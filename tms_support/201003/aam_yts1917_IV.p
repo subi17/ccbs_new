@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
 {Syst/eventval.i}
 {Func/faccper.i}
 {Func/fcustbal.i}
@@ -9,7 +9,7 @@ Syst.CUICommon:katun = "Qvantel".
 {Func/finvoiceacc.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 END.
@@ -249,7 +249,7 @@ PROCEDURE pCreditNote:
  
       /* check IF invoice number is already in use */
       IF NOT can-find(FIRST Invoice where
-                            Invoice.Brand    = Syst.CUICommon:gcBrand AND 
+                            Invoice.Brand    = Syst.Var:gcBrand AND 
                             Invoice.ExtInvID = lcExtInvID AND
                             RECID(Invoice) NE liInvRecid) 
       THEN LEAVE ExtInvNum.
@@ -329,7 +329,7 @@ PROCEDURE pCreditNote:
       */
       /* in yoigo newest accounts are always used 
       FOR FIRST BillItem NO-LOCK WHERE
-                BillItem.Brand = Syst.CUICommon:gcBrand AND
+                BillItem.Brand = Syst.Var:gcBrand AND
                 BillItem.BillCode = bCreditRow.BillCode:
          bCreditRow.SlsAcc = fInvRowAccount(Customer.Category,
                                             bCreditInv.VatUsage).
@@ -369,15 +369,15 @@ PROCEDURE pCreditNote:
    ASSIGN
       Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = next-value(MemoSeq)
-      Memo.Brand     = Syst.CUICommon:gcBrand
+      Memo.Brand     = Syst.Var:gcBrand
       Memo.MemoTitle = "Credited"
-      Memo.CreUser   = Syst.CUICommon:katun
+      Memo.CreUser   = Syst.Var:katun
       Memo.HostTable = "Invoice"
       Memo.KeyValue  = STRING(bCreditInv.InvNum)
       Memo.CustNum   = Invoice.CustNum.
       Memo.Memotext  = Func.Common:mGetHdrText(50,Customer.Language) + " " +
                        STRING(Invoice.InvNum) +  
-                       ", YTS-1916. Handler: " + Syst.CUICommon:katun.
+                       ", YTS-1916. Handler: " + Syst.Var:katun.
 
    /* customer balances */
    fCustBal(Customer.CustNum,
@@ -409,13 +409,13 @@ PROCEDURE pCreditNote:
    ASSIGN
       Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.Brand     = Syst.CUICommon:gcBrand
+      Memo.Brand     = Syst.Var:gcBrand
       Memo.MemoTitle = "Credited"
-      Memo.CreUser   = Syst.CUICommon:katun
+      Memo.CreUser   = Syst.Var:katun
       Memo.HostTable = "Invoice"
       Memo.KeyValue  = STRING(Invoice.InvNum)
       Memo.CustNum   = Invoice.CustNum
-      Memo.Memotext  = "YTS-1916, credited by " + Syst.CUICommon:katun.
+      Memo.Memotext  = "YTS-1916, credited by " + Syst.Var:katun.
 
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhInvoice). 
 

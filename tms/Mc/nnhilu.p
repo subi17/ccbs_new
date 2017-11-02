@@ -38,13 +38,13 @@ DEF BUFFER xhinta FOR Tariff.
 
 DO FOR TMSUser:
    FIND FIRST TMSUser where
-              TMSUser.UserCode = Syst.CUICommon:katun
+              TMSUser.UserCode = Syst.Var:katun
    no-lock no-error.
    fname = fChkPath(TMSUser.RepDir) + "custprices.txt".
 END.
 
 DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
-ynimi = Syst.CUICommon:ynimi.
+ynimi = Syst.Var:ynimi.
 
 form
    skip(3)
@@ -62,7 +62,7 @@ form
       help "Name of the printout file"
       label "File Name ......" skip(3)
 WITH
-   width 80 ROW 1 COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
+   width 80 ROW 1 COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc)
    " " + ynimi + " PRINT CUSTOMER Price LIST " + string(TODAY,"99-99-99") + " "
    side-labels FRAME rajat.
 
@@ -88,7 +88,7 @@ WITH
    width 170 NO-LABEL no-box FRAME sivuots.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
 paper = TRUE.
 DISPLAY paper stch WITH FRAME rajat.
 PAUSE 0 no-message.
@@ -98,12 +98,12 @@ ufkey = TRUE.
 toimi:
    repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
       ASSIGN
-      Syst.CUICommon:ufk[1]= 132 Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
-      Syst.CUICommon:ufk[5]= 63 Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-      Syst.CUICommon:ehto = 0. RUN Syst/ufkey.p.
+      Syst.Var:ufk[1]= 132 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+      Syst.Var:ufk[5]= 63 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+      Syst.Var:ehto = 0. RUN Syst/ufkey.p.
 
-      IF Syst.CUICommon:toimi = 1 THEN DO:
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+      IF Syst.Var:toimi = 1 THEN DO:
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          disp "" @ fname WITH FRAME rajat.
          UPDATE 
             paper 
@@ -112,13 +112,13 @@ toimi:
          IF NOT paper THEN UPDATE fname WITH FRAME rajat.
          NEXT toimi.
       END.
-      ELSE  IF Syst.CUICommon:toimi = 5 THEN DO:
+      ELSE  IF Syst.Var:toimi = 5 THEN DO:
          LEAVE toimi.
       END.
-      ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
+      ELSE IF Syst.Var:toimi = 8 THEN DO:
          RETURN.
       END.
-   END. /* Syst.CUICommon:toimi */
+   END. /* Syst.Var:toimi */
 
 /* Avataan striimi */
 IF paper THEN DO:
@@ -156,27 +156,27 @@ ELSE OUTPUT STREAM tul TO value(fname).
 
    print-line:
    FOR EACH  BDest   no-lock WHERE
-             BDest.Brand   = Syst.CUICommon:gcBrand,
+             BDest.Brand   = Syst.Var:gcBrand,
        EACH  RateCCN no-lock where
-             RateCCN.Brand = Syst.CUICommon:gcBrand AND
+             RateCCN.Brand = Syst.Var:gcBrand AND
              RateCCN.BDest = BDest.BDest AND
              RateCCN.DestType = BDest.DestType,
        FIRST CCN no-lock where
-             CCN.Brand = Syst.CUICommon:gcBrand AND
+             CCN.Brand = Syst.Var:gcBrand AND
              CCN.CCN   = RateCCN.CCN
    BREAK BY BDest.BDest:
 
       FOR EACH Tariff no-lock where
-               Tariff.Brand   = Syst.CUICommon:gcBrand AND
+               Tariff.Brand   = Syst.Var:gcBrand AND
                Tariff.CCN     = CCN.CCN,
       FIRST BillItem NO-LOCK WHERE
-            BillItem.Brand    = Syst.CUICommon:gcBrand AND
+            BillItem.Brand    = Syst.Var:gcBrand AND
             BillItem.BillCode = Tariff.BillCode:
 
          /* onko kjA pyytAnyt keskeytystA ? */
          READKEY PAUSE 0.
-         Syst.CUICommon:nap = keylabel(LASTKEY).
-         if Syst.CUICommon:nap = "END" THEN DO:
+         Syst.Var:nap = keylabel(LASTKEY).
+         if Syst.Var:nap = "END" THEN DO:
             message "Are You sure You want to cance printing (Y/N) ?"
             UPDATE ok.
             IF ok THEN DO:

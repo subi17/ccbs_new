@@ -13,8 +13,8 @@ DEF VAR pcMSISDN AS CHAR NO-UNDO.
 
 {Syst/commpaa.i}
 ASSIGN
-   Syst.CUICommon:katun = "IVR_" + ghAuthLog::EndUserId.
-   Syst.CUICommon:gcBrand = "1".
+   Syst.Var:katun = "IVR_" + ghAuthLog::EndUserId.
+   Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
 

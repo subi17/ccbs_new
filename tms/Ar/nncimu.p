@@ -54,7 +54,7 @@
                   16.05.02/aam partial crediting 
                   17.05.02/tk  RUN Mc/memo.p
                   28.05.02/aam userlog removed 
-                  03.06.02/aam Syst.CUICommon:katun added to Invoice.Memo
+                  03.06.02/aam Syst.Var:katun added to Invoice.Memo
                   07.06.02/aam use Invoice.OverPaym for overpayment,
                                change the sign also for cinv.VATAmt
                   18.06.02/aam don't update InvNum with F1,
@@ -76,7 +76,7 @@
                                sent to bank -> cancel dd-data from orig.invoice
                   11.06.03/aam message if dd-invoice is credited too late
                   15.09.03/aam brand
-                  13.10.03/aam invoice can be given in Syst.CUICommon:si-recid2,
+                  13.10.03/aam invoice can be given in Syst.Var:si-recid2,
                                don't change invoicetype for type 3 
                   04.12.03/aam default due date = invoice date            
                   29.12.03/aam WInvDisp = true for partially credited
@@ -190,8 +190,8 @@ form
                     help "Change the state of credited events into unbilled"
                                    skip
 WITH
-   OVERLAY width 80 ROW 1 side-labels COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + Syst.CUICommon:ynimi + "   CREDIT NOTES        " + string(TODAY,"99-99-99") + " "
+   OVERLAY width 80 ROW 1 side-labels COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc)
+   " " + Syst.Var:ynimi + "   CREDIT NOTES        " + string(TODAY,"99-99-99") + " "
    FRAME rajat.
 
 form
@@ -313,24 +313,24 @@ FUNCTION fDispReasonGrpDesc RETURNS LOGIC
     
 END FUNCTION.
 
-Syst.CUICommon:cfc = "sel".  RUN Syst/ufcolor.p.
+Syst.Var:cfc = "sel".  RUN Syst/ufcolor.p.
 
 /* crediting limit from user */
 FIND FIRST TMSUser NO-LOCK WHERE
-           TMSUser.UserCode = Syst.CUICommon:katun NO-ERROR.
+           TMSUser.UserCode = Syst.Var:katun NO-ERROR.
 IF AVAILABLE TMSUser THEN 
       ldCreditLimit =  fUserLimitAmt(TMSUser.UserCode,
                                      {&CREDIT_NOTE_LIMIT_TYPE}) .
  
 /* release right */
-IF SetTMSUser(Syst.CUICommon:katun) 
+IF SetTMSUser(Syst.Var:katun) 
 THEN lcCanRelease = getTMSRight("SYST").
 ELSE lcCanRelease = "".
  
 liCalled = 0. 
-IF Syst.CUICommon:si-recid2 NE ? THEN DO:
-   FIND Invoice NO-LOCK WHERE RECID(Invoice) = Syst.CUICommon:si-recid2 NO-ERROR.
-   Syst.CUICommon:si-recid2 = ?.
+IF Syst.Var:si-recid2 NE ? THEN DO:
+   FIND Invoice NO-LOCK WHERE RECID(Invoice) = Syst.Var:si-recid2 NO-ERROR.
+   Syst.Var:si-recid2 = ?.
 
    IF NOT AVAILABLE Invoice THEN DO:
       MESSAGE "Unknown invoice"
@@ -367,18 +367,18 @@ repeat WITH FRAME rajat:
              lcExtInvID  = "".
 
       IF liCalled = 0 THEN DO:
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
          UPDATE lcExtInvID validate(lcExtInvID = "" OR 
                           can-find(FIRST Invoice where 
-                                         Invoice.Brand  = Syst.CUICommon:gcBrand AND
+                                         Invoice.Brand  = Syst.Var:gcBrand AND
                                          Invoice.ExtInvID = input lcExtInvID),
                           "Unknown invoice !").
 
          IF lcExtInvID = "" THEN LEAVE rajat.
 
          FIND Invoice WHERE
-              Invoice.Brand    = Syst.CUICommon:gcBrand AND
+              Invoice.Brand    = Syst.Var:gcBrand AND
               Invoice.ExtInvID = lcExtInvID NO-LOCK NO-ERROR.
          IF NOT AVAILABLE Invoice THEN NEXT.
          
@@ -399,7 +399,7 @@ repeat WITH FRAME rajat:
    END.
 
    FIND Invoice where Invoice.InvNum = liInvNum no-lock.
-   IF Invoice.Brand NE Syst.CUICommon:gcBrand THEN DO:
+   IF Invoice.Brand NE Syst.Var:gcBrand THEN DO:
       MESSAGE "Invoice belongs to brand" Invoice.Brand
       VIEW-AS ALERT-BOX
       ERROR.
@@ -456,7 +456,7 @@ repeat WITH FRAME rajat:
    
    DO FOR InvGroup:
       FIND FIRST InvGroup WHERE
-                 InvGroup.Brand    = Syst.CUICommon:gcBrand AND
+                 InvGroup.Brand    = Syst.Var:gcBrand AND
                  InvGroup.InvGroup = Customer.InvGroup 
       no-lock no-error.
       DISPLAY InvGroup.IGName.  
@@ -512,12 +512,12 @@ repeat WITH FRAME rajat:
             END.   
          END.
                    
-         Syst.CUICommon:ehto = 9.
+         Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
          NEXT. 
       END.
 
-      ELSE IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+      ELSE IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
 
          IF FRAME-FIELD = "hInvDate" THEN DO:
 
@@ -586,26 +586,26 @@ repeat WITH FRAME rajat:
 
    toimi:
    repeat WITH FRAME rajat:
-      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0 
-      Syst.CUICommon:ufk[1] = 91  Syst.CUICommon:ufk[2] = 927  Syst.CUICommon:ufk[3] = 0 Syst.CUICommon:ufk[4] = 1807
-      Syst.CUICommon:ufk[5] = 908 Syst.CUICommon:ufk[7] = 1721 Syst.CUICommon:ufk[8] = 8.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ehto = 0 
+      Syst.Var:ufk[1] = 91  Syst.Var:ufk[2] = 927  Syst.Var:ufk[3] = 0 Syst.Var:ufk[4] = 1807
+      Syst.Var:ufk[5] = 908 Syst.Var:ufk[7] = 1721 Syst.Var:ufk[8] = 8.
       
       /* no partial crediting for special invoices */
-      IF Invoice.InvType >= 3 AND Invoice.InvType <= 4 THEN Syst.CUICommon:ufk[4] = 0.
+      IF Invoice.InvType >= 3 AND Invoice.InvType <= 4 THEN Syst.Var:ufk[4] = 0.
       
       /* yoigo special */
-      Syst.CUICommon:ufk[4] = 0.
+      Syst.Var:ufk[4] = 0.
       
       RUN Syst/ufkey.p.
 
-      IF Syst.CUICommon:toimi = 8 THEN LEAVE rajat.
+      IF Syst.Var:toimi = 8 THEN LEAVE rajat.
 
-      ELSE IF Syst.CUICommon:toimi = 1 THEN DO:
+      ELSE IF Syst.Var:toimi = 1 THEN DO:
          llNewInv = false.
          NEXT  rajat.
       END.
 
-      ELSE IF Syst.CUICommon:toimi = 2 THEN DO TRANS: /* memo */
+      ELSE IF Syst.Var:toimi = 2 THEN DO TRANS: /* memo */
          FIND Invoice WHERE Invoice.InvNum = liInvNum
          NO-LOCK NO-ERROR.
          RUN Mc/memo.p(INPUT Invoice.CustNum,
@@ -616,7 +616,7 @@ repeat WITH FRAME rajat:
       END.
 
       /* cancel */
-      else if Syst.CUICommon:toimi = 7 then do:
+      else if Syst.Var:toimi = 7 then do:
          liInvNum = 0.
          clear frame rajat no-pause.
          IF liCalled > 0 THEN LEAVE rajat.
@@ -624,13 +624,13 @@ repeat WITH FRAME rajat:
       end. 
 
       /* partial crediting; mark invoice lines TO be credited */
-      ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
+      ELSE IF Syst.Var:toimi = 4 THEN DO:
          RUN Ar/partcred.p(liInvNum,
                       input-output table wMarked).
          fCreditAmt(). 
       END.
 
-      ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
+      ELSE IF Syst.Var:toimi = 5 THEN DO:
 
          /* credited amount can't be more than invoice amount */
          IF abs(xCrAmt) GT abs(Invoice.InvAmt) THEN DO:
@@ -682,7 +682,7 @@ repeat WITH FRAME rajat:
          IF ok THEN LEAVE toimi.
 
       END.
-   END. /* Syst.CUICommon:toimi */
+   END. /* Syst.Var:toimi */
 
    /* Ask FOR unmarking the Billed rows */
    IF NOT State AND llAllowRel AND 

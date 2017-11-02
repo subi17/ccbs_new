@@ -144,7 +144,7 @@ FOR EACH HighUsage NO-LOCK,
    FIRST MobSub    NO-LOCK WHERE
          MobSub.CLI = HighUsage.CLI,
    FIRST Customer NO-LOCK WHERE
-         Customer.Brand    = Syst.CUICommon:gcBrand AND
+         Customer.Brand    = Syst.Var:gcBrand AND
          Customer.CustNum  = MobSub.CustNum AND
          Customer.InvGroup = icInvGroup:
 
@@ -153,12 +153,12 @@ FOR EACH HighUsage NO-LOCK,
 END.
 
 FOR EACH Customer NO-LOCK WHERE
-         Customer.Brand    = Syst.CUICommon:gcBrand AND 
+         Customer.Brand    = Syst.Var:gcBrand AND 
          Customer.invGroup = icInvGroup:
          
    FINDSUBS:      
    FOR EACH MobSub NO-LOCK WHERE
-            MobSub.Brand   = Syst.CUICommon:gcBrand AND 
+            MobSub.Brand   = Syst.Var:gcBrand AND 
             Mobsub.InvCust = Customer.Custnum AND
             MobSub.PayType = FALSE:
          
@@ -449,12 +449,12 @@ FOR EACH ttTotalCLI,
          
          /* save to db for reporting */
          CREATE ErrorLog.
-         ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
+         ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
                 ErrorLog.ActionID  = "ODIREQHS"
                 ErrorLog.TableName = "MobSub"
                 ErrorLog.KeyValue  = STRING(MobSub.MsSeq)
                 ErrorLog.ErrorMsg  = "Creation failed: " + lcResult
-                ErrorLog.UserCode  = Syst.CUICommon:katun.
+                ErrorLog.UserCode  = Syst.Var:katun.
                 ErrorLog.ActionTS  = Func.Common:mMakeTS().
          
       END.
@@ -484,8 +484,8 @@ PROCEDURE pCollectCDR:
    EMPTY TEMP-TABLE ttCall.
 
    fMobCDRCollect(INPUT "post",
-                  INPUT Syst.CUICommon:gcBrand,
-                  INPUT Syst.CUICommon:katun,
+                  INPUT Syst.Var:gcBrand,
+                  INPUT Syst.Var:katun,
                   INPUT idaFromDate,   
                   INPUT idaToDate,
                   INPUT 0,

@@ -50,7 +50,7 @@ def var exFile  as c format "x(40)"      NO-UNDO.
 
 /* get default direcory Name FOR OUTPUT */
 DO FOR TMSUser:
-   FIND TMSUser where TMSUser.UserCode = Syst.CUICommon:katun no-lock.
+   FIND TMSUser where TMSUser.UserCode = Syst.Var:katun no-lock.
       ASSIGN exdir = TMSUser.RepDir.
 END.
 if opsys = "unix" then exFile = exdir + "/custlist.txt".
@@ -113,10 +113,10 @@ form
    exFile  label "   Name of Output File"
            help "Name for output File (ASCII-format, File RepType '.txt')"
    SKIP(1) 
-with width 80 title color value(Syst.CUICommon:ctc) " CUSTOMER LISTS " side-labels
-   COLOR value(Syst.CUICommon:cfc) OVERLAY FRAME rajat.
+with width 80 title color value(Syst.Var:ctc) " CUSTOMER LISTS " side-labels
+   COLOR value(Syst.Var:cfc) OVERLAY FRAME rajat.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
 PAUSE 0 no-message.
 
 ASSIGN
@@ -134,11 +134,11 @@ WITH FRAME rajat.
 rajat:
 repeat WITH FRAME rajat:
 
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE
       CustGroup validate(input CustGroup = "" OR
          can-find(FIRST CustGroup where
-                        CustGroup.Brand     = Syst.CUICommon:gcBrand AND
+                        CustGroup.Brand     = Syst.Var:gcBrand AND
                         CustGroup.CustGroup = input CustGroup), "NONE FOUND !")
       asno1
       asno2 validate(INPUT asno2 >= INPUT asno1,
@@ -147,7 +147,7 @@ repeat WITH FRAME rajat:
       myyja2 validate(input myyja2 >= input myyja1, "Incorrect Order !")
       Category validate(input Category = "" or
           can-find(first CustCat where                              
-                         CustCat.Brand    = Syst.CUICommon:gcBrand AND
+                         CustCat.Brand    = Syst.Var:gcBrand AND
                          CustCat.Category = input Category), "NONE FOUND !")
       apvm1
       apvm2 validate(input apvm2 >= input apvm1, "Invalid Order !")
@@ -157,11 +157,11 @@ repeat WITH FRAME rajat:
       ConnType
       InvGroup validate(input InvGroup = "" OR 
           can-find(FIRST InvGroup where
-                         InvGroup.Brand    = Syst.CUICommon:gcBrand AND
+                         InvGroup.Brand    = Syst.Var:gcBrand AND
                          InvGroup.InvGroup = input InvGroup), "NONE FOUND !")
       Reseller validate(input Reseller = "" OR 
           can-find(FIRST Reseller where
-                         Reseller.Brand    = Syst.CUICommon:gcBrand AND
+                         Reseller.Brand    = Syst.Var:gcBrand AND
                          Reseller.Reseller = input Reseller), "NONE FOUND !")
       j1 j2
       WITH FRAME rajat EDITING:
@@ -202,29 +202,29 @@ repeat WITH FRAME rajat:
 
 toimi:
    repeat WITH FRAME rajat:
-      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[3] = 807 Syst.CUICommon:ufk[4] = 847
-                     Syst.CUICommon:ufk[5] = 808 Syst.CUICommon:ufk[6] = 847 Syst.CUICommon:ufk[7] = 997 Syst.CUICommon:ufk[8] = 8
-             Syst.CUICommon:ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 132 Syst.Var:ufk[3] = 807 Syst.Var:ufk[4] = 847
+                     Syst.Var:ufk[5] = 808 Syst.Var:ufk[6] = 847 Syst.Var:ufk[7] = 997 Syst.Var:ufk[8] = 8
+             Syst.Var:ehto = 0.
 
       RUN Syst/ufkey.p.
 
-      IF Syst.CUICommon:toimi = 1 THEN  NEXT  RAJAT.
-      IF Syst.CUICommon:toimi = 8 THEN  LEAVE RAJAT.
+      IF Syst.Var:toimi = 1 THEN  NEXT  RAJAT.
+      IF Syst.Var:toimi = 8 THEN  LEAVE RAJAT.
 
-      IF Syst.CUICommon:toimi = 4 OR Syst.CUICommon:toimi = 6 OR Syst.CUICommon:toimi = 7 THEN DO:
+      IF Syst.Var:toimi = 4 OR Syst.Var:toimi = 6 OR Syst.Var:toimi = 7 THEN DO:
          /* Ask Name FOR Excel / XOR File */
-         if Syst.CUICommon:toimi = 7 then exFile = exdir + "/" + "xorcod.txt".
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+         if Syst.Var:toimi = 7 then exFile = exdir + "/" + "xorcod.txt".
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          UPDATE exFile WITH FRAME rajat.
          if exFile = "" THEN NEXT toimi.
       END.
 
       /* refine the parameters */
-      IF Syst.CUICommon:toimi = 3 OR
-         Syst.CUICommon:toimi = 4 OR
-         Syst.CUICommon:toimi = 5 OR
-         Syst.CUICommon:toimi = 6 OR
-         Syst.CUICommon:toimi = 7
+      IF Syst.Var:toimi = 3 OR
+         Syst.Var:toimi = 4 OR
+         Syst.Var:toimi = 5 OR
+         Syst.Var:toimi = 6 OR
+         Syst.Var:toimi = 7
       THEN DO:
 
          IF asno1 = ? THEN asno1 = 0.
@@ -236,7 +236,7 @@ toimi:
       END.
 
       /* large printout */
-      IF Syst.CUICommon:toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
          ASSIGN
          tuni1 = "nnasll"
          tuni2 = "".
@@ -258,7 +258,7 @@ toimi:
       END.
 
       /* Large Excel/ascii printout */
-      IF Syst.CUICommon:toimi = 6 THEN DO:
+      IF Syst.Var:toimi = 6 THEN DO:
          RUN Mc/nnasle.p(CustGroup,
                     asno1,asno2,
                     myyja1,myyja2,
@@ -275,9 +275,9 @@ toimi:
       END.
 
       /* A brief list (either onto paper of Excel) */
-      IF Syst.CUICommon:toimi = 3 OR Syst.CUICommon:toimi = 4 THEN DO:
+      IF Syst.Var:toimi = 3 OR Syst.Var:toimi = 4 THEN DO:
 
-         IF Syst.CUICommon:toimi = 3 THEN DO: /* ask AND open the printer */
+         IF Syst.Var:toimi = 3 THEN DO: /* ask AND open the printer */
             ASSIGN
             tuni1 = "nnasls"
             tuni2 = "".
@@ -296,13 +296,13 @@ toimi:
                      InvGroup,
                      Reseller,
                      order1,order2,
-                     (Syst.CUICommon:toimi = 4),
+                     (Syst.Var:toimi = 4),
                      exFile).
          LEAVE TOIMI.
       END.
 
       /* EXPORT customer codes FOR XOR */
-      IF Syst.CUICommon:toimi = 7 THEN DO:
+      IF Syst.Var:toimi = 7 THEN DO:
          IF cday NE ? THEN DO:
             message "NOTE: No call check with this function - press ENTER !".
             PAUSE no-message.
@@ -322,10 +322,10 @@ toimi:
          LEAVE toimi.
       END.
 
-   END. /* Syst.CUICommon:toimi */
+   END. /* Syst.Var:toimi */
 
    /* CLOSE the printer STREAM IF a paper report was done */
-   IF Syst.CUICommon:toimi = 3 OR Syst.CUICommon:toimi = 5 THEN DO:
+   IF Syst.Var:toimi = 3 OR Syst.Var:toimi = 5 THEN DO:
       tila = FALSE.
       {Syst/tmsreport.i}.
    END.

@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
 
 DEF VAR ldReqAmt  AS DEC  NO-UNDO.
 DEF VAR ldaDate   AS DATE NO-UNDO.
@@ -17,7 +17,7 @@ ldaDate = 06/01/2014.
 
 EACH_MOBSUB:
 FOR FIRST DayCampaign WHERE
-          DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+          DayCampaign.Brand = Syst.Var:gcBrand AND
           DayCampaign.DCEvent = "PAYTERM24_5" NO-LOCK,
     FIRST MobSub WHERE
           MobSub.MsSeq = 11092403 NO-LOCK,
@@ -42,7 +42,7 @@ FOR FIRST DayCampaign WHERE
                   STRING(TODAY,"99.99.9999") +  /* memo */
                   "¤" +  DayCampaign.DCEvent ,  /* calcobject */
                   FALSE,              /* no messages to screen */
-                  Syst.CUICommon:katun,
+                  Syst.Var:katun,
                   "",
                   0, /* order id */
                   "DCCLI",

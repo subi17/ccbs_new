@@ -26,21 +26,21 @@ form
       CLIType.Clitype format "x(12)"
       CLIType.CliName  format "x(30)"
       CLIType.StatusCode
-    WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " CLI Type (" + Syst.CUICommon:gcBrand + ") " OVERLAY FRAME sel.
+    WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " CLI Type (" + Syst.Var:gcBrand + ") " OVERLAY FRAME sel.
 
 form /* SEEK Code */
     ob-code
     help "Enter RepType of an Object Billing RepType"
-    with row 4  col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
-    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
+    with row 4  col 2 title color value(Syst.Var:ctc) " FIND CODE "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 MAIN:
 repeat:
 
    FIND FIRST CLIType WHERE
-              CLIType.Brand = Syst.CUICommon:gcBrand AND
+              CLIType.Brand = Syst.Var:gcBrand AND
               LOOKUP(STRING(CLIType.WebStatusCode),
                      {&CLITYPE_WEB_ACTIVE_STATUSES}) > 0 AND
               LOOKUP(STRING(CLIType.StatusCode),
@@ -77,7 +77,7 @@ print-line:
             rtab[FRAME-LINE] = recid(CLIType).
             DOWN WITH FRAME sel.
             FIND NEXT CLIType WHERE
-              CLIType.Brand = Syst.CUICommon:gcBrand AND
+              CLIType.Brand = Syst.Var:gcBrand AND
               LOOKUP(STRING(CLIType.WebStatusCode),
                      {&CLITYPE_WEB_ACTIVE_STATUSES}) > 0 AND
               LOOKUP(STRING(CLIType.StatusCode),
@@ -89,9 +89,9 @@ print-line:
 
       IF ufkey THEN DO:
          ASSIGN
-         Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 35 Syst.CUICommon:ufk[5] = 11
-         Syst.CUICommon:ufk[6] = 0 Syst.CUICommon:ufk[8] = 8  Syst.CUICommon:ufk[9] = 1
-         siirto = ? Syst.CUICommon:ehto = 3 ufkey = FALSE.
+         Syst.Var:ufk = 0 Syst.Var:ufk[1] = 35 Syst.Var:ufk[5] = 11
+         Syst.Var:ufk[6] = 0 Syst.Var:ufk[8] = 8  Syst.Var:ufk[9] = 1
+         siirto = ? Syst.Var:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
   END. /* print-line */
@@ -101,18 +101,18 @@ BROWSE:
 
          HIDE MESSAGE no-pause.
          CHOOSE ROW CLIType.Clitype {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(Syst.CUICommon:ccc) CLIType.Clitype WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) CLIType.Clitype WITH FRAME sel.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.
-         Syst.CUICommon:nap = keylabel(LASTKEY).
+         Syst.Var:nap = keylabel(LASTKEY).
 
          /* previous line */
-         if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO
+         if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO
          WITH FRAME sel:
             IF FRAME-LINE = 1 THEN DO:
                FIND CLIType where recid(CLIType) = rtab[FRAME-LINE] no-lock.
                FIND PREV CLIType WHERE
-              CLIType.Brand = Syst.CUICommon:gcBrand AND
+              CLIType.Brand = Syst.Var:gcBrand AND
               LOOKUP(STRING(CLIType.WebStatusCode),
                      {&CLITYPE_WEB_ACTIVE_STATUSES}) > 0 AND
               LOOKUP(STRING(CLIType.StatusCode),
@@ -138,11 +138,11 @@ BROWSE:
          END. /* previous line */
 
          /* NEXT line */
-         if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO WITH FRAME sel:
+         if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO WITH FRAME sel:
             IF FRAME-LINE = FRAME-DOWN THEN DO:
                FIND CLIType where recid(CLIType) = rtab[FRAME-LINE] no-lock .
                FIND NEXT CLIType WHERE
-              CLIType.Brand = Syst.CUICommon:gcBrand AND
+              CLIType.Brand = Syst.Var:gcBrand AND
               LOOKUP(STRING(CLIType.WebStatusCode),
                      {&CLITYPE_WEB_ACTIVE_STATUSES}) > 0 AND
               LOOKUP(STRING(CLIType.StatusCode),
@@ -169,10 +169,10 @@ BROWSE:
          END. /* NEXT line */
 
          /* previous page */
-         else if lookup(Syst.CUICommon:nap,"page-up,prev-page") > 0 THEN DO WITH FRAME sel:
+         else if lookup(Syst.Var:nap,"page-up,prev-page") > 0 THEN DO WITH FRAME sel:
             FIND CLIType where recid(CLIType) = Memory no-lock no-error.
             FIND PREV CLIType WHERE
-              CLIType.Brand = Syst.CUICommon:gcBrand AND
+              CLIType.Brand = Syst.Var:gcBrand AND
               LOOKUP(STRING(CLIType.WebStatusCode),
                      {&CLITYPE_WEB_ACTIVE_STATUSES}) > 0 AND
               LOOKUP(STRING(CLIType.StatusCode),
@@ -181,7 +181,7 @@ BROWSE:
 
                DO i = 1 TO (FRAME-DOWN - 1):
                   FIND PREV CLIType WHERE
-              CLIType.Brand = Syst.CUICommon:gcBrand AND
+              CLIType.Brand = Syst.Var:gcBrand AND
               LOOKUP(STRING(CLIType.WebStatusCode),
                      {&CLITYPE_WEB_ACTIVE_STATUSES}) > 0 AND
               LOOKUP(STRING(CLIType.StatusCode),
@@ -201,7 +201,7 @@ BROWSE:
         END. /* previous page */
 
         /* NEXT page */
-        else if lookup(Syst.CUICommon:nap,"page-down,next-page") > 0 THEN DO WITH FRAME sel:
+        else if lookup(Syst.Var:nap,"page-down,next-page") > 0 THEN DO WITH FRAME sel:
            IF rtab[FRAME-DOWN] = ? THEN DO:
                BELL.
                message "This is the last page !".
@@ -215,14 +215,14 @@ BROWSE:
         END. /* NEXT page */
 
         /* Seek */
-        if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:  /* ob-code */
-           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:  /* ob-code */
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE ob-code WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
            IF ob-code ENTERED THEN DO:
               FIND FIRST CLIType WHERE
-              CLIType.Brand = Syst.CUICommon:gcBrand AND
+              CLIType.Brand = Syst.Var:gcBrand AND
               LOOKUP(STRING(CLIType.WebStatusCode),
                      {&CLITYPE_WEB_ACTIVE_STATUSES}) > 0 AND
               LOOKUP(STRING(CLIType.StatusCode),
@@ -242,15 +242,15 @@ BROWSE:
         END. /* Seek */
 
         /* CHOOSE */
-        else if lookup(Syst.CUICommon:nap,"return,enter,5,f5") > 0 THEN DO:
+        else if lookup(Syst.Var:nap,"return,enter,5,f5") > 0 THEN DO:
            FIND CLIType where recid(CLIType) = rtab[FRAME-LINE] no-lock.
            siirto = string(CLIType.Clitype).
            LEAVE MAIN.
         END. /* CHOOSE */
         /* FIRST record */
-        else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
+        else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
            FIND FIRST CLIType WHERE
-              CLIType.Brand = Syst.CUICommon:gcBrand AND
+              CLIType.Brand = Syst.Var:gcBrand AND
               LOOKUP(STRING(CLIType.WebStatusCode),
                      {&CLITYPE_WEB_ACTIVE_STATUSES}) > 0 AND
               LOOKUP(STRING(CLIType.StatusCode),
@@ -261,9 +261,9 @@ BROWSE:
         END. /* FIRST record */
 
         /* LAST record */
-        else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO :
+        else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO :
            FIND LAST CLIType WHERE
-              CLIType.Brand = Syst.CUICommon:gcBrand AND
+              CLIType.Brand = Syst.Var:gcBrand AND
               LOOKUP(STRING(CLIType.WebStatusCode),
                      {&CLITYPE_WEB_ACTIVE_STATUSES}) > 0 AND
               LOOKUP(STRING(CLIType.StatusCode),
@@ -273,7 +273,7 @@ BROWSE:
            NEXT LOOP.
         END. /* LAST record */
 
-        else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" THEN LEAVE MAIN. /* RETURN */
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" THEN LEAVE MAIN. /* RETURN */
 
      END.  /* BROWSE */
    END.  /* LOOP */

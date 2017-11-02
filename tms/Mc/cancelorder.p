@@ -36,7 +36,7 @@ DEF VAR lcTermType     AS CHARACTER NO-UNDO.
 DEFINE BUFFER bOrderDelivery FOR OrderDelivery.
 
 FIND Order NO-LOCK WHERE
-     Order.Brand = Syst.CUICommon:gcBrand AND
+     Order.Brand = Syst.Var:gcBrand AND
      Order.OrderID = iiOrder NO-ERROR.
 IF NOT AVAIL Order THEN RETURN "".
 
@@ -49,7 +49,7 @@ IF ilCheckLOStatus THEN DO:
    IF AVAIL OrderDelivery THEN DO:
 
       FOR EACH bOrderDelivery NO-LOCK WHERE
-               bOrderDelivery.Brand   = Syst.CUICommon:gcBrand AND
+               bOrderDelivery.Brand   = Syst.Var:gcBrand AND
                bOrderDelivery.OrderId = OrderDelivery.OrderId AND
                bOrderDelivery.LOTimeStamp = OrderDelivery.LOTimeStamp:
          liCount = liCount + 1.
@@ -182,7 +182,7 @@ ELSE DO:
       liReq = fRevertRenewalOrderRequest(
                   Order.MsSeq,
                   Order.OrderId,
-                  Syst.CUICommon:katun,
+                  Syst.Var:katun,
                   Func.Common:mMakeTS(),
                   {&REQUEST_SOURCE_ORDER_CANCELLATION},
                   OUTPUT lcResult).

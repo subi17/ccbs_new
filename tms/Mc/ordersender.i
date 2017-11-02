@@ -49,7 +49,7 @@
                                     INPUT  Order.Cli,
                                     INPUT  Order.CustNum,
                                     INPUT  1,
-                                    INPUT  Syst.CUICommon:katun,
+                                    INPUT  Syst.Var:katun,
                                     INPUT  OrderFusion.FixedInstallationTS,
                                     INPUT  "CREATE-FIXED",
                                     INPUT  STRING(Order.OrderId),
@@ -76,7 +76,7 @@
                IF (Order.OrderType EQ {&ORDER_TYPE_NEW} OR
                    Order.OrderType EQ {&ORDER_TYPE_MNP}) AND
                    CAN-FIND(FIRST Memo NO-LOCK WHERE
-                                  Memo.Brand = Syst.CUICommon:gcBrand AND
+                                  Memo.Brand = Syst.Var:gcBrand AND
                                   Memo.HostTable = "Order" AND
                                   Memo.Keyvalue = STRING(Order.OrderID) AND
                                   Memo.MemoText = "Fixed Cancellation failed because installation was already in place") THEN DO:
@@ -108,13 +108,13 @@
                if associated customer main line considered order is in ongoing status  */
             IF Order.StatusCode NE {&ORDER_STATUS_ONGOING}                           AND
                CAN-FIND(FIRST CLIType NO-LOCK WHERE 
-                              CLIType.Brand      = Syst.CUICommon:gcBrand                           AND 
+                              CLIType.Brand      = Syst.Var:gcBrand                           AND 
                               CLIType.CLIType    = Order.CLIType                     AND 
                               CLIType.PayType    = {&CLITYPE_PAYTYPE_POSTPAID}       AND
                               CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO: 
  
                FIND FIRST OrderCustomer NO-LOCK WHERE
-                          OrderCustomer.Brand   = Syst.CUICommon:gcBrand                            AND
+                          OrderCustomer.Brand   = Syst.Var:gcBrand                            AND
                           OrderCustomer.OrderId = Order.OrderId                      AND
                           OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
 
@@ -122,7 +122,7 @@
                DO:
                   /* Additional lines Mobile only tariffs */ 
                   IF (CAN-FIND(FIRST OrderAction NO-LOCK WHERE
-                                     OrderAction.Brand    = Syst.CUICommon:gcBrand           AND
+                                     OrderAction.Brand    = Syst.Var:gcBrand           AND
                                      OrderAction.OrderID  = Order.OrderId     AND
                                      OrderAction.ItemType = "AddLineDiscount" AND
                               LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0)    
@@ -141,7 +141,7 @@
                                                            OrderCustomer.CustId,
                                                            Order.CLIType))              OR
                      (CAN-FIND(FIRST OrderAction NO-LOCK WHERE
-                                     OrderAction.Brand    = Syst.CUICommon:gcBrand           AND
+                                     OrderAction.Brand    = Syst.Var:gcBrand           AND
                                      OrderAction.OrderID  = Order.OrderId     AND
                                      OrderAction.ItemType = "AddLineDiscount" AND
                               LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_20}) > 0) 
@@ -160,7 +160,7 @@
                                                            OrderCustomer.CustId,
                                                            Order.CLIType))              OR      
                      (CAN-FIND(FIRST OrderAction NO-LOCK WHERE
-                                     OrderAction.Brand    = Syst.CUICommon:gcBrand           AND
+                                     OrderAction.Brand    = Syst.Var:gcBrand           AND
                                      OrderAction.OrderID  = Order.OrderId     AND
                                      OrderAction.ItemType = "AddLineDiscount" AND
                              LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0) 
@@ -200,7 +200,7 @@
                      Order.MultiSimId     <> 0                                 AND 
                      Order.MultiSimType   = {&MULTISIMTYPE_EXTRALINE}          AND 
                      CAN-FIND(FIRST OrderAction NO-LOCK WHERE 
-                                    OrderAction.Brand    = Syst.CUICommon:gcBrand             AND 
+                                    OrderAction.Brand    = Syst.Var:gcBrand             AND 
                                     OrderAction.OrderID  = Order.OrderID       AND
                                     OrderAction.ItemType = "ExtraLineDiscount" AND  
                              LOOKUP(OrderAction.ItemKey,lcExtraLineDiscounts) > 0) THEN 
@@ -239,16 +239,16 @@
                Order.MNPStatus = 1 AND
                LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) > 0 AND
                NOT CAN-FIND(FIRST OrderAccessory NO-LOCK WHERE
-                             OrderAccessory.Brand = Syst.CUICommon:gcBrand AND
+                             OrderAccessory.Brand = Syst.Var:gcBrand AND
                              OrderAccessory.OrderId = Order.OrderID) AND
                NOT CAN-FIND(LAST OrderTimeStamp NO-LOCK WHERE
-                             OrderTimeStamp.Brand   = Syst.CUICommon:gcBrand   AND
+                             OrderTimeStamp.Brand   = Syst.Var:gcBrand   AND
                              OrderTimeStamp.OrderID = Order.OrderID AND
                              OrderTimeStamp.RowType = {&ORDERTIMESTAMP_SIMONLY})
                THEN DO:
                   
                   FIND FIRST OrderCustomer WHERE
-                             OrderCustomer.Brand = Syst.CUICommon:gcBrand AND
+                             OrderCustomer.Brand = Syst.Var:gcBrand AND
                              OrderCustomer.OrderId = Order.OrderId AND
                              OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
                   SEARCHSIM:
@@ -269,7 +269,7 @@
                         RELEASE SIM.
 
                         FOR EACH bSIM USE-index simstat WHERE
-                                 bSIM.Brand   = Syst.CUICommon:gcBrand  AND
+                                 bSIM.Brand   = Syst.Var:gcBrand  AND
                                  bSIM.Stock   = lcStock  AND
                                  bSIM.simstat = 1        AND
                                  bSIM.SimArt  = "universal" NO-LOCK:
@@ -358,13 +358,13 @@
                   NOT Order.OrderChannel BEGINS "Renewal_POS" THEN DO:
                   
                   FIND FIRST OrderAction WHERE
-                             OrderAction.Brand    = Syst.CUICommon:gcBrand AND
+                             OrderAction.Brand    = Syst.Var:gcBrand AND
                              OrderAction.OrderId  = Order.OrderId AND
                              OrderAction.ItemType = "SIMType" NO-LOCK NO-ERROR.
                   IF AVAIL OrderAction AND OrderAction.ItemKey > "" THEN DO:
                      /* YBP-589 */ 
                      FIND FIRST OrderCustomer WHERE
-                                OrderCustomer.Brand = Syst.CUICommon:gcBrand AND
+                                OrderCustomer.Brand = Syst.Var:gcBrand AND
                                 OrderCustomer.OrderId = Order.OrderId AND
                                 OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
                      
@@ -380,7 +380,7 @@
                         lcStock = fSearchStock(lcStock,OrderCustomer.ZipCode).
 
                         FOR EACH bSIM USE-index simstat WHERE
-                                 bSIM.Brand   = Syst.CUICommon:gcBrand  AND
+                                 bSIM.Brand   = Syst.Var:gcBrand  AND
                                  bSIM.Stock   = lcStock  AND
                                  bSIM.simstat = 1        AND
                                  bSIM.SimArt  = "universal" NO-LOCK:
@@ -434,7 +434,7 @@
                   fAfterSalesRequest(
                      Order.MsSeq,
                      Order.OrderId,
-                     Syst.CUICommon:katun,
+                     Syst.Var:katun,
                      Func.Common:mMakeTS(),
                      "7",
                      OUTPUT ocResult
@@ -532,7 +532,7 @@
                 llReserveSimAndMsisdn =  
                 NOT CAN-FIND(
                 FIRST ActionLog NO-LOCK WHERE
-                      ActionLog.Brand  = Syst.CUICommon:gcBrand AND
+                      ActionLog.Brand  = Syst.Var:gcBrand AND
                       ActionLog.TableName = "Order" AND
                       ActionLog.KeyValue = STRING(Order.OrderID) AND
                       ActionLog.ActionId = "RESIGNATION" AND
@@ -563,7 +563,7 @@
                    Sim.SimStat NE 1 AND
                    Order.OrderType <> 3 AND
                    NOT CAN-FIND(LAST OrderTimeStamp NO-LOCK WHERE
-                             OrderTimeStamp.Brand   = Syst.CUICommon:gcBrand   AND
+                             OrderTimeStamp.Brand   = Syst.Var:gcBrand   AND
                              OrderTimeStamp.OrderID = Order.OrderID AND
                              OrderTimeStamp.RowType = {&ORDERTIMESTAMP_SIMONLY}) THEN DO:
                       /* YBP-605 */
@@ -595,7 +595,7 @@
              END.
 
              FIND FIRST clitype WHERE
-                        clitype.brand   = Syst.CUICommon:gcBrand and
+                        clitype.brand   = Syst.Var:gcBrand and
                         clitype.clitype = order.clitype NO-LOCK NO-ERROR.
              
              IF NOT AVAIL clitype THEN DO:
@@ -628,7 +628,7 @@
              
             /* YBP-612 */
             FIND FIRST OrderCustomer WHERE
-                       OrderCustomer.Brand = Syst.CUICommon:gcBrand AND
+                       OrderCustomer.Brand = Syst.Var:gcBrand AND
                        OrderCustomer.OrderId = Order.OrderId AND
                        OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
 
@@ -699,7 +699,7 @@
                    RELEASE SIM.
 
                    FOR EACH bSIM USE-index simstat WHERE
-                            bSIM.Brand   = Syst.CUICommon:gcBrand  AND
+                            bSIM.Brand   = Syst.Var:gcBrand  AND
                             bSIM.Stock   = lcStock  AND
                             bSIM.simstat = 1        AND
                             bSIM.SimArt  = "universal" NO-LOCK:
@@ -750,7 +750,7 @@
              END.
               
              FIND FIRST MSISDN WHERE
-                        MSISDN.Brand = Syst.CUICommon:gcBrand AND
+                        MSISDN.Brand = Syst.Var:gcBrand AND
                         MSISDN.CLI   = Order.Cli NO-LOCK NO-ERROR.
                         
              IF NOT AVAIL MSISDN THEN DO:
@@ -761,7 +761,7 @@
                    Msisdn.cli        = order.cli 
                    Msisdn.StatusCode = 22
                    MSISDN.MSSeq      = Order.MSSeq
-                   MSISDN.Brand      = Syst.CUICommon:gcBrand.
+                   MSISDN.Brand      = Syst.Var:gcBrand.
              END.          
 
              /*MM Migration: Subscription creation will be done after NC
@@ -769,7 +769,7 @@
              IF Order.Orderchannel BEGINS "migration" THEN NEXT {1}.
 
              IF NOT CAN-FIND(LAST OrderTimeStamp NO-LOCK WHERE
-                        OrderTimeStamp.Brand   = Syst.CUICommon:gcBrand   AND
+                        OrderTimeStamp.Brand   = Syst.Var:gcBrand   AND
                         OrderTimeStamp.OrderID = Order.OrderID AND
                         OrderTimeStamp.RowType = {&ORDERTIMESTAMP_SIMONLY}) THEN DO:
                 IF (LOOKUP(Order.OrderChannel,
@@ -834,7 +834,7 @@
                 fReactivationRequest(INPUT Order.MsSeq,
                                      INPUT Order.OrderId,
                                      INPUT ldeSwitchTS,
-                                     INPUT Syst.CUICommon:katun,
+                                     INPUT Syst.Var:katun,
                                      {&REQUEST_SOURCE_NEWTON},
                                      OUTPUT ocResult).
              ELSE
@@ -842,7 +842,7 @@
                                   INPUT  Order.Cli,
                                   INPUT  Order.CustNum,
                                   INPUT  1,
-                                  INPUT  Syst.CUICommon:katun,
+                                  INPUT  Syst.Var:katun,
                                   INPUT  ldeSwitchTS,
                                   INPUT  "CREATE",
                                   INPUT  STRING(Order.OrderId),

@@ -84,7 +84,7 @@ FORM
       SKIP(3)
    
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + Syst.CUICommon:ynimi + " BILLING RUN " + STRING(TODAY,"99-99-99") + " "
+     TITLE " " + Syst.Var:ynimi + " BILLING RUN " + STRING(TODAY,"99-99-99") + " "
      FRAME fCrit.
 
 FUNCTION fDefaultPeriod RETURNS LOGIC
@@ -128,19 +128,19 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
    IF ufkey THEN DO:
       ASSIGN
-         Syst.CUICommon:ufk    = 0
-         Syst.CUICommon:ufk[1] = 132 
-         Syst.CUICommon:ufk[5] = 795  
-         Syst.CUICommon:ufk[8] = 8 
-         Syst.CUICommon:ehto   = 0.
+         Syst.Var:ufk    = 0
+         Syst.Var:ufk[1] = 132 
+         Syst.Var:ufk[5] = 795  
+         Syst.Var:ufk[8] = 8 
+         Syst.Var:ehto   = 0.
       RUN Syst/ufkey.p.
    END.
-   ELSE ASSIGN Syst.CUICommon:toimi = 1
+   ELSE ASSIGN Syst.Var:toimi = 1
                ufkey = TRUE.
 
-   IF Syst.CUICommon:toimi = 1 THEN DO:
+   IF Syst.Var:toimi = 1 THEN DO:
 
-      Syst.CUICommon:ehto = 9. 
+      Syst.Var:ehto = 9. 
       RUN Syst/ufkey.p.
       
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
@@ -155,9 +155,9 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          WITH FRAME fCrit EDITING:
 
             READKEY.
-            Syst.CUICommon:nap = KEYLABEL(LASTKEY).
+            Syst.Var:nap = KEYLABEL(LASTKEY).
 
-            IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
+            IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
 
                IF FRAME-FIELD = "ldtInvDate" THEN DO:
                   IF ldtInvDate ENTERED THEN DO:
@@ -176,11 +176,11 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    END.
 
    /* split customers into groups and start billing runs */
-   ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
+   ELSE IF Syst.Var:toimi = 5 THEN DO:
 
       /* check that no test invoices exist */
       IF CAN-FIND(FIRST Invoice WHERE 
-                        Invoice.Brand   = Syst.CUICommon:gcBrand AND
+                        Invoice.Brand   = Syst.Var:gcBrand AND
                         Invoice.InvType = 99)
       THEN DO:
          MESSAGE "Test invoices must be deleted " SKIP
@@ -214,12 +214,12 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
          IF RETURN-VALUE BEGINS "ERROR:" THEN DO TRANS:
             CREATE ErrorLog.
-            ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
+            ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
                    ErrorLog.ActionID  = "SplitBillRun" 
                    ErrorLog.TableName = "Invoice"
                    ErrorLog.KeyValue  = STRING(ldtInvDate,"99-99-99")
                    ErrorLog.ErrorMsg  = RETURN-VALUE
-                   ErrorLog.UserCode  = Syst.CUICommon:katun.
+                   ErrorLog.UserCode  = Syst.Var:katun.
                    ErrorLog.ActionTS  = Func.Common:mMakeTS().
          END.
       
@@ -238,7 +238,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       LEAVE CritLoop.
    END.
 
-   ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
+   ELSE IF Syst.Var:toimi = 8 THEN DO:
       LEAVE CritLoop.
    END.
 

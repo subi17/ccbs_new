@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Qvantel".
-Syst.CUICommon:gcBrand  = "1".
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand  = "1".
 {Func/barrfunc.i}
 
 DEFINE VARIABLE lrBarring AS ROWID no-UNDO.
@@ -44,7 +44,7 @@ put stream sout unformatted
    "MSISDN|MSSEQ|CUSTNUM|SUBS.TYPE|CURRENT_BARRING|COUNTER_TYPE|COUNTER_AMOUNT|COUNTER_LIMIT|LIMIT_EXCEEDED" skip.
 
 FOR EACH msrequest NO-LOCK where
-         msrequest.brand = Syst.CUICommon:gcBrand and
+         msrequest.brand = Syst.Var:gcBrand and
          msrequest.reqtype = 35 and
          msrequest.reqstatus = 2 and
          msrequest.actstamp > liFrom and

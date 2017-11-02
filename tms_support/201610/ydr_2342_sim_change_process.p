@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "OTANOK".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "OTANOK".
 
 {Syst/tmsconst.i}
 {Func/msreqfunc.i}
@@ -137,7 +137,7 @@ FUNCTION fSearchStock RETURNS CHARACTER
    DEF VAR liLoop AS INT NO-UNDO. 
 
    FOR EACH Stock WHERE
-            Stock.Brand   = Syst.CUICommon:gcBrand AND
+            Stock.Brand   = Syst.Var:gcBrand AND
             Stock.StoType = icStock NO-LOCK:
       DO liLoop = 1 TO NUM-ENTRIES(Stock.ZipCodeExp,","):
         IF icZipCode MATCHES
@@ -200,7 +200,7 @@ FUNCTION fDelivSIM RETURNS LOG
    
    IF AgreeCustomer.CustIDType = "CIF" THEN DO:
       FIND FIRST CustContact NO-LOCK WHERE
-                 CustContact.Brand    = Syst.CUICommon:gcBrand                              AND
+                 CustContact.Brand    = Syst.Var:gcBrand                              AND
                  CustContact.CustNum  = AgreeCustomer.CustNum                AND
                  CustContact.CustType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT} NO-ERROR.
       IF AVAIL CustContact THEN
@@ -337,7 +337,7 @@ REPEAT TRANSACTION:
    PUT STREAM sOut UNFORMATTED lcCLI.
    
    IF NOT CAN-FIND (FIRST MSISDN WHERE 
-                          MSISDN.Brand = Syst.CUICommon:gcBrand AND
+                          MSISDN.Brand = Syst.Var:gcBrand AND
                           MSISDN.CLI   = lcCLI) THEN DO:
       PUT STREAM sOut UNFORMATTED
          ";MSISDN not found"
@@ -346,7 +346,7 @@ REPEAT TRANSACTION:
    END.
 
    FIND FIRST MobSub NO-LOCK WHERE
-              MobSub.Brand = Syst.CUICommon:gcBrand AND
+              MobSub.Brand = Syst.Var:gcBrand AND
               MobSub.CLI   = lcCLI   NO-ERROR.
    IF NOT AVAIL MobSub THEN DO:
       PUT STREAM sOut UNFORMATTED
@@ -377,7 +377,7 @@ REPEAT TRANSACTION:
    IF AVAIL Order AND 
      (Order.ICC > "" OR 
       can-find(FIRST OrderAction WHERE
-                 OrderAction.Brand    = Syst.CUICommon:gcBrand AND
+                 OrderAction.Brand    = Syst.Var:gcBrand AND
                  OrderAction.OrderId  = Order.OrderId AND
                  OrderAction.ItemType = "SIMType" AND
                  OrderAction.ItemKey > "")) THEN DO:
@@ -432,7 +432,7 @@ FOR EACH MSREquest NO-LOCK WHERE
               MobSub.MsSeq = MSREquest.msseq NO-ERROR.
    IF AVAIL MobSub THEN DO:
       FIND FIRST SIM NO-LOCK WHERE
-                 SIM.Brand = Syst.CUICommon:gcBrand AND
+                 SIM.Brand = Syst.Var:gcBrand AND
                  SIM.ICC   = MSREquest.REqcparam2 aND
                  SIM.simstat = 13 NO-ERROR.
       IF AVAIL SIM THEN
@@ -468,7 +468,7 @@ PROCEDURE pCreateReq:
 
       SearchSIM:
       FOR EACH SIM NO-LOCK USE-INDEX simstat WHERE
-               SIM.Brand = Syst.CUICommon:gcBrand AND
+               SIM.Brand = Syst.Var:gcBrand AND
                SIM.Stock = lcStock AND
                SIM.SimStat = {&SIM_SIMSTAT_AVAILABLE} AND
                SIM.SimArt   = "universal":
@@ -500,8 +500,8 @@ PROCEDURE pCreateReq:
    CREATE MsRequest.
    ASSIGN MsRequest.MsRequest  = NEXT-VALUE(MsRequest)
           MsRequest.ReqType    = {&REQTYPE_ICC_CHANGE}
-          MsRequest.Brand      = Syst.CUICommon:gcBrand
-          MsRequest.UserCode   = Syst.CUICommon:katun
+          MsRequest.Brand      = Syst.Var:gcBrand
+          MsRequest.UserCode   = Syst.Var:katun
           MsRequest.ActStamp   = Func.Common:mMakeTS()
           MsRequest.ReqStatus  = 20
           MsRequest.CLI        = lcCLI

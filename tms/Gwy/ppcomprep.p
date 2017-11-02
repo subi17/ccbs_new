@@ -27,10 +27,10 @@ DEFINE STREAM sDump.
 OUTPUT STREAM sDump TO VALUE(icFile).
 
 FOR EACH PrePaidRequest NO-LOCK WHERE
-         PrePaidRequest.Brand  = Syst.CUICommon:gcBrand  AND
+         PrePaidRequest.Brand  = Syst.Var:gcBrand  AND
          PrePaidRequest.Source = "CC",
    FIRST Payment NO-LOCK WHERE
-         Payment.Brand  = Syst.CUICommon:gcBrand AND
+         Payment.Brand  = Syst.Var:gcBrand AND
          Payment.RefNum = STRING(PrePaidRequest.PPRequest):
    
    PUT STREAM sDump UNFORMATTED

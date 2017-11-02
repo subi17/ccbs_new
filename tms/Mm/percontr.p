@@ -214,7 +214,7 @@ IF MsRequest.ReqStat = 0 THEN DO:
              lcALLPostpaidUPSELLBundles = fCParamC("POSTPAID_DATA_UPSELLS").
 
       IF CAN-FIND(FIRST bPendRequest NO-LOCK WHERE
-         bPendRequest.Brand   = Syst.CUICommon:gcBrand AND
+         bPendRequest.Brand   = Syst.Var:gcBrand AND
          bPendRequest.ReqType = {&REQTYPE_CONTRACT_ACTIVATION} AND
          bPendRequest.Custnum = MsRequest.CustNum AND
          (LOOKUP(bPendRequest.ReqCParam3,lcALLPostpaidBundles) > 0 OR
@@ -473,7 +473,7 @@ PROCEDURE pContractActivation:
       llRerate     = FALSE.
    
    FIND FIRST DayCampaign WHERE 
-              DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
+              DayCampaign.Brand   = Syst.Var:gcBrand AND
               DayCampaign.DCEvent = lcDCEvent NO-LOCK NO-ERROR.
    IF NOT AVAILABLE DayCampaign OR 
       DayCampaign.ValidFrom > ldtActDate OR
@@ -502,7 +502,7 @@ PROCEDURE pContractActivation:
          lcUseCLIType = bOrigRequest.ReqCParam2. 
    END.
 
-   IF fMatrixAnalyse(Syst.CUICommon:gcBrand,
+   IF fMatrixAnalyse(Syst.Var:gcBrand,
                      "PERCONTR",
                      "PerContract;SubsTypeTo",
                      lcDCEvent + ";" + lcUseCLIType,
@@ -680,7 +680,7 @@ PROCEDURE pContractActivation:
       IF LOOKUP(DayCampaign.DCType,{&PERCONTRACT_DCCLI_DCTYPE}) > 0 THEN DO:
          IF lcDCEvent BEGINS "PAYTERM" THEN DO:
             FOR EACH DCCLI NO-LOCK WHERE
-                     DCCLI.Brand      = Syst.CUICommon:gcBrand         AND
+                     DCCLI.Brand      = Syst.Var:gcBrand         AND
                      DCCLI.MsSeq      = MsRequest.MsSeq AND
                      DCCLI.ValidTo   >= ldtActDate      AND
                      DCCLI.ValidFrom <= ldtActDate      AND 
@@ -694,7 +694,7 @@ PROCEDURE pContractActivation:
             END.
          END.
          ELSE IF CAN-FIND(FIRST DCCLI WHERE
-                                DCCLI.Brand      = Syst.CUICommon:gcBrand         AND
+                                DCCLI.Brand      = Syst.Var:gcBrand         AND
                                 DCCLI.DCEvent    = lcDCEvent       AND
                                 DCCLI.MsSeq      = MsRequest.MsSeq AND
                                 DCCLI.ValidTo   >= ldtActDate      AND
@@ -708,7 +708,7 @@ PROCEDURE pContractActivation:
          IF MsRequest.ReqCParam3 EQ "RVTERM12" THEN DO:
             
             FIND FIRST FMItem NO-LOCK WHERE
-                       FMITem.Brand = Syst.CUICommon:gcBrand AND
+                       FMITem.Brand = Syst.Var:gcBrand AND
                        FMItem.Feemodel = DayCampaign.FeeModel AND
                        FMItem.FromDate <= ldtActDate AND
                        FMITem.ToDate >= ldtActDate NO-ERROR.
@@ -728,7 +728,7 @@ PROCEDURE pContractActivation:
             ELSE DO:
 
                FIND bQ25SingleFee NO-LOCK USE-INDEX Custnum WHERE
-                    bQ25SingleFee.Brand       = Syst.CUICommon:gcBrand AND
+                    bQ25SingleFee.Brand       = Syst.Var:gcBrand AND
                     bQ25SingleFee.Custnum     = MsOwner.CustNum AND
                     bQ25SingleFee.HostTable   = "Mobsub" AND
                     bQ25SingleFee.KeyValue    = STRING(MsOwner.MsSeq) AND
@@ -759,7 +759,7 @@ PROCEDURE pContractActivation:
 
                /* Find original installment contract */   
                FIND FIRST DCCLI NO-LOCK WHERE
-                          DCCLI.Brand   = Syst.CUICommon:gcBrand AND
+                          DCCLI.Brand   = Syst.Var:gcBrand AND
                           DCCLI.DCEvent BEGINS "PAYTERM" AND
                           DCCLI.MsSeq   = MsRequest.MsSeq AND 
                           DCCLI.PerContractId = MsRequest.ReqIParam3 NO-ERROR.
@@ -777,7 +777,7 @@ PROCEDURE pContractActivation:
                RELEASE DCCLI.
                
                FOR EACH DiscountPlan NO-LOCK WHERE
-                        DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
+                        DiscountPlan.Brand = Syst.Var:gcBrand AND
                        (DiscountPlan.DPRuleID = "RVTERMDT1DISC" OR
                         DiscountPlan.DPRuleID = "RVTERMDT4DISC"),
                    EACH DPMember NO-LOCK WHERE
@@ -840,7 +840,7 @@ PROCEDURE pContractActivation:
       
       /* current contract */
       FIND FIRST DCCLI WHERE
-                 DCCLI.Brand   = Syst.CUICommon:gcBrand      AND
+                 DCCLI.Brand   = Syst.Var:gcBrand      AND
                  DCCLI.DCEvent = lcDCEvent    AND
                  DCCLI.MsSeq   = MsRequest.MsSeq
       NO-LOCK NO-ERROR.
@@ -1000,7 +1000,7 @@ PROCEDURE pContractActivation:
    ELSE DO:
      
       CREATE DCCLI.
-      ASSIGN DCCLI.Brand         = Syst.CUICommon:gcBrand
+      ASSIGN DCCLI.Brand         = Syst.Var:gcBrand
              DCCLI.PerContractID = NEXT-VALUE(PerContractID)
              DCCLI.DCEvent       = lcDCEvent
              DCCLI.MsSeq         = MsRequest.MsSeq
@@ -1024,7 +1024,7 @@ PROCEDURE pContractActivation:
       /* create fatimes */
       IF DayCampaign.BillCode = "" AND 
          CAN-FIND(FIRST FatGroup WHERE
-                        FatGroup.Brand = Syst.CUICommon:gcBrand AND
+                        FatGroup.Brand = Syst.Var:gcBrand AND
                         FatGroup.FtGrp = DCCLI.DCEvent)
       THEN DO:
       
@@ -1069,13 +1069,13 @@ PROCEDURE pContractActivation:
                        bOrigReq.MsRequest = MsRequest.OrigReq NO-LOCK NO-ERROR.
             IF AVAILABLE bOrigReq THEN 
                FIND FIRST Order WHERE
-                          Order.Brand   = Syst.CUICommon:gcBrand AND
+                          Order.Brand   = Syst.Var:gcBrand AND
                           Order.OrderID = bOrigReq.ReqIParam1 NO-LOCK NO-ERROR.
          END.
          
          IF AVAILABLE Order THEN DO:
            FOR EACH SubsTerminal WHERE   
-                    SubsTerminal.Brand   = Syst.CUICommon:gcBrand AND
+                    SubsTerminal.Brand   = Syst.Var:gcBrand AND
                     SubsTerminal.OrderID = Order.OrderID AND
                     SubsTerminal.MsSeq   = MsRequest.MsSeq AND
                     SubsTerminal.PerContractID = 0 EXCLUSIVE-LOCK:
@@ -1416,7 +1416,7 @@ PROCEDURE pFinalize:
    END.
 
    FIND FIRST DayCampaign WHERE 
-              DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
+              DayCampaign.Brand   = Syst.Var:gcBrand AND
               DayCampaign.DCEvent = MsRequest.ReqCParam3 NO-LOCK NO-ERROR.
    IF NOT AVAILABLE DayCampaign THEN DO:
       fReqError("Periodical contract is not valid").
@@ -1460,7 +1460,7 @@ PROCEDURE pFinalize:
       END. /* FOR EACH ServiceLimit NO-LOCK WHERE */
 
       FOR EACH FixedFee NO-LOCK USE-INDEX HostTable WHERE
-               FixedFee.Brand     = Syst.CUICommon:gcBrand AND
+               FixedFee.Brand     = Syst.Var:gcBrand AND
                FixedFee.HostTable = "MobSub" AND
                FixedFee.KeyValue  = STRING(MsRequest.MsSeq) AND
                FixedFee.FeeModel  = DayCampaign.FeeModel AND
@@ -1664,7 +1664,7 @@ PROCEDURE pFinalize:
          IF (LOOKUP(MsRequest.ReqCparam3,lcDSS2PrimarySubsType) > 0 OR
             (LOOKUP(MsOwner.CLIType,lcDSS2PrimarySubsType)      > 0  AND 
              CAN-FIND(FIRST CLIType NO-LOCK WHERE 
-                            CLIType.Brand      = Syst.CUICommon:gcBrand         AND 
+                            CLIType.Brand      = Syst.Var:gcBrand         AND 
                             CLIType.CLIType    = MsOwner.CLIType AND 
                             CLIType.BaseBundle = MsRequest.ReqCParam3))) AND
             NOT fIsDSSActive(MsOwner.CustNum,ldCurrTS) AND
@@ -1676,7 +1676,7 @@ PROCEDURE pFinalize:
                   there is DSS2 termination request. YTS-8140 
                used MsOwner.Custnum cause of ACC */
             FIND FIRST bTerMsRequest NO-LOCK USE-INDEX CustNum WHERE
-                       bTerMsRequest.Brand = Syst.CUICommon:gcBrand AND
+                       bTerMsRequest.Brand = Syst.Var:gcBrand AND
                        bTerMsRequest.ReqType = 83 AND
                        bTerMsRequest.Custnum = MsOwner.Custnum AND
                        bTerMsRequest.ReqCParam3 BEGINS "DSS" AND
@@ -1709,7 +1709,7 @@ PROCEDURE pFinalize:
                  fIsDSS2Allowed(MsOwner.CustNum,0,ldCurrTS,
                            OUTPUT liDSSMsSeq,OUTPUT lcError) THEN DO:
             FOR FIRST MsRequest WHERE
-                      MsRequest.Brand      = Syst.CUICommon:gcBrand          AND
+                      MsRequest.Brand      = Syst.Var:gcBrand          AND
                       MsRequest.ReqType    = {&REQTYPE_DSS}   AND
                       MsRequest.Custnum    = MsOwner.CustNum  AND
                       MsRequest.ReqCParam1 = "DELETE"         AND
@@ -1728,7 +1728,7 @@ PROCEDURE pFinalize:
                   IF NOT fTransferDSS(INPUT liCurrDSSMsSeq,
                                       INPUT liDSSMsSeq,
                                       INPUT TODAY,
-                                      INPUT Syst.CUICommon:katun,
+                                      INPUT Syst.Var:katun,
                                       INPUT "Contract",
                                       OUTPUT lcError) THEN
                      Func.Common:mWriteMemo("Customer",
@@ -1792,12 +1792,12 @@ PROCEDURE pFinalize:
    /* YOT-3647 */
    IF iiRequestType EQ 8 AND
        CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                      CLIType.Brand = Syst.CUICommon:gcBrand AND
+                      CLIType.Brand = Syst.Var:gcBrand AND
                       CLIType.CLIType = lcDCEvent AND
                       CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) THEN DO:
 
       FOR EACH bMSRequest NO-LOCK WHERE
-               bMSRequest.Brand = Syst.CUICommon:gcBrand AND
+               bMSRequest.Brand = Syst.Var:gcBrand AND
                bMSRequest.ReqType = 18 AND
                bMSRequest.Custnum = MsOwner.Custnum AND
                bMSRequest.ActStamp > MsRequest.ActStamp AND
@@ -1822,7 +1822,7 @@ PROCEDURE pFinalize:
       MsRequest.ReqType    EQ 8     AND
       MsRequest.ReqCParam2 EQ "act" THEN 
    DO:
-      IF NOT CAN-FIND(FIRST CliType WHERE CLIType.Brand      = Syst.CUICommon:gcBrand         AND 
+      IF NOT CAN-FIND(FIRST CliType WHERE CLIType.Brand      = Syst.Var:gcBrand         AND 
                                           CliType.CliType    = MsOwner.CliType AND 
                                           CliType.BaseBundle = "CONT15"        NO-LOCK) THEN
           LEAVE.
@@ -1866,7 +1866,7 @@ PROCEDURE pFinalize:
          
             IF bMSRequest.ReqIParam2 > 0 THEN
                FIND FIRST Order NO-LOCK WHERE
-                          Order.Brand = Syst.CUICommon:gcBrand AND
+                          Order.Brand = Syst.Var:gcBrand AND
                           Order.OrderId = bMSRequest.ReqIParam2 NO-ERROR.
             ELSE RELEASE Order.
 
@@ -2031,7 +2031,7 @@ PROCEDURE pContractTermination:
       liCustNum = MsRequest.CustNum.
    
    FIND FIRST DayCampaign WHERE 
-              DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
+              DayCampaign.Brand   = Syst.Var:gcBrand AND
               DayCampaign.DCEvent = lcDCEvent NO-LOCK NO-ERROR.
    IF NOT AVAILABLE DayCampaign THEN DO:
       fReqError("Unknown periodical contract").
@@ -2085,7 +2085,7 @@ PROCEDURE pContractTermination:
 
             /* Check STC Request with DSS2 data bundle */
             FIND FIRST bMsRequest NO-LOCK WHERE
-                       bMsRequest.Brand = Syst.CUICommon:gcBrand AND
+                       bMsRequest.Brand = Syst.Var:gcBrand AND
                        bMsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
                        bMsRequest.Custnum = MsOwner.Custnum AND
                        bMsRequest.ActStamp = ldeNextDayStamp AND 
@@ -2098,7 +2098,7 @@ PROCEDURE pContractTermination:
             /* Check BTC Request with DSS2 data bundle */
             IF NOT llKeepDSSActive THEN DO:
                FIND FIRST bMsRequest NO-LOCK WHERE
-                          bMsRequest.Brand = Syst.CUICommon:gcBrand AND
+                          bMsRequest.Brand = Syst.Var:gcBrand AND
                           bMsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE} AND
                           bMsRequest.Custnum = MsOwner.Custnum AND
                           bMsRequest.ActStamp = ldeNextDayStamp AND
@@ -2308,7 +2308,7 @@ PROCEDURE pContractTermination:
 
             fMakeCreateEvent((BUFFER bLimit:HANDLE),
                              "",
-                             Syst.CUICommon:katun,
+                             Syst.Var:katun,
                              "").
 
             fUpdateServicelCounterMSID(bLimit.CustNum,
@@ -2352,7 +2352,7 @@ PROCEDURE pContractTermination:
 
       /* current contract */
       FIND FIRST DCCLI WHERE
-                 DCCLI.Brand         = Syst.CUICommon:gcBrand              AND
+                 DCCLI.Brand         = Syst.Var:gcBrand              AND
                  DCCLI.DCEvent       = lcDCEvent            AND
                  DCCLI.MsSeq         = MsRequest.MsSeq      AND
                 (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN
@@ -2422,7 +2422,7 @@ PROCEDURE pContractTermination:
       
       /* remove unused fatimes */
       FOR EACH FATime EXCLUSIVE-LOCK USE-INDEX MobSub WHERE
-               FATime.Brand  = Syst.CUICommon:gcBrand         AND
+               FATime.Brand  = Syst.Var:gcBrand         AND
                FATime.MsSeq  = MsRequest.MsSeq AND
                FATime.Period > liEndPeriod     AND
                FATime.FtGrp  = DCCLI.DCEvent   AND
@@ -2445,7 +2445,7 @@ PROCEDURE pContractTermination:
          DO i = 1 to NUM-ENTRIES(lcIPhoneDiscountRuleIds):
             lcIPhoneDiscountRuleId = ENTRY(i,lcIPhoneDiscountRuleIds).
             FOR FIRST DiscountPlan WHERE
-                      DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
+                      DiscountPlan.Brand = Syst.Var:gcBrand AND
                       DiscountPlan.DPRuleID = lcIPhoneDiscountRuleId NO-LOCK,
                 EACH  DPMember WHERE
                       DPMember.DPId       = DiscountPlan.DPId AND
@@ -2594,12 +2594,12 @@ PROCEDURE pContractTermination:
           
    /* close fees associated with this contract */  
    FOR EACH FixedFee NO-LOCK USE-INDEX HostTable WHERE
-            FixedFee.Brand     = Syst.CUICommon:gcBrand   AND 
+            FixedFee.Brand     = Syst.Var:gcBrand   AND 
             FixedFee.HostTable = "MobSub"  AND
             FixedFee.KeyValue  = STRING(liCheckMsSeq) AND
             FixedFee.CalcObj   = lcDCEvent,
       FIRST FMItem NO-LOCK WHERE
-            FMItem.Brand     = Syst.CUICommon:gcBrand AND
+            FMItem.Brand     = Syst.Var:gcBrand AND
             FMItem.FeeModel  = FixedFee.FeeModel AND
             FMItem.FromDate <= FixedFee.BegDate AND
             FMItem.ToDate   >= FixedFee.BegDate:
@@ -2672,7 +2672,7 @@ PROCEDURE pContractTermination:
       IF llCancelOrder OR llCancelInstallment OR 
          MsRequest.ReqSource EQ {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE} THEN
       FOR FIRST SingleFee USE-INDEX Custnum WHERE
-                SingleFee.Brand       = Syst.CUICommon:gcBrand AND
+                SingleFee.Brand       = Syst.Var:gcBrand AND
                 SingleFee.Custnum     = MsOwner.CustNum AND
                 SingleFee.HostTable   = "Mobsub" AND
                 SingleFee.KeyValue    = STRING(MsOwner.MsSeq) AND
@@ -2703,7 +2703,7 @@ PROCEDURE pContractTermination:
    IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} AND
       DayCampaign.DCEvent BEGINS "PAYTERM" THEN
       FOR FIRST SingleFee USE-INDEX Custnum WHERE
-               SingleFee.Brand       = Syst.CUICommon:gcBrand AND
+               SingleFee.Brand       = Syst.Var:gcBrand AND
                SingleFee.Custnum     = MsOwner.CustNum AND
                SingleFee.HostTable   = "Mobsub" AND
                SingleFee.KeyValue    = STRING(MsOwner.MsSeq) AND
@@ -2794,7 +2794,7 @@ PROCEDURE pContractTermination:
       IF lcDCEvent EQ "DATA6" THEN DO: 
          DO liCnt = 1 TO NUM-ENTRIES({&BONO6DISCOUNTS}):
             FIND FIRST DiscountPlan WHERE 
-                       DiscountPlan.Brand      = Syst.CUICommon:gcBrand     AND 
+                       DiscountPlan.Brand      = Syst.Var:gcBrand     AND 
                        DiscountPlan.DPRuleId   = ENTRY(liCnt, 
                                                        {&BONO6DISCOUNTS}) AND 
                        DiscountPlan.ValidTo   >= TODAY       NO-LOCK NO-ERROR.
@@ -2909,7 +2909,7 @@ PROCEDURE pContractTermination:
                  bMsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
 
       FOR EACH MsRequest EXCLUSIVE-LOCK WHERE
-               MsRequest.Brand   = Syst.CUICommon:gcBrand         AND
+               MsRequest.Brand   = Syst.Var:gcBrand         AND
                MsRequest.ReqType = {&REQTYPE_DSS}  AND
                MsRequest.CustNum = liCustNum:
 
@@ -2949,7 +2949,7 @@ PROCEDURE pMaintainContract:
    lhContract = BUFFER DCCLI:HANDLE.
 
    FIND FIRST DCCLI WHERE 
-              DCCLI.Brand      = Syst.CUICommon:gcBrand              AND
+              DCCLI.Brand      = Syst.Var:gcBrand              AND
               DCCLI.DCEvent    = MsRequest.ReqCParam3 AND     
               DCCLI.MsSeq      = MsRequest.MsSeq      AND
               DCCLI.ValidTo   >= TODAY                AND
@@ -3224,7 +3224,7 @@ PROCEDURE pActivateServicePackage:
    
    /* service packages that need to be activated */
    FOR EACH DCServicePackage NO-LOCK WHERE
-            DCServicePackage.Brand     = Syst.CUICommon:gcBrand AND
+            DCServicePackage.Brand     = Syst.Var:gcBrand AND
             DCServicePackage.DCEvent   = icDCEvent AND
             DCServicePackage.ToDate   >= idaActivationDate AND
             DCServicePackage.FromDate <= idaActivationDate TRANS:
@@ -3296,7 +3296,7 @@ PROCEDURE pTerminateServicePackage:
    /* No need to find retain bundle list for VOIP */
    IF icDCEvent <> "BONO_VOIP" THEN 
    DO:
-      FIND FIRST bPerContract WHERE bPerContract.Brand = Syst.CUICommon:gcBrand AND bPerContract.DCEvent = icDCEvent NO-LOCK NO-ERROR.
+      FIND FIRST bPerContract WHERE bPerContract.Brand = Syst.Var:gcBrand AND bPerContract.DCEvent = icDCEvent NO-LOCK NO-ERROR.
       IF AVAILABLE bPerContract AND LOOKUP(bPerContract.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 THEN 
       DO: 
          lcBundles = fGetActiveBundle(iiMsSeq,Func.Common:mSecOffSet(MsRequest.ActStamp,1)).
@@ -3312,7 +3312,7 @@ PROCEDURE pTerminateServicePackage:
 
    /* service packages that need to be deactivated */
    FOR EACH DCServicePackage NO-LOCK WHERE
-            DCServicePackage.Brand     = Syst.CUICommon:gcBrand AND
+            DCServicePackage.Brand     = Syst.Var:gcBrand AND
             DCServicePackage.DCEvent   = icDCEvent AND
             /* if some package has been ended on contract, it stays active
                on subscription also after this */
@@ -3412,7 +3412,7 @@ PROCEDURE pContractReactivation:
           liReacPeriod = YEAR(ldtActDate) * 100 + MONTH(ldtActDate).
 
    FIND FIRST DayCampaign WHERE
-              DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
+              DayCampaign.Brand   = Syst.Var:gcBrand AND
               DayCampaign.DCEvent = lcDCEvent NO-LOCK NO-ERROR.
    IF NOT AVAILABLE DayCampaign OR
       DayCampaign.ValidFrom > ldtActDate OR
@@ -3422,7 +3422,7 @@ PROCEDURE pContractReactivation:
       RETURN.
    END. /* IF NOT AVAILABLE DayCampaign OR */
 
-   IF fMatrixAnalyse(Syst.CUICommon:gcBrand,
+   IF fMatrixAnalyse(Syst.Var:gcBrand,
                      "PERCONTR",
                      "PerContract;SubsTypeTo",
                      lcDCEvent + ";" + lcUseCLIType,
@@ -3445,7 +3445,7 @@ PROCEDURE pContractReactivation:
    IF LOOKUP(DayCampaign.DCType, {&PERCONTRACT_RATING_PACKAGE}) = 0 AND
       LOOKUP(DayCampaign.DCType, {&DCTYPE_POOL_RATING}) = 0 THEN DO:
       IF CAN-FIND(FIRST DCCLI WHERE
-                     DCCLI.Brand         = Syst.CUICommon:gcBrand              AND
+                     DCCLI.Brand         = Syst.Var:gcBrand              AND
                      DCCLI.DCEvent       = lcDCEvent            AND
                      DCCLI.MsSeq         = MsRequest.MsSeq      AND
                      (IF DCCLI.DCEvent BEGINS "PAYTERM" THEN
@@ -3458,7 +3458,7 @@ PROCEDURE pContractReactivation:
          RETURN.
       END. /* IF CAN-FIND(FIRST DCCLI WHERE */
 
-      FIND FIRST DCCLI WHERE DCCLI.Brand         = Syst.CUICommon:gcBrand              AND
+      FIND FIRST DCCLI WHERE DCCLI.Brand         = Syst.Var:gcBrand              AND
                              DCCLI.DCEvent       = lcDCEvent            AND
                              DCCLI.MsSeq         = MsRequest.MsSeq      AND
                              (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN
@@ -3490,7 +3490,7 @@ PROCEDURE pContractReactivation:
                DATE(ENTRY(liLookUp,bMsRequest.ReqCParam4,";")) NO-ERROR.
             LEAVE.
          END. /* IF bMsRequest.ReqCParam3 = MsRequest.ReqCParam3 AND */
-      END. /* FOR EACH bMsRequest WHERE bMsRequest.Brand     = Syst.CUICommon:gcBrand */
+      END. /* FOR EACH bMsRequest WHERE bMsRequest.Brand     = Syst.Var:gcBrand */
    END. /* IF LOOKUP(DayCampaign.DCType, {&PERCONTRACT_RATING_PACKAGE}) = 0 */
 
    IF ldtFromDate = ? THEN ldtFromDate = ldtActDate.
@@ -3500,7 +3500,7 @@ PROCEDURE pContractReactivation:
    
    /* Open the related fixed fee */
    FOR FIRST FixedFee USE-INDEX Custnum WHERE
-             FixedFee.Brand     = Syst.CUICommon:gcBrand   AND
+             FixedFee.Brand     = Syst.Var:gcBrand   AND
              FixedFee.Custnum   = Customer.Custnum AND
              FixedFee.HostTable = "MobSub"  AND
              FixedFee.KeyValue  = STRING(MsRequest.MsSeq) AND
@@ -3512,7 +3512,7 @@ PROCEDURE pContractReactivation:
              (IF liFFBegPeriod > 0 THEN 
               FixedFee.BegPeriod >= liFFBegPeriod ELSE TRUE) EXCLUSIVE-LOCK,
       FIRST FMItem WHERE
-            FMItem.Brand     = Syst.CUICommon:gcBrand AND
+            FMItem.Brand     = Syst.Var:gcBrand AND
             FMItem.FeeModel  = FixedFee.FeeModel AND
             FMItem.FromDate <= FixedFee.BegDate  AND
             FMItem.ToDate   >= FixedFee.BegDate NO-LOCK:
@@ -3636,7 +3636,7 @@ PROCEDURE pContractReactivation:
              FixedFee.BillCode EQ "PAYTERM" THEN DO:
 
             FIND FIRST SingleFee USE-INDEX Custnum WHERE
-                       SingleFee.Brand = Syst.CUICommon:gcBrand AND
+                       SingleFee.Brand = Syst.Var:gcBrand AND
                        SingleFee.Custnum = MsRequest.CustNum AND
                        SingleFee.HostTable = "Mobsub" AND
                        SingleFee.KeyValue = STRING(MsRequest.MsSeq) AND
@@ -3664,7 +3664,7 @@ PROCEDURE pContractReactivation:
           IF Fixedfee.BillCode EQ "PAYTERM" THEN DO:
           /* Open Residual SingleFee (if not billed) */
           FIND FIRST SingleFee USE-INDEX Custnum WHERE
-                     SingleFee.Brand       = Syst.CUICommon:gcBrand AND
+                     SingleFee.Brand       = Syst.Var:gcBrand AND
                      SingleFee.Custnum     = FixedFee.CustNum AND
                      SingleFee.HostTable   = FixedFee.HostTable AND
                      SingleFee.KeyValue    = FixedFee.KeyValue AND
@@ -3809,7 +3809,7 @@ PROCEDURE pContractReactivation:
    ELSE DO:
       /* current contract */
       FIND FIRST DCCLI WHERE
-                 DCCLI.Brand         = Syst.CUICommon:gcBrand              AND
+                 DCCLI.Brand         = Syst.Var:gcBrand              AND
                  DCCLI.DCEvent       = lcDCEvent            AND
                  DCCLI.MsSeq         = MsRequest.MsSeq      AND
                  (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN
@@ -3831,7 +3831,7 @@ PROCEDURE pContractReactivation:
             ldateDccli = ADD-INTERVAL(DCCLI.ValidTo, 1, "months").
          ELSE ldateDccli = DCCLI.ValidTo.
             FIND FIRST SingleFee USE-INDEX Custnum WHERE
-                       SingleFee.Brand = Syst.CUICommon:gcBrand AND
+                       SingleFee.Brand = Syst.Var:gcBrand AND
                        SingleFee.Custnum = MsRequest.CustNum AND
                        SingleFee.HostTable = "Mobsub" AND
                        SingleFee.KeyValue = STRING(MsRequest.MsSeq) AND

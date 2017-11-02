@@ -2,8 +2,8 @@
 */
 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "cron".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "cron".
 
 {Syst/eventlog.i}
 {Func/direct_dbconnect.i}
@@ -17,7 +17,7 @@ fInitializeConnectTables("MobCDR,McdrDtl2,ErrorCDR","").
 
 ldaLimitDate = TODAY - 90.
 
-RUN pDirectConnect2Dbs(Syst.CUICommon:gcBrand,
+RUN pDirectConnect2Dbs(Syst.Var:gcBrand,
                        "",
                        ldalimitDate - 1,
                        ldaLimitDate - 1).

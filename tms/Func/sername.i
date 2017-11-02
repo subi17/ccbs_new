@@ -8,7 +8,7 @@ FUNCTION fGetServiceName RETURNS CHARACTER
 
    DO liloop = 1 TO  Num-entries(ServiceCodes,"."):
       FIND FIRST bDispCom WHERE
-                 bDispCom.Brand   = Syst.CUICommon:gcBrand    AND 
+                 bDispCom.Brand   = Syst.Var:gcBrand    AND 
                  bDispCom.servCom = ENTRY(liLoop,ServiceCodes,".") 
       NO-LOCK NO-ERROR.
       IF AVAIL bDispCom THEN
@@ -30,7 +30,7 @@ FUNCTION fGetLocalName RETURNS CHARACTER
 
    DO liloop = 1 TO  Num-entries(ServiceCodes,"."):
       FIND FIRST bDispCom WHERE
-                 bDispCom.Brand   = Syst.CUICommon:gcBrand    AND 
+                 bDispCom.Brand   = Syst.Var:gcBrand    AND 
                  bDispCom.servCom = ENTRY(liLoop,ServiceCodes,".")
       NO-LOCK NO-ERROR.
       IF AVAIL bDispCom THEN

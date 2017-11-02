@@ -162,7 +162,7 @@ ELSE DO:
    /* check log */
    IF NOT fCheckArplog(ocr-file,
                        LogPrefix,
-                       Syst.CUICommon:katun)
+                       Syst.Var:katun)
    THEN RETURN. 
 
    /* open the ocr PaymFile again */

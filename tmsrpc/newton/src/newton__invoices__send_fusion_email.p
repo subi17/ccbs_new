@@ -7,7 +7,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Inv/fusioninvoice.i}
 
@@ -27,7 +27,7 @@ IF TRIM(pcUsername) EQ "" THEN RETURN appl_err("username is empty").
 
 {newton/src/settenant.i pcTenant}
 
-Syst.CUICommon:katun = "VISTA_" + pcUserName.
+Syst.Var:katun = "VISTA_" + pcUserName.
 
 liRequestID = fFusionEmailRequest(
                 INPUT Func.Common:mMakeTS(),

@@ -12,7 +12,7 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Mm/subser.i}
@@ -81,7 +81,7 @@ FIND FIRST Mobsub WHERE Mobsub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Mobsub THEN
     RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
 
-Syst.CUICommon:katun = "Newton".
+Syst.Var:katun = "Newton".
 
 DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
    pcStruct = get_struct(pcInputArray, STRING(liInputCounter - 1)).
@@ -99,7 +99,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
 
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-   FIND FIRST DayCampaign WHERE DayCampaign.Brand = Syst.CUICommon:gcBrand AND DayCampaign.DCEvent = pcServiceId NO-LOCK NO-ERROR.
+   FIND FIRST DayCampaign WHERE DayCampaign.Brand = Syst.Var:gcBrand AND DayCampaign.DCEvent = pcServiceId NO-LOCK NO-ERROR.
    IF AVAIL DayCampaign AND DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
    DO:
        ASSIGN lcBundleType = (IF DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN "Television" ELSE "").
@@ -141,7 +141,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
       CREATE Memo.
       ASSIGN
           Memo.CreStamp  = {&nowTS}
-          Memo.Brand     = Syst.CUICommon:gcBrand
+          Memo.Brand     = Syst.Var:gcBrand
           Memo.HostTable = "MobSub"
           Memo.KeyValue  = STRING(Mobsub.MsSeq)
           Memo.MemoSeq   = NEXT-VALUE(MemoSeq)

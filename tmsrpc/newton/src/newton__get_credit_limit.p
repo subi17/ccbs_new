@@ -12,8 +12,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "NewtonRPC".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "NewtonRPC".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 
 /* Input parameters */
@@ -59,24 +59,24 @@ IF AVAILABLE Limit THEN DO:
 
    MOBSUB_LOOP:
    FOR EACH bMobSub NO-LOCK WHERE
-            bMobSub.Brand   = Syst.CUICommon:gcBrand AND
+            bMobSub.Brand   = Syst.Var:gcBrand AND
             bMobSub.CustNum = Customer.CustNum:
       RUN pGetTermFee(bMobSub.MsSeq).
    END.
 
    TERMMOBSUB_LOOP:
    FOR EACH bTermMobSub NO-LOCK WHERE
-            bTermMobSub.Brand   = Syst.CUICommon:gcBrand AND
+            bTermMobSub.Brand   = Syst.Var:gcBrand AND
             bTermMobSub.CustNum = Customer.CustNum:
       RUN pGetTermFee(bTermMobSub.MsSeq).
    END.
 
    FOR EACH Order NO-LOCK WHERE
-            Order.Brand   = Syst.CUICommon:gcBrand          AND
+            Order.Brand   = Syst.Var:gcBrand          AND
             Order.CustNum = Customer.CustNum AND
       LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0,
       FIRST OfferItem NO-LOCK WHERE
-            OfferItem.Brand       = Syst.CUICommon:gcBrand        AND
+            OfferItem.Brand       = Syst.Var:gcBrand        AND
             OfferItem.Offer       = Order.Offer    AND
             OfferItem.ItemType    = "PerContract"  AND
             OfferItem.ItemKey     BEGINS "PAYTERM" AND
@@ -86,7 +86,7 @@ IF AVAILABLE Limit THEN DO:
       ldeWithdrawn = ldeWithdrawn + OfferItem.Amount.
 
       FOR FIRST FMItem NO-LOCK WHERE
-                FMItem.Brand     = Syst.CUICommon:gcBrand           AND
+                FMItem.Brand     = Syst.Var:gcBrand           AND
                 FMItem.FeeModel  = OfferItem.ItemKey AND
                 FMItem.ToDate   >= TODAY             AND
                 FMItem.FromDate <= TODAY:
@@ -110,7 +110,7 @@ PROCEDURE pGetTermFee:
            (DCCLI.DCEvent BEGINS "PAYTERM" OR
             DCCLI.DCEvent BEGINS "RVTERM"):
       FOR FIRST FixedFee NO-LOCK WHERE
-                FixedFee.Brand       = Syst.CUICommon:gcBrand                     AND
+                FixedFee.Brand       = Syst.Var:gcBrand                     AND
                 FixedFee.Custnum     = Customer.Custnum            AND
                 FixedFee.HostTable   = "MobSub"                    AND
                 FixedFee.KeyValue    = STRING(iiMsSeq)             AND
@@ -131,7 +131,7 @@ PROCEDURE pGetTermFee:
 
          IF FixedFee.BillCode BEGINS "PAYTERM" THEN
          FOR FIRST SingleFee NO-LOCK WHERE
-                   SingleFee.Brand       = Syst.CUICommon:gcBrand              AND
+                   SingleFee.Brand       = Syst.Var:gcBrand              AND
                    SingleFee.Custnum     = FixedFee.CustNum     AND
                    SingleFee.HostTable   = FixedFee.HostTable   AND
                    SingleFee.KeyValue    = FixedFee.KeyValue    AND

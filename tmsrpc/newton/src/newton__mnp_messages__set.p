@@ -55,8 +55,8 @@ IF MNPOperation.ErrorHandled NE ({&MNP_ERRORHANDLED_NO}) THEN
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = pcUserName.
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = pcUserName.
 {Syst/eventval.i}
 {Syst/tmsconst.i}
 {Mnp/mnpoperation.i}
@@ -75,7 +75,7 @@ END.
 IF MNPOperation.ErrorHandled EQ ({&MNP_ERRORHANDLED_NO}) THEN DO:
 
    IF llDoEvent THEN DO:
-      &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
+      &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
       {Func/lib/eventlog.i}
       DEF VAR lhMNPOperation AS HANDLE NO-UNDO.
       lhMNPOperation = BUFFER MNPOperation:HANDLE.
@@ -94,7 +94,7 @@ END.
 CREATE Memo.
 ASSIGN
     Memo.CreStamp  = {&nowTS}
-    Memo.Brand     = Syst.CUICommon:gcBrand
+    Memo.Brand     = Syst.Var:gcBrand
     Memo.HostTable = "MNPProcess"
     Memo.KeyValue  = STRING(MNPOperation.MNPSeq)
     Memo.MemoSeq   = NEXT-VALUE(MemoSeq)

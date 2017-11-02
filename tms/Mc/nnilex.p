@@ -49,7 +49,7 @@ DEF VAR totcf     AS DE NO-UNDO.
 
 /* get default direcory Name FOR OUTPUT */
 DO FOR TMSUser:
-   FIND TMSUser where TMSUser.UserCode = Syst.CUICommon:katun no-lock.
+   FIND TMSUser where TMSUser.UserCode = Syst.Var:katun no-lock.
    ASSIGN exdir = TMSUser.RepDir.
 END.
 
@@ -91,19 +91,19 @@ help "Earliest invoicing date"
 help "Invoicing group's code, empty for all"  SKIP
 "                Decimal separator .....:" exdeci help "Period/Comma" skip(2)
 WITH
-   width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + Syst.CUICommon:ynimi + " EXCEL-SUMMARY OF INVOICES " +
+   width 80 OVERLAY COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc)
+   " " + Syst.Var:ynimi + " EXCEL-SUMMARY OF INVOICES " +
    string(TODAY,"99-99-99") + " " NO-LABELS FRAME start.
 
 exdate2 = date(month(TODAY),1,year(TODAY)) + 32.
 exdate2 = date(month(exdate2),1,year(exdate2)) - 1.
 exdate1 = date(month(exdate2),1,year(exdate2)).
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
 
 CRIT:
 repeat WITH FRAME start:
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    DISP exName.
    UPDATE
       exdate1  validate(exdate1 ne ?,"Give first Date !")
@@ -114,7 +114,7 @@ repeat WITH FRAME start:
       exdeci
    WITH FRAME start EDITING.
       READKEY.
-      IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+      IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
          PAUSE 0.
       END.
       APPLY LASTKEY.
@@ -122,12 +122,12 @@ repeat WITH FRAME start:
 
 task:
    repeat WITH FRAME start:
-      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
-      IF Syst.CUICommon:toimi = 1 THEN NEXT  CRIT.
-      IF Syst.CUICommon:toimi = 8 THEN LEAVE CRIT.
+      IF Syst.Var:toimi = 1 THEN NEXT  CRIT.
+      IF Syst.Var:toimi = 8 THEN LEAVE CRIT.
 
-      IF Syst.CUICommon:toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
          ok = FALSE.
          message "Are you SURE you want to star processing (Y/N) ?" UPDATE ok.
          IF ok THEN LEAVE task.

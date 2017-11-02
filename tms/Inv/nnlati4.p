@@ -29,7 +29,7 @@ DEF VAR rl      AS i                       NO-UNDO.
 DEF VAR sl      AS i                       NO-UNDO.
 
 DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
-ynimi = Syst.CUICommon:ynimi.
+ynimi = Syst.Var:ynimi.
 
 form
    skip(1)
@@ -50,8 +50,8 @@ help "Code of an External Customer Group (EMPTY = none)" SKIP
      "Agent/reseller ........:"  AT 15 Reseller
         help "One for certain, empty for all" TO 50 skip(2)
 WITH
-   width 80 COLOR value(Syst.CUICommon:cfc)
-   title color value(Syst.CUICommon:ctc) " " + ynimi + " INVOICE STATISTICS SALESMAN/AGENT "   
+   width 80 COLOR value(Syst.Var:cfc)
+   title color value(Syst.Var:ctc) " " + ynimi + " INVOICE STATISTICS SALESMAN/AGENT "   
    + string(TODAY,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
 
 form header
@@ -78,10 +78,10 @@ FIND LAST Invoice no-lock no-error.
 IF AVAIL Invoice THEN ASSIGN date1 = Invoice.InvDate.
 date2 = date1.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
 LOOP:
 repeat WITH FRAME rajat:
-    Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+    Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
     UPDATE
     date1
@@ -98,11 +98,11 @@ repeat WITH FRAME rajat:
 
 TOIMI:
    repeat:
-      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
-      IF Syst.CUICommon:toimi = 1 THEN NEXT LOOP.
-      IF Syst.CUICommon:toimi = 8 THEN LEAVE LOOP.
-      IF Syst.CUICommon:toimi = 5 THEN LEAVE TOIMI.
+      IF Syst.Var:toimi = 1 THEN NEXT LOOP.
+      IF Syst.Var:toimi = 8 THEN LEAVE LOOP.
+      IF Syst.Var:toimi = 5 THEN LEAVE TOIMI.
    END.
 
 

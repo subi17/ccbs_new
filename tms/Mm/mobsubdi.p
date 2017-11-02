@@ -40,7 +40,7 @@
 {Func/barrfunc.i}
 IF llDoEvent THEN DO:
 
-  &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+  &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    
   {Func/lib/eventlog.i}
       
@@ -126,9 +126,9 @@ ELSE                    lcUserName = "".
 DO WHILE TRUE:
    ASSIGN 
       noMobile = (not avail mobsub) 
-      Syst.CUICommon:ufk = 0 
-      Syst.CUICommon:ufk[8] = 8 
-      Syst.CUICommon:ehto = 3. 
+      Syst.Var:ufk = 0 
+      Syst.Var:ufk[8] = 8 
+      Syst.Var:ehto = 3. 
    IF AVAIL MobSub AND Mobsub.msStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN DO:
       noMobile = TRUE.
       llPartial = TRUE.
@@ -367,8 +367,8 @@ DO WHILE TRUE:
              EndPeriod   LABEL  "Period To .....:"    SKIP
       
       WITH  OVERLAY ROW 5 centered
-      COLOR VALUE(Syst.CUICommon:cfc)
-      TITLE COLOR VALUE(Syst.CUICommon:ctc) (IF llDSSActive THEN "RERATE CUSTOMER"
+      COLOR VALUE(Syst.Var:cfc)
+      TITLE COLOR VALUE(Syst.Var:ctc) (IF llDSSActive THEN "RERATE CUSTOMER"
                               ELSE "RERATE SUBSCRIPTION")
       SIDE-LABELS
       FRAME rerate.
@@ -442,7 +442,7 @@ DO WHILE TRUE:
          VIEW-AS ALERT-BOX BUTTONS YES-NO TITLE " CONFIRMATION " UPDATE ok .
          
       IF NOT ok THEN NEXT.
-      RUN Mm/reacmobsub_cui.p(INPUT TermMobsub.Msseq, INPUT Syst.CUICommon:katun).
+      RUN Mm/reacmobsub_cui.p(INPUT TermMobsub.Msseq, INPUT Syst.Var:katun).
    END. /* ELSE IF FRAME-INDEX = 27 AND noMobile THEN DO: */
 
    /* call specification */

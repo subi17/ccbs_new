@@ -12,8 +12,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-ASSIGN Syst.CUICommon:gcBrand = "1"
-       Syst.CUICommon:katun   = "tmsrpc".
+ASSIGN Syst.Var:gcBrand = "1"
+       Syst.Var:katun   = "tmsrpc".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 
@@ -68,14 +68,14 @@ ASSIGN liYear   = INT(SUBSTRING(STRING(piPeriod),1,4))
        ldeEndStamp = Func.Common:mMake2DT(ldaDate,0).
 
 FIND FIRST Customer WHERE
-           Customer.Brand = Syst.CUICommon:gcBrand AND
+           Customer.Brand = Syst.Var:gcBrand AND
            Customer.OrgId = pcDNI   AND
            Customer.Roles NE "inactive" NO-LOCK NO-ERROR.
 IF NOT AVAIL Customer THEN
    RETURN appl_err("Customer not found").
 
 FIND FIRST MsOwner WHERE
-           MsOwner.Brand   = Syst.CUICommon:gcBrand AND
+           MsOwner.Brand   = Syst.Var:gcBrand AND
            MsOwner.CustNum = Customer.CustNum AND
            MsOwner.CLI     = pcMSISDN AND
            MsOwner.TsEnd  >= ldeEndStamp NO-LOCK NO-ERROR.
@@ -83,7 +83,7 @@ IF NOT AVAIL MsOwner THEN
    RETURN appl_err("MobSub not found").
 
 FOR EACH Invoice WHERE
-         Invoice.Brand    = Syst.CUICommon:gcBrand AND
+         Invoice.Brand    = Syst.Var:gcBrand AND
          Invoice.CustNum  = Customer.CustNum AND
          Invoice.InvDate >= ldaDate AND
          Invoice.InvType  = 1 NO-LOCK:

@@ -9,7 +9,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/eventval.i}
 
 DEFINE VARIABLE pcTenant   AS CHARACTER NO-UNDO.
@@ -35,7 +35,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 IF TRIM(pcUsername) EQ "VISTA_" THEN 
     RETURN appl_err("username is empty").
 
-Syst.CUICommon:katun = pcUserName.
+Syst.Var:katun = pcUserName.
 
 IF NUM-ENTRIES(pcID,"|") > 1 THEN
    ASSIGN
@@ -47,14 +47,14 @@ ELSE
 {newton/src/settenant.i pcTenant}
 
 FIND FeeModel WHERE 
-     FeeModel.Brand = Syst.CUICommon:gcBrand AND
+     FeeModel.Brand = Syst.Var:gcBrand AND
      FeeModel.FeeModel = pcId NO-LOCK NO-ERROR.
 IF NOT AVAIL FeeModel THEN DO:
    RETURN appl_err(SUBST("Charge event &1 not found", pcId)).
 END.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
    {Func/lib/eventlog.i}
 END.
 

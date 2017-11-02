@@ -45,12 +45,12 @@ FUNCTION fErrorLog RETURNS LOGIC
    
    DO TRANS:
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
              ErrorLog.ActionID  = "BRANALYSIS"
              ErrorLog.TableName = "BRTestCase"
              ErrorLog.KeyValue  = STRING(iiCustNum)
              ErrorLog.ErrorMsg  = icError
-             ErrorLog.UserCode  = Syst.CUICommon:katun.
+             ErrorLog.UserCode  = Syst.Var:katun.
              ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    

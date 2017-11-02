@@ -20,7 +20,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 DEF VAR lcQuery AS CHARACTER NO-UNDO. 
 
 lcQuery = 'FOR EACH DayCampaign NO-LOCK WHERE ' +
-          'DayCampaign.Brand = ' + QUOTER(Syst.CUICommon:gcBrand) + ' AND ' +
+          'DayCampaign.Brand = ' + QUOTER(Syst.Var:gcBrand) + ' AND ' +
           'LOOKUP(DayCampaign.DCType,"3,5") > 0 AND ' +
           'DayCampaign.ValidTo >= TODAY AND DayCampaign.ValidFrom <= TODAY'.
 

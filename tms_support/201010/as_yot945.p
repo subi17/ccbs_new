@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "anttis".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 
 find daycampaign where
      daycampaign.dcevent = "SMSFREEOCT10" no-lock.
@@ -66,7 +66,7 @@ do trans:
       ELSE LEAVE.
    END.
 
-   ASSIGN DCCLI.Brand        = Syst.CUICommon:gcBrand
+   ASSIGN DCCLI.Brand        = Syst.Var:gcBrand
           DCCLI.DCEvent      = daycampaign.dcevent
           DCCLI.MsSeq        = mobsub.msseq
           DCCLI.CLI          = mobsub.cli

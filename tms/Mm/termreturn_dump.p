@@ -118,11 +118,11 @@ FOR EACH TermReturn NO-LOCK WHERE
             END.
             WHEN "#Q25Amount" THEN DO:
                FIND FIRST Order NO-LOCK WHERE
-                          Order.Brand   = Syst.CUICommon:gcBrand AND
+                          Order.Brand   = Syst.Var:gcBrand AND
                           Order.OrderId = TermReturn.OrderId NO-ERROR.
                IF AVAILABLE Order THEN DO:
                   FIND SingleFee WHERE
-                       SingleFee.Brand       = Syst.CUICommon:gcBrand AND
+                       SingleFee.Brand       = Syst.Var:gcBrand AND
                        SingleFee.HostTable   = "Mobsub" AND
                        SingleFee.KeyValue    = STRING(Order.MsSeq) AND
                        SingleFee.OrderId     = Order.OrderId AND

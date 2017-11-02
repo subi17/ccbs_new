@@ -64,7 +64,7 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fbankdata.i}
 
@@ -112,7 +112,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {newton/src/findtenant.i NO Common Customer CustNum piCustNum}
 
-Syst.CUICommon:katun = "VISTA_" + scUser.
+Syst.Var:katun = "VISTA_" + scUser.
 
 /* Local variables */
 DEF VAR lcstruct AS CHAR NO-UNDO.
@@ -301,7 +301,7 @@ ELSE lcOrgId = lcCustomerData[LOOKUP("person_id", lcDataFields)].
 IF Customer.orgid NE lcOrgId THEN DO:
 
    FIND FIRST bCustomer WHERE
-      bCustomer.Brand = Syst.CUICommon:gcBrand AND
+      bCustomer.Brand = Syst.Var:gcBrand AND
       bCustomer.OrgID = lcOrgId
    NO-LOCK NO-ERROR.
 
@@ -317,7 +317,7 @@ IF Customer.CustIdType NE "CIF" THEN DO:
    IF lcCustIdType NE Customer.CustIdType THEN DO:
       
       FIND FIRST bCustomer WHERE
-         bCustomer.Brand = Syst.CUICommon:gcBrand AND
+         bCustomer.Brand = Syst.Var:gcBrand AND
          bCustomer.OrgID = lcOrgId AND
          bCustomer.CustIdType = lcCustIdType NO-LOCK NO-ERROR.
       
@@ -349,7 +349,7 @@ IF Customer.CustIdType = "CIF" THEN DO:
    RUN StarEventInitialize(lhCustContact).
    
    FIND FIRST CustContact WHERE
-              CustContact.Brand = Syst.CUICommon:gcBrand AND
+              CustContact.Brand = Syst.Var:gcBrand AND
               CustContact.CustNum = piCustNum AND
               CustContact.CustType = 5 EXCLUSIVE-LOCK NO-ERROR.
 
@@ -359,7 +359,7 @@ IF Customer.CustIdType = "CIF" THEN DO:
    ELSE IF get_paramcount(pcCCStruct) > 0 THEN DO:  
       CREATE CustContact.
       ASSIGN
-         CustContact.Brand = Syst.CUICommon:gcBrand
+         CustContact.Brand = Syst.Var:gcBrand
          CustContact.Custnum = Customer.Custnum
          CustContact.CustType = 5.
    END.
@@ -496,7 +496,7 @@ IF llCustomerChanged THEN DO:
 
           liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                            INPUT TODAY,
-                                           INPUT Syst.CUICommon:katun,
+                                           INPUT Syst.Var:katun,
                                            INPUT 0, /* msseq */
                                            INPUT "", /* cli */
                                            INPUT Customer.CustNum,
@@ -532,7 +532,7 @@ IF llCustomerChanged THEN DO:
 
              liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                               INPUT TODAY,
-                                              INPUT Syst.CUICommon:katun,
+                                              INPUT Syst.Var:katun,
                                               INPUT 0, /* msseq */
                                               INPUT "", /* cli */
                                               INPUT Customer.CustNum,
@@ -673,11 +673,11 @@ IF pcMemoTitle NE "" OR
    CREATE Memo.
    ASSIGN
        Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = Syst.CUICommon:gcBrand
+       Memo.Brand     = Syst.Var:gcBrand
        Memo.HostTable = lcMemoHostTable
        Memo.KeyValue  = STRING(Customer.Custnum)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = Syst.CUICommon:katun
+       Memo.CreUser   = Syst.Var:katun
        Memo.CustNum   = Customer.Custnum.
    IF llBankAcctChange THEN
       ASSIGN

@@ -172,7 +172,7 @@ FUNCTION fVatIncl RETURNS LOGICAL
          
       END. 
       ELSE FOR FIRST BillItem NO-LOCK WHERE
-                     BillItem.Brand    = Syst.CUICommon:gcBrand AND
+                     BillItem.Brand    = Syst.Var:gcBrand AND
                      BillItem.BillCode = icBillCode,
                FIRST VatCode OF BillItem NO-LOCK:
                
@@ -212,7 +212,7 @@ FUNCTION fUnitPrice RETURNS LOGICAL
    /* old type of mob data call */
    IF iiSecTar > 0 THEN DO:
       FIND Tariff WHERE 
-           Tariff.Brand     = Syst.CUICommon:gcBrand AND
+           Tariff.Brand     = Syst.Var:gcBrand AND
            Tariff.TariffNum = iiSecTar NO-LOCK NO-ERROR.
       IF AVAILABLE Tariff THEN ASSIGN 
          ttCall.UnitPrice = Tariff.Price[1] * ldVatFactor
@@ -222,7 +222,7 @@ FUNCTION fUnitPrice RETURNS LOGICAL
    END.         
    
    FIND Tariff WHERE 
-        Tariff.Brand     = Syst.CUICommon:gcBrand AND
+        Tariff.Brand     = Syst.Var:gcBrand AND
         Tariff.TariffNum = iiTariff NO-LOCK NO-ERROR.
    IF NOT AVAILABLE Tariff THEN RETURN FALSE.
 
@@ -309,7 +309,7 @@ FUNCTION fCollFixCDR RETURNS LOGICAL
               FixCDR.CurrUnit,
               "",
               FixCDR.TariffID,
-              Syst.CUICommon:gcBrand,
+              Syst.Var:gcBrand,
               OUTPUT ttCall.Amt,
               OUTPUT ldGross).   
 
@@ -360,7 +360,7 @@ FUNCTION fCollMobCDR RETURNS LOGICAL
              MobCDR.CurrUnit,
              "",
              MobCDR.TariffNum,
-             Syst.CUICommon:gcBrand,
+             Syst.Var:gcBrand,
              OUTPUT ttCall.Amt,
              OUTPUT ttCall.Mpm).   
 

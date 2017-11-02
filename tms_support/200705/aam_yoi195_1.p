@@ -1,7 +1,7 @@
 {Syst/testpaa.i}
 {Func/fmakemsreq.i}
 
-Syst.CUICommon:katun = "ari".
+Syst.Var:katun = "ari".
 
 def var i       as int  no-undo.
 def var j       as int  no-undo.

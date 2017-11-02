@@ -27,12 +27,12 @@ RUN pCancelCommission (OUTPUT oiChecked,
 DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = Syst.CUICommon:gcBrand   
+      ActionLog.Brand        = Syst.Var:gcBrand   
       ActionLog.TableName    = "CoTarg"  
       ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                STRING(MONTH(TODAY),"99") + 
                                STRING(DAY(TODAY),"99")
-      ActionLog.UserCode     = Syst.CUICommon:katun
+      ActionLog.UserCode     = Syst.Var:katun
       ActionLog.ActionID     = "COMMCANCEL"
       ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
       ActionLog.ActionDec    = oiCancelled
@@ -71,18 +71,18 @@ PROCEDURE pCancelCommission:
    
    CommissionCancel:
    FOR EACH CoTarg NO-LOCK USE-INDEX CommStatus WHERE
-            CoTarg.Brand      = Syst.CUICommon:gcBrand AND
+            CoTarg.Brand      = Syst.Var:gcBrand AND
             CoTarg.CommStatus = 2       AND
             CoTarg.TargType = "M",
       FIRST FATime NO-LOCK USE-INDEX HostTable WHERE
-            FATime.Brand     = Syst.CUICommon:gcBrand  AND
+            FATime.Brand     = Syst.Var:gcBrand  AND
             FATime.HostTable = "CoTarg" AND
             FATime.KeyValue  = STRING(CoTarg.CoTargID) AND
             FATime.InvNum    = 0,
       FIRST MobSub NO-LOCK WHERE 
             MobSub.MsSeq = INTEGER(CoTarg.CoTarg),
       FIRST CoRule NO-LOCK WHERE
-            CoRule.Brand    = Syst.CUICommon:gcBrand AND
+            CoRule.Brand    = Syst.Var:gcBrand AND
             CoRule.CoRuleID = CoTarg.CoRuleID AND
             CoRule.RuleType = 2:   /* 2=referee */
             

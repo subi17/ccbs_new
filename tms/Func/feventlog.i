@@ -14,7 +14,7 @@ FUNCTION fViewEvent RETURNS LOGICAL
              EventLog.Key            = icKey
              EventLog.EventDate      = TODAY
              EventLog.EventTime      = STRING(TIME,"hh:mm:ss")
-             EventLog.UserCode       = Syst.CUICommon:katun
+             EventLog.UserCode       = Syst.Var:katun
              EventLog.Action         = "View"
              EventLog.EventLogStatus = 5.
       RELEASE EventLog.

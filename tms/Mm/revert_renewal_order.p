@@ -72,7 +72,7 @@ END. /* IF AVAIL bSubMsRequest THEN DO: */
 Func.Common:mSplitTS(bRenewalMsRequest.ActStamp,OUTPUT ldaRenewalDate,OUTPUT liRenewalTime).
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    
    {Func/lib/eventlog.i}
 END.
@@ -88,7 +88,7 @@ FUNCTION fCollectActivationFees RETURNS LOGICAL (
    IF icDCEvent BEGINS "PAYTERM" THEN DO:
       
       FOR FIRST FixedFee USE-INDEX Custnum WHERE
-                FixedFee.Brand     = Syst.CUICommon:gcBrand   AND
+                FixedFee.Brand     = Syst.Var:gcBrand   AND
                 FixedFee.Custnum   = bSubMsRequest.Custnum AND
                 FixedFee.HostTable = "MobSub"  AND
                 FixedFee.KeyValue  = STRING(bSubMsRequest.MsSeq) AND
@@ -97,7 +97,7 @@ FUNCTION fCollectActivationFees RETURNS LOGICAL (
                 FixedFee.SourceKey = STRING(iiPercontractID):
             
          FOR FIRST SingleFee USE-INDEX Custnum WHERE
-                   SingleFee.Brand       = Syst.CUICommon:gcBrand AND
+                   SingleFee.Brand       = Syst.Var:gcBrand AND
                    SingleFee.Custnum     = FixedFee.CustNum AND
                    SingleFee.HostTable   = FixedFee.HostTable AND
                    SingleFee.KeyValue    = FixedFee.KeyValue AND
@@ -115,7 +115,7 @@ FUNCTION fCollectActivationFees RETURNS LOGICAL (
          END.
       
          FOR FIRST SingleFee USE-INDEX Custnum NO-LOCK WHERE
-                   SingleFee.Brand = Syst.CUICommon:gcBrand AND
+                   SingleFee.Brand = Syst.Var:gcBrand AND
                    SingleFee.Custnum = bSubMsRequest.CustNum AND
                    SingleFee.HostTable = "Mobsub" AND
                    SingleFee.KeyValue = STRING(bSubMsRequest.MsSeq) AND
@@ -135,7 +135,7 @@ FUNCTION fCollectActivationFees RETURNS LOGICAL (
       bSubMsRequest.ReqCParam2 EQ "recreate" THEN DO:
    
       FOR FIRST SingleFee USE-INDEX Custnum WHERE
-                SingleFee.Brand = Syst.CUICommon:gcBrand AND
+                SingleFee.Brand = Syst.Var:gcBrand AND
                 SingleFee.Custnum = bSubMsRequest.CustNum AND
                 SingleFee.HostTable = "Mobsub" AND
                 SingleFee.KeyValue = STRING(bSubMsRequest.MsSeq) AND
@@ -165,7 +165,7 @@ FUNCTION fCollectTerminationFees RETURNS LOGICAL (
    IF icDCEvent BEGINS "PAYTERM" THEN DO:
       
       FOR FIRST FixedFee USE-INDEX Custnum WHERE
-                FixedFee.Brand     = Syst.CUICommon:gcBrand   AND
+                FixedFee.Brand     = Syst.Var:gcBrand   AND
                 FixedFee.Custnum   = bSubMsRequest.Custnum AND
                 FixedFee.HostTable = "MobSub"  AND
                 FixedFee.KeyValue  = STRING(bSubMsRequest.MsSeq) AND
@@ -174,7 +174,7 @@ FUNCTION fCollectTerminationFees RETURNS LOGICAL (
                 FixedFee.SourceKey = STRING(iiPercontractID):
             
          FOR FIRST SingleFee USE-INDEX Custnum NO-LOCK WHERE
-                   SingleFee.Brand = Syst.CUICommon:gcBrand AND
+                   SingleFee.Brand = Syst.Var:gcBrand AND
                    SingleFee.Custnum = bSubMsRequest.CustNum AND
                    SingleFee.HostTable = "Mobsub" AND
                    SingleFee.KeyValue = STRING(bSubMsRequest.MsSeq) AND
@@ -194,7 +194,7 @@ FUNCTION fCollectTerminationFees RETURNS LOGICAL (
    ELSE IF icDCEvent BEGINS "TERM" THEN DO:
    
       FOR FIRST SingleFee USE-INDEX Custnum WHERE
-                SingleFee.Brand = Syst.CUICommon:gcBrand AND
+                SingleFee.Brand = Syst.Var:gcBrand AND
                 SingleFee.Custnum = bSubMsRequest.CustNum AND
                 SingleFee.HostTable = "Mobsub" AND
                 SingleFee.KeyValue = STRING(bSubMsRequest.MsSeq) AND
@@ -256,7 +256,7 @@ PROCEDURE pRevertRenewalOrder:
             (bSubMsRequest.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION} OR
              bSubMsRequest.ReqType    = {&REQTYPE_CONTRACT_TERMINATION}),
        FIRST DayCampaign NO-LOCK WHERE
-             DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
+             DayCampaign.Brand   = Syst.Var:gcBrand AND
              DayCampaign.DCEvent = bSubMsRequest.ReqCparam3 AND
             (DayCampaign.DCType EQ {&DCTYPE_DISCOUNT} OR
              DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT}):
@@ -270,7 +270,7 @@ PROCEDURE pRevertRenewalOrder:
           ELSE ldaRequestDate = 1/1/2000.
 
           FIND FIRST DCCLI NO-LOCK WHERE
-                     DCCLI.Brand      = Syst.CUICommon:gcBrand AND
+                     DCCLI.Brand      = Syst.Var:gcBrand AND
                      DCCLI.DCEvent    = DayCampaign.DCEvent AND
                      DCCLI.MsSeq      = bSubMsRequest.MsSeq AND
                      DCCLI.ValidFrom <= TODAY AND
@@ -289,7 +289,7 @@ PROCEDURE pRevertRenewalOrder:
              REPEAT:
                 liCount = liCount + 1.
                 FIND FIRST bDCCLI NO-LOCK WHERE
-                           bDCCLI.Brand      = Syst.CUICommon:gcBrand AND
+                           bDCCLI.Brand      = Syst.Var:gcBrand AND
                            bDCCLI.DCEvent    = DayCampaign.DCEvent AND
                            bDCCLI.MsSeq      = bSubMsRequest.MsSeq AND
                            bDCCLI.ValidFrom <= TODAY AND
@@ -301,7 +301,7 @@ PROCEDURE pRevertRenewalOrder:
              IF bSubMsRequest.ReqCparam2 = "recreate" AND
                 bSubMsRequest.ReqIParam1 > 0 THEN DO:
                 FIND FIRST bDCCLI NO-LOCK WHERE
-                           bDCCLI.Brand      = Syst.CUICommon:gcBrand AND
+                           bDCCLI.Brand      = Syst.Var:gcBrand AND
                            bDCCLI.DCEvent    = DayCampaign.DCEvent AND
                            bDCCLI.MsSeq      = bSubMsRequest.MsSeq AND
                            bDCCLI.ValidFrom <= TODAY AND
@@ -465,7 +465,7 @@ PROCEDURE pCloseQ25Discount:
    DEF BUFFER bMsRequest FOR MSRequest.
 
    FIND FIRST OrderAction NO-LOCK WHERE
-              OrderAction.Brand    EQ Syst.CUICommon:gcBrand AND
+              OrderAction.Brand    EQ Syst.Var:gcBrand AND
               OrderAction.OrderId  EQ MsRequest.ReqIParam1 AND
               OrderAction.ItemType EQ "Q25Discount" NO-ERROR.
       
@@ -480,7 +480,7 @@ PROCEDURE pCloseQ25Discount:
       RETURN "ERROR:Q25 discount cancellation (discount amount)". 
 
    FIND SingleFee NO-LOCK WHERE
-        SingleFee.Brand       = Syst.CUICommon:gcBrand AND
+        SingleFee.Brand       = Syst.Var:gcBrand AND
         SingleFee.HostTable   = "Mobsub" AND
         SingleFee.KeyValue    = STRING(Mobsub.MsSeq) AND
         SingleFee.SourceTable = "DCCLI" AND
@@ -509,7 +509,7 @@ PROCEDURE pCloseQ25Discount:
    ELSE DO:
       
       FOR EACH DCCLI NO-LOCK WHERE
-               DCCLI.Brand   EQ Syst.CUICommon:gcBrand AND
+               DCCLI.Brand   EQ Syst.Var:gcBrand AND
                DCCLI.DCEvent EQ "RVTERM12" AND
                DCCLI.MsSeq   EQ MobSub.MsSeq AND
                DCCLI.ValidTo >= TODAY:
@@ -553,7 +553,7 @@ PROCEDURE pCloseQ25Discount:
    
    DISCOUNT_LOOP:
    FOR EACH DiscountPlan NO-LOCK WHERE
-            DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
+            DiscountPlan.Brand = Syst.Var:gcBrand AND
      LOOKUP(DiscountPlan.DPRuleID,"RVTERMDT1DISC,RVTERMDT4DISC") > 0:
 
       FOR EACH dpmember NO-LOCK WHERE

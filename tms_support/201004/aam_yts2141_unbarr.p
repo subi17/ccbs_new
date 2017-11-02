@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-Syst.CUICommon:katun = "qvantel".
+Syst.Var:katun = "qvantel".
 {Func/barrfunc.i}
 
 def stream sread.
@@ -104,7 +104,7 @@ repeat:
       RUN Mm/barrengine.p (msowner.MsSeq,
                    "UNY_REST",
                    "9",                /* source  */
-                   Syst.CUICommon:katun,       /* creator */
+                   Syst.Var:katun,       /* creator */
                    Func.Common:mMakeTS() + 0.0012, /* activate, 2min delay */
                    "",                 /* SMS */
                    OUTPUT lcResult).

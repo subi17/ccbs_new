@@ -7,7 +7,7 @@
 ----------------------------------------------------------------- */
 
 FIND first TMSParam WHERE 
-     tmsparam.brand = Syst.CUICommon:gcBrand AND 
+     tmsparam.brand = Syst.Var:gcBrand AND 
      tmsparam.ParamCode = "{1}" NO-LOCK NO-ERROR.
 IF NOT AVAIL TMSParam THEN DO:
    MESSAGE

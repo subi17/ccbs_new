@@ -6,8 +6,8 @@
   --------------------------------------------------------------------------- */
 {Syst/commpaa.i}
 ASSIGN
-   Syst.CUICommon:gcBrand = "1"
-   Syst.CUICommon:katun   = "Cron".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun   = "Cron".
    
 {Func/cparam2.i}
 {Func/heartbeat.i}
@@ -225,7 +225,7 @@ FUNCTION fAnalyseTriggerEvent RETURN INT
 
       WHEN "ALL" THEN DO:
          FOR EACH MsOwner NO-LOCK WHERE
-                  MsOwner.Brand = Syst.CUICommon:gcBrand AND
+                  MsOwner.Brand = Syst.Var:gcBrand AND
                   MsOwner.PayType = FALSE
          BREAK BY MsOwner.MsSeq
                BY MsOwner.InvCust:

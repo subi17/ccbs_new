@@ -111,8 +111,8 @@ IF NOT AVAILABLE MsOwner THEN
    RETURN appl_err(SUBST("MsOwner entry &1 not found", piMsSeq)).
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Newton".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Newton".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/flimitreq.i}
 {Func/fcustpl.i}
@@ -335,7 +335,7 @@ IF NOT MobSub.PayType THEN DO:
 
       ldeFinalAmt = 0.
       FOR EACH SingleFee USE-INDEX Custnum WHERE
-               SingleFee.Brand       = Syst.CUICommon:gcBrand AND
+               SingleFee.Brand       = Syst.Var:gcBrand AND
                SingleFee.Custnum     = Mobsub.InvCust AND
                SingleFee.HostTable   = "Mobsub" AND
                SingleFee.KeyValue    = STRING(Mobsub.MsSeq) AND
@@ -361,7 +361,7 @@ IF NOT MobSub.PayType THEN DO:
             DCCLI.ValidTo   >= TODAY AND
             DCCLI.CreateFees = TRUE,
       FIRST DayCampaign WHERE
-            DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+            DayCampaign.Brand = Syst.Var:gcBrand AND
             DayCampaign.DCEvent = DCCLI.DCEvent AND
             DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND
             DayCampaign.TermFeeModel NE "" AND
@@ -416,7 +416,7 @@ add_int(memo_struct,"service", INT(fMemoCount("service",MobSub.Msseq,True))).
 
 /* satisfaction value */
 FIND FIRST PIndicator  WHERE
-           PIndicator.Brand = Syst.CUICommon:gcBrand AND
+           PIndicator.Brand = Syst.Var:gcBrand AND
            PIndicator.HostTable = "MobSub" AND
            PIndicator.KeyValue = STRING(MobSub.MsSeq) AND
            PIndicator.IndicatorType = {&P_INDICATOR_TYPE_SATISFACTION_VALUE}  
@@ -443,7 +443,7 @@ IF MobSub.MultiSIMType > 0 AND
               lbMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} NO-ERROR. 
    
    FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSimID WHERE
-              lbMobSub.Brand        = Syst.CUICommon:gcBrand           AND
+              lbMobSub.Brand        = Syst.Var:gcBrand           AND
               lbMobSub.MultiSimID   = MobSub.MultiSimID AND
               lbMobSub.MultiSimType = liMultiSIMType    AND
               lbMobSub.Custnum      = MobSub.Custnum    NO-ERROR.

@@ -8,8 +8,8 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
@@ -246,7 +246,7 @@ PROCEDURE pHandleOfferSMSResponse:
          IF SMSMessage.OrderId EQ 0 THEN NEXT.
 
          FIND FIRST bOrder NO-LOCK WHERE
-                    bOrder.Brand  = Syst.CUICommon:gcBrand AND
+                    bOrder.Brand  = Syst.Var:gcBrand AND
                     bOrder.OrderId = SMSMessage.OrderID AND
                     bOrder.ContractId = lcContractID NO-ERROR.
 
@@ -265,7 +265,7 @@ PROCEDURE pHandleOfferSMSResponse:
       IF SMSMessage.OrderId EQ 0 THEN NEXT.
 
       FIND FIRST bOrder NO-LOCK WHERE
-                 bOrder.Brand  = Syst.CUICommon:gcBrand AND
+                 bOrder.Brand  = Syst.Var:gcBrand AND
                  bOrder.OrderId = SMSMessage.OrderID NO-ERROR.
       LEAVE.
    END.
@@ -288,7 +288,7 @@ PROCEDURE pHandleOfferSMSResponse:
    IF lcError EQ "" AND lcContractId > "" THEN DO:
 
       FIND Order NO-LOCK WHERE
-           Order.Brand = Syst.CUICommon:gcBrand AND
+           Order.Brand = Syst.Var:gcBrand AND
            Order.ContractId = lcContractID NO-ERROR.
       IF NOT AVAILABLE Order THEN DO:
             
@@ -347,7 +347,7 @@ PROCEDURE pHandleOfferSMSResponse:
    ELSE DO:
 
       FIND OrderCustomer NO-LOCK WHERE
-           OrderCustomer.Brand = Syst.CUICommon:gcBrand AND
+           OrderCustomer.Brand = Syst.Var:gcBrand AND
            OrderCustomer.OrderId = Order.OrderID AND
            OrderCustomer.RowType = 1.
 

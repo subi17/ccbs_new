@@ -8,8 +8,8 @@ Version ......: yoigo
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 
 DEFINE VARIABLE lcParam AS CHARACTER NO-UNDO. 
 

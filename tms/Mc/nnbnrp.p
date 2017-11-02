@@ -40,7 +40,7 @@ with centered width 80 no-label title "B-number prices" FRAME frm.
 
 DO FOR TMSUser:
    FIND FIRST TMSUser no-lock where
-              TMSUser.UserCode = Syst.CUICommon:katun.
+              TMSUser.UserCode = Syst.Var:katun.
    exPaymFile = TMSUser.RepDir + "/bnrprice.txt".
 END.
 
@@ -48,17 +48,17 @@ CRIT:
 repeat WITH FRAME frm:
 
    HIDE MESSAGE no-pause.
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       PriceList 
       bone
       exPaymFile 
    WITH FRAME frm EDITING:
       READKEY.
-      IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+      IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
          IF lookup(frame-field,"PriceList") > 0 THEN DO:
             FIND FIRST PriceList WHERE 
-                       PriceList.Brand  = Syst.CUICommon:gcBrand AND
+                       PriceList.Brand  = Syst.Var:gcBrand AND
                        PriceList.PriceList = INPUT PriceList 
             NO-LOCK NO-ERROR.
 
@@ -80,12 +80,12 @@ repeat WITH FRAME frm:
 
 task:
    repeat WITH FRAME frm:
-      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
-      IF Syst.CUICommon:toimi = 1 THEN NEXT  CRIT.
-      IF Syst.CUICommon:toimi = 8 THEN LEAVE CRIT.
+      IF Syst.Var:toimi = 1 THEN NEXT  CRIT.
+      IF Syst.Var:toimi = 8 THEN LEAVE CRIT.
 
-      IF Syst.CUICommon:toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
          ok = FALSE.
          message "Are you SURE you want to start processing (Y/N) ?" UPDATE ok.
          IF ok THEN LEAVE task.
@@ -100,7 +100,7 @@ task:
    message "Printing prices ...".
 
    FIND FIRST PriceList no-lock where
-              PriceList.Brand  = Syst.CUICommon:gcBrand AND
+              PriceList.Brand  = Syst.Var:gcBrand AND
               PriceList.PriceList = PriceList NO-ERROR.
 
    /* header texts */
@@ -129,7 +129,7 @@ task:
       my-nl.
 
    FOR EACH  Tariff no-lock where
-             Tariff.Brand     = Syst.CUICommon:gcBrand AND
+             Tariff.Brand     = Syst.Var:gcBrand AND
              (IF   pricelist    = "ALL" THEN TRUE 
               ELSE Tariff.PriceList = PriceList)
    BREAK
@@ -141,7 +141,7 @@ task:
 
       IF Tariff.CCN > 0 THEN 
       FIND FIRST CCN NO-LOCK WHERE
-             CCN.Brand = Syst.CUICommon:gcBrand AND
+             CCN.Brand = Syst.Var:gcBrand AND
              CCN.CCN   = Tariff.CCN NO-ERROR.
 
       /* Price data */

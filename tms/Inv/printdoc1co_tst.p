@@ -245,7 +245,7 @@ for each invoice no-lock where
          /* owner change */           
          liseq = 0.
          for each MsOwner no-lock WHERE
-                  Msowner.Brand  = Syst.CUICommon:gcBrand     AND
+                  Msowner.Brand  = Syst.Var:gcBrand     AND
                   MsOwner.CLI    = subinvoice.cli AND
                   MsOwner.TsEnd >= ldFrom      AND
                   MsOwner.TsBeg <  ldTo
@@ -330,7 +330,7 @@ for each ttcli:
    if can-find(first ttpick where ttpick.cli = ttcli.cli) then next.
    
    for each invoice no-lock where
-            invoice.brand = Syst.CUICommon:gcBrand and
+            invoice.brand = Syst.Var:gcBrand and
             invoice.invdate = iiInvDate and
             invoice.invtype = 99,
       first subinvoice of invoice no-lock where

@@ -161,7 +161,7 @@ PROCEDURE pSingleInvoice:
                     ?,
                     "",             /* memo */
                     FALSE,          /* no messages to screen */
-                    Syst.CUICommon:katun,
+                    Syst.Var:katun,
                     "",
                     0,
                     "",

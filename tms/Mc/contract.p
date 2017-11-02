@@ -20,7 +20,7 @@
 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -84,8 +84,8 @@ form
     Contract.CloseDate
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
        " CONTRACTS "  + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
@@ -94,14 +94,14 @@ form
     Contract.CustNum     COLON 20   
        VALIDATE(INPUT Contract.CustNum = 0 OR 
                 CAN-FIND(FIRST Customer WHERE 
-                               Customer.Brand   = Syst.CUICommon:gcBrand AND
+                               Customer.Brand   = Syst.Var:gcBrand AND
                                Customer.CustNum = INPUT Contract.CustNum),
                 "Unknown customer")
        lcCustName FORMAT "X(30)" NO-LABEL SKIP
     Contract.Salesman     COLON 20   LABEL "Salesman"
        VALIDATE(INPUT Contract.Salesman = "" OR
                 CAN-FIND(Salesman WHERE 
-                         Salesman.Brand   = Syst.CUICommon:gcBrand AND
+                         Salesman.Brand   = Syst.Var:gcBrand AND
                          Salesman.Salesman = 
                          INPUT Contract.Salesman),
                 "Unknown Salesman")
@@ -114,7 +114,7 @@ form
     Contract.FeeModel    COLON 20
        VALIDATE(INPUT Contract.FeeModel = "" OR
                 CAN-FIND(FeeModel WHERE 
-                         FeeModel.Brand = Syst.CUICommon:gcBrand AND
+                         FeeModel.Brand = Syst.Var:gcBrand AND
                          FeeModel.FeeModel = INPUT Contract.FeeModel),
                 "Unknown fee model")
        FeeModel.FeeName NO-LABEL SKIP
@@ -130,8 +130,8 @@ form
        FORMAT "X(55)"
 
 WITH  OVERLAY ROW 3 centered
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -141,29 +141,29 @@ form /* seek  contract */
     "Brand ..:" lcBrand skip
     "Contract:" lcContract
     HELP "Enter contract ID"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND contract "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND contract "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  CustNum */
     "Brand ..:" lcBrand skip
     "Customer:" liCustNum
     HELP "Enter customer number"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND customer "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND customer "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek  Salesman */
     "Brand ..:" lcBrand skip
     "Salesman:" xSalesman
     HELP "Enter Salesman code"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Salesman "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Salesman "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f3.
 
 form /* seek  date */
     "Brand:" lcBrand skip
     "Date :" ldtFrom
     HELP "Enter beginning date"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Beg. Date "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Beg. Date "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f4.
 
 form /* seek  date */
     "Brand:" lcBrand skip
@@ -172,11 +172,11 @@ form /* seek  date */
        SKIP
     "Date :" ldtTo
        HELP "Enter end date"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND End Date"
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f5.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND End Date"
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f5.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "By Contract  ," +
@@ -218,7 +218,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a Contract  */
-      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -226,7 +226,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE ADD-ROW:
 
@@ -277,7 +277,7 @@ REPEAT WITH FRAME sel:
       ASSIGN must-print = TRUE.
 
       /* is there ANY record ? */
-      FIND FIRST Contract WHERE Contract.Brand = Syst.CUICommon:gcBrand 
+      FIND FIRST Contract WHERE Contract.Brand = Syst.Var:gcBrand 
        NO-LOCK NO-ERROR.
       IF NOT AVAILABLE Contract THEN LEAVE LOOP.
       NEXT LOOP.
@@ -329,11 +329,11 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        Syst.CUICommon:ufk[1]= 816  Syst.CUICommon:ufk[2]= 0  Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
-        Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
-        Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-        Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-        Syst.CUICommon:ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 816  Syst.Var:ufk[2]= 0  Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
 
         RUN Syst/ufkey.p.
       END.
@@ -341,29 +341,29 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
          CHOOSE ROW Contract.Contract {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Contract.Contract WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) Contract.Contract WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW Contract.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Contract.CustNum WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) Contract.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
          CHOOSE ROW Contract.Salesman {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Contract.Salesman WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) Contract.Salesman WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
          CHOOSE ROW Contract.FromDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Contract.FromDate WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) Contract.FromDate WITH FRAME sel.
       END.
       ELSE IF order = 5 THEN DO:
          CHOOSE ROW Contract.ToDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Contract.ToDate WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) Contract.ToDate WITH FRAME sel.
       END.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -371,10 +371,10 @@ BROWSE:
          END.
       END.
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -392,7 +392,7 @@ BROWSE:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -417,7 +417,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -443,7 +443,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND Contract WHERE recid(Contract) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -467,7 +467,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -481,32 +481,32 @@ BROWSE:
        END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        ASSIGN
-       Syst.CUICommon:ufk[1]= 35   Syst.CUICommon:ufk[2]= 714 Syst.CUICommon:ufk[3]= 885 Syst.CUICommon:ufk[4]= 1351
-       Syst.CUICommon:ufk[5]= 1352 Syst.CUICommon:ufk[6]= 0   Syst.CUICommon:ufk[7]= 0   Syst.CUICommon:ufk[8]= 8 
-       Syst.CUICommon:ehto = 0
+       Syst.Var:ufk[1]= 35   Syst.Var:ufk[2]= 714 Syst.Var:ufk[3]= 885 Syst.Var:ufk[4]= 1351
+       Syst.Var:ufk[5]= 1352 Syst.Var:ufk[6]= 0   Syst.Var:ufk[7]= 0   Syst.Var:ufk[8]= 8 
+       Syst.Var:ehto = 0
        ufkey = TRUE.
 
        IF iiCustNum > 0 
-       THEN ASSIGN Syst.CUICommon:ufk[1] = 0 
-                   Syst.CUICommon:ufk[2] = 0
-                   Syst.CUICommon:ufk[3] = 0.
+       THEN ASSIGN Syst.Var:ufk[1] = 0 
+                   Syst.Var:ufk[2] = 0
+                   Syst.Var:ufk[3] = 0.
        IF icSalesman > ""
-       THEN ASSIGN Syst.CUICommon:ufk[1] = 0
-                   Syst.CUICommon:ufk[3] = 0
-                   Syst.CUICommon:ufk[4] = 0.
+       THEN ASSIGN Syst.Var:ufk[1] = 0
+                   Syst.Var:ufk[3] = 0
+                   Syst.Var:ufk[4] = 0.
 
        RUN Syst/ufkey.p.
 
        /* Search BY column 1 */
-       IF Syst.CUICommon:toimi = 1 THEN DO:
-          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       IF Syst.Var:toimi = 1 THEN DO:
+          Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+          Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME f1.
           DISPLAY lcBrand WITH FRAME F1.
-          UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+          UPDATE lcBrand WHEN Syst.Var:gcAllBrand
                  lcContract WITH FRAME f1.
           HIDE FRAME f1 NO-PAUSE.
 
@@ -523,12 +523,12 @@ BROWSE:
        END. /* Search-1 */
 
        /* Search BY column 2 */
-       ELSE IF Syst.CUICommon:toimi = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       ELSE IF Syst.Var:toimi = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+          Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+          Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME f2.
           DISPLAY lcBrand WITH FRAME F2.
-          UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+          UPDATE lcBrand WHEN Syst.Var:gcAllBrand
                  liCustNum WITH FRAME f2.
           HIDE FRAME f2 NO-PAUSE.
 
@@ -553,13 +553,13 @@ BROWSE:
        END. /* Search-2 */
 
        /* Search BY col 3 */
-       ELSE IF Syst.CUICommon:toimi = 3 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       ELSE IF Syst.Var:toimi = 3 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+          Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+          Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME F3.
           DISPLAY lcBrand WITH FRAME F3.
-          UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+          UPDATE lcBrand WHEN Syst.Var:gcAllBrand
                  xSalesman WITH FRAME f3.
           HIDE FRAME f3 NO-PAUSE.
 
@@ -576,13 +576,13 @@ BROWSE:
        END. /* Search-3 */
 
        /* Search BY col 4 */
-       ELSE IF Syst.CUICommon:toimi = 4 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       ELSE IF Syst.Var:toimi = 4 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+          Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+          Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME F4.
           DISPLAY lcBrand WITH FRAME F4.
-          UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+          UPDATE lcBrand WHEN Syst.Var:gcAllBrand
                  ldtFrom WITH FRAME f4.
           HIDE FRAME f4 NO-PAUSE.
 
@@ -607,13 +607,13 @@ BROWSE:
           END.
        END. /* Search-4 */
 
-       ELSE IF Syst.CUICommon:toimi = 5 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       ELSE IF Syst.Var:toimi = 5 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+          Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+          Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           CLEAR FRAME F5.
           DISPLAY lcBrand WITH FRAME F5.
-          UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+          UPDATE lcBrand WHEN Syst.Var:gcAllBrand
                  liContrType
                  ldtTo WITH FRAME f5.
           HIDE FRAME f5 NO-PAUSE.
@@ -634,21 +634,21 @@ BROWSE:
 
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW"
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW"
      THEN DO:  /* add */
         {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW"
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION:  /* DELETE */
        {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        Contract.Contract Contract.CustNum Contract.Salesman .
 
        RUN local-find-NEXT.
@@ -687,7 +687,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        Contract.Contract Contract.CustNum Contract.Salesman .
 
        IF ok THEN DO:
@@ -708,7 +708,7 @@ BROWSE:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0
      THEN REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -717,7 +717,7 @@ BROWSE:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhContract).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY Contract.CustNum.
 
        RUN local-UPDATE-record.                                  
@@ -734,25 +734,25 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(Contract) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(Contract) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -964,7 +964,7 @@ PROCEDURE local-UPDATE-record:
 
       IF lcRight = "RW" THEN DO:
       
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          
          UPDATE
          Contract.Salesman  WHEN icSalesman = ""
@@ -997,13 +997,13 @@ PROCEDURE local-UPDATE-record:
                   WITH FRAME lis.   
                END.   
 
-               Syst.CUICommon:ehto = 9.
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.
 
 
-             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                 PAUSE 0.
 
                 IF FRAME-FIELD = "Salesman" THEN DO:

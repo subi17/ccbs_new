@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "anttis".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 DEFINE VARIABLE lcCharValue AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE ldAmount AS DECIMAL NO-UNDO. 
 DEFINE VARIABLE lcError AS CHARACTER NO-UNDO. 
@@ -31,7 +31,7 @@ do i = 1 to num-entries(orders, " ")with frame a:
    IF NOT AVAIL mobsub and order.mnpstatus = 0 then next.
    
    FOR EACH SingleFee EXCLUSIVE-LOCK WHERE 
-      SingleFee.Brand     = Syst.CUICommon:gcBrand AND
+      SingleFee.Brand     = Syst.Var:gcBrand AND
       SingleFee.HostTable = "Order" AND
       SingleFee.KeyValue  = STRING(Order.OrderId) AND
       SingleFee.CalcObj   = "CASHFEE":

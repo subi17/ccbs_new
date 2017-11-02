@@ -28,8 +28,8 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Qvantel".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
 
 {Func/email.i}
 {Func/cparam2.i}
@@ -107,7 +107,7 @@ END.
 
 /* Second part of this file, customer data check dump */
 FOR EACH Customer WHERE 
-   Customer.Brand = Syst.CUICommon:gcBrand NO-LOCK:
+   Customer.Brand = Syst.Var:gcBrand NO-LOCK:
 
    FIND FIRST MobSub WHERE
       MobSub.Custnum = Customer.Custnum AND

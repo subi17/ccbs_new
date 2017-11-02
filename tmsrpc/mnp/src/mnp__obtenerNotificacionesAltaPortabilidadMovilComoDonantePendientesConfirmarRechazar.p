@@ -72,7 +72,7 @@ FOR EACH ttInput NO-LOCK:
          MNPProcess.UpdateTS    = {&nowts} 
          MNPProcess.CreatedTS   = ttInput.CreatedTS
          MNPProcess.MNPUpdateTS = ttInput.StatusTS
-         MNPProcess.Brand       = Syst.CUICommon:gcBrand
+         MNPProcess.Brand       = Syst.Var:gcBrand
          MNPProcess.MNPType     = {&MNP_TYPE_OUT} /* mnp out */
          MNPProcess.MNPSeq      = next-value(m2mrequest)
          MNPProcess.PortingTime = ttInput.portingTime
@@ -81,7 +81,7 @@ FOR EACH ttInput NO-LOCK:
          MNPProcess.OperCode    = ttInput.ReceptorCode
          MNPProcess.StatusCode  = {&MNP_ST_ASOL} 
          MNPProcess.StatusReason = ttInput.StatusReason
-         MNPProcess.UserCode    = Syst.CUICommon:katun.
+         MNPProcess.UserCode    = Syst.Var:katun.
      
       FOR EACH ttMultipleMSISDN WHERE 
                ttMultipleMSISDN.portrequest = ttInput.portRequest NO-LOCK:

@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "rafaeldv".
-Syst.CUICommon:gcBrand  = "1".
+Syst.Var:katun = "rafaeldv".
+Syst.Var:gcBrand  = "1".
 {Func/msisdn.i}
 
 DEFINE VARIABLE ldTS AS DECIMAL NO-UNDO. 
@@ -13,7 +13,7 @@ plSimulated = FALSE.
 ldTS = Func.Common:mMakeTS(). 
 
 FOR EACH MSISDNbuf NO-LOCK WHERE 
-         MSISDNbuf.Brand = Syst.CUICommon:gcBrand AND
+         MSISDNbuf.Brand = Syst.Var:gcBrand AND
          MSISDNbuf.CLI BEGINS '633996' AND
          MSISDNbuf.ValidTo > ldTS:
         /* change status */

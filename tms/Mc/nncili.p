@@ -31,7 +31,7 @@ form
    "              File Name ...:" fname
       help "Name of the output file"                                   skip(7)
 with centered width 80 no-label 
-   title " " + Syst.CUICommon:ynimi + "  Contract payment report " FRAME frm.
+   title " " + Syst.Var:ynimi + "  Contract payment report " FRAME frm.
 
 DO FOR TMSUser:
    FIND FIRST TMSUser no-lock where
@@ -46,19 +46,19 @@ repeat WITH FRAME frm:
 
    HIDE MESSAGE no-pause.
 
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       CustNum
       fname 
    WITH FRAME frm EDITING:
       READKEY.
-      Syst.CUICommon:nap = keylabel(LASTKEY).
-      IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
+      Syst.Var:nap = keylabel(LASTKEY).
+      IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
          if frame-field = "CustNum" THEN DO:
             ASSIGN CustNum.
             IF CustNum NE 0 THEN DO:
                FIND FIRST Customer where
-                          Customer.Brand   = Syst.CUICommon:gcBrand AND
+                          Customer.Brand   = Syst.Var:gcBrand AND
                           Customer.CustNum = CustNum
                no-lock no-error.
                IF AVAIL Customer THEN DISP Customer.CustName WITH FRAME frm.
@@ -76,12 +76,12 @@ repeat WITH FRAME frm:
 
 task:
    repeat WITH FRAME frm ON ENDKEY UNDO, RETURN:
-      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
-      IF Syst.CUICommon:toimi = 1 THEN NEXT  CRIT.
-      IF Syst.CUICommon:toimi = 8 THEN LEAVE CRIT.
+      IF Syst.Var:toimi = 1 THEN NEXT  CRIT.
+      IF Syst.Var:toimi = 8 THEN LEAVE CRIT.
 
-      IF Syst.CUICommon:toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
          ok = FALSE.
          message "Are you SURE you want to start processing (Y/N) ?" UPDATE ok.
          IF ok THEN LEAVE task.
@@ -106,7 +106,7 @@ task:
       "Memo"      my-nl.
 
    FOR EACH FixedFee no-lock where
-            FixedFee.Brand = Syst.CUICommon:gcBrand AND
+            FixedFee.Brand = Syst.Var:gcBrand AND
            (IF CustNum NE 0 
             THEN FixedFee.CustNum = CustNum
             ELSE TRUE).

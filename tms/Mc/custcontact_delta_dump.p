@@ -69,7 +69,7 @@ FOR EACH EventLog NO-LOCK WHERE
    IF ERROR-STATUS:ERROR THEN NEXT.
 
    FOR EACH CustContact NO-LOCK WHERE
-            CustContact.Brand = Syst.CUICommon:gcBrand AND
+            CustContact.Brand = Syst.Var:gcBrand AND
             CustContact.CustNum = liCustNum AND
             CustContact.CustType = 5:
       fCollect().

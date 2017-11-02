@@ -35,7 +35,7 @@ FUNCTION fCanExtendTerminalContract RETURNS LOGICAL
             DCCLI.DCEvent BEGINS "TERM" AND
             DCCLI.CreateFees = TRUE,
       FIRST DayCampaign WHERE
-            DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+            DayCampaign.Brand = Syst.Var:gcBrand AND
             DayCampaign.DCEvent = DCCLI.DCEvent AND
             DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND
             DayCampaign.TermFeeModel NE "" AND

@@ -10,7 +10,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Mc/orderfusion.i}
 
@@ -38,7 +38,7 @@ ASSIGN
       WHEN LOOKUP("update_ts", lcTopStructFields) > 0.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-Syst.CUICommon:katun = pcUserName.
+Syst.Var:katun = pcUserName.
 {newton/src/findtenant.i YES ordercanal Order OrderId piOrderId}
 
 IF TRIM(pcUserName) EQ "VISTA_" THEN RETURN appl_err("username is empty").

@@ -130,12 +130,12 @@ IF iiPaymCount = 0 AND NOT ilEmptyFile THEN
    RETURN "ERROR: No refunds were found".
 
 FIND FIRST Company WHERE
-           Company.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+           Company.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 IF NOT AVAIL Company THEN RETURN "ERROR:Company data not available".
 
 /* bank account that is dedicated for dd */
 FOR FIRST BankAccount NO-LOCK WHERE
-          BankAccount.Brand   = Syst.CUICommon:gcBrand AND
+          BankAccount.Brand   = Syst.Var:gcBrand AND
           LOOKUP("Refund",BankAccount.InvForm) > 0:
    lcBankAcc = BankAccount.BankAccount.
 END.
@@ -442,7 +442,7 @@ END.
 DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = Syst.CUICommon:gcBrand   
+      ActionLog.Brand        = Syst.Var:gcBrand   
       ActionLog.TableName    = STRING(SESSION:BATCH,"Cron/UI")  
       ActionLog.KeyValue     = ""
       ActionLog.ActionID     = "RefundFile"
@@ -451,7 +451,7 @@ DO TRANS:
       ActionLog.ActionDec    = oiPaymCount
       ActionLog.ActionChar   = lcPlainFile + 
                                IF NOT SESSION:BATCH
-                               THEN ". Created by " + Syst.CUICommon:katun
+                               THEN ". Created by " + Syst.Var:katun
                                ELSE "" 
       ActionLog.ActionStatus = 3.
       ActionLog.ActionTS     = Func.Common:mMakeTS().
@@ -489,12 +489,12 @@ IF CAN-FIND(FIRST ttError) THEN DO:
 
        /* save to db for reporting */
        CREATE ErrorLog.
-       ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
+       ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
               ErrorLog.ActionID  = "RFNDFILE"
               ErrorLog.TableName = "MsRequest"
               ErrorLog.KeyValue  = STRING(ttError.MsRequest)
               ErrorLog.ActionTS  = ldCurrent
-              ErrorLog.UserCode  = Syst.CUICommon:katun
+              ErrorLog.UserCode  = Syst.Var:katun
               ErrorLog.ErrorMsg  = ttError.ErrMsg.
     END.
 

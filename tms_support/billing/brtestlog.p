@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Qvantel".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
 
 DEFINE VARIABLE liBRTestQResultID AS INTEGER NO-UNDO. 
 DEFINE VARIABLE lcFile1 AS CHARACTER NO-UNDO. 

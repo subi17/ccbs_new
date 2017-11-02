@@ -10,7 +10,7 @@ external_selfservice__q25_add.p
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Func/fsendsms.i}
@@ -52,7 +52,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
        lcAppEndUserId  = ghAuthLog::EndUserId.
 
-Syst.CUICommon:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.  /* YTS-8221 fixed back */
+Syst.Var:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.  /* YTS-8221 fixed back */
 
 FIND FIRST Customer NO-LOCK WHERE
            Customer.Custnum = MobSub.Custnum NO-ERROR.
@@ -68,7 +68,7 @@ ASSIGN
 
 /* Find original installment contract */   
 FIND DCCLI NO-LOCK WHERE
-     DCCLI.Brand   = Syst.CUICommon:gcBrand AND
+     DCCLI.Brand   = Syst.Var:gcBrand AND
      DCCLI.DCEvent BEGINS "PAYTERM" AND
      DCCLI.MsSeq   = MobSub.MsSeq AND 
      DCCLI.ValidTo >= ldaQ25PeriodStartDate AND
@@ -81,7 +81,7 @@ IF DCCLI.TermDate NE ? THEN
    RETURN appl_err("Installment contract terminated").
    
 FIND SingleFee USE-INDEX Custnum WHERE
-     SingleFee.Brand       = Syst.CUICommon:gcBrand AND
+     SingleFee.Brand       = Syst.Var:gcBrand AND
      SingleFee.Custnum     = MobSub.CustNum AND
      SingleFee.HostTable   = "Mobsub" AND
      SingleFee.KeyValue    = STRING(Mobsub.MsSeq) AND
@@ -121,7 +121,7 @@ ELSE ASSIGN
    ldContractActivTS = Func.Common:mSecOffSet(Func.Common:mMakeTS(),5). /* Handle it immediately */
 
 IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
-                  DCCLI.Brand   EQ Syst.CUICommon:gcBrand AND
+                  DCCLI.Brand   EQ Syst.Var:gcBrand AND
                   DCCLI.DCEvent EQ "RVTERM12" AND
                   DCCLI.MsSeq   EQ MobSub.MsSeq AND
                   DCCLI.ValidTo >= TODAY) THEN
@@ -196,7 +196,7 @@ IF lcSMSTxt > "" THEN DO:
    ldeFeeAmount = SingleFee.Amt.
    
    FOR EACH DiscountPlan NO-LOCK WHERE
-            DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
+            DiscountPlan.Brand = Syst.Var:gcBrand AND
            (DiscountPlan.DPRuleID = "RVTERMDT1DISC" OR
             DiscountPlan.DPRuleID = "RVTERMDT4DISC"),
        EACH DPMember NO-LOCK WHERE

@@ -35,7 +35,7 @@ form
    "CLI / Billing Item / CCN." AT 10 
    skip(14)
    WITH ROW 1 side-labels width 80
-        title " " + Syst.CUICommon:ynimi + 
+        title " " + Syst.Var:ynimi + 
         " CALL SUMMARY PER CCN (REPORT 7) " +
         string(TODAY,"99-99-99") + " "
         FRAME valinta.
@@ -90,21 +90,21 @@ toimi:
 
       IF ufkey THEN DO:
          ASSIGN
-         Syst.CUICommon:ufk[1]= 132 Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
-         Syst.CUICommon:ufk[5]= 63 Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-         Syst.CUICommon:ehto = 3 ufkey = FALSE.
+         Syst.Var:ufk[1]= 132 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= 63 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
-      IF llStart THEN ASSIGN Syst.CUICommon:nap     = "1"
+      IF llStart THEN ASSIGN Syst.Var:nap     = "1"
                              llStart = FALSE.
       ELSE DO:
          READKEY.
-         Syst.CUICommon:nap = keylabel(LASTKEY).
+         Syst.Var:nap = keylabel(LASTKEY).
       END.
 
-      if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
-         ASSIGN Syst.CUICommon:ehto = 9 ufkey = TRUE. 
+      if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:
+         ASSIGN Syst.Var:ehto = 9 ufkey = TRUE. 
          RUN Syst/ufkey.p.
 
          REPEAT ON ENDKEY UNDO, LEAVE:
@@ -112,7 +112,7 @@ toimi:
             InvNum
             VALIDATE(INPUT InvNum = 0 OR
                      CAN-FIND (FIRST Invoice WHERE
-                               Invoice.Brand  = Syst.CUICommon:gcBrand AND
+                               Invoice.Brand  = Syst.Var:gcBrand AND
                                Invoice.InvNum = INPUT invnum),
             "Unknown Invoice Number!")                   
             WITH FRAME rajat.
@@ -134,7 +134,7 @@ toimi:
                UPDATE
                CustNum
                   validate(CAN-FIND(FIRST Customer WHERE 
-                                    Customer.Brand   = Syst.CUICommon:gcBrand AND
+                                    Customer.Brand   = Syst.Var:gcBrand AND
                                     Customer.CustNum = INPUT CustNum),
                            "Unknown customer")                            
                pvm1
@@ -156,14 +156,14 @@ toimi:
 
       END.
 
-      else if lookup(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"5,f5") > 0 THEN DO:
          LEAVE toimi.
       END.
 
-      else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"8,f8") > 0 THEN DO:
          RETURN.
       END.
-END. /* Syst.CUICommon:toimi */
+END. /* Syst.Var:toimi */
 
 /* Avataan striimi */
 ASSIGN tila = TRUE.

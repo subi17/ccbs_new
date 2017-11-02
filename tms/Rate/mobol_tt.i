@@ -30,7 +30,7 @@ FUNCTION fFillTariff RETURNS LOGICAL:
    EMPTY TEMP-TABLE ttTariff.
 
    FOR EACH Tariff NO-LOCK WHERE
-            Tariff.Brand = Syst.CUICommon:gcBrand:
+            Tariff.Brand = Syst.Var:gcBrand:
 
       CREATE ttTariff.
       BUFFER-COPY Tariff TO ttTariff.
@@ -45,7 +45,7 @@ FUNCTION fFillBDest RETURNS LOGICAL:
    EMPTY TEMP-TABLE ttBDest.
    
    FOR EACH Bdest NO-LOCK WHERE 
-            Bdest.Brand = Syst.CUICommon:gcBrand:
+            Bdest.Brand = Syst.Var:gcBrand:
       
       CREATE ttBDest.
       BUFFER-COPY BDest TO ttBDest.
@@ -59,7 +59,7 @@ FUNCTION fFillBNet RETURNS LOGICAL:
    EMPTY TEMP-TABLE ttBNet.
    
    FOR EACH bnet NO-LOCK WHERE
-            bNet.Brand = Syst.CUICommon:gcBrand:
+            bNet.Brand = Syst.Var:gcBrand:
       
       CREATE ttBNet.
       BUFFER-COPY bnet TO ttBNet.
@@ -73,7 +73,7 @@ FUNCTION fFillRatePref RETURNS LOGICAL:
    EMPTY TEMP-TABLE ttRatePref.
    
    FOR EACH RatePref NO-LOCK WHERE 
-            RatePref.Brand = Syst.CUICommon:gcBrand:
+            RatePref.Brand = Syst.Var:gcBrand:
             
       CREATE ttRatePref.
       BUFFER-COPY RatePref TO ttRatePref.
@@ -86,7 +86,7 @@ FUNCTION fFillPListConf RETURNS LOGICAL:
    EMPTY TEMP-TABLE ttPListConf.
    
    FOR EACH PListConf NO-LOCK WHERE 
-            PListConf.Brand = Syst.CUICommon:gcBrand:
+            PListConf.Brand = Syst.Var:gcBrand:
             
       CREATE ttPListConf.
       BUFFER-COPY PListConf TO ttPListConf.
@@ -99,7 +99,7 @@ FUNCTION fFillPriceList RETURNS LOGICAL:
    EMPTY TEMP-TABLE ttPriceList.
    
    FOR EACH PriceList NO-LOCK WHERE 
-            PriceList.Brand = Syst.CUICommon:gcBrand:
+            PriceList.Brand = Syst.Var:gcBrand:
             
       CREATE ttPriceList.
       BUFFER-COPY PriceList TO ttPriceList.
@@ -112,7 +112,7 @@ FUNCTION fFillTCC RETURNS LOGICAL:
    EMPTY TEMP-TABLE ttTCC.
    
    FOR EACH TCC NO-LOCK WHERE 
-            TCC.Brand = Syst.CUICommon:gcBrand:
+            TCC.Brand = Syst.Var:gcBrand:
       CREATE ttTCC.
       BUFFER-COPY TCC TO ttTCC.
    END.

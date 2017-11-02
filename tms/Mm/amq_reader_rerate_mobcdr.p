@@ -8,8 +8,8 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "Cron".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Cron".
 {Func/cparam2.i}
 {Func/direct_dbconnect.i}
 {Func/replog_reader.i}
@@ -98,7 +98,7 @@ PROCEDURE pAmqCDRReader:
 
    DO TRANS:
       FIND FIRST ActionLog WHERE
-                 ActionLog.Brand     = Syst.CUICommon:gcBrand        AND
+                 ActionLog.Brand     = Syst.Var:gcBrand        AND
                  ActionLog.ActionID  = "Rerate_MobCDR_HPD"   AND
                  ActionLog.TableName = "MobCDR" EXCLUSIVE-LOCK NO-ERROR.
       IF AVAIL ActionLog THEN DO:
@@ -110,13 +110,13 @@ PROCEDURE pAmqCDRReader:
       ELSE DO:
          CREATE ActionLog.
          ASSIGN 
-            ActionLog.Brand        = Syst.CUICommon:gcBrand
+            ActionLog.Brand        = Syst.Var:gcBrand
             ActionLog.TableName    = "MobCDR"
             ActionLog.KeyValue     = "HPD"
             ActionLog.ActionID     = "Rerate_MobCDR_HPD"
             ActionLog.ActionPeriod = YEAR(ldaReadDate) * 100 + MONTH(ldaReadDate)
             ActionLog.ActionStatus = 2
-            ActionLog.UserCode     = Syst.CUICommon:katun
+            ActionLog.UserCode     = Syst.Var:katun
             ActionLog.ActionDec    = ldeReadInTS.
       END. /* ELSE DO: */
 
@@ -163,7 +163,7 @@ PROCEDURE pAmqCDRReader:
 
    DO TRANS:
       FIND FIRST ActionLog WHERE
-                 ActionLog.Brand     = Syst.CUICommon:gcBrand AND
+                 ActionLog.Brand     = Syst.Var:gcBrand AND
                  ActionLog.ActionID  = "Rerate_MobCDR_HPD" AND
                  ActionLog.TableName = "MobCDR" EXCLUSIVE-LOCK NO-ERROR.
       IF AVAIL ActionLog THEN
@@ -182,7 +182,7 @@ PROCEDURE pDBConnect:
    /* connect to correct cdr dbs */
    fInitializeConnectTables("MobCDR,McdrDtl2","").
 
-   RUN pDirectConnect2Dbs(Syst.CUICommon:gcBrand,
+   RUN pDirectConnect2Dbs(Syst.Var:gcBrand,
                           "",
                           idaConnectDate,
                           idaConnectDate).
@@ -218,7 +218,7 @@ PROCEDURE pStartReader:
       IF liLoopReader > 1 THEN iiReadTime = -1.
 
       FOR EACH EDRHistory NO-LOCK USE-INDEX UpdateDate WHERE
-               EDRHistory.Brand       = Syst.CUICommon:gcBrand AND
+               EDRHistory.Brand       = Syst.Var:gcBrand AND
                EDRHistory.UpdateDate  = idaReadDate AND
                EDRHistory.UpdateTime  > iiReadTime,
          FIRST MobCDR NO-LOCK WHERE

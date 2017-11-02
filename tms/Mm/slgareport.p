@@ -57,26 +57,26 @@ FOR EACH SLGANalyse NO-LOCK.
 
 
    FIND FIRST CliType WHERE 
-              CliType.Brand   = Syst.CUICommon:gcBrand   AND 
+              CliType.Brand   = Syst.Var:gcBrand   AND 
               Clitype.CliType = SLGAnalyse.CliType NO-LOCK.
               
                  
    FIND FIRST BillItem WHERE 
-              BillItem.Brand    = Syst.CUICommon:gcBrand AND 
+              BillItem.Brand    = Syst.Var:gcBrand AND 
               BillItem.BillCode = slganalyse.BillCode NO-LOCK NO-ERROR.
               
    IF AVAIL CCN THEN lcCCN = CCN.CCNName.
    ELSE              lcCCN = "N/A"  . 
       
    FIND FIRST CCN WHERE 
-              CCN.Brand = Syst.CUICommon:gcBrand AND 
+              CCN.Brand = Syst.Var:gcBrand AND 
               CCN.CCN   = slganalyse.CCN NO-LOCK NO-ERROR.
               
    IF AVAIL CCN THEN lcCCN = CCN.CCNName.
    ELSE              lcCCN = "N/A"  .
               
    FIND FIRST Bdest WHERE 
-              Bdest.Brand = Syst.CUICommon:gcBrand AND 
+              Bdest.Brand = Syst.Var:gcBrand AND 
               Bdest.Bdest = slganalyse.Bdest AND
               BDest.ToDate >= SLGAnalyse.ValidFrom AND
               BDest.FromDate <= SLGAnalyse.ValidTo NO-LOCK NO-ERROR.

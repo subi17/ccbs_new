@@ -15,7 +15,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -63,8 +63,8 @@ form
     Cfoser.memo      FORMAT "X(23)" 
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
     "  CFO NUMBER RANGE MENU  "
     + string(TODAY,"99-99-99") + " "
     FRAME sel.
@@ -78,8 +78,8 @@ form
             /* LABEL FORMAT */
 
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -87,27 +87,27 @@ WITH  OVERLAY ROW 4 centered
 form /* seek  CFOSer */
     CFOSer
     HELP "Enter Number of series "
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND NUMBER "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND NUMBER "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
 form
     CFOSer.Memo
 
     WITH OVERLAY ROW 3 centered
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc)
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc)
     " Memo: " + CFOSer.clifrom + " " WITH NO-LABELS 1 columns
     FRAME f4.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
 
 
-FIND FIRST CFOSer WHERE CFOser.Brand = Syst.CUICommon:gcBrand 
+FIND FIRST CFOSer WHERE CFOser.Brand = Syst.Var:gcBrand 
 /* srule */ NO-LOCK NO-ERROR.
 IF AVAILABLE CFOSer THEN ASSIGN
    Memory       = recid(CFOSer)
@@ -134,28 +134,28 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a CFOSer  */
-      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
-           DISP Syst.CUICommon:gcBrand @ Cfoser.Brand WITH FRAME lis.
+           DISP Syst.Var:gcBrand @ Cfoser.Brand WITH FRAME lis.
            PROMPT-FOR CFOSer.CLIFrom
            VALIDATE
               (CFOSer.CLIFrom NOT ENTERED OR
               NOT CAN-FIND(CFOSer using  CFOSer.CLIFrom WHERE
-                           CFOser.Brand = Syst.CUICommon:gcBrand ),
+                           CFOser.Brand = Syst.Var:gcBrand ),
               "CFO serie " + string(INPUT CFOSer.CLIFrom) +
               " already exists !").
            IF INPUT FRAME lis CFOSer.CLIFrom = "" THEN 
            LEAVE add-row.
            CREATE CFOSer.
            ASSIGN
-           CFOser.Brand   = Syst.CUICommon:gcBrand 
+           CFOser.Brand   = Syst.Var:gcBrand 
            CFOSer.CLIFrom = INPUT FRAME lis CFOSer.CLIFrom.
 
            RUN local-UPDATE-record.
@@ -175,7 +175,7 @@ ADD-ROW:
       ASSIGN must-print = TRUE.
 
       /* is there ANY record ? */
-      FIND FIRST CFOSer WHERE CFOser.Brand = Syst.CUICommon:gcBrand 
+      FIND FIRST CFOSer WHERE CFOser.Brand = Syst.Var:gcBrand 
       /* srule */ NO-LOCK NO-ERROR.
       IF NOT AVAILABLE CFOSer THEN LEAVE LOOP.
       NEXT LOOP.
@@ -227,32 +227,32 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        Syst.CUICommon:ufk[1]= 36  Syst.CUICommon:ufk[2]  = 0 Syst.CUICommon:ufk[3]= 0  Syst.CUICommon:ufk[4]= 927
-        Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
-        Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-        Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-        Syst.CUICommon:ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 36  Syst.Var:ufk[2]  = 0 Syst.Var:ufk[3]= 0  Syst.Var:ufk[4]= 927
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW CFOSer.CLIFrom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) CFOSer.CLIFrom WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) CFOSer.CLIFrom WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW CFOSer.CLIFrom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) CFOSer.CLIFrom WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) CFOSer.CLIFrom WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -276,10 +276,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -304,7 +304,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -330,7 +330,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND CFOSer WHERE recid(CFOSer) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -354,7 +354,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -369,16 +369,16 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET CFOSer WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF CFOSer ENTERED THEN DO:
           FIND FIRST CFOSer WHERE 
                      CFOSer.CLIFrom >= CFOSer AND 
-                     CFOSer.Brand    = Syst.CUICommon:gcBrand 
+                     CFOSer.Brand    = Syst.Var:gcBrand 
           /* srule */ NO-LOCK NO-ERROR.
           IF NOT AVAILABLE CFOSer THEN DO:
              BELL.
@@ -394,9 +394,9 @@ BROWSE:
 
 
      /* UPDATE memo */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 THEN DO TRANS ON ENDKEY UNDO, NEXT LOOP:
-        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-        Syst.CUICommon:ehto = 9. 
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 THEN DO TRANS ON ENDKEY UNDO, NEXT LOOP:
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.Var:ehto = 9. 
         RUN Syst/ufkey.p. ufkey = TRUE.
         RUN local-find-this(TRUE).
         IF lcRight = "RW" THEN 
@@ -408,18 +408,18 @@ BROWSE:
         HIDE FRAME f4 NO-PAUSE.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW" 
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO TRANSACTION:  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        CFOSer.CLIFrom CFOSer.CLIFrom 
        CFOSer.Brand
        CFOSer.ValidFrom
@@ -444,7 +444,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        CFOSer.CLIFrom CFOSer.CLIFrom 
        CFOSer.Brand
        CFOSer.ValidFrom
@@ -468,7 +468,7 @@ BROWSE:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -476,8 +476,8 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCFOSer).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
-       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY 
           CFOSer.CLIFrom
           CFOSer.Brand
@@ -500,25 +500,25 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(CFOSer) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(CFOSer) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -535,22 +535,22 @@ PROCEDURE local-find-this:
 END PROCEDURE.
 
 PROCEDURE local-find-FIRST:
-       IF order = 1 THEN FIND FIRST CFOSer WHERE CFOSer.Brand    = Syst.CUICommon:gcBrand
+       IF order = 1 THEN FIND FIRST CFOSer WHERE CFOSer.Brand    = Syst.Var:gcBrand
        /* srule */ NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
-       IF order = 1 THEN FIND LAST CFOSer WHERE CFOSer.Brand    = Syst.CUICommon:gcBrand
+       IF order = 1 THEN FIND LAST CFOSer WHERE CFOSer.Brand    = Syst.Var:gcBrand
        /* srule */ NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
-       IF order = 1 THEN FIND NEXT CFOSer WHERE CFOSer.Brand    = Syst.CUICommon:gcBrand
+       IF order = 1 THEN FIND NEXT CFOSer WHERE CFOSer.Brand    = Syst.Var:gcBrand
        /* srule */ NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
-       IF order = 1 THEN FIND PREV CFOSer WHERE CFOSer.Brand    = Syst.CUICommon:gcBrand
+       IF order = 1 THEN FIND PREV CFOSer WHERE CFOSer.Brand    = Syst.Var:gcBrand
        /* srule */ NO-LOCK NO-ERROR.
 END PROCEDURE.
 
@@ -592,8 +592,8 @@ PROCEDURE local-UPDATE-record:
             CFOSer.memo
          with frame lis editing:
          readkey. 
-         Syst.CUICommon:nap = keylabel(lastkey).
-         if lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 then do:
+         Syst.Var:nap = keylabel(lastkey).
+         if lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 then do:
             HIDE MESSAGE.
             
             

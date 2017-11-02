@@ -16,7 +16,7 @@
 {Func/log.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
 END.
 
@@ -62,7 +62,7 @@ FUNCTION fUpdateEmail RETURNS LOGICAL
 
          liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                           INPUT TODAY,
-                                          INPUT Syst.CUICommon:katun,
+                                          INPUT Syst.Var:katun,
                                           INPUT 0, /* msseq */
                                           INPUT "", /* cli */
                                           INPUT Customer.CustNum,
@@ -96,7 +96,7 @@ FUNCTION fUpdateEmail RETURNS LOGICAL
 
             liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                              INPUT TODAY,
-                                             INPUT Syst.CUICommon:katun,
+                                             INPUT Syst.Var:katun,
                                              INPUT 0, /* msseq */
                                              INPUT "", /* cli */
                                              INPUT Customer.CustNum,
@@ -141,7 +141,7 @@ FUNCTION fUpdEmailDelType RETURNS LOGICAL
 
             liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                              INPUT TODAY,
-                                             INPUT Syst.CUICommon:katun,
+                                             INPUT Syst.Var:katun,
                                              INPUT 0, /* msseq */
                                              INPUT "", /* cli */
                                              INPUT Customer.CustNum,
@@ -206,7 +206,7 @@ FUNCTION fClosePendingACC RETURNS LOGICAL
 
     ASSIGN ldeCurrentTime = Func.Common:mMakeTS().
 
-    FOR EACH bf_MsRequest WHERE bf_MsRequest.Brand     = Syst.CUICommon:gcBrand                                      AND 
+    FOR EACH bf_MsRequest WHERE bf_MsRequest.Brand     = Syst.Var:gcBrand                                      AND 
                                 bf_MsRequest.ReqType   = {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE}         AND 
                                 LOOKUP(STRING(bf_MsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0 AND 
                                 bf_MsRequest.ActStamp >= ldeCurrentTime                               NO-LOCK:
@@ -221,7 +221,7 @@ FUNCTION fClosePendingACC RETURNS LOGICAL
             FIND FIRST bf_Customer WHERE bf_Customer.CustNum = bf_MsRequest.CustNum NO-LOCK NO-ERROR.
             IF AVAIL bf_Customer THEN
             DO:
-                FIND FIRST bf_CustCat WHERE bf_CustCat.Brand = Syst.CUICommon:gcBrand AND bf_CustCat.Category = bf_Customer.Category NO-LOCK NO-ERROR.
+                FIND FIRST bf_CustCat WHERE bf_CustCat.Brand = Syst.Var:gcBrand AND bf_CustCat.Category = bf_Customer.Category NO-LOCK NO-ERROR.
                 IF AVAIL bf_CustCat THEN 
                 DO:
                     IF icCloseType = "Pro" THEN 
@@ -238,7 +238,7 @@ FUNCTION fClosePendingACC RETURNS LOGICAL
                     BUFFER bf_MsRequest:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
                     IF NOT AVAIL bf_MsRequest THEN 
                     DO:
-                        fLog("Order.i:fClosePendingACC: Record bf_MsRequest not available for update" , Syst.CUICommon:katun).
+                        fLog("Order.i:fClosePendingACC: Record bf_MsRequest not available for update" , Syst.Var:katun).
                         NEXT.
                     END.
 
@@ -284,13 +284,13 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
    */
 
    FIND FIRST Order NO-LOCK WHERE
-              Order.Brand   = Syst.CUICommon:gcBrand AND
+              Order.Brand   = Syst.Var:gcBrand AND
               Order.OrderId = iiOrder
               NO-ERROR.
    IF NOT AVAILABLE Order THEN RETURN FALSE. 
 
    FIND FIRST OrderCustomer EXCLUSIVE-LOCK WHERE
-              OrderCustomer.Brand   = Syst.CUICommon:gcBrand AND
+              OrderCustomer.Brand   = Syst.Var:gcBrand AND
               OrderCustomer.OrderID = iiOrder AND
               OrderCustomer.RowType = iiTarget NO-ERROR.
    IF NOT AVAILABLE OrderCustomer THEN RETURN FALSE. 
@@ -415,7 +415,7 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
       ELSE DO:
 
          FOR FIRST bUpdOrderCustomer NO-LOCK WHERE
-                   bUpdOrderCustomer.Brand   = Syst.CUICommon:gcBrand AND
+                   bUpdOrderCustomer.Brand   = Syst.Var:gcBrand AND
                    bUpdOrderCustomer.OrderID = iiOrder AND
                    bUpdOrderCustomer.RowType = 1,
              FIRST AgrCust NO-LOCK WHERE
@@ -452,13 +452,13 @@ FUNCTION fGetTerminalOfferItemId RETURN INTEGER
 
    LoopItems:
    FOR EACH xOfferItem WHERE 
-      xOfferItem.Brand = Syst.CUICommon:gcBrand  AND
+      xOfferItem.Brand = Syst.Var:gcBrand  AND
       xOfferItem.Offer     = pcOffer AND 
       xOfferItem.ItemType  = "BillItem" AND
       xOfferItem.EndStamp   >= pdeTime AND
       xOfferItem.BeginStamp <= pdeTime NO-LOCK:
       FIND xBillItem WHERE 
-           xBillItem.Brand = Syst.CUICommon:gcBrand AND 
+           xBillItem.Brand = Syst.Var:gcBrand AND 
            xBillItem.BillCode = xOfferItem.ItemKey AND
            xBillItem.BIGroup = pcGroup NO-LOCK NO-ERROR.
       IF AVAIL xBillItem THEN DO:

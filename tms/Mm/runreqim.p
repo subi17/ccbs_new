@@ -26,12 +26,12 @@ ASSIGN
    liReqStat = MsRequest.ReqStatus.
 
 FOR FIRST RequestType NO-LOCK WHERE
-          RequestType.Brand   = Syst.CUICommon:gcBrand   AND
+          RequestType.Brand   = Syst.Var:gcBrand   AND
           RequestType.ReqType = liReqType AND 
           RequestType.InUse:
 
    lcUser = RequestType.UserCode.
-   IF lcUser = "" THEN lcUser = Syst.CUICommon:katun.
+   IF lcUser = "" THEN lcUser = Syst.Var:katun.
  
    /* logging on type level */
    IF RequestType.LogOn THEN DO:

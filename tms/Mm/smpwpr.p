@@ -24,7 +24,7 @@ FRAME rajat.
 
 
 FIND FIRST TMSUser NO-LOCK WHERE
-           TMSUser.UserCode = Syst.CUICommon:katun NO-ERROR.
+           TMSUser.UserCode = Syst.Var:katun NO-ERROR.
 IF AVAIL TMSUser THEN lcEMail = TMSUser.Email.
 ELSE lcEMail = "".
 
@@ -50,7 +50,7 @@ if count = 0 then do:
    RETURN.
 end.   
 
-Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 UPDATE 
    lcEMail with frame rajat.
 

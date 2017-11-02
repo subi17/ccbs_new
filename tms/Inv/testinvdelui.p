@@ -46,9 +46,9 @@ SKIP (2)
 "           Invoices deleted ....:" liInvCount    SKIP 
 SKIP(5)
 WITH
-   OVERLAY TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + Syst.CUICommon:ynimi + " DELETE TEST INVOICES " + string(TODAY,"99-99-99") + " "
-   COLOR value(Syst.CUICommon:cfc) width 80 ROW 1 NO-LABELS
+   OVERLAY TITLE COLOR value(Syst.Var:ctc)
+   " " + Syst.Var:ynimi + " DELETE TEST INVOICES " + string(TODAY,"99-99-99") + " "
+   COLOR value(Syst.Var:cfc) width 80 ROW 1 NO-LABELS
    FRAME mainFrame.
 
 ASSIGN lcFloor        = ""
@@ -73,7 +73,7 @@ DISP liTestInvCount WITH FRAME mainFrame.
 
 mainLoop:
 REPEAT WITH FRAME mainFrame:
-   Syst.CUICommon:ehto = 9.
+   Syst.Var:ehto = 9.
    RUN Syst/ufkey.p.
 
    UPDATE 
@@ -84,11 +84,11 @@ REPEAT WITH FRAME mainFrame:
    editLoop:
    EDITING:
       READKEY.
-      Syst.CUICommon:nap = KEYLABEL(LASTKEY).
+      Syst.Var:nap = KEYLABEL(LASTKEY).
       
-      IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO: 
+      IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO: 
 
-         IF LOOKUP(Syst.CUICommon:nap,"f1") > 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"f1") > 0 THEN DO:
             IF INPUT llProceed THEN LEAVE editLoop.
          END.
          
@@ -100,19 +100,19 @@ REPEAT WITH FRAME mainFrame:
    IF NOT INPUT llProceed THEN RETURN.
 
    ASSIGN
-      Syst.CUICommon:ufk = 0      /* clear all */
-      Syst.CUICommon:ufk[1] = 7   /* change    */
-      Syst.CUICommon:ufk[5] = 795 /* start     */
-      Syst.CUICommon:ufk[8] = 8   /* return    */
-      Syst.CUICommon:ehto = 1.
+      Syst.Var:ufk = 0      /* clear all */
+      Syst.Var:ufk[1] = 7   /* change    */
+      Syst.Var:ufk[5] = 795 /* start     */
+      Syst.Var:ufk[8] = 8   /* return    */
+      Syst.Var:ehto = 1.
    RUN Syst/ufkey.p.
    
-   IF Syst.CUICommon:toimi = 1 THEN NEXT mainLoop.
-   IF Syst.CUICommon:toimi = 5 THEN DO:
+   IF Syst.Var:toimi = 1 THEN NEXT mainLoop.
+   IF Syst.Var:toimi = 5 THEN DO:
       RUN pDeleteTestInvoices.
       RETURN.
    END.
-   IF Syst.CUICommon:toimi = 8 THEN RETURN.
+   IF Syst.Var:toimi = 8 THEN RETURN.
 
 END.
 

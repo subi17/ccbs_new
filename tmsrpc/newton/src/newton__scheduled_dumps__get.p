@@ -15,7 +15,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 ASSIGN
-   Syst.CUICommon:gcBrand = "1".
+   Syst.Var:gcBrand = "1".
 {Syst/eventval.i}
 {Func/create_eventlog.i}
 {Func/scheduled_dumps.i}

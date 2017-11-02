@@ -31,7 +31,7 @@
 {Mc/lib/tokenchk.i 'bdest'}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -82,8 +82,8 @@ FORM
    BDest.ToDate   
 WITH 
    width 80 ROW 1 OVERLAY scroll 1 15 DOWN
-   COLOR value(Syst.CUICommon:cfc)
-   title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+   COLOR value(Syst.Var:cfc)
+   title color value(Syst.Var:ctc) " " + Syst.Var:ynimi +
       " B-DESTINATIONS " + 
       string(TODAY,"99-99-99") + " " FRAME sel.
 
@@ -109,7 +109,7 @@ FORM
    BDest.FromDate LABEL "Valid From" COLON 20 SKIP
    BDest.ToDate LABEL "Valid To" COLON 20
 WITH  
-   OVERLAY ROW 4 centered COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
+   OVERLAY ROW 4 centered COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc)
    fr-header WITH side-LABELs FRAME lis.
 
 {Func/brand.i}
@@ -120,24 +120,24 @@ FORM
    "BDest:" haku
    help "Give B-destination."                         
 WITH 
-   row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND B-DESTINATION "
-   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
+   row 4 col 2 title color value(Syst.Var:ctc) " FIND B-DESTINATION "
+   COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 FORM 
    "Brand:" lcBrand skip
    "Name :" hakunimi
    help "Give name of B-Destination"             
 WITH 
-   row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND NAME "
-   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
+   row 4 col 2 title color value(Syst.Var:ctc) " FIND NAME "
+   COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 FORM 
    "Brand:" lcBrand skip
    "Name :" liCCN
    help "Give CCN"             
 WITH 
-   row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CCN "
-   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
+   row 4 col 2 title color value(Syst.Var:ctc) " FIND CCN "
+   COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
 FORM
    " Copy from :" BDest.BDest SKIP
@@ -170,7 +170,7 @@ FUNCTION fBDestClass RETURNS CHAR
 END.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 FIND FIRST BDest where 
@@ -210,7 +210,7 @@ repeat WITH FRAME sel:
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
          PAUSE 0 no-MESSAGE.
-         assign Syst.CUICommon:cfc = "lis" Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
+         assign Syst.Var:cfc = "lis" Syst.Var:ehto = 9. RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
          fr-header = " ADD ".
 
          DO TRANSAction ON ENDKEY UNDO add-new, LEAVE add-new:
@@ -340,11 +340,11 @@ repeat WITH FRAME sel:
 
       IF ufkey THEN DO:
          ASSIGN
-         Syst.CUICommon:ufk[1]= 704 Syst.CUICommon:ufk[2]= 717 Syst.CUICommon:ufk[3]= 1163    Syst.CUICommon:ufk[4]= 814
-         Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
-         Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)  
-         Syst.CUICommon:ufk[7]= 1162 Syst.CUICommon:ufk[8]= 8   Syst.CUICommon:ufk[9]= 1
-         Syst.CUICommon:ehto = 3 ufkey = FALSE.
+         Syst.Var:ufk[1]= 704 Syst.Var:ufk[2]= 717 Syst.Var:ufk[3]= 1163    Syst.Var:ufk[4]= 814
+         Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
+         Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)  
+         Syst.Var:ufk[7]= 1162 Syst.Var:ufk[8]= 8   Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
 
          RUN Syst/ufkey.p.
 
@@ -352,23 +352,23 @@ repeat WITH FRAME sel:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW BDest.BDest {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(Syst.CUICommon:ccc) BDest.BDest WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) BDest.BDest WITH FRAME sel.
       END.
       IF order = 2 THEN DO:
          CHOOSE ROW BDest.BDName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(Syst.CUICommon:ccc) BDest.BDName WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) BDest.BDName WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
          CHOOSE ROW BDest.CCN {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(Syst.CUICommon:ccc) BDest.CCN WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) BDest.CCN WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      Syst.CUICommon:nap = KEYLABEL(LASTKEY).
+      Syst.Var:nap = KEYLABEL(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards".
             PAUSE 1 NO-MESSAGE.
@@ -376,10 +376,10 @@ repeat WITH FRAME sel:
          END.
       END.
 
-      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order = 5 THEN order = 1.
       END.
-      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = 5.
       END.
 
@@ -404,7 +404,7 @@ repeat WITH FRAME sel:
          NEXT LOOP.
       END.
 
-      if lookup(Syst.CUICommon:nap,"CTRL-B") > 0 THEN DO WITH FRAME prcopy TRANS:
+      if lookup(Syst.Var:nap,"CTRL-B") > 0 THEN DO WITH FRAME prcopy TRANS:
          PAUSE 0.
          FIND BDest where recid(BDest) = rtab[frame-line(sel)].
 
@@ -414,7 +414,7 @@ repeat WITH FRAME sel:
 
          if copyto NE "" THEN DO:
             IF CAN-FIND(FIRST bBDest WHERE
-                              bBDest.Brand = Syst.CUICommon:gcBrand AND
+                              bBDest.Brand = Syst.Var:gcBrand AND
                               bBDest.BDest = copyto AND
                               bBDest.DestType = BDest.DestType AND
                               bBDest.ToDate = 12/31/49)
@@ -438,7 +438,7 @@ repeat WITH FRAME sel:
          must-print = TRUE.
       END.
 
-      ELSE IF lookup(Syst.CUICommon:nap,"CTRL-Z") > 0 THEN DO WITH FRAME prcopy:
+      ELSE IF lookup(Syst.Var:nap,"CTRL-Z") > 0 THEN DO WITH FRAME prcopy:
 
          PAUSE 0.
          FIND BDest where recid(BDest) = rtab[frame-line(sel)].
@@ -450,15 +450,15 @@ repeat WITH FRAME sel:
 
             i = 0.
             IF CAN-FIND(FIRST bBDest WHERE 
-                              bBDest.Brand = Syst.CUICommon:gcBrand AND
+                              bBDest.Brand = Syst.Var:gcBrand AND
                               bBDest.BDest = copyto) THEN 
             FOR EACH Tariff NO-LOCK where
-                     Tariff.Brand = Syst.CUICommon:gcBrand AND
+                     Tariff.Brand = Syst.Var:gcBrand AND
                      Tariff.BDest = BDest.BDest AND
                      Tariff.ValidTo >= TODAY:
 
                IF CAN-FIND(FIRST bTariff where
-                                 bTariff.Brand    = Syst.CUICommon:gcBrand AND
+                                 bTariff.Brand    = Syst.Var:gcBrand AND
                                  bTariff.BDest    = copyto AND
                                  bTariff.CustNum  = Tariff.CustNum  AND
                                  bTariff.PriceList = Tariff.PriceList AND
@@ -481,7 +481,7 @@ repeat WITH FRAME sel:
       END.
 
       /* previous line */
-      ELSE IF lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      ELSE IF lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND BDest where recid(BDest) = rtab[1] NO-LOCK.
             IF order = 1 THEN FIND prev BDest where
@@ -517,7 +517,7 @@ repeat WITH FRAME sel:
       END. /* previous line */
 
       /* NEXT line */
-      ELSE IF lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND BDest where recid(BDest) = rtab[FRAME-DOWN] NO-LOCK .
@@ -554,7 +554,7 @@ repeat WITH FRAME sel:
       END. /* NEXT line */
 
       /* previous page */
-      ELSE IF lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
+      ELSE IF lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND BDest where recid(BDest) = memory NO-LOCK NO-ERROR.
          IF order = 1 THEN FIND prev BDest where
@@ -597,7 +597,7 @@ repeat WITH FRAME sel:
       END. /* previous page */
 
       /* NEXT page */
-      ELSE IF lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+      ELSE IF lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
          /* cursor TO the downmost line */
          IF rtab[FRAME-DOWN] = ? THEN DO:
             MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -613,13 +613,13 @@ repeat WITH FRAME sel:
       END. /* NEXT page */
 
       /* Haku 1 */
-      ELSE IF lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+      ELSE IF lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
+         Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
          haku = "".
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
 
          DISPLAY lcBrand WITH FRAME hayr.
-         UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+         UPDATE lcBrand WHEN Syst.Var:gcAllBrand
                 haku WITH FRAME hayr.
          HIDE FRAME hayr no-pause.
 
@@ -644,12 +644,12 @@ repeat WITH FRAME sel:
          END.
       END. /* Haku sar. 1 */
 
-      ELSE IF lookup(Syst.CUICommon:nap,"2,f2") > 0 THEN DO:  /* haku nimellA */
-         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+      ELSE IF lookup(Syst.Var:nap,"2,f2") > 0 THEN DO:  /* haku nimellA */
+         Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
          hakunimi = "".
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          DISPLAY lcBrand WITH FRAME hayr2.
-         UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+         UPDATE lcBrand WHEN Syst.Var:gcAllBrand
                 hakunimi WITH FRAME hayr2.
          HIDE FRAME hayr2 no-pause.
 
@@ -664,12 +664,12 @@ repeat WITH FRAME sel:
             NEXT LOOP.
          END.
       END. /* Haku sar. 2 */
-      ELSE IF lookup(Syst.CUICommon:nap,"3,f3") > 0 THEN DO:  /* haku nimellA */
-         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+      ELSE IF lookup(Syst.Var:nap,"3,f3") > 0 THEN DO:  /* haku nimellA */
+         Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
          hakunimi = "".
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          DISPLAY lcBrand WITH FRAME hayr3.
-         UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
+         UPDATE lcBrand WHEN Syst.Var:gcAllBrand
                 liCCN WITH FRAME hayr3.
          HIDE FRAME hayr3 no-pause.
 
@@ -685,7 +685,7 @@ repeat WITH FRAME sel:
          END.
       END. /* Haku sar. 2 */
 
-      ELSE IF lookup(Syst.CUICommon:nap,"7,f7") > 0 THEN DO:  /* rating */
+      ELSE IF lookup(Syst.Var:nap,"7,f7") > 0 THEN DO:  /* rating */
 
          FIND FIRST BDest WHERE
               RECID(BDest) = rtab[frame-line(sel)] NO-LOCK NO-ERROR.
@@ -698,7 +698,7 @@ repeat WITH FRAME sel:
       END.
 
       /* translations */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 AND Syst.CUICommon:ufk[4] > 0 THEN DO:  
+      ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 AND Syst.Var:ufk[4] > 0 THEN DO:  
          FIND BDest where recid(BDest) = rtab[FRAME-LINE] NO-LOCK.
          RUN Mc/invlang.p(2,STRING(BDest.BDestID)).
          ufkey = TRUE.
@@ -706,19 +706,19 @@ repeat WITH FRAME sel:
       END.
 
 
-      ELSE IF lookup(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
+      ELSE IF lookup(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
          must-add = TRUE.
          NEXT LOOP.
       END.
 
-      ELSE IF lookup(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW"
+      ELSE IF lookup(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW"
       THEN DO TRANSAction:  /* removal */
 
         delline = FRAME-LINE.
         FIND BDest where recid(BDest) = rtab[FRAME-LINE] NO-LOCK.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(Syst.CUICommon:ctc) 
+        COLOR DISPLAY value(Syst.Var:ctc) 
            BDest.BDest BDest.BDName    BDest.Brand.
 
         IF order = 1 THEN FIND NEXT BDest where
@@ -757,7 +757,7 @@ repeat WITH FRAME sel:
 
         ASSIGN ok = FALSE.
         MESSAGE "ARE YOU SURE YOU WANT TO REMOVE (Y/N)" UPDATE ok.
-        COLOR DISPLAY value(Syst.CUICommon:ccc) 
+        COLOR DISPLAY value(Syst.Var:ccc) 
            BDest.BDest BDest.BDName  BDest.Brand.
         IF ok THEN DO:
 
@@ -783,8 +783,8 @@ repeat WITH FRAME sel:
         ELSE delline = 0. /* wasn't the LAST one */
       END. /* removal */
 
-      ELSE IF lookup(Syst.CUICommon:nap,"enter,return") > 0 THEN DO WITH FRAME lis TRANS:
-         Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
+      ELSE IF lookup(Syst.Var:nap,"enter,return") > 0 THEN DO WITH FRAME lis TRANS:
+         Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
          /* change */
          fr-header = " CHANGE ".
          FIND BDest where recid(BDest) = rtab[frame-line(sel)] NO-lock.
@@ -814,7 +814,7 @@ repeat WITH FRAME sel:
          WITH FRAME sel.
       END.
 
-      ELSE IF lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
+      ELSE IF lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
          IF order = 1 THEN FIND FIRST BDest  where
             BDest.Brand = lcBrand NO-LOCK NO-ERROR.
          ELSE IF order = 2 THEN FIND FIRST BDest where
@@ -827,7 +827,7 @@ repeat WITH FRAME sel:
          NEXT LOOP.
       END.
 
-      ELSE IF lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
+      ELSE IF lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
          IF order = 1 THEN FIND LAST BDest 
          where BDest.Brand = lcBrand NO-LOCK NO-ERROR.
          ELSE IF order = 2 THEN FIND LAST BDest 
@@ -839,14 +839,14 @@ repeat WITH FRAME sel:
          ASSIGN memory = recid(BDest) must-print = TRUE.
          NEXT LOOP.
       END.
-      ELSE IF lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+      ELSE IF lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
    END.  /* BROWSE */
    
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 fCleanEventObjects().
 
@@ -875,7 +875,7 @@ PROCEDURE local-update-record:
    lcRateBDest = "".
    IF BDest.RateBDest > "" THEN
    FIND FIRST bBDest WHERE
-              bBDest.Brand = Syst.CUICommon:gcBrand AND
+              bBDest.Brand = Syst.Var:gcBrand AND
               bBDest.BDest = BDest.RateBDest NO-LOCK NO-ERROR.
    IF AVAILABLE bBDest THEN lcRateBDest = bBdest.BDName.
 
@@ -899,22 +899,22 @@ PROCEDURE local-update-record:
  
       IF NOT NEW BDest THEN DO:
          ASSIGN 
-            Syst.CUICommon:ufk    = 0 
-            Syst.CUICommon:ufk[1] = 7 WHEN lcRight = "RW"
-            Syst.CUICommon:ufk[4] = 9843 WHEN llBDestTrans
-            Syst.CUICommon:ufk[8] = 8
-            Syst.CUICommon:ehto   = 0
+            Syst.Var:ufk    = 0 
+            Syst.Var:ufk[1] = 7 WHEN lcRight = "RW"
+            Syst.Var:ufk[4] = 9843 WHEN llBDestTrans
+            Syst.Var:ufk[8] = 8
+            Syst.Var:ehto   = 0
             ufkey  = TRUE.
            
          RUN Syst/ufkey.p.
       END.
-      ELSE Syst.CUICommon:toimi = 1.
+      ELSE Syst.Var:toimi = 1.
         
-      IF Syst.CUICommon:toimi = 1 THEN DO:
+      IF Syst.Var:toimi = 1 THEN DO:
         
          FIND CURRENT BDest EXCLUSIVE-LOCK.
 
-         ASSIGN ufkey = TRUE Syst.CUICommon:ehto = 9.
+         ASSIGN ufkey = TRUE Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
    
          UPDATE
@@ -927,9 +927,9 @@ PROCEDURE local-update-record:
             BDest.ToDate
          WITH FRAME lis EDITING:
                
-            READKEY. Syst.CUICommon:nap = KEYLABEL(LASTKEY).
+            READKEY. Syst.Var:nap = KEYLABEL(LASTKEY).
                
-            IF Syst.CUICommon:nap = "F9" AND FRAME-FIELD = "Class" THEN DO: 
+            IF Syst.Var:nap = "F9" AND FRAME-FIELD = "Class" THEN DO: 
 
                RUN Help/h-tmscodes.p(INPUT "BDest",  /* TableName*/
                                     "BDestClass", /* FieldName */
@@ -939,12 +939,12 @@ PROCEDURE local-update-record:
                IF lcCode ne "" AND lcCode NE ? THEN 
                   DISPLAY INTEGER(lcCode) ;& BDest.Class WITH FRAME lis.
 
-               Syst.CUICommon:ehto = 9.
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.
             
-            ELSE IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
+            ELSE IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
    
                PAUSE 0 no-MESSAGE.
 
@@ -985,7 +985,7 @@ PROCEDURE local-update-record:
                   lcRateBDest = "".
                   IF INPUT BDest.RateBDest > "" THEN DO:
                      FIND FIRST bBDest WHERE
-                                bBDest.Brand = Syst.CUICommon:gcBrand AND
+                                bBDest.Brand = Syst.Var:gcBrand AND
                                 bBDest.BDest = INPUT BDest.RateBDest
                      NO-LOCK NO-ERROR.
                      IF NOT AVAILABLE bBDest THEN DO:
@@ -1004,11 +1004,11 @@ PROCEDURE local-update-record:
       
          IF NEW BDest THEN LEAVE BDestUpdate.
       END.
-      ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
+      ELSE IF Syst.Var:toimi = 4 THEN DO:
          RUN Mc/bdesttrans.p(Bdest.BdestId).
       END.
 
-      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
+      ELSE IF Syst.Var:toimi = 8 THEN LEAVE.
    END.
  
 END PROCEDURE.

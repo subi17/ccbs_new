@@ -31,7 +31,7 @@ def var ldstamp as de no-undo.
 DEF VAR liError AS INT NO-UNDO.
 
 find Order Where 
-     Order.Brand = Syst.CUICommon:gcBrand AND
+     Order.Brand = Syst.Var:gcBrand AND
      Order.OrderId = iiOrderId exclusive-lock no-error no-wait.
 if locked(Order) THEN do:
    if not session:batch then message "lukko" view-as alert-box.

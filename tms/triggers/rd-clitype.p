@@ -6,12 +6,12 @@ IF NEW CLIType
 THEN RETURN.
 
 FIND FIRST DumpFile NO-LOCK WHERE 
-           DumpFile.Brand    EQ Syst.CUICommon:gcBrand AND
+           DumpFile.Brand    EQ Syst.Var:gcBrand AND
            DumpFile.DumpName EQ {&DUMP_CLITYPE_TRACK}   NO-ERROR.
 
 IF AVAIL DumpFile THEN DO:
    FIND FIRST DFTimeTable EXCLUSIVE-LOCK WHERE 
-              DFTimeTable.Brand       = Syst.CUICommon:gcBrand AND  
+              DFTimeTable.Brand       = Syst.Var:gcBrand AND  
               DFTimeTable.DumpId      = DumpFile.DumpId         AND 
               DFTimeTable.DumpTrigger = NO                      NO-ERROR.
 

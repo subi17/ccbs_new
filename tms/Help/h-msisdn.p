@@ -31,38 +31,38 @@ form
       MSISDN.ValidFrom
       MSISDN.CustNum
       MSClass.MCName format "x(8)" Column-label "MSISDN Class" 
-      with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
-    title color value(Syst.CUICommon:ctc) " MSISDNs " overlay frame sel.
+      with scroll 1 11 down  row 4 centered color value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " MSISDNs " overlay frame sel.
 
 form /* SEEK Code */
     m_pref space(0) 
     CLI format "x(12)"
     help "Enter MSISDN No. "
-    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND MSISDN "
-    color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND MSISDN "
+    color value(Syst.Var:cfc) no-labels overlay frame hayr.
 
 
 form
     MSISDN.CustNum    label "Customer ..." Customer.CustName no-label at 25 skip
   WITH
   overlay row 4 centered
-    COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(Syst.CUICommon:ctc) " Customer Data of MSISDN " + MSISDN.CLI + " "
+    COLOR VALUE(Syst.Var:cfc)
+    title COLOR VALUE(Syst.Var:ctc) " Customer Data of MSISDN " + MSISDN.CLI + " "
     side-labels 
     FRAME cust.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.Var:ccc = Syst.Var:cfc.
 
 MAIN:
 repeat:
 
    find first MSISDN WHERE 
-              MSISDN.Brand = Syst.CUICommon:gcBrand   AND
+              MSISDN.Brand = Syst.Var:gcBrand   AND
               MSISDN.ValidTo > Func.Common:mMakeTS()  AND 
               MSISDN.StatusCode = 1 
    NO-LOCK NO-ERROR.
    FIND MSClass WHERE 
-        MSClass.Brand  = Syst.CUICommon:gcBrand AND 
+        MSClass.Brand  = Syst.Var:gcBrand AND 
         MSClass.MCCode = MSISDN.MCCode NO-LOCK NO-ERROR.
 
    if not available MSISDN then do:
@@ -92,7 +92,7 @@ print-line:
             rtab[frame-line] = recid(MSISDN).
             down with frame sel.
             find next MSISDN WHERE
-                      MSISDN.BRand      = Syst.CUICommon:gcBrand  AND 
+                      MSISDN.BRand      = Syst.Var:gcBrand  AND 
                        MSISDN.ValidTo > Func.Common:mMakeTS()  AND
                       MSISDN.StatusCode = 1 no-lock no-error.
          end.
@@ -102,9 +102,9 @@ print-line:
 
       if ufkey then do:
          assign
-         Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 36 Syst.CUICommon:ufk[3] = 238 Syst.CUICommon:ufk[4] = 788 Syst.CUICommon:ufk[5] = 11
-         Syst.CUICommon:ufk[6] = 0 Syst.CUICommon:ufk[8] = 8  Syst.CUICommon:ufk[9] = 1
-         siirto = ? Syst.CUICommon:ehto = 3 ufkey = false.
+         Syst.Var:ufk = 0 Syst.Var:ufk[1] = 36 Syst.Var:ufk[3] = 238 Syst.Var:ufk[4] = 788 Syst.Var:ufk[5] = 11
+         Syst.Var:ufk[6] = 0 Syst.Var:ufk[8] = 8  Syst.Var:ufk[9] = 1
+         siirto = ? Syst.Var:ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
       end.
   end. /* print-line */
@@ -114,18 +114,18 @@ BROWSE:
 
          hide message no-pause.
          choose row MSISDN.CLI {Syst/uchoose.i} no-error with frame sel.
-         color display value(Syst.CUICommon:ccc) MSISDN.CLI with frame sel.
+         color display value(Syst.Var:ccc) MSISDN.CLI with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.
-         Syst.CUICommon:nap = keylabel(lastkey).
+         Syst.Var:nap = keylabel(lastkey).
 
          /* previous line */
-         if lookup(Syst.CUICommon:nap,"cursor-up") > 0 then do
+         if lookup(Syst.Var:nap,"cursor-up") > 0 then do
          with frame sel:
             if frame-line = 1 then do:
                find MSISDN where recid(MSISDN) = rtab[frame-line] no-lock.
                find prev MSISDN WHERE
-                         MSISDN.BRand      = Syst.CUICommon:gcBrand  AND 
+                         MSISDN.BRand      = Syst.Var:gcBrand  AND 
                           MSISDN.ValidTo > Func.Common:mMakeTS()  AND 
                          MSISDN.StatusCode = 1 
                no-lock no-error.
@@ -150,13 +150,13 @@ BROWSE:
          end. /* previous line */
 
          /* next line */
-         if lookup(Syst.CUICommon:nap,"cursor-down") > 0 then do with frame sel:
+         if lookup(Syst.Var:nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                find MSISDN where recid(MSISDN) = rtab[frame-line] no-lock .
                find next MSISDN WHERE
                          MSISDN.StatusCode = 1  AND 
                           MSISDN.ValidTo > Func.Common:mMakeTS()  AND 
-                         MSISDN.Brand      = Syst.CUICommon:gcBrand 
+                         MSISDN.Brand      = Syst.Var:gcBrand 
                no-lock no-error.
                if not available MSISDN then do:
                   bell.
@@ -180,10 +180,10 @@ BROWSE:
          end. /* next line */
 
          /* previous page */
-         else if lookup(Syst.CUICommon:nap,"page-up,prev-page") > 0 then do with frame sel:
+         else if lookup(Syst.Var:nap,"page-up,prev-page") > 0 then do with frame sel:
             find MSISDN where recid(MSISDN) = memory no-lock no-error.
             find prev MSISDN WHERE
-                      MSISDN.Brand      = Syst.CUICommon:gcBrand AND 
+                      MSISDN.Brand      = Syst.Var:gcBrand AND 
                        MSISDN.ValidTo > Func.Common:mMakeTS() AND
                       MSISDN.StatusCode = 1 
             no-lock no-error.
@@ -191,7 +191,7 @@ BROWSE:
 
                do i = 1 to (frame-down - 1):
                   find prev MSISDN WHERE
-                            MSISDN.Brand      = Syst.CUICommon:gcBrand AND
+                            MSISDN.Brand      = Syst.Var:gcBrand AND
                              MSISDN.ValidTo > Func.Common:mMakeTS() AND 
                             MSISDN.StatusCode = 1 no-lock no-error.
                   if available MSISDN then memory = recid(MSISDN).
@@ -209,7 +209,7 @@ BROWSE:
         end. /* previous page */
 
         /* next page */
-        else if lookup(Syst.CUICommon:nap,"page-down,next-page") > 0 then do with frame sel:
+        else if lookup(Syst.Var:nap,"page-down,next-page") > 0 then do with frame sel:
            if rtab[frame-down] = ? then do:
                bell.
                message "This is the last page !".
@@ -223,17 +223,17 @@ BROWSE:
         end. /* next page */
 
         /* Seek */
-        if lookup(Syst.CUICommon:nap,"1,f1") > 0 then do on ENDkey undo, NEXT LOOP:
+        if lookup(Syst.Var:nap,"1,f1") > 0 then do on ENDkey undo, NEXT LOOP:
            /*CLI*/
-           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            clear frame hayr.
            disp m_pref with frame  hayr.
            set CLI with frame hayr.
            hide frame hayr no-pause.
            if CLI ENTERED then do:
               find first MSISDN where 
-                         Msisdn.Brand = Syst.CUICommon:gcBrand AND 
+                         Msisdn.Brand = Syst.Var:gcBrand AND 
                          MSISDN.CLI >= CLI AND
                           MSISDN.ValidTo > Func.Common:mMakeTS() AND
                          MSISDN.StatusCode = 1
@@ -255,7 +255,7 @@ BROWSE:
 
 
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 THEN 
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 THEN 
 CUST:     
      REPEAT: /* show Customer data */
         RUN local-find-this (false).
@@ -272,7 +272,7 @@ CU-DATA:
         repeat with frame cust:
 
            find Customer of MSISDN WHERE
-                            Msisdn.Brand      = Syst.CUICommon:gcBrand AND 
+                            Msisdn.Brand      = Syst.Var:gcBrand AND 
                             MSISDN.StatusCode = 1 no-lock no-error.
 
            disp
@@ -280,9 +280,9 @@ CU-DATA:
            with frame cust.
 CU-Action:
            repeat with frame cust:
-              assign Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto =  0.
+              assign Syst.Var:ufk = 0 Syst.Var:ufk[8] = 8 Syst.Var:ehto =  0.
               RUN Syst/ufkey.p.
-              case Syst.CUICommon:toimi:
+              case Syst.Var:toimi:
                  WHEN 8 THEN do:
                     ufkey = true. 
                     hide frame cust no-pause.
@@ -301,15 +301,15 @@ CU-Action:
 
 
         /* Choose */
-        else if lookup(Syst.CUICommon:nap,"return,enter,5,f5") > 0 then do:
+        else if lookup(Syst.Var:nap,"return,enter,5,f5") > 0 then do:
            find MSISDN where recid(MSISDN) = rtab[frame-line] no-lock.
            siirto = string(MSISDN.CLI).
            leave MAIN.
         end. /* Choose */
         /* First record */
-        else if lookup(Syst.CUICommon:nap,"home,h") > 0 then do:
+        else if lookup(Syst.Var:nap,"home,h") > 0 then do:
            find first MSISDN WHERE
-                      MSISDN.Brand      = Syst.CUICommon:gcBrand  AND 
+                      MSISDN.Brand      = Syst.Var:gcBrand  AND 
                        MSISDN.ValidTo > Func.Common:mMakeTS()  AND 
                       MSISDN.StatusCode = 1 no-lock.
            memory = recid(MSISDN).
@@ -318,9 +318,9 @@ CU-Action:
         end. /* First record */
 
         /* last record */
-        else if lookup(Syst.CUICommon:nap,"end,e") > 0 then do :
+        else if lookup(Syst.Var:nap,"end,e") > 0 then do :
            find last MSISDN WHERE
-                     MSISDN.Brand      = Syst.CUICommon:gcBrand AND 
+                     MSISDN.Brand      = Syst.Var:gcBrand AND 
                       MSISDN.ValidTo > Func.Common:mMakeTS()  AND 
                      MSISDN.StatusCode = 1 no-lock.
            memory = recid(MSISDN).
@@ -328,7 +328,7 @@ CU-Action:
            next LOOP.
         end. /* last record */
 
-        else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" then leave MAIN. /* Return */
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" then leave MAIN. /* Return */
 
      end.  /* BROWSE */
    end.  /* LOOP */

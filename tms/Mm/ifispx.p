@@ -49,7 +49,7 @@ IF getTMSRight("SYST") EQ "RW" THEN llIsAdmin = TRUE.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -70,8 +70,8 @@ form
     SimMan.ManName
     IFiSpx.SimArt
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+    COLOR VALUE(Syst.Var:cfc)
+    title COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
     " IMSI PaymFile Specifications "
     + string(TODAY,"99-99-99") + " "
     FRAME sel.
@@ -112,8 +112,8 @@ form
 
 
 WITH  OVERLAY ROW 1 centered
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc)
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc)
     ac-hdr WITH side-labels 
     FRAME lis.
 
@@ -122,11 +122,11 @@ form /* seek Spex  BY  Mancode */
      VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
      "Man.Code..:"   mancode
     help "Enter Manufacturer"
-    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND MANUFACTURER "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 title COLOR VALUE(Syst.Var:ctc) " FIND MANUFACTURER "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 orders = "By 1,By 2,By 3, By 4".
@@ -152,13 +152,13 @@ REPEAT WITH FRAME sel:
    END.
 
    IF must-add THEN DO:  /* Add a IFiSpx  */
-      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
    REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
       PAUSE 0 no-MESSAGE.
-      Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+      Syst.Var:ehto = 9. RUN Syst/ufkey.p.
       DO TRANSACTION:
          CLEAR FRAME lis NO-PAUSE.
          PROMPT-FOR 
@@ -166,7 +166,7 @@ ADD-ROW:
             IFiSpx.Version     
          EDITING:
             READKEY.
-            IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN 
+            IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN 
             DO WITH FRAME lis:
                PAUSE 0.
                if  frame-field = "Mancode" THEN 
@@ -174,7 +174,7 @@ ADD-ROW:
                   if input IFiSpx.ManCode = "" THEN 
                      UNDO ADD-row, LEAVE add-row.
                      FIND SimMan where 
-                        Simman.Brand   = Syst.CUICommon:gcBrand AND 
+                        Simman.Brand   = Syst.Var:gcBrand AND 
                         SimMan.Mancode = INPUT IFiSpx.ManCode
                         no-lock no-error.
                      IF NOT AVAIL SimMan THEN 
@@ -187,7 +187,7 @@ ADD-ROW:
                   else if frame-field = "Version" THEN 
                   DO:
                      FIND IFiSpx where 
-                        ifispx.Brand   = Syst.CUICommon:gcBrand AND 
+                        ifispx.Brand   = Syst.Var:gcBrand AND 
                         IFiSpx.ManCode = INPUT IFiSpx.ManCode AND 
                         IFiSpx.Version = INPUT IFiSpx.Version
                         no-lock no-error.
@@ -202,7 +202,7 @@ ADD-ROW:
                APPLY LASTKEY.
             END.      
             CREATE IFiSpx.
-            ASSIGN IFIspx.Brand   = Syst.CUICommon:gcBrand 
+            ASSIGN IFIspx.Brand   = Syst.Var:gcBrand 
                    IFiSpx.ManCode = INPUT FRAME lis IFiSpx.ManCode 
                    IFiSpx.Version = INPUT FRAME lis IFiSpx.Version.
 
@@ -273,11 +273,11 @@ BROWSE:
       IF ufkey THEN 
       DO:
          ASSIGN
-            Syst.CUICommon:ufk[1]= 215  Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0   Syst.CUICommon:ufk[4] = 0
-            Syst.CUICommon:ufk[5]= 5    Syst.CUICommon:ufk[6]= 4 Syst.CUICommon:ufk[7]= 0   Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-            Syst.CUICommon:ehto = 3 ufkey = FALSE.
+            Syst.Var:ufk[1]= 215  Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0   Syst.Var:ufk[4] = 0
+            Syst.Var:ufk[5]= 5    Syst.Var:ufk[6]= 4 Syst.Var:ufk[7]= 0   Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+            Syst.Var:ehto = 3 ufkey = FALSE.
             {Syst/uright1.i '"5,6"'}  
-         IF NOT llIsAdmin THEN ASSIGN  Syst.CUICommon:ufk[5]= 0    Syst.CUICommon:ufk[6]= 0. 
+         IF NOT llIsAdmin THEN ASSIGN  Syst.Var:ufk[5]= 0    Syst.Var:ufk[6]= 0. 
          RUN Syst/ufkey.p.
       END.
 
@@ -285,22 +285,22 @@ BROWSE:
       IF order = 1 THEN 
       DO:
          CHOOSE ROW IFiSpx.ManCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) IFiSpx.ManCode WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) IFiSpx.ManCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN 
       DO:
          CHOOSE ROW IFiSpx.ManCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) IFiSpx.ManCode WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) IFiSpx.ManCode WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN 
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN 
       DO:
          order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN 
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN 
       DO:
          order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
@@ -327,10 +327,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN 
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN 
       DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             RUN local-find-this(FALSE).
@@ -358,7 +358,7 @@ BROWSE:
       END. /* previous ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN 
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN 
       DO WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN 
          DO:
@@ -387,7 +387,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* prev page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN 
+      ELSE IF LOOKUP(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN 
       DO:
          Memory = rtab[1].
          FIND IFiSpx WHERE recid(IFiSpx) = Memory NO-LOCK NO-ERROR.
@@ -414,7 +414,7 @@ BROWSE:
       END. /* previous page */
 
       /* NEXT page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN 
+      ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN 
       DO WITH FRAME sel:
          /* PUT Cursor on downmost ROW */
          IF rtab[FRAME-DOWN] = ? THEN 
@@ -432,13 +432,13 @@ BROWSE:
       END. /* NEXT page */
 
       /* Search BY column 1 */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN 
+      ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN 
       DO ON ENDKEY UNDO, NEXT LOOP:
-         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+         Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
          Mancode = "".
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          Disp lcBrand With FRAME f1.
-         UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
+         UPDATE lcBrand WHEN Syst.Var:gcAllBrand = TRUE
             Mancode WITH FRAME f1.
          HIDE FRAME f1 NO-PAUSE.
          IF Mancode <> "" THEN 
@@ -453,21 +453,21 @@ BROWSE:
          END.
       END. /* Search-1 */
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND llIsAdmin THEN 
+      ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND llIsAdmin THEN 
       DO:  /* add */
          {Syst/uright2.i}
          must-add = TRUE.
          NEXT LOOP.
       END.
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND llIsAdmin THEN 
+      ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND llIsAdmin THEN 
       DO TRANSACTION:  /* DELETE */
          {Syst/uright2.i}
          delrow = FRAME-LINE.
          RUN local-find-this (FALSE).
 
          /* Highlight */
-         COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
+         COLOR DISPLAY VALUE(Syst.Var:ctc)
          IFISpx.Brand IFiSpx.ManCode IFiSpx.ManCode .
 
          RUN local-find-NEXT.
@@ -490,7 +490,7 @@ BROWSE:
 
          ASSIGN ok = FALSE.
          MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-         COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
+         COLOR DISPLAY VALUE(Syst.Var:ccc)
          IFiSpx.ManCode IFiSpx.ManCode .
          IF ok THEN 
          DO:
@@ -510,16 +510,16 @@ BROWSE:
          ELSE delrow = 0. /* UNDO DELETE */
       END. /* DELETE */
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0  AND llIsAdmin THEN
+      ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0  AND llIsAdmin THEN
       REPEAT WITH FRAME lis TRANSACTION ON ENDKEY UNDO, LEAVE:
          {Syst/uright2.i}
          /* change */
          RUN local-find-this(TRUE).
          RUN local-find-others.
 
-         ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
+         ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
-         Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
+         Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
          CLEAR FRAME lis NO-PAUSE.
          DISPLAY IFiSpx.ManCode.
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhIFisPX).
@@ -534,26 +534,26 @@ BROWSE:
          LEAVE.
       END.
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"home,h") > 0 THEN 
+      ELSE IF LOOKUP(Syst.Var:nap,"home,h") > 0 THEN 
       DO:
          RUN local-find-FIRST.
          ASSIGN Memory = recid(IFiSpx) must-print = TRUE.
         NEXT LOOP.
       END.
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"END,e") > 0 THEN 
+      ELSE IF LOOKUP(Syst.Var:nap,"END,e") > 0 THEN 
       DO : /* LAST record */
          RUN local-find-LAST.
          ASSIGN Memory = recid(IFiSpx) must-print = TRUE.
          NEXT LOOP.
       END.
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+      ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
    END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -667,7 +667,7 @@ PROCEDURE local-UPDATE-record:
       IFiSpx.Isc1
    WITH FRAME lis EDITING:
       READKEY.
-      IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN 
+      IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN 
       DO WITH FRAME lis:
          PAUSE 0.
          IF FRAME-FIELD = "SimArt" THEN 

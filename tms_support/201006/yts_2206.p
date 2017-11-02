@@ -65,7 +65,7 @@ ldEndStamp = Func.Common:mHMS2TS(ldtInputDate,"23:59:59").
 OUTPUT STREAM sLog TO "yts_2206.log" append.
 
 FOR EACH MsRequest NO-LOCK WHERE
-         MsRequest.Brand = Syst.CUICommon:gcBrand AND
+         MsRequest.Brand = Syst.Var:gcBrand AND
          MsRequest.ReqType = ({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}) AND
          MsRequest.ReqStatus = ({&REQUEST_STATUS_DONE}) AND
          MsRequest.ActStamp >= ldBeginStamp AND 

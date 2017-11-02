@@ -116,7 +116,7 @@ FUNCTION fOngoingDSSAct RETURNS LOG (INPUT iiCustnum AS INT):
    DEF VAR llExist AS LOG NO-UNDO.
    
    llExist = CAN-FIND (FIRST MsRequest NO-LOCK WHERE
-                       MsRequest.Brand = Syst.CUICommon:gcBrand            AND
+                       MsRequest.Brand = Syst.Var:gcBrand            AND
                        MsRequest.ReqType = {&REQTYPE_DSS}   AND
                        MsRequest.Custnum = iiCustnum        AND
                        MsRequest.ReqCParam1 = "CREATE"      AND
@@ -133,7 +133,7 @@ FUNCTION fOngoingDSSTerm RETURNS LOG (INPUT iiCustnum   AS INT,
    DEF VAR llExist AS LOG NO-UNDO.
    
    llExist = CAN-FIND (FIRST MsRequest NO-LOCK WHERE
-                       MsRequest.Brand = Syst.CUICommon:gcBrand           AND
+                       MsRequest.Brand = Syst.Var:gcBrand           AND
                        MsRequest.ReqType = {&REQTYPE_DSS}  AND
                        MsRequest.Custnum = iiCustnum       AND
                        MsRequest.ReqCParam1 = "DELETE"     AND
@@ -433,7 +433,7 @@ FUNCTION fGetOtherBundleUsages RETURNS DEC (INPUT iiCustNum   AS INT,
             FIRST bServiceLimit NO-LOCK WHERE
                   bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
             FIRST bDayCampaign WHERE
-                  bDayCampaign.Brand = Syst.CUICommon:gcBrand AND
+                  bDayCampaign.Brand = Syst.Var:gcBrand AND
                   bDayCampaign.DCEvent = bServiceLimit.GroupCode NO-LOCK:
 
             IF LOOKUP(STRING(bDayCampaign.DCType),
@@ -560,7 +560,7 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
              lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
 
    FOR EACH bMobSub WHERE
-            bMobSub.Brand   = Syst.CUICommon:gcBrand   AND
+            bMobSub.Brand   = Syst.Var:gcBrand   AND
             bMobSub.InvCust = iiCustnum AND
             NOT bMobSub.PayType NO-LOCK:
 
@@ -585,7 +585,7 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
          FIRST bServiceLimit NO-LOCK WHERE
                bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
          FIRST bDayCampaign WHERE
-               bDayCampaign.Brand = Syst.CUICommon:gcBrand AND
+               bDayCampaign.Brand = Syst.Var:gcBrand AND
                bDayCampaign.DCEvent = bServiceLimit.GroupCode NO-LOCK:
 
          /* might happen with ACC if the old customer has still active DSS */
@@ -610,7 +610,7 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
             IF (LOOKUP(bDayCampaign.DCEvent,lcDSS2PrimarySubsType) > 0) OR
                (LOOKUP(bMobSub.CLIType,lcDSS2PrimarySubsType)      > 0  AND
                  CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                                CLIType.Brand      = Syst.CUICommon:gcBrand         AND
+                                CLIType.Brand      = Syst.Var:gcBrand         AND
                                 CLIType.CLIType    = bMobSub.CLIType AND
                                 CLIType.BaseBundle = bDayCampaign.DCEvent)) THEN
             llDSS2PrimaryAvail = TRUE.
@@ -708,14 +708,14 @@ FUNCTION fIsDSSAllowed RETURNS LOG
       RETURN FALSE.
    END. /* IF NOT AVAILABLE MobSub THEN DO: */
 
-   IF fMatrixAnalyse(Syst.CUICommon:gcBrand,
+   IF fMatrixAnalyse(Syst.Var:gcBrand,
                      "PERCONTR",
                      "PerContract;SubsTypeTo",
                      icBundleId + ";" + MobSub.CLIType,
                      OUTPUT ocResult) NE 1 THEN DO:
       ocResult = "ERROR:Contract is not allowed for this subscription type".
       RETURN FALSE.
-   END. /* IF fMatrixAnalyse(Syst.CUICommon:gcBrand */
+   END. /* IF fMatrixAnalyse(Syst.Var:gcBrand */
 
    RETURN fIsDSSAllowedForCustomer(INPUT iiCustnum,
                                    INPUT ideActStamp,
@@ -766,14 +766,14 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
          RETURN FALSE.
       END. /* IF NOT AVAILABLE bMobSub THEN DO: */
 
-      IF fMatrixAnalyse(Syst.CUICommon:gcBrand,
+      IF fMatrixAnalyse(Syst.Var:gcBrand,
                         "PERCONTR",
                         "PerContract;SubsTypeTo",
                         "DSS2" + ";" + bMobSub.CLIType,
                         OUTPUT ocResult) NE 1 THEN DO:
          ocResult = "ERROR:Contract is not allowed for this subscription type".
          RETURN FALSE.
-      END. /* IF fMatrixAnalyse(Syst.CUICommon:gcBrand */
+      END. /* IF fMatrixAnalyse(Syst.Var:gcBrand */
 
       IF LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType)   > 0  AND 
         (LOOKUP(bMobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
@@ -790,7 +790,7 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
 
    MOBSUB_LOOP:
    FOR EACH bMobSub WHERE
-            bMobSub.Brand   = Syst.CUICommon:gcBrand   AND
+            bMobSub.Brand   = Syst.Var:gcBrand   AND
             bMobSub.InvCust = iiCustnum AND
             NOT bMobSub.PayType NO-LOCK:
 
@@ -840,7 +840,7 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
          FIRST bServiceLimit NO-LOCK WHERE
                bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
          FIRST bDayCampaign NO-LOCK WHERE
-               bDayCampaign.Brand = Syst.CUICommon:gcBrand AND
+               bDayCampaign.Brand = Syst.Var:gcBrand AND
                bDayCampaign.DCEvent = bServiceLimit.GroupCode AND
                LOOKUP(bDayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0:
 
@@ -861,7 +861,7 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
             IF (LOOKUP(bDayCampaign.DCEvent,lcDSS2PrimarySubsType) > 0) OR
                (LOOKUP(bMobSub.CLIType,lcDSS2PrimarySubsType)      > 0  AND 
                 CAN-FIND(FIRST CLIType NO-LOCK WHERE 
-                               CLIType.Brand      = Syst.CUICommon:gcBrand         AND 
+                               CLIType.Brand      = Syst.Var:gcBrand         AND 
                                CLIType.CLIType    = bMobSub.CLIType AND 
                                CLIType.BaseBundle = bDayCampaign.DCEvent)) THEN DO:
                ASSIGN oiDSS2PriMsSeq     = bMobSub.MsSeq
@@ -923,7 +923,7 @@ FUNCTION fgetFlexUpsellBundle RETURNS CHAR
    ELSE IF icDSSId EQ "DSS2" THEN DO:
       FIND FIRST MobSub WHERE Mobsub.msseq EQ iiMsseq NO-LOCK NO-ERROR.
       IF AVAIL MobSub THEN DO:
-         IF fMatrixAnalyse(Syst.CUICommon:gcBrand,
+         IF fMatrixAnalyse(Syst.Var:gcBrand,
                            "PERCONTR",
                            "PerContract;SubsTypeTo",
                            "DSS2" + ";" + MobSub.CLIType,
@@ -990,7 +990,7 @@ FUNCTION fCanDSSKeepActive RETURNS LOG
 
    MOBSUB_LOOP:
    FOR EACH bMobSub WHERE
-            bMobSub.Brand   = Syst.CUICommon:gcBrand   AND
+            bMobSub.Brand   = Syst.Var:gcBrand   AND
             bMobSub.InvCust = iiCustnum AND
             NOT bMobSub.PayType NO-LOCK:
 
@@ -1051,7 +1051,7 @@ FUNCTION fCanDSSKeepActive RETURNS LOG
          FIRST bServiceLimit NO-LOCK WHERE
                bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
          FIRST bDayCampaign NO-LOCK WHERE
-               bDayCampaign.Brand = Syst.CUICommon:gcBrand AND
+               bDayCampaign.Brand = Syst.Var:gcBrand AND
                bDayCampaign.DCEvent = bServiceLimit.GroupCode AND
                LOOKUP(bDayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0:
 
@@ -1124,7 +1124,7 @@ FUNCTION fIsDSSTransferAllowed RETURNS LOG
              lcDSS2PrimarySubsType   = fCParamC("DSS2_PRIMARY_SUBS_TYPE").
 
    FOR EACH bMobSub WHERE
-            bMobSub.Brand   = Syst.CUICommon:gcBrand      AND
+            bMobSub.Brand   = Syst.Var:gcBrand      AND
             bMobSub.InvCust = iiCustnum    AND
             NOT bMobSub.PayType NO-LOCK BY ActivationDate:
 
@@ -1150,7 +1150,7 @@ FUNCTION fIsDSSTransferAllowed RETURNS LOG
          FIRST bServiceLimit NO-LOCK WHERE
                bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
          FIRST bDayCampaign WHERE
-               bDayCampaign.Brand = Syst.CUICommon:gcBrand AND
+               bDayCampaign.Brand = Syst.Var:gcBrand AND
                bDayCampaign.DCEvent = bServiceLimit.GroupCode AND
                LOOKUP(STRING(bDayCampaign.DCType),
                       {&PERCONTRACT_RATING_PACKAGE}) > 0 NO-LOCK:
@@ -1234,7 +1234,7 @@ FUNCTION fTransferDSS RETURNS LOG
 
    DO TRANSACTION:
       FIND FIRST FixedFee WHERE
-                 FixedFee.Brand     = Syst.CUICommon:gcBrand   AND
+                 FixedFee.Brand     = Syst.Var:gcBrand   AND
                  FixedFee.HostTable = "MobSub"  AND
                  FixedFee.KeyValue  = STRING(iiCurrentDSSMsSeq) AND
                  FixedFee.CalcObj   = {&DSS}    AND
@@ -1330,7 +1330,7 @@ FUNCTION fGetActiveBundleLimit RETURNS DEC
       FIRST bServiceLimit NO-LOCK WHERE
             bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
       FIRST DayCampaign NO-LOCK WHERE 
-            DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
+            DayCampaign.Brand   = Syst.Var:gcBrand AND
             DayCampaign.DCEvent = bServiceLimit.GroupCode AND
             LOOKUP(STRING(DayCampaign.DCType),
                    {&PERCONTRACT_RATING_PACKAGE}) > 0:
@@ -1552,7 +1552,7 @@ PROCEDURE pUpdateDSSLimit:
                IF llDoEvent THEN 
                   fMakeCreateEvent((BUFFER MserviceLPool:HANDLE),
                                    "",
-                                   Syst.CUICommon:katun,
+                                   Syst.Var:katun,
                                    "").
 
                
@@ -1616,7 +1616,7 @@ PROCEDURE pUpdateDSSLimit:
                IF llDoEvent THEN 
                   fMakeCreateEvent((BUFFER MserviceLPool:HANDLE),
                                    "",
-                                   Syst.CUICommon:katun,
+                                   Syst.Var:katun,
                                    "").
             END.
           END.

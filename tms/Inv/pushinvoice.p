@@ -122,7 +122,7 @@ OUTPUT STREAM sPushLog TO VALUE(lcPushLogFile).
 
 PUSH_INVOICE_LOOP:
 FOR EACH Invoice WHERE
-         Invoice.Brand    = Syst.CUICommon:gcBrand AND
+         Invoice.Brand    = Syst.Var:gcBrand AND
          Invoice.InvType  = 1 AND
          Invoice.InvDate >= ldaDateFrom AND
          Invoice.InvAmt  >= 0 NO-LOCK:

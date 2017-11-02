@@ -45,7 +45,7 @@ FUNCTION _fGetTxt RETURNS CHAR
 
    /* with desired language */ 
    FOR FIRST InvText NO-LOCK WHERE
-             InvText.Brand     = Syst.CUICommon:gcBrand AND 
+             InvText.Brand     = Syst.Var:gcBrand AND 
              InvText.Target    = iTarget AND
              InvText.KeyValue  = iKey    AND
              InvText.FromDate <= iDate   AND
@@ -60,7 +60,7 @@ FUNCTION _fGetTxt RETURNS CHAR
    /* if not available then get text with default language */
    IF oText = "" AND iLang NE 1 THEN 
    FOR FIRST InvText NO-LOCK WHERE
-             InvText.Brand     = Syst.CUICommon:gcBrand AND 
+             InvText.Brand     = Syst.Var:gcBrand AND 
              InvText.Target    = iTarget AND
              InvText.KeyValue  = iKey    AND
              InvText.FromDate <= iDate   AND
@@ -74,7 +74,7 @@ FUNCTION _fGetTxt RETURNS CHAR
 
       IF InvText.Target  = "SMS" THEN
       FOR FIRST RepText NO-LOCK WHERE
-                RepText.Brand      = Syst.CUICommon:gcBrand AND 
+                RepText.Brand      = Syst.Var:gcBrand AND 
                 RepText.TextType   = 32 AND
                 RepText.LinkCode   = STRING(InvText.ITNum) AND
                 RepText.FromDate  <= iDate   AND

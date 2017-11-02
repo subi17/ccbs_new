@@ -11,8 +11,8 @@
 {Syst/commpaa.i}
 {Syst/tmsconst.i}
 {Func/barrfunc.i}
-Syst.CUICommon:katun = "NewtonAd".
-Syst.CUICommon:gcBrand  = "1".
+Syst.Var:katun = "NewtonAd".
+Syst.Var:gcBrand  = "1".
 
 /* Input parameters */
 DEF VAR pcUser AS CHAR NO-UNDO.
@@ -39,7 +39,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUser) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-Syst.CUICommon:katun = pcUser.
+Syst.Var:katun = pcUser.
 
 FIND FIRST Mobsub NO-LOCK WHERE
            Mobsub.MsSeq = piMsSeq NO-ERROR.

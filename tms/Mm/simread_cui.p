@@ -30,7 +30,7 @@ DO WITH FRAME SIMfile :
 
    lcSIMfile = RETURN-VALUE.
 
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    PAUSE 0.
 
    IF lcSIMfile = "" OR lcSIMfile = ? THEN LEAVE.

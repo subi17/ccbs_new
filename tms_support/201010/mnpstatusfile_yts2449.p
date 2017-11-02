@@ -7,8 +7,8 @@
   Version ......: yoigo
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
@@ -19,7 +19,7 @@ Syst.CUICommon:gcBrand = "1".
 {Func/msisdn.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -322,7 +322,7 @@ PROCEDURE pMNPStatusCheck:
                 MNPProcess.StatusCode = ({&MNP_ST_BNOT})) EXCLUSIVE-LOCK:
       
             FIND msisdn where
-               msisdn.brand = Syst.CUICommon:gcBrand and
+               msisdn.brand = Syst.Var:gcBrand and
                msisdn.cli = bMNPSub.CLI  AND
                msisdn.statuscode = ({&MSISDN_ST_RETURN_NOTICE_SENT}) AND
                msisdn.validto > Func.Common:mMakeTS() NO-LOCK NO-ERROR.
@@ -357,7 +357,7 @@ PROCEDURE pMNPStatusCheck:
            MNPSub.MNPSeq = MNPProcess.MNPSeq NO-LOCK.
 
       FIND msisdn where
-         msisdn.brand = Syst.CUICommon:gcBrand and
+         msisdn.brand = Syst.Var:gcBrand and
          msisdn.cli = MNPSub.CLI  AND
          msisdn.validto > Func.Common:mMakeTS() NO-LOCK NO-ERROR.
 

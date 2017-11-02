@@ -20,13 +20,13 @@ FUNCTION fBalanceInvoicePaid RETURNS LOGIC
    llUpdated = FALSE.
    
    FOR EACH SingleFee NO-LOCK WHERE
-            SingleFee.Brand  = Syst.CUICommon:gcBrand AND
+            SingleFee.Brand  = Syst.Var:gcBrand AND
             SingleFee.InvNum = iiInvNum:
                      
       IF SingleFee.HostTable = "Order" THEN DO:
                       
          FIND Order WHERE
-              Order.Brand   = Syst.CUICommon:gcBrand AND
+              Order.Brand   = Syst.Var:gcBrand AND
               Order.OrderID = INTEGER(SingleFee.KeyValue) NO-LOCK NO-ERROR.                    
          IF NOT AVAILABLE Order THEN NEXT.
                       

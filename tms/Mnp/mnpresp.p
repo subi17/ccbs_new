@@ -10,8 +10,8 @@
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "MNP".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "MNP".
 
 {Func/heartbeat.i}
 {Mnp/mnp.i}
@@ -216,7 +216,7 @@ PROCEDURE pHandleQueue:
    /* order should always exist with MNP IN processes */
    IF MNPProcess.MNPType = {&MNP_TYPE_IN} THEN 
    DO:
-      FIND Order WHERE Order.Brand = Syst.CUICommon:gcBrand AND Order.Orderid = MNPProcess.OrderID EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+      FIND Order WHERE Order.Brand = Syst.Var:gcBrand AND Order.Orderid = MNPProcess.OrderID EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
       IF LOCKED Order THEN 
          RETURN.
 
@@ -391,19 +391,19 @@ PROCEDURE pHandleQueue:
                         lcNewOper      = SUBSTRING(lcResponseDesc,liRespLength - 2,liRespLength).
                     
                      FIND MNPOperator NO-LOCK WHERE
-                          MNPOperator.Brand    = Syst.CUICommon:gcBrand         AND
+                          MNPOperator.Brand    = Syst.Var:gcBrand         AND
                           MNPOperator.OperCode = TRIM(lcNewOper) AND
                           MNPOperator.Active   = TRUE NO-ERROR.
                      
                      IF NOT AVAIL MNPOperator THEN 
                         FIND MNPOperator NO-LOCK WHERE
-                             MNPOperator.Brand    = Syst.CUICommon:gcBrand         AND
+                             MNPOperator.Brand    = Syst.Var:gcBrand         AND
                              MNPOperator.OperCode = TRIM(lcNewOper) NO-ERROR.
 
                      IF AVAIL MNPOperator THEN llgMNPOperName = TRUE.
                      ELSE DO:
                         FIND FIRST MNPOperator NO-LOCK WHERE
-                                   MNPOperator.Brand    = Syst.CUICommon:gcBrand         AND
+                                   MNPOperator.Brand    = Syst.Var:gcBrand         AND
                                    MNPOperator.OperCode = TRIM(lcNewOper) NO-ERROR.
                         IF AVAIL MNPOperator AND 
                                  MNPOperator.OperBrand > "" THEN 
@@ -620,7 +620,7 @@ PROCEDURE pHandleQueue:
             MNPSub.MNPSeq = MNPProcess.MNPSeq NO-LOCK.
          
          FIND msisdn where
-            msisdn.brand = Syst.CUICommon:gcBrand and
+            msisdn.brand = Syst.Var:gcBrand and
             msisdn.cli = MNPSub.CLI AND
             msisdn.statuscode = {&MSISDN_ST_WAITING_RETURN} and
             msisdn.validto > Func.Common:mMakeTS() NO-LOCK NO-ERROR.
@@ -653,7 +653,7 @@ PROCEDURE pHandleQueue:
          IF AVAIL MNPSub THEN DO:
 
             FIND FIRST MSISDN WHERE
-                       MSISDN.Brand = Syst.CUICommon:gcBrand AND
+                       MSISDN.Brand = Syst.Var:gcBrand AND
                        MSISDN.CLI = MNPSub.CLI
             USE-INDEX CLI NO-LOCK NO-ERROR.
 
@@ -852,7 +852,7 @@ PROCEDURE pHandleQueue:
         
          /* Cancel pending SMS messages */
          FOR EACH CallAlarm WHERE
-                  CallAlarm.Brand = Syst.CUICommon:gcBrand AND
+                  CallAlarm.Brand = Syst.Var:gcBrand AND
                   CallAlarm.CLI = Order.CLI AND
                   CallAlarm.DeliStat = 1 AND
                   CallAlarm.CreditType = 12 EXCLUSIVE-LOCK:
@@ -931,7 +931,7 @@ PROCEDURE pHandleQueue:
          IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 THEN DO:
             
             FIND OrderAccessory WHERE
-                 OrderAccessory.Brand = Syst.CUICommon:gcBrand AND
+                 OrderAccessory.Brand = Syst.Var:gcBrand AND
                  OrderAccessory.OrderId = Order.OrderId AND
                  OrderAccessory.TerminalType = ({&TERMINAL_TYPE_PHONE})
             EXCLUSIVE-LOCK NO-ERROR.
@@ -1027,7 +1027,7 @@ PROCEDURE pHandleFromASOL2ACON:
                           MNPSub.NRN,
                           STRING(2),
                           "5", /* automatic script*/
-                          Syst.CUICommon:katun,
+                          Syst.Var:katun,
                           0, /* orig. request */
                           lcTermType,
                           OUTPUT ocResult). 

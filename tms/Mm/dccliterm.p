@@ -101,7 +101,7 @@ END.
 FIND Customer WHERE Customer.CustNum = MobSub.CustNum NO-LOCK.
 
 FIND FIRST DayCampaign WHERE
-           DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
+           DayCampaign.Brand   = Syst.Var:gcBrand AND
            DayCampaign.DCEvent = icDCEvent NO-LOCK NO-ERROR.
 IF NOT AVAILABLE DayCampaign THEN RETURN.
 
@@ -140,7 +140,7 @@ END.
 ELSE DO:
       
    FIND FIRST DCCLI WHERE
-              DCCLI.Brand         = Syst.CUICommon:gcBrand     AND
+              DCCLI.Brand         = Syst.Var:gcBrand     AND
               DCCLI.DCEvent       = icDCEvent   AND
               DCCLI.MSSeq         = iiMsSeq     AND 
              (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN 
@@ -182,7 +182,7 @@ END.
 ASSIGN
    lcCustName   = Func.Common:mDispCustName(BUFFER Customer)
    ldtTermDate = TODAY
-   Syst.CUICommon:toimi        = -1.
+   Syst.Var:toimi        = -1.
 
 MakeReq:
 REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
@@ -199,26 +199,26 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
            lcMemoText
    WITH FRAME fCriter.
 
-   IF Syst.CUICommon:toimi < 0 THEN Syst.CUICommon:toimi = 1.
+   IF Syst.Var:toimi < 0 THEN Syst.Var:toimi = 1.
    ELSE DO:
       ASSIGN
-         Syst.CUICommon:ufk    = 0  
-         Syst.CUICommon:ufk[1] = 7
-         Syst.CUICommon:ufk[5] = IF lcMemoText > "" AND
+         Syst.Var:ufk    = 0  
+         Syst.Var:ufk[1] = 7
+         Syst.Var:ufk[5] = IF lcMemoText > "" AND
                      ldtTermDate >= ldtFirstDate AND
                      ldtTermDate <= TODAY
                   THEN 1027 
                   ELSE 0 
-         Syst.CUICommon:ufk[8] = 8 
-         Syst.CUICommon:ehto   = 0.
+         Syst.Var:ufk[8] = 8 
+         Syst.Var:ehto   = 0.
       RUN Syst/ufkey.p.
    END.
    
-   IF Syst.CUICommon:toimi = 1 THEN DO:
+   IF Syst.Var:toimi = 1 THEN DO:
    
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
       
-         Syst.CUICommon:ehto = 9.
+         Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
          
          UPDATE 
@@ -228,7 +228,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
          
             READKEY.
             
-            IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
                PAUSE 0.
         
                IF FRAME-FIELD = "ldtTermDate" THEN DO:
@@ -254,7 +254,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
       
    END.
 
-   ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
+   ELSE IF Syst.Var:toimi = 5 THEN DO:
 
       /* is there a request already (check once more; who knows how much
          time has been spent on this screen) */
@@ -295,12 +295,12 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
 
          CREATE Memo.
          ASSIGN 
-            Memo.Brand     = Syst.CUICommon:gcBrand
+            Memo.Brand     = Syst.Var:gcBrand
             Memo.HostTable = "MobSub"
             Memo.KeyValue  = STRING(MobSub.MsSeq)
             Memo.CustNum   = MobSub.CustNum
             Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-            Memo.CreUser   = Syst.CUICommon:katun 
+            Memo.CreUser   = Syst.Var:katun 
             Memo.MemoTitle = "Periodical Contract Terminated"
             Memo.MemoText  = "Contract: " + icDCEvent + CHR(10) + 
                              lcMemoText.
@@ -319,7 +319,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
       LEAVE.
    END.
    
-   ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
+   ELSE IF Syst.Var:toimi = 8 THEN LEAVE.
 
 END. /* MakeReq */
 

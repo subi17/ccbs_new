@@ -9,8 +9,8 @@
    --------------------------------------------------- */               
                                                                 
 {Syst/commpaa.i} 
-Syst.CUICommon:katun = "cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "cron".
+Syst.Var:gcBrand = "1".
 
 {Func/cparam2.i}
 {Func/tsformat.i}
@@ -46,7 +46,7 @@ ASSIGN
 OUTPUT STREAM excel TO VALUE(lcspooldir + lcfilename).
 
 FOR EACH MsRequest NO-LOCK WHERE
-         MsRequest.Brand = Syst.CUICommon:gcBrand AND
+         MsRequest.Brand = Syst.Var:gcBrand AND
          MsRequest.ReqType = 0 AND
          MsRequest.ReqStatus = 2 AND
          MsRequest.ActStamp >= ldIndexFind AND
@@ -54,10 +54,10 @@ FOR EACH MsRequest NO-LOCK WHERE
          MsRequest.DoneStamp < Func.Common:mMake2DT(ldtEndD + 1, 0):
 
    FIND FIRST bOldType WHERE
-              bOldType.Brand = Syst.CUICommon:gcBrand AND
+              bOldType.Brand = Syst.Var:gcBrand AND
               bOldType.CLIType = MsRequest.ReqCParam1 NO-LOCK NO-ERROR.
    FIND FIRST CLIType WHERE
-              CLIType.Brand = Syst.CUICommon:gcBrand AND
+              CLIType.Brand = Syst.Var:gcBrand AND
               CLIType.CLIType = MsRequest.ReqCParam2 NO-LOCK NO-ERROR.
               
    IF NOT AVAILABLE bOldType OR NOT AVAILABLE CLIType THEN NEXT. 

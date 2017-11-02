@@ -53,13 +53,13 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
    VIEW FRAME fCriter.
 
    ASSIGN
-      Syst.CUICommon:ufk   = 0  
-      Syst.CUICommon:ufk[5]= 1027  
-      Syst.CUICommon:ufk[8]= 8 
-      Syst.CUICommon:ehto = 0.
+      Syst.Var:ufk   = 0  
+      Syst.Var:ufk[5]= 1027  
+      Syst.Var:ufk[8]= 8 
+      Syst.Var:ehto = 0.
    RUN Syst/ufkey.p.
 
-   IF Syst.CUICommon:toimi = 5 THEN DO:
+   IF Syst.Var:toimi = 5 THEN DO:
 
       llOk = FALSE.
       MESSAGE "A PIN letter will be sent." SKIP
@@ -87,7 +87,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
       LEAVE.
    END.
    
-   ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
+   ELSE IF Syst.Var:toimi = 8 THEN LEAVE.
 
 END. /* lCustMark */
 

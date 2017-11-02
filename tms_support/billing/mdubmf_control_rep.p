@@ -108,7 +108,7 @@ FOR EACH ServiceLimit NO-LOCK WHERE
                         OUTPUT liInvCust).
         liCount = 0 .
         FOR EACH FixedFee NO-LOCK USE-INDEX HostTable WHERE
-                 FixedFee.Brand     = Syst.CUICommon:gcBrand   AND 
+                 FixedFee.Brand     = Syst.Var:gcBrand   AND 
                  FixedFee.HostTable = "MobSub"  AND
                  FixedFee.KeyValue  = STRING(MServiceLimit.MsSeq),
             EACH FFItem OF FixedFee NO-LOCK WHERE 
@@ -141,7 +141,7 @@ PUT STREAM sLogSum UNFORMATTED
 
 /* fixed fee - list2 ------------------------------- */
 FOR EACH FixedFee NO-LOCK USE-INDEX BillCode WHERE
-         FixedFee.Brand = Syst.CUICommon:gcBrand AND 
+         FixedFee.Brand = Syst.Var:gcBrand AND 
          FixedFee.BillCode = "MDUBMF",
     EACH FFItem OF FixedFee NO-LOCK WHERE
          FFItem.BillPeriod <= (YEAR(ldaBegin) * 100 + MONTH(ldaBegin)):
@@ -155,7 +155,7 @@ FOR EACH FixedFee NO-LOCK USE-INDEX BillCode WHERE
 
     /* check if has been invoiced in given period*/
      FIND Invoice WHERE
-          Invoice.Brand = Syst.CUICommon:gcBrand AND 
+          Invoice.Brand = Syst.Var:gcBrand AND 
           Invoice.InvNum = FFItem.InvNum AND 
           Invoice.InvDate >= ldaInvStart AND
           Invoice.InvDate <= ldaInvEnd NO-LOCK NO-ERROR. 

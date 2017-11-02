@@ -17,7 +17,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 DEF VAR pcTenant         AS CHAR NO-UNDO.
 DEF VAR piOffSet         AS INT  NO-UNDO.
@@ -56,16 +56,16 @@ top_struct = add_struct(response_toplevel_id, "").
 result_array = add_array(top_struct, "subscriptions").
 
 FOR EACH SIM NO-LOCK WHERE
-         SIM.Brand   EQ Syst.CUICommon:gcBrand    AND
+         SIM.Brand   EQ Syst.Var:gcBrand    AND
          SIM.Stock   EQ "TESTING"  AND
          SIM.SimStat EQ 4,
     EACH IMSI WHERE
          IMSI.ICC = SIM.ICC NO-LOCK,
     EACH MobSub NO-LOCK WHERE
-         MobSub.Brand = Syst.CUICommon:gcBrand AND
+         MobSub.Brand = Syst.Var:gcBrand AND
          MobSub.IMSI  = IMSI.IMSI,
    FIRST Customer NO-LOCK WHERE
-         Customer.Brand = Syst.CUICommon:gcBrand AND
+         Customer.Brand = Syst.Var:gcBrand AND
          Customer.CustNum = MobSub.CustNum:
 
    liSubCount = liSubCount + 1.

@@ -41,7 +41,7 @@ IF NOT AVAILABLE MsOwner THEN
    RETURN "ERROR:Subscription not available".
 
 FIND FIRST CLIType WHERE
-           CLIType.Brand   = Syst.CUICommon:gcBrand AND
+           CLIType.Brand   = Syst.Var:gcBrand AND
            CLIType.CLIType = MsOwner.CLIType NO-LOCK NO-ERROR.
 IF AVAILABLE CLIType THEN liPayType = CLIType.PayType.
 
@@ -132,7 +132,7 @@ PROCEDURE pMsRequest:
       IF ERROR-STATUS:ERROR THEN NEXT. 
       
       FIND FIRST RequestType WHERE
-                 RequestType.Brand   = Syst.CUICommon:gcBrand AND
+                 RequestType.Brand   = Syst.Var:gcBrand AND
                  RequestType.ReqType = liPendingType
       NO-LOCK NO-ERROR.
       IF NOT AVAILABLE RequestType THEN NEXT.

@@ -33,7 +33,7 @@ DEF NEW shared STREAM excel.
 
 /* get default direcory Name FOR OUTPUT */
 DO FOR TMSUser:
-   FIND TMSUSer where TMSUser.UserCode = Syst.CUICommon:katun no-lock.
+   FIND TMSUSer where TMSUser.UserCode = Syst.Var:katun no-lock.
    ASSIGN exdir = TMSUSer.RepDir.
 END.
 
@@ -67,33 +67,33 @@ help "(D)irect, (I)ndirect  (?)=ALL" SKIP
 
  skip(1)
 WITH
-   width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + Syst.CUICommon:ynimi + " EXCEL-SUMMARY OF Billed PRODUCTS " +
+   width 80 OVERLAY COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc)
+   " " + Syst.Var:ynimi + " EXCEL-SUMMARY OF Billed PRODUCTS " +
    string(TODAY,"99-99-99") + " " NO-LABELS FRAME start.
 
 exdate2 = date(month(TODAY),1,year(TODAY)) - 1.
 exdate1 = date(month(exdate2),1,year(exdate2)).
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
 exConnType = ?.  InvGroup = "T1E".
 
 CRIT:
 repeat WITH FRAME start:
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    DISP exName.
    UPDATE
       exName
       exdate1  validate(exdate1 ne ?,"Give first Date !")
       exdate2  validate(input exdate2 >= input exdate1,"Invalid order !")
       InvGroup  validate(InvGroup = "" OR can-find(InvGroup where
-                                 InvGroup.Brand  = Syst.CUICommon:gcBrand AND
+                                 InvGroup.Brand  = Syst.Var:gcBrand AND
                                  InvGroup.InvGroup = InvGroup),
                                  "Group does not exist !")
       exConnType
       exdeci
    WITH FRAME start EDITING.
       READKEY.
-      IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+      IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
          PAUSE 0.
       END.
       APPLY LASTKEY.
@@ -101,12 +101,12 @@ repeat WITH FRAME start:
 
 task:
    repeat WITH FRAME start:
-      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
-      IF Syst.CUICommon:toimi = 1 THEN NEXT  CRIT.
-      IF Syst.CUICommon:toimi = 8 THEN LEAVE CRIT.
+      IF Syst.Var:toimi = 1 THEN NEXT  CRIT.
+      IF Syst.Var:toimi = 8 THEN LEAVE CRIT.
 
-      IF Syst.CUICommon:toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
          ok = FALSE.
          message "Are you SURE you want to start processing (Y/N) ?" UPDATE ok.
          IF ok THEN LEAVE task.
@@ -117,10 +117,10 @@ task:
    /* headers FIRST */
    if InvGroup ne "" THEN DO:
       FIND InvGroup NO-LOCK where 
-           InvGroup.Brand  = Syst.CUICommon:gcBrand AND
+           InvGroup.Brand  = Syst.Var:gcBrand AND
            InvGroup.InvGroup = InvGroup.
    END.   
-   PUT STREAM excel UNFORMATTED Syst.CUICommon:ynimi.
+   PUT STREAM excel UNFORMATTED Syst.Var:ynimi.
    RUN Syst/uexskip.p(1).
    put stream excel unformatted "Invoicing group: ".
    if InvGroup ne "" THEN PUT STREAM excel UNFORMATTED
@@ -141,7 +141,7 @@ task:
 
    FOR
       EACH  Invoice no-lock where
-            Invoice.Brand  = Syst.CUICommon:gcBrand AND
+            Invoice.Brand  = Syst.Var:gcBrand AND
             Invoice.InvDate >= exdate1  AND
             Invoice.InvDate <= exdate2,
       FIRST Customer no-lock where
@@ -156,7 +156,7 @@ task:
 
    FOR
       EACH  Invoice no-lock where
-            Invoice.Brand  = Syst.CUICommon:gcBrand AND
+            Invoice.Brand  = Syst.Var:gcBrand AND
             Invoice.InvDate >= exdate1  AND
             Invoice.InvDate <= exdate2,
       FIRST Customer no-lock where
@@ -174,7 +174,7 @@ task:
 
       IF last-of(InvRow.BillCode) THEN DO:
          FIND BillItem where 
-              BillItem.Brand  = Syst.CUICommon:gcBrand AND
+              BillItem.Brand  = Syst.Var:gcBrand AND
               BillItem.BillCode = InvRow.BillCode no-lock no-error.
          IF AVAIL BillItem THEN ProdName = BillItem.BIName.
          else                ProdName = "!! UNKNOWN !!".

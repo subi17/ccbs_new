@@ -19,7 +19,7 @@ DEF VAR lcLetters AS CHAR  NO-UNDO.
 lcLetters = "A,B,C,D,E,F,G,H,I,J,K,L,M".
 
 FOR EACH RequestType NO-LOCK WHERE
-         RequestType.Brand = Syst.CUICommon:gcBrand AND
+         RequestType.Brand = Syst.Var:gcBrand AND
          RequestType.ReqType >= 20:
 
    IF LOOKUP(STRING(RequestType.ReqType),"20,22,23,31,34") > 0 
@@ -36,9 +36,9 @@ ASSIGN liMenu          = liMenu + 1
 PAUSE 0.
 
 DO WHILE TRUE:
-   ASSIGN Syst.CUICommon:ufk    = 0 
-          Syst.CUICommon:ufk[8] = 8 
-          Syst.CUICommon:ehto   = 3. 
+   ASSIGN Syst.Var:ufk    = 0 
+          Syst.Var:ufk[8] = 8 
+          Syst.Var:ehto   = 3. 
    RUN Syst/ufkey.p. 
 
    DISPLAY

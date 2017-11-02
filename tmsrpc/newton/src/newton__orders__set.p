@@ -51,10 +51,10 @@ ASSIGN
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = pcUserName.
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = pcUserName.
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
-&GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
+&GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
 {Func/lib/eventlog.i}
 
 /* validate order struct */
@@ -99,7 +99,7 @@ IF TRIM(pcUserName) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 IF piAdditionalDoc NE ? THEN DO:
    
    FIND OrderCustomer WHERE 
-        OrderCustomer.Brand = Syst.CUICommon:gcBrand AND 
+        OrderCustomer.Brand = Syst.Var:gcBrand AND 
         OrderCustomer.OrderId = piOrderId AND
         OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
 
@@ -130,7 +130,7 @@ IF NUM-ENTRIES(lcOrderFields) > 0 THEN DO:
          RETURN appl_err("Wrong fusion order status, cannot update ICC").
 
       FIND FIRST SIM EXCLUSIVE-LOCK WHERE
-                 SIM.brand EQ Syst.CUICommon:gcBrand AND
+                 SIM.brand EQ Syst.Var:gcBrand AND
                  SIM.ICC EQ pcIcc AND
                  SIM.simstat EQ 1 NO-ERROR.
       IF NOT AVAILABLE SIM THEN
@@ -162,7 +162,7 @@ IF NUM-ENTRIES(lcOrderFields) > 0 THEN DO:
          RETURN appl_err("Wrong fusion order status, cannot update IMEI").
       
       FIND OrderAccessory EXCLUSIVE-LOCK WHERE
-           OrderAccessory.Brand = Syst.CUICommon:gcBrand AND
+           OrderAccessory.Brand = Syst.Var:gcBrand AND
            OrderAccessory.OrderId = Order.OrderId AND
            OrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE} NO-ERROR.
 

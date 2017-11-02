@@ -104,8 +104,8 @@ DO ic = 1 TO 2:
 END.
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = pcUserName.
-Syst.CUICommon:gcBrand = lcBrand.
+Syst.Var:katun = pcUserName.
+Syst.Var:gcBrand = lcBrand.
 {Func/flimitreq.i}
 
 /* ready to create the request */

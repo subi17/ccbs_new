@@ -183,7 +183,7 @@ ASSIGN
 IF liWaitSeconds = ? THEN liWaitSeconds = 600.   
 
 /* period for current active cdr db */ 
-liActiveDB = fGetCurrentDB(Syst.CUICommon:gcBrand,
+liActiveDB = fGetCurrentDB(Syst.Var:gcBrand,
                            "MobCDR",
                            OUTPUT ldaActiveFrom,
                            OUTPUT ldaActiveTo).

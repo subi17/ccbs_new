@@ -114,7 +114,7 @@ FUNCTION fGetChannel RETURNS CHAR
    
    IF ibFixedFee.OrderId > 0 THEN DO:
       FIND FIRST Order NO-LOCK WHERE
-                 Order.Brand = Syst.CUICommon:gcBrand AND
+                 Order.Brand = Syst.Var:gcBrand AND
                  Order.OrderId = ibFixedFee.OrderId NO-ERROR.
    END.
    ELSE IF FixedFee.BillCode EQ "PAYTERM" THEN DO:
@@ -170,7 +170,7 @@ FIND FIRST DumpFile WHERE DumpFile.DumpID = iiDumpID NO-LOCK NO-ERROR.
 IF AVAIL DumpFile THEN lcDelimiter = DumpFile.DumpDelimiter.
             
 FIND FIRST ActionLog NO-LOCK WHERE
-           ActionLog.Brand    = Syst.CUICommon:gcBrand AND
+           ActionLog.Brand    = Syst.Var:gcBrand AND
            ActionLog.ActionID BEGINS "TF_READ_" AND
            ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE} NO-ERROR.
          
@@ -181,7 +181,7 @@ END.
 ELSE DO TRANS:
 
    FIND FIRST bActionLog NO-LOCK WHERE
-              bActionLog.Brand    = Syst.CUICommon:gcBrand AND
+              bActionLog.Brand    = Syst.Var:gcBrand AND
               bActionLog.ActionId = ActionLog.ActionID AND
               bActionLog.ActionStatus NE {&ACTIONLOG_STATUS_CANCELLED} AND
               bActionLog.FromDate <= ActionLog.Todate AND
@@ -423,7 +423,7 @@ PROCEDURE pCollectActivations:
       ldResidual = 0.
       IF NOT FixedFee.BillCode BEGINS "RVTERM" THEN DO:
          FIND FIRST SingleFee NO-LOCK WHERE
-                    SingleFee.Brand = Syst.CUICommon:gcBrand AND
+                    SingleFee.Brand = Syst.Var:gcBrand AND
                     SingleFee.Custnum = FixedFee.Custnum AND
                     SingleFee.HostTable = FixedFee.HostTable AND
                     SingleFee.KeyValue = Fixedfee.KeyValue AND
@@ -449,7 +449,7 @@ PROCEDURE pCollectActivations:
       
       liBatches = 0.
       FOR FIRST FeeModel NO-LOCK WHERE 
-                FeeModel.Brand = Syst.CUICommon:gcBrand AND
+                FeeModel.Brand = Syst.Var:gcBrand AND
                 FeeModel.FeeModel EQ FixedFee.FeeModel,
          FIRST FMItem OF FeeModel NO-LOCK:
             liBatches = FMItem.FFItemQty.
@@ -546,7 +546,7 @@ PROCEDURE pCollectACC:
 
    REQUEST_LOOP:
    FOR EACH msrequest NO-LOCK where
-            msrequest.brand = Syst.CUICommon:gcBrand and
+            msrequest.brand = Syst.Var:gcBrand and
             msrequest.reqtype = 10 and
             msrequest.reqstatus = 2 and
             MsRequest.ActStamp >= ldCheck AND
@@ -635,7 +635,7 @@ PROCEDURE pCollectACC:
             ldResidual = 0.
             IF NOT FixedFee.BillCode BEGINS "RVTERM" THEN DO:
                FIND FIRST SingleFee NO-LOCK WHERE
-                          SingleFee.Brand = Syst.CUICommon:gcBrand AND
+                          SingleFee.Brand = Syst.Var:gcBrand AND
                           SingleFee.Custnum = bmsowner.custnum AND
                           SingleFee.HostTable = FixedFee.HostTable AND
                           SingleFee.KeyValue = Fixedfee.KeyValue AND
@@ -651,7 +651,7 @@ PROCEDURE pCollectACC:
                liFFItemQty = 0.
             
             FOR FIRST FeeModel NO-LOCK WHERE 
-                      FeeModel.Brand = Syst.CUICommon:gcBrand AND
+                      FeeModel.Brand = Syst.Var:gcBrand AND
                       FeeModel.FeeModel EQ FixedFee.FeeModel,
                FIRST FMItem OF FeeModel NO-LOCK:
             
@@ -722,7 +722,7 @@ PROCEDURE pCollectACC:
          /* new owner */
          FF_LOOP:
          FOR EACH FixedFee NO-LOCK USE-INDEX Custnum WHERE
-                  FixedFee.Brand     = Syst.CUICommon:gcBrand AND
+                  FixedFee.Brand     = Syst.Var:gcBrand AND
                   FIxedFee.Custnum   = bmsowner.custnum AND 
                   FixedFee.HostTable = "MobSub" AND
                   FixedFee.KeyValue  = STRING(bmsowner.MsSeq) AND
@@ -743,7 +743,7 @@ PROCEDURE pCollectACC:
             ldResidual = 0.
             IF NOT FixedFee.BillCode BEGINS "RVTERM" THEN DO:
                FIND FIRST SingleFee NO-LOCK WHERE
-                          SingleFee.Brand = Syst.CUICommon:gcBrand AND
+                          SingleFee.Brand = Syst.Var:gcBrand AND
                           SingleFee.Custnum = FixedFee.Custnum AND
                           SingleFee.HostTable = FixedFee.HostTable AND
                           SingleFee.KeyValue = Fixedfee.KeyValue AND
@@ -844,7 +844,7 @@ PROCEDURE pCollectInstallmentContractChanges:
 
    REQUEST_LOOP:
    FOR EACH MsRequest NO-LOCK WHERE
-            MsRequest.Brand     = Syst.CUICommon:gcBrand AND
+            MsRequest.Brand     = Syst.Var:gcBrand AND
             MsRequest.ReqType   = {&REQTYPE_INSTALLMENT_CONTRACT_CHANGE} AND
             MsRequest.ReqStatus = 2       AND
             MsRequest.ActStamp >= ldCheck AND
@@ -918,7 +918,7 @@ PROCEDURE pCollectInstallmentContractChanges:
 
       /* Old fee */
       FOR FIRST FixedFee NO-LOCK WHERE
-                FixedFee.Brand = Syst.CUICommon:gcBrand AND
+                FixedFee.Brand = Syst.Var:gcBrand AND
                 FixedFee.Custnum = MsRequest.Custnum AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue = STRING(MsRequest.MsSeq) AND
@@ -927,7 +927,7 @@ PROCEDURE pCollectInstallmentContractChanges:
                 FixedFee.SourceTable = "DCCLI" AND
                 FixedFee.SourceKey = STRING(bTermDCCLI.PerContractID),
           FIRST DayCampaign NO-LOCK USE-INDEX DCEvent WHERE
-                DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+                DayCampaign.Brand = Syst.Var:gcBrand AND
                 DayCampaign.DCEvent = bTermDCCLI.DCEvent:
             
          IF FixedFee.TFBank > "" AND FixedFee.TFBank NE lcTFBank THEN NEXT REQUEST_LOOP.
@@ -952,7 +952,7 @@ PROCEDURE pCollectInstallmentContractChanges:
             liFFItemQty = 0.
 
          FOR FIRST FeeModel NO-LOCK WHERE 
-                   FeeModel.Brand = Syst.CUICommon:gcBrand AND
+                   FeeModel.Brand = Syst.Var:gcBrand AND
                    FeeModel.FeeModel EQ FixedFee.FeeModel,
             FIRST FMItem OF FeeModel NO-LOCK:
 
@@ -989,7 +989,7 @@ PROCEDURE pCollectInstallmentContractChanges:
          IF FixedFee.BillCode EQ "PAYTERM" THEN DO:
 
             FIND FIRST SingleFee NO-LOCK WHERE
-                       SingleFee.Brand = Syst.CUICommon:gcBrand AND
+                       SingleFee.Brand = Syst.Var:gcBrand AND
                        SingleFee.Custnum = FixedFee.Custnum AND
                        SingleFee.HostTable = FixedFee.HostTable AND
                        SingleFee.KeyValue = Fixedfee.KeyValue AND
@@ -1028,7 +1028,7 @@ PROCEDURE pCollectInstallmentContractChanges:
 
       /* New fee */
       FOR FIRST FixedFee NO-LOCK WHERE
-                FixedFee.Brand = Syst.CUICommon:gcBrand AND
+                FixedFee.Brand = Syst.Var:gcBrand AND
                 FixedFee.Custnum = MsRequest.Custnum AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue = STRING(MsRequest.MsSeq) AND
@@ -1060,7 +1060,7 @@ PROCEDURE pCollectInstallmentContractChanges:
          
          IF FixedFee.BillCode EQ "PAYTERM" THEN 
             FIND FIRST SingleFee NO-LOCK WHERE
-                       SingleFee.Brand = Syst.CUICommon:gcBrand AND
+                       SingleFee.Brand = Syst.Var:gcBrand AND
                        SingleFee.Custnum = FixedFee.Custnum AND
                        SingleFee.HostTable = FixedFee.HostTable AND
                        SingleFee.KeyValue = Fixedfee.KeyValue AND
@@ -1148,7 +1148,7 @@ PROCEDURE pCollectReactivations:
 
    REQUEST_LOOP:
    FOR EACH MsRequest NO-LOCK WHERE
-            MsRequest.Brand     = Syst.CUICommon:gcBrand AND
+            MsRequest.Brand     = Syst.Var:gcBrand AND
             MsRequest.ReqType   = 8       AND
             MsRequest.ReqStatus = 2       AND
             MsRequest.ActStamp >= ldCheck AND
@@ -1189,7 +1189,7 @@ PROCEDURE pCollectReactivations:
          llTerminationSent = FALSE.
 
       FOR FIRST FixedFee NO-LOCK WHERE
-                FixedFee.Brand = Syst.CUICommon:gcBrand AND
+                FixedFee.Brand = Syst.Var:gcBrand AND
                 FixedFee.Custnum = MsRequest.Custnum AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue = STRING(MsRequest.MsSeq) AND
@@ -1215,7 +1215,7 @@ PROCEDURE pCollectReactivations:
          
          /* check if fees are already billed */
          FIND FIRST SingleFee WHERE
-                    SingleFee.Brand     = Syst.CUICommon:gcBrand AND
+                    SingleFee.Brand     = Syst.Var:gcBrand AND
                     SingleFee.HostTable = "MobSub" AND
                     SingleFee.KeyValue  = STRING(MsRequest.MsSeq) AND
                     SingleFee.CalcObj   = "DC" + STRING(DCCLI.PerContractID)
@@ -1236,7 +1236,7 @@ PROCEDURE pCollectReactivations:
             ldResidualNB = 0.
          IF NOT FixedFee.BillCode BEGINS "RVTERM" THEN DO:            
             FIND FIRST SingleFee NO-LOCK WHERE
-                       SingleFee.Brand = Syst.CUICommon:gcBrand AND
+                       SingleFee.Brand = Syst.Var:gcBrand AND
                        SingleFee.Custnum = FixedFee.Custnum AND
                        SingleFee.HostTable = FixedFee.HostTable AND
                        SingleFee.KeyValue = Fixedfee.KeyValue AND
@@ -1401,7 +1401,7 @@ PROCEDURE pCollectInstallmentCancellations:
 
    REQUEST_LOOP:
    FOR EACH MsRequest NO-LOCK WHERE
-            MsRequest.Brand     = Syst.CUICommon:gcBrand AND
+            MsRequest.Brand     = Syst.Var:gcBrand AND
             MsRequest.ReqType   = 9 AND
             MsRequest.ReqStatus = 2       AND
             MsRequest.ActStamp >= ldCheck AND
@@ -1462,7 +1462,7 @@ PROCEDURE pCollectInstallmentCancellations:
       END.
       
       FOR FIRST FixedFee NO-LOCK WHERE
-                FixedFee.Brand = Syst.CUICommon:gcBrand AND
+                FixedFee.Brand = Syst.Var:gcBrand AND
                 FixedFee.Custnum = MsRequest.Custnum AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue = STRING(MsRequest.MsSeq) AND
@@ -1471,7 +1471,7 @@ PROCEDURE pCollectInstallmentCancellations:
                 FixedFee.SourceTable = "DCCLI" AND
                 FixedFee.SourceKey = STRING(bTermDCCLI.PerContractID),
           FIRST DayCampaign NO-LOCK USE-INDEX DCEvent WHERE
-                DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+                DayCampaign.Brand = Syst.Var:gcBrand AND
                 DayCampaign.DCEvent = bTermDCCLI.DCEvent:
       
          IF FixedFee.TFBank > "" AND FixedFee.TFBank NE lcTFBank THEN NEXT REQUEST_LOOP.
@@ -1495,7 +1495,7 @@ PROCEDURE pCollectInstallmentCancellations:
             liFFItemQty = 0.
 
          FOR FIRST FeeModel NO-LOCK WHERE 
-                   FeeModel.Brand = Syst.CUICommon:gcBrand AND
+                   FeeModel.Brand = Syst.Var:gcBrand AND
                    FeeModel.FeeModel EQ FixedFee.FeeModel,
             FIRST FMItem OF FeeModel NO-LOCK:
 
@@ -1537,7 +1537,7 @@ PROCEDURE pCollectInstallmentCancellations:
          ldeResidualAmt = 0.
          IF NOT FixedFee.BillCode BEGINS "RVTERM" THEN DO: 
             FIND FIRST SingleFee NO-LOCK WHERE
-                       SingleFee.Brand = Syst.CUICommon:gcBrand AND
+                       SingleFee.Brand = Syst.Var:gcBrand AND
                        SingleFee.Custnum = FixedFee.Custnum AND
                        SingleFee.HostTable = FixedFee.HostTable AND
                        SingleFee.KeyValue = Fixedfee.KeyValue AND

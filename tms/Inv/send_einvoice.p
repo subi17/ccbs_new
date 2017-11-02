@@ -77,7 +77,7 @@ ASSIGN lcAddrConfDir = fCParamC("RepConfDir")
 
 INVOICE_LOOP:
 FOR EACH Invoice WHERE
-         Invoice.Brand    = Syst.CUICommon:gcBrand AND
+         Invoice.Brand    = Syst.Var:gcBrand AND
          Invoice.InvType  = 1 AND
          Invoice.InvDate >= ldaDateFrom AND
          Invoice.InvAmt  >= 0 AND
@@ -183,7 +183,7 @@ lcTransDir = lcTransDir + "/einvoice.log".
 
 IF lcTransDir > "" AND SEARCH(lcAddrConfDir) <> ? THEN DO:
    FOR FIRST InvText NO-LOCK WHERE
-             InvText.Brand     = Syst.CUICommon:gcBrand            AND
+             InvText.Brand     = Syst.Var:gcBrand            AND
              InvText.Target    = "General"          AND
              InvText.KeyValue  = "EmailConfeInvoice" AND
              InvText.Language  = 5                  AND 

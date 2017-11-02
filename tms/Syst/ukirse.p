@@ -24,15 +24,15 @@ DEF VAR must-print  AS logic NO-UNDO.
 form
 TMSPrinter.PrinterId       /* column-label "Printer"
                           help "Printer"         */
-WITH scroll 1 11 DOWN  ROW 4 col 15 COLOR value(Syst.CUICommon:cfc)
-title color value(Syst.CUICommon:ctc) " ALL PRINTERS "
+WITH scroll 1 11 DOWN  ROW 4 col 15 COLOR value(Syst.Var:cfc)
+title color value(Syst.Var:ctc) " ALL PRINTERS "
 OVERLAY FRAME sel.
 
 runko:
 repeat ON ENDKEY UNDO runko, NEXT runko:
    ASSIGN
    siirto = ?
-   Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+   Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 
    FIND FIRST TMSPrinter  no-lock no-error.
    IF NOT AVAILABLE TMSPrinter THEN DO:
@@ -68,8 +68,8 @@ LOOP:
 
       IF ufkey THEN DO:
         ASSIGN
-        Syst.CUICommon:ufk[1] = 0 
-        Syst.CUICommon:ufk[6] = 11 Syst.CUICommon:ufk[7] = 0  Syst.CUICommon:ufk[8] = 8  Syst.CUICommon:ufk[9] = 1 ufkey = FALSE Syst.CUICommon:ehto = 3.
+        Syst.Var:ufk[1] = 0 
+        Syst.Var:ufk[6] = 11 Syst.Var:ufk[7] = 0  Syst.Var:ufk[8] = 8  Syst.Var:ufk[9] = 1 ufkey = FALSE Syst.Var:ehto = 3.
         RUN Syst/ufkey.p.
      END.
 
@@ -78,13 +78,13 @@ BROWSE:
 
          HIDE MESSAGE.
          CHOOSE ROW TMSPrinter.PrinterId {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(Syst.CUICommon:ccc) TMSPrinter.PrinterId WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) TMSPrinter.PrinterId WITH FRAME sel.
 
          if frame-value = " " AND rtab[FRAME-LINE] = ? THEN NEXT.
-         Syst.CUICommon:nap = keylabel(LASTKEY).
+         Syst.Var:nap = keylabel(LASTKEY).
 
          /* previous line */
-         if Syst.CUICommon:nap = "1" or Syst.CUICommon:nap = "f1" or Syst.CUICommon:nap = "cursor-up" THEN DO
+         if Syst.Var:nap = "1" or Syst.Var:nap = "f1" or Syst.Var:nap = "cursor-up" THEN DO
          WITH FRAME sel:
             IF FRAME-LINE = 1 THEN DO:
                FIND TMSPrinter where recid(TMSPrinter) = rtab[FRAME-LINE] no-lock.
@@ -112,7 +112,7 @@ BROWSE:
          END. /* previous line */
 
          /* NEXT line */
-         else if Syst.CUICommon:nap = "2" or Syst.CUICommon:nap = "f2" or Syst.CUICommon:nap = "cursor-down" THEN DO
+         else if Syst.Var:nap = "2" or Syst.Var:nap = "f2" or Syst.Var:nap = "cursor-down" THEN DO
          WITH FRAME sel:
 
             IF FRAME-LINE = FRAME-DOWN THEN DO:
@@ -141,7 +141,7 @@ BROWSE:
          END. /* NEXT line */
 
          /* previous page */
-         else if Syst.CUICommon:nap = "page-up" or Syst.CUICommon:nap = "prev-page" THEN DO:
+         else if Syst.Var:nap = "page-up" or Syst.Var:nap = "prev-page" THEN DO:
             FIND TMSPrinter where recid(TMSPrinter) = ylin no-lock no-error.
             FIND prev TMSPrinter  no-lock no-error.
 
@@ -166,7 +166,7 @@ BROWSE:
 
 
         /* NEXT page */
-        else if Syst.CUICommon:nap = "page-down" or Syst.CUICommon:nap = "next-page" THEN DO WITH FRAME sel:
+        else if Syst.Var:nap = "page-down" or Syst.Var:nap = "next-page" THEN DO WITH FRAME sel:
 
            IF rtab[FRAME-DOWN] = ? THEN DO:
                BELL.
@@ -181,29 +181,29 @@ BROWSE:
         END. /* NEXT page */
 
 
-        else  if Syst.CUICommon:nap = "enter" or Syst.CUICommon:nap = "return" OR
-        Syst.CUICommon:nap = "f6" or Syst.CUICommon:nap = "6" THEN DO:
+        else  if Syst.Var:nap = "enter" or Syst.Var:nap = "return" OR
+        Syst.Var:nap = "f6" or Syst.Var:nap = "6" THEN DO:
            /* valinta */
            FIND TMSPrinter where recid(TMSPrinter) = rtab[FRAME-LINE] no-lock.
            siirto = TMSPrinter.PrinterId.
            LEAVE runko.
         END.
 
-        else if Syst.CUICommon:nap = "end,e" THEN DO : /* LAST record */
+        else if Syst.Var:nap = "end,e" THEN DO : /* LAST record */
            FIND LAST TMSPrinter  no-lock.
            ylin = recid(TMSPrinter).
            must-print = TRUE.
            NEXT LOOP.
         END.
 
-        else if Syst.CUICommon:nap = "home,h" THEN DO:
+        else if Syst.Var:nap = "home,h" THEN DO:
            FIND FIRST TMSPrinter  no-lock.
            ylin = recid(TMSPrinter).
            must-print = TRUE.
            NEXT LOOP.
         END.
 
-        else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" THEN LEAVE runko.
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" THEN LEAVE runko.
 
      END.  /* BROWSE */
    END.  /* LOOP */

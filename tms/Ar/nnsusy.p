@@ -200,7 +200,7 @@ DEF NEW SHARED VAR intsumm AS DE EXTENT 10 NO-UNDO.
 
 IF llDoEvent THEN 
 DO FOR Payment:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -222,8 +222,8 @@ form
  Invoice.CustName    no-label format "x(26)"
  pVouch             label "Voucher"
  help "Voucher #, F9: Previous vouchers" SKIP
-with title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " PAYMENTS TO INVOICES "
- + string(TODAY,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc) ROW 1 col 1
+with title color value(Syst.Var:ctc) " " + Syst.Var:ynimi + " PAYMENTS TO INVOICES "
+ + string(TODAY,"99-99-99") + " " COLOR value(Syst.Var:cfc) ROW 1 col 1
   width 80 side-labels FRAME INV-NO.
 
 form
@@ -284,8 +284,8 @@ form
     ysuoyht      NO-LABEL
     ykorko       label "Overt. Int" AT 32        
     SKIP(1)
-with title color value(Syst.CUICommon:ctc) " PAYMENT "
- COLOR value(Syst.CUICommon:cfc) ROW 4 col 1 OVERLAY side-labels FRAME payment.
+with title color value(Syst.Var:ctc) " PAYMENT "
+ COLOR value(Syst.Var:cfc) ROW 4 col 1 OVERLAY side-labels FRAME payment.
 
 /* acctietoja varten */
 form
@@ -303,8 +303,8 @@ form
  deb at 2 label "Debet "                                 SKIP
  kre at 2 label "Credit"                                 SKIP
 WITH
- title color value(Syst.CUICommon:ctc) " ACCOUNT       AMOUNT "
- COLOR value(Syst.CUICommon:cfc) ROW 4 col 57 side-labels OVERLAY FRAME acct.
+ title color value(Syst.Var:ctc) " ACCOUNT       AMOUNT "
+ COLOR value(Syst.Var:cfc) ROW 4 col 57 side-labels OVERLAY FRAME acct.
 
 FORM 
 SKIP(1)
@@ -331,8 +331,8 @@ SKIP(1)
       dprop FORMAT "->,>>>,>>9.99"
    SKIP(1)
 
-WITH title color value(Syst.CUICommon:ctc) " USE CUSTOMER'S UNBOOKED Balance ? "
-           COLOR value(Syst.CUICommon:cfc) OVERLAY ROW 3 centered NO-LABELS FRAME overp.
+WITH title color value(Syst.Var:ctc) " USE CUSTOMER'S UNBOOKED Balance ? "
+           COLOR value(Syst.Var:cfc) OVERLAY ROW 3 centered NO-LABELS FRAME overp.
 
 
 FUNCTION fDefaultAcc RETURNS LOGICAL
@@ -359,7 +359,7 @@ FUNCTION fCreateOptrans RETURNS LOGICAL
    ASSIGN OPLog.CreStamp    = Func.Common:mMakeTS()
           OPLog.CustNum     = Invoice.CustNum
           OPLog.EventDate   = kirjpvm
-          OPLog.UserCode    = Syst.CUICommon:katun
+          OPLog.UserCode    = Syst.Var:katun
           OPLog.EventType   = iType
           OPLog.InvNum      = Invoice.InvNum
           OPLog.Voucher     = ConseNo
@@ -406,7 +406,7 @@ ASSIGN muispvm    = TODAY.
 
 fCurrLabels(""). 
 
-assign Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+assign Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME INV-NO.
 view FRAME payment.
 view FRAME acct.
@@ -414,7 +414,7 @@ view FRAME acct.
 LASKU:
 repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
 
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    PAUSE 0.
    CLEAR FRAME payment.
    CLEAR FRAME acct.
@@ -460,7 +460,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
         exclusive-lock no-error.
 
    IF NOT AVAILABLE Invoice OR 
-      Invoice.Brand NE Syst.CUICommon:gcBrand 
+      Invoice.Brand NE Syst.Var:gcBrand 
    THEN DO:
       bell. message "Unknown Invoice Nbr !". pause 1 no-message.
       CLEAR FRAME payment no-pause. NEXT LASKU.
@@ -482,7 +482,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
     
    /* Lasku was found */
    ASSIGN 
-      Syst.CUICommon:si-recid   = recid(Invoice)
+      Syst.Var:si-recid   = recid(Invoice)
       ldPayment  = 0 
       ldPaidAmt  = 0 
       suopvm     = muispvm 
@@ -551,9 +551,9 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
     
    /* KysytAAn tositenumero  */
    UPDATE pVouch WITH FRAME INV-NO EDITING:
-      READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
+      READKEY. Syst.Var:nap = keylabel(LASTKEY).
       /* HELP tositenumerolle */
-      IF lookup(Syst.CUICommon:nap,"f9,!") > 0  THEN DO:
+      IF lookup(Syst.Var:nap,"f9,!") > 0  THEN DO:
          RUN Ar/nnsuse.p(INPUT  Invoice.InvNum, OUTPUT i).
          IF i > 0 THEN disp i format "zzzzzzz9" @ pVouch WITH FRAME INV-NO.
          NEXT.
@@ -680,7 +680,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
          DISPLAY kaccno kaccmk deb kre  WITH FRAME acct.
 
          IF CAN-FIND(FIRST memo WHERE
-                           memo.Brand     = Syst.CUICommon:gcBrand   AND
+                           memo.Brand     = Syst.Var:gcBrand   AND
                            memo.HostTable = "Payment" AND
                            memo.KeyValue  = STRING(Payment.Voucher) AND
                            memo.memotext NE "") THEN DO:
@@ -709,7 +709,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
 
       CREATE Payment. 
       ASSIGN Payment.Voucher  = fGetIntVoucher()
-             Payment.Brand    = Syst.CUICommon:gcBrand 
+             Payment.Brand    = Syst.Var:gcBrand 
              suopvm           = muispvm
              ldPayment        = ldOldDue
              kirjpvm          = muispvm.
@@ -765,9 +765,9 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
             UPDATE aprop oprop dprop
             WITH FRAME overp EDITING:
 
-               READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
+               READKEY. Syst.Var:nap = keylabel(LASTKEY).
 
-               IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
+               IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
                   HIDE MESSAGE.
                   if frame-field = "aprop" THEN DO:
                      IF INPUT aprop > ldCustAP THEN DO:
@@ -826,7 +826,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
    repeat WITH FRAME payment:
 
       IF xDontUpd = FALSE THEN DO:
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          PAUSE 0.
 
          /* old values */
@@ -848,13 +848,13 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
                   lOrigin
          WITH FRAME payment
          EDITING:
-            READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
+            READKEY. Syst.Var:nap = keylabel(LASTKEY).
 
-            IF lookup(Syst.CUICommon:nap,"F4") > 0 THEN DO:
+            IF lookup(Syst.Var:nap,"F4") > 0 THEN DO:
                LEAVE PaidAmt.
             END. 
 
-            IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
+            IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
                HIDE MESSAGE.
 
                IF frame-field = "suopvm" THEN DO:
@@ -956,7 +956,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
                      VIEW-AS ALERT-BOX WARNING.
                END.
                
-            END. /* Syst.CUICommon:poisnap INNER */
+            END. /* Syst.Var:poisnap INNER */
          
             APPLY LASTKEY.
 
@@ -1000,8 +1000,8 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
 
      END.  /* xdontupd = FALSE */
 
-     assign muispvm  = suopvm. Syst.CUICommon:cfc = "sel".
-     RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+     assign muispvm  = suopvm. Syst.Var:cfc = "sel".
+     RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 
      ASSIGN lAPVatAmt = 0. 
 
@@ -1030,7 +1030,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
         /* is this an advance payment invoice */
         IF ldAPAmt = 0 THEN DO: 
            FIND Account WHERE 
-                Account.Brand  = Syst.CUICommon:gcBrand AND
+                Account.Brand  = Syst.Var:gcBrand AND
                 Account.AccNum = Invoice.ARAccNum NO-LOCK NO-ERROR.
            IF AVAILABLE Account AND Account.AccType = 19 AND lAPVatAmt = 0
            THEN ldAPAmt = -1 * ysuoyht.
@@ -1090,9 +1090,9 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
             kaccno[10] kaccmk[10]
          WITH FRAME acct EDITING:
 
-            READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
+            READKEY. Syst.Var:nap = keylabel(LASTKEY).
 
-            IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO: 
+            IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO: 
                PAUSE 0.
                HIDE MESSAGE.
 
@@ -1101,7 +1101,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
                   AccNum = INPUT FRAME acct kaccno[ac-ind]. 
                   IF AccNum NE 0 THEN DO:
                      FIND Account where 
-                         Account.Brand = Syst.CUICommon:gcBrand AND
+                         Account.Brand = Syst.Var:gcBrand AND
                          Account.AccNum = AccNum no-lock no-error.
                      IF NOT AVAIL Account THEN DO:
                         bell. message "Unknown account !".
@@ -1161,7 +1161,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
        DO ii = 1 TO 10.
           IF kaccno[ii] NE 0 THEN DO:
              FIND Account where 
-                Account.Brand  = Syst.CUICommon:gcBrand AND
+                Account.Brand  = Syst.Var:gcBrand AND
                 Account.AccNum = kaccno[ii]
                 no-lock no-error.
              IF AVAILABLE Account THEN ASSIGN 
@@ -1278,24 +1278,24 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
             extra-amt = ldOldDue - ysuoyht. 
          END.
 
-         ASSIGN  Syst.CUICommon:ufk = 0
-         Syst.CUICommon:ufk[1] = 91 Syst.CUICommon:ufk[2] = 993 Syst.CUICommon:ufk[3] = 992 Syst.CUICommon:ufk[4] = 833
-         Syst.CUICommon:ufk[5] = 832 Syst.CUICommon:ufk[6] = 12 Syst.CUICommon:ufk[7] = 4 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
-         IF new_paym THEN Syst.CUICommon:ufk[7] = 0.
+         ASSIGN  Syst.Var:ufk = 0
+         Syst.Var:ufk[1] = 91 Syst.Var:ufk[2] = 993 Syst.Var:ufk[3] = 992 Syst.Var:ufk[4] = 833
+         Syst.Var:ufk[5] = 832 Syst.Var:ufk[6] = 12 Syst.Var:ufk[7] = 4 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
+         IF new_paym THEN Syst.Var:ufk[7] = 0.
          IF ykorko = 0 OR Invoice.InvType = 3 OR Invoice.InvType = 4
-         THEN Syst.CUICommon:ufk[4] = 0.
+         THEN Syst.Var:ufk[4] = 0.
 
          /* period locked */
-         IF llPLock THEN ASSIGN Syst.CUICommon:ufk[1] = 0
-                                Syst.CUICommon:ufk[4] = 0
-                                Syst.CUICommon:ufk[5] = 0
-                                Syst.CUICommon:ufk[7] = 0.
+         IF llPLock THEN ASSIGN Syst.Var:ufk[1] = 0
+                                Syst.Var:ufk[4] = 0
+                                Syst.Var:ufk[5] = 0
+                                Syst.Var:ufk[7] = 0.
 
-         Syst.CUICommon:ehto = 0. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 0. RUN Syst/ufkey.p.
 
-         IF Syst.CUICommon:toimi  = 1 THEN NEXT PaidAmt.              /* change */
+         IF Syst.Var:toimi  = 1 THEN NEXT PaidAmt.              /* change */
 
-         ELSE IF Syst.CUICommon:toimi = 2 THEN DO:                        /* print memo */
+         ELSE IF Syst.Var:toimi = 2 THEN DO:                        /* print memo */
             RUN Mc/memo.p(INPUT Invoice.CustNum,
                      INPUT "Invoice",
                      INPUT STRING(INPUT Invoice.InvNum),
@@ -1303,7 +1303,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
             NEXT.
          END.
 
-         ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
+         ELSE IF Syst.Var:toimi = 3 THEN DO:
 
             IF new_paym THEN DO:
                /* we have TO set some preliminary values TO following fields
@@ -1323,16 +1323,16 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
             NEXT.
          END.   
 
-         ELSE IF Syst.CUICommon:toimi = 8 THEN UNDO LASKU, LEAVE LASKU.   /* Paluu */
-         ELSE IF Syst.CUICommon:toimi = 6 THEN UNDO LASKU, NEXT  LASKU.   /* En talleta */
+         ELSE IF Syst.Var:toimi = 8 THEN UNDO LASKU, LEAVE LASKU.   /* Paluu */
+         ELSE IF Syst.Var:toimi = 6 THEN UNDO LASKU, NEXT  LASKU.   /* En talleta */
 
-         ELSE IF Syst.CUICommon:toimi = 4 OR Syst.CUICommon:toimi = 5 THEN DO:
+         ELSE IF Syst.Var:toimi = 4 OR Syst.Var:toimi = 5 THEN DO:
 
             /* check period */
             IF fPeriodLocked(kirjpvm,TRUE) THEN NEXT. 
 
             FIND InvGroup where 
-               InvGroup.Brand    = Syst.CUICommon:gcBrand AND
+               InvGroup.Brand    = Syst.Var:gcBrand AND
                InvGroup.InvGroup = Customer.InvGroup 
                NO-LOCK.
             ASSIGN b-acc = InvGroup.UpdCustBal.
@@ -1422,7 +1422,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
                ASSIGN kactype[ii] = 0.
                IF kaccno[ii] NE 0 THEN DO:
                   FIND Account where 
-                     Account.Brand  = Syst.CUICommon:gcBrand AND
+                     Account.Brand  = Syst.Var:gcBrand AND
                      Account.AccNum = kaccno[ii]
                      no-lock no-error.
                   IF AVAILABLE Account THEN ASSIGN 
@@ -1472,7 +1472,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
                   Payment.AccType[ii]  = kactype[ii].
             END.
 
-            IF Syst.CUICommon:toimi = 4 /* korkotapahtuma */ THEN DO:
+            IF Syst.Var:toimi = 4 /* korkotapahtuma */ THEN DO:
                FIND FIRST CustIntEvent where 
                           CustIntEvent.Voucher = Payment.Voucher
                exclusive-lock no-error.
@@ -1528,7 +1528,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
                         (ykorko - ed-korko)).
             END.
 
-            IF Syst.CUICommon:toimi = 5 THEN DO:
+            IF Syst.Var:toimi = 5 THEN DO:
                /* ei haluttu korkoa, mutta onko vanha CustIntEvent olemassa
                   jos nyt muutettiin vanhaa suoritusta ? */
                FIND FIRST CustIntEvent WHERE
@@ -1552,9 +1552,9 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
             IF NOT new_paym AND llDoEvent THEN
             RUN StarEventMakeModifyEvent(lhPayment).
 
-         END.  /* Syst.CUICommon:toimi = 4/5 */
+         END.  /* Syst.Var:toimi = 4/5 */
 
-         ELSE IF Syst.CUICommon:toimi = 7 THEN DO:   /* removal */
+         ELSE IF Syst.Var:toimi = 7 THEN DO:   /* removal */
 
             /* check period */
             IF fPeriodLocked(kirjpvm,TRUE) THEN NEXT. 
@@ -1565,7 +1565,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
             IF NOT ok THEN NEXT TOIMI.    
 
             FIND InvGroup where 
-               InvGroup.Brand = Syst.CUICommon:gcBrand AND
+               InvGroup.Brand = Syst.Var:gcBrand AND
                InvGroup.InvGroup = Customer.InvGroup 
                NO-LOCK.
             ASSIGN b-acc = InvGroup.UpdCustBal.
@@ -1629,7 +1629,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
 
          END.
 
-         IF Syst.CUICommon:toimi = 4 OR Syst.CUICommon:toimi = 5 OR Syst.CUICommon:toimi = 7 THEN DO:
+         IF Syst.Var:toimi = 4 OR Syst.Var:toimi = 5 OR Syst.Var:toimi = 7 THEN DO:
             /* pAivitetAAn laskutietue */
 
             /* Lasketaan suoritusten yhteismAArA */
@@ -1686,7 +1686,7 @@ repeat FOR Payment TRANSACTION ON ENDKEY UNDO LASKU, LEAVE LASKU:
 
             NEXT LASKU.
          END.
-      END. /* Syst.CUICommon:toimi */
+      END. /* Syst.Var:toimi */
    END. /* PaidAmt */
 END. /* LASKU */
 

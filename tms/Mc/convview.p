@@ -18,7 +18,7 @@ DEF VAR lcFixedTime AS CHAR NO-UNDO.
 
 
 FIND FIRST OrderFusion NO-LOCK where
-           OrderFusion.Brand eq Syst.CUICommon:gcBrand AND
+           OrderFusion.Brand eq Syst.Var:gcBrand AND
            OrderFusion.OrderID EQ iiOrderID NO-ERROR.
 
 IF NOT AVAIL OrderFusion THEN DO:
@@ -56,8 +56,8 @@ FORM
  
 
 WITH OVERLAY ROW 1 WIDTH 80 centered
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) "Convergent data"
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) "Convergent data"
     NO-LABELS
     FRAME fData.
 
@@ -93,21 +93,21 @@ REPEAT WITH FRAME fData ON ENDKEY UNDO LOOP, NEXT LOOP:
 
    PAUSE 0.
    ASSIGN
-      Syst.CUICommon:ufk   = 0  
-      Syst.CUICommon:ufk[5]= 9853
-      Syst.CUICommon:ufk[6]= 9854
-      Syst.CUICommon:ufk[8]= 8 
-      Syst.CUICommon:ehto  = 0.
+      Syst.Var:ufk   = 0  
+      Syst.Var:ufk[5]= 9853
+      Syst.Var:ufk[6]= 9854
+      Syst.Var:ufk[8]= 8 
+      Syst.Var:ehto  = 0.
    RUN Syst/ufkey.p.
 
-   IF Syst.CUICommon:toimi EQ 5 THEN DO:
+   IF Syst.Var:toimi EQ 5 THEN DO:
      RUN Mc/fusionmessage.p(iiOrderID).
    END.
-   IF Syst.CUICommon:toimi EQ 6 THEN DO:
+   IF Syst.Var:toimi EQ 6 THEN DO:
      RUN Mc/addrview.p(iiOrderId).
    END.
    
-   ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
+   ELSE IF Syst.Var:toimi = 8 THEN LEAVE.
 
 END. 
 

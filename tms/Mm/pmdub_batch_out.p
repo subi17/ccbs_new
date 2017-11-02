@@ -8,8 +8,8 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Func/ftransdir.i}
 {Func/cparam2.i}
 {Mm/bundle_first_month_fee.i}
@@ -75,8 +75,8 @@ IF NOT lcOutDir > "" OR
    ldeMonthlyFee <= 0 THEN RETURN.
 
 for each clitype where
-         clitype.brand = Syst.CUICommon:gcBrand no-lock:
-   if fmatrixanalyse(Syst.CUICommon:gcBrand,
+         clitype.brand = Syst.Var:gcBrand no-lock:
+   if fmatrixanalyse(Syst.Var:gcBrand,
                      "percontr",
                      "percontract;substypeto",
                      "pmdub;" + clitype.clitype,
@@ -89,7 +89,7 @@ lcAllowedTypes = substring(lcAllowedTypes,2).
          
 i = 1.
 FOR EACH ActionLog WHERE
-         ActionLog.Brand      = Syst.CUICommon:gcBrand AND
+         ActionLog.Brand      = Syst.Var:gcBrand AND
          ActionLog.ActionID   = "PMDUB_OUT" AND
          ActionLog.ActionTS  >= ldeTodayBegin AND
          ActionLog.ActionTS  <= ldeTodayEnd NO-LOCK:
@@ -212,7 +212,7 @@ PROCEDURE pMarkStarted:
    
    /* check that there isn't already another run for the same purpose */
    IF CAN-FIND(FIRST ActionLog USE-INDEX ActionID WHERE
-                     ActionLog.Brand        = Syst.CUICommon:gcBrand     AND    
+                     ActionLog.Brand        = Syst.Var:gcBrand     AND    
                      ActionLog.TableName    = "Cron" AND
                      ActionLog.ActionID     = "PMDUB_OUT" AND
                      ActionLog.KeyValue     = lcFileName AND
@@ -223,12 +223,12 @@ PROCEDURE pMarkStarted:
          CREATE ActionLog.
          
          ASSIGN
-            ActionLog.Brand        = Syst.CUICommon:gcBrand
+            ActionLog.Brand        = Syst.Var:gcBrand
             ActionLog.ActionID     = "PMDUB_OUT"
             ActionLog.ActionTS     = ldeNow
             ActionLog.TableName    = "Cron"
             ActionLog.KeyValue     = lcFileName
-            ActionLog.UserCode     = Syst.CUICommon:katun
+            ActionLog.UserCode     = Syst.Var:katun
             ActionLog.ActionStatus = {&ACTIONLOG_STATUS_LOGGED}
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY) 
             ActionLog.ActionChar   = "Batch not started due to ongoing run".
@@ -242,12 +242,12 @@ PROCEDURE pMarkStarted:
       CREATE ActionLog.
       
       ASSIGN
-         ActionLog.Brand        = Syst.CUICommon:gcBrand
+         ActionLog.Brand        = Syst.Var:gcBrand
          ActionLog.ActionID     = "PMDUB_OUT"
          ActionLog.ActionTS     = ldeNow
          ActionLog.TableName    = "Cron"
          ActionLog.KeyValue     = lcFileName
-         ActionLog.UserCode     = Syst.CUICommon:katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE}
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY).
       RELEASE ActionLog.   
@@ -260,7 +260,7 @@ PROCEDURE pMarkFinished:
 
    /* mark this run finished */
    FOR FIRST ActionLog USE-INDEX ActionID WHERE
-             ActionLog.Brand        = Syst.CUICommon:gcBrand AND    
+             ActionLog.Brand        = Syst.Var:gcBrand AND    
              ActionLog.ActionID     = "PMDUB_OUT" AND
              ActionLog.ActionTS     = ldeNow AND
              ActionLog.TableName    = "Cron" AND

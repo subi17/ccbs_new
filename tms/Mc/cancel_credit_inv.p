@@ -18,7 +18,7 @@
 */
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "snet".
+Syst.Var:katun = "snet".
 
 {Func/coinv.i}
 {Syst/eventval.i} 
@@ -29,7 +29,7 @@ def buffer cInvoice for Invoice.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -73,7 +73,7 @@ update xDebInv
 if xDebInv = 0 or xCredInv = 0 then return.
 
 find first Invoice where 
-    Invoice.Brand  = Syst.CUICommon:gcBrand AND
+    Invoice.Brand  = Syst.Var:gcBrand AND
     Invoice.InvNum = xDebInv no-error.
 if not available Invoice then do:
     message "Unknown debit invoice"
@@ -172,7 +172,7 @@ END.
 
 /* are there other creditings on this invoice */
 FOR EACH cInvoice NO-LOCK WHERE
-         cInvoice.Brand    = Syst.CUICommon:gcBrand         AND 
+         cInvoice.Brand    = Syst.Var:gcBrand         AND 
          cInvoice.CustNum  = Invoice.CustNum AND
          cInvoice.CrInvNum = Invoice.InvNum  AND
          cInvoice.InvNum  NE bInvoice.InvNum
@@ -234,7 +234,7 @@ for each InvRow of Invoice no-lock where
     /* bitems can also be combined */
     IF InvRow.FFItemNum > 0 THEN 
     FOR FIRST SingleFee where
-              SingleFee.Brand = Syst.CUICommon:gcBrand AND 
+              SingleFee.Brand = Syst.Var:gcBrand AND 
               SingleFee.FMItemId = InvRow.FFItemNum:
 
         assign SingleFee.billed = true

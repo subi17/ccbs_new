@@ -42,7 +42,7 @@ FIND FIRST MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
 IF NOT AVAILABLE MobSub THEN RETURN "ERROR:Subscription not available".
 
 FIND FIRST Order WHERE 
-           Order.Brand   = Syst.CUICommon:gcBrand AND
+           Order.Brand   = Syst.Var:gcBrand AND
            Order.OrderID = iiOrderID NO-LOCK NO-ERROR. 
 IF NOT AVAILABLE Order OR Order.MsSeq NE iiMsSeq THEN 
    RETURN "ERROR:Unknown order".
@@ -84,7 +84,7 @@ ELSE lcUseOffer = Order.Offer.
 IF lcUseOffer = "" THEN RETURN "ERROR:Unknown offer ID".
 
 FIND FIRST Offer WHERE 
-           Offer.Brand = Syst.CUICommon:gcBrand AND
+           Offer.Brand = Syst.Var:gcBrand AND
            Offer.Offer = lcUseOffer NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Offer THEN RETURN "ERROR:Unknown offer".
 
@@ -97,7 +97,7 @@ FIND Customer WHERE Customer.CustNum = MobSub.InvCust NO-LOCK.
          
 OFFERITEM_LOOP:
 FOR EACH OfferItem NO-LOCK WHERE
-         OfferItem.Brand     = Syst.CUICommon:gcBrand AND
+         OfferItem.Brand     = Syst.Var:gcBrand AND
          OfferItem.Offer     = Offer.Offer AND
          OfferItem.EndStamp   >= ldOfferStamp  AND
          OfferItem.BeginStamp <= ldOfferStamp:
@@ -117,7 +117,7 @@ FOR EACH OfferItem NO-LOCK WHERE
 
       /* in case of multiple BundleItem, OrderAction contains selection */
       IF CAN-FIND(FIRST bOfferItem NO-LOCK WHERE
-                        bOfferItem.Brand = Syst.CUICommon:gcBrand AND
+                        bOfferItem.Brand = Syst.Var:gcBrand AND
                         bOfferItem.Offer = OfferItem.Offer AND
                         bOfferItem.ItemType = OfferItem.ItemType AND
                         bOfferItem.EndStamp >= ldOfferStamp  AND
@@ -127,7 +127,7 @@ FOR EACH OfferItem NO-LOCK WHERE
    
       /* If BundleItem is defined in OrderAction, prevent duplicate creation */
       FIND FIRST OrderAction WHERE
-                 OrderAction.Brand = Syst.CUICommon:gcBrand AND
+                 OrderAction.Brand = Syst.Var:gcBrand AND
                  OrderAction.OrderId = Order.OrderId AND
                  OrderAction.ItemType = OfferItem.ItemType NO-LOCK NO-ERROR.
       IF AVAIL OrderAction THEN NEXT OFFERITEM_LOOP.
@@ -162,17 +162,17 @@ PROCEDURE pTopup:
    DEF VAR lcTaxZone      AS CHAR NO-UNDO.
 
    FOR FIRST TopupScheme NO-LOCK WHERE
-             TopupScheme.Brand       = Syst.CUICommon:gcBrand AND
+             TopupScheme.Brand       = Syst.Var:gcBrand AND
              TopupScheme.TopupScheme = OfferItem.ItemKey AND
              TopupScheme.ToDate     >= ldaOfferDate AND
              TopupScheme.FromDate   <= ldaOfferDate,
        FIRST TopupSchemeRow NO-LOCK WHERE
-             TopupSchemeRow.Brand       = Syst.CUICommon:gcBrand AND
+             TopupSchemeRow.Brand       = Syst.Var:gcBrand AND
              TopupSchemeRow.TopupScheme = TopupScheme.TopupScheme AND
              TopupSchemeRow.EndStamp   >= ldOfferStamp AND
              TopupSchemeRow.BeginStamp <= ldOfferStamp,
        FIRST BillItem NO-LOCK WHERE
-             BillItem.Brand    = Syst.CUICommon:gcBrand AND
+             BillItem.Brand    = Syst.Var:gcBrand AND
              BillItem.BillCode = TopupSchemeRow.BillCode:
          
       /* taxcode */
@@ -215,7 +215,7 @@ PROCEDURE pFatime:
       OfferItem.ItemKey EQ "IPL15CPACT" THEN DO:
       
       FIND FIRST SalesMan NO-LOCK WHERE
-                 SalesMan.Brand = Syst.CUICommon:gcBrand AND
+                 SalesMan.Brand = Syst.Var:gcBrand AND
                  SalesMan.SalesMan = Order.SalesMan NO-ERROR.
 
       IF AVAIL SalesMan AND
@@ -254,7 +254,7 @@ PROCEDURE pPeriodicalContract:
    DEF BUFFER bActRequest FOR MsRequest.
    
    FIND FIRST DayCampaign WHERE
-              DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
+              DayCampaign.Brand   = Syst.Var:gcBrand AND
               DayCampaign.DCEvent = OfferItem.ItemKey
    NO-LOCK NO-ERROR.
    IF NOT AVAILABLE DayCampaign THEN 
@@ -275,7 +275,7 @@ PROCEDURE pPeriodicalContract:
    IF DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND
       Order.OrderType = 2 AND
       CAN-FIND (FIRST OrderAction WHERE
-                      OrderAction.Brand    = Syst.CUICommon:gcBrand AND
+                      OrderAction.Brand    = Syst.Var:gcBrand AND
                       OrderAction.OrderId  = Order.OrderId AND
                       OrderAction.ItemType = "ExcludeTermPenalty" NO-LOCK)
    THEN llCreateFees = FALSE.
@@ -323,7 +323,7 @@ PROCEDURE pPeriodicalContract:
 
    IF OfferItem.ItemKey BEGINS "PAYTERM" THEN DO:
       FIND FIRST bOfferItem NO-LOCK WHERE
-                 bOfferItem.Brand = Syst.CUICommon:gcBrand AND
+                 bOfferItem.Brand = Syst.Var:gcBrand AND
                  bOfferItem.Offer = OfferItem.Offer AND
                  bOfferItem.ItemType = "DiscountPlan" AND
                  bOfferItem.EndStamp >= ldOfferStamp  AND
@@ -376,7 +376,7 @@ PROCEDURE pServicePackage:
       END. /* IF AVAILABLE SubSer THEN DO: */
 
       IF NOT CAN-FIND(FIRST OrderAction WHERE
-                      OrderAction.Brand = Syst.CUICommon:gcBrand AND
+                      OrderAction.Brand = Syst.Var:gcBrand AND
                       OrderAction.OrderId = iiOrderID AND
                       OrderAction.ItemType = "BundleItem" AND
                       LOOKUP(OrderAction.ItemKey,
@@ -456,7 +456,7 @@ PROCEDURE pDiscountPlanMember:
   /* ADDLINE-20 If Additional Line Discount is defined in OrderAction, prevent creation of usual discount from Offer */
    IF LOOKUP(Order.CLIType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
       FIND FIRST OrderCustomer WHERE
-                 OrderCustomer.Brand   = Syst.CUICommon:gcBrand       AND
+                 OrderCustomer.Brand   = Syst.Var:gcBrand       AND
                  OrderCustomer.OrderID = Order.OrderID AND
                  OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
       IF AVAILABLE OrderCustomer THEN DO:
@@ -467,7 +467,7 @@ PROCEDURE pDiscountPlanMember:
                                          {&ONGOING_ORDER_AVAIL},
                                          OUTPUT lcConvOrders) THEN DO:
             IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
-                              OrderAction.Brand    = Syst.CUICommon:gcBrand           AND
+                              OrderAction.Brand    = Syst.Var:gcBrand           AND
                               OrderAction.OrderID  = Order.OrderID     AND
                               OrderAction.ItemType = "AddLineDiscount" AND
                               LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0) THEN RETURN "".
@@ -480,7 +480,7 @@ PROCEDURE pDiscountPlanMember:
                                            {&ONGOING_ORDER_AVAIL},
                                            OUTPUT lcConvOrders) THEN DO:
             IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
-                              OrderAction.Brand    = Syst.CUICommon:gcBrand           AND
+                              OrderAction.Brand    = Syst.Var:gcBrand           AND
                               OrderAction.OrderID  = Order.OrderID     AND
                               OrderAction.ItemType = "AddLineDiscount" AND
                               LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_20}) > 0) THEN RETURN "".
@@ -493,7 +493,7 @@ PROCEDURE pDiscountPlanMember:
                                     {&ONGOING_ORDER_AVAIL},
                                     OUTPUT lcConvOrders) THEN DO:
             IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
-                              OrderAction.Brand    = Syst.CUICommon:gcBrand           AND
+                              OrderAction.Brand    = Syst.Var:gcBrand           AND
                               OrderAction.OrderID  = Order.OrderID     AND
                               OrderAction.ItemType = "AddLineDiscount" AND
                               LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0) THEN RETURN "".
@@ -511,7 +511,7 @@ PROCEDURE pDiscountPlanMember:
       Order.MultiSimType                        EQ {&MULTISIMTYPE_EXTRALINE} THEN 
    DO:
       IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
-                        OrderAction.Brand    = Syst.CUICommon:gcBrand                 AND
+                        OrderAction.Brand    = Syst.Var:gcBrand                 AND
                         OrderAction.OrderID  = Order.OrderID           AND
                         OrderAction.ItemType = "ExtraLineDiscount"     AND
                  LOOKUP(OrderAction.ItemKey,lcExtraLineDiscounts) > 0) THEN RETURN "".

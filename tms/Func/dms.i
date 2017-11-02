@@ -10,7 +10,7 @@
 {Func/jsonlib.i}
 
 ASSIGN
-   Syst.CUICommon:gcBrand = "1".
+   Syst.Var:gcBrand = "1".
 
 DEF TEMP-TABLE ttDocs NO-UNDO
    FIELD DocTypeID      AS CHAR
@@ -78,7 +78,7 @@ FUNCTION fUpdateDMS RETURNS CHAR
    /* Store current order status */
    IF NEW DMS AND icOrderstatus = "" THEN DO:
       FIND FIRST Order NO-LOCK WHERE
-                 Order.Brand = Syst.CUICommon:gcBrand AND
+                 Order.Brand = Syst.Var:gcBrand AND
                  Order.OrderID = iiHostId NO-ERROR.
       IF AVAILABLE Order THEN DMS.OrderStatus = Order.StatusCode.
    END.
@@ -154,7 +154,7 @@ FUNCTION fIsHolder RETURNS LOGICAL
     iiRowType AS INTEGER):
 
    RETURN CAN-FIND(FIRST OrderCustomer NO-LOCK WHERE
-                         OrderCustomer.Brand = Syst.CUICommon:gcBrand     AND
+                         OrderCustomer.Brand = Syst.Var:gcBrand     AND
                          OrderCustomer.OrderId = iiOrderId AND
                          OrderCustomer.RowType = iiRowType).
 
@@ -283,7 +283,7 @@ END.
 FUNCTION fGetBankName RETURNS CHAR
    (icCode AS CHAR):
    FIND FIRST Bank WHERE
-              Bank.Brand      = Syst.CUICommon:gcBrand AND
+              Bank.Brand      = Syst.Var:gcBrand AND
               Bank.BankID     = SUBSTRING(icCode,5,4) NO-LOCK NO-ERROR.
    IF AVAIL Bank THEN RETURN Bank.Name.
    RETURN "".
@@ -469,12 +469,12 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    DEF VAR lcMQ AS CHAR NO-UNDO.
    /*search data for message*/
    FIND FIRST Order NO-LOCK WHERE
-              Order.Brand EQ Syst.CUICommon:gcBrand AND
+              Order.Brand EQ Syst.Var:gcBrand AND
               Order.OrderId EQ icOrderID NO-ERROR.
    IF NOT AVAIL Order THEN RETURN "DMS Notif: No Order available".
 
    FIND FIRST OrderCustomer NO-LOCK WHERE
-              OrderCustomer.Brand EQ Syst.CUICommon:gcBrand AND
+              OrderCustomer.Brand EQ Syst.Var:gcBrand AND
               OrderCustomer.OrderId EQ icOrderID AND
               OrderCustomer.RowType EQ 1 NO-ERROR.
    IF NOT AVAIL Order THEN RETURN "DMS Notif: No OrderCustomer available".

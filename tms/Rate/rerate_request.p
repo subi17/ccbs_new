@@ -59,7 +59,7 @@ RUN pInitializeRerate IN lhCustRerate.
 llReportStarted = FALSE.
 
 /* period for current active cdr db */ 
-liActiveDB = fGetCurrentDB(Syst.CUICommon:gcBrand,
+liActiveDB = fGetCurrentDB(Syst.Var:gcBrand,
                            "MobCDR",
                            OUTPUT ldaActiveFrom,
                            OUTPUT ldaActiveTo).
@@ -91,7 +91,7 @@ PROCEDURE pGetAllRequests:
       in order to avoid doing rerate initializing for each request */
    RERATE_REQUEST:
    FOR EACH MsRequest NO-LOCK WHERE
-            MsRequest.Brand     = Syst.CUICommon:gcBrand AND
+            MsRequest.Brand     = Syst.Var:gcBrand AND
             MsRequest.ReqType   = 65      AND
             MsRequest.ReqStat   = 0       AND
             MsRequest.ActStamp <= ldActStamp
@@ -117,7 +117,7 @@ PROCEDURE pGetCustomerRequests:
 
    CUSTOMER_REQUEST:
    FOR EACH MsRequest NO-LOCK USE-INDEX CustNum WHERE
-            MsRequest.Brand     = Syst.CUICommon:gcBrand AND
+            MsRequest.Brand     = Syst.Var:gcBrand AND
             MsRequest.CustNum   = iiInvCust AND
             MsRequest.ReqType   = 65      AND
             MsRequest.ReqStat   = 0       AND
@@ -163,12 +163,12 @@ PROCEDURE pHandleRequest:
    
    IF llReport AND NOT llReportStarted THEN DO:
       IF VALID-HANDLE(lhSubsRerate) THEN 
-         RUN pInitializeRerateReport IN lhSubsRerate(Syst.CUICommon:katun,
+         RUN pInitializeRerateReport IN lhSubsRerate(Syst.Var:katun,
                                                      TODAY,
                                                      TODAY,
                                                      "").
       IF VALID-HANDLE(lhCustRerate) THEN 
-         RUN pInitializeRerateReport IN lhCustRerate(Syst.CUICommon:katun,
+         RUN pInitializeRerateReport IN lhCustRerate(Syst.Var:katun,
                                                      TODAY,
                                                      TODAY,
                                                      "").

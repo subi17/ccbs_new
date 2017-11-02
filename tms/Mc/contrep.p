@@ -52,7 +52,7 @@ ASSIGN
     viiva4   = fill("-",lev).
 
 DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
-ynimi = Syst.CUICommon:ynimi.
+ynimi = Syst.Var:ynimi.
 
 form header
    viiva1 AT 1 SKIP
@@ -119,7 +119,7 @@ IF idtClDate1 = ? AND idtClDate2 NE ?
 THEN idtClDate1 = DATE(01,01,2000).
 
 FOR EACH Contract NO-LOCK WHERE
-         Contract.Brand      = Syst.CUICommon:gcBrand      AND 
+         Contract.Brand      = Syst.Var:gcBrand      AND 
          Contract.CustNum   >= iiCustNum1   AND
          Contract.CustNum   <= iiCustNum2   AND
          Contract.Salesman  >= icSalesman1  AND

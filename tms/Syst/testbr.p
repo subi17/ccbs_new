@@ -12,8 +12,8 @@ FORM
 
 {Func/brand.i}
 
-assign lcBrand = Syst.CUICommon:gcBrand
-       Syst.CUICommon:gcBrand = "".
+assign lcBrand = Syst.Var:gcBrand
+       Syst.Var:gcBrand = "".
 
 /* run this in order to change propath etc. */
 fChgBrand(lcBrand,  

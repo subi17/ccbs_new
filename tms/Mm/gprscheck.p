@@ -41,7 +41,7 @@ FRAME a.
 LOOP:
 DO WHILE TRUE:
 
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    REPEAT ON ENDKEY UNDO, LEAVE:
 
       UPDATE 

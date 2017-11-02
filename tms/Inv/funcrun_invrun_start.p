@@ -62,8 +62,8 @@ QUIT.
 PROCEDURE pInitialize:
 
    ASSIGN
-      Syst.CUICommon:gcBrand      = '1'
-      Syst.CUICommon:katun        = 'cron'
+      Syst.Var:gcBrand      = '1'
+      Syst.Var:katun        = 'cron'
       ldeBegTime   = Func.Common:mMakeTS()
       ldaEBADueDate = ?
       ldaIberPayDueDate = ?.
@@ -125,7 +125,7 @@ PROCEDURE pInitialize:
             FuncRunResult.FRResultSeq = FuncRunProcess.ProcSeq:
 
       FIND FIRST Customer WHERE
-                 Customer.Brand   = Syst.CUICommon:gcBrand AND 
+                 Customer.Brand   = Syst.Var:gcBrand AND 
                  Customer.CustNum = FuncRunResult.IntParam
       NO-LOCK NO-ERROR.
       
@@ -168,10 +168,10 @@ PROCEDURE pCreateInvoices:
    
       ASSIGN
          ActionLog.ActionTS     = Func.Common:mMakeTS()
-         ActionLog.Brand        = Syst.CUICommon:gcBrand
+         ActionLog.Brand        = Syst.Var:gcBrand
          ActionLog.TableName    = "Invoice"
          ActionLog.KeyValue     = lcBillRun
-         ActionLog.UserCode     = Syst.CUICommon:katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionID     = "BillRun"
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
                                   MONTH(TODAY)
@@ -239,7 +239,7 @@ PROCEDURE pFinalize:
    DO TRANS:
 
       FIND FIRST ActionLog WHERE
-                 ActionLog.Brand        = Syst.CUICommon:gcBrand   AND
+                 ActionLog.Brand        = Syst.Var:gcBrand   AND
                  ActionLog.TableName    = "Invoice" AND
                  ActionLog.KeyValue     = lcBillRun AND
                  ActionLog.ActionID     = "BillRun" AND
@@ -250,10 +250,10 @@ PROCEDURE pFinalize:
    
          ASSIGN
             ActionLog.ActionTS     = Func.Common:mMakeTS()
-            ActionLog.Brand        = Syst.CUICommon:gcBrand
+            ActionLog.Brand        = Syst.Var:gcBrand
             ActionLog.TableName    = "Invoice"
             ActionLog.KeyValue     = lcBillRun
-            ActionLog.UserCode     = Syst.CUICommon:katun
+            ActionLog.UserCode     = Syst.Var:katun
             ActionLog.ActionID     = "BillRun"
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
                                      MONTH(TODAY)

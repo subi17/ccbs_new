@@ -372,7 +372,7 @@ FUNCTION fChkBankAccChange RETURNS LOGICAL
    DEF BUFFER MsRequest FOR MsRequest.
 
    /* any postpaid subscriptions */
-   IF CAN-FIND (FIRST mobsub WHERE mobsub.Brand = Syst.CUICommon:gcBrand AND
+   IF CAN-FIND (FIRST mobsub WHERE mobsub.Brand = Syst.Var:gcBrand AND
                                    mobsub.custnum = iiCustNum AND
                                    mobsub.paytype = FALSE NO-LOCK) THEN
       RETURN FALSE.
@@ -380,7 +380,7 @@ FUNCTION fChkBankAccChange RETURNS LOGICAL
    ldeDate = Func.Common:mDate2TS(TODAY - 40).
 
    /* is terminated postpaid subscription during last 40 days */
-   FOR EACH MsRequest WHERE MsRequest.Brand = Syst.CUICommon:gcBrand AND
+   FOR EACH MsRequest WHERE MsRequest.Brand = Syst.Var:gcBrand AND
                             MsRequest.Reqtype = 18 AND
                             MsRequest.CustNum = iiCustNum AND
                             MsRequest.ActStamp > ldeDate AND
@@ -395,14 +395,14 @@ FUNCTION fChkBankAccChange RETURNS LOGICAL
 
    /* is STC from postpaid done during last 40 days */
    FOR EACH MsRequest NO-LOCK WHERE
-            MsRequest.Brand = Syst.CUICommon:gcBrand AND
+            MsRequest.Brand = Syst.Var:gcBrand AND
             MsRequest.Reqtype = 0 AND
             MsRequest.CustNum = iiCustNum AND
             MsRequest.ActStamp > ldeDate AND
             MsRequest.ReqStatus = 2:
 
       IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                        CLIType.Brand = Syst.CUICommon:gcBrand AND
+                        CLIType.Brand = Syst.Var:gcBrand AND
                         CLIType.CLIType = MsRequest.ReqCParam1 AND
                         CLIType.PayType = {&CLITYPE_PAYTYPE_POSTPAID})
          THEN RETURN FALSE.

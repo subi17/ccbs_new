@@ -38,7 +38,7 @@ def var memb         as lo  format "*/"        NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -60,10 +60,10 @@ form
     memb                column-label "Member"
     SMGroup.SmGroup      /* COLUMN-LABEL FORMAT */
     SMGroup.SGName      /* COLUMN-LABEL FORMAT */
-WITH centered OVERLAY scroll 1 13 DOWN ROW 2 COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(Syst.CUICommon:ctc)
+WITH centered OVERLAY scroll 1 13 DOWN ROW 2 COLOR value(Syst.Var:cfc)
+    TITLE COLOR value(Syst.Var:ctc)
     " Join SMan '" + string(Salesman) + "' " + substr(Salesman.SmName,1,16) +
-    " into groups (" + Syst.CUICommon:gcBrand + ") "
+    " into groups (" + Syst.Var:gcBrand + ") "
     FRAME sel.
 
 form
@@ -75,26 +75,26 @@ WITH
 form /* Salesman Group :n haku kentällä SMGroup */
     SMGroup
     help "Type Group Code"
-    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
-    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND CODE "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* Salesman Group :n haku kentällä SGName */
     SGName
     help "Type first characters of a name"
-    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND name "
-    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND name "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 FIND Salesman where 
-     Salesman.Brand    = Syst.CUICommon:gcBrand AND
+     Salesman.Brand    = Syst.Var:gcBrand AND
      Salesman.Salesman = Salesman no-lock.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 FIND FIRST SMGroup
-WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
+WHERE SMGroup.Brand = Syst.Var:gcBrand no-lock no-error.
 IF AVAILABLE SMGroup THEN ASSIGN
    muisti       = recid(SMGroup)
    tulostettava = TRUE
@@ -134,9 +134,9 @@ tulostus:
 
          rtab[FRAME-LINE] = recid(SMGroup).
          IF jarj = 1 THEN FIND NEXT SMGroup
-         WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
+         WHERE SMGroup.Brand = Syst.Var:gcBrand no-lock no-error.
          ELSE IF jarj = 2 THEN FIND NEXT SMGroup USE-INDEX SGName
-         WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
+         WHERE SMGroup.Brand = Syst.Var:gcBrand no-lock no-error.
       END.
       ELSE DO:
          CLEAR no-pause.
@@ -165,29 +165,29 @@ SELAUS:
 
       IF ufkey THEN DO:
    ASSIGN
-   Syst.CUICommon:ufk[1]= 35   Syst.CUICommon:ufk[2]= 30 Syst.CUICommon:ufk[3]= 927 Syst.CUICommon:ufk[4]= 510
-   Syst.CUICommon:ufk[5]= 515  Syst.CUICommon:ufk[6]= 0  Syst.CUICommon:ufk[7]= 0   Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-   Syst.CUICommon:ehto = 3 ufkey = FALSE.
+   Syst.Var:ufk[1]= 35   Syst.Var:ufk[2]= 30 Syst.Var:ufk[3]= 927 Syst.Var:ufk[4]= 510
+   Syst.Var:ufk[5]= 515  Syst.Var:ufk[6]= 0  Syst.Var:ufk[7]= 0   Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+   Syst.Var:ehto = 3 ufkey = FALSE.
    RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
    CHOOSE ROW SMGroup.SmGroup {Syst/uchoose.i} no-error WITH FRAME sel.
-   COLOR DISPLAY value(Syst.CUICommon:ccc) SMGroup.SmGroup WITH FRAME sel.
+   COLOR DISPLAY value(Syst.Var:ccc) SMGroup.SmGroup WITH FRAME sel.
       END.
       ELSE IF jarj = 2 THEN DO:
    CHOOSE ROW SMGroup.SGName {Syst/uchoose.i} no-error WITH FRAME sel.
-   COLOR DISPLAY value(Syst.CUICommon:ccc) SMGroup.SGName WITH FRAME sel.
+   COLOR DISPLAY value(Syst.Var:ccc) SMGroup.SGName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
    jarj = jarj + 1. IF jarj > jarjlkm THEN jarj = 1.
       END.
-      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
    jarj = jarj - 1. IF jarj = 0 THEN jarj = jarjlkm.
       END.
 
@@ -196,9 +196,9 @@ SELAUS:
    FIND SMGroup where recid(SMGroup) = muisti NO-LOCK.
    DO i = 1 TO FRAME-LINE - 1:
       IF jarj = 1 THEN FIND prev SMGroup
-      WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
+      WHERE SMGroup.Brand = Syst.Var:gcBrand no-lock no-error.
       ELSE IF jarj = 2 THEN FIND prev SMGroup USE-INDEX SGName
-      WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
+      WHERE SMGroup.Brand = Syst.Var:gcBrand no-lock no-error.
       IF AVAILABLE SMGroup THEN
          ASSIGN ekarivi = i muisti = recid(SMGroup).
       ELSE LEAVE.
@@ -214,16 +214,16 @@ SELAUS:
    NEXT.
       END.
 
-      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* edellinen rivi */
-      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
    IF FRAME-LINE = 1 THEN DO:
       FIND SMGroup where recid(SMGroup) = rtab[1] no-lock.
       IF jarj = 1 THEN FIND prev SMGroup
-      WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
+      WHERE SMGroup.Brand = Syst.Var:gcBrand no-lock no-error.
       ELSE IF jarj = 2 THEN FIND prev SMGroup USE-INDEX SGName
-      WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
+      WHERE SMGroup.Brand = Syst.Var:gcBrand no-lock no-error.
       IF NOT AVAILABLE SMGroup THEN DO:
          message "YOU ARE ON THE FIRST ROW !".
          BELL. PAUSE 1 no-message.
@@ -245,14 +245,14 @@ SELAUS:
       END. /* edellinen rivi */
 
       /* seuraava rivi */
-      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
    IF FRAME-LINE = FRAME-DOWN THEN DO:
       FIND SMGroup where recid(SMGroup) = rtab[FRAME-DOWN] no-lock .
       IF jarj = 1 THEN FIND NEXT SMGroup
-      WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
+      WHERE SMGroup.Brand = Syst.Var:gcBrand no-lock no-error.
       ELSE IF jarj = 2 THEN FIND NEXT SMGroup USE-INDEX SGName
-      WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
+      WHERE SMGroup.Brand = Syst.Var:gcBrand no-lock no-error.
       IF NOT AVAILABLE SMGroup THEN DO:
          message "YOU ARE ON THE LAST ROW !".
          BELL. PAUSE 1 no-message.
@@ -274,22 +274,22 @@ SELAUS:
       END. /* seuraava rivi */
 
       /* edellinen sivu */
-      else if lookup(Syst.CUICommon:nap,"prev-page,page-up") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up") > 0 THEN DO:
    muisti = rtab[1].
    FIND SMGroup where recid(SMGroup) = muisti no-lock no-error.
    IF jarj = 1 THEN FIND prev SMGroup
-   WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
+   WHERE SMGroup.Brand = Syst.Var:gcBrand no-lock no-error.
    ELSE IF jarj = 2 THEN FIND prev SMGroup USE-INDEX SGName
-   WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
+   WHERE SMGroup.Brand = Syst.Var:gcBrand no-lock no-error.
    IF AVAILABLE SMGroup THEN DO:
       muisti = recid(SMGroup).
 
       /* mennään tiedostoa taaksepäin 1 sivun verran */
       DO rivi = 1 TO (FRAME-DOWN - 1):
          IF jarj = 1 THEN FIND prev SMGroup
-         WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
+         WHERE SMGroup.Brand = Syst.Var:gcBrand no-lock no-error.
          ELSE IF jarj = 2 THEN FIND prev SMGroup USE-INDEX SGName
-         WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
+         WHERE SMGroup.Brand = Syst.Var:gcBrand no-lock no-error.
          IF AVAILABLE SMGroup THEN muisti = recid(SMGroup).
          ELSE rivi = FRAME-DOWN.
       END.
@@ -304,7 +304,7 @@ SELAUS:
      END. /* edellinen sivu */
 
      /* seuraava sivu */
-     else if lookup(Syst.CUICommon:nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
        /* kohdistin alimmalle riville */
        IF rtab[FRAME-DOWN] = ? THEN DO:
       message "YOU ARE ON THE LAST PAGE !".
@@ -319,15 +319,15 @@ SELAUS:
      END. /* seuraava sivu */
 
      /* Haku 1 */
-     else if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+     else if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        SMGroup = "".
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE SMGroup WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if SMGroup <> "" THEN DO:
           FIND FIRST SMGroup where 
-                     SMGroup.Brand = Syst.CUICommon:gcBrand AND
+                     SMGroup.Brand = Syst.Var:gcBrand AND
                      SMGroup.SmGroup >= SMGroup
           no-lock no-error.
           IF NOT AVAILABLE SMGroup THEN DO:
@@ -344,16 +344,16 @@ SELAUS:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     else if lookup(Syst.CUICommon:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        SGName = "".
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE SGName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if SGName <> "" THEN DO:
           FIND FIRST SMGroup where 
-                     SMGroup.Brand = Syst.CUICommon:gcBrand AND
+                     SMGroup.Brand = Syst.Var:gcBrand AND
                      SMGroup.SGName >= SGName
           USE-INDEX SGName no-lock no-error.
 
@@ -368,9 +368,9 @@ SELAUS:
        END.
      END. /* Haku sar. 2 */
 
-     else if lookup(Syst.CUICommon:nap,"3,f3") > 0 THEN     /* memo */
+     else if lookup(Syst.Var:nap,"3,f3") > 0 THEN     /* memo */
      DO TRANS WITH FRAME memo ON ENDKEY UNDO, NEXT LOOP:
-       assign Syst.CUICommon:ehto = 9 Syst.CUICommon:cfc = "lis" ufkey = TRUE.
+       assign Syst.Var:ehto = 9 Syst.Var:cfc = "lis" ufkey = TRUE.
        RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
        FIND SMGroup where recid(SMGroup) = rtab[frame-line(sel)]
        exclusive-lock.
@@ -385,14 +385,14 @@ SELAUS:
        HIDE FRAME memo no-pause.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"4,f4") > 0 THEN DO TRANSAction:  /* poisto */
+     else if lookup(Syst.Var:nap,"4,f4") > 0 THEN DO TRANSAction:  /* poisto */
    FIND SMGroup where recid(SMGroup) = rtab[FRAME-LINE] no-lock.
    RUN Mc/nnsgme1.p(SMGroup.SmGroup).
    ufkey = TRUE.
    NEXT LOOP.
      END.
 
-     if lookup(Syst.CUICommon:nap,"5,f5,enter,return") > 0 THEN DO TRANS: /* ADD OR REMOVE */
+     if lookup(Syst.Var:nap,"5,f5,enter,return") > 0 THEN DO TRANS: /* ADD OR REMOVE */
 
    FIND SMGroup where recid(SMGroup) = rtab[FRAME-LINE] no-lock.
 
@@ -419,36 +419,36 @@ SELAUS:
    END.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"home") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home") > 0 THEN DO:
        IF jarj = 1 THEN FIND FIRST SMGroup
-       WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
+       WHERE SMGroup.Brand = Syst.Var:gcBrand no-lock no-error.
        ELSE IF jarj = 2 THEN FIND FIRST SMGroup USE-INDEX SGName
-       WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
+       WHERE SMGroup.Brand = Syst.Var:gcBrand no-lock no-error.
        ASSIGN muisti = recid(SMGroup) tulostettava = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"end") > 0 THEN DO : /* viimeinen tietue */
+     else if lookup(Syst.Var:nap,"end") > 0 THEN DO : /* viimeinen tietue */
        IF jarj = 1 THEN FIND LAST SMGroup
-       WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
+       WHERE SMGroup.Brand = Syst.Var:gcBrand no-lock no-error.
        ELSE IF jarj = 2 THEN FIND LAST SMGroup USE-INDEX SGName
-       WHERE SMGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
+       WHERE SMGroup.Brand = Syst.Var:gcBrand no-lock no-error.
        ASSIGN muisti = recid(SMGroup) tulostettava = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* SELAUS */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE local-disp-row:
 
    memb = can-find(SMGMember where 
-                   SMGMember.Brand    = Syst.CUICommon:gcBrand AND
+                   SMGMember.Brand    = Syst.Var:gcBrand AND
                    SMGMember.SmGroup  = SMGroup.SmGroup AND
                    SMGMember.Salesman = Salesman).
 

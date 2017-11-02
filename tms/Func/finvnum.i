@@ -16,7 +16,7 @@ FUNCTION fSeqInvGroup RETURNS CHARACTER
    DEF VAR lcSeqGroup AS CHAR NO-UNDO.
    
    FIND bCurInvGroup NO-LOCK WHERE
-        bCurInvGroup.Brand    = Syst.CUICommon:gcBrand AND
+        bCurInvGroup.Brand    = Syst.Var:gcBrand AND
         bCurInvGroup.InvGroup = icInvGroup NO-ERROR.
    IF NOT AVAILABLE bCurInvGroup THEN RETURN "".
    
@@ -38,7 +38,7 @@ FUNCTION fGetInvNum RETURNS CHARACTER
    icInvGroup = fSeqInvGroup(icInvGroup).
    
    FOR FIRST bSeqIGInvNum NO-LOCK WHERE
-             bSeqIGInvNum.Brand     = Syst.CUICommon:gcBrand    AND
+             bSeqIGInvNum.Brand     = Syst.Var:gcBrand    AND
              bSeqIGInvNum.InvGroup  = icInvGroup AND 
              bSeqIGInvNum.InvType   = iiType     AND 
              bSeqIGInvNum.FromDate <= idtInvDate:
@@ -51,7 +51,7 @@ FUNCTION fGetInvNum RETURNS CHARACTER
 
    /* try general if dedicated was not found */
    FOR FIRST bSeqIGInvNum NO-LOCK WHERE
-             bSeqIGInvNum.Brand     = Syst.CUICommon:gcBrand    AND
+             bSeqIGInvNum.Brand     = Syst.Var:gcBrand    AND
              bSeqIGInvNum.InvGroup  = icInvGroup AND 
              bSeqIGInvNum.InvType   = 0          AND 
              bSeqIGInvNum.FromDate <= idtInvDate:
@@ -83,7 +83,7 @@ FUNCTION fUpdateInvNum RETURNS LOGICAL
    DO WHILE TRUE:
    
       FIND FIRST bSeqIGInvNum EXCLUSIVE-LOCK WHERE
-                 bSeqIGInvNum.Brand    = Syst.CUICommon:gcBrand    AND
+                 bSeqIGInvNum.Brand    = Syst.Var:gcBrand    AND
                  bSeqIGInvNum.InvGroup = icInvGroup AND
                  bSeqIGInvNum.InvType  = iiType     AND
                  bSeqIGInvNum.FromDate <= idtInvDate 

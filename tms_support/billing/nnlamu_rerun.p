@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-Syst.CUICommon:katun = "ari".
+Syst.Var:katun = "ari".
 {Func/tmsparam2.i}
 {Inv/billrund.i NEW}
 {Func/faccper.i}
@@ -59,7 +59,7 @@ DEF STREAM sTimeLog.
 /* Check that no Test Invoices exist in TMS,
    Tests must be deleted before real invoicing can be done.  */
 FIND FIRST Invoice NO-LOCK WHERE 
-           Invoice.Brand   = Syst.CUICommon:gcBrand AND
+           Invoice.Brand   = Syst.Var:gcBrand AND
            Invoice.InvType = 99 
            NO-ERROR.
 /*
@@ -95,9 +95,9 @@ PUT SCREEN ROW 23 COL 1 FILL(" ",60).
 form
    skip(17)
 WITH
-   OVERLAY TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + Syst.CUICommon:ynimi + " REGENERATION " + string(TODAY,"99-99-99") + " "
-   COLOR value(Syst.CUICommon:cfc) width 80 ROW 1
+   OVERLAY TITLE COLOR value(Syst.Var:ctc)
+   " " + Syst.Var:ynimi + " REGENERATION " + string(TODAY,"99-99-99") + " "
+   COLOR value(Syst.Var:cfc) width 80 ROW 1
    FRAME taka.
 
 form
@@ -118,14 +118,14 @@ form
      help "Latest Period where Unbilled contract items are Billed now"     SKIP 
   lowvalue label " Low value invoices ....."
            help "Create invoices that are below the minimum invoicing amount"
-with title color value(Syst.CUICommon:ctc) " CRITERIA FOR CREATING INVOICES " side-labels
-   COLOR value(Syst.CUICommon:cfc) ROW 2 centered OVERLAY FRAME rajat.
+with title color value(Syst.Var:ctc) " CRITERIA FOR CREATING INVOICES " side-labels
+   COLOR value(Syst.Var:cfc) ROW 2 centered OVERLAY FRAME rajat.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. Syst.Var:ccc = Syst.Var:cfc.
 view FRAME taka. PAUSE 0 no-message.
 
-Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
-Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
+Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
 ASSIGN
 atpvm2 = date(month(TODAY),1,year(TODAY)) - 1
@@ -178,7 +178,7 @@ toimi:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, RETURN:
       IF kysy_rajat THEN DO:
          /* We ask the limits */
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          UPDATE
             lcFile
             atpvm1 atpvm2 validate(INPUT atpvm2 >= INPUT atpvm1,
@@ -187,8 +187,8 @@ toimi:
          ciperiod
          lowvalue
          WITH FRAME rajat EDITING :
-            READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
-            IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
+            READKEY. Syst.Var:nap = keylabel(LASTKEY).
+            IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
                HIDE MESSAGE no-pause.
 
                IF FRAME-FIELD = "invDte" THEN DO:
@@ -213,16 +213,16 @@ toimi:
          kysy_rajat = FALSE.
       END.
 
-      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[2] = 0
-                     Syst.CUICommon:ufk[4] = 0 Syst.CUICommon:ufk[5] = 795
-                     Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 132 Syst.Var:ufk[2] = 0
+                     Syst.Var:ufk[4] = 0 Syst.Var:ufk[5] = 795
+                     Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
-      IF Syst.CUICommon:toimi = 1 THEN DO:
+      IF Syst.Var:toimi = 1 THEN DO:
          kysy_rajat = TRUE.
          NEXT toimi.
       END.
 
-      IF Syst.CUICommon:toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
 
          /* check period */
          IF fPeriodLocked(InvDte,TRUE) THEN NEXT toimi.
@@ -245,20 +245,20 @@ toimi:
 
       END.
 
-      IF Syst.CUICommon:toimi = 8 THEN DO:
+      IF Syst.Var:toimi = 8 THEN DO:
          HIDE MESSAGE no-pause.
          HIDE FRAME rajat no-pause.
          HIDE FRAME taka no-pause.
          RETURN.
       END.
 
-   END. /* Syst.CUICommon:toimi */
+   END. /* Syst.Var:toimi */
 
 HIDE FRAME lCustNum no-pause.
 
 OUTPUT STREAM sTimeLog TO /tmp/invrun_dur.log append.
 PUT STREAM sTimeLog UNFORMATTED
-   "Customer based (lamu3) started  (brand " Syst.CUICommon:gcBrand 
+   "Customer based (lamu3) started  (brand " Syst.Var:gcBrand 
    " group " InvGroup ") " 
    STRING(TODAY,"99.99.9999") " "
    STRING(TIME,"hh:mm:ss")
@@ -401,7 +401,7 @@ RUN pGetAmt in pHandle (OUTPUT lQty,
 
 OUTPUT STREAM sTimeLog TO /tmp/invrun_dur.log append.
 PUT STREAM sTimeLog UNFORMATTED
-   "Customer based (lamu3) finished (brand " Syst.CUICommon:gcBrand 
+   "Customer based (lamu3) finished (brand " Syst.Var:gcBrand 
    " group " InvGroup "): " 
    Func.Common:mTS2HMS(ldEndTime)
    "|Dur: " 
@@ -444,7 +444,7 @@ IF ok AND lQty > 0 THEN DO:
     DO FOR ActionLog TRANS:
        CREATE ActionLog.
        ASSIGN 
-          ActionLog.Brand        = Syst.CUICommon:gcBrand   
+          ActionLog.Brand        = Syst.Var:gcBrand   
           ActionLog.TableName    = "Invoice"  
           ActionLog.KeyValue     = lcBillRun 
           ActionLog.ActionID     = "BillRun"

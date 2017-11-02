@@ -11,8 +11,8 @@
 {Syst/commpaa.i}
 
 ASSIGN
-   Syst.CUICommon:gcBrand = "1"
-   Syst.CUICommon:katun   = "ATM".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun   = "ATM".
 
 {Syst/tmsconst.i}
 {Func/barrfunc.i}

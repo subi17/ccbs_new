@@ -9,8 +9,8 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/msisdn.i}
 DEFINE VARIABLE secs AS INTEGER NO-UNDO.
@@ -32,7 +32,7 @@ def buffer msisdnBuf for msisdn.
 put stream sout unformatted "MSISDN|Days in quarantine" skip.
 
 FOR EACH msisdnBuf NO-LOCK WHERE
-         msisdnBuf.brand = Syst.CUICommon:gcBrand
+         msisdnBuf.brand = Syst.Var:gcBrand
    USE-INDEX CLI BREAK BY msisdnBuf.cli:
 
    IF FIRST-OF(msisdnBuf.cli) AND 

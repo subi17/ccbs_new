@@ -57,7 +57,7 @@ viiva3 = fill("-",lev)
 viiva4 = fill("-",lev).
 
 DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
-ynimi = Syst.CUICommon:ynimi.
+ynimi = Syst.Var:ynimi.
 
 form header
    viiva1 AT 2 SKIP
@@ -96,14 +96,14 @@ eka = TRUE.
 print-line:
 repeat:
    FOR EACH Customer no-lock where
-            Customer.Brand   = Syst.CUICommon:gcBrand AND
+            Customer.Brand   = Syst.Var:gcBrand AND
             Customer.CustNum >= kund1  AND
             (IF kund2 NE 0 THEN Customer.CustNum <= kund2 ELSE TRUE):
 
          /* onko kjA pyytAnyt keskeytystA ? */
          READKEY PAUSE 0.
-         Syst.CUICommon:nap = keylabel(LASTKEY).
-         if Syst.CUICommon:nap = "ESC" THEN DO:
+         Syst.Var:nap = keylabel(LASTKEY).
+         if Syst.Var:nap = "ESC" THEN DO:
             message "Abort printing (Y/N) ?"
             UPDATE ke.
             IF ke THEN DO:

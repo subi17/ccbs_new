@@ -214,7 +214,7 @@ CLASS Syst.Parameters FINAL:
         icType  AS CHARACTER ):
             
       FOR FIRST lbTMSParam NO-LOCK WHERE
-         lbTMSParam.Brand      = Syst.CUICommon:gcBrand          AND
+         lbTMSParam.Brand      = Syst.Var:gcBrand          AND
          lbTMSParam.ParamCode  = icCode           AND
          ( IF icGroup = ?
            THEN TRUE
@@ -271,13 +271,13 @@ CLASS Syst.Parameters FINAL:
          THEN DO TRANSACTION:
             IF llAvailable
             THEN FIND localTMSParam EXCLUSIVE-LOCK WHERE
-                     localTMSParam.Brand      = Syst.CUICommon:gcBrand AND
+                     localTMSParam.Brand      = Syst.Var:gcBrand AND
                      localTMSParam.ParamCode  = icCode  AND
                      localTMSParam.ParamGroup = icGroup.
             ELSE DO:
                   CREATE localTMSParam.
                   ASSIGN
-                     localTMSParam.Brand      = Syst.CUICommon:gcBrand
+                     localTMSParam.Brand      = Syst.Var:gcBrand
                      localTMSParam.ParamCode  = icCode
                      localTMSParam.ParamType  = icType
                      localTMSParam.ParamGroup = icGroup

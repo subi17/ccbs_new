@@ -28,8 +28,8 @@ resp_array = add_array(response_toplevel_id, "").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "NewtonRPC".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "NewtonRPC".
 {Func/smsmessage.i}
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:

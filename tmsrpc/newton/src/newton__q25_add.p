@@ -20,7 +20,7 @@ newton__q25_add.p
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Func/fsendsms.i}
@@ -116,7 +116,7 @@ IF NOT AVAILABLE Customer THEN
 
 /* Find original installment contract */   
 FIND FIRST DCCLI NO-LOCK WHERE
-           DCCLI.Brand   = Syst.CUICommon:gcBrand AND
+           DCCLI.Brand   = Syst.Var:gcBrand AND
            DCCLI.DCEvent BEGINS "PAYTERM" AND
            DCCLI.MsSeq   = MobSub.MsSeq AND 
            DCCLI.PerContractId = liper_contract_id NO-ERROR.
@@ -128,7 +128,7 @@ IF DCCLI.TermDate NE ? THEN
    RETURN appl_err("Installment contract terminated").
    
 FIND SingleFee USE-INDEX Custnum WHERE
-     SingleFee.Brand       = Syst.CUICommon:gcBrand AND
+     SingleFee.Brand       = Syst.Var:gcBrand AND
      SingleFee.Custnum     = MobSub.CustNum AND
      SingleFee.HostTable   = "Mobsub" AND
      SingleFee.KeyValue    = STRING(Mobsub.MsSeq) AND
@@ -173,7 +173,7 @@ ELSE
       llNewExtension = YES . /* Handle it immediately */
 
 IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
-                  DCCLI.Brand   EQ Syst.CUICommon:gcBrand AND
+                  DCCLI.Brand   EQ Syst.Var:gcBrand AND
                   DCCLI.DCEvent EQ "RVTERM12" AND
                   DCCLI.MsSeq   EQ MobSub.MsSeq AND
                   DCCLI.ValidTo >= TODAY) THEN
@@ -190,12 +190,12 @@ IF SingleFee.OrderId > 0 THEN DO:
       RETURN appl_err("Already returned terminal").
 END.
 
-lcOrigkatun = Syst.CUICommon:katun.
+lcOrigkatun = Syst.Var:katun.
 /*YPR-3256*/
 IF lcQ25ContractId EQ "" THEN
-   Syst.CUICommon:katun = "VISTA_" + lcUsername.
+   Syst.Var:katun = "VISTA_" + lcUsername.
 ELSE 
-   Syst.CUICommon:katun = "POS_" + lcUsername.
+   Syst.Var:katun = "POS_" + lcUsername.
 
 /*Request for Q25 extension*/
 liCreated = fPCActionRequest(
@@ -215,7 +215,7 @@ liCreated = fPCActionRequest(
    OUTPUT lcResult).   
    
 IF liCreated = 0 THEN DO:
-   Syst.CUICommon:katun = lcOrigKatun.
+   Syst.Var:katun = lcOrigKatun.
    RETURN appl_err(SUBST("Q25 extension request failed: &1",
                          lcResult)).
 END.
@@ -259,7 +259,7 @@ IF lcSMSTxt > "" THEN DO:
    ldeFeeAmount = SingleFee.Amt.
    
    FOR EACH DiscountPlan NO-LOCK WHERE
-            DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
+            DiscountPlan.Brand = Syst.Var:gcBrand AND
            (DiscountPlan.DPRuleID = "RVTERMDT1DISC" OR
             DiscountPlan.DPRuleID = "RVTERMDT4DISC"),
        EACH DPMember NO-LOCK WHERE
@@ -307,17 +307,17 @@ IF lcmemo_title > "" THEN DO:
    CREATE Memo.
    ASSIGN
        Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = Syst.CUICommon:gcBrand
+       Memo.Brand     = Syst.Var:gcBrand
        Memo.HostTable = "MobSub"
        Memo.KeyValue  = STRING(MobSub.MsSeq)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = Syst.CUICommon:katun
+       Memo.CreUser   = Syst.Var:katun
        Memo.MemoTitle = lcmemo_title
        Memo.MemoText  = lcmemo_content
        Memo.CustNum   = MobSub.CustNum.
 END. /* IF lcmemo_title > "" AND lcmemo_content > "" THEN DO: */
 
-Syst.CUICommon:katun = lcOrigKatun.
+Syst.Var:katun = lcOrigKatun.
 add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:

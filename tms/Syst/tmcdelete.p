@@ -31,7 +31,7 @@ IF idtBreakDate = ? THEN idtBreakDate = TODAY.
 
 /* delete only counters with correct type */
 FOR EACH TMRule NO-LOCK WHERE
-         TMRule.Brand = Syst.CUICommon:gcBrand AND
+         TMRule.Brand = Syst.Var:gcBrand AND
          TMRule.CounterType = 1:
    CREATE ttRule.
    ttRule.TMRuleSeq = TMRule.TMRuleSeq.
@@ -76,7 +76,7 @@ END.
 DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = Syst.CUICommon:gcBrand   
+      ActionLog.Brand        = Syst.Var:gcBrand   
       ActionLog.TableName    = "TMCounter"  
       ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                STRING(MONTH(TODAY),"99")  +

@@ -111,7 +111,7 @@ FOR EACH DMS NO-LOCK WHERE
             END.
             WHEN "#OrderStatus" THEN DO:
                FIND FIRST Order NO-LOCK WHERE
-                          Order.Brand = Syst.CUICommon:gcBrand AND
+                          Order.Brand = Syst.Var:gcBrand AND
                           Order.OrderID = DMS.HostID NO-ERROR.
                IF AVAIL Order AND DMS.HostTable = "Order" THEN
                   lcValue = Order.StatusCode.

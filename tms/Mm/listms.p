@@ -40,7 +40,7 @@ FIND BillTarg WHERE BillTarg.BillTarg   = mobsub.BillTarg  AND
                    BillTarg.CustNum  = mobsub.CustNum  NO-LOCK.
 
 DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
-ynimi = Syst.CUICommon:ynimi.
+ynimi = Syst.Var:ynimi.
 
 FORM HEADER
    FILL("=",116) FORMAT "x(116)"         skip
@@ -108,11 +108,11 @@ rw-c = 14.
 FOR 
 EACH  subser  OF mobsub  NO-LOCK,
 FIRST servcom WHERE 
-      ServCom.Brand   = Syst.CUICommon:gcBrand AND 
+      ServCom.Brand   = Syst.Var:gcBrand AND 
       ServCom.servcom = subser.servcom  NO-LOCK,
 
 FIRST service NO-LOCK WHERE 
-      Service.Brand   = Syst.CUICommon:gcBrand AND 
+      Service.Brand   = Syst.Var:gcBrand AND 
       service.Service = servcom.Service
 
 BREAK

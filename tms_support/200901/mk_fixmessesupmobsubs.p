@@ -1,4 +1,4 @@
-{Syst/commpaa.i} Syst.CUICommon:katun = "SOG". Syst.CUICommon:gcBrand = "1".
+{Syst/commpaa.i} Syst.Var:katun = "SOG". Syst.Var:gcBrand = "1".
 {Func/fsubser.i}
 
 def stream slog.
@@ -64,8 +64,8 @@ REPEAT:
         Solog.MsSeq        = MobSub.MsSeq    /* Mobile Subscription No.    */
         Solog.CLI          = MobSub.Cli      /* MSISDN                     */
         Solog.Stat         = 0               /* just created               */
-        Solog.Brand        = Syst.CUICommon:gcBrand
-        Solog.Users        = Syst.CUICommon:katun.
+        Solog.Brand        = Syst.Var:gcBrand
+        Solog.Users        = Syst.Var:katun.
    ASSIGN     
         Solog.TimeSlotTMS  = lcActStamp
         Solog.ActivationTS = lcActStamp

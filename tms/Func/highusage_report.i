@@ -271,7 +271,7 @@ FUNCTION process_highspender_row RETURN LOGICAL
     RETURN TRUE.
 END FUNCTION.
 
-loop_highspender_table(Syst.CUICommon:gcBrand, ideCreateTS, iStatus).
+loop_highspender_table(Syst.Var:gcBrand, ideCreateTS, iStatus).
 
 OUTPUT STREAM excel CLOSE.
 

@@ -13,7 +13,7 @@
                   13.05.02 aam called from brand.p
                   01.09.03 jp   TMS+
                   03.03.05 kl return correctly
-                  03.08.06 tk set Syst.CUICommon:qupd = true when running from find module
+                  03.08.06 tk set Syst.Var:qupd = true when running from find module
 
   VERSION ......: M15
 ---------------------------------------------------------------------- */
@@ -102,11 +102,11 @@ form
 
 
 find first Brand no-lock WHERE
-           Brand.Brand = Syst.CUICommon:gcBrand NO-ERROR.
+           Brand.Brand = Syst.Var:gcBrand NO-ERROR.
 ASSIGN
    empty = fill(" ",78)
-   Syst.CUICommon:ynimi = IF AVAILABLE Brand THEN Brand.BrName ELSE "Unknown"
-   Syst.CUICommon:yvari = FALSE.
+   Syst.Var:ynimi = IF AVAILABLE Brand THEN Brand.BrName ELSE "Unknown"
+   Syst.Var:yvari = FALSE.
 
 
 /* start from main level */
@@ -114,7 +114,7 @@ f_level = s_level.
 
 
 pause 0.
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. pcolor = Syst.CUICommon:ctc. pclear = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. pcolor = Syst.Var:ctc. pclear = Syst.Var:cfc.
 view frame menu_frame.
 
 mlevel = 1.
@@ -127,7 +127,7 @@ repeat with frame menu_frame:
 
    if available MenuTree then do:
       assign
-      ftitle[1] = " " + Syst.CUICommon:ynimi + " (" + Syst.CUICommon:gcBrand + 
+      ftitle[1] = " " + Syst.Var:ynimi + " (" + Syst.Var:gcBrand + 
                        ") " + MenuTitle + " " + string(TODAY,"99-99-99")
       substring(ftitle[1],59) = string("(" + MenuId + ")","x(10)")
       title_width = length(ftitle[1]).
@@ -158,9 +158,9 @@ repeat with frame menu_frame:
 
    if first_time then do with frame login:
 
-     assign first_time = false Syst.CUICommon:si-pvm = TODAY.
+     assign first_time = false Syst.Var:si-pvm = TODAY.
 
-     find TmsUser where TmsUser.UserCode = Syst.CUICommon:katun no-lock.
+     find TmsUser where TmsUser.UserCode = Syst.Var:katun no-lock.
 
      /* set user's default menu level */
      if TmsUser.StartMenu ne "" then do:
@@ -189,7 +189,7 @@ repeat with frame menu_frame:
 
    /* search all menu items on this level */
 
-   assign item_type = 0 f_name = "" Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0 f_id = "" vartype = 0.
+   assign item_type = 0 f_name = "" Syst.Var:ufk = 0 Syst.Var:ehto = 0 f_id = "" vartype = 0.
    for each  MenuTree no-lock where
              MenuTree.Level = f_level and
              MenuTree.State[1] = false  /* NOT denied */:
@@ -201,7 +201,7 @@ repeat with frame menu_frame:
 
 
       ASSIGN
-      Syst.CUICommon:ufk    [MenuTree.Position]  = MenuNum       /* NO. of ufkey menu text */
+      Syst.Var:ufk    [MenuTree.Position]  = MenuNum       /* NO. of ufkey menu text */
       f_name [MenuTree.Position]  = Module      /* name of module        */
       item_type [MenuTree.Position]  = MenuType  /* Type of Item  
                                                      module/menu/return */
@@ -212,16 +212,16 @@ repeat with frame menu_frame:
 f_code:
    repeat with frame menu_frame:
       /* wait for the user's choice */
-      assign Syst.CUICommon:ufk[9] = 1.
+      assign Syst.Var:ufk[9] = 1.
 
 
       /* show function codes */
       pause 0.
       display f_id with frame f_code.
-      Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
+      Syst.Var:ehto = 3. RUN Syst/ufkey.p.
       info = false. 
 ACTION: repeat:
-         readkey. Syst.CUICommon:nap = keylabel(lastkey).
+         readkey. Syst.Var:nap = keylabel(lastkey).
 
          if keylabel(lastkey) = "?" then do:
             info = true.
@@ -232,11 +232,11 @@ ACTION: repeat:
          end.   
 
          /* brand selection */
-         if Syst.CUICommon:nap = "f11" then leave main_loop. 
+         if Syst.Var:nap = "f11" then leave main_loop. 
 
-         Syst.CUICommon:toimi = minimum(lookup(Syst.CUICommon:nap,"1,2,3,4,5,6,7,8,return"),9).
-         if Syst.CUICommon:toimi = 0 then
-         Syst.CUICommon:toimi = lookup(Syst.CUICommon:nap,"f1,f2,f3,f4,f5,f6,f7,f8,enter").
+         Syst.Var:toimi = minimum(lookup(Syst.Var:nap,"1,2,3,4,5,6,7,8,return"),9).
+         if Syst.Var:toimi = 0 then
+         Syst.Var:toimi = lookup(Syst.Var:nap,"f1,f2,f3,f4,f5,f6,f7,f8,enter").
          pause 0 no-message.
 
          /* hide function codes from screen */
@@ -244,14 +244,14 @@ ACTION: repeat:
          hide frame f_code-ERGO no-pause.
 
 
-         if Syst.CUICommon:toimi > 0 or length(Syst.CUICommon:nap) = 1 then leave.
+         if Syst.Var:toimi > 0 or length(Syst.Var:nap) = 1 then leave.
       end.
 
       if info then do trans:
-         if Syst.CUICommon:toimi < 8 then do:
+         if Syst.Var:toimi < 8 then do:
 
             hide message no-pause.
-            RUN Syst/nninfo.p(f_id[Syst.CUICommon:toimi]).
+            RUN Syst/nninfo.p(f_id[Syst.Var:toimi]).
             hide frame info  no-pause.
          end.
          info = false.
@@ -259,12 +259,12 @@ ACTION: repeat:
       end.
 
       /* in case no function key was hit .. */
-      if Syst.CUICommon:toimi = 0 then do on endkey undo, next f_code:
-         if length(Syst.CUICommon:nap) > 1 then undo, retry.
-         assign f_code = Syst.CUICommon:nap firstc = true.
+      if Syst.Var:toimi = 0 then do on endkey undo, next f_code:
+         if length(Syst.Var:nap) > 1 then undo, retry.
+         assign f_code = Syst.Var:nap firstc = true.
          pause 0 no-message.
-         assign Syst.CUICommon:ufk = 0  Syst.CUICommon:ufk[1] = 35 Syst.CUICommon:ufk[2] = 717 Syst.CUICommon:ufk[8] = 8
-         Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
+         assign Syst.Var:ufk = 0  Syst.Var:ufk[1] = 35 Syst.Var:ufk[2] = 717 Syst.Var:ufk[8] = 8
+         Syst.Var:ehto = 3. RUN Syst/ufkey.p.
          update f_code with frame f_code_search editing:
 
             if firstc then do:
@@ -273,14 +273,14 @@ ACTION: repeat:
                firstc = false.
             end.
 
-            readkey. Syst.CUICommon:nap=keylabel(lastkey).
+            readkey. Syst.Var:nap=keylabel(lastkey).
 
-            if Syst.CUICommon:nap = "f8" then do:
+            if Syst.Var:nap = "f8" then do:
                hide frame f_code_search no-pause.
                undo f_code, next MAIN_LOOP.
             end.
 
-            order = lookup(Syst.CUICommon:nap,"f1,f2").
+            order = lookup(Syst.Var:nap,"f1,f2").
             if order > 0 then do:
                assign siirto = input f_code.
                RUN Syst/utose.p.
@@ -316,7 +316,7 @@ ACTION: repeat:
          /* shall a module be run ? */
          if MenuType = 1 then do:
             assign
-               Syst.CUICommon:qupd   = TRUE.
+               Syst.Var:qupd   = TRUE.
 
                run value(MenuTree.Module).
 
@@ -344,17 +344,17 @@ ACTION: repeat:
       end.
 
 
-      if Syst.CUICommon:toimi = 9 then do: /* Quick return to main level */
+      if Syst.Var:toimi = 9 then do: /* Quick return to main level */
          clear frame stack no-pause.
          assign mlevel = 1 f_level = s_level.
          next MAIN_LOOP.
       end.
 
-      if item_type[Syst.CUICommon:toimi] = 3 then do: /* one level backwards */
+      if item_type[Syst.Var:toimi] = 3 then do: /* one level backwards */
 
          if mlevel = 1 then do:
             OK = false.
-            message " USER <" + Syst.CUICommon:katun + 
+            message " USER <" + Syst.Var:katun + 
                     ">: Are You sure you want to log out?" 
             VIEW-AS ALERT-BOX
             BUTTONS YES-NO 
@@ -379,15 +379,15 @@ ACTION: repeat:
             next MAIN_LOOP.
          end.
       end.
-      else if item_type[Syst.CUICommon:toimi] = 2 then do: /* move into submenu */
+      else if item_type[Syst.Var:toimi] = 2 then do: /* move into submenu */
          /* save title of next menu level */
          assign
          mlevel = mlevel + 1
-         ftitle[mlevel] = f_title[Syst.CUICommon:toimi]
+         ftitle[mlevel] = f_title[Syst.Var:toimi]
          title_width = maximum(title_width,length(ftitle[mlevel])).
 
          /* level key dor db search */
-         f_level = f_level + string(Syst.CUICommon:toimi).
+         f_level = f_level + string(Syst.Var:toimi).
 
          /* align title width according to the longest title */
          do i = 1 to mlevel:
@@ -397,16 +397,16 @@ ACTION: repeat:
             ftitle[i] = substring(substring(empty,1,x) +
             ftitle[i] + substring(empty,1,x),1,title_width).
          end.
-         substring(ftitle[mlevel],59) = string("(" + f_id[Syst.CUICommon:toimi] + ")","x(10)").
+         substring(ftitle[mlevel],59) = string("(" + f_id[Syst.Var:toimi] + ")","x(10)").
          next MAIN_LOOP.
       end.
-      else if item_type[Syst.CUICommon:toimi] EQ 0 THEN
+      else if item_type[Syst.Var:toimi] EQ 0 THEN
          BELL.
       else do: /* run a program module */
          assign
-            Syst.CUICommon:qupd   =  TRUE . 
+            Syst.Var:qupd   =  TRUE . 
 
-         run value(f_name[Syst.CUICommon:toimi]).
+         run value(f_name[Syst.Var:toimi]).
          /* clear screen */
          hide frame menu_frame no-pause.
 
@@ -420,7 +420,7 @@ ACTION: repeat:
 end. /* MAIN_LOOP */
 
 /* brand selection */
-IF Syst.CUICommon:nap = "f11" THEN DO:
+IF Syst.Var:nap = "f11" THEN DO:
    /* choose a new brand */
    RETURN. 
 END.

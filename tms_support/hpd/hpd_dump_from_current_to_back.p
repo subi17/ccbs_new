@@ -83,7 +83,7 @@ DEFINE VARIABLE gcLogDir AS CHARACTER INITIAL "/scratch/log/hpd" NO-UNDO.
 */
 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 DEFINE VARIABLE gcSessionParam AS CHARACTER NO-UNDO.
 

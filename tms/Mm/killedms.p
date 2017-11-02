@@ -40,7 +40,7 @@ help "Latest Date of call" skip(1)
 "          other ..................:" statother 
 skip(1)
 WITH
-   width 80 overlay no-labels title " " + Syst.CUICommon:ynimi +
+   width 80 overlay no-labels title " " + Syst.Var:ynimi +
    " Count mobile subscriptions " FRAME rajat.
 
 pvm1 = date(month(TODAY),1,year(TODAY)).
@@ -52,7 +52,7 @@ rajat:
 repeat WITH FRAME rajat:
 
    PAUSE 0.
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE
    pvm1
    pvm2
@@ -60,11 +60,11 @@ repeat WITH FRAME rajat:
 
 toimi:
    repeat WITH FRAME toimi:
-      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0 Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ehto = 0 Syst.Var:ufk[1] = 132 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8.
       RUN Syst/ufkey.p.
-      IF Syst.CUICommon:toimi = 1 THEN NEXT  rajat.
-      IF Syst.CUICommon:toimi = 8 THEN LEAVE rajat.
-      IF Syst.CUICommon:toimi = 5 THEN LEAVE toimi.
+      IF Syst.Var:toimi = 1 THEN NEXT  rajat.
+      IF Syst.Var:toimi = 8 THEN LEAVE rajat.
+      IF Syst.Var:toimi = 5 THEN LEAVE toimi.
    END.
    ASSIGN 
       lkm = 0
@@ -80,7 +80,7 @@ toimi:
    FOR EACH MSOwner no-lock where
             MSOwner.TsBegin >= stamp1  AND
             MSOwner.TsEnd   <= stamp2  AND 
-            MSOwner.Brand    = Syst.CUICommon:gcBrand :
+            MSOwner.Brand    = Syst.Var:gcBrand :
 
       lkm = lkm + 1.
 

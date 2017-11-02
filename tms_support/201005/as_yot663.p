@@ -1,7 +1,7 @@
 input from mnp_old_ongoing.txt.
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "anttis".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 {Func/orderfunc.i}
 {Syst/tmsconst.i}
 

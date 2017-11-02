@@ -73,7 +73,7 @@ FORM
 
    SKIP(7)
    WITH ROW 1 SIDE-LABELS WIDTH 80
-        TITLE " " + Syst.CUICommon:ynimi + " CAMPAIGN RUN " +
+        TITLE " " + Syst.Var:ynimi + " CAMPAIGN RUN " +
               STRING(TODAY,"99-99-99") + " "
         FRAME fCriter.
 
@@ -84,7 +84,7 @@ ASSIGN liCustNum2    = 999999999
        ldtDate1      = TODAY
        ldtDate2      = TODAY.
 
-FIND LAST Campaign NO-LOCK WHERE Campaign.Brand = Syst.CUICommon:gcBrand NO-ERROR.
+FIND LAST Campaign NO-LOCK WHERE Campaign.Brand = Syst.Var:gcBrand NO-ERROR.
 IF AVAILABLE Campaign THEN lcCampaign2 = Campaign.Campaign.
 
 
@@ -104,23 +104,23 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
       IF ufkey THEN DO:
          ASSIGN
-         Syst.CUICommon:ufk[1]= 7   Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
-         Syst.CUICommon:ufk[5]= 795 Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 
-         Syst.CUICommon:ufk[9]= 1
-         Syst.CUICommon:ehto = 3.
+         Syst.Var:ufk[1]= 7   Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= 795 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 
+         Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3.
          RUN Syst/ufkey.p.
 
          READKEY.
-         Syst.CUICommon:nap = keylabel(LASTKEY).
+         Syst.Var:nap = keylabel(LASTKEY).
       END.
 
-      ELSE ASSIGN Syst.CUICommon:nap   = "1"  
+      ELSE ASSIGN Syst.Var:nap   = "1"  
                   ufkey = TRUE.
 
-      IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO:
 
          repeat WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
-             Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+             Syst.Var:ehto = 9. RUN Syst/ufkey.p.
              UPDATE 
                 lcCampaign1 
                 lcCampaign2
@@ -131,7 +131,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
              WITH FRAME fCriter EDITING:
                 READKEY.
 
-                IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+                IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
 
                 END. 
 
@@ -143,7 +143,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
       END.
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 THEN DO:
 
          llOk = FALSE. 
 
@@ -155,7 +155,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
          IF NOT llOk THEN NEXT.
 
-         Syst.CUICommon:ehto = 5.
+         Syst.Var:ehto = 5.
          RUN Syst/ufkey.p.
 
          /* collect customers */
@@ -180,11 +180,11 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
       END.
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN DO:
          LEAVE toimi.
       END.
 
-END. /* Syst.CUICommon:toimi */
+END. /* Syst.Var:toimi */
 
 HIDE MESSAGE NO-PAUSE.
 HIDE FRAME fCriter NO-PAUSE.    

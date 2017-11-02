@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-Syst.CUICommon:katun = "ari".
+Syst.Var:katun = "ari".
 
 def stream sread.
 input stream sread from /apps/snet/200908/FAT_BARRED_CUSTOMER.txt.

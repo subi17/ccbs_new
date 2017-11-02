@@ -7,8 +7,8 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Qvantel".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
@@ -225,7 +225,7 @@ PROCEDURE pMarkStarted:
    
    /* check that there isn't already another run for the same purpose */
    IF CAN-FIND(FIRST ActionLog USE-INDEX ActionID WHERE
-                     ActionLog.Brand        = Syst.CUICommon:gcBrand     AND    
+                     ActionLog.Brand        = Syst.Var:gcBrand     AND    
                      ActionLog.ActionID     = "TELEFONICA" AND
                      ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE}) THEN
       lcError = "Batch not started due to ongoing run".
@@ -240,12 +240,12 @@ PROCEDURE pMarkStarted:
       DO TRANS:
          CREATE ActionLog.
          ASSIGN
-            ActionLog.Brand        = Syst.CUICommon:gcBrand
+            ActionLog.Brand        = Syst.Var:gcBrand
             ActionLog.ActionID     = "TELEFONICA"
             ActionLog.ActionTS     = ldThisRun
             ActionLog.TableName    = "Cron"
             ActionLog.KeyValue     = lcFileName
-            ActionLog.UserCode     = Syst.CUICommon:katun
+            ActionLog.UserCode     = Syst.Var:katun
             ActionLog.ActionStatus = {&ACTIONLOG_STATUS_LOGGED}
             ActionLog.ActionPeriod = YEAR(ldaInvDate) * 100 + MONTH(ldaInvDate) 
             ActionLog.ActionChar   = lcError.
@@ -259,12 +259,12 @@ PROCEDURE pMarkStarted:
       CREATE ActionLog.
       
       ASSIGN
-         ActionLog.Brand        = Syst.CUICommon:gcBrand
+         ActionLog.Brand        = Syst.Var:gcBrand
          ActionLog.ActionID     = "TELEFONICA"
          ActionLog.ActionTS     = ldThisRun
          ActionLog.TableName    = "Cron"
          ActionLog.KeyValue     = lcFileName
-         ActionLog.UserCode     = Syst.CUICommon:katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE}
          ActionLog.ActionPeriod = YEAR(ldaInvDate) * 100 + MONTH(ldaInvDate).
       RELEASE ActionLog.   
@@ -279,7 +279,7 @@ PROCEDURE pMarkError:
 
    /* mark this run finished */
    FOR FIRST ActionLog USE-INDEX ActionID WHERE
-             ActionLog.Brand        = Syst.CUICommon:gcBrand AND    
+             ActionLog.Brand        = Syst.Var:gcBrand AND    
              ActionLog.ActionID     = "TELEFONICA" AND
              ActionLog.ActionTS     = ldThisRun AND
              ActionLog.TableName    = "Cron" AND
@@ -299,7 +299,7 @@ PROCEDURE pMarkFinished:
 
    /* mark this run finished */
    FOR FIRST ActionLog USE-INDEX ActionID WHERE
-             ActionLog.Brand        = Syst.CUICommon:gcBrand AND    
+             ActionLog.Brand        = Syst.Var:gcBrand AND    
              ActionLog.ActionID     = "TELEFONICA" AND
              ActionLog.ActionTS     = ldThisRun AND
              ActionLog.TableName    = "Cron" AND
@@ -321,7 +321,7 @@ PROCEDURE pCollectFusionInvoices:
    DEF VAR liSubs AS INT NO-UNDO. 
 
    FOR EACH Invoice NO-LOCK WHERE
-            Invoice.Brand = Syst.CUICommon:gcBrand AND
+            Invoice.Brand = Syst.Var:gcBrand AND
             Invoice.InvDate >= ldaInvDate AND
             Invoice.InvType = 1 AND
             (Invoice.DelType = {&INV_DEL_TYPE_FUSION_EMAIL_PENDING} OR
@@ -375,7 +375,7 @@ PROCEDURE pCollectFusionInvoices:
          FOR EACH Invrow NO-LOCK WHERE 
                   Invrow.InvNum = Invoice.Invnum,
             FIRST BillItem NO-LOCK WHERE
-                  BillItem.Brand = Syst.CUICommon:gcBrand AND
+                  BillItem.Brand = Syst.Var:gcBrand AND
                   BillItem.BillCode = InvRow.BillCode:
 
              IF LOOKUP(BillItem.BillCode,"CONTFF2MF,CONTSF14MF,CONTSF10MF") > 0 THEN 
@@ -473,7 +473,7 @@ PROCEDURE pAnalyzeTelefonicaInvoices:
       IF ttTF.Mapping = {&FI_MAPPING_TF} THEN DO: 
          
          FIND Customer NO-LOCK WHERE
-              Customer.Brand = Syst.CUICommon:gcBrand AND
+              Customer.Brand = Syst.Var:gcBrand AND
               Customer.OrgId = ttTF.CustomerId AND
               Customer.CustIdType NE "passport" AND
               Customer.Roles NE "inactive" NO-ERROR.

@@ -28,8 +28,8 @@ form
     Customer.Email
 
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(Syst.CUICommon:cfc)
-    title COLOR VALUE(Syst.CUICommon:ctc) " Subscriber Data "
+    COLOR VALUE(Syst.Var:cfc)
+    title COLOR VALUE(Syst.Var:ctc) " Subscriber Data "
     side-labels 1 columns FRAME subs.
 
 
@@ -64,7 +64,7 @@ DO WITH FRAME subs:
    WITH FRAME subs.
 
    ASSIGN
-   Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
+   Syst.Var:ufk = 0 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
    RUN Syst/ufkey.p.
 
    HIDE FRAME subs NO-PAUSE.

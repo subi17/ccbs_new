@@ -42,13 +42,13 @@ ASSIGN tila = true.
 message "Printing in progress, wait ...".
 
 FOR EACH Customer NO-LOCK WHERE 
-         Customer.Brand     = Syst.CUICommon:gcBrand  AND
+         Customer.Brand     = Syst.Var:gcBrand  AND
          Customer.CustNum  >= CustNum1 AND
          Customer.CustNum  <= CustNum2 AND
         (Customer.InvGroup  = InvGroup OR InvGroup = ""):
 
    FOR EACH MobSub NO-LOCK WHERE 
-            MobSub.Brand    = Syst.CUICommon:gcBrand AND
+            MobSub.Brand    = Syst.Var:gcBrand AND
             MobSub.CustNum  = Customer.CustNum AND
            (MobSub.MsStatus = MsStatus OR MsStatus = 0) AND
            (MobSub.CLIType  = CLIType OR CLIType = "") AND
@@ -93,7 +93,7 @@ BREAK
    
    IF LAST-OF(ttMobSub.CLIType) THEN DO:
       FIND CLIType NO-LOCK WHERE
-           clitype.Brand   = Syst.CUICommon:gcBrand AND 
+           clitype.Brand   = Syst.Var:gcBrand AND 
            CLIType.CLIType = ttMobSub.CLIType.
       
    
@@ -122,7 +122,7 @@ IF details then do:
 
    FOR EACH ttMobSub NO-LOCK:
       FIND CLIType NO-LOCK WHERE
-           clitype.Brand   = Syst.CUICommon:gcBrand AND 
+           clitype.Brand   = Syst.Var:gcBrand AND 
            CLIType.CLIType = ttMobSub.CLIType.
       
       put stream tul unformatted

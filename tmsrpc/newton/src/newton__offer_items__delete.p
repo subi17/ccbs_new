@@ -9,7 +9,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/eventval.i}
 
 DEFINE VARIABLE pcTenant   AS CHARACTER NO-UNDO.
@@ -36,7 +36,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-Syst.CUICommon:katun = pcUserName.
+Syst.Var:katun = pcUserName.
 
 {newton/src/settenant.i pcTenant}
 

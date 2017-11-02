@@ -1,10 +1,10 @@
 {Syst/testpaa.i}
-Syst.CUICommon:katun = "ari".
+Syst.Var:katun = "ari".
 
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhInvoice AS HANDLE NO-UNDO.
@@ -63,7 +63,7 @@ for each order no-lock use-index stamp where
    if licashcust > 0 then DO TRANS:
 
       FOR EACH SingleFee EXCLUSIVE-LOCK USE-INDEX HostTable WHERE
-               SingleFee.Brand     = Syst.CUICommon:gcBrand AND
+               SingleFee.Brand     = Syst.Var:gcBrand AND
                SingleFee.HostTable = "Order" AND
                SingleFee.KeyValue  = STRING(Order.OrderID):
                

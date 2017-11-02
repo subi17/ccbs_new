@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-Syst.CUICommon:katun = "anttis".
+Syst.Var:katun = "anttis".
 
 {Func/barrfunc.i}
 
@@ -115,7 +115,7 @@ repeat:
    RUN Mm/barrengine.p (Mobsub.MsSeq,
                     "UN" + lcstat,     /* package for unbarring */
                       "5",                /* source  */
-                      Syst.CUICommon:katun,             /* creator */
+                      Syst.Var:katun,             /* creator */
                       ldeActStamp,  /* activate */
                       "",                 /* sms-text */
                       OUTPUT lcResult).

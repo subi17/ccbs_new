@@ -21,9 +21,9 @@
 */
 
            EDITING:
-              READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
+              READKEY. Syst.Var:nap = keylabel(LASTKEY).
 
-              if lookup(Syst.CUICommon:nap,"F4") > 0 THEN UNDO, LEAVE.
+              if lookup(Syst.Var:nap,"F4") > 0 THEN UNDO, LEAVE.
 
               ELSE IF KEYLABEL(LASTKEY) = "F9" AND 
                    LOOKUP(FRAME-FIELD,"CustIDType,HonTitle,lcCustZipCode") > 0
@@ -54,13 +54,13 @@
                   END. 
 
                   ELSE IF FRAME-FIELD = "lcCustZipCode" THEN DO:
-                     ASSIGN Syst.CUICommon:si-recid = ?
+                     ASSIGN Syst.Var:si-recid = ?
                             siirto   = "".
                      RUN Help/h-postcode.p.
                      /* several rows with same zipcode */
-                     IF Syst.CUICommon:si-recid NE ? THEN DO:
+                     IF Syst.Var:si-recid NE ? THEN DO:
                         DISPLAY siirto @ lcCustZipCode WITH FRAME lis.
-                        FIND PostCode WHERE RECID(PostCode) = Syst.CUICommon:si-recid
+                        FIND PostCode WHERE RECID(PostCode) = Syst.Var:si-recid
                            NO-LOCK NO-ERROR.
                         IF AVAILABLE PostCode THEN DO:
                            DISPLAY PostCode.PostOffice @ lcCustPostOffice
@@ -81,12 +81,12 @@
                      END.      
                   END.
                   
-                  Syst.CUICommon:ehto = 9.
+                  Syst.Var:ehto = 9.
                   RUN Syst/ufkey.p.
                   NEXT. 
               END.
 
-              ELSE IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
+              ELSE IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                  HIDE MESSAGE no-pause.
 
                 
@@ -252,7 +252,7 @@
                  
                  else if frame-field = "Category" THEN DO:
                     FIND FIRST CustCat where 
-                               CustCat.Brand    = Syst.CUICommon:gcBrand AND
+                               CustCat.Brand    = Syst.Var:gcBrand AND
                                CustCat.Category = INPUT FRAME lis Customer.Category 
                     no-lock no-error.
                     IF NOT AVAIL CustCat THEN DO:
@@ -339,7 +339,7 @@
                     END.
                     IF Customer.CustIDType <> INPUT FRAME lis Customer.CustIDType THEN DO:
                        FOR EACH CustCat NO-LOCK WHERE
-                                CustCat.Brand = Syst.CUICommon:gcBrand:
+                                CustCat.Brand = Syst.Var:gcBrand:
                            IF LOOKUP(INPUT FRAME lis Customer.CustIDType,
                                  CustCat.CustIDType) > 0 THEN DO:
                           DISPLAY 
@@ -377,7 +377,7 @@
               
               ELSE IF FRAME-FIELD = "DataProtected" THEN DO:
                  FIND FIRST Mobsub WHERE 
-                    Mobsub.Brand   = Syst.CUICommon:gcBrand AND
+                    Mobsub.Brand   = Syst.Var:gcBrand AND
                     Mobsub.Custnum = Customer.CustNum NO-LOCK NO-ERROR.
                  IF AVAIL Mobsub THEN DO:
                     MESSAGE "The Function is not allowed." SKIP

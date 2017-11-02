@@ -38,7 +38,7 @@ FUNCTION fCreateMNPDump RETURNS LOGICAL
    OUTPUT STREAM sdump TO value (icFile).
    
    FOR EACH MNPProcess WHERE
-            MNPProcess.Brand = Syst.CUICommon:gcBrand AND
+            MNPProcess.Brand = Syst.Var:gcBrand AND
             MNPProcess.MNPType = iiType NO-LOCK:
       
       ASSIGN

@@ -8,7 +8,7 @@ DEFINE INPUT PARAMETER piPPReq AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcTCPModule  AS CHARACTER NO-UNDO INITIAL "Gwy/tcpgwy.p" . 
 
 FIND FIRST TMSParam where
-           TMSParam.Brand      = Syst.CUICommon:gcBrand AND 
+           TMSParam.Brand      = Syst.Var:gcBrand AND 
            TMSParam.ParamCode  =  "TCPModule" NO-LOCK NO-ERROR.
 IF AVAIL TMSParam THEN 
          lcTCPModule = TMSParam.CharVal.

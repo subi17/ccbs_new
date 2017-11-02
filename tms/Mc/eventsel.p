@@ -28,7 +28,7 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'Eventlog'}
 
-&GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+&GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
 {Func/lib/eventlog.i}
 
@@ -75,8 +75,8 @@ form
     Eventlog.Key         format "x(23)" column-label "Key"
     EventLog.EventLogStatus FORMAT ">9" COLUMN-LABEL "Type"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
     " Eventlog BROWSER "
     + string(TODAY,"99-99-99") + " "
     FRAME sel.
@@ -91,8 +91,8 @@ form
     Eventlog.Key      
     muutokset VIEW-AS EDITOR size-chars 60 BY 10
 WITH  OVERLAY ROW 3 centered
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     2 columns
     FRAME lis.
@@ -103,22 +103,22 @@ form /* seek Eventlog  BY  Date */
     "Time..:"
     lcevtime
     HELP "Enter Time 99:99:99"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Date & Time"
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Date & Time"
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Eventlog  BY UserCode */
     "User.:" UserCode
     HELP "Enter Usercode" SKIP
     "Date.:" ldate
     HELP "Enter Date"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND User "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND User "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek Eventlog  BY  TableName and keyvalue */
     "Table..:" lcTable HELP "Enter TableName or beginning of it " SKIP
     "Key....:" lcKey   HELP "Enter KeyValue or beginning of it"
-            WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Table & Key "
-                COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
+            WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Table & Key "
+                COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f3.
 
 IF icTableName > "" 
 THEN ASSIGN MaxOrder = 1    
@@ -131,7 +131,7 @@ IF ENTRY(1,icKey,CHR(255)) = "#BEGIN" THEN ASSIGN
    llBegins = TRUE.
 ELSE llBegins = FALSE.
    
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "  By Date  ,  By User  ,  By Table ".
@@ -199,15 +199,15 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        Syst.CUICommon:ufk[1]= 28  Syst.CUICommon:ufk[2]= 542 Syst.CUICommon:ufk[3]= 2121 Syst.CUICommon:ufk[4]= 0
-        Syst.CUICommon:ufk[5]=265 Syst.CUICommon:ufk[6] = 0
-        Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-        Syst.CUICommon:ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 28  Syst.Var:ufk[2]= 542 Syst.Var:ufk[3]= 2121 Syst.Var:ufk[4]= 0
+        Syst.Var:ufk[5]=265 Syst.Var:ufk[6] = 0
+        Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
         
         IF icTableName > "" THEN ASSIGN
-           Syst.CUICommon:ufk[1] = 0 
-           Syst.CUICommon:ufk[2] = 0
-           Syst.CUICommon:ufk[3] = 0.
+           Syst.Var:ufk[1] = 0 
+           Syst.Var:ufk[2] = 0
+           Syst.Var:ufk[3] = 0.
            
         RUN Syst/ufkey.p.
       END.
@@ -215,21 +215,21 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW Eventlog.EventDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Eventlog.EventDate WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) Eventlog.EventDate WITH FRAME sel.
       END.
       ELSE  IF order = 2 THEN DO:
         CHOOSE ROW Eventlog.UserCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Eventlog.UserCode WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) Eventlog.UserCode WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
         CHOOSE ROW Eventlog.TableName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Eventlog.TableName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) Eventlog.TableName WITH FRAME sel.
       END.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(Syst.CUICommon:nap,"8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -238,10 +238,10 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -265,10 +265,10 @@ REPEAT WITH FRAME sel:
         NEXT.
       END.
 
-      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -293,7 +293,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -319,7 +319,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND Eventlog WHERE recid(Eventlog) = memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -343,7 +343,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -358,10 +358,10 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */                          
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND Syst.CUICommon:ufk[1] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 AND Syst.Var:ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        ASSIGN
              lcevtime = "".
@@ -404,11 +404,11 @@ REPEAT WITH FRAME sel:
      END. /* Search-1 */
 
      /* Search BY col 2 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 AND Syst.CUICommon:ufk[2] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 AND Syst.Var:ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        SET UserCode 
            ldate
@@ -433,10 +433,10 @@ REPEAT WITH FRAME sel:
      END. /* Search-2 */
 
      /* Search BY column 3 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 AND Syst.CUICommon:ufk[3] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 AND Syst.Var:ufk[3] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f3.
        ASSIGN
              lcTable = ""
@@ -469,7 +469,7 @@ REPEAT WITH FRAME sel:
        END.
      END. /* Search-3 */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5,enter,return") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5,enter,return") > 0 THEN DO:
 
         RUN local-find-this (FALSE).
 
@@ -485,25 +485,25 @@ REPEAT WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = recid(Eventlog) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN memory = recid(Eventlog) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 PROCEDURE local-find-this:

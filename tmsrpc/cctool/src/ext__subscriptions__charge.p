@@ -16,8 +16,8 @@
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fcustpl.i}
 
@@ -51,7 +51,7 @@ IF LOOKUP("amount", lcStruct) GT 0 THEN
 ELSE DO:
 
   FIND FeeModel WHERE 
-       FeeModel.Brand = Syst.CUICommon:gcBrand AND
+       FeeModel.Brand = Syst.Var:gcBrand AND
        FeeModel.FeeModel = lcEventId NO-LOCK NO-ERROR.
   IF NOT AVAIL FeeModel THEN DO:
             RETURN appl_err(SUBST("Charge/Comp billing event  &1 not found", lcEventId)).
@@ -63,7 +63,7 @@ ELSE DO:
                                    TODAY).
 
   FIND FIRST FMItem NO-LOCK  WHERE
-             FMItem.Brand     = Syst.CUICommon:gcBrand       AND
+             FMItem.Brand     = Syst.Var:gcBrand       AND
              FMItem.FeeModel  = FeeModel.FeeModel AND
              FMItem.PriceList = lcPriceList AND
              FMItem.FromDate <= TODAY     AND
@@ -103,7 +103,7 @@ END.
 
 RUN Mm/create_charge_comp.p( {&REQUEST_SOURCE_EXTERNAL_API} ,
                        liMsSeq,
-                       (IF MobSub.PayType THEN Syst.CUICommon:katun ELSE ""), 
+                       (IF MobSub.PayType THEN Syst.Var:katun ELSE ""), 
                        ldAmount,
                        lcEventId,
                        0,

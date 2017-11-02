@@ -8,8 +8,8 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Inv/printdoc1tt.i}
 {Func/cparam2.i}
 {Func/duplicate_invoice.i}
@@ -39,7 +39,7 @@ ldeNow = Func.Common:mMakeTS().
       
 DUP_REQ_LOOP:      
 FOR EACH MsRequest WHERE
-   MsRequest.Brand = Syst.CUICommon:gcBrand AND
+   MsRequest.Brand = Syst.Var:gcBrand AND
    MsRequest.ReqType = {&REQTYPE_DUPLICATE_INVOICE} AND
    MsRequest.ReqStatus = {&REQUEST_STATUS_NEW} AND 
    MsRequest.ActStamp <= ldeNow NO-LOCK

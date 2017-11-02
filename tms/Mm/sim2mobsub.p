@@ -86,7 +86,7 @@ SKIP(2)
 "  Time ....:" MSISDN.PortingTime            SKIP(1)
 
 WITH
-   CENTERED WIDTH 60 OVERLAY COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc)
+   CENTERED WIDTH 60 OVERLAY COLOR VALUE(Syst.Var:cfc) TITLE COLOR VALUE(Syst.Var:ctc)
    " Activate subscription  " + mobsub.cli + " "
    NO-LABELS FRAME lis.
 DEF VAR s AS INT NO-UNDO.
@@ -107,13 +107,13 @@ REPEAT WITH FRAME lis:
    
    action:
    REPEAT WITH FRAME lis:
-      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 0 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ufk[5] = 1967  Syst.CUICommon:ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 0 Syst.Var:ufk[8] = 8 Syst.Var:ufk[5] = 1967  Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
-      IF Syst.CUICommon:toimi = 1 THEN LEAVE action.
-      IF Syst.CUICommon:toimi = 8 THEN DO:
+      IF Syst.Var:toimi = 1 THEN LEAVE action.
+      IF Syst.Var:toimi = 8 THEN DO:
          LEAVE loop.
       END.
-      ELSE IF Syst.CUICommon:toimi = 5 THEN DO :
+      ELSE IF Syst.Var:toimi = 5 THEN DO :
          
          FIND Mobsub   WHERE
               Mobsub.msseq = msseq NO-ERROR.
@@ -175,7 +175,7 @@ REPEAT WITH FRAME lis:
          WITH FRAME lis EDITING:
             READKEY.
             
-            IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                PAUSE 0.
                IF FRAME-FIELD = "icc" THEN DO:
                   IF INPUT FRAME LIS MobSub.ICC = "" THEN DO:

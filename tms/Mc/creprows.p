@@ -93,8 +93,8 @@ FOR EACH SubInvoice OF Invoice NO-LOCK WHERE
    EMPTY TEMP-TABLE ttCall.
 
    fMobCDRCollect(INPUT "post",
-                  INPUT Syst.CUICommon:gcBrand,
-                  INPUT Syst.CUICommon:katun,
+                  INPUT Syst.Var:gcBrand,
+                  INPUT Syst.Var:katun,
                   INPUT IF Invoice.FirstCall NE ?   
                         THEN Invoice.FirstCall
                         ELSE Invoice.FromDate,

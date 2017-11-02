@@ -23,7 +23,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 END.
@@ -52,7 +52,7 @@ FIND Customer OF PaidInv NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Customer THEN RETURN "ERROR:Unknown customer".
 
 FIND InvGroup where 
-     InvGroup.Brand    = Syst.CUICommon:gcBrand AND 
+     InvGroup.Brand    = Syst.Var:gcBrand AND 
      InvGroup.InvGroup = Customer.InvGroup NO-LOCK NO-ERROR.
 
 ASSIGN 

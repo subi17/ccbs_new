@@ -9,8 +9,8 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Func/cparam2.i}
 {Func/email.i}
 
@@ -45,7 +45,7 @@ ELSE ASSIGN
 ldeTo = Func.Common:mMake2DT(DATE(MONTH(TODAY), 2, YEAR(TODAY)), 0).
    
 FOR EACH ErrorLog WHERE
-         ErrorLog.Brand = Syst.CUICommon:gcBrand AND
+         ErrorLog.Brand = Syst.Var:gcBrand AND
          ErrorLog.ActionID = "STCBalanceQuery" AND
          ErrorLog.ActionTS >= ldeFrom AND
          ErrorLog.ActionTS < ldeTo NO-LOCK:

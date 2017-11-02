@@ -28,7 +28,7 @@ form
    "      Type :" lDef NO-LABEL 
    help "Total sum or Specification"
    SKIP
-with title " " + Syst.CUICommon:ynimi + " UNREGISTERED PAYMENTS " +
+with title " " + Syst.Var:ynimi + " UNREGISTERED PAYMENTS " +
            STRING(TODAY,"99-99-99") + " "
    ROW 1 centered Size 80 by 19 FRAME valinta.
 
@@ -40,25 +40,25 @@ DISPLAY
    lDef
 WITH FRAME valinta. 
 ASSIGN ufkey = TRUE
-       Syst.CUICommon:nap   = "first". 
+       Syst.Var:nap   = "first". 
 
 toimi:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       IF ufkey THEN DO:
          ASSIGN
-         Syst.CUICommon:ufk[1]= 132 
-         Syst.CUICommon:ufk[2]= 0  Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0 
-         Syst.CUICommon:ufk[5]= 63 Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 
-         Syst.CUICommon:ufk[9]= 1
-         Syst.CUICommon:ehto = 3 ufkey = FALSE.
+         Syst.Var:ufk[1]= 132 
+         Syst.Var:ufk[2]= 0  Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0 
+         Syst.Var:ufk[5]= 63 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 
+         Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
           READKEY.
           ASSIGN
-          Syst.CUICommon:nap = keylabel(LASTKEY).
-      if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+          Syst.Var:nap = keylabel(LASTKEY).
+      if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          repeat WITH FRAME valinta ON ENDKEY UNDO, LEAVE:
             UPDATE 
                 lDate
@@ -69,13 +69,13 @@ toimi:
          NEXT toimi.
       END.
 
-      else if lookup(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"5,f5") > 0 THEN DO:
          LEAVE toimi.
       END.
-      else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"8,f8") > 0 THEN DO:
          RETURN.
       END.
-   END. /* Syst.CUICommon:toimi */
+   END. /* Syst.Var:toimi */
 
 ASSIGN tila = TRUE.
 {Syst/utuloste.i "return"}

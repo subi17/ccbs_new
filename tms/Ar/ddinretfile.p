@@ -85,12 +85,12 @@ FUNCTION fErrorLog RETURNS DECIMAL
    DO TRANS:
       /* save to db for reporting */
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
              ErrorLog.ActionID  = "DDRET"
              ErrorLog.TableName = "Invoice"
              ErrorLog.KeyValue  = STRING(liInvNum)
              ErrorLog.ActionTS  = ldCurrStamp
-             ErrorLog.UserCode  = Syst.CUICommon:katun
+             ErrorLog.UserCode  = Syst.Var:katun
              ErrorLog.ErrorMsg  = icMessage.
    END.
       

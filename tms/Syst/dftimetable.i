@@ -149,7 +149,7 @@ FUNCTION fResetDumpTrigger RETURNS LOGICAL
      INPUT lcDumpMode AS CHARACTER):
 
    FIND FIRST DFTimeTable EXCLUSIVE-LOCK WHERE 
-              DFTimeTable.Brand       = Syst.CUICommon:gcBrand    AND 
+              DFTimeTable.Brand       = Syst.Var:gcBrand    AND 
               DFTimeTable.DumpId      = liDumpID   AND 
               DFTimeTable.DumpMode    = lcDumpMode AND 
               DFTimeTable.DumpTrigger = YES        NO-ERROR. 

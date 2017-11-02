@@ -230,7 +230,7 @@ FUNCTION fIsPenalty RETURNS LOG
             bDCCLI.ValidTo   >= TODAY        AND
             bDCCLI.CreateFees = TRUE:
       IF CAN-FIND(DayCampaign WHERE
-                  DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+                  DayCampaign.Brand = Syst.Var:gcBrand AND
                   DayCampaign.DCEvent = bDCCLI.DCEvent AND
                   DayCampaign.TermFeeModel NE "" AND
                   DayCampaign.TermFeeCalc > 0) THEN DO:

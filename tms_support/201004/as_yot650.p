@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "YOT-649".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "YOT-649".
+Syst.Var:gcBrand = "1".
 {Func/orderfunc.i}
 {Syst/tmsconst.i}
 
@@ -41,7 +41,7 @@ repeat:
         
    /* Cancel pending SMS messages */
    FOR EACH CallAlarm WHERE
-            CallAlarm.Brand = Syst.CUICommon:gcBrand AND
+            CallAlarm.Brand = Syst.Var:gcBrand AND
             CallAlarm.CLI = Order.CLI AND
             CallAlarm.DeliStat = 1 AND
             CallAlarm.CreditType = 12 EXCLUSIVE-LOCK:
@@ -66,10 +66,10 @@ repeat:
             CREATE ActionLog.
             ASSIGN
                ActionLog.ActionTS     = Func.Common:mMakeTS()
-               ActionLog.Brand        = Syst.CUICommon:gcBrand  
+               ActionLog.Brand        = Syst.Var:gcBrand  
                ActionLog.TableName    = "Order"  
                ActionLog.KeyValue     = STRING(Order.Orderid)
-               ActionLog.UserCode     = Syst.CUICommon:katun
+               ActionLog.UserCode     = Syst.Var:katun
                ActionLog.ActionID     = "SIMRELEASE"
                ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
                ActionLog.ActionStatus = 2

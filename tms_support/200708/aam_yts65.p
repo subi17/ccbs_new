@@ -80,7 +80,7 @@ by ttorder.crstamp:
 
       j = j + 1.
       CREATE Memo.
-      ASSIGN Memo.Brand     = Syst.CUICommon:gcBrand
+      ASSIGN Memo.Brand     = Syst.Var:gcBrand
              Memo.HostTable = "Order"
              Memo.KeyValue  = STRING(Order.OrderID)
              Memo.CustNum   = Order.CustNum
@@ -130,7 +130,7 @@ by ttorder.crstamp:
 
       j = j + 1.
       CREATE Memo.
-      ASSIGN Memo.Brand     = Syst.CUICommon:gcBrand
+      ASSIGN Memo.Brand     = Syst.Var:gcBrand
              Memo.HostTable = "Order"
              Memo.KeyValue  = STRING(Order.OrderID)
              Memo.CustNum   = Order.CustNum
@@ -207,7 +207,7 @@ by ttorder.crstamp:
 
       j = j + 1.
       CREATE Memo.
-      ASSIGN Memo.Brand     = Syst.CUICommon:gcBrand
+      ASSIGN Memo.Brand     = Syst.Var:gcBrand
              Memo.HostTable = "Order"
              Memo.KeyValue  = STRING(Order.OrderID)
              Memo.CustNum   = Order.CustNum

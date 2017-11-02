@@ -29,8 +29,8 @@
 
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-Syst.CUICommon:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
+Syst.Var:gcBrand = "1".
 {Func/mdub.i}
 {Syst/tmsconst.i}
 {Func/msreqfunc.i}
@@ -83,7 +83,7 @@ ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName,lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
-Syst.CUICommon:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
+Syst.Var:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
 ldaBonoVoipRemovalDate   = DATE(fCParamC("BonoVoipRemovalDate")).
 
@@ -109,7 +109,7 @@ IF CAN-FIND( FIRST MsRequest NO-LOCK WHERE
 lcBONOContracts = fCParamC("BONO_CONTRACTS").
 
 FIND FIRST DayCampaign NO-LOCK WHERE
-           DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+           DayCampaign.Brand = Syst.Var:gcBrand AND
            DayCampaign.DCEvent = pcBundleId NO-ERROR.
 IF NOT AVAIL DayCampaign THEN RETURN appl_err("DayCampaign not defined").
 
@@ -124,7 +124,7 @@ ELSE IF TODAY GE ldaBonoVoipRemovalDate AND
    THEN RETURN appl_err("Incorrect Bundle Id").
 
 /* Check if subscription type is not compatible with bundle */
-IF fMatrixAnalyse(Syst.CUICommon:gcBrand,
+IF fMatrixAnalyse(Syst.Var:gcBrand,
                   "PERCONTR",
                   "PerContract;SubsTypeTo",
                   pcBundleId + ";" + MobSub.CLIType,

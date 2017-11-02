@@ -52,7 +52,7 @@ IF MobSub.PayType THEN DO:
     ASSIGN
           PrePaidRequest.TSRequest   = Func.Common:mMakeTS()
           PrePaidRequest.UserCode    = icUserCode 
-          PrePaidRequest.Brand       = Syst.CUICommon:gcBrand
+          PrePaidRequest.Brand       = Syst.Var:gcBrand
           PrePaidRequest.PPRequest   =  NEXT-VALUE(PrePaidReq)
           PrePaidRequest.PPStatus    = 0
           PrePaidRequest.Request     = "AdjustmentTRequest"

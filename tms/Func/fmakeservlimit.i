@@ -27,7 +27,7 @@ DEF VAR lcDSSBundleId       AS CHAR NO-UNDO.
 
 IF llDoEvent THEN DO:
 
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -137,10 +137,10 @@ FUNCTION fMakeServLimit RETURN LOGICAL
    /* Activate */ 
 
    FOR EACH ServiceLimitGroup NO-LOCK WHERE 
-            ServiceLimitGroup.Brand     = Syst.CUICommon:gcBrand AND
+            ServiceLimitGroup.Brand     = Syst.Var:gcBrand AND
             ServiceLimitGroup.GroupCode = icServiceLimitGroup,
       FIRST bContract WHERE
-            bContract.Brand = Syst.CUICommon:gcBrand AND
+            bContract.Brand = Syst.Var:gcBrand AND
             bContract.DCEvent = ServiceLimitGroup.GroupCode,
        EACH ServiceLimit NO-LOCK WHERE 
             ServiceLimit.GroupCode  = icServiceLimitGroup AND 
@@ -330,10 +330,10 @@ FUNCTION fMakeServLPool RETURN LOGICAL
    END.
 
    FOR FIRST ServiceLimitGroup NO-LOCK WHERE 
-             ServiceLimitGroup.Brand     = Syst.CUICommon:gcBrand AND
+             ServiceLimitGroup.Brand     = Syst.Var:gcBrand AND
              ServiceLimitGroup.GroupCode = icServiceLimitGroup,
        FIRST DayCampaign WHERE
-             DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+             DayCampaign.Brand = Syst.Var:gcBrand AND
              DayCampaign.DCEvent = ServiceLimitGroup.GroupCode,
         EACH ServiceLimit NO-LOCK WHERE 
              ServiceLimit.GroupCode  = icServiceLimitGroup AND 

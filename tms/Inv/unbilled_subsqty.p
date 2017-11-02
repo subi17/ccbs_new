@@ -286,7 +286,7 @@ PROCEDURE pInitialize:
       ldaBillPeriodEnd =  ldaToPeriod.
 
    FOR FIRST ReportConf NO-LOCK WHERE
-             ReportConf.Brand    = Syst.CUICommon:gcBrand AND
+             ReportConf.Brand    = Syst.Var:gcBrand AND
              ReportConf.ReportID = "UnbilledSubsQty":
 
       FOR EACH ReportConfRow OF ReportConf NO-LOCK WHERE
@@ -311,7 +311,7 @@ PROCEDURE pCollectSubscriptions:
    
    /* first get billed ones */
    FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
-            Invoice.Brand = Syst.CUICommon:gcBrand        AND
+            Invoice.Brand = Syst.Var:gcBrand        AND
             Invoice.InvDate >= idaInvDate1 AND
             Invoice.InvDate <= idaInvDate2 AND
             Invoice.InvType  = 1,
@@ -326,7 +326,7 @@ PROCEDURE pCollectSubscriptions:
       billing period */
    OpenSubscriptions:
    FOR EACH MsOwner NO-LOCK WHERE
-            MsOwner.Brand   = Syst.CUICommon:gcBrand AND
+            MsOwner.Brand   = Syst.Var:gcBrand AND
             MsOwner.PayType = FALSE   AND
             MsOwner.TsEnd  >= ldFromPeriod AND
             MsOwner.TsBeg  <= ldToPeriod:
@@ -509,7 +509,7 @@ PROCEDURE pCollectCustomers:
    END.
    
    FOR EACH FixedFee NO-LOCK USE-INDEX HostTable WHERE
-            FixedFee.Brand     = Syst.CUICommon:gcBrand AND
+            FixedFee.Brand     = Syst.Var:gcBrand AND
             FixedFee.HostTable = "Customer" AND
             FixedFee.InUse     = TRUE,
       FIRST FFItem OF FixedFee NO-LOCK WHERE

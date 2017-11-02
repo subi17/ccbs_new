@@ -36,7 +36,7 @@ IF NOT CONNECTED(icOldDB) THEN DO:
 
    llAlreadyConnected = FALSE. 
    fInitializeConnectTables(icOldCDR,"old").
-   RUN pDirectConnect2Dbs(Syst.CUICommon:gcBrand,
+   RUN pDirectConnect2Dbs(Syst.Var:gcBrand,
                           "old",
                           idaDateSt,
                           idaDateSt).

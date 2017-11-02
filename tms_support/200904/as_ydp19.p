@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "anttis".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 
 
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO. 
@@ -132,8 +132,8 @@ FOR EACH ttCli NO-LOCK:
         Solog.MsSeq        = msowner.MsSeq 
         Solog.CLI          = msowner.Cli 
         Solog.Stat         = 0     /* just created */
-        Solog.Brand        = Syst.CUICommon:gcBrand
-        Solog.Users        = Syst.CUICommon:katun.
+        Solog.Brand        = Syst.Var:gcBrand
+        Solog.Users        = Syst.Var:katun.
    ASSIGN     
         Solog.TimeSlotTMS  = ldeActStamp
         Solog.ActivationTS = ldeActStamp
@@ -184,8 +184,8 @@ FOR EACH mobsub where
         Solog.MsSeq        = mobSub.MsSeq 
         Solog.CLI          = mobSub.Cli 
         Solog.Stat         = 0     /* just created */
-        Solog.Brand        = Syst.CUICommon:gcBrand
-        Solog.Users        = Syst.CUICommon:katun.
+        Solog.Brand        = Syst.Var:gcBrand
+        Solog.Users        = Syst.Var:katun.
    ASSIGN     
         Solog.TimeSlotTMS  = ldeActStamp
         Solog.ActivationTS = ldeActStamp

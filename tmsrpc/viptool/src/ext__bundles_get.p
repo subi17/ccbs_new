@@ -15,8 +15,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-Syst.CUICommon:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId. 
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId. 
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Func/matrix.i}
@@ -47,7 +47,7 @@ IF LOOKUP(pcBundleId,lcBONOContracts + ",BONO_VOIP") = 0 AND
    RETURN appl_err("Incorrect Bundle Id").
 
 /* Check if subscription type is not compatible with bundle */
-IF fMatrixAnalyse(Syst.CUICommon:gcBrand,
+IF fMatrixAnalyse(Syst.Var:gcBrand,
                   "PERCONTR",
                   "PerContract;SubsTypeTo",
                   pcBundleId + ";" + MobSub.CLIType,
@@ -59,7 +59,7 @@ liStatus = 0. /* deactivated */
 
 /* if exist any MDUB valid to the future then service is activated */   
 FOR EACH ServiceLimitGroup NO-LOCK WHERE 
-         ServiceLimitGroup.Brand     = Syst.CUICommon:gcBrand AND
+         ServiceLimitGroup.Brand     = Syst.Var:gcBrand AND
          ServiceLimitGroup.GroupCode = pcBundleId,
     EACH ServiceLimit NO-LOCK WHERE 
          ServiceLimit.GroupCode  = pcBundleId AND 

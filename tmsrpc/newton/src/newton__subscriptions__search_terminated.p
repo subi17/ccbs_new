@@ -19,8 +19,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Newton".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Newton".
+Syst.Var:gcBrand = "1".
 {newton/src/json_key.i}
 {Mm/fbundle.i}
 
@@ -138,7 +138,7 @@ IF pcSearchType EQ "msisdn" THEN DO:
    RELEASE ttOwner.
    FOR EACH termmobsub NO-LOCK WHERE
       termmobsub.cli = pcInput AND
-      termmobsub.brand = Syst.CUICommon:gcBrand,
+      termmobsub.brand = Syst.Var:gcBrand,
       FIRST Customer NO-LOCK WHERE
             Customer.Custnum = TermMobSub.Custnum: 
    
@@ -169,7 +169,7 @@ ELSE IF pcSearchType EQ "fixed_number" THEN DO:
    RELEASE ttOwner.
 
    FOR EACH termmobsub NO-LOCK WHERE
-      termmobsub.brand = Syst.CUICommon:gcBrand AND
+      termmobsub.brand = Syst.Var:gcBrand AND
       termmobsub.FixedNumber = pcInput,
       FIRST Customer NO-LOCK WHERE
             Customer.Custnum = TermMobSub.Custnum:
@@ -200,10 +200,10 @@ ELSE IF pcSearchType EQ "imsi" THEN DO:
    
    RELEASE ttOwner.
    FOR EACH TermMobsub NO-LOCK WHERE
-      TermMobSub.Brand = Syst.CUICommon:gcBrand AND
+      TermMobSub.Brand = Syst.Var:gcBrand AND
       TermMobSub.IMSI  = pcInput,
       FIRST Customer NO-LOCK WHERE
-            Customer.Brand = Syst.CUICommon:gcBrand AND
+            Customer.Brand = Syst.Var:gcBrand AND
             Customer.Custnum = TermMobSub.Custnum: 
    
       IF NOT fIsViewableTermMobsub(TermMobSub.MsSeq) THEN NEXT.
@@ -233,7 +233,7 @@ ELSE IF pcSearchType EQ "custnum" AND liOwner NE 0 THEN DO:
 
    FIND Customer NO-LOCK WHERE
         Customer.CustNum = liOwner AND
-        Customer.brand = Syst.CUICommon:gcBrand NO-ERROR.
+        Customer.brand = Syst.Var:gcBrand NO-ERROR.
    IF NOT AVAILABLE Customer THEN
       RETURN appl_err(SUBST("Customer &1 not found 1", liOwner)).
    
@@ -247,7 +247,7 @@ END.
 ELSE IF pcSearchType EQ "person_id" THEN DO:
    
    FIND Customer NO-LOCK WHERE
-        Customer.brand = Syst.CUICommon:gcBrand AND
+        Customer.brand = Syst.Var:gcBrand AND
         Customer.OrgId = pcInput AND
         Customer.Roles NE "inactive" USE-INDEX OrgId NO-ERROR.
 
@@ -268,9 +268,9 @@ ELSE RETURN appl_err(SUBST("Unknown search type &1", pcSearchType)).
 FOR EACH ttOwner NO-LOCK,
     EACH TermMobSub NO-LOCK WHERE
          TermMobSub.Custnum = ttOwner.Custnum AND
-         TermMobSub.brand = Syst.CUICommon:gcBrand,
+         TermMobSub.brand = Syst.Var:gcBrand,
     FIRST Customer NO-LOCK WHERE
-          Customer.brand = Syst.CUICommon:gcBrand AND
+          Customer.brand = Syst.Var:gcBrand AND
           Customer.custnum = TermMobSub.custnum:
      
     IF llSearchByMobsub AND (pcInput EQ TermMobSub.CLI OR

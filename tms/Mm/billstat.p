@@ -54,7 +54,7 @@ rajat:
 repeat with frame rajat:
 
    pause 0.
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
    update 
    date1 date2
@@ -63,17 +63,17 @@ repeat with frame rajat:
 
 toimi:
    repeat with frame toimi:
-      assign Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0 Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8.
+      assign Syst.Var:ufk = 0 Syst.Var:ehto = 0 Syst.Var:ufk[1] = 132 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8.
       RUN Syst/ufkey.p.
-      if Syst.CUICommon:toimi = 1 then next  rajat.
-      if Syst.CUICommon:toimi = 8 then leave rajat.
-      if Syst.CUICommon:toimi = 5 then leave toimi.
+      if Syst.Var:toimi = 1 then next  rajat.
+      if Syst.Var:toimi = 8 then leave rajat.
+      if Syst.Var:toimi = 5 then leave toimi.
    end.
 
 
 
    FOR EACH Invoice WHERE
-            Invoice.Brand    = Syst.CUICommon:gcBrand AND 
+            Invoice.Brand    = Syst.Var:gcBrand AND 
             Invoice.InvDate >= date1   AND
             Invoice.InvDate <= date2  NO-LOCK.
 

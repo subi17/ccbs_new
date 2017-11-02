@@ -11,8 +11,8 @@ Version ......: Yoigo
 
 {Syst/commpaa.i}
 ASSIGN
-   Syst.CUICommon:katun = "Qvantel"
-   Syst.CUICommon:gcBrand = "1".
+   Syst.Var:katun = "Qvantel"
+   Syst.Var:gcBrand = "1".
 
 DEFINE VARIABLE ldadate AS DATE FORMAT "99.99.9999" NO-UNDO.
 DEF VAR ufkey AS LOG NO-UNDO INIT TRUE.
@@ -59,7 +59,7 @@ lcTypes = "0,81,9".
 lcStatuses = "0,1,2,3,4,5,6,7,8". 
 lcTypeDesc = "---STC---,---BTC---,---Manual contract terminations---".
 
-Syst.CUICommon:ehto = 4. RUN Syst/ufkey.p.
+Syst.Var:ehto = 4. RUN Syst/ufkey.p.
 
 LOOPPI:
 DO liTypeLoop = 1 TO NUM-ENTRIES(lcTypes) WITH FRAME lis:
@@ -91,7 +91,7 @@ DO liTypeLoop = 1 TO NUM-ENTRIES(lcTypes) WITH FRAME lis:
       DISP lcDetails WITH FRAME lis.
 
       FOR EACH msrequest NO-LOCK where
-               msrequest.brand = Syst.CUICommon:gcBrand and
+               msrequest.brand = Syst.Var:gcBrand and
                msrequest.reqtype = liType and
                msrequest.reqstatus = liStatus and
                msrequest.actstamp = ldeDate :
@@ -149,15 +149,15 @@ PROCEDURE pUserInput:
       WITH FRAME lis EDITING:
       
          IF ufkey THEN DO:
-            ASSIGN Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+            ASSIGN Syst.Var:ehto = 9. RUN Syst/ufkey.p.
             ufkey = false.
          END.
 
          READKEY.
          
-         Syst.CUICommon:nap = keylabel(lastkey).
+         Syst.Var:nap = keylabel(lastkey).
 
-         IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
 
          END.
 

@@ -1,8 +1,8 @@
 /* Set Solog to status Ok for a defined list of ServCom */
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "fakeSolog".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "fakeSolog".
+Syst.Var:gcBrand = "1".
 {Func/msreqfunc.i}
 {Func/fgettxt.i}
 {Func/fmakesms.i}
@@ -85,7 +85,7 @@ DEFINE VARIABLE liLang      AS INTEGER   NO-UNDO.
 DEFINE VARIABLE ldeSMSTime  AS DEC       NO-UNDO.
 
 FOR EACH MsRequest NO-LOCK WHERE
-         MsRequest.Brand = Syst.CUICommon:gcBrand AND
+         MsRequest.Brand = Syst.Var:gcBrand AND
          LOOKUP(STRING(MsRequest.ReqType),"0,1,13,15,18,19,82,83") > 0 AND
          MsRequest.ReqStatus = 5 :
         /*   AND
@@ -100,7 +100,7 @@ FOR EACH MsRequest NO-LOCK WHERE
          (liCli >= 722600000 AND liCli <= 722600009)) THEN NEXT.
 
       FIND SoLog WHERE
-           Solog.Brand = Syst.CUICommon:gcBrand AND
+           Solog.Brand = Syst.Var:gcBrand AND
            SoLog.MsSeq = MsRequest.MsSeq AND
            SoLog.Stat = 0 AND
            SoLog.MsRequest = MsRequest.MsRequest

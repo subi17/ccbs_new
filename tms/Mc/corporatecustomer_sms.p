@@ -8,8 +8,8 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "cron".
+Syst.Var:gcBrand = "1".
 {Func/fgettxt.i}
 {Func/fmakesms.i}
 {Func/transname.i}
@@ -57,7 +57,7 @@ FUNCTION checkNewSubscriptions RETURNS LOGICAL:
    DO liStatus = 1 TO 99:
 
       FOR EACH Mobsub NO-LOCK WHERE 
-               MobSub.Brand  = Syst.CUICommon:gcBrand AND
+               MobSub.Brand  = Syst.Var:gcBrand AND
                MobSub.MsStatus = liStatus AND
                MobSub.ActivationDate >= ldaDate AND
                MobSub.ActivationTS > ldeTs:
@@ -74,7 +74,7 @@ FUNCTION checkNewSubscriptions RETURNS LOGICAL:
          IF NOT AVAIL Customer THEN NEXT.
 
          FIND FIRST CallAlarm WHERE
-                    CallAlarm.Brand = Syst.CUICommon:gcBrand AND
+                    CallAlarm.Brand = Syst.Var:gcBrand AND
                     CallAlarm.CLI   = MobSub.CLI AND
                     CallAlarm.CreditType = 40 NO-LOCK NO-ERROR.
          IF AVAIL CallAlarm THEN NEXT. /* SMS is already created */
@@ -83,14 +83,14 @@ FUNCTION checkNewSubscriptions RETURNS LOGICAL:
             IF MobSub.TariffBundle = "" THEN NEXT.
 
             lcReplacedTxt = fConvBundleToBillItem(MobSub.TariffBundle).
-            lcReplacedTxt = fGetItemName(Syst.CUICommon:gcBrand,
+            lcReplacedTxt = fGetItemName(Syst.Var:gcBrand,
                                    "BillItem",
                                    lcReplacedTxt,
                                    Customer.Language,
                                    TODAY).
          END.
          ELSE
-            lcReplacedTxt = fGetItemName(Syst.CUICommon:gcBrand,
+            lcReplacedTxt = fGetItemName(Syst.Var:gcBrand,
                                   "CLIType",
                                   MobSub.CLIType,
                                   Customer.Language,

@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-Syst.CUICommon:katun = "ari".
+Syst.Var:katun = "ari".
 
 def var i as int no-undo.
 def var j as int no-undo.
@@ -33,12 +33,12 @@ function fwritememo returns logic
     iicust  as int):
     
    CREATE Memo.
-   ASSIGN Memo.Brand     = Syst.CUICommon:gcBrand
+   ASSIGN Memo.Brand     = Syst.Var:gcBrand
           Memo.HostTable = "MobSub"
           Memo.KeyValue  = STRING(iiMsSeq)
           Memo.CustNum   = iiCust
           Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-          Memo.CreUser   = Syst.CUICommon:katun 
+          Memo.CreUser   = Syst.Var:katun 
           Memo.MemoTitle = lcEvent
           Memo.MemoText  = lcMemo
           Memo.CreStamp  = ldCurrent.

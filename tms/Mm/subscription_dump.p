@@ -78,7 +78,7 @@ FOR EACH MobSub NO-LOCK
       LEAVE.
    END.
          
-   IF MobSub.Brand NE Syst.CUICommon:gcBrand THEN NEXT.
+   IF MobSub.Brand NE Syst.Var:gcBrand THEN NEXT.
 
    DO liCnt = 1 TO NUM-ENTRIES(lcDumpFields):
 

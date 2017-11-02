@@ -17,8 +17,8 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "anttis".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "anttis".
 DEFINE TEMP-TABLE ttRoamCDR LIKE RoamCDR.
 DEFINE TEMP-TABLE ttRoamGPRS LIKE RoamGPRS.
 {/apps/snet/200805/roamtariff2.i}
@@ -26,7 +26,7 @@ DEFINE TEMP-TABLE ttRoamGPRS LIKE RoamGPRS.
 {Func/cparam.i2}
 
 
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 /*
 DEFINE INPUT PARAMETER pcPLMN     AS CHARACTER NO-UNDO.
 DEFINE INPUT PARAMETER pdaDate1   AS DATE      NO-UNDO.

@@ -28,7 +28,7 @@ DEF VAR SmName  AS c  NO-UNDO.
 
 /* get default direcory name FOR OUTPUT */
 DO FOR TMSUser:
-   FIND TMSUser where TMSUser.UserCode = Syst.CUICommon:katun no-lock.
+   FIND TMSUser where TMSUser.UserCode = Syst.Var:katun no-lock.
    ASSIGN exdir = TMSUser.RepDir.
 END.
 
@@ -45,12 +45,12 @@ help "Earliest call date"
 "-" exdate2 format "99-99-99" help "Latest call date"  skip
 "                Directory for output .:" exdir format "x(30)" skip(7)
 WITH
-   width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + Syst.CUICommon:ynimi + " SUMMARY calls SMAN/PROD " + string(TODAY,"99-99-99") + " "
+   width 80 OVERLAY COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc)
+   " " + Syst.Var:ynimi + " SUMMARY calls SMAN/PROD " + string(TODAY,"99-99-99") + " "
    NO-LABELS FRAME rajat.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
 
 ASSIGN
 exdate2 = date(month(TODAY),1,year(TODAY)) - 1
@@ -63,7 +63,7 @@ hdr     = "Sman,Name,ProdCode,ProdName,AmtCalls,AmtMinPeak," +
 rajat:
 repeat WITH FRAME rajat:
 
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE
    exdate1
    exdate2 validate(input exdate2 >= input exdate1,"Invalid order !")
@@ -71,12 +71,12 @@ repeat WITH FRAME rajat:
 
 toimi:
    repeat WITH fram rajat:
-      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 15 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 15 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
 
-      IF Syst.CUICommon:toimi = 1 THEN NEXT rajat.
-      IF Syst.CUICommon:toimi = 8 THEN LEAVE rajat.
-      IF Syst.CUICommon:toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 1 THEN NEXT rajat.
+      IF Syst.Var:toimi = 8 THEN LEAVE rajat.
+      IF Syst.Var:toimi = 5 THEN DO:
          ok = FALSE.
          message "Do You REALLY want to start printing (Y/N) ?"
          UPDATE ok.
@@ -90,7 +90,7 @@ toimi:
    exPaymFile = exdir + "/smprod.txt".
    OUTPUT STREAM excel TO value(exPaymFile).
 
-   PUT STREAM excel UNFORMATTED Syst.CUICommon:ynimi.
+   PUT STREAM excel UNFORMATTED Syst.Var:ynimi.
    RUN Syst/uexskip.p(2).
    PUT STREAM excel UNFORMATTED
     "All calls by salesman/product during "

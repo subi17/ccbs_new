@@ -14,8 +14,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Newton".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Newton".
+Syst.Var:gcBrand = "1".
 
 DEF VAR pcTenant    AS CHARACTER NO-UNDO.
 DEF VAR resp_array  AS CHARACTER NO-UNDO.
@@ -32,7 +32,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 resp_array = add_array(response_toplevel_id, "").
 
 FOR EACH MNPOperator WHERE
-         MNPOperator.Brand EQ Syst.CUICommon:gcBrand AND 
+         MNPOperator.Brand EQ Syst.Var:gcBrand AND 
          MNPOperator.Active NE ? NO-LOCK:
    resp_struct = add_struct(resp_array, "").
    add_string(resp_struct, "brand", fConvertTenantToBrand(pcTenant)).

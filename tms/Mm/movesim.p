@@ -37,7 +37,7 @@ DEF BUFFER xSIM FOR SIM.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -75,7 +75,7 @@ WITH
    width 80
    OVERLAY
    TITLE 
-   " " + Syst.CUICommon:ynimi + 
+   " " + Syst.Var:ynimi + 
    " MOVE SIM CARDS " +
    string(TODAY,"99.99.9999") + " "
    NO-LABELS
@@ -92,19 +92,19 @@ PAUSE 0.
 MAIN:
 REPEAT WITH FRAME main:
 
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE
    Stock1 Stock2 SIMStat SimArt icc1 icc2
    WITH FRAME main EDITING:
       READKEY.
 
-      IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME main:
+      IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME main:
          HIDE MESSAGE.
 
          IF FRAME-FIELD = "stock1" THEN DO:
             FIND Stock WHERE 
-                 Stock.Brand = Syst.CUICommon:gcBrand   AND 
+                 Stock.Brand = Syst.Var:gcBrand   AND 
                  Stock.Stock = INPUT Stock1 NO-LOCK NO-ERROR.
             IF NOT AVAIL Stock THEN DO:
                BELL.
@@ -116,7 +116,7 @@ REPEAT WITH FRAME main:
 
          ELSE IF FRAME-FIELD = "SimArt" THEN DO:
             FIND SimArt WHERE 
-                 SimArt.Brand  = Syst.CUICommon:gcBrand AND 
+                 SimArt.Brand  = Syst.Var:gcBrand AND 
                  SimArt.SimArt = INPUT SimArt NO-LOCK NO-ERROR.
             IF NOT AVAIL SimArt THEN DO:
                BELL.
@@ -127,7 +127,7 @@ REPEAT WITH FRAME main:
          END.
          ELSE IF FRAME-FIELD = "Stock2" THEN DO:
             FIND Stock2 WHERE 
-                 Stock2.Brand  = Syst.CUICommon:gcBrand AND 
+                 Stock2.Brand  = Syst.Var:gcBrand AND 
                  Stock2.Stock = INPUT Stock2 NO-LOCK NO-ERROR.
             IF NOT AVAIL Stock2 THEN DO:
                BELL.
@@ -155,7 +155,7 @@ REPEAT WITH FRAME main:
                Qty = integer(substr(INPUT icc2,2)).
 
                FIND xSIM WHERE 
-                    xSim.Brand = Syst.CUICommon:gcBrand AND 
+                    xSim.Brand = Syst.Var:gcBrand AND 
                     xSIM.ICC   = INPUT icc1 NO-LOCK.
                IF NOT AVAIL xSIM THEN DO:
                   BELL.
@@ -165,7 +165,7 @@ REPEAT WITH FRAME main:
 
                DO i = 1 TO Qty - 1.  
                   FIND NEXT xSIM WHERE
-                            xSim.Brand = Syst.CUICommon:gcBrand 
+                            xSim.Brand = Syst.Var:gcBrand 
                   no-lock no-error.
                   IF NOT AVAIL xSIM THEN DO:
                      BELL.
@@ -190,24 +190,24 @@ REPEAT WITH FRAME main:
 ACTION:
    REPEAT WITH FRAME main:
       ASSIGN
-      Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0
-      Syst.CUICommon:ufk[1] = 7 
-      Syst.CUICommon:ufk[5] = 795
-      Syst.CUICommon:ufk[8] = 8.
+      Syst.Var:ufk = 0 Syst.Var:ehto = 0
+      Syst.Var:ufk[1] = 7 
+      Syst.Var:ufk[5] = 795
+      Syst.Var:ufk[8] = 8.
 
       IF length(icc1) NE length(icc2) THEN DO:
          MESSAGE 
          "Both ICC ID Codes must be of same length !"
          VIEW-AS ALERT-BOX ERROR TITLE " INVALID ICC ID CODE(S) ".
-         Syst.CUICommon:ufk[5] = 0.
+         Syst.Var:ufk[5] = 0.
       END.   
 
 
       RUN Syst/ufkey.p.
 
-      IF Syst.CUICommon:toimi = 1 THEN NEXT  main.
-      IF Syst.CUICommon:toimi = 8 THEN LEAVE main.
-      IF Syst.CUICommon:toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 1 THEN NEXT  main.
+      IF Syst.Var:toimi = 8 THEN LEAVE main.
+      IF Syst.Var:toimi = 5 THEN DO:
 
          i = 0.
          FOR 
@@ -242,10 +242,10 @@ ACTION:
             SIM.SimArt = SimArt  AND
             SIM.ICC    >= icc1   AND
             SIM.ICC    <= icc2   AND 
-            SIM.Brand   = Syst.CUICommon:gcBrand :
+            SIM.Brand   = Syst.Var:gcBrand :
 
        FIND  StoBal WHERE
-             Stobal.Brand  = Syst.CUICommon:gcBrand    AND 
+             Stobal.Brand  = Syst.Var:gcBrand    AND 
              StoBal.SimArt = SIM.SimArt AND
              StoBal.StoBal = SIM.Stock
        EXCLUSIVE-LOCK no-error.
@@ -266,12 +266,12 @@ ACTION:
        FIND  StoBal WHERE
              StoBal.SimArt = SIM.SimArt AND
              StoBal.StoBal = SIM.Stock  AND 
-             StoBal.Brand  = Syst.CUICommon:gcBrand 
+             StoBal.Brand  = Syst.Var:gcBrand 
        EXCLUSIVE-LOCK NO-ERROR.
        IF NOT AVAIL StoBal THEN DO:
           CREATE StoBal.
           ASSIGN
-             Stobal.Brand     = Syst.CUICommon:gcBrand 
+             Stobal.Brand     = Syst.Var:gcBrand 
              StoBal.SimArt    = SIM.SimArt
              StoBal.StoBal    = SIM.Stock
              StoBal.Balance   = StoBal.Balance    + 1

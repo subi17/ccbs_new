@@ -99,7 +99,7 @@ FUNCTION fValKeyValue RETURNS CHARACTER
 
       WHEN "salesman" THEN DO:
          FIND Salesman WHERE        
-             Salesman.Salesman = Syst.CUICommon:gcBrand AND
+             Salesman.Salesman = Syst.Var:gcBrand AND
              Salesman.Salesman = KeyValue
          NO-LOCK NO-ERROR.
          IF NOT AVAIL Salesman THEN DO:
@@ -112,7 +112,7 @@ FUNCTION fValKeyValue RETURNS CHARACTER
 
       WHEN "InvGroup" THEN DO:
          FIND InvGroup WHERE 
-            InvGroup.Brand    = Syst.CUICommon:gcBrand AND
+            InvGroup.Brand    = Syst.Var:gcBrand AND
             InvGroup.InvGroup = KeyValue
          NO-LOCK NO-ERROR.
          IF NOT AVAIL InvGroup THEN DO:
@@ -124,7 +124,7 @@ FUNCTION fValKeyValue RETURNS CHARACTER
 
       WHEN "BillItem" THEN DO:
          FIND BillItem WHERE 
-            BillItem.Brand    = Syst.CUICommon:gcBrand AND
+            BillItem.Brand    = Syst.Var:gcBrand AND
             BillItem.BillCode = KeyValue
          NO-LOCK NO-ERROR.
          IF NOT AVAIL BillItem THEN DO:
@@ -136,7 +136,7 @@ FUNCTION fValKeyValue RETURNS CHARACTER
 
       WHEN "CustGroup" THEN DO:
          FIND CustGroup WHERE 
-            CustGroup.Brand     = Syst.CUICommon:gcBrand AND
+            CustGroup.Brand     = Syst.Var:gcBrand AND
             CustGroup.CustGroup = KeyValue
          NO-LOCK NO-ERROR.
          IF NOT AVAIL CustGroup THEN DO:
@@ -148,7 +148,7 @@ FUNCTION fValKeyValue RETURNS CHARACTER
 
       WHEN "InvSect" THEN DO:
          FIND InvSect WHERE 
-            InvSect.Brand   = Syst.CUICommon:gcBrand AND
+            InvSect.Brand   = Syst.Var:gcBrand AND
             InvSect.InvSect = KeyValue
          NO-LOCK NO-ERROR.
          IF NOT AVAIL InvSect THEN DO:

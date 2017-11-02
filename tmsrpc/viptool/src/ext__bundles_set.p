@@ -24,8 +24,8 @@
 
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-Syst.CUICommon:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId. 
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId. 
+Syst.Var:gcBrand = "1".
 {Func/mdub.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
@@ -79,7 +79,7 @@ IF LOOKUP(pcBundleId,lcBONOContracts + ",BONO_VOIP") = 0 AND
 THEN RETURN appl_err("Incorrect Bundle Id").
 
 /* Check if subscription type is not compatible with bundle */
-IF fMatrixAnalyse(Syst.CUICommon:gcBrand,
+IF fMatrixAnalyse(Syst.Var:gcBrand,
                   "PERCONTR",
                   "PerContract;SubsTypeTo",
                   pcBundleId + ";" + MobSub.CLIType,
@@ -266,11 +266,11 @@ add_int(response_toplevel_id, "", liRequest).
 CREATE Memo.
 ASSIGN
       Memo.CreStamp  = {&nowTS}
-      Memo.Brand     = Syst.CUICommon:gcBrand 
+      Memo.Brand     = Syst.Var:gcBrand 
       Memo.HostTable = "MobSub" 
       Memo.KeyValue  = STRING(MobSub.MsSeq) 
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = Syst.CUICommon:katun 
+      Memo.CreUser   = Syst.Var:katun 
       Memo.MemoTitle = "Mobile Data Usage Bundle"
       Memo.MemoText  = "External API bundle activation/deactivation"
       Memo.CustNum   = MobSub.CustNum

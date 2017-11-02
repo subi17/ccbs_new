@@ -19,7 +19,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/eventval.i}
 {Mc/offer.i}
 {newton/src/xmlrpc_names.i}
@@ -42,18 +42,18 @@ lcStruct = validate_request(pcStruct, "offer_id!,amount,valid_from!,valid_to,dis
  
 IF lcStruct = ? THEN RETURN.
 
-Syst.CUICommon:katun = "VISTA_" + get_string(pcStruct, "username").
+Syst.Var:katun = "VISTA_" + get_string(pcStruct, "username").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF TRIM(Syst.CUICommon:katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
+IF TRIM(Syst.Var:katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 {newton/src/settenant.i pcTenant}
 
 CREATE ttOfferItem.
 ASSIGN
     ttOfferItem.OfferItemId   = NEXT-VALUE(OfferItemSeq)
-    ttOfferItem.Brand         = Syst.CUICommon:gcBrand
+    ttOfferItem.Brand         = Syst.Var:gcBrand
     ttOfferItem.Offer         = get_string(pcStruct, "offer_id")
     ttOfferItem.VatIncl       = get_bool(pcStruct, "vat_included")
     ttOfferItem.Amount        = (IF LOOKUP("amount", lcStruct) > 0 THEN get_double( pcStruct, "amount") ELSE 0)
@@ -77,7 +77,7 @@ IF fValidateOfferItem(TABLE ttOfferItem, TRUE, OUTPUT ocError) > 0 THEN DO:
 END.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
    {Func/lib/eventlog.i}
    DEF VAR lhOfferItem AS HANDLE NO-UNDO.
    lhOfferItem = BUFFER OfferItem:HANDLE.
@@ -94,7 +94,7 @@ IF ttOfferItem.ItemType = "Topup" THEN DO:
    END.
 
    FIND TopupScheme WHERE 
-        TopupScheme.Brand = Syst.CUICommon:gcBrand AND
+        TopupScheme.Brand = Syst.Var:gcBrand AND
         TopupScheme.TopupScheme = ttOfferItem.ItemKey NO-LOCK NO-ERROR.
    
    IF AVAIL TopupScheme THEN DO:

@@ -14,7 +14,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
@@ -68,12 +68,12 @@ FUNCTION fError RETURNS LOGIC
    DO TRANS:
       /* save to db for reporting */
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
              ErrorLog.ActionID  = "DDBankChg"
              ErrorLog.TableName = "Customer"
              ErrorLog.KeyValue  = STRING(liCustNum)
              ErrorLog.ActionTS  = ldCurrStamp
-             ErrorLog.UserCode  = Syst.CUICommon:katun
+             ErrorLog.UserCode  = Syst.Var:katun
              ErrorLog.ErrorMsg  = icMessage + CHR(10) +
                                   "New bank account: " + lcNewBank.
    END.
@@ -250,7 +250,7 @@ PROCEDURE pFinalize:
    DO TRANS:
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = Syst.CUICommon:gcBrand   
+         ActionLog.Brand        = Syst.Var:gcBrand   
          ActionLog.TableName    = "Customer"  
          ActionLog.KeyValue     = "CSB19" 
          ActionLog.ActionID     = "DDBankChg"
@@ -266,7 +266,7 @@ PROCEDURE pFinalize:
                                         " errors occurred"
                                    ELSE "")
          ActionLog.ActionStatus = 3
-         ActionLog.UserCode     = Syst.CUICommon:katun.
+         ActionLog.UserCode     = Syst.Var:katun.
          ActionLog.ActionTS     = Func.Common:mMakeTS().
    END.
 

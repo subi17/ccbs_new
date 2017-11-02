@@ -3,7 +3,7 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 {Func/xmlfunction.i}
 {Mm/msbalance.i}
@@ -73,7 +73,7 @@ FUNCTION fBalanceEnquiryTResponse  RETURN LOGICAL
              END.
              ELSE DO:
                 FIND FIRST MsOwner NO-LOCK WHERE
-                           MsOwner.Brand = Syst.CUICommon:gcBrand AND
+                           MsOwner.Brand = Syst.Var:gcBrand AND
                            MsOwner.CLI   = pcCLI NO-ERROR.
                 IF AVAILABLE MsOwner THEN
                      FIND Customer WHERE Customer.CustNum = MsOwner.InvCust NO-LOCK NO-ERROR.

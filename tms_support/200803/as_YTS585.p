@@ -1,6 +1,6 @@
 {Syst/commpaa.i} 
-Syst.CUICommon:katun = "anttis".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 {Func/msreqfunc.i}
 {Rate/daycampaign.i}
 {Syst/eventval.i}
@@ -46,7 +46,7 @@ FOR EACH msrequest where
    IF NOT AVAIL MsOwner THEN NEXT.
   
    FIND FIRST DCCLI WHERE
-             DCCLI.Brand      = Syst.CUICommon:gcBrand         AND
+             DCCLI.Brand      = Syst.Var:gcBrand         AND
              DCCLI.DCEvent    = lcDCEvent       AND
              DCCLI.MsSeq      = MsRequest.MsSeq AND
              DCCLI.ValidTo   >= ldtActDate      AND

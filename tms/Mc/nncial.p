@@ -46,20 +46,20 @@ WITH
    OVERLAY FRAME LOG ROW 4 12 DOWN width 80 TITLE
    " SUMMARY OF EXPIRING CONTRACT PAYMENTS ". 
 
-Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 PAUSE 0.
 view FRAME LOG.
 UPDATE 
    idate 
    CustNum VALIDATE(INPUT CustNum = 0 OR
                     CAN-FIND(FIRST Customer WHERE 
-                                   Customer.Brand   = Syst.CUICommon:gcBrand AND
+                                   Customer.Brand   = Syst.Var:gcBrand AND
                                    Customer.CustNum = INPUT CustNum),
                     "Unknown customer !")
 WITH FRAME Date.
 PAUSE 0.
 
-Syst.CUICommon:ufk = 0. Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
+Syst.Var:ufk = 0. Syst.Var:ehto = 3. RUN Syst/ufkey.p.
 
 period = year(idate) * 100 + month(idate).
 
@@ -75,7 +75,7 @@ ELSE DO:
    MESSAGE "Collecting fees ..".
 
    FOR EACH FixedFee no-lock WHERE
-            FixedFee.Brand      = Syst.CUICommon:gcBrand AND
+            FixedFee.Brand      = Syst.Var:gcBrand AND
             FixedFee.EndPeriod <= Period,
       FIRST FFItem of FixedFee no-lock where 
             FFItem.BillPeriod <= Period AND
@@ -106,7 +106,7 @@ BY Customer.CustName
 WITH FRAME LOG.
 
    FIND FIRST Salesman no-lock where 
-              Salesman.Brand    = Syst.CUICommon:gcBrand AND
+              Salesman.Brand    = Syst.Var:gcBrand AND
               Salesman.Salesman = Customer.Salesman.
    DISP 
       Salesman.SmName   format "x(15)"

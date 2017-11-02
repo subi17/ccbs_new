@@ -110,7 +110,7 @@ FUNCTION fTargetAddr RETURNS LOGICAL
    DISPLAY lcTarget lcName lcAddr lcPost WITH FRAME rajat.
 END.
 
-FIND FIRST Memo WHERE Memo.Brand     = Syst.CUICommon:gcBrand     AND
+FIND FIRST Memo WHERE Memo.Brand     = Syst.Var:gcBrand     AND
                       Memo.HostTable = icHostTable AND
                       Memo.KeyValue  = icKeyValue  AND 
                       Memo.MemoSeq   = iiMemoSeq NO-LOCK NO-ERROR.
@@ -144,7 +144,7 @@ ASSIGN tuni1         = "Memo"
        liLetterClass = fCParamI("EPLGenLClass")
        liAddress     = 1
        llUfkey       = FALSE
-       Syst.CUICommon:nap           = "1"
+       Syst.Var:nap           = "1"
        lcTitle       = '"' + Memo.MemoTitle + '"'
        llEPL         = FALSE.
 
@@ -163,19 +163,19 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
             
    IF llUfkey THEN DO:
       ASSIGN
-      Syst.CUICommon:ufk[1]= 132 Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
-      Syst.CUICommon:ufk[5]= 63  Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-      Syst.CUICommon:ehto = 3.
+      Syst.Var:ufk[1]= 132 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+      Syst.Var:ufk[5]= 63  Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+      Syst.Var:ehto = 3.
       RUN Syst/ufkey.p.
 
       READKEY.
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
    END.
    ELSE llUfkey = TRUE.
 
-   if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
+   if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:
    
-      ASSIGN Syst.CUICommon:ehto = 9.
+      ASSIGN Syst.Var:ehto = 9.
       RUN Syst/ufkey.p.
 
       REPEAT ON ENDKEY UNDO, LEAVE:
@@ -199,13 +199,13 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
                 IF lcCode NE "" AND lcCode NE ? THEN 
                 DISPLAY INTEGER(lcCode) @ liAddress WITH FRAME rajat.
                 
-                Syst.CUICommon:ehto = 9.
+                Syst.Var:ehto = 9.
                 RUN Syst/ufkey.p.
                 
                 NEXT.
              END.
              
-             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 
              THEN DO WITH FRAME rajat:
              
                 PAUSE 0.
@@ -225,7 +225,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
 
    END.   
    
-   else if lookup(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:
+   else if lookup(Syst.Var:nap,"5,f5") > 0 THEN DO:
       
       IF lcName = "" OR
          lcPost = ""
@@ -240,7 +240,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
          IF NOT llOk THEN NEXT.
       END.
       
-      Syst.CUICommon:ehto = 5. 
+      Syst.Var:ehto = 5. 
       RUN Syst/ufkey.p.
  
       IF llEPl THEN DO:
@@ -284,11 +284,11 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
       LEAVE toimi.
    END.
 
-   else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
+   else if lookup(Syst.Var:nap,"8,f8") > 0 THEN DO:
       LEAVE toimi.
    END.
       
-END. /* Syst.CUICommon:toimi */
+END. /* Syst.Var:toimi */
 
 HIDE MESSAGE no-pause.
 HIDE FRAME rajat no-pause.

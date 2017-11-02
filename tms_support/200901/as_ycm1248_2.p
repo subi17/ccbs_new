@@ -13,8 +13,8 @@ def stream sout.
 output stream sout to /apps/snet/200901/as_yts1248_3.log append. 
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "anttis".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 {Func/fmakemsreq.i}
 DEFINE VARIABLE liReq AS INTEGER NO-UNDO. 
 DEFINE VARIABLE lcInfo AS CHAR NO-UNDO. 

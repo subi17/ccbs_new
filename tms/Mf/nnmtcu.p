@@ -53,8 +53,8 @@ form
    MthCall.CloseDate         label "Closed"      format "99-99-99"
 WITH
    width 48 OVERLAY scroll 1 ROW 2 12 DOWN
-   centered NO-LABEL COLOR value(Syst.CUICommon:cfc)
-   title color value(Syst.CUICommon:ctc) " Monthly call counters "
+   centered NO-LABEL COLOR value(Syst.Var:cfc)
+   title color value(Syst.Var:ctc) " Monthly call counters "
    FRAME sel.
 
 form
@@ -70,8 +70,8 @@ form
        help "Date when subscription was closed"                   SKIP
 
     WITH  OVERLAY ROW 4 centered
-    COLOR value(Syst.CUICommon:cfc)
-    TITLE COLOR value(Syst.CUICommon:ctc)
+    COLOR value(Syst.Var:cfc)
+    TITLE COLOR value(Syst.Var:ctc)
     fr-header WITH NO-LABEL
     FRAME lis.
 
@@ -90,7 +90,7 @@ ELSE DO:
 END.
 
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 LOOP:
@@ -154,30 +154,30 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        Syst.CUICommon:ufk[1] = 0  Syst.CUICommon:ufk[2] = 0 Syst.CUICommon:ufk[3] = 0 Syst.CUICommon:ufk[4] = 0
-        Syst.CUICommon:ufk[5] = 0  Syst.CUICommon:ufk[6] = 0 Syst.CUICommon:ufk[7] = 0 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ufk[9] = 1
-        Syst.CUICommon:ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1] = 0  Syst.Var:ufk[2] = 0 Syst.Var:ufk[3] = 0 Syst.Var:ufk[4] = 0
+        Syst.Var:ufk[5] = 0  Syst.Var:ufk[6] = 0 Syst.Var:ufk[7] = 0 Syst.Var:ufk[8] = 8 Syst.Var:ufk[9] = 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW MthCall.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(Syst.CUICommon:ccc) MthCall.CustNum WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) MthCall.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW MthCall.Month {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(Syst.CUICommon:ccc) MthCall.Month WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) MthCall.Month WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -204,10 +204,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND MthCall where recid(MthCall) = rtab[1] no-lock.
            IF order = 1 THEN FIND prev MthCall
@@ -236,7 +236,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND MthCall where recid(MthCall) = rtab[FRAME-DOWN] no-lock .
@@ -266,7 +266,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND MthCall where recid(MthCall) = memory no-lock no-error.
         IF order = 1 THEN FIND prev MthCall
@@ -296,7 +296,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* cursor TO the downmost line */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -313,17 +313,17 @@ BROWSE:
 /* FUNCTIONS DISABLED FROM HERE ...... 
 IF THESE ARE TAKEN BACK TO USE THEN ADD EVENTLOG
 
-     if lookup(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:  /* lisays */
+     if lookup(Syst.Var:nap,"5,f5") > 0 THEN DO:  /* lisays */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 THEN DO TRANSAction:  /* removal */
+     else if lookup(Syst.Var:nap,"6,f6") > 0 THEN DO TRANSAction:  /* removal */
        delline = FRAME-LINE.
        FIND MthCall where recid(MthCall) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(Syst.CUICommon:ctc)
+       COLOR DISPLAY value(Syst.Var:ctc)
        MthCall.CustNum MthCall.Month MthCall.Called MthCall.Limit MthCall.CloseDate.
 
        IF order = 1 THEN FIND NEXT MthCall
@@ -352,7 +352,7 @@ IF THESE ARE TAKEN BACK TO USE THEN ADD EVENTLOG
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(Syst.CUICommon:ccc)
+       COLOR DISPLAY value(Syst.Var:ccc)
        MthCall.CustNum MthCall.Month MthCall.Called MthCall.Limit MthCall.CloseDate.
        IF ok THEN DO:
 
@@ -371,15 +371,15 @@ IF THESE ARE TAKEN BACK TO USE THEN ADD EVENTLOG
        ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 THEN
+     else if lookup(Syst.Var:nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSAction:
        /* change */
        HIDE FRAME lis.
        FIND MthCall where recid(MthCall) = rtab[frame-line(sel)]
        exclusive-lock.
-       assign fr-header = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
+       assign fr-header = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9.
        RUN Syst/ufkey.p.
-       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
        ASSIGN
           Month     = MthCall.Month
           Called  = MthCall.Called
@@ -397,7 +397,7 @@ IF THESE ARE TAKEN BACK TO USE THEN ADD EVENTLOG
      END.
 ....  DOWN TO HERE */
 
-     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
        IF order = 1 THEN FIND FIRST MthCall
        where MthCall.CustNum = CustNum no-lock no-error.
        ELSE IF order = 2 THEN FIND FIRST MthCall USE-INDEX Month
@@ -406,7 +406,7 @@ IF THESE ARE TAKEN BACK TO USE THEN ADD EVENTLOG
        NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
        IF order = 1 THEN FIND LAST MthCall
        where MthCall.CustNum = CustNum no-lock no-error.
        ELSE IF order = 2 THEN FIND LAST MthCall USE-INDEX Month
@@ -415,11 +415,11 @@ IF THESE ARE TAKEN BACK TO USE THEN ADD EVENTLOG
        NEXT LOOP.
      END.
 
-     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 

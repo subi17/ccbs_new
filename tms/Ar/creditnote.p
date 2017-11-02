@@ -33,7 +33,7 @@ DEFINE TEMP-TABLE ttSubInvoice
        INDEX SubInvRow IS PRIMARY UNIQUE SubInvoice InvRow.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 END.
@@ -427,7 +427,7 @@ PROCEDURE pFullCreditNote:
  
       /* check IF invoice number is already in use */
       IF NOT can-find(FIRST Invoice where
-                            Invoice.Brand    = Syst.CUICommon:gcBrand AND 
+                            Invoice.Brand    = Syst.Var:gcBrand AND 
                             Invoice.ExtInvID = lcExtInvID AND
                             RECID(Invoice) NE liInvRecid) 
       THEN LEAVE ExtInvNum.
@@ -625,7 +625,7 @@ PROCEDURE pFullCreditNote:
          OPLog.CreStamp  = Func.Common:mMakeTS()
          OPLog.CustNum   = Customer.CustNum
          OPLog.EventDate = TODAY
-         OPLog.UserCode  = Syst.CUICommon:katun
+         OPLog.UserCode  = Syst.Var:katun
          OPLog.EventType = 11 /* Credit invoice (deduction also credited) */
          OPLog.InvNum    = Invoice.InvNum
          /* OPLog.Voucher */
@@ -646,7 +646,7 @@ PROCEDURE pFullCreditNote:
          OPLog.CreStamp  = Func.Common:mMakeTS()
          OPLog.CustNum   = Customer.CustNum
          OPLog.EventDate = TODAY
-         OPLog.UserCode  = Syst.CUICommon:katun
+         OPLog.UserCode  = Syst.Var:katun
          OPLog.EventType = 4 /* Credit invoice (deduction also credited) */
          OPLog.InvNum    = Invoice.InvNum
          /* OPLog.Voucher */
@@ -719,7 +719,7 @@ PROCEDURE pFullCreditNote:
          
       /* in yoigo newest accounts are always used */
       FOR FIRST BillItem NO-LOCK WHERE
-                BillItem.Brand = Syst.CUICommon:gcBrand AND
+                BillItem.Brand = Syst.Var:gcBrand AND
                 BillItem.BillCode = bCreditRow.BillCode:
          bCreditRow.SlsAcc = fInvRowAccount(Customer.Category,
                                             bCreditInv.VatUsage).
@@ -731,7 +731,7 @@ PROCEDURE pFullCreditNote:
    ASSIGN
       Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = next-value(MemoSeq)
-      Memo.Brand     = Syst.CUICommon:gcBrand
+      Memo.Brand     = Syst.Var:gcBrand
       Memo.MemoTitle = "Credited"
       Memo.CreUser   = lcUserId
       Memo.HostTable = "Invoice"
@@ -739,7 +739,7 @@ PROCEDURE pFullCreditNote:
       Memo.CustNum   = Invoice.CustNum.
       Memo.Memotext  = Func.Common:mGetHdrText(50,Customer.Language) + " " +
                        STRING(Invoice.InvNum) +  
-                       ". Handler: " + Syst.CUICommon:katun  +
+                       ". Handler: " + Syst.Var:katun  +
                        ". Reason Note/Jira : " + bCreditInv.xxmemo[1].
 
    /* customer balances */
@@ -778,13 +778,13 @@ PROCEDURE pFullCreditNote:
    ASSIGN
       Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.Brand     = Syst.CUICommon:gcBrand
+      Memo.Brand     = Syst.Var:gcBrand
       Memo.MemoTitle = "Credited"
       Memo.CreUser   = lcUserId
       Memo.HostTable = "Invoice"
       Memo.KeyValue  = STRING(Invoice.InvNum)
       Memo.CustNum   = Invoice.CustNum
-      Memo.Memotext  = "Credited by " + Syst.CUICommon:katun +
+      Memo.Memotext  = "Credited by " + Syst.Var:katun +
                        ". Reason Note/Jira: " + Invoice.xxmemo[1].
 
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhInvoice). 
@@ -861,7 +861,7 @@ PROCEDURE pFullCreditNote:
 
    /* customer's invoicing Period */
    FIND FIRST Invoice WHERE
-              Invoice.Brand    = Syst.CUICommon:gcBrand          AND
+              Invoice.Brand    = Syst.Var:gcBrand          AND
               Invoice.CustNum  = Customer.CustNum AND
               Invoice.CrInvNum = 0                AND
               Invoice.InvAmt > 0 NO-LOCK NO-ERROR.

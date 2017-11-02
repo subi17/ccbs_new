@@ -43,7 +43,7 @@ ldtEnd = Func.Common:mHMS2TS(ldaEnd,"23:59:59").
 
 
 FOR EACH MsRequest NO-LOCK WHERE
-         Msrequest.Brand = Syst.CUICommon:gcBrand  AND 
+         Msrequest.Brand = Syst.Var:gcBrand  AND 
          ( MsRequest.ReqType =  {&REQTYPE_CONTRACT_ACTIVATION} OR
            MsRequest.ReqType =  {&REQTYPE_CONTRACT_TERMINATION} ) AND
          MsRequest.ActStamp >= ldtBegin AND 

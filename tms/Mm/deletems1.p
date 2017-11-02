@@ -141,8 +141,8 @@ FORM
       HELP "ICC status after termination (F9)" SKIP
 
 WITH
-   OVERLAY ROW 2 CENTERED COLOR VALUE(Syst.CUICommon:cfc)
-   TITLE COLOR VALUE(Syst.CUICommon:ctc) 
+   OVERLAY ROW 2 CENTERED COLOR VALUE(Syst.Var:cfc)
+   TITLE COLOR VALUE(Syst.Var:ctc) 
       " Subscription Termination / De-activation " + MobSub.CLI + " "
    NO-LABELS  
 FRAME main.
@@ -160,7 +160,7 @@ IF lcError NE "" THEN DO:
 END.
 
 ASSIGN
-   lcUserCode = Syst.CUICommon:katun
+   lcUserCode = Syst.Var:katun
    ldtPContr  = ?.
 
 llPenalty = fIsPenalty(0, Mobsub.MsSeq).
@@ -239,7 +239,7 @@ WITH FRAME main.
 MAIN:
 REPEAT WITH FRAME main:
 
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       liOrderer 
       lcOutOper WHEN liOrderer EQ 2
@@ -288,7 +288,7 @@ REPEAT WITH FRAME main:
          END.   
 
          llHelp = TRUE. 
-         Syst.CUICommon:ehto = 9.
+         Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
          NEXT. 
       END.
@@ -311,7 +311,7 @@ REPEAT WITH FRAME main:
             llHelp = TRUE. 
          END.   
          
-         Syst.CUICommon:ehto = 9.
+         Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
          NEXT. 
       
@@ -335,13 +335,13 @@ REPEAT WITH FRAME main:
             llHelp = TRUE.
          END.   
 
-         Syst.CUICommon:ehto = 9.
+         Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
          NEXT. 
          
       END.
       
-      IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0  THEN DO WITH FRAME main:
+      IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0  THEN DO WITH FRAME main:
          PAUSE 0.
         
          IF FRAME-FIELD = "liOrderer" THEN DO: 
@@ -598,19 +598,19 @@ REPEAT WITH FRAME main:
    REPEAT WITH FRAME main:
       
       ASSIGN
-         Syst.CUICommon:ufk = 0 
-         Syst.CUICommon:ehto = 0
-         Syst.CUICommon:ufk[1] = 7 
-         Syst.CUICommon:ufk[5] = 795
-         Syst.CUICommon:ufk[8] = 8.
+         Syst.Var:ufk = 0 
+         Syst.Var:ehto = 0
+         Syst.Var:ufk[1] = 7 
+         Syst.Var:ufk[5] = 795
+         Syst.Var:ufk[8] = 8.
 
       RUN Syst/ufkey.p.
       
-      IF Syst.CUICommon:toimi = 1 THEN NEXT  main.
+      IF Syst.Var:toimi = 1 THEN NEXT  main.
       
-      IF Syst.CUICommon:toimi = 8 THEN LEAVE main.
+      IF Syst.Var:toimi = 8 THEN LEAVE main.
       
-      IF Syst.CUICommon:toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
          
          IF llPenalty THEN
             MESSAGE
@@ -625,7 +625,7 @@ REPEAT WITH FRAME main:
             Mobsub.MultiSimID > 0 THEN DO:
       
             FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSimID WHERE
-                       lbMobSub.Brand = Syst.CUICommon:gcBrand AND
+                       lbMobSub.Brand = Syst.Var:gcBrand AND
                        lbMobSub.MultiSimId = Mobsub.MultiSimId AND
                        lbMobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} AND
                        lbMobSub.Custnum = Mobsub.Custnum
@@ -648,7 +648,7 @@ REPEAT WITH FRAME main:
             END.
          END.
          ELSE IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                                CLIType.Brand = Syst.CUICommon:gcBrand AND
+                                CLIType.Brand = Syst.Var:gcBrand AND
                                 CLIType.CLIType = Mobsub.TariffBundle AND
                                 CLIType.LineType = {&CLITYPE_LINETYPE_MAIN})
                                 THEN DO:
@@ -656,12 +656,12 @@ REPEAT WITH FRAME main:
             llAddLineTerm = FALSE.
 
             FOR EACH bbMobSub NO-LOCK WHERE
-                     bbMobSub.Brand   = Syst.CUICommon:gcBrand AND
+                     bbMobSub.Brand   = Syst.Var:gcBrand AND
                      bbMobSub.InvCust = Mobsub.CustNum AND
                      bbMobSub.PayType = FALSE AND
                      bbMobSub.MsSeq NE Mobsub.MsSeq,
                FIRST CLIType NO-LOCK WHERE
-                     CLIType.Brand = Syst.CUICommon:gcBrand ANd
+                     CLIType.Brand = Syst.Var:gcBrand ANd
                      CLIType.CLIType = (IF Mobsub.TariffBundle > ""
                                         THEN Mobsub.TariffBundle
                                         ELSE Mobsub.CLIType) AND

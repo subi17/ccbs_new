@@ -57,7 +57,7 @@ PROCEDURE pStartDump:
    /* connect to correct cdr dbs */
    fInitializeConnectTables("PrepEDR,EDRDtl","").
 
-   RUN pDirectConnect2Dbs(Syst.CUICommon:gcBrand,
+   RUN pDirectConnect2Dbs(Syst.Var:gcBrand,
                           "",
                           idaConnectDate,
                           idaConnectDate).

@@ -10,8 +10,8 @@
 
 {Syst/commpaa.i}
 ASSIGN
-   Syst.CUICommon:katun   = "Cron"
-   Syst.CUICommon:gcBrand = "1".
+   Syst.Var:katun   = "Cron"
+   Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
@@ -96,7 +96,7 @@ REPEAT:
       END.
 
       IF NOT CAN-FIND(FIRST Customer WHERE
-                            Customer.Brand = Syst.CUICommon:gcBrand AND
+                            Customer.Brand = Syst.Var:gcBrand AND
                             Customer.CustNum = liCustNum)
       THEN DO:
          fError("Unknown Customer").
@@ -113,7 +113,7 @@ REPEAT:
       
       CREATE Limit.
       ASSIGN
-         Limit.Brand     = Syst.CUICommon:gcBrand
+         Limit.Brand     = Syst.Var:gcBrand
          Limit.CustNum   = liCustNum
          Limit.LimitAmt  = ldLimitAmt
          Limit.LimitType = {&LIMIT_TYPE_RISKLIMIT}

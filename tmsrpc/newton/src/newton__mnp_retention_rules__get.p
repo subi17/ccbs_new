@@ -16,8 +16,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Newton".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Newton".
+Syst.Var:gcBrand = "1".
 
 DEF VAR lcResultStruct AS CHAR NO-UNDO. 
 DEF VAR resp_array AS CHARACTER NO-UNDO.
@@ -34,7 +34,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 resp_array = add_array(response_toplevel_id, "").
       
 FOR EACH mnpretentionrule NO-LOCK WHERE
-         mnpretentionrule.brand = Syst.CUICommon:gcBrand AND
+         mnpretentionrule.brand = Syst.Var:gcBrand AND
          mnpretentionrule.ToDate >= TODAY AND
          mnpretentionrule.FromDate <= TODAY:
    
@@ -50,7 +50,7 @@ FOR EACH mnpretentionrule NO-LOCK WHERE
 
    IF MNPRetentionRule.SMSText > "" THEN DO:
       FIND FIRST InvText NO-LOCK WHERE
-                 InvText.Brand = Syst.CUICommon:gcBrand AND
+                 InvText.Brand = Syst.Var:gcBrand AND
                  InvText.Target = "SMS" AND
                  InvText.KeyValue = MNPRetentionRule.SMSText AND
                  InvText.Language = 1 AND

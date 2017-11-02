@@ -21,7 +21,7 @@ FUNCTION fcontract_end_date RETURNS DATE
    DEFINE BUFFER b_DayCampaign   FOR DayCampaign.
 
    FIND FIRST b_DayCampaign WHERE
-              b_DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
+              b_DayCampaign.Brand   = Syst.Var:gcBrand AND
               b_DayCampaign.dcEvent = icDcEvent NO-LOCK NO-ERROR.
    IF NOT AVAILABLE b_DayCampaign THEN DO:
       ldtEndDate = 12/31/2049.

@@ -7,7 +7,7 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/q25functions.i}
 {Func/ftransdir.i}
@@ -136,7 +136,7 @@ PROCEDURE pReadFileData:
       message lcfaxtoemailnumber VIEW-AS ALERT-BOX.*/
       
       FIND FIRST MobSub NO-LOCK WHERE 
-                 MobSub.brand EQ Syst.CUICommon:gcBrand AND
+                 MobSub.brand EQ Syst.Var:gcBrand AND
                  MobSub.Fixednumber EQ lcFixedNum AND
                  Mobsub.Paytype EQ FALSE NO-ERROR.
       IF NOT AVAIL Mobsub THEN DO:
@@ -176,7 +176,7 @@ PROCEDURE pReadFileData:
       liReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}.
 
       FIND FIRST MsRequest WHERE
-                 MsRequest.Brand EQ Syst.CUICommon:gcBrand AND
+                 MsRequest.Brand EQ Syst.Var:gcBrand AND
                  MsRequest.ReqType EQ liReqType AND
                  MsRequest.ReqStatus EQ liReqStatus AND
                  MsRequest.ReqCParam3 EQ lcServicecode.
@@ -209,7 +209,7 @@ PROCEDURE pReadFileData:
             request */
          IF lcSetStatus EQ "Inactive" THEN DO:
            FIND FIRST MsRequest WHERE
-                      MsRequest.Brand EQ Syst.CUICommon:gcBrand AND
+                      MsRequest.Brand EQ Syst.Var:gcBrand AND
                       MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
                       MsRequest.ReqStatus EQ {&REQUEST_STATUS_DONE} AND
                       MsRequest.ReqCParam3 EQ lcServicecode.

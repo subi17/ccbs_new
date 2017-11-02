@@ -16,7 +16,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/eventval.i}
 {Syst/tmsconst.i}
 {Mc/offer.i}
@@ -50,7 +50,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 IF TRIM(pcUsername) EQ "VISTA_" THEN 
     RETURN appl_err("username is empty").
 
-Syst.CUICommon:katun = pcUserName.
+Syst.Var:katun = pcUserName.
 
 piId = INTEGER(pcId) NO-ERROR.
 IF ERROR-STATUS:ERROR THEN 
@@ -133,7 +133,7 @@ IF NOT llEqual THEN DO:
    FIND CURRENT OfferCriteria EXCLUSIVE-LOCK.
 
    IF llDoEvent THEN DO:
-      &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
+      &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
       {Func/lib/eventlog.i}
       DEF VAR lhOfferCriteria AS HANDLE NO-UNDO.
       lhOfferCriteria = BUFFER OfferCriteria:HANDLE.

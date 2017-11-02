@@ -116,7 +116,7 @@ FUNCTION fIsBTCAllowed RETURNS LOGIC
              bSTC.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
              LOOKUP(STRING(bSTC.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0:
              
-      IF fMatrixAnalyse(Syst.CUICommon:gcBrand,
+      IF fMatrixAnalyse(Syst.Var:gcBrand,
                         "BTC-DENY",
                         "SubsTypeFrom;SubsTypeTo",
                         bSTC.ReqCParam1 + ";" + bSTC.ReqCParam2,
@@ -179,7 +179,7 @@ FUNCTION fIsBTCBundleAllowed RETURNS LOGIC
    END.
  
    /* is the new bundle allowed */
-   IF fMatrixAnalyse(Syst.CUICommon:gcBrand,
+   IF fMatrixAnalyse(Syst.Var:gcBrand,
                      "PERCONTR",
                      "PerContract;SubsTypeTo",
                      pcNewBundle + ";" + pcCLIType,
@@ -260,19 +260,19 @@ FUNCTION fMainAdditionalLine RETURNS LOGICAL
    DEF BUFFER CLIType       FOR CLIType.
 
    FIND FIRST CLIType NO-LOCK WHERE
-              CLIType.Brand = Syst.CUICommon:gcBrand AND
+              CLIType.Brand = Syst.Var:gcBrand AND
               CLIType.CLIType = pcNewBundle AND
               CLIType.LineType = {&CLITYPE_LINETYPE_ADDITIONAL} NO-ERROR.
    IF NOT AVAIL CLIType THEN RETURN TRUE.
    
    MOBSUB_LOOP:
    FOR EACH lbMobSub NO-LOCK WHERE
-            lbMobSub.Brand   = Syst.CUICommon:gcBrand AND
+            lbMobSub.Brand   = Syst.Var:gcBrand AND
             lbMobSub.InvCust = iiCustNum AND
             lbMobSub.MsSeq NE  iiMsSeq AND
             lbMobSub.PayType = FALSE,
       FIRST CLIType NO-LOCK WHERE
-            CLIType.Brand = Syst.CUICommon:gcBrand AND
+            CLIType.Brand = Syst.Var:gcBrand AND
             CLIType.CLIType = lbMobSub.TariffBundle AND
             CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}:
 

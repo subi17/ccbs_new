@@ -43,7 +43,7 @@ FORM
 "          " lcUpdText[4]  AUTO-RETURN                         SKIP(2) 
 
 WITH  OVERLAY ROW 1 centered width 80
-    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc) " SEND SMS "   
+    COLOR VALUE(Syst.Var:cfc) TITLE COLOR VALUE(Syst.Var:ctc) " SEND SMS "   
     NO-LABELS FRAME main.
 
 PAUSE 0.
@@ -61,7 +61,7 @@ lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 MAIN:
 REPEAT WITH FRAME main:
 
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
                
 UPDATE
@@ -106,7 +106,7 @@ WITH FRAME main EDITING:
 
                PUT SCREEN ROW 1 COL 2 STRING(liqty) + "/160          ".
 
-               IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME main:
+               IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME main:
                 PAUSE 0.
                   IF FRAME-FIELD = "lckeyvalue" THEN DO:
                   END.
@@ -118,15 +118,15 @@ WITH FRAME main EDITING:
 ACTION:
    REPEAT WITH FRAME main:
       ASSIGN
-      Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0
-      Syst.CUICommon:ufk[1] = 7 
-      Syst.CUICommon:ufk[5] = 2355
-      Syst.CUICommon:ufk[8] = 8.
+      Syst.Var:ufk = 0 Syst.Var:ehto = 0
+      Syst.Var:ufk[1] = 7 
+      Syst.Var:ufk[5] = 2355
+      Syst.Var:ufk[8] = 8.
       RUN Syst/ufkey.p.
 
-      IF Syst.CUICommon:toimi = 1 THEN NEXT  main.
-      IF Syst.CUICommon:toimi = 8 THEN LEAVE main.
-      IF Syst.CUICommon:toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 1 THEN NEXT  main.
+      IF Syst.Var:toimi = 8 THEN LEAVE main.
+      IF Syst.Var:toimi = 5 THEN DO:
 
          ok = FALSE.
          
@@ -162,7 +162,7 @@ ACTION:
             CallAlarm.DeliMsg  = lcText
             CallAlarm.Limit    = 0
             CallAlarm.CreditType = 9
-            CallAlarm.Brand      = Syst.CUICommon:gcBrand .
+            CallAlarm.Brand      = Syst.Var:gcBrand .
 
          LEAVE Action.
       END.

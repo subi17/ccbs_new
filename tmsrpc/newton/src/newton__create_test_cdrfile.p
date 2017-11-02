@@ -13,8 +13,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Mnp/mnpoutchk.i}
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Newton".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Newton".
+Syst.Var:gcBrand = "1".
 
 /*New input parameters*/
 DEFINE VARIABLE pcStruct    AS CHARACTER NO-UNDO.

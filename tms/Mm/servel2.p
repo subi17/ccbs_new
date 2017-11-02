@@ -40,8 +40,8 @@ form
     ServEl.SeValue
     ServPac.SPName
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) 
     " Service '" + ServCom + "' APPEARS IN: "
     FRAME sel.
 
@@ -50,8 +50,8 @@ form
     ServPac.SPName  
     ServEl.SeValue
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(Syst.CUICommon:cfc)
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -59,14 +59,14 @@ WITH  OVERLAY ROW 4 centered
 form /* seek ServEl  BY  ServPac */
     servPac
     HELP "Enter Code of ServPac"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND CODE "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FIND FIRST ServCom WHERE 
-           ServCom.Brand   = Syst.CUICommon:gcBrand   AND 
+           ServCom.Brand   = Syst.Var:gcBrand   AND 
            ServCom.ServCom = ServCom USE-INDEX ServCom.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By 2,By 3, By 4".
@@ -74,7 +74,7 @@ orders = "By Code,By 2,By 3, By 4".
 
 FIND FIRST ServEl WHERE
            ServEl.ServCom = ServCom  AND 
-           ServEl.Brand   = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+           ServEl.Brand   = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 IF AVAILABLE ServEl THEN ASSIGN
    Memory       = recid(ServEl)
    must-print   = TRUE
@@ -94,24 +94,24 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a ServEl  */
-      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR ServEl.ServPac WITH FRAME lis  EDITING:
               READKEY.
-              IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
+              IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                  PAUSE 0.
                  if frame-field = "ServPac" THEN DO:
 
                     if input ServEl.ServPac = "" THEN LEAVE add-row.
                      FIND ServPac where
-                          ServPac.Brand   = Syst.CUICommon:gcBrand  AND 
+                          ServPac.Brand   = Syst.Var:gcBrand  AND 
                           ServPac.ServPac = INPUT ServEl.ServPac
                     no-lock no-error.
                     IF NOT AVAIL ServPac THEN DO:
@@ -138,7 +138,7 @@ ADD-ROW:
 
            CREATE ServEl.
            ASSIGN
-           ServEl.Brand   = Syst.CUICommon:gcBrand 
+           ServEl.Brand   = Syst.Var:gcBrand 
            ServEl.ServCom = ServCom
            ServEl.ServPac = INPUT FRAME lis ServEl.ServPac.
 
@@ -158,7 +158,7 @@ ADD-ROW:
 
       /* is there ANY record ? */
       FIND FIRST ServEl WHERE
-      ServEl.ServCom = ServCom  AND Servel.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+      ServEl.ServCom = ServCom  AND Servel.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
       IF NOT AVAILABLE ServEl THEN LEAVE LOOP.
       NEXT LOOP.
    END.
@@ -209,9 +209,9 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        Syst.CUICommon:ufk[1]= 35  Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 /* 250 */ Syst.CUICommon:ufk[4]= 0
-        Syst.CUICommon:ufk[5]= 5  Syst.CUICommon:ufk[6]= 4 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-        Syst.CUICommon:ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 35  Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 /* 250 */ Syst.Var:ufk[4]= 0
+        Syst.Var:ufk[5]= 5  Syst.Var:ufk[6]= 4 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
         {Syst/uright1.i '"5,6"'}
         RUN Syst/ufkey.p.
       END.
@@ -219,16 +219,16 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW ServEl.ServPac {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ServEl.ServPac WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) ServEl.ServPac WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -252,10 +252,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -280,7 +280,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -306,7 +306,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ServEl WHERE recid(ServEl) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -330,7 +330,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -345,15 +345,15 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET ServPac WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF ServPac ENTERED THEN DO:
           FIND FIRST ServEl WHERE ServEl.ServPac >= ServPac
-          AND ServEl.ServCom = ServCom  AND Servel.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+          AND ServEl.ServCom = ServCom  AND Servel.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
           IF NOT AVAILABLE ServEl THEN DO:
              BELL.
              MESSAGE "NOT FOUND !".
@@ -366,19 +366,19 @@ BROWSE:
        END.
      END. /* Search-1 */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:  /* add */
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 THEN DO:  /* add */
         {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 THEN DO TRANSACTION:  /* DELETE */
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 THEN DO TRANSACTION:  /* DELETE */
        {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        ServEl.ServPac. 
 
        RUN local-find-NEXT.
@@ -400,7 +400,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        ServEl.ServPac.
        IF ok THEN DO:
 
@@ -419,14 +419,14 @@ BROWSE:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        {Syst/uright2.i}
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
-       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ServEl.ServPac.
 
        RUN local-UPDATE-record.                                  
@@ -441,25 +441,25 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(ServEl) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(ServEl) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -477,22 +477,22 @@ END PROCEDURE.
 
 PROCEDURE local-find-FIRST:
        IF order = 1 THEN FIND FIRST ServEl
-       WHERE ServEl.ServCom = ServCom  AND Servel.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+       WHERE ServEl.ServCom = ServCom  AND Servel.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
        IF order = 1 THEN FIND LAST ServEl
-       WHERE ServEl.ServCom = ServCom  AND Servel.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+       WHERE ServEl.ServCom = ServCom  AND Servel.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
        IF order = 1 THEN FIND NEXT ServEl
-       WHERE ServEl.ServCom = ServCom  AND Servel.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+       WHERE ServEl.ServCom = ServCom  AND Servel.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
        IF order = 1 THEN FIND PREV ServEl
-       WHERE ServEl.ServCom = ServCom  AND Servel.Brand = Syst.CUICommon:gcBrand 
+       WHERE ServEl.ServCom = ServCom  AND Servel.Brand = Syst.Var:gcBrand 
        NO-LOCK NO-ERROR.
 END PROCEDURE.
 
@@ -508,7 +508,7 @@ END PROCEDURE.
 
 PROCEDURE local-find-others.
        FIND ServPac where
-            ServPac.Brand   = Syst.CUICommon:gcBrand AND
+            ServPac.Brand   = Syst.Var:gcBrand AND
             ServPac.ServPac = ServEl.ServPac NO-LOCK NO-ERROR.
 
 END PROCEDURE.
@@ -523,7 +523,7 @@ PROCEDURE local-UPDATE-record:
       ServEl.SeValue
       WITH FRAME lis EDITING:
              READKEY.
-             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                 PAUSE 0.
                 IF FRAME-FIELD = "SeValue" THEN DO:
                    IF INPUT ServEl.SeValue < ServCom.SCValueRange[1] OR

@@ -8,8 +8,8 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
@@ -73,13 +73,13 @@ FUNCTION fCreateCentreFileRow RETURNS CHAR
    DEF VAR liTime AS INT NO-UNDO.
  
    FIND FIRST Order NO-LOCK WHERE
-              Order.Brand EQ Syst.CUICommon:gcBrand AND
+              Order.Brand EQ Syst.Var:gcBrand AND
               Order.OrderID EQ fusionMessage.OrderId NO-ERROR.
    IF NOT AVAIL Order THEN
       RETURN "ERROR: Order not available" + STRING(fusionMessage.OrderId).
 
    FIND FIRST OrderFusion NO-LOCK WHERE
-              OrderFusion.Brand EQ Syst.CUICommon:gcBrand AND
+              OrderFusion.Brand EQ Syst.Var:gcBrand AND
               OrderFusion.OrderId EQ fusionMessage.OrderId NO-ERROR.
    IF NOT AVAIL OrderFusion THEN
       RETURN "ERROR: OrderFusion not available orderid: " + 
@@ -93,7 +93,7 @@ FUNCTION fCreateCentreFileRow RETURNS CHAR
    END.                    
    ELSE DO:
        FIND FIRST OrderDelivery WHERE
-                  OrderDelivery.brand EQ Syst.CUICommon:gcBrand AND
+                  OrderDelivery.brand EQ Syst.Var:gcBrand AND
                   OrderDelivery.orderid EQ fusionMessage.OrderId NO-ERROR.
        IF AVAIL OrderDelivery THEN           
           lcdeliverydate = STRING(YEAR(OrderDelivery.LOTimeStamp),"9999") +

@@ -46,7 +46,7 @@ IF MsRequest.ReqCParam1 NE "Cancel" THEN DO:
 END.
 
 FIND Order WHERE
-     Order.Brand = Syst.CUICommon:gcBrand AND
+     Order.Brand = Syst.Var:gcBrand AND
      Order.OrderId = MsRequest.ReqIParam1 NO-LOCK NO-ERROR.
 
 IF NOT AVAIL Order THEN DO:

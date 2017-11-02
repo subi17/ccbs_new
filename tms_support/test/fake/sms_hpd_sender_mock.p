@@ -7,8 +7,8 @@
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Func/log.i}
 {Func/ftransdir.i}
 {Func/replog_reader.i}

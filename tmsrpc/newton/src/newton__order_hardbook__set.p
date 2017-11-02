@@ -12,10 +12,10 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "NewtonRPC".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "NewtonRPC".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
-&GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
+&GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
 {Func/lib/eventlog.i}
 
 DEF VAR pcStruct    AS CHAR NO-UNDO.
@@ -40,7 +40,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 {newton/src/findtenant.i YES ordercanal Order OrderId liOrderId}
 
 FIND FIRST OrderAccessory EXCLUSIVE-LOCK WHERE
-           OrderAccessory.Brand = Syst.CUICommon:gcBrand AND
+           OrderAccessory.Brand = Syst.Var:gcBrand AND
            OrderAccessory.OrderId = liOrderId AND
            OrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE} NO-ERROR.
 

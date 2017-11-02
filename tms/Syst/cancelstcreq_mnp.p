@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "cron".
+Syst.Var:gcBrand = "1".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/msreqfunc.i}
@@ -35,7 +35,7 @@ PUT STREAM strout UNFORMATTED
    "Status" SKIP.
 
 FOR EACH bMNPRequest NO-LOCK WHERE
-         bMNPRequest.Brand      = Syst.CUICommon:gcBrand                                 AND
+         bMNPRequest.Brand      = Syst.Var:gcBrand                                 AND
          bMNPRequest.ReqType    = {&REQTYPE_SUBSCRIPTION_TERMINATION}     AND
          bMNPRequest.ReqStatus  = 0                                       AND
          bMNPRequest.Reqcparam3 = STRING({&SUBSCRIPTION_TERM_REASON_MNP}) AND
@@ -44,7 +44,7 @@ FOR EACH bMNPRequest NO-LOCK WHERE
    Func.Common:mTS2Date(bMNPRequest.ActStamp,ldtMNPDate).
 
    FIND FIRST MsRequest NO-LOCK WHERE
-              MsRequest.Brand     = Syst.CUICommon:gcBrand                             AND
+              MsRequest.Brand     = Syst.Var:gcBrand                             AND
               MsRequest.MsSeq     = bMNPRequest.MsSeq                   AND
               MsRequest.ReqType   = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
               MsRequest.ReqStatus = 8                                   AND

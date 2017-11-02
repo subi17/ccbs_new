@@ -10,8 +10,8 @@
 */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "Newton".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Newton".
 {Syst/tmsconst.i}
 
 DEFINE VARIABLE pcArray AS CHARACTER NO-UNDO. 
@@ -64,7 +64,7 @@ END.
 {Syst/eventval.i}
    
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
    {Func/lib/eventlog.i}
    DEF VAR lhOrderAccessory AS HANDLE NO-UNDO.
    lhOrderAccessory = BUFFER OrderAccessory:HANDLE.
@@ -76,7 +76,7 @@ FOR EACH ttIMEI NO-LOCK:
    {newton/src/findtenant.i YES ordercanal Order OrderId ttIMEI.OrderId}
    
    FIND OrderAccessory WHERE
-        OrderAccessory.Brand = Syst.CUICommon:gcBrand AND
+        OrderAccessory.Brand = Syst.Var:gcBrand AND
         OrderAccessory.OrderId = ttImei.OrderId AND
         OrderAccessory.IMEI = ttImei.IMEI AND
         OrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE}

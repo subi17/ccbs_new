@@ -63,7 +63,7 @@ ASSIGN
     viiva4 = fill("-",lev).
 
 DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
-ynimi = Syst.CUICommon:ynimi.
+ynimi = Syst.Var:ynimi.
 
 form header
    viiva1 AT 1 SKIP
@@ -105,7 +105,7 @@ ASSIGN sl = 1
        rl = 0.
 
 FOR EACH UnregPaym WHERE 
-         UnregPaym.Brand   = Syst.CUICommon:gcBrand AND
+         UnregPaym.Brand   = Syst.Var:gcBrand AND
          UnregPaym.AccDate <= iDate  AND
          UnregPaym.State NE 2
 no-lock.

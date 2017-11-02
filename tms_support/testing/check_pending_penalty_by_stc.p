@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
 {Syst/tmsconst.i}
 {Mm/fbundle.i}
 {Mm/requestaction_exec.i}
@@ -62,7 +62,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcRequestTypes):
 
    do liLoop2 = 1 TO NUM-ENTRIES(lcReqStatuses):
    FOR EACH MsRequest NO-LOCK WHERE
-            MsRequest.Brand = Syst.CUICommon:gcBrand AND
+            MsRequest.Brand = Syst.Var:gcBrand AND
             MsRequest.ReqType = liRequestType AND
             MsRequest.ReqStatus = int(ENTRY(liLoop2,lcReqStatuses)) AND
             MsRequest.ActStamp = ldeActStamp:

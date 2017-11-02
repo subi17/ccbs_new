@@ -4,7 +4,7 @@
   SOLUTION .....: Ticket Master
   CREATED ......: 18.09.98 pt
   CHANGED ......: 09.10.98 kl inv/due DAY, InvGroup
-                  16.12.98 kl Syst.CUICommon:ufk[5] = 795
+                  16.12.98 kl Syst.Var:ufk[5] = 795
                   04.11.02 jr Eventlog
                   05.03.03 tk tokens
                   15.09.03/aam brand
@@ -33,7 +33,7 @@ DEF VAR hlp       AS DA                  NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -89,7 +89,7 @@ PAUSE 0.
 
 rajat:
 repeat WITH FRAME rajat ON ENDKEY UNDO, RETURN:
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE
       lcInvGroup
@@ -99,17 +99,17 @@ repeat WITH FRAME rajat ON ENDKEY UNDO, RETURN:
       i-date e-date
    EDITING.
 
-      READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
+      READKEY. Syst.Var:nap = keylabel(LASTKEY).
 
-      if Syst.CUICommon:nap = "F4" THEN RETURN.
+      if Syst.Var:nap = "F4" THEN RETURN.
 
-      IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
+      IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
 
          if frame-field = "lcInvGroup" THEN DO:
             if input lcInvGroup = "" then assign IGName = "ALL".
             ELSE DO:
                FIND FIRST InvGroup no-lock where
-                          InvGroup.Brand    = Syst.CUICommon:gcBrand AND
+                          InvGroup.Brand    = Syst.Var:gcBrand AND
                           InvGroup.InvGroup = INPUT lcInvGroup
                NO-ERROR.
                IF NOT AVAIL InvGroup THEN DO:
@@ -141,22 +141,22 @@ repeat WITH FRAME rajat ON ENDKEY UNDO, RETURN:
 
    toimi:
    repeat WITH FRAME rajat:
-      ASSIGN Syst.CUICommon:ufk = 0  
-             Syst.CUICommon:ufk[1] = 7 
-             Syst.CUICommon:ufk[3] = 1777
-             Syst.CUICommon:ufk[5] = 795 
-             Syst.CUICommon:ufk[8] = 8.
+      ASSIGN Syst.Var:ufk = 0  
+             Syst.Var:ufk[1] = 7 
+             Syst.Var:ufk[3] = 1777
+             Syst.Var:ufk[5] = 795 
+             Syst.Var:ufk[8] = 8.
              
-      IF InvNum2 = 0 OR diff = 0 THEN Syst.CUICommon:ufk[5] = 0.
+      IF InvNum2 = 0 OR diff = 0 THEN Syst.Var:ufk[5] = 0.
 
-      Syst.CUICommon:ehto = 0. RUN Syst/ufkey.p.
-      IF Syst.CUICommon:toimi = 1 THEN NEXT rajat.
+      Syst.Var:ehto = 0. RUN Syst/ufkey.p.
+      IF Syst.Var:toimi = 1 THEN NEXT rajat.
 
-      ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
+      ELSE IF Syst.Var:toimi = 3 THEN DO:
          
          qty = 0.
          FOR EACH Invoice NO-LOCK USE-INDEX InvDate where
-                  Invoice.Brand   = Syst.CUICommon:gcBrand    AND
+                  Invoice.Brand   = Syst.Var:gcBrand    AND
                   Invoice.InvDate = ldtInvDate AND
                   Invoice.PrintState = 0       AND
                   Invoice.PaymState  = 0       AND
@@ -183,8 +183,8 @@ repeat WITH FRAME rajat ON ENDKEY UNDO, RETURN:
          VIEW-AS ALERT-BOX.
       END. 
       
-      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE rajat.
-      ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
+      ELSE IF Syst.Var:toimi = 8 THEN LEAVE rajat.
+      ELSE IF Syst.Var:toimi = 5 THEN DO:
          ok = FALSE.
          message "Do you REALLY want to change dates with " + string(diff) +
                  " days (Y/N) ?" UPDATE ok.
@@ -194,7 +194,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO, RETURN:
 
    qty = 0.
    FOR EACH Invoice USE-INDEX InvDate where
-            Invoice.Brand   = Syst.CUICommon:gcBrand    AND
+            Invoice.Brand   = Syst.Var:gcBrand    AND
             Invoice.InvDate = ldtInvDate AND
             Invoice.PrintState = 0       AND
             Invoice.PaymState  = 0       AND

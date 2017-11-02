@@ -18,7 +18,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 DEF VAR lcQuery AS CHARACTER NO-UNDO. 
 
-lcQuery = 'FOR EACH Reseller NO-LOCK WHERE Reseller.Brand = ' + QUOTER(Syst.CUICommon:gcBrand).
+lcQuery = 'FOR EACH Reseller NO-LOCK WHERE Reseller.Brand = ' + QUOTER(Syst.Var:gcBrand).
 
 fListQuery(
    "Reseller",

@@ -52,7 +52,7 @@ form
    "CLI / CCN." AT 10 
    skip(14)
    WITH ROW 1 side-labels width 80
-        title " " + Syst.CUICommon:ynimi + 
+        title " " + Syst.Var:ynimi + 
         " CALL SUMMARY PER CLI (REPORT 3) " +
         string(TODAY,"99-99-99") + " "
         FRAME valinta.
@@ -137,7 +137,7 @@ ASSIGN pvm1          = DATE(MONTH(TODAY),1,YEAR(TODAY))
        liAddress     = 1
        liPrintTo     = 1
        ufkey         = FALSE
-       Syst.CUICommon:nap           = "1".
+       Syst.Var:nap           = "1".
 
 toimi:
 repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
@@ -149,24 +149,24 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
         
       IF ufkey THEN DO:
          ASSIGN
-         Syst.CUICommon:ufk[1]= 132 Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
-         Syst.CUICommon:ufk[5]= 63 Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-         Syst.CUICommon:ehto = 3.
+         Syst.Var:ufk[1]= 132 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= 63 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3.
          RUN Syst/ufkey.p.
          READKEY.
-         Syst.CUICommon:nap = keylabel(LASTKEY).
+         Syst.Var:nap = keylabel(LASTKEY).
       END.
       ELSE ufkey = TRUE.
 
-      if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
-         ASSIGN Syst.CUICommon:ehto = 9 ufkey = TRUE. 
+      if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:
+         ASSIGN Syst.Var:ehto = 9 ufkey = TRUE. 
          RUN Syst/ufkey.p.
 
          REPEAT ON ENDKEY UNDO, LEAVE:
             UPDATE 
             InvNum
             VALIDATE(CAN-FIND (FIRST Invoice WHERE
-                               Invoice.Brand  = Syst.CUICommon:gcBrand AND
+                               Invoice.Brand  = Syst.Var:gcBrand AND
                                Invoice.InvNum = INPUT invnum),
             "Unknown Invoice Number!")                   
             lcAtil 
@@ -174,7 +174,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                      CAN-FIND(FIRST CLI WHERE 
                                     CLI.CLI = INPUT lcAtil) OR
                      CAN-FIND(FIRST MSOwner WHERE 
-                                    MSOwner.Brand = Syst.CUICommon:gcBrand AND
+                                    MSOwner.Brand = Syst.Var:gcBrand AND
                                     MSOwner.CLI = INPUT lcAtil),
                      "Unknown CLI")
             liPrintTo
@@ -213,7 +213,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
 
       END.
 
-      else if lookup(Syst.CUICommon:nap,"5,f5") > 0 AND InvNum > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"5,f5") > 0 AND InvNum > 0 THEN DO:
         
          IF liPrintTo = 1 AND lcTestFlag > "" THEN DO:
             IF NOT fEPLStart(lcTestFlag) THEN NEXT.
@@ -223,12 +223,12 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
            
       END.
 
-      else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"8,f8") > 0 THEN DO:
          RETURN.
       END.
-END. /* Syst.CUICommon:toimi */
+END. /* Syst.Var:toimi */
 
-Syst.CUICommon:ehto = 5.
+Syst.Var:ehto = 5.
 RUN Syst/ufkey.p.
 
 ASSIGN llOk      = TRUE
@@ -238,7 +238,7 @@ IF llCover THEN DO:
 
    IF lcAtil > "" AND liAddress = 3 THEN DO: 
       FIND FIRST MsOwner NO-LOCK WHERE
-                 MsOwner.Brand   = Syst.CUICommon:gcBrand AND
+                 MsOwner.Brand   = Syst.Var:gcBrand AND
                  MsOwner.CLI     = lcAtil  AND
                  MsOwner.TsBeg  <= liPer2  AND
                  MsOwner.TsEnd  >= liPer1 NO-ERROR.
@@ -342,7 +342,7 @@ IF lcErrFile = "" AND liError NE -1 THEN DO:
    /* log from print */
    DO FOR ITSendLog TRANS:
       CREATE ITSendLog.
-      ASSIGN ITSendLog.Brand      = Syst.CUICommon:gcBrand 
+      ASSIGN ITSendLog.Brand      = Syst.Var:gcBrand 
              ITSendLog.TxtType    = 5
              ITSendLog.ITNum      = 0
              ITSendLog.CustNum    = CustNum
@@ -352,7 +352,7 @@ IF lcErrFile = "" AND liError NE -1 THEN DO:
                                     ELSE 4
              ITSendLog.EMail      = ""
              ITSendLog.RepType    = "Spec3"
-             ITSendLog.UserCode   = Syst.CUICommon:katun.
+             ITSendLog.UserCode   = Syst.Var:katun.
              ITSendLog.SendStamp  = Func.Common:mMakeTS().
    END.
     
@@ -372,7 +372,7 @@ RUN Mc/creasfee.p (CustNum,
               ?,
               "",
               TRUE,
-              Syst.CUICommon:katun,
+              Syst.Var:katun,
               "",
               0,
               "",

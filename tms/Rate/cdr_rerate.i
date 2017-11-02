@@ -79,7 +79,7 @@ FUNCTION fRerateLogStart RETURNS INT
 
    CREATE ActionLog.
    ASSIGN
-      ActionLog.Brand = Syst.CUICommon:gcBrand
+      ActionLog.Brand = Syst.Var:gcBrand
       ActionLog.UserCode = icUserCode
       ActionLog.ActionID = "Rerate"
       ActionLog.ActionStatus = 0
@@ -104,7 +104,7 @@ FUNCTION fRerateReportFile RETURNS INT
    DEF VAR lcReportFile AS CHARACTER NO-UNDO.
    
    FIND ActionLog EXCLUSIVE-LOCK WHERE
-        ActionLog.Brand = Syst.CUICommon:gcBrand AND
+        ActionLog.Brand = Syst.Var:gcBrand AND
         ActionLog.TableName = "MobCDR" AND
         ActionLog.KeyValue = STRING(iiRerateID) AND
         ActionLog.ActionId = "Rerate" NO-ERROR.
@@ -134,7 +134,7 @@ FUNCTION fRerateLogFinish RETURNS INT
    DEF VAR lcEnded AS CHARACTER NO-UNDO. 
 
    FIND ActionLog EXCLUSIVE-LOCK WHERE
-        ActionLog.Brand = Syst.CUICommon:gcBrand AND
+        ActionLog.Brand = Syst.Var:gcBrand AND
         ActionLog.TableName = "MobCDR" AND
         ActionLog.KeyValue = STRING(iiRerateID) AND
         ActionLog.ActionId = "Rerate" NO-ERROR.

@@ -9,8 +9,8 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "NewtonAd".
-Syst.CUICommon:gcBrand  = "1".
+Syst.Var:katun = "NewtonAd".
+Syst.Var:gcBrand  = "1".
 {Syst/tmsconst.i}
 {Func/vasfunc.i}
 /* Input parameters */
@@ -84,7 +84,7 @@ FOR EACH daycampaign NO-LOCK:
 
    IF llgSVA THEN 
    DO:
-      FIND FIRST FMItem WHERE FMItem.Brand     EQ Syst.CUICommon:gcBrand              AND 
+      FIND FIRST FMItem WHERE FMItem.Brand     EQ Syst.Var:gcBrand              AND 
                               FMItem.FeeModel  EQ DayCampaign.FeeModel AND 
                               FMItem.BillCode  <> ""                   AND 
                               FMItem.PriceList <> ""                   AND
@@ -138,7 +138,7 @@ FOR EACH daycampaign NO-LOCK:
            END.
        END.
 
-       FIND FIRST FMItem WHERE FMItem.Brand     EQ Syst.CUICommon:gcBrand              AND 
+       FIND FIRST FMItem WHERE FMItem.Brand     EQ Syst.Var:gcBrand              AND 
                                FMItem.FeeModel  EQ DayCampaign.FeeModel AND 
                                FMItem.BillCode  <> ""                   AND 
                                FMItem.PriceList <> ""                   AND

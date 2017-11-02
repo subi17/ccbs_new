@@ -13,8 +13,8 @@
 {Func/upsellbundle.i}
 {Func/matrix.i}
 
-Syst.CUICommon:gcBrand =  Syst.CUICommon:gcBrand.
-Syst.CUICommon:katun = "Cron".
+Syst.Var:gcBrand =  Syst.Var:gcBrand.
+Syst.Var:katun = "Cron".
 /*
 "FLEX_500MB_UPSELL"
 "FLEX_5GB_UPSELL"
@@ -120,7 +120,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcUpsellList):
                                          servicelimit.groupcode, ldeNow).
 
          IF llgSimulate EQ FALSE THEN DO:
-            IF fMatrixAnalyse(Syst.CUICommon:gcBrand,
+            IF fMatrixAnalyse(Syst.Var:gcBrand,
                            "PERCONTR",
                            "PerContract;SubsTypeTo",
                            lcUpsell + ";" + fPrintCLIType(mservicelimit.msseq),

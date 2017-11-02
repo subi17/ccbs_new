@@ -54,7 +54,7 @@ lcPassword = "".
 
 UPDATE lcUsercode lcPassword WITH FRAME loginFrame.
 
-IF lcUsercode NE Syst.CUICommon:katun THEN DO:
+IF lcUsercode NE Syst.Var:katun THEN DO:
    MESSAGE "ACCESS DENIED!" VIEW-AS ALERT-BOX ERROR.
    RETURN.
 END.
@@ -104,8 +104,8 @@ REPEAT:
       
       UPDATE lcUsercode WITH FRAME passFrame EDITING:
          READKEY.
-         Syst.CUICommon:nap = KEYLABEL(LASTKEY).
-         IF LOOKUP(Syst.CUICommon:nap,"F4,F8") > 0 THEN LEAVE mainloop.
+         Syst.Var:nap = KEYLABEL(LASTKEY).
+         IF LOOKUP(Syst.Var:nap,"F4,F8") > 0 THEN LEAVE mainloop.
          APPLY LASTKEY.
       END.
       
@@ -145,7 +145,7 @@ REPEAT:
             FIND CURRENT tmspass EXCLUSIVE-LOCK.
             ASSIGN
                tmspass.createts = Func.Common:mMakeTS()
-               tmspass.creator  = Syst.CUICommon:katun
+               tmspass.creator  = Syst.Var:katun
                tmspass.password = lcNewPasswd1.
             RELEASE tmspass. 
             MESSAGE "Password changed! User must change it on first login."

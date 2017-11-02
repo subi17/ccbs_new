@@ -25,7 +25,7 @@ DEFINE TEMP-TABLE ttHistory
 FIELD passwd AS CHAR.
 
 DEFINE VARIABLE lcUserCode AS CHARACTER NO-UNDO FORMAT "X(16)". 
-lcUserCode = Syst.CUICommon:katun.
+lcUserCode = Syst.Var:katun.
 
 DEFINE VARIABLE lcNewPass  AS CHARACTER FORMAT "X(16)" NO-UNDO.
 DEFINE VARIABLE lcOldPass  AS CHARACTER FORMAT "X(16)" NO-UNDO.
@@ -70,7 +70,7 @@ SKIP(1)
 
 WITH 
    WIDTH 80 ROW 2 
-     TITLE " " + Syst.CUICommon:ynimi + " PASSWORD CHANGE "  +
+     TITLE " " + Syst.Var:ynimi + " PASSWORD CHANGE "  +
            STRING(TODAY,"99-99-99") + " "
    NO-LABELS
 FRAME passFrame.
@@ -80,7 +80,7 @@ FRAME passFrame.
    -------------------------------------------------------------------- */
    
 FIND FIRST tmsuser NO-LOCK WHERE 
-           tmsuser.usercode = Syst.CUICommon:katun.
+           tmsuser.usercode = Syst.Var:katun.
            
 /* get the user's password history in temptable */
 liHistoryCount = 0.
@@ -95,9 +95,9 @@ END.
 
 DISPLAY liPassWdHistory lcUserCode WITH FRAME passFrame.
  
-Syst.CUICommon:ufk = 0.
-Syst.CUICommon:ufk[8] = 8.
-Syst.CUICommon:ehto = 3.
+Syst.Var:ufk = 0.
+Syst.Var:ufk[8] = 8.
+Syst.Var:ehto = 3.
 
 mainLoop:
 REPEAT:
@@ -118,16 +118,16 @@ REPEAT:
       UPDATE lcOldPass lcNewPass lcNewPass2 WITH FRAME passFrame EDITING:
          
          READKEY.
-         Syst.CUICommon:nap = KEYLABEL(LASTKEY).
+         Syst.Var:nap = KEYLABEL(LASTKEY).
 
-         IF LOOKUP(Syst.CUICommon:nap,"f4,f8") > 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"f4,f8") > 0 THEN DO:
             olPasswordChanged = FALSE.
             HIDE FRAME passFrame.
             RETURN.
          END.
          
          
-         IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
             
             IF FRAME-FIELD = "lcOldPass" THEN DO:
             END.

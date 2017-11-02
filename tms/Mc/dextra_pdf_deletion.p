@@ -11,8 +11,8 @@
 
 /* ***************************  Definitions  ************************** */
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/cparam2.i}
@@ -47,7 +47,7 @@ REPEAT:
    IF ERROR-STATUS:ERROR THEN NEXT.
         
    FOR FIRST Order WHERE 
-            Order.Brand      = Syst.CUICommon:gcBrand AND
+            Order.Brand      = Syst.Var:gcBrand AND
             Order.OrderId    = liOrderId                       AND
            (Order.StatusCode = {&ORDER_STATUS_CLOSED}          OR
             Order.StatusCode = {&ORDER_STATUS_CLOSED_BY_FRAUD} OR

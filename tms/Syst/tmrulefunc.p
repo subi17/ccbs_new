@@ -51,12 +51,12 @@ RUN pInitMenu.
 form
     ttMenu.MenuText AT 2 FORMAT "x(50)"
 WITH ROW FrmRow OVERLAY FrmDown DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " TMRule Functions " 
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " TMRule Functions " 
     CENTERED NO-LABELS 
     FRAME sel.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -125,12 +125,12 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
          ASSIGN
-           Syst.CUICommon:ufk    = 0 
-           Syst.CUICommon:ufk[1] = 0 
-           Syst.CUICommon:ufk[2] = 0
-           Syst.CUICommon:ufk[5] = 11 
-           Syst.CUICommon:ufk[8] = 8 
-           Syst.CUICommon:ehto   = 3 
+           Syst.Var:ufk    = 0 
+           Syst.Var:ufk[1] = 0 
+           Syst.Var:ufk[2] = 0
+           Syst.Var:ufk[5] = 11 
+           Syst.Var:ufk[8] = 8 
+           Syst.Var:ehto   = 3 
            ufkey  = FALSE.
       
          RUN Syst/ufkey.p.
@@ -139,12 +139,12 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
          CHOOSE ROW ttMenu.Menutext {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttMenu.MenuText WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) ttMenu.MenuText WITH FRAME sel.
       END.
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(Syst.CUICommon:nap,"8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -153,7 +153,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -178,7 +178,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            
@@ -208,7 +208,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ttMenu WHERE ROWID(ttMenu) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -232,7 +232,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -246,12 +246,12 @@ REPEAT WITH FRAME sel:
        END.
      END. /* NEXT page */
      
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5,enter,return") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5,enter,return") > 0 THEN DO:
         RUN local-find-this(FALSE).
         
         IF AVAILABLE ttMenu THEN DO:
            
-           Syst.CUICommon:ehto = 5.
+           Syst.Var:ehto = 5.
            RUN Syst/ufkey.p.
            
            RUN VALUE(ttMenu.Module)(iiTMRuleSeq,
@@ -268,25 +268,25 @@ REPEAT WITH FRAME sel:
         END.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"HOME,H") > 0 THEN DO : /* FIRST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"HOME,H") > 0 THEN DO : /* FIRST record */
         RUN local-find-FIRST.
         ASSIGN Memory = ROWID(ttMenu) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = ROWID(ttMenu) must-print = TRUE.
         NEXT LOOP.
      END.
      
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 PROCEDURE local-find-this:
@@ -347,7 +347,7 @@ PROCEDURE pInitMenu.
    
    /* Get list of available functions 
       a config table needed */
-   IF fTokenRights(Syst.CUICommon:katun,"SYST") = "RW" THEN DO:
+   IF fTokenRights(Syst.Var:katun,"SYST") = "RW" THEN DO:
       CREATE ttMenu.
       ASSIGN ttMenu.Module   = "Syst/tmrlimitupd.p"
              ttMenu.ModParam = "1"

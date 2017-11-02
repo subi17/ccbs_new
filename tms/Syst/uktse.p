@@ -26,20 +26,20 @@ DEF VAR must-print  AS logic NO-UNDO.
 form
 TMSUser.UserCode  /* column-label "UserId"    */
 TMSUser.UserName /* column-label "User Name" */
-WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
-title color value(Syst.CUICommon:ctc) " USERS "
+WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.Var:cfc)
+title color value(Syst.Var:ctc) " USERS "
 OVERLAY FRAME kase.
 
-Syst.CUICommon:cfc = "kase". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "kase". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 runko:
 repeat:
 
    ASSIGN
 
-     Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[5] = 11
-     Syst.CUICommon:ufk[6] = 0  Syst.CUICommon:ufk[7] = 0  Syst.CUICommon:ufk[8] = 8  Syst.CUICommon:ufk[9] = 1 siirto = ?.
+     Syst.Var:ufk = 0 Syst.Var:ufk[5] = 11
+     Syst.Var:ufk[6] = 0  Syst.Var:ufk[7] = 0  Syst.Var:ufk[8] = 8  Syst.Var:ufk[9] = 1 siirto = ?.
 
-   Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 3. RUN Syst/ufkey.p.
 
    FIND FIRST TMSUser no-lock no-error.
    IF NOT AVAILABLE TMSUser THEN DO:
@@ -81,14 +81,14 @@ BROWSE:
 
          HIDE MESSAGE.
          CHOOSE ROW TMSUser.UserCode {Syst/uchoose.i} no-error WITH FRAME kase.
-         COLOR DISPLAY value(Syst.CUICommon:ccc) TMSUser.UserCode WITH FRAME kase.
+         COLOR DISPLAY value(Syst.Var:ccc) TMSUser.UserCode WITH FRAME kase.
 
          if frame-value = " " AND rtab[FRAME-LINE] = ? THEN NEXT.
-         Syst.CUICommon:nap = keylabel(LASTKEY).
+         Syst.Var:nap = keylabel(LASTKEY).
 
 
          /* previous line */
-         if Syst.CUICommon:nap = "1" or Syst.CUICommon:nap = "f1" or Syst.CUICommon:nap = "cursor-up" THEN DO
+         if Syst.Var:nap = "1" or Syst.Var:nap = "f1" or Syst.Var:nap = "cursor-up" THEN DO
          WITH FRAME kase:
             IF FRAME-LINE = 1 THEN DO:
                FIND TMSUser where recid(TMSUser) = rtab[FRAME-LINE] no-lock.
@@ -116,7 +116,7 @@ BROWSE:
          END. /* previous line */
 
          /* NEXT line */
-         else if Syst.CUICommon:nap = "2" or Syst.CUICommon:nap = "f2" or Syst.CUICommon:nap = "cursor-down" THEN DO
+         else if Syst.Var:nap = "2" or Syst.Var:nap = "f2" or Syst.Var:nap = "cursor-down" THEN DO
          WITH FRAME kase:
 
             IF FRAME-LINE = FRAME-DOWN THEN DO:
@@ -145,7 +145,7 @@ BROWSE:
          END. /* NEXT line */
 
          /* previous page */
-         else if Syst.CUICommon:nap = "page-up" or Syst.CUICommon:nap = "prev-page" THEN DO:
+         else if Syst.Var:nap = "page-up" or Syst.Var:nap = "prev-page" THEN DO:
             FIND TMSUser where recid(TMSUser) = ylin no-lock no-error.
             FIND prev TMSUser no-lock no-error.
 
@@ -170,7 +170,7 @@ BROWSE:
 
 
         /* NEXT page */
-        else if Syst.CUICommon:nap = "page-down" or Syst.CUICommon:nap = "next-page" THEN DO
+        else if Syst.Var:nap = "page-down" or Syst.Var:nap = "next-page" THEN DO
         WITH FRAME kase:
 
            IF rtab[FRAME-DOWN] = ? THEN DO:
@@ -186,22 +186,22 @@ BROWSE:
         END. /* NEXT page */
 
 
-        else  if Syst.CUICommon:nap = "enter" or Syst.CUICommon:nap = "return" OR
-        Syst.CUICommon:nap = "f5" or Syst.CUICommon:nap = "5" THEN DO:
+        else  if Syst.Var:nap = "enter" or Syst.Var:nap = "return" OR
+        Syst.Var:nap = "f5" or Syst.Var:nap = "5" THEN DO:
            /* valinta */
            siirto = frame-value.
            LEAVE runko.
         END.
 
 
-        else if Syst.CUICommon:nap = "end,e" THEN DO : /* LAST record */
+        else if Syst.Var:nap = "end,e" THEN DO : /* LAST record */
            FIND LAST TMSUser no-lock.
            ylin = recid(TMSUser).
            must-print = TRUE.
            NEXT LOOP.
         END.
 
-        else if Syst.CUICommon:nap = "home,h" THEN DO:
+        else if Syst.Var:nap = "home,h" THEN DO:
            FIND FIRST TMSUser no-lock.
            ylin = recid(TMSUser).
            must-print = TRUE.
@@ -209,7 +209,7 @@ BROWSE:
         END.
 
 
-        else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" THEN LEAVE runko.
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" THEN LEAVE runko.
 
      END.  /* BROWSE */
    END.  /* LOOP */

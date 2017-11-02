@@ -100,7 +100,7 @@ if cday = ? then callcheck = "NO Calls CHECKED".
 else             callcheck = "NO Calls SINCE " + string(cday,"99.99.99").
 
 DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
-ynimi = Syst.CUICommon:ynimi.
+ynimi = Syst.Var:ynimi.
 
 form header
    fill("=",90) format "x(90)" SKIP
@@ -130,9 +130,9 @@ message "Printing in process, cancel: press 'END'".
 print-line:
 FOR
     EACH Customer no-lock            where
-         Customer.Brand     = Syst.CUICommon:gcBrand AND
+         Customer.Brand     = Syst.Var:gcBrand AND
         (if CustGroup ne "" THEN can-find(CGMember where
-                                        CGMember.Brand     = Syst.CUICommon:gcBrand AND
+                                        CGMember.Brand     = Syst.Var:gcBrand AND
                                         CGMember.CustGroup = CustGroup  AND
                                         CGMember.CustNum  = Customer.CustNum)
                           ELSE TRUE)                                       AND
@@ -170,8 +170,8 @@ FOR
 
    /* onko kjA pyytAnyt keskeytystA ? */
    READKEY PAUSE 0.
-   Syst.CUICommon:nap = keylabel(LASTKEY).
-   if Syst.CUICommon:nap = "END" THEN DO:
+   Syst.Var:nap = keylabel(LASTKEY).
+   if Syst.Var:nap = "END" THEN DO:
       message "Do You really want to cancel (Y/N) ?"
       UPDATE ke.
       IF ke THEN DO:
@@ -182,13 +182,13 @@ FOR
    END.
 
    FIND FIRST Salesman where
-              Salesman.Brand    = Syst.CUICommon:gcBrand AND
+              Salesman.Brand    = Syst.Var:gcBrand AND
               Salesman.Salesman = Customer.Salesman no-lock no-error.
    IF AVAIL Salesman THEN mynimi = Salesman.SmName.
    else                   mynimi = "! UNKNOWN !".
 
    FIND FIRST Reseller where
-              Reseller.Brand    = Syst.CUICommon:gcBrand AND
+              Reseller.Brand    = Syst.Var:gcBrand AND
               Reseller.Reseller = Customer.Reseller no-lock no-error.
    IF AVAIL Reseller THEN rsname = Reseller.RsName.
    else                 rsname = "! UNKNOWN !".
@@ -217,7 +217,7 @@ FOR
 
    dkatnimi = "".
    FIND FIRST CustCat where 
-              CustCat.Brand    = Syst.CUICommon:gcBrand AND
+              CustCat.Brand    = Syst.Var:gcBrand AND
               CustCat.Category = Customer.Category 
       no-lock no-error.
    IF AVAIL CustCat THEN ASSIGN dkatnimi = CustCat.CatName.
@@ -233,7 +233,7 @@ FOR
    hdr0 =  "".
    if CustGroup ne "" THEN DO:
       FIND CustGroup where 
-           CustGroup.Brand     = Syst.CUICommon:gcBrand AND
+           CustGroup.Brand     = Syst.Var:gcBrand AND
            CustGroup.CustGroup = CustGroup no-lock.
       hdr0 = "Customers in an External Group '" + CustGroup + "': " +
       CustGroup.CGName.
@@ -275,13 +275,13 @@ FOR
 
    /* is there a memo text ? */
    IF CAN-FIND(FIRST memo WHERE
-                     memo.Brand     = Syst.CUICommon:gcBrand AND
+                     memo.Brand     = Syst.Var:gcBrand AND
                      memo.HostTable = "Customer" AND
                      memo.KeyValue  = STRING(Customer.CustNum) AND
                      memo.memotext NE "") THEN
    DO:
       FOR EACH memo WHERE
-               memo.Brand     = Syst.CUICommon:gcBrand AND
+               memo.Brand     = Syst.Var:gcBrand AND
                memo.HostTable = "Customer" AND
                memo.KeyValue  = STRING(Customer.CustNum) AND
                memo.memotext NE "" NO-LOCK:

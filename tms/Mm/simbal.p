@@ -25,7 +25,7 @@ INDEX s s.
 PAUSE 0.
 VIEW FRAME LOG.
 MESSAGE "Calculating SIM Cards, wait a moment ...".
-FOR EACH SIM no-lock WHERE sim.Brand = Syst.CUICommon:gcBrand .
+FOR EACH SIM no-lock WHERE sim.Brand = Syst.Var:gcBrand .
     FIND tt WHERE tt.s = sim.simstat NO-ERROR.
     IF NOT AVAIL tt THEN DO:
        CREATE tt.
@@ -53,6 +53,6 @@ FOR EACH tt NO-LOCK.
 END.   
 HIDE MESSAGE NO-PAUSE.
 
-ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0. RUN Syst/ufkey.p.
+ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0. RUN Syst/ufkey.p.
 HIDE FRAME LOG NO-PAUSE.
 

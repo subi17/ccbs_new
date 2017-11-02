@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 
 {Syst/host.i}
 
@@ -20,7 +20,7 @@ ASSIGN
 OUTPUT STREAM strout TO VALUE(lcDumpFile).
 
 FIND FIRST DumpFile NO-LOCK WHERE 
-           DumpFile.Brand    = Syst.CUICommon:gcBrand AND 
+           DumpFile.Brand    = Syst.Var:gcBrand AND 
            DumpFile.DumpName = "ARECDWHDump" NO-ERROR.
 
 IF AVAIL DumpFile THEN DO:

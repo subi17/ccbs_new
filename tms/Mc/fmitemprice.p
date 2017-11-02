@@ -13,7 +13,7 @@
 {Syst/eventval.i} 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 END.
@@ -75,7 +75,7 @@ PROCEDURE pFMItemPrice:
    END.
 
    IF NOT CAN-FIND(BillItem WHERE
-                   BillItem.Brand    = Syst.CUICommon:gcBrand AND
+                   BillItem.Brand    = Syst.Var:gcBrand AND
                    BillItem.BillCode = MsRequest.ReqCParam1)
    THEN DO:
       fReqError("Unknown billing item").
@@ -131,10 +131,10 @@ PROCEDURE pFMItemPrice:
       IF lcFeeModel[liReqCnt] = "" THEN NEXT.
       
       FOR EACH FeeModel NO-LOCK WHERE
-               FeeModel.Brand   = Syst.CUICommon:gcBrand      AND
+               FeeModel.Brand   = Syst.Var:gcBrand      AND
                FeeModel.FeeModel BEGINS lcFeeModel[liReqCnt],
          FIRST FMItem EXCLUSIVE-LOCK WHERE
-               FMItem.Brand     = Syst.CUICommon:gcBrand              AND
+               FMItem.Brand     = Syst.Var:gcBrand              AND
                FMITem.FeeModel  = FeeModel.FeeModel    AND
                FMItem.BillCode  = MsRequest.ReqCParam1 AND
                FMItem.FromDate <= ldtFromDate          AND

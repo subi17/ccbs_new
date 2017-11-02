@@ -8,8 +8,8 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
 {Func/msisdn.i}
 
 DEF VAR lcminMSISDN     AS CHAR NO-UNDO FORMAT "X(10)".
@@ -51,7 +51,7 @@ END FUNCTION.
 FUNCTION fReleaseSIM RETURNS LOG (INPUT icICC AS CHAR):
 
    FOR FIRST SIM EXCLUSIVE-LOCK WHERE
-             SIM.Brand EQ Syst.CUICommon:gcBrand AND
+             SIM.Brand EQ Syst.Var:gcBrand AND
              SIM.ICC   EQ icICC   AND
              SIM.SimStat <> 1:
       SIM.SimStat = 1.
@@ -67,7 +67,7 @@ FUNCTION fReleaseMSISDN RETURNS LOG (INPUT icMSISDN AS CHAR):
    ELSE liMSISDN_status = 99.   /* use normal status value */
 
    FOR FIRST MSISDN EXCLUSIVE-LOCK WHERE
-             MSISDN.Brand = Syst.CUICommon:gcBrand AND
+             MSISDN.Brand = Syst.Var:gcBrand AND
              MSISDN.CLI   = icMSISDN AND
              MSISDN.StatusCode < 98:
       fMakeMsidnHistory(INPUT RECID(MSISDN)).
@@ -85,7 +85,7 @@ FUNCTION fDeleteSubscription RETURNS LOG (INPUT icMSISDN AS CHAR):
             MsOwner.CLI = icMSISDN EXCLUSIVE-LOCK:
 
        FOR EACH FixedFee USE-INDEX Custnum WHERE
-                FixedFee.Brand     = Syst.CUICommon:gcBrand AND
+                FixedFee.Brand     = Syst.Var:gcBrand AND
                 FixedFee.Custnum   = MsOwner.CustNum AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue  = STRING(MsOwner.MsSeq) EXCLUSIVE-LOCK:
@@ -96,7 +96,7 @@ FUNCTION fDeleteSubscription RETURNS LOG (INPUT icMSISDN AS CHAR):
        END. /* FOR EACH FixedFee USE-INDEX HostTable WHERE */
 
        FOR EACH SingleFee USE-INDEX Custnum WHERE
-                SingleFee.Brand     = Syst.CUICommon:gcBrand AND
+                SingleFee.Brand     = Syst.Var:gcBrand AND
                 SingleFee.Custnum   = MsOwner.CustNum AND
                 SingleFee.HostTable = "Mobsub" AND
                 SingleFee.KeyValue  = STRING(MsOwner.MsSeq) EXCLUSIVE-LOCK:
@@ -152,13 +152,13 @@ FUNCTION fDeleteSubscription RETURNS LOG (INPUT icMSISDN AS CHAR):
    END.
 
    FOR EACH MobSub WHERE
-            MobSub.Brand = Syst.CUICommon:gcBrand AND
+            MobSub.Brand = Syst.Var:gcBrand AND
             MobSub.CLI   = icMSISDN EXCLUSIVE-LOCK:
       DELETE MobSub.
    END.
 
    FOR EACH TermMobSub WHERE
-            TermMobSub.Brand = Syst.CUICommon:gcBrand AND
+            TermMobSub.Brand = Syst.Var:gcBrand AND
             TermMobSub.CLI   = icMSISDN EXCLUSIVE-LOCK:
       DELETE TermMobSub.
    END.
@@ -169,14 +169,14 @@ END FUNCTION.
 /* Main Block */
 
 FOR EACH MSISDN NO-LOCK WHERE
-         MSISDN.Brand = Syst.CUICommon:gcBrand AND
+         MSISDN.Brand = Syst.Var:gcBrand AND
          MSISDN.CLI   GE lcminMSISDN AND
          MSISDN.CLI   LE lcmaxMSISDN AND
          MSISDN.ValidTo GE Func.Common:mMakeTS() AND
          MSISDN.StatusCode < 98:
 
    FIND FIRST Order WHERE
-              Order.Brand = Syst.CUICommon:gcBrand AND
+              Order.Brand = Syst.Var:gcBrand AND
               Order.CLI   = MSISDN.CLI AND
               Order.OrderType = 0 NO-LOCK NO-ERROR.
    IF NOT AVAIL Order THEN DO:
@@ -185,7 +185,7 @@ FOR EACH MSISDN NO-LOCK WHERE
    END.
    ELSE DO:
       FIND FIRST SIM WHERE
-                 SIM.Brand EQ Syst.CUICommon:gcBrand   AND
+                 SIM.Brand EQ Syst.Var:gcBrand   AND
                  SIM.ICC   EQ Order.ICC  NO-LOCK NO-ERROR.
       IF AVAIL SIM THEN   /* If stock not correct then ask confirmation */
          IF NOT (SIM.Stock EQ "TESTING" OR

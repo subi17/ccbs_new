@@ -74,7 +74,7 @@ FUNCTION fPPInvCustTot RETURNS LOGICAL
    odBal = 0.
    
    FOR EACH Invoice NO-LOCK WHERE
-            Invoice.Brand   = Syst.CUICommon:gcBrand          AND
+            Invoice.Brand   = Syst.Var:gcBrand          AND
             Invoice.CustNum = PaymPlan.CustNum AND
             Invoice.PaymState NE 2             AND 
             Invoice.InvType NE 3               AND

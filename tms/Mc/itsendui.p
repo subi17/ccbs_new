@@ -47,7 +47,7 @@ FORM
       FORMAT "X(8)"
       VALIDATE(INPUT lcInvGroup = "" OR
                CAN-FIND(InvGroup WHERE 
-                        InvGroup.Brand    = Syst.CUICommon:gcBrand AND
+                        InvGroup.Brand    = Syst.Var:gcBrand AND
                         InvGroup.InvGroup = INPUT lcInvGroup),
               "Unknown invoicing group")
 
@@ -91,7 +91,7 @@ FORM
 
    SKIP(7)
    WITH ROW 1 SIDE-LABELS WIDTH 80
-        TITLE " " + Syst.CUICommon:ynimi + " SENDING OF INFORMATION TEXTS " +
+        TITLE " " + Syst.Var:ynimi + " SENDING OF INFORMATION TEXTS " +
               STRING(TODAY,"99-99-99") + " "
         FRAME fCriter.
 
@@ -120,25 +120,25 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
       IF ufkey THEN DO:
          ASSIGN
-         Syst.CUICommon:ufk[1]= 7   Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
-         Syst.CUICommon:ufk[5]= 795 Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 
-         Syst.CUICommon:ufk[9]= 1
-         Syst.CUICommon:ehto = 3 
+         Syst.Var:ufk[1]= 7   Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= 795 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 
+         Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 
          ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
-      IF llFirst THEN ASSIGN Syst.CUICommon:nap     = "1"  
+      IF llFirst THEN ASSIGN Syst.Var:nap     = "1"  
                              llFirst = FALSE.
       ELSE DO:                             
          READKEY.
-         ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
+         ASSIGN Syst.Var:nap = keylabel(LASTKEY).
       END. 
 
-      IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO:
 
          repeat WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
-             Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+             Syst.Var:ehto = 9. RUN Syst/ufkey.p.
              UPDATE 
                 lcInvGroup
                 llExtCustGrp
@@ -149,14 +149,14 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
              WITH FRAME fCriter EDITING:
                 READKEY.
 
-                IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+                IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
 
                    IF FRAME-FIELD = "lcInvGroup" THEN DO:
                       IF INPUT lcInvGroup = "" 
                       THEN DISPLAY "ALL" ;& InvGroup.IGName. 
                       ELSE DO:
                          FIND InvGroup WHERE 
-                              InvGroup.Brand    = Syst.CUICommon:gcBrand AND
+                              InvGroup.Brand    = Syst.Var:gcBrand AND
                               InvGroup.InvGroup = INPUT lcInvGroup
                          NO-LOCK NO-ERROR.
                          IF AVAILABLE InvGroup THEN DISPLAY InvGroup.IGName.
@@ -174,7 +174,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
                          RUN Mc/gathecg.p(INPUT-OUTPUT table ttCustGroup).
 
-                         Syst.CUICommon:ehto = 9.
+                         Syst.Var:ehto = 9.
                          RUN Syst/ufkey.p.
 
                          FOR EACH ttCustGroup:
@@ -214,7 +214,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
          NEXT toimi.
       END.
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 THEN DO:
 
          llOk = FALSE. 
 
@@ -226,7 +226,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
          IF NOT llOk THEN NEXT.
 
-         Syst.CUICommon:ehto = 5.
+         Syst.Var:ehto = 5.
          RUN Syst/ufkey.p.
 
          /* collect customers */
@@ -256,11 +256,11 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
       END.
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN DO:
          LEAVE toimi.
       END.
 
-END. /* Syst.CUICommon:toimi */
+END. /* Syst.Var:toimi */
 
 HIDE MESSAGE NO-PAUSE.
 HIDE FRAME fCriter NO-PAUSE.    

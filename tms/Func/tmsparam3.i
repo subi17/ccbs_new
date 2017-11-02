@@ -89,7 +89,7 @@ PROCEDURE pGetParam:
    DEF INPUT PARAM inp2 AS CHAR NO-UNDO.
 
    FIND FIRST TMSParam where
-              TMSParam.Brand      = Syst.CUICommon:gcBrand AND
+              TMSParam.Brand      = Syst.Var:gcBrand AND
               TMSParam.ParamGroup = inp1    AND
               TMSParam.ParamCode  = inp2
    no-lock no-error.

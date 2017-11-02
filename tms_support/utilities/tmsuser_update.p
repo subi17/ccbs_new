@@ -12,9 +12,9 @@ DEFINE VARIABLE lcLine                  AS CHARACTER NO-UNDO.
 DEFINE BUFFER bTMSPass FOR TMSPass.
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = pcUser.
+Syst.Var:katun = pcUser.
 {Func/cparam2.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 liPasswordHistoryLength = fCParamI("PassWdHistory").
 {Func/log.i}
 
@@ -140,7 +140,7 @@ FUNCTION fNew RETURNS LOGICAL (icLine AS CHAR):
       ASSIGN
          tmspass.usercode = lcUsercode
          tmspass.Password = lcPassword 
-         tmspass.creator  = Syst.CUICommon:katun
+         tmspass.creator  = Syst.Var:katun
          tmspass.createts = ldeTS.
 
       IF lcTemp NE "" THEN DO:
@@ -148,7 +148,7 @@ FUNCTION fNew RETURNS LOGICAL (icLine AS CHAR):
           IF NOT plSimulate THEN DO:
              /*create limit for this user */
              CREATE UserLimit.
-             ASSIGN UserLimit.Brand      = Syst.CUICommon:gcBrand
+             ASSIGN UserLimit.Brand      = Syst.Var:gcBrand
                     UserLimit.LimitType  = 9
                     UserLimit.LimitTarget = "TMSUser"
                     UserLimit.LimitTargetID = TMSUser.UserCode
@@ -234,7 +234,7 @@ FUNCTION fModify RETURNS LOGICAL (icLine AS CHAR):
       IF lcTemp NE "" THEN DO:
 
           FIND UserLimit WHERE
-               UserLimit.Brand = Syst.CUICommon:gcBrand AND
+               UserLimit.Brand = Syst.Var:gcBrand AND
                UserLimit.LimitType = 9 AND
                UserLimit.LimitTarget = "TMSUser" AND
                UserLimit.LimitTargetID = TMSUser.UserCode NO-LOCK NO-ERROR.
@@ -243,7 +243,7 @@ FUNCTION fModify RETURNS LOGICAL (icLine AS CHAR):
              /*create limit for this user */
              IF NOT plSimulate THEN DO:
                 CREATE UserLimit.
-                ASSIGN UserLimit.Brand      = Syst.CUICommon:gcBrand
+                ASSIGN UserLimit.Brand      = Syst.Var:gcBrand
                        UserLimit.LimitType  = 9
                        UserLimit.LimitTarget = "TMSUser"
                        UserLimit.LimitTargetID = TMSUser.UserCode

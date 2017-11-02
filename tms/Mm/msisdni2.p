@@ -58,7 +58,7 @@ help "Latest Date of call" skip(1)
 "  Prepaid " lkm1 "calls, " summa1 "euros"         SKIP(1)
 "  Current balance              " ldCurBal "euros" SKIP(1)  
 WITH
-   row 7 col 9 overlay no-labels title " " + Syst.CUICommon:ynimi +
+   row 7 col 9 overlay no-labels title " " + Syst.Var:ynimi +
    "  Total Value of Calls,  "  + string(substr(lcCLI,1,16)) + ") " FRAME rajat.
 
 
@@ -71,18 +71,18 @@ rajat:
 repeat WITH FRAME rajat:
 
    PAUSE 0.
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE pvm1 pvm2
    validate (input pvm2 >= input pvm1,"Incorrect order !").
 
    toimi:
    repeat WITH FRAME toimi:
-      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0 Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ehto = 0 Syst.Var:ufk[1] = 132 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8.
       RUN Syst/ufkey.p.
-      IF Syst.CUICommon:toimi = 1 THEN NEXT  rajat.
-      IF Syst.CUICommon:toimi = 8 THEN LEAVE rajat.
-      IF Syst.CUICommon:toimi = 5 THEN LEAVE toimi.
+      IF Syst.Var:toimi = 1 THEN NEXT  rajat.
+      IF Syst.Var:toimi = 8 THEN LEAVE rajat.
+      IF Syst.Var:toimi = 5 THEN LEAVE toimi.
    END.
    ASSIGN lkm1 = 0 lkm2 = 0 summa1 = 0 summa2 = 0.
 
@@ -91,8 +91,8 @@ repeat WITH FRAME rajat:
    EMPTY TEMP-TABLE ttCall.
     
    fMobCDRCollect(INPUT "pre",
-                  INPUT Syst.CUICommon:gcBrand,
-                  INPUT Syst.CUICommon:katun,
+                  INPUT Syst.Var:gcBrand,
+                  INPUT Syst.Var:katun,
                   INPUT pvm1,
                   INPUT pvm2,
                   INPUT 0,

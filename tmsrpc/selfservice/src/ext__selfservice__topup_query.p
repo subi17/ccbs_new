@@ -21,8 +21,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-ASSIGN Syst.CUICommon:gcBrand = "1"
-       Syst.CUICommon:katun   = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
+ASSIGN Syst.Var:gcBrand = "1"
+       Syst.Var:katun   = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
 {Func/fexternalapi.i}
 
 /* Input parameters */

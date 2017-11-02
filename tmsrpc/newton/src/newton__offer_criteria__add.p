@@ -15,7 +15,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/eventval.i}
 {Syst/tmsconst.i}
 {Mc/offer.i}
@@ -42,14 +42,14 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-Syst.CUICommon:katun = pcUserName.
+Syst.Var:katun = pcUserName.
 
 {newton/src/settenant.i pcTenant}
 
 CREATE ttOfferCriteria.
 ASSIGN 
     ttOfferCriteria.offercriteriaid = NEXT-VALUE(OfferCriteriaSeq)
-    ttOfferCriteria.brand           = Syst.CUICommon:gcBrand
+    ttOfferCriteria.brand           = Syst.Var:gcBrand
     ttOfferCriteria.offer           = get_string(pcStruct,"offer_id")
     ttOfferCriteria.criteriatype    = get_string(pcStruct, "criteria_type")    
     ttOfferCriteria.BeginStamp      = get_timestamp(pcStruct,"valid_from")

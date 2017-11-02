@@ -173,14 +173,14 @@ PROCEDURE pInitialize:
       RETURN "ERROR: No invoices were found".
 
    FIND FIRST Company WHERE
-              Company.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+              Company.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
    IF NOT AVAIL Company THEN RETURN "ERROR:Company data not available".
 
    /* bank account that is dedicated for dd */
    lcBankID = "DD" + icBankCode.
    
    FOR FIRST BankAccount NO-LOCK WHERE
-             BankAccount.Brand   = Syst.CUICommon:gcBrand AND
+             BankAccount.Brand   = Syst.Var:gcBrand AND
              LOOKUP(lcBankID,BankAccount.InvForm) > 0:
       lcCompanyBank = BankAccount.BankAccount.
    END.
@@ -222,7 +222,7 @@ PROCEDURE pInitialize:
       lcBaseHeader[liPCnt] = Func.Common:mGetHdrText(liPos,1).
    END.
 
-   lcBaseTaxZone = fGetItemName(Syst.CUICommon:gcBrand,
+   lcBaseTaxZone = fGetItemName(Syst.Var:gcBrand,
                                 "TaxZone",
                                 "1",
                                 1,
@@ -321,7 +321,7 @@ PROCEDURE pPrintInvoices:
       IF Invoice.TaxZone = "1" AND Customer.Language = 1 THEN
          lcTaxZone = lcBaseTaxZone.
       ELSE 
-         lcTaxZone = fGetItemName(Syst.CUICommon:gcBrand,
+         lcTaxZone = fGetItemName(Syst.Var:gcBrand,
                                   "TaxZone",
                                   Invoice.TaxZone,
                                   Customer.Language,
@@ -594,12 +594,12 @@ PROCEDURE pLogErrors:
 
          /* save to db for reporting */
          CREATE ErrorLog.
-         ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
+         ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
                 ErrorLog.ActionID  = "DDFILETEST"
                 ErrorLog.TableName = "Invoice"
                 ErrorLog.KeyValue  = ttError.Inv
                 ErrorLog.ActionTS  = ldCurrStamp
-                ErrorLog.UserCode  = Syst.CUICommon:katun
+                ErrorLog.UserCode  = Syst.Var:katun
                 ErrorLog.ErrorMsg  = ttError.ErrMsg.
       END.
 

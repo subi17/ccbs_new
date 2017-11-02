@@ -114,7 +114,7 @@ FIND FIRST ttCriter NO-ERROR.
 IF NOT AVAILABLE ttCriter THEN RETURN "ERROR:Criteria not defined".
 
 DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
-ynimi = Syst.CUICommon:ynimi.
+ynimi = Syst.Var:ynimi.
 
 form header
    viiva1 at 1 SKIP
@@ -247,7 +247,7 @@ ELSE DO:
 
    FOR EACH TCustGroup,
        EACH cgmember NO-LOCK WHERE
-            cgMember.Brand     = Syst.CUICommon:gcBrand AND
+            cgMember.Brand     = Syst.Var:gcBrand AND
             cgmember.custgroup = Tcustgroup.custgroup:
 
       FIND FIRST tcgmember WHERE 
@@ -271,7 +271,7 @@ IF ttCriter.CustNum1 NE ttCriter.CustNum2 THEN ASSIGN
 
 IF ttCriter.InvGroup > "" THEN DO:
    FIND InvGroup WHERE 
-        InvGroup.Brand    = Syst.CUICommon:gcBrand AND
+        InvGroup.Brand    = Syst.Var:gcBrand AND
         InvGroup.InvGroup = ttCriter.InvGroup NO-LOCK NO-ERROR.
    lcInvGroup = ttCriter.InvGroup + " " +   
                 (IF AVAILABLE InvGroup THEN InvGroup.IGName ELSE "").
@@ -281,7 +281,7 @@ ELSE lcInvGroup = "ALL".
 
 runko:
 FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE             
-         Invoice.Brand      = Syst.CUICommon:gcBrand             AND 
+         Invoice.Brand      = Syst.Var:gcBrand             AND 
          Invoice.InvDate   >= ttCriter.InvDate1   AND 
          Invoice.InvDate   <= ttCriter.InvDate2   AND 
          Invoice.ExtInvID  >= ttCriter.ExtInvID1  AND

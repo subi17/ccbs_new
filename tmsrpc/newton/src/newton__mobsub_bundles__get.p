@@ -18,7 +18,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Func/cparam2.i}
 {Mm/active_bundle.i}
 {Mm/fbundle.i}
@@ -73,7 +73,7 @@ FUNCTION fGetMDUBStatus RETURNS INT (
     
    /* Activated */
    FOR EACH ServiceLimitGroup NO-LOCK WHERE 
-            ServiceLimitGroup.Brand     = Syst.CUICommon:gcBrand AND
+            ServiceLimitGroup.Brand     = Syst.Var:gcBrand AND
             ServiceLimitGroup.GroupCode = pcBundle,
        EACH ServiceLimit NO-LOCK WHERE 
             ServiceLimit.GroupCode  = pcBundle AND 
@@ -243,7 +243,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    add_string(lcResultStruct, "id", pcBundleId + "|" + STRING(MobSub.MsSeq)).
 
    FIND FIRST DayCampaign WHERE 
-              DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
+              DayCampaign.Brand   = Syst.Var:gcBrand AND
               DayCampaign.DCEvent = pcBundleId NO-LOCK NO-ERROR. 
    IF AVAIL DayCampaign THEN add_string(lcResultStruct, "name", DayCampaign.DCName).
 

@@ -217,7 +217,7 @@ END.
 IF lcServName = "" THEN lcServName = MsRequest.ReqCParam1.
 
 FIND ServCom WHERE
-     ServCom.Brand   = Syst.CUICommon:gcBrand AND
+     ServCom.Brand   = Syst.Var:gcBrand AND
      ServCom.ServCom = MsRequest.ReqCParam1 NO-LOCK NO-ERROR.
 
 rc = 0.
@@ -248,7 +248,7 @@ IF ServCom.ActType = 0 THEN DO:
 
         IF MobSub.TariffBundle = "" THEN DO:
            FIND FIRST bCLIType WHERE
-                      bCLIType.Brand = Syst.CUICommon:gcBrand AND
+                      bCLIType.Brand = Syst.Var:gcBrand AND
                       bCLIType.CLIType = MobSub.CLIType NO-LOCK NO-ERROR.
            IF AVAIL bCLIType THEN DO:
               IF bCLIType.BaseBundle = "" THEN
@@ -270,7 +270,7 @@ IF ServCom.ActType = 0 THEN DO:
         IF lcShaperConfId = "" THEN lcShaperConfId = "DEFAULT".
 
         FIND FIRST ShaperConf NO-LOCK WHERE
-                   ShaperConf.Brand = Syst.CUICommon:gcBrand AND
+                   ShaperConf.Brand = Syst.Var:gcBrand AND
                    ShaperConf.ShaperConfID = lcShaperConfId NO-ERROR.
         IF NOT AVAIL ShaperConf THEN DO:
            ocError = "ERROR:Shaper Configuration not found".
@@ -378,8 +378,8 @@ BY ttSolog.ActStamp:
       Solog.MsSeq        = MobSub.MsSeq      /* Mobile Subscription No.    */
       Solog.CLI          = MobSub.CLI        /* MSISDN                     */
       Solog.Stat         = 0                 /* just created               */
-      Solog.Brand        = Syst.CUICommon:gcBrand 
-      Solog.Users        = Syst.CUICommon:katun    
+      Solog.Brand        = Syst.Var:gcBrand 
+      Solog.Users        = Syst.Var:katun    
       Solog.MSrequest    = ttSolog.MSrequest.
    
    /* Special handling for Prepaid Bono8 HSDPA, SER-1345  */

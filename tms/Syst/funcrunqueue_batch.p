@@ -10,8 +10,8 @@
 {Syst/commpaa.i}
 
 ASSIGN 
-   Syst.CUICommon:gcBrand = "1" 
-   Syst.CUICommon:katun   = "Cron".
+   Syst.Var:gcBrand = "1" 
+   Syst.Var:katun   = "Cron".
        
 {Syst/eventlog.i}
 
@@ -31,7 +31,7 @@ ttStatus.RunState = "Running".
 
 
 FOR EACH FuncRunQueue NO-LOCK WHERE
-         FuncRunQueue.Brand  = Syst.CUICommon:gcBrand AND
+         FuncRunQueue.Brand  = Syst.Var:gcBrand AND
          FuncRunQueue.Active = TRUE,
     EACH ttStatus,
     EACH FuncRunQSchedule NO-LOCK WHERE
@@ -52,13 +52,13 @@ BY FuncRunQSchedule.StartTS:
       IF RETURN-VALUE BEGINS "ERROR:" THEN DO TRANS:
          CREATE ErrorLog.
          ASSIGN 
-            ErrorLog.Brand     = Syst.CUICommon:gcBrand
+            ErrorLog.Brand     = Syst.Var:gcBrand
             ErrorLog.ActionID  = "FRQUEUERUN" + 
                                  STRING(FuncRunQueue.FRQueueID)
             ErrorLog.TableName = "FuncRunQueue"
             ErrorLog.KeyValue  = STRING(FuncRunQueue.FRQueueID)
             ErrorLog.ErrorMsg  = RETURN-VALUE
-            ErrorLog.UserCode  = Syst.CUICommon:katun.
+            ErrorLog.UserCode  = Syst.Var:katun.
             ErrorLog.ActionTS  = Func.Common:mMakeTS().
       END.
 

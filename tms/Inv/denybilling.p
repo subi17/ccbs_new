@@ -15,7 +15,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -237,7 +237,7 @@ REPEAT:
       
       CREATE Limit.
       ASSIGN 
-         Limit.Brand     = Syst.CUICommon:gcBrand
+         Limit.Brand     = Syst.Var:gcBrand
          Limit.MsSeq     = MobSub.MsSeq   
          Limit.LimitType = 3               
          Limit.TMRuleSeq = 0               

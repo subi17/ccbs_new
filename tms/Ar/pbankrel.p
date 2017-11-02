@@ -63,7 +63,7 @@ FORM
    SKIP(6)
 
    with row 1 side-labels width 80
-        title " " + Syst.CUICommon:ynimi + " PAYMENTS' BANK ACCOUNT REPORT " +
+        title " " + Syst.Var:ynimi + " PAYMENTS' BANK ACCOUNT REPORT " +
         string(TODAY,"99-99-99") + " "
         frame fCrit.
 
@@ -76,30 +76,30 @@ display ldtPaid1 ldtPaid2
         with frame fCrit. 
 
 ASSIGN ufkey = false
-       Syst.CUICommon:nap   = "first". 
+       Syst.Var:nap   = "first". 
 
 toimi:
 REPEAT WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
 
    IF ufkey THEN DO:
       ASSIGN
-         Syst.CUICommon:ufk[1]= 132 Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
-         Syst.CUICommon:ufk[5]= 63  Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 
-         Syst.CUICommon:ufk[9]= 1
-         Syst.CUICommon:ehto = 3 ufkey = FALSE.
+         Syst.Var:ufk[1]= 132 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= 63  Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 
+         Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
       RUN Syst/ufkey.p.
    END.
 
-   IF Syst.CUICommon:nap NE "first" THEN DO:
+   IF Syst.Var:nap NE "first" THEN DO:
       READKEY.
       ASSIGN
-      Syst.CUICommon:nap = KEYLABEL(LASTKEY).
+      Syst.Var:nap = KEYLABEL(LASTKEY).
    END.
-   ELSE ASSIGN Syst.CUICommon:nap = "1". 
+   ELSE ASSIGN Syst.Var:nap = "1". 
 
-   IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
+   IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO:
 
-      Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+      Syst.Var:ehto = 9. RUN Syst/ufkey.p.
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
          UPDATE InvGroup
                 ldtPaid1
@@ -107,16 +107,16 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
          WITH FRAME fCrit EDITING:
 
             READKEY.
-            Syst.CUICommon:nap = KEYLABEL(LASTKEY).
+            Syst.Var:nap = KEYLABEL(LASTKEY).
 
-            IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
+            IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
 
                IF FRAME-FIELD = "InvGroup" THEN DO:
 
                   IF INPUT InvGroup = "" THEN lcIgName = "ALL".
                   ELSE DO:
                      FIND InvGroup WHERE 
-                          InvGroup.Brand    = Syst.CUICommon:gcBrand AND
+                          InvGroup.Brand    = Syst.Var:gcBrand AND
                           InvGroup.InvGroup = INPUT InvGroup
                         NO-LOCK NO-ERROR.
                      IF NOT AVAILABLE InvGroup THEN DO:
@@ -145,15 +145,15 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
 
    END.
 
-   ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:
+   ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 THEN DO:
       LEAVE toimi.
    END.
 
-   ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
+   ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN DO:
       RETURN.
    END.
 
-END. /* Syst.CUICommon:toimi */
+END. /* Syst.Var:toimi */
 
 /* Avataan striimi */
 ASSIGN tila = TRUE.

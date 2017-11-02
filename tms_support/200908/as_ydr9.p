@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-Syst.CUICommon:katun = "anttis".
+Syst.Var:katun = "anttis".
 {Func/barrfunc.i}
 
 input from /apps/snet/200908/barrings_from_Y_to_D_REST.txt.
@@ -37,7 +37,7 @@ repeat:
 /*
    RUN checkmsbarring(
        INPUT mobsub.MsSeq,
-       INPUT Syst.CUICommon:katun,
+       INPUT Syst.Var:katun,
        OUTPUT lcBarrComList,
        OUTPUT lcBarrStatus).
 */

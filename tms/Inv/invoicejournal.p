@@ -48,7 +48,7 @@ DEF INPUT PARAM  ilXOnlySum   AS LOG FORMAT "Yes/No"   NO-UNDO.
 
 /* INPUT PARAMETER VALIDATION */
 FIND FIRST InvGroup NO-LOCK WHERE
-           InvGroup.Brand    = Syst.CUICommon:gcBrand AND 
+           InvGroup.Brand    = Syst.Var:gcBrand AND 
            InvGroup.InvGroup = icInvGroup
            NO-ERROR.
 IF NOT AVAIL InvGroup THEN 
@@ -151,7 +151,7 @@ viiva2 = fill("=",lev)
 viiva3 = fill("-",lev).
 
 DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
-ynimi = Syst.CUICommon:ynimi.
+ynimi = Syst.Var:ynimi.
 
 /* FRAME SIVUOTS */
 form header
@@ -277,7 +277,7 @@ EMPTY TEMP-TABLE ttTotal.
 
 FOR EACH TCustGroup.
    FOR EACH cgmember WHERE
-            cgMember.Brand     = Syst.CUICommon:gcBrand AND
+            cgMember.Brand     = Syst.Var:gcBrand AND
             cgmember.custgroup = Tcustgroup.custgroup
    NO-lock.
       FIND FIRST tcgmember WHERE
@@ -309,7 +309,7 @@ runko:
 for each Invoice no-lock USE-INDEX InvDate where             
       Invoice.InvDate   >= idaPvm1         and 
       Invoice.InvDate   <= idaPvm2         and 
-      Invoice.Brand      = Syst.CUICommon:gcBrand      AND 
+      Invoice.Brand      = Syst.Var:gcBrand      AND 
       Invoice.ExtInvID  >= icExtInvID1  AND
       Invoice.ExtInvID  <= icExtInvID2  AND
       Invoice.CustNum   >= iiCustnum[1] AND

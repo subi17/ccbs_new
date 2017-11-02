@@ -94,7 +94,7 @@ END.
 
 CREATE ttPrepaidRequest.
 ttPrepaidRequest.Request = lcType.
-ttPrepaidRequest.Brand = Syst.CUICommon:gcBrand.
+ttPrepaidRequest.Brand = Syst.Var:gcBrand.
 ttPrepaidRequest.CLI = get_string(pcStruct, "subscriber_number").
 ttPrepaidRequest.Reference = get_string(pcStruct, "reference").
 

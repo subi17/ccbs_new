@@ -36,8 +36,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "NewtonRPC".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "NewtonRPC".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Inv/fusioninvoice.i}
 

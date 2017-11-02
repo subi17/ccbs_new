@@ -115,9 +115,9 @@ RUN Inv/lamupers.p persistent set pHandle.
 form
    skip(17)
 WITH
-   OVERLAY TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + Syst.CUICommon:ynimi + " DEPOSIT INVOICING " + string(TODAY,"99-99-99") + " "
-   COLOR value(Syst.CUICommon:cfc) width 80
+   OVERLAY TITLE COLOR value(Syst.Var:ctc)
+   " " + Syst.Var:ynimi + " DEPOSIT INVOICING " + string(TODAY,"99-99-99") + " "
+   COLOR value(Syst.Var:cfc) width 80
    FRAME taka.
 
 form
@@ -145,23 +145,23 @@ form
    mark    label " Approve automatically .."
            help "Approve all invoices automatically (Yes/No) ?" 
                                                 SKIP(1)    
-with title color value(Syst.CUICommon:ctc) " CRITERIA FOR CREATING INVOICES " side-labels
-   COLOR value(Syst.CUICommon:cfc) ROW 3 centered OVERLAY FRAME rajat.
+with title color value(Syst.Var:ctc) " CRITERIA FOR CREATING INVOICES " side-labels
+   COLOR value(Syst.Var:cfc) ROW 3 centered OVERLAY FRAME rajat.
 
 form
     SKIP(1)
     " Consecutive invoice number: " lcInvNum  NO-LABEL           
     SKIP(1)
 WITH
-   title color value (Syst.CUICommon:ctc) " INVOICE GROUP DATA " COLOR value(Syst.CUICommon:cfc)
+   title color value (Syst.Var:ctc) " INVOICE GROUP DATA " COLOR value(Syst.Var:cfc)
    OVERLAY centered ROW 14 FRAME lCustNum.
 
 IF NOT ilSilent THEN DO:
-   Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+   Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. Syst.Var:ccc = Syst.Var:cfc.
    view FRAME taka. PAUSE 0 no-message.
 
-   Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    
    liPaymTerm = 9. 
 END.
@@ -182,7 +182,7 @@ IF iiInvType = -1 THEN DO:
    ciperiod = 0.
    /* take first partial month and first full one */
    FOR EACH FixedFee NO-LOCK WHERE
-            FixedFee.Brand   = Syst.CUICommon:gcBrand  AND
+            FixedFee.Brand   = Syst.Var:gcBrand  AND
             FixedFee.CustNum = CustNum1 AND
             LOOKUP(FixedFee.BillCode,lcItem) > 0:
       
@@ -284,7 +284,7 @@ IF NOT ilSilent THEN DO:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, RETURN:
       IF kysy_rajat THEN DO:
          /* We ask the limits */
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          UPDATE
             InvGroup
             CustNum1 CustNum2   validate(INPUT CustNum2  >= INPUT CustNum1,
@@ -293,8 +293,8 @@ IF NOT ilSilent THEN DO:
          invDte liPaymTerm
          mark
          WITH FRAME rajat EDITING :
-            READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
-            IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
+            READKEY. Syst.Var:nap = keylabel(LASTKEY).
+            IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
                HIDE MESSAGE no-pause.
 
                if frame-field = "InvGroup" THEN DO:
@@ -307,7 +307,7 @@ IF NOT ilSilent THEN DO:
                   END.
 
                   FIND InvGroup where 
-                       InvGroup.Brand    = Syst.CUICommon:gcBrand AND
+                       InvGroup.Brand    = Syst.Var:gcBrand AND
                        InvGroup.InvGroup = InvGroup
                   no-lock no-error.
                   IF NOT AVAIL InvGroup THEN DO:
@@ -373,16 +373,16 @@ IF NOT ilSilent THEN DO:
          kysy_rajat = FALSE.
       END.
 
-      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[2] = 0 
-                     Syst.CUICommon:ufk[4] = 0 Syst.CUICommon:ufk[5] = 795
-                     Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 132 Syst.Var:ufk[2] = 0 
+                     Syst.Var:ufk[4] = 0 Syst.Var:ufk[5] = 795
+                     Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
-      IF Syst.CUICommon:toimi = 1 THEN DO:
+      IF Syst.Var:toimi = 1 THEN DO:
          kysy_rajat = TRUE.
          NEXT toimi.
       END.
 
-      IF Syst.CUICommon:toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
 
          /* check period */
          IF fPeriodLocked(InvDte,TRUE) THEN NEXT toimi.
@@ -404,14 +404,14 @@ IF NOT ilSilent THEN DO:
 
       END.
 
-      IF Syst.CUICommon:toimi = 8 THEN DO:
+      IF Syst.Var:toimi = 8 THEN DO:
          HIDE MESSAGE no-pause.
          HIDE FRAME rajat no-pause.
          HIDE FRAME taka no-pause.
          RETURN.
       END.
 
-   END. /* Syst.CUICommon:toimi */
+   END. /* Syst.Var:toimi */
 
    HIDE FRAME lCustNum no-pause.
 
@@ -422,7 +422,7 @@ END.
    
 XCUST:
 FOR EACH Customer   no-lock  where
-         Customer.Brand     = Syst.CUICommon:gcBrand     AND
+         Customer.Brand     = Syst.Var:gcBrand     AND
          Customer.CustNum  >= CustNum1    AND
          Customer.CustNum  <= CustNum2    AND
          Customer.InvGroup  = InvGroup,

@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-Syst.CUICommon:katun = "qvantel".
+Syst.Var:katun = "qvantel".
 
 DEF VAR liCount AS INT  NO-UNDO. 
 DEF VAR i AS INT NO-UNDO.

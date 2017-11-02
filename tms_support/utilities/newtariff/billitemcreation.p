@@ -10,8 +10,8 @@
   
 /* ***************************  Definitions  ************************** */
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Func/ftransdir.i}
@@ -196,7 +196,7 @@ PROCEDURE pCreateBillingItem:
       END.
       
       FIND BItemGroup WHERE  
-           BItemGroup.Brand   = Syst.CUICommon:gcBrand AND
+           BItemGroup.Brand   = Syst.Var:gcBrand AND
            BItemGroup.BIGroup = ttBillItem.BIGroup  
       NO-LOCK NO-ERROR.  
             
@@ -206,7 +206,7 @@ PROCEDURE pCreateBillingItem:
       END.
       
       FIND Account WHERE  
-           Account.Brand  = Syst.CUICommon:gcBrand AND
+           Account.Brand  = Syst.Var:gcBrand AND
            Account.AccNum = INTEGER(ttBillItem.PostAcct) 
       NO-LOCK NO-ERROR.
                         
@@ -224,7 +224,7 @@ PROCEDURE pCreateBillingItem:
       END.      
       
       CREATE BillItem.
-      ASSIGN BillItem.Brand       = Syst.CUICommon:gcBrand
+      ASSIGN BillItem.Brand       = Syst.Var:gcBrand
              BillItem.DispMPM     = FALSE
              BillItem.BillCode    = ttBillItem.BillItem
              Billitem.BIName      = ttBillItem.BIName
@@ -260,11 +260,11 @@ PROCEDURE pCreTranslations:
 
    FOR EACH ttTrans NO-LOCK:    
       IF CAN-FIND(FIRST BillItem WHERE 
-                        BillItem.Brand    = Syst.CUICommon:gcBrand            AND 
+                        BillItem.Brand    = Syst.Var:gcBrand            AND 
                         BillItem.BillCode = ttTrans.tLangType) THEN DO:
          
          IF CAN-FIND(FIRST RepText WHERE 
-                           RepText.Brand    = Syst.CUICommon:gcBrand                    AND
+                           RepText.Brand    = Syst.Var:gcBrand                    AND
                            RepText.TextType = 1 AND
                            RepText.LinkCode = ttTrans.tLangType          AND
                            RepText.Language = INTEGER(ttTrans.tLangint)) THEN 
@@ -272,7 +272,7 @@ PROCEDURE pCreTranslations:
                                                 
          CREATE RepText.
          ASSIGN 
-            RepText.Brand    = Syst.CUICommon:gcBrand    
+            RepText.Brand    = Syst.Var:gcBrand    
             RepText.TextType = 1               /* Default value */       
             RepText.LinkCode = ttTrans.tLangType        
             RepText.Language = INTEGER(ttTrans.tLangint)    

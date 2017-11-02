@@ -77,7 +77,7 @@ FUNCTION fCreateFixedfee RETURNS LOGICAL
       CREATE xFixedFee.
       /* get an individual sequence FOR a NEW coint record */
       ASSIGN
-         xFixedFee.Brand     = Syst.CUICommon:gcBrand
+         xFixedFee.Brand     = Syst.Var:gcBrand
          xFixedFee.FFNum     = NEXT-VALUE(Contract) /* sequence FOR contract */
          xFixedFee.BegPeriod = iiPeriod            /* beginning InstDuePeriod  */
          xFixedFee.CustNum   = iiFeeCust  /* customer no.            */
@@ -245,17 +245,17 @@ FUNCTION fMakeSetfees RETURNS INTEGER
    IF icFeeMemo NE "ProMigrate" THEN DO: /* pro migr case only pro fee needed */
       FOR
          EACH FMItem NO-LOCK WHERE
-            FMItem.Brand     = Syst.CUICommon:gcBrand       AND
+            FMItem.Brand     = Syst.Var:gcBrand       AND
             FMItem.FeeModel  = icFeeModel    AND
             FMItem.PriceList = lcFMPriceList AND
             FMItem.FromDate <= idaValidFrom  AND
             FMItem.ToDate   >= idaValidFrom,
 
             BillItem NO-LOCK WHERE
-            BillItem.Brand    = Syst.CUICommon:gcBrand      AND
+            BillItem.Brand    = Syst.Var:gcBrand      AND
             BillItem.BillCode = FMItem.BillCode,
          FIRST PriceList NO-LOCK WHERE
-            PriceList.Brand = Syst.CUICommon:gcBrand AND
+            PriceList.Brand = Syst.Var:gcBrand AND
             PriceList.PriceList = FMItem.PriceList:
 
          IF FMItem.BillType EQ "NF"
@@ -271,7 +271,7 @@ FUNCTION fMakeSetfees RETURNS INTEGER
             CREATE xSingleFee.
 
             ASSIGN
-               xSingleFee.Brand       = Syst.CUICommon:gcBrand 
+               xSingleFee.Brand       = Syst.Var:gcBrand 
                xSingleFee.FMItemId    = NEXT-VALUE(bi-seq)
                xSingleFee.CustNum     = liFeeCust      /* customer number */
                xSingleFee.BillTarget  = iiBillTarget
@@ -341,16 +341,16 @@ FUNCTION fMakeSetfees RETURNS INTEGER
    END.
    IF fIsPro(Customer.category) OR icFeeMemo EQ "ProMigrate" THEN DO:
       FOR EACH FMItem NO-LOCK WHERE
-               FMItem.Brand     = Syst.CUICommon:gcBrand       AND
+               FMItem.Brand     = Syst.Var:gcBrand       AND
                FMItem.FeeModel  = icFeeModel    AND
                FMItem.PriceList = "PRO_" + Mobsub.clitype AND
                FMItem.FromDate <= idaValidFrom  AND
                FMItem.ToDate   >= idaValidFrom,
                BillItem NO-LOCK WHERE
-               BillItem.Brand    = Syst.CUICommon:gcBrand      AND
+               BillItem.Brand    = Syst.Var:gcBrand      AND
                BillItem.BillCode = FMItem.BillCode,
          FIRST PriceList NO-LOCK WHERE
-               PriceList.Brand = Syst.CUICommon:gcBrand AND
+               PriceList.Brand = Syst.Var:gcBrand AND
                PriceList.PriceList = FMItem.PriceList:
          fCreateFixedfee(iiperiod, liFeeCust, icCalcObj, idaValidFrom,
                          idPrice, iiMSSeq, icContractID, icSourceTable,

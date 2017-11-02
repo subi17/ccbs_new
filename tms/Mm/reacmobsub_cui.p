@@ -36,7 +36,7 @@ FIND FIRST bTermMobSub WHERE
 IF AVAIL bTermMobSub AND bTermMobSub.MultiSIMId > 0 AND
    bTermMobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} THEN DO:
    FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-              lbMobSub.Brand  = Syst.CUICommon:gcBrand AND
+              lbMobSub.Brand  = Syst.Var:gcBrand AND
               lbMobSub.MultiSimID = bTermMobSub.MultiSimID AND
               lbMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
               lbMobSub.Custnum = bTermMobSub.Custnum NO-ERROR.

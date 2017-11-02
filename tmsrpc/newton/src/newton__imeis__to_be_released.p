@@ -26,7 +26,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 {newton/src/settenant.i pcTenant}
 
 FOR EACH OrderAccessory NO-LOCK WHERE  
-         OrderAccessory.Brand = Syst.CUICommon:gcBrand AND
+         OrderAccessory.Brand = Syst.Var:gcBrand AND
          OrderAccessory.IMEIStatus = ({&IMEI_STATUS_TO_BE_RELEASED})
    i = 1 to 500:
 

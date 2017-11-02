@@ -16,7 +16,7 @@
 {Ar/subinvdet.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -74,16 +74,16 @@ form
     SubInvoice.PaymState                      COLUMN-LABEL "PState"
     SubInvoice.ClaimState
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc)
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc)
        " SUBINVOICES OF INVOICE "  + STRING(lcExtInvID) + " "
     FRAME sel.
 
 form /* seek  SubInvoice */
     "SubInvoice:" liSubInvNum FORMAT ">>>>9"
     HELP "Enter SubInvoice"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND SubInvoice "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND SubInvoice "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FORM
    "Invoice .........:" SubInvoice.InvNum    SKIP
@@ -109,14 +109,14 @@ ASSIGN
 
                                           
 /* used as help browser */
-IF Syst.CUICommon:gcHelpParam > "" THEN DO:
-   IF iiInvNum = 0 THEN iiInvNum = INTEGER(Syst.CUICommon:gcHelpParam) NO-ERROR.
+IF Syst.Var:gcHelpParam > "" THEN DO:
+   IF iiInvNum = 0 THEN iiInvNum = INTEGER(Syst.Var:gcHelpParam) NO-ERROR.
    ASSIGN llHelp      = TRUE
-          Syst.CUICommon:gcHelpParam = "".
+          Syst.Var:gcHelpParam = "".
 END.
 ELSE llHelp = FALSE.          
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -186,19 +186,19 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        Syst.CUICommon:ufk    = 0
-        Syst.CUICommon:ufk[1] = 36
-        Syst.CUICommon:ufk[2] = 927
-        Syst.CUICommon:ufk[8] = 8 
-        Syst.CUICommon:ehto   = 3 
+        Syst.Var:ufk    = 0
+        Syst.Var:ufk[1] = 36
+        Syst.Var:ufk[2] = 927
+        Syst.Var:ufk[8] = 8 
+        Syst.Var:ehto   = 3 
         ufkey  = FALSE.
 
         IF llHelp THEN ASSIGN 
-           Syst.CUICommon:ufk[5] = 11
-           Syst.CUICommon:ufk[7] = 790.
+           Syst.Var:ufk[5] = 11
+           Syst.Var:ufk[7] = 790.
         ELSE ASSIGN 
-           Syst.CUICommon:ufk[5] = 790 
-           Syst.CUICommon:ufk[7] = 1152.
+           Syst.Var:ufk[5] = 790 
+           Syst.Var:ufk[7] = 1152.
            
         RUN Syst/ufkey.p.
         
@@ -207,13 +207,13 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW SubInvoice.SubInvNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) SubInvoice.SubInvNum WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) SubInvoice.SubInvNum WITH FRAME sel.
       END.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(Syst.CUICommon:nap,"8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -222,10 +222,10 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -243,7 +243,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -268,7 +268,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -294,7 +294,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND SubInvoice WHERE recid(SubInvoice) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -318,7 +318,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -333,11 +333,11 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND Syst.CUICommon:ufk[1] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 AND Syst.Var:ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        UPDATE liSubInvNum WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -360,7 +360,7 @@ REPEAT WITH FRAME sel:
      END. /* Search-1 */
 
      /* memo */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 AND Syst.CUICommon:ufk[2] > 0 THEN DO:  
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 AND Syst.Var:ufk[2] > 0 THEN DO:  
         RUN local-find-this(FALSE).
  
         RUN Mc/memo.p(INPUT SubInvoice.CustNum,
@@ -373,7 +373,7 @@ REPEAT WITH FRAME sel:
      END.
 
      /* payments */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 AND Syst.CUICommon:ufk[4] > 0 THEN DO:  
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 AND Syst.Var:ufk[4] > 0 THEN DO:  
         RUN local-find-this(FALSE).
 
         RUN Ar/payments.p(0,
@@ -384,7 +384,7 @@ REPEAT WITH FRAME sel:
      END.
 
      /* choose from help */
-     ELSE IF (llHelp AND LOOKUP(Syst.CUICommon:nap,"enter,return,5,f5") > 0 AND Syst.CUICommon:ufk[5] > 0) 
+     ELSE IF (llHelp AND LOOKUP(Syst.Var:nap,"enter,return,5,f5") > 0 AND Syst.Var:ufk[5] > 0) 
      THEN DO:  
 
         RUN local-find-this(FALSE).
@@ -393,8 +393,8 @@ REPEAT WITH FRAME sel:
      END.
       
      /* subinvoice rows */
-     ELSE IF (NOT llHelp AND LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND Syst.CUICommon:ufk[5] > 0) OR
-             (llHelp AND LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 AND Syst.CUICommon:ufk[7] > 0)
+     ELSE IF (NOT llHelp AND LOOKUP(Syst.Var:nap,"5,f5") > 0 AND Syst.Var:ufk[5] > 0) OR
+             (llHelp AND LOOKUP(Syst.Var:nap,"7,f7") > 0 AND Syst.Var:ufk[7] > 0)
      THEN DO:  
 
         RUN local-find-this(FALSE).
@@ -407,7 +407,7 @@ REPEAT WITH FRAME sel:
      END.
       
      /* other actions */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 AND Syst.CUICommon:ufk[7] > 0 THEN DO:  
+     ELSE IF LOOKUP(Syst.Var:nap,"7,f7") > 0 AND Syst.Var:ufk[7] > 0 THEN DO:  
 
         RUN local-find-this(FALSE).
         
@@ -419,31 +419,31 @@ REPEAT WITH FRAME sel:
         otheractions:
         REPEAT ON ENDKEY UNDO, NEXT:
 
-           assign Syst.CUICommon:ufk    = 0
-                  Syst.CUICommon:ufk[8] = 8
-                  Syst.CUICommon:ehto   = 0
+           assign Syst.Var:ufk    = 0
+                  Syst.Var:ufk[8] = 8
+                  Syst.Var:ehto   = 0
                   ufkey  = true.
            RUN Syst/ufkey.p.
                
            /* credit invoice */
-           IF Syst.CUICommon:toimi = 3 THEN DO:
+           IF Syst.Var:toimi = 3 THEN DO:
 
               FIND Invoice OF SubInvoice NO-LOCK. 
-              ASSIGN Syst.CUICommon:si-recid2 = RECID(Invoice)
-                     Syst.CUICommon:si-recid  = RECID(SubInvoice)
+              ASSIGN Syst.Var:si-recid2 = RECID(Invoice)
+                     Syst.Var:si-recid  = RECID(SubInvoice)
                      memory    = RECID(SubInvoice).
               
               RUN Ar/nncimu.p.
 
-              ASSIGN Syst.CUICommon:si-recid2  = ?   
-                     Syst.CUICommon:si-recid   = ?
+              ASSIGN Syst.Var:si-recid2  = ?   
+                     Syst.Var:si-recid   = ?
                      ufkey      = TRUE
                      must-print = TRUE.
               LEAVE otheractions.       
            END. 
     
            /* calculate estimated Interest for unpaid invoices */
-           ELSE IF Syst.CUICommon:toimi = 5 THEN DO:       
+           ELSE IF Syst.Var:toimi = 5 THEN DO:       
 
               ASSIGN ldDebt  = SubInvoice.InvAmt - SubInvoice.PaidAmt
                      ldtDate = TODAY.
@@ -465,7 +465,7 @@ REPEAT WITH FRAME sel:
                  NEXT.
               end.   
               
-              Syst.CUICommon:ehto = 9. 
+              Syst.Var:ehto = 9. 
               RUN Syst/ufkey.p.
 
               PAUSE 0.
@@ -505,7 +505,7 @@ REPEAT WITH FRAME sel:
            END.
  
             
-           ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE otheractions.
+           ELSE IF Syst.Var:toimi = 8 THEN LEAVE otheractions.
         
         end.
         
@@ -518,7 +518,7 @@ REPEAT WITH FRAME sel:
         NEXT LOOP.
      END.
      
-     ELSE IF NOT llHelp AND LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
+     ELSE IF NOT llHelp AND LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
 
@@ -527,7 +527,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSubInvoice).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -543,25 +543,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(SubInvoice) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(SubInvoice) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 fCleanEventObjects().
 
@@ -647,12 +647,12 @@ PROCEDURE local-UPDATE-record:
 
       ASSIGN
          ufkey = true
-         Syst.CUICommon:ufk = 0
-         Syst.CUICommon:ufk[8] = 8
-         Syst.CUICommon:ehto = 0.
+         Syst.Var:ufk = 0
+         Syst.Var:ufk[8] = 8
+         Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
 
-      IF Syst.CUICommon:toimi = 8 THEN DO:
+      IF Syst.Var:toimi = 8 THEN DO:
          HIDE FRAME fInvDet NO-PAUSE.
          LEAVE.   
       END.

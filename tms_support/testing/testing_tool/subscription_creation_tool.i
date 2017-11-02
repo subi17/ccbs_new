@@ -7,8 +7,8 @@
   Version ......: Yoigo
 ---------------------------------------------------------------------- */
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
 
 {Syst/tmsconst.i}
 {Func/cparam2.i}
@@ -147,14 +147,14 @@ FUNCTION fCheckMSISDN RETURNS LOG (INPUT iiStatus_MSISDN AS INT,
 
    IF icUsedMSISDN > "" THEN DO:
       FIND FIRST MSISDN EXCLUSIVE-LOCK WHERE
-                 MSISDN.Brand = Syst.CUICommon:gcBrand AND
+                 MSISDN.Brand = Syst.Var:gcBrand AND
                  MSISDN.CLI   = icUsedMSISDN AND   /* Search with given MSISDN number */
                  MSISDN.ValidTo GE Func.Common:mMakeTS() AND
                  MSISDN.StatusCode EQ iiStatus_MSISDN NO-WAIT NO-ERROR. /* Normal or EMA */
    END.
    ELSE DO: /* Find first free */
       FIND FIRST MSISDN EXCLUSIVE-LOCK WHERE
-                 MSISDN.Brand = Syst.CUICommon:gcBrand AND
+                 MSISDN.Brand = Syst.Var:gcBrand AND
                  MSISDN.ValidTo GE Func.Common:mMakeTS() AND
                  MSISDN.StatusCode EQ iiStatus_MSISDN NO-WAIT NO-ERROR. /* Normal or EMA */
    END.
@@ -170,7 +170,7 @@ FUNCTION fCheckSIM RETURNS LOG (INPUT icSimIcc AS CHAR):
    IF icSimIcc > "" THEN DO:
       FIND FIRST SIM EXCLUSIVE-LOCK WHERE
                  SIM.ICC   EQ icSimIcc AND   /* Search with given ICC number */
-                 SIM.Brand EQ Syst.CUICommon:gcBrand AND
+                 SIM.Brand EQ Syst.Var:gcBrand AND
                  SIM.SimStat EQ 1 NO-WAIT NO-ERROR.
 
       IF AVAILABLE SIM THEN   /* If stock not correct then ask confirmation */
@@ -189,7 +189,7 @@ FUNCTION fCheckSIM RETURNS LOG (INPUT icSimIcc AS CHAR):
    END.
    ELSE DO:
       FIND FIRST SIM EXCLUSIVE-LOCK WHERE
-                 SIM.Brand EQ Syst.CUICommon:gcBrand AND
+                 SIM.Brand EQ Syst.Var:gcBrand AND
                 (SIM.Stock EQ "TESTING" OR
                  SIM.Stock EQ "EMATESTING") AND
                  SIM.SimStat EQ 1 NO-WAIT NO-ERROR.
@@ -273,7 +273,7 @@ FUNCTION fCreateOrder RETURNS CHAR (INPUT icIdType       AS CHAR,
       BUFFER-COPY ttOrder EXCEPT OrderId MsSeq Salesman TO Order.
 
       ASSIGN
-         Order.Brand           = Syst.CUICommon:gcBrand
+         Order.Brand           = Syst.Var:gcBrand
          Order.OrderId         = NEXT-VALUE(OrderId)
          Order.CrStamp         = Func.Common:mMakeTS()
          Order.StatusCode      = "1"
@@ -340,7 +340,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHAR (INPUT iiOrderId     AS INT,
    END.
 
    ASSIGN
-      OrderCustomer.Brand   = Syst.CUICommon:gcBrand
+      OrderCustomer.Brand   = Syst.Var:gcBrand
       OrderCustomer.OrderId = iiOrderId
       OrderCustomer.RowType = 1.
 
@@ -356,7 +356,7 @@ FUNCTION fCreateOrderTopup RETURNS LOGICAL:
    CREATE OrderTopup.
    ASSIGN
       OrderTopup.Amount = 20.00
-      OrderTopup.Brand = Syst.CUICommon:gcBrand
+      OrderTopup.Brand = Syst.Var:gcBrand
       OrderTopup.OrderId = Order.OrderId.
    lCreate = TRUE.
    RETURN lCreate.
@@ -576,7 +576,7 @@ PROCEDURE pActContract:
                              bMsRequest.MsRequest = liRequest
                        EXCLUSIVE-LOCK NO-ERROR.
                   IF AVAIL bMsRequest THEN
-                     bMsRequest.ReqCparam4 = Syst.CUICommon:katun + "|" + STRING(TODAY,"99-99-9999").
+                     bMsRequest.ReqCparam4 = Syst.Var:katun + "|" + STRING(TODAY,"99-99-9999").
                END. /* IF lcContractID = "SPOTIFY" THEN DO: */
             END. /* ELSE DO: */
          END. /* ELSE DO: */
@@ -636,7 +636,7 @@ PROCEDURE pDeactContract:
 
             IF lcContractID = "" THEN DO:
                FIND FIRST OrderAction WHERE
-                          OrderAction.Brand = Syst.CUICommon:gcBrand AND
+                          OrderAction.Brand = Syst.Var:gcBrand AND
                           OrderAction.OrderId = ttSubscription.OrderId AND
                           OrderAction.ItemType = "BundleItem" AND
                           OrderAction.ItemKey BEGINS "MDUB" NO-LOCK NO-ERROR.
@@ -850,7 +850,7 @@ PROCEDURE pSTC:
                 lcNewCLIType = "CONTSF".
 
       FIND FIRST NewCliType WHERE
-                 NewCLIType.Brand   = Syst.CUICommon:gcBrand AND
+                 NewCLIType.Brand   = Syst.Var:gcBrand AND
                  NewCLIType.CLIType = lcNewCLIType NO-LOCK NO-ERROR.
       IF NOT AVAIL NewCLIType THEN
          lcRemark = lcRemark + "," + "Invalid CLIType specified " + lcNewCLIType.
@@ -861,15 +861,15 @@ PROCEDURE pSTC:
       ELSE
          ldActTS = Func.Common:mMake2DT(ttInputFileContent.ActDate,0).
 
-      /* Set the Syst.CUICommon:katun to check correct barring */
-      Syst.CUICommon:katun = "NewtonAd".
+      /* Set the Syst.Var:katun to check correct barring */
+      Syst.Var:katun = "NewtonAd".
       /* Various validations */
       IF NOT fValidateMobTypeCh(MobSub.MsSeq,NewCLIType.CLIType,
                                 ldActTS,FALSE,FALSE,0,"",OUTPUT lcError) THEN
       lcRemark = lcRemark + "," + lcError.
 
-      /* Set the Syst.CUICommon:katun again with original username */
-      Syst.CUICommon:katun = "Qvantel".
+      /* Set the Syst.Var:katun again with original username */
+      Syst.Var:katun = "Qvantel".
       IF fValidateNewCliType(NewCLIType.CLIType,lcDataBundleId,
                              TRUE,OUTPUT lcError) NE 0 THEN
         lcRemark = lcRemark + "," + lcError.
@@ -890,7 +890,7 @@ PROCEDURE pSTC:
                                       "" /* pcSalesman */,
                                       FALSE,
                                       TRUE,
-                                      Syst.CUICommon:katun,
+                                      Syst.Var:katun,
                                       0,
                                       {&REQUEST_SOURCE_SCRIPT},
                                       0,

@@ -88,12 +88,12 @@ form
    help "Logfile's name,  empty: no log"                   SKIP
    "                Display double calls ........:" bDisp  skip(3)
 WITH
-   width 80 ROW 1 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
-   " " + Syst.CUICommon:ynimi + " MARK DOUBLE MOBILE calls " + string(TODAY,"99-99-99") + " "
+   width 80 ROW 1 OVERLAY COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc)
+   " " + Syst.Var:ynimi + " MARK DOUBLE MOBILE calls " + string(TODAY,"99-99-99") + " "
    NO-LABELS FRAME start.
 
 IF NOT bbatch THEN DO:
-    Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
+    Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
     ASSIGN
     cadate2 = date(month(TODAY),1,year(TODAY)) - 1
     cadate1 = date(month(cadate2),1,year(cadate2)).
@@ -106,7 +106,7 @@ CRIT:
 repeat WITH FRAME start:
 
    IF NOT bbatch THEN DO:
-      Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+      Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
       UPDATE
       cadate1  validate(cadate1 ne ?,"Give first Date !")
@@ -118,7 +118,7 @@ repeat WITH FRAME start:
       WITH FRAME start
       EDITING.
          READKEY.
-         IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+         IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
             PAUSE 0.
 
             if frame-field = "logfile" THEN DO:
@@ -136,12 +136,12 @@ repeat WITH FRAME start:
 
       task:
       repeat WITH FRAME start:
-         ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 795 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
+         ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 795 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
          RUN Syst/ufkey.p.
-         IF Syst.CUICommon:toimi = 1 THEN NEXT  CRIT.
-         IF Syst.CUICommon:toimi = 8 THEN LEAVE CRIT.
+         IF Syst.Var:toimi = 1 THEN NEXT  CRIT.
+         IF Syst.Var:toimi = 8 THEN LEAVE CRIT.
 
-         IF Syst.CUICommon:toimi = 5 THEN DO:
+         IF Syst.Var:toimi = 5 THEN DO:
             ok = FALSE.
             BELL. 
             IF erase THEN DO: 
@@ -166,7 +166,7 @@ repeat WITH FRAME start:
 
    /* connect db(s) */
    fInitializeConnectTables("MobCDR","").
-   RUN pDirectConnect2Dbs(Syst.CUICommon:gcBrand,
+   RUN pDirectConnect2Dbs(Syst.Var:gcBrand,
                           "",
                           cadate2,
                           cadate2).
@@ -186,7 +186,7 @@ repeat WITH FRAME start:
  
    IF ldaOldDb NE ? THEN DO:
       fInitializeConnectTables("MobCDR","old").
-      RUN pDirectConnect2Dbs(Syst.CUICommon:gcBrand,
+      RUN pDirectConnect2Dbs(Syst.Var:gcBrand,
                              "old",
                              ldaOldDb,
                              ldaOldDb).

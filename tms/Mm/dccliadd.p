@@ -91,7 +91,7 @@ ASSIGN
    ldtContrDate = TODAY
    llCreateFees = FALSE
    llContrSource = TRUE
-   Syst.CUICommon:toimi        = -1.
+   Syst.Var:toimi        = -1.
 
 MakeReq:
 REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
@@ -105,7 +105,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
    END.
    ELSE IF lcDCEvent > "" THEN 
       FIND FIRST DayCampaign WHERE
-                 DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+                 DayCampaign.Brand = Syst.Var:gcBrand AND
                  DayCampaign.DCEvent = lcDCEvent NO-LOCK NO-ERROR.
    ELSE DISPLAY "" @ DayCampaign.DCName WITH FRAME fCriter.
                  
@@ -121,26 +121,26 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
            llCreateFees
    WITH FRAME fCriter.
 
-   IF Syst.CUICommon:toimi < 0 THEN Syst.CUICommon:toimi = 1.
+   IF Syst.Var:toimi < 0 THEN Syst.Var:toimi = 1.
    ELSE DO:
       ASSIGN
-         Syst.CUICommon:ufk    = 0  
-         Syst.CUICommon:ufk[1] = 7
-         Syst.CUICommon:ufk[5] = IF lcDCEvent > "" AND
+         Syst.Var:ufk    = 0  
+         Syst.Var:ufk[1] = 7
+         Syst.Var:ufk[5] = IF lcDCEvent > "" AND
                      ldtContrDate >= MobSub.ActivationDate AND
                      ldtContrDate <= TODAY
                   THEN 1027 
                   ELSE 0 
-         Syst.CUICommon:ufk[8] = 8 
-         Syst.CUICommon:ehto   = 0.
+         Syst.Var:ufk[8] = 8 
+         Syst.Var:ehto   = 0.
       RUN Syst/ufkey.p.
    END.
    
-   IF Syst.CUICommon:toimi = 1 THEN DO:
+   IF Syst.Var:toimi = 1 THEN DO:
    
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
       
-         Syst.CUICommon:ehto = 9.
+         Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
          
          UPDATE 
@@ -152,7 +152,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
          
             READKEY.
             
-            IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
                PAUSE 0.
         
                IF FRAME-FIELD = "lcDCEvent" THEN DO:
@@ -160,7 +160,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
                   IF INPUT lcDCEvent = "" THEN LEAVE.
                    
                   FIND FIRST DayCampaign WHERE
-                             DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+                             DayCampaign.Brand = Syst.Var:gcBrand AND
                              DayCampaign.DCEvent = INPUT lcDCEvent 
                   NO-LOCK NO-ERROR.
                 
@@ -223,7 +223,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
       
    END.
 
-   ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
+   ELSE IF Syst.Var:toimi = 5 THEN DO:
 
       ldActStamp = Func.Common:mMake2DT(ldtContrDate,
                             IF ldtContrDate = TODAY
@@ -252,7 +252,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
          liConCount = 0.
                   
          FOR EACH DCCLI NO-LOCK WHERE
-                  DCCLI.Brand      = Syst.CUICommon:gcBrand      AND
+                  DCCLI.Brand      = Syst.Var:gcBrand      AND
                   DCCLI.MsSeq      = MobSub.MsSeq AND
                   DCCLI.ValidTo   >= ldtContrDate AND 
                   DCCLI.DCEvent   BEGINS "PAYTERM":        
@@ -266,7 +266,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
          END.   
       END.       
       ELSE IF CAN-FIND(FIRST DCCLI WHERE
-                             DCCLI.Brand   = Syst.CUICommon:gcBrand AND
+                             DCCLI.Brand   = Syst.Var:gcBrand AND
                              DCCLI.DCEvent = lcDCEvent AND
                              DCCLI.MsSeq   = MobSub.MsSeq AND
                              DCCLI.ValidFrom <= ldtContrDate AND
@@ -386,7 +386,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
       LEAVE.
    END.
    
-   ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
+   ELSE IF Syst.Var:toimi = 8 THEN LEAVE.
 
 END. /* MakeReq */
 

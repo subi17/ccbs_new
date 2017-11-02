@@ -1,6 +1,6 @@
 /* common alueen m{{ritys                                        commali.i    
             07.10.03/aam CommVarDef
-            09.02.04/aam Syst.CUICommon:gcHelpParam
+            09.02.04/aam Syst.Var:gcHelpParam
 */
 
 &IF "{&CommVarDef}" NE "YES" 

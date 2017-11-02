@@ -103,7 +103,7 @@ END.
 FOR EACH ttPaym:
 
    FIND Payment WHERE Payment.Voucher = ttPaym.Voucher EXCLUSIVE-LOCK NO-ERROR.
-   IF NOT AVAILABLE Payment OR Payment.Brand NE Syst.CUICommon:gcBrand THEN DO:
+   IF NOT AVAILABLE Payment OR Payment.Brand NE Syst.Var:gcBrand THEN DO:
       ocInfo = "Payment " + STRING(ttPaym.Voucher) + " missing".
       RETURN.
    END.
@@ -211,7 +211,7 @@ FOR EACH ttPaym,
    lcNewLine.
 
    ASSIGN Payment.ExpStamp = ldTime
-          Payment.ExpUser  = Syst.CUICommon:katun
+          Payment.ExpUser  = Syst.Var:katun
           Payment.PaymFile = STRING(liBatch)
           oiDone           = oiDone + 1
           ldTotal          = ldTotal + ttPaym.Amt.

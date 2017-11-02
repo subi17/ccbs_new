@@ -27,7 +27,7 @@ FUNCTION fIsPro RETURNS LOGICAL
    DEF BUFFER CustCat FOR CustCat.
 
    FIND FIRST CustCat NO-LOCK WHERE
-              CustCat.Brand EQ Syst.CUICommon:gcBrand AND
+              CustCat.Brand EQ Syst.Var:gcBrand AND
               CustCat.Category EQ icCategory NO-ERROR.
               
    IF AVAIL CustCat AND Custcat.pro THEN RETURN TRUE.
@@ -41,7 +41,7 @@ FUNCTION fIsSelfEmpl RETURNS LOGICAL
    DEF BUFFER CustCat FOR CustCat.
 
    FIND FIRST CustCat NO-LOCK WHERE
-              CustCat.Brand EQ Syst.CUICommon:gcBrand AND
+              CustCat.Brand EQ Syst.Var:gcBrand AND
               CustCat.Category EQ icCategory NO-ERROR.
 
    IF AVAIL CustCat AND INDEX(custcat.catname, "self") > 0 THEN RETURN TRUE.
@@ -66,7 +66,7 @@ FUNCTION fGetSegment RETURNS CHAR
    IF AVAIL bCustomer THEN lcCategory = bCustomer.category.
    ELSE IF iiOrderid > 0 THEN DO:
       FIND FIRST bOrdercustomer WHERE
-                 bOrdercustomer.brand EQ Syst.CUICommon:gcBrand AND
+                 bOrdercustomer.brand EQ Syst.Var:gcBrand AND
                  bOrdercustomer.orderid EQ iiorderid AND
                  bOrdercustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
                  NO-LOCK NO-ERROR.
@@ -75,7 +75,7 @@ FUNCTION fGetSegment RETURNS CHAR
 
    IF lcCategory > "" THEN DO:
       FIND FIRST CustCat NO-LOCK WHERE
-                 CustCat.Brand = Syst.CUICommon:gcBrand AND
+                 CustCat.Brand = Syst.Var:gcBrand AND
                  CustCat.Category = lcCategory
                  NO-ERROR.
       IF AVAIL CustCat THEN
@@ -127,7 +127,7 @@ FUNCTION fMakeProActRequest RETURNS INT(
       END.
          
       FIND FIRST MsRequest WHERE
-                 MsRequest.Brand EQ Syst.CUICommon:gcBrand AND
+                 MsRequest.Brand EQ Syst.Var:gcBrand AND
                  MsRequest.ReqType EQ liReqType AND
                  MsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} AND
                  MsRequest.ReqCParam3 EQ icContr NO-ERROR.
@@ -171,7 +171,7 @@ FUNCTION fIsProOrder RETURNS LOGICAL
    DEF BUFFER Order FOR Order.
 
    FIND FIRST Order NO-LOCK WHERE
-              Order.Brand EQ  Syst.CUICommon:gcBrand AND
+              Order.Brand EQ  Syst.Var:gcBrand AND
               Order.OrderID EQ iiOrderID NO-ERROR.
 
    IF INDEX(Order.orderchannel,"PRO") > 0 THEN
@@ -188,7 +188,7 @@ FUNCTION fIs3PTariff RETURNS LOGICAL
    DEF BUFFER CLIType FOR CLIType.
 
    FIND FIRST CLIType NO-LOCK WHERE
-              CLIType.Brand EQ Syst.CUICommon:gcBrand AND
+              CLIType.Brand EQ Syst.Var:gcBrand AND
               CLIType.CliType EQ icCLIType NO-ERROR.
    IF AVAIL CliType AND
             CliType.TariffType EQ {&CLITYPE_TARIFFTYPE_CONVERGENT}  THEN
@@ -215,12 +215,12 @@ FUNCTION fValidateProSTC RETURNS CHAR
    IF NOT fIsPro(Customer.Category) THEN RETURN "". /*No PRO logic needed*/
 
    FIND FIRST bCurr NO-LOCK WHERE
-              bCurr.Brand EQ Syst.CUICommon:gcBrand AND
+              bCurr.Brand EQ Syst.Var:gcBrand AND
               bCurr.Clitype EQ icCurrCLIType NO-ERROR.
    IF NOT AVAIL bCurr THEN RETURN "Incorrect CLIType".
 
    FIND FIRST bNew NO-LOCK WHERE
-              bNew.Brand EQ Syst.CUICommon:gcBrand AND
+              bNew.Brand EQ Syst.Var:gcBrand AND
               bNew.Clitype EQ icNewCLIType NO-ERROR.
    IF NOT AVAIL bNew THEN RETURN "Incorrect CLIType".
 
@@ -230,7 +230,7 @@ FUNCTION fValidateProSTC RETURNS CHAR
       RETURN "STC to Prepaid is not allowed for Pro customer".
    IF fIsFixedOnly(bNew.Clitype) AND NOT fIs3PTariff(bCurr.Clitype)  THEN DO:
       FIND FIRST Mobsub WHERE
-                 Mobsub.brand EQ Syst.CUICommon:gcBrand AND
+                 Mobsub.brand EQ Syst.Var:gcBrand AND
                  Mobsub.custnum EQ iiCustomer AND
                  fIsConvergenceTariff(MobSub.clitype) NO-ERROR.
       IF NOT AVAIL Mobsub THEN
@@ -262,19 +262,19 @@ FUNCTION fGetProFeemodel RETURNS CHAR
    DEF BUFFER DayCampaign FOR DayCampaign.
 
    FOR FIRST CLIType NO-LOCK WHERE
-             CLIType.Brand = Syst.CUICommon:gcBrand AND
+             CLIType.Brand = Syst.Var:gcBrand AND
              CLIType.CLIType = icCliType AND
              CLIType.FixedBundle > "",
        FIRST DayCampaign NO-LOCK WHERE
-             DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+             DayCampaign.Brand = Syst.Var:gcBrand AND
              DayCampaign.DCEvent = CLIType.FixedBundle:
       RETURN DayCampaign.FeeModel.
    END.
    FOR FIRST CLIType NO-LOCK WHERE
-             CLIType.Brand = Syst.CUICommon:gcBrand AND
+             CLIType.Brand = Syst.Var:gcBrand AND
              CLIType.CLIType = icCliType,
        FIRST DayCampaign NO-LOCK WHERE
-             DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+             DayCampaign.Brand = Syst.Var:gcBrand AND
              DayCampaign.DCEvent = CLIType.clitype:
       RETURN DayCampaign.FeeModel.
    END.
@@ -441,11 +441,11 @@ FUNCTION fProMigrateOtherSubs RETURNS CHAR
    DEF VAR liMsReq AS INT NO-UNDO.
 
    FOR EACH bMobsub WHERE
-            bMobsub.brand EQ Syst.CUICommon:gcBrand AND
+            bMobsub.brand EQ Syst.Var:gcBrand AND
             bMobsub.agrCust EQ iiagrCust AND
             bMobsub.msseq NE iimsseq:
       FIND FIRST Clitype WHERE
-                 Clitype.brand EQ Syst.CUICommon:gcBrand AND
+                 Clitype.brand EQ Syst.Var:gcBrand AND
                  Clitype.clitype EQ bMobsub.clitype NO-LOCK NO-ERROR.
       IF AVAIL Clitype AND
                Clitype.webstatuscode EQ {&CLITYPE_WEBSTATUSCODE_ACTIVE}
@@ -491,12 +491,12 @@ FUNCTION fCheckOngoingOrders RETURNS LOGICAL (INPUT icCustId AS CHAR,
                                               INPUT icCustIdType AS CHAR,
                                               INPUT iimsseq AS INT):
    FOR EACH OrderCustomer NO-LOCK WHERE
-            OrderCustomer.Brand      EQ Syst.CUICommon:gcBrand AND
+            OrderCustomer.Brand      EQ Syst.Var:gcBrand AND
             OrderCustomer.CustId     EQ icCustId AND
             OrderCustomer.CustIdType EQ icCustIDType AND
             OrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
       FIRST Order NO-LOCK WHERE
-            Order.Brand              EQ Syst.CUICommon:gcBrand AND
+            Order.Brand              EQ Syst.Var:gcBrand AND
             Order.orderid            EQ Ordercustomer.Orderid AND
             Order.msseq              NE iimsseq AND
            LOOKUP(Order.StatusCode, {&ORDER_INACTIVE_STATUSES}) = 0:

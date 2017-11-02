@@ -32,7 +32,7 @@ DEFINE BUFFER lbOrderCustomer FOR OrderCustomer.
 &SCOPED-DEFINE COMPANY_NAME_LIMIT 64   /* Name length limitation send to Nodo Central */
 
 FIND Order NO-LOCK WHERE
-     Order.Brand   = Syst.CUICommon:gcBrand AND
+     Order.Brand   = Syst.Var:gcBrand AND
      Order.OrderId = iiOrderId NO-ERROR.
 
 IF NOT AVAIL Order THEN RETURN ("ERROR: Order not found " + STRING(iiOrderId)).
@@ -58,14 +58,14 @@ THEN lcRegion = OrderCustomer.Region.
 ASSIGN lcTenant = BUFFER-TENANT-NAME(Order).
 
 FIND FIRST MNPOperator WHERE 
-           MNPOperator.Brand = Syst.CUICommon:gcBrand AND
+           MNPOperator.Brand = Syst.Var:gcBrand AND
            MNPOperator.OperName = STRING(order.curroper) AND
            MNPOperator.Active = True
 NO-LOCK NO-ERROR.
 
 IF NOT AVAIL MNPOperator THEN
    FIND FIRST MNPOperator WHERE 
-              MNPOperator.Brand = Syst.CUICommon:gcBrand AND
+              MNPOperator.Brand = Syst.Var:gcBrand AND
               MNPOperator.OperName = STRING(order.curroper) AND
               MNPOperator.Active = False
    NO-LOCK NO-ERROR.
@@ -122,7 +122,7 @@ FOR EACH MNPProcess where
 END.
    
 FIND FIRST OrderAccessory NO-LOCK WHERE
-           OrderAccessory.Brand = Syst.CUICommon:gcBrand AND
+           OrderAccessory.Brand = Syst.Var:gcBrand AND
            OrderAccessory.OrderId = Order.OrderID AND
            OrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE} NO-ERROR.
 IF AVAIL OrderAccessory THEN
@@ -159,9 +159,9 @@ ASSIGN
    MNPProcess.OrderId     = Order.OrderId
    MNPProcess.FormRequest = lcFormRequest
    MNPProcess.StatusCode  = {&MNP_ST_NEW}
-   MNPProcess.Brand       = Syst.CUICommon:gcBrand
+   MNPProcess.Brand       = Syst.Var:gcBrand
    MNPProcess.MNPType     = {&MNP_TYPE_IN}
-   MNPProcess.UserCode    = Syst.CUICommon:katun
+   MNPProcess.UserCode    = Syst.Var:katun
    MNPProcess.UpdateTS    = MNPProcess.CreatedTS
    MNPProcess.OperCode    = MNPOperator.OperCode WHEN AVAIL MNPOperator
    MNPProcess.PortingTime = ldeChgStamp.

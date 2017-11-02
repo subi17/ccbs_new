@@ -43,7 +43,7 @@ FUNCTION GetAccKeys RETURNS LOGIC
     /* Account number  */
     IF NOT AVAILABLE BillItem OR BillItem.BillCode NE iItemCode 
     THEN FIND BillItem WHERE 
-              BillItem.Brand    = Syst.CUICommon:gcBrand AND
+              BillItem.Brand    = Syst.Var:gcBrand AND
               BillItem.BillCode = iItemCode NO-LOCK NO-ERROR.
     
     IF AVAILABLE BillItem THEN DO:
@@ -84,7 +84,7 @@ FUNCTION GetAccRcv RETURNS INTEGER
     IF iKatkod NE "" THEN DO:
         
         FIND CustCat WHERE 
-             CustCat.Brand    = Syst.CUICommon:gcBrand AND
+             CustCat.Brand    = Syst.Var:gcBrand AND
              CustCat.Category = iKatkod NO-LOCK NO-ERROR.
 
         IF AVAILABLE CustCat THEN DO:

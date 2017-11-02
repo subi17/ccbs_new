@@ -19,7 +19,7 @@ DEF VAR lcReqName AS CHAR NO-UNDO.
 DEF VAR lcSkip    AS CHAR NO-UNDO.
 
 FIND RequestType WHERE
-     RequestType.Brand   = Syst.CUICommon:gcBrand AND
+     RequestType.Brand   = Syst.Var:gcBrand AND
      RequestType.ReqType = iiReqType NO-LOCK NO-ERROR.
    
 IF AVAILABLE RequestType THEN lcReqName = RequestType.ReqName.

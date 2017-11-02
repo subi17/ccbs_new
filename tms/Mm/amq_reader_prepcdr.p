@@ -8,8 +8,8 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "Cron".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Cron".
 {Func/cparam2.i}
 {Func/direct_dbconnect.i}
 {Func/replog_reader.i}
@@ -99,7 +99,7 @@ PROCEDURE pAmqCDRReader:
 
    DO TRANS:
       FIND FIRST ActionLog WHERE
-                 ActionLog.Brand     = Syst.CUICommon:gcBrand        AND
+                 ActionLog.Brand     = Syst.Var:gcBrand        AND
                  ActionLog.ActionID  = "PrepCDR_HPD"   AND
                  ActionLog.TableName = "PrepCDR" EXCLUSIVE-LOCK NO-ERROR.
       IF AVAIL ActionLog THEN DO:
@@ -111,13 +111,13 @@ PROCEDURE pAmqCDRReader:
       ELSE DO:
          CREATE ActionLog.
          ASSIGN 
-            ActionLog.Brand        = Syst.CUICommon:gcBrand
+            ActionLog.Brand        = Syst.Var:gcBrand
             ActionLog.TableName    = "PrepCDR"
             ActionLog.KeyValue     = "HPD"
             ActionLog.ActionID     = "PrepCDR_HPD"
             ActionLog.ActionPeriod = YEAR(ldaReadDate) * 100 + MONTH(ldaReadDate)
             ActionLog.ActionStatus = 2
-            ActionLog.UserCode     = Syst.CUICommon:katun
+            ActionLog.UserCode     = Syst.Var:katun
             ActionLog.ActionDec    = ldeReadInTS.
       END. /* ELSE DO: */
 
@@ -164,7 +164,7 @@ PROCEDURE pAmqCDRReader:
 
    DO TRANS:
       FIND FIRST ActionLog WHERE
-                 ActionLog.Brand     = Syst.CUICommon:gcBrand AND
+                 ActionLog.Brand     = Syst.Var:gcBrand AND
                  ActionLog.ActionID  = "PrepCDR_HPD" AND
                  ActionLog.TableName = "PrepCDR" EXCLUSIVE-LOCK NO-ERROR.
       IF AVAIL ActionLog THEN
@@ -181,7 +181,7 @@ PROCEDURE pDBConnect:
    /* connect to correct cdr dbs */
    fInitializeConnectTables("PrepCDR,McdrDtl2","").
 
-   RUN pDirectConnect2Dbs(Syst.CUICommon:gcBrand,
+   RUN pDirectConnect2Dbs(Syst.Var:gcBrand,
                           "",
                           idaConnectDate,
                           idaConnectDate).

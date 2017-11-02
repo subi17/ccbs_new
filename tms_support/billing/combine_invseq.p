@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "anttis".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 {Inv/combine_invseq.i}
 
 DEF VAR idafromdate as date no-undo.
@@ -32,7 +32,7 @@ ok = false.
 LOOP:
 DO WHILE TRUE:
 
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    REPEAT ON ENDKEY UNDO, LEAVE:
       UPDATE 
          idafromdate

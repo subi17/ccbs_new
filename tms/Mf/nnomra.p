@@ -32,7 +32,7 @@ form
 "                rapport' med valda kriterier. (Ej kriterier = ALLT)."
    skip(14)
    WITH ROW 1 side-labels width 80
-   title " " + Syst.CUICommon:ynimi + " OPERATOR/LAND RAPPORT " +
+   title " " + Syst.Var:ynimi + " OPERATOR/LAND RAPPORT " +
    string(TODAY,"99-99-99") + " "
    FRAME valinta.
 
@@ -69,17 +69,17 @@ toimi:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       IF ufkey THEN DO:
     ASSIGN
-    Syst.CUICommon:ufk[1]= 132 Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
-    Syst.CUICommon:ufk[5]= 63 Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-    Syst.CUICommon:ehto = 3 ufkey = FALSE.
+    Syst.Var:ufk[1]= 132 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+    Syst.Var:ufk[5]= 63 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+    Syst.Var:ehto = 3 ufkey = FALSE.
     RUN Syst/ufkey.p.
       END.
 
       READKEY.
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
-    Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+      if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:
+    Syst.Var:ehto = 9. RUN Syst/ufkey.p.
     UPDATE oper1
       oper2
       validate(input oper2 = "" OR INPUT oper2 >= INPUT oper1,
@@ -96,13 +96,13 @@ toimi:
     ufkey = TRUE.
     NEXT toimi.
       END.
-      else if lookup(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"5,f5") > 0 THEN DO:
     LEAVE toimi.
       END.
-      else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"8,f8") > 0 THEN DO:
     RETURN.
       END.
-   END. /* Syst.CUICommon:toimi */
+   END. /* Syst.Var:toimi */
 
 /* Avataan striimi */
 ASSIGN tila = TRUE.

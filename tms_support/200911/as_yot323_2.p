@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "anttis".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 {Func/msisdn.i}
 
 DEFINE VARIABLE iCLi as int64 no-undo.
@@ -21,7 +21,7 @@ DO iCli = 633400000 to 633499999:
    FIND FIRST msisdnnumber where
       msisdnnumber.cli = string(iCli) NO-LOCK.
       
-   FIND FIRST msisdn where msisdn.brand = Syst.CUICommon:gcBrand and 
+   FIND FIRST msisdn where msisdn.brand = Syst.Var:gcBrand and 
       msisdn.cli = msisdnnumber.cli and 
       msisdn.statuscode = 0 and
       msisdn.validto > ldeNow NO-LOCK NO-ERROR.

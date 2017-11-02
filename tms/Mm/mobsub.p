@@ -38,7 +38,7 @@ DEFINE INPUT PARAMETER icType    AS CHAR NO-UNDO.
 {Func/fdss.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -163,8 +163,8 @@ form
     llMemo                  FORMAT "*/"    COLUMN-LABEL "M"  
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
     "  MOBILE SUBSCRIPTION  "
     + string(TODAY,"99-99-99") + " "
     FRAME sel.
@@ -173,14 +173,14 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
 form /* seek Mobsub CLI */
     lcCli  
     HELP "Enter MSISDN  "
-    WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Msisdn "
-    COLOR VALUE(Syst.CUICommon:cfc) WIDTH 24  NO-LABELS OVERLAY FRAME f1.
+    WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Msisdn "
+    COLOR VALUE(Syst.Var:cfc) WIDTH 24  NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Mobsub MsSeq */
     liMsSeq  
     HELP "Enter Subscription ID  "
-    WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Subscription ID "
-    COLOR VALUE(Syst.CUICommon:cfc) WIDTH 24  NO-LABELS OVERLAY FRAME fMsSeq.
+    WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Subscription ID "
+    COLOR VALUE(Syst.Var:cfc) WIDTH 24  NO-LABELS OVERLAY FRAME fMsSeq.
 
 
 form /* Customer :n nimella hakua varten */
@@ -192,16 +192,16 @@ form /* Customer :n nimella hakua varten */
   SKIP
   "Company:" lcCompany  FORMAT "X(30)"
   HELP "Company name" SKIP
-  with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Name "
-  COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
+  with row 4 col 2 title color value(Syst.Var:ctc) " FIND Name "
+  COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 
 form /* seek  CustNum */
     liCustNum
     HELP "Enter Customer No "
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Customer No"
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Customer No"
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f3.
                 
 form /* Customer :n nimella hakua varten */
   "LastName/Company:" lcLastName FORMAT "X(30)"
@@ -209,35 +209,35 @@ form /* Customer :n nimella hakua varten */
   "FirstName ......:" lcFirstName
   FORMAT "X(20)"
   HELP "First name"
-  with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND AGREEMENT NAME "
-  COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
+  with row 4 col 2 title color value(Syst.Var:ctc) " FIND AGREEMENT NAME "
+  COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f4.
  
 
 
 form /* seek  CustNum */
    lcPersonID
    HELP "Enter Person ID"
-   WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Person ID"   COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f5.
+   WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Person ID"   COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f5.
 
 form /* seek  CustNum */
     liMSStatus
     HELP "Enter Subscription Status" 
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND StatusCode " 
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f6.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND StatusCode " 
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f6.
                 
 form
    lcICC
    HELP "Enter Person ICC" 
-   WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) 
-   "FIND ICC"  COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f7.
+   WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) 
+   "FIND ICC"  COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f7.
 
 form
    lcFixedNumber
    HELP "Enter Fixed Number" 
-   WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) 
-   "FIND FIXED NUMBER" COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME frSearchFixed.
+   WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) 
+   "FIND FIXED NUMBER" COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME frSearchFixed.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "  By MSISDN  ,  By SUBS ID ,  By CUSTNUM  ,  BY STATUS  ".
@@ -308,25 +308,25 @@ BROWSE:
         
         IF NOT llMore THEN
         ASSIGN
-        Syst.CUICommon:ufk[1]= 209  Syst.CUICommon:ufk[2]= 9018 Syst.CUICommon:ufk[3]= 2902  Syst.CUICommon:ufk[4]= 2903
-        Syst.CUICommon:ufk[5]= 2214 Syst.CUICommon:ufk[6]= 2901
-        Syst.CUICommon:ufk[7]= 555  Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-        Syst.CUICommon:ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 209  Syst.Var:ufk[2]= 9018 Syst.Var:ufk[3]= 2902  Syst.Var:ufk[4]= 2903
+        Syst.Var:ufk[5]= 2214 Syst.Var:ufk[6]= 2901
+        Syst.Var:ufk[7]= 555  Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
         
         ELSE ASSIGN
-        Syst.CUICommon:ufk[1]= 559  Syst.CUICommon:ufk[2]= 1740 Syst.CUICommon:ufk[3]= 9852 Syst.CUICommon:ufk[4]= 0
-        Syst.CUICommon:ufk[5]= 0 Syst.CUICommon:ufk[6]= 0
-        Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-        Syst.CUICommon:ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 559  Syst.Var:ufk[2]= 1740 Syst.Var:ufk[3]= 9852 Syst.Var:ufk[4]= 0
+        Syst.Var:ufk[5]= 0 Syst.Var:ufk[6]= 0
+        Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
 
         IF ictype  NE  "" THEN ASSIGN
-         Syst.CUICommon:ufk[1] =  0
-         Syst.CUICommon:ufk[2] =  0
-         Syst.CUICommon:ufk[3] =  0
-         Syst.CUICommon:ufk[4] =  0 
-         Syst.CUICommon:ufk[5] =  0
-         Syst.CUICommon:ufk[6] =  0
-         Syst.CUICommon:ufk[7] =  0.
+         Syst.Var:ufk[1] =  0
+         Syst.Var:ufk[2] =  0
+         Syst.Var:ufk[3] =  0
+         Syst.Var:ufk[4] =  0 
+         Syst.Var:ufk[5] =  0
+         Syst.Var:ufk[6] =  0
+         Syst.Var:ufk[7] =  0.
          
          RUN Syst/ufkey.p.
       END.
@@ -334,29 +334,29 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW Mobsub.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Mobsub.CLI WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) Mobsub.CLI WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW Mobsub.MsSeq  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Mobsub.MsSeq WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) Mobsub.MsSeq WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
         CHOOSE ROW Mobsub.AgrCust {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Mobsub.AgrCust WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) Mobsub.AgrCust WITH FRAME sel.
       END.
       IF order = 4 THEN DO:
         CHOOSE ROW Mobsub.MSStatus {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Mobsub.MSStatus WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) Mobsub.MSStatus WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -380,10 +380,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -408,7 +408,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -434,7 +434,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND Mobsub WHERE recid(mobsub) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -458,7 +458,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -473,10 +473,10 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND NOT llMore AND icType = "" 
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 AND NOT llMore AND icType = "" 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET lccli WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -496,10 +496,10 @@ BROWSE:
      END. /* Search-1 */
      
      /* Search BY column 2 */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 AND NOT llMore AND icType = "" 
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 AND NOT llMore AND icType = "" 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME fMsSeq.
        SET liMsSeq WITH FRAME fMsSeq.
        HIDE FRAME fMsSeq NO-PAUSE.
@@ -518,10 +518,10 @@ BROWSE:
        END.
      END. /* Search-2 */
      
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 AND NOT llMore AND 
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 AND NOT llMore AND 
        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f3.
        SET liCustNum WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
@@ -542,10 +542,10 @@ BROWSE:
        END.
      END. /* Search-3 */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 AND NOT llMore AND 
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 AND NOT llMore AND 
        icType = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        
        ASSIGN
           lcSurname1 = ""
@@ -574,10 +574,10 @@ BROWSE:
        END.
      END. /* Search-4 */
     
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND NOT llMore AND 
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND NOT llMore AND 
        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f5.
        SET lcPersonid WITH FRAME f5.
        HIDE FRAME f5 NO-PAUSE.
@@ -587,15 +587,15 @@ BROWSE:
        END.
      END. /* Search-5 */
      
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND NOT llMore AND 
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND NOT llMore AND 
        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
        ASSIGN lcFirstName = ""
               lcSurName1  = ""
               lcSurName2  = ""
               lcCompany   = "".
                                                         
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        SET lcSurName1 lcSurName2 lcCompany WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -609,7 +609,7 @@ BROWSE:
        END.
      END.
      
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 AND Syst.CUICommon:ufk[7] > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"7,f7") > 0 AND Syst.Var:ufk[7] > 0 THEN DO:
         llMore = TRUE.
         ufkey = TRUE.
         NEXT LOOP.
@@ -618,10 +618,10 @@ BROWSE:
      /********************/
      /* 2nd page options */
      /********************/
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND llMore AND lcRight = "RW" AND 
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 AND llMore AND lcRight = "RW" AND 
        ictype = "" THEN DO ON ENDKEY UNDO, NEXT LOOP: 
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f6.
        SET liMSStatus WITH FRAME f6.
        IF  liMSStatus  ne 0  THEN DO:
@@ -641,10 +641,10 @@ BROWSE:
        ENd.
      END. 
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 AND llMore AND 
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 AND llMore AND 
        iCType = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f7.
        SET lcICC WITH FRAME f7.
        HIDE FRAME f7 NO-PAUSE.
@@ -674,7 +674,7 @@ BROWSE:
        END.
      END. 
      
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 AND lcRight = "RW" AND llMore AND 
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 AND lcRight = "RW" AND llMore AND 
         ictype = "" THEN DO:
         
         RUN local-find-this (FALSE).
@@ -690,10 +690,10 @@ BROWSE:
            IF MsSeq > 0 THEN 
               FIND SearchMobsub WHERE 
                    SearchMobsub.MsSeq = liMsSeq AND
-                   SearchMobsub.brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+                   SearchMobsub.brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
            ELSE DO:
               FIND FIRST SearchMobsub WHERE 
-                         SearchMobsub.Brand   = Syst.CUICommon:gcBrand AND
+                         SearchMobsub.Brand   = Syst.Var:gcBrand AND
                          SearchMobsub.CustNum = liCustNum NO-LOCK NO-ERROR.
 
               IF NOT AVAIL SearchMobsub THEN DO:
@@ -714,17 +714,17 @@ BROWSE:
            END.
         END.
      END. 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 AND llMore AND 
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 AND llMore AND 
        iCType = "" THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME frSearchFixed.
        SET lcFixedNumber WITH FRAME frSearchFixed.
        HIDE FRAME frSearchFixed NO-PAUSE.
 
        IF lcFixedNumber  > ""  THEN DO:
           FOR FIRST SearchMobsub WHERE
-                    SearchMobsub.Brand = Syst.CUICommon:gcBrand AND
+                    SearchMobsub.Brand = Syst.Var:gcBrand AND
                     SearchMobsub.FixedNumber = lcFixedNumber NO-LOCK.
           END.
 
@@ -745,7 +745,7 @@ BROWSE:
           NEXT LOOP.
        END.
      END. 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN DO:
 
        RUN local-find-this(FALSE).
        
@@ -759,27 +759,27 @@ BROWSE:
 
           ASSIGN
              ufkey = TRUE
-             Syst.CUICommon:ufk   = 0  
-             Syst.CUICommon:ehto  = 1  
-             Syst.CUICommon:ufk[1] = 7
-             Syst.CUICommon:ufk[2] = 788
-             Syst.CUICommon:ufk[3] = 2244 
-             Syst.CUICommon:ufk[4] = 1990 WHEN lcRight = "RW"
-             Syst.CUICommon:ufk[4] = 0 WHEN lcRight NE "RW"
-             Syst.CUICommon:ufk[5] =  927
-             Syst.CUICommon:ufk[6]=  1992
-             Syst.CUICommon:ufk[7]= 249
-             Syst.CUICommon:ufk[8]= 8  .
+             Syst.Var:ufk   = 0  
+             Syst.Var:ehto  = 1  
+             Syst.Var:ufk[1] = 7
+             Syst.Var:ufk[2] = 788
+             Syst.Var:ufk[3] = 2244 
+             Syst.Var:ufk[4] = 1990 WHEN lcRight = "RW"
+             Syst.Var:ufk[4] = 0 WHEN lcRight NE "RW"
+             Syst.Var:ufk[5] =  927
+             Syst.Var:ufk[6]=  1992
+             Syst.Var:ufk[7]= 249
+             Syst.Var:ufk[8]= 8  .
           RUN Syst/ufkey.p.   
-          IF Syst.CUICommon:toimi = 8 THEN DO:
+          IF Syst.Var:toimi = 8 THEN DO:
              LEAVE.
           ENd.
 
-          IF Syst.CUICommon:toimi = 1 AND
+          IF Syst.Var:toimi = 1 AND
              fIsPermittedModule(mobsub.clitype, "mobsub_update") THEN
              run local-update-record(TRUE).
-          ELSE IF Syst.CUICommon:toimi = 2  THEN RUN Mm/persondata.p(mobsub.msseq).
-          ELSE IF Syst.CUICommon:toimi = 3  THEN DO:
+          ELSE IF Syst.Var:toimi = 2  THEN RUN Mm/persondata.p(mobsub.msseq).
+          ELSE IF Syst.Var:toimi = 3  THEN DO:
              RUN Mm/msrequest.p(-1,
                            ?, /* reqstat ? for all */
                            MobSub.MsSeq,
@@ -799,15 +799,15 @@ BROWSE:
              /* in case a request was run */
              RUN local-UPDATE-record(FALSE).
           END.      
-          ELSE IF Syst.CUICommon:toimi = 4  AND lcRight = "RW" AND 
+          ELSE IF Syst.Var:toimi = 4  AND lcRight = "RW" AND 
             fIsPermittedModule(mobsub.clitype, "subser") THEN 
                RUN Mm/subser.p(Mobsub.MsSeq).
-          ELSE IF Syst.CUICommon:toimi = 5  THEN RUN Mc/memo.p(INPUT mobsub.CustNum,
+          ELSE IF Syst.Var:toimi = 5  THEN RUN Mc/memo.p(INPUT mobsub.CustNum,
                                            INPUT "Mobsub",
                                            INPUT STRING(MobSub.MsSeq),
                                            INPUT "Mobsub").
 
-          ELSE IF Syst.CUICommon:toimi = 6 
+          ELSE IF Syst.Var:toimi = 6 
              THEN DO:
        
              CALLBROWSE:
@@ -815,43 +815,43 @@ BROWSE:
 
                 ASSIGN
                    ufkey  = TRUE
-                   Syst.CUICommon:ufk    = 0
-                   Syst.CUICommon:ehto   = 1
-                   Syst.CUICommon:ufk[1] = 1992
-                   Syst.CUICommon:ufk[2] = 844
-                   Syst.CUICommon:ufk[3] = 562
-                   Syst.CUICommon:ufk[4] = 2435
-                   Syst.CUICommon:ufk[5] = 0
-                   Syst.CUICommon:ufk[6] = 0
-                   Syst.CUICommon:ufk[7] = 1079.
-                   Syst.CUICommon:ufk[8] = 8.
+                   Syst.Var:ufk    = 0
+                   Syst.Var:ehto   = 1
+                   Syst.Var:ufk[1] = 1992
+                   Syst.Var:ufk[2] = 844
+                   Syst.Var:ufk[3] = 562
+                   Syst.Var:ufk[4] = 2435
+                   Syst.Var:ufk[5] = 0
+                   Syst.Var:ufk[6] = 0
+                   Syst.Var:ufk[7] = 1079.
+                   Syst.Var:ufk[8] = 8.
 
                 RUN Syst/ufkey.p.   
         
-                IF Syst.CUICommon:toimi = 8 THEN DO:
+                IF Syst.Var:toimi = 8 THEN DO:
                    LEAVE CALLBROWSE.
                 ENd.
 
-                IF       Syst.CUICommon:toimi = 1  THEN RUN Mm/msisdniv.p(Mobsub.MsSeq).
+                IF       Syst.Var:toimi = 1  THEN RUN Mm/msisdniv.p(Mobsub.MsSeq).
 
-                ELSE IF Syst.CUICommon:toimi = 2 AND avail mobsub  THEN
+                ELSE IF Syst.Var:toimi = 2 AND avail mobsub  THEN
                    RUN Mm/callstat.p(INPUT 0,Mobsub.cli,"PRODUCT").
        
-                ELSE IF Syst.CUICommon:toimi = 3 AND avail mobsub  THEN 
+                ELSE IF Syst.Var:toimi = 3 AND avail mobsub  THEN 
                    RUN Mm/callstat.p(INPUT 0,Mobsub.cli,"DATE").
        
-                ELSE IF Syst.CUICommon:toimi = 4 AND avail mobsub  THEN
+                ELSE IF Syst.Var:toimi = 4 AND avail mobsub  THEN
                    RUN Mm/callstat.p(INPUT 0,Mobsub.cli,"CCN").
 
-                ELSE IF Syst.CUICommon:toimi = 6 THEN 
+                ELSE IF Syst.Var:toimi = 6 THEN 
                    RUN Mm/persondata.p(mobsub.msseq).
                    
-                ELSE IF Syst.CUICommon:toimi = 7 THEN
+                ELSE IF Syst.Var:toimi = 7 THEN
                    RUN Gwy/ppreqbr.p(MobSub.MsSeq).
         
              END.
           END.
-          ELSE IF Syst.CUICommon:toimi = 7 AND avail mobsub  THEN DO:
+          ELSE IF Syst.Var:toimi = 7 AND avail mobsub  THEN DO:
              RUN Mm/mobsubdi.p(INPUT Mobsub.MSSeq, OUTPUT killed).
              
              /* refresh mobsub status / barring status */
@@ -864,19 +864,19 @@ BROWSE:
        NEXT LOOP.
     END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(mobsub) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(mobsub) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN DO:
         IF llMore THEN DO:
            llMore = FALSE.
            ufkey = TRUE.
@@ -888,7 +888,7 @@ BROWSE:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -1034,7 +1034,7 @@ PROCEDURE local-find-others.
    DEF BUFFER bDSSTermMobSub FOR TermMobSub.
       
    IF CAN-FIND(FIRST memo WHERE 
-                     Memo.Brand     = Syst.CUICommon:gcBrand                AND
+                     Memo.Brand     = Syst.Var:gcBrand                AND
                      Memo.HostTable = "MobSub"               AND
                      Memo.KeyValue  = STRING(MobSub.MsSeq)   AND
                     (Memo.MemoText NE "" OR 
@@ -1079,7 +1079,7 @@ PROCEDURE local-find-others.
          lcBillTarget = STRING(Mobsub.Billtarget).
       
       FIND FIRST sim WHERE 
-                 SIM.Brand  = Syst.CUICommon:gcBrand AND 
+                 SIM.Brand  = Syst.Var:gcBrand AND 
                  Sim.Icc = Mobsub.ICC
       NO-LOCK NO-ERROR.
               
@@ -1092,11 +1092,11 @@ PROCEDURE local-find-others.
       /* SalesMan */ 
 
       FIND FIRST Salesman WHERE 
-                 SalesMan.Brand    = Syst.CUICommon:gcBrand AND 
+                 SalesMan.Brand    = Syst.Var:gcBrand AND 
                  Salesman.Salesman = Mobsub.Salesman NO-LOCK NO-ERROR.
 
       FIND FIRST Reseller WHERE 
-                 Reseller.Brand    = Syst.CUICommon:gcBrand AND 
+                 Reseller.Brand    = Syst.Var:gcBrand AND 
                  Reseller.Reseller = Mobsub.Reseller NO-LOCK NO-ERROR.
 
       /* Status */ 
@@ -1185,7 +1185,7 @@ PROCEDURE local-find-others.
       liMultiSIMType = (IF Mobsub.MultiSimType = 1 THEN 2 ELSE 1).
 
       FIND FIRST SearchMobsub NO-LOCK WHERE
-                 SearchMobsub.Brand = Syst.CUICommon:gcBrand AND
+                 SearchMobsub.Brand = Syst.Var:gcBrand AND
                  SearchMobsub.MultiSimID = MobSub.MultiSimID AND
                  SearchMobsub.MultiSimType = liMultiSIMType NO-ERROR.
 
@@ -1255,7 +1255,7 @@ PROCEDURE local-UPDATE-record.
    UPDATE_LOOP:
    REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
       
-      Syst.CUICommon:ehto = 9.
+      Syst.Var:ehto = 9.
       RUN Syst/ufkey.p.
    
       DISP MobSub.Reseller
@@ -1280,7 +1280,7 @@ PROCEDURE local-UPDATE-record.
                   DISPLAY siirto @ Mobsub.Reseller.
                END.
                
-               Syst.CUICommon:ehto = 9.
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
             
             END.
@@ -1293,21 +1293,21 @@ PROCEDURE local-UPDATE-record.
                  DISPLAY siirto @ MobSub.Salesman WITH FRAME lis.
                END.
                
-               Syst.CUICommon:ehto = 9.
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
             
             END.
           
          END.
         
-        IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
+        IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
            
             IF FRAME-FIELD = "Reseller" THEN DO:
              
                IF INPUT Mobsub.Reseller NE "" THEN DO:
                
                   FIND FIRST Reseller WHERE
-                     Reseller.Brand = Syst.CUICommon:gcBrand AND
+                     Reseller.Brand = Syst.Var:gcBrand AND
                      Reseller.Reseller = INPUT Mobsub.Reseller 
                   NO-LOCK NO-ERROR.
 
@@ -1326,7 +1326,7 @@ PROCEDURE local-UPDATE-record.
                IF LOOKUP(INPUT Mobsub.Salesman,"WEB,YOIGO,GIFT") = 0 THEN DO:
                   
                   FIND FIRST Salesman WHERE
-                     Salesman.Brand = Syst.CUICommon:gcBrand AND
+                     Salesman.Brand = Syst.Var:gcBrand AND
                      Salesman.Salesman = INPUT Mobsub.Salesman
                   NO-LOCK NO-ERROR.
 

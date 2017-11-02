@@ -35,12 +35,12 @@ DEF STREAM sout.
 OUTPUT STREAM sout TO VALUE(icFile).
 
 FOR EACH MNPProcess NO-LOCK WHERE
-         MNPProcess.Brand = Syst.CUICommon:gcBrand AND
+         MNPProcess.Brand = Syst.Var:gcBrand AND
          MNPProcess.MNPType = {&MNP_TYPE_IN} AND
          MNPProcess.StatusCode EQ {&MNP_ST_ACON} AND
          MNPProcess.PortingTime < Func.Common:mMakeTS(),
    FIRST Order NO-LOCK WHERE
-         Order.Brand = Syst.CUICommon:gcBrand AND
+         Order.Brand = Syst.Var:gcBrand AND
          Order.OrderId = MNPProcess.OrderId:
 
    IF Order.OrderType = 3 THEN

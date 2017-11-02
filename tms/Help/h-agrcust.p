@@ -46,16 +46,16 @@ form
     Customer.PostOffice FORMAT "X(14)"    COLUMN-LABEL "Post."
     Customer.OrgID      FORMAT "X(11)"    COLUMN-LABEL "PersonID"
 WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN
-    COLOR VALUE(Syst.CUICommon:cfc)   
-    TITLE COLOR VALUE(Syst.CUICommon:ctc) " AGREEMENT CUSTOMERS " 
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " AGREEMENT CUSTOMERS " 
     FRAME sel.
 
 form /* seek  Customer */
     "Customer Nbr:" liCustNum
        HELP "Enter customer number"
        FORMAT ">>>>>>>9"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND number "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND number "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  */
    "LastName/Company:" lcLastName    
@@ -64,17 +64,17 @@ form /* seek  */
    "FirstName ......:" lcFirstName 
        FORMAT "X(20)"
        HELP "First name"
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND name "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND name "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek  */
     "PersonID/CompanyID:" lcOrgID
        HELP "Enter person id / company id"
        FORMAT "X(11)" 
-    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND person ID "
-    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND person ID "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f3.
 
-Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 IF icOrgID > "" THEN ASSIGN 
@@ -146,16 +146,16 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-           Syst.CUICommon:ufk    = 0
-           Syst.CUICommon:ufk[5] = 11
-           Syst.CUICommon:ufk[8] = 8 
-           Syst.CUICommon:ehto   = 3 
+           Syst.Var:ufk    = 0
+           Syst.Var:ufk[5] = 11
+           Syst.Var:ufk[8] = 8 
+           Syst.Var:ehto   = 3 
            ufkey  = FALSE.
 
         IF icOrgID = "" THEN ASSIGN 
-           Syst.CUICommon:ufk[1] = 702
-           Syst.CUICommon:ufk[2] = 717
-           Syst.CUICommon:ufk[3] = 812.
+           Syst.Var:ufk[1] = 702
+           Syst.Var:ufk[2] = 717
+           Syst.Var:ufk[3] = 812.
            
         RUN Syst/ufkey.p.
       END.
@@ -163,21 +163,21 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
          CHOOSE ROW Customer.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Customer.CustNum WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) Customer.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW lcCustName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) lcCustName WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) lcCustName WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
          CHOOSE ROW Customer.OrgID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Customer.OrgID WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) Customer.OrgID WITH FRAME sel.
       END.
 
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(Syst.CUICommon:nap,"8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -185,10 +185,10 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -206,7 +206,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -231,7 +231,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -257,7 +257,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND Customer WHERE recid(Customer) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -281,7 +281,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -295,11 +295,11 @@ REPEAT WITH FRAME sel:
        END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND Syst.CUICommon:ufk[1] > 0 
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 AND Syst.Var:ufk[1] > 0 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f1.
         liCustNum = 0.
         UPDATE liCustNum WITH FRAME f1.
@@ -307,7 +307,7 @@ REPEAT WITH FRAME sel:
 
         IF liCustNum > 0 THEN DO:
            FIND FIRST Customer USE-INDEX CustNum WHERE 
-                      Customer.Brand    = Syst.CUICommon:gcBrand   AND
+                      Customer.Brand    = Syst.Var:gcBrand   AND
                       Customer.CustNum >= liCustNum AND
                       Customer.CustNum  = Customer.AgrCust
            NO-LOCK NO-ERROR.
@@ -327,11 +327,11 @@ REPEAT WITH FRAME sel:
         END.
      END. /* Search-1 */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 AND Syst.CUICommon:ufk[2] > 0 
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 AND Syst.Var:ufk[2] > 0 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f2.
         ASSIGN lcLastName   = ""
                lcFirstName = "".
@@ -343,7 +343,7 @@ REPEAT WITH FRAME sel:
 
             IF lcFirstName = "" THEN 
                FIND FIRST Customer USE-INDEX CustName WHERE 
-                          Customer.Brand    = Syst.CUICommon:gcBrand     AND
+                          Customer.Brand    = Syst.Var:gcBrand     AND
                           Customer.CustName >= lcLastName AND
                           Customer.CustNum  = Customer.AgrCust
                NO-LOCK NO-ERROR.
@@ -351,7 +351,7 @@ REPEAT WITH FRAME sel:
             ELSE DO:
                
                FIND FIRST Customer USE-INDEX CustName WHERE 
-                          Customer.Brand     = Syst.CUICommon:gcBrand     AND
+                          Customer.Brand     = Syst.Var:gcBrand     AND
                           Customer.CustName  = lcLastName  AND
                           Customer.FirstName = lcFirstName AND
                           Customer.CustNum   = Customer.AgrCust
@@ -359,7 +359,7 @@ REPEAT WITH FRAME sel:
 
                IF NOT AVAILABLE Customer THEN 
                FIND FIRST Customer USE-INDEX CustName WHERE 
-                          Customer.Brand     = Syst.CUICommon:gcBrand          AND
+                          Customer.Brand     = Syst.Var:gcBrand          AND
                           Customer.CustName  = lcLastName       AND
                           Customer.FirstName BEGINS lcFirstName AND
                           Customer.CustNum   = Customer.AgrCust
@@ -367,7 +367,7 @@ REPEAT WITH FRAME sel:
 
                IF NOT AVAILABLE Customer THEN 
                FIND FIRST Customer USE-INDEX CustName WHERE 
-                          Customer.Brand     = Syst.CUICommon:gcBrand      AND
+                          Customer.Brand     = Syst.Var:gcBrand      AND
                           Customer.CustName  = lcLastName   AND
                           Customer.FirstName >= lcFirstName AND
                           Customer.CustNum   = Customer.AgrCust
@@ -375,7 +375,7 @@ REPEAT WITH FRAME sel:
 
                IF NOT AVAILABLE Customer THEN 
                FIND FIRST Customer USE-INDEX CustName WHERE 
-                          Customer.Brand     = Syst.CUICommon:gcBrand      AND
+                          Customer.Brand     = Syst.Var:gcBrand      AND
                           Customer.CustName  >= lcLastName  AND
                           Customer.FirstName >= lcFirstName AND
                           Customer.CustNum   = Customer.AgrCust
@@ -397,11 +397,11 @@ REPEAT WITH FRAME sel:
         END.
      END. /* Search-2 */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 AND Syst.CUICommon:ufk[3] > 0 
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 AND Syst.Var:ufk[3] > 0 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
-        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f3.
         lcOrgID = "".
         UPDATE lcOrgID WITH FRAME f3.
@@ -409,7 +409,7 @@ REPEAT WITH FRAME sel:
 
         IF lcOrgID > "" THEN DO:
            FIND FIRST Customer USE-INDEX OrgID WHERE 
-                      Customer.Brand  = Syst.CUICommon:gcBrand AND
+                      Customer.Brand  = Syst.Var:gcBrand AND
                       Customer.OrgID >= lcOrgID AND
                       Customer.CustNum = Customer.AgrCust
            NO-LOCK NO-ERROR.
@@ -429,7 +429,7 @@ REPEAT WITH FRAME sel:
         END.
      END. /* Search-3 */
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5,enter,return") > 0 THEN DO: 
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5,enter,return") > 0 THEN DO: 
         RUN local-find-this(FALSE).
 
         IF AVAILABLE Customer THEN DO:
@@ -438,25 +438,25 @@ REPEAT WITH FRAME sel:
         END.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"HOME,H") > 0 THEN DO : /* FIRST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"HOME,H") > 0 THEN DO : /* FIRST record */
         RUN local-find-FIRST.
         ASSIGN Memory = recid(Customer) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(Customer) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-Syst.CUICommon:si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 PROCEDURE local-find-this:
@@ -475,21 +475,21 @@ PROCEDURE local-find-FIRST:
 
    IF order = 1 THEN 
       FIND FIRST Customer USE-INDEX CustNum WHERE
-                 Customer.Brand   = Syst.CUICommon:gcBrand AND
+                 Customer.Brand   = Syst.Var:gcBrand AND
                  Customer.CustNum = Customer.AgrCust NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
       FIND FIRST Customer USE-INDEX CustName WHERE
-                 Customer.Brand   = Syst.CUICommon:gcBrand AND
+                 Customer.Brand   = Syst.Var:gcBrand AND
                  Customer.CustNum = Customer.AgrCust NO-LOCK NO-ERROR.
    ELSE IF order = 3 THEN DO:
       IF icOrgID > "" THEN 
       FIND FIRST Customer USE-INDEX OrgID WHERE
-                 Customer.Brand   = Syst.CUICommon:gcBrand AND
+                 Customer.Brand   = Syst.Var:gcBrand AND
                  Customer.OrgID   = icOrgID NO-LOCK NO-ERROR.
 
       ELSE    
       FIND FIRST Customer USE-INDEX OrgID WHERE
-                 Customer.Brand   = Syst.CUICommon:gcBrand AND
+                 Customer.Brand   = Syst.Var:gcBrand AND
                  Customer.CustNum = Customer.AgrCust NO-LOCK NO-ERROR.
    END.
    
@@ -498,21 +498,21 @@ END PROCEDURE.
 PROCEDURE local-find-LAST:
    IF order = 1 THEN 
       FIND LAST Customer USE-INDEX CustNum WHERE
-                Customer.Brand   = Syst.CUICommon:gcBrand AND
+                Customer.Brand   = Syst.Var:gcBrand AND
                 Customer.CustNum = Customer.AgrCust NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
       FIND LAST Customer USE-INDEX CustName WHERE
-                Customer.Brand   = Syst.CUICommon:gcBrand AND
+                Customer.Brand   = Syst.Var:gcBrand AND
                 Customer.CustNum = Customer.AgrCust NO-LOCK NO-ERROR.
    ELSE IF order = 3 THEN DO:
       IF icOrgID > "" THEN 
       FIND LAST Customer USE-INDEX OrgID WHERE
-                Customer.Brand   = Syst.CUICommon:gcBrand AND
+                Customer.Brand   = Syst.Var:gcBrand AND
                 Customer.OrgID   = icOrgID NO-LOCK NO-ERROR.
 
       ELSE    
       FIND LAST Customer USE-INDEX OrgID WHERE
-                Customer.Brand   = Syst.CUICommon:gcBrand AND
+                Customer.Brand   = Syst.Var:gcBrand AND
                 Customer.CustNum = Customer.AgrCust NO-LOCK NO-ERROR.
    END.
  
@@ -521,21 +521,21 @@ END PROCEDURE.
 PROCEDURE local-find-NEXT:
    IF order = 1 THEN 
       FIND NEXT Customer USE-INDEX CustNum WHERE
-                Customer.Brand   = Syst.CUICommon:gcBrand AND
+                Customer.Brand   = Syst.Var:gcBrand AND
                 Customer.CustNum = Customer.AgrCust NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
       FIND NEXT Customer USE-INDEX CustName WHERE
-                Customer.Brand   = Syst.CUICommon:gcBrand AND
+                Customer.Brand   = Syst.Var:gcBrand AND
                 Customer.CustNum = Customer.AgrCust NO-LOCK NO-ERROR.
    ELSE IF order = 3 THEN DO:
       IF icOrgID > "" THEN 
       FIND NEXT Customer USE-INDEX OrgID WHERE
-                Customer.Brand   = Syst.CUICommon:gcBrand AND
+                Customer.Brand   = Syst.Var:gcBrand AND
                 Customer.OrgID   = icOrgID NO-LOCK NO-ERROR.
 
       ELSE    
       FIND NEXT Customer USE-INDEX OrgID WHERE
-                Customer.Brand   = Syst.CUICommon:gcBrand AND
+                Customer.Brand   = Syst.Var:gcBrand AND
                 Customer.CustNum = Customer.AgrCust NO-LOCK NO-ERROR.
    END.
 END PROCEDURE.
@@ -543,21 +543,21 @@ END PROCEDURE.
 PROCEDURE local-find-PREV:
    IF order = 1 THEN 
       FIND PREV Customer USE-INDEX CustNum WHERE
-                Customer.Brand   = Syst.CUICommon:gcBrand AND
+                Customer.Brand   = Syst.Var:gcBrand AND
                 Customer.CustNum = Customer.AgrCust NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
       FIND PREV Customer USE-INDEX CustName WHERE
-                Customer.Brand   = Syst.CUICommon:gcBrand AND
+                Customer.Brand   = Syst.Var:gcBrand AND
                 Customer.CustNum = Customer.AgrCust NO-LOCK NO-ERROR.
    ELSE IF order = 3 THEN DO:
       IF icOrgID > "" THEN 
       FIND PREV Customer USE-INDEX OrgID WHERE
-                Customer.Brand   = Syst.CUICommon:gcBrand AND
+                Customer.Brand   = Syst.Var:gcBrand AND
                 Customer.OrgID   = icOrgID NO-LOCK NO-ERROR.
 
       ELSE    
       FIND PREV Customer USE-INDEX OrgID WHERE
-                Customer.Brand   = Syst.CUICommon:gcBrand AND
+                Customer.Brand   = Syst.Var:gcBrand AND
                 Customer.CustNum = Customer.AgrCust NO-LOCK NO-ERROR.
    END.
  

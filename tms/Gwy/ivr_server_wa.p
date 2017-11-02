@@ -4,8 +4,8 @@
 {Func/heartbeat.i}
 
 ASSIGN
-   Syst.CUICommon:gcBrand = "1"
-   Syst.CUICommon:katun   = "Request".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun   = "Request".
 
 DEFINE STREAM outfile.
 
@@ -181,7 +181,7 @@ PROCEDURE SocketIO:
          
          FIND FIRST PrePaidRequest WHERE
                     PrePaidRequest.CLI      = lcCLI   AND
-                    PrePaidRequest.Brand    = Syst.CUICommon:gcBrand AND
+                    PrePaidRequest.Brand    = Syst.Var:gcBrand AND
                     PrePaidRequest.Source   = "IVR"   AND
                    (PrePaidRequest.PPStatus = 0 OR
                     PrePaidRequest.PPStatus = 9)
@@ -194,14 +194,14 @@ PROCEDURE SocketIO:
 
             ASSIGN
                PrePaidRequest.CLI       = lcCLI
-               PrePaidRequest.Brand     = Syst.CUICommon:gcBrand
+               PrePaidRequest.Brand     = Syst.Var:gcBrand
                PrePaidRequest.Source    = "IVR"
                PrePaidRequest.PPRequest = NEXT-VALUE(PrePaidReq)
                PrePaidRequest.CommLine  = lcXML
                PrePaidRequest.PPStatus  = 0.
          
             FIND FIRST MobSub WHERE
-                       MobSub.Brand = Syst.CUICommon:gcBrand AND
+                       MobSub.Brand = Syst.Var:gcBrand AND
                        MobSub.CLI   = PrePaidRequest.CLI
             NO-LOCK NO-ERROR.
             
@@ -221,11 +221,11 @@ PROCEDURE SocketIO:
                ASSIGN
                   MsRequest.CreStamp   = PrePaidRequest.TSRequest
                   MsRequest.MsRequest  = NEXT-VALUE(MsRequest)
-                  MsRequest.Brand      = Syst.CUICommon:gcBrand
+                  MsRequest.Brand      = Syst.Var:gcBrand
                   MsRequest.MSSeq      = MobSub.MSSeq
                   MsRequest.CLI        = MobSub.CLI
                   MsRequest.CustNum    = MobSub.CustNum
-                  MsRequest.UserCode   = Syst.CUICommon:katun
+                  MsRequest.UserCode   = Syst.Var:katun
                   MsRequest.ActStamp   = MsRequest.CreStamp
                   MsRequest.ReqType    = 1
                   MsRequest.ReqCParam1 = "PROFILE"

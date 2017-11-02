@@ -29,8 +29,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "NewtonRPC".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "NewtonRPC".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Syst/eventval.i}
 {Mc/dpmember.i}
@@ -39,7 +39,7 @@ Syst.CUICommon:gcBrand = "1".
 {Func/fcreditreq.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
    DEFINE VARIABLE lhTermReturn AS HANDLE NO-UNDO.
    lhTermReturn = BUFFER TermReturn:HANDLE.
@@ -183,7 +183,7 @@ IF (llDeviceStart AND llDeviceScreen) OR
       RETURN appl_err("Unknown subscription").
    
    FIND SingleFee USE-INDEX Custnum WHERE
-        SingleFee.Brand       = Syst.CUICommon:gcBrand AND
+        SingleFee.Brand       = Syst.Var:gcBrand AND
         SingleFee.Custnum     = MobSub.CustNum AND
         SingleFee.HostTable   = "Mobsub" AND
         SingleFee.KeyValue    = STRING(MobSub.MsSeq) AND
@@ -243,12 +243,12 @@ IF (llDeviceStart AND llDeviceScreen) OR
    IF NOT llRenewalOrder THEN DO:
 
       FOR EACH DCCLI NO-LOCK WHERE
-               DCCLI.Brand   EQ Syst.CUICommon:gcBrand AND
+               DCCLI.Brand   EQ Syst.Var:gcBrand AND
                DCCLI.DCEvent EQ "RVTERM12" AND
                DCCLI.MsSeq   EQ MobSub.MsSeq AND
                DCCLI.Validto >= TODAY,
           EACH FixedFee NO-LOCK WHERE
-               FixedFee.Brand = Syst.CUICommon:gcBrand AND
+               FixedFee.Brand = Syst.Var:gcBrand AND
                FixedFee.Custnum = MobSub.Custnum AND
                FixedFee.HostTable = "MobSub" AND
                Fixedfee.KeyValue = STRING(MobSub.MsSeq) AND
@@ -337,7 +337,7 @@ IF (llDeviceStart AND llDeviceScreen) OR
          RETURN appl_err("ERROR:Discount creation failed; " + lcResult).
 
       FOR EACH DiscountPlan NO-LOCK WHERE
-               DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
+               DiscountPlan.Brand = Syst.Var:gcBrand AND
               (DiscountPlan.DPRuleID = "RVTERMDT1DISC" OR
                DiscountPlan.DPRuleID = "RVTERMDT4DISC"),
           EACH DPMember NO-LOCK WHERE
@@ -393,8 +393,8 @@ ELSE DO:
       lcMemoText  = lcResult.
 END.
 
-lcOrigkatun = Syst.CUICommon:katun.
-Syst.CUICommon:katun =  "VISTA_" + lcSalesman.
+lcOrigkatun = Syst.Var:katun.
+Syst.Var:katun =  "VISTA_" + lcSalesman.
 
 IF llCreateMemo THEN
    Func.Common:mWriteMemo("MobSub",
@@ -403,7 +403,7 @@ IF llCreateMemo THEN
                     lcMemoTitle,
                     lcMemoText).
 
-Syst.CUICommon:katun = lcOrigKatun.
+Syst.Var:katun = lcOrigKatun.
 
 RELEASE TermReturn.
 

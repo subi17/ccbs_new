@@ -10,8 +10,8 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-ASSIGN Syst.CUICommon:gcBrand = "1"
-       Syst.CUICommon:katun   = "Cron".
+ASSIGN Syst.Var:gcBrand = "1"
+       Syst.Var:katun   = "Cron".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/msreqfunc.i}
@@ -23,7 +23,7 @@ DEF VAR liMsActTime      AS INT  NO-UNDO.
 DEF VAR lhCustomer     AS HANDLE NO-UNDO.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
    lhCustomer = BUFFER Customer:HANDLE.
    RUN StarEventInitialize(lhCustomer).
@@ -33,7 +33,7 @@ liConfDays = fCParamI("WaitingCanceleInvoiceDays").
 IF liConfDays = 0 OR liConfDays = ? THEN liConfDays = 90.
 
 FOR EACH MsRequest NO-LOCK WHERE
-         MsRequest.Brand      = Syst.CUICommon:gcBrand AND
+         MsRequest.Brand      = Syst.Var:gcBrand AND
          MsRequest.ReqType    = {&REQTYPE_ACTIVATE_EMAIL_INVOICE} AND
          MsRequest.ReqStatus  = {&REQUEST_STATUS_CONFIRMATION_PENDING}:
 

@@ -16,7 +16,7 @@
 {Func/cparam2.i}
 {Func/log.i}
 
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 /*
 PARAMETERS:
@@ -149,12 +149,12 @@ PROCEDURE pServerResponse:
 
    IF llRC = FALSE OR ERROR-STATUS:GET-MESSAGE(1) <> '' THEN DO:
       IF NOT SESSION:BATCH THEN DO:
-         IF Syst.CUICommon:katun EQ "Service" OR
-            Syst.CUICommon:katun EQ "PerCont" OR
-            Syst.CUICommon:katun EQ "STC" OR
-            Syst.CUICommon:katun EQ "CreFixed" OR
-            Syst.CUICommon:katun EQ "CreSub" OR
-            Syst.CUICommon:katun EQ "request" THEN
+         IF Syst.Var:katun EQ "Service" OR
+            Syst.Var:katun EQ "PerCont" OR
+            Syst.Var:katun EQ "STC" OR
+            Syst.Var:katun EQ "CreFixed" OR
+            Syst.Var:katun EQ "CreSub" OR
+            Syst.Var:katun EQ "request" THEN
             fLogError(SUBST("TCPGWY: Unable to read response: &1, &2",
                       llRC, ERROR-STATUS:GET-MESSAGE(1))).
          ELSE MESSAGE llRC ERROR-STATUS:GET-MESSAGE(1) VIEW-AS ALERT-BOX.

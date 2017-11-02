@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 DEF VAR ldaFrom AS DATE INIT 10/27/16.
 DEF VAR liMode AS INT INIT 1.
 DEF VAR liMode_ra AS INT INIT 1.
@@ -31,7 +31,7 @@ FUNCTION create_bdest RETURNS CHAR (INPUT ictariffcode AS CHAR):
                               THEN 93 ELSE 81.
 
       FIND FIRST BDest WHERE
-                 BDest.Brand = Syst.CUICommon:gcBrand        AND
+                 BDest.Brand = Syst.Var:gcBrand        AND
                  BDest.BDest = lcBDestination NO-LOCK NO-ERROR.
 
       IF NOT AVAILABLE BDest THEN DO:
@@ -45,7 +45,7 @@ FUNCTION create_bdest RETURNS CHAR (INPUT ictariffcode AS CHAR):
 
          CREATE BDest.
          ASSIGN
-            BDest.Brand    = Syst.CUICommon:gcBrand
+            BDest.Brand    = Syst.Var:gcBrand
             BDest.BDestID  = liBDLValue
             BDest.BDest    = lcBDestination
             BDest.BDName   = icTariffCode + " " +
@@ -354,7 +354,7 @@ FUNCTION faddToExistingCparamChar RETURNS LOGICAL (INPUT icCparamCode AS CHAR,
                                                    INPUT icAddChar AS CHAR):
 
    FIND FIRST TMSParam EXCLUSIVE-LOCK WHERE
-              TMSParam.Brand      EQ Syst.CUICommon:gcBrand AND
+              TMSParam.Brand      EQ Syst.Var:gcBrand AND
               TMSParam.ParamCode  EQ icCparamCode NO-ERROR.
    IF NOT AVAIL TMSParam THEN DO:
       MESSAGE icCparamCode + " not found" VIEW-AS ALERT-BOX.

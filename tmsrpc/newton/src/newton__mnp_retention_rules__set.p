@@ -15,7 +15,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/eventval.i}
 
 DEF VAR pcStruct   AS CHAR NO-UNDO. 
@@ -46,7 +46,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-Syst.CUICommon:katun = pcUsername.
+Syst.Var:katun = pcUsername.
 
 {newton/src/settenant.i pcTenant}
 
@@ -101,7 +101,7 @@ IF LOOKUP("sms_token",lcStruct) > 0 THEN DO:
 
    IF ttMNPRetentionRule.SMSText > "" THEN DO:
       FIND FIRST InvText NO-LOCK WHERE
-                 InvText.Brand = Syst.CUICommon:gcBrand AND
+                 InvText.Brand = Syst.Var:gcBrand AND
                  InvText.Target = "SMS" AND
                  InvText.KeyValue = ttMNPRetentionRule.SMSText AND
                  InvText.FromDate <= TODAY AND

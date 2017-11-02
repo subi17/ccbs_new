@@ -26,7 +26,7 @@ FUNCTION fGetUpSellCount RETURNS INT
           ldTS          = Func.Common:mMakeTS().
 
    FOR FIRST DayCampaign NO-LOCK WHERE
-             DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+             DayCampaign.Brand = Syst.Var:gcBrand AND
              DayCampaign.DCEvent = icDCEvent,
        FIRST ServiceLimit NO-LOCK WHERE 
              ServiceLimit.GroupCode  = DayCampaign.DCEvent AND 

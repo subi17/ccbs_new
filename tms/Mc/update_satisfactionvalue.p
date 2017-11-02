@@ -4,8 +4,8 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
@@ -129,7 +129,7 @@ FUNCTION fFindIAS RETURNS LOGICAL
     pcKeyValue AS CHAR,
     pdTimeStamp AS DEC):
    FIND FIRST PIndicator NO-LOCK WHERE
-              PIndicator.Brand = Syst.CUICommon:gcBrand AND
+              PIndicator.Brand = Syst.Var:gcBrand AND
               PIndicator.HostTable = pcHostTable AND 
               PIndicator.KeyValue = pcKeyValue AND
               PIndicator.IndicatorType = {&P_INDICATOR_TYPE_SATISFACTION_VALUE} AND
@@ -144,7 +144,7 @@ FUNCTION fCreateIAS RETURNS LOGICAL
     pcKeyValue AS CHAR,
     pdTimeStamp AS DEC):
     CREATE PIndicator.
-    ASSIGN PIndicator.Brand = Syst.CUICommon:gcBrand 
+    ASSIGN PIndicator.Brand = Syst.Var:gcBrand 
            PIndicator.HostTable = pcHostTable
            PIndicator.KeyValue = pcKeyValue
            PIndicator.IndicatorType = {&P_INDICATOR_TYPE_SATISFACTION_VALUE}
@@ -192,7 +192,7 @@ IF ERROR-STATUS:ERROR THEN RETURN "ERROR: Wrong file format".
 
 /* validate mobsub */
 FIND MobSub NO-LOCK WHERE
-     MobSub.Brand = Syst.CUICommon:gcBrand AND
+     MobSub.Brand = Syst.Var:gcBrand AND
      Mobsub.Cli = lcCli NO-ERROR.
 IF NOT AVAIL MobSub THEN RETURN "ERROR:Subscription not found".
 

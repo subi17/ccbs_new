@@ -17,7 +17,7 @@ DEF VAR lcMemo AS CHAR  NO-UNDO.
 ASSIGN lcMemo = "Agent" + CHR(255) + "TMS".
 
 IF llDoEvent THEN DO FOR Customer:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -96,17 +96,17 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
            Customer.RobinsonsLimit.
 
    ASSIGN
-      Syst.CUICommon:ufk   = 0  
-      Syst.CUICommon:ufk[1]= 7  
-      Syst.CUICommon:ufk[8]= 8 
-      Syst.CUICommon:ehto = 0.
+      Syst.Var:ufk   = 0  
+      Syst.Var:ufk[1]= 7  
+      Syst.Var:ufk[8]= 8 
+      Syst.Var:ehto = 0.
    RUN Syst/ufkey.p.
 
-   IF Syst.CUICommon:toimi = 1 THEN DO:
+   IF Syst.Var:toimi = 1 THEN DO:
 
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
             
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          
          FIND CURRENT Customer EXCLUSIVE-LOCK.
 
@@ -132,7 +132,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
       END.
    END.
    
-   ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
+   ELSE IF Syst.Var:toimi = 8 THEN LEAVE.
 
 END. /* lCustMark */
 

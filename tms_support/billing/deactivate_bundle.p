@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Qvantel".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
 {Func/fmakemsreq.i}
 
 find first mobsub where mobsub.cli = "633495343" no-lock no-error.
@@ -23,11 +23,11 @@ message liRequest skip lcResult view-as alert-box.
 CREATE Memo.
    ASSIGN
       Memo.CreStamp  = Func.Common:mMakeTS()
-      Memo.Brand     = Syst.CUICommon:gcBrand 
+      Memo.Brand     = Syst.Var:gcBrand 
       Memo.HostTable = "MobSub" 
       Memo.KeyValue  = STRING(MobSub.MsSeq) 
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = Syst.CUICommon:katun 
+      Memo.CreUser   = Syst.Var:katun 
       Memo.MemoTitle = "Deactivate Bundle"
       Memo.MemoText  = "Deactivated MDUB2 bundle manually, since it was activated wrongly"
       Memo.CustNum   = MobSub.CustNum

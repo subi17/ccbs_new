@@ -69,7 +69,7 @@ FORM
    ROW 3 CENTERED OVERLAY FRAME fCrit.
 
 FIND Customer WHERE 
-     Customer.Brand   = Syst.CUICommon:gcBrand AND
+     Customer.Brand   = Syst.Var:gcBrand AND
      Customer.CustNum = iiCustNum NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Customer THEN DO:
    MESSAGE "Unknown customer" iiCustNum
@@ -89,7 +89,7 @@ DISP Customer.CustNum
      ldDPAmt ldOPAmt ldAPAmt
 WITH FRAME fCrit. 
 
-ASSIGN Syst.CUICommon:nap      = "1"
+ASSIGN Syst.Var:nap      = "1"
        llUfkey  = FALSE
        liAccNum = fCParamI("BankAcc").
        
@@ -105,7 +105,7 @@ toimi:
 repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
 
    FIND Account WHERE 
-        Account.Brand  = Syst.CUICommon:gcBrand AND
+        Account.Brand  = Syst.Var:gcBrand AND
         Account.AccNum = liAccNum NO-LOCK NO-ERROR.
 
    PAUSE 0.
@@ -118,19 +118,19 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
  
    IF llUfkey THEN DO:
       ASSIGN
-      Syst.CUICommon:ufk[1]= 132  Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
-      Syst.CUICommon:ufk[5]= 1734 Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
-      Syst.CUICommon:ehto = 3.
+      Syst.Var:ufk[1]= 132  Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+      Syst.Var:ufk[5]= 1734 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+      Syst.Var:ehto = 3.
       RUN Syst/ufkey.p.
 
       READKEY.
-      Syst.CUICommon:nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
    END.
    ELSE llUfkey = TRUE.
 
-   if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
+   if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:
    
-      ASSIGN Syst.CUICommon:ehto = 9.
+      ASSIGN Syst.Var:ehto = 9.
       RUN Syst/ufkey.p.
 
       REPEAT ON ENDKEY UNDO, LEAVE:
@@ -144,7 +144,7 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
           
              READKEY.
              
-             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 
              THEN DO WITH FRAME fCrit:
              
                 PAUSE 0.
@@ -162,7 +162,7 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
                 
                 ELSE IF FRAME-FIELD = "liAccNum" THEN DO:
                    FIND Account WHERE
-                        Account.Brand  = Syst.CUICommon:gcBrand AND
+                        Account.Brand  = Syst.Var:gcBrand AND
                         Account.AccNum = INPUT liAccNum NO-LOCK NO-ERROR.
                    IF NOT AVAILABLE Account THEN DO:
                       BELL.
@@ -188,7 +188,7 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
 
    END.   
    
-   else if lookup(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:
+   else if lookup(Syst.Var:nap,"5,f5") > 0 THEN DO:
       
       IF ldAmt = 0 THEN DO:
          MESSAGE "Amount has not been given"
@@ -197,7 +197,7 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
          NEXT.
       END.
 
-      Syst.CUICommon:ehto = 5. 
+      Syst.Var:ehto = 5. 
       RUN Syst/ufkey.p.
  
       RUN Ar/refupaym.p (iiCustNum,
@@ -223,11 +223,11 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
       LEAVE toimi.
    END.
 
-   else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
+   else if lookup(Syst.Var:nap,"8,f8") > 0 THEN DO:
       LEAVE toimi.
    END.
       
-END. /* Syst.CUICommon:toimi */
+END. /* Syst.Var:toimi */
 
 HIDE MESSAGE no-pause.
 HIDE FRAME fCrit no-pause.

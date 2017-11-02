@@ -38,8 +38,8 @@ IF NOT AVAILABLE mobsub THEN
    RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Newton".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Newton".
+Syst.Var:gcBrand = "1".
 {Func/dataformat.i}
 {Func/fdss.i}
 
@@ -64,7 +64,7 @@ IF lcDSSBundleId = {&DSS} OR
 liCount = 0.
 
 FOR EACH TMRule  NO-LOCK WHERE
-         TMRule.Brand = Syst.CUICommon:gcBrand AND
+         TMRule.Brand = Syst.Var:gcBrand AND
          TMRule.FromDate <= TODAY AND
          TMRule.ToDate >=  TODAY:
 

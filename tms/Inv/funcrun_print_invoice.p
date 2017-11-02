@@ -9,8 +9,8 @@
 
 {Syst/commpaa.i}
 ASSIGN 
-   Syst.CUICommon:gcBrand = "1"
-   Syst.CUICommon:katun   = "Cron".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun   = "Cron".
    
 {Func/cparam2.i}
 {Inv/printdoc1tt.i}
@@ -51,12 +51,12 @@ FUNCTION fErrorLog RETURNS LOGIC
    
    DO TRANS:
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
              ErrorLog.ActionID  = "FRINVPRINT" + STRING(iiFRExecID)
              ErrorLog.TableName = "FuncRunExec"
              ErrorLog.KeyValue  = STRING(iiFRExecID)
              ErrorLog.ErrorMsg  = icError
-             ErrorLog.UserCode  = Syst.CUICommon:katun.
+             ErrorLog.UserCode  = Syst.Var:katun.
              ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    
@@ -96,12 +96,12 @@ FUNCTION fCreateActionLog RETURNS LOGICAL
    DO TRANS:
       CREATE ActionLog.
       ASSIGN
-         ActionLog.Brand        = Syst.CUICommon:gcBrand
+         ActionLog.Brand        = Syst.Var:gcBrand
          ActionLog.TableName    = "FuncRunProcess"
          ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") +
                                   STRING(MONTH(TODAY),"99") +
                                   STRING(DAY(TODAY),"99")
-         ActionLog.UserCode     = Syst.CUICommon:katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionID     = "FRPROCESS" + STRING(liFRProcessID)
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
          ActionLog.ActionChar   = icMsg
@@ -160,8 +160,8 @@ QUIT.
 PROCEDURE pInitialize:
 
    FIND FIRST Company WHERE
-              Company.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
-   IF AVAILABLE Company THEN Syst.CUICommon:ynimi = Company.CompName.
+              Company.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
+   IF AVAILABLE Company THEN Syst.Var:ynimi = Company.CompName.
 
    ASSIGN 
       llReplica = fIsThisReplica()
@@ -320,12 +320,12 @@ PROCEDURE pPrintInvoices:
    DO TRANS:
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = Syst.CUICommon:gcBrand   
+         ActionLog.Brand        = Syst.Var:gcBrand   
          ActionLog.TableName    = "Invoice"  
          ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                   STRING(MONTH(TODAY),"99") + 
                                   STRING(DAY(TODAY),"99")
-         ActionLog.UserCode     = Syst.CUICommon:katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionID     = lcActionID
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
          ActionLog.ActionDec    = liPrinted

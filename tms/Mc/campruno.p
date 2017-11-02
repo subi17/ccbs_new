@@ -23,7 +23,7 @@ OUTPUT STREAM sLog TO /apps/tms/snet/camruno.log append.
 PUT STREAM sLog UNFORMATTED iiOrder " begin" SKIP.
 
 FIND Order NO-LOCK WHERE 
-     Order.Brand   = Syst.CUICommon:gcBrand AND
+     Order.Brand   = Syst.Var:gcBrand AND
      Order.OrderID = iiOrder NO-ERROR.
 IF NOT AVAILABLE Order THEN DO:
    ocError = "Unknown order".

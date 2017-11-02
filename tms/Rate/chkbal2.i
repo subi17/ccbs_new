@@ -162,7 +162,7 @@ FUNCTION fChkMobsubLimit RETURNS LOG
    END.   
    ELSE DO:
       FOR EACH CallLimit WHERE
-               CallLimit.Brand    = Syst.CUICommon:gcBrand      AND  
+               CallLimit.Brand    = Syst.Var:gcBrand      AND  
                CallLimit.CustNo   = liDefMobCust AND
                CallLimit.dto     >= CallDate     AND
                CallLimit.dfrom   <= CallDate     AND
@@ -217,7 +217,7 @@ FUNCTION fChkMobsubLimit RETURNS LOG
             CallAlarm.DeliPara   = lcDeliPara
             CallAlarm.DeliMsg    = lcAlarmMess
             CallAlarm.Limit      = ttCallLimit.limit
-            CallAlarm.Brand      = Syst.CUICommon:gcBrand
+            CallAlarm.Brand      = Syst.Var:gcBrand
             CallAlarm.CreditType = ttCallLimit.CreditType.
 
          RELEASE CallAlarm.
@@ -239,7 +239,7 @@ FUNCTION fChkMobsubLimit RETURNS LOG
                CallAlarm.DeliPara = lcDeliPara
                CallAlarm.DeliMsg  = lcAlarmMess
                CallAlarm.Limit    = ttCallLimit.limit
-               CallAlarm.Brand    = Syst.CUICommon:gcBrand
+               CallAlarm.Brand    = Syst.Var:gcBrand
                CallAlarm.CreditType = ttCallLimit.CreditType.
 
             RELEASE CallAlarm.

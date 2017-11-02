@@ -9,8 +9,8 @@
 
 /* ***************************  Definitions  ************************** */
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Cron".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
@@ -209,7 +209,7 @@ PROCEDURE ip_CrtSingleFee:
       END.   
           
       FIND FIRST BillItem WHERE
-                 BillItem.Brand    = Syst.CUICommon:gcBrand             AND
+                 BillItem.Brand    = Syst.Var:gcBrand             AND
                  BillItem.BIGroup  = {&BITEM_GRP_CHARGE} AND
                  Billitem.BillCode = lcBillingItem       NO-LOCK NO-ERROR.
        
@@ -219,7 +219,7 @@ PROCEDURE ip_CrtSingleFee:
       END.   
 
       CREATE SingleFee.
-      ASSIGN SingleFee.Brand       = Syst.CUICommon:gcBrand
+      ASSIGN SingleFee.Brand       = Syst.Var:gcBrand
              SingleFee.FMItemId    = NEXT-VALUE(bi-seq)
              SingleFee.CustNum     = MobSub.CustNum
              SingleFee.BillTarget  = 1
@@ -246,12 +246,12 @@ PROCEDURE ip_CrtSingleFee:
           CREATE Memo.
           ASSIGN
               Memo.CreStamp  = Func.Common:mMakeTS()
-              Memo.Brand     = Syst.CUICommon:gcBrand
+              Memo.Brand     = Syst.Var:gcBrand
               Memo.HostTable = "SingleFee"
               Memo.CustNum   = MobSub.CustNum
               Memo.KeyValue  = STRING(liKeyValue)
               Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-              Memo.CreUser   = Syst.CUICommon:katun
+              Memo.CreUser   = Syst.Var:katun
               Memo.MemoTitle = "Charge"
               Memo.MemoText  = lcMemoText.
       END.

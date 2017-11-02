@@ -39,7 +39,7 @@ DEFINE INPUT PARAMETER iiMSRequest AS INTEGER NO-UNDO.
 {Func/remfees.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -110,7 +110,7 @@ ELSE
 
 IF liOrigStatus = 8 AND MsRequest.ReqIParam2 > 0 THEN DO:
    FIND FIRST Order NO-LOCK WHERE
-              Order.Brand = Syst.CUICommon:gcBrand AND
+              Order.Brand = Syst.Var:gcBrand AND
               Order.OrderID = MsRequest.ReqIparam2 NO-ERROR.
    IF NOT AVAIL Order THEN DO:
       fReqError(SUBST("Order not found: &1", MsRequest.ReqIParam2)).
@@ -177,7 +177,7 @@ IF lcAttrValue > "" THEN DO:
 END.
       
 FIND bOldType WHERE
-     bOldType.Brand   = Syst.CUICommon:gcBrand AND
+     bOldType.Brand   = Syst.Var:gcBrand AND
      bOldType.CLIType = MsRequest.ReqCParam1 NO-LOCK NO-ERROR.
 
 IF NOT AVAILABLE bOldType THEN DO:
@@ -186,7 +186,7 @@ IF NOT AVAILABLE bOldType THEN DO:
 END. 
 
 FIND CLIType WHERE
-     CLIType.Brand   = Syst.CUICommon:gcBrand AND
+     CLIType.Brand   = Syst.Var:gcBrand AND
      CLIType.CLIType = MsRequest.ReqCParam2 NO-LOCK NO-ERROR.
 
 IF NOT AVAILABLE CLIType THEN DO:
@@ -196,7 +196,7 @@ END.
 
 IF MsRequest.ReqCParam5 > "" THEN
    FIND bNewTariff NO-LOCK WHERE
-        bNewTariff.Brand   = Syst.CUICommon:gcBrand AND
+        bNewTariff.Brand   = Syst.Var:gcBrand AND
         bNewTariff.CLIType = MsRequest.ReqCParam5 NO-ERROR.
 ELSE
    FIND bNewTariff NO-LOCK WHERE
@@ -232,7 +232,7 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
    /* NOTE: check before pUpdateSubscription */ 
    IF Mobsub.TariffBundle > "" THEN
       FIND bOldTariff NO-LOCK WHERE
-           bOldTariff.Brand = Syst.CUICommon:gcBrand AND
+           bOldTariff.Brand = Syst.Var:gcBrand AND
            bOldTariff.CLIType = Mobsub.TariffBundle NO-ERROR.
    ELSE 
       FIND bOldTariff NO-LOCK WHERE
@@ -628,12 +628,12 @@ PROCEDURE pUpdateSubscription:
   
    IF MsRequest.ReqIParam2 > 0 AND
       CAN-FIND(FIRST Order NO-LOCK WHERE
-                     Order.Brand = Syst.CUICommon:gcBrand AND
+                     Order.Brand = Syst.Var:gcBrand AND
                      Order.OrderID = MsRequest.ReqIParam2 AND
                      Order.OrderType EQ {&ORDER_TYPE_STC}) THEN DO:
 
       FIND FIRST Order NO-LOCK WHERE
-                 Order.Brand = Syst.CUICommon:gcBrand AND
+                 Order.Brand = Syst.Var:gcBrand AND
                  Order.OrderID = MsRequest.ReqIParam2 AND
                  Order.OrderType EQ {&ORDER_TYPE_STC}.
 
@@ -652,7 +652,7 @@ PROCEDURE pUpdateSubscription:
    
    IF MsRequest.ReqIParam2 > 0 THEN
       FOR FIRST Order NO-LOCK WHERE
-                Order.Brand = Syst.CUICommon:gcBrand AND
+                Order.Brand = Syst.Var:gcBrand AND
                 Order.OrderID = MsRequest.ReqIparam2,
           FIRST OrderFusion NO-LOCK WHERE
                 OrderFusion.Brand = Order.Brand AND
@@ -735,7 +735,7 @@ PROCEDURE pUpdateSubscription:
 
          IF llDoEvent THEN fMakeCreateEvent((BUFFER bOwner:HANDLE),
                                             "",
-                                            Syst.CUICommon:katun,
+                                            Syst.Var:katun,
                                             "").
          RELEASE bOwner.
       END.
@@ -786,7 +786,7 @@ PROCEDURE pUpdateSubscription:
                 SubSer.MsSeq   = MsRequest.MsSeq AND
                 SubSer.SsDate <= TODAY NO-LOCK,
           FIRST ServCom NO-LOCK WHERE
-                ServCom.Brand   = Syst.CUICommon:gcBrand AND
+                ServCom.Brand   = Syst.Var:gcBrand AND
                 ServCom.ServCom = SubSer.ServCom:
          IF SubSer.SSStat = 1 THEN
             fServiceOpenFee(ServCom.FeeModel,
@@ -820,7 +820,7 @@ PROCEDURE pUpdateSubscription:
          AVAIL lbDPMember  THEN DO:
             
          FIND FIRST lbDiscountPlan NO-LOCK WHERE 
-                    lbDiscountPlan.Brand = Syst.CUICommon:gcBrand         AND 
+                    lbDiscountPlan.Brand = Syst.Var:gcBrand         AND 
                     lbDiscountPlan.DPId  = lbDPMember.DPId NO-ERROR.
             
          IF AVAIL lbDiscountPlan THEN DO:
@@ -906,7 +906,7 @@ PROCEDURE pUpdateSubscription:
       LOOKUP(CLIType.CLIType,lcExtraMainLineCLITypes) GT 0  THEN DO:
 
       FIND FIRST lELMobSub EXCLUSIVE-LOCK WHERE 
-                 lELMobSub.Brand        EQ Syst.CUICommon:gcBrand                   AND 
+                 lELMobSub.Brand        EQ Syst.Var:gcBrand                   AND 
                  lELMobSub.MultiSimId   EQ MobSub.MsSeq              AND 
                  lELMobSub.MultiSimtype EQ {&MULTISIMTYPE_EXTRALINE} AND 
                 (lELMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE}  OR
@@ -944,13 +944,13 @@ PROCEDURE pUpdateSubscription:
 
    /* Mobile only additional line ALFMO-5 */
    FIND FIRST DiscountPlan WHERE
-              DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
+              DiscountPlan.Brand = Syst.Var:gcBrand AND
               DiscountPlan.DPRuleID = ENTRY(LOOKUP(bOldType.CliType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}) NO-LOCK NO-ERROR.
 
    IF fIsConvergenceTariff(bOldType.CliType) AND 
       NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,CLIType.CLIType)     THEN DO:
       FOR EACH bMobSub NO-LOCK WHERE
-               bMobSub.Brand   = Syst.CUICommon:gcBrand          AND
+               bMobSub.Brand   = Syst.Var:gcBrand          AND
                bMobSub.AgrCust = Customer.CustNum AND
                bMobSub.MsSeq  <> MsRequest.MsSeq  AND
                LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
@@ -985,7 +985,7 @@ PROCEDURE pUpdateSubscription:
                    DPMember.ValidTo   <> 12/31/49) THEN
    DO:
       FOR EACH bMobSub NO-LOCK WHERE
-               bMobSub.Brand   = Syst.CUICommon:gcBrand          AND
+               bMobSub.Brand   = Syst.Var:gcBrand          AND
                bMobSub.AgrCust = Customer.CustNum AND
                bMobSub.MsSeq  <> MsRequest.MsSeq  AND
                LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
@@ -1106,7 +1106,7 @@ PROCEDURE pFinalize:
                           OUTPUT liReqCnt).
 
    FIND FIRST Order NO-LOCK WHERE
-      Order.Brand = Syst.CUICommon:gcBrand AND
+      Order.Brand = Syst.Var:gcBrand AND
       Order.OrderID = MsRequest.ReqIParam2 AND
       Order.OrderType EQ {&ORDER_TYPE_STC} NO-ERROR.
 
@@ -1256,7 +1256,7 @@ PROCEDURE pFinalize:
    IF MsRequest.ReqIParam2 > 0 THEN DO:
       /* release possible renewal pos stc order */
       FIND FIRST Order NO-LOCK WHERE
-         Order.Brand   = Syst.CUICommon:gcBrand AND
+         Order.Brand   = Syst.Var:gcBrand AND
          Order.OrderID = MsRequest.ReqIParam2 AND
          Order.StatusCode = {&ORDER_STATUS_RENEWAL_STC} AND
          LOOKUP(Order.OrderChannel,"renewal_pos_stc,retention_stc") > 0
@@ -1305,22 +1305,22 @@ PROCEDURE pFinalize:
    IF MsRequest.ReqIParam2 > 0 THEN DO:
 
       FOR FIRST Order NO-LOCK WHERE
-                Order.Brand = Syst.CUICommon:gcBrand AND
+                Order.Brand = Syst.Var:gcBrand AND
                 Order.OrderID = MsRequest.ReqIParam2 AND
                 Order.OrderType EQ {&ORDER_TYPE_STC}:
 
          IF Order.StatusCode EQ {&ORDER_STATUS_ONGOING} THEN DO:
             FOR FIRST OrderCustomer WHERE
-                       OrderCustomer.brand EQ Syst.CUICommon:gcBrand AND
+                       OrderCustomer.brand EQ Syst.Var:gcBrand AND
                        Ordercustomer.orderid EQ MsRequest.ReqIParam2 AND
                        OrderCustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
                        Ordercustomer.pro,
                 FIRST Customer WHERE
-                      Customer.brand EQ Syst.CUICommon:gcBrand AND
+                      Customer.brand EQ Syst.Var:gcBrand AND
                       Customer.orgid EQ Ordercustomer.custid AND
                       customer.category NE Ordercustomer.category,
                 FIRST bMobsub WHERE
-                      bMobsub.brand EQ Syst.CUICommon:gcBrand AND
+                      bMobsub.brand EQ Syst.Var:gcBrand AND
                       bMobsub.custnum EQ customer.custnum AND
                       bMobsub.msseq ne MsRequest.msseq NO-LOCK:
                llmigrationNeeded = TRUE.
@@ -1383,7 +1383,7 @@ PROCEDURE pFinalize:
       RUN Mm/barrengine.p(MobSub.MsSeq,
                       "Y_BPSUB=1",
                       {&REQUEST_SOURCE_STC},
-                      Syst.CUICommon:katun,               /* creator */
+                      Syst.Var:katun,               /* creator */
                       Func.Common:mSecOffSet(Func.Common:mMakeTS(),5),            /* activate */
                       "",                  /* sms */
                       OUTPUT lcError).
@@ -1446,7 +1446,7 @@ PROCEDURE pUpdateCustomer:
     IF (bNewTariff.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} OR Mobsub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) AND
       Customer.DelType NE {&INV_DEL_TYPE_NO_DELIVERY}                                                                 AND
       NOT CAN-FIND(FIRST bMobSub NO-LOCK WHERE
-                         bMobsub.Brand    = Syst.CUICommon:gcBrand        AND
+                         bMobsub.Brand    = Syst.Var:gcBrand        AND
                          bMobSub.CustNum  = MobSub.CustNum AND
                          bMobSub.MsSeq   <> MobSub.MsSeq   AND 
                          bMobSub.PayType  = FALSE AND
@@ -1457,7 +1457,7 @@ PROCEDURE pUpdateCustomer:
        (bOldType.Paytype = {&CLITYPE_PAYTYPE_PREPAID}  AND CLIType.PayType = {&CLITYPE_PAYTYPE_POSTPAID}) OR 
        (bOldType.Paytype = {&CLITYPE_PAYTYPE_POSTPAID} AND CLIType.PayType = {&CLITYPE_PAYTYPE_POSTPAID}) THEN 
     DO:
-        FIND FIRST OrderCustomer WHERE OrderCustomer.Brand   = Syst.CUICommon:gcBrand                            AND
+        FIND FIRST OrderCustomer WHERE OrderCustomer.Brand   = Syst.Var:gcBrand                            AND
                                        OrderCustomer.OrderID = Order.OrderId                      AND
                                        OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-LOCK NO-ERROR.
         IF AVAIL OrderCustomer AND OrderCustomer.Category > "" THEN                                        
@@ -1619,7 +1619,7 @@ PROCEDURE pCloseContracts:
             DCCLI.MsSeq   = iiMsSeq  AND
             DCCLI.ValidTo >= idaActDate,
       FIRST DayCampaign NO-LOCK WHERE
-            DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+            DayCampaign.Brand = Syst.Var:gcBrand AND
             DayCampaign.DCEvent = DCCLI.DCevent:
 
       /* pending termination request */
@@ -1660,7 +1660,7 @@ PROCEDURE pCloseContracts:
       ASSIGN lcContract   = ENTRY(liCount,lcContractList).
 
       FIND FIRST DayCampaign NO-LOCK WHERE
-                 DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+                 DayCampaign.Brand = Syst.Var:gcBrand AND
                  DayCampaign.DCEvent = lcContract NO-ERROR.
 
       IF AVAIL DayCampaign AND
@@ -1671,7 +1671,7 @@ PROCEDURE pCloseContracts:
          (LOOKUP(icNewType,lcAllVoIPNativeBundles) > 0 OR 
           LOOKUP(icBaseBundle,lcAllVoIPNativeBundles) > 0))
          OR
-         (fMatrixAnalyse(Syst.CUICommon:gcBrand,
+         (fMatrixAnalyse(Syst.Var:gcBrand,
                         "PERCONTR",
                         "PerContract;SubsTypeTo",
                          lcContract + ";" + icNewType,
@@ -1691,7 +1691,7 @@ PROCEDURE pCloseContracts:
              2=exclude_term_penalty)
           */
          IF AVAILABLE(bOrigRequest) AND bOrigRequest.ReqIParam5 EQ 2 AND
-            CAN-FIND(FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand   EQ Syst.CUICommon:gcBrand             AND 
+            CAN-FIND(FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand   EQ Syst.Var:gcBrand             AND 
                                                      DayCampaign.DCEvent EQ lcContract          AND 
                                                      DayCampaign.DCType  EQ {&DCTYPE_DISCOUNT}) THEN 
              llCreateFees = FALSE.
@@ -1725,7 +1725,7 @@ PROCEDURE pCloseContracts:
                liBonoTerminate = liTerminate.
             llCreated = TRUE.
          END.
-      END. /* IF fMatrixAnalyse(Syst.CUICommon:gcBrand, */
+      END. /* IF fMatrixAnalyse(Syst.Var:gcBrand, */
    END. /* DO liCount = 1 TO NUM-ENTRIES(lcContractList): */
 
    IF LOOKUP("PMDUB", lcContractList) > 0 AND
@@ -1792,7 +1792,7 @@ PROCEDURE pCloseContracts:
 
    FOR EACH ttContract:
       FIND FIRST DayCampaign WHERE
-                 DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
+                 DayCampaign.Brand   = Syst.Var:gcBrand AND
                  DayCampaign.DCEvent = ttContract.DCEvent AND
                  DayCampaign.ValidTo >= Today NO-LOCK NO-ERROR.
       IF NOT AVAIL DayCampaign THEN DO:
@@ -1865,7 +1865,7 @@ PROCEDURE pCloseContracts:
    /* Close Residual Amount Single Fee */
    IF llCloseRVTermFee THEN
       FOR EACH SingleFee USE-INDEX Custnum WHERE
-               SingleFee.Brand       = Syst.CUICommon:gcBrand AND
+               SingleFee.Brand       = Syst.Var:gcBrand AND
                SingleFee.Custnum     = MobSub.CustNum AND
                SingleFee.HostTable   = "Mobsub" AND
                SingleFee.KeyValue    = STRING(MobSub.MsSeq) AND
@@ -1900,7 +1900,7 @@ PROCEDURE pNetworkAction:
    /* unbarring is done before stc-solog; find barrings that are done to 
       old clitype during activation and unbarr them */
    FOR EACH RequestAction NO-LOCK WHERE
-            RequestAction.Brand      = Syst.CUICommon:gcBrand AND
+            RequestAction.Brand      = Syst.Var:gcBrand AND
             RequestAction.CLIType    = MsRequest.ReqCParam1  AND
             RequestAction.ReqType    = 13                    AND
             RequestAction.ValidTo   >= MobSub.ActivationDate AND
@@ -1936,7 +1936,7 @@ PROCEDURE pNetworkAction:
       
       IF RETURN-VALUE BEGINS "ERROR:" OR ERROR-STATUS:ERROR THEN DO:
          CREATE ErrorLog.
-         ASSIGN ErrorLog.Brand = Syst.CUICommon:gcBrand
+         ASSIGN ErrorLog.Brand = Syst.Var:gcBrand
                 ErrorLog.TableName = "MsRequest"
                 ErrorLog.KeyValue = STRING(MsRequest.MsRequest)
                 ErrorLog.ActionID = "STCBalanceQuery"
@@ -2020,7 +2020,7 @@ PROCEDURE pUpdateDSSAccount:
                   there is DSS2 termination request. YTS-8140 
                used bMobSub.Custnum cause of ACC */
             FIND FIRST bTerMsRequest NO-LOCK USE-INDEX CustNum WHERE
-                       bTerMsRequest.Brand = Syst.CUICommon:gcBrand AND
+                       bTerMsRequest.Brand = Syst.Var:gcBrand AND
                        bTerMsRequest.ReqType = 83 AND
                        bTerMsRequest.Custnum = bMobSub.Custnum AND
                        bTerMsRequest.ReqCParam3 BEGINS "DSS" AND
@@ -2082,7 +2082,7 @@ PROCEDURE pUpdateDSSAccount:
                         there is DSS2 termination request. YTS-8140 
                       used Mobsub.Custnum cause of ACC */
                   FIND FIRST bTerMsRequest NO-LOCK USE-INDEX CustNum WHERE
-                             bTerMsRequest.Brand = Syst.CUICommon:gcBrand AND
+                             bTerMsRequest.Brand = Syst.Var:gcBrand AND
                              bTerMsRequest.ReqType = 83 AND
                              bTerMsRequest.Custnum = Mobsub.Custnum AND
                              bTerMsRequest.ReqCParam3 BEGINS "DSS" AND
@@ -2319,7 +2319,7 @@ PROCEDURE pUpdateDSSAccount:
                   there is DSS2 termination request. YTS-8140 
                 used Mobsub.Custnum cause of ACC */
             FIND FIRST bTerMsRequest NO-LOCK USE-INDEX CustNum WHERE
-                       bTerMsRequest.Brand = Syst.CUICommon:gcBrand AND
+                       bTerMsRequest.Brand = Syst.Var:gcBrand AND
                        bTerMsRequest.ReqType = 83 AND
                        bTerMsRequest.Custnum = Mobsub.Custnum AND
                        bTerMsRequest.ReqCParam3 BEGINS "DSS" AND
@@ -2397,7 +2397,7 @@ PROCEDURE pMultiSimSTC:
    IF NOT AVAIL Mobsub THEN RETURN.
 
    FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-              lbMobSub.Brand  = Syst.CUICommon:gcBrand AND
+              lbMobSub.Brand  = Syst.Var:gcBrand AND
               lbMobSub.MultiSimID = MobSub.MultiSimID AND
               lbMobSub.MultiSimType NE MobSub.MultiSimType AND
               lbMobSub.Custnum = MobSub.Custnum NO-ERROR.
@@ -2414,10 +2414,10 @@ PROCEDURE pMultiSimSTC:
    CREATE ActionLog.
    ASSIGN
       ActionLog.ActionTS     = Func.Common:mMakeTS()
-      ActionLog.Brand        = Syst.CUICommon:gcBrand
+      ActionLog.Brand        = Syst.Var:gcBrand
       ActionLog.TableName    = "Customer"
       ActionLog.KeyValue     = STRING(MobSub.Custnum)
-      ActionLog.UserCode     = Syst.CUICommon:katun
+      ActionLog.UserCode     = Syst.Var:katun
       ActionLog.ActionID     = "MultiSIMTermination"
       ActionLog.ActionPeriod = YEAR(idtActDate - 1) * 100 +
                                MONTH(idtActDate - 1)
@@ -2513,7 +2513,7 @@ PROCEDURE pCONTM2BarringReset:
       RUN Mm/barrengine.p(MobSub.MsSeq,
                       "#REFRESH",
                       {&REQUEST_SOURCE_STC},
-                      Syst.CUICommon:katun,               /* creator */
+                      Syst.Var:katun,               /* creator */
                       Func.Common:mSecOffSet(Func.Common:mMakeTS(),2),            /* activate */
                       "",                  /* sms */
                       OUTPUT lcError).
@@ -2545,7 +2545,7 @@ PROCEDURE pCONTM2BarringReset:
          RUN Mm/barrengine.p(MobSub.MsSeq,
                          "Y_BPSUB=1",
                          {&REQUEST_SOURCE_STC},
-                         Syst.CUICommon:katun,               /* creator */
+                         Syst.Var:katun,               /* creator */
                          Func.Common:mSecOffSet(Func.Common:mMakeTS(),6),            /* activate */
                          "",                  /* sms */
                          OUTPUT lcError).

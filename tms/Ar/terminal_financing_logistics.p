@@ -7,8 +7,8 @@
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Qvantel".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 
@@ -49,7 +49,7 @@ FUNCTION fPopulateTTDelivery RETURNS LOGICAL
 
    FOR
       EACH OrderDelivery NO-LOCK WHERE
-         OrderDelivery.brand = Syst.CUICommon:gcBrand AND
+         OrderDelivery.brand = Syst.Var:gcBrand AND
          OrderDelivery.OrderId = iiOrderId
       BY OrderDelivery.LoTimeStamp DESCENDING:
 
@@ -97,7 +97,7 @@ FUNCTION fCancelOrder RETURNS LOGICAL
 
    IF ilCheckActionLog AND
       CAN-FIND(FIRST ActionLog NO-LOCK WHERE
-                     ActionLog.Brand = Syst.CUICommon:gcBrand AND
+                     ActionLog.Brand = Syst.Var:gcBrand AND
                      ActionLog.TableName = "Order" AND
                      ActionLog.KeyValue = STRING(iiOrderId) AND
                      ActionLog.ActionID = "LOCancel" AND
@@ -115,7 +115,7 @@ FUNCTION fCancelOrder RETURNS LOGICAL
 
    CREATE ActionLog.
    ASSIGN
-      ActionLog.Brand        = Syst.CUICommon:gcBrand
+      ActionLog.Brand        = Syst.Var:gcBrand
       ActionLog.TableName    = "Order"
       ActionLog.KeyValue     = STRING(iiOrderID)
       ActionLog.ActionID     = "LOCancel"
@@ -218,11 +218,11 @@ PUT STREAM SOUT UNFORMATTED "ORDER_ID;MSSEQ;MSISDN;ACTION/NEW_FF_STATUS" SKIP.
 
 ORDER_LOOP:
 FOR EACH Order NO-LOCK WHERE
-         Order.Brand   = Syst.CUICommon:gcBrand AND
+         Order.Brand   = Syst.Var:gcBrand AND
          Order.StatusCode = {&ORDER_STATUS_RESIGNATION}:
 
    FOR EACH OrderDelivery NO-LOCK WHERE
-            OrderDelivery.Brand = Syst.CUICommon:gcBrand AND
+            OrderDelivery.Brand = Syst.Var:gcBrand AND
             OrderDelivery.Orderid = Order.OrderId 
          BREAK BY OrderDelivery.OrderId
          BY OrderDelivery.LoTimeStamp DESC:
@@ -258,7 +258,7 @@ FF_LOOP:
 FOR EACH FixedFee NO-LOCK WHERE
          FixedFee.FinancedResult = {&TF_STATUS_HOLD_SENDING},
    FIRST Order NO-LOCK WHERE
-         Order.Brand = Syst.CUICommon:gcBrand AND
+         Order.Brand = Syst.Var:gcBrand AND
          Order.OrderID = FixedFee.OrderID:
 
    lcTFStatus = fGetTFStatus(Order.OrderID).

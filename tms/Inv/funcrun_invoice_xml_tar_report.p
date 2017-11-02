@@ -9,8 +9,8 @@
 
 {Syst/commpaa.i}
 ASSIGN 
-   Syst.CUICommon:gcBrand = "1"
-   Syst.CUICommon:katun   = "Cron".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun   = "Cron".
    
 {Func/cparam2.i}
 {Syst/funcrunprocess_run.i}
@@ -85,7 +85,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcPHList):
              FuncRunQSchedule.StartTS  <= ldTo          AND
              FuncRunQSchedule.RunState NE "Initialized",
         EACH FuncRunExec NO-LOCK WHERE
-             FuncRunExec.Brand         EQ Syst.CUICommon:gcBrand AND
+             FuncRunExec.Brand         EQ Syst.Var:gcBrand AND
              FuncRunExec.FRQScheduleID EQ FuncRunQSchedule.FRQScheduleID AND
              FuncRunExec.RunState      EQ "Finished",
         EACH FuncRunConfig NO-LOCK WHERE

@@ -11,8 +11,8 @@
 
 {Syst/commpaa.i}
 
-ASSIGN Syst.CUICommon:gcBrand = "1" 
-       Syst.CUICommon:katun   = "ddauth".
+ASSIGN Syst.Var:gcBrand = "1" 
+       Syst.Var:katun   = "ddauth".
 
 {Syst/utumaa.i "new"}
 {Func/cparam2.i}
@@ -60,8 +60,8 @@ lcInFile  = fCparamC("DDebitAuthFile").
 IF lcInFile = "" THEN RETURN.
 
 FIND FIRST Company WHERE
-           Company.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
-IF AVAILABLE Company THEN Syst.CUICommon:ynimi = Company.CompName.
+           Company.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
+IF AVAILABLE Company THEN Syst.Var:ynimi = Company.CompName.
 
 fELog("DDAUTH","Started").
 

@@ -13,8 +13,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Newton".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Newton".
+Syst.Var:gcBrand = "1".
 
 DEF VAR pcTenant       AS CHAR      NO-UNDO.
 DEF VAR lcResultStruct AS CHAR      NO-UNDO. 
@@ -31,7 +31,7 @@ resp_array = add_array(response_toplevel_id, "").
 {newton/src/settenant.i pcTenant}
       
 FOR EACH mnpretplatform NO-LOCK WHERE
-         mnpretplatform.brand = Syst.CUICommon:gcBrand AND
+         mnpretplatform.brand = Syst.Var:gcBrand AND
          mnpretplatform.Todate >= TODAY AND
          mnpretplatform.FromDate <= TODAY:
    

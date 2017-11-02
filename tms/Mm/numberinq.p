@@ -169,7 +169,7 @@ llFound = CAN-FIND(FIRST SubSer WHERE
 /* and attributes */
 IF llFound THEN
 FOR FIRST CTServEl NO-LOCK WHERE
-          CTServEl.Brand     = Syst.CUICommon:gcBrand        AND
+          CTServEl.Brand     = Syst.Var:gcBrand        AND
           CTServEl.ServCom   = lcNumberInq    AND
           CTServEl.CLIType   = MobSub.CLIType AND
           CTServEl.FromDate <= TODAY,
@@ -243,12 +243,12 @@ REPEAT WITH FRAME fInquiry ON ENDKEY UNDO lAction, NEXT lAction:
    WITH FRAME fInquiry. 
 
    ASSIGN
-      Syst.CUICommon:ufk[1]= 7  Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
-      Syst.CUICommon:ufk[5]= 15 Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 
-      Syst.CUICommon:ehto = 0.
+      Syst.Var:ufk[1]= 7  Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+      Syst.Var:ufk[5]= 15 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 
+      Syst.Var:ehto = 0.
    RUN Syst/ufkey.p.
 
-   if Syst.CUICommon:toimi = 1 THEN DO:
+   if Syst.Var:toimi = 1 THEN DO:
    
       IF llPending THEN DO:
          MESSAGE "There are pending change requests for these parameters."
@@ -256,7 +256,7 @@ REPEAT WITH FRAME fInquiry ON ENDKEY UNDO lAction, NEXT lAction:
          NEXT. 
       END.
       
-      Syst.CUICommon:ehto = 9.
+      Syst.Var:ehto = 9.
       RUN Syst/ufkey.p.
 
       lUpdate:  
@@ -274,7 +274,7 @@ REPEAT WITH FRAME fInquiry ON ENDKEY UNDO lAction, NEXT lAction:
           
              READKEY.
              
-             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 
              THEN DO WITH FRAME fInquiry:
              
                 PAUSE 0.
@@ -365,7 +365,7 @@ REPEAT WITH FRAME fInquiry ON ENDKEY UNDO lAction, NEXT lAction:
 
    END.
    
-   ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
+   ELSE IF Syst.Var:toimi = 5 THEN DO:
 
       ldCurrStamp = Func.Common:mMakeTS().
       
@@ -422,7 +422,7 @@ REPEAT WITH FRAME fInquiry ON ENDKEY UNDO lAction, NEXT lAction:
       LEAVE lAction.
    END.
 
-   ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
+   ELSE IF Syst.Var:toimi = 8 THEN DO:
       LEAVE lAction.
    END.
       

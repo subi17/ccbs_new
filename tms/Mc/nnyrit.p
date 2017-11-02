@@ -22,7 +22,7 @@
 {Mc/lib/tokenchk.i 'company'}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -59,22 +59,22 @@ form
    Company.Address4     label "Addit. Address3" AT 10 FORMAT "X(40)" SKIP
    SKIP(1)
    
-with title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " COMPANY INFORMATION "
+with title color value(Syst.Var:ctc) " " + Syst.Var:ynimi + " COMPANY INFORMATION "
      + string(TODAY,"99-99-99") + " "
-     COLOR value(Syst.CUICommon:cfc) ROW 1 col 1 width 80 side-labels
+     COLOR value(Syst.Var:cfc) ROW 1 col 1 width 80 side-labels
      FRAME yri.
 
-Syst.CUICommon:cfc = "yri". RUN Syst/ufcolor.p.
+Syst.Var:cfc = "yri". RUN Syst/ufcolor.p.
 
 PAUSE 0 no-message.
 
 OLRefresh:
 repeat ON ENDKEY UNDO OLRefresh, NEXT OLRefresh:
 
-   FIND FIRST Company WHERE Company.Brand = Syst.CUICommon:gcBrand exclusive-lock no-error.
+   FIND FIRST Company WHERE Company.Brand = Syst.Var:gcBrand exclusive-lock no-error.
    IF NOT AVAILABLE Company THEN DO:
       CREATE Company.
-      Company.Brand = Syst.CUICommon:gcBrand.
+      Company.Brand = Syst.Var:gcBrand.
    END.
 
    DISPLAY 
@@ -97,18 +97,18 @@ repeat ON ENDKEY UNDO OLRefresh, NEXT OLRefresh:
    repeat:
 
       ASSIGN
-      Syst.CUICommon:ufk    = 0 
-      Syst.CUICommon:ufk[1] = (IF lcRight = "RW" THEN 91 ELSE 0)
-      Syst.CUICommon:ufk[3] = (IF lcRight = "RW" THEN 927 ELSE 0)
-      Syst.CUICommon:ufk[5] = (IF lcRight = "RW" THEN 15 ELSE 0) 
-      Syst.CUICommon:ufk[8] = 8  
-      Syst.CUICommon:ehto   = 0. 
+      Syst.Var:ufk    = 0 
+      Syst.Var:ufk[1] = (IF lcRight = "RW" THEN 91 ELSE 0)
+      Syst.Var:ufk[3] = (IF lcRight = "RW" THEN 927 ELSE 0)
+      Syst.Var:ufk[5] = (IF lcRight = "RW" THEN 15 ELSE 0) 
+      Syst.Var:ufk[8] = 8  
+      Syst.Var:ehto   = 0. 
       
       RUN Syst/ufkey.p.
 
-      IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" THEN DO:
-         Syst.CUICommon:cfc = "yri". RUN Syst/ufcolor.p.
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+      IF Syst.Var:toimi = 1 AND lcRight = "RW" THEN DO:
+         Syst.Var:cfc = "yri". RUN Syst/ufcolor.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCompany).
 
@@ -129,12 +129,12 @@ repeat ON ENDKEY UNDO OLRefresh, NEXT OLRefresh:
 
          IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCompany).
 
-         Syst.CUICommon:cfc = "yri". RUN Syst/ufcolor.p.
+         Syst.Var:cfc = "yri". RUN Syst/ufcolor.p.
          PAUSE 0 no-message.
          NEXT toimi.
       END.
 
-      ELSE IF Syst.CUICommon:toimi = 3 AND lcRight = "RW" THEN DO:
+      ELSE IF Syst.Var:toimi = 3 AND lcRight = "RW" THEN DO:
       
         RUN Mc/memo.p(INPUT 0,
                  INPUT "Company",
@@ -143,13 +143,13 @@ repeat ON ENDKEY UNDO OLRefresh, NEXT OLRefresh:
 
       END.
 
-      ELSE IF Syst.CUICommon:toimi = 5 AND lcRight = "RW" THEN DO:
+      ELSE IF Syst.Var:toimi = 5 AND lcRight = "RW" THEN DO:
          ASSIGN
-         Syst.CUICommon:ynimi = CompName. /* common-alueelle */
+         Syst.Var:ynimi = CompName. /* common-alueelle */
          LEAVE OLRefresh.
       END.
 
-      ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
+      ELSE IF Syst.Var:toimi = 8 THEN DO:
          
          llOk = FALSE.
          MESSAGE "Do You want to leave without saving ?"
@@ -162,6 +162,6 @@ repeat ON ENDKEY UNDO OLRefresh, NEXT OLRefresh:
          IF llOk THEN UNDO OLRefresh, LEAVE OLRefresh.
       END.
          
-   END. /* Syst.CUICommon:toimi */
+   END. /* Syst.Var:toimi */
 END. /* OLRefresh */
 

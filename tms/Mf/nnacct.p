@@ -77,13 +77,13 @@ form
   "          Customers B-number list .." bnfile no-label format "x(20)"
 
 WITH
-   color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " Accounting Report to Excel "
+   color value(Syst.Var:cfc) title color value(Syst.Var:ctc) " Accounting Report to Excel "
    OVERLAY width 80 side-labels FRAME krit.
 
 form
    bnfile format "x(16)" NO-LABEL
 WITH
-   color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " Seekt customer/file "
+   color value(Syst.Var:cfc) title color value(Syst.Var:ctc) " Seekt customer/file "
    fsize DOWN OVERLAY ROW 3 col 60 FRAME act.
 
 
@@ -118,15 +118,15 @@ tab = chr(9).
 
 krit:
 repeat WITH FRAME krit:
-   Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
-   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    disp "<" + entry(cnum,cname) + ">" @ bnfile.
 
    UPDATE ticfile excfile WITH FRAME krit
    EDITING:
 
       READKEY.
-      IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+      IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
     PAUSE 0.
     if frame-field = "ticfile" THEN DO:
        ASSIGN FRAME krit ticfile.
@@ -157,20 +157,20 @@ repeat WITH FRAME krit:
 
 toimi:
    repeat:
-      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[4] = 856 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[4] = 856 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
 
       if search("./" + entry(cnum,cname)) = ? THEN DO:
     BELL. MESSAGE
     "Parameterfile"  entry(cnum,cname) "missing ! - hit ENTER !".
-    Syst.CUICommon:ufk[5] = 0.
+    Syst.Var:ufk[5] = 0.
     PAUSE no-message.
       END.
 
       RUN Syst/ufkey.p.
-      IF Syst.CUICommon:toimi = 8 THEN LEAVE krit.
-      IF Syst.CUICommon:toimi = 1 THEN NEXT  krit.
-      IF Syst.CUICommon:toimi = 4 THEN DO WITH FRAME act.
-    Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
+      IF Syst.Var:toimi = 8 THEN LEAVE krit.
+      IF Syst.Var:toimi = 1 THEN NEXT  krit.
+      IF Syst.Var:toimi = 4 THEN DO WITH FRAME act.
+    Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
     CLEAR FRAME act ALL no-pause.
     DO i = 1 TO fsize WITH FRAME act.
        bnfile = entry(i,cname).
@@ -181,7 +181,7 @@ toimi:
     CHOOSE ROW bnfile
     help "Choose customer and press ENTER !" {Syst/uchoose.i} no-error
     WITH FRAME act.
-    COLOR DISPLAY value(Syst.CUICommon:ccc) bnfile.
+    COLOR DISPLAY value(Syst.Var:ccc) bnfile.
 
     cnum = frame-line(act).
     bnfile = entry(cnum,cname).
@@ -189,7 +189,7 @@ toimi:
     disp "<" + bnfile + ">" @ bnfile WITH FRAME krit.
     NEXT toimi.
       END.
-      IF Syst.CUICommon:toimi = 5 THEN LEAVE toimi.
+      IF Syst.Var:toimi = 5 THEN LEAVE toimi.
    END.
 
 

@@ -21,8 +21,8 @@ DEF VAR piMaxCount AS INT NO-UNDO.
 
 {Syst/commpaa.i}
 ASSIGN
-   Syst.CUICommon:katun = "IVR_" + ghAuthLog::EndUserId.
-   Syst.CUICommon:gcBrand = "1".
+   Syst.Var:katun = "IVR_" + ghAuthLog::EndUserId.
+   Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
 
@@ -46,7 +46,7 @@ lcRespArray = add_array(response_toplevel_id,"").
 
 INVOICE_LOOP:
 FOR EACH Invoice WHERE 
-         Invoice.Brand = Syst.CUICommon:gcBrand AND
+         Invoice.Brand = Syst.Var:gcBrand AND
          Invoice.Custnum = MobSub.Custnum AND
          Invoice.InvType = 1 NO-LOCK USE-INDEX Custnum:
 

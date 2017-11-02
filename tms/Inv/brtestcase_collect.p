@@ -166,12 +166,12 @@ FUNCTION fErrorLog RETURNS LOGIC
 
    DO TRANS:
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
              ErrorLog.ActionID  = "BRANALYSIS"
              ErrorLog.TableName = "BRTestCase"
              ErrorLog.KeyValue  = STRING(iiCustNum)
              ErrorLog.ErrorMsg  = icError
-             ErrorLog.UserCode  = Syst.CUICommon:katun.
+             ErrorLog.UserCode  = Syst.Var:katun.
              ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
 
@@ -1222,7 +1222,7 @@ PROCEDURE pCheckFixedFee:
 
    IF ttCriteria.CriteriaField = "BillCode" THEN
       FOR EACH FixedFee NO-LOCK WHERE
-               FixedFee.Brand = Syst.CUICommon:gcBrand AND
+               FixedFee.Brand = Syst.Var:gcBrand AND
                FixedFee.HostTable = "MobSub" AND
                FixedFee.KeyValue = STRING(MsOwner.MsSeq) AND
                FixedFee.InUse = TRUE AND
@@ -1256,7 +1256,7 @@ PROCEDURE pCheckFixedFee:
       END.
    ELSE IF ttCriteria.CriteriaField = "CalcObj" THEN
       FOR EACH FixedFee NO-LOCK WHERE
-               FixedFee.Brand = Syst.CUICommon:gcBrand AND
+               FixedFee.Brand = Syst.Var:gcBrand AND
                FixedFee.HostTable = "MobSub" AND
                FixedFee.KeyValue = STRING(MsOwner.MsSeq) AND
                FixedFee.InUse = TRUE AND
@@ -1309,7 +1309,7 @@ PROCEDURE pCheckSingleFee:
       liTo    = TRUNCATE(ttCriteria.PeriodEnd / 100,0).
    
    FOR EACH SingleFee NO-LOCK WHERE
-            SingleFee.Brand = Syst.CUICommon:gcBrand AND
+            SingleFee.Brand = Syst.Var:gcBrand AND
             SingleFee.HostTable = "MobSub" AND
             SingleFee.KeyValue = STRING(MsOwner.MsSeq) AND
             SingleFee.Active = TRUE AND
@@ -1341,7 +1341,7 @@ PROCEDURE pCheckFATime:
       liTo    = TRUNCATE(ttCriteria.PeriodEnd / 100,0).
    
    FOR EACH FATime NO-LOCK USE-INDEX MobSub WHERE
-            FATime.Brand = Syst.CUICommon:gcBrand AND
+            FATime.Brand = Syst.Var:gcBrand AND
             FATime.MsSeq = MsOwner.MsSeq AND
             FATime.InvNum = 0 AND
             FATime.FTGrp MATCHES(ttCriteria.ValueIncluded):

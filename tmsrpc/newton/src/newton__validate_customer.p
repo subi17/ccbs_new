@@ -53,7 +53,7 @@ IF NOT AVAIL MobSub THEN DO:
 END.
 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = lcBrand.
+Syst.Var:gcBrand = lcBrand.
 lcName =  Func.Common:mDispCustName(BUFFER Customer).
 
 add_string(response_toplevel_id,"",lcName).

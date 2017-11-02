@@ -98,7 +98,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 DEF VAR lcQuery AS CHARACTER NO-UNDO. 
 
 lcQuery = 'FOR EACH PrepaidRequest NO-LOCK WHERE' + 
-          ' PrepaidRequest.Brand = ' + QUOTER(Syst.CUICommon:gcBrand) +
+          ' PrepaidRequest.Brand = ' + QUOTER(Syst.Var:gcBrand) +
           ' AND PrepaidRequest.MsSeq = ' + STRING(get_int(pcStruct,"msseq")) + 
           ' AND  PrepaidRequest.Response NE "First4B" '.
 

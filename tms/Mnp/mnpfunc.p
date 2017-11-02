@@ -122,7 +122,7 @@ CASE lcSelected:
 
    WHEN {&MNP_CANCEL} THEN DO:
      
-     Syst.CUICommon:ehto = 10.
+     Syst.Var:ehto = 10.
      RUN Syst/ufkey.p.
      
      UPDATE 
@@ -141,7 +141,7 @@ CASE lcSelected:
    END.
    
    WHEN {&MNP_REJECT} THEN DO:
-     Syst.CUICommon:ehto = 10.
+     Syst.Var:ehto = 10.
      RUN Syst/ufkey.p.
      
      UPDATE 
@@ -169,7 +169,7 @@ CASE lcSelected:
    WHEN {&MNP_NMN_DETAIL} THEN fSendMigrationNumberDetailRequest(MNPProcess.PortRequest).
    WHEN {&MNP_NR_DETAIL} THEN DO:
      
-     Syst.CUICommon:ehto = 10.
+     Syst.Var:ehto = 10.
      RUN Syst/ufkey.p.
      
      UPDATE 
@@ -185,7 +185,7 @@ CASE lcSelected:
    WHEN {&MNP_PR_DETAIL} THEN fSendPortabilityDetailQuery(MNPProcess.PortRequest).
    WHEN {&MNP_PR_REQUESTED} THEN DO:
      
-     Syst.CUICommon:ehto = 10.
+     Syst.Var:ehto = 10.
      RUN Syst/ufkey.p.
      
      UPDATE 
@@ -200,7 +200,7 @@ CASE lcSelected:
    END.
    WHEN {&MNP_NT_CANCEL} THEN DO:
       fSendNumberTerminationCancel(MNPProcess.PortRequest).
-      fMakeCreateEvent(lhTable,"",Syst.CUICommon:katun,"").
+      fMakeCreateEvent(lhTable,"",Syst.Var:katun,"").
    END.
    WHEN {&MNP_NT_DETAIL} THEN fSendNumberTerminationDetail(MNPProcess.PortRequest).
 
@@ -215,7 +215,7 @@ PROCEDURE pCreatePortabilityQuery:
    
    DEF FRAME a.     
    CREATE ttPortabilityQuery.
-   Syst.CUICommon:ehto = 10.
+   Syst.Var:ehto = 10.
    RUN Syst/ufkey.p.
 
    UPDATE ttPortabilityQuery WITH 
@@ -234,7 +234,7 @@ PROCEDURE pCreateNumberRangesQuery:
    
    DEF FRAME a.     
    CREATE ttNumberRangesQuery.
-   Syst.CUICommon:ehto = 10.
+   Syst.Var:ehto = 10.
    RUN Syst/ufkey.p.
 
    UPDATE ttNumberRangesQuery WITH 
@@ -253,7 +253,7 @@ PROCEDURE pCreateNumberTermQuery:
    
    DEF FRAME a.     
    CREATE ttNumberTermQuery.
-   Syst.CUICommon:ehto = 10.
+   Syst.Var:ehto = 10.
    RUN Syst/ufkey.p.
 
    UPDATE ttNumberTermQuery WITH 

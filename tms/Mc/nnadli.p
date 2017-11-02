@@ -40,7 +40,7 @@ DEF TEMP-TABLE ttCust NO-UNDO
    INDEX CustName CustName CustNum. 
 
 DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
-ynimi = Syst.CUICommon:ynimi.
+ynimi = Syst.Var:ynimi.
 
 form
    skip(1)
@@ -109,19 +109,19 @@ END FUNCTION.
 
 rajat:
 repeat WITH FRAME rajat:
-   Syst.CUICommon:ehto = 9.  RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9.  RUN Syst/ufkey.p.
 
    UPDATE
    lcInvGroup
    WITH FRAME rajat
    EDITING:
       READKEY.
-      IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME rajat:
+      IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME rajat:
          HIDE MESSAGE.
          if frame-field = "lcInvGroup" THEN DO :
             if input lcInvGroup ne "" THEN DO:
                FIND InvGroup where 
-                    InvGroup.Brand    = Syst.CUICommon:gcBrand AND
+                    InvGroup.Brand    = Syst.Var:gcBrand AND
                     InvGroup.InvGroup = INPUT lcInvGroup 
                     no-lock no-error.
                IF NOT AVAIL InvGroup THEN DO:
@@ -140,13 +140,13 @@ repeat WITH FRAME rajat:
 Action:
    repeat WITH FRAME sel:
        ASSIGN
-       Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0 Syst.CUICommon:ufk[1] = 91  Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8.
+       Syst.Var:ufk = 0 Syst.Var:ehto = 0 Syst.Var:ufk[1] = 91  Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8.
        RUN Syst/ufkey.p.
 
 
-       IF Syst.CUICommon:toimi = 1 THEN NEXT rajat.
-       IF Syst.CUICommon:toimi = 8 THEN LEAVE rajat.
-       IF Syst.CUICommon:toimi = 5 THEN DO:
+       IF Syst.Var:toimi = 1 THEN NEXT rajat.
+       IF Syst.Var:toimi = 8 THEN LEAVE rajat.
+       IF Syst.Var:toimi = 5 THEN DO:
 
           tila = TRUE.
           {Syst/tmsreport.i "leave rajat"}
@@ -162,7 +162,7 @@ Action:
 
    IF lcInvGroup NE "" THEN 
    FOR EACH Customer NO-LOCK WHERE
-            Customer.Brand    = Syst.CUICommon:gcBrand AND
+            Customer.Brand    = Syst.Var:gcBrand AND
             Customer.InvGroup = lcInvGroup:
 
       fChkCust().
@@ -170,7 +170,7 @@ Action:
 
    ELSE 
    FOR EACH Customer NO-LOCK WHERE
-            Customer.Brand  = Syst.CUICommon:gcBrand:
+            Customer.Brand  = Syst.Var:gcBrand:
       fChkCust().
    END.
 

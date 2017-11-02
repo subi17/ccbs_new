@@ -51,7 +51,7 @@ IF NOT AVAILABLE MobSub THEN DO:
 END.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
 END.
 
@@ -183,7 +183,7 @@ PROCEDURE pNew:
    FOR EACH ttProvCommand:
 
       FIND ServCom NO-LOCK WHERE
-           ServCom.Brand   = Syst.CUICommon:gcBrand AND
+           ServCom.Brand   = Syst.Var:gcBrand AND
            ServCom.ServCom = ttProvCommand.component NO-ERROR.
 
       IF NOT AVAILABLE ServCom THEN DO:
@@ -192,7 +192,7 @@ PROCEDURE pNew:
       END.
 
       FIND FIRST CTServEl NO-LOCK WHERE
-                 CTServEl.Brand     = Syst.CUICommon:gcBrand   AND
+                 CTServEl.Brand     = Syst.Var:gcBrand   AND
                  CTServEl.ServCom   = ServCom.ServCom AND
                  CTServEl.CLIType   = MobSub.CLIType AND
                  CTServEl.FromDate <= TODAY NO-ERROR.
@@ -459,7 +459,7 @@ PROCEDURE pDone.
  
       CREATE Memo.
       ASSIGN 
-         Memo.Brand     = Syst.CUICommon:gcBrand
+         Memo.Brand     = Syst.Var:gcBrand
          Memo.HostTable = "MobSub"
          Memo.KeyValue  = STRING(MsRequest.MsSeq)
          Memo.CustNum   = MsRequest.CustNum
@@ -512,7 +512,7 @@ PROCEDURE pDone.
          RUN Mm/barrengine.p(Mobsub.MsSeq,
                          "#REFRESH",
                          "5",                /* source  */
-                         Syst.CUICommon:katun,              /* creator */
+                         Syst.Var:katun,              /* creator */
                          Func.Common:mMakeTS(),
                          "",                 /* SMS */
                          OUTPUT lcResult).

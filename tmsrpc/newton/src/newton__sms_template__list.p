@@ -14,7 +14,7 @@
 */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 
 DEFINE VARIABLE resp_array       AS CHARACTER NO-UNDO. 
@@ -34,7 +34,7 @@ resp_array = add_array(response_toplevel_id, "").
 {newton/src/settenant.i pcTenant}
 
 FOR EACH InvText NO-LOCK WHERE
-         InvText.Brand     = Syst.CUICommon:gcBrand AND
+         InvText.Brand     = Syst.Var:gcBrand AND
          InvText.Target    = "SMS" AND
          InvText.Language  = 1 AND
          InvText.ToDate   >= TODAY AND
@@ -54,7 +54,7 @@ FOR EACH InvText NO-LOCK WHERE
    add_int(lcLangItemStruct, "language", InvText.Language).
    add_string(lcLangItemStruct, "smstext", InvText.InvText).
    FOR EACH RepText NO-LOCK WHERE
-            RepText.Brand     = Syst.CUICommon:gcBrand AND
+            RepText.Brand     = Syst.Var:gcBrand AND
             RepText.LinkCode  = STRING(InvText.ITNum) AND
             RepText.TextType  = 32 AND
             RepText.ToDate   >= TODAY AND

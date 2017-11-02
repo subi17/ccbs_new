@@ -20,8 +20,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
-Syst.CUICommon:katun = "NewtonRPC".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "NewtonRPC".
 {Func/orderchk.i}
 {Func/order.i}
 {Syst/tmsconst.i}
@@ -80,7 +80,7 @@ FUNCTION fHandleCorporateCustomer RETURNS LOGICAL:
 
    IF AVAIL Customer THEN DO:
       FIND FIRST bMobSub WHERE
-                 bMobSub.Brand   = Syst.CUICommon:gcBrand AND
+                 bMobSub.Brand   = Syst.Var:gcBrand AND
                  bMobSub.AgrCust = Customer.CustNum
            NO-LOCK NO-ERROR.
       IF NOT AVAIL bMobSub THEN Order.StatusCode = "20".
@@ -94,7 +94,7 @@ FUNCTION fCreateOrder RETURNS LOGICAL:
 
    CREATE Order.
    ASSIGN
-      Order.Brand           = Syst.CUICommon:gcBrand 
+      Order.Brand           = Syst.Var:gcBrand 
       Order.OrderId         = liOrderId
       Order.Salesman        = pcSalesman
       Order.Source          = "newton"
@@ -180,7 +180,7 @@ IF pcOldOperator = "" OR pcOldOperator = ? THEN
 {newton/src/settenant.i pcTenant}
 
 FIND FIRST Customer WHERE
-           Customer.Brand      = Syst.CUICommon:gcBrand    AND
+           Customer.Brand      = Syst.Var:gcBrand    AND
            Customer.CustIDType = pcIdType   AND
            Customer.OrgId      = pcPersonId AND
            Customer.Roles     <> "inactive" NO-LOCK NO-ERROR.
@@ -234,10 +234,10 @@ DO liCounter = 0 TO get_paramcount(pcArray) - 1:
       RETURN appl_err("Subscription is alreay active").
 
    IF CAN-FIND(FIRST MobSub WHERE
-                     MobSub.Brand = Syst.CUICommon:gcBrand AND
+                     MobSub.Brand = Syst.Var:gcBrand AND
                      MobSub.CLI   = TermMobSub.CLI NO-LOCK) OR
       CAN-FIND(FIRST Order WHERE
-                     Order.Brand = Syst.CUICommon:gcBrand AND
+                     Order.Brand = Syst.Var:gcBrand AND
                      Order.CLI   = TermMobSub.CLI AND
                      Order.OrderType NE {&ORDER_TYPE_RENEWAL} AND
                      Order.OrderType NE {&ORDER_TYPE_STC} AND
@@ -257,7 +257,7 @@ DO liCounter = 0 TO get_paramcount(pcArray) - 1:
       RETURN appl_err("SIM is already in use").
 
    FIND CLIType WHERE
-        CLIType.Brand = Syst.CUICommon:gcBrand AND
+        CLIType.Brand = Syst.Var:gcBrand AND
         CLIType.CliType = TermMobSub.CLIType NO-LOCK NO-ERROR.
    IF NOT AVAIL CLIType THEN 
       RETURN appl_err("Invalid CLIType").
@@ -295,7 +295,7 @@ FOR EACH ttMNPRollback:
                          STRING(ttMNPRollback.RetentionOrderId),"").
 
    /* YTS-2890 */
-   fMakeCreateEvent((BUFFER Order:HANDLE),"",Syst.CUICommon:katun,"").
+   fMakeCreateEvent((BUFFER Order:HANDLE),"",Syst.Var:katun,"").
 END.
 
 add_boolean(response_toplevel_id, "", True).

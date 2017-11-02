@@ -48,7 +48,7 @@
 {Func/fcustdata.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -135,18 +135,18 @@ END.
 liFeeCust = MobSub.InvCust.
 
 FIND FIRST msowner WHERE 
-           msowner.brand = Syst.CUICommon:gcBrand AND 
+           msowner.brand = Syst.Var:gcBrand AND 
            msowner.CLI   = mobsub.Cli no-lock no-error.
 
 IF iiContract > 0 
 THEN FIND Contract WHERE 
-          Contract.Brand    = Syst.CUICommon:gcBrand AND
+          Contract.Brand    = Syst.Var:gcBrand AND
           Contract.Contract = STRING(iiContract) NO-LOCK NO-ERROR.
 
 /* use default if not given */          
 IF iiContract = 0 OR NOT AVAILABLE Contract 
 THEN FIND Contract  WHERE 
-          Contract.Brand    = Syst.CUICommon:gcBrand AND 
+          Contract.Brand    = Syst.Var:gcBrand AND 
           Contract.Contract = msowner.contract NO-LOCK NO-ERROR.
 
 IF avail contract THEN ASSIGN
@@ -189,7 +189,7 @@ IF InterAct THEN DO WITH FRAME info:
    PAUSE 0.
    IF FeeModel ne "" THEN DO:
       FIND FeeModel  WHERE 
-           FeeModel.Brand    = Syst.CUICommon:gcBrand  AND 
+           FeeModel.Brand    = Syst.Var:gcBrand  AND 
            FeeModel.FeeModel = FeeModel NO-LOCK NO-ERROR.
 
       /* PriceList is stored on PricePlan record */
@@ -220,14 +220,14 @@ ACTION:
    REPEAT WITH FRAME info:
 
       IF ask-data THEN DO ON ENDKEY UNDO, RETRY:
-         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. 
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p. 
          UPDATE 
            FeeModel
            codate  
            WITH FRAME info EDITING:
             READKEY.
 
-            IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME info:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME info:
                PAUSE 0. /* clears lowest line on screen */
 
                IF FRAME-FIELD = "FeeModel" THEN DO:
@@ -237,7 +237,7 @@ ACTION:
                      UNDO, RETURN.
                   END.   
                   FIND FeeModel  WHERE 
-                       FeeModel.Brand    = Syst.CUICommon:gcBrand   AND 
+                       FeeModel.Brand    = Syst.Var:gcBrand   AND 
                        FeeModel.FeeModel = 
                   INPUT FRAME info FeeModel NO-LOCK NO-ERROR.
                   IF NOT AVAIL FeeModel THEN DO:
@@ -267,29 +267,29 @@ ACTION:
       END.
 
       ASSIGN
-      Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[4] = 294 
-      Syst.CUICommon:ufk[5] = (IF lcRight = "RW" THEN 15 ELSE 0)
-      Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
-      if FeeModel = "" THEN Syst.CUICommon:ufk[5] = 0.
+      Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[4] = 294 
+      Syst.Var:ufk[5] = (IF lcRight = "RW" THEN 15 ELSE 0)
+      Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
+      if FeeModel = "" THEN Syst.Var:ufk[5] = 0.
       RUN Syst/ufkey.p.
 
 
-      IF Syst.CUICommon:toimi = 1 THEN DO:
+      IF Syst.Var:toimi = 1 THEN DO:
         ask-data = TRUE.
         NEXT Action.
       END.
 
-      IF Syst.CUICommon:toimi = 4 THEN DO:
+      IF Syst.Var:toimi = 4 THEN DO:
          /* show items (contents) of this Billing Event */
          RUN Mc/beitempl.p(FeeModel,lcPriceList).
          NEXT.
       END.
-      ELSE IF Syst.CUICommon:toimi = 5 AND lcRight = "RW" THEN DO:
+      ELSE IF Syst.Var:toimi = 5 AND lcRight = "RW" THEN DO:
          IF Fcheck-pl(FeeModel.FeeModel,
                       lcPriceList) = FALSE THEN NEXT Action.
          LEAVE Action. /* i.e. DO the job ... */
       END.   
-      ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
+      ELSE IF Syst.Var:toimi = 8 THEN DO:
          HIDE FRAME info.
          UNDO, RETURN.
       END.
@@ -323,17 +323,17 @@ ok = TRUE.
 
 FOR                             
 EACH FMItem NO-LOCK  WHERE
-     FMItem.Brand     = Syst.CUICommon:gcBrand     AND 
+     FMItem.Brand     = Syst.Var:gcBrand     AND 
      FMItem.FeeModel  = FeeModel    AND
      FMItem.PriceList = lcPriceList AND
      FMItem.FromDate <= CoDate      AND
      FMItem.ToDate   >= CoDate,
 
      BillItem no-lock WHERE
-     BillItem.BRand    = Syst.CUICommon:gcBrand   AND 
+     BillItem.BRand    = Syst.Var:gcBrand   AND 
      BillItem.BillCode = FMItem.BillCode,
 FIRST PriceList NO-LOCK WHERE
-      PriceList.Brand     = Syst.CUICommon:gcBrand AND
+      PriceList.Brand     = Syst.Var:gcBrand AND
       PriceList.PriceList = lcPriceList:
 
      IF FMItem.BillType NE "NF" THEN /* Not no fee */
@@ -367,7 +367,7 @@ FIRST PriceList NO-LOCK WHERE
            ASSIGN
            SingleFee.FMItemId    = NEXT-VALUE(bi-seq).                             
            ASSIGN
-           SingleFee.Brand       = Syst.CUICommon:gcBrand 
+           SingleFee.Brand       = Syst.Var:gcBrand 
            SingleFee.CustNum     = liFeeCust  /* customer number         */
            SingleFee.BillTarget  = MobSub.BillTarget /* Billing Target        */
            SingleFee.CalcObj     = "MsSeq" +       /* MobSub id               */
@@ -427,7 +427,7 @@ FIRST PriceList NO-LOCK WHERE
            CREATE FixedFee.
 
            ASSIGN      
-           FixedFee.Brand      = Syst.CUICommon:gcBrand 
+           FixedFee.Brand      = Syst.Var:gcBrand 
            FixedFee.FFNum      = NEXT-VALUE(contract) /* sequence FOR contract   */
            FixedFee.BegPeriod  = Period           /* beginning Period        */
            FixedFee.CustNum    = liFeeCust        /* customer no.            */

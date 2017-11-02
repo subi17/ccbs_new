@@ -29,7 +29,7 @@ FUNCTION fCheckDCCLIContract RETURNS LOGICAL
           BUFFER bbttAnalyzerReport FOR ttAnalyzerReport):
 
    FOR FIRST DayCampaign WHERE
-             DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+             DayCampaign.Brand = Syst.Var:gcBrand AND
              DayCampaign.DcEvent = icDcEvent NO-LOCK,
        FIRST DCCLI WHERE
              DCCLI.MsSeq = iiMsSeq AND
@@ -41,7 +41,7 @@ FUNCTION fCheckDCCLIContract RETURNS LOGICAL
 
       IF DayCampaign.FeeModel > "" THEN DO:
       FIND FIRST FixedFee NO-LOCK USE-INDEX HostTable WHERE
-                 FixedFee.Brand     = Syst.CUICommon:gcBrand AND
+                 FixedFee.Brand     = Syst.Var:gcBrand AND
                  FixedFee.HostTable = "MobSub" AND
                  FixedFee.KeyValue  = STRING(DCCLI.MsSeq) AND
                  FixedFee.FeeModel  = DayCampaign.FeeModel AND
@@ -63,7 +63,7 @@ FUNCTION fCheckDCCLIContract RETURNS LOGICAL
 
       IF icAction = "Termination" AND DayCampaign.TermFeeModel > "" THEN DO:
          FIND FIRST SingleFee WHERE
-                    SingleFee.Brand = Syst.CUICommon:gcBrand AND
+                    SingleFee.Brand = Syst.Var:gcBrand AND
                     SingleFee.HostTable = "MobSub" AND
                     SingleFee.KeyValue  = STRING(DCCLI.MsSeq) AND
                     SingleFee.FeeModel  = DayCampaign.TermFeeModel AND
@@ -96,7 +96,7 @@ FUNCTION fCheckServLimitContract RETURNS LOGICAL
    ldNextMonthActStamp = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(idActDate) + 1,0).
 
    FOR FIRST DayCampaign WHERE
-             DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+             DayCampaign.Brand = Syst.Var:gcBrand AND
              DayCampaign.DcEvent = icDcEvent NO-LOCK,
        EACH  ServiceLimit WHERE
              ServiceLimit.GroupCode = DayCampaign.DcEvent NO-LOCK,
@@ -115,7 +115,7 @@ FUNCTION fCheckServLimitContract RETURNS LOGICAL
 
       IF DayCampaign.FeeModel > "" THEN DO:
          FIND FIRST FixedFee NO-LOCK USE-INDEX HostTable WHERE
-                    FixedFee.Brand     = Syst.CUICommon:gcBrand AND
+                    FixedFee.Brand     = Syst.Var:gcBrand AND
                     FixedFee.HostTable = "MobSub" AND
                     FixedFee.KeyValue  = STRING(MServiceLimit.MsSeq) AND
                     FixedFee.FeeModel  = DayCampaign.FeeModel AND
@@ -164,7 +164,7 @@ FUNCTION fCheckService RETURNS LOGICAL
                         MobSub.MsSeq = MsRequest.MsSeq AND
                         MobSub.PayType = FALSE) THEN DO:
          FIND FIRST FixedFee NO-LOCK USE-INDEX HostTable WHERE
-                    FixedFee.Brand     = Syst.CUICommon:gcBrand AND
+                    FixedFee.Brand     = Syst.Var:gcBrand AND
                     FixedFee.HostTable = "MobSub" AND
                     FixedFee.KeyValue  = STRING(MsRequest.MsSeq) AND
                     FixedFee.FeeModel  = "BBMF" AND
@@ -213,7 +213,7 @@ PROCEDURE pContractActivation:
          ttAnalyzerReport.Remark = "Contract request is ongoing".
 
       FIND FIRST DayCampaign WHERE
-                 DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+                 DayCampaign.Brand = Syst.Var:gcBrand AND
                  DayCampaign.DcEvent = MsRequest.ReqCparam3
            NO-LOCK NO-ERROR.
       IF NOT AVAIL DayCampaign THEN
@@ -287,7 +287,7 @@ PROCEDURE pContractDeactivation:
          ttAnalyzerReport.Remark = "Contract request is ongoing".
 
       FIND FIRST DayCampaign WHERE
-                 DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+                 DayCampaign.Brand = Syst.Var:gcBrand AND
                  DayCampaign.DcEvent = MsRequest.ReqCparam3
            NO-LOCK NO-ERROR.
       IF NOT AVAIL DayCampaign THEN
@@ -526,7 +526,7 @@ PROCEDURE pSTC:
 
          IF LOOKUP(STRING(bSubMsRequest.ReqType),"8,9") > 0 THEN DO:
             FIND FIRST DayCampaign WHERE
-                       DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+                       DayCampaign.Brand = Syst.Var:gcBrand AND
                        DayCampaign.DcEvent = bSubMsRequest.ReqCparam3
                  NO-LOCK NO-ERROR.
             IF NOT AVAIL DayCampaign THEN DO:
@@ -655,7 +655,7 @@ PROCEDURE pBTC:
          Func.Common:mSplitTS(bSubMsRequest.ActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
          IF LOOKUP(STRING(bSubMsRequest.ReqType),"8,9") > 0 THEN DO:
             FIND FIRST DayCampaign WHERE
-                       DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+                       DayCampaign.Brand = Syst.Var:gcBrand AND
                        DayCampaign.DcEvent = bSubMsRequest.ReqCparam3
                  NO-LOCK NO-ERROR.
             IF NOT AVAIL DayCampaign THEN DO:

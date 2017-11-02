@@ -125,7 +125,7 @@ END.
 VIEW FRAME clog . pause 0.
 DISP " PORT " + STRING(iiport) + " WAITING..." @ cdrfile WITH FRAME cLOG.
 
-Syst.CUICommon:ehto = 3.
+Syst.Var:ehto = 3.
 RUN Syst/ufkey.p.
 RUN Syst/ufxkey.p(8,3).
 

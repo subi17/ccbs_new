@@ -27,8 +27,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "NewtonRPC".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "NewtonRPC".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 
 DEF VAR pcTenant     AS CHAR NO-UNDO. 
@@ -78,7 +78,7 @@ IF TRIM(pcSalesID) EQ "" THEN
    RETURN appl_err("Sales ID is empty").
 
 FIND SalesMan NO-LOCK WHERE 
-     SalesMan.Brand    = Syst.CUICommon:gcBrand   AND 
+     SalesMan.Brand    = Syst.Var:gcBrand   AND 
      SalesMan.Salesman = pcSalesID NO-ERROR.
 
 IF NOT AVAIL SalesMan THEN 
@@ -90,7 +90,7 @@ IF pcMSISDN NE "" AND
 
 IF pcMSISDN NE "" THEN DO:
    FIND FIRST MobSub NO-LOCK WHERE 
-              MobSub.Brand = Syst.CUICommon:gcBrand  AND 
+              MobSub.Brand = Syst.Var:gcBrand  AND 
               MobSub.CLI   = pcMSISDN NO-ERROR.
 
    IF NOT AVAIL MobSub THEN 
@@ -105,7 +105,7 @@ IF (pcCustID     NE ""  AND
 
 IF pcCustID NE "" THEN DO:
    FIND FIRST Customer NO-LOCK WHERE 
-              Customer.Brand      = Syst.CUICommon:gcBrand      AND 
+              Customer.Brand      = Syst.Var:gcBrand      AND 
               Customer.OrgID      = pcCustID     AND 
               Customer.CustIDType = pcCustIDType NO-ERROR.
 
@@ -159,7 +159,7 @@ FOR EACH TMSCodes NO-LOCK WHERE
    IF LOOKUP(TMSCodes.CodeValue,"6,7,8,9") > 0 THEN NEXT. 
          
    FOR EACH Order NO-LOCK USE-INDEX Salesman WHERE 
-            Order.Brand      = Syst.CUICommon:gcBrand            AND
+            Order.Brand      = Syst.Var:gcBrand            AND
             Order.Salesman   = Salesman.Salesman  AND 
             Order.Statuscode = TMSCodes.CodeValue AND 
             Order.OrderType  = 2                  AND 
@@ -173,7 +173,7 @@ FOR EACH TMSCodes NO-LOCK WHERE
             ELSE TRUE):
 
       FIND FIRST OrderAction NO-LOCK WHERE 
-                 OrderAction.Brand    = Syst.CUICommon:gcBrand        AND 
+                 OrderAction.Brand    = Syst.Var:gcBrand        AND 
                  OrderAction.OrderID  = Order.OrderID  AND 
                  OrderAction.ItemType = "Q25Extension" NO-ERROR.
 
@@ -205,7 +205,7 @@ FOR EACH ttContractDetails EXCLUSIVE-LOCK
          ttContractDetails.CLI NE MobSub.CLI THEN NEXT.
       ELSE DO:
          FIND FIRST MobSub NO-LOCK WHERE 
-                    MobSub.Brand = Syst.CUICommon:gcBrand               AND 
+                    MobSub.Brand = Syst.Var:gcBrand               AND 
                     MobSub.CLI   = ttContractDetails.CLI NO-ERROR. 
          
          IF NOT AVAIL MobSub THEN NEXT.
@@ -215,7 +215,7 @@ FOR EACH ttContractDetails EXCLUSIVE-LOCK
          MobSub.CustNum NE Customer.CustNum THEN NEXT.
       ELSE DO:
          FIND FIRST Customer NO-LOCK WHERE 
-                    Customer.Brand   = Syst.CUICommon:gcBrand        AND 
+                    Customer.Brand   = Syst.Var:gcBrand        AND 
                     Customer.CustNum = MobSub.CustNum NO-ERROR.
 
          IF NOT AVAIL Customer THEN NEXT.           
@@ -251,7 +251,7 @@ PROCEDURE pQ25ExtensionContracts:
 DEFINE INPUT PARAMETER icUserCode AS CHAR NO-UNDO. 
    
    FOR EACH MsRequest NO-LOCK USE-INDEX UserCode WHERE 
-            MsRequest.Brand      = Syst.CUICommon:gcBrand          AND 
+            MsRequest.Brand      = Syst.Var:gcBrand          AND 
             MsRequest.UserCode   = icUserCode       AND 
             MsRequest.ActStamp  >= lpcDateStamp     AND 
             MsRequest.CreStamp  >= lpcDateStamp     AND
@@ -266,7 +266,7 @@ DEFINE INPUT PARAMETER icUserCode AS CHAR NO-UNDO.
             MsRequest.ReqStatus  = 0)               AND 
             MsRequest.ReqCParam3 = "RVTERM12",
       FIRST SingleFee NO-LOCK USE-INDEX HostTable WHERE 
-            SingleFee.Brand       = Syst.CUICommon:gcBrand                      AND 
+            SingleFee.Brand       = Syst.Var:gcBrand                      AND 
             SingleFee.HostTable   = "MobSub"                     AND 
             SingleFee.KeyValue    = STRING(MsRequest.MsSeq)      AND 
             SingleFee.SourceTable = "DCCLI"                      AND 

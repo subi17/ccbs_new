@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-assign Syst.CUICommon:gcBrand = "1"
-       Syst.CUICommon:katun = "Qvantel".
+assign Syst.Var:gcBrand = "1"
+       Syst.Var:katun = "Qvantel".
 {Syst/tmsconst.i}
 {Func/fixedfee.i}
 {Mm/active_bundle.i}

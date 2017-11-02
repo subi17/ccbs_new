@@ -20,7 +20,7 @@ DEF VAR InvGroup LIKE InvGroup.InvGroup NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -43,33 +43,33 @@ form
   "               Invoice group :" InvGroup   
                   help "Invoice group to close"    skip(7)
 WITH
-    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:cfc) " CLOSE AN INVOICE GROUP " 
+    color value(Syst.Var:cfc) title color value(Syst.Var:cfc) " CLOSE AN INVOICE GROUP " 
     centered NO-LABEL
     OVERLAY  width 80
     FRAME frm.
 
-Syst.CUICommon:cfc = "kline".  RUN Syst/ufcolor.p.
+Syst.Var:cfc = "kline".  RUN Syst/ufcolor.p.
 
 LOOP:
 repeat WITH FRAME frm:
 
-  Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+  Syst.Var:ehto = 9. RUN Syst/ufkey.p.
   UPDATE InvGroup WITH FRAME frm.
 
    toimi:
       repeat WITH FRAME LOOP:
-         ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 795 Syst.CUICommon:ufk[8] = 8.
+         ASSIGN Syst.Var:ufk = 0 Syst.Var:ehto = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 795 Syst.Var:ufk[8] = 8.
          RUN Syst/ufkey.p.
-         IF Syst.CUICommon:toimi = 1 THEN NEXT  toimi.
-         IF Syst.CUICommon:toimi = 5 THEN LEAVE toimi.
-         IF Syst.CUICommon:toimi = 8 THEN LEAVE LOOP.
-      END.  /* Syst.CUICommon:toimi */
+         IF Syst.Var:toimi = 1 THEN NEXT  toimi.
+         IF Syst.Var:toimi = 5 THEN LEAVE toimi.
+         IF Syst.Var:toimi = 8 THEN LEAVE LOOP.
+      END.  /* Syst.Var:toimi */
 
 
   ASSIGN i1 = 0.
   /* CLOSE ALL customers from an invoice group */
   FOR EACH Customer no-lock where
-           Customer.Brand    = Syst.CUICommon:gcBrand AND
+           Customer.Brand    = Syst.Var:gcBrand AND
            Customer.InvGroup = InvGroup:
 
      FIND FIRST MthCall where 

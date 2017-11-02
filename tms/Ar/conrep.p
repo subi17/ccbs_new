@@ -40,7 +40,7 @@ ASSIGN
     viiva4   = FILL("-",lev).
 
 DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
-ynimi = Syst.CUICommon:ynimi.
+ynimi = Syst.Var:ynimi.
 
 form header
    viiva1 AT 1 SKIP
@@ -100,7 +100,7 @@ IF icFile > "" THEN DO:
 END.
       
 FOR EACH Contact NO-LOCK WHERE
-         Contact.Brand    = Syst.CUICommon:gcBrand    AND
+         Contact.Brand    = Syst.Var:gcBrand    AND
          Contact.UserCode = icUserCode AND
          Contact.ConDate  = idtConDate AND
          (IF iiHandled < 2

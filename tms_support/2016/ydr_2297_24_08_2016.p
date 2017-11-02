@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 {Func/fmakesms.i}
 
@@ -39,11 +39,11 @@ PROCEDURE pSendSMS:
 DEFINE VARIABLE ldTimeStamp AS DECIMAL NO-UNDO.
 
    FOR EACH MobSub NO-LOCK WHERE 
-            MobSub.Brand   = Syst.CUICommon:gcBrand AND 
+            MobSub.Brand   = Syst.Var:gcBrand AND 
             MobSub.PayType = FALSE:
 
       FIND FIRST Customer NO-LOCK where 
-                 Customer.Brand   = Syst.CUICommon:gcBrand        AND 
+                 Customer.Brand   = Syst.Var:gcBrand        AND 
                  Customer.CustNum = MobSub.CustNum NO-ERROR.
 
       IF NOT AVAIL Customer THEN NEXT.

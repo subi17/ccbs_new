@@ -34,7 +34,7 @@ IF NOT AVAIL MSRequest OR MsRequest.ReqType NE 15 THEN DO:
 END.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -138,7 +138,7 @@ PROCEDURE pChangeSIM:
    
    IF llDoEvent THEN fMakeCreateEvent((BUFFER MsOwner:HANDLE),
                                       "",
-                                      Syst.CUICommon:katun,
+                                      Syst.Var:katun,
                                       "").
 
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).

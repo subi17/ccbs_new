@@ -1,8 +1,8 @@
 {Syst/commpaa.i}
 
 ASSIGN
-   Syst.CUICommon:katun   = "cron"
-   Syst.CUICommon:gcBrand = "1".
+   Syst.Var:katun   = "cron"
+   Syst.Var:gcBrand = "1".
 
 {Func/cparam.i2}
 {Func/xmlfunction.i}
@@ -174,7 +174,7 @@ PROCEDURE pAdjustBalance:
       liRequest = NEXT-VALUE(PrePaidReq).
    
       IF NOT CAN-FIND(FIRST PrePaidRequest WHERE
-                            PrePaidRequest.Brand     = Syst.CUICommon:gcBrand AND
+                            PrePaidRequest.Brand     = Syst.Var:gcBrand AND
                             PrepaidRequest.PPRequest = liRequest)
       THEN LEAVE.
    END.
@@ -182,8 +182,8 @@ PROCEDURE pAdjustBalance:
    CREATE PrePaidRequest.
    ASSIGN
       PrePaidRequest.TSRequest   = Func.Common:mMakeTS()
-      PrePaidRequest.UserCode    = Syst.CUICommon:katun
-      PrePaidRequest.Brand       = Syst.CUICommon:gcBrand
+      PrePaidRequest.UserCode    = Syst.Var:katun
+      PrePaidRequest.Brand       = Syst.Var:gcBrand
       PrePaidRequest.MsSeq       = MobSub.MsSeq
       PrePaidRequest.CLI         = MobSub.CLI
       PrePaidRequest.PPRequest   = liRequest
@@ -197,7 +197,7 @@ PROCEDURE pAdjustBalance:
       PrePaidRequest.TaxZone     = lcTaxZone
       PrePaidRequest.OrigRequest = liOrigReq.
    
-   RUN Gwy/pp_platform.p(Syst.CUICommon:gcBrand,PrePaidRequest.PPRequest).
+   RUN Gwy/pp_platform.p(Syst.Var:gcBrand,PrePaidRequest.PPRequest).
    
    lcXML = RETURN-VALUE.
    
@@ -226,12 +226,12 @@ PROCEDURE pAdjustBalance:
 
       CREATE Memo.
       ASSIGN 
-         Memo.Brand     = Syst.CUICommon:gcBrand
+         Memo.Brand     = Syst.Var:gcBrand
          Memo.HostTable = "MobSub"
          Memo.KeyValue  = STRING(MobSub.MsSeq)
          Memo.CustNum   = MobSub.CustNum
          Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-         Memo.CreUser   = Syst.CUICommon:katun 
+         Memo.CreUser   = Syst.Var:katun 
          Memo.MemoTitle = "MINUS ADJUSTMENT"
          Memo.MemoText  = "Deducted " + STRING(-1 * ldAmount) + 
                           " eur according to file " + lcPlainFile +

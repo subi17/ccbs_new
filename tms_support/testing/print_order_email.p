@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-Syst.CUICommon:katun = "Qvantel".
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
 {Syst/utumaa.i new }
 {Func/feplstart.i}
 {Func/cparam2.i}
@@ -76,7 +76,7 @@ END.
 DO WHILE TRUE:
 
    FOR FIRST InvText NO-LOCK WHERE 
-             InvText.Brand     = Syst.CUICommon:gcBrand     AND
+             InvText.Brand     = Syst.Var:gcBrand     AND
              InvText.Target    = "OrderConf" AND
              InvText.KeyValue  = lcEmailKey  AND
              InvText.FromDate <= ldtDate     AND

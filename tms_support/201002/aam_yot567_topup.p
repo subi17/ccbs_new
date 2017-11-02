@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-Syst.CUICommon:katun = "Qvantel".
+Syst.Var:katun = "Qvantel".
 {Func/ftaxdata.i}
 {Func/ftopup.i}
 

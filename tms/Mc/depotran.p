@@ -44,7 +44,7 @@ FUNCTION fCreateOPLog RETURNS LOGICAL
     ASSIGN
     OPLog.CustNum   = iiCustNum
     OPLog.EventDate = TODAY
-    OPLog.UserCode  = Syst.CUICommon:katun
+    OPLog.UserCode  = Syst.Var:katun
     OPLog.EventType = iiType      
     OPLog.InvNum    = Invoice.InvNum
     OPLog.Voucher   = 0
@@ -70,7 +70,7 @@ END FUNCTION.
 
 
 FIND Order NO-LOCK WHERE 
-     Order.Brand   = Syst.CUICommon:gcBrand AND
+     Order.Brand   = Syst.Var:gcBrand AND
      Order.OrderID = iiOrder NO-ERROR.
 IF NOT AVAILABLE Order THEN DO:
    ocError = "Unknown order".
@@ -105,7 +105,7 @@ DO liCnt = 1 TO 2:
 
    /* find deposit fee -> get invoice */
    FOR FIRST SingleFee NO-LOCK WHERE
-             SingleFee.Brand     = Syst.CUICommon:gcBrand               AND
+             SingleFee.Brand     = Syst.Var:gcBrand               AND
              SingleFee.HostTable = "Order"               AND
              SingleFee.KeyValue  = STRING(Order.OrderID) AND
              SingleFee.BillCode  = lcItem[liCnt]:

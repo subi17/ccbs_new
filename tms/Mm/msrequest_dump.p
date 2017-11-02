@@ -135,7 +135,7 @@ PROCEDURE pDumpToFile:
          END.         
          WHEN "#Memo" THEN DO:
             FOR EACH Memo NO-LOCK WHERE
-                     Memo.Brand = Syst.CUICommon:gcBrand AND
+                     Memo.Brand = Syst.Var:gcBrand AND
                      Memo.HostTable = "MsRequest" AND
                      Memo.KeyValue  = STRING(MsRequest.MsRequest)
             BY Memo.CreStamp:
@@ -194,7 +194,7 @@ PROCEDURE pDumpRequests:
    FOR EACH ttStatus NO-LOCK:
       /* YOT-4874 Add to dump also old requests where new updatestamp */
       FOR EACH MsRequest NO-LOCK USE-INDEX UpdateStamp WHERE
-               MsRequest.Brand     = Syst.CUICommon:gcBrand AND
+               MsRequest.Brand     = Syst.Var:gcBrand AND
                MsRequest.ReqStatus = ttStatus.ReqStatus AND
                MsRequest.UpdateStamp >= idLastDump AND
                MsRequest.ActStamp < ldFromStamp
@@ -211,7 +211,7 @@ PROCEDURE pDumpRequests:
       END.
 
       FOR EACH MsRequest NO-LOCK USE-INDEX ReqStatus WHERE
-               MsRequest.Brand     = Syst.CUICommon:gcBrand AND
+               MsRequest.Brand     = Syst.Var:gcBrand AND
                MsRequest.ReqStatus = ttStatus.ReqStatus AND
                MsRequest.ActStamp >= ldFromStamp
          ON QUIT UNDO, RETRY

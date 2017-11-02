@@ -13,7 +13,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Mc/invoicetarget.i}
 
 DEF VAR piCustNum AS INT NO-UNDO.
@@ -40,7 +40,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 pcUserName = "VISTA_" + get_string(pcStruct,"username").
 piCustNum = get_int(pcStruct,"customer_id").
-Syst.CUICommon:katun = pcUserName. 
+Syst.Var:katun = pcUserName. 
 IF LOOKUP("reason",lcStruct) > 0 THEN 
 pcReason = get_string(pcStruct,"reason").
 IF LOOKUP("default",lcStruct) > 0 THEN 
@@ -104,11 +104,11 @@ DO TRANS:
       CREATE Memo.
       ASSIGN
           Memo.CreStamp  = {&nowTS}
-          Memo.Brand     = Syst.CUICommon:gcBrand 
+          Memo.Brand     = Syst.Var:gcBrand 
           Memo.HostTable = "Customer" 
           Memo.KeyValue  = STRING(piCustNum) 
           Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-          Memo.CreUser   = Syst.CUICommon:katun 
+          Memo.CreUser   = Syst.Var:katun 
           Memo.MemoTitle = "Invoice Target Group Add"
           Memo.MemoText  = pcReason
           Memo.CustNum   = piCustNum. 

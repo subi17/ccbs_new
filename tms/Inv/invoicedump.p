@@ -104,7 +104,7 @@ IF icDumpMode = "Full" THEN DO:
 
    /* Dump ALL invoices */
    FOR EACH invoice NO-LOCK USE-INDEX InvDate WHERE
-            invoice.brand    = Syst.CUICommon:gcBrand    AND
+            invoice.brand    = Syst.Var:gcBrand    AND
             invoice.invdate >= ldFromDate AND
             Invoice.DeliveryState > 0
        ON QUIT UNDO, RETRY
@@ -148,7 +148,7 @@ ELSE DO:
    EMPTY TEMP-TABLE ttInv.
 
    FOR EACH invoice NO-LOCK WHERE
-            invoice.brand    = Syst.CUICommon:gcBrand    AND
+            invoice.brand    = Syst.Var:gcBrand    AND
             invoice.invdate >= ldFromDate AND
             Invoice.DeliveryState > 0
       ON QUIT UNDO, RETRY

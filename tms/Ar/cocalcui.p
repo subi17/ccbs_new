@@ -44,7 +44,7 @@ FORM
       FORMAT "X(8)"
       VALIDATE(INPUT lcInvGroup = "" OR
                CAN-FIND(InvGroup WHERE 
-                        InvGroup.Brand    = Syst.CUICommon:gcBrand AND
+                        InvGroup.Brand    = Syst.Var:gcBrand AND
                         InvGroup.InvGroup = INPUT lcInvGroup),
               "Unknown invoicing group")
 
@@ -84,7 +84,7 @@ FORM
       HELP "Rule that is used, 0 (empty) = ALL"
       VALIDATE(INPUT liCoRuleID = 0 OR 
                CAN-FIND(CoRule WHERE 
-                        CoRule.Brand    = Syst.CUICommon:gcBrand AND
+                        CoRule.Brand    = Syst.Var:gcBrand AND
                         CORule.CoRuleID = INPUT liCoRuleID),
                "Unknown rule")
       FORMAT ">>>>>>>>"
@@ -111,7 +111,7 @@ FORM
       HELP "EMPTY = all resellers"
       VALIDATE(INPUT lcReseller = "" OR
                CAN-FIND(Reseller WHERE
-                        Reseller.Brand    = Syst.CUICommon:gcBrand AND
+                        Reseller.Brand    = Syst.Var:gcBrand AND
                         Reseller.Reseller = INPUT lcReseller),
                "Unknown reseller")
       FORMAT "X(8)"
@@ -125,7 +125,7 @@ FORM
       HELP "EMPTY = all salesmen"
       VALIDATE(INPUT lcSalesman = "" OR
                CAN-FIND(Salesman WHERE 
-                        Salesman.Brand    = Syst.CUICommon:gcBrand AND
+                        Salesman.Brand    = Syst.Var:gcBrand AND
                         Salesman.Salesman = INPUT lcSalesman),
                "Unknown salesman")
       FORMAT "X(8)"
@@ -147,7 +147,7 @@ FORM
       SKIP(2)
 
    WITH ROW 1 side-labels width 80
-        title " " + Syst.CUICommon:ynimi + " COMMISSION CALCULATION " +
+        title " " + Syst.Var:ynimi + " COMMISSION CALCULATION " +
         string(TODAY,"99-99-99") + " "
         FRAME fCriter.
 
@@ -159,7 +159,7 @@ FUNCTION fReseller RETURNS LOGICAL
 
    ELSE DO:
       FIND Reseller WHERE 
-           Reseller.Brand    = Syst.CUICommon:gcBrand AND
+           Reseller.Brand    = Syst.Var:gcBrand AND
            Reseller.Reseller = icReseller
       NO-LOCK NO-ERROR.
       IF AVAILABLE Reseller THEN DISPLAY Reseller.RsName WITH FRAME fCriter. 
@@ -175,7 +175,7 @@ FUNCTION fSalesman RETURNS LOGICAL
 
    ELSE DO:
       FIND Salesman WHERE   
-           Salesman.Brand    = Syst.CUICommon:gcBrand AND
+           Salesman.Brand    = Syst.Var:gcBrand AND
            Salesman.Salesman = icSalesman
       NO-LOCK NO-ERROR.
       IF AVAILABLE Salesman THEN DISPLAY Salesman.SmName WITH FRAME fCriter.
@@ -192,7 +192,7 @@ ASSIGN liCustNum2    = 999999999
        ldtDate1      = DATE(MONTH(ldtDate2),1,YEAR(ldtDate2))
 
        ufkey         = FALSE
-       Syst.CUICommon:nap           = "1".
+       Syst.Var:nap           = "1".
 
 toimi:
 REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
@@ -215,22 +215,22 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
       IF ufkey THEN DO:
          ASSIGN
-         Syst.CUICommon:ufk[1]= 7    Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
-         Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 879 ELSE 0)
-         Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 
-         Syst.CUICommon:ufk[9]= 1
-         Syst.CUICommon:ehto = 3 .
+         Syst.Var:ufk[1]= 7    Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 879 ELSE 0)
+         Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 
+         Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 .
          RUN Syst/ufkey.p.
 
          READKEY.
-         Syst.CUICommon:nap = keylabel(LASTKEY).
+         Syst.Var:nap = keylabel(LASTKEY).
       END.
       ELSE ufkey = TRUE.
       
-      IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO:
 
          repeat WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
-             Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+             Syst.Var:ehto = 9. RUN Syst/ufkey.p.
              UPDATE 
                 lcInvGroup
                 liCustNum1
@@ -247,14 +247,14 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
              WITH FRAME fCriter EDITING:
                 READKEY.
 
-                IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
+                IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
 
                    IF FRAME-FIELD = "lcInvGroup" THEN DO:
                       IF INPUT lcInvGroup = "" 
                       THEN DISPLAY "ALL" ;& InvGroup.IGName. 
                       ELSE DO:
                          FIND InvGroup WHERE  
-                              InvGroup.Brand    = Syst.CUICommon:gcBrand AND
+                              InvGroup.Brand    = Syst.Var:gcBrand AND
                               InvGroup.InvGroup = INPUT lcInvGroup
                          NO-LOCK NO-ERROR.
                          IF AVAILABLE InvGroup THEN DISPLAY InvGroup.IGName.
@@ -291,7 +291,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
          NEXT toimi.
       END.
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW"
+      ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW"
       THEN DO:
 
          llOk = TRUE. 
@@ -303,7 +303,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
          IF NOT llOk THEN NEXT.
 
-         Syst.CUICommon:ehto = 5.
+         Syst.Var:ehto = 5.
          RUN Syst/ufkey.p.
 
          RUN Ar/cocalc.p(lcInvGroup,
@@ -328,11 +328,11 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
       END.
 
-      ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN DO:
          LEAVE toimi.
       END.
 
-END. /* Syst.CUICommon:toimi */
+END. /* Syst.Var:toimi */
 
 HIDE MESSAGE NO-PAUSE.
 HIDE FRAME fCriter NO-PAUSE.    

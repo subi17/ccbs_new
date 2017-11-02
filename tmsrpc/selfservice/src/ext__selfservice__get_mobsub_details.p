@@ -43,8 +43,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-Syst.CUICommon:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
-Syst.CUICommon:gcBrand = "1".
+Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Mm/fbundle.i}
 {Func/fixedfee.i}
@@ -121,7 +121,7 @@ IF LOOKUP(lcAppId,"501,502") > 0 THEN DO:
       MobSub.MultiSIMID > 0 THEN DO:
 
       FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSIMID WHERE
-                 lbMobSub.Brand = Syst.CUICommon:gcBrand AND
+                 lbMobSub.Brand = Syst.Var:gcBrand AND
                  lbMobSub.MultiSimID = MobSub.MultiSimID AND
                  lbMobSub.MultiSimType NE MobSub.MultiSimType AND
                  lbMobSub.Custnum = MobSub.Custnum NO-ERROR.
@@ -144,7 +144,7 @@ ELSE DO:
    add_int(top_struct, "language", Customer.Language).
    add_boolean(top_struct, "paytype", MobSub.PayType).
 
-   lcSubscriptionName = fGetItemName(Syst.CUICommon:gcBrand,
+   lcSubscriptionName = fGetItemName(Syst.Var:gcBrand,
                                      "CLIType",
                                      lcSubscriptionType,
                                      Customer.Language,
@@ -194,7 +194,7 @@ FOR EACH DCCLI NO-LOCK WHERE
          DCCLI.ValidTo   >= TODAY AND
          DCCLI.CreateFees = TRUE,
    FIRST DayCampaign WHERE
-         DayCampaign.Brand = Syst.CUICommon:gcBrand AND
+         DayCampaign.Brand = Syst.Var:gcBrand AND
          DayCampaign.DCEvent = DCCLI.DCEvent AND
          DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND
          DayCampaign.TermFeeModel NE "" AND
@@ -226,7 +226,7 @@ FOR EACH DCCLI NO-LOCK WHERE
                                           DayCampaign.TermFeeModel,
                                           TODAY).
          FIND FIRST FMItem NO-LOCK WHERE
-                    FMItem.Brand     = Syst.CUICommon:gcBrand       AND
+                    FMItem.Brand     = Syst.Var:gcBrand       AND
                     FMItem.FeeModel  = DayCampaign.TermFeeModel AND
                     FMItem.PriceList = lcPriceList AND
                     FMItem.FromDate <= TODAY     AND

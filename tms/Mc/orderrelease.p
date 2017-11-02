@@ -13,7 +13,7 @@ DEF VAR llOk     AS LOG  NO-UNDO.
 DEF VAR lcStatus AS CHAR NO-UNDO.
 
 FIND FIRST Order WHERE 
-           Order.Brand   = Syst.CUICommon:gcBrand AND 
+           Order.Brand   = Syst.Var:gcBrand AND 
            Order.OrderID = iiOrder
            EXCLUSIVE-LOCK NO-ERROR.
 
@@ -40,7 +40,7 @@ SET llOk.
 IF NOT llOk THEN RETURN.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    
    {Func/lib/eventlog.i}
       
@@ -62,17 +62,17 @@ IF Order.CREventQty = 0 AND
    Order.CredOk = FALSE THEN DO: /* Credit scoring is not tried yet */
    
    FIND FIRST OrderCustomer WHERE
-      OrderCustomer.Brand = Syst.CUICommon:gcBrand AND
+      OrderCustomer.Brand = Syst.Var:gcBrand AND
       OrderCustomer.OrderId = Order.OrderId AND
       OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
    IF OrderCustomer.CustidType = "CIF" THEN DO:
       FIND FIRST Customer WHERE
-         Customer.Brand = Syst.CUICommon:gcBrand AND 
+         Customer.Brand = Syst.Var:gcBrand AND 
          Customer.OrgId = OrderCustomer.CustId AND
          Customer.CustIdType = OrderCustomer.CustIdType NO-LOCK NO-ERROR. 
       IF AVAIL Customer THEN DO:
          FIND FIRST MobSub WHERE
-                    MobSub.Brand   = Syst.CUICommon:gcBrand AND
+                    MobSub.Brand   = Syst.Var:gcBrand AND
                     MobSub.AgrCust = Customer.CustNum
               NO-LOCK NO-ERROR.
          IF NOT AVAIL MobSub THEN lcStatus = "20".
