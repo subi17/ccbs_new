@@ -9,7 +9,6 @@
   Version ......: 
   ---------------------------------------------------------------------- */
 
-{Func/timestamp.i}
 {Func/fmakemsreq.i}
 {Syst/tmsconst.i}
 {Func/ftaxdata.i}
@@ -51,9 +50,9 @@ IF MobSub.PayType THEN DO:
     CREATE PrePaidRequest.
 
     ASSIGN
-          PrePaidRequest.TSRequest   = fMakeTS()
+          PrePaidRequest.TSRequest   = Func.Common:mMakeTS()
           PrePaidRequest.UserCode    = icUserCode 
-          PrePaidRequest.Brand       = gcBrand
+          PrePaidRequest.Brand       = Syst.CUICommon:gcBrand
           PrePaidRequest.PPRequest   =  NEXT-VALUE(PrePaidReq)
           PrePaidRequest.PPStatus    = 0
           PrePaidRequest.Request     = "AdjustmentTRequest"

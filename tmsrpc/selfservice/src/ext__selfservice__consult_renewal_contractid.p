@@ -23,9 +23,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-ASSIGN katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
-       gcBrand = "1".
-{Func/timestamp.i}
+ASSIGN Syst.CUICommon:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
+       Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/forderstamp.i}
 {Func/fgettxt.i}
@@ -75,7 +74,7 @@ lcApplicationId = substring(pcTransId,1,3).
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName, lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
-katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
+Syst.CUICommon:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
 IF LOOKUP(pcDelType,"SMS") = 0 THEN
    RETURN appl_err("Invalid Delivery Type").
@@ -93,10 +92,10 @@ FOR EACH Order WHERE
    IF liCount >= 3 THEN LEAVE.
    liTotalCount = liTotalCount + 1.
 
-   fSplitTS(Order.CrStamp,ldOrderDate,liOrderTime).
+   Func.Common:mSplitTS(Order.CrStamp,ldOrderDate,liOrderTime).
 
    FIND FIRST OrderCustomer NO-LOCK WHERE
-              OrderCustomer.Brand EQ gcBrand AND
+              OrderCustomer.Brand EQ Syst.CUICommon:gcBrand AND
               Ordercustomer.OrderID EQ Order.OrderId AND
               OrderCustomer.Rowtype EQ 1 NO-ERROR.
    IF NOT AVAIL OrderCustomer THEN 
@@ -108,7 +107,7 @@ FOR EACH Order WHERE
       ELSE
          ldeOrderStamp = fGetOrderStamp(Order.OrderId,"Close").
 
-      fSplitTS(ldeOrderStamp,ldFinalOrderDate,liFinalOrderTime).
+      Func.Common:mSplitTS(ldeOrderStamp,ldFinalOrderDate,liFinalOrderTime).
 
       IF ldFinalOrderDate <> ? THEN DO:
          IF ldFinalOrderDate < (TODAY - 30) THEN NEXT.
@@ -143,7 +142,7 @@ ELSE IF NOT llOngoing THEN DO:
       RETURN appl_err("Renewal order already cancelled").
    ELSE IF llDelivered THEN DO:
       FIND FIRST MobSub WHERE
-                 MobSub.Brand = gcBrand AND
+                 MobSub.Brand = Syst.CUICommon:gcBrand AND
                  MobSub.CLI   = pcCLI NO-LOCK NO-ERROR.
       IF NOT AVAIL MobSub THEN
          RETURN appl_err("Subscription is cancelled"). 
@@ -180,5 +179,4 @@ FINALLY:
    /* Store the transaction id */
    ghAuthLog::TransactionId = pcTransId.
 
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

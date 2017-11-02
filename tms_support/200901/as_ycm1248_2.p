@@ -13,8 +13,8 @@ def stream sout.
 output stream sout to /apps/snet/200901/as_yts1248_3.log append. 
 
 {Syst/commpaa.i}
-katun = "anttis".
-gcBrand = "1".
+Syst.CUICommon:katun = "anttis".
+Syst.CUICommon:gcBrand = "1".
 {Func/fmakemsreq.i}
 DEFINE VARIABLE liReq AS INTEGER NO-UNDO. 
 DEFINE VARIABLE lcInfo AS CHAR NO-UNDO. 
@@ -47,7 +47,7 @@ FOR EACH mobsub where mobsub.brand = "1" NO-LOCK:
                                     TRIM(SubSer.ServCom),
                                     SubSer.SSStat,
                                     SubSer.SSParam,
-                                    fMakeTS(),
+                                    Func.Common:mMakeTS(),
                                     "",
                                     FALSE,      /* fees */
                                     FALSE,      /* sms */

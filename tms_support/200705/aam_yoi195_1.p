@@ -1,7 +1,7 @@
 {Syst/testpaa.i}
 {Func/fmakemsreq.i}
 
-katun = "ari".
+Syst.CUICommon:katun = "ari".
 
 def var i       as int  no-undo.
 def var j       as int  no-undo.
@@ -34,7 +34,7 @@ for each msowner no-lock where
       */
            
 
-      fsplitts(msrequest.actstamp,
+      Func.Common:mSplitTS(msrequest.actstamp,
                output ldtdate,
                output i).
          

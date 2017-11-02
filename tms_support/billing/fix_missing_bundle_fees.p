@@ -1,10 +1,9 @@
-{Func/date.i}
 {Syst/commpaa.i}
-katun = "anttis".
-gcBrand = "1".
+Syst.CUICommon:katun = "anttis".
+Syst.CUICommon:gcBrand = "1".
 
 DEFINE VARIABLE ldeNow AS DECIMAL NO-UNDO. 
-ldeNow = fmakets().
+ldeNow = Func.Common:mMakeTS().
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 DEFINE VARIABLE lcBillCode AS CHARACTER NO-UNDO. 
 def buffer stcrequest for msrequest. 
@@ -47,7 +46,7 @@ FOR EACH servicelimit where
          end.
       end.
 
-      fSplitTs(mservicelimit.fromts,output ldaDate, output liTime).
+      Func.Common:mSplitTS(mservicelimit.fromts,output ldaDate, output liTime).
       liPeriod = year(ldaDate) * 100 + month(ldaDate).
 
       FIND FIRST fixedfee where
@@ -82,14 +81,14 @@ FOR EACH servicelimit where
             find bMServicelimit where
                rowid(bMServicelimit) = rowid(mservicelimit) EXCLUSIVE-LOCK.
       
-            fSplitTs(stcrequest.donestamp,output ldaDate, output liTime).
+            Func.Common:mSplitTS(stcrequest.donestamp,output ldaDate, output liTime).
 
             put stream sout unformatted
                servicelimit.groupcode "|"
-               fts2hms(mservicelimit.fromts) "|"
-               fts2hms(msrequest.actstamp) "|"
-               fts2hms(stcrequest.actstamp) "|"
-               fts2hms(stcrequest.donestamp) "|"
+               Func.Common:mTS2HMS(mservicelimit.fromts) "|"
+               Func.Common:mTS2HMS(msrequest.actstamp) "|"
+               Func.Common:mTS2HMS(stcrequest.actstamp) "|"
+               Func.Common:mTS2HMS(stcrequest.donestamp) "|"
                order.orderchannel "|"
                stcrequest.reqcparam1 "|"
                stcrequest.reqcparam2 "|"

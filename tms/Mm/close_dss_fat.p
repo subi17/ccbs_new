@@ -8,12 +8,10 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-gcBrand = "1".
-katun   = "CRON".
+Syst.CUICommon:gcBrand = "1".
+Syst.CUICommon:katun = "CRON".
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/fcpfat.i}
-{Func/date.i}
 {Mm/active_bundle.i}
 
 DEF VAR lcPromotionPath          AS CHAR NO-UNDO.
@@ -55,20 +53,20 @@ IF liMonth = 1 THEN
 ELSE
    ldaFirstDayOfLastMonth = DATE((liMonth - 1),1,YEAR(TODAY)).
 
-ASSIGN ldeStamp          = fMakeTS()
-       ldeCurrentMonthStamp = fMake2Dt(DATE(MONTH(TODAY),1,YEAR(TODAY)),0)
+ASSIGN ldeStamp          = Func.Common:mMakeTS()
+       ldeCurrentMonthStamp = Func.Common:mMake2DT(DATE(MONTH(TODAY),1,YEAR(TODAY)),0)
        ldaPromoFromDate  = fCParamDa("DSSPromoFromDate")
        ldaPromoToDate    = fCParamDa("DSSPromoEndDate")
        lcPromotionPath   = fCParamC("DSSPromoFilePath")
-       ldPromoPeriodFrom = fMake2Dt(ldaPromoFromDate,0)
-       ldPromoPeriodTo   = fMake2Dt(ldaPromoToDate,86399)
-       ldaLastDayOfLastMonth = fLastDayOfMonth(ldaFirstDayOfLastMonth)
+       ldPromoPeriodFrom = Func.Common:mMake2DT(ldaPromoFromDate,0)
+       ldPromoPeriodTo   = Func.Common:mMake2DT(ldaPromoToDate,86399)
+       ldaLastDayOfLastMonth = Func.Common:mLastDayOfMonth(ldaFirstDayOfLastMonth)
        liCurrentMonthPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
-       ldeNextMonth = fMake2Dt(fLastDayOfMonth(TODAY) + 1,0)
+       ldeNextMonth = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(TODAY) + 1,0)
        liLastMonthPeriod = YEAR(ldaFirstDayOfLastMonth) * 100 +
                            MONTH(ldaFirstDayOfLastMonth)
-       ldPeriodFrom = fMake2Dt(ldaFirstDayOfLastMonth,0)
-       ldPeriodTo   = fMake2Dt(ldaLastDayOfLastMonth,86399)
+       ldPeriodFrom = Func.Common:mMake2DT(ldaFirstDayOfLastMonth,0)
+       ldPeriodTo   = Func.Common:mMake2DT(ldaLastDayOfLastMonth,86399)
        lcLogFile        = lcPromotionPath + "/close_dss_fat_" +
        STRING(liLastMonthPeriod) + "_" + STRING(ldeStamp) + ".log".
 
@@ -76,7 +74,7 @@ DEF BUFFER lbMobSub FOR MobSub.
 
 FAT_LOOP:
 FOR EACH FATime WHERE
-         FATime.Brand  = gcBrand AND
+         FATime.Brand  = Syst.CUICommon:gcBrand AND
          FATime.FTGrp  = "DSSCPFREE" AND
          FATime.InvNum = 0 AND
          FATime.LastPeriod > liLastMonthPeriod NO-LOCK,
@@ -92,14 +90,14 @@ FOR EACH FATime WHERE
              ttDSSFat.CLI      = FATime.CLI
              ttDSSFat.Remark1  = "DSS is not active".
       NEXT.
-   END. /* IF fGetActiveSpecificBundle(FATime.MsSeq,fMakeTS() */
+   END. /* IF fGetActiveSpecificBundle(FATime.MsSeq,Func.Common:mMakeTS() */
 
    /* Check if any  multisim subscription pair is active */
    FOR EACH MobSub NO-LOCK WHERE
             MobSub.Custnum = Customer.Custnum AND
             MobSub.MultiSimID > 0,
       FIRST lbMobSub NO-LOCK WHERE
-            lbMobSub.Brand = gcBrand AND
+            lbMobSub.Brand = Syst.CUICommon:gcBrand AND
             lbMobSub.MultiSImID = Mobsub.MultiSImID AND
             lbMobSub.MultiSimType NE Mobsub.MultiSIMType:
       IF Mobsub.Custnum NE lbMobSub.Custnum THEN LEAVE.
@@ -127,7 +125,7 @@ FOR EACH FATime WHERE
              FIRST bServiceLimit NO-LOCK USE-INDEX SlSeq WHERE
                    bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
              FIRST bDayCampaign NO-LOCK WHERE
-                   bDayCampaign.Brand = gcBrand AND
+                   bDayCampaign.Brand = Syst.CUICommon:gcBrand AND
                    bDayCampaign.DCEvent = bServiceLimit.GroupCode AND
                    LOOKUP(bDayCampaign.DCType,
                           {&PERCONTRACT_RATING_PACKAGE}) > 0:

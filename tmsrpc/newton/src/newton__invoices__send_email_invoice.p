@@ -7,7 +7,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/femailinvoice.i}
 
@@ -26,10 +26,10 @@ IF TRIM(pcUsername) EQ "" THEN RETURN appl_err("username is empty").
 
 {newton/src/settenant.i pcTenant}
 
-katun = "VISTA_" + pcUserName.
+Syst.CUICommon:katun = "VISTA_" + pcUserName.
 
 liRequestID = fSendeInvoiceRequest(
-                      INPUT fMakeTS(),
+                      INPUT Func.Common:mMakeTS(),
                       INPUT DATE(MONTH(TODAY),1,YEAR(TODAY)),
                       INPUT pcUserName, /* creator */
                       INPUT ({&REQUEST_SOURCE_NEWTON}),
@@ -40,5 +40,4 @@ IF liRequestID = 0 THEN RETURN appl_err(lcError).
 add_boolean(response_toplevel_id,?,TRUE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

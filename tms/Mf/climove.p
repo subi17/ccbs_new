@@ -10,7 +10,6 @@
   ------------------------------------------------------ */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
 DEF INPUT PARAMETER CustNum LIKE Customer.CustNum.
 
@@ -87,7 +86,7 @@ form
    ttCLISer.vTime
       help "A Text for Customer Care"        
 WITH OVERLAY scroll 1 15 DOWN ROW 1 centered WIDTH 80
-   COLOR value(cfc) TITLE COLOR value(ctc)
+   COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
    " " + string(Customer.CustNum) + " " + 
    substr(Customer.CustName,1,16) + ":  A-sub. nos. "
 FRAME sel.
@@ -103,10 +102,10 @@ FRAME frmSetTime.
 
 form /* FIND asub */
    asub help "Enter A-Number OR beginning of it"
-with row 4 col 2 title color value(ctc) " FIND ASUB No. "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME search-1.
+with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND ASUB No. "
+   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME search-1.
 
-cfc = "kline". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "kline". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 ASSIGN
@@ -167,15 +166,15 @@ BROWSE:
       IF ufkey THEN DO:
 
          ASSIGN
-            ufk[1] = 701
-            ufk[2] = 702
-            ufk[3] = 509
-            ufk[4] = 507
-            ufk[5] = 56
-            ufk[6] = 508
-            ufk[8] = 8 
-            ufk[9] = 1
-            ehto   = 3
+            Syst.CUICommon:ufk[1] = 701
+            Syst.CUICommon:ufk[2] = 702
+            Syst.CUICommon:ufk[3] = 509
+            Syst.CUICommon:ufk[4] = 507
+            Syst.CUICommon:ufk[5] = 56
+            Syst.CUICommon:ufk[6] = 508
+            Syst.CUICommon:ufk[8] = 8 
+            Syst.CUICommon:ufk[9] = 1
+            Syst.CUICommon:ehto   = 3
             ufkey  = FALSE.
 
          RUN Syst/ufkey.p.
@@ -184,7 +183,7 @@ BROWSE:
 
       HIDE MESSAGE no-pause.
       CHOOSE ROW ttCLISer.CLIFrom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-      COLOR DISPLAY value(ccc) ttCLISer.CLIFrom WITH FRAME sel.
+      COLOR DISPLAY value(Syst.CUICommon:ccc) ttCLISer.CLIFrom WITH FRAME sel.
 
       IF rtab[FRAME-LINE] = ? THEN DO:
          BELL.
@@ -193,14 +192,14 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* Search 1 */
-      if lookup(nap,"F1,1") > 0 THEN DO:
-         cfc = "puyr". RUN Syst/ufcolor.p.
+      if lookup(Syst.CUICommon:nap,"F1,1") > 0 THEN DO:
+         Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
          assign
             asub  = ""
-            ehto  = 9
+            Syst.CUICommon:ehto  = 9
             ufkey = TRUE.
          RUN Syst/ufkey.p. 
          UPDATE asub WITH FRAME search-1.
@@ -219,7 +218,7 @@ BROWSE:
          END.
       END. /* Search col. 1 */
 
-      if lookup(nap,"F2,2") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"F2,2") > 0 THEN DO:
 
          FIND ttCLISer WHERE recid(ttCLISer) = rtab[FRAME-LINE] EXCLUSIVE-LOCK.
          IF ttCLISer.move = FALSE THEN DO:
@@ -233,7 +232,7 @@ BROWSE:
 
       END.
 
-      ELSE IF LOOKUP(nap,"F3,3") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"F3,3") > 0 THEN DO:
 
          FIND ttCLISer WHERE recid(ttCLISer) = rtab[FRAME-LINE] EXCLUSIVE-LOCK.
 
@@ -266,12 +265,12 @@ BROWSE:
          WITH FRAME sel.
 
       END.
-      ELSE IF LOOKUP(nap,"F4,4") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"F4,4") > 0 THEN DO:
 
          FIND ttCLISer WHERE recid(ttCLISer) = rtab[FRAME-LINE] EXCLUSIVE-LOCK.
 
          ASSIGN
-            ehto  = 9
+            Syst.CUICommon:ehto  = 9
             ufkey = TRUE.
 
          RUN Syst/ufkey.p.
@@ -286,11 +285,11 @@ BROWSE:
          WITH FRAME frmSetTime EDITING:
 
             READKEY.
-            nap = KEYLABEL(LASTKEY).
+            Syst.CUICommon:nap = KEYLABEL(LASTKEY).
 
-            IF LOOKUP(nap,poisnap) > 0 THEN DO:
+            IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
                IF FRAME-FIELD = "movetime" AND
-                  NOT fCheckTime(INPUT FRAME frmSetTime movetime) THEN DO:
+                  NOT Func.Common:mCheckTime(INPUT FRAME frmSetTime movetime) THEN DO:
                   MESSAGE 
                      "Invalid time: " + INPUT FRAME frmSetTime movetime 
                   VIEW-AS ALERT-BOX error.
@@ -303,7 +302,7 @@ BROWSE:
 
          END.
 
-         lTimeStamp = fHMS2TS(movedate,movetime).
+         lTimeStamp = Func.Common:mHMS2TS(movedate,movetime).
 
          IF ttCLISer.move = TRUE THEN DO:
 
@@ -322,7 +321,7 @@ BROWSE:
          HIDE FRAME frmSetTime.
 
       END.
-      ELSE IF LOOKUP(nap,"F5,5") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"F5,5") > 0 THEN DO:
 
          IF NOT fCheckTS() THEN NEXT BROWSE.
 
@@ -355,7 +354,7 @@ BROWSE:
          NEXT LOOP.
 
       END.
-      ELSE IF LOOKUP(nap,"F6,6") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"F6,6") > 0 THEN DO:
 
          IF NOT fCheckTS() THEN NEXT BROWSE.
 
@@ -441,7 +440,7 @@ BROWSE:
       END.
 
       /* previous line */
-      ELSE IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND ttCLISer WHERE recid(ttCLISer) = rtab[1] NO-LOCK.
             FIND prev ttCLISer WHERE ttCLISer.CustNum = CustNum
@@ -469,7 +468,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
 
          IF FRAME-LINE = FRAME-DOWN THEN DO:
@@ -499,7 +498,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      ELSE IF LOOKUP(nap,"prev-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND ttCLISer WHERE recid(ttCLISer) = memory NO-LOCK NO-ERROR.
          FIND prev ttCLISer WHERE ttCLISer.CustNum = CustNum
@@ -527,7 +526,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
 
         /* cursor TO the downmost line */
 
@@ -544,7 +543,7 @@ BROWSE:
         END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN DO TRANSACTION:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN DO TRANSACTION:
         /* change */
         FIND ttCLISer WHERE recid(ttCLISer) = rtab[frame-line(sel)] 
         EXCLUSIVE-LOCK NO-ERROR.
@@ -558,7 +557,7 @@ BROWSE:
         WITH FRAME sel.
      END.
 
-     ELSE IF LOOKUP(nap,"home,h") > 0 THEN DO: /* ensimmainen tietue */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,h") > 0 THEN DO: /* ensimmainen tietue */
         FIND FIRST ttCLISer WHERE 
                    ttCLISer.CustNum = CustNum 
         USE-INDEX CustNum NO-LOCK NO-ERROR.
@@ -568,7 +567,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"end,e") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
         FIND LAST ttCLISer WHERE
                   ttCLISer.CustNum = CustNum 
         USE-INDEX CustNum NO-LOCK.
@@ -578,13 +577,13 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE local-disp-row:
 

@@ -8,14 +8,13 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:katun = "Cron".
+Syst.CUICommon:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Syst/eventlog.i}
 {Func/cparam2.i}
-{Func/date.i}
 {Func/fgettxt.i}
 {Func/smsmessage.i}
 
@@ -117,7 +116,7 @@ REPEAT:
          NEXT.
       END.
       FIND FIRST Order WHERE
-                 Order.brand EQ gcBrand AND
+                 Order.brand EQ Syst.CUICommon:gcBrand AND
                  Order.orderid EQ INT(lcYoigoOrderId) AND
                  LOOKUP(order.statuscode,{&ORDER_INACTIVE_STATUSES}) = 0 
                  NO-LOCK NO-ERROR.
@@ -127,7 +126,7 @@ REPEAT:
          NEXT.
       END.
       FIND FIRST CliType WHERE
-                 Clitype.brand EQ gcBrand AND
+                 Clitype.brand EQ Syst.CUICommon:gcBrand AND
                  Clitype.clitype EQ order.clitype NO-LOCK NO-ERROR.
      IF NOT AVAIL Clitype THEN DO:
          fLogLine("ERROR:Order " + lcTempOrderId + " with incorrect clitype " + 
@@ -172,7 +171,7 @@ PROCEDURE pHandleSALfile:
       FusionMessage.AdditionalInfo = icSALOrderId
       FusionMessage.MessageSeq = NEXT-VALUE(FusionMessageSeq)
       FusionMessage.OrderID = INT(icYoigoOrderID)
-      FusionMessage.CreatedTS = fMakeTS()
+      FusionMessage.CreatedTS = Func.Common:mMakeTS()
       FusionMessage.UpdateTS = FusionMessage.CreatedTS
       FusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_LOGISTICS} 
       FusionMessage.Source = "MasMovil"

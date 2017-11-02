@@ -36,8 +36,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-katun = "NewtonRPC".
-gcBrand = "1".
+Syst.CUICommon:katun = "NewtonRPC".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Inv/fusioninvoice.i}
 
@@ -172,5 +172,4 @@ IF Fusion.InvNum > 0 THEN DO:
 END.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

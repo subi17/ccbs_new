@@ -24,19 +24,19 @@ def var must-add    as logic                no-undo.
 form
    Country.Country
    Country.COName  format "x(30)"
-with scroll 1 11 down  row 4 centered color value(cfc)
-   title color value(ctc) " Country " overlay 
+with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
+   title color value(Syst.CUICommon:ctc) " Country " overlay 
 frame sel.
 
 form /* SEEK Code */
    se-code
       help "Enter Code of Country"
 with
-   row 4 col 2 title color value(ctc) " FIND CODE "
-   color value(cfc) no-labels overlay
+   row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
+   color value(Syst.CUICommon:cfc) no-labels overlay
 frame hayr.
 
-cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 
 MAIN:
 repeat:
@@ -80,14 +80,14 @@ print-line:
 
       if ufkey then do:
          assign
-            ufk    = 0
-            ufk[1] = 35
-            ufk[5] = 11
-            ufk[6] = 0
-            ufk[8] = 8
-            ufk[9] = 1
+            Syst.CUICommon:ufk    = 0
+            Syst.CUICommon:ufk[1] = 35
+            Syst.CUICommon:ufk[5] = 11
+            Syst.CUICommon:ufk[6] = 0
+            Syst.CUICommon:ufk[8] = 8
+            Syst.CUICommon:ufk[9] = 1
             siirto = ?
-            ehto   = 3
+            Syst.CUICommon:ehto   = 3
             ufkey = false. 
          RUN Syst/ufkey.p.
       end.
@@ -98,13 +98,13 @@ BROWSE:
 
          hide message no-pause.
          choose row Country.Country {Syst/uchoose.i} no-error with frame sel.
-         color display value(ccc) Country.Country with frame sel.
+         color display value(Syst.CUICommon:ccc) Country.Country with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.
-         nap = keylabel(lastkey).
+         Syst.CUICommon:nap = keylabel(lastkey).
 
          /* previous line */
-         if lookup(nap,"cursor-up") > 0 then do
+         if lookup(Syst.CUICommon:nap,"cursor-up") > 0 then do
          with frame sel:
             if frame-line = 1 then do:
                find Country where recid(Country) = rtab[frame-line] no-lock.
@@ -130,7 +130,7 @@ BROWSE:
          end. /* previous line */
 
          /* next line */
-         if lookup(nap,"cursor-down") > 0 then do with frame sel:
+         if lookup(Syst.CUICommon:nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                find Country where recid(Country) = rtab[frame-line] no-lock .
                find next Country no-lock no-error.
@@ -156,7 +156,7 @@ BROWSE:
          end. /* next line */
 
          /* previous page */
-         else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
+         else if lookup(Syst.CUICommon:nap,"page-up,prev-page") > 0 then do with frame sel:
             find Country where recid(Country) = memory no-lock no-error.
             find prev Country no-lock no-error.
             if available Country then do:
@@ -178,7 +178,7 @@ BROWSE:
         end. /* previous page */
 
         /* next page */
-        else if lookup(nap,"page-down,next-page") > 0 then do with frame sel:
+        else if lookup(Syst.CUICommon:nap,"page-down,next-page") > 0 then do with frame sel:
            if rtab[frame-down] = ? then do:
                bell.
                message "This is the last page !".
@@ -192,10 +192,10 @@ BROWSE:
         end. /* next page */
 
         /* Seek */
-        if lookup(nap,"1,f1") > 0 then do on ENDkey undo, NEXT LOOP:
+        if lookup(Syst.CUICommon:nap,"1,f1") > 0 then do on ENDkey undo, NEXT LOOP:
            /*se-code*/
-           cfc = "puyr". RUN Syst/ufcolor.p.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set se-code with frame hayr.
            hide frame hayr no-pause.
            if se-code ENTERED then do:
@@ -216,13 +216,13 @@ BROWSE:
         end. /* Seek */
 
         /* Choose */
-        else if lookup(nap,"return,enter,5,f5") > 0 then do:
+        else if lookup(Syst.CUICommon:nap,"return,enter,5,f5") > 0 then do:
            find Country where recid(Country) = rtab[frame-line] no-lock.
            siirto = string(Country.Country).
            leave MAIN.
         end. /* Choose */
         /* First record */
-        else if lookup(nap,"home,h") > 0 then do:
+        else if lookup(Syst.CUICommon:nap,"home,h") > 0 then do:
            find first Country no-lock.
            memory = recid(Country).
            must-print = true.
@@ -230,14 +230,14 @@ BROWSE:
         end. /* First record */
 
         /* last record */
-        else if lookup(nap,"end,e") > 0 then do :
+        else if lookup(Syst.CUICommon:nap,"end,e") > 0 then do :
            find last Country no-lock.
            memory = recid(Country).
            must-print = true.
            next LOOP.
         end. /* last record */
 
-        else if nap = "8" or nap = "f8" then leave MAIN. /* Return */
+        else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" then leave MAIN. /* Return */
 
      end.  /* BROWSE */
    end.  /* LOOP */

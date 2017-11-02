@@ -1,6 +1,5 @@
 {Syst/testpaa.i}
 {Func/cparam.i2}
-{Func/timestamp.i}
 {Func/fvoucher.i}
 {Syst/eventval.i}
 {Func/fcustbal.i}
@@ -62,7 +61,7 @@ for each order no-lock where
             ", pp-request " + STRING(PrePaidRequest.PPRequest).
 
    /* Get the voucher no. */
-   liVouch = fGetAndUpdVoucher(gcBrand,2).
+   liVouch = fGetAndUpdVoucher(Syst.CUICommon:gcBrand,2).
 
    ldAmt = PrePaidRequest.TopUpAmt / 100.
    
@@ -75,7 +74,7 @@ for each order no-lock where
    
    CREATE Payment.
    ASSIGN 
-       Payment.Brand    = gcBrand
+       Payment.Brand    = Syst.CUICommon:gcBrand
        Payment.Voucher  = liVouch
        Payment.CustNum  = Customer.CustNum
        Payment.CustName = lcName
@@ -101,22 +100,22 @@ for each order no-lock where
        Payment.AccType[2] = 20.
        
    /* time when posted */
-   Payment.ImportStamp = fMakeTS().
+   Payment.ImportStamp = Func.Common:mMakeTS().
 
    IF lcMemo > "" THEN DO:
    
       /* separate Memo */
       CREATE Memo.
       ASSIGN 
-          Memo.Brand     = gcBrand
+          Memo.Brand     = Syst.CUICommon:gcBrand
           Memo.HostTable = "payment"
           Memo.KeyValue  = STRING(Payment.Voucher)
           Memo.CustNum   = Payment.CustNum
           Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-          Memo.CreUser   = katun 
+          Memo.CreUser   = Syst.CUICommon:katun 
           Memo.MemoTitle = "INITIAL TOPUP"
           Memo.MemoText  = lcMemo.
-          Memo.CreStamp  = fMakeTS().
+          Memo.CreStamp  = Func.Common:mMakeTS().
    
    END.
 
@@ -134,7 +133,7 @@ for each order no-lock where
       lcExtVoucher = Payment.ExtVoucher.
    
       IF NOT CAN-FIND(FIRST Payment WHERE
-                            Payment.Brand      = gcBrand AND
+                            Payment.Brand      = Syst.CUICommon:gcBrand AND
                             Payment.ExtVoucher = lcExtVoucher AND
                             RECID(Payment) NE lrRecid)
       THEN LEAVE.

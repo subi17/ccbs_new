@@ -6,7 +6,6 @@
 {Syst/commali.i}
 {Syst/dumpfile_run.i}
 {Func/create_eventlog.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 
 DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
@@ -49,10 +48,10 @@ INDEX contract contract.
              
 
 FOR EACH DayCampaign NO-LOCK WHERE
-         DayCampaign.Brand = gcBrand AND
+         DayCampaign.Brand = Syst.CUICommon:gcBrand AND
   LOOKUP(DayCampaign.DCType,"1,4") > 0,
   EACH ServiceLimitGroup NO-LOCK WHERE 
-       ServiceLimitGroup.Brand     = gcBrand AND
+       ServiceLimitGroup.Brand     = Syst.CUICommon:gcBrand AND
        ServiceLimitGroup.GroupCode = DayCampaign.DCEvent,
   EACH ServiceLimit NO-LOCK WHERE 
        ServiceLimit.GroupCode = DayCampaign.DCEvent:
@@ -63,7 +62,7 @@ FOR EACH DayCampaign NO-LOCK WHERE
       ttContract.contract = servicelimit.groupcode + "/" + ServiceLimit.SLCode.
 END.
 FOR EACH DayCampaign NO-LOCK WHERE
-         DayCampaign.Brand = gcBrand AND
+         DayCampaign.Brand = Syst.CUICommon:gcBrand AND
   LOOKUP(DayCampaign.DCType,"1,4") = 0:
 
    CREATE ttContract.
@@ -105,7 +104,7 @@ OUTPUT STREAM sFile TO VALUE(icFile).
 
 IF icDumpMode EQ "modified" THEN DO:
 
-   fSplitTs(idLastDump, OUTPUT ldaLastDumpDate, OUTPUT liLastDumpTime).
+   Func.Common:mSplitTS(idLastDump, OUTPUT ldaLastDumpDate, OUTPUT liLastDumpTime).
    lcLastDumpTime = STRING(liLastDumpTime,"hh:mm:ss").
 
    FOR EACH EventLog NO-LOCK where
@@ -120,7 +119,7 @@ IF icDumpMode EQ "modified" THEN DO:
       IF ERROR-STATUS:ERROR THEN NEXT.
 
       FIND FIRST Order NO-LOCK WHERE
-                 Order.Brand = gcBrand AND
+                 Order.Brand = Syst.CUICommon:gcBrand AND
                  Order.OrderId = liOrderID NO-ERROR.
       IF NOT AVAIL Order THEN NEXT.
       
@@ -140,7 +139,7 @@ ELSE
 /* order loop */
 Order_loop:
 FOR EACH Order NO-LOCK WHERE
-         Order.Brand = gcBrand:
+         Order.Brand = Syst.CUICommon:gcBrand:
 
       EMPTY TEMP-TABLE ttSubContract.
       RUN pReadOffer.
@@ -169,14 +168,14 @@ PROCEDURE pReadOffer :
    DEF BUFFER bOfferItem FOR OfferItem.
 
    FIND FIRST Offer WHERE 
-              Offer.Brand = gcBrand AND
+              Offer.Brand = Syst.CUICommon:gcBrand AND
               Offer.Offer = Order.Offer NO-LOCK NO-ERROR.
    IF NOT AVAILABLE Offer THEN RETURN.
 
    DO i = 1 TO 2:
 
       FOR EACH OfferItem  NO-LOCK WHERE
-               OfferItem.Brand       = gcBrand       AND
+               OfferItem.Brand       = Syst.CUICommon:gcBrand       AND
                OfferItem.Offer       = Offer.Offer   AND
                OfferItem.ItemType    = lcItemTypes[i] AND
                OfferItem.EndStamp   >= Order.CrStamp AND
@@ -207,7 +206,7 @@ END PROCEDURE.
 PROCEDURE pReadOrderAction:
 
    FOR EACH OrderAction NO-LOCK WHERE
-            OrderAction.Brand = gcBrand AND
+            OrderAction.Brand = Syst.CUICommon:gcBrand AND
             OrderAction.OrderId = Order.OrderId AND
             OrderAction.ItemType = "BundleItem":
 

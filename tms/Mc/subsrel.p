@@ -93,8 +93,8 @@ form
    skip(3)
 
    with row 1 side-labels width 80
-        title " " + ynimi + " SUBSCRIPTION REVENUE REPORT " +
-        string(pvm,"99-99-99") + " "
+        title " " + Syst.CUICommon:ynimi + " SUBSCRIPTION REVENUE REPORT " +
+        string(TODAY,"99-99-99") + " "
         frame valinta.
 
 
@@ -103,19 +103,19 @@ ASSIGN ldtDate2 = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
        ldtDate1 = DATE(MONTH(ldtDate2),1,YEAR(ldtDate2)).
 
 FIND LAST InvGroup NO-LOCK WHERE
-          InvGroup.Brand = gcBrand NO-ERROR.
+          InvGroup.Brand = Syst.CUICommon:gcBrand NO-ERROR.
 IF AVAILABLE InvGroup THEN ASSIGN lcInvGroup[2] = InvGroup.InvGroup.
 
 FIND LAST CLIType NO-LOCK WHERE
-          CLIType.Brand = gcBrand NO-ERROR.
+          CLIType.Brand = Syst.CUICommon:gcBrand NO-ERROR.
 IF AVAILABLE CLIType THEN ASSIGN lcCLIType[2] = CLIType.CLIType.
 
 FIND LAST BillItem NO-LOCK WHERE
-          BillItem.Brand = gcBrand NO-ERROR.
+          BillItem.Brand = Syst.CUICommon:gcBrand NO-ERROR.
 IF AVAILABLE BillItem THEN lcBillCode[2] = BillItem.BillCode.
 
 FIND LAST CCN NO-LOCK WHERE
-          CCN.Brand = gcBrand NO-ERROR.
+          CCN.Brand = Syst.CUICommon:gcBrand NO-ERROR.
 IF AVAILABLE CCN THEN liCCN[2] = CCN.CCN.
 
 display ldtDate1 ldtDate2
@@ -125,7 +125,7 @@ display ldtDate1 ldtDate2
         liCCN
         with frame valinta. 
 assign ufkey = false
-       nap   = "first". 
+       Syst.CUICommon:nap   = "first". 
 
 
 toimi:
@@ -133,24 +133,24 @@ repeat with frame valinta on endkey undo toimi, next toimi:
 
       if ufkey then do:
          assign
-         ufk[1]= 132 
-         ufk[2]= 0  ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
-         ufk[9]= 1
-         ehto = 3 
+         Syst.CUICommon:ufk[1]= 132 
+         Syst.CUICommon:ufk[2]= 0  Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+         Syst.CUICommon:ufk[5]= 63 Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 
+         Syst.CUICommon:ufk[9]= 1
+         Syst.CUICommon:ehto = 3 
          ufkey = false.
          RUN Syst/ufkey.p.
       end.
 
-      if nap ne "first" then do:
+      if Syst.CUICommon:nap ne "first" then do:
           readkey.
           ASSIGN
-          nap = keylabel(lastkey).
+          Syst.CUICommon:nap = keylabel(lastkey).
       end.
-      else assign nap = "1". 
+      else assign Syst.CUICommon:nap = "1". 
 
-      if lookup(nap,"1,f1") > 0 then do:
-         ehto = 9. RUN Syst/ufkey.p.
+      if lookup(Syst.CUICommon:nap,"1,f1") > 0 then do:
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          repeat with frame valinta on endkey undo, leave:
             update 
                 ldtDate1
@@ -175,16 +175,16 @@ repeat with frame valinta on endkey undo toimi, next toimi:
          next toimi.
       end.
 
-      else if lookup(nap,"5,f5") > 0 then do:
+      else if lookup(Syst.CUICommon:nap,"5,f5") > 0 then do:
          leave toimi.
       end.
 
-      else if lookup(nap,"8,f8") > 0 then do:
+      else if lookup(Syst.CUICommon:nap,"8,f8") > 0 then do:
          return.
       end.
-end. /* toimi */
+end. /* Syst.CUICommon:toimi */
 
-ehto = 5.
+Syst.CUICommon:ehto = 5.
 RUN Syst/ufkey.p.
 
 IF lcFile = "" THEN DO:

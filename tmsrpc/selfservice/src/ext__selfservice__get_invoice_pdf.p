@@ -18,8 +18,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-ASSIGN gcBrand = "1"
-       katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
+ASSIGN Syst.CUICommon:gcBrand = "1"
+       Syst.CUICommon:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
 {Func/fexternalapi.i}
 {Func/cparam2.i}
 
@@ -52,14 +52,14 @@ lcApplicationId = substring(pcTransId,1,3).
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName, lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
        
-katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
+Syst.CUICommon:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
 lcMiYoigoURL = fCParam("URL","MiYoigoURL").
 IF lcMiYoigoURL = "" OR lcMiYoigoURL = ? THEN
    RETURN appl_err("Missing system configuration").
 
 FIND FIRST Invoice WHERE
-           Invoice.Brand    = gcBrand AND
+           Invoice.Brand    = Syst.CUICommon:gcBrand AND
            Invoice.ExtInvID = pcExtInvId NO-LOCK NO-ERROR.
 IF NOT AVAIL Invoice THEN
    RETURN appl_err("Invoice not found").
@@ -94,5 +94,4 @@ FINALLY:
    /* Store the transaction id */
    ghAuthLog::TransactionId = pcTransId.
 
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

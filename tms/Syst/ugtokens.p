@@ -54,22 +54,22 @@ form
     wtoken.tokenname
     cright            label "Right"
 WITH ROW FrmRow centered OVERLAY 12 DOWN
-    COLOR VALUE(cfc)
-    title COLOR VALUE(ctc) " CHOOSE TOKENS, GROUP " + icUserGroup + " " 
+    COLOR VALUE(Syst.CUICommon:cfc)
+    title COLOR VALUE(Syst.CUICommon:ctc) " CHOOSE TOKENS, GROUP " + icUserGroup + " " 
     FRAME sel.
 
 form /* seek Token by Code */
     tokencode
     help "Enter Token Code"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
 
-llAdminUser = fIsAdminUser(katun).
+llAdminUser = fIsAdminUser(Syst.CUICommon:katun).
 
 FIND FIRST token
  NO-LOCK NO-ERROR.
@@ -144,26 +144,26 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-        ufk[5]= (IF lcRight = "RW" THEN 11 ELSE 0) 
-        ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ufk[1]= 35 Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+        Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 11 ELSE 0) 
+        Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW wtoken.tokencode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) wtoken.tokencode WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) wtoken.tokencode WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -187,10 +187,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* previous ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-prev.
@@ -215,7 +215,7 @@ BROWSE:
       END. /* previous ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -241,7 +241,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* prev page */
-      ELSE IF LOOKUP(nap,"prev-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND wtoken WHERE recid(wtoken) = memory NO-LOCK NO-ERROR.
         RUN local-find-prev.
@@ -265,7 +265,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -280,10 +280,10 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        tokencode = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE tokencode WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF tokencode <> "" THEN DO:
@@ -301,7 +301,7 @@ BROWSE:
        END.
      END. /* Search-1 */
 
-     ELSE IF LOOKUP(nap,"enter,return,5,f5") > 0 AND lcRight = "RW" THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return,5,f5") > 0 AND lcRight = "RW" THEN DO:
        RUN local-find-this(TRUE).
        
        IF wToken.AdminToken AND NOT llAdminUser THEN DO:
@@ -330,19 +330,19 @@ BROWSE:
        xrecid = recid(wtoken).
      END.
 
-     ELSE IF LOOKUP(nap,"home,h") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = recid(wtoken) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,e") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,e") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN memory = recid(wtoken) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
 
         IF lcRight = "RW" THEN DO:
            lSave = TRUE.
@@ -356,7 +356,7 @@ BROWSE:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 IF lSave THEN DO:
    ASSIGN

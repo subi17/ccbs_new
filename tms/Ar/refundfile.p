@@ -12,7 +12,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/ftransdir.i}
 {Func/email.i}
 {Func/msreqfunc.i}
@@ -131,12 +130,12 @@ IF iiPaymCount = 0 AND NOT ilEmptyFile THEN
    RETURN "ERROR: No refunds were found".
 
 FIND FIRST Company WHERE
-           Company.Brand = gcBrand NO-LOCK NO-ERROR.
+           Company.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 IF NOT AVAIL Company THEN RETURN "ERROR:Company data not available".
 
 /* bank account that is dedicated for dd */
 FOR FIRST BankAccount NO-LOCK WHERE
-          BankAccount.Brand   = gcBrand AND
+          BankAccount.Brand   = Syst.CUICommon:gcBrand AND
           LOOKUP("Refund",BankAccount.InvForm) > 0:
    lcBankAcc = BankAccount.BankAccount.
 END.
@@ -148,8 +147,7 @@ ASSIGN lcRefAmt      = " / " + STRING(iiPaymCount)
        /* yoigo cif */
        lcCompanyID   = REPLACE(Company.CompanyID,"-","")
        lcSuffix      = "001"    
-       lcDescription = DYNAMIC-FUNCTION("fHdrText" IN ghFunc1,
-                                        301,
+       lcDescription = Func.Common:mGetHdrText(301,
                                         1).
 
 /* transfer directory given */
@@ -250,8 +248,7 @@ IF iiPaymCount > 0 THEN DO:
 
       /* customer name and address data */
       ASSIGN 
-         lcCustName = DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1,
-                                       BUFFER Customer)
+         lcCustName = Func.Common:mPrintCustName(BUFFER Customer)
          lcAddress  = Customer.Address
          lcZipCode  = Customer.ZipCode 
          lcPost     = Customer.PostOffice.
@@ -428,7 +425,7 @@ OUTPUT STREAM sFile CLOSE.
 
 HIDE FRAME fPrint NO-PAUSE.
 
-ldCurrent = fMakeTS().
+ldCurrent = Func.Common:mMakeTS().
 
 /* mark requests */
 FOR EACH ttRequest WHERE
@@ -445,7 +442,7 @@ END.
 DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = gcBrand   
+      ActionLog.Brand        = Syst.CUICommon:gcBrand   
       ActionLog.TableName    = STRING(SESSION:BATCH,"Cron/UI")  
       ActionLog.KeyValue     = ""
       ActionLog.ActionID     = "RefundFile"
@@ -454,10 +451,10 @@ DO TRANS:
       ActionLog.ActionDec    = oiPaymCount
       ActionLog.ActionChar   = lcPlainFile + 
                                IF NOT SESSION:BATCH
-                               THEN ". Created by " + katun
+                               THEN ". Created by " + Syst.CUICommon:katun
                                ELSE "" 
       ActionLog.ActionStatus = 3.
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
 END.
 
 /* move the new file to the actual transfer directory */
@@ -492,12 +489,12 @@ IF CAN-FIND(FIRST ttError) THEN DO:
 
        /* save to db for reporting */
        CREATE ErrorLog.
-       ASSIGN ErrorLog.Brand     = gcBrand
+       ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
               ErrorLog.ActionID  = "RFNDFILE"
               ErrorLog.TableName = "MsRequest"
               ErrorLog.KeyValue  = STRING(ttError.MsRequest)
               ErrorLog.ActionTS  = ldCurrent
-              ErrorLog.UserCode  = katun
+              ErrorLog.UserCode  = Syst.CUICommon:katun
               ErrorLog.ErrorMsg  = ttError.ErrMsg.
     END.
 

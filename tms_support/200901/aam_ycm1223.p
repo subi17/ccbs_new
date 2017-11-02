@@ -1,11 +1,10 @@
 {Syst/testpaa.i}
-katun = "ari".
+Syst.CUICommon:katun = "ari".
 
-{Func/timestamp.i}
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhInvoice AS HANDLE NO-UNDO.
@@ -50,7 +49,7 @@ for each order no-lock use-index stamp where
    i = i + 1.
    pause 0.
    disp i  format ">>>>9" 
-        fts2hms(order.crstamp) format "x(20)"
+        Func.Common:mTS2HMS(order.crstamp) format "x(20)"
         binvoice.invamt
         order.statuscode
         string(order.mnpstatus > 0,"mnp/new")
@@ -64,7 +63,7 @@ for each order no-lock use-index stamp where
    if licashcust > 0 then DO TRANS:
 
       FOR EACH SingleFee EXCLUSIVE-LOCK USE-INDEX HostTable WHERE
-               SingleFee.Brand     = gcBrand AND
+               SingleFee.Brand     = Syst.CUICommon:gcBrand AND
                SingleFee.HostTable = "Order" AND
                SingleFee.KeyValue  = STRING(Order.OrderID):
                

@@ -1,10 +1,10 @@
 {Syst/commpaa.i}
-katun = "anttis".
-gcBrand = "1".
+Syst.CUICommon:katun = "anttis".
+Syst.CUICommon:gcBrand = "1".
 {Func/msisdn.i}
 
 FIND FIRST msisdn where
-   msisdn.brand = gcBrand and
+   msisdn.brand = Syst.CUICommon:gcBrand and
    msisdn.cli = "622567039" EXCLUSIVE-LOCK NO-ERROR.
 FIND FIRST termmobsub where termmobsub.cli = "622567039".
 
@@ -18,7 +18,7 @@ assign
 create memo.
 
 ASSIGN
-   memo.CreStamp  = fmakeTS()
+   memo.CreStamp  = Func.Common:mMakeTS()
    memo.MemoSeq   = NEXT-VALUE(MemoSeq)
    Memo.Custnum   = TERMMobSub.CustNum
    memo.HostTable = "MobSub"

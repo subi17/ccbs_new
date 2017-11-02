@@ -10,8 +10,6 @@
 &GLOBAL-DEFINE fmakeservlimit YES
 
 {Syst/commali.i}
-{Func/date.i}
-{Func/timestamp.i}
 {Syst/eventval.i}
 {Func/fdss.i}
 
@@ -29,7 +27,7 @@ DEF VAR lcDSSBundleId       AS CHAR NO-UNDO.
 
 IF llDoEvent THEN DO:
 
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -69,7 +67,7 @@ FUNCTION fMakeServLimit RETURN LOGICAL
    DEF BUFFER bMobSub   FOR MobSub.
    DEF BUFFER MDSSServiceLimit FOR MServiceLimit.
    
-   IF idActStamp = 0 OR idActStamp = ? THEN idActStamp = fMakeTS(). 
+   IF idActStamp = 0 OR idActStamp = ? THEN idActStamp = Func.Common:mMakeTS(). 
    IF idEndStamp = 0 OR idEndStamp = ? THEN idEndStamp = 99999999.99999.
 
    lcPostpaidDataBundles = fCParamC("POSTPAID_DATA_CONTRACTS").
@@ -77,12 +75,12 @@ FUNCTION fMakeServLimit RETURN LOGICAL
    /* Use current time stamp if DSS activation stamp is less than current */
    /* because request could be rejected and DSS usage could be wrong      */
    IF LOOKUP(icServiceLimitGroup,{&DSS_BUNDLES}) > 0 AND
-      idActStamp < fMakeTS() THEN idActStamp = fMakeTS().
+      idActStamp < Func.Common:mMakeTS() THEN idActStamp = Func.Common:mMakeTS().
 
-   IF idActStamp < fMakeTS() THEN ldeCheckTS = fMakeTS().
+   IF idActStamp < Func.Common:mMakeTS() THEN ldeCheckTS = Func.Common:mMakeTS().
    ELSE ldeCheckTS = idActStamp.
 
-   fSplitTS(idActStamp,
+   Func.Common:mSplitTS(idActStamp,
             OUTPUT ldtDate,
             OUTPUT liTime).
 
@@ -139,10 +137,10 @@ FUNCTION fMakeServLimit RETURN LOGICAL
    /* Activate */ 
 
    FOR EACH ServiceLimitGroup NO-LOCK WHERE 
-            ServiceLimitGroup.Brand     = gcBrand AND
+            ServiceLimitGroup.Brand     = Syst.CUICommon:gcBrand AND
             ServiceLimitGroup.GroupCode = icServiceLimitGroup,
       FIRST bContract WHERE
-            bContract.Brand = gcBrand AND
+            bContract.Brand = Syst.CUICommon:gcBrand AND
             bContract.DCEvent = ServiceLimitGroup.GroupCode,
        EACH ServiceLimit NO-LOCK WHERE 
             ServiceLimit.GroupCode  = icServiceLimitGroup AND 
@@ -158,7 +156,7 @@ FUNCTION fMakeServLimit RETURN LOGICAL
                    MServiceLimit.EndTS    = idEndStamp
          USE-INDEX MsSeq NO-ERROR.
          IF AVAIL MServiceLimit
-         THEN idEndStamp = fSecOffSet(MServiceLimit.EndTS,-1).
+         THEN idEndStamp = Func.Common:mSecOffSet(MServiceLimit.EndTS,-1).
          ELSE LEAVE.
       END.
 
@@ -179,8 +177,8 @@ FUNCTION fMakeServLimit RETURN LOGICAL
       
          ASSIGN 
             ldFactor[1] = (liDays - DAY(ldtDate) + 1) / liDays
-            ldEnd[1]    = fMake2DT(ldaBegDate - 1,86399)
-            ldBegin[2]  = fMake2DT(ldaBegDate,0)
+            ldEnd[1]    = Func.Common:mMake2DT(ldaBegDate - 1,86399)
+            ldBegin[2]  = Func.Common:mMake2DT(ldaBegDate,0)
             ldEnd[2]    = idEndStamp.
       END. /* IF (ServiceLimit.FirstMonthCalc = 1 */
 
@@ -193,9 +191,9 @@ FUNCTION fMakeServLimit RETURN LOGICAL
 
       IF LOOKUP(icServiceLimitGroup,{&DSS_BUNDLES}) > 0 AND
          ldeCurrMonthLimit <> ldeOtherMonthLimit THEN
-         ASSIGN ldaBegDate = fLastDayOfMonth(ldtDate)
-                ldEnd[1]   = fMake2DT(ldaBegDate,86399)
-                ldBegin[2] = fMake2DT(ldaBegDate + 1,0)
+         ASSIGN ldaBegDate = Func.Common:mLastDayOfMonth(ldtDate)
+                ldEnd[1]   = Func.Common:mMake2DT(ldaBegDate,86399)
+                ldBegin[2] = Func.Common:mMake2DT(ldaBegDate + 1,0)
                 ldEnd[2]   = idEndStamp.
 
       DO liCount = 1 TO 2:
@@ -313,16 +311,16 @@ FUNCTION fMakeServLPool RETURN LOGICAL
    DEF BUFFER ServiceLimit FOR ServiceLimit.
    DEF BUFFER MServiceLimit FOR MServiceLimit.
    
-   IF idActStamp = 0 OR idActStamp = ? THEN idActStamp = fMakeTS(). 
+   IF idActStamp = 0 OR idActStamp = ? THEN idActStamp = Func.Common:mMakeTS(). 
 
-   fSplitTS(idActStamp, OUTPUT ldtDate, OUTPUT liTime).
-   ldaLastDay = fLastDayOfMonth(ldtDate).
-   ldeMonthEnd = fMake2Dt(ldaLastDay, 86399).
-   ldeMonthBegin = fMake2Dt(DATE(MONTH(ldtDate),1,YEAR(ldtDate)),0).
+   Func.Common:mSplitTS(idActStamp, OUTPUT ldtDate, OUTPUT liTime).
+   ldaLastDay = Func.Common:mLastDayOfMonth(ldtDate).
+   ldeMonthEnd = Func.Common:mMake2DT(ldaLastDay, 86399).
+   ldeMonthBegin = Func.Common:mMake2DT(DATE(MONTH(ldtDate),1,YEAR(ldtDate)),0).
    
    IF idEndStamp = 0 OR idEndStamp = ? THEN idEndStamp = ldeMonthEnd.
 
-   fSplitTS(idActStamp,
+   Func.Common:mSplitTS(idActStamp,
             OUTPUT ldtDate,
             OUTPUT liTime).
 
@@ -332,10 +330,10 @@ FUNCTION fMakeServLPool RETURN LOGICAL
    END.
 
    FOR FIRST ServiceLimitGroup NO-LOCK WHERE 
-             ServiceLimitGroup.Brand     = gcBrand AND
+             ServiceLimitGroup.Brand     = Syst.CUICommon:gcBrand AND
              ServiceLimitGroup.GroupCode = icServiceLimitGroup,
        FIRST DayCampaign WHERE
-             DayCampaign.Brand = gcBrand AND
+             DayCampaign.Brand = Syst.CUICommon:gcBrand AND
              DayCampaign.DCEvent = ServiceLimitGroup.GroupCode,
         EACH ServiceLimit NO-LOCK WHERE 
              ServiceLimit.GroupCode  = icServiceLimitGroup AND 
@@ -401,7 +399,7 @@ FUNCTION fMakeServLPool RETURN LOGICAL
       /* close existing pool */
       IF AVAIL MserviceLPool THEN DO:
 
-         ldeOldEndStamp = fSecOffSet(idActStamp, -1).
+         ldeOldEndStamp = Func.Common:mSecOffSet(idActStamp, -1).
    
          FIND CURRENT MserviceLPool EXCLUSIVE-LOCK.
 

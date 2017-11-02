@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-katun = "Qvantel".
-gcBrand = "1".
+Syst.CUICommon:katun = "Qvantel".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/msreqfunc.i}
 {Mnp/mnp.i}
@@ -44,7 +44,7 @@ repeat trans:
    pause 0.
       
    ldeNCTime = ?.
-   ldeNCTime = fHMS2TS(date(int(substring(lcNCTime,5,2)),
+   ldeNCTime = Func.Common:mHMS2TS(date(int(substring(lcNCTime,5,2)),
        int(substring(lcNCTime,7,2)),
        int(substring(lcNCTime,1,4))),
        substring(lcNCTime,10)) NO-ERROR.
@@ -89,7 +89,7 @@ repeat trans:
          /* Cancel possible SMS messages */
          if not llSimulate then
          FOR EACH CallAlarm WHERE
-                  CallAlarm.Brand = gcBrand AND
+                  CallAlarm.Brand = Syst.CUICommon:gcBrand AND
                   CallAlarm.CLI = MNPSub.CLI AND
                   CallAlarm.DeliStat = 1 AND
                   CallAlarm.CreditType = 12 EXCLUSIVE-LOCK:
@@ -106,7 +106,7 @@ repeat trans:
 
          if not llSimulate then
          fMNPCallAlarm("MNPCancel",
-                   fmakets(),
+                   Func.Common:mMakeTS(),
                    MNPProcess.FormRequest,
                    MNPSub.CLI,
                    (IF AVAIL MobSub THEN MobSub.Custnum ELSE 0),
@@ -123,7 +123,7 @@ repeat trans:
                bMNPProcess.StatusCode = {&MNP_ST_BDET} EXCLUSIVE-LOCK:
 
             ASSIGN
-               bMNPProcess.UpdateTS = fMakeTS()
+               bMNPProcess.UpdateTS = Func.Common:mMakeTS()
                bMNPProcess.StatusCode = {&MNP_ST_BNOT}.
             RELEASE bMNPProcess.
          END.
@@ -141,7 +141,7 @@ repeat trans:
       ASSIGN
          MNPProcess.StatusCode = {&MNP_ST_ACAN}
          MNPProcess.StatusReason = lcReason
-         MNPProcess.UpdateTS = fMakeTS()
+         MNPProcess.UpdateTS = Func.Common:mMakeTS()
          MNPProcess.MNPUpdateTS = ldeNCTime.
       
       RELEASE MNPProcess.
@@ -229,7 +229,7 @@ repeat trans:
       if not llSimulate then
       ASSIGN
          MNPProcess.StatusReason = lcReason
-         MNPProcess.UpdateTS = fMakeTs()
+         MNPProcess.UpdateTS = Func.Common:mMakeTS()
          MNPProcess.MNPUpdateTS = ldeNCTime.
 
    end.
@@ -291,7 +291,7 @@ repeat trans:
 
          assign
             MNPProcess.StatusReason = lcReason
-            MNPProcess.UpdateTS = fMakeTS()
+            MNPProcess.UpdateTS = Func.Common:mMakeTS()
             MNPProcess.MNPUpdateTS = ldeNCTime.
       end.
 

@@ -1,6 +1,5 @@
 {Syst/testpaa.i}
-katun = "ari".
-{Func/timestamp.i}
+Syst.CUICommon:katun = "ari".
 
 def buffer breq    for msrequest.
 def buffer bupdreq for msrequest.
@@ -46,7 +45,7 @@ for each msrequest no-lock where
                 exclusive-lock.
             bupdreq.createfees = true.
 
-            fsplitts(breq.actstamp,
+            Func.Common:mSplitTS(breq.actstamp,
                      output ldtactdate,
                      output litime).
                      

@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-katun = "anttis".
-gcBrand = "1".
+Syst.CUICommon:katun = "anttis".
+Syst.CUICommon:gcBrand = "1".
 {Func/fsubstermreq.i}
 {Func/msisdn.i}
 
@@ -55,7 +55,7 @@ repeat:
       output liQuarTime
    ).
 
-   fSplitTS(MsRequest.ActStamp, OUTPUT ldaKillDate, OUTPUT liTime).
+   Func.Common:mSplitTS(MsRequest.ActStamp, OUTPUT ldaKillDate, OUTPUT liTime).
   
    if msisdn.statuscode ne liMsisdnStat then do:
       put stream slog unformatted msisdn.cli "|" 

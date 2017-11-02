@@ -8,14 +8,13 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:katun = "Cron".
+Syst.CUICommon:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Syst/eventlog.i}
 {Func/cparam2.i}
-{Func/date.i}
 {Func/fgettxt.i}
 {Func/smsmessage.i}
 
@@ -84,9 +83,9 @@ FUNCTION fParseTimeStamp RETURNS LOGIC
                   substring(icTimeStamp,13,2)) NO-ERROR.
    IF ERROR-STATUS:ERROR THEN RETURN FALSE.
 
-   IF fCheckTime(REPLACE(lcTime,":","")) EQ FALSE THEN RETURN FALSE.
+   IF Func.Common:mCheckTime(REPLACE(lcTime,":","")) EQ FALSE THEN RETURN FALSE.
 
-   odeStamp = fHMS2TS(ldaDate,lcTime).
+   odeStamp = Func.Common:mHMS2TS(ldaDate,lcTime).
    IF odeStamp EQ ? OR odeStamp EQ 0 THEN RETURN FALSE.
 
    RETURN TRUE.
@@ -233,7 +232,7 @@ PROCEDURE pHandleOfferSMSResponse:
       lcCommand      = ENTRY(1,icResponse, " ")
       lcContractID   = RIGHT-TRIM(ENTRY(2,icResponse, " "),".") WHEN 
          NUM-ENTRIES(icResponse," ") >= 2
-      ldeCheckBuffer = fOffSet(fMakeTS(), -90 * 24).
+      ldeCheckBuffer = Func.Common:mOffSet(Func.Common:mMakeTS(), -90 * 24).
 
    IF lcContractID > "" THEN
       /* find order based on contact number */
@@ -247,7 +246,7 @@ PROCEDURE pHandleOfferSMSResponse:
          IF SMSMessage.OrderId EQ 0 THEN NEXT.
 
          FIND FIRST bOrder NO-LOCK WHERE
-                    bOrder.Brand  = gcBrand AND
+                    bOrder.Brand  = Syst.CUICommon:gcBrand AND
                     bOrder.OrderId = SMSMessage.OrderID AND
                     bOrder.ContractId = lcContractID NO-ERROR.
 
@@ -266,7 +265,7 @@ PROCEDURE pHandleOfferSMSResponse:
       IF SMSMessage.OrderId EQ 0 THEN NEXT.
 
       FIND FIRST bOrder NO-LOCK WHERE
-                 bOrder.Brand  = gcBrand AND
+                 bOrder.Brand  = Syst.CUICommon:gcBrand AND
                  bOrder.OrderId = SMSMessage.OrderID NO-ERROR.
       LEAVE.
    END.
@@ -289,7 +288,7 @@ PROCEDURE pHandleOfferSMSResponse:
    IF lcError EQ "" AND lcContractId > "" THEN DO:
 
       FIND Order NO-LOCK WHERE
-           Order.Brand = gcBrand AND
+           Order.Brand = Syst.CUICommon:gcBrand AND
            Order.ContractId = lcContractID NO-ERROR.
       IF NOT AVAILABLE Order THEN DO:
             
@@ -348,7 +347,7 @@ PROCEDURE pHandleOfferSMSResponse:
    ELSE DO:
 
       FIND OrderCustomer NO-LOCK WHERE
-           OrderCustomer.Brand = gcBrand AND
+           OrderCustomer.Brand = Syst.CUICommon:gcBrand AND
            OrderCustomer.OrderId = Order.OrderID AND
            OrderCustomer.RowType = 1.
 

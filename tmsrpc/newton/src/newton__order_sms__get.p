@@ -28,8 +28,8 @@ resp_array = add_array(response_toplevel_id, "").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {Syst/commpaa.i}
-gcBrand = "1".
-katun = "NewtonRPC".
+Syst.CUICommon:gcBrand = "1".
+Syst.CUICommon:katun = "NewtonRPC".
 {Func/smsmessage.i}
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
@@ -60,5 +60,4 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 END.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

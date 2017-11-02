@@ -10,8 +10,8 @@
 
 {Syst/commpaa.i}
 ASSIGN
-   gcBrand = "1"
-   katun   = "Cron".
+   Syst.CUICommon:gcBrand = "1"
+   Syst.CUICommon:katun   = "Cron".
    
 {Func/cparam2.i}
 {Syst/eventlog.i}

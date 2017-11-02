@@ -7,9 +7,8 @@
   Version ......: xfera 
   ---------------------------------------------------------------------- */
 {Syst/commpaa.i}
-gcBrand = "1".
-Katun = "Qvantel".
-{Func/timestamp.i}
+Syst.CUICommon:gcBrand = "1".
+Syst.CUICommon:katun = "Qvantel".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Func/cparam2.i}
@@ -27,7 +26,7 @@ FOR EACH PrepEDR EXCLUSIVE-LOCK WHERE
          PrepEDR.DateSt    = 12/1/2013 AND
          PrepEDR.ErrorCode = 1001:
 
-   ldeCallTS = fMake2Dt(PrepEDR.Datest,PrepEDR.TimeStart). 
+   ldeCallTS = Func.Common:mMake2DT(PrepEDR.Datest,PrepEDR.TimeStart). 
       
    FIND FIRST MobSub NO-LOCK WHERE
               MobSub.CLI = PrepEDR.CLI NO-ERROR.
@@ -70,7 +69,7 @@ PROCEDURE pHandleEDR:
    DEF BUFFER bActReq  FOR MsRequest.
    DEF BUFFER bTermReq FOR MsRequest.
                
-   ldeNow = fMakeTS().
+   ldeNow = Func.Common:mMakeTS().
          
    FIND FIRST Mobsub NO-LOCK WHERE
               Mobsub.MsSeq = PrepEDR.MsSeq NO-ERROR.
@@ -91,7 +90,7 @@ PROCEDURE pHandleEDR:
    IF (PrepEDR.CLIType EQ "TARJ7" OR
       (PrepEDR.CLIType EQ "TARJ6" AND lcShaperConf EQ "MEGA5_PRE_NB")) AND
       TIME >= 33600 AND TIME < 36900 THEN /* 09:20-10:15 */
-      ldeNow = fHMS2TS(TODAY,"10:15:00").
+      ldeNow = Func.Common:mHMS2TS(TODAY,"10:15:00").
    
    IF PrepEDR.CLIType EQ "TARJ6" THEN DO:
    
@@ -107,7 +106,7 @@ PROCEDURE pHandleEDR:
                  MsRequest.ReqStatus = 0 AND
                  MsRequest.ReqCparam1 = "SHAPER" AND
                  MsRequest.ReqIParam1 = 1 AND
-                 MsRequest.ActStamp > fMakeTS() NO-ERROR.
+                 MsRequest.ActStamp > Func.Common:mMakeTS() NO-ERROR.
 
       IF AVAIL MsRequest THEN DO:
          IF MsRequest.ReqCparam2 EQ lcShaperConf THEN RETURN.
@@ -129,8 +128,7 @@ PROCEDURE pHandleEDR:
                                   OUTPUT lcResult).
 
       IF liRequest = 0 THEN 
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "Mobsub",
+         Func.Common:mWriteMemo("Mobsub",
                           STRING(Mobsub.MsSeq),
                           MobSub.CustNum,
                           "SHAPER creation failed",
@@ -144,14 +142,14 @@ PROCEDURE pHandleEDR:
                  bActReq.ReqType = 8 AND
                  bActReq.ReqStatus = 0 AND
                  bActReq.ReqCparam3 = "TARJ7" AND
-                 bActReq.ActStamp > fMakeTS() NO-ERROR.
+                 bActReq.ActStamp > Func.Common:mMakeTS() NO-ERROR.
       
       FIND FIRST bTermReq NO-LOCK WHERE
                  bTermReq.MsSeq = PrepEDR.MsSeq AND
                  bTermReq.ReqType = 9 AND
                  bTermReq.ReqStatus = 0 AND
                  bTermReq.ReqCparam3 = "TARJ7" AND
-                 bTermReq.ActStamp > fMakeTS() NO-ERROR.
+                 bTermReq.ActStamp > Func.Common:mMakeTS() NO-ERROR.
 
       lcBundles = fGetCurrentBundle(MobSub.Msseq).
 
@@ -173,7 +171,7 @@ PROCEDURE pHandleEDR:
             IF PrepEDR.ServFeeExpDateBefore > "" THEN DO:
    
                IF MONTH(PrepEDR.DateST) EQ 2 AND
-                  PrepEDR.DateST EQ fLastDayOfMonth(PrepEDR.DateST) THEN
+                  PrepEDR.DateST EQ Func.Common:mLastDayOfMonth(PrepEDR.DateST) THEN
                FOR FIRST ServiceLimit NO-LOCK WHERE
                          ServiceLimit.GroupCode EQ "TARJ7",
                    FIRST MServiceLimit NO-LOCK WHERE
@@ -183,7 +181,7 @@ PROCEDURE pHandleEDR:
                          MServiceLimit.EndTs >= ldeNow AND
                          MServiceLimit.FromTS <= ldeNow:
                   
-                  fSplitTS(MServiceLimit.FromTS,OUTPUT ldaFromdate,OUTPUT liTime).
+                  Func.Common:mSplitTS(MServiceLimit.FromTS,OUTPUT ldaFromdate,OUTPUT liTime).
                   
                   IF DAY(ldaFromdate) EQ 29 OR DAY(ldaFromdate) EQ 30 THEN DO:
                      liRequest = fServiceRequest(MobSub.MsSeq,
@@ -201,8 +199,7 @@ PROCEDURE pHandleEDR:
                                                  OUTPUT lcResult).
                   
                      IF liRequest = 0 THEN  
-                        DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                         "Mobsub",
+                        Func.Common:mWriteMemo("Mobsub",
                                          STRING(Mobsub.MsSeq),
                                          MobSub.CustNum,
                                          "TARJ7 reset failed",
@@ -244,7 +241,7 @@ PROCEDURE pHandleEDR:
                     MsRequest.ReqType = 9 AND
                     MsRequest.ReqStatus = 0 AND
                     MsRequest.ReqCparam3 = "TARJ7" AND
-                    MsRequest.ActStamp > fMakeTS() NO-ERROR.
+                    MsRequest.ActStamp > Func.Common:mMakeTS() NO-ERROR.
          IF AVAIL MsRequest THEN fReqStatus(4,"Automatic cancellation by EDR").
          ELSE DO:
          
@@ -257,10 +254,10 @@ PROCEDURE pHandleEDR:
                RETURN.
             END.
 
-            fSplitTS(PrepEDR.ReadInTS,OUTPUT ldaFromdate,OUTPUT liTime).
+            Func.Common:mSplitTS(PrepEDR.ReadInTS,OUTPUT ldaFromdate,OUTPUT liTime).
 
             IF PrepEDR.DateSt EQ (ldaFromdate - 1) THEN
-               ldeNow = fHMS2TS(PrepEDR.DateSt,"23:59:59").
+               ldeNow = Func.Common:mHMS2TS(PrepEDR.DateSt,"23:59:59").
             ELSE ldeNow = PrepEDR.ReadInTS.
 
             liRequest = fPCActionRequest(MobSub.MsSeq,
@@ -275,8 +272,7 @@ PROCEDURE pHandleEDR:
                                          "",
                                          OUTPUT lcResult). 
             IF liRequest = 0 THEN  
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                "Mobsub",
+               Func.Common:mWriteMemo("Mobsub",
                                 STRING(Mobsub.MsSeq),
                                 MobSub.CustNum,
                                 "TARJ7 activation failed",
@@ -308,8 +304,7 @@ PROCEDURE pHandleEDR:
                                       "",
                                       OUTPUT lcResult). 
          IF liRequest = 0 THEN  
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "Mobsub",
+            Func.Common:mWriteMemo("Mobsub",
                              STRING(Mobsub.MsSeq),
                              MobSub.CustNum,
                              "TARJ7 termination failed",

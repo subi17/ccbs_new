@@ -48,23 +48,23 @@ date2 = date1.
 cdate = date(1,1,year(TODAY)).
 
 DO WITH FRAME count:
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
    date1 
    date2 VALIDATE ( input date2 >= input date1,"Invalid order !")
    cdate 
    InvGroup
    VALIDATE (CAN-FIND(invgroup WHERE 
-                      InvGroup.Brand    = gcBrand AND
+                      InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                       invgroup.invgroup = INPUT invgroup),
              "Unknown Invoice Group Code!").
 
 
-   ufk = 0. ehto = 3. RUN Syst/ufkey.p.
+   Syst.CUICommon:ufk = 0. Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
 
    message "Counting ...".
    FOR EACH Customer no-lock where
-            Customer.Brand     = gcBrand AND
+            Customer.Brand     = Syst.CUICommon:gcBrand AND
             Customer.ContrBeg >= date1   AND
             Customer.ContrBeg <= date2   AND
             (if InvGroup ne "" THEN Customer.InvGroup = InvGroup ELSE TRUE):

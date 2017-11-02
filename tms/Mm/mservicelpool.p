@@ -8,8 +8,6 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/date.i}
-{Func/timestamp.i}
  
 DEF INPUT PARAM iiMSSeq as INT  no-undo.
 DEF INPUT PARAM iiSlSeq AS INT NO-UNDO.
@@ -19,8 +17,8 @@ DEF INPUT PARAM idaValidTo AS DATE NO-UNDO.
 DEFINE VARIABLE ldeEndTS AS DECIMAL NO-UNDO. 
 DEFINE VARIABLE ldeFromTS AS DECIMAL NO-UNDO. 
 
-ldeEndTS = fMake2Dt(idaValidTo,86399).
-ldeFromTs = fMake2Dt(idaValidFrom,0).
+ldeEndTS = Func.Common:mMake2DT(idaValidTo,86399).
+ldeFromTs = Func.Common:mMake2DT(idaValidFrom,0).
 
 def /* new */ shared var siirto AS char.
 
@@ -69,12 +67,12 @@ form
     lcLimit FORMAT "x(8)" column-label "Limit"
     lcInclUnit FORMAT "x(10)" column-label "Unit"
 WITH ROW FrmRow width 80 overlay FrmDown  down
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) 
+    COLOR VALUE(Syst.CUICommon:cfc)   
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     " Rating Pools " + lcServiceLimit
     FRAME sel.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By MSSeq   , By SLSeq ,By 3, By 4".
@@ -101,13 +99,13 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a mservicelpool  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR mservicelpool.MSSeq
@@ -188,26 +186,26 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 0  ufk[2]= 0 ufk[3]= 0  ufk[4]= 0
-        ufk[5]= 0  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = false.
+        Syst.CUICommon:ufk[1]= 0  Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0  Syst.CUICommon:ufk[4]= 0
+        Syst.CUICommon:ufk[5]= 0  Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+        Syst.CUICommon:ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         choose row msseq {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) msseq WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) msseq WITH FRAME sel.
       END.
       
       IF rtab[FRAME-line] = ? THEN NEXT.
 
-      nap = keylabel(LASTkey).
+      Syst.CUICommon:nap = keylabel(LASTkey).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -231,10 +229,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTkey).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTkey).
 
       /* PREVious row */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-line = 1 THEN DO:
            RUN local-find-this(false).
            RUN local-find-PREV.
@@ -259,7 +257,7 @@ BROWSE:
       END. /* PREVious row */
 
       /* NEXT row */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-line = FRAME-down THEN DO:
            RUN local-find-this(false).
@@ -285,7 +283,7 @@ BROWSE:
       END. /* NEXT row */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND mservicelpool WHERE recid(mservicelpool) = memory 
         NO-LOCK NO-ERROR.
@@ -310,7 +308,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* Put Cursor on downmost Row */
        IF rtab[FRAME-down] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -324,14 +322,14 @@ BROWSE:
        END.
      END. /* NEXT page */
      
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN DO TRANS:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN DO TRANS:
        MESSAGE "This view is not yet implemented" VIEW-AS ALERT-BOX. 
        LEAVE. /* This view is not yet implemented */
 /*
        /* change */
        RUN local-find-this(false).
-       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. 
+       ASSIGN ac-hdr = " CHANGE " ufkey = true Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. 
        
        RUN local-update-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -346,25 +344,25 @@ BROWSE:
        LEAVE. */
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = recid(mservicelpool) must-print = true.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN memory = recid(mservicelpool) must-print = true.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 PROCEDURE local-find-this:
@@ -426,8 +424,8 @@ PROCEDURE local-disp-row:
     CLEAR FRAME sel NO-PAUSE.
 
     DEFINE VARIABLE liTime AS INTEGER NO-UNDO. 
-    lcFromTS = fTS2HMS(mservicelpool.fromts).
-    lcEndTs = fTS2HMS(mservicelpool.endts).
+    lcFromTS = Func.Common:mTS2HMS(mservicelpool.fromts).
+    lcEndTs = Func.Common:mTS2HMS(mservicelpool.endts).
 
     DISPLAY 
        MServiceLPool.MsSeq

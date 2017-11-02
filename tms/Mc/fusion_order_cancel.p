@@ -1,7 +1,6 @@
 {Syst/commali.i}
 {Syst/eventval.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/fixedlinefunc.i}
 {Mc/orderfusion.i}
 
@@ -11,14 +10,14 @@ DEF VAR lhBuff             AS HANDLE NO-UNDO.
 DEF VAR lcError            AS CHAR NO-UNDO. 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
    {Func/lib/eventlog.i}
 END.
 
 /* check order exist */
 /* check order exist */
 FIND Order NO-LOCK WHERE
-     Order.Brand = gcbrand AND
+     Order.Brand = Syst.CUICommon:gcBrand AND
      Order.OrderId = piOrderId NO-ERROR.
 IF NOT AVAIL Order THEN 
    RETURN SUBST("Unknown Order id &1",STRING(piOrderId)).
@@ -55,7 +54,7 @@ IF Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
 
    ASSIGN
       OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_CANCELLED}
-      OrderFusion.UpdateTS = fMakeTS().
+      OrderFusion.UpdateTS = Func.Common:mMakeTS().
    
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhBuff).
 

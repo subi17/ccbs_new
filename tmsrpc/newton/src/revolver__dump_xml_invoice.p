@@ -12,7 +12,7 @@
 
 {Syst/commpaa.i}
 {Syst/tmsconst.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 /* Input parameters */
 DEF VAR piInvnum  AS INT  NO-UNDO.
@@ -42,5 +42,4 @@ IF RETURN-VALUE BEGINS "ERROR" THEN
 add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

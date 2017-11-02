@@ -8,8 +8,7 @@
 ------------------------------------------------------ */
 
 {Syst/commali.i}
-{Func/timestamp.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 DEF VAR lcHostname AS CHAR NO-UNDO.
 INPUT THROUGH hostname.

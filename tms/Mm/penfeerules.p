@@ -79,24 +79,24 @@ form
    " Current penalty ..:" ldeCurrPen SKIP
    " Create penalty Fee:" DCCLI.CreateFees SKIP
 WITH OVERLAY ROW 2 centered
-   COLOR value(cfc)
-   TITLE COLOR value(ctc)
+   COLOR value(Syst.CUICommon:cfc)
+   TITLE COLOR value(Syst.CUICommon:ctc)
    " PENALTY FEE RULES FOR " + icEvent + " "
    WITH no-labels side-labels
    FRAME lis.
 
 
-assign ufkey = TRUE ehto = 3.
+assign ufkey = TRUE Syst.CUICommon:ehto = 3.
 RUN Syst/ufkey.p.
 
-cfc = "lis". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 
 RUN LOCAL-UPDATE-RECORD.
        
 PROCEDURE LOCAL-UPDATE-RECORD. 
    
    FIND FIRST DayCampaign WHERE
-      DayCampaign.Brand = gcBrand AND
+      DayCampaign.Brand = Syst.CUICommon:gcBrand AND
       DayCampaign.DCEvent = dccli.dcevent NO-LOCK NO-ERROR.
 
    IF AVAIL DayCampaign THEN DO:
@@ -117,7 +117,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
       IF AVAIL TMSCodes THEN lcCalcMethod = TMSCodes.CodeName.
       
       FIND FIRST BillItem WHERE
-                 BillItem.Brand    = gcBrand AND
+                 BillItem.Brand    = Syst.CUICommon:gcBrand AND
                  BillItem.BillCode = DayCampaign.BillCode
       NO-LOCK NO-ERROR.
    
@@ -144,7 +144,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
                                     TODAY).
    
    FIND FIRST FMItem NO-LOCK  WHERE
-            FMItem.Brand     = gcBrand       AND
+            FMItem.Brand     = Syst.CUICommon:gcBrand       AND
             FMItem.FeeModel  = DayCampaign.TermFeeModel AND
             FMItem.PriceList = lcPriceList AND
             FMItem.FromDate <= TODAY     AND
@@ -172,11 +172,11 @@ PROCEDURE LOCAL-UPDATE-RECORD.
    ldeCurrPen = TRUNCATE(ldeCurrPen * ldePrice,0).
 
    FIND FIRST FeeModel NO-LOCK WHERE
-      FeeModel.Brand = gcBrand AND
+      FeeModel.Brand = Syst.CUICommon:gcBrand AND
       FeeModel.FeeModel = DayCampaign.TermFeeModel NO-ERROR.
 
    FIND FIRST PriceList NO-LOCK WHERE
-      PriceList.Brand = gcBrand AND
+      PriceList.Brand = Syst.CUICommon:gcBrand AND
       PriceList.PriceList = lcPriceList NO-ERROR.
 
    DISP

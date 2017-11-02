@@ -10,10 +10,9 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-katun = "NewtonRPC".
-gcBrand = "1".
+Syst.CUICommon:katun = "NewtonRPC".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
-{Func/date.i}
 {Func/orderchk.i}
 
 /* Input parameters */
@@ -63,7 +62,7 @@ IF fOngoingOrders(pcCli, (IF pcChannel BEGINS "retention"
 
 ELSE IF pcNumberType EQ "stc" THEN DO:
    FIND FIRST MobSub NO-LOCK WHERE
-              MobSub.Brand EQ gcBrand AND
+              MobSub.Brand EQ Syst.CUICommon:gcBrand AND
               MobSub.CLI EQ pcCLI NO-ERROR.
    IF NOT AVAIL Mobsub THEN 
       RETURN appl_err("Subscription not found").
@@ -86,7 +85,7 @@ END.
 /* Check Fixed number existence and orders */
 IF pcFixedNumber > "" THEN DO:
    FIND FIRST MobSub WHERE
-              MobSub.Brand EQ gcBrand AND
+              MobSub.Brand EQ Syst.CUICommon:gcBrand AND
               MobSub.FixedNumber EQ pcFixedNumber AND
               MobSub.CLI NE pcCLI NO-LOCK NO-ERROR. 
    IF AVAIL MobSub THEN
@@ -103,7 +102,7 @@ END.
 IF pcNumberType EQ "MNP" OR
    pcNumberType EQ "NEW" THEN DO:
    FIND FIRST MobSub WHERE
-              MobSub.Brand EQ gcBrand AND
+              MobSub.Brand EQ Syst.CUICommon:gcBrand AND
               MobSub.CLI EQ pcCLI NO-LOCK NO-ERROR. 
    IF AVAIL MobSub THEN
       RETURN appl_err("Subscription already exists with number|" + pcCLI).
@@ -112,5 +111,4 @@ END.
 add_boolean(response_toplevel_id, "", llAllow).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

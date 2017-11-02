@@ -12,7 +12,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/eventval.i}
 
 DEF VAR pcStruct AS CHAR NO-UNDO. 
@@ -32,7 +32,7 @@ pcStruct   = get_struct(param_toplevel_id, "1").
 
 lcstruct = validate_struct(pcStruct,"limit,username!,activationlimit").
 pcUsername = "VISTA_" + get_string(pcStruct, "username").
-katun = pcUsername.
+Syst.CUICommon:katun = pcUsername.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -73,7 +73,7 @@ ELSE
 {newton/src/settenant.i pcTenant}
 
 FIND CustCat EXCLUSIVE-LOCK WHERE
-     CustCat.Brand = gcBrand AND
+     CustCat.Brand = Syst.CUICommon:gcBrand AND
      CustCat.Category = pcCategory NO-WAIT NO-ERROR.
 
 IF NOT AVAIL CustCat THEN 
@@ -115,6 +115,5 @@ RELEASE CustCat.
 add_struct(response_toplevel_id, "").
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-   IF llDoEvent THEN fCleanEventObjects().
+      IF llDoEvent THEN fCleanEventObjects().
 END.

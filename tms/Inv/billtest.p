@@ -24,7 +24,7 @@ ASSIGN
    lcOutDir = "/scratch/reports/billing_tests/".
 
 DO WHILE TRUE ON ENDKEY UNDO:
-   ASSIGN  ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p. 
+   ASSIGN  Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p. 
    hide frame fParam1 no-pause.       
    hide frame fParam2 no-pause.       
    DISPLAY 
@@ -56,7 +56,7 @@ DO WHILE TRUE ON ENDKEY UNDO:
    END.
 
    ELSE IF FRAME-INDEX  = 2 THEN DO:
-      ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+      Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
       update 
          ldtinv label "Invoice date" skip 
          ldtfrom format "99-99-99"
@@ -86,7 +86,7 @@ DO WHILE TRUE ON ENDKEY UNDO:
       
       def var llDisp       as log no-undo.      
       
-      ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+      Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
       update 
          ldtinv label "Invoice date" 
          llDisp

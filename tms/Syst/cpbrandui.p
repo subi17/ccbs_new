@@ -40,10 +40,10 @@ form
       FORMAT "X(30)"
    
    SKIP(6)
-with title color value(ctc) 
-  " " + ynimi + " COPY A NEW BRAND  " + 
-  STRING(pvm,"99-99-99")  + " "
-  side-labels color value(cfc) 
+with title color value(Syst.CUICommon:ctc) 
+  " " + Syst.CUICommon:ynimi + " COPY A NEW BRAND  " + 
+  STRING(TODAY,"99-99-99")  + " "
+  side-labels color value(Syst.CUICommon:cfc) 
   OVERLAY row 1 width 80 frame main.
 
 
@@ -65,8 +65,8 @@ END.
 
 lcNewName = Brand.BRName.
 
-cfc = "lis". RUN Syst/ufcolor.p.
-ehto = 9. RUN Syst/ufkey.p.
+Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
+Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
 PAUSE 0.
 DISPLAY icNewBrand lcNewName WITH frame main. 
@@ -78,16 +78,16 @@ repeat WITH FRAME main:
 
    REPEAT WITH FRAME main ON ENDKEY UNDO, LEAVE:
    
-      ehto = 9. RUN Syst/ufkey.p.
+      Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
       pause 0 no-MESSAGE.
 
       update
          lcSrcBrand
       with frame main editing:
 
-         readkey. nap = keylabel(lastkey).
+         readkey. Syst.CUICommon:nap = keylabel(lastkey).
 
-         IF lookup(nap,poisnap) > 0 THEN DO:
+         IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
 
             IF FRAME-FIELD = "lcSrcBrand" THEN DO WITH FRAME main:
 
@@ -127,18 +127,18 @@ repeat WITH FRAME main:
    repeat WITH FRAME main on ENDkey undo toimi, next toimi:
 
       ASSIGN
-      ufk = 0 ufk[1] = 132 ufk[4] = 0  ufk[5] = 795 ufk[8] = 8 
-      ehto = 0.
+      Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[4] = 0  Syst.CUICommon:ufk[5] = 795 Syst.CUICommon:ufk[8] = 8 
+      Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
 
-      IF toimi = 1 THEN next LOOP.
+      IF Syst.CUICommon:toimi = 1 THEN next LOOP.
 
-      else IF toimi = 8 THEN DO:
+      else IF Syst.CUICommon:toimi = 8 THEN DO:
          llCopy = FALSE.
          leave LOOP.
       END.
 
-      else IF toimi = 5 THEN DO:
+      else IF Syst.CUICommon:toimi = 5 THEN DO:
          
          IF lcSrcBrand = "" THEN DO:
             MESSAGE "Source brand has not been selected."

@@ -16,7 +16,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -70,8 +70,8 @@ FORM
     RequestActionRule.ExclParamValue FORMAT "X(10)"
     RequestActionRule.ToDate 
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) 
+    COLOR VALUE(Syst.CUICommon:cfc)   
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
        "  ACTION RULES FOR " + STRING(iiRequestActionID) + " (Active) "
     FRAME sel.
 
@@ -84,16 +84,16 @@ FORM
     RequestActionRule.FromDate        COLON 25
     RequestActionRule.ToDate          COLON 25    
 WITH  OVERLAY ROW 5 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 FORM 
     "Parameter:" lcParamField FORMAT "X(15)"
     HELP "Enter parameter"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Parameter"
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Parameter"
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FUNCTION fParamDescription RETURNS LOGIC
    (icParamField AS CHAR):
@@ -103,7 +103,7 @@ FUNCTION fParamDescription RETURNS LOGIC
    IF icParamField begins "#" THEN lcParamDesc = "Special rule".
    ELSE 
    FOR FIRST RequestParam NO-LOCK WHERE
-             RequestParam.Brand   = gcBrand AND
+             RequestParam.Brand   = Syst.CUICommon:gcBrand AND
              RequestParam.ReqType = RequestAction.ReqType AND
              RequestParam.ParamField = icParamField:
       lcParamDesc = RequestParam.Usage.      
@@ -112,7 +112,7 @@ FUNCTION fParamDescription RETURNS LOGIC
 END FUNCTION.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 FIND FIRST RequestAction WHERE 
@@ -124,7 +124,7 @@ IF NOT AVAILABLE RequestAction THEN DO:
 END.
 
 FOR EACH RequestParam NO-LOCK WHERE
-         RequestParam.Brand   = gcBrand AND
+         RequestParam.Brand   = Syst.CUICommon:gcBrand AND
          RequestParam.ReqType = RequestAction.ReqType AND
          RequestParam.Usage > "":
    lcFields = lcFields + (IF lcFields > "" THEN "," ELSE "") + 
@@ -156,7 +156,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a RequestActionRule  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -165,7 +165,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
@@ -251,21 +251,21 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 36 ufk[2]= 0  ufk[3]= 0  
-        ufk[4]= 1827 WHEN NOT llActive
-        ufk[4]= 1828 WHEN llActive
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)  
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
-        ufk[7]= 0  
-        ufk[8]= 8 
-        ehto  = 3 
+        Syst.CUICommon:ufk[1]= 36 Syst.CUICommon:ufk[2]= 0  Syst.CUICommon:ufk[3]= 0  
+        Syst.CUICommon:ufk[4]= 1827 WHEN NOT llActive
+        Syst.CUICommon:ufk[4]= 1828 WHEN llActive
+        Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)  
+        Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
+        Syst.CUICommon:ufk[7]= 0  
+        Syst.CUICommon:ufk[8]= 8 
+        Syst.CUICommon:ehto  = 3 
         ufkey = FALSE.
         
         /* used as help */
-        IF gcHelpParam > "" THEN ASSIGN
-           ufk[5] = 11
-           ufk[6] = 0
-           ufk[7] = 0.
+        IF Syst.CUICommon:gcHelpParam > "" THEN ASSIGN
+           Syst.CUICommon:ufk[5] = 11
+           Syst.CUICommon:ufk[6] = 0
+           Syst.CUICommon:ufk[7] = 0.
          
         RUN Syst/ufkey.p.
       END.
@@ -274,13 +274,13 @@ REPEAT WITH FRAME sel:
       IF order = 1 THEN DO:
         CHOOSE ROW RequestActionRule.ParamField {Syst/uchoose.i} NO-ERROR 
           WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) RequestActionRule.ParamField WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) RequestActionRule.ParamField WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -289,10 +289,10 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -310,7 +310,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -335,7 +335,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -361,7 +361,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND RequestActionRule WHERE recid(RequestActionRule) = Memory 
         NO-LOCK NO-ERROR.
@@ -387,7 +387,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -403,9 +403,9 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
        SET lcParamField WITH FRAME f1.
@@ -428,7 +428,7 @@ REPEAT WITH FRAME sel:
        END.
      END. /* Search-1 */
 
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:  /* display filter */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 THEN DO:  /* display filter */
         llActive = NOT llActive.
         RUN local-find-first.
         ASSIGN 
@@ -442,8 +442,8 @@ REPEAT WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
-        IF gcHelpParam > "" THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
+        IF Syst.CUICommon:gcHelpParam > "" THEN DO:
            xRecid = rtab[FRAME-LINE].
            LEAVE LOOP.
         END.
@@ -454,13 +454,13 @@ REPEAT WITH FRAME sel:
         END.    
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW" 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO TRANSACTION:  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        RequestActionRule.ParamField
        RequestActionRule.ParamValue
        RequestActionRule.ExclParamValue.
@@ -484,7 +484,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N)?" UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        RequestActionRule.ParamField
        RequestActionRule.ParamValue
        RequestActionRule.ExclParamValue.
@@ -508,21 +508,21 @@ REPEAT WITH FRAME sel:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 AND lcRight = "RW" THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 AND lcRight = "RW" THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(FALSE).
 
-       IF gcHelpParam > "" THEN DO:
+       IF Syst.CUICommon:gcHelpParam > "" THEN DO:
           xRecid = rtab[FRAME-LINE (sel)].
           LEAVE LOOP.
        END.
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhRequestActionRule).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -538,27 +538,27 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(RequestActionRule) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(RequestActionRule) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
-ehto = 4.
+Syst.CUICommon:ehto = 4.
 RUN Syst/ufkey.p.
 
 fCleanEventObjects().
@@ -679,19 +679,19 @@ PROCEDURE local-UPDATE-record:
       
       IF NOT NEW RequestActionRule THEN DO:
          ASSIGN 
-            ufk    = 0
-            ufk[1] = 7 WHEN lcRight = "RW"
-            ufk[8] = 8
-            ehto   = 0.
+            Syst.CUICommon:ufk    = 0
+            Syst.CUICommon:ufk[1] = 7 WHEN lcRight = "RW"
+            Syst.CUICommon:ufk[8] = 8
+            Syst.CUICommon:ehto   = 0.
          
          RUN Syst/ufkey.p.
          
-         IF toimi = 8 THEN LEAVE.
+         IF Syst.CUICommon:toimi = 8 THEN LEAVE.
       END.
 
       FIND CURRENT RequestActionRule EXCLUSIVE-LOCK.
       
-      ehto = 9.
+      Syst.CUICommon:ehto = 9.
       RUN Syst/ufkey.p.
       
       UPDATE
@@ -707,26 +707,26 @@ PROCEDURE local-UPDATE-record:
          IF KEYLABEL(LASTKEY) = "F9" AND FRAME-FIELD = "ParamField" THEN DO:
 
             ASSIGN
-               gcHelpParam = "RequestActionRule"
-               si-recid    = ?.
+               Syst.CUICommon:gcHelpParam = "RequestActionRule"
+               Syst.CUICommon:si-recid    = ?.
             RUN Syst/requestparam.p(RequestAction.ReqType).
-            gcHelpParam = "".
+            Syst.CUICommon:gcHelpParam = "".
             
-            IF si-recid NE ? THEN DO:
+            IF Syst.CUICommon:si-recid NE ? THEN DO:
             
-               FIND RequestParam WHERE RECID(RequestParam) = si-recid
+               FIND RequestParam WHERE RECID(RequestParam) = Syst.CUICommon:si-recid
                   NO-LOCK NO-ERROR.
                IF AVAILABLE RequestParam THEN 
                   DISPLAY RequestParam.ParamField @ 
                           RequestActionRule.ParamField WITH FRAME lis.
             END.           
 
-            ehto = 9.
+            Syst.CUICommon:ehto = 9.
             RUN Syst/ufkey.p.
             NEXT. 
          END.
 
-         ELSE IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+         ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
 
             PAUSE 0.
             

@@ -21,7 +21,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/orderchk.i}
 {Func/custfunc.i}
@@ -108,11 +108,11 @@ FUNCTION fCheckMigration RETURNS LOG ():
          llOrderAllowed = FALSE
          lcReason = "PRO migration not possible because of not company or selfemployed".
    ELSE DO:
-      FIND Mobsub WHERE Mobsub.Brand EQ gcBrand AND Mobsub.InvCust EQ Customer.CustNum NO-LOCK NO-ERROR.
+      FIND Mobsub WHERE Mobsub.Brand EQ Syst.CUICommon:gcBrand AND Mobsub.InvCust EQ Customer.CustNum NO-LOCK NO-ERROR.
       IF AMBIG MobSub THEN
           IF (pcChannel EQ "Newton" OR pcChannel EQ "VFR") THEN DO:
              IF CAN-FIND(FIRST Mobsub NO-LOCK WHERE
-                               Mobsub.Brand EQ gcBrand AND
+                               Mobsub.Brand EQ Syst.CUICommon:gcBrand AND
                                Mobsub.InvCust EQ Customer.CustNum AND
                                Mobsub.paytype) THEN DO:
                ASSIGN
@@ -132,7 +132,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                    and all convergent subscriptions are commercially
                    active webstatus */
                 FOR EACH Mobsub NO-LOCK WHERE 
-                         Mobsub.Brand EQ gcBrand AND 
+                         Mobsub.Brand EQ Syst.CUICommon:gcBrand AND 
                          Mobsub.InvCust EQ Customer.CustNum:
                    IF NOT fIsConvergent3POnly(Mobsub.clitype) THEN NEXT.
                    FIND FIRST Clitype WHERE
@@ -166,7 +166,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                       or possible to migrate to active according to defined
                       mapping */
                    FOR EACH Mobsub NO-LOCK WHERE
-                            Mobsub.Brand EQ gcBrand AND
+                            Mobsub.Brand EQ Syst.CUICommon:gcBrand AND
                             Mobsub.InvCust EQ Customer.CustNum:
                       IF fIsConvergent3POnly(Mobsub.clitype) THEN NEXT.
                       FIND FIRST Clitype WHERE
@@ -287,7 +287,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
          /* Migration not possible for retired or non active convergent */
          ELSE IF fIsConvergenceTariff(Mobsub.clitype) AND
             CAN-FIND(First CliType WHERE
-                           Clitype.brand EQ gcBrand AND
+                           Clitype.brand EQ Syst.CUICommon:gcBrand AND
                            Clitype.Clitype EQ Mobsub.clitype AND
                            Clitype.webstatuscode NE {&CLITYPE_WEBSTATUSCODE_ACTIVE}) THEN
             ASSIGN
@@ -300,7 +300,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
          ELSE IF NOT llNonProToProMigrationOngoing THEN
          DO:
              /* There exists only 1 non-pro mobile subscription, so this is for blocking migrating of non-pro mobile line to pro mobile line */
-             FIND FIRST CliType WHERE CliType.Brand = gcBrand AND CliType.CliType = pcCliType NO-LOCK NO-ERROR.
+             FIND FIRST CliType WHERE CliType.Brand = Syst.CUICommon:gcBrand AND CliType.CliType = pcCliType NO-LOCK NO-ERROR.
              IF AVAIL CliType AND CliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
                  ASSIGN
                      llOrderAllowed = FALSE
@@ -334,7 +334,7 @@ IF NOT llOrderAllowed THEN DO:
 END.
 
 FIND FIRST Customer NO-LOCK WHERE
-           Customer.Brand      = gcBrand    AND
+           Customer.Brand      = Syst.CUICommon:gcBrand    AND
            Customer.OrgID      = pcPersonId AND
            Customer.CustIDType = pcIdType   AND
            Customer.Roles     NE "inactive" NO-ERROR.
@@ -361,7 +361,7 @@ IF AVAIL Customer AND
 END.
 ELSE IF AVAIL Customer AND
    CAN-FIND(FIRST MobSub WHERE 
-                  Mobsub.Brand EQ gcBrand AND
+                  Mobsub.Brand EQ Syst.CUICommon:gcBrand AND
                   Mobsub.InvCust EQ Customer.CustNum) THEN DO:
    FIND FIRST CustCat WHERE Custcat.brand EQ "1" AND CustCat.category EQ Customer.category NO-LOCK NO-ERROR.
    IF AVAIL CustCat THEN
@@ -409,7 +409,7 @@ ELSE IF AVAIL Customer AND
             IF plSTCMigrate THEN 
             DO:
                 fCheckMigration().
-                FIND Mobsub WHERE Mobsub.Brand EQ gcBrand AND Mobsub.InvCust EQ Customer.CustNum NO-LOCK NO-ERROR.
+                FIND Mobsub WHERE Mobsub.Brand EQ Syst.CUICommon:gcBrand AND Mobsub.InvCust EQ Customer.CustNum NO-LOCK NO-ERROR.
                 IF AVAIL MobSub AND NOT llProToNonProMigrationOngoing THEN 
                     ASSIGN 
                         llOrderAllowed = FALSE
@@ -446,13 +446,13 @@ ELSE DO:
               lcReason = "PRO migration not possible because of not company or selfemployed". 
       ELSE DO:
          FOR EACH OrderCustomer WHERE
-                  OrderCustomer.Brand      EQ gcBrand    AND
+                  OrderCustomer.Brand      EQ Syst.CUICommon:gcBrand    AND
                   OrderCustomer.CustIdType EQ pcIdType   AND
                   OrderCustomer.CustId     EQ pcPersonId NO-LOCK:
 
              IF OrderCustomer.PRO EQ FALSE THEN 
              DO:    
-                FIND FIRST Order WHERE Order.Brand EQ gcBrand AND Order.OrderId EQ OrderCustomer.OrderId NO-LOCK NO-ERROR.
+                FIND FIRST Order WHERE Order.Brand EQ Syst.CUICommon:gcBrand AND Order.OrderId EQ OrderCustomer.OrderId NO-LOCK NO-ERROR.
                 IF AVAIL Order AND LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 THEN 
                 DO:
                     llOrderAllowed = FALSE.
@@ -467,7 +467,7 @@ ELSE DO:
          /* Assume, there is no ongoing order for customer selected from PRO channels */
          IF NOT llPROOngoingOrder AND NOT llCustCatPro THEN 
          DO:
-             FIND FIRST CliType WHERE CliType.Brand = gcBrand AND CliType.CliType = pcCliType NO-LOCK NO-ERROR.
+             FIND FIRST CliType WHERE CliType.Brand = Syst.CUICommon:gcBrand AND CliType.CliType = pcCliType NO-LOCK NO-ERROR.
              IF AVAIL CliType AND CliType.TariffType <> {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
              DO:
                  llOrderAllowed = FALSE.
@@ -506,19 +506,19 @@ ELSE lcExtraLineAllowed = "NO_MAIN_LINE".
 IF lcAddLineAllowed = "" THEN DO:
       
    FOR EACH OrderCustomer NO-LOCK WHERE   
-            OrderCustomer.Brand      EQ gcBrand AND 
+            OrderCustomer.Brand      EQ Syst.CUICommon:gcBrand AND 
             OrderCustomer.CustId     EQ pcPersonId AND
             OrderCustomer.CustIdType EQ pcIdType AND
             OrderCustomer.RowType    EQ 1,
       EACH  Order NO-LOCK WHERE
-            Order.Brand              EQ gcBrand AND
+            Order.Brand              EQ Syst.CUICommon:gcBrand AND
             Order.orderid            EQ OrderCustomer.Orderid AND
             Order.OrderType          NE {&ORDER_TYPE_RENEWAL} AND 
             Order.OrderType          NE {&ORDER_TYPE_STC} AND 
             Order.SalesMan NE "GIFT" AND
             LOOKUP(STRING(Order.statuscode),{&ORDER_INACTIVE_STATUSES}) EQ 0,
        FIRST CLIType NO-LOCK WHERE
-             CLIType.Brand = gcBrand AND
+             CLIType.Brand = Syst.CUICommon:gcBrand AND
              CLIType.CLIType = Order.CLIType AND
              CLIType.LineType > 0,
        EACH OrderAction NO-LOCK WHERE 
@@ -527,7 +527,7 @@ IF lcAddLineAllowed = "" THEN DO:
             OrderAction.ItemType = "BundleItem":
 
          IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                           CLIType.Brand    = gcBrand                   AND
+                           CLIType.Brand    = Syst.CUICommon:gcBrand                   AND
                            CLIType.CLIType  = OrderAction.ItemKey       AND
                            CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) THEN DO:
          lcAddLineAllowed = "OK".
@@ -559,5 +559,4 @@ ELSE
 add_string(lcReturnStruct, 'segment',lcSegment).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

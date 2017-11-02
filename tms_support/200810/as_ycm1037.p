@@ -1,7 +1,6 @@
 {Syst/commpaa.i}
-katun = "anttis".
-gcBrand = "1".
-{Func/date.i}
+Syst.CUICommon:katun = "anttis".
+Syst.CUICommon:gcBrand = "1".
 
 DEFINE VARIABLE liRangeStart AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liRangeEnd   AS INTEGER NO-UNDO. 
@@ -14,7 +13,7 @@ def stream screated.
 output stream screated to /apps/snet/200810/as_ycm1037.created2.txt.
 
 DEFINE VARIABLE ldeNow AS DECIMAL NO-UNDO. 
-ldeNow = fmakets().
+ldeNow = Func.Common:mMakeTS().
 
 FUNCTION fCreateMSIDNStamp RETURNS LOGICAL
 (iiBegin AS INTEGER,
@@ -38,7 +37,7 @@ FUNCTION fCreateMSIDNStamp RETURNS LOGICAL
          
          CREATE MSISDN.
          ASSIGN
-            MSISDN.Brand      = gcBrand
+            MSISDN.Brand      = Syst.CUICommon:gcBrand
             MSISDN.CLI        = msisdnnumber.cli
             MSISDN.ValidFrom  = ldeNow 
             MSISDN.POS        = ""

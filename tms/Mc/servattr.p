@@ -19,7 +19,7 @@
 {Mc/lib/tokenchk.i 'ServAttr'}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -66,8 +66,8 @@ form
     ServAttr.ScChgable   column-label "ChgA" format "Y/N"
     ServAttr.FeeModel    column-label "FeeModel" format "x(7)"
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) 
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     " Attributes of Service Component '" + icServCom  + "'"
     FRAME sel.
 
@@ -85,29 +85,29 @@ form
     ServAttr.FeeModel  COLON 20 
        FeeModel.FeeName NO-LABEL    SKIP
 WITH  OVERLAY ROW 5 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 form /* seek ServAttr  BY  ServAttr */
     ServAttr
     HELP "Enter Code of ServAttr"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek ServAttr  BY SAName */
     SAName
     HELP "Enter Name of ServAttr"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Name "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FIND ServCom WHERE
-     ServCom.Brand   = gcBrand AND
+     ServCom.Brand   = Syst.CUICommon:gcBrand AND
      ServCom.ServCom = icServCom NO-LOCK NO-ERROR.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -133,13 +133,13 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a ServAttr  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            disp icServCom @ servAttr.ServCom WITH FRAME lis.
@@ -148,7 +148,7 @@ REPEAT WITH FRAME sel:
               (ServAttr.ServAttr NOT ENTERED OR
               NOT CAN-FIND(ServAttr using  ServAttr.ServAttr WHERE  
                            ServAttr.ServCom = icServCom AND 
-                           ServAttr.Brand = gcBrand ),
+                           ServAttr.Brand = Syst.CUICommon:gcBrand ),
               "ServAttr " + string(INPUT ServAttr.ServAttr) +
               " already exists !").
            IF INPUT FRAME lis ServAttr.ServAttr NOT ENTERED THEN 
@@ -156,7 +156,7 @@ REPEAT WITH FRAME sel:
            CREATE ServAttr.
            ASSIGN
            ServAttr.ServCom  = icServCom  
-           ServAttr.Brand    = gcBrand 
+           ServAttr.Brand    = Syst.CUICommon:gcBrand 
            ServAttr.ServAttr = INPUT FRAME lis ServAttr.ServAttr.
 
            RUN local-UPDATE-record.
@@ -177,7 +177,7 @@ REPEAT WITH FRAME sel:
       /* is there ANY record ? */
       FIND FIRST ServAttr WHERE 
                  ServAttr.ServCom = icServCom AND 
-                 ServAttr.Brand   = gcBrand 
+                 ServAttr.Brand   = Syst.CUICommon:gcBrand 
       NO-LOCK NO-ERROR.
       IF NOT AVAILABLE ServAttr THEN LEAVE LOOP.
       NEXT LOOP.
@@ -229,14 +229,14 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35  
-        ufk[2]= 30 
-        ufk[3]= 0
-        ufk[4]= 927
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-        ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ufk[1]= 35  
+        Syst.CUICommon:ufk[2]= 30 
+        Syst.CUICommon:ufk[3]= 0
+        Syst.CUICommon:ufk[4]= 927
+        Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
+        Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         {Syst/uright1.i '"4,5,6"'}
         RUN Syst/ufkey.p.
       END.
@@ -244,20 +244,20 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW ServAttr.ServAttr {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ServAttr.ServAttr WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ServAttr.ServAttr WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW ServAttr.SAName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ServAttr.SAName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ServAttr.SAName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -281,10 +281,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -309,7 +309,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -335,7 +335,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ServAttr WHERE recid(ServAttr) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -359,7 +359,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -374,15 +374,15 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET ServAttr WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF ServAttr ENTERED THEN DO:
           FIND FIRST ServAttr WHERE 
-                     ServAttr.Brand    = gcBrand AND 
+                     ServAttr.Brand    = Syst.CUICommon:gcBrand AND 
                      ServAttr.ServAttr >= ServAttr AND 
                      ServAttr.ServCom   = icServCom NO-LOCK NO-ERROR.
           IF NOT AVAILABLE ServAttr THEN DO:
@@ -398,16 +398,16 @@ BROWSE:
      END. /* Search-1 */
 
      /* Search BY col 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        SET SAName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF SAName ENTERED THEN DO:
           FIND FIRST ServAttr WHERE 
-                     ServAttr.Brand   = gcBrand AND 
+                     ServAttr.Brand   = Syst.CUICommon:gcBrand AND 
                      ServAttr.SAName >= SAName AND 
                      ServAttr.ServCom  = icServCom NO-LOCK NO-ERROR.
           IF NOT AVAILABLE ServAttr THEN DO:
@@ -422,7 +422,7 @@ BROWSE:
      END. /* Search-2 */
 
      /* UPDATE memo */
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 THEN DO:
         RUN local-find-this(FALSE).
         RUN Mc/memo.p(INPUT 0,
                  INPUT "ServAttr",
@@ -432,21 +432,21 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW"
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW"
      THEN DO:  /* add */
         {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW"
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION:  /* DELETE */
        {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        ServAttr.ServAttr ServAttr.SAName .
 
        RUN local-find-NEXT.
@@ -468,7 +468,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        ServAttr.ServAttr ServAttr.SAName .
        IF ok THEN DO:
 
@@ -479,7 +479,7 @@ BROWSE:
            /* was LAST record DELETEd ? */
            IF NOT CAN-FIND(FIRST ServAttr
            WHERE ServAttr.ServCom = icServCom AND 
-                 ServAttr.Brand = gcBrand) THEN DO:
+                 ServAttr.Brand = Syst.CUICommon:gcBrand) THEN DO:
               CLEAR FRAME sel NO-PAUSE.
               PAUSE 0 NO-MESSAGE.
               LEAVE LOOP.
@@ -490,7 +490,7 @@ BROWSE:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -498,8 +498,8 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhServAttr).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ServAttr.ServAttr.
 
        RUN local-UPDATE-record.                                  
@@ -516,25 +516,25 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(ServAttr) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(ServAttr) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 
@@ -553,36 +553,36 @@ END PROCEDURE.
 PROCEDURE local-find-FIRST:
        IF order = 1 THEN FIND FIRST ServAttr
        WHERE ServAttr.ServCom = icServCom AND 
-             ServAttr.Brand = gcBrand NO-LOCK NO-ERROR.
+             ServAttr.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND FIRST ServAttr USE-INDEX SAName
        WHERE ServAttr.ServCom = icServCom AND 
-             ServAttr.Brand = gcBrand NO-LOCK NO-ERROR.
+             ServAttr.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
        IF order = 1 THEN FIND LAST ServAttr
-       WHERE ServAttr.ServCom = icServCom AND ServAttr.Brand = gcBrand
+       WHERE ServAttr.ServCom = icServCom AND ServAttr.Brand = Syst.CUICommon:gcBrand
        NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND LAST ServAttr USE-INDEX SAName
-       WHERE ServAttr.ServCom = icServCom AND ServAttr.Brand = gcBrand 
+       WHERE ServAttr.ServCom = icServCom AND ServAttr.Brand = Syst.CUICommon:gcBrand 
        NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
        IF order = 1 THEN FIND NEXT ServAttr
-       WHERE ServAttr.ServCom = icServCom AND ServAttr.Brand = gcBrand 
+       WHERE ServAttr.ServCom = icServCom AND ServAttr.Brand = Syst.CUICommon:gcBrand 
        NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND NEXT ServAttr USE-INDEX SAName
-       WHERE ServAttr.ServCom = icServCom AND ServAttr.Brand = gcBrand 
+       WHERE ServAttr.ServCom = icServCom AND ServAttr.Brand = Syst.CUICommon:gcBrand 
        NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
        IF order = 1 THEN FIND PREV ServAttr
-       WHERE ServAttr.ServCom = icServCom AND ServAttr.Brand = gcBrand 
+       WHERE ServAttr.ServCom = icServCom AND ServAttr.Brand = Syst.CUICommon:gcBrand 
        NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND PREV ServAttr USE-INDEX SAName
-       WHERE ServAttr.ServCom = icServCom AND ServAttr.Brand = gcBrand 
+       WHERE ServAttr.ServCom = icServCom AND ServAttr.Brand = Syst.CUICommon:gcBrand 
        NO-LOCK NO-ERROR.
 END PROCEDURE.
 
@@ -602,7 +602,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
 
    FIND FIRST FeeModel WHERE 
-              FeeModel.Brand = gcBrand AND 
+              FeeModel.Brand = Syst.CUICommon:gcBrand AND 
               FeeModel.FeeModel = ServAttr.FeeModel NO-LOCK NO-ERROR.
 
 END PROCEDURE.
@@ -622,7 +622,7 @@ PROCEDURE local-UPDATE-record:
 
       IF lcRight = "RW" THEN DO:
       
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
 
       
@@ -635,13 +635,13 @@ PROCEDURE local-UPDATE-record:
          WITH FRAME lis
          EDITING:
              READKEY.
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
                 PAUSE 0.
 
                 IF FRAME-FIELD = "FeeModel" AND 
                    INPUT FRAME lis ServAttr.Feemodel NE "" THEN DO:
                    FIND Feemodel WHERE 
-                        FeeModel.Brand    = gcBrand AND 
+                        FeeModel.Brand    = Syst.CUICommon:gcBrand AND 
                         FeeModel.FeeModel = INPUT FRAME lis ServAttr.FeeModel
                    NO-LOCK NO-ERROR.
                    IF NOT AVAIL FeeModel THEN DO:

@@ -1,13 +1,13 @@
 {Syst/commpaa.i}
-katun = "anttis".
-gcBrand = "1".
+Syst.CUICommon:katun = "anttis".
+Syst.CUICommon:gcBrand = "1".
 {Syst/eventval.i}
 
 DEFINE var icFile AS CHARACTER NO-UNDO. 
 icfile = "/apps/snet/200911/as_custnum300_problem.input".
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhInvoice AS HANDLE NO-UNDO.
@@ -51,7 +51,7 @@ repeat:
          END.
        
          FOR EACH SingleFee EXCLUSIVE-LOCK USE-INDEX HostTable WHERE
-                  SingleFee.Brand     = gcBrand AND
+                  SingleFee.Brand     = Syst.CUICommon:gcBrand AND
                   SingleFee.HostTable = "Order" AND
                   SingleFee.KeyValue  = STRING(Order.OrderId) AND
                   SingleFee.CalcObj   = lcCalcObj:

@@ -133,12 +133,12 @@ form
       HELP "Print an account level summary from all postings" skip(1)
    
    with row 1 side-labels width 80
-        title color value(ctc) " " + ynimi + "  INVOICE JOURNAL  " +
-        string(pvm,"99-99-99") + " " color value(cfc)
+        title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + "  INVOICE JOURNAL  " +
+        string(TODAY,"99-99-99") + " " color value(Syst.CUICommon:cfc)
         frame rajat.
 
 
-cfc = "puli". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "puli". RUN Syst/ufcolor.p.
 pause 0 no-message.
 
 assign pvm2         = date(month(today),01,year(today)) - 1
@@ -164,7 +164,7 @@ repeat with frame rajat on endkey undo toimi, next toimi:
 
       IF InvGroup > "" THEN DO:
          FIND InvGroup WHERE 
-              InvGroup.Brand    = gcBrand AND
+              InvGroup.Brand    = Syst.CUICommon:gcBrand AND
               InvGroup.InvGroup = InvGroup NO-LOCK NO-ERROR.
          IF AVAILABLE InvGroup THEN DISPLAY InvGroup.igname @ igname
             WITH FRAME rajat.
@@ -173,11 +173,11 @@ repeat with frame rajat on endkey undo toimi, next toimi:
       IF extname = ""
       THEN DISPLAY "NOT SELECTED" @ extname WITH FRAME rajat.
 
-      assign ufk = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8 ehto = 0.
+      assign Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
 
-      if toimi = 1 then do:
-         ehto = 9. RUN Syst/ufkey.p.
+      if Syst.CUICommon:toimi = 1 then do:
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
          repeat with frame rajat on endkey undo, leave:
          
@@ -213,9 +213,9 @@ repeat with frame rajat on endkey undo toimi, next toimi:
 
             with frame rajat editing:
 
-               readkey. nap = keylabel(lastkey).
+               readkey. Syst.CUICommon:nap = keylabel(lastkey).
 
-               IF nap = "F9" AND 
+               IF Syst.CUICommon:nap = "F9" AND 
                   (INDEX(FRAME-FIELD,"liInvType") > 0 OR
                    INDEX(FRAME-FIELD,"liPaymState") > 0)
                THEN DO:
@@ -254,12 +254,12 @@ repeat with frame rajat on endkey undo toimi, next toimi:
                      END.
                   END.
 
-                  ehto = 9.
+                  Syst.CUICommon:ehto = 9.
                   RUN Syst/ufkey.p.
                   NEXT. 
                END.
 
-               if lookup(nap,poisnap) > 0 then do:
+               if lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 then do:
                   hide message.
                   if frame-field = "InvGroup" then do:
                      assign frame rajat InvGroup.
@@ -269,7 +269,7 @@ repeat with frame rajat on endkey undo toimi, next toimi:
                      end.
                      else do:
                         find InvGroup where
-                             InvGroup.Brand    = gcBrand AND
+                             InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                              InvGroup.InvGroup = InvGroup
                         no-lock no-error.
                         if not avail InvGroup then do:
@@ -295,7 +295,7 @@ repeat with frame rajat on endkey undo toimi, next toimi:
                      else do:
                         RUN Mc/gathecg.p(INPUT-OUTPUT table TCustGroup).
                         /* DISPLAY Customer groups */
-                        EHTO = 9.
+                        Syst.CUICommon:ehto = 9.
                         RUN Syst/ufkey.p.
                         FOR EACH TCustGroup.
                            dExtCustGrp = dExtCustGrp + TCustGroup.CustGroup +
@@ -329,14 +329,14 @@ repeat with frame rajat on endkey undo toimi, next toimi:
       end.
 
 
-      if toimi = 5 then do:
+      if Syst.CUICommon:toimi = 5 then do:
 
          leave toimi.
       end.
 
-      if toimi = 8 then return.
+      if Syst.CUICommon:toimi = 8 then return.
 
-end. /* toimi */
+end. /* Syst.CUICommon:toimi */
 
 
 IF extcustgrp = FALSE THEN 

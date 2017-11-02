@@ -43,14 +43,14 @@ form
    lcStatus           FORMAT "X(12)"   COLUMN-LABEL "Status"
 
 WITH OVERLAY CENTERED  scroll 3 15 DOWN
-   COLOR value(cfc)
-   title color value(ctc) " " +
+   COLOR value(Syst.CUICommon:cfc)
+   title color value(Syst.CUICommon:ctc) " " +
    " COUNTERS for " + icEvent + " " 
-   + string(pvm,"99-99-99") 
+   + string(TODAY,"99-99-99") 
    FRAME sel.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 IF idtFrom = ? THEN idtFrom = 12/1/2006.
@@ -119,14 +119,14 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk   = 0
-        ufk[1]= 35
-        ufk[5] = 968
-        ufk[6]= 0 /* 4   */
-        ufk[8]= 8.
+        Syst.CUICommon:ufk   = 0
+        Syst.CUICommon:ufk[1]= 35
+        Syst.CUICommon:ufk[5] = 968
+        Syst.CUICommon:ufk[6]= 0 /* 4   */
+        Syst.CUICommon:ufk[8]= 8.
         
-        IF iiMsseq > 0 THEN ufk[1] = 0.
-        ASSIGN ehto = 3 ufkey = FALSE.
+        IF iiMsseq > 0 THEN Syst.CUICommon:ufk[1] = 0.
+        ASSIGN Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
@@ -135,17 +135,17 @@ BROWSE:
       
       IF order = 1 THEN DO:
         CHOOSE ROW liPeriod {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) liPeriod WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) liPeriod WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW PPInvSeq.FromDate {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) PPInvSeq.FromDate WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) PPInvSeq.FromDate WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -153,10 +153,10 @@ BROWSE:
          END.
       END.
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -171,7 +171,7 @@ BROWSE:
       END.
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND PPInvSeq where recid(PPInvSeq) = rtab[1] no-lock.
            RUN LOCAL-FIND-PREV.
@@ -196,7 +196,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND PPInvSeq where recid(PPInvSeq) = rtab[FRAME-DOWN] no-lock .
@@ -222,7 +222,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND PPInvSeq where recid(PPInvSeq) = memory no-lock no-error.
         RUN LOCAL-FIND-PREV.
@@ -246,7 +246,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* cursor TO the downmost line */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -261,7 +261,7 @@ BROWSE:
      END. /* NEXT page */
 
 
-     else if lookup(nap,"enter,return,f5") > 0 THEN DO WITH FRAME lis :
+     else if lookup(Syst.CUICommon:nap,"enter,return,f5") > 0 THEN DO WITH FRAME lis :
         /* change */
 
          FIND FIRST PPInvSeq where 
@@ -270,7 +270,7 @@ BROWSE:
          RUN LOCAL-FIND-OTHERS.
          
          FIND FIRST DayCampaign WHERE
-            DayCampaign.Brand = gcBrand AND
+            DayCampaign.Brand = Syst.CUICommon:gcBrand AND
             DayCampaign.DCEvent = icEvent NO-LOCK. 
 
          IF DayCampaign.DCType EQ "8" AND
@@ -293,25 +293,25 @@ BROWSE:
          ufkey = True.
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
        RUN LOCAL-FIND-FIRST.
        ASSIGN memory = recid(PPInvSeq) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
        RUN LOCAL-FIND-LAST.
        ASSIGN memory = recid(PPInvSeq) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE LOCAL-FIND-OTHERS:
    

@@ -9,7 +9,6 @@
   ------------------------------------------------------ */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fmakemsreq.i}
 
@@ -102,11 +101,11 @@ END.
 FIND Customer WHERE Customer.CustNum = MobSub.CustNum NO-LOCK.
 
 FIND FIRST DayCampaign WHERE
-           DayCampaign.Brand   = gcBrand AND
+           DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
            DayCampaign.DCEvent = icDCEvent NO-LOCK NO-ERROR.
 IF NOT AVAILABLE DayCampaign THEN RETURN.
 
-ldCurrent = fMakeTS().
+ldCurrent = Func.Common:mMakeTS().
 
 /* service package */
 IF DayCampaign.DCType = "1" OR INDEX(DayCampaign.DCEvent,"RELAX") > 0 THEN DO:
@@ -121,7 +120,7 @@ IF DayCampaign.DCType = "1" OR INDEX(DayCampaign.DCEvent,"RELAX") > 0 THEN DO:
             ServiceLimit.SLSeq     = MServiceLimit.SLSeq  AND
             ServiceLimit.GroupCode = icDCEvent:
 
-      fSplitTS(MServiceLimit.FromTS,
+      Func.Common:mSplitTS(MServiceLimit.FromTS,
                OUTPUT ldtDate,
                OUTPUT liTime).
                
@@ -141,7 +140,7 @@ END.
 ELSE DO:
       
    FIND FIRST DCCLI WHERE
-              DCCLI.Brand         = gcBrand     AND
+              DCCLI.Brand         = Syst.CUICommon:gcBrand     AND
               DCCLI.DCEvent       = icDCEvent   AND
               DCCLI.MSSeq         = iiMsSeq     AND 
              (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN 
@@ -181,10 +180,9 @@ BY Invoice.ToDate DESC:
 END.
           
 ASSIGN
-   lcCustName   = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                   BUFFER Customer)
+   lcCustName   = Func.Common:mDispCustName(BUFFER Customer)
    ldtTermDate = TODAY
-   toimi        = -1.
+   Syst.CUICommon:toimi        = -1.
 
 MakeReq:
 REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
@@ -201,26 +199,26 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
            lcMemoText
    WITH FRAME fCriter.
 
-   IF toimi < 0 THEN toimi = 1.
+   IF Syst.CUICommon:toimi < 0 THEN Syst.CUICommon:toimi = 1.
    ELSE DO:
       ASSIGN
-         ufk    = 0  
-         ufk[1] = 7
-         ufk[5] = IF lcMemoText > "" AND
+         Syst.CUICommon:ufk    = 0  
+         Syst.CUICommon:ufk[1] = 7
+         Syst.CUICommon:ufk[5] = IF lcMemoText > "" AND
                      ldtTermDate >= ldtFirstDate AND
                      ldtTermDate <= TODAY
                   THEN 1027 
                   ELSE 0 
-         ufk[8] = 8 
-         ehto   = 0.
+         Syst.CUICommon:ufk[8] = 8 
+         Syst.CUICommon:ehto   = 0.
       RUN Syst/ufkey.p.
    END.
    
-   IF toimi = 1 THEN DO:
+   IF Syst.CUICommon:toimi = 1 THEN DO:
    
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
       
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
          
          UPDATE 
@@ -230,7 +228,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
          
             READKEY.
             
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
                PAUSE 0.
         
                IF FRAME-FIELD = "ldtTermDate" THEN DO:
@@ -256,7 +254,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
       
    END.
 
-   ELSE IF toimi = 5 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
 
       /* is there a request already (check once more; who knows how much
          time has been spent on this screen) */
@@ -271,7 +269,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
       
       IF NOT llOk THEN NEXT.
  
-      ldActStamp = fMake2Dt(ldtTermDate,
+      ldActStamp = Func.Common:mMake2DT(ldtTermDate,
                             IF ldtTermDate = TODAY
                             THEN TIME
                             ELSE 86399).
@@ -297,16 +295,16 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
 
          CREATE Memo.
          ASSIGN 
-            Memo.Brand     = gcBrand
+            Memo.Brand     = Syst.CUICommon:gcBrand
             Memo.HostTable = "MobSub"
             Memo.KeyValue  = STRING(MobSub.MsSeq)
             Memo.CustNum   = MobSub.CustNum
             Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-            Memo.CreUser   = katun 
+            Memo.CreUser   = Syst.CUICommon:katun 
             Memo.MemoTitle = "Periodical Contract Terminated"
             Memo.MemoText  = "Contract: " + icDCEvent + CHR(10) + 
                              lcMemoText.
-            Memo.CreStamp  = fMakeTS().
+            Memo.CreStamp  = Func.Common:mMakeTS().
          
          MESSAGE "Request was created with ID" liCreated
          VIEW-AS ALERT-BOX INFORMATION.
@@ -321,7 +319,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
       LEAVE.
    END.
    
-   ELSE IF toimi = 8 THEN LEAVE.
+   ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
 
 END. /* MakeReq */
 

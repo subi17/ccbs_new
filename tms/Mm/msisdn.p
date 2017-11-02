@@ -39,10 +39,8 @@ DEF  INPUT PARAMETER   iiStatusCode LIKE MSISDN.StatusCode NO-UNDO.
 {Syst/commali.i}
 {Func/msisdn.i}
 {Syst/eventval.i} 
-{Func/timestamp.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'mobsub'}
-{Func/freplacesms.i}
 {Syst/tmsconst.i}
 
 DEF /* SHARED */ VAR siirto AS char.
@@ -90,7 +88,7 @@ m_pref = "".
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/create_eventlog.i}
    {Func/lib/eventlog.i}
@@ -111,7 +109,7 @@ DEF BUFFER bttMSISDN FOR ttMSISDN.
 
 IF iiCustNum > 0 THEN 
 FOR EACH MSISDN WHERE 
-         MSISDN.Brand   = gcBrand AND 
+         MSISDN.Brand   = Syst.CUICommon:gcBrand AND 
          MSISDN.CustNum = iiCustNum NO-LOCK.
    
    CREATE ttMSISDN.
@@ -119,7 +117,7 @@ FOR EACH MSISDN WHERE
 END.         
 ELSE IF icCli > "" THEN
 FOR EACH MSISDN WHERE
-         MSISDN.Brand = gcBrand AND 
+         MSISDN.Brand = Syst.CUICommon:gcBrand AND 
          MSISDN.CLI = icCLI NO-LOCK.
          
    CREATE ttMSISDN.
@@ -129,9 +127,9 @@ ELSE IF iiStatusCode > 0 THEN DO:
    disp " Please wait... " with frame frWait overlay row 7 centered.
    pause 0.
    
-   ldeNow = fMakeTS().
+   ldeNow = Func.Common:mMakeTS().
    FOR EACH msisdn where
-      msisdn.brand = gcBrand and
+      msisdn.brand = Syst.CUICommon:gcBrand and
       msisdn.statuscode = iiStatusCode and
       msisdn.validto > ldeNow NO-LOCK use-index statuscode:
       CREATE ttMSISDN.
@@ -153,10 +151,10 @@ form
     ttMSISDN.ValidFrom     FORMAT "99999999"
     
 WITH ROW FrmRow width 80 overlay FrmDown  down
-    COLOR VALUE(cfc)
-    title COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.CUICommon:cfc)
+    title COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " MSISDN Numbers "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 {Func/brand.i}
@@ -179,8 +177,8 @@ form
   "OrderID.....:" lcOrder  FORMAT "X(20)"                         SKIP
 WITH
    overlay row 4 centered NO-LABELS
-   COLOR VALUE(cfc)
-   title COLOR VALUE(ctc)
+   COLOR VALUE(Syst.CUICommon:cfc)
+   title COLOR VALUE(Syst.CUICommon:ctc)
    ac-hdr WITH 
    Frame lis.
 
@@ -190,24 +188,24 @@ form /* seek ttMSISDN No.  by  CLI */
       CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
    "MSISDN No.:" CLI format "x(11)"
       help "Enter ttMSISDN"
-   WITH row 4 col 2 title COLOR VALUE(ctc) " FIND ttMSISDN NO."
-   COLOR VALUE(cfc) no-labels overlay FRAME f1.
+   WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND ttMSISDN NO."
+   COLOR VALUE(Syst.CUICommon:cfc) no-labels overlay FRAME f1.
 
 form /* seek ttMSISDN No.  by CustNum */
     "Brand Code:" lcBrand  HELP "Enter Brand"
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "CustomerNo:" CustNum
     help "Enter Customer"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CUST. NO. "
-    COLOR VALUE(cfc) no-labels overlay FRAME f2.
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND CUST. NO. "
+    COLOR VALUE(Syst.CUICommon:cfc) no-labels overlay FRAME f2.
 
 form /* seek ttMSISDN No.  by StatusCode */
     "Brand Code:" lcBrand  HELP "Enter Brand"
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "StatusCode:" StatusCode 
     help "Enter Status"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND STATUS "
-    COLOR VALUE(cfc) no-labels overlay FRAME f3.
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND STATUS "
+    COLOR VALUE(Syst.CUICommon:cfc) no-labels overlay FRAME f3.
 
 form /* seek ttMSISDN No.  by StatusCode */
     "Brand Code:" lcBrand  HELP "Enter Brand"
@@ -215,8 +213,8 @@ form /* seek ttMSISDN No.  by StatusCode */
               CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "Order Id..:" OrderId 
     help "Enter OrderId"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND ORDERID "
-    COLOR VALUE(cfc) no-labels overlay FRAME f4.
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND ORDERID "
+    COLOR VALUE(Syst.CUICommon:cfc) no-labels overlay FRAME f4.
 
 FUNCTION fVALmino RETURNS LOGICAL(CLI AS CHAR).
    /* check the validity of new ttMSISDN No. */
@@ -250,7 +248,7 @@ END FUNCTION.
 
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 orders = "By ttMSISDN ,By CustNo ,By Status ,By OrderId".
@@ -276,18 +274,18 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a ttMSISDN  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, leave ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            
            FIND FIRST bttMSISDN NO-LOCK WHERE
-                      bttMSISDN.Brand = gcBrand AND
+                      bttMSISDN.Brand = Syst.CUICommon:gcBrand AND
                       bttMSISDN.CLI = bttMSISDN.CLI USE-INDEX CLI.
            
            FIND FIRST MobSub WHERE
@@ -300,7 +298,7 @@ ADD-ROW:
            CREATE ttMSISDN.
            BUFFER-COPY bttMSISDN EXCEPT ValidFrom TO ttMSISDN.
            ASSIGN
-              ttMSISDN.ValidFrom = fMakeTS().
+              ttMSISDN.ValidFrom = Func.Common:mMakeTS().
 
            RUN local-update-record.
 
@@ -309,7 +307,7 @@ ADD-ROW:
 
            /* Do real update to database */
            FIND FIRST MSISDN EXCLUSIVE-LOCK WHERE
-                      MSISDN.Brand = gcBrand AND
+                      MSISDN.Brand = Syst.CUICommon:gcBrand AND
                       MSISDN.CLI = ttMSISDN.CLI USE-INDEX CLI NO-WAIT NO-ERROR.
            IF NOT AVAIL MSISDN THEN DO:
               MESSAGE "MSISDN not found or record is locked"
@@ -324,7 +322,7 @@ ADD-ROW:
    
            IF llDoEvent THEN fMakeCreateEvent((BUFFER MSISDN:HANDLE),
                                               "",
-                                              katun,
+                                              Syst.CUICommon:katun,
                                               "").
 
            FIND CURRENT MSISDN NO-LOCK.
@@ -398,11 +396,11 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 816 ufk[2]= 0 ufk[3]= 0  
-        ufk[4]= 0
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
-        ufk[6]= 1752 /* 238 */ ufk[7]= 0 /* 788 */ ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = false.
+        Syst.CUICommon:ufk[1]= 816 Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0  
+        Syst.CUICommon:ufk[4]= 0
+        Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
+        Syst.CUICommon:ufk[6]= 1752 /* 238 */ Syst.CUICommon:ufk[7]= 0 /* 788 */ Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+        Syst.CUICommon:ehto = 3 ufkey = false.
         RUN Syst/ufkey.p.
       END.
 
@@ -419,12 +417,12 @@ BROWSE:
 
       IF rtab[FRAME-line] = ? THEN NEXT.
 
-      nap = keylabel(LASTkey).
+      Syst.CUICommon:nap = keylabel(LASTkey).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -448,10 +446,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTkey).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTkey).
 
       /* previous row */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-line = 1 THEN DO:
            RUN local-find-this(false).
            RUN local-find-prev.
@@ -476,7 +474,7 @@ BROWSE:
       END. /* previous row */
 
       /* NEXT row */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-line = FRAME-down THEN DO:
            RUN local-find-this(false).
@@ -502,7 +500,7 @@ BROWSE:
       END. /* NEXT row */
 
       /* prev page */
-      ELSE IF LOOKUP(nap,"prev-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND ttMSISDN WHERE recid(ttMSISDN) = memory NO-LOCK NO-ERROR.
         RUN local-find-prev.
@@ -526,7 +524,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* Put Cursor on downmost Row */
        IF rtab[FRAME-down] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -541,24 +539,24 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search by column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN repeat with frame sel.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN repeat with frame sel.
 
-       ASSIGN ufkey = TRUE ufk = 0 ehto = 1
-       ufk[1]= 209  ufk[2]= 702 ufk[3]= 559 ufk[4] = 2211 
-       ufk[8] = 8.
+       ASSIGN ufkey = TRUE Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 1
+       Syst.CUICommon:ufk[1]= 209  Syst.CUICommon:ufk[2]= 702 Syst.CUICommon:ufk[3]= 559 Syst.CUICommon:ufk[4] = 2211 
+       Syst.CUICommon:ufk[8] = 8.
        RUN Syst/ufkey.p.
 
-       if toimi = 8 then next browse.
+       if Syst.CUICommon:toimi = 8 then next browse.
 
-       if toimi = 1 then do:
+       if Syst.CUICommon:toimi = 1 then do:
 
-          cfc = "puyr". RUN Syst/ufcolor.p.
-          ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
           clear frame f1.
           Disp lcBrand With FRAME f1.
           CLI = m_pref.             
           ok = FALSE.
-          UPDATE lcBrand WHEN gcAllBrand = TRUE  
+          UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE  
                  CLI WITH FRAME f1 EDITING:
              IF NOT ok and frame-field = "cli" THEN DO:
                 ok = TRUE.
@@ -586,12 +584,12 @@ BROWSE:
         END. /* Search-1 */
 
         /* Search by col 2 */
-        else if toimi = 2 then do:
-          cfc = "puyr". RUN Syst/ufcolor.p.
-          ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+        else if Syst.CUICommon:toimi = 2 then do:
+          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
           CLEAR FRAME f2.
           Disp lcBrand With FRAME f2.
-          SET  lcBrand WHEN gcAllBrand = TRUE 
+          SET  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE 
                CustNum WITH FRAME f2.
           HIDE FRAME f2 NO-PAUSE.
           IF CustNum ENTERED THEN DO:
@@ -606,11 +604,11 @@ BROWSE:
         END. /* Search-2 */
 
         /* Search by col 3 */
-        else if toimi = 3 then do:
-          cfc = "puyr". RUN Syst/ufcolor.p.
-          ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+        else if Syst.CUICommon:toimi = 3 then do:
+          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
           DISP lcBrand WITH FRAME f3.
-          SET  lcBrand WHEN gcAllBrand = TRUE
+          SET  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
                StatusCode WITH FRAME f3.
           HIDE FRAME f3 NO-PAUSE.
           IF StatusCode ENTERED THEN DO:
@@ -624,11 +622,11 @@ BROWSE:
         END. /* Search-3 */
 
         /* Search by col 4 */
-        else if toimi = 4 then do:
-          cfc = "puyr". RUN Syst/ufcolor.p.
-          ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+        else if Syst.CUICommon:toimi = 4 then do:
+          Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            Disp lcBrand With FRAME f4.
-          SET   lcBrand WHEN gcAllBrand = TRUE  
+          SET   lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE  
                orderid WITH FRAME f4.
           HIDE FRAME f4 NO-PAUSE.
           IF orderid ENTERED THEN DO:
@@ -650,7 +648,7 @@ BROWSE:
 
      end.
 /*
-     ELSE IF LOOKUP(nap,"6,f6") > 0 THEN  DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 THEN  DO:
         RUN local-find-this (false).
 
         FIND mobsub WHERE mobsub.CLI = ttMSISDN.CLI NO-LOCK NO-ERROR.
@@ -670,7 +668,7 @@ BROWSE:
 
 
 
-     ELSE IF LOOKUP(nap,"7,f7") > 0 THEN 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 THEN 
 CUST:     
      REPEAT: /* show customer data */
         RUN local-find-this (false).
@@ -691,7 +689,7 @@ CU-DATA:
 
 CU-ACTION:
            repeat with frame cust:
-              assign ufk = 0 ufk[8] = 8 ehto =  0.
+              assign Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto =  0.
               RUN Syst/ufkey.p.
               case toimi:
                  WHEN 8 THEN do:
@@ -705,30 +703,30 @@ CU-ACTION:
         LEAVE.
      end.      
 
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO: /* list known users of ttMSISDN */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 THEN DO: /* list known users of ttMSISDN */
        RUN local-find-this (false).
        RUN Mm/msowner2.p(ttMSISDN.cli).
        ufkey = TRUE.
        NEXT loop.
      END.
 */
-     ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:  /* add */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:  /* add */
         {Syst/uright2.i} 
         RUN local-find-this (false).
         must-add = true.
         NEXT LOOP.
      END.
       
-     ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO: 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 THEN DO: 
         RUN local-find-this (false).
         RUN Mc/eventsel.p("MSISDN",
-                        "#BEGIN" + CHR(255) + gcBrand + CHR(255) +
+                        "#BEGIN" + CHR(255) + Syst.CUICommon:gcBrand + CHR(255) +
                         STRING(ttMSISDN.CLI)).
         ufkey = true.
      END.   
 
 /*
-     ELSE IF LOOKUP(nap,"#") > 0 AND lcRight = "RW" 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"#") > 0 AND lcRight = "RW" 
      THEN DO TRANSACTION:  /* DELETE */
        delrow = FRAME-line.
        RUN local-find-this (false).
@@ -740,7 +738,7 @@ if ttMSISDN.StatusCode ne 1 then do:
 end.   
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        ttMSISDN.CLI ttMSISDN.CustNum ttMSISDN.brand .
 
        RUN local-find-NEXT.
@@ -762,7 +760,7 @@ end.
 
        ASSIGN ok = false.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        ttMSISDN.CLI ttMSISDN.CustNum ttMSISDN.brand .
        IF ok THEN DO:
            IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhttMSISDN).
@@ -781,7 +779,7 @@ end.
        ELSE delrow = 0. /* undo DELETE */
      END. /* DELETE */
 */
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN DO:
        /* change */
        RUN local-find-this(FALSE).
 
@@ -791,11 +789,11 @@ end.
           MESSAGE
              "This MSISDN" ttMSISDN.CLI "is currently assigned"    SKIP
              "into a mobile subscription that belongs to customer" SKIP
-             Customer.CustNum  lcCustName 
+             ttMSISDN.CustNum lcCustName
           VIEW-AS ALERT-BOX TITLE " MSISDN is in use !".
        END.
-       ASSIGN ac-hdr = " VIEW " ufkey = true ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = true Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-update-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -809,25 +807,25 @@ end.
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = recid(ttMSISDN) must-print = true.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN memory = recid(ttMSISDN) must-print = true.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN leave LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN leave LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 
@@ -908,11 +906,11 @@ END PROCEDURE.
 PROCEDURE local-find-others.
    
    find msclass where 
-        MSClass.Brand = gcBrand AND 
+        MSClass.Brand = Syst.CUICommon:gcBrand AND 
         msclass.MCCode = ttMSISDN.MCCode no-lock no-error.
    
    find Customer of ttMSISDN no-lock no-error.
-   lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,BUFFER Customer).
+   lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
    find msstat  of ttMSISDN no-lock no-error.
    
@@ -969,8 +967,8 @@ PROCEDURE local-update-record:
 
       DISP
          ttMSISDN.cli
-         fTS2HMS(ttMSISDN.ValidFrom) @ lcValidFrom 
-         fTS2HMS(ttMSISDN.Validto)   @ lcValidTo
+         Func.Common:mTS2HMS(ttMSISDN.ValidFrom) @ lcValidFrom 
+         Func.Common:mTS2HMS(ttMSISDN.Validto)   @ lcValidTo
          lcMSISDNType
          ttMSISDN.CustNum
          ttMSISDN.ActionDate
@@ -998,26 +996,26 @@ PROCEDURE local-update-record:
          END.
          
          ASSIGN
-           ufk = 0
-           ufk[7]= 1522
-           ufk[8]= 8
-           ufk[9]= 1
-           ehto = 0.
+           Syst.CUICommon:ufk = 0
+           Syst.CUICommon:ufk[7]= 1522
+           Syst.CUICommon:ufk[8]= 8
+           Syst.CUICommon:ufk[9]= 1
+           Syst.CUICommon:ehto = 0.
 
          RUN Syst/ufkey.p.
       END.
-      ELSE ASSIGN toimi = 1.
+      ELSE ASSIGN Syst.CUICommon:toimi = 1.
 /*
       READKEY. 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
   */    
-      IF toimi = 1 THEN DO TRANS:
+      IF Syst.CUICommon:toimi = 1 THEN DO TRANS:
          RUN pUpdate.
          IF NEW ttMsisdn THEN RETURN.
          llDispMenu = TRUE.
       END.
       
-      IF toimi = 7 THEN DO:
+      IF Syst.CUICommon:toimi = 7 THEN DO:
          
          lcMenuOptions = "". 
          CASE iiStatusCode:
@@ -1067,7 +1065,7 @@ PROCEDURE local-update-record:
          NEXT UPDATE-LOOP.
       END.   
       
-      IF toimi = 8 THEN DO:
+      IF Syst.CUICommon:toimi = 8 THEN DO:
          HIDE FRAME choices NO-PAUSE.
          HIDE MESSAGE.
          LEAVE UPDATE-LOOP.
@@ -1084,7 +1082,7 @@ PROCEDURE pUpdate:
 
    FIND CURRENT ttMSISDN EXCLUSIVE-LOCK.
       
-   ehto = 9.
+   Syst.CUICommon:ehto = 9.
    RUN Syst/ufkey.p.
    
    REPEAT ON ENDKEY UNDO, LEAVE:
@@ -1116,13 +1114,13 @@ PROCEDURE pUpdate:
                   END.
 
                   DISP ttMSISDN.POS WITH FRAME lis.
-                  ehto = 9. RUN Syst/ufkey.p.
+                  Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
                   NEXT.
                END.
             END.
          END.
 
-         IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+         IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
             PAUSE 0.
                
             IF FRAME-FIELD = "StatusCode" THEN DO:

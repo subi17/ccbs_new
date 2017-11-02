@@ -11,24 +11,26 @@
 
 def new shared var siirto as char format "x(75)".
 DEF VAR i AS INT NO-UNDO.
-DEF VAR save-ehto LIKE ehto NO-UNDO.
-DEF VAR save-ufk LIKE ufk   NO-UNDO.
+DEF VAR save-ehto AS INT NO-UNDO.
+DEF VAR save-ufk AS INTEGER EXTENT 9   NO-UNDO.
 DEF VAR hmod AS c NO-UNDO.
 DEF VAR pp AS INT NO-UNDO.
 DEF VAR kk AS INT NO-UNDO.
 DEF VAR vv AS INT NO-UNDO.
 DEF VAR df AS c   NO-UNDO.
 DEF VAR lcCode AS CHAR NO-UNDO.
+DEF VAR helpkey AS CHAR NO-UNDO.
+
 
 
 /* talteen ufKey:n common-arvot jottei sotketa paikkoja */
-save-ehto = ehto.
+save-ehto = Syst.CUICommon:ehto.
 DO i = 1 TO 9 :
-   save-ufk[i] = ufk[i].
+   save-ufk[i] = Syst.CUICommon:ufk[i].
 END.
 helpkey = keylabel(LASTKEY).
 
-gcHelpParam = "ahelp".
+Syst.CUICommon:gcHelpParam = "ahelp".
 
 if helpkey = "f31" THEN RUN istrans.p.
 else if helpkey = "f10" THEN DO:
@@ -62,7 +64,7 @@ DO:
    IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
-else if lookup(frame-field,"gcbrand,Brand") > 0 OR
+else if lookup(frame-field,"Syst.CUICommon:gcBrand,Brand") > 0 OR
      index(frame-field,"brand") > 0 
 THEN DO:
    RUN Help/h-brand.p.
@@ -133,7 +135,7 @@ else if
         lookup(frame-field,"ValidFrom,ValidTo") > 0 THEN DO:
 
      if index(frame-value," ") > 0 or frame-value = "" THEN DO:
-        ASSIGN pp = day(pvm) kk = month(pvm) vv = year(pvm).
+        ASSIGN pp = day(TODAY) kk = month(TODAY) vv = year(TODAY).
      END.
      ELSE DO:
         ASSIGN
@@ -157,20 +159,20 @@ else if
      END.
 
      /* check the FORMAT of the frame-field */
-     si-pvm = date(kk,pp,vv).
-     frame-value = string(si-pvm,"99-99-9999").
+     Syst.CUICommon:si-pvm = date(kk,pp,vv).
+     frame-value = string(Syst.CUICommon:si-pvm,"99-99-9999").
      IF length(frame-value) = 8 THEN ASSIGN
         df = "99-99-99".
      ELSE ASSIGN
         df = "99-99-9999".
-     frame-value = string(si-pvm,df).
+     frame-value = string(Syst.CUICommon:si-pvm,df).
 
-     RUN Syst/ukale.p.
-     IF si-pvm <> ? THEN DO:
+     RUN Syst/ukale.p(INPUT helpkey).
+     IF Syst.CUICommon:si-pvm <> ? THEN DO:
         PAUSE 0 no-message.
-        frame-value = string(si-pvm,df).
+        frame-value = string(Syst.CUICommon:si-pvm,df).
      END.
-     ELSE si-pvm = TODAY.
+     ELSE Syst.CUICommon:si-pvm = TODAY.
 END.
 ELSE IF lookup(frame-field,"UserCode") 
     > 0 THEN DO:
@@ -342,9 +344,9 @@ else if lookup(frame-field,"tokencode") > 0 THEN DO:
 END.
 
 else if index(frame-field,"contract") > 0 and
-     si-recid2 > 0 and si-recid2 ne ?
+     Syst.CUICommon:si-recid2 > 0 and Syst.CUICommon:si-recid2 ne ?
 then do:
-   RUN Help/h-contract.p(si-recid2).
+   RUN Help/h-contract.p(Syst.CUICommon:si-recid2).
    if siirto <> ? then frame-value = siirto.
 end.
 
@@ -470,13 +472,13 @@ END.
 /* ------------------------------------------------- */
 END.
 
-gcHelpParam = "".
+Syst.CUICommon:gcHelpParam = "".
 
 /* ja lopuksi palautetaan ufKey:n arvot */
 
-ehto = save-ehto.
+Syst.CUICommon:ehto = save-ehto.
 DO i = 1 TO 9:
-   ufk[i] = save-ufk[i].
+   Syst.CUICommon:ufk[i] = save-ufk[i].
 END.
 PAUSE 0.   /* KJ�H KJ�H */
 RUN Syst/ufkey.p.

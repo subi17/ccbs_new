@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-katun = "ari".
+Syst.CUICommon:katun = "ari".
 {Func/ftaxdata.i}
 {Func/ftopup.i}
 

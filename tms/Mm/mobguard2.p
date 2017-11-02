@@ -36,7 +36,7 @@ Tmscode.codename FORMAT "X(35)"  SKIP
 HELP "Earliest call date" " - " lddate2 
 HELP "Latest call date"
 VALIDATE(INPUT lddate1 <= INPUT lddate2,"Invalid order of dates !")  SKIP
-WITH CENTERED ROW 2 COLOR VALUE(cfc) TITLE 
+WITH CENTERED ROW 2 COLOR VALUE(Syst.CUICommon:cfc) TITLE 
 "BROWSE CDRS" OVERLAY side-label no-label FRAME reason .
 
 RUN local-Show-record.
@@ -50,7 +50,7 @@ IF reasonc > "0" AND llAccept = TRUE THEN DO:
    ASSIGN
       eventlog.eventdate  = TODAY
       eventlog.eventtime  = STRING(TIME,"HH:MM:SS")
-      eventlog.usercode   = katun
+      eventlog.usercode   = Syst.CUICommon:katun
       eventlog.action     = 'Check'.
  
    ASSIGN
@@ -68,7 +68,7 @@ PROCEDURE local-Show-record:
    
    REPEAT ON ENDKEY UNDO, LEAVE:
    
-      ASSIGN ufk = 0 ufk[8] = 8 ehto = 10. RUN Syst/ufkey.p.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 10. RUN Syst/ufkey.p.
       
       IF ilAskDates THEN ASSIGN
       ldDate1 = DATE(Month(Today),1,YEAR(Today))
@@ -109,7 +109,7 @@ PROCEDURE local-Show-record:
                  ENd.
              END.
 
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME reason:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME reason:
                 PAUSE 0.
                 IF FRAME-FIELD = "ReasonC" THEN DO:
                    find first TMSCodes WHERE

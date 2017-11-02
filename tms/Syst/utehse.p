@@ -37,12 +37,12 @@ form
     PrintCodes.PageLength  column-label "Lines/page"
     PrintCodes.AvailLines column-label "Use lines/page"
     WITH ROW 2 col 2 centered  OVERLAY scroll 1 13 DOWN
-    COLOR value(cfc)
-    TITLE COLOR value(ctc)
+    COLOR value(Syst.CUICommon:cfc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     " PRINTER '" + xPrinterId + "' EFFECTS "
     FRAME sel.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 FIND FIRST TMSPrinter where TMSPrinter.PrinterId = xPrinterId no-lock no-error.
 FIND FIRST PrintCodes where PrintCodes.PrinterId = xPrinterId no-lock no-error.
@@ -110,9 +110,9 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 0   ufk[2]= 0    ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 11  ufk[6]= 0    ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ufk[1]= 0   Syst.CUICommon:ufk[2]= 0    Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+         Syst.CUICommon:ufk[5]= 11  Syst.CUICommon:ufk[6]= 0    Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
@@ -127,10 +127,10 @@ BROWSE:
          NEXT.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND PrintCodes where recid(PrintCodes) = rtab[1] no-lock.
             FIND prev PrintCodes where PrintCodes.PrinterId = xPrinterId no-lock no-error.
@@ -157,7 +157,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
 
          IF FRAME-LINE = FRAME-DOWN THEN DO:
@@ -186,7 +186,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up") > 0 THEN DO:
          memory = rtab[1].
          FIND PrintCodes where recid(PrintCodes) = memory no-lock no-error.
          FIND prev PrintCodes where PrintCodes.PrinterId = xPrinterId no-lock no-error.
@@ -213,7 +213,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
 
         /* cursor TO the downmost line */
 
@@ -230,7 +230,7 @@ BROWSE:
         END.
      END. /* NEXT page */
 
-     else if lookup(nap,"enter,return,5,f5") > 0 THEN DO: /* CHOOSE */
+     else if lookup(Syst.CUICommon:nap,"enter,return,5,f5") > 0 THEN DO: /* CHOOSE */
 
         FIND PrintCodes where recid(PrintCodes) = rtab[frame-line(sel)]
         no-lock.
@@ -240,7 +240,7 @@ BROWSE:
         LEAVE LOOP.
      END.   
 
-     else if lookup(nap,"e,end") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"e,end") > 0 THEN DO : /* LAST record */
         FIND LAST PrintCodes where PrintCodes.PrinterId = xPrinterId no-lock.
         ASSIGN
         memory = recid(PrintCodes)
@@ -248,7 +248,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"h,home") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"h,home") > 0 THEN DO:
         FIND FIRST PrintCodes where PrintCodes.PrinterId = xPrinterId no-lock.
         ASSIGN
         memory = recid(PrintCodes)
@@ -256,12 +256,12 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 

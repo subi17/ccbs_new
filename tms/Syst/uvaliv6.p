@@ -55,7 +55,7 @@ DEF STREAM fixmenu2.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -79,7 +79,7 @@ form
     minne  label "New Level for submenu ............."
     help "New Level for moved fixmenus " SKIP
 
-    with color value(cfc) title color value(ctc) " MOVE SUBMENU "
+    with color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " MOVE SUBMENU "
          OVERLAY centered ROW 4 FRAME siirto side-labels.
 
 
@@ -118,7 +118,7 @@ form
              help "Token code for this menu item"
 
     WITH OVERLAY ROW 6 centered side-labels
-    TITLE COLOR value(ctc) fr-header COLOR value(cfc)
+    TITLE COLOR value(Syst.CUICommon:ctc) fr-header COLOR value(Syst.CUICommon:cfc)
     FRAME lis.
 
 form
@@ -134,32 +134,32 @@ form
     MenuTree.State[1]   column-label "S"    format  "*/"
     MenuTree.MenuClass     /* column-label "PgCl"          */
  WITH width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(cfc)
-    title color value(ctc) " " + ynimi + " MenuText TREE "
-    + string(pvm,"99-99-99") + " "
+    COLOR value(Syst.CUICommon:cfc)
+    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " MenuText TREE "
+    + string(TODAY,"99-99-99") + " "
  FRAME sel.
 
 
 form /* tason hakua varten */
     haku
     help "Enter Level No"                           
-    with row 4 col 1 title color value(ctc) " FIND Level "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    with row 4 col 1 title color value(Syst.CUICommon:ctc) " FIND Level "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /*  tunnuksen hakua varten */
     haku2
     help "Enter Function Code"                          
-    with row 4 col 47 title color value(ctc) " FIND CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+    with row 4 col 47 title color value(Syst.CUICommon:ctc) " FIND CODE "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /*  Search by module  */
     haku3
     help "Enter Module Name"                          
-    with row 4 col 35 title color value(ctc) " FIND MODULE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr3.
+    with row 4 col 35 title color value(Syst.CUICommon:ctc) " FIND MODULE "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
    FIND FIRST MenuTree no-lock no-error.
    IF AVAILABLE MenuTree THEN ASSIGN memory = recid(MenuTree)
@@ -184,7 +184,7 @@ repeat WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* valikon lisays  */
-      assign cfc = "lis" ufkey = true fr-header = " LISAYS " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " LISAYS " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 add-new:
@@ -195,7 +195,7 @@ add-new:
 
             CREATE MenuTree.
             ufkey = TRUE.
-            ehto = 9. RUN Syst/ufkey.p.
+            Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
             UPDATE
                 MenuTree.Level 
@@ -212,8 +212,8 @@ add-new:
             WITH FRAME lis  EDITING:
 
                READKEY.
-               nap = keylabel(LASTKEY).
-               pois = lookup(nap,poisnap) > 0.
+               Syst.CUICommon:nap = keylabel(LASTKEY).
+               pois = lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0.
                IF pois THEN DO WITH FRAME lis:
                   HIDE MESSAGE.
 
@@ -386,12 +386,12 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 22  ufk[2]= 1150 ufk[3]= 35 ufk[4]= 301
-         ufk[5]= (IF lcRight = "RW" THEN 5   ELSE 0) 
-         ufk[6]= (IF lcRight = "RW" THEN 4   ELSE 0)
-         ufk[7]= (IF lcRight = "RW" THEN 140 ELSE 0)
-         ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ufk[1]= 22  Syst.CUICommon:ufk[2]= 1150 Syst.CUICommon:ufk[3]= 35 Syst.CUICommon:ufk[4]= 301
+         Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5   ELSE 0) 
+         Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4   ELSE 0)
+         Syst.CUICommon:ufk[7]= (IF lcRight = "RW" THEN 140 ELSE 0)
+         Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
          RUN Syst/ufkey.p.
       END.
@@ -399,25 +399,25 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW MenuTree.Level {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) MenuTree.Level WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) MenuTree.Level WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW MenuTree.Module {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) MenuTree.Module WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) MenuTree.Module WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
          CHOOSE ROW MenuTree.MenuId {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) MenuTree.MenuId WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) MenuTree.MenuId WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order = 4 THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = 3.
       END.
 
@@ -445,10 +445,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND MenuTree where recid(MenuTree) = rtab[1] no-lock.
             IF order = 1 THEN FIND prev MenuTree no-lock no-error.
@@ -489,7 +489,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND MenuTree where recid(MenuTree) = rtab[FRAME-DOWN] no-lock .
@@ -531,7 +531,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND MenuTree where recid(MenuTree) = memory no-lock no-error.
          IF order = 1 THEN FIND prev MenuTree no-lock no-error.
@@ -564,7 +564,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "THIS IS THE LAST PAGE !".
@@ -579,8 +579,8 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". RUN Syst/ufcolor.p. haku = "". ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+     if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p. haku = "". Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         FIND MenuTree where recid(MenuTree) = rtab[FRAME-LINE] no-lock.
         if MenuTree.Level ne "0" THEN DO:
            IF MenuTree.MenuType = 2 THEN haku = MenuTree.Level + string(
@@ -606,10 +606,10 @@ BROWSE:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 3 */
-     if lookup(nap,"3,f3") > 0 THEN DO:  /* haku sar. 2 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+     if lookup(Syst.CUICommon:nap,"3,f3") > 0 THEN DO:  /* haku sar. 2 */
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku2 = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE haku2 WITH FRAME hayr2.
         HIDE FRAME hayr2 no-pause.
         if haku2 <> "" THEN DO:
@@ -627,10 +627,10 @@ BROWSE:
      END. /* Haku sar. 3 */
 
      /* Search by module */
-     if lookup(nap,"2,f2") > 0 THEN DO: 
-        cfc = "puyr". RUN Syst/ufcolor.p.
+     if lookup(Syst.CUICommon:nap,"2,f2") > 0 THEN DO: 
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku3 = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE haku3 WITH FRAME hayr3.
         HIDE FRAME hayr3 no-pause.
         if haku3 <> "" THEN DO:
@@ -647,13 +647,13 @@ BROWSE:
         END.
      END. /* Search by module */
 
-     else if nap = "7" or nap = "f7" AND lcRight = "RW" THEN DO: /* siirto */
-        assign ufkey = true ehto = 9. cfc = "kline". RUN Syst/ufcolor.p. RUN Syst/ufkey.p.
+     else if Syst.CUICommon:nap = "7" or Syst.CUICommon:nap = "f7" AND lcRight = "RW" THEN DO: /* siirto */
+        assign ufkey = true Syst.CUICommon:ehto = 9. Syst.CUICommon:cfc = "kline". RUN Syst/ufcolor.p. RUN Syst/ufkey.p.
         DO TRANSACTION ON ENDKEY UNDO, NEXT LOOP:
            assign mista = "" minne = "".
            UPDATE mista minne WITH FRAME siirto EDITING:
               READKEY.
-              ASSIGN nap = keylabel(LASTKEY) pois = lookup(nap,poisnap) > 0.
+              ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY) pois = lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0.
               IF pois THEN DO:
                  HIDE MESSAGE.
                  if frame-field = "mista" THEN DO:
@@ -739,7 +739,7 @@ siirto:             repeat:
         NEXT LOOP.
      END. /* siirto */
 
-     else if nap = "4" or nap = "f4" THEN DO:
+     else if Syst.CUICommon:nap = "4" or Syst.CUICommon:nap = "f4" THEN DO:
         FIND MenuTree where recid(MenuTree) = rtab[FRAME-LINE] no-lock.
         if MenuTree.Level = "0" or MenuTree.Level > "8" THEN DO:
            bell. message "LEvel " + MenuTree.Level + " is not a UFKEY-menu !".
@@ -769,16 +769,16 @@ siirto:             repeat:
         HIDE FRAME meteks no-pause.
      END.
 
-     if lookup(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
+     if lookup(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
          must-add = TRUE. NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 AND lcRight = "RW" 
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO TRANSAction:  /* removal */
         delline = FRAME-LINE.
         FIND MenuTree where recid(MenuTree) = rtab[FRAME-LINE] no-lock.
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(ctc) MenuTree.Level MenuTree.MenuId
+        COLOR DISPLAY value(Syst.CUICommon:ctc) MenuTree.Level MenuTree.MenuId
         MenuTree.Position MenuTree.MenuNum tx1 tx2
         MenuTree.MenuType MenuTree.Module MenuTree.MenuTitle MenuTree.State[1]
         MenuTree.MenuClass.
@@ -806,7 +806,7 @@ siirto:             repeat:
         exclusive-lock.
         ASSIGN ok = FALSE.
         message " ARE YOU SURE YOU WANT TO ERASE (Y/N)? " UPDATE ok.
-        COLOR DISPLAY value(ccc) MenuTree.Level MenuTree.MenuId
+        COLOR DISPLAY value(Syst.CUICommon:ccc) MenuTree.Level MenuTree.MenuId
         MenuTree.Position MenuTree.MenuNum tx1 tx2
         MenuTree.MenuType MenuTree.Module MenuTree.MenuTitle MenuTree.State[1]
         MenuTree.MenuClass.
@@ -823,7 +823,7 @@ siirto:             repeat:
         ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     else  if lookup(nap,"return,enter") > 0  THEN DO TRANSACTION
+     else  if lookup(Syst.CUICommon:nap,"return,enter") > 0  THEN DO TRANSACTION
      WITH FRAME lis ON ENDKEY UNDO, NEXT LOOP: /* change */
         FIND MenuTree where recid(MenuTree) = rtab[frame-line(sel)]
         exclusive-lock.
@@ -831,8 +831,8 @@ siirto:             repeat:
         FIND MenuClass of MenuTree no-lock no-error.
 
         ASSIGN ed-taso = MenuTree.Level ed-pka = MenuTree.Position.
-        assign ufkey = true ehto = 9 fr-header = " CHANGE MenuText "
-        cfc = "lis". RUN Syst/ufcolor.p.
+        assign ufkey = true Syst.CUICommon:ehto = 9 fr-header = " CHANGE MenuText "
+        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
         PAUSE 0 no-message.
 
         FIND FIRST MenuText where 
@@ -875,8 +875,8 @@ siirto:             repeat:
                MenuTree.tokencode
            WITH FRAME lis EDITING:
               READKEY.
-              nap = keylabel(LASTKEY).
-              pois = lookup(nap,poisnap) > 0.
+              Syst.CUICommon:nap = keylabel(LASTKEY).
+              pois = lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0.
               IF pois THEN DO WITH FRAME lis:
                  HIDE MESSAGE.
 
@@ -987,7 +987,7 @@ siirto:             repeat:
         WITH FRAME sel.
      END.
 
-     if lookup(nap,"CTRL-P") > 0 THEN DO:
+     if lookup(Syst.CUICommon:nap,"CTRL-P") > 0 THEN DO:
         FIND FIRST MenuTree where
                    recid(MenuTree) = rtab[FRAME-LINE]
         no-lock no-error.
@@ -1007,7 +1007,7 @@ siirto:             repeat:
         APPLY LASTKEY.
      END.                           
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
         IF order = 1 THEN FIND FIRST MenuTree no-lock no-error.
         ELSE IF order = 2 THEN FIND FIRST MenuTree use-index Module
         no-lock no-error.
@@ -1017,7 +1017,7 @@ siirto:             repeat:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 1 THEN FIND LAST MenuTree no-lock no-error.
         ELSE IF order = 2 THEN FIND LAST MenuTree use-index Module
         no-lock no-error.
@@ -1026,10 +1026,10 @@ siirto:             repeat:
         ASSIGN memory = recid(MenuTree) must-print = TRUE.
         NEXT LOOP.
      END.
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 

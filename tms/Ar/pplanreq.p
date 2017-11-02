@@ -124,7 +124,7 @@ PROCEDURE pSingleInvoice:
       RETURN.
    END. 
 
-   fSplitTS(MsRequest.CreStamp,
+   Func.Common:mSplitTS(MsRequest.CreStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
 
@@ -161,7 +161,7 @@ PROCEDURE pSingleInvoice:
                     ?,
                     "",             /* memo */
                     FALSE,          /* no messages to screen */
-                    katun,
+                    Syst.CUICommon:katun,
                     "",
                     0,
                     "",

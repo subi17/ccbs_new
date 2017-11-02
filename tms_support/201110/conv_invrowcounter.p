@@ -3,7 +3,6 @@
 
 {Syst/commali.i}
 {Func/callquery.i}
-{Func/timestamp.i}
 
 DEF INPUT  PARAMETER iiInvSeq  AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER oiEvents  AS INT  NO-UNDO.
@@ -64,8 +63,8 @@ PROCEDURE pCollectCDRs:
    EMPTY TEMP-TABLE ttCall.
   
    fMobCDRCollect(INPUT "post",
-                  INPUT gcBrand,
-                  INPUT katun,
+                  INPUT Syst.CUICommon:gcBrand,
+                  INPUT Syst.CUICommon:katun,
                   INPUT InvSeq.FromDate,   
                   INPUT InvSeq.ToDate,
                   INPUT 0,

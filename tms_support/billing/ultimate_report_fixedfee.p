@@ -1,8 +1,7 @@
 {Syst/commpaa.i}
-katun = "Qvantel".
-gcBrand  = "1".
+Syst.CUICommon:katun = "Qvantel".
+Syst.CUICommon:gcBrand  = "1".
 {Func/flimitreq.i}
-{Func/date.i}
 {Syst/tmsconst.i}
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 DEFINE VARIABLE j AS INTEGER NO-UNDO. 
@@ -36,7 +35,7 @@ liPeriod = year(ldaPeriod) * 100 + month(ldaPeriod).
 ldaPeriodOld = date(month(ldaPeriod),1,year(ldaPeriod)) - 1.
 ldaPeriodOld = date(month(ldaPeriodOld),1,year(ldaPeriodOld)).
 liPeriodOld = year(ldaPeriodOld) * 100 + month(ldaPeriodOld).
-ldaPeriodNext = flastdayofmonth(ldaPeriod) + 1.
+ldaPeriodNext = Func.Common:mLastDayOfMonth(ldaPeriod) + 1.
 liPeriodNext = year(ldaPeriodNext) * 100 + month(ldaPeriodNext).
 
 output stream sout to value("/apps/yoigo/tms_support/billing/log/ultimate_report_fixedfee_" + 
@@ -49,7 +48,7 @@ fOR EACH fixedfee NO-LOCK where
          fixedfee.billcode eq "PAYTERM":
 
    if fixedfee.begdate < ldaPeriodOld then next.
-   if fixedfee.begdate > flastdayofmonth(ldaPeriod) then next.
+   if fixedfee.begdate > Func.Common:mLastDayOfMonth(ldaPeriod) then next.
 
    if fixedfee.financedresult ne "00" then next.
 

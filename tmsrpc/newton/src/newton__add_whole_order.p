@@ -248,9 +248,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-gcBrand = "1".
-katun = "NewtonRPC".
-{Func/date.i}
+Syst.CUICommon:gcBrand = "1".
+Syst.CUICommon:katun = "NewtonRPC".
 {Func/orderchk.i}
 {Func/order.i}
 {Syst/tmsconst.i}
@@ -683,7 +682,7 @@ FUNCTION fCreateMemo RETURNS LOGICAL (INPUT pcTitle AS CHARACTER,
    CREATE Memo.
    ASSIGN
       Memo.CreStamp  = {&nowTS}
-      Memo.Brand     = gcBrand 
+      Memo.Brand     = Syst.CUICommon:gcBrand 
       Memo.HostTable = "Order" 
       Memo.KeyValue  = STRING(Order.OrderId) 
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
@@ -837,7 +836,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
             
             IF lcFError EQ "" THEN
                FOR FIRST Customer WHERE
-                         Customer.Brand      = gcBrand  AND
+                         Customer.Brand      = Syst.CUICommon:gcBrand  AND
                          Customer.OrgId      = lcIdOrderCustomer AND
                          Customer.CustIdType = lcIdtypeOrderCustomer AND
                          Customer.Roles NE "inactive" NO-LOCK:
@@ -863,7 +862,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
       /* YBP-535 */
       CREATE OrderCustomer.
       ASSIGN
-         OrderCustomer.Brand           = gcBrand 
+         OrderCustomer.Brand           = Syst.CUICommon:gcBrand 
          OrderCustomer.OrderId         = liOrderId
          OrderCustomer.CustId          = lcIdOrderCustomer 
          OrderCustomer.CustIdType      = lcIdtypeOrderCustomer
@@ -945,7 +944,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
          IF piRowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL} THEN DO:
 
             FIND bOrderCustomer NO-LOCK WHERE
-                 bOrderCustomer.Brand = gcBrand AND
+                 bOrderCustomer.Brand = Syst.CUICommon:gcBrand AND
                  bOrderCustomer.OrderID = liOrderId AND
                  bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
             NO-ERROR.
@@ -1029,7 +1028,7 @@ FUNCTION fCheckMSISDN RETURNS CHARACTER:
    IF pcNumberType EQ "new" THEN DO:
 
       FIND FIRST MSISDN NO-LOCK
-         WHERE msisdn.brand EQ gcBrand 
+         WHERE msisdn.brand EQ Syst.CUICommon:gcBrand 
          AND MSISDN.ValidTo GE {&nowts}
          AND msisdn.cli EQ pcCLI
          AND msisdn.statuscode EQ 1 
@@ -1042,7 +1041,7 @@ FUNCTION fCheckMSISDN RETURNS CHARACTER:
    ELSE IF pcNumberType EQ "MNP" OR 
            pcNumberType EQ "migration" THEN DO:
       FIND FIRST MobSub WHERE
-                 MobSub.Brand = gcBrand AND
+                 MobSub.Brand = Syst.CUICommon:gcBrand AND
                  MobSub.CLI = pcCLI NO-LOCK NO-ERROR. 
       IF AVAIL MobSub THEN
          lcError = "Subscription already exists with MSISDN " + pcCLI.
@@ -1060,7 +1059,7 @@ FUNCTION fCheckSIM RETURNS CHARACTER:
    IF pcIcc NE '' THEN 
    DO:
        FIND FIRST SIM EXCLUSIVE-LOCK
-          WHERE SIM.brand EQ gcBrand 
+          WHERE SIM.brand EQ Syst.CUICommon:gcBrand 
           AND SIM.ICC EQ pcIcc
           AND SIM.simstat EQ 1 
           NO-ERROR.
@@ -1100,7 +1099,7 @@ END.
 FUNCTION fCreateOrder RETURNS LOGICAL:
    CREATE Order.
    ASSIGN
-      Order.Brand           = gcBrand 
+      Order.Brand           = Syst.CUICommon:gcBrand 
       Order.OrderId         = liOrderId
       Order.Salesman        = pcSalesman
       Order.Reseller        = pcReseller
@@ -1157,13 +1156,13 @@ FUNCTION fHandleCorporateCustomer RETURNS LOGICAL:
    */
 
    FIND FIRST Customer WHERE
-              Customer.Brand      = gcBrand  AND
+              Customer.Brand      = Syst.CUICommon:gcBrand  AND
               Customer.OrgId      = lcId     AND
               Customer.CustIdType = lcIdType AND
               Customer.Roles NE "inactive" NO-LOCK NO-ERROR. 
    IF AVAIL Customer THEN DO:
       FIND FIRST MobSub WHERE
-                 MobSub.Brand   = gcBrand AND
+                 MobSub.Brand   = Syst.CUICommon:gcBrand AND
                  MobSub.AgrCust = Customer.CustNum
            NO-LOCK NO-ERROR.
       IF NOT AVAIL MobSub THEN Order.StatusCode = "20".
@@ -1182,7 +1181,7 @@ FUNCTION fCreateOrderTopup RETURNS LOGICAL:
       CREATE OrderTopup.
       ASSIGN
          OrderTopup.Amount = pfTopup
-         OrderTopup.Brand = gcBrand 
+         OrderTopup.Brand = Syst.CUICommon:gcBrand 
          OrderTopup.OrderId = Order.OrderId
          /*OrderTopup.VatAmount = */
       .
@@ -1198,7 +1197,7 @@ FUNCTION fCreateAccessory RETURNS LOGICAL:
       ASSIGN
          OrderAccessory.OrderId     = Order.OrderId
          OrderAccessory.TerminalType = {&TERMINAL_TYPE_ACCESSORY}
-         OrderAccessory.brand       = gcBrand
+         OrderAccessory.brand       = Syst.CUICommon:gcBrand
          OrderAccessory.ProductCode = pcAccessory. /*deviceid - billingitem*/
    END.
 
@@ -1221,7 +1220,7 @@ FUNCTION fCreateOrderAccessory RETURNS LOGICAL:
       ASSIGN
          OrderAccessory.OrderId       = Order.OrderId
          OrderAccessory.TerminalType  = {&TERMINAL_TYPE_PHONE} 
-         OrderAccessory.brand         = gcBrand 
+         OrderAccessory.brand         = Syst.CUICommon:gcBrand 
          OrderAccessory.IMEI          = pcIMEI
          OrderAccessory.discount      = piDeviceDiscount WHEN piDeviceDiscount NE 0
          OrderAccessory.Model         = pcDeviceModel
@@ -1247,7 +1246,7 @@ FUNCTION fCreateOrderAccessory RETURNS LOGICAL:
       ASSIGN
          OrderAccessory.OrderId     = Order.OrderId
          OrderAccessory.TerminalType = {&TERMINAL_TYPE_LAPTOP} 
-         OrderAccessory.brand       = gcBrand 
+         OrderAccessory.brand       = Syst.CUICommon:gcBrand 
          OrderAccessory.IMEI        = pcLaptopSerial
          OrderAccessory.ProductCode = OfferItem.ItemKey WHEN AVAIL OfferItem.
    END.
@@ -1260,7 +1259,7 @@ END.
 FUNCTION fCreateOrderPayment RETURNS LOGICAL:
    CREATE OrderPayment.
    ASSIGN
-      OrderPayment.Brand         = gcBrand
+      OrderPayment.Brand         = Syst.CUICommon:gcBrand
       OrderPayment.OrderId       = liOrderId
       OrderPayment.Method        = piPaymentMethod
       OrderPayment.CCReference   = pcCreditCardRefNum
@@ -1284,7 +1283,7 @@ FUNCTION fCreateOrderFusion RETURNS LOGICAL:
 
    CREATE OrderFusion.
    ASSIGN
-      OrderFusion.Brand              = gcBrand
+      OrderFusion.Brand              = Syst.CUICommon:gcBrand
       OrderFusion.OrderId            = liOrderId
       OrderFusion.FusionStatus       = {&FUSION_FIXED_NUMBER_TYPE_NEW} WHEN NOT llROIClose
       OrderFusion.OrderDate          = ldaOrderDate
@@ -1295,7 +1294,7 @@ FUNCTION fCreateOrderFusion RETURNS LOGICAL:
       OrderFusion.CustomerType       = lcFixedLineCustomerType
       OrderFusion.FixedMNPTime       = lcFixedLineMNPTime
       OrderFusion.FixedCurrOper      = lcFixedLineMNPOldOperName
-      OrderFusion.UpdateTS           = fMakeTS()
+      OrderFusion.UpdateTS           = Func.Common:mMakeTS()
       OrderFusion.FixedCurrOperCode  = lcFixedLineMNPOldOperCode
       OrderFusion.SerialNumber       = lcFixedLineSerialNbr
       OrderFusion.ADSLLinkState      = lcFixedLineAdslLinkState
@@ -1523,7 +1522,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {newton/src/settenant.i pcTenant}
 
-FIND CLIType NO-LOCK WHERE CLIType.Brand = gcBrand AND CLIType.CliType = pcSubType NO-ERROR.
+FIND CLIType NO-LOCK WHERE CLIType.Brand = Syst.CUICommon:gcBrand AND CLIType.CliType = pcSubType NO-ERROR.
 IF NOT AVAIL CLIType THEN
    RETURN appl_err(SUBST("Unknown CLIType &1", pcSubType)).   
 ELSE IF INDEX(pcChannel,"PRO") > 0 THEN
@@ -1544,7 +1543,7 @@ IF LOOKUP(pcNumberType,"new,mnp,renewal,stc") = 0 THEN
 /*Customer is not allowed to have active subscription in Yoigo system*/
 IF pcChannel BEGINS "migration" THEN DO:
    DEF VAR lcMErr AS CHAR NO-UNDO.
-   IF fMigrationCheckCustomer(gcBrand, lcId) NE "" THEN
+   IF fMigrationCheckCustomer(Syst.CUICommon:gcBrand, lcId) NE "" THEN
       RETURN appl_Err("Migration data validation error:" + lcMErr).
 END.
 
@@ -1557,7 +1556,7 @@ IF (pcNumberType EQ "mnp" OR pcNumberType EQ "stc") AND
 /* YPB-515 */
 FOR EACH ttDiscount:
    FIND FIRST DiscountPlan WHERE
-              DiscountPlan.Brand = gcBrand AND
+              DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
               DiscountPlan.DPRuleID = ttDiscount.DPRuleID AND
               DiscountPlan.ValidFrom <= TODAY AND
               DiscountPlan.ValidTo   >= TODAY NO-LOCK NO-ERROR.
@@ -1568,7 +1567,7 @@ END.
 /* ADDLINE-20 Additional Line */
 IF pcAdditionaLineDiscount > "" THEN DO:
    FIND FIRST AddLineDiscountPlan WHERE
-              AddLineDiscountPlan.Brand      = gcBrand                 AND
+              AddLineDiscountPlan.Brand      = Syst.CUICommon:gcBrand                 AND
               AddLineDiscountPlan.DPRuleID   = pcAdditionaLineDiscount AND
               AddLineDiscountPlan.ValidFrom <= TODAY                   AND
               AddLineDiscountPlan.ValidTo   >= TODAY NO-LOCK NO-ERROR.
@@ -1641,7 +1640,7 @@ IF pcOfferId NE "" THEN DO:
 
    /* YBP-519 */
    FIND Offer WHERE 
-        Offer.Brand = gcBrand AND 
+        Offer.Brand = Syst.CUICommon:gcBrand AND 
         Offer.Offer = pcOfferId NO-LOCK NO-ERROR.
    IF NOT AVAIL Offer THEN
       RETURN appl_err("Offer " + pcOfferId + " is not defined").
@@ -1674,7 +1673,7 @@ IF pcOfferId NE "" THEN DO:
       
       /* YBP-521 */
       FOR EACH offercriteria where
-               offercriteria.brand = gcBrand and
+               offercriteria.brand = Syst.CUICommon:gcBrand and
                offercriteria.offer = offer.offer and
                offercriteria.beginstamp < pdePriceSelTime and
                offercriteria.endstamp > pdePriceSelTime NO-LOCK:
@@ -1806,13 +1805,13 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 IF LOOKUP(pcNumberType,"renewal,stc") > 0 THEN DO:
    
    FIND MobSub WHERE
-        MobSub.Brand = gcBrand AND
+        MobSub.Brand = Syst.CUICommon:gcBrand AND
         MobSub.CLI = pcCli NO-LOCK NO-ERROR. 
    IF NOT AVAIL MobSub THEN 
       RETURN appl_err(SUBST("Mobsub with msisdn &1 not found", pcCli)).
 
    FIND Customer WHERE
-        Customer.Brand = gcBrand AND
+        Customer.Brand = Syst.CUICommon:gcBrand AND
         Customer.OrgId = lcID AND
         Customer.CustidType = lcIdType AND
         Customer.Custnum = MobSub.Custnum NO-LOCK NO-ERROR.
@@ -1831,7 +1830,7 @@ lcError = fCheckSIM().
 
 IF NOT lcError > "" THEN DO:
    FIND FIRST lbOrder NO-LOCK WHERE
-              lbOrder.brand EQ gcBrand AND
+              lbOrder.brand EQ Syst.CUICommon:gcBrand AND
               lbOrder.ContractID EQ pcContractId AND
               lbOrder.CLI NE pcCLI NO-ERROR.
    IF AVAIL lbOrder THEN
@@ -1843,7 +1842,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* YBP-529 */
 FIND FIRST lbOrder NO-LOCK WHERE
-           lbOrder.brand EQ gcBrand AND
+           lbOrder.brand EQ Syst.CUICommon:gcBrand AND
            lbOrder.ContractID EQ pcContractId AND
            lbOrder.CLI = pcCLI AND
            lbOrder.CrStamp = pdePriceSelTime
@@ -1858,7 +1857,7 @@ IF piMultiSimID > 0 THEN DO:
 
    IF piMultiSimType EQ {&MULTISIMTYPE_PRIMARY} THEN DO:
       FIND FIRST lbOrder NO-LOCK WHERE
-                 lbOrder.brand = gcBrand AND
+                 lbOrder.brand = Syst.CUICommon:gcBrand AND
                  lbOrder.MultiSimID = piMultiSimID AND
                  lbOrder.MultiSimType = piMultiSimType NO-ERROR.
       IF AVAIL lbOrder THEN RETURN appl_err("Primary order already exists").
@@ -1866,7 +1865,7 @@ IF piMultiSimID > 0 THEN DO:
    ELSE IF piMultiSimType EQ {&MULTISIMTYPE_SECONDARY} THEN DO:
 
       FIND FIRST lbOrder NO-LOCK WHERE
-                 lbOrder.brand = gcBrand AND
+                 lbOrder.brand = Syst.CUICommon:gcBrand AND
                  lbOrder.MultiSimID = piMultiSimID AND
                  lbOrder.MultiSimType = {&MULTISIMTYPE_PRIMARY} NO-ERROR.
       IF NOT AVAIL lbOrder THEN
@@ -1877,7 +1876,7 @@ IF piMultiSimID > 0 THEN DO:
       END.
       
       FIND FIRST lbOrder NO-LOCK WHERE
-                 lbOrder.brand = gcBrand AND
+                 lbOrder.brand = Syst.CUICommon:gcBrand AND
                  lbOrder.MultiSimID = piMultiSimID AND
                  lbOrder.MultiSimType = piMultiSimType NO-ERROR.
       IF AVAIL lbOrder AND LOOKUP(lbOrder.Statuscode,{&ORDER_CLOSE_STATUSES}) = 0 THEN
@@ -1894,7 +1893,7 @@ IF LOOKUP(pcNumberType,"new,mnp,migration") > 0 AND
    CLIType.LineType  > 0 AND
    CLIType.LineType <> 3 AND
    NOT CAN-FIND(FIRST CLIType WHERE
-                      CLIType.Brand = gcBrand AND
+                      CLIType.Brand = Syst.CUICommon:gcBrand AND
                       CLIType.CLIType = (IF pcMobsubBundleType > "" THEN
                                             pcMobsubBundleType
                                          ELSE pcSubType)           AND
@@ -1962,7 +1961,7 @@ IF pcFusionStruct > "" THEN DO:
          RETURN appl_err(SUBST("Mobsub with Fixed Number &1 not found", lcFixedLineNumber)).
 
       FIND FIRST lbMobSub WHERE
-                 lbMobSub.Brand = gcBrand AND
+                 lbMobSub.Brand = Syst.CUICommon:gcBrand AND
                  lbMobSub.FixedNumber = lcFixedLineNumber AND
                  lbMobSub.Cli NE pcCLI NO-LOCK NO-ERROR. 
       IF AVAIL lbMobSub THEN
@@ -2035,7 +2034,7 @@ IF LOOKUP(pcSubType,lcExtraLineCLITypes) > 0 THEN DO:
       RETURN appl_err("No Existing Main line subscriptions OR Ongoing main line orders are available").
 
    FIND FIRST ExtraLineMainOrder EXCLUSIVE-LOCK WHERE
-              ExtraLineMainOrder.Brand   = gcBrand      AND 
+              ExtraLineMainOrder.Brand   = Syst.CUICommon:gcBrand      AND 
               ExtraLineMainOrder.OrderId = piMultiSimID NO-ERROR.
 
    IF NOT AVAIL ExtraLineMainOrder THEN 
@@ -2049,7 +2048,7 @@ IF LOOKUP(pcSubType,lcExtraLineCLITypes) > 0 THEN DO:
 
    IF lcExtraLineDiscRuleId NE "" THEN DO:
       FIND FIRST ExtraLineDiscountPlan NO-LOCK WHERE
-                 ExtraLineDiscountPlan.Brand      = gcBrand               AND
+                 ExtraLineDiscountPlan.Brand      = Syst.CUICommon:gcBrand               AND
                  ExtraLineDiscountPlan.DPRuleID   = lcExtraLineDiscRuleId AND
                  ExtraLineDiscountPlan.ValidFrom <= TODAY                 AND
                  ExtraLineDiscountPlan.ValidTo   >= TODAY                 NO-ERROR.
@@ -2080,7 +2079,7 @@ If pcMandateId > "" THEN
                       pcMandateId,
                       "").
 
-fSplitTS(Order.CrStamp,OUTPUT ldaOrderDate,OUTPUT liOrderTime).
+Func.Common:mSplitTS(Order.CrStamp,OUTPUT ldaOrderDate,OUTPUT liOrderTime).
 
 /* YBP-547 */
 /* Apply discount to the subscription */
@@ -2108,7 +2107,7 @@ END.
    April promo (OR) Convergent New Adds Promotion */
 IF pcNumberType EQ "stc" AND fIsConvergenceTariff(pcSubType) THEN DO:
    FIND FIRST ConvDiscountPlan WHERE
-              ConvDiscountPlan.Brand      = gcBrand         AND
+              ConvDiscountPlan.Brand      = Syst.CUICommon:gcBrand         AND
              (ConvDiscountPlan.DPRuleID   = "CONVDISC"      OR
               ConvDiscountPlan.DPRuleID   = "CONVDISC20_3") AND
               ConvDiscountPlan.ValidFrom <= TODAY           AND
@@ -2193,7 +2192,7 @@ IF LOOKUP(pcNumberType,"renewal,stc") > 0 THEN DO:
    ASSIGN Order.MsSeq   = MobSub.MsSeq
           Order.Custnum = Customer.Custnum.
    FIND FIRST OrderCustomer WHERE
-      OrderCustomer.Brand = gcBrand AND 
+      OrderCustomer.Brand = Syst.CUICommon:gcBrand AND 
       OrderCustomer.OrderId = Order.OrderId AND
       OrderCustomer.Rowtype = 1 EXCLUSIVE-LOCK NO-ERROR.
    ASSIGN
@@ -2206,7 +2205,7 @@ END.
 /* YPR-2105 */
 IF Order.OrderChannel BEGINS "retention" THEN
    FOR EACH lbOrder NO-LOCK WHERE
-            lbOrder.Brand = gcBrand AND
+            lbOrder.Brand = Syst.CUICommon:gcBrand AND
             lbOrder.CLI = Order.CLI AND
             lbOrder.StatusCode = {&ORDER_STATUS_OFFER_SENT} AND /* shouldn't never get this value because of YDR-2575 */
             ROWID(lbOrder) NE ROWID(Order):
@@ -2281,7 +2280,7 @@ ELSE IF Order.statuscode NE "4" THEN DO:
       
       /* YBP-559 */
       FIND FIRST OrderCustomer WHERE 
-         OrderCustomer.Brand = gcBrand AND
+         OrderCustomer.Brand = Syst.CUICommon:gcBrand AND
          OrderCustomer.OrderId = Order.OrderId AND
          OrderCustomer.RowType = 1 EXCLUSIVE-LOCK NO-ERROR.
 
@@ -2366,7 +2365,7 @@ ELSE IF Order.statuscode NE "4" THEN DO:
                             OUTPUT ldeSMSStamp).
                
          IF lcRenoveSMSText > "" THEN DO:
-            ldeSMSStamp = DYNAMIC-FUNCTION("fMakeOfficeTS" in ghFunc1).
+            ldeSMSStamp = Func.Common:mMakeOfficeTS().
             fMakeSchedSMS(Order.CustNum,
                           Order.CLI,
                           {&SMSTYPE_AFTER_SALES_ORDER},
@@ -2400,7 +2399,7 @@ ELSE IF Order.statuscode NE "4" THEN DO:
       IF Order.MultiSimID > 0 AND
          Order.MultiSimType EQ {&MULTISIMTYPE_SECONDARY} THEN DO:
          FIND FIRST lbOrder NO-LOCK WHERE
-                    lbOrder.Brand = gcBrand AND
+                    lbOrder.Brand = Syst.CUICommon:gcBrand AND
                     lbOrder.MultiSimID = Order.MultiSimID AND
                     lbOrder.MultiSimType = {&MULTISIMTYPE_PRIMARY} NO-ERROR.
          IF AVAIL lbOrder AND
@@ -2500,7 +2499,7 @@ END.
 IF pcAdditionalBundleList > "" THEN
 DO liBundleCnt = 1 TO NUM-ENTRIES(pcAdditionalBundleList):
 
-   FIND FIRST DayCampaign WHERE DayCampaign.Brand = gcBrand AND DayCampaign.DCEvent = ENTRY(liBundleCnt, pcAdditionalBundleList) NO-LOCK NO-ERROR.
+   FIND FIRST DayCampaign WHERE DayCampaign.Brand = Syst.CUICommon:gcBrand AND DayCampaign.DCEvent = ENTRY(liBundleCnt, pcAdditionalBundleList) NO-LOCK NO-ERROR.
    IF AVAIL DayCampaign AND DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
        fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList),pcAdditionalOfferList).
    ELSE         
@@ -2580,7 +2579,7 @@ IF Order.OrderChannel BEGINS "Renewal_POS" AND Order.ICC > "" AND
 
    ASSIGN liRequest = 0
           lcError   = ""
-          katun     = Order.SalesMan.
+          Syst.CUICommon:katun     = Order.SalesMan.
 
    liRequest =  fSubscriptionRequest
                    (INPUT  Order.MSSeq,
@@ -2588,7 +2587,7 @@ IF Order.OrderChannel BEGINS "Renewal_POS" AND Order.ICC > "" AND
                     INPUT  Order.CustNum,
                     INPUT  1,
                     INPUT  "",
-                    INPUT  fMakeTS(),
+                    INPUT  Func.Common:mMakeTS(),
                     INPUT  "CHANGEICC",
                     INPUT  Order.ICC,
                     "",
@@ -2607,15 +2606,14 @@ IF Order.OrderChannel BEGINS "Renewal_POS" AND Order.ICC > "" AND
    ELSE DO:
       fUpdateSIM().
 
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "MsRequest",
+      Func.Common:mWriteMemo("MsRequest",
                        STRING(liRequest),
                        Order.CustNum,
                        "ICC TYPE CHANGE AUTO",
                        Order.OrderChannel).
    END. /* ELSE DO: */
 
-   katun = "NewtonRPC".
+   Syst.CUICommon:katun = "NewtonRPC".
 
 END. /* IF Order.OrderChannel BEGINS "Renewal_POS" AND Order.ICC > "" */
  
@@ -2633,7 +2631,7 @@ IF Order.OrderType EQ {&ORDER_TYPE_STC} AND
                
    IF lcSTCSMSText > "" THEN DO:
       
-      lcCLITypeTrans = fGetItemName(gcBrand,
+      lcCLITypeTrans = fGetItemName(Syst.CUICommon:gcBrand,
                             "CLIType",
                             Order.CLIType,
                            (IF AVAIL Customer
@@ -2720,7 +2718,7 @@ IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN DO:
 END.
       
 /* YTS-2890 */
-fMakeCreateEvent((BUFFER Order:HANDLE),"",katun,"").
+fMakeCreateEvent((BUFFER Order:HANDLE),"",Syst.CUICommon:katun,"").
 fMarkOrderStamp(Order.OrderID,"Change",0.0).
 
 
@@ -2744,5 +2742,4 @@ END.
 add_int(response_toplevel_id, "", liOrderId).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

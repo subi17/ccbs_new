@@ -32,7 +32,6 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'MobSub'}
 {Func/cparam2.i}
@@ -46,7 +45,7 @@
 {Func/profunc.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -142,10 +141,9 @@ FIND FIRST AgrCust WHERE
 
 FIND FIRST CLIType WHERE
            CLIType.Clitype = MobSub.CliType  AND
-           CliType.Brand   = gcBrand NO-LOCK NO-ERROR.
+           CliType.Brand   = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
            
-lcAgrCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                 BUFFER Agrcust).
+lcAgrCustName = Func.Common:mDispCustName(BUFFER Agrcust).
 
 ASSIGN lcBONOContracts       = fCParamC("BONO_CONTRACTS")
        lcBundleCLITypes      = fCParamC("BUNDLE_BASED_CLITYPES").
@@ -185,7 +183,7 @@ form /* asks MSISDN number */
    " Change fee ....:"   llCreateFees SKIP
    " Data Bundle....:" lcBundle FORMAT "x(12)" SKIP
    WITH  OVERLAY ROW 2 centered
-   COLOR VALUE(cfc)TITLE COLOR VALUE(ctc) " Subscription type change " 
+   COLOR VALUE(Syst.CUICommon:cfc)TITLE COLOR VALUE(Syst.CUICommon:ctc) " Subscription type change " 
    NO-LABELS SIDE-LABEL FRAME main.
 
 FUNCTION FTime2Dec RETURNS DECIMAL
@@ -232,7 +230,7 @@ ASSIGN
    liCreditCheck = 1
    new-ts-time   = FTime2Dec(time).
 
-fSplitTS(Mobsub.ActivationTS, OUTPUT odtDate, oiTime).
+Func.Common:mSplitTS(Mobsub.ActivationTS, OUTPUT odtDate, oiTime).
 
 liAge = today - odtDate.
 
@@ -248,8 +246,7 @@ END.
 FIND FIRST UserCustomer WHERE 
            UserCustomer.Custnum = Mobsub.Custnum NO-LOCK NO-ERROR.
            
-IF Avail UserCustomer THEN UserName =  DYNAMIC-FUNCTION("fDispCustName" IN 
-                                       ghFunc1, BUFFER UserCustomer).
+IF Avail UserCustomer THEN UserName = Func.Common:mDispCustName(BUFFER UserCustomer).
 ELSE UserName = "".                                       
 
 /* is there a time limit for scheduling (on old type) */
@@ -280,7 +277,7 @@ ASSIGN
 IF lcBankAccount ne "" THEN DO:
    
    FIND FIRST Bank WHERE
-              Bank.Brand      = gcBrand AND
+              Bank.Brand      = Syst.CUICommon:gcBrand AND
               Bank.BankID     = SUBSTRING(lcBankAccount,5,4) AND
               Bank.BankOffice = SUBSTRING(lcBankAccount,9,4) 
    NO-LOCK NO-ERROR.
@@ -347,7 +344,7 @@ WITH FRAME main.
 MAIN:
 REPEAT  WITH FRAME main:
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    IF llBarring OR 
       llMnp THEN DO:
       MESSAGE {&MSG_NOT_ALLOWED}. PAUSE NO-MESSAGE.
@@ -365,7 +362,7 @@ REPEAT  WITH FRAME main:
 
              IF FRAME-FIELD = "new-type" AND KEYLABEL(LASTKEY) = "F9" THEN DO:
                 RUN Help/h-mobtype.p.
-                Ehto = 9. RUN Syst/ufkey.p.
+                Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
                 IF siirto NE ? THEN DO:
                    DISP siirto @ new-type WITH FRAME main.
                    NEXT.
@@ -378,7 +375,7 @@ REPEAT  WITH FRAME main:
                 RUN Help/h-date.p(lcchangedate,mobsub.msseq,
                            INPUT FRAME main new-type).
 
-                Ehto = 9. RUN Syst/ufkey.p.
+                Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
                 
                 IF siirto NE ? THEN DO:
                    DISP siirto @ new-ts-date WITH FRAME main.
@@ -393,7 +390,7 @@ REPEAT  WITH FRAME main:
                 IF FRAME-FIELD ="new-type" THEN DO:
                 
                    IF INPUT FRAME main new-type = "" THEN DO:
-                      Ehto = 9. RUN Syst/ufkey.p.
+                      Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
                       IF siirto NE ? THEN DO:
                          DISP siirto @ new-type WITH FRAME main.
                          NEXT.
@@ -414,7 +411,7 @@ REPEAT  WITH FRAME main:
                    END.     
                    
                    FIND FIRST PriceList WHERE 
-                              PriceList.Brand     = gcBrand AND 
+                              PriceList.Brand     = Syst.CUICommon:gcBrand AND 
                               Pricelist.PriceList = Clitype.PricePlan 
                    NO-LOCK NO-ERROR.
 
@@ -429,7 +426,7 @@ REPEAT  WITH FRAME main:
                    END.
                    
                    FIND FIRST NewCliType WHERE
-                              NewCLIType.Brand = gcBrand AND
+                              NewCLIType.Brand = Syst.CUICommon:gcBrand AND
                               NewCLIType.CLIType = INPUT new-type NO-LOCK.
                    IF NewCLIType.PayType = 2 THEN 
                       liCreditcheck = 0.
@@ -442,7 +439,7 @@ REPEAT  WITH FRAME main:
                    IF INPUT new-ts-date = ? THEN DO:
                       RUN Help/h-date.p(lcchangedate,mobsub.msseq,
                                  INPUT FRAME main new-type).
-                      Ehto = 9. RUN Syst/ufkey.p.
+                      Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
                                                  
                       IF siirto NE ? THEN DO:
                          DISP siirto @ new-ts-date WITH FRAME main.
@@ -460,7 +457,7 @@ REPEAT  WITH FRAME main:
                    RUN Help/h-date.p(lcchangedate,mobsub.msseq,
                               INPUT FRAME main new-type).
                     
-                   Ehto = 9. RUN Syst/ufkey.p.
+                   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
                                     
                    IF siirto NE ? THEN DO:
                       DISP siirto @ new-ts-date WITH FRAME main.
@@ -508,7 +505,7 @@ REPEAT  WITH FRAME main:
       END. /* EDITING */
 
       FIND FIRST NewCliType WHERE
-                 NewCLIType.Brand = gcBrand AND
+                 NewCLIType.Brand = Syst.CUICommon:gcBrand AND
                  NewCLIType.CLIType = new-type NO-LOCK NO-ERROR.
       
       ASSIGN
@@ -527,7 +524,7 @@ REPEAT  WITH FRAME main:
           
             READKEY.
 
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME main:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME main:
             
                PAUSE 0.
                                            
@@ -557,7 +554,7 @@ REPEAT  WITH FRAME main:
             IF MobSub.Paytype = TRUE AND
                NewCLIType.PayType = 1 AND
                NOT CAN-FIND(FIRST bMobSub WHERE
-                                  bMobSub.Brand     = gcBrand AND
+                                  bMobSub.Brand     = Syst.CUICommon:gcBrand AND
                                   bMobSub.MsSeq    <> MobSub.MsSeq AND
                                   bMobSub.CustNum   = Customer.CustNum AND
                                   bMobSub.PayType   = FALSE) THEN DO:
@@ -633,7 +630,7 @@ REPEAT  WITH FRAME main:
   
   if liCreditCheck = 1 THEN DO:
      FIND FIRST NewCliType WHERE
-                NewCLIType.Brand = gcBrand AND
+                NewCLIType.Brand = Syst.CUICommon:gcBrand AND
                 NewCLIType.CLIType = INPUT new-type NO-LOCK NO-ERROR.
      IF AVAILABLE NewCLIType AND NewCLIType.PayType = 2 THEN 
         liCreditcheck = 0.
@@ -653,17 +650,17 @@ REPEAT  WITH FRAME main:
    REPEAT WITH FRAME main:
 
       ASSIGN
-      ufk = 0 ehto = 0
-      ufk[1] = 7 
-      ufk[5] = 795
-      ufk[8] = 8.
+      Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0
+      Syst.CUICommon:ufk[1] = 7 
+      Syst.CUICommon:ufk[5] = 795
+      Syst.CUICommon:ufk[8] = 8.
       RUN Syst/ufkey.p.
 
-      IF toimi = 1 THEN NEXT  main.
+      IF Syst.CUICommon:toimi = 1 THEN NEXT  main.
       
-      IF toimi = 8 THEN LEAVE main.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE main.
       
-      IF TOIMI = 5 THEN DO TRANS:
+      IF Syst.CUICommon:toimi = 5 THEN DO TRANS:
          
          RUN Mc/charge_dialog.p(
             MobSub.MsSeq,
@@ -676,7 +673,7 @@ REPEAT  WITH FRAME main:
             Mobsub.MultiSimID > 0 THEN DO:
       
             FIND FIRST bbMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-                       bbMobSub.Brand = gcBrand AND
+                       bbMobSub.Brand = Syst.CUICommon:gcBrand AND
                        bbMobSub.MultiSimId = Mobsub.MultiSimId AND
                        bbMobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} AND
                        bbMobSub.Custnum = Mobsub.Custnum
@@ -699,24 +696,24 @@ REPEAT  WITH FRAME main:
             END.
          END.
          ELSE IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                                CLIType.Brand = gcBrand AND
+                                CLIType.Brand = Syst.CUICommon:gcBrand AND
                                 CLIType.CLIType = Mobsub.TariffBundle AND
                                 CLIType.LineType = {&CLITYPE_LINETYPE_MAIN})
                 AND
                 NOT CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                                   CLIType.Brand = gcBrand AND
+                                   CLIType.Brand = Syst.CUICommon:gcBrand AND
                                    CLIType.CLIType = lcBundle AND
                                    CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) THEN DO:
 
             llAddLineTerm = FALSE.
 
             FOR EACH bbMobSub NO-LOCK WHERE
-                     bbMobSub.Brand   = gcBrand AND
+                     bbMobSub.Brand   = Syst.CUICommon:gcBrand AND
                      bbMobSub.InvCust = Mobsub.CustNum AND
                      bbMobSub.PayType = FALSE AND
                      bbMobSub.MsSeq NE Mobsub.MsSeq,
                FIRST bCliType NO-LOCK WHERE
-                     bCliType.Brand = gcBrand AND
+                     bCliType.Brand = Syst.CUICommon:gcBrand AND
                      bCliType.CLiType = (IF bbMobSub.TariffBundle > ""
                                         THEN bbMobSub.TariffBundle
                                         ELSE bbMobSub.CLIType) AND

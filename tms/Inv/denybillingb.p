@@ -11,13 +11,12 @@
 
 {Syst/commpaa.i}
 
-ASSIGN gcBrand = "1" 
-       katun   = "Cron".
+ASSIGN Syst.CUICommon:gcBrand = "1" 
+       Syst.CUICommon:katun   = "Cron".
        
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Syst/eventlog.i}
-{Func/timestamp.i}
 
 DEF VAR liCnt       AS INT  NO-UNDO.
 DEF VAR lcDenyFile  AS CHAR NO-UNDO.
@@ -51,8 +50,8 @@ END FUNCTION.
 
 
 FIND FIRST Company WHERE
-           Company.Brand = gcBrand NO-LOCK NO-ERROR.
-IF AVAILABLE Company THEN ynimi = Company.CompName.
+           Company.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
+IF AVAILABLE Company THEN Syst.CUICommon:ynimi = Company.CompName.
 
 ASSIGN 
    lcReadDir  = fCParamC("DenyBillFiles")
@@ -95,7 +94,7 @@ FOR EACH ttFiles:
    DO TRANS:
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = gcBrand   
+         ActionLog.Brand        = Syst.CUICommon:gcBrand   
          ActionLog.TableName    = "Cron"  
          ActionLog.KeyValue     = "" 
          ActionLog.ActionID     = "DENYBILL"
@@ -108,7 +107,7 @@ FOR EACH ttFiles:
                                   " Succesful: " + 
                                   STRING(liRead - liError - liExist)
          ActionLog.ActionStatus = 3.
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
 
       /* file without the dir */
       lcPlainFile = ttFiles.DenyFile.

@@ -18,8 +18,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i} 
 
 {Syst/commpaa.i}
-gcBrand = "1".
-{Func/timestamp.i}
+Syst.CUICommon:gcBrand = "1".
 {Func/fsubstermreq.i}
 {Mm/fbundle.i}
 {Func/msisdn_prefix.i}
@@ -67,14 +66,14 @@ IF lcTermStruct EQ ? THEN RETURN.
 
 /* required params */
 piMsSeq     = get_pos_int(pcTermStruct, "msseq").
-katun       = "VISTA_" + get_string(pcTermStruct, "salesman").
+Syst.CUICommon:katun = "VISTA_" + get_string(pcTermStruct, "salesman").
 piOrderer   = get_pos_int(pcTermStruct, "orderer").
 pdeKillTS   = get_timestamp(pcTermStruct, "killts").
 IF LOOKUP("termination_type", lcTermStruct) GT 0 THEN
    pcTermType  = get_string(pcTermStruct, "termination_type").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF TRIM(katun) EQ "VISTA_" THEN DO:
+IF TRIM(Syst.CUICommon:katun) EQ "VISTA_" THEN DO:
    RETURN appl_err("username is empty").
 END.
 
@@ -208,10 +207,10 @@ liReq = fTerminationRequest(
 
 IF liReq > 0 THEN DO:
 
-   fTS2Date(pdeKillTS, OUTPUT ldaTermDate).
+   Func.Common:mTS2Date(pdeKillTS, OUTPUT ldaTermDate).
 
    fAdditionalLineSTC(liReq,
-                      fMake2Dt(ldaTermDate + 1, 0),
+                      Func.Common:mMake2DT(ldaTermDate + 1, 0),
                       "DELETE").
    
    add_boolean(response_toplevel_id, "", true).
@@ -220,5 +219,4 @@ ELSE
    add_boolean(response_toplevel_id, "", false).
    
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

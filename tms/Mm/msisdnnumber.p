@@ -15,7 +15,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -66,10 +66,10 @@ form
     lcRankName                  COLUMN-LABEL "ClassName"
     
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.CUICommon:cfc)   
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "  MSISDN MENU  "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form
@@ -78,25 +78,25 @@ form
     "Rank.....:" MSISDNNumber.Rank        /* LABEL FORMAT */     SKIP
 
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     NO-LABELS 
     FRAME lis.
 
 form /* seek  MSISDNNumber */
     lcCli
     HELP "Enter Number of CLI "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND MSISDN "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  BTName */
     BTName
     HELP "Enter Name of the Billing RepType"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Name "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -129,13 +129,13 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a MSISDNNumber  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR MSISDNNumber.CLI
@@ -219,33 +219,33 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 36  ufk[2]= 0 ufk[3]= 2140  ufk[4]= 0
-        ufk[5]= 0
-        ufk[6]= 0
-        ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ufk[1]= 36  Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 2140  Syst.CUICommon:ufk[4]= 0
+        Syst.CUICommon:ufk[5]= 0
+        Syst.CUICommon:ufk[6]= 0
+        Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW MSISDNNumber.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MSISDNNumber.CLI WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MSISDNNumber.CLI WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW MSISDNNumber.MSISDNType {Syst/uchoose.i} 
         NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MSISDNNumber.MSISDNType WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MSISDNNumber.MSISDNType WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -269,10 +269,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -297,7 +297,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -323,7 +323,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND MSISDNNumber WHERE recid(MSISDNNumber) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -347,7 +347,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -362,9 +362,9 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET lccli WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -383,7 +383,7 @@ BROWSE:
        END.
      END. /* Search-1 */
 
-     ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
          RUN local-find-this(FALSE).
 
@@ -392,7 +392,7 @@ BROWSE:
          UFKEY = TRUE.
 
      END.
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -400,8 +400,8 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSISDNNumber).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY MSISDNNumber.CLI.
 
        RUN local-UPDATE-record.                                  
@@ -418,25 +418,25 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(MSISDNNumber) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(MSISDNNumber) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 

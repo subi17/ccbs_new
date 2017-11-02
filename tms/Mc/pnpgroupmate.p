@@ -42,10 +42,10 @@ form
    pnpgroup.dto
 
 WITH width 80 OVERLAY scroll 1 15 DOWN
-   COLOR value(cfc)
-   title color value(ctc) " " + ynimi +
+   COLOR value(Syst.CUICommon:cfc)
+   title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
    " Maintain PNP groups "
-   + string(pvm,"99-99-99") + " "
+   + string(TODAY,"99-99-99") + " "
    FRAME sel.
 
 form
@@ -60,18 +60,18 @@ form
    "Valid From.:" pnpgroup.dfrom                 SKIP
    "Valid To...:" pnpgroup.dto      
 WITH OVERLAY ROW 4 centered
-   COLOR value(cfc)
-   TITLE COLOR value(ctc)
+   COLOR value(Syst.CUICommon:cfc)
+   TITLE COLOR value(Syst.CUICommon:ctc)
    fr-header WITH no-labels
    FRAME lis.
 
 form /*  search WITH FIELD pnpgroup */
     haku-pnpgroup
     help "Give ...."
-    with row 4 col 2 title color value(ctc) " FIND xxxxxxx "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND xxxxxxx "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 RUN LOCAL-FIND-FIRST.
@@ -96,19 +96,19 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* pnpgroup -ADD  */
       HIDE FRAME lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
 
            CREATE pnpgroup.
            ASSIGN
            pnpgroup.pnpseq = NEXT-VALUE(pnpseq)
-           pnpgroup.Brand  = gcBrand 
+           pnpgroup.Brand  = Syst.CUICommon:gcBrand 
            pnpgroup.pnpgrouptupe = 1.
 
            RUN LOCAL-UPDATE-RECORD(true).
@@ -178,29 +178,29 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35  ufk[2]= 30 ufk[3]= 0 ufk[4]= 1761
-        ufk[5]= 5  ufk[6]= 4 ufk[7]= 1762 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ufk[1]= 35  Syst.CUICommon:ufk[2]= 30 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 1761
+        Syst.CUICommon:ufk[5]= 5  Syst.CUICommon:ufk[6]= 4 Syst.CUICommon:ufk[7]= 1762 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW pnpgroup.pnpgroup {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) pnpgroup.pnpgroup WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) pnpgroup.pnpgroup WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW pnpgroup.pnpgroup {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) pnpgroup.pnpgroup WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) pnpgroup.pnpgroup WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -221,10 +221,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND pnpgroup where recid(pnpgroup) = rtab[1] no-lock.
            RUN LOCAL-FIND-PREV.
@@ -249,7 +249,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND pnpgroup where recid(pnpgroup) = rtab[FRAME-DOWN] no-lock .
@@ -275,7 +275,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND pnpgroup where recid(pnpgroup) = memory no-lock no-error.
         RUN LOCAL-FIND-PREV.
@@ -299,7 +299,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* cursor TO the downmost line */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -314,15 +314,15 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+     else if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        haku-pnpgroup = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE haku-pnpgroup WITH FRAME haku-f1.
        HIDE FRAME haku-f1 no-pause.
        if haku-pnpgroup <> "" THEN DO:
           FIND FIRST pnpgroup where 
-                     Pnpgroup.Brand     = gcBrand AND 
+                     Pnpgroup.Brand     = Syst.CUICommon:gcBrand AND 
                      pnpgroup.pnpgroup >= haku-pnpgroup
           /* search condition */ no-lock no-error.
           IF NOT AVAILABLE pnpgroup THEN DO:
@@ -337,17 +337,17 @@ BROWSE:
        END.
      END. /* Haku sar. 1 */
 
-     if lookup(nap,"5,f5") > 0 THEN DO:  /* lisays */
+     if lookup(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:  /* lisays */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* removal */
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 THEN DO TRANSACTION:  /* removal */
        delline = FRAME-LINE.
        FIND pnpgroup where recid(pnpgroup) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
           pnpgroup.pnpgroup 
           pnpgroup.pnpgroup.
 
@@ -372,7 +372,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.CUICommon:ccc)
           pnpgroup.pnpgroup 
           pnpgroup.pnpgroup.
        IF ok THEN DO:
@@ -380,7 +380,7 @@ BROWSE:
            DELETE pnpgroup.
 
            /* in the LAST record was deleted ? */
-           IF NOT can-find(FIRST pnpgroup WHERE pnpgroup.Brand = gcBrand 
+           IF NOT can-find(FIRST pnpgroup WHERE pnpgroup.Brand = Syst.CUICommon:gcBrand 
            /* search condition */) THEN DO:
               CLEAR FRAME sel no-pause.
               PAUSE 0 no-message.
@@ -392,7 +392,7 @@ BROWSE:
        ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     ELSE IF LOOKUP(nap,"4,F4") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,F4") > 0 THEN DO:
        FIND FIRST pnpgroup WHERE 
             RECID(pnpgroup) = rtab[FRAME-LINE] 
        NO-LOCK NO-ERROR.
@@ -403,7 +403,7 @@ BROWSE:
        PAUSE 0.
      END.
 
-     else if lookup(nap,"7,f7") > 0 THEN DO:  /* hinnasto */
+     else if lookup(Syst.CUICommon:nap,"7,f7") > 0 THEN DO:  /* hinnasto */
 
         FIND FIRST pnpgroup WHERE 
              RECID(pnpgroup) = rtab[FRAME-LINE] 
@@ -413,15 +413,15 @@ BROWSE:
         RUN nntuhi(0,pnpgroup.RateCCN).
      END.
      
-     else if lookup(nap,"enter,return") > 0 THEN DO WITH FRAME lis TRANSACTION:
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 THEN DO WITH FRAME lis TRANSACTION:
        /* change */
        FIND FIRST pnpgroup where 
             recid(pnpgroup) = rtab[frame-line(sel)]
        exclusive-lock.
-       assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
+       assign fr-header = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
        RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 
        RUN LOCAL-UPDATE-RECORD(FALSE).
        
@@ -429,35 +429,35 @@ BROWSE:
 
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
        RUN LOCAL-FIND-FIRST.
        ASSIGN memory = recid(pnpgroup) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
        RUN LOCAL-FIND-LAST.
        ASSIGN memory = recid(pnpgroup) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE LOCAL-DISP-ROW: 
    
    FIND FIRST BillItem WHERE
-              BillItem.Brand    = gcBrand AND 
+              BillItem.Brand    = Syst.CUICommon:gcBrand AND 
               BillItem.BillCode = pnpgroup.BillCode
    NO-LOCK NO-ERROR.
  
    FIND FIRST CCN WHERE
-              CCN.Brand = gcBRand AND 
+              CCN.Brand = Syst.CUICommon:gcBrand AND 
               CCN.CCN = pnpgroup.ccn
    NO-LOCK NO-ERROR.
   
@@ -476,7 +476,7 @@ END PROCEDURE.
 PROCEDURE LOCAL-FIND-NEXT.
 
    IF order = 1 THEN 
-      FIND NEXT pnpgroup WHERE pnpgroup.Brand = gcBRand 
+      FIND NEXT pnpgroup WHERE pnpgroup.Brand = Syst.CUICommon:gcBrand 
       NO-LOCK NO-ERROR.
 
 END PROCEDURE.
@@ -484,7 +484,7 @@ END PROCEDURE.
 PROCEDURE LOCAL-FIND-PREV.
 
    IF order = 1 THEN 
-      FIND PREV pnpgroup WHERE pnpgroup.Brand = gcBRand
+      FIND PREV pnpgroup WHERE pnpgroup.Brand = Syst.CUICommon:gcBrand
       NO-LOCK NO-ERROR.
 
 END PROCEDURE.
@@ -492,7 +492,7 @@ END PROCEDURE.
 PROCEDURE LOCAL-FIND-FIRST.
 
    IF order = 1 THEN 
-      FIND FIRST pnpgroup WHERE pnpgroup.Brand = gcBRand
+      FIND FIRST pnpgroup WHERE pnpgroup.Brand = Syst.CUICommon:gcBrand
       NO-LOCK NO-ERROR.
 
 END PROCEDURE.
@@ -500,7 +500,7 @@ END PROCEDURE.
 PROCEDURE LOCAL-FIND-LAST.
 
    IF order = 1 THEN 
-      FIND LAST pnpgroup WHERE pnpgroup.Brand = gcBRand
+      FIND LAST pnpgroup WHERE pnpgroup.Brand = Syst.CUICommon:gcBrand
       NO-LOCK NO-ERROR.
 
 END PROCEDURE.
@@ -512,18 +512,18 @@ PROCEDURE LOCAL-UPDATE-RECORD.
    IF NOT bNew THEN DO:
 
       FIND FIRST BillItem WHERE
-                 BillItem.Brand    = gcBrand   AND 
+                 BillItem.Brand    = Syst.CUICommon:gcBrand   AND 
                  BillItem.BillCode = pnpgroup.BillCode
       NO-LOCK NO-ERROR.
  
       FIND FIRST CCN WHERE
-                 CCN.Brand = gcBrand AND 
+                 CCN.Brand = Syst.CUICommon:gcBrand AND 
                  CCN.CCN   = pnpgroup.ccn
       NO-LOCK NO-ERROR.
 
 
       FIND FIRST xxRateccn WHERE 
-                 xxRateccn.Brand = gcBrand AND 
+                 xxRateccn.Brand = Syst.CUICommon:gcBrand AND 
                  xxRateccn.ccn   = pnpgroup.rateccn 
       no-lock no-error.
 
@@ -554,8 +554,8 @@ PROCEDURE LOCAL-UPDATE-RECORD.
    WITH FRAME lis EDITING: 
       
       READKEY. 
-      nap = KEYLABEL(LASTKEY). 
-      IF lookup(nap,poisnap) > 0 THEN DO:
+      Syst.CUICommon:nap = KEYLABEL(LASTKEY). 
+      IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
          if keylabel(lastkey) = "F4" THEN LEAVE . 
 
 
@@ -568,7 +568,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
          ELSE IF FRAME-FIELD = "RateCCN" THEN DO:
             if input frame lis pnpgroup.RateCCN = "" OR 
             NOT CAN-FIND(FIRST Rateccn WHERE 
-                               Rateccn.Brand = gcBrand AND 
+                               Rateccn.Brand = Syst.CUICommon:gcBrand AND 
                                Rateccn.ccn = INPUT FRAME lis PnpGroup.rateccn) 
             THEN DO:
                BELL.
@@ -577,7 +577,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
                NEXT.
             END.
             FIND FIRST xxRateccn WHERE 
-                       xxRateccn.Brand = gcBrand and 
+                       xxRateccn.Brand = Syst.CUICommon:gcBrand and 
                     xxRateccn.ccn = INPUT FRAME lis PnpGroup.rateccn no-lock.
         
             DISP xxrateccn.ccnname @ lcrateccnname with frame lis.
@@ -603,7 +603,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
             END.
             
             IF CAN-FIND(FIRST xxpnpgroup WHERE
-                              xxPnpGroup.Brand    = gcBrand                 AND                               xxpnpgroup.pnpgroup = input pnpgroup.pnpgroup AND
+                              xxPnpGroup.Brand    = Syst.CUICommon:gcBrand                 AND                               xxpnpgroup.pnpgroup = input pnpgroup.pnpgroup AND
                               xxpnpgroup.dto      = input pnpgroup.dto      AND
                               RECID(xxpnpgroup)   ne RECID(pnpgroup))
             THEN DO:

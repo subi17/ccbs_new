@@ -37,7 +37,7 @@ def var ok         as log format "Yes/No"    NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -61,9 +61,9 @@ form
    MedTrunk.OpCode
    MedTrunk.Type  
 WITH width 80 OVERLAY scroll 1 15 DOWN
-   COLOR value(cfc)
-   title color value(ctc) " " + ynimi + " Exchange CGR ranges " 
-   + string(pvm,"99-99-99") + " " FRAME sel.
+   COLOR value(Syst.CUICommon:cfc)
+   title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " Exchange CGR ranges " 
+   + string(TODAY,"99-99-99") + " " FRAME sel.
 
 form
    MedTrunk.Ident
@@ -74,22 +74,22 @@ form
    MedTrunk.OpCode
    MedTrunk.Type  
 WITH  OVERLAY ROW 4 centered
-   COLOR value(cfc) TITLE COLOR value(ctc)
+   COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
    fr-header WITH side-labels 1 columns FRAME lis.
 
 form /*  search WITH FIELD TrFrom */
     TrFrom
     help "Give range or beginning of it"
-    with row 4 col 2 title color value(ctc) " FIND RANGE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND RANGE "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /*  search WITH FIELD TrName */
     TrName
     help "Give Name or beginning of it"
-    with row 4 col 2 title color value(ctc) " FIND Name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Name "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST MedTrunk
@@ -120,13 +120,13 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* MedTrunk -ADD  */
       HIDE FRAME lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
            CREATE MedTrunk.
            UPDATE 
@@ -138,8 +138,8 @@ add-new:
               MedTrunk.OpCode  
               MedTrunk.Type
            WITH FRAME lis EDITING.
-              READKEY. nap = keylabel(LASTKEY).
-              IF lookup(nap,poisnap) > 0 THEN DO:
+              READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
+              IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
                  if frame-field = "ident" THEN DO:
                     if input MedTrunk.Ident = "" THEN UNDO, LEAVE add-new.
                     ELSE 
@@ -258,40 +258,40 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35  ufk[2]= 30 ufk[3]= 0 ufk[4]= 0
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-        ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ufk[1]= 35  Syst.CUICommon:ufk[2]= 30 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+        Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
+        Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW MedTrunk.Ident {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) MedTrunk.Ident WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) MedTrunk.Ident WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW MedTrunk.TrName {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) MedTrunk.TrName WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) MedTrunk.TrName WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
         CHOOSE ROW MedTrunk.?? {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) MedTrunk.?? WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) MedTrunk.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
         CHOOSE ROW MedTrunk.??  {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) MedTrunk.? WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) MedTrunk.? WITH FRAME sel.
       END.
 */
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -322,10 +322,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND MedTrunk where recid(MedTrunk) = rtab[1] no-lock.
            IF order = 1 THEN FIND prev MedTrunk
@@ -364,7 +364,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND MedTrunk where recid(MedTrunk) = rtab[FRAME-DOWN] no-lock .
@@ -404,7 +404,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND MedTrunk where recid(MedTrunk) = memory no-lock no-error.
         IF order = 1 THEN FIND prev MedTrunk
@@ -442,7 +442,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* cursor TO the downmost line */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -457,10 +457,10 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+     else if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        TrFrom = ?.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE TrFrom WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        IF TrFrom <> ? THEN DO:
@@ -479,11 +479,11 @@ BROWSE:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.CUICommon:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        TrName = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE TrName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if TrName <> "" THEN DO:
@@ -500,18 +500,18 @@ BROWSE:
        END.
      END. /* Haku sar. 2 */
 
-     if lookup(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
+     if lookup(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 AND lcRight = "RW"
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSAction:  /* removal */
        delline = FRAME-LINE.
        FIND MedTrunk where recid(MedTrunk) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
           MedTrunk.Ident 
           MedTrunk.TrFrom 
           MedTrunk.TrTo
@@ -553,7 +553,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.CUICommon:ccc)
           MedTrunk.Ident 
           MedTrunk.TrFrom 
           MedTrunk.TrTo
@@ -578,14 +578,14 @@ BROWSE:
        ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     else if lookup(nap,"enter,return") > 0 AND lcRight = "RW" THEN
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 AND lcRight = "RW" THEN
      DO WITH FRAME lis TRANSAction on endkey undo, leave:
        /* change */
        FIND MedTrunk where recid(MedTrunk) = rtab[frame-line(sel)]
        exclusive-lock.
-       assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
+       assign fr-header = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
        RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        DISP MedTrunk.TrFrom.
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMedTrunk).
        UPDATE 
@@ -607,7 +607,7 @@ BROWSE:
        xrecid = recid(MedTrunk).
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
        IF order = 1 THEN FIND FIRST MedTrunk
        /* search condition */ no-lock no-error.
        ELSE IF order = 2 THEN FIND FIRST MedTrunk USE-INDEX TrName
@@ -620,7 +620,7 @@ BROWSE:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
        IF order = 1 THEN FIND LAST MedTrunk
        /* search condition */ no-lock no-error.
        ELSE IF order = 2 THEN FIND LAST MedTrunk USE-INDEX TrName
@@ -633,11 +633,11 @@ BROWSE:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 

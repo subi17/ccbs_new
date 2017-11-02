@@ -9,7 +9,6 @@
 {Syst/commali.i}
 {Func/cparam2.i}
 {Syst/dumpfile_run.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/forderstamp.i}
 {Func/msreqfunc.i}
@@ -57,7 +56,7 @@ DEF VAR lcOutDirCetelem AS CHAR NO-UNDO.
 DEF VAR lcLogDirCetelem AS CHAR NO-UNDO.
 
 FOR EACH Reseller NO-LOCK WHERE
-         Reseller.Brand = gcBrand:
+         Reseller.Brand = Syst.CUICommon:gcBrand:
    IF Reseller.Fuc1 > "" AND
       Reseller.Fuc2 > "" THEN
    lcResellers = lcResellers + "," + Reseller.Reseller.
@@ -76,8 +75,8 @@ DEF BUFFER bMsRequest FOR MsRequest.
 
 /* previous week from sunday to saturday */
 ASSIGN
-   ldeTsFrom         = fMake2Dt(MsRequest.ReqDtParam1,0)
-   ldeTsTo           = fMake2Dt(MsRequest.ReqDtParam2,86399)
+   ldeTsFrom         = Func.Common:mMake2DT(MsRequest.ReqDtParam1,0)
+   ldeTsTo           = Func.Common:mMake2DT(MsRequest.ReqDtParam2,86399)
    liCurrentPeriod   = YEAR(TODAY) * 100 + MONTH(TODAY)
    lcTFBank          = MsRequest.ReqCParam1
    lcRootDir         = fCParam("TermFinance","OutRootDir")
@@ -147,7 +146,7 @@ FUNCTION fErrorLog RETURN LOGICAL(
    liErrors = liErrors + 1.
 
    PUT STREAM sErr UNFORMATTED
-      fTS2HMS(fMakeTS()) ":"
+      Func.Common:mTS2HMS(Func.Common:mMakeTS()) ":"
       iiOrderId ":" icErrorText skip.
 
 END.
@@ -187,26 +186,26 @@ ORDER_LOOP:
 FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
          FixedFee.FinancedResult = {&TF_STATUS_WAITING_SENDING},
    FIRST OrderTimeStamp NO-LOCK WHERE
-         OrderTimeStamp.Brand = gcBrand AND
+         OrderTimeStamp.Brand = Syst.CUICommon:gcBrand AND
          OrderTimeStamp.OrderId = FixedFee.OrderID AND
          OrderTimeStamp.RowType = {&ORDERTIMESTAMP_DELIVERY} AND
          OrderTimeStamp.TimeStamp <= ldeTSTo,
    FIRST Order NO-LOCK WHERE
-         Order.Brand = gcBrand AND
+         Order.Brand = Syst.CUICommon:gcBrand AND
          Order.OrderId = FixedFee.OrderID,
    FIRST OrderCustomer NO-LOCK WHERE
-         OrderCustomer.Brand = gcBrand AND
+         OrderCustomer.Brand = Syst.CUICommon:gcBrand AND
          OrderCustomer.OrderId = Order.OrderId AND
          OrderCustomer.RowType = 1 BY OrderTimeStamp.TimeStamp:
 
    EMPTY TEMP-TABLE ttOrderCustomer NO-ERROR.
 
-   fTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
+   Func.Common:mTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
 
    IF FixedFee.BillCode EQ "RVTERM" THEN DO:
 
       FIND SingleFee NO-LOCK WHERE
-           SingleFee.Brand       = gcBrand AND
+           SingleFee.Brand       = Syst.CUICommon:gcBrand AND
            SingleFee.Custnum     = Order.CustNum AND
            SingleFee.HostTable   = "Mobsub" AND
            SingleFee.KeyValue    = STRING(Order.MsSeq) AND
@@ -234,7 +233,7 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
    IF INDEX(Order.OrderChannel, "POS") = 0 THEN DO:
 
       IF CAN-FIND(FIRST OrderAction WHERE
-                        OrderAction.Brand    = gcBrand AND
+                        OrderAction.Brand    = Syst.CUICommon:gcBrand AND
                         OrderAction.OrderId  = Order.OrderId AND
                         OrderAction.ItemType = "TerminalFinancing" AND
                         OrderAction.ItemKey  = "0225") THEN DO:
@@ -264,7 +263,7 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
    ELSE IF LOOKUP(Order.Reseller,lcResellers) > 0 THEN DO:
 
       FIND Reseller NO-LOCK WHERE
-           Reseller.Brand = gcBrand AND
+           Reseller.Brand = Syst.CUICommon:gcBrand AND
            Reseller.Reseller = Order.Reseller NO-ERROR.
 
       IF NOT AVAIL Reseller THEN DO:
@@ -379,13 +378,13 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
 
    IF FixedFee.BillCode EQ "RVTERM" THEN
       FIND FIRST FMItem NO-LOCK WHERE
-                 FMItem.Brand     = gcBrand AND
+                 FMItem.Brand     = Syst.CUICommon:gcBrand AND
                  FMItem.FeeModel  = FixedFee.FeeModel AND
                  FMItem.ToDate   >= FixedFee.BegDate AND
                  FMItem.FromDate <= FixedFee.BegDate NO-ERROR.
    ELSE
       FIND FIRST FMItem NO-LOCK WHERE
-                 FMItem.Brand     = gcBrand AND
+                 FMItem.Brand     = Syst.CUICommon:gcBrand AND
                  FMItem.FeeModel  = FixedFee.FeeModel AND
                  FMItem.ToDate   >= ldaOrderDate AND
                  FMItem.FromDate <= ldaOrderDate NO-ERROR.
@@ -478,7 +477,7 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
    IF NOT FixedFee.BillCode BEGINS "PAYTERM" THEN RELEASE SingleFee.
    ELSE
    FIND FIRST SingleFee NO-LOCK WHERE
-              SingleFee.Brand = gcBrand AND
+              SingleFee.Brand = Syst.CUICommon:gcBrand AND
               SingleFee.Custnum = FixedFee.Custnum AND
               SingleFee.HostTable = FixedFee.HostTable AND
               SingleFee.KeyValue = Fixedfee.KeyValue AND

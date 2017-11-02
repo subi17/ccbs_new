@@ -12,7 +12,6 @@
 
 {Syst/commali.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Mc/offer.i}
 {Func/dms.i}
 {Func/q25functions.i}
@@ -117,7 +116,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
          liRT = INT(ENTRY(liStampTypeCount,lcStampTypes)).
 
          FOR EACH OrderTimestamp NO-LOCK WHERE
-                  OrderTimestamp.Brand EQ gcBrand AND
+                  OrderTimestamp.Brand EQ Syst.CUICommon:gcBrand AND
                   OrderTimestamp.RowType EQ liRt AND
                   Ordertimestamp.TimeStamp < idEndTS AND
                   Ordertimestamp.TimeStamp >= idStartTS:
@@ -125,7 +124,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
                        ttOrderList.OrderID EQ OrderTimestamp.OrderId NO-ERROR.
             IF AVAIL ttOrderList THEN NEXT.
             FIND FIRST Order NO-LOCK WHERE
-                       Order.Brand EQ gcBrand AND
+                       Order.Brand EQ Syst.CUICommon:gcBrand AND
                        Order.OrderID EQ OrderTimestamp.OrderId NO-ERROR.
             IF NOT AVAIL Order THEN NEXT.
             /*Default values for new loop*/
@@ -232,7 +231,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
      If activation information is not sent yet to DMS (found in this exec round)
      cancellation is not allowed to be sent -> need to erase existing entry.*/
   FOR EACH MsRequest NO-LOCK WHERE
-            MsRequest.Brand EQ gcBrand AND
+            MsRequest.Brand EQ Syst.CUICommon:gcBrand AND
             MsRequest.ReqStatus EQ 2 AND
             MsRequest.UpdateStamp > idStartTS AND
             MsRequest.UpdateStamp < idEndTS AND
@@ -340,12 +339,12 @@ FUNCTION fGetTerminalFinanceType RETURNS CHAR
    DEF VAR ldeFinalFee AS DECIMAL NO-UNDO.
 
    FIND FIRST bOrder NO-LOCK WHERE
-              bOrder.Brand EQ gcBrand AND
+              bOrder.Brand EQ Syst.CUICommon:gcBrand AND
               bOrder.OrderId EQ iiOrderId NO-ERROR.
    IF NOT AVAIL bOrder THEN RETURN "".
 
    FIND FIRST bOA NO-LOCK  WHERE
-              bOA.Brand EQ gcBrand AND
+              bOA.Brand EQ Syst.CUICommon:gcBrand AND
               bOA.OrderID EQ iiOrderID AND
               bOA.TerminalType EQ {&TERMINAL_TYPE_PHONE} NO-ERROR.
    IF AVAIL bOA THEN DO:
@@ -378,7 +377,7 @@ FUNCTION fGetCancellationInfo RETURNS CHAR
    DO liReqTypeCount = 1 TO NUM-ENTRIES (lcReqTypes):
       liRT = INT(ENTRY(liReqTypeCount,lcReqTypes)).
       FIND FIRST bMsRequest NO-LOCK WHERE
-                 bMsRequest.Brand EQ gcBrand AND
+                 bMsRequest.Brand EQ Syst.CUICommon:gcBrand AND
                  bMsRequest.ReqStatus EQ 2 AND
                  bMsRequest.UpdateStamp > idStartTS AND
                  bMsRequest.UpdateStamp < idEndTS AND
@@ -411,12 +410,12 @@ FUNCTION fGetTerminalData RETURNS CHAR
    (iiOrderId AS INT):
 
    FIND FIRST OrderAccessory NO-LOCK  WHERE
-              OrderAccessory.Brand EQ gcBrand AND
+              OrderAccessory.Brand EQ Syst.CUICommon:gcBrand AND
               OrderAccessory.OrderID EQ iiOrderID AND
               Orderaccessory.TerminalType EQ {&TERMINAL_TYPE_PHONE} NO-ERROR.
    IF AVAIL OrderAccessory THEN DO:
       FIND FIRST Billitem NO-LOCK WHERE
-                 BillItem.Brand   = gcBrand AND
+                 BillItem.Brand   = Syst.CUICommon:gcBrand AND
                  BillItem.BillCode = OrderAccessory.ProductCode 
                  NO-ERROR.
       IF AVAILABLE BillItem THEN RETURN BillItem.BIName.
@@ -477,7 +476,7 @@ FUNCTION fGetPrevTariff RETURNS CHAR
          /* TODO: not fool proof check */
          /* 100% sure solution: add */
          FIND FIRST MsOwner NO-LOCK WHERE
-                    Msowner.Brand = gcBrand AND
+                    Msowner.Brand = Syst.CUICommon:gcBrand AND
                     MsOwner.CLI   = Order.CLI AND
                     MsOwner.TsEnd < msrequest.donestamp AND 
                     MsOwner.CLIType = msrequest.reqcparam1 AND
@@ -517,7 +516,7 @@ FUNCTION fGetQ25Extension RETURNS CHAR
     OUTPUT ocItem AS CHAR):
    DEF BUFFER bOA FOR OrderAction.
    FIND FIRST bOA WHERE
-              bOA.Brand EQ gcBrand AND
+              bOA.Brand EQ Syst.CUICommon:gcBrand AND
               bOA.OrderID EQ iiOrderID AND
               bOA.ItemType EQ "Q25Extension" NO-ERROR.
    IF AVAIL bOA THEN DO:
@@ -533,7 +532,7 @@ FUNCTION fGetQ25BankByOrder RETURNS CHAR
    (BUFFER Order FOR Order,
     icSourceKey AS CHAR):
 FIND SingleFee USE-INDEX Custnum WHERE
-   SingleFee.Brand = gcBrand AND
+   SingleFee.Brand = Syst.CUICommon:gcBrand AND
    SingleFee.Custnum = Order.CustNum AND
    SingleFee.HostTable = "Mobsub" AND
    SingleFee.KeyValue = STRING(Order.MsSeq) AND
@@ -557,7 +556,7 @@ FUNCTION fFindQ25Cancellation RETURNS CHAR
    IF Order.OrderType NE {&ORDER_TYPE_RENEWAL} THEN RETURN "".
 
    FIND FIRST OrderAction NO-LOCK WHERE
-              OrderAction.Brand    EQ gcBrand AND
+              OrderAction.Brand    EQ Syst.CUICommon:gcBrand AND
               OrderAction.OrderId  EQ Order.OrderId AND
               OrderAction.ItemType EQ "Q25Discount" NO-ERROR.
 
@@ -646,10 +645,10 @@ FUNCTION fGetTVService RETURNS CHARACTER
   ELSE IF NOT (CAN-FIND(FIRST MobSub     WHERE MobSub.MsSeq     = iiMsSeq NO-LOCK)  OR 
                CAN-FIND(FIRST TermMobSub WHERE TermMobSub.MsSeq = iiMsSeq NO-LOCK)) THEN
   DO:
-      FOR EACH bf_OrderAction WHERE bf_OrderAction.Brand    = gcBrand      AND 
+      FOR EACH bf_OrderAction WHERE bf_OrderAction.Brand    = Syst.CUICommon:gcBrand      AND 
                                     bf_OrderAction.OrderId  = iiOrderId    AND 
                                     bf_OrderAction.ItemType = "BundleItem" NO-LOCK,
-          FIRST bf_DayCampaign WHERE bf_DayCampaign.Brand   = gcBrand AND 
+          FIRST bf_DayCampaign WHERE bf_DayCampaign.Brand   = Syst.CUICommon:gcBrand AND 
                                      bf_DayCampaign.DCEvent = bf_OrderAction.ItemKey NO-LOCK:
 
           IF LOOKUP(STRING(bf_DayCampaign.BundleTarget), STRING({&TELEVISION_BUNDLE})) = 0 THEN 
@@ -690,7 +689,7 @@ FUNCTION fFixNumberAndDonorInformation RETURNS CHARACTER
       .
 
    FIND FIRST OrderFusion NO-LOCK WHERE
-              OrderFusion.Brand EQ gcBrand AND
+              OrderFusion.Brand EQ Syst.CUICommon:gcBrand AND
               OrderFusion.OrderID EQ iiOrderId NO-ERROR.
 
    IF AVAILABLE OrderFusion
@@ -704,7 +703,7 @@ FUNCTION fFixNumberAndDonorInformation RETURNS CHARACTER
       liRowType = INTEGER(ENTRY(lii,lcRowTypes)).
 
       FIND FIRST OrderCustomer NO-LOCK WHERE
-         OrderCustomer.Brand = gcBrand AND
+         OrderCustomer.Brand = Syst.CUICommon:gcBrand AND
          OrderCustomer.OrderID = iiOrderID AND
          OrderCustomer.RowType = liRowType
       NO-ERROR.
@@ -768,13 +767,13 @@ FUNCTION fCreateDocumentCase1 RETURNS CHAR
    lcCaseTypeId = "1".
 
    FIND FIRST Order NO-LOCK WHERE 
-              Order.Brand EQ gcBrand AND
+              Order.Brand EQ Syst.CUICommon:gcBrand AND
               Order.OrderID EQ iiOrderId NO-ERROR.
    IF NOT AVAIL Order THEN
       RETURN "1:Order not available" + STRING(iiOrderId).
 
    FIND FIRST OrderCustomer NO-LOCK  WHERE
-              OrderCustomer.Brand EQ gcBrand AND
+              OrderCustomer.Brand EQ Syst.CUICommon:gcBrand AND
               OrderCustomer.OrderID EQ iiOrderID AND
               OrderCustomer.RowType EQ 1 NO-ERROR.
    IF NOT AVAIL OrderCustomer THEN
@@ -863,12 +862,12 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
       lcModel           = "-".
 
    FIND FIRST Order NO-LOCK WHERE 
-              Order.Brand = gcBrand  AND
+              Order.Brand = Syst.CUICommon:gcBrand  AND
               Order.OrderID EQ iiOrderId NO-ERROR.
    IF NOT AVAIL Order THEN RETURN "2:Order not available" + STRING(iiOrderId).
 
    FIND FIRST OrderCustomer NO-LOCK  WHERE
-              OrderCustomer.Brand EQ gcBrand AND  
+              OrderCustomer.Brand EQ Syst.CUICommon:gcBrand AND  
               OrderCustomer.OrderID EQ iiOrderID AND
               OrderCustomer.RowType EQ 1 NO-ERROR.
    IF NOT AVAIL OrderCustomer THEN 
@@ -876,7 +875,7 @@ FUNCTION fCreateDocumentCase2 RETURNS CHAR
 
    /*Get delivery address if it is available*/
    FIND FIRST DeliveryCustomer NO-LOCK  WHERE
-              DeliveryCustomer.Brand EQ gcBrand AND
+              DeliveryCustomer.Brand EQ Syst.CUICommon:gcBrand AND
               DeliveryCustomer.OrderID EQ iiOrderID AND
               DeliveryCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_DELIVERY} NO-ERROR.
    IF AVAIL DeliveryCustomer THEN DO:
@@ -1045,12 +1044,12 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
       lcCaseTypeId      = "3".
 
    FIND FIRST Order NO-LOCK WHERE 
-              Order.Brand = gcBrand  AND
+              Order.Brand = Syst.CUICommon:gcBrand  AND
               Order.OrderID EQ iiOrderId NO-ERROR.
    IF NOT AVAIL Order THEN RETURN "3:Order not available" + STRING(iiOrderId).
 
    FIND FIRST OrderCustomer NO-LOCK  WHERE
-              OrderCustomer.Brand EQ gcBrand  AND  
+              OrderCustomer.Brand EQ Syst.CUICommon:gcBrand  AND  
               OrderCustomer.OrderID EQ iiOrderID AND
               OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
    IF NOT AVAIL OrderCustomer THEN 
@@ -1060,7 +1059,7 @@ FUNCTION fCreateDocumentCase3 RETURNS CHAR
    THEN DO:
       /*Get delivery address if it is available*/
       FIND FIRST DeliveryCustomer NO-LOCK  WHERE
-                 DeliveryCustomer.Brand EQ gcBrand AND
+                 DeliveryCustomer.Brand EQ Syst.CUICommon:gcBrand AND
                  DeliveryCustomer.OrderID EQ iiOrderID AND
                  DeliveryCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_DELIVERY} NO-ERROR.
       IF AVAIL DeliveryCustomer
@@ -1216,7 +1215,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
       lcIMEICaseTypeID  = '4a'.
 
    FOR EACH MsRequest NO-LOCK WHERE
-            MsRequest.Brand EQ gcBrand AND
+            MsRequest.Brand EQ Syst.CUICommon:gcBrand AND
             MsRequest.ReqStatus EQ 2 AND
             MsRequest.UpdateStamp > idStartTS AND
             MsRequest.UpdateStamp < idEndTS AND
@@ -1298,7 +1297,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
             ELSE DO:
                
                FIND FIRST MsOwner NO-LOCK WHERE
-                          Msowner.Brand = gcBrand AND
+                          Msowner.Brand = Syst.CUICommon:gcBrand AND
                           MsOwner.CLI   = msrequest.CLI AND
                           MsOwner.CLIType = msrequest.reqcparam1 AND
                           MsOwner.TsEnd < msrequest.donestamp AND 
@@ -1329,7 +1328,7 @@ FUNCTION fCreateDocumentCase4 RETURNS CHAR
          WHEN {&REQTYPE_IMEI_CHANGE} THEN DO:
             lcCaseTypeId = lcIMEICaseTypeID.
             FIND FIRST Order NO-LOCK WHERE 
-                       Order.Brand EQ gcBrand AND
+                       Order.Brand EQ Syst.CUICommon:gcBrand AND
                        Order.OrderID EQ MsRequest.ReqIparam1 NO-ERROR.
             IF NOT AVAIL Order THEN DO:
                fLogLine(lcCaseFileRow,"Order not found " + lcCaseTypeId).
@@ -1410,7 +1409,7 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
    lcCaseTypeId    = "5".
 
    FIND FIRST Order NO-LOCK WHERE
-              Order.Brand EQ gcBrand AND
+              Order.Brand EQ Syst.CUICommon:gcBrand AND
               Order.OrderID EQ iiOrderId NO-ERROR.
    IF NOT AVAIL Order THEN 
       RETURN "5:Order not available" + STRING(iiOrderId).
@@ -1419,7 +1418,7 @@ FUNCTION fCreateDocumentCase5 RETURNS CHAR
    THEN DO:
       /*Get delivery address if it is available*/
       FIND FIRST DeliveryCustomer NO-LOCK  WHERE
-                 DeliveryCustomer.Brand EQ gcBrand AND
+                 DeliveryCustomer.Brand EQ Syst.CUICommon:gcBrand AND
                  DeliveryCustomer.OrderID EQ iiOrderID AND
                  DeliveryCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_DELIVERY} NO-ERROR.
       IF AVAIL DeliveryCustomer
@@ -1482,7 +1481,7 @@ FUNCTION fCreateDocumentCase6 RETURNS CHAR
       lcCancellationType = "".
 
    FIND FIRST Order NO-LOCK WHERE
-              Order.Brand EQ gcBrand AND
+              Order.Brand EQ Syst.CUICommon:gcBrand AND
               Order.OrderID EQ iiOrderId NO-ERROR.
    IF NOT AVAIL Order THEN 
       RETURN "6:Order not available" + STRING(iiOrderId).
@@ -1579,7 +1578,7 @@ FUNCTION fCreateDocumentCase10 RETURNS CHAR
    do i = 1 to NUM-ENTRIES(lcStatuses):
       liStat = INT(ENTRY(i,lcStatuses)).
       FOR EACH MsRequest NO-LOCK WHERE
-            MsRequest.Brand EQ gcBrand AND
+            MsRequest.Brand EQ Syst.CUICommon:gcBrand AND
             MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
             MsRequest.ReqStatus eq liStat AND
             MsRequest.ActStamp >= idStartTS AND
@@ -1685,12 +1684,12 @@ END.
 /*Main functionality*/
 OUTPUT STREAM sLogFile TO VALUE(icLogFile) APPEND.
 
-ldCurrentTime = fMakeTS().
+ldCurrentTime = Func.Common:mMakeTS().
 
-fLogLine("","DMS Casefile creation starts " + fTS2HMS(ldCurrentTime)).
+fLogLine("","DMS Casefile creation starts " + Func.Common:mTS2HMS(ldCurrentTime)).
 fLogLine("", "Collection period: " + 
-         STRING(idPeriodStart) + " " + fTS2HMS(idPeriodStart) + " - " + 
-         STRING(idPeriodEnd) + " " + fTS2HMS(idPeriodEnd) ).
+         STRING(idPeriodStart) + " " + Func.Common:mTS2HMS(idPeriodStart) + " - " + 
+         STRING(idPeriodEnd) + " " + Func.Common:mTS2HMS(idPeriodEnd) ).
 
 /* Create temp table to ensure that multiple order changes 
    do not produce extra documents. Only 1 doc/order is provided. */
@@ -1700,6 +1699,6 @@ DO liCaseCount = 1 TO NUM-ENTRIES(icCases):
    lcStatus = fCreateDocumentRows(ENTRY(liCaseCount,icCases)).
 END.
 
-ldCurrentTime = fMakeTS().
-fLogLine("","DMS Casefile creation ends " + fTS2HMS(ldCurrentTime)).
+ldCurrentTime = Func.Common:mMakeTS().
+fLogLine("","DMS Casefile creation ends " + Func.Common:mTS2HMS(ldCurrentTime)).
 OUTPUT STREAM sLogFile CLOSE.

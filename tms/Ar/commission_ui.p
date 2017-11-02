@@ -22,7 +22,7 @@ FORM
    "in commission rule definitions." AT 10 
    SKIP(13)
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + "  COMMISSIONS  " + STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.CUICommon:ynimi + "  COMMISSIONS  " + STRING(TODAY,"99-99-99") + " "
      FRAME fCrit.
 
 
@@ -33,13 +33,13 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    VIEW FRAME fCrit.
 
    ASSIGN
-      ufk    = 0
-      ufk[5] = 795
-      ufk[8] = 8 
-      ehto   = 0.
+      Syst.CUICommon:ufk    = 0
+      Syst.CUICommon:ufk[5] = 795
+      Syst.CUICommon:ufk[8] = 8 
+      Syst.CUICommon:ehto   = 0.
    RUN Syst/ufkey.p.
 
-   IF toimi = 5 THEN DO:
+   IF Syst.CUICommon:toimi = 5 THEN DO:
       
       llOk = FALSE.
       MESSAGE "Start handling commissions?" 
@@ -59,7 +59,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       LEAVE CritLoop.
    END.
 
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
       LEAVE CritLoop.
    END.
 

@@ -1,9 +1,8 @@
-{Func/date.i}
 {Syst/commpaa.i}
 {Func/cparam2.i}
 
-ASSIGN gcBrand = "1"
-       katun   = "batch".
+ASSIGN Syst.CUICommon:gcBrand = "1"
+       Syst.CUICommon:katun   = "batch".
 
 DEF VAR lcSpoolPath      AS CHAR NO-UNDO.
        ASSIGN

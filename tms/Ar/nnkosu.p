@@ -60,16 +60,16 @@ form
    "   Amount of payments:" rc       NO-LABEL FORMAT "zzzzzz" SKIP(1)
    skip(10)
 with
-   row 1 width 80 overlay color value(cfc) title color value(ctc)
-   " " + ynimi + " " + qtitle + " " + string(pvm,"99-99-9999") +
+   row 1 width 80 overlay color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc)
+   " " + Syst.CUICommon:ynimi + " Payments into a/r, input from OCR file " + string(TODAY,"99-99-9999") +
    " " frame main.
 
 
-cfc = "sel".  RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "sel".  RUN Syst/ufcolor.p.
 view frame main.
 
 /* payment configuration file */
-IF NOT CAN-FIND(FIRST PaymCfg WHERE PaymCfg.Brand = gcBrand) THEN DO:
+IF NOT CAN-FIND(FIRST PaymCfg WHERE PaymCfg.Brand = Syst.CUICommon:gcBrand) THEN DO:
    MESSAGE 
    "SYSTEM ERROR:"                   SKIP
    "Payment file configuration"  SKIP
@@ -80,7 +80,7 @@ END.
 
 amt-o = 0.
 FOR EACH PaymCfg WHERE
-         PaymCfg.Brand = gcBrand NO-LOCK:
+         PaymCfg.Brand = Syst.CUICommon:gcBrand NO-LOCK:
 
    /* read all possible origin records */
    CREATE worigin.
@@ -158,7 +158,7 @@ REPEAT:
 
       DISPLAY xPaymFile WITH FRAME main. 
 
-      ehto = 5.
+      Syst.CUICommon:ehto = 5.
       RUN Syst/ufkey.p.
       
       MESSAGE "Searching for new payments ...".
@@ -225,7 +225,7 @@ REPEAT:
    /* update log */
    fCreateArplog(xPaymFile,
                  wOrigin.WLogPr,
-                 katun). 
+                 Syst.CUICommon:katun). 
 
    /* delete or move the payment file to archive */
    IF liRead > 0 THEN RUN pDeleteFile(xPaymFile). 
@@ -256,7 +256,7 @@ PROCEDURE local-set-origin:
         IF worigin.w-seq = amt-o THEN UP amt-o - 1.
         ELSE DOWN.
     END.
-    ASSIGN ufk = 0 ufk[5] = 11 ufk[8] = 8 ehto = 3.
+    ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[5] = 11 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 3.
     RUN Syst/ufkey.p.
     CHOOSE ROW worigin.worname no-error {Syst/uchoose.i}
     WITH FRAME origin.   

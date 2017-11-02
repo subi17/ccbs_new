@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-katun = "anttis".
-gcBrand = "1".
+Syst.CUICommon:katun = "anttis".
+Syst.CUICommon:gcBrand = "1".
 
 {Func/flimitreq.i}
 {Syst/tmsconst.i}

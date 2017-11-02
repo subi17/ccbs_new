@@ -3,11 +3,10 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 {Func/xmlfunction.i}
 {Mm/msbalance.i}
-{Func/date.i}
 
 DEF VAR lcHostname AS CHAR NO-UNDO.
 INPUT THROUGH hostname.
@@ -74,7 +73,7 @@ FUNCTION fBalanceEnquiryTResponse  RETURN LOGICAL
              END.
              ELSE DO:
                 FIND FIRST MsOwner NO-LOCK WHERE
-                           MsOwner.Brand = gcBrand AND
+                           MsOwner.Brand = Syst.CUICommon:gcBrand AND
                            MsOwner.CLI   = pcCLI NO-ERROR.
                 IF AVAILABLE MsOwner THEN
                      FIND Customer WHERE Customer.CustNum = MsOwner.InvCust NO-LOCK NO-ERROR.
@@ -233,7 +232,7 @@ fRPCStruct("Start",lcStruct,lhSAXWriter).
 
 def stream slog.
 output stream slog to /tmp/air_queries.log append.
-put stream slog unformatted lcCLI ":" fts2hms(fmakets()) ":" lcMethodRequest skip
+put stream slog unformatted lcCLI ":" Func.Common:mTS2HMS(Func.Common:mMakeTS()) ":" lcMethodRequest skip
    pcRequest skip(2).
 output stream slog close.
 

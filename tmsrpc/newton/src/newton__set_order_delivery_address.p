@@ -19,7 +19,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 
 DEFINE VARIABLE piOrderId                  AS INTEGER   NO-UNDO. 
@@ -204,5 +204,4 @@ add_boolean(response_toplevel_id, "", lChanged).
 
 FINALLY:
    fCleanEventObjects().
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

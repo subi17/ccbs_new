@@ -4,7 +4,6 @@
 
 {Syst/commali.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 
 FUNCTION fGetShaperConfId RETURN CHAR
@@ -30,11 +29,11 @@ FUNCTION fGetShaperConfId RETURN CHAR
 
    IF idtDate = TODAY
    THEN ASSIGN
-      ldeActTime = fMakeTS()
+      ldeActTime = Func.Common:mMakeTS()
       ldeEndTime = ldeActTime.
    ELSE ASSIGN
-      ldeActTime = fMake2Dt(idtDate,0)
-      ldeEndTime = fMake2Dt(idtDate,86399).
+      ldeActTime = Func.Common:mMake2DT(idtDate,0)
+      ldeEndTime = Func.Common:mMake2DT(idtDate,86399).
 
    DEFINE VARIABLE lcBONOContracts AS CHARACTER NO-UNDO.
 
@@ -42,7 +41,7 @@ FUNCTION fGetShaperConfId RETURN CHAR
    
    IF icShaperBase EQ "" THEN
       FOR FIRST bDCPackage NO-LOCK WHERE
-                bDCPackage.Brand     = gcBrand AND
+                bDCPackage.Brand     = Syst.CUICommon:gcBrand AND
                 bDCPackage.DCEvent   = icDCevent AND
                 bDCPackage.ServPac   = "shaper" AND
                 bDCPackage.ToDate   >= idtDate AND
@@ -70,12 +69,12 @@ FUNCTION fGetShaperConfId RETURN CHAR
                bBundleLimit.GroupCode NE icDCEvent   AND
         LOOKUP(bBundleLimit.GroupCode,lcBONOContracts) > 0,
          FIRST bContract NO-LOCK WHERE
-               bContract.Brand = gcBrand AND
+               bContract.Brand = Syst.CUICommon:gcBrand AND
                bContract.DCEvent = bBundleLimit.GroupCode AND
                LOOKUP(bContract.DCType,
                       {&PERCONTRACT_RATING_PACKAGE}) > 0,
          FIRST bDCPackage NO-LOCK WHERE
-               bDCPackage.Brand     = gcBrand AND
+               bDCPackage.Brand     = Syst.CUICommon:gcBrand AND
                bDCPackage.DCEvent   = bContract.DCEvent AND
                bDCPackage.ServPac   = "shaper" AND
                bDCPackage.ToDate   >= idtDate AND
@@ -115,7 +114,7 @@ FUNCTION fGetShaperConfId RETURN CHAR
       ELSE lcTagValue = "".
 
       FOR FIRST CTServel NO-LOCK WHERE
-                CTServel.Brand = gcBrand AND
+                CTServel.Brand = Syst.CUICommon:gcBrand AND
                 CTServel.ServCom = "SHAPER_STP" AND
                 CTServel.CLIType = icCLIType AND
                 CTServel.FromDate <= idtDate:
@@ -134,10 +133,10 @@ FUNCTION fGetShaperConfId RETURN CHAR
               FIRST bBundleLimit NO-LOCK WHERE bBundleLimit.SlSeq     = bBundleAct.SlSeq AND
                                                bBundleLimit.GroupCode NE icDCEvent       AND
                                                bBundleLimit.GroupCode NE "MM_DATA600",
-              FIRST bContract NO-LOCK WHERE bContract.Brand   = gcBrand                AND
+              FIRST bContract NO-LOCK WHERE bContract.Brand   = Syst.CUICommon:gcBrand                AND
                                             bContract.DCEvent = bBundleLimit.GroupCode AND
                                             LOOKUP(bContract.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0,
-              FIRST bDCPackage NO-LOCK WHERE bDCPackage.Brand     = gcBrand           AND
+              FIRST bDCPackage NO-LOCK WHERE bDCPackage.Brand     = Syst.CUICommon:gcBrand           AND
                                              bDCPackage.DCEvent   = bContract.DCEvent AND
                                              bDCPackage.ServPac   = "SHAPER"          AND
                                              bDCPackage.ToDate   >= idtDate           AND

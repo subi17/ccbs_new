@@ -20,7 +20,6 @@
   -------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/date.i}
 {Func/msreqfunc.i}
 {Func/fmakemsreq.i}
 {Rate/daycampaign.i}
@@ -215,7 +214,7 @@ IF MsRequest.ReqStat = 0 THEN DO:
              lcALLPostpaidUPSELLBundles = fCParamC("POSTPAID_DATA_UPSELLS").
 
       IF CAN-FIND(FIRST bPendRequest NO-LOCK WHERE
-         bPendRequest.Brand   = gcBrand AND
+         bPendRequest.Brand   = Syst.CUICommon:gcBrand AND
          bPendRequest.ReqType = {&REQTYPE_CONTRACT_ACTIVATION} AND
          bPendRequest.Custnum = MsRequest.CustNum AND
          (LOOKUP(bPendRequest.ReqCParam3,lcALLPostpaidBundles) > 0 OR
@@ -464,7 +463,7 @@ PROCEDURE pContractActivation:
       RETURN.
    END.
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
 
@@ -474,7 +473,7 @@ PROCEDURE pContractActivation:
       llRerate     = FALSE.
    
    FIND FIRST DayCampaign WHERE 
-              DayCampaign.Brand   = gcBrand AND
+              DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
               DayCampaign.DCEvent = lcDCEvent NO-LOCK NO-ERROR.
    IF NOT AVAILABLE DayCampaign OR 
       DayCampaign.ValidFrom > ldtActDate OR
@@ -503,7 +502,7 @@ PROCEDURE pContractActivation:
          lcUseCLIType = bOrigRequest.ReqCParam2. 
    END.
 
-   IF fMatrixAnalyse(gcBrand,
+   IF fMatrixAnalyse(Syst.CUICommon:gcBrand,
                      "PERCONTR",
                      "PerContract;SubsTypeTo",
                      lcDCEvent + ";" + lcUseCLIType,
@@ -527,14 +526,14 @@ PROCEDURE pContractActivation:
                     MServiceLimit.MsSeq    = MsOwner.MsSeq AND
                     MServiceLimit.DialType = ServiceLimit.DialType AND
                     MServiceLimit.SlSeq    = ServiceLimit.SlSeq AND
-                    MServiceLimit.EndTS   >= fMakeTS() NO-LOCK NO-ERROR.
+                    MServiceLimit.EndTS   >= Func.Common:mMakeTS() NO-LOCK NO-ERROR.
          IF NOT AVAIL MServiceLimit THEN DO:
             RUN pSendSMS(INPUT MsOwner.MsSeq,INPUT 0,INPUT "UpsellTARJ7Failed",
                          INPUT 10,INPUT {&UPSELL_SMS_SENDER},INPUT "").
             fReqStatus(3,"Base data contract is not active").
             RETURN.
          END. /* IF NOT AVAIL MServiceLimit THEN DO: */
-         fSplitTS(MServiceLimit.FromTS,
+         Func.Common:mSplitTS(MServiceLimit.FromTS,
                   OUTPUT ldtPrepActDate,
                   OUTPUT liPrepActTime).
       END. /* FOR EACH ServiceLimit NO-LOCK WHERE */
@@ -547,7 +546,7 @@ PROCEDURE pContractActivation:
          THEN DO:
       
             ASSIGN ldaPromoStartDate = fCParamDa("PMDUB_PROMO_START_DATE")
-                   ldaPromoActStamp  = fMake2Dt(ldaPromoStartDate,0).
+                   ldaPromoActStamp  = Func.Common:mMake2DT(ldaPromoStartDate,0).
 
             FIND FIRST Order WHERE
                        Order.MsSeq = MsRequest.MsSeq AND
@@ -681,7 +680,7 @@ PROCEDURE pContractActivation:
       IF LOOKUP(DayCampaign.DCType,{&PERCONTRACT_DCCLI_DCTYPE}) > 0 THEN DO:
          IF lcDCEvent BEGINS "PAYTERM" THEN DO:
             FOR EACH DCCLI NO-LOCK WHERE
-                     DCCLI.Brand      = gcBrand         AND
+                     DCCLI.Brand      = Syst.CUICommon:gcBrand         AND
                      DCCLI.MsSeq      = MsRequest.MsSeq AND
                      DCCLI.ValidTo   >= ldtActDate      AND
                      DCCLI.ValidFrom <= ldtActDate      AND 
@@ -695,7 +694,7 @@ PROCEDURE pContractActivation:
             END.
          END.
          ELSE IF CAN-FIND(FIRST DCCLI WHERE
-                                DCCLI.Brand      = gcBrand         AND
+                                DCCLI.Brand      = Syst.CUICommon:gcBrand         AND
                                 DCCLI.DCEvent    = lcDCEvent       AND
                                 DCCLI.MsSeq      = MsRequest.MsSeq AND
                                 DCCLI.ValidTo   >= ldtActDate      AND
@@ -709,7 +708,7 @@ PROCEDURE pContractActivation:
          IF MsRequest.ReqCParam3 EQ "RVTERM12" THEN DO:
             
             FIND FIRST FMItem NO-LOCK WHERE
-                       FMITem.Brand = gcBrand AND
+                       FMITem.Brand = Syst.CUICommon:gcBrand AND
                        FMItem.Feemodel = DayCampaign.FeeModel AND
                        FMItem.FromDate <= ldtActDate AND
                        FMITem.ToDate >= ldtActDate NO-ERROR.
@@ -729,7 +728,7 @@ PROCEDURE pContractActivation:
             ELSE DO:
 
                FIND bQ25SingleFee NO-LOCK USE-INDEX Custnum WHERE
-                    bQ25SingleFee.Brand       = gcBrand AND
+                    bQ25SingleFee.Brand       = Syst.CUICommon:gcBrand AND
                     bQ25SingleFee.Custnum     = MsOwner.CustNum AND
                     bQ25SingleFee.HostTable   = "Mobsub" AND
                     bQ25SingleFee.KeyValue    = STRING(MsOwner.MsSeq) AND
@@ -760,7 +759,7 @@ PROCEDURE pContractActivation:
 
                /* Find original installment contract */   
                FIND FIRST DCCLI NO-LOCK WHERE
-                          DCCLI.Brand   = gcBrand AND
+                          DCCLI.Brand   = Syst.CUICommon:gcBrand AND
                           DCCLI.DCEvent BEGINS "PAYTERM" AND
                           DCCLI.MsSeq   = MsRequest.MsSeq AND 
                           DCCLI.PerContractId = MsRequest.ReqIParam3 NO-ERROR.
@@ -778,7 +777,7 @@ PROCEDURE pContractActivation:
                RELEASE DCCLI.
                
                FOR EACH DiscountPlan NO-LOCK WHERE
-                        DiscountPlan.Brand = gcBrand AND
+                        DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
                        (DiscountPlan.DPRuleID = "RVTERMDT1DISC" OR
                         DiscountPlan.DPRuleID = "RVTERMDT4DISC"),
                    EACH DPMember NO-LOCK WHERE
@@ -786,7 +785,7 @@ PROCEDURE pContractActivation:
                         DPMember.HostTable = "MobSub" AND
                         DPMember.KeyValue  = STRING(MsRequest.MsSeq) AND
                         DPMember.ValidTo >= ldaResidualFee AND
-                        DPMember.ValidTo <= fLastDayOfMonth(ldaResidualFee) AND
+                        DPMember.ValidTo <= Func.Common:mLastDayOfMonth(ldaResidualFee) AND
                         DPMember.ValidTo >= DPMember.ValidFrom:
                    ldeFeeAmount = ldeFeeAmount - DPMember.DiscValue.
                END.
@@ -841,7 +840,7 @@ PROCEDURE pContractActivation:
       
       /* current contract */
       FIND FIRST DCCLI WHERE
-                 DCCLI.Brand   = gcBrand      AND
+                 DCCLI.Brand   = Syst.CUICommon:gcBrand      AND
                  DCCLI.DCEvent = lcDCEvent    AND
                  DCCLI.MsSeq   = MsRequest.MsSeq
       NO-LOCK NO-ERROR.
@@ -905,18 +904,18 @@ PROCEDURE pContractActivation:
          DAY(ldtActDate) <= DAY(ldtPrepActDate) THEN DO:
 
          IF (DAY(ldtActDate) EQ DAY(ldtPrepActDate) OR
-            fLastDayOfMonth(ldtActDate) EQ ldtActDate) AND 
+            Func.Common:mLastDayOfMonth(ldtActDate) EQ ldtActDate) AND 
             liActTime > 36000 THEN
-            ldtEndDate = fLastDayOfMonth(ldtActDate) + 1.
+            ldtEndDate = Func.Common:mLastDayOfMonth(ldtActDate) + 1.
          ELSE ldtEndDate = ldtActDate.
       END.
-      ELSE ldtEndDate = fLastDayOfMonth(ldtActDate) + 1.
+      ELSE ldtEndDate = Func.Common:mLastDayOfMonth(ldtActDate) + 1.
          
-      IF DAY(fLastDayOfMonth(ldtEndDate)) >= DAY(ldtPrepActDate) THEN
+      IF DAY(Func.Common:mLastDayOfMonth(ldtEndDate)) >= DAY(ldtPrepActDate) THEN
          ldtEndDate = DATE(MONTH(ldtEndDate),
                            DAY(ldtPrepActDate),
                            YEAR(ldtEndDate)).
-      ELSE ldtEndDate = fLastDayOfMonth(ldtEndDate). 
+      ELSE ldtEndDate = Func.Common:mLastDayOfMonth(ldtEndDate). 
 
       liEndTime = 36000.
    END.
@@ -925,16 +924,16 @@ PROCEDURE pContractActivation:
       liEndTime = 86399.
 
    IF ldtEndDate >= 12/31/2049 THEN ldEndStamp = 99999999.99999.
-   ELSE ldEndStamp = fMake2Dt(ldtEndDate,liEndTime).
+   ELSE ldEndStamp = Func.Common:mMake2DT(ldtEndDate,liEndTime).
 
-   ldBegStamp = fMake2Dt(ldtFromDate,
+   ldBegStamp = Func.Common:mMake2DT(ldtFromDate,
                          IF ldtFromDate = ldtActDate
                          THEN liActTime
                          ELSE 0).
    
    IF LOOKUP(DayCampaign.DCType,
              {&PERCONTRACT_RATING_PACKAGE},{&DCTYPE_POOL_RATING}) > 0 AND
-      ldBegStamp < fSecOffSet(fMakeTS(),-300) THEN DO:
+      ldBegStamp < Func.Common:mSecOffSet(Func.Common:mMakeTS(),-300) THEN DO:
          IF DAY(TODAY) > 1 OR MONTH(ldtFromDate) NE MONTH(TODAY) THEN 
             llReRate = TRUE.  
    END.   
@@ -1001,7 +1000,7 @@ PROCEDURE pContractActivation:
    ELSE DO:
      
       CREATE DCCLI.
-      ASSIGN DCCLI.Brand         = gcBrand
+      ASSIGN DCCLI.Brand         = Syst.CUICommon:gcBrand
              DCCLI.PerContractID = NEXT-VALUE(PerContractID)
              DCCLI.DCEvent       = lcDCEvent
              DCCLI.MsSeq         = MsRequest.MsSeq
@@ -1025,7 +1024,7 @@ PROCEDURE pContractActivation:
       /* create fatimes */
       IF DayCampaign.BillCode = "" AND 
          CAN-FIND(FIRST FatGroup WHERE
-                        FatGroup.Brand = gcBrand AND
+                        FatGroup.Brand = Syst.CUICommon:gcBrand AND
                         FatGroup.FtGrp = DCCLI.DCEvent)
       THEN DO:
       
@@ -1070,13 +1069,13 @@ PROCEDURE pContractActivation:
                        bOrigReq.MsRequest = MsRequest.OrigReq NO-LOCK NO-ERROR.
             IF AVAILABLE bOrigReq THEN 
                FIND FIRST Order WHERE
-                          Order.Brand   = gcBrand AND
+                          Order.Brand   = Syst.CUICommon:gcBrand AND
                           Order.OrderID = bOrigReq.ReqIParam1 NO-LOCK NO-ERROR.
          END.
          
          IF AVAILABLE Order THEN DO:
            FOR EACH SubsTerminal WHERE   
-                    SubsTerminal.Brand   = gcBrand AND
+                    SubsTerminal.Brand   = Syst.CUICommon:gcBrand AND
                     SubsTerminal.OrderID = Order.OrderID AND
                     SubsTerminal.MsSeq   = MsRequest.MsSeq AND
                     SubsTerminal.PerContractID = 0 EXCLUSIVE-LOCK:
@@ -1216,8 +1215,7 @@ PROCEDURE pContractActivation:
                 lcInvRowDetails = TRIM(lcInvRowDetails,",").
 
          IF lcSubInvNums = "" OR ldeTotalRowAmt < 0 THEN
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                              STRING(MsRequest.MsSeq),
                              MsRequest.Custnum,
                              "CREDIT NOTE CREATION FAILED",
@@ -1232,8 +1230,7 @@ PROCEDURE pContractActivation:
                                         OUTPUT lcError).
                
             IF liRequest = 0 THEN
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                "MobSub",
+               Func.Common:mWriteMemo("MobSub",
                                 STRING(MsRequest.MsSeq),
                                 MsRequest.Custnum,
                                 "CREDIT NOTE CREATION FAILED",
@@ -1252,8 +1249,7 @@ PROCEDURE pContractActivation:
                                OUTPUT lcError).
          /* write possible error to an order memo */
          IF lcError > "" THEN
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                              STRING(MsOwner.MsSeq),
                              MsOwner.CustNum,
                              "RVTERMDT2 discount creation failed",
@@ -1276,8 +1272,7 @@ PROCEDURE pContractActivation:
 
       /* write possible error to an order memo */
       IF lcError > "" THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(MsOwner.MsSeq),
                           MsOwner.CustNum,
                           "BONOVOIPCPACT FATIME CREATION FAILED",
@@ -1393,13 +1388,13 @@ PROCEDURE pFinalize:
    /* request is under work */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
       
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
     
    ASSIGN liPeriod = YEAR(ldtActDate) * 100 + MONTH(ldtActDate)
-          ldeLastDayofMonthStamp = fMake2Dt(fLastDayOfMonth(ldtActDate),86399)
-          ldeNextMonthStamp      = fMake2Dt((fLastDayOfMonth(ldtActDate) + 1),0).
+          ldeLastDayofMonthStamp = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(ldtActDate),86399)
+          ldeNextMonthStamp      = Func.Common:mMake2DT((Func.Common:mLastDayOfMonth(ldtActDate) + 1),0).
 
    FIND FIRST MsOwner NO-LOCK USE-INDEX MsSeq WHERE
               MsOwner.MsSeq  = MsRequest.MsSeq AND
@@ -1421,7 +1416,7 @@ PROCEDURE pFinalize:
    END.
 
    FIND FIRST DayCampaign WHERE 
-              DayCampaign.Brand   = gcBrand AND
+              DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
               DayCampaign.DCEvent = MsRequest.ReqCParam3 NO-LOCK NO-ERROR.
    IF NOT AVAILABLE DayCampaign THEN DO:
       fReqError("Periodical contract is not valid").
@@ -1465,7 +1460,7 @@ PROCEDURE pFinalize:
       END. /* FOR EACH ServiceLimit NO-LOCK WHERE */
 
       FOR EACH FixedFee NO-LOCK USE-INDEX HostTable WHERE
-               FixedFee.Brand     = gcBrand AND
+               FixedFee.Brand     = Syst.CUICommon:gcBrand AND
                FixedFee.HostTable = "MobSub" AND
                FixedFee.KeyValue  = STRING(MsRequest.MsSeq) AND
                FixedFee.FeeModel  = DayCampaign.FeeModel AND
@@ -1564,29 +1559,29 @@ PROCEDURE pFinalize:
          MsRequest.ReqIParam4 = 1.
       END.
       
-      fSplitTS(MsRequest.UpdateStamp,
+      Func.Common:mSplitTS(MsRequest.UpdateStamp,
                OUTPUT ldtDoneDate,
                OUTPUT liDoneTime).
 
       /* If call is made on last day before 1 hours then create
          re-reate request for last second of current day */
-      IF DAY(ldtDoneDate) = DAY(fLastDayOfMonth(ldtDoneDate)) AND
+      IF DAY(ldtDoneDate) = DAY(Func.Common:mLastDayOfMonth(ldtDoneDate)) AND
          liDoneTime <= (86399 - 3600) THEN DO:
          IF 86399 < (liDoneTime + 14400) THEN
-            ldeRerateActStamp = fMake2DT(ldtDoneDate,86399).
-         ELSE ldeRerateActStamp = fSecOffSet(MsRequest.UpdateStamp,14400).
-      END. /* IF DAY(ldtDoneDate) = DAY(fLastDayOfMonth(ldtDoneDate)) */
+            ldeRerateActStamp = Func.Common:mMake2DT(ldtDoneDate,86399).
+         ELSE ldeRerateActStamp = Func.Common:mSecOffSet(MsRequest.UpdateStamp,14400).
+      END. /* IF DAY(ldtDoneDate) = DAY(Func.Common:mLastDayOfMonth(ldtDoneDate)) */
       /* If call is made before last day then create re-reate
          request with 4 hours delay */
-      ELSE IF DAY(ldtDoneDate) < DAY(fLastDayOfMonth(ldtDoneDate)) THEN
-         ldeRerateActStamp = fSecOffSet(MsRequest.UpdateStamp,14400).
+      ELSE IF DAY(ldtDoneDate) < DAY(Func.Common:mLastDayOfMonth(ldtDoneDate)) THEN
+         ldeRerateActStamp = Func.Common:mSecOffSet(MsRequest.UpdateStamp,14400).
    END. /* IF MsRequest.ReqCparam3 = {&DSS} THEN DO: */
 
    ELSE IF MsRequest.ReqIParam4 = 1 THEN DO:
-      fSplitTS(MsRequest.ActStamp,
+      Func.Common:mSplitTS(MsRequest.ActStamp,
                OUTPUT ldtDoneDate,
                OUTPUT liDoneTime).
-      ldeRerateActStamp = fMakeTS().
+      ldeRerateActStamp = Func.Common:mMakeTS().
    END.
       
    /* Prevent creating extra re-rate requests if contract */
@@ -1653,7 +1648,7 @@ PROCEDURE pFinalize:
                             MsOwner.CLIType,        /* CLI Type */
                             0,                      /* order    */
                             MsRequest.ActStamp,
-                            fSecOffSet(MsRequest.ActStamp,-1),
+                            Func.Common:mSecOffSet(MsRequest.ActStamp,-1),
                             NO,                     /* create fees */
                             MsRequest.ReqSource,    /* req.source  */
                             {&REQUEST_ACTIONLIST_ALL}).
@@ -1662,14 +1657,14 @@ PROCEDURE pFinalize:
 
       IF LOOKUP(MsOwner.CLIType,lcAllowedDSS2SubsType) > 0 THEN DO:
 
-         ASSIGN ldCurrTS = (IF MsRequest.ActStamp > fMakeTS() THEN
-                MsRequest.ActStamp ELSE fMakeTS())
+         ASSIGN ldCurrTS = (IF MsRequest.ActStamp > Func.Common:mMakeTS() THEN
+                MsRequest.ActStamp ELSE Func.Common:mMakeTS())
                 lcDSS2PrimarySubsType = fCParamC("DSS2_PRIMARY_SUBS_TYPE").
    
          IF (LOOKUP(MsRequest.ReqCparam3,lcDSS2PrimarySubsType) > 0 OR
             (LOOKUP(MsOwner.CLIType,lcDSS2PrimarySubsType)      > 0  AND 
              CAN-FIND(FIRST CLIType NO-LOCK WHERE 
-                            CLIType.Brand      = gcBrand         AND 
+                            CLIType.Brand      = Syst.CUICommon:gcBrand         AND 
                             CLIType.CLIType    = MsOwner.CLIType AND 
                             CLIType.BaseBundle = MsRequest.ReqCParam3))) AND
             NOT fIsDSSActive(MsOwner.CustNum,ldCurrTS) AND
@@ -1681,7 +1676,7 @@ PROCEDURE pFinalize:
                   there is DSS2 termination request. YTS-8140 
                used MsOwner.Custnum cause of ACC */
             FIND FIRST bTerMsRequest NO-LOCK USE-INDEX CustNum WHERE
-                       bTerMsRequest.Brand = gcBrand AND
+                       bTerMsRequest.Brand = Syst.CUICommon:gcBrand AND
                        bTerMsRequest.ReqType = 83 AND
                        bTerMsRequest.Custnum = MsOwner.Custnum AND
                        bTerMsRequest.ReqCParam3 BEGINS "DSS" AND
@@ -1694,7 +1689,7 @@ PROCEDURE pFinalize:
                                        "CREATE",
                                        "",
                                        "DSS2",
-                                       fSecOffSet(ldCurrTS,180),
+                                       Func.Common:mSecOffSet(ldCurrTS,180),
                                        MsRequest.ReqSource,
                                        "",
                                        TRUE, /* create fees */
@@ -1703,8 +1698,7 @@ PROCEDURE pFinalize:
                                        OUTPUT lcError).
                IF liRequest = 0 THEN
                   /* write possible error to a memo */
-                  DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                   "MobSub",
+                  Func.Common:mWriteMemo("MobSub",
                                    STRING(MsOwner.MsSeq),
                                    MsOwner.Custnum,
                                    "DSS2 activation failed in percontr handling",
@@ -1715,7 +1709,7 @@ PROCEDURE pFinalize:
                  fIsDSS2Allowed(MsOwner.CustNum,0,ldCurrTS,
                            OUTPUT liDSSMsSeq,OUTPUT lcError) THEN DO:
             FOR FIRST MsRequest WHERE
-                      MsRequest.Brand      = gcBrand          AND
+                      MsRequest.Brand      = Syst.CUICommon:gcBrand          AND
                       MsRequest.ReqType    = {&REQTYPE_DSS}   AND
                       MsRequest.Custnum    = MsOwner.CustNum  AND
                       MsRequest.ReqCParam1 = "DELETE"         AND
@@ -1734,11 +1728,10 @@ PROCEDURE pFinalize:
                   IF NOT fTransferDSS(INPUT liCurrDSSMsSeq,
                                       INPUT liDSSMsSeq,
                                       INPUT TODAY,
-                                      INPUT katun,
+                                      INPUT Syst.CUICommon:katun,
                                       INPUT "Contract",
                                       OUTPUT lcError) THEN
-                     DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                               "Customer",
+                     Func.Common:mWriteMemo("Customer",
                                STRING(MsRequest.CustNum),
                                MsRequest.CustNum,
                                MsRequest.ReqCParam3 + " Transfer Failed",
@@ -1799,12 +1792,12 @@ PROCEDURE pFinalize:
    /* YOT-3647 */
    IF iiRequestType EQ 8 AND
        CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                      CLIType.Brand = gcBrand AND
+                      CLIType.Brand = Syst.CUICommon:gcBrand AND
                       CLIType.CLIType = lcDCEvent AND
                       CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) THEN DO:
 
       FOR EACH bMSRequest NO-LOCK WHERE
-               bMSRequest.Brand = gcBrand AND
+               bMSRequest.Brand = Syst.CUICommon:gcBrand AND
                bMSRequest.ReqType = 18 AND
                bMSRequest.Custnum = MsOwner.Custnum AND
                bMSRequest.ActStamp > MsRequest.ActStamp AND
@@ -1829,7 +1822,7 @@ PROCEDURE pFinalize:
       MsRequest.ReqType    EQ 8     AND
       MsRequest.ReqCParam2 EQ "act" THEN 
    DO:
-      IF NOT CAN-FIND(FIRST CliType WHERE CLIType.Brand      = gcBrand         AND 
+      IF NOT CAN-FIND(FIRST CliType WHERE CLIType.Brand      = Syst.CUICommon:gcBrand         AND 
                                           CliType.CliType    = MsOwner.CliType AND 
                                           CliType.BaseBundle = "CONT15"        NO-LOCK) THEN
           LEAVE.
@@ -1863,7 +1856,7 @@ PROCEDURE pFinalize:
          FOR FIRST Order NO-LOCK WHERE
                    Order.MsSeq = MsRequest.MsSeq AND
                    Order.OrderType < 2:
-            fTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
+            Func.Common:mTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
          END.
       ELSE IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_STC} AND
               MsRequest.OrigRequest > 0 THEN
@@ -1873,13 +1866,13 @@ PROCEDURE pFinalize:
          
             IF bMSRequest.ReqIParam2 > 0 THEN
                FIND FIRST Order NO-LOCK WHERE
-                          Order.Brand = gcBrand AND
+                          Order.Brand = Syst.CUICommon:gcBrand AND
                           Order.OrderId = bMSRequest.ReqIParam2 NO-ERROR.
             ELSE RELEASE Order.
 
             IF AVAIL Order THEN 
-               fTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
-            ELSE fTS2Date(bMsRequest.CreStamp, OUTPUT ldaOrderDate).
+               Func.Common:mTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
+            ELSE Func.Common:mTS2Date(bMsRequest.CreStamp, OUTPUT ldaOrderDate).
          END.
 
       IF ldaOrderDate NE ? AND
@@ -1906,8 +1899,7 @@ PROCEDURE pFinalize:
                                       OUTPUT lcError).
          IF liRequest = 0 THEN
             /* write possible error to a memo */
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                              STRING(MsOwner.MsSeq),
                              MsOwner.Custnum,
                              "VOICE100 activation failed",
@@ -2019,14 +2011,14 @@ PROCEDURE pContractTermination:
       RETURN.
    END.
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
 
    ASSIGN
-      ldeLastDayofMonthStamp = fMake2Dt(fLastDayOfMonth(ldtActDate),86399)
-      ldeNextMonthStamp      = fMake2Dt((fLastDayOfMonth(ldtActDate) + 1),0)
-      ldeNextDayStamp        = fMake2Dt((ldtActDate + 1),0)
+      ldeLastDayofMonthStamp = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(ldtActDate),86399)
+      ldeNextMonthStamp      = Func.Common:mMake2DT((Func.Common:mLastDayOfMonth(ldtActDate) + 1),0)
+      ldeNextDayStamp        = Func.Common:mMake2DT((ldtActDate + 1),0)
       liEndPeriod            = YEAR(ldtActDate) * 100 + MONTH(ldtActDate).
 
    IF MsRequest.ReqCParam2 = "recreate" THEN ASSIGN
@@ -2039,7 +2031,7 @@ PROCEDURE pContractTermination:
       liCustNum = MsRequest.CustNum.
    
    FIND FIRST DayCampaign WHERE 
-              DayCampaign.Brand   = gcBrand AND
+              DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
               DayCampaign.DCEvent = lcDCEvent NO-LOCK NO-ERROR.
    IF NOT AVAILABLE DayCampaign THEN DO:
       fReqError("Unknown periodical contract").
@@ -2093,7 +2085,7 @@ PROCEDURE pContractTermination:
 
             /* Check STC Request with DSS2 data bundle */
             FIND FIRST bMsRequest NO-LOCK WHERE
-                       bMsRequest.Brand = gcBrand AND
+                       bMsRequest.Brand = Syst.CUICommon:gcBrand AND
                        bMsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
                        bMsRequest.Custnum = MsOwner.Custnum AND
                        bMsRequest.ActStamp = ldeNextDayStamp AND 
@@ -2106,7 +2098,7 @@ PROCEDURE pContractTermination:
             /* Check BTC Request with DSS2 data bundle */
             IF NOT llKeepDSSActive THEN DO:
                FIND FIRST bMsRequest NO-LOCK WHERE
-                          bMsRequest.Brand = gcBrand AND
+                          bMsRequest.Brand = Syst.CUICommon:gcBrand AND
                           bMsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE} AND
                           bMsRequest.Custnum = MsOwner.Custnum AND
                           bMsRequest.ActStamp = ldeNextDayStamp AND
@@ -2186,7 +2178,7 @@ PROCEDURE pContractTermination:
          IF ServiceLimit.LastMonthCalc = 1 AND 
             LOOKUP(MsRequest.ReqCParam2,"recreate,canc") = 0
          THEN DO:
-            fSplitTS(MServiceLimit.FromTS,
+            Func.Common:mSplitTS(MServiceLimit.FromTS,
                      OUTPUT ldaFromDate,
                      OUTPUT liReqCnt).
    
@@ -2198,10 +2190,10 @@ PROCEDURE pContractTermination:
                TRUNCATE(ldNewEndStamp / 100,0) THEN DO:
                   IF MServiceLimit.FromTS < ldNewEndStamp THEN ASSIGN 
                      llRelativeLast = TRUE
-                     ldNewEndStamp = fMake2Dt(DATE(MONTH(ldtActDate),1,
+                     ldNewEndStamp = Func.Common:mMake2DT(DATE(MONTH(ldtActDate),1,
                                                    YEAR(ldtActDate)) - 1,
                                               86399).
-                  ELSE ldNewEndStamp = fMake2Dt(DATE(MONTH(ldaFromDate),1,
+                  ELSE ldNewEndStamp = Func.Common:mMake2DT(DATE(MONTH(ldaFromDate),1,
                                                    YEAR(ldaFromDate)) - 1,
                                                 86399).
              END.                 
@@ -2227,7 +2219,7 @@ PROCEDURE pContractTermination:
                bLimit.SlSeq    = MServiceLimit.SlSeq AND
                bLimit.EndTS    = ldNewEndStamp)
             THEN LEAVE.
-            ldNewEndStamp = fSecOffSet(ldNewEndStamp,-1). 
+            ldNewEndStamp = Func.Common:mSecOffSet(ldNewEndStamp,-1). 
          END.
 
          IF LOOKUP(lcDCEvent,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 THEN DO:
@@ -2289,7 +2281,7 @@ PROCEDURE pContractTermination:
             BUFFER-COPY MServiceLimit EXCEPT EndTS MSID TO bLimit.
             ASSIGN
                bLimit.MSID   = NEXT-VALUE(mServiceLimit)
-               bLimit.FromTS = fSecOffSet(ldNewEndStamp,1)
+               bLimit.FromTS = Func.Common:mSecOffSet(ldNewEndStamp,1)
                ldNewEndStamp = ldEndStamp.
 
             DO WHILE TRUE:
@@ -2299,7 +2291,7 @@ PROCEDURE pContractTermination:
                   bLimit.SlSeq    = MServiceLimit.SlSeq AND
                   bLimit.EndTS    = ldNewEndStamp)
                THEN LEAVE.
-               ldNewEndStamp = fSecOffSet(ldNewEndStamp,1). 
+               ldNewEndStamp = Func.Common:mSecOffSet(ldNewEndStamp,1). 
             END.
    
             bLimit.EndTS  = ldNewEndStamp.
@@ -2316,7 +2308,7 @@ PROCEDURE pContractTermination:
 
             fMakeCreateEvent((BUFFER bLimit:HANDLE),
                              "",
-                             katun,
+                             Syst.CUICommon:katun,
                              "").
 
             fUpdateServicelCounterMSID(bLimit.CustNum,
@@ -2360,7 +2352,7 @@ PROCEDURE pContractTermination:
 
       /* current contract */
       FIND FIRST DCCLI WHERE
-                 DCCLI.Brand         = gcBrand              AND
+                 DCCLI.Brand         = Syst.CUICommon:gcBrand              AND
                  DCCLI.DCEvent       = lcDCEvent            AND
                  DCCLI.MsSeq         = MsRequest.MsSeq      AND
                 (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN
@@ -2391,7 +2383,7 @@ PROCEDURE pContractTermination:
          RETURN.
       END.
       
-      fSplitTS(MsRequest.CreStamp,
+      Func.Common:mSplitTS(MsRequest.CreStamp,
                OUTPUT ldtCreDate,
                OUTPUT liActTime).
 
@@ -2430,7 +2422,7 @@ PROCEDURE pContractTermination:
       
       /* remove unused fatimes */
       FOR EACH FATime EXCLUSIVE-LOCK USE-INDEX MobSub WHERE
-               FATime.Brand  = gcBrand         AND
+               FATime.Brand  = Syst.CUICommon:gcBrand         AND
                FATime.MsSeq  = MsRequest.MsSeq AND
                FATime.Period > liEndPeriod     AND
                FATime.FtGrp  = DCCLI.DCEvent   AND
@@ -2453,7 +2445,7 @@ PROCEDURE pContractTermination:
          DO i = 1 to NUM-ENTRIES(lcIPhoneDiscountRuleIds):
             lcIPhoneDiscountRuleId = ENTRY(i,lcIPhoneDiscountRuleIds).
             FOR FIRST DiscountPlan WHERE
-                      DiscountPlan.Brand = gcBrand AND
+                      DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
                       DiscountPlan.DPRuleID = lcIPhoneDiscountRuleId NO-LOCK,
                 EACH  DPMember WHERE
                       DPMember.DPId       = DiscountPlan.DPId AND
@@ -2602,12 +2594,12 @@ PROCEDURE pContractTermination:
           
    /* close fees associated with this contract */  
    FOR EACH FixedFee NO-LOCK USE-INDEX HostTable WHERE
-            FixedFee.Brand     = gcBrand   AND 
+            FixedFee.Brand     = Syst.CUICommon:gcBrand   AND 
             FixedFee.HostTable = "MobSub"  AND
             FixedFee.KeyValue  = STRING(liCheckMsSeq) AND
             FixedFee.CalcObj   = lcDCEvent,
       FIRST FMItem NO-LOCK WHERE
-            FMItem.Brand     = gcBrand AND
+            FMItem.Brand     = Syst.CUICommon:gcBrand AND
             FMItem.FeeModel  = FixedFee.FeeModel AND
             FMItem.FromDate <= FixedFee.BegDate AND
             FMItem.ToDate   >= FixedFee.BegDate:
@@ -2669,8 +2661,7 @@ PROCEDURE pContractTermination:
       IF RETURN-VALUE > "" THEN NEXT.
       
       /* Write memo */
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                 "FixedFee",
+      Func.Common:mWriteMemo("FixedFee",
                  STRING(FixedFee.FFNum),
                  FixedFee.CustNum,
                  "Closed",
@@ -2681,7 +2672,7 @@ PROCEDURE pContractTermination:
       IF llCancelOrder OR llCancelInstallment OR 
          MsRequest.ReqSource EQ {&REQUEST_SOURCE_INSTALLMENT_CONTRACT_CHANGE} THEN
       FOR FIRST SingleFee USE-INDEX Custnum WHERE
-                SingleFee.Brand       = gcBrand AND
+                SingleFee.Brand       = Syst.CUICommon:gcBrand AND
                 SingleFee.Custnum     = MsOwner.CustNum AND
                 SingleFee.HostTable   = "Mobsub" AND
                 SingleFee.KeyValue    = STRING(MsOwner.MsSeq) AND
@@ -2712,7 +2703,7 @@ PROCEDURE pContractTermination:
    IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} AND
       DayCampaign.DCEvent BEGINS "PAYTERM" THEN
       FOR FIRST SingleFee USE-INDEX Custnum WHERE
-               SingleFee.Brand       = gcBrand AND
+               SingleFee.Brand       = Syst.CUICommon:gcBrand AND
                SingleFee.Custnum     = MsOwner.CustNum AND
                SingleFee.HostTable   = "Mobsub" AND
                SingleFee.KeyValue    = STRING(MsOwner.MsSeq) AND
@@ -2803,7 +2794,7 @@ PROCEDURE pContractTermination:
       IF lcDCEvent EQ "DATA6" THEN DO: 
          DO liCnt = 1 TO NUM-ENTRIES({&BONO6DISCOUNTS}):
             FIND FIRST DiscountPlan WHERE 
-                       DiscountPlan.Brand      = gcBrand     AND 
+                       DiscountPlan.Brand      = Syst.CUICommon:gcBrand     AND 
                        DiscountPlan.DPRuleId   = ENTRY(liCnt, 
                                                        {&BONO6DISCOUNTS}) AND 
                        DiscountPlan.ValidTo   >= TODAY       NO-LOCK NO-ERROR.
@@ -2862,8 +2853,7 @@ PROCEDURE pContractTermination:
                              FALSE, /* mandatory for father request */
                              OUTPUT lcError).
                IF liRequest = 0 THEN
-                  DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                   "MobSub",
+                  Func.Common:mWriteMemo("MobSub",
                                    STRING(bMsRequest.MsSeq),
                                    bMsRequest.Custnum,
                                    "Contract consumption adjustment failed;",
@@ -2919,7 +2909,7 @@ PROCEDURE pContractTermination:
                  bMsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
 
       FOR EACH MsRequest EXCLUSIVE-LOCK WHERE
-               MsRequest.Brand   = gcBrand         AND
+               MsRequest.Brand   = Syst.CUICommon:gcBrand         AND
                MsRequest.ReqType = {&REQTYPE_DSS}  AND
                MsRequest.CustNum = liCustNum:
 
@@ -2959,7 +2949,7 @@ PROCEDURE pMaintainContract:
    lhContract = BUFFER DCCLI:HANDLE.
 
    FIND FIRST DCCLI WHERE 
-              DCCLI.Brand      = gcBrand              AND
+              DCCLI.Brand      = Syst.CUICommon:gcBrand              AND
               DCCLI.DCEvent    = MsRequest.ReqCParam3 AND     
               DCCLI.MsSeq      = MsRequest.MsSeq      AND
               DCCLI.ValidTo   >= TODAY                AND
@@ -3065,7 +3055,7 @@ PROCEDURE pMaintainContract:
    /* fee for changing contract */
    IF MsRequest.CreateFees AND DayCampaign.ModifyFeeModel > "" THEN DO:
 
-      fSplitTS(MsRequest.ActStamp,
+      Func.Common:mSplitTS(MsRequest.ActStamp,
                OUTPUT ldtActDate,
                OUTPUT liReqCnt).
                
@@ -3136,7 +3126,7 @@ PROCEDURE pPerContractPIN:
       RETURN.
    END. 
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
 
@@ -3165,8 +3155,8 @@ PROCEDURE pPerContractPIN:
 
       IF lcSMSText > "" THEN DO:                    
          /* don't send messages before 8 am. */
-         ldReqStamp = DYNAMIC-FUNCTION("fMakeOfficeTS" in ghFunc1).
-         IF ldReqStamp = ? THEN ldReqStamp = fMakeTS().
+         ldReqStamp = Func.Common:mMakeOfficeTS().
+         IF ldReqStamp = ? THEN ldReqStamp = Func.Common:mMakeTS().
 
          fMakeSchedSMS(Customer.CustNum,
                        Customer.SMSNumber,
@@ -3234,7 +3224,7 @@ PROCEDURE pActivateServicePackage:
    
    /* service packages that need to be activated */
    FOR EACH DCServicePackage NO-LOCK WHERE
-            DCServicePackage.Brand     = gcBrand AND
+            DCServicePackage.Brand     = Syst.CUICommon:gcBrand AND
             DCServicePackage.DCEvent   = icDCEvent AND
             DCServicePackage.ToDate   >= idaActivationDate AND
             DCServicePackage.FromDate <= idaActivationDate TRANS:
@@ -3306,23 +3296,23 @@ PROCEDURE pTerminateServicePackage:
    /* No need to find retain bundle list for VOIP */
    IF icDCEvent <> "BONO_VOIP" THEN 
    DO:
-      FIND FIRST bPerContract WHERE bPerContract.Brand = gcBrand AND bPerContract.DCEvent = icDCEvent NO-LOCK NO-ERROR.
+      FIND FIRST bPerContract WHERE bPerContract.Brand = Syst.CUICommon:gcBrand AND bPerContract.DCEvent = icDCEvent NO-LOCK NO-ERROR.
       IF AVAILABLE bPerContract AND LOOKUP(bPerContract.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 THEN 
       DO: 
-         lcBundles = fGetActiveBundle(iiMsSeq,fSecOffSet(MsRequest.ActStamp,1)).
+         lcBundles = fGetActiveBundle(iiMsSeq,Func.Common:mSecOffSet(MsRequest.ActStamp,1)).
          lcBundles = REPLACE(lcBundles,"BONO_VOIP","").
       END.
 
       /* No need to terminate SHAPER and HSDPA if
          ongoing STC/BTC with data bundle */
       IF (lcBundles = "" OR LOOKUP(lcBundles,lcOnlyVoiceContracts) > 0) AND 
-         fBundleWithSTC(iiMsSeq,fSecOffSet(MsRequest.ActStamp,1),FALSE) THEN 
+         fBundleWithSTC(iiMsSeq,Func.Common:mSecOffSet(MsRequest.ActStamp,1),FALSE) THEN 
          RETURN "".
    END.
 
    /* service packages that need to be deactivated */
    FOR EACH DCServicePackage NO-LOCK WHERE
-            DCServicePackage.Brand     = gcBrand AND
+            DCServicePackage.Brand     = Syst.CUICommon:gcBrand AND
             DCServicePackage.DCEvent   = icDCEvent AND
             /* if some package has been ended on contract, it stays active
                on subscription also after this */
@@ -3393,7 +3383,7 @@ PROCEDURE pContractReactivation:
    /* request is under work */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
 
@@ -3422,7 +3412,7 @@ PROCEDURE pContractReactivation:
           liReacPeriod = YEAR(ldtActDate) * 100 + MONTH(ldtActDate).
 
    FIND FIRST DayCampaign WHERE
-              DayCampaign.Brand   = gcBrand AND
+              DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
               DayCampaign.DCEvent = lcDCEvent NO-LOCK NO-ERROR.
    IF NOT AVAILABLE DayCampaign OR
       DayCampaign.ValidFrom > ldtActDate OR
@@ -3432,7 +3422,7 @@ PROCEDURE pContractReactivation:
       RETURN.
    END. /* IF NOT AVAILABLE DayCampaign OR */
 
-   IF fMatrixAnalyse(gcBrand,
+   IF fMatrixAnalyse(Syst.CUICommon:gcBrand,
                      "PERCONTR",
                      "PerContract;SubsTypeTo",
                      lcDCEvent + ";" + lcUseCLIType,
@@ -3455,7 +3445,7 @@ PROCEDURE pContractReactivation:
    IF LOOKUP(DayCampaign.DCType, {&PERCONTRACT_RATING_PACKAGE}) = 0 AND
       LOOKUP(DayCampaign.DCType, {&DCTYPE_POOL_RATING}) = 0 THEN DO:
       IF CAN-FIND(FIRST DCCLI WHERE
-                     DCCLI.Brand         = gcBrand              AND
+                     DCCLI.Brand         = Syst.CUICommon:gcBrand              AND
                      DCCLI.DCEvent       = lcDCEvent            AND
                      DCCLI.MsSeq         = MsRequest.MsSeq      AND
                      (IF DCCLI.DCEvent BEGINS "PAYTERM" THEN
@@ -3468,7 +3458,7 @@ PROCEDURE pContractReactivation:
          RETURN.
       END. /* IF CAN-FIND(FIRST DCCLI WHERE */
 
-      FIND FIRST DCCLI WHERE DCCLI.Brand         = gcBrand              AND
+      FIND FIRST DCCLI WHERE DCCLI.Brand         = Syst.CUICommon:gcBrand              AND
                              DCCLI.DCEvent       = lcDCEvent            AND
                              DCCLI.MsSeq         = MsRequest.MsSeq      AND
                              (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN
@@ -3500,7 +3490,7 @@ PROCEDURE pContractReactivation:
                DATE(ENTRY(liLookUp,bMsRequest.ReqCParam4,";")) NO-ERROR.
             LEAVE.
          END. /* IF bMsRequest.ReqCParam3 = MsRequest.ReqCParam3 AND */
-      END. /* FOR EACH bMsRequest WHERE bMsRequest.Brand     = gcBrand */
+      END. /* FOR EACH bMsRequest WHERE bMsRequest.Brand     = Syst.CUICommon:gcBrand */
    END. /* IF LOOKUP(DayCampaign.DCType, {&PERCONTRACT_RATING_PACKAGE}) = 0 */
 
    IF ldtFromDate = ? THEN ldtFromDate = ldtActDate.
@@ -3510,7 +3500,7 @@ PROCEDURE pContractReactivation:
    
    /* Open the related fixed fee */
    FOR FIRST FixedFee USE-INDEX Custnum WHERE
-             FixedFee.Brand     = gcBrand   AND
+             FixedFee.Brand     = Syst.CUICommon:gcBrand   AND
              FixedFee.Custnum   = Customer.Custnum AND
              FixedFee.HostTable = "MobSub"  AND
              FixedFee.KeyValue  = STRING(MsRequest.MsSeq) AND
@@ -3522,7 +3512,7 @@ PROCEDURE pContractReactivation:
              (IF liFFBegPeriod > 0 THEN 
               FixedFee.BegPeriod >= liFFBegPeriod ELSE TRUE) EXCLUSIVE-LOCK,
       FIRST FMItem WHERE
-            FMItem.Brand     = gcBrand AND
+            FMItem.Brand     = Syst.CUICommon:gcBrand AND
             FMItem.FeeModel  = FixedFee.FeeModel AND
             FMItem.FromDate <= FixedFee.BegDate  AND
             FMItem.ToDate   >= FixedFee.BegDate NO-LOCK:
@@ -3568,7 +3558,7 @@ PROCEDURE pContractReactivation:
             THEN DO:
                ASSIGN 
                   ddate = fInt2Date(FFItem.Concerns[2],2)
-                  ddate = fLastDayOfMonth(ddate)
+                  ddate = Func.Common:mLastDayOfMonth(ddate)
                   liItemEnd = YEAR(ddate) * 10000 +
                               MONTH(ddate) * 100 +
                               DAY(ddate).
@@ -3646,7 +3636,7 @@ PROCEDURE pContractReactivation:
              FixedFee.BillCode EQ "PAYTERM" THEN DO:
 
             FIND FIRST SingleFee USE-INDEX Custnum WHERE
-                       SingleFee.Brand = gcBrand AND
+                       SingleFee.Brand = Syst.CUICommon:gcBrand AND
                        SingleFee.Custnum = MsRequest.CustNum AND
                        SingleFee.HostTable = "Mobsub" AND
                        SingleFee.KeyValue = STRING(MsRequest.MsSeq) AND
@@ -3674,7 +3664,7 @@ PROCEDURE pContractReactivation:
           IF Fixedfee.BillCode EQ "PAYTERM" THEN DO:
           /* Open Residual SingleFee (if not billed) */
           FIND FIRST SingleFee USE-INDEX Custnum WHERE
-                     SingleFee.Brand       = gcBrand AND
+                     SingleFee.Brand       = Syst.CUICommon:gcBrand AND
                      SingleFee.Custnum     = FixedFee.CustNum AND
                      SingleFee.HostTable   = FixedFee.HostTable AND
                      SingleFee.KeyValue    = FixedFee.KeyValue AND
@@ -3750,7 +3740,7 @@ PROCEDURE pContractReactivation:
             ldEndStamp = 99999999.99999
             ldInclAmt  = MServiceLimit.InclAmt.
 
-         fSplitTS(MServiceLimit.FromTS,
+         Func.Common:mSplitTS(MServiceLimit.FromTS,
                   OUTPUT ldtMSActDate,
                   OUTPUT liMSActTime).
 
@@ -3760,8 +3750,8 @@ PROCEDURE pContractReactivation:
          THEN DO:
             IF DAY(ldtMSActDate) > 1 THEN DO: 
                ASSIGN 
-                  ldaPeriodEndDate = fLastDayOfMonth(ldtMSActDate)
-                  ldEndStamp = fMake2DT(ldaPeriodEndDate,86399).
+                  ldaPeriodEndDate = Func.Common:mLastDayOfMonth(ldtMSActDate)
+                  ldEndStamp = Func.Common:mMake2DT(ldaPeriodEndDate,86399).
                IF MServiceLimit.EndTS >= ldEndStamp THEN NEXT. 
              
                /* limit may have been changed on termination */
@@ -3819,7 +3809,7 @@ PROCEDURE pContractReactivation:
    ELSE DO:
       /* current contract */
       FIND FIRST DCCLI WHERE
-                 DCCLI.Brand         = gcBrand              AND
+                 DCCLI.Brand         = Syst.CUICommon:gcBrand              AND
                  DCCLI.DCEvent       = lcDCEvent            AND
                  DCCLI.MsSeq         = MsRequest.MsSeq      AND
                  (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} THEN
@@ -3841,7 +3831,7 @@ PROCEDURE pContractReactivation:
             ldateDccli = ADD-INTERVAL(DCCLI.ValidTo, 1, "months").
          ELSE ldateDccli = DCCLI.ValidTo.
             FIND FIRST SingleFee USE-INDEX Custnum WHERE
-                       SingleFee.Brand = gcBrand AND
+                       SingleFee.Brand = Syst.CUICommon:gcBrand AND
                        SingleFee.Custnum = MsRequest.CustNum AND
                        SingleFee.HostTable = "Mobsub" AND
                        SingleFee.KeyValue = STRING(MsRequest.MsSeq) AND

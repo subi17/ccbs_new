@@ -36,7 +36,6 @@
 {Mc/lib/tokenchk.i 'PrePaidRequest'}
 {Func/xmlfunction.i}
 {Func/ftaxdata.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/matrix.i}
 {Func/ftaxdata.i}
@@ -51,7 +50,7 @@ DEFINE INPUT PARAMETER  iiMsSeq AS INT  NO-UNDO.
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -142,7 +141,7 @@ IF AVAIL TMSParam THEN lcCCPrepaidPriceList = TMSParam.CharVal.
 
 
  /* create records in ttable */
- FOR EACH FeeModel WHERE FeeModel.Brand = gcBrand AND 
+ FOR EACH FeeModel WHERE FeeModel.Brand = Syst.CUICommon:gcBrand AND 
                         FeeModel.FMGroup = 1,
     FIRST FMItem OF FeeModel WHERE FMItem.ToDate >= TODAY AND
                                    FMItem.FromDate <= TODAY AND
@@ -168,10 +167,10 @@ FORM
    PrePaidRequest.TopUpAmt    COLUMN-LABEL "TopUpAmt" FORMAT "->>9.99"
    PrePaidRequest.VatAmt      COLUMN-LABEL "TaxAmt"   FORMAT "->>9.99"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-   COLOR VALUE(cfc)   
-   TITLE COLOR VALUE(ctc) " " + ynimi +
+   COLOR VALUE(Syst.CUICommon:cfc)   
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
    " TOPUP REQUESTS  "
-   + string(pvm,"99-99-99") + " "
+   + string(TODAY,"99-99-99") + " "
 FRAME sel.
 
 FORM
@@ -246,14 +245,14 @@ FORM
        NO-LABEL 
        FORMAT "X(30)" 
 
-WITH  OVERLAY ROW 1 centered COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr SIDE-LABELS FRAME lis.
+WITH  OVERLAY ROW 1 centered COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr SIDE-LABELS FRAME lis.
 
 FORM /* seek  PrePaidRequest */
    lcCLI
       HELP "Enter code"
-WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
-   COLOR VALUE(cfc) NO-LABELS OVERLAY
+WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
+   COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY
 FRAME f1.
 
 FUNCTION fGetRequestID RETURNS INTEGER:
@@ -264,7 +263,7 @@ FUNCTION fGetRequestID RETURNS INTEGER:
       liNextID = NEXT-VALUE(PrePaidReq).
    
       IF NOT CAN-FIND(FIRST PrePaidRequest WHERE
-                            PrePaidRequest.Brand     = gcBrand AND
+                            PrePaidRequest.Brand     = Syst.CUICommon:gcBrand AND
                             PrepaidRequest.PPRequest = liNextID)
       THEN LEAVE.
    END.
@@ -280,7 +279,7 @@ FUNCTION fTopUpLoaded RETURNS DECIMAL
    DEF VAR ldTS2     AS DEC  NO-UNDO.
    DEF VAR ldLoaded  AS DEC  NO-UNDO.
    
-   fMonthlyStamps(TODAY,
+   Func.Common:mMonthlyStamps(TODAY,
                   OUTPUT ldTS1, 
                   OUTPUT ldTS2).
    
@@ -308,7 +307,7 @@ FUNCTION fMinusRequest RETURNS LOGIC
 
    ASSIGN
       PrePaidRequest.PPRequest   = fGetRequestID()
-      PrePaidRequest.Brand       = gcBrand
+      PrePaidRequest.Brand       = Syst.CUICommon:gcBrand
       PrePaidRequest.MsSeq       = iiMsSeq
       PrePaidRequest.CLI         = icCLI
       PrePaidRequest.PPReqPrefix = "999"
@@ -316,7 +315,7 @@ FUNCTION fMinusRequest RETURNS LOGIC
       PrePaidRequest.CommLine    = "AdjustmentTRequest" 
       PrePaidRequest.Source      = "CC"
       PrePaidRequest.PPStatus    = 99.
-      PrePaidRequest.TSRequest   = fMakeTS().
+      PrePaidRequest.TSRequest   = Func.Common:mMakeTS().
 
    RETURN TRUE.
    
@@ -324,7 +323,7 @@ END FUNCTION.
 
 lcPassword = fCParamC("AdminUser").
  
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 FIND FIRST MobSub WHERE
@@ -362,9 +361,9 @@ REPEAT WITH FRAME sel:
       DO WHILE TRUE:
    
          ASSIGN
-            ufk       = 0
-            ufk[8]    = 8
-            ehto      = 3.
+            Syst.CUICommon:ufk       = 0
+            Syst.CUICommon:ufk[8]    = 8
+            Syst.CUICommon:ehto      = 3.
       
          RUN Syst/ufkey.p. 
 
@@ -392,7 +391,7 @@ REPEAT WITH FRAME sel:
              NEXT LOOP.
            END.
           
-         FIND FeeModel WHERE FeeModel.Brand = gcBrand AND 
+         FIND FeeModel WHERE FeeModel.Brand = Syst.CUICommon:gcBrand AND 
                              FeeModel.FeeModel  = ttable.ValueId NO-LOCK NO-ERROR.
                             
          /* Fetch default charge */
@@ -404,7 +403,7 @@ REPEAT WITH FRAME sel:
 
 
         FIND FIRST FMItem NO-LOCK  WHERE
-                   FMItem.Brand     = gcBrand       AND
+                   FMItem.Brand     = Syst.CUICommon:gcBrand       AND
                    FMItem.FeeModel  = FeeModel.FeeModel AND
                    FMItem.PriceList = lcPriceList AND
                    FMItem.FromDate <= TODAY     AND
@@ -451,9 +450,9 @@ REPEAT WITH FRAME sel:
         liMonthlyLimitType =  {&PREP_CHARGE_MONTHLY_LIMIT_TYPE}.
       END.
       /* one time user limit */
-      ldUpLimit = fUserLimitAmt(katun,liOneTimeLimitType).
+      ldUpLimit = fUserLimitAmt(Syst.CUICommon:katun,liOneTimeLimitType).
       /* monthly user limit */
-      ldUpMonthLimit = fUserLimitAmt(katun,liMonthlyLimitType).
+      ldUpMonthLimit = fUserLimitAmt(Syst.CUICommon:katun,liMonthlyLimitType).
 
       IF ldUpLimit < 0 OR ldUpMonthLimit < 0  THEN DO:
          MESSAGE "One time / monthly limit is not defined in your account or group "
@@ -469,7 +468,7 @@ REPEAT WITH FRAME sel:
       END.
 
       ASSIGN
-         cfc      = "lis"
+         Syst.CUICommon:cfc = "lis"
          ufkey    = true
          ac-hdr   = " ADD "
          must-add = FALSE.
@@ -481,7 +480,7 @@ REPEAT WITH FRAME sel:
 
         PAUSE 0 NO-MESSAGE.
         
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         
         REPEAT TRANSACTION WITH FRAME lis:
            
@@ -491,10 +490,10 @@ REPEAT WITH FRAME sel:
 
            ASSIGN
               PrePaidRequest.PPRequest  = fGetRequestID()
-              PrePaidRequest.Brand      = gcBrand
+              PrePaidRequest.Brand      = Syst.CUICommon:gcBrand
               PrePaidRequest.MsSeq      = iiMsSeq
               PrePaidRequest.CLI        = lcMobCLI
-              PrePaidRequest.UserCode   = katun
+              PrePaidRequest.UserCode   = Syst.CUICommon:katun
               PrePaidRequest.ReqCParam1 = lcBEventId
               PrePaidRequest.TopUpAmt   = ldFItemAmt.
        
@@ -587,13 +586,13 @@ REPEAT WITH FRAME sel:
       IF ufkey THEN DO:
 
         ASSIGN
-           ufk    = 0
-           ufk[4] = 829
-           ufk[5] = 302 WHEN lcRight = "RW"
-           ufk[7] = 1079
-           ufk[8] = 8
-           ufk[9] = 1
-           ehto   = 3
+           Syst.CUICommon:ufk    = 0
+           Syst.CUICommon:ufk[4] = 829
+           Syst.CUICommon:ufk[5] = 302 WHEN lcRight = "RW"
+           Syst.CUICommon:ufk[7] = 1079
+           Syst.CUICommon:ufk[8] = 8
+           Syst.CUICommon:ufk[9] = 1
+           Syst.CUICommon:ehto   = 3
            ufkey  = FALSE.
 
          RUN Syst/ufkey.p.
@@ -603,15 +602,15 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW PrePaidRequest.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) PrePaidRequest.CLI WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) PrePaidRequest.CLI WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -629,7 +628,7 @@ REPEAT WITH FRAME sel:
       END.
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,7,F7,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"5,f5,7,F7,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -638,7 +637,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -663,7 +662,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -689,7 +688,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND PrePaidRequest WHERE recid(PrePaidRequest) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -713,7 +712,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -728,16 +727,16 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND Syst.CUICommon:ufk[1] > 0 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET lcCLI WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF lcCLI ENTERED THEN DO:
           FIND FIRST PrePaidRequest USE-INDEX CLI WHERE 
-                     PrePaidRequest.Brand = gcBrand AND
+                     PrePaidRequest.Brand = Syst.CUICommon:gcBrand AND
                      PrePaidRequest.CLI >= lcCLI
           NO-LOCK NO-ERROR.
           IF NOT AVAILABLE PrePaidRequest THEN DO:
@@ -752,7 +751,7 @@ REPEAT WITH FRAME sel:
        END.
      END. /* Search-1 */
 
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 THEN DO:
         
         RUN local-find-this(FALSE).
         
@@ -761,7 +760,7 @@ REPEAT WITH FRAME sel:
         NO-LOCK NO-ERROR.
 
         IF NOT CAN-FIND(FIRST Payment WHERE
-                              Payment.Brand  = gcBrand AND
+                              Payment.Brand  = Syst.CUICommon:gcBrand AND
                               Payment.RefNum = STRING(PrePaidRequest.PPRequest))
         THEN DO:
            MESSAGE
@@ -779,7 +778,7 @@ REPEAT WITH FRAME sel:
 
      END.
 
-     ELSE IF LOOKUP(nap,"<") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"<") > 0 THEN DO:
 
         RUN local-find-this(FALSE).
      
@@ -789,7 +788,7 @@ REPEAT WITH FRAME sel:
 
      END.
      
-     ELSE IF LOOKUP(nap,">") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,">") > 0 THEN DO:
      
         RUN local-find-this(FALSE).
 
@@ -799,7 +798,7 @@ REPEAT WITH FRAME sel:
 
      END.
      
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:
     
         IF fMatrixAnalyse("1",
                           "DENIED",
@@ -819,7 +818,7 @@ REPEAT WITH FRAME sel:
         
      END. /* ADD NEW */
 
-     ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 THEN DO:
         RUN Gwy/balancequery.p(lcMobCLI).
         INT(RETURN-VALUE) NO-ERROR.
         IF ERROR-STATUS:ERROR THEN
@@ -831,7 +830,7 @@ REPEAT WITH FRAME sel:
         VIEW-AS ALERT-BOX TITLE "Balance query".
      END. /* balance query */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
 
@@ -840,8 +839,8 @@ REPEAT WITH FRAME sel:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPrePaidRequest).
 
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY PrePaidRequest.CLI.
 
        llTaxable = (PrepaidRequest.VatAmt NE 0).
@@ -870,26 +869,26 @@ REPEAT WITH FRAME sel:
        END.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(PrePaidRequest) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(PrePaidRequest) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE local-find-this:
 
@@ -908,12 +907,12 @@ PROCEDURE local-find-FIRST:
 
    IF order = 1 THEN 
       FIND FIRST PrePaidRequest USE-INDEX MsSeq WHERE
-                 PrePaidRequest.Brand = gcBrand AND
+                 PrePaidRequest.Brand = Syst.CUICommon:gcBrand AND
                  PrePaidRequest.MsSeq = iiMsSeq 
       NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
       FIND FIRST PrePaidRequest USE-INDEX Source WHERE 
-                 PrePaidRequest.Brand = gcBrand AND
+                 PrePaidRequest.Brand = Syst.CUICommon:gcBrand AND
                  PrePaidRequest.MsSeq = iiMsSeq 
       NO-LOCK NO-ERROR.
 
@@ -923,12 +922,12 @@ PROCEDURE local-find-LAST:
 
    IF order = 1 THEN 
       FIND LAST PrePaidRequest USE-INDEX MsSeq WHERE 
-                PrePaidRequest.Brand = gcBrand AND
+                PrePaidRequest.Brand = Syst.CUICommon:gcBrand AND
                 PrePaidRequest.MsSeq = iiMsSeq 
       NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
       FIND LAST PrePaidRequest USE-INDEX Source WHERE 
-                PrePaidRequest.Brand = gcBrand AND
+                PrePaidRequest.Brand = Syst.CUICommon:gcBrand AND
                 PrePaidRequest.MsSeq = iiMsSeq 
       NO-LOCK NO-ERROR.
 
@@ -938,12 +937,12 @@ PROCEDURE local-find-NEXT:
 
    IF order = 1 THEN 
       FIND NEXT PrePaidRequest USE-INDEX MsSeq WHERE 
-                PrePaidRequest.Brand = gcBrand AND
+                PrePaidRequest.Brand = Syst.CUICommon:gcBrand AND
                 PrePaidRequest.MsSeq = iiMsSeq 
       NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
       FIND NEXT PrePaidRequest USE-INDEX MsSeq WHERE 
-                PrePaidRequest.Brand = gcBrand AND
+                PrePaidRequest.Brand = Syst.CUICommon:gcBrand AND
                 PrePaidRequest.MsSeq = iiMsSeq 
       NO-LOCK NO-ERROR.
 
@@ -953,12 +952,12 @@ PROCEDURE local-find-PREV:
 
    IF order = 1 THEN
       FIND PREV PrePaidRequest USE-INDEX MsSeq WHERE 
-                PrePaidRequest.Brand = gcBrand AND
+                PrePaidRequest.Brand = Syst.CUICommon:gcBrand AND
                 PrePaidRequest.MsSeq = iiMsSeq 
       NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
       FIND PREV PrePaidRequest USE-INDEX Source WHERE 
-                PrePaidRequest.Brand = gcBrand AND
+                PrePaidRequest.Brand = Syst.CUICommon:gcBrand AND
                 PrePaidRequest.MsSeq = iiMsSeq 
       NO-LOCK NO-ERROR.
 
@@ -986,7 +985,7 @@ END PROCEDURE.
 
 PROCEDURE local-find-others.
 
-   lcTSRequest = fTS2HMS(PrePaidRequest.TSRequest).
+   lcTSRequest = Func.Common:mTS2HMS(PrePaidRequest.TSRequest).
    
    lcDispResp = STRING((PrePaidRequest.RespCode = 0 OR
                         PrePaidRequest.RespCode = 1 OR
@@ -1063,8 +1062,7 @@ PROCEDURE local-UPDATE-record:
    END.
    
    ASSIGN 
-      lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                 BUFFER Customer)
+      lcCustName = Func.Common:mDispCustName(BUFFER Customer)
       lcTaxZone  = ""
       ldTaxPerc  = 0
       llDirect   = FALSE
@@ -1103,7 +1101,7 @@ PROCEDURE local-UPDATE-record:
    IF llNew THEN DO:
           
       ASSIGN
-         PrePaidRequest.TSRequest = fMakeTS()
+         PrePaidRequest.TSRequest = Func.Common:mMakeTS()
          PrePaidRequest.Request   = "AdjustmentTRequest"    
          PrePaidRequest.CommLine  = "AdjustmentTRequest"     
          PrePaidRequest.Source    =  (IF llNegative THEN "CHARGE" ELSE "COMP" )
@@ -1145,7 +1143,7 @@ PROCEDURE local-UPDATE-record:
    END.
    
    ASSIGN
-      ldCurrTS  = fMakeTS()
+      ldCurrTS  = Func.Common:mMakeTS()
       lcReqZone = lcTaxZone.
  
    FIND TaxZone WHERE TaxZone.TaxZone = lcTaxZone NO-LOCK NO-ERROR.
@@ -1163,7 +1161,7 @@ PROCEDURE local-UPDATE-record:
       /* in case of minus adjustment */
       IF PrePaidRequest.OrigRequest > 0 THEN DO: 
          FOR FIRST bufPP NO-LOCK WHERE
-                   bufPP.Brand     = gcBrand  AND
+                   bufPP.Brand     = Syst.CUICommon:gcBrand  AND
                    bufPP.PPRequest = PrePaidRequest.OrigRequest:
           ldMaxAmt =  bufPP.TopUpAmt / 100.
          END.
@@ -1184,19 +1182,17 @@ PROCEDURE local-UPDATE-record:
    RequestUpdate:
    REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
-      fSplitTS(PrePaidRequest.TSRequest, OUTPUT ldaDate, OUTPUT liTime).
+      Func.Common:mSplitTS(PrePaidRequest.TSRequest, OUTPUT ldaDate, OUTPUT liTime).
 
       ASSIGN
-         lcDone      = fTS2HMS(PrePaidRequest.TsResponse)
+         lcDone      = Func.Common:mTS2HMS(PrePaidRequest.TsResponse)
          lcTime      = REPLACE(STRING(liTime,"hh:mm:ss"),":","")
          ldeTopUpAmt = PrePaidRequest.TopUpAmt  / 100    
          ldeVatAmt   = PrePaidRequest.VatAmt    / 100 
-         lcRespCode  = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                        "PrePaidRequest",
+         lcRespCode  = Func.Common:mTMSCodeName("PrePaidRequest",
                                         "RespCode",
-                                        PrePaidRequest.RespCode)
-         lcStatus    = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                        "PrePaidRequest",
+                                        STRING(PrePaidRequest.RespCode))
+         lcStatus    = Func.Common:mTMSCodeName("PrePaidRequest",
                                         "PPStatus",
                                         STRING(PrePaidRequest.PPStatus)).
  
@@ -1239,21 +1235,21 @@ PROCEDURE local-UPDATE-record:
          DISPLAY 0 @ PrePaidRequest.PPStatus WITH FRAME lis.
    
       ASSIGN 
-         ufk    = 0
-         ufk[3] = 1088
-         ufk[4] = 1121
-         ufk[8] = 8
-         ehto   = 0.
+         Syst.CUICommon:ufk    = 0
+         Syst.CUICommon:ufk[3] = 1088
+         Syst.CUICommon:ufk[4] = 1121
+         Syst.CUICommon:ufk[8] = 8
+         Syst.CUICommon:ehto   = 0.
 
       IF lcRight = "RW" AND LOOKUP(PrePaidRequest.Source,"CC,CHARGE,COMP") > 0 THEN DO:
 
          /* udpate */   
          IF PrePaidRequest.PPStatus = 0 OR
-            PrePaidRequest.PPStatus = 99 THEN ufk[1] = 7.
+            PrePaidRequest.PPStatus = 99 THEN Syst.CUICommon:ufk[1] = 7.
 
          /* status change (cancel) */
          IF PrePaidRequest.PPStatus = 0 OR
-            PrePaidRequest.PPStatus = 3 THEN ufk[7] = 1087.
+            PrePaidRequest.PPStatus = 3 THEN Syst.CUICommon:ufk[7] = 1087.
       END.
 
       /* minus adjustment */
@@ -1266,32 +1262,32 @@ PROCEDURE local-UPDATE-record:
          ldMinus = 0.   
 
          FOR EACH bufPP NO-LOCK WHERE
-                  bufPP.Brand       = gcBrand                  AND
+                  bufPP.Brand       = Syst.CUICommon:gcBrand                  AND
                   bufPP.OrigRequest = PRePaidRequest.PPRequest AND
                   bufPP.Request     = "AdjustmentTRequest":
             ldMinus = ldMinus + bufPP.TopUpAmt.      
          END.
 
-         IF ABS(ldMinus) < PrePaidRequest.TopUpAmt THEN ufk[6] = 1086.
+         IF ABS(ldMinus) < PrePaidRequest.TopUpAmt THEN Syst.CUICommon:ufk[6] = 1086.
       END.
 
       /* accept / cancel */
       IF PrePaidRequest.PPStatus = 99 OR
          llChanged THEN ASSIGN
-         ufk[5] = 1089
-         ufk[8] = 1059.
+         Syst.CUICommon:ufk[5] = 1089
+         Syst.CUICommon:ufk[8] = 1059.
 
       IF llDirect THEN ASSIGN 
          llDirect = FALSE
-         toimi    = 1.
+         Syst.CUICommon:toimi    = 1.
          
       ELSE RUN Syst/ufkey.p.   
       
-      IF toimi = 1 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN DO:
       
          FIND CURRENT PrePaidRequest EXCLUSIVE-LOCK.
          
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
          
          REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE. 
@@ -1304,9 +1300,9 @@ PROCEDURE local-UPDATE-record:
 
                READKEY.
       
-               nap = keylabel(lastkey).
+               Syst.CUICommon:nap = keylabel(lastkey).
       
-               IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+               IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
 
                   PAUSE 0.
 
@@ -1366,14 +1362,14 @@ PROCEDURE local-UPDATE-record:
                   END.
                   
                   ELSE IF FRAME-FIELD = "lcTime" THEN DO:
-                     IF NOT fCheckTime(INPUT INPUT FRAME lis lcTime) THEN DO:
+                     IF NOT Func.Common:mCheckTime(INPUT INPUT FRAME lis lcTime) THEN DO:
                         MESSAGE 
                            "Invalid time: " + INPUT FRAME lis lcTime
                         VIEW-AS ALERT-BOX ERROR.
                         NEXT.
                      END.
                      
-                     ldCheckTS = fHMS2TS(INPUT INPUT FRAME lis ldaDate,
+                     ldCheckTS = Func.Common:mHMS2TS(INPUT INPUT FRAME lis ldaDate,
                                          INPUT INPUT FRAME lis lcTime).
                                           
                      IF ldCheckTS < ldCurrTS THEN DO:
@@ -1405,7 +1401,7 @@ PROCEDURE local-UPDATE-record:
 
              END.
             
-            ldCheckTS = fHMS2TS(ldaDate,lcTime).
+            ldCheckTS = Func.Common:mHMS2TS(ldaDate,lcTime).
             
             IF ldeTopUpAmt * 100 NE PrePaidRequest.TopUpAmt OR
                ldeVatAmt * 100   NE PrePaidRequest.VatAmt   OR
@@ -1413,7 +1409,7 @@ PROCEDURE local-UPDATE-record:
             THEN ASSIGN
                PrePaidRequest.TopUpAmt  = ldeTopUpAmt * 100
                PrePaidRequest.VatAmt    = ldeVatAmt * 100
-               PrePaidRequest.TSRequest = fHMS2TS(ldaDate,lcTime)
+               PrePaidRequest.TSRequest = Func.Common:mHMS2TS(ldaDate,lcTime)
                llChanged                = TRUE.
              
             PrepaidRequest.TaxZone = lcReqZone.
@@ -1430,16 +1426,16 @@ PROCEDURE local-UPDATE-record:
       END.
 
       /* show xml */
-      ELSE IF toimi = 3 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
          RUN pShowXML(PrePaidRequest.Response).
       END.
        
-      ELSE IF toimi = 4 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
          RUN pShowXML(PrePaidRequest.CommLine).
       END.
       
       /* minus adjustment */
-      ELSE IF toimi = 6 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 6 THEN DO:
 
          IF PrepaidRequest.TSRequest < 20080101 THEN DO:
             MESSAGE "Minus adjustment is not allowed for previous year's"
@@ -1471,9 +1467,9 @@ PROCEDURE local-UPDATE-record:
          END.
 
          ASSIGN
-            ufk    = 0
-            ufk[8] = 8
-            ehto   = 3.
+            Syst.CUICommon:ufk    = 0
+            Syst.CUICommon:ufk[8] = 8
+            Syst.CUICommon:ehto   = 3.
       
          RUN Syst/ufkey.p. 
 
@@ -1519,7 +1515,7 @@ PROCEDURE local-UPDATE-record:
                   PrePaidRequest.OrigRequest = bufPP.PPRequest
                   PrePaidRequest.TaxZone     = lcReqZone
                   llNegative                 = TRUE
-                  PrePaidRequest.UserCode    = katun
+                  PrePaidRequest.UserCode    = Syst.CUICommon:katun
                   llTaxable                  = (PrePaidRequest.VatAmt NE 0).
             END.
          END.
@@ -1527,12 +1523,12 @@ PROCEDURE local-UPDATE-record:
       END.
 
       /* change status */  
-      ELSE IF toimi = 7 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 7 THEN DO:
         
          ASSIGN
-            ufk    = 0
-            ufk[8] = 8
-            ehto   = 3.
+            Syst.CUICommon:ufk    = 0
+            Syst.CUICommon:ufk[8] = 8
+            Syst.CUICommon:ehto   = 3.
       
          RUN Syst/ufkey.p. 
 
@@ -1596,7 +1592,7 @@ PROCEDURE local-UPDATE-record:
 
       END.
 
-      ELSE IF toimi = 5 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
    
          lcReturn = "".
          
@@ -1612,7 +1608,7 @@ PROCEDURE local-UPDATE-record:
          RETURN lcReturn.
       END.
 
-      ELSE IF toimi = 8 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
       
          IF llChanged OR PrePaidRequest.PPStatus = 99 THEN DO:
             llOk = FALSE.

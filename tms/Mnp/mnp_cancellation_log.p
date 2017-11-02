@@ -9,7 +9,6 @@
 {Syst/commali.i}
 {Syst/tmsconst.i}
 {Syst/dumpfile_run.i}
-{Func/date.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
 
@@ -30,8 +29,8 @@ DEF VAR ldeTo AS DEC NO-UNDO.
 
 ASSIGN
    ldaDate = TODAY - 1
-   ldeFrom = fHMS2TS(ldaDate, "00:00:00")
-   ldeTo = fHMS2TS(ldaDate,"23:59:59").
+   ldeFrom = Func.Common:mHMS2TS(ldaDate, "00:00:00")
+   ldeTo = Func.Common:mHMS2TS(ldaDate,"23:59:59").
 
 FORM
     oiEvents    AT 2  LABEL "Picked " FORMAT ">>>>>>>9"
@@ -42,18 +41,18 @@ OUTPUT STREAM sdump TO value (icFile).
 
 ERROR_LOOP:
 FOR EACH MNPProcess NO-LOCK WHERE
-         MNPProcess.Brand = gcBrand AND
+         MNPProcess.Brand = Syst.CUICommon:gcBrand AND
          MNPProcess.MNPType = {&MNP_TYPE_IN} AND
          MNPProcess.UpdateTS >= ldeFrom AND
          MNPProcess.UpdateTS <= ldeTo AND
          MNPProcess.StatusCode = {&MNP_ST_ACAN} USE-INDEX UpdateTS,
    FIRST Order NO-LOCK WHERE
-         Order.Brand = gcBrand AND
+         Order.Brand = Syst.CUICommon:gcBrand AND
          Order.OrderID = MNPProcess.OrderID:
 
    /* it's presumed that the latest memo is related to cancellation */
    FIND FIRST Memo NO-LOCK WHERE
-              Memo.Brand = gcBrand AND
+              Memo.Brand = Syst.CUICommon:gcBrand AND
               Memo.HostTable = "MNPProcess" AND
               Memo.KeyValue = STRING(MNPProcess.MNPSeq)
               USE-INDEX HostTable NO-ERROR.
@@ -64,7 +63,7 @@ FOR EACH MNPProcess NO-LOCK WHERE
        MNPProcess.FormRequest "|"
       (IF AVAIL Memo THEN Memo.Source ELSE "") "|"
       (IF AVAIL Memo THEN Memo.CreUser ELSE "") "|"
-      fts2hms(MNPProcess.UpdateTS) skip.
+      Func.Common:mTS2HMS(MNPProcess.UpdateTS) skip.
       
    oiEvents = oiEvents + 1.
    IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN DO:

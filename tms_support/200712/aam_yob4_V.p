@@ -39,7 +39,7 @@
   -------------------------------------------------------------------------- */
 
 {Syst/testpaa.i} 
-katun = "ari".
+Syst.CUICommon:katun = "ari".
 
 {Func/tmsparam2.i}
 {Inv/billrund.i NEW}
@@ -47,7 +47,6 @@ katun = "ari".
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'Invoice'}
 {Func/finvnum.i}
-{Func/timestamp.i}
 
 IF lcRight NE "RW" THEN DO:
    MESSAGE " You cannot create invoices ! " VIEW-AS ALERT-BOX.
@@ -101,7 +100,7 @@ DEF STREAM sTimeLog.
 /* Check that no Test Invoices exist in TMS,
    Tests must be deleted before real invoicing can be done.  */
 FIND FIRST Invoice NO-LOCK WHERE 
-           Invoice.Brand   = gcBrand AND
+           Invoice.Brand   = Syst.CUICommon:gcBrand AND
            Invoice.InvType = 99 
            NO-ERROR.
 IF AVAIL Invoice THEN DO:
@@ -136,9 +135,9 @@ PUT SCREEN ROW 23 COL 1 FILL(" ",60).
 form
    skip(17)
 WITH
-   OVERLAY TITLE COLOR value(ctc)
-   " " + ynimi + " INVOICING, PHASE 1 " + string(pvm,"99-99-99") + " "
-   COLOR value(cfc) width 80 ROW 1
+   OVERLAY TITLE COLOR value(Syst.CUICommon:ctc)
+   " " + Syst.CUICommon:ynimi + " INVOICING, PHASE 1 " + string(TODAY,"99-99-99") + " "
+   COLOR value(Syst.CUICommon:cfc) width 80 ROW 1
    FRAME taka.
 
 form
@@ -173,8 +172,8 @@ form
                                                 SKIP    
    lowvalue label " Low value invoices ....."
            help "Create invoices that are below the minimum invoicing amount"
-with title color value(ctc) " CRITERIA FOR CREATING INVOICES " side-labels
-   COLOR value(cfc) ROW 2 centered OVERLAY FRAME rajat.
+with title color value(Syst.CUICommon:ctc) " CRITERIA FOR CREATING INVOICES " side-labels
+   COLOR value(Syst.CUICommon:cfc) ROW 2 centered OVERLAY FRAME rajat.
 
 form
     " Consecutive invoice number: " lcInvNum  NO-LABEL           SKIP
@@ -182,14 +181,14 @@ form
     " Oldest unpaid Calls ......: " upmth  NO-LABEL  
     lowvalue format "(created)/(not created)" NO-LABEL
 WITH
-   title color value (ctc) " INVOICE GROUP DATA " COLOR value(cfc)
+   title color value (Syst.CUICommon:ctc) " INVOICE GROUP DATA " COLOR value(Syst.CUICommon:cfc)
    OVERLAY centered ROW 14 FRAME lCustNum.
 
-cfc = "sel". RUN Syst/ufcolor.p. ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME taka. PAUSE 0 no-message.
 
-cfc = "lis". RUN Syst/ufcolor.p.
-ehto = 9. RUN Syst/ufkey.p.
+Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
+Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
 ASSIGN
 atpvm2 = date(month(TODAY),1,year(TODAY)) - 1
@@ -245,7 +244,7 @@ toimi:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, RETURN:
       IF kysy_rajat THEN DO:
          /* We ask the limits */
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          UPDATE
             InvGroup
             liInvCode
@@ -259,8 +258,8 @@ toimi:
          mark
          lowvalue
          WITH FRAME rajat EDITING :
-            READKEY. nap = keylabel(LASTKEY).
-            IF lookup(nap,poisnap) > 0 THEN DO:
+            READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
+            IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
                HIDE MESSAGE no-pause.
 
                if frame-field = "InvGroup" THEN DO:
@@ -273,7 +272,7 @@ toimi:
                   END.
 
                   FIND InvGroup where 
-                       InvGroup.Brand    = gcBrand AND
+                       InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                        InvGroup.InvGroup = InvGroup
                   no-lock no-error.
                   IF NOT AVAIL InvGroup THEN DO:
@@ -348,16 +347,16 @@ toimi:
          kysy_rajat = FALSE.
       END.
 
-      ASSIGN ufk = 0 ufk[1] = 132 ufk[2] = 0
-                     ufk[4] = 0 ufk[5] = 795
-                     ufk[8] = 8 ehto = 0.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[2] = 0
+                     Syst.CUICommon:ufk[4] = 0 Syst.CUICommon:ufk[5] = 795
+                     Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN DO:
          kysy_rajat = TRUE.
          NEXT toimi.
       END.
 
-      IF toimi = 5 THEN DO:
+      IF Syst.CUICommon:toimi = 5 THEN DO:
 
          /* check period */
          IF fPeriodLocked(InvDte,TRUE) THEN NEXT toimi.
@@ -376,27 +375,27 @@ toimi:
 
       END.
 
-      IF toimi = 8 THEN DO:
+      IF Syst.CUICommon:toimi = 8 THEN DO:
          HIDE MESSAGE no-pause.
          HIDE FRAME rajat no-pause.
          HIDE FRAME taka no-pause.
          RETURN.
       END.
 
-   END. /* toimi */
+   END. /* Syst.CUICommon:toimi */
 
 HIDE FRAME lCustNum no-pause.
 
 OUTPUT STREAM sTimeLog TO /tmp/invrun_dur.log append.
 PUT STREAM sTimeLog UNFORMATTED
-   "Customer based (lamu3) started  (brand " gcBrand 
+   "Customer based (lamu3) started  (brand " Syst.CUICommon:gcBrand 
    " group " InvGroup ") " 
    STRING(TODAY,"99.99.9999") " "
    STRING(TIME,"hh:mm:ss")
    SKIP.
 OUTPUT STREAM sTimeLog CLOSE.
 
-ASSIGN ldBegTime = fMakeTS()
+ASSIGN ldBegTime = Func.Common:mMakeTS()
        liCustQty = 0.
 
 /* We make it THRU ALL the Calls, what we wanted TO handle */
@@ -469,7 +468,7 @@ input stream sread close.
 XCUST:
 for each ttcust,
    first Customer   no-lock  where
-         Customer.Brand     = gcBrand     AND 
+         Customer.Brand     = Syst.CUICommon:gcBrand     AND 
          Customer.CustNum   = ttcust.custnum,
    FIRST InvGroup OF Customer no-lock:
 
@@ -519,11 +518,10 @@ RUN pCreateInv in pHandle(invDte,
 HIDE MESSAGE NO-PAUSE.
 PAUSE 0.
 
-ldEndTime = fMakeTS().
+ldEndTime = Func.Common:mMakeTS().
 
 /* duration */
-liDurDays = DYNAMIC-FUNCTION("fTSDuration" IN ghfunc1,
-                             ldBegTime,
+liDurDays = Func.Common:mTSDuration(ldBegTime,
                              ldEndTime,
                              OUTPUT liDurTime).
                         
@@ -533,9 +531,9 @@ RUN pGetAmt in pHandle (OUTPUT lQty,
 
 OUTPUT STREAM sTimeLog TO /tmp/invrun_dur.log append.
 PUT STREAM sTimeLog UNFORMATTED
-   "Customer based (lamu3) finished (brand " gcBrand 
+   "Customer based (lamu3) finished (brand " Syst.CUICommon:gcBrand 
    " group " InvGroup "): " 
-   fTS2HMS(ldEndTime)
+   Func.Common:mTS2HMS(ldEndTime)
    "|Dur: " 
       (IF liDurDays > 0 
        THEN STRING(liDurDays) + " days and"
@@ -575,7 +573,7 @@ IF ok AND lQty > 0 THEN DO:
     DO FOR ActionLog TRANS:
        CREATE ActionLog.
        ASSIGN 
-          ActionLog.Brand        = gcBrand   
+          ActionLog.Brand        = Syst.CUICommon:gcBrand   
           ActionLog.TableName    = "Invoice"  
           ActionLog.KeyValue     = lcBillRun 
           ActionLog.ActionID     = "BillRun"
@@ -584,7 +582,7 @@ IF ok AND lQty > 0 THEN DO:
           ActionLog.ActionDec    = lQty
           ActionLog.ActionChar   = lcMessage
           ActionLog.ActionStatus = 0.
-          ActionLog.ActionTS     = fMakeTS().
+          ActionLog.ActionTS     = Func.Common:mMakeTS().
     END.
     
     MESSAGE lcMessage

@@ -34,7 +34,7 @@ IF NOT AVAIL MSRequest OR MsRequest.ReqType NE 15 THEN DO:
 END.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -104,7 +104,7 @@ PROCEDURE pChangeSIM:
    FIND FIRST Old-MSOWner WHERE 
               Old-MSOWNER.MSSEQ  = Mobsub.MSSeq AND 
               Old-MSOWNER.CLI    = Mobsub.CLI   AND 
-              Old-MSOwner.TSEND >= FMakeTS() EXCLUSIVE-LOCK NO-ERROR.
+              Old-MSOwner.TSEND >= Func.Common:mMakeTS() EXCLUSIVE-LOCK NO-ERROR.
             
    IF NOT AVAIL old-Msowner THEN DO:
       FIND FIRST Old-MSOWner WHERE
@@ -117,7 +117,7 @@ PROCEDURE pChangeSIM:
 
    IF AVAIL Old-MSOwner THEN DO:
       IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMsOwner).
-      ASSIGN Old-MSOwner.TsEnd = FMakeTS().
+      ASSIGN Old-MSOwner.TsEnd = Func.Common:mMakeTS().
       IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMsOwner).
    END.
    
@@ -131,14 +131,14 @@ PROCEDURE pChangeSIM:
    CREATE MSOwner.
    BUFFER-COPY old-Msowner except TSend CLIEvent TO Msowner.
    ASSIGN
-      MSOwner.TsBegin     = fSecOffSet(Old-MSOwner.TsEnd,1)
+      MSOwner.TsBegin     = Func.Common:mSecOffSet(Old-MSOwner.TsEnd,1)
       MSowner.imsi        = IMSI.imsi
       MSOWner.TSEnd       = 99999999.99999
       MsOwner.CLIEvent    = "ICC".
    
    IF llDoEvent THEN fMakeCreateEvent((BUFFER MsOwner:HANDLE),
                                       "",
-                                      katun,
+                                      Syst.CUICommon:katun,
                                       "").
 
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).
@@ -164,8 +164,7 @@ PROCEDURE pChangeSIM:
          OUTPUT liChargeReqId) NO-ERROR.
 
       IF ERROR-STATUS:ERROR OR liChargeReqId = 0 THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(MobSub.MsSeq),
                           MobSub.CustNum,
                           "CHARGE CREATION FAILED",
@@ -190,7 +189,7 @@ PROCEDURE pChangeSIM:
                                         SubSer.ServCom,
                                         1,     /* ON */
                                         "",
-                                        fMakeTS(),
+                                        Func.Common:mMakeTS(),
                                         "",
                                         TRUE, /* fees */
                                         FALSE, /* sms */
@@ -201,8 +200,7 @@ PROCEDURE pChangeSIM:
                                         OUTPUT lcResponse).
             /* Write possible error to a memo */
             IF liRequest = 0 THEN
-             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                              "MobSub",
+             Func.Common:mWriteMemo("MobSub",
                               STRING(Mobsub.MsSeq),
                               Mobsub.CustNum,
                               "BB Service Re-provision",
@@ -224,7 +222,7 @@ PROCEDURE pChangeSIM:
                                   SubSer.ServCom,
                                   1,     /* ON */
                                   "",
-                                  fMakeTS(),
+                                  Func.Common:mMakeTS(),
                                   "",
                                   TRUE, /* fees */
                                   FALSE, /* sms */
@@ -235,8 +233,7 @@ PROCEDURE pChangeSIM:
                                   OUTPUT lcResponse).
       /* Write possible error to a memo */
       IF liRequest = 0 THEN
-       DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                        "MobSub",
+       Func.Common:mWriteMemo("MobSub",
                         STRING(Mobsub.MsSeq),
                         Mobsub.CustNum,
                         Subser.Servcom + " service Re-provision",

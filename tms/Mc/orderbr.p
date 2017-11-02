@@ -13,7 +13,6 @@
 /* &GLOBAL-DEFINE BrTable Order */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
 
 DEFINE TEMP-TABLE ttOrder NO-UNDO
@@ -63,9 +62,9 @@ form
     ttOrder.StatusCode
 
 WITH ROW 4 width 80 OVERLAY 8 DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
-       " Customers orders "  + string(pvm,"99-99-99") + " "
+    COLOR VALUE(Syst.CUICommon:cfc)   
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+       " Customers orders "  + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 /* Create orders for browsing */ 
@@ -158,15 +157,15 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1] = 0  
-        ufk[2] = 0  
-        ufk[3] = 0 
-        ufk[4] = 0
-        ufk[5] = 0
-        ufk[6] = 0
-        ufk[7] = 0
-        ufk[8] = 8
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ufk[1] = 0  
+        Syst.CUICommon:ufk[2] = 0  
+        Syst.CUICommon:ufk[3] = 0 
+        Syst.CUICommon:ufk[4] = 0
+        Syst.CUICommon:ufk[5] = 0
+        Syst.CUICommon:ufk[6] = 0
+        Syst.CUICommon:ufk[7] = 0
+        Syst.CUICommon:ufk[8] = 8
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
         RUN Syst/ufkey.p.
       END.
@@ -174,13 +173,13 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
          CHOOSE ROW ttOrder.OrderId {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) ttOrder.OrderId WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttOrder.OrderId WITH FRAME sel.
       END.
       
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -202,7 +201,7 @@ BROWSE:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -227,7 +226,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -253,7 +252,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ttOrder WHERE recid(ttOrder) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -277,7 +276,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -291,7 +290,7 @@ BROWSE:
        END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN DO:
         
         RUN local-find-THIS(FALSE).
         
@@ -300,25 +299,25 @@ BROWSE:
         LEAVE LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(ttOrder) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(ttOrder) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 PAUSE 0.
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 
@@ -360,7 +359,7 @@ END PROCEDURE.
 
 PROCEDURE local-disp-row:
 
-       lcTimeStamp  = fTS2HMS(ttOrder.TimeStamp).
+       lcTimeStamp  = Func.Common:mTS2HMS(ttOrder.TimeStamp).
        
        CLEAR FRAME sel NO-PAUSE.
        

@@ -10,7 +10,6 @@
 ------------------------------------------------------------------------ */
    
 {Syst/commali.i}
-{Func/func.p}
 {Func/email.i}
 {Func/cparam2.i}
 {Mm/cdrvar.i}
@@ -18,7 +17,6 @@
 {Rate/chkbal2.i}
 {Rate/mobol_tt.i}
 {Func/fmakeservice.i}
-{Func/timestamp.i}
 {Func/fsubser.i}
 {Func/fservlimit.i}
 {Rate/onlinevar.i}
@@ -453,7 +451,7 @@ else do:
 end.      
 
 
-ehto = 3. RUN Syst/ufkey.p.
+Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
    
    /* QUIT menutext */
    RUN Syst/ufxkey.p(8,3).
@@ -661,7 +659,7 @@ DO TRANS:
       ASSIGN
          ttCall.ReadDate  = TODAY
          ttCall.ReadTime  = TIME
-         ttCall.ReadInTS  = fMake2Dt(ttCall.ReadDate, ttCall.ReadTime)
+         ttCall.ReadInTS  = Func.Common:mMake2DT(ttCall.ReadDate, ttCall.ReadTime)
          ldtTMSTime       = NOW
          TTCall.custNum   = liunkcust
          amt2 = amt2 + 1
@@ -925,7 +923,7 @@ DO TRANS:
            IF ttCall.Spocmt = 66 THEN liTempDialType = 4.
            ELSE liTempDialType = 1.
            FOR FIRST BDest NO-LOCK WHERE
-                     BDest.Brand  = gcBrand AND
+                     BDest.Brand  = Syst.CUICommon:gcBrand AND
                      BDest.Bdest  = ttCall.BDest AND
                      BDest.DestType = ttCall.BType AND
                      BDest.Class  = 2 AND
@@ -1069,7 +1067,7 @@ DO TRANS:
       /* Update PremiumNumber Operator information only for VOICE */
       IF ttCall.MSCID <> "CCGW" THEN DO:
          FIND FIRST BillItem WHERE
-                    BillItem.Brand    = gcBrand AND
+                    BillItem.Brand    = Syst.CUICommon:gcBrand AND
                     BillItem.BillCode = ttCall.BillCode NO-LOCK NO-ERROR.
          IF AVAILABLE BillItem AND BillItem.BIGroup = "6" THEN
             ttCall.ServiceName = fGetPremiumServiceName(ttCall.GsmBnr,

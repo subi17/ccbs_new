@@ -30,8 +30,8 @@ DEF VAR tlli-ots    AS CHAR.
 form
     InvGroup.InvGroup
     InvGroup.IGName  format "x(30)"
-WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(cfc)
-    title color value(ctc) " Invoicing Groups (" + gcBrand + ") " 
+WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
+    title color value(Syst.CUICommon:ctc) " Invoicing Groups (" + Syst.CUICommon:gcBrand + ") " 
     OVERLAY FRAME tlse.
 
 form
@@ -39,21 +39,21 @@ form
     InvGroup.IGName SKIP
 
 WITH OVERLAY ROW 8 centered
-    TITLE COLOR value(ctc) tlli-ots
-    COLOR value(cfc) side-labels 1 col
+    TITLE COLOR value(Syst.CUICommon:ctc) tlli-ots
+    COLOR value(Syst.CUICommon:cfc) side-labels 1 col
     FRAME tlli.
 
 form /* Invoicing Group :n hakua varten */
     haku
     help "Enter Code of an Invoicing Group"
-    with row 4 col 2 title color value(ctc) "FIND Inv.Group"
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) "FIND Inv.Group"
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
-cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 Runko:
 repeat:
 
-   FIND FIRST InvGroup WHERE InvGroup.Brand = gcBrand NO-LOCK no-error.
+   FIND FIRST InvGroup WHERE InvGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
    IF NOT AVAILABLE InvGroup THEN DO:
       must-print = FALSE.
    END.
@@ -79,7 +79,7 @@ Repeat WITH FRAME tlse:
             WITH FRAME tlse.
             rtab[FRAME-LINE] = recid(InvGroup).
             DOWN WITH FRAME tlse.
-            FIND NEXT InvGroup WHERE InvGroup.Brand = gcBrand NO-LOCK no-error.
+            FIND NEXT InvGroup WHERE InvGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
          END.
          must-print = FALSE.
          up frame-line(tlse) - 1 WITH FRAME tlse.
@@ -87,9 +87,9 @@ Repeat WITH FRAME tlse:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk = 0 ufk[1] = 35 ufk[5] = 11
-         ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
-         siirto = ? ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 35 Syst.CUICommon:ufk[5] = 11
+         Syst.CUICommon:ufk[6] = 0 Syst.CUICommon:ufk[8] = 8  Syst.CUICommon:ufk[9] = 1
+         siirto = ? Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
   END. /* print-line */
@@ -99,17 +99,17 @@ BROWSE:
 
          HIDE MESSAGE no-pause.
          CHOOSE ROW InvGroup.InvGroup {Syst/uchoose.i} no-error WITH FRAME tlse.
-         COLOR DISPLAY value(ccc) InvGroup.InvGroup WITH FRAME tlse.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) InvGroup.InvGroup WITH FRAME tlse.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.
-         nap = keylabel(LASTKEY).
+         Syst.CUICommon:nap = keylabel(LASTKEY).
 
          /* previous line */
-         if lookup(nap,"cursor-up") > 0 THEN DO
+         if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO
          WITH FRAME tlse:
             IF FRAME-LINE = 1 THEN DO:
                FIND InvGroup where recid(InvGroup) = rtab[FRAME-LINE] no-lock.
-               FIND prev InvGroup WHERE InvGroup.Brand = gcBrand 
+               FIND prev InvGroup WHERE InvGroup.Brand = Syst.CUICommon:gcBrand 
                NO-LOCK no-error.
                IF NOT AVAILABLE InvGroup THEN DO:
                   BELL.
@@ -132,10 +132,10 @@ BROWSE:
          END. /* previous line */
 
          /* NEXT line */
-         if lookup(nap,"cursor-down") > 0 THEN DO WITH FRAME tlse:
+         if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO WITH FRAME tlse:
             IF FRAME-LINE = FRAME-DOWN THEN DO:
                FIND InvGroup where recid(InvGroup) = rtab[FRAME-LINE] no-lock .
-               FIND NEXT InvGroup WHERE InvGroup.Brand = gcBrand 
+               FIND NEXT InvGroup WHERE InvGroup.Brand = Syst.CUICommon:gcBrand 
                NO-LOCK no-error.
                IF NOT AVAILABLE InvGroup THEN DO:
                   BELL.
@@ -159,13 +159,13 @@ BROWSE:
          END. /* NEXT line */
 
          /* previous page */
-         else if lookup(nap,"page-up,prev-page") > 0 THEN DO WITH FRAME tlse:
+         else if lookup(Syst.CUICommon:nap,"page-up,prev-page") > 0 THEN DO WITH FRAME tlse:
             FIND InvGroup where recid(InvGroup) = ylin no-lock no-error.
-            FIND prev InvGroup WHERE InvGroup.Brand = gcBrand NO-LOCK no-error.
+            FIND prev InvGroup WHERE InvGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             IF AVAILABLE InvGroup THEN DO:
                /* mennaan tiedostoa taaksepAin 1 sivun verran */
                DO i = 1 TO (FRAME-DOWN - 1):
-                  FIND prev InvGroup WHERE InvGroup.Brand = gcBrand 
+                  FIND prev InvGroup WHERE InvGroup.Brand = Syst.CUICommon:gcBrand 
                   NO-LOCK no-error.
                   IF AVAILABLE InvGroup THEN ylin = recid(InvGroup).
                   ELSE i = FRAME-DOWN.
@@ -182,7 +182,7 @@ BROWSE:
         END. /* previous page */
 
         /* NEXT page */
-        else if lookup(nap,"page-down,next-page") > 0 THEN DO WITH FRAME tlse:
+        else if lookup(Syst.CUICommon:nap,"page-down,next-page") > 0 THEN DO WITH FRAME tlse:
            IF rtab[FRAME-DOWN] = ? THEN DO:
                BELL.
                message "This is the last page !".
@@ -196,27 +196,27 @@ BROWSE:
         END. /* NEXT page */
 
         /* Haku */
-        if lookup(nap,"1,f1") > 0 THEN DO:  /* haku */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+        if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:  /* haku */
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            haku = "".
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE haku WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
            if haku <> "" THEN DO:
 
               FIND FIRST InvGroup where 
-                 InvGroup.Brand    = gcBrand AND
+                 InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                  InvGroup.InvGroup = INPUT haku
               no-lock no-error.
 
               IF NOT AVAILABLE InvGroup THEN 
                  FIND FIRST InvGroup where 
-                    InvGroup.Brand    =  gcBrand AND
+                    InvGroup.Brand    =  Syst.CUICommon:gcBrand AND
                     InvGroup.InvGroup ge INPUT haku
                  no-lock no-error.
               IF NOT AVAILABLE InvGroup THEN 
                  FIND FIRST InvGroup where 
-                    InvGroup.Brand    =  gcBrand AND
+                    InvGroup.Brand    =  Syst.CUICommon:gcBrand AND
                     InvGroup.InvGroup le INPUT haku
                  no-lock no-error.
 
@@ -236,28 +236,28 @@ BROWSE:
         END. /* Haku */
 
         /* Valinta */
-        else if lookup(nap,"return,enter,5,f5") > 0 THEN DO:
+        else if lookup(Syst.CUICommon:nap,"return,enter,5,f5") > 0 THEN DO:
            FIND InvGroup where recid(InvGroup) = rtab[FRAME-LINE] no-lock.
            siirto = string(InvGroup.InvGroup).
            LEAVE runko.
         END. /* Valinta */
         /* Ensimmainen tietue */
-        else if lookup(nap,"home,h") > 0 THEN DO:
-           FIND FIRST InvGroup WHERE InvGroup.Brand = gcBrand NO-LOCK.
+        else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
+           FIND FIRST InvGroup WHERE InvGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK.
            ylin = recid(InvGroup).
            must-print = TRUE.
            NEXT LOOP.
         END. /* Ensimmainen tietue */
 
         /* LAST record */
-        else if lookup(nap,"end,e") > 0 THEN DO :
-           FIND LAST InvGroup WHERE InvGroup.Brand = gcBrand NO-LOCK.
+        else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO :
+           FIND LAST InvGroup WHERE InvGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK.
            ylin = recid(InvGroup).
            must-print = TRUE.
            NEXT LOOP.
         END. /* LAST record */
 
-        else if nap = "8" or nap = "f8" THEN LEAVE runko. /* Paluu */
+        else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" THEN LEAVE runko. /* Paluu */
 
      END.  /* BROWSE */
    END.  /* LOOP */

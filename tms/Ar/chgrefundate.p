@@ -34,7 +34,7 @@ IF MsRequest.ReqDParam2 NE 2 THEN DO:
 END.
 
 /* has user got priviliges */
-IF fTokenRights(katun,"CCSUPER") NE "RW" THEN DO:
+IF fTokenRights(Syst.CUICommon:katun,"CCSUPER") NE "RW" THEN DO:
    MESSAGE "You are not authorized to use this function"
    VIEW-AS ALERT-BOX INFORMATION.
    RETURN.
@@ -42,7 +42,7 @@ END.
 
 ldtPaymDate = MsRequest.ReqDtParam1.
 
-ehto = 9.
+Syst.CUICommon:ehto = 9.
 RUN Syst/ufkey.p.
 
 REPEAT ON ENDKEY UNDO, LEAVE:

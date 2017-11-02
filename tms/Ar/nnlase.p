@@ -15,7 +15,7 @@
                   10.12.02 lp siirto = ?
                   15.09.03/aam brand
                   06.02.04 jp  CustNum for memo
-                  09.02.04/aam parameters from gcHelpParam
+                  09.02.04/aam parameters from Syst.CUICommon:gcHelpParam
                   14.04.04/aam index CustName replaced with CustNum 
                   18.04.06/aam use payments.p instead of nnlasu.p
                   22.03.07 kl  new param for RUN Ar/payments.p
@@ -61,43 +61,43 @@ form
     notes                                   column-label "M"
 WITH
     width 80 OVERLAY scroll 1 14 DOWN ROW 2 centered
-    COLOR value(cfc) TITLE COLOR value(ctc)
-    " INVOICES  (" + gcBrand + ") "
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
+    " INVOICES  (" + Syst.CUICommon:gcBrand + ") "
     FRAME sel.
 
 form 
     "Invoice:" lcExtInvID  FORMAT "X(12)" 
     help "Invoice number"    
-    with row 4 col 2 title color value(ctc) " FIND INVOICE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME F1.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND INVOICE "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME F1.
 
 form 
     "System Invoice:" liInvNum FORMAT ">>>>>>>9" 
     help "System invoice number"
-    with row 4 col 2 title color value(ctc) " FIND SYST INVOICE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME F2.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND SYST INVOICE "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME F2.
 
 form 
     "Customer:" liCustNum FORMAT ">>>>>>>9" 
     help "Customer number"
-    with row 4 col 2 title color value(ctc) " FIND CUSTOMER"
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME F3.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CUSTOMER"
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME F3.
 
 form 
     "Invoice Date:" ldtInvDate FORMAT "99-99-99" 
     help "Invoice date"
-    with row 4 col 2 title color value(ctc) " FIND DATE"
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME F4.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND DATE"
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME F4.
 
 {Func/brand.i}
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
-IF gcHelpParam > "" THEN DO:
-   liInvCust = INTEGER(ENTRY(1,gcHelpParam)) NO-ERROR.
-   IF NUM-ENTRIES(gcHelpParam) > 1
-   THEN llOnlyOpen = (ENTRY(2,gcHelpParam) = "TRUE"). 
+IF Syst.CUICommon:gcHelpParam > "" THEN DO:
+   liInvCust = INTEGER(ENTRY(1,Syst.CUICommon:gcHelpParam)) NO-ERROR.
+   IF NUM-ENTRIES(Syst.CUICommon:gcHelpParam) > 1
+   THEN llOnlyOpen = (ENTRY(2,Syst.CUICommon:gcHelpParam) = "TRUE"). 
 END.
 
 order = 1.
@@ -167,15 +167,15 @@ print-line:
       
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 92  ufk[2]= 1634 ufk[3]= 707 ufk[4]= 28
-         ufk[5]= 11  ufk[6]= 927 ufk[7]= 829 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ufk[1]= 92  Syst.CUICommon:ufk[2]= 1634 Syst.CUICommon:ufk[3]= 707 Syst.CUICommon:ufk[4]= 28
+         Syst.CUICommon:ufk[5]= 11  Syst.CUICommon:ufk[6]= 927 Syst.CUICommon:ufk[7]= 829 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
          IF liInvCust > 0 THEN ASSIGN 
-            ufk[1] = 0
-            ufk[2] = 0
-            ufk[3] = 0
-            ufk[4] = 0.
+            Syst.CUICommon:ufk[1] = 0
+            Syst.CUICommon:ufk[2] = 0
+            Syst.CUICommon:ufk[3] = 0
+            Syst.CUICommon:ufk[4] = 0.
 
          {Syst/uright1.i '"6,7"'}
          RUN Syst/ufkey.p.
@@ -184,35 +184,35 @@ print-line:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW Invoice.ExtInvID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Invoice.ExtInvID WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Invoice.ExtInvID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW Invoice.InvNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Invoice.InvNum WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Invoice.InvNum WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
          CHOOSE ROW Invoice.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Invoice.CustNum WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Invoice.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
          CHOOSE ROW Invoice.InvDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Invoice.InvDate WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Invoice.InvDate WITH FRAME sel.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      IF rtab[FRAME-LINE] = ? AND LOOKUP(nap,"8,F8") = 0 THEN DO:
+      IF rtab[FRAME-LINE] = ? AND LOOKUP(Syst.CUICommon:nap,"8,F8") = 0 THEN DO:
          BELL.
          message "YOU ARE ON AN EMPTY ROW, MOVE UPWARDS !".
          PAUSE 1 no-message.
          NEXT.
       END.
 
-      if nap = "cursor-right" AND liInvCust = 0 THEN DO:
+      if Syst.CUICommon:nap = "cursor-right" AND liInvCust = 0 THEN DO:
          order = order + 1.
          IF order = 5 THEN order = 1.
       END.
-      ELSE if nap = "cursor-left" AND liInvCust = 0 THEN DO:
+      ELSE if Syst.CUICommon:nap = "cursor-left" AND liInvCust = 0 THEN DO:
          order = order - 1.
          IF order = 0 THEN order = 4.
       END.
@@ -238,7 +238,7 @@ print-line:
       END.
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND Invoice where recid(Invoice) = rtab[1] no-lock.
             RUN local-find-prev.
@@ -266,7 +266,7 @@ print-line:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
 
          IF FRAME-LINE = FRAME-DOWN THEN DO:
@@ -296,7 +296,7 @@ print-line:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          
          FIND Invoice where recid(Invoice) = memory no-lock NO-ERROR.
@@ -323,7 +323,7 @@ print-line:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
 
         /* cursor TO the downmost line */
 
@@ -340,16 +340,16 @@ print-line:
         END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(nap,"1,F1") > 0 AND ufk[1] > 0 THEN DO:  
-        cfc = "puyr". RUN Syst/ufcolor.p.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,F1") > 0 AND Syst.CUICommon:ufk[1] > 0 THEN DO:  
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         lcExtInvID = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE lcExtInvID WITH FRAME F1.
         HIDE FRAME F1 no-pause.
 
         IF lcExtInvID > "" THEN DO:
            FIND FIRST Invoice where 
-                      Invoice.Brand   = gcBrand AND
+                      Invoice.Brand   = Syst.CUICommon:gcBrand AND
                       Invoice.ExtInvID >= lcExtInvID
            no-lock NO-ERROR.
 
@@ -359,10 +359,10 @@ print-line:
         END.
      END. 
 
-     ELSE IF LOOKUP(nap,"2,F2") > 0 AND ufk[2] > 0 THEN DO:  
-        cfc = "puyr". RUN Syst/ufcolor.p.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,F2") > 0 AND Syst.CUICommon:ufk[2] > 0 THEN DO:  
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         lcExtInvID = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE liInvNum WITH FRAME F2.
         HIDE FRAME F2 no-pause.
 
@@ -377,16 +377,16 @@ print-line:
         END.
      END. 
 
-     ELSE IF LOOKUP(nap,"3,F3") > 0 AND ufk[3] > 0  THEN DO:  
-        cfc = "puyr". RUN Syst/ufcolor.p.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,F3") > 0 AND Syst.CUICommon:ufk[3] > 0  THEN DO:  
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         lcExtInvID = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE liCustNum WITH FRAME F3.
         HIDE FRAME F3 no-pause.
 
         IF liCustNum > 0 THEN DO:
            FIND FIRST Invoice where 
-                      Invoice.Brand   = gcBrand AND
+                      Invoice.Brand   = Syst.CUICommon:gcBrand AND
                       Invoice.CustNum >= liCustNum
            no-lock NO-ERROR.
 
@@ -396,21 +396,21 @@ print-line:
         END.
      END. 
 
-     ELSE IF LOOKUP(nap,"4,F4") > 0 AND ufk[4] > 0 THEN DO:
-        cfc = "puyr". RUN Syst/ufcolor.p.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,F4") > 0 AND Syst.CUICommon:ufk[4] > 0 THEN DO:
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         ldtInvDate = ?.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE ldtInvDate WITH FRAME F4.
         HIDE FRAME F4 no-pause.
 
         IF ldtInvDate <> ? THEN DO:
            FIND LAST Invoice where 
-                     Invoice.Brand  = gcBrand AND
+                     Invoice.Brand  = Syst.CUICommon:gcBrand AND
                      Invoice.InvDate = ldtInvDate    
            no-lock NO-ERROR.
            IF NOT AVAILABLE Invoice THEN 
            FIND FIRST Invoice where 
-                      Invoice.Brand  = gcBrand AND
+                      Invoice.Brand  = Syst.CUICommon:gcBrand AND
                       Invoice.InvDate > ldtInvDate    
            no-lock NO-ERROR.
 
@@ -420,7 +420,7 @@ print-line:
         END.
      END. 
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANS: /* memo */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 THEN DO TRANS: /* memo */
         FIND Invoice WHERE recid(Invoice) = rtab[frame-line(sel)]
            NO-LOCK NO-ERROR.
         RUN Mc/memo.p(INPUT Invoice.CustNum,
@@ -431,7 +431,7 @@ print-line:
         NEXT.
      END.
 
-     else if lookup(nap,"f7,7") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"f7,7") > 0 THEN DO:
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE(sel)] 
            no-lock NO-ERROR.
         RUN Ar/payments.p(0,Invoice.InvNum,"").
@@ -439,14 +439,14 @@ print-line:
         NEXT.
      END.
 
-     else if lookup(nap,"enter,return,5,f5") > 0 THEN DO : /* valitaan tAmA */
+     else if lookup(Syst.CUICommon:nap,"enter,return,5,f5") > 0 THEN DO : /* valitaan tAmA */
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE(sel)] 
            no-lock NO-ERROR.
         siirto = string(Invoice.InvNum).
         LEAVE LOOP.
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
         RUN local-find-first.
         ASSIGN
         memory = recid(Invoice)
@@ -454,7 +454,7 @@ print-line:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
      
         RUN local-find-last.
         ASSIGN
@@ -463,13 +463,13 @@ print-line:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE local-disp-row:
 
@@ -497,23 +497,23 @@ PROCEDURE local-find-next:
    IF liInvCust > 0 THEN DO:
       IF NOT llOnlyOpen THEN 
       FIND NEXT Invoice USE-INDEX CustNum WHERE
-                Invoice.Brand = gcBrand AND
+                Invoice.Brand = Syst.CUICommon:gcBrand AND
                 Invoice.CustNum = liInvCust NO-LOCK NO-ERROR.
       ELSE  
       FIND NEXT Invoice USE-INDEX CustNum WHERE
-                Invoice.Brand   = gcBrand   AND
+                Invoice.Brand   = Syst.CUICommon:gcBrand   AND
                 Invoice.CustNum = liInvCust AND
                 Invoice.PaymState < 2 NO-LOCK NO-ERROR.
    END.
    ELSE DO:
       IF      order = 1 THEN FIND NEXT Invoice USE-INDEX ExtInvID WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 2 THEN FIND NEXT Invoice USE-INDEX InvNum WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 3 THEN FIND NEXT Invoice USE-INDEX CustNum WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 4 THEN FIND NEXT Invoice USE-INDEX InvDate WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    END.
    
 END PROCEDURE.
@@ -523,23 +523,23 @@ PROCEDURE local-find-prev:
    IF liInvCust > 0 THEN DO:
       IF NOT llOnlyOpen THEN 
       FIND PREV Invoice USE-INDEX CustNum WHERE
-                Invoice.Brand = gcBrand AND
+                Invoice.Brand = Syst.CUICommon:gcBrand AND
                 Invoice.CustNum = liInvCust NO-LOCK NO-ERROR.
       ELSE  
       FIND PREV Invoice USE-INDEX CustNum WHERE
-                Invoice.Brand   = gcBrand   AND
+                Invoice.Brand   = Syst.CUICommon:gcBrand   AND
                 Invoice.CustNum = liInvCust AND
                 Invoice.PaymState < 2 NO-LOCK NO-ERROR.
    END.
    ELSE DO:
       IF      order = 1 THEN FIND PREV Invoice USE-INDEX ExtInvID WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 2 THEN FIND PREV Invoice USE-INDEX InvNum WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 3 THEN FIND PREV Invoice USE-INDEX CustNum WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 4 THEN FIND PREV Invoice USE-INDEX InvDate WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    END.
    
 END PROCEDURE.
@@ -549,23 +549,23 @@ PROCEDURE local-find-first:
    IF liInvCust > 0 THEN DO:
       IF NOT llOnlyOpen THEN 
       FIND FIRST Invoice USE-INDEX CustNum WHERE
-                 Invoice.Brand = gcBrand AND
+                 Invoice.Brand = Syst.CUICommon:gcBrand AND
                  Invoice.CustNum = liInvCust NO-LOCK NO-ERROR.
       ELSE  
       FIND FIRST Invoice USE-INDEX CustNum WHERE
-                 Invoice.Brand   = gcBrand   AND
+                 Invoice.Brand   = Syst.CUICommon:gcBrand   AND
                  Invoice.CustNum = liInvCust AND
                  Invoice.PaymState < 2 NO-LOCK NO-ERROR.
    END.
    ELSE DO:
       IF      order = 1 THEN FIND FIRST Invoice USE-INDEX ExtInvID WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 2 THEN FIND FIRST Invoice USE-INDEX InvNum WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 3 THEN FIND FIRST Invoice USE-INDEX CustNum WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 4 THEN FIND FIRST Invoice USE-INDEX InvDate WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    END.
    
 END PROCEDURE.
@@ -575,22 +575,22 @@ PROCEDURE local-find-last:
    IF liInvCust > 0 THEN DO:
       IF NOT llOnlyOpen THEN 
       FIND LAST Invoice USE-INDEX CustNum WHERE
-                Invoice.Brand = gcBrand AND
+                Invoice.Brand = Syst.CUICommon:gcBrand AND
                 Invoice.CustNum = liInvCust NO-LOCK NO-ERROR.
       ELSE  
       FIND LAST Invoice USE-INDEX CustNum WHERE
-                Invoice.Brand   = gcBrand   AND
+                Invoice.Brand   = Syst.CUICommon:gcBrand   AND
                 Invoice.CustNum = liInvCust AND
                 Invoice.PaymState < 2 NO-LOCK NO-ERROR.
    END.           ELSE DO:
       IF      order = 1 THEN FIND LAST Invoice USE-INDEX ExtInvID WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 2 THEN FIND LAST Invoice USE-INDEX InvNum WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 3 THEN FIND LAST Invoice USE-INDEX CustNum WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
       ELSE IF order = 4 THEN FIND LAST Invoice USE-INDEX InvDate WHERE
-         Invoice.Brand = gcBrand NO-LOCK NO-ERROR.
+         Invoice.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    END.
    
 END PROCEDURE.

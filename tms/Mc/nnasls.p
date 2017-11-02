@@ -81,6 +81,9 @@ else             callcheck = "NO Calls SINCE " + string(cday,"99.99.99").
 x-cg-code = (if CustGroup ne "" then CustGroup else "NONE").
 
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 form header
    viiva1  AT 2 SKIP
    ynimi at 2 "SMALL CUSTOMER LIST" at 64 "Page" AT 161
@@ -88,7 +91,7 @@ form header
    SKIP
    "By " + entry(order1,jar1) + entry(order2,jar2)
    at 64 format "x(36)"
-   string(pvm,"99-99-99") TO 170 SKIP
+   string(TODAY,"99-99-99") TO 170 SKIP
 
    /* show criterias */
    "External Customer Group:" AT 6 x-cg-code SKIP
@@ -202,7 +205,7 @@ print-line:
 FOR
     EACH Customer no-lock            where
         (if CustGroup ne "" THEN can-find(CGMember where
-                                        CGMember.Brand    = gcBrand AND
+                                        CGMember.Brand    = Syst.CUICommon:gcBrand AND
                                         CGMember.CustGroup = CustGroup  AND
                                         CGMember.CustNum  = Customer.CustNum)
                           ELSE TRUE)                                         AND
@@ -230,7 +233,7 @@ by (if order2 = 1 then string(Customer.CustNum,"9999999")
 
    /* asiakasta hoitavan myyjAn nimi */
    FIND Salesman where 
-        Salesman.Brand    = gcBrand AND
+        Salesman.Brand    = Syst.CUICommon:gcBrand AND
         Salesman.Salesman = Customer.Salesman
    no-lock no-error.
    IF AVAIL Salesman THEN ASSIGN mynimi = Salesman.SmName.
@@ -238,7 +241,7 @@ by (if order2 = 1 then string(Customer.CustNum,"9999999")
 
    if Customer.Reseller ne "" THEN DO:
       FIND Reseller where 
-           Reseller.Brand    = gcBrand AND
+           Reseller.Brand    = Syst.CUICommon:gcBrand AND
            Reseller.Reseller = Customer.Reseller
       no-lock no-error.
       IF AVAIL Reseller THEN ASSIGN rsname = Reseller.RsName.

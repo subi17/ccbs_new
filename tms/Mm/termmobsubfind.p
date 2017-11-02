@@ -15,14 +15,13 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'Customer'}
 {Syst/eventval.i}
-{Func/func.p}
 
 
 DEFINE INPUT PARAMETER  icCriteria AS C NO-UNDO.
 DEFINE INPUT PARAMETER  icValue    AS C NO-UNDO.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -71,14 +70,14 @@ form
     liQty   COLUMN-LABEL "Amount Of Subscriptions"
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.CUICommon:cfc)   
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "  BILLING ITEMS MENU  "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -121,13 +120,13 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a Customer  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR Customer.CustNum
@@ -210,15 +209,15 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1] = 0  
-        ufk[2] = 2245 
-        ufk[3] = 0
-        UFK[4] = 0
-        UFK[5] = 0
-        UFK[6] = 0
-        UFK[7] = 0
-        ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ufk[1] = 0  
+        Syst.CUICommon:ufk[2] = 2245 
+        Syst.CUICommon:ufk[3] = 0
+        Syst.CUICommon:ufk[4] = 0
+        Syst.CUICommon:ufk[5] = 0
+        Syst.CUICommon:ufk[6] = 0
+        Syst.CUICommon:ufk[7] = 0
+        Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
 
       
@@ -227,21 +226,21 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW Customer.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Customer.CustNum WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Customer.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW Customer.CustName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Customer.CustName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) Customer.CustName WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -265,10 +264,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -293,7 +292,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -319,7 +318,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND Customer WHERE recid(Customer) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -343,7 +342,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -357,7 +356,7 @@ BROWSE:
        END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(nap,"2,f2") > 0 AND lcRight = "RW" THEN DO:  
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 AND lcRight = "RW" THEN DO:  
         RUN local-find-this (FALSE).
         IF icCriteria      = "ID" OR 
            icCriteria      = "AGRNAME" THEN 
@@ -369,18 +368,18 @@ BROWSE:
                               
      END.
      
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
         must-add= TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW" 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO TRANSACTION:  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        Customer.CustNum Customer.CustName .
 
        RUN local-find-NEXT.
@@ -402,7 +401,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        Customer.CustNum Customer.CustName .
        IF ok THEN DO:
 
@@ -423,25 +422,25 @@ BROWSE:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(Customer) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(Customer) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 
@@ -460,11 +459,11 @@ END PROCEDURE.
 PROCEDURE local-find-FIRST:
        
    IF order = 1 AND icCriteria = "ID" THEN FIND FIRST Customer
-       WHERE Customer.Brand = gcBrand AND 
+       WHERE Customer.Brand = Syst.CUICommon:gcBrand AND 
              Customer.OrgID = icValue NO-LOCK NO-ERROR.
    ELSE IF order = 1 AND icCriteria = "AGRNAME" THEN 
        FIND FIRST Customer  WHERE 
-                  Customer.Brand    = gcBrand                  AND 
+                  Customer.Brand    = Syst.CUICommon:gcBrand                  AND 
                   
                   IF lcSurname1 > "" THEN
                      Customer.CustName  BEGINS  lcSurname1        
@@ -487,13 +486,13 @@ PROCEDURE local-find-FIRST:
                   
                   AND
                   CAN-FIND(FIRST TermMobSub WHERE
-                                 TermMobSub.Brand = gcBrand AND   
+                                 TermMobSub.Brand = Syst.CUICommon:gcBrand AND   
                                  TermMobSub.AgrCust = Customer.Custnum)
                   
                   NO-LOCK NO-ERROR.
    ELSE IF order = 1 AND icCriteria = "USERNAME" THEN
           FIND FIRST Customer  WHERE
-                     Customer.Brand    = gcBrand               AND
+                     Customer.Brand    = Syst.CUICommon:gcBrand               AND
                      Customer.CustName  BEGINS  lcSurname1     AND
                      Customer.FirstName BEGINS  lcFirstName    AND
                      Customer.SurName2  BEGINS lcSurname2    AND
@@ -507,21 +506,21 @@ END PROCEDURE.
 PROCEDURE local-find-LAST:
 
        IF order = 1 AND icCriteria = "ID" THEN FIND LAST Customer
-              WHERE Customer.Brand = gcBrand  AND 
+              WHERE Customer.Brand = Syst.CUICommon:gcBrand  AND 
                     Customer.OrgID = icValue NO-LOCK NO-ERROR.
        ELSE IF order = 1 AND icCriteria = "AGRNAME" THEN
           FIND LAST Customer  WHERE
-                    Customer.Brand    = gcBrand             AND
+                    Customer.Brand    = Syst.CUICommon:gcBrand             AND
                     Customer.CustName  BEGINS  lcSurname1   AND
                     Customer.SurName2  BEGINS  lcSurname2        AND
                     Customer.CompanyName BEGINS lcCompany        AND
                     CAN-FIND(FIRST TermMobSub WHERE
-                                   TermMobSub.Brand = gcBrand AND 
+                                   TermMobSub.Brand = Syst.CUICommon:gcBrand AND 
                                    TermMobSub.AgrCust = Customer.Custnum)
                     NO-LOCK NO-ERROR.
        ELSE IF order = 1 AND icCriteria = "USERNAME" THEN
           FIND LAST Customer  WHERE
-                    Customer.Brand    = gcBrand             AND
+                    Customer.Brand    = Syst.CUICommon:gcBrand             AND
                     Customer.CustName    BEGINS  lcSurname1   AND
                     Customer.FirstName   BEGINS  lcFirstName  AND
                     Customer.SurName2    BEGINS  lcSurname2    AND
@@ -535,27 +534,27 @@ PROCEDURE local-find-NEXT:
 
    IF order = 1 AND icCriteria = "ID" THEN 
    FIND NEXT Customer
-       WHERE Customer.Brand = gcBrand AND 
+       WHERE Customer.Brand = Syst.CUICommon:gcBrand AND 
             Customer.OrgID = icValue NO-LOCK NO-ERROR.
    ELSE IF order = 1 AND icCriteria = "AGRNAME" THEN
    FIND NEXT Customer  WHERE
-             Customer.Brand    = gcBrand  AND
+             Customer.Brand    = Syst.CUICommon:gcBrand  AND
              Customer.CustName  BEGINS  lcSurname1  AND
              Customer.SurName2  BEGINS  lcSurname2        AND
              Customer.CompanyName BEGINS lcCompany        AND
              CAN-FIND(FIRST TermMobSub WHERE
-                            TermMobSub.Brand = gcBrand AND 
+                            TermMobSub.Brand = Syst.CUICommon:gcBrand AND 
                             TermMobSub.AgrCust = Customer.Custnum)
              NO-LOCK NO-ERROR.
    ELSE IF order = 1 AND icCriteria = "USERNAME" THEN
    FIND NEXT Customer  WHERE
-             Customer.Brand    = gcBrand            AND
+             Customer.Brand    = Syst.CUICommon:gcBrand            AND
              Customer.CustName  BEGINS  lcSurname1  AND
              Customer.FirstName BEGINS  lcFirstName AND
              Customer.SurName2  BEGINS lcSurname2   AND
              Customer.CompanyName BEGINS lcCompany  AND
              CAN-FIND(FIRST TermMobSub WHERE 
-                            TermMobSub.Brand = gcBrand AND 
+                            TermMobSub.Brand = Syst.CUICommon:gcBrand AND 
                             TermMobSub.CustNum = Customer.CustNum)
              NO-LOCK NO-ERROR.
 END PROCEDURE.
@@ -563,27 +562,27 @@ END PROCEDURE.
 PROCEDURE local-find-PREV:
 
    IF order = 1 AND icCriteria = "ID" THEN FIND PREV Customer
-      WHERE Customer.brand = gcBrand AND 
+      WHERE Customer.brand = Syst.CUICommon:gcBrand AND 
             Customer.OrgID = icValue NO-LOCK NO-ERROR.
    ELSE IF order = 1 AND icCriteria = "AGRNAME" THEN
      FIND PREV Customer  WHERE
-             Customer.Brand    = gcBrand  AND
+             Customer.Brand    = Syst.CUICommon:gcBrand  AND
              Customer.CustName  BEGINS  lcSurname1  AND
              Customer.SurName2  BEGINS  lcSurname2        AND
              Customer.CompanyName BEGINS lcCompany        AND
              CAN-FIND(FIRST TermMobSub WHERE
-                            TermMobSub.Brand = gcBrand AND
+                            TermMobSub.Brand = Syst.CUICommon:gcBrand AND
                             TermMobSub.AgrCust = Customer.Custnum)
              NO-LOCK NO-ERROR.
    ELSE IF order = 1 AND icCriteria = "USERNAME" THEN
      FIND PREV Customer  WHERE
-               Customer.Brand    = gcBrand  AND
+               Customer.Brand    = Syst.CUICommon:gcBrand  AND
                Customer.CustName    BEGINS  lcSurname1   AND
                Customer.FirstName   BEGINS  lcFirstName  AND
                Customer.SurName2    BEGINS lcSurname2    AND
                Customer.CompanyName BEGINS lcCompany     AND
                CAN-FIND(FIRST TermMobSub WHERE 
-                              TermMobSub.Brand = gcBrand AND 
+                              TermMobSub.Brand = Syst.CUICommon:gcBrand AND 
                               TermMobSub.CustNum = Customer.CustNum)
                NO-LOCK NO-ERROR.
 
@@ -594,8 +593,7 @@ PROCEDURE local-disp-row:
        CLEAR FRAME sel NO-PAUSE.
        DISPLAY 
        Customer.CustNum 
-       DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                 BUFFER Customer) @
+       Func.Common:mDispCustName(BUFFER Customer) @
                                  Customer.CustName
        Customer.OrgID
        Liqty
@@ -608,14 +606,14 @@ PROCEDURE local-find-others.
 
    if icCriteria = "ID" OR icCriteria = "AGRNAME" THEN 
    FOR EACH TermMobSub NO-LOCK WHERE
-            TermMobSub.Brand    = gcBrand    AND 
+            TermMobSub.Brand    = Syst.CUICommon:gcBrand    AND 
             TermMobSub.AgrCust  = Customer.AgrCust.
          
        liqty = liqty + 1.     
    END.
    ELSE IF LOOKUP(icCriteria,"CUSTNAME,USERNAME") > 0 THEN  
    FOR EACH TermMobSub NO-LOCK WHERE
-            TermMobSub.Brand    = gcBrand    AND
+            TermMobSub.Brand    = Syst.CUICommon:gcBrand    AND
             TermMobSub.CustNum = Customer.CustNum.
      liqty = liqty + 1.
   END.

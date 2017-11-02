@@ -33,10 +33,9 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/callquery.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Mm/active_bundle.i}
 {Func/upsellbundle.i}
@@ -149,11 +148,11 @@ tthCDR = TEMP-TABLE ttCDR:HANDLE.
 
 ASSIGN
    first_of_month = DATE(MONTH(TODAY), 1, YEAR(TODAY))
-   ldaLastDay     = fLastDayOfMonth(TODAY)
+   ldaLastDay     = Func.Common:mLastDayOfMonth(TODAY)
    liPeriod       = YEAR(TODAY) * 100 + MONTH(TODAY)
-   ldPeriodFrom   = fMake2Dt(first_of_month,0)
-   ldPeriodTo     = fMake2Dt(ldaLastDay,86399)
-   ldeCurrentTS   = fMakeTS()
+   ldPeriodFrom   = Func.Common:mMake2DT(first_of_month,0)
+   ldPeriodTo     = Func.Common:mMake2DT(ldaLastDay,86399)
+   ldeCurrentTS   = Func.Common:mMakeTS()
    liDayPeriod    = YEAR(TODAY) * 10000 + MONTH(TODAY) * 100 + DAY(TODAY).
 
 first_level_struct = add_struct(response_toplevel_id, "").
@@ -167,13 +166,13 @@ IF LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 THEN DO:
              MServiceLimit.SLSeq = ServiceLimit.SLSeq AND
              MServiceLimit.EndTS >= ldeCurrentTS NO-LOCK:
 
-         fSplitTS(MServiceLimit.FromTS,OUTPUT ldaActDate, OUTPUT liTime).
+         Func.Common:mSplitTS(MServiceLimit.FromTS,OUTPUT ldaActDate, OUTPUT liTime).
                   
          IF ldaActDate >= DATE(MONTH(TODAY),1,YEAR(TODAY)) THEN
             ldaPrepRenewal = ldaActDate.
          ELSE DO:
          
-            IF TODAY EQ fLastDayOfMonth(TODAY) AND
+            IF TODAY EQ Func.Common:mLastDayOfMonth(TODAY) AND
                DAY(ldaActDate) >= DAY(TODAY) THEN ldaPrepRenewal = TODAY.
             ELSE IF DAY(ldaActDate) > DAY(TODAY)THEN DO:
                ldaPrepRenewal = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1.
@@ -194,14 +193,14 @@ IF LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 THEN DO:
                
                FIND FIRST MsRequest NO-LOCK USE-INDEX MsActStamp WHERE
                           MsRequest.MsSeq = MobSub.MsSeq AND
-                          MsRequest.ActStamp >= fHMS2TS(ldaPrepRenewal,"00:00:00") AND
-                          MsRequest.ActStamp <= fHMS2TS(ldaPrepRenewal,"23:59:59") AND
+                          MsRequest.ActStamp >= Func.Common:mHMS2TS(ldaPrepRenewal,"00:00:00") AND
+                          MsRequest.ActStamp <= Func.Common:mHMS2TS(ldaPrepRenewal,"23:59:59") AND
                           MsRequest.ReqType = {&REQTYPE_SERVICE_CHANGE} AND
                           MsRequest.ReqStatus <= {&REQUEST_STATUS_DONE} AND
                           MsRequest.ReqCParam2 = "LADEL1_PRE_PLUS_RESET"
                           NO-ERROR.
                IF AVAIL MsRequest THEN DO:
-                  fSplitTS(MsRequest.ActStamp,OUTPUT ldaRstDate, OUTPUT liRstTime).
+                  Func.Common:mSplitTS(MsRequest.ActStamp,OUTPUT ldaRstDate, OUTPUT liRstTime).
                   liPrepRenewal = liRstTime.
                END.
             END.
@@ -257,13 +256,13 @@ IF NOT MobSub.PayType THEN DO:
               MsOwner.CLIEvent BEGINS "iS" NO-LOCK NO-ERROR.
    IF AVAIL MSOwner AND MsOwner.TsBeg >= ldPeriodFrom AND
       MsOwner.TsBeg <= ldPeriodTo THEN DO:
-      fSplitTS(MsOwner.TsBeg,OUTPUT ldaiSTCDate,OUTPUT liiSTCTime).
+      Func.Common:mSplitTS(MsOwner.TsBeg,OUTPUT ldaiSTCDate,OUTPUT liiSTCTime).
       lliSTC = TRUE.
    END.
 END.
 
 fMobCDRCollect(INPUT TRIM(STRING(MobSub.PayType,"pre/post")),
-               INPUT gcBrand,
+               INPUT Syst.CUICommon:gcBrand,
                INPUT "rpc",
                INPUT ldaCDRCollectFrom,
                INPUT TODAY,
@@ -352,7 +351,7 @@ ELSE ASSIGN
 /* yoigo-yoigo counter */
 IF MobSub.CLIType EQ "CONT" THEN DO:
    FIND FIRST DCCli NO-LOCK WHERE
-              DCCli.Brand = gcBrand AND
+              DCCli.Brand = Syst.CUICommon:gcBrand AND
               DCCli.dcevent = "YOIGOYOIGO" AND
               DCCli.msseq = mobsub.msseq AND
               DCCli.validto >= TODAY NO-ERROR.
@@ -424,7 +423,7 @@ IF NOT MobSub.PayType THEN DO:
    /* Check if there is any active DSS upsell */
    IF llDSSActive THEN
    FOR FIRST DayCampaign NO-LOCK WHERE
-             DayCampaign.Brand = gcBrand AND
+             DayCampaign.Brand = Syst.CUICommon:gcBrand AND
              DayCampaign.DCEvent = lcDSSBundleId:
       
       DO liLoop = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell):
@@ -510,7 +509,7 @@ DO liLoop = 1 TO 5:
       FIRST ServiceLimit NO-LOCK WHERE
             ServiceLimit.SLSeq = MServiceLimit.SLSeq,
       FIRST DayCampaign WHERE
-            DayCampaign.Brand = gcBrand AND
+            DayCampaign.Brand = Syst.CUICommon:gcBrand AND
             DayCampaign.DCEvent = ServiceLimit.GroupCode NO-LOCK:
 
       IF LOOKUP(STRING(DayCampaign.DCType),
@@ -754,6 +753,5 @@ FINALLY:
    EMPTY TEMP-TABLE ttCDR.
    EMPTY TEMP-TABLE ttMsOwner.
    IF VALID-HANDLE(tthCDR) THEN DELETE OBJECT tthCDR NO-ERROR.
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.
 

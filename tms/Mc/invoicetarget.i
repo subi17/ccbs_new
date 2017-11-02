@@ -12,7 +12,6 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Syst/eventval.i}
@@ -22,7 +21,7 @@ DEFINE VARIABLE lcInvoiceTargetMode AS CHARACTER NO-UNDO.
 
 IF llDoEvent THEN DO:
 
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    
    {Func/lib/eventlog.i}
    {Func/create_eventlog.i}
@@ -50,7 +49,7 @@ FUNCTION fAddInvoiceTargetGroup RETURNS INT
    liITGroupId = NEXT-VALUE(ITGroupID).
 
    CREATE bInvoiceTargetGroup.
-   ASSIGN bInvoiceTargetGroup.Brand = gcBrand
+   ASSIGN bInvoiceTargetGroup.Brand = Syst.CUICommon:gcBrand
           bInvoiceTargetGroup.ITGroupId = liITGroupId
           bInvoiceTargetGroup.AgrCust = bCustomer.AgrCust
           bInvoiceTargetGroup.CustNum = bCustomer.CustNum 
@@ -60,7 +59,7 @@ FUNCTION fAddInvoiceTargetGroup RETURNS INT
       
    IF llDoEvent THEN fMakeCreateEvent((BUFFER bInvoiceTargetGroup:HANDLE),
                                       "",
-                                      katun,
+                                      Syst.CUICommon:katun,
                                       "").
 
    RELEASE bInvoiceTargetGroup.
@@ -68,9 +67,9 @@ FUNCTION fAddInvoiceTargetGroup RETURNS INT
    /* Send validation email to customer */
    IF iiDelType = {&INV_DEL_TYPE_FUSION_EMAIL_PENDING} AND
       NOT fPendingEmailActRequest(INPUT bCustomer.Custnum) THEN
-      fEmailInvoiceRequest(INPUT fMakeTS(),
+      fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                            INPUT TODAY,
-                           INPUT katun,
+                           INPUT Syst.CUICommon:katun,
                            INPUT 0, /* msseq */
                            INPUT "", /* cli */
                            INPUT bCustomer.CustNum,
@@ -342,7 +341,7 @@ FUNCTION _fAddInvoiceTarget RETURNS INT
    
    IF llDoEvent THEN fMakeCreateEvent((BUFFER bInvoiceTarget:HANDLE),
                                       "",
-                                      katun,
+                                      Syst.CUICommon:katun,
                                       "").
    
    RELEASE bInvoiceTarget.
@@ -710,7 +709,7 @@ FUNCTION fSTCInvoiceTarget RETURNS LOGICAL
    END.
 
    IF CAN-FIND(FIRST CLIType WHERE
-                     CLIType.Brand = gcBrand AND
+                     CLIType.Brand = Syst.CUICommon:gcBrand AND
                      CLIType.CLIType = icNewCLIType AND
                      CLIType.PayType = {&CLITYPE_PAYTYPE_PREPAID} )
       THEN RETURN TRUE. 
@@ -773,7 +772,7 @@ FUNCTION fGetCustomerCurrentGrouping RETURNS CHAR
    DEF VAR lcInvoiceTarget AS CHAR NO-UNDO. 
    
    FOR EACH InvoiceTargetGroup NO-LOCK WHERE
-            InvoiceTargetGroup.Brand   = gcBrand AND
+            InvoiceTargetGroup.Brand   = Syst.CUICommon:gcBrand AND
             InvoiceTargetGroup.CustNum = iiCustNum AND
             InvoiceTargetGroup.ToDate >= TODAY:
      
@@ -838,7 +837,7 @@ FUNCTION fGroupAllInvoiceTargets RETURNS LOG
 
    DO TRANS:
    FOR EACH InvoiceTargetGroup NO-LOCK WHERE
-            InvoiceTargetGroup.Brand   = gcBrand AND
+            InvoiceTargetGroup.Brand   = Syst.CUICommon:gcBrand AND
             InvoiceTargetGroup.CustNum = iiCustNum AND
             InvoiceTargetGroup.ToDate >= TODAY AND
             InvoiceTargetGroup.ITGroup NE liDefaultITGroup:

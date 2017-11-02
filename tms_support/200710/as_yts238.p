@@ -1,7 +1,7 @@
 {roamtariff.i}
 
 {Syst/testpaa.i}
-katun = "anttis".
+Syst.CUICommon:katun = "anttis".
 
 def stream sread.
 input stream sread from /apps/snet/200710/YTS-238.txt.

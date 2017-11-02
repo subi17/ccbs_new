@@ -11,9 +11,7 @@
 ---------------------------------------------------------------------- */
 {Syst/commali.i}
 {Syst/tmsconst.i}
-{Func/date.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/fcreatereq.i}
 {Func/msreqfunc.i}
 {Func/fgettxt.i}
@@ -34,12 +32,12 @@ FUNCTION fPendingFusionEmailRequest RETURNS LOGICAL
    DEF VAR ldeNextMonth AS DEC NO-UNDO. 
    DEF VAR ldeCurrentMonth AS DEC NO-UNDO. 
    
-   ldaNextMonth = fLastDayOfMonth(idaPeriod) + 1.
-   ASSIGN ldeCurrentMonth = fMake2Dt(idaPeriod,0)
-          ldeNextMonth = fMake2Dt(ldaNextMonth,0).
+   ldaNextMonth = Func.Common:mLastDayOfMonth(idaPeriod) + 1.
+   ASSIGN ldeCurrentMonth = Func.Common:mMake2DT(idaPeriod,0)
+          ldeNextMonth = Func.Common:mMake2DT(ldaNextMonth,0).
 
    RETURN CAN-FIND(FIRST MsRequest NO-LOCK WHERE
-                         MsRequest.Brand    = gcBrand AND
+                         MsRequest.Brand    = Syst.CUICommon:gcBrand AND
                          MsRequest.ReqType  = {&REQTYPE_FUSION_EMAIL} AND
                          MsRequest.ActStamp > ldeCurrentMonth AND
                          MsRequest.ActStamp < ldeNextMonth AND
@@ -56,7 +54,7 @@ FUNCTION fFusionEmailValidate RETURNS LOGICAL(INPUT idaPeriod AS DATE,
    DEF VAR ldeNextMonth AS DEC NO-UNDO. 
 
    IF NOT CAN-FIND(FIRST ActionLog NO-LOCK WHERE
-                         ActionLog.Brand    = gcBrand AND
+                         ActionLog.Brand    = Syst.CUICommon:gcBrand AND
                          ActionLog.ActionID = "TELEFONICA" AND
                          ActionLog.ActionPeriod = YEAR(idaPeriod) * 100 +
                                                   MONTH(idaPeriod) AND
@@ -79,7 +77,7 @@ FUNCTION fFusionEmailRequest RETURNS INTEGER
    DEF VAR ldaPeriod AS DATE NO-UNDO. 
    DEF VAR liTime AS INT NO-UNDO. 
 
-   fSplitTS(idactstamp, OUTPUT ldaPeriod, OUTPUT liTime).
+   Func.Common:mSplitTS(idactstamp, OUTPUT ldaPeriod, OUTPUT liTime).
    ldaPeriod = DATE(MONTH(ldaPeriod),1,YEAR(ldaPeriod)).
 
    IF NOT fFusionEmailValidate(ldaPeriod,

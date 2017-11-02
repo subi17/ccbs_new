@@ -9,9 +9,8 @@
 &GLOBAL-DEFINE MailTitleSpaces Allow
 
 {Syst/commpaa.i}
-gcBrand = "1".
-Katun = "Qvantel".
-{Func/timestamp.i}
+Syst.CUICommon:gcBrand = "1".
+Syst.CUICommon:katun = "Qvantel".
 {Func/cparam2.i}
 {Func/email.i}
 {Syst/tmsconst.i}
@@ -23,7 +22,7 @@ DEF VAR lcEmailText   AS CHAR NO-UNDO.
 liPeriod = YEAR(TODAY) * 100 + MONTH(TODAY).
 
 FIND FIRST ActionLog WHERE
-           ActionLog.Brand        = gcBrand        AND
+           ActionLog.Brand        = Syst.CUICommon:gcBrand        AND
            ActionLog.ActionID     = "TELEFONICA"   AND
            ActionLog.ActionPeriod = liPeriod NO-LOCK NO-ERROR.
 IF AVAIL ActionLog THEN RETURN.
@@ -31,7 +30,7 @@ IF AVAIL ActionLog THEN RETURN.
 lcAddrConfDir = fCParamC("RepConfDir").
 
 lcEmailText = "Telefonica file has not been arrived for billing period " +
-              STRING(liPeriod) + " in TMS till now " + fTS2HMS(fMakeTS()) +
+              STRING(liPeriod) + " in TMS till now " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) +
               " .".
 
 /* Send an email to configure list*/

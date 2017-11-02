@@ -14,7 +14,6 @@
 &GLOBAL-DEFINE MNP_I YES
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/fgettxt.i}
 {Syst/tmsconst.i}
 {Func/fixedlinefunc.i}
@@ -30,7 +29,7 @@ DEF VAR lIniSeconds     AS INTEGER   NO-UNDO.
 DEF VAR lEndSeconds     AS INTEGER   NO-UNDO.
 DEF VAR ldsendingstamp  AS DECIMAL   NO-UNDO.
 
-   fSplitTS(ideActTS,ldaButtonDate,liButtonSeconds).   
+   Func.Common:mSplitTS(ideActTS,ldaButtonDate,liButtonSeconds).   
    ldsendingstamp = ideActTS.
    
    /* ie. "41400-63000" Send between 11:30-17:30 YDR-2594 */
@@ -42,13 +41,13 @@ DEF VAR ldsendingstamp  AS DECIMAL   NO-UNDO.
    IF (liButtonSeconds > lEndSeconds) THEN
    DO:
       ldaButtonDate = ADD-INTERVAL (ldaButtonDate, 1, "days").
-      ldsendingstamp = fHMS2TS(ldaButtonDate, STRING(lIniSeconds,"hh:mm:ss")) .
+      ldsendingstamp = Func.Common:mHMS2TS(ldaButtonDate, STRING(lIniSeconds,"hh:mm:ss")) .
    END.
 
    /* If is too early, schedule to start when window opens */
    IF (liButtonSeconds < lIniSeconds) THEN
    DO:
-      ldsendingstamp = fHMS2TS(ldaButtonDate, STRING(lIniSeconds,"hh:mm:ss")) .
+      ldsendingstamp = Func.Common:mHMS2TS(ldaButtonDate, STRING(lIniSeconds,"hh:mm:ss")) .
    END.
    RETURN ldsendingstamp.
    
@@ -109,7 +108,7 @@ FUNCTION fMNPCallAlarm RETURNS LOGICAL
 
    IF NOT lcAlarmMess > "" THEN RETURN FALSE.
    
-   fSplitTS(pdeActTS,ldaDate,liTime).
+   Func.Common:mSplitTS(pdeActTS,ldaDate,liTime).
             
    CASE pcAction:
       WHEN "MNPConfTime" THEN DO:
@@ -140,7 +139,7 @@ FUNCTION fMNPCallAlarm RETURNS LOGICAL
            "MNPFinRemDirect" THEN DO:
          ASSIGN
             ldaDate     = ldaDate - 1
-            ldeActStamp = fHMS2TS(ldaDate,"09:00:00").
+            ldeActStamp = Func.Common:mHMS2TS(ldaDate,"09:00:00").
       END.
       WHEN "MNPCancelRetention" OR WHEN
            "MNPCancelRetentionOnHold" THEN DO:
@@ -163,7 +162,7 @@ FUNCTION fMNPCallAlarm RETURNS LOGICAL
       CallAlarm.Limit      = 0
       CallAlarm.CreditType = 12
       CallAlarm.Orig       = pcSender
-      CallAlarm.Brand      = gcBrand.
+      CallAlarm.Brand      = Syst.CUICommon:gcBrand.
       
    RELEASE CallAlarm.
 
@@ -179,7 +178,7 @@ FUNCTION fMNPMessage RETURNS LOGICAL
    CREATE MNPMessage.
 
    ASSIGN
-      MNPMessage.CreatedTS   = fMakeTS()
+      MNPMessage.CreatedTS   = Func.Common:mMakeTS()
       MNPMessage.MNPSeq      = piMNPSeq
       MNPMessage.Sender      = 1
       MNPMessage.XMLMessage  = pcXML
@@ -307,7 +306,7 @@ FUNCTION fMNPCreatedTS RETURNS DECIMAL
    DEF VAR ldtNewDate AS DATE NO-UNDO.
    DEF VAR liNewTime  AS INT  NO-UNDO.
       
-   ldNewFrom = fMakeTS().
+   ldNewFrom = Func.Common:mMakeTS().
 
    /* make sure that there is atleast 1 second gap between rows */
    REPEAT:
@@ -323,14 +322,14 @@ FUNCTION fMNPCreatedTS RETURNS DECIMAL
                          MNPMessage.CreatedTS = ldNewFrom)
          THEN LEAVE.
       END.
-      fSplitTS(ldNewFrom,
+      Func.Common:mSplitTS(ldNewFrom,
                OUTPUT ldtNewDate,
                OUTPUT liNewTime).
       IF liNewTime >= 86400 THEN ASSIGN
          ldtNewDate = ldtNewDate + 1
          liNewTime  = 1.
       ELSE liNewTime = liNewTime + 1.
-      ldNewFrom = fMake2Dt(ldtNewDate,liNewTime).
+      ldNewFrom = Func.Common:mMake2DT(ldtNewDate,liNewTime).
    END.
 
    RETURN ldNewFrom.
@@ -353,12 +352,12 @@ FUNCTION fMNPPeriods RETURNS INT
 
    liPeriods = 0.
 
-   fSplitTS(
+   Func.Common:mSplitTS(
    input ideTimeTo,
    output ldaNowDate,
    output ldeNowTime).
 
-   fSplitTS(
+   Func.Common:mSplitTS(
       input ideTimeFrom,
       output ldaDate,
       output ldeTime).
@@ -423,7 +422,7 @@ FUNCTION fCalculateDueDate RETURNS DECIMAL
 
    IF iiperiods <= 0 THEN RETURN 0.
 
-   fSplitTS(
+   Func.Common:mSplitTS(
       input idePortingTime,
       output ldaPortingDate,
       output liPortingTime).
@@ -449,7 +448,7 @@ FUNCTION fCalculateDueDate RETURNS DECIMAL
 
    END.
    
-   RETURN fMake2Dt(ldaDueDate,liEndTime).
+   RETURN Func.Common:mMake2DT(ldaDueDate,liEndTime).
 
 END FUNCTION.
 
@@ -618,7 +617,7 @@ FUNCTION fMNPChangeWindowDate RETURNS DATE (
 
    liMinPeriodSum  = fGetMinMNPWindow().
 
-   fSplitTS(ideOrderStamp, OUTPUT ldaOrderDate, OUTPUT liOrderTime).
+   Func.Common:mSplitTS(ideOrderStamp, OUTPUT ldaOrderDate, OUTPUT liOrderTime).
 
    IF liPeriods < liMinPeriodSum THEN
       liPeriods = liMinPeriodSum. 
@@ -756,7 +755,7 @@ FUNCTION fIsNCTime RETURNS LOGICAL:
    
    DEFINE VARIABLE ldeNow AS DECIMAL NO-UNDO. 
    ASSIGN
-      ldeNow = fMakeTS()
+      ldeNow = Func.Common:mMakeTS()
       ldeNow = ldeNow - INT(ldeNow - 0.4).
 
    /* outside 8:10 - 19:50, inside 14:00 - 14:15, weekend or holiday */ 
@@ -771,7 +770,7 @@ FUNCTION fIsNCSendTime RETURNS LOGICAL:
    
    DEFINE VARIABLE ldeNow AS DECIMAL NO-UNDO. 
    ASSIGN
-      ldeNow = fMakeTS()
+      ldeNow = Func.Common:mMakeTS()
       ldeNow = ldeNow - INT(ldeNow - 0.4).
 
    /* inside 14:00 - 14:15 */ 
@@ -815,7 +814,7 @@ FUNCTION fRetention RETURNS LOGICAL
          RUN Mc/orderinctrl.p(bOrder.OrderId, 0, TRUE).
       ELSE DO:
          FIND FIRST OrderCustomer WHERE
-                    OrderCustomer.Brand   = gcBrand AND
+                    OrderCustomer.Brand   = Syst.CUICommon:gcBrand AND
                     OrderCustomer.OrderId = bOrder.OrderId AND
                     OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
          IF AVAIL OrderCustomer THEN DO:
@@ -843,7 +842,7 @@ FUNCTION fRetention RETURNS LOGICAL
       END. /*Convergent*/
       IF lcMNPSMSText > "" THEN DO:
             fMNPCallAlarm(lcMNPSMSText,
-                          fMakeTS(),
+                          Func.Common:mMakeTS(),
                           icFormRequest,
                           icCLI,
                           iiCustnum,

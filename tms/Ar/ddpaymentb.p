@@ -11,12 +11,11 @@
 
 {Syst/commpaa.i}
 
-ASSIGN gcBrand = "1" 
-       katun   = "ddpaym".
+ASSIGN Syst.CUICommon:gcBrand = "1" 
+       Syst.CUICommon:katun   = "ddpaym".
        
 {Func/cparam2.i}
 {Syst/eventlog.i}
-{Func/timestamp.i}
 
 DEF VAR liCount    AS INT  NO-UNDO.
 DEF VAR lcError    AS CHAR NO-UNDO.
@@ -41,7 +40,7 @@ RUN Ar/ddpaymentco.p ("",                   /* InvGroup  */
 IF NOT (liCount = 0 AND lcError BEGINS "INFO") THEN DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = gcBrand   
+      ActionLog.Brand        = Syst.CUICommon:gcBrand   
       ActionLog.TableName    = "Cron"  
       ActionLog.KeyValue     = "" 
       ActionLog.ActionID     = "DDPayment"
@@ -50,7 +49,7 @@ IF NOT (liCount = 0 AND lcError BEGINS "INFO") THEN DO TRANS:
       ActionLog.ActionDec    = liCount
       ActionLog.ActionChar   = lcError
       ActionLog.ActionStatus = 3.
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
 END.
 
 fELog("DDPAYM","Stopped:" + STRING(liCount) +

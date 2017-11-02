@@ -26,7 +26,6 @@
   ---------------------------------------------------------------------- */
  
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/sog.i}
 {Func/fctserval.i}
 {Func/cparam2.i}
@@ -92,7 +91,7 @@ FUNCTION fCreateMs RETURNS LOGICAL
 
    /* SIM batch  (Here we get the ADKEY #) */ 
    FIND FIRST SimBatch WHERE  
-              SimBatch.Brand    = gcBrand AND  
+              SimBatch.Brand    = Syst.CUICommon:gcBrand AND  
               SimBatch.SimBatch = sim.SimBatch  
    NO-LOCK NO-ERROR.
             
@@ -146,10 +145,10 @@ FUNCTION fCreateMs RETURNS LOGICAL
           ASSIGN xTime         = TRUNC(MSISDN.PortingTime,0) * 3600 +
                                  integer(substring(
                                  string(msisdn.PortingTime,"99.99"),4)) * 60
-                 ldTimeSlotTMS = fMake2Dt(msisdn.PortingDate,xTime).
+                 ldTimeSlotTMS = Func.Common:mMake2DT(msisdn.PortingDate,xTime).
 
        END.
-       ELSE ASSIGN ldTimeSlotTMS = fMake2Dt(adate,0).              
+       ELSE ASSIGN ldTimeSlotTMS = Func.Common:mMake2DT(adate,0).              
    END.
    
    /******************************* 
@@ -162,7 +161,7 @@ FUNCTION fCreateMs RETURNS LOGICAL
    FOR EACH subser NO-LOCK WHERE
             subser.MsSeq = piMsSeq, 
       FIRST ServCom NO-LOCK WHERE  
-            ServCom.Brand   = gcBrand           AND  
+            ServCom.Brand   = Syst.CUICommon:gcBrand           AND  
             ServCom.ServCom = subser.Servcom    AND  
             ServCom.ActType  = 0 
    BREAK BY SubSer.ServCom
@@ -181,7 +180,7 @@ FUNCTION fCreateMs RETURNS LOGICAL
          THEN lcServPac = CTServEl.ServPac.
          ELSE 
          FOR FIRST ServEl NO-LOCK WHERE
-                   ServEl.Brand   = gcBrand AND
+                   ServEl.Brand   = Syst.CUICommon:gcBrand AND
                    ServEl.ServCom = SubSer.ServCom:
             lcServPac = ServEl.ServPac.
          END.
@@ -235,7 +234,7 @@ FUNCTION fCreateMs RETURNS LOGICAL
             SubSer.ServCom = SubSerPara.ServCom AND
             SubSer.SSStat  = 1,
       FIRST ServCom NO-LOCK WHERE
-            ServCom.Brand   = gcBrand AND
+            ServCom.Brand   = Syst.CUICommon:gcBrand AND
             ServCom.ServCom = SubSerPara.ServCom
    BREAK BY SubSerPara.ServCom
          BY SubSerPara.ParaName
@@ -303,7 +302,7 @@ FUNCTION fCreateMs RETURNS LOGICAL
       /* remove last comma */
       SUBSTR(ttSolog.CommLine,length(ttSolog.CommLine)) = " ".
  
-      ldTime = fMakeTS().
+      ldTime = Func.Common:mMakeTS().
    
       REPEAT:
          /* make sure that there is atleast 1 second gap between sologs */
@@ -325,7 +324,7 @@ FUNCTION fCreateMs RETURNS LOGICAL
          Solog.CLI          = MobSub.CLI     /* MSISDN                  */
          Solog.Stat         = 0              /* just created             */
          Solog.Brand        = MobSub.Brand  
-         Solog.Users        = katun 
+         Solog.Users        = Syst.CUICommon:katun 
          Solog.TimeSlotTMS  = ldTimeSlotTMS 
          Solog.CreatedTS    = ldTime         /* Created NOW         */
          Solog.ActivationTS = ldTime.        /* Activate NOW         */
@@ -348,7 +347,7 @@ FUNCTION fCreateMs RETURNS LOGICAL
    FIRST Solog EXCLUSIVE-LOCK WHERE
          Solog.Solog = ttSolog.Solog:
    
-      IF Solog.TimeSlotTMS = 0 THEN Solog.TimeSlotTMS = fMakeTS().
+      IF Solog.TimeSlotTMS = 0 THEN Solog.TimeSlotTMS = Func.Common:mMakeTS().
       
       IF Solog.TimeSlotTMS = 0 THEN DO:
          IF NOT batch THEN MESSAGE 
@@ -364,7 +363,7 @@ FUNCTION fCreateMs RETURNS LOGICAL
             "Service Order request #" string(Solog.Solog) 
             "has been saved to the system."                             SKIP(1)
             "This activation request is scheduled and will be sent to " SKIP
-            "activation server " fTS2HMS(Solog.TimeSlotTMS) "."
+            "activation server " Func.Common:mTS2HMS(Solog.TimeSlotTMS) "."
          VIEW-AS ALERT-BOX TITLE "Service Order Request".  
       END.
    END.

@@ -1,6 +1,5 @@
 {Syst/testpaa.i}
-{Func/timestamp.i}
-katun = "ari".
+Syst.CUICommon:katun = "ari".
 
 def var i as int no-undo.
 def var j as int no-undo.
@@ -25,7 +24,7 @@ lcmemo =
    "update due to Yoigo's CONTRATO1 tariff plan change 1st of March 2008.".
 
 assign
-   ldcurrent = fmakets()
+   ldcurrent = Func.Common:mMakeTS()
    lcevent   = "YOIGOYOIGO".
 
 
@@ -34,12 +33,12 @@ function fwritememo returns logic
     iicust  as int):
     
    CREATE Memo.
-   ASSIGN Memo.Brand     = gcBrand
+   ASSIGN Memo.Brand     = Syst.CUICommon:gcBrand
           Memo.HostTable = "MobSub"
           Memo.KeyValue  = STRING(iiMsSeq)
           Memo.CustNum   = iiCust
           Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-          Memo.CreUser   = katun 
+          Memo.CreUser   = Syst.CUICommon:katun 
           Memo.MemoTitle = lcEvent
           Memo.MemoText  = lcMemo
           Memo.CreStamp  = ldCurrent.
@@ -64,7 +63,7 @@ for each mobsub no-lock where
    by msowner.tsend desc:
       
       if msowner.clitype ne mobsub.clitype then do:
-         fsplitts(msowner.tsend,
+         Func.Common:mSplitTS(msowner.tsend,
                   output ldtbeg,
                   output litime).
          leave.         

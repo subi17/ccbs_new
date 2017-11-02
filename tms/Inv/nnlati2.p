@@ -41,6 +41,9 @@ DEF WORKFILE wcountry
    FIELD wnet   AS DE
    FIELD wdiscount   AS DE.
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 form
      skip(1)
      "  Note:  This program prints out a summary with Billed amounts  "
@@ -61,19 +64,18 @@ form
      "-"
      sm-code2 NO-LABEL 
      HELP "Salesman to" skip(5)
-
 WITH
-   width 80 COLOR value(cfc)
-   title color value(ctc) " " + ynimi +
+   width 80 COLOR value(Syst.CUICommon:cfc)
+   title color value(Syst.CUICommon:ctc) " " + ynimi +
    " BILLING BY SALESMAN/CUSTOMER/COUNTRY(Service) " +
-   string(pvm,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
+   string(TODAY,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
 
 form header
 
    fill("=",114) format "x(114)" SKIP
    ynimi at 2 format "x(25)" "BILLING STATISTICS BY" at 40 date1 "-" date2
    "Page" at 105 sl format "ZZZZ9" SKIP
-   "SALESMAN / CUSTOMER / Country "  at 40 string(pvm,"99-99-99") AT 107 SKIP
+   "SALESMAN / CUSTOMER / Country "  at 40 string(TODAY,"99-99-99") AT 107 SKIP
    fill("=",114) format "x(114)" skip(1)
    "CustNo" at 4 "Customer's Name" at 11 "Billed (ex VATAmt)" TO 57
    space(1) "Disc% used" SKIP
@@ -81,15 +83,15 @@ form header
    WITH width 114 NO-LABEL no-box FRAME sivuotsi.
 
 /* Haetaan pvm-ehdotus ensin viim. laskuttamattom., sitten viim. laskutetusta */
-ASSIGN date1  = pvm.
+ASSIGN date1  = TODAY.
 FIND FIRST Invoice no-lock no-error.
 IF AVAIL Invoice THEN ASSIGN date1 = Invoice.InvDate.
 date2 = date1.
 
-cfc = "sel". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
 LOOP:
 repeat WITH FRAME rajat:
-    ehto = 9. RUN Syst/ufkey.p.
+    Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
     UPDATE
 
@@ -103,11 +105,11 @@ repeat WITH FRAME rajat:
 
 TOIMI:
    repeat:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT LOOP.
-      IF toimi = 8 THEN LEAVE LOOP.
-      IF toimi = 5 THEN LEAVE TOIMI.
+      IF Syst.CUICommon:toimi = 1 THEN NEXT LOOP.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE LOOP.
+      IF Syst.CUICommon:toimi = 5 THEN LEAVE TOIMI.
    END.
 
 

@@ -9,10 +9,9 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/terminal_financing.i}
-{Func/timestamp.i}
 
 DEFINE VARIABLE pcTenant    AS CHARACTER NO-UNDO.
 DEFINE VARIABLE pcUsername  AS CHARACTER NO-UNDO. 
@@ -36,16 +35,16 @@ IF TRIM(pcUsername) EQ "" THEN RETURN appl_err("username is empty").
 
 {newton/src/settenant.i pcTenant}
 
-katun = "VISTA_" + pcUserName.
+Syst.CUICommon:katun = "VISTA_" + pcUserName.
 
 IF LOOKUP(pcBankCode,{&TF_BANK_CODES}) EQ 0 THEN
    RETURN appl_err(SUBST("Incorrect bank code: &1", pcBankCode)).
 
 /* Checking if files are sent to certain bank at this month already.
    In case yes, exception is returned. */
-fMonthlyStamps(TODAY, ldeMonthBeg, ldeMonthEnd).
+Func.Common:mMonthlyStamps(TODAY, ldeMonthBeg, ldeMonthEnd).
 IF CAN-FIND( FIRST MsRequest NO-LOCK WHERE
-         MsRequest.Brand = gcBrand AND
+         MsRequest.Brand = Syst.CUICommon:gcBrand AND
          MsRequest.ReqType = {&REQTYPE_TERMINAL_FINANCE_CAN_TER_BANK_FILE} AND
          MsRequest.ReqStatus = {&REQUEST_STATUS_DONE} AND
          MsRequest.ActStamp >= ldeMonthBeg AND
@@ -65,5 +64,4 @@ IF liRequestID = 0 THEN RETURN appl_err(lcError).
 add_boolean(response_toplevel_id,?,TRUE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

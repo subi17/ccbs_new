@@ -47,7 +47,7 @@ FORM
         HELP "Events of one rule, or all = 0 (empty)"
         VALIDATE(INPUT liCoRuleID = 0 OR 
                  CAN-FIND(CoRule WHERE 
-                          CoRule.Brand    = gcBrand AND
+                          CoRule.Brand    = Syst.CUICommon:gcBrand AND
                           CORule.CoRuleID = INPUT liCoRuleID),
                  "Unknown rule")
         FORMAT ">>>>>>>>"
@@ -117,16 +117,16 @@ FORM
    SKIP(2)
 
    WITH ROW 1 SIDE-LABELS WIDTH 80
-        TITLE " " + ynimi + " COMMISSION REPORT " +
-        STRING(pvm,"99-99-99") + " "
+        TITLE " " + Syst.CUICommon:ynimi + " COMMISSION REPORT " +
+        STRING(TODAY,"99-99-99") + " "
         FRAME valinta.
 
 VIEW FRAME valinta.
 PAUSE 0 NO-MESSAGE.
 
-FIND LAST Reseller WHERE Reseller.Brand = gcBrand NO-LOCK NO-ERROR.
+FIND LAST Reseller WHERE Reseller.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 IF AVAILABLE Reseller THEN ASSIGN lcReseller[2] = Reseller.Reseller.
-FIND LAST Salesman WHERE Salesman.Brand = gcBrand NO-LOCK NO-ERROR.
+FIND LAST Salesman WHERE Salesman.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 IF AVAILABLE Salesman THEN ASSIGN lcSalesman[2] = Salesman.Salesman.
 ASSIGN liCustNum[2]   = 999999999          
        ldtCalcDate[1] = DATE(MONTH(TODAY),1,YEAR(TODAY))
@@ -135,7 +135,7 @@ ASSIGN liCustNum[2]   = 999999999
                         ELSE DATE(MONTH(TODAY) + 1,1,YEAR(TODAY)) - 1.
 
 ASSIGN lcUfkey = FALSE
-       nap     = "first". 
+       Syst.CUICommon:nap     = "first". 
 
 toimi:
 REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
@@ -154,25 +154,25 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
    if lcUfkey THEN DO:
 
       ASSIGN
-         ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0 
-         ufk[5]= 63  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
-         ufk[9]= 1
-         ehto = 3 
+         Syst.CUICommon:ufk[1]= 132 Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0 
+         Syst.CUICommon:ufk[5]= 63  Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 
+         Syst.CUICommon:ufk[9]= 1
+         Syst.CUICommon:ehto = 3 
          lcUfkey = FALSE.
 
       RUN Syst/ufkey.p.
 
    END.
 
-   IF nap NE "first" THEN DO:
+   IF Syst.CUICommon:nap NE "first" THEN DO:
       READKEY.
-      nap = KEYLABEL(LASTKEY).
+      Syst.CUICommon:nap = KEYLABEL(LASTKEY).
    END.
-   ELSE ASSIGN nap = "1". 
+   ELSE ASSIGN Syst.CUICommon:nap = "1". 
 
-   IF LOOKUP(nap,"1,f1") > 0 THEN DO:
+   IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
 
-      ehto = 9. 
+      Syst.CUICommon:ehto = 9. 
       RUN Syst/ufkey.p.
 
       REPEAT WITH FRAME valinta ON ENDKEY UNDO, LEAVE:
@@ -189,7 +189,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
 
             READKEY.
 
-            IF LOOKUP(keylabel(LASTKEY),poisnap) > 0 THEN 
+            IF LOOKUP(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN 
             DO WITH FRAME valinta:
 
                HIDE MESSAGE.
@@ -214,17 +214,17 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
       NEXT toimi.
    END.
 
-   ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:
+   ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:
       LEAVE toimi.
    END.
 
-   ELSE IF LOOKUP(nap,"8,f8") > 0 THEN DO:
+   ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
       RETURN.
    END.
 
-END. /* toimi */
+END. /* Syst.CUICommon:toimi */
 
-ehto = 5.
+Syst.CUICommon:ehto = 5.
 RUN Syst/ufkey.p.
 
 IF lcFile = "" THEN DO:

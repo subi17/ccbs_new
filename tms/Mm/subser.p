@@ -50,7 +50,6 @@
 {Syst/eventval.i}
 {Func/msisdn.i}
 {Func/ffeecont.i}
-{Func/timestamp.i}
 {Func/fmakemsreq.i}
 {Func/service.i}
 
@@ -68,7 +67,7 @@ DEF TEMP-TABLE ttRequest NO-UNDO
 {Func/sername.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -153,8 +152,8 @@ form
     ServCom.ScName    format "x(31)" 
     ttSubSer.SSParam  format "x(13)"
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc)  " Services of MobSub " + MobSub.CLI + " "
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)  " Services of MobSub " + MobSub.CLI + " "
     FRAME sel.
 
 
@@ -173,8 +172,8 @@ HELP "Date when service parameter shall be activated"           SKIP
 HELP "Excact time when a SCHEDULED Activation shall be performed"   
 
 WITH  OVERLAY ROW 6 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) "UPDATE TO HLR" 
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) "UPDATE TO HLR" 
     SIDE-LABELS 
 
     FRAME hlr.
@@ -194,8 +193,8 @@ form
                INPUT ttSubSer.SSDate >= TODAY,
               "Date is mandatory and cannot be in the past")
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -203,14 +202,14 @@ WITH  OVERLAY ROW 4 centered
 form /* seek Subscriber's Service  BY  ServCom */
     ServCom
     HELP "Enter service component code"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND SERVICE COMPONENT "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND SERVICE COMPONENT "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Subscriber's Service  BY ServPac */
     ttSubSer.ServPac
     HELP "Enter Service Package"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND SERVICE PACKAGE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND SERVICE PACKAGE "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 FIND MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK.
@@ -218,7 +217,7 @@ FIND MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK.
 /* get current definitions, servpac index is sorted by date */
 RUN pSetTempTable.
         
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By Service,By ServPac,By 3, By 4".
@@ -257,13 +256,13 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a SubSer  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
       
            CLEAR FRAME lis NO-PAUSE.
@@ -277,12 +276,12 @@ REPEAT WITH FRAME sel:
               IF lookup(keylabel(LASTKEY),"f4") > 0 
               THEN undo add-row, leave add-row.
 
-              IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+              IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
                  PAUSE 0.
                  if frame-field = "ServCom" THEN DO:
                     if input ttSubSer.ServCom = "" THEN LEAVE add-row.
                     FIND ServCom where 
-                         ServCom.Brand   = gcBrand    AND 
+                         ServCom.Brand   = Syst.CUICommon:gcBrand    AND 
                          ServCom.ServCom = INPUT ttSubSer.ServCom
                     no-lock no-error.
                     IF NOT AVAIL ServCom THEN DO:
@@ -313,7 +312,7 @@ REPEAT WITH FRAME sel:
            /* check if component is defined for clitype and get 
               default value */
            FIND FIRST CTServEl WHERE
-                      CTServEl.Brand    = gcBrand        AND
+                      CTServEl.Brand    = Syst.CUICommon:gcBrand        AND
                       CTServEl.ServCom  = INPUT FRAME lis ttSubSer.ServCom AND
                       CTServEl.CLIType  = MobSub.CLIType AND
                       CTServEl.FromDate <= INPUT FRAME lis ttSubSer.SSDate
@@ -403,30 +402,30 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 245  ufk[2]= 246 ufk[3]= 2350 
-        ufk[4]= (IF lcRight = "RW" THEN 248 ELSE 0)
-        ufk[5]= (IF lcRight = "RW" THEN 60 ELSE 0) 
-        ufk[6]= 66
-        ufk[7]= 781  
-        ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ufk[1]= 245  Syst.CUICommon:ufk[2]= 246 Syst.CUICommon:ufk[3]= 2350 
+        Syst.CUICommon:ufk[4]= (IF lcRight = "RW" THEN 248 ELSE 0)
+        Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 60 ELSE 0) 
+        Syst.CUICommon:ufk[6]= 66
+        Syst.CUICommon:ufk[7]= 781  
+        Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW ttSubSer.ServCom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttSubSer.ServCom WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttSubSer.ServCom WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW ttSubSer.ServPac {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttSubSer.ServPac WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttSubSer.ServPac WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -434,10 +433,10 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -455,7 +454,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -480,7 +479,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -506,7 +505,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ttSubSer WHERE recid(ttSubSer) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -530,7 +529,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -545,9 +544,9 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 2 BUT ORDER IS STILL 1 !!!! */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET ServCom WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -568,10 +567,10 @@ REPEAT WITH FRAME sel:
      END. /* Search-1 */
 
      /* Search BY col 1 BUT ORDER IS 2 !!!! */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        SET ServPac WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -592,11 +591,11 @@ REPEAT WITH FRAME sel:
      END. /* Search-2 */
 
      /* attributes */
-     ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0 THEN DO:  
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 AND Syst.CUICommon:ufk[3] > 0 THEN DO:  
         RUN local-find-this(FALSE).
         IF AVAILABLE ttSubSer THEN DO:
            FIND ServCom WHERE 
-                ServCom.Brand   = gcBrand AND
+                ServCom.Brand   = Syst.CUICommon:gcBrand AND
                 ServCom.ServCom = ttSubSer.ServCom NO-LOCK NO-ERROR.
            IF NOT AVAILABLE ServCom OR 
               NOT ServCom.ServAttrL 
@@ -625,13 +624,13 @@ REPEAT WITH FRAME sel:
      END.
 
 
-     ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0 THEN DO:  /* COPY */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 AND Syst.CUICommon:ufk[4] > 0 THEN DO:  /* COPY */
         RUN local-copy-ServPac.
         ufkey = TRUE.
         NEXT loop.
      END.
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0 THEN DO:  /* request */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND Syst.CUICommon:ufk[5] > 0 THEN DO:  /* request */
         RUN local-find-this(FALSE).
         RUN local-find-others.
         IF NOT llRequest THEN 
@@ -652,13 +651,13 @@ REPEAT WITH FRAME sel:
         
      END.
      
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0 THEN DO:  /* history */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND Syst.CUICommon:ufk[6] > 0 THEN DO:  /* history */
         RUN Mm/subserhist.p (iiMsSeq).
         
         ufkey = TRUE.
         NEXT LOOP.
      END.
-     ELSE IF LOOKUP(nap,"7,f7") > 0 AND ufk[7] > 0 THEN DO:  /* history */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 AND Syst.CUICommon:ufk[7] > 0 THEN DO:  /* history */
         RUN local-find-this(FALSE).
 
 
@@ -674,7 +673,7 @@ REPEAT WITH FRAME sel:
         NEXT LOOP.
      END.
     
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -683,7 +682,7 @@ REPEAT WITH FRAME sel:
             THEN llStop = TRUE.
             ELSE llStop = FALSE.
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ttSubSer.ServCom.
        IF NOT llStop THEN DO:
            RUN local-UPDATE-record.                                  
@@ -721,25 +720,25 @@ REPEAT WITH FRAME sel:
        END.    
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(ttSubSer) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(ttSubSer) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN  LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN  LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 /* update temp-table into subser */
@@ -771,7 +770,7 @@ PROCEDURE local-find-this:
        FIND ttSubSer WHERE recid(ttSubSer) = rtab[frame-line(sel)] 
        NO-LOCK.
     FIND ServCom WHERE 
-         ServCom.Brand   = gcBrand AND 
+         ServCom.Brand   = Syst.CUICommon:gcBrand AND 
          ServCom.ServCom = ENTRY(1,ttSubSer.ServCom,".") 
     NO-LOCK NO-ERROR.
 END PROCEDURE.
@@ -820,11 +819,11 @@ END PROCEDURE.
 
 PROCEDURE local-find-others.
    FIND ServPac WHERE 
-        ServPac.Brand   = gcBrand   AND 
+        ServPac.Brand   = Syst.CUICommon:gcBrand   AND 
         ServPac.ServPac = ttSubSer.ServPac NO-LOCK NO-ERROR.
    
    FIND ServCom WHERE 
-        ServCom.Brand   = gcBrand  AND 
+        ServCom.Brand   = Syst.CUICommon:gcBrand  AND 
         ServCom.ServCom = ENTRY(1,ttSubSer.ServCom,".") NO-LOCK NO-ERROR.
 
    llRequest = CAN-FIND(FIRST MsRequest WHERE      
@@ -881,7 +880,7 @@ PROCEDURE local-UPDATE-record:
 
          liOldStat = ttSubSer.SSStat.
          
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
          
          UPDATE
@@ -892,7 +891,7 @@ PROCEDURE local-UPDATE-record:
 
             READKEY.
             
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
                PAUSE 0.
 
                IF FRAME-FIELD = "SSStat" THEN DO:
@@ -906,7 +905,7 @@ PROCEDURE local-UPDATE-record:
                                           ttSubSer.ServCom,
                                           INPUT INPUT ttSubSer.SSStat).
                       IF ldActStamp > 0 
-                      THEN fSplitTS(ldActStamp,
+                      THEN Func.Common:mSplitTS(ldActStamp,
                                     OUTPUT ldtActDate,
                                     OUTPUT liReq).
                       ELSE ldtActDate = TODAY.             
@@ -978,7 +977,7 @@ PROCEDURE local-UPDATE-record:
                                           ttSubSer.ServCom,
                                           ttSubSer.SSStat).
             IF ldActStamp > 0 THEN DO:
-               fSplitTS(ldActStamp,
+               Func.Common:mSplitTS(ldActStamp,
                         OUTPUT ldtActDate,
                         OUTPUT liReq).
 
@@ -1004,7 +1003,7 @@ PROCEDURE local-UPDATE-record:
             /* are there rules for updating other components due
                to the change of this one */
             FOR EACH ScUpdRule NO-LOCK WHERE
-                     ScUpdRule.Brand    = gcBrand          AND
+                     ScUpdRule.Brand    = Syst.CUICommon:gcBrand          AND
                      ScUpdRule.ServCom  = ttSubSer.ServCom AND
                      ScUpdRule.OldValue = liOldStat        AND
                      ScUpdRule.NewValue = liNewStat:
@@ -1045,7 +1044,7 @@ PROCEDURE local-UPDATE-record:
 
          ttSubSer.ServPac = "".
          FOR FIRST CTServEl NO-LOCK WHERE
-                   CTServEl.Brand   = gcBrand          AND 
+                   CTServEl.Brand   = Syst.CUICommon:gcBrand          AND 
                    CTServEl.ServCom = ttSubSer.ServCom AND
                    CTServEl.CLIType = MobSub.CLIType   AND
                    CTServEl.FromDate <= TODAY:
@@ -1058,7 +1057,7 @@ PROCEDURE local-UPDATE-record:
       END.  
 
       ELSE DO:
-         ehto = 5.
+         Syst.CUICommon:ehto = 5.
          RUN Syst/ufkey.p.
          PAUSE MESSAGE "Press ENTER to continue".
       END. 
@@ -1100,12 +1099,12 @@ PROCEDURE local-copy-ServPac:
    
    COPY:
    REPEAT WITH FRAME c-sp ON ENDKEY UNDO, LEAVE:
-      ehto = 9. RUN Syst/ufkey.p.
+      Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
       UPDATE lcServPac 
          VALIDATE(input lcServPac = "" OR 
                   CAN-FIND(ServPac where
-                           ServPac.Brand   = gcBrand AND 
+                           ServPac.Brand   = Syst.CUICommon:gcBrand AND 
                            ServPac.ServPac = INPUT lcServPac),
                  "UNKNOWN Service PACK !")
          ldtDate.
@@ -1118,7 +1117,7 @@ PROCEDURE local-copy-ServPac:
       END.
       
       FIND ServPac WHERE
-           ServPac.Brand   = gcBrand AND 
+           ServPac.Brand   = Syst.CUICommon:gcBrand AND 
            ServPac.ServPac = lcServPac NO-LOCK NO-ERROR.
       IF NOT AVAILABLE ServPac THEN DO:
          MESSAGE "Service package record not found for: " lcServPac
@@ -1139,7 +1138,7 @@ PROCEDURE local-copy-ServPac:
       
       /* package must be defined to clitype */
       IF NOT CAN-FIND(FIRST CTServPac WHERE
-                            CTServPac.Brand     = gcBrand        AND
+                            CTServPac.Brand     = Syst.CUICommon:gcBrand        AND
                             CTServpac.CLIType   = MobSub.CLIType AND
                             CTServPac.ServPac   = lcServPac      AND
                             CTServPac.FromDate <= TODAY)
@@ -1159,7 +1158,7 @@ PROCEDURE local-copy-ServPac:
       IF ok THEN DO:
 
          IF ServPac.ServPac = "BB" AND
-            NOT fIsBBAllowed(Mobsub.MsSeq,fMakeTS()) THEN DO:
+            NOT fIsBBAllowed(Mobsub.MsSeq,Func.Common:mMakeTS()) THEN DO:
             MESSAGE "BB service can not be activated since subscription" skip
                     "does not have active data bundle"
             VIEW-AS ALERT-BOX ERROR.
@@ -1244,7 +1243,7 @@ PROCEDURE pUpdateSubSer:
     
    FIND MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK.
     
-   ldCurrent = fMakeTS().
+   ldCurrent = Func.Common:mMakeTS().
    
    FOR EACH ttSubSer
    BREAK BY ttSubSer.SSStat   /* deactivations first */
@@ -1273,7 +1272,7 @@ PROCEDURE pUpdateSubSer:
 
          IF ttSubSer.ServCom = "BB" AND
             ttSubSer.SSStat  = 1    AND
-            NOT fIsBBAllowed(Mobsub.MsSeq,fMakeTS()) THEN DO:
+            NOT fIsBBAllowed(Mobsub.MsSeq,Func.Common:mMakeTS()) THEN DO:
             MESSAGE "BB service can not be activated since subscription" skip
                     "does not have active data bundle"
             VIEW-AS ALERT-BOX ERROR.
@@ -1292,7 +1291,7 @@ PROCEDURE pUpdateSubSer:
          
          IF ttSubSer.SSDate = TODAY 
          THEN ldActStamp = ldCurrent.
-         ELSE ldActStamp = fMake2DT(ttSubSer.SSDate,1).
+         ELSE ldActStamp = Func.Common:mMake2DT(ttSubSer.SSDate,1).
 
          /* create change request */
          liReq = fServiceRequest(MobSub.MsSeq,
@@ -1358,7 +1357,7 @@ PROCEDURE pUpdateSubSer:
          
          IF ttSubSerPara.SSDate = TODAY 
          THEN ldActStamp = ldCurrent.
-         ELSE ldActStamp = fMake2DT(ttSubSerPara.SSDate,1).
+         ELSE ldActStamp = Func.Common:mMake2DT(ttSubSerPara.SSDate,1).
 
          /* create change request */
          liReq = fServAttrRequest(MobSub.MsSeq,
@@ -1404,7 +1403,7 @@ PROCEDURE pUpdateSubSer:
       PAUSE 0.
       MESSAGE "Performing requests, wait ..".
 
-      ehto = 5.
+      Syst.CUICommon:ehto = 5.
       RUN Syst/ufkey.p.
       
       FOR EACH ttRequest:

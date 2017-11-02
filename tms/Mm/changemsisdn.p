@@ -40,7 +40,7 @@ IF NOT AVAILABLE MsRequest OR MsRequest.ReqType NE 19 THEN DO:
 END.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -83,7 +83,7 @@ PROCEDURE pChangeMSISDN:
 
    FIND FIRST new-MSISDN WHERE
               new-MSISDN.CLI = MSRequest.ReqCParam2  AND 
-              new-MSISDN.ValidTo > fMakeTS() No-LOCK NO-ERROR.
+              new-MSISDN.ValidTo > Func.Common:mMakeTS() No-LOCK NO-ERROR.
 
    IF NOT AVAIL new-MSISDN THEN DO:
       fReqError("Unknown new msisdn number:" +  MSRequest.ReqCParam2).
@@ -109,14 +109,14 @@ PROCEDURE pChangeMSISDN:
    FIND FIRST Old-MSOWner WHERE 
               Old-MSOWNER.MSSEQ  = Mobsub.MSSeq AND 
               Old-MSOWNER.CLI    = Mobsub.CLI   AND 
-              Old-MSOwner.TSEND >= FMakeTS() EXCLUSIVE-LOCK NO-ERROR.
+              Old-MSOwner.TSEND >= Func.Common:mMakeTS() EXCLUSIVE-LOCK NO-ERROR.
 
    FIND FIRST MSISDN WHERE 
               MSISDN.CLI  = MobSub.CLI AND 
-              MSISDN.ValidTo > fMakeTS() EXCLUSIVE-LOCK NO-ERROR.
+              MSISDN.ValidTo > Func.Common:mMakeTS() EXCLUSIVE-LOCK NO-ERROR.
 
    FIND FIRST MSRange WHERE 
-              MSRange.Brand    = gcBrand    AND 
+              MSRange.Brand    = Syst.CUICommon:gcBrand    AND 
               MSRange.CLIFrom <= MSISDN.CLI AND
               MSRange.CLITo   >= MSISDN.CLI
    NO-LOCK NO-ERROR.
@@ -125,7 +125,7 @@ PROCEDURE pChangeMSISDN:
    /* What Happens TO old msowner */
    IF AVAIL Old-MSOwner THEN DO:
       IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMsOwner).
-      ASSIGN Old-MSOwner.TsEnd = FMakeTS().
+      ASSIGN Old-MSOwner.TsEnd = Func.Common:mMakeTS().
       IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMsOwner).
    END.
   
@@ -154,20 +154,20 @@ PROCEDURE pChangeMSISDN:
    CREATE MSOwner.
    BUFFER-COPY old-Msowner except CLI CLIEvent TO Msowner.
    ASSIGN
-      MSOwner.TsBegin     = FMakeTS()
+      MSOwner.TsBegin     = Func.Common:mMakeTS()
       MSOwner.CLI         = new-MSISDN.CLI
       MSOwner.CustNum     = Mobsub.CustNum
       MSOwner.BillTarget  = Mobsub.BillTarget
       MSOwner.MsSeq       = MobSub.MsSeq 
       MSowner.imsi        = mobsub.imsi
-      MSowner.brand       = gcBrand 
+      MSowner.brand       = Syst.CUICommon:gcBrand 
       MSOWner.TSEnd       = 99999999.99999
       MsOwner.CliType     = mobsub.clitype
       MsOwner.CLIEvent    = "CLI".
    
    IF llDoEvent THEN fMakeCreateEvent((BUFFER MsOwner:HANDLE),
                                       "",
-                                      katun,
+                                      Syst.CUICommon:katun,
                                       "").
 
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobSub).
@@ -200,10 +200,10 @@ PROCEDURE pChangeMSISDN:
 
       CREATE OPLog.
       ASSIGN
-         OPLog.CreStamp  = fMakeTS()
+         OPLog.CreStamp  = Func.Common:mMakeTS()
          OPLog.CustNum   = MsOwner.InvCust
          OPLog.EventDate = TODAY
-         OPLog.UserCode  = katun
+         OPLog.UserCode  = Syst.CUICommon:katun
          OPLog.EventType = liLogType 
          OPLog.InvNum    = 0
          OPLog.Voucher   = 0
@@ -217,10 +217,10 @@ PROCEDURE pChangeMSISDN:
 
       CREATE OPLog.
       ASSIGN
-         OPLog.CreStamp  = fMakeTS()
+         OPLog.CreStamp  = Func.Common:mMakeTS()
          OPLog.CustNum   = MsOwner.InvCust
          OPLog.EventDate = TODAY
-         OPLog.UserCode  = katun
+         OPLog.UserCode  = Syst.CUICommon:katun
          OPLog.EventType = liLogType
          OPLog.InvNum    = 0
          OPLog.Voucher   = 0
@@ -261,12 +261,12 @@ PROCEDURE pChangeMSISDN:
       
          CREATE Memo.
          ASSIGN
-            Memo.CreStamp  = fMakeTs() 
-            Memo.Brand     = gcBrand                 
+            Memo.CreStamp  = Func.Common:mMakeTS() 
+            Memo.Brand     = Syst.CUICommon:gcBrand                 
             Memo.HostTable = "MobSub"                
             Memo.KeyValue  = STRING(DCCLI.MsSeq)     
          Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-         Memo.CreUser   = katun 
+         Memo.CreUser   = Syst.CUICommon:katun 
          Memo.Memotitle = "Per.Contract Msisdn Changed" 
          Memo.MemoText  = "Periodical contract msisdn was changed due to " +
                           "subscription msisdn change.".
@@ -288,7 +288,7 @@ PROCEDURE pChangeMSISDN:
                              "HSDPA",
                              1,
                              "",
-                             fMakeTS(),
+                             Func.Common:mMakeTS(),
                              "",                /* SalesMan */ 
                              FALSE,             /* fees */
                              FALSE,             /* SMS */ 

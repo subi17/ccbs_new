@@ -4,14 +4,13 @@
 
 {Syst/commali.i}
 {Func/tmsparam4.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/amq.i}
 {Func/jsonlib.i}
 
 ASSIGN
-   gcBrand = "1".
+   Syst.CUICommon:gcBrand = "1".
 
 DEF TEMP-TABLE ttDocs NO-UNDO
    FIELD DocTypeID      AS CHAR
@@ -64,7 +63,7 @@ FUNCTION fUpdateDMS RETURNS CHAR
    ELSE IF NOT AVAIL DMS THEN DO:
       CREATE DMS.
       ASSIGN DMS.DMSID    = NEXT-VALUE(DMS)
-             DMS.StatusTS = fMakeTS().
+             DMS.StatusTS = Func.Common:mMakeTS().
    END.
 
    ASSIGN DMS.DmsExternalID = icDmsExternalID WHEN icDmsExternalID NE ""
@@ -79,7 +78,7 @@ FUNCTION fUpdateDMS RETURNS CHAR
    /* Store current order status */
    IF NEW DMS AND icOrderstatus = "" THEN DO:
       FIND FIRST Order NO-LOCK WHERE
-                 Order.Brand = gcBrand AND
+                 Order.Brand = Syst.CUICommon:gcBrand AND
                  Order.OrderID = iiHostId NO-ERROR.
       IF AVAILABLE Order THEN DMS.OrderStatus = Order.StatusCode.
    END.
@@ -105,7 +104,7 @@ FUNCTION fUpdateDMS RETURNS CHAR
       IF NOT AVAIL DMSDoc THEN DO:
          CREATE DMSDoc.
          ASSIGN DMSDoc.DMSID       = DMS.DMSID
-                DMSDoc.DocStatusTS = fMakeTS().
+                DMSDoc.DocStatusTS = Func.Common:mMakeTS().
       END.
 
       ASSIGN DMSDoc.DocTypeID     = ENTRY(i,icDocList,icDocListSep)
@@ -155,7 +154,7 @@ FUNCTION fIsHolder RETURNS LOGICAL
     iiRowType AS INTEGER):
 
    RETURN CAN-FIND(FIRST OrderCustomer NO-LOCK WHERE
-                         OrderCustomer.Brand = gcBrand     AND
+                         OrderCustomer.Brand = Syst.CUICommon:gcBrand     AND
                          OrderCustomer.OrderId = iiOrderId AND
                          OrderCustomer.RowType = iiRowType).
 
@@ -284,7 +283,7 @@ END.
 FUNCTION fGetBankName RETURNS CHAR
    (icCode AS CHAR):
    FIND FIRST Bank WHERE
-              Bank.Brand      = gcBrand AND
+              Bank.Brand      = Syst.CUICommon:gcBrand AND
               Bank.BankID     = SUBSTRING(icCode,5,4) NO-LOCK NO-ERROR.
    IF AVAIL Bank THEN RETURN Bank.Name.
    RETURN "".
@@ -470,12 +469,12 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    DEF VAR lcMQ AS CHAR NO-UNDO.
    /*search data for message*/
    FIND FIRST Order NO-LOCK WHERE
-              Order.Brand EQ gcBrand AND
+              Order.Brand EQ Syst.CUICommon:gcBrand AND
               Order.OrderId EQ icOrderID NO-ERROR.
    IF NOT AVAIL Order THEN RETURN "DMS Notif: No Order available".
 
    FIND FIRST OrderCustomer NO-LOCK WHERE
-              OrderCustomer.Brand EQ gcBrand AND
+              OrderCustomer.Brand EQ Syst.CUICommon:gcBrand AND
               OrderCustomer.OrderId EQ icOrderID AND
               OrderCustomer.RowType EQ 1 NO-ERROR.
    IF NOT AVAIL Order THEN RETURN "DMS Notif: No OrderCustomer available".

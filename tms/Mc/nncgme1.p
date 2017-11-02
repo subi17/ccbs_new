@@ -49,7 +49,7 @@ DEF VAR lcTask       AS CHAR                   NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -69,31 +69,31 @@ form
     CGMember.Memo     /* COLUMN-LABEL FORMAT */
     Customer.PostOffice       column-label "City" format "x(12)"
 WITH centered OVERLAY scroll 1 13 DOWN ROW 2
-    COLOR value(cfc)
-    TITLE COLOR value(ctc)
-    " Members in a c-group " + icCustGroup + " (" + gcBrand + ") "
+    COLOR value(Syst.CUICommon:cfc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
+    " Members in a c-group " + icCustGroup + " (" + Syst.CUICommon:gcBrand + ") "
    FRAME sel.
 
 form
     CGMember.CustNum     /* LABEL FORMAT */
     Customer.CustName     /* LABEL FORMAT */
 WITH  OVERLAY ROW 4 centered
-    COLOR value(cfc)
-    TITLE COLOR value(ctc)
+    COLOR value(Syst.CUICommon:cfc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     lm-ots WITH side-labels 1 columns
     FRAME lis.
 
 form /* member :n haku kentällä CustNum */
     CustNum
     help "Type Customer number "
-    with row 4 col 2 title color value(ctc) " FIND CUST. NO. "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CUST. NO. "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* member :n haku kentällä CustName */
     CustName
     help "Type Customer's Name"
-    with row 4 col 2 title color value(ctc) " FIND CUST. Name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CUST. Name "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form
    skip(1)
@@ -108,11 +108,11 @@ WITH
 
 
 FIND CustGroup where 
-     CustGroup.Brand     = gcBrand AND
+     CustGroup.Brand     = Syst.CUICommon:gcBrand AND
      CustGroup.CustGroup = icCustGroup no-lock.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST CGMember 
@@ -146,19 +146,19 @@ repeat WITH FRAME sel:
 
 ADD-CUST:
        repeat TRANS ON ENDKEY UNDO ADD-CUST, LEAVE ADD-CUST.
-          ASSIGN ufkey = TRUE ufk = 0 ehto = 0
-          ufk[1] = 511 ufk[2] = 513 ufk[3] = 516 ufk[4] = 529 ufk[8] = 8.
+          ASSIGN ufkey = TRUE Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0
+          Syst.CUICommon:ufk[1] = 511 Syst.CUICommon:ufk[2] = 513 Syst.CUICommon:ufk[3] = 516 Syst.CUICommon:ufk[4] = 529 Syst.CUICommon:ufk[8] = 8.
           RUN Syst/ufkey.p.
 
-          IF toimi = 8 THEN LEAVE ADD-CUST.
-          IF toimi = 1 THEN DO:
+          IF Syst.CUICommon:toimi = 8 THEN LEAVE ADD-CUST.
+          IF Syst.CUICommon:toimi = 1 THEN DO:
              lm-ots = " ADD ONE CUSTOMER ".
 
              add-single:
              repeat WITH FRAME lis ON ENDKEY UNDO ADD-CUST,
                                NEXT ADD-CUST:
                 PAUSE 0.
-                ehto = 9. RUN Syst/ufkey.p.
+                Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
                 CLEAR FRAME lis no-pause.
                 PROMPT-FOR CGMember.CustNum
                 validate(INPUT CGMember.CustNum  = 0 OR 
@@ -203,25 +203,25 @@ ADD-CUST:
                    THEN RUN StarEventMakeCreateEvent(lhCGMember).
                 END.
              END.
-          END. /* toimi = 1: add a single group */
+          END. /* Syst.CUICommon:toimi = 1: add a single group */
 
-          ELSE IF toimi = 2 THEN DO:
+          ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
              RUN Mc/nncgcb.p(CustGroup.CustGroup).
              LEAVE add-cust.
           END.
-          ELSE IF toimi = 3 THEN DO WITH FRAME copy:
+          ELSE IF Syst.CUICommon:toimi = 3 THEN DO WITH FRAME copy:
              /* copy members */
 
              add-single:
              repeat WITH FRAME copy ON ENDKEY UNDO ADD-CUST: 
 
                 PAUSE 0.
-                                                                                            ehto = 9. RUN Syst/ufkey.p.
+                                                                                            Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
                 CLEAR FRAME lis no-pause.
                 PROMPT-FOR xcg-code
                 validate(INPUT xcg-code  = "" OR 
                          can-find(xCustGroup where
-                                  xCustGroup.Brand     = gcBrand AND
+                                  xCustGroup.Brand     = Syst.CUICommon:gcBrand AND
                                   xCustGroup.CustGroup = input xcg-code),
                          "Unknown group !").
 
@@ -231,7 +231,7 @@ ADD-CUST:
 
              if xcg-code ne "" THEN DO:
                 FIND xCustGroup where 
-                     xCustGroup.Brand     = gcBrand AND
+                     xCustGroup.Brand     = Syst.CUICommon:gcBrand AND
                      xCustGroup.CustGroup = xcg-code no-lock.
                 DISP xCustGroup.CGName.
 
@@ -270,8 +270,8 @@ ADD-CUST:
                 LEAVE add-cust.
              END. 
              HIDE FRAME copy.
-          END. /* toimi = 3 */
-          ELSE IF toimi = 4 THEN DO:
+          END. /* Syst.CUICommon:toimi = 3 */
+          ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
              RUN Mc/nncggm.p(CustGroup.CustGroup).
              LEAVE add-cust.
           END.
@@ -340,31 +340,31 @@ SELAUS:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 702  ufk[2]= 30 ufk[3]= 530 ufk[4]= 518
-        ufk[5]= (IF lcRight = "RW" THEN 1499 ELSE 0)
-        ufk[6]= (IF lcRight = "RW" THEN 4    ELSE 0)
-        ufk[7]= 185 ufk[8]=   8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ufk[1]= 702  Syst.CUICommon:ufk[2]= 30 Syst.CUICommon:ufk[3]= 530 Syst.CUICommon:ufk[4]= 518
+        Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 1499 ELSE 0)
+        Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4    ELSE 0)
+        Syst.CUICommon:ufk[7]= 185 Syst.CUICommon:ufk[8]=   8 Syst.CUICommon:ufk[9]= 1
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
         CHOOSE ROW CGMember.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) CGMember.CustNum WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) CGMember.CustNum WITH FRAME sel.
       END.
       ELSE IF jarj = 2 THEN DO:
         CHOOSE ROW CGMember.CustName {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) CGMember.CustName WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) CGMember.CustName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         jarj = jarj + 1. IF jarj > jarjlkm THEN jarj = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         jarj = jarj - 1. IF jarj = 0 THEN jarj = jarjlkm.
       END.
 
@@ -391,10 +391,10 @@ SELAUS:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* edellinen rivi */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND CGMember where recid(CGMember) = rtab[1] no-lock.
            IF jarj = 1 THEN FIND prev CGMember
@@ -425,7 +425,7 @@ SELAUS:
       END. /* edellinen rivi */
 
       /* seuraava rivi */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND CGMember where recid(CGMember) = rtab[FRAME-DOWN] no-lock .
@@ -457,7 +457,7 @@ SELAUS:
       END. /* seuraava rivi */
 
       /* edellinen sivu */
-      else if lookup(nap,"prev-page,page-up") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up") > 0 THEN DO:
         muisti = rtab[1].
         FIND CGMember where recid(CGMember) = muisti no-lock no-error.
         IF jarj = 1 THEN FIND prev CGMember
@@ -487,7 +487,7 @@ SELAUS:
      END. /* edellinen sivu */
 
      /* seuraava sivu */
-     else if lookup(nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
        /* kohdistin alimmalle riville */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -502,10 +502,10 @@ SELAUS:
      END. /* seuraava sivu */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+     else if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        CustNum = 0.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE CustNum WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        IF CustNum <> 0 THEN DO:
@@ -525,11 +525,11 @@ SELAUS:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.CUICommon:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        CustName = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE CustName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if CustName <> "" THEN DO:
@@ -547,21 +547,21 @@ SELAUS:
        END.
      END. /* Haku sar. 2 */
 
-     else if lookup(nap,"4,f4") > 0 THEN DO:  /* other memberships */
+     else if lookup(Syst.CUICommon:nap,"4,f4") > 0 THEN DO:  /* other memberships */
         FIND CGMember where recid(CGMember) = rtab[FRAME-LINE] no-lock.
         RUN Mc/nncgme2.p(CGMember.CustNum).
         ufkey = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* ADD */
+     else if lookup(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* ADD */
         lisattava = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"3,f3") > 0 THEN DO:  /* count # of members */
+     else if lookup(Syst.CUICommon:nap,"3,f3") > 0 THEN DO:  /* count # of members */
 
-        ASSIGN Qty = 0 ehto = 3 ufkey = TRUE ufk = 0. RUN Syst/ufkey.p.
+        ASSIGN Qty = 0 Syst.CUICommon:ehto = 3 ufkey = TRUE Syst.CUICommon:ufk = 0. RUN Syst/ufkey.p.
         message "Calculating no. of members, wait a moment please ...".
         FOR EACH CGMember OF CustGroup no-lock:
            Qty = Qty + 1.
@@ -571,33 +571,33 @@ SELAUS:
         PAUSE no-message.
         NEXT LOOP.
      END.
-     else if lookup(nap,"f7,7") > 0 THEN REPEAT WITH FRAME SEL:
+     else if lookup(Syst.CUICommon:nap,"f7,7") > 0 THEN REPEAT WITH FRAME SEL:
 
         FIND CGMember where recid(CGMember) = rtab[FRAME-LINE] no-lock.
 
         ASSIGN
            ufkey = TRUE
-           ufk   = 0
-           ehto  = 1
-           ufk[1] = 1883 ufk[2] = 1888 
-           ufk[4] = 0 ufk[5]= 0 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8.
+           Syst.CUICommon:ufk   = 0
+           Syst.CUICommon:ehto  = 1
+           Syst.CUICommon:ufk[1] = 1883 Syst.CUICommon:ufk[2] = 1888 
+           Syst.CUICommon:ufk[4] = 0 Syst.CUICommon:ufk[5]= 0 Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8.
         RUN Syst/ufkey.p.   
 
-        IF toimi = 8 THEN NEXT SELAUS.
+        IF Syst.CUICommon:toimi = 8 THEN NEXT SELAUS.
 
-        IF toimi = 1 THEN RUN Mc/commontt.p(CGMember.CustNum).
+        IF Syst.CUICommon:toimi = 1 THEN RUN Mc/commontt.p(CGMember.CustNum).
 
-        IF toimi = 2 THEN RUN Mc/mobilett.p(CGMember.CustNum).
+        IF Syst.CUICommon:toimi = 2 THEN RUN Mc/mobilett.p(CGMember.CustNum).
 
      END.
 
-     else if lookup(nap,"6,f6") > 0 AND lcRight = "RW"
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSAction:  /* poisto */
        privi = FRAME-LINE.
        FIND CGMember where recid(CGMember) = rtab[FRAME-LINE] no-lock.
 
        /* valaistaan poistettava rivi */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
        CGMember.CustNum CGMember.CustName CGMember.Memo Customer.PostOffice
        /* sd */.
 
@@ -627,7 +627,7 @@ SELAUS:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.CUICommon:ccc)
        CGMember.CustNum CGMember.CustName CGMember.Memo Customer.PostOffice
        /* sd */.
        IF ok THEN DO:
@@ -650,12 +650,12 @@ SELAUS:
        ELSE privi = 0. /* ei poistettukaan */
      END. /* poisto */
 
-     else if lookup(nap,"enter,return") > 0 AND lcRight = "RW" 
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 AND lcRight = "RW" 
      THEN DO WITH FRAME sel TRANSAction:
        /* muutos */
        FIND CGMember where recid(CGMember) = rtab[frame-line(sel)]
        exclusive-lock.
-       assign lm-ots = " CHANGE " ufkey = TRUE ehto = 9.
+       assign lm-ots = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
        RUN Syst/ufkey.p.
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCGMember).
        UPDATE CGMember.Memo.
@@ -663,7 +663,7 @@ SELAUS:
        xrecid = recid(CGMember).
      END.
 
-     else if lookup(nap,"home") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home") > 0 THEN DO:
        IF jarj = 1 THEN FIND FIRST CGMember
        OF CustGroup no-lock no-error.
        ELSE IF jarj = 2 THEN FIND FIRST CGMember USE-INDEX CustName
@@ -672,7 +672,7 @@ SELAUS:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end") > 0 THEN DO : /* viimeinen tietue */
+     else if lookup(Syst.CUICommon:nap,"end") > 0 THEN DO : /* viimeinen tietue */
        IF jarj = 1 THEN FIND LAST CGMember
        OF CustGroup no-lock no-error.
        ELSE IF jarj = 2 THEN FIND LAST CGMember USE-INDEX CustName
@@ -681,11 +681,11 @@ SELAUS:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* SELAUS */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 

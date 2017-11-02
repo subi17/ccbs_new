@@ -18,7 +18,7 @@ FUNCTION fAccPeriod RETURNS INTEGER
    liAPeriod = 0. 
 
    FOR FIRST AccPeriod NO-LOCK WHERE
-      AccPeriod.Brand     = gcBrand AND
+      AccPeriod.Brand     = Syst.CUICommon:gcBrand AND
       AccPeriod.FromDate <= iDate   AND
       AccPeriod.ToDate   >= iDate:
 
@@ -37,7 +37,7 @@ FUNCTION fPeriodLocked RETURNS LOGICAL
    liAPeriod = 0. 
 
    FOR FIRST AccPeriod NO-LOCK WHERE
-      AccPeriod.Brand     = gcBrand AND
+      AccPeriod.Brand     = Syst.CUICommon:gcBrand AND
       AccPeriod.FromDate <= iDate   AND
       AccPeriod.ToDate   >= iDate:
 

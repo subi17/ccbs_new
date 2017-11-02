@@ -9,12 +9,11 @@
 ---------------------------------------------------------------------- */
 {Syst/commpaa.i}
 ASSIGN 
-   gcBrand = "1"
-   katun   = "Cron".
+   Syst.CUICommon:gcBrand = "1"
+   Syst.CUICommon:katun   = "Cron".
 {Func/cparam2.i}
 {Syst/funcrunprocess_run.i}
 {Syst/funcrunprocess_update.i}
-{Func/date.i}
 {Syst/tmsconst.i}
 {Func/coinv.i}
 {Func/ftransdir.i}
@@ -72,7 +71,7 @@ IF ldaBillPeriod = ? THEN DO:
 END.   
 
 ASSIGN
-   ldaToDate = fLastDayOfMonth(ldaBillPeriod) 
+   ldaToDate = Func.Common:mLastDayOfMonth(ldaBillPeriod) 
    liBillPeriod = YEAR(ldaBillPeriod) * 100 + MONTH(ldaBillPeriod)
    lcLogDir = fCParam("TermFinance","LogDir")
    lcLogIntDir = lcLogDir + "internal/".
@@ -128,7 +127,7 @@ FOR EACH FixedFee NO-LOCK WHERE
          FixedFee.FinancedResult = {&TF_STATUS_WAITING_SENDING} OR
          FixedFee.FinancedResult = {&TF_STATUS_SENT_TO_BANK},
    FIRST Order NO-LOCK WHERE
-         Order.Brand = gcBrand AND
+         Order.Brand = Syst.CUICommon:gcBrand AND
          Order.OrderId = FixedFee.OrderID:
 
    IF FixedFee.BegDate > ldaToDate THEN NEXT.
@@ -171,13 +170,13 @@ FOR EACH FixedFee NO-LOCK WHERE
 
    /* check if fixedfee item amount does not match with original confs. */
    FOR FIRST DayCampaign NO-LOCK WHERE
-             DayCampaign.Brand = gcBrand AND
+             DayCampaign.Brand = Syst.CUICommon:gcBrand AND
              DayCampaign.DCEvent = FixedFee.CalcObj,
        FIRST FeeModel NO-LOCK WHERE
-             FeeModel.Brand = gcBrand AND
+             FeeModel.Brand = Syst.CUICommon:gcBrand AND
              FeeModel.FeeModel = DayCampaign.FeeModel,
        FIRST FMItem NO-LOCK WHERE
-             FMItem.Brand = gcBrand AND
+             FMItem.Brand = Syst.CUICommon:gcBrand AND
              FMItem.FeeModel = FeeModel.FeeModel:
    
       ASSIGN
@@ -209,7 +208,7 @@ FOR EACH FixedFee NO-LOCK WHERE
    END.
       
    FIND FIRST DCCLI EXCLUSIVE-LOCK WHERE
-              DCCLI.Brand   = gcBrand AND
+              DCCLI.Brand   = Syst.CUICommon:gcBrand AND
               DCCLI.MsSeq   = INT(FixedFee.KeyValue) AND
               DCCLI.DCEvent = FixedFee.CalcObj AND
               DCCLI.percontractId = int(FixedFee.SourceKey) NO-ERROR.
@@ -221,7 +220,7 @@ FOR EACH FixedFee NO-LOCK WHERE
    
    IF FixedFee.BillCode BEGINS "PAYTERM" THEN
       FIND FIRST SingleFee EXCLUSIVE-LOCK WHERE
-                 SingleFee.Brand = gcBrand AND
+                 SingleFee.Brand = Syst.CUICommon:gcBrand AND
                  SingleFee.Custnum = FixedFee.Custnum AND
                  SingleFee.HostTable = FixedFee.HostTable AND
                  SingleFee.KeyValue = Fixedfee.KeyValue AND
@@ -292,7 +291,7 @@ FOR EACH FixedFee NO-LOCK WHERE
          ffitem.concerns[1] = YEAR(ldaNewBillPeriod) * 10000 + 
                               MONTH(ldaNewBillPeriod) * 100 + 
                               DAY(ldaNewBillPeriod)
-         ldaNewBillPeriod = fLastDayOfMonth(ldaNewBillPeriod) 
+         ldaNewBillPeriod = Func.Common:mLastDayOfMonth(ldaNewBillPeriod) 
          ffitem.concerns[2] = YEAR(ldaNewBillPeriod) * 10000 + 
                               MONTH(ldaNewBillPeriod) * 100 + 
                               DAY(ldaNewBillPeriod)

@@ -12,7 +12,6 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
 DEFINE VARIABLE lcUsercode AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcOldPasswd AS CHARACTER NO-UNDO.
@@ -55,7 +54,7 @@ lcPassword = "".
 
 UPDATE lcUsercode lcPassword WITH FRAME loginFrame.
 
-IF lcUsercode NE katun THEN DO:
+IF lcUsercode NE Syst.CUICommon:katun THEN DO:
    MESSAGE "ACCESS DENIED!" VIEW-AS ALERT-BOX ERROR.
    RETURN.
 END.
@@ -105,8 +104,8 @@ REPEAT:
       
       UPDATE lcUsercode WITH FRAME passFrame EDITING:
          READKEY.
-         nap = KEYLABEL(LASTKEY).
-         IF LOOKUP(nap,"F4,F8") > 0 THEN LEAVE mainloop.
+         Syst.CUICommon:nap = KEYLABEL(LASTKEY).
+         IF LOOKUP(Syst.CUICommon:nap,"F4,F8") > 0 THEN LEAVE mainloop.
          APPLY LASTKEY.
       END.
       
@@ -145,8 +144,8 @@ REPEAT:
          IF llChange THEN DO TRANS:
             FIND CURRENT tmspass EXCLUSIVE-LOCK.
             ASSIGN
-               tmspass.createts = fMakeTS()
-               tmspass.creator  = katun
+               tmspass.createts = Func.Common:mMakeTS()
+               tmspass.creator  = Syst.CUICommon:katun
                tmspass.password = lcNewPasswd1.
             RELEASE tmspass. 
             MESSAGE "Password changed! User must change it on first login."

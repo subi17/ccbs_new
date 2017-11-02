@@ -34,7 +34,7 @@ ASSIGN
    lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
 
 FIND FIRST Order NO-LOCK WHERE
-           Order.Brand = gcBrand AND
+           Order.Brand = Syst.CUICommon:gcBrand AND
            Order.Orderid = piOrderID NO-ERROR.
 IF NOT AVAIL Order THEN RETURN "Order not found".
          
@@ -69,12 +69,12 @@ ASSIGN
 
 llExtendContract = 
    CAN-FIND (FIRST OrderAction NO-LOCK WHERE
-                   OrderAction.Brand    = gcBrand AND
+                   OrderAction.Brand    = Syst.CUICommon:gcBrand AND
                    OrderAction.OrderId  = Order.OrderId AND
                    OrderAction.ItemType = "ExtendTermContract").
 
 FIND FIRST OrderFusion NO-LOCK WHERE
-           OrderFusion.Brand = gcBrand AND
+           OrderFusion.Brand = Syst.CUICommon:gcBrand AND
            OrderFusion.OrderID = Order.OrderId NO-ERROR.
 IF NOT AVAIL OrderFusion THEN RETURN "OrderFusion not found".
 
@@ -82,7 +82,7 @@ IF OrderFusion.FixedInstallationTS EQ ? OR
    OrderFusion.FixedInstallationTS EQ 0 THEN
    RETURN "Missing fixed line installation date".
 
-fSplitTS(OrderFusion.FixedInstallationTS,
+Func.Common:mSplitTS(OrderFusion.FixedInstallationTS,
          OUTPUT ldaSTCDate,
          OUTPUT liSTCTime).
 
@@ -92,11 +92,11 @@ IF ldaSTCDate < TODAY THEN ASSIGN
 
 IF fIsiSTCAllowed(MobSub.MsSeq) THEN DO:
    IF mobsub.PayType EQ FALSE THEN
-      ldeSTCTS = fMake2Dt(ldaSTCDate, 0).
-   ELSE ldeSTCTS = fMake2Dt(ldaSTCDate, liSTCTime).
+      ldeSTCTS = Func.Common:mMake2DT(ldaSTCDate, 0).
+   ELSE ldeSTCTS = Func.Common:mMake2DT(ldaSTCDate, liSTCTime).
 END.
 /* TODO: how to handle properly */
-ELSE ldeSTCTS = fDate2TS(fLastDayOfMonth(TODAY) + 1).
+ELSE ldeSTCTS = Func.Common:mDate2TS(Func.Common:mLastDayOfMonth(TODAY) + 1).
 
 /* Various validations */
 IF fValidateMobTypeCh(
@@ -115,7 +115,7 @@ IF fValidateNewCliType(INPUT lcNewCLIType, INPUT lcBundleID,
 THEN RETURN lcError.
 
 FIND FIRST NewCliType WHERE
-           NewCLIType.Brand = gcBrand AND
+           NewCLIType.Brand = Syst.CUICommon:gcBrand AND
            NewCLIType.CLIType = Order.CLIType NO-LOCK.
 IF NOT AVAIL NewCLIType THEN
    RETURN SUBST("Unknown CLIType &1", Order.CLIType).

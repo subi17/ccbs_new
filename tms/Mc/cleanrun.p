@@ -71,9 +71,9 @@ RUN Inv/lamupers.p persistent set pHandle.
 form
    skip(17)
 with
-   overlay title color value(ctc)
-   " " + ynimi + " BILLING CLEANING RUN " + string(pvm,"99-99-99") + " "
-   color value(cfc) width 80
+   overlay title color value(Syst.CUICommon:ctc)
+   " " + Syst.CUICommon:ynimi + " BILLING CLEANING RUN " + string(TODAY,"99-99-99") + " "
+   color value(Syst.CUICommon:cfc) width 80
    frame taka.
 
 form
@@ -115,21 +115,21 @@ form
      format "Killed/All"
      SKIP
 
-with title color value(ctc) " CRITERIA FOR CREATING INVOICES " side-labels
-   color value(cfc) row 2 centered overlay frame rajat.
+with title color value(Syst.CUICommon:ctc) " CRITERIA FOR CREATING INVOICES " side-labels
+   color value(Syst.CUICommon:cfc) row 2 centered overlay frame rajat.
 
 form
     " Consecutive invoice number: " lasno  no-label           skip
     " Minimum invoicing amount .: " mininv no-label           skip
 with
-   title color value (ctc) " INVOICE GROUP DATA " color value(cfc)
+   title color value (Syst.CUICommon:ctc) " INVOICE GROUP DATA " color value(Syst.CUICommon:cfc)
    overlay centered row 15 frame lasno.
 
-cfc = "sel". RUN Syst/ufcolor.p. ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view frame taka. pause 0 no-message.
 
-cfc = "lis". RUN Syst/ufcolor.p.
-ehto = 9. RUN Syst/ufkey.p.
+Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
+Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
 ASSIGN
 atpvm2 = date(month(today),1,year(today)) - 1
@@ -145,7 +145,7 @@ ASSIGN
 ELSE DO:
    FIND Customer WHERE Customer.CustNum = asno1 NO-LOCK NO-ERROR.
    FIND InvGroup WHERE 
-        InvGroup.Brand    = gcBrand AND
+        InvGroup.Brand    = Syst.CUICommon:gcBrand AND
         InvGroup.InvGroup = Customer.InvGroup NO-LOCK NO-ERROR.
    IF NOT AVAIL InvGroup THEN DO:
       MESSAGE
@@ -185,7 +185,7 @@ toimi:
    repeat with frame valinta on endkey undo toimi, return:
       if kysy_rajat then do:
          /* We ask the limits */
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          update
             InvGroup
             asno1 asno2   validate(input asno2  >= input asno1,
@@ -199,8 +199,8 @@ toimi:
          liMinDays
          llKilled
          with frame rajat editing :
-            readkey. nap = keylabel(lastkey).
-            if lookup(nap,poisnap) > 0 then do:
+            readkey. Syst.CUICommon:nap = keylabel(lastkey).
+            if lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 then do:
                hide message no-pause.
 
                if frame-field = "InvGroup" then do:
@@ -213,7 +213,7 @@ toimi:
                   end.
 
                   find InvGroup where 
-                       InvGroup.Brand    = gcBrand AND
+                       InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                        InvGroup.InvGroup = InvGroup
                   no-lock no-error.
                   if not avail InvGroup then do:
@@ -295,16 +295,16 @@ toimi:
          kysy_rajat = false.
       end.
 
-      assign ufk = 0 ufk[1] = 132 ufk[2] = 0
-                     ufk[4] = 0 ufk[5] = 795
-                     ufk[8] = 8 ehto = 0.
+      assign Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[2] = 0
+                     Syst.CUICommon:ufk[4] = 0 Syst.CUICommon:ufk[5] = 795
+                     Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
-      if toimi = 1 then do:
+      if Syst.CUICommon:toimi = 1 then do:
          kysy_rajat = true.
          next toimi.
       end.
 
-      if toimi = 5 then do:
+      if Syst.CUICommon:toimi = 5 then do:
 
          /* reject if lanro is ZERO */
          if lasno = "" then do:
@@ -317,14 +317,14 @@ toimi:
 
       end.
 
-      if toimi = 8 then do:
+      if Syst.CUICommon:toimi = 8 then do:
          hide message no-pause.
          hide frame rajat no-pause.
          hide frame taka no-pause.
          return.
       end.
 
-   end. /* toimi */
+   end. /* Syst.CUICommon:toimi */
 
 hide frame lasno no-pause.
 
@@ -332,14 +332,14 @@ hide frame lasno no-pause.
 message "Sorting customers and calls ...".
 XCUST:
 for each Customer   no-lock  where
-         Customer.Brand     = gcBrand  AND
+         Customer.Brand     = Syst.CUICommon:gcBrand  AND
          Customer.CustNum  >= asno1    and
          Customer.CustNum  <= asno2    and
          Customer.CustNum  >  unknown  and
          Customer.InvGroup  = InvGroup,
 
    first InvGroup  no-lock where
-         InvGroup.Brand    = gcBrand AND
+         InvGroup.Brand    = Syst.CUICommon:gcBrand AND
          InvGroup.InvGroup = Customer.InvGroup.
 
    /* only customers with killed subscriptions */

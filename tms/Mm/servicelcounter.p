@@ -9,9 +9,7 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/date.i}
 {Syst/tmsconst.i}
-{Inv/nnpura.i}
  
 DEF INPUT PARAM iMSSeq    AS INT  NO-UNDO.
 DEF INPUT PARAM iiCustNum AS INT  NO-UNDO.
@@ -64,8 +62,8 @@ form
     lcUsage                  FORMAT "x(9)" column-label "Usage"           
     lcBDestLimit             FORMAT "x(4)" column-label "BDestAmt"
 WITH ROW FrmRow width 80 overlay FrmDown  down
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) 
+    COLOR VALUE(Syst.CUICommon:cfc)   
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     " COUNTERS for period " + STRING(iiPeriod) + " " + icEvent + " "
     FRAME sel.
 
@@ -86,13 +84,13 @@ form
    "Starting fees.. ..:" ldeStartingFees  SKIP
    "Unit charge.......:" ldeUnitCharge    SKIP
 WITH OVERLAY ROW 2 centered
-   COLOR value(cfc)
-   TITLE COLOR value(ctc)
+   COLOR value(Syst.CUICommon:cfc)
+   TITLE COLOR value(Syst.CUICommon:ctc)
    " COUNTERS for period " + STRING(iiPeriod) + " " + icEvent + " "
    WITH no-labels side-labels
    FRAME lis.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By MSSeq   , By SLSeq ,By 3, By 4".
@@ -123,13 +121,13 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a ServiceLCounter  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR ServiceLCounter.MSSeq
@@ -210,28 +208,28 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 0  ufk[2]= 0 ufk[3]= 0  ufk[4]= 0
-        ufk[5]= 0  ufk[6]= 0 
-        ufk[7]= 925 
-        ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = false.
+        Syst.CUICommon:ufk[1]= 0  Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0  Syst.CUICommon:ufk[4]= 0
+        Syst.CUICommon:ufk[5]= 0  Syst.CUICommon:ufk[6]= 0 
+        Syst.CUICommon:ufk[7]= 925 
+        Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+        Syst.CUICommon:ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         choose row ldaFromDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ldaFromDate WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ldaFromDate WITH FRAME sel.
       END.
       
       IF rtab[FRAME-line] = ? THEN NEXT.
 
-      nap = keylabel(LASTkey).
+      Syst.CUICommon:nap = keylabel(LASTkey).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -255,10 +253,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTkey).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTkey).
 
       /* PREVious row */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-line = 1 THEN DO:
            RUN local-find-this(false).
            RUN local-find-PREV.
@@ -283,7 +281,7 @@ BROWSE:
       END. /* PREVious row */
 
       /* NEXT row */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-line = FRAME-down THEN DO:
            RUN local-find-this(false).
@@ -309,7 +307,7 @@ BROWSE:
       END. /* NEXT row */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND ServiceLCounter WHERE recid(ServiceLCounter) = memory 
         NO-LOCK NO-ERROR.
@@ -334,7 +332,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* Put Cursor on downmost Row */
        IF rtab[FRAME-down] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -348,14 +346,14 @@ BROWSE:
        END.
      END. /* NEXT page */
      
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN DO TRANS:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN DO TRANS:
        MESSAGE "This view is not yet implemented" VIEW-AS ALERT-BOX. 
        LEAVE. /* This view is not yet implemented */
 /*
        /* change */
        RUN local-find-this(false).
-       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. 
+       ASSIGN ac-hdr = " CHANGE " ufkey = true Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. 
        
        RUN local-update-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -370,19 +368,19 @@ BROWSE:
        LEAVE. */
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = recid(ServiceLCounter) must-print = true.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN memory = recid(ServiceLCounter) must-print = true.
         NEXT LOOP.
      END.
      
-     ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 THEN DO:
          RUN local-find-this(false).
          RUN Mm/slcounteritem.p(ServiceLCounter.msseq, 
                              ServiceLCounter.Period,
@@ -392,13 +390,13 @@ BROWSE:
          xrecid = recid(ServiceLCounter).
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 PROCEDURE local-find-this:
@@ -571,7 +569,7 @@ PROCEDURE local-find-others.
    IF AVAIL Servicelimit THEN DO:
     
       FIND FIRST ServiceLimitGroup WHERE
-         ServiceLimitGroup.Brand = gcBrand AND
+         ServiceLimitGroup.Brand = Syst.CUICommon:gcBrand AND
          ServiceLimitGroup.GroupCode = ServiceLimit.GroupCode NO-LOCK NO-ERROR.
      
       ASSIGN 
@@ -580,9 +578,9 @@ PROCEDURE local-find-others.
                            INT(SUBSTRING(STRING(iiPeriod),7,2)) ELSE 1),
                            INT(SUBSTRING(STRING(iiPeriod),1,4)))
         ldaEndDate = (IF iiPeriod > 999999 THEN ldaFromDate 
-                      ELSE fLastDayOfMonth(ldaFromDate))
-        ldPeriodFrom = fMake2Dt(ldaFromDate,0)
-        ldPeriodTo   = fMake2Dt(ldaEndDate,86399).
+                      ELSE Func.Common:mLastDayOfMonth(ldaFromDate))
+        ldPeriodFrom = Func.Common:mMake2DT(ldaFromDate,0)
+        ldPeriodTo   = Func.Common:mMake2DT(ldaEndDate,86399).
 
       IF ServiceLimitGroup.GroupCode BEGINS {&DSS} THEN
          FIND FIRST MServiceLimit WHERE
@@ -633,12 +631,12 @@ PROCEDURE local-find-others.
     
       CASE ServiceLimit.InclUnit:
          WHEN 1 THEN DO:
-            lcUsage = fSec2C(ServiceLCounter.Amt,9).
-            lcLimit = fSec2C(ldeLimit * 60,9).
+            lcUsage = Func.Common:mSec2C(ServiceLCounter.Amt,9).
+            lcLimit = Func.Common:mSec2C(ldeLimit * 60,9).
          END.
          WHEN 2 THEN DO:
-            lcUsage = fSec2C(ServiceLCounter.Amt,8).
-            lcLimit = fSec2C(ldeLimit,8).
+            lcUsage = Func.Common:mSec2C(ServiceLCounter.Amt,8).
+            lcLimit = Func.Common:mSec2C(ldeLimit,8).
          END.
          WHEN 4 THEN DO:
             lcUsage = STRING(ROUND(ServiceLCounter.Amt / 1024 / 1024,2)).

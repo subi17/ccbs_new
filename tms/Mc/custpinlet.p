@@ -9,7 +9,6 @@
   ------------------------------------------------------ */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fctserval.i}
 {Func/fctchange.i}
@@ -54,13 +53,13 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
    VIEW FRAME fCriter.
 
    ASSIGN
-      ufk   = 0  
-      ufk[5]= 1027  
-      ufk[8]= 8 
-      ehto = 0.
+      Syst.CUICommon:ufk   = 0  
+      Syst.CUICommon:ufk[5]= 1027  
+      Syst.CUICommon:ufk[8]= 8 
+      Syst.CUICommon:ehto = 0.
    RUN Syst/ufkey.p.
 
-   IF toimi = 5 THEN DO:
+   IF Syst.CUICommon:toimi = 5 THEN DO:
 
       llOk = FALSE.
       MESSAGE "A PIN letter will be sent." SKIP
@@ -88,7 +87,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
       LEAVE.
    END.
    
-   ELSE IF toimi = 8 THEN LEAVE.
+   ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
 
 END. /* lCustMark */
 

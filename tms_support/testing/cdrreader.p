@@ -11,8 +11,8 @@ Version ......: Yoigo
 {Syst/commpaa.i}
 {testing/cdrreader.i}
 ASSIGN
-   katun = "Qvantel"
-   gcBrand = "1".
+   Syst.CUICommon:katun = "Qvantel"
+   Syst.CUICommon:gcBrand = "1".
 
 DEFINE VARIABLE lcCLI AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcSecCLI AS CHARACTER NO-UNDO.
@@ -90,13 +90,13 @@ PROCEDURE pUserInput:
          lcMeas WITH FRAME lis EDITING:
       
          IF ufkey THEN DO:
-            ASSIGN ehto = 9. RUN Syst/ufkey.p.
+            ASSIGN Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
             ufkey = false.
          END.
 
          READKEY.
          
-         nap = keylabel(lastkey).
+         Syst.CUICommon:nap = keylabel(lastkey).
             
          IF KEYLABEL(LASTKEY) = "F9" AND 
             FRAME-FIELD = "lcCDRFile" THEN DO:
@@ -109,7 +109,7 @@ PROCEDURE pUserInput:
          END.
 
 
-         IF LOOKUP(nap,poisnap) > 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
 
             IF FRAME-FIELD = "lcCli" THEN DO:
                FIND FIRST mobsub WHERE

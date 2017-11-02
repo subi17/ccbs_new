@@ -13,12 +13,11 @@
 {Syst/commali.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'DumpLog'}
-{Func/timestamp.i}
 
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -68,9 +67,9 @@ form
     DumpLog.DumpLogStatus COLUMN-LABEL "St"
     DumpLog.FileName FORMAT "X(40)" COLUMN-LABEL "Filename"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
-       "DUMP LOG "  + string(pvm,"99-99-99") + " "
+    COLOR VALUE(Syst.CUICommon:cfc)   
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+       "DUMP LOG "  + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form
@@ -84,8 +83,8 @@ form
     DumpLog.FileName COLON 20
     DumpLog.Filesize COLON 20
 WITH  OVERLAY ROW 1 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -93,21 +92,20 @@ FORM
     lcLargeInfo AT 2 NO-LABEL
        VIEW-AS EDITOR SIZE-CHARS 70 BY 17
 WITH OVERLAY ROW 1 centered
-    COLOR VALUE(cfc) TITLE " VIEW INFO " 
+    COLOR VALUE(Syst.CUICommon:cfc) TITLE " VIEW INFO " 
     SIDE-LABELS FRAME fInfo.
 
 form /* seek  DumpLog */
     "DumpID:" liDumpID 
     HELP "Enter Dump ID "
-    WITH row 4 col 1 TITLE COLOR VALUE(ctc) " FIND Dump ID "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 1 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Dump ID "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
 FUNCTION fStatusName RETURNS LOGICAL
    (INPUT iiStatus AS INT):
 
-   lcStatus = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "ActionLog",
+   lcStatus = Func.Common:mTMSCodeName("ActionLog",
                                "ActionStatus",
                                STRING(iiStatus)).
    DISP lcStatus WITH FRAME lis.
@@ -115,7 +113,7 @@ FUNCTION fStatusName RETURNS LOGICAL
 END.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -184,26 +182,26 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk    = 0
-        ufk[8] = 8 
-        ehto   = 3 
+        Syst.CUICommon:ufk    = 0
+        Syst.CUICommon:ufk[8] = 8 
+        Syst.CUICommon:ehto   = 3 
         ufkey  = FALSE.
 
         IF iiDumpID > 0 THEN ASSIGN 
-           ufk[1] = 0
-           ufk[3] = 0.
+           Syst.CUICommon:ufk[1] = 0
+           Syst.CUICommon:ufk[3] = 0.
 
         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       CHOOSE ROW DumpLog.DumpId {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-      COLOR DISPLAY VALUE(ccc) DumpLog.DumpId WITH FRAME sel.
+      COLOR DISPLAY VALUE(Syst.CUICommon:ccc) DumpLog.DumpId WITH FRAME sel.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -213,7 +211,7 @@ REPEAT WITH FRAME sel:
 
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -238,7 +236,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -264,7 +262,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND DumpLog WHERE recid(DumpLog) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -288,7 +286,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -303,10 +301,10 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND Syst.CUICommon:ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY liDumpID WITH FRAME F1.
 
@@ -323,7 +321,7 @@ REPEAT WITH FRAME sel:
        END.
      END. /* Search-1 */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -331,8 +329,8 @@ REPEAT WITH FRAME sel:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDumpLog).
 
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 5. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE Syst.CUICommon:ehto = 5. RUN Syst/ufkey.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -348,25 +346,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(DumpLog) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(DumpLog) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 
@@ -391,7 +389,7 @@ IF iiDumpID > 0 THEN DO:
    END.
    ELSE
       FIND FIRST DumpLog USE-INDEX CreateStart WHERE
-                 DumpLog.CreateStart <= fMakeTS().
+                 DumpLog.CreateStart <= Func.Common:mMakeTS().
 
 END PROCEDURE.
 
@@ -405,7 +403,7 @@ PROCEDURE LOCAL-FIND-LAST:
    END.
    ELSE
       FIND LAST DumpLog USE-INDEX CreateStart WHERE
-                DumpLog.CreateStart <= fMakeTS().
+                DumpLog.CreateStart <= Func.Common:mMakeTS().
  
 END PROCEDURE.
 
@@ -419,7 +417,7 @@ PROCEDURE LOCAL-FIND-NEXT:
    END.
    ELSE
       FIND NEXT DumpLog USE-INDEX CreateStart WHERE
-                DumpLog.CreateStart <= fMakeTS().
+                DumpLog.CreateStart <= Func.Common:mMakeTS().
  
 END PROCEDURE.
 
@@ -433,7 +431,7 @@ PROCEDURE LOCAL-FIND-PREV:
    END.
    ELSE
       FIND PREV DumpLog USE-INDEX CreateStart WHERE
-                DumpLog.CreateStart <= fMakeTS().
+                DumpLog.CreateStart <= Func.Common:mMakeTS().
  
 END PROCEDURE.
 
@@ -458,7 +456,7 @@ END PROCEDURE.
 
 PROCEDURE local-find-others.
 
-    fSplitTS(DumpLog.CreateStart,
+    Func.Common:mSplitTS(DumpLog.CreateStart,
              OUTPUT ldtDate,
              OUTPUT liTime).
 
@@ -478,10 +476,10 @@ PROCEDURE local-UPDATE-record:
          lcTime = STRING(ldtDate,"99-99-99") + " " + STRING(liTime,"hh:mm:ss")
          lcInfo = ""
          lcCreateStart = (IF DumpLog.CreateStart > 0
-                          THEN fTS2HMS(DumpLog.CreateStart)
+                          THEN Func.Common:mTS2HMS(DumpLog.CreateStart)
                           ELSE "")
          lcCreateEnd = (IF DumpLog.CreateEnd > 0
-                        THEN fTS2HMS(DumpLog.CreateEnd)
+                        THEN Func.Common:mTS2HMS(DumpLog.CreateEnd)
                         ELSE "").
       
       DISP 
@@ -498,17 +496,17 @@ PROCEDURE local-UPDATE-record:
       fStatusName(DumpLog.DumpLogStatus).
         
       ASSIGN 
-         ehto = 0
-         ufk  = 0
-         ufk[1] = 7 WHEN lcRight = "RW"
-      /* ufk[4] = 1697 */
-         ufk[8] = 8.
+         Syst.CUICommon:ehto = 0
+         Syst.CUICommon:ufk  = 0
+         Syst.CUICommon:ufk[1] = 7 WHEN lcRight = "RW"
+      /* Syst.CUICommon:ufk[4] = 1697 */
+         Syst.CUICommon:ufk[8] = 8.
       RUN Syst/ufkey.p.
       
-      IF toimi = 1 THEN 
+      IF Syst.CUICommon:toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
       
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
          
          FIND CURRENT DumpLog EXCLUSIVE-LOCK.
@@ -516,9 +514,9 @@ PROCEDURE local-UPDATE-record:
          
             READKEY.
          
-            nap = KEYLABEL(LASTKEY).
+            Syst.CUICommon:nap = KEYLABEL(LASTKEY).
             
-            IF nap = "F9" AND FRAME-FIELD = "DumpLogStatus" THEN DO:
+            IF Syst.CUICommon:nap = "F9" AND FRAME-FIELD = "DumpLogStatus" THEN DO:
 
                RUN Help/h-tmscodes.p(INPUT "ActionLog",  /* TableName*/
                                     "ActionStatus", /* FieldName */
@@ -530,12 +528,12 @@ PROCEDURE local-UPDATE-record:
                   DISPLAY INTEGER(lcCode) ;& DumpLog.DumpLogStatus.
                END.
 
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.
  
-            ELSE IF LOOKUP(nap,poisnap) > 0 THEN DO:
+            ELSE IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
             
                IF FRAME-FIELD = "DumpLogStatus" THEN DO:
                   fStatusName(INPUT INPUT DumpLog.DumpLogStatus).
@@ -554,7 +552,7 @@ PROCEDURE local-UPDATE-record:
          LEAVE.
       END.
 
-      ELSE IF toimi = 8 THEN LEAVE.
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
    END.
 
 END PROCEDURE.

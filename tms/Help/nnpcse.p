@@ -28,8 +28,8 @@ form
     MenuClass.MenuClass
     MenuClass.MCName  format "x(30)"
     MenuClass.Memo[1]  format "x(34)"
-WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(cfc)
-    title color value(ctc) " Program classes " OVERLAY FRAME tlse.
+WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
+    title color value(Syst.CUICommon:ctc) " Program classes " OVERLAY FRAME tlse.
 
 form
     MenuClass.MenuClass SKIP
@@ -37,17 +37,17 @@ form
     MenuClass.Memo[1]    SKIP
 
 WITH OVERLAY ROW 8 centered
-    TITLE COLOR value(ctc) tlli-ots
-    COLOR value(cfc) side-labels 1 col
+    TITLE COLOR value(Syst.CUICommon:ctc) tlli-ots
+    COLOR value(Syst.CUICommon:cfc) side-labels 1 col
     FRAME tlli.
 
 form /* Program Class :n hakua varten */
     MenuClass
     help "Enter No of Class"
-    with row 4 col 2 title color value(ctc) " FIND Program Class "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Program Class "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
-cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 Runko:
 repeat:
 
@@ -65,7 +65,7 @@ LOOP:
    Repeat WITH FRAME tlse:
    IF must-add THEN DO:  /* Program Class  lisays  */
       ASSIGN
-      cfc = "tlli"
+      Syst.CUICommon:cfc = "tlli"
       tlli-ots = " ADD ".
       RUN Syst/ufcolor.p.
 add-new:
@@ -127,9 +127,9 @@ print-line:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk = 0 ufk[1] = 35 ufk[5] = 11
-         ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
-         siirto = ? ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 35 Syst.CUICommon:ufk[5] = 11
+         Syst.CUICommon:ufk[6] = 0 Syst.CUICommon:ufk[8] = 8  Syst.CUICommon:ufk[9] = 1
+         siirto = ? Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
   END. /* print-line */
@@ -139,13 +139,13 @@ BROWSE:
 
          HIDE MESSAGE no-pause.
          CHOOSE ROW MenuClass.MenuClass {Syst/uchoose.i} no-error WITH FRAME tlse.
-         COLOR DISPLAY value(ccc) MenuClass.MenuClass WITH FRAME tlse.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) MenuClass.MenuClass WITH FRAME tlse.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.
-         nap = keylabel(LASTKEY).
+         Syst.CUICommon:nap = keylabel(LASTKEY).
 
          /* previous line */
-         if lookup(nap,"cursor-up") > 0 THEN DO
+         if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO
          WITH FRAME tlse:
             IF FRAME-LINE = 1 THEN DO:
                FIND MenuClass where recid(MenuClass) = rtab[FRAME-LINE] no-lock.
@@ -171,7 +171,7 @@ BROWSE:
          END. /* previous line */
 
          /* NEXT line */
-         if lookup(nap,"cursor-down") > 0 THEN DO WITH FRAME tlse:
+         if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO WITH FRAME tlse:
             IF FRAME-LINE = FRAME-DOWN THEN DO:
                FIND MenuClass where recid(MenuClass) = rtab[FRAME-LINE] no-lock .
                FIND NEXT MenuClass no-lock no-error.
@@ -197,7 +197,7 @@ BROWSE:
          END. /* NEXT line */
 
          /* previous page */
-         else if lookup(nap,"page-up,prev-page") > 0 THEN DO WITH FRAME tlse:
+         else if lookup(Syst.CUICommon:nap,"page-up,prev-page") > 0 THEN DO WITH FRAME tlse:
             FIND MenuClass where recid(MenuClass) = ylin no-lock no-error.
             FIND prev MenuClass no-lock no-error.
             IF AVAILABLE MenuClass THEN DO:
@@ -219,7 +219,7 @@ BROWSE:
         END. /* previous page */
 
         /* NEXT page */
-        else if lookup(nap,"page-down,next-page") > 0 THEN DO WITH FRAME tlse:
+        else if lookup(Syst.CUICommon:nap,"page-down,next-page") > 0 THEN DO WITH FRAME tlse:
            IF rtab[FRAME-DOWN] = ? THEN DO:
                BELL.
                message "THIS IS THE LAST PAGE !".
@@ -233,10 +233,10 @@ BROWSE:
         END. /* NEXT page */
 
         /* Haku */
-        if lookup(nap,"1,f1") > 0 THEN DO:  /* haku */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+        if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:  /* haku */
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            MenuClass = 0.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE MenuClass WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
            IF MenuClass <> 0 THEN DO:
@@ -256,14 +256,14 @@ BROWSE:
         END. /* Haku */
 
         /* Valinta */
-        else if lookup(nap,"return,enter,5,f5") > 0 THEN DO:
+        else if lookup(Syst.CUICommon:nap,"return,enter,5,f5") > 0 THEN DO:
            FIND MenuClass where recid(MenuClass) = rtab[FRAME-LINE] no-lock.
            siirto = string(MenuClass.MenuClass).
            LEAVE runko.
         END. /* Valinta */
 
         /* Ensimmainen tietue */
-        else if lookup(nap,"home,h") > 0 THEN DO:
+        else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
            FIND FIRST MenuClass no-lock.
            ylin = recid(MenuClass).
            must-print = TRUE.
@@ -271,14 +271,14 @@ BROWSE:
         END. /* Ensimmainen tietue */
 
         /* LAST record */
-        else if lookup(nap,"end,e") > 0 THEN DO :
+        else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO :
            FIND LAST MenuClass no-lock.
            ylin = recid(MenuClass).
            must-print = TRUE.
            NEXT LOOP.
         END. /* LAST record */
 
-        else if nap = "8" or nap = "f8" THEN LEAVE runko. /* Paluu */
+        else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" THEN LEAVE runko. /* Paluu */
 
      END.  /* BROWSE */
    END.  /* LOOP */

@@ -45,9 +45,9 @@ IF NOT bBatch THEN DO:
                                 ": " coun2 " transactions"       SKIP(3)
 
    WITH  OVERLAY  ROW 1 WIDTH 80
-   COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) 
-    " " + ynimi + "    EXPORT PRESELECTIONS " + STRING(pvm,"99.99.9999") + " "
+   COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
+    " " + Syst.CUICommon:ynimi + "    EXPORT PRESELECTIONS " + STRING(TODAY,"99.99.9999") + " "
     NO-LABELS 
     /*1 columns*/
     FRAME main.
@@ -65,8 +65,8 @@ IF NOT bBatch THEN DO:
      "   - No:  Some transactions remain unexported due to the"  SKIP
      "          daily Limit (they shall be exported earliest tomorrow) "
 
-   WITH title color value(ctc) " DAILY Limit EXCEEDED "
-           color value(cfc) overlay row 3 centered no-labels frame alert.
+   WITH title color value(Syst.CUICommon:ctc) " DAILY Limit EXCEEDED "
+           color value(Syst.CUICommon:cfc) overlay row 3 centered no-labels frame alert.
 
 
    PAUSE 0.
@@ -101,7 +101,7 @@ IF NOT bBatch THEN DO:
    MAIN:
    REPEAT WITH FRAME main:
 
-      ehto = 9. RUN Syst/ufkey.p.
+      Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
       pause 0.
          DISPLAY
@@ -115,15 +115,15 @@ IF NOT bBatch THEN DO:
    Action:
       REPEAT WITH FRAME main:
          ASSIGN
-         ufk = 0 ehto = 0
-         ufk[1] = 0 
-         ufk[5] = 795
-         ufk[8] = 8.
+         Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0
+         Syst.CUICommon:ufk[1] = 0 
+         Syst.CUICommon:ufk[5] = 795
+         Syst.CUICommon:ufk[8] = 8.
          RUN Syst/ufkey.p.
 
-         IF toimi = 1 THEN NEXT  main.
-         IF toimi = 8 THEN LEAVE main.
-         IF TOIMI = 5 THEN DO:
+         IF Syst.CUICommon:toimi = 1 THEN NEXT  main.
+         IF Syst.CUICommon:toimi = 8 THEN LEAVE main.
+         IF Syst.CUICommon:toimi = 5 THEN DO:
 
             ok = false.
             MESSAGE "Do You REALLY want to export (Y/N) ?" UPDATE ok.

@@ -19,7 +19,6 @@
                                  ClaimDate & ClaimQty,
                                  get CommPaid amounts according TO
                                  Payment.AcChargeType
-                  24.10.2002 aam fTMSCodeName()
                   12.11.2002 jr "nnlaki" => "invoice" in memo
                   18.11.02 lp - F9 for ClaimCancel and ClaimState
                               - Cash Discount and Demanded at ->UPDATE
@@ -40,7 +39,6 @@
   ---------------------------------------------------------------------------*/
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/eventval.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'invoice'}
@@ -49,7 +47,7 @@
 {Func/cparam2.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -170,8 +168,8 @@ suoritettu       label "Total payments ..." AT 2
                  format "zzzzzzzz9.99-" SKIP
 skip
 
-with title color value(ctc) " " + ynimi + " UPDATE AN INVOICE "
-+ string(pvm,"99-99-99") + " " COLOR value(cfc) ROW 1 col 1
+with title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " UPDATE AN INVOICE "
++ string(TODAY,"99-99-99") + " " COLOR value(Syst.CUICommon:cfc) ROW 1 col 1
 width 80 side-LABELs
 FRAME Invoice.
 
@@ -179,15 +177,14 @@ form
 Invoice.CustName LABEL "Customer's Name....."
 Invoice.Address  LABEL "Address ............"
 Invoice.PostOffice  LABEL "Post office ........"
-with title color value(ctc) " 9999: DIVERSE CUSTOMER "
-COLOR value(cfc) ROW 5 centered side-LABELs OVERLAY
+with title color value(Syst.CUICommon:ctc) " 9999: DIVERSE CUSTOMER "
+COLOR value(Syst.CUICommon:cfc) ROW 5 centered side-LABELs OVERLAY
 FRAME oso.
 
 FUNCTION fClaimStateName RETURNS LOGIC
    (idClaimState AS DEC).
    
-   lcState = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                              "Invoice",
+   lcState = Func.Common:mTMSCodeName("Invoice",
                               "ClaimState",
                               REPLACE(STRING(idClaimState),",",".")).
    DISPLAY lcState WITH FRAME Invoice.
@@ -195,39 +192,33 @@ FUNCTION fClaimStateName RETURNS LOGIC
 END FUNCTION.
 
 
-cfc = "yri". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "yri". RUN Syst/ufcolor.p.
 
 liDueDate = fCParamI("DueDateTrans").
 
 /* get invoice types and payment states */
 DO xi = 0 TO 5:
    lcPaymState = lcPaymState + 
-                 DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                  "Invoice","PaymState",STRING(xi)) +
+                 Func.Common:mTMSCodeName("Invoice","PaymState",STRING(xi)) +
                  lcSep.
    lcSTypeLst  = lcSTypeLst + 
-                 DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                  "Invoice","SpecDel",STRING(xi)) +
+                 Func.Common:mTMSCodeName("Invoice","SpecDel",STRING(xi)) +
                  lcSep.
 END.
 
 DO xi = 1 TO 9:
    lcInvType   = lcInvType + 
-                 DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                  "Invoice","InvType",STRING(xi)) +
+                 Func.Common:mTMSCodeName("Invoice","InvType",STRING(xi)) +
                  lcSep.
    lcCancelLst = lcCancelLst + 
-                 DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                  "Invoice","ClaimCancel",STRING(xi)) +
+                 Func.Common:mTMSCodeName("Invoice","ClaimCancel",STRING(xi)) +
                  lcSep.
    IF xi <= 4 THEN DO:
       lcChargeTypeLst = lcChargeTypeLst + 
-                   DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                    "Invoice","ChargeType",STRING(xi)) +
+                   Func.Common:mTMSCodeName("Invoice","ChargeType",STRING(xi)) +
                    lcSep.
       lcDelTypeLst = lcDelTypeLst + 
-                   DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                    "Invoice","DelType",STRING(xi)) +
+                   Func.Common:mTMSCodeName("Invoice","DelType",STRING(xi)) +
                    lcSep.
    END.                  
 END.
@@ -238,11 +229,11 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
    PAUSE 0 no-message.
    assign lasnimi = ""
           kodnim = "".
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    PROMPT-FOR Invoice.InvNum /*WITH FRAME Invoice */
    VALIDATE(input InvNum = "" OR input InvNum ="0" OR
             CAN-FIND (FIRST Invoice WHERE 
-                            Invoice.Brand  = gcBrand AND
+                            Invoice.Brand  = Syst.CUICommon:gcBrand AND
                             Invoice.Invnum = INPUT InvNum),
             "Invoice not found !") .
    if input Invoice.InvNum = "" or input Invoice.InvNum = "0" THEN LEAVE LOOP.
@@ -323,15 +314,15 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
               WITH FRAME Invoice.
 
       ASSIGN
-      ufk[1] = (IF lcRight = "RW" THEN 91 ELSE 0) 
-      ufk[2] = 0 ufk[3] = 927 ufk[4] = 0 
-      ufk[5] = (IF lcRight = "RW" THEN 15 ELSE 0)
-      ufk[6] = (IF lcRight = "RW" THEN 12 ELSE 0)
-      ufk[7] = 0  ufk[7] = 0   ufk[8] = 8   ufk[9] = 0 ehto = 0.
+      Syst.CUICommon:ufk[1] = (IF lcRight = "RW" THEN 91 ELSE 0) 
+      Syst.CUICommon:ufk[2] = 0 Syst.CUICommon:ufk[3] = 927 Syst.CUICommon:ufk[4] = 0 
+      Syst.CUICommon:ufk[5] = (IF lcRight = "RW" THEN 15 ELSE 0)
+      Syst.CUICommon:ufk[6] = (IF lcRight = "RW" THEN 12 ELSE 0)
+      Syst.CUICommon:ufk[7] = 0  Syst.CUICommon:ufk[7] = 0   Syst.CUICommon:ufk[8] = 8   Syst.CUICommon:ufk[9] = 0 Syst.CUICommon:ehto = 0.
 
-      ehto = 0. RUN Syst/ufkey.p.
-      IF toimi = 1 AND lcRight = "RW" THEN DO:
-         ehto = 9. RUN Syst/ufkey.p.
+      Syst.CUICommon:ehto = 0. RUN Syst/ufkey.p.
+      IF Syst.CUICommon:toimi = 1 AND lcRight = "RW" THEN DO:
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhInvoice).
 
@@ -365,9 +356,9 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
 
          WITH FRAME Invoice EDITING:
             READKEY.
-            nap = KEYLABEL(LASTKEY).
+            Syst.CUICommon:nap = KEYLABEL(LASTKEY).
 
-            IF nap = "F9" AND 
+            IF Syst.CUICommon:nap = "F9" AND 
                LOOKUP(FRAME-FIELD,
                       "ClaimState,ClaimCancel,DelType,ChargeType,SpecDel")
                       > 0
@@ -457,12 +448,12 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
 
                END.
 
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.
 
-            ELSE IF LOOKUP(nap,poisnap) > 0 THEN DO WITH FRAME Invoice:
+            ELSE IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME Invoice:
 
                IF FRAME-FIELD = "ClaimState" THEN DO:
                   fClaimStateName(INPUT INPUT FRAME Invoice
@@ -545,7 +536,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
          NEXT toimi.
       END.
 
-      ELSE IF toimi = 3 THEN DO : /* memo */
+      ELSE IF Syst.CUICommon:toimi = 3 THEN DO : /* memo */
          RUN Mc/memo.p(INPUT Invoice.Custnum,
                   INPUT "invoice",
                   INPUT STRING(Invoice.InvNum),
@@ -553,7 +544,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
          NEXT toimi.  
       END.
 
-      ELSE IF toimi = 5 AND lcRight = "RW" THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 5 AND lcRight = "RW" THEN DO:
 
          /* create claiming history for claim cancellation */
          IF Invoice.ClaimState = 15 AND ldOldClaim < 15 THEN DO:
@@ -571,7 +562,7 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
                       ClaimHist.Memo       = "Claiming cancelled"
                       ClaimHist.ClaimDate  = TODAY
                       ClaimHist.ClaimAmt   = Invoice.InvAmt - Invoice.PaidAmt
-                      ClaimHist.Handler    = katun.
+                      ClaimHist.Handler    = Syst.CUICommon:katun.
             END.
          END. 
 
@@ -579,12 +570,12 @@ repeat WITH FRAME Invoice ON ENDKEY UNDO LOOP, NEXT LOOP:
 
          NEXT LOOP.
       END.
-      ELSE IF toimi = 6 AND lcRight = "RW" THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 6 AND lcRight = "RW" THEN DO:
          CLEAR FRAME Invoice no-pause.
          UNDO LOOP, NEXT LOOP.
       END.
-      ELSE IF toimi = 8 THEN UNDO LOOP, LEAVE LOOP.
-   END. /* toimi */
+      ELSE IF Syst.CUICommon:toimi = 8 THEN UNDO LOOP, LEAVE LOOP.
+   END. /* Syst.CUICommon:toimi */
 END. /* LOOP */
 HIDE FRAME Invoice no-pause.
 

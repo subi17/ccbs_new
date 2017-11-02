@@ -9,7 +9,6 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 {Syst/commali.i}
-{Func/timestamp.i}
 
 DEFINE INPUT PARAMETER iiMsRequest AS INTEGER.
 DEFINE INPUT PARAMETER iiStatNow   AS INTEGER.
@@ -18,7 +17,7 @@ DEFINE INPUT PARAMETER iCParam     AS CHARACTER.
 
 FIND MsRequest WHERE
      MsRequest.MsRequest = iiMsRequest AND
-     MsRequest.Brand     = gcBrand
+     MsRequest.Brand     = Syst.CUICommon:gcBrand
 NO-LOCK NO-ERROR.
 
 DEF VAR ldtActivate AS DATE      NO-UNDO.
@@ -26,7 +25,7 @@ DEF VAR liStampTime AS INTEGER   NO-UNDO.
 DEF VAR Ok          AS LOGICAL   NO-UNDO.
 DEF VAR lcInfo      AS CHARACTER NO-UNDO.
 
-fSplitTS(MsRequest.ActStamp,
+Func.Common:mSplitTS(MsRequest.ActStamp,
          OUTPUT ldtActivate,
          OUTPUT liStampTime).
 

@@ -13,14 +13,13 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'mobsub'}
 {Syst/eventval.i}
 {Func/highusage.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -93,10 +92,10 @@ FORM
     llMemo                COLUMN-LABEL "M" FORMAT "M/"
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.CUICommon:cfc)   
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "  HIGH SPENDER MENU  "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form
@@ -121,8 +120,8 @@ form
     
 
 WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     NO-LABEL
     FRAME lis.
 
@@ -131,18 +130,18 @@ form /* seek  HighUsage */
     HELP "Enter Customer Number "
     "Period" lihakuperiod 
     HELP "Enter Period" 
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUSTOMER "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CUSTOMER "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  CLI */
     CLI
     HELP "Enter MSISDN Number"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND MSISDN "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -224,36 +223,36 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 702  
-        ufk[2]= 209 
-        ufk[3]= 2423  
-        ufk[4]= 788
-        ufk[5]= 927
-        ufk[6]= 2425
-        ufk[7]= 555 
-        ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ufk[1]= 702  
+        Syst.CUICommon:ufk[2]= 209 
+        Syst.CUICommon:ufk[3]= 2423  
+        Syst.CUICommon:ufk[4]= 788
+        Syst.CUICommon:ufk[5]= 927
+        Syst.CUICommon:ufk[6]= 2425
+        Syst.CUICommon:ufk[7]= 555 
+        Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW InvSeq.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) InvSeq.CustNum WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) InvSeq.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW HighUsage.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) HighUsage.CLI WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) HighUsage.CLI WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -277,10 +276,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -305,7 +304,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -331,7 +330,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND HighUsage WHERE recid(HighUsage) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -355,7 +354,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
           MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -370,9 +369,9 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET HighUsage lihakuperiod  WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -402,10 +401,10 @@ BROWSE:
      END. /* Search-1 */
 
      /* Search BY col 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        SET CLI WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -424,7 +423,7 @@ BROWSE:
        END.
      END. /* Search-2 */
 
-     ELSE IF LOOKUP(nap,"3,f3") > 0 THEN REPEAT:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 THEN REPEAT:
         
         RUN local-find-this (FALSE).
 
@@ -437,35 +436,35 @@ BROWSE:
         PUT SCREEN ROW 22 "CustNo:" + STRING(Mobsub.custnum) .
         ASSIGN
            ufkey = TRUE
-           ufk   = 0
-           ehto  = 1
-           ufk[1] = 267 
-           ufk[2] = 252
-           ufk[3] = 0
-           ufk[4] = 2427
-           ufk[5] = 2426  
-           ufk[6]= 0 
-           ufk[7]= 2355 
-           ufk[8]= 8.
+           Syst.CUICommon:ufk   = 0
+           Syst.CUICommon:ehto  = 1
+           Syst.CUICommon:ufk[1] = 267 
+           Syst.CUICommon:ufk[2] = 252
+           Syst.CUICommon:ufk[3] = 0
+           Syst.CUICommon:ufk[4] = 2427
+           Syst.CUICommon:ufk[5] = 2426  
+           Syst.CUICommon:ufk[6]= 0 
+           Syst.CUICommon:ufk[7]= 2355 
+           Syst.CUICommon:ufk[8]= 8.
         RUN Syst/ufkey.p.   
         
-        IF toimi = 8 THEN DO:
+        IF Syst.CUICommon:toimi = 8 THEN DO:
         PUT SCREEN ROW 22 "                                 " .
 
            NEXT BROWSE.
         ENd.
-        IF toimi = 1 AND avail mobsub  THEN RUN Mm/solog2.p(mobsub.msseq).
+        IF Syst.CUICommon:toimi = 1 AND avail mobsub  THEN RUN Mm/solog2.p(mobsub.msseq).
 
-        IF toimi = 2 AND avail mobsub  THEN RUN Mm/subser.p(mobsub.msseq).
+        IF Syst.CUICommon:toimi = 2 AND avail mobsub  THEN RUN Mm/subser.p(mobsub.msseq).
 
-        IF toimi = 4 AND avail mobsub THEN RUN lockms(mobsub.msseq).         
-        IF toimi = 5 AND avail mobsub THEN RUN unlockms(mobsub.msseq).
+        IF Syst.CUICommon:toimi = 4 AND avail mobsub THEN RUN lockms(mobsub.msseq).         
+        IF Syst.CUICommon:toimi = 5 AND avail mobsub THEN RUN unlockms(mobsub.msseq).
 
-        IF toimi = 7 AND avail mobsub then RUN Mm/mobsubsms.p(mobsub.msseq).
+        IF Syst.CUICommon:toimi = 7 AND avail mobsub then RUN Mm/mobsubsms.p(mobsub.msseq).
 
      END.
      
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN REPEAT:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 THEN REPEAT:
         
         RUN local-find-this (FALSE).
 
@@ -477,30 +476,30 @@ BROWSE:
         
         ASSIGN
            ufkey = TRUE
-           ufk   = 0
-           ehto  = 1
-           ufk[1] = 1883 ufk[2] = 1888 
-           ufk[4] = 1830 
-           ufk[5]= 0  
-           ufk[6]= 0 ufk[7]= 0 ufk[8]= 8.
+           Syst.CUICommon:ufk   = 0
+           Syst.CUICommon:ehto  = 1
+           Syst.CUICommon:ufk[1] = 1883 Syst.CUICommon:ufk[2] = 1888 
+           Syst.CUICommon:ufk[4] = 1830 
+           Syst.CUICommon:ufk[5]= 0  
+           Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8.
         RUN Syst/ufkey.p.   
 
-        IF toimi = 8 THEN DO:
+        IF Syst.CUICommon:toimi = 8 THEN DO:
            PUT SCREEN ROW 22 "                                  " .
 
            NEXT BROWSE.
         END.   
 
-        IF  toimi = 1 THEN RUN Mc/commontt.p(Invseq.CustNum).
+        IF  Syst.CUICommon:toimi = 1 THEN RUN Mc/commontt.p(Invseq.CustNum).
 
-        IF toimi = 2 THEN RUN Mc/mobilett.p(Invseq.CustNum).
+        IF Syst.CUICommon:toimi = 2 THEN RUN Mc/mobilett.p(Invseq.CustNum).
 
-        IF toimi = 4 THEN RUN Mm/mobcallis.p(highusage.Cli,invseq.invseq).        
+        IF Syst.CUICommon:toimi = 4 THEN RUN Mm/mobcallis.p(highusage.Cli,invseq.invseq).        
 
 
      END.
      
-     ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
        /* mobsub detailed information */
 
        RUN local-find-this(FALSE).
@@ -518,7 +517,7 @@ BROWSE:
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        RUN local-find-this(TRUE).
 
@@ -561,7 +560,7 @@ BROWSE:
              END.
              
              /* Normal actions: IF user just exited from a FIELD */
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO 
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO 
              WITH FRAME newstatus:
                 PAUSE 0.
                 IF FRAME-FIELD = "newstatus" THEN DO:
@@ -609,7 +608,7 @@ BROWSE:
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        /* mobsub detailed information */
 
@@ -622,7 +621,7 @@ BROWSE:
      END.
 
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -630,8 +629,8 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhHighUsage).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY 
        Highusage.cli     
        LiAmountOfInvoice  
@@ -653,25 +652,25 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(HighUsage) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(HighUsage) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 PROCEDURE local-find-this:
@@ -787,7 +786,7 @@ PROCEDURE local-find-others.
    IF not avail invseq then next.
 
    FIND FIRST memo WHERE 
-              Memo.Brand     = gcBrand               AND
+              Memo.Brand     = Syst.CUICommon:gcBrand               AND
               memo.Custnum   = Invseq.Custnum        AND 
               Memo.Hosttable = "Highusage"           AND  
               memo.keyvalue  = STRING(HighUsage.Invseq) + "|" +                                STRING(Highusage.cli)
@@ -796,7 +795,7 @@ PROCEDURE local-find-others.
    IF avail memo then llmemo = true.
    
    FOR EACH invoice WHERE 
-            Invoice.Brand    = gcBrand         AND
+            Invoice.Brand    = Syst.CUICommon:gcBrand         AND
             Invoice.Custnum  = Invseq.CustNum  AND 
             Invoice.CrInvNum = 0  NO-LOCK.
       ASSIGN 
@@ -808,7 +807,7 @@ PROCEDURE local-find-others.
 
 
    FOR EACH Invoice NO-LOCK WHERE 
-            Invoice.Brand    = gcBrand AND 
+            Invoice.Brand    = Syst.CUICommon:gcBrand AND 
             Invoice.Custnum  = Invseq.CustNum AND
             Invoice.InvDate >= today - 90,
       FIRST SubInvoice OF Invoice NO-LOCK WHERE
@@ -830,8 +829,8 @@ PROCEDURE local-find-others.
    
    FIND customer where customer.custnum = invseq.custnum no-lock no-error.
    Username = lcCustName.
-   lcCreated = "(" + fTS2HMS(HighUsage.crstamp) + ")".     
-   lcChanged = "(" + fTS2HMS(HighUsage.chstamp) + ")" .               
+   lcCreated = "(" + Func.Common:mTS2HMS(HighUsage.crstamp) + ")".     
+   lcChanged = "(" + Func.Common:mTS2HMS(HighUsage.chstamp) + ")" .               
 
    FIND FIRST TMSCodes WHERE
               TMSCodes.TableName = "HighUsage"      AND
@@ -859,7 +858,7 @@ PROCEDURE local-UPDATE-record:
    REPEAT ON ENDKEY UNDO, LEAVE:
       RUN local-find-others.
       FIND customer where customer.custnum = invseq.custnum no-lock no-error.
-      IF AVAIL Customer Then lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN                                           ghFunc1, BUFFER Customer).
+      IF AVAIL Customer Then lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                                        
       DISP
       InvSeq.CustNum   

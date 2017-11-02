@@ -9,9 +9,8 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-katun = "Cron".
-gcbrand = "1".
-{Func/timestamp.i}
+Syst.CUICommon:katun = "Cron".
+Syst.CUICommon:gcBrand = "1".
 {Func/cparam2.i}
 {Func/email.i}
 
@@ -39,14 +38,14 @@ lcReportFileOut = lcReportDir + lcFileName.
 OUTPUT STREAM sout TO VALUE(lcReportFileOut).
 
 IF MONTH(TODAY) = 1 THEN ASSIGN
-   ldeFrom = fMake2DT(DATE(12, 2, YEAR(TODAY) - 1), 0).
+   ldeFrom = Func.Common:mMake2DT(DATE(12, 2, YEAR(TODAY) - 1), 0).
 ELSE ASSIGN
-   ldeFrom = fMake2DT(DATE(MONTH(TODAY) - 1, 2, YEAR(TODAY)), 0).
+   ldeFrom = Func.Common:mMake2DT(DATE(MONTH(TODAY) - 1, 2, YEAR(TODAY)), 0).
 
-ldeTo = fMake2DT(DATE(MONTH(TODAY), 2, YEAR(TODAY)), 0).
+ldeTo = Func.Common:mMake2DT(DATE(MONTH(TODAY), 2, YEAR(TODAY)), 0).
    
 FOR EACH ErrorLog WHERE
-         ErrorLog.Brand = gcBrand AND
+         ErrorLog.Brand = Syst.CUICommon:gcBrand AND
          ErrorLog.ActionID = "STCBalanceQuery" AND
          ErrorLog.ActionTS >= ldeFrom AND
          ErrorLog.ActionTS < ldeTo NO-LOCK:
@@ -58,7 +57,7 @@ FOR EACH ErrorLog WHERE
         MsRequest.MsRequest = liMsRequest NO-LOCK NO-ERROR.
    IF NOT AVAIL MsRequest THEN NEXT.
 
-   fSplitTS(ErrorLog.ActionTS, OUTPUT ldaExecDate, OUTPUT liSecs).
+   Func.Common:mSplitTS(ErrorLog.ActionTS, OUTPUT ldaExecDate, OUTPUT liSecs).
 
    PUT STREAM sout UNFORMATTED
       MsRequest.CLI ";"

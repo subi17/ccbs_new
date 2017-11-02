@@ -10,7 +10,6 @@
 
 {Syst/commali.i}
 {Syst/eventval.i}
-{Func/timestamp.i}
 {Func/forderstamp.i}
 {Func/orderfunc.i}
 {Mc/orderfusion.i}
@@ -19,7 +18,7 @@ DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF INPUT PARAMETER icAction AS CHAR NO-UNDO.
 
 FIND FIRST Order WHERE 
-           Order.Brand   = gcBrand and 
+           Order.Brand   = Syst.CUICommon:gcBrand and 
            Order.OrderID = iiOrder NO-LOCK NO-ERROR.
 
 DEF VAR llOk AS LOG NO-UNDO.
@@ -53,7 +52,7 @@ IF icAction NE "RELEASE_BATCH" THEN DO:
 END.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    
    {Func/lib/eventlog.i}
       
@@ -69,12 +68,12 @@ IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrder).
 IF Order.StatusCode EQ {&ORDER_STATUS_RESIGNATION} THEN DO:
    CREATE ActionLog.
    ASSIGN
-      ActionLog.Brand  = gcBrand 
+      ActionLog.Brand  = Syst.CUICommon:gcBrand 
       ActionLog.TableName = "Order"
       ActionLog.KeyValue = STRING(Order.OrderID)
       ActionLog.ActionId = "RESIGNATION"
       ActionLog.ActionStatus = {&ACTIONLOG_STATUS_LOGGED}
-      ActionLog.ActionTS = fMakeTS().
+      ActionLog.ActionTS = Func.Common:mMakeTS().
 END.
 
 /* release fusion company order */
@@ -89,7 +88,7 @@ ELSE IF Order.OrderType = 2 THEN DO:
    
    IF Order.statuscode EQ {&ORDER_STATUS_RENEWAL_HOLD} THEN DO:
       FIND FIRST OrderCustomer EXCLUSIVE-LOCK WHERE
-                 OrderCustomer.Brand = gcBrand AND
+                 OrderCustomer.Brand = Syst.CUICommon:gcBrand AND
                  OrderCustomer.OrderId = Order.OrderId AND
                  OrderCustomer.RowType = 1 NO-ERROR.
       OrderCustomer.DataChecked = (icAction = "MODIFY").
@@ -118,7 +117,7 @@ ELSE IF Order.MultiSIMId > 0 AND
         Order.MultiSIMType = {&MULTISIMTYPE_SECONDARY} THEN DO:
 
    FIND FIRST lbOrder NO-LOCK WHERE
-              lbOrder.Brand = gcBrand AND
+              lbOrder.Brand = Syst.CUICommon:gcBrand AND
               lbOrder.MultiSIMId = Order.MultiSIMId AND
               lbOrder.MultiSImType = {&MULTISIMTYPE_PRIMARY} NO-ERROR.
    IF AVAIL lbOrder AND
@@ -127,22 +126,22 @@ ELSE IF Order.MultiSIMId > 0 AND
 END.
 ELSE IF Order.Ordertype < 2 AND
    CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                  CLIType.Brand       = gcBrand       AND
+                  CLIType.Brand       = Syst.CUICommon:gcBrand       AND
                   CLIType.CLIType     = Order.CLIType AND
                  (CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
                   CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL})) AND
    NOT CAN-FIND(FIRST OrderAction WHERE
-                     OrderAction.Brand = gcBrand AND
+                     OrderAction.Brand = Syst.CUICommon:gcBrand AND
                      OrderAction.OrderId = Order.OrderID AND
                      OrderAction.ItemType = "BundleItem" AND
        CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                      CLIType.Brand = gcBrand AND
+                      CLIType.Brand = Syst.CUICommon:gcBrand AND
                       CLIType.CLIType = OrderAction.ItemKey AND
                       CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}))
                    THEN DO:
       
    FIND FIRST OrderCustomer NO-LOCK WHERE
-              OrderCustomer.Brand = gcBrand AND
+              OrderCustomer.Brand = Syst.CUICommon:gcBrand AND
               OrderCustomer.OrderId = Order.OrderId AND
               OrderCustomer.RowType = 1 NO-ERROR.
 
@@ -175,8 +174,7 @@ IF lcNewOrderStatus > "" THEN DO:
                                             OUTPUT lcError).
       
          IF lcError NE "" THEN 
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "Order",
+            Func.Common:mWriteMemo("Order",
                              STRING(Order.OrderID),
                              0,
                              "Masmovil message creation failed",

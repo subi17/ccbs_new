@@ -27,8 +27,8 @@ form
     UserGrp.UserGroup
     UserGrp.UGName  format "x(30)"
     UserGrp.memo[1]  format "x(20)"
-with scroll 1 11 down  row 4 centered color value(cfc)
-    title color value(ctc) " User Groups " overlay frame tlse.
+with scroll 1 11 down  row 4 centered color value(Syst.CUICommon:cfc)
+    title color value(Syst.CUICommon:ctc) " User Groups " overlay frame tlse.
 
 form
     UserGrp.UserGroup skip
@@ -36,17 +36,17 @@ form
     UserGrp.memo[1]    skip
 
 with overlay row 8 centered
-    title color value(ctc) tlli-ots
-    color value(cfc) side-labels 1 col
+    title color value(Syst.CUICommon:ctc) tlli-ots
+    color value(Syst.CUICommon:cfc) side-labels 1 col
     frame tlli.
 
 form /* Invoicing Group :n hakua varten */
     UserGroup
     help "Enter Code of an User Group"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
-    color value(cfc) no-labels overlay frame hayr.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
+    color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
-cfc = "tlse". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.CUICommon:cfc = "tlse". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 Runko:
 repeat:
 
@@ -64,7 +64,7 @@ LOOP:
    Repeat with frame tlse:
    if must-add then do:  /* Invoicing Group  lisays  */
       assign
-      cfc = "tlli"
+      Syst.CUICommon:cfc = "tlli"
       tlli-ots = " ADD ".
       RUN Syst/ufcolor.p.
 add-new:
@@ -126,9 +126,9 @@ print-line:
 
       if ufkey then do:
          assign
-         ufk = 0 ufk[1] = 35 ufk[5] = 11
-         /* ufk[6] = 5  no new records here ... */
-         ufk[8] = 8  ufk[9] = 1 siirto = ? ehto = 3 ufkey = false.
+         Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 35 Syst.CUICommon:ufk[5] = 11
+         /* Syst.CUICommon:ufk[6] = 5  no new records here ... */
+         Syst.CUICommon:ufk[8] = 8  Syst.CUICommon:ufk[9] = 1 siirto = ? Syst.CUICommon:ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
       end.
   end. /* print-line */
@@ -138,13 +138,13 @@ BROWSE:
 
          hide message no-pause.
          choose row UserGrp.UserGroup {Syst/uchoose.i} no-error with frame tlse.
-         color display value(ccc) UserGrp.UserGroup with frame tlse.
+         color display value(Syst.CUICommon:ccc) UserGrp.UserGroup with frame tlse.
 
          if frame-value = "" and rtab[frame-line] = ? then next.
-         nap = keylabel(lastkey).
+         Syst.CUICommon:nap = keylabel(lastkey).
 
          /* previous line */
-         if lookup(nap,"cursor-up") > 0 then do
+         if lookup(Syst.CUICommon:nap,"cursor-up") > 0 then do
          with frame tlse:
             if frame-line = 1 then do:
                find UserGrp where recid(UserGrp) = rtab[frame-line] no-lock.
@@ -170,7 +170,7 @@ BROWSE:
          end. /* previous line */
 
          /* next line */
-         if lookup(nap,"cursor-down") > 0 then do with frame tlse:
+         if lookup(Syst.CUICommon:nap,"cursor-down") > 0 then do with frame tlse:
             if frame-line = frame-down then do:
                find UserGrp where recid(UserGrp) = rtab[frame-line] no-lock .
                find next UserGrp no-lock no-error.
@@ -196,7 +196,7 @@ BROWSE:
          end. /* next line */
 
          /* previous page */
-         else if lookup(nap,"page-up,prev-page") > 0 then do with frame tlse:
+         else if lookup(Syst.CUICommon:nap,"page-up,prev-page") > 0 then do with frame tlse:
             find UserGrp where recid(UserGrp) = muisti no-lock no-error.
             find prev UserGrp no-lock no-error.
             if available UserGrp then do:
@@ -218,7 +218,7 @@ BROWSE:
         end. /* previous page */
 
         /* next page */
-        else if lookup(nap,"page-down,next-page") > 0 then do with frame tlse:
+        else if lookup(Syst.CUICommon:nap,"page-down,next-page") > 0 then do with frame tlse:
            if rtab[frame-down] = ? then do:
                bell.
                message "This is the last page !".
@@ -232,10 +232,10 @@ BROWSE:
         end. /* next page */
 
         /* Haku */
-        if lookup(nap,"1,f1") > 0 then do:  /* haku */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+        if lookup(Syst.CUICommon:nap,"1,f1") > 0 then do:  /* haku */
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            UserGroup = "".
-           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            update UserGroup with frame hayr.
            hide frame hayr no-pause.
            if UserGroup <> "" then do:
@@ -255,13 +255,13 @@ BROWSE:
         end. /* Haku */
 
         /* Valinta */
-        else if lookup(nap,"return,enter,5,f5") > 0 then do:
+        else if lookup(Syst.CUICommon:nap,"return,enter,5,f5") > 0 then do:
            find UserGrp where recid(UserGrp) = rtab[frame-line] no-lock.
            siirto = string(UserGrp.UserGroup).
            leave runko.
         end. /* Valinta */
         /* Ensimmainen tietue */
-        else if lookup(nap,"home,h") > 0 then do:
+        else if lookup(Syst.CUICommon:nap,"home,h") > 0 then do:
            find first UserGrp no-lock.
            muisti = recid(UserGrp).
            must-print = true.
@@ -269,14 +269,14 @@ BROWSE:
         end. /* Ensimmainen tietue */
 
         /* last record */
-        else if lookup(nap,"end,e") > 0 then do :
+        else if lookup(Syst.CUICommon:nap,"end,e") > 0 then do :
            find last UserGrp no-lock.
            muisti = recid(UserGrp).
            must-print = true.
            next LOOP.
         end. /* last record */
 
-        else if nap = "8" or nap = "f8" then leave runko. /* Paluu */
+        else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" then leave runko. /* Paluu */
 
      end.  /* BROWSE */
    end.  /* LOOP */

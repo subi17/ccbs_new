@@ -28,6 +28,9 @@ DEF VAR nocalls  AS DE                     NO-UNDO.
 DEF VAR rl      AS i                       NO-UNDO.
 DEF VAR sl      AS i                       NO-UNDO.
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 form
    skip(1)
    "  Note:  This program prints out a summary report of Billed totals " SKIP
@@ -47,16 +50,16 @@ help "Code of an External Customer Group (EMPTY = none)" SKIP
      "Agent/reseller ........:"  AT 15 Reseller
         help "One for certain, empty for all" TO 50 skip(2)
 WITH
-   width 80 COLOR value(cfc)
-   title color value(ctc) " " + ynimi + " INVOICE STATISTICS SALESMAN/AGENT "   
-   + string(pvm,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
+   width 80 COLOR value(Syst.CUICommon:cfc)
+   title color value(Syst.CUICommon:ctc) " " + ynimi + " INVOICE STATISTICS SALESMAN/AGENT "   
+   + string(TODAY,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
 
 form header
 
    fill("=",114) format "x(114)" SKIP
    ynimi at 2 format "x(25)" "SALES STATISTICS" at 40 date1 "-" date2
    "Page" at 105 sl format "ZZZZ9" SKIP
-   "SALESMAN / RESELLER"  at 40 string(pvm,"99-99-99") AT 107 SKIP
+   "SALESMAN / RESELLER"  at 40 string(TODAY,"99-99-99") AT 107 SKIP
    fill("=",114) format "x(114)" skip(1)
    "SmCode"           AT 3
    "Salesman's name"  AT 11
@@ -68,17 +71,17 @@ form header
    WITH width 114 NO-LABEL no-box FRAME sivuotsi.
 
 /* Get Date proposal */
-ASSIGN date1  = pvm.
+ASSIGN date1  = TODAY.
 FIND LAST Invoice  USE-INDEX InvDate no-lock no-error.
 IF NOT AVAIL Invoice THEN
 FIND LAST Invoice no-lock no-error.
 IF AVAIL Invoice THEN ASSIGN date1 = Invoice.InvDate.
 date2 = date1.
 
-cfc = "sel". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
 LOOP:
 repeat WITH FRAME rajat:
-    ehto = 9. RUN Syst/ufkey.p.
+    Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
     UPDATE
     date1
@@ -95,11 +98,11 @@ repeat WITH FRAME rajat:
 
 TOIMI:
    repeat:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT LOOP.
-      IF toimi = 8 THEN LEAVE LOOP.
-      IF toimi = 5 THEN LEAVE TOIMI.
+      IF Syst.CUICommon:toimi = 1 THEN NEXT LOOP.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE LOOP.
+      IF Syst.CUICommon:toimi = 5 THEN LEAVE TOIMI.
    END.
 
 

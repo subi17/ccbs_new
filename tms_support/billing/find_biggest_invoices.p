@@ -1,8 +1,5 @@
-&GLOBAL-DEFINE BrandVarDefined Yes
 {Syst/commpaa.i}
-gcBrand = "1".
-{Func/timestamp.i}
-{Func/func.p}
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 
@@ -86,7 +83,7 @@ i = 0.
 
 if lcclitype > "" then do:
    FIND FIRST clitype where
-              clitype.brand = gcbrand and
+              clitype.brand = Syst.CUICommon:gcBrand and
               clitype.clitype = lcclitype NO-LOCK no-error.
    IF NOT AVAIL clitype then do:
       MESSAGE "Unknown Subscr. Type" lcclitype VIEW-AS ALERT-BOX.
@@ -111,8 +108,8 @@ for each invoice no-lock use-index invType where
     end.
 
     assign
-       ldfromper = fmake2dt(invoice.fromdate,1)
-       ldtoper   = fmake2dt(invoice.todate,86399).
+       ldfromper = Func.Common:mMake2DT(invoice.fromdate,1)
+       ldtoper   = Func.Common:mMake2DT(invoice.todate,86399).
 
     if licustqty > 0 then do:
        create ttcust.

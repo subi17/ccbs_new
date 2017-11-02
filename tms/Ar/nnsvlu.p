@@ -62,8 +62,8 @@ FORM
        help "Name of input file (F9 = list of files)"
    SKIP(6) 
    WITH WIDTH 80 ROW 1 SIDE-LABELS
-    COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) " " + ynimi +
-       " IMPORT DD AUTHORIZATIONS "  + string(pvm,"99-99-99") + " "
+    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+       " IMPORT DD AUTHORIZATIONS "  + string(TODAY,"99-99-99") + " "
     FRAME fStart.
 
 
@@ -73,7 +73,7 @@ VIEW FRAME fStart.
 MAIN:
 REPEAT WITH FRAME fStart:
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
    REPEAT WITH FRAME fStart ON ENDKEY UNDO, LEAVE:
    
@@ -112,7 +112,7 @@ REPEAT WITH FRAME fStart:
               DISPLAY lcInfile.
            END. 
 
-           ehto = 9.
+           Syst.CUICommon:ehto = 9.
            RUN Syst/ufkey.p.
 
         END. 
@@ -124,16 +124,16 @@ REPEAT WITH FRAME fStart:
     
    END.
    
-   ASSIGN ufk = 0
-          ufk[1] = 7
-          ufk[5] = (IF lcInfile NE "" THEN 795 ELSE 0)
-          ufk[8] = 8
-          ehto = 0.
+   ASSIGN Syst.CUICommon:ufk = 0
+          Syst.CUICommon:ufk[1] = 7
+          Syst.CUICommon:ufk[5] = (IF lcInfile NE "" THEN 795 ELSE 0)
+          Syst.CUICommon:ufk[8] = 8
+          Syst.CUICommon:ehto = 0.
    RUN Syst/ufkey.p.
 
-   IF TOIMI = 5 THEN LEAVE. 
+   IF Syst.CUICommon:toimi = 5 THEN LEAVE. 
 
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
       HIDE FRAME fStart NO-PAUSE.
       RETURN.
    END. 
@@ -164,7 +164,7 @@ ASSIGN tila = TRUE
 
 {Syst/utuloste.i "return"}
 
-ehto = 5.
+Syst.CUICommon:ehto = 5.
 RUN Syst/ufkey.p.
 
 RUN Ar/ddauthin.p (lcInFile, 

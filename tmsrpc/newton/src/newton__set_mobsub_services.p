@@ -15,7 +15,7 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Mm/subser.i}
@@ -81,14 +81,14 @@ FUNCTION fLocalMemo RETURNS LOGIC
 
    CREATE Memo.
    ASSIGN
-      Memo.Brand     = gcBrand
-      Memo.CreStamp  = fMakeTS()
+      Memo.Brand     = Syst.CUICommon:gcBrand
+      Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
       Memo.Custnum   = iiCustNum
       Memo.HostTable = icHostTable
       Memo.KeyValue  = icKey
       Memo.MemoType  = "service"
-      Memo.CreUser   = katun
+      Memo.CreUser   = Syst.CUICommon:katun
       Memo.MemoTitle = icTitle
       Memo.Memotext  = icText.
 END FUNCTION.
@@ -116,11 +116,11 @@ IF TRIM(pcUser) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 {newton/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
-katun = pcUser.
+Syst.CUICommon:katun = pcUser.
 IF pcUserLevel EQ "Operator" THEN 
-   cCheckMsBarringKatun = "NewtonAd". 
+   cCheckMsBarringkatun = "NewtonAd". 
 ELSE 
-   cCheckMsBarringKatun = "NewtonCC". 
+   cCheckMsBarringkatun = "NewtonCC". 
 /*YPR-4773*/
 /*Activation is not allowed if fixed line provisioning is pending*/
 IF (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG}    /*16*/ OR 
@@ -175,7 +175,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
      SubSer.MsSeq = Mobsub.MsSeq AND
      SubSer.ServCom = pcServiceId,
    FIRST ServCom NO-LOCK WHERE 
-      ServCom.Brand = gcBrand AND
+      ServCom.Brand = Syst.CUICommon:gcBrand AND
       ServCom.ServCom = pcServiceID:
 
       /* Check ongoing service requests */
@@ -230,7 +230,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
                                     SubSer.ServCom,
                                     liValue).
       IF ldActStamp > 0 THEN DO:
-         fSplitTS(ldActStamp,
+         Func.Common:mSplitTS(ldActStamp,
                   OUTPUT ldtActDate,
                   OUTPUT liReq).
 
@@ -238,13 +238,13 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
             (DAY(ldtActDate) = 1 AND liReq < TIME - 120 AND
              DAY(SubSer.SSDate) NE 1)
          THEN .
-         ELSE ldActStamp = fMakeTS().
+         ELSE ldActStamp = Func.Common:mMakeTS().
       END.
-      ELSE ldActStamp = fMakeTS().
+      ELSE ldActStamp = Func.Common:mMakeTS().
 
       IF ldtActDate = TODAY
-      THEN ldActStamp = fMakeTS().
-      ELSE ldActStamp = fMake2DT(ldtActDate,1).
+      THEN ldActStamp = Func.Common:mMakeTS().
+      ELSE ldActStamp = Func.Common:mMake2DT(ldtActDate,1).
 
       IF pcParam EQ "" AND
          SubSer.ServCom NE "CF" AND /* YBU-2004 */
@@ -329,7 +329,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
    IF LOOKUP(pcServiceID,"BB,LTE") > 0 AND pcValue = "ON" THEN DO:
    
       FIND FIRST ServCom WHERE
-                 ServCom.Brand = gcBrand AND
+                 ServCom.Brand = Syst.CUICommon:gcBrand AND
                  ServCom.ServCom = pcServiceID NO-LOCK NO-ERROR.
       IF NOT AVAILABLE ServCom THEN RETURN appl_err("Invalid Service Id").
 
@@ -373,7 +373,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
                               ServCom.ServCom,
                               1,
                               pcParam,
-                              fMakeTS(),
+                              Func.Common:mMakeTS(),
                               lcSalesman,
                               TRUE,      /* fees */
                               plSendSMS,      /* sms */
@@ -404,8 +404,7 @@ END.
 add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.
 
 
 

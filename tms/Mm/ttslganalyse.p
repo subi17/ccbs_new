@@ -26,7 +26,7 @@ DEF TEMP-TABLE ttSLG LIKE SLGAnalyse.
 DEF INPUT-OUTPUT PARAMETER TABLE FOR ttSLG.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -74,8 +74,8 @@ form
     ttSLG.ValidFrom    COLUMN-LABEL "Date" 
 
 WITH ROW FrmRow OVERLAY CENTERED FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) 
+    COLOR VALUE(Syst.CUICommon:cfc)   
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     " NEW ATTRIBUTES FOR PERIODICAL/SERVICE COUNTERS " 
     FRAME sel.
 
@@ -85,14 +85,14 @@ form
     ttSLG.CCN      LABEL "Value of attribute" 
     ttSLG.ValidFrom 
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -162,27 +162,27 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 0  ufk[2]= 0 ufk[3]= 0  ufk[4]= 0
-        ufk[5]= 0
-        ufk[6]= 4 
-        ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ufk[1]= 0  Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0  Syst.CUICommon:ufk[4]= 0
+        Syst.CUICommon:ufk[5]= 0
+        Syst.CUICommon:ufk[6]= 4 
+        Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW ttSLG.CliType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttSLG.CliType WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttSLG.CliType WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -206,10 +206,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -234,7 +234,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -260,7 +260,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ttSLG WHERE recid(ttSLG) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -284,7 +284,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -298,13 +298,13 @@ BROWSE:
        END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0  
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND Syst.CUICommon:ufk[6] > 0  
      THEN DO TRANSACTION:  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        ttSLG.CliType     ttSLG.BillCode 
        ttSLG.CCN ttSLG.Bdest 
        CCN.CCNName WHEN AVAIL CCN BillItem.BIName.
@@ -328,7 +328,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        ttSLG.CliType ttSLG.BillCode
        ttSLG.CCN ttSLG.Bdest CCN.CCNName WHEN AVAIL CCN BillItem.BIName.
        IF ok THEN DO:
@@ -351,7 +351,7 @@ BROWSE:
      END. /* DELETE */
 
      
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -359,8 +359,8 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhttSLG).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -376,25 +376,25 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(ttSLG) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(ttSLG) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 
@@ -435,11 +435,11 @@ PROCEDURE local-disp-row:
        CLEAR FRAME sel NO-PAUSE.
 
        find first ccn where 
-                  ccn.brand = gcBrand AND 
+                  ccn.brand = Syst.CUICommon:gcBrand AND 
                   ccn.ccn   = ttslg.ccn no-lock no-error.
 
        find first billitem where
-                  billitem.Brand    = gcBrand AND 
+                  billitem.Brand    = Syst.CUICommon:gcBrand AND 
                   billitem.BillCode = ttslg.BillCode NO-LOCK NO-ERROR.
 
        DISPLAY 
@@ -476,7 +476,7 @@ PROCEDURE local-UPDATE-record:
    IF llChange THEN
    /* can service be changed from here */
    FOR FIRST CTServEl NO-LOCK WHERE 
-             CTServEl.Brand     = gcBrand              AND
+             CTServEl.Brand     = Syst.CUICommon:gcBrand              AND
              CTServEl.ServCom   = ttSLG.CliType AND
              CTServEl.CLIType   = MobSub.CLIType       AND
              CTServEl.FromDate <= TODAY,

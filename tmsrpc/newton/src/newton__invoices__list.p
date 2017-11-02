@@ -31,7 +31,6 @@
 {Func/log.i}
 
 
-DEF VAR gcBrand AS CHARACTER NO-UNDO INITIAL "1" .
 DEF VAR pcSearchStruct AS CHARACTER NO-UNDO. 
 DEF VAR lcSearchStruct AS CHARACTER NO-UNDO. 
 DEF VAR pcTenant       AS CHARACTER NO-UNDO.
@@ -54,7 +53,7 @@ FUNCTION fSearchOrder RETURNS CHAR
    liKey = get_int(pcSearchStruct,"order_id").
 
    FIND Order WHERE
-        Order.Brand = gcBrand AND
+        Order.Brand = Syst.CUICommon:gcBrand AND
         Order.OrderId = liKey NO-LOCK NO-ERROR.
    
    IF NOT AVAIL Order THEN ocError = "order not found".

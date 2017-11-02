@@ -58,7 +58,7 @@ BY DFField.OrderNbr:
                   DFField.DFField.
 END.
 
-fSplitTS(idLastDump,
+Func.Common:mSplitTS(idLastDump,
          OUTPUT ldaModified,
          OUTPUT liCnt).
 
@@ -118,11 +118,11 @@ FOR EACH TermReturn NO-LOCK WHERE
             END.
             WHEN "#Q25Amount" THEN DO:
                FIND FIRST Order NO-LOCK WHERE
-                          Order.Brand   = gcBrand AND
+                          Order.Brand   = Syst.CUICommon:gcBrand AND
                           Order.OrderId = TermReturn.OrderId NO-ERROR.
                IF AVAILABLE Order THEN DO:
                   FIND SingleFee WHERE
-                       SingleFee.Brand       = gcBrand AND
+                       SingleFee.Brand       = Syst.CUICommon:gcBrand AND
                        SingleFee.HostTable   = "Mobsub" AND
                        SingleFee.KeyValue    = STRING(Order.MsSeq) AND
                        SingleFee.OrderId     = Order.OrderId AND

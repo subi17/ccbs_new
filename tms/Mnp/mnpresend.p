@@ -6,7 +6,7 @@ DEFINE INPUT PARAMETER piOrderId AS INTEGER NO-UNDO.
 DEFINE VARIABLE lcStatus AS CHARACTER NO-UNDO.
 
 FIND Order WHERE
-     Order.Brand   = gcBrand AND
+     Order.Brand   = Syst.CUICommon:gcBrand AND
      Order.OrderId = piOrderId
 NO-LOCK.
 
@@ -30,7 +30,7 @@ END.
 FIND CURRENT Order EXCLUSIVE-LOCK.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 

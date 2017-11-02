@@ -23,8 +23,8 @@
 
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
-gcBrand = "1".
+Syst.CUICommon:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/upsellbundle.i}
 {Func/fgettxt.i}
@@ -63,7 +63,7 @@ ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName,lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
-katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
+Syst.CUICommon:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
 /*YPR-4775*/
 /*(De)Activation is not allowed if fixed line provisioning is pending*/
@@ -76,7 +76,7 @@ IF (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG}    /*16*/ OR
    previous five minutes from external api */
 IF CAN-FIND( FIRST MsRequest NO-LOCK WHERE
                    MsRequest.MsSeq = Mobsub.MsSeq AND
-                   MsRequest.ActStamp > fSecOffSet(fMakeTS(),-300) AND
+                   MsRequest.ActStamp > Func.Common:mSecOffSet(Func.Common:mMakeTS(),-300) AND
                    MsRequest.ReqType = 8 AND
                    MsRequest.ReqCParam3 = pcUpsellId AND
                    MsRequest.ReqSource = {&REQUEST_SOURCE_EXTERNAL_API}
@@ -91,7 +91,7 @@ IF NOT AVAIL Customer THEN RETURN appl_err("Customer not found").
 IF pcUpsellId = "CONTD1_UPSELL" THEN pcUpsellId = "CONTDATA_UPSELL".
 
 FIND FIRST DayCampaign NO-LOCK WHERE
-           DayCampaign.Brand = gcBrand AND
+           DayCampaign.Brand = Syst.CUICommon:gcBrand AND
            DayCampaign.DCEvent = pcUpsellId NO-ERROR.
 IF NOT AVAIL DayCampaign THEN RETURN appl_err("DayCampaign not defined").
 
@@ -105,7 +105,7 @@ IF (pcUpsellId = "DATA200_UPSELL" OR
 IF pcUpsellId EQ {&TARJ_UPSELL} THEN DO:
 
    /* Check if subscription type is not compatible with bundle */
-   IF fMatrixAnalyse(gcBrand,
+   IF fMatrixAnalyse(Syst.CUICommon:gcBrand,
                      "PERCONTR",
                      "PerContract;SubsTypeTo",
                      pcUpsellId + ";" + MobSub.CLIType,
@@ -133,7 +133,7 @@ IF pcUpsellId EQ {&TARJ_UPSELL} THEN DO:
    liRequest = fPCActionRequest(MobSub.MsSeq,
                                 pcUpsellId,
                                 "act",
-                                fMakeTS(),
+                                Func.Common:mMakeTS(),
                                 TRUE, /* fees */
                                 {&REQUEST_SOURCE_EXTERNAL_API},
                                 "",   /* creator */
@@ -150,7 +150,7 @@ ELSE IF NOT fCreateUpsellBundle(
    MobSub.MsSeq,
    pcUpsellId,
    {&REQUEST_SOURCE_EXTERNAL_API},
-   fMakeTS(),
+   Func.Common:mMakeTS(),
    OUTPUT liRequest,
    OUTPUT lcError) THEN DO:
 
@@ -176,7 +176,7 @@ ELSE IF NOT fCreateUpsellBundle(
 END.
 
 FIND FIRST DayCampaign NO-LOCK WHERE
-           DayCampaign.Brand = gcBrand AND
+           DayCampaign.Brand = Syst.CUICommon:gcBrand AND
            DayCampaign.DCEvent = pcUpsellId NO-ERROR.
 
 ASSIGN lcMemoText = IF INDEX(Daycampaign.DCName,"Ampliación")>0 THEN
@@ -193,8 +193,7 @@ ELSE IF pcUpsellId = "DSS200_UPSELL" THEN ASSIGN
    lcMemoText  = "Internet compartido - Ampliación 200 MB".
           
 
-DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                 "MobSub",                             /* HostTable */
+Func.Common:mWriteMemoWithType("MobSub",                             /* HostTable */
                  STRING(Mobsub.MsSeq),                 /* KeyValue  */
                  MobSub.CustNum,                       /* CustNum */
                  lcMemoTitle,                          /* MemoTitle */
@@ -212,5 +211,4 @@ FINALLY:
    /* Store the transaction id */
    ghAuthLog::TransactionId = pcTransId.
 
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

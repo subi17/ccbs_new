@@ -7,7 +7,6 @@
       
 {Syst/commali.i}
 {Func/excel.i}
-{Func/timestamp.i}
 {Func/email.i}
 {Func/highusage.i}
 {Func/cparam2.i}
@@ -92,8 +91,7 @@ FOR EACH HighUsage NO-LOCK WHERE
          
    FIND customer where 
         customer.custnum   = invseq.custnum NO-LOCK NO-ERROR.
-        lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                              BUFFER Customer).
+        lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
    FIND AgrCustomer WHERE 
         AgrCustomer.CustNum = Customer.AgrCust No-LOCK NO-ERROR.
@@ -104,7 +102,7 @@ FOR EACH HighUsage NO-LOCK WHERE
       llClaim           = FALSE.
    
    FOR EACH invoice WHERE 
-            Invoice.Brand    = gcBrand          AND
+            Invoice.Brand    = Syst.CUICommon:gcBrand          AND
             Invoice.Custnum  = Invseq.CustNum   AND 
             Invoice.CrInvNum = 0  NO-LOCK.
 
@@ -120,7 +118,7 @@ FOR EACH HighUsage NO-LOCK WHERE
       ldeInvoiceAverage = 0 .
 
    FOR EACH Invoice NO-LOCK WHERE 
-            Invoice.Brand    = gcBrand AND 
+            Invoice.Brand    = Syst.CUICommon:gcBrand AND 
             Invoice.Custnum  = Invseq.CustNum AND
             Invoice.InvDate >= today - 90,
       FIRST SubInvoice OF Invoice NO-LOCK WHERE
@@ -139,10 +137,9 @@ FOR EACH HighUsage NO-LOCK WHERE
    FIND FIRST msowner where 
               msowner.cli = HighUsage.cli no-lock no-error.
    IF avail msowner then 
-   Username = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                      BUFFER Customer).
-   lcCreated = "(" + fTS2HMS(HighUsage.crstamp) + ")".     
-   lcChanged = "(" + fTS2HMS(HighUsage.chstamp) + ")" .               
+   Username = Func.Common:mDispCustName(BUFFER Customer).
+   lcCreated = "(" + Func.Common:mTS2HMS(HighUsage.crstamp) + ")".     
+   lcChanged = "(" + Func.Common:mTS2HMS(HighUsage.chstamp) + ")" .               
 
    FIND Mobsub where 
         Mobsub.cli = msowner.cli no-lock no-error.
@@ -165,7 +162,7 @@ FOR EACH HighUsage NO-LOCK WHERE
       liperiod = YEAR(Invseq.todate) * 100 + MONTH(Invseq.todate).
 
   FIND FIRST memo WHERE 
-             Memo.Brand     = gcBrand               AND
+             Memo.Brand     = Syst.CUICommon:gcBrand               AND
              memo.Custnum   = Invseq.Custnum        AND 
              Memo.Hosttable = "Highusage"           AND  
              memo.keyvalue  = STRING(HighUsage.Invseq) + "|" +  
@@ -176,8 +173,8 @@ FOR EACH HighUsage NO-LOCK WHERE
   IF avail memo THEN  DO:
      ASSIGN memotext = REPLACE(memo.memotext,chr(10)," ") .
      IF memo.CreStamp > memo.ChgStamp THEN 
-        memostamp = fTS2HMS(memo.CreStamp) .
-     ELSE memostamp = fTS2HMS(memo.ChgStamp).   
+        memostamp = Func.Common:mTS2HMS(memo.CreStamp) .
+     ELSE memostamp = Func.Common:mTS2HMS(memo.ChgStamp).   
      
   END.    
   ELSE   ASSIGN memotext = "" memostamp = "".

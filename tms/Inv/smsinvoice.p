@@ -102,7 +102,7 @@ ASSIGN /* 9:00-22:00 */
 
 INVOICE_LOOP:
 FOR EACH Invoice WHERE
-         Invoice.Brand    = gcBrand AND
+         Invoice.Brand    = Syst.CUICommon:gcBrand AND
          Invoice.InvType  = 1 AND
          Invoice.InvDate >= ldaDateFrom AND
          Invoice.InvAmt  >= 0 NO-LOCK:
@@ -186,7 +186,7 @@ FOR EACH Invoice WHERE
                         MobSub.CLI,
                         44,
                         lcSMSReplacedText,
-                        fMakeTS(),
+                        Func.Common:mMakeTS(),
                         "Fact. Yoigo",
                         STRING(lIniSeconds) + "-" + STRING(lEndSeconds)).
 
@@ -213,7 +213,7 @@ IF lcAddrConfDir > "" THEN
 
 IF lcContConFile > "" AND SEARCH(lcAddrConfDir) <> ? THEN DO:
    FOR FIRST InvText NO-LOCK WHERE
-             InvText.Brand     = gcBrand            AND
+             InvText.Brand     = Syst.CUICommon:gcBrand            AND
              InvText.Target    = "General"          AND
              InvText.KeyValue  = "EmailConfSMSInv"  AND
              InvText.Language  = 5                  AND 

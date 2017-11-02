@@ -59,7 +59,7 @@
                                don't go directly into update mode with "enter"
                   09.10.03/aam fEPLStart 
                   10.10.03/aam itsendlo
-                  13.10.03/aam use si-recid2 to pass invoice to nnlaki,
+                  13.10.03/aam use Syst.CUICommon:si-recid2 to pass invoice to nnlaki,
                                crediting of invoice (nncimu)
                   02.02.04/jp  memo to customer  
                   09.02.04/aam CustNum to showpr
@@ -97,7 +97,6 @@
 &GLOBAL-DEFINE TMSCodeDef NO
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/eventval.i}
 {Func/fcustbal.i}
@@ -107,7 +106,7 @@
 {Ar/invdet.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -256,7 +255,7 @@ form
     lcPaymPlan FORMAT "X(15)" AT 44 NO-LABEL 
 with
     overlay centered width 80 row 1 side-labels
-    color value(cfc) title color value(ctc) cd-title
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) cd-title
     frame cusdata.
 
 form
@@ -277,7 +276,7 @@ form
     Invoice.InvType    column-label "T"          FORMAT ">9"
 with
     width 80 overlay centered scroll 1 8 down row 8
-    color value(cfc) title color value(ctc) lcSelHeader frame sel.
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) lcSelHeader frame sel.
 
 form
    "Invoice ..........:" Invoice.InvNum    no-label skip
@@ -315,8 +314,8 @@ FORM
 form 
     "Invoice:" lcExtInvId
        help "Give Invoice Nbr"    
-    with row 7 col 2 title color value(ctc) " FIND INVOICE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME F1.
+    with row 7 col 2 title color value(Syst.CUICommon:ctc) " FIND INVOICE "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME F1.
 
 FORM
    Invoice.InvNum     COLON 18 LABEL "Invoice" SKIP
@@ -429,7 +428,7 @@ FUNCTION fInvoiceCopyFee RETURNS LOGICAL.
                   ?,
                  "",
                  TRUE,
-                 katun,
+                 Syst.CUICommon:katun,
                  "",
                  0,
                  "",
@@ -572,7 +571,7 @@ message "Calculating Balance Due, wait ...".
 
 IF AVAILABLE Customer AND 
    CAN-FIND(FIRST PaymPlan WHERE 
-                  PaymPlan.Brand = gcBrand AND
+                  PaymPlan.Brand = Syst.CUICommon:gcBrand AND
                   PaymPlan.CustNum = Customer.CustNum AND
                   PaymPlan.PPStatus = 3)
 THEN lcPaymPlan = "*Paym.plan*".
@@ -588,7 +587,7 @@ IF iiOrderID > 0 THEN DO:
    lcCredited = "".
 
    FOR EACH SingleFee NO-LOCK WHERE
-            SingleFee.Brand     = gcBrand        AND
+            SingleFee.Brand     = Syst.CUICommon:gcBrand        AND
             SingleFee.HostTable = "Order"        AND
             SingleFee.KeyValue  = STRING(iiOrderID),
       FIRST Invoice NO-LOCK WHERE
@@ -686,8 +685,7 @@ ELSE ASSIGN
 
 IF AVAILABLE Customer THEN DO:
 
-   lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                 BUFFER Customer).
+   lcCustName = Func.Common:mDispCustName(BUFFER Customer).
    IF LENGTH(lcCustName) > 50 THEN 
       lcCustName = SUBSTRING(lcCustName,1,50).
       
@@ -704,7 +702,7 @@ cd-title = " " +
     
 ldNetBal = ldCustOP + ldCustAP - ldCustINT - blan.
 
-cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 
 PAUSE 0.
 view frame sel.
@@ -797,29 +795,29 @@ print-line:
 
       IF ufkey THEN do:
          assign
-         ufk = 0 ufk[8]= 8 ufk[9]= 1 ehto = 3 ufkey = false.
+         Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1 Syst.CUICommon:ehto = 3 ufkey = false.
          if keyp then do:
             assign
-               ufk[1] = 92
-               ufk[2] = 1635.
+               Syst.CUICommon:ufk[1] = 92
+               Syst.CUICommon:ufk[2] = 1635.
                
-            IF iiOrderID > 0 THEN ufk[2] = 0.   
+            IF iiOrderID > 0 THEN Syst.CUICommon:ufk[2] = 0.   
          end.   
          else assign
-            ufk[1] = 639 
-            ufk[3] = 1020
-            ufk[4] = 1796 /* 1860 */.
+            Syst.CUICommon:ufk[1] = 639 
+            Syst.CUICommon:ufk[3] = 1020
+            Syst.CUICommon:ufk[4] = 1796 /* 1860 */.
          RUN Syst/ufkey.p.
       end.
 
       hide message no-pause.
       choose row Invoice.ExtInvID {Syst/uchoose.i} no-error with frame sel.
-      color DISPlay value(ccc) Invoice.ExtInvID with frame sel.
+      color DISPlay value(Syst.CUICommon:ccc) Invoice.ExtInvID with frame sel.
 
-      assign nap = keylabel(lastkey).
+      assign Syst.CUICommon:nap = keylabel(lastkey).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"2,f2,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"2,f2,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -828,7 +826,7 @@ print-line:
       END.
 
       /* previous line */
-      IF lookup(nap,"cursor-up") > 0 THEN do with frame sel:
+      IF lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN do with frame sel:
          IF frame-line = 1 THEN do:
             find ttInvoice where recid(ttInvoice) = rtab[1] no-lock.
             find prev ttInvoice no-error.
@@ -855,7 +853,7 @@ print-line:
       end. /* previous line */
 
       /* next line */
-      else IF lookup(nap,"cursor-down") > 0 THEN do
+      else IF lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN do
       with frame sel:
 
          IF frame-line = frame-down THEN do:
@@ -884,7 +882,7 @@ print-line:
       end. /* next line */
 
       /* previous page */
-      else IF lookup(nap,"prev-page,page-up") > 0 THEN do:
+      else IF lookup(Syst.CUICommon:nap,"prev-page,page-up") > 0 THEN do:
          memory = rtab[1].
          find ttInvoice where recid(ttInvoice) = memory no-lock no-error.
          find prev ttInvoice no-error.
@@ -910,7 +908,7 @@ print-line:
      end. /* previous page */
 
      /* next page */
-     else IF lookup(nap,"next-page,page-down") > 0 THEN do with frame sel:
+     else IF lookup(Syst.CUICommon:nap,"next-page,page-down") > 0 THEN do with frame sel:
 
         /* cursor to the downmost line */
 
@@ -928,9 +926,9 @@ print-line:
      end. /* next page */
 
      /* find */
-     ELSE IF LOOKUP(nap,"1,F1") > 0 AND ufk[1] > 0 AND keyp THEN DO:  
-        cfc = "puyr". RUN Syst/ufcolor.p.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,F1") > 0 AND Syst.CUICommon:ufk[1] > 0 AND keyp THEN DO:  
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         
         lcExtInvId = "".      
         UPDATE lcExtInvId WITH FRAME F1.     
@@ -952,25 +950,25 @@ print-line:
      END.
      
      /* filtering */
-     ELSE IF LOOKUP(nap,"2,F2") > 0 AND ufk[2] > 0 AND keyp THEN DO:  
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,F2") > 0 AND Syst.CUICommon:ufk[2] > 0 AND keyp THEN DO:  
         
         ASSIGN 
-           ufk      = 0
-           ufk[1]   = 1636
-           ufk[2]   = 1637
-           ufk[3]   = 1638
-           ufk[4]   = 1641
-           ufk[7]   = 831
-           ufk[8]   = 8
-           ehto     = 0
+           Syst.CUICommon:ufk      = 0
+           Syst.CUICommon:ufk[1]   = 1636
+           Syst.CUICommon:ufk[2]   = 1637
+           Syst.CUICommon:ufk[3]   = 1638
+           Syst.CUICommon:ufk[4]   = 1641
+           Syst.CUICommon:ufk[7]   = 831
+           Syst.CUICommon:ufk[8]   = 8
+           Syst.CUICommon:ehto     = 0
            ufkey    = TRUE
            lcFilter = "".
 
         RUN Syst/ufkey.p.   
 
-        liFilter = IF toimi = 7 THEN 0 ELSE toimi.
+        liFilter = IF Syst.CUICommon:toimi = 7 THEN 0 ELSE Syst.CUICommon:toimi.
         
-        IF toimi >= 1 AND toimi <= 4 THEN DO:
+        IF Syst.CUICommon:toimi >= 1 AND Syst.CUICommon:toimi <= 4 THEN DO:
            RUN Ar/invfilterkey.p (INPUT TABLE ttFilter,
                              liFilter,
                              OUTPUT lcFilter).
@@ -983,7 +981,7 @@ print-line:
         NEXT loop.
      END.
 
-     else IF lookup(nap,"?") > 0 THEN DO:
+     else IF lookup(Syst.CUICommon:nap,"?") > 0 THEN DO:
 
         MESSAGE
         "A          Invoice contains Advance Payment" SKIP
@@ -1003,13 +1001,13 @@ print-line:
         NEXT.
      END.
 
-     else IF lookup(nap,"1,f1") > 0 AND NOT keyp THEN do:
+     else IF lookup(Syst.CUICommon:nap,"1,f1") > 0 AND NOT keyp THEN do:
         find ttInvoice where recid(ttInvoice) = rtab[frame-line(sel)]
         no-lock no-error.
         find Invoice where Invoice.InvNum = ttInvoice.InvNum no-lock.
         
         assign memory    = recid(ttInvoice).
-               si-recid2 = recid(Invoice).
+               Syst.CUICommon:si-recid2 = recid(Invoice).
 
         llCreaFee = (Invoice.PrintState > 0).
         
@@ -1020,13 +1018,13 @@ print-line:
         assign
         must-print = true
         ufkey      = true
-        si-recid2  = ?. 
+        Syst.CUICommon:si-recid2  = ?. 
         
         next LOOP.
      end.
 
 
-     else IF lookup(nap,"3,f3") > 0 AND NOT keyp AND ufk[3] > 0
+     else IF lookup(Syst.CUICommon:nap,"3,f3") > 0 AND NOT keyp AND Syst.CUICommon:ufk[3] > 0
      THEN do:
         find ttInvoice where recid(ttInvoice) = rtab[frame-line(sel)]
         no-lock no-error.
@@ -1040,7 +1038,7 @@ print-line:
              Invoice.PrintState
              llCredited WITH FRAME fEPL.
         
-        ASSIGN ehto  = 9
+        ASSIGN Syst.CUICommon:ehto  = 9
                ufkey = TRUE.
         RUN Syst/ufkey.p.
         REPEAT WITH FRAME fEPL ON ENDKEY UNDO, LEAVE:
@@ -1053,7 +1051,7 @@ print-line:
         IF LOOKUP(KEYFUNCTION(LASTKEY),"endkey,end-error") > 0 OR
         KEYLABEL(lastkey) = "F4" THEN NEXT.
 
-        ehto = 5.
+        Syst.CUICommon:ehto = 5.
         RUN Syst/ufkey.p.
         
         IF fEPLStart(lcTestFlag) THEN DO:
@@ -1092,8 +1090,8 @@ print-line:
         NEXT LOOP.
      END.
 
-     else IF nap = "T" AND keyp THEN DO:
-        ASSIGN ufk = 0 ehto = 3.
+     else IF Syst.CUICommon:nap = "T" AND keyp THEN DO:
+        ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 3.
         RUN Syst/ufkey.p.
         find ttInvoice where recid(ttInvoice) = rtab[frame-line] NO-LOCK.
         find Invoice where Invoice.InvNum = ttInvoice.InvNum no-lock.
@@ -1107,13 +1105,13 @@ print-line:
 
      END.
 
-     else IF lookup(nap,"F7,7") > 0 AND ufk[7] > 0 AND keyp THEN DO:
+     else IF lookup(Syst.CUICommon:nap,"F7,7") > 0 AND Syst.CUICommon:ufk[7] > 0 AND keyp THEN DO:
         keyp = No.
         ufkey = true.
         next LOOP.
      end.        
 
-     else IF lookup(nap,"enter,return") > 0 AND keyp THEN DO:
+     else IF lookup(Syst.CUICommon:nap,"enter,return") > 0 AND keyp THEN DO:
 
         FIND ttInvoice WHERE recid(ttInvoice) = rtab[frame-line(sel)].
 
@@ -1149,7 +1147,7 @@ print-line:
         NEXT LOOP.
      END.
 
-     else IF lookup(nap,"home,h") > 0 THEN do:
+     else IF lookup(Syst.CUICommon:nap,"home,h") > 0 THEN do:
         find first ttInvoice no-error.
         assign
         memory = recid(ttInvoice)
@@ -1157,7 +1155,7 @@ print-line:
         next LOOP.
      end.
 
-     else IF lookup(nap,"end,e") > 0 THEN do : /* last record */
+     else IF lookup(Syst.CUICommon:nap,"end,e") > 0 THEN do : /* last record */
         find last ttInvoice no-error.
         assign
         memory = recid(ttInvoice)
@@ -1165,9 +1163,9 @@ print-line:
         next LOOP.
      end.
 
-     else IF lookup(nap,"8,f8") > 0 AND keyp THEN leave LOOP.
+     else IF lookup(Syst.CUICommon:nap,"8,f8") > 0 AND keyp THEN leave LOOP.
 
-     else IF lookup(nap,"8,f8") > 0 AND NOT keyp THEN DO:
+     else IF lookup(Syst.CUICommon:nap,"8,f8") > 0 AND NOT keyp THEN DO:
         must-print = true.
         keyp = yes.
         ufkey = true.
@@ -1178,7 +1176,7 @@ end.  /* LOOP */
 
 hide frame sel no-pause.
 hide frame cusdata no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE local-DISP-row:
 
@@ -1218,7 +1216,7 @@ PROCEDURE local-DISP-row:
          END.
       END.
       ELSE IF Invoice.PaymState = 3 THEN due = "CRL".
-      ELSE IF ERA NE 0 AND Invoice.DueDate < pvm THEN due = "!!!".
+      ELSE IF ERA NE 0 AND Invoice.DueDate < TODAY THEN due = "!!!".
    END. 
 
    CLEAR FRAME sel NO-PAUSE.
@@ -1248,7 +1246,7 @@ PROCEDURE pCancellation.
    /* Cancel form */
    DO WHILE TRUE:
                
-      ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
                                
       DISPLAY   SKIP(1)
                 " 1) Cancelled by operator         " @ menuc[1]
@@ -1294,7 +1292,7 @@ PROCEDURE pCancellation.
                    ClaimHist.Memo       = "Claiming cancelled"
                    ClaimHist.ClaimDate  = TODAY
                    ClaimHist.ClaimAmt   = Invoice.InvAmt - Invoice.PaidAmt
-                   ClaimHist.Handler    = katun.
+                   ClaimHist.Handler    = Syst.CUICommon:katun.
                
             MESSAGE "Claiming cancelled!" VIEW-AS ALERT-BOX.
             liClaimCancel = 0.

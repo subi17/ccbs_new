@@ -6,7 +6,6 @@
 -------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Mc/offer.i}
 {Syst/tmsconst.i}
 
@@ -24,7 +23,7 @@ DEF VAR lcUseOffer     AS CHAR NO-UNDO.
 /******** Main start *********/
 
 FIND FIRST Order WHERE 
-           Order.Brand   = gcBrand AND
+           Order.Brand   = Syst.CUICommon:gcBrand AND
            Order.OrderID = iiOrderID NO-LOCK NO-ERROR. 
 IF NOT AVAILABLE Order THEN 
    RETURN "ERROR:Unknown order".
@@ -42,7 +41,7 @@ IF Order.Offer = "" THEN DO:
    RETURN "No offer available".
 END.
 
-fSplitTS(Order.CrStamp,
+Func.Common:mSplitTS(Order.CrStamp,
          OUTPUT ldaOfferDate,
          OUTPUT liTime).
    
@@ -55,24 +54,24 @@ ELSE lcUseOffer = Order.Offer.
 IF lcUseOffer = "" THEN RETURN "ERROR:Unknown offer ID".
 
 FIND FIRST Offer WHERE 
-           Offer.Brand = gcBrand AND
+           Offer.Brand = Syst.CUICommon:gcBrand AND
            Offer.Offer = lcUseOffer NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Offer THEN RETURN "ERROR:Unknown offer".
 
 
 FOR EACH OfferItem NO-LOCK WHERE
-         OfferItem.Brand       = gcBrand       AND
+         OfferItem.Brand       = Syst.CUICommon:gcBrand       AND
          OfferItem.Offer       = Offer.Offer   AND
          OfferItem.ItemType    = "PerContract" AND
          OfferItem.EndStamp   >= Order.CrStamp AND
          OfferItem.BeginStamp <= Order.CrStamp,
    FIRST DayCampaign NO-LOCK USE-INDEX DCEvent WHERE
-         DayCampaign.Brand   = gcBrand AND
+         DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
          DayCampaign.DCEvent = OfferItem.ItemKey AND
          DayCampaign.DCType  = {&DCTYPE_DISCOUNT} AND
          DayCampaign.TermFeeCalc > 0,
    FIRST FMItem NO-LOCK WHERE
-         FMItem.Brand     = gcBrand AND
+         FMItem.Brand     = Syst.CUICommon:gcBrand AND
          FMItem.FeeModel  = DayCampaign.TermFeeModel AND
          FMItem.ToDate   >= ldaOfferDate AND
          FMItem.FromDate <= ldaOfferDate:

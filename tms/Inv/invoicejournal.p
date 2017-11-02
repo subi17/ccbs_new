@@ -48,7 +48,7 @@ DEF INPUT PARAM  ilXOnlySum   AS LOG FORMAT "Yes/No"   NO-UNDO.
 
 /* INPUT PARAMETER VALIDATION */
 FIND FIRST InvGroup NO-LOCK WHERE
-           InvGroup.Brand    = gcBrand AND 
+           InvGroup.Brand    = Syst.CUICommon:gcBrand AND 
            InvGroup.InvGroup = icInvGroup
            NO-ERROR.
 IF NOT AVAIL InvGroup THEN 
@@ -150,6 +150,9 @@ viiva1 = fill("=",lev)
 viiva2 = fill("=",lev)
 viiva3 = fill("-",lev).
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 /* FRAME SIVUOTS */
 form header
    viiva1 at 2 skip
@@ -159,7 +162,7 @@ form header
    ilConnType format "Dir/Indir"
      idaPvm1 at 47 format "99-99-9999" "-" idaPvm2 format "99-99-9999"
    ilDeny format "DENIED/" at 80  unpaid format "UNPAID/" at 90
-   string(pvm,"99-99-99") at 108 skip
+   string(TODAY,"99-99-99") at 108 skip
    viiva2 at 2 skip(1)
 
    "Invoice"     at 2
@@ -191,7 +194,7 @@ form header
      "Page" at 106 sl format "ZZZZ9" skip
    "Inv.group" at 2 icInvGroup IGName format "x(20)"
      idaPvm1 at 43 format "99-99-9999" "-" idaPvm2 format "99-99-9999"
-     string(pvm,"99-99-99") at 108 skip
+     string(TODAY,"99-99-99") at 108 skip
    viiva2 at 2 skip(1)
    "Acct" at 2 "Amt Debit" at 22 "Amt Credit" at 38 skip
    viiva3 at 2 skip
@@ -274,7 +277,7 @@ EMPTY TEMP-TABLE ttTotal.
 
 FOR EACH TCustGroup.
    FOR EACH cgmember WHERE
-            cgMember.Brand     = gcBrand AND
+            cgMember.Brand     = Syst.CUICommon:gcBrand AND
             cgmember.custgroup = Tcustgroup.custgroup
    NO-lock.
       FIND FIRST tcgmember WHERE
@@ -306,7 +309,7 @@ runko:
 for each Invoice no-lock USE-INDEX InvDate where             
       Invoice.InvDate   >= idaPvm1         and 
       Invoice.InvDate   <= idaPvm2         and 
-      Invoice.Brand      = gcBrand      AND 
+      Invoice.Brand      = Syst.CUICommon:gcBrand      AND 
       Invoice.ExtInvID  >= icExtInvID1  AND
       Invoice.ExtInvID  <= icExtInvID2  AND
       Invoice.CustNum   >= iiCustnum[1] AND
@@ -379,8 +382,7 @@ by Invoice.ExtInvID:
               FIRST OrderCustomer OF Order NO-LOCK WHERE
                     OrderCustomer.RowType = Order.InvCustRole:
                 
-             lcCustName = DYNAMIC-FUNCTION("fPrintOrderName" IN ghFunc1,
-                                           BUFFER OrderCustomer).
+             lcCustName = Func.Common:mPrintOrderName(BUFFER OrderCustomer).
           END.                                     
 
        END.        

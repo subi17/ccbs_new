@@ -1,9 +1,8 @@
 /* monitoring script for checking sms send queue length */
-{Func/timestamp.i}
 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 DEFINE VARIABLE d AS DECIMAL NO-UNDO. 
-d = fmakets().
+d = Func.Common:mMakeTS().
 
 FOR EACH callalarm where 
          callalarm.brand = "1" and

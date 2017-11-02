@@ -38,10 +38,9 @@ DEF VAR lcApplicationId AS CHAR NO-UNDO.
 
 {Syst/commpaa.i}
 ASSIGN
-   katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
-   gcBrand = "1".
+   Syst.CUICommon:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
+   Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Syst/eventval.i}
 {Func/fmakemsreq.i}
 {Func/femailinvoice.i}
@@ -62,10 +61,10 @@ lcApplicationId = substring(pcTransId,1,3).
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName, lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
-katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
+Syst.CUICommon:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun   
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun   
    {Func/lib/eventlog.i}
    lhCustomer = BUFFER Customer:HANDLE.
 END.
@@ -96,9 +95,9 @@ IF Customer.DelType NE piDelType THEN DO:
    /* If DelType is Email then set to Email Pending first and send 
       an email to customer to activate the email service */
    IF piDelType = {&INV_DEL_TYPE_EMAIL} THEN DO:
-      liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+      liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                        INPUT TODAY,
-                                       INPUT katun,
+                                       INPUT Syst.CUICommon:katun,
                                        INPUT MobSub.MsSeq,
                                        INPUT MobSub.CLI,
                                        INPUT Mobsub.Custnum,
@@ -135,7 +134,7 @@ IF Customer.DelType NE piDelType THEN DO:
                                        "changed to " + STRING(Customer.DelType)).
       IF piDelType EQ {&INV_DEL_TYPE_NO_DELIVERY} THEN
          FOR EACH MobSub WHERE
-                  MobSub.brand EQ gcbrand AND
+                  MobSub.brand EQ Syst.CUICommon:gcBrand AND
                   Mobsub.custnum EQ Customer.Custnum NO-LOCK:
             fMakeSchedSMS3(Customer.Custnum,MobSub.CLI,9,
                            "InvDelivTypeChanged",Customer.Language,0,
@@ -157,5 +156,4 @@ FINALLY:
    /* Store the transaction id */
    ghAuthLog::TransactionId = pcTransId.
 
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

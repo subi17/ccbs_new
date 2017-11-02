@@ -17,7 +17,7 @@
 {Mc/lib/tokenchk.i 'natholiday'}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -55,10 +55,10 @@ form
     NatHoliday.HName    column-label "Explanation" 
 
     WITH width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(cfc)
-    title color value(ctc) " " + ynimi +
+    COLOR value(Syst.CUICommon:cfc)
+    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " MID-WEEK Holiday "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form
@@ -67,24 +67,24 @@ form
 
 
     WITH  OVERLAY ROW 8 col 5
-    COLOR value(cfc)
-    TITLE COLOR value(ctc)
+    COLOR value(Syst.CUICommon:cfc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     fr-header WITH side-labels 1 columns
     FRAME lis.
 
 form /* ArkipyhA :n tunnuksella hakua varten */
     haku
     help "Give holiday's code or beginning of it"
-    with row 4 col 2 title color value(ctc) " HOLIDAYCODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " HOLIDAYCODE "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* ArkipyhA :n nimella hakua varten */
     haku2
     help "Give holiday's Name or beginning of it"
-    with row 4 col 2 title color value(ctc) " HOLIDAYNAME "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " HOLIDAYNAME "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
    FIND FIRST NatHoliday no-lock no-error.
 IF AVAILABLE NatHoliday THEN ASSIGN memory = recid(NatHoliday)
@@ -109,13 +109,13 @@ repeat WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* NatHoliday -ADD  */
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          DO TRANSAction:
             PROMPT-FOR NatHoliday.Holiday
             VALIDATE
@@ -196,11 +196,11 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 28  ufk[2]= 717 ufk[3]= 0 ufk[4]= 0
-         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
-         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ufk[1]= 28  Syst.CUICommon:ufk[2]= 717 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+         Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
+         Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+         Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
 
          RUN Syst/ufkey.p.
       END.
@@ -208,21 +208,21 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW NatHoliday.Holiday {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) NatHoliday.Holiday WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) NatHoliday.Holiday WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW NatHoliday.HName {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) NatHoliday.HName WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) NatHoliday.HName WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order = 3 THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = 2.
       END.
 
@@ -248,10 +248,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND NatHoliday where recid(NatHoliday) = rtab[1] no-lock.
             IF order = 1 THEN FIND prev NatHoliday no-lock no-error.
@@ -280,7 +280,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND NatHoliday where recid(NatHoliday) = rtab[FRAME-DOWN] no-lock .
@@ -310,7 +310,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND NatHoliday where recid(NatHoliday) = memory no-lock no-error.
          IF order = 1 THEN FIND prev NatHoliday no-lock no-error.
@@ -339,7 +339,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "YOU ARE ON THE LAST PAGE".
@@ -355,10 +355,10 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+     if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku = ?.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE haku WITH FRAME hayr.
         HIDE FRAME hayr no-pause.
         IF haku <> ? THEN DO:
@@ -386,10 +386,10 @@ BROWSE:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+     if lookup(Syst.CUICommon:nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku2 = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE haku2 WITH FRAME hayr2.
         HIDE FRAME hayr2 no-pause.
         if haku2 <> "" THEN DO:
@@ -418,20 +418,20 @@ BROWSE:
         END.
      END. /* Haku sar. 2 */
 
-     if lookup(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
+     if lookup(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
 
          must-add = TRUE.
          NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 AND lcRight = "RW"
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSAction:  /* removal */
 
         delline = FRAME-LINE.
         FIND NatHoliday where recid(NatHoliday) = rtab[FRAME-LINE] no-lock.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(ctc) NatHoliday.Holiday NatHoliday.HName
+        COLOR DISPLAY value(Syst.CUICommon:ctc) NatHoliday.Holiday NatHoliday.HName
         .
 
         IF order = 1 THEN FIND NEXT NatHoliday no-lock no-error.
@@ -458,7 +458,7 @@ BROWSE:
 
         ASSIGN ok = FALSE.
         message " ARE YOU SURE YOU WANT TO REMOVE (Y/N) " UPDATE ok.
-        COLOR DISPLAY value(ccc) NatHoliday.Holiday NatHoliday.HName
+        COLOR DISPLAY value(Syst.CUICommon:ccc) NatHoliday.Holiday NatHoliday.HName
         .
         IF ok THEN DO:
 
@@ -478,15 +478,15 @@ BROWSE:
         ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     else if lookup(nap,"enter,return") > 0 AND lcRight = "RW" THEN
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 AND lcRight = "RW" THEN
      DO WITH FRAME lis TRANSAction:
         /* change */
         {Syst/uright2.i}
         FIND NatHoliday where recid(NatHoliday) = rtab[frame-line(sel)]
         exclusive-lock.
-        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
+        assign fr-header = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
         RUN Syst/ufkey.p.
-        cfc = "lis". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
         DISPLAY NatHoliday.Holiday.
 
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhNatHoliday).
@@ -504,7 +504,7 @@ BROWSE:
 
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
         IF order = 1 THEN FIND FIRST NatHoliday no-lock no-error.
         ELSE IF order = 2 THEN FIND FIRST NatHoliday USE-INDEX HName
         no-lock no-error.
@@ -512,7 +512,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 1 THEN FIND LAST NatHoliday no-lock no-error.
         ELSE IF order = 2 THEN FIND LAST NatHoliday USE-INDEX HName
         no-lock no-error.
@@ -520,11 +520,11 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 

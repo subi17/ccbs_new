@@ -21,14 +21,13 @@ DEF VAR liInvType AS INT                            NO-UNDO.
 DO FOR Customer:
    FIND Customer WHERE Customer.CustNum = iiCustNum NO-LOCK.
    lcName = STRING(Customer.CustNum) + " " +
-            DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                             BUFFER Customer).
+            Func.Common:mDispCustName(BUFFER Customer).
 END. 
 
 PAUSE 0.
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p. 
+   ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p. 
 
       DISPLAY
        " A) Username And Password          "             @ menuc[1] SKIP

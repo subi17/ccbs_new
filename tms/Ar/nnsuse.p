@@ -66,7 +66,7 @@ DO WITH FRAME suo:
    up FRAME-LINE - 1.
 
    repeat WITH FRAME suo:
-      ASSIGN ufk = 0 ehto = 3 ufk[1] = 992 ufk[5] = 11 ufk[8] = 8.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 3 Syst.CUICommon:ufk[1] = 992 Syst.CUICommon:ufk[5] = 11 Syst.CUICommon:ufk[8] = 8.
       RUN Syst/ufkey.p.
 
       CHOOSE ROW Payment.Voucher {Syst/uchoose.i} no-error.

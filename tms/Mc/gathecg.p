@@ -42,7 +42,7 @@ def var memb         as lo format "*/" NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -63,18 +63,18 @@ form
     CustGroup.CreDate
 
 WITH centered OVERLAY scroll 1 13 DOWN ROW 2
-    color value(cfc) title color value(ctc) " CHOOSE MEMBERS INTO GROUP " 
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " CHOOSE MEMBERS INTO GROUP " 
     FRAME sel.
 
 form /* FIND CustGroup BY number */
     CustGroup help "Enter Customer No."
-    with row 4 col 2 title color value(ctc) " FIND CUST. No. "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CUST. No. "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* FIND CustGroup BY Name */
     CustName help "Enter Customer's name"
-    with row 4 col 2 title color value(ctc) " FIND Name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Name "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 
 form
@@ -89,11 +89,11 @@ mess[1] = "This customer has:".
 mess[4] = "where starting Amount is allowed.".
 mess[5] = "This overrides all those settings.".
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc. view FRAME sel.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc. view FRAME sel.
 
 
 FIND FIRST CustGroup
-   USE-INDEX CustGroup  WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+   USE-INDEX CustGroup  WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
 IF AVAIL CustGroup  THEN
    ASSIGN memory = recid(CustGroup) must-print = TRUE must-add    = FALSE.
 ELSE DO:
@@ -132,13 +132,13 @@ print-line:
 
           rtab[FRAME-LINE] = recid(CustGroup).
           IF order = 1 THEN FIND NEXT CustGroup
-          USE-INDEX CustGroup WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+          USE-INDEX CustGroup WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
           ELSE IF order = 3 THEN FIND NEXT CustGroup
-           WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+           WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
           ELSE IF order = 2 THEN FIND NEXT CustGroup
-          USE-INDEX CGName WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+          USE-INDEX CGName WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
           ELSE IF order = 4 THEN FIND NEXT CustGroup
-           WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+           WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
        END.
        ELSE DO:  CLEAR no-pause.  rtab[FRAME-LINE] = ?. END.
        IF FRAME-LINE = FRAME-DOWN THEN LEAVE. DOWN.
@@ -156,22 +156,22 @@ BROWSE:
    repeat WITH FRAME sel ON ENDKEY UNDO, RETURN:
       IF ufkey THEN DO:
     ASSIGN
-    ufk[1]= 1709 ufk[2]= 717 ufk[3]= 0 ufk[4]= 0
-    ufk[5]= 515 ufk[6]= 0   ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-    ehto = 3 ufkey = FALSE.  RUN Syst/ufkey.p.
+    Syst.CUICommon:ufk[1]= 1709 Syst.CUICommon:ufk[2]= 717 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+    Syst.CUICommon:ufk[5]= 515 Syst.CUICommon:ufk[6]= 0   Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+    Syst.CUICommon:ehto = 3 ufkey = FALSE.  RUN Syst/ufkey.p.
       END.
       HIDE MESSAGE no-pause. IF order = 1 THEN
     CHOOSE ROW CustGroup.CustGroup {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 2 THEN
     CHOOSE ROW CustGroup.CGName {Syst/uchoose.i} no-error WITH FRAME sel.
-      COLOR DISPLAY value(ccc)
+      COLOR DISPLAY value(Syst.CUICommon:ccc)
       CustGroup.CustGroup CustGroup.CreUser  CustGroup.CGName
       WITH FRAME sel.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
-      nap = keylabel(LASTKEY).
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      Syst.CUICommon:nap = keylabel(LASTKEY).
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
     order = order + 1. IF order = 5 THEN order = 1. END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
     order = order - 1. IF order = 0 THEN order = 4. END.
 
       IF order <> ex-order THEN DO:
@@ -179,13 +179,13 @@ BROWSE:
     FIND CustGroup where recid(CustGroup) = memory.
     DO i = 1 TO FRAME-LINE - 1:
        IF order = 1 THEN FIND prev CustGroup
-       USE-INDEX CustGroup WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+       USE-INDEX CustGroup WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
        ELSE IF order = 3 THEN FIND prev CustGroup
-        WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+        WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
        ELSE IF order = 2 THEN FIND prev CustGroup
-       USE-INDEX CGName WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+       USE-INDEX CGName WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
        ELSE IF order = 4 THEN FIND prev CustGroup
-        WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+        WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
        IF AVAILABLE CustGroup  THEN
           ASSIGN firstline = i memory = recid(CustGroup).
        ELSE LEAVE.
@@ -196,21 +196,21 @@ BROWSE:
     bell. message "You are on an empty row, move upwards !".
     PAUSE 1 no-message. NEXT.
       END.
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
     IF FRAME-LINE = 1 THEN DO:
        FIND CustGroup where recid(CustGroup) = rtab[1] NO-LOCK.
        IF order = 1 THEN FIND prev CustGroup
-       USE-INDEX CustGroup WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+       USE-INDEX CustGroup WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
        ELSE IF order = 3 THEN FIND prev CustGroup
-        WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+        WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
        ELSE IF order = 2 THEN FIND prev CustGroup
-       USE-INDEX CGName WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+       USE-INDEX CGName WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
        ELSE IF order = 4 THEN FIND prev CustGroup
-        WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+        WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
        IF NOT AVAILABLE CustGroup  THEN DO:
           message "YOU ARE ON THE FIRST ROW !".
           BELL. PAUSE 1 no-message. NEXT BROWSE.
@@ -231,18 +231,18 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
     IF FRAME-LINE = FRAME-DOWN THEN DO:
        FIND CustGroup where recid(CustGroup) = rtab[FRAME-DOWN] NO-LOCK .
        IF order = 1 THEN FIND NEXT CustGroup
-       USE-INDEX CustGroup WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+       USE-INDEX CustGroup WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
        ELSE IF order = 3 THEN FIND NEXT CustGroup
-        WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+        WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
        ELSE IF order = 2 THEN FIND NEXT CustGroup
-       USE-INDEX CGName WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+       USE-INDEX CGName WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
        ELSE IF order = 4 THEN FIND NEXT CustGroup
-        WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+        WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
        IF NOT AVAILABLE CustGroup  THEN DO:
           message "YOU ARE ON THE LAST ROW !".
           BELL.  PAUSE 1 no-message. NEXT BROWSE.
@@ -265,29 +265,29 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
     memory = rtab[1].
     FIND CustGroup where recid(CustGroup) = memory NO-LOCK no-error.
     IF order = 1 THEN FIND prev CustGroup
-    USE-INDEX CustGroup WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+    USE-INDEX CustGroup WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
     ELSE IF order = 3 THEN FIND prev CustGroup
-     WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+     WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
     ELSE IF order = 2 THEN FIND prev CustGroup
-    USE-INDEX CGName  WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+    USE-INDEX CGName  WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
     ELSE IF order = 4 THEN FIND prev CustGroup
-     WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+     WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
     IF AVAILABLE CustGroup  THEN DO:
        memory = recid(CustGroup).
        /* go back one page */
        DO line = 1 TO (FRAME-DOWN - 1):
           IF order = 1 THEN FIND prev CustGroup
-          USE-INDEX CustGroup WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+          USE-INDEX CustGroup WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
           ELSE IF order = 3 THEN FIND prev CustGroup
-           WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+           WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
           ELSE IF order = 2 THEN FIND prev CustGroup
-          USE-INDEX CGName WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+          USE-INDEX CGName WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
           ELSE IF order = 4 THEN FIND prev CustGroup
-           WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+           WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
           IF AVAILABLE CustGroup  THEN memory = recid(CustGroup).
           ELSE line = FRAME-DOWN.
        END.
@@ -300,7 +300,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
    /* cursor TO the downmost line */
    IF rtab[FRAME-DOWN] = ? THEN DO:
        message "YOU ARE ON THE LAST PAGE". BELL. PAUSE 1 no-message.
@@ -313,14 +313,14 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-   cfc = "puyr". RUN Syst/ufcolor.p.
-   CustGroup = "". ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+     if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
+   Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+   CustGroup = "". Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE CustGroup WITH FRAME hayr.
    HIDE FRAME hayr no-pause.
    IF CustGroup <> "" THEN DO:
       FIND FIRST CustGroup  USE-INDEX CustGroup WHERE 
-                 CustGroup.Brand = gcBrand AND
+                 CustGroup.Brand = Syst.CUICommon:gcBrand AND
                  CustGroup.CustGroup >= CustGroup
                  NO-LOCK no-error.
       IF NOT AVAILABLE CustGroup  THEN DO:
@@ -333,14 +333,14 @@ BROWSE:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-   cfc = "puyr". RUN Syst/ufcolor.p. CustName = "".
-   ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+     if lookup(Syst.CUICommon:nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
+   Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p. CustName = "".
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE CustName WITH FRAME hayr3.
    HIDE FRAME hayr2 no-pause.
    if CustName <> "" THEN DO:
       FIND FIRST CustGroup  where 
-                 CustGroup.Brand = gcBrand  AND
+                 CustGroup.Brand = Syst.CUICommon:gcBrand  AND
                  CustGroup.CGname >= CustName
       NO-LOCK no-error.
       IF NOT AVAILABLE CustGroup  THEN DO:
@@ -353,7 +353,7 @@ BROWSE:
      END. /* Haku sar. 2 */
 
 
-     else if lookup(nap,"enter,return,5,F5") > 0 THEN
+     else if lookup(Syst.CUICommon:nap,"enter,return,5,F5") > 0 THEN
      DO WITH FRAME lis TRANSAction:
 
         /* ADD OR REMOVE */
@@ -373,34 +373,34 @@ BROWSE:
         END.
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
         IF order = 1 THEN FIND FIRST CustGroup
-        USE-INDEX CustGroup WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX CustGroup WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ELSE IF order = 3 THEN FIND FIRST CustGroup
-        WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+        WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ELSE IF order = 2 THEN FIND FIRST CustGroup
-        USE-INDEX CGName WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX CGName WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ELSE IF order = 4 THEN FIND FIRST CustGroup
-        WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+        WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ASSIGN memory = recid(CustGroup) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 1 THEN FIND LAST CustGroup
-        USE-INDEX CustGroup WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX CustGroup WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ELSE IF order = 3 THEN FIND LAST CustGroup
-        WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+        WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ELSE IF order = 2 THEN FIND LAST CustGroup
-        USE-INDEX CGName WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX CGName WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ELSE IF order = 4 THEN FIND LAST CustGroup
-        WHERE CustGroup.Brand = gcBrand NO-LOCK no-error.
+        WHERE CustGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ASSIGN memory = recid(CustGroup) must-print = TRUE.
         NEXT LOOP.
      END.
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
   END.  /* BROWSE */
 END.  /* LOOP */
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 

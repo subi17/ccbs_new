@@ -1,6 +1,6 @@
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fexternalapi.i}
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
@@ -95,7 +95,7 @@ IF ERROR-STATUS:ERROR THEN DO:
    RETURN.
 END.
 
-FOR FIRST Order WHERE Order.Brand = gcBrand AND Order.OrderId = liOrderID TENANT-WHERE TENANT-ID() > -1 NO-LOCK:
+FOR FIRST Order WHERE Order.Brand = Syst.CUICommon:gcBrand AND Order.OrderId = liOrderID TENANT-WHERE TENANT-ID() > -1 NO-LOCK:
     ASSIGN lcTenant = BUFFER-TENANT-NAME(Order).                
 END.
 
@@ -110,7 +110,7 @@ DO liDBCount = 1 TO NUM-DBS:
 END.
 
 FIND FIRST OrderFusion EXCLUSIVE-LOCK WHERE
-           OrderFusion.Brand = gcBrand AND
+           OrderFusion.Brand = Syst.CUICommon:gcBrand AND
            OrderFusion.OrderId = liOrderID NO-ERROR.
 IF NOT AVAIL OrderFusion THEN DO:
    add_string(lcresultStruct, "resultCode", {&RESULT_INVALID_ORDERID}).
@@ -134,7 +134,7 @@ ASSIGN
    FusionMessage.MessageSeq = NEXT-VALUE(FusionMessageSeq)
    FusionMessage.OrderID = liOrderID
    FusionMessage.MsSeq = Order.MsSeq
-   FusionMessage.CreatedTS = fMakeTS()
+   FusionMessage.CreatedTS = Func.Common:mMakeTS()
    FusionMessage.UpdateTS = FusionMessage.CreatedTS
    FusionMessage.MessageID = lcNotificationID
    FusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_UPDATE_STATUS}
@@ -219,8 +219,7 @@ CASE FusionMessage.FixedStatus:
 
          fSetOrderStatus(Order.Orderid, {&ORDER_STATUS_IN_CONTROL}).
          
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                 "Order",
+         Func.Common:mWriteMemo("Order",
                  STRING(Order.OrderID),
                  Order.CustNum,
                  "Order handling stopped",
@@ -239,8 +238,7 @@ CASE FusionMessage.FixedStatus:
       
       /* NOTE: do not change the memo text (checked in ordersender.i) */
       IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "Order",
+         Func.Common:mWriteMemo("Order",
                           STRING(Order.OrderID),
                           Order.CustNum,
                           "Order cancellation failed",
@@ -280,8 +278,7 @@ CASE FusionMessage.FixedStatus:
          RUN Mc/closeorder.p(Order.OrderID, TRUE).
 
          IF RETURN-VALUE NE "" THEN DO:
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "Order",
+            Func.Common:mWriteMemo("Order",
                              STRING(Order.OrderID),
                              Order.CustNum,
                              "Order closing failed",
@@ -302,5 +299,4 @@ add_string(lcresultStruct, "resultDescription", "success").
 
 FINALLY:
    ghAuthLog::TransactionId = "690".
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

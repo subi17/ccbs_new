@@ -49,7 +49,7 @@ FUNCTION fSetAddress RETURNS LOGICAL
 
    IF iiAddress = 3 THEN DO:
       FIND FIRST MsOwner WHERE
-           MsOwner.Brand   = gcBrand   AND
+           MsOwner.Brand   = Syst.CUICommon:gcBrand   AND
            MsOwner.CustNum = iiCustNum AND
            MsOwner.MSSeq   = iiMSSeq NO-LOCK NO-ERROR.
       IF NOT AVAILABLE MsOwner THEN DO:
@@ -94,7 +94,7 @@ FUNCTION fStartEPL RETURNS LOGICAL.
    EMPTY TEMP-TABLE wError. 
 
    FIND FIRST Company WHERE
-              Company.Brand = gcBrand 
+              Company.Brand = Syst.CUICommon:gcBrand 
    NO-LOCK NO-ERROR. 
    IF NOT AVAIL Company THEN DO:
       fErrLine("Company data is missing.",

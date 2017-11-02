@@ -13,12 +13,11 @@
 {Syst/commali.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'ActionLog'}
-{Func/timestamp.i}
 
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -78,9 +77,9 @@ form
     ActionLog.ActionStatus  COLUMN-LABEL "St"
     ActionLog.ActionChar FORMAT "X(22)" COLUMN-LABEL "Info"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
-       " ACTION LOG "  + string(pvm,"99-99-99") + " "
+    COLOR VALUE(Syst.CUICommon:cfc)   
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+       " ACTION LOG "  + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form
@@ -108,8 +107,8 @@ form
        NO-LABEL
        VIEW-AS EDITOR SIZE 70 BY 6
 WITH  OVERLAY ROW 1 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -117,7 +116,7 @@ FORM
     lcLargeInfo AT 2 NO-LABEL
        VIEW-AS EDITOR SIZE-CHARS 70 BY 17
 WITH OVERLAY ROW 1 centered
-    COLOR VALUE(cfc) TITLE " VIEW INFO " 
+    COLOR VALUE(Syst.CUICommon:cfc) TITLE " VIEW INFO " 
     SIDE-LABELS FRAME fInfo.
    
 {Func/brand.i}
@@ -126,8 +125,8 @@ form /* seek  ActionLog */
     "Brand :" lcBrand skip
     "Action:" lcActionID FORMAT "X(20)"
     HELP "Enter action ID "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Action ID "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Action ID "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
 form /* seek  ActionLog */
@@ -136,14 +135,13 @@ form /* seek  ActionLog */
        HELP "Enter table name " SKIP 
     "Key .:" lcKey FORMAT "X(30)"
        HELP "Enter key value for table"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Table "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Table "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FUNCTION fStatusName RETURNS LOGICAL
    (INPUT iiStatus AS INT):
    
-   lcStatus = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "ActionLog",
+   lcStatus = Func.Common:mTMSCodeName("ActionLog",
                                "ActionStatus",
                                STRING(iiStatus)).
                                
@@ -151,7 +149,7 @@ FUNCTION fStatusName RETURNS LOGICAL
 END.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 IF icTableName > "" THEN 
@@ -230,20 +228,20 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk    = 0
-        ufk[1] = 1124  
-        ufk[2] = 2121
-        ufk[8] = 8 
-        ehto   = 3 
+        Syst.CUICommon:ufk    = 0
+        Syst.CUICommon:ufk[1] = 1124  
+        Syst.CUICommon:ufk[2] = 2121
+        Syst.CUICommon:ufk[8] = 8 
+        Syst.CUICommon:ehto   = 3 
         ufkey  = FALSE.
 
         IF icTableName > "" THEN ASSIGN 
-           ufk[1] = 0
-           ufk[2] = 0
-           ufk[3] = 0.
+           Syst.CUICommon:ufk[1] = 0
+           Syst.CUICommon:ufk[2] = 0
+           Syst.CUICommon:ufk[3] = 0.
         ELSE IF icActionID > "" THEN ASSIGN 
-           ufk[1] = 0
-           ufk[3] = 0.
+           Syst.CUICommon:ufk[1] = 0
+           Syst.CUICommon:ufk[3] = 0.
 
         RUN Syst/ufkey.p.
       END.
@@ -251,17 +249,17 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW ActionLog.ActionID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ActionLog.ActionID WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ActionLog.ActionID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW ActionLog.TableName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ActionLog.TableName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ActionLog.TableName WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -270,10 +268,10 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -291,7 +289,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -316,7 +314,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -342,7 +340,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ActionLog WHERE recid(ActionLog) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -366,7 +364,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -381,14 +379,14 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND Syst.CUICommon:ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
 
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               lcActionID WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
 
@@ -406,14 +404,14 @@ REPEAT WITH FRAME sel:
      END. /* Search-1 */
 
      /* Search BY column 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 AND Syst.CUICommon:ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
        
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               lcTable 
               lcKey
        WITH FRAME f2.
@@ -442,13 +440,13 @@ REPEAT WITH FRAME sel:
        END.
      END. /* Search-2 */
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW" AND ufk[6] > 0 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW" AND Syst.CUICommon:ufk[6] > 0 
      THEN DO TRANSACTION:  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        ActionLog.TableName ActionLog.KeyValue ldtDate.
 
        RUN local-find-NEXT.
@@ -470,7 +468,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        ActionLog.TableName ActionLog.KeyValue ldtDate.
 
        IF ok THEN DO:
@@ -492,7 +490,7 @@ REPEAT WITH FRAME sel:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -500,8 +498,8 @@ REPEAT WITH FRAME sel:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhActionLog).
 
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 5. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE Syst.CUICommon:ehto = 5. RUN Syst/ufkey.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ActionLog.TableName.
 
        RUN local-UPDATE-record.                                  
@@ -518,25 +516,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(ActionLog) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(ActionLog) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 
@@ -560,28 +558,28 @@ PROCEDURE local-find-FIRST:
    
          IF icKeyValue > "" THEN 
             FIND FIRST ActionLog USE-INDEX TableName WHERE
-                       ActionLog.Brand     = gcBrand     AND
+                       ActionLog.Brand     = Syst.CUICommon:gcBrand     AND
                        ActionLog.TableName = icTableName AND
                        ActionLog.KeyValue  = icKeyValue NO-LOCK NO-ERROR.      
 
          ELSE 
             FIND FIRST ActionLog USE-INDEX TableName WHERE
-                       ActionLog.Brand     = gcBrand     AND
+                       ActionLog.Brand     = Syst.CUICommon:gcBrand     AND
                        ActionLog.TableName = icTableName NO-LOCK NO-ERROR.
       END.                 
 
       ELSE IF icActionID > "" THEN 
          FIND FIRST ActionLog USE-INDEX ActionID WHERE
-                    ActionLog.Brand    = gcBrand AND
+                    ActionLog.Brand    = Syst.CUICommon:gcBrand AND
                     ActionLog.ActionID = icActionID NO-LOCK NO-ERROR.
                                
       ELSE FIND FIRST ActionLog USE-INDEX ActionID WHERE
-                      ActionLog.Brand = gcBrand NO-LOCK NO-ERROR.
+                      ActionLog.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    END.      
 
    ELSE IF order = 2 THEN DO:
       FIND FIRST ActionLog USE-INDEX TableName WHERE
-                 ActionLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                 ActionLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
  
 END PROCEDURE.
@@ -594,28 +592,28 @@ PROCEDURE local-find-LAST:
    
          IF icKeyValue > "" THEN 
             FIND LAST ActionLog USE-INDEX TableName WHERE
-                      ActionLog.Brand     = gcBrand     AND
+                      ActionLog.Brand     = Syst.CUICommon:gcBrand     AND
                       ActionLog.TableName = icTableName AND
                       ActionLog.KeyValue  = icKeyValue NO-LOCK NO-ERROR.      
 
          ELSE 
             FIND LAST ActionLog USE-INDEX TableName WHERE
-                      ActionLog.Brand     = gcBrand     AND
+                      ActionLog.Brand     = Syst.CUICommon:gcBrand     AND
                       ActionLog.TableName = icTableName NO-LOCK NO-ERROR.
       END.                 
 
       ELSE IF icActionID > "" THEN 
          FIND LAST ActionLog USE-INDEX ActionID WHERE
-                   ActionLog.Brand    = gcBrand AND
+                   ActionLog.Brand    = Syst.CUICommon:gcBrand AND
                    ActionLog.ActionID = icActionID NO-LOCK NO-ERROR.
                                
       ELSE FIND LAST ActionLog USE-INDEX ActionID WHERE
-                     ActionLog.Brand = gcBrand NO-LOCK NO-ERROR.
+                     ActionLog.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    END.      
 
    ELSE IF order = 2 THEN DO:
       FIND LAST ActionLog USE-INDEX TableName WHERE
-                ActionLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                ActionLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
 
 END PROCEDURE.
@@ -628,28 +626,28 @@ PROCEDURE local-find-NEXT:
    
          IF icKeyValue > "" THEN 
             FIND NEXT ActionLog USE-INDEX TableName WHERE
-                      ActionLog.Brand     = gcBrand     AND
+                      ActionLog.Brand     = Syst.CUICommon:gcBrand     AND
                       ActionLog.TableName = icTableName AND
                       ActionLog.KeyValue  = icKeyValue NO-LOCK NO-ERROR.      
 
          ELSE 
             FIND NEXT ActionLog USE-INDEX TableName WHERE
-                      ActionLog.Brand     = gcBrand     AND
+                      ActionLog.Brand     = Syst.CUICommon:gcBrand     AND
                       ActionLog.TableName = icTableName NO-LOCK NO-ERROR.
       END.                 
 
       ELSE IF icActionID > "" THEN 
          FIND NEXT ActionLog USE-INDEX ActionID WHERE
-                   ActionLog.Brand    = gcBrand AND
+                   ActionLog.Brand    = Syst.CUICommon:gcBrand AND
                    ActionLog.ActionID = icActionID NO-LOCK NO-ERROR.
                                
       ELSE FIND NEXT ActionLog USE-INDEX ActionID WHERE
-                     ActionLog.Brand = gcBrand NO-LOCK NO-ERROR.
+                     ActionLog.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    END.      
  
    ELSE IF order = 2 THEN DO:
       FIND NEXT ActionLog USE-INDEX TableName WHERE
-                ActionLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                ActionLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
 
 END PROCEDURE.
@@ -662,28 +660,28 @@ PROCEDURE local-find-PREV:
    
          IF icKeyValue > "" THEN 
             FIND PREV ActionLog USE-INDEX TableName WHERE
-                      ActionLog.Brand     = gcBrand     AND
+                      ActionLog.Brand     = Syst.CUICommon:gcBrand     AND
                       ActionLog.TableName = icTableName AND
                       ActionLog.KeyValue  = icKeyValue NO-LOCK NO-ERROR.      
 
          ELSE 
             FIND PREV ActionLog USE-INDEX TableName WHERE
-                      ActionLog.Brand     = gcBrand     AND
+                      ActionLog.Brand     = Syst.CUICommon:gcBrand     AND
                       ActionLog.TableName = icTableName NO-LOCK NO-ERROR.
       END.                 
 
       ELSE IF icActionID > "" THEN 
          FIND PREV ActionLog USE-INDEX ActionID WHERE
-                   ActionLog.Brand    = gcBrand AND
+                   ActionLog.Brand    = Syst.CUICommon:gcBrand AND
                    ActionLog.ActionID = icActionID NO-LOCK NO-ERROR.
                                
       ELSE FIND PREV ActionLog USE-INDEX ActionID WHERE
-                     ActionLog.Brand = gcBrand NO-LOCK NO-ERROR.
+                     ActionLog.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
    END.      
 
    ELSE IF order = 2 THEN DO:
       FIND PREV ActionLog USE-INDEX TableName WHERE
-                ActionLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                ActionLog.Brand = Syst.CUICommon:gcBrand  NO-LOCK NO-ERROR.
    END.
 
 END PROCEDURE.
@@ -707,7 +705,7 @@ END PROCEDURE.
 
 PROCEDURE local-find-others.
 
-    fSplitTS(ActionLog.ActionTS,
+    Func.Common:mSplitTS(ActionLog.ActionTS,
              OUTPUT ldtDate,
              OUTPUT liTime).
 
@@ -740,8 +738,7 @@ PROCEDURE local-UPDATE-record:
          FIND Customer WHERE Customer.CustNum = ActionLog.CustNum 
             NO-LOCK NO-ERROR.
          IF AVAILABLE Customer THEN 
-            lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                          BUFFER Customer).
+            lcCustName = Func.Common:mDispCustName(BUFFER Customer).
       END.
       
       DISP 
@@ -765,17 +762,17 @@ PROCEDURE local-UPDATE-record:
       fStatusName(ActionLog.ActionStatus).
         
       ASSIGN 
-         ehto = 0
-         ufk  = 0
-         ufk[1] = 7 WHEN lcRight = "RW"
-         ufk[4] = 1697
-         ufk[8] = 8.
+         Syst.CUICommon:ehto = 0
+         Syst.CUICommon:ufk  = 0
+         Syst.CUICommon:ufk[1] = 7 WHEN lcRight = "RW"
+         Syst.CUICommon:ufk[4] = 1697
+         Syst.CUICommon:ufk[8] = 8.
       RUN Syst/ufkey.p.
       
-      IF toimi = 1 THEN 
+      IF Syst.CUICommon:toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
       
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
          
          FIND CURRENT ActionLog EXCLUSIVE-LOCK.
@@ -783,9 +780,9 @@ PROCEDURE local-UPDATE-record:
          
             READKEY.
          
-            nap = KEYLABEL(LASTKEY).
+            Syst.CUICommon:nap = KEYLABEL(LASTKEY).
             
-            IF nap = "F9" AND FRAME-FIELD = "ActionStatus" THEN DO:
+            IF Syst.CUICommon:nap = "F9" AND FRAME-FIELD = "ActionStatus" THEN DO:
 
                RUN Help/h-tmscodes.p(INPUT "ActionLog",  /* TableName*/
                                     "ActionStatus", /* FieldName */
@@ -797,12 +794,12 @@ PROCEDURE local-UPDATE-record:
                   DISPLAY INTEGER(lcCode) ;& ActionLog.ActionStatus.
                END.
 
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.
  
-            ELSE IF LOOKUP(nap,poisnap) > 0 THEN DO:
+            ELSE IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
             
                IF FRAME-FIELD = "ActionStatus" THEN DO:
                   fStatusName(INPUT INPUT ActionLog.ActionStatus).
@@ -821,7 +818,7 @@ PROCEDURE local-UPDATE-record:
          LEAVE.
       END.
 
-      ELSE IF toimi = 4 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
         
          liInfoPos = 1.
 
@@ -847,25 +844,25 @@ PROCEDURE local-UPDATE-record:
          
             ASSIGN 
                ufkey = TRUE
-               ehto  = 0
-               ufk   = 0
-               ufk[8] = 8.
+               Syst.CUICommon:ehto  = 0
+               Syst.CUICommon:ufk   = 0
+               Syst.CUICommon:ufk[8] = 8.
  
             IF liInfoPos < NUM-ENTRIES(ActionLog.ActionChar,CHR(10)) 
-            THEN ufk[4] = 20.
+            THEN Syst.CUICommon:ufk[4] = 20.
  
             RUN Syst/ufkey.p.
         
-            IF toimi = 4 THEN NEXT. 
+            IF Syst.CUICommon:toimi = 4 THEN NEXT. 
             
-            ELSE IF toimi = 8 THEN DO:
+            ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
                HIDE FRAME fInfo NO-PAUSE.
                LEAVE.
             END.
          END.   
       END.
 
-      ELSE IF toimi = 8 THEN LEAVE.
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
    END.
 
 END PROCEDURE.

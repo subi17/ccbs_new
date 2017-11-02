@@ -9,8 +9,8 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-katun  = "anttis".
-gcBrand = "1".
+Syst.CUICommon:katun = "anttis".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/msreqfunc.i}
 {Func/orderfunc.i}
@@ -26,7 +26,7 @@ disp order.statuscode mnpprocess.statuscode order.mnpstatus.
          
 /* Cancel pending SMS messages */
 FOR EACH CallAlarm WHERE
-         CallAlarm.Brand = gcBrand AND
+         CallAlarm.Brand = Syst.CUICommon:gcBrand AND
          CallAlarm.CLI = Order.CLI AND
          CallAlarm.DeliStat = 1 AND
          CallAlarm.CreditType = 12 EXCLUSIVE-LOCK:
@@ -38,7 +38,7 @@ fSetOrderStatus(Order.OrderId,"7").
 */
 
 ASSIGN         
-   MNPProcess.UpdateTS = fMakeTS()
+   MNPProcess.UpdateTS = Func.Common:mMakeTS()
    MNPProcess.StatusCode = {&MNP_ST_ACAN}
    MNPProcess.statusreason = "CANC_ABONA".
    Order.MNPStatus = MNPProcess.StatusCode + 1. 

@@ -53,42 +53,42 @@ form
     ttService.ScName   COLUMN-LABEL "Service name" 
     ttService.chosen   COLUMN-LABEL "CH"
 WITH ROW FrmRow centered OVERLAY 12 DOWN
-    COLOR VALUE(cfc)
-    title COLOR VALUE(ctc) " CHOOSE SERVICES " 
+    COLOR VALUE(Syst.CUICommon:cfc)
+    title COLOR VALUE(Syst.CUICommon:ctc) " CHOOSE SERVICES " 
     FRAME sel.
 
 form /* seek ServCom by Code */
     ServCom
     help "Enter ServCom Code"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
 
 FIND FIRST ServCom WHERE 
-           ServCom.Brand = gcBrand NO-LOCK NO-ERROR.
+           ServCom.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 IF NOT AVAILABLE ServCom THEN  DO:
    MESSAGE "No Service components available !" view-as alert-box.
    return.
 END.
 
 FIND Order WHERE 
-     Order.Brand = gcBrand AND 
+     Order.Brand = Syst.CUICommon:gcBrand AND 
      Orderid     = iiOrderId 
 NO-LOCK NO-ERROR.
 
 for each ServCom no-lock WHERE 
-         ServCom.Brand = gcBrand :
+         ServCom.Brand = Syst.CUICommon:gcBrand :
    create ttService.
    assign
      ttService.ServCom = ServCom.ServCom
      ttService.ScName  = ServCom.ScName.
 
    IF CAN-FIND(ServEl WHERE 
-               ServEl.Brand   = gcBrand AND 
+               ServEl.Brand   = Syst.CUICommon:gcBrand AND 
                ServEl.ServPac = "*1"    AND
                ServEl.ServCom = ServCom.ServCom) 
    THEN ttService.chosen = TRUE.
@@ -151,30 +151,30 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-        ufk[5]= (IF lcRight = "RW" THEN 11 ELSE 0) 
-        ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ufk[1]= 35 Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+        Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 11 ELSE 0) 
+        Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW ttService.ServCom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttService.ServCom WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttService.ServCom WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW ttService.ScName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttService.ScName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttService.ScName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY). 
+      Syst.CUICommon:nap = keylabel(LASTKEY). 
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -199,10 +199,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* previous ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-prev.
@@ -227,7 +227,7 @@ BROWSE:
       END. /* previous ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -253,7 +253,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* prev page */
-      ELSE IF LOOKUP(nap,"prev-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND ttService WHERE recid(ttService) = memory NO-LOCK NO-ERROR.
         RUN local-find-prev.
@@ -277,7 +277,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -292,10 +292,10 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        ServCom = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE ServCom WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF ServCom <> "" THEN DO:
@@ -314,26 +314,26 @@ BROWSE:
        END.
      END. /* Search-1 */
 
-     ELSE IF LOOKUP(nap,"enter,return,5,f5") > 0 AND lcRight = "RW" THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return,5,f5") > 0 AND lcRight = "RW" THEN DO:
        RUN local-find-this(TRUE).
        ttService.chosen = NOT(ttService.chosen).
        RUN local-disp-row.
        xrecid = recid(ttService).
      END.
 
-     ELSE IF LOOKUP(nap,"home,h") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = recid(ttService) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,e") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,e") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN memory = recid(ttService) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
         LEAVE LOOP.
      END.
 
@@ -341,7 +341,7 @@ BROWSE:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 FOR EACH ttService WHERE
          ttService.chosen = TRUE
@@ -351,7 +351,7 @@ NO-LOCK:
                OrderService.Service = ttService.ServCom NO-ERROR.
     IF NOT AVAILABLE OrderService THEN DO:
        CREATE OrderService.
-       ASSIGN OrderService.Brand   = gcBrand
+       ASSIGN OrderService.Brand   = Syst.CUICommon:gcBrand
               OrderService.OrderID = Order.OrderID
               OrderService.Service = ttService.ServCom.
     END.

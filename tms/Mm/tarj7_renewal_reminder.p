@@ -8,9 +8,8 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-ASSIGN gcBrand = "1"
-       katun   = "CRON".
-{Func/timestamp.i}
+ASSIGN Syst.CUICommon:gcBrand = "1"
+       Syst.CUICommon:katun   = "CRON".
 {Func/cparam2.i}
 {Func/fgettxt.i}
 {Func/fmakesms.i}
@@ -48,20 +47,20 @@ DO liCount = 1 TO NUM-ENTRIES(lcGroupCodes):
              MServiceLimit.DialType = ServiceLimit.DialType AND
              MServiceLimit.EndTS    = 99999999.99999 NO-LOCK:
 
-      fSplitTS(MServiceLimit.FromTS,OUTPUT ldaFromdate,OUTPUT liTime).
+      Func.Common:mSplitTS(MServiceLimit.FromTS,OUTPUT ldaFromdate,OUTPUT liTime).
 
       IF ldaFromdate >= TODAY THEN NEXT.
 
       /* Skip the case if the current day of the month is not day of the month 
          before the activation date. */
       IF DAY(ldaFromdate) EQ 1 THEN DO:
-         IF fLastDayOfMonth(TODAY) NE TODAY THEN NEXT.
+         IF Func.Common:mLastDayOfMonth(TODAY) NE TODAY THEN NEXT.
       END.
       ELSE DO:
-         IF DAY(fLastDayOfMonth(TODAY)) >= DAY(ldaFromdate) THEN DO:
+         IF DAY(Func.Common:mLastDayOfMonth(TODAY)) >= DAY(ldaFromdate) THEN DO:
             IF DAY(TODAY) NE DAY(ldaFromdate - 1) THEN NEXT.
          END.
-         ELSE IF TODAY NE fLastDayOfMonth(TODAY) - 1 THEN NEXT.      
+         ELSE IF TODAY NE Func.Common:mLastDayOfMonth(TODAY) - 1 THEN NEXT.      
       END.
 
       FIND FIRST MobSub WHERE

@@ -30,7 +30,6 @@
 {Syst/utumaa.i "new"}
 {Func/feplstart.i}
 {Inv/eplspec.i}
-{Func/timestamp.i}
 {Func/transelog.i}
 
 assign tuni1 = "nnpura4"
@@ -71,9 +70,9 @@ form
    "Calling Customer / CLI / Billing Item / CCN."       AT 10 
    skip(14)
    WITH ROW 1 side-labels width 80
-        title " " + ynimi + 
+        title " " + Syst.CUICommon:ynimi + 
         " CALL DETAILS WITH UNIT PRICES (REPORT 4) " +
-        string(pvm,"99-99-99") + " "
+        string(TODAY,"99-99-99") + " "
         FRAME valinta.
 
 form
@@ -186,7 +185,7 @@ ASSIGN pvm1          = DATE(MONTH(TODAY),1,YEAR(TODAY))
        liAddress     = 3
        liPrintTo     = 1
        ufkey         = FALSE
-       nap           = "1".
+       Syst.CUICommon:nap           = "1".
 
 toimi:
 repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
@@ -201,19 +200,19 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 63  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3. 
+         Syst.CUICommon:ufk[1]= 132 Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+         Syst.CUICommon:ufk[5]= 63  Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+         Syst.CUICommon:ehto = 3. 
          RUN Syst/ufkey.p.
 
          READKEY.
-         nap = keylabel(LASTKEY).
+         Syst.CUICommon:nap = keylabel(LASTKEY).
       END.
       ELSE ufkey = TRUE.
 
-      if lookup(nap,"1,f1") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
          
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
 
          REPEAT ON ENDKEY UNDO, LEAVE:
@@ -224,7 +223,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
             InvNum
             VALIDATE(INPUT InvNum = 0 OR
                      CAN-FIND (FIRST Invoice WHERE
-                                     Invoice.Brand  = gcBrand AND
+                                     Invoice.Brand  = Syst.CUICommon:gcBrand AND
                                      Invoice.InvNum = INPUT invnum),
             "Unknown Invoice Number!")                   
             WITH FRAME rajat.
@@ -237,8 +236,8 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                   CustNum2 = Invoice.CustNum
                   pvm1     = Invoice.FromDate
                   pvm2     = Invoice.ToDate
-                  liPer1   = fMake2DT(Invoice.FirstCall,1)
-                  liPer2   = fMake2DT(Invoice.ToDate,86399)
+                  liPer1   = Func.Common:mMake2DT(Invoice.FirstCall,1)
+                  liPer2   = Func.Common:mMake2DT(Invoice.ToDate,86399)
                   tilak    = 1
                   llUseInv = TRUE.
 
@@ -264,7 +263,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                         CAN-FIND(FIRST CLI WHERE 
                                        CLI.CLI = INPUT lcAtil) OR
                         CAN-FIND(FIRST MSOwner WHERE 
-                                       MSOwner.Brand = gcBrand AND
+                                       MSOwner.Brand = Syst.CUICommon:gcBrand AND
                                        MSOwner.CLI = INPUT lcAtil),
                        "Unknown CLI")
                liPrintTo        
@@ -272,7 +271,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                
                   READKEY.
            
-                  IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 
+                  IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 
                   THEN DO WITH FRAME rajat:
                   
                      PAUSE 0.
@@ -312,7 +311,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
          
       END.
       
-      else if lookup(nap,"5,f5") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:
 
          IF llFullB THEN DO:
    
@@ -344,7 +343,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                NEXT.
             END.
             
-            ehto = 9.
+            Syst.CUICommon:ehto = 9.
             RUN Syst/ufkey.p.
             
             REPEAT ON ENDKEY UNDO, NEXT toimi:   
@@ -381,12 +380,12 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
          LEAVE toimi.
       END.
       
-      else if lookup(nap,"8,f8") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
          RETURN.
       END.
-END. /* toimi */
+END. /* Syst.CUICommon:toimi */
 
-ehto = 5.
+Syst.CUICommon:ehto = 5.
 RUN Syst/ufkey.p.
 
 ASSIGN llOk      = TRUE
@@ -396,11 +395,11 @@ IF llCover THEN DO:
    IF lcAtil > "" AND liAddress = 3 THEN DO: 
    
       IF NOT llUseInv THEN DO:
-         ASSIGN liPer1 = fMake2DT(pvm1,1)
-                liPer2 = fMake2DT(pvm2,86399).
+         ASSIGN liPer1 = Func.Common:mMake2DT(pvm1,1)
+                liPer2 = Func.Common:mMake2DT(pvm2,86399).
    
          FIND FIRST MsOwner NO-LOCK WHERE
-                    MsOwner.Brand   = gcBrand AND
+                    MsOwner.Brand   = Syst.CUICommon:gcBrand AND
                     MsOwner.CustNum = CustNum1 AND
                     MsOwner.CLI     = lcAtil   AND
                     MsOwner.TsBeg  <= liPer2   AND
@@ -409,7 +408,7 @@ IF llCover THEN DO:
                     
       ELSE 
       FIND FIRST MsOwner NO-LOCK WHERE
-                 MsOwner.Brand   = gcBrand AND
+                 MsOwner.Brand   = Syst.CUICommon:gcBrand AND
                  MsOwner.CLI     = lcAtil  AND
                  MsOwner.TsBeg  <= liPer2  AND
                  MsOwner.TsEnd  >= liPer1 NO-ERROR.
@@ -530,15 +529,15 @@ IF llFullB AND liError NE -1 THEN DO FOR Memo TRANS:
               
    /* memo to customer */
    CREATE Memo.
-   ASSIGN Memo.Brand     = gcBrand
+   ASSIGN Memo.Brand     = Syst.CUICommon:gcBrand
           Memo.HostTable = "Customer"
           Memo.KeyValue  = STRING(CustNum1)
           Memo.CustNum   = CustNum1
           Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-          Memo.CreUser   = katun 
+          Memo.CreUser   = Syst.CUICommon:katun 
           Memo.MemoTitle = "Full B-Number Report"
           Memo.MemoText  = lcMemo.
-          Memo.CreStamp  = fMakeTS().
+          Memo.CreStamp  = Func.Common:mMakeTS().
                
 END.
 
@@ -577,7 +576,7 @@ IF liPrintTo <= 2 THEN DO:
       IF CustNum1 = CustNum2 THEN 
       DO FOR ITSendLog TRANS:
          CREATE ITSendLog.
-         ASSIGN ITSendLog.Brand      = gcBrand 
+         ASSIGN ITSendLog.Brand      = Syst.CUICommon:gcBrand 
                 ITSendLog.TxtType    = 5
                 ITSendLog.ITNum      = 0
                 ITSendLog.CustNum    = CustNum1
@@ -587,8 +586,8 @@ IF liPrintTo <= 2 THEN DO:
                                        ELSE 4
                 ITSendLog.EMail      = ""
                 ITSendLog.RepType    = "Spec4"
-                ITSendLog.UserCode   = katun.
-                ITSendLog.SendStamp  = fMakeTS().
+                ITSendLog.UserCode   = Syst.CUICommon:katun.
+                ITSendLog.SendStamp  = Func.Common:mMakeTS().
       END.
        
       MESSAGE "Report 4 has been printed."
@@ -615,7 +614,7 @@ RUN Mc/creasfee.p (CustNum1,
               ?,
               "",
               TRUE,
-              katun,
+              Syst.CUICommon:katun,
               "",
               0,
               "",

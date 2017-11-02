@@ -62,7 +62,7 @@ FUNCTION fMakeTemp RETURNS LOGICAL.
 END FUNCTION.
 
 FOR EACH MsRequest NO-LOCK USE-INDEX ReqType WHERE    
-         MsRequest.Brand       = gcBrand      AND
+         MsRequest.Brand       = Syst.CUICommon:gcBrand      AND
          MsRequest.ReqType     = 23           AND
          MsRequest.ReqStat     = 16           AND
          MsRequest.CustNum    >= iiCustNum1   AND
@@ -102,8 +102,7 @@ FOR EACH ttAccDate:
    ELSE lcFile = REPLACE(icFile,"#IGRP","ALL").
    
    /* due date to file name */   
-   lcDate = DYNAMIC-FUNCTION("fDateFmt" IN ghFunc1,
-                             ttAccDate.AccDate,
+   lcDate = Func.Common:mDateFmt(ttAccDate.AccDate,
                              "yyyymmdd").
    lcFile = REPLACE(lcFile,"#DATE",lcDate).
 

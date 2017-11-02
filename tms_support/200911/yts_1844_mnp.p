@@ -2,8 +2,8 @@
 
 
 {Syst/commpaa.i}
-katun = "rafaeldv".
-gcbrand = "1".
+Syst.CUICommon:katun = "rafaeldv".
+Syst.CUICommon:gcBrand = "1".
 {Func/service.i}
 
 DEFINE STREAM sout.
@@ -17,7 +17,7 @@ DEFINE VARIABLE liNumForb AS INTEGER NO-UNDO.
 DEFINE VARIABLE liNumOff AS INTEGER NO-UNDO. 
 DEFINE VARIABLE ldTS AS DECIMAL NO-UNDO.
 
-ldTS = fHMS2TS( DATE(11,4,2009),
+ldTS = Func.Common:mHMS2TS( DATE(11,4,2009),
                 "08:00:00").
 
 FIND FIRST ServPac WHERE
@@ -26,7 +26,7 @@ FIND FIRST ServPac WHERE
 OUTPUT STREAM sout TO fix_mnp_smsbundle2.log . 
 
 FOR EACH MobSub NO-LOCK WHERE
-         MobSub.Brand = gcBrand AND
+         MobSub.Brand = Syst.CUICommon:gcBrand AND
          LOOKUP(MobSub.CliType,"TARJ,TARJ4") > 0 AND
          MobSub.ActivationTS > ldTS AND
          Mobsub.ActivationTS < 20091123.00000  AND 

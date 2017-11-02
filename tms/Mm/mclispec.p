@@ -4,7 +4,7 @@
   APPLICATION ..: TMS
   AUTHOR .......: aam
   CREATED ......: 23.01.04 
-  MODIFIED .....: 09.02.04/aam gcHelpParam
+  MODIFIED .....: 09.02.04/aam Syst.CUICommon:gcHelpParam
                   26.10.04/aam new parameter to nnpura4: full b-numbers
                   03.01.05/aam RepCode from SubSer
                   06.06.05/aam ItSendLog
@@ -20,7 +20,6 @@
 {Inv/eplspec.i}
 {Func/feplstart.i}
 {Func/fsubser.i}
-{Func/timestamp.i}
 
 DEF INPUT PARAMETER icCLI AS CHAR NO-UNDO.
 
@@ -102,13 +101,12 @@ form
 
 ASSIGN lcMacros      = fCParamC("MacroDir") + fCParamC("MacroSpec")
        liLetterClass = fCParamI("EPLSpecClass")
-       lcMainTitle   = CAPS(DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                             "MobSub",
+       lcMainTitle   = CAPS(Func.Common:mTMSCodeName("MobSub",
                                              "RepCodes",
                                              "4")).
 
 FIND MobSub WHERE 
-     MobSub.Brand = gcBrand AND
+     MobSub.Brand = Syst.CUICommon:gcBrand AND
      MobSub.CLI   = icCLI NO-LOCK NO-ERROR.
 IF NOT AVAILABLE MobSub THEN DO:
    MESSAGE "Unknown CLI" icCLI
@@ -129,12 +127,11 @@ ASSIGN pvm1      = DATE(MONTH(TODAY),1,YEAR(TODAY))
        llEMail   = FALSE
        llEPL     = TRUE
        llCreaFee = TRUE
-       gcHelpParam = "".
+       Syst.CUICommon:gcHelpParam = "".
        
 FOR FIRST Customer OF MobSub NO-LOCK:
-   gcHelpParam = STRING(Customer.InvCust).
-   lcUser      = DYNAMIC-FUNCTION("fDispCustName" IN
-                 ghFunc1, BUFFER Customer).
+   Syst.CUICommon:gcHelpParam = STRING(Customer.InvCust).
+   lcUser      = Func.Common:mDispCustName(BUFFER Customer).
 END. 
 
 PAUSE 0.
@@ -158,22 +155,22 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
 
    IF ufkey THEN DO:
       ASSIGN
-      ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-      ufk[5]= 63  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-      ehto = 3 ufkey = FALSE.
+      Syst.CUICommon:ufk[1]= 132 Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+      Syst.CUICommon:ufk[5]= 63  Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+      Syst.CUICommon:ehto = 3 ufkey = FALSE.
       RUN Syst/ufkey.p.
    END.
 
-   IF llStart THEN ASSIGN nap     = "1"
+   IF llStart THEN ASSIGN Syst.CUICommon:nap     = "1"
                           llStart = FALSE.
    ELSE DO:
       READKEY.
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
    END.
 
-   if lookup(nap,"1,f1") > 0 THEN DO:
+   if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
    
-      ASSIGN ehto = 9 
+      ASSIGN Syst.CUICommon:ehto = 9 
              ufkey = TRUE. 
       RUN Syst/ufkey.p.
 
@@ -182,7 +179,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
           UPDATE 
           InvNum
              VALIDATE(CAN-FIND (FIRST Invoice WHERE
-                                      Invoice.Brand  = gcBrand AND
+                                      Invoice.Brand  = Syst.CUICommon:gcBrand AND
                                       Invoice.InvNum = INPUT invnum),
                       "Unknown Invoice Number!")                   
           pvm1 
@@ -210,13 +207,13 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                 IF lcCode NE "" AND lcCode NE ? THEN 
                 DISPLAY lcCode @ lcRepCodes WITH FRAME rajat.
                 
-                ehto = 9.
+                Syst.CUICommon:ehto = 9.
                 RUN Syst/ufkey.p.
                 
                 NEXT.
              END.
 
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 
              THEN DO WITH FRAME rajat:
              
                 PAUSE 0.
@@ -227,7 +224,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                       FIND Invoice WHERE 
                            Invoice.InvNum = INPUT InvNum 
                       NO-LOCK NO-ERROR.
-                      IF AVAIL Invoice AND Invoice.Brand = gcBrand THEN DO: 
+                      IF AVAIL Invoice AND Invoice.Brand = Syst.CUICommon:gcBrand THEN DO: 
                       
                          IF NOT CAN-FIND(FIRST SubInvoice OF Invoice WHERE
                                                SubInvoice.CLI = icCLI)
@@ -266,7 +263,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       
    END.
    
-   else if lookup(nap,"5,f5") > 0 THEN DO:
+   else if lookup(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:
       
       IF InvNum = 0 THEN DO:
          MESSAGE "Invoice number is mandatory."
@@ -280,7 +277,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
          NEXT.
       END.
          
-      ehto = 5. 
+      Syst.CUICommon:ehto = 5. 
       RUN Syst/ufkey.p.
       
       llOk = FALSE.
@@ -390,7 +387,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                        ?,
                        "",
                        TRUE,
-                       katun,
+                       Syst.CUICommon:katun,
                        "",
                        0,
                        "",
@@ -403,7 +400,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
          /* log from print */
          DO FOR ITSendLog TRANS:
             CREATE ITSendLog.
-            ASSIGN ITSendLog.Brand      = gcBrand 
+            ASSIGN ITSendLog.Brand      = Syst.CUICommon:gcBrand 
                    ITSendLog.TxtType    = 5
                    ITSendLog.ITNum      = 0
                    ITSendLog.CustNum    = MobSub.CustNum
@@ -413,8 +410,8 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                                           ELSE 4
                    ITSendLog.EMail      = ""
                    ITSendLog.RepType    = "Spec" + lcRepCodes
-                   ITSendLog.UserCode   = katun.
-                   ITSendLog.SendStamp  = fMakeTS().
+                   ITSendLog.UserCode   = Syst.CUICommon:katun.
+                   ITSendLog.SendStamp  = Func.Common:mMakeTS().
          END.
          
          MESSAGE "Specification report has been printed."
@@ -425,13 +422,13 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       LEAVE toimi.
    END.
 
-   else if lookup(nap,"8,f8") > 0 THEN DO:
+   else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
       LEAVE toimi.
    END.
       
-END. /* toimi */
+END. /* Syst.CUICommon:toimi */
 
-gcHelpParam = "".
+Syst.CUICommon:gcHelpParam = "".
 
 HIDE MESSAGE no-pause.
 HIDE FRAME rajat no-pause.

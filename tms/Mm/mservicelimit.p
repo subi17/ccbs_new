@@ -9,7 +9,6 @@
   ------------------------------------------------------ */
 
 {Syst/commali.i}                    
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Mc/lib/tokenlib.i}
 
@@ -19,7 +18,7 @@ DEF  INPUT PARAMETER  iiSlSeq    AS INT            NO-UNDO.
 
 {Syst/eventval.i}
 IF llDoEvent THEN DO :
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    
    {Func/lib/eventlog.i}
       
@@ -72,10 +71,10 @@ form
    lcvalid                    COLUMN-LABEL "Active Time"
 
 WITH width 80 OVERLAY ROW 1 scroll 1 15 DOWN
-   COLOR value(cfc)
-   title color value(ctc) " "   + 
+   COLOR value(Syst.CUICommon:cfc)
+   title color value(Syst.CUICommon:ctc) " "   + 
    " Servicelimits "
-   + string(pvm,"99-99-99") + " "
+   + string(TODAY,"99-99-99") + " "
    FRAME sel.
 
 form
@@ -87,8 +86,8 @@ form
    "Valid From.:" mservicelimit.FromTS   lcvalidfrom    SKIP  
    "Valid To...:" mservicelimit.endTS     lcvalidto      SKIP
 WITH OVERLAY ROW 4 centered
-   COLOR value(cfc)
-   TITLE COLOR value(ctc )
+   COLOR value(Syst.CUICommon:cfc)
+   TITLE COLOR value(Syst.CUICommon:ctc)
    fr-header WITH no-labels
    FRAME lis.
 
@@ -111,8 +110,7 @@ FUNCTION fDispUnit2 RETURNS LOGICAL
    (iiUnit AS INT).
    
      IF iiUnit > 0 THEN
-            lcUnit = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-         "Tariff","DataType",STRING(iiUnit)).
+            lcUnit = Func.Common:mTMSCodeName("Tariff","DataType",STRING(iiUnit)).
      ELSE lcUnit = "".
     
      DISPLAY lcUnit WITH FRAME servicelimit.
@@ -127,14 +125,13 @@ END FUNCTION.
 form /*  search WITH FIELD mservicelimit */
     haku-servicelimit
     help "Give ...."
-    with row 4 col 2 title color value(ctc) " FIND CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 FUNCTION fDispUnit RETURNS LOGICAL
    (iiUnit AS INT).
    IF iiUnit > 0 THEN
-   lcUnit = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-           
+   lcUnit = Func.Common:mTMSCodeName(
    "Servicelimit","InclUnit",STRING(iiUnit)).
    ELSE lcUnit = "".
    DISPLAY lcUnit WITH FRAME lis.
@@ -144,7 +141,7 @@ END FUNCTION.
 
 IF getTMSRight("VENDOR,SYST") EQ "RW" THEN llAdmin = TRUE.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 RUN LOCAL-FIND-FIRST.
@@ -175,13 +172,13 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* mservicelimit -ADD  */
       HIDE FRAME lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
            LEAVE add-new.
         
@@ -245,14 +242,14 @@ BROWSE:
    
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 2612
-        ufk[2]= 0
-        ufk[3]= 2610 
-        ufk[4]= 2603
-        ufk[5]= 5  ufk[6]= 4 
-        ufk[7]= 0
-        ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ufk[1]= 2612
+        Syst.CUICommon:ufk[2]= 0
+        Syst.CUICommon:ufk[3]= 2610 
+        Syst.CUICommon:ufk[4]= 2603
+        Syst.CUICommon:ufk[5]= 5  Syst.CUICommon:ufk[6]= 4 
+        Syst.CUICommon:ufk[7]= 0
+        Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
       
@@ -261,20 +258,20 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW lccli {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) lccli WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) lccli WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW mservicelimit.DialType {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) lccli WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) lccli WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -295,10 +292,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND mservicelimit where recid(mservicelimit) = rtab[1] no-lock.
            RUN LOCAL-FIND-PREV.
@@ -323,7 +320,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND mservicelimit where recid(mservicelimit) = rtab[FRAME-DOWN] 
@@ -350,7 +347,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND mservicelimit where recid(mservicelimit) = memory no-lock no-error.
         RUN LOCAL-FIND-PREV.
@@ -374,7 +371,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* cursor TO the downmost line */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -388,14 +385,14 @@ BROWSE:
        END.
      END. /* NEXT page */
 
-     IF lookup(nap,"1,f1") > 0 THEN DO:  /* show callcounters */
+     IF lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:  /* show callcounters */
         FIND mservicelimit where recid(mservicelimit) = rtab[FRAME-LINE]
         no-lock.
          
         FIND FIRST servicelimit WHERE 
                    ServiceLimit.slseq = mservicelimit.slseq NO-LOCK NO-ERROR.
         FIND FIRST servicelimitGroup WHERE 
-                   ServiceLimitGroup.Brand = gcBrand AND
+                   ServiceLimitGroup.Brand = Syst.CUICommon:gcBrand AND
                    servicelimitgroup.groupcode = servicelimit.GroupCode
         NO-LOCK NO-ERROR.           
                    
@@ -426,13 +423,13 @@ BROWSE:
                  
      END.
      
-     ELSE IF lookup(nap,"3,f3") > 0 THEN DO:  /* show callcounters */
+     ELSE IF lookup(Syst.CUICommon:nap,"3,f3") > 0 THEN DO:  /* show callcounters */
         FIND mservicelimit where recid(mservicelimit) = rtab[FRAME-LINE]
         no-lock.
         FIND FIRST servicelimit WHERE 
                    ServiceLimit.slseq = mservicelimit.slseq NO-LOCK NO-ERROR.
         FIND FIRST servicelimitGroup WHERE 
-                   ServiceLimitGroup.Brand = gcBrand AND
+                   ServiceLimitGroup.Brand = Syst.CUICommon:gcBrand AND
                    servicelimitgroup.groupcode = servicelimit.GroupCode
         NO-LOCK NO-ERROR.
 
@@ -449,12 +446,12 @@ BROWSE:
         NEXT LOOP.
      
      END.
-     ELSE if lookup(nap,"4,f4") > 0 THEN DO:  /* Close service limit */
+     ELSE if lookup(Syst.CUICommon:nap,"4,f4") > 0 THEN DO:  /* Close service limit */
        
        FIND mservicelimit where recid(mservicelimit) = rtab[FRAME-LINE] 
        no-lock.
        
-       IF mserviceLimit.endTS < fmakets() THEN DO:
+       IF mserviceLimit.endTS < Func.Common:mMakeTS() THEN DO:
           MESSAGE
           "Service Limit allready closed!"
           VIEW-AS ALERT-BOX.
@@ -487,15 +484,15 @@ BROWSE:
               EACH xxservicelimit WHERE 
                    xxservicelimit.slseq = servicelimit.slseq  AND 
                    xxservicelimit.msseq = mservicelimit.msseq AND 
-                   xxservicelimit.endTS > fmakeTS() .
+                   xxservicelimit.endTS > Func.Common:mMakeTS() .
 
              ASSIGN 
-                xxservicelimit.endTS = fmakeTS()
+                xxservicelimit.endTS = Func.Common:mMakeTS()
                 lii = lii +  1.
           END.
        
           FOR EACH FixedFee WHERE 
-                   FixedFee.Brand             = gcBrand                     AND
+                   FixedFee.Brand             = Syst.CUICommon:gcBrand                     AND
                    FixedFee.HostTable         = "mobsub"                    AND 
                    Fixedfee.keyvalue          = string(mservicelimit.msseq) AND                   Fixedfee.servicelimitgroup = lcgroup .
                     
@@ -524,17 +521,17 @@ BROWSE:
                                
        END.
      END.
-     if lookup(nap,"5,f5") > 0 THEN DO:  /* lisays */
+     if lookup(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:  /* lisays */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* removal */
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 THEN DO TRANSACTION:  /* removal */
        delline = FRAME-LINE.
        FIND mservicelimit where recid(mservicelimit) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
           lccli
           mservicelimit.inclamt.
 
@@ -560,7 +557,7 @@ no-lock.
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.CUICommon:ccc)
           lccli
           mservicelimit.inclunit.
        IF ok THEN DO:
@@ -581,16 +578,16 @@ no-lock.
      END. /* removal */
 
 
-     else if lookup(nap,"7,f7") > 0 THEN DO:  /* hinnasto */
+     else if lookup(Syst.CUICommon:nap,"7,f7") > 0 THEN DO:  /* hinnasto */
 
      END.
      
-     else if lookup(nap,"enter,return") > 0 AND NOT llAdmin THEN DO:
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 AND NOT llAdmin THEN DO:
        FIND FIRST mservicelimit where 
             recid(mservicelimit) = rtab[frame-line(sel)] no-lock.
-       assign fr-header = " VIEW " ufk = 0 ufk[8] = 8 ehto = 3.
+       assign fr-header = " VIEW " Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 3.
        RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 
        IF AVAIL mservicelimit THEN DO:
          RUN LOCAL-FIND-OTHER.
@@ -602,8 +599,8 @@ no-lock.
             mservicelimit.InclAmt
             mservicelimit.FromTS
             mservicelimit.endTS
-            fTs2hms(mservicelimit.FromTS)  @ lcvalidfrom
-            fTs2hms(mservicelimit.endTS)   @ lcvalidto
+            Func.Common:mTS2HMS(mservicelimit.FromTS)  @ lcvalidfrom
+            Func.Common:mTS2HMS(mservicelimit.endTS)   @ lcvalidto
             WITH FRAME lis.
             
             fDispUnit(mServiceLimit.InclUnit).
@@ -614,15 +611,15 @@ no-lock.
        
      END.
 
-     else if lookup(nap,"enter,return") > 0 AND llAdmin THEN DO WITH FRAME lis TRANSACTION:
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 AND llAdmin THEN DO WITH FRAME lis TRANSACTION:
        /* change */
        FIND FIRST mservicelimit where 
             recid(mservicelimit) = rtab[frame-line(sel)]
        no-lock.
-       assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
+       assign fr-header = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
        RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 
        RUN LOCAL-UPDATE-RECORD(FALSE).
        
@@ -632,25 +629,25 @@ no-lock.
 
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
        RUN LOCAL-FIND-FIRST.
        ASSIGN memory = recid(mservicelimit) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
        RUN LOCAL-FIND-LAST.
        ASSIGN memory = recid(mservicelimit) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE LOCAL-DISP-ROW: 
    RUN LOCAL-FIND-OTHER.
@@ -843,9 +840,9 @@ PROCEDURE LOCAL-FIND-OTHER.
    IF AVAIL dialtype THEN lctype = dialtype.dtname.
    ELSE lctype = "".
 
-   lcvalid =  fTs2hms(mservicelimit.FromTS) + "-" .
+   lcvalid =  Func.Common:mTS2HMS(mservicelimit.FromTS) + "-" .
    IF mservicelimit.EndTS < 99999999 THEN 
-   lcvalid = lcvalid +  fTs2hms(mservicelimit.EndTS).
+   lcvalid = lcvalid +  Func.Common:mTS2HMS(mservicelimit.EndTS).
 
    FIND FIRST servicelimit WHERE
               ServiceLimit.slseq = Mservicelimit.slseq AND 
@@ -868,8 +865,8 @@ PROCEDURE LOCAL-UPDATE-RECORD.
       mservicelimit.InclAmt 
       mservicelimit.fromts
       mservicelimit.endts
-      fTs2hms(mservicelimit.FromTS)  @ lcvalidfrom
-      fTs2hms(mservicelimit.endTS)   @ lcvalidto
+      Func.Common:mTS2HMS(mservicelimit.FromTS)  @ lcvalidfrom
+      Func.Common:mTS2HMS(mservicelimit.endTS)   @ lcvalidto
    with frame lis. 
 
    fDispUnit(mServiceLimit.InclUnit).
@@ -882,12 +879,12 @@ PROCEDURE LOCAL-UPDATE-RECORD.
          mservicelimit.endTS
       WITH FRAME lis EDITING: 
          
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          
          READKEY.
-         nap = KEYLABEL(LASTKEY). 
+         Syst.CUICommon:nap = KEYLABEL(LASTKEY). 
          
-         IF nap = "F9" AND
+         IF Syst.CUICommon:nap = "F9" AND
             FRAME-FIELD = "InclUnit"
          THEN DO:
             RUN Help/h-tmscodes.p(INPUT "Tariff",    /* TableName */
@@ -903,14 +900,14 @@ PROCEDURE LOCAL-UPDATE-RECORD.
              NEXT.
          END.
 
-         IF lookup(nap,poisnap) > 0 THEN DO:
+         IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
 
             IF FRAME-FIELD = "fromts" THEN DO:
-               disp fTs2hms(input input mservicelimit.FromTS)  @ lcvalidfrom.
+               disp Func.Common:mTS2HMS(input input mservicelimit.FromTS)  @ lcvalidfrom.
             END.
 
             ELSE IF FRAME-FIELD = "endts" THEN DO:
-               disp fTs2hms(input mservicelimit.endts)  @ lcvalidto.
+               disp Func.Common:mTS2HMS(input mservicelimit.endts)  @ lcvalidto.
             END.
 
             ELSE IF FRAME-FIELD = "servicelimit" THEN DO:

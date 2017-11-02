@@ -12,7 +12,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/ftransdir.i}
 {Func/email.i}
 
@@ -129,7 +128,7 @@ IF CAN-FIND(FIRST ttError) THEN DO:
                            STRING(DAY(TODAY),"99")    + 
                            "_" + STRING(TIME) + ".txt".                    
 
-    ldCurrStamp = fMakeTS().
+    ldCurrStamp = Func.Common:mMakeTS().
                            
     OUTPUT STREAM slog TO VALUE(lcErrFile).
     PUT STREAM slog UNFORMATTED
@@ -145,12 +144,12 @@ IF CAN-FIND(FIRST ttError) THEN DO:
 
        /* save to db for reporting */
        CREATE ErrorLog.
-       ASSIGN ErrorLog.Brand     = gcBrand
+       ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
               ErrorLog.ActionID  = "DDPAYM"
               ErrorLog.TableName = "Invoice"
               ErrorLog.KeyValue  = ttError.Inv
               ErrorLog.ActionTS  = ldCurrStamp
-              ErrorLog.UserCode  = katun
+              ErrorLog.UserCode  = Syst.CUICommon:katun
               ErrorLog.ErrorMsg  = ttError.ErrMsg.
     END.
 

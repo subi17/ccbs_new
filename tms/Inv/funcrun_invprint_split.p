@@ -9,8 +9,8 @@
 
 {Syst/commpaa.i}
 ASSIGN 
-   gcBrand = "1"
-   katun   = "Cron".
+   Syst.CUICommon:gcBrand = "1"
+   Syst.CUICommon:katun   = "Cron".
    
 {Syst/funcrunprocess_run.i}
 

@@ -19,7 +19,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/eventval.i}
 {Mc/offer.i}
 {newton/src/xmlrpc_names.i}
@@ -42,18 +42,18 @@ lcStruct = validate_request(pcStruct, "offer_id!,amount,valid_from!,valid_to,dis
  
 IF lcStruct = ? THEN RETURN.
 
-katun = "VISTA_" + get_string(pcStruct, "username").
+Syst.CUICommon:katun = "VISTA_" + get_string(pcStruct, "username").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
+IF TRIM(Syst.CUICommon:katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 {newton/src/settenant.i pcTenant}
 
 CREATE ttOfferItem.
 ASSIGN
     ttOfferItem.OfferItemId   = NEXT-VALUE(OfferItemSeq)
-    ttOfferItem.Brand         = gcBrand
+    ttOfferItem.Brand         = Syst.CUICommon:gcBrand
     ttOfferItem.Offer         = get_string(pcStruct, "offer_id")
     ttOfferItem.VatIncl       = get_bool(pcStruct, "vat_included")
     ttOfferItem.Amount        = (IF LOOKUP("amount", lcStruct) > 0 THEN get_double( pcStruct, "amount") ELSE 0)
@@ -77,7 +77,7 @@ IF fValidateOfferItem(TABLE ttOfferItem, TRUE, OUTPUT ocError) > 0 THEN DO:
 END.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
    {Func/lib/eventlog.i}
    DEF VAR lhOfferItem AS HANDLE NO-UNDO.
    lhOfferItem = BUFFER OfferItem:HANDLE.
@@ -94,7 +94,7 @@ IF ttOfferItem.ItemType = "Topup" THEN DO:
    END.
 
    FIND TopupScheme WHERE 
-        TopupScheme.Brand = gcBrand AND
+        TopupScheme.Brand = Syst.CUICommon:gcBrand AND
         TopupScheme.TopupScheme = ttOfferItem.ItemKey NO-LOCK NO-ERROR.
    
    IF AVAIL TopupScheme THEN DO:
@@ -104,7 +104,7 @@ IF ttOfferItem.ItemType = "Topup" THEN DO:
    END.
 END.
 
-deCurTime = fMakeTs().
+deCurTime = Func.Common:mMakeTS().
 IF ttOfferItem.BeginStamp < deCurTime THEN DO:
    ttOfferItem.BeginStamp = deCurTime.
    add_timestamp(lcRespStruct, "valid_from", ttOfferItem.BeginStamp).
@@ -128,5 +128,4 @@ add_string(lcRespStruct, "id", STRING(OfferItem.OfferItemId)).
 
 FINALLY:
    EMPTY TEMP-TABLE ttNamePairs.
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

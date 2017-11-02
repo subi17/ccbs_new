@@ -5,13 +5,12 @@ DEFINE BUFFER bTMSPass FOR TMSPass.
 
 {Syst/commpaa.i}
 {Func/cparam.i2}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 liPasswordHistoryLength = fCParamI("PassWdHistory").
 llSimulate = TRUE. 
 
 {Func/log.i}
-{Func/date.i}
-katun = "anttis".
+Syst.CUICommon:katun = "anttis".
 
 fSetLogFileName("/home/anttis/user_paivitys" + 
    STRING(YEAR(TODAY),"9999") +
@@ -65,7 +64,7 @@ FUNCTION fNew RETURNS LOGICAL
    DEFINE VARIABLE lcTemp AS CHARACTER NO-UNDO. 
    DEFINE VARIABLE ldeTS AS DECIMAL NO-UNDO. 
    DEFINE VARIABLE liUsernum AS INTEGER NO-UNDO. 
-   ldeTS = fMakeTS().
+   ldeTS = Func.Common:mMakeTS().
 
    fLog(icLine,"fAdd").   
    
@@ -148,7 +147,7 @@ FUNCTION fNew RETURNS LOGICAL
       ASSIGN
          tmspass.usercode = lcUsercode
          tmspass.Password = lcPassword 
-         tmspass.creator  = katun
+         tmspass.creator  = Syst.CUICommon:katun
          tmspass.createts = ldeTS.
    END.
 
@@ -173,7 +172,7 @@ FUNCTION fModify RETURNS LOGICAL
    DEFINE VARIABLE ldeTS AS DECIMAL NO-UNDO. 
    DEFINE VARIABLE i AS INTEGER NO-UNDO. 
    DEFINE VARIABLE llModified AS LOGICAL NO-UNDO INIT FALSE. 
-   ldeTS = fMakeTS().
+   ldeTS = Func.Common:mMakeTS().
    fLog(icLine,"fModify").   
 
    lcUsercode = ENTRY(3,icLine,lcDelim).

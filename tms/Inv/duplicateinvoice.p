@@ -8,8 +8,8 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:katun = "Cron".
+Syst.CUICommon:gcBrand = "1".
 {Inv/printdoc1tt.i}
 {Func/cparam2.i}
 {Func/duplicate_invoice.i}
@@ -35,11 +35,11 @@ IF lcSpoolDir = ? OR TRIM(lcSpoolDir) = "" OR
    RETURN.
 END.
 
-ldeNow = fMakeTS().
+ldeNow = Func.Common:mMakeTS().
       
 DUP_REQ_LOOP:      
 FOR EACH MsRequest WHERE
-   MsRequest.Brand = gcBrand AND
+   MsRequest.Brand = Syst.CUICommon:gcBrand AND
    MsRequest.ReqType = {&REQTYPE_DUPLICATE_INVOICE} AND
    MsRequest.ReqStatus = {&REQUEST_STATUS_NEW} AND 
    MsRequest.ActStamp <= ldeNow NO-LOCK

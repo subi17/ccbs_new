@@ -104,15 +104,15 @@ DO ic = 1 TO 2:
 END.
 
 {Syst/commpaa.i}
-katun = pcUserName.
-gcBrand = lcBrand.
+Syst.CUICommon:katun = pcUserName.
+Syst.CUICommon:gcBrand = lcBrand.
 {Func/flimitreq.i}
 
 /* ready to create the request */
 liMsReq = fLimitRequest(
           ?,           /* msseq */
           piCustnum,   /* custum */
-          fMakeTS(),   /* act.stamp */ 
+          Func.Common:mMakeTS(),   /* act.stamp */ 
           lcMode,    /* create, update */
           ldValue,  /* new limit values */
           FALSE,       /* default value */ 
@@ -126,5 +126,4 @@ IF liMsReq = 0 THEN RETURN appl_err(ocResult).
 add_struct(response_toplevel_id, "").
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

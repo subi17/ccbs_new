@@ -1,6 +1,6 @@
 {Syst/commpaa.i} 
-katun = "anttis".
-gcBrand = "1".
+Syst.CUICommon:katun = "anttis".
+Syst.CUICommon:gcBrand = "1".
 {Func/msreqfunc.i}
 {Rate/daycampaign.i}
 {Syst/eventval.i}
@@ -33,7 +33,7 @@ FOR EACH msrequest where
    /* day campaign id */
    lcDCEvent = MsRequest.ReqCParam3.
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
 
@@ -46,7 +46,7 @@ FOR EACH msrequest where
    IF NOT AVAIL MsOwner THEN NEXT.
   
    FIND FIRST DCCLI WHERE
-             DCCLI.Brand      = gcBrand         AND
+             DCCLI.Brand      = Syst.CUICommon:gcBrand         AND
              DCCLI.DCEvent    = lcDCEvent       AND
              DCCLI.MsSeq      = MsRequest.MsSeq AND
              DCCLI.ValidTo   >= ldtActDate      AND

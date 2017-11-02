@@ -9,14 +9,13 @@
 
 /* ***************************  Definitions  ************************** */
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:katun = "Cron".
+Syst.CUICommon:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
 {Syst/eventlog.i}
-{Func/date.i}
 {Func/coinv.i}
 
 DEFINE VARIABLE lcLine   AS CHARACTER NO-UNDO.
@@ -210,7 +209,7 @@ PROCEDURE ip_CrtSingleFee:
       END.   
           
       FIND FIRST BillItem WHERE
-                 BillItem.Brand    = gcBrand             AND
+                 BillItem.Brand    = Syst.CUICommon:gcBrand             AND
                  BillItem.BIGroup  = {&BITEM_GRP_CHARGE} AND
                  Billitem.BillCode = lcBillingItem       NO-LOCK NO-ERROR.
        
@@ -220,7 +219,7 @@ PROCEDURE ip_CrtSingleFee:
       END.   
 
       CREATE SingleFee.
-      ASSIGN SingleFee.Brand       = gcBrand
+      ASSIGN SingleFee.Brand       = Syst.CUICommon:gcBrand
              SingleFee.FMItemId    = NEXT-VALUE(bi-seq)
              SingleFee.CustNum     = MobSub.CustNum
              SingleFee.BillTarget  = 1
@@ -246,13 +245,13 @@ PROCEDURE ip_CrtSingleFee:
        IF lcMemoText > "" THEN DO:
           CREATE Memo.
           ASSIGN
-              Memo.CreStamp  = fMakeTS()
-              Memo.Brand     = gcBrand
+              Memo.CreStamp  = Func.Common:mMakeTS()
+              Memo.Brand     = Syst.CUICommon:gcBrand
               Memo.HostTable = "SingleFee"
               Memo.CustNum   = MobSub.CustNum
               Memo.KeyValue  = STRING(liKeyValue)
               Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-              Memo.CreUser   = katun
+              Memo.CreUser   = Syst.CUICommon:katun
               Memo.MemoTitle = "Charge"
               Memo.MemoText  = lcMemoText.
       END.

@@ -10,7 +10,7 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Func/fixedlinefunc.i}
@@ -29,7 +29,7 @@ DEF VAR lcStatusCode       AS INT  NO-UNDO.
 
 DEF BUFFER bCLIType        FOR CLIType.
 
-ASSIGN katun = "Newton".
+ASSIGN Syst.CUICommon:katun = "Newton".
 
 IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
 
@@ -74,13 +74,13 @@ END FUNCTION.
 
 
 FOR EACH CLIType NO-LOCK WHERE
-         CLIType.Brand = gcBrand AND
+         CLIType.Brand = Syst.CUICommon:gcBrand AND
          CLIType.WebStatusCode > 0:
 
    /* Combine bundle based clitypes with base tariff */
    IF CLIType.BundleType = TRUE THEN
       FOR EACH bCLIType WHERE
-               bCLIType.Brand = gcBrand AND
+               bCLIType.Brand = Syst.CUICommon:gcBrand AND
                bCLIType.BillTarget EQ CLIType.BillTarget AND
                bCLIType.CLIType <> CLIType.CLIType AND
                bCLIType.BundleType = CLIType.BundleType NO-LOCK:
@@ -102,5 +102,4 @@ FOR EACH CLIType NO-LOCK WHERE
 END. /* FOR EACH CLIType WHERE */
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

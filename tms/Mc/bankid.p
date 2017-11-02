@@ -21,22 +21,22 @@ DEF VAR must-print    AS logic NO-UNDO.
 form
 bank.bankid COLUMN-LABEL "Bank"
 bank.bankoffice   COLUMN-LABEL "Office"
-WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(cfc)
-title color value(ctc) " Banks (" + gcBrand + ") "
+WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.CUICommon:cfc)
+title color value(Syst.CUICommon:ctc) " Banks (" + Syst.CUICommon:gcBrand + ") "
 OVERLAY FRAME kase.
 
-cfc = "kase". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "kase". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 runko:
 repeat:
 
    ASSIGN
 
-     ufk = 0 ufk[5] = 11
-     ufk[6] = 0  ufk[7] = 0  ufk[8] = 8  ufk[9] = 1 siirto = ?.
+     Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[5] = 11
+     Syst.CUICommon:ufk[6] = 0  Syst.CUICommon:ufk[7] = 0  Syst.CUICommon:ufk[8] = 8  Syst.CUICommon:ufk[9] = 1 siirto = ?.
 
-   ehto = 3. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
 
-   FIND FIRST bank WHERE Bank.Brand = gcBrand NO-LOCK no-error.
+   FIND FIRST bank WHERE Bank.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
    IF NOT AVAILABLE bank THEN DO:
 
       message " No Banks at all !".
@@ -63,7 +63,7 @@ LOOP:
             DISPLAY  bank.bankid bank.bankoffice WITH FRAME kase.
             rtab[FRAME-LINE] = recid(bank).
             DOWN WITH FRAME kase.
-            FIND NEXT bank WHERE Bank.Brand = gcBrand NO-LOCK no-error.
+            FIND NEXT bank WHERE Bank.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
          END.
          must-print = FALSE.
          up frame-line(kase) - 1 WITH FRAME kase.
@@ -74,18 +74,18 @@ BROWSE:
 
          HIDE MESSAGE.
          CHOOSE ROW  bank.bankid {Syst/uchoose.i} no-error WITH FRAME kase.
-         COLOR DISPLAY value(ccc)  bank.bankid WITH FRAME kase.
+         COLOR DISPLAY value(Syst.CUICommon:ccc)  bank.bankid WITH FRAME kase.
 
          if frame-value = " " AND rtab[FRAME-LINE] = ? THEN NEXT.
-         nap = keylabel(LASTKEY).
+         Syst.CUICommon:nap = keylabel(LASTKEY).
 
 
          /* previous line */
-         if nap = "1" or nap = "f1" or nap = "cursor-up" THEN DO
+         if Syst.CUICommon:nap = "1" or Syst.CUICommon:nap = "f1" or Syst.CUICommon:nap = "cursor-up" THEN DO
          WITH FRAME kase:
             IF FRAME-LINE = 1 THEN DO:
                FIND bank where recid(bank) = rtab[FRAME-LINE] no-lock.
-               FIND prev bank WHERE Bank.Brand = gcBrand NO-LOCK no-error.
+               FIND prev bank WHERE Bank.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                IF NOT AVAILABLE bank THEN DO:
                   BELL.
                   message "This is the 1st Row !".
@@ -109,12 +109,12 @@ BROWSE:
          END. /* previous line */
 
          /* NEXT line */
-         else if nap = "2" or nap = "f2" or nap = "cursor-down" THEN DO
+         else if Syst.CUICommon:nap = "2" or Syst.CUICommon:nap = "f2" or Syst.CUICommon:nap = "cursor-down" THEN DO
          WITH FRAME kase:
 
             IF FRAME-LINE = FRAME-DOWN THEN DO:
                FIND bank where recid(bank) = rtab[FRAME-LINE] no-lock .
-               FIND NEXT bank WHERE Bank.Brand = gcBrand NO-LOCK no-error.
+               FIND NEXT bank WHERE Bank.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                IF NOT AVAILABLE bank THEN DO:
                   BELL.
                   message "This is the last row !".
@@ -136,15 +136,15 @@ BROWSE:
          END. /* NEXT line */
 
          /* previous page */
-         else if nap = "page-up" or nap = "prev-page" THEN DO:
+         else if Syst.CUICommon:nap = "page-up" or Syst.CUICommon:nap = "prev-page" THEN DO:
             FIND bank where recid(bank) = ylin no-lock no-error.
-            FIND prev bank WHERE Bank.Brand = gcBrand NO-LOCK no-error.
+            FIND prev bank WHERE Bank.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
 
             IF AVAILABLE bank THEN DO:
 
                /* go back one page */
                DO i = 1 TO (FRAME-DOWN - 1):
-                  FIND prev bank WHERE Bank.Brand = gcBrand NO-LOCK no-error.
+                  FIND prev bank WHERE Bank.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                   IF AVAILABLE bank THEN ylin = recid(bank).
                   ELSE i = FRAME-DOWN.
                END.
@@ -161,7 +161,7 @@ BROWSE:
 
 
         /* NEXT page */
-        else if nap = "page-down" or nap = "next-page" THEN DO
+        else if Syst.CUICommon:nap = "page-down" or Syst.CUICommon:nap = "next-page" THEN DO
         WITH FRAME kase:
 
            IF rtab[FRAME-DOWN] = ? THEN DO:
@@ -177,30 +177,30 @@ BROWSE:
         END. /* NEXT page */
 
 
-        else  if nap = "enter" or nap = "return" OR
-        nap = "f5" or nap = "5" THEN DO:
+        else  if Syst.CUICommon:nap = "enter" or Syst.CUICommon:nap = "return" OR
+        Syst.CUICommon:nap = "f5" or Syst.CUICommon:nap = "5" THEN DO:
            /* valinta */
            siirto = frame-value.
            LEAVE runko.
         END.
 
 
-        else if nap = "end,e" THEN DO : /* LAST record */
-           FIND LAST bank WHERE Bank.Brand = gcBrand NO-LOCK.
+        else if Syst.CUICommon:nap = "end,e" THEN DO : /* LAST record */
+           FIND LAST bank WHERE Bank.Brand = Syst.CUICommon:gcBrand NO-LOCK.
            ylin = recid(bank).
            must-print = TRUE.
            NEXT LOOP.
         END.
 
-        else if nap = "home,h" THEN DO:
-           FIND FIRST bank WHERE Bank.Brand = gcBrand NO-LOCK.
+        else if Syst.CUICommon:nap = "home,h" THEN DO:
+           FIND FIRST bank WHERE Bank.Brand = Syst.CUICommon:gcBrand NO-LOCK.
            ylin = recid(bank).
            must-print = TRUE.
            NEXT LOOP.
         END.
 
 
-        else if nap = "8" or nap = "f8" THEN LEAVE runko.
+        else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" THEN LEAVE runko.
 
      END.  /* BROWSE */
    END.  /* LOOP */

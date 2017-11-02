@@ -62,8 +62,8 @@ FORM
        
 ASSIGN ldtDate[1] = DATE(MONTH(TODAY),1,YEAR(TODAY))
        ldtDate[2] = TODAY
-       lcUser     = katun
-       toimi      = -1
+       lcUser     = Syst.CUICommon:katun
+       Syst.CUICommon:toimi      = -1
        llMail     = FALSE
        llActive   = FALSE. 
 
@@ -72,23 +72,23 @@ REPEAT WITH FRAME fDate:
     PAUSE 0.
     DISP ldtDate lcUser lcFile llMail llActive WITH FRAME fDate.
 
-    IF toimi = -1 THEN toimi = 1.
+    IF Syst.CUICommon:toimi = -1 THEN Syst.CUICommon:toimi = 1.
     ELSE DO:
-       ASSIGN ufk = 0
-              ufk[1] = 7
-              ufk[5] = 795
-              ufk[8] = 8
-              ehto   = 0.
+       ASSIGN Syst.CUICommon:ufk = 0
+              Syst.CUICommon:ufk[1] = 7
+              Syst.CUICommon:ufk[5] = 795
+              Syst.CUICommon:ufk[8] = 8
+              Syst.CUICommon:ehto   = 0.
               
        IF ldtDate[1] = ? OR ldtDate[2] = ? OR lcFile = "" 
-       THEN ufk[5] = 0.
+       THEN Syst.CUICommon:ufk[5] = 0.
               
        RUN Syst/ufkey.p.
     END.
     
-    IF TOIMI = 1 THEN DO:
+    IF Syst.CUICommon:toimi = 1 THEN DO:
     
-       ehto = 9.
+       Syst.CUICommon:ehto = 9.
        RUN Syst/ufkey.p.
        
        REPEAT WITH FRAME fDate ON ENDKEY UNDO, LEAVE:
@@ -103,7 +103,7 @@ REPEAT WITH FRAME fDate:
     
     END.
 
-    ELSE IF toimi = 5 THEN DO:
+    ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
        RUN Inv/custnobill.p (ldtDate[1],  
                        ldtDate[2],
                        lcUser,
@@ -118,7 +118,7 @@ REPEAT WITH FRAME fDate:
        TITLE " DONE ".
     END.
     
-    ELSE IF toimi = 8 THEN LEAVE.
+    ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
    
 END.
 

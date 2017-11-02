@@ -61,7 +61,7 @@ FUNCTION CheckPage RETURNS LOGIC
 END.
 
 FIND FIRST Customer WHERE 
-           Customer.Brand   = gcBrand AND
+           Customer.Brand   = Syst.CUICommon:gcBrand AND
            Customer.CustNum = iiCustNum NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Customer THEN RETURN.           
 
@@ -74,6 +74,9 @@ ASSIGN
    sl = 1
    rl = 0.
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 FORM header
    line1 AT 1 SKIP
    ynimi at 1 format "x(28)" 
@@ -82,7 +85,7 @@ FORM header
    sl format "ZZZZ9" SKIP
    "Customer" AT 1
    Customer.Custnum AT 10 
-   pvm format "99.99.9999" AT 68 SKIP
+   TODAY FORMAT "99.99.9999" AT 68 SKIP
    line3 AT 1 SKIP(1)
 WITH width 80 NO-LABEL no-box FRAME pagehead.
 
@@ -106,7 +109,7 @@ PUT STREAM tul UNFORMATTED
 rl = rl + 7.
 
 FOR EACH Invoice NO-LOCK WHERE
-         Invoice.Brand   = gcBrand AND
+         Invoice.Brand   = Syst.CUICommon:gcBrand AND
          Invoice.CustNum = Customer.CustNum:
 
    RUN Ar/invbal.p(INPUT Invoice.InvNum, OUTPUT lDebt ).
@@ -125,7 +128,7 @@ FOR EACH Invoice NO-LOCK WHERE
    ASSIGN
       rl = rl + 1.
 
-   IF Invoice.DueDate < pvm THEN
+   IF Invoice.DueDate < TODAY THEN
       lDue = Invoice.Invamt - lPaid.
    ELSE lDue = 0.   
 
@@ -174,7 +177,7 @@ FOR EACH Invoice NO-LOCK WHERE
       lTotDebt = lTotDebt + lDebt
       lTotPaid = lTotPaid + lPaid
       lTotVal  = lTotVal  + Invoice.InvAmt.
-   IF Invoice.DueDate < pvm THEN lTotDue = lTotDue + lDue.
+   IF Invoice.DueDate < TODAY THEN lTotDue = lTotDue + lDue.
 
    PUT STREAM tul UNFORMATTED SKIP(1).
 

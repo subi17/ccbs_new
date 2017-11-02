@@ -21,7 +21,7 @@ VERSION ........: M15
 DEF VAR idate  AS DA NO-UNDO.
 DEF VAR CustNum AS i  NO-UNDO.
 DEF VAR period  AS i  NO-UNDO.
-idate = pvm.
+idate = TODAY.
 
 DEF TEMP-TABLE ttCust NO-UNDO
     FIELD CustNum AS INT
@@ -43,22 +43,22 @@ form
    FFItem.Amt
 WITH
    OVERLAY FRAME LOG ROW 4 12 DOWN width 80 TITLE
-   " " + ynimi + "  SUMMARY OF FUTURE CONTRACT PAYMENTS ". 
+   " " + Syst.CUICommon:ynimi + "  SUMMARY OF FUTURE CONTRACT PAYMENTS ". 
 
-ehto = 9. RUN Syst/ufkey.p.
+Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 PAUSE 0.
 view FRAME LOG.
 UPDATE 
    idate 
    CustNum VALIDATE(INPUT CustNum = 0 OR
                     CAN-FIND(FIRST Customer WHERE 
-                                   Customer.Brand   = gcBrand AND
+                                   Customer.Brand   = Syst.CUICommon:gcBrand AND
                                    Customer.CustNum = INPUT CustNum),
                     "Unknown customer !")
 WITH FRAME Date.
 PAUSE 0.
 
-ufk = 0. ehto = 3. RUN Syst/ufkey.p.
+Syst.CUICommon:ufk = 0. Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
 
 period = year(idate) * 100 + month(idate).
 
@@ -74,7 +74,7 @@ ELSE DO:
    MESSAGE "Collecting fees ..".
 
    FOR EACH FixedFee no-lock WHERE
-            FixedFee.Brand = gcBrand,
+            FixedFee.Brand = Syst.CUICommon:gcBrand,
        FIRST FFItem of FixedFee no-lock where 
              FFItem.BillPeriod <= Period AND
              FFItem.Billed     = FALSE:

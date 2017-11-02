@@ -1,7 +1,6 @@
 {Syst/commpaa.i}
-gcbrand = "1".
-katun = "Qvantel".
-{Func/timestamp.i}
+Syst.CUICommon:gcBrand = "1".
+Syst.CUICommon:katun = "Qvantel".
 
 def var i as int no-undo.
 def var k as int no-undo.
@@ -36,7 +35,7 @@ END. /* IF lcinputfile = "" THEN DO: */
 liperiod = year(today) * 100 + month(today).
 lcoutputfile = "/apps/yoigo/tms_support/billing/log/" + 
                 Syst.Parameters:Tenant +
-                "_recalc_invrowcounter_" + string(fMakeTS()) + ".log".
+                "_recalc_invrowcounter_" + string(Func.Common:mMakeTS()) + ".log".
 
 input stream sin from value(lcinputfile).
 output stream sout to value(lcoutputfile).

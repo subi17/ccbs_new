@@ -11,7 +11,7 @@
 {Syst/tmsconst.i}
 {Syst/eventval.i}
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    {Func/lib/eventlog.i}
    DEFINE VARIABLE lhCustContact AS HANDLE NO-UNDO.
    
@@ -31,7 +31,7 @@ DEF BUFFER bMobSub FOR MobSub.
 DEF BUFFER bOrderCustomer FOR OrderCustomer.
 
 FIND Order NO-LOCK WHERE
-   Order.Brand   = gcBrand AND
+   Order.Brand   = Syst.CUICommon:gcBrand AND
    Order.OrderId = iiOrderId
 NO-ERROR.
 
@@ -41,7 +41,7 @@ IF NOT AVAIL Order THEN DO:
 END.
 
 FIND OrderCustomer NO-LOCK WHERE
-   OrderCustomer.Brand   = gcBrand AND
+   OrderCustomer.Brand   = Syst.CUICommon:gcBrand AND
    OrderCustomer.OrderId = iiOrderId AND
    OrderCustomer.RowType = iiRowType NO-ERROR.
 
@@ -67,7 +67,7 @@ IF Order.OrderType < 2 THEN DO:
    
    IF Order.PayType = FALSE AND
       NOT CAN-FIND(FIRST bMobSub WHERE
-                         bMobSub.Brand     = gcBrand AND
+                         bMobSub.Brand     = Syst.CUICommon:gcBrand AND
                          bMobSub.CustNum   = Customer.CustNum AND
                          bMobSub.MsSeq    <> Order.MsSeq AND
                          bMobSub.PayType   = FALSE) THEN
@@ -75,12 +75,12 @@ IF Order.OrderType < 2 THEN DO:
    
    IF Order.PayType = TRUE AND
       NOT CAN-FIND(FIRST bMobSub WHERE
-                         bMobSub.Brand     = gcBrand AND
+                         bMobSub.Brand     = Syst.CUICommon:gcBrand AND
                          bMobSub.CustNum   = Customer.CustNum AND
                          bMobSub.MsSeq    <> Order.MsSeq) 
                          AND
       NOT CAN-FIND(FIRST TermMobSub WHERE
-                         TermMobSub.Brand     = gcBrand AND
+                         TermMobSub.Brand     = Syst.CUICommon:gcBrand AND
                          TermMobSub.CustNum   = Customer.CustNum AND
                          TermMobSub.MsSeq    <> Order.MsSeq)  THEN
       llUpdateCustContact = TRUE.
@@ -92,18 +92,18 @@ IF llUpdateCustContact THEN DO:
 
    IF OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN DO: 
       IF NOT CAN-FIND(FIRST bOrderCustomer WHERE
-                            bOrderCustomer.Brand   = gcBrand AND
+                            bOrderCustomer.Brand   = Syst.CUICommon:gcBrand AND
                             bOrderCustomer.OrderId = OrderCustomer.OrderId AND
                             bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}) THEN DO:
          FIND CustContact WHERE
-              CustContact.Brand    = gcBrand AND
+              CustContact.Brand    = Syst.CUICommon:gcBrand AND
               CustContact.Custnum  = Customer.CustNum AND
               CustContact.CustType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}
               EXCLUSIVE-LOCK NO-ERROR.
          IF AVAILABLE CustContact THEN DO:
             IF llDoEvent THEN RUN StarEventMakeDeleteEventWithMemo(
                                     lhCustContact,
-                                    katun,
+                                    Syst.CUICommon:katun,
                                     lcMemo).
             DELETE CustContact.
          END.
@@ -111,7 +111,7 @@ IF llUpdateCustContact THEN DO:
    END.
    ELSE DO:
       FIND CustContact WHERE
-           CustContact.Brand = gcBrand AND
+           CustContact.Brand = Syst.CUICommon:gcBrand AND
            CustContact.Custnum = Customer.CustNum AND
            CustContact.CustType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}
            EXCLUSIVE-LOCK NO-ERROR.
@@ -122,7 +122,7 @@ IF llUpdateCustContact THEN DO:
       ELSE IF lldoevent THEN RUN StarEventSetOldBuffer(lhCustContact).
 
       ASSIGN
-         CustContact.Brand          = gcBrand
+         CustContact.Brand          = Syst.CUICommon:gcBrand
          CustContact.Custnum        = iiCustnum
          CustContact.CustType       = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}
          CustContact.HonTitle       = OrderCustomer.CustTitle
@@ -153,7 +153,7 @@ IF llUpdateCustContact THEN DO:
          IF NEW CustContact THEN RUN StarEventMakeCreateEvent (lhCustContact).
          ELSE RUN StarEventMakeModifyEventWithMemo(
                      lhCustContact,
-                     katun,
+                     Syst.CUICommon:katun,
                      lcMemo).
       END.
 

@@ -17,7 +17,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/eventval.i}
 {Syst/tmsconst.i}
 
@@ -45,11 +45,11 @@ lcStruct = validate_request(pcStruct,
  
 IF lcStruct = ? THEN RETURN.
 
-katun = "VISTA_" + get_string(pcStruct, "username").
+Syst.CUICommon:katun = "VISTA_" + get_string(pcStruct, "username").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
+IF TRIM(Syst.CUICommon:katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 IF NUM-ENTRIES(pcReseller,"|") > 1 THEN
   ASSIGN
@@ -60,7 +60,7 @@ ELSE
 
 {newton/src/settenant.i pcTenant}
 
-FIND Reseller EXCLUSIVE-LOCK WHERE Reseller.Brand = gcBrand AND Reseller.Reseller = pcReseller NO-ERROR.
+FIND Reseller EXCLUSIVE-LOCK WHERE Reseller.Brand = Syst.CUICommon:gcBrand AND Reseller.Reseller = pcReseller NO-ERROR.
 IF NOT AVAIL Reseller THEN
    RETURN appl_err(SUBST("Reseller not found: &1",pcReseller)).
 
@@ -119,7 +119,7 @@ IF pcBankCode NE ? OR
 END.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
    {Func/lib/eventlog.i}
    DEF VAR lhReseller AS HANDLE NO-UNDO.
    DEF VAR lhResellerTF AS HANDLE NO-UNDO.
@@ -140,7 +140,7 @@ END.
 IF lcResellerTF EQ "ADD" THEN DO:
    CREATE ResellerTF.
    ASSIGN
-      ResellerTF.Brand     = gcBrand
+      ResellerTF.Brand     = Syst.CUICommon:gcBrand
       ResellerTF.Reseller  = ttReseller.Reseller
       ResellerTF.TFBank    = pcBankCode
       ResellerTF.ValidFrom = pdaBankCodeFrom.
@@ -160,5 +160,4 @@ add_struct(response_toplevel_id, "").
 FINALLY:
    IF llDoEvent THEN fCleanEventObjects().
    EMPTY TEMP-TABLE ttReseller.
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

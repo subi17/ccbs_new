@@ -1,8 +1,7 @@
 {Syst/testpaa.i}
-gcbrand = "1".
-katun = "YoigoRequest".
+Syst.CUICommon:gcBrand = "1".
+Syst.CUICommon:katun = "YoigoRequest".
 {Func/fcreditreq.i}
-{Func/timestamp.i}
 
 session:numeric-format = "european".
 
@@ -98,7 +97,7 @@ repeat:
              Memo.CreUser   = msrequest.usercode 
              Memo.MemoTitle = "Erroneous Invoice"
              Memo.MemoText  = "Credited by Yoigo, YCM-1132".
-             Memo.CreStamp  = fMakeTS().
+             Memo.CreStamp  = Func.Common:mMakeTS().
    end.
    
    pause 0.

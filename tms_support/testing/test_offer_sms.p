@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-katun = "Qvantel".
-gcBrand = "1".
+Syst.CUICommon:katun = "Qvantel".
+Syst.CUICommon:gcBrand = "1".
 {Func/order_data.i}
 {Func/msisdn_prefix.i}
 {Func/smsmessage.i}

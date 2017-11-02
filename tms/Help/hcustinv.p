@@ -50,17 +50,16 @@ form
     Invoice.InvType                 COLUMN-LABEL "Type"
     notes                           column-label "Memo"
 WITH CENTERED OVERLAY scroll 1 10 DOWN ROW 3
-    COLOR value(cfc) 
-    TITLE COLOR value(ctc)
+    COLOR value(Syst.CUICommon:cfc) 
+    TITLE COLOR value(Syst.CUICommon:ctc)
        " CHOOSE INVOICE " +
        " (" + STRING(CustNum) + " " + lcCustName + ") "
     FRAME sel.
 
 FIND Customer WHERE Customer.CustNum = CustNum NO-LOCK.
-lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                              BUFFER Customer).
+lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 
@@ -130,12 +129,12 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk   = 0
-         ufk[3]= 927 
-         ufk[4]= 829
-         ufk[5]= 11  
-         ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ufk   = 0
+         Syst.CUICommon:ufk[3]= 927 
+         Syst.CUICommon:ufk[4]= 829
+         Syst.CUICommon:ufk[5]= 11  
+         Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
          {Syst/uright1.i '"3,4,7"'}
          RUN Syst/ufkey.p.
       END.
@@ -143,7 +142,7 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW Invoice.InvNum {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Invoice.InvNum WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Invoice.InvNum WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? AND NOT must-add THEN DO:
@@ -153,13 +152,13 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if nap = "cursor-right" THEN DO:
+      if Syst.CUICommon:nap = "cursor-right" THEN DO:
          order = order + 1.
          IF order = 2 THEN order = 1.
       END.
-      if nap = "cursor-left" THEN DO:
+      if Syst.CUICommon:nap = "cursor-left" THEN DO:
          order = order - 1.
          IF order = 0 THEN order = 1.
       END.
@@ -184,7 +183,7 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
       END.
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND Invoice where recid(Invoice) = rtab[1] no-lock.
             RUN local-find-prev.
@@ -214,7 +213,7 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
 
          IF FRAME-LINE = FRAME-DOWN THEN DO:
@@ -247,7 +246,7 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND Invoice where recid(Invoice) = memory no-lock no-error.
          
@@ -276,7 +275,7 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
 
         /* cursor TO the downmost line */
 
@@ -294,22 +293,22 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
      END. /* NEXT page */
 
      /* Hakurutiini */
-     else if lookup(nap,"1,f1") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
         ex-order = order.
         ASSIGN order = 1.
         RUN Ar/nnlaha.p.
         ASSIGN ufkey = TRUE.
-        IF si-recid <> ? THEN
-          ASSIGN memory = si-recid
+        IF Syst.CUICommon:si-recid <> ? THEN
+          ASSIGN memory = Syst.CUICommon:si-recid
                   must-print = TRUE.
         ELSE ASSIGN
              order = ex-order
              must-print = FALSE.
-        cfc = "sel". RUN Syst/ufcolor.p. ccc = cfc.
+        Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. Syst.CUICommon:ccc = Syst.CUICommon:cfc.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"3,f3") >0 THEN DO TRANS: /* memo */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") >0 THEN DO TRANS: /* memo */
         FIND Invoice WHERE recid(Invoice) = rtab;<frame-line;>
         NO-LOCK NO-ERROR.
         RUN Mc/memo.p(INPUT Invoice.CustNum,
@@ -321,20 +320,20 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
      END.
 
 
-     else if lookup(nap,"f4,4") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"f4,4") > 0 THEN DO:
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE] no-lock no-error.
         RUN Ar/payments.p(0,Invoice.InvNum,"").
         ufkey = TRUE.
         NEXT.
      END.
 
-     else if lookup(nap,"enter,return,5,f5") > 0 THEN DO : /* valitaan tAmA */
+     else if lookup(Syst.CUICommon:nap,"enter,return,5,f5") > 0 THEN DO : /* valitaan tAmA */
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE] no-lock no-error.
         siirto = string(Invoice.InvNum).
         LEAVE LOOP.
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
         RUN local-find-first.
         ASSIGN
         memory = recid(Invoice)
@@ -342,7 +341,7 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
         
         RUN local-find-last.
 
@@ -352,13 +351,13 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE local-find-others:
 
@@ -389,7 +388,7 @@ END PROCEDURE.
 PROCEDURE local-find-first:
 
    FIND FIRST Invoice where 
-              Invoice.Brand   = gcBrand AND
+              Invoice.Brand   = Syst.CUICommon:gcBrand AND
               Invoice.CustNum = CustNum AND
              (IF paid = false THEN Invoice.PaymState < 2 ELSE TRUE) AND
              Invoice.InvType < 3
@@ -400,7 +399,7 @@ END PROCEDURE.
 PROCEDURE local-find-last:
 
    FIND LAST Invoice where 
-             Invoice.Brand   = gcBrand AND
+             Invoice.Brand   = Syst.CUICommon:gcBrand AND
              Invoice.CustNum = CustNum AND
              (IF paid = false THEN Invoice.PaymState < 2 ELSE TRUE) AND
              Invoice.InvType < 3
@@ -411,7 +410,7 @@ END PROCEDURE.
 PROCEDURE local-find-next:
 
    FIND NEXT Invoice where 
-             Invoice.Brand   = gcBrand AND
+             Invoice.Brand   = Syst.CUICommon:gcBrand AND
              Invoice.CustNum = CustNum AND
              (IF paid = false THEN Invoice.PaymState < 2 ELSE TRUE) AND
              Invoice.InvType < 3
@@ -422,7 +421,7 @@ END PROCEDURE.
 PROCEDURE local-find-prev:
 
    FIND PREV Invoice where 
-             Invoice.Brand   = gcBrand AND
+             Invoice.Brand   = Syst.CUICommon:gcBrand AND
              Invoice.CustNum = CustNum AND
              (IF paid = false THEN Invoice.PaymState < 2 ELSE TRUE) AND
              Invoice.InvType < 3

@@ -61,7 +61,7 @@
 {Syst/tmsconst.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -150,7 +150,7 @@ form
     FixedFee.CLI          column-label "MSISDN"        format "x(12)"
     lcMemoAvail           COLUMN-LABEL "M"             FORMAT "x(1)" 
 WITH centered  ROW 4 OVERLAY scroll 1 12 DOWN
-    color value(cfc) title color value(ctc) 
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) 
     " Fixed Fees: " +  string(CustNum) + " " + 
         substr(lcCustName,1,24) + " "
     FRAME sel.
@@ -222,7 +222,7 @@ form
     lcFinancedResult NO-LABEL FORMAT "X(12)"
     FixedFee.ServiceLimitGroup NO-LABEL 
         AT 56 FORMAT "X(20)"
-WITH OVERLAY ROW 3 centered COLOR value(cfc) TITLE COLOR value(ctc)
+WITH OVERLAY ROW 3 centered COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
      fr-header WITH SIDE-LABELS FRAME lis.
 
 form /* seek Billable item  BY  keyvalue */
@@ -231,14 +231,14 @@ form /* seek Billable item  BY  keyvalue */
        FORMAT "Subsc.ID/Customer" SKIP
     "ID ...:" lcKeyValue  
        HELP "Enter target ID"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Target "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Target "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
 form /* memo */
 WITH
     OVERLAY ROW 6 centered NO-LABEL
-    color value(cfc) title color value(cfc) " Update Invoice Text "
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:cfc) " Update Invoice Text "
     FRAME memo.
 
 form
@@ -272,8 +272,7 @@ FUNCTION fDispUnit RETURNS LOGICAL
    (iiUnit AS INT).
 
    IF iiUnit > 0 THEN 
-      lcUnit = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "Tariff","DataType",STRING(iiUnit)).
+      lcUnit = Func.Common:mTMSCodeName("Tariff","DataType",STRING(iiUnit)).
    ELSE lcUnit = "".
 
    RETURN (iiUnit = 0 OR (iiUnit > 0 AND lcUnit > "")). 
@@ -300,12 +299,11 @@ END.
 FIND Customer NO-LOCK where 
      Customer.CustNum = CustNum .
 
-lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                              BUFFER Customer).
+lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 LOOP:
@@ -317,12 +315,12 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO TRANS:  /* FixedFee -ADD  */
       HIDE FRAME lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          CREATE FixedFee.
 
          ASSIGN
@@ -330,14 +328,14 @@ repeat WITH FRAME sel:
             FixedFee.FFNum      = next-value(contract)
             FixedFee.CustNum    = Customer.CustNum
             FixedFee.VATIncl    = Customer.VATIncl
-            FixedFee.BegPeriod  = year(pvm) * 100 + month(pvm)
+            FixedFee.BegPeriod  = year(TODAY) * 100 + month(TODAY)
             FixedFee.InUse      = TRUE
             FixedFee.BegDate    = TODAY
             FixedFee.Interval   = 1
             FixedFee.BillMethod = 1   /* before */
             lBelongTo           = FALSE.
 
-         si-recid2 = FixedFee.CustNum.
+         Syst.CUICommon:si-recid2 = FixedFee.CustNum.
 
          CLEAR FRAME lis no-pause.
          DISPLAY FixedFee.CustNum lcCustName WITH FRAME lis.
@@ -369,14 +367,14 @@ repeat WITH FRAME sel:
                   DISP fixedfee.keyvalue with frame lis.
                END.
 
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.
 
             if keylabel(lastkey) = "F4" THEN UNDO add-new, LEAVE add-new.
 
-            IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO:
+            IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
                HIDE MESSAGE.
 
                if frame-field = "contract" then do:
@@ -397,7 +395,7 @@ repeat WITH FRAME sel:
                   ASSIGN FRAME lis FixedFee.BillCode.
                   if FixedFee.BillCode = "" THEN UNDO add-new, LEAVE add-new.
                   FIND FIRST BillItem where 
-                             BillItem.Brand    = gcBrand AND
+                             BillItem.Brand    = Syst.CUICommon:gcBrand AND
                              BillItem.BillCode = FixedFee.BillCode 
                   no-lock no-error.
                   IF NOT AVAIL BillItem THEN DO:
@@ -420,7 +418,7 @@ repeat WITH FRAME sel:
 
                   IF INPUT FRAME lis lBelongTo = FALSE THEN DO:
                      FIND FIRST MobSub WHERE
-                                Mobsub.Brand = gcBrand AND 
+                                Mobsub.Brand = Syst.CUICommon:gcBrand AND 
                                 MobSub.msseq = INT(INPUT FRAME lis 
                                                    FixedFee.KeyValue) AND
                                 MobSub.CustNum = FixedFee.CustNum
@@ -531,7 +529,7 @@ repeat WITH FRAME sel:
              APPLY LASTKEY.
           END. /* UPDATE EDITING */
 
-          si-recid2 = 0.
+          Syst.CUICommon:si-recid2 = 0.
 
           IF lBelongTo 
           THEN FixedFee.HostTable = "Customer".  
@@ -619,25 +617,25 @@ repeat WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 183 ufk[2]= 927  ufk[3]= 2150 ufk[4]= 609
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
-        ufk[7]= (IF lcRight = "RW" THEN 187 ELSE 0)   
-        ufk[8]= 8 ufk[9]= 1
-        ehto  = 3 ufkey = FALSE.
+        Syst.CUICommon:ufk[1]= 183 Syst.CUICommon:ufk[2]= 927  Syst.CUICommon:ufk[3]= 2150 Syst.CUICommon:ufk[4]= 609
+        Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
+        Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
+        Syst.CUICommon:ufk[7]= (IF lcRight = "RW" THEN 187 ELSE 0)   
+        Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+        Syst.CUICommon:ehto  = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW FixedFee.KeyValue {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) FixedFee.KeyValue WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) FixedFee.KeyValue WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -645,10 +643,10 @@ repeat WITH FRAME sel:
          END.
       END.
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -667,7 +665,7 @@ repeat WITH FRAME sel:
       END.
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND FixedFee where recid(FixedFee) = rtab[1] no-lock.
            
@@ -695,7 +693,7 @@ repeat WITH FRAME sel:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND FixedFee where recid(FixedFee) = rtab[FRAME-DOWN] no-lock .
@@ -725,7 +723,7 @@ repeat WITH FRAME sel:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND FixedFee where recid(FixedFee) = memory no-lock no-error.
         
@@ -753,7 +751,7 @@ repeat WITH FRAME sel:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* cursor TO the downmost line */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -768,10 +766,10 @@ repeat WITH FRAME sel:
      END. /* NEXT page */
 
      /* Haku sarakk. 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
 
        lcKeyValue = "". 
        PAUSE 0.
@@ -786,7 +784,7 @@ repeat WITH FRAME sel:
           ELSE lcHostTable = "Customer".
                 
           FIND FIRST FixedFee USE-INDEX CustNum WHERE 
-                     FixedFee.Brand     = gcBrand     AND 
+                     FixedFee.Brand     = Syst.CUICommon:gcBrand     AND 
                      FixedFee.CustNum   = CustNum     AND
                      FixedFee.HostTable = lcHostTable AND
                      FixedFee.KeyValue  = lcKeyValue 
@@ -794,7 +792,7 @@ repeat WITH FRAME sel:
 
           IF NOT AVAILABLE FixedFee THEN 
           FIND FIRST FixedFee USE-INDEX CustNum WHERE 
-                     FixedFee.Brand     = gcBrand     AND 
+                     FixedFee.Brand     = Syst.CUICommon:gcBrand     AND 
                      FixedFee.CustNum   = CustNum     AND
                      FixedFee.HostTable = lcHostTable AND
                      FixedFee.KeyValue >= lcKeyValue 
@@ -813,7 +811,7 @@ repeat WITH FRAME sel:
        END.
      END. /* Haku sar. 1 */
 
-     ELSE IF LOOKUP(nap,"2,f2") > 0 THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 THEN
      DO: /* MEMO */
         FIND FixedFee where recid(FixedFee) = rtab[frame-line(sel)]
         NO-LOCK.
@@ -822,14 +820,14 @@ repeat WITH FRAME sel:
                  INPUT STRING(FixedFee.FFNum),
                  INPUT "FixedFee").
         ufkey = TRUE. 
-        ehto = 9.
+        Syst.CUICommon:ehto = 9.
         NEXT LOOP.
      END.
 
-     ELSE if lookup(nap,"3,f3") > 0 THEN 
+     ELSE if lookup(Syst.CUICommon:nap,"3,f3") > 0 THEN 
      DO TRANS WITH FRAME memo ON ENDKEY UNDO, NEXT LOOP:   /* memo */
 
-       assign ehto = 9 cfc = "lis" ufkey = TRUE.
+       assign Syst.CUICommon:ehto = 9 Syst.CUICommon:cfc = "lis" ufkey = TRUE.
        RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
        FIND FixedFee where recid(FixedFee) = rtab[frame-line(sel)]
        exclusive-lock.
@@ -873,19 +871,19 @@ repeat WITH FRAME sel:
      END.
 
 
-     else if lookup(nap,"4,f4") > 0 THEN DO TRANSAction:  /* items */
+     else if lookup(Syst.CUICommon:nap,"4,f4") > 0 THEN DO TRANSAction:  /* items */
         FIND FixedFee where recid(FixedFee) = rtab[FRAME-LINE] no-lock.
         RUN Mc/nncobi.p(FixedFee.FFNum).
         ufkey = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
+     else if lookup(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"7,f7") > 0 AND lcRight = "RW" 
+     else if lookup(Syst.CUICommon:nap,"7,f7") > 0 AND lcRight = "RW" 
      THEN DO TRANSACTION:  /* del unbilled */
         FIND FixedFee WHERE RECID(FixedFee) = rtab[FRAME-LINE] NO-LOCK.
         ok = FALSE.
@@ -979,7 +977,7 @@ repeat WITH FRAME sel:
         END.
      END.
 
-     else if lookup(nap,"6,f6") > 0 AND ufk[6] > 0 AND lcRight = "RW"
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 AND Syst.CUICommon:ufk[6] > 0 AND lcRight = "RW"
      THEN DO TRANSAction:  /* removal */
        
        delline = FRAME-LINE.
@@ -1009,7 +1007,7 @@ repeat WITH FRAME sel:
        END.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
           FixedFee.BillCode FixedFee.EndPeriod
           FixedFee.Amt FixedFee.BegPeriod  FixedFee.Cli.
 
@@ -1034,7 +1032,7 @@ repeat WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.CUICommon:ccc)
           FixedFee.BillCode FixedFee.EndPeriod
           FixedFee.Amt FixedFee.BegPeriod FixedFee.Cli.
        IF ok THEN DO:
@@ -1061,11 +1059,11 @@ repeat WITH FRAME sel:
        ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     else if lookup(nap,"enter,return") > 0 THEN
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSACTION ON ENDKEY UNDO, NEXT LOOP:
        /* change */
 
-       assign fr-header = " FIXED FEE DATA " cfc = "lis".  RUN Syst/ufcolor.p.
+       assign fr-header = " FIXED FEE DATA " Syst.CUICommon:cfc = "lis".  RUN Syst/ufcolor.p.
 
        FIND FixedFee where recid(FixedFee) = rtab[frame-line(sel)]
        no-lock.
@@ -1076,7 +1074,7 @@ repeat WITH FRAME sel:
        RUN Mc/nnccit.p(FixedFee.FFNum, OUTPUT amt-billed, OUTPUT amt-nonbilled).
 
        IF amt-nonbilled = 0 THEN DO:
-          ehto = 5.
+          Syst.CUICommon:ehto = 5.
           RUN Syst/ufkey.p.
           BELL.
           message "There are NONE Unbilled items left" SKIP
@@ -1112,8 +1110,7 @@ repeat WITH FRAME sel:
                     FixedFee.HostTable = "").
        
        FIND Customer WHERE Customer.CustNum = FixedFee.CustNum NO-LOCK.
-       lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                     BUFFER Customer).
+       lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
        IF FixedFee.TFBank > "" THEN 
          lcFinancedResult = "(" + FixedFee.TFBank + ")".
@@ -1151,25 +1148,25 @@ repeat WITH FRAME sel:
        IF lcRight = "RW" THEN DO:         
 
           ASSIGN 
-             ufk = 0 
-             ufk[1] = 7 
-             ufk[2] = 9845 when CAN-FIND(first fixedfeetf of fixedfee)
-             ufk[8] = 8 
-             ehto = 0 
+             Syst.CUICommon:ufk = 0 
+             Syst.CUICommon:ufk[1] = 7 
+             Syst.CUICommon:ufk[2] = 9845 when CAN-FIND(first fixedfeetf of fixedfee)
+             Syst.CUICommon:ufk[8] = 8 
+             Syst.CUICommon:ehto = 0 
              ufkey = true.
           RUN Syst/ufkey.p.
 
-          if toimi = 8 then do:
+          if Syst.CUICommon:toimi = 8 then do:
              hide frame lis no-pause.
              next.
           end.
 
-          else if toimi = 2 then do:
+          else if Syst.CUICommon:toimi = 2 then do:
 
             FIND fixedfeetf NO-LOCK WHERE
                  fixedfeetf.ffnum = fixedfee.ffnum NO-ERROR.
 
-            ehto = 3. ufk = 0. RUN Syst/ufkey.p.
+            Syst.CUICommon:ehto = 3. Syst.CUICommon:ufk = 0. RUN Syst/ufkey.p.
             ufkey = true.
             DISP
                FixedFeeTF.BankDate     
@@ -1191,10 +1188,10 @@ repeat WITH FRAME sel:
             NEXT.
           end.
           
-          ehto = 9.
+          Syst.CUICommon:ehto = 9.
           RUN Syst/ufkey.p.
 
-          si-recid2 = FixedFee.CustNum.
+          Syst.CUICommon:si-recid2 = FixedFee.CustNum.
 
           PROMPT
           FixedFee.Amt            WHEN amt-nonbilled > 0
@@ -1210,7 +1207,7 @@ repeat WITH FRAME sel:
 
             READKEY.
 
-            IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO:
+            IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
                HIDE MESSAGE.
 
                if frame-field = "contract" then do:
@@ -1266,7 +1263,7 @@ repeat WITH FRAME sel:
             FIND CURRENT FixedFee NO-LOCK.
           END.
 
-          si-recid2 = 0.
+          Syst.CUICommon:si-recid2 = 0.
 
           IF FixedFee.Amt entered          OR
              FixedFee.BillMethod  entered  OR
@@ -1283,7 +1280,7 @@ repeat WITH FRAME sel:
                          FFItem.Billed = FALSE:
                    IF llDoEvent THEN RUN StarEventMakeDeleteEventWithMemo(
                                            lhFFItem,
-                                           katun,
+                                           Syst.CUICommon:katun,
                                            "ManualCUI").
                    DELETE FFItem.
                 END. 
@@ -1330,7 +1327,7 @@ repeat WITH FRAME sel:
 
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
 
        RUN local-find-first.
 
@@ -1338,21 +1335,21 @@ repeat WITH FRAME sel:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
        RUN local-find-last.
 
        ASSIGN memory = recid(FixedFee) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
   LEAVE LOOP.
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE local-disp-row:
 
@@ -1393,7 +1390,7 @@ PROCEDURE local-find-next:
 
    IF icMsSeq > "" THEN DO:
       FIND NEXT FixedFee USE-INDEX CustNum WHERE 
-                FixedFee.Brand   = gcBrand AND
+                FixedFee.Brand   = Syst.CUICommon:gcBrand AND
                 FixedFee.CustNum = CustNum AND 
                 FIxedFee.HostTable = "Mobsub" AND
                 FixedFee.KeyValue  = icMsseq
@@ -1403,7 +1400,7 @@ PROCEDURE local-find-next:
    ELSE DO:
       IF order = 1 THEN 
       FIND NEXT FixedFee USE-INDEX CustNum WHERE
-                FixedFee.Brand   = gcBrand AND
+                FixedFee.Brand   = Syst.CUICommon:gcBrand AND
                 FixedFee.CustNum = CustNum NO-LOCK NO-ERROR.
    END.
    
@@ -1413,7 +1410,7 @@ PROCEDURE local-find-prev:
 
    IF icMsSeq > "" THEN DO:
       FIND PREV FixedFee USE-INDEX CustNum WHERE 
-                FixedFee.Brand   = gcBrand AND
+                FixedFee.Brand   = Syst.CUICommon:gcBrand AND
                 FixedFee.CustNum = CustNum AND 
                 FIxedFee.HostTable = "Mobsub" AND
                 FixedFee.KeyValue  = icMsseq
@@ -1423,7 +1420,7 @@ PROCEDURE local-find-prev:
    ELSE DO:
       IF order = 1 THEN 
       FIND PREV FixedFee USE-INDEX CustNum WHERE
-                FixedFee.Brand   = gcBrand AND
+                FixedFee.Brand   = Syst.CUICommon:gcBrand AND
                 FixedFee.CustNum = CustNum NO-LOCK NO-ERROR.
    END.
    
@@ -1433,7 +1430,7 @@ PROCEDURE local-find-first:
 
    IF icMsSeq > "" THEN DO:
       FIND FIRST FixedFee USE-INDEX CustNum WHERE 
-                 FixedFee.Brand   = gcBrand AND
+                 FixedFee.Brand   = Syst.CUICommon:gcBrand AND
                  FixedFee.CustNum = CustNum AND 
                  FIxedFee.HostTable = "Mobsub" AND
                  FixedFee.KeyValue  = icMsseq
@@ -1443,7 +1440,7 @@ PROCEDURE local-find-first:
    ELSE DO:
       IF order = 1 THEN 
       FIND FIRST FixedFee USE-INDEX CustNum WHERE
-                 FixedFee.Brand   = gcBrand AND
+                 FixedFee.Brand   = Syst.CUICommon:gcBrand AND
                  FixedFee.CustNum = CustNum NO-LOCK NO-ERROR.
    END.
    
@@ -1453,7 +1450,7 @@ PROCEDURE local-find-last:
 
    IF icMsSeq > "" THEN DO:
       FIND LAST FixedFee USE-INDEX CustNum WHERE 
-                FixedFee.Brand   = gcBrand AND
+                FixedFee.Brand   = Syst.CUICommon:gcBrand AND
                 FixedFee.CustNum = CustNum AND 
                 FIxedFee.HostTable = "Mobsub" AND
                 FixedFee.KeyValue  = icMsseq
@@ -1463,7 +1460,7 @@ PROCEDURE local-find-last:
    ELSE DO:
       IF order = 1 THEN 
       FIND LAST FixedFee USE-INDEX CustNum WHERE
-                FixedFee.Brand   = gcBrand AND
+                FixedFee.Brand   = Syst.CUICommon:gcBrand AND
                 FixedFee.CustNum = CustNum NO-LOCK NO-ERROR.
    END.
    

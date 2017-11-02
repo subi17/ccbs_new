@@ -17,7 +17,7 @@
 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -69,8 +69,8 @@ form
     llServType          column-label "S.Type" FORMAT "Basic/Addit"
     ServCom.ScName      FORMAT "X(40)"
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) 
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     icCLIType + ": Components of '" + icServPac + "' "
     FRAME sel.
 
@@ -95,19 +95,19 @@ form
        FORMAT "Basic/Additional" SKIP
     CTServEl.ChgAllowed COLON 20
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 form 
     lcServCom
     HELP "Enter Code of Service"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 
@@ -129,14 +129,14 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a CTServEl  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
        
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
@@ -148,7 +148,7 @@ REPEAT WITH FRAME sel:
            WITH FRAME lis EDITING:
            
               READKEY.
-              IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+              IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
                  
                  PAUSE 0.
 
@@ -157,7 +157,7 @@ REPEAT WITH FRAME sel:
                     if input CTServEl.ServCom = "" THEN LEAVE add-row.
                     
                     FIND ServCom where 
-                         ServCom.Brand   = gcBrand AND 
+                         ServCom.Brand   = Syst.CUICommon:gcBrand AND 
                          ServCom.ServCom = INPUT CTServEl.ServCom
                     no-lock no-error.
                     IF NOT AVAIL ServCom THEN DO:
@@ -167,7 +167,7 @@ REPEAT WITH FRAME sel:
 
                     /* must be part of the general package */
                     IF NOT CAN-FIND(FIRST ServEl WHERE
-                             ServEl.Brand   = gcBrand   AND
+                             ServEl.Brand   = Syst.CUICommon:gcBrand   AND
                              ServEl.ServPac = icServPac AND
                              ServEl.ServCom = INPUT CTServEl.ServCom)
                     THEN DO:
@@ -188,7 +188,7 @@ REPEAT WITH FRAME sel:
                     END.
 
                     IF CAN-FIND(CTServEl WHERE
-                         CTServEl.Brand    = gcBrand                AND 
+                         CTServEl.Brand    = Syst.CUICommon:gcBrand                AND 
                          CTServEl.CLIType  = icCLIType              AND
                          CTServEl.ServPac  = icServPac              AND
                          CTServEl.ServCom  = INPUT CTServEl.ServCom AND
@@ -216,7 +216,7 @@ REPEAT WITH FRAME sel:
 
            CREATE CTServEl.
            ASSIGN
-           CTServEl.Brand    = gcBrand
+           CTServEl.Brand    = Syst.CUICommon:gcBrand
            CTServEl.CTServEl = NEXT-VALUE(CTServEl)
            CTServEl.CLIType  = icCLIType
            CTServEl.ServPac  = icServPac  
@@ -295,21 +295,21 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 0  ufk[2]= 0 ufk[3]= 0 ufk[4]= 2350.
+        Syst.CUICommon:ufk[1]= 0  Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 2350.
         
         /* find, new and delete keys only for Syst group */
         FIND FIRST tmsuser NO-LOCK WHERE
-                   tmsuser.usercode = katun NO-ERROR.
+                   tmsuser.usercode = Syst.CUICommon:katun NO-ERROR.
         
         IF AVAIL tmsuser AND tmsuser.usergroup = "Syst" THEN 
            ASSIGN 
-              ufk[1]= 35
-              ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
-              ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0).
+              Syst.CUICommon:ufk[1]= 35
+              Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
+              Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0).
         
         ASSIGN      
-           ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-           ehto = 3 ufkey = FALSE.
+           Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+           Syst.CUICommon:ehto = 3 ufkey = FALSE.
            
         {Syst/uright1.i '"5,6"'}
         RUN Syst/ufkey.p.
@@ -318,13 +318,13 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW CTServEl.ServCom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CTServEl.ServCom WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) CTServEl.ServCom WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -332,10 +332,10 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -353,7 +353,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -378,7 +378,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -404,7 +404,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND CTServEl WHERE recid(CTServEl) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -428,7 +428,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -443,15 +443,15 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET lcServCom WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF lcServCom > "" THEN DO:
           FIND FIRST CTServEl WHERE 
-                     CTServEl.Brand    = gcBrand   AND
+                     CTServEl.Brand    = Syst.CUICommon:gcBrand   AND
                      CTServEl.CLIType  = icCLIType AND
                      CTServEl.ServPac  = icServPac AND 
                      CTServEl.ServCom >= lcServCom  
@@ -469,13 +469,13 @@ REPEAT WITH FRAME sel:
      END. /* Search-1 */
 
      /* attributes */
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 THEN DO:
         
         RUN local-find-this(FALSE).
 
 
         FIND ServCom WHERE
-             ServCom.Brand   = gcBrand AND
+             ServCom.Brand   = Syst.CUICommon:gcBrand AND
              ServCom.ServCom = CTServEl.ServCom NO-LOCK NO-ERROR.
         IF AVAILABLE ServCom AND ServCom.ServAttr = TRUE THEN 
         RUN Mm/ctservattr.p(CTServEl.CTServEl).
@@ -489,20 +489,20 @@ REPEAT WITH FRAME sel:
      END.
 
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
         {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW"
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION:  /* DELETE */
        {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        CTServEl.ServCom. 
 
        RUN local-find-NEXT.
@@ -524,7 +524,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        CTServEl.ServCom.
        IF ok THEN DO:
 
@@ -534,7 +534,7 @@ REPEAT WITH FRAME sel:
 
            /* was LAST record DELETEd ? */
            IF NOT CAN-FIND(FIRST CTServEl
-           WHERE CTServEl.ServPac = ServPac AND CTServEl.Brand = gcBrand) 
+           WHERE CTServEl.ServPac = ServPac AND CTServEl.Brand = Syst.CUICommon:gcBrand) 
            THEN DO:
               CLEAR FRAME sel NO-PAUSE.
               PAUSE 0 NO-MESSAGE.
@@ -546,7 +546,7 @@ REPEAT WITH FRAME sel:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
 
@@ -554,7 +554,7 @@ REPEAT WITH FRAME sel:
        RUN local-find-this((lcRight = "RW")).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY CTServEl.ServCom.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCTServEl).
@@ -573,25 +573,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(CTServEl) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(CTServEl) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 PROCEDURE local-find-this:
@@ -608,28 +608,28 @@ END PROCEDURE.
 
 PROCEDURE local-find-FIRST:
        IF order = 1 THEN FIND FIRST CTServEl WHERE 
-          CTServEl.Brand   = gcBrand   AND
+          CTServEl.Brand   = Syst.CUICommon:gcBrand   AND
           CTServEl.CLIType = icCLIType AND
           CTServEl.ServPac = icServPac NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
        IF order = 1 THEN FIND LAST CTServEl WHERE 
-          CTServEl.Brand   = gcBrand   AND
+          CTServEl.Brand   = Syst.CUICommon:gcBrand   AND
           CTServEl.CLIType = icCLIType AND
           CTServEl.ServPac = icServPac NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
        IF order = 1 THEN FIND NEXT CTServEl WHERE 
-          CTServEl.Brand   = gcBrand   AND
+          CTServEl.Brand   = Syst.CUICommon:gcBrand   AND
           CTServEl.CLIType = icCLIType AND
           CTServEl.ServPac = icServPac NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
        IF order = 1 THEN FIND PREV CTServEl WHERE 
-          CTServEl.Brand   = gcBrand   AND
+          CTServEl.Brand   = Syst.CUICommon:gcBrand   AND
           CTServEl.CLIType = icCLIType AND
           CTServEl.ServPac = icServPac NO-LOCK NO-ERROR.
 END PROCEDURE.
@@ -649,7 +649,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
 
        FIND ServCom where
-            ServCom.Brand   = gcBrand  AND 
+            ServCom.Brand   = Syst.CUICommon:gcBrand  AND 
             ServCom.ServCom = CTServEl.ServCom NO-LOCK NO-ERROR.
 
        llServType = (CTServEl.ServType = 0). 
@@ -665,21 +665,19 @@ PROCEDURE local-UPDATE-record:
       CLEAR FRAME lis NO-PAUSE.
       
       FIND CLIType WHERE
-           CLIType.Brand   = gcBrand AND
+           CLIType.Brand   = Syst.CUICommon:gcBrand AND
            CLIType.CLIType = icCLIType NO-LOCK NO-ERROR.
       FIND ServPac WHERE 
-           ServPac.Brand   = gcBrand AND 
+           ServPac.Brand   = Syst.CUICommon:gcBrand AND 
            ServPac.ServPac = icServPac NO-LOCK NO-ERROR.
 
       IF AVAILABLE ServCom THEN DO:
 
-         lcActType = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                                      "ServCom",
+         lcActType = Func.Common:mTMSCodeName("ServCom",
                                       "ActType",
                                       STRING(ServCom.ActType)).
 
-         lcTarget = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                                     "ServCom",
+         lcTarget = Func.Common:mTMSCodeName("ServCom",
                                      "Target",
                                      STRING(ServCom.Target)).
          
@@ -703,7 +701,7 @@ PROCEDURE local-UPDATE-record:
       WITH FRAME lis.
       
       IF lcRight = "RW" THEN DO:
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
          
          UPDATE
@@ -713,7 +711,7 @@ PROCEDURE local-UPDATE-record:
          CTServEl.ChgAllowed
          WITH FRAME lis EDITING:
              READKEY.
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
                 PAUSE 0.
                 IF FRAME-FIELD = "DefValue" THEN DO:
                    IF INPUT CTServEl.DefValue < ServCom.scvaluerange[1] OR

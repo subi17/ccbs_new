@@ -9,7 +9,6 @@
  ============================================================================*/
          
 {Syst/commali.i} 
-{Func/timestamp.i}
 {Rate/error_codes.i}
 
 DEF STREAM msg.
@@ -47,10 +46,10 @@ VALIDATE(INPUT cdate1 <= INPUT cdate2,"Invalid order of dates !")
    OVERLAY 
    ROW 3 
    WIDTH 60   CENTERED
-   COLOR VALUE(cfc) 
-   TITLE COLOR VALUE(ctc) 
-    " " + ynimi + " MOVE TICKETS TO UNINVOICABLE   " + 
-    string(pvm,"99.99.99") + " "  NO-LABELS  FRAME main.
+   COLOR VALUE(Syst.CUICommon:cfc) 
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) 
+    " " + Syst.CUICommon:ynimi + " MOVE TICKETS TO UNINVOICABLE   " + 
+    string(TODAY,"99.99.99") + " "  NO-LABELS  FRAME main.
    
 PAUSE 0.
 
@@ -59,7 +58,7 @@ MAIN:
 REPEAT WITH FRAME main:
 
 IF NOT bbatch THEN DO:
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
     
  DISPLAY
  cdate1 cdate2 with frame main.
@@ -70,7 +69,7 @@ IF NOT bbatch THEN DO:
 WITH FRAME main  EDITING:
       READKEY.
             
-      IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME main:
+      IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME main:
          PAUSE 0.
          
          if frame-field = "ig-code" then do:
@@ -83,15 +82,15 @@ WITH FRAME main  EDITING:
    ACTION:
    REPEAT WITH FRAME main:
       ASSIGN
-      ufk = 0 ehto = 0
-      ufk[1] = 7 
-      ufk[5] = 795
-      ufk[8] = 8.
+      Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0
+      Syst.CUICommon:ufk[1] = 7 
+      Syst.CUICommon:ufk[5] = 795
+      Syst.CUICommon:ufk[8] = 8.
       RUN Syst/ufkey.p.
       
-      IF toimi = 1 THEN NEXT  main.
-      IF toimi = 8 THEN LEAVE main.
-      IF TOIMI = 5 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN NEXT  main.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE main.
+      IF Syst.CUICommon:toimi = 5 THEN DO:
          ok = false.
          MESSAGE "Do You REALLY want to MOVE tickets to error (Y/N)?" UPDATE ok.
          IF NOT ok THEN NEXT action.
@@ -100,7 +99,7 @@ WITH FRAME main  EDITING:
    END. /* Action */      
 END. /* bbatch */
 
-lcStart = fTS2HMS(fMakeTS()).
+lcStart = Func.Common:mTS2HMS(Func.Common:mMakeTS()).
 
 FOR EACH MobError NO-LOCK WHERE 
          MobERror.MobError >     0 .
@@ -132,18 +131,18 @@ END.
 
 DO FOR ActionLog TRANS:
 
-   lcEnd = fTS2HMS(fMakeTS()).
+   lcEnd = Func.Common:mTS2HMS(Func.Common:mMakeTS()).
     
    CREATE ActionLog.
    
    ASSIGN
-      ActionLog.ActionTS     = fMakeTS()
-      ActionLog.Brand        = gcBrand
+      ActionLog.ActionTS     = Func.Common:mMakeTS()
+      ActionLog.Brand        = Syst.CUICommon:gcBrand
       ActionLog.TableName    = "MobCDR"
       ActionLog.KeyValue     = STRING(YEAR(cDate2),"9999") + 
                                STRING(MONTH(cDate2),"99") + 
                                STRING(DAY(cDate2),"99")
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.CUICommon:katun
       ActionLog.ActionID     = "ERRORCLEAN"
       ActionLog.ActionPeriod = YEAR(cDate2) * 100 + 
                                MONTH(cDate2)

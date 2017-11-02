@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-katun = "YOT-649".
-gcBrand = "1".
+Syst.CUICommon:katun = "YOT-649".
+Syst.CUICommon:gcBrand = "1".
 {Func/orderfunc.i}
 {Syst/tmsconst.i}
 
@@ -41,7 +41,7 @@ repeat:
         
    /* Cancel pending SMS messages */
    FOR EACH CallAlarm WHERE
-            CallAlarm.Brand = gcBrand AND
+            CallAlarm.Brand = Syst.CUICommon:gcBrand AND
             CallAlarm.CLI = Order.CLI AND
             CallAlarm.DeliStat = 1 AND
             CallAlarm.CreditType = 12 EXCLUSIVE-LOCK:
@@ -65,11 +65,11 @@ repeat:
 
             CREATE ActionLog.
             ASSIGN
-               ActionLog.ActionTS     = fMakeTS()
-               ActionLog.Brand        = gcBrand  
+               ActionLog.ActionTS     = Func.Common:mMakeTS()
+               ActionLog.Brand        = Syst.CUICommon:gcBrand  
                ActionLog.TableName    = "Order"  
                ActionLog.KeyValue     = STRING(Order.Orderid)
-               ActionLog.UserCode     = katun
+               ActionLog.UserCode     = Syst.CUICommon:katun
                ActionLog.ActionID     = "SIMRELEASE"
                ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
                ActionLog.ActionStatus = 2
@@ -90,7 +90,7 @@ repeat:
    END.
 
    ASSIGN         
-      MNPProcess.UpdateTS = fMakeTS()
+      MNPProcess.UpdateTS = Func.Common:mMakeTS()
       MNPProcess.statusreason = "CANC_TECNI" WHEN MNPProcess.StatusReason EQ ""
       MNPProcess.StatusCode = {&MNP_ST_ACAN}. 
 end.

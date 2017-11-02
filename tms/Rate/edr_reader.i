@@ -8,7 +8,6 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 {Syst/commali.i}
-{Func/date.i}
 {Syst/tmsconst.i}
 {Func/detailvalue.i}
 {Func/msreqfunc.i}
@@ -81,7 +80,7 @@ PROCEDURE pAnalyzeEDR:
       ttEDR.CLIType = MobSub.CLIType.
    ELSE DO:
    
-      ldeCallTS = fMake2Dt(ttEDR.Datest, ttEDR.TimeStart). 
+      ldeCallTS = Func.Common:mMake2DT(ttEDR.Datest, ttEDR.TimeStart). 
       
       FIND FIRST msowner NO-LOCK WHERE
                  msowner.CLI       =  ttEDR.CLI AND
@@ -170,7 +169,7 @@ PROCEDURE pHandleEDR:
    DEF VAR licount    AS INT NO-UNDO.
 
    licount =  NUM-ENTRIES(liOngStats).
-   ldeNow  = fMakeTS().
+   ldeNow  = Func.Common:mMakeTS().
 
    FIND FIRST Mobsub NO-LOCK WHERE
               Mobsub.msseq = ttEDR.msseq NO-ERROR.
@@ -209,7 +208,7 @@ PROCEDURE pHandleEDR:
                  MsRequest.ReqStatus = 0 AND
                  MsRequest.ReqCparam1 = "SHAPER" AND
                  MsRequest.ReqIParam1 = 1 AND
-                 MsRequest.ActStamp > fMakeTS() NO-ERROR.
+                 MsRequest.ActStamp > Func.Common:mMakeTS() NO-ERROR.
 
       IF AVAIL MsRequest THEN DO:
          IF MsRequest.ReqCparam2 EQ lcShaperConf THEN RETURN.
@@ -218,7 +217,7 @@ PROCEDURE pHandleEDR:
       
       IF lcShaperConf EQ "MEGA5_PRE_NB" AND
          TIME >= 33600 AND TIME < 36900 THEN /* 09:20-10:15 */
-         ldeNow = fHMS2TS(TODAY,"10:15:00").
+         ldeNow = Func.Common:mHMS2TS(TODAY,"10:15:00").
       
       liRequest = fServiceRequest(ttEDR.MsSeq,
                                   "SHAPER",
@@ -235,8 +234,7 @@ PROCEDURE pHandleEDR:
                                   OUTPUT lcResult).
 
       IF liRequest = 0 THEN 
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "Mobsub",
+         Func.Common:mWriteMemo("Mobsub",
                           STRING(Mobsub.MsSeq),
                           MobSub.CustNum,
                           "SHAPER creation failed",
@@ -247,14 +245,14 @@ PROCEDURE pHandleEDR:
    
       /* Restriction for termination and RESET provisioning */
       IF TIME >= 33600 AND TIME < 36900 THEN /* 09:20-10:15 */
-         ldeNow = fHMS2TS(TODAY,"10:15:00").
+         ldeNow = Func.Common:mHMS2TS(TODAY,"10:15:00").
 
       FIND FIRST bActReq NO-LOCK WHERE
                  bActReq.MsSeq = ttEDR.MsSeq AND
                  bActReq.ReqType = 8 AND
                  bActReq.ReqStatus = 0 AND
                  bActReq.ReqCparam3 = ttEDR.CLIType AND
-                 bActReq.ActStamp > fMakeTS() NO-ERROR.
+                 bActReq.ActStamp > Func.Common:mMakeTS() NO-ERROR.
    
       /*
       FIND FIRST bTermReq NO-LOCK WHERE
@@ -311,7 +309,7 @@ PROCEDURE pHandleEDR:
                            Order.OrderType = 2 AND
                     LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) = 0,
                      FIRST OrderAction NO-LOCK WHERE
-                           OrderAction.Brand = gcBrand AND
+                           OrderAction.Brand = Syst.CUICommon:gcBrand AND
                            OrderAction.OrderId = Order.OrderId AND
                            OrderAction.ItemType = "Promotion" AND
                            OrderAction.ItemKey  = ttEDR.CLIType,
@@ -336,10 +334,10 @@ PROCEDURE pHandleEDR:
                   END.
 
                IF MONTH(ttEDR.DateST) EQ 2 AND
-                  ttEDR.DateST EQ fLastDayOfMonth(ttEDR.DateST) AND
+                  ttEDR.DateST EQ Func.Common:mLastDayOfMonth(ttEDR.DateST) AND
                   ttEDR.CLIType NE "TARJ13" THEN DO:
                
-                  fSplitTS(MServiceLimit.FromTS,OUTPUT ldaFromdate,OUTPUT liTime).
+                  Func.Common:mSplitTS(MServiceLimit.FromTS,OUTPUT ldaFromdate,OUTPUT liTime).
 
                   IF DAY(ldaFromdate) EQ 29 OR DAY(ldaFromdate) EQ 30 THEN DO:
                      liRequest = fServiceRequest(MobSub.MsSeq,
@@ -357,8 +355,7 @@ PROCEDURE pHandleEDR:
                                                  OUTPUT lcResult).
                   
                      IF liRequest = 0 THEN  
-                        DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                         "Mobsub",
+                        Func.Common:mWriteMemo("Mobsub",
                                          STRING(Mobsub.MsSeq),
                                          MobSub.CustNum,
                                          ttEDR.CLIType + " reset failed",
@@ -386,8 +383,7 @@ PROCEDURE pHandleEDR:
                                               FALSE,
                                               OUTPUT lcResult).
                   IF liRequest = 0 THEN
-                     DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                      "MobSub",
+                     Func.Common:mWriteMemo("MobSub",
                                       STRING(MobSub.MsSeq),
                                       MobSub.CustNum,
                                       "PREP_VOICE",
@@ -405,8 +401,7 @@ PROCEDURE pHandleEDR:
                              bOrigrequest.actstamp = MServiceLimit.fromts no-error.
 
                   IF NOT AVAIL bOrigrequest then do:
-                     DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                      "Mobsub",
+                     Func.Common:mWriteMemo("Mobsub",
                                       STRING(Mobsub.MsSeq),
                                       MobSub.CustNum,
                                       ttEDR.CLIType + " renewal promotion failed",
@@ -420,7 +415,7 @@ PROCEDURE pHandleEDR:
                                                  ttEDR.CLIType + "_PROMO",
                                                  (IF liRequest EQ 0
                                                   THEN ldeNow
-                                                  ELSE fSecOffSet(ldeNow,60)),
+                                                  ELSE Func.Common:mSecOffSet(ldeNow,60)),
                                                  "",         /* salesman */
                                                  FALSE,      /* fees */
                                                  FALSE,      /* sms */
@@ -431,8 +426,7 @@ PROCEDURE pHandleEDR:
                                                  OUTPUT lcResult).
      
                      if liRequest eq 0 then
-                        DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                         "Mobsub",
+                        Func.Common:mWriteMemo("Mobsub",
                                          STRING(Mobsub.MsSeq),
                                          MobSub.CustNum,
                                          ttEDR.CLIType + " renewal promotion request failed",
@@ -468,7 +462,7 @@ PROCEDURE pHandleEDR:
                                                  ttEDR.CLIType,
                                                  (IF liRequest EQ 0
                                                   THEN ldeNow
-                                                  ELSE fSecOffSet(ldeNow,60)),
+                                                  ELSE Func.Common:mSecOffSet(ldeNow,60)),
                                                  "",         /* salesman */
                                                  FALSE,      /* fees */
                                                  FALSE,      /* sms */
@@ -479,8 +473,7 @@ PROCEDURE pHandleEDR:
                                                  OUTPUT lcResult).
 
                      if liRequest eq 0 then
-                        DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                         "Mobsub",
+                        Func.Common:mWriteMemo("Mobsub",
                                          STRING(Mobsub.MsSeq),
                                          MobSub.CustNum,
                                          ttEDR.CLIType + " renewal new tariff request failed",
@@ -522,11 +515,11 @@ PROCEDURE pHandleEDR:
                          MServiceLimit.EndTs >= ldeNow AND
                          MServiceLimit.FromTS <= ldeNow:
 
-                  fSplitTS(MServiceLimit.FromTS,
+                  Func.Common:mSplitTS(MServiceLimit.FromTS,
                            OUTPUT ldaFromdate,OUTPUT liTime).
 
                   ldaLastDay = ADD-INTERVAL(ttEDR.DateSt,1,"months").
-                  ldaLastDay = fLastDayOfMonth(ldaLastDay).
+                  ldaLastDay = Func.Common:mLastDayOfMonth(ldaLastDay).
                   
                   IF DAY(ldaFromDate) < DAY(ldaLastDay)
                   THEN ldaResetDate = DATE(MONTH(ldaLastDay),
@@ -552,14 +545,14 @@ PROCEDURE pHandleEDR:
          ELSE DO:
 
             IF ttEDR.DateSt EQ TODAY - 1 THEN
-               ldeNow = fHMS2TS(TODAY - 1,"23:59:59").
-            ELSE ldeNow = fMakeTS().
+               ldeNow = Func.Common:mHMS2TS(TODAY - 1,"23:59:59").
+            ELSE ldeNow = Func.Common:mMakeTS().
 
             /* Add 1 second to handle termination and activation 
                request with the same activation stamp */
             IF AVAIL bTermReq AND
                      bTermReq.Actstamp EQ ldeNow THEN 
-               ldeNow = fSecOffset(ldeNow,1).
+               ldeNow = Func.Common:mSecOffSet(ldeNow,1).
 
             liRequest = fPCActionRequest(MobSub.MsSeq,
                                          ttEDR.CLIType,
@@ -576,8 +569,7 @@ PROCEDURE pHandleEDR:
                                          "",
                                          OUTPUT lcResult). 
             IF liRequest = 0 THEN  
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                "Mobsub",
+               Func.Common:mWriteMemo("Mobsub",
                                 STRING(Mobsub.MsSeq),
                                 MobSub.CustNum,
                                 ttEDR.CLIType + " activation failed",
@@ -622,8 +614,7 @@ PROCEDURE pHandleEDR:
                                       "",
                                       OUTPUT lcResult). 
          IF liRequest = 0 THEN  
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "Mobsub",
+            Func.Common:mWriteMemo("Mobsub",
                              STRING(Mobsub.MsSeq),
                              MobSub.CustNum,
                              ttEDR.CLIType + " termination failed",

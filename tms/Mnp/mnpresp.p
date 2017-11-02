@@ -10,10 +10,9 @@
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/commpaa.i}
-gcBrand = "1".
-katun = "MNP".
+Syst.CUICommon:gcBrand = "1".
+Syst.CUICommon:katun = "MNP".
 
-{Func/timestamp.i}
 {Func/heartbeat.i}
 {Mnp/mnp.i}
 {Func/cparam2.i}
@@ -217,7 +216,7 @@ PROCEDURE pHandleQueue:
    /* order should always exist with MNP IN processes */
    IF MNPProcess.MNPType = {&MNP_TYPE_IN} THEN 
    DO:
-      FIND Order WHERE Order.Brand = gcBrand AND Order.Orderid = MNPProcess.OrderID EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+      FIND Order WHERE Order.Brand = Syst.CUICommon:gcBrand AND Order.Orderid = MNPProcess.OrderID EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
       IF LOCKED Order THEN 
          RETURN.
 
@@ -343,7 +342,7 @@ PROCEDURE pHandleQueue:
                                    BUFFER MNPProcess,
                                    OUTPUT lcPortCode) THEN DO:
                ASSIGN
-                  MNPProcess.UpdateTS = fMakeTS()
+                  MNPProcess.UpdateTS = Func.Common:mMakeTS()
                   MNPProcess.StatusCode = {&MNP_ST_AREC}
                   MNPProcess.StatusReason = lcResponseCode
                   MessageBuf.StatusCode = {&MNP_MSG_HANDLED}
@@ -392,19 +391,19 @@ PROCEDURE pHandleQueue:
                         lcNewOper      = SUBSTRING(lcResponseDesc,liRespLength - 2,liRespLength).
                     
                      FIND MNPOperator NO-LOCK WHERE
-                          MNPOperator.Brand    = gcBrand         AND
+                          MNPOperator.Brand    = Syst.CUICommon:gcBrand         AND
                           MNPOperator.OperCode = TRIM(lcNewOper) AND
                           MNPOperator.Active   = TRUE NO-ERROR.
                      
                      IF NOT AVAIL MNPOperator THEN 
                         FIND MNPOperator NO-LOCK WHERE
-                             MNPOperator.Brand    = gcBrand         AND
+                             MNPOperator.Brand    = Syst.CUICommon:gcBrand         AND
                              MNPOperator.OperCode = TRIM(lcNewOper) NO-ERROR.
 
                      IF AVAIL MNPOperator THEN llgMNPOperName = TRUE.
                      ELSE DO:
                         FIND FIRST MNPOperator NO-LOCK WHERE
-                                   MNPOperator.Brand    = gcBrand         AND
+                                   MNPOperator.Brand    = Syst.CUICommon:gcBrand         AND
                                    MNPOperator.OperCode = TRIM(lcNewOper) NO-ERROR.
                         IF AVAIL MNPOperator AND 
                                  MNPOperator.OperBrand > "" THEN 
@@ -568,7 +567,7 @@ PROCEDURE pHandleQueue:
          END.
          
          ASSIGN
-            MNPProcess.UpdateTS = fMakeTS()
+            MNPProcess.UpdateTS = Func.Common:mMakeTS()
             MNPProcess.MNPUpdateTS = MNPProcess.UpdateTS
             MNPProcess.PortRequest = lcPortCode
             MNPProcess.StatusCode = {&MNP_ST_ASOL}
@@ -621,10 +620,10 @@ PROCEDURE pHandleQueue:
             MNPSub.MNPSeq = MNPProcess.MNPSeq NO-LOCK.
          
          FIND msisdn where
-            msisdn.brand = gcBrand and
+            msisdn.brand = Syst.CUICommon:gcBrand and
             msisdn.cli = MNPSub.CLI AND
             msisdn.statuscode = {&MSISDN_ST_WAITING_RETURN} and
-            msisdn.validto > fMakeTS() NO-LOCK NO-ERROR.
+            msisdn.validto > Func.Common:mMakeTS() NO-LOCK NO-ERROR.
 
          IF NOT AVAIL msisdn THEN DO:
             lcResponseDesc = "MSISDN was not found or it is in wrong status".
@@ -634,7 +633,7 @@ PROCEDURE pHandleQueue:
          END.
          
          ASSIGN
-            MNPProcess.UpdateTS = fMakeTS()
+            MNPProcess.UpdateTS = Func.Common:mMakeTS()
             MNPProcess.MNPUpdateTS = MNPProcess.UpdateTS
             MNPProcess.PortRequest = lcPortCode
             MNPProcess.StatusCode = {&MNP_ST_BNOT}.
@@ -654,7 +653,7 @@ PROCEDURE pHandleQueue:
          IF AVAIL MNPSub THEN DO:
 
             FIND FIRST MSISDN WHERE
-                       MSISDN.Brand = gcBrand AND
+                       MSISDN.Brand = Syst.CUICommon:gcBrand AND
                        MSISDN.CLI = MNPSub.CLI
             USE-INDEX CLI NO-LOCK NO-ERROR.
 
@@ -677,7 +676,7 @@ PROCEDURE pHandleQueue:
          END.
 
          ASSIGN
-            MNPProcess.UpdateTS = fMakeTS()
+            MNPProcess.UpdateTS = Func.Common:mMakeTS()
             MNPProcess.MNPUpdateTS = MNPProcess.UpdateTS
             MNPProcess.StatusCode = {&MNP_ST_BCAN}.
       END.
@@ -692,7 +691,7 @@ PROCEDURE pHandleQueue:
       WHEN "crearSolicitudNumeracionMigracionNumeracionMovil" THEN DO:
          
          ASSIGN
-            MNPProcess.UpdateTS = fMakeTS()
+            MNPProcess.UpdateTS = Func.Common:mMakeTS()
             MNPProcess.MNPUpdateTS = MNPProcess.UpdateTS
             MNPProcess.PortRequest = lcPortCode
             MNPProcess.StatusCode = {&MNP_ST_NENV}.
@@ -702,7 +701,7 @@ PROCEDURE pHandleQueue:
       WHEN "crearSolicitudMigracionNumeracionMovil" THEN DO:
       
          ASSIGN
-            MNPProcess.UpdateTS = fMakeTS()
+            MNPProcess.UpdateTS = Func.Common:mMakeTS()
             MNPProcess.MNPUpdateTS = MNPProcess.UpdateTS
             MNPProcess.PortRequest = lcPortCode
             MNPProcess.StatusCode = {&MNP_ST_MENV}.
@@ -712,7 +711,7 @@ PROCEDURE pHandleQueue:
       WHEN "finalizarSolicitudMigracionNumeracionMovil" THEN DO:
          
          ASSIGN
-            MNPProcess.UpdateTS = fMakeTS()
+            MNPProcess.UpdateTS = Func.Common:mMakeTS()
             MNPProcess.MNPUpdateTS = MNPProcess.UpdateTS
             MNPProcess.StatusCode = {&MNP_ST_MFIN}.
       END.
@@ -762,7 +761,7 @@ PROCEDURE pHandleQueue:
                     NO-LOCK NO-ERROR.
 
             fMNPCallAlarm("MNPCancelPropose",
-                      fMakeTs(),
+                      Func.Common:mMakeTS(),
                       MNPProcess.FormRequest,
                       MNPSub.CLI,
                       (IF AVAIL MobSub THEN MobSub.Custnum ELSE 0),
@@ -853,7 +852,7 @@ PROCEDURE pHandleQueue:
         
          /* Cancel pending SMS messages */
          FOR EACH CallAlarm WHERE
-                  CallAlarm.Brand = gcBrand AND
+                  CallAlarm.Brand = Syst.CUICommon:gcBrand AND
                   CallAlarm.CLI = Order.CLI AND
                   CallAlarm.DeliStat = 1 AND
                   CallAlarm.CreditType = 12 EXCLUSIVE-LOCK:
@@ -903,7 +902,7 @@ PROCEDURE pHandleQueue:
             
             fMNPCallAlarm(
                 lcSMS,
-                fMakeTS(),
+                Func.Common:mMakeTS(),
                 MNPProcess.FormRequest,
                 Order.CLI,
                 Order.CustNum,
@@ -919,7 +918,7 @@ PROCEDURE pHandleQueue:
          END.
       
          ASSIGN         
-            MNPProcess.UpdateTS = fMakeTS()
+            MNPProcess.UpdateTS = Func.Common:mMakeTS()
             MNPProcess.MNPUpdateTS = MNPProcess.UpdateTS
             MNPProcess.StatusCode = {&MNP_ST_ACAN}
             Order.MNPStatus = MNPProcess.StatusCode + 1.
@@ -932,7 +931,7 @@ PROCEDURE pHandleQueue:
          IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 THEN DO:
             
             FIND OrderAccessory WHERE
-                 OrderAccessory.Brand = gcBrand AND
+                 OrderAccessory.Brand = Syst.CUICommon:gcBrand AND
                  OrderAccessory.OrderId = Order.OrderId AND
                  OrderAccessory.TerminalType = ({&TERMINAL_TYPE_PHONE})
             EXCLUSIVE-LOCK NO-ERROR.
@@ -1028,7 +1027,7 @@ PROCEDURE pHandleFromASOL2ACON:
                           MNPSub.NRN,
                           STRING(2),
                           "5", /* automatic script*/
-                          katun,
+                          Syst.CUICommon:katun,
                           0, /* orig. request */
                           lcTermType,
                           OUTPUT ocResult). 
@@ -1037,16 +1036,16 @@ PROCEDURE pHandleFromASOL2ACON:
          fErrorHandle(ocResult). 
       ELSE DO:
 
-         fTS2Date(MNPSub.PortingTime, OUTPUT ldaMNPDate).
+         Func.Common:mTS2Date(MNPSub.PortingTime, OUTPUT ldaMNPDate).
 
          fAdditionalLineSTC(liTermReqId,
-                            fMake2Dt(ldaMNPDate, 0),
+                            Func.Common:mMake2DT(ldaMNPDate, 0),
                             "MNP").
       END.
    END.
    
    ASSIGN
-      MNPProcess.UpdateTS = fMakeTS()
+      MNPProcess.UpdateTS = Func.Common:mMakeTS()
       MNPProcess.MNPUpdateTS = MNPProcess.UpdateTS
       MNPProcess.StatusCode = {&MNP_ST_ACON}.
    
@@ -1072,7 +1071,7 @@ PROCEDURE pHandleFromASOL2AREC:
             bMNPProcess.StatusCode = {&MNP_ST_BDET} EXCLUSIVE-LOCK:
 
          ASSIGN
-            bMNPProcess.UpdateTS = fMakeTS()
+            bMNPProcess.UpdateTS = Func.Common:mMakeTS()
             bMNPProcess.StatusCode = {&MNP_ST_BNOT}.
          RELEASE bMNPProcess.
       END.
@@ -1091,7 +1090,7 @@ PROCEDURE pHandleFromASOL2AREC:
    END.
    
    ASSIGN
-      MNPProcess.UpdateTS = fMakeTS()
+      MNPProcess.UpdateTS = Func.Common:mMakeTS()
       MNPProcess.MNPUpdateTS = MNPProcess.UpdateTS
       MNPProcess.StatusCode = {&MNP_ST_AREC}.
 

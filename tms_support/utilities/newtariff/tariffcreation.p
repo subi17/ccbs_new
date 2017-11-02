@@ -12,8 +12,8 @@
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:katun = "Cron".
+Syst.CUICommon:gcBrand = "1".
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Func/ftransdir.i}
@@ -325,7 +325,7 @@ PROCEDURE pProcessTT:
 
    IF lcTariffBundle > "" THEN
    DO:
-       IF NOT CAN-FIND(FIRST CliType WHERE CliType.Brand = gcBrand AND CliType.CliType = lcCliType NO-LOCK) THEN 
+       IF NOT CAN-FIND(FIRST CliType WHERE CliType.Brand = Syst.CUICommon:gcBrand AND CliType.CliType = lcCliType NO-LOCK) THEN 
        DO:
            /* Main Tariff */
            CREATE ttCliType.
@@ -1128,7 +1128,7 @@ PROCEDURE pValidateData:
             DO:
                IF ttTariffCre.FieldValue = "" THEN
                   UNDO, THROW NEW Progress.Lang.AppError("Copy services from clitype is blank", 1).
-               ELSE IF NOT CAN-FIND(FIRST CliType WHERE CliType.Brand = gcBrand AND CliType.CliType = ttTariffCre.FieldValue NO-LOCK) THEN 
+               ELSE IF NOT CAN-FIND(FIRST CliType WHERE CliType.Brand = Syst.CUICommon:gcBrand AND CliType.CliType = ttTariffCre.FieldValue NO-LOCK) THEN 
                   UNDO, THROW NEW Progress.Lang.AppError("Invalid 'copy services from clitype'", 1).   
                ELSE 
                   lcCopyServicesFromCliType = ttTariffCre.FieldValue.
@@ -1149,7 +1149,7 @@ PROCEDURE pValidateData:
             END.
             WHEN {&RRP} THEN 
             DO:
-               IF ttTariffCre.FieldValue EQ "" AND NOT CAN-FIND(FIRST RatePlan WHERE RatePlan.Brand = gcBrand AND RatePlan.RatePlan = ttTariffCre.FieldValue NO-LOCK) THEN 
+               IF ttTariffCre.FieldValue EQ "" AND NOT CAN-FIND(FIRST RatePlan WHERE RatePlan.Brand = Syst.CUICommon:gcBrand AND RatePlan.RatePlan = ttTariffCre.FieldValue NO-LOCK) THEN 
                   UNDO, THROW NEW Progress.Lang.AppError("Reference Rateplan is invalid", 1).
                ELSE 
                   ASSIGN lcReferenceRatePlan = ttTariffCre.FieldValue.
@@ -1343,9 +1343,9 @@ PROCEDURE pValidateData:
 
       ELSE IF lcRatePlanAction = "New" AND lcRatePlan = lcReferenceRatePlan THEN 
          UNDO, THROW NEW Progress.Lang.AppError("Rateplan and Reference Rateplan are same, which is contradicting to Rateplan action", 1).         
-      ELSE IF lcRatePlanAction = "New" AND CAN-FIND(FIRST RatePlan WHERE RatePlan.Brand = gcBrand AND RatePlan.RatePlan = lcRatePlan NO-LOCK) THEN 
+      ELSE IF lcRatePlanAction = "New" AND CAN-FIND(FIRST RatePlan WHERE RatePlan.Brand = Syst.CUICommon:gcBrand AND RatePlan.RatePlan = lcRatePlan NO-LOCK) THEN 
          UNDO, THROW NEW Progress.Lang.AppError("Rateplan already exists, which is contradicting with Rateplan action", 1).         
-      ELSE IF lcRatePlanAction = "UseExisting" AND NOT CAN-FIND(FIRST RatePlan WHERE RatePlan.Brand = gcBrand AND RatePlan.RatePlan = lcReferenceRatePlan NO-LOCK) THEN 
+      ELSE IF lcRatePlanAction = "UseExisting" AND NOT CAN-FIND(FIRST RatePlan WHERE RatePlan.Brand = Syst.CUICommon:gcBrand AND RatePlan.RatePlan = lcReferenceRatePlan NO-LOCK) THEN 
          UNDO, THROW NEW Progress.Lang.AppError("Reference Rateplan doesn't exists, which is contradicting with Rateplan action", 1).
       ELSE
       DO:
@@ -1433,7 +1433,7 @@ PROCEDURE pSaveTranslation:
    FOR EACH ttTrans NO-LOCK
        ON ERROR UNDO, THROW:
       
-       FIND FIRST RepText WHERE RepText.Brand    = gcBrand                   AND 
+       FIND FIRST RepText WHERE RepText.Brand    = Syst.CUICommon:gcBrand                   AND 
                                 RepText.TextType = ttTrans.tTextType         AND 
                                 RepText.LinkCode = ttTrans.tLangType         AND 
                                 RepText.Language = INTEGER(ttTrans.tLangint) AND 
@@ -1448,7 +1448,7 @@ PROCEDURE pSaveTranslation:
        DO:                           
            CREATE RepText.
            ASSIGN 
-              RepText.Brand    = gcBrand    
+              RepText.Brand    = Syst.CUICommon:gcBrand    
               RepText.TextType = ttTrans.tTextType                /* Default value */       
               RepText.LinkCode = ttTrans.tLangType        
               RepText.Language = INTEGER(ttTrans.tLangint)    

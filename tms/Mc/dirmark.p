@@ -38,10 +38,10 @@ form
     DMarketing.DirMark      /* COLUMN-LABEL FORMAT */
     DMarketing.DirMarkName     /* COLUMN-LABEL FORMAT */
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
-    title COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.CUICommon:cfc)
+    title COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " DIRECT MARKETING CODES "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 {Func/brand.i}
@@ -50,8 +50,8 @@ form
     "Direct marketing code ..:"  DMarketing.DirMark     NO-LABEL SKIP
     "Direct marketing name ..:"  DMarketing.DirMarkName NO-LABEL 
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc)
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     ac-hdr /* WITH side-labels 1 columns */
     FRAME lis.
 
@@ -60,18 +60,18 @@ form /* seek VAT Code  BY  DirMark */
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "DirMarket.:" DirMark
     help "Enter Code"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Code  BY DirMarkName */
     "Brand Code:" lcBrand  HELP "Enter Brand"
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "DirName ..:" DirMarkName
     help "Enter Name"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND NAME "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 title COLOR VALUE(Syst.CUICommon:ctc) " FIND NAME "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 orders = " By Code , By Name , By 3 , By 4" .
@@ -97,13 +97,13 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a DMarketing  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR DMarketing.DirMark.
@@ -175,9 +175,9 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35  ufk[2]= 30 ufk[3]= 0 ufk[4]= 0
-        ufk[5]= 5  ufk[6]= 4 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ufk[1]= 35  Syst.CUICommon:ufk[2]= 30 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+        Syst.CUICommon:ufk[5]= 5  Syst.CUICommon:ufk[6]= 4 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         {Syst/uright1.i '"5,6"'}
         RUN Syst/ufkey.p.
       END.
@@ -185,20 +185,20 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW DMarketing.DirMark {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) DMarketing.DirMark WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) DMarketing.DirMark WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW DMarketing.DirMarkName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) DMarketing.DirMarkName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) DMarketing.DirMarkName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -222,10 +222,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* previous ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-prev.
@@ -250,7 +250,7 @@ BROWSE:
       END. /* previous ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -276,7 +276,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* prev page */
-      ELSE IF LOOKUP(nap,"prev-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND DMarketing WHERE recid(DMarketing) = memory NO-LOCK NO-ERROR.
         RUN local-find-prev.
@@ -300,7 +300,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -315,12 +315,12 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        DirMark = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        Disp lcBrand With FRAME f1.
-       UPDATE lcBrand WHEN gcAllBrand = TRUE
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
               DirMark WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF DirMark <> "" THEN DO:
@@ -336,13 +336,13 @@ BROWSE:
      END. /* Search-1 */
 
      /* Search BY col 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        DirMarkName = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         Disp lcBrand With FRAME f2.
-       UPDATE  lcBrand WHEN gcAllBrand = TRUE
+       UPDATE  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
                DirMarkName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF DirMarkName <> "" THEN DO:
@@ -357,19 +357,19 @@ BROWSE:
        END.
      END. /* Search-2 */
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:  /* add */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:  /* add */
         {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* DELETE */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 THEN DO TRANSACTION:  /* DELETE */
        {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        DMarketing.DirMark DMarketing.DirMarkName .
 
        RUN local-find-NEXT.
@@ -391,7 +391,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        DMarketing.DirMark DMarketing.DirMarkName .
        IF ok THEN DO:
 
@@ -410,14 +410,14 @@ BROWSE:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSACTION:
        {Syst/uright2.i} 
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
        RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        CLEAR FRAME lis NO-PAUSE.
        DISPLAY DMarketing.DirMark.
        RUN local-update-record.
@@ -426,25 +426,25 @@ BROWSE:
        xrecid = recid(DMarketing).
      END.
 
-     ELSE IF LOOKUP(nap,"home,h") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = recid(DMarketing) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,e") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,e") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN memory = recid(DMarketing) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 

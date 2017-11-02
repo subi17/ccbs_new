@@ -7,8 +7,8 @@
   Version ......: yoigo
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:katun = "Cron".
+Syst.CUICommon:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
@@ -16,11 +16,10 @@ gcBrand = "1".
 {Syst/eventlog.i}
 {Syst/eventval.i}
 {Func/email.i}
-{Func/timestamp.i}
 {Func/multitenantfunc.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -199,7 +198,7 @@ PROCEDURE pUpdateSegmentStatus:
          Segmentation.SegmentOffer = icSegmentOffer
          Segmentation.SegmentDate = idaSegmentDate
          Segmentation.SegmentCons = ideSegmentConsumption
-         Segmentation.SegmentCreation = fMakeTS().
+         Segmentation.SegmentCreation = Func.Common:mMakeTS().
    END.
 
    /* nothing to do */
@@ -217,7 +216,7 @@ PROCEDURE pUpdateSegmentStatus:
          Segmentation.SegmentOffer = icSegmentOffer
          Segmentation.SegmentDate = idaSegmentDate
          Segmentation.SegmentCons = ideSegmentConsumption
-         Segmentation.SegmentCreation = fMakeTS().
+         Segmentation.SegmentCreation = Func.Common:mMakeTS().
       IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhSegmentation).
       RELEASE Segmentation.
    END.   

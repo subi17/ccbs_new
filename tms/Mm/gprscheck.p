@@ -1,5 +1,4 @@
 {Syst/commali.i}
-{Func/timestamp.i}
 DEFINE VARIABLE lcCli AS CHARACTER NO-UNDO format "x(9)". 
 DEFINE VARIABLE lcFrom AS CHARACTER NO-UNDO FORMAT "x(8)". 
 DEFINE VARIABLE lcTo AS CHARACTER NO-UNDO FORMAT "x(8)".
@@ -42,7 +41,7 @@ FRAME a.
 LOOP:
 DO WHILE TRUE:
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    REPEAT ON ENDKEY UNDO, LEAVE:
 
       UPDATE 
@@ -73,26 +72,26 @@ DO WHILE TRUE:
          next.
       END.
       
-      ldeFrom = fHMS2TS(ldaFrom,lcFrom) no-error.
+      ldeFrom = Func.Common:mHMS2TS(ldaFrom,lcFrom) no-error.
       if error-status:error then do:
          MESSAGE "Incorrect from stamp:" ldaFrom lcFrom 
          VIEW-AS ALERT-BOX ERROR.
          next.
       end.
-      fSplitTS(ldeFrom, output ldaFrom, output liFrom).
+      Func.Common:mSplitTS(ldeFrom, output ldaFrom, output liFrom).
       if error-status:error then do:
          MESSAGE "Incorrect to stamp:" ldaTo lcTo 
          VIEW-AS ALERT-BOX ERROR.
          next.
       end.
       
-      ldeTo = fHMS2TS(ldato,lcto) no-error.
+      ldeTo = Func.Common:mHMS2TS(ldato,lcto) no-error.
       if error-status:error then do:
          MESSAGE "Incorrect to stamp:" ldaTo lcTo 
          VIEW-AS ALERT-BOX ERROR.
          next.
       end.
-      fSplitTS(ldeTo, output ldaTo, output lito).
+      Func.Common:mSplitTS(ldeTo, output ldaTo, output lito).
       if error-status:error then do:
          MESSAGE "Incorrect to stamp:" ldaTo lcTo 
          VIEW-AS ALERT-BOX ERROR.

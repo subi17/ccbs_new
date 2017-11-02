@@ -15,7 +15,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/fmakemsreq.i}
 {Mm/subser.i}
 {Syst/tmsconst.i}
@@ -50,7 +50,7 @@ lcStruct = validate_request(pcStruct,"itemizations,delivery_channel,invoice_targ
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 pcUserName = "VISTA_" + get_string(pcStruct,"username").
-katun = pcUserName.
+Syst.CUICommon:katun = pcUserName.
 lcMemo = "Agent" + CHR(255) + "VISTA".
 
 IF LOOKUP("reason",lcStruct) > 0 THEN 
@@ -85,7 +85,7 @@ IF pcInvoiceGrouping NE "" AND
    RETURN appl_err(SUBST("Unsupported invoice_target value &1", pcInvoiceGrouping)).
 
 {Syst/eventval.i}
-&GLOBAL-DEFINE STAR_EVENT_USER katun   
+&GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun   
 {Func/lib/eventlog.i}
 DEF VAR lhCustomer AS HANDLE NO-UNDO. 
 lhCustomer = BUFFER Customer:HANDLE.
@@ -102,9 +102,9 @@ IF liDelType > 0 AND Customer.DelType <> liDelType THEN DO:
 
       /* If DelType is Email then set to Email Pending first and send
          an email to customer to activate the email service */
-      liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+      liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                        INPUT TODAY,
-                                       INPUT katun,
+                                       INPUT Syst.CUICommon:katun,
                                        INPUT 0,
                                        INPUT "",
                                        INPUT Customer.Custnum,
@@ -140,7 +140,7 @@ IF liDelType > 0 AND Customer.DelType <> liDelType THEN DO:
                                     "changed to " + STRING(Customer.DelType)).
       IF liDelType EQ {&INV_DEL_TYPE_NO_DELIVERY} THEN DO:
          FOR EACH MobSub WHERE
-                  MobSub.brand EQ gcbrand AND
+                  MobSub.brand EQ Syst.CUICommon:gcBrand AND
                   Mobsub.custnum EQ Customer.Custnum NO-LOCK:
             fMakeSchedSMS3(Customer.Custnum,MobSub.CLI,9,
                            "InvDelivTypeChanged",Customer.Language,0,
@@ -211,7 +211,7 @@ DO liCount = 0 TO get_paramcount(pcItemsArray) - 1:
                                   SubSer.ServCom,
                                   piStatus).
    IF ldActStamp > 0 THEN DO:
-      fSplitTS(ldActStamp,
+      Func.Common:mSplitTS(ldActStamp,
                OUTPUT ldtReqActDate,
                OUTPUT liRequest).
 
@@ -219,13 +219,13 @@ DO liCount = 0 TO get_paramcount(pcItemsArray) - 1:
          (DAY(ldtReqActDate) = 1 AND liRequest < TIME - 120 AND
           DAY(SubSer.SSDate) NE 1)
       THEN .
-      ELSE ldActStamp = fMakeTS().
+      ELSE ldActStamp = Func.Common:mMakeTS().
    END.
-   ELSE ldActStamp = fMakeTS().
+   ELSE ldActStamp = Func.Common:mMakeTS().
 
    IF ldtReqActDate = TODAY
-   THEN ldActStamp = fMakeTS().
-   ELSE ldActStamp = fMake2DT(ldtReqActDate,1).
+   THEN ldActStamp = Func.Common:mMakeTS().
+   ELSE ldActStamp = Func.Common:mMake2DT(ldtReqActDate,1).
 
    liRequest = fServiceRequest(SubSer.MsSeq,
                            Subser.ServCom,
@@ -249,11 +249,11 @@ IF pcReason NE '' AND llUpdate THEN DO:
    CREATE Memo.
    ASSIGN
        Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = gcBrand 
+       Memo.Brand     = Syst.CUICommon:gcBrand 
        Memo.HostTable = "Customer" 
        Memo.KeyValue  = STRING(piCustNum) 
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = katun 
+       Memo.CreUser   = Syst.CUICommon:katun 
        Memo.MemoTitle = "Update Deliverables"
        Memo.MemoText  = pcReason
        Memo.CustNum   = piCustNum. 
@@ -263,6 +263,5 @@ add_boolean(response_toplevel_id, "", TRUE).
 
 
 FINALLY:
-IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
 END.
 

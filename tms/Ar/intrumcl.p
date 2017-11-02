@@ -44,15 +44,15 @@ lcInfile AT 10 LABEL "File Name"
     help "Name of Output File"
 SKIP(5)
 WITH  OVERLAY ROW 1 WIDTH 80
-   COLOR VALUE(cfc)
-   TITLE COLOR VALUE(ctc) 
-   " " + ynimi + " CREDIT LOSS POSTING  " + STRING(pvm,"99-99-99") + " "
+   COLOR VALUE(Syst.CUICommon:cfc)
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) 
+   " " + Syst.CUICommon:ynimi + " CREDIT LOSS POSTING  " + STRING(TODAY,"99-99-99") + " "
    SIDE-LABELS FRAME main.
 
 MAIN:
 REPEAT WITH FRAME main:
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
     PAUSE 0.
     UPDATE
@@ -81,7 +81,7 @@ REPEAT WITH FRAME main:
               DISPLAY lcInfile.
            END. 
 
-           ehto = 9.
+           Syst.CUICommon:ehto = 9.
            RUN Syst/ufkey.p.
         END. 
 
@@ -91,15 +91,15 @@ REPEAT WITH FRAME main:
     ACTION:
     REPEAT WITH FRAME main:
       ASSIGN
-      ufk = 0 ehto = 0
-      ufk[1] = 7 
-      ufk[5] = (IF lcInfile ne "" THEN 795 ELSE 0).
-      ufk[8] = 8.
+      Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0
+      Syst.CUICommon:ufk[1] = 7 
+      Syst.CUICommon:ufk[5] = (IF lcInfile ne "" THEN 795 ELSE 0).
+      Syst.CUICommon:ufk[8] = 8.
       RUN Syst/ufkey.p.
 
-      IF toimi = 1 THEN NEXT  main.
-      IF toimi = 8 THEN LEAVE main.
-      IF TOIMI = 5 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN NEXT  main.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE main.
+      IF Syst.CUICommon:toimi = 5 THEN DO:
 
          IF SEARCH(lcInfile) = ? THEN DO:
             MESSAGE "File cannot be found. Check the path and name."

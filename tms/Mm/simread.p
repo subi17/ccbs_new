@@ -16,8 +16,6 @@
 {Syst/commali.i}
 {Func/cparam2.i}
 {Syst/tmsconst.i}
-{Func/date.i}
-{Func/ftmscode.i}
 
 DEF INPUT PARAMETER SIMfile AS CHARACTER NO-UNDO. 
 DEF INPUT PARAMETER ProcessedDir AS CHARACTER NO-UNDO. 
@@ -120,14 +118,14 @@ END.
 
 /* read the description record from default */
 FIND IFiSpx where 
-     IFiSpx.Brand   = gcBrand   AND
+     IFiSpx.Brand   = Syst.CUICommon:gcBrand   AND
      IFiSpx.ManCode = "GEMALTO" AND
      IFiSpx.Version = "00001" NO-LOCK.
 
 PAUSE 0.
 
 FIND Stock WHERE 
-     Stock.Brand = gcBrand AND 
+     Stock.Brand = Syst.CUICommon:gcBrand AND 
      Stock.Stock = Stock
 no-lock no-error.
 
@@ -225,13 +223,13 @@ DO i = 1 TO IFiSpx.Hrowd:
       IF sTPValue = "" THEN
          llSerNbFound = FALSE.
       ELSE DO:
-         lcManCode = fTMSCodeConfigValue("IFiSpx","ManCode",
+         lcManCode = Func.Common:mTMSCodeConfigValue("IFiSpx","ManCode",
                                          SUBSTRING(sTPValue,7,1)).
-         lcSimArt  = fTMSCodeConfigValue("IFiSpx","SimArt",
+         lcSimArt  = Func.Common:mTMSCodeConfigValue("IFiSpx","SimArt",
                                          SUBSTRING(sTPValue,7,2)).
          /* Find actual record */
          FIND FIRST IFiSpx WHERE
-                    IFiSpx.Brand   = gcBrand   AND
+                    IFiSpx.Brand   = Syst.CUICommon:gcBrand   AND
                     IFiSpx.ManCode = lcManCode AND
                     IFiSpx.SimArt  = lcSimArt NO-LOCK NO-ERROR.
          IF NOT AVAIL IFiSpx THEN llSerNbFound = FALSE.
@@ -265,19 +263,19 @@ REPEAT WITH FRAME Main:
    UPDATE_LOOP:
    REPEAT ON ENDKEY UNDO, LEAVE:
       
-      ehto = 9. RUN Syst/ufkey.p.
+      Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
       
       UPDATE 
          Stock
       WITH FRAME MAIN EDITING:
          READKEY.
-         IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN 
+         IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN 
          DO WITH FRAME main:
             PAUSE 0.
             IF FRAME-FIELD = "Stock" THEN 
             DO:
                FIND Stock WHERE 
-                    Stock.Brand = gcBrand AND 
+                    Stock.Brand = Syst.CUICommon:gcBrand AND 
                     Stock.Stock =
                INPUT FRAME main Stock NO-LOCK NO-ERROR.
                IF NOT AVAIL Stock THEN 
@@ -327,12 +325,12 @@ REPEAT WITH FRAME Main:
    ACTION:
    REPEAT WITH FRAME Main:
       ASSIGN
-      ufk =  0 ufk[1] = 7 ufk[4] = 241
-      ufk[5] = 795 ufk[8] = 8 ehto = 0.  RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT  main.
-      IF toimi = 8 THEN LEAVE main.
-      IF toimi = 4 THEN LEAVE Action.
-      IF toimi = 5 THEN 
+      Syst.CUICommon:ufk =  0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[4] = 241
+      Syst.CUICommon:ufk[5] = 795 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.  RUN Syst/ufkey.p.
+      IF Syst.CUICommon:toimi = 1 THEN NEXT  main.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE main.
+      IF Syst.CUICommon:toimi = 4 THEN LEAVE Action.
+      IF Syst.CUICommon:toimi = 5 THEN 
       DO:
          ok = FALSE.
          message "Do You REALLY want to start the load run (Y/N) ?" UPDATE ok.
@@ -341,7 +339,7 @@ REPEAT WITH FRAME Main:
       END.
    END. /* Action */
 
-   ufk =  0. ehto = 3. RUN Syst/ufkey.p.
+   Syst.CUICommon:ufk =  0. Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
 
    lError = FALSE.
 
@@ -377,7 +375,7 @@ REPEAT WITH FRAME Main:
        ProcessedDir, cSIMFileNamePartNoExt, cSIMFileExtPart).
 
    PhaseLoop:
-   DO  phase = 1 TO (IF toimi = 4 THEN 1 ELSE 2):    /* 1: preceeding check;  
+   DO  phase = 1 TO (IF Syst.CUICommon:toimi = 4 THEN 1 ELSE 2):    /* 1: preceeding check;  
                                                         2: UPDATE */
       IF phase = 2 THEN 
       DO:
@@ -549,7 +547,7 @@ REPEAT WITH FRAME Main:
          *************************************/
          tot = tot + 1.
          FIND SIM where 
-            Sim.Brand = gcBrand AND 
+            Sim.Brand = Syst.CUICommon:gcBrand AND 
             SIM.ICC   = ICC
             no-lock no-error.
          
@@ -576,7 +574,7 @@ REPEAT WITH FRAME Main:
             ASSIGN
             SimBatch.SimBatch = NEXT-VALUE(simbatch)
             SimBatch.ManCode = IFiSpx.ManCode
-            SimBatch.Brand  = gcBrand 
+            SimBatch.Brand  = Syst.CUICommon:gcBrand 
             SimBatch.SimArt = IFiSpx.SimArt
             SimBatch.DelDate = TODAY
             SimBatch.TpKey  = TpKey
@@ -591,7 +589,7 @@ REPEAT WITH FRAME Main:
 
          CREATE SIM.
          ASSIGN
-            SIM.Brand       = gcBrand 
+            SIM.Brand       = Syst.CUICommon:gcBrand 
             SIM.SimBatch    = isimbatch
             SIM.ManCode     = IFiSpx.ManCode
             SIM.ICC         = icc
@@ -624,7 +622,7 @@ REPEAT WITH FRAME Main:
          ****************************/
 
          FIND StoBal WHERE 
-            Stobal.Brand  = gcBrand AND 
+            Stobal.Brand  = Syst.CUICommon:gcBrand AND 
             StoBal.SimArt = IFiSpx.SimArt  AND
             StoBal.StoBal = Stock
             Exclusive-lock No-error.
@@ -632,7 +630,7 @@ REPEAT WITH FRAME Main:
          DO:
             CREATE StoBal.
             ASSIGN
-               Stobal.Brand  = gcBrand 
+               Stobal.Brand  = Syst.CUICommon:gcBrand 
                StoBal.SimArt = IFiSpx.SimArt
                StoBal.StoBal = Stock.
          END.
@@ -646,7 +644,7 @@ REPEAT WITH FRAME Main:
          ***********************************/
 
          FIND SimArt WHERE 
-            SimArt.Brand  = gcBrand AND 
+            SimArt.Brand  = Syst.CUICommon:gcBrand AND 
             SimArt.SimArt = IFiSpx.SimArt
             EXCLUSIVE-LOCK.
          ASSIGN SimArt.Balance   = SimArt.Balance +  1
@@ -659,7 +657,7 @@ REPEAT WITH FRAME Main:
       IF lError THEN
       DO:
          MESSAGE lcErrorMsg VIEW-AS ALERT-BOX BUTTONS OK.
-         IF toimi = 5 THEN
+         IF Syst.CUICommon:toimi = 5 THEN
             LEAVE PhaseLoop.
       END.
 
@@ -667,10 +665,10 @@ REPEAT WITH FRAME Main:
 
          CREATE ActionLog.
          ASSIGN 
-            ActionLog.Brand        = gcBrand   
+            ActionLog.Brand        = Syst.CUICommon:gcBrand   
             ActionLog.TableName    = "SIMBatch"  
             ActionLog.KeyValue     = STRING(isimBatch)
-            ActionLog.UserCode     = katun
+            ActionLog.UserCode     = Syst.CUICommon:katun
             ActionLog.ActionID     = "SIMFILE"
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
             ActionLog.ActionChar   = "Totally " + STRING(tot) +
@@ -679,7 +677,7 @@ REPEAT WITH FRAME Main:
                "Status: " + STRING(iSimStat) + " " + SIMStat.SSName + CHR(10) +
                "File: " + SIMFile
             ActionLog.ActionStatus = {&ACTIONLOG_STATUS_LOGGED} 
-            ActionLog.ActionTS     = fMakeTS().
+            ActionLog.ActionTS     = Func.Common:mMakeTS().
          RELEASE ActionLog.   
 
          MESSAGE "Totally" tot "SIM records were successfully loaded" 
@@ -687,7 +685,7 @@ REPEAT WITH FRAME Main:
       END.
    END. /* phase ... */
 
-   IF toimi = 4 THEN 
+   IF Syst.CUICommon:toimi = 4 THEN 
    DO:
       
       IF lError THEN 
@@ -720,10 +718,10 @@ REPEAT WITH FRAME Main:
       phase = -1. /* to prevent going back to update mode */
    END.
 
-   IF toimi = 5 AND d-icc + d-IMSI = 0 AND NOT lError THEN 
+   IF Syst.CUICommon:toimi = 5 AND d-icc + d-IMSI = 0 AND NOT lError THEN 
       lRealUpdate = TRUE.
 
-   IF toimi = 5 OR d-icc + d-IMSI > 0 THEN LEAVE Main.
+   IF Syst.CUICommon:toimi = 5 OR d-icc + d-IMSI > 0 THEN LEAVE Main.
 END. /* Main */
 
 HIDE MESSAGE.
@@ -768,7 +766,7 @@ PROCEDURE HandleUniqueSIMFileName:
    FindUniqueFileName:
    REPEAT:
       IF NOT CAN-FIND(SimBatch WHERE 
-                  SimBatch.Brand = gcBrand AND 
+                  SimBatch.Brand = Syst.CUICommon:gcBrand AND 
                   SimBatch.ManCode = IFiSpx.ManCode AND
                   SimBatch.FileName = pcSIMFileNamePart) 
          AND SEARCH(cFullFilePath) = ? 

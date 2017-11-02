@@ -28,7 +28,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -90,8 +90,8 @@ form
     FMItem.Amount        format "->,>>9.99"
 
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc)
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     " Items of B-Event " + 
         FeeModel.Brand + "/" + FeeModel.FeeModel + ": " + 
         FeeModel.FeeName + " "
@@ -128,8 +128,8 @@ form
        lcServicelname    NO-LABEL       SKIP
           
 WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -138,14 +138,14 @@ WITH  OVERLAY ROW 2 centered
 form /* seek Billing Event Item  BY  PriceList */
     PriceList
     HELP "Enter Price List Code"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND P-LIST "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND P-LIST "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Billing Event Item  BY BillCode */
     BillCode
     HELP "Enter BillCode"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND BillCode "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND BillCode "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 FUNCTION fBrokenRental RETURNS LOGIC
@@ -255,7 +255,7 @@ PROCEDURE local-update-record:
          WITH FRAME lis EDITING:
              READKEY.
 
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
 
                 PAUSE 0.
 
@@ -291,7 +291,7 @@ PROCEDURE local-update-record:
                 ELSE IF FRAME-FIELD = "ServiceLimitGroup" THEN DO:
                    IF INPUT  servicelimitgroup  ne "" THEN DO:
                        FIND FIRST ServiceLimitGroup WHERE
-                                  ServiceLimitGroup.Brand = gcBrand AND 
+                                  ServiceLimitGroup.Brand = Syst.CUICommon:gcBrand AND 
                                   ServiceLimitGroup.GroupCode = INPUT FRAME lis
                                   ServiceLimitGroup NO-LOCK NO-ERROR.
                        IF NOT AVAIL servicelimitgroup THEN DO:
@@ -361,11 +361,11 @@ PROCEDURE choose-row:
 
  IF order = 1 THEN DO:
         CHOOSE ROW FMItem.PriceList {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) FMItem.PriceList WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) FMItem.PriceList WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW FMItem.BillCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) FMItem.BillCode WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) FMItem.BillCode WITH FRAME sel.
       END.
 
 END PROCEDURE.
@@ -373,7 +373,7 @@ END PROCEDURE.
 
 PROCEDURE highlight-row:
 
-COLOR DISPLAY VALUE(ctc)
+COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
           FMItem.PriceList    
           FMItem.BillCode     
           BillItem.BIName     
@@ -386,13 +386,13 @@ END PROCEDURE.
 
 PROCEDURE local-add-record:
 
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
       
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
 
@@ -409,7 +409,7 @@ PROCEDURE local-add-record:
               END.
 
 
-              IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+              IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
                  PAUSE 0.
                  IF FRAME-FIELD = "PriceList" THEN DO:
                     IF INPUT FMItem.PriceList = "" THEN 

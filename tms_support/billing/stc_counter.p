@@ -10,10 +10,9 @@ Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-{Func/timestamp.i}
 ASSIGN
-   katun = "Qvantel"
-   gcBrand = "1".
+   Syst.CUICommon:katun = "Qvantel"
+   Syst.CUICommon:gcBrand = "1".
 
 DEFINE VARIABLE ldadate AS DATE FORMAT "99.99.9999" NO-UNDO.
 DEF VAR ufkey AS LOG NO-UNDO INIT TRUE.
@@ -60,7 +59,7 @@ lcTypes = "0,81,9".
 lcStatuses = "0,1,2,3,4,5,6,7,8". 
 lcTypeDesc = "---STC---,---BTC---,---Manual contract terminations---".
 
-ehto = 4. RUN Syst/ufkey.p.
+Syst.CUICommon:ehto = 4. RUN Syst/ufkey.p.
 
 LOOPPI:
 DO liTypeLoop = 1 TO NUM-ENTRIES(lcTypes) WITH FRAME lis:
@@ -80,8 +79,8 @@ DO liTypeLoop = 1 TO NUM-ENTRIES(lcTypes) WITH FRAME lis:
    ASSIGN
       lcDetails = lcDetails  + 
                  ENTRY(liTypeLoop,lcTypeDesc) + CHR(10) + "Requests:"
-      ldeDate = (IF liType = 9 THEN fMake2Dt(ldaDate - 1,86399)
-                 ELSE fMake2Dt(ldaDate,0)).
+      ldeDate = (IF liType = 9 THEN Func.Common:mMake2DT(ldaDate - 1,86399)
+                 ELSE Func.Common:mMake2DT(ldaDate,0)).
    
    DO liStatusLoop = 1 TO num-entries(lcStatuses):
 
@@ -92,7 +91,7 @@ DO liTypeLoop = 1 TO NUM-ENTRIES(lcTypes) WITH FRAME lis:
       DISP lcDetails WITH FRAME lis.
 
       FOR EACH msrequest NO-LOCK where
-               msrequest.brand = gcBrand and
+               msrequest.brand = Syst.CUICommon:gcBrand and
                msrequest.reqtype = liType and
                msrequest.reqstatus = liStatus and
                msrequest.actstamp = ldeDate :
@@ -150,15 +149,15 @@ PROCEDURE pUserInput:
       WITH FRAME lis EDITING:
       
          IF ufkey THEN DO:
-            ASSIGN ehto = 9. RUN Syst/ufkey.p.
+            ASSIGN Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
             ufkey = false.
          END.
 
          READKEY.
          
-         nap = keylabel(lastkey).
+         Syst.CUICommon:nap = keylabel(lastkey).
 
-         IF LOOKUP(nap,poisnap) > 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
 
          END.
 

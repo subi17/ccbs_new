@@ -10,8 +10,8 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-katun = "Newton".
-gcBrand = "1".
+Syst.CUICommon:katun = "Newton".
+Syst.CUICommon:gcBrand = "1".
 
 
 /* Input parameters */
@@ -81,6 +81,5 @@ ELSE
 add_boolean(response_toplevel_id, "", llResult).
 
 FINALLY:
-  IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+  END.
 

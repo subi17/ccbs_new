@@ -19,7 +19,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i} 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/orderfunc.i}
 {Func/fcustdata.i}
@@ -68,7 +68,7 @@ pcCreator     = "VISTA_" + get_string(pcStruct,"username").
 
 IF TRIM(pcCreator) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-katun = pcCreator.
+Syst.CUICommon:katun = pcCreator.
 
 IF pcIDType = "CIF" THEN
    pcCompany     = get_string(pcStruct,"company").
@@ -126,14 +126,14 @@ IF Order.OldPayType AND pcOldICC EQ "" THEN DO:
 END.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    {Func/lib/eventlog.i}
 END.
 
 IF Order.CurrOper NE pcOldOperator THEN DO:
    
    FIND FIRST MNPOperator WHERE
-              MNPOperator.Brand = gcBrand AND
+              MNPOperator.Brand = Syst.CUICommon:gcBrand AND
               MNPOperator.OperName = pcOldOperator
    NO-LOCK NO-ERROR.
    IF NOT AVAIL MNPOperator THEN 
@@ -212,7 +212,7 @@ FIND CURRENT Order NO-LOCK.
 CREATE Memo.
 ASSIGN
     Memo.CreStamp  = {&nowTS}
-    Memo.Brand     = gcBrand
+    Memo.Brand     = Syst.CUICommon:gcBrand
     Memo.HostTable = "Order"
     Memo.KeyValue  = STRING(Order.OrderId)
     Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
@@ -226,7 +226,7 @@ IF AVAIL MNPProcess THEN DO:
    CREATE Memo.
    ASSIGN
        Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = gcBrand
+       Memo.Brand     = Syst.CUICommon:gcBrand
        Memo.HostTable = "MNPProcess"
        Memo.KeyValue  = STRING(MNPProcess.MNPSeq)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
@@ -240,5 +240,4 @@ fCleanEventObjects().
 add_boolean(response_toplevel_id, "", true).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

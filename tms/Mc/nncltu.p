@@ -26,8 +26,8 @@ DEF VAR rl       AS i NO-UNDO.
 assign tuni1 = "nncltu"
        tuni2 = "".
 
-FIND FIRST Customer no-lock WHERE Customer.Brand = gcBrand no-error.
-FIND FIRST CustLetter WHERE CustLetter.Brand = gcBrand no-lock no-error.
+FIND FIRST Customer no-lock WHERE Customer.Brand = Syst.CUICommon:gcBrand no-error.
+FIND FIRST CustLetter WHERE CustLetter.Brand = Syst.CUICommon:gcBrand no-lock no-error.
 IF NOT AVAILABLE CustLetter THEN DO:
     MESSAGE "No customer letters available."
     VIEW-AS ALERT-BOX
@@ -61,8 +61,8 @@ HELP "Customer To"                                                 skip
 HELP "Invoice Group" to 39                                         skip
 "                Margin ....:" CustLetter.LtrMargin to 39          skip(5)
 WITH
-    COLOR value(cfc) TITLE COLOR value(cfc)
-    " " + ynimi + " Customer letter printing " + string(pvm,"99-99-99") + " "
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:cfc)
+    " " + Syst.CUICommon:ynimi + " Customer letter printing " + string(TODAY,"99-99-99") + " "
     ROW 1 width 80 NO-LABEL
     FRAME rajat.
 
@@ -73,14 +73,14 @@ ASSIGN
 rajat:
 repeat WITH FRAME rajat:
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
    DISP CustLetter.ChgDate CustLetter.LtrMargin WITH FRAME rajat.
    UPDATE
       cust-nr1   cust-nr2 validate (input cust-nr2 >= input cust-nr1,
                                     "Invalid order !")
       InvGroup  VALIDATE (can-find(InvGroup where 
-                                   InvGroup.Brand    = gcBrand AND
+                                   InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                                    InvGroup.InvGroup = InvGroup)
                          or InvGroup = "","UNKNOWN INVOICE GROUP")
       CustLetter.LtrMargin
@@ -89,13 +89,13 @@ repeat WITH FRAME rajat:
 toimi:
    repeat WITH FRAME rajat:
       ASSIGN
-      ufk = 0 ehto = 0
-      ufk[1] = 7 ufk[5] = 63 ufk[8] = 8.
+      Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0
+      Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT  rajat.
-      IF toimi = 8 THEN LEAVE rajat.
-      IF toimi = 5 THEN  LEAVE toimi.
-   END.  /* toimi */
+      IF Syst.CUICommon:toimi = 1 THEN NEXT  rajat.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE rajat.
+      IF Syst.CUICommon:toimi = 5 THEN  LEAVE toimi.
+   END.  /* Syst.CUICommon:toimi */
 
    ASSIGN INPUT LtrMargin.
 
@@ -104,10 +104,10 @@ toimi:
 
    message "Printing ...".
 
-   RUN Syst/udate2c.p(INPUT pvm, INPUT TRUE, OUTPUT paivays).
+   RUN Syst/udate2c.p(INPUT TODAY, INPUT TRUE, OUTPUT paivays).
 
    FOR EACH  Customer no-lock  where
-             Customer.Brand    = gcBrand AND
+             Customer.Brand    = Syst.CUICommon:gcBrand AND
              Customer.CustNum >= cust-nr1     AND
              Customer.CustNum <= cust-nr2     AND
             (if InvGroup ne "" THEN Customer.InvGroup = InvGroup

@@ -1,8 +1,8 @@
 /* based on 200902/as_yob150.p */
 
 {Syst/commpaa.i}
-katun = "ari".
-gcBrand = "1".
+Syst.CUICommon:katun = "ari".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/flimitreq.i}
 

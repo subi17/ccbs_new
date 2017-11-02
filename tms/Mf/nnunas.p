@@ -32,7 +32,7 @@ ASSIGN
    ukcust = fCParamI("UnknownCustomer").
 
 DO FOR TMSUser:
-   FIND FIRST TMSUser where TMSUser.UserCode = katun no-lock.
+   FIND FIRST TMSUser where TMSUser.UserCode = Syst.CUICommon:katun no-lock.
    exdir = TMSUser.RepDir.
 END.   
 
@@ -59,7 +59,7 @@ rajat:
 repeat WITH FRAME rajat:
    PAUSE 0.
    DISP  exName.
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE 
       day1 
@@ -68,11 +68,11 @@ repeat WITH FRAME rajat:
 
 toimi:
    repeat WITH FRAME rajat:
-      ASSIGN ehto = 0 ufk = 0 ufk[1] = 7 ufk[5] = 15 ufk[8] = 8.
+      ASSIGN Syst.CUICommon:ehto = 0 Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 15 Syst.CUICommon:ufk[8] = 8.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT  rajat.
-      IF toimi = 8 THEN LEAVE rajat.
-      IF toimi = 5 THEN LEAVE toimi.
+      IF Syst.CUICommon:toimi = 1 THEN NEXT  rajat.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE rajat.
+      IF Syst.CUICommon:toimi = 5 THEN LEAVE toimi.
    END.
 
    PAUSE 0.
@@ -80,7 +80,7 @@ toimi:
 
    OUTPUT STREAM excel TO value(exName).           
 
-   PUT STREAM excel UNFORMATTED  ynimi my-nl my-nl.
+   PUT STREAM excel UNFORMATTED  Syst.CUICommon:ynimi my-nl my-nl.
 
    PUT STREAM excel UNFORMATTED 
       "Calls from Unidentified A-subscriber numbers " +

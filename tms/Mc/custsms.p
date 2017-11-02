@@ -8,7 +8,6 @@
  ============================================================================*/
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO.
 
@@ -44,7 +43,7 @@ FORM
 "          " lcUpdText[4]  AUTO-RETURN                         SKIP(2) 
 
 WITH  OVERLAY ROW 1 centered width 80
-    COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) " SEND SMS "   
+    COLOR VALUE(Syst.CUICommon:cfc) TITLE COLOR VALUE(Syst.CUICommon:ctc) " SEND SMS "   
     NO-LABELS FRAME main.
 
 PAUSE 0.
@@ -57,13 +56,12 @@ IF NOT AVAILABLE Customer THEN DO:
    RETURN.
 END.
 
-lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, 
-                              BUFFER Customer).
+lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
 MAIN:
 REPEAT WITH FRAME main:
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
                
 UPDATE
@@ -108,7 +106,7 @@ WITH FRAME main EDITING:
 
                PUT SCREEN ROW 1 COL 2 STRING(liqty) + "/160          ".
 
-               IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME main:
+               IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME main:
                 PAUSE 0.
                   IF FRAME-FIELD = "lckeyvalue" THEN DO:
                   END.
@@ -120,15 +118,15 @@ WITH FRAME main EDITING:
 ACTION:
    REPEAT WITH FRAME main:
       ASSIGN
-      ufk = 0 ehto = 0
-      ufk[1] = 7 
-      ufk[5] = 2355
-      ufk[8] = 8.
+      Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0
+      Syst.CUICommon:ufk[1] = 7 
+      Syst.CUICommon:ufk[5] = 2355
+      Syst.CUICommon:ufk[8] = 8.
       RUN Syst/ufkey.p.
 
-      IF toimi = 1 THEN NEXT  main.
-      IF toimi = 8 THEN LEAVE main.
-      IF TOIMI = 5 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN NEXT  main.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE main.
+      IF Syst.CUICommon:toimi = 5 THEN DO:
 
          ok = FALSE.
          
@@ -152,7 +150,7 @@ ACTION:
          IF NOT ok THEN NEXT Action.
 
          CREATE CallAlarm.
-         CallAlarm.ActStamp = fmakets().
+         CallAlarm.ActStamp = Func.Common:mMakeTS().
          ASSIGN
             CallAlarm.CLSeq    = 0
             CallAlarm.CASeq    = NEXT-VALUE(CallAlarm)
@@ -164,7 +162,7 @@ ACTION:
             CallAlarm.DeliMsg  = lcText
             CallAlarm.Limit    = 0
             CallAlarm.CreditType = 9
-            CallAlarm.Brand      = gcBrand .
+            CallAlarm.Brand      = Syst.CUICommon:gcBrand .
 
          LEAVE Action.
       END.

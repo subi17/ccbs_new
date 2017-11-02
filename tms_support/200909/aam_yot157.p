@@ -1,7 +1,6 @@
 {Syst/testpaa.i}
-katun = "ari".
+Syst.CUICommon:katun = "ari".
 {/home/ari/work/fcreditreq_chk.i}
-{Func/timestamp.i}
 
 def var lcline as char no-undo.
 def var liorderid as int no-undo.
@@ -45,7 +44,7 @@ for each msrequest no-lock use-index custnum where
    ttreq.invnum = msrequest.reqiparam1.
 end.
          
-ldactstamp = fmake2dt(today,time). 
+ldactstamp = Func.Common:mMake2DT(today,time). 
 
 message "start reading"
 view-as alert-box.
@@ -156,7 +155,7 @@ repeat:
           Memo.CreUser   = msrequest.usercode 
           Memo.MemoTitle = "CLOSED ORDER (ACAN)"
           Memo.MemoText  = "Credited by Yoigo, YOT-156".
-          Memo.CreStamp  = fmakets().
+          Memo.CreStamp  = Func.Common:mMakeTS().
 
    create ttreq.
    ttreq.invnum = invoice.invnum.

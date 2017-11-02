@@ -12,7 +12,6 @@
 {Func/excel.i}
 {Func/function.i}
 {Syst/commali.i}
-{Func/date.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'invoice'}
 
@@ -54,7 +53,7 @@ with centered width 80 no-label title " Customers bills " FRAME frm.
 
 DO FOR TMSUser:
    FIND FIRST TMSUser no-lock where
-              TMSUser.UserCode = katun.
+              TMSUser.UserCode = Syst.CUICommon:katun.
    fname = TMSUser.RepDir + "/prodinv.txt".
 END.
 
@@ -70,17 +69,17 @@ repeat WITH FRAME frm:
 
    HIDE MESSAGE no-pause.
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       date1 date2
       InvGroup 
       fname 
    WITH FRAME frm EDITING:
       READKEY.
-      IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+      IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
          IF FRAME-FIELD = "InvGroup" THEN DO:
             FIND FIRST InvGroup WHERE 
-                       InvGroup.Brand    = gcBrand AND
+                       InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                        InvGroup.InvGroup = input InvGroup
             NO-LOCK NO-ERROR.
             IF NOT AVAIL InvGroup THEN DO:
@@ -98,12 +97,12 @@ repeat WITH FRAME frm:
 
 task:
    repeat WITH FRAME frm ON ENDKEY UNDO, RETURN:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT  CRIT.
-      IF toimi = 8 THEN LEAVE CRIT.
+      IF Syst.CUICommon:toimi = 1 THEN NEXT  CRIT.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE CRIT.
 
-      IF toimi = 5 THEN DO:
+      IF Syst.CUICommon:toimi = 5 THEN DO:
          ok = FALSE.
          message "Are you SURE you want to start processing (Y/N) ?" UPDATE ok.
          IF ok THEN LEAVE task.
@@ -127,7 +126,7 @@ task:
    OUTPUT STREAM excel TO value(fname).
 
    FIND FIRST InvGroup where
-              InvGroup.Brand    = gcBrand AND
+              InvGroup.Brand    = Syst.CUICommon:gcBrand AND
               InvGroup.InvGroup = InvGroup
    no-lock no-error.
 
@@ -160,7 +159,7 @@ task:
    put stream excel unformatted "TOTAL" my-nl.
 
    FOR EACH Customer no-lock where
-            Customer.Brand    = gcBrand AND
+            Customer.Brand    = Syst.CUICommon:gcBrand AND
             Customer.CustNum  > 1000    AND
             Customer.InvGroup = InvGroup.
 

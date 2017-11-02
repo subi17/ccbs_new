@@ -11,10 +11,9 @@
 
 {Syst/commpaa.i}
 ASSIGN
-   gcBrand = "1"
-   katun   = "laskutus".
+   Syst.CUICommon:gcBrand = "1"
+   Syst.CUICommon:katun   = "laskutus".
 
-{Func/date.i}
 {Syst/utumaa.i "new"}
 {Ar/invjournal.i}
 {Func/cparam2.i}
@@ -47,7 +46,7 @@ IF lcTransDir = ? THEN lcTransDir = "".
 IF lcSpoolDir = ? OR lcSpoolDir = "" THEN lcSpoolDir = "/tmp".
 
 FIND FIRST Company NO-LOCK.
-ynimi = Company.CompName.
+Syst.CUICommon:ynimi = Company.CompName.
 
 /* Parameter handling */
 
@@ -76,7 +75,7 @@ IF lcParam NE "" THEN DO:
          INT(SUBSTRING(lcParam,1,4))) NO-ERROR.
 
       IF ERROR-STATUS:ERROR THEN ok = false.
-      ldtInvDate[2] = fLastDayOfMonth(ldtInvDate[1]).
+      ldtInvDate[2] = Func.Common:mLastDayOfMonth(ldtInvDate[1]).
 
    END.
 
@@ -111,7 +110,7 @@ ELSE DO:
    ELSE DO:
       ldTmpDate = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1.
       ldtInvDate[1] = DATE(MONTH(ldTmpDate),16,YEAR(ldTmpDate)).
-      ldtInvDate[2] = fLastDayOfMonth(ldTmpDate). 
+      ldtInvDate[2] = Func.Common:mLastDayOfMonth(ldTmpDate). 
    END.
 END.
 
@@ -121,7 +120,7 @@ fELog("INVJOURNAL","Started").
 
 /* print a detailed report for each invgroup and then a summary from all */
 FOR EACH InvGroup NO-LOCK WHERE
-         InvGroup.Brand = gcBrand:
+         InvGroup.Brand = Syst.CUICommon:gcBrand:
 
    RUN pPrintReport(InvGroup.InvGroup,
                     ldtInvDate[1],
@@ -200,7 +199,7 @@ PROCEDURE pPrintReport:
    IF liInvQty = 0 OR RETURN-VALUE BEGINS "ERROR:" THEN DO TRANS:
 
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
              ErrorLog.ActionID  = "InvJournal"
              ErrorLog.TableName = "cron"
              ErrorLog.KeyValue  = ""
@@ -214,15 +213,15 @@ PROCEDURE pPrintReport:
                                   "Period: " +
                                   STRING(idtDate1,"99.99.9999") + "-" +
                                   STRING(idtDate2,"99.99.9999")
-             ErrorLog.UserCode  = katun.
-             ErrorLog.ActionTS  = fMakeTS().
+             ErrorLog.UserCode  = Syst.CUICommon:katun.
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    
    ELSE DO TRANS:
 
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = gcBrand   
+         ActionLog.Brand        = Syst.CUICommon:gcBrand   
          ActionLog.TableName    = "Cron"  
          ActionLog.KeyValue     = "" 
          ActionLog.ActionID     = "InvJournal"
@@ -237,7 +236,7 @@ PROCEDURE pPrintReport:
                                   STRING(idtDate1,"99.99.9999") + "-" +
                                   STRING(idtDate2,"99.99.9999")
          ActionLog.ActionStatus = 3.
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
 
       /* file without the dir */
       lcPlainFile = lcFile.

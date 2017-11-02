@@ -13,6 +13,8 @@
 
 {Syst/commali.i}
 
+DEFINE INPUT  PARAMETER icHelpKey AS CHARACTER NO-UNDO.
+
 def new shared var uviikko as int format "999999".
 DEF NEW shared VAR uvpvm AS Date.
 
@@ -45,14 +47,14 @@ form
   p[29] p[30] p[31] p[32] p[33] p[34] p[35] " "  vk[5] SKIP
   p[36] p[37] "                "                 vk[6]
 
-  WITH TITLE COLOR value(ctc) kuu
-  COLOR value(cfc) ROW 9 col 50
+  WITH TITLE COLOR value(Syst.CUICommon:ctc) kuu
+  COLOR value(Syst.CUICommon:cfc) ROW 9 col 50
   NO-LABEL OVERLAY FRAME kal.
 
   ASSIGN
-  kk=month(si-pvm) vv=year(si-pvm) pp=day(si-pvm)
+  kk=month(Syst.CUICommon:si-pvm) vv=year(Syst.CUICommon:si-pvm) pp=day(Syst.CUICommon:si-pvm)
   chalku=string(pp)
-  cfc = "kal". RUN Syst/ufcolor.p.
+  Syst.CUICommon:cfc = "kal". RUN Syst/ufcolor.p.
 
 
 LOOP:
@@ -75,7 +77,7 @@ repeat:
    repeat:
      IF month(ipvm) <> kk THEN DO:
         /* choosea varten: ed. kk:n viimeinen pvA */
-        if lookup(nap,"1,f1") > 0 THEN chalku = string(day(ipvm - 1)).
+        if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN chalku = string(day(ipvm - 1)).
         LEAVE.
      END.
 
@@ -99,19 +101,19 @@ toimi:
    repeat WITH FRAME kal:
       IF uf THEN DO:
          ASSIGN
-            ufk[1]=24 ufk[2]=25 ufk[3]=0 ufk[4]=0
-            ufk[5]=11 ufk[6]=0  ufk[7]=0 ufk[8]=8 ehto=3.
-         if helpkey <> "f9" THEN ufk[5] = 0.
+            Syst.CUICommon:ufk[1]=24 Syst.CUICommon:ufk[2]=25 Syst.CUICommon:ufk[3]=0 Syst.CUICommon:ufk[4]=0
+            Syst.CUICommon:ufk[5]=11 Syst.CUICommon:ufk[6]=0  Syst.CUICommon:ufk[7]=0 Syst.CUICommon:ufk[8]=8 Syst.CUICommon:ehto = 3.
+         if icHelpKey <> "f9" THEN Syst.CUICommon:ufk[5] = 0.
          RUN Syst/ufkey.p.
          uf=false.
       END.
-      nap = "".
+      Syst.CUICommon:nap = "".
       CHOOSE FIELD p
       keys chalku
-      COLOR value(ctc) no-error.
-      nap = keylabel(LASTKEY).
+      COLOR value(Syst.CUICommon:ctc) no-error.
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if nap = "1" or nap = "f1" THEN DO:
+      if Syst.CUICommon:nap = "1" or Syst.CUICommon:nap = "f1" THEN DO:
          /* edellinen kuukausi */
          kk = kk - 1.
          IF kk = 0 THEN DO:
@@ -122,7 +124,7 @@ toimi:
          NEXT LOOP.
       END.
 
-      else if nap = "2" or nap = "f2" THEN DO:
+      else if Syst.CUICommon:nap = "2" or Syst.CUICommon:nap = "f2" THEN DO:
          /* seuraava kuukausi */
          kk = kk + 1.
          IF kk = 13 THEN DO:
@@ -133,25 +135,25 @@ toimi:
          chalku = "1".
          NEXT LOOP.
       END.
-      else if lookup(nap,"5,f5,enter,return") > 0  THEN DO:
+      else if lookup(Syst.CUICommon:nap,"5,f5,enter,return") > 0  THEN DO:
          if frame-value = "" THEN NEXT.
          pp = integer(frame-value).
          IF vv < 100 THEN DO:
             IF vv > 80 AND vv < 1980 THEN vv = vv + 1900.
             ELSE IF vv > 80 THEN vv = vv + 2000.
          END.
-         si-pvm = date(kk,pp,vv).
+         Syst.CUICommon:si-pvm = date(kk,pp,vv).
          HIDE FRAME kal no-pause.
          LEAVE LOOP.
       END.
 
-      else if nap = "8" or nap = "f8" THEN DO:
-         si-pvm = ?.
+      else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" THEN DO:
+         Syst.CUICommon:si-pvm = ?.
          HIDE FRAME kal no-pause.
          LEAVE LOOP.
       END.
 
-   END. /* toimi */
+   END. /* Syst.CUICommon:toimi */
 END. /* LOOP */
 
 RETURN.

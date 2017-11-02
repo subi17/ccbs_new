@@ -56,7 +56,7 @@ PROCEDURE connect-tables:
 
    /* did it go well ? */
    FIND solog WHERE 
-        Solog.Brand = gcBrand AND 
+        Solog.Brand = Syst.CUICommon:gcBrand AND 
         SOLog.SoLog = new-so-seq NO-LOCK.
 
    IF AVAIL solog then ASSIGN mobsub.MsStatus = 2. /* On going */
@@ -75,12 +75,14 @@ PROCEDURE connect-tables:
 
    IF lddate = ? then lddate = today.
 
-   fReplaceSMS (INPUT lcalarmmess, mobsub.msseq , lddate, OUTPUT lcalarmmess).
+   Func.Common:mReplaceSMS 
+             ( IF AVAILABLE Customer THEN Customer.CustName ELSE "",
+               Mobsub.CLI, lcalarmmess, mobsub.msseq , lddate, OUTPUT lcalarmmess).
  
    
    CREATE CallAlarm.
    ASSIGN
-      CallAlarm.ActStamp   = fmakets().
+      CallAlarm.ActStamp   = Func.Common:mMakeTS().
       
    ASSIGN
       CallAlarm.CLSeq      =  0
@@ -93,7 +95,7 @@ PROCEDURE connect-tables:
       CallAlarm.DeliMsg    = lcAlarmMess
       CallAlarm.Limit      = 0
       CallAlarm.CreditType = 9
-      CallAlarm.Brand      = gcBrand .
+      CallAlarm.Brand      = Syst.CUICommon:gcBrand .
 
 END PROCEDURE.
 

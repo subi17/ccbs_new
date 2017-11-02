@@ -12,7 +12,6 @@
                   23.03.04 aam check if customer exists (new-no)
                   18.06.04 tk  creuser and credate
                   10.01.06 aam clean eventlog
-                  24.01.06 jt DYNAMIC-FUNCTION("fDispCustName"  Version ......: M15
 --------------------------------------------------------------------------- */
 
 {Syst/commali.i}
@@ -21,7 +20,7 @@ DEF BUFFER new-Customer FOR Customer.
 
 {Syst/eventval.i}
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -41,8 +40,7 @@ DEF VAR lcCustName                  AS CHAR NO-UNDO.
 FIND Customer WHERE Customer.CustNum = CustNum NO-LOCK NO-ERROR.
 PAUSE 0.
 
-lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                              BUFFER Customer).
+lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                                     
 ok = FALSE.
 IF DEBUG THEN 
@@ -55,7 +53,7 @@ ELSE ok = TRUE.
 IF ok THEN DO:
    
    FIND LAST new-Customer WHERE
-      new-Customer.Brand = gcBrand
+      new-Customer.Brand = Syst.CUICommon:gcBrand
    USE-INDEX CustNum NO-LOCK NO-ERROR.
    
    new-no = new-Customer.Custnum + 1.
@@ -82,8 +80,8 @@ IF ok THEN DO:
       new-Customer.PaymCust  = new-no
       new-Customer.RepCust   = new-no
       new-Customer.AgrCust   = new-no
-      new-customer.Brand     = gcBrand
-      new-customer.CreUser   = katun
+      new-customer.Brand     = Syst.CUICommon:gcBrand
+      new-customer.CreUser   = Syst.CUICommon:katun
       new-customer.CreDate   = TODAY.
 
 

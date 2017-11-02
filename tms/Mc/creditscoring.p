@@ -8,8 +8,6 @@ DEFINE OUTPUT PARAMETER pcAnswerCodes AS CHARACTER NO-UNDO.
 
 {fcgi_agent/xmlrpc/xmlrpc_client.i}
 {Syst/commali.i}
-{Func/timestamp.i}
-{Func/date.i}
 {Syst/tmsconst.i}
 {Mm/fbundle.i}
 
@@ -178,7 +176,7 @@ IF pcActionType EQ "ORDER" THEN DO:
               OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-LOCK NO-ERROR.
    IF AVAILABLE OrderCustomer AND AVAILABLE Order THEN
    DO:
-      pcFoundingDate = fDateFmt(OrderCustomer.FoundationDate, "ddmmyyyy"). /* 3 */
+      pcFoundingDate = Func.Common:mDateFmt(OrderCustomer.FoundationDate, "ddmmyyyy"). /* 3 */
       
       FIND FIRST OrderAccessory OF Order WHERE
                  OrderAccessory.TerminalType EQ ({&TERMINAL_TYPE_PHONE}) NO-LOCK NO-ERROR.
@@ -200,7 +198,7 @@ IF pcActionType EQ "ORDER" THEN DO:
 
       /* YPRO-25 Segment field WITH Customer Category */
       FIND FIRST CustCat NO-LOCK WHERE
-                 CustCat.Brand    = gcBrand AND
+                 CustCat.Brand    = Syst.CUICommon:gcBrand AND
                  CustCat.Category = OrderCustomer.Category NO-ERROR.
       IF AVAILABLE CustCat THEN
         lcSegment = CustCat.Segment.
@@ -322,7 +320,7 @@ ELSE IF LOOKUP(pcActionType, "NORMAL,RENEWAL_STC") > 0 THEN DO:
      
    ASSIGN pcCIF          = Customer.OrgId                    /*  1 */
           pcZIP          = Customer.ZIP                      /*  2 */
-          pcFoundingDate = fDateFmt(Customer.FoundationDate, 
+          pcFoundingDate = Func.Common:mDateFmt(Customer.FoundationDate, 
                                     "ddmmyyyy")              /* 3 */
           pcAddress       = Customer.Address                 /* 4 */
           pcRepId         = Customer.OrgId                /* 5 */
@@ -354,7 +352,7 @@ ELSE IF LOOKUP(pcActionType, "NORMAL,RENEWAL_STC") > 0 THEN DO:
 
    /* YPRO-25 Segment field WITH Customer Category */
    FIND FIRST CustCat NO-LOCK WHERE
-              CustCat.Brand    = gcBrand AND
+              CustCat.Brand    = Syst.CUICommon:gcBrand AND
               CustCat.Category = Customer.Category NO-ERROR.
    IF AVAILABLE CustCat THEN
      lcSegment = CustCat.Segment.
@@ -391,10 +389,10 @@ IF LOOKUP(pcActionType,"ORDER,RENEWAL_STC") > 0 THEN DO:
    /* Find TERM and PayTerm contracts from offer */
    IF Order.Offer > "" THEN
       FOR FIRST Offer WHERE
-                Offer.Brand = gcBrand AND
+                Offer.Brand = Syst.CUICommon:gcBrand AND
                 Offer.Offer = Order.Offer NO-LOCK,
           EACH  OfferItem WHERE
-                OfferItem.Brand       = gcBrand        AND
+                OfferItem.Brand       = Syst.CUICommon:gcBrand        AND
                 OfferItem.Offer       = Offer.Offer    AND
                 OfferItem.ItemType    = "PerContract"  AND
                (OfferItem.ItemKey BEGINS "PAYTERM" OR
@@ -411,7 +409,7 @@ IF LOOKUP(pcActionType,"ORDER,RENEWAL_STC") > 0 THEN DO:
    /* Check Payment Method for direct channel */
    IF INDEX(Order.OrderChannel,"POS") = 0 THEN DO:
       FIND FIRST Orderpayment WHERE
-                 OrderPayment.Brand   = gcBrand AND
+                 OrderPayment.Brand   = Syst.CUICommon:gcBrand AND
                  OrderPayment.OrderId = Order.OrderId NO-LOCK NO-ERROR.
       IF AVAIL OrderPayment THEN DO:
          IF OrderPayment.Method = {&ORDERPAYMENT_M_POD} THEN 

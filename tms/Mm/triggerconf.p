@@ -9,13 +9,12 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/eventval.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'Mobsub'}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -65,9 +64,9 @@ form
     TriggerConf.ValidFrom
     TriggerConf.ValidTo
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
-       "  TriggerConfs  "  + string(pvm,"99-99-99") + " "
+    COLOR VALUE(Syst.CUICommon:cfc)   
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+       "  TriggerConfs  "  + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form
@@ -79,22 +78,22 @@ form
     TriggerConf.ValidTo                 LABEL "To......."                SKIP
                    
 WITH  OVERLAY ROW 6 CENTERED
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 form /* seek  TriggerConf */
     "TriggerConf:" lcTriggerConf FORMAT ">9"
     HELP "Enter TriggerConf"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND TriggerConf "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND TriggerConf "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  TriggerConf */
     "Name:" lcRgName FORMAT "x(30)"
     HELP "Enter name"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Name "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FUNCTION fZoneName RETURNS LOGIC
    (icTaxZone AS CHAR):
@@ -106,7 +105,7 @@ FUNCTION fZoneName RETURNS LOGIC
      */
 END FUNCTION.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -128,7 +127,7 @@ REPEAT WITH FRAME sel:
    END.
     
    IF must-add THEN DO:  /* Add a TriggerConf  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -136,7 +135,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
            
@@ -211,15 +210,15 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk    = 0
-        ufk[1] = 35
-        ufk[2] = 30
-        ufk[3] = 4004 
-        ufk[4] = 4000
-        ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0) 
-        ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)
-        ufk[8] = 8 
-        ehto   = 3 
+        Syst.CUICommon:ufk    = 0
+        Syst.CUICommon:ufk[1] = 35
+        Syst.CUICommon:ufk[2] = 30
+        Syst.CUICommon:ufk[3] = 4004 
+        Syst.CUICommon:ufk[4] = 4000
+        Syst.CUICommon:ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0) 
+        Syst.CUICommon:ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.CUICommon:ufk[8] = 8 
+        Syst.CUICommon:ehto   = 3 
         ufkey  = FALSE.
 
         RUN Syst/ufkey.p.
@@ -229,18 +228,18 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW TriggerConf.TriggerConfID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TriggerConf.TriggerConfID WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) TriggerConf.TriggerConfID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW TriggerConf.TCNAme {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TriggerConf.TCNAme WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) TriggerConf.TCNAme WITH FRAME sel.
       END.
 
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -249,10 +248,10 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -270,7 +269,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -295,7 +294,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -321,7 +320,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND TriggerConf WHERE recid(TriggerConf) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -345,7 +344,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -360,11 +359,11 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND Syst.CUICommon:ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        UPDATE lcTriggerConf WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -390,11 +389,11 @@ REPEAT WITH FRAME sel:
      END. /* Search-1 */
 
      /* Search BY column 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 AND Syst.CUICommon:ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        UPDATE lcRgName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -419,7 +418,7 @@ REPEAT WITH FRAME sel:
 
      END. /* Search-2 */
      
-     ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 THEN DO:
         
         RUN local-find-this (FALSE).
 
@@ -431,7 +430,7 @@ REPEAT WITH FRAME sel:
      
      ENd.
      
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 THEN DO:
         
         RUN local-find-this (FALSE).
 
@@ -443,20 +442,20 @@ REPEAT WITH FRAME sel:
      
      ENd.
      
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0  
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND Syst.CUICommon:ufk[5] > 0  
      THEN DO:  /* add */
         {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
      
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND Syst.CUICommon:ufk[6] > 0
      THEN DO TRANSACTION:  /* DELETE */
        {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        TriggerConf.TriggerConfID 
        TriggerConf.Prior 
        TriggerConf.EventRule
@@ -485,7 +484,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        TriggerConf.TriggerConfID TriggerConf.Prior TriggerConf.TCName 
        TriggerConf.ValidFrom  TriggerConf.ValidTo       TriggerConf.EventRule  lcRuleName
               .
@@ -508,7 +507,7 @@ REPEAT WITH FRAME sel:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -519,7 +518,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhTriggerConf).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
 
@@ -539,25 +538,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(TriggerConf) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(TriggerConf) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 
@@ -665,7 +664,7 @@ PROCEDURE local-UPDATE-record:
 
       IF lcRight = "RW" THEN REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
       
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          PAUSE 0.
          UPDATE
          TriggerConf.TCNAme 
@@ -694,7 +693,7 @@ PROCEDURE local-UPDATE-record:
             END.
             
             PAUSE 0.
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 
             THEN DO WITH FRAME lis:
              
                PAUSE 0.
@@ -730,7 +729,7 @@ PROCEDURE local-UPDATE-record:
       
       ELSE DO:
    
-         ehto = 5.
+         Syst.CUICommon:ehto = 5.
          RUN Syst/ufkey.p.
          PAUSE MESSAGE "Press ENTER to continue".
       END. 

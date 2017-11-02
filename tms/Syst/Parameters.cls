@@ -3,7 +3,6 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 CLASS Syst.Parameters FINAL:
 
    DEFINE STATIC BUFFER lbTMSParam FOR TMSParam.
-   DEFINE PUBLIC STATIC VARIABLE gcBrand AS CHARACTER NO-UNDO INITIAL "1".
    
    METHOD PUBLIC STATIC CHARACTER getc
       ( icCode AS CHARACTER ):
@@ -215,7 +214,7 @@ CLASS Syst.Parameters FINAL:
         icType  AS CHARACTER ):
             
       FOR FIRST lbTMSParam NO-LOCK WHERE
-         lbTMSParam.Brand      = gcBrand          AND
+         lbTMSParam.Brand      = Syst.CUICommon:gcBrand          AND
          lbTMSParam.ParamCode  = icCode           AND
          ( IF icGroup = ?
            THEN TRUE
@@ -272,13 +271,13 @@ CLASS Syst.Parameters FINAL:
          THEN DO TRANSACTION:
             IF llAvailable
             THEN FIND localTMSParam EXCLUSIVE-LOCK WHERE
-                     localTMSParam.Brand      = gcBrand AND
+                     localTMSParam.Brand      = Syst.CUICommon:gcBrand AND
                      localTMSParam.ParamCode  = icCode  AND
                      localTMSParam.ParamGroup = icGroup.
             ELSE DO:
                   CREATE localTMSParam.
                   ASSIGN
-                     localTMSParam.Brand      = gcBrand
+                     localTMSParam.Brand      = Syst.CUICommon:gcBrand
                      localTMSParam.ParamCode  = icCode
                      localTMSParam.ParamType  = icType
                      localTMSParam.ParamGroup = icGroup

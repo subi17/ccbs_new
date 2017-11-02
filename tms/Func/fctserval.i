@@ -23,7 +23,7 @@ FUNCTION fServComValue RETURNS INTEGER
           olAllowed  = FALSE.
    
    FOR FIRST CTServEl NO-LOCK WHERE
-             CTServEl.Brand     = gcBrand   AND
+             CTServEl.Brand     = Syst.CUICommon:gcBrand   AND
              CTServEl.ServCom   = icServCom AND
              CTServEl.CLIType   = icCLIType AND
              CTServEl.FromDate <= TODAY:
@@ -46,7 +46,7 @@ FUNCTION fServParamValue RETURNS CHAR
    lcComValue = ?.
    
    FOR FIRST CTServEl NO-LOCK WHERE
-             CTServEl.Brand     = gcBrand   AND
+             CTServEl.Brand     = Syst.CUICommon:gcBrand   AND
              CTServEl.ServCom   = icServCom AND
              CTServEl.CLIType   = icCLIType AND
              CTServEl.FromDate <= TODAY:
@@ -72,7 +72,7 @@ FUNCTION fServAttrValue RETURNS CHARACTER
           olAllowed  = FALSE.
    
    FOR FIRST CTServEl NO-LOCK WHERE
-             CTServEl.Brand     = gcBrand   AND
+             CTServEl.Brand     = Syst.CUICommon:gcBrand   AND
              CTServEl.ServCom   = icServCom AND
              CTServEl.CLIType   = icCLIType AND
              CTServEl.FromDate <= TODAY,

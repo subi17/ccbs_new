@@ -10,12 +10,11 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:katun = "Cron".
+Syst.CUICommon:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/fcreatereq.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
 
@@ -48,8 +47,8 @@ ASSIGN
    lcOutDir            = fCParam("LastInvoices","OutDir")
    ldaStartDate        = DATE(MONTH(TODAY), 1, YEAR(TODAY))
    ldaEndDate          = DATE(MONTH(TODAY), 3, YEAR(TODAY))
-   ldStartTime         = fMake2Dt(ldaStartDate,0)
-   ldEndTime           = fMake2Dt(ldaEndDate  ,86399)
+   ldStartTime         = Func.Common:mMake2DT(ldaStartDate,0)
+   ldEndTime           = Func.Common:mMake2DT(ldaEndDate  ,86399)
    ldtActivationDate   = DATE(MONTH(TODAY), 22, YEAR(TODAY))
    lcDateValue         = STRING(YEAR(TODAY),"9999") +
                          STRING(MONTH(TODAY),"99")  +
@@ -88,7 +87,7 @@ FOR EACH EventLog NO-LOCK WHERE
       DO:
          CREATE ttCust.
          ASSIGN ttCust.CustNum = INT(EventLog.Key) 
-                ttCust.EndTS   = fHMS2TS(EventLog.EventDate, 
+                ttCust.EndTS   = Func.Common:mHMS2TS(EventLog.EventDate, 
                                          EventLog.EventTime).
                                          
          PUT STREAM sCollectLog UNFORMATTED
@@ -133,8 +132,8 @@ FOR EACH ttCust:
                         LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0) THEN NEXT.
 
       fCreateRequest({&REQTYPE_DUPLICATE_INVOICE},
-                     fMake2Dt(ldtActivationDate,0),
-                     katun,
+                     Func.Common:mMake2DT(ldtActivationDate,0),
+                     Syst.CUICommon:katun,
                      FALSE,      /* fees     */
                      FALSE).     /* send sms */
 

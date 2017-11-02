@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-gcbrand = "1".
-katun = "Qvantel".
+Syst.CUICommon:gcBrand = "1".
+Syst.CUICommon:katun = "Qvantel".
 
 DEF VAR ldReqAmt  AS DEC  NO-UNDO.
 DEF VAR ldaDate   AS DATE NO-UNDO.
@@ -15,10 +15,10 @@ OUTPUT TO "/apps/yoigo/tms_support/testing/contm2_fee_change.txt" append.
 
 EACH_MOBSUB:
 FOR FIRST DayCampaign WHERE
-          DayCampaign.Brand = gcBrand AND
+          DayCampaign.Brand = Syst.CUICommon:gcBrand AND
           DayCampaign.DCEvent = "CONTM2" NO-LOCK,
     EACH DCCLI WHERE
-         DCCLI.Brand = gcBrand AND
+         DCCLI.Brand = Syst.CUICommon:gcBrand AND
          DCCLI.DCEvent = "CONTM2" AND
          DCCLI.ValidTo >= ldaDate NO-LOCK,
    FIRST MobSub WHERE
@@ -30,7 +30,7 @@ FOR FIRST DayCampaign WHERE
    STATUS DEFAULT STRING(licount).
 
    FOR EACH FixedFee NO-LOCK USE-INDEX HostTable WHERE
-            FixedFee.Brand     = gcBrand   AND 
+            FixedFee.Brand     = Syst.CUICommon:gcBrand   AND 
             FixedFee.HostTable = "MobSub"  AND
             FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
             FixedFee.CalcObj   = DCCLI.DCEvent:
@@ -43,7 +43,7 @@ FOR FIRST DayCampaign WHERE
                      TRUE,
                      MobSub.MsSeq,
                      "", /* Data bundle id */
-                     katun, /* eventlog.usercode */
+                     Syst.CUICommon:katun, /* eventlog.usercode */
                      "SummerCampaign-PriceChange", /* eventlog.memo */
                      0,
                      OUTPUT ldReqAmt).
@@ -67,7 +67,7 @@ FOR FIRST DayCampaign WHERE
                   STRING(TODAY,"99.99.9999") +  /* memo */
                   "¤" +  DCCLI.DCEvent ,  /* calcobject */
                   FALSE,              /* no messages to screen */
-                  katun,
+                  Syst.CUICommon:katun,
                   "SummerCampaign-PriceChange",
                   0, /* order id */
                   "DCCLI",

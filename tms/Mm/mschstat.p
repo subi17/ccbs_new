@@ -17,7 +17,7 @@
 {Func/fsubser.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -78,7 +78,7 @@ ac-hdr = "CHANGE".
 loop:
 repeat:
 
-   assign ufkey = true ehto = 9.
+   assign ufkey = true Syst.CUICommon:ehto = 9.
    RUN Syst/ufkey.p.
 
    update cli with frame askcli.
@@ -94,17 +94,17 @@ repeat:
 
    upd:
    repeat with frame lis trans:
-      ASSIGN ufkey = TRUE ufk = 0 ehto = 1
-      ufk[1] = 7
-      ufk[8] = 8.
+      ASSIGN ufkey = TRUE Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 1
+      Syst.CUICommon:ufk[1] = 7
+      Syst.CUICommon:ufk[8] = 8.
       RUN Syst/ufkey.p.
 
-      if toimi = 8 then do:
+      if Syst.CUICommon:toimi = 8 then do:
          next loop.
       end.
 
-      if toimi = 1 then do:
-         assign ufkey = true ehto = 9.
+      if Syst.CUICommon:toimi = 1 then do:
+         assign ufkey = true Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
 
          if llDoEvent THEN RUN StarEventSetOldBuffer(lhMobSub).
@@ -196,26 +196,26 @@ PROCEDURE local-find-others.
                                  fatime.invnum = 0).
          FIND msstat    OF msisdn                            NO-LOCK NO-ERROR.
          FIND msclass   WHERE 
-              MSClass.Brand = gcBrand AND
+              MSClass.Brand = Syst.CUICommon:gcBrand AND
               MSClass.McCode  = MSISDN.McCode NO-LOCK NO-ERROR.
          FIND reseller    WHERE 
-              ReSeller.Brand    = gcBrand   AND 
+              ReSeller.Brand    = Syst.CUICommon:gcBrand   AND 
               Reseller.Reseller = MobSub.Reseller  
          NO-LOCK NO-ERROR.
          FIND salesman  WHERE 
-              Salesman.Brand    = gcBrand AND 
+              Salesman.Brand    = Syst.CUICommon:gcBrand AND 
               Salesman.Salesman = MobSub.SalesMan  
          NO-LOCK NO-ERROR.
          FIND sim       WHERE 
-              SIM.Brand       = gcBrand AND 
+              SIM.Brand       = Syst.CUICommon:gcBrand AND 
               SIM.ICC         = MobSub.ICC     
          NO-LOCK NO-ERROR.
          FIND stock     WHERE 
-              Stock.Brand     = gcBrand  AND 
+              Stock.Brand     = Syst.CUICommon:gcBrand  AND 
               Stock.Stock     = SIM.Stock     NO-LOCK NO-ERROR.
          FIND mobcount  WHERE MobCount.MsSeq  = MobSub.MsSeq  NO-LOCK NO-ERROR.
          FIND CliType   WHERE 
-              CliType.Brand   = gcBrand   AND 
+              CliType.Brand   = Syst.CUICommon:gcBrand   AND 
               CliType.CliType = MobSub.CliType 
          NO-LOCK NO-ERROR.
 

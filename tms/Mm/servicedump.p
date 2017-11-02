@@ -13,12 +13,10 @@
 
 {Syst/commpaa.i}
 {Func/excel.i}
-{Func/date.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 
-gcbrand = "1".
-katun = "batch".
+Syst.CUICommon:gcBrand = "1".
+Syst.CUICommon:katun = "batch".
 
 DEF TEMP-TABLE ttService
    FIELD tmsseq    as integer
@@ -44,9 +42,9 @@ ASSIGN
   lcOutDir   = fCParam("dumpoutgoing","servicedump.p")
   lcspooldir = fCParam("dumpspool","servicedump.p")
   lcDelim = "|"
-  liToday = integer(fdatefmt(TODAY,"yyyymmdd"))
-  lcFileName = "services" + fdatefmt(TODAY,"yyyymmdd") + ".dump"
-  timeto = fmakets().
+  liToday = integer(Func.Common:mDateFmt(TODAY,"yyyymmdd"))
+  lcFileName = "services" + Func.Common:mDateFmt(TODAY,"yyyymmdd") + ".dump"
+  timeto = Func.Common:mMakeTS().
 
 FOR EACH mobsub NO-LOCK WHERE
          mobsub.brand = "1":

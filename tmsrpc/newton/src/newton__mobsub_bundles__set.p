@@ -16,12 +16,11 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/mdub.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Func/upsellbundle.i}
-{Func/date.i}
 {Func/msreqfunc.i}
 {Func/fsendsms.i}
 {Func/fdss.i}
@@ -76,9 +75,9 @@ FUNCTION fSetMDUB RETURNS INT
           lcPrepaidVoiceTariffs  = fCParamC("PREPAID_VOICE_TARIFFS")
           lcOnlyVoiceContracts   = fCParamC("ONLY_VOICE_CONTRACTS")
           lcDataBundleCLITypes   = fCParamC("DATA_BUNDLE_BASED_CLITYPES")
-          ldeActStamp            = fMakeTS().
+          ldeActStamp            = Func.Common:mMakeTS().
 
-   fSplitTs(ldeActStamp,output ldaActDate, output liTime).
+   Func.Common:mSplitTS(ldeActStamp,output ldaActDate, output liTime).
 
    CASE piAction :
       /* termination */
@@ -220,7 +219,7 @@ FUNCTION fSetMDUB RETURNS INT
    IF ocError NE "" THEN RETURN liReturnValue.
 
    IF piAction = 0 THEN
-      ldeActStamp = fMake2Dt(fLastDayOfMonth(ldaActDate),86399).
+      ldeActStamp = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(ldaActDate),86399).
 
    IF pcBundleId = {&DSS} THEN DO:
       IF piAction = 0 THEN
@@ -326,7 +325,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 lcStruct = validate_request(pcStruct,"name,value!,activations,username!,reason").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-katun = "VISTA_" + get_string(pcStruct,"username").
+Syst.CUICommon:katun = "VISTA_" + get_string(pcStruct,"username").
 
 piBundleAction = get_int(pcStruct,"value").
 
@@ -346,7 +345,7 @@ IF (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG}    /*16*/ OR
     MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) /*17*/ THEN
    RETURN appl_err("Mobile line provisioning is not complete").
 
-IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
+IF TRIM(Syst.CUICommon:katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 IF piBundleAction NE 0 AND piBundleAction NE 1 THEN
    RETURN appl_err(SUBST("incorrect action value: &1", piBundleAction)).
@@ -359,7 +358,7 @@ IF piBundleAction EQ 1 THEN
 ELSE 
     lcOnOff = "Desactivar".
 
-FIND DayCampaign NO-LOCK WHERE DayCampaign.Brand = gcBrand AND DayCampaign.DCEvent = pcBundleId NO-ERROR.
+FIND DayCampaign NO-LOCK WHERE DayCampaign.Brand = Syst.CUICommon:gcBrand AND DayCampaign.DCEvent = pcBundleId NO-ERROR.
 IF NOT AVAIL DayCampaign THEN
    RETURN appl_err(SUBST("Invalid Bundle Id: &1", pcBundleId)).
 
@@ -391,7 +390,7 @@ DO:
    fCreateUpsellBundle(piMsSeq,
                        pcBundleId,
                        {&REQUEST_SOURCE_NEWTON},
-                       fMakeTS(),
+                       Func.Common:mMakeTS(),
                        OUTPUT liRequest,
                        OUTPUT lcError).
 
@@ -427,19 +426,13 @@ DO:
    lcReturnValue = "activations".
 END.
 
-DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                 "MobSub",                             /* HostTable */
+Func.Common:mWriteMemoWithType("MobSub",                             /* HostTable */
                  STRING(Mobsub.MsSeq),                 /* KeyValue  */
                  MobSub.CustNum,                       /* CustNum   */
                  lcMemoTitle,                          /* MemoTitle */
                  lcMemoText,                           /* MemoText  */
                  "Service",                            /* MemoType  */
-                 katun).
+                 Syst.CUICommon:katun).
 
 lcResultStruct = add_struct(response_toplevel_id, "").
 add_int(lcResultStruct,lcReturnValue,liReturnValue).
-
-FINALLY:
-    IF VALID-HANDLE(ghFunc1) THEN 
-        DELETE OBJECT ghFunc1 NO-ERROR.
-END.

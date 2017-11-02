@@ -11,8 +11,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 ASSIGN
-katun = "cron"
-gcbrand = "1".
+Syst.CUICommon:katun = "cron"
+Syst.CUICommon:gcBrand = "1".
 DEF VAR resp_array AS CHARACTER NO-UNDO.
 DEF VAR resp_struct AS CHARACTER NO-UNDO.
 
@@ -47,7 +47,6 @@ FOR EACH ttFiles NO-LOCK:
 END.
 
 
-IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
 
 FINALLY:
    EMPTY TEMP-TABLE ttFiles.

@@ -37,7 +37,7 @@ def var memb         as lo  format "*/"        NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -60,8 +60,8 @@ form
     memb                column-label "Member"
     UserGrp.UserGroup      /* COLUMN-LABEL FORMAT */
     UserGrp.UGName      /* COLUMN-LABEL FORMAT */
-WITH centered OVERLAY scroll 1 13 DOWN ROW 2 COLOR value(cfc)
-    TITLE COLOR value(ctc)
+WITH centered OVERLAY scroll 1 13 DOWN ROW 2 COLOR value(Syst.CUICommon:cfc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     " Join CustNo " + string(UserCode) + " into group(s) "
     FRAME sel.
 
@@ -74,20 +74,20 @@ WITH
 form /* Customer Group :n haku kentällä UserGroup */
     UserGroup
     help "Type Group Code"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* Customer Group :n haku kentällä UGName */
     UGName
     help "Type first characters of a name"
-    with row 4 col 2 title color value(ctc) " FIND name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND name "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 FIND TMSUser where TMSUser.UserCode = UserCode no-lock.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST UserGrp
@@ -163,29 +163,29 @@ SELAUS:
 
       IF ufkey THEN DO:
    ASSIGN
-   ufk[1]= 35   ufk[2]= 30 ufk[3]= 927 ufk[4]= 510
-   ufk[5]= 515  ufk[6]= 0  ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
-   ehto = 3 ufkey = FALSE.
+   Syst.CUICommon:ufk[1]= 35   Syst.CUICommon:ufk[2]= 30 Syst.CUICommon:ufk[3]= 927 Syst.CUICommon:ufk[4]= 510
+   Syst.CUICommon:ufk[5]= 515  Syst.CUICommon:ufk[6]= 0  Syst.CUICommon:ufk[7]= 0   Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+   Syst.CUICommon:ehto = 3 ufkey = FALSE.
    RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
    CHOOSE ROW UserGrp.UserGroup {Syst/uchoose.i} no-error WITH FRAME sel.
-   COLOR DISPLAY value(ccc) UserGrp.UserGroup WITH FRAME sel.
+   COLOR DISPLAY value(Syst.CUICommon:ccc) UserGrp.UserGroup WITH FRAME sel.
       END.
       ELSE IF jarj = 2 THEN DO:
    CHOOSE ROW UserGrp.UGName {Syst/uchoose.i} no-error WITH FRAME sel.
-   COLOR DISPLAY value(ccc) UserGrp.UGName WITH FRAME sel.
+   COLOR DISPLAY value(Syst.CUICommon:ccc) UserGrp.UGName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
    jarj = jarj + 1. IF jarj > jarjlkm THEN jarj = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
    jarj = jarj - 1. IF jarj = 0 THEN jarj = jarjlkm.
       END.
 
@@ -212,10 +212,10 @@ SELAUS:
    NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* edellinen rivi */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
    IF FRAME-LINE = 1 THEN DO:
       FIND UserGrp where recid(UserGrp) = rtab[1] no-lock.
       IF jarj = 1 THEN FIND prev UserGrp
@@ -243,7 +243,7 @@ SELAUS:
       END. /* edellinen rivi */
 
       /* seuraava rivi */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
    IF FRAME-LINE = FRAME-DOWN THEN DO:
       FIND UserGrp where recid(UserGrp) = rtab[FRAME-DOWN] no-lock .
@@ -272,7 +272,7 @@ SELAUS:
       END. /* seuraava rivi */
 
       /* edellinen sivu */
-      else if lookup(nap,"prev-page,page-up") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up") > 0 THEN DO:
    muisti = rtab[1].
    FIND UserGrp where recid(UserGrp) = muisti no-lock no-error.
    IF jarj = 1 THEN FIND prev UserGrp
@@ -302,7 +302,7 @@ SELAUS:
      END. /* edellinen sivu */
 
      /* seuraava sivu */
-     else if lookup(nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
        /* kohdistin alimmalle riville */
        IF rtab[FRAME-DOWN] = ? THEN DO:
       message "YOU ARE ON THE LAST PAGE !".
@@ -317,10 +317,10 @@ SELAUS:
      END. /* seuraava sivu */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+     else if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        UserGroup = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE UserGroup WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if UserGroup <> "" THEN DO:
@@ -339,11 +339,11 @@ SELAUS:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.CUICommon:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        UGName = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE UGName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if UGName <> "" THEN DO:
@@ -360,9 +360,9 @@ SELAUS:
        END.
      END. /* Haku sar. 2 */
 
-     else if lookup(nap,"3,f3") > 0 THEN     /* memo */
+     else if lookup(Syst.CUICommon:nap,"3,f3") > 0 THEN     /* memo */
      DO TRANS WITH FRAME memo ON ENDKEY UNDO, NEXT LOOP:
-       assign ehto = 9 cfc = "lis" ufkey = TRUE.
+       assign Syst.CUICommon:ehto = 9 Syst.CUICommon:cfc = "lis" ufkey = TRUE.
        RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
        FIND UserGrp where recid(UserGrp) = rtab[frame-line(sel)]
        exclusive-lock.
@@ -382,14 +382,14 @@ SELAUS:
        HIDE FRAME memo no-pause.
      END.
 
-     else if lookup(nap,"4,f4") > 0 THEN DO TRANSAction:  /* poisto */
+     else if lookup(Syst.CUICommon:nap,"4,f4") > 0 THEN DO TRANSAction:  /* poisto */
    FIND UserGrp where recid(UserGrp) = rtab[FRAME-LINE] no-lock.
    RUN Syst/nnugme1.p(UserGrp.UserGroup).
    ufkey = TRUE.
    NEXT LOOP.
      END.
 
-     if lookup(nap,"5,f5,enter,return") > 0 THEN DO TRANS: /* ADD OR REMOVE */
+     if lookup(Syst.CUICommon:nap,"5,f5,enter,return") > 0 THEN DO TRANS: /* ADD OR REMOVE */
 
    FIND UserGrp where recid(UserGrp) = rtab[FRAME-LINE] no-lock.
 
@@ -413,7 +413,7 @@ SELAUS:
    END.
      END.
 
-     else if lookup(nap,"home") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home") > 0 THEN DO:
        IF jarj = 1 THEN FIND FIRST UserGrp
        /* hakuehto */ no-lock no-error.
        ELSE IF jarj = 2 THEN FIND FIRST UserGrp USE-INDEX UGName
@@ -422,7 +422,7 @@ SELAUS:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end") > 0 THEN DO : /* viimeinen tietue */
+     else if lookup(Syst.CUICommon:nap,"end") > 0 THEN DO : /* viimeinen tietue */
        IF jarj = 1 THEN FIND LAST UserGrp
        /* hakuehto */ no-lock no-error.
        ELSE IF jarj = 2 THEN FIND LAST UserGrp USE-INDEX UGName
@@ -431,11 +431,11 @@ SELAUS:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* SELAUS */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 

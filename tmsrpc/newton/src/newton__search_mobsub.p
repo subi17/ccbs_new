@@ -23,7 +23,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {newton/src/json_key.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 
@@ -159,7 +159,7 @@ IF LENGTH(pcInput) EQ 9 AND
    LOOKUP("msisdn", pcSearchTypes) > 0 THEN DO:
 
     FIND mobsub NO-LOCK WHERE 
-         mobsub.brand = gcBrand AND
+         mobsub.brand = Syst.CUICommon:gcBrand AND
          mobsub.cli = pcInput NO-ERROR.
     IF NOT AVAILABLE mobsub THEN
         RETURN appl_err(SUBST("MobSub entry &1 not found", pcInput)).
@@ -176,7 +176,7 @@ ELSE IF LENGTH(pcInput) EQ 9 AND
    LOOKUP("msisdn", pcSearchTypes) > 0 THEN DO:
    
    FIND mobsub NO-LOCK WHERE
-        mobsub.brand = gcBrand AND
+        mobsub.brand = Syst.CUICommon:gcBrand AND
         mobsub.fixednumber = pcInput NO-ERROR.
     IF NOT AVAILABLE mobsub THEN
         RETURN appl_err(SUBST("MobSub entry &1 not found", pcInput)).
@@ -187,7 +187,7 @@ END.
 ELSE IF LENGTH(pcInput) = 15 AND pcInput BEGINS "21404" AND LOOKUP("imsi", pcSearchTypes) > 0 THEN DO:
    
    FIND FIRST MobSub NO-LOCK WHERE
-      MobSub.Brand = gcBrand AND
+      MobSub.Brand = Syst.CUICommon:gcBrand AND
       MobSub.IMSI  = pcInput NO-ERROR.
    
    IF NOT AVAIL MobSub THEN 
@@ -201,7 +201,7 @@ END.
 ELSE IF liOwner NE 0 AND LOOKUP("custnum", pcSearchTypes) > 0 THEN DO:
     FIND Customer NO-LOCK
     WHERE Customer.CustNum = liOwner
-      AND Customer.brand = gcBrand NO-ERROR.
+      AND Customer.brand = Syst.CUICommon:gcBrand NO-ERROR.
     IF NOT AVAILABLE Customer THEN
         RETURN appl_err(SUBST("Customer &1 not found 1", liOwner)).
 END.
@@ -209,7 +209,7 @@ ELSE IF LOOKUP("person_id", pcSearchTypes) > 0 THEN DO:
    
    FOR EACH Customer NO-LOCK WHERE
             Customer.OrgId = pcInput AND
-            Customer.brand = gcBrand AND
+            Customer.brand = Syst.CUICommon:gcBrand AND
             Customer.Roles NE "inactive" 
             lii = 1 TO 2:
       IF lii > 1 THEN DO:
@@ -221,7 +221,7 @@ ELSE IF LOOKUP("person_id", pcSearchTypes) > 0 THEN DO:
     
     FIND FIRST Customer NO-LOCK
     WHERE Customer.OrgId = pcInput
-      AND Customer.brand = gcBrand
+      AND Customer.brand = Syst.CUICommon:gcBrand
       AND Customer.Roles NE "inactive" NO-ERROR.
     IF NOT AVAILABLE Customer THEN
         RETURN appl_err(SUBST("Customer &1 not found 2", pcInput)).
@@ -233,7 +233,7 @@ ELSE liOwner = 0.
 IF NOT AVAILABLE Customer AND liOwner > 0 THEN DO:
     FIND Customer NO-LOCK
     WHERE Customer.CustNum = liOwner
-      AND Customer.brand = gcBrand NO-ERROR.
+      AND Customer.brand = Syst.CUICommon:gcBrand NO-ERROR.
 END.
 IF NOT AVAILABLE Customer THEN
    RETURN appl_err(SUBST("Customer &1 not found 3", liOwner)).
@@ -277,7 +277,7 @@ ELSE DO:
 
    /* Add same customers other subscriptions */
    FOR EACH mobsub NO-LOCK
-   WHERE mobsub.brand = gcBrand
+   WHERE mobsub.brand = Syst.CUICommon:gcBrand
      AND mobsub.agrCust = liOwner
      AND Mobsub.CLI <> pcInput
      AND Mobsub.FixedNumber <> pcInput:
@@ -297,5 +297,4 @@ IF sub_struct = '' THEN
     RETURN appl_err(SUBST("No MobSub for &1 found", Customer.CustNum)).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

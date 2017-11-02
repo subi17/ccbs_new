@@ -14,7 +14,7 @@ SESSION:SYSTEM-ALERT-BOXES = TRUE.
 
 {Syst/eventval.i}
 if llDoEvent THEN DO:
-    &GLOBAL-DEFINE STAR_EVENT_USER katun
+    &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
     {Func/lib/eventlog.i}
 
     DEF VAR lhMobError AS HANDLE NO-UNDO.
@@ -58,18 +58,18 @@ FORM
     LcCheck           Column-label "Check"
     ErrQty
 WITH ROW FrmRow width 80 overlay FrmDown  down
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.CUICommon:cfc)   
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "  ERROR ITEMS MENU  "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 FORM
    MobError.MobError  /* label format */
    MobError.MEName    /* label format */
 WITH  overlay row 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -77,26 +77,26 @@ WITH  overlay row 4 centered
 form /* seek  ErrorCode */
     ErrorCode
     HELP "Enter Code of ERROR Type "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
-    COLOR VALUE(cfc) NO-labels overlay FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f1.
 
 form /* seek  me-name */
     me-name
     HELP "Enter Name of the ERROR Type"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND NAME "
-    COLOR VALUE(cfc) NO-labels overlay FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND NAME "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f2.
 
 form
     MobError.memo
 
     with overlay row 3 centered
-    COLOR VALUE(cfc)
-    title COLOR VALUE(ctc)
+    COLOR VALUE(Syst.CUICommon:cfc)
+    title COLOR VALUE(Syst.CUICommon:ctc)
     " MEMO: " + MobError.MEName + " " WITH no-labels 1 columns
     frame f4.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -123,13 +123,13 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a MobError  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR MobError.MobError
@@ -213,30 +213,30 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35  ufk[2]= 30 ufk[3]= 0  ufk[4]= 927 
-        ufk[5]= 1961 ufk[6]= 1962 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = false.
+        Syst.CUICommon:ufk[1]= 35  Syst.CUICommon:ufk[2]= 30 Syst.CUICommon:ufk[3]= 0  Syst.CUICommon:ufk[4]= 927 
+        Syst.CUICommon:ufk[5]= 1961 Syst.CUICommon:ufk[6]= 1962 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+        Syst.CUICommon:ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         choose row MobError.MobError {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MobError.MobError WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MobError.MobError WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         choose row MobError.MEName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MobError.MEName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MobError.MEName WITH FRAME sel.
       END.
 
       IF rtab[FRAME-line] = ? THEN NEXT.
 
-      nap = keylabel(LASTkey).
+      Syst.CUICommon:nap = keylabel(LASTkey).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -260,10 +260,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTkey).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTkey).
 
       /* PREVious row */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-line = 1 THEN DO:
            RUN local-find-this(false).
            RUN local-find-PREV.
@@ -288,7 +288,7 @@ BROWSE:
       END. /* PREVious row */
 
       /* NEXT row */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-line = FRAME-down THEN DO:
            RUN local-find-this(false).
@@ -314,7 +314,7 @@ BROWSE:
       END. /* NEXT row */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND MobError WHERE recid(MobError) = memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -338,7 +338,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* Put Cursor on downmost Row */
        IF rtab[FRAME-down] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -353,9 +353,9 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search by column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        SET ErrorCode WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -375,10 +375,10 @@ BROWSE:
      END. /* Search-1 */
 
      /* Search by col 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO on ENDkey undo, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F2.
        SET me-name WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -397,11 +397,11 @@ BROWSE:
      END. /* Search-2 */
 
      /* Update Memo */
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO TRANS on ENDkey undo, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 THEN DO TRANS on ENDkey undo, NEXT LOOP:
 
 
-        cfc = "puyr". RUN Syst/ufcolor.p.
-        ehto = 9. 
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:ehto = 9. 
         RUN Syst/ufkey.p. ufkey = true.
         run local-find-this(true).
         UPDATE MobError.memo WITH FRAME f4.
@@ -410,7 +410,7 @@ BROWSE:
 
 
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO: 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 THEN DO: 
        {Syst/uright2.i}
        delrow = FRAME-line.
        RUN local-find-this (false).
@@ -427,7 +427,7 @@ BROWSE:
 
      END. 
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO : 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 THEN DO : 
        {Syst/uright2.i}
        delrow = FRAME-line.
        RUN local-find-this (false).
@@ -438,13 +438,13 @@ BROWSE:
 
      END. 
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(true).
-       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = true Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY MobError.MobError.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobError).
@@ -463,25 +463,25 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = recid(MobError) must-print = true.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN memory = recid(MobError) must-print = true.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 

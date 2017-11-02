@@ -9,14 +9,14 @@
     REPEAT:
 
       ASSIGN
-        ufk       = 0
-        ufk[2]    = 754 /* BILLING ITEMS */
-        ufk[5]    = 401 /* EVENT MANAG */
-        ufk[8]    = 8
-        ehto      = 0.
+        Syst.CUICommon:ufk       = 0
+        Syst.CUICommon:ufk[2]    = 754 /* BILLING ITEMS */
+        Syst.CUICommon:ufk[5]    = 401 /* EVENT MANAG */
+        Syst.CUICommon:ufk[8]    = 8
+        Syst.CUICommon:ehto      = 0.
        RUN Syst/ufkey.p .
        
-       IF toimi = 2 THEN DO:
+       IF Syst.CUICommon:toimi = 2 THEN DO:
       
           DEFINE VARIABLE lcBIGroup AS CHARACTER NO-UNDO. 
           FIND TMSParam WHERE TMSParam.Brand = "1" AND
@@ -29,7 +29,7 @@
 
        END.
 
-       IF toimi = 5 THEN DO:
+       IF Syst.CUICommon:toimi = 5 THEN DO:
           DEFINE VARIABLE liFMGroup AS INTEGER NO-UNDO. 
           FIND TMSParam WHERE TMSParam.Brand = "1" AND
                               TMSParam.ParamGroup = "CCAdminTool" AND
@@ -42,7 +42,7 @@
 
        END.
 
-       IF toimi = 8 THEN LEAVE.
+       IF Syst.CUICommon:toimi = 8 THEN LEAVE.
 
     END. /* ADMIN-CC */
 

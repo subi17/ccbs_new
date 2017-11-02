@@ -8,7 +8,6 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Func/barrfunc.i}
@@ -64,14 +63,14 @@ FUNCTION fError RETURNS LOGIC
 
    DO TRANS:
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.CUICommon:gcBrand
              ErrorLog.ActionID  = "COLLACTION"
              ErrorLog.TableName = "MobSub"
              ErrorLog.KeyValue  = STRING(liMsSeq)
              ErrorLog.ErrorChar = lcPlainFile
              ErrorLog.ErrorMsg  = lcReadLine + CHR(10) + icMessage
-             ErrorLog.UserCode  = katun.
-             ErrorLog.ActionTS  = fMakeTS().
+             ErrorLog.UserCode  = Syst.CUICommon:katun.
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    
 END FUNCTION.
@@ -85,7 +84,7 @@ RUN pInitialize.
 
 /* check that there isn't already another run handling this file */
 IF CAN-FIND(FIRST ActionLog USE-INDEX TableName WHERE
-                  ActionLog.Brand        = gcBrand      AND    
+                  ActionLog.Brand        = Syst.CUICommon:gcBrand      AND    
                   ActionLog.TableName    = "MobSub"     AND
                   ActionLog.KeyValue     = lcPlainFile  AND
                   ActionLog.ActionID     = "IFSCOLLECT" AND
@@ -95,14 +94,14 @@ THEN RETURN.
 DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = gcBrand   
+      ActionLog.Brand        = Syst.CUICommon:gcBrand   
       ActionLog.TableName    = "MobSub"  
       ActionLog.KeyValue     = lcPlainFile
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.CUICommon:katun
       ActionLog.ActionID     = "IFSCOLLECT"
       ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
       ActionLog.ActionStatus = 0.
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
       lrActionID             = RECID(ActionLog).
 END.
 
@@ -165,7 +164,7 @@ PROCEDURE pInitialize:
       lcTransDir     = fCParamC("IFSCollActionLogTrans") 
       lcArcDir       = fCParamC("IFSCollActionArc")
       lcDebitBarrings = fGetBarringsInGroup("Collections")
-      ldToday        = fMake2DT(TODAY,1)
+      ldToday        = Func.Common:mMake2DT(TODAY,1)
       llLogWritten   = FALSE.
 
    IF lcLogFile = ? OR lcLogFile = "" THEN 
@@ -173,7 +172,7 @@ PROCEDURE pInitialize:
  
    liSeq = 1.
    FOR EACH ActionLog NO-LOCK WHERE
-            ActionLog.Brand    = gcBrand      AND
+            ActionLog.Brand    = Syst.CUICommon:gcBrand      AND
             ActionLog.ActionID = "IFSCOLLECT" AND
             ActionLog.ActionTS >= ldToday:
       liSeq = liSeq + 1.
@@ -371,7 +370,7 @@ PROCEDURE pSetBarring:
                    icBarrCommand,
                    "9",                /* source  */
                    "Collection",       /* creator */
-                   fMakeTS() + 0.0012, /* activate, 2min delay */
+                   Func.Common:mMakeTS() + 0.0012, /* activate, 2min delay */
                    "",                 /* SMS */
                    OUTPUT lcResult).
 
@@ -389,7 +388,7 @@ PROCEDURE pSetBarring:
       END.   
 
       lcBarring = ENTRY(1,icBarrCommand,"=").
-      lcBarrTrans = fGetItemName(gcBrand,
+      lcBarrTrans = fGetItemName(Syst.CUICommon:gcBrand,
                                  "BarringCode",
                                  lcBarring,
                                  5,
@@ -399,7 +398,7 @@ PROCEDURE pSetBarring:
 
       CREATE Memo.
       ASSIGN 
-         Memo.Brand     = gcBrand
+         Memo.Brand     = Syst.CUICommon:gcBrand
          Memo.HostTable = "MobSub"
          Memo.KeyValue  = STRING(MobSub.MsSeq)
          Memo.CustNum   = MobSub.CustNum
@@ -411,7 +410,7 @@ PROCEDURE pSetBarring:
                          (IF icSetBarring EQ "UN"
                           THEN " released"
                           ELSE " applied")
-         Memo.CreStamp  = fMakeTS().
+         Memo.CreStamp  = Func.Common:mMakeTS().
       
       RETURN "OK".
    END.             

@@ -1,8 +1,7 @@
 {Syst/commpaa.i}
-gcBrand = "1".
-katun = "qvantel".
+Syst.CUICommon:gcBrand = "1".
+Syst.CUICommon:katun = "qvantel".
 {edrhistory_changes.i}
-{Func/timestamp.i}
 
 DEF VAR i           AS INT  NO-UNDO.
 DEF VAR ldaFromDate AS DATE NO-UNDO.
@@ -156,8 +155,8 @@ HIDE FRAME fLog NO-PAUSE.
 IF ldaFromDate = ? OR ldaToDate = ? OR lcFile = "" THEN RETURN.
 
 ASSIGN
-   ldFrom = fMake2DT(ldaFromDate,0)
-   ldTo   = fMake2DT(ldaToDate,86399).
+   ldFrom = Func.Common:mMake2DT(ldaFromDate,0)
+   ldTo   = Func.Common:mMake2DT(ldaToDate,86399).
                             
 FOR EACH EDRHistory NO-LOCK WHERE
          EDRHistory.Brand = "1" AND
@@ -260,7 +259,7 @@ FOR EACH ttAmtChanged WHERE
          ttAmtChanged.Amount NE 0:
 
    FIND FIRST BillItem WHERE 
-              BillItem.Brand = gcBrand AND
+              BillItem.Brand = Syst.CUICommon:gcBrand AND
               BillItem.BillCode = ttAmtChanged.BillCode NO-LOCK NO-ERROR.
               
    PUT STREAM sLog UNFORMATTED           
@@ -325,7 +324,7 @@ FOR EACH ttErrorChanged WHERE
          ttErrorChanged.Qty NE 0:
 
    FIND FIRST BillItem WHERE 
-              BillItem.Brand = gcBrand AND
+              BillItem.Brand = Syst.CUICommon:gcBrand AND
               BillItem.BillCode = ttErrorChanged.BillCode NO-LOCK NO-ERROR.
               
    FIND FIRST MobError WHERE MobError.MobError = ttErrorChanged.ErrorCode

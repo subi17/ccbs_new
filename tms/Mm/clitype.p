@@ -29,7 +29,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
 {Func/lib/eventlog.i}
 
@@ -95,10 +95,10 @@ form
     CliType.BillTarget COLUMN-LABEL "B.Target"
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.CUICommon:cfc)   
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "  SUBSCRIPTION TYPE MENU  "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 {Func/brand.i}
@@ -158,8 +158,8 @@ form
         lcTariffType NO-LABEL FORMAT "X(15)" SKIP
 
 WITH OVERLAY ROW 2 centered
-   COLOR value(cfc)
-   TITLE COLOR value(ctc)
+   COLOR value(Syst.CUICommon:cfc)
+   TITLE COLOR value(Syst.CUICommon:ctc)
    ac-hdr  WITH no-labels
 FRAME lis.
 
@@ -169,8 +169,8 @@ form /* seek  CLIType */
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "CliType ..:"  CLIType FORMAT "X(12)"               
     HELP "Enter Code of Cli Type"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CODE "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
 FUNCTION fAccName RETURNS CHARACTER
@@ -179,7 +179,7 @@ FUNCTION fAccName RETURNS CHARACTER
    IF iiAccNum = 0 THEN RETURN "".
 
    FIND Account WHERE 
-        Account.Brand  = gcBrand AND
+        Account.Brand  = Syst.CUICommon:gcBrand AND
         Account.AccNum = iiAccNum NO-LOCK NO-ERROR.
    IF AVAILABLE Account THEN RETURN Account.AccName.
    ELSE RETURN "?".
@@ -189,8 +189,7 @@ END FUNCTION.
 FUNCTION fPayTypeName RETURNS LOGIC
    (iiPayType AS INT):
 
-   lcPayType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "CLIType",
+   lcPayType = Func.Common:mTMSCodeName("CLIType",
                                 "PayType",
                                 STRING(iiPayType)).
 END FUNCTION.
@@ -198,8 +197,7 @@ END FUNCTION.
 FUNCTION fStatusName RETURNS LOGIC
    (iiStatusCode AS INT):
 
-   lcStatus = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "CLIType",
+   lcStatus = Func.Common:mTMSCodeName("CLIType",
                                "StatusCode",
                                STRING(iiStatusCode)).
 END FUNCTION.
@@ -207,8 +205,7 @@ END FUNCTION.
 FUNCTION fWebStatusName RETURNS LOGIC
    (iiStatusCode AS INT):
 
-   lcWebStatus = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                  "CLIType",
+   lcWebStatus = Func.Common:mTMSCodeName("CLIType",
                                   "WebStatusCode",
                                   STRING(iiStatusCode)).
 END FUNCTION.
@@ -216,8 +213,7 @@ END FUNCTION.
 FUNCTION fLineType RETURNS LOGIC
    (iiLineType AS INT):
 
-   lcLineType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                  "CLIType",
+   lcLineType = Func.Common:mTMSCodeName("CLIType",
                                   "LineType",
                                   STRING(iiLineType)).
 END FUNCTION.
@@ -225,8 +221,7 @@ END FUNCTION.
 FUNCTION fFixedLineType RETURNS LOGIC
    (iiFixedLineType AS INT):
 
-   lcFixedLineType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "CLIType",
+   lcFixedLineType = Func.Common:mTMSCodeName("CLIType",
                                       "FixedLineType",
                                       STRING(iiFixedLineType)).
 END FUNCTION.
@@ -234,8 +229,7 @@ END FUNCTION.
 FUNCTION fTariffType RETURNS LOGIC
    (iiTariffType AS INT):
 
-   lcTariffType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "CLIType",
+   lcTariffType = Func.Common:mTMSCodeName("CLIType",
                                    "TariffType",
                                     STRING(iiTariffType)).
 END FUNCTION.   
@@ -243,13 +237,12 @@ END FUNCTION.
 FUNCTION fUsageType RETURNS LOGIC
    (iiUsageType AS INT):
 
-   lcUsageType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "CLIType",
+   lcUsageType = Func.Common:mTMSCodeName("CLIType",
                                       "UsageType",
                                       STRING(iiUsageType)).
 END FUNCTION.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 FIND FIRST CLIType Where 
@@ -278,20 +271,20 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a CLIType  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR CLIType.CLIType
            VALIDATE
               (CLIType.CLIType NOT ENTERED OR
               NOT CAN-FIND(CLIType using  CLIType.CLIType WHERE 
-                           CLIType.Brand  = gcBrand ),
+                           CLIType.Brand  = Syst.CUICommon:gcBrand ),
               "CLIType " + string(INPUT CLIType.CLIType) +
               " already exists !").
            IF INPUT FRAME lis CLIType.CLIType = "" THEN 
@@ -371,32 +364,32 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35  ufk[2]= 927 ufk[3]= 253 ufk[4]= 814
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-        ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ufk[1]= 35  Syst.CUICommon:ufk[2]= 927 Syst.CUICommon:ufk[3]= 253 Syst.CUICommon:ufk[4]= 814
+        Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
+        Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW CLIType.CLIType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CLIType.CLIType WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) CLIType.CLIType WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW CLIType.CLIName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CLIType.CLIName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) CLIType.CLIName WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -420,10 +413,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -448,7 +441,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -474,7 +467,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND CLIType WHERE recid(CLIType) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -498,7 +491,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -513,12 +506,12 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISP CLIType With FRAME f1.
-       SET  lcBrand WHEN gcallbrand = TRUE CLIType WITH FRAME f1.
+       SET  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE CLIType WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF CLIType ENTERED THEN DO:
           IF lcBrand ne "*" THEN 
@@ -538,7 +531,7 @@ BROWSE:
      END. /* Search-1 */
 
      /* service packages */
-     ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 THEN DO:
         RUN local-find-this(FALSE).
 
         RUN Mm/ctservpac.p (CLIType.CLIType).
@@ -548,7 +541,7 @@ BROWSE:
      END.
 
      /* translations */
-     ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0 THEN DO:  
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 AND Syst.CUICommon:ufk[4] > 0 THEN DO:  
         RUN local-find-this(FALSE).
         RUN Mc/invlang.p(9,CLIType.CLIType).
           
@@ -557,7 +550,7 @@ BROWSE:
      END.
 
      /* memo */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 THEN DO:
         RUN local-find-this(FALSE).
         RUN Mc/memo.p(INPUT 0,
                  INPUT "CLIType",
@@ -567,18 +560,18 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW" 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO TRANSACTION:  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        CLIType.CLIType CLIType.CLIName CliType.Brand.
 
        RUN local-find-NEXT.
@@ -600,7 +593,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        CLIType.CLIType CLIType.CLIName CliType.Brand.
        IF ok THEN DO:
 
@@ -621,14 +614,14 @@ BROWSE:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(FALSE).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY CLIType.CLIType.
 
        RUN local-UPDATE-record.                                  
@@ -643,25 +636,25 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(CLIType) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(CLIType) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE local-find-this:
 
@@ -732,7 +725,7 @@ PROCEDURE local-UPDATE-record:
    REPEAT ON ENDKEY UNDO, LEAVE:
    
       FIND DiscPlan WHERE
-           DiscPlan.Brand    = gcBrand AND 
+           DiscPlan.Brand    = Syst.CUICommon:gcBrand AND 
            DiscPlan.DiscPlan = CLIType.DiscPlan
       NO-LOCK NO-ERROR.
       IF AVAIL Discplan THEN DPName = Discplan.DPName.
@@ -747,7 +740,7 @@ PROCEDURE local-UPDATE-record:
       IF AVAIL TMSCodes THEN SPName = TMSCodes.CodeName.               
  
       FIND RatePlan WHERE
-           RatePlan.Brand    = gcBrand AND
+           RatePlan.Brand    = Syst.CUICommon:gcBrand AND
            RatePlan.RatePlan = CLIType.Priceplan
       NO-LOCK NO-ERROR.
       IF AVAIL RatePlan THEN PLName = RatePlan.RPName.
@@ -791,17 +784,17 @@ PROCEDURE local-UPDATE-record:
       DISPLAY lcAccName WITH FRAME lis.
 
       ASSIGN
-         ufk    = 0
-         ufk[1] = 7 WHEN lcRight = "RW"
-         ufk[8] = 8
-         ehto   = 0.
+         Syst.CUICommon:ufk    = 0
+         Syst.CUICommon:ufk[1] = 7 WHEN lcRight = "RW"
+         Syst.CUICommon:ufk[8] = 8
+         Syst.CUICommon:ehto   = 0.
       RUN Syst/ufkey.p.
          
-      IF toimi = 1 THEN 
+      IF Syst.CUICommon:toimi = 1 THEN 
       ChangeType:
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
 
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
          
          PROMPT-FOR
@@ -856,12 +849,12 @@ PROCEDURE local-UPDATE-record:
                   WITH FRAME lis.
                END.
              
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.
 
-            ELSE IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+            ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
                
                IF FRAME-FIELD = "PayType" THEN DO:
                   fPayTypeName(INPUT INPUT CLIType.PayType).
@@ -905,7 +898,7 @@ PROCEDURE local-UPDATE-record:
                   THEN DISPLAY  "" @ DPName with frame lis.
                   ELSE DO:
                      FIND Discplan WHERE 
-                          DiscPlan.Brand    = gcBRand AND 
+                          DiscPlan.Brand    = Syst.CUICommon:gcBrand AND 
                           Discplan.Discplan = INPUT CLIType.Discplan
                      NO-LOCK NO-ERROR.
                      IF NOT AVAIL Discplan THEN DO:
@@ -919,7 +912,7 @@ PROCEDURE local-UPDATE-record:
 
                ELSE IF FRAME-FIELD = "Priceplan" THEN DO:
                   FIND rateplan  WHERE 
-                       rateplan.Brand     = gcBrand AND 
+                       rateplan.Brand     = Syst.CUICommon:gcBrand AND 
                        rateplan.rateplan  = input PricePlan
                   NO-LOCK NO-ERROR.
                   IF NOT AVAIL rateplan THEN DO:

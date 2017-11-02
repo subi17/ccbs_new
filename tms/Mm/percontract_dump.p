@@ -6,7 +6,6 @@
 {Syst/commali.i}
 {Syst/dumpfile_run.i}
 {Func/create_eventlog.i}
-{Func/timestamp.i}
 {Func/profunc.i}
 
 DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
@@ -143,17 +142,17 @@ BY DFField.OrderNbr:
                   DFField.DFField.
 END.
 
-fSplitTS(idLastDump,
+Func.Common:mSplitTS(idLastDump,
          OUTPUT ldaModified,
          OUTPUT liTimeMod).
 
 
 ASSIGN
-   ldtLastDump = fTimeStamp2DateTime(idLastDump)
+   ldtLastDump = Func.Common:mTimeStamp2DateTime(idLastDump)
    lhDCCLI     = BUFFER DCCLI:HANDLE
    lhMServLimit = BUFFER MServiceLimit:HANDLE
    ldaDumpStart = TODAY - 90
-   ldDumpStart = fHMS2TS(ldaDumpStart,"").
+   ldDumpStart = Func.Common:mHMS2TS(ldaDumpStart,"").
 
 OUTPUT STREAM sFile TO VALUE(icFile).
 
@@ -211,7 +210,7 @@ ELSE DO:
    /* DCLI periodical contracts ------------------------------------*/
    DCCLI_loop:
    FOR EACH DCCLI NO-LOCK WHERE
-            DCCLI.Brand = gcBrand AND
+            DCCLI.Brand = Syst.CUICommon:gcBrand AND
             DCCLI.ValidTo > TODAY - 90
    ON QUIT UNDO, RETRY
    ON STOP UNDO, RETRY:
@@ -263,7 +262,7 @@ SESSION:NUMERIC-FORMAT = lcNumeric.
 PROCEDURE pFillTempTables:
 
    FOR EACH DayCampaign NO-LOCK WHERE
-            DayCampaign.Brand = gcBrand:
+            DayCampaign.Brand = Syst.CUICommon:gcBrand:
       CREATE ttDayCampaign.
       BUFFER-COPY DayCampaign TO ttDayCampaign.
    END.
@@ -366,20 +365,20 @@ PROCEDURE pReadDCCLI :
          IF NOT AVAIL EventLog THEN
             ldEventTS = 0.
          ELSE
-            ldEventTS = fHMS2TS(EventLog.EventDate, EventLog.EventTime).
+            ldEventTS = Func.Common:mHMS2TS(EventLog.EventDate, EventLog.EventTime).
       END.
       ELSE ldEventTS = 0.
 
       FIND FIRST ttDayCampaign NO-LOCK WHERE
-                 ttDayCampaign.Brand   = gcBrand AND
+                 ttDayCampaign.Brand   = Syst.CUICommon:gcBrand AND
                  ttDayCampaign.DCEvent = DCCLI.DCEvent  NO-ERROR.
       IF NOT AVAIL ttDayCampaign THEN RETURN. 
 
       CREATE ttContract.
       ASSIGN ttContract.Contract = DCCLI.DCEvent
              ttContract.MsSeq    = DCCLI.MsSeq
-             ttContract.ValidFrom = fHMS2TS(DCCLI.ValidFrom,"0")
-             ttContract.ValidTo   = fHMS2TS(DCCLI.ValidTo,"0")
+             ttContract.ValidFrom = Func.Common:mHMS2TS(DCCLI.ValidFrom,"0")
+             ttContract.ValidTo   = Func.Common:mHMS2TS(DCCLI.ValidTo,"0")
              ttContract.TermDate  = DCCLI.TermDate
              ttContract.ContractDate = DCCLI.ContractDate
              ttContract.RenewalDate = DCCLI.RenewalDate
@@ -406,7 +405,7 @@ PROCEDURE pReadMServiceLimit :
       DEFINE VARIABLE liServTime AS INTEGER NO-UNDO.
       DEFINE VARIABLE lcSLCode AS CHARACTER NO-UNDO. 
 
-      ldTS = fMakeTS().
+      ldTS = Func.Common:mMakeTS().
 
       lcEventKey = fGetEventKey(lhMServLimit).
       FIND FIRST EventLog NO-LOCK USE-INDEX TableName WHERE
@@ -416,14 +415,14 @@ PROCEDURE pReadMServiceLimit :
       IF NOT AVAIL EventLog THEN
          ldEventTS = 0.
       ELSE
-         ldEventTS = fHMS2TS(EventLog.EventDate, EventLog.EventTime).
+         ldEventTS = Func.Common:mHMS2TS(EventLog.EventDate, EventLog.EventTime).
       FIND FIRST ttServiceLimit WHERE
                  ttServiceLimit.slseq    = mServiceLimit.slseq AND 
                  ttServiceLimit.dialtype = mServicelimit.dialtype
       NO-LOCK NO-ERROR.
       
       FIND FIRST ttDayCampaign NO-LOCK WHERE
-                 ttDayCampaign.Brand   = gcBrand AND
+                 ttDayCampaign.Brand   = Syst.CUICommon:gcBrand AND
                  ttDayCampaign.DCEvent = ttServiceLimit.GroupCode  NO-ERROR.
       IF NOT AVAIL ttDayCampaign THEN RETURN. 
 
@@ -445,11 +444,11 @@ PROCEDURE pReadMServiceLimit :
                                        ELSE FALSE)
              ttContract.EventTS = ldEventTS.
       
-      fSplitTS(MServiceLimit.FromTS, output ldaServDate, output liServTime).
+      Func.Common:mSplitTS(MServiceLimit.FromTS, output ldaServDate, output liServTime).
       ASSIGN ttContract.ValidFrom = MServiceLimit.FromTS
              ttContract.ContractDate = ldaServDate.
 
-      IF MServiceLimit.EndTs >= 99999999 THEN ttContract.ValidTo = fHMS2TS(12/31/2049,"0").
+      IF MServiceLimit.EndTs >= 99999999 THEN ttContract.ValidTo = Func.Common:mHMS2TS(12/31/2049,"0").
       ELSE 
          ttContract.ValidTo = MServiceLimit.EndTS.
       
@@ -479,8 +478,8 @@ PROCEDURE pWriteContract:
             WHEN "#RenewalRule" THEN lcValue = STRING(ttContract.Renewal) + " " + lcRuleName.
             WHEN "#PeriodUnit" THEN lcValue = STRING(ttContract.DurUnit) + " " + lcInclUnit.
             WHEN "#PeriodLenght" THEN lcValue = STRING(ttContract.DurMonths).
-            WHEN "#EfectiveDate" THEN lcValue = fTS2HMS(ttContract.ValidFrom).
-            WHEN "#ExpirationDate" THEN lcValue = fTS2HMS(ttContract.ValidTo).
+            WHEN "#EfectiveDate" THEN lcValue = Func.Common:mTS2HMS(ttContract.ValidFrom).
+            WHEN "#ExpirationDate" THEN lcValue = Func.Common:mTS2HMS(ttContract.ValidTo).
             WHEN "#ContractDate" THEN IF ttContract.ContractDate NE ? THEN 
                                          lcValue = STRING(ttContract.ContractDate,"99-99-9999").
                                          ELSE lcValue = "".
@@ -490,7 +489,7 @@ PROCEDURE pWriteContract:
             WHEN "#RenewalDate" THEN IF ttContract.RenewalDate NE ? THEN 
                                         lcValue = STRING(ttContract.RenewalDate,"99-99-9999"). 
                                         ELSE lcValue = "".
-            WHEN "#EventTS" THEN lcValue = fTS2HMS(ttContract.EventTS).
+            WHEN "#EventTS" THEN lcValue = Func.Common:mTS2HMS(ttContract.EventTS).
             WHEN "#Amount"  THEN IF ttContract.Amount NE ? THEN
                                  lcValue = STRING(ttContract.Amount).
                                  ELSE lcValue = "".

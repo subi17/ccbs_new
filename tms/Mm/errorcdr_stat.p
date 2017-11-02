@@ -10,7 +10,6 @@
 &GLOBAL-DEFINE TraceLog NO
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Func/coinv.i}
@@ -100,8 +99,8 @@ PROCEDURE pCollectCDRs:
       EMPTY TEMP-TABLE ttCall.
                
       fMobCDRCollect(INPUT "post",
-                     INPUT gcBrand,
-                     INPUT katun,
+                     INPUT Syst.CUICommon:gcBrand,
+                     INPUT Syst.CUICommon:katun,
                      INPUT idaCDRDate1,
                      INPUT idaCDRDate2,
                      INPUT 0,

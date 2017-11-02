@@ -10,8 +10,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Mnp/mnpoutchk.i}
 {Syst/commpaa.i}
-katun = "Newton".
-gcBrand = "1".
+Syst.CUICommon:katun = "Newton".
+Syst.CUICommon:gcBrand = "1".
 
 /*Input parameters*/
 DEFINE VARIABLE pcStruct    AS CHARACTER NO-UNDO.
@@ -77,5 +77,4 @@ RUN VALUE(lcRateDir + "edr_reader.p")(
 add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

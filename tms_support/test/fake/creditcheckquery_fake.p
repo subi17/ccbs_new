@@ -2,7 +2,6 @@
 {Func/xmlfunction.i}
 {Func/mathfunction.i}
 {Func/msreqfunc.i}
-{Func/timestamp.i}
 
 DEF VAR lcHostname AS CHAR NO-UNDO.
 INPUT THROUGH hostname.
@@ -58,7 +57,7 @@ PROCEDURE pHeader:
    DEF BUFFER bOrigRequest FOR MsRequest.
    
    FIND FIRST MSrequest WHERE 
-              MSRequest.Brand     = gcBrand    AND
+              MSRequest.Brand     = Syst.CUICommon:gcBrand    AND
               MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
    
    llACC = FALSE.

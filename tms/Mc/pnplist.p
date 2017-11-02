@@ -21,7 +21,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -39,7 +39,7 @@ DEF  input PARAMETer  ipPnpSeq AS INT NO-UNDO .
 
 FIND FIRST pnpgroup WHERE
            pnpgroup.pnpseq = ipPnpSeq  AND 
-           pnpgroup.Brand  = gcBrand 
+           pnpgroup.Brand  = Syst.CUICommon:gcBrand 
 NO-LOCK NO-ERROR.
 
 DEF VAR liCustNum LIKE PNPList.pnpSeq  NO-UNDO.
@@ -71,8 +71,8 @@ FORM
    PNPList.BDestFrom
    PNPList.BDestTo
 WITH ROW 3 CENTERED OVERLAY scroll 1 12 DOWN
-   COLOR value(cfc)
-   title color value(ctc) " PNP numbers: " + pnpgroup.name + " " 
+   COLOR value(Syst.CUICommon:cfc)
+   title color value(Syst.CUICommon:ctc) " PNP numbers: " + pnpgroup.name + " " 
 FRAME sel.
 
 FORM
@@ -85,15 +85,15 @@ FORM
    "BNumberTo .:" PNPList.BDestTo
       HELP "TO B-number for PNP series"   SKIP
 WITH OVERLAY ROW 6 centered
-   COLOR value(cfc)
-   TITLE COLOR value(ctc)
+   COLOR value(Syst.CUICommon:cfc)
+   TITLE COLOR value(Syst.CUICommon:ctc)
    fr-header  WITH no-labels
 FRAME lis.
 
 form /*  search WITH FIELD PNPList */
    liCustNum help "Give ...."
-with row 4 col 2 title color value(ctc) " FIND Customer "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
+with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Customer "
+   COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 FORM
    "Give filename :" lFileName  FORMAT "x(40)"
@@ -101,7 +101,7 @@ WITH
    ROW 8 OVERLAY CENTERED TITLE " Import CLI list from file " 
    NO-LABELS FRAME frmImport.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 RUN LOCAL-FIND-FIRST.
@@ -132,7 +132,7 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* PNPList -ADD  */
       HIDE FRAME lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD "
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD "
 
       must-add = FALSE.
       RUN Syst/ufcolor.p.
@@ -140,7 +140,7 @@ add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
 
            RUN LOCAL-UPDATE-RECORD(TRUE).
@@ -215,27 +215,27 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 702  ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-        ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ufk[1]= 702  Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+        Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
+        Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW PNPList.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) PNPList.BDestFrom WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) PNPList.BDestFrom WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -262,10 +262,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND PNPList where recid(PNPList) = rtab[1] no-lock.
            RUN LOCAL-FIND-PREV.
@@ -290,7 +290,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND PNPList where recid(PNPList) = rtab[FRAME-DOWN] no-lock .
@@ -316,7 +316,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND PNPList where recid(PNPList) = memory no-lock no-error.
         RUN LOCAL-FIND-PREV.
@@ -340,7 +340,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* cursor TO the downmost line */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -355,17 +355,17 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+     else if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        liCustNum = 0.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE liCustNum WITH FRAME haku-f1.
        HIDE FRAME haku-f1 no-pause.
        if liCustNum <> 0 THEN DO:
           FIND FIRST PNPList where 
                      PNPList.CustNum  = liCustNum     AND 
                      PnpList.PnpSeq   = ipPnpSeq      AND 
-                     pnplist.Brand    = gcBrand 
+                     pnplist.Brand    = Syst.CUICommon:gcBrand 
           /* search condition */ no-lock no-error.
           IF NOT AVAILABLE PNPList THEN DO:
              BELL.
@@ -379,18 +379,18 @@ BROWSE:
        END.
      END. /* Haku sar. 1 */
 
-     if lookup(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
+     if lookup(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 AND lcRight = "RW" 
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO TRANSACTION:  /* removal */
        delline = FRAME-LINE.
        FIND PNPList where recid(PNPList) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
           PNPList.BDestFrom 
        WITH FRAME sel.
 
@@ -415,7 +415,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc) PNPList.BDestFrom WITH FRAME sel.
+       COLOR DISPLAY value(Syst.CUICommon:ccc) PNPList.BDestFrom WITH FRAME sel.
        IF ok THEN DO:
 
            IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhPnpList).
@@ -435,14 +435,14 @@ BROWSE:
        ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     ELSE IF LOOKUP(nap,"7,F7") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"7,F7") > 0 THEN DO:
         PAUSE 0.
         UPDATE 
            lFileName 
         WITH FRAME frmImport EDITING:
            READKEY.
-           nap = KEYLABEL(LASTKEY).
-           IF LOOKUP(nap,poisnap) > 0 THEN DO:
+           Syst.CUICommon:nap = KEYLABEL(LASTKEY).
+           IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
               ASSIGN lFileName.
               IF INPUT lFileName = "" THEN LEAVE.
               ELSE DO:
@@ -458,7 +458,7 @@ BROWSE:
                        IMPORT UNFORMATTED xls.
                        CREATE PNPList.
                        ASSIGN
-                          PNPList.Brand  = gcBrand
+                          PNPList.Brand  = Syst.CUICommon:gcBrand
                           PNPList.pnpSeq = ipPnpSeq
                           PNPList.BDestFrom  = TRIM(xls).
                     END.
@@ -470,15 +470,15 @@ BROWSE:
         HIDE FRAME frmImport.
      END.
 
-     else if lookup(nap,"enter,return") > 0 THEN DO WITH FRAME lis TRANSACTION:
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 THEN DO WITH FRAME lis TRANSACTION:
        /* change */
        FIND FIRST PNPList where 
             recid(PNPList) = rtab[frame-line(sel)]
        exclusive-lock.
-       assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
+       assign fr-header = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
        RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
        
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPnpList).
 
@@ -492,25 +492,25 @@ BROWSE:
 
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
        RUN LOCAL-FIND-FIRST.
        ASSIGN memory = recid(PNPList) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
        RUN LOCAL-FIND-LAST.
        ASSIGN memory = recid(PNPList) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE LOCAL-DISP-ROW: 
 
@@ -531,7 +531,7 @@ END PROCEDURE.
 
 PROCEDURE LOCAL-FIND-NEXT.
       FIND NEXT PNPList USE-INDEX PNPSeq WHERE
-                PNPList.Brand  = gcBrand AND
+                PNPList.Brand  = Syst.CUICommon:gcBrand AND
                 PNPList.pnpSeq = ipPnpSeq
       NO-LOCK NO-ERROR.
 
@@ -539,7 +539,7 @@ END PROCEDURE.
 
 PROCEDURE LOCAL-FIND-PREV.
       FIND PREV PNPList USE-INDEX PNPSeq WHERE
-                 PNPList.Brand  = gcBrand AND
+                 PNPList.Brand  = Syst.CUICommon:gcBrand AND
                  PNPList.pnpSeq = ipPnpSeq
       NO-LOCK NO-ERROR.
 
@@ -547,7 +547,7 @@ END PROCEDURE.
 
 PROCEDURE LOCAL-FIND-FIRST.
       FIND FIRST PNPList USE-INDEX PNPSeq WHERE
-                 PNPList.Brand  = gcBrand AND
+                 PNPList.Brand  = Syst.CUICommon:gcBrand AND
                  PNPList.pnpSeq = ipPnpSeq
       NO-LOCK NO-ERROR.
 
@@ -555,7 +555,7 @@ END PROCEDURE.
 
 PROCEDURE LOCAL-FIND-LAST.
       FIND LAST PNPList USE-INDEX PNPSeq WHERE
-                PNPList.Brand  = gcBrand AND
+                PNPList.Brand  = Syst.CUICommon:gcBrand AND
                 PNPList.pnpSeq = ipPnpSeq
       NO-LOCK NO-ERROR.
 
@@ -569,7 +569,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
       CREATE PNPList.
       ASSIGN
          PNPList.pnpSeq    = ipPnpseq
-         PNPList.Brand     = gcBrand.
+         PNPList.Brand     = Syst.CUICommon:gcBrand.
       FIND FIRST Customer WHERE
                  Customer.CustNum = PNPList.CustNum
       NO-LOCK NO-ERROR.
@@ -580,13 +580,13 @@ PROCEDURE LOCAL-UPDATE-RECORD.
                  Customer.CustNum = PNPList.CustNum
       NO-LOCK NO-ERROR.
       FIND FIRST PriceList WHERE
-                 PriceList.Brand     = gcBrand AND 
+                 PriceList.Brand     = Syst.CUICommon:gcBrand AND 
                  PriceList.PriceList = PNPList.PriceList
       NO-LOCK NO-ERROR.
    END.
 
    FIND FIRST pnpgroup WHERE
-              Pnpgroup.Brand  = gcBRand aND 
+              Pnpgroup.Brand  = Syst.CUICommon:gcBrand aND 
               pnpgroup.pnpseq = ipPnpSeq
    NO-LOCK NO-ERROR.
 
@@ -611,14 +611,14 @@ PROCEDURE LOCAL-UPDATE-RECORD.
       WITH FRAME lis EDITING: 
 
          READKEY. 
-         nap = KEYLABEL(LASTKEY). 
-         IF lookup(nap,poisnap) > 0 THEN DO:
+         Syst.CUICommon:nap = KEYLABEL(LASTKEY). 
+         IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
             if keylabel(lastkey) = "F4" THEN LEAVE . 
 
             IF FRAME-FIELD = "PriceList" THEN DO:
                ASSIGN PNPList.PriceList.
                FIND FIRST PriceList WHERE
-                          Pricelist.Brand    = gcBrand AND 
+                          Pricelist.Brand    = Syst.CUICommon:gcBrand AND 
                           PriceList.PriceList = PNPList.PriceList
                NO-LOCK NO-ERROR.
                IF NOT AVAIL PriceList THEN DO:

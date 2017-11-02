@@ -214,8 +214,8 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {Syst/commpaa.i}
 ASSIGN
-   katun = "VISTA_" + pcSalesMan
-   gcBrand = "1".
+   Syst.CUICommon:katun = "VISTA_" + pcSalesMan
+   Syst.CUICommon:gcBrand = "1".
 {Mm/msagrcustchg.i}
 {Func/fcustchangereq.i}
 {Func/fcharge_comp_loaded.i}
@@ -313,8 +313,7 @@ liRequest = fMSCustChangeRequest(
 IF liRequest = 0 THEN
    RETURN appl_err("Request could not be done; " + lcError).
 
-DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                 "customer",
+Func.Common:mWriteMemo("customer",
                  STRING(Mobsub.AgrCust),
                  MobSub.AgrCust,
                  pcMemoTitle,
@@ -324,5 +323,4 @@ add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:
    EMPTY TEMP-TABLE ttCustomer.
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

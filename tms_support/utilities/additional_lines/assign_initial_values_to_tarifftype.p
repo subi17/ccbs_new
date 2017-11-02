@@ -8,8 +8,8 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-katun = "ADDITIONAL_LINES".
-gcBrand = "1".
+Syst.CUICommon:katun = "ADDITIONAL_LINES".
+Syst.CUICommon:gcBrand = "1".
 
 DEF VAR lcConvergent AS CHAR NO-UNDO. 
 DEF VAR lcFixedOnly  AS CHAR NO-UNDO. 
@@ -23,7 +23,7 @@ ASSIGN lcConvergent = "CONTDSL39,CONTDSL40,CONTDSL45,CONTDSL48,CONTDSL52,CONTDSL
    for Convergent tariff's (3P) change LineType value from Entry Line to Main Line */
 
 FOR EACH CLIType EXCLUSIVE-LOCK WHERE 
-         CLIType.Brand = gcBrand:
+         CLIType.Brand = Syst.CUICommon:gcBrand:
    
    IF LOOKUP(CLIType.CLIType,lcConvergent) > 0 THEN  
       ASSIGN CLIType.TariffType = 1

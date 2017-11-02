@@ -39,6 +39,9 @@ DEF TEMP-TABLE ttCust NO-UNDO
    FIELD CustAP   AS DEC
    INDEX CustName CustName CustNum. 
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 form
    skip(1)
 "  Note: This program prints out a summary of customers who have either" skip
@@ -48,7 +51,7 @@ lcInvGroup HELP "Invoicing Group" InvGroup.IGName skip(11)
 WITH
    width 80 overlay title 
    " " + ynimi + " Summary Of AdvPayments and Deposits " + 
-   STRING(pvm,"99-99-99") + " "
+   STRING(TODAY,"99-99-99") + " "
    NO-LABELS FRAME rajat.
 
 form header /* header FOR printout */                
@@ -58,7 +61,7 @@ form header /* header FOR printout */
       "Page" to 70 sl format "zz9" TO 78
 
    "AND ADVANCE PAYMENTS"  AT 34
-      string(pvm,"99.99.99") TO 78    SKIP
+      string(TODAY,"99.99.99") TO 78    SKIP
    fill("=",78) format "x(78)"
    skip(1)
 
@@ -106,19 +109,19 @@ END FUNCTION.
 
 rajat:
 repeat WITH FRAME rajat:
-   ehto = 9.  RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9.  RUN Syst/ufkey.p.
 
    UPDATE
    lcInvGroup
    WITH FRAME rajat
    EDITING:
       READKEY.
-      IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO WITH FRAME rajat:
+      IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME rajat:
          HIDE MESSAGE.
          if frame-field = "lcInvGroup" THEN DO :
             if input lcInvGroup ne "" THEN DO:
                FIND InvGroup where 
-                    InvGroup.Brand    = gcBrand AND
+                    InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                     InvGroup.InvGroup = INPUT lcInvGroup 
                     no-lock no-error.
                IF NOT AVAIL InvGroup THEN DO:
@@ -137,13 +140,13 @@ repeat WITH FRAME rajat:
 Action:
    repeat WITH FRAME sel:
        ASSIGN
-       ufk = 0 ehto = 0 ufk[1] = 91  ufk[5] = 63 ufk[8] = 8.
+       Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0 Syst.CUICommon:ufk[1] = 91  Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8.
        RUN Syst/ufkey.p.
 
 
-       IF toimi = 1 THEN NEXT rajat.
-       IF toimi = 8 THEN LEAVE rajat.
-       IF toimi = 5 THEN DO:
+       IF Syst.CUICommon:toimi = 1 THEN NEXT rajat.
+       IF Syst.CUICommon:toimi = 8 THEN LEAVE rajat.
+       IF Syst.CUICommon:toimi = 5 THEN DO:
 
           tila = TRUE.
           {Syst/tmsreport.i "leave rajat"}
@@ -159,7 +162,7 @@ Action:
 
    IF lcInvGroup NE "" THEN 
    FOR EACH Customer NO-LOCK WHERE
-            Customer.Brand    = gcBrand AND
+            Customer.Brand    = Syst.CUICommon:gcBrand AND
             Customer.InvGroup = lcInvGroup:
 
       fChkCust().
@@ -167,7 +170,7 @@ Action:
 
    ELSE 
    FOR EACH Customer NO-LOCK WHERE
-            Customer.Brand  = gcBrand:
+            Customer.Brand  = Syst.CUICommon:gcBrand:
       fChkCust().
    END.
 

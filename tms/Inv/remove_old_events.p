@@ -5,7 +5,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Syst/eventval.i} 
 
 DEF INPUT  PARAMETER iiInvCust    AS INT  NO-UNDO.
@@ -26,7 +25,7 @@ DEF VAR lcSep       AS CHAR NO-UNDO INIT "|".
 DEF STREAM sLog.
 
 IF (ilFees OR ilFATimes) AND llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -225,7 +224,7 @@ PROCEDURE pRemoveFees:
                EXCLUSIVE-LOCK.
             IF llDoEvent THEN RUN StarEventMakeDeleteEventWithMemo(
                                        lhSingleFee,
-                                       katun,
+                                       Syst.CUICommon:katun,
                                        "RemoveOldEvents").
             DELETE SingleFee.
             
@@ -238,7 +237,7 @@ PROCEDURE pRemoveFees:
          END.
 
          FOR EACH FixedFee NO-LOCK WHERE
-                  FixedFee.Brand = gcBrand AND
+                  FixedFee.Brand = Syst.CUICommon:gcBrand AND
                   FixedFee.CustNum = Customer.CustNum AND
                   FixedFee.InUse = TRUE,
              EACH bFFItem OF FixedFee NO-LOCK WHERE
@@ -345,7 +344,7 @@ PROCEDURE pLogAction:
   
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = gcBrand   
+         ActionLog.Brand        = Syst.CUICommon:gcBrand   
          ActionLog.TableName    = "BillEvents"  
          ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                   STRING(MONTH(TODAY),"99") + 
@@ -358,7 +357,7 @@ PROCEDURE pLogAction:
          ActionLog.ActionDec    = 0
          ActionLog.ActionChar   = lcResult
          ActionLog.ActionStatus = 3.
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
    END.
    
 END PROCEDURE. 

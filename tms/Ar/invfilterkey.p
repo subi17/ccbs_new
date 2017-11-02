@@ -28,10 +28,10 @@ DEF VAR liFilter    AS INT   NO-UNDO.
 FORM
    lcKey         FORMAT "X(30)"   LABEL "Filtering Key" 
    ttFilter.FQty FORMAT ">>>>>>9" LABEL "Invoice Qty (All)"
-   WITH SCROLL 1 11 DOWN ROW 4 CENTERED COLOR VALUE(cfc)
-        TITLE COLOR VALUE(ctc) " CHOOSE KEY " OVERLAY FRAME sel.
+   WITH SCROLL 1 11 DOWN ROW 4 CENTERED COLOR VALUE(Syst.CUICommon:cfc)
+        TITLE COLOR VALUE(Syst.CUICommon:ctc) " CHOOSE KEY " OVERLAY FRAME sel.
 
-cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 
 ASSIGN
    ufkey      = TRUE
@@ -76,10 +76,10 @@ REPEAT with frame sel:
 
       if ufkey then do:
          assign
-            ufk    = 0 
-            ufk[5] = 11
-            ufk[8] = 8 
-            ehto   = 3 
+            Syst.CUICommon:ufk    = 0 
+            Syst.CUICommon:ufk[5] = 11
+            Syst.CUICommon:ufk[8] = 8 
+            Syst.CUICommon:ehto   = 3 
             ufkey  = false.
 
          RUN Syst/ufkey.p.
@@ -92,16 +92,16 @@ REPEAT with frame sel:
 
       hide message no-pause.
       choose row lcKey {Syst/uchoose.i} no-error with frame sel.
-      color display value(ccc) lcKey with frame sel.
+      color display value(Syst.CUICommon:ccc) lcKey with frame sel.
 
-      nap = keylabel(lastkey).
+      Syst.CUICommon:nap = keylabel(lastkey).
 
       if frame-value = "" and rtab[frame-line] = ? and
-         lookup(nap,"8,f8") = 0
+         lookup(Syst.CUICommon:nap,"8,f8") = 0
       then next.
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 then do
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 then do
       with frame sel:
    
          if frame-line = 1 then do:
@@ -132,7 +132,7 @@ REPEAT with frame sel:
       end. /* previous line */
 
       /* next line */
-      if lookup(nap,"cursor-down") > 0 then do with frame sel:
+      if lookup(Syst.CUICommon:nap,"cursor-down") > 0 then do with frame sel:
          if frame-line = frame-down then do:
          
             find ttFilter where recid(ttFilter) = rtab[frame-line] no-lock .
@@ -163,7 +163,7 @@ REPEAT with frame sel:
       end. /* next line */
 
       /* previous page */
-      else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
+      else if lookup(Syst.CUICommon:nap,"page-up,prev-page") > 0 then do with frame sel:
          find ttFilter where recid(ttFilter) = memory no-lock no-error.
          
          RUN local-find-PREV.
@@ -190,7 +190,7 @@ REPEAT with frame sel:
       end. /* previous page */
 
       /* next page */
-      else if lookup(nap,"page-down,next-page") > 0 then do with frame sel:
+      else if lookup(Syst.CUICommon:nap,"page-down,next-page") > 0 then do with frame sel:
          if rtab[frame-down] = ? then do:
             bell.
             message "This is the last page !".
@@ -204,14 +204,14 @@ REPEAT with frame sel:
       end. /* next page */
 
       /* Choose */
-      else if lookup(nap,"return,enter,5,f5") > 0 then do:
+      else if lookup(Syst.CUICommon:nap,"return,enter,5,f5") > 0 then do:
          find ttFilter where recid(ttFilter) = rtab[frame-line] no-lock.
          ocFilterKey = ttFilter.FCharKey.
          leave MAIN.
       end. /* Choose */
 
       /* First record */
-      else if lookup(nap,"home,h") > 0 then do:
+      else if lookup(Syst.CUICommon:nap,"home,h") > 0 then do:
 
          RUN local-find-FIRST.
 
@@ -221,7 +221,7 @@ REPEAT with frame sel:
       end. /* First record */
 
       /* last record */
-      else if lookup(nap,"end,e") > 0 then do :
+      else if lookup(Syst.CUICommon:nap,"end,e") > 0 then do :
 
          RUN local-find-LAST.
         
@@ -230,7 +230,7 @@ REPEAT with frame sel:
          next LOOP.
       end. /* last record */
 
-      else if nap = "8" or nap = "f8" then leave MAIN. /* Return */
+      else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" then leave MAIN. /* Return */
 
    end.  /* BROWSE */
 end.  /* LOOP */
@@ -244,8 +244,7 @@ PROCEDURE local-disp-row:
 
     IF iiFilterType = 3 THEN 
        lcKey = lcKey + " " + 
-               DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "Invoice",
+               Func.Common:mTMSCodeName("Invoice",
                                 "InvType",
                                 ttFilter.FCharKey).
 

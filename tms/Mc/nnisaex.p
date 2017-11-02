@@ -82,13 +82,13 @@ form
      "Output File:" at 16 exFile help "Name of output file"
      skip(1)
 WITH
-   width 80 COLOR value(cfc)
-   title color value(ctc) " " + ynimi +
+   width 80 COLOR value(Syst.CUICommon:cfc)
+   title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
    " INVOICE SUMMARY SALESMAN/AGENT/CUSTOMER "
-   + string(pvm,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
+   + string(TODAY,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
 
 DO FOR TMSUser.
-   FIND TMSUser where TMSUser.UserCode = katun no-lock.
+   FIND TMSUser where TMSUser.UserCode = Syst.CUICommon:katun no-lock.
    ASSIGN exdir = fChkPath(TMSUser.RepDir).
 END.
 assign exFile   = exdir + "inv-smag.txt".
@@ -96,14 +96,14 @@ assign exFile   = exdir + "inv-smag.txt".
 /* Make Date proposal */
 ASSIGN
 print = FALSE
-date1 = date(month(pvm),1,year(pvm)).
+date1 = date(month(TODAY),1,year(TODAY)).
 date2 = date1 + 35.
 date2 = date(month(date2),1,year(date2)) - 1.
 
-cfc = "sel". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
 LOOP:
 repeat WITH FRAME rajat:
-    ehto = 9. RUN Syst/ufkey.p.
+    Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
     UPDATE
     date1   
@@ -120,11 +120,11 @@ repeat WITH FRAME rajat:
 
 TOIMI:
    repeat:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT LOOP.
-      IF toimi = 8 THEN LEAVE LOOP.
-      IF toimi = 5 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN NEXT LOOP.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE LOOP.
+      IF Syst.CUICommon:toimi = 5 THEN DO:
          IF print THEN DO:
             /* ask FOR printer IF letters are wanted */
             ASSIGN tila = TRUE.
@@ -137,7 +137,7 @@ TOIMI:
    OUTPUT STREAM excel TO value(exFile).
 
    PUT STREAM excel UNFORMATTED
-      ynimi  tab "Invoice summary by Salesman / agent / customer".
+      Syst.CUICommon:ynimi  tab "Invoice summary by Salesman / agent / customer".
       RUN Syst/uexskip.p(1).
 
    PUT STREAM excel UNFORMATTED
@@ -218,7 +218,7 @@ TOIMI:
          FIND Reseller where Reseller.Reseller = Customer.Reseller no-lock.
 
 form header
-      pvm format "99.99.9999" AT 62
+      TODAY FORMAT "99.99.9999" AT 62
       "Page"                  AT 83 
       sl  format "z9" 
       skip(5)

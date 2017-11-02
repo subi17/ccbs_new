@@ -20,7 +20,7 @@ DEF OUTPUT PARAMETER oiHandled        AS INT  NO-UNDO.
 
 
 FOR EACH Invoice NO-LOCK WHERE 
-         Invoice.Brand   = gcBrand AND
+         Invoice.Brand   = Syst.CUICommon:gcBrand AND
          Invoice.InvType = 99 AND
          (IF idtInvDate <> ? THEN 
              Invoice.InvDate = idtInvDate

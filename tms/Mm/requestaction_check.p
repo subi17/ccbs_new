@@ -47,7 +47,7 @@ FUNCTION fRequestCheck RETURNS LOGICAL:
                CLIType.LineType = 2) OR
                (LOOKUP(bfMobSub.CLIType,lcBundleBsdClitypes) > 0 AND
                CAN-FIND( FIRST bCLIType NO-LOCK WHERE 
-                               bCLIType.Brand = gcBrand AND
+                               bCLIType.Brand = Syst.CUICommon:gcBrand AND
                                bCLIType.CLIType = bfMobSub.TariffBundle AND
                                bCLIType.LineType = 2)) THEN DO:
                   IF (MsRequest.ReqCParam3 EQ STRING({&SUBSCRIPTION_TERM_REASON_MULTISIM}) OR
@@ -105,7 +105,7 @@ IF iiMsSeq > 0 THEN DO:
 END.
 
 FIND FIRST CLIType WHERE
-           CLIType.Brand   = gcBrand AND
+           CLIType.Brand   = Syst.CUICommon:gcBrand AND
            CLIType.CLIType = icCLIType NO-LOCK NO-ERROR.
 IF AVAILABLE CLIType THEN liPayType = CLIType.PayType.
 

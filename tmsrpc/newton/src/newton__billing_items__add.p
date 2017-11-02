@@ -102,17 +102,17 @@ IF LENGTH(pcId) > 16
    THEN RETURN appl_err("Billing Item code max size exceeded").
 
 {Syst/commpaa.i}
-gcBrand = lcBrand.
+Syst.CUICommon:gcBrand = lcBrand.
 {Syst/eventval.i}
-katun = "VISTA_" + get_string(pcStruct, "username").
+Syst.CUICommon:katun = "VISTA_" + get_string(pcStruct, "username").
 
-IF TRIM(katun) EQ "VISTA_" THEN DO:
+IF TRIM(Syst.CUICommon:katun) EQ "VISTA_" THEN DO:
    RETURN appl_err("username is empty").
 END.
 
 /* create BillItem */
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
    {Func/lib/eventlog.i}
    DEF VAR lhBillItem AS HANDLE NO-UNDO.
    lhBillItem = BUFFER BillItem:HANDLE.
@@ -173,5 +173,4 @@ add_struct(response_toplevel_id, "").
 
 FINALLY:
    IF llDoEvent THEN fCleanEventObjects().
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

@@ -14,7 +14,6 @@
 
 {Syst/commali.i}
 {Func/fgettxt.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fmakesms.i}
 {Syst/tmsconst.i}
@@ -71,12 +70,12 @@ FUNCTION fReplaceTags RETURNS CHARACTER(INPUT iiMsRequest   AS INTEGER,
                 LOOKUP(MsRequest.ReqCParam2,lcCONTSFContracts) > 0 THEN DO:
 
                 oiSMSType = 6.
-                fSplitTS(MsRequest.ActStamp,OUTPUT ldaActDate,OUTPUT liActTime).
+                Func.Common:mSplitTS(MsRequest.ActStamp,OUTPUT ldaActDate,OUTPUT liActTime).
 
                 IF INDEX(icSMSText,"#CLITYPE") > 0 OR
                    INDEX(icSMSText,"#NEW_BUNDLE") > 0 THEN DO:
                    lcReplacedTxt = fConvBundleToBillItem(INPUT MsRequest.ReqCParam2).
-                   lcReplacedTxt = fGetItemName(gcBrand,
+                   lcReplacedTxt = fGetItemName(Syst.CUICommon:gcBrand,
                                                 "BillItem",
                                                 lcReplacedTxt,
                                                 Customer.Language,
@@ -93,7 +92,7 @@ FUNCTION fReplaceTags RETURNS CHARACTER(INPUT iiMsRequest   AS INTEGER,
 
              oiSMSType = 10.
              lcReplacedTxt = fConvBundleToBillItem(INPUT MsRequest.ReqCParam1).
-             lcReplacedTxt = fGetItemName(gcBrand,
+             lcReplacedTxt = fGetItemName(Syst.CUICommon:gcBrand,
                                           "BillItem",
                                           lcReplacedTxt,
                                           Customer.Language,
@@ -101,7 +100,7 @@ FUNCTION fReplaceTags RETURNS CHARACTER(INPUT iiMsRequest   AS INTEGER,
              icSMSText = REPLACE(icSMSText,"#OLD_BUNDLE",lcReplacedTxt).
       
              lcReplacedTxt = fConvBundleToBillItem(INPUT MsRequest.ReqCParam2).
-             lcReplacedTxt = fGetItemName(gcBrand,
+             lcReplacedTxt = fGetItemName(Syst.CUICommon:gcBrand,
                                           "BillItem",
                                           lcReplacedTxt,
                                           Customer.Language,
@@ -113,20 +112,20 @@ FUNCTION fReplaceTags RETURNS CHARACTER(INPUT iiMsRequest   AS INTEGER,
              ASSIGN oiSMSType        = 6
                     lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
 
-             fSplitTS(MsRequest.ReqDParam1,OUTPUT ldaActDate,OUTPUT liActTime).
+             Func.Common:mSplitTS(MsRequest.ReqDParam1,OUTPUT ldaActDate,OUTPUT liActTime).
 
              /* Get actual CLIType Translation name from Billing Item */
              IF LOOKUP(MsRequest.ReqCParam2,lcBundleCLITypes) > 0 AND
                 MsRequest.ReqCParam5 > "" THEN DO:
                 lcReplacedTxt = fConvBundleToBillItem(INPUT MsRequest.ReqCParam5).
-                lcReplacedTxt = fGetItemName(gcBrand,
+                lcReplacedTxt = fGetItemName(Syst.CUICommon:gcBrand,
                                              "BillItem",
                                              lcReplacedTxt,
                                              Customer.Language,
                                              TODAY).
              END. /* IF LOOKUP(MsRequest.ReqCParam2,lcBundleCLITypes) > 0 */
              ELSE
-                lcReplacedTxt = fGetItemName(gcBrand,
+                lcReplacedTxt = fGetItemName(Syst.CUICommon:gcBrand,
                                              "CLIType",
                                              MsRequest.ReqCParam2,
                                              Customer.Language,

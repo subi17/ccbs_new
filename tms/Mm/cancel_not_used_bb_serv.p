@@ -9,9 +9,8 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-ASSIGN gcBrand = "1"
-       katun   = "CRON".
-{Func/timestamp.i}
+ASSIGN Syst.CUICommon:gcBrand = "1"
+       Syst.CUICommon:katun   = "CRON".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
@@ -110,7 +109,7 @@ FOR EACH ttSubscription NO-LOCK,
                                    INPUT "BB",
                                    INPUT 0,                 /* deactivate  */
                                    INPUT "",
-                                   INPUT fMakeTS(),
+                                   INPUT Func.Common:mMakeTS(),
                                    INPUT "",                /* SalesMan */
                                    INPUT FALSE,             /* Set fees */
                                    INPUT FALSE,             /* SMS      */

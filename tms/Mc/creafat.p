@@ -11,7 +11,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/fcpfat.i}
 
 DEF INPUT  PARAMETER iiCustNum     AS INT  NO-UNDO.  
@@ -28,7 +27,7 @@ DEF VAR lcCLI  AS CHAR NO-UNDO.
 
 
 FIND Customer WHERE 
-     Customer.Brand   = gcBrand AND
+     Customer.Brand   = Syst.CUICommon:gcBrand AND
      Customer.CustNum = iiCustNum NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Customer THEN DO:
   ocError = "Customer was not found.".
@@ -52,7 +51,7 @@ IF iiMSSeq > 0 THEN DO:
 END.
 
 FIND FatGroup WHERE
-     FatGroup.Brand = gcBrand AND
+     FatGroup.Brand = Syst.CUICommon:gcBrand AND
      FatGroup.FtGrp = icFatGroup NO-LOCK NO-ERROR.
 IF NOT AVAILABLE FatGroup THEN DO:
    ocError = "FAT group was not found".

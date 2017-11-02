@@ -12,7 +12,6 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'MSISDN'}
 {Func/fmakemsreq.i}
@@ -63,8 +62,8 @@ form /* asks MSISDN Number */
        HELP "Enter new MSISDN Number"
 
 WITH
-   OVERLAY ROW 2 centered COLOR VALUE(cfc) NO-LABELS
-   TITLE COLOR VALUE(ctc) " CHANGE MSISDN Number FOR A SUBSCRIPTION "
+   OVERLAY ROW 2 centered COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) " CHANGE MSISDN Number FOR A SUBSCRIPTION "
 FRAME main.
 
 {Func/tmsparam.i MSStatusUse return}. ms-use = TMSParam.IntVal.
@@ -111,12 +110,12 @@ FIND FIRST Customer WHERE
            Customer.CustNum = MobSub.CustNum
 NO-LOCK NO-ERROR.
 IF AVAIL Customer THEN lcUserName =
-   DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER Customer).
+   Func.Common:mDispCustName(BUFFER Customer).
 
 
 FIND FIRST MSISDN WHERE 
            MSISDN.CLI  = MobSub.CLI AND 
-           MSISDN.ValidTo > fMAkeTS()
+           MSISDN.ValidTo > Func.Common:mMakeTS()
 NO-LOCK NO-ERROR.
 
 IF NOT AVAIL msisdn THEN DO:
@@ -131,7 +130,7 @@ IF NOT AVAIL msisdn THEN DO:
 END.
 
 FIND FIRST MSRange WHERE 
-           MSRange.Brand    = gcBrand    AND 
+           MSRange.Brand    = Syst.CUICommon:gcBrand    AND 
            MSRange.CLIFrom <= MSISDN.CLI AND
            MSRange.CLITo   >= MSISDN.CLI
 NO-LOCK NO-ERROR.
@@ -155,7 +154,7 @@ WITH FRAME main.
 MAIN:
 REPEAT TRANSACTION WITH FRAME main:
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE
       new-CLI-end 
@@ -163,7 +162,7 @@ REPEAT TRANSACTION WITH FRAME main:
 
       READKEY.
 
-      IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME main:
+      IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME main:
                 
          PAUSE 0.
 
@@ -191,13 +190,13 @@ REPEAT TRANSACTION WITH FRAME main:
             END.
             
             FIND FIRST new-MSISDN WHERE  
-                       new-MSISDN.Brand   = gcBrand  AND
+                       new-MSISDN.Brand   = Syst.CUICommon:gcBrand  AND
                        new-MSISDN.CLI     = new-CLI  
                        USE-INDEX CLI
             EXCLUSIVE-LOCK NO-ERROR.
 
             IF NOT AVAIL new-MSISDN OR
-               (new-MSISDN.ValidTo <= fMakeTS() AND 
+               (new-MSISDN.ValidTo <= Func.Common:mMakeTS() AND 
                   new-MSISDN.StatusCode NE 4) THEN DO:
                BELL.
                MESSAGE "MSISDN No." new-CLI "DOES NOT EXIST !".
@@ -208,9 +207,9 @@ REPEAT TRANSACTION WITH FRAME main:
 
                /* Check double timestamp  */ 
                FIND FIRST active-MSISDN WHERE  
-                          active-MSISDN.Brand = gcBrand AND
+                          active-MSISDN.Brand = Syst.CUICommon:gcBrand AND
                           active-MSISDN.CLI = new-CLI  AND
-                          active-MSISDN.ValidTo > fMakeTS() AND
+                          active-MSISDN.ValidTo > Func.Common:mMakeTS() AND
                           recid(active-msisdn) ne recid(new-msisdn)
                NO-LOCK NO-ERROR.
                IF AVAIL active-MSISDN THEN DO:
@@ -273,7 +272,7 @@ REPEAT TRANSACTION WITH FRAME main:
                   ELSE
                      MESSAGE
                         "This Number is quarantined until"
-                        ENTRY(1,fTS2HMS(new-msisdn.validto)," ")
+                        ENTRY(1,Func.Common:mTS2HMS(new-msisdn.validto)," ")
                         "- Use it anyway (Y/N) ?"
                      UPDATE ok.
                   
@@ -283,8 +282,8 @@ REPEAT TRANSACTION WITH FRAME main:
         
                END.
 
-               IF new-MSISDN.ValidFrom < FmakeTS() AND 
-                  new-msisdn.ValidTo > fMakets() THEN DO:
+               IF new-MSISDN.ValidFrom < Func.Common:mMakeTS() AND 
+                  new-msisdn.ValidTo > Func.Common:mMakeTS() THEN DO:
 
                   IF new-msisdn.StatusCode = 0 THEN DO:
               
@@ -320,19 +319,19 @@ REPEAT TRANSACTION WITH FRAME main:
    REPEAT WITH FRAME main:
 
       ASSIGN
-         ufk    = 0
-         ehto   = 0
-         ufk[1] = 7 
-         ufk[5] = 261
-         ufk[8] = 8.
+         Syst.CUICommon:ufk    = 0
+         Syst.CUICommon:ehto   = 0
+         Syst.CUICommon:ufk[1] = 7 
+         Syst.CUICommon:ufk[5] = 261
+         Syst.CUICommon:ufk[8] = 8.
       
       RUN Syst/ufkey.p.
 
-      IF toimi = 1 THEN NEXT  main.
+      IF Syst.CUICommon:toimi = 1 THEN NEXT  main.
 
-      IF toimi = 8 THEN LEAVE main.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE main.
 
-      IF TOIMI = 5 THEN DO:
+      IF Syst.CUICommon:toimi = 5 THEN DO:
          
          RUN Mc/charge_dialog.p(
             MobSub.MsSeq,
@@ -355,8 +354,8 @@ REPEAT TRANSACTION WITH FRAME main:
                     INPUT  Mobsub.Cli,
                     INPUT  Mobsub.CustNum,
                     INPUT  liStatusCode,
-                    INPUT  katun,
-                    INPUT  fMakeTS(),
+                    INPUT  Syst.CUICommon:katun,
+                    INPUT  Func.Common:mMakeTS(),
                     INPUT  "CHANGEMSISDN",
                     INPUT  new-cli,
                     INPUT  "", /*for old SIM*/

@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-katun = "anttis".
-gcBrand = "1".
+Syst.CUICommon:katun = "anttis".
+Syst.CUICommon:gcBrand = "1".
 
 {Func/orderfunc.i}
 
@@ -17,7 +17,7 @@ disp order.statuscode order.mnpstatus mnpprocess.statuscode.
 assign
    mnpprocess.statuscode = 7
    mnpprocess.statusreason = "CANC_TECNI"
-   mnpprocess.updatets = fMakeTS()
+   mnpprocess.updatets = Func.Common:mMakeTS()
    order.mnpstatus = 8.
 
 fSetOrderStatus(order.orderid, "7").  

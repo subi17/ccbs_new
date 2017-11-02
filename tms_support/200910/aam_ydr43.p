@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-katun = "ari".
+Syst.CUICommon:katun = "ari".
 
 def var limonth     as int  no-undo.
 def var licnt       as int  no-undo.

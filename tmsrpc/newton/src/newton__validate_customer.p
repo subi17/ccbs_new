@@ -53,12 +53,10 @@ IF NOT AVAIL MobSub THEN DO:
 END.
 
 {Syst/commpaa.i}
-gcBrand = lcBrand.
-lcName =  DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                           BUFFER Customer).
+Syst.CUICommon:gcBrand = lcBrand.
+lcName =  Func.Common:mDispCustName(BUFFER Customer).
 
 add_string(response_toplevel_id,"",lcName).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

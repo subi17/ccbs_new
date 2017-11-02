@@ -12,12 +12,11 @@ DEFINE VARIABLE lcLine                  AS CHARACTER NO-UNDO.
 DEFINE BUFFER bTMSPass FOR TMSPass.
 
 {Syst/commpaa.i}
-katun = pcUser.
+Syst.CUICommon:katun = pcUser.
 {Func/cparam2.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 liPasswordHistoryLength = fCParamI("PassWdHistory").
 {Func/log.i}
-{Func/date.i}
 
 fSetLogFileName(pcLogFile).
 fSetLogEntryTypes(fGetValidLogEntryTypes()).
@@ -67,7 +66,7 @@ FUNCTION fNew RETURNS LOGICAL (icLine AS CHAR):
    DEFINE VARIABLE lcTemp AS CHARACTER NO-UNDO. 
    DEFINE VARIABLE ldeTS AS DECIMAL NO-UNDO. 
    DEFINE VARIABLE liUsernum AS INTEGER NO-UNDO. 
-   ldeTS = fMakeTS().
+   ldeTS = Func.Common:mMakeTS().
 
    fLog(icLine,"fAdd").   
    
@@ -141,7 +140,7 @@ FUNCTION fNew RETURNS LOGICAL (icLine AS CHAR):
       ASSIGN
          tmspass.usercode = lcUsercode
          tmspass.Password = lcPassword 
-         tmspass.creator  = katun
+         tmspass.creator  = Syst.CUICommon:katun
          tmspass.createts = ldeTS.
 
       IF lcTemp NE "" THEN DO:
@@ -149,7 +148,7 @@ FUNCTION fNew RETURNS LOGICAL (icLine AS CHAR):
           IF NOT plSimulate THEN DO:
              /*create limit for this user */
              CREATE UserLimit.
-             ASSIGN UserLimit.Brand      = gcBrand
+             ASSIGN UserLimit.Brand      = Syst.CUICommon:gcBrand
                     UserLimit.LimitType  = 9
                     UserLimit.LimitTarget = "TMSUser"
                     UserLimit.LimitTargetID = TMSUser.UserCode
@@ -182,7 +181,7 @@ FUNCTION fModify RETURNS LOGICAL (icLine AS CHAR):
    DEFINE VARIABLE ldeTS AS DECIMAL NO-UNDO. 
    DEFINE VARIABLE i AS INTEGER NO-UNDO. 
    DEFINE VARIABLE llModified AS LOGICAL NO-UNDO INIT FALSE. 
-   ldeTS = fMakeTS().
+   ldeTS = Func.Common:mMakeTS().
    fLog(icLine,"fModify").   
 
    lcUsercode = ENTRY(3,icLine,lcDelim).
@@ -235,7 +234,7 @@ FUNCTION fModify RETURNS LOGICAL (icLine AS CHAR):
       IF lcTemp NE "" THEN DO:
 
           FIND UserLimit WHERE
-               UserLimit.Brand = gcBrand AND
+               UserLimit.Brand = Syst.CUICommon:gcBrand AND
                UserLimit.LimitType = 9 AND
                UserLimit.LimitTarget = "TMSUser" AND
                UserLimit.LimitTargetID = TMSUser.UserCode NO-LOCK NO-ERROR.
@@ -244,7 +243,7 @@ FUNCTION fModify RETURNS LOGICAL (icLine AS CHAR):
              /*create limit for this user */
              IF NOT plSimulate THEN DO:
                 CREATE UserLimit.
-                ASSIGN UserLimit.Brand      = gcBrand
+                ASSIGN UserLimit.Brand      = Syst.CUICommon:gcBrand
                        UserLimit.LimitType  = 9
                        UserLimit.LimitTarget = "TMSUser"
                        UserLimit.LimitTargetID = TMSUser.UserCode

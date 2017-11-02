@@ -11,7 +11,6 @@
 {Syst/commali.i}
 {Syst/tmsconst.i}
 {Syst/dumpfile_run.i}
-{Func/date.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 
@@ -43,7 +42,7 @@ DEFINE VARIABLE liLoop AS INTEGER NO-UNDO.
 DEFINE VARIABLE lhSaxWriter AS HANDLE NO-UNDO. 
 DEF VAR lhXML AS HANDLE NO-UNDO.
 
-ldeFrom = fOffSet(fMakeTS(),-24).
+ldeFrom = Func.Common:mOffSet(Func.Common:mMakeTS(),-24).
 CREATE SAX-WRITER lhXML.
 lhXML:FORMATTED = TRUE.
 lhXML:ENCODING = 'UTF-8'.
@@ -56,15 +55,15 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusesOngoing):
    liStatus = INT(ENTRY(liLoop, lcStatusesOngoing)).
 
    FOR EACH mnpprocess NO-LOCK where
-            mnpprocess.brand = gcBrand and
+            mnpprocess.brand = Syst.CUICommon:gcBrand and
             mnpprocess.mnptype = {&MNP_TYPE_IN} and
             mnpprocess.statuscode = liStatus,
       FIRST Order NO-LOCK USE-INDEX OrderID WHERE
-            Order.Brand = gcBrand AND
+            Order.Brand = Syst.CUICommon:gcBrand AND
             Order.Orderid = mnpprocess.orderid ANd
             LOOKUP(Order.orderchannel,{&ORDER_CHANNEL_INDIRECT}) > 0,
       FIRST SalesMan NO-LOCK WHERE
-            SalesMan.Brand = gcBrand AND
+            SalesMan.Brand = Syst.CUICommon:gcBrand AND
             SalesMan.SalesMan = Order.SalesMan AND
             SalesMan.Reseller = "PH":
       
@@ -83,16 +82,16 @@ DO liLoop = 1 TO NUM-ENTRIES(lcStatusesFinal):
    liStatus = INT(ENTRY(liLoop, lcStatusesFinal)).
 
    FOR EACH mnpprocess NO-LOCK USE-INDEX updatets WHERE
-            mnpprocess.brand = gcBrand and
+            mnpprocess.brand = Syst.CUICommon:gcBrand and
             mnpprocess.mnptype = {&MNP_TYPE_IN} and
             mnpprocess.updatets > ldeFrom AND
             mnpprocess.statuscode = liStatus,
       FIRST Order NO-LOCK USE-INDEX OrderID WHERE
-            Order.Brand = gcBrand AND
+            Order.Brand = Syst.CUICommon:gcBrand AND
             Order.Orderid = mnpprocess.orderid AND
             LOOKUP(Order.orderchannel,{&ORDER_CHANNEL_INDIRECT}) > 0,
       FIRST SalesMan NO-LOCK WHERE
-            SalesMan.Brand = gcBrand AND
+            SalesMan.Brand = Syst.CUICommon:gcBrand AND
             SalesMan.SalesMan = Order.SalesMan AND
             SalesMan.Reseller = "PH":
       
@@ -127,7 +126,7 @@ PROCEDURE pDumpToXMLFile:
    lhXML:INSERT-ATTRIBUTE("phonenumber", order.cli).
    IF MNPProcess.Portrequest > "" THEN DO:
       
-      fSplitTS(mnpprocess.portingtime,
+      Func.Common:mSplitTS(mnpprocess.portingtime,
                OUTPUT ldaChangeDate,
                OUTPUT liTime). 
 

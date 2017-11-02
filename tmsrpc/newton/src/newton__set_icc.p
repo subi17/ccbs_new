@@ -85,8 +85,8 @@ IF TRIM(pcSalesman) EQ "" THEN RETURN appl_err("username is empty").
 
 {Syst/commpaa.i}
 ASSIGN 
-   gcBrand = "1"
-   katun = "VISTA_" + pcSalesman.
+   Syst.CUICommon:gcBrand = "1"
+   Syst.CUICommon:katun = "VISTA_" + pcSalesman.
 {Func/fmakemsreq.i}
 {Func/fcharge_comp_loaded.i}
 
@@ -137,11 +137,11 @@ IF pcReason NE '' THEN DO:
    CREATE Memo.
    ASSIGN
       Memo.CreStamp  = {&nowTS}
-      Memo.Brand     = gcBrand 
+      Memo.Brand     = Syst.CUICommon:gcBrand 
       Memo.HostTable = "MsRequest" 
       Memo.KeyValue  = STRING(liReq) 
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = katun 
+      Memo.CreUser   = Syst.CUICommon:katun 
       Memo.MemoTitle = "ICC Change Reason"
       Memo.MemoText  = pcReason
       Memo.CustNum   = MsRequest.CustNum .
@@ -158,5 +158,4 @@ RELEASE SIM.
 add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

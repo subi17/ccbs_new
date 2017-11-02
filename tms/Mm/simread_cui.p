@@ -11,7 +11,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 
 DEFINE VARIABLE lcSIMfile          AS CHARACTER NO-UNDO FORMAT "X(40)".
 DEFINE VARIABLE lcProcessedDir     AS CHARACTER NO-UNDO.
@@ -31,7 +30,7 @@ DO WITH FRAME SIMfile :
 
    lcSIMfile = RETURN-VALUE.
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    PAUSE 0.
 
    IF lcSIMfile = "" OR lcSIMfile = ? THEN LEAVE.

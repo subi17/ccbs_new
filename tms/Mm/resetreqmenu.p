@@ -51,9 +51,9 @@ END.
 DO WHILE TRUE:
 
    ASSIGN 
-      ufk    = 0 
-      ufk[8] = 8 
-      ehto   = 3. 
+      Syst.CUICommon:ufk    = 0 
+      Syst.CUICommon:ufk[8] = 8 
+      Syst.CUICommon:ehto   = 3. 
    RUN Syst/ufkey.p. 
 
    PAUSE 0.
@@ -266,7 +266,7 @@ DO WHILE TRUE:
             DEFINE VARIABLE msisdn-recid AS RECID NO-UNDO.
             
             FIND FIRST MSISDN-back NO-LOCK WHERE
-               MSISDN-back.Brand = gcBrand AND
+               MSISDN-back.Brand = Syst.CUICommon:gcBrand AND
                MSISDN-back.CLI   = MsRequest.ReqCParam2 USE-INDEX CLI.
             IF MSISDN-back.StatusCode = 27 THEN DO:
                msisdn-recid = recid(msisdn-back).

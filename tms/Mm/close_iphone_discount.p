@@ -9,15 +9,14 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-gcBrand = "1".
-katun   = "CRON".
+Syst.CUICommon:gcBrand = "1".
+Syst.CUICommon:katun = "CRON".
 {Func/cparam2.i}
-{Func/date.i}
 
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -42,15 +41,15 @@ DEF BUFFER bDPMember FOR DPMember.
 DEF STREAM sout.
 
 IF DAY(TODAY) = 1 THEN
-   ldaToDate = fLastDayOfMOnth(TODAY - 1).
+   ldaToDate = Func.Common:mLastDayOfMonth(TODAY - 1).
 ELSE
-   ldaToDate = fLastDayOfMOnth(TODAY).
+   ldaToDate = Func.Common:mLastDayOfMonth(TODAY).
 
 ASSIGN lcIPhoneDiscountRuleIds = fCParamC("IPHONE_DISCOUNT")
        lcPromotionPath = fCParamC("IPHONE_DISCOUNT_LOG")
        ldaFromDate = DATE(MONTH(ldaToDate),1,YEAR(ldaToDate))
        liPeriod = YEAR(ldaToDate) * 100 + MONTH(ldaToDate)
-       ldeStamp = fMakeTS()
+       ldeStamp = Func.Common:mMakeTS()
        lcLogFile = lcPromotionPath + "/close_iphone_discount_" +
                    STRING(liPeriod) + "_" + STRING(ldeStamp) + ".log".
 
@@ -66,7 +65,7 @@ EACH_DISCOUNT:
 DO liCount = 1 to NUM-ENTRIES(lcIPhoneDiscountRuleIds):
    lcIPhoneDiscountRuleId = ENTRY(liCount,lcIPhoneDiscountRuleIds).
    FIND FIRST DiscountPlan WHERE
-              DiscountPlan.Brand = gcBrand AND
+              DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
               DiscountPlan.DPRuleID = lcIPhoneDiscountRuleId NO-LOCK NO-ERROR.
    IF NOT AVAIL DiscountPlan THEN DO:
       PUT STREAM sout UNFORMATTED "ERROR:Invalid Iphone Discount: " +
@@ -91,10 +90,10 @@ DO liCount = 1 to NUM-ENTRIES(lcIPhoneDiscountRuleIds):
             DCCLI.ValidFrom <= DPMember.ValidTo AND
             DCCLI.ValidTo >= DPMember.ValidFrom NO-LOCK:
 
-      ldaInvDate = fLastDayOfMonth(DCCLI.ValidFrom) + 1.
+      ldaInvDate = Func.Common:mLastDayOfMonth(DCCLI.ValidFrom) + 1.
 
       FOR EACH Invoice WHERE
-               Invoice.Brand     = gcBrand AND
+               Invoice.Brand     = Syst.CUICommon:gcBrand AND
                Invoice.CustNum   = Customer.CustNum AND
                Invoice.InvDate  >= ldaInvDate AND
                Invoice.InvType   = 1 AND

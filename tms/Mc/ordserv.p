@@ -8,7 +8,6 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 {Syst/commali.i}
-{Func/timestamp.i}
 
 {Syst/eventval.i}
 {Mc/lib/tokenlib.i}
@@ -16,7 +15,7 @@
 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -62,14 +61,14 @@ form
     lcSCName      FORMAT "X(30)" COLUMN-LABEL "Service Name"
     OrderService.ServValue 
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " SERVICES OF ORDER " + STRING(iiOrderID) + " "
+    COLOR VALUE(Syst.CUICommon:cfc)   
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " SERVICES OF ORDER " + STRING(iiOrderID) + " "
     FRAME sel.
 
 form
     OrderService.Service  COLON 15
        VALIDATE(CAN-FIND(ServCom WHERE 
-                         ServCom.Brand   = gcBrand AND
+                         ServCom.Brand   = Syst.CUICommon:gcBrand AND
                          ServCom.ServCom = INPUT OrderService.Service),
                 "Unknown service")
     lcSCName      
@@ -77,16 +76,16 @@ form
        NO-LABEL
     OrderService.ServValue COLON 15 
 WITH  OVERLAY ROW 6 CENTERED
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 form /* seek  OrderService */
     "Service:" lcServCom FORMAT "x(12)"
     HELP "Enter service"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Service "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Service "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
 FUNCTION fSCName RETURNS LOGIC
@@ -95,14 +94,14 @@ FUNCTION fSCName RETURNS LOGIC
    lcSCName = "".
    
    FIND ServCom WHERE   
-        ServCom.Brand   = gcBrand AND
+        ServCom.Brand   = Syst.CUICommon:gcBrand AND
         ServCom.ServCom = icServCom NO-LOCK NO-ERROR.
    IF AVAILABLE ServCom THEN lcSCName = ServCom.SCName. 
    
 END FUNCTION.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -124,7 +123,7 @@ REPEAT WITH FRAME sel:
    END.
     
    IF must-add THEN DO:  /* Add a OrderService  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -132,14 +131,14 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
            PROMPT-FOR OrderService.Service WITH FRAME lis EDITING:
            
                READKEY. 
-               nap = KEYLABEL(LASTKEY).
+               Syst.CUICommon:nap = KEYLABEL(LASTKEY).
                APPLY LASTKEY.
            END.
 
@@ -147,7 +146,7 @@ REPEAT WITH FRAME sel:
            THEN LEAVE add-row.
 
            IF CAN-FIND(OrderService WHERE
-                       OrderService.Brand   = gcBrand AND
+                       OrderService.Brand   = Syst.CUICommon:gcBrand AND
                        OrderService.OrderID = iiOrderID 
                         USING OrderService.Service) THEN DO:
               MESSAGE "OrderService already exists with code"     
@@ -158,7 +157,7 @@ REPEAT WITH FRAME sel:
            
            
            CREATE OrderService.
-           ASSIGN OrderService.Brand   = gcBrand
+           ASSIGN OrderService.Brand   = Syst.CUICommon:gcBrand
                   OrderService.OrderID = iiOrderID
                   OrderService.Service = INPUT OrderService.Service.
 
@@ -230,10 +229,10 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk    = 0
-        ufk[1] = 35
-        ufk[8] = 8 
-        ehto   = 3 
+        Syst.CUICommon:ufk    = 0
+        Syst.CUICommon:ufk[1] = 35
+        Syst.CUICommon:ufk[8] = 8 
+        Syst.CUICommon:ehto   = 3 
         ufkey  = FALSE.
 
         RUN Syst/ufkey.p.
@@ -243,13 +242,13 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW OrderService.Service {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) OrderService.Service WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) OrderService.Service WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -258,10 +257,10 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -279,7 +278,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -304,7 +303,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -330,7 +329,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND OrderService WHERE recid(OrderService) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -354,7 +353,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -369,11 +368,11 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND Syst.CUICommon:ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        UPDATE lcServCom WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -381,7 +380,7 @@ REPEAT WITH FRAME sel:
        IF lcServCom > "" THEN DO:
        
           FIND FIRST OrderService WHERE 
-                     OrderService.Brand    = gcBrand   AND
+                     OrderService.Brand    = Syst.CUICommon:gcBrand   AND
                      OrderService.OrderID  = iiOrderID AND
                      OrderService.Service >= lcServCom
           NO-LOCK NO-ERROR.
@@ -401,20 +400,20 @@ REPEAT WITH FRAME sel:
      END. /* Search-1 */
 
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0  
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND Syst.CUICommon:ufk[5] > 0  
      THEN DO:  /* add */
         {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
      
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND Syst.CUICommon:ufk[6] > 0
      THEN DO TRANSACTION:  /* DELETE */
        {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        OrderService.Service OrderService.ServValue.
 
        RUN local-find-NEXT.
@@ -436,7 +435,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        OrderService.Service OrderService.ServValue.
 
        IF ok THEN DO:
@@ -458,7 +457,7 @@ REPEAT WITH FRAME sel:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -467,7 +466,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrderService).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -483,25 +482,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(OrderService) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(OrderService) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 
@@ -521,7 +520,7 @@ PROCEDURE local-find-FIRST:
 
        IF order = 1 THEN 
        FIND FIRST OrderService WHERE    
-                  OrderService.Brand   = gcBrand AND
+                  OrderService.Brand   = Syst.CUICommon:gcBrand AND
                   OrderService.OrderID = iiOrderID NO-LOCK NO-ERROR.
          
 END PROCEDURE.
@@ -530,7 +529,7 @@ PROCEDURE local-find-LAST:
 
        IF order = 1 THEN 
        FIND LAST OrderService WHERE    
-                 OrderService.Brand   = gcBrand AND
+                 OrderService.Brand   = Syst.CUICommon:gcBrand AND
                  OrderService.OrderID = iiOrderID NO-LOCK NO-ERROR.
   
 END PROCEDURE.
@@ -539,7 +538,7 @@ PROCEDURE local-find-NEXT:
 
        IF order = 1 THEN 
        FIND NEXT OrderService WHERE    
-                 OrderService.Brand   = gcBrand AND
+                 OrderService.Brand   = Syst.CUICommon:gcBrand AND
                  OrderService.OrderID = iiOrderID NO-LOCK NO-ERROR.
 
 END PROCEDURE.
@@ -548,7 +547,7 @@ PROCEDURE local-find-PREV:
  
        IF order = 1 THEN 
        FIND PREV OrderService WHERE    
-                 OrderService.Brand   = gcBrand AND
+                 OrderService.Brand   = Syst.CUICommon:gcBrand AND
                  OrderService.OrderID = iiOrderID NO-LOCK NO-ERROR.
     
 END PROCEDURE.
@@ -588,7 +587,7 @@ PROCEDURE local-UPDATE-record:
       IF lcRight = "RW" AND FALSE
       THEN REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
       
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
       
          UPDATE
          OrderService.ServValue    
@@ -596,7 +595,7 @@ PROCEDURE local-UPDATE-record:
             
             READKEY.
  
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 
             THEN DO WITH FRAME lis:
              
                PAUSE 0.
@@ -611,7 +610,7 @@ PROCEDURE local-UPDATE-record:
       END.
       
       ELSE DO:
-         ehto = 5.
+         Syst.CUICommon:ehto = 5.
          RUN Syst/ufkey.p.
          PAUSE MESSAGE "Press ENTER to continue".
       END. 

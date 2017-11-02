@@ -10,7 +10,7 @@ FUNCTION fCParamC RETURNS CHAR
    DEF VAR ret AS c NO-UNDO init ?.
 
    FIND FIRST TMSParam where
-              TMSParam.Brand      = gcBrand AND 
+              TMSParam.Brand      = Syst.CUICommon:gcBrand AND 
               TMSParam.ParamCode  = inp
    no-lock no-error.
 
@@ -29,7 +29,7 @@ FUNCTION fCParamI RETURNS INT
    DEF VAR ret AS i NO-UNDO init ?.
 
    FIND FIRST TMSParam where
-              TMSParam.Brand      = gcBrand AND 
+              TMSParam.Brand      = Syst.CUICommon:gcBrand AND 
               TMSParam.ParamCode  = inp
    no-lock no-error.
 
@@ -48,7 +48,7 @@ FUNCTION fCParamDe RETURNS dec
    DEF VAR ret AS DE NO-UNDO init ?.
 
    FIND FIRST TMSParam where
-              TMSParam.Brand      = gcBrand AND 
+              TMSParam.Brand      = Syst.CUICommon:gcBrand AND 
               TMSParam.ParamCode  = inp
    no-lock no-error.
 
@@ -67,7 +67,7 @@ FUNCTION fCParamDa RETURNS Date
    DEF VAR ret AS DA NO-UNDO init ?.
 
    FIND FIRST TMSParam where
-              TMSParam.Brand      = gcBrand AND 
+              TMSParam.Brand      = Syst.CUICommon:gcBrand AND 
               TMSParam.ParamCode  = inp
    no-lock no-error.
 

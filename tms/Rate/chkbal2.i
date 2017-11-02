@@ -3,7 +3,6 @@
    changes:         21.05.03/aam fInvBal, fclbal,
                                  fGetText, fAlarmMessage etc.
 
-                    17.06.03/jp  fIsPnpAllowed             
                     21.06.04 jp  fCreateServiceLimit
 */
 
@@ -100,44 +99,6 @@ FUNCTION fAlarmMessage RETURNS LOGICAL
 END FUNCTION.
 
 
-FUNCTION fIsPnpAllowed RETURNS LOG
-   (INPUT  Cli          AS CHAR,
-    INPUT  CallDate     AS DATE,
-    INPUT  Old_PNP      AS LOG,
-    INPUT  New_PNP      AS LOG,
-    OUTPUT PNPAllowed   AS LOG).
-
-   DEF VAR period      AS INT NO-UNDO.
-   DEF VAR liCalc      AS INT NO-UNDO.
-
-   /* Compare Pnp Values before and after pnp analysis */
-   IF      old_pnp = TRUE  AND
-           new_pnp = TRUE     THEN liCalc =  0.
-   ELSE IF old_pnp = TRUE  AND
-           new_pnp = FALSE    THEN liCalc = -1.
-   ELSE IF old_pnp = FALSE AND
-           new_pnp = TRUE     THEN liCalc = 1.
-   ELSE IF old_pnp = FALSE AND
-           new_pnp = FALSE    THEN liCalc = 0.
-
-   ASSIGN
-      Period = Year(CallDate) * 100 + Month(CallDate).
-
-   FIND FIRST PnpQty WHERE
-              PnpQty.CLI    = CLI  AND
-              pnpQty.Period = Period EXCLUSIVE-LOCK NO-ERROR.
-
-   IF NOT AVAIL pnpQty THEN DO:
-      CREATE PnpQty.
-      ASSIGN
-         PnpQty.Cli    = CLI
-         PnpQty.Period = period
-         PnpQty.Qty    = 1
-         PnpAllowed    = TRUE.
-   END.
-END.   
-
-
 FUNCTION fChkMobsubLimit RETURNS LOG
    (INPUT CustNo       AS INT,
     INPUT iccli        AS CHAR,
@@ -201,7 +162,7 @@ FUNCTION fChkMobsubLimit RETURNS LOG
    END.   
    ELSE DO:
       FOR EACH CallLimit WHERE
-               CallLimit.Brand    = gcBrand      AND  
+               CallLimit.Brand    = Syst.CUICommon:gcBrand      AND  
                CallLimit.CustNo   = liDefMobCust AND
                CallLimit.dto     >= CallDate     AND
                CallLimit.dfrom   <= CallDate     AND
@@ -237,11 +198,11 @@ FUNCTION fChkMobsubLimit RETURNS LOG
                        MobSubLimit). 
 
          
-         ldeActStamp = fmakets().
+         ldeActStamp = Func.Common:mMakeTS().
          
          IF ttCallLimit.delitype   = 1 AND 
             ttCallLimit.CreditType = 2 THEN
-            ldeActStamp = fMakeOfficeTS() . 
+            ldeActStamp = Func.Common:mMakeOfficeTS(). 
          
          CREATE CallAlarm.
          CallAlarm.ActStamp = ldeActStamp.
@@ -256,7 +217,7 @@ FUNCTION fChkMobsubLimit RETURNS LOG
             CallAlarm.DeliPara   = lcDeliPara
             CallAlarm.DeliMsg    = lcAlarmMess
             CallAlarm.Limit      = ttCallLimit.limit
-            CallAlarm.Brand      = gcbrand
+            CallAlarm.Brand      = Syst.CUICommon:gcBrand
             CallAlarm.CreditType = ttCallLimit.CreditType.
 
          RELEASE CallAlarm.
@@ -278,7 +239,7 @@ FUNCTION fChkMobsubLimit RETURNS LOG
                CallAlarm.DeliPara = lcDeliPara
                CallAlarm.DeliMsg  = lcAlarmMess
                CallAlarm.Limit    = ttCallLimit.limit
-               CallAlarm.Brand    = gcbrand
+               CallAlarm.Brand    = Syst.CUICommon:gcBrand
                CallAlarm.CreditType = ttCallLimit.CreditType.
 
             RELEASE CallAlarm.
@@ -289,7 +250,7 @@ FUNCTION fChkMobsubLimit RETURNS LOG
               RECID(xxCallLimit) = RECID(ttCallLimit) EXCLUSIVE-LOCK NO-ERROR.
 
          ASSIGN
-            xxCallLimit.ActStamp = fmakets().
+            xxCallLimit.ActStamp = Func.Common:mMakeTS().
 
          FOR EACH SaldoCounter WHERE
                   SaldoCounter.MSSeq  = MSSeq AND

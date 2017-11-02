@@ -39,9 +39,9 @@ form
     Salesman.SmName  format "x(30)" column-label "Salesman's Name"
     Salesman.Salesman                 column-label "SmCode" 
 WITH centered OVERLAY scroll 1 10 DOWN ROW 6
-    COLOR value(cfc)
-    title color value(ctc) 
-    " Salesman BROWSER: FROM (" + gcBrand + ") '"  + Salesman + "' " 
+    COLOR value(Syst.CUICommon:cfc)
+    title color value(Syst.CUICommon:ctc) 
+    " Salesman BROWSER: FROM (" + Syst.CUICommon:gcBrand + ") '"  + Salesman + "' " 
     FRAME sel.
 
 
@@ -56,9 +56,9 @@ form
 with row 1 centered overlay title " SEEK SALESMEN " FRAME alku.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
    FIND FIRST Salesman USE-INDEX Salesman WHERE 
-      Salesman.Brand = gcBrand NO-LOCK no-error.
+      Salesman.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
    IF NOT AVAIL Salesman THEN DO:
       BELL.
       message "No products at all - press ENTER !".
@@ -78,27 +78,27 @@ repeat WITH FRAME sel:
        ASSIGN haettava = FALSE nro = FALSE.
        PAUSE 0 no-message.
 alku:  repeat WITH FRAME alku ON ENDKEY UNDO, RETURN:
-          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           UPDATE Salesman WITH FRAME alku EDITING:
-             READKEY. nap = keylabel(LASTKEY).
+             READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
              /* onko painettu home */
-             if lookup(nap,"home") > 0 THEN 
-             assign nro = true nap = "enter".
-             APPLY keycode(nap).
+             if lookup(Syst.CUICommon:nap,"home") > 0 THEN 
+             assign nro = true Syst.CUICommon:nap = "enter".
+             APPLY keycode(Syst.CUICommon:nap).
           END.
 
           if Salesman = "" THEN LEAVE LOOP.
 
           IF NOT nro THEN DO:
              FIND FIRST Salesman where 
-                        Salesman.Brand   = gcBrand AND
+                        Salesman.Brand   = Syst.CUICommon:gcBrand AND
                         Salesman.SmName >= Salesman
              no-lock no-error.
              order = 1.
           END.
           ELSE DO:
              FIND FIRST Salesman where 
-                        Salesman.Brand     = gcBrand AND
+                        Salesman.Brand     = Syst.CUICommon:gcBrand AND
                         Salesman.Salesman >= Salesman
              no-lock no-error.
              order = 2.
@@ -141,10 +141,10 @@ print-line:
                rtab[FRAME-LINE] = recid(Salesman).
                IF order = 2 THEN FIND NEXT Salesman
                USE-INDEX Salesman WHERE 
-                  Salesman.Brand = gcBrand NO-LOCK no-error.
+                  Salesman.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                ELSE IF order = 1 THEN FIND NEXT Salesman
                USE-INDEX SmName WHERE 
-                  Salesman.Brand = gcBrand NO-LOCK no-error.
+                  Salesman.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             END.
             ELSE DO:
                CLEAR no-pause.
@@ -173,30 +173,30 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 0   ufk[2]= 0   ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 11 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ufk[1]= 0   Syst.CUICommon:ufk[2]= 0   Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+         Syst.CUICommon:ufk[5]= 11 Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 2 THEN DO:
          CHOOSE ROW Salesman.Salesman {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Salesman.Salesman WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Salesman.Salesman WITH FRAME sel.
       END.
       ELSE IF order = 1 THEN DO:
          CHOOSE ROW Salesman.SmName {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Salesman.SmName WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Salesman.SmName WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order = 3 THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = 2.
       END.
 
@@ -205,9 +205,9 @@ BROWSE:
          FIND Salesman where recid(Salesman) = memory.
          DO i = 1 TO FRAME-LINE - 1:
             IF order = 2 THEN FIND prev Salesman
-            USE-INDEX Salesman WHERE Salesman.Brand = gcBrand NO-LOCK no-error.
+            USE-INDEX Salesman WHERE Salesman.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             ELSE IF order = 1 THEN FIND prev Salesman
-            USE-INDEX SmName WHERE Salesman.Brand = gcBrand NO-LOCK no-error.
+            USE-INDEX SmName WHERE Salesman.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             IF AVAILABLE Salesman THEN
                ASSIGN firstline = i memory = recid(Salesman).
             ELSE LEAVE.
@@ -223,16 +223,16 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND Salesman where recid(Salesman) = rtab[1] no-lock.
             IF order = 2 THEN FIND prev Salesman
-            USE-INDEX Salesman WHERE Salesman.Brand = gcBrand NO-LOCK no-error.
+            USE-INDEX Salesman WHERE Salesman.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             ELSE IF order = 1 THEN FIND prev Salesman
-            USE-INDEX SmName WHERE Salesman.Brand = gcBrand NO-LOCK no-error.
+            USE-INDEX SmName WHERE Salesman.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             IF NOT AVAILABLE Salesman THEN DO:
                message "YOU ARE ON THE FIRST ROW !".
                BELL.
@@ -255,14 +255,14 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND Salesman where recid(Salesman) = rtab[FRAME-DOWN] no-lock .
             IF order = 2 THEN FIND NEXT Salesman
-            USE-INDEX Salesman WHERE Salesman.Brand = gcBrand NO-LOCK no-error.
+            USE-INDEX Salesman WHERE Salesman.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             ELSE IF order = 1 THEN FIND NEXT Salesman
-            USE-INDEX SmName WHERE Salesman.Brand = gcBrand NO-LOCK no-error.
+            USE-INDEX SmName WHERE Salesman.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
             IF NOT AVAILABLE Salesman THEN DO:
                message "YOU ARE ON THE LAST ROW !".
                BELL.
@@ -285,13 +285,13 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND Salesman where recid(Salesman) = memory no-lock no-error.
          IF order = 2 THEN FIND prev Salesman
-         USE-INDEX Salesman WHERE Salesman.Brand = gcBrand NO-LOCK no-error.
+         USE-INDEX Salesman WHERE Salesman.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
          ELSE IF order = 1 THEN FIND prev Salesman
-         USE-INDEX SmName WHERE Salesman.Brand = gcBrand NO-LOCK no-error.
+         USE-INDEX SmName WHERE Salesman.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
          IF AVAILABLE Salesman THEN DO:
             memory = recid(Salesman).
 
@@ -299,10 +299,10 @@ BROWSE:
             DO line = 1 TO (FRAME-DOWN - 1):
                IF order = 2 THEN FIND prev Salesman
                USE-INDEX Salesman WHERE 
-                  Salesman.Brand = gcBrand NO-LOCK no-error.
+                  Salesman.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                ELSE IF order = 1 THEN FIND prev Salesman
                USE-INDEX SmName WHERE 
-                  Salesman.Brand = gcBrand NO-LOCK no-error.
+                  Salesman.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
                IF AVAILABLE Salesman THEN memory = recid(Salesman).
                ELSE line = FRAME-DOWN.
             END.
@@ -318,7 +318,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "YOU ARE ON THE LAST PAGE !".
@@ -333,32 +333,32 @@ BROWSE:
         END.
      END. /* NEXT page */
 
-     else if lookup(nap,"5,f5,enter,return") > 0 THEN DO: /* valinta */
+     else if lookup(Syst.CUICommon:nap,"5,f5,enter,return") > 0 THEN DO: /* valinta */
         FIND Salesman where recid(Salesman) = rtab[FRAME-LINE] no-lock.
         siirto = string(Salesman.Salesman).
         LEAVE LOOP.
      END.
 
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
         IF order = 2 THEN FIND FIRST Salesman
-        USE-INDEX Salesman WHERE Salesman.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX Salesman WHERE Salesman.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ELSE IF order = 1 THEN FIND FIRST Salesman
-        USE-INDEX SmName WHERE Salesman.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX SmName WHERE Salesman.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ASSIGN memory = recid(Salesman) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 2 THEN FIND LAST Salesman
-        USE-INDEX Salesman WHERE Salesman.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX Salesman WHERE Salesman.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ELSE IF order = 1 THEN FIND LAST Salesman
-        USE-INDEX SmName WHERE Salesman.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX SmName WHERE Salesman.Brand = Syst.CUICommon:gcBrand NO-LOCK no-error.
         ASSIGN memory = recid(Salesman) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
         haettava = TRUE.
         HIDE FRAME sel no-pause.
         NEXT LOOP.
@@ -369,5 +369,5 @@ END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
 HIDE FRAME alku no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 

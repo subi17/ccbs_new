@@ -38,8 +38,8 @@ IF NOT AVAILABLE mobsub THEN
    RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
 
 {Syst/commpaa.i}
-katun = "Newton".
-gcBrand = "1".
+Syst.CUICommon:katun = "Newton".
+Syst.CUICommon:gcBrand = "1".
 {Func/dataformat.i}
 {Func/fdss.i}
 
@@ -51,7 +51,7 @@ tmcounters = add_array(resp_struct,"counters").
 /* Fee calculation changes */
 IF NOT MobSub.PayType THEN
    lcDSSBundleId = fGetActiveDSSId(INPUT Mobsub.Custnum,
-                                   INPUT fMakeTS()).
+                                   INPUT Func.Common:mMakeTS()).
 
 IF lcDSSBundleId = "DSS2" THEN
    lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
@@ -64,7 +64,7 @@ IF lcDSSBundleId = {&DSS} OR
 liCount = 0.
 
 FOR EACH TMRule  NO-LOCK WHERE
-         TMRule.Brand = gcBrand AND
+         TMRule.Brand = Syst.CUICommon:gcBrand AND
          TMRule.FromDate <= TODAY AND
          TMRule.ToDate >=  TODAY:
 
@@ -138,5 +138,4 @@ FOR EACH TMRule  NO-LOCK WHERE
 END.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

@@ -69,9 +69,9 @@ lcTerminated                                                               SKIP
 "Activation....:"    TermMobSub.ActivationDate      FORMAT "99-99-9999"    SKIP
 lcInportTime 
 WITH  OVERLAY ROW 1 centered SIDE-LABELS
-TITLE COLOR VALUE(ctc) " " + ynimi +
+TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + ynimi +
  "  TERMINATED MOBILE SUBSCRIPTION  "
- + string(pvm,"99-99-99") + " "
+ + string(TODAY,"99-99-99") + " "
  NO-LABELS 
 FRAME lis.
 
@@ -86,12 +86,12 @@ SKIP(1)
 "      Service Profile Code:"  def-sp-code NO-LABEL
  HELP "Press F9 for help"
  validate(CAN-FIND(FIRST servpac where
-                         servpac.Brand = gcBrand AND 
+                         servpac.Brand = Syst.CUICommon:gcBrand AND 
           servpac.servpac = def-sp-code),"Unknown service profile")
                    servpac.spname                                       SKIP
  
- WITH OVERLAY CENTERED row 5  TITLE COLOR VALUE(ctc) " SERVICE PROFILE "
- COLOR VALUE(cfc) NO-labels  FRAME profi.
+ WITH OVERLAY CENTERED row 5  TITLE COLOR VALUE(Syst.CUICommon:ctc) " SERVICE PROFILE "
+ COLOR VALUE(Syst.CUICommon:cfc) NO-labels  FRAME profi.
  
  
 FORM

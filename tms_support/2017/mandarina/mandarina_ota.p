@@ -9,7 +9,7 @@
 
 /* includes */
 {Syst/commpaa.i}
-gcbrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 /* Folders and labels. */ 
 DEF VAR lcInputFile AS CHAR NO-UNDO INITIAL "/tmp/OTA_KO.csv".           /* ¡¡Remember to check for each run!! */
@@ -35,7 +35,7 @@ REPEAT:
   
    /* Check subscription */     
    FIND FIRST mobsub WHERE
-              mobsub.Brand EQ gcBrand AND
+              mobsub.Brand EQ Syst.CUICommon:gcBrand AND
               mobsub.CLI   EQ lcMSISDN 
          USE-INDEX CLI NO-LOCK NO-ERROR.
    IF NOT AVAILABLE mobsub THEN DO:
@@ -44,8 +44,7 @@ REPEAT:
       NEXT.
    END.  
 
-   DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                    "Mobsub",
+   Func.Common:mWriteMemoWithType("Mobsub",
                      mobsub.MsSeq,
                      mobsub.CustNum,
                      lcMemoTitle,

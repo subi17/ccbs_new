@@ -1,8 +1,6 @@
 {Syst/commpaa.i}
-gcbrand = "1".
-katun = "Qvantel".
-{Func/timestamp.i}
-{Func/date.i}
+Syst.CUICommon:gcBrand = "1".
+Syst.CUICommon:katun = "Qvantel".
 {Func/barrfunc.i}
 
 def var lltrue        as log   no-undo.
@@ -13,14 +11,14 @@ def var ldaFromdate   as date  no-undo.
 def var ldToDate      as date  no-undo.
 def var ldeStamp      as dec   no-undo.
 
-ldeStamp = fMakeTS().
+ldeStamp = Func.Common:mMakeTS().
 
 def buffer bmsrequest for msrequest.
 
 output to "/apps/yoigo/tms_support/testing/check_barr_rerate_outside_package_calls.txt".
 
 assign ldaFromdate = DATE(MONTH(today),1,YEAR(today))
-       ldToDate    = fLastDayOfMonth(TODAY).
+       ldToDate    = Func.Common:mLastDayOfMonth(TODAY).
 
 EACH_MOBSUB:
 for each mobsub no-lock where mobsub.paytype = false:
@@ -39,7 +37,7 @@ for each mobsub no-lock where mobsub.paytype = false:
             mobcdr.eventtype = "gprs" no-lock:
       IF Mobcdr.errorcode NE 0        THEN NEXT.
       IF MobCDR.BillCode NE "14100001" THEN NEXT.
-      ldeTime  = fMake2Dt(Mobcdr.datest, Mobcdr.TimeStart).
+      ldeTime  = Func.Common:mMake2DT(Mobcdr.datest, Mobcdr.TimeStart).
       if ldeTime >= MServiceLimit.FromTs then do:
          lltrue = true.
          leave.

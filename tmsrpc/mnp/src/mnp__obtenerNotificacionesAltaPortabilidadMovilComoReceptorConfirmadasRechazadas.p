@@ -83,7 +83,7 @@ FOR EACH ttInput NO-LOCK:
    END.
 
    FIND Order WHERE
-        Order.Brand = gcBrand AND
+        Order.Brand = Syst.CUICommon:gcBrand AND
         Order.OrderId = MNPProcess.OrderId EXCLUSIVE-LOCK NO-ERROR.
    
    IF NOT AVAIL Order THEN DO:
@@ -251,5 +251,4 @@ FINALLY:
    EMPTY TEMP-TABLE ttInput.
    EMPTY TEMP-TABLE ttMultipleMSISDN.
    IF llDoEvent THEN fCleanEventObjects().
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

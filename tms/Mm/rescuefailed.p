@@ -1,13 +1,12 @@
 {Syst/commali.i}
 {Syst/eventval.i}
-{Func/timestamp.i}
 {Func/forderstamp.i}
 {Func/orderfunc.i}
 
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    
    {Func/lib/eventlog.i}
       
@@ -17,7 +16,7 @@ IF llDoEvent THEN DO:
 END.               
 
 FIND FIRST Order WHERE 
-           Order.Brand   = gcBrand AND 
+           Order.Brand   = Syst.CUICommon:gcBrand AND 
            Order.OrderID = iiOrder EXCLUSIVE-LOCK NO-ERROR.
 
 IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrder).

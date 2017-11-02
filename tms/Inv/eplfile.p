@@ -300,7 +300,7 @@ FUNCTION fPrintInvoTxt RETURNS LOGICAL
             MY-NL
             "0I"
             lcDateHead " " 
-            STRING(pvm,"99.99.9999")
+            STRING(TODAY,"99.99.9999")
             MY-NL
             "37"
             SPACE(4)
@@ -443,12 +443,12 @@ THEN iLetterClass = 2.
 
 
 FIND FIRST Company WHERE
-           Company.Brand = gcBrand NO-LOCK NO-ERROR.
+           Company.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 IF NOT AVAIL Company THEN RETURN.
 
 /* header texts to temp-table */
 FOR EACH HdrText NO-LOCK WHERE
-         HdrText.Brand = gcBrand:
+         HdrText.Brand = Syst.CUICommon:gcBrand:
       CREATE ttHead.
       ASSIGN ttHead.Lang = HdrText.te-kie
              ttHead.Nbr  = HdrText.te-nro
@@ -1007,8 +1007,7 @@ BY wInvoice.InvNum:
                END.
                ELSE IF xCount = 1 THEN NEXT. 
  
-               lcCLIName = DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1,
-                                            BUFFER bCLICust).
+               lcCLIName = Func.Common:mPrintCustName(BUFFER bCLICust).
 
                /* start a new letter */
                IF xCount = 2 THEN ASSIGN 
@@ -1053,7 +1052,7 @@ BY wInvoice.InvNum:
       /* log from print */
       DO FOR ITSendLog TRANS:
          CREATE ITSendLog.
-         ASSIGN ITSendLog.Brand      = gcBrand 
+         ASSIGN ITSendLog.Brand      = Syst.CUICommon:gcBrand 
                 ITSendLog.TxtType    = IF iPrintType = 1 THEN 4 ELSE 3
                 ITSendLog.ITNum      = 0
                 ITSendLog.CustNum    = Invoice.CustNum
@@ -1063,8 +1062,8 @@ BY wInvoice.InvNum:
                                        ELSE 2
                 ITSendLog.EMail      = ""
                 ITSendLog.RepType    = "Inv"
-                ITSendLog.UserCode   = katun.
-                ITSendLog.SendStamp  = fMakeTS().
+                ITSendLog.UserCode   = Syst.CUICommon:katun.
+                ITSendLog.SendStamp  = Func.Common:mMakeTS().
       END.
  
    END. 

@@ -18,7 +18,7 @@
 SESSION:SYSTEM-ALERT-BOXES = TRUE.
 
 if llDoEvent THEN DO:
-    &GLOBAL-DEFINE STAR_EVENT_USER katun
+    &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
     {Func/lib/eventlog.i}
         
     DEF VAR lhDayCampaign AS HANDLE NO-UNDO.
@@ -76,10 +76,10 @@ form
    DayCampaign.ValidTo   
 
 WITH width 80 OVERLAY scroll 1 15 DOWN ROW 1 
-   COLOR value(cfc)
-   title color value(ctc) " " + ynimi +
+   COLOR value(Syst.CUICommon:cfc)
+   title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
    " PERIODICAL CONTRACTS " 
-   + string(pvm,"99-99-99") + " "
+   + string(TODAY,"99-99-99") + " "
    FRAME sel.
 
 form                              
@@ -121,8 +121,8 @@ form
       FORMAT "x(256)" VIEW-AS FILL-IN SIZE 30 BY 1
       HELP "Upsell corresponding to that Bundle" SKIP
 WITH OVERLAY ROW 1 centered
-   COLOR value(cfc)
-   TITLE COLOR value(ctc)
+   COLOR value(Syst.CUICommon:cfc)
+   TITLE COLOR value(Syst.CUICommon:ctc)
    fr-header WITH SIDE-LABELS FRAME lis.
 
 FORM
@@ -142,23 +142,22 @@ FORM
       HELP "First month calculation method, (F)ull or (R)elative"
    SKIP(1)
 WITH OVERLAY ROW 5 CENTERED   
-   COLOR value(cfc) TITLE COLOR value(ctc)
+   COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
    fr-header WITH SIDE-LABELS FRAME fFees.
 
 
 form /*  search WITH FIELD DayCampaign */
     lcEvent
     help "Give ...."
-    with row 4 col 2 title color value(ctc) " FIND Event "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Event "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 
 FUNCTION fDispUnit RETURNS LOGICAL
    (iiUnit AS INT):
 
    IF iiUnit > 0 THEN
-      lcUnit = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "DayCampaign",
+      lcUnit = Func.Common:mTMSCodeName("DayCampaign",
                                 "InclUnit",
                                 STRING(iiUnit)).
    ELSE lcUnit = "".
@@ -171,8 +170,7 @@ END FUNCTION.
 FUNCTION fDurUnit RETURNS LOGIC
    (iiDurUnit AS INT):
    
-   lcDurUnit = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "DayCampaign",
+   lcDurUnit = Func.Common:mTMSCodeName("DayCampaign",
                                 "DurUnit",
                                 STRING(iiDurUnit)).
    DISP lcDurUnit WITH FRAME lis.
@@ -182,8 +180,7 @@ END FUNCTION.
 FUNCTION fDurType RETURNS LOGIC
    (iiDurType AS INT):
    
-   lcDurType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "DayCampaign",
+   lcDurType = Func.Common:mTMSCodeName("DayCampaign",
                                 "DurType",
                                 STRING(iiDurType)).
    DISP lcDurType WITH FRAME lis.
@@ -193,8 +190,7 @@ END FUNCTION.
 FUNCTION fEffective RETURNS LOGIC
    (iiEffective AS INT):
    
-   lcEffective = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                  "DayCampaign",
+   lcEffective = Func.Common:mTMSCodeName("DayCampaign",
                                   "Effective",
                                   STRING(iiEffective)).
    DISP lcEffective WITH FRAME lis.
@@ -204,8 +200,7 @@ END FUNCTION.
 FUNCTION fTermFeeCalc RETURNS LOGIC
    (iiTermFeeCalc AS INT):
    
-   lcTermFeeCalc = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                    "DayCampaign",
+   lcTermFeeCalc = Func.Common:mTMSCodeName("DayCampaign",
                                     "TermFeeCalc",
                                     STRING(iiTermFeeCalc)).
    DISP lcTermFeeCalc WITH FRAME fFees.
@@ -218,7 +213,7 @@ FUNCTION fFeeModel RETURNS CHAR
    IF icFeeModel = "" THEN RETURN "".
    
    FIND FIRST FeeModel WHERE
-              FeeModel.Brand    = gcBrand AND
+              FeeModel.Brand    = Syst.CUICommon:gcBrand AND
               FeeModel.FeeModel = icFeeModel NO-LOCK NO-ERROR.
    IF AVAILABLE FeeModel 
    THEN RETURN FeeModel.FeeName.
@@ -229,8 +224,7 @@ END FUNCTION.
 FUNCTION fStatusName RETURNS LOGIC
    (iiStatusCode AS INT):
 
-   lcStatus = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "CLIType",
+   lcStatus = Func.Common:mTMSCodeName("CLIType",
                                "WebStatusCode",
                                STRING(iiStatusCode)).
 
@@ -238,7 +232,7 @@ FUNCTION fStatusName RETURNS LOGIC
 END FUNCTION.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 
@@ -262,18 +256,18 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* DayCampaign -ADD  */
       HIDE FRAME lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
       
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
 
            CREATE DayCampaign.
-           DayCampaign.Brand = gcBrand.
+           DayCampaign.Brand = Syst.CUICommon:gcBrand.
 
            RUN LOCAL-UPDATE-RECORD(true).
            IF LOOKUP(KEYFUNCTION(LASTKEY),"ENDKEY,END-ERROR") > 0 OR
@@ -345,27 +339,27 @@ repeat WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35  ufk[2]= 0 ufk[3]= 222 ufk[4]= 0
-        ufk[5]= 5  ufk[6]= 4 ufk[7]= 814
-        ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ufk[1]= 35  Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 222 Syst.CUICommon:ufk[4]= 0
+        Syst.CUICommon:ufk[5]= 5  Syst.CUICommon:ufk[6]= 4 Syst.CUICommon:ufk[7]= 814
+        Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW DayCampaign.DCEvent {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) DayCampaign.DCEvent WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) DayCampaign.DCEvent WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW DayCampaign.DCEvent {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) DayCampaign.DCEvent WITH FRAME sel.
+        COLOR DISPLAY value(Syst.CUICommon:ccc) DayCampaign.DCEvent WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -373,10 +367,10 @@ repeat WITH FRAME sel:
          END.
       END.
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -391,7 +385,7 @@ repeat WITH FRAME sel:
       END.
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND DayCampaign where recid(DayCampaign) = rtab[1] no-lock.
            RUN LOCAL-FIND-PREV.
@@ -416,7 +410,7 @@ repeat WITH FRAME sel:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND DayCampaign where recid(DayCampaign) = rtab[FRAME-DOWN] no-lock .
@@ -442,7 +436,7 @@ repeat WITH FRAME sel:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND DayCampaign where recid(DayCampaign) = memory no-lock no-error.
         RUN LOCAL-FIND-PREV.
@@ -466,7 +460,7 @@ repeat WITH FRAME sel:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* cursor TO the downmost line */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -481,10 +475,10 @@ repeat WITH FRAME sel:
      END. /* NEXT page */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+     else if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        lcEvent = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE lcEvent WITH FRAME haku-f1.
        HIDE FRAME haku-f1 no-pause.
        if lcEvent <> "" THEN DO:
@@ -502,17 +496,17 @@ repeat WITH FRAME sel:
        END.
      END. /* Haku sar. 1 */
 
-     if lookup(nap,"5,f5") > 0 THEN DO:  /* lisays */
+     if lookup(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:  /* lisays */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* removal */
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 THEN DO TRANSACTION:  /* removal */
        delline = FRAME-LINE.
        FIND DayCampaign where recid(DayCampaign) = rtab[FRAME-LINE] no-lock.
 
        IF CAN-FIND(FIRST DCCLI WHERE 
-                         DCCLI.Brand   = gcBrand AND 
+                         DCCLI.Brand   = Syst.CUICommon:gcBrand AND 
                          DCCLI.DCEvent = DayCampaign.DCEvent)
        THEN DO:
           MESSAGE "Day campaign is in use on subscriptions," SKIP
@@ -522,7 +516,7 @@ repeat WITH FRAME sel:
        END.
        
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.CUICommon:ctc)
           DayCampaign.DCEvent 
 
           DayCampaign.ValidFrom
@@ -554,7 +548,7 @@ repeat WITH FRAME sel:
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
 
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.CUICommon:ccc)
           DayCampaign.DCEvent 
           DayCampaign.ValidFrom
           DayCampaign.ValidTo
@@ -583,7 +577,7 @@ repeat WITH FRAME sel:
      END. /* removal */
 
      /* translations */
-     ELSE IF LOOKUP(nap,"7,f7") > 0 AND ufk[7] > 0 THEN DO:  
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"7,f7") > 0 AND Syst.CUICommon:ufk[7] > 0 THEN DO:  
         FIND DayCampaign WHERE RECID(DayCampaign) = rtab[FRAME-LINE] NO-LOCK.
         RUN Mc/invlang.p(14,DayCampaign.DCEvent).
           
@@ -591,7 +585,7 @@ repeat WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"3,F3") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,F3") > 0 THEN DO:
        FIND FIRST DayCampaign WHERE 
             RECID(DayCampaign) = rtab[FRAME-LINE] 
        NO-LOCK NO-ERROR.
@@ -627,15 +621,15 @@ repeat WITH FRAME sel:
        PAUSE 0.
      END.
 
-     else if lookup(nap,"enter,return") > 0 THEN DO WITH FRAME lis TRANSACTION:
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 THEN DO WITH FRAME lis TRANSACTION:
        /* change */
        FIND FIRST DayCampaign where 
             recid(DayCampaign) = rtab[frame-line(sel)]
        no-lock.
-       assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
+       assign fr-header = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
        RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDayCampaign).
 
@@ -650,35 +644,35 @@ repeat WITH FRAME sel:
 
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
        RUN LOCAL-FIND-FIRST.
        ASSIGN memory = recid(DayCampaign) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
        RUN LOCAL-FIND-LAST.
        ASSIGN memory = recid(DayCampaign) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE LOCAL-DISP-ROW: 
    
    FIND FIRST BillItem WHERE
-              BillItem.Brand    = gcBrand AND
+              BillItem.Brand    = Syst.CUICommon:gcBrand AND
               BillItem.BillCode = DayCampaign.DCTarget
    NO-LOCK NO-ERROR.
  
    FIND FIRST bBillItem WHERE 
-              bBillItem.Brand    = gcBrand AND
+              bBillItem.Brand    = Syst.CUICommon:gcBrand AND
               bBillItem.BillCode = DayCampaign.BillCode 
    NO-LOCK NO-ERROR.
 
@@ -747,12 +741,12 @@ PROCEDURE LOCAL-UPDATE-RECORD.
    REPEAT ON ENDKEY UNDO, LEAVE:
 
       FIND FIRST BillItem WHERE
-                 BillItem.Brand    = gcBrand AND
+                 BillItem.Brand    = Syst.CUICommon:gcBrand AND
                  BillItem.BillCode = DayCampaign.DCTarget
       NO-LOCK NO-ERROR.
  
       FIND FIRST bBillItem WHERE
-                 bBillItem.Brand    = gcBrand AND
+                 bBillItem.Brand    = Syst.CUICommon:gcBrand AND
                  bBillItem.BillCode = DayCampaign.BillCode
       NO-LOCK NO-ERROR.
 
@@ -777,7 +771,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
       ELSE lcCalcMethod = "".
                   
       FIND FIRST ccn WHERE 
-                 ccn.Brand = gcBrand AND       
+                 ccn.Brand = Syst.CUICommon:gcBrand AND       
                  ccn.ccn   = DayCampaign.ccn NO-LOCK NO-ERROR.
 
       DISP 
@@ -816,28 +810,28 @@ PROCEDURE LOCAL-UPDATE-RECORD.
       fEffective(DayCampaign.Effective).
       fStatusName(DayCampaign.StatusCode).
 
-      IF ilNew THEN toimi = 1.
+      IF ilNew THEN Syst.CUICommon:toimi = 1.
       
       ELSE ASSIGN 
-         ehto   = 0
-         ufk    = 0
-         ufk[1] = 7 WHEN lcRight = "RW" AND gcHelpParam = ""
-         ufk[2] = 295
-         ufk[4] = 253
-         ufk[8] = 8.
+         Syst.CUICommon:ehto   = 0
+         Syst.CUICommon:ufk    = 0
+         Syst.CUICommon:ufk[1] = 7 WHEN lcRight = "RW" AND Syst.CUICommon:gcHelpParam = ""
+         Syst.CUICommon:ufk[2] = 295
+         Syst.CUICommon:ufk[4] = 253
+         Syst.CUICommon:ufk[8] = 8.
       RUN Syst/ufkey.p.
       
-      IF toimi = 1 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN DO:
          RUN pUpdate(ilNew).
          IF RETURN-VALUE BEGINS "UNDO" THEN UNDO, LEAVE MaintMenu.
          IF ilNew THEN LEAVE MaintMenu.
       END.   
 
-      ELSE IF toimi = 2 THEN RUN pFeeData(FALSE).
+      ELSE IF Syst.CUICommon:toimi = 2 THEN RUN pFeeData(FALSE).
 
-      ELSE IF toimi = 4 THEN RUN Mm/dcservicepackage.p(DayCampaign.DCEvent).  
+      ELSE IF Syst.CUICommon:toimi = 4 THEN RUN Mm/dcservicepackage.p(DayCampaign.DCEvent).  
       
-      ELSE IF toimi = 8 THEN LEAVE MaintMenu.
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE MaintMenu.
    END.
 
    HIDE FRAME lis NO-PAUSE.
@@ -861,7 +855,7 @@ PROCEDURE pUpdate:
  
       FIND CURRENT DayCampaign EXCLUSIVE-LOCK.
             
-      ehto = 9.
+      Syst.CUICommon:ehto = 9.
       RUN Syst/ufkey.p.
     
       UPDATE 
@@ -970,14 +964,14 @@ PROCEDURE pUpdate:
                END.
             END.
          
-            ehto = 9.
+            Syst.CUICommon:ehto = 9.
             RUN Syst/ufkey.p.
             NEXT.
          END.
        
-         nap = KEYLABEL(LASTKEY). 
+         Syst.CUICommon:nap = KEYLABEL(LASTKEY). 
 
-         IF lookup(nap,poisnap) > 0 THEN DO:
+         IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
             if keylabel(lastkey) = "F4" THEN LEAVE . 
 
             IF FRAME-FIELD = "DCEvent" THEN DO:
@@ -986,7 +980,7 @@ PROCEDURE pUpdate:
                END.
                ELSE IF CAN-FIND(FIRST 
                      xxDayCampaign WHERE
-                     xxDayCampaign.Brand    = gcBrand AND
+                     xxDayCampaign.Brand    = Syst.CUICommon:gcBrand AND
                      xxDayCampaign.DCEvent  = input DayCampaign.DCEvent  AND
                      RECID(xxDayCampaign)   ne RECID(DayCampaign))
                THEN DO:
@@ -1038,7 +1032,7 @@ PROCEDURE pUpdate:
 
             ELSE IF FRAME-FIELD = "BillItem" THEN DO:
                FIND FIRST bBillItem WHERE 
-                   bBillItem.Brand    = gcBrand AND
+                   bBillItem.Brand    = Syst.CUICommon:gcBrand AND
                    bBillItem.BillCode = input frame lis DayCampaign.BillCode
                NO-LOCK NO-ERROR.
                IF NOT AVAIL bBillItem THEN DO:
@@ -1199,22 +1193,22 @@ PROCEDURE pFeeData:
       
       fTermFeeCalc(DayCampaign.TermFeeCalc).
 
-      IF ilNew THEN toimi = 1.
+      IF ilNew THEN Syst.CUICommon:toimi = 1.
       ELSE DO: 
          ASSIGN 
-            ehto   = 0
-            ufk    = 0
-            ufk[1] = 7 WHEN gcHelpParam = ""
-            ufk[8] = 8.
+            Syst.CUICommon:ehto   = 0
+            Syst.CUICommon:ufk    = 0
+            Syst.CUICommon:ufk[1] = 7 WHEN Syst.CUICommon:gcHelpParam = ""
+            Syst.CUICommon:ufk[8] = 8.
          RUN Syst/ufkey.p.
       END.
       
-      IF toimi = 1 THEN 
+      IF Syst.CUICommon:toimi = 1 THEN 
       REPEAT WITH FRAME fFees ON ENDKEY UNDO, LEAVE FeeMenu:
 
          FIND CURRENT DayCampaign EXCLUSIVE-LOCK.
             
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
     
          UPDATE 
@@ -1242,14 +1236,14 @@ PROCEDURE pFeeData:
                   END.
                END.
           
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT.
             END.
 
-            nap = KEYLABEL(LASTKEY). 
+            Syst.CUICommon:nap = KEYLABEL(LASTKEY). 
 
-            IF lookup(nap,poisnap) > 0 THEN DO:
+            IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
                if keylabel(lastkey) = "F4" THEN LEAVE . 
 
                IF FRAME-FIELD = "TermFeeCalc" THEN DO:
@@ -1311,7 +1305,7 @@ PROCEDURE pFeeData:
          LEAVE.
      END.
      
-     ELSE IF toimi = 8 THEN LEAVE.
+     ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.
      
   END.  
 

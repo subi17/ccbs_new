@@ -9,7 +9,6 @@
 */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/tmsconst.i}
-DEFINE VARIABLE gcBrand  AS CHARACTER NO-UNDO INIT "1".
 DEFINE VARIABLE pcTenant AS CHARACTER NO-UNDO.
 
 DEFINE VARIABLE lcArray AS CHARACTER NO-UNDO. 
@@ -27,7 +26,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 {newton/src/settenant.i pcTenant}
 
 FOR EACH OrderAccessory NO-LOCK WHERE  
-         OrderAccessory.Brand = gcBrand AND
+         OrderAccessory.Brand = Syst.CUICommon:gcBrand AND
          OrderAccessory.IMEIStatus = ({&IMEI_STATUS_TO_BE_RELEASED})
    i = 1 to 500:
 

@@ -6,7 +6,6 @@
 
    mark and read order time stamps 
 */
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 
 /* change possible descriptive type to an integer key */
@@ -58,19 +57,19 @@ FUNCTION fMarkOrderStamp RETURNS LOGICAL
    IF liStampType = 0 THEN RETURN FALSE.
    
    FIND FIRST OrderTimeStamp WHERE
-              OrderTimeStamp.Brand   = Syst.Parameters:gcBrand   AND
+              OrderTimeStamp.Brand   = Syst.CUICommon:gcBrand   AND
               OrderTimeStamp.OrderID = iiOrderID AND
               OrderTimeStamp.RowType = liStampType EXCLUSIVE-LOCK NO-ERROR.
               
    IF NOT AVAILABLE OrderTimeStamp THEN DO:
       CREATE OrderTimeStamp.
-      ASSIGN OrderTimeStamp.Brand   = Syst.Parameters:gcBrand
+      ASSIGN OrderTimeStamp.Brand   = Syst.CUICommon:gcBrand
              OrderTimeStamp.OrderID = iiOrderID 
              OrderTimeStamp.RowType = liStampType.
    END. 
 
    /* use current time if not given */ 
-   IF idStamp = 0 THEN idStamp = fMakeTS().
+   IF idStamp = 0 THEN idStamp = Func.Common:mMakeTS().
    
    OrderTimeStamp.TimeStamp = idStamp.    
 
@@ -89,7 +88,7 @@ FUNCTION fGetOrderStamp RETURNS DECIMAL
    IF liStampType = 0 THEN RETURN 0.0.
    
    FIND FIRST OrderTimeStamp WHERE
-              OrderTimeStamp.Brand   = Syst.Parameters:gcBrand   AND
+              OrderTimeStamp.Brand   = Syst.CUICommon:gcBrand   AND
               OrderTimeStamp.OrderID = iiOrderID AND
               OrderTimeStamp.RowType = liStampType NO-LOCK NO-ERROR.
               

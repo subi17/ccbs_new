@@ -8,11 +8,9 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Mnp/mnp.i}
 {Mnp/mnpmessages.i}
 {Syst/tmsconst.i}
-{Func/date.i}
 {Mm/fbundle.i}
 {Func/multitenantfunc.i}
 
@@ -34,7 +32,7 @@ DEFINE BUFFER lbOrderCustomer FOR OrderCustomer.
 &SCOPED-DEFINE COMPANY_NAME_LIMIT 64   /* Name length limitation send to Nodo Central */
 
 FIND Order NO-LOCK WHERE
-     Order.Brand   = gcBrand AND
+     Order.Brand   = Syst.CUICommon:gcBrand AND
      Order.OrderId = iiOrderId NO-ERROR.
 
 IF NOT AVAIL Order THEN RETURN ("ERROR: Order not found " + STRING(iiOrderId)).
@@ -60,19 +58,19 @@ THEN lcRegion = OrderCustomer.Region.
 ASSIGN lcTenant = BUFFER-TENANT-NAME(Order).
 
 FIND FIRST MNPOperator WHERE 
-           MNPOperator.Brand = gcBrand AND
+           MNPOperator.Brand = Syst.CUICommon:gcBrand AND
            MNPOperator.OperName = STRING(order.curroper) AND
            MNPOperator.Active = True
 NO-LOCK NO-ERROR.
 
 IF NOT AVAIL MNPOperator THEN
    FIND FIRST MNPOperator WHERE 
-              MNPOperator.Brand = gcBrand AND
+              MNPOperator.Brand = Syst.CUICommon:gcBrand AND
               MNPOperator.OperName = STRING(order.curroper) AND
               MNPOperator.Active = False
    NO-LOCK NO-ERROR.
 
-ldeToday = fDate2TS(TODAY).
+ldeToday = Func.Common:mDate2TS(TODAY).
 
 IF AVAIL MNPOperator THEN DO:
 
@@ -102,7 +100,7 @@ FOR EACH MNPProcess WHERE
    MNPProcess.MNPType = {&MNP_TYPE_IN} AND
    MNPProcess.StatusCode = {&MNP_ST_AREC} EXCLUSIVE-LOCK:
    ASSIGN
-      MNPProcess.UpdateTS = fMakeTS()
+      MNPProcess.UpdateTS = Func.Common:mMakeTS()
       MNPProcess.StatusCode = {&MNP_ST_AREC_CLOSED}. /* closed */
 END.
 
@@ -118,13 +116,13 @@ FOR EACH MNPProcess where
               MNPOperation.statuscode = {&MNP_MSG_NC}
    NO-LOCK NO-ERROR.
    IF AVAIL MNPOperation THEN ASSIGN
-      MNPProcess.UpdateTS = fMakeTS()
+      MNPProcess.UpdateTS = Func.Common:mMakeTS()
       MNPProcess.StatusCode = {&MNP_ST_AREC_CLOSED}
       MNPProcess.StatusReason = MNPOperation.ErrorCode.
 END.
    
 FIND FIRST OrderAccessory NO-LOCK WHERE
-           OrderAccessory.Brand = gcBrand AND
+           OrderAccessory.Brand = Syst.CUICommon:gcBrand AND
            OrderAccessory.OrderId = Order.OrderID AND
            OrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE} NO-ERROR.
 IF AVAIL OrderAccessory THEN
@@ -138,7 +136,7 @@ IF lcTariffType = "" THEN
    lcTariffType = Order.CLIType.
 
 ldChgDate = fMNPChangeWindowDate(   /* Count min porting date */
-            fMakeTS(),
+            Func.Common:mMakeTS(),
             /* todo: can be removed after deplo */
             (IF Order.OrderType = 3 AND
                 Order.OrderChannel NE "inversa"
@@ -152,18 +150,18 @@ ldChgDate = fMNPChangeWindowDate(   /* Count min porting date */
 IF Order.PortingDate <> ? THEN
    IF ldChgDate < Order.PortingDate THEN /* Porting date in the future, use that */
       ldChgDate = Order.PortingDate.
-ldeChgStamp = fMake2Dt(ldChgDate,7200).
+ldeChgStamp = Func.Common:mMake2DT(ldChgDate,7200).
 
 CREATE MNPProcess.
 ASSIGN 
-   MNPProcess.CreatedTS   = fMakeTS()
+   MNPProcess.CreatedTS   = Func.Common:mMakeTS()
    MNPProcess.MNPSeq      = next-value(m2mrequest)
    MNPProcess.OrderId     = Order.OrderId
    MNPProcess.FormRequest = lcFormRequest
    MNPProcess.StatusCode  = {&MNP_ST_NEW}
-   MNPProcess.Brand       = gcBrand
+   MNPProcess.Brand       = Syst.CUICommon:gcBrand
    MNPProcess.MNPType     = {&MNP_TYPE_IN}
-   MNPProcess.UserCode    = katun
+   MNPProcess.UserCode    = Syst.CUICommon:katun
    MNPProcess.UpdateTS    = MNPProcess.CreatedTS
    MNPProcess.OperCode    = MNPOperator.OperCode WHEN AVAIL MNPOperator
    MNPProcess.PortingTime = ldeChgStamp.

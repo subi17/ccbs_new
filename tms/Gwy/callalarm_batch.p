@@ -1,5 +1,5 @@
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/heartbeat.i}
 
 FUNCTION fLogOut RETURNS LOGICAL:

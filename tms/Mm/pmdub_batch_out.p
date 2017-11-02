@@ -8,9 +8,8 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
-{Func/date.i}
+Syst.CUICommon:katun = "Cron".
+Syst.CUICommon:gcBrand = "1".
 {Func/ftransdir.i}
 {Func/cparam2.i}
 {Mm/bundle_first_month_fee.i}
@@ -58,17 +57,17 @@ ASSIGN
    lcOutDir   = fCParam("PrepaidBundle","OutDir")
    lcSpoolDir = fCParam("PrepaidBundle","OutSpoolDir")
    ldeMonthlyFee = fgetPrepaidFeeAmount("PMDUB", TODAY)
-   ldeNow = fMakeTS()
+   ldeNow = Func.Common:mMakeTS()
    ldaCurrMonth = DATE(MONTH(TODAY), 1, YEAR(TODAY))
    ldaFirstMonth = ldaCurrMonth - 1
    ldaFirstMonth = DATE(MONTH(ldaFirstMonth), 1, YEAR(ldaFirstMonth))
-   ldeFirstMonthBegin = fMake2Dt(ldaFirstMonth,0) 
-   ldeFirstMonthEnd = fMake2Dt(fLastDayOfMonth(ldaFirstMonth),86399)
+   ldeFirstMonthBegin = Func.Common:mMake2DT(ldaFirstMonth,0) 
+   ldeFirstMonthEnd = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(ldaFirstMonth),86399)
    liFirstMonthPeriod = YEAR(ldaFirstMonth) * 100 + MONTH(ldaFirstMonth)
-   ldeTodayBegin = fmake2Dt(TODAY,0)
-   ldeTodayEnd = fmake2Dt(TODAY,86399)
-   ldeFirstDayStart = fmake2Dt(ldaCurrMonth,0)
-   ldeFirstDayEnd = fmake2Dt(ldaCurrMonth,86399)
+   ldeTodayBegin = Func.Common:mMake2DT(TODAY,0)
+   ldeTodayEnd = Func.Common:mMake2DT(TODAY,86399)
+   ldeFirstDayStart = Func.Common:mMake2DT(ldaCurrMonth,0)
+   ldeFirstDayEnd = Func.Common:mMake2DT(ldaCurrMonth,86399)
    .
 
 IF NOT lcOutDir > "" OR
@@ -76,8 +75,8 @@ IF NOT lcOutDir > "" OR
    ldeMonthlyFee <= 0 THEN RETURN.
 
 for each clitype where
-         clitype.brand = gcBrand no-lock:
-   if fmatrixanalyse(gcBrand,
+         clitype.brand = Syst.CUICommon:gcBrand no-lock:
+   if fmatrixanalyse(Syst.CUICommon:gcBrand,
                      "percontr",
                      "percontract;substypeto",
                      "pmdub;" + clitype.clitype,
@@ -90,7 +89,7 @@ lcAllowedTypes = substring(lcAllowedTypes,2).
          
 i = 1.
 FOR EACH ActionLog WHERE
-         ActionLog.Brand      = gcBrand AND
+         ActionLog.Brand      = Syst.CUICommon:gcBrand AND
          ActionLog.ActionID   = "PMDUB_OUT" AND
          ActionLog.ActionTS  >= ldeTodayBegin AND
          ActionLog.ActionTS  <= ldeTodayEnd NO-LOCK:
@@ -213,7 +212,7 @@ PROCEDURE pMarkStarted:
    
    /* check that there isn't already another run for the same purpose */
    IF CAN-FIND(FIRST ActionLog USE-INDEX ActionID WHERE
-                     ActionLog.Brand        = gcBrand     AND    
+                     ActionLog.Brand        = Syst.CUICommon:gcBrand     AND    
                      ActionLog.TableName    = "Cron" AND
                      ActionLog.ActionID     = "PMDUB_OUT" AND
                      ActionLog.KeyValue     = lcFileName AND
@@ -224,12 +223,12 @@ PROCEDURE pMarkStarted:
          CREATE ActionLog.
          
          ASSIGN
-            ActionLog.Brand        = gcBrand
+            ActionLog.Brand        = Syst.CUICommon:gcBrand
             ActionLog.ActionID     = "PMDUB_OUT"
             ActionLog.ActionTS     = ldeNow
             ActionLog.TableName    = "Cron"
             ActionLog.KeyValue     = lcFileName
-            ActionLog.UserCode     = katun
+            ActionLog.UserCode     = Syst.CUICommon:katun
             ActionLog.ActionStatus = {&ACTIONLOG_STATUS_LOGGED}
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY) 
             ActionLog.ActionChar   = "Batch not started due to ongoing run".
@@ -243,12 +242,12 @@ PROCEDURE pMarkStarted:
       CREATE ActionLog.
       
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.CUICommon:gcBrand
          ActionLog.ActionID     = "PMDUB_OUT"
          ActionLog.ActionTS     = ldeNow
          ActionLog.TableName    = "Cron"
          ActionLog.KeyValue     = lcFileName
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.CUICommon:katun
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE}
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY).
       RELEASE ActionLog.   
@@ -261,7 +260,7 @@ PROCEDURE pMarkFinished:
 
    /* mark this run finished */
    FOR FIRST ActionLog USE-INDEX ActionID WHERE
-             ActionLog.Brand        = gcBrand AND    
+             ActionLog.Brand        = Syst.CUICommon:gcBrand AND    
              ActionLog.ActionID     = "PMDUB_OUT" AND
              ActionLog.ActionTS     = ldeNow AND
              ActionLog.TableName    = "Cron" AND

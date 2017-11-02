@@ -66,16 +66,16 @@ def var order         as int   no-undo.
 
 form
    valik no-label
-   with overlay 2 down title color value(ctc) " CHOOSE ORDER FOR PRINTOUT "
-   color value(cfc) row 6 centered frame rival.
+   with overlay 2 down title color value(Syst.CUICommon:ctc) " CHOOSE ORDER FOR PRINTOUT "
+   color value(Syst.CUICommon:cfc) row 6 centered frame rival.
 
 form
    "  Note : This program creates an AGE ANALYSIS of all "    skip
    "         unpaid invoices according to given criteria:"    skip
    skip(15)
    with row 1 side-labels width 80
-        title color value(ctc) " " + ynimi + " AGE ANALYSIS " +
-        string(pvm,"99-99-99") + " " color value(cfc)
+        title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " AGE ANALYSIS " +
+        string(TODAY,"99-99-99") + " " color value(Syst.CUICommon:cfc)
         frame valinta.
 
 form
@@ -106,12 +106,12 @@ form
    aryhma6 label "Group 6 " "days" "  - " lryhma6 no-label "days" skip
    "Group 7 :" aryhma7 no-label "days overdue invoices" 
 
-   with title color value(ctc) " CRITERIA FOR PRINTOUT " side-labels
-   color value(cfc) row 4 centered overlay frame rajat.
+   with title color value(Syst.CUICommon:ctc) " CRITERIA FOR PRINTOUT " side-labels
+   color value(Syst.CUICommon:cfc) row 4 centered overlay frame rajat.
 
-cfc = "sel". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
 view frame valinta.
-cfc = "puli". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "puli". RUN Syst/ufcolor.p.
 pause 0 no-message.
 
 assign
@@ -137,11 +137,11 @@ with frame rajat.
 
 toimi:
 repeat with frame valinta on endkey undo toimi, next toimi:
-      assign ufk = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8 ehto = 0.
+      assign Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
 
-      if toimi = 1 then do:
-         ehto = 9. RUN Syst/ufkey.p.
+      if Syst.CUICommon:toimi = 1 then do:
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          update 
             day-to
             InvGroup
@@ -160,8 +160,8 @@ repeat with frame valinta on endkey undo toimi, next toimi:
             validate(input lryhma6 >  input aryhma6, "Impossible definition !")
 
          with frame rajat editing:
-            readkey. nap = keylabel(lastkey).
-            if lookup(nap,poisnap) > 0 then do:
+            readkey. Syst.CUICommon:nap = keylabel(lastkey).
+            if lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 then do:
                hide message.
                if frame-field = "InvGroup" then do:
                   assign frame rajat InvGroup.
@@ -171,7 +171,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
                   end.
                   else do:
                      find invgroup where 
-                          InvGroup.Brand    = gcBrand AND
+                          InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                           invgroup.InvGroup = InvGroup
                      no-lock no-error.
                      if not avail invgroup then do:
@@ -198,7 +198,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
                   else do:
                      RUN Mc/gathecg.p(INPUT-OUTPUT table TCustGroup).
                      /* DISPLAY Customer groups */
-                     EHTO = 9.
+                     Syst.CUICommon:ehto = 9.
                      RUN Syst/ufkey.p.
                      FOR EACH TCustGroup.
                         dExtCustGrp = dExtCustGrp + TCustGroup.CustGroup + ",".
@@ -244,10 +244,10 @@ repeat with frame valinta on endkey undo toimi, next toimi:
 
       end.
 
-      else if toimi = 5 then do:
+      else if Syst.CUICommon:toimi = 5 then do:
          IF NOT llOnlySummary THEN DO:
             assign
-            cfc = "uusi". RUN Syst/ufcolor.p.   ccc = cfc.
+            Syst.CUICommon:cfc = "uusi". RUN Syst/ufcolor.p.   Syst.CUICommon:ccc = Syst.CUICommon:cfc.
             do i = 1 to 2 with frame rival:
                valik = valikko[i].
                display valik.
@@ -261,7 +261,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
                "Choose printing order, press ENTER !".
                readkey pause 0.
                choose row valik {Syst/uchoose.i} no-error.
-               color display value(ccc) valik with frame rival.
+               color display value(Syst.CUICommon:ccc) valik with frame rival.
                i = frame-line.
                hide message no-pause.
                assign order = i.
@@ -277,11 +277,11 @@ repeat with frame valinta on endkey undo toimi, next toimi:
          leave toimi.
       end.
 
-      else if toimi = 8 then return.
+      else if Syst.CUICommon:toimi = 8 then return.
 
-end. /* toimi */
+end. /* Syst.CUICommon:toimi */
 
-ehto = 5.
+Syst.CUICommon:ehto = 5.
 RUN Syst/ufkey.p.
 
 CREATE ttCriter.

@@ -11,7 +11,6 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/msreqfunc.i}
 {Func/fmakemsreq.i}
 {Syst/eventval.i}
@@ -52,19 +51,19 @@ IF NOT AVAILABLE MobSub THEN DO:
 END.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
    {Func/lib/eventlog.i}
 END.
 
 /* mainly for test purposes when dates are manipulated .. */
-IF MsRequest.ActStamp > fMakeTS() THEN DO:
+IF MsRequest.ActStamp > Func.Common:mMakeTS() THEN DO:
    ldActStamp = MsRequest.ActStamp.
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldaActDate,
             OUTPUT liTime).
 END.
 ELSE ASSIGN
-   ldActStamp = fMakeTS()
+   ldActStamp = Func.Common:mMakeTS()
    ldaActDate = TODAY.
 
 RUN pMain.
@@ -142,8 +141,8 @@ PROCEDURE pNew:
    DEF VAR liUnbarrReq AS INT NO-UNDO.
    DEF VAR liDelay AS INT NO-UNDO.
 
-   IF idtDate = TODAY THEN ideActTime = fMakeTS().
-   ELSE ideActTime = fMake2Dt(idtDate,10800).
+   IF idtDate = TODAY THEN ideActTime = Func.Common:mMakeTS().
+   ELSE ideActTime = Func.Common:mMake2DT(idtDate,10800).
 
    /* Assign master request (35) to 1 */
    IF NOT fReqStatus(1,"") THEN RETURN "".
@@ -184,7 +183,7 @@ PROCEDURE pNew:
    FOR EACH ttProvCommand:
 
       FIND ServCom NO-LOCK WHERE
-           ServCom.Brand   = gcBrand AND
+           ServCom.Brand   = Syst.CUICommon:gcBrand AND
            ServCom.ServCom = ttProvCommand.component NO-ERROR.
 
       IF NOT AVAILABLE ServCom THEN DO:
@@ -193,7 +192,7 @@ PROCEDURE pNew:
       END.
 
       FIND FIRST CTServEl NO-LOCK WHERE
-                 CTServEl.Brand     = gcBrand   AND
+                 CTServEl.Brand     = Syst.CUICommon:gcBrand   AND
                  CTServEl.ServCom   = ServCom.ServCom AND
                  CTServEl.CLIType   = MobSub.CLIType AND
                  CTServEl.FromDate <= TODAY NO-ERROR.
@@ -238,7 +237,7 @@ PROCEDURE pNew:
                                (IF ttProvCommand.ComponentParam NE "" THEN 1
                                 ELSE ttProvCommand.ComponentValue),
                                ttProvCommand.ComponentParam,
-                               fSecOffSet(ideActTime,liDelay),
+                               Func.Common:mSecOffSet(ideActTime,liDelay),
                                "",                /* SalesMan */
                                FALSE,             /* Set fees */
                                FALSE,             /* SMS */
@@ -262,7 +261,7 @@ PROCEDURE pNew:
                                   "BARRING",
                                   1,
                                   ttProvCommand.BarringCmd,
-                                  fSecOffSet(ideActTime,5), /* 5 sec delay */
+                                  Func.Common:mSecOffSet(ideActTime,5), /* 5 sec delay */
                                   "",                /* SalesMan */
                                   FALSE,             /* Set fees */
                                   FALSE,             /* SMS */
@@ -289,7 +288,7 @@ PROCEDURE pNew:
                                      "LP",
                                      1,
                                      "remove",
-                                     fSecOffSet(ideActTime,5), /* 5 sec delay, 
+                                     Func.Common:mSecOffSet(ideActTime,5), /* 5 sec delay, 
                                                 must be before LP activation*/
                                      "",                /* SalesMan */
                                      FALSE,             /* Set fees */
@@ -410,7 +409,7 @@ PROCEDURE pDone.
          Barring.MsSeq = MobSub.MsSeq
          Barring.BarringCode = ttMergedBarring.BarrCode
          Barring.BarringStatus = ttMergedBarring.BarrStatus
-         Barring.EventTS = fMakeTs() 
+         Barring.EventTS = Func.Common:mMakeTS() 
          Barring.UserCode = MsRequest.UserCode
          Barring.MSrequest = MSrequest.MSrequest.
    END.
@@ -460,7 +459,7 @@ PROCEDURE pDone.
  
       CREATE Memo.
       ASSIGN 
-         Memo.Brand     = gcBrand
+         Memo.Brand     = Syst.CUICommon:gcBrand
          Memo.HostTable = "MobSub"
          Memo.KeyValue  = STRING(MsRequest.MsSeq)
          Memo.CustNum   = MsRequest.CustNum
@@ -470,7 +469,7 @@ PROCEDURE pDone.
          Memo.MemoTitle = lcMemoTitle
          Memo.MemoText  = ENTRY(1,ENTRY(1,MsRequest.ReqCParam1),"=") +
                           " aplicado".
-         Memo.CreStamp  = fMakeTS().
+         Memo.CreStamp  = Func.Common:mMakeTS().
    END.
 
    /* MobSub status update ok, Master request OK */
@@ -513,16 +512,15 @@ PROCEDURE pDone.
          RUN Mm/barrengine.p(Mobsub.MsSeq,
                          "#REFRESH",
                          "5",                /* source  */
-                         katun,              /* creator */
-                         fMakeTS(),
+                         Syst.CUICommon:katun,              /* creator */
+                         Func.Common:mMakeTS(),
                          "",                 /* SMS */
                          OUTPUT lcResult).
                
          liReq = INTEGER(lcResult) NO-ERROR. 
          IF liReq EQ ? OR NOT liReq > 0 THEN DO:     
             /* Write memo */
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                              STRING(MsRequest.MsSeq),
                              MsRequest.CustNum,
                              "Barring",
@@ -565,8 +563,7 @@ PROCEDURE pDone.
                                  OUTPUT lcResult).
             IF liReq = 0 THEN
                /* Write memo */
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                "MobSub",
+               Func.Common:mWriteMemo("MobSub",
                                 STRING(MsRequest.MsSeq),
                                 MsRequest.CustNum,
                                 "Service Package",

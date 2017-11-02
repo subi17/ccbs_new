@@ -10,7 +10,6 @@
   Version ......: Yoigo
 ---------------------------------------------------------------------- */
 {Syst/commali.i}
-{Func/date.i}
 {Func/log.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
@@ -175,7 +174,7 @@ FUNCTION fNagios RETURNS LOGICAL
    /* nagios URL */
    IF pcURL = "" THEN RETURN FALSE.
    FIND FIRST TMSParam WHERE
-              TMSParam.Brand      = gcBrand  AND
+              TMSParam.Brand      = Syst.CUICommon:gcBrand  AND
               TMSParam.ParamGroup = "NAGIOS" AND
               TMSParam.ParamCode  = "URL"
    NO-LOCK NO-ERROR.
@@ -187,7 +186,7 @@ FUNCTION fNagios RETURNS LOGICAL
       lcCommand     = ENTRY(1,pcCommand,":")
       lcDescription = ENTRY(2,pcCommand,":") WHEN
                       NUM-ENTRIES(pcCommand,":") > 1
-      lcTimeStamp   = fTS2HMS(fOffSetTS(liOffSet))
+      lcTimeStamp   = Func.Common:mTS2HMS(Func.Common:mOffSetTS(liOffSet))
       lcTimeStamp   = SUBSTR(lcTimeStamp,7,4)  +
                       SUBSTR(lcTimeStamp,4,2)  +
                       SUBSTR(lcTimeStamp,1,2)  +
@@ -237,20 +236,20 @@ FUNCTION fKeepAlive RETURNS INTEGER
       CREATE ttNagios.
       ASSIGN
          ttNagios.tcCommand = lcCommand
-         ttNagios.tdeTS1    = fOffSetTS(1).
+         ttNagios.tdeTS1    = Func.Common:mOffSetTS(1).
 
       fNagios(pcCommand,pcURL).
 
    END.
    
-   ttNagios.tdeTS2 = fOffSetTS(liOffSet).
+   ttNagios.tdeTS2 = Func.Common:mOffSetTS(liOffSet).
 
    IF ttNagios.tdeTS2 - ttNagios.tdeTS1 > ldeAlarmLimit THEN DO:
    
       fNagios(pcCommand,pcURL).
 
       ASSIGN
-         ttNagios.tdeTS1 = fOffSetTS(1)
+         ttNagios.tdeTS1 = Func.Common:mOffSetTS(1)
          ttNagios.tdeTS2 = ttNagios.tdeTS1.
 
    END.
@@ -437,7 +436,7 @@ PROCEDURE pDumpFileRotation:
          fMove2TransDir(lcDumpFile, ".txt", lcDumpOut).
    END. /* IF llLogFileAct = FALSE THEN DO: */
 
-   ASSIGN ldeTimeStamp = fSecOffSet(fMakeTS(),liDumpFreq)
+   ASSIGN ldeTimeStamp = Func.Common:mSecOffSet(Func.Common:mMakeTS(),liDumpFreq)
           ldDate       = TODAY
           llLogFileAct = TRUE
           lcDumpFile   = lcDumpSpool + "/replog_reader_" + icModule + "_" +

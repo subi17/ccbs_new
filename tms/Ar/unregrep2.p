@@ -62,13 +62,16 @@ ASSIGN
     viiva3 = fill("-",lev)
     viiva4 = fill("-",lev).
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.CUICommon:ynimi.
+
 form header
    viiva1 AT 1 SKIP
    ynimi at 1 format "x(28)" 
       "Unregistered Payments" AT 32
       "Page" AT 68  
       sl format "ZZZZ9" SKIP
-      pvm format "99.99.9999" AT 68 SKIP
+      TODAY FORMAT "99.99.9999" AT 68 SKIP
    viiva2 AT 1 skip(1)
 
    WITH width 95 NO-LABEL no-box FRAME sivuotsi.
@@ -102,7 +105,7 @@ ASSIGN sl = 1
        rl = 0.
 
 FOR EACH UnregPaym WHERE 
-         UnregPaym.Brand   = gcBrand AND
+         UnregPaym.Brand   = Syst.CUICommon:gcBrand AND
          UnregPaym.AccDate <= iDate  AND
          UnregPaym.State NE 2
 no-lock.

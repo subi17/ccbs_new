@@ -21,7 +21,7 @@ DEF VAR new_custlet AS LOG NO-UNDO INIT FALSE.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -39,14 +39,14 @@ END.
 form /* memo */
 WITH
     OVERLAY ROW 1 centered NO-LABEL
-    color value(cfc) title color value(cfc) " Update letter "
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:cfc) " Update letter "
     FRAME memo.
 
 DO TRANS WITH FRAME memo ON ENDKEY UNDO, RETURN:
 
-   assign ehto = 9 cfc = "lis" ufkey = TRUE.
+   assign Syst.CUICommon:ehto = 9 Syst.CUICommon:cfc = "lis" ufkey = TRUE.
    RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
-   FIND FIRST CustLetter WHERE CustLetter.Brand = gcBrand
+   FIND FIRST CustLetter WHERE CustLetter.Brand = Syst.CUICommon:gcBrand
       exclusive-lock no-error.
    IF NOT AVAIL CustLetter THEN 
    DO:
@@ -56,7 +56,7 @@ DO TRANS WITH FRAME memo ON ENDKEY UNDO, RETURN:
       END.
       new_custlet = TRUE.
       CREATE CustLetter.
-      CustLetter.Brand = gcBrand.
+      CustLetter.Brand = Syst.CUICommon:gcBrand.
    END.
 
    IF NOT new_custlet AND
@@ -86,7 +86,7 @@ END.
 
 DO i = 1 TO 17 TRANS:
    IF CustLetter.LtrText[i] entered THEN DO:
-      CustLetter.ChgDate = pvm.
+      CustLetter.ChgDate = TODAY.
       LEAVE.
    END.
 END.

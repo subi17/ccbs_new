@@ -2,9 +2,8 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
-katun = "Newton".
-{Func/timestamp.i}
+Syst.CUICommon:gcBrand = "1".
+Syst.CUICommon:katun = "Newton".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
@@ -88,7 +87,7 @@ IF lcInSpoolDir = "" OR lcInIncomingDir = "" THEN
    RETURN appl_err("TMS Configuration missing").
 
 /* Prepare Subscription creation input file */
-lcInputFile = lcInSpoolDir + "/newton_subs_creation_" + pcUserName + "_" + STRING(fMakeTS()) + ".RPT".
+lcInputFile = lcInSpoolDir + "/newton_subs_creation_" + pcUserName + "_" + STRING(Func.Common:mMakeTS()) + ".RPT".
 
 OUTPUT STREAM sInput TO VALUE(lcInputFile).
 
@@ -127,6 +126,5 @@ fTransDir(lcInputFile,
 add_boolean(response_toplevel_id,?,True).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.
 

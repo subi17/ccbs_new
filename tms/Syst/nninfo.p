@@ -17,7 +17,7 @@ DEF VAR i   AS i.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -32,9 +32,9 @@ DO:
 END.
 
 DO i = 1 TO 8:
-   xfk[i] = ufk[i].
+   xfk[i] = Syst.CUICommon:ufk[i].
 END.
-ASSIGN ufk = 0 ufk[1] = 2 ufk[8] = 8. ehto = 0.
+ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 2 Syst.CUICommon:ufk[8] = 8. Syst.CUICommon:ehto = 0.
 
 FIND MenuTree where MenuTree.MenuId = MenuId no-lock.
 
@@ -50,9 +50,9 @@ DISP MenuTree.Memo[1 FOR 15] WITH FRAME info.
 
 RUN Syst/ufkey.p.
 
-IF toimi = 1 THEN DO TRANS:
+IF Syst.CUICommon:toimi = 1 THEN DO TRANS:
    PAUSE 0.
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    FIND MenuTree where MenuTree.MenuId = MenuId exclusive-lock.
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMenuTree).
    UPDATE MenuTree.Memo[1 FOR 15] WITH FRAME info.
@@ -62,8 +62,8 @@ END.
 HIDE FRAME info  no-pause.
 
 DO i = 1 TO 8.
-   ufk[i] = xfk[i].
+   Syst.CUICommon:ufk[i] = xfk[i].
 END.
-ehto = 3.
+Syst.CUICommon:ehto = 3.
 RUN Syst/ufkey.p.
 PAUSE 0.

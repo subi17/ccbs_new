@@ -11,7 +11,6 @@
                   04.12.03/aam delete, eventlog
                   30.01.04/aam input CustNum,
                                editor for memo
-                  24.01.06/jt  DYNAMIC-FUNCTION("fDispCustName"
                   16.06.06/aam ClaimState instead of Claim and ClaimQty
                   24.05.07/aam Invoice.ExtInvID
   Version ......: M15
@@ -27,7 +26,7 @@
 {Ar/invdet.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -82,10 +81,10 @@ form
     ClaimHist.Handler    format "x(8)"
 
 WITH ROW FrmRow width 80 overlay FrmDown  down
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.CUICommon:cfc)   
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     "  CLAIMING HISTORY  "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 {Func/brand.i}
@@ -94,31 +93,31 @@ form /* seek  invoice */
     "Brand .:" lcBrand skip
     "Invoice:" lInvNum
     HELP "Enter invoice number "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND INVOICE "
-    COLOR VALUE(cfc) NO-labels overlay FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND INVOICE "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f1.
 
 form /* seek  customer */
     "Brand ..:" lcBrand skip
     "Customer:" liCustNum
     HELP "Enter customer number "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUSTOMER "
-    COLOR VALUE(cfc) NO-labels overlay FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CUSTOMER "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f2.
 
 
 form /* seek  Date */
     "Brand:" lcBrand skip
     "Date :" lClaimDate FORMAT "99-99-9999"
     HELP "Enter claiming date"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Date "
-    COLOR VALUE(cfc) NO-labels overlay FRAME f3.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Date "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-labels overlay FRAME f3.
 
 
 form
     ClaimHist.memo
     VIEW-AS EDITOR SIZE 60 BY 5 
     with overlay row 8 centered
-    COLOR VALUE(cfc)
-    title COLOR VALUE(ctc)
+    COLOR VALUE(Syst.CUICommon:cfc)
+    title COLOR VALUE(Syst.CUICommon:ctc)
     " memo: " + ClaimHist.handler + " " WITH no-labels 1 columns
     frame f4.
 
@@ -143,7 +142,7 @@ ELSE DO:
    RETURN.      
 END.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 
@@ -200,17 +199,17 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 92   ufk[2]= 714  ufk[3]= 28 ufk[4]= 927 
-         ufk[5]= 1491 ufk[6]= 4    ufk[7]= 0  ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = false.
+         Syst.CUICommon:ufk[1]= 92   Syst.CUICommon:ufk[2]= 714  Syst.CUICommon:ufk[3]= 28 Syst.CUICommon:ufk[4]= 927 
+         Syst.CUICommon:ufk[5]= 1491 Syst.CUICommon:ufk[6]= 4    Syst.CUICommon:ufk[7]= 0  Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+         Syst.CUICommon:ehto = 3 ufkey = false.
          
          IF iiInvNum > 0 THEN ASSIGN 
-                ufk[1] = 0
-                ufk[2] = 0
-                ufk[3] = 0.
+                Syst.CUICommon:ufk[1] = 0
+                Syst.CUICommon:ufk[2] = 0
+                Syst.CUICommon:ufk[3] = 0.
          ELSE IF iiCustNum > 0 THEN ASSIGN 
-                ufk[1] = 0
-                ufk[2] = 0.
+                Syst.CUICommon:ufk[1] = 0
+                Syst.CUICommon:ufk[2] = 0.
                 
          RUN Syst/ufkey.p.
       END.
@@ -218,30 +217,30 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         choose row lcExtInvID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) lcExtInvID WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) lcExtInvID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         choose row ClaimHist.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ClaimHist.CustNum WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ClaimHist.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
         choose row ClaimHist.ClaimDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ClaimHist.ClaimDate WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ClaimHist.ClaimDate WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTkey).
+      Syst.CUICommon:nap = keylabel(LASTkey).
 
       IF rtab[FRAME-line] = ? AND
-         LOOKUP(nap,"8,f8") = 0 
+         LOOKUP(Syst.CUICommon:nap,"8,f8") = 0 
       THEN NEXT.
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         IF iiCustNum = 0 THEN DO:
            order = order + 1. 
            IF order > maxOrder THEN order = 1.
         END.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         IF iiCustNum = 0 THEN DO:
            order = order - 1. IF order = 0 THEN order = maxOrder.
         END. 
@@ -267,10 +266,10 @@ REPEAT WITH FRAME sel:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTkey).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTkey).
 
       /* PREVious row */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-line = 1 THEN DO:
            RUN local-find-this(false).
            RUN local-find-PREV.
@@ -295,7 +294,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious row */
 
       /* NEXT row */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-line = FRAME-down THEN DO:
            RUN local-find-this(false).
@@ -321,7 +320,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT row */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND ClaimHist WHERE recid(ClaimHist) = memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -345,7 +344,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* Put Cursor on downmost Row */
        IF rtab[FRAME-down] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -360,13 +359,13 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search by column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND Syst.CUICommon:ufk[1] > 0
      THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               lInvNum WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
 
@@ -389,13 +388,13 @@ REPEAT WITH FRAME sel:
      END. /* Search-1 */
 
      /* Search by column 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 AND Syst.CUICommon:ufk[2] > 0 
      THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               liCustNum WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
 
@@ -413,14 +412,14 @@ REPEAT WITH FRAME sel:
      END. /* Search-2 */
 
      /* Search by col 3 */
-     ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 AND Syst.CUICommon:ufk[3] > 0
      THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F3.
        DISPLAY lcBrand WITH FRAME F3.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               lClaimDate WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
 
@@ -459,24 +458,24 @@ REPEAT WITH FRAME sel:
      END. /* Search-3 */
 
      /* update memo */
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO TRANS on ENDkey undo, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 THEN DO TRANS on ENDkey undo, NEXT LOOP:
         {Syst/uright2.i}.
 
         RUN local-find-this(FALSE).
         PAUSE 0.
         DISPLAY ClaimHist.Memo WITH FRAME f4.
         
-        ASSIGN ufk = 0
-               ufk[1] = 7
-               ufk[8] = 8
-               ehto   = 0
+        ASSIGN Syst.CUICommon:ufk = 0
+               Syst.CUICommon:ufk[1] = 7
+               Syst.CUICommon:ufk[8] = 8
+               Syst.CUICommon:ehto   = 0
                ufkey = true.
         
         RUN Syst/ufkey.p.
         
-        IF toimi = 1 THEN DO:
+        IF Syst.CUICommon:toimi = 1 THEN DO:
         
-           ehto = 9. 
+           Syst.CUICommon:ehto = 9. 
            RUN Syst/ufkey.p. 
            run local-find-this(true).
 
@@ -492,11 +491,11 @@ REPEAT WITH FRAME sel:
         HIDE FRAME f4 NO-PAUSE.
      END.
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:  /* view invoice */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:  /* view invoice */
         RUN local-find-this(true).
 
         IF AVAILABLE ClaimHist THEN DO:
-           ehto = 5.
+           Syst.CUICommon:ehto = 5.
            RUN Syst/ufkey.p.
 
            /* show details */
@@ -506,7 +505,7 @@ REPEAT WITH FRAME sel:
         ufkey = TRUE.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* DELETE */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 THEN DO TRANSACTION:  /* DELETE */
      
         {Syst/uright2.i}
         delrow = FRAME-LINE.
@@ -543,7 +542,7 @@ REPEAT WITH FRAME sel:
         RUN local-find-this(TRUE).
              
         /* Highlight */
-        COLOR DISPLAY VALUE(ctc)
+        COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
         lcExtInvID
         ClaimHist.ClaimState
         ClaimHist.ClaimDate
@@ -552,7 +551,7 @@ REPEAT WITH FRAME sel:
                               
         ASSIGN ok = FALSE.
         MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-        COLOR DISPLAY VALUE(ccc)
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
         lcExtInvID
         ClaimHist.ClaimState
         ClaimHist.ClaimDate
@@ -579,26 +578,26 @@ REPEAT WITH FRAME sel:
         
      END. /* DELETE */
         
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = recid(ClaimHist) must-print = true.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN memory = recid(ClaimHist) must-print = true.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
 HIDE MESSAGE NO-PAUSE. 
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 PROCEDURE local-find-this:
@@ -736,8 +735,7 @@ PROCEDURE local-find-others.
        lcExtInvID = "".
        
     IF AVAILABLE Customer 
-    THEN lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                       BUFFER Customer).
+    THEN lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
     FIND Invoice WHERE Invoice.InvNum = ClaimHist.InvNum NO-LOCK NO-ERROR.
     IF AVAILABLE Invoice THEN lcExtInvID = Invoice.ExtInvID.

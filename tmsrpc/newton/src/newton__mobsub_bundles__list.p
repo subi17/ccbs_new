@@ -8,12 +8,11 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/upsellcount.i}
 {Mm/active_bundle.i}
 {Mm/fbundle.i}
-{Func/timestamp.i}
 {Func/fixedlinefunc.i}
 
 DEF VAR lcResultArray         AS CHAR NO-UNDO. 
@@ -40,7 +39,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 lcResultArray = add_array(response_toplevel_id, "").
 
-ASSIGN ldCurrentDateTime = fMakeTS().
+ASSIGN ldCurrentDateTime = Func.Common:mMakeTS().
 
 RUN pAdd_DSS.
 
@@ -81,7 +80,7 @@ PROCEDURE pAdd_DataBundle:
        
        add_string(lcResultArray,"", lcActiveBundle + "|" + STRING(Mobsub.MsSeq)).
 
-       FIND FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand   = gcBrand        AND
+       FIND FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand   = Syst.CUICommon:gcBrand        AND
                                             DayCampaign.DCEvent = lcActiveBundle NO-ERROR.
        IF NOT AVAIL DayCampaign OR DayCampaign.BundleUpsell EQ "" THEN 
           NEXT.
@@ -94,7 +93,7 @@ PROCEDURE pAdd_DataBundle:
 
     IF NOT llActiveBonoContract THEN 
     DO:
-        FOR EACH DayCampaign NO-LOCK WHERE DayCampaign.Brand = gcBrand AND
+        FOR EACH DayCampaign NO-LOCK WHERE DayCampaign.Brand = Syst.CUICommon:gcBrand AND
                                     LOOKUP(DayCampaign.DCEvent,lcAllowedBONOContracts) > 0:
 
            IF NOT fIsBundleAllowed(Mobsub.CLIType,
@@ -163,7 +162,7 @@ PROCEDURE pAdd_DSS:
     DO:
         add_string(lcResultArray,"", lcDSSBundleId + "|" + STRING(Mobsub.MsSeq)).
         /*Find upsells and add all to reponse*/
-        FIND FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand   = gcBrand       AND
+        FIND FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand   = Syst.CUICommon:gcBrand       AND
                                              DayCampaign.DCEvent = lcDSSBundleId NO-ERROR.
         IF AVAIL DayCampaign AND DayCampaign.BundleUpsell > "" THEN 
         DO:
@@ -187,5 +186,4 @@ PROCEDURE pAdd_DSS:
 END PROCEDURE.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

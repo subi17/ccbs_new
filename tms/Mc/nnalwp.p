@@ -41,7 +41,7 @@ DEF NEW shared STREAM excel.
 
 /* get default direcory Name FOR OUTPUT */
 DO FOR TMSUser:
-   FIND TMSUser where TMSUser.UserCode = katun no-lock.
+   FIND TMSUser where TMSUser.UserCode = Syst.CUICommon:katun no-lock.
    ASSIGN exdir = TMSUser.RepDir.
 END.
 
@@ -94,14 +94,14 @@ help "Type of subscriber: (D)irect / (I)ndirect connection, (?) = ALL"
 skip(1)
 
 WITH
-   width 80 OVERLAY COLOR value(cfc) TITLE COLOR value(ctc)
-   " " + ynimi + " CUSTOMER MAILING LIST " + string(pvm,"99-99-99") + " " NO-LABELS FRAME start.
+   width 80 OVERLAY COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
+   " " + Syst.CUICommon:ynimi + " CUSTOMER MAILING LIST " + string(TODAY,"99-99-99") + " " NO-LABELS FRAME start.
 
 cdate2 = TODAY.
 cdate1 = 1/1/1995.       
 bills  = TRUE.                      
 
-cfc = "sel". RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p.
 
 
 sml = "SMLX".
@@ -117,7 +117,7 @@ WITH FRAME start.
 
 CRIT:
 repeat WITH FRAME start:
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    UPDATE
       exName
       CustGroup
@@ -130,13 +130,13 @@ repeat WITH FRAME start:
       Category  CustNum ConnType
    WITH FRAME start EDITING.
       READKEY.
-      IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO:
+      IF lookup(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO:
          PAUSE 0.
          if frame-field = "CustGroup" THEN DO:
             if input frame start CustGroup = "" then disp "ALL" @ CGName.
             ELSE DO:
                FIND CustGroup where 
-                    CustGroup.Brand     = gcBrand AND
+                    CustGroup.Brand     = Syst.CUICommon:gcBrand AND
                     CustGroup.CustGroup = INPUT CustGroup
                no-lock no-error.
                IF NOT AVAIL CustGroup THEN DO:
@@ -152,7 +152,7 @@ repeat WITH FRAME start:
             if input frame start InvGroup = "" then disp "ALL" @ IGName.
             ELSE DO:
                FIND InvGroup where 
-                    InvGroup.Brand    = gcBrand AND
+                    InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                     InvGroup.InvGroup = INPUT InvGroup
                no-lock no-error.
                IF NOT AVAIL InvGroup THEN DO:
@@ -169,7 +169,7 @@ repeat WITH FRAME start:
             if input frame start Salesman = "" then disp "ALL" @ IGName.
             ELSE DO:
                FIND Salesman where 
-                    Salesman.Brand    = gcBrand AND
+                    Salesman.Brand    = Syst.CUICommon:gcBrand AND
                     Salesman.Salesman = INPUT Salesman
                no-lock no-error.
                IF NOT AVAIL Salesman THEN DO:
@@ -185,7 +185,7 @@ repeat WITH FRAME start:
             if input frame start Category = "" then disp "ALL" @ CatName.
             ELSE DO:
                FIND CustCat where 
-                    CustCat.Brand    = gcBrand AND
+                    CustCat.Brand    = Syst.CUICommon:gcBrand AND
                     CustCat.Category = INPUT FRAME start Category
                no-lock no-error.
                IF NOT AVAIL CustCat THEN DO:
@@ -218,12 +218,12 @@ repeat WITH FRAME start:
 
 task:
    repeat WITH FRAME start:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT  CRIT.
-      IF toimi = 8 THEN LEAVE CRIT.
+      IF Syst.CUICommon:toimi = 1 THEN NEXT  CRIT.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE CRIT.
 
-      IF toimi = 5 THEN DO:
+      IF Syst.CUICommon:toimi = 5 THEN DO:
          ok = FALSE.
          message "Are you SURE you want to start processing (Y/N) ?" UPDATE ok.
          IF ok THEN LEAVE task.
@@ -250,7 +250,7 @@ task:
    END.
 
    FOR EACH Customer no-lock where 
-            Customer.Brand = gcBrand AND 
+            Customer.Brand = Syst.CUICommon:gcBrand AND 
             lookup(Customer.Size,szlist) 
             > 0   AND 
            (if Salesman ne "" THEN Customer.Salesman = Salesman ELSE TRUE)  AND

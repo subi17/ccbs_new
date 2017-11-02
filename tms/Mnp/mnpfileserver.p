@@ -7,8 +7,8 @@ CREATED ......: 06.10.09
 Version ......: xfera
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:katun = "Cron".
+Syst.CUICommon:gcBrand = "1".
 {Func/log.i}
 {fcgi_agent/xmlrpc/xmlrpc_client.i}
 {Syst/tmsconst.i}

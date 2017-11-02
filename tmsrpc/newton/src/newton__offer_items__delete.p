@@ -8,9 +8,8 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-{Func/timestamp.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/eventval.i}
 
 DEFINE VARIABLE pcTenant   AS CHARACTER NO-UNDO.
@@ -37,7 +36,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-katun = pcUserName.
+Syst.CUICommon:katun = pcUserName.
 
 {newton/src/settenant.i pcTenant}
 
@@ -45,7 +44,7 @@ FIND OfferItem WHERE OfferItem.OfferItemId = liId NO-LOCK NO-ERROR.
 IF NOT AVAIL OfferItem THEN 
    RETURN appl_err(SUBST("OfferItem &1 not found", pcId)).
 
-IF OfferItem.BeginStamp < fMakeTs() THEN 
+IF OfferItem.BeginStamp < Func.Common:mMakeTS() THEN 
    RETURN appl_err("Cannot delete active or history data").
 
 FIND CURRENT OfferItem EXCLUSIVE-LOCK.
@@ -68,5 +67,4 @@ RELEASE OfferItem.
 add_struct(response_toplevel_id, "").
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

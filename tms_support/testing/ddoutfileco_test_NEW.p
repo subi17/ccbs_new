@@ -10,7 +10,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 
 DEFINE INPUT  PARAMETER icInvGrp       AS CHAR NO-UNDO.
 DEFINE INPUT  PARAMETER iiCustNum1     AS INT  NO-UNDO.
@@ -47,7 +46,7 @@ DEF VAR tme         AS INT NO-UNDO.
 DEF VAR lcoutstring   AS CHAR NO-UNDO.
 DEF VAR lclogpath     AS CHARACTER NO-UNDO. 
 DEF VAR lcfinfile     AS CHARACTER NO-UNDO. 
-fSplitTS(fMakeTS(), OUTPUT dte, OUTPUT tme).
+Func.Common:mSplitTS(Func.Common:mMakeTS(), OUTPUT dte, OUTPUT tme).
 ASSIGN
    lclogpath = "/apps/yoigo/tms_support/testing/log/csb_duration_"
    lcoutstring = STRING(dte,"999999") + "T" + STRING(tme,"hh:mm:ss") + ".txt"
@@ -57,7 +56,7 @@ OUTPUT STREAM sout TO VALUE(lcfinfile).
 {Inv/ddoutfilett.i}
 
 PUT STREAM sout UNFORMATTED
-   "CSB SESSION WITH " icCSBFileForm " started:" fTS2HMS(fMakeTS()) SKIP.
+   "CSB SESSION WITH " icCSBFileForm " started:" Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
 DEF TEMP-TABLE ttDueDate NO-UNDO
    FIELD DueDate  AS DATE
    FIELD BankCode AS CHAR
@@ -158,7 +157,7 @@ END.
 
 IF icInvID1 = icInvID2 THEN 
 FOR FIRST Invoice NO-LOCK WHERE
-          Invoice.Brand    = gcBrand AND
+          Invoice.Brand    = Syst.CUICommon:gcBrand AND
           Invoice.ExtInvID = icInvID1,
     FIRST Customer OF Invoice NO-LOCK:
    
@@ -170,7 +169,7 @@ END.
 
 ELSE IF iiInvDate NE ? THEN 
 FOR EACH Invoice NO-LOCK WHERE    
-         Invoice.Brand    = gcBrand    AND
+         Invoice.Brand    = Syst.CUICommon:gcBrand    AND
          Invoice.InvDate  = iiInvDate  AND
          Invoice.ExtInvID >= icInvID1  AND      
          Invoice.ExtInvID <= icInvID2  AND   
@@ -194,7 +193,7 @@ END.
 
 ELSE 
 FOR EACH Invoice NO-LOCK WHERE               
-         Invoice.Brand  = gcBrand      AND
+         Invoice.Brand  = Syst.CUICommon:gcBrand      AND
          Invoice.ExtInvID >= icInvID1  AND      
          Invoice.ExtInvID <= icInvID2  AND   
          Invoice.CustNum >= iiCustNum1 AND
@@ -259,8 +258,7 @@ FOR EACH ttDueDate:
    ELSE lcFile = REPLACE(icFile,"#IGRP","ALL").
    
    /* due date to file name */   
-   lcDate = DYNAMIC-FUNCTION("fDateFmt" IN ghFunc1,
-                             ttDueDate.DueDate,
+   lcDate = Func.Common:mDateFmt(ttDueDate.DueDate,
                              "yyyymmdd").
    ASSIGN 
       lcFileXml = REPLACE(lcFileXml,"#DDATE",lcDate)
@@ -273,7 +271,7 @@ FOR EACH ttDueDate:
    IF icCSBFileForm EQ "TXT" OR
       icCSBFileForm EQ "BOTH" THEN DO:
       PUT STREAM sout UNFORMATTED
-      "CSB " ttDueDate.BankCode " " icCSBFileForm " TXT part started:" fTS2HMS(fMakeTS()) SKIP.
+      "CSB " ttDueDate.BankCode " " icCSBFileForm " TXT part started:" Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
       RUN /apps/yoigo/tms_support/testing/ddoutfile_test.p (INPUT-OUTPUT TABLE ttInvoice,  
                     ttDueDate.DueDate,
                     ttDueDate.BankCode,
@@ -285,12 +283,12 @@ FOR EACH ttDueDate:
                     liFileSeq,
                     OUTPUT liInvCount). 
       PUT STREAM sout UNFORMATTED
-      "CSB " ttDueDate.BankCode " " icCSBFileForm " TXT part ended:" fTS2HMS(fMakeTS()) SKIP.
+      "CSB " ttDueDate.BankCode " " icCSBFileForm " TXT part ended:" Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
    END.
    IF icCSBFileForm EQ "XML" OR
       icCSBFileForm EQ "BOTH" THEN DO:
       PUT STREAM sout UNFORMATTED
-      "CSB " ttDueDate.BankCode " " icCSBFileForm " XML part started:" fTS2HMS(fMakeTS()) SKIP.
+      "CSB " ttDueDate.BankCode " " icCSBFileForm " XML part started:" Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
       RUN /apps/yoigo/tms_support/testing/ddoutfile_xml_test_NEW.p (INPUT-OUTPUT TABLE ttInvoice,  
                     ttDueDate.DueDate,
                     ttDueDate.BankCode,
@@ -302,7 +300,7 @@ FOR EACH ttDueDate:
                     liFileSeq,
                     OUTPUT liInvCount). 
       PUT STREAM sout UNFORMATTED
-      "CSB " ttDueDate.BankCode " " icCSBFileForm " XML part ended:" fTS2HMS(fMakeTS()) SKIP.
+      "CSB " ttDueDate.BankCode " " icCSBFileForm " XML part ended:" Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
    END.
    PUT STREAM sout UNFORMATTED
     "----------------------------------------------------" SKIP.
@@ -317,21 +315,21 @@ DO TRANS:
 
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = gcBrand   
+      ActionLog.Brand        = Syst.CUICommon:gcBrand   
       ActionLog.TableName    = "Invoice"  
       ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                STRING(MONTH(TODAY),"99") + 
                                STRING(DAY(TODAY),"99")
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.CUICommon:katun
       ActionLog.ActionID     = "DDFILETEST"
       ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
       ActionLog.ActionChar   = " Files: " + STRING(oiFileCount) + CHR(10) +
                                " Invoices: " + STRING(oiInvCount)
       ActionLog.ActionStatus = 3.
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
 END.
 PUT STREAM sout UNFORMATTED
-   "CSB SESSION WITH " icCSBFileForm " ended:" fTS2HMS(fMakeTS()) SKIP.
+   "CSB SESSION WITH " icCSBFileForm " ended:" Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
 
 RETURN ocError.
 

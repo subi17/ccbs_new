@@ -8,7 +8,7 @@ FUNCTION fGetPIndicatorHistory RETURNS LOGICAL
 
    DEFINE VARIABLE lcStruct AS CHARACTER NO-UNDO. 
    FOR EACH PIndicator NO-LOCK WHERE
-            PIndicator.Brand = gcBrand AND
+            PIndicator.Brand = Syst.CUICommon:gcBrand AND
             PIndicator.HostTable = pcHostTable AND
             PIndicator.KeyValue = pcKeyValue AND
             PIndicator.IndicatorType = piIndicatorType USE-INDEX HostTable :

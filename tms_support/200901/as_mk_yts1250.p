@@ -1,6 +1,5 @@
-{Syst/commpaa.i} katun = "SOG". gcbrand = "1".
+{Syst/commpaa.i} Syst.CUICommon:katun = "SOG". Syst.CUICommon:gcBrand = "1".
 {Func/fsubser.i}
-{Func/timestamp.i}
 {Func/msreqfunc.i}
 
 DEF BUFFER provMSREquest FOR MSRequest.
@@ -34,7 +33,7 @@ INPUT icProfile AS CHAR,
       
       IF AVAIL SIM THEN
       FIND FIRST SimBatch WHERE
-                 SimBatch.Brand    = gcBrand AND
+                 SimBatch.Brand    = Syst.CUICommon:gcBrand AND
                  SimBatch.SimBatch = Sim.SimBatch NO-LOCK NO-ERROR. 
 
       FIND FIRST IMSI WHERE IMSI.ICC = SIM.ICC NO-LOCK NO-ERROR.
@@ -164,7 +163,7 @@ REPEAT:
          lcProfile = "2"
          llPayType = TRUE.
 
-   lcActStamp = fMakeTS().
+   lcActStamp = Func.Common:mMakeTS().
    
    FIND FIRST Order WHERE 
               Order.MSSeq = MobSub.MSSeq AND
@@ -179,8 +178,8 @@ REPEAT:
       Solog.MsSeq        = Mobsub.MsSeq    /* Mobile Subscription No.    */
       Solog.CLI          = Mobsub.CLI      /* MSISDN                     */
       Solog.Stat         = 0               /* just created               */
-      Solog.Brand        = gcBrand
-      Solog.Users        = katun.
+      Solog.Brand        = Syst.CUICommon:gcBrand
+      Solog.Users        = Syst.CUICommon:katun.
   
    ASSIGN
       Solog.TimeSlotTMS  = lcActStamp
@@ -233,8 +232,8 @@ pause. */
         Solog.MsSeq        = MobSub.MsSeq    /* Mobile Subscription No.    */
         Solog.CLI          = MobSub.Cli      /* MSISDN                     */
         Solog.Stat         = 0               /* just created               */
-        Solog.Brand        = gcBrand
-        Solog.Users        = katun.
+        Solog.Brand        = Syst.CUICommon:gcBrand
+        Solog.Users        = Syst.CUICommon:katun.
    ASSIGN     
         Solog.TimeSlotTMS  = lcActStamp
         Solog.ActivationTS = lcActStamp

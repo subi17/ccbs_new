@@ -33,8 +33,8 @@ resp_array = add_array(response_toplevel_id, "").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {Syst/commpaa.i}
-gcBrand = "1".
-katun = "NewtonRPC".
+Syst.CUICommon:gcBrand = "1".
+Syst.CUICommon:katun = "NewtonRPC".
 {lib/smpp/smpp_defs.i}
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
@@ -50,8 +50,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    lcResultStruct = add_struct(resp_array, "").
    add_string(lcResultStruct, "msisdn", CallAlarm.CLI).
    add_int(lcResultStruct,"type",CallAlarm.CreditType).
-   lcCreditName = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "CallAlarm",
+   lcCreditName = Func.Common:mTMSCodeName("CallAlarm",
                                    "CreditType",
                                    STRING(CallAlarm.CreditType)).
    add_string(lcResultStruct,"type_name",lcCreditName).
@@ -68,5 +67,4 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 END.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

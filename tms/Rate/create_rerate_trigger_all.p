@@ -3,11 +3,10 @@
 
 {Syst/commpaa.i}
 ASSIGN 
-   gcBrand = "1"
-   katun = "cron".
+   Syst.CUICommon:gcBrand = "1"
+   Syst.CUICommon:katun = "cron".
 {Syst/eventlog.i}
 {Func/cparam2.i}
-{Func/date.i}
 
 DEF VAR llCreated  AS LOG  NO-UNDO.
 DEF VAR liRateDay  AS INT  NO-UNDO.
@@ -19,7 +18,7 @@ fELog("Trigger_rerate_all","Started").
 
 ASSIGN 
    lcLastDays = fCParamC("RerateALLDays")
-   ldaLastDay = fLastDayOfMonth(TODAY)
+   ldaLastDay = Func.Common:mLastDayOfMonth(TODAY)
    llCreated  = FALSE.
 IF lcLastDays = ? THEN lcLastDays = "". 
    

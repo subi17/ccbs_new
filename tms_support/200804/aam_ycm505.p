@@ -1,10 +1,9 @@
 {Syst/commpaa.i}
 
 ASSIGN
-   katun   = "cron"
-   gcBrand = "1".
+   Syst.CUICommon:katun   = "cron"
+   Syst.CUICommon:gcBrand = "1".
 
-{Func/timestamp.i}
 {Func/cparam.i2}
 {Func/xmlfunction.i}
 {Func/fgettxt.i}
@@ -175,16 +174,16 @@ PROCEDURE pAdjustBalance:
       liRequest = NEXT-VALUE(PrePaidReq).
    
       IF NOT CAN-FIND(FIRST PrePaidRequest WHERE
-                            PrePaidRequest.Brand     = gcBrand AND
+                            PrePaidRequest.Brand     = Syst.CUICommon:gcBrand AND
                             PrepaidRequest.PPRequest = liRequest)
       THEN LEAVE.
    END.
     
    CREATE PrePaidRequest.
    ASSIGN
-      PrePaidRequest.TSRequest   = fMakeTS()
-      PrePaidRequest.UserCode    = katun
-      PrePaidRequest.Brand       = gcBrand
+      PrePaidRequest.TSRequest   = Func.Common:mMakeTS()
+      PrePaidRequest.UserCode    = Syst.CUICommon:katun
+      PrePaidRequest.Brand       = Syst.CUICommon:gcBrand
       PrePaidRequest.MsSeq       = MobSub.MsSeq
       PrePaidRequest.CLI         = MobSub.CLI
       PrePaidRequest.PPRequest   = liRequest
@@ -198,7 +197,7 @@ PROCEDURE pAdjustBalance:
       PrePaidRequest.TaxZone     = lcTaxZone
       PrePaidRequest.OrigRequest = liOrigReq.
    
-   RUN Gwy/pp_platform.p(gcBrand,PrePaidRequest.PPRequest).
+   RUN Gwy/pp_platform.p(Syst.CUICommon:gcBrand,PrePaidRequest.PPRequest).
    
    lcXML = RETURN-VALUE.
    
@@ -208,7 +207,7 @@ PROCEDURE pAdjustBalance:
    ASSIGN
       PrePaidRequest.Response   = lcXML
       PrePaidRequest.RespCode   = liRespCode
-      PrePaidRequest.TSResponse = fMakeTS().
+      PrePaidRequest.TSResponse = Func.Common:mMakeTS().
 
    /* OK response */
    IF liRespCode = 0 THEN DO:
@@ -227,17 +226,17 @@ PROCEDURE pAdjustBalance:
 
       CREATE Memo.
       ASSIGN 
-         Memo.Brand     = gcBrand
+         Memo.Brand     = Syst.CUICommon:gcBrand
          Memo.HostTable = "MobSub"
          Memo.KeyValue  = STRING(MobSub.MsSeq)
          Memo.CustNum   = MobSub.CustNum
          Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-         Memo.CreUser   = katun 
+         Memo.CreUser   = Syst.CUICommon:katun 
          Memo.MemoTitle = "MINUS ADJUSTMENT"
          Memo.MemoText  = "Deducted " + STRING(-1 * ldAmount) + 
                           " eur according to file " + lcPlainFile +
                           " (YCM-497).".
-         Memo.CreStamp  = fMakeTS().
+         Memo.CreStamp  = Func.Common:mMakeTS().
   
       fOK().
     

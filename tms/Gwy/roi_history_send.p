@@ -10,14 +10,13 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-{Func/timestamp.i}
 {Func/heartbeat.i}
 {Func/log.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {fcgi_agent/xmlrpc/xmlrpc_client.i}
 
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 fSetLogFileName("/scratch/log/roi/roi_history_send.log").
 
@@ -62,7 +61,7 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
    add_string(pcStruct, "order_id", STRING(Order.OrderId)).
    /* optionals  */
    FIND FIRST OrderCustomer WHERE
-              OrderCustomer.Brand = gcBrand AND
+              OrderCustomer.Brand = Syst.CUICommon:gcBrand AND
               OrderCustomer.OrderId = Order.OrderId AND
               OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
    IF AVAIL OrderCustomer THEN   /* BankAccount without IBAN format */
@@ -74,7 +73,7 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
           ELSE OrderCustomer.BankCode)).
 
    FIND FIRST OrderPayment WHERE 
-              OrderPayment.Brand = gcBrand AND
+              OrderPayment.Brand = Syst.CUICommon:gcBrand AND
               OrderPayment.OrderId = Order.OrderId NO-LOCK NO-ERROR.
    
    IF AVAIL OrderPayment THEN DO:
@@ -91,7 +90,7 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
    END.
    
    FIND FIRST Memo WHERE 
-              Memo.Brand = gcBrand AND
+              Memo.Brand = Syst.CUICommon:gcBrand AND
               Memo.HostTable = "Order" AND
               Memo.KeyValue  = STRING(Order.OrderId) AND
               Memo.MemoTitle EQ "ORDER CHANNEL in Standalone model" NO-LOCK NO-ERROR.
@@ -126,7 +125,7 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
    END.
 
    FIND FIRST OrderTopup WHERE  
-              OrderTopup.Brand = gcBrand AND
+              OrderTopup.Brand = Syst.CUICommon:gcBrand AND
               OrderTopup.OrderId = Order.OrderId NO-LOCK NO-ERROR.
    IF AVAIL OrderTopup THEN 
         add_double(pcStruct,"topup",OrderTopup.Amount).
@@ -145,7 +144,7 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
        add_string(pcStruct,"campaign_code",Order.Campaign).
    
    FIND FIRST Memo WHERE 
-              Memo.Brand = gcBrand AND
+              Memo.Brand = Syst.CUICommon:gcBrand AND
               Memo.HostTable = "Order" AND
               Memo.KeyValue  = STRING(Order.OrderId) AND
               Memo.MemoTitle EQ "Info" NO-LOCK NO-ERROR.
@@ -170,7 +169,7 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
                      CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) AND
       LOOKUP(Order.CLIType, {&ADDLINE_CLITYPES}) > 0 THEN DO: 
       IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
-                        OrderAction.Brand    = gcBrand           AND
+                        OrderAction.Brand    = Syst.CUICommon:gcBrand           AND
                         OrderAction.OrderID  = Order.OrderID     AND
                         OrderAction.ItemType = "AddLineDiscount" AND
                         LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS} + "," + {&ADDLINE_DISCOUNTS_20}) > 0) 
@@ -189,7 +188,7 @@ FUNCTION fFillCustomerStruct RETURNS LOGICAL
           INPUT piRowType AS INTEGER):
 
    FIND FIRST OrderCustomer WHERE
-              OrderCustomer.Brand = gcBrand AND
+              OrderCustomer.Brand = Syst.CUICommon:gcBrand AND
               OrderCustomer.OrderId = Order.OrderId AND 
               OrderCustomer.RowType = piRowType NO-LOCK NO-ERROR.
 
@@ -224,7 +223,7 @@ FUNCTION fFillCustomerStruct RETURNS LOGICAL
    
    /* YPRO-24 ROI History Segment field WITH Category */
    FIND FIRST CustCat NO-LOCK WHERE
-              CustCat.Brand    = gcBrand AND
+              CustCat.Brand    = Syst.CUICommon:gcBrand AND
               CustCat.Category = OrderCustomer.Category NO-ERROR.
    IF AVAILABLE CustCat THEN
       add_string(pcStruct,"segment",CustCat.Segment).
@@ -259,7 +258,7 @@ FUNCTION fFillAddressStruct RETURNS LOGICAL
          (INPUT pcStruct AS CHARACTER):
  
    FIND FIRST OrderCustomer WHERE
-              OrderCustomer.Brand = gcBrand AND
+              OrderCustomer.Brand = Syst.CUICommon:gcBrand AND
               OrderCustomer.OrderId = Order.OrderId AND 
               OrderCustomer.RowType = 4 NO-LOCK NO-ERROR.
 
@@ -297,7 +296,7 @@ FUNCTION fFillAccessoryStruct RETURNS LOGICAL
          (INPUT pcStruct AS CHARACTER):
 
    FIND FIRST OrderAccessory NO-LOCK WHERE
-              OrderAccessory.Brand = gcBrand AND
+              OrderAccessory.Brand = Syst.CUICommon:gcBrand AND
               OrderAccessory.OrderId = Order.OrderId AND
               OrderAccessory.TerminalType = ({&TERMINAL_TYPE_PHONE}) NO-ERROR.
    IF NOT AVAIL OrderAccessory THEN RETURN FALSE.
@@ -336,7 +335,7 @@ DO WHILE TRUE:
    initialize(cConnURL, iTimeOut).
 
    FOR EACH Order NO-LOCK WHERE
-            Order.Brand = gcBrand AND
+            Order.Brand = Syst.CUICommon:gcBrand AND
             Order.SendToROI = 1
             liNumMsgs = 1 to 120:
 
@@ -389,7 +388,7 @@ PROCEDURE pSendROIHistory:
 
    xmlrpc_cleanup().
 
-   FIND Order WHERE Order.Brand = gcBrand AND
+   FIND Order WHERE Order.Brand = Syst.CUICommon:gcBrand AND
                     Order.OrderId = piOrderId NO-LOCK NO-ERROR.
 
    lcOrderStruct = add_struct(param_toplevel_id,"").
@@ -411,9 +410,9 @@ PROCEDURE pSendROIHistory:
       fLog( "ROI History, ERROR Creating message: " + gc_xmlrpc_error,"NW_ERR"). 
       PUT SCREEN ROW 23 COL 4  "ERROR Creating message " + gc_xmlrpc_error.
       /* save the exception in the ErrorLog */
-      ldTS = fMakeTS().
+      ldTS = Func.Common:mMakeTS().
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand = gcBrand
+      ASSIGN ErrorLog.Brand = Syst.CUICommon:gcBrand
              ErrorLog.TableName = "Order"
              ErrorLog.KeyValue = STRING(Order.OrderId)
              ErrorLog.ActionID = "ROIHistory"
@@ -465,9 +464,9 @@ PROCEDURE pSendROIHistory:
    END.
    ELSE DO:
       /* save the exception in the ErrorLog */
-      ldTS = fMakeTS().
+      ldTS = Func.Common:mMakeTS().
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand = gcBrand
+      ASSIGN ErrorLog.Brand = Syst.CUICommon:gcBrand
              ErrorLog.TableName = "Order"
              ErrorLog.KeyValue = STRING(Order.OrderId)
              ErrorLog.ActionID = "ROIHistory"

@@ -16,7 +16,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/eventval.i}
 {Syst/tmsconst.i}
 {Mc/offer.i}
@@ -50,7 +50,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 IF TRIM(pcUsername) EQ "VISTA_" THEN 
     RETURN appl_err("username is empty").
 
-katun = pcUserName.
+Syst.CUICommon:katun = pcUserName.
 
 piId = INTEGER(pcId) NO-ERROR.
 IF ERROR-STATUS:ERROR THEN 
@@ -104,7 +104,7 @@ IF fValidateOfferCriteria(TABLE ttOfferCriteria, FALSE, OUTPUT ocError) > 0 THEN
    RETURN appl_err(ocError).
 END.
 
-ldeNowTS = fMakeTS().
+ldeNowTS = Func.Common:mMakeTS().
 
 lcRespStruct = add_struct(response_toplevel_id, "").
 
@@ -133,7 +133,7 @@ IF NOT llEqual THEN DO:
    FIND CURRENT OfferCriteria EXCLUSIVE-LOCK.
 
    IF llDoEvent THEN DO:
-      &GLOBAL-DEFINE STAR_EVENT_USER katun 
+      &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
       {Func/lib/eventlog.i}
       DEF VAR lhOfferCriteria AS HANDLE NO-UNDO.
       lhOfferCriteria = BUFFER OfferCriteria:HANDLE.
@@ -153,5 +153,4 @@ END.
 RELEASE OfferCriteria.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

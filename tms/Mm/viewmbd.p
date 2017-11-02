@@ -118,15 +118,15 @@ lcBDName = fMobCDRBDestName(ttCall.SpoCMT,
                             ttCall.DateSt).
                          
 FIND BillItem WHERE
-     BillItem.Brand          = gcBrand      AND 
+     BillItem.Brand          = Syst.CUICommon:gcBrand      AND 
      BillItem.BillCode       = ttCall.BillCode        NO-LOCK NO-ERROR.
 
 FIND FIRST CCN WHERE
-           CCN.Brand     = gcBrand          AND 
+           CCN.Brand     = Syst.CUICommon:gcBrand          AND 
            CCN.CCN       = ttCall.rateCCN           NO-LOCK NO-ERROR.    
            
 FIND FIRST bCCN WHERE
-           bCCN.Brand     = gcBrand          AND 
+           bCCN.Brand     = Syst.CUICommon:gcBrand          AND 
            bCCN.CCN       = ttCall.CCN           NO-LOCK NO-ERROR.    
 
 ASSIGN
@@ -246,7 +246,7 @@ FORMAT
 "Reason Code" ReasonC format "9"  Tmscode.codename FORMAT "X(35)"  SKIP
 "Reason Text" ReasonT format "x(60)"                     
 
-WITH CENTERED ROW 2 COLOR VALUE(cfc) TITLE 
+WITH CENTERED ROW 2 COLOR VALUE(Syst.CUICommon:cfc) TITLE 
 "SHOW B-NUMBER" OVERLAY side-label no-label FRAME reason .
 
 
@@ -261,8 +261,7 @@ DISP
              "!! UNKNOWN !!"   WHEN NOT AVAIL invcust @ invcust.CustName  Time-E
  ttCall.CLI
 
- DYNAMIC-FUNCTION("fHideBSub" IN ghFunc1,
-          ttCall.gsmbnr,
+ Func.Common:mHideBSub(ttCall.gsmbnr,
           ttCall.custnum,
           ttCall.bdest,
           ttCall.BType,
@@ -337,33 +336,32 @@ PAUSE 0.
 Action:                    
 repeat WITH FRAME cdr:    
    ASSIGN 
-   ufk = 0 
-   ufk[2] = 9790
-   ufk[4] = 1112  
-   ufk[6] = 1115 
-   ufk[5] = 2421
-   ufk[7] = 1772
-   ufk[8] = 8 
-   ehto = 0.
+   Syst.CUICommon:ufk = 0 
+   Syst.CUICommon:ufk[2] = 9790
+   Syst.CUICommon:ufk[4] = 1112  
+   Syst.CUICommon:ufk[6] = 1115 
+   Syst.CUICommon:ufk[5] = 2421
+   Syst.CUICommon:ufk[7] = 1772
+   Syst.CUICommon:ufk[8] = 8 
+   Syst.CUICommon:ehto = 0.
 
    RUN Syst/ufkey.p.
 
-   IF toimi = 2 THEN DO:
+   IF Syst.CUICommon:toimi = 2 THEN DO:
       RUN Rate/edrhistory_one_edr.p(ttCall.CLI,
                                ttCall.DateSt,
                                ttCall.TimeSt,
                                ttCall.DtlSeq).
    END.
    
-   ELSE IF toimi = 4 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
        /* View rate record */
        RUN Mm/nnhitt2.p(ttCall.TariffNum).
    END.
 
-   ELSE if toimi = 7 THEN DO:
+   ELSE if Syst.CUICommon:toimi = 7 THEN DO:
          
-         bsub = DYNAMIC-FUNCTION("fHideBSub" IN ghFunc1,
-                  ttCall.Gsmbnr,
+         bsub = Func.Common:mHideBSub(ttCall.Gsmbnr,
                   ttCall.custnum,
                   ttCall.bdest,
                   ttCall.BType,
@@ -380,7 +378,7 @@ repeat WITH FRAME cdr:
          ASSIGN
          eventlog.eventdate  = TODAY
          eventlog.eventtime  = STRING(TIME,"HH:MM:SS")
-         eventlog.usercode   = katun
+         eventlog.usercode   = Syst.CUICommon:katun
          eventlog.action     = 'Check'.
          ASSIGN
          eventlog.KEY        =  reasonT + chr(255) + ttCall.cli + chr(255) +
@@ -394,23 +392,23 @@ repeat WITH FRAME cdr:
          bsub = ttCall.gsmbnr.
 
         disp bsub @ ttCall.gsmbnr WITH FRAME cdr.  PAUSE 0.
-        ufk[5] =  0.
+        Syst.CUICommon:ufk[5] =  0.
         RUN Syst/ufkey.p.
       END.   
    end.
    
-   ELSE IF toimi = 6 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 6 THEN DO:
       RUN Mm/viewmcdr2.p(INPUT ttCall.Datest, ttCall.Dtlseq,
                     IF ttCall.CDRTable > ""
                     THEN ttCall.CDRTable
                     ELSE "MobCdr").
    END.
 
-   ELSE IF toimi = 5 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
       RUN Syst/viewtable.p((BUFFER ttcall:HANDLE)).
    END.
 
-   ELSE IF toimi = 8 THEN LEAVE Action.
+   ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE Action.
 END.
 
 HIDE FRAME cdr     NO-PAUSE.
@@ -447,7 +445,7 @@ PROCEDURE local-Show-record:
                  ENd.
              END.
 
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME reason:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME reason:
                 PAUSE 0.
                 IF FRAME-FIELD = "ReasonC" THEN DO:
                    find first TMSCodes WHERE

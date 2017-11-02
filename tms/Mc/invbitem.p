@@ -16,7 +16,7 @@ DEF INPUT PARAMETER  BillCode      AS C  NO-UNDO.
 DEF VAR  Qty        AS I  NO-UNDO.
 
 ASSIGN
-   ufk = 0 ehto = 3. RUN Syst/ufkey.p.
+   Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p.
 
    FIND FIRST SingleFee WHERE 
               SingleFee.InvNum  = InvNum AND
@@ -36,7 +36,7 @@ ASSIGN
          BREAK BY SingleFee.Memo[1].
 
       FIND BillItem WHERE 
-           BillItem.Brand    = gcBrand AND
+           BillItem.Brand    = Syst.CUICommon:gcBrand AND
            BillItem.BillCode = SingleFee.BillCode NO-LOCK no-ERROR.
 
       DISP

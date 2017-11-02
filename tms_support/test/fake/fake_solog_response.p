@@ -1,9 +1,8 @@
 /* Set Solog to status Ok for a defined list of ServCom */
 
 {Syst/commpaa.i}
-katun = "fakeSolog".
-gcBrand = "1".
-{Func/timestamp.i}
+Syst.CUICommon:katun = "fakeSolog".
+Syst.CUICommon:gcBrand = "1".
 {Func/msreqfunc.i}
 {Func/fgettxt.i}
 {Func/fmakesms.i}
@@ -69,7 +68,6 @@ DO WHILE TRUE :
 
 END.
 
-IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
 
 QUIT.
 
@@ -87,7 +85,7 @@ DEFINE VARIABLE liLang      AS INTEGER   NO-UNDO.
 DEFINE VARIABLE ldeSMSTime  AS DEC       NO-UNDO.
 
 FOR EACH MsRequest NO-LOCK WHERE
-         MsRequest.Brand = gcBrand AND
+         MsRequest.Brand = Syst.CUICommon:gcBrand AND
          LOOKUP(STRING(MsRequest.ReqType),"0,1,13,15,18,19,82,83") > 0 AND
          MsRequest.ReqStatus = 5 :
         /*   AND
@@ -102,7 +100,7 @@ FOR EACH MsRequest NO-LOCK WHERE
          (liCli >= 722600000 AND liCli <= 722600009)) THEN NEXT.
 
       FIND SoLog WHERE
-           Solog.Brand = gcBrand AND
+           Solog.Brand = Syst.CUICommon:gcBrand AND
            SoLog.MsSeq = MsRequest.MsSeq AND
            SoLog.Stat = 0 AND
            SoLog.MsRequest = MsRequest.MsRequest
@@ -110,7 +108,7 @@ FOR EACH MsRequest NO-LOCK WHERE
       IF NOT AVAIL SoLog THEN NEXT.
 
       ASSIGN
-         Solog.CompletedTS = fMakeTS()
+         Solog.CompletedTS = Func.Common:mMakeTS()
          Solog.stat        = 2
          SoLog.Response    = "OK (FAKE)".
 
@@ -167,7 +165,7 @@ PROCEDURE pSoLog:
       bufSolog.Stat = 0 THEN DO:
 
        ASSIGN
-            bufSolog.CompletedTS = fMakeTS()
+            bufSolog.CompletedTS = Func.Common:mMakeTS()
             bufSolog.stat        = 2.
 
        IF lcStatus = "OK" THEN bufSoLog.Response = bufSoLog.response + lcStatus.

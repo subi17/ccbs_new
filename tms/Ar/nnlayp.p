@@ -69,7 +69,6 @@
 &GLOBAL-DEFINE BrTable Invoice
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/eventval.i}
 {Mc/lib/tokenlib.i}
@@ -77,7 +76,7 @@
 {Ar/invdet.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -139,9 +138,9 @@ form
     Invoice.PrintState     /* column-label "S"             */
 
 WITH width 80 OVERLAY scroll 1 15 DOWN ROW 1
-    COLOR value(cfc)
-    title color value(ctc) " " + ynimi + " INVOICE File "
-    + string(pvm,"99-99-99") + " " FRAME sel.
+    COLOR value(Syst.CUICommon:cfc)
+    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " INVOICE File "
+    + string(TODAY,"99-99-99") + " " FRAME sel.
 
 form
    skip(1)
@@ -152,7 +151,7 @@ form
    format "z,zzz,zz9.99" skip(1)
    " Is this OK (Y/N) ?" ok  format "Yes/No"
 WITH
-    OVERLAY ROW 3 centered COLOR value(cfc) TITLE COLOR value(ctc)
+    OVERLAY ROW 3 centered COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc)
     " ATTENTION ! ! ! " NO-LABEL WITH FRAME unetto.
 
 {Func/brand.i}
@@ -161,15 +160,15 @@ form /* Invoicen numerohakua varten */
     "Brand .:" lcBrand skip
     "Invoice:" lcExtInvID  FORMAT "X(14)" 
     help "Give Invoice No."    
-    with row 4 col 2 title color value(ctc) " FIND INVOICE No."
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND INVOICE No."
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* Invoicen asnolla hakua varten */
     "Brand ..:" lcBrand skip
     "Customer:" hakuCustNum
     help "Give Customer No."
-    with row 4 col 2 title color value(ctc) " FIND CUST # "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hakie.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CUST # "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hakie.
 
 form /* Invoicen summan hakua varten */
     "Brand .......:" lcBrand skip
@@ -179,23 +178,23 @@ form /* Invoicen summan hakua varten */
        skip
     "Amount ......:" hakunetto   
        help "Give Billed Amount"   SKIP
- with row 4 col 2 title color value(ctc) " FIND AMOUNT "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+ with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND AMOUNT "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /* Invoicen paivayshakua varten */
     "Brand:" lcBrand skip
     "Date :" InvDate
     help "Give Date of Invoice"
-    with row 4 col 2 title color value(ctc) " FIND Date "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr3.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Date "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
 form /* memo */
 WITH
     OVERLAY ROW 7 centered NO-LABEL
-    color value(cfc) title color value(cfc) " Update memo "
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:cfc) " Update memo "
     FRAME memo.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST Invoice WHERE Invoice.Brand = lcBrand USE-INDEX ExtInvID
@@ -274,38 +273,38 @@ repeat WITH FRAME sel:
    repeat WITH FRAME sel ON ENDKEY UNDO, RETURN:
 
       IF ufkey THEN DO:
-         ASSIGN  ufk = 0
-         ufk[1]= 94  ufk[2] = 1492 ufk[3] = 927 ufk[4] = 1883
-         ufk[5]= 790 ufk[6] = 829 ufk[7] = 1796 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         ASSIGN  Syst.CUICommon:ufk = 0
+         Syst.CUICommon:ufk[1]= 94  Syst.CUICommon:ufk[2] = 1492 Syst.CUICommon:ufk[3] = 927 Syst.CUICommon:ufk[4] = 1883
+         Syst.CUICommon:ufk[5]= 790 Syst.CUICommon:ufk[6] = 829 Syst.CUICommon:ufk[7] = 1796 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW Invoice.ExtInvID {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Invoice.ExtInvID WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Invoice.ExtInvID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW Invoice.InvDate {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Invoice.InvDate WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Invoice.InvDate WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
          CHOOSE ROW Invoice.CustNum  {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Invoice.CustNum  WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Invoice.CustNum  WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
          CHOOSE ROW Invoice.InvAmt {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Invoice.InvAmt WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) Invoice.InvAmt WITH FRAME sel.
       END.
        IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order = 5 THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = 4.
       END.
 
@@ -336,10 +335,10 @@ repeat WITH FRAME sel:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND Invoice where recid(Invoice) = rtab[1] no-lock.
             IF order = 1 THEN FIND prev Invoice USE-INDEX ExtInvID
@@ -373,7 +372,7 @@ repeat WITH FRAME sel:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND Invoice where recid(Invoice) = rtab[FRAME-DOWN] no-lock .
@@ -407,7 +406,7 @@ repeat WITH FRAME sel:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND Invoice where recid(Invoice) = memory no-lock no-error.
          IF order = 1 THEN FIND prev Invoice USE-INDEX ExtInvID
@@ -446,7 +445,7 @@ repeat WITH FRAME sel:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "YOU ARE ON THE LAST PAGE !".
@@ -462,26 +461,26 @@ repeat WITH FRAME sel:
      END. /* NEXT page */
 
      /* search functions */
-     if lookup(nap,"1,f1") > 0 THEN 
+     if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN 
      etsi:    
      repeat WITH FRAME sel:
 
-        ASSIGN ufk = 0 ehto = 0  ufk[8] = 8
-               ufk[1]= 133 ufk[2]= 28  ufk[3]= 702 ufk[4]= 789.
+        ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0  Syst.CUICommon:ufk[8] = 8
+               Syst.CUICommon:ufk[1]= 133 Syst.CUICommon:ufk[2]= 28  Syst.CUICommon:ufk[3]= 702 Syst.CUICommon:ufk[4]= 789.
 
         RUN Syst/ufkey.p.
         ufkey = TRUE.
 
-        IF toimi = 8 THEN LEAVE etsi.
+        IF Syst.CUICommon:toimi = 8 THEN LEAVE etsi.
 
 
         /* Haku 1 */
-        IF toimi = 1 THEN DO:  /* haku sarakk. 1 */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+        IF Syst.CUICommon:toimi = 1 THEN DO:  /* haku sarakk. 1 */
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            lcExtInvID = "".
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME hayr.
-           UPDATE lcBrand WHEN gcAllBrand
+           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   lcExtInvID WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
 
@@ -505,12 +504,12 @@ repeat WITH FRAME sel:
         END. /* Haku sar. 1 */
 
         /* Haku sarakk. 2 */
-        IF toimi = 2 THEN DO:  /* haku sar. 2 */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+        IF Syst.CUICommon:toimi = 2 THEN DO:  /* haku sar. 2 */
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            InvDate = ?.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME hayr3.
-           UPDATE lcBrand WHEN gcAllBrand
+           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   InvDate WITH FRAME hayr3.
            HIDE FRAME hayr3 no-pause.
 
@@ -532,12 +531,12 @@ repeat WITH FRAME sel:
         END. /* Haku sar. 2 */
 
         /* Haku 3 */
-        ELSE IF toimi = 3 THEN DO:  /* haku sarakk. 3 */
-           cfc = "puyr". RUN Syst/ufcolor.p.
+        ELSE IF Syst.CUICommon:toimi = 3 THEN DO:  /* haku sarakk. 3 */
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            hakuCustNum = 0.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME hakie.
-           UPDATE lcBrand WHEN gcAllBrand
+           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   hakuCustNum WITH FRAME hakie.
            HIDE FRAME hakie no-pause.
 
@@ -555,14 +554,14 @@ repeat WITH FRAME sel:
         END. /* Haku sar. 3 */
 
         /* Haku sarakk. 4 */
-        IF toimi = 4 THEN DO:  /* haku sar. 4 */
+        IF Syst.CUICommon:toimi = 4 THEN DO:  /* haku sar. 4 */
            InvDate = ?.
-           cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
            hakunetto = 0.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            liPaymState = 0.
            DISPLAY lcBrand WITH FRAME hayr2.
-           UPDATE lcBrand WHEN gcAllBrand
+           UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                   liPaymState
                   hakunetto 
                   WITH FRAME hayr2.
@@ -588,7 +587,7 @@ repeat WITH FRAME sel:
 
      END. /* seek */
 
-     ELSE IF LOOKUP(nap,"3,F3") > 0 THEN DO TRANS: /* memo */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,F3") > 0 THEN DO TRANS: /* memo */
         FIND Invoice WHERE RECID(Invoice) = rtab[FRAME-LINE(sel)]
         NO-LOCK NO-ERROR.
         RUN Mc/memo.p(INPUT Invoice.CustNum,
@@ -599,7 +598,7 @@ repeat WITH FRAME sel:
         NEXT.
      END.
 
-     else if lookup(nap,"2,f2") > 0 THEN DO : /* claiming history */
+     else if lookup(Syst.CUICommon:nap,"2,f2") > 0 THEN DO : /* claiming history */
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE] no-lock no-error.
         RUN Ar/claimhis.p(0,
                      INPUT Invoice.InvNum).
@@ -607,7 +606,7 @@ repeat WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 THEN DO : /* payments */
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 THEN DO : /* payments */
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE] no-lock no-error.
         RUN Ar/payments.p(0,Invoice.InvNum,"").
         ufkey = TRUE.
@@ -615,7 +614,7 @@ repeat WITH FRAME sel:
      END.
 
      /* view mail send log */
-     else if lookup(nap,"7,f7") > 0 THEN DO : 
+     else if lookup(Syst.CUICommon:nap,"7,f7") > 0 THEN DO : 
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE] no-lock no-error.
         RUN Mc/itsendlo.p(0,
                      Invoice.InvNum,
@@ -626,7 +625,7 @@ repeat WITH FRAME sel:
      END.
 
      
-     else if lookup(nap,"T") > 0 THEN DO : /* time stamps */
+     else if lookup(Syst.CUICommon:nap,"T") > 0 THEN DO : /* time stamps */
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE] no-lock no-error.
         MESSAGE 
         "Created/Changed" Invoice.ChgStamp "Transferred" Invoice.ExpStamp.
@@ -637,11 +636,11 @@ repeat WITH FRAME sel:
      END.
 
 
-     else if lookup(nap,"5,f5") > 0 THEN DO :  /* laskulinet */
+     else if lookup(Syst.CUICommon:nap,"5,f5") > 0 THEN DO :  /* laskulinet */
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE] 
         no-lock no-error.
 
-        cfc = "lis". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
 
         /* kysytaan linet */
         RUN Ar/nnlryp.p(Invoice.InvNum,0).
@@ -650,7 +649,7 @@ repeat WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"enter,return") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 THEN DO:
 
         FIND Invoice WHERE recid(Invoice) = rtab[frame-line(sel)]
            NO-LOCK NO-ERROR.
@@ -682,7 +681,7 @@ repeat WITH FRAME sel:
      END.
 
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
         IF order = 1 THEN FIND FIRST Invoice USE-INDEX ExtInvID
         WHERE Invoice.Brand = lcBrand NO-LOCK no-error.
         ELSE IF order = 2 THEN FIND LAST  Invoice USE-INDEX InvDate
@@ -695,7 +694,7 @@ repeat WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 1 THEN FIND LAST Invoice USE-INDEX ExtInvID
         WHERE Invoice.Brand = lcBrand NO-LOCK no-error.
         ELSE IF order = 2 THEN FIND FIRST Invoice USE-INDEX InvDate
@@ -720,34 +719,33 @@ repeat WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"4,f4") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"4,f4") > 0 THEN DO:
         
         FIND Invoice where recid(Invoice) = rtab[frame-line(sel)] no-lock.
         
         RUN Mc/commontt.p(Invoice.CustNum).
         
-        ASSIGN  ufk = 0
-                ufk[1]= 94  ufk[2] = 1492 ufk[3] = 927 ufk[4] = 1883
-                ufk[5]= 790 ufk[6] = 829 ufk[7] = 1796 ufk[8]= 8 ufk[9]= 1
-                ehto = 3 ufkey = FALSE.
+        ASSIGN  Syst.CUICommon:ufk = 0
+                Syst.CUICommon:ufk[1]= 94  Syst.CUICommon:ufk[2] = 1492 Syst.CUICommon:ufk[3] = 927 Syst.CUICommon:ufk[4] = 1883
+                Syst.CUICommon:ufk[5]= 790 Syst.CUICommon:ufk[6] = 829 Syst.CUICommon:ufk[7] = 1796 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+                Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE local-disp-row:
 
    FIND Customer where Customer.CustNum = Invoice.CustNum
    no-lock no-error.
    IF AVAILABLE Customer THEN 
-      lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                    BUFFER Customer).
+      lcCustName = Func.Common:mDispCustName(BUFFER Customer).
    ELSE lcCustName = "".                                 
 
    FIND FIRST memo WHERE

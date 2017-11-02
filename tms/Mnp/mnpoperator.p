@@ -10,14 +10,12 @@
 {Syst/commali.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'MNPOperator'} 
-{Func/timestamp.i}
 {Func/ftaxdata.i}
-{Func/timestamp.i}
 
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -62,10 +60,10 @@ FORM
     MNPOperator.NRN
     MNPOperator.OperBrand
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.CUICommon:cfc)   
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " MNP OPERATORS "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 FORM
@@ -77,12 +75,12 @@ FORM
     MNPOperator.NRN LABEL "NRN"
     MNPOperator.Active LABEL "Active"
 WITH  OVERLAY ROW 4 centered 1 columns
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr with side-labels
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr with side-labels
     NO-LABELS 
     FRAME lis.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By OperName ,  By OperCode".
@@ -111,20 +109,20 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a MNPOperator  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
 
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            
            CREATE MNPOperator.
-           MNPOperator.Brand = gcBrand.
+           MNPOperator.Brand = Syst.CUICommon:gcBrand.
 
            RUN local-UPDATE-record.
 
@@ -199,33 +197,33 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk = 0
-        ufk[1]= 0  ufk[2]= 0 ufk[3]= 0
-        ufk[5]=  (IF lcRight = "RW" THEN 5 ELSE 0)
-        ufk[6]=  (IF lcRight = "RW" THEN 4 ELSE 0)
-        ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ufk = 0
+        Syst.CUICommon:ufk[1]= 0  Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0
+        Syst.CUICommon:ufk[5]=  (IF lcRight = "RW" THEN 5 ELSE 0)
+        Syst.CUICommon:ufk[6]=  (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW MNPOperator.Opername {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MNPOperator.Opername WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MNPOperator.Opername WITH FRAME sel.
       END.
       IF order = 2 THEN DO:
         CHOOSE ROW MNPOperator.OperCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MNPOperator.OperCode WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) MNPOperator.OperCode WITH FRAME sel.
       END.
       
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -249,10 +247,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -277,7 +275,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -303,7 +301,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
          Memory = rtab[1].
          FIND MNPOperator WHERE recid(MNPOperator) = Memory NO-LOCK NO-ERROR.
          RUN local-find-PREV.
@@ -327,7 +325,7 @@ BROWSE:
       END. /* PREVious page */
       
       /* NEXT page */
-      ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
          IF rtab[FRAME-DOWN] = ? THEN DO:
             MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -341,7 +339,7 @@ BROWSE:
          END.
       END. /* NEXT page */
      
-      ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:
      
          must-add = TRUE.
         
@@ -350,12 +348,12 @@ BROWSE:
       END. /* ADD NEW */
      
            
-      ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW" THEN DO TRANS:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW" THEN DO TRANS:
 
          RUN local-find-this(FALSE).
         
          ok = FALSE.
-         COLOR DISPLAY value(ctc)
+         COLOR DISPLAY value(Syst.CUICommon:ctc)
             MNPOperator.Opername
             MNPOperator.OperCode.
         
@@ -376,7 +374,7 @@ BROWSE:
             "ARE YOU SURE YOU WANT TO DELETE THIS ROW?" 
          UPDATE ok.
 
-         COLOR DISPLAY value(ccc)
+         COLOR DISPLAY value(Syst.CUICommon:ccc)
             MNPOperator.Opername
             MNPOperator.OperCode.
          
@@ -407,7 +405,7 @@ BROWSE:
         
       END. /* DELETE */
            
-      ELSE IF LOOKUP(nap,"enter,return") > 0 AND lcRight = "RW" THEN
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 AND lcRight = "RW" THEN
       REPEAT WITH FRAME lis TRANSACTION
       ON ENDKEY UNDO, LEAVE:
 
@@ -416,8 +414,8 @@ BROWSE:
 
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMNPOperator).
 
-         ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-         cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+         ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
       
          RUN local-UPDATE-record.
          HIDE FRAME lis NO-PAUSE.
@@ -435,25 +433,25 @@ BROWSE:
    
       END.
       
-      ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
          RUN local-find-FIRST.
          ASSIGN Memory = recid(MNPOperator) must-print = TRUE.
          NEXT LOOP.
       END.
 
-      ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
          RUN local-find-LAST.
          ASSIGN Memory = recid(MNPOperator) must-print = TRUE.
          NEXT LOOP.
       END.
 
-      ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
    END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE local-find-this:
 
@@ -472,11 +470,11 @@ PROCEDURE local-find-FIRST:
 
    IF order = 1 THEN 
       FIND FIRST MNPOperator WHERE
-                 MNPOperator.Brand EQ gcBrand
+                 MNPOperator.Brand EQ Syst.CUICommon:gcBrand
       NO-LOCK USE-INDEX OperName NO-ERROR.
    ELSE IF order = 2 THEN
       FIND FIRST MNPOperator WHERE
-                 MNPOperator.Brand EQ gcBrand
+                 MNPOperator.Brand EQ Syst.CUICommon:gcBrand
       NO-LOCK USE-INDEX OperCode NO-ERROR.
 
 END PROCEDURE.
@@ -485,11 +483,11 @@ PROCEDURE local-find-LAST:
 
    IF order = 1 THEN 
       FIND LAST MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand 
+                MNPOperator.Brand EQ Syst.CUICommon:gcBrand 
       NO-LOCK USE-INDEX OperName NO-ERROR.
    ELSE IF order = 2 THEN
       FIND LAST MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand
+                MNPOperator.Brand EQ Syst.CUICommon:gcBrand
       NO-LOCK USE-INDEX OperCode NO-ERROR.
 
 END PROCEDURE.
@@ -498,11 +496,11 @@ PROCEDURE local-find-NEXT:
 
    IF order = 1 THEN 
       FIND NEXT MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand
+                MNPOperator.Brand EQ Syst.CUICommon:gcBrand
       NO-LOCK USE-INDEX OperName NO-ERROR.
    ELSE IF order = 2 THEN
       FIND NEXT MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand
+                MNPOperator.Brand EQ Syst.CUICommon:gcBrand
       NO-LOCK USE-INDEX OperCode NO-ERROR.
 
 END PROCEDURE.
@@ -511,11 +509,11 @@ PROCEDURE local-find-PREV:
 
    IF order = 1 THEN
       FIND PREV MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand
+                MNPOperator.Brand EQ Syst.CUICommon:gcBrand
       NO-LOCK USE-INDEX OperName NO-ERROR.
    ELSE IF order = 2 THEN
       FIND PREV MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand
+                MNPOperator.Brand EQ Syst.CUICommon:gcBrand
       NO-LOCK USE-INDEX OperCode NO-ERROR.
 
 END PROCEDURE.
@@ -549,7 +547,7 @@ PROCEDURE local-UPDATE-record:
 
       READKEY.
       
-      nap = keylabel(lastkey).
+      Syst.CUICommon:nap = keylabel(lastkey).
 
       APPLY LASTKEY.
 

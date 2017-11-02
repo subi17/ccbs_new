@@ -1,8 +1,7 @@
 
 {Syst/commpaa.i}
-katun = "rafaeldv".
-gcBrand  = "1".
-{Func/timestamp.i}
+Syst.CUICommon:katun = "rafaeldv".
+Syst.CUICommon:gcBrand  = "1".
 {Func/msisdn.i}
 {Syst/tmsconst.i}
 
@@ -44,7 +43,7 @@ FUNCTION fIsGoldNumber RETURNS LOGICAL:
    RETURN llGold. 
 END FUNCTION.
 
-ldTS = fMakeTS(). 
+ldTS = Func.Common:mMakeTS(). 
 lcSimulated = FALSE.
 OUTPUT STREAM sLog TO "yot_573.log".
 
@@ -52,7 +51,7 @@ FOR EACH bMSISDN NO-LOCK WHERE
          bMSISDN.POS = ({&MSISDN_STOCK_PREACTIVATED}) AND
          bMSISDN.StatusCode = 1 AND
          bMSISDN.ValidTo > ldTS  AND
-         bMSISDN.Brand = gcBrand :
+         bMSISDN.Brand = Syst.CUICommon:gcBrand :
       
       lcError = fCheckMSISDN().
       IF lcError NE "" THEN DO:
@@ -74,7 +73,7 @@ FOR EACH bMSISDN NO-LOCK WHERE
 END.
 
 FOR EACH bMSISDN NO-LOCK WHERE
-         bMSISDN.Brand = gcBrand AND 
+         bMSISDN.Brand = Syst.CUICommon:gcBrand AND 
          bMSISDN.CLI BEGINS "6335" AND
          bMSISDN.StatusCode = 0 AND
          bMSISDN.ValidTo > ldTS :

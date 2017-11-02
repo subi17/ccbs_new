@@ -1,6 +1,5 @@
 {Syst/testpaa.i}
-katun = "qvantel".
-{Func/timestamp.i}
+Syst.CUICommon:katun = "qvantel".
 
 DEF VAR liCount AS INT  NO-UNDO. 
 DEF VAR i AS INT NO-UNDO.
@@ -24,8 +23,8 @@ FOR EACH Customer NO-LOCK,
    
    IF InvSeq.AgrCust = 0 THEN DO:
       ASSIGN 
-         ldFrom = fMake2Dt(InvSeq.FromDate,0)
-         ldTo   = fMake2Dt(InvSeq.ToDate,86399).
+         ldFrom = Func.Common:mMake2DT(InvSeq.FromDate,0)
+         ldTo   = Func.Common:mMake2DT(InvSeq.ToDate,86399).
       FOR FIRST MsOwner NO-LOCK WHERE
                 MsOwner.MsSeq = InvSeq.MsSeq AND
                 MsOwner.InvCust = InvSeq.CustNum AND

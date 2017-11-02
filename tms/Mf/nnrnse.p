@@ -38,8 +38,8 @@ form
     AreaCode.AreaCode                  /* column-label "Areanumber"    */
 WITH
     centered OVERLAY scroll 1 13 DOWN ROW 3
-    COLOR value(cfc)
-    title color value(ctc) " SEARCHING AREANO FROM " + rnhaku + "' " FRAME sel.
+    COLOR value(Syst.CUICommon:cfc)
+    title color value(Syst.CUICommon:ctc) " SEARCHING AREANO FROM " + rnhaku + "' " FRAME sel.
 
 
 form
@@ -52,7 +52,7 @@ form
 
 with row 1 centered overlay title " SEEK AREANUMBER " FRAME alku.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
    FIND FIRST AreaCode USE-INDEX AreaCode no-lock no-error.
    IF NOT AVAIL AreaCode THEN DO:
       BELL.
@@ -73,12 +73,12 @@ repeat WITH FRAME sel:
        ASSIGN haettava = FALSE nrohaku = FALSE.
        PAUSE 0 no-message.
 alku:  repeat WITH FRAME alku:
-          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+          Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           UPDATE rnhaku WITH FRAME alku EDITING:
-             READKEY. nap = keylabel(LASTKEY).
+             READKEY. Syst.CUICommon:nap = keylabel(LASTKEY).
              /* onko painettu home */
-             if nap = "home,h" then assign nrohaku = true nap = "enter".
-             APPLY keycode(nap).
+             if Syst.CUICommon:nap = "home,h" then assign nrohaku = true Syst.CUICommon:nap = "enter".
+             APPLY keycode(Syst.CUICommon:nap).
           END.
 
           if rnhaku = "" THEN LEAVE LOOP.
@@ -161,30 +161,30 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 0   ufk[2]= 0   ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 11 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ufk[1]= 0   Syst.CUICommon:ufk[2]= 0   Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+         Syst.CUICommon:ufk[5]= 11 Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 2 THEN DO:
          CHOOSE ROW AreaCode.AreaCode {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) AreaCode.AreaCode WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) AreaCode.AreaCode WITH FRAME sel.
       END.
       ELSE IF order = 1 THEN DO:
          CHOOSE ROW AreaCode.AreaName {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) AreaCode.AreaName WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) AreaCode.AreaName WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order = 3 THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = 2.
       END.
 
@@ -211,10 +211,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND AreaCode where recid(AreaCode) = rtab[1] no-lock.
             IF order = 2 THEN FIND prev AreaCode
@@ -243,7 +243,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND AreaCode where recid(AreaCode) = rtab[FRAME-DOWN] no-lock .
@@ -273,7 +273,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
          Memory = rtab[1].
          FIND AreaCode where recid(AreaCode) = Memory no-lock no-error.
          IF order = 2 THEN FIND prev AreaCode
@@ -304,7 +304,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "YOU ARE ON THE LAST PAGE !".
@@ -319,14 +319,14 @@ BROWSE:
         END.
      END. /* NEXT page */
 
-     else if lookup(nap,"5,f5,enter,return") > 0 THEN DO: /* valinta */
+     else if lookup(Syst.CUICommon:nap,"5,f5,enter,return") > 0 THEN DO: /* valinta */
         FIND AreaCode where recid(AreaCode) = rtab[FRAME-LINE] no-lock.
         siirto = string(AreaCode).
         LEAVE LOOP.
      END.
 
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
         IF order = 2 THEN FIND FIRST AreaCode
         USE-INDEX AreaCode no-lock no-error.
         ELSE IF order = 1 THEN FIND FIRST AreaCode
@@ -335,7 +335,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 2 THEN FIND LAST AreaCode
         USE-INDEX AreaCode no-lock no-error.
         ELSE IF order = 1 THEN FIND LAST AreaCode
@@ -344,7 +344,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
         haettava = TRUE.
         HIDE FRAME sel no-pause.
         NEXT LOOP.
@@ -355,5 +355,5 @@ END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
 HIDE FRAME alku no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 

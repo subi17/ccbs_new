@@ -7,7 +7,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Func/msisdn.i}
 
 DEF VAR pcTenant        AS CHAR NO-UNDO.
@@ -41,7 +41,7 @@ END FUNCTION.
 FUNCTION fReleaseSIM RETURNS LOG (INPUT icICC AS CHAR):
 
    FOR FIRST SIM EXCLUSIVE-LOCK WHERE
-             SIM.Brand EQ gcBrand AND
+             SIM.Brand EQ Syst.CUICommon:gcBrand AND
              SIM.ICC   EQ icICC   AND
             (SIM.Stock EQ "TESTING" OR
              SIM.Stock EQ "EMATESTING") AND
@@ -59,7 +59,7 @@ FUNCTION fReleaseMSISDN RETURNS LOG (INPUT icMSISDN AS CHAR):
    ELSE MSISDN_status = 99.   /* use normal status value */
 
    FOR FIRST MSISDN EXCLUSIVE-LOCK WHERE
-             MSISDN.Brand = gcBrand AND
+             MSISDN.Brand = Syst.CUICommon:gcBrand AND
              MSISDN.CLI   = icMSISDN AND
              MSISDN.StatusCode < 98:
       fMakeMsidnHistory(INPUT RECID(MSISDN)).
@@ -77,7 +77,7 @@ FUNCTION fDeleteSubscription RETURNS LOG (INPUT icMSISDN AS CHAR):
             MsOwner.CLI = icMSISDN EXCLUSIVE-LOCK:
 
        FOR EACH FixedFee USE-INDEX Custnum WHERE
-                FixedFee.Brand     = gcBrand AND
+                FixedFee.Brand     = Syst.CUICommon:gcBrand AND
                 FixedFee.Custnum   = MsOwner.CustNum AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue  = STRING(MsOwner.MsSeq) EXCLUSIVE-LOCK:
@@ -88,7 +88,7 @@ FUNCTION fDeleteSubscription RETURNS LOG (INPUT icMSISDN AS CHAR):
        END. /* FOR EACH FixedFee USE-INDEX HostTable WHERE */
 
        FOR EACH SingleFee USE-INDEX Custnum WHERE
-                SingleFee.Brand     = gcBrand AND
+                SingleFee.Brand     = Syst.CUICommon:gcBrand AND
                 SingleFee.Custnum   = MsOwner.CustNum AND
                 SingleFee.HostTable = "Mobsub" AND
                 SingleFee.KeyValue  = STRING(MsOwner.MsSeq) EXCLUSIVE-LOCK:
@@ -144,13 +144,13 @@ FUNCTION fDeleteSubscription RETURNS LOG (INPUT icMSISDN AS CHAR):
    END.
 
    FOR EACH MobSub WHERE
-            MobSub.Brand = gcBrand AND
+            MobSub.Brand = Syst.CUICommon:gcBrand AND
             MobSub.CLI   = icMSISDN EXCLUSIVE-LOCK:
       DELETE MobSub.
    END.
 
    FOR EACH TermMobSub WHERE
-            TermMobSub.Brand = gcBrand AND
+            TermMobSub.Brand = Syst.CUICommon:gcBrand AND
             TermMobSub.CLI   = icMSISDN EXCLUSIVE-LOCK:
       DELETE TermMobSub.
    END.
@@ -161,13 +161,13 @@ END FUNCTION.
 /* Main Block */
 
 FIND FIRST MobSub WHERE
-           MobSub.Brand = gcBrand AND
+           MobSub.Brand = Syst.CUICommon:gcBrand AND
            MobSub.CLI   = lcMSISDN NO-LOCK NO-ERROR.
 IF NOT AVAIL MobSub THEN
    RETURN appl_err("Subscription not found").
 ELSE DO:
    FIND FIRST SIM WHERE
-              SIM.Brand EQ gcBrand    AND
+              SIM.Brand EQ Syst.CUICommon:gcBrand    AND
               SIM.ICC   EQ MobSub.ICC AND
              (SIM.Stock EQ "TESTING" OR
               SIM.Stock EQ "EMATESTING") NO-LOCK NO-ERROR.
@@ -183,5 +183,4 @@ fDeleteSubscription(INPUT MobSub.CLI).
 add_boolean(response_toplevel_id,?,True).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

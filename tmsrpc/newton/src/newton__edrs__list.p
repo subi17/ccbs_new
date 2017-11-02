@@ -12,9 +12,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 ASSIGN
-   katun = "NewtonRPC"
-   gcBrand = "1".
-{Func/date.i}
+   Syst.CUICommon:katun = "NewtonRPC"
+   Syst.CUICommon:gcBrand = "1".
 {Func/callquery.i}
 
 DEF VAR resp_array AS CHAR NO-UNDO. 
@@ -38,8 +37,8 @@ resp_array = add_array(response_toplevel_id, "").
 tthCDR = TEMP-TABLE ttCall:HANDLE.
 
 fMobCDRCollect(INPUT "edr",
-               INPUT gcBrand,
-               INPUT katun,
+               INPUT Syst.CUICommon:gcBrand,
+               INPUT Syst.CUICommon:katun,
                INPUT TODAY - 30,
                INPUT TODAY,
                INPUT 0,
@@ -58,7 +57,7 @@ FOR EACH ttCall NO-LOCK WHERE
          ttCall.MsSeq = MobSub.Msseq AND
          ttCall.ErrorCode = 0:
 
-   ldeEventTime = fMake2Dt(ttCall.DateSt, ttCall.TimeStart).
+   ldeEventTime = Func.Common:mMake2DT(ttCall.DateSt, ttCall.TimeStart).
 
    CASE ttCall.SuccessCode:
       WHEN 1 THEN lcSuccessCode = "OK".
@@ -75,6 +74,5 @@ END.
 
 FINALLY:
    EMPTY TEMP-TABLE ttCall.
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-   IF VALID-HANDLE(tthCDR) THEN DELETE OBJECT tthCDR NO-ERROR.
+      IF VALID-HANDLE(tthCDR) THEN DELETE OBJECT tthCDR NO-ERROR.
 END.

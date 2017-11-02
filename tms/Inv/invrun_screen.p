@@ -12,7 +12,6 @@
 
 {Syst/commpaa.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Inv/billrund.i NEW}
 {Func/ftransdir.i}
 
@@ -41,11 +40,11 @@ DEFINE VARIABLE lcTransDir   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liCallQty    AS INTEGER   NO-UNDO.
 
 ASSIGN
-   gcBrand      = '1'
-   katun        = 'cron'
+   Syst.CUICommon:gcBrand      = '1'
+   Syst.CUICommon:katun        = 'cron'
    lcInvRunFile = SESSION:PARAM
    lcTransDir   = fCParamC("SplitInvRunArc")
-   ldeBegTime   = fMakeTS()
+   ldeBegTime   = Func.Common:mMakeTS()
    ldaDueDate   = ?.
 
 RUN Inv/lamupers.p PERSISTENT SET lhHandle.
@@ -93,7 +92,7 @@ IF LOOKUP(lcInvRunFile,",?, ") = 0 THEN DO:
          liCallQty = INTEGER(ENTRY(2,lcLine,CHR(9))) NO-ERROR.
                         
          FIND FIRST Customer WHERE
-                    Customer.Brand   = gcBrand AND 
+                    Customer.Brand   = Syst.CUICommon:gcBrand AND 
                     Customer.CustNum = INT(ENTRY(1,lcLine,CHR(9)))
          NO-LOCK NO-ERROR.
       
@@ -142,11 +141,11 @@ IF LOOKUP(lcInvRunFile,",?, ") = 0 THEN DO:
       CREATE ActionLog.
    
       ASSIGN
-         ActionLog.ActionTS     = fMakeTS()
-         ActionLog.Brand        = gcBrand
+         ActionLog.ActionTS     = Func.Common:mMakeTS()
+         ActionLog.Brand        = Syst.CUICommon:gcBrand
          ActionLog.TableName    = "Invoice"
          ActionLog.KeyValue     = lcBillRun
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.CUICommon:katun
          ActionLog.ActionID     = "BillRun"
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
                                   MONTH(TODAY)
@@ -170,10 +169,9 @@ IF LOOKUP(lcInvRunFile,",?, ") = 0 THEN DO:
                               "*" + lcBillRun,
                               FALSE).
 
-   ldeEndTime = fMakeTS().
+   ldeEndTime = Func.Common:mMakeTS().
 
-   liDurDays = DYNAMIC-FUNCTION("fTSDuration" IN ghFunc1,
-                                ldeBegTime,
+   liDurDays = Func.Common:mTSDuration(ldeBegTime,
                                 ldeEndTime,
                                 OUTPUT liDurTime).
 
@@ -201,7 +199,7 @@ IF LOOKUP(lcInvRunFile,",?, ") = 0 THEN DO:
    IF liInvType NE 99 THEN DO FOR ActionLog TRANS:
 
       FIND FIRST ActionLog WHERE
-                 ActionLog.Brand        = gcBrand   AND
+                 ActionLog.Brand        = Syst.CUICommon:gcBrand   AND
                  ActionLog.TableName    = "Invoice" AND
                  ActionLog.KeyValue     = lcBillRun AND
                  ActionLog.ActionID     = "BillRun" AND
@@ -211,11 +209,11 @@ IF LOOKUP(lcInvRunFile,",?, ") = 0 THEN DO:
          CREATE ActionLog.
    
          ASSIGN
-            ActionLog.ActionTS     = fMakeTS()
-            ActionLog.Brand        = gcBrand
+            ActionLog.ActionTS     = Func.Common:mMakeTS()
+            ActionLog.Brand        = Syst.CUICommon:gcBrand
             ActionLog.TableName    = "Invoice"
             ActionLog.KeyValue     = lcBillRun
-            ActionLog.UserCode     = katun
+            ActionLog.UserCode     = Syst.CUICommon:katun
             ActionLog.ActionID     = "BillRun"
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
                                      MONTH(TODAY)

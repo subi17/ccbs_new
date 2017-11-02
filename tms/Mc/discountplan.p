@@ -14,7 +14,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -65,10 +65,10 @@ FORM
     DiscountPlan.Priority    FORMAT ">>>>9" 
     DiscountPlan.ValidTo
 WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN 
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.CUICommon:cfc)   
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
        "  DISCOUNT PLAN  " +
-       string(pvm,"99-99-99") + " "
+       string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 {Func/brand.i}
@@ -111,8 +111,8 @@ FORM
        LABEL "Visible In CC" 
        HELP "Visible in CC tools"
 WITH  OVERLAY ROW 1 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -121,15 +121,15 @@ FORM
     "Brand:" lcBrand skip
     "Name :" lcRuleID FORMAT "X(20)" 
     HELP "Enter rule ID"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Rule ID "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Rule ID "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
 FUNCTION fBillItemName RETURNS LOGIC
   (icBillCode AS CHAR):
   
    FIND FIRST BillItem WHERE
-              BillItem.Brand = gcBrand AND
+              BillItem.Brand = Syst.CUICommon:gcBrand AND
               BillItem.BillCode = icBillCode NO-LOCK NO-ERROR.
    IF AVAILABLE BillItem THEN DISPLAY BillItem.BIName WITH FRAME lis.
    ELSE DISPLAY "" @ BillItem.BIName WITH FRAME lis.
@@ -142,8 +142,7 @@ END FUNCTION.
 FUNCTION fSubject RETURNS LOGIC
    (icSubject AS CHAR):
 
-   lcSubject = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "DiscountPlan",
+   lcSubject = Func.Common:mTMSCodeName("DiscountPlan",
                                    "Subject",
                                    icSubject).
    DISPLAY lcSubject WITH FRAME lis.
@@ -155,8 +154,7 @@ END FUNCTION.
 FUNCTION fDPUnit RETURNS LOGIC
    (icDPUnit AS CHAR):
 
-   lcSubject = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "DiscountPlan",
+   lcSubject = Func.Common:mTMSCodeName("DiscountPlan",
                                    "DPUnit",
                                    icDPUnit).
    DISPLAY lcDPUnit WITH FRAME lis.
@@ -167,11 +165,11 @@ END FUNCTION.
 */
 
 
-IF gcHelpParam > "" THEN ASSIGN
+IF Syst.CUICommon:gcHelpParam > "" THEN ASSIGN
    FrmRow  = 3
    FrmDown = 11.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 
@@ -200,7 +198,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a DiscountPlan  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -209,7 +207,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
@@ -316,19 +314,19 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk    = 0
-        ufk[1] = 816
-        ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)  
-        ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)  
-        ufk[8] = 8 
-        ehto   = 3 
+        Syst.CUICommon:ufk    = 0
+        Syst.CUICommon:ufk[1] = 816
+        Syst.CUICommon:ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)  
+        Syst.CUICommon:ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)  
+        Syst.CUICommon:ufk[8] = 8 
+        Syst.CUICommon:ehto   = 3 
         ufkey  = FALSE.
         
         /* used as help */
-        IF gcHelpParam > "" THEN ASSIGN
-           ufk[5] = 11
-           ufk[6] = 0
-           ufk[7] = 0.
+        IF Syst.CUICommon:gcHelpParam > "" THEN ASSIGN
+           Syst.CUICommon:ufk[5] = 11
+           Syst.CUICommon:ufk[6] = 0
+           Syst.CUICommon:ufk[7] = 0.
          
         RUN Syst/ufkey.p.
       END.
@@ -337,18 +335,18 @@ REPEAT WITH FRAME sel:
       IF order = 1 THEN DO:
         CHOOSE ROW DiscountPlan.DPRuleID {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) DiscountPlan.DPRuleID WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) DiscountPlan.DPRuleID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW DiscountPlan.DPID {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) DiscountPlan.DPID WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) DiscountPlan.DPID WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -357,10 +355,10 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -378,7 +376,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -403,7 +401,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -429,7 +427,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND DiscountPlan WHERE recid(DiscountPlan) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -453,7 +451,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -468,14 +466,14 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 THEN 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND Syst.CUICommon:ufk[1] > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       SET lcBrand WHEN gcAllBrand 
+       SET lcBrand WHEN Syst.CUICommon:gcAllBrand 
            lcRuleID WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        
@@ -491,8 +489,8 @@ REPEAT WITH FRAME sel:
        END.
      END. /* Search-1 */
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0 THEN DO:  /* add */
-        IF gcHelpParam > "" THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND Syst.CUICommon:ufk[5] > 0 THEN DO:  /* add */
+        IF Syst.CUICommon:gcHelpParam > "" THEN DO:
            xRecid = rtab[FRAME-LINE].
            LEAVE LOOP.
         END.
@@ -503,7 +501,7 @@ REPEAT WITH FRAME sel:
         END.    
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0  
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND Syst.CUICommon:ufk[6] > 0  
      THEN DO TRANSACTION:  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
@@ -533,7 +531,7 @@ REPEAT WITH FRAME sel:
        END.
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        DiscountPlan.DPId DiscountPlan.DPName
        DiscountPlan.Priority.
         
@@ -556,7 +554,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        DiscountPlan.DPId DiscountPlan.DPName
        DiscountPlan.Priority.
        
@@ -584,22 +582,22 @@ REPEAT WITH FRAME sel:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis /*  TRANSACTION */
      ON ENDKEY UNDO, LEAVE:
 
        /* change */
        RUN local-find-this(FALSE).
 
-       IF gcHelpParam > "" THEN DO:
+       IF Syst.CUICommon:gcHelpParam > "" THEN DO:
           xRecid = rtab[FRAME-LINE (sel)].
           LEAVE LOOP.
        END.
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDiscountPlan).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY DiscountPlan.DPId.
 
        RUN local-UPDATE-record.                                  
@@ -616,27 +614,27 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(DiscountPlan) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(DiscountPlan) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
-IF gcHelpParam > "" THEN DO:
+IF Syst.CUICommon:gcHelpParam > "" THEN DO:
    IF xRecid NE ? THEN DO:
       FIND FIRST DiscountPlan WHERE RECID(DiscountPlan) = xRecid NO-LOCK.
       siirto = STRING(DiscountPlan.DPRuleId).
@@ -644,7 +642,7 @@ IF gcHelpParam > "" THEN DO:
 END.
    
 
-ehto = 4.
+Syst.CUICommon:ehto = 4.
 RUN Syst/ufkey.p.
 
 fCleanEventObjects().
@@ -731,7 +729,7 @@ PROCEDURE local-UPDATE-record:
 
    DEF VAR lcValue AS CHAR NO-UNDO.
 
-   IF NEW DiscountPlan THEN toimi = -1.
+   IF NEW DiscountPlan THEN Syst.CUICommon:toimi = -1.
    
    MaintMenu:
    REPEAT ON ENDKEY UNDO, LEAVE:
@@ -780,28 +778,28 @@ PROCEDURE local-UPDATE-record:
          llCCDisplay
       WITH FRAME lis.
 
-      IF toimi < 0 THEN toimi = 1.
+      IF Syst.CUICommon:toimi < 0 THEN Syst.CUICommon:toimi = 1.
       ELSE DO:
          ASSIGN 
-            ufk    = 0
-            ufk[1] = 7    WHEN lcRight = "RW"
-            ufk[2] = 2205 WHEN NOT llSubjectType 
-            ufk[3] = 1723 WHEN NOT llTargetType
-            ufk[4] = 9224
-            ufk[6] = 9223
-            ufk[7] = 814
-            ufk[8] = 8
-            ehto   = 0.
+            Syst.CUICommon:ufk    = 0
+            Syst.CUICommon:ufk[1] = 7    WHEN lcRight = "RW"
+            Syst.CUICommon:ufk[2] = 2205 WHEN NOT llSubjectType 
+            Syst.CUICommon:ufk[3] = 1723 WHEN NOT llTargetType
+            Syst.CUICommon:ufk[4] = 9224
+            Syst.CUICommon:ufk[6] = 9223
+            Syst.CUICommon:ufk[7] = 814
+            Syst.CUICommon:ufk[8] = 8
+            Syst.CUICommon:ehto   = 0.
          
          RUN Syst/ufkey.p.
       END.
                   
-      IF toimi = 1 THEN 
+      IF Syst.CUICommon:toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
 
          FIND CURRENT DiscountPlan EXCLUSIVE-LOCK.
       
-         ehto = 9.
+         Syst.CUICommon:ehto = 9.
          RUN Syst/ufkey.p.
    
          UPDATE
@@ -850,20 +848,19 @@ PROCEDURE local-UPDATE-record:
                   END.
                END.
   
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
 
                NEXT. 
             END.
 
 
-            ELSE IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN 
+            ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN 
             DO WITH FRAME lis:
                PAUSE 0.
 
                IF FRAME-FIELD = "Subject" THEN DO:
-                  IF DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "DiscountPlan",
+                  IF Func.Common:mTMSCodeName("DiscountPlan",
                                       "Subject",
                                       INPUT INPUT DiscountPlan.Subject) = ""
                   THEN DO:
@@ -874,8 +871,7 @@ PROCEDURE local-UPDATE-record:
                END.
                
                ELSE IF FRAME-FIELD = "DPUnit" THEN DO:
-                  IF DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "DiscountPlan",
+                  IF Func.Common:mTMSCodeName("DiscountPlan",
                                       "DPUnit",
                                       INPUT INPUT DiscountPlan.DPUnit) = ""
                   THEN DO:
@@ -887,7 +883,7 @@ PROCEDURE local-UPDATE-record:
 
                ELSE IF FRAME-FIELD = "BillCode" THEN DO:
                   IF NOT CAN-FIND(FIRST BillItem WHERE
-                        BillItem.Brand = gcBrand AND
+                        BillItem.Brand = Syst.CUICommon:gcBrand AND
                         BillItem.BillCode = INPUT DiscountPlan.BillCode)
                   THEN DO:
                      MESSAGE "Unknown billing item"
@@ -928,28 +924,28 @@ PROCEDURE local-UPDATE-record:
          LEAVE.
       END.
 
-      ELSE IF toimi = 2 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 2 THEN DO:
          RUN Mc/dpsubject.p (DiscountPlan.DPId).
       END.
       
-      ELSE IF toimi = 3 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 3 THEN DO:
          RUN Mc/dptarget.p (DiscountPlan.DPId).
       END.
  
-      ELSE IF toimi = 4 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 4 THEN DO:
          RUN Mc/dprate.p (DiscountPlan.DPId).
       END.
 
-      ELSE IF toimi = 6 THEN DO:
+      ELSE IF Syst.CUICommon:toimi = 6 THEN DO:
          RUN Mc/dpmember.p (DiscountPlan.DPId,"","").
       END.
       
       /* translations */
-      ELSE IF toimi = 7 THEN DO:  
+      ELSE IF Syst.CUICommon:toimi = 7 THEN DO:  
          RUN Mc/invlang.p(31,STRING(DiscountPlan.DPId)).
       END.
        
-      ELSE IF toimi = 8 THEN LEAVE.  
+      ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE.  
 
    END.
    

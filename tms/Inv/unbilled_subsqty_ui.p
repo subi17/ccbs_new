@@ -73,8 +73,8 @@ FORM
    SKIP(6)
 
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + " UNBILLED SUBSCRIPTIONS " + 
-           STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.CUICommon:ynimi + " UNBILLED SUBSCRIPTIONS " + 
+           STRING(TODAY,"99-99-99") + " "
      FRAME fCrit.
 
 
@@ -104,22 +104,22 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
    IF ufkey THEN DO:
       ASSIGN
-         ufk    = 0
-         ufk[1] = 132 
-         ufk[3] = 1069
-         ufk[5] = 795
-         ufk[8] = 8 
-         ehto   = 0.
+         Syst.CUICommon:ufk    = 0
+         Syst.CUICommon:ufk[1] = 132 
+         Syst.CUICommon:ufk[3] = 1069
+         Syst.CUICommon:ufk[5] = 795
+         Syst.CUICommon:ufk[8] = 8 
+         Syst.CUICommon:ehto   = 0.
       RUN Syst/ufkey.p.
    END.
    
    ELSE ASSIGN 
-      toimi = 1
+      Syst.CUICommon:toimi = 1
       ufkey = TRUE.
 
-   IF toimi = 1 THEN DO:
+   IF Syst.CUICommon:toimi = 1 THEN DO:
 
-      ehto = 9. 
+      Syst.CUICommon:ehto = 9. 
       RUN Syst/ufkey.p.
       
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
@@ -131,9 +131,9 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          WITH FRAME fCrit EDITING:
 
             READKEY.
-            nap = KEYLABEL(LASTKEY).
+            Syst.CUICommon:nap = KEYLABEL(LASTKEY).
 
-            IF LOOKUP(nap,poisnap) > 0 THEN DO:
+            IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
 
             END.
 
@@ -145,10 +145,10 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
    END.
 
-   ELSE IF toimi = 3 THEN 
+   ELSE IF Syst.CUICommon:toimi = 3 THEN 
       RUN Syst/report_config.p ("UnbilledSubsQty").
  
-   ELSE IF toimi = 5 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 5 THEN DO:
       
       IF lcFile = "" OR lcFile = ? THEN DO:
          MESSAGE "File name has not been given."
@@ -185,7 +185,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       LEAVE CritLoop.
    END.
 
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.CUICommon:toimi = 8 THEN DO:
       LEAVE CritLoop.
    END.
 

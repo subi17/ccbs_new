@@ -21,7 +21,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAl-DEFINE STAR_EVENT_USER katun
+   &GLOBAl-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -69,10 +69,10 @@ form
     SimArt.SAName     format "x(10)" column-label "SIMType's"
     SimBatch.TpKey     
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " SimBatch "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 {Func/brand.i}                       
@@ -89,8 +89,8 @@ form
     VALIDATE(INPUT SimBatch.TPKey ne "","Missing Transport Key!")         SKIP
 
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     NO-LABELS 
     /*1 columns*/
     FRAME lis.
@@ -100,29 +100,29 @@ form /* seek SimBatch  BY  Mancode */
      VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
      "Man.Code..:"    mancode
     HELP "Enter Code of Manufacturer"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MANUFACTURER CODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND MANUFACTURER CODE "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek SimBatch  BY SimArt */
     "Brand Code:" lcBrand  HELP "Enter Brand"
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "SimArticle:"   SimARt
     HELP "Enter Code of SIM Article"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND ARTICLE CODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND ARTICLE CODE "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* memo */
     SimBatch.Memo
 
     WITH OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc)
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc)
     " memo of Batch#: " + string(SimBatch.SimBatch) + " " 
     WITH NO-LABELS 1 columns
     FRAME f4.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "By Vendor, By Type ,By 3, By 4".
@@ -154,13 +154,13 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a SimBatch  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
 
@@ -169,7 +169,7 @@ ADD-ROW:
               SimBatch.DelDate
            WITH FRAME lis EDITING:
               READKEY.
-              IF lookup(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+              IF lookup(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
                  PAUSE 0.
                  IF FRAME-FIELD = "Mancode" THEN DO:
                     IF INPUT SimBatch.ManCode = "" THEN UNDO add-row, LEAVE.
@@ -204,7 +204,7 @@ ADD-ROW:
 
            CREATE SimBatch.
            ASSIGN
-           SimBatch.Brand    = gcBrand 
+           SimBatch.Brand    = Syst.CUICommon:gcBrand 
            SimBatch.Simbatch = NEXT-VALUE(SimBatch)
            SimBatch.ManCode  = INPUT FRAME lis SimBatch.ManCode
            SimBatch.DelDate  = INPUT FRAME lis SimBatch.DelDate.
@@ -280,31 +280,31 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35  ufk[2]= 35 ufk[3]= 262 ufk[4]= 927
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-        ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ufk[1]= 35  Syst.CUICommon:ufk[2]= 35 Syst.CUICommon:ufk[3]= 262 Syst.CUICommon:ufk[4]= 927
+        Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
+        Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW SimBatch.Brand {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) SimBatch.Brand WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) SimBatch.Brand WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW SimBatch.SimArt {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) SimBatch.SimArt WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) SimBatch.SimArt WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -328,10 +328,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -356,7 +356,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -382,7 +382,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND SimBatch WHERE recid(SimBatch) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -406,7 +406,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -421,12 +421,12 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
         Disp lcBrand With FRAME f1.
-       SET   lcBrand WHEN gcAllBrand = TRUE
+       SET   lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
              Mancode WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF Mancode ENTERED THEN DO:
@@ -441,13 +441,13 @@ BROWSE:
      END. /* Search-1 */
 
      /* Search BY col 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        Disp lcBrand With FRAME f2.
-       SET  lcBrand WHEN gcAllBrand = TRUE
+       SET  lcBrand WHEN Syst.CUICommon:gcAllBrand = TRUE
             SimArt WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF SimArt ENTERED THEN DO:
@@ -461,22 +461,19 @@ BROWSE:
        END.
      END. /* Search-2 */
 
-     ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO TRANS:  /* INIVID. CARDS */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 THEN DO TRANS:  /* INIVID. CARDS */
        ufkey = TRUE.
        RUN local-find-this(FALSE). 
 
-       ASSIGN                                 
-       rt_param[2] = string(SimBatch.SimBatch)
-       rt_param[1] = "". /* ALL Stocks */
        RUN Mm/sim.p(SimBatch.simBatch).
 
        NEXT LOOP.
      END.
 
      /* UPDATE memo */
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO TRANS ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN Syst/ufcolor.p.
-        ehto = 9. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 THEN DO TRANS ON ENDKEY UNDO, NEXT LOOP:
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.CUICommon:ehto = 9. ufkey = TRUE.
         RUN local-find-this(TRUE).
         DISPLAY SimBatch.Memo WITH FRAME f4.
         IF lcRight = "RW" THEN DO:
@@ -490,18 +487,18 @@ BROWSE:
         HIDE FRAME f4 NO-PAUSE.
      END.
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW"
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION:  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        SimBatch.ManCode SimBatch.SimArt SimBatch.TpKey SimBatch.DelDate.
 
        RUN local-find-NEXT.
@@ -523,7 +520,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
        SimBatch.ManCode SimBatch.SimArt SimBatch.TpKey SimBatch.DelDate.
        IF ok THEN DO:
 
@@ -544,14 +541,14 @@ BROWSE:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        {Syst/uright2.i}
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY SimBatch.ManCode.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhSimBatch).
@@ -571,25 +568,25 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(SimBatch) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(SimBatch) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 
@@ -649,10 +646,10 @@ END PROCEDURE.
 
 PROCEDURE local-find-others.
    FIND SimMan WHERE 
-        SimMan.Brand = gcBrand AND
+        SimMan.Brand = Syst.CUICommon:gcBrand AND
         SimMan.Mancode = SimBatch.ManCode NO-LOCK NO-ERROR.
    FIND SimArt WHERE 
-        SimArt.Brand = gcBrand AND 
+        SimArt.Brand = Syst.CUICommon:gcBrand AND 
         SimArt.SimArt = SimBatch.SimArt NO-LOCK NO-ERROR.
 END PROCEDURE.
 

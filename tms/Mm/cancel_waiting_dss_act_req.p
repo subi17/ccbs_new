@@ -9,9 +9,8 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-ASSIGN gcBrand = "1"
-       katun   = "CRON".
-{Func/timestamp.i}
+ASSIGN Syst.CUICommon:gcBrand = "1"
+       Syst.CUICommon:katun   = "CRON".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/fsendsms.i}
@@ -25,12 +24,12 @@ liConfDays = fCParamI("WaitingCancelDSSDays").
 IF liConfDays = 0 OR liConfDays = ? THEN liConfDays = 14.
 
 FOR EACH MsRequest WHERE
-         MsRequest.Brand      = gcBrand AND
+         MsRequest.Brand      = Syst.CUICommon:gcBrand AND
          MsRequest.ReqType    = {&REQTYPE_DSS} AND
          MsRequest.ReqStatus  = 19 AND
          MsRequest.ReqCParam1 = "CREATE" NO-LOCK:
 
-    fSplitTS(MsRequest.ActStamp,ldMsActDate,liMsActTime).
+    Func.Common:mSplitTS(MsRequest.ActStamp,ldMsActDate,liMsActTime).
     IF liConfDays >= (TODAY - ldMsActDate) THEN NEXT.
 
     /* Cancel DSS request */

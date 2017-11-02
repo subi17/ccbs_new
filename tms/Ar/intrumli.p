@@ -83,10 +83,10 @@ exPaymFile AT 10 LABEL "File Name .."
     help "Name of Output File"
 SKIP(8)
  WITH  OVERLAY ROW 1 WIDTH 80
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) 
-       " " + ynimi + " SEND INVOICES TO COLLECTION " + 
-       STRING(pvm,"99-99-99") + " " 
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
+       " " + Syst.CUICommon:ynimi + " SEND INVOICES TO COLLECTION " + 
+       STRING(TODAY,"99-99-99") + " " 
     SIDE-LABELS 
     /*1 columns*/
     FRAME main.
@@ -104,7 +104,7 @@ DISPLAY ldMinDebt WITH FRAME main.
 MAIN:
 REPEAT WITH FRAME main:
 
-    ehto = 9. RUN Syst/ufkey.p.
+    Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
     UPDATE
     xCustNum1 xCustNum2
@@ -114,15 +114,15 @@ REPEAT WITH FRAME main:
     Action:
     REPEAT WITH FRAME main:
       ASSIGN
-      ufk = 0 ehto = 0
-      ufk[1] = 7 
-      ufk[5] = (IF exPaymFile ne "" THEN 795 ELSE 0).
-      ufk[8] = 8.
+      Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0
+      Syst.CUICommon:ufk[1] = 7 
+      Syst.CUICommon:ufk[5] = (IF exPaymFile ne "" THEN 795 ELSE 0).
+      Syst.CUICommon:ufk[8] = 8.
       RUN Syst/ufkey.p.
 
-      IF toimi = 1 THEN NEXT  main.
-      IF toimi = 8 THEN LEAVE main.
-      IF TOIMI = 5 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN NEXT  main.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE main.
+      IF Syst.CUICommon:toimi = 5 THEN DO:
 
          ok = FALSE.
          MESSAGE "Do You REALLY want to start (Y/N) ?" UPDATE ok.
@@ -160,7 +160,7 @@ REPEAT WITH FRAME main:
    /* UPDATE Seq nbr */
    IF xBatch = 0 AND xCount NE 0 THEN DO FOR bTMSParam TRANS:
       FIND bTMSParam WHERE 
-           bTMSParam.Brand     = gcBrand AND
+           bTMSParam.Brand     = Syst.CUICommon:gcBrand AND
            bTMSParam.ParamCode = "IntrumFileSeqNbr" NO-ERROR.
       ASSIGN  btmsparam.intVal = yBatch.
       RELEASE bTMSParam.

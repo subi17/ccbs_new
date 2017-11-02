@@ -1,5 +1,4 @@
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/msisdn.i}
 {Func/forderstamp.i}
 {Func/orderfunc.i}
@@ -90,13 +89,13 @@ ASSIGN
 INPUT STREAM sRead FROM VALUE(icFile).
 OUTPUT STREAM sLog TO VALUE(icLogFile) APPEND.
 
-ldCurrent = fMakeTS().
+ldCurrent = Func.Common:mMakeTS().
 
 PUT STREAM sLog UNFORMATTED
    "File: " icFile
    SKIP
    "Started: " 
-   fTS2HMS(ldCurrent)
+   Func.Common:mTS2HMS(ldCurrent)
    SKIP.
 
 ASSIGN
@@ -152,14 +151,14 @@ REPEAT:
    END.
  
    FIND CLIType WHERE
-        CLIType.Brand   = gcBrand AND
+        CLIType.Brand   = Syst.CUICommon:gcBrand AND
         CLIType.CLIType = lcCLIType NO-LOCK NO-ERROR.
    IF NOT AVAILABLE CLIType THEN DO:
       fError("CLIType not found").
    END.
    
    FIND FIRST MSISDN WHERE 
-              MSISDN.Brand = gcBrand AND 
+              MSISDN.Brand = Syst.CUICommon:gcBrand AND 
               MSISDN.CLI = lcCLI NO-LOCK NO-ERROR.
    IF NOT AVAILABLE MSISDN THEN DO:
       fError("No MSISDN/ICC found").
@@ -193,7 +192,7 @@ REPEAT:
    IF lcBEvent1 > "" THEN DO:
    
       FIND FeeModel WHERE
-           FeeModel.Brand = gcBrand AND
+           FeeModel.Brand = Syst.CUICommon:gcBrand AND
            FeeModel.FeeModel = lcBEvent1 NO-LOCK NO-ERROR.
       IF NOT AVAILABLE FeeModel THEN DO:
          fError("Billing event not found").
@@ -226,7 +225,7 @@ REPEAT:
    
    CREATE Order.
    ASSIGN
-      Order.Brand           = gcBrand
+      Order.Brand           = Syst.CUICommon:gcBrand
       Order.OrderId         = NEXT-VALUE(OrderId)
       Order.MsSeq           = NEXT-VALUE(MobSub)
       Order.CLI             = lcCLI
@@ -252,7 +251,7 @@ REPEAT:
         
     CREATE OrderCustomer.
     ASSIGN 
-       OrderCustomer.Brand        = gcBrand     
+       OrderCustomer.Brand        = Syst.CUICommon:gcBrand     
        OrderCustomer.OrderID      = Order.OrderID
        OrderCustomer.RowType      = 1
        OrderCustomer.CustNum      = liCustNum
@@ -291,19 +290,19 @@ REPEAT:
     /* payment on delivery */
     CREATE OrderPayment.
     ASSIGN
-       OrderPayment.Brand   = gcBrand
+       OrderPayment.Brand   = Syst.CUICommon:gcBrand
        OrderPayment.OrderId = Order.OrderId
        OrderPayment.Method  = {&ORDERPAYMENT_M_POD}. 
 
 
     CREATE Memo.
     ASSIGN 
-       Memo.Brand     = gcBrand
+       Memo.Brand     = Syst.CUICommon:gcBrand
        Memo.HostTable = "Order"
        Memo.KeyValue  = STRING(Order.OrderID)
        Memo.CustNum   = Order.CustNum
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = katun 
+       Memo.CreUser   = Syst.CUICommon:katun 
        Memo.MemoTitle = lcHeader
        Memo.MemoText  = lcMemo
        Memo.CreStamp  = ldCurrent.

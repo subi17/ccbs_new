@@ -11,7 +11,6 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {Syst/tmsconst.i}
 
-DEFINE VARIABLE gcBrand AS CHARACTER NO-UNDO INIT "1".
 DEFINE VARIABLE response_array AS CHARACTER NO-UNDO. 
 
 DEF VAR pcCLI           AS CHAR    NO-UNDO.
@@ -24,7 +23,7 @@ IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
 pcCLI = get_string(param_toplevel_id, "0").
 if gi_xmlrpc_error NE 0 THEN RETURN.
 
-FOR FIRST MobSub WHERE MobSub.Brand = gcBrand AND MobSub.Cli = pcCLI TENANT-WHERE TENANT-ID() > -1 NO-LOCK:
+FOR FIRST MobSub WHERE MobSub.Brand = Syst.CUICommon:gcBrand AND MobSub.Cli = pcCLI TENANT-WHERE TENANT-ID() > -1 NO-LOCK:
     ASSIGN lcTenant = BUFFER-TENANT-NAME(MobSub).                
 END.
 

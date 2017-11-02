@@ -20,7 +20,7 @@ DEF VAR InvGroup LIKE InvGroup.InvGroup NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -43,33 +43,33 @@ form
   "               Invoice group :" InvGroup   
                   help "Invoice group to close"    skip(7)
 WITH
-    color value(cfc) title color value(cfc) " CLOSE AN INVOICE GROUP " 
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:cfc) " CLOSE AN INVOICE GROUP " 
     centered NO-LABEL
     OVERLAY  width 80
     FRAME frm.
 
-cfc = "kline".  RUN Syst/ufcolor.p.
+Syst.CUICommon:cfc = "kline".  RUN Syst/ufcolor.p.
 
 LOOP:
 repeat WITH FRAME frm:
 
-  ehto = 9. RUN Syst/ufkey.p.
+  Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
   UPDATE InvGroup WITH FRAME frm.
 
    toimi:
       repeat WITH FRAME LOOP:
-         ASSIGN ufk = 0 ehto = 0 ufk[1] = 7 ufk[5] = 795 ufk[8] = 8.
+         ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 795 Syst.CUICommon:ufk[8] = 8.
          RUN Syst/ufkey.p.
-         IF toimi = 1 THEN NEXT  toimi.
-         IF toimi = 5 THEN LEAVE toimi.
-         IF toimi = 8 THEN LEAVE LOOP.
-      END.  /* toimi */
+         IF Syst.CUICommon:toimi = 1 THEN NEXT  toimi.
+         IF Syst.CUICommon:toimi = 5 THEN LEAVE toimi.
+         IF Syst.CUICommon:toimi = 8 THEN LEAVE LOOP.
+      END.  /* Syst.CUICommon:toimi */
 
 
   ASSIGN i1 = 0.
   /* CLOSE ALL customers from an invoice group */
   FOR EACH Customer no-lock where
-           Customer.Brand    = gcBrand AND
+           Customer.Brand    = Syst.CUICommon:gcBrand AND
            Customer.InvGroup = InvGroup:
 
      FIND FIRST MthCall where 
@@ -83,13 +83,13 @@ repeat WITH FRAME frm:
            MthCall.CustNum = Customer.CustNum
            MthCall.Month     = Month
            MthCall.Limit   = Customer.CreditLimit
-           MthCall.CloseDate  = pvm i1 = i1 + 1.
+           MthCall.CloseDate  = TODAY i1 = i1 + 1.
         IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhMthCall).   
      END.
      ELSE
      DO:
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMthCall).
-        ASSIGN MthCall.CloseDate  = pvm i1 = i1 + 1.
+        ASSIGN MthCall.CloseDate  = TODAY i1 = i1 + 1.
         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMthCall).
      END.
   END.

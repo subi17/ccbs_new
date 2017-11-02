@@ -12,13 +12,12 @@
 
 {Syst/commpaa.i}
 
-ASSIGN gcBrand = "1" 
-       katun   = "Cron".
+ASSIGN Syst.CUICommon:gcBrand = "1" 
+       Syst.CUICommon:katun   = "Cron".
        
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Syst/eventlog.i}
-{Func/timestamp.i}
 {Func/multitenantfunc.i}
 
 DEF VAR liCnt       AS INT  NO-UNDO.
@@ -95,7 +94,7 @@ FOR EACH ttFiles:
       fConvertBrandToTenant(lcTenant)) THEN NEXT.
 
    IF CAN-FIND (FIRST ActionLog NO-LOCK WHERE
-                      ActionLog.Brand = gcBrand AND
+                      ActionLog.Brand = Syst.CUICommon:gcBrand AND
                       ActionLog.TableName = "Cron" AND
                       ActionLog.KeyValue = lcPlainFile AND
                       ActionLog.ActionID = "SubsTerm" AND
@@ -104,14 +103,14 @@ FOR EACH ttFiles:
    DO TRANS:
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = gcBrand   
+         ActionLog.Brand        = Syst.CUICommon:gcBrand   
          ActionLog.TableName    = "Cron"  
          ActionLog.KeyValue     = lcPlainFile
          ActionLog.ActionID     = "SubsTerm"
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
                                   MONTH(TODAY)
          ActionLog.ActionStatus = 0
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
    END.
    
    RUN Mm/readtermfile.p (ttFiles.TermFile,
@@ -129,7 +128,7 @@ FOR EACH ttFiles:
          ActionLog.ActionChar   = "Read: " + STRING(liRead) + 
                                   " Errors: " + STRING(liError) + 
                                   " Succesful: " + STRING(liRead - liError) + 
-                                  CHR(10) + "Finished: " + fTS2HMS(fMakeTS())
+                                  CHR(10) + "Finished: " + Func.Common:mTS2HMS(Func.Common:mMakeTS())
          ActionLog.ActionStatus = 3.
    END.
    

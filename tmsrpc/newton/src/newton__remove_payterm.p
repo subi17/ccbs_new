@@ -17,8 +17,7 @@
 ---------------------------------------------------------------------- */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
-{Func/timestamp.i}
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Func/coinv.i}
@@ -56,7 +55,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 /* Required Params */
 ASSIGN 
    liMsSeq  = get_pos_int(pcPayTermStruct, "msseq")
-   katun    = "VISTA_" + get_nonempty_string(pcPayTermStruct, "username")
+   Syst.CUICommon:katun = "VISTA_" + get_nonempty_string(pcPayTermStruct, "username")
    lcCurrentPayterm = get_nonempty_string(pcPayTermStruct, "payterm_contract")
    liPerContractId  = get_int(pcPayTermStruct, "per_contract_id")
    lcAction = get_nonempty_string(pcPayTermStruct, "action")
@@ -82,7 +81,7 @@ CASE lcAction:
 END.
 
 FIND FIRST DayCampaign NO-LOCK WHERE 
-           DayCampaign.Brand   = gcBrand AND
+           DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
            DayCampaign.DCEvent = lcCurrentPayterm AND
            DayCampaign.DCType  = {&DCTYPE_INSTALLMENT} NO-ERROR.
 IF NOT AVAIL DayCampaign THEN
@@ -99,7 +98,7 @@ IF NOT AVAIL DCCLI THEN
 IF lcAction EQ "canc" THEN DO:
    
    FIND FixedFee NO-LOCK USE-INDEX CustNum WHERE
-        FixedFee.Brand     = gcBrand   AND
+        FixedFee.Brand     = Syst.CUICommon:gcBrand   AND
         FixedFee.CustNum   = MobSub.CustNum AND
         FixedFee.HostTable = "MobSub"  AND
         FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
@@ -116,7 +115,7 @@ IF lcAction EQ "canc" THEN DO:
    FOR EACH FFItem OF FixedFee NO-LOCK USE-INDEX FFNum:
       IF FFItem.Billed = TRUE AND
          CAN-FIND (FIRST Invoice USE-INDEX InvNum WHERE
-                         Invoice.Brand   = gcBrand AND
+                         Invoice.Brand   = Syst.CUICommon:gcBrand AND
                          Invoice.InvNum  = FFItem.InvNum AND
                          Invoice.InvType = 1 NO-LOCK) THEN NEXT.
       liLastUnBilledPeriod = FFItem.BillPeriod.
@@ -127,9 +126,9 @@ IF lcAction EQ "canc" THEN DO:
       liLastUnBilledPeriod = FixedFee.BegPeriod.
 
    ldaLastUnBilledDate = fPer2Date(liLastUnBilledPeriod,0) - 1.
-   ldePeriodTo = fMake2Dt(ldaLastUnBilledDate,86399).
+   ldePeriodTo = Func.Common:mMake2DT(ldaLastUnBilledDate,86399).
 END.
-ELSE ldePeriodTo = fMakeTS().
+ELSE ldePeriodTo = Func.Common:mMakeTS().
 
 liCreated = fPCActionRequest(MobSub.MsSeq,
                              DCCLI.DCEvent,
@@ -153,11 +152,11 @@ IF lcMemoTitle > "" AND lcMemoContent > "" THEN DO:
    CREATE Memo.
    ASSIGN
        Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = gcBrand
+       Memo.Brand     = Syst.CUICommon:gcBrand
        Memo.HostTable = "MobSub"
        Memo.KeyValue  = STRING(MobSub.MsSeq)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = katun
+       Memo.CreUser   = Syst.CUICommon:katun
        Memo.MemoTitle = lcMemoTitle
        Memo.MemoText  = lcMemoContent
        Memo.CustNum   = (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0).
@@ -166,5 +165,4 @@ END. /* IF lcMemoTitle > "" AND lcMemoContent > "" THEN DO: */
 add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

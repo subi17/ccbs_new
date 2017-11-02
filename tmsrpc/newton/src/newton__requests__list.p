@@ -16,12 +16,6 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
-DEFINE VARIABLE gcBrand AS CHARACTER INIT "1" NO-UNDO. 
-DEFINE VARIABLE katun AS CHARACTER NO-UNDO. 
-
-&SCOPED-DEFINE BrandVarDefined YES
-{Func/func.p}
-
 DEFINE VARIABLE pcTenant AS CHARACTER NO-UNDO.
 DEFINE VARIABLE piType AS INTEGER NO-UNDO. 
 DEFINE VARIABLE piStatus AS INTEGER NO-UNDO. 
@@ -75,7 +69,7 @@ request_array = add_array(resp_struct, "requests").
 FUNCTION fAddCustomerData RETURN LOGICAL:
    FIND Customer WHERE Customer.CustNum = MsRequest.CustNum NO-LOCK NO-ERROR.
    IF AVAIL Customer THEN
-      add_string(request_struct, "name", fDispCustName(BUFFER Customer)). 
+      add_string(request_struct, "name", Func.Common:mDispCustName(BUFFER Customer)). 
    RETURN TRUE.
 END.
 
@@ -95,7 +89,7 @@ END.
 iCount = 0.
 RequestLoop:
 FOR EACH MsRequest USE-INDEX ReqType WHERE 
-    MsRequest.Brand eq gcBrand AND 
+    MsRequest.Brand eq Syst.CUICommon:gcBrand AND 
     MsRequest.ReqType eq piType AND
     MsRequest.ReqStatus eq piStatus NO-LOCK:
     IF iCount >= piOffset + piLimit THEN 

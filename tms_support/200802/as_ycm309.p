@@ -1,9 +1,6 @@
-DEFINE VARIABLE katun AS CHARACTER NO-UNDO.
-DEFINE VARIABLE gcBrand AS CHARACTER NO-UNDO.
-katun = "cron".
-gcbrand = "1".
+DEFINE VARIABLE Syst.CUICommon:katun AS CHARACTER NO-UNDO.
+Syst.CUICommon:katun = "cron".
 
-{Func/date.i}
 {Func/xmlfunction.i}
 {Func/tsformat.i}
 

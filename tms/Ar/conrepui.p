@@ -68,8 +68,8 @@ FORM
    SKIP(6)
 
    WITH ROW 1 SIDE-LABELS WIDTH 80 OVERLAY
-        TITLE " " + ynimi + " CONTACT REPORT " +
-        STRING(pvm,"99-99-99") + " "
+        TITLE " " + Syst.CUICommon:ynimi + " CONTACT REPORT " +
+        STRING(TODAY,"99-99-99") + " "
         FRAME valinta.
 
 PAUSE 0.
@@ -77,9 +77,9 @@ VIEW FRAME valinta.
 PAUSE 0 NO-MESSAGE.
 
 ASSIGN llUfkey = FALSE
-       nap     = "1".
+       Syst.CUICommon:nap     = "1".
        
-IF icUserCode = "" THEN icUserCode = katun.
+IF icUserCode = "" THEN icUserCode = Syst.CUICommon:katun.
 IF idtConDate = ? THEN idtConDate = TODAY.
 
 toimi:
@@ -97,7 +97,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
    
    IF liCustNum > 0 THEN DO:
       FIND Customer WHERE 
-           Customer.Brand   = gcBrand AND
+           Customer.Brand   = Syst.CUICommon:gcBrand AND
            Customer.CustNum = liCustNum NO-LOCK NO-ERROR.
       IF AVAILABLE Customer THEN DISPLAY Customer.CustName.
    END.
@@ -106,23 +106,23 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
    if llUfkey THEN DO:
 
       ASSIGN
-         ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0 
-         ufk[5]= 63  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
-         ufk[9]= 1
-         ehto = 3.
+         Syst.CUICommon:ufk[1]= 132 Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0 
+         Syst.CUICommon:ufk[5]= 63  Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 
+         Syst.CUICommon:ufk[9]= 1
+         Syst.CUICommon:ehto = 3.
 
       RUN Syst/ufkey.p.
 
       READKEY.
-      nap = KEYLABEL(LASTKEY).
+      Syst.CUICommon:nap = KEYLABEL(LASTKEY).
 
    END.
    ELSE llUfkey = TRUE.
 
    
-   IF LOOKUP(nap,"1,f1") > 0 THEN DO:
+   IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
 
-      ehto = 9. 
+      Syst.CUICommon:ehto = 9. 
       RUN Syst/ufkey.p.
 
       REPEAT WITH FRAME valinta ON ENDKEY UNDO, LEAVE:
@@ -136,7 +136,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
 
             READKEY.
 
-            IF LOOKUP(keylabel(LASTKEY),poisnap) > 0 THEN 
+            IF LOOKUP(keylabel(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN 
             DO WITH FRAME valinta:
 
                HIDE MESSAGE.
@@ -155,7 +155,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
                IF FRAME-FIELD = "liCustNum" THEN DO:
                   IF INPUT liCustNum > 0 THEN DO:
                      FIND Customer WHERE 
-                          Customer.Brand   = gcBrand AND
+                          Customer.Brand   = Syst.CUICommon:gcBrand AND
                           Customer.CustNum = INPUT liCustNum 
                      NO-LOCK NO-ERROR.
                      IF NOT AVAILABLE Customer THEN DO:
@@ -180,9 +180,9 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
 
    END.
 
-   ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:
+   ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:
 
-      ehto = 5.
+      Syst.CUICommon:ehto = 5.
       RUN Syst/ufkey.p.
 
       IF lcFile = "" THEN DO:
@@ -209,11 +209,11 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
       LEAVE toimi.
    END.
 
-   ELSE IF LOOKUP(nap,"8,f8") > 0 THEN DO:
+   ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
       LEAVE toimi.
    END.
 
-END. /* toimi */
+END. /* Syst.CUICommon:toimi */
 
 HIDE MESSAGE NO-PAUSE.
 HIDE FRAME valinta NO-PAUSE.    

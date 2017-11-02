@@ -20,7 +20,7 @@ PUT STREAM strlog
            
 /* Processing records */
 FOR EACH TMSParam WHERE
-         TMSParam.Brand      = "1" /*Syst.Parameters:gcBrand*/ AND
+         TMSParam.Brand      = "1" /*Syst.CUICommon:gcBrand*/ AND
          TMSParam.ParamGroup = "DMS"
     NO-LOCK /* EXCLUSIVE-LOCK */ :
 

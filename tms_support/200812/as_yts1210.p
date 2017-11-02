@@ -1,7 +1,6 @@
 {Syst/commpaa.i}
-katun = "anttis".
-gcBrand = "1".
-{Func/timestamp.i}
+Syst.CUICommon:katun = "anttis".
+Syst.CUICommon:gcBrand = "1".
 {Func/barrfunc.i}
 
 DEF VAR lrOLBRec      AS RECID                  NO-UNDO.
@@ -39,7 +38,7 @@ FOR EACH msrequest where
                       "UN" + "Y_PRODINT",
                       "5",                 /* source  */
                       "",                  /* creator */
-                      fMakeTS(),           /* activate */
+                      Func.Common:mMakeTS(),           /* activate */
                       "",                  /* sms */
                       OUTPUT lcError).
 

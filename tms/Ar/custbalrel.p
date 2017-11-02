@@ -56,8 +56,8 @@ form
       HELP "Create a fee for customer for printing this report"
       FORMAT "Yes/No"
    SKIP
-WITH TITLE " " + ynimi +  " A/R CUSTOMER REPORT " + 
-           STRING(pvm,"99-99-99") + " "
+WITH TITLE " " + Syst.CUICommon:ynimi +  " A/R CUSTOMER REPORT " + 
+           STRING(TODAY,"99-99-99") + " "
    ROW 1 centered Size 80 by 19 NO-LABELS OVERLAY FRAME valinta.
 
 PAUSE 0.
@@ -69,14 +69,14 @@ ASSIGN liCustNum   = iiCustNum
        llCreaFee   = TRUE
 
        ufkey = TRUE
-       nap   = "first". 
+       Syst.CUICommon:nap   = "first". 
 
 toimi:
 repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
  
       lcCustName = "".
       FIND Customer NO-LOCK WHERE
-           Customer.Brand   = gcBrand AND
+           Customer.Brand   = Syst.CUICommon:gcBrand AND
            Customer.CustNum = liCustNum NO-ERROR.
       IF AVAILABLE Customer THEN lcCustName = Customer.CustName.
                  
@@ -89,25 +89,25 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
    
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 132 
-         ufk[2]= 0  ufk[3]= 0 ufk[4]= 0 
-         ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
-         ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ufk[1]= 132 
+         Syst.CUICommon:ufk[2]= 0  Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0 
+         Syst.CUICommon:ufk[5]= 63 Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 
+         Syst.CUICommon:ufk[9]= 1
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
       pause 0.
 
-      if nap ne "first" THEN DO: 
+      if Syst.CUICommon:nap ne "first" THEN DO: 
           READKEY.
           ASSIGN
-          nap = keylabel(LASTKEY).
+          Syst.CUICommon:nap = keylabel(LASTKEY).
       END.
-      else assign nap = "1". 
+      else assign Syst.CUICommon:nap = "1". 
 
-      if lookup(nap,"1,f1") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
 
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          
          repeat WITH FRAME valinta ON ENDKEY UNDO, LEAVE:
             UPDATE 
@@ -116,13 +116,13 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                llCreaFee
             WITH FRAME valinta EDITING:
                READKEY.
-               IF lookup(keylabel(lastkey),poisnap) > 0 THEN DO:
+               IF lookup(keylabel(lastkey),Syst.CUICommon:poisnap) > 0 THEN DO:
                   if frame-field = "liCustNum" THEN DO:
                      IF INPUT liCustNum > 0 THEN DO:
                      
                         FIND Customer WHERE Customer.CustNum = INPUT liCustNum
                         NO-LOCK NO-ERROR.
-                        IF NOT AVAIL Customer OR Customer.Brand NE gcBrand
+                        IF NOT AVAIL Customer OR Customer.Brand NE Syst.CUICommon:gcBrand
                         THEN DO:
                            MESSAGE "Unknown Customer !".
                            NEXT.
@@ -139,15 +139,15 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
          NEXT toimi.
       END.
 
-      else if lookup(nap,"5,f5") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:
          IF liCustNum > 0 THEN LEAVE toimi.
       END.
-      else if lookup(nap,"8,f8") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
          HIDE FRAME valinta NO-PAUSE.
          RETURN.
       END.
 
-END. /* toimi */
+END. /* Syst.CUICommon:toimi */
 
 {Syst/utuloste.i "return"}
 
@@ -167,7 +167,7 @@ RUN Mc/creasfee.p (Customer.CustNum,
               ?, 
               "",
               TRUE,
-              katun,
+              Syst.CUICommon:katun,
               "",
               0,
               "",

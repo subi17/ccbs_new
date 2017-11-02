@@ -1,9 +1,8 @@
 
 {Syst/commpaa.i}
-katun = "rafaeldv".
-gcBrand = "1".
+Syst.CUICommon:katun = "rafaeldv".
+Syst.CUICommon:gcBrand = "1".
 
-{Func/timestamp.i}
 {Func/xmlfunction.i}
 
 DEFINE VARIABLE cOutputFile AS CHARACTER NO-UNDO INITIAL "ytc_121_4.output".
@@ -32,8 +31,8 @@ ldate2 = DATE(07,22,2009).
 lcTimeInit = "00:00:00". /*"09:54:00". */
 lcTimeEnd =  "24:59:59". /*"15:56:00". */
 
-ldBegin = fHMS2TS(ldate,lcTimeInit).
-ldEnd = fHMS2TS(ldate2,lcTimeEnd).
+ldBegin = Func.Common:mHMS2TS(ldate,lcTimeInit).
+ldEnd = Func.Common:mHMS2TS(ldate2,lcTimeEnd).
 
  
 FOR EACH PrepaidRequest NO-LOCK WHERE 
@@ -49,14 +48,14 @@ FOR EACH PrepaidRequest NO-LOCK WHERE
        RUN Gwy/balancequery.p (PrepaidRequest.CLI).
        */
 
-        RUN Gwy/pp_platform.p(gcBrand,PrePaidRequest.PPRequest).
+        RUN Gwy/pp_platform.p(Syst.CUICommon:gcBrand,PrePaidRequest.PPRequest).
         lcXML = RETURN-VALUE.
         liRespCode = INT(fGetRPCNodeValue(lcXML,"responseCode")) NO-ERROR.
         
         DO FOR bufPP:
            FIND FIRST bufPP WHERE RECID(bufPP) = RECID(PrePaidRequest) EXCLUSIVE-LOCK.
            ASSIGN
-                bufPP.TSResponse = fMakeTS()
+                bufPP.TSResponse = Func.Common:mMakeTS()
                 bufPP.Response   = lcXML
                 bufPP.RespCode   = liRespCode.
         END.
@@ -76,4 +75,3 @@ END.
 
 OUTPUT STREAM sout CLOSE.
 
-IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.

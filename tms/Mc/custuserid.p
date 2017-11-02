@@ -70,7 +70,7 @@ IF lcDispPwd > "" THEN DO:
              EventLog.Key            = STRING(iiCustNum)
              EventLog.EventDate      = TODAY
              EventLog.EventTime      = STRING(TIME,"hh:mm:ss")
-             EventLog.UserCode       = katun
+             EventLog.UserCode       = Syst.CUICommon:katun
              EventLog.Action         = "View"
              EventLog.EventLogStatus = 5.
       RELEASE EventLog.
@@ -92,12 +92,12 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
    WITH FRAME fCriter.
 
    ASSIGN
-      ufk   = 0  
-      ufk[8]= 8 
-      ehto = 0.
+      Syst.CUICommon:ufk   = 0  
+      Syst.CUICommon:ufk[8]= 8 
+      Syst.CUICommon:ehto = 0.
    RUN Syst/ufkey.p.
 
-   IF toimi = 8 THEN LEAVE.
+   IF Syst.CUICommon:toimi = 8 THEN LEAVE.
 
 END. /* lCustMark */
 

@@ -13,7 +13,6 @@
 &GLOBAL-DEFINE dss_bundle_first_month_fee YES
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/fdss.i}
 {Mm/bundle_first_month_fee.i}
@@ -57,8 +56,8 @@ PROCEDURE pGetDSSLinkedSubsFee:
 
    ASSIGN ldFromDate   = fInt2Date(iiPeriod,1)
           ldToDate     = fInt2Date(iiPeriod,2)
-          ldPeriodFrom = fMake2Dt(ldFromDate,0)
-          ldPeriodTo   = fMake2Dt(ldToDate,86399).
+          ldPeriodFrom = Func.Common:mMake2DT(ldFromDate,0)
+          ldPeriodTo   = Func.Common:mMake2DT(ldToDate,86399).
           
    ldeDSSUsage = fGetDSSUsage(INPUT iiInvCust,
                               INPUT ldFromDate,
@@ -77,7 +76,7 @@ PROCEDURE pGetDSSLinkedSubsFee:
              FIRST bServiceLimit NO-LOCK WHERE
                    bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
              FIRST bDayCampaign NO-LOCK WHERE
-                   bDayCampaign.Brand = gcBrand AND
+                   bDayCampaign.Brand = Syst.CUICommon:gcBrand AND
                    bDayCampaign.DCEvent = bServiceLimit.GroupCode AND
                    LOOKUP(bDayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0:
 
@@ -180,7 +179,7 @@ PROCEDURE pGetDSSLinkedSubsFee:
                 /* for each used because there might exist  
                    same type of fixed fee in the past */
                 FOR EACH  FixedFee NO-LOCK USE-INDEX HostTable WHERE
-                          FixedFee.Brand     = gcBrand AND
+                          FixedFee.Brand     = Syst.CUICommon:gcBrand AND
                           FixedFee.HostTable = "MobSub" AND
                           FixedFee.KeyValue  = STRING(ttMsOwner.MsSeq) AND
                           FixedFee.FeeModel  = bDayCampaign.FeeModel AND
@@ -224,10 +223,10 @@ PROCEDURE pGetDSSLinkedSubsFee:
       END. /* IF ttSub.BundleId = "DUB" AND ldeDSSUsage > 0 */
 
       FOR FIRST DayCampaign NO-LOCK WHERE
-                DayCampaign.Brand   = gcBrand AND
+                DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
                 DayCampaign.DCEvent = ttSub.BundleId,
           FIRST FixedFee NO-LOCK USE-INDEX HostTable WHERE
-                FixedFee.Brand     = gcBrand AND
+                FixedFee.Brand     = Syst.CUICommon:gcBrand AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue  = STRING(ttSub.MsSeq) AND
                 FixedFee.FeeModel  = DayCampaign.FeeModel AND
@@ -236,7 +235,7 @@ PROCEDURE pGetDSSLinkedSubsFee:
                 FixedFee.BegDate  <= ldToDate   AND
                 FixedFee.EndPer   >= iiPeriod,
           FIRST FMItem NO-LOCK WHERE
-                FMItem.Brand     = gcBrand AND
+                FMItem.Brand     = Syst.CUICommon:gcBrand AND
                 FMItem.FeeModel  = FixedFee.FeeModel AND
                 FMItem.FromDate <= FixedFee.BegDate  AND
                 FMItem.ToDate   >= FixedFee.BegDate:

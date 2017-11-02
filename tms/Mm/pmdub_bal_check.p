@@ -9,9 +9,8 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-ASSIGN gcBrand = "1"
-       katun   = "CRON".
-{Func/timestamp.i}
+ASSIGN Syst.CUICommon:gcBrand = "1"
+       Syst.CUICommon:katun   = "CRON".
 {Func/cparam2.i}
 {Func/fgettxt.i}
 {Func/fmakesms.i}
@@ -43,9 +42,9 @@ DEF VAR ldFirstDayOfMonth AS DATE NO-UNDO.
 DEF VAR ldeFromTS AS DEC NO-UNDO.
 
 ldFirstDayOfMonth = DATE(MONTH(TODAY),1,YEAR(TODAY)).
-ldLastDayOfMonth = fLastDayOfMonth(TODAY).
+ldLastDayOfMonth = Func.Common:mLastDayOfMonth(TODAY).
 
-ldeFromTS = fMake2Dt(ldFirstDayOfMonth,0).
+ldeFromTS = Func.Common:mMake2DT(ldFirstDayOfMonth,0).
 
 /* Only Send the SMS last day of month or 3 days before last of month */
 CASE (ldLastDayOfMonth - TODAY):
@@ -58,8 +57,8 @@ ASSIGN
    ldeMinBalance = fCParamDe("PMDUBMinBalance")
    liCurrPeriod  = YEAR(TODAY) * 100 + MONTH(TODAY)
    ldToDate      = (fInt2Date(liCurrPeriod,2) + 1)
-   ldeNow        = fMakeTS()
-   ldeCheckTS    = fMake2Dt(ldToDate, 00000)
+   ldeNow        = Func.Common:mMakeTS()
+   ldeCheckTS    = Func.Common:mMake2DT(ldToDate, 00000)
    lcLogDir      = fCParam("PrepaidBundle","LogDir").
 
 IF lcLogDir = "" OR lcLogDir = ? THEN lcLogDir = "/tmp/".

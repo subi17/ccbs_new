@@ -16,7 +16,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -71,8 +71,8 @@ FORM
     DCServicePackage.FromDate
     DCServicePackage.ToDate
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) 
+    COLOR VALUE(Syst.CUICommon:cfc)   
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) 
        "  SERVICE PACKAGES OF " + STRING(icDCEvent) + " (Active) "
     FRAME sel.
 
@@ -89,21 +89,21 @@ FORM
     DCServicePackage.FromDate    COLON 20
     DCServicePackage.ToDate      COLON 20    
 WITH  OVERLAY ROW 3 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 FORM 
     "ServPac:" lcServPac FORMAT "X(16)"
     HELP "Enter service package"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Service Pacage "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Service Pacage "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
 RUN pInitTempTable.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -132,7 +132,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a DCServicePackage  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -141,11 +141,11 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
-           DISPLAY gcBrand @ DCServicePackage.Brand
+           DISPLAY Syst.CUICommon:gcBrand @ DCServicePackage.Brand
                    icDCEvent @ DCServicePackage.DCEvent.
 
            PROMPT-FOR 
@@ -155,7 +155,7 @@ REPEAT WITH FRAME sel:
 
               IF KEYLABEL(LASTKEY) = "F9" AND FRAME-FIELD = "PayType" THEN DO:
 
-                 ehto = 9.
+                 Syst.CUICommon:ehto = 9.
                  RUN Syst/ufkey.p.
                  NEXT. 
               END.
@@ -166,7 +166,7 @@ REPEAT WITH FRAME sel:
            IF INPUT DCServicePackage.ServPac = "" THEN UNDO, LEAVE ADD-ROW.
 
            IF  NOT CAN-FIND(FIRST ServPac WHERE
-                      ServPac.Brand = gcBrand AND
+                      ServPac.Brand = Syst.CUICommon:gcBrand AND
                       ServPac.ServPac = INPUT DCServicePackage.ServPac) 
            THEN DO:
                MESSAGE "Unknown service package"
@@ -182,7 +182,7 @@ REPEAT WITH FRAME sel:
            
            CREATE DCServicePackage.
            ASSIGN 
-              DCServicePackage.Brand   = gcBrand
+              DCServicePackage.Brand   = Syst.CUICommon:gcBrand
               DCServicePackage.DCServicePackageID = liPackageID
               DCServicePackage.DCEvent = icDCEvent
               DCServicePackage.ServPac = INPUT FRAME lis 
@@ -264,24 +264,24 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 739 
-        ufk[2]= 0  
-        ufk[3]= 0  
-        ufk[4]= 1827 WHEN NOT llActive
-        ufk[4]= 1828 WHEN llActive
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)  
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
-        ufk[7]= 0  
-        ufk[8]= 8 
-        ehto  = 3 
+        Syst.CUICommon:ufk[1]= 739 
+        Syst.CUICommon:ufk[2]= 0  
+        Syst.CUICommon:ufk[3]= 0  
+        Syst.CUICommon:ufk[4]= 1827 WHEN NOT llActive
+        Syst.CUICommon:ufk[4]= 1828 WHEN llActive
+        Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)  
+        Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
+        Syst.CUICommon:ufk[7]= 0  
+        Syst.CUICommon:ufk[8]= 8 
+        Syst.CUICommon:ehto  = 3 
         ufkey = FALSE.
         
         /* used as help */
-        IF gcHelpParam > "" THEN ASSIGN
-           ufk[4] = 0
-           ufk[5] = 11
-           ufk[6] = 0
-           ufk[7] = 0.
+        IF Syst.CUICommon:gcHelpParam > "" THEN ASSIGN
+           Syst.CUICommon:ufk[4] = 0
+           Syst.CUICommon:ufk[5] = 11
+           Syst.CUICommon:ufk[6] = 0
+           Syst.CUICommon:ufk[7] = 0.
          
         RUN Syst/ufkey.p.
       END.
@@ -290,13 +290,13 @@ REPEAT WITH FRAME sel:
       IF order = 1 THEN DO:
         CHOOSE ROW DCServicePackage.ServPac {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) DCServicePackage.ServPac WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) DCServicePackage.ServPac WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"4,f4,5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"4,f4,5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -305,10 +305,10 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -326,7 +326,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -351,7 +351,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -377,7 +377,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ttPackage WHERE recid(ttPackage) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -401,7 +401,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -416,9 +416,9 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
        SET lcServPac WITH FRAME f1.
@@ -440,7 +440,7 @@ REPEAT WITH FRAME sel:
        END.
      END. /* Search-1 */
 
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:  /* display filter */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 THEN DO:  /* display filter */
         llActive = NOT llActive.
         RUN pInitTempTable.
         RUN local-find-first.
@@ -455,8 +455,8 @@ REPEAT WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
-        IF gcHelpParam > "" THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
+        IF Syst.CUICommon:gcHelpParam > "" THEN DO:
            RUN local-find-this(FALSE).
            xRecid = RECID(DCServicePackage).
            LEAVE LOOP.
@@ -468,7 +468,7 @@ REPEAT WITH FRAME sel:
         END.    
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW" 
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO TRANSACTION:  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
@@ -480,7 +480,7 @@ REPEAT WITH FRAME sel:
        END.
  
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ctc)
        DCServicePackage.ServPac
        DCServicePackage.FromDate
        DCServicePackage.ToDate.
@@ -504,7 +504,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N)?" UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.CUICommon:ccc)
           DCServicePackage.ServPac
           DCServicePackage.FromDate
           DCServicePackage.ToDate.
@@ -529,21 +529,21 @@ REPEAT WITH FRAME sel:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 AND lcRight = "RW" THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 AND lcRight = "RW" THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(FALSE).
 
-       IF gcHelpParam > "" THEN DO:
+       IF Syst.CUICommon:gcHelpParam > "" THEN DO:
           xRecid = RECID(DCServicePackage).
           LEAVE LOOP.
        END.
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDCServicePackage).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -559,19 +559,19 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(ttPackage) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(ttPackage) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
@@ -579,9 +579,9 @@ END.  /* LOOP */
 FINALLY:
 
    HIDE FRAME sel NO-PAUSE.
-   si-recid = xrecid.
+   Syst.CUICommon:si-recid = xrecid.
 
-   ehto = 4.
+   Syst.CUICommon:ehto = 4.
    RUN Syst/ufkey.p.
 
    fCleanEventObjects().
@@ -678,7 +678,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
    
     FIND FIRST ServPac WHERE 
-               ServPac.Brand = gcBrand AND
+               ServPac.Brand = Syst.CUICommon:gcBrand AND
                ServPac.ServPac = DCServicePackage.ServPac NO-LOCK NO-ERROR.
 END PROCEDURE.
 
@@ -692,7 +692,7 @@ PROCEDURE local-UPDATE-record:
       RUN local-find-others.
       
       FIND FIRST DayCampaign WHERE 
-           DayCampaign.Brand   = gcBrand AND
+           DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
            DayCampaign.DCEvent = DCServicePackage.DCEvent NO-LOCK NO-ERROR.
            
       DISP 
@@ -709,20 +709,20 @@ PROCEDURE local-UPDATE-record:
       
       IF NOT NEW DCServicePackage THEN REPEAT:
          ASSIGN 
-            ufk    = 0
-            ufk[1] = 7 WHEN lcRight = "RW"
-            ufk[4] = 252
-            ufk[8] = 8
-            ehto   = 0.
+            Syst.CUICommon:ufk    = 0
+            Syst.CUICommon:ufk[1] = 7 WHEN lcRight = "RW"
+            Syst.CUICommon:ufk[4] = 252
+            Syst.CUICommon:ufk[8] = 8
+            Syst.CUICommon:ehto   = 0.
          
          RUN Syst/ufkey.p.
 
-         IF toimi = 1 THEN LEAVE.
+         IF Syst.CUICommon:toimi = 1 THEN LEAVE.
          
-         ELSE IF toimi = 4 THEN 
+         ELSE IF Syst.CUICommon:toimi = 4 THEN 
             RUN Mm/dcservicecomponent.p(DCServicePackage.DCServicePackageID).
             
-         ELSE IF toimi = 8 THEN LEAVE ActionDetails.
+         ELSE IF Syst.CUICommon:toimi = 8 THEN LEAVE ActionDetails.
       END.
 
       FIND CURRENT DCServicePackage EXCLUSIVE-LOCK.
@@ -734,7 +734,7 @@ PROCEDURE local-UPDATE-record:
  
          READKEY.
 
-         IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+         IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
             
             PAUSE 0.
          END.
@@ -743,7 +743,7 @@ PROCEDURE local-UPDATE-record:
       END.
 
       IF CAN-FIND(FIRST bDCPackage WHERE
-                        bDCPackage.Brand      = gcBrand AND
+                        bDCPackage.Brand      = Syst.CUICommon:gcBrand AND
                         bDCPackage.DCEvent    = DCServicePackage.DCEvent  AND
                         bDCPackage.ServPac    = DCServicePackage.ServPac  AND
                         bDCPackage.FromDate <= DCServicePackage.ToDate    AND
@@ -767,7 +767,7 @@ PROCEDURE pInitTempTable:
    EMPTY TEMP-TABLE ttPackage.
    
    FOR EACH DCServicePackage NO-LOCK WHERE
-            DCServicePackage.Brand   = gcBrand AND
+            DCServicePackage.Brand   = Syst.CUICommon:gcBrand AND
             DCServicePackage.DCEvent = icDCEvent:
 
       IF llActive AND DCServicePackage.ToDate < TODAY THEN NEXT.

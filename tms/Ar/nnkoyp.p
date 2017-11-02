@@ -15,7 +15,6 @@
                   20.12.2005/aam iiCustNum,
                                  F4 text removed
                   12.01.2006/aam calculate interest amount in update
-                  24.01.2006/jt  DYNAMIC-FUNCTION("fDispCustName"
   Version ......: M15
 ----------------  ------------------------------------------------------ */
 &GLOBAL-DEFINE BrTable CustIntEvent
@@ -28,7 +27,7 @@
 {Func/cparam2.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -97,8 +96,8 @@ form
     CustIntEvent.Percent    column-label "Int%%"  
     CustIntEvent.Amt        column-label "Int tot"  
 WITH width 80 ROW liRow OVERLAY scroll 1 liDown DOWN
-    color value(cfc) title color value(ctc) " " + ynimi +
-    " OVERTIME INTERESTS " + string(pvm,"99-99-99") + " "
+    color value(Syst.CUICommon:cfc) title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+    " OVERTIME INTERESTS " + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form
@@ -115,7 +114,7 @@ form
     CustIntEvent.Amt           LABEL "Interest Amount" FORMAT "->>>>>>>9.99"
     CustIntEvent.BilledInvNum  LABEL "Billed on Inv.Nbr"                       
 WITH  OVERLAY ROW 3 col 3
-    COLOR value(cfc) TITLE COLOR value(ctc) ac-hdr 1 col FRAME lis.
+    COLOR value(Syst.CUICommon:cfc) TITLE COLOR value(Syst.CUICommon:ctc) ac-hdr 1 col FRAME lis.
 
 {Func/brand.i}
 
@@ -149,15 +148,15 @@ form /* Asiakasnumerohaku */
     "Brand ..:" lcBrand skip
     "Customer:" haku-asno
     help "Enter number of Customer"
-    with row 4 col 2 title color value(ctc) " FIND CUSTOMER "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CUSTOMER "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* LAskunumerohaku */
     "Brand .:" lcBrand skip
     "Invoice:" haku-lanro
     help "Enter number of Invoice"
-    with row 4 col 2 title color value(ctc) " FIND INVOICE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND INVOICE "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 IF iiCustNum > 0 THEN ASSIGN 
    liRow  = 4 
@@ -166,7 +165,7 @@ ELSE ASSIGN
    liRow  = 1
    liDown = 15.
    
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 order = 1.
@@ -197,14 +196,14 @@ repeat WITH FRAME sel:
 
 
    IF must-add THEN DO:  /* Add a BillType  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            IF iiCustNum = 0 THEN 
@@ -299,14 +298,14 @@ repeat WITH FRAME sel:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 702  ufk[2]= 92 ufk[3]= 0 ufk[4]= 0
-         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)   
-         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ufk[1]= 702  Syst.CUICommon:ufk[2]= 92 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+         Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)   
+         Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+         Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
          
-         IF iiCustNum > 0 THEN ASSIGN ufk[1] = 0
-                                      ufk[2] = 0.
+         IF iiCustNum > 0 THEN ASSIGN Syst.CUICommon:ufk[1] = 0
+                                      Syst.CUICommon:ufk[2] = 0.
          
          RUN Syst/ufkey.p.
       END.
@@ -314,17 +313,17 @@ repeat WITH FRAME sel:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW CustIntEvent.CustNum  {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) CustIntEvent.CustNum WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) CustIntEvent.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW CustIntEvent.InvNum {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) CustIntEvent.InvNum WITH FRAME sel. 
+         COLOR DISPLAY value(Syst.CUICommon:ccc) CustIntEvent.InvNum WITH FRAME sel. 
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -332,10 +331,10 @@ repeat WITH FRAME sel:
          END.
       END.
 
-      if lookup(nap,"cursor-right") > 0 AND iiCustNum = 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 AND iiCustNum = 0 THEN DO:
          order = order + 1. IF order = 3 THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 AND iiCustNum = 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 AND iiCustNum = 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = 2.
       END.
 
@@ -354,7 +353,7 @@ repeat WITH FRAME sel:
       END.
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND CustIntEvent where recid(CustIntEvent) = rtab[1] no-lock.
             RUN local-find-prev.
@@ -382,7 +381,7 @@ repeat WITH FRAME sel:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND CustIntEvent where recid(CustIntEvent) = rtab[FRAME-DOWN] 
@@ -413,7 +412,7 @@ repeat WITH FRAME sel:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND CustIntEvent where recid(CustIntEvent) = memory no-lock no-error.
          
@@ -442,7 +441,7 @@ repeat WITH FRAME sel:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "YOU ARE ON THE LAST PAGE".
@@ -458,13 +457,13 @@ repeat WITH FRAME sel:
      END. /* NEXT page */
 
      /* Haku 1 */
-     if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+     if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku-asno = 0.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
 
         DISPLAY lcBrand WITH FRAME hayr.
-        UPDATE lcBrand WHEN gcAllBrand
+        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                haku-asno WITH FRAME hayr.
         HIDE FRAME hayr no-pause.
 
@@ -480,13 +479,13 @@ repeat WITH FRAME sel:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+     if lookup(Syst.CUICommon:nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku-lanro = 0.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
 
         DISPLAY lcBrand WITH FRAME hayr2.
-        UPDATE lcBrand WHEN gcAllBrand
+        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                haku-lanro WITH FRAME hayr2.
         HIDE FRAME hayr2 no-pause.
 
@@ -502,7 +501,7 @@ repeat WITH FRAME sel:
      END. /* Haku sar. 2 */
 
 
-     else if lookup(nap,"6,f6") > 0 AND lcRight = "RW"
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSAction:  /* removal */
         {Syst/uright2.i}
         delline = FRAME-LINE.
@@ -517,7 +516,7 @@ repeat WITH FRAME sel:
         END.
         
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(ctc)
+        COLOR DISPLAY value(Syst.CUICommon:ctc)
         lcCustName CustIntEvent.CustNum CustIntEvent.PaymDate 
         CustIntEvent.InvNum CustIntEvent.LateDays
         CustIntEvent.PaidAmt CustIntEvent.Percent CustIntEvent.Amt.
@@ -546,7 +545,7 @@ repeat WITH FRAME sel:
         ASSIGN ok = FALSE.
         message " ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
 
-        COLOR DISPLAY value(ccc)
+        COLOR DISPLAY value(Syst.CUICommon:ccc)
         lcCustName CustIntEvent.CustNum CustIntEvent.PaymDate 
         CustIntEvent.InvNum CustIntEvent.LateDays
         CustIntEvent.PaidAmt CustIntEvent.Percent CustIntEvent.Amt.
@@ -576,16 +575,16 @@ repeat WITH FRAME sel:
         ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
 
-     else if lookup(nap,"enter,return") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 THEN DO:
         ac-hdr = " VIEW ".
-        cfc = "lis". RUN Syst/ufcolor.p.
-        ufk = 0. ehto = 3. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
+        Syst.CUICommon:ufk = 0. Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p. ufkey = TRUE.
 
         FIND CustIntEvent where recid(CustIntEvent) = rtab[FRAME-LINE] no-lock.
 
@@ -612,7 +611,7 @@ repeat WITH FRAME sel:
         CustIntEvent.IntPerc CustIntEvent.IntDays CustIntEvent.IntAmt 
         WITH FRAME inter.
 
-        ASSIGN ufk =  0 ufkey = TRUE ehto = 3.
+        ASSIGN Syst.CUICommon:ufk =  0 ufkey = TRUE Syst.CUICommon:ehto = 3.
         RUN Syst/ufkey.p.
         PAUSE 0.
         message "Press ENTER !".
@@ -621,7 +620,7 @@ repeat WITH FRAME sel:
         NEXT.
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
 
         RUN local-find-first.
 
@@ -629,7 +628,7 @@ repeat WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
      
         RUN local-find-last.
 
@@ -637,13 +636,13 @@ repeat WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 PROCEDURE local-find-others:
   FIND Customer OF CustIntEvent NO-LOCK NO-ERROR.
@@ -660,8 +659,7 @@ PROCEDURE local-update-record:
 
    REPEAT ON ENDKEY UNDO, LEAVE:
       RUN local-find-others.
-      lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                     BUFFER Customer).
+      lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                                                  
       DISP
        lcCustName
@@ -688,11 +686,11 @@ PROCEDURE local-update-record:
                 RUN Help/hcustinv.p(CustIntEvent.CustNum, TRUE).
                 IF siirto NE ? THEN disp siirto @ 
                                CustIntEvent.InvNum with frame lis.
-                ehto = 9.  RUN Syst/ufkey.p.
+                Syst.CUICommon:ehto = 9.  RUN Syst/ufkey.p.
                 next.
              END.
 
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME lis:
                 PAUSE 0.
                 IF FRAME-FIELD = "InvNum" THEN DO:
                    FIND Invoice WHERE 
@@ -787,8 +785,7 @@ END PROCEDURE.
 PROCEDURE local-disp-row:
 
    RUN local-find-others.
-   lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                               BUFFER Customer).
+   lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                                               
    DISPLAY CustIntEvent.Brand
            lcCustName when AVAIL Customer

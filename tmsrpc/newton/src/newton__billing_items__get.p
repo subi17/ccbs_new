@@ -28,7 +28,7 @@ FUNCTION fGetTranslationName RETURN CHARACTER
   (INPUT pcCode AS CHARACTER, INPUT piLang AS INTEGER):
   DEFINE VARIABLE cRetText AS CHARACTER NO-UNDO. 
 
-   cRetText = fTranslationName(gcBrand,
+   cRetText = fTranslationName(Syst.CUICommon:gcBrand,
                                  1,  /* BillItem */
                                  pcCode,
                                  piLang,
@@ -50,7 +50,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    {newton/src/settenant.i pcTenant}
 
    FIND BillItem NO-LOCK WHERE 
-        BillItem.Brand = gcBrand AND 
+        BillItem.Brand = Syst.CUICommon:gcBrand AND 
         BillItem.BillCode = pcId NO-ERROR.
 
    IF NOT AVAIL BillItem THEN RETURN appl_err("Billing item not found: " + pcId).

@@ -9,14 +9,13 @@
   ----------------------------------------------------------------------*/
 
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:katun = "Cron".
+Syst.CUICommon:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
 {Syst/eventlog.i}
-{Func/date.i}
 {Inv/billrund.i NEW}
 {Func/multitenantfunc.i}
 
@@ -67,7 +66,7 @@ ASSIGN
    lcOutDir        = fCParam("TestInvoices","OutDir")
    lcFuncRunQAllow = fCParam("TestInvoices","FuncRunConfigList")
    ldtFromDate     = DATE((MONTH(TODAY)), 1 , YEAR(TODAY))
-   ldtToDate       = fLastDayOfMonth(TODAY)
+   ldtToDate       = Func.Common:mLastDayOfMonth(TODAY)
    liFeePeriod     = INTEGER(STRING(YEAR(TODAY)) + STRING(MONTH(TODAY),"99")).
 
 RUN Inv/lamupers.p PERSISTENT SET lhandle.
@@ -191,7 +190,7 @@ REPEAT:
       END.   
       
       FIND Invoice WHERE
-           Invoice.Brand          = gcBrand      AND  
+           Invoice.Brand          = Syst.CUICommon:gcBrand      AND  
            Invoice.CustNum        = liCustNum    AND
            MONTH(Invoice.InvDate) = MONTH(TODAY) AND  
            Invoice.InvType        = 99           EXCLUSIVE-LOCK NO-ERROR. 
@@ -303,7 +302,7 @@ REPEAT:
                                             lcBillRunID).
                                             
               FIND Invoice WHERE 
-                   Invoice.Brand          = gcBrand      AND 
+                   Invoice.Brand          = Syst.CUICommon:gcBrand      AND 
                    Invoice.CustNum        = liCustNum    AND
                    MONTH(Invoice.InvDate) = MONTH(TODAY) AND  
                    Invoice.InvType        = 99           NO-LOCK NO-ERROR.

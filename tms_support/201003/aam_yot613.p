@@ -1,9 +1,8 @@
 {Syst/testpaa.i}
-katun = "YOT-612".
-{Func/timestamp.i}
+Syst.CUICommon:katun = "YOT-612".
 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -51,16 +50,16 @@ repeat:
       RUN StarEventMakeModifyEvent (lhCustomer).
 
       CREATE Memo.
-      ASSIGN Memo.Brand     = gcBrand
+      ASSIGN Memo.Brand     = Syst.CUICommon:gcBrand
              Memo.HostTable = "Customer"
              Memo.KeyValue  = string(customer.custnum)
              Memo.CustNum   = customer.custnum
              Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-             Memo.CreUser   = katun 
+             Memo.CreUser   = Syst.CUICommon:katun 
              Memo.MemoTitle = "Información del cliente modificada"
              Memo.MemoText  = "Correos nos devuelve la carta. " + 
                               "Inhabilitamos el envío de la misma". 
-             Memo.CreStamp  = fMakeTS().
+             Memo.CreStamp  = Func.Common:mMakeTS().
 
       j = j + 1.
    end.

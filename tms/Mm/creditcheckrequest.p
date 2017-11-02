@@ -9,7 +9,6 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/msreqfunc.i}
 
 DEFINE INPUT PARAMETER iiReqId AS INTEGER   NO-UNDO.
@@ -18,7 +17,7 @@ DEF VAR ocResult      AS CHAR NO-UNDO.
 
 FIND MsRequest WHERE 
      MsRequest.MsRequest = iiReqId AND
-     MsRequest.Brand     = gcBrand
+     MsRequest.Brand     = Syst.CUICommon:gcBrand
 NO-LOCK NO-ERROR.
 
 IF NOT AVAIL MsRequest THEN RETURN "ERROR, request lost!".

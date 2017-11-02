@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-assign gcbrand = "1"
-       katun = "Qvantel2".
+assign Syst.CUICommon:gcBrand = "1"
+       Syst.CUICommon:katun = "Qvantel2".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Func/matrix.i}
@@ -21,7 +21,7 @@ lcBONOContracts = fCParamC("BONO_CONTRACTS").
 output stream sout to "/apps/yoigo/tms_support/testing/mig_conts35_39_to_CONTS32_20140707.log".
 
 FOR EACH MobSub WHERE
-         MobSub.Brand = gcBrand AND
+         MobSub.Brand = Syst.CUICommon:gcBrand AND
          MobSub.CLIType = "CONTS" AND
         (MobSub.TariffBundle = "CONTS39" OR MobSub.TariffBundle = "CONTS35") NO-LOCK:
 
@@ -75,7 +75,7 @@ FOR EACH MobSub WHERE
                                     "CONTS32",
                                     (IF lliSTCflag THEN 20140801 ELSE 20140701),
                                     {&REQUEST_SOURCE_SCRIPT},
-                                    katun,
+                                    Syst.CUICommon:katun,
                                     TRUE,
                                     0,
                                     FALSE,

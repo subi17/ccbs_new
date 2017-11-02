@@ -1,6 +1,5 @@
 {Syst/testpaa.i}
-katun = "ari".
-{Func/timestamp.i}
+Syst.CUICommon:katun = "ari".
 
 def var lcres as char no-undo.
 def var ldtactdate as date no-undo.
@@ -53,7 +52,7 @@ for each msrequest no-lock where
       export stream slog singlefee.
       delete singlefee.
        
-      fsplitts(msrequest.actstamp,
+      Func.Common:mSplitTS(msrequest.actstamp,
                output ldtactdate,
                output litime).
                

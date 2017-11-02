@@ -13,8 +13,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
-{Func/timestamp.i}
+Syst.CUICommon:gcBrand = "1".
 {Func/duplicate_invoice.i}
 {Syst/tmsconst.i}
 
@@ -35,14 +34,14 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF validate_request(pcStruct, "username!,memo!") = ? THEN RETURN.
 
-katun = "VISTA_" + get_string(pcStruct,"username").
+Syst.CUICommon:katun = "VISTA_" + get_string(pcStruct,"username").
 pcMemoStruct = get_struct(pcStruct,"memo").
 pcMemoTitle = get_string(pcMemoStruct,"title").
 pcMemoContent = get_string(pcMemoStruct,"content").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
+IF TRIM(Syst.CUICommon:katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 {newton/src/findtenant.i NO Common Invoice InvNum piInvNum}
 
@@ -57,8 +56,7 @@ IF liRequestID = 0 THEN DO:
    RETURN appl_err(lcError).
 END.
 
-DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                 "Invoice",
+Func.Common:mWriteMemo("Invoice",
                  STRING(Invoice.InvNum),
                  Invoice.Custnum,
                  pcMemoTitle,
@@ -67,5 +65,4 @@ DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
 add_boolean(response_toplevel_id,?,TRUE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

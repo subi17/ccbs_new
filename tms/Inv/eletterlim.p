@@ -60,7 +60,7 @@ FORM
    " - From specified invoicing date and from specified invoicing group." SKIP
    SKIP (13)
    WITH ROW 1 SIDE-LABELS WIDTH 80
-        TITLE " " + ynimi + " ELETTERS FROM INVOICES " +
+        TITLE " " + Syst.CUICommon:ynimi + " ELETTERS FROM INVOICES " +
         STRING(TODAY,"99-99-99") + " "
         FRAME valinta.
 
@@ -129,7 +129,7 @@ REPEAT:
             LLtila xCredit llPrintService llInvType
             WITH FRAME rajat.
 
-    ehto = 9. RUN Syst/ufkey.p.
+    Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
     UPDATE 
        lano1
@@ -157,7 +157,7 @@ REPEAT:
             ELSE IF FRAME-FIELD = "lano2" THEN DO:
                 IF INPUT lano2 = INPUT lano1 THEN DO:
                     FIND FIRST Invoice NO-LOCK WHERE
-                         Invoice.Brand  = gcBrand AND 
+                         Invoice.Brand  = Syst.CUICommon:gcBrand AND 
                          Invoice.InvNum = INPUT lano2 NO-ERROR.
                     IF AVAILABLE Invoice THEN DISPLAY
                         Invoice.InvDate  ;& Lpvm 
@@ -172,12 +172,12 @@ REPEAT:
 
     task:
     repeat WITH FRAME rajat:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 7 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT  limits.
-      IF toimi = 8 THEN LEAVE limits.
+      IF Syst.CUICommon:toimi = 1 THEN NEXT  limits.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE limits.
 
-      IF toimi = 5 THEN DO:
+      IF Syst.CUICommon:toimi = 5 THEN DO:
          IF fEPLStart(lcTestFlag) THEN LEAVE task.
       END.
       
@@ -187,7 +187,7 @@ REPEAT:
 
     IF asno NE 0 THEN DO:
         FIND FIRST Customer WHERE 
-                   Customer.Brand = gcBrand AND
+                   Customer.Brand = Syst.CUICommon:gcBrand AND
                    Customer.CustNum = asno
         NO-LOCK NO-ERROR.
         IF NOT AVAILABLE Customer THEN DO:
@@ -199,7 +199,7 @@ REPEAT:
 
     IF igroup NE "" THEN DO:
         FIND FIRST invgroup WHERE 
-                   InvGroup.Brand = gcBrand AND
+                   InvGroup.Brand = Syst.CUICommon:gcBrand AND
                    invgroup.InvGroup = igroup 
         NO-LOCK NO-ERROR.
         IF NOT AVAILABLE invgroup THEN DO:

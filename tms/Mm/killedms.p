@@ -10,7 +10,6 @@
   ------------------------------------------------------ */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
 DEF VAR lkm       AS i  NO-UNDO.
 def var pvm1      as da no-undo format "99-99-99".
@@ -41,7 +40,7 @@ help "Latest Date of call" skip(1)
 "          other ..................:" statother 
 skip(1)
 WITH
-   width 80 overlay no-labels title " " + ynimi +
+   width 80 overlay no-labels title " " + Syst.CUICommon:ynimi +
    " Count mobile subscriptions " FRAME rajat.
 
 pvm1 = date(month(TODAY),1,year(TODAY)).
@@ -53,7 +52,7 @@ rajat:
 repeat WITH FRAME rajat:
 
    PAUSE 0.
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    UPDATE
    pvm1
    pvm2
@@ -61,11 +60,11 @@ repeat WITH FRAME rajat:
 
 toimi:
    repeat WITH FRAME toimi:
-      ASSIGN ufk = 0 ehto = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0 Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[5] = 63 Syst.CUICommon:ufk[8] = 8.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT  rajat.
-      IF toimi = 8 THEN LEAVE rajat.
-      IF toimi = 5 THEN LEAVE toimi.
+      IF Syst.CUICommon:toimi = 1 THEN NEXT  rajat.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE rajat.
+      IF Syst.CUICommon:toimi = 5 THEN LEAVE toimi.
    END.
    ASSIGN 
       lkm = 0
@@ -75,13 +74,13 @@ toimi:
       statother = 0.
    message "Calculating ...".                   
 
-   stamp1 = fHMS2TS(pvm1,"00:00:00").
-   stamp2 = fHMS2TS(pvm2,"23:59:59").
+   stamp1 = Func.Common:mHMS2TS(pvm1,"00:00:00").
+   stamp2 = Func.Common:mHMS2TS(pvm2,"23:59:59").
 
    FOR EACH MSOwner no-lock where
             MSOwner.TsBegin >= stamp1  AND
             MSOwner.TsEnd   <= stamp2  AND 
-            MSOwner.Brand    = gcBrand :
+            MSOwner.Brand    = Syst.CUICommon:gcBrand :
 
       lkm = lkm + 1.
 

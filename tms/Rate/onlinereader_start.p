@@ -16,7 +16,7 @@ DEF VAR liPortNum       AS INT  NO-UNDO.
 DEF VAR lcTableNames    AS CHAR NO-UNDO.
 DEF VAR lcOldTableNames AS CHAR NO-UNDO.
 
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 
 liPortNum = INTEGER(SESSION:PARAMETER) NO-ERROR.
 IF ERROR-STATUS:ERROR OR liPortNum = 0 THEN QUIT.
@@ -31,7 +31,7 @@ ELSE lcTableNames = "MobCDR,McdrDtl2,PrepCDR,ErrorCDR".
 DO WHILE TRUE:
 
    fInitializeConnectTables(lcTableNames,"").
-   RUN pDirectConnect2Dbs(gcBrand,
+   RUN pDirectConnect2Dbs(Syst.CUICommon:gcBrand,
                           "",
                           TODAY,
                           TODAY).
@@ -63,7 +63,7 @@ DO WHILE TRUE:
    fInitializeConnectTables(lcOldTableNames,"old").
 
    IF lcOldTableNames > "" THEN 
-      RUN pDirectConnect2Dbs(gcBrand,
+      RUN pDirectConnect2Dbs(Syst.CUICommon:gcBrand,
                              "old",
                              TODAY - 1,
                              TODAY - 1).

@@ -22,7 +22,7 @@ IF NOT AVAIL Customer THEN DO:
 END.
       
 FIND CustContact WHERE
-     CustContact.Brand = gcBrand AND
+     CustContact.Brand = Syst.CUICommon:gcBrand AND
      CustContact.Custnum = Customer.Custnum AND
      CustContact.CustType = iiCustType NO-LOCK NO-ERROR.
 
@@ -82,12 +82,12 @@ REPEAT WITH FRAME fCustContact ON ENDKEY UNDO lCustMark, NEXT lCustMark:
       CustContact.Language lcLanguage.
 
    ASSIGN
-      ufk   = 0  
-      ufk[8]= 8 
-      ehto = 0.
+      Syst.CUICommon:ufk   = 0  
+      Syst.CUICommon:ufk[8]= 8 
+      Syst.CUICommon:ehto = 0.
    RUN Syst/ufkey.p.
 
-   IF toimi = 8 THEN LEAVE.
+   IF Syst.CUICommon:toimi = 8 THEN LEAVE.
 
 END. /* lCustMark */
 

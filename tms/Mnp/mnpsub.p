@@ -12,17 +12,15 @@
 
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'MNPProcess'}
-{Func/timestamp.i}
 {Func/xmlfunction.i}
 {Func/ftaxdata.i}
-{Func/timestamp.i}
 
 {Syst/eventval.i}
 
 DEFINE INPUT PARAMETER piMNPSeq AS INTEGER NO-UNDO.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -63,10 +61,10 @@ FORM
    mnpsub.icc  LABEL "ICC" format "x(20)"
    mnpsub.portingtime LABEL "Porting Time"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.CUICommon:cfc)   
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
     " MNP Subs "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 /*
@@ -75,8 +73,8 @@ FORM
     "Prefix.......:" mnpsub.Prefix      SKIP
     "Zone.........:" mnpsub.RateZone    FORMAT "9" SKIP
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     NO-LABELS 
     FRAME lis.
 */
@@ -155,33 +153,33 @@ BROWSE:
       IF ufkey THEN DO:
         
         ASSIGN
-        ufk = 0
-        ufk[1]= 0  ufk[2]= 0 ufk[3]= 0
-     /*   ufk[5]= 5  WHEN lcRight = "RW" */
-        ufk[6]= 0  /* WHEN lcRight = "RW" */
-        ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ufk = 0
+        Syst.CUICommon:ufk[1]= 0  Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0
+     /*   Syst.CUICommon:ufk[5]= 5  WHEN lcRight = "RW" */
+        Syst.CUICommon:ufk[6]= 0  /* WHEN lcRight = "RW" */
+        Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW mnpsub.cli {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-/*        COLOR DISPLAY VALUE(ccc) mnpsub.cli WITH FRAME sel.*/
+/*        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) mnpsub.cli WITH FRAME sel.*/
       END.
 /*      IF order = 2 THEN DO:
         CHOOSE ROW mnpsub.Ratezone {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) mnpsub.Ratezone WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) mnpsub.Ratezone WITH FRAME sel.
       END. */
       
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -205,10 +203,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -233,7 +231,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -259,7 +257,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND mnpsub WHERE recid(mnpsub) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -283,7 +281,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -298,7 +296,7 @@ BROWSE:
      END. /* NEXT page */
      
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:
      
         must-add = TRUE.
         
@@ -306,7 +304,7 @@ BROWSE:
         
      END. /* ADD NEW */
     /* 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
 
@@ -314,8 +312,8 @@ BROWSE:
        RUN local-find-this(TRUE).
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhmnpsub). 
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        RUN local-UPDATE-record.
        HIDE FRAME lis NO-PAUSE.
 
@@ -332,25 +330,25 @@ BROWSE:
 
      END.
 */
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(mnpsub) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(mnpsub) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 /* --------------- PROCEDURES ------------------- */
 
@@ -406,7 +404,7 @@ PROCEDURE local-disp-row:
       mnpsub.cli
       mnpsub.icc
       mnpsub.msseq
-      fTS2HMS(mnpsub.portingtime) format "x(19)" @ mnpsub.portingtime
+      Func.Common:mTS2HMS(mnpsub.portingtime) format "x(19)" @ mnpsub.portingtime
    WITH FRAME sel.
 
 END PROCEDURE.
@@ -427,9 +425,9 @@ PROCEDURE local-UPDATE-record:
 
       READKEY.
       
-      nap = keylabel(lastkey).
+      Syst.CUICommon:nap = keylabel(lastkey).
       
-      IF LOOKUP(nap,poisnap) > 0 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
 
          IF mnpsub.Prefix ENTERED THEN DO:
                         

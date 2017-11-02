@@ -245,7 +245,7 @@ for each invoice no-lock where
          /* owner change */           
          liseq = 0.
          for each MsOwner no-lock WHERE
-                  Msowner.Brand  = gcBrand     AND
+                  Msowner.Brand  = Syst.CUICommon:gcBrand     AND
                   MsOwner.CLI    = subinvoice.cli AND
                   MsOwner.TsEnd >= ldFrom      AND
                   MsOwner.TsBeg <  ldTo
@@ -330,7 +330,7 @@ for each ttcli:
    if can-find(first ttpick where ttpick.cli = ttcli.cli) then next.
    
    for each invoice no-lock where
-            invoice.brand = gcbrand and
+            invoice.brand = Syst.CUICommon:gcBrand and
             invoice.invdate = iiInvDate and
             invoice.invtype = 99,
       first subinvoice of invoice no-lock where
@@ -360,8 +360,7 @@ ELSE icFile = REPLACE(icFile,"#IGRP","ALL").
 /* invoice date to file name */   
 IF ldtNameDate NE ? THEN DO:
    
-   lcDate = DYNAMIC-FUNCTION("fDateFmt" IN ghFunc1,
-                             ldtNameDate,
+   lcDate = Func.Common:mDateFmt(ldtNameDate,
                              "yyyymmdd").
    icFile = REPLACE(icFile,"#IDATE",lcDate).
 END.

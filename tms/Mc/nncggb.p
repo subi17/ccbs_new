@@ -42,7 +42,7 @@ DEF VAR lcTask       AS CHAR                   NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -64,9 +64,9 @@ form
     memb                column-label "Member"
     CustGroup.CustGroup      /* COLUMN-LABEL FORMAT */
     CustGroup.CGName      /* COLUMN-LABEL FORMAT */
-WITH centered OVERLAY scroll 1 13 DOWN ROW 2 COLOR value(cfc)
-    TITLE COLOR value(ctc)
-    " Join CustNo " + string(CustNum) + " into group(s) (" + gcBrand + ") "
+WITH centered OVERLAY scroll 1 13 DOWN ROW 2 COLOR value(Syst.CUICommon:cfc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
+    " Join CustNo " + string(CustNum) + " into group(s) (" + Syst.CUICommon:gcBrand + ") "
     FRAME sel.
 
 form
@@ -78,24 +78,24 @@ WITH
 form /* Customer Group :n haku kentällä CustGroup */
     CustGroup
     help "Type Group Code"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* Customer Group :n haku kentällä CGName */
     CGName
     help "Type first characters of a name"
-    with row 4 col 2 title color value(ctc) " FIND Name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " FIND Name "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 FIND Customer where Customer.CustNum = CustNum no-lock.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST CustGroup
-WHERE CustGroup.Brand = gcBrand no-lock no-error.
+WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
 IF AVAILABLE CustGroup THEN ASSIGN
    muisti       = recid(CustGroup)
    tulostettava = TRUE
@@ -137,9 +137,9 @@ tulostus:
          DISPLAY memb CustGroup.CustGroup CustGroup.CGName.
          rtab[FRAME-LINE] = recid(CustGroup).
          IF jarj = 1 THEN FIND NEXT CustGroup
-         WHERE CustGroup.Brand = gcBrand no-lock no-error.
+         WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
          ELSE IF jarj = 2 THEN FIND NEXT CustGroup USE-INDEX CGName
-         WHERE CustGroup.Brand = gcBrand no-lock no-error.
+         WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
       END.
       ELSE DO:
          CLEAR no-pause.
@@ -168,29 +168,29 @@ SELAUS:
 
       IF ufkey THEN DO:
    ASSIGN
-   ufk[1]= 35 ufk[2]= 30 ufk[3]= 927 ufk[4]= 510
-   ufk[5]= 5  ufk[6]= 0  ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
-   ehto = 3 ufkey = FALSE.
+   Syst.CUICommon:ufk[1]= 35 Syst.CUICommon:ufk[2]= 30 Syst.CUICommon:ufk[3]= 927 Syst.CUICommon:ufk[4]= 510
+   Syst.CUICommon:ufk[5]= 5  Syst.CUICommon:ufk[6]= 0  Syst.CUICommon:ufk[7]= 0   Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+   Syst.CUICommon:ehto = 3 ufkey = FALSE.
    RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
    CHOOSE ROW CustGroup.CustGroup {Syst/uchoose.i} no-error WITH FRAME sel.
-   COLOR DISPLAY value(ccc) CustGroup.CustGroup WITH FRAME sel.
+   COLOR DISPLAY value(Syst.CUICommon:ccc) CustGroup.CustGroup WITH FRAME sel.
       END.
       ELSE IF jarj = 2 THEN DO:
    CHOOSE ROW CustGroup.CGName {Syst/uchoose.i} no-error WITH FRAME sel.
-   COLOR DISPLAY value(ccc) CustGroup.CGName WITH FRAME sel.
+   COLOR DISPLAY value(Syst.CUICommon:ccc) CustGroup.CGName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
    jarj = jarj + 1. IF jarj > jarjlkm THEN jarj = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
    jarj = jarj - 1. IF jarj = 0 THEN jarj = jarjlkm.
       END.
 
@@ -199,9 +199,9 @@ SELAUS:
    FIND CustGroup where recid(CustGroup) = muisti.
    DO i = 1 TO FRAME-LINE - 1:
       IF jarj = 1 THEN FIND prev CustGroup
-      WHERE CustGroup.Brand = gcBrand no-lock no-error.
+      WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
       ELSE IF jarj = 2 THEN FIND prev CustGroup USE-INDEX CGName
-      WHERE CustGroup.Brand = gcBrand no-lock no-error.
+      WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
       IF AVAILABLE CustGroup THEN
          ASSIGN ekarivi = i muisti = recid(CustGroup).
       ELSE LEAVE.
@@ -217,16 +217,16 @@ SELAUS:
    NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* edellinen rivi */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
    IF FRAME-LINE = 1 THEN DO:
       FIND CustGroup where recid(CustGroup) = rtab[1] no-lock.
       IF jarj = 1 THEN FIND prev CustGroup
-      WHERE CustGroup.Brand = gcBrand no-lock no-error.
+      WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
       ELSE IF jarj = 2 THEN FIND prev CustGroup USE-INDEX CGName
-      WHERE CustGroup.Brand = gcBrand no-lock no-error.
+      WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
       IF NOT AVAILABLE CustGroup THEN DO:
          message "YOU ARE ON THE FIRST ROW !".
          BELL. PAUSE 1 no-message.
@@ -248,14 +248,14 @@ SELAUS:
       END. /* edellinen rivi */
 
       /* seuraava rivi */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
    IF FRAME-LINE = FRAME-DOWN THEN DO:
       FIND CustGroup where recid(CustGroup) = rtab[FRAME-DOWN] no-lock .
       IF jarj = 1 THEN FIND NEXT CustGroup
-      WHERE CustGroup.Brand = gcBrand no-lock no-error.
+      WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
       ELSE IF jarj = 2 THEN FIND NEXT CustGroup USE-INDEX CGName
-      WHERE CustGroup.Brand = gcBrand no-lock no-error.
+      WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
       IF NOT AVAILABLE CustGroup THEN DO:
          message "YOU ARE ON THE LAST ROW !".
          BELL. PAUSE 1 no-message.
@@ -277,22 +277,22 @@ SELAUS:
       END. /* seuraava rivi */
 
       /* edellinen sivu */
-      else if lookup(nap,"prev-page,page-up") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up") > 0 THEN DO:
    muisti = rtab[1].
    FIND CustGroup where recid(CustGroup) = muisti no-lock no-error.
    IF jarj = 1 THEN FIND prev CustGroup
-   WHERE CustGroup.Brand = gcBrand no-lock no-error.
+   WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
    ELSE IF jarj = 2 THEN FIND prev CustGroup USE-INDEX CGName
-   WHERE CustGroup.Brand = gcBrand no-lock no-error.
+   WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
    IF AVAILABLE CustGroup THEN DO:
       muisti = recid(CustGroup).
 
       /* mennään tiedostoa taaksepäin 1 sivun verran */
       DO rivi = 1 TO (FRAME-DOWN - 1):
          IF jarj = 1 THEN FIND prev CustGroup
-         WHERE CustGroup.Brand = gcBrand no-lock no-error.
+         WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
          ELSE IF jarj = 2 THEN FIND prev CustGroup USE-INDEX CGName
-         WHERE CustGroup.Brand = gcBrand no-lock no-error.
+         WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
          IF AVAILABLE CustGroup THEN muisti = recid(CustGroup).
          ELSE rivi = FRAME-DOWN.
       END.
@@ -307,7 +307,7 @@ SELAUS:
      END. /* edellinen sivu */
 
      /* seuraava sivu */
-     else if lookup(nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
        /* kohdistin alimmalle riville */
        IF rtab[FRAME-DOWN] = ? THEN DO:
       message "YOU ARE ON THE LAST PAGE !".
@@ -322,15 +322,15 @@ SELAUS:
      END. /* seuraava sivu */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+     else if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        CustGroup = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE CustGroup WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if CustGroup <> "" THEN DO:
           FIND FIRST CustGroup where 
-                     CustGroup.Brand = gcBrand AND
+                     CustGroup.Brand = Syst.CUICommon:gcBrand AND
                      CustGroup.CustGroup >= CustGroup
           no-lock no-error.
           IF NOT AVAILABLE CustGroup THEN DO:
@@ -347,16 +347,16 @@ SELAUS:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.CUICommon:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
        CGName = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE CGName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if CGName <> "" THEN DO:
           FIND FIRST CustGroup where 
-                     CustGroup.Brand   = gcBrand AND
+                     CustGroup.Brand   = Syst.CUICommon:gcBrand AND
                      CustGroup.CGName >= CGName
           USE-INDEX CGName no-lock no-error.
           IF NOT AVAILABLE CustGroup THEN DO:
@@ -371,7 +371,7 @@ SELAUS:
        END.
      END. /* Haku sar. 2 */
 
-     else if lookup(nap,"3,f3") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"3,f3") > 0 THEN DO:
 
        FIND CustGroup where recid(CustGroup) = rtab[frame-line(sel)]
        no-lock.
@@ -384,14 +384,14 @@ SELAUS:
 
      END.
 
-     else if lookup(nap,"4,f4") > 0 THEN DO TRANSAction:  /* poisto */
+     else if lookup(Syst.CUICommon:nap,"4,f4") > 0 THEN DO TRANSAction:  /* poisto */
    FIND CustGroup where recid(CustGroup) = rtab[FRAME-LINE] no-lock.
    RUN Mc/nncgme1.p(CustGroup.CustGroup).
    ufkey = TRUE.
    NEXT LOOP.
      END.
 
-     if lookup(nap,"5,f5,enter,return") > 0 THEN DO TRANS: /* ADD OR REMOVE */
+     if lookup(Syst.CUICommon:nap,"5,f5,enter,return") > 0 THEN DO TRANS: /* ADD OR REMOVE */
 
         FIND CustGroup where recid(CustGroup) = rtab[FRAME-LINE] no-lock.
 
@@ -421,29 +421,29 @@ SELAUS:
         END.
      END.
 
-     else if lookup(nap,"home") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home") > 0 THEN DO:
        IF jarj = 1 THEN FIND FIRST CustGroup
-       WHERE CustGroup.Brand = gcBrand no-lock no-error.
+       WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
        ELSE IF jarj = 2 THEN FIND FIRST CustGroup USE-INDEX CGName
-       WHERE CustGroup.Brand = gcBrand no-lock no-error.
+       WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
        ASSIGN muisti = recid(CustGroup) tulostettava = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end") > 0 THEN DO : /* viimeinen tietue */
+     else if lookup(Syst.CUICommon:nap,"end") > 0 THEN DO : /* viimeinen tietue */
        IF jarj = 1 THEN FIND LAST CustGroup
-       WHERE CustGroup.Brand = gcBrand no-lock no-error.
+       WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
        ELSE IF jarj = 2 THEN FIND LAST CustGroup USE-INDEX CGName
-       WHERE CustGroup.Brand = gcBrand no-lock no-error.
+       WHERE CustGroup.Brand = Syst.CUICommon:gcBrand no-lock no-error.
        ASSIGN muisti = recid(CustGroup) tulostettava = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* SELAUS */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 

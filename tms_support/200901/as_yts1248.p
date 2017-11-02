@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-katun = "anttis".
-gcBrand = "1".
+Syst.CUICommon:katun = "anttis".
+Syst.CUICommon:gcBrand = "1".
 {Func/fmakemsreq.i}
 
 def stream sin.
@@ -51,7 +51,7 @@ if i > 10 then leave.
                               TRIM(SubSer.ServCom),
                               SubSer.SSStat,
                               SubSer.SSParam,
-                              fMakeTS(),
+                              Func.Common:mMakeTS(),
                               "",
                               FALSE,      /* fees */
                               FALSE,      /* sms */

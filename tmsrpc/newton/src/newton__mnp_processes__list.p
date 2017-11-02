@@ -28,7 +28,6 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/tmsconst.i}
 
-DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".
 DEF VAR lcResultStruct AS CHARACTER NO-UNDO. 
 DEF VAR pcTenant AS CHARACTER NO-UNDO.
 DEF VAR pcStruct AS CHARACTER NO-UNDO. 
@@ -206,7 +205,7 @@ ELSE IF lcStatusCode EQ "ERR" THEN DO:
       lcQuery = lcQuery + " AND MNPOperation.ErrorCode = " + QUOTER(get_string(pcStruct,"error_code")).
 
    lcQuery = lcQuery + ", FIRST MNPProcess NO-LOCK WHERE MNPProcess.MNPSeq = MNPOperation.MNPSeq" +
-       ' AND MNPProcess.Brand = ' + QUOTER(gcBrand) + 
+       ' AND MNPProcess.Brand = ' + QUOTER(Syst.CUICommon:gcBrand) + 
        ' AND MNPProcess.MNPType = ' + QUOTER(liMNPType) + 
        ' AND (MNPProcess.StatusCode = ' + QUOTER({&MNP_ST_NEW}) +
        ' OR MNPProcess.StatusCode = ' + QUOTER({&MNP_ST_ASOL}) +
@@ -271,7 +270,7 @@ IF LOOKUP("salesman_id",lcStruct) > 0 THEN DO:
       lcOrderStatusCode = ENTRY(liEntryCount,lcOrderStatusCodes).
 
       FOR EACH Order NO-LOCK WHERE
-               Order.Brand      = gcBrand AND
+               Order.Brand      = Syst.CUICommon:gcBrand AND
                Order.SalesMan   = lcSalesmanId AND
                Order.StatusCode = lcOrderStatusCode AND
                Order.MNPStatus  > 0 AND

@@ -25,7 +25,6 @@
 {Syst/utumaa.i "new"}
 {Syst/eventlog.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 
 assign tuni1 = "accdatll"
        tuni2 = "".
@@ -153,8 +152,8 @@ form
         NO-LABEL
    SKIP(1)
    WITH ROW 1 side-labels width 80
-        title " " + ynimi + " REVENUE REPORT " +
-        string(pvm,"99-99-99") + " "
+        title " " + Syst.CUICommon:ynimi + " REVENUE REPORT " +
+        string(TODAY,"99-99-99") + " "
         FRAME rajat.
 
 view FRAME rajat.
@@ -174,7 +173,7 @@ ASSIGN date2       = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
 
 IF lcFileDir = ? OR lcFileDir = "" THEN lcFileDir = "/tmp".       
 
-FIND LAST InvGroup WHERE InvGroup.Brand = gcBrand NO-LOCK NO-ERROR.
+FIND LAST InvGroup WHERE InvGroup.Brand = Syst.CUICommon:gcBrand NO-LOCK NO-ERROR.
 IF AVAILABLE InvGroup THEN ASSIGN InvGroup[2] = InvGroup.InvGroup.
 
 lcExFile = "".
@@ -204,18 +203,18 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0 /* 847 */
-         ufk[5]= 63  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
-         ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ufk[1]= 132 Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0 /* 847 */
+         Syst.CUICommon:ufk[5]= 63  Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 
+         Syst.CUICommon:ufk[9]= 1
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
       READKEY.
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"1,f1") > 0 THEN DO:
-         ehto = 9. RUN Syst/ufkey.p.
+      if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          ufkey = TRUE. 
          UPDATE 
                 date1
@@ -247,7 +246,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
          NEXT toimi.
       END.
 
-      else if lookup(nap,"5,f5") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:
       
          IF (llExcel AND lcExFile = "") OR
             (llSap   AND lcSapFile = "") 
@@ -269,11 +268,11 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
          LEAVE toimi.
       END.
 
-      else if lookup(nap,"8,f8") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
          RETURN.
       END.
 
-END. /* toimi */
+END. /* Syst.CUICommon:toimi */
 
 /* Avataan striimi */
 IF llPaper THEN DO:
@@ -281,7 +280,7 @@ IF llPaper THEN DO:
     {Syst/tmsreport.i "return"}
 END.
 
-ehto = 5.
+Syst.CUICommon:ehto = 5.
 RUN Syst/ufkey.p.
 
 /* info line for log */
@@ -299,7 +298,7 @@ fELog("REVENUE","Started:" + lcLogLine).
 ASSIGN lcExFile     = lcFileDir + "/" + lcExFile
        lcSapFile    = lcFileDir + "/" + lcSapFile
        ldtStartDate = TODAY
-       ldBegTime    = fMakeTS()
+       ldBegTime    = Func.Common:mMakeTS()
        lcStartTime  = STRING(TIME,"hh:mm:ss").
        
 DISPLAY ldtStartDate lcStartTime WITH FRAME rajat.        
@@ -332,11 +331,10 @@ IF llPaper THEN DO:
     {Syst/tmsreport.i}
 END.
 
-ldEndTime = fMakeTS().
+ldEndTime = Func.Common:mMakeTS().
 
 /* duration */
-liDurDays = DYNAMIC-FUNCTION("fTSDuration" IN ghfunc1,
-                             ldBegTime,
+liDurDays = Func.Common:mTSDuration(ldBegTime,
                              ldEndTime,
                              OUTPUT liDurTime).
  

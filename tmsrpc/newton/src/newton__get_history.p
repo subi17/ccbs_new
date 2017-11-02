@@ -15,7 +15,7 @@
 */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 
@@ -44,11 +44,11 @@ IF piMsSeq = ? OR piLatest = ? THEN RETURN.
 
 FIND MobSub NO-LOCK WHERE
      Mobsub.msseq = piMsSeq AND
-     Mobsub.Brand = gcBrand NO-ERROR.
+     Mobsub.Brand = Syst.CUICommon:gcBrand NO-ERROR.
 IF NOT AVAILABLE mobsub THEN DO:
    FIND TermMobsub NO-LOCK WHERE
         TermMobsub.msseq = piMsSeq AND
-        TermMobsub.brand = gcBrand NO-ERROR.
+        TermMobsub.brand = Syst.CUICommon:gcBrand NO-ERROR.
    IF NOT AVAIL TermMobsub THEN
       RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
    ASSIGN
@@ -253,5 +253,4 @@ FOR EACH MsRequest NO-LOCK USE-INDEX MsSeq WHERE
 END.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

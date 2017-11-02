@@ -41,12 +41,11 @@ END.
 FIND Customer where 
      Customer.CustNum = liAgrCust no-lock no-error.
 
-IF Avail Customer THEN lcUserName =  DYNAMIC-FUNCTION("fDispCustName" IN
-                                             ghFunc1, BUFFER Customer).
+IF Avail Customer THEN lcUserName = Func.Common:mDispCustName(BUFFER Customer).
 ELSE lcUserName = "".
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p. 
+   ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 3. RUN Syst/ufkey.p. 
  
  DISPLAY
  "A) Subscription EventLog       "  @ menuc[1]    SKIP

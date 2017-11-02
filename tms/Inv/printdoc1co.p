@@ -88,7 +88,7 @@ IF NUM-ENTRIES(icFileType,"|") > 1 THEN ASSIGN
 
 IF icInvID1 = icInvID2 THEN 
 FOR FIRST Invoice NO-LOCK WHERE
-          Invoice.Brand    = gcBrand AND
+          Invoice.Brand    = Syst.CUICommon:gcBrand AND
           Invoice.ExtInvID = icInvID1 AND
           Invoice.DelType  = iiDelType,
     FIRST Customer OF Invoice NO-LOCK:
@@ -102,7 +102,7 @@ END.
 
 ELSE IF iiInvDate NE ? THEN 
 FOR EACH Invoice NO-LOCK WHERE    
-         Invoice.Brand    = gcBrand    AND
+         Invoice.Brand    = Syst.CUICommon:gcBrand    AND
          Invoice.InvDate  = iiInvDate  AND
          Invoice.ExtInvID >= icInvID1  AND      
          Invoice.ExtInvID <= icInvID2  AND   
@@ -129,7 +129,7 @@ END.
 
 ELSE 
 FOR EACH Invoice NO-LOCK WHERE               
-         Invoice.Brand  = gcBrand      AND
+         Invoice.Brand  = Syst.CUICommon:gcBrand      AND
          Invoice.ExtInvID >= icInvID1  AND      
          Invoice.ExtInvID <= icInvID2  AND   
          Invoice.CustNum >= iiCustNum1 AND
@@ -162,8 +162,7 @@ ELSE icFile = REPLACE(icFile,"#IGRP","ALL").
 /* invoice date to file name */   
 IF ldtNameDate NE ? THEN DO:
    
-   lcDate = DYNAMIC-FUNCTION("fDateFmt" IN ghFunc1,
-                             ldtNameDate,
+   lcDate = Func.Common:mDateFmt(ldtNameDate,
                              "yyyymmdd").
    icFile = REPLACE(icFile,"#IDATE",lcDate).
 END.

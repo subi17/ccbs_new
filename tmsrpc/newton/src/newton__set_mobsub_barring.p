@@ -9,11 +9,10 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/barrfunc.i}
-katun    = "NewtonAd".
-gcBrand  = "1".
+Syst.CUICommon:katun = "NewtonAd".
+Syst.CUICommon:gcBrand  = "1".
 
 /* Input parameters */
 DEF VAR pcUser AS CHAR NO-UNDO.
@@ -40,7 +39,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUser) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-katun = pcUser.
+Syst.CUICommon:katun = pcUser.
 
 FIND FIRST Mobsub NO-LOCK WHERE
            Mobsub.MsSeq = piMsSeq NO-ERROR.
@@ -61,7 +60,7 @@ RUN Mm/barrengine.p(MobSub.MsSeq,
                  pcCommand,
                  {&REQUEST_SOURCE_NEWTON},
                  "",
-                 fMakeTS(),
+                 Func.Common:mMakeTS(),
                  "",
                  OUTPUT lcSetStatus).
 
@@ -74,5 +73,4 @@ IF lcSetStatus NE "" THEN RETURN appl_err(lcSetStatus).
 add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

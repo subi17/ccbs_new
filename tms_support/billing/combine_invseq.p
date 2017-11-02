@@ -1,7 +1,6 @@
 {Syst/commpaa.i}
-katun = "anttis".
-gcBrand = "1".
-{Func/date.i}
+Syst.CUICommon:katun = "anttis".
+Syst.CUICommon:gcBrand = "1".
 {Inv/combine_invseq.i}
 
 DEF VAR idafromdate as date no-undo.
@@ -9,7 +8,7 @@ DEF VAR idatodate as date no-undo.
 
 ASSIGN
    idafromdate = date(month(today), 1, YEAR(TODAY))
-   idatodate = fLastDayOfMonth(today).
+   idatodate = Func.Common:mLastDayOfMonth(today).
 
 DEFINE VARIABLE lcInfo AS CHARACTER NO-UNDO. 
 
@@ -33,7 +32,7 @@ ok = false.
 LOOP:
 DO WHILE TRUE:
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
    REPEAT ON ENDKEY UNDO, LEAVE:
       UPDATE 
          idafromdate

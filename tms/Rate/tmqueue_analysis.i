@@ -4,7 +4,6 @@
 &GLOBAL-DEFINE TMQUEUE_ANALYSIS_I YES
 
 {Syst/commali.i}
-{Func/date.i}
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/istc.i}
@@ -84,10 +83,10 @@ FUNCTION fUpsellBundleCountNew RETURN INT
    DEF BUFFER bMsRequest     FOR MsRequest.
    DEF BUFFER DayCampaign    FOR DayCampaign.
    
-   ASSIGN ldaLastDay  = fLastDayOfMonth(idtDate)
-          ldeMonthEnd = fMake2Dt(ldaLastDay, 86399)
-          ldeTime     = fMake2Dt(idtDate, 86399)
-          ldeMonthBegin = fMake2Dt(DATE(MONTH(idtDate),1,YEAR(idtDate)),0)
+   ASSIGN ldaLastDay  = Func.Common:mLastDayOfMonth(idtDate)
+          ldeMonthEnd = Func.Common:mMake2DT(ldaLastDay, 86399)
+          ldeTime     = Func.Common:mMake2DT(idtDate, 86399)
+          ldeMonthBegin = Func.Common:mMake2DT(DATE(MONTH(idtDate),1,YEAR(idtDate)),0)
           lcIPLContracts  = fCParamC("IPL_CONTRACTS")
           lcBONOContracts = fCParamC("BONO_CONTRACTS")
           lcFLATContracts = fCParamC("FLAT_CONTRACTS").
@@ -125,7 +124,7 @@ FUNCTION fUpsellBundleCountNew RETURN INT
             bServiceLimit.SLSeq = bMServiceLimit.SLSeq AND
             bServiceLimit.DialType = {&DIAL_TYPE_GPRS},
       FIRST DayCampaign NO-LOCK WHERE 
-            DayCampaign.Brand   = gcBrand AND
+            DayCampaign.Brand   = Syst.CUICommon:gcBrand AND
             DayCampaign.DCEvent = bServiceLimit.GroupCode AND
             LOOKUP(STRING(DayCampaign.DCType),
                    {&PERCONTRACT_RATING_PACKAGE}) > 0:
@@ -216,10 +215,10 @@ FUNCTION fGetDSSUpsellBundleCount RETURN INT
    DEF BUFFER ServiceLimit  FOR ServiceLimit.
    DEF BUFFER MserviceLPool FOR MServiceLPool.
    
-   ASSIGN ldaLastDay    = fLastDayOfMonth(idtDate)
-          ldeMonthEnd   = fMake2Dt(ldaLastDay,86399)
-          ldeToday      = fMake2Dt(idtDate,86399)
-          ldeMonthBegin = fMake2Dt(DATE(MONTH(idtDate),1,YEAR(idtDate)),0)
+   ASSIGN ldaLastDay    = Func.Common:mLastDayOfMonth(idtDate)
+          ldeMonthEnd   = Func.Common:mMake2DT(ldaLastDay,86399)
+          ldeToday      = Func.Common:mMake2DT(idtDate,86399)
+          ldeMonthBegin = Func.Common:mMake2DT(DATE(MONTH(idtDate),1,YEAR(idtDate)),0)
           liPeriod      = YEAR(idtDate) * 100 + MONTH(idtDate).
 
    IF LOOKUP(STRING(iiTMRuleSeq),lcDSSUpsell) = 0 THEN RETURN -1.
@@ -346,8 +345,8 @@ FUNCTION fGetTotalBundleUsage RETURN LOGICAL
          bServiceLimit.GroupCode NE icDCEvent THEN NEXT.
 
       ASSIGN 
-         ldeFirstSecofDay = fMake2Dt(TODAY,0)
-         ldeLastSecofDay  = fMake2Dt(TODAY,86399).
+         ldeFirstSecofDay = Func.Common:mMake2DT(TODAY,0)
+         ldeLastSecofDay  = Func.Common:mMake2DT(TODAY,86399).
 
       /* pending STC request */
       IF CAN-FIND(FIRST MsRequest NO-LOCK USE-INDEX MsActStamp WHERE
@@ -370,13 +369,13 @@ FUNCTION fGetTotalBundleUsage RETURN LOGICAL
          NEXT. 
       
       FIND FIRST bDayCampaign NO-LOCK WHERE 
-                 bDayCampaign.Brand   = gcBrand                 AND 
+                 bDayCampaign.Brand   = Syst.CUICommon:gcBrand                 AND 
                  bDayCampaign.DCEvent = bServiceLimit.GroupCode NO-ERROR.
       
       IF NOT AVAIL bDayCampaign THEN NEXT.
 
       FIND FIRST bFMItem NO-LOCK WHERE  
-                 bFMItem.Brand     = gcBrand               AND       
+                 bFMItem.Brand     = Syst.CUICommon:gcBrand               AND       
                  bFMItem.FeeModel  = bDayCampaign.FeeModel AND
                  bFMItem.ToDate   >= TODAY                 AND 
                  bFMItem.FromDate <= TODAY                 NO-ERROR.
@@ -398,7 +397,7 @@ FUNCTION fGetTotalBundleUsage RETURN LOGICAL
              llgBundle     = TRUE.
          ELSE DO:
             FIND FIRST bFixedFee NO-LOCK WHERE
-                       bFixedFee.Brand      = gcBrand                      AND 
+                       bFixedFee.Brand      = Syst.CUICommon:gcBrand                      AND 
                        bFixedFee.HostTable  = "MobSub"                     AND 
                        bFixedFee.CustNum    = iiCustnum                    AND
                        bFixedFee.KeyValue   = STRING(bMServicelimit.MsSeq) AND 
@@ -420,7 +419,7 @@ FUNCTION fGetTotalBundleUsage RETURN LOGICAL
       
       IF bFMItem.BillMethod THEN DO:
          FOR EACH bSingleFee NO-LOCK WHERE
-                  bSingleFee.Brand      = gcBrand                      AND
+                  bSingleFee.Brand      = Syst.CUICommon:gcBrand                      AND
                   bSingleFee.Custnum    = iiCustnum                    AND
                   bSingleFee.HostTable  = "MobSub"                     AND
                   bSingleFee.KeyValue   = STRING(bMServiceLimit.MsSeq) AND
@@ -478,7 +477,7 @@ PROCEDURE pUpdateTMCounterLimit:
    ASSIGN
       ldaToday = TODAY
       ldaFirstDay = DATE(MONTH(ldaToday), 1, YEAR(ldaToday))
-      ldaLastDay = fLastDayOfMOnth(ldaToday).
+      ldaLastDay = Func.Common:mLastDayOfMonth(ldaToday).
 
    /* have to "disable" possible base contract counter if bono is set */
    IF liTMRuleSeq = INT(lcBonoData) THEN DO:
@@ -561,7 +560,7 @@ PROCEDURE pUpdateDSSTMCounterLimit:
    ASSIGN
       ldaToday    = TODAY
       ldaFirstDay = DATE(MONTH(ldaToday),1,YEAR(ldaToday))
-      ldaLastDay  = fLastDayOfMOnth(ldaToday).
+      ldaLastDay  = Func.Common:mLastDayOfMonth(ldaToday).
 
    FIND FIRST TMCounter USE-INDEX Custnum NO-LOCK WHERE
               TMCounter.CustNum   = iiCustNum and
@@ -623,9 +622,9 @@ PROCEDURE pFraudCounterLimit:
    ASSIGN
       ldaToday      = TODAY
       ldaFirstDay   = DATE(MONTH(ldaToday), 1, YEAR(ldaToday))
-      ldaLastDay    = fLastDayOfMOnth(ldaToday)
-      ldeMonthBegin = fMake2Dt(ldaFirstDay,0)
-      ldeMonthEnd   = fMake2Dt(ldaLastDay,86399)
+      ldaLastDay    = Func.Common:mLastDayOfMonth(ldaToday)
+      ldeMonthBegin = Func.Common:mMake2DT(ldaFirstDay,0)
+      ldeMonthEnd   = Func.Common:mMake2DT(ldaLastDay,86399)
       liFraudSeq    = fCParamI("TMQueueTTFSeq").
 
    IF liFraudSeq = ? OR liFraudSeq = 0 THEN RETURN.

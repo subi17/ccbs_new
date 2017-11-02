@@ -1,6 +1,5 @@
 {Syst/testpaa.i}
-katun = "ari".
-{Func/timestamp.i}
+Syst.CUICommon:katun = "ari".
 
 def var lireq as int no-undo.
 
@@ -18,7 +17,7 @@ for each order no-lock where
          mobsub.msseq = order.msseq:
 
    disp i order.orderid
-        fts2hms(order.crstamp) format "x(19)"
+        Func.Common:mTS2HMS(order.crstamp) format "x(19)"
         order.statuscode.
         
    find first prepaidrequest no-lock use-index cli where

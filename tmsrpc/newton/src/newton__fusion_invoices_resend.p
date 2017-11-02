@@ -9,8 +9,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-katun = "NewtonRPC".
-gcBrand = "1".
+Syst.CUICommon:katun = "NewtonRPC".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 
@@ -42,7 +42,7 @@ IF pcUsername EQ "" THEN RETURN appl_err("empty username").
 
 {newton/src/settenant.i pcTenant}
 
-katun = "VISTA_" + pcUsername.
+Syst.CUICommon:katun = "VISTA_" + pcUsername.
 
 FIND FusionInvoice NO-LOCK WHERE
      FusionInvoice.FuInvNum = piFusionInvNum NO-ERROR.
@@ -60,7 +60,7 @@ IF FusionInvoice.Custnum > 0 THEN DO:
    IF NOT AVAIL Customer THEN RETURN appl_err("Customer not found").
 
    IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
-                     MsRequest.Brand = gcBrand AND
+                     MsRequest.Brand = Syst.CUICommon:gcBrand AND
                      MsRequest.ReqType = {&REQTYPE_EMAIL_SENDING} AND
                      MsRequest.Custnum = FusionInvoice.Custnum AND
                      MsRequest.ReqCParam1 = "FusionEmail" AND
@@ -73,8 +73,8 @@ END.
 IF lcEmail EQ "" OR lcEmail EQ ? THEN
    RETURN appl_err("Email not defined").
 
-liRequest = fEmailSendingRequest(INPUT fMakeTS(),
-                                 INPUT katun,
+liRequest = fEmailSendingRequest(INPUT Func.Common:mMakeTS(),
+                                 INPUT Syst.CUICommon:katun,
                                  INPUT FusionInvoice.Custnum,
                                  INPUT "", /* msisdn */
                                  INPUT lcEmail,
@@ -88,5 +88,4 @@ IF liRequest = 0 THEN RETURN appl_err("Email request creation failed").
 add_boolean(response_toplevel_id, "", True).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

@@ -26,7 +26,7 @@ FUNCTION fgetCustSegment RETURNS CHAR
 
    IF ilProCust THEN DO:
       FIND FIRST CustCat NO-LOCK WHERE
-                 Custcat.brand EQ Syst.Parameters:gcBrand AND
+                 Custcat.brand EQ Syst.CUICommon:gcBrand AND
                  Custcat.custidtype EQ icIdType AND
                  CustCat.selfemployed EQ ilSelfEmployed AND
                  CustCat.pro EQ ilProCust NO-ERROR.
@@ -48,7 +48,7 @@ FUNCTION fgetCustSegment RETURNS CHAR
          ocCategory = "11". 
       IF ocCategory > "" THEN DO:
          FIND FIRST CustCat NO-LOCK WHERE
-                    Custcat.brand EQ Syst.Parameters:gcBrand AND
+                    Custcat.brand EQ Syst.CUICommon:gcBrand AND
                     Custcat.category EQ ocCategory NO-ERROR.
 
          IF AVAIL CustCat THEN
@@ -56,7 +56,7 @@ FUNCTION fgetCustSegment RETURNS CHAR
       END.
       ELSE DO:
          FIND FIRST CustCat NO-LOCK WHERE
-                    Custcat.brand EQ Syst.Parameters:gcBrand AND
+                    Custcat.brand EQ Syst.CUICommon:gcBrand AND
                     CustCat.custidtype EQ icIdType AND
                     CustCat.selfemployed EQ ilSelfemployed AND
                     CustCat.pro EQ ilProCust NO-ERROR.

@@ -19,8 +19,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-ASSIGN katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
-       gcBrand = "1".
+ASSIGN Syst.CUICommon:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
+       Syst.CUICommon:gcBrand = "1".
 {Func/fexternalapi.i}
 {Syst/tmsconst.i}
 
@@ -53,7 +53,7 @@ lcApplicationId = substring(pcTransId,1,3).
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName, lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
-katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
+Syst.CUICommon:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
 IF NOT fchkOrderCancelRule(INPUT Order.OrderChannel,
                            INPUT "api") THEN
@@ -76,7 +76,7 @@ IF pcCancel_code NE "" THEN DO:
       RETURN appl_err("Incorrect cancellation code").
 
    FOR EACH CallAlarm NO-LOCK WHERE
-            CallAlarm.Brand      = gcBrand AND
+            CallAlarm.Brand      = Syst.CUICommon:gcBrand AND
             CallAlarm.CLI        = Order.CLI   AND
             CallAlarm.CreditType = {&SMSTYPE_MNP_CANCEL} BY ActStamp DESC:
       LEAVE.
@@ -97,7 +97,7 @@ IF RETURN-VALUE NE "OK" THEN
 CREATE Memo.
 ASSIGN
     Memo.CreStamp  = {&nowTS}
-    Memo.Brand     = gcBrand
+    Memo.Brand     = Syst.CUICommon:gcBrand
     Memo.HostTable = "MNPProcess"
     Memo.KeyValue  = STRING(MNPProcess.MNPSeq)
     Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
@@ -110,7 +110,7 @@ ASSIGN
 CREATE Memo.
 ASSIGN
    Memo.CreStamp  = {&nowTS}
-   Memo.Brand     = gcBrand
+   Memo.Brand     = Syst.CUICommon:gcBrand
    Memo.HostTable = "Order"
    Memo.KeyValue  = STRING(MNPProcess.OrderId)
    Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
@@ -130,5 +130,4 @@ FINALLY:
    /* Store the transaction id */
    ghAuthLog::TransactionId = pcTransId.
 
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

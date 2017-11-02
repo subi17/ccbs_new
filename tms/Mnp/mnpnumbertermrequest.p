@@ -8,7 +8,6 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Mnp/mnpmessages.i}
 {Mnp/mnp.i}
 {Syst/tmsconst.i}
@@ -24,10 +23,10 @@ DEF VAR ldeNow AS DECIMAL NO-UNDO.
 DEF VAR lcStatuses AS CHARACTER NO-UNDO. 
 DEF VAR lcTenant   AS CHARACTER NO-UNDO.
 
-ldeNow = fMakeTS().
+ldeNow = Func.Common:mMakeTS().
    
 FIND msisdn where
-     msisdn.brand = gcBrand and
+     msisdn.brand = Syst.CUICommon:gcBrand and
      msisdn.cli = icCLI AND
      msisdn.statuscode = {&MSISDN_ST_WAITING_RETURN} and
      msisdn.validto > ldeNow NO-LOCK NO-ERROR.
@@ -61,13 +60,13 @@ DO TRANS:
 
    CREATE MNPProcess.
    ASSIGN 
-      MNPProcess.CreatedTS   = fMakeTS()
+      MNPProcess.CreatedTS   = Func.Common:mMakeTS()
       MNPProcess.MNPSeq      = next-value(m2mrequest)
       MNPProcess.FormRequest = lcFormRequest 
       MNPProcess.StatusCode  = {&MNP_ST_NEW}
-      MNPProcess.Brand       = gcBrand
+      MNPProcess.Brand       = Syst.CUICommon:gcBrand
       MNPProcess.MNPType     = {&MNP_TYPE_TERMINATION}
-      MNPProcess.UserCode    = katun
+      MNPProcess.UserCode    = Syst.CUICommon:katun
       MNPProcess.UpdateTS    = MNPProcess.CreatedTS.
 
    CREATE MNPSub.

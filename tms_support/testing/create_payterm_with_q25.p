@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-katun = "Qvantel".
-gcBrand = "1".
+Syst.CUICommon:katun = "Qvantel".
+Syst.CUICommon:gcBrand = "1".
 {Func/fmakemsreq.i}
 
 DEF VAR lccli AS CHAR NO-UNDO format "x(10)".
@@ -46,16 +46,16 @@ PROCEDURE pUserInput:
       WITH FRAME lis EDITING:
 
          IF ufkey THEN DO:
-            ASSIGN ehto = 9. RUN Syst/ufkey.p.
+            ASSIGN Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
             ufkey = false.
          END.
 
          READKEY.
 
-         nap = keylabel(lastkey).
+         Syst.CUICommon:nap = keylabel(lastkey).
 
 
-         IF LOOKUP(nap,poisnap) > 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
 
             IF FRAME-FIELD = "lcCli" THEN DO:
                FIND FIRST mobsub WHERE
@@ -70,7 +70,7 @@ PROCEDURE pUserInput:
 
             IF FRAME-FIELD = "lcPayterm" THEN DO:
                FIND FIRST DayCampaign WHERE
-                          DayCampaign.Brand = gcBrand and
+                          DayCampaign.Brand = Syst.CUICommon:gcBrand and
                           DayCampaign.DcEvent begins "PAYTERM" and
                           DayCampaign.DcEvent eq INPUT lcPayterm
                NO-LOCK NO-ERROR.
@@ -103,7 +103,7 @@ end.
 liRequest = fPCActionRequest(mobsub.msseq, /* subscription id */
                              lcPayterm,
                              "act",
-                             fMake2Dt(ldaActivationDate,0), /* activation_ts */
+                             Func.Common:mMake2DT(ldaActivationDate,0), /* activation_ts */
                              true,
                              "5",
                              "",

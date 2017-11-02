@@ -10,9 +10,7 @@
 */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
-{Func/date.i}
-{Func/timestamp.i}
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 
@@ -48,11 +46,11 @@ DEF BUFFER bDayCampaign     FOR DayCampaign.
 IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
 piCustNum = get_int(param_toplevel_id, "0").
 
-ASSIGN ldeCurrentTS = fMakeTS()
+ASSIGN ldeCurrentTS = Func.Common:mMakeTS()
        ldFromDate   = DATE(MONTH(TODAY),1,YEAR(TODAY))
-       ldToDate     = fLastDayOfMonth(TODAY)
-       ldPeriodFrom = fMake2Dt(ldFromDate,0)
-       ldPeriodTo   = fMake2Dt(ldToDate,86399)
+       ldToDate     = Func.Common:mLastDayOfMonth(TODAY)
+       ldPeriodFrom = Func.Common:mMake2DT(ldFromDate,0)
+       ldPeriodTo   = Func.Common:mMake2DT(ldToDate,86399)
        lcIPLContracts   = fCParamC("IPL_CONTRACTS")
        lcCONTDContracts = fCParamC("CONTD_CONTRACTS")
        lcCONTSContracts = fCParamC("CONTS_CONTRACTS")
@@ -127,7 +125,7 @@ FOR EACH bMsOwner NO-LOCK WHERE
        FIRST bServiceLimit NO-LOCK USE-INDEX SlSeq WHERE
              bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
        FIRST bDayCampaign WHERE
-             bDayCampaign.Brand = gcBrand AND
+             bDayCampaign.Brand = Syst.CUICommon:gcBrand AND
              bDayCampaign.DCEvent = bServiceLimit.GroupCode NO-LOCK:
 
          IF LOOKUP(STRING(bDayCampaign.DCType),
@@ -180,5 +178,4 @@ FOR EACH bMsOwner NO-LOCK WHERE
 END. /* FOR EACH bMsOwner WHERE */
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

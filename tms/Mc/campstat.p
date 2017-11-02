@@ -16,7 +16,7 @@
 {Mc/lib/tokenchk.i 'CampStat'}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -70,9 +70,9 @@ form
     CampStat.CampDate      
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
-       " CAMPAIGN STATISTICS "  + string(pvm,"99-99-99") + " "
+    COLOR VALUE(Syst.CUICommon:cfc)   
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi +
+       " CAMPAIGN STATISTICS "  + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 {Func/brand.i}
@@ -85,8 +85,8 @@ form
        Customer.CustName NO-LABEL FORMAT "x(30)"
     CampStat.CampDate   COLON 20 
 WITH  OVERLAY ROW 6 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.CUICommon:cfc)
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -94,32 +94,32 @@ form /* seek  CampStat */
     "Brand ..:" lcBrand skip
     "Campaign:" lcCampaign FORMAT "X(12)"
     HELP "Enter Campaign code"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Campaign "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Campaign "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  Cust */
     "Brand ..:" lcBrand skip
     "Customer:" liCustNum FORMAT ">>>>>>>9"
        HELP "Enter Customer"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Customer "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Customer "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 form /* seek  CLI */
     "Brand:" lcBrand skip
     "CLI .:" lcCLI FORMAT "X(15)"
     HELP "Enter CLI"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CLI "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f3.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND CLI "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f3.
 
 form /* seek  CampDate */
     "Brand:" lcBrand skip
     "Date :" ldTDate FORMAT "99-99-99"
     HELP "Enter usage date"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Date "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f4.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) " FIND Date "
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f4.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 orders = "  By Campaign ," +
@@ -162,7 +162,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a CampStat  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.CUICommon:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ASSIGN must-print = TRUE.
@@ -219,48 +219,48 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 1729  ufk[2]= 714 ufk[3]= 653  ufk[4]= 28
-        ufk[5]= 0 
-        ufk[6]= 0 
-        ufk[7]= 0  ufk[8]= 8 ufk[9]= 1.
+        Syst.CUICommon:ufk[1]= 1729  Syst.CUICommon:ufk[2]= 714 Syst.CUICommon:ufk[3]= 653  Syst.CUICommon:ufk[4]= 28
+        Syst.CUICommon:ufk[5]= 0 
+        Syst.CUICommon:ufk[6]= 0 
+        Syst.CUICommon:ufk[7]= 0  Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1.
 
         IF icCampaign > "" THEN ASSIGN 
-           ufk[1] = 0
-           ufk[4] = 0.
+           Syst.CUICommon:ufk[1] = 0
+           Syst.CUICommon:ufk[4] = 0.
         ELSE IF icCLI > "" OR iiCustNum > 0 THEN ASSIGN 
-           ufk[1] = 0
-           ufk[2] = 0
-           ufk[3] = 0.
+           Syst.CUICommon:ufk[1] = 0
+           Syst.CUICommon:ufk[2] = 0
+           Syst.CUICommon:ufk[3] = 0.
         ELSE ASSIGN 
-           ufk[4] = 0.
+           Syst.CUICommon:ufk[4] = 0.
         
         ASSIGN 
-        ehto = 3 ufkey = FALSE.
+        Syst.CUICommon:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW CampStat.Campaign {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CampStat.Campaign WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) CampStat.Campaign WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW CampStat.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CampStat.CustNum WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) CampStat.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
         CHOOSE ROW CampStat.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CampStat.CLI WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) CampStat.CLI WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
         CHOOSE ROW CampStat.CampDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CampStat.CampDate WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.CUICommon:ccc) CampStat.CampDate WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -269,13 +269,13 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(nap,"cursor-right") > 0 AND MaxOrder > 1 THEN DO:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-right") > 0 AND MaxOrder > 1 THEN DO:
         order = order + 1. 
         IF order > maxOrder THEN order = IF icCampaign > "" 
                                          THEN 2
                                          ELSE 1.
       END.
-      ELSE IF LOOKUP(nap,"cursor-left") > 0 AND MaxOrder > 1 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-left") > 0 AND MaxOrder > 1 THEN DO:
         order = order - 1. 
         IF icCampaign > "" AND order = 1 THEN order = MaxOrder.
         ELSE IF order = 0 THEN order = maxOrder.
@@ -295,7 +295,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -320,7 +320,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -346,7 +346,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND CampStat WHERE recid(CampStat) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -370,7 +370,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -385,13 +385,13 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 AND Syst.CUICommon:ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               lcCampaign WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
 
@@ -407,14 +407,14 @@ REPEAT WITH FRAME sel:
        END.
      END. /* Search-1 */
      /* Search BY col 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 AND Syst.CUICommon:ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        DISPLAY lcBrand WITH FRAME F2.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               liCustNum WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
 
@@ -438,14 +438,14 @@ REPEAT WITH FRAME sel:
      END. /* Search-2 */
 
      /* Search BY col 3 */
-     ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"3,f3") > 0 AND Syst.CUICommon:ufk[3] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F3.
        DISPLAY lcBrand WITH FRAME F3.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               lcCLI WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
 
@@ -469,14 +469,14 @@ REPEAT WITH FRAME sel:
      END. /* Search-3 */
 
      /* Search BY col 4 */
-     ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"4,f4") > 0 AND Syst.CUICommon:ufk[4] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F4.
        DISPLAY lcBrand WITH FRAME F4.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
               ldtDate WITH FRAME f4.
        HIDE FRAME f4 NO-PAUSE.
 
@@ -500,7 +500,7 @@ REPEAT WITH FRAME sel:
        END.
      END. /* Search-4 */
      
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -509,7 +509,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCampStat).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY CampStat.Campaign.
 
        RUN local-UPDATE-record.                                  
@@ -526,25 +526,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(CampStat) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(CampStat) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 

@@ -8,9 +8,8 @@
 -----------------------------------------------------------------------------*/
 
 {Syst/commpaa.i}
-ASSIGN gcBrand = "1"
-       katun   = "CRON".
-{Func/timestamp.i}
+ASSIGN Syst.CUICommon:gcBrand = "1"
+       Syst.CUICommon:katun   = "CRON".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
@@ -28,7 +27,7 @@ DEF VAR lcGroupCodes      AS CHAR NO-UNDO.
 DEF STREAM Sout.
 
 ASSIGN lcLogDir     = fCParam("PrepaidBundle","PrepaidBundle_LogDir")
-       ldeNow       = fMakeTS()
+       ldeNow       = Func.Common:mMakeTS()
        lcGroupCodes = "TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13".
 
 IF lcLogDir = "" OR lcLogDir = ? THEN lcLogDir = "/tmp/".
@@ -49,14 +48,14 @@ DO liCount = 1 TO NUM-ENTRIES(lcGroupCodes):
              MServiceLimit.DialType = ServiceLimit.DialType AND
              MServiceLimit.EndTS    = 99999999.99999 NO-LOCK:
 
-      fSplitTS(MServiceLimit.FromTS,OUTPUT ldaFromdate,OUTPUT liTime).
+      Func.Common:mSplitTS(MServiceLimit.FromTS,OUTPUT ldaFromdate,OUTPUT liTime).
       
       IF ldaFromdate >= TODAY THEN NEXT.
       
-      IF DAY(fLastDayOfMonth(TODAY)) >= DAY(ldaFromdate) THEN DO:
+      IF DAY(Func.Common:mLastDayOfMonth(TODAY)) >= DAY(ldaFromdate) THEN DO:
          IF DAY(TODAY) NE DAY(ldaFromdate) THEN NEXT.
       END.
-      ELSE IF TODAY NE fLastDayOfMonth(TODAY) THEN NEXT.      
+      ELSE IF TODAY NE Func.Common:mLastDayOfMonth(TODAY) THEN NEXT.      
 
       FIND FIRST MsOwner WHERE
                  MsOwner.MsSeq = MServiceLimit.MsSeq AND

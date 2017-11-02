@@ -8,12 +8,11 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.CUICommon:katun = "Cron".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Syst/eventlog.i}
 {Syst/eventval.i}
 
@@ -39,7 +38,7 @@ DEF STREAM sFile.
 DEF STREAM sLog.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -79,7 +78,7 @@ REPEAT:
    
       /* To prevent duplicate file handling */
       IF CAN-FIND (FIRST ActionLog NO-LOCK WHERE
-                         ActionLog.Brand = gcBrand AND
+                         ActionLog.Brand = Syst.CUICommon:gcBrand AND
                          ActionLog.TableName = "Cron" AND
                          ActionLog.KeyValue = lcFileName AND
                          ActionLog.ActionID = "TerminalConfBOB" AND
@@ -88,14 +87,14 @@ REPEAT:
       DO TRANS:
          CREATE ActionLog.
          ASSIGN 
-            ActionLog.Brand        = gcBrand   
+            ActionLog.Brand        = Syst.CUICommon:gcBrand   
             ActionLog.TableName    = "Cron"  
             ActionLog.KeyValue     = lcFileName
             ActionLog.ActionID     = "TerminalConfBOB"
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
                                      MONTH(TODAY)
             ActionLog.ActionStatus = 0
-            ActionLog.ActionTS     = fMakeTS().
+            ActionLog.ActionTS     = Func.Common:mMakeTS().
       END.
 
       INPUT STREAM sin FROM VALUE(lcInputFile).
@@ -134,7 +133,7 @@ REPEAT:
          ActionLog.ActionChar   = "Read: " + STRING(liRead) + 
                                   " Errors: " + STRING(liErrors) + 
                                   " Succesful: " + STRING(liRead - liErrors) + 
-                                  CHR(10) + "Finished: " + fTS2HMS(fMakeTS())
+                                  CHR(10) + "Finished: " + Func.Common:mTS2HMS(Func.Common:mMakeTS())
          ActionLog.ActionStatus = 3.
    END.
    

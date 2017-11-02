@@ -48,7 +48,7 @@ FUNCTION fCollect RETURNS LOGIC:
 
    lhReqField = lhTable:BUFFER-FIELD("OrderId").
    IF CAN-FIND(FIRST ttOrder WHERE
-                     ttOrder.Brand   = gcBrand AND
+                     ttOrder.Brand   = Syst.CUICommon:gcBrand AND
                      ttOrder.OrderId = lhReqField:BUFFER-VALUE)
    THEN RETURN FALSE.
 
@@ -84,7 +84,7 @@ BY DFField.OrderNbr:
                   DFField.DFField.
 END.
 
-fSplitTS(idLastDump,
+Func.Common:mSplitTS(idLastDump,
          OUTPUT ldaModified,
          OUTPUT liCnt).
 
@@ -92,8 +92,8 @@ ASSIGN
    lhCollect   = BUFFER ttOrder:HANDLE
    lhTable     = BUFFER Order:HANDLE
    lcKeyFields = fEventKeyFields(lhTable)
-   ldtLastDump = fTimeStamp2DateTime(idLastDump)
-   ldCrStamp   = fMakeTS().
+   ldtLastDump = Func.Common:mTimeStamp2DateTime(idLastDump)
+   ldCrStamp   = Func.Common:mMakeTS().
 
 OUTPUT STREAM sFile TO VALUE(icFile).
 
@@ -102,7 +102,7 @@ DEF VAR liRowType     AS INT NO-UNDO.
 
 IF icDumpMode = "Full" THEN DO:
    FOR EACH Order NO-LOCK WHERE
-            Order.Brand = gcBrand:
+            Order.Brand = Syst.CUICommon:gcBrand:
       fCollect().
    END.
 END.
@@ -114,7 +114,7 @@ ELSE DO:
       IF LOOKUP(STRING(liOrderStatus),{&ORDER_INACTIVE_STATUSES}) > 0 THEN NEXT.
 
       FOR EACH Order NO-LOCK WHERE
-               Order.Brand = gcBrand AND
+               Order.Brand = Syst.CUICommon:gcBrand AND
                Order.StatusCode = STRING(liOrderStatus):
          fCollect().
       END.
@@ -123,11 +123,11 @@ ELSE DO:
    /* Dump only orders which are in final stage based on the timestamp */
    DO liRowType = 1 TO 4:
       FOR EACH OrderTimeStamp NO-LOCK WHERE
-               OrderTimeStamp.Brand = gcBrand AND
+               OrderTimeStamp.Brand = Syst.CUICommon:gcBrand AND
                OrderTimeStamp.RowType = liRowType AND
                OrderTimeStamp.TimeStamp >= idLastDump,
           FIRST Order NO-LOCK WHERE
-                Order.Brand = gcBrand AND
+                Order.Brand = Syst.CUICommon:gcBrand AND
                 Order.OrderID = OrderTimeStamp.OrderID:
          IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 THEN NEXT.
          fCollect().
@@ -152,7 +152,7 @@ ELSE DO:
       THEN DO:
       
          FOR EACH Order NO-LOCK  USE-INDEX Stamp WHERE
-                  Order.Brand = gcBrand AND
+                  Order.Brand = Syst.CUICommon:gcBrand AND
                   Order.CrStamp >= idLastDump:
 
                   fCollect().
@@ -184,7 +184,7 @@ FOR EACH ttOrder NO-LOCK:
             CASE lcField:
             WHEN "#Segment" THEN DO:
                FIND FIRST Ordercustomer WHERE
-                          Ordercustomer.brand EQ gcbrand AND
+                          Ordercustomer.brand EQ Syst.CUICommon:gcBrand AND
                           Ordercustomer.orderid EQ ttOrder.orderid AND
                           Ordercustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-LOCK NO-ERROR.
                IF AVAIL ordercustomer THEN           

@@ -29,7 +29,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    {newton/src/settenant.i pcTenant}
        
    FIND FeeModel NO-LOCK WHERE 
-        FeeModel.Brand = gcBrand AND 
+        FeeModel.Brand = Syst.CUICommon:gcBrand AND 
         FeeModel.FeeModel = pcId NO-ERROR.
 
    IF NOT AVAIL FeeModel THEN RETURN appl_err("Charge event not found: "+ pcId).

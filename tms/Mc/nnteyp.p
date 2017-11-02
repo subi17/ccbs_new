@@ -10,7 +10,7 @@
                   17.09.02/jp Language validation
                   05.03.03/tk tokens
                   15.09.03/aam brand
-                  28.06.04/aam gcHelpParam
+                  28.06.04/aam Syst.CUICommon:gcHelpParam
   Version ......: M15
   ------------------------------------------------------ */
 &GLOBAL-DEFINE BrTable HdrText
@@ -21,7 +21,7 @@
 {Mc/lib/tokenchk.i 'hdrtext'}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -63,9 +63,9 @@ form
     HdrText.te-text    /* column-label "Text"     */
         format "x(62)"
     WITH width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(cfc)
-    title color value(ctc) " " + ynimi + " Texts at different Languages "
-    + string(pvm,"99-99-99") + " " FRAME sel.
+    COLOR value(Syst.CUICommon:cfc)
+    title color value(Syst.CUICommon:ctc) " " + Syst.CUICommon:ynimi + " Texts at different Languages "
+    + string(TODAY,"99-99-99") + " " FRAME sel.
 
 form
     HdrText.te-nro   label "Number"    AT 2
@@ -73,8 +73,8 @@ form
     HdrText.te-text  label "Text"      AT 2 
        VIEW-AS EDITOR SIZE 70 BY 12
 
-    WITH  OVERLAY ROW 3 CENTERED COLOR value(cfc)
-    TITLE COLOR value(ctc)
+    WITH  OVERLAY ROW 3 CENTERED COLOR value(Syst.CUICommon:cfc)
+    TITLE COLOR value(Syst.CUICommon:ctc)
     fr-header WITH side-labels 
     FRAME lis.
 
@@ -84,24 +84,24 @@ form /* HdrTextn nimi :n tunnuksella hakua varten */
     "Brand:" lcBrand skip
     "Code :" haku
     help " Give text's code or beginning of it "
-    with row 4 col 2 title color value(ctc) " TEXTCODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " TEXTCODE "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* HdrTextn kielikoodilla hakua varten */
     "Brand ..:" lcBrand skip
     "Language:" hakukie
     help "Give Language code (1 - 9)"
-    with row 4 col 2 title color value(ctc) " LANGUAGE CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hakie.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " LANGUAGE CODE "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hakie.
 
 form /* HdrTextn nimi :n nimella hakua varten */
     "Brand:" lcBrand skip
     "Text :" hakutext
     help " Give text or beginning of it "
-    with row 4 col 2 title color value(ctc) " TEXT "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+    with row 4 col 2 title color value(Syst.CUICommon:ctc) " TEXT "
+    COLOR value(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 view FRAME sel.
 
 FIND FIRST HdrText WHERE HdrText.Brand = lcBrand NO-LOCK NO-ERROR.
@@ -134,18 +134,18 @@ repeat WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* HdrText -ADD  */
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.CUICommon:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          DO TRANSACTION:
             PROMPT-FOR HdrText.te-nro HdrText.te-kie EDITING:
                READKEY.
-               nap = keylabel(LASTKEY).
-               IF lookup(nap,poisnap) > 0 THEN DO:
+               Syst.CUICommon:nap = keylabel(LASTKEY).
+               IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
                   HIDE MESSAGE.
                   if frame-field = "te-nro" THEN DO:
                      IF INPUT FRAME lis te-nro = 0 THEN LEAVE add-new.
@@ -253,16 +253,16 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 36 ufk[2]= 749 ufk[3]= 134 ufk[4]= 0
-         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
-         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.CUICommon:ufk[1]= 36 Syst.CUICommon:ufk[2]= 749 Syst.CUICommon:ufk[3]= 134 Syst.CUICommon:ufk[4]= 0
+         Syst.CUICommon:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
+         Syst.CUICommon:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+         Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 Syst.CUICommon:ufk[9]= 1
+         Syst.CUICommon:ehto = 3 ufkey = FALSE.
  
          /* used as help */
-         IF gcHelpParam > "" THEN ASSIGN
-            ufk[5] = 11
-            ufk[6] = 0.
+         IF Syst.CUICommon:gcHelpParam > "" THEN ASSIGN
+            Syst.CUICommon:ufk[5] = 11
+            Syst.CUICommon:ufk[6] = 0.
  
          RUN Syst/ufkey.p.
       END.
@@ -270,25 +270,25 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW HdrText.te-nro {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) HdrText.te-nro WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) HdrText.te-nro WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW HdrText.te-kie  {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) HdrText.te-kie  WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) HdrText.te-kie  WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
          CHOOSE ROW HdrText.te-text {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) HdrText.te-text WITH FRAME sel.
+         COLOR DISPLAY value(Syst.CUICommon:ccc) HdrText.te-text WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order = 4 THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.CUICommon:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = 3.
       END.
 
@@ -317,10 +317,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.CUICommon:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND HdrText where recid(HdrText) = rtab[1] no-lock.
             IF order = 1 THEN FIND prev HdrText 
@@ -352,7 +352,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND HdrText where recid(HdrText) = rtab[FRAME-DOWN] no-lock .
@@ -385,7 +385,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.CUICommon:nap,"prev-page,page-up,-") > 0 THEN DO:
          Memory = rtab[1].
          FIND HdrText where recid(HdrText) = Memory NO-LOCK NO-ERROR.
          IF order = 1 THEN FIND prev HdrText 
@@ -420,7 +420,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.CUICommon:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "YOU ARE ON THE LAST PAGE !".
@@ -436,12 +436,12 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+     if lookup(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku = 0.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr.
-        UPDATE lcBrand WHEN gcAllBrand
+        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                haku WITH FRAME hayr.
         HIDE FRAME hayr no-pause.
 
@@ -470,12 +470,12 @@ BROWSE:
      END. /* Haku sar. 1 */
 
      /* Haku 2 */
-     else if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sarakk. 2 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+     else if lookup(Syst.CUICommon:nap,"2,f2") > 0 THEN DO:  /* haku sarakk. 2 */
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         haku = 0.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hakie.
-        UPDATE lcBrand WHEN gcAllBrand
+        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                hakukie WITH FRAME hakie.
         HIDE FRAME hakie no-pause.
 
@@ -493,12 +493,12 @@ BROWSE:
      END. /* Haku sar. 2 */
 
      /* Haku sarakk. 3 */
-     if lookup(nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+     if lookup(Syst.CUICommon:nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
+        Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
         hakutext = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr2.
-        UPDATE lcBrand WHEN gcAllBrand
+        UPDATE lcBrand WHEN Syst.CUICommon:gcAllBrand
                hakutext WITH FRAME hayr2.
         HIDE FRAME hayr2 no-pause.
 
@@ -527,11 +527,11 @@ BROWSE:
         END.
      END. /* Haku sar. 3 */
 
-     if (lookup(nap,"5,f5") > 0 AND ufk[5] > 0) OR
-        (lookup(nap,"enter,return") > 0 AND gcHelpParam > "")
+     if (lookup(Syst.CUICommon:nap,"5,f5") > 0 AND Syst.CUICommon:ufk[5] > 0) OR
+        (lookup(Syst.CUICommon:nap,"enter,return") > 0 AND Syst.CUICommon:gcHelpParam > "")
      THEN DO:  /* lisays */
 
-        IF gcHelpParam > "" THEN DO:
+        IF Syst.CUICommon:gcHelpParam > "" THEN DO:
            xRecid = rtab[FRAME-LINE].
            LEAVE LOOP.
         END.
@@ -542,14 +542,14 @@ BROWSE:
         END. 
      END.
 
-     else if lookup(nap,"6,f6") > 0 AND ufk[6] > 0 
+     else if lookup(Syst.CUICommon:nap,"6,f6") > 0 AND Syst.CUICommon:ufk[6] > 0 
      THEN DO TRANSACTION:  /* removal */
 
         delline = FRAME-LINE.
         FIND HdrText where recid(HdrText) = rtab[FRAME-LINE] no-lock.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(ctc) HdrText.te-nro HdrText.te-text
+        COLOR DISPLAY value(Syst.CUICommon:ctc) HdrText.te-nro HdrText.te-text
         te-kie /* qq */.
 
         IF order = 1 THEN FIND NEXT HdrText 
@@ -582,7 +582,7 @@ BROWSE:
 
         ASSIGN ok = FALSE.
         message " ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-        COLOR DISPLAY value(ccc) HdrText.te-nro HdrText.te-text
+        COLOR DISPLAY value(Syst.CUICommon:ccc) HdrText.te-nro HdrText.te-text
         te-kie /* qq */.
         IF ok THEN DO:
 
@@ -603,20 +603,20 @@ BROWSE:
         ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     else if lookup(nap,"enter,return") > 0 AND lcRight = "RW" THEN
+     else if lookup(Syst.CUICommon:nap,"enter,return") > 0 AND lcRight = "RW" THEN
      DO WITH FRAME lis TRANSACTION:
         /* change */
 
         FIND HdrText where recid(HdrText) = rtab[frame-line(sel)]
         exclusive-lock.
-        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
+        assign fr-header = " CHANGE " ufkey = TRUE Syst.CUICommon:ehto = 9.
         RUN Syst/ufkey.p.
-        cfc = "lis". RUN Syst/ufcolor.p.
+        Syst.CUICommon:cfc = "lis". RUN Syst/ufcolor.p.
         DISPLAY HdrText.te-nro HdrText.te-kie HdrText.te-text.
 
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhHdrText).
 
-        IF gcHelpParam = "" THEN 
+        IF Syst.CUICommon:gcHelpParam = "" THEN 
         UPDATE HdrText.te-text
           /*   te-kie  */.
         ELSE PAUSE MESSAGE "Press ENTER to continue".
@@ -631,7 +631,7 @@ BROWSE:
 
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"home,h") > 0 THEN DO:
         IF order = 1 THEN FIND FIRST HdrText 
            WHERE HdrText.Brand = lcBrand NO-LOCK NO-ERROR.
         ELSE IF order = 2 THEN FIND FIRST HdrText USE-INDEX te-KIe
@@ -642,7 +642,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.CUICommon:nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 1 THEN FIND LAST HdrText 
            WHERE HdrText.Brand = lcBrand NO-LOCK NO-ERROR.
         ELSE IF order = 2 THEN FIND LAST HdrText USE-INDEX te-KIe
@@ -653,7 +653,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN DO:
+     else if lookup(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
         xRecid = 0.
         LEAVE LOOP.
      END. 
@@ -662,5 +662,5 @@ BROWSE:
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid    = xrecid.
+Syst.CUICommon:si-recid    = xrecid.
 

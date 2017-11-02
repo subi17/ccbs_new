@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-katun = "anttis".
+Syst.CUICommon:katun = "anttis".
 {Func/msisdn.i}
 
 find msisdn where

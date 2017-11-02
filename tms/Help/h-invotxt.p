@@ -10,7 +10,6 @@
   ------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/func.p}
 
 def shared var siirto as char. 
 DEF INPUT PARAMETER ictarget   AS CHAR NO-UNDO.
@@ -31,21 +30,21 @@ DEF VAR lddate      AS DATE                 NO-UNDO.
 form
     InvText.TxtTitle     FORMAT "X(25)"
     lctext format "x(48)" COLUMN-LABEL "TEXT" 
-    with scroll 1 11 down  row 4  centered color value(cfc)
-    title color value(ctc) " Invoice Text " overlay frame sel.
+    with scroll 1 11 down  row 4  centered color value(Syst.CUICommon:cfc)
+    title color value(Syst.CUICommon:ctc) " Invoice Text " overlay frame sel.
 
 form /* SEEK Code */
     ob-code
     help "Enter Type of an Object Billing Type"
-    with row 4  col 2 title color value(ctc) " FIND CODE "
-    color value(cfc) no-labels overlay frame hayr.
+    with row 4  col 2 title color value(Syst.CUICommon:ctc) " FIND CODE "
+    color value(Syst.CUICommon:cfc) no-labels overlay frame hayr.
 
-cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 MAIN:
 repeat:
 
    find first InvText no-lock WHERE 
-              invText.Brand = gcBrand   AND 
+              invText.Brand = Syst.CUICommon:gcBrand   AND 
               InvText.Target = icTarget AND 
        (if ickeyvalue = "" THEN TRUE ELSE InvText.Keyvalue = icKeyvalue)  
     no-error.
@@ -80,7 +79,7 @@ print-line:
             rtab[frame-line] = recid(InvText).
             down with frame sel.
             find next InvText no-lock WHERE 
-                      invText.Brand = gcBrand AND 
+                      invText.Brand = Syst.CUICommon:gcBrand AND 
                       InvText.Target = icTarget AND 
             (if ickeyvalue = "" THEN TRUE ELSE InvText.Keyvalue = icKeyvalue)
             no-error.
@@ -91,9 +90,9 @@ print-line:
 
       if ufkey then do:
          assign
-         ufk = 0 ufk[1] = 35 ufk[5] = 11
-         ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
-         siirto = ? ehto = 3 ufkey = false.
+         Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 35 Syst.CUICommon:ufk[5] = 11
+         Syst.CUICommon:ufk[6] = 0 Syst.CUICommon:ufk[8] = 8  Syst.CUICommon:ufk[9] = 1
+         siirto = ? Syst.CUICommon:ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
       end.
   end. /* print-line */
@@ -103,19 +102,19 @@ BROWSE:
 
          hide message no-pause.
          choose row InvText.TxtTitle {Syst/uchoose.i} no-error with frame sel.
-         color display value(ccc) 
+         color display value(Syst.CUICommon:ccc) 
          InvText.TxtTitle with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.
-         nap = keylabel(lastkey).
+         Syst.CUICommon:nap = keylabel(lastkey).
 
          /* previous line */
-         if lookup(nap,"cursor-up") > 0 then do
+         if lookup(Syst.CUICommon:nap,"cursor-up") > 0 then do
          with frame sel:
             if frame-line = 1 then do:
                find InvText where recid(InvText) = rtab[frame-line] no-lock.
                find prev InvText no-lock WHERE 
-                         invText.Brand = gcBrand AND 
+                         invText.Brand = Syst.CUICommon:gcBrand AND 
                          InvText.Target = icTarget AND 
                 (if ickeyvalue = "" THEN TRUE 
                  ELSE InvText.Keyvalue = icKeyvalue) no-error.
@@ -142,11 +141,11 @@ BROWSE:
          end. /* previous line */
 
          /* next line */
-         if lookup(nap,"cursor-down") > 0 then do with frame sel:
+         if lookup(Syst.CUICommon:nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                find InvText where recid(InvText) = rtab[frame-line] no-lock .
                find next InvText no-lock WHERE 
-                         invText.Brand = gcBrand AND 
+                         invText.Brand = Syst.CUICommon:gcBrand AND 
                          InvText.Target = icTarget AND 
                          (if ickeyvalue = "" THEN TRUE 
                          ELSE InvText.Keyvalue = icKeyvalue)  no-error.
@@ -173,17 +172,17 @@ BROWSE:
          end. /* next line */
 
          /* previous page */
-         else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
+         else if lookup(Syst.CUICommon:nap,"page-up,prev-page") > 0 then do with frame sel:
             find InvText where recid(InvText) = memory no-lock no-error.
             find prev InvText no-lock WHERE 
-                      invText.Brand = gcBrand AND 
+                      invText.Brand = Syst.CUICommon:gcBrand AND 
                       InvText.Target = icTarget AND 
               (if ickeyvalue = "" THEN TRUE ELSE InvText.Keyvalue = icKeyvalue)             no-error.
             if available InvText then do:
 
                do i = 1 to (frame-down - 1):
                   find prev InvText no-lock WHERE 
-                            invText.Brand = gcBrand AND 
+                            invText.Brand = Syst.CUICommon:gcBrand AND 
                             InvText.Target = icTarget AND 
              (if ickeyvalue = "" THEN TRUE ELSE InvText.Keyvalue = icKeyvalue) 
              no-error.
@@ -202,7 +201,7 @@ BROWSE:
         end. /* previous page */
 
         /* next page */
-        else if lookup(nap,"page-down,next-page") > 0 then do with frame sel:
+        else if lookup(Syst.CUICommon:nap,"page-down,next-page") > 0 then do with frame sel:
            if rtab[frame-down] = ? then do:
                bell.
                message "This is the last page !".
@@ -216,14 +215,14 @@ BROWSE:
         end. /* next page */
 
         /* Seek */
-        if lookup(nap,"1,f1") > 0 then do:  /* ob-code */
-           cfc = "puyr". RUN Syst/ufcolor.p.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+        if lookup(Syst.CUICommon:nap,"1,f1") > 0 then do:  /* ob-code */
+           Syst.CUICommon:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            update ob-code with frame hayr.
            hide frame hayr no-pause.
            if ob-code ENTERED then do:
               find first InvText where InvText.TxtTitle >= ob-code
-             AND  invText.Brand = gcBrand AND 
+             AND  invText.Brand = Syst.CUICommon:gcBrand AND 
                   InvText.Target = icTarget AND 
               (if ickeyvalue = "" THEN TRUE ELSE InvText.Keyvalue = icKeyvalue) 
                   no-lock no-error.
@@ -242,7 +241,7 @@ BROWSE:
         end. /* Seek */
 
         /* Choose */
-        else if lookup(nap,"return,enter,5,f5") > 0 then do:
+        else if lookup(Syst.CUICommon:nap,"return,enter,5,f5") > 0 then do:
            find InvText where recid(InvText) = rtab[frame-line] no-lock.
             
            FIND FIRST mobsub WHERE
@@ -261,8 +260,10 @@ BROWSE:
 
             lddate = today.
 
-           fReplaceSMS 
-             (INPUT invtext.invtext, iimsseq , lddate, OUTPUT siirto).   
+           Func.Common:mReplaceSMS
+             ( Customer.CustName,
+               IF AVAILABLE MobSub THEN Mobsub.CLI ELSE "",
+               invtext.invtext, iimsseq , lddate, OUTPUT siirto).   
 
            MESSAGE
            "Approve pre-defined text?" SKIP(1 )
@@ -274,9 +275,9 @@ BROWSE:
            leave MAIN.
         end. /* Choose */
         /* First record */
-        else if lookup(nap,"home,h") > 0 then do:
+        else if lookup(Syst.CUICommon:nap,"home,h") > 0 then do:
            find first InvText no-lock
-           WHERE invText.Brand = gcBrand AND InvText.Target = icTarget AND (if ickeyvalue = "" THEN TRUE ELSE InvText.Keyvalue = icKeyvalue) 
+           WHERE invText.Brand = Syst.CUICommon:gcBrand AND InvText.Target = icTarget AND (if ickeyvalue = "" THEN TRUE ELSE InvText.Keyvalue = icKeyvalue) 
                no-error.
            memory = recid(InvText).
            must-print = true.
@@ -284,9 +285,9 @@ BROWSE:
         end. /* First record */
 
         /* last record */
-        else if lookup(nap,"end,e") > 0 then do :
+        else if lookup(Syst.CUICommon:nap,"end,e") > 0 then do :
            find last InvText no-lock
-           WHERE invText.Brand = gcBrand AND 
+           WHERE invText.Brand = Syst.CUICommon:gcBrand AND 
                  InvText.Target = icTarget AND 
               (if ickeyvalue = "" THEN TRUE ELSE InvText.Keyvalue = icKeyvalue) 
                no-error.
@@ -295,7 +296,7 @@ BROWSE:
            next LOOP.
         end. /* last record */
 
-        else if nap = "8" or nap = "f8" then leave MAIN. /* Return */
+        else if Syst.CUICommon:nap = "8" or Syst.CUICommon:nap = "f8" then leave MAIN. /* Return */
 
      end.  /* BROWSE */
    end.  /* LOOP */

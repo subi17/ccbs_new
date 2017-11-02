@@ -57,8 +57,8 @@ FORM
    SKIP(5)
    
    with row 1 side-labels width 80
-        title " " + ynimi + " DD STATUS REPORT " +
-        string(pvm,"99-99-99") + " "
+        title " " + Syst.CUICommon:ynimi + " DD STATUS REPORT " +
+        string(TODAY,"99-99-99") + " "
         frame fCrit.
 
 
@@ -79,20 +79,20 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
 
    IF ufkey THEN DO:
       ASSIGN
-         ufk[1] = 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-         ufk[5] = 63  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
-         ufk[9] = 1
-         ehto   = 3.
+         Syst.CUICommon:ufk[1] = 132 Syst.CUICommon:ufk[2]= 0 Syst.CUICommon:ufk[3]= 0 Syst.CUICommon:ufk[4]= 0
+         Syst.CUICommon:ufk[5] = 63  Syst.CUICommon:ufk[6]= 0 Syst.CUICommon:ufk[7]= 0 Syst.CUICommon:ufk[8]= 8 
+         Syst.CUICommon:ufk[9] = 1
+         Syst.CUICommon:ehto   = 3.
       RUN Syst/ufkey.p.
       READKEY.
-      nap = KEYLABEL(LASTKEY).
+      Syst.CUICommon:nap = KEYLABEL(LASTKEY).
    END.
-   ELSE ASSIGN nap   = "1"
+   ELSE ASSIGN Syst.CUICommon:nap   = "1"
                ufkey = TRUE.
 
-   IF LOOKUP(nap,"1,f1") > 0 THEN DO:
+   IF LOOKUP(Syst.CUICommon:nap,"1,f1") > 0 THEN DO:
          
-      ehto = 9. RUN Syst/ufkey.p.
+      Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
 
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
       
@@ -103,9 +103,9 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
          WITH FRAME fCrit EDITING:
          
             READKEY.
-            nap = KEYLABEL(LASTKEY).
+            Syst.CUICommon:nap = KEYLABEL(LASTKEY).
          
-            IF LOOKUP(nap,poisnap) > 0 THEN DO:
+            IF LOOKUP(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN DO:
 
             END.
             
@@ -121,15 +121,15 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
          
    END.
       
-   ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:
+   ELSE IF LOOKUP(Syst.CUICommon:nap,"5,f5") > 0 THEN DO:
       LEAVE toimi.
    END.
 
-   ELSE IF LOOKUP(nap,"8,f8") > 0 THEN DO:
+   ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN DO:
       RETURN.
    END.
       
-END. /* toimi */
+END. /* Syst.CUICommon:toimi */
 
 /* Avataan striimi */
 IF lcFile = "" THEN DO:
@@ -139,7 +139,7 @@ END.
 
 MESSAGE "Printing in process".            
 
-ehto = 5.
+Syst.CUICommon:ehto = 5.
 RUN Syst/ufkey.p.
 
 RUN Ar/ddstatrep.p (ldtAuthDate1,

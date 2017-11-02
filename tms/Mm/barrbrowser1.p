@@ -13,7 +13,6 @@
 
 {Syst/commali.i}
 {Func/barrfunc.i}
-{Func/timestamp.i}
 
 DEFINE INPUT PARAMETER iiMsSeq   AS INTEGER    NO-UNDO.
 
@@ -72,11 +71,11 @@ DEFINE TEMP-TABLE ttBarrings NO-UNDO
 form /* Set new commands */
     lcBCommand FORMAT "X(70)"
     HELP "Enter Barring Command"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) 
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.CUICommon:ctc) 
     "Enter Barring Command (Type #REFRESH in case of re-provisioning)"
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    COLOR VALUE(Syst.CUICommon:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.CUICommon:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.CUICommon:ccc = Syst.CUICommon:cfc.
 VIEW FRAME sel.
 
 
@@ -87,8 +86,8 @@ FORM
     ttBarrings.UserCode FORMAT "x(5)"
     ttBarrings.EventTS FORMAT "x(20)"
     WITH OVERLAY ROW 1 12 DOWN COL 1 WIDTH 80
-    TITLE COLOR VALUE(ctc) " " + "Barring packages" + " "
-    COLOR VALUE(cfc)   
+    TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + "Barring packages" + " "
+    COLOR VALUE(Syst.CUICommon:cfc)   
 
 FRAME frTop.
 
@@ -96,8 +95,8 @@ FORM
    lcPMask FORMAT "x(13)" NO-LABEL lcPMask NO-LABEL FORMAT "x(66)" SKIP
    WITH OVERLAY ROW 17 COL 1 WIDTH 80  
 
-   TITLE COLOR VALUE(ctc) " " + "Total Barring Mask" + " "
-   COLOR VALUE(cfc)
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) " " + "Total Barring Mask" + " "
+   COLOR VALUE(Syst.CUICommon:cfc)
 
 FRAME frBottom.
 
@@ -105,8 +104,8 @@ FORM
    lcBarringMemoText NO-LABEL VIEW-AS EDITOR SIZE 65 BY 5
    WITH OVERLAY ROW 10 COL 2 WIDTH 70 
    
-   TITLE COLOR VALUE(ctc) "" + "Memo for barring" + " "
-   COLOR VALUE (cfc)
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) "" + "Memo for barring" + " "
+   COLOR VALUE (Syst.CUICommon:cfc)
 
 FRAME frBarrMemo.
 
@@ -185,12 +184,12 @@ REPEAT WITH FRAME frTop:
    
       IF ufkey THEN DO:
          ASSIGN
-           ufk    = 0
-           ufk[1] = 0 
-           ufk[2] = 90
-           ufk[5] = 0
-           ufk[8] = 8 
-           ehto   = 3 
+           Syst.CUICommon:ufk    = 0
+           Syst.CUICommon:ufk[1] = 0 
+           Syst.CUICommon:ufk[2] = 90
+           Syst.CUICommon:ufk[5] = 0
+           Syst.CUICommon:ufk[8] = 8 
+           Syst.CUICommon:ehto   = 3 
            ufkey  = FALSE.
       
          RUN Syst/ufkey.p.
@@ -202,13 +201,13 @@ REPEAT WITH FRAME frTop:
          GO-ON (home f1 f4 END CURSOR-DOWN
          CURSOR-UP CURSOR-LEFT CURSOR-RIGHT) NO-ERROR
          WITH FRAME frTop.
-         COLOR DISPLAY VALUE(ccc) ttBarrings.BarringCode WITH FRAME rfLLeft.
+         COLOR DISPLAY VALUE(Syst.CUICommon:ccc) ttBarrings.BarringCode WITH FRAME rfLLeft.
       END.
       
-      nap = keylabel(LASTKEY).
+      Syst.CUICommon:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.CUICommon:nap,"8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -216,7 +215,7 @@ REPEAT WITH FRAME frTop:
          END.
       END.
       /*Giving command */
-      IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+      IF LOOKUP(Syst.CUICommon:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
          CLEAR FRAME f2.
          SET lcBCommand WITH FRAME f2.
          HIDE FRAME f2 NO-PAUSE.
@@ -260,7 +259,7 @@ REPEAT WITH FRAME frTop:
                   NEXT BROWSE.                 
                END.
 
-               ehto = 9.
+               Syst.CUICommon:ehto = 9.
                RUN Syst/ufkey.p.
                 
                PAUSE 0.
@@ -278,7 +277,7 @@ REPEAT WITH FRAME frTop:
                   lcBCommand,
                   {&REQUEST_SOURCE_MANUAL_TMS},
                   "",
-                  fMakeTS(),
+                  Func.Common:mMakeTS(),
                   "",
                   OUTPUT lcSetStatus).
                
@@ -290,9 +289,9 @@ REPEAT WITH FRAME frTop:
                   IF lcBarringMemoText > "" THEN DO:
                      CREATE Memo.
                      ASSIGN
-                       Memo.crestamp  = fMakeTS()
-                       Memo.Brand     = gcBrand
-                       Memo.creuser   = katun
+                       Memo.crestamp  = Func.Common:mMakeTS()
+                       Memo.Brand     = Syst.CUICommon:gcBrand
+                       Memo.creuser   = Syst.CUICommon:katun
                        Memo.memoseq   = NEXT-VALUE(memoseq)   
                        Memo.hosttable = "MobSub" 
                        Memo.MemoType  = "Service"
@@ -321,7 +320,7 @@ REPEAT WITH FRAME frTop:
          RUN pUpdateBottomFrame.
       END. /* PREVious ROW */
    /* PREVious ROW */
-      ELSE IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME frTop:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-up") > 0 THEN DO WITH FRAME frTop:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -347,7 +346,7 @@ REPEAT WITH FRAME frTop:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"cursor-down") > 0 THEN DO
       WITH FRAME frTop:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            
@@ -379,7 +378,7 @@ REPEAT WITH FRAME frTop:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.CUICommon:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ttBarrings WHERE ROWID(ttBarrings) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -403,7 +402,7 @@ REPEAT WITH FRAME frTop:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME frTop:
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME frTop:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -416,25 +415,25 @@ REPEAT WITH FRAME frTop:
            NEXT LOOP.
        END.
      END. /* NEXT page */
-     ELSE IF LOOKUP(nap,"HOME,H") > 0 THEN DO : /* FIRST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"HOME,H") > 0 THEN DO : /* FIRST record */
         RUN local-find-FIRST.
         ASSIGN Memory = ROWID(ttBarrings) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = ROWID(ttBarrings) must-print = TRUE.
         NEXT LOOP.
      END.
      
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.CUICommon:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME frTop NO-PAUSE.
-si-recid = xrecid.
+Syst.CUICommon:si-recid = xrecid.
 
 
 PROCEDURE local-find-this:
@@ -514,7 +513,7 @@ PROCEDURE pInitMenu.
       USE-INDEX MsSeq NO-ERROR.
 
       IF AVAIL Barring THEN
-         lcEventTS = fTs2HMS(Barring.EventTS).
+         lcEventTS = Func.Common:mTS2HMS(Barring.EventTS).
       ELSE lcEventTS = "".
 
       CREATE ttBarrings.

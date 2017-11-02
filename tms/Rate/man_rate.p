@@ -82,7 +82,7 @@ form
       lcCLIType FORMAT "X(12)" HELP "CLI type, EMPTY = all"
          VALIDATE(INPUT lcCLIType = "" OR
                   CAN-FIND(CLIType WHERE 
-                           CLIType.Brand = gcBrand AND
+                           CLIType.Brand = Syst.CUICommon:gcBrand AND
                            CLIType.CLIType = INPUT lcCLIType),
                  "Unknown CLI type") SKIP
                  
@@ -95,10 +95,10 @@ form
       llRateCCN
       HELP "Do you want re-analyse Rating CCN using Calltype and Destination"
 
-WITH OVERLAY ROW 1 WIDTH 80 COLOR VALUE(cfc) 
-   TITLE COLOR VALUE(ctc) 
-      " " + ynimi + "   ANALYSE/RATE MOBILE CALLS   " + 
-      string(pvm,"99.99.99") + " "  
+WITH OVERLAY ROW 1 WIDTH 80 COLOR VALUE(Syst.CUICommon:cfc) 
+   TITLE COLOR VALUE(Syst.CUICommon:ctc) 
+      " " + Syst.CUICommon:ynimi + "   ANALYSE/RATE MOBILE CALLS   " + 
+      string(TODAY,"99.99.99") + " "  
    NO-LABELS FRAME main.
    
 PAUSE 0.
@@ -108,7 +108,7 @@ MAIN:
 REPEAT WITH FRAME main:
 
 IF NOT bbatch THEN DO:
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
     
  DISPLAY
 "ALL" @ invgroup.IGName.
@@ -127,7 +127,7 @@ IF NOT bbatch THEN DO:
 WITH FRAME main  EDITING:
       READKEY.
             
-      IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME main:
+      IF LOOKUP(KEYLABEL(LASTKEY),Syst.CUICommon:poisnap) > 0 THEN DO WITH FRAME main:
          PAUSE 0.
          
          if frame-field = "ig-code" then do:
@@ -137,7 +137,7 @@ WITH FRAME main  EDITING:
             end.
             else do:
                find invgroup where 
-                    InvGroup.Brand    = gcBrand AND
+                    InvGroup.Brand    = Syst.CUICommon:gcBrand AND
                     invgroup.Invgroup = ig-code no-lock no-error.
                if not avail invgroup then do:
                   bell.
@@ -203,15 +203,15 @@ WITH FRAME main  EDITING:
    ACTION:
    REPEAT WITH FRAME main:
       ASSIGN
-      ufk = 0 ehto = 0
-      ufk[1] = 7 
-      ufk[5] = 795
-      ufk[8] = 8.
+      Syst.CUICommon:ufk = 0 Syst.CUICommon:ehto = 0
+      Syst.CUICommon:ufk[1] = 7 
+      Syst.CUICommon:ufk[5] = 795
+      Syst.CUICommon:ufk[8] = 8.
       RUN Syst/ufkey.p.
       
-      IF toimi = 1 THEN NEXT  main.
-      IF toimi = 8 THEN LEAVE main.
-      IF TOIMI = 5 THEN DO:
+      IF Syst.CUICommon:toimi = 1 THEN NEXT  main.
+      IF Syst.CUICommon:toimi = 8 THEN LEAVE main.
+      IF Syst.CUICommon:toimi = 5 THEN DO:
          ok = false.
          MESSAGE "Do You REALLY want to START ANALYSIS RUN (Y/N) ?" UPDATE ok.
          IF NOT ok THEN NEXT action.
@@ -233,7 +233,7 @@ ldebegstamp = YEAR(cdate2)  * 10000 +
 fFillTT().
 
 liRerateSeq = fRerateLogStart (
-   katun,
+   Syst.CUICommon:katun,
    cdate1,
    cdate2,
    CLI,

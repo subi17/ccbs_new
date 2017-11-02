@@ -11,8 +11,7 @@
 */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
-{Func/timestamp.i}
+Syst.CUICommon:gcBrand = "1".
 
 DEFINE VARIABLE resp_array AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcResultStruct AS CHAR NO-UNDO. 
@@ -32,7 +31,7 @@ resp_array = add_array(response_toplevel_id, "").
 {newton/src/settenant.i pcTenant}
 
 FOR EACH InvText NO-LOCK WHERE
-         InvText.Brand = gcBrand AND
+         InvText.Brand = Syst.CUICommon:gcBrand AND
          InvText.Target = "SMS" AND
          InvText.ToDate >= TODAY AND
          InvText.FromDate <= TODAY:
@@ -51,11 +50,11 @@ FOR EACH InvText NO-LOCK WHERE
       add_string(lcResultStruct, "usercode", EventLog.UserCode).
       add_string(lcResultStruct, "keyvalue", InvText.KeyValue).
       add_int(lcResultStruct, "language", InvText.Language).
-      ldeTimeStamp = fHMS2TS(EventLog.EventDate, EventLog.EventTime).
+      ldeTimeStamp = Func.Common:mHMS2TS(EventLog.EventDate, EventLog.EventTime).
       add_timestamp(lcResultStruct, "timestamp", ldeTimeStamp).
    END.
    FOR EACH RepText NO-LOCK WHERE
-            RepText.Brand     = gcBrand AND
+            RepText.Brand     = Syst.CUICommon:gcBrand AND
             RepText.LinkCode  = STRING(InvText.ITNum) AND
             RepText.TextType  = 32 AND
             RepText.ToDate   >= TODAY AND
@@ -75,7 +74,7 @@ FOR EACH InvText NO-LOCK WHERE
       add_string(lcResultStruct, "usercode", EventLog.UserCode).
       add_string(lcResultStruct, "keyvalue", InvText.KeyValue).
       add_int(lcResultStruct, "language", RepText.Language).
-      ldeTimeStamp = fHMS2TS(EventLog.EventDate, EventLog.EventTime).
+      ldeTimeStamp = Func.Common:mHMS2TS(EventLog.EventDate, EventLog.EventTime).
       add_timestamp(lcResultStruct, "timestamp", ldeTimeStamp).
       END.
    END.
@@ -83,6 +82,5 @@ END.
 
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.
 

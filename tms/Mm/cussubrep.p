@@ -28,7 +28,7 @@ DEF VAR ffnumber   AS CHAR No-UNDO.
 DEF VAR addserv    AS CHAR NO-UNDO.
 DEF VAR filename   AS CHAR NO-UNDO INIT "cust_subs_report.txt".
 
-Find First TMSUser WHERE TMSUser.UserCode = katun no-lock no-error.
+Find First TMSUser WHERE TMSUser.UserCode = Syst.CUICommon:katun no-lock no-error.
 IF AVAIL TMSUser THEN 
    path = TMSUser.repdir + "/" + filename.
 ELSE 
@@ -53,8 +53,8 @@ FORm SKIP(1)
    CustNum2   NO-LABEL HELP "Customers TO number"      FORMAT "zzzzzzzz9" skip
    path    LABEL  " Path and Filename ......"  FORMAT "x(40)"
 
-WITH title color value(ctc) " CRITERIA FOR CREATING CUSTOMER & SUBSCRIPTION REPORT " side-LABELs
-   color value(cfc) row 4 centered overlay FRAME rajat.
+WITH title color value(Syst.CUICommon:ctc) " CRITERIA FOR CREATING CUSTOMER & SUBSCRIPTION REPORT " side-LABELs
+   color value(Syst.CUICommon:cfc) row 4 centered overlay FRAME rajat.
 ASSIGN
    CustNum1  = 1001
    CustNum2  = 999999999.
@@ -64,15 +64,15 @@ PAUSE 0.
 toimi:
    REPEAT WITH FRAME valinta on ENDkey UNDO toimi, return:
          /* We ASk the limits */
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.CUICommon:ehto = 9. RUN Syst/ufkey.p.
          UPDATE
              InvGroup
              CustNum1 CustNum2 VALIDATE(input CustNum2 >= input CustNum1,
              "Impossible !")
               path
          WITH FRAME rajat editing :
-            readkey. nap = keyLABEL(lastkey).
-            IF lookup(nap,poisnap) > 0 THEN do:
+            readkey. Syst.CUICommon:nap = keyLABEL(lastkey).
+            IF lookup(Syst.CUICommon:nap,Syst.CUICommon:poisnap) > 0 THEN do:
                HIDE MESSAGE NO-PAUSE.
                IF FRAME-field = "InvGroup" THEN do:
                   ASSIGN FRAME rajat InvGroup.
@@ -88,7 +88,7 @@ toimi:
                   END.
                   ELSE do: 
                      FIND invgroup WHERE 
-                          InvGroup.Brand    = gcBrand AND 
+                          InvGroup.Brand    = Syst.CUICommon:gcBrand AND 
                           invgroup.InvGroup = InvGroup
                      NO-LOCK NO-ERROR.
                      IF not avail invgroup THEN do:
@@ -104,21 +104,21 @@ toimi:
       END.
 
 
-      ASSIGN ufk = 0 ufk[1] = 0 ufk[2] = 0   ufk[4] = 0 ufk[5] = 795
-                     ufk[8] = 8 ehto = 0.
+      ASSIGN Syst.CUICommon:ufk = 0 Syst.CUICommon:ufk[1] = 0 Syst.CUICommon:ufk[2] = 0   Syst.CUICommon:ufk[4] = 0 Syst.CUICommon:ufk[5] = 795
+                     Syst.CUICommon:ufk[8] = 8 Syst.CUICommon:ehto = 0.
       RUN Syst/ufkey.p.
 
-      IF toimi = 5 THEN do:
+      IF Syst.CUICommon:toimi = 5 THEN do:
          leave toimi.
       END.
 
-      IF toimi = 8 THEN do:
+      IF Syst.CUICommon:toimi = 8 THEN do:
          HIDE MESSAGE NO-PAUSE.
          HIDE FRAME rajat NO-PAUSE.
          HIDE FRAME main NO-PAUSE.
          return.
       END.
-   END. /* toimi */
+   END. /* Syst.CUICommon:toimi */
 
    /* REPORT FILE INFORMATION */
    OUTPUT STREAM EXCEL TO VALUE(PATH).
@@ -134,7 +134,7 @@ toimi:
    /***** CUSTOMER SECTION ****/
 
    FOR EACH Customer WHERE
-            Customer.Brand     = gcBrand  AND 
+            Customer.Brand     = Syst.CUICommon:gcBrand  AND 
             Customer.CustNum  >= CustNum1 AND
             Customer.CustNum  <= CustNum2 AND
             (IF   InvGroup NE "*" THEN 
@@ -172,12 +172,12 @@ toimi:
          Addserv = "".      
 
          FOR EACH FixedFee  where 
-                  Fixedfee.Brand     = gcBrand       AND
+                  Fixedfee.Brand     = Syst.CUICommon:gcBrand       AND
                   FixedFee.Hosttable = "mobsub"      AND 
                   FixedFee.Keyvalue  = STRING(mobsub.msseq) NO-LOCK.
 
             Find first BillItem where 
-                       BillItem.Brand    = gcBrand AND 
+                       BillItem.Brand    = Syst.CUICommon:gcBrand AND 
                        BillItem.BillCode = FixedFee.BillCode 
             no-lock no-error.
             addserv = addserv + BillItem.BIName + ",".
@@ -186,7 +186,7 @@ toimi:
          PUT STREAM excel UNFORMATTED
          "*"                                       MY-NL
          "MSISDN:"            TAB mobsub.CLI   TAB 
-         DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER Customer)
+         Func.Common:mDispCustName(BUFFER Customer)
          MY-NL
          
          "Activation date"    TAB mobsub.ActivationDate 

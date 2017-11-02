@@ -9,13 +9,12 @@
 
 {Syst/commpaa.i}
 ASSIGN 
-   gcBrand = "1"
-   katun   = "Cron".
+   Syst.CUICommon:gcBrand = "1"
+   Syst.CUICommon:katun   = "Cron".
    
 {Func/cparam2.i}
 {Func/files.i}
 {Func/coinv.i}
-{Func/timestamp.i}
 {Syst/funcrunprocess_run.i}
 {Func/direct_dbconnect.i}
 
@@ -110,7 +109,7 @@ IF llSubReport THEN DO:
    
    /* connect to correct cdr dbs */
    fInitializeConnectTables("MobCDR","").
-   RUN pDirectConnect2Dbs(gcBrand,
+   RUN pDirectConnect2Dbs(Syst.CUICommon:gcBrand,
                           "",  
                           ldaEndPeriod,
                           ldaEndPeriod).

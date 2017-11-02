@@ -24,7 +24,7 @@ DEFINE INPUT PARAMETER iiUpdateInterval AS INT  NO-UNDO.
       ttResult.TestResult = "Invoice not created".
 
       FOR EACH Invoice NO-LOCK USE-INDEX CustNum WHERE
-               Invoice.Brand = gcBrand AND
+               Invoice.Brand = Syst.CUICommon:gcBrand AND
                Invoice.CustNum = ttResult.InvCust AND
                Invoice.InvDate = idaInvDate AND
                Invoice.InvType = iiInvType,
@@ -105,7 +105,7 @@ DEFINE INPUT PARAMETER iiBRTestQueueID AS INT NO-UNDO.
    DEF VAR liResultID    AS INT  NO-UNDO.
    DEF VAR ldResultStamp AS DEC  NO-UNDO.
 
-   ldResultStamp = fMakeTS().
+   ldResultStamp = Func.Common:mMakeTS().
    FOR FIRST FuncRunExec NO-LOCK WHERE
              FuncRunExec.FRExecID = iiFRExecID:
       ldResultStamp = FuncRunExec.StartTS.
@@ -139,7 +139,7 @@ DEFINE INPUT PARAMETER iiBRTestQueueID AS INT NO-UNDO.
          BRTestQResult.BRTestQResultID = liResultID
          BRTestQResult.BRTestQueueID = iiBRTestQueueID
          BRTestQResult.TestRunStamp  = ldResultStamp
-         BRTestQResult.UserCode = katun.
+         BRTestQResult.UserCode = Syst.CUICommon:katun.
 
       RELEASE BRTestQueue.
       RELEASE BRTestQResult.

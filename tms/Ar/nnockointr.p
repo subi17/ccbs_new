@@ -20,7 +20,6 @@
 
 {Syst/commali.i}
 {Func/excel.i}
-{Func/date.i} 
 /* temp-table */
 {Ar/paymfile.i}
 {Func/farplog.i}
@@ -152,7 +151,7 @@ ELSE DO:
       dd  = INT(SUBSTR(xDate,5,2))
       mm  = INT(SUBSTR(xDate,3,2))
       yyy = INT(SUBSTR(xDate,1,2))
-      yyy = fAddCent(yyy)
+      yyy = Func.Common:mAddCent(yyy)
 
       chkdate     = DATE(mm,dd,yyy)
       x_writeDate = chkdate
@@ -163,7 +162,7 @@ ELSE DO:
    /* check log */
    IF NOT fCheckArplog(ocr-file,
                        LogPrefix,
-                       katun)
+                       Syst.CUICommon:katun)
    THEN RETURN. 
 
    /* open the ocr PaymFile again */

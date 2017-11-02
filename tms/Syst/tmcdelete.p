@@ -9,7 +9,6 @@
 
 {Syst/commali.i}
 {Syst/eventlog.i}
-{Func/timestamp.i}
 
 DEF INPUT PARAMETER idtBreakDate AS DATE NO-UNDO.
 
@@ -32,7 +31,7 @@ IF idtBreakDate = ? THEN idtBreakDate = TODAY.
 
 /* delete only counters with correct type */
 FOR EACH TMRule NO-LOCK WHERE
-         TMRule.Brand = gcBrand AND
+         TMRule.Brand = Syst.CUICommon:gcBrand AND
          TMRule.CounterType = 1:
    CREATE ttRule.
    ttRule.TMRuleSeq = TMRule.TMRuleSeq.
@@ -77,7 +76,7 @@ END.
 DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = gcBrand   
+      ActionLog.Brand        = Syst.CUICommon:gcBrand   
       ActionLog.TableName    = "TMCounter"  
       ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                STRING(MONTH(TODAY),"99")  +
@@ -94,7 +93,7 @@ DO TRANS:
       ActionLog.UserCode     = "Cron"
       ActionLog.FromDate     = ldtFrom
       ActionLog.ToDate       = ldtTo.
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
 END.
 
 fELog("MONTHLY","TMCounterDeleteStopped:" + STRING(liQty)).

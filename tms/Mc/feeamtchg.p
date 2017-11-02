@@ -23,7 +23,7 @@ DEF VAR liQty       AS INT  NO-UNDO.
 DEF VAR llNewFee    AS LOG  NO-UNDO. 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun
 
    {Func/lib/eventlog.i}
 
@@ -44,7 +44,7 @@ FORM liFee LABEL "Fees"
 WITH 1 DOWN OVERLAY ROW 15 CENTERED SIDE-LABELS FRAME fFeeQty.
 
  
-ehto = 9.
+Syst.CUICommon:ehto = 9.
 RUN Syst/ufkey.p.
 
 REPEAT ON ENDKEY UNDO, RETURN:                            
@@ -87,7 +87,7 @@ REPEAT ON ENDKEY UNDO, RETURN:
    END.
 
    FIND CLIType WHERE 
-        CLIType.Brand   = gcBrand AND
+        CLIType.Brand   = Syst.CUICommon:gcBrand AND
         CLIType.CLIType = lcCLIType NO-LOCK NO-ERROR.
    IF NOT AVAILABLE CLIType THEN DO:
        MESSAGE "Unknown CLI type"
@@ -107,7 +107,7 @@ REPEAT ON ENDKEY UNDO, RETURN:
    
 END.
 
-ehto = 5.
+Syst.CUICommon:ehto = 5.
 RUN Syst/ufkey.p.
 
 OUTPUT STREAM sLog TO VALUE(lcEventDir + "/feeamtchg_" +
@@ -130,7 +130,7 @@ PAUSE 0.
 VIEW FRAME fMobQty.
 
 FOR EACH MobSub NO-LOCK WHERE
-         MobSub.Brand   = gcBrand AND
+         MobSub.Brand   = Syst.CUICommon:gcBrand AND
          MobSub.CLIType = lcCLIType:
 
    liMobSub = liMobSub + 1.
@@ -139,7 +139,7 @@ FOR EACH MobSub NO-LOCK WHERE
    DISP liMobSub WITH FRAME fMobQty.
    
    FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
-            FixedFee.Brand     = gcBrand              AND 
+            FixedFee.Brand     = Syst.CUICommon:gcBrand              AND 
             FixedFee.HostTable = "MobSub"             AND
             FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
             LOOKUP(FixedFee.BillCode,lcBillCode) > 0  AND

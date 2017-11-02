@@ -12,10 +12,10 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-katun = "NewtonRPC".
-gcBrand = "1".
+Syst.CUICommon:katun = "NewtonRPC".
+Syst.CUICommon:gcBrand = "1".
 {Syst/tmsconst.i}
-&GLOBAL-DEFINE STAR_EVENT_USER katun 
+&GLOBAL-DEFINE STAR_EVENT_USER Syst.CUICommon:katun 
 {Func/lib/eventlog.i}
 
 DEF VAR pcStruct    AS CHAR NO-UNDO.
@@ -40,7 +40,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 {newton/src/findtenant.i YES ordercanal Order OrderId liOrderId}
 
 FIND FIRST OrderAccessory EXCLUSIVE-LOCK WHERE
-           OrderAccessory.Brand = gcBrand AND
+           OrderAccessory.Brand = Syst.CUICommon:gcBrand AND
            OrderAccessory.OrderId = liOrderId AND
            OrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE} NO-ERROR.
 
@@ -58,6 +58,5 @@ RELEASE OrderAccessory.
 add_boolean(response_toplevel_id, "", true).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-   fCleanEventObjects().
+      fCleanEventObjects().
 END.

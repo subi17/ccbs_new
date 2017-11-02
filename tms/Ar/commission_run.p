@@ -9,7 +9,6 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/ftaxdata.i}
 {Func/fcpfat.i}
@@ -45,7 +44,7 @@ FUNCTION fMarkRelated RETURNS LOGIC
 
    /* also other commissions related to the same order will be marked */
    FOR EACH bRelated NO-LOCK USE-INDEX OrderID WHERE
-            bRelated.Brand     = gcBrand AND
+            bRelated.Brand     = Syst.CUICommon:gcBrand AND
             bRelated.OrderID   = CoTarg.OrderID AND
             bRelated.CoTargID NE CoTarg.CoTargID AND
             bRelated.CommStatus = 1:
@@ -70,19 +69,19 @@ RUN pCalculateCommission (OUTPUT oiChecked,
 DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = gcBrand   
+      ActionLog.Brand        = Syst.CUICommon:gcBrand   
       ActionLog.TableName    = "CoTarg"  
       ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                STRING(MONTH(TODAY),"99") + 
                                STRING(DAY(TODAY),"99")
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.CUICommon:katun
       ActionLog.ActionID     = "COMMISSION"
       ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
       ActionLog.ActionDec    = oiActivated
       ActionLog.ActionChar   = "Handled: " + STRING(oiChecked) + CHR(10) + 
                                " Activated: " + STRING(oiActivated)
       ActionLog.ActionStatus = 3.
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
 END.
 
 RETURN RETURN-VALUE.
@@ -125,10 +124,10 @@ PROCEDURE pCalculateCommission:
    
    CommissionQueue:
    FOR EACH CoTarg NO-LOCK WHERE
-            CoTarg.Brand      = gcBrand AND
+            CoTarg.Brand      = Syst.CUICommon:gcBrand AND
             CoTarg.CommStatus = 1,
       FIRST CoRule NO-LOCK WHERE
-            CoRule.Brand    = gcBrand AND
+            CoRule.Brand    = Syst.CUICommon:gcBrand AND
             CoRule.CoRuleID = CoTarg.CoRuleID:
             
       ASSIGN
@@ -144,7 +143,7 @@ PROCEDURE pCalculateCommission:
       
       /* pending time has expired */
       IF CoRule.MaxPendingDays > 0 THEN DO:
-         fSplitTS(CoTarg.CreatedTS,
+         Func.Common:mSplitTS(CoTarg.CreatedTS,
                   OUTPUT ldtCreated,
                   OUTPUT liCnt).
 
@@ -215,11 +214,11 @@ PROCEDURE pCalculateCommission:
 
          /* if promoted has done a payment type change then rejection */
          FOR FIRST bRelated NO-LOCK USE-INDEX OrderID WHERE
-                   bRelated.Brand     = gcBrand AND
+                   bRelated.Brand     = Syst.CUICommon:gcBrand AND
                    bRelated.OrderID   = CoTarg.OrderID AND
                    bRelated.CoTarg    = STRING(bPromotedSub.MsSeq),
              FIRST bRule NO-LOCK WHERE
-                   bRule.Brand    = gcBrand AND
+                   bRule.Brand    = Syst.CUICommon:gcBrand AND
                    bRule.CoRuleID = bRelated.CoRuleID:
             
             llRelatedType = (bRule.PayType = 2).
@@ -241,11 +240,11 @@ PROCEDURE pCalculateCommission:
             
          /* make sure that referee hasn't been terminated or done a stc */
          FOR FIRST bRelated NO-LOCK USE-INDEX OrderID WHERE
-                   bRelated.Brand     = gcBrand AND
+                   bRelated.Brand     = Syst.CUICommon:gcBrand AND
                    bRelated.OrderID   = CoTarg.OrderID AND
                    bRelated.CoTarg   NE CoTarg.CoTarg,
              FIRST bRule NO-LOCK WHERE
-                   bRule.Brand    = gcBrand AND
+                   bRule.Brand    = Syst.CUICommon:gcBrand AND
                    bRule.CoRuleID = bRelated.CoRuleID:
 
             FIND FIRST bRefereeSub WHERE 
@@ -303,7 +302,7 @@ PROCEDURE pCalculateCommission:
          /* topup recharged */    
          ELSE DO:
             FOR EACH PrepaidRequest NO-LOCK USE-INDEX MsSeq WHERE
-                     PrepaidRequest.Brand   = gcBrand AND
+                     PrepaidRequest.Brand   = Syst.CUICommon:gcBrand AND
                      PrepaidRequest.MsSeq   = bPromotedSub.MsSeq AND
                      LOOKUP(PrepaidRequest.Source,"ATM") > 0 AND
                      LOOKUP(PrepaidRequest.Request,"RCG,ANT") > 0 AND
@@ -330,7 +329,7 @@ PROCEDURE pCalculateCommission:
       EMPTY TEMP-TABLE ttAmount.
       
       ASSIGN
-         ldStamp     = fMakeTS()
+         ldStamp     = Func.Common:mMakeTS()
          ldTotAmount = CoRule.CommAmount.
 
       /* divide amount to be paid into instalments */
@@ -349,13 +348,13 @@ PROCEDURE pCalculateCommission:
          /* first instalment is paid immediately, next ones on 1st of 
             each month */
          IF liCnt < CoRule.CoNoInst THEN DO:
-            fSplitTS(ldStamp,
+            Func.Common:mSplitTS(ldStamp,
                      OUTPUT ldtDate,
                      OUTPUT liTime).
             IF MONTH(ldtDate) = 12 
             THEN ldtDate = DATE(1,1,YEAR(ldtDate) + 1).
             ELSE ldtDate = DATE(MONTH(ldtDate) + 1,1,YEAR(ldtDate)).
-            ldStamp = fMake2DT(ldtDate,3600).
+            ldStamp = Func.Common:mMake2DT(ldtDate,3600).
          END.
       END.
 
@@ -394,7 +393,7 @@ PROCEDURE pCreateFat:
    END.
          
    FIND FIRST FatGroup WHERE
-              FatGroup.Brand = gcBrand AND
+              FatGroup.Brand = Syst.CUICommon:gcBrand AND
               FatGroup.FtGrp = CoRule.FtGrp NO-LOCK NO-ERROR.
    IF NOT AVAILABLE FatGroup THEN DO:
       fCommStatus(CoTarg.CoTargID,
@@ -410,7 +409,7 @@ PROCEDURE pCreateFat:
    DO TRANS: 
       FOR EACH ttAmount:      
 
-         fSplitTS(ttAmount.ActStamp,
+         Func.Common:mSplitTS(ttAmount.ActStamp,
                   OUTPUT ldtDate,
                   OUTPUT liTime).
                
@@ -567,8 +566,7 @@ PROCEDURE pSendSMS:
          
    /* failing of sms doesn't affect the status of the actual commission */
    IF liRequest = 0 THEN DO:
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "CoTarg",
+      Func.Common:mWriteMemo("CoTarg",
                        STRING(CoTarg.CoTargID),
                        0,
                        "COMMISSION",

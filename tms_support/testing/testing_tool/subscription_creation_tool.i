@@ -7,10 +7,9 @@
   Version ......: Yoigo
 ---------------------------------------------------------------------- */
 {Syst/commpaa.i}
-gcBrand = "1".
-katun = "Qvantel".
+Syst.CUICommon:gcBrand = "1".
+Syst.CUICommon:katun = "Qvantel".
 
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Func/fmakemsreq.i}
@@ -148,15 +147,15 @@ FUNCTION fCheckMSISDN RETURNS LOG (INPUT iiStatus_MSISDN AS INT,
 
    IF icUsedMSISDN > "" THEN DO:
       FIND FIRST MSISDN EXCLUSIVE-LOCK WHERE
-                 MSISDN.Brand = gcBrand AND
+                 MSISDN.Brand = Syst.CUICommon:gcBrand AND
                  MSISDN.CLI   = icUsedMSISDN AND   /* Search with given MSISDN number */
-                 MSISDN.ValidTo GE fMakeTS() AND
+                 MSISDN.ValidTo GE Func.Common:mMakeTS() AND
                  MSISDN.StatusCode EQ iiStatus_MSISDN NO-WAIT NO-ERROR. /* Normal or EMA */
    END.
    ELSE DO: /* Find first free */
       FIND FIRST MSISDN EXCLUSIVE-LOCK WHERE
-                 MSISDN.Brand = gcBrand AND
-                 MSISDN.ValidTo GE fMakeTS() AND
+                 MSISDN.Brand = Syst.CUICommon:gcBrand AND
+                 MSISDN.ValidTo GE Func.Common:mMakeTS() AND
                  MSISDN.StatusCode EQ iiStatus_MSISDN NO-WAIT NO-ERROR. /* Normal or EMA */
    END.
    IF NOT AVAILABLE MSISDN THEN
@@ -171,7 +170,7 @@ FUNCTION fCheckSIM RETURNS LOG (INPUT icSimIcc AS CHAR):
    IF icSimIcc > "" THEN DO:
       FIND FIRST SIM EXCLUSIVE-LOCK WHERE
                  SIM.ICC   EQ icSimIcc AND   /* Search with given ICC number */
-                 SIM.Brand EQ gcBrand AND
+                 SIM.Brand EQ Syst.CUICommon:gcBrand AND
                  SIM.SimStat EQ 1 NO-WAIT NO-ERROR.
 
       IF AVAILABLE SIM THEN   /* If stock not correct then ask confirmation */
@@ -190,7 +189,7 @@ FUNCTION fCheckSIM RETURNS LOG (INPUT icSimIcc AS CHAR):
    END.
    ELSE DO:
       FIND FIRST SIM EXCLUSIVE-LOCK WHERE
-                 SIM.Brand EQ gcBrand AND
+                 SIM.Brand EQ Syst.CUICommon:gcBrand AND
                 (SIM.Stock EQ "TESTING" OR
                  SIM.Stock EQ "EMATESTING") AND
                  SIM.SimStat EQ 1 NO-WAIT NO-ERROR.
@@ -274,9 +273,9 @@ FUNCTION fCreateOrder RETURNS CHAR (INPUT icIdType       AS CHAR,
       BUFFER-COPY ttOrder EXCEPT OrderId MsSeq Salesman TO Order.
 
       ASSIGN
-         Order.Brand           = gcBrand
+         Order.Brand           = Syst.CUICommon:gcBrand
          Order.OrderId         = NEXT-VALUE(OrderId)
-         Order.CrStamp         = fMakeTS()
+         Order.CrStamp         = Func.Common:mMakeTS()
          Order.StatusCode      = "1"
          Order.CLI             = MSISDN.CLI
          Order.CLIType         = lcCLIType
@@ -341,7 +340,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHAR (INPUT iiOrderId     AS INT,
    END.
 
    ASSIGN
-      OrderCustomer.Brand   = gcBrand
+      OrderCustomer.Brand   = Syst.CUICommon:gcBrand
       OrderCustomer.OrderId = iiOrderId
       OrderCustomer.RowType = 1.
 
@@ -357,7 +356,7 @@ FUNCTION fCreateOrderTopup RETURNS LOGICAL:
    CREATE OrderTopup.
    ASSIGN
       OrderTopup.Amount = 20.00
-      OrderTopup.Brand = gcBrand
+      OrderTopup.Brand = Syst.CUICommon:gcBrand
       OrderTopup.OrderId = Order.OrderId.
    lCreate = TRUE.
    RETURN lCreate.
@@ -452,7 +451,7 @@ PROCEDURE pActBono:
           NEXT.
 
       ASSIGN ttSubscription.Handled = TRUE
-             ldActTS  = fMakeTS()
+             ldActTS  = Func.Common:mMakeTS()
              lcRemark = ""
              liSubCount = liSubCount + 1
              liBonoCount = liBonoCount + 1.
@@ -531,7 +530,7 @@ PROCEDURE pActContract:
           NEXT.
 
       ASSIGN ttSubscription.Handled = TRUE
-             ldActTS  = fMakeTS()
+             ldActTS  = Func.Common:mMakeTS()
              lcRemark = ""
              liContractCount = 0
              liSubCount = liSubCount + 1.
@@ -577,7 +576,7 @@ PROCEDURE pActContract:
                              bMsRequest.MsRequest = liRequest
                        EXCLUSIVE-LOCK NO-ERROR.
                   IF AVAIL bMsRequest THEN
-                     bMsRequest.ReqCparam4 = katun + "|" + STRING(TODAY,"99-99-9999").
+                     bMsRequest.ReqCparam4 = Syst.CUICommon:katun + "|" + STRING(TODAY,"99-99-9999").
                END. /* IF lcContractID = "SPOTIFY" THEN DO: */
             END. /* ELSE DO: */
          END. /* ELSE DO: */
@@ -614,7 +613,7 @@ PROCEDURE pDeactContract:
           NEXT.
 
       ASSIGN ttSubscription.Handled = TRUE
-             ldActTS  = fSecOffSet(fMakeTS(),120) /* 2 mins gap */
+             ldActTS  = Func.Common:mSecOffSet(Func.Common:mMakeTS(),120) /* 2 mins gap */
              lcRemark = ""
              liSubCount = liSubCount + 1.
 
@@ -626,18 +625,18 @@ PROCEDURE pDeactContract:
             liRequest    = 0
             llError      = FALSE
             lcError      = ""
-            ldActTS  = fSecOffSet(fMakeTS(),120) /* 2 mins gap */
+            ldActTS  = Func.Common:mSecOffSet(Func.Common:mMakeTS(),120) /* 2 mins gap */
             lcContractID = ENTRY(liContractCount,ttInputFileContent.TestList).
 
          IF lcContractID = "BONO" THEN DO:
             lcContractID = fGetCurrentSpecificBundle(INPUT ttSubscription.MsSeq,
                                                      INPUT "BONO").
 
-            ldActTS = fMake2Dt(fLastDayOfMonth(TODAY),86399).
+            ldActTS = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(TODAY),86399).
 
             IF lcContractID = "" THEN DO:
                FIND FIRST OrderAction WHERE
-                          OrderAction.Brand = gcBrand AND
+                          OrderAction.Brand = Syst.CUICommon:gcBrand AND
                           OrderAction.OrderId = ttSubscription.OrderId AND
                           OrderAction.ItemType = "BundleItem" AND
                           OrderAction.ItemKey BEGINS "MDUB" NO-LOCK NO-ERROR.
@@ -653,7 +652,7 @@ PROCEDURE pDeactContract:
             lcRemark = lcRemark + "," + lcContractID.
 
             IF LOOKUP(lcContractID,"DSS,BONO_VOIP,SPOTIFY") > 0 THEN
-               ldActTS = fMake2Dt(fLastDayOfMonth(TODAY),86399).
+               ldActTS = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(TODAY),86399).
 
             /* terminate periodical contract */
             liRequest = fPCActionRequest(ttSubscription.MsSeq,
@@ -713,9 +712,9 @@ PROCEDURE pService:
              liSubCount = liSubCount + 1.
 
       IF icAction = "Activation" THEN
-         ldActTS = fMakeTS().
+         ldActTS = Func.Common:mMakeTS().
       ELSE
-         ldActTS = fSecOffSet(fMakeTS(),120). /* 2 mins gap */
+         ldActTS = Func.Common:mSecOffSet(Func.Common:mMakeTS(),120). /* 2 mins gap */
 
       IF liSubCount = 1 THEN
          PUT STREAM sOutput UNFORMATTED ttInputFileContent.InputLine SKIP.
@@ -851,26 +850,26 @@ PROCEDURE pSTC:
                 lcNewCLIType = "CONTSF".
 
       FIND FIRST NewCliType WHERE
-                 NewCLIType.Brand   = gcBrand AND
+                 NewCLIType.Brand   = Syst.CUICommon:gcBrand AND
                  NewCLIType.CLIType = lcNewCLIType NO-LOCK NO-ERROR.
       IF NOT AVAIL NewCLIType THEN
          lcRemark = lcRemark + "," + "Invalid CLIType specified " + lcNewCLIType.
 
       IF ttInputFileContent.ActDate = ? OR lcNewCLIType BEGINS "TARJ" OR
          MobSub.CLIType BEGINS "TARJ" THEN
-         ldActTS = fMake2Dt((fLastDayOfMonth(TODAY) + 1),0).
+         ldActTS = Func.Common:mMake2DT((Func.Common:mLastDayOfMonth(TODAY) + 1),0).
       ELSE
-         ldActTS = fMake2Dt(ttInputFileContent.ActDate,0).
+         ldActTS = Func.Common:mMake2DT(ttInputFileContent.ActDate,0).
 
-      /* Set the katun to check correct barring */
-      katun = "NewtonAd".
+      /* Set the Syst.CUICommon:katun to check correct barring */
+      Syst.CUICommon:katun = "NewtonAd".
       /* Various validations */
       IF NOT fValidateMobTypeCh(MobSub.MsSeq,NewCLIType.CLIType,
                                 ldActTS,FALSE,FALSE,0,"",OUTPUT lcError) THEN
       lcRemark = lcRemark + "," + lcError.
 
-      /* Set the katun again with original username */
-      katun = "Qvantel".
+      /* Set the Syst.CUICommon:katun again with original username */
+      Syst.CUICommon:katun = "Qvantel".
       IF fValidateNewCliType(NewCLIType.CLIType,lcDataBundleId,
                              TRUE,OUTPUT lcError) NE 0 THEN
         lcRemark = lcRemark + "," + lcError.
@@ -891,7 +890,7 @@ PROCEDURE pSTC:
                                       "" /* pcSalesman */,
                                       FALSE,
                                       TRUE,
-                                      katun,
+                                      Syst.CUICommon:katun,
                                       0,
                                       {&REQUEST_SOURCE_SCRIPT},
                                       0,
@@ -990,11 +989,11 @@ PROCEDURE pBTC:
                    lcRemark   = lcRemark + "," + lcErrorMsg.
 
          IF ttInputFileContent.ActDate = ? OR lcBundleType = "BONO" THEN
-            ldaActDate = (fLastDayOfMonth(TODAY) + 1).
+            ldaActDate = (Func.Common:mLastDayOfMonth(TODAY) + 1).
          ELSE
             ldaActDate = ttInputFileContent.ActDate.
 
-         ldActTS = fMake2Dt(ldaActDate,0).
+         ldActTS = Func.Common:mMake2DT(ldaActDate,0).
 
          IF lcErrorMsg = ""  AND
             NOT fValidateBTC(MobSub.MsSeq,
