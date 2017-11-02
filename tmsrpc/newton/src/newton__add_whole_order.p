@@ -2185,7 +2185,7 @@ IF pcFixedLinePortabilityUserStruct > "" THEN
 /* should be called only after rowtype=1 creation */
 IF pcFixedInstallAddress > "" THEN 
    fCreateOrderCustomer(pcFixedInstallAddress,
-                        gcCustomerStructFields,Syst.Var
+                        gcCustomerStructFields,
                         {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL},
                         TRUE). 
 
