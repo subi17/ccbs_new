@@ -1343,15 +1343,16 @@ PROCEDURE pFinalize:
                                                  MSRequest.msrequest,
                                                  MSRequest.salesman).
                FIND MSRequest WHERE MSRequest.MsRequest = iiMSRequest NO-LOCK.
-            END.
-            IF lcResult > "" THEN DO:
-               /* write possible error to a memo */
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                "MobSub",
-                                STRING(MobSub.MsSeq),
-                                MobSub.Custnum,
-                                "Migration failed",
-                                lcResult).
+            
+               IF lcResult > "" THEN DO:
+                  /* write possible error to a memo */
+                  DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                   "MobSub",
+                                   STRING(MobSub.MsSeq),
+                                   MobSub.Custnum,
+                                   "Migration failed",
+                                   lcResult).
+               END.
             END.
             fSetOrderStatus(Order.OrderId,"6").  
             fMarkOrderStamp(Order.OrderID,
