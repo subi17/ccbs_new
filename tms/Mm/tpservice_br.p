@@ -12,21 +12,22 @@ DEF INPUT PARAMETER iiMsSeq  AS INT NO-UNDO.
 {Syst/commali.i}
 {Func/timestamp.i}
 
-DEF VAR xrecid         AS RECID                           init ?.
-DEF VAR FIRSTrow       AS INT                    NO-UNDO  init 0.
-DEF VAR order          AS INT                    NO-UNDO  init 1.
-DEF VAR maxOrder       AS INT                    NO-UNDO  init 1.
-DEF VAR ufkey          AS LOG                    NO-UNDO  init TRUE.
-DEF VAR pr-order       AS INT                    NO-UNDO.
-DEF VAR Memory         AS RECID                  NO-UNDO.
-DEF VAR RowNo          AS INT                    NO-UNDO.
-DEF VAR must-print     AS LOG                    NO-UNDO.
-DEF VAR must-add       AS LOG                    NO-UNDO.
-DEF VAR ac-hdr         AS CHAR                   NO-UNDO.
-DEF VAR rtab           AS RECID EXTENT 24        NO-UNDO.
-DEF VAR i              AS INT                    NO-UNDO.
-DEF VAR lcCreatedTS    AS CHAR                   NO-UNDO.
-DEF VAR lcUpdatedTS    AS CHAR                   NO-UNDO.
+DEF VAR xrecid          AS RECID                           init ?.
+DEF VAR FIRSTrow        AS INT                    NO-UNDO  init 0.
+DEF VAR order           AS INT                    NO-UNDO  init 1.
+DEF VAR maxOrder        AS INT                    NO-UNDO  init 1.
+DEF VAR ufkey           AS LOG                    NO-UNDO  init TRUE.
+DEF VAR pr-order        AS INT                    NO-UNDO.
+DEF VAR Memory          AS RECID                  NO-UNDO.
+DEF VAR RowNo           AS INT                    NO-UNDO.
+DEF VAR must-print      AS LOG                    NO-UNDO.
+DEF VAR must-add        AS LOG                    NO-UNDO.
+DEF VAR ac-hdr          AS CHAR                   NO-UNDO.
+DEF VAR rtab            AS RECID EXTENT 24        NO-UNDO.
+DEF VAR i               AS INT                    NO-UNDO.
+DEF VAR lcCreatedTS     AS CHAR                   NO-UNDO.
+DEF VAR lcUpdatedTS     AS CHAR                   NO-UNDO.
+DEF VAR lcVoucherStatus AS CHAR                   NO-UNDO.
 
 FORM
    TPService.Product      FORMAT "X(20)" COLUMN-LABEL "Product"
@@ -53,6 +54,8 @@ FORM
     "Offer .............:" TPService.Offer
     SKIP
     "Serial Number .....:" TPService.SerialNbr
+    SKIP
+    "Sky TV Voucher ....:" TPService.SkyTvVoucher lcVoucherStatus AT 38 
     SKIP
     "External Id .......:" TPService.MessageId
     SKIP
@@ -268,8 +271,9 @@ REPEAT WITH FRAME sel:
         PAUSE 0. 
         
         ASSIGN
-            lcCreatedTS = fTS2HMS(TPService.CreatedTS)  
-            lcUpdatedTS = fTS2HMS(TPService.UpdateTS).
+            lcCreatedTS     = fTS2HMS(TPService.CreatedTS)  
+            lcUpdatedTS     = fTS2HMS(TPService.UpdateTS)
+            lcVoucherStatus = (IF TPService.VoucherStatus = "" THEN "Unlocked" ELSE TPService.VoucherStatus).
 
         DISP TPService.MsSeq
              TPService.ServSeq
@@ -279,6 +283,7 @@ REPEAT WITH FRAME sel:
              TPService.Product
              TPService.Offer
              TPService.SerialNbr
+             lcVoucherStatus
              TPService.MessageId
              TPService.ServStatus
              TPService.UserCode
