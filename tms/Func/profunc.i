@@ -245,12 +245,12 @@ FUNCTION fValidateProSTC RETURNS CHAR
    IF bNew.Paytype EQ {&CLITYPE_PAYTYPE_PREPAID} THEN 
       RETURN "STC to Prepaid is not allowed for Pro customer".
    IF fIs2PTariff(bNew.Clitype) AND NOT fIs3PTariff(bCurr.Clitype)  THEN DO:
-      FIND FIRST Mobsub WHERE
-                 Mobsub.brand EQ gcbrand AND
-                 Mobsub.custnum EQ iiCustomer AND
-                 fIsConvergenceTariff(MobSub.clitype) NO-ERROR.
-      IF NOT AVAIL Mobsub THEN
-         RETURN "STC to 2P is not allowed for Pro customer".  /* Allowed only from 3P to 2P case YPPI-5 and if there is still convergent left */
+      FOR EACH Mobsub WHERE
+               Mobsub.brand EQ gcbrand AND
+               Mobsub.custnum EQ iiCustomer:
+         IF fIsConvergenceTariff(MobSub.clitype) THEN RETURN "".
+      END.
+      RETURN "STC to 2P is not allowed for Pro customer".  /* STC to pro allowed from mobile to 2P and if there is still convergent left and YPPI-5 3P to 2P */
    END.   
    RETURN "".
 END.
