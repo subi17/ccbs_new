@@ -88,9 +88,11 @@ do with frame login:
                              "UNKNOWN USER ID - PLEASE CHECK AND RETYPE !").
 
             if katun = "" then quit.
+            
+            Syst.CUICommon:katun = katun.
 
             find TmsUser where  
-                 TmsUser.UserCode = katun no-lock no-error.
+                 TmsUser.UserCode = Syst.CUICommon:katun no-lock no-error.
 
             disp TmsUser.UserName.
             PAUSE 0.
@@ -204,8 +206,6 @@ do with frame login:
             pause 0.
             leave.
       end. /* USER_LOGIN */
-
-      Syst.CUICommon:katun  = katun.
 
       if Syst.CUICommon:katun = "" then quit. 
 
