@@ -454,11 +454,8 @@ DEF VAR lcDiscountFields AS CHAR NO-UNDO.
 
 DEF BUFFER AddLineDiscountPlan FOR DiscountPlan.
 
-/* April promotion CONVDISC (OR) 
-   Convergent new Adds Promotion */
-DEF BUFFER ConvDiscountPlan FOR DiscountPlan.
-
 DEF VAR lcItemParam AS CHAR NO-UNDO.
+DEF VAR llCreateDisc AS LOG NO-UNDO.
 
 /* Extra lines */
 DEF VAR lcExtraLineDiscRuleId  AS CHAR NO-UNDO.
@@ -2098,24 +2095,31 @@ FOR EACH ttDiscount,
    ELSE lcItemParam = "".
 
    fCreateOrderAction(Order.Orderid,
-                     "Discount",
-                      STRING(DiscountPlan.DPId),
+                     "DiscountPlan",
+                      DiscountPlan.DPRuleID,
                       lcItemParam).
 END.
 
 /* Apply CONVDISC discount to convergent tariff with STC order - 
    April promo (OR) Convergent New Adds Promotion */
 IF pcNumberType EQ "stc" AND fIsConvergenceTariff(pcSubType) THEN DO:
-   FIND FIRST ConvDiscountPlan WHERE
-              ConvDiscountPlan.Brand      = Syst.CUICommon:gcBrand         AND
-             (ConvDiscountPlan.DPRuleID   = "CONVDISC"      OR
-              ConvDiscountPlan.DPRuleID   = "CONVDISC20_3") AND
-              ConvDiscountPlan.ValidFrom <= TODAY           AND
-              ConvDiscountPlan.ValidTo   >= TODAY           NO-LOCK NO-ERROR.
-   IF AVAIL ConvDiscountPlan THEN
+
+   llCreateDisc = TRUE.
+   FOR EACH ttDiscount:
+       IF fMatrixAnalyse(Syst.CUICommon:gcBrand,
+                     "DISCOUNT-OVERRIDE",
+                     "Discount;DiscountOld",
+                     ttDiscount.DPRuleID + ";" + "CONVDISC",
+                     OUTPUT lcError) EQ 0 THEN DO:
+         llCreateDisc = FALSE.
+         LEAVE.
+      END.
+   END.
+
+   IF llCreateDisc THEN
       fCreateOrderAction(Order.Orderid,
-                         "Discount",
-                         STRING(ConvDiscountPlan.DPId),
+                         "DiscountPlan",
+                         "CONVDISC",
                          "").
 END.
 
@@ -2742,4 +2746,5 @@ END.
 add_int(response_toplevel_id, "", liOrderId).
 
 FINALLY:
-   END.
+   EMPTY TEMP-TABLE ttDiscount NO-ERROR.
+END.
