@@ -144,14 +144,6 @@ IF fValidateMobTypeCh(
    {&REQUEST_SOURCE_NEWTON}, 
    OUTPUT lcError) EQ FALSE THEN RETURN appl_err(lcError).
 
-  /*YPRO*/
-  lcProValidation = fValidateProSTC(MobSub.Custnum,
-                                    MobSub.CliType,
-                                    pcCliType).
-  IF lcProValidation NE "" THEN 
-     RETURN appl_err("Pro customer validation error: " + lcProValidation).
-
-
 /* Set the katun again with original username */
 katun = "VISTA_" + pcSalesman.
 
