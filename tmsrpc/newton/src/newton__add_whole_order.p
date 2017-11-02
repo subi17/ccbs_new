@@ -1942,7 +1942,7 @@ IF pcFusionStruct > "" THEN DO:
 
    IF lcFixedLinePermanency > "" AND
       NOT CAN-FIND(FIRST DayCampaign NO-LOCK WHERE
-                         DayCampaign.Brand = Syst.parameters:gcBrand AND
+                         DayCampaign.Brand = Syst.CUICommon:gcBrand AND
                          DayCampaign.DcEvent = lcFixedLinePermanency) THEN
       RETURN appl_err(SUBST("Invalid fixed_line_permanency_contract_id: &1", lcFixedLinePermanency)).
    
@@ -2085,7 +2085,7 @@ Func.Common:mSplitTS(Order.CrStamp,OUTPUT ldaOrderDate,OUTPUT liOrderTime).
 /* Apply discount to the subscription */
 FOR EACH ttDiscount,
     FIRST DiscountPlan NO-LOCK WHERE
-          DiscountPlan.Brand = gcBrand AND
+          DiscountPlan.Brand = Syst.CUICommon:gcBrand AND
           DiscountPlan.DPRuleID = ttDiscount.DPRuleID AND
           DiscountPlan.ValidFrom <= TODAY AND
           DiscountPlan.ValidTo   >= TODAY:
