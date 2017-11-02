@@ -48,14 +48,14 @@ form
    liCustNum[1] AT 10
       LABEL "Customers ........."
       HELP "Customer number"
-      FORMAT ">>>>>>>9"
+      FORMAT ">>>>>>>>9"
    "-"
    liCustNum[2]
       NO-LABEL 
       HELP "Customer number"
       VALIDATE(INPUT liCustNum[2] >= INPUT liCustNum[1],
                "Upper limit cannot be less than lower limit")
-      FORMAT ">>>>>>>9"
+      FORMAT ">>>>>>>>9"
    SKIP
 
    liInvType[1] AT 10
@@ -112,7 +112,7 @@ PAUSE 0 NO-MESSAGE.
 
 FIND LAST InvGroup WHERE InvGroup.Brand = gcBrand NO-LOCK NO-ERROR.
 IF AVAILABLE InvGroup THEN ASSIGN lcInvGroup[2] = InvGroup.InvGroup.
-ASSIGN liCustNum[2]  = 99999999  
+ASSIGN liCustNum[2]  = 999999999  
        ldClaimQty[2] = 8
        liInvType     = 1
        liPaymPlan    = 0
