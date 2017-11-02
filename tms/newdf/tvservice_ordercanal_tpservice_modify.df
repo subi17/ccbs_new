@@ -22,7 +22,7 @@ ADD FIELD "RedemFile" OF "TPService" AS character
   HELP "Redemption File Name"
   ORDER 200
 
-ADD FIELD "VoucherActiveDt" OF "TPService" AS character
+ADD FIELD "VoucherActiveDt" OF "TPService" AS date
   FORMAT "99-99-99"
   INITIAL ?
   LABEL "Voucher Active"
@@ -30,7 +30,7 @@ ADD FIELD "VoucherActiveDt" OF "TPService" AS character
   HELP "Voucher Active Date"
   ORDER 210
 
-ADD FIELD "VoucherExpiryDt" OF "TPService" AS character
+ADD FIELD "VoucherExpiryDt" OF "TPService" AS date
   FORMAT "99-99-99"
   INITIAL ?
   LABEL "Voucher Expiry"
@@ -38,7 +38,7 @@ ADD FIELD "VoucherExpiryDt" OF "TPService" AS character
   HELP "Voucher Expiry Date"
   ORDER 220
 
-ADD FIELD "VoucherRedemDt" OF "TPService" AS character
+ADD FIELD "VoucherRedemDt" OF "TPService" AS date
   FORMAT "99-99-99"
   INITIAL ?
   LABEL "Voucher Redem"
@@ -46,7 +46,7 @@ ADD FIELD "VoucherRedemDt" OF "TPService" AS character
   HELP "Voucher Redem Date"
   ORDER 230
 
-ADD FIELD "VoucherCancelDt" OF "TPService" AS character
+ADD FIELD "VoucherCancelDt" OF "TPService" AS date
   FORMAT "99-99-99"
   INITIAL ?
   LABEL "Voucher Cancel"
