@@ -1032,6 +1032,7 @@ PROCEDURE pFinalize:
 
    DEF BUFFER DataContractReq FOR MsRequest. 
    DEF BUFFER Order FOR Order.
+   DEF BUFFER bMobsub FOR Mobsub.
    /* now when billtarget has been updated new fees can be created */
 
    FIND FIRST MobSub WHERE MobSub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
@@ -1323,10 +1324,10 @@ PROCEDURE pFinalize:
                       Customer.brand EQ gcbrand AND
                       Customer.orgid EQ Ordercustomer.custid AND
                       customer.category NE Ordercustomer.category,
-                FIRST Mobsub WHERE
-                      Mobsub.brand EQ gcbrand AND
-                      Mobsub.custnum EQ customer.custnum AND
-                      Mobsub.msseq ne MsRequest.msseq NO-LOCK:
+                FIRST bMobsub WHERE
+                      bMobsub.brand EQ gcbrand AND
+                      bMobsub.custnum EQ customer.custnum AND
+                      bMobsub.msseq ne MsRequest.msseq NO-LOCK:
                llmigrationNeeded = TRUE.
             END.         
             /* update customer data */
