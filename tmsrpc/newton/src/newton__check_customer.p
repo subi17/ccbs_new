@@ -204,7 +204,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                    pcChannel EQ "Fusion_pos_pro") 
           THEN DO:
              IF CAN-FIND(FIRST Mobsub NO-LOCK WHERE
-                               Mobsub.Brand EQ gcBrand AND
+                               Mobsub.Brand EQ Syst.CUICommon:gcBrand AND
                                Mobsub.InvCust EQ Customer.CustNum AND
                                Mobsub.paytype) THEN DO:
                ASSIGN
@@ -220,7 +220,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
              END.
              ELSE DO:
                 IF CAN-FIND(FIRST Mobsub NO-LOCK WHERE
-                                  Mobsub.Brand EQ gcBrand AND
+                                  Mobsub.Brand EQ Syst.CUICommon:gcBrand AND
                                   Mobsub.InvCust EQ Customer.CustNum AND
                                   fIsConvergent3POnly(Mobsub.clitype)) THEN DO:
 
@@ -230,7 +230,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                 END.
                 llOnlyActiveFound = FALSE.
                 FOR EACH Mobsub NO-LOCK WHERE
-                         Mobsub.Brand EQ gcBrand AND
+                         Mobsub.Brand EQ Syst.CUICommon:gcBrand AND
                          Mobsub.InvCust EQ Customer.CustNum:
                    FIND FIRST Clitype WHERE
                               Clitype.brand EQ "1" AND
