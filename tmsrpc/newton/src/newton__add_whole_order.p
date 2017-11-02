@@ -2099,8 +2099,8 @@ FOR EACH ttDiscount,
    ELSE lcItemParam = "".
 
    fCreateOrderAction(Order.Orderid,
-                     "Discount",
-                      STRING(DiscountPlan.DPId),
+                     "DiscountPlan",
+                      DiscountPlan.DPRuleID,
                       lcItemParam).
 END.
 
@@ -2115,8 +2115,8 @@ IF pcNumberType EQ "stc" AND fIsConvergenceTariff(pcSubType) THEN DO:
               ConvDiscountPlan.ValidTo   >= TODAY           NO-LOCK NO-ERROR.
    IF AVAIL ConvDiscountPlan THEN
       fCreateOrderAction(Order.Orderid,
-                         "Discount",
-                         STRING(ConvDiscountPlan.DPId),
+                         "DiscountPlan",
+                         ConvDiscountPlan.DPRuleID,
                          "").
 END.
 

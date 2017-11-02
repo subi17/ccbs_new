@@ -106,7 +106,8 @@ FOR EACH OrderAction NO-LOCK WHERE
          RUN pPeriodicalContract.
       END.
       WHEN "Service"           THEN RUN pService.
-      WHEN "Discount"          THEN RUN pDiscountPlan. 
+      WHEN "Discount" OR 
+      WHEN "DiscountPlan"      THEN RUN pDiscountPlan. 
       WHEN "AddLineDiscount"   THEN RUN pAddLineDiscountPlan.
       WHEN "ExtraLineDiscount" THEN RUN pExtraLineDiscountPlan.
       WHEN "Q25Discount"       THEN RUN pQ25Discount.
@@ -430,9 +431,20 @@ PROCEDURE pDiscountPlan:
    DEF BUFFER bDiscountPlan FOR DiscountPlan.
 
    DEF VAR lcResult AS CHAR NO-UNDO. 
+   DEF VAR ldaOrderDate AS DATE NO-UNDO. 
 
-   FIND FIRST DiscountPlan NO-LOCK WHERE
-              DiscountPlan.DPId = INT(OrderAction.ItemKey) NO-ERROR.
+   fts2Date(Order.CrStamp, OUTPUT ldaOrderDate).
+   
+   IF OrderAction.ItemType EQ "DiscountPlan" THEN
+      FIND FIRST DiscountPlan NO-LOCK WHERE
+                 DiscountPlan.Brand = gcBrand AND
+                 DiscountPlan.DPRuleID = OrderAction.ItemKey AND
+                 DiscountPlan.ValidFrom <= ldaOrderDate AND
+                 DiscountPlan.ValidTo >= ldaOrderDate NO-ERROR.
+   ELSE
+      FIND FIRST DiscountPlan NO-LOCK WHERE
+                 DiscountPlan.DPId = INT(OrderAction.ItemKey) NO-ERROR.
+
    IF NOT AVAIL DiscountPlan THEN 
       RETURN "ERROR:DiscountPlan ID: " + OrderAction.ItemKey + " not found".
    
@@ -445,7 +457,7 @@ PROCEDURE pDiscountPlan:
       RETURN "ERROR:DPRate: " + OrderAction.ItemKey + " not found".
    
    FIND FIRST DPMember NO-LOCK WHERE
-              DPMember.DPId      = INT(OrderAction.ItemKey) AND
+              DPMember.DPId      = DiscountPlan.DpID AND
               DPMember.HostTable = "Mobsub"                 AND
               DPMember.KeyValue  = STRING(Order.MsSeq)      AND
               DPMember.ValidTo  >= TODAY                    NO-ERROR.
