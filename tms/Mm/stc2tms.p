@@ -1311,16 +1311,16 @@ PROCEDURE pFinalize:
 
          IF Order.StatusCode EQ {&ORDER_STATUS_ONGOING} THEN DO:
             FOR FIRST OrderCustomer WHERE
-                       OrderCustomer.brand EQ gcBrand AND
+                       OrderCustomer.brand EQ Syst.CUICommon:gcBrand AND
                        Ordercustomer.orderid EQ MsRequest.ReqIParam2 AND
                        OrderCustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
                        Ordercustomer.pro,
                 FIRST Customer WHERE
-                      Customer.brand EQ gcbrand AND
+                      Customer.brand EQ Syst.CUICommon:gcBrand AND
                       Customer.orgid EQ Ordercustomer.custid AND
                       customer.category NE Ordercustomer.category,
                 FIRST bMobsub WHERE
-                      bMobsub.brand EQ gcbrand AND
+                      bMobsub.brand EQ Syst.CUICommon:gcBrand AND
                       bMobsub.custnum EQ customer.custnum AND
                       bMobsub.msseq ne MsRequest.msseq NO-LOCK:
                llmigrationNeeded = TRUE.
@@ -1342,8 +1342,7 @@ PROCEDURE pFinalize:
             
                IF lcResult > "" THEN DO:
                   /* write possible error to a memo */
-                  DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                   "MobSub",
+                  Func.Common:mWriteMemo("MobSub",
                                    STRING(MobSub.MsSeq),
                                    MobSub.Custnum,
                                    "Migration failed",

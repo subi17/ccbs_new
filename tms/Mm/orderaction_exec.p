@@ -233,7 +233,7 @@ PROCEDURE pPeriodicalContract:
                  (IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN Func.Common:mMakeTS()
                   ELSE IF Order.OrderType NE 2 THEN ideActStamp
                   ELSE IF Order.OrderChannel BEGINS "Retention" THEN Func.Common:mMakeTS()
-                  ELSE IF DayCampaign.DCEvent BEGINS "FTERM" THEN fMakeTS()
+                  ELSE IF DayCampaign.DCEvent BEGINS "FTERM" THEN Func.Common:mMakeTS()
                   ELSE IF DayCampaign.DCType = {&DCTYPE_DISCOUNT} THEN Order.CrStamp
                   ELSE ideActStamp).
 
@@ -457,7 +457,7 @@ PROCEDURE pDiscountPlan:
       FIRST bDiscountPlan NO-LOCK WHERE   
             bDiscountPlan.DPID = DPMember.DPID:
 
-      IF fMatrixAnalyse(gcBrand,
+      IF fMatrixAnalyse(Syst.CUICommon:gcBrand,
                         "DISCOUNT-OVERRIDE",
                         "Discount;DiscountOld",
                         DiscountPlan.DPRuleID + ";" + bDiscountPlan.DPRuleID,

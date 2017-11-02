@@ -267,7 +267,7 @@ FUNCTION fIsTerminalOrder RETURNS LOG
    DEFINE BUFFER bTermOrder FOR Order.
 
    FIND FIRST bTermOrder NO-LOCK WHERE 
-              bTermOrder.Brand   = gcBrand   AND 
+              bTermOrder.Brand   = Syst.CUICommon:gcBrand   AND 
               bTermOrder.OrderId = liOrderId NO-ERROR.
 
    IF NOT AVAIL bTermOrder THEN RETURN FALSE.
@@ -393,7 +393,7 @@ FUNCTION fCheckForAdditionalORExtraMainLine RETURNS LOGICAL
           lcExtraLineCLITypes = fCParam("DiscountType","ExtraLine_CLITypes").
    
    FIND FIRST bOrder NO-LOCK WHERE 
-              bOrder.Brand   = gcBrand   AND 
+              bOrder.Brand   = Syst.CUICommon:gcBrand   AND 
               bOrder.OrderId = liOrderId NO-ERROR.
 
    IF NOT AVAIL bOrder THEN 
@@ -434,12 +434,12 @@ FUNCTION fCheckForAdditionalORExtraMainLine RETURNS LOGICAL
       ELSE IF LOOKUP(bOrder.CliType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
 
          FIND FIRST bOrderCustomer NO-LOCK WHERE
-                    bOrderCustomer.Brand   = gcBrand        AND
+                    bOrderCustomer.Brand   = Syst.CUICommon:gcBrand        AND
                     bOrderCustomer.OrderId = bOrder.OrderId AND
                     bOrderCustomer.RowType = 1              NO-ERROR.
          
          FIND FIRST bOrderAction NO-LOCK WHERE
-                    bOrderAction.Brand    = gcBrand            AND
+                    bOrderAction.Brand    = Syst.CUICommon:gcBrand            AND
                     bOrderAction.OrderID  = bOrder.OrderId     AND
                     bOrderAction.ItemType EQ "AddLineDiscount" NO-ERROR.
          

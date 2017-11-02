@@ -299,7 +299,7 @@ PROCEDURE pPeriodicalContract:
       /* CCP-3 override the default fixed line permancy*/
       IF ttAction.ActionKey BEGINS "FTERM" AND iiOrderID > 0 AND
          CAN-FIND(FIRST OrderAction NO-LOCK WHERE
-                        OrderAction.Brand = gcBrand AND
+                        OrderAction.Brand = Syst.CUICommon:gcBrand AND
                         OrderAction.OrderID = iiOrderID AND
                         OrderAction.ItemType = "FixedPermanency") THEN RETURN.
 
