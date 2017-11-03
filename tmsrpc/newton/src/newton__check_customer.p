@@ -203,7 +203,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                    pcChannel EQ "Fusion_pos_pro") 
           THEN DO:
              IF CAN-FIND(FIRST Mobsub NO-LOCK WHERE
-                               Mobsub.Brand EQ gcBrand AND
+                               Mobsub.Brand EQ Syst.Var:gcBrand AND
                                Mobsub.InvCust EQ Customer.CustNum AND
                                Mobsub.paytype) THEN DO:
                ASSIGN
