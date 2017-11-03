@@ -429,11 +429,11 @@ PROCEDURE pDiscountPlan:
    DEF VAR lcResult AS CHAR NO-UNDO. 
    DEF VAR ldaOrderDate AS DATE NO-UNDO. 
 
-   fts2Date(Order.CrStamp, OUTPUT ldaOrderDate).
+   Func.Common:mts2Date(Order.CrStamp, OUTPUT ldaOrderDate).
    
    IF OrderAction.ItemType EQ "DiscountPlan" THEN
       FIND FIRST DiscountPlan NO-LOCK WHERE
-                 DiscountPlan.Brand = gcBrand AND
+                 DiscountPlan.Brand = Syst.Var:gcBrand AND
                  DiscountPlan.DPRuleID = OrderAction.ItemKey AND
                  DiscountPlan.ValidFrom <= ldaOrderDate AND
                  DiscountPlan.ValidTo >= ldaOrderDate NO-ERROR.
