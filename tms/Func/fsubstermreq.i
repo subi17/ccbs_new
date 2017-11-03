@@ -88,6 +88,14 @@ FUNCTION fTerminationRequest RETURNS INTEGER
          THEN bCreaReq.ReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}.
    END.
 
+   ELSE IF (fHasConvergenceTariff(iiMsSeq) AND
+            icTermType = {&TERMINATION_TYPE_PARTIAL}) AND
+            (Order.StatusCode = {&ORDER_STATUS_PENDING_MOBILE_LINE} OR 
+             Order.StatusCode = {&ORDER_STATUS_MNP} OR
+             Order.StatusCode = {&ORDER_STATUS_MNP_REJECTED}) THEN DO:
+      RUN Mm/deletems1.p(INPUT iiMsSeq).
+   END. 
+
    RELEASE bCreaReq.
    
    RETURN liReqCreated.
