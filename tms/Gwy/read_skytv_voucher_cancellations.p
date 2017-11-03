@@ -128,7 +128,7 @@ PROCEDURE pReadFile:
         ASSIGN
             ttCancellation.FileName   = icFileName
             ttCancellation.Voucher    = ENTRY(1,lcData)
-            ttCancellation.CancelDate = DATE(ENTRY(1,ENTRY(2,lcData)," "))
+            ttCancellation.CancelDate = DATE(ENTRY(1,ENTRY(2,lcData)," ")).
 
     END.
     INPUT CLOSE.
