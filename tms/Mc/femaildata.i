@@ -2115,8 +2115,10 @@ PROCEDURE pGetCTNAME:
              FIND FIRST Orderaction NO-LOCK where
                         Orderaction.brand = Syst.Var:gcBrand AND
                         orderaction.orderid = order.orderid AND
-                        orderaction.itemtype = "discount" AND
-                        orderaction.itemkey = STRING(DiscountPlan.DPID) NO-ERROR.
+                      ((orderaction.itemtype = "discount" AND
+                        orderaction.itemkey = STRING(DiscountPlan.DPID)) OR
+                       (orderaction.itemtype = "discountplan" AND
+                        orderaction.itemkey = DiscountPlan.DPRuleId)) NO-ERROR.
               IF AVAIL orderaction THEN    
                  llgEmailText = TRUE.
           END.
@@ -2149,8 +2151,10 @@ PROCEDURE pGetCTNAME:
              FIND FIRST Orderaction NO-LOCK where
                         Orderaction.brand = Syst.Var:gcBrand AND
                         orderaction.orderid = order.orderid AND
-                        orderaction.itemtype = "discount" AND
-                        orderaction.itemkey = STRING(DiscountPlan.DPID) NO-ERROR.
+                      ((orderaction.itemtype = "discount" AND
+                        orderaction.itemkey = STRING(DiscountPlan.DPID)) OR
+                       (orderaction.itemtype = "discountplan" AND
+                        orderaction.itemkey = DiscountPlan.DPRuleId)) NO-ERROR.
               IF AVAIL orderaction THEN    
                  llgEmailText = TRUE.
           END.

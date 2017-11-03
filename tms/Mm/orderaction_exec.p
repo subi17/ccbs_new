@@ -105,11 +105,17 @@ FOR EACH OrderAction NO-LOCK WHERE
          RUN pPeriodicalContract.
       END.
       WHEN "Service"           THEN RUN pService.
-      WHEN "Discount"          THEN RUN pDiscountPlan. 
+      WHEN "Discount" OR 
+      WHEN "DiscountPlan"      THEN RUN pDiscountPlan. 
       WHEN "AddLineDiscount"   THEN RUN pAddLineDiscountPlan.
       WHEN "ExtraLineDiscount" THEN RUN pExtraLineDiscountPlan.
       WHEN "Q25Discount"       THEN RUN pQ25Discount.
       WHEN "Q25Extension"      THEN RUN pQ25Extension.
+      WHEN "FixedPermanency"   THEN DO:
+         IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} OR
+            MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}
+            THEN RUN pPeriodicalContract.
+      END.
       OTHERWISE NEXT ORDERACTION_LOOP.
    END CASE.
 
@@ -228,6 +234,7 @@ PROCEDURE pPeriodicalContract:
                  (IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN Func.Common:mMakeTS()
                   ELSE IF Order.OrderType NE 2 THEN ideActStamp
                   ELSE IF Order.OrderChannel BEGINS "Retention" THEN Func.Common:mMakeTS()
+                  ELSE IF DayCampaign.DCEvent BEGINS "FTERM" THEN Func.Common:mMakeTS() 
                   ELSE IF DayCampaign.DCType = {&DCTYPE_DISCOUNT} THEN Order.CrStamp
                   ELSE ideActStamp).
 
@@ -417,9 +424,23 @@ END PROCEDURE.
 PROCEDURE pDiscountPlan:
 
    DEFINE VARIABLE ldate AS DATE NO-UNDO.
+   DEF BUFFER bDiscountPlan FOR DiscountPlan.
 
-   FIND FIRST DiscountPlan NO-LOCK WHERE
-              DiscountPlan.DPId = INT(OrderAction.ItemKey) NO-ERROR.
+   DEF VAR lcResult AS CHAR NO-UNDO. 
+   DEF VAR ldaOrderDate AS DATE NO-UNDO. 
+
+   Func.Common:mts2Date(Order.CrStamp, OUTPUT ldaOrderDate).
+   
+   IF OrderAction.ItemType EQ "DiscountPlan" THEN
+      FIND FIRST DiscountPlan NO-LOCK WHERE
+                 DiscountPlan.Brand = Syst.Var:gcBrand AND
+                 DiscountPlan.DPRuleID = OrderAction.ItemKey AND
+                 DiscountPlan.ValidFrom <= ldaOrderDate AND
+                 DiscountPlan.ValidTo >= ldaOrderDate NO-ERROR.
+   ELSE
+      FIND FIRST DiscountPlan NO-LOCK WHERE
+                 DiscountPlan.DPId = INT(OrderAction.ItemKey) NO-ERROR.
+
    IF NOT AVAIL DiscountPlan THEN 
       RETURN "ERROR:DiscountPlan ID: " + OrderAction.ItemKey + " not found".
    
@@ -432,13 +453,32 @@ PROCEDURE pDiscountPlan:
       RETURN "ERROR:DPRate: " + OrderAction.ItemKey + " not found".
    
    FIND FIRST DPMember NO-LOCK WHERE
-              DPMember.DPId      = INT(OrderAction.ItemKey) AND
+              DPMember.DPId      = DiscountPlan.DpID AND
               DPMember.HostTable = "Mobsub"                 AND
               DPMember.KeyValue  = STRING(Order.MsSeq)      AND
               DPMember.ValidTo  >= TODAY                    NO-ERROR.
    IF AVAIL DPMember THEN 
       RETURN "ERROR:DPMember: " + OrderAction.ItemKey + " for " + 
          STRING(Order.MsSeq) + " already exist".
+   
+   FOR EACH DPMember NO-LOCK WHERE
+            DPMember.Hosttable = "Mobsub" AND
+            DPMember.KeyValue = STRING(Order.MsSeq) AND
+            DPMember.ValidFrom <= TODAY AND
+            DPMember.ValidTo >= TODAY,
+      FIRST bDiscountPlan NO-LOCK WHERE   
+            bDiscountPlan.DPID = DPMember.DPID:
+
+      IF fMatrixAnalyse(Syst.Var:gcBrand,
+                        "DISCOUNT-OVERRIDE",
+                        "Discount;DiscountOld",
+                        DiscountPlan.DPRuleID + ";" + bDiscountPlan.DPRuleID,
+                        OUTPUT lcResult) EQ 0 THEN
+         fCloseDiscount(bDiscountPlan.DPRuleID,
+                        Order.MsSeq,
+                        TODAY - 1,
+                        FALSE).
+   END.
 
    CREATE DPMember.
    ASSIGN DPMember.DPMemberID = NEXT-VALUE(DPMemberID)

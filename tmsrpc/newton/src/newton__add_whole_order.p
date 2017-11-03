@@ -53,9 +53,7 @@
                bono_voip;boolean;optional;activate bono voip
                delivery_channel;string;optional;paper/email/sms/no delivery
                bypass_rules;boolean;optional;skips subscription/actinvation limit check
-               discount_plan_id;string;optional
-               discount_plan_amount;double;optional
-               discount_valid_periods;int;optional
+               discounts;array of struct;optional;discounts
                sim_type;string;optional;sim types (eg: regular/micro/nano/universal)
                multisim_id;int;optional;order group id
                multisim_type;int;optional;group member (1,2,..), mandatory if multisim_id is passed
@@ -72,6 +70,9 @@
                multiorder;boolean;optional;
                terminal_financing_bank;string;optional
                additional_line_discount;string;optional
+ * @discounts discount_plan_id;string;optional;
+               discount_plan_amount;double;optional;
+               discount_valid_periods;int;optional;
  * @customer_data fname;string;optional;
                   lname;string;optional;
                   lname2;string;optional;
@@ -206,6 +207,7 @@
                  estimated_data_speed;string;optional;broadband estimated speed
                  fixed_line_mnp_time_of_change;string;optional;
                  fixed_line_product;string;mandatory;fusion order product code
+                 fixed_line_permanency_contract_id;string;mandatory;fixed line permanency id (FTERMx)
                  customer_type;string;mandatory;customer type
                  contractid;string;optional;
                  install_address;struct;mandatory;
@@ -329,9 +331,6 @@ DEF VAR pcReferee       AS CHAR NO-UNDO.
 DEF VAR pcOfferId  AS CHAR NO-UNDO.
 DEF VAR pdePriceSelTime AS DEC NO-UNDO.
 DEF VAR liTermOfferItemID AS INTEGER NO-UNDO.
-DEF VAR pcDiscountPlanId  AS CHAR NO-UNDO. 
-DEF VAR pdeDiscountPlanAmount AS DEC NO-UNDO. 
-DEF VAR piDiscountValidPeriod AS INT NO-UNDO.
 DEF VAR piMultiSimID AS INT NO-UNDO. 
 DEF VAR piMultiSimType AS INT NO-UNDO. 
 DEF VAR plExcTermPenalty AS LOG NO-UNDO.
@@ -344,7 +343,6 @@ DEF VAR pcUpsHours AS CHAR NO-UNDO.
 DEF VAR plCustDataRetr AS LOGICAL NO-UNDO.
 DEF VAR pcIdentifiedSmsNumber AS CHAR NO-UNDO.
 DEF VAR plMultiOrder AS LOGICAL NO-UNDO.
-DEF VAR pcGescal AS CHAR NO-UNDO. 
 DEF VAR lcCLITypeTrans AS CHAR NO-UNDO. 
 
 /* Real Order Inspection parameters */
@@ -369,6 +367,7 @@ DEF VAR plByPassRules           AS LOG  NO-UNDO.
 DEF VAR lcdelivery_channel      AS CHAR NO-UNDO.
 DEF VAR pcUsageType             AS CHAR NO-UNDO. 
 
+DEF VAR liCounter              AS INT  NO-UNDO.
 DEF VAR liBundleCnt            AS INT  NO-UNDO.
 DEF VAR liOfferCnt             AS INT  NO-UNDO.
 DEF VAR lcPostpaidVoiceTariffs AS CHAR NO-UNDO.
@@ -421,6 +420,7 @@ DEF VAR lcFixedLineMNPOldOperCode AS CHAR    NO-UNDO.
 DEF VAR lcFixedLineSerialNbr      AS CHAR    NO-UNDO.
 DEF VAR liEstimatedDataSpeed      AS INTE    NO-UNDO.
 DEF VAR lcFixedLineMNPTime        AS CHAR    NO-UNDO. 
+DEF VAR lcFixedLinePermanency     AS CHAR NO-UNDO. 
 DEF VAR lcFixedLineProduct        AS CHAR    NO-UNDO. 
 DEF VAR lcFixedLineCustomerType   AS CHAR    NO-UNDO. 
 DEF VAR lcPayment                 AS CHAR    NO-UNDO.
@@ -448,13 +448,14 @@ DEF VAR pcTerminalFinancing AS CHAR NO-UNDO.
 
 /* ADDLINE-20 Additional Line */
 DEF VAR pcAdditionaLineDiscount AS CHAR NO-UNDO.
+DEF VAR pcDiscountArray AS CHAR NO-UNDO.
+DEF VAR pcDiscountStruct AS CHAR NO-UNDO. 
+DEF VAR lcDiscountFields AS CHAR NO-UNDO. 
+
 DEF BUFFER AddLineDiscountPlan FOR DiscountPlan.
 
-/* April promotion CONVDISC (OR) 
-   Convergent new Adds Promotion */
-DEF BUFFER ConvDiscountPlan FOR DiscountPlan.
-
 DEF VAR lcItemParam AS CHAR NO-UNDO.
+DEF VAR llCreateDisc AS LOG NO-UNDO.
 
 /* Extra lines */
 DEF VAR lcExtraLineDiscRuleId  AS CHAR NO-UNDO.
@@ -468,6 +469,12 @@ DEF BUFFER ExtraLineMainOrder    FOR Order.
 /* Prevent duplicate orders YTS-2166 */
 DEF BUFFER lbOrder FOR Order.   
 DEF BUFFER lbMobSub FOR MobSub. 
+ 
+DEF TEMP-TABLE ttDiscount NO-UNDO
+   FIELD DPRuleID AS CHAR
+   FIELD discount_plan_amount AS DEC
+   FIELD discount_valid_periods AS INT
+INDEX discount_valid_periods IS PRIMARY discount_valid_periods. 
 
 /* YBP-514 */
 FUNCTION fGetOrderFields RETURNS LOGICAL :
@@ -595,18 +602,9 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
    IF LOOKUP('bypass_rules', lcOrderStruct) GT 0 THEN
       plBypassRules = get_bool(pcOrderStruct,"bypass_rules").
 
-   IF LOOKUP('discount_plan_id', lcOrderStruct) GT 0 THEN
-      pcDiscountPlanId = get_string(pcOrderStruct,"discount_plan_id").
-
    IF LOOKUP('sim_type', lcOrderStruct) > 0 THEN
       lcSimType = get_string(pcOrderStruct,"sim_type").
 
-   IF LOOKUP('discount_plan_amount', lcOrderStruct) GT 0 THEN
-      pdeDiscountPlanAmount = get_double(pcOrderStruct,"discount_plan_amount").
-
-   IF LOOKUP('discount_valid_periods', lcOrderStruct) GT 0 THEN
-      piDiscountValidPeriod = get_int(pcOrderStruct,"discount_valid_periods").
-   
    IF LOOKUP('multisim_id', lcOrderStruct) GT 0 THEN
       piMultiSimID = get_pos_int(pcOrderStruct,"multisim_id").
    
@@ -648,6 +646,28 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
 
    IF LOOKUP('additional_line_discount', lcOrderStruct) GT 0 THEN
       pcAdditionaLineDiscount = get_string(pcOrderStruct,"additional_line_discount").
+   
+   IF LOOKUP('discounts', lcOrderStruct) GT 0 THEN
+      pcDiscountArray = get_array(pcOrderStruct,"discounts").
+
+   IF pcDiscountArray > "" THEN
+   DO liCounter = 0 TO get_paramcount(pcDiscountArray) - 1:
+
+      RELEASE ttDiscount.
+
+      pcDiscountStruct = get_struct(pcDiscountArray,STRING(liCounter)).
+      lcDiscountFields = validate_request(pcDiscountStruct,
+        "discount_plan_id!,discount_plan_amount,discount_valid_periods").
+
+      CREATE ttDiscount.
+      ASSIGN
+         ttDiscount.DPRuleID = get_string(pcDiscountStruct,"discount_plan_id")
+         ttDiscount.discount_plan_amount = get_double(pcDiscountStruct,"discount_plan_amount")
+            WHEN LOOKUP('discount_plan_amount', lcDiscountFields) GT 0
+         ttDiscount.discount_valid_periods = get_int(pcDiscountStruct,"discount_valid_periods")
+            WHEN LOOKUP('discount_valid_periods', lcDiscountFields) GT 0.
+
+   END.
 
    RETURN TRUE.
 END.
@@ -1331,9 +1351,7 @@ gcOrderStructFields = "brand!," +
                       "bono_voip," +
                       "bypass_rules," +
                       "delivery_channel," +
-                      "discount_plan_id," +
-                      "discount_plan_amount," +
-                      "discount_valid_periods," +
+                      "discounts," +
                       "sim_type," + 
                       "multisim_id," +
                       "multisim_type," +
@@ -1533,14 +1551,14 @@ IF (pcNumberType EQ "mnp" OR pcNumberType EQ "stc") AND
 
 
 /* YPB-515 */
-IF pcDiscountPlanId > "" THEN DO:
+FOR EACH ttDiscount:
    FIND FIRST DiscountPlan WHERE
               DiscountPlan.Brand = Syst.Var:gcBrand AND
-              DiscountPlan.DPRuleID = pcDiscountPlanId AND
+              DiscountPlan.DPRuleID = ttDiscount.DPRuleID AND
               DiscountPlan.ValidFrom <= TODAY AND
               DiscountPlan.ValidTo   >= TODAY NO-LOCK NO-ERROR.
    IF NOT AVAIL DiscountPlan THEN
-      RETURN appl_Err(SUBST("Incorrect discount plan id: &1", pcDiscountPlanId)).
+      RETURN appl_Err(SUBST("Incorrect discount plan id: &1", ttDiscount.DPRuleID)).
 END.
 
 /* ADDLINE-20 Additional Line */
@@ -1894,7 +1912,7 @@ END.
 /* YBP-530 */
 IF pcFusionStruct > "" THEN DO:
    lcFusionStructFields = validate_request(pcFusionStruct, 
-      "fixed_line_number_type!,fixed_line_number,customer_type!,contractid,fixed_line_mnp_old_operator_name,fixed_line_mnp_old_operator_code,fixed_line_serial_number,estimated_data_speed,fixed_line_mnp_time_of_change,fixed_line_product!,install_address!").
+      "fixed_line_number_type!,fixed_line_number,customer_type!,contractid,fixed_line_mnp_old_operator_name,fixed_line_mnp_old_operator_code,fixed_line_serial_number,estimated_data_speed,fixed_line_mnp_time_of_change,fixed_line_product!,install_address!,fixed_line_permanency_contract_id!").
    IF gi_xmlrpc_error NE 0 THEN RETURN.
    
    ASSIGN
@@ -1914,9 +1932,16 @@ IF pcFusionStruct > "" THEN DO:
       liEstimatedDataSpeed = get_int(pcFusionStruct, "estimated_data_speed") 
          WHEN LOOKUP('estimated_data_speed', lcOrderStruct) > 0  
       lcFixedLineMNPTime = get_string(pcFusionStruct, "fixed_line_mnp_time_of_change")
-         WHEN LOOKUP("fixed_line_mnp_time_of_change",lcFusionStructFields) > 0.
+         WHEN LOOKUP("fixed_line_mnp_time_of_change",lcFusionStructFields) > 0
+      lcFixedLinePermanency = get_string(pcFusionStruct, "fixed_line_permanency_contract_id").
 
    IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+   IF lcFixedLinePermanency > "" AND
+      NOT CAN-FIND(FIRST DayCampaign NO-LOCK WHERE
+                         DayCampaign.Brand = Syst.Var:gcBrand AND
+                         DayCampaign.DcEvent = lcFixedLinePermanency) THEN
+      RETURN appl_err(SUBST("Invalid fixed_line_permanency_contract_id: &1", lcFixedLinePermanency)).
    
    IF lcFixedLineNumberType EQ {&FUSION_FIXED_NUMBER_TYPE_MNP} AND
       lcFixedLineNumber EQ "" THEN
@@ -2055,32 +2080,46 @@ Func.Common:mSplitTS(Order.CrStamp,OUTPUT ldaOrderDate,OUTPUT liOrderTime).
 
 /* YBP-547 */
 /* Apply discount to the subscription */
-IF AVAIL DiscountPlan THEN DO:
+FOR EACH ttDiscount,
+    FIRST DiscountPlan NO-LOCK WHERE
+          DiscountPlan.Brand = Syst.Var:gcBrand AND
+          DiscountPlan.DPRuleID = ttDiscount.DPRuleID AND
+          DiscountPlan.ValidFrom <= TODAY AND
+          DiscountPlan.ValidTo   >= TODAY:
 
-   ASSIGN lcItemParam = "amount=" + STRING(pdeDiscountPlanAmount) +
-                        "|valid_period=" + STRING(piDiscountValidPeriod)
-                        WHEN (pdeDiscountPlanAmount NE 0 AND 
-                              piDiscountValidPeriod NE 0).
+   IF ttDiscount.discount_plan_amount NE 0 AND 
+      ttDiscount.discount_valid_periods NE 0 THEN
+      lcItemParam = SUBST("amount=&1,|valid_period=&2",
+                          ttDiscount.discount_plan_amount,
+                          ttDiscount.discount_valid_periods).
+   ELSE lcItemParam = "".
 
    fCreateOrderAction(Order.Orderid,
-                     "Discount",
-                      STRING(DiscountPlan.DPId),
+                     "DiscountPlan",
+                      DiscountPlan.DPRuleID,
                       lcItemParam).
 END.
 
 /* Apply CONVDISC discount to convergent tariff with STC order - 
    April promo (OR) Convergent New Adds Promotion */
 IF pcNumberType EQ "stc" AND fIsConvergenceTariff(pcSubType) THEN DO:
-   FIND FIRST ConvDiscountPlan WHERE
-              ConvDiscountPlan.Brand      = Syst.Var:gcBrand         AND
-             (ConvDiscountPlan.DPRuleID   = "CONVDISC"      OR
-              ConvDiscountPlan.DPRuleID   = "CONVDISC20_3") AND
-              ConvDiscountPlan.ValidFrom <= TODAY           AND
-              ConvDiscountPlan.ValidTo   >= TODAY           NO-LOCK NO-ERROR.
-   IF AVAIL ConvDiscountPlan THEN
+
+   llCreateDisc = TRUE.
+   FOR EACH ttDiscount:
+       IF fMatrixAnalyse(Syst.Var:gcBrand,
+                     "DISCOUNT-OVERRIDE",
+                     "Discount;DiscountOld",
+                     ttDiscount.DPRuleID + ";" + "CONVDISC",
+                     OUTPUT lcError) EQ 0 THEN DO:
+         llCreateDisc = FALSE.
+         LEAVE.
+      END.
+   END.
+
+   IF llCreateDisc THEN
       fCreateOrderAction(Order.Orderid,
-                         "Discount",
-                         STRING(ConvDiscountPlan.DPId),
+                         "DiscountPlan",
+                         "CONVDISC",
                          "").
 END.
 
@@ -2089,6 +2128,13 @@ IF AVAIL AddLineDiscountPlan THEN DO:
    fCreateOrderAction(Order.Orderid,
                       "AddLineDiscount",
                       AddLineDiscountPlan.DPRuleId,
+                      "").
+END.
+
+IF lcFixedLinePermanency > "" THEN DO:
+   fCreateOrderAction(Order.Orderid,
+                      "FixedPermanency",
+                      lcFixedLinePermanency,
                       "").
 END.
 
@@ -2700,4 +2746,5 @@ END.
 add_int(response_toplevel_id, "", liOrderId).
 
 FINALLY:
-   END.
+   EMPTY TEMP-TABLE ttDiscount NO-ERROR.
+END.
