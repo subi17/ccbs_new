@@ -55,7 +55,7 @@ FORM
     SKIP
     "Serial Number .....:" TPService.SerialNbr
     SKIP
-    "Sky TV Voucher ....:" TPService.SkyTvVoucher FORMAT "X(24)" lcVoucherStatus FORMAT "X(20)" AT 38 
+    "Sky TV Voucher ....:" TPService.SkyTvVoucher lcVoucherStatus FORMAT "X(15)" AT 38 
     SKIP
     "External Id .......:" TPService.MessageId
     SKIP
