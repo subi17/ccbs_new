@@ -246,7 +246,7 @@ FUNCTION fValidateProSTC RETURNS CHAR
 
    IF bNew.Paytype EQ {&CLITYPE_PAYTYPE_PREPAID} THEN 
       RETURN "STC to Prepaid is not allowed for Pro customer".
-   IF fIs2PTariff(bNew.Clitype) AND NOT fIs3PTariff(bCurr.Clitype)  THEN DO:
+   IF fIsFixedOnly(bNew.Clitype) AND NOT fIs3PTariff(bCurr.Clitype)  THEN DO:
       ll3PFound = FALSE.
       FOR EACH Mobsub WHERE
                Mobsub.brand EQ gcbrand AND
