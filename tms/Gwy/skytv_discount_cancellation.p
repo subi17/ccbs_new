@@ -57,7 +57,7 @@ PROCEDURE pProcessRequests:
 
         ASSIGN 
             TPService.VoucherStatus   = "Cancelled"
-            TPService.VoucherCancelDt = ttCancellation.CancelDate.
+            TPService.VoucherCancelDt = TODAY.
 
     END.
 
