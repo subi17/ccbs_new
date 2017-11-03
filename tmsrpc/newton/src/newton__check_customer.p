@@ -348,6 +348,8 @@ IF AVAIL Customer AND
 ASSIGN
     lcPROChannels    = fCParamC("PRO_CHANNELS").
 
+lcSegment    = fgetCustSegment(pcIdType, plSelfEmployed, llProChannel, OUTPUT lccategory).
+
 /* If customer does not have subscriptions it is handled as new */
 
 IF AVAIL Customer AND
@@ -366,8 +368,7 @@ ELSE IF AVAIL Customer AND
    FIND FIRST CustCat WHERE Custcat.brand EQ "1" AND CustCat.category EQ Customer.category NO-LOCK NO-ERROR.
    IF AVAIL CustCat THEN
       ASSIGN
-          llCustCatPro = CustCat.pro
-          lcSegment    = CustCat.Segment.
+          llCustCatPro = CustCat.pro.
  
     ASSIGN 
        llNonProToProMigrationOngoing = fCheckOngoingProMigration   (Customer.CustNum)
@@ -438,7 +439,6 @@ ELSE IF AVAIL Customer AND
     END.
 END.
 ELSE DO:
-   lcSegment = fgetCustSegment(pcIdType, plSelfEmployed, llProChannel, OUTPUT lccategory).
    IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN DO:
       IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
            ASSIGN
