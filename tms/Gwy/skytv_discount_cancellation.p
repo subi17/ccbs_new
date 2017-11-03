@@ -38,7 +38,7 @@ PROCEDURE pProcessRequests:
         DO:
             FIND FIRST Customer WHERE Customer.CustNum = MobSub.AgrCust NO-LOCK NO-ERROR.
             IF AVAIL Customer THEN
-                ASSIGN lcDiscPlan = fGetRegionDiscountPlan(ttCustomer.Region)    
+                ASSIGN lcDiscPlan = fGetRegionDiscountPlan(ttCustomer.Region).    
         END.
 
         IF lcDiscPlan > "" THEN 
