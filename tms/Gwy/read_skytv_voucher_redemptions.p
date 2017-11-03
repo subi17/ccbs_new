@@ -12,12 +12,12 @@ gcBrand = "1".
 {Func/orderfunc.i}
 
 DEFINE TEMP-TABLE ttRedemption
-    FIELD Voucher    AS CHAR
-    FIELD ExpiryDate AS DATE
-    FIELD Status     AS CHAR 
-    FIELD TimesUsed  AS INTE
-    FIELD RedemDate  AS DATE
-    FIELD FileName   AS CHAR
+    FIELD Voucher       AS CHAR
+    FIELD ExpiryDate    AS DATE
+    FIELD VoucherStatus AS CHAR 
+    FIELD TimesUsed     AS INTE
+    FIELD RedemDate     AS DATE
+    FIELD FileName      AS CHAR
     INDEX IdxVoucher IS UNIQUE PRIMARY Voucher.
 
 DO ON ERROR UNDO, THROW:
@@ -54,7 +54,7 @@ PROCEDURE pUpdateStatus:
                               TPService.Operation    = {&TYPE_ACTIVATION}   EXCLUSIVE-LOCK:
 
         ASSIGN 
-            TPService.VoucherStatus   = ttRedemption.Status
+            TPService.VoucherStatus   = ttRedemption.VoucherStatus
             TPService.VoucherExpiryDt = ttRedemption.ExpiryDate
             TPService.VoucherRedemDt  = ttRedemption.RedemDate
             TPService.RedemFile       = ttRedemption.FileName.    
@@ -109,17 +109,16 @@ PROCEDURE pReadFile:
 
         CREATE ttRedemption.
         ASSIGN
-            ttRedemption.FileName   = icFileName
-            ttRedemption.Voucher    = ENTRY(1,lcData)
-            ttRedemption.ExpiryDate = DATE(ENTRY(1,ENTRY(2,lcData)," "))    
-            ttRedemption.Status     = ENTRY(3,lcData)    
-            ttRedemption.TimesUsed  = INT(ENTRY(4,lcData))
-            ttRedemption.RedemDate  = (IF ENTRY(5,lcData) = "" THEN 
-                                           ? 
-                                       ELSE 
-                                           DATE(ENTRY(1,ENTRY(5,lcData)," "))
-                                      ).
-
+            ttRedemption.FileName      = icFileName
+            ttRedemption.Voucher       = ENTRY(1,lcData)
+            ttRedemption.ExpiryDate    = DATE(ENTRY(1,ENTRY(2,lcData)," "))    
+            ttRedemption.VoucherStatus = ENTRY(3,lcData)    
+            ttRedemption.TimesUsed     = INT(ENTRY(4,lcData))
+            ttRedemption.RedemDate     = (IF ENTRY(5,lcData) = "" THEN 
+                                             ? 
+                                         ELSE 
+                                             DATE(ENTRY(1,ENTRY(5,lcData)," "))
+                                         ).
     END.
     INPUT CLOSE.
     
