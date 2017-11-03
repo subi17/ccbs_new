@@ -154,6 +154,11 @@ FOR EACH daycampaign NO-LOCK:
        add_double(top_struct, "price"     , ldPrice).
        add_string(top_struct, "status"    , STRING(liServStatus)).
        add_string(top_struct, "category"  , "tv").
+       IF INDEX(DayCampaign.DCEvent, "SKYTV") > 0 THEN
+            add_string(top_struct, "skytv_voucher_status"  , (IF TPService.VoucherStatus <> "" THEN 
+                                                                 TPService.VoucherStatus 
+                                                              ELSE 
+                                                                 "Unlocked")).
    END.
 END.
 
