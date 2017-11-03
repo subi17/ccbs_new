@@ -230,7 +230,7 @@ FUNCTION fValidateProSTC RETURNS CHAR
       RETURN "STC to Prepaid is not allowed for Pro customer".
    IF fIsFixedOnly(bNew.Clitype) AND NOT fIs3PTariff(bCurr.Clitype)  THEN DO:
       FOR EACH Mobsub WHERE
-               Mobsub.brand EQ gcbrand AND
+               Mobsub.brand EQ Syst.Var:gcbrand AND
                Mobsub.custnum EQ iiCustomer:
          IF fIsConvergenceTariff(MobSub.clitype) THEN RETURN "".
       END.

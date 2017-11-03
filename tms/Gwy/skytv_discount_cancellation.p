@@ -1,10 +1,8 @@
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/log.i}
-{Func/date.i}
 {Func/memo.i}
 {Func/cparam2.i}
 {Mc/orderfusion.i}
