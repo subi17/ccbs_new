@@ -22,6 +22,45 @@ ADD FIELD "RedemFile" OF "TPService" AS character
   HELP "Redemption File Name"
   ORDER 200
 
+ADD FIELD "VoucherActiveDt" OF "TPService" AS date
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Voucher Active"
+  COLUMN-LABEL "Voucher Active"
+  HELP "Voucher Active Date"
+  ORDER 210
+
+ADD FIELD "VoucherExpiryDt" OF "TPService" AS date
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Voucher Expiry"
+  COLUMN-LABEL "Voucher Expiry"
+  HELP "Voucher Expiry Date"
+  ORDER 220
+
+ADD FIELD "VoucherRedemDt" OF "TPService" AS date
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Voucher Redem"
+  COLUMN-LABEL "Voucher Redem"
+  HELP "Voucher Redem Date"
+  ORDER 230
+
+ADD FIELD "VoucherCancelDt" OF "TPService" AS date
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Voucher Cancel"
+  COLUMN-LABEL "Voucher Cancel"
+  HELP "Voucher Cancel Date"
+  ORDER 240
+
+ADD INDEX "VoucherStatus" ON "TPService"
+  AREA "Dyn_Index_1"
+  INDEX-FIELD "VoucherStatus" ASCENDING
+  INDEX-FIELD "Operation"     ASCENDING
+  INDEX-FIELD "ServType"      ASCENDING
+  INDEX-FIELD "ServStatus"    ASCENDING
+
 ADD INDEX "Voucher" ON "TPService"
   AREA "Dyn_Index_1"
   INDEX-FIELD "SkyTvVoucher" ASCENDING
