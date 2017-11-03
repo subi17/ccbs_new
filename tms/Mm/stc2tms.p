@@ -1027,9 +1027,11 @@ PROCEDURE pFinalize:
    DEF VAR lcFusionSubsType      AS CHAR NO-UNDO.
    DEF VAR lcPostpaidDataBundles AS CHAR NO-UNDO.
    DEF VAR lcDataBundleCLITypes  AS CHAR NO-UNDO.
+   DEF VAR llMigrationNeeded     AS LOG  NO-UNDO.
 
    DEF BUFFER DataContractReq FOR MsRequest. 
-
+   DEF BUFFER Order FOR Order.
+   DEF BUFFER bMobsub FOR Mobsub.
    /* now when billtarget has been updated new fees can be created */
 
    FIND FIRST MobSub WHERE MobSub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
@@ -1308,7 +1310,21 @@ PROCEDURE pFinalize:
                 Order.OrderType EQ {&ORDER_TYPE_STC}:
 
          IF Order.StatusCode EQ {&ORDER_STATUS_ONGOING} THEN DO:
-         
+            FOR FIRST OrderCustomer WHERE
+                       OrderCustomer.brand EQ gcBrand AND
+                       Ordercustomer.orderid EQ MsRequest.ReqIParam2 AND
+                       OrderCustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
+                       Ordercustomer.pro,
+                FIRST Customer WHERE
+                      Customer.brand EQ gcbrand AND
+                      Customer.orgid EQ Ordercustomer.custid AND
+                      customer.category NE Ordercustomer.category,
+                FIRST bMobsub WHERE
+                      bMobsub.brand EQ gcbrand AND
+                      bMobsub.custnum EQ customer.custnum AND
+                      bMobsub.msseq ne MsRequest.msseq NO-LOCK:
+               llmigrationNeeded = TRUE.
+            END.         
             /* update customer data */
             RUN Mm/createcustomer.p(Order.OrderId,1,FALSE,TRUE,output liCustnum).
 
@@ -1318,7 +1334,22 @@ PROCEDURE pFinalize:
                                     ?,
                                     MsRequest.MsRequest,
                                     {&REQUEST_SOURCE_STC}).
+            IF llMigrationNeeded THEN DO:
+               lcResult =  fProMigrateOtherSubs (order.Custnum, order.msseq,
+                                                 MSRequest.msrequest,
+                                                 MSRequest.salesman).
+               FIND MSRequest WHERE MSRequest.MsRequest = iiMSRequest NO-LOCK.
             
+               IF lcResult > "" THEN DO:
+                  /* write possible error to a memo */
+                  DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
+                                   "MobSub",
+                                   STRING(MobSub.MsSeq),
+                                   MobSub.Custnum,
+                                   "Migration failed",
+                                   lcResult).
+               END.
+            END.
             fSetOrderStatus(Order.OrderId,"6").  
             fMarkOrderStamp(Order.OrderID,
                             "Delivery",
@@ -1335,7 +1366,7 @@ PROCEDURE pFinalize:
    
    /* request handled succesfully */
    fReqStatus(2,"").
-
+   
    IF bOldType.CLIType EQ "CONTM2" OR
       CLIType.CLIType EQ "CONTM2" THEN DO:
       

@@ -198,6 +198,79 @@ FUNCTION fCheckMigration RETURNS LOG ():
                 END.
              END.
           END.
+          ELSE IF (pcChannel EQ "Telesales_pro" OR
+                   pcChannel EQ "Fusion_Telesales_pro" OR 
+                   pcChannel EQ "Fusion_pos_pro") 
+          THEN DO:
+             IF CAN-FIND(FIRST Mobsub NO-LOCK WHERE
+                               Mobsub.Brand EQ gcBrand AND
+                               Mobsub.InvCust EQ Customer.CustNum AND
+                               Mobsub.paytype) THEN DO:
+               ASSIGN
+                  llOrderAllowed = FALSE
+                  lcReason = "PRO migration not possible because of prepaid subscription".
+             END.
+             /* Check any ongoing orders */
+             ELSE IF fCheckOngoingOrders(Customer.OrgID, Customer.CustIDType,
+                                    0) THEN DO:
+             ASSIGN
+                llOrderAllowed = FALSE
+                lcReason = "PRO migration not possible because of active non pro orders".
+             END.
+             ELSE DO:
+                llOnlyActiveFound = FALSE.
+                FOR EACH Mobsub NO-LOCK WHERE
+                         Mobsub.Brand EQ Syst.Var:gcBrand AND
+                         Mobsub.InvCust EQ Customer.CustNum:
+                   IF NOT fIsConvergent3POnly(Mobsub.clitype) THEN DO:
+                      NEXT.
+                   END.
+                   ELSE DO:
+                      llOnlyActiveFound = TRUE.
+                      LEAVE.
+                   END.
+                END.
+                IF llOnlyActiveFound THEN DO:
+                   ASSIGN
+                      llOrderAllowed = FALSE
+                      lcReason = "This migration is not allowed because of active 3P convergent".
+                END.
+                ELSE DO:
+                   FOR EACH Mobsub NO-LOCK WHERE
+                            Mobsub.Brand EQ Syst.Var:gcBrand AND
+                            Mobsub.InvCust EQ Customer.CustNum:
+                      FIND FIRST Clitype WHERE
+                                 Clitype.brand EQ "1" AND
+                                 Clitype.clitype EQ Mobsub.clitype NO-LOCK NO-ERROR.
+                      IF (AVAIL CLitype AND clitype.WebStatusCode EQ 1 OR
+                         fgetActiveReplacement(Mobsub.clitype) > "") THEN DO:
+                         IF fHasTVService(Mobsub.msseq) THEN DO:
+                         /* TV service not allowed for PRO */
+                            ASSIGN
+                               llOrderAllowed = FALSE
+                               lcReason = "PRO migration not possible because of TV service".
+                            LEAVE.
+                         END.
+                         ELSE
+                            IF llOnlyActiveFound EQ FALSE THEN
+                               llOnlyActiveFound = TRUE.
+                      END.
+                      ELSE DO:
+                         /* found subscription that rejects migration
+                            commercially non active that does not have
+                            migration mapping or tv service activated */
+                         llOnlyActiveFound = FALSE.
+                         LEAVE.
+                      END.
+                   END.
+                END. 
+                IF NOT llOnlyActiveFound  THEN DO:
+                   ASSIGN
+                      llOrderAllowed = FALSE
+                      lcReason = "This migration is not allowed. Please change tariff to the commercially active ones.".
+                END.                
+             END.             
+          END.          
           ELSE
           ASSIGN
              llOrderAllowed = FALSE
@@ -282,6 +355,8 @@ IF AVAIL Customer AND
 ASSIGN
     lcPROChannels    = fCParamC("PRO_CHANNELS").
 
+lcSegment    = fgetCustSegment(pcIdType, plSelfEmployed, llProChannel, OUTPUT lccategory).
+
 /* If customer does not have subscriptions it is handled as new */
 
 IF AVAIL Customer AND
@@ -300,8 +375,7 @@ ELSE IF AVAIL Customer AND
    FIND FIRST CustCat WHERE Custcat.brand EQ "1" AND CustCat.category EQ Customer.category NO-LOCK NO-ERROR.
    IF AVAIL CustCat THEN
       ASSIGN
-          llCustCatPro = CustCat.pro
-          lcSegment    = CustCat.Segment.
+          llCustCatPro = CustCat.pro.
  
     ASSIGN 
        llNonProToProMigrationOngoing = fCheckOngoingProMigration   (Customer.CustNum)
@@ -372,7 +446,6 @@ ELSE IF AVAIL Customer AND
     END.
 END.
 ELSE DO:
-   lcSegment = fgetCustSegment(pcIdType, plSelfEmployed, llProChannel, OUTPUT lccategory).
    IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN DO:
       IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
            ASSIGN
