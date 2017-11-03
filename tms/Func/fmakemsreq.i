@@ -229,7 +229,7 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
           bCreaReq.ReqDParam2  = ideFee
           bCreaReq.ReqIParam1  = iiCreditCheck
           bCreaReq.ReqIParam2  = iiOrderID
-          bCreaReq.ReqIParam4  = (IF llProCustomer THEN 1 ELSE 0) /* This is for request action rules, so only bundles specific to PRO customer are activated*/
+          bCreaReq.ReqIParam4  = (IF llProCustomer OR icSource EQ {&REQUEST_SOURCE_MIGRATION} THEN 1 ELSE 0) /* This is for request action rules, so only bundles specific to PRO customer are activated*/
           bCreaReq.ReqIParam5  = iiRequestFlags
           bCreaReq.Salesman    = icSalesman
           bCreaReq.ReqSource   = icSource
