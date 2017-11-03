@@ -249,7 +249,7 @@ FUNCTION fValidateProSTC RETURNS CHAR
    IF fIsFixedOnly(bNew.Clitype) AND NOT fIs3PTariff(bCurr.Clitype)  THEN DO:
       ll3PFound = FALSE.
       FOR EACH Mobsub WHERE
-               Mobsub.brand EQ gcbrand AND
+               Mobsub.brand EQ Syst.Var:gcBrand AND
                Mobsub.custnum EQ iiCustomer:
          IF NOT fIs3PTariff(MobSub.clitype) THEN NEXT.
          ELSE ll3PFound = TRUE.
