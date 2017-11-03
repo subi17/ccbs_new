@@ -224,6 +224,8 @@ FUNCTION fValidateProSTC RETURNS CHAR
    DEF BUFFER bNew FOR CLIType.
    DEF BUFFER Customer FOR Customer.
    DEF BUFFER mobsub FOR mobsub.
+
+   DEF VAR ll3PFound AS LOGICAL NO-UNDO.
    
    FIND FIRST Customer NO-LOCK WHERE
               Customer.CustNum EQ iiCustomer NO-ERROR.
@@ -245,12 +247,14 @@ FUNCTION fValidateProSTC RETURNS CHAR
    IF bNew.Paytype EQ {&CLITYPE_PAYTYPE_PREPAID} THEN 
       RETURN "STC to Prepaid is not allowed for Pro customer".
    IF fIs2PTariff(bNew.Clitype) AND NOT fIs3PTariff(bCurr.Clitype)  THEN DO:
+      ll3PFound = FALSE.
       FOR EACH Mobsub WHERE
                Mobsub.brand EQ gcbrand AND
                Mobsub.custnum EQ iiCustomer:
-         IF fIsConvergenceTariff(MobSub.clitype) THEN RETURN "".
+         IF NOT fIs3PTariff(MobSub.clitype) THEN NEXT.
+         ELSE ll3PFound = TRUE.
       END.
-      RETURN "STC to 2P is not allowed for Pro customer".  /* STC to pro allowed from mobile to 2P and if there is still convergent left and YPPI-5 3P to 2P */
+      IF NOT ll3PFound THEN RETURN "STC to 2P is not allowed for Pro customer".  /* STC to pro allowed from mobile to 2P and if there is still convergent left and YPPI-5 3P to 2P */
    END.   
    RETURN "".
 END.
