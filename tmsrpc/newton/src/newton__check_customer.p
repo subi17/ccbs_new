@@ -244,8 +244,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                                  Clitype.brand EQ "1" AND
                                  Clitype.clitype EQ Mobsub.clitype NO-LOCK NO-ERROR.
                       IF (AVAIL CLitype AND clitype.WebStatusCode EQ 1 OR
-                         fgetActiveReplacement(Mobsub.clitype) > "") AND
-                         NOT fHasTVService(Mobsub.msseq) THEN DO:
+                         fgetActiveReplacement(Mobsub.clitype) > "") THEN DO:
                          IF fHasTVService(Mobsub.msseq) THEN DO:
                          /* TV service not allowed for PRO */
                             ASSIGN
@@ -266,7 +265,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                       END.
                    END.
                 END. 
-                IF NOT llOnlyActiveFound THEN DO:
+                IF NOT llOnlyActiveFound  THEN DO:
                    ASSIGN
                       llOrderAllowed = FALSE
                       lcReason = "This migration is not allowed. Please change tariff to the commercially active ones.".
