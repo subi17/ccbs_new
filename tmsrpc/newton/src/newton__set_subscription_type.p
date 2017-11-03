@@ -144,6 +144,7 @@ IF fValidateMobTypeCh(
    {&REQUEST_SOURCE_NEWTON}, 
    OUTPUT lcError) EQ FALSE THEN RETURN appl_err(lcError).
 
+<<<<<<< HEAD
   /*YPRO*/
   lcProValidation = fValidateProSTC(MobSub.Custnum,
                                     MobSub.CliType,
@@ -154,6 +155,10 @@ IF fValidateMobTypeCh(
 
 /* Set the Syst.Var:katun again with original username */
 Syst.Var:katun = "VISTA_" + pcSalesman.
+=======
+/* Set the katun again with original username */
+katun = "VISTA_" + pcSalesman.
+>>>>>>> YPRO-phase2-delivery3
 
 IF fValidateNewCliType(INPUT pcCliType, INPUT pcDataBundleId,
                        INPUT plByPass, OUTPUT lcError) NE 0
