@@ -219,42 +219,51 @@ FUNCTION fCheckMigration RETURNS LOG ():
                 lcReason = "PRO migration not possible because of active non pro orders".
              END.
              ELSE DO:
-                IF CAN-FIND(FIRST Mobsub NO-LOCK WHERE
-                                  Mobsub.Brand EQ Syst.Var:gcBrand AND
-                                  Mobsub.InvCust EQ Customer.CustNum AND
-                                  fIsConvergent3POnly(Mobsub.clitype)) THEN DO:
-
-                   ASSIGN
-                      llOrderAllowed = FALSE
-                      lcReason = "This migration is not allowed because of active 3P convergent".
-                END.
                 llOnlyActiveFound = FALSE.
                 FOR EACH Mobsub NO-LOCK WHERE
                          Mobsub.Brand EQ Syst.Var:gcBrand AND
                          Mobsub.InvCust EQ Customer.CustNum:
-                   FIND FIRST Clitype WHERE
-                              Clitype.brand EQ "1" AND
-                              Clitype.clitype EQ Mobsub.clitype NO-LOCK NO-ERROR.
-                   IF (AVAIL CLitype AND clitype.WebStatusCode EQ 1 OR
-                      fgetActiveReplacement(Mobsub.clitype) > "") AND
-                      NOT fHasTVService(Mobsub.msseq) THEN DO:
-                      IF fHasTVService(Mobsub.msseq) THEN DO:
-                      /* TV service not allowed for PRO */
-                         ASSIGN
-                            llOrderAllowed = FALSE
-                            lcReason = "PRO migration not possible because of TV service".
-                         LEAVE.
-                      END.
-                      ELSE
-                         IF llOnlyActiveFound EQ FALSE THEN
-                            llOnlyActiveFound = TRUE.
+                   IF NOT fIsConvergent3POnly(Mobsub.clitype) THEN DO:
+                      NEXT.
                    END.
                    ELSE DO:
-                      /* found subscription that rejects migration
-                         commercially non active that does not have
-                         migration mapping or tv service activated */
-                      llOnlyActiveFound = FALSE.
+                      llOnlyActiveFound = TRUE.
                       LEAVE.
+                   END.
+                END.   
+                IF llOnlyActiveFound THEN DO:
+                   ASSIGN
+                      llOrderAllowed = FALSE
+                      lcReason = "This migration is not allowed because of active 3P convergent".
+                END.
+                ELSE DO:
+                   FOR EACH Mobsub NO-LOCK WHERE
+                            Mobsub.Brand EQ Syst.Var:gcBrand AND
+                            Mobsub.InvCust EQ Customer.CustNum:
+                      FIND FIRST Clitype WHERE
+                                 Clitype.brand EQ "1" AND
+                                 Clitype.clitype EQ Mobsub.clitype NO-LOCK NO-ERROR.
+                      IF (AVAIL CLitype AND clitype.WebStatusCode EQ 1 OR
+                         fgetActiveReplacement(Mobsub.clitype) > "") AND
+                         NOT fHasTVService(Mobsub.msseq) THEN DO:
+                         IF fHasTVService(Mobsub.msseq) THEN DO:
+                         /* TV service not allowed for PRO */
+                            ASSIGN
+                               llOrderAllowed = FALSE
+                               lcReason = "PRO migration not possible because of TV service".
+                            LEAVE.
+                         END.
+                         ELSE
+                            IF llOnlyActiveFound EQ FALSE THEN
+                               llOnlyActiveFound = TRUE.
+                      END.
+                      ELSE DO:
+                         /* found subscription that rejects migration
+                            commercially non active that does not have
+                            migration mapping or tv service activated */
+                         llOnlyActiveFound = FALSE.
+                         LEAVE.
+                      END.
                    END.
                 END.
                 IF NOT llOnlyActiveFound THEN DO:
