@@ -45,10 +45,10 @@ PROCEDURE pUpdateStatus:
 
     OUTPUT TO VALUE(lcLogFile) APPEND.
     FOR EACH ttCancellation,
-        FIRST TPService WHERE TPService.SkyTvVoucher = ttCancellation.Voucher AND    
-                              TPService.ServType     = "Television"           AND    
-                              TPService.ServStatus   = {&STATUS_HANDLED}      AND 
-                              TPService.Operation    = {&TYPE_ACTIVATION}     EXCLUSIVE-LOCK:
+        EACH TPService WHERE TPService.SkyTvVoucher = ttCancellation.Voucher AND    
+                             TPService.ServType     = "Television"           AND    
+                             TPService.ServStatus   = {&STATUS_HANDLED}      AND 
+                             TPService.Operation    = {&TYPE_ACTIVATION}     EXCLUSIVE-LOCK:
 
         ASSIGN 
             TPService.VoucherStatus   = "Cancelled"
