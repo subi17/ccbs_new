@@ -265,7 +265,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                       END.
                    END.
                 END. 
-                IF NOT llOnlyActiveFound THEN DO:
+                IF NOT llOnlyActiveFound  THEN DO:
                    ASSIGN
                       llOrderAllowed = FALSE
                       lcReason = "This migration is not allowed. Please change tariff to the commercially active ones.".
