@@ -1315,15 +1315,16 @@ PROCEDURE pFinalize:
                 Order.OrderType EQ {&ORDER_TYPE_STC}:
 
          IF Order.StatusCode EQ {&ORDER_STATUS_ONGOING} THEN DO:
-            FOR FIRST OrderCustomer WHERE
-                       OrderCustomer.brand EQ gcBrand AND
-                       Ordercustomer.orderid EQ MsRequest.ReqIParam2 AND
-                       OrderCustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
-                       Ordercustomer.pro,
-                FIRST Customer WHERE
+            FOR FIRST OrderCustomer NO-LOCK WHERE
+                      OrderCustomer.brand EQ gcBrand AND
+                      Ordercustomer.orderid EQ MsRequest.ReqIParam2 AND
+                      OrderCustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
+                      Ordercustomer.pro,
+                FIRST Customer NO-LOCK WHERE
                       Customer.brand EQ gcbrand AND
                       Customer.orgid EQ Ordercustomer.custid AND
-                      customer.category NE Ordercustomer.category,
+                      Customer.CustidType = Ordercustomer.CustidType AND
+                      Customer.category NE Ordercustomer.category,
                 FIRST bMobsub WHERE
                       bMobsub.brand EQ gcbrand AND
                       bMobsub.custnum EQ customer.custnum AND
