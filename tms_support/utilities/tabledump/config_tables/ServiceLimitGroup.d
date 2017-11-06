@@ -63,6 +63,7 @@
 "1" "DSS2_UPSELL" "DSS 2 Bundle Upsell" 01/09/13 31/12/49
 "1" "DSS_FLEX_500MB_UPSELL" "DSS 500MB Flex Upsell" 05/07/17 31/12/49
 "1" "DSS_FLEX_5GB_UPSELL" "DSS 5GB Flex Upsell" 05/07/17 31/12/49
+"1" "DSS_FLEX_UPSELL" "DSS Mobile Data Usage Flex Ups" 01/11/17 31/12/49
 "1" "DSS_UPSELL" "DSS Bundle Upsel" 23/11/11 31/12/49
 "1" "DSS_UPSELL_UPGRADE" "Upsell Upgrade DSS customer" 23/03/12 31/12/49
 "1" "DUB" "Data Usage Bundle 500 MB" 31/01/11 31/12/49
