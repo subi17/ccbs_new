@@ -538,7 +538,7 @@ PROCEDURE pBundleCheck:
            iiCustNum "|"
            iiMsSeq   "|"
            icCLI     "|"
-           lcBundle  SKIP.
+           icBundle  SKIP.
 
         liBundleCount = liBundleCount + 1.
      END.
@@ -552,3 +552,4 @@ OUTPUT STREAM strout CLOSE.
 MESSAGE "Done," liCount "missing contracts found" VIEW-AS ALERT-BOX.
 
 MESSAGE "Bundle tariff Count : " liBundleCount VIEW-AS ALERT-BOX.
+
