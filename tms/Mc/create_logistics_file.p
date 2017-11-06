@@ -387,6 +387,7 @@ FUNCTION fCheckForAdditionalORExtraMainLine RETURNS LOGICAL
    DEF VAR lcExtraLineCLITypes AS CHAR NO-UNDO. 
    DEF VAR liOrderLoop         AS INT  NO-UNDO.
    DEF VAR lcTerminalBillCode  AS CHAR NO-UNDO INITIAL "". 
+   DEF VAR lcMainCLIType       AS CHAR NO-UNDO INITIAL "".
 
    ASSIGN llDespachar         = FALSE
           liMainOrderId       = 0
@@ -461,15 +462,21 @@ FUNCTION fCheckForAdditionalORExtraMainLine RETURNS LOGICAL
                      IF bMLttOneDelivery.CIF NE bOrderCustomer.CustId THEN NEXT.
                   OTHERWISE .
                END.
+               
+               lcMainCLIType = "".
 
+               IF bMLttOneDelivery.SubsType BEGINS "FH" THEN
+                  lcMainCLIType = "CONT" + TRIM(bMLttOneDelivery.SubsType).
+               ELSE lcMainCLIType = TRIM(bMLttOneDelivery.SubsType).
+               
                IF LOOKUP(bOrderAction.ItemKey,{&ADDLINE_DISCOUNTS_20}) > 0 OR 
                   LOOKUP(bOrderAction.ItemKey, {&ADDLINE_DISCOUNTS})   > 0 THEN DO:
 
-                  IF NOT fIsConvergenceTariff(bMLttOneDelivery.SubsType) THEN 
+                  IF NOT fIsConvergenceTariff(lcMainCLIType) THEN 
                      NEXT MAINORDER.
 
                   IF LOOKUP(bOrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0 THEN 
-                     IF fIsConvergentAddLineOK(bMLttOneDelivery.SubsType,bOrder.CLIType) THEN
+                     IF fIsConvergentAddLineOK(lcMainCLIType,bOrder.CLIType) THEN
                         liMainOrderId = INT(bMLttOneDelivery.OrderId).
                   ELSE 
                       liMainOrderId = INT(bMLttOneDelivery.OrderId).
@@ -477,7 +484,7 @@ FUNCTION fCheckForAdditionalORExtraMainLine RETURNS LOGICAL
                END.
                ELSE DO:
                   IF LOOKUP(bOrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0 THEN
-                     IF fIsMobileOnlyAddLineOK(bMLttOneDelivery.SubsType,bOrder.CLIType) THEN 
+                     IF fIsMobileOnlyAddLineOK(lcMainCLIType,bOrder.CLIType) THEN 
                         liMainOrderId = INT(bMLttOneDelivery.OrderId).
                END.         
 
@@ -486,9 +493,9 @@ FUNCTION fCheckForAdditionalORExtraMainLine RETURNS LOGICAL
             
             END.
 
+            llgAdditionalLine = TRUE.
+         
          END.
-
-         llgAdditionalLine = TRUE.
 
       END. /* Additional line */
 
@@ -496,6 +503,9 @@ FUNCTION fCheckForAdditionalORExtraMainLine RETURNS LOGICAL
          llgAdditionalLine THEN DO:
          
          IF LOOKUP(bOrder.StatusCode,{&ORDER_ROI_STATUSES}) > 0 THEN 
+            llDespachar = FALSE.
+         ELSE IF fIsTerminalOrder(liMainOrderId,
+                                  OUTPUT lcTerminalBillCode) THEN 
             llDespachar = FALSE.
          ELSE llDespachar = TRUE.
 
