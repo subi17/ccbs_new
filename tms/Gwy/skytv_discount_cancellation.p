@@ -28,7 +28,7 @@ PROCEDURE pProcessRequests:
                              TPService.Operation     = {&TYPE_ACTIVATION} AND 
                              TPService.ServStatus    = {&STATUS_HANDLED}  EXCLUSIVE-LOCK:
 
-        ASSIGN ldtValidate = ADD-INTERVAL(TPService.VoucherActiveDt, 4, "weeks").
+        ASSIGN ldtValidate = ADD-INTERVAL(TPService.VoucherActiveDt, 5, "weeks").
 
         IF ldtValidate >= TODAY THEN
             NEXT.
