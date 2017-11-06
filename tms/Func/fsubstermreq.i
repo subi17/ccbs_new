@@ -17,6 +17,7 @@
 {Func/msisdn_prefix.i}
 {Func/fixedlinefunc.i}
 {Func/multitenantfunc.i}
+{Func/orderfunc.i}
 
 FUNCTION fTerminationRequest RETURNS INTEGER
    (INPUT  iiMsSeq        AS INT,    /* subscription         */
@@ -78,13 +79,14 @@ FUNCTION fTerminationRequest RETURNS INTEGER
    IF (fHasConvergenceTariff(iiMsSeq) AND
        icTermType = {&TERMINATION_TYPE_FULL}) THEN DO:
 
+      /* Close mobile part order when termination request is created. */
       FOR FIRST bOrder NO-LOCK WHERE
              bOrder.MsSeq = iiMsSeq AND
              (bOrder.StatusCode = {&ORDER_STATUS_PENDING_MOBILE_LINE} OR 
               bOrder.StatusCode = {&ORDER_STATUS_MNP} OR
               bOrder.StatusCode = {&ORDER_STATUS_MNP_REJECTED}):          
 
-         RUN Mc/closeorder.p:fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_CLOSED}).
+         RUN fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_CLOSED}).
       END.
                     
       /* Do not change the memo text (used by DWH) */
