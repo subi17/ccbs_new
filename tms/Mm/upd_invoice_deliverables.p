@@ -315,9 +315,13 @@ REPEAT:
    /* Set effective tenant based on file name. If not regocniced go next file
    */   
 
+/* TODO:Temporarily disabled due to YTS-11466 */
+/*
    lcTenant = ENTRY(1,ENTRY(1,lcFileName,"_"),"-").
    IF NOT fsetEffectiveTenantForAllDB(
          fConvertBrandToTenant(lcTenant)) THEN NEXT.
+*/
+   lcTenant = "Yoigo".
 
    lcLogFile = lcSpoolDir + lcTenant + "_invoice_deliverables_" +
                lcToday + "_" + lcTime + ".log".
