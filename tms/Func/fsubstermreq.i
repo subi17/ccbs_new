@@ -35,6 +35,7 @@ FUNCTION fTerminationRequest RETURNS INTEGER
 
    DEF VAR liReqCreated AS INT NO-UNDO.
    DEF BUFFER bMsRequest FOR MsRequest.
+   DEF BUFFER bOrder FOR Order.   
 
    ocResult = fChkRequest(iiMsSeq,
                           18,
@@ -77,6 +78,13 @@ FUNCTION fTerminationRequest RETURNS INTEGER
    IF (fHasConvergenceTariff(iiMsSeq) AND
        icTermType = {&TERMINATION_TYPE_FULL}) THEN DO:
 
+      IF CAN-FIND(FIRST bOrder NO-LOCK WHERE
+             bOrder.MsSeq = iiMsSeq AND
+             bOrder.StatusCode = {&ORDER_STATUS_PENDING_MOBILE_LINE} OR 
+             bOrder.StatusCode = {&ORDER_STATUS_MNP} OR
+             bOrder.StatusCode = {&ORDER_STATUS_MNP_REJECTED}) 
+         THEN fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_CLOSED}).
+         
       /* Do not change the memo text (used by DWH) */
       IF icTermReason EQ STRING({&SUBSCRIPTION_TERM_REASON_MNP}) THEN
          bCreaReq.Memo = "Fixed line need to be terminated by Yoigo BO".
@@ -87,14 +95,6 @@ FUNCTION fTerminationRequest RETURNS INTEGER
                         Order.StatusCode = {&ORDER_STATUS_PENDING_FIXED_LINE})
          THEN bCreaReq.ReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}.
    END.
-
-   ELSE IF (fHasConvergenceTariff(iiMsSeq) AND
-            icTermType = {&TERMINATION_TYPE_PARTIAL}) AND
-            (Order.StatusCode = {&ORDER_STATUS_PENDING_MOBILE_LINE} OR 
-             Order.StatusCode = {&ORDER_STATUS_MNP} OR
-             Order.StatusCode = {&ORDER_STATUS_MNP_REJECTED}) THEN DO:
-      RUN Mm/deletems1.p(INPUT iiMsSeq).
-   END. 
 
    RELEASE bCreaReq.
    
