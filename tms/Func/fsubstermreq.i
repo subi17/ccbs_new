@@ -17,7 +17,6 @@
 {Func/msisdn_prefix.i}
 {Func/fixedlinefunc.i}
 {Func/multitenantfunc.i}
-{Func/orderfunc.i}
 
 FUNCTION fTerminationRequest RETURNS INTEGER
    (INPUT  iiMsSeq        AS INT,    /* subscription         */
