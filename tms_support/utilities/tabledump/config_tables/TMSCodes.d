@@ -1447,6 +1447,7 @@
 "Salesman" "SmPrefix" "IFS" "KO" "KONECTA CROSS SELLING OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KR" "KONECTA RECEPCION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KW" "KONECTA WEB" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "KX" "KONECTA EMISION OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MA" "MADISON OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MB" "MARKTEL BO CANCELACIONES" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MC" "MADISON CARTERA" "" "15" 1
