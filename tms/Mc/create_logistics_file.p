@@ -493,9 +493,9 @@ FUNCTION fCheckForAdditionalORExtraMainLine RETURNS LOGICAL
             
             END.
 
+            llgAdditionalLine = TRUE.
+         
          END.
-
-         llgAdditionalLine = TRUE.
 
       END. /* Additional line */
 
@@ -503,6 +503,9 @@ FUNCTION fCheckForAdditionalORExtraMainLine RETURNS LOGICAL
          llgAdditionalLine THEN DO:
          
          IF LOOKUP(bOrder.StatusCode,{&ORDER_ROI_STATUSES}) > 0 THEN 
+            llDespachar = FALSE.
+         ELSE IF fIsTerminalOrder(liMainOrderId,
+                                  OUTPUT lcTerminalBillCode) THEN 
             llDespachar = FALSE.
          ELSE llDespachar = TRUE.
 
