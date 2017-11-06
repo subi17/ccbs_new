@@ -42,7 +42,7 @@ def clean(*a):
 
 
 logging_level = '3'
-extraargs = ['-logginglevel', logging_level, '-logthreshold', '1500000']
+extraargs = ['-logginglevel', logging_level, '-logthreshold', '15000000']
 
 @target
 def run_agent(*a):
