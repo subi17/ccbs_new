@@ -1,10 +1,8 @@
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/log.i}
-{Func/date.i}
 {Func/memo.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
@@ -38,7 +36,7 @@ PROCEDURE pUpdateStatus:
     DEF VAR lcErrMsg    AS CHAR NO-UNDO.
     
     ASSIGN 
-        ldeActStamp = fMakeTS()    
+        ldeActStamp = Func.Common:mMakeTS()    
         lcDateTime  = REPLACE(ISO-DATE(TODAY),"-","") + REPLACE(STRING(TIME,"HH:MM:SS"),":","")
         lcLogFile   = fCParamC('ActivationIncomingLogFileName')
         lcLogFile   = REPLACE(lcLogFile,"#DATETIME",lcDateTime).
@@ -64,7 +62,7 @@ PROCEDURE pUpdateStatus:
 
         IF lcDiscPlan > "" THEN 
         DO:
-            FIND FIRST DiscountPlan WHERE DiscountPlan.Brand = gcBrand AND DiscountPlan.DPRuleID = lcDiscPlan NO-LOCK NO-ERROR.
+            FIND FIRST DiscountPlan WHERE DiscountPlan.Brand = Syst.Var:gcBrand AND DiscountPlan.DPRuleID = lcDiscPlan NO-LOCK NO-ERROR.
             IF AVAIL DiscountPlan THEN 
             DO:
                 FIND FIRST DPMember WHERE DPMember.DPId      = DiscountPlan.DPId       AND 
