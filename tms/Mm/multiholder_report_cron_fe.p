@@ -1,6 +1,8 @@
 /* ----------------------------------------------------------------------
   MODULE .......: multiholder_report_cron.p
   TASK .........: Temporary report for multiholder data
+                  This is not used any more.The program was developed to
+                  specific reporting need.
   APPLICATION ..: tms
   AUTHOR .......: ilkkasav
   CREATED ......: 25.07.17
