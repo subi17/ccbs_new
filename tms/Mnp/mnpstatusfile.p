@@ -155,13 +155,13 @@ REPEAT:
          NEXT.
       END.
 
-      /* not yoigos or masmovil's case */
-      IF (lcDonor NE "005" AND lcRecipient NE "005") OR (lcDonor NE "200" AND lcRecipient NE "200") THEN DO:
+      /* not yoigos case */
+      IF lcDonor NE "005" AND lcRecipient NE "005" THEN DO:
          liSkipped = liSkipped + 1.
          NEXT.
       END.
       
-      IF (lcRecipient EQ "005" OR lcRecipient EQ "200") AND LOOKUP(lcNCStatus,"BNOT,BDEF,BDET,BFIN,BCAN") > 0 
+      IF lcRecipient EQ "005" AND LOOKUP(lcNCStatus,"BNOT,BDEF,BDET,BFIN,BCAN") > 0 
          THEN DO:
          liSkipped = liSkipped + 1.
          NEXT.
@@ -237,21 +237,13 @@ PROCEDURE pMNPStatusCheck:
 
    DEF BUFFER bMNPSub FOR MNPSub.
 
-   DEFINE VARIABLE liNCStatus       AS INTEGER   NO-UNDO. 
-   DEFINE VARIABLE lcTMSStatus      AS CHARACTER NO-UNDO. 
-   DEFINE VARIABLE liTMSStatus      AS INTEGER   NO-UNDO.
-   DEFINE VARIABLE lcTenant         AS CHAR      NO-UNDO.
-   DEFINE VARIABLE llYoigoTenant    AS LOGI      NO-UNDO INIT FALSE.
-   DEFINE VARIABLE llMasmovilTenant AS LOGI      NO-UNDO INIT FALSE.
+   DEFINE VARIABLE liNCStatus AS INTEGER NO-UNDO. 
+   DEFINE VARIABLE lcTMSStatus AS CHARACTER NO-UNDO. 
+   DEFINE VARIABLE liTMSStatus AS INTEGER NO-UNDO.
 
    FIND MNPProcess NO-LOCK WHERE 
         MNPProcess.PortRequest = icRefCode NO-ERROR.
    IF NOT AVAIL MNPProcess THEN RETURN "ERROR: MNP process not found".
-
-   ASSIGN
-      lcTenant         = BUFFER-TENANT-NAME(MNPProcess)
-      llYoigoTenant    = (IF lcTenant = {&TENANT_YOIGO}    THEN TRUE ELSE FALSE)   
-      llMasmovilTenant = (IF lcTenant = {&TENANT_MASMOVIL} THEN TRUE ELSE FALSE).
 
    IF MNPProcess.StatusCode = {&MNP_ST_AREC_CLOSED} THEN
       liTMSStatus = {&MNP_ST_AREC}.
@@ -324,7 +316,7 @@ PROCEDURE pMNPStatusCheck:
 
             IF AVAIL msisdn THEN DO:
             
-               liMSISDNStatus = (IF ((fIsYoigoCLI(msisdn.CLI) AND llYoigoTenant) OR (fIsMasmovilCLI(msisdn.CLI) AND llMasmovilTenant)) THEN 
+               liMSISDNStatus = (IF fIsYoigoCLI(msisdn.CLI) THEN 
                      {&MSISDN_ST_MNP_OUT_YOIGO} ELSE
                      {&MSISDN_ST_MNP_OUT_OTHER}).
       
@@ -364,7 +356,7 @@ PROCEDURE pMNPStatusCheck:
 
             fMakeMsidnHistory(recid(msisdn)).
 
-            liMSISDNStatus = (IF ((fIsYoigoCLI(msisdn.CLI) AND llYoigoTenant) OR (fIsMasmovilCLI(msisdn.CLI) AND llMasmovilTenant)) THEN 
+            liMSISDNStatus = (IF fIsYoigoCLI(MNPSub.CLI) THEN 
                   {&MSISDN_ST_MNP_OUT_YOIGO} ELSE
                   {&MSISDN_ST_MNP_OUT_OTHER}).
          
