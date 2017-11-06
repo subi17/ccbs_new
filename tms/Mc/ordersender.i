@@ -17,6 +17,8 @@
                 DEF VAR lh76Order AS HANDLE NO-UNDO.
 
             &ENDIF
+
+            RELEASE SIM.
                 
             /* Create separate activation request for NEW/MNP convergent fixed lines */
             IF fIsConvergenceTariff(Order.CLIType) AND
