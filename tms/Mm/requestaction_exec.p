@@ -289,7 +289,8 @@ PROCEDURE pPeriodicalContract:
       /*FTERM12 is coming only from allowed channels. So olnly ActionKey anddate is checked.*/          
        
       IF ttAction.ActionKey EQ "FTERM12-100" AND 
-         idActStamp < 20171101 AND
+         ((AVAIL bFTERMOrder AND bFTERMOrder.Crstamp < 20171101) OR
+          (NOT AVAIL bFTERMOrder AND idActStamp < 20171101)) AND
          CAN-FIND(FIRST bFTERMOrder NO-LOCK WHERE 
                         bFTERMOrder.brand EQ gcBrand AND
                         bFTERMOrder.OrderID EQ iiOrderID AND
