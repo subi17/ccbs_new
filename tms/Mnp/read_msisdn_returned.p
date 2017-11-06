@@ -19,7 +19,7 @@ gcBrand = "1".
 {Func/email.i}
 {Func/msisdn.i}
 
-DEFINE VARIABLE lii AS INTEGER NO-UNDO.
+DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO.
 
 DEFINE VARIABLE lcSep AS CHARACTER NO-UNDO INIT ";".
@@ -38,8 +38,7 @@ DEFINE VARIABLE lcReportFileOut AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcOutDir AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcConfDir AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE liNumOK AS INTEGER NO-UNDO. 
-DEFINE VARIABLE liNumErr AS INTEGER NO-UNDO.
-DEFINE VARIABLE llSkipFile AS LOGICAL NO-UNDO.
+DEFINE VARIABLE liNumErr AS INTEGER NO-UNDO. 
 
 /* field variables */
 DEFINE VARIABLE lcMSISDN AS CHARACTER NO-UNDO. 
@@ -79,8 +78,7 @@ REPEAT:
 
    ASSIGN
       liNumErr = 0
-      liNumOK = 0
-      llSkipFile = FALSE.
+      liNumOK = 0.
 
    IMPORT STREAM sFile UNFORMATTED lcFileName.
  
@@ -98,83 +96,54 @@ REPEAT:
               lcFilename  " "
               STRING(TODAY,"99.99.99") " "
               STRING(TIME,"hh:mm:ss") SKIP.
+  
+   LINE_LOOP:
+   REPEAT:
+      
+      IMPORT STREAM sin UNFORMATTED lcLine.
+      IF lcLine EQ "" THEN NEXT.
 
-   DO ON ERROR UNDO, THROW:
+      ASSIGN 
+         lcMSISDN = ENTRY(1,lcLine,lcSep)        
+         lcDate = ENTRY(2,lcLine,lcSep)        
+         NO-ERROR.
+ 
+      IF ERROR-STATUS:ERROR THEN DO:
+         fError("Wrong file format").
+         liNumErr = liNumErr + 1 .
+         NEXT.
+      END.
 
-      CASE ENTRY(1, lcFileName, "_"):
-         WHEN "005"
-         THEN multitenancy.TenantInformation:mSetEffectiveBrand("yoigo").
-         WHEN "200"
-         THEN multitenancy.TenantInformation:mSetEffectiveBrand("masmovil").
-         OTHERWISE DO:
-            fError("Invalid file prefix").
-            ASSIGN
-               liNumErr = liNumErr + 1
-               llSkipFile = TRUE.
-         END.
-      END CASE.
-
-      CATCH appError AS Progress.Lang.AppError:
-         DO lii = 1 TO appError:NumMessages:
-            fError(appError:GetMessage(lii)).
-         END.
-         ASSIGN
-            liNumErr = liNumErr + 1
-            llSkipFile = TRUE.
-      END CATCH.
-
-   END.
-
-   IF NOT llSkipFile
-   THEN DO:
-      LINE_LOOP:
-      REPEAT:
-         
-         IMPORT STREAM sin UNFORMATTED lcLine.
-         IF lcLine EQ "" THEN NEXT.
-   
-         ASSIGN 
-            lcMSISDN = ENTRY(1,lcLine,lcSep)        
-            lcDate = ENTRY(2,lcLine,lcSep)        
-            NO-ERROR.
-    
-         IF ERROR-STATUS:ERROR THEN DO:
-            fError("Wrong file format").
-            liNumErr = liNumErr + 1 .
-            NEXT.
-         END.
-   
-         ldaDate = date(
-            int(substring(lcDate,5,2)),
-            int(substring(lcDate,7,2)),
-            int(substring(lcDate,1,4))) no-error.
-         
-         IF ERROR-STATUS:ERROR THEN DO:
-            fError("Wrong file format").
-            liNumErr = liNumErr + 1 .
-            NEXT.
-         END.
-        
-         RUN pReturnMSISDN(lcMSISDN,
-                         ldaDate).
-   
-         IF RETURN-VALUE BEGINS "ERROR" THEN DO:
-            fError(ENTRY(2,RETURN-VALUE,":")).
-            liNumErr = liNumErr + 1 .
-         END.
-         ELSE DO:
-            liNumOK = liNumOK + 1 .
-         END.
+      ldaDate = date(
+         int(substring(lcDate,5,2)),
+         int(substring(lcDate,7,2)),
+         int(substring(lcDate,1,4))) no-error.
+      
+      IF ERROR-STATUS:ERROR THEN DO:
+         fError("Wrong file format").
+         liNumErr = liNumErr + 1 .
+         NEXT.
       END.
      
-      PUT STREAM sLog UNFORMATTED 
-          "input: " STRING(liNumOK + liNumErr) ", "
-          "updated: " STRING(liNumOK) ", "
-          "errors: " STRING(liNumErr) SKIP.
+      RUN pReturnMSISDN(lcMSISDN,
+                      ldaDate).
+
+      IF RETURN-VALUE BEGINS "ERROR" THEN DO:
+         fError(ENTRY(2,RETURN-VALUE,":")).
+         liNumErr = liNumErr + 1 .
+      END.
+      ELSE DO:
+         liNumOK = liNumOK + 1 .
+      END.
    END.
+  
+   PUT STREAM sLog UNFORMATTED 
+       "input: " STRING(liNumOK + liNumErr) ", "
+       "updated: " STRING(liNumOK) ", "
+       "errors: " STRING(liNumErr) SKIP.
 
    lcReportFileOut = fMove2TransDir(lcLogFile, "", lcOutDir).
-   lcProcessedFile = fMove2TransDir(lcInputFile, "", lcProcDir).
+   lcProcessedFile = fMove2TransDir(lcInputFile, "", lcProcDir). 
    IF lcProcessedFile NE "" THEN fBatchLog("FINISH", lcProcessedFile).
    
    INPUT STREAM sin CLOSE.

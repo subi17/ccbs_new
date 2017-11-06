@@ -50,14 +50,12 @@ DEFINE VARIABLE lcInputFile AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcProcDir AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcProcessedFile AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcSpoolDir AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE lcReportFileOut AS CHARACTER EXTENT 3 NO-UNDO. 
+DEFINE VARIABLE lcReportFileOut AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcOutDir AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcConfDir AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcLogFile AS CHAR NO-UNDO. 
-DEFINE VARIABLE liMNPSeq AS INTEGER NO-UNDO.
-DEFINE VARIABLE lcTimeValue AS CHARACTER NO-UNDO.
+DEFINE VARIABLE liMNPSeq AS INTEGER NO-UNDO. 
 DEF VAR liMSISDNStatus AS INT NO-UNDO. 
-DEFINE VARIABLE lii AS INTEGER NO-UNDO.
 
 /* counters */
 DEFINE VARIABLE liNumOK AS INTEGER NO-UNDO. 
@@ -77,86 +75,24 @@ ASSIGN
 DEF STREAM sin.
 DEF STREAM sFile.
 DEF STREAM sLog.
-DEF STREAM sLogAPOR.
-DEF STREAM sLogASOL.
-
-DEFINE VARIABLE lhsLog AS HANDLE EXTENT 3 NO-UNDO.
-
-ASSIGN
-   lhsLog[1] = STREAM sLog:HANDLE
-   lhsLog[2] = STREAM sLogAPOR:HANDLE
-   lhsLog[3] = STREAM sLogASOL:HANDLE.
-
 DEF STREAM sMSISDN.
 
 /* temporary logging (YTS-3289) */
 OUTPUT STREAM sMSISDN TO VALUE(lcRootDir + "msisdn_status_change.log") APPEND.
 
+FUNCTION fLogLine RETURNS LOGIC
+   (icMessage AS CHAR):
 
-FUNCTION fLog RETURNS LOGICAL
-   (ihStream AS HANDLE,
-    icMessage AS CHAR):
-
-   IF ihStream:PRIVATE-DATA BEGINS "!"
-   THEN DO:
-      ihStream:PRIVATE-DATA = SUBSTRING(ihStream:PRIVATE-DATA,2).
-      OUTPUT STREAM-HANDLE ihStream TO VALUE(ihStream:PRIVATE-DATA).
-   END.
-
-   PUT STREAM-HANDLE ihStream UNFORMATTED
+   PUT STREAM sLog UNFORMATTED
+      lcLine + "|" +
       icMessage SKIP.
       
 END FUNCTION.
 
-FUNCTION fError RETURNS LOGICAL
+FUNCTION fError RETURNS LOGIC
    (icMessage AS CHAR):
 
-   fLog(lhsLog[1], lcLine + "|" + icMessage).
-
-END FUNCTION.
-
-FUNCTION fCharToDate RETURNS DATE
-   (icCharDate AS CHARACTER):
-
-   DEFINE VARIABLE lcc AS CHARACTER NO-UNDO.
-   DEFINE VARIABLE lda AS DATE      NO-UNDO.
-   lcc = ENTRY(1,icCharDate,"/").
-
-   ASSIGN
-      lda = DATE(INTEGER(SUBSTRING(lcc,5,2)),
-                 INTEGER(SUBSTRING(lcc,7,2)),
-                 INTEGER(SUBSTRING(lcc,1,4)))
-      NO-ERROR.
-
-   IF ERROR-STATUS:ERROR
-   THEN RETURN ?.
-
-   RETURN lda.
-
-END FUNCTION.
-
-FUNCTION fErrorMulti RETURNS LOGICAL
-   (icMessage  AS CHAR,
-    icTime     AS CHAR,
-    icNCStatus AS CHAR,
-    icDonor    AS CHAR,
-    icNCTime   AS CHAR):
-
-   fLog(lhsLog[1], lcLine + "|" + icMessage).
-
-   IF icMessage = "ERROR: MNP process not found" AND
-      icDonor   = "005"
-   THEN DO:
-      IF icTime      = "0800" AND
-         icNCStatus  = "APOR" AND
-         fCharToDate(icNCTime) EQ TODAY
-      THEN fLog(lhsLog[2], lcLine + "|" + icMessage).
-
-      ELSE IF LOOKUP(icTime, "0800,1400") > 0 AND
-              icNCStatus = "ASOL"
-      THEN fLog(lhsLog[3], lcLine + "|" + icMessage).
-   END.
-
+   fLogLine("ERROR:" + icMessage).
 END FUNCTION.
 
 IF llDoEvent THEN RUN StarEventInitialize(lhMNPProcess).
@@ -186,27 +122,22 @@ REPEAT:
    IF SEARCH(lcInputFile) NE ? THEN 
       INPUT STREAM sin FROM VALUE(lcInputFile).
    ELSE NEXT.
-
-   ASSIGN
-      lcTimeValue = SUBSTRING(ENTRY(3,lcFileName,"_"),1,4)
-      lcLogFile = lcSpoolDir + entry(num-entries(lcInputFile,"/"), lcInputFile, "/").
    
    fBatchLog("START", lcInputFile).
    
-   DO lii = 1 TO 3:
-      lhsLog[lii]:PRIVATE-DATA = SUBSTITUTE("!&1&2.log",lcLogFile,ENTRY(lii,",_APOR,_ASOL")).
-   END.
+   lcLogFile = lcSpoolDir + entry(num-entries(lcInputFile,"/"), lcInputFile, "/") + ".log".
+   OUTPUT STREAM sLog TO VALUE(lcLogFile).
 
-   fLog(lhsLog[1],
-        lcFilename + " " +
-        STRING(TODAY,"99.99.99") + " " +
-        STRING(TIME,"hh:mm:ss")).
+   PUT STREAM sLog UNFORMATTED
+              lcFilename  " "
+              STRING(TODAY,"99.99.99") " "
+              STRING(TIME,"hh:mm:ss") SKIP.
    
    IMPORT STREAM sin UNFORMATTED lcLine. /* skip header line */
   
    LINE_LOOP:
    REPEAT:
-
+      
       IMPORT STREAM sin UNFORMATTED lcLine.
       IF lcLine EQ "" THEN NEXT.
    
@@ -219,7 +150,7 @@ REPEAT:
          lcRecipient = ENTRY(9,lcLine,lcSep) NO-ERROR.
 
       IF ERROR-STATUS:ERROR THEN DO:
-         fError("ERROR: Wrong file format").
+         fError("Wrong file format").
          liNumErr = liNumErr + 1 .
          NEXT.
       END.
@@ -243,7 +174,7 @@ REPEAT:
           substring(lcNCTime,10)) NO-ERROR.
       
       IF ERROR-STATUS:ERROR THEN DO:
-         fError("ERROR: Wrong file format").
+         fError("Wrong file format").
          liNumErr = liNumErr + 1 .
          NEXT.
       END.
@@ -258,7 +189,7 @@ REPEAT:
             liErrorSkips = liErrorSkips + 1.
          END.
          ELSE DO:
-            fErrorMulti(RETURN-VALUE, lcTimeValue, lcNCStatus, lcDonor, lcNCTime).
+            fError(ENTRY(2,RETURN-VALUE,":")).
             liNumErr = liNumErr + 1 .
          END.
       END.
@@ -268,34 +199,28 @@ REPEAT:
          ELSE liNumOK = liNumOK + 1 .
       END.
    END.
+  
+   PUT STREAM sLog UNFORMATTED 
+       "total: " STRING(liSkipped + liNumOK + liNumErr + liErrorSkips) ", "
+       "ok: " STRING(liNumOK) ", "
+       "skipped (not yoigo): " STRING(liSkipped) ", "
+       "errors: " STRING(liNumErr) ", "
+       "status errors skipped: " STRING(liErrorSkips) skip.
 
-   fLog(lhsLog[1],
-        "total: " + STRING(liSkipped + liNumOK + liNumErr + liErrorSkips) + ", " +
-        "ok: " + STRING(liNumOK) + ", " +
-        "skipped (not yoigo): " + STRING(liSkipped) + ", " +
-        "errors: " + STRING(liNumErr) + ", " +
-        "status errors skipped: " + STRING(liErrorSkips)).
-
-   INPUT STREAM sin CLOSE.
-
+   lcReportFileOut = fMove2TransDir(lcLogFile, "", lcOutDir).
    lcProcessedFile = fMove2TransDir(lcInputFile, "", lcProcDir). 
+   IF lcProcessedFile NE "" THEN fBatchLog("FINISH", lcProcessedFile).
+   
+   INPUT STREAM sin CLOSE.
+   OUTPUT STREAM sLog CLOSE.
 
-   DO lii = 1 TO 3:
-      IF NOT lhsLog[lii]:PRIVATE-DATA BEGINS "!"
-      THEN DO:
-         OUTPUT STREAM-HANDLE lhsLog[lii] CLOSE.
-         lcReportFileOut[lii] = fMove2TransDir(lhsLog[lii]:PRIVATE-DATA, "", lcOutDir).
-
-         IF liNumErr > 0 THEN DO:
-            /* mail recipients */
-            GetRecipients(lcConfDir + SUBSTITUTE("mnpstatusfile&1.email",ENTRY(lii,",_apor,_asol"))).
-            /* send via mail */
-            SendMail(lcReportFileOut[lii],"").
-         END.
-      END.
+   IF liNumErr > 0 THEN DO:
+      /* mail recipients */
+      GetRecipients(lcConfDir + "mnpstatusfile.email").
+      /* send via mail */
+      SendMail(lcReportFileOut,"").
    END.
 
-   IF lcProcessedFile NE "" THEN fBatchLog("FINISH", lcProcessedFile).
 END.
 
 INPUT STREAM sFile CLOSE.

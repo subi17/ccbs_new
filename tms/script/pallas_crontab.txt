@@ -24,6 +24,7 @@
 # Oracle Explorer
 20 22 15 * * /usr/sbin/explorer -q -e -P -w !ipaddr # SUNWexplo
 #
+#
 # OpenEdge DB BACKUP
 59 0 5 * * /opt/local/bin/db_backup.sh set1 >> /var/log/tms/db_backup/db_backup.out 2>&1
 59 0 6 * * /opt/local/bin/db_backup.sh set2 >> /var/log/tms/db_backup/db_backup.out 2>&1
@@ -63,7 +64,7 @@
 # Nagios Start
 #
 00 10,22 * * * /opt/nagios/libexec/local/tmsrpc_monitoring.py > /scratch/nagios/web/tmsrpc_crc_check 2>&1
-58 5 * * * /opt/nagios/libexec/local/check_hispender_donety > /scratch/nagios/mon/hispenders 2>&1
+00 5 * * * /opt/nagios/libexec/local/check_hispender_donety > /scratch/nagios/mon/hispenders 2>&1
 15 * * * * /opt/nagios/libexec/local/cron_mscount.sh 2>&1 > /opt/nagios/libexec/local/mscount.err
 #check_mscount.sh | /usr/bin/sed 's/[A-Z]*: //' > /opt/nagios/libexec/local/mscount.txt
 00,05,10,15,20,25,30,35,40,45,50,55 * * * * /opt/nagios/libexec/local/count_new_cdrs.sh >> /opt/nagios/libexec/local/cronlog.txt
@@ -76,7 +77,7 @@
 # yoigo
 #15 3 * * * pike -C /apps/yoigo/tms batch -- dailydump common ordercanal mobile counter star reratelog tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py dailydump >> /scratch/cron/batch.log
 01 7 * * * pike -C /apps/yoigo/tms batch -- Mc/sologrep common ordercanal mobile counter star reratelog tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py sologrep >> /scratch/cron/batch.log
-03 4 * * * pike -C /apps/yoigo/tms batch -- Mc/orderchkrep common ordercanal mobile counter star reratelog tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py orderchkrep >> /scratch/cron/batch.log
+03 4 * * * /opt/local/bin/xfear -bdebug Mc/orderchkrep common ordercanal mobile counter star reratelog tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py orderchkrep >> /scratch/cron/batch.log
 # YDR-119
 11 * * * * pike -C /apps/yoigo/tms batch -- Mm/read_barringfile all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py read_barringfile >> /scratch/cron/batch.log
 00 22 * * * pike -C /apps/yoigo/tms batch -- Mm/unbarr_premium all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py unbarr_premium >> /scratch/cron/batch.log
@@ -85,9 +86,11 @@
 
 # more yoigo
 #05 22 1 * * pike -C /apps/yoigo/tms batch -- monthly all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py monthly >> /scratch/cron/batch.log
-55 1 * * * pike -C /apps/yoigo/tms batch -- Mm/mdaily all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py mdaily >> /scratch/cron/batch.log
+55 1 * * 1,2,3,4,5,6 pike -C /apps/yoigo/tms batch -- Mm/mdaily all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py mdaily >> /scratch/cron/batch.log
 40 5 * * * pike -C /apps/yoigo/tms batch -- Mm/mdaily_after_mnp all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py mdaily_after_mnp >> /scratch/cron/batch.log
 #even more yogi
+#mdaily-koodissa toistaseks sunnuntaitarkistuksia
+55 1 * * 0 pike -C /apps/yoigo/tms batch -- Mm/mdaily all tenant=yoigo umask=0000 > /scratch/cron/mdaily_sunday.cron 2>&1
 #01 3 * * 1,2,3,4,5,6 pike -C /apps/yoigo/tms batch -- invoicedump all tenant=yoigo umask=0000 > /scratch/cron/invoicedump.cron 2>&1
 #01 3 * * 0 pike -C /apps/yoigo/tms batch -- invoicedump all -param sunday tenant=yoigo > /scratch/cron/invoicedumpall.cron 2>&1
 00 9,11,13,15,17,18 * * * pike -C /apps/yoigo/tms batch -- Mc/create_logistics_file common ordercanal mobile counter star reratelog tenant=yoigo umask=0000 > /scratch/cron/icc_cron.cron 2>&1
@@ -96,9 +99,9 @@
 # Highspender
 5 1 * * * pike -C /apps/yoigo/tms batch -- Mm/highspender all -param IGIC1 tenant=yoigo > /scratch/cron/highspendercron1.cron 2>&1
 10 1 * * * pike -C /apps/yoigo/tms batch -- Mm/highspender all -param IPSIC1 tenant=yoigo > /scratch/cron/highspendercron2.cron 2>&1
-15 1 * * * pike -C /apps/yoigo/tms batch -- Mm/highspender all -param IPSIM1 tenant=yoigo > /scratch/cron/highspendercron3.cron 2>&1
-20 1 * * * pike -C /apps/yoigo/tms batch -- Mm/highspender all -param UNKNOWN tenant=yoigo > /scratch/cron/highspendercron4.cron 2>&1
-25 1 * * * pike -C /apps/yoigo/tms batch -- Mm/highspender all -param VAT1 tenant=yoigo > /scratch/cron/highspendercron5.cron 2>&1
+20 1 * * * pike -C /apps/yoigo/tms batch -- Mm/highspender all -param IPSIM1 tenant=yoigo > /scratch/cron/highspendercron3.cron 2>&1
+30 1 * * * pike -C /apps/yoigo/tms batch -- Mm/highspender all -param UNKNOWN tenant=yoigo > /scratch/cron/highspendercron4.cron 2>&1
+40 1 * * * pike -C /apps/yoigo/tms batch -- Mm/highspender all -param VAT1 tenant=yoigo > /scratch/cron/highspendercron5.cron 2>&1
 # TAP files
 # Hakee CDR:t kannasta. Muodostaa jokaisesta roaming-operaattorista oman cdr-filen spool-hakemistoon.
 # Lopuksi muuntaa operaattorikohtaisen filen binaariformaattiin ja siirtaa sen outgoingiin.
@@ -151,7 +154,7 @@
 # TMSRPC logfile cleanup
 15 0 * * * /opt/tools/tmsrpc_logs.sh > /tmp/tmsrpc_logs.out 2>&1
 # Batch process for updating the fraud threshold limits (YCM-1228)
-00 12 * * * pike -C /apps/yoigo/tms batch -- Mm/tmlimitfile all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py tmlimitfile >> /scratch/cron/batch.log
+15 5 * * 1 pike -C /apps/yoigo/tms batch -- Mm/tmlimitfile all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py tmlimitfile >> /scratch/cron/batch.log
 # daily reports from ErrorLog
 40 3 * * * pike -C /apps/yoigo/tms batch -- Syst/errorlog_report_batch all -param ifsdump tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py errorlog_report_ifs >> /scratch/cron/batch.log
 50 3 * * * pike -C /apps/yoigo/tms batch -- Syst/errorlog_report_batch all -param cashfee tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py errorlog_report_cash >> /scratch/cron/batch.log
@@ -181,7 +184,7 @@
 #0 22 * * * pike -C /apps/yoigo/tms batch -- dd_bankacc_change_batch all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py dd_bankacc_change >> /scratch/cron/batch.log
 # mnp message error check script for monitoring. SER-719
 #0,5,10,15,20,25,30,35,45,50,55 * * * * pike -C /apps/yoigo/tms batch -- mnp_errors_check all -param 5 tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py mnp_errors_check >> /scratch/cron/batch.log
-0,5,10,15,20,25,30,35,45,50,55 * * * * pike -C /apps/yoigo/tms batch -- Mnp/mnp_errors_check all -param 15 tenant=yoigo |tail -1 > /opt/tools/mnperrors/total_and_errors.txt
+0,5,10,15,20,25,30,35,45,50,55 * * * * pike -C /apps/yoigo/tms batch -- Mnp/mnp_errors_check all -param 15 |tail -1 tenant=yoigo > /opt/tools/mnperrors/total_and_errors.txt
 # Cleanup of old orders in queue 44 (YOT-437)
 0 10 * * * pike -C /apps/yoigo/tms batch -- Mc/orderautoclose all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py orderautoclose >> /scratch/cron/batch.log
 # MNP confirmation/rejection message creation
@@ -190,7 +193,7 @@
 # MNP status file handling
 45 * * * * pike -C /apps/yoigo/tms batch -- Mnp/mnpstatusfile all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py mnpstatusfile >> /scratch/cron/batch.log
 # Returned MSISDN file read
-30 * * * * pike -C /apps/yoigo/tms batch -- Mnp/read_msisdn_returned all tenant=super umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py read_msisdn_returned >> /scratch/cron/batch.log
+30 * * * * pike -C /apps/yoigo/tms batch -- Mnp/read_msisdn_returned all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py read_msisdn_returned >> /scratch/cron/batch.log
 # MNP retention file creation
 0 9,10,11,12,13,14,16,17,18,19,20 * * 1,2,3,4,5 pike -C /apps/yoigo/tms batch -- Mnp/mnp_retention_file all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py mnp_retention_file >> /scratch/cron/batch.log
 # Special MNP retention file creation YTS-7574. Nodo Central break between 14-15 and TMS request new MNP orders at 15:06
@@ -201,7 +204,7 @@
 10,25,40,55 * * * * pike -C /apps/yoigo/tms batch -- Mc/orderrelease_simonly common ordercanal mobile counter star reratelog tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py orderrelease_simonly >> /scratch/cron/batch.log
 # lighttpd logs for awstats processing
 #05,15,25,35,45,55 * * * * /usr/bin/cp /apps/xfera/tmsrpc/newton/var/log/lighttpd_*_access.log /mnt/xferaweblogs/rigel/current/
-#0 4 * * * /usr/bin/cp /apps/xfera/tmsrpc/newton/var/log/lighttpd_*_access.log /mnt/xferaweblogs/rigel/current/; /usr/sbin/logadm -f /etc/logadm_lighttpd.conf > /tmp/logadm_lighttpd.out 2>&1
+0 4 * * * /usr/bin/cp /apps/xfera/tmsrpc/newton/var/log/lighttpd_*_access.log /mnt/xferaweblogs/rigel/current/; /usr/sbin/logadm -f /etc/logadm_lighttpd.conf > /tmp/logadm_lighttpd.out 2>&1
 30 3 * * * test -x /mnt/xferaweblogs/rigel_move_logs.sh && /mnt/xferaweblogs/rigel_move_logs.sh > /tmp/rigel_move_logs.out 2>&1
 # This
 # delete error cdrs
@@ -289,7 +292,7 @@
 0,10,20,30,40,50 * * * * pike -C /apps/yoigo/tms batch -- Ar/bob_pdfinvoice_xml all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py bob_pdfinvoice_xml >> /scratch/cron/batch.log
 #
 # executing request type process in cron batch mode for every 5 mintues.
-1,6,11,16,21,26,31,36,41,46,51,56 * * * * pike -C /apps/yoigo/tms mbatch -- Syst/request_daemon all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py request_daemon >> /scratch/cron/batch.log
+1,6,11,16,21,26,31,36,41,46,51,56 * * * * pike -C /apps/yoigo/tms batch -- Syst/request_daemon all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py request_daemon >> /scratch/cron/batch.log
 # Q25 reminder logging functionality. Done 5AM
 0 5 * * * pike -C /apps/yoigo/tms batch -- Mm/q25_reminder_collection all -param 0 tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py q25_reminder_collection >> /scratch/cron/batch.log
 # Q25 reminder functionality. SMS message sending start at around 10 each day
@@ -305,19 +308,19 @@
 # BOB tool to handle Q25 discount per subscription file
 0 * * * * pike -C /apps/yoigo/tms batch -- Mc/q25_discount_reader all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py q25_discount_reader >> /scratch/cron/batch.log
 # DUMPFILE BATCHES
-0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idmbatch -- Syst/dumpfile_batch all -param 1 tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py dumpfile_batch >> /scratch/cron/batch.log
-0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idmbatch -- Syst/dumpfile_batch common ordercanal mobile counter star reratelog -param 2 tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py dumpfile_batch_2 >> /scratch/cron/batch_2.log
-0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idmbatch -- Syst/dumpfile_batch common ordercanal mobile counter star reratelog -param 3 tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py dumpfile_batch_3 >> /scratch/cron/batch_3.log
-0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idmbatch -- Syst/dumpfile_batch common ordercanal mobile counter star reratelog -param 4 tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py dumpfile_batch_4 >> /scratch/cron/batch_4.log  
-0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idmbatch -- Syst/dumpfile_batch common ordercanal mobile counter star reratelog -param 5 tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py dumpfile_batch_5 >> /scratch/cron/batch_5.log
-0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idmbatch -- Syst/dumpfile_batch common ordercanal mobile counter star reratelog -param 6 tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py dumpfile_batch_6 >> /scratch/cron/batch_6.log
-0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idmbatch -- Syst/dumpfile_batch common ordercanal mobile counter star reratelog -param 7 tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py dumpfile_batch_7 >> /scratch/cron/batch_7.log
-0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idmbatch -- Syst/dumpfile_batch common ordercanal mobile counter star reratelog -param 8 tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py dumpfile_batch_8 >> /scratch/cron/batch_8.log
-0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idmbatch -- Syst/dumpfile_batch common ordercanal mobile counter star reratelog -param 9 tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py dumpfile_batch_9 >> /scratch/cron/batch_9.log
-0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idmbatch -- Syst/dumpfile_batch common ordercanal mobile counter star reratelog -param 10 tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py dumpfile_batch_10 >> /scratch/cron/batch_10.log
-0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idmbatch -- Syst/dumpfile_batch common ordercanal mobile counter star reratelog -param 11 tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py dumpfile_batch_11 >> /scratch/cron/batch_11.log
-0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idmbatch -- Syst/dumpfile_batch common ordercanal mobile counter star reratelog -param 12 tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py dumpfile_batch_12 >> /scratch/cron/batch_12.log
-0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idmbatch -- Syst/dumpfile_batch common ordercanal mobile counter star reratelog -param 13 tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py dumpfile_batch_13 >> /scratch/cron/batch_13.log
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idbatch -- Syst/dumpfile_batch 1 all -param tenant=yoigo umask=0000
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idbatch -- Syst/dumpfile_batch 2 common ordercanal mobile counter star reratelog tenant=yoigo umask=0000
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idbatch -- Syst/dumpfile_batch 3 common ordercanal mobile counter star reratelog tenant=yoigo umask=0000
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idbatch -- Syst/dumpfile_batch 4 common ordercanal mobile counter star reratelog tenant=yoigo umask=0000
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idbatch -- Syst/dumpfile_batch 5 common ordercanal mobile counter star reratelog tenant=yoigo umask=0000
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idbatch -- Syst/dumpfile_batch 6 common ordercanal mobile counter star reratelog tenant=yoigo umask=0000
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idbatch -- Syst/dumpfile_batch 7 common ordercanal mobile counter star reratelog tenant=yoigo umask=0000
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idbatch -- Syst/dumpfile_batch 8 common ordercanal mobile counter star reratelog tenant=yoigo umask=0000
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idbatch -- Syst/dumpfile_batch 9 common ordercanal mobile counter star reratelog tenant=yoigo umask=0000
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idbatch -- Syst/dumpfile_batch 10 common ordercanal mobile counter star reratelog tenant=yoigo umask=0000
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idbatch -- Syst/dumpfile_batch 11 common ordercanal mobile counter star reratelog tenant=yoigo umask=0000
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idbatch -- Syst/dumpfile_batch 12 common ordercanal mobile counter star reratelog tenant=yoigo umask=0000
+0,5,10,15,20,25,30,35,40,45,50,55 * * * * pike -C /apps/yoigo/tms idbatch -- Syst/dumpfile_batch 13 common ordercanal mobile counter star reratelog tenant=yoigo umask=0000
 # CDR dumps for PUPU
 #0,15,30,45 * * * * pike -C /apps/yoigo/tms batch -- mobcdr_pupu_dump_start all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py mobcdr_pupu_dump_start >> /scratch/cron/batch.log
 #5,20,35,50 * * * * pike -C /apps/yoigo/tms batch -- prepcdr_pupu_dump_start all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py prepcdr_pupu_dump_start >> /scratch/cron/batch.log
@@ -348,22 +351,3 @@
 
 #March/April promo 2017: Following program is run monthly to activate upsells to Azul&CONT25 subscriptions. This can be removed when campaign related upsell activation period is over
 1 8 1 * * pike -C /apps/yoigo/tms batch -- Mm/march2017_Azul_update_monthly all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py march2017_Azul_update_monthly.p >> /scratch/cron/batch.log
-
-#YPRO SVA bob tool
-2 * * * * pike -C /apps/yoigo/tms batch -- Mm/sva_bob all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py sva_bob >> /scratch/cron/batch.log
-
-#Multiholder report
-#1 14 * * *  pike -C /apps/yoigo/tms batch -- Mm/multiholder_report_cron_fe all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py multiholder_report_cron_fe >> /scratch/cron/batch.log
-#1 8 * * *  pike -C /apps/yoigo/tms batch -- Mm/multiholder_report_cron_fe all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py multiholder_report_cron_fe >> /scratch/cron/batch.log
-
-# mandarina_bob.p every 10 minutes
-1,11,21,31,41,51 * * * * pike -C /apps/yoigo/tms batch -- Mm/mandarina_bob all -param PRIORITY tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py mandarina_bob >> /scratch/cron/batch.log
-
-# mandarina_bob.p twice a day for massive run
-1 4,13 * * * pike -C /apps/yoigo/tms batch -- Mm/mandarina_bob all -param MASSIVE tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py mandarina_bob >> /scratch/cron/batch.log
-
-# mandarina_icc_checker.p every 10 minutes
-1,11,21,31,41,51 * * * * pike -C /apps/yoigo/tms batch -- Mm/mandarina_icc_checker all tenant=yoigo 2>&1 | /opt/local/bin/parse_mpro_batch.py mandarina_icc_checker >> /scratch/cron/batch.log
-
-#PRO flex_*_upsell activation
-1 0 1 * * pike -C /apps/yoigo/tms batch -- Mm/act_pro_flex_upsell all tenant=yoigo umask=0000 2>&1 | /opt/local/bin/parse_mpro_batch.py act_pro_flex_upsell.p >> /scratch/cron/batch.log
