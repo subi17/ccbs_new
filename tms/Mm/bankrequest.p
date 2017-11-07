@@ -9,7 +9,6 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/msreqfunc.i}
 {Func/fmakemsreq.i}
 {Syst/tmsconst.i}
@@ -28,7 +27,7 @@ DEF VAR lcChannel     AS CHAR NO-UNDO.
 
 FIND MsRequest WHERE 
      MsRequest.MsRequest = iiReqId AND
-     MsRequest.Brand     = gcBrand
+     MsRequest.Brand     = Syst.Var:gcBrand
 NO-LOCK NO-ERROR.
 
 IF NOT AVAIL MsRequest THEN RETURN "ERROR, request lost!".
@@ -62,18 +61,18 @@ FIND bMsRequest NO-LOCK WHERE
 
 CREATE memo.
 ASSIGN
-memo.CreStamp  = fMakeTS()
+memo.CreStamp  = Func.Common:mMakeTS()
 memo.MemoSeq   = NEXT-VALUE(MemoSeq)
 Memo.Custnum   = AgrCust.CustNum
 memo.HostTable = "Customer"
 memo.KeyValue  = STRING(AgrCust.CustNum)
-memo.CreUser   = katun
+memo.CreUser   = Syst.Var:katun
 memo.MemoTitle = "NEW BANK ACCOUNT NUMBER"
 Memo.memotext  = "RequestID" + STRING(msrequest.msrequest) + 
                  " Bank account update:" + msrequest.ReqCparam1.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
    DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
    lhCustomer = BUFFER AgrCust:HANDLE.
@@ -135,7 +134,7 @@ THEN DO:
            FALSE,               /* Fees */
            FALSE,               /* SendSMS */
            bMSRequest.UserCode,
-           fMakeTS(),
+           Func.Common:mMakeTS(),
            "CREDITCHECK",
            "",
            33,

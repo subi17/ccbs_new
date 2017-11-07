@@ -10,7 +10,6 @@
 
 {Syst/commali.i}
 {Syst/dumpfile_run.i}
-{Func/timestamp.i}
 
 DEFINE INPUT  PARAMETER icDumpID      AS INTEGER   NO-UNDO.
 DEFINE INPUT  PARAMETER icFile        AS CHARACTER NO-UNDO.
@@ -63,7 +62,7 @@ FUNCTION fCollectEvent RETURNS LOGICAL
       lcSalesMan  = ""
       lcChannel   = ""
       lcUserCode  = ""
-      ldEventTS   = fHMS2TS(EventLog.EventDate, EventLog.EventTime)
+      ldEventTS   = Func.Common:mHMS2TS(EventLog.EventDate, EventLog.EventTime)
       liEntries   = NUM-ENTRIES(EventLog.Memo,lc255).
 
    IF EventLog.Usercode BEGINS "VISTA_" THEN
@@ -141,7 +140,7 @@ ELSE ASSIGN lcDel = CHR(9)
 
 OUTPUT STREAM sFile TO VALUE(icFile).
 
-fSplitTs(idLastDump, OUTPUT ldaLastDumpDate, OUTPUT liLastDumpTime).
+Func.Common:mSplitTS(idLastDump, OUTPUT ldaLastDumpDate, OUTPUT liLastDumpTime).
 
 lcLastDumpTime = STRING(liLastDumpTime,"hh:mm:ss").
 

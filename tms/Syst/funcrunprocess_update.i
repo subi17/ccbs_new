@@ -2,7 +2,6 @@
 */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
 FUNCTION fProcessErrorLog RETURNS LOGIC
    (iiFRProcessID AS INT,
@@ -10,13 +9,13 @@ FUNCTION fProcessErrorLog RETURNS LOGIC
  
    DO TRANS:
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
              ErrorLog.ActionID  = "FRPROCESS" + STRING(iiFRProcessID)
              ErrorLog.TableName = "FuncRunProcess"
              ErrorLog.KeyValue  = STRING(iiFRProcessID)
              ErrorLog.ErrorMsg  = icMessage
-             ErrorLog.UserCode  = katun.
-             ErrorLog.ActionTS  = fMakeTS().
+             ErrorLog.UserCode  = Syst.Var:katun.
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    
 END FUNCTION.
@@ -49,7 +48,7 @@ FUNCTION fUpdateFuncRunProgress RETURNS LOGIC
       FIND CURRENT FuncRunProcess EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
       IF AVAILABLE FuncRunProcess THEN DO:
          ASSIGN
-            FuncRunProcess.LastTS    = fMakeTS()
+            FuncRunProcess.LastTS    = Func.Common:mMakeTS()
             FuncRunProcess.Processed = iiProcessed.
          RELEASE FuncRunProcess.   
       END.   

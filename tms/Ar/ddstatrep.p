@@ -58,14 +58,17 @@ ASSIGN
     lcSessionNum           = SESSION:NUMERIC-FORMAT
     SESSION:NUMERIC-FORMAT = "European".
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
+
 form header
    lcLine1 AT 1 SKIP
-   ynimi  AT 1 FORMAT "x(30)" 
+   ynimi AT 1 FORMAT "x(30)" 
       "DIRECT DEBIT STATUS" AT 40
       "Page" AT 71
       liPage FORMAT "ZZ9" SKIP
    lcDateHeader AT 40 FORMAT "X(30)"
-      pvm FORMAT "99.99.99" AT 71 SKIP
+      TODAY FORMAT "99.99.99" AT 71 SKIP
    lcLine2 AT 1 SKIP
    "InvGroup"    AT 1
    "Name"        AT 10
@@ -112,7 +115,7 @@ VIEW FRAME fQty.
 
 /* authorization status */
 FOR EACH DDAuth NO-LOCK WHERE
-         DDAuth.Brand = gcBrand,
+         DDAuth.Brand = Syst.Var:gcBrand,
    FIRST Customer OF DDAuth NO-LOCK:
      
    IF DDAuth.AuthDate >= idtAuthDate1 AND
@@ -251,7 +254,7 @@ FOR EACH ttAuth:
       fChkPage(0).
    
       FIND InvGroup WHERE 
-           InvGroup.Brand    = gcBrand AND
+           InvGroup.Brand    = Syst.Var:gcBrand AND
            InvGroup.InvGroup = ttAuth.InvGroup NO-LOCK.
       
       PUT STREAM tul

@@ -13,7 +13,6 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
-{Func/timestamp.i}
 
 DEF VAR resp_struct AS CHARACTER NO-UNDO. 
 DEF VAR resp_array AS CHARACTER NO-UNDO. 
@@ -40,7 +39,7 @@ FOR EACH eventlog NO-LOCK WHERE eventlog.tablename = "MNPRetentionRule" and even
       resp_struct = add_struct(resp_array, "").
       add_string(resp_struct, "username", Eventlog.usercode).
       add_timestamp(resp_struct,"event_stamp", 
-         fHMS2TS(EventLog.EventDate, EventLog.EventTime)).
+         Func.Common:mHMS2TS(EventLog.EventDate, EventLog.EventTime)).
       add_string(resp_struct, "modified_fields", entry(3 * i + 1,Eventlog.DataValues,CHR(255))).
       add_string(resp_struct, "old_values", entry(3 * i + 2,Eventlog.DataValues,CHR(255))).
       add_string(resp_struct, "new_values", entry(3 * i + 3,Eventlog.DataValues,CHR(255))).

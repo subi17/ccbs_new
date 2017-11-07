@@ -5,7 +5,6 @@
 */   
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/fvoucher.i}
 {Syst/eventval.i}
 {Func/fcustbal.i}
@@ -15,7 +14,7 @@
 {Func/fpaymconfig.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
 END.
 
@@ -97,7 +96,7 @@ REPEAT:
    ELSE LEAVE.
 END.
 
-ASSIGN Payment.Brand      = gcBrand
+ASSIGN Payment.Brand      = Syst.Var:gcBrand
        Payment.CustNum    = iiCustNum
        Payment.PaymAmt    = idPosting[1]
        Payment.TotAmt     = idPosting[1]
@@ -125,18 +124,17 @@ IF iiInvNum > 0 THEN ASSIGN
    Payment.DueDate  = bPaidInv.DueDate.
    
 ELSE
-   Payment.CustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                       BUFFER Customer).
+   Payment.CustName = Func.Common:mDispCustName(BUFFER Customer).
 
 /* created stamp */
-Payment.ImportStamp = fMakeTS().
+Payment.ImportStamp = Func.Common:mMakeTS().
 
 lcPref = "".
 
 DO liCount = 1 TO liAccCnt:
 
    FIND Account where 
-        Account.Brand  = gcBrand AND 
+        Account.Brand  = Syst.Var:gcBrand AND 
         Account.AccNum = Payment.AccNum[liCount]
    NO-LOCK NO-ERROR.
    IF AVAILABLE Account THEN 
@@ -215,7 +213,7 @@ DO liCount = 1 TO liAccCnt:
       CREATE OPLog.
       ASSIGN OPLog.CustNum   = Payment.CustNum
              OPLog.EventDate = Payment.AccDate
-             OPLog.UserCode  = katun
+             OPLog.UserCode  = Syst.Var:katun
              OPLog.InvNum    = Payment.InvNum
              OPLog.Voucher   = Payment.Voucher
              OPLog.Amt       = -1 * Payment.Posting[liCount]
@@ -234,12 +232,12 @@ IF icMemo > "" THEN DO:
 
    /* separate Memo */
    CREATE Memo.
-   ASSIGN Memo.Brand     = gcBrand
+   ASSIGN Memo.Brand     = Syst.Var:gcBrand
           Memo.HostTable = "Payment"
           Memo.KeyValue  = STRING(Payment.Voucher)
           Memo.CustNum   = Payment.CustNum
           Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-          Memo.CreUser   = katun 
+          Memo.CreUser   = Syst.Var:katun 
           Memo.MemoTitle = lcTitle
           Memo.MemoText  = icMemo
           Memo.CreStamp  = Payment.ImportStamp.
@@ -274,7 +272,7 @@ REPEAT:
    IF liCount > 10000 THEN LEAVE.
 
    IF NOT CAN-FIND(FIRST Payment WHERE
-                         Payment.Brand      = gcBrand AND
+                         Payment.Brand      = Syst.Var:gcBrand AND
                          Payment.ExtVoucher = lcExtVoucher AND
                          RECID(Payment) NE lrRecid)
    THEN LEAVE.

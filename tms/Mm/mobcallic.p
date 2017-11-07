@@ -4,7 +4,6 @@
   APPLICATION ..: nn
   AUTHOR .......: pt
   CREATED ......: 29-09-99
-  CHANGED ......: jt 26.01.06 UserName = DYNAMIC-FUNCTION("fDispCustName" IN                                           ghFunc1, BUFFER Customer)
   Version ......: SCRUNKO4 (10.06.99)
   ---------------------------------------------------------------------- */
 
@@ -12,7 +11,6 @@
 {Func/msisdn.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'mobcdr'}
-{Func/func.p}
 
 DEF INPUT PARAMETER  CustNum AS INT NO-UNDO.
 

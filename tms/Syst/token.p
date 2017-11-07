@@ -15,7 +15,7 @@
 {Func/fuserright.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -58,10 +58,10 @@ form
     token.tokenname
     Token.AdminToken
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
-    title COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.Var:cfc)
+    title COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
     " TOKENS "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form
@@ -69,23 +69,23 @@ form
     token.tokenname
     Token.AdminToken
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc)
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc)
     ac-hdr WITH side-labels 1 columns
     FRAME lis.
 
 form /* seek Token by Code */
     tokencode
     help "Enter Token Code"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 title COLOR VALUE(Syst.Var:ctc) " FIND CODE "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
 
-llAdminUser = fIsAdminUser(katun).
+llAdminUser = fIsAdminUser(Syst.Var:katun).
 
 FIND FIRST token
 /* srule */ NO-LOCK NO-ERROR.
@@ -112,13 +112,13 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a token  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
       DO WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR token.tokencode
@@ -204,27 +204,27 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35 ufk[2]= 0 ufk[3]= 0 ufk[4]= 2203
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-        ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 35 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 2203
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW token.tokencode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) token.tokencode WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) token.tokencode WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -248,10 +248,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-prev.
@@ -276,7 +276,7 @@ BROWSE:
       END. /* previous ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -302,7 +302,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* prev page */
-      ELSE IF LOOKUP(nap,"prev-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND token WHERE recid(token) = memory NO-LOCK NO-ERROR.
         RUN local-find-prev.
@@ -326,7 +326,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -341,10 +341,10 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        tokencode = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE tokencode WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF tokencode <> "" THEN DO:
@@ -362,19 +362,19 @@ BROWSE:
        END.
      END. /* Search-1 */
 
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 THEN DO:
         RUN local-find-this(FALSE).
         RUN Syst/tokentab.p(token.tokencode).
         ufkey = true.
         next loop.
      END.
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW" 
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO TRANSAction:  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
@@ -402,7 +402,7 @@ BROWSE:
        END.
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
           token.tokencode 
           token.tokenname.
 
@@ -425,7 +425,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
           token.tokencode 
           token.tokenname.
        IF ok THEN DO:
@@ -447,14 +447,14 @@ BROWSE:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 AND lcRight = "RW" THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 AND lcRight = "RW" THEN
      DO WITH FRAME lis TRANSAction:
        {Syst/uright2.i} 
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9.
        RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
        CLEAR FRAME lis NO-PAUSE.
        DISPLAY token.tokencode.
 
@@ -476,25 +476,25 @@ BROWSE:
        xrecid = recid(token).
      END.
 
-     ELSE IF LOOKUP(nap,"home,h") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,h") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = recid(token) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,e") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,e") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN memory = recid(token) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -559,7 +559,7 @@ PROCEDURE local-update-record:
              leave.
           END.
 
-          IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+          IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
              PAUSE 0.
 
           END.
