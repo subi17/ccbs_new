@@ -10,18 +10,21 @@
 {Func/setfees.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
 END.
 
 DEF INPUT PARAMETER iiRequest AS INTEGER NO-UNDO.
 DEF BUFFER bsubReq FOR MSRequest.
+DEF BUFFER bMobsub FOR Mobsub.
 
 DEF VAR lcCategory AS CHAR.
 DEF VAR lhCustomer AS HANDLE NO-UNDO.
 DEF VAR lcCharValue AS CHAR NO-UNDO.
 DEF VAR lcError AS CHAR NO-UNDO.
 DEF VAR liOrigStatus AS INT NO-UNDO.
+DEF VAR liMsreq AS INT NO-UNDO.
+DEF VAR lcResult AS CHAR NO-UNDO.
 
 FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
 
@@ -41,7 +44,7 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
               Customer.custnum EQ Mobsub.agrcust NO-ERROR.
    IF NOT AVAIL Customer THEN lcError = "ERROR: NO Customer".
    FIND FIRST CLIType WHERE 
-              CLIType.brand EQ Syst.Parameters:gcBrand AND
+              CLIType.brand EQ Syst.Var:gcBrand AND
               CLIType.clitype EQ Mobsub.clitype NO-ERROR.
    IF NOT AVAIL CLIType THEN lcError = "ERROR: Unknown Clitype".
 
@@ -81,7 +84,7 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
                     ?,
                     "Pro Migrate",    /* memo   */
                     FALSE,           /* no messages to screen */
-                    katun,
+                    Syst.Var:katun,
                     "ProMigrate",
                     0,
                     "",
@@ -104,23 +107,35 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
                                 {&REQUEST_SOURCE_MIGRATION},
                                 {&REQUEST_ACTIONLIST_ALL}).
       FOR EACH bSubReq EXCLUSIVE-LOCK WHERE
-               bsubreq.Brand     = gcBrand AND
+               bsubreq.Brand     = Syst.Var:gcBrand AND
                bsubreq.origRequest = iiRequest:
          bsubreq.mandatory = 1.
       END.
    END.
    /* Mark request as handled */
-    IF fChkSubRequest(iiRequest) = FALSE THEN DO:
+   IF fChkSubRequest(iiRequest) = FALSE THEN DO:
       IF NOT fReqStatus(7,"") THEN DO:
          fReqError("ERROR: St. update failed.").
          RETURN.
       END.
    END.
-   ELSE
+   ELSE DO:
       IF NOT fReqStatus(8,"") THEN DO:
          fReqError("ERROR: St. update failed.").
          RETURN.
       END.
+   END.
+   IF MSRequest.origRequest EQ 0 THEN DO:
+      /* Main request, check if other subscription to migrate and 
+         do migration or iSTC for all */
+      lcResult =  fProMigrateOtherSubs (Mobsub.agrCust, Mobsub.msseq, 
+                                        MSRequest.msrequest, 
+                                        MSRequest.salesman).
+      IF lcResult > "" THEN DO:
+        fReqStatus(3,"").
+        fReqError(lcResult).
+     END.
+   END.
 END.
 ELSE IF liOrigStatus EQ {&REQUEST_STATUS_SUB_REQUEST_DONE} THEN DO:
    IF fChkSubRequest(iiRequest) = FALSE THEN DO:

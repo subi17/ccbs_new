@@ -17,6 +17,8 @@
                 DEF VAR lh76Order AS HANDLE NO-UNDO.
 
             &ENDIF
+
+            RELEASE SIM.
                 
             /* Create separate activation request for NEW/MNP convergent fixed lines */
             IF fIsConvergenceTariff(Order.CLIType) AND
@@ -36,8 +38,7 @@
 
                   fSetOrderStatus(Order.OrderID, {&ORDER_STATUS_ERROR}).
                   
-                  DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                   "Order",
+                  Func.Common:mWriteMemo("Order",
                                    STRING(Order.OrderID),
                                    0,
                                    "FIXED LINE ACTIVATION FAILED",
@@ -49,7 +50,7 @@
                                     INPUT  Order.Cli,
                                     INPUT  Order.CustNum,
                                     INPUT  1,
-                                    INPUT  katun,
+                                    INPUT  Syst.Var:katun,
                                     INPUT  OrderFusion.FixedInstallationTS,
                                     INPUT  "CREATE-FIXED",
                                     INPUT  STRING(Order.OrderId),
@@ -65,8 +66,7 @@
                   llOrdStChg = fSetOrderStatus(Order.OrderId,
                                                {&ORDER_STATUS_ERROR}).
 
-                  DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                   "Order",
+                  Func.Common:mWriteMemo("Order",
                                    STRING(Order.OrderID),
                                    0,
                                    "FIXED LINE ACTIVATION FAILED",
@@ -77,7 +77,7 @@
                IF (Order.OrderType EQ {&ORDER_TYPE_NEW} OR
                    Order.OrderType EQ {&ORDER_TYPE_MNP}) AND
                    CAN-FIND(FIRST Memo NO-LOCK WHERE
-                                  Memo.Brand = gcBrand AND
+                                  Memo.Brand = Syst.Var:gcBrand AND
                                   Memo.HostTable = "Order" AND
                                   Memo.Keyvalue = STRING(Order.OrderID) AND
                                   Memo.MemoText = "Fixed Cancellation failed because installation was already in place") THEN DO:
@@ -109,13 +109,13 @@
                if associated customer main line considered order is in ongoing status  */
             IF Order.StatusCode NE {&ORDER_STATUS_ONGOING}                           AND
                CAN-FIND(FIRST CLIType NO-LOCK WHERE 
-                              CLIType.Brand      = gcBrand                           AND 
+                              CLIType.Brand      = Syst.Var:gcBrand                           AND 
                               CLIType.CLIType    = Order.CLIType                     AND 
                               CLIType.PayType    = {&CLITYPE_PAYTYPE_POSTPAID}       AND
                               CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO: 
  
                FIND FIRST OrderCustomer NO-LOCK WHERE
-                          OrderCustomer.Brand   = gcBrand                            AND
+                          OrderCustomer.Brand   = Syst.Var:gcBrand                            AND
                           OrderCustomer.OrderId = Order.OrderId                      AND
                           OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
 
@@ -123,7 +123,7 @@
                DO:
                   /* Additional lines Mobile only tariffs */ 
                   IF (CAN-FIND(FIRST OrderAction NO-LOCK WHERE
-                                     OrderAction.Brand    = gcBrand           AND
+                                     OrderAction.Brand    = Syst.Var:gcBrand           AND
                                      OrderAction.OrderID  = Order.OrderId     AND
                                      OrderAction.ItemType = "AddLineDiscount" AND
                               LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0)    
@@ -140,7 +140,7 @@
                                                            OrderCustomer.CustId,
                                                            Order.CLIType))              OR
                      (CAN-FIND(FIRST OrderAction NO-LOCK WHERE
-                                     OrderAction.Brand    = gcBrand           AND
+                                     OrderAction.Brand    = Syst.Var:gcBrand           AND
                                      OrderAction.OrderID  = Order.OrderId     AND
                                      OrderAction.ItemType = "AddLineDiscount" AND
                               LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_20}) > 0) 
@@ -157,7 +157,7 @@
                                                            OrderCustomer.CustId,
                                                            Order.CLIType))              OR      
                      (CAN-FIND(FIRST OrderAction NO-LOCK WHERE
-                                     OrderAction.Brand    = gcBrand           AND
+                                     OrderAction.Brand    = Syst.Var:gcBrand           AND
                                      OrderAction.OrderID  = Order.OrderId     AND
                                      OrderAction.ItemType = "AddLineDiscount" AND
                              LOOKUP(OrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0) 
@@ -195,7 +195,7 @@
                      Order.MultiSimId     <> 0                                 AND 
                      Order.MultiSimType   = {&MULTISIMTYPE_EXTRALINE}          AND 
                      CAN-FIND(FIRST OrderAction NO-LOCK WHERE 
-                                    OrderAction.Brand    = gcBrand             AND 
+                                    OrderAction.Brand    = Syst.Var:gcBrand             AND 
                                     OrderAction.OrderID  = Order.OrderID       AND
                                     OrderAction.ItemType = "ExtraLineDiscount" AND  
                              LOOKUP(OrderAction.ItemKey,lcExtraLineDiscounts) > 0) THEN 
@@ -234,16 +234,16 @@
                Order.MNPStatus = 1 AND
                LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) > 0 AND
                NOT CAN-FIND(FIRST OrderAccessory NO-LOCK WHERE
-                             OrderAccessory.Brand = gcBrand AND
+                             OrderAccessory.Brand = Syst.Var:gcBrand AND
                              OrderAccessory.OrderId = Order.OrderID) AND
                NOT CAN-FIND(LAST OrderTimeStamp NO-LOCK WHERE
-                             OrderTimeStamp.Brand   = gcBrand   AND
+                             OrderTimeStamp.Brand   = Syst.Var:gcBrand   AND
                              OrderTimeStamp.OrderID = Order.OrderID AND
                              OrderTimeStamp.RowType = {&ORDERTIMESTAMP_SIMONLY})
                THEN DO:
                   
                   FIND FIRST OrderCustomer WHERE
-                             OrderCustomer.Brand = gcBrand AND
+                             OrderCustomer.Brand = Syst.Var:gcBrand AND
                              OrderCustomer.OrderId = Order.OrderId AND
                              OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
                   SEARCHSIM:
@@ -264,7 +264,7 @@
                         RELEASE SIM.
 
                         FOR EACH bSIM USE-index simstat WHERE
-                                 bSIM.Brand   = gcBrand  AND
+                                 bSIM.Brand   = Syst.Var:gcBrand  AND
                                  bSIM.Stock   = lcStock  AND
                                  bSIM.simstat = 1        AND
                                  bSIM.SimArt  = "universal" NO-LOCK:
@@ -278,7 +278,7 @@
                               NO-LOCK USE-INDEX MsSeq NO-ERROR.
 
                               IF AVAIL bOldOrder AND
-                                fOffSet(bOldOrder.CrStamp, 24 * 7) > fMakeTS()
+                                Func.Common:mOffSet(bOldOrder.CrStamp, 24 * 7) > Func.Common:mMakeTS()
                                 THEN NEXT.
                            END.
 
@@ -353,13 +353,13 @@
                   NOT Order.OrderChannel BEGINS "Renewal_POS" THEN DO:
                   
                   FIND FIRST OrderAction WHERE
-                             OrderAction.Brand    = gcBrand AND
+                             OrderAction.Brand    = Syst.Var:gcBrand AND
                              OrderAction.OrderId  = Order.OrderId AND
                              OrderAction.ItemType = "SIMType" NO-LOCK NO-ERROR.
                   IF AVAIL OrderAction AND OrderAction.ItemKey > "" THEN DO:
                      /* YBP-589 */ 
                      FIND FIRST OrderCustomer WHERE
-                                OrderCustomer.Brand = gcBrand AND
+                                OrderCustomer.Brand = Syst.Var:gcBrand AND
                                 OrderCustomer.OrderId = Order.OrderId AND
                                 OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
                      
@@ -375,7 +375,7 @@
                         lcStock = fSearchStock(lcStock,OrderCustomer.ZipCode).
 
                         FOR EACH bSIM USE-index simstat WHERE
-                                 bSIM.Brand   = gcBrand  AND
+                                 bSIM.Brand   = Syst.Var:gcBrand  AND
                                  bSIM.Stock   = lcStock  AND
                                  bSIM.simstat = 1        AND
                                  bSIM.SimArt  = "universal" NO-LOCK:
@@ -385,7 +385,7 @@
                                          bOldOrder.MsSeq = bSIM.MsSeq
                                    NO-LOCK USE-INDEX MsSeq NO-ERROR.
                               IF AVAIL bOldOrder AND
-                                 fOffSet(bOldOrder.CrStamp, 24 * 7) > fMakeTS()
+                                 Func.Common:mOffSet(bOldOrder.CrStamp, 24 * 7) > Func.Common:mMakeTS()
                               THEN NEXT.
                            END.
 
@@ -429,15 +429,14 @@
                   fAfterSalesRequest(
                      Order.MsSeq,
                      Order.OrderId,
-                     katun,
-                     fMakeTS(),
+                     Syst.Var:katun,
+                     Func.Common:mMakeTS(),
                      "7",
                      OUTPUT ocResult
                      ).
                    
                   IF ocResult > "" THEN DO:
-                     DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                      "Order",
+                     Func.Common:mWriteMemo("Order",
                                       STRING(Order.OrderID),
                                       0,
                                       "After Sales Request creation failed",
@@ -460,8 +459,7 @@
                   llOrdStChg = fSetOrderStatus(Order.OrderId,"12").
                ELSE DO:
                   /* YBP-598 */ 
-                  DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                   "Order",
+                  Func.Common:mWriteMemo("Order",
                                    STRING(Order.OrderID),
                                    0,
                                    "STC request creation failed",
@@ -488,8 +486,7 @@
              IF order.CLI = "" THEN DO:
 
                    /* YBP-599 */ 
-                   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                    "Order",
+                   Func.Common:mWriteMemo("Order",
                                     STRING(Order.OrderID),
                                     0,
                                     "MSISDN",
@@ -505,8 +502,7 @@
 
                 llOrdStChg = fSetOrderStatus(Order.OrderId,"2"). 
 
-                DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                 "Order",
+                Func.Common:mWriteMemo("Order",
                                  STRING(Order.OrderID),
                                  0,
                                  "MSISDN",
@@ -531,7 +527,7 @@
                 llReserveSimAndMsisdn =  
                 NOT CAN-FIND(
                 FIRST ActionLog NO-LOCK WHERE
-                      ActionLog.Brand  = gcBrand AND
+                      ActionLog.Brand  = Syst.Var:gcBrand AND
                       ActionLog.TableName = "Order" AND
                       ActionLog.KeyValue = STRING(Order.OrderID) AND
                       ActionLog.ActionId = "RESIGNATION" AND
@@ -548,8 +544,7 @@
 
                    llOrdStChg = fSetOrderStatus(Order.OrderId,"2").  /* error */
                    /* YBP-603 */ 
-                   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                    "Order",
+                   Func.Common:mWriteMemo("Order",
                                     STRING(Order.OrderID),
                                     0,
                                     "Order Process Error",
@@ -563,14 +558,13 @@
                    Sim.SimStat NE 1 AND
                    Order.OrderType <> 3 AND
                    NOT CAN-FIND(LAST OrderTimeStamp NO-LOCK WHERE
-                             OrderTimeStamp.Brand   = gcBrand   AND
+                             OrderTimeStamp.Brand   = Syst.Var:gcBrand   AND
                              OrderTimeStamp.OrderID = Order.OrderID AND
                              OrderTimeStamp.RowType = {&ORDERTIMESTAMP_SIMONLY}) THEN DO:
                       /* YBP-605 */
                       llOrdStChg = fSetOrderStatus(Order.OrderId,"4"). /* in control */
                       /* YBP-605 */
-                      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                       "Order",
+                      Func.Common:mWriteMemo("Order",
                                        STRING(Order.OrderID),
                                        0,
                                        "ICC In Use",
@@ -587,8 +581,7 @@
                 /* YBP-608 */
                 llOrdStChg = fSetOrderStatus(Order.OrderId,"4").
                 /* YBP-609 */
-                DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                 "Order",
+                Func.Common:mWriteMemo("Order",
                                  STRING(Order.OrderID),
                                  0,
                                  "CLI Type",
@@ -597,15 +590,14 @@
              END.
 
              FIND FIRST clitype WHERE
-                        clitype.brand   = gcBrand and
+                        clitype.brand   = Syst.Var:gcBrand and
                         clitype.clitype = order.clitype NO-LOCK NO-ERROR.
              
              IF NOT AVAIL clitype THEN DO:
 
                 llOrdStChg = fSetOrderStatus(Order.OrderId,"2"). /* ERROR */
                 /* YBP-610 */
-                DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                 "Order",
+                Func.Common:mWriteMemo("Order",
                                  STRING(Order.OrderID),
                                  0,
                                  "CLI Type",
@@ -620,8 +612,7 @@
 
                 llOrdStChg = fSetOrderStatus(Order.OrderId,"2"). /* error */
                 /* YBP-611 */
-                DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                 "Order",
+                Func.Common:mWriteMemo("Order",
                                  STRING(Order.OrderID),
                                  0,
                                  "Subscription",
@@ -632,7 +623,7 @@
              
             /* YBP-612 */
             FIND FIRST OrderCustomer WHERE
-                       OrderCustomer.Brand = gcBrand AND
+                       OrderCustomer.Brand = Syst.Var:gcBrand AND
                        OrderCustomer.OrderId = Order.OrderId AND
                        OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
 
@@ -649,8 +640,7 @@
                 RUN Mc/prinoconf.p (Order.OrderID).
                 
                 IF RETURN-VALUE BEGINS "ERROR" THEN DO:
-                   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                    "Order",
+                   Func.Common:mWriteMemo("Order",
                                     STRING(Order.OrderID),
                                     0,
                                     "Order Confirmation Failed",
@@ -704,7 +694,7 @@
                    RELEASE SIM.
 
                    FOR EACH bSIM USE-index simstat WHERE
-                            bSIM.Brand   = gcBrand  AND
+                            bSIM.Brand   = Syst.Var:gcBrand  AND
                             bSIM.Stock   = lcStock  AND
                             bSIM.simstat = 1        AND
                             bSIM.SimArt  = "universal" NO-LOCK:
@@ -718,7 +708,7 @@
                          NO-LOCK USE-INDEX MsSeq NO-ERROR.
 
                          IF AVAIL bOldOrder AND
-                           fOffSet(bOldOrder.CrStamp, 24 * 7) > fMakeTS()
+                           Func.Common:mOffSet(bOldOrder.CrStamp, 24 * 7) > Func.Common:mMakeTS()
                            THEN NEXT.
                       END.
 
@@ -755,18 +745,18 @@
              END.
               
              FIND FIRST MSISDN WHERE
-                        MSISDN.Brand = gcBrand AND
+                        MSISDN.Brand = Syst.Var:gcBrand AND
                         MSISDN.CLI   = Order.Cli NO-LOCK NO-ERROR.
                         
              IF NOT AVAIL MSISDN THEN DO:
                 CREATE MSISDN.
                 ASSIGN
                    MSISDN.ActionDate = TODAY 
-                   msisdn.ValidFrom  = fmakeTS()
+                   msisdn.ValidFrom  = Func.Common:mMakeTS()
                    Msisdn.cli        = order.cli 
                    Msisdn.StatusCode = 22
                    MSISDN.MSSeq      = Order.MSSeq
-                   MSISDN.Brand      = gcBrand.
+                   MSISDN.Brand      = Syst.Var:gcBrand.
              END.          
 
              /*MM Migration: Subscription creation will be done after NC
@@ -774,7 +764,7 @@
              IF Order.Orderchannel BEGINS "migration" THEN NEXT {1}.
 
              IF NOT CAN-FIND(LAST OrderTimeStamp NO-LOCK WHERE
-                        OrderTimeStamp.Brand   = gcBrand   AND
+                        OrderTimeStamp.Brand   = Syst.Var:gcBrand   AND
                         OrderTimeStamp.OrderID = Order.OrderID AND
                         OrderTimeStamp.RowType = {&ORDERTIMESTAMP_SIMONLY}) THEN DO:
                 IF (LOOKUP(Order.OrderChannel,
@@ -807,7 +797,7 @@
                    SimDeliveryHist.OrderID    = Order.OrderID
                    SimDeliveryHist.MSSeq      = Order.MSSeq 
                    SimDeliveryHist.StatusCode = 2.
-                   SimDeliveryHist.TimeStamp = fMakeTS().
+                   SimDeliveryHist.TimeStamp = Func.Common:mMakeTS().
              END.
              END. /* IF NOT llReserveSimAndMsisdn THEN DO: */
              
@@ -832,14 +822,14 @@
                    ldeSwitchTS = MNPSub.PortingTime.      
                 END.
              END.
-             ELSE ldeSwitchTS = fMakeTS().
+             ELSE ldeSwitchTS = Func.Common:mMakeTS().
 
              
              IF Order.OrderType = 3 THEN
                 fReactivationRequest(INPUT Order.MsSeq,
                                      INPUT Order.OrderId,
                                      INPUT ldeSwitchTS,
-                                     INPUT katun,
+                                     INPUT Syst.Var:katun,
                                      {&REQUEST_SOURCE_NEWTON},
                                      OUTPUT ocResult).
              ELSE
@@ -847,7 +837,7 @@
                                   INPUT  Order.Cli,
                                   INPUT  Order.CustNum,
                                   INPUT  1,
-                                  INPUT  katun,
+                                  INPUT  Syst.Var:katun,
                                   INPUT  ldeSwitchTS,
                                   INPUT  "CREATE",
                                   INPUT  STRING(Order.OrderId),
@@ -862,8 +852,7 @@
              IF ocResult > "" THEN DO:
                 llOrdStChg = fSetOrderStatus(Order.OrderId,"2"). /* error */
 
-                DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                 "Order",
+                Func.Common:mWriteMemo("Order",
                                  STRING(Order.OrderID),
                                  0,
                                  "ACTIVATION FAILED",

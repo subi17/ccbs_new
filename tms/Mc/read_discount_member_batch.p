@@ -9,12 +9,11 @@
 
 {Syst/commpaa.i}
 
-ASSIGN gcBrand = "1" 
-       katun   = "Cron".
+ASSIGN Syst.Var:gcBrand = "1" 
+       Syst.Var:katun   = "Cron".
        
 {Func/cparam2.i}
 {Syst/eventlog.i}
-{Func/timestamp.i}
 {Func/ftransdir.i}
 
 DEF VAR lcFile      AS CHAR NO-UNDO.
@@ -48,8 +47,8 @@ END FUNCTION.
 /******** Main start ******/
 
 FIND FIRST Company WHERE
-           Company.Brand = gcBrand NO-LOCK NO-ERROR.
-IF AVAILABLE Company THEN ynimi = Company.CompName.
+           Company.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
+IF AVAILABLE Company THEN Syst.Var:ynimi = Company.CompName.
 
 lcFile = fCParamC("ReadDPMemberFile").
    

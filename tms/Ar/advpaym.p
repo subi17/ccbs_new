@@ -3,14 +3,12 @@
   FUNCTION .....: create an advance payment to customer
   APPLICATION ..: TMS
   CREATED ......: 02.01.06/aam 
-  MODIFIED .....: 24.01.06/jt DYNAMIC-FUNCTION("fDispCustName"
   VERSION ......: M15
   -------------------------------------------------------------------------- */
 
 {Syst/commali.i}
 {Func/cparam2.i}
 {Func/fcustbal.i}
-{Func/timestamp.i}
 {Func/fapvat.i}
 {Func/fvoucher.i}
 {Syst/eventval.i}
@@ -24,7 +22,7 @@ DEF INPUT  PARAMETER icMemo      AS CHAR NO-UNDO.
 DEF OUTPUT PARAMETER oiVoucher   AS INT  NO-UNDO.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPayment AS HANDLE NO-UNDO.
@@ -44,7 +42,7 @@ DEF VAR lcTitle       AS CHAR NO-UNDO.
 
 liAPAccNum = fCParamI("AdvPaymAcc").
 FIND Account WHERE 
-     Account.Brand  = gcBrand AND
+     Account.Brand  = Syst.Var:gcBrand AND
      Account.AccNum = liAPAccNum NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Account THEN DO:
    RETURN "Unknown AP account".
@@ -55,7 +53,7 @@ IF Account.AccType NE 19 THEN DO:
 END.
 
 IF NOT CAN-FIND(Account WHERE 
-                Account.Brand  = gcBrand AND
+                Account.Brand  = Syst.Var:gcBrand AND
                 Account.AccNum = iiFromAcc)
 THEN DO:
    RETURN "Unknown transfer account".
@@ -74,13 +72,13 @@ IF iiEventType = 0 THEN iiEventType = 10.
 /* Get the voucher no. */
 oiVoucher = fGetIntVoucher().
 
-ldCurrStamp = fMakeTS().
+ldCurrStamp = Func.Common:mMakeTS().
 
 DO TRANS: 
 
    CREATE Payment.
    /* payment */
-   ASSIGN  Payment.Brand       = gcBrand
+   ASSIGN  Payment.Brand       = Syst.Var:gcBrand
            Payment.Voucher     = oiVoucher
            Payment.CustNum     = Customer.CustNum
            Payment.InvNum      = 0
@@ -99,8 +97,7 @@ DO TRANS:
            Payment.AccNum[2]   = liAPAccNum
            Payment.Posting[2]  = -1 * idAmount.
  
-   Payment.CustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                               BUFFER Customer).
+   Payment.CustName = Func.Common:mDispCustName(BUFFER Customer).
  
    /* vat */
    IF Customer.VATUsage < 3 THEN ASSIGN 
@@ -116,7 +113,7 @@ DO TRANS:
    DO liCount = 1 TO 4:
       IF Payment.AccNum[liCount] = 0 THEN NEXT. 
       FIND Account where 
-           Account.Brand  = gcBrand AND 
+           Account.Brand  = Syst.Var:gcBrand AND 
            Account.AccNum = Payment.AccNum[liCount]
       NO-LOCK NO-ERROR.
       IF AVAILABLE Account THEN 
@@ -132,12 +129,12 @@ DO TRANS:
 
       /* separate Memo */
       CREATE Memo.
-      ASSIGN Memo.Brand     = gcBrand
+      ASSIGN Memo.Brand     = Syst.Var:gcBrand
              Memo.HostTable = "Payment"
              Memo.KeyValue  = STRING(Payment.Voucher)
              Memo.CustNum   = Payment.CustNum
              Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-             Memo.CreUser   = katun 
+             Memo.CreUser   = Syst.Var:katun 
              Memo.MemoTitle = lcTitle
              Memo.MemoText  = icMemo
              Memo.CreStamp  = ldCurrStamp.
@@ -158,7 +155,7 @@ DO TRANS:
    CREATE OPLog.
    ASSIGN OPLog.CustNum   = Customer.CustNum
           OPLog.EventDate = idtPaymDate
-          OPLog.UserCode  = katun
+          OPLog.UserCode  = Syst.Var:katun
           OPLog.EventType = iiEventType      
           OPLog.InvNum    = 0
           OPLog.Voucher   = oiVoucher

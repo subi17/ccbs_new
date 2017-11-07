@@ -39,25 +39,25 @@ skip(1)
 with row 1 title " DELETE MONTHLY CALL COUNTERS " width 80
    NO-LABELS FRAME frm.
 
-IF month(pvm) NE 1 THEN ASSIGN
-   Month = (year(pvm) * 100) + month(pvm) - 1.
+IF month(TODAY) NE 1 THEN ASSIGN
+   Month = (year(TODAY) * 100) + month(TODAY) - 1.
 ELSE ASSIGN
-   Month = ((year(pvm) * 100) - 100) + 12.
+   Month = ((year(TODAY) * 100) - 100) + 12.
 
 
 LOOP:
 repeat:
-ehto = 9. RUN Syst/ufkey.p.
+Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE Month WITH FRAME frm.
 
 do-it:
    repeat WITH FRAME frm:
-      ASSIGN ufk = 0 ehto = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ehto = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT  LOOP.
-      IF toimi = 8 THEN LEAVE LOOP.
-      IF toimi = 5 THEN LEAVE do-it.
+      IF Syst.Var:toimi = 1 THEN NEXT  LOOP.
+      IF Syst.Var:toimi = 8 THEN LEAVE LOOP.
+      IF Syst.Var:toimi = 5 THEN LEAVE do-it.
    END.
 
    IF Month NE 0 THEN DO:

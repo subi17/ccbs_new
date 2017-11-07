@@ -8,7 +8,6 @@
            dss_limit;double
 */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-{Func/timestamp.i}
 
 /* Input parameters */
 DEF VAR pcstruct            AS CHAR NO-UNDO.
@@ -24,12 +23,12 @@ IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
 lcXMLStruct = get_struct(param_toplevel_id, "0").
 lcValidateFields = validate_struct(lcXMLStruct,"fechaSolicitudPorAbonado,codigoO
 peradorDonante,codigoOperadorReceptor,abonado,codigoContrato,NRNReceptor,fechaVe
-ntanaCambio,MSISDN,ICCID").
+ntanaCambio,MSISDN,ICCID,sourceApplication").
 
 IF LOOKUP("fechaVentanaCambio", lcValidateFields) > 0 THEN
    ldePortingTime = get_timestamp(lcXMLStruct, "fechaVentanaCambio").
 ELSE
-   ldePortingTime = fMake2Dt(TODAY + 3,7200).
+   ldePortingTime = Func.Common:mMake2DT(TODAY + 3,7200).
 
 REPEAT:
    lcvalue = "005D0" + STRING(RANDOM(1,100000000),"999999999") + 

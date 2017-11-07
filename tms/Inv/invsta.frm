@@ -5,7 +5,7 @@ form
     "  3: Billed locally, Sent to Print House  " SKIP
     "  9: Credited invoices                      " SKIP 
 WITH
-   title color value (ctc) " Status codes for invoices " COLOR value(cfc)
+   title color value (Syst.Var:ctc) " Status codes for invoices " COLOR value(Syst.Var:cfc)
    OVERLAY centered ROW 13 FRAME statu.
 
 

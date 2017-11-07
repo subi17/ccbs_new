@@ -10,8 +10,8 @@
 */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
-katun = "Newton".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Newton".
 {Syst/tmsconst.i}
 
 DEFINE VARIABLE pcArray AS CHARACTER NO-UNDO. 
@@ -64,7 +64,7 @@ END.
 {Syst/eventval.i}
    
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
    {Func/lib/eventlog.i}
    DEF VAR lhOrderAccessory AS HANDLE NO-UNDO.
    lhOrderAccessory = BUFFER OrderAccessory:HANDLE.
@@ -76,7 +76,7 @@ FOR EACH ttIMEI NO-LOCK:
    {newton/src/findtenant.i YES ordercanal Order OrderId ttIMEI.OrderId}
    
    FIND OrderAccessory WHERE
-        OrderAccessory.Brand = gcBrand AND
+        OrderAccessory.Brand = Syst.Var:gcBrand AND
         OrderAccessory.OrderId = ttImei.OrderId AND
         OrderAccessory.IMEI = ttImei.IMEI AND
         OrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE}
@@ -100,5 +100,4 @@ add_boolean(response_toplevel_id,"", true).
 
 FINALLY:
    EMPTY TEMP-TABLE ttIMEI.
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

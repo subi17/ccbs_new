@@ -7,8 +7,8 @@
   Version ......: yoigo
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
@@ -16,12 +16,11 @@ gcBrand = "1".
 {Syst/eventlog.i}
 {Syst/eventval.i}
 {Func/email.i}
-{Func/timestamp.i}
 {Func/msisdn.i}
 {Func/msisdn_prefix.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -155,20 +154,20 @@ REPEAT:
          NEXT.
       END.
 
-      /* not yoigos or masmovil's case */
-      IF (lcDonor NE "005" AND lcRecipient NE "005") OR (lcDonor NE "200" AND lcRecipient NE "200") THEN DO:
+      /* not yoigos case */
+      IF lcDonor NE "005" AND lcRecipient NE "005" THEN DO:
          liSkipped = liSkipped + 1.
          NEXT.
       END.
       
-      IF (lcRecipient EQ "005" OR lcRecipient EQ "200") AND LOOKUP(lcNCStatus,"BNOT,BDEF,BDET,BFIN,BCAN") > 0 
+      IF lcRecipient EQ "005" AND LOOKUP(lcNCStatus,"BNOT,BDEF,BDET,BFIN,BCAN") > 0 
          THEN DO:
          liSkipped = liSkipped + 1.
          NEXT.
       END.
       
       ldeNCTime = ?.
-      ldeNCTime = fHMS2TS(date(int(substring(lcNCTime,5,2)),
+      ldeNCTime = Func.Common:mHMS2TS(date(int(substring(lcNCTime,5,2)),
           int(substring(lcNCTime,7,2)),
           int(substring(lcNCTime,1,4))),
           substring(lcNCTime,10)) NO-ERROR.
@@ -237,21 +236,13 @@ PROCEDURE pMNPStatusCheck:
 
    DEF BUFFER bMNPSub FOR MNPSub.
 
-   DEFINE VARIABLE liNCStatus       AS INTEGER   NO-UNDO. 
-   DEFINE VARIABLE lcTMSStatus      AS CHARACTER NO-UNDO. 
-   DEFINE VARIABLE liTMSStatus      AS INTEGER   NO-UNDO.
-   DEFINE VARIABLE lcTenant         AS CHAR      NO-UNDO.
-   DEFINE VARIABLE llYoigoTenant    AS LOGI      NO-UNDO INIT FALSE.
-   DEFINE VARIABLE llMasmovilTenant AS LOGI      NO-UNDO INIT FALSE.
+   DEFINE VARIABLE liNCStatus AS INTEGER NO-UNDO. 
+   DEFINE VARIABLE lcTMSStatus AS CHARACTER NO-UNDO. 
+   DEFINE VARIABLE liTMSStatus AS INTEGER NO-UNDO.
 
    FIND MNPProcess NO-LOCK WHERE 
         MNPProcess.PortRequest = icRefCode NO-ERROR.
    IF NOT AVAIL MNPProcess THEN RETURN "ERROR: MNP process not found".
-
-   ASSIGN
-      lcTenant         = BUFFER-TENANT-NAME(MNPProcess)
-      llYoigoTenant    = (IF lcTenant = {&TENANT_YOIGO}    THEN TRUE ELSE FALSE)   
-      llMasmovilTenant = (IF lcTenant = {&TENANT_MASMOVIL} THEN TRUE ELSE FALSE).
 
    IF MNPProcess.StatusCode = {&MNP_ST_AREC_CLOSED} THEN
       liTMSStatus = {&MNP_ST_AREC}.
@@ -295,7 +286,7 @@ PROCEDURE pMNPStatusCheck:
       IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMNPProcess).
       
       ASSIGN 
-         MNPProcess.UpdateTS = fMakeTS()
+         MNPProcess.UpdateTS = Func.Common:mMakeTS()
          MNPProcess.MNPUpdateTS = ideNCTime
          MNPProcess.StatusCode = {&MNP_ST_APOR}
          liMNPSeq = MNPProcess.MNPSeq.
@@ -317,14 +308,14 @@ PROCEDURE pMNPStatusCheck:
                 MNPProcess.StatusCode = ({&MNP_ST_BNOT})) EXCLUSIVE-LOCK:
       
             FIND msisdn where
-               msisdn.brand = gcBrand and
+               msisdn.brand = Syst.Var:gcBrand and
                msisdn.cli = bMNPSub.CLI  AND
                msisdn.statuscode = ({&MSISDN_ST_RETURN_NOTICE_SENT}) AND
-               msisdn.validto > fMakeTS() NO-LOCK NO-ERROR.
+               msisdn.validto > Func.Common:mMakeTS() NO-LOCK NO-ERROR.
 
             IF AVAIL msisdn THEN DO:
             
-               liMSISDNStatus = (IF ((fIsYoigoCLI(msisdn.CLI) AND llYoigoTenant) OR (fIsMasmovilCLI(msisdn.CLI) AND llMasmovilTenant)) THEN 
+               liMSISDNStatus = (IF fIsYoigoCLI(msisdn.CLI) THEN 
                      {&MSISDN_ST_MNP_OUT_YOIGO} ELSE
                      {&MSISDN_ST_MNP_OUT_OTHER}).
       
@@ -334,7 +325,7 @@ PROCEDURE pMNPStatusCheck:
                IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMNPProcess).
                
                ASSIGN
-                  MNPProcess.UpdateTS = fMakeTS()
+                  MNPProcess.UpdateTS = Func.Common:mMakeTS()
                   MNPProcess.StatusCode = ({&MNP_ST_BCAN}).
       
                IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMNPProcess).
@@ -345,7 +336,7 @@ PROCEDURE pMNPStatusCheck:
          END.
             
          FIND FIRST msisdn where
-                    msisdn.brand = gcBrand and
+                    msisdn.brand = Syst.Var:gcBrand and
                     msisdn.cli = MNPSub.CLI
          NO-LOCK USE-INDEX CLI NO-ERROR.
 
@@ -357,14 +348,14 @@ PROCEDURE pMNPStatusCheck:
                   msisdn.statuscode EQ {&MSISDN_ST_WAITING_RETURN}) THEN DO:
             
             PUT STREAM sMSISDN UNFORMATTED 
-               fts2hms(fmakets()) "|"
+               Func.Common:mTS2HMS(Func.Common:mMakeTS()) "|"
                msisdn.cli "|"
                MNPSub.mnpseq "|"
                msisdn.statuscode skip.
 
             fMakeMsidnHistory(recid(msisdn)).
 
-            liMSISDNStatus = (IF ((fIsYoigoCLI(msisdn.CLI) AND llYoigoTenant) OR (fIsMasmovilCLI(msisdn.CLI) AND llMasmovilTenant)) THEN 
+            liMSISDNStatus = (IF fIsYoigoCLI(MNPSub.CLI) THEN 
                   {&MSISDN_ST_MNP_OUT_YOIGO} ELSE
                   {&MSISDN_ST_MNP_OUT_OTHER}).
          
@@ -389,9 +380,9 @@ PROCEDURE pMNPStatusCheck:
            MNPSub.MNPSeq = MNPProcess.MNPSeq NO-LOCK.
 
       FIND msisdn where
-         msisdn.brand = gcBrand and
+         msisdn.brand = Syst.Var:gcBrand and
          msisdn.cli = MNPSub.CLI  AND
-         msisdn.validto > fMakeTS() NO-LOCK NO-ERROR.
+         msisdn.validto > Func.Common:mMakeTS() NO-LOCK NO-ERROR.
 
       IF NOT AVAIL msisdn OR 
          msisdn.statuscode NE ({&MSISDN_ST_RETURN_NOTICE_SENT}) THEN DO:
@@ -407,7 +398,7 @@ PROCEDURE pMNPStatusCheck:
       IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMNPProcess).
       
       ASSIGN 
-         MNPProcess.UpdateTS = fMakeTS()
+         MNPProcess.UpdateTS = Func.Common:mMakeTS()
          MNPProcess.MNPUpdateTS = ideNCTime
          MNPProcess.StatusCode = ({&MNP_ST_BDEF}).
 

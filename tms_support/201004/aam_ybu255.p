@@ -1,7 +1,6 @@
 {Syst/testpaa.i}
-katun = "Qvantel".
+Syst.Var:katun = "Qvantel".
 
-{Func/timestamp.i}
 DEF VAR ldaActDate    AS DATE NO-UNDO.
 DEF VAR liTime        AS INT  NO-UNDO.
 def var j as int no-undo.
@@ -25,7 +24,7 @@ FOR EACH MsRequest NO-LOCK WHERE
          DayCampaign.DCEvent = MsRequest.ReqCParam3,
    first mobsub where mobsub.msseq = msrequest.msseq no-lock:
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldaActDate,
             OUTPUT liTime).
 

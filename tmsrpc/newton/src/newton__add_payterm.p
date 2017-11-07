@@ -20,8 +20,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
-{Func/timestamp.i}
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Func/fsubsterminal.i}
@@ -60,7 +59,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN 
    liMsSeq           = get_pos_int(pcPayTermStruct, "msseq")
-   katun             = "VISTA_" + get_nonempty_string(pcPayTermStruct, "username")
+   Syst.Var:katun             = "VISTA_" + get_nonempty_string(pcPayTermStruct, "username")
    lcNewPayterm      = get_nonempty_string(pcPayTermStruct, "payterm_contract")
    ldeResidualValue  = get_double(pcPayTermStruct, "residual_value") WHEN
                        LOOKUP("residual_value",lcStruct) > 0
@@ -77,7 +76,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 {newton/src/findtenant.i NO ordercanal MobSub MsSeq liMsSeq}
 
 FIND FIRST DayCampaign NO-LOCK WHERE 
-           DayCampaign.Brand   = gcBrand AND
+           DayCampaign.Brand   = Syst.Var:gcBrand AND
            DayCampaign.DCEvent = lcNewPayterm AND
            DayCampaign.DCType  = {&DCTYPE_INSTALLMENT} AND
            DayCampaign.ValidFrom <= TODAY AND
@@ -106,7 +105,7 @@ THEN RETURN appl_err("Cannot add more installments").
 liCreated = fPCActionRequest(MobSub.MsSeq,
                              DayCampaign.DCEvent,
                              "act",
-                             fMakeTS(),
+                             Func.Common:mMakeTS(),
                              TRUE, /* create fees */
                              {&REQUEST_SOURCE_NEWTON},
                              "",
@@ -130,7 +129,7 @@ IF AVAILABLE MsRequest THEN ASSIGN
 RELEASE MsRequest.
 
 FIND FIRST Order NO-LOCK WHERE
-           Order.Brand = gcBrand AND
+           Order.Brand = Syst.Var:gcBrand AND
            Order.OrderId = liOrderId NO-ERROR.
 IF NOT AVAILABLE Order THEN
    RETURN appl_err("Order not found").
@@ -141,7 +140,7 @@ IF lcIMEI > "" THEN DO:
    IF lcBillCode = "" THEN RETURN appl_err("Missing Terminal Billing Code").
 
    FIND FIRST SubsTerminal NO-LOCK WHERE
-              SubsTerminal.Brand = gcBrand AND
+              SubsTerminal.Brand = Syst.Var:gcBrand AND
               SubsTerminal.OrderId = Order.OrderId AND
               SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE} NO-ERROR.
 
@@ -168,7 +167,7 @@ IF lcIMEI > "" THEN DO:
       END.
 
       ASSIGN
-         SubsTerminal.Brand         = gcBrand
+         SubsTerminal.Brand         = Syst.Var:gcBrand
          SubsTerminal.OrderId       = Order.OrderId
          SubsTerminal.IMEI          = lcIMEI
          SubsTerminal.MsSeq         = MobSub.MsSeq
@@ -183,11 +182,11 @@ IF lcMemoTitle > "" AND lcMemoContent > "" THEN DO:
    CREATE Memo.
    ASSIGN
        Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = gcBrand
+       Memo.Brand     = Syst.Var:gcBrand
        Memo.HostTable = "MobSub"
        Memo.KeyValue  = STRING(MobSub.MsSeq)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = katun
+       Memo.CreUser   = Syst.Var:katun
        Memo.MemoTitle = lcMemoTitle
        Memo.MemoText  = lcMemoContent
        Memo.CustNum   = (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0).
@@ -196,5 +195,4 @@ END. /* IF lcMemoTitle > "" AND lcMemoContent > "" THEN DO: */
 add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

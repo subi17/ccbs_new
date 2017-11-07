@@ -14,9 +14,8 @@ https://kethor.qvantel.com/browse/MANDLP-10
 
 /* includes */
 {Syst/commpaa.i}
-gcbrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/lpfunctions.i}
 {Func/barrfunc.i}
@@ -52,11 +51,11 @@ PUT STREAM sICCLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_icc_checker
 ASSIGN
    lcTableName = "MANDARINA"
    lcActionID  = "Mandarina_ICC_Checker"
-   ldCurrentTimeTS = fMakeTS().
+   ldCurrentTimeTS = Func.Common:mMakeTS().
 
 DO TRANS:
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.Var:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName NO-ERROR.
 
@@ -72,11 +71,11 @@ DO TRANS:
       /*First execution stamp*/
       CREATE ActionLog.
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.Var:gcBrand
          ActionLog.TableName    = lcTableName
          ActionLog.ActionID     = lcActionID
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
       RELEASE ActionLog.
       PUT STREAM sICCLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_icc_checker_first_run" SKIP.
@@ -88,19 +87,19 @@ DO TRANS:
       /*Set collection period start time to match the previous period end*/
       ASSIGN
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ldCollPeriodStartTS    = ActionLog.ActionTS.
       RELEASE Actionlog.
    END.
 END.
 
-ldCollPeriodEndTS = fSecOffSet(ldCurrentTimeTS, -60). /*Now - 1 minute */
-PUT STREAM sICCLog UNFORMATTED "Collection period: " + fTS2HMS(ldCollPeriodStartTS) + " TO " fTS2HMS(ldCollPeriodEndTS) SKIP.
+ldCollPeriodEndTS = Func.Common:mSecOffSet(ldCurrentTimeTS, -60). /*Now - 1 minute */
+PUT STREAM sICCLog UNFORMATTED "Collection period: " + Func.Common:mTS2HMS(ldCollPeriodStartTS) + " TO " Func.Common:mTS2HMS(ldCollPeriodEndTS) SKIP.
 /* ICC lookup part */
 /* Find ICC requests */
 /* Find information if LP is active. If yes, switch it off */
 FOR EACH MsRequest NO-LOCK WHERE
-         MsRequest.Brand EQ gcBrand AND
+         MsRequest.Brand EQ Syst.Var:gcBrand AND
          MsRequest.ReqStatus EQ {&REQUEST_STATUS_DONE} AND
          MsRequest.UpdateStamp > ldCollPeriodStartTS AND
          MsRequest.UpdateStamp <= ldCollPeriodEndTS AND
@@ -125,6 +124,35 @@ FOR EACH MsRequest NO-LOCK WHERE
             NEXT.
          END.
       END. 
+      
+      /* begin YDR-2668. IF Internet barring active because of Mandarina, then remove. */
+      IF LOOKUP("Internet", lcBarrings) <> 0 AND
+         CAN-FIND(FIRST Memo WHERE
+                        Memo.Brand EQ Syst.Var:gcBrand AND
+                        Memo.CustNum EQ MsRequest.CustNum AND
+                        Memo.HostTable EQ "MobSub" AND
+                        Memo.MemoTitle EQ "OTA Barring activado"
+                        USE-INDEX CustNum)
+      THEN DO:
+         RUN pRemoveInternetBarring.
+         IF RETURN-VALUE = "OK" THEN DO:
+            PUT STREAM sICCLog UNFORMATTED 
+               STRING(TIME,"hh:mm:ss") + ";" +  
+               STRING(MsRequest.MsSeq) + ";" +
+               STRING(MsRequest.CustNum) + ";" + 
+               "Internet_barring_deactivate"
+               SKIP.
+         END.  
+         ELSE DO:
+            PUT STREAM sICCLog UNFORMATTED 
+               STRING(TIME,"hh:mm:ss") + ";" +  
+               STRING(MsRequest.MsSeq) + ";" +
+               STRING(MsRequest.CustNum) + ";" +
+               RETURN-VALUE
+               SKIP.        
+         END.
+      END.  
+      /* end YDR-2668 */
 
       IF (bLP_MsRequest.ReqCparam2 EQ "REDIRECTION_OTFAILED1" OR
           bLP_MsRequest.ReqCparam2 EQ "REDIRECTION_OTFAILED2") THEN DO:
@@ -159,7 +187,7 @@ END.
 /*Update cunrent collection period end time to actionlog*/
 DO TRANS:
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.Var:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName    AND
               ActionLog.ActionStatus NE {&ACTIONLOG_STATUS_SUCCESS}
@@ -173,3 +201,44 @@ END.
 
 PUT STREAM sICCLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_icc_checker_finishes" SKIP.
 OUTPUT STREAM sICCLog CLOSE.
+
+/*-------------------------------------------------
+ Internal Procedures
+-------------------------------------------------*/
+
+PROCEDURE pRemoveInternetBarring:
+
+   DEF VAR liRequest AS INT  NO-UNDO.
+   DEF VAR lcResult  AS CHAR NO-UNDO.   
+
+   FIND FIRST MobSub WHERE
+              MobSub.Brand EQ Syst.Var:gcBrand AND
+              Mobsub.CLI EQ MsRequest.CLI
+        USE-INDEX CLI NO-LOCK NO-ERROR.
+
+   IF NOT AVAILABLE MobSub THEN
+      RETURN "ERROR:MSISDN_not_found".
+
+   RUN Mm/barrengine.p(mobsub.MsSeq,
+                       "Internet=0",        /* Barring */
+                       "11",                /* source   */
+                       "Sistema",           /* creator  */
+                       Func.Common:mMakeTS(),           /* activate */
+                       "",                  /* SMS      */
+                       OUTPUT lcResult).
+
+   liRequest = INTEGER(lcResult) NO-ERROR.                             
+   IF liRequest > 0 THEN DO:   
+      Func.Common:mWriteMemoWithType("Mobsub",
+                       STRING(mobsub.MsSeq),
+                       mobsub.CustNum,
+                       "OTA Barring desactivado",          /* memo title */
+                       "Redirection removed, reason: ICC", /* memo text  */
+                       "Service",                          /* memo type  */   
+                       "Sistema").                         /* memo creator    */
+      RETURN "OK". 
+   END.
+   ELSE 
+      RETURN "ERROR:" + lcResult.
+END PROCEDURE.
+

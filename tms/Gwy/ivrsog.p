@@ -8,7 +8,6 @@
   Version ......: 
   --------------------------------------------------------------------------- */
 
-{Func/timestamp.i}
 
 DEFINE INPUT PARAMETER piSoLog    AS INTEGER   NO-UNDO.
 DEFINE INPUT PARAMETER pcCommLine AS CHARACTER NO-UNDO.
@@ -56,7 +55,7 @@ IF RETURN-VALUE = "OK" THEN REPEAT ON STOP UNDO, LEAVE ON QUIT UNDO, LEAVE:
                ".log".
 
    OUTPUT TO VALUE(lcLogDir + lcLogFile) APPEND.
-   PUT UNFORMATTED "OK: " fTS2HMS(fMakeTS()) " " llTimeOut " " lcResponse CHR(10).
+   PUT UNFORMATTED "OK: " Func.Common:mTS2HMS(Func.Common:mMakeTS()) " " llTimeOut " " lcResponse CHR(10).
    OUTPUT CLOSE.
 
    IF NOT llTimeOut THEN DO:

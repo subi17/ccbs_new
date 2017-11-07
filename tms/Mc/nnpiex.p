@@ -66,20 +66,20 @@ form
    "        Decimal separator ..:" exdeci                        skip(3)
 WITH 
    ROW 1 side-labels width 80 NO-LABELS
-   title color value(ctc) " " + ynimi +
+   title color value(Syst.Var:ctc) " " + Syst.Var:ynimi +
    " SUMMARY OF PAYMENTS AND INVOICES " +
-   string(pvm,"99-99-99") + " " COLOR value(cfc) FRAME Limit.
+   string(TODAY,"99-99-99") + " " COLOR value(Syst.Var:cfc) FRAME Limit.
 
 ASSIGN
    iAR     = 1
-   dte     = pvm.
+   dte     = TODAY.
 
 PAUSE 0.
 DISPLAY "ALL" @ InvGroup.IGName WITH FRAME limit.
 
 DO FOR TMSUser:
    FIND TMSUser where
-        TMSUser.UserCode = katun
+        TMSUser.UserCode = Syst.Var:katun
    no-lock.
    fname = TMSUser.RepDir + "/invlist.txt".
 END.
@@ -87,7 +87,7 @@ END.
 Limit:
 repeat WITH FRAME Limit ON ENDKEY UNDO, LEAVE:
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       dte 
       InvGroup 
@@ -96,14 +96,14 @@ repeat WITH FRAME Limit ON ENDKEY UNDO, LEAVE:
       fname 
       exdeci 
    WITH FRAME Limit EDITING:
-      READKEY. nap = keylabel(LASTKEY).
-      IF lookup(nap,poisnap) > 0 THEN DO:
+      READKEY. Syst.Var:nap = keylabel(LASTKEY).
+      IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
          if frame-field = "InvGroup" THEN DO:
             ASSIGN InvGroup.
             if InvGroup NE "" THEN DO:
 
                find InvGroup where
-                    InvGroup.Brand    = gcBrand AND
+                    InvGroup.Brand    = Syst.Var:gcBrand AND
                     InvGroup.InvGroup = InvGroup
                no-lock no-error.
                if not avail Invgroup THEN DO:
@@ -141,7 +141,7 @@ repeat WITH FRAME Limit ON ENDKEY UNDO, LEAVE:
             else do:
                RUN Mc/gathecg.p(INPUT-OUTPUT table TCustGroup).
                /* DISPLAY Customer groups */
-               EHTO = 9.
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
                FOR EACH TCustGroup.
                   dExtCustGrp = dExtCustGrp + TCustGroup.CustGroup +
@@ -167,15 +167,15 @@ repeat WITH FRAME Limit ON ENDKEY UNDO, LEAVE:
 
    do-it:
       repeat WITH FRAME Limit:
-         ASSIGN ufk = 0 ehto = 0
-            ufk[1] = 7 
-            ufk[5] = 795
-            ufk[8] = 8.
+         ASSIGN Syst.Var:ufk = 0 Syst.Var:ehto = 0
+            Syst.Var:ufk[1] = 7 
+            Syst.Var:ufk[5] = 795
+            Syst.Var:ufk[8] = 8.
          RUN Syst/ufkey.p.
 
-         IF toimi = 1 THEN NEXT Limit.
-         IF toimi = 8 THEN LEAVE Limit.
-         IF toimi = 5 THEN LEAVE do-it.
+         IF Syst.Var:toimi = 1 THEN NEXT Limit.
+         IF Syst.Var:toimi = 8 THEN LEAVE Limit.
+         IF Syst.Var:toimi = 5 THEN LEAVE do-it.
    END.
 
    message "Are You sure You want to start listing (Y/N) ?"
@@ -210,7 +210,7 @@ repeat WITH FRAME Limit ON ENDKEY UNDO, LEAVE:
 
    FOR EACH TCustGroup.
       FOR EACH cgmember WHERE
-               CGMember.Brand     = gcBrand AND
+               CGMember.Brand     = Syst.Var:gcBrand AND
                cgmember.custgroup = Tcustgroup.custgroup
       NO-lock.
          FIND FIRST tcgmember WHERE
@@ -235,7 +235,7 @@ repeat WITH FRAME Limit ON ENDKEY UNDO, LEAVE:
 
    LOOP:
    FOR EACH Customer no-lock where
-            Customer.Brand    = gcBrand          AND
+            Customer.Brand    = Syst.Var:gcBrand          AND
             Customer.CustNum >= cgcustno1        AND
             Customer.CustNum <= cgcustno2        AND
            (if InvGroup = "" THEN TRUE 

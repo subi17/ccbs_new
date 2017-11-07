@@ -9,6 +9,7 @@
                       pay_type;int;payment type (eg: 1=postpaid,2=prepaid)
                       usage_type;string;tariff type(eg: Voice/Data)
                       monthly_cost;double;monthly cost
+                      pro_extra_monthly_fee;double;extra pro monthly fee
                       bundled;boolean; bundle based clitype (eg: CONTF/CONTRD/CONTS/CONTD)
                       data_amount;double;data amount for subscriptions with base bundle (CONT6,CONT7,CONT8,CONT9)
                       line_type;int;line type (main=1 or additional=2)
@@ -32,36 +33,22 @@ DEF VAR lcAllVoIPNativeBundles AS CHAR NO-UNDO.
 DEF VAR ldaCont15PromoEnd      AS DATE NO-UNDO.
 DEF VAR lcRegionArray          AS CHAR NO-UNDO.
 DEF VAR lcRegionStruct         AS CHAR NO-UNDO.
-DEF VAR lcFixedLineBB          AS CHAR NO-UNDO.
+DEF VAR lcProFeeContract       AS CHAR NO-UNDO. 
 DEF VAR liUnit                 AS INTE NO-UNDO.
 DEF VAR liF2FUnit              AS INTE NO-UNDO.
 DEF VAR liF2MUnit              AS INTE NO-UNDO.
 DEF VAR ldF2FAmount            AS DECI NO-UNDO.
 DEF VAR ldF2MAmount            AS DECI NO-UNDO.
 
-FUNCTION fTMSCodeName RETURNS CHARACTER
-   (iTableName AS CHAR,
-    iFieldName AS CHAR,
-    iCodeValue AS CHAR).
-
-   FIND FIRST TMSCodes NO-LOCK WHERE
-              TMSCodes.TableName = iTableName AND
-              TMSCodes.FieldName = iFieldName AND
-              TMSCodes.CodeValue = iCodeValue NO-ERROR.
-
-   IF AVAILABLE TMSCodes AND TMSCodes.InUse > 0 THEN RETURN TMSCodes.CodeName.
-   ELSE RETURN "".
-
-END FUNCTION.
-
 FUNCTION fGetSLAmount RETURNS DECIMAL 
   (icServiceLimitGroup AS CHARACTER,
    iiDialType          AS INTEGER,
    OUTPUT oiUnit       AS INTEGER):
 
-  FIND FIRST ServiceLimit NO-LOCK WHERE ServiceLimit.GroupCode = icServiceLimitGroup AND
-                                        ServiceLimit.DialType  = iiDialType          AND
-                                        ServiceLimit.ValidTo   >= TODAY              NO-ERROR.
+  FIND FIRST ServiceLimit NO-LOCK WHERE 
+             ServiceLimit.GroupCode = icServiceLimitGroup AND
+             ServiceLimit.DialType  = iiDialType          AND
+             ServiceLimit.ValidTo   >= TODAY              NO-ERROR.
   IF AVAIL ServiceLimit THEN 
   DO:
       ASSIGN oiUnit = ServiceLimit.InclUnit.
@@ -70,23 +57,6 @@ FUNCTION fGetSLAmount RETURNS DECIMAL
 
   RETURN 0.                                          
          
-END FUNCTION.  
-
-FUNCTION fGetFixedLineBaseBundle RETURNS CHARACTER
-  (icCliType AS CHARACTER):
-
-  FIND FIRST RequestAction WHERE RequestAction.Brand      = "1"             AND
-                                 RequestAction.ReqType    = 14              AND
-                                 RequestAction.CliType    = icCliType       AND
-                                 RequestAction.ActionType = "DayCampaign"   AND
-                                 RequestAction.Action     = 1               AND
-                                 RequestAction.ValidFrom <= TODAY           AND
-                                 RequestAction.ValidTo   >= TODAY           NO-LOCK NO-ERROR. 
-  IF AVAIL RequestAction THEN 
-    RETURN RequestAction.ActionKey.                               
-
-  RETURN "".
-
 END FUNCTION.  
 
 ASSIGN lcAllowedDSS2SubsType  = fCParamC("DSS2_SUBS_TYPE")
@@ -113,8 +83,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    IF NOT AVAIL CLIType THEN RETURN appl_err("Subscription Type not found: "+ pcId).
 
    ASSIGN 
-      lcCLITypeTransName = fGetItemName("1","CLIType",CLIType.CLIType,1,TODAY)
-      lcFixedLineBB      = fGetFixedLineBaseBundle(CliType.CliType) WHEN CliType.TariffType > 0.
+      lcCLITypeTransName = fGetItemName("1","CLIType",CLIType.CLIType,1,TODAY).
 
    IF CLIType.CLIType = "CONTFF" THEN
       lcCLITypeTransName = CLIType.CLIName.
@@ -143,9 +112,11 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    DO:
       add_double(lcResultStruct,"data_amount" , fGetSLAmount(CLIType.BaseBundle,{&DIAL_TYPE_GPRS} ,OUTPUT liUnit)).
       add_double(lcResultStruct,"voice_amount", fGetSLAmount(CLIType.BaseBundle,{&DIAL_TYPE_VOICE},OUTPUT liUnit)).
+
+      lcProFeeContract = CLIType.BaseBundle.
    END.
 
-   IF lcFixedLineBB > "" THEN
+   IF CLIType.FixedBundle > "" THEN
    DO:
        ASSIGN 
            ldF2FAmount = fGetSLAmount(lcFixedLineBB,{&DIAL_TYPE_FIXED_VOICE_BDEST}, OUTPUT liF2FUnit)
@@ -157,7 +128,23 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
        add_int   (lcResultStruct,"fixed2fixed_voice_amount_unit" , liF2FUnit).
        add_double(lcResultStruct,"fixed2mobile_voice_amount"     , ldF2MAmount).
        add_int   (lcResultStruct,"fixed2mobile_voice_amount_unit", liF2MUnit).
+
+      lcProFeeContract = CLIType.FixedBundle.
    END.
+
+   IF lcProFeeContract > "" THEN
+      FOR FIRST DayCampaign NO-LOCK WHERE
+                DayCampaign.Brand  = Syst.Var:gcBrand AND
+                DayCampaign.DCEvent = lcProFeeContract AND
+                DayCampaign.FeeModel > "",
+          FIRST FMItem NO-LOCK WHERE
+                FMItem.Brand = Syst.Var:gcBrand AND
+                FMItem.FeeModel = DayCampaign.FeeModel AND
+                FMItem.PriceList = "PRO_" + CLIType.CLIType AND
+                FMItem.FromDate <= TODAY AND
+                FMItem.Todate >= TODAY:
+         add_double(lcResultStruct,"pro_extra_monthly_fee", FMItem.Amount).
+       END.
 
    IF CLIType.UsageType = 1 THEN
       add_string(lcResultStruct,"usage_type", "voice").

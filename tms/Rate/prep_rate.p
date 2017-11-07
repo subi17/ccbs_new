@@ -13,7 +13,6 @@
 {Func/cparam2.i}
 
 {Func/fcustcnt.i}
-{Func/func.p}
 {Mm/cdrvar.i}
 {Mm/ficora.i}
 {Rate/chkbal2.i} 
@@ -212,7 +211,7 @@ VALIDATE(INPUT cust-no1 <= INPUT cust-no2,"Invalid order of customers !") SKIP
    HELP "CLI type, EMPTY = all"
    VALIDATE(INPUT lcCLIType = "" OR
             CAN-FIND(CLIType WHERE 
-                     CLIType.Brand = gcBrand AND
+                     CLIType.Brand = Syst.Var:gcBrand AND
                      CLIType.CLIType = INPUT lcCLIType),
             "Unknown CLI type") 
    SKIP
@@ -228,10 +227,10 @@ HELP "Do you want re-analyse Rating CCN using Calltype and Destination"
    OVERLAY 
    ROW 1 
    WIDTH 80
-   COLOR VALUE(cfc) 
-   TITLE COLOR VALUE(ctc) 
-    " " + ynimi + "   ANALYSE/RATE MOBILE CALLS   " + 
-    string(pvm,"99.99.99") + " "  NO-LABELS  FRAME main.
+   COLOR VALUE(Syst.Var:cfc) 
+   TITLE COLOR VALUE(Syst.Var:ctc) 
+    " " + Syst.Var:ynimi + "   ANALYSE/RATE MOBILE CALLS   " + 
+    string(TODAY,"99.99.99") + " "  NO-LABELS  FRAME main.
    
 PAUSE 0.
 
@@ -240,7 +239,7 @@ MAIN:
 REPEAT WITH FRAME main:
 
 IF NOT bbatch THEN DO:
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
     
  DISPLAY
 "ALL" @ invgroup.IGName.
@@ -259,7 +258,7 @@ IF NOT bbatch THEN DO:
 WITH FRAME main  EDITING:
       READKEY.
             
-      IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME main:
+      IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME main:
          PAUSE 0.
          
          if frame-field = "ig-code" then do:
@@ -269,7 +268,7 @@ WITH FRAME main  EDITING:
             end.
             else do:
                find invgroup where 
-                    InvGroup.Brand    = gcBrand AND
+                    InvGroup.Brand    = Syst.Var:gcBrand AND
                     invgroup.Invgroup = ig-code no-lock no-error.
                if not avail invgroup then do:
                   bell.
@@ -338,15 +337,15 @@ WITH FRAME main  EDITING:
 ACTION:
    REPEAT WITH FRAME main:
       ASSIGN
-      ufk = 0 ehto = 0
-      ufk[1] = 7 
-      ufk[5] = 795
-      ufk[8] = 8.
+      Syst.Var:ufk = 0 Syst.Var:ehto = 0
+      Syst.Var:ufk[1] = 7 
+      Syst.Var:ufk[5] = 795
+      Syst.Var:ufk[8] = 8.
       RUN Syst/ufkey.p.
       
-      IF toimi = 1 THEN NEXT  main.
-      IF toimi = 8 THEN LEAVE main.
-      IF TOIMI = 5 THEN DO:
+      IF Syst.Var:toimi = 1 THEN NEXT  main.
+      IF Syst.Var:toimi = 8 THEN LEAVE main.
+      IF Syst.Var:toimi = 5 THEN DO:
          ok = false.
          MESSAGE "Do You REALLY want to START ANALYSIS RUN (Y/N) ?" UPDATE ok.
          IF NOT ok THEN NEXT action.

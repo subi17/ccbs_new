@@ -8,7 +8,13 @@
    One subscription may have several overlapping packages which are used in 
    the priority order defined in SLGAnalyse. 
 */
-{Func/cparam2.i}
+
+&GLOBAL-DEFINE MOBILE_SUBTYPES                 "CONTD,CONTF,CONTS,CONTFF,CONTSF,CONT6,CONT7,CONT8,CONT9,CONT10,CONT15,CONT23,CONT24,CONT25,CONT26,CONT27,CONT28"
+&GLOBAL-DEFINE ADSL-CONVERGENT-SUBTYPES        "CONTDSL35,CONTDSL39,CONTDSL40,CONTDSL45,CONTDSL48,CONTDSL52,CONTDSL58,CONTDSL59"
+&GLOBAL-DEFINE FIBER-CONVERGENT-SUBTYPES-LIST1 "CONTFH35_50,CONTFH39_50,CONTFH40_50,CONTFH45_50,CONTFH48_50,CONTFH52_50,CONTFH58_50,CONTFH59_50"
+&GLOBAL-DEFINE FIBER-CONVERGENT-SUBTYPES-LIST2 "CONTFH45_300,CONTFH49_300,CONTFH50_300,CONTFH55_300,CONTFH58_300,CONTFH62_300,CONTFH68_300,CONTFH69_300"
+
+&GLOBAL-DEFINE DSS2_SUBTYPES "CONTS,CONTM2,CONTM,CONTSF,CONT15,CONTDSL45,CONTDSL52,CONTFH45_50,CONTFH52_50,CONTFH55_300,CONTFH62_300,CONTDSL58,CONTDSL59,CONTFH58_50,CONTFH59_50,CONTFH68_300,CONTFH69_300,CONT28"
 
 FUNCTION fIncludedUnit RETURNS DEC
    (iiInclUnit AS INT):
@@ -30,76 +36,6 @@ FUNCTION fIncludedUnit RETURNS DEC
    OTHERWISE RETURN c_dur.
    END CASE.
     
-END FUNCTION.
-
-FUNCTION fSubscriptionTypeList RETURNS CHARACTER
-  (INPUT icDCEvent AS CHARACTER):
-
-  DEFINE VARIABLE lcSubsTypeList AS CHARACTER NO-UNDO.
-
-  DEFINE BUFFER bf_ttMxItem FOR ttMxItem.
-
-  FOR EACH ttMatrix WHERE ttMatrix.Brand = gcBrand AND ttMatrix.MXKey = "PERCONTR" NO-LOCK By ttMatrix.Prior:
-      
-      IF ttMatrix.MXRes <> 1 THEN 
-          NEXT.                                           
-      
-      FOR EACH ttMxItem WHERE ttMxItem.MxSeq = ttMatrix.MxSeq AND ttMxItem.MxName = "PerContract" AND ttMxItem.MxValue = icDCEvent NO-LOCK:
-          FOR EACH bf_ttMxItem WHERE bf_ttMxItem.MxSeq = ttMatrix.MxSeq AND bf_ttMxItem.MXName = "SubsTypeTo" NO-LOCK:               
-              ASSIGN lcSubsTypeList = lcSubsTypeList + (IF lcSubsTypeList <> "" THEN "," ELSE "") + bf_ttMxItem.MxValue.
-          END.
-      END.
-
-  END.
-
-  RETURN lcSubsTypeList.
-
-END FUNCTION.  
-
-FUNCTION fMobileSubscriptionTypeList RETURNS CHARACTER
-    ():
-
-    DEFINE VARIABLE lcSubsTypeList AS CHARACTER NO-UNDO.
-
-    FOR EACH ttCliType WHERE ttCliType.Brand = gcBrand AND ttCliType.WebStatusCode <> 0 AND ttCliType.BundleType = False AND ttCliType.PayType = 1:
-        
-        IF ttCliType.FixedLineDownload NE ? AND ttCliType.FixedLineDownload NE "" THEN
-            NEXT.
-        
-        ASSIGN lcSubsTypeList = lcSubsTypeList + (IF lcSubsTypeList <> "" THEN "," ELSE "") + ttCliType.CliType.
-    END. 
-
-    RETURN lcSubsTypeList.
-
-END FUNCTION.
-
-FUNCTION fConvergentSubscriptionTypeList RETURNS CHARACTER
-    ():
-
-    DEFINE VARIABLE lcSubsTypeList AS CHARACTER NO-UNDO.
-
-    FOR EACH ttCliType WHERE ttCliType.Brand = gcBrand AND ttCliType.WebStatusCode <> 0 AND ttCliType.BundleType = False AND ttCliType.PayType = 1:
-        
-        IF ttCliType.FixedLineDownload NE ? AND ttCliType.FixedLineDownload NE "" THEN
-            ASSIGN lcSubsTypeList = lcSubsTypeList + (IF lcSubsTypeList <> "" THEN "," ELSE "") + ttCliType.CliType.
-
-    END. 
-
-    RETURN lcSubsTypeList.
-
-END FUNCTION.
-
-FUNCTION fFamilySubscriptionTypeList RETURNS CHARACTER
-    ():
-
-    DEFINE VARIABLE lcSubsTypeList AS CHARACTER NO-UNDO.
-
-    FOR EACH ttCliType WHERE ttCliType.Brand = gcBrand AND ttCliType.WebStatusCode <> 0 AND ttCliType.BundleType = True AND ttCliType.PayType = 1:        
-        ASSIGN lcSubsTypeList = lcSubsTypeList + (IF lcSubsTypeList <> "" THEN "," ELSE "") + ttCliType.CliType.    
-    END. 
-
-    RETURN lcSubsTypeList.
-
 END FUNCTION.
 
 FUNCTION fPackageCalculation RETURNS LOGIC:
@@ -141,18 +77,18 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
    DEF VAR liCallPeriod          AS INT NO-UNDO. 
    DEF VAR ldeEndTs              AS DEC NO-UNDO. 
    DEF VAR lcCliTypeList         AS CHAR NO-UNDO.
-   DEF VAR lcDSS2CliTypeList     AS CHAR NO-UNDO.
-   DEF VAR llAvailRelaxPackage   AS LOG NO-UNDO.
 
    ASSIGN	
-      ttCall.BillCode   = bsub-prod
-      lcOrigBillCode    = bsub-prod
-      lcCliTypeList     = fMobileSubscriptionTypeList()	+ "," + fFamilySubscriptionTypeList() + "," + fConvergentSubscriptionTypeList()
-      lcDSS2CliTypeList = fCParamC("DSS2_SUBS_TYPE")
-      ldPackageAmt      = 0
-      ldTotalPrice      = 0
-      liUnitUsed        = ?
-      liSLGAUsed        = ?.
+      ttCall.BillCode = bsub-prod
+      lcOrigBillCode  = bsub-prod
+      lcCliTypeList   = {&MOBILE_SUBTYPES} 				   + "," +
+      				    {&ADSL-CONVERGENT-SUBTYPES} 	   + "," +
+      				    {&FIBER-CONVERGENT-SUBTYPES-LIST1} + "," +
+      				    {&FIBER-CONVERGENT-SUBTYPES-LIST2}
+      ldPackageAmt    = 0
+      ldTotalPrice    = 0
+      liUnitUsed      = ?
+      liSLGAUsed      = ?.
    
    IF ttCall.MSCID = "NRTRDE" THEN DO:
       ttCall.ErrorCode = 0.
@@ -190,7 +126,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
 
          IF ttServiceLimit.GroupCode = {&DSS} OR
             (ttServiceLimit.GroupCode = "DSS2" AND
-             LOOKUP(MSOwner.CLIType,lcDSS2CliTypeList) > 0) THEN
+             LOOKUP(MSOwner.CLIType,{&DSS2_SUBTYPES}) > 0) THEN
             llVoice_Data_subs_DSS = TRUE.
       END. /* FOR FIRST ttServiceLimit NO-LOCK WHERE */
    END. /* IF MSOwner.CLIType = "CONT6" THEN DO: */
@@ -207,40 +143,6 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
          lcNewTypeList  = ""
          llUpsell = FALSE.
 
-      
-      /* Check availability of RELAX packages on subscription */
-      FOR EACH  ttServiceLimit NO-LOCK WHERE ttServiceLimit.GroupCode = "MM_BONO_RELAX",
-          FIRST MServiceLimit NO-LOCK WHERE MServiceLimit.MsSeq    = MSOwner.MsSeq        AND
-                                            MServiceLimit.DialType = liDialType           AND
-                                            MServiceLimit.SlSeq    = ttServiceLimit.SlSeq AND
-                                            MServiceLimit.FromTS  <= CallTimeStamp        AND
-                                            MServiceLimit.EndTS   >= CallTimeStamp:
-          ASSIGN llAvailRelaxPackage = TRUE.
-          LEAVE.
-      END.
-      
-      IF llAvailRelaxPackage THEN 
-      DO liSLGPacket = 1 TO NUM-ENTRIES(lcSLGroupList):       
-         /* Since the list will be already sorted by priority configured on SLGAnalyse. 
-            Also, allowing only service package and bono's, will cause newlist to be with 
-            only base bundle and relax bono, since Masmovil doesnt have any bono's other 
-            than relax bono's */
-         IF LOOKUP(ENTRY(liSLGPacket,lcSLGATypeList),"1,4") = 0 THEN 
-             NEXT.
-
-         FOR EACH  ttServiceLimit NO-LOCK WHERE ttServiceLimit.GroupCode = ENTRY(liSLGPacket,lcSLGroupList),
-             FIRST MServiceLimit NO-LOCK WHERE MServiceLimit.MsSeq    = MSOwner.MsSeq        AND
-                                               MServiceLimit.DialType = liDialType           AND
-                                               MServiceLimit.SlSeq    = ttServiceLimit.SlSeq AND
-                                               MServiceLimit.FromTS  <= CallTimeStamp        AND
-                                               MServiceLimit.EndTS   >= CallTimeStamp:
-             ASSIGN 
-                 llUpsell       = FALSE
-                 lcNewGroupList = lcNewGroupList + (IF lcNewGroupList > "" THEN "," ELSE "") + ttServiceLimit.GroupCode 
-                 lcNewTypeList  = lcNewTypeList  + (IF lcNewTypeList  > "" THEN "," ELSE "") + ENTRY(liSLGPacket,lcSLGATypeList).                                           
-         END.          
-      END.
-      ELSE
       DO liSLGPacket = 1 TO NUM-ENTRIES(lcSLGroupList):
       
          IF LOOKUP(ENTRY(liSLGPacket,lcSLGATypeList),"1,4,6") = 0 THEN NEXT.
@@ -818,21 +720,21 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
 
             IF NOT AVAIL MServiceLimit THEN DO:
                
-               fSplitTS(CallTimeStamp,
+               Func.Common:mSplitTS(CallTimeStamp,
                         OUTPUT ldtDate,
                         OUTPUT liTime).
                
-               ldeEndTS = fMake2Dt(ldtDate,86399).
+               ldeEndTS = Func.Common:mMake2DT(ldtDate,86399).
                
                FIND LAST MServiceLimit NO-LOCK WHERE
                          MServiceLimit.MsSeq    = MSOwner.MsSeq AND
                          MServiceLimit.DialType = liDialType AND
                          MServiceLimit.SlSeq   = ttServiceLimit.SlSeq AND
                          MServiceLimit.EndTS <= ldeEndTS AND
-                         MServiceLimit.FromTS >= fMake2Dt(ldtDate,0)
+                         MServiceLimit.FromTS >= Func.Common:mMake2DT(ldtDate,0)
                USE-INDEX MsSeq NO-ERROR.
                IF AVAIL MServiceLimit THEN
-                  ldeEndTS = fSecOffSet(MServiceLimit.EndTS,-1).
+                  ldeEndTS = Func.Common:mSecOffSet(MServiceLimit.EndTS,-1).
 
                CREATE mServiceLimit.
                ASSIGN
@@ -843,13 +745,13 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
                   mServiceLimit.DialType = ttServiceLimit.DialType          
                   mServiceLimit.InclUnit = ttServiceLimit.InclUnit
                   mServiceLimit.InclAmt  = ttServiceLimit.InclAmt
-                  mServiceLimit.FromTS   = fMake2Dt(ldtDate,0)
+                  mServiceLimit.FromTS   = Func.Common:mMake2DT(ldtDate,0)
                   mServiceLimit.EndTS    = ldeEndTS NO-ERROR.
                IF ERROR-STATUS:ERROR THEN DELETE mServiceLimit.
                ELSE IF llDoEvent THEN 
                   fMakeCreateEvent((BUFFER mServiceLimit:HANDLE),
                                    "",
-                                   katun,
+                                   Syst.Var:katun,
                                    "").
 
             END.

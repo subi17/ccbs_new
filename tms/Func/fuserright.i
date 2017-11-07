@@ -73,7 +73,7 @@ FUNCTION fUserLimitAmt RETURNS DECIMAL
    IF AVAIL TMSUser THEN DO:
       /* check if limits amounts is defined individualy  */
       FIND FIRST UserLimit WHERE 
-                 UserLimit.Brand = gcBrand AND
+                 UserLimit.Brand = Syst.Var:gcBrand AND
                  UserLimit.LimitTarget = "TMSUser" AND 
                  UserLimit.LimitType = ilimitType AND 
                  UserLimit.LimitTargetID = TMSUser.UserCode NO-LOCK NO-ERROR.
@@ -81,7 +81,7 @@ FUNCTION fUserLimitAmt RETURNS DECIMAL
       ELSE DO:
           /* extract limit amount defined at group level  */
           FIND FIRST UserLimit WHERE 
-                     UserLimit.Brand = gcBrand AND 
+                     UserLimit.Brand = Syst.Var:gcBrand AND 
                      UserLimit.LimitTarget = "UserGroup" AND
                      UserLimit.LimitType = ilimitType AND
                      UserLimit.LimitTargetID = TMSUser.UserGroup 
