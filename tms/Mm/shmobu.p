@@ -28,8 +28,8 @@ form
     Customer.Email
 
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    title COLOR VALUE(ctc) " Subscriber Data "
+    COLOR VALUE(Syst.Var:cfc)
+    title COLOR VALUE(Syst.Var:ctc) " Subscriber Data "
     side-labels 1 columns FRAME subs.
 
 
@@ -48,8 +48,7 @@ DO WITH FRAME subs:
       VIEW-AS ALERT-BOX ERROR.
       RETURN.
    END.
-   lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                  BUFFER Customer).
+   lcCustName = Func.Common:mDispCustName(BUFFER Customer).
    FIND Country WHERE Country.Country = Customer.Country NO-LOCK NO-ERROR.
 
    DISP
@@ -65,7 +64,7 @@ DO WITH FRAME subs:
    WITH FRAME subs.
 
    ASSIGN
-   ufk = 0 ufk[8] = 8 ehto = 0.
+   Syst.Var:ufk = 0 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
    RUN Syst/ufkey.p.
 
    HIDE FRAME subs NO-PAUSE.

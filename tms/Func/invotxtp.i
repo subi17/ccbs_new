@@ -51,7 +51,7 @@ FUNCTION fGetInvoTxt RETURNS LOGICAL
     DEF VAR lcLevel AS CHAR NO-UNDO.
     
     FOR EACH InvText NO-LOCK WHERE
-             InvText.Brand     = gcBrand AND
+             InvText.Brand     = Syst.Var:gcBrand AND
              InvText.Target    = iTarget AND
              InvText.KeyValue  = iKey    AND
              InvText.FromDate <= iDate   AND
@@ -107,7 +107,7 @@ FUNCTION fGetReminderTxt RETURNS LOGICAL
     lcLevel = REPLACE(STRING(idLevel),",",".").
 
     FOR EACH InvText NO-LOCK WHERE
-             InvText.Brand     = gcBrand    AND
+             InvText.Brand     = Syst.Var:gcBrand    AND
              InvText.Target    = "general"  AND
              InvText.KeyValue  BEGINS "rem" AND
              InvText.FromDate <= iDate      AND

@@ -1,4 +1,3 @@
-{Func/timestamp.i}
 {Func/ftaxdata.i}
 
 def var lcdir   as char no-undo.
@@ -72,7 +71,7 @@ for each prepaidrequest no-lock where
          prepaidrequest.tsrequest <  20070901    and
          prepaidrequest.respcode = 0:
 
-   fsplitts(prepaidrequest.tsrequest,
+   Func.Common:mSplitTS(prepaidrequest.tsrequest,
             output ldtdate,
             output litime).
             
@@ -101,7 +100,7 @@ for each prepaidrequest no-lock where
          prepaidrequest.request begins "refill"  and
          prepaidrequest.respcode = 0:
 
-   fsplitts(prepaidrequest.tsrequest,
+   Func.Common:mSplitTS(prepaidrequest.tsrequest,
             output ldtdate,
             output litime).
             

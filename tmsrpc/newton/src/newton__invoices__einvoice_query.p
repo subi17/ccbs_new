@@ -12,11 +12,10 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-ASSIGN gcBrand = "1"
-       katun   = "tmsrpc".
+ASSIGN Syst.Var:gcBrand = "1"
+       Syst.Var:katun   = "tmsrpc".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 
 DEF VAR pcTenant       AS CHAR  NO-UNDO.
 DEF VAR pcStruct       AS CHAR  NO-UNDO. 
@@ -66,17 +65,17 @@ IF lcSaltKey = "" OR lcSaltKey = ? THEN
 ASSIGN liYear   = INT(SUBSTRING(STRING(piPeriod),1,4))
        liMonth  = INT(SUBSTRING(STRING(piPeriod),5,2))
        ldaDate  = DATE(liMonth,1,liYear)
-       ldeEndStamp = fMake2Dt(ldaDate,0).
+       ldeEndStamp = Func.Common:mMake2DT(ldaDate,0).
 
 FIND FIRST Customer WHERE
-           Customer.Brand = gcBrand AND
+           Customer.Brand = Syst.Var:gcBrand AND
            Customer.OrgId = pcDNI   AND
            Customer.Roles NE "inactive" NO-LOCK NO-ERROR.
 IF NOT AVAIL Customer THEN
    RETURN appl_err("Customer not found").
 
 FIND FIRST MsOwner WHERE
-           MsOwner.Brand   = gcBrand AND
+           MsOwner.Brand   = Syst.Var:gcBrand AND
            MsOwner.CustNum = Customer.CustNum AND
            MsOwner.CLI     = pcMSISDN AND
            MsOwner.TsEnd  >= ldeEndStamp NO-LOCK NO-ERROR.
@@ -84,7 +83,7 @@ IF NOT AVAIL MsOwner THEN
    RETURN appl_err("MobSub not found").
 
 FOR EACH Invoice WHERE
-         Invoice.Brand    = gcBrand AND
+         Invoice.Brand    = Syst.Var:gcBrand AND
          Invoice.CustNum  = Customer.CustNum AND
          Invoice.InvDate >= ldaDate AND
          Invoice.InvType  = 1 NO-LOCK:
@@ -111,5 +110,4 @@ IF NOT AVAIL Invoice THEN
 add_int(response_toplevel_id,?,Invoice.InvNum).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

@@ -1,6 +1,5 @@
 {Syst/testpaa.i}
 {Func/fvoucher.i}
-{Func/timestamp.i}
 
 def var ldtaxperc  as dec  no-undo.
 def var i          as int  no-undo.
@@ -77,7 +76,7 @@ for each payment no-lock use-index paymtype where
        
           
    create bpaym.
-   bpaym.voucher = fGetAndUpdVoucher(gcbrand,2).
+   bpaym.voucher = fGetAndUpdVoucher(Syst.Var:gcBrand,2).
 
    buffer-copy payment except voucher extvoucher to bpaym.
 
@@ -104,7 +103,7 @@ for each payment no-lock use-index paymtype where
       bpaym.extvoucher           skip.
 
    CREATE Memo.
-   ASSIGN Memo.Brand     = gcBrand
+   ASSIGN Memo.Brand     = Syst.Var:gcBrand
           Memo.HostTable = "payment"
           Memo.KeyValue  = STRING(bPaym.Voucher)
           Memo.CustNum   = Payment.CustNum
@@ -114,7 +113,7 @@ for each payment no-lock use-index paymtype where
           Memo.MemoText  = "Cancellation for TopUp posting due to " +
                            "unsuccessful TopUp event." + chr(10) +
                            "Cancelled voucher: " + payment.extvoucher.
-          Memo.CreStamp  = fMakeTS().
+          Memo.CreStamp  = Func.Common:mMakeTS().
     
 end.
    

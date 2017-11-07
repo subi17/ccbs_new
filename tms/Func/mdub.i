@@ -6,7 +6,6 @@
 
 &GLOBAL-DEFINE mdub YES
 
-{Func/timestamp.i}
 {Func/fmakemsreq.i}
 {Func/service.i}
 {Syst/tmsconst.i}
@@ -16,8 +15,8 @@
 DEF VAR ldaNextMonthActDate AS DATE NO-UNDO.
 DEF VAR ldNextMonthActStamp AS DEC  NO-UNDO.
 
-ASSIGN ldaNextMonthActDate = (fLastDayOfMonth(TODAY) + 1)
-       ldNextMonthActStamp = fMake2Dt(ldaNextMonthActDate,0).
+ASSIGN ldaNextMonthActDate = (Func.Common:mLastDayOfMonth(TODAY) + 1)
+       ldNextMonthActStamp = Func.Common:mMake2DT(ldaNextMonthActDate,0).
 
 FUNCTION fGetActiveMDUB RETURNS CHAR 
    (INPUT icType       AS CHAR,
@@ -32,13 +31,13 @@ FUNCTION fGetActiveMDUB RETURNS CHAR
           liNumEntries    = NUM-ENTRIES(lcBONOContracts).
 
    IF ideActStamp = 0 OR ideActStamp = ? THEN
-      ideActStamp = fMakeTS().
+      ideActStamp = Func.Common:mMakeTS().
 
    DO i = 1 TO liNumEntries:
       lcBundle = ENTRY(i,lcBONOContracts).
       /* check if exist any bono contract valid to the future */   
       FOR EACH ServiceLimitGroup NO-LOCK WHERE 
-               ServiceLimitGroup.Brand     = gcBrand AND
+               ServiceLimitGroup.Brand     = Syst.Var:gcBrand AND
                ServiceLimitGroup.GroupCode = lcBundle,
           EACH ServiceLimit NO-LOCK WHERE 
                ServiceLimit.GroupCode = ServiceLimitGroup.GroupCode AND 
@@ -89,14 +88,14 @@ END FUNCTION.
 FUNCTION fServPackagesActive RETURNS LOGICAL :
 
    FIND FIRST CTServPac WHERE
-              CTServPac.Brand   = gcBrand AND
+              CTServPac.Brand   = Syst.Var:gcBrand AND
               CTServPac.CLIType = MobSub.CLIType AND
               CTServPac.ServPac = "SHAPER" AND  
               CTServPac.ToDate >= TODAY NO-LOCK NO-ERROR.
    IF NOT AVAILABLE CTServPac THEN RETURN FALSE.
 
    FIND FIRST CTServPac WHERE
-              CTServPac.Brand   = gcBrand AND
+              CTServPac.Brand   = Syst.Var:gcBrand AND
               CTServPac.CLIType = MobSub.CLIType AND
               CTServPac.ServPac = "HSDPA" AND  
               CTServPac.ToDate >= TODAY NO-LOCK NO-ERROR.
@@ -113,7 +112,7 @@ FUNCTION fAllowMDUBActivation RETURNS LOGICAL
    lcBONOContracts = fCParamC(icType + "BONO_CONTRACTS").
 
    /* should not exist any MDUB valid to the future */
-   IF fGetActiveMDUB(icType, INPUT fMakeTS()) > "" THEN RETURN FALSE.
+   IF fGetActiveMDUB(icType, INPUT Func.Common:mMakeTS()) > "" THEN RETURN FALSE.
    /* should not exist any pending request for MDUB */
    IF fPendingMDUBActReq(icType) THEN RETURN FALSE.
    /* check service package definition exist for SHAPER and HSDPA */
@@ -225,13 +224,13 @@ FUNCTION fTerminateMDUBService RETURNS LOGICAL
    DEFINE VARIABLE lcError AS CHARACTER NO-UNDO. 
    DEFINE VARIABLE ldTermTS AS DECIMAL NO-UNDO.
    
-   ldTermTS = fHMS2TS(fLastDayOfMonth(idtReqDate) ,"23:59:59").
+   ldTermTS = Func.Common:mHMS2TS(Func.Common:mLastDayOfMonth(idtReqDate) ,"23:59:59").
 
    FOR FIRST ServPac NO-LOCK WHERE
-             ServPac.Brand   = gcBrand AND
+             ServPac.Brand   = Syst.Var:gcBrand AND
              ServPac.ServPac = icServPac,
         EACH ServEl NO-LOCK WHERE
-             ServEl.Brand   = gcBrand AND
+             ServEl.Brand   = Syst.Var:gcBrand AND
              ServEl.ServPac = ServPac.ServPac,
        FIRST SubSer NO-LOCK WHERE
              SubSer.MsSeq   = MobSub.MsSeq AND
@@ -274,7 +273,7 @@ FUNCTION fTerminateMDUBPerContract RETURNS LOGICAL
    DEFINE VARIABLE ldTermTS AS DECIMAL NO-UNDO.
 
    /* define termination request stamp  */ 
-   ldTS = fMakeTS().
+   ldTS = Func.Common:mMakeTS().
 
    FOR EACH MServiceLimit NO-LOCK WHERE
             MServiceLimit.MSSeq = MobSub.MsSeq AND
@@ -287,7 +286,7 @@ FUNCTION fTerminateMDUBPerContract RETURNS LOGICAL
    END.
    IF NOT llDo THEN RETURN TRUE. /* nothing has to be done */ 
           
-   ldTermTS = fHMS2TS(fLastDayOfMonth(idtReqDate) ,"23:59:59").
+   ldTermTS = Func.Common:mHMS2TS(Func.Common:mLastDayOfMonth(idtReqDate) ,"23:59:59").
 
    liRequest = fPCActionRequest(MobSub.MsSeq,
                                 icPerContract,
@@ -314,15 +313,15 @@ FUNCTION fMDUBFixedFeeAmt RETURNS DECIMAL
    DEFINE VARIABLE liOrderTime AS INTEGER NO-UNDO. 
    DEFINE VARIABLE ldAmt AS DECIMAL NO-UNDO.
 
-   fSplitTS(Order.CrStamp,
+   Func.Common:mSplitTS(Order.CrStamp,
             OUTPUT ldaOrderDate,
             OUTPUT liOrderTime).
  
    FOR FIRST DayCampaign NO-LOCK WHERE
-             DayCampaign.Brand = gcBrand AND 
+             DayCampaign.Brand = Syst.Var:gcBrand AND 
              DayCampaign.DCEvent = icBundle,
        FIRST FMItem NO-LOCK WHERE
-             FMItem.Brand     = gcBrand AND
+             FMItem.Brand     = Syst.Var:gcBrand AND
              FMItem.FeeModel  = DayCampaign.FeeModel AND
              FMItem.ToDate   >= ldaOrderDate AND
              FMItem.FromDate <= ldaOrderDate:
@@ -338,7 +337,7 @@ FUNCTION fMDUBInOrder RETURNS CHARACTER
    DEF VAR lcBundle AS CHAR NO-UNDO. 
 
    FIND FIRST Order WHERE 
-              Order.Brand   = gcBrand AND
+              Order.Brand   = Syst.Var:gcBrand AND
               Order.OrderID = piOrderId NO-LOCK NO-ERROR. 
    IF NOT AVAILABLE Order THEN RETURN "".
    

@@ -14,7 +14,6 @@
 
 {Syst/commali.i}
 
-{Func/date.i}
 {Syst/eventval.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'cotarg'}
@@ -57,8 +56,8 @@ form
     lcHandled FORMAT "x(10)" column-label "Handled" 
     CoTarg.CommStatus
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) 
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) 
     lcTitle
     FRAME sel.
 
@@ -74,20 +73,20 @@ FORM
     "Commission ID ....:" COTarg.CoTargID SKIP
     "Commission Rule ID:" COTarg.CORuleId SKIP
 WITH  OVERLAY ROW 5 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) "COMMISSION INFO" 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) "COMMISSION INFO" 
     NO-LABELS 
     FRAME lis.
 
 form /* seek  target */
     lcTarg
     HELP "Enter target type "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND target type "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND target type "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 IF icType = "rule" THEN DO:
 FIND CoRule WHERE 
-     CoRule.Brand = gcBrand AND
+     CoRule.Brand = Syst.Var:gcBrand AND
      CoRule.CoRuleId = iiKey NO-LOCK.
 ASSIGN 
    lcTitle = " COMM. TARGETS FOR: " +
@@ -98,7 +97,7 @@ END.
 ELSE IF icType = "mobsub" THEN
    lcTitle = "COMMISSIONS FOR SUBSCRIPTION: " + STRING(iiKey).
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -163,32 +162,32 @@ REPEAT WITH FRAME sel:
    REPEAT WITH FRAME sel ON ENDKEY UNDO, RETURN:
 
       IF ufkey THEN DO:
-        ufk = 0.
+        Syst.Var:ufk = 0.
         ASSIGN
-        ufk[2]= 0  ufk[3]= 0  
-        ufk[7]= 0  ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[2]= 0  Syst.Var:ufk[3]= 0  
+        Syst.Var:ufk[7]= 0  Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW CoTarg.COTarg {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CoTarg.COTarg WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) CoTarg.COTarg WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW CoTarg.CoTarg {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CoTarg.CoTarg WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) CoTarg.CoTarg WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
         CHOOSE ROW CoTarg.CommStatus {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CoTarg.CommStatus WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) CoTarg.CommStatus WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -197,10 +196,10 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -218,7 +217,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -243,7 +242,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -269,7 +268,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND CoTarg WHERE recid(CoTarg) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -293,7 +292,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -307,7 +306,7 @@ REPEAT WITH FRAME sel:
        END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0 THEN DO:  /* SHARING */
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 AND Syst.Var:ufk[4] > 0 THEN DO:  /* SHARING */
        {Syst/uright2.i}
        RUN local-find-this (FALSE).
        IF AVAILABLE CoTarg 
@@ -315,20 +314,20 @@ REPEAT WITH FRAME sel:
        ufkey = true. 
      END.
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0 AND lcRight = "RW"
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND Syst.Var:ufk[5] > 0 AND lcRight = "RW"
      THEN DO:  /* add */
         {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(FALSE).
       
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        /*DISPLAY CoTarg.TargType.*/
 
        RUN local-UPDATE-record.                                  
@@ -343,25 +342,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(CoTarg) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(CoTarg) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -383,11 +382,11 @@ PROCEDURE local-find-FIRST:
        CASE icType:
           WHEN "Rule" THEN
               FIND FIRST CoTarg
-              WHERE CoTarg.Brand = gcBrand AND CoTarg.CoRuleId = iiKey
+              WHERE CoTarg.Brand = Syst.Var:gcBrand AND CoTarg.CoRuleId = iiKey
               NO-LOCK NO-ERROR.
           WHEN "Mobsub" THEN 
              FIND FIRST CoTarg
-              WHERE CoTarg.Brand = gcBrand AND 
+              WHERE CoTarg.Brand = Syst.Var:gcBrand AND 
                     CoTarg.TargType = "M" AND
                     CoTarg.COTarg = STRING(iiKey)
               NO-LOCK NO-ERROR.
@@ -400,11 +399,11 @@ PROCEDURE local-find-LAST:
        CASE icType:
           WHEN "Rule" THEN
               FIND LAST CoTarg
-              WHERE CoTarg.Brand = gcBrand AND CoTarg.CoRuleId = iiKey
+              WHERE CoTarg.Brand = Syst.Var:gcBrand AND CoTarg.CoRuleId = iiKey
               NO-LOCK NO-ERROR.
           WHEN "Mobsub" THEN 
              FIND LAST CoTarg
-              WHERE CoTarg.Brand = gcBrand AND 
+              WHERE CoTarg.Brand = Syst.Var:gcBrand AND 
                     CoTarg.TargType = "M" AND
                     CoTarg.COTarg = STRING(iiKey)
               NO-LOCK NO-ERROR.
@@ -417,11 +416,11 @@ PROCEDURE local-find-NEXT:
        CASE icType:
           WHEN "Rule" THEN
               FIND NEXT CoTarg
-              WHERE CoTarg.Brand = gcBrand AND CoTarg.CoRuleId = iiKey
+              WHERE CoTarg.Brand = Syst.Var:gcBrand AND CoTarg.CoRuleId = iiKey
               NO-LOCK NO-ERROR.
           WHEN "Mobsub" THEN 
              FIND NEXT CoTarg
-              WHERE CoTarg.Brand = gcBrand AND 
+              WHERE CoTarg.Brand = Syst.Var:gcBrand AND 
                     CoTarg.TargType = "M" AND
                     CoTarg.COTarg = STRING(iiKey)
               NO-LOCK NO-ERROR.
@@ -434,11 +433,11 @@ PROCEDURE local-find-PREV:
        CASE icType:
           WHEN "Rule" THEN
               FIND PREV CoTarg
-              WHERE CoTarg.Brand = gcBrand AND CoTarg.CoRuleId = iiKey
+              WHERE CoTarg.Brand = Syst.Var:gcBrand AND CoTarg.CoRuleId = iiKey
               NO-LOCK NO-ERROR.
           WHEN "Mobsub" THEN 
              FIND PREV CoTarg
-              WHERE CoTarg.Brand = gcBrand AND 
+              WHERE CoTarg.Brand = Syst.Var:gcBrand AND 
                     CoTarg.TargType = "M" AND
                     CoTarg.COTarg = STRING(iiKey)
               NO-LOCK NO-ERROR.
@@ -469,13 +468,13 @@ PROCEDURE local-find-others.
    END. 
    WHEN "R" THEN DO:
       FIND FIRST Reseller WHERE 
-                 Reseller.Brand    = gcBrand AND
+                 Reseller.Brand    = Syst.Var:gcBrand AND
                  Reseller.Reseller = CoTarg.CoTarg NO-LOCK NO-ERROR.
       IF AVAILABLE Reseller THEN lcTargName = Reseller.RsName.
    END.
    WHEN "S" THEN DO:
       FIND FIRST Salesman WHERE 
-                 Salesman.Brand    = gcBrand AND
+                 Salesman.Brand    = Syst.Var:gcBrand AND
                  Salesman.Salesman = CoTarg.CoTarg 
          NO-LOCK NO-ERROR.
       IF AVAILABLE Salesman THEN lcTargName = Salesman.SmName.
@@ -490,21 +489,19 @@ PROCEDURE local-find-others.
 
    END CASE.       
    
-   lcCommStatus = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "CoTarg",
+   lcCommStatus = Func.Common:mTMSCodeName("CoTarg",
                                "CommStatus",
                                STRING(COTarg.CommStatus)).
    
-   lcstatusreason = dynamic-function("ftmscodename" in ghfunc1,
-                               "cotarg",
+   lcstatusreason = Func.Common:mTMSCodeName("cotarg",
                                "statusreason",
                                string(cotarg.statusreason)).
    
-   lcCreated = fTS2HMS(COTarg.CreatedTS).
-   lcHandled = fTS2HMS(COTarg.HandledTS).
+   lcCreated = Func.Common:mTS2HMS(COTarg.CreatedTS).
+   lcHandled = Func.Common:mTS2HMS(COTarg.HandledTS).
       
    FIND CORule WHERE
-      CORule.Brand = gcBrand AND
+      CORule.Brand = Syst.Var:gcBrand AND
       CORule.CORuleID = COTarg.CORuleId NO-LOCK NO-ERROR.
 
 END PROCEDURE.
@@ -531,13 +528,13 @@ PROCEDURE local-UPDATE-record:
       
       ASSIGN
           ufkey = TRUE
-          ufk   = 0  
-          ehto  = 1
-          ufk[5] = 927
-          ufk[8]= 8.
+          Syst.Var:ufk   = 0  
+          Syst.Var:ehto  = 1
+          Syst.Var:ufk[5] = 927
+          Syst.Var:ufk[8]= 8.
       RUN Syst/ufkey.p.          
 
-      IF toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
          RUN Mc/memo.p("0",
                   INPUT "CoTarg",
                   INPUT STRING(CoTarg.COTargId),
