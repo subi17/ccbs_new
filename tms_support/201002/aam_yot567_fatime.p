@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-katun = "Qvantel".
+Syst.Var:katun = "Qvantel".
 
 def var lcmaintask as char no-undo init "YOT-566".
 def var liperiod   as int  no-undo init 201002.

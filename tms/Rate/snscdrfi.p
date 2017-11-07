@@ -47,12 +47,12 @@ ASSIGN ok = TRUE
        "/apps/mtv/tms/snet".
 ticfile = "/tmp/cdr2004022.asc".
 IF ok THEN DO:
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE
       ticfile
    WITH FRAME loki EDITING.
-   READKEY. nap = keylabel(LASTKEY).
-   IF lookup(nap,poisnap) > 0 THEN DO:
+   READKEY. Syst.Var:nap = keylabel(LASTKEY).
+   IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
       if frame-field = "ticfile" AND search(INPUT ticfile) = ? THEN DO:
          message "File '" + input ticfile + "' can't be found !"
          VIEW-AS ALERT-BOX error.
@@ -65,7 +65,7 @@ END.
 if ticfile = "" OR ticfile = "Mobile OnLine" THEN LEAVE.
 
 
-ufk = 0. ehto = 3.
+Syst.Var:ufk = 0. Syst.Var:ehto = 3.
 RUN Syst/ufkey.p. PAUSE 0.
 
 message "Are You SURE You want to start reading CDRs into database ?"

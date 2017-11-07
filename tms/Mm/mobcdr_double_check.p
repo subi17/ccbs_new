@@ -164,8 +164,7 @@ FUNCTION fHandleDouble RETURNS CHAR
          NO-LOCK NO-ERROR.
 
       IF AVAIL Customer THEN 
-         lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                       BUFFER Customer).
+         lcCustName = Func.Common:mDispCustName(BUFFER Customer).
       ELSE lcCustName = "UNKNOWN".                                 
 
       lcPrice = REPLACE(STRING(ttMarkCDR.Amount,"->>>>9.9999"),".",",").

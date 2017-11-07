@@ -1,16 +1,16 @@
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/log.i}
-{Func/date.i}
 {Func/memo.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Func/fmakemsreq.i}
 {Func/orderfunc.i}
 {Mc/dpmember.i}
+
+&GLOBAL-DEFINE SKYTV-DISCOUNT-PERIOD 7
 
 DEF VAR lcCustomerId AS CHAR NO-UNDO.
 
@@ -25,6 +25,7 @@ DEFINE TEMP-TABLE ttCustomer
     FIELD SerialNbr   AS CHAR
     FIELD StatusCode  AS CHAR
     FIELD Description AS CHAR
+    FIELD Voucher     AS CHAR
     FIELD FileName    AS CHAR
     INDEX IdxCustomerId IS UNIQUE PRIMARY CustomerId Email.
 
@@ -51,7 +52,7 @@ PROCEDURE pUpdateStatus:
     DEF VAR lcErrMsg    AS CHAR NO-UNDO.
     
     ASSIGN 
-        ldeActStamp = fMakeTS()    
+        ldeActStamp = Func.Common:mMakeTS()    
         lcDateTime  = REPLACE(ISO-DATE(TODAY),"-","") + REPLACE(STRING(TIME,"HH:MM:SS"),":","")
         lcLogFile   = fCParamC('ActivationIncomingLogFileName')
         lcLogFile   = REPLACE(lcLogFile,"#DATETIME",lcDateTime).
@@ -96,7 +97,7 @@ PROCEDURE pUpdateStatus:
 
                     IF lcDiscPlan > "" THEN 
                     DO:
-                        FIND FIRST DiscountPlan WHERE DiscountPlan.Brand = gcBrand AND DiscountPlan.DPRuleID = lcDiscPlan NO-LOCK NO-ERROR.
+                        FIND FIRST DiscountPlan WHERE DiscountPlan.Brand = Syst.Var:gcBrand AND DiscountPlan.DPRuleID = lcDiscPlan NO-LOCK NO-ERROR.
                         IF AVAIL DiscountPlan THEN 
                         DO:
                             FIND FIRST DPRate WHERE DPRate.DPId = DiscountPlan.DPId AND DPRate.ValidFrom <= TODAY AND DPRate.ValidTo >= TODAY NO-LOCK NO-ERROR.
@@ -109,7 +110,7 @@ PROCEDURE pUpdateStatus:
                                                                       lcDiscPlan,
                                                                       ldeDiscAmt,
                                                                       TODAY,
-                                                                      0,
+                                                                      {&SKYTV-DISCOUNT-PERIOD},
                                                                       0,
                                                                       OUTPUT lcErrMsg).
 
@@ -133,8 +134,10 @@ PROCEDURE pUpdateStatus:
             fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq, {&SOURCE_TV_STB_VENDOR}, {&STATUS_ERROR}).
 
         ASSIGN 
-            TPService.ResponseCode   = ttCustomer.StatusCode
-            TPService.AdditionalInfo = ttCustomer.Description.    
+            TPService.SkyTvVoucher    = ttCustomer.Voucher 
+            TPService.VoucherActiveDt = TODAY   
+            TPService.ResponseCode    = ttCustomer.StatusCode
+            TPService.AdditionalInfo  = ttCustomer.Description.    
     END.
     OUTPUT CLOSE.
     RELEASE TPService.
@@ -196,7 +199,8 @@ PROCEDURE pReadFile:
             ttCustomer.Product     = ENTRY(7,lcData)
             ttCustomer.SerialNbr   = ENTRY(8,lcData)
             ttCustomer.StatusCode  = ENTRY(11,lcData)
-            ttCustomer.Description = ENTRY(12,lcData).
+            ttCustomer.Description = ENTRY(12,lcData)
+            ttCustomer.Voucher     = ENTRY(13,lcData).
 
     END.
     INPUT CLOSE.

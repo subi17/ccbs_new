@@ -18,9 +18,8 @@
 {Syst/tmsconst.i}
 {Syst/commpaa.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/ftransdir.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 DEF STREAM sOut.
 DEF STREAM sLog.
@@ -67,11 +66,11 @@ OUTPUT STREAM sOut TO VALUE(lcOutFile) APPEND.
 OUTPUT STREAM sLog TO VALUE(lcLogFile) APPEND.
 
 PUT STREAM sLog UNFORMATTED 
-   "Migration file building starts " + fTS2HMS(fMakeTS()) SKIP.
+   "Migration file building starts " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
 
 /*Data collection*/
 FOR EACH Order EXCLUSIVE-LOCK WHERE
-         Order.Brand EQ gcBrand AND
+         Order.Brand EQ Syst.Var:gcBrand AND
          Order.StatusCode EQ {&ORDER_STATUS_MIGRATION_PENDING}: 
    lcRow = Order.CLI.
    PUT STREAM sOut UNFORMATTED lcRow SKIP.
@@ -82,7 +81,7 @@ FOR EACH Order EXCLUSIVE-LOCK WHERE
 END.
 
 PUT STREAM sLog UNFORMATTED 
-   "Migration file building ends " + fTS2HMS(fMakeTS()) SKIP.
+   "Migration file building ends " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
 
 fMove2TransDir(lcOutFile, ".txt", lcOutDir).
 

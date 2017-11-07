@@ -64,9 +64,9 @@ FORM
   
 
 WITH ROW 5 CENTERED width 40 OVERLAY 10  DOWN 
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " Calls by " + lcCrit + " "  
-    + string(pvm,"99-99-99") 
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " Calls by " + lcCrit + " "  
+    + string(TODAY,"99-99-99") 
 FRAME aa.
 
 FORM 
@@ -75,9 +75,9 @@ FORM
   summa2          COLUMN-LABEL "Total price" FORMAT ">>>,>>9.99"
 
 WITH ROW 5 CENTERED width 60 OVERLAY 10  DOWN 
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " Calls by " + lcCrit + " " 
-    + string(pvm,"99-99-99") 
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " Calls by " + lcCrit + " " 
+    + string(TODAY,"99-99-99") 
 FRAME ab.
 
 FORM 
@@ -86,9 +86,9 @@ FORM
   summa2          COLUMN-LABEL "Total price" FORMAT ">>>,>>9.99"
 
 WITH ROW 3 CENTERED width 60 OVERLAY 13  DOWN 
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " Calls by " + lcCrit + " " 
-    + string(pvm,"99-99-99") 
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " Calls by " + lcCrit + " " 
+    + string(TODAY,"99-99-99") 
 FRAME ac.
 
 IF iiInvSeq > 0 THEN DO:
@@ -118,8 +118,8 @@ tthCDR = TEMP-TABLE ttCall:HANDLE.
 
 
 fMobCDRCollect(INPUT "post,pre",
-               INPUT gcBrand,
-               INPUT katun,
+               INPUT Syst.Var:gcBrand,
+               INPUT Syst.Var:katun,
                INPUT ldaFrom,
                INPUT ldaTo,
                INPUT 0,
@@ -197,7 +197,7 @@ ELSE IF lcCrit = "PRODUCT" THEN DO:
       
       IF LAST-OF(BufferCall.billcode) THEN DO:
          FIND billitem where 
-              billitem.brand    = gcBrand         AND 
+              billitem.brand    = Syst.Var:gcBrand         AND 
               billitem.billcode = BufferCall.billcode NO-LOCK NO-ERROR.
               
          disp BufferCall.billcode 
@@ -217,7 +217,7 @@ ELSE IF lcCrit = "CCN" THEN DO:
       
       IF LAST-OF(BufferCall.ccn) THEN DO:
          FIND ccn where 
-              ccn.brand  = gcBrand         AND 
+              ccn.brand  = Syst.Var:gcBrand         AND 
               ccn.ccn    = BufferCall.ccn NO-LOCK NO-ERROR.
               
          disp BufferCall.ccn 

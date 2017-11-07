@@ -37,7 +37,7 @@ def var memb         as lo format "*/" NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -59,35 +59,35 @@ form
     soname           column-label "Name of Sales Office"
 WITH
     centered OVERLAY scroll 1 13 DOWN ROW 2
-    COLOR value(cfc) TITLE COLOR value(ctc)
+    COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc)
     " CHOOSE MEMBERS INTO Salesman GROUP '" +
-    icSMGroup + "' (" + gcBrand + ") " FRAME sel.
+    icSMGroup + "' (" + Syst.Var:gcBrand + ") " FRAME sel.
 
 
 form /* FIND Salesman BY code */
     Salesman help "Enter Salesman's Code"
-    with row 4 col 2 title color value(ctc) " FIND SALESMAN "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND SALESMAN "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* FIND Salesman BY name */
     SmName help "Enter salesman's name"
-    with row 4 col 2 title color value(ctc) " FIND NAME "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND NAME "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /* FIND Salesoffice */
     Salesoffice help "Enter code of Salesoffice "
-    with row 4 col 2 title color value(ctc) " FIND OFFICE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr3.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND OFFICE "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc. view FRAME sel.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc. view FRAME sel.
 
 FIND SMGroup WHERE
-     SMGroup.Brand   = gcBrand AND
+     SMGroup.Brand   = Syst.Var:gcBrand AND
      SMGroup.SMGroup = icSMGroup NO-LOCK NO-ERROR.
 IF NOT AVAILABLE SMGroup THEN RETURN.
 
 FIND FIRST Salesman 
-   WHERE Salesman.Brand = gcBrand USE-INDEX Salesman 
+   WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX Salesman 
    no-lock no-error.
 IF AVAIL Salesman THEN
    ASSIGN memory = recid(Salesman) must-print = TRUE must-add    = FALSE.
@@ -124,13 +124,13 @@ print-line:
 
           rtab[FRAME-LINE] = recid(Salesman).
           IF order = 1 THEN FIND NEXT Salesman
-          WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+          WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX Salesman no-lock no-error.
           ELSE IF order = 3 THEN FIND NEXT Salesman
-          WHERE Salesman.Brand = gcBrand USE-INDEX Salesoffice no-lock no-error.
+          WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX Salesoffice no-lock no-error.
           ELSE IF order = 2 THEN FIND NEXT Salesman
-          WHERE Salesman.Brand = gcBrand USE-INDEX SmName no-lock no-error.
+          WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX SmName no-lock no-error.
           ELSE IF order = 4 THEN FIND NEXT Salesman
-          WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+          WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX Salesman no-lock no-error.
        END.
        ELSE DO:  CLEAR no-pause.  rtab[FRAME-LINE] = ?. END.
        IF FRAME-LINE = FRAME-DOWN THEN LEAVE. DOWN.
@@ -148,9 +148,9 @@ BROWSE:
    repeat WITH FRAME sel ON ENDKEY UNDO, RETURN:
       IF ufkey THEN DO:
     ASSIGN
-    ufk[1]= 885 ufk[2]= 30  ufk[3]= 523 ufk[4]= 0
-    ufk[5]= 515 ufk[6]= 0   ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
-    ehto = 3 ufkey = FALSE.  RUN Syst/ufkey.p.
+    Syst.Var:ufk[1]= 885 Syst.Var:ufk[2]= 30  Syst.Var:ufk[3]= 523 Syst.Var:ufk[4]= 0
+    Syst.Var:ufk[5]= 515 Syst.Var:ufk[6]= 0   Syst.Var:ufk[7]= 0   Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+    Syst.Var:ehto = 3 ufkey = FALSE.  RUN Syst/ufkey.p.
       END.
       HIDE MESSAGE no-pause. IF order = 1 THEN
     CHOOSE ROW Salesman.Salesman {Syst/uchoose.i} no-error WITH FRAME sel.
@@ -160,14 +160,14 @@ BROWSE:
     CHOOSE ROW Salesman.SmName {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 4 THEN
     CHOOSE ROW Salesman.Salesman {Syst/uchoose.i} no-error WITH FRAME sel.
-      COLOR DISPLAY value(ccc)
+      COLOR DISPLAY value(Syst.Var:ccc)
       Salesman.Salesman Salesman.Salesman Salesman.SalesOffice Salesman.SmName
       WITH FRAME sel.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
-      nap = keylabel(LASTKEY).
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      Syst.Var:nap = keylabel(LASTKEY).
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
     order = order + 1. IF order = 4 THEN order = 1. END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
     order = order - 1. IF order = 0 THEN order = 2. END.
 
       IF order <> ex-order THEN DO:
@@ -175,13 +175,13 @@ BROWSE:
     FIND Salesman where recid(Salesman) = memory NO-LOCK.
     DO i = 1 TO FRAME-LINE - 1:
        IF order = 1 THEN FIND prev Salesman
-       WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+       WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX Salesman no-lock no-error.
        ELSE IF order = 3 THEN FIND prev Salesman
-       WHERE Salesman.Brand = gcBrand USE-INDEX Salesoffice no-lock no-error.
+       WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX Salesoffice no-lock no-error.
        ELSE IF order = 2 THEN FIND prev Salesman
-       WHERE Salesman.Brand = gcBrand USE-INDEX SmName no-lock no-error.
+       WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX SmName no-lock no-error.
        ELSE IF order = 4 THEN FIND prev Salesman
-       WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+       WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX Salesman no-lock no-error.
        IF AVAILABLE Salesman THEN
           ASSIGN firstline = i memory = recid(Salesman).
        ELSE LEAVE.
@@ -192,21 +192,21 @@ BROWSE:
     bell. message "You are on an empty row, move upwards !".
     PAUSE 1 no-message. NEXT.
       END.
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
     IF FRAME-LINE = 1 THEN DO:
        FIND Salesman where recid(Salesman) = rtab[1] no-lock.
        IF order = 1 THEN FIND prev Salesman
-       WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+       WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX Salesman no-lock no-error.
        ELSE IF order = 3 THEN FIND prev Salesman
-       WHERE Salesman.Brand = gcBrand USE-INDEX Salesoffice no-lock no-error.
+       WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX Salesoffice no-lock no-error.
        ELSE IF order = 2 THEN FIND prev Salesman
-       WHERE Salesman.Brand = gcBrand USE-INDEX SmName no-lock no-error.
+       WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX SmName no-lock no-error.
        ELSE IF order = 4 THEN FIND prev Salesman
-       WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+       WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX Salesman no-lock no-error.
        IF NOT AVAILABLE Salesman THEN DO:
           message "YOU ARE ON THE FIRST ROW !".
           BELL. PAUSE 1 no-message. NEXT BROWSE.
@@ -224,18 +224,18 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
     IF FRAME-LINE = FRAME-DOWN THEN DO:
        FIND Salesman where recid(Salesman) = rtab[FRAME-DOWN] no-lock .
        IF order = 1 THEN FIND NEXT Salesman
-       WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+       WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX Salesman no-lock no-error.
        ELSE IF order = 3 THEN FIND NEXT Salesman
-       WHERE Salesman.Brand = gcBrand USE-INDEX Salesoffice no-lock no-error.
+       WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX Salesoffice no-lock no-error.
        ELSE IF order = 2 THEN FIND NEXT Salesman
-       WHERE Salesman.Brand = gcBrand USE-INDEX SmName no-lock no-error.
+       WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX SmName no-lock no-error.
        ELSE IF order = 4 THEN FIND NEXT Salesman
-       WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+       WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX Salesman no-lock no-error.
        IF NOT AVAILABLE Salesman THEN DO:
           message "YOU ARE ON THE LAST ROW !".
           BELL.  PAUSE 1 no-message. NEXT BROWSE.
@@ -255,29 +255,29 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
     memory = rtab[1].
     FIND Salesman where recid(Salesman) = memory no-lock no-error.
     IF order = 1 THEN FIND prev Salesman
-    WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+    WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX Salesman no-lock no-error.
     ELSE IF order = 3 THEN FIND prev Salesman
-    WHERE Salesman.Brand = gcBrand USE-INDEX Salesoffice no-lock no-error.
+    WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX Salesoffice no-lock no-error.
     ELSE IF order = 2 THEN FIND prev Salesman
-    WHERE Salesman.Brand = gcBrand USE-INDEX SmName  no-lock no-error.
+    WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX SmName  no-lock no-error.
     ELSE IF order = 4 THEN FIND prev Salesman
-    WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+    WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX Salesman no-lock no-error.
     IF AVAILABLE Salesman THEN DO:
        memory = recid(Salesman).
        /* go back one page */
        DO line = 1 TO (FRAME-DOWN - 1):
           IF order = 1 THEN FIND prev Salesman
-          WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+          WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX Salesman no-lock no-error.
           ELSE IF order = 3 THEN FIND prev Salesman
-          WHERE Salesman.Brand = gcBrand USE-INDEX Salesoffice no-lock no-error.
+          WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX Salesoffice no-lock no-error.
           ELSE IF order = 2 THEN FIND prev Salesman
-          WHERE Salesman.Brand = gcBrand USE-INDEX SmName no-lock no-error.
+          WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX SmName no-lock no-error.
           ELSE IF order = 4 THEN FIND prev Salesman
-          WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+          WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX Salesman no-lock no-error.
           IF AVAILABLE Salesman THEN memory = recid(Salesman).
           ELSE line = FRAME-DOWN.
        END.
@@ -290,7 +290,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
    /* cursor TO the downmost line */
    IF rtab[FRAME-DOWN] = ? THEN DO:
        message "YOU ARE ON THE LAST PAGE". BELL. PAUSE 1 no-message.
@@ -303,14 +303,14 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-   cfc = "puyr". RUN Syst/ufcolor.p.
-   Salesman = "". ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+     if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
+   Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+   Salesman = "". Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE Salesman WITH FRAME hayr.
    HIDE FRAME hayr no-pause.
    if Salesman <> "" THEN DO:
       FIND FIRST Salesman where 
-                 Salesman.Brand = gcBrand AND
+                 Salesman.Brand = Syst.Var:gcBrand AND
                  Salesman.Salesman >= Salesman
       USE-INDEX Salesman no-lock no-error.
       IF NOT AVAILABLE Salesman THEN DO:
@@ -323,14 +323,14 @@ BROWSE:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 3 */
-     if lookup(nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
-   cfc = "puyr". RUN Syst/ufcolor.p. Salesoffice = "".
-   ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+     if lookup(Syst.Var:nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
+   Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p. Salesoffice = "".
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE Salesoffice WITH FRAME hayr3.
    HIDE FRAME hayr3 no-pause.
    if Salesoffice <> "" THEN DO:
       FIND FIRST Salesman where 
-                 Salesman.Brand = gcBrand AND
+                 Salesman.Brand = Syst.Var:gcBrand AND
                  Salesman.SalesOffice >= Salesoffice
       no-lock no-error.
       IF NOT AVAILABLE Salesman THEN DO:
@@ -343,14 +343,14 @@ BROWSE:
      END. /* Haku sar. 3 */
 
      /* Haku sarakk. 2 */
-     if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-   cfc = "puyr". RUN Syst/ufcolor.p. SmName = "".
-   ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+     if lookup(Syst.Var:nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
+   Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p. SmName = "".
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE SmName WITH FRAME hayr2.
    HIDE FRAME hayr2 no-pause.
    if SmName <> "" THEN DO:
       FIND FIRST Salesman where 
-                 Salesman.Brand = gcBrand AND
+                 Salesman.Brand = Syst.Var:gcBrand AND
                  Salesman.SmName >= SmName
       no-lock no-error.
       IF NOT AVAILABLE Salesman THEN DO:
@@ -362,7 +362,7 @@ BROWSE:
    END.
      END. /* Haku sar. 2 */
 
-     else if lookup(nap,"enter,return,5,F5") > 0 THEN
+     else if lookup(Syst.Var:nap,"enter,return,5,F5") > 0 THEN
      DO WITH FRAME lis TRANSAction:
 
    /* ADD OR REMOVE */
@@ -389,36 +389,36 @@ BROWSE:
    END.
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
    IF order = 1 THEN FIND FIRST Salesman
-   WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+   WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX Salesman no-lock no-error.
    ELSE IF order = 3 THEN FIND FIRST Salesman
-   WHERE Salesman.Brand = gcBrand USE-INDEX Salesoffice no-lock no-error.
+   WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX Salesoffice no-lock no-error.
    ELSE IF order = 2 THEN FIND FIRST Salesman
-   WHERE Salesman.Brand = gcBrand USE-INDEX SmName no-lock no-error.
+   WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX SmName no-lock no-error.
    ELSE IF order = 4 THEN FIND FIRST Salesman
-   WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+   WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX Salesman no-lock no-error.
    ASSIGN memory = recid(Salesman) must-print = TRUE.
    NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
    IF order = 1 THEN FIND LAST Salesman
-   WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+   WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX Salesman no-lock no-error.
    ELSE IF order = 3 THEN FIND LAST Salesman
-   WHERE Salesman.Brand = gcBrand USE-INDEX Salesoffice no-lock no-error.
+   WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX Salesoffice no-lock no-error.
    ELSE IF order = 2 THEN FIND LAST Salesman
-   WHERE Salesman.Brand = gcBrand USE-INDEX SmName no-lock no-error.
+   WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX SmName no-lock no-error.
    ELSE IF order = 4 THEN FIND LAST Salesman
-   WHERE Salesman.Brand = gcBrand USE-INDEX Salesman no-lock no-error.
+   WHERE Salesman.Brand = Syst.Var:gcBrand USE-INDEX Salesman no-lock no-error.
    ASSIGN memory = recid(Salesman) must-print = TRUE.
    NEXT LOOP.
      END.
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
   END.  /* BROWSE */
 END.  /* LOOP */
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE local-disp-row:
 

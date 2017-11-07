@@ -40,19 +40,19 @@ form
  "         Email address ......:" lcEmail  
  skip(4)
 with row 1 width 80 NO-LABELS
-   title " " + ynimi + " CREATE RESELLER " + string(pvm,"99-99-99") + " "
+   title " " + Syst.Var:ynimi + " CREATE RESELLER " + string(TODAY,"99-99-99") + " "
 FRAME rajat.
 
 
 FIND FIRST TMSUser NO-LOCK WHERE
-           TMSUser.UserCode = katun NO-ERROR.
+           TMSUser.UserCode = Syst.Var:katun NO-ERROR.
 IF AVAIL TMSUser THEN lcEMail = TMSUser.Email.
 ELSE lcEMail = "".
 
 loop:
 repeat with frame rajat:
    PAUSE 0 no-message.
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       lcResell
       lcRSName
@@ -67,13 +67,13 @@ repeat with frame rajat:
       
       HIDE MESSAGE NO-PAUSE.
       
-      IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO:
+      IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
          IF FRAME-FIELD = "lcResell" THEN DO:
             ASSIGN lcResell.
             IF lcResell = "" THEN RETURN.
             
             FIND FIRST Reseller NO-LOCK WHERE
-                       Reseller.Brand  = gcBrand AND
+                       Reseller.Brand  = Syst.Var:gcBrand AND
                        Reseller.Reseller = lcResell NO-ERROR.
             IF AVAIL Reseller THEN DO:
                MESSAGE 
@@ -92,14 +92,14 @@ repeat with frame rajat:
    END.
    
    ASSIGN
-      ufk = 0
-      ufk[1] = 132
-      ufk[5] = 795
-      ufk[8] = 8
-      ehto = 0.
+      Syst.Var:ufk = 0
+      Syst.Var:ufk[1] = 132
+      Syst.Var:ufk[5] = 795
+      Syst.Var:ufk[8] = 8
+      Syst.Var:ehto = 0.
 
    RUN Syst/ufkey.p.
-   case toimi:
+   case Syst.Var:toimi:
       when 8 then return.
       when 1 then next loop.
       when 5 then leave loop.
@@ -112,7 +112,7 @@ if keylabel(lastkey) = "f4" then return.
 IF NOT llOldRS THEN DO:
    CREATE Reseller.
    ASSIGN
-      Reseller.Brand    = gcBrand 
+      Reseller.Brand    = Syst.Var:gcBrand 
       Reseller.Reseller = lcResell 
       Reseller.RsName   = lcRSName
       liFirst = 1.
@@ -139,7 +139,7 @@ DO loop = liFirst to liFirst + liCount - 1:
 
    CREATE salesman.
    ASSIGN
-      SalesMan.Brand    = gcBrand
+      SalesMan.Brand    = Syst.Var:gcBrand
       SalesMan.Salesman = lcResell + string(loop,"999")
       SalesMan.Reseller = lcResell
       SalesMan.SmName   = Reseller.RsName
