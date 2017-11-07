@@ -32,8 +32,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 
 {Syst/commpaa.i}
-gcBrand = "1".
-{Func/timestamp.i}
+Syst.Var:gcBrand = "1".
 {Func/fmakemsreq.i}
 
 /* Input parameters */
@@ -64,7 +63,7 @@ pcstruct = get_struct(param_toplevel_id, "3").
 plCreateFee = get_bool(param_toplevel_id, "2").
 pcSalesman = get_string(param_toplevel_id, "1").
 scUser = "VISTA_" + pcSalesman. /* Read from eventlog functions into eventlog.user */
-katun = "VISTA_" + pcSalesman.
+Syst.Var:katun = "VISTA_" + pcSalesman.
 piCustNum = get_int(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -161,7 +160,6 @@ END.
 add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.
 
 

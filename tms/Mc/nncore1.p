@@ -63,8 +63,7 @@ IF NOT AVAIL Invoice THEN RETURN.
 
 find first Customer of Invoice no-lock no-error.
 if not available Customer then return.
-lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                              BUFFER Customer).
+lcCustName = Func.Common:mDispCustName(BUFFER Customer).
  
 fInitFeeValues().
 
@@ -133,7 +132,7 @@ END.
 find invgroup of Customer no-lock no-error.
 if avail invgroup AND invgroup.CompName NE "" 
 then company = invgroup.CompName.
-else company = ynimi.
+else company = Syst.Var:ynimi.
    
 /* first collect contract and single fees into temp-table */
 fCollectFees().   

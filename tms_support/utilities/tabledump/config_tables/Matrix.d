@@ -20,6 +20,7 @@
 "1" "3P to 2P STC (Fiber 300M)" "CONVFIXEDSTC" 148 1 1
 "1" "3P to 2P STC (Fiber 1GB)" "CONVFIXEDSTC" 154 1 1
 "1" "denied modules" "DENIED" 18 0 1
+"1" "Cross-sell discount override" "DISCOUNT-OVERRIDE" 158 0 1
 "1" "CONT6" "PERCONTR" 22 1 1
 "1" "CONT" "PERCONTR" 25 1 3
 "1" "CONT7" "PERCONTR" 46 1 4

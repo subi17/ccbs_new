@@ -25,21 +25,21 @@ form
       CustTemp.TemplNum    column-label "Code"
       CustTemp.TemplName  column-label "Name"
       CustTemp.CustNum   
-    with scroll 1 11 down  row 4 centered color value(cfc)
-    title color value(ctc) " TEMPLATES " overlay frame sel.
+    with scroll 1 11 down  row 4 centered color value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " TEMPLATES " overlay frame sel.
 
 form /* SEEK Code */
     TemplNum
     help "Enter Type of an Template Code"
-    with row 4  col 2 title color value(ctc) " FIND CODE "
-    color value(cfc) no-labels overlay frame hayr.
+    with row 4  col 2 title color value(Syst.Var:ctc) " FIND CODE "
+    color value(Syst.Var:cfc) no-labels overlay frame hayr.
 
-cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.Var:ccc = Syst.Var:cfc.
 MAIN:
 repeat:
 
    find first CustTemp WHERE 
-              CustTemp.Brand = gcBrand no-lock no-error.
+              CustTemp.Brand = Syst.Var:gcBrand no-lock no-error.
    if not available CustTemp then do:
       must-print = false.
       must-add = true.
@@ -72,7 +72,7 @@ print-line:
             rtab[frame-line] = recid(CustTemp).
             down with frame sel.
             find next CustTemp WHERE 
-                      CustTemp.Brand = gcBrand no-lock no-error.
+                      CustTemp.Brand = Syst.Var:gcBrand no-lock no-error.
          end.
          must-print = false.
          up frame-line(sel) - 1 with frame sel.
@@ -80,9 +80,9 @@ print-line:
 
       if ufkey then do:
          assign
-         ufk = 0 ufk[1] = 35 ufk[5] = 11
-         ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
-         siirto = ? ehto = 3 ufkey = false.
+         Syst.Var:ufk = 0 Syst.Var:ufk[1] = 35 Syst.Var:ufk[5] = 11
+         Syst.Var:ufk[6] = 0 Syst.Var:ufk[8] = 8  Syst.Var:ufk[9] = 1
+         siirto = ? Syst.Var:ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
       end.
   end. /* print-line */
@@ -92,18 +92,18 @@ BROWSE:
 
          hide message no-pause.
          choose row CustTemp.TemplNum {Syst/uchoose.i} no-error with frame sel.
-         color display value(ccc) CustTemp.TemplNum with frame sel.
+         color display value(Syst.Var:ccc) CustTemp.TemplNum with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.
-         nap = keylabel(lastkey).
+         Syst.Var:nap = keylabel(lastkey).
 
          /* previous line */
-         if lookup(nap,"cursor-up") > 0 then do
+         if lookup(Syst.Var:nap,"cursor-up") > 0 then do
          with frame sel:
             if frame-line = 1 then do:
                find CustTemp where recid(CustTemp) = rtab[frame-line] no-lock.
                find prev CustTemp WHERE 
-                         CustTemp.Brand = gcBrand no-lock no-error.
+                         CustTemp.Brand = Syst.Var:gcBrand no-lock no-error.
                if not available CustTemp then do:
                   bell.
                   message "You are on 1st row !".              
@@ -125,10 +125,10 @@ BROWSE:
          end. /* previous line */
 
          /* next line */
-         if lookup(nap,"cursor-down") > 0 then do with frame sel:
+         if lookup(Syst.Var:nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                find CustTemp where recid(CustTemp) = rtab[frame-line] no-lock .
-               find next CustTemp WHERE CustTemp.Brand = gcBrand 
+               find next CustTemp WHERE CustTemp.Brand = Syst.Var:gcBrand 
                no-lock no-error.
                if not available CustTemp then do:
                   bell.
@@ -152,14 +152,14 @@ BROWSE:
          end. /* next line */
 
          /* previous page */
-         else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
+         else if lookup(Syst.Var:nap,"page-up,prev-page") > 0 then do with frame sel:
             find CustTemp where recid(CustTemp) = memory no-lock no-error.
-            find prev CustTemp  WHERE CustTemp.Brand = gcBrand 
+            find prev CustTemp  WHERE CustTemp.Brand = Syst.Var:gcBrand 
             no-lock no-error.
             if available CustTemp then do:
 
                do i = 1 to (frame-down - 1):
-                  find prev CustTemp  WHERE CustTemp.Brand = gcBrand 
+                  find prev CustTemp  WHERE CustTemp.Brand = Syst.Var:gcBrand 
                   no-lock no-error.
                   if available CustTemp then memory = recid(CustTemp).
                   else i = frame-down.
@@ -176,7 +176,7 @@ BROWSE:
         end. /* previous page */
 
         /* next page */
-        else if lookup(nap,"page-down,next-page") > 0 then do with frame sel:
+        else if lookup(Syst.Var:nap,"page-down,next-page") > 0 then do with frame sel:
            if rtab[frame-down] = ? then do:
                bell.
                message "This is the last page !".
@@ -190,14 +190,14 @@ BROWSE:
         end. /* next page */
 
         /* Seek */
-        if lookup(nap,"1,f1") > 0 then do:  /* TemplNum */
-           cfc = "puyr". RUN Syst/ufcolor.p.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+        if lookup(Syst.Var:nap,"1,f1") > 0 then do:  /* TemplNum */
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            update TemplNum with frame hayr.
            hide frame hayr no-pause.
            if TemplNum ENTERED then do:
               find first CustTemp where 
-                         CustTem.Brand      = gcBrand AND 
+                         CustTem.Brand      = Syst.Var:gcBrand AND 
                          CustTemp.TemplNum >= TemplNum
               no-lock no-error.
                if not available CustTemp then do:
@@ -215,28 +215,28 @@ BROWSE:
         end. /* Seek */
 
         /* Choose */
-        else if lookup(nap,"return,enter,5,f5") > 0 then do:
+        else if lookup(Syst.Var:nap,"return,enter,5,f5") > 0 then do:
            find CustTemp where recid(CustTemp) = rtab[frame-line] no-lock.
            siirto = STRING(CustTemp.TemplNum).
            leave MAIN.
         end. /* Choose */
         /* First record */
-        else if lookup(nap,"home,h") > 0 then do:
-           find first CustTemp  WHERE CustTemp.Brand = gcBrand no-lock.
+        else if lookup(Syst.Var:nap,"home,h") > 0 then do:
+           find first CustTemp  WHERE CustTemp.Brand = Syst.Var:gcBrand no-lock.
            memory = recid(CustTemp).
            must-print = true.
            next LOOP.
         end. /* First record */
 
         /* last record */
-        else if lookup(nap,"end,e") > 0 then do :
-           find last CustTemp   WHERE CustTemp.Brand = gcBrand no-lock.
+        else if lookup(Syst.Var:nap,"end,e") > 0 then do :
+           find last CustTemp   WHERE CustTemp.Brand = Syst.Var:gcBrand no-lock.
            memory = recid(CustTemp).
            must-print = true.
            next LOOP.
         end. /* last record */
 
-        else if nap = "8" or nap = "f8" then leave MAIN. /* Return */
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" then leave MAIN. /* Return */
 
      end.  /* BROWSE */
    end.  /* LOOP */

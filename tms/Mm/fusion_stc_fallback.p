@@ -22,7 +22,7 @@ DEF VAR lcBundleID AS CHAR NO-UNDO.
 DEF VAR lcOrderBundleID AS CHAR NO-UNDO. 
 
 FIND FIRST Order NO-LOCK WHERE
-           Order.Brand = gcBrand AND
+           Order.Brand = Syst.Var:gcBrand AND
            Order.OrderID = piOrderID NO-ERROR.
 IF NOT AVAIL Order THEN RETURN "Order not found".
 
@@ -30,7 +30,7 @@ IF NOT Order.OrderChannel BEGINS "fusion" THEN
    RETURN "Order is not Fusion".
 
 FIND FIRST Mobsub NO-LOCK WHERE
-           Mobsub.Brand = gcBrand AND
+           Mobsub.Brand = Syst.Var:gcBrand AND
            Mobsub.Msseq = Order.MsSeq NO-ERROR.
 IF NOT AVAIL Mobsub THEN RETURN "Subscription not found".
 
@@ -38,7 +38,7 @@ IF Order.CLIType NE Mobsub.CLIType THEN
    RETURN "Order subscription type does not match with subscription".
 
 FIND FIRST CLIType WHERE
-           CLIType.Brand = gcBrand AND
+           CLIType.Brand = Syst.Var:gcBrand AND
            CLIType.CLIType = Order.CLIType NO-LOCK NO-ERROR.
 IF NOT AVAIL CLIType THEN RETURN "CLIType not found".
    
@@ -61,7 +61,7 @@ ELSE IF MobSub.CLIType EQ "CONTSF" THEN DO:
 END.
 ELSE RETURN "Subscription type is not Fusion".
 
-ldeSTCTS = fDate2TS(fLastDayOfMonth(TODAY)+ 1).
+ldeSTCTS = Func.Common:mDate2TS(Func.Common:mLastDayOfMonth(TODAY)+ 1).
 
 /* Various validations */
 IF fValidateMobTypeCh(
