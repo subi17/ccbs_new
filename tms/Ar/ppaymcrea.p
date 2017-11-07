@@ -11,7 +11,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/fctserval.i}
 {Func/fctchange.i}
 {Func/fmakemsreq.i}
@@ -159,15 +158,13 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lDueDate, NEXT lDueDate:
 
    IF llOrdCust THEN DO:
       liCustNum = Invoice.CustNum.
-      lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                    BUFFER Customer).
+      lcCustName = Func.Common:mDispCustName(BUFFER Customer).
    END.                                 
  
    ELSE DO:
       liCustNum = Customer.AgrCust.
    
-      lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                    BUFFER bAgrCust).
+      lcCustName = Func.Common:mDispCustName(BUFFER bAgrCust).
    END.                                 
  
    PAUSE 0.
@@ -179,18 +176,18 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lDueDate, NEXT lDueDate:
            lcCustName   WITH FRAME fCriter.
 
    ASSIGN
-      ufk    = 0 
-      ufk[1] = 7
-      ufk[5] = 1027  
-      ufk[8] = 8 
-      ehto   = 0.
+      Syst.Var:ufk    = 0 
+      Syst.Var:ufk[1] = 7
+      Syst.Var:ufk[5] = 1027  
+      Syst.Var:ufk[8] = 8 
+      Syst.Var:ehto   = 0.
    RUN Syst/ufkey.p.
 
-   IF toimi = 1 THEN DO:
+   IF Syst.Var:toimi = 1 THEN DO:
    
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
          
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          
          UPDATE ldAmount[1]
                 llCreateFees
@@ -199,7 +196,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lDueDate, NEXT lDueDate:
 
             READKEY.
             
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
             
                IF FRAME-FIELD = "ldAmount" THEN DO:
                
@@ -230,7 +227,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lDueDate, NEXT lDueDate:
             
    END. 
    
-   ELSE IF toimi = 5 THEN DO:
+   ELSE IF Syst.Var:toimi = 5 THEN DO:
 
       llOk = FALSE.
       MESSAGE "A part payment plan will be created for invoice." SKIP
@@ -264,7 +261,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lDueDate, NEXT lDueDate:
       LEAVE.
    END.
    
-   ELSE IF toimi = 8 THEN LEAVE.
+   ELSE IF Syst.Var:toimi = 8 THEN LEAVE.
 
 END. /* lDueDate */
 

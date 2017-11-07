@@ -56,7 +56,6 @@
                   17.02.2004/aam cover sheet
                   06.04.2004/aam no sub-totals or totals
                   14.04.2004/aam index change on mobcdr
-                  23.04.2004/aam use fHideBSub from func.i
   VERSION ......: M15
   ------------------------------------------------------ */
 
@@ -66,7 +65,6 @@
 /* print-linemuuttujat */
 {Syst/utumaa.i}
 {Inv/edefine.i}
-{Inv/nnpura.i}
 {Func/fdivtxt.i}
 
 /* xml / pdf */
@@ -133,14 +131,6 @@ DEF TEMP-TABLE ttCall NO-UNDO
    FIELD VatIncl    AS LOG 
    INDEX CallCust VatIncl CallCust CLI BillCode CCN.
 
-/* Is this  a PNP number */
-FUNCTION fIsPNP RETURNS LOGICAL
-  (INPUT  iCustNum AS INT,
-   INPUT  iBSub    AS CHAR).
- 
-   RETURN FALSE.
-END.   
-
    
 FUNCTION fCollFixCDR RETURNS LOGICAL.
 
@@ -190,6 +180,9 @@ viiva5     = FILL(" ",2) + fill("-",lev - 2)
 epltul     = (iiTarg = 1)
 llPDFPrint = (iiTarg = 3).
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
+
 form header
    viiva1 AT 1 SKIP
    ynimi at 1 format "x(30)"
@@ -198,7 +191,7 @@ form header
       sl format "ZZZ9" SKIP
    lcAtil at 1 format "x(15)"
       lcSubHead AT 35 FORMAT "X(35)"
-      pvm at 71 format "99-99-9999" SKIP
+      TODAY at 71 format "99-99-9999" SKIP
    viiva2 AT 1 skip(1)
 WITH width 130 NO-LABEL no-box FRAME sivuotsi.
 
@@ -268,7 +261,7 @@ IF llPDFPrint THEN DO:
    
    /* mail to user */
    IF iiMail = 2 THEN DO:
-      FIND TMSUser WHERE TMSUser.UserCode = katun NO-LOCK NO-ERROR.
+      FIND TMSUser WHERE TMSUser.UserCode = Syst.Var:katun NO-LOCK NO-ERROR.
       IF AVAILABLE TMSUser THEN lcMailAddr = TMSUser.EMail.
    END. 
       
@@ -315,7 +308,7 @@ END.
 ELSE DO:
 
    FOR EACH Customer NO-LOCK WHERE
-            Customer.Brand    = gcBrand  AND
+            Customer.Brand    = Syst.Var:gcBrand  AND
             Customer.CustNum >= CustNum1 AND
             Customer.CustNum <= CustNum2:
 
@@ -632,11 +625,10 @@ BREAK BY ttCall.VatIncl
       btilnro = ttCall.BSub.
       if btilnro begins "00000" THEN btilnro = substr(btilnro,6).
 
-      ckestos = fSec2C(ttCall.Duration,12).
+      ckestos = Func.Common:mSec2C(ttCall.Duration,12).
 
       /* Modify BSUB FOR reporting: fXBSub uses {&country} */
-      btilnro = DYNAMIC-FUNCTION("fHideBSub" IN ghFunc1,
-                                 ttcall.bsub,
+      btilnro = Func.Common:mHideBSub(ttcall.bsub,
                                  ttcall.callcust,
                                  ttcall.bdest,
                                  ttCall.BType,
@@ -701,7 +693,7 @@ BREAK BY ttCall.VatIncl
       /* Tulostetaan Customer-yhteensa-line */
       IF last-of(ttCall.CallCust) THEN DO:
          
-         ckestos = fSec2C((ACCUM TOTAL BY ttCall.CallCust ttCall.Duration),12).
+         ckestos = Func.Common:mSec2C((ACCUM TOTAL BY ttCall.CallCust ttCall.Duration),12).
 
          IF epltul THEN DO:
          END.

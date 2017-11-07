@@ -58,7 +58,7 @@ BY DFField.OrderNbr:
                   DFField.DFField.
 END.
 
-fSplitTS(idLastDump,
+Func.Common:mSplitTS(idLastDump,
          OUTPUT ldaModified,
          OUTPUT liCnt).
 
@@ -111,7 +111,7 @@ FOR EACH DMS NO-LOCK WHERE
             END.
             WHEN "#OrderStatus" THEN DO:
                FIND FIRST Order NO-LOCK WHERE
-                          Order.Brand = gcBrand AND
+                          Order.Brand = Syst.Var:gcBrand AND
                           Order.OrderID = DMS.HostID NO-ERROR.
                IF AVAIL Order AND DMS.HostTable = "Order" THEN
                   lcValue = Order.StatusCode.

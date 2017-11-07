@@ -137,7 +137,6 @@ DEFINE INPUT PARAMETER icType    AS CHAR NO-UNDO.
 
 {Func/cparam2.i}
 {Syst/eventval.i}
-{Func/timestamp.i}
 {Func/fcustbal.i}
 {Func/fcustcnt.i}
 {Func/fctype.i}
@@ -154,7 +153,7 @@ DEFINE INPUT PARAMETER icType    AS CHAR NO-UNDO.
 {Func/femailinvoice.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -241,8 +240,8 @@ DEF VAR x2           AS i   NO-UNDO.
 def var memochr      AS LOG NO-UNDO.
 DEF VAR CLI          LIKE CLI.CLI NO-UNDO.
 DEF VAR debug        AS LOG    NO-UNDO INIT TRUE.
-DEF VAR save-ehto    LIKE ehto NO-UNDO.
-DEF VAR save-ufk     LIKE ufk  NO-UNDO.
+DEF VAR save-ehto    AS INTEGER NO-UNDO.
+DEF VAR save-ufk     AS INTEGER EXTENT 9 NO-UNDO.
 DEF VAR lcBankAcc    AS CHAR   NO-UNDO.
 DEF VAR llDDBank     AS LOG    NO-UNDO. 
 DEF VAR lcTyyppi     AS CHAR   NO-UNDO.
@@ -389,9 +388,9 @@ form
     lcRoles             format "X(5)"     column-label "A I U"   
     memochr             format "M/"       column-label "M"
 WITH width 80 OVERLAY ROW liFrmRow scroll 1 liFrmDown DOWN
-    color value(cfc) title color value(ctc) 
-       " " + ynimi + " " + lcFrmTitle + " " +
-       string(pvm,"99-99-99") + " " FRAME sel.
+    color value(Syst.Var:cfc) title color value(Syst.Var:ctc) 
+       " " + Syst.Var:ynimi + " " + lcFrmTitle + " " +
+       string(TODAY,"99-99-99") + " " FRAME sel.
 
 form 
    {Mc/nnasse.frm}
@@ -418,8 +417,8 @@ form /* Customer :n tunnuksella hakua varten */
                "Unknown brand")
       SKIP
    "Number ...:" CustNum help "Enter Customer Number"
-with row 4 col 2 title color value(ctc) " FIND CUST No. "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME search-1.
+with row 4 col 2 title color value(Syst.Var:ctc) " FIND CUST No. "
+   COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME search-1.
 
 form /* Customer :n nimella hakua varten */
    "Brand Code:" lcBrand  HELP "Enter Brand" 
@@ -437,8 +436,8 @@ form /* Customer :n nimella hakua varten */
   SKIP
   "Company...:" lcCompany  FORMAT "X(30)"
      HELP "Company name" SKIP
-  with row 4 col 2 title color value(ctc) " FIND Name "
-  COLOR value(cfc) NO-LABELS OVERLAY FRAME search-2.
+  with row 4 col 2 title color value(Syst.Var:ctc) " FIND Name "
+  COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME search-2.
  
 form /* Aakkoshakua varten */
    "Brand Code:" lcBrand  HELP "Enter Brand" 
@@ -446,8 +445,8 @@ form /* Aakkoshakua varten */
                "Unknown brand")
       SKIP
    "Abbreviat.:" SearchName help "Enter abbreviation"
-with row 4 col 2 title color value(ctc) " FIND ABBREVIATION "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME search-3.
+with row 4 col 2 title color value(Syst.Var:ctc) " FIND ABBREVIATION "
+   COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME search-3.
 
 form /* FIND zip */
    "Brand Code:" lcBrand  HELP "Enter Brand" 
@@ -455,8 +454,8 @@ form /* FIND zip */
                "Unknown brand")
       SKIP
    "Zip Code .:" lcZip  help "Enter ZIP code"
-with row 4 col 2 title color value(ctc) " FIND ZIP "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME search-4.
+with row 4 col 2 title color value(Syst.Var:ctc) " FIND ZIP "
+   COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME search-4.
 
 form /* FIND OrgCode */
    "Brand Code:" lcBrand  HELP "Enter Brand" 
@@ -464,8 +463,8 @@ form /* FIND OrgCode */
                "Unknown brand")
       SKIP
    "PersonID .:" OrgId  help "Enter personID or company ID"
-with row 4 col 2 title color value(ctc) " FIND PERSONID "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME search-6.
+with row 4 col 2 title color value(Syst.Var:ctc) " FIND PERSONID "
+   COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME search-6.
 
 form /* FIND CLI # */
    "Brand Code:" lcBrand  HELP "Enter Brand" 
@@ -473,8 +472,8 @@ form /* FIND CLI # */
                "Unknown brand")
       SKIP
    "CLI ......:" CLI help "Enter A-number or beginning of it"
-with row 4 col 2 title color value(ctc) " FIND CLI "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME search-7.
+with row 4 col 2 title color value(Syst.Var:ctc) " FIND CLI "
+   COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME search-7.
 
 
 form
@@ -635,8 +634,7 @@ END FUNCTION.
 FUNCTION fDispVATUsage RETURNS LOGICAL
    (iiVATUsage AS INT).
    
-   lcVatUsage = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "Invoice",
+   lcVatUsage = Func.Common:mTMSCodeName("Invoice",
                                  "VATUsage",
                                  STRING(iiVatUsage)).   
    
@@ -728,7 +726,7 @@ FUNCTION fCustCat RETURNS LOGICAL
 
    dkatnimi = "".
    FIND FIRST CustCat where 
-             CustCat.Brand    = gcBrand AND
+             CustCat.Brand    = Syst.Var:gcBrand AND
              CustCat.Category = icCategory 
    no-lock no-error.
    IF AVAIL CustCat THEN ASSIGN dkatnimi = CustCat.CatName.
@@ -778,10 +776,10 @@ mess[4] = "where starting Amount is allowed.".
 mess[5] = "This overrides all those settings.".
                       
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc. view FRAME sel.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc. view FRAME sel.
 
 ASSIGN
-   month    = (year(pvm) * 100) + month(pvm)
+   month    = (year(TODAY) * 100) + month(TODAY)
    order    = 1 .
 
 IF iiCustNum > 0 THEN lctyyppi = "INPUTCUST".
@@ -819,7 +817,7 @@ IF icType = "address_chg" AND lcRight = "RW" THEN DO:
    FIND Customer WHERE Customer.Custnum = iiCustNum NO-LOCK NO-ERROR.
 
    fr-header = " CUSTOMER ADDRESS CHANGE ".
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
    /* UPDATE Customer record */
 
@@ -930,7 +928,7 @@ IF icType = "address_chg" AND lcRight = "RW" THEN DO:
    fCleanEventObjects(). 
    RETURN.
 
-END.  /* toimi = 1 */
+END.  /* Syst.Var:toimi = 1 */
 
 
 LOOP:
@@ -981,7 +979,7 @@ repeat WITH FRAME sel:
          END. 
 
          lcInvGroup = "".
-         CLEAR FRAME lis no-pause. ehto = 9. RUN Syst/ufkey.p.
+         CLEAR FRAME lis no-pause. Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
          RUN Syst/ufxkey.p(5,964).
 
@@ -1042,7 +1040,7 @@ repeat WITH FRAME sel:
 
               FIND InvGroup NO-LOCK WHERE 
                    InvGroup.InvGroup = lcInvGroup AND 
-                   InvGroup.Brand    = gcBrand NO-ERROR.
+                   InvGroup.Brand    = Syst.Var:gcBrand NO-ERROR.
                    
               IF NOT AVAILABLE InvGroup THEN DO:
                  MESSAGE "Unknown invoicing group"
@@ -1079,21 +1077,21 @@ repeat WITH FRAME sel:
            END.
 
            ASSIGN
-              Customer.ChgStamp = fMakeTS()
+              Customer.ChgStamp = Func.Common:mMakeTS()
               Customer.Brand    = lcBrand 
-              Customer.CreUser  = katun
-              Customer.CreDate  = pvm  
+              Customer.CreUser  = Syst.Var:katun
+              Customer.CreDate  = TODAY  
               Customer.CustNum  = INPUT FRAME lis Customer.CustNum
               Customer.InvCust  = Customer.CustNum 
               Customer.PaymCust = Customer.CustNum
               Customer.RepCust  = Customer.CustNum
               Customer.RateCust = Customer.CustNum 
               Customer.AgrCust  = Customer.CustNum
-              Customer.ContrBeg = pvm
+              Customer.ContrBeg = TODAY
               xrecid            = recid(Customer).
 
            FIND CustCat WHERE 
-                CustCat.Brand    = gcBrand AND
+                CustCat.Brand    = Syst.Var:gcBrand AND
                 CustCat.Category = Customer.Category 
            NO-LOCK NO-ERROR.
            IF AVAILABLE CustCat THEN Customer.PaymTerm = CustCat.PaymTerm.
@@ -1127,7 +1125,7 @@ repeat WITH FRAME sel:
 
            /* set the default VALUE of CreditInvNum Limit */
            FIND FIRST TMSParam WHERE 
-               TMSParam.Brand = gcBrand AND
+               TMSParam.Brand = Syst.Var:gcBrand AND
                TMSParam.ParamCode = "CreditLimit:" + Customer.Category
            no-lock no-error.
            IF AVAIL TMSParam THEN Customer.CreditLimit = tmsparam.intVal.
@@ -1202,17 +1200,17 @@ repeat WITH FRAME sel:
       
       IF ufkey AND iiCustnum = 0 THEN DO:
          ASSIGN 
-         ufk = 0 
-         ufk[1] = 714
-         ufk[5]= (IF lcRight = "RW" THEN 732  ELSE 0)
-         ufk[6]= (IF lcRight = "RW" THEN 4    ELSE 0)
-         ufk[7]= 0 
-         ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.  
+         Syst.Var:ufk = 0 
+         Syst.Var:ufk[1] = 714
+         Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 732  ELSE 0)
+         Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4    ELSE 0)
+         Syst.Var:ufk[7]= 0 
+         Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.  
          
          IF liMainCust > 0 THEN ASSIGN
-            ufk    = 0    
-            ufk[8] = 8.
+            Syst.Var:ufk    = 0    
+            Syst.Var:ufk[8] = 8.
          
          RUN Syst/ufkey.p.
       END.
@@ -1228,26 +1226,26 @@ repeat WITH FRAME sel:
          ELSE IF order = 4 THEN
             CHOOSE ROW Customer.OrgId {Syst/uchoose.i} no-error WITH FRAME sel.
        
-         COLOR DISPLAY value(ccc) 
+         COLOR DISPLAY value(Syst.Var:ccc) 
          Customer.CustNum Customer.ZipCode
          Customer.OrgId lcCustName
          WITH FRAME sel.
       END.
       
-      IF iiCustnum > 0 THEN nap = "enter".
-      ELSE ASSIGN nap = keylabel(LASTKEY).
+      IF iiCustnum > 0 THEN Syst.Var:nap = "enter".
+      ELSE ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-LINE] = ? AND 
-         LOOKUP(nap,"f5,5,f8,8") = 0
+         LOOKUP(Syst.Var:nap,"f5,5,f8,8") = 0
       THEN DO:
          bell. message "Move upwards !".
          PAUSE 1 no-message. NEXT.
       END.
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order = 5 THEN order = 1. 
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = 4. 
       END.
 
@@ -1266,7 +1264,7 @@ repeat WITH FRAME sel:
       END.
 
         /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND Customer where recid(Customer) = rtab[1] no-lock.
 
@@ -1290,7 +1288,7 @@ repeat WITH FRAME sel:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND Customer where recid(Customer) = rtab[FRAME-DOWN] no-lock .
@@ -1317,7 +1315,7 @@ repeat WITH FRAME sel:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND Customer where recid(Customer) = memory no-lock no-error.
 
@@ -1342,7 +1340,7 @@ repeat WITH FRAME sel:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "YOU ARE ON THE LAST PAGE". BELL. PAUSE 1 no-message.
@@ -1359,26 +1357,26 @@ repeat WITH FRAME sel:
      * Search functions in a separate loop *
      ***************************************/
 
-     else if lookup(nap,"f1,1") > 0 AND ufk[1] > 0
+     else if lookup(Syst.Var:nap,"f1,1") > 0 AND Syst.Var:ufk[1] > 0
      THEN repeat WITH FRAME sel:
 
         ASSIGN 
-        ufkey = TRUE ufk = 0 ehto = 1
-        ufk[1] = 707  ufk[2] = 30  
-        ufk[3] = 1050 ufk[4] = 812 
-        ufk[8] = 8.
+        ufkey = TRUE Syst.Var:ufk = 0 Syst.Var:ehto = 1
+        Syst.Var:ufk[1] = 707  Syst.Var:ufk[2] = 30  
+        Syst.Var:ufk[3] = 1050 Syst.Var:ufk[4] = 812 
+        Syst.Var:ufk[8] = 8.
         
         RUN Syst/ufkey.p.
-        IF toimi = 8 THEN NEXT BROWSE.
+        IF Syst.Var:toimi = 8 THEN NEXT BROWSE.
 
         /* Search 1 */
-        IF toimi = 1 THEN DO:  /* search WITH column 1 */
-           cfc = "puyr". RUN Syst/ufcolor.p.
-           CustNum = 0. ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        IF Syst.Var:toimi = 1 THEN DO:  /* search WITH column 1 */
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           CustNum = 0. Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
 
            PAUSE 0.
            DISP lcBrand WITH FRAME search-1. 
-           UPDATE lcBrand WHEN gcAllBrand = TRUE 
+           UPDATE lcBrand WHEN Syst.Var:gcAllBrand = TRUE 
                   CustNum WITH FRAME search-1.
 
            HIDE FRAME search-1 no-pause.
@@ -1397,8 +1395,8 @@ repeat WITH FRAME sel:
         END. /* Search col. 1 */
 
         /* Search WITH column 2 */
-        ELSE  IF toimi = 2 THEN DO:  /* search col. 3 */
-           cfc = "puyr". RUN Syst/ufcolor.p. 
+        ELSE  IF Syst.Var:toimi = 2 THEN DO:  /* search col. 3 */
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p. 
            
            ASSIGN
               lcFirstName = ""
@@ -1406,10 +1404,10 @@ repeat WITH FRAME sel:
               lcSurName2  = ""
               lcCompany   = "".
 
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISP lcBrand WITH FRAME search-2. 
            UPDATE
-              lcBrand WHEN gcAllBrand = TRUE 
+              lcBrand WHEN Syst.Var:gcAllBrand = TRUE 
               lcFirstName
               lcSurName1
               lcSurName2
@@ -1496,11 +1494,11 @@ repeat WITH FRAME sel:
         END. /* Search col. 2 */
 
         /* Search WITH column 3 */
-        ELSE IF toimi = 3 THEN DO: 
-           cfc = "puyr". RUN Syst/ufcolor.p. lcZip = "".
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        ELSE IF Syst.Var:toimi = 3 THEN DO: 
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p. lcZip = "".
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISP lcBrand WITH FRAME search-4. 
-           UPDATE lcBrand WHEN gcAllBrand = TRUE 
+           UPDATE lcBrand WHEN Syst.Var:gcAllBrand = TRUE 
                   lcZip WITH FRAME search-4.
            HIDE FRAME search-4 no-pause.
 
@@ -1515,11 +1513,11 @@ repeat WITH FRAME sel:
         END.
 
         /* Search WITH column 4 */
-        ELSE IF toimi = 4 THEN DO: 
-           cfc = "puyr". RUN Syst/ufcolor.p. OrgId = "".
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        ELSE IF Syst.Var:toimi = 4 THEN DO: 
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p. OrgId = "".
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISP lcBrand WITH FRAME search-6. 
-           UPDATE lcBrand WHEN gcAllBrand = TRUE 
+           UPDATE lcBrand WHEN Syst.Var:gcAllBrand = TRUE 
                   OrgId WITH FRAME search-6.
            HIDE FRAME search-6 no-pause.
            if OrgId <> "" THEN DO:
@@ -1535,7 +1533,7 @@ repeat WITH FRAME sel:
 
      END.  /* search */
 
-     ELSE IF LOOKUP(nap,"4,F4") > 0 AND ufk[4] > 0 AND lcRight = "RW" THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"4,F4") > 0 AND Syst.Var:ufk[4] > 0 AND lcRight = "RW" THEN DO:
         FIND Customer WHERE recid(Customer) = rtab[FRAME-LINE] NO-LOCK.
         CustNum = Customer.CustNum.
 
@@ -1549,10 +1547,10 @@ repeat WITH FRAME sel:
         END.
      END.
 
-     else if lookup(nap,"5,f5") > 0 THEN  /* lisays */
+     else if lookup(Syst.Var:nap,"5,f5") > 0 THEN  /* lisays */
          MESSAGE "This function is not allowed." VIEW-AS ALERT-BOX.
 
-     else if lookup(nap,"enter,return") > 0 THEN 
+     else if lookup(Syst.Var:nap,"enter,return") > 0 THEN 
      CHG: 
      REPEAT WITH FRAME lis:
      
@@ -1582,8 +1580,7 @@ repeat WITH FRAME sel:
 
         fCustSex(Customer.Sex).
        
-        lcIDType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                    "Customer",
+        lcIDType = Func.Common:mTMSCodeName("Customer",
                                     "CustIDType",
                                     Customer.CustIdType).
         fRegion(Customer.Region).
@@ -1601,8 +1598,7 @@ repeat WITH FRAME sel:
               no-lock no-error.
            if avail xCustomer then 
               lcAgrCust = lcAgrCust + " " + 
-                          DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                           BUFFER xCustomer).
+                          Func.Common:mDispCustName(BUFFER xCustomer).
         END.       
 
         /* invoicing customer */
@@ -1613,8 +1609,7 @@ repeat WITH FRAME sel:
               no-lock no-error.
            if avail xCustomer then 
               lcInvCust = lcInvCust + " " + 
-                          DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                           BUFFER xCustomer).
+                          Func.Common:mDispCustName(BUFFER xCustomer).
         END.
 
         CASE lcTyyppi:
@@ -1625,7 +1620,7 @@ repeat WITH FRAME sel:
         END CASE.
  
         ASSIGN fr-header = fr-header + " CUSTOMER DATA "  
-               cfc       = "kline" 
+               Syst.Var:cfc = "kline" 
                ufkey     = TRUE.
  
         Action: 
@@ -1643,17 +1638,17 @@ repeat WITH FRAME sel:
            llDelNote[6]  = (Customer.IDelPost > "")
            llDelNote[7]  = (Customer.IDelCountry > "")
 
-           ufk      = 0 
-           ufk[1]   = 7 WHEN lcRight =  "RW"
-           ufk[1]   = 0 WHEN lcRight NE "RW"
-           ufk[2]   = 0 
-           ufk[3]   = 0  
-           ufk[4]   = 0 
-           ufk[5]   = 1096  
-           ufk[6]   = 130  
-           ufk[7]   = 1883
-           ufk[8]   = 8 
-           ehto     = 0 
+           Syst.Var:ufk      = 0 
+           Syst.Var:ufk[1]   = 7 WHEN lcRight =  "RW"
+           Syst.Var:ufk[1]   = 0 WHEN lcRight NE "RW"
+           Syst.Var:ufk[2]   = 0 
+           Syst.Var:ufk[3]   = 0  
+           Syst.Var:ufk[4]   = 0 
+           Syst.Var:ufk[5]   = 1096  
+           Syst.Var:ufk[6]   = 130  
+           Syst.Var:ufk[7]   = 1883
+           Syst.Var:ufk[8]   = 8 
+           Syst.Var:ehto     = 0 
            ufkey    = TRUE
            liF2Type = 0
            liF3Type = 0.
@@ -1661,35 +1656,35 @@ repeat WITH FRAME sel:
            IF liMainCust = 0 AND iiCustNum = 0 THEN DO:
 
               /* browse inv.customers f3 and users f4 */ 
-              IF llAgrCust THEN ASSIGN ufk[3]   = 2349
+              IF llAgrCust THEN ASSIGN Syst.Var:ufk[3]   = 2349
                                        liF3Type = 1.
-              IF llAgrCust OR llOthInvCust THEN ufk[4] = 2351.
+              IF llAgrCust OR llOthInvCust THEN Syst.Var:ufk[4] = 2351.
              
               /* view agreement customer */
               IF NOT llAgrCust THEN ASSIGN 
-                 ufk[2]   = 1025
+                 Syst.Var:ufk[2]   = 1025
                  liF2Type = 1.
               
               /* view inv. customer */
               IF NOT llInvCust THEN DO:
                  IF NOT llAgrCust THEN ASSIGN
-                    ufk[3]   = 1026
+                    Syst.Var:ufk[3]   = 1026
                     liF3Type = 2.
                  ELSE ASSIGN 
-                    ufk[2]   = 1026
+                    Syst.Var:ufk[2]   = 1026
                     liF2Type = 2. 
               END. 
            END.
            
            /* no financial data if only user */
-           IF NOT llAgrCust AND NOT llOthInvCust THEN ufk[6] = 0.
+           IF NOT llAgrCust AND NOT llOthInvCust THEN Syst.Var:ufk[6] = 0.
            
            PAUSE 0.
            DISPLAY llDelNote WITH FRAME lis.
            
            RUN Syst/ufkey.p.
 
-           IF toimi = 8 THEN DO:
+           IF Syst.Var:toimi = 8 THEN DO:
               if (Customer.CustName = "" AND Customer.CustIDType NE "CIF") OR
                  Customer.InvGroup = ""      OR
                  Customer.Language = 0 
@@ -1706,26 +1701,26 @@ repeat WITH FRAME sel:
            END.   
 
            /* customer info */ 
-           else IF toimi = 7 THEN DO:
+           else IF Syst.Var:toimi = 7 THEN DO:
         
               RUN Mc/commontt.p(Customer.CustNum). 
         
            END.
 
 
-           ELSE IF toimi = 1 AND lcRight = "RW" THEN DO:    
+           ELSE IF Syst.Var:toimi = 1 AND lcRight = "RW" THEN DO:    
 
-              ehto = 9. RUN Syst/ufkey.p.
+              Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
               /* UPDATE Customer record */
               RUN local-update-customer.
               
               FIND CURRENT Customer NO-LOCK.
               NEXT CHG /*Action*/.
-           END.  /* toimi = 1 */
+           END.  /* Syst.Var:toimi = 1 */
 
            /* view agr. customer */
-           ELSE IF toimi = 2 AND liF2Type = 1 THEN DO:
+           ELSE IF Syst.Var:toimi = 2 AND liF2Type = 1 THEN DO:
               
               IF Customer.CustNum = Customer.AgrCust THEN DO:
                  MESSAGE "Agreement customer is the same"
@@ -1738,7 +1733,7 @@ repeat WITH FRAME sel:
            END. 
             
            /* browse invoicing customers */
-           ELSE IF TOIMI = 3 AND liF3Type = 1 THEN DO:
+           ELSE IF Syst.Var:toimi = 3 AND liF3Type = 1 THEN DO:
               IF NOT llAgrCust THEN DO:
                  MESSAGE "This customer is not an agreement customer" 
                  VIEW-AS ALERT-BOX.
@@ -1750,8 +1745,8 @@ repeat WITH FRAME sel:
            END.
 
            /* view inv. customer */
-           ELSE IF (toimi = 3 AND liF3Type = 2) OR
-                   (toimi = 2 AND liF2Type = 2) 
+           ELSE IF (Syst.Var:toimi = 3 AND liF3Type = 2) OR
+                   (Syst.Var:toimi = 2 AND liF2Type = 2) 
            THEN DO:
               IF Customer.CustNum = Customer.InvCust THEN DO:
                  MESSAGE "Invoicing customer is the same"
@@ -1764,7 +1759,7 @@ repeat WITH FRAME sel:
            END. 
            
            /* browse users */
-           ELSE IF TOIMI = 4 THEN DO:
+           ELSE IF Syst.Var:toimi = 4 THEN DO:
               IF NOT llAgrCust AND NOT llOthInvCust
               THEN DO:
                  MESSAGE "This customer is an user" VIEW-AS ALERT-BOX.
@@ -1785,11 +1780,11 @@ repeat WITH FRAME sel:
            END.
             
            /* contact data */
-           ELSE IF toimi = 5 THEN DO: 
+           ELSE IF Syst.Var:toimi = 5 THEN DO: 
               RUN Mc/custcont.p(Customer.CustNum).
            END.
            
-           ELSE IF toimi = 6 THEN DO: /* Financial Data */
+           ELSE IF Syst.Var:toimi = 6 THEN DO: /* Financial Data */
 
               RUN local-update-fin.
               FIND CURRENT Customer NO-LOCK.
@@ -1806,17 +1801,17 @@ repeat WITH FRAME sel:
         
      END. /* Change */
 
-     else if lookup(nap,"6,f6") > 0 THEN 
+     else if lookup(Syst.Var:nap,"6,f6") > 0 THEN 
          MESSAGE "This function is not allowed." VIEW-AS ALERT-BOX.
      
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
 
         RUN pFindFirst.
         ASSIGN memory = recid(Customer) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
 
         RUN pFindLast.
 
@@ -1825,7 +1820,7 @@ repeat WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN DO:
         
         LEAVE LOOP.
      END.  
@@ -1839,7 +1834,7 @@ repeat WITH FRAME sel:
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 fCleanEventObjects(). 
 
 PROCEDURE local-update-customer:
@@ -1887,7 +1882,7 @@ PROCEDURE local-update-customer:
       IF Customer.CustNum > 1000 THEN DO:
 
          FIND CustCat WHERE 
-              CustCat.Brand    = gcBrand AND
+              CustCat.Brand    = Syst.Var:gcBrand AND
               CustCat.Category = INPUT Customer.Category NO-LOCK NO-ERROR.
          IF NOT AVAILABLE CustCat THEN DO:
              MESSAGE "Unknown category"
@@ -1911,7 +1906,7 @@ PROCEDURE local-update-customer:
          END.
          
          FIND FIRST xCustomer WHERE
-            xCustomer.Brand = gcBrand AND
+            xCustomer.Brand = Syst.Var:gcBrand AND
             xCustomer.OrgID = INPUT Customer.OrgId AND
             xCustomer.CustIDType = INPUT Customer.CustIDType AND
             xCustomer.Roles NE "inactive" AND
@@ -2096,8 +2091,7 @@ PROCEDURE local-update-fin:
       END.
    END.
 
-   lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                 BUFFER Customer).
+   lcCustName = Func.Common:mDispCustName(BUFFER Customer).
  
    IF lcRight = "RW" then
    ACTION: 
@@ -2105,22 +2099,18 @@ PROCEDURE local-update-fin:
 
       CLEAR FRAME fina NO-PAUSE.
 
-      lcDType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "Invoice",
+      lcDType = Func.Common:mTMSCodeName("Invoice",
                                  "DelType",
                                  STRING(Customer.DelType)).
-      lcCType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "Customer",
+      lcCType = Func.Common:mTMSCodeName("Customer",
                                  "ChargeType",
                                  STRING(Customer.ChargeType)).
 
-      lcSType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "Invoice",
+      lcSType = Func.Common:mTMSCodeName("Invoice",
                                  "SpecDel",
                                  STRING(Customer.SpecDel)).
       
-      lcInvTargetRule = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "Customer",
+      lcInvTargetRule = Func.Common:mTMSCodeName("Customer",
                                  "InvoiceTargetRule",
                                  STRING(Customer.InvoiceTargetRule)).
 
@@ -2162,7 +2152,7 @@ PROCEDURE local-update-fin:
       IF lcBankAcc > "" THEN DO:
    
          FIND FIRST Bank WHERE
-                    Bank.Brand      = gcBrand AND
+                    Bank.Brand      = Syst.Var:gcBrand AND
                     Bank.BankID     = SUBSTRING(lcBankAcc,5,4) AND
                     Bank.BankOffice = SUBSTRING(lcBankAcc,9,4) NO-LOCK NO-ERROR.
          IF AVAILABLE Bank THEN ASSIGN 
@@ -2178,26 +2168,26 @@ PROCEDURE local-update-fin:
       WITH FRAME fina. 
 
       ASSIGN
-      ufk = 0
-      ufk[1] = 7
-      ufk[2] = 1717
-      ufk[3] = 1122
-      ufk[5] = 1164
-      ufk[8] = 8
-      ehto = 0
+      Syst.Var:ufk = 0
+      Syst.Var:ufk[1] = 7
+      Syst.Var:ufk[2] = 1717
+      Syst.Var:ufk[3] = 1122
+      Syst.Var:ufk[5] = 1164
+      Syst.Var:ufk[8] = 8
+      Syst.Var:ehto = 0
       ufkey = true.
       RUN Syst/ufkey.p.
                                                              
-      IF toimi = 8 then do:
+      IF Syst.Var:toimi = 8 then do:
          hide frame fina.
          LEAVE.
       end.
 
-      ELSE IF toimi = 1 AND lcRight = "RW" THEN DO:
+      ELSE IF Syst.Var:toimi = 1 AND lcRight = "RW" THEN DO:
       BILLDATA_CHG:
       REPEAT WITH FRAME fina ON ENDKEY UNDO, LEAVE:
 
-         ehto = 9.
+         Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
          
          PROMPT
@@ -2277,12 +2267,12 @@ PROCEDURE local-update-fin:
                   
                END.
      
-               ehto = 9.
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.
 
-            IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO WITH FRAME fina:
+            IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME fina:
                PAUSE 0.
 
                IF FRAME-FIELD = "VATUsage" THEN DO:
@@ -2315,8 +2305,7 @@ PROCEDURE local-update-fin:
                   THEN NEXT. 
 
                   lcCType = 
-                     DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "Customer",
+                     Func.Common:mTMSCodeName("Customer",
                                       "ChargeType",
                                       STRING(INPUT Customer.ChargeType)).
                   DISPLAY lcCType.
@@ -2332,8 +2321,7 @@ PROCEDURE local-update-fin:
                ELSE IF FRAME-FIELD = "DelType" THEN DO:
 
                   lcDType = 
-                     DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "Invoice",
+                     Func.Common:mTMSCodeName("Invoice",
                                       "DelType",
                                       STRING(INPUT Customer.DelType)).
                   DISPLAY lcDType.
@@ -2361,8 +2349,7 @@ PROCEDURE local-update-fin:
                ELSE IF FRAME-FIELD = "InvoiceTargetRule" THEN DO:
 
                   lcInvTargetRule = 
-                     DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "Customer",
+                     Func.Common:mTMSCodeName("Customer",
                                       "InvoiceTargetRule",
                                       STRING(INPUT Customer.InvoiceTargetRule)).
                   DISPLAY lcInvTargetRule.
@@ -2421,9 +2408,9 @@ PROCEDURE local-update-fin:
                   END. /* IF Customer.Email = "" THEN DO: */
 
                   liRequest = fEmailInvoiceRequest(
-                                       INPUT fMakeTS(),
+                                       INPUT Func.Common:mMakeTS(),
                                        INPUT TODAY,
-                                       INPUT katun,
+                                       INPUT Syst.Var:katun,
                                        INPUT 0,
                                        INPUT "",
                                        INPUT Customer.CustNum,
@@ -2485,13 +2472,13 @@ PROCEDURE local-update-fin:
 
                CREATE Memo.
                ASSIGN
-                  Memo.CreStamp  = fMakeTS()
-                  Memo.Brand     = gcBrand
+                  Memo.CreStamp  = Func.Common:mMakeTS()
+                  Memo.Brand     = Syst.Var:gcBrand
                   Memo.Custnum   = Customer.CustNum
                   Memo.HostTable = "Customer"
                   Memo.KeyValue  = STRING(Customer.CustNum)
                   Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-                  Memo.CreUser   = katun
+                  Memo.CreUser   = Syst.Var:katun
                   Memo.MemoTitle = "Cambio de cuenta"
                   Memo.MemoText  = "Solicitado por el cliente: Nº de " +
                                    "cuenta: " + Customer.BankAcc + " --> " +
@@ -2515,15 +2502,15 @@ PROCEDURE local-update-fin:
       END.
       END.   
    
-      ELSE IF toimi = 2 THEN DO:
+      ELSE IF Syst.Var:toimi = 2 THEN DO:
          RUN Ar/custbal.p (Customer.CustNum).
       END.
       
-      ELSE IF toimi = 3 AND lcRight = "RW" THEN DO:
+      ELSE IF Syst.Var:toimi = 3 AND lcRight = "RW" THEN DO:
          
          REPEAT WITH FRAME fina ON ENDKEY UNDO, LEAVE:
             
-            ehto = 9.
+            Syst.Var:ehto = 9.
             RUN Syst/ufkey.p.
             
             PROMPT Customer.CreditLimit.
@@ -2543,7 +2530,7 @@ PROCEDURE local-update-fin:
       
       END.
 
-      ELSE IF toimi = 5 THEN DO:                 
+      ELSE IF Syst.Var:toimi = 5 THEN DO:                 
          RUN Mm/pclist.p("Customer",Customer.CustNum).
       END.                                        
    END. 
@@ -2601,8 +2588,7 @@ PROCEDURE local-disp-row:
    ASSIGN lcRoles    = STRING(llAgrCust,"X/") + " " +
                        STRING(llOthInvCust,"x/") + " " +
                        STRING(llUser,"x/")
-          lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                        BUFFER Customer).
+          lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                     
    
    DISPLAY Customer.CustNum 

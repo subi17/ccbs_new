@@ -43,9 +43,9 @@ form
     BDest.DestType
     BDest.ToDate 
 WITH centered OVERLAY scroll 1 13 DOWN ROW 3
-    COLOR value(cfc)
-    title color value(ctc) 
-    " FIND B-DESTINATION (" + gcBrand + ") '" + bthaku + "' " FRAME sel.
+    COLOR value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) 
+    " FIND B-DESTINATION (" + Syst.Var:gcBrand + ") '" + bthaku + "' " FRAME sel.
 
 
 form
@@ -54,11 +54,11 @@ form
     SKIP
 with row 1 centered overlay title " FIND B-DESTINATION " FRAME alku.
 
-cfc = "sel". 
+Syst.Var:cfc = "sel". 
 RUN Syst/ufcolor.p. 
-ASSIGN ccc = cfc.
+ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 
-FIND FIRST BDest WHERE BDest.Brand = gcBrand NO-LOCK NO-ERROR.
+FIND FIRST BDest WHERE BDest.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 
 IF NOT AVAIL BDest THEN DO:
    BELL.
@@ -85,7 +85,7 @@ repeat WITH FRAME sel:
        PAUSE 0 no-message.
 alku:  repeat WITH FRAME alku ON ENDKEY UNDO, LEAVE loop :
 
-          ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+          Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           UPDATE bthaku WITH FRAME alku.
           if bthaku = "" THEN LEAVE LOOP.
           /* onko numerohaku */
@@ -100,14 +100,14 @@ alku:  repeat WITH FRAME alku ON ENDKEY UNDO, LEAVE loop :
           IF NOT nrohaku THEN DO:
 
              FIND FIRST BDest where 
-                        BDest.Brand   = gcBrand AND
+                        BDest.Brand   = Syst.Var:gcBrand AND
                         BDest.BDName >= bthaku
              USE-INDEX BDName no-lock no-error.
              order = 1.
           END.
           ELSE DO:
              FIND FIRST BDest where 
-                        BDest.Brand  = gcBrand AND
+                        BDest.Brand  = Syst.Var:gcBrand AND
                         BDest.BDest >= bthaku
              no-lock no-error.
              order = 2.
@@ -151,9 +151,9 @@ print-line:
                   BDest.DestType BDest.ToDate.
                rtab[FRAME-LINE] = recid(BDest).
                IF order = 2 THEN FIND NEXT BDest
-               USE-INDEX BDest WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+               USE-INDEX BDest WHERE BDest.Brand = Syst.Var:gcBrand NO-LOCK no-error.
                ELSE IF order = 1 THEN FIND NEXT BDest
-               USE-INDEX BDName WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+               USE-INDEX BDName WHERE BDest.Brand = Syst.Var:gcBrand NO-LOCK no-error.
             END.
             ELSE DO:
                CLEAR no-pause.
@@ -182,30 +182,30 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 0   ufk[2]= 0   ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 11 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.Var:ufk[1]= 0   Syst.Var:ufk[2]= 0   Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= 11 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 2 THEN DO:
          CHOOSE ROW BDest.BDest {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) BDest.BDest WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) BDest.BDest WITH FRAME sel.
       END.
       ELSE IF order = 1 THEN DO:
          CHOOSE ROW BDest.BDName {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) BDest.BDName WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) BDest.BDName WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order = 3 THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = 2.
       END.
 
@@ -214,9 +214,9 @@ BROWSE:
          FIND BDest where recid(BDest) = memory.
          DO i = 1 TO FRAME-LINE - 1:
             IF order = 2 THEN FIND prev BDest
-            USE-INDEX BDest WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+            USE-INDEX BDest WHERE BDest.Brand = Syst.Var:gcBrand NO-LOCK no-error.
             ELSE IF order = 1 THEN FIND prev BDest
-            USE-INDEX BDName WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+            USE-INDEX BDName WHERE BDest.Brand = Syst.Var:gcBrand NO-LOCK no-error.
             IF AVAILABLE BDest THEN
                ASSIGN firstline = i memory = recid(BDest).
             ELSE LEAVE.
@@ -232,16 +232,16 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND BDest where recid(BDest) = rtab[1] no-lock.
             IF order = 2 THEN FIND prev BDest
-            USE-INDEX BDest WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+            USE-INDEX BDest WHERE BDest.Brand = Syst.Var:gcBrand NO-LOCK no-error.
             ELSE IF order = 1 THEN FIND prev BDest
-            USE-INDEX BDName WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+            USE-INDEX BDName WHERE BDest.Brand = Syst.Var:gcBrand NO-LOCK no-error.
             IF NOT AVAILABLE BDest THEN DO:
                message "YOU ARE ON THE FIRST ROW !".
                BELL.
@@ -265,14 +265,14 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND BDest where recid(BDest) = rtab[FRAME-DOWN] no-lock .
             IF order = 2 THEN FIND NEXT BDest
-            USE-INDEX BDest WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+            USE-INDEX BDest WHERE BDest.Brand = Syst.Var:gcBrand NO-LOCK no-error.
             ELSE IF order = 1 THEN FIND NEXT BDest
-            USE-INDEX BDName WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+            USE-INDEX BDName WHERE BDest.Brand = Syst.Var:gcBrand NO-LOCK no-error.
             IF NOT AVAILABLE BDest THEN DO:
                message "YOU ARE ON THE LAST ROW !".
                BELL.
@@ -296,22 +296,22 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND BDest where recid(BDest) = memory no-lock no-error.
          IF order = 2 THEN FIND prev BDest
-         USE-INDEX BDest WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+         USE-INDEX BDest WHERE BDest.Brand = Syst.Var:gcBrand NO-LOCK no-error.
          ELSE IF order = 1 THEN FIND prev BDest
-         USE-INDEX BDName WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+         USE-INDEX BDName WHERE BDest.Brand = Syst.Var:gcBrand NO-LOCK no-error.
          IF AVAILABLE BDest THEN DO:
             memory = recid(BDest).
 
             /* go back one page */
             DO line = 1 TO (FRAME-DOWN - 1):
                IF order = 2 THEN FIND prev BDest
-               USE-INDEX BDest WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+               USE-INDEX BDest WHERE BDest.Brand = Syst.Var:gcBrand NO-LOCK no-error.
                ELSE IF order = 1 THEN FIND prev BDest
-               USE-INDEX BDName WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+               USE-INDEX BDName WHERE BDest.Brand = Syst.Var:gcBrand NO-LOCK no-error.
                IF AVAILABLE BDest THEN memory = recid(BDest).
                ELSE line = FRAME-DOWN.
             END.
@@ -327,7 +327,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "YOU ARE ON THE LAST PAGE".
@@ -342,32 +342,32 @@ BROWSE:
         END.
      END. /* NEXT page */
 
-     else if lookup(nap,"5,f5,enter,return") > 0 THEN DO: /* valinta */
+     else if lookup(Syst.Var:nap,"5,f5,enter,return") > 0 THEN DO: /* valinta */
         FIND BDest where recid(BDest) = rtab[FRAME-LINE] no-lock.
         siirto = string(BDest).
         LEAVE LOOP.
      END.
 
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
         IF order = 2 THEN FIND FIRST BDest
-        USE-INDEX BDest WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX BDest WHERE BDest.Brand = Syst.Var:gcBrand NO-LOCK no-error.
         ELSE IF order = 1 THEN FIND FIRST BDest
-        USE-INDEX BDName WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX BDName WHERE BDest.Brand = Syst.Var:gcBrand NO-LOCK no-error.
         ASSIGN memory = recid(BDest) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 2 THEN FIND LAST BDest
-        USE-INDEX BDest WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX BDest WHERE BDest.Brand = Syst.Var:gcBrand NO-LOCK no-error.
         ELSE IF order = 1 THEN FIND LAST BDest
-        USE-INDEX BDName WHERE BDest.Brand = gcBrand NO-LOCK no-error.
+        USE-INDEX BDName WHERE BDest.Brand = Syst.Var:gcBrand NO-LOCK no-error.
         ASSIGN memory = recid(BDest) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN DO:
         haettava = TRUE.
         HIDE FRAME sel no-pause.
         NEXT LOOP.
@@ -378,5 +378,5 @@ END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
 HIDE FRAME alku no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 

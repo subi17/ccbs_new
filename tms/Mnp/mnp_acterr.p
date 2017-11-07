@@ -9,7 +9,6 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/date.i}
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Syst/tmsconst.i}
@@ -36,12 +35,12 @@ DEF STREAM sout.
 OUTPUT STREAM sout TO VALUE(icFile).
 
 FOR EACH MNPProcess NO-LOCK WHERE
-         MNPProcess.Brand = gcBrand AND
+         MNPProcess.Brand = Syst.Var:gcBrand AND
          MNPProcess.MNPType = {&MNP_TYPE_IN} AND
          MNPProcess.StatusCode EQ {&MNP_ST_ACON} AND
-         MNPProcess.PortingTime < fMakeTS(),
+         MNPProcess.PortingTime < Func.Common:mMakeTS(),
    FIRST Order NO-LOCK WHERE
-         Order.Brand = gcBrand AND
+         Order.Brand = Syst.Var:gcBrand AND
          Order.OrderId = MNPProcess.OrderId:
 
    IF Order.OrderType = 3 THEN
@@ -57,7 +56,7 @@ FOR EACH MNPProcess NO-LOCK WHERE
 
    IF AVAIL MsRequest THEN DO:
       /* msrequest actstamp should be same as changeWindowDate */
-      fSplitTS(INPUT  MsRequest.ActStamp,
+      Func.Common:mSplitTS(INPUT  MsRequest.ActStamp,
                OUTPUT ldaDate,
                OUTPUT liSecs).
 

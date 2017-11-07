@@ -18,7 +18,7 @@ FUNCTION fAddressChangeValues RETURNS LOGICAL
 
    /* is there a pending request */
    FIND FIRST bReqValue WHERE
-              bReqValue.Brand     = gcBrand   AND
+              bReqValue.Brand     = Syst.Var:gcBrand   AND
               bReqValue.ReqType   = 6         AND
               bReqValue.CustNum   = iiCustNum AND
               bReqValue.ReqStatus = 0 NO-LOCK NO-ERROR.

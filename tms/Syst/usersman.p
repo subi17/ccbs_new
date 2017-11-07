@@ -20,7 +20,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -65,10 +65,10 @@ form
     UserSman.Salesman
     Salesman.SMName 
 WITH ROW FrmRow centered overlay FrmDown  down
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
     " USER'S SALESMAN DEFINITIONS  "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 {Func/brand.i}
@@ -81,8 +81,8 @@ form
     UserSman.Salesman   COLON 20 
         Salesman.SMName NO-LABEL SKIP
 WITH  OVERLAY ROW 6 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -103,7 +103,7 @@ ELSE DO:
    memory = ?.
 END.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "  By Brand  ,".
@@ -119,7 +119,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a UserSman  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -127,7 +127,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE ADD-ROW:
 
@@ -234,11 +234,11 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk = 0
-         ufk[5]= 5 
-         ufk[6]= 4    
-         ufk[8]= 8 
-         ehto = 3 ufkey = false.
+         Syst.Var:ufk = 0
+         Syst.Var:ufk[5]= 5 
+         Syst.Var:ufk[6]= 4    
+         Syst.Var:ufk[8]= 8 
+         Syst.Var:ehto = 3 ufkey = false.
          
          RUN Syst/ufkey.p.
       END.
@@ -246,13 +246,13 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         choose row UserSman.Brand {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) UserSman.Brand WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) UserSman.Brand WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -260,11 +260,11 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. 
         IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -282,7 +282,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious row */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-line = 1 THEN DO:
            RUN local-find-this(false).
            RUN local-find-PREV.
@@ -307,7 +307,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious row */
 
       /* NEXT row */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-line = FRAME-down THEN DO:
            RUN local-find-this(false).
@@ -333,7 +333,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT row */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND UserSman WHERE recid(UserSman) = memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -357,7 +357,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* Put Cursor on downmost Row */
        IF rtab[FRAME-down] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -371,20 +371,20 @@ REPEAT WITH FRAME sel:
        END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW"
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW"
      THEN DO:  /* add */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
      
        /* change */
        RUN local-find-this(true).
-       ASSIGN ac-hdr = " VIEW " ufkey = true ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = true Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY UserSman.Brand.
 
        RUN local-update-record.                                  
@@ -400,7 +400,7 @@ REPEAT WITH FRAME sel:
      END.
 
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW"
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION:  /* DELETE */
      
         delrow = FRAME-LINE.
@@ -425,14 +425,14 @@ REPEAT WITH FRAME sel:
         RUN local-find-this(TRUE).
              
         /* Highlight */
-        COLOR DISPLAY VALUE(ctc)
+        COLOR DISPLAY VALUE(Syst.Var:ctc)
         UserSman.UserCode
         UserSman.Brand
         UserSman.Salesman.
                               
         ASSIGN ok = FALSE.
         MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-        COLOR DISPLAY VALUE(ccc)
+        COLOR DISPLAY VALUE(Syst.Var:ccc)
         UserSman.UserCode
         UserSman.Brand
         UserSman.Salesman.
@@ -457,26 +457,26 @@ REPEAT WITH FRAME sel:
         
      END. /* DELETE */
         
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = recid(UserSman) must-print = true.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN memory = recid(UserSman) must-print = true.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
 HIDE MESSAGE NO-PAUSE. 
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 PROCEDURE local-find-this:
@@ -555,7 +555,7 @@ PROCEDURE local-UPDATE-record:
 
       IF lcRight = "RW" THEN DO:
       
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          
          UPDATE
          UserSman.Salesman  
@@ -564,7 +564,7 @@ PROCEDURE local-UPDATE-record:
 
             READKEY.
 
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                 PAUSE 0.
 
                 IF FRAME-FIELD = "Salesman" THEN DO:
