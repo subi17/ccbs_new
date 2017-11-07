@@ -10,7 +10,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'Invoice'}
@@ -43,7 +42,7 @@ FORM
    SKIP(9)
    
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + "  DELIVERY STATE  " + STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.Var:ynimi + "  DELIVERY STATE  " + STRING(TODAY,"99-99-99") + " "
      FRAME fCrit.
 
 
@@ -60,19 +59,19 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
    IF ufkey THEN DO:
       ASSIGN
-         ufk    = 0
-         ufk[1] = 7
-         ufk[5] = 795  
-         ufk[8] = 8 
-         ehto   = 0.
+         Syst.Var:ufk    = 0
+         Syst.Var:ufk[1] = 7
+         Syst.Var:ufk[5] = 795  
+         Syst.Var:ufk[8] = 8 
+         Syst.Var:ehto   = 0.
       RUN Syst/ufkey.p.
    END.
-   ELSE ASSIGN toimi = 1
+   ELSE ASSIGN Syst.Var:toimi = 1
                ufkey = TRUE.
 
-   IF toimi = 1 THEN DO:
+   IF Syst.Var:toimi = 1 THEN DO:
 
-      ehto = 9. 
+      Syst.Var:ehto = 9. 
       RUN Syst/ufkey.p.
       
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
@@ -82,9 +81,9 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          WITH FRAME fCrit EDITING:
 
             READKEY.
-            nap = KEYLABEL(LASTKEY).
+            Syst.Var:nap = KEYLABEL(LASTKEY).
 
-            IF LOOKUP(nap,poisnap) > 0 THEN DO:
+            IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
             END.
 
             APPLY LASTKEY.
@@ -96,7 +95,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    END.
 
    /* setting */
-   ELSE IF toimi = 5 THEN DO:
+   ELSE IF Syst.Var:toimi = 5 THEN DO:
       
       IF ldaInvDate = ? THEN DO:
          MESSAGE "Invoice date has not been chosen"
@@ -118,7 +117,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       LEAVE CritLoop.
    END.
 
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.Var:toimi = 8 THEN DO:
       LEAVE CritLoop.
    END.
 

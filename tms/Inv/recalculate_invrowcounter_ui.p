@@ -42,8 +42,8 @@ FORM
       FORMAT "99-99-99"
    SKIP(9)
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + "  INVOICE ROW COUNTERS  " + 
-           STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.Var:ynimi + "  INVOICE ROW COUNTERS  " + 
+           STRING(TODAY,"99-99-99") + " "
      FRAME fCrit.
 
 
@@ -62,20 +62,20 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
    IF ufkey THEN DO:
       ASSIGN
-         ufk    = 0
-         ufk[1] = 7 
-         ufk[5] = 795
-         ufk[8] = 8 
-         ehto   = 0.
+         Syst.Var:ufk    = 0
+         Syst.Var:ufk[1] = 7 
+         Syst.Var:ufk[5] = 795
+         Syst.Var:ufk[8] = 8 
+         Syst.Var:ehto   = 0.
       RUN Syst/ufkey.p.
    END.
    ELSE ASSIGN 
-      toimi = 1
+      Syst.Var:toimi = 1
       ufkey = TRUE.
 
-   IF toimi = 1 THEN DO:
+   IF Syst.Var:toimi = 1 THEN DO:
 
-      ehto = 9. 
+      Syst.Var:ehto = 9. 
       RUN Syst/ufkey.p.
       
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
@@ -88,7 +88,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
             READKEY.
             
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME fCrit:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME fCrit:
                PAUSE 0.
 
                IF FRAME-FIELD = "liCustNum" THEN DO:
@@ -103,8 +103,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                         MESSAGE "Unknown customer".
                         NEXT.
                      END.
-                     lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                                   BUFFER Customer).
+                     lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                      DISP lcCustName WITH FRAME fCrit.
                   END.
                END.
@@ -119,7 +118,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
    END.
 
-   ELSE IF toimi = 5 THEN DO:
+   ELSE IF Syst.Var:toimi = 5 THEN DO:
       
       IF liCustNum = 0 OR ldaFromDate = ? OR ldaToDate = ? THEN DO:
          MESSAGE "Invalid criteria"
@@ -145,7 +144,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       LEAVE CritLoop.
    END.
 
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.Var:toimi = 8 THEN DO:
       LEAVE CritLoop.
    END.
 

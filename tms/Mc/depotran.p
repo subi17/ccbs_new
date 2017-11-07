@@ -13,7 +13,6 @@
 {Func/cparam2.i}
 {Func/fcustbal.i}
 {Func/finvbal.i}
-{Func/timestamp.i}
 
 DEF INPUT  PARAMETER iiOrder AS INT  NO-UNDO. 
 DEF OUTPUT PARAMETER ocError AS CHAR NO-UNDO. 
@@ -45,7 +44,7 @@ FUNCTION fCreateOPLog RETURNS LOGICAL
     ASSIGN
     OPLog.CustNum   = iiCustNum
     OPLog.EventDate = TODAY
-    OPLog.UserCode  = katun
+    OPLog.UserCode  = Syst.Var:katun
     OPLog.EventType = iiType      
     OPLog.InvNum    = Invoice.InvNum
     OPLog.Voucher   = 0
@@ -71,7 +70,7 @@ END FUNCTION.
 
 
 FIND Order NO-LOCK WHERE 
-     Order.Brand   = gcBrand AND
+     Order.Brand   = Syst.Var:gcBrand AND
      Order.OrderID = iiOrder NO-ERROR.
 IF NOT AVAILABLE Order THEN DO:
    ocError = "Unknown order".
@@ -106,7 +105,7 @@ DO liCnt = 1 TO 2:
 
    /* find deposit fee -> get invoice */
    FOR FIRST SingleFee NO-LOCK WHERE
-             SingleFee.Brand     = gcBrand               AND
+             SingleFee.Brand     = Syst.Var:gcBrand               AND
              SingleFee.HostTable = "Order"               AND
              SingleFee.KeyValue  = STRING(Order.OrderID) AND
              SingleFee.BillCode  = lcItem[liCnt]:
@@ -195,7 +194,7 @@ DO TRANS:
               STRING(Invoice.InvNum)).
 
    /* same stamp for both log events */
-   ldStamp = fMakeTS().
+   ldStamp = Func.Common:mMakeTS().
 
    /* reduce deposit from general customer */
    fCustBal(liOldCust,

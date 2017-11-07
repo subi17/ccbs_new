@@ -1,4 +1,3 @@
-{Func/timestamp.i}
 
 def stream slog.
 
@@ -43,8 +42,8 @@ if ldafromdate = ? or ldatodate = ? or lclogfile = "" then return.
 
 assign
    lireqtype = if llactivation then 8 else 9
-   ldfromper = fmake2dt(ldafromdate,0)
-   ldtoper   = fmake2dt(ldatodate,86399).
+   ldfromper = Func.Common:mMake2DT(ldafromdate,0)
+   ldtoper   = Func.Common:mMake2DT(ldatodate,86399).
 
 output stream slog to value(lclogfile).
 
@@ -87,7 +86,7 @@ for each msrequest no-lock where
        msowner.clitype  chr(9)
        msrequest.reqcparam3 chr(9)
        msrequest.reqtype chr(9)
-       fts2hms(msrequest.actstamp) skip.
+       Func.Common:mTS2HMS(msrequest.actstamp) skip.
           
     if i >= liqty then leave. 
 end.

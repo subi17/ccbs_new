@@ -1,6 +1,5 @@
 output to /apps/snet/200812/as_ycm1163.txt.
 def frame a with 15 down.
-{Func/timestamp.i}
 FOR EACH mnpprocess where
    statuscode = 999 and  orderid > 500000 NO-LOCK:
    
@@ -18,7 +17,7 @@ FOR EACH mnpprocess where
       disp 
          
          mnpprocess.orderid
-         fts2hms(order.crstamp) format "x(20)"
+         Func.Common:mTS2HMS(order.crstamp) format "x(20)"
          mnpprocess.formrequest format "x(20)"
          order.statuscode.
          /*mnpprocess.statuscode

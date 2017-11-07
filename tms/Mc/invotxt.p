@@ -18,7 +18,7 @@
                                invotxt2.p merged to this
                   22.10.03/aam RemLevel                               
                   11.02.04/aam print (prininfo.p),
-                               gcHelpParam
+                               Syst.Var:gcHelpParam
                   22.03.04/aam LetterClass, AddrTarget             
                   07.05.04/aam MainTitle
                   27.12.05/aam memo
@@ -39,7 +39,7 @@
 {Syst/tmsconst.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -109,9 +109,9 @@ form
     lcTitle     COLUMN-LABEL "Title"   FORMAT "X(20)"
 
 WITH CENTERED  ROW FrmRow FrmDown DOWN WIDTH 80
-    COLOR VALUE(cfc) OVERLAY
-    TITLE COLOR VALUE(ctc) " " + ynimi + " Information Texts " 
-        + string(pvm,"99-99-99") + " "
+    COLOR VALUE(Syst.Var:cfc) OVERLAY
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi + " Information Texts " 
+        + string(TODAY,"99-99-99") + " "
         FRAME sel.
 
 form
@@ -153,8 +153,8 @@ form
         VIEW-AS EDITOR SIZE 75 BY 8 
 
 WITH  OVERLAY ROW 1 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) 
        ac-hdr + "  Text ID: " + STRING(InvText.ITNum) + " "
     SIDE-LABELS
     FRAME lis.
@@ -165,8 +165,8 @@ form /* seek InvText BY  Date */
     "Brand:" lcBrand skip
     "Date :" FromDate
     HELP "Enter FromDate"      
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND FromDate "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND FromDate "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek InvText BY   */
     "Brand   :" lcBrand
@@ -176,8 +176,8 @@ form /* seek InvText BY   */
     SKIP
     "KeyValue:" lckeyvalue FORMAT "X(25)"
       HELP "Enter Key Value" 
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Target"
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Target"
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 FUNCTION fTypeName RETURNS CHARACTER
@@ -185,8 +185,7 @@ FUNCTION fTypeName RETURNS CHARACTER
 
    IF icType = "" THEN RETURN "".
 
-   ELSE RETURN DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "InvText","InfoType",icType).
+   ELSE RETURN Func.Common:mTMSCodeName("InvText","InfoType",icType).
 
 END FUNCTION.
 
@@ -195,13 +194,12 @@ FUNCTION fAddrTarget RETURNS CHARACTER
 
    IF iiAddress = 0 THEN RETURN "".
 
-   ELSE RETURN DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "InvText","AddrTarget",STRING(iiAddress)).
+   ELSE RETURN Func.Common:mTMSCodeName("InvText","AddrTarget",STRING(iiAddress)).
 
 END FUNCTION.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "By FromDate, By Target ,By 3, By 4".
@@ -232,7 +230,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a InvText  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -242,7 +240,7 @@ REPEAT WITH FRAME sel:
 
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
-           ehto = 9. RUN Syst/ufkey.p.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
            ASSIGN InvText.InvText:SCREEN-VALUE = "". 
 
@@ -265,13 +263,13 @@ REPEAT WITH FRAME sel:
                     RUN VALUE(lcProgram).
                     IF siirto NE ? THEN DISP siirto @ InvText.KeyValue.        
 
-                    ehto = 9.
+                    Syst.Var:ehto = 9.
                     RUN Syst/ufkey.p.
 
                  END.   
               END.
 
-              IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+              IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                  PAUSE 0.
                  IF frame-field = "keyvalue" THEN 
                  DO:
@@ -386,24 +384,24 @@ BROWSE:
 
         IF NOT llMore THEN
         ASSIGN
-        ufk[1]= 28  ufk[2]= (IF icTarget = "" THEN 183 ELSE 0)
-        ufk[3]= (IF llShowHistory THEN 38 ELSE 37) 
-        ufk[4]= 814 ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-        ufk[7]= 555 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 28  Syst.Var:ufk[2]= (IF icTarget = "" THEN 183 ELSE 0)
+        Syst.Var:ufk[3]= (IF llShowHistory THEN 38 ELSE 37) 
+        Syst.Var:ufk[4]= 814 Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.Var:ufk[7]= 555 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
         
         ELSE ASSIGN
-        ufk[1]= 927 ufk[2]= 938 ufk[3]= 1796 ufk[4]= 0
-        ufk[5]= 0   ufk[6]= 0   ufk[7]= 0 ufk[8]= 8 
-        ufk[9]= 1 ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 927 Syst.Var:ufk[2]= 938 Syst.Var:ufk[3]= 1796 Syst.Var:ufk[4]= 0
+        Syst.Var:ufk[5]= 0   Syst.Var:ufk[6]= 0   Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 
+        Syst.Var:ufk[9]= 1 Syst.Var:ehto = 3 ufkey = FALSE.
         
 
         /* used as help */
-        IF gcHelpParam > "" THEN ASSIGN
-           ufk[5] = 11
-           ufk[6] = 0
-           ufk[7] = 0.
+        IF Syst.Var:gcHelpParam > "" THEN ASSIGN
+           Syst.Var:ufk[5] = 11
+           Syst.Var:ufk[6] = 0
+           Syst.Var:ufk[7] = 0.
         
         RUN Syst/ufkey.p.
       END.
@@ -411,17 +409,17 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW InvText.FromDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) InvText.FromDate WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) InvText.FromDate WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW InvText.Target {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) InvText.Target WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) InvText.Target WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -430,10 +428,10 @@ BROWSE:
       END.
 
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -451,7 +449,7 @@ BROWSE:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -476,7 +474,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -502,7 +500,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND InvText WHERE recid(InvText) = memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -526,7 +524,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -541,13 +539,13 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND NOT llMore AND ufk[1] > 0 
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 AND NOT llMore AND Syst.Var:ufk[1] > 0 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME f1.
-       SET lcBrand WHEN gcAllBrand AND icTarget = ""
+       SET lcBrand WHEN Syst.Var:gcAllBrand AND icTarget = ""
            FromDate WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF FromDate ENTERED THEN DO:
@@ -572,18 +570,18 @@ BROWSE:
      END. /* Search-1 */
 
      /* Search BY col 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 AND NOT llMore AND ufk[2] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 AND NOT llMore AND Syst.Var:ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
 
        ASSIGN
          lcTarget   = "SMS"
          lcKeyValue = "".
 
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME f2.
-       UPDATE lcBrand WHEN gcAllBrand AND icTarget = ""
+       UPDATE lcBrand WHEN Syst.Var:gcAllBrand AND icTarget = ""
            lcTarget validate(lctarget > "", "Enter Target!")  
            lckeyvalue WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -602,7 +600,7 @@ BROWSE:
      END. /* Search-2 */
 
      /* view send log */
-     ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0 THEN DO:  
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 AND Syst.Var:ufk[4] > 0 THEN DO:  
        FIND InvText WHERE recid(InvText) = rtab[FRAME-LINE] NO-LOCK.
          IF InvText.Target NE "SMS" THEN
             MESSAGE "Function not supported for" InvText.Target VIEW-AS ALERT-BOX.
@@ -614,7 +612,7 @@ BROWSE:
 
      END.
 
-     ELSE IF LOOKUP(nap,"3,f3") > 0 AND NOT llMore AND ufk[3] > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 AND NOT llMore AND Syst.Var:ufk[3] > 0 THEN DO:
         llShowHistory = NOT llShowHistory.
         CLEAR FRAME sel no-pause.
         RUN local-find-FIRST.
@@ -626,10 +624,10 @@ BROWSE:
         
      END.
     
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" AND ufk[5] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" AND Syst.Var:ufk[5] > 0
      THEN DO:  /* add */
      
-        IF gcHelpParam > "" THEN DO:
+        IF Syst.Var:gcHelpParam > "" THEN DO:
            xRecid = rtab[FRAME-LINE].
            LEAVE LOOP.
         END.
@@ -640,13 +638,13 @@ BROWSE:
         END.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW" AND ufk[6] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW" AND Syst.Var:ufk[6] > 0
      THEN DO TRANSAction:  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        InvText.FromDate InvText.ToDate
        InvText.Target. 
 
@@ -669,7 +667,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        InvText.FromDate InvText.ToDate
        InvText.Target. 
        
@@ -697,7 +695,7 @@ BROWSE:
      END. /* DELETE */
 
      /* print */
-     ELSE IF LOOKUP(nap,"7,f7") > 0 AND ufk[7] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"7,f7") > 0 AND Syst.Var:ufk[7] > 0
      THEN DO:  
        llMore = TRUE.
        ufkey = TRUE.
@@ -711,7 +709,7 @@ BROWSE:
 
      /* MEMO in F1 */
 
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND llMore AND ufk[1] > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 AND llMore AND Syst.Var:ufk[1] > 0 THEN DO:
 
         /*RUN local-find-this (FALSE).*/
  
@@ -723,13 +721,13 @@ BROWSE:
         RUN local-disp-row.
         
         ASSIGN ufkey = TRUE
-               ehto  = 9.
+               Syst.Var:ehto  = 9.
         NEXT LOOP.
      END.
 
      /* PRINT LETTER in F2 */
 
-     ELSE IF LOOKUP(nap,"2,f2") > 0 AND llMore AND ufk[2] > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 AND llMore AND Syst.Var:ufk[2] > 0 THEN DO:
          RUN local-find-this (TRUE).
          RUN Mc/prininfo.p(InvText.ITNum,
                     0,
@@ -739,7 +737,7 @@ BROWSE:
      END.
 
      /* VIEW SEND LOG in F3 */
-     ELSE IF LOOKUP(nap,"3,f3") > 0 AND llMore AND ufk[3] > 0 THEN DO:  
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 AND llMore AND Syst.Var:ufk[3] > 0 THEN DO:  
        RUN local-find-this (FALSE).
        RUN Mc/itsendlo.p(IF InvText.Target = "Customer" 
                     THEN INTEGER(InvText.KeyValue) ELSE 0,
@@ -752,7 +750,7 @@ BROWSE:
      END. 
 
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -760,9 +758,9 @@ BROWSE:
        ASSIGN 
              ac-hdr = " CHANGE " 
              ufkey  = TRUE 
-             ehto = 9. 
+             Syst.Var:ehto = 9. 
        RUN Syst/ufkey.p.
-       cfc = "lis". 
+       Syst.Var:cfc = "lis". 
        RUN Syst/ufcolor.p. 
        CLEAR FRAME lis NO-PAUSE.
        DISPLAY InvText.KeyValue.
@@ -783,19 +781,19 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = recid(InvText) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN memory = recid(InvText) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN DO:
          IF llMore THEN DO:
             llMore = FALSE.
             ufkey = TRUE.
@@ -811,8 +809,8 @@ BROWSE:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-ASSIGN si-recid    = xrecid        
-       gcHelpParam = "".
+ASSIGN Syst.Var:si-recid    = xrecid        
+       Syst.Var:gcHelpParam = "".
 
 
 PROCEDURE local-find-this:
@@ -1054,7 +1052,7 @@ PROCEDURE local-find-others.
                      ELSE InvText.TxtTitle.
 
    llMemo = CAN-FIND(FIRST Memo WHERE
-                           Memo.Brand     = gcBrand   AND
+                           Memo.Brand     = Syst.Var:gcBrand   AND
                            Memo.HostTable = "InvText" AND
                            Memo.KeyValue  = STRING(InvText.ITNum)).
 END PROCEDURE.
@@ -1101,22 +1099,22 @@ PROCEDURE local-update-record:
          liLength
       WITH FRAME lis.
       
-      IF NEW InvText THEN toimi = 1.
+      IF NEW InvText THEN Syst.Var:toimi = 1.
       ELSE DO: 
          ASSIGN 
-            ehto   = 0
-            ufk    = 0
-            ufk[1] = 7 WHEN lcRight = "RW" AND gcHelpParam = ""
-            ufk[8] = 8.
+            Syst.Var:ehto   = 0
+            Syst.Var:ufk    = 0
+            Syst.Var:ufk[1] = 7 WHEN lcRight = "RW" AND Syst.Var:gcHelpParam = ""
+            Syst.Var:ufk[8] = 8.
          RUN Syst/ufkey.p.
       END.
       
-      IF toimi = 1 THEN 
+      IF Syst.Var:toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
 
          FIND CURRENT InvText EXCLUSIVE-LOCK.
             
-         ehto = 9.
+         Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
          
          CASE InvText.Target:
@@ -1198,12 +1196,12 @@ PROCEDURE local-update-record:
                   END.
                END.
 
-               ehto = 9.
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.
 
-            ELSE IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 
+            ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 
             THEN DO WITH FRAME lis:
 
                PAUSE 0.

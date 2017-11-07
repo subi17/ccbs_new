@@ -51,8 +51,8 @@ IF NOT AVAILABLE mobsub THEN
    RETURN appl_err(SUBST("MobSub entry &1 not found", liMsSeq)).
 
 {Syst/commpaa.i}
-katun = lcUserId.
-gcBrand = "1". 
+Syst.Var:katun = lcUserId.
+Syst.Var:gcBrand = "1". 
 {Syst/tmsconst.i}
 
 
@@ -91,5 +91,4 @@ ELSE
 add_int(response_toplevel_id, "request_id",liReqId).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.
