@@ -22,8 +22,8 @@
 {Syst/commpaa.i}
 
 ASSIGN
-katun = "cron"
-gcbrand = "1".
+Syst.Var:katun = "cron"
+Syst.Var:gcBrand = "1".
 
 DEF VAR pcTenant    AS CHARACTER NO-UNDO.
 DEF VAR resp_array  AS CHARACTER NO-UNDO.
@@ -56,4 +56,3 @@ FOR EACH ActionLog WHERE Actionlog.actionID EQ "MINCONS" AND
    IF liCount > 6 THEN LEAVE.
 END.
 
-IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.

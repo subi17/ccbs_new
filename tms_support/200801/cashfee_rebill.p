@@ -59,7 +59,7 @@ DEF VAR llVatIncl       AS LOG  NO-UNDO.
    check here before initializing eventlog */
 IF iiAction = 1 THEN DO: 
    IF CAN-FIND(FIRST SingleFee USE-INDEX HostTable WHERE
-                     SingleFee.Brand     = gcBrand AND
+                     SingleFee.Brand     = Syst.Var:gcBrand AND
                      SingleFee.HostTable = "Order" AND
                      SingleFee.KeyValue  = STRING(iiOrder) AND
                      SingleFee.CalcObj   = lcCalcObj)
@@ -70,7 +70,7 @@ IF iiAction = 1 THEN DO:
       /* if invoice already created and subscription has now been created
          then transfer invoice to the actual customer */
       FIND Order WHERE 
-           Order.Brand   = gcBrand AND
+           Order.Brand   = Syst.Var:gcBrand AND
            Order.OrderID = iiOrder NO-LOCK NO-ERROR.
       IF AVAILABLE Order AND Order.InvNum > 0 THEN DO:
          
@@ -81,7 +81,7 @@ IF iiAction = 1 THEN DO:
             Invoice.CustNum NE MobSub.InvCust
          THEN DO TRANS:
             FOR EACH SingleFee EXCLUSIVE-LOCK USE-INDEX HostTable WHERE
-                     SingleFee.Brand     = gcBrand AND
+                     SingleFee.Brand     = Syst.Var:gcBrand AND
                      SingleFee.HostTable = "Order" AND
                      SingleFee.KeyValue  = STRING(iiOrder) AND
                      SingleFee.CalcObj   = lcCalcObj:
@@ -103,7 +103,7 @@ IF iiAction = 1 THEN DO:
    END.
 
    IF llDoEvent THEN DO:
-      &GLOBAL-DEFINE STAR_EVENT_USER katun
+      &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    
       {Func/lib/eventlog.i}
       
@@ -123,7 +123,7 @@ FUNCTION fCreateSingleFee RETURNS LOGICAL
       CREATE SingleFee.
 
       ASSIGN
-      SingleFee.Brand       = gcBrand 
+      SingleFee.Brand       = Syst.Var:gcBrand 
       SingleFee.FMItemId    = NEXT-VALUE(bi-seq)
       SingleFee.CustNum     = liCashCust    
       SingleFee.BillTarget  = 1
@@ -185,7 +185,7 @@ END FUNCTION.
 
         
 FIND Order NO-LOCK WHERE 
-     Order.Brand   = gcBrand AND
+     Order.Brand   = Syst.Var:gcBrand AND
      Order.OrderID = iiOrder NO-ERROR.
 IF NOT AVAILABLE Order THEN DO:
    ocError = "Error:Unknown order".
@@ -202,7 +202,7 @@ END.
 
 /* region determines tax zone, which determines the customer to be used */
 FIND FIRST OrderCustomer WHERE
-           OrderCustomer.Brand   = gcBrand       AND
+           OrderCustomer.Brand   = Syst.Var:gcBrand       AND
            OrderCustomer.OrderID = Order.OrderID AND
            OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
 IF NOT AVAILABLE OrderCustomer THEN DO:
@@ -258,7 +258,7 @@ IF liCashCust = ? OR liCashCust = 0 THEN DO:
 END.
 
 FIND Customer NO-LOCK WHERE
-     Customer.Brand   = gcBrand AND
+     Customer.Brand   = Syst.Var:gcBrand AND
      Customer.CustNum = liCashCust NO-ERROR.
 IF NOT AVAILABLE Customer THEN DO:
    ocError = "Error:Unknown customer " + STRING(liCashCust).
@@ -321,10 +321,10 @@ lcFeeModel = (IF Order.PayType THEN "PRE" ELSE "POS") +
 /* first try to determine actual fee model through terminal product */
 IF lcTerminal > "" THEN 
 FOR EACH FeeModel NO-LOCK WHERE
-         FeeModel.Brand   = gcBrand      AND
+         FeeModel.Brand   = Syst.Var:gcBrand      AND
          FeeModel.FeeModel BEGINS lcFeeModel,
    FIRST FMItem NO-LOCK WHERE
-         FMItem.Brand     = gcBrand      AND
+         FMItem.Brand     = Syst.Var:gcBrand      AND
          FMITem.FeeModel  = FeeModel.FeeModel AND
          FMItem.BillCode  = lcTerminal   AND
          FMItem.PriceList = lcTermPList  AND
@@ -354,7 +354,7 @@ IF LOOKUP(Order.OrderChannel,"Yoigo,Pre-act") > 0 THEN DO:
    lcFeeModel = Order.FeeModel.
 
    FOR FIRST FMItem NO-LOCK WHERE
-             FMItem.Brand     = gcBrand           AND
+             FMItem.Brand     = Syst.Var:gcBrand           AND
              FMITem.FeeModel  = FeeModel.FeeModel AND
              FMItem.FromDate <= TODAY             AND
              FMItem.ToDate   >= TODAY:
@@ -380,16 +380,16 @@ message "feemodel" lcfeemodel
 DO liCnt = 1 TO NUM-ENTRIES(lcFeeModel):
 
    FOR EACH FMItem NO-LOCK WHERE
-            FMItem.Brand     = gcBrand                 AND
+            FMItem.Brand     = Syst.Var:gcBrand                 AND
             FMITem.FeeModel  = ENTRY(liCnt,lcFeeModel) AND
             LOOKUP(FMItem.PriceList,lcPriceLists) > 0  AND
             FMItem.FromDate <= TODAY                   AND
             FMItem.ToDate   >= TODAY,
       FIRST BillItem NO-LOCK WHERE
-            BillItem.Brand    = gcBrand AND
+            BillItem.Brand    = Syst.Var:gcBrand AND
             BillItem.BillCode = FMItem.BillCode,
       FIRST PriceList NO-LOCK WHERE
-            PriceList.Brand     = gcBrand AND
+            PriceList.Brand     = Syst.Var:gcBrand AND
             PriceList.PriceList = FMItem.PriceList:
 
       llVatIncl = PriceList.InclVat.
@@ -400,7 +400,7 @@ DO liCnt = 1 TO NUM-ENTRIES(lcFeeModel):
          /* already done 
             (should invoice creation be tried if billed = false ?) */
          FOR FIRST SingleFee NO-LOCK USE-INDEX HostTable WHERE
-                   SingleFee.Brand     = gcBrand AND
+                   SingleFee.Brand     = Syst.Var:gcBrand AND
                    SingleFee.HostTable = "Order" AND
                    SingleFee.KeyValue  = STRING(Order.OrderID) AND
                    SingleFee.BillCode  = FMItem.BillCode       AND
@@ -456,14 +456,14 @@ IF ldTopupAmt NE 0 AND iiAction NE 3 THEN DO:
    ELSE IF iiAction = 2 THEN DO:
     
       FIND BillItem WHERE 
-           BillItem.Brand    = gcBrand AND
+           BillItem.Brand    = Syst.Var:gcBrand AND
            BillItem.BillCode = lcTopupItem NO-LOCK NO-ERROR.
          
       fCreateDispRow(ldAmt,
                      llVatIncl).
 
       FIND BillItem WHERE 
-           BillItem.Brand    = gcBrand AND
+           BillItem.Brand    = Syst.Var:gcBrand AND
            BillItem.BillCode = lcTopupDiscItem NO-LOCK NO-ERROR.
          
       fCreateDispRow(ldAmt * -1,
@@ -523,7 +523,7 @@ PROCEDURE pTerminalDiscount:
    ELSE IF iiAction = 2 OR iiAction = 3 THEN DO:
       
       FIND BillItem WHERE 
-           BillItem.Brand    = gcBrand AND
+           BillItem.Brand    = Syst.Var:gcBrand AND
            BillItem.BillCode = lcTermDiscItem NO-LOCK NO-ERROR.
          
       fCreateDispRow(ldAmt,

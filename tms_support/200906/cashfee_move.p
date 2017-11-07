@@ -4,7 +4,7 @@
 DEFINE INPUT PARAMETER icFile AS CHARACTER NO-UNDO. 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhInvoice AS HANDLE NO-UNDO.
@@ -48,7 +48,7 @@ repeat:
          END.
        
          FOR EACH SingleFee EXCLUSIVE-LOCK USE-INDEX HostTable WHERE
-                  SingleFee.Brand     = gcBrand AND
+                  SingleFee.Brand     = Syst.Var:gcBrand AND
                   SingleFee.HostTable = "Order" AND
                   SingleFee.KeyValue  = STRING(Order.OrderId) AND
                   SingleFee.CalcObj   = lcCalcObj:

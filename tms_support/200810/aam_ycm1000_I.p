@@ -1,4 +1,3 @@
-{Func/timestamp.i}
 
 def stream sread.
 input stream sread from /apps/snet/200810/deny_billing_081028.txt.
@@ -12,7 +11,7 @@ def var j         as int  no-undo.
 def var ldcurrent as dec  no-undo.
 def var licode    as int  no-undo.
 
-ldcurrent = fmakets().
+ldcurrent = Func.Common:mMakeTS().
 
 repeat:
 

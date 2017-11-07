@@ -20,7 +20,7 @@ DEF VAR lcHSender    AS CHAR                         NO-UNDO.
 
 
 FIND FIRST Company NO-LOCK WHERE 
-           Company.Brand = gcBrand NO-ERROR.
+           Company.Brand = Syst.Var:gcBrand NO-ERROR.
 IF AVAILABLE Company THEN ASSIGN
    lcBTName    = Company.CompName
    lcBTAddr    = Company.Address
@@ -35,7 +35,7 @@ IF AVAILABLE Company THEN ASSIGN
    lcBTCCAddr[2] = Company.Address3
    lcBTCCAddr[3] = Company.Address4.
 
-FIND TMSUser WHERE TMSUser.UserCode = katun NO-LOCK NO-ERROR.
+FIND TMSUser WHERE TMSUser.UserCode = Syst.Var:katun NO-LOCK NO-ERROR.
 IF AVAILABLE TMSUser THEN 
 ASSIGN lcBTSender = TMSUser.EMail
        lcHSender  = TMSUser.UserName.

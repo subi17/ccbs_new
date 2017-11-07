@@ -75,7 +75,7 @@ FORM
    "       " CatName     NO-LABEL
    SKIP(3)   
    WITH ROW 1 SIDE-LABELS WIDTH 79
-        TITLE " " + ynimi + " CUSTOMER REPORT " +
+        TITLE " " + Syst.Var:ynimi + " CUSTOMER REPORT " +
         STRING(TODAY,"99-99-99") + " "                   
         FRAME crit.
 
@@ -110,7 +110,7 @@ WITH FRAME crit.
 limits:
 REPEAT WITH FRAME crit:
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
    REPEAT WITH FRAME crit ON ENDKEY UNDO, LEAVE limits:
       UPDATE 
@@ -128,7 +128,7 @@ REPEAT WITH FRAME crit:
       WITH FRAME crit EDITING:
          READKEY.
 
-         IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO:
+         IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
          HIDE MESSAGE.
 
             IF FRAME-FIELD = "CustNum1" THEN DO:
@@ -146,7 +146,7 @@ REPEAT WITH FRAME crit:
             ELSE IF FRAME-FIELD = "Salesman" THEN DO:
                IF INPUT Salesman NE "" THEN DO:
                   FIND FIRST Salesman WHERE    
-                             Salesman.Brand    = gcBrand AND
+                             Salesman.Brand    = Syst.Var:gcBrand AND
                              Salesman.Salesman = INPUT Salesman
                   NO-LOCK NO-ERROR.
                   IF NOT AVAIL Salesman THEN DO:
@@ -161,7 +161,7 @@ REPEAT WITH FRAME crit:
             ELSE IF FRAME-FIELD = "RateCust" THEN DO:
                IF INPUT RateCust NE 0 THEN DO:
                   FIND FIRST Customer WHERE    
-                             Customer.Brand   = gcBrand AND
+                             Customer.Brand   = Syst.Var:gcBrand AND
                              Customer.CustNum = INPUT RateCust
                   NO-LOCK NO-ERROR.
                  
@@ -170,8 +170,7 @@ REPEAT WITH FRAME crit:
                      NEXT.
                   END.
                   ELSE DO:
-                     lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                                    BUFFER Customer).                               DISP lcCustName @ RCName.
+                     lcCustName = Func.Common:mDispCustName(BUFFER Customer).                               DISP lcCustName @ RCName.
                   END.
                END.   
                ELSE DISP "ALL" @ RCName.   
@@ -187,7 +186,7 @@ REPEAT WITH FRAME crit:
                         "ALL" @ lGroups.
                   END.
                   APPLY 13.
-                  ehto = 9.
+                  Syst.Var:ehto = 9.
                   RUN Syst/ufkey.p.
                   NEXT.
                END.
@@ -197,7 +196,7 @@ REPEAT WITH FRAME crit:
             ELSE IF FRAME-FIELD = "InvGroup" THEN DO:
                IF INPUT InvGroup NE "" THEN DO:
                   FIND FIRST InvGroup WHERE    
-                             InvGroup.Brand    = gcBrand AND
+                             InvGroup.Brand    = Syst.Var:gcBrand AND
                              InvGroup.InvGroup = INPUT InvGroup
                   NO-LOCK NO-ERROR.
                   IF NOT AVAIL InvGroup THEN DO:
@@ -212,7 +211,7 @@ REPEAT WITH FRAME crit:
             ELSE IF FRAME-FIELD = "Reseller" THEN DO:
                IF INPUT Reseller NE "" THEN DO:
                   FIND FIRST Reseller WHERE    
-                             Reseller.Brand    = gcBrand AND
+                             Reseller.Brand    = Syst.Var:gcBrand AND
                              Reseller.Reseller = INPUT Reseller
                   NO-LOCK NO-ERROR.
                   IF NOT AVAIL Reseller THEN DO:
@@ -227,7 +226,7 @@ REPEAT WITH FRAME crit:
             ELSE IF FRAME-FIELD = "RatePlan" THEN DO:
                IF INPUT RatePlan NE "" THEN DO:
                   FIND FIRST RatePlan WHERE    
-                             RatePlan.Brand    = gcBrand AND
+                             RatePlan.Brand    = Syst.Var:gcBrand AND
                              RatePlan.RatePlan = INPUT RatePlan
                   NO-LOCK NO-ERROR.
                   IF NOT AVAIL RatePlan THEN DO:
@@ -242,7 +241,7 @@ REPEAT WITH FRAME crit:
             ELSE IF FRAME-FIELD = "DiscPlan" THEN DO:
                IF INPUT DiscPlan NE "" THEN DO:
                   FIND FIRST DiscPlan WHERE    
-                             DiscPlan.Brand    = gcBrand AND
+                             DiscPlan.Brand    = Syst.Var:gcBrand AND
                              DiscPlan.DiscPlan = INPUT DiscPlan
                   NO-LOCK NO-ERROR.
                   IF NOT AVAIL DiscPlan THEN DO:
@@ -256,7 +255,7 @@ REPEAT WITH FRAME crit:
             ELSE IF FRAME-FIELD = "Category" THEN DO:
                IF INPUT Category NE "" THEN DO:
                   FIND FIRST CustCat WHERE    
-                             CustCat.Brand    = gcBrand AND
+                             CustCat.Brand    = Syst.Var:gcBrand AND
                              CustCat.Category = INPUT Category
                   NO-LOCK NO-ERROR.
                   IF NOT AVAIL CustCat THEN DO:
@@ -287,21 +286,21 @@ REPEAT WITH FRAME crit:
    task:
    REPEAT WITH FRAME crit:
 
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
 
-      IF toimi = 1 THEN NEXT  limits.
+      IF Syst.Var:toimi = 1 THEN NEXT  limits.
 
-      IF toimi = 8 THEN LEAVE limits.
+      IF Syst.Var:toimi = 8 THEN LEAVE limits.
 
-      IF toimi = 5 THEN LEAVE task.
+      IF Syst.Var:toimi = 5 THEN LEAVE task.
 
    END. /* task */
 
    IF(lCG) THEN DO:
 
       FOR EACH CGMember NO-LOCK WHERE
-              CGMember.Brand = gcBrand AND
+              CGMember.Brand = Syst.Var:gcBrand AND
               LOOKUP(CGMember.CustGroup,lGroups) > 0.
 
          CREATE tCustNums.

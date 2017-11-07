@@ -8,8 +8,8 @@
 ---------------------------------------------------------------------- */ 
 {Syst/commpaa.i}
 ASSIGN 
-   gcBrand = "1"
-   katun   = "Cron".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun   = "Cron".
 
 {Func/cparam2.i}
 {Func/replog_reader.i}

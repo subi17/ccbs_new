@@ -13,7 +13,6 @@
 {Syst/eventval.i}
 {Func/cparam2.i}
 {Rate/daycampaign.i}
-{Func/date.i}
 {Func/fctserval.i}
 {Func/fctchange.i}
 {Func/fmakemsreq.i}
@@ -23,7 +22,7 @@ DEF INPUT PARAMETER  icKeyType AS CHAR        NO-UNDO.
 DEF INPUT PARAMETER  iiKey AS INT           NO-UNDO.                
 
 if llDoEvent THEN DO:
-    &GLOBAL-DEFINE STAR_EVENT_USER katun
+    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
     {Func/lib/eventlog.i}
         
     DEF VAR lhDCCLI AS HANDLE NO-UNDO.
@@ -119,8 +118,8 @@ FORM
     ttContract.Memo        COLUMN-LABEL "M"           FORMAT "M/"
     
     WITH ROW FrmRow CENTERED overlay FrmDown  down
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + lcFormHeader + " " +  " "
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + lcFormHeader + " " +  " "
 FRAME sel.
 
 FORM
@@ -154,8 +153,8 @@ FORM
    " Extension date..:" ttContract.RenewalDate FORMAT "99-99-9999"  
 
    WITH  overlay row 2 centered
-   COLOR VALUE(cfc)
-   TITLE COLOR VALUE(ctc) ac-hdr 
+   COLOR VALUE(Syst.Var:cfc)
+   TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
    NO-LABELS SIDE-LABELS
     /*1 columns*/
 FRAME lis.
@@ -163,20 +162,20 @@ FRAME lis.
 form
     liMsSeq FORMAT ">>>>>>>>9" 
     HELP "Enter subscription ID"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND SUBSCRIPTION ID " 
-    COLOR VALUE(cfc) NO-labels overlay FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND SUBSCRIPTION ID " 
+    COLOR VALUE(Syst.Var:cfc) NO-labels overlay FRAME f1.
  
 form
     lCCli FORMAT "X(12)"
     HELP "Enter MSISDN"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN " 
-    COLOR VALUE(cfc) NO-labels overlay FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND MSISDN " 
+    COLOR VALUE(Syst.Var:cfc) NO-labels overlay FRAME f2.
     
 form 
      lcEvent FORMAT "X(12)"
      HELP "Enter Contract"
-     WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CONTRACT "
-     COLOR VALUE(cfc) NO-labels overlay FRAME f3.
+     WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND CONTRACT "
+     COLOR VALUE(Syst.Var:cfc) NO-labels overlay FRAME f3.
 
 
 /* read all mobsub periodical contracts to temp table */ 
@@ -190,7 +189,7 @@ PROCEDURE pReadContracts:
             DCCLI.MSSeq = ihMobSub::Msseq NO-LOCK:
      
       FIND FIRST Memo WHERE  
-          Memo.Brand     = gcBrand                AND 
+          Memo.Brand     = Syst.Var:gcBrand                AND 
           Memo.HostTable = "MobSub"               AND 
           Memo.KeyValue  = STRING(DCCLI.MsSeq)    AND 
           Memo.Memotitle begins "Periodical" NO-LOCK NO-ERROR. 
@@ -227,10 +226,10 @@ PROCEDURE pReadContracts:
    FOR EACH MServiceLimit WHERE
       MServiceLimit.MSSeq = ihmobsub::msseq NO-LOCK:
       
-      ldeSec = fMakeTS().
+      ldeSec = Func.Common:mMakeTS().
       
       FIND FIRST Memo WHERE  
-          Memo.Brand     = gcBrand                AND 
+          Memo.Brand     = Syst.Var:gcBrand                AND 
           Memo.HostTable = "MobSub"               AND 
           Memo.KeyValue  = STRING(DCCLI.MsSeq)    AND 
           Memo.Memotitle begins "Periodical" NO-LOCK NO-ERROR. 
@@ -273,12 +272,12 @@ PROCEDURE pReadContracts:
                                  ELSE FALSE)
          .
       
-      fSplitTS(input MServiceLimit.FromTS, output ldaDate, output liSec).
+      Func.Common:mSplitTS(input MServiceLimit.FromTS, output ldaDate, output liSec).
       ttContract.ValidFrom = ldaDate.
       ttContract.ValidFromTime = STRING(liSec,"HH:MM:SS"). 
       IF MServiceLimit.EndTs >= 99999999 THEN ttContract.ValidTo = 12/31/2049.
       ELSE DO:
-         fSplitTS(input MServiceLimit.EndTS, output ldaDate, output liSec).
+         Func.Common:mSplitTS(input MServiceLimit.EndTS, output ldaDate, output liSec).
          ttContract.ValidTo = ldaDate.
          ttContract.ValidToTime = STRING(liSec,"HH:MM:SS"). 
       END.
@@ -308,7 +307,7 @@ ELSE IF icKeyType = "customer" THEN DO:
    lcFormHeader = "CUSTOMER'S PERIODICAL CONTRACTS".
    FIND FIRST Customer WHERE Customer.Custnum = iiKey NO-LOCK NO-ERROR.
    FOR EACH Mobsub WHERE
-      Mobsub.Brand   = gcBrand AND
+      Mobsub.Brand   = Syst.Var:gcBrand AND
       Mobsub.Custnum = iiKey NO-LOCK:
       RUN pReadContracts ((BUFFER Mobsub:HANDLE)).
    END.
@@ -316,7 +315,7 @@ END.
 
 IF getTMSRight("CCSUPER,SYST") EQ "RW" THEN llAdmin = TRUE.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -382,19 +381,19 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1] = 1645 ufk[2]= 209  ufk[3]= 1045 
-        ufk[4]=0
-        ufk[4]= 1068 WHEN llAdmin AND
+        Syst.Var:ufk[1] = 1645 Syst.Var:ufk[2]= 209  Syst.Var:ufk[3]= 1045 
+        Syst.Var:ufk[4]=0
+        Syst.Var:ufk[4]= 1068 WHEN llAdmin AND
                           icKeyType eq "mobsub"
-        ufk[5]= 2240 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = false.
+        Syst.Var:ufk[5]= 2240 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = false.
 
         IF icKeyType = "mobsub" THEN ASSIGN
-           ufk[1] = 0 
-           ufk[2] = 0
-           ufk[3] = 0.
+           Syst.Var:ufk[1] = 0 
+           Syst.Var:ufk[2] = 0
+           Syst.Var:ufk[3] = 0.
         
-        IF icEvent > "" THEN ufk[3] = 0.
+        IF icEvent > "" THEN Syst.Var:ufk[3] = 0.
            
         RUN Syst/ufkey.p.
       END.
@@ -402,21 +401,21 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         choose row ttContract.MsSeq {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttContract.MsSeq WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) ttContract.MsSeq WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         choose row ttContract.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttContract.CLI WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) ttContract.CLI WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
         choose row ttContract.Contract {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttContract.Contract WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) ttContract.Contract WITH FRAME sel.
       END.
       
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"4,f4,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"4,f4,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -424,10 +423,10 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -445,7 +444,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious row */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-line = 1 THEN DO:
            RUN local-find-this(false).
            RUN local-find-PREV.
@@ -470,7 +469,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious row */
 
       /* NEXT row */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-line = FRAME-down THEN DO:
            RUN local-find-this(false).
@@ -496,7 +495,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT row */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND ttContract WHERE recid(ttContract) = memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -520,7 +519,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* Put Cursor on downmost Row */
        IF rtab[FRAME-down] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -535,10 +534,10 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
  
      /* Search by column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 AND Syst.Var:ufk[1] > 0 
      THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        SET liMsSeq WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -558,10 +557,10 @@ REPEAT WITH FRAME sel:
      END. /* Search-1 */
  
      /* Search by column 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0 
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 AND Syst.Var:ufk[2] > 0 
      THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f2.
        SET lCCli WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -581,11 +580,11 @@ REPEAT WITH FRAME sel:
      END. /* Search-2 */
                    
      /* Search by col 3 */
-     ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 AND Syst.Var:ufk[3] > 0
      THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F3.
        SET lCEvent WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
@@ -603,7 +602,7 @@ REPEAT WITH FRAME sel:
        END.
      END. /* Search-3 */
 
-     IF LOOKUP(nap,"f4") > 0 AND ufk[4] > 0 THEN DO:
+     IF LOOKUP(Syst.Var:nap,"f4") > 0 AND Syst.Var:ufk[4] > 0 THEN DO:
         RUN local-find-this(false).
         /*YPR-4775*/
         /*Operation is not allowed if fixed line provisioning is pending*/
@@ -627,7 +626,7 @@ REPEAT WITH FRAME sel:
         
      END.
      
-     ELSE IF LOOKUP(nap,"5,F5") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"5,F5") > 0 THEN DO:
          
          FIND FIRST ttContract WHERE
               RECID(ttContract) = rtab[FRAME-LINE]
@@ -644,7 +643,7 @@ REPEAT WITH FRAME sel:
      END.
      
      
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis
      ON ENDKEY UNDO, LEAVE:
 
@@ -669,25 +668,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = recid(ttContract) must-print = true.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN memory = recid(ttContract) must-print = true.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 PROCEDURE local-find-this:
@@ -771,7 +770,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
    
    FIND FIRST DayCampaign NO-LOCK WHERE
-      DayCampaign.Brand = gcBrand AND 
+      DayCampaign.Brand = Syst.Var:gcBrand AND 
       DayCampaign.DCEvent = ttContract.Contract NO-ERROR.
    
    IF DayCampaign.DCType = "1" THEN DO:
@@ -787,7 +786,7 @@ PROCEDURE local-update-record:
    REPEAT ON ENDKEY UNDO, LEAVE:
       
       FIND FIRST DayCampaign NO-LOCK WHERE
-         DayCampaign.Brand = gcBrand AND 
+         DayCampaign.Brand = Syst.Var:gcBrand AND 
          DayCampaign.DCEvent = ttContract.Contract NO-ERROR.
 
       /* Get Type description */
@@ -872,22 +871,22 @@ PROCEDURE local-update-record:
       WITH FRAME lis.
    
    ASSIGN
-     ufk = 0
-     ufk[1]= 0    ufk[2]= 0    ufk[3]= 2244
-     ufk[4]= 1068 WHEN llAdmin AND NOT ttContract.SubsTerminated
-     ufk[5]= 927  ufk[6]= 1752 ufk[7]= 1036 ufk[8]= 8 ufk[9]= 1
-     ehto = 3.
+     Syst.Var:ufk = 0
+     Syst.Var:ufk[1]= 0    Syst.Var:ufk[2]= 0    Syst.Var:ufk[3]= 2244
+     Syst.Var:ufk[4]= 1068 WHEN llAdmin AND NOT ttContract.SubsTerminated
+     Syst.Var:ufk[5]= 927  Syst.Var:ufk[6]= 1752 Syst.Var:ufk[7]= 1036 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+     Syst.Var:ehto = 3.
 
      RUN Syst/ufkey.p.
    READKEY. 
-   ASSIGN nap = keylabel(LASTKEY).
+   ASSIGN Syst.Var:nap = keylabel(LASTKEY).
    
-   IF LOOKUP(nap,"f3") > 0 AND ufk[3] > 0 THEN DO: 
+   IF LOOKUP(Syst.Var:nap,"f3") > 0 AND Syst.Var:ufk[3] > 0 THEN DO: 
       RUN Mm/msrequest.p(?,?,ttContract.MsSeq,0,0,ttContract.Contract ).
       NEXT UPDATE-LOOP.
    END.   
    
-   IF LOOKUP(nap,"f4") > 0 AND ufk[4] > 0 THEN DO:
+   IF LOOKUP(Syst.Var:nap,"f4") > 0 AND Syst.Var:ufk[4] > 0 THEN DO:
 
       RUN Syst/selectbox.p(
          "PERIODICAL CONTRACT FUNCTION",
@@ -906,7 +905,7 @@ PROCEDURE local-update-record:
    
    END.
    
-   IF LOOKUP(nap,"f5") > 0  AND ufk[5] > 0 THEN DO: 
+   IF LOOKUP(Syst.Var:nap,"f5") > 0  AND Syst.Var:ufk[5] > 0 THEN DO: 
       
       RUN Mc/memo.p
          (INPUT 0,
@@ -918,7 +917,7 @@ PROCEDURE local-update-record:
 
    END.   
    
-   ELSE IF LOOKUP(nap,"6,F6") > 0 THEN DO:
+   ELSE IF LOOKUP(Syst.Var:nap,"6,F6") > 0 THEN DO:
       
       IF DayCampaign.DCType = "1" THEN 
          RUN Mc/eventsel.p("mservicelimit",
@@ -933,7 +932,7 @@ PROCEDURE local-update-record:
    
    END.
 
-   IF LOOKUP(nap,"f7") > 0 THEN DO:
+   IF LOOKUP(Syst.Var:nap,"f7") > 0 THEN DO:
       
       lcMenuOptions = "". 
       
@@ -1001,7 +1000,7 @@ PROCEDURE local-update-record:
       NEXT UPDATE-LOOP.
    END.   
    
-   IF LOOKUP(nap,"f8") > 0 THEN DO:
+   IF LOOKUP(Syst.Var:nap,"f8") > 0 THEN DO:
       HIDE FRAME choices NO-PAUSE.
       HIDE MESSAGE.
       LEAVE UPDATE-LOOP.

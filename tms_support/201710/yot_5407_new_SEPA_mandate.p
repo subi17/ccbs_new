@@ -17,11 +17,10 @@
 */
 
 {Syst/commpaa.i}
-katun = "Qvantel".
-gcBrand = "1".
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
 {Syst/eventval.i}
 {Func/fbankdata.i}
-{Func/timestamp.i}
 {Func/create_eventlog.i}
 
 DEFINE VARIABLE idaOrderDate AS DATE      NO-UNDO.
@@ -82,8 +81,8 @@ END.
 
 ASSIGN
    ldaDate    = TODAY
-   ldenowTS   = fMakeTS()
-   ldeOldTS   = fSecOffSet(ldenowTS,-1).
+   ldenowTS   = Func.Common:mMakeTS()
+   ldeOldTS   = Func.Common:mSecOffSet(ldenowTS,-1).
       
 fCalculateMandate(Order.MsSeq, ldaDate, iiCustNum, OUTPUT lcMandate).
 
@@ -122,7 +121,7 @@ DO:
    DO:
       IF llDoEvent THEN
       DO:
-         &GLOBAL-DEFINE STAR_EVENT_USER katun
+         &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
          {Func/lib/eventlog.i}
          DEF VAR lhMSOwner AS HANDLE NO-UNDO.
          lhMSOwner = BUFFER Msowner:HANDLE.

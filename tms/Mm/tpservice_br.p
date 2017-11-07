@@ -10,23 +10,23 @@
 DEF INPUT PARAMETER iiMsSeq  AS INT NO-UNDO.
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
-DEF VAR xrecid         AS RECID                           init ?.
-DEF VAR FIRSTrow       AS INT                    NO-UNDO  init 0.
-DEF VAR order          AS INT                    NO-UNDO  init 1.
-DEF VAR maxOrder       AS INT                    NO-UNDO  init 1.
-DEF VAR ufkey          AS LOG                    NO-UNDO  init TRUE.
-DEF VAR pr-order       AS INT                    NO-UNDO.
-DEF VAR Memory         AS RECID                  NO-UNDO.
-DEF VAR RowNo          AS INT                    NO-UNDO.
-DEF VAR must-print     AS LOG                    NO-UNDO.
-DEF VAR must-add       AS LOG                    NO-UNDO.
-DEF VAR ac-hdr         AS CHAR                   NO-UNDO.
-DEF VAR rtab           AS RECID EXTENT 24        NO-UNDO.
-DEF VAR i              AS INT                    NO-UNDO.
-DEF VAR lcCreatedTS    AS CHAR                   NO-UNDO.
-DEF VAR lcUpdatedTS    AS CHAR                   NO-UNDO.
+DEF VAR xrecid          AS RECID                           init ?.
+DEF VAR FIRSTrow        AS INT                    NO-UNDO  init 0.
+DEF VAR order           AS INT                    NO-UNDO  init 1.
+DEF VAR maxOrder        AS INT                    NO-UNDO  init 1.
+DEF VAR ufkey           AS LOG                    NO-UNDO  init TRUE.
+DEF VAR pr-order        AS INT                    NO-UNDO.
+DEF VAR Memory          AS RECID                  NO-UNDO.
+DEF VAR RowNo           AS INT                    NO-UNDO.
+DEF VAR must-print      AS LOG                    NO-UNDO.
+DEF VAR must-add        AS LOG                    NO-UNDO.
+DEF VAR ac-hdr          AS CHAR                   NO-UNDO.
+DEF VAR rtab            AS RECID EXTENT 24        NO-UNDO.
+DEF VAR i               AS INT                    NO-UNDO.
+DEF VAR lcCreatedTS     AS CHAR                   NO-UNDO.
+DEF VAR lcUpdatedTS     AS CHAR                   NO-UNDO.
+DEF VAR lcVoucherStatus AS CHAR                   NO-UNDO.
 
 FORM
    TPService.Product      FORMAT "X(20)" COLUMN-LABEL "Product"
@@ -34,8 +34,8 @@ FORM
    TPService.Operation    FORMAT "X(12)" COLUMN-LABEL "Operation"   
    TPService.ServStatus   FORMAT "X(8)"  COLUMN-LABEL "Status"
    lcUpdatedTS            FORMAT "X(10)" COLUMN-LABEL "Updated"
-   WITH ROW 1 CENTERED OVERLAY 15 DOWN COLOR VALUE(cfc) 
-   TITLE COLOR VALUE(ctc) "Third Party Services" FRAME sel.
+   WITH ROW 1 CENTERED OVERLAY 15 DOWN COLOR VALUE(Syst.Var:cfc) 
+   TITLE COLOR VALUE(Syst.Var:ctc) "Third Party Services" FRAME sel.
 
 FORM
     "MsSeq .............:" TPService.MsSeq
@@ -54,6 +54,8 @@ FORM
     SKIP
     "Serial Number .....:" TPService.SerialNbr
     SKIP
+    "Sky TV Voucher ....:" TPService.SkyTvVoucher lcVoucherStatus FORMAT "X(15)" AT 38 
+    SKIP
     "External Id .......:" TPService.MessageId
     SKIP
     "Service Status ....:" TPService.ServStatus FORMAT "X(35)"
@@ -67,9 +69,9 @@ FORM
     "Cancellation Reason:" TPService.TermReason
     SKIP(1)
 WITH OVERLAY ROW 1 WIDTH 80 centered
-    COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) "Third party service data" NO-LABELS FRAME fDetails.
+    COLOR VALUE(Syst.Var:cfc) TITLE COLOR VALUE(Syst.Var:ctc) "Third party service data" NO-LABELS FRAME fDetails.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -126,9 +128,9 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
           ASSIGN
-              ufk    = 0
-              ufk[8] = 8 
-              ehto   = 3 
+              Syst.Var:ufk    = 0
+              Syst.Var:ufk[8] = 8 
+              Syst.Var:ehto   = 3 
               ufkey  = FALSE.
 
           RUN Syst/ufkey.p.
@@ -137,17 +139,17 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW TPService.Product {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TPService.Product WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) TPService.Product WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -171,10 +173,10 @@ REPEAT WITH FRAME sel:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -199,7 +201,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -225,7 +227,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND TPService WHERE recid(TPService) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -249,7 +251,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -263,13 +265,14 @@ REPEAT WITH FRAME sel:
        END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN DO:
         RUN local-find-this(FALSE).
         PAUSE 0. 
         
         ASSIGN
-            lcCreatedTS = fTS2HMS(TPService.CreatedTS)  
-            lcUpdatedTS = fTS2HMS(TPService.UpdateTS).
+            lcCreatedTS = Func.Common:mTS2HMS(TPService.CreatedTS)  
+            lcUpdatedTS = Func.Common:mTS2HMS(TPService.UpdateTS).
+            lcVoucherStatus = (IF TPService.VoucherStatus <> "" THEN TPService.VoucherStatus ELSE "Unlocked").
 
         DISP TPService.MsSeq
              TPService.ServSeq
@@ -279,6 +282,8 @@ REPEAT WITH FRAME sel:
              TPService.Product
              TPService.Offer
              TPService.SerialNbr
+             TPService.SkyTvVoucher
+             lcVoucherStatus
              TPService.MessageId
              TPService.ServStatus
              TPService.UserCode
@@ -291,16 +296,16 @@ REPEAT WITH FRAME sel:
         REPEAT:
             ASSIGN
              ufkey  = TRUE
-             ufk    = 0  
-             ehto   = 1  
-             ufk[1] = 9853
-             ufk[8] = 8.      
+             Syst.Var:ufk    = 0  
+             Syst.Var:ehto   = 1  
+             Syst.Var:ufk[1] = 9853
+             Syst.Var:ufk[8] = 8.      
 
             RUN Syst/ufkey.p. 
 
-            IF toimi = 1  THEN 
+            IF Syst.Var:toimi = 1  THEN 
                 RUN Mm/tpservicemessage.p(TPService.MsSeq, TPService.ServSeq).
-            ELSE IF toimi = 8 THEN 
+            ELSE IF Syst.Var:toimi = 8 THEN 
                LEAVE.
             
             ASSIGN  Memory = recid(TPService) must-print = TRUE.
@@ -308,20 +313,20 @@ REPEAT WITH FRAME sel:
         END.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(TPService) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(TPService) must-print = TRUE.
         NEXT LOOP.
      END.
      
      IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -329,13 +334,13 @@ REPEAT WITH FRAME sel:
          END.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN 
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN 
         LEAVE LOOP.
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE local-find-this:
 
@@ -376,7 +381,7 @@ PROCEDURE local-disp-row:
     
     CLEAR FRAME sel NO-PAUSE.
     
-    ASSIGN lcUpdatedTS = fTS2HMS(TPService.UpdateTS).
+    ASSIGN lcUpdatedTS = Func.Common:mTS2HMS(TPService.UpdateTS).
 
     DISPLAY 
        TPService.Product

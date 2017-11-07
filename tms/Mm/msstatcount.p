@@ -1,8 +1,8 @@
 {Syst/commpaa.i}
 {Func/cparam2.i}
 
-ASSIGN gcBrand = "1"
-       katun   = "batch".
+ASSIGN Syst.Var:gcBrand = "1"
+       Syst.Var:katun   = "batch".
 
 DEFINE STREAM osDump.
 DEFINE TEMP-TABLE ttMStat NO-UNDO

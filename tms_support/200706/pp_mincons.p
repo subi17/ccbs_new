@@ -1,7 +1,6 @@
 {Syst/testpaa.i}
-katun = "snet".
+Syst.Var:katun = "snet".
 
-{Func/timestamp.i}
 {Func/ftaxdata.i}
 
 def stream sread.
@@ -70,12 +69,12 @@ FUNCTION fMinComp RETURNS LOGICAL
 
    CREATE Memo.
    ASSIGN
-      Memo.Brand     = gcBrand
+      Memo.Brand     = Syst.Var:gcBrand
       Memo.HostTable = "MobSub"
       Memo.KeyValue  = STRING(MobSub.MsSeq)
       Memo.CustNum   = MobSub.CustNum
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = katun 
+      Memo.CreUser   = Syst.Var:katun 
       Memo.MemoTitle = "Minimum Consumption"
       Memo.MemoText  = "Subscription's balance has been charged with " +
                        string(ldmincons) + 
@@ -116,7 +115,7 @@ repeat:
          
          RUN Gwy/balancequery.p(lccli).
          
-         fMinComp(lccli,fMakeTS(),DECIMAL(RETURN-VALUE)).
+         fMinComp(lccli,Func.Common:mMakeTS(),DECIMAL(RETURN-VALUE)).
 
       END.
 
