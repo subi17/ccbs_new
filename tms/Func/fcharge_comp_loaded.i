@@ -2,7 +2,6 @@
 
 /* return the amount of charge or compensation for a mobsub */
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 
 FUNCTION fMonthLoaded RETURN DECIMAL 
@@ -12,7 +11,7 @@ FUNCTION fMonthLoaded RETURN DECIMAL
    DEF VAR ldTS2     AS DEC  NO-UNDO.
    DEF VAR ldLoaded  AS DEC  NO-UNDO.
   
-   fMonthlyStamps(TODAY,
+   Func.Common:mMonthlyStamps(TODAY,
                   OUTPUT ldTS1, 
                   OUTPUT ldTS2).
    
@@ -21,7 +20,7 @@ FUNCTION fMonthLoaded RETURN DECIMAL
    IF ilPaytype THEN DO:
       /* prepaid --------------------------------------------------------------------*/
        FOR EACH PrePaidRequest WHERE
-            PrePaidRequest.Brand      = gcBrand   AND
+            PrePaidRequest.Brand      = Syst.Var:gcBrand   AND
             PrePaidRequest.CLI        = icCLI    AND
             PrePaidRequest.Source     = icSource AND
             PrePaidRequest.PPStatus   < 3        AND
@@ -39,7 +38,7 @@ FUNCTION fMonthLoaded RETURN DECIMAL
       /* postpaid --------------------------------------------------------------*/
 
       FOR EACH MsRequest WHERE
-            MsRequest.Brand      = gcBrand  AND
+            MsRequest.Brand      = Syst.Var:gcBrand  AND
             MsRequest.ReqType    =  {&REQTYPE_CHARGE_AND_COMPENSATION} AND
             MsRequest.CLI        = icCLI    AND           
             MsRequest.ReqStatus <> 3 AND

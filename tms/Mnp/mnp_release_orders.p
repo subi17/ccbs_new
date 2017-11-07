@@ -8,13 +8,13 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/orderfunc.i}
 
 FOR EACH Order NO-LOCK WHERE
-         Order.Brand = gcBrand AND
+         Order.Brand = Syst.Var:gcBrand AND
          Order.StatusCode = {&ORDER_STATUS_MNP_PENDING}:
    fSetOrderStatus(Order.OrderId,"3").
 END.

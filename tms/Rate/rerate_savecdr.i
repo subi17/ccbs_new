@@ -56,7 +56,7 @@ FUNCTION fBCopy RETURNS LOGICAL:
          CREATE EDRHistory.
          BUFFER-COPY MobCDR TO EDRHistory.
          ASSIGN 
-            EDRHistory.Brand = gcBrand
+            EDRHistory.Brand = Syst.Var:gcBrand
             EDRHistory.UpdateDate = TODAY
             EDRHistory.UpdateTime = TIME 
             EDRHistory.UpdateSource = IF lcRerateSource > "" 

@@ -71,7 +71,7 @@ FUNCTION fTerminateSVAs RETURNS LOGICAL
                         bMsrequest.actstamp > Msrequest.actstamp) THEN NEXT.
       fMakeProActRequest(iiMsSeq,
                          msrequest.reqcparam3,
-                         fSecOffSet(fMakeTS(),60),
+                         Func.Common:mSecOffSet(Func.Common:mMakeTS(),60),
                          STRING(ilWaitConfirm),
                          "",
                          "term",

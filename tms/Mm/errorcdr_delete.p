@@ -7,7 +7,6 @@
 ------------------------------------------------------ */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 
 DEF INPUT  PARAMETER idaFromDate AS DATE NO-UNDO.
@@ -77,7 +76,7 @@ PROCEDURE pDelete:
    DO TRANS:
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = gcBrand   
+         ActionLog.Brand        = Syst.Var:gcBrand   
          ActionLog.TableName    = "ErrorCDR"  
          ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                   STRING(MONTH(TODAY),"99")  +
@@ -94,10 +93,10 @@ PROCEDURE pDelete:
                                   "Started at " + 
                                   REPLACE(STRING(ldtStarted),"/","-")
          ActionLog.ActionStatus = 3
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.FromDate     = ldaFrom
          ActionLog.ToDate       = ldaTo.
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
    END.
 
 END PROCEDURE.

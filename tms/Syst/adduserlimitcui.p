@@ -49,7 +49,7 @@ DEF VAR endloop      AS I                    NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -74,8 +74,8 @@ FORM
     TMSCodes.CodeName     COLUMN-LABEL "Description"   FORMAT "X(30)"
     lcLimitAmt            COLUMN-LABEL "Value" FORMAT "X(20)"    
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
-COLOR VALUE(cfc)
-TITLE COLOR VALUE(ctc)  "Limits for " + icLimitTarget + " " + icLimitTargetID 
+COLOR VALUE(Syst.Var:cfc)
+TITLE COLOR VALUE(Syst.Var:ctc)  "Limits for " + icLimitTarget + " " + icLimitTargetID 
 FRAME sel.
 
 
@@ -90,8 +90,8 @@ FORM
     UserLimit.LimitAmt LABEL "Amount " FORMAT "->>>9.99"
 
 WITH  OVERLAY ROW 1 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -101,12 +101,12 @@ WITH  OVERLAY ROW 1 centered
 form /* SEEK Code */
     ob-code
     help "Enter Type "
-    with row 4  col 2 title color value(ctc) " Find Type "
-    color value(cfc) no-labels overlay frame hayr.
+    with row 4  col 2 title color value(Syst.Var:ctc) " Find Type "
+    color value(Syst.Var:cfc) no-labels overlay frame hayr.
 
 
 /* main */
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first. 
@@ -131,14 +131,14 @@ LOOP:
 REPEAT WITH FRAME sel:
 
  IF must-add THEN DO:  /* Add / update /delete UserLimit  */
-      ASSIGN cfc = "lis" ufkey = true  must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true  must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
       
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         
         REPEAT TRANSACTION WITH FRAME lis:
            PAUSE 0.
@@ -147,7 +147,7 @@ REPEAT WITH FRAME sel:
            IF llIsNew THEN DO:
 
               CREATE UserLimit.
-              ASSIGN UserLimit.Brand      = gcBrand 
+              ASSIGN UserLimit.Brand      = Syst.Var:gcBrand 
                      UserLimit.LimitType  = INT(TMSCodes.CodeValue)
                      UserLimit.LimitTarget = icLimitTarget
                      UserLimit.LimitTargetID = icLimitTargetID.
@@ -198,9 +198,9 @@ REPEAT WITH FRAME sel:
 
       if ufkey then do:
          assign
-         ufk = 0 ufk[1] = 35 ufk[5] = 11
-         ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
-         ehto = 3 ufkey = false.
+         Syst.Var:ufk = 0 Syst.Var:ufk[1] = 35 Syst.Var:ufk[5] = 11
+         Syst.Var:ufk[6] = 0 Syst.Var:ufk[8] = 8  Syst.Var:ufk[9] = 1
+         Syst.Var:ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
       end.
 
@@ -212,18 +212,18 @@ REPEAT WITH FRAME sel:
  
      HIDE MESSAGE NO-PAUSE.     
      CHOOSE ROW TMSCodes.CodeValue {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-     COLOR DISPLAY VALUE(ccc) TMSCodes.CodeValue WITH FRAME sel.
+     COLOR DISPLAY VALUE(Syst.Var:ccc) TMSCodes.CodeValue WITH FRAME sel.
 
       /* clean variable */
       llIsNew = FALSE.
 
-      nap = keylabel(lastkey).
+      Syst.Var:nap = keylabel(lastkey).
       if frame-value = "" and rtab[frame-line] = ? and
-            lookup(nap,"8,f8") = 0
+            lookup(Syst.Var:nap,"8,f8") = 0
       then next.
 
          /* previous line */
-         if lookup(nap,"cursor-up") > 0 then do
+         if lookup(Syst.Var:nap,"cursor-up") > 0 then do
          with frame sel:
             if frame-line = 1 then do:
                RUN local-find-this.
@@ -249,7 +249,7 @@ REPEAT WITH FRAME sel:
          end. /* previous line */
 
          /* next line */
-         if lookup(nap,"cursor-down") > 0 then do with frame sel:
+         if lookup(Syst.Var:nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                 RUN local-find-this.
                  RUN local-find-NEXT.
@@ -275,7 +275,7 @@ REPEAT WITH FRAME sel:
          end. /* next line */
 
          /* previous page */
-         else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
+         else if lookup(Syst.Var:nap,"page-up,prev-page") > 0 then do with frame sel:
             find TMSCodes where recid(TMSCodes) = memory no-lock no-error.
             RUN local-find-prev.
             if available TMSCodes then do:
@@ -297,7 +297,7 @@ REPEAT WITH FRAME sel:
         end. /* previous page */
 
         /* next page */
-        else if lookup(nap,"page-down,next-page") > 0 then do with frame sel:
+        else if lookup(Syst.Var:nap,"page-down,next-page") > 0 then do with frame sel:
            if rtab[frame-down] = ? then do:
                bell.
                message "This is the last page !".
@@ -311,9 +311,9 @@ REPEAT WITH FRAME sel:
         end. /* next page */
 
         /* Seek */
-        if lookup(nap,"1,f1") > 0 then do:  /* ob-code */
-           cfc = "puyr". RUN Syst/ufcolor.p.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+        if lookup(Syst.Var:nap,"1,f1") > 0 then do:  /* ob-code */
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            update ob-code with frame hayr.
            hide frame hayr no-pause.
            if ob-code ENTERED then do: 
@@ -338,7 +338,7 @@ REPEAT WITH FRAME sel:
         end. /* Seek */
 
         /* Choose */
-        else if lookup(nap,"return,enter,5,f5") > 0  and lcRight = "RW" then do:
+        else if lookup(Syst.Var:nap,"return,enter,5,f5") > 0  and lcRight = "RW" then do:
             /* change or add new */ 
             RUN local-find-this.
             RUN find-this-limit(FALSE).
@@ -352,7 +352,7 @@ REPEAT WITH FRAME sel:
         end. /* Choose */
  
         /* First record */
-        else if lookup(nap,"home,h") > 0 then do:
+        else if lookup(Syst.Var:nap,"home,h") > 0 then do:
            RUN local-find-FIRST.
            memory = recid(TMSCodes).
            must-print = true.
@@ -360,14 +360,14 @@ REPEAT WITH FRAME sel:
         end. /* First record */
 
         /* last record */
-        else if lookup(nap,"end,e") > 0 then do : 
+        else if lookup(Syst.Var:nap,"end,e") > 0 then do : 
            RUN local-find-LAST.
            memory = recid(TMSCodes).
            must-print = true.
            next LOOP.
         end. /* last record */
 
-        else if nap = "8" or nap = "f8" then leave LOOP. /* Return */
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" then leave LOOP. /* Return */
 
   END.  /* BROWSE */
 
@@ -383,7 +383,7 @@ PROCEDURE find-this-limit:
 
     IF exlock THEN DO:
       FIND TMSCodes  WHERE recid(TMSCodes) = rtab[frame-line(sel)].   
-      FIND UserLimit WHERE UserLimit.Brand = gcBrand AND
+      FIND UserLimit WHERE UserLimit.Brand = Syst.Var:gcBrand AND
                      UserLimit.LimitType = INT(TMSCodes.CodeValue) AND
                      UserLimit.LimitTarget = icLimitTarget AND
                      UserLimit.LimitTargetID = icLimitTargetID
@@ -391,7 +391,7 @@ PROCEDURE find-this-limit:
     END.
     ELSE DO:
       FIND TMSCodes  WHERE recid(TMSCodes) = rtab[frame-line(sel)] .
-      FIND UserLimit WHERE UserLimit.Brand = gcBrand AND
+      FIND UserLimit WHERE UserLimit.Brand = Syst.Var:gcBrand AND
                      UserLimit.LimitType = INT(TMSCodes.CodeValue) AND
                      UserLimit.LimitTarget = icLimitTarget AND
                      UserLimit.LimitTargetID = icLimitTargetID
@@ -404,7 +404,7 @@ PROCEDURE findlimitAmt:
 
    lclimitAmt = "not defined".
 
-   FIND UserLimit WHERE UserLimit.Brand = gcBrand AND
+   FIND UserLimit WHERE UserLimit.Brand = Syst.Var:gcBrand AND
                   UserLimit.LimitType = INT(TMSCodes.CodeValue) AND
                   UserLimit.LimitTarget = icLimitTarget AND
                   UserLimit.LimitTargetID = icLimitTargetID NO-LOCK NO-ERROR.
@@ -416,7 +416,7 @@ PROCEDURE findlimitAmt:
 
        FIND TMSUser WHERE TMSUser.UserCode = icLimitTargetID NO-LOCK NO-ERROR.
 
-       FIND UserLimit WHERE UserLimit.Brand = gcBrand AND
+       FIND UserLimit WHERE UserLimit.Brand = Syst.Var:gcBrand AND
                       UserLimit.LimitType = INT(TMSCodes.CodeValue) AND
                       UserLimit.LimitTarget = "UserGroup" AND
                       UserLimit.LimitTargetID = TMSUser.UserGroup NO-LOCK NO-ERROR.
@@ -506,17 +506,17 @@ PROCEDURE local-update-record:
       WITH FRAME lis.
 
       IF NOT llIsNew THEN DO:
-         ASSIGN ehto   = 0
-                ufk    = 0            
-                ufk[1] = 7 WHEN lcRight = "RW" AND llIsAdmin 
-                ufk[3] = 4 WHEN lcRight = "RW" AND UserLimit.LimitTarget = icLimitTarget
-                ufk[8] = 8.
+         ASSIGN Syst.Var:ehto   = 0
+                Syst.Var:ufk    = 0            
+                Syst.Var:ufk[1] = 7 WHEN lcRight = "RW" AND llIsAdmin 
+                Syst.Var:ufk[3] = 4 WHEN lcRight = "RW" AND UserLimit.LimitTarget = icLimitTarget
+                Syst.Var:ufk[8] = 8.
              
          RUN Syst/ufkey.p.
       END.
-      ELSE toimi = 1.
+      ELSE Syst.Var:toimi = 1.
       
-      IF toimi = 1 AND lcRight = "RW" THEN DO:
+      IF Syst.Var:toimi = 1 AND lcRight = "RW" THEN DO:
        
         IF UserLimit.LimitTarget <> icLimitTarget THEN DO:
              ASSIGN ok = FALSE.
@@ -528,7 +528,7 @@ PROCEDURE local-update-record:
 
                  /* create a new user limit */
                  CREATE UserLimit.
-                 ASSIGN UserLimit.Brand      = gcBrand 
+                 ASSIGN UserLimit.Brand      = Syst.Var:gcBrand 
                         UserLimit.LimitType  = INT(TMSCodes.CodeValue)
                         UserLimit.LimitTarget = icLimitTarget
                         UserLimit.LimitTargetID = icLimitTargetID
@@ -540,7 +540,7 @@ PROCEDURE local-update-record:
 
          END.
 
-         ehto = 9.
+         Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
 
          IF NOT llIsNew AND llDoEvent THEN RUN StarEventSetOldBuffer(lhUserLimit).
@@ -551,7 +551,7 @@ PROCEDURE local-update-record:
             UserLimit.LimitAmt WHEN llIsAdmin
          WITH FRAME lis EDITING:
             READKEY.
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
                PAUSE 0. 
                IF INT(FRAME-VALUE) < 0 THEN DO:
                    MESSAGE " Give only positive values !"
@@ -568,7 +568,7 @@ PROCEDURE local-update-record:
          
       END.
 
-      IF toimi = 3 AND lcRight = "RW" THEN DO:
+      IF Syst.Var:toimi = 3 AND lcRight = "RW" THEN DO:
         
          /* we should check the the user limit correspond to same limit target */
          IF UserLimit.LimitTarget <> icLimitTarget THEN DO:

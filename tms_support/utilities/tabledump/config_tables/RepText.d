@@ -1552,6 +1552,18 @@
 1 "" 2 "Descompte promoció" 0 "CONVDISC20_3" "1" 05/07/17 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONVDISC20_3" "1" 05/07/17 31/12/49
 1 "" 5 "Promotional discount" 0 "CONVDISC20_3" "1" 05/07/17 31/12/49
+1 "" 1 "Descuento promoción" 0 "CONVDISC_CS100_6" "1" 07/11/17 31/12/49
+1 "" 2 "Descompte promoció" 0 "CONVDISC_CS100_6" "1" 07/11/17 31/12/49
+1 "" 3 "Promozio-deskontua" 0 "CONVDISC_CS100_6" "1" 07/11/17 31/12/49
+1 "" 5 "Promotional discount" 0 "CONVDISC_CS100_6" "1" 07/11/17 31/12/49
+1 "" 1 "Descuento promoción" 0 "CONVDISC_CS20F12" "1" 07/11/17 31/12/49
+1 "" 2 "Descompte promoció" 0 "CONVDISC_CS20F12" "1" 07/11/17 31/12/49
+1 "" 3 "Promozio-deskontua" 0 "CONVDISC_CS20F12" "1" 07/11/17 31/12/49
+1 "" 5 "Promotional discount" 0 "CONVDISC_CS20F12" "1" 07/11/17 31/12/49
+1 "" 1 "Descuento promoción" 0 "CONVDISC_CS20M12" "1" 07/11/17 31/12/49
+1 "" 2 "Descompte promoció" 0 "CONVDISC_CS20M12" "1" 07/11/17 31/12/49
+1 "" 3 "Promozio-deskontua" 0 "CONVDISC_CS20M12" "1" 07/11/17 31/12/49
+1 "" 5 "Promotional discount" 0 "CONVDISC_CS20M12" "1" 07/11/17 31/12/49
 1 "" 1 "Descuento promocional" 0 "CPDISC20" "1" 01/02/14 31/12/49
 1 "" 2 "Descuento promocional" 0 "CPDISC20" "1" 01/02/14 31/12/49
 1 "" 3 "Descuento promocional" 0 "CPDISC20" "1" 01/02/14 31/12/49
@@ -7764,16 +7776,16 @@
 1 "" 3 "Huawei P10 Lite Blanco con funda de regalo" 0 "P043L10WP" "1" 24/03/17 31/12/49
 1 "" 4 "Huawei P10 Lite Blanco con funda de regalo" 0 "P043L10WP" "1" 24/03/17 31/12/49
 1 "" 5 "Huawei P10 Lite White with cover gift" 0 "P043L10WP" "1" 24/03/17 31/12/49
-1 "" 1 "Huawei mate 10 Negro" 0 "P043M10NC" "1" 25/10/17 31/12/49
+1 "" 1 "Huawei Mate 10 Negro" 0 "P043M10NC" "1" 25/10/17 31/12/49
 1 "" 2 "Huawei mate 10 Negro" 0 "P043M10NC" "1" 25/10/17 31/12/49
 1 "" 3 "Huawei mate 10 Negro" 0 "P043M10NC" "1" 25/10/17 31/12/49
 1 "" 4 "Huawei mate 10 Negro" 0 "P043M10NC" "1" 25/10/17 31/12/49
-1 "" 5 "Huawei mate 10 Black" 0 "P043M10NC" "1" 25/10/17 31/12/49
-1 "" 1 "Huawei mate 10 Negro con Tablet de regalo" 0 "P043M1PNC" "1" 26/10/17 31/12/49
+1 "" 5 "Huawei Mate 10 Black" 0 "P043M10NC" "1" 25/10/17 31/12/49
+1 "" 1 "Huawei Mate 10 Negro con Tablet de regalo" 0 "P043M1PNC" "1" 26/10/17 31/12/49
 1 "" 2 "Huawei mate 10 Negro con Tablet de regalo" 0 "P043M1PNC" "1" 26/10/17 31/12/49
 1 "" 3 "Huawei mate 10 Negro con Tablet de regalo" 0 "P043M1PNC" "1" 26/10/17 31/12/49
 1 "" 4 "Huawei mate 10 Negro con Tablet de regalo" 0 "P043M1PNC" "1" 26/10/17 31/12/49
-1 "" 5 "Huawei mate 10 Black with Tablet Gift" 0 "P043M1PNC" "1" 26/10/17 31/12/49
+1 "" 5 "Huawei Mate 10 Black with Tablet Gift" 0 "P043M1PNC" "1" 26/10/17 31/12/49
 1 "" 1 "Huawei Mate 9 Dorado" 0 "P043MT9DC" "1" 17/08/17 31/12/49
 1 "" 2 "Huawei Mate 9 Dorado" 0 "P043MT9DC" "1" 17/08/17 31/12/49
 1 "" 3 "Huawei Mate 9 Dorado" 0 "P043MT9DC" "1" 17/08/17 31/12/49

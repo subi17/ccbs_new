@@ -1,9 +1,8 @@
 {Syst/commpaa.i}
-gcBrand = "1".
-katun = "Qvantel".
-{Func/timestamp.i}
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
 
-&GLOBAL-DEFINE STAR_EVENT_USER katun
+&GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
 {Func/lib/eventlog.i}
 
@@ -41,7 +40,7 @@ for each customer no-lock where
             bowner.msseq = msowner.msseq and
             bowner.clitype = "tarj3"
    by bowner.tsend desc:
-      fsplitts(bowner.tsend,
+      Func.Common:mSplitTS(bowner.tsend,
                output ldatarj3,
                output litime).
       leave.         

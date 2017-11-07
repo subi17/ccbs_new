@@ -10,12 +10,11 @@
 /*YPRO-88*/
 {Syst/tmsconst.i}
 {Syst/commpaa.i}
-{Func/timestamp.i}
 {Func/upsellbundle.i}
 {Func/matrix.i}
 
-gcBrand =  Syst.Parameters:gcBrand.
-katun = "Cron".
+Syst.Var:gcBrand =  Syst.Var:gcBrand.
+Syst.Var:katun = "Cron".
 /*
 "FLEX_500MB_UPSELL"
 "FLEX_5GB_UPSELL"
@@ -56,18 +55,18 @@ END.
 
 FUNCTION fMonthStart RETURNS DECIMAL:
    DEF VAR ldeCurr AS DECIMAL NO-UNDO.
-   ldeCurr =  INT( fMakeTS() / 100) * 100  .
+   ldeCurr =  INT( Func.Common:mMakeTS() / 100) * 100  .
    RETURN ldeCurr + 1.
 
 END.
 FUNCTION fPrevMonthEnd RETURNS DECIMAL:
    DEF VAR ldeCurr AS DECIMAL NO-UNDO.
-   ldeCurr = (INT( fMakeTS() / 100) * 100) + 1.
-   RETURN fSecOffSet(ldeCurr,-1). /*mont change - 2 secs*/
+   ldeCurr = (INT( Func.Common:mMakeTS() / 100) * 100) + 1.
+   RETURN Func.Common:mSecOffSet(ldeCurr,-1). /*mont change - 2 secs*/
 END.
 
 
-ldeNow = fMakeTS().
+ldeNow = Func.Common:mMakeTS().
 ldeActTime = fMonthStart().
 ldeCheckMoment = fPrevMonthEnd().
 lcLogDir = fCParam("UpsellCron","UpsellLog").
@@ -121,7 +120,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcUpsellList):
                                          servicelimit.groupcode, ldeNow).
 
          IF llgSimulate EQ FALSE THEN DO:
-            IF fMatrixAnalyse(gcBrand,
+            IF fMatrixAnalyse(Syst.Var:gcBrand,
                            "PERCONTR",
                            "PerContract;SubsTypeTo",
                            lcUpsell + ";" + fPrintCLIType(mservicelimit.msseq),

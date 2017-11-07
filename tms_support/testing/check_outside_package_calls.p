@@ -1,4 +1,3 @@
-{Func/timestamp.i}
 def var lltrue as log no-undo.
 def var ldeTime as dec no-undo.
 def var ldFromDate as date no-undo.
@@ -13,7 +12,7 @@ for each mobsub no-lock where mobsub.paytype = false:
    FIND FIRST MServiceLimit NO-LOCK WHERE
               MServiceLimit.MsSeq   = mobsub.MsSeq AND
               MServiceLimit.dialtype = 7 and
-              MServiceLimit.FromTs  <=  fMakeTS() and
+              MServiceLimit.FromTs  <=  Func.Common:mMakeTS() and
               MServiceLimit.EndTS  >= 99999999.99999 no-error.
    if not avail MServiceLimit then next.
    lltrue = false.            
@@ -27,7 +26,7 @@ for each mobsub no-lock where mobsub.paytype = false:
             mobcdr.eventtype = "gprs" no-lock:
       IF Mobcdr.errorcode NE 0         THEN NEXT.
       IF MobCDR.BillCode NE "14100001" THEN NEXT.
-      ldeTime  = fMake2Dt(Mobcdr.datest, Mobcdr.TimeStart).
+      ldeTime  = Func.Common:mMake2DT(Mobcdr.datest, Mobcdr.TimeStart).
       if ldeTime >= MServiceLimit.FromTs then do:
          lltrue = true.
          leave.
