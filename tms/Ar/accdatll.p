@@ -21,11 +21,10 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{utumaa.i "new"}
-{eventlog.i}
-{cparam2.i}
-{timestamp.i}
+{Syst/commali.i}
+{Syst/utumaa.i "new"}
+{Syst/eventlog.i}
+{Func/cparam2.i}
 
 assign tuni1 = "accdatll"
        tuni2 = "".
@@ -34,8 +33,8 @@ DEF VAR ufkey      AS LOG                     NO-UNDO.
 def var ok         as log   format "Yes/No"   NO-UNDO.
 def var date1       as Date  format "99-99-99" NO-UNDO.
 def var date2       as Date  format "99-99-99" NO-UNDO.
-DEF VAR liCust-nr1  AS INT   FORMAT ">>>>>>>9" NO-UNDO.
-DEF VAR liCust-nr2  AS INT   FORMAT ">>>>>>>9" NO-UNDO. 
+DEF VAR liCust-nr1  AS INT   FORMAT ">>>>>>>>9" NO-UNDO.
+DEF VAR liCust-nr2  AS INT   FORMAT ">>>>>>>>9" NO-UNDO. 
 
 DEF VAR xProdLines  AS LOGIC FORMAT "Yes/No"          NO-UNDO.
 DEF VAR xBilled     AS LOGIC FORMAT "Yes/No"          NO-UNDO INIT TRUE.
@@ -153,8 +152,8 @@ form
         NO-LABEL
    SKIP(1)
    WITH ROW 1 side-labels width 80
-        title " " + ynimi + " REVENUE REPORT " +
-        string(pvm,"99-99-99") + " "
+        title " " + Syst.Var:ynimi + " REVENUE REPORT " +
+        string(TODAY,"99-99-99") + " "
         FRAME rajat.
 
 view FRAME rajat.
@@ -168,13 +167,13 @@ ASSIGN date2       = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
        llFees      = TRUE
        llExcel     = TRUE
        llSap       = TRUE
-       liCust-nr2  = 99999999
+       liCust-nr2  = 999999999
        ldtUnbilled = date2
        lcFileDir   = fCParamC("RevenueFileDir").
 
 IF lcFileDir = ? OR lcFileDir = "" THEN lcFileDir = "/tmp".       
 
-FIND LAST InvGroup WHERE InvGroup.Brand = gcBrand NO-LOCK NO-ERROR.
+FIND LAST InvGroup WHERE InvGroup.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 IF AVAILABLE InvGroup THEN ASSIGN InvGroup[2] = InvGroup.InvGroup.
 
 lcExFile = "".
@@ -204,18 +203,18 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0 /* 847 */
-         ufk[5]= 63  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
-         ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         Syst.Var:ufk[1]= 132 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0 /* 847 */
+         Syst.Var:ufk[5]= 63  Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 
+         Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
+         RUN Syst/ufkey.p.
       END.
 
       READKEY.
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"1,f1") > 0 THEN DO:
-         ehto = 9. RUN ufkey.p.
+      if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          ufkey = TRUE. 
          UPDATE 
                 date1
@@ -247,7 +246,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
          NEXT toimi.
       END.
 
-      else if lookup(nap,"5,f5") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"5,f5") > 0 THEN DO:
       
          IF (llExcel AND lcExFile = "") OR
             (llSap   AND lcSapFile = "") 
@@ -269,20 +268,20 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
          LEAVE toimi.
       END.
 
-      else if lookup(nap,"8,f8") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"8,f8") > 0 THEN DO:
          RETURN.
       END.
 
-END. /* toimi */
+END. /* Syst.Var:toimi */
 
 /* Avataan striimi */
 IF llPaper THEN DO:
     ASSIGN tila = TRUE.
-    {tmsreport.i "return"}
+    {Syst/tmsreport.i "return"}
 END.
 
-ehto = 5.
-RUN ufkey.
+Syst.Var:ehto = 5.
+RUN Syst/ufkey.p.
 
 /* info line for log */
 lcLogLine = STRING(date1,"999999") + "-" +
@@ -299,12 +298,12 @@ fELog("REVENUE","Started:" + lcLogLine).
 ASSIGN lcExFile     = lcFileDir + "/" + lcExFile
        lcSapFile    = lcFileDir + "/" + lcSapFile
        ldtStartDate = TODAY
-       ldBegTime    = fMakeTS()
+       ldBegTime    = Func.Common:mMakeTS()
        lcStartTime  = STRING(TIME,"hh:mm:ss").
        
 DISPLAY ldtStartDate lcStartTime WITH FRAME rajat.        
        
-RUN accdatli  (date1,
+RUN Ar/accdatli.p  (date1,
                date2,
                liCust-nr1,
                liCust-nr2,
@@ -329,14 +328,13 @@ fELog("REVENUE","Stopped:" + lcLogLine).
 
 IF llPaper THEN DO:
     ASSIGN tila = FALSE.
-    {tmsreport.i}
+    {Syst/tmsreport.i}
 END.
 
-ldEndTime = fMakeTS().
+ldEndTime = Func.Common:mMakeTS().
 
 /* duration */
-liDurDays = DYNAMIC-FUNCTION("fTSDuration" IN ghfunc1,
-                             ldBegTime,
+liDurDays = Func.Common:mTSDuration(ldBegTime,
                              ldEndTime,
                              OUTPUT liDurTime).
  

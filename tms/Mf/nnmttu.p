@@ -12,8 +12,8 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{utumaa.i "new"}
+{Syst/commali.i}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "nnmttu"
        tuni2 = "".
@@ -38,10 +38,13 @@ DEF VAR lev      AS i NO-UNDO init 112.
 DEF VAR InvGroup  LIKE InvGroup.InvGroup NO-UNDO.
 DEF VAR IGName  LIKE InvGroup.IGName NO-UNDO.
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
+
 form header /* tulosteen pAAotsikko */
    fill ("=",lev) format "x(112)" SKIP
    ynimi AT 1
-   "MONTHLY CALLS"   at 33  s-head  at 50 pvm format "99-99-99" TO 112 SKIP
+   "MONTHLY CALLS"   at 33  s-head  at 50 TODAY format "99-99-99" TO 112 SKIP
    "month" at 33 Month at 39  IGName at 50 "Page"  TO 107
       sl format "ZZZ9" TO 112 SKIP
    fill ("=",lev) format "x(112)" skip(1)
@@ -87,17 +90,17 @@ skip(3)
 "                 -limit exceeded:" b-exc
                  help "Customers with exceeded Limit / all (A/E)"        skip(3)
 WITH
-    COLOR value(cfc) TITLE COLOR value(cfc)
-    " " + ynimi + " Monthly call counter report " + string(pvm,"99-99-99") + " "
+    COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:cfc)
+    " " + ynimi + " Monthly call counter report " + string(TODAY,"99-99-99") + " "
     ROW 1 width 80 NO-LABEL
     FRAME rajat.
 
-Month = (year(pvm) * 100) + month(pvm).
+Month = (year(TODAY) * 100) + month(TODAY).
 
 rajat:
 repeat WITH FRAME rajat:
 
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE Month 
    InvGroup VALIDATE(CAN-FIND(invgroup WHERE
                               invgroup.invgroup = INPUT invgroup),
@@ -118,13 +121,13 @@ repeat WITH FRAME rajat:
 toimi:
    repeat WITH FRAME rajat:
       ASSIGN
-      ufk = 0 ehto = 0
-      ufk[1] = 7 ufk[5] = 63 ufk[8] = 8.
-      RUN ufkey.
-      IF toimi = 1 THEN NEXT  rajat.
-      IF toimi = 8 THEN LEAVE rajat.
-      IF toimi = 5 THEN LEAVE toimi.
-  END.  /* toimi */
+      Syst.Var:ufk = 0 Syst.Var:ehto = 0
+      Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8.
+      RUN Syst/ufkey.p.
+      IF Syst.Var:toimi = 1 THEN NEXT  rajat.
+      IF Syst.Var:toimi = 8 THEN LEAVE rajat.
+      IF Syst.Var:toimi = 5 THEN LEAVE toimi.
+  END.  /* Syst.Var:toimi */
 
    /* set header FOR report */
    if b-all     then s-head = "-all customers".
@@ -132,7 +135,7 @@ toimi:
    if not b-exc then s-head = s-head + " with exceeded limit".
 
    tila = TRUE.
-   {tmsreport.i "leave rajat"}
+   {Syst/tmsreport.i "leave rajat"}
 
    message "Printing ...".
    FOR EACH MthCall no-lock  where
@@ -213,7 +216,7 @@ toimi:
 
    PUT STREAM tul UNFORMATTED skip(spit1 - rl).
    ASSIGN tila = FALSE.
-   {tmsreport.i}
+   {Syst/tmsreport.i}
 
    IF i = 0 THEN DO:
       BELL.

@@ -1,7 +1,7 @@
 {roamtariff.i}
 
-{testpaa.i}
-katun = "anttis".
+{Syst/testpaa.i}
+Syst.Var:katun = "anttis".
 
 def stream sread.
 input stream sread from /apps/snet/200711/as_yts283.txt.
@@ -36,7 +36,7 @@ repeat:
       next.
    END.   
    
-   RUN as_yts283_tapfilecr.p(lcPlmn,ldtDate - 1,ldtDate - 1,"",FALSE,lcFileSeq).
+   RUN 200711/as_yts283_tapfilecr.p(lcPlmn,ldtDate - 1,ldtDate - 1,"",FALSE,lcFileSeq).
 
 put stream slog unformatted
        lcPlmn           chr(9)

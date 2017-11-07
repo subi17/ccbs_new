@@ -40,7 +40,7 @@
  *
  */
 
-{lib/protop.i}
+{protop/lib/protop.i}
 
 define variable support as character no-undo initial "Server IO".
 
@@ -89,9 +89,9 @@ procedure update_serverio:
 
       if tt_serverio.srv-dba[3] < tt_serverio.srv-dba[3] then	/* detect reuse of an id (stat rolling backwards...) 	*/
         assign
-          {lib/init-xrec.i tt_serverio.srv-dba p_this1}
-          {lib/init-xrec.i tt_serverio.srv-dbr p_this2}
-          {lib/init-xrec.i tt_serverio.srv-dbw p_this3}
+          {protop/lib/init-xrec.i tt_serverio.srv-dba p_this1}
+          {protop/lib/init-xrec.i tt_serverio.srv-dbr p_this2}
+          {protop/lib/init-xrec.i tt_serverio.srv-dbw p_this3}
         .
 
     end.
@@ -107,9 +107,9 @@ procedure update_serverio:
         tt_serverio.srvport    = p_srvport
         tt_serverio.curr-usr   = p_curr-usr
         tt_serverio.max-usr    = p_max-usr
-        {lib/init-xrec.i tt_serverio.srv-dba p_this1}
-        {lib/init-xrec.i tt_serverio.srv-dbr p_this2}
-        {lib/init-xrec.i tt_serverio.srv-dbw p_this3}
+        {protop/lib/init-xrec.i tt_serverio.srv-dba p_this1}
+        {protop/lib/init-xrec.i tt_serverio.srv-dbr p_this2}
+        {protop/lib/init-xrec.i tt_serverio.srv-dbw p_this3}
       .
 
     end.
@@ -132,9 +132,9 @@ procedure age_serverio:
      else
       assign
         tt_serverio.xvalid = no
-        {lib/upd-xrec.i tt_serverio.srv-dba tt_serverio.srv-dba[3]}
-        {lib/upd-xrec.i tt_serverio.srv-dbr tt_serverio.srv-dbr[3]}
-        {lib/upd-xrec.i tt_serverio.srv-dbw tt_serverio.srv-dbw[3]}
+        {protop/lib/upd-xrec.i tt_serverio.srv-dba tt_serverio.srv-dba[3]}
+        {protop/lib/upd-xrec.i tt_serverio.srv-dbr tt_serverio.srv-dbr[3]}
+        {protop/lib/upd-xrec.i tt_serverio.srv-dbw tt_serverio.srv-dbw[3]}
         tt_serverio.hr  = 100 * (( tt_serverio.srv-dba[x] - tt_serverio.srv-dbr[x] ) / tt_serverio.srv-dba[x] )
         tt_serverio.hr  = ( if tt_serverio.hr = ? then 0 else tt_serverio.hr )
       .

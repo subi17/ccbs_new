@@ -15,13 +15,12 @@
                   01.10.03/tk  ask what to copy,
                                copy PNP numbers + Customer's prices
                   23.01.04/aam AgrCust             
-                  24.01.06/jt  DYNAMIC-FUNCTION("fDispCustName",
                   
   Version ......: M15
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
+{Syst/commali.i}
+{Syst/eventval.i}
 
 DEF BUFFER new-Customer FOR Customer.
 DEF BUFFER new-Target   FOR BillTarget. 
@@ -29,9 +28,9 @@ DEF BUFFER new-Tariff   FOR Tariff.
 DEF BUFFER new-PnpList  FOR PNPList.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
    lhCustomer = BUFFER new-Customer:HANDLE.
@@ -69,8 +68,7 @@ FRAME valinta.
 
 FIND Customer WHERE Customer.CustNum = liCustNum NO-LOCK NO-ERROR.
 
-lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                              BUFFER Customer).
+lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                                     
 PAUSE 0.
 
@@ -93,7 +91,7 @@ IF ok THEN DO:
     pause.
 
    /* get next free number */
-   RUN custser.
+   RUN Help/custser.p.
 
    i = index(siirto,"-").
    IF i > 0 THEN DO:
@@ -101,7 +99,7 @@ IF ok THEN DO:
              x2 = int(substr(siirto, i + 1)).
 
       FIND LAST new-Customer NO-LOCK WHERE
-                new-Customer.Brand    = gcBrand AND
+                new-Customer.Brand    = Syst.Var:gcBrand AND
                 new-Customer.CustNum >= x1      AND
                 new-Customer.CustNum <= x2 NO-ERROR.
       IF AVAILABLE new-Customer THEN ASSIGN
@@ -109,13 +107,13 @@ IF ok THEN DO:
 
       DO new-custNo = x1 TO x2:
          IF NOT can-find(FIRST new-Customer where
-                               new-Customer.Brand   = gcBrand AND
+                               new-Customer.Brand   = Syst.Var:gcBrand AND
                                new-Customer.CustNum = new-custNo) THEN LEAVE.
       END.
    END.
    ELSE DO:
       FIND LAST new-Customer NO-LOCK USE-INDEX CustNum WHERE
-                new-Customer.Brand  = gcBrand.
+                new-Customer.Brand  = Syst.Var:gcBrand.
       new-custNo = new-Customer.CustNum + 1.
    END.
 

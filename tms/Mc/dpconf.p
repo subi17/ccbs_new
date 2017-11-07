@@ -13,15 +13,15 @@
 
 &GLOBAL-DEFINE BrTable DPConf
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'dpconf'}
-{eventval.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'dpconf'}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhDpConf AS HANDLE NO-UNDO.
    lhDPConf = BUFFER DPConf:HANDLE.
@@ -32,7 +32,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhDPBasis).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhDPConf).
+      RUN Mc/eventview2.p(lhDPConf).
    END.
 
 END.
@@ -71,7 +71,7 @@ DEF VAR ok           AS LOG FORMAT "Yes/No"    NO-UNDO.
 
 DEF VAR leave_key    AS CHAR                   NO-UNDO.
 
-leave_key = poisnap + ",cursor-right,cursor-left".
+leave_key = Syst.Var:poisnap + ",cursor-right,cursor-left".
 
 FORM
     DPConf.ValidFrom      /* column-label format */
@@ -81,12 +81,12 @@ FORM
     BasName      COLUMN-LABEL "Type Name"
 
 WITH ROW FrmRow CENTERED OVERLAY FrmDown DOWN
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc)
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc)
     " Discounts of Discount Plan " + DiscPlan + " " 
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 FORM
     "Valid from .:" DPConf.ValidFrom SKIP
@@ -106,8 +106,8 @@ WITH
     ROW 1 
     CENTERED                            
     NO-LABEL
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -130,8 +130,8 @@ WITH
     ROW 6 
     CENTERED
     NO-LABEL
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) lis2-hdr
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) lis2-hdr
     SIDE-LABELS 
     FRAME lis2.
 
@@ -144,26 +144,26 @@ WITH
     ROW 7 
     CENTERED
     NO-LABEL
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) " FIXED DISCOUNT " 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " FIXED DISCOUNT " 
     SIDE-LABELS 
     FRAME lis3.
 
 FORM /* seek DPConf  by  ValidFrom */
     " " ValidFrom
     HELP "Enter Effective Date"
-    WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND Date "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY  FRAME f1.
+    WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Date "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY  FRAME f1.
 
 FORM /* seek DPConf  by DPCName */
     DPCName
     HELP "Enter name of Discount Group"
-    WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND NAME "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND NAME "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FIND DiscPlan WHERE DiscPlan.DiscPlan = DiscPlan NO-LOCK no-error.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "By Eff. Date  ,By Description,By 3, By 4".
@@ -192,17 +192,17 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a DPConf  */
       ASSIGN 
-      cfc = "lis" 
+      Syst.Var:cfc = "lis" 
       ufkey = true 
       ac-hdr = " ADD " 
       must-add = false.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. 
-        RUN ufkey.
+        Syst.Var:ehto = 9. 
+        RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
 
@@ -218,7 +218,7 @@ ADD-ROW:
 
               if keylabel(lastkey) = "F4" then undo add-row, leave add-row.
 
-              IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+              IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                  HIDE MESSAGE.
                  IF FRAME-FIELD = "ValidFrom" THEN DO:
                     IF INPUT DPConf.ValidFrom = ? THEN DO:
@@ -332,28 +332,28 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 28  ufk[2]= 30  ufk[3]= 0  ufk[4]= 1723
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)  
-        ufk[7]= 0  ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = false.
-        RUN ufkey.p.
+        Syst.Var:ufk[1]= 28  Syst.Var:ufk[2]= 30  Syst.Var:ufk[3]= 0  Syst.Var:ufk[4]= 1723
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)  
+        Syst.Var:ufk[7]= 0  Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = false.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW DPConf.ValidFrom ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) DPConf.ValidFrom WITH FRAME sel.
+        CHOOSE ROW DPConf.ValidFrom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) DPConf.ValidFrom WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW DPConf.DPCName  NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) DPConf.DPCName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) DPConf.DPCName WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTkey).
+      Syst.Var:nap = keylabel(LASTkey).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -362,10 +362,10 @@ BROWSE:
       END.
 
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -383,7 +383,7 @@ BROWSE:
       END.
 
       /* PREVious row */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-line = 1 THEN DO:
            RUN local-find-this(false).
            RUN local-find-PREV.
@@ -408,7 +408,7 @@ BROWSE:
       END. /* PREVious row */
 
       /* NEXT row */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-line = FRAME-down THEN DO:
            RUN local-find-this(false).
@@ -434,7 +434,7 @@ BROWSE:
       END. /* NEXT row */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND DPConf WHERE recid(DPConf) = memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -458,7 +458,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* Put Cursor on downmost Row */
        IF rtab[FRAME-down] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -473,14 +473,14 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search by column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDkey undo, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDkey undo, NEXT LOOP:
 
 ASK-F1:
        REPEAT WITH FRAME f1 
        ON ENDKEY UNDO ASK-F1, LEAVE ASK-F1.
 
-         cfc = "puyr". RUN ufcolor.
-         ehto = 9. RUN ufkey. ufkey = true.
+         Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
          CLEAR FRAME f1.
          SET ValidFrom WITH FRAME f1.
          LEAVE.
@@ -506,14 +506,14 @@ ASK-F1:
      END. /* Search-1 */
 
      /* Search by col 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDkey UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDkey UNDO, NEXT LOOP:
 
 ASK-F2:
         REPEAT WITH FRAME f2 
         ON ENDKEY UNDO ASK-F2, LEAVE ASK-F2.
 
-          cfc = "puyr". RUN ufcolor.
-          ehto = 9. RUN ufkey. ufkey = true.
+          Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+          Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
           CLEAR FRAME f2.
           SET DPCName WITH FRAME f2.
           LEAVE.
@@ -537,18 +537,18 @@ ASK-F2:
        END.
      END. /* Search-2 */
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* ADD */
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* ADD */
         must-add = true.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW" 
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO TRANSAction:  /* DELETE */
        delrow = FRAME-line.
        RUN local-find-this (false).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        DPConf.ValidFrom DPConf.DPCName .
 
        RUN local-find-NEXT.
@@ -570,7 +570,7 @@ ASK-F2:
 
        ASSIGN ok = false.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        DPConf.ValidFrom DpConf.ValidTo DPConf.DPCName .
        IF ok THEN DO:
 
@@ -598,11 +598,11 @@ ASK-F2:
        ELSE delrow = 0. /* undo DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"f4,4") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"f4,4") > 0 THEN DO:
         /* read this DPConf record into record buffer, NO-LOCK */
         RUN local-find-this(false).
 
-        RUN dpbasis(DPConf.DPConfNum).  
+        RUN Mc/dpbasis.p(DPConf.DPConfNum).  
 
         ufkey = TRUE.
         NEXT loop.
@@ -610,14 +610,14 @@ ASK-F2:
 
      END.
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
-       {uright2.i}
+       {Syst/uright2.i}
        RUN local-find-this(true).
-       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = true Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY DPConf.ValidFrom DPConf.ValidTo.
        DISPLAY DPConf.DPCName.
 
@@ -637,25 +637,25 @@ ASK-F2:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = recid(DPConf) must-print = true.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN memory = recid(DPConf) must-print = true.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE local-find-this:
 
@@ -758,7 +758,7 @@ PROCEDURE local-update-record:
          WITH FRAME lis
          EDITING:
                 READKEY.
-                IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+                IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                    PAUSE 0.
                    IF FRAME-FIELD = "DiscType" THEN DO:
                       IF INPUT DPConf.DiscType > 3 THEN DO:

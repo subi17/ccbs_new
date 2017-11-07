@@ -9,15 +9,15 @@
   -------------------------------------------------------------------------- */
 
 
-{msreqfunc.i}
-{eventval.i}
-{fwebuser.i}
-{coinv.i}
+{Func/msreqfunc.i}
+{Syst/eventval.i}
+{Func/fwebuser.i}
+{Func/coinv.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMobSub AS HANDLE NO-UNDO.
    lhMobSub = BUFFER MobSub:HANDLE.
@@ -123,7 +123,7 @@ PROCEDURE pMsCustChange:
       RETURN. 
    END.
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
  
@@ -161,7 +161,7 @@ PROCEDURE pMsCustChange:
       
       liCreated = liDefCust.
 
-      RUN copymobcu (INPUT-OUTPUT liCreated,
+      RUN Mm/copymobcu.p (INPUT-OUTPUT liCreated,
                      FALSE).
       
       FIND bNewCust WHERE bNewCust.CustNum = liCreated EXCLUSIVE-LOCK NO-ERROR.
@@ -170,8 +170,8 @@ PROCEDURE pMsCustChange:
          IF liNewUser    = 0 THEN liNewUser    = liCreated.
          IF liNewInvCust = 0 THEN liNewInvCust = liCreated.
             
-         ASSIGN bNewCust.ChgStamp   = fMakeTS()
-                bNewCust.CreUser    = katun
+         ASSIGN bNewCust.ChgStamp   = Func.Common:mMakeTS()
+                bNewCust.CreUser    = Syst.Var:katun
                 bNewCust.InvCust    = liNewInvCust
                 bNewCust.PaymCust   = MobSub.AgrCust
                 bNewCust.RepCust    = bNewCust.CustNum
@@ -192,7 +192,7 @@ PROCEDURE pMsCustChange:
                 bNewCust.ContrBeg   = TODAY.
 
          FIND CustCat WHERE 
-              CustCat.Brand    = gcBrand AND
+              CustCat.Brand    = Syst.Var:gcBrand AND
               CustCat.Category = bNewCust.Category 
          NO-LOCK NO-ERROR.
          IF AVAILABLE CustCat THEN bNewCust.PaymTerm = CustCat.PaymTerm.
@@ -299,7 +299,7 @@ PROCEDURE pMsCustChange:
       create_account(liUserCust,?,?).
 
       /* print a letter */
-      RUN prinuser(liUserCust,
+      RUN Mc/prinuser.p(liUserCust,
                    "new", 
                    OUTPUT lcReqChar).
 
@@ -330,15 +330,17 @@ PROCEDURE pMsCustChange:
                                                       ">>>>>>9.99"))).
               
          /* replace tags */
-         fReplaceSMS(lcSMSText,
-                     MsRequest.MsSeq,
-                     TODAY,
-                     OUTPUT lcSMSText).
-
+         Func.Common:mReplaceSMS 
+             ( IF AVAILABLE Customer THEN Customer.CustName ELSE "",
+               Mobsub.CLI,
+               lcSMSText,
+               MsRequest.MsSeq,
+               TODAY,
+               OUTPUT lcSMSText).
 
          /* don't send messages before 8 am. */
-         ldReqStamp = DYNAMIC-FUNCTION("fMakeOfficeTS" in ghFunc1).
-         IF ldReqStamp = ? THEN ldReqStamp = fMakeTS().
+         ldReqStamp = Func.Common:mMakeOfficeTS().
+         IF ldReqStamp = ? THEN ldReqStamp = Func.Common:mMakeTS().
 
          fMakeSchedSMS(MobSub.CustNum,
                        MobSub.CLI,
@@ -398,7 +400,7 @@ PROCEDURE pOwnerChange:
       RETURN. 
    END.
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
  
@@ -502,7 +504,7 @@ PROCEDURE pOwnerChange:
          ASSIGN liCreated[liReqCnt] = liDefCust
                 llNewCust           = TRUE.
 
-         RUN copymobcu (INPUT-OUTPUT liCreated[liReqCnt],
+         RUN Mm/copymobcu.p (INPUT-OUTPUT liCreated[liReqCnt],
                         FALSE).
       END.
       
@@ -567,8 +569,8 @@ PROCEDURE pOwnerChange:
          
          IF llNewCust THEN DO:
             ASSIGN 
-            bNewCust.ChgStamp   = fMakeTS()
-            bNewCust.CreUser    = katun
+            bNewCust.ChgStamp   = Func.Common:mMakeTS()
+            bNewCust.CreUser    = Syst.Var:katun
             bNewCust.PaymCust   = liNewOwner
             bNewCust.AgrCust    = liNewOwner
             bNewCust.RepCust    = bNewCust.CustNum
@@ -579,7 +581,7 @@ PROCEDURE pOwnerChange:
             bNewCust.ContrBeg   = TODAY.
 
             FIND CustCat WHERE 
-                 CustCat.Brand    = gcBrand AND
+                 CustCat.Brand    = Syst.Var:gcBrand AND
                  CustCat.Category = bNewCust.Category NO-LOCK NO-ERROR.
             IF AVAILABLE CustCat THEN bNewCust.PaymTerm = CustCat.PaymTerm.
          END.   
@@ -656,7 +658,7 @@ PROCEDURE pOwnerChange:
 
       /* print a letter */
       IF liReqCnt >= 2 THEN DO:
-         RUN prinuser(liChkCust,
+         RUN Mc/prinuser.p(liChkCust,
                       "ownerchg", 
                       OUTPUT lcReqChar).
 
@@ -668,7 +670,7 @@ PROCEDURE pOwnerChange:
    END.
 
    /* confirmation letters to both old and new owner */
-   RUN prinocconf(liOldOwner,
+   RUN Mm/prinocconf.p(liOldOwner,
                   liNewOwner,
                   MsRequest.MsSeq,
                   MsRequest.CLI,
@@ -701,15 +703,17 @@ PROCEDURE pOwnerChange:
                                                       ">>>>>>9.99"))).
               
          /* replace tags */
-         fReplaceSMS(lcSMSText,
-                     MsRequest.MsSeq,
-                     TODAY,
-                     OUTPUT lcSMSText).
-
+         Func.Common:mReplaceSMS
+             ( IF AVAILABLE Customer THEN Customer.CustName ELSE "",
+               Mobsub.CLI,
+               lcSMSText,
+               MsRequest.MsSeq,
+               TODAY,
+               OUTPUT lcSMSText).
 
          /* don't send messages before 8 am. */
-         ldReqStamp = DYNAMIC-FUNCTION("fMakeOfficeTS" in ghFunc1).
-         IF ldReqStamp = ? THEN ldReqStamp = fMakeTS().
+         ldReqStamp = Func.Common:mMakeOfficeTS().
+         IF ldReqStamp = ? THEN ldReqStamp = Func.Common:mMakeTS().
 
          fMakeSchedSMS(liNewOwner,
                        bNewCust.SMSNumber,
@@ -722,7 +726,7 @@ PROCEDURE pOwnerChange:
    /* fee from owner change to new customer (actually to invoice customer) */
    IF MsRequest.CreateFees THEN DO:
    
-      RUN creasfee (0,
+      RUN Mc/creasfee.p (0,
                     MsRequest.MsSeq,
                     TODAY,
                     "MobSub",
@@ -732,7 +736,7 @@ PROCEDURE pOwnerChange:
                     /* memo   */
                     STRING(liOldOwner) + " -> " + STRING(liNewOwner),
                     FALSE,          /* no messages to screen */
-                    katun,
+                    Syst.Var:katun,
                     "",
                     0,
                     "",
@@ -808,7 +812,7 @@ PROCEDURE pMsCustMove:
          ELSE DO:
         
             FIND CLIType WHERE 
-                 CLIType.Brand   = gcBrand AND
+                 CLIType.Brand   = Syst.Var:gcBrand AND
                  CLIType.CLIType = MobSub.CLIType NO-LOCK NO-ERROR.
             IF AVAILABLE CLIType THEN ASSIGN 
                BillTarget.BillTarget = CLIType.BillTarget
@@ -829,7 +833,7 @@ PROCEDURE pMsCustMove:
       ELSE ldtFeeTo = DATE(MONTH(ldtActDate) + 1,1,YEAR(ldtActDate)) - 1.
     
       FOR EACH FATime EXCLUSIVE-LOCK USE-INDEX MobSub WHERE
-               FATime.Brand  = gcBrand      AND
+               FATime.Brand  = Syst.Var:gcBrand      AND
                FATime.MsSeq  = MobSub.MsSeq AND
                FATime.InvNum = 0            AND
                FATime.Period >= liFeePeriod:
@@ -854,8 +858,7 @@ PROCEDURE pMsCustMove:
                bFatime.TransQty = 0.
 
             /* memo */
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "FATime",
+            Func.Common:mWriteMemo("FATime",
                        STRING(bFatime.FatNum),
                        bFatime.CustNum,
                        "User Change",
@@ -865,8 +868,7 @@ PROCEDURE pMsCustMove:
          /* transfer newer fatimes totally */
          ELSE DO:
             /* memo */
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "FATime",
+            Func.Common:mWriteMemo("FATime",
                        STRING(Fatime.FatNum),
                        iiNewUser,
                        "User Change",
@@ -888,7 +890,7 @@ PROCEDURE pMsCustMove:
              
       /* SIM */
       FIND FIRST SIM EXCLUSIVE-LOCK WHERE
-                 SIM.Brand = gcBrand   AND
+                 SIM.Brand = Syst.Var:gcBrand   AND
                  SIM.ICC   = MobSub.ICC NO-ERROR.
       IF AVAILABLE SIM THEN SIM.CustNum = iiNewUser.
    END.
@@ -911,7 +913,7 @@ PROCEDURE pMsCustMove:
                     DAY(ldtFeeDate).
                     
       FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
-               FixedFee.Brand     = gcBrand              AND
+               FixedFee.Brand     = Syst.Var:gcBrand              AND
                FixedFee.HostTable = "MobSub"             AND 
                FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
                FixedFee.InUse     = TRUE:
@@ -976,8 +978,7 @@ PROCEDURE pMsCustMove:
          ELSE bFixedFee.BegPer = bFFItem.BillPer.
 
          /* memo */
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                    "FixedFee",
+         Func.Common:mWriteMemo("FixedFee",
                     STRING(bFixedFee.FFNum),
                     bFixedFee.CustNum,
                     "User Change",

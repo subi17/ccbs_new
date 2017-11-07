@@ -1,11 +1,10 @@
     
-{commpaa.i}
-{timestamp.i}
-{xmlfunction.i}
-{heartbeat.i}
-{fgettxt.i}
+{Syst/commpaa.i}
+{Func/xmlfunction.i}
+{Func/heartbeat.i}
+{Func/fgettxt.i}
 
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 FUNCTION fCallAlarm RETURNS LOGICAL
   (INPUT pcAction AS CHARACTER,
@@ -29,7 +28,7 @@ FUNCTION fCallAlarm RETURNS LOGICAL
       liLang      = 1
       lcAlarmMess = fGetTxt(INPUT "SMS", pcAction, TODAY, liLang)
       lcAlarmMess = REPLACE(lcAlarmMess,"#TOPUP", TRIM(STRING(pdeAmt / 100,">>>99.99")))
-      ldeActStamp = fMakeTS().
+      ldeActStamp = Func.Common:mMakeTS().
    
    CREATE CallAlarm.
    ASSIGN
@@ -45,7 +44,7 @@ FUNCTION fCallAlarm RETURNS LOGICAL
       CallAlarm.Limit      = 0
       CallAlarm.CreditType = 22
       CallAlarm.Orig       = "800622800"
-      CallAlarm.Brand      = gcBrand.
+      CallAlarm.Brand      = Syst.Var:gcBrand.
       
    RELEASE CallAlarm.
 
@@ -76,7 +75,7 @@ FRAME frmMain .
 
 ASSIGN
    liLoop   = 0
-   lcTime1  = fTS2HMS(fMakeTS())
+   lcTime1  = Func.Common:mTS2HMS(Func.Common:mMakeTS())
    lcTime2  = lcTime1
    lcNagios = "ivrh:IVR Handler".
 
@@ -86,7 +85,7 @@ liNagios = fKeepAlive(lcNagios).
 LOOP:
 REPEAT ON STOP UNDO, LEAVE ON QUIT UNDO, LEAVE:
    
-   lcTime2  = fTS2HMS(fMakeTS()).
+   lcTime2  = Func.Common:mTS2HMS(Func.Common:mMakeTS()).
   
    DISPLAY
       lcTime1
@@ -102,7 +101,7 @@ REPEAT ON STOP UNDO, LEAVE ON QUIT UNDO, LEAVE:
    PUT SCREEN ROW 23 "Processing...    ".
 
    FOR EACH PrePaidRequest NO-LOCK WHERE
-            PrePaidRequest.Brand    = gcBrand AND
+            PrePaidRequest.Brand    = Syst.Var:gcBrand AND
             PrePaidRequest.Source   = "IVR"   AND
            (PrePaidRequest.PPStatus = 0 OR
             PrePaidRequest.PPStatus = 9),
@@ -194,18 +193,18 @@ PROCEDURE pIvrProcess:
 
    DEFINE BUFFER bufPP FOR PrePaidRequest.
 
-   RUN topupcamp(piMsSeq, OUTPUT liPPRequest).
+   RUN Mm/topupcamp.p(piMsSeq, OUTPUT liPPRequest).
 
    IF liPPRequest NE 0 THEN DO:
 
-      RUN pp_platform(gcBrand,liPPRequest).
+      RUN Gwy/pp_platform.p(Syst.Var:gcBrand,liPPRequest).
 
       lcResponse = RETURN-VALUE.
       
       lcRespCode = fGetRPCNodeValue(lcResponse,"responseCode").
       
       FIND FIRST bufPP WHERE
-                 bufPP.Brand     = gcBrand AND
+                 bufPP.Brand     = Syst.Var:gcBrand AND
                  bufPP.PPRequest = liPPRequest
       EXCLUSIVE-LOCK NO-ERROR.
       

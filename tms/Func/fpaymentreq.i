@@ -3,7 +3,7 @@
    create a request for a payment 
 */
    
-{fcreatereq.i}
+{Func/fcreatereq.i}
 
 /* caller can just give the amount in idPaymAmt, and let the request take 
    care of posting rules and accounts (fPaymentRequest)
@@ -35,7 +35,7 @@ FUNCTION fPaymentWithPostingsRequest RETURNS INTEGER
 
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest(31,
                   idActStamp,

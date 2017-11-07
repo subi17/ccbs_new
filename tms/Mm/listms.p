@@ -6,15 +6,14 @@
   CREATED ......: 16.08-1999
   CHANGED ......: 11.10.02 jr Removed BillLevel
                   13.12.04/aam SSDate for SubSer
-                  25.01.06/jt DYNAMIC-FUNCTION("fDispCustName"
                               removed mobsub.first + lastname 
                               now customer.custname customer.lastname
   VERSION ......: M15
 ---------------------------------------------------------------------- */
 
-{commali.i} 
+{Syst/commali.i} 
 
-{utumaa.i new}
+{Syst/utumaa.i new}
 
 ASSIGN tuni1 = "listms"
        tuni2 = "".
@@ -34,18 +33,20 @@ FIND sim     WHERE sim.icc         = mobsub.icc     NO-LOCK.
 FIND msisdn  WHERE msisdn.CLI    = mobsub.CLI   NO-LOCK.
 FIND Customer WHERE Customer.CustNum  = mobsub.CustNum  NO-LOCK.
 
-lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                               BUFFER Customer).
+lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
 FIND imsi    WHERE imsi.IMSI      = mobsub.IMSI   NO-LOCK.
 FIND BillTarg WHERE BillTarg.BillTarg   = mobsub.BillTarg  AND
                    BillTarg.CustNum  = mobsub.CustNum  NO-LOCK.
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
+
 FORM HEADER
    FILL("=",116) FORMAT "x(116)"         skip
       ynimi  at 1  FORMAT "x(23)"
       "SERVICES OF MOBILE SUBSCRIPTION" at 41
-      pvm    format "99.99.9999" TO 116 skip
+      TODAY FORMAT "99.99.9999" TO 116 skip
       mobno  FORMAT "x(20)"  at 41
       "Page"            TO 112   
       pg-c format "zz9" TO 116   skip
@@ -79,7 +80,7 @@ WITH
    WIDTH 116 NO-BOX NO-LABEL FRAME hdr.
 
 tila = true.
-{utuloste.i return}
+{Syst/utuloste.i return}
 
 /* reformat the MSISDN NO. */
 
@@ -107,11 +108,11 @@ rw-c = 14.
 FOR 
 EACH  subser  OF mobsub  NO-LOCK,
 FIRST servcom WHERE 
-      ServCom.Brand   = gcBrand AND 
+      ServCom.Brand   = Syst.Var:gcBrand AND 
       ServCom.servcom = subser.servcom  NO-LOCK,
 
 FIRST service NO-LOCK WHERE 
-      Service.Brand   = gcBrand AND 
+      Service.Brand   = Syst.Var:gcBrand AND 
       service.Service = servcom.Service
 
 BREAK
@@ -156,6 +157,6 @@ PUT STREAM tul UNFORMATTED chr(12).
 
 /* Close the printer stream */
 tila = FALSE.
-{utuloste.i}
+{Syst/utuloste.i}
 
 PAUSE 0.

@@ -8,12 +8,12 @@ CHANGED ......:
 Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
-   katun = "Qvantel"
-      gcBrand = "1".
-{cparam2.i}
-{xmlrpc/xmlrpc_client.i}
+   Syst.Var:katun = "Qvantel"
+      Syst.Var:gcBrand = "1".
+{Func/cparam2.i}
+{fcgi_agent/xmlrpc/xmlrpc_client.i}
 
 DEFINE VARIABLE ocResponse AS CHAR NO-UNDO.
 
@@ -85,15 +85,15 @@ PROCEDURE pUserInput:
             lcMnpReason WITH FRAME lis EDITING:
 
             IF ufkey THEN DO:
-               ASSIGN ehto = 9. RUN ufkey.p.
+               ASSIGN Syst.Var:ehto = 9. RUN Syst/ufkey.p.
                ufkey = false.
             END.
 
             READKEY.
 
-            nap = keylabel(lastkey).
+            Syst.Var:nap = keylabel(lastkey).
 
-            IF LOOKUP(nap,poisnap) > 0 THEN DO:
+            IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
 
                IF FRAME-FIELD = "lcMnpRefId" THEN DO:
                   FIND FIRST MNPProcess WHERE
@@ -254,7 +254,8 @@ PROCEDURE pAddRequestStructElement:
    add_string(lcPersondata, "nombre", MNPDetails.FirstName).
    add_string(lcPersondata, "primerApellido", MNPDetails.SurName1).
 
-
+   IF MNPDetails.CustIdType = "CIF"
+   THEN add_string(lcPersondata, "razonSocial", MNPDetails.CompanyName).
 
    IF gi_xmlrpc_error NE 0 THEN DO:
    ocResponse = SUBST("ERROR: XML creation: &1", gc_xmlrpc_error).

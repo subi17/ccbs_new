@@ -7,9 +7,9 @@
   VERSION ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{pdfinvdf.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Inv/pdfinvdf.i}
 
 DEF INPUT  PARAMETER iiInvNum1     AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiInvNum2     AS INT  NO-UNDO.
@@ -67,7 +67,7 @@ END FUNCTION.
    are insignificant */
 IF iiInvNum1 = iiInvNum2 THEN 
 FOR FIRST Invoice NO-LOCK WHERE 
-          Invoice.Brand  = gcBrand AND
+          Invoice.Brand  = Syst.Var:gcBrand AND
           Invoice.InvNum = iiInvNum1,
     FIRST Customer OF Invoice NO-LOCK:
    
@@ -79,7 +79,7 @@ END.
 /* one date is chosen */
 ELSE IF idtInvDate1 = idtInvDate2 THEN
 FOR EACH Invoice NO-LOCK WHERE          
-         Invoice.Brand       = gcBrand       AND
+         Invoice.Brand       = Syst.Var:gcBrand       AND
          Invoice.InvDate     = idtInvDate1   AND
          Invoice.DelType     = iiDelType     AND
          Invoice.InvNum     >= iiInvNum1     AND
@@ -97,7 +97,7 @@ END.
 /* wider selection */
 ELSE 
 FOR EACH  Invoice NO-LOCK WHERE
-          Invoice.Brand        = gcBrand       AND
+          Invoice.Brand        = Syst.Var:gcBrand       AND
           Invoice.InvDate     >= idtInvDate1   AND
           Invoice.InvDate     <= idtInvDate2   AND
           Invoice.InvNum      >= iiInvNum1     AND
@@ -124,7 +124,7 @@ IF NOT CAN-FIND(FIRST ttPDFInv) THEN DO:
    
 END.
 
-RUN pdfinv(INPUT-OUTPUT TABLE ttPDFInv,
+RUN Inv/pdfinv.p(INPUT-OUTPUT TABLE ttPDFInv,
            INPUT  ilPrintRep,
            INPUT  ilFormPDF,
            INPUT  iiSendMail,

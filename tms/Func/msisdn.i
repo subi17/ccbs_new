@@ -5,8 +5,11 @@
 
 */
 
-{commali.i}
-{timestamp.i}
+&IF "{&MSISDN_I}" NE "YES" 
+&THEN
+&GLOBAL-DEFINE MSISDN_I YES
+
+{Syst/commali.i}
 
 DEF VAR m_pref  AS C NO-UNDO FORMAT "x(3)".
 
@@ -15,8 +18,8 @@ DEF VAR lcGSData    AS   CHAR NO-UNDO INIT "0406".
 DEF VAR lcGSFax     AS   CHAR NO-UNDO INIT "0406".
 DEF VAR lcGSDcf     AS   CHAR NO-UNDO.
 
-{tmsparam.i DefMSISDNPr return}.  m_pref  = TMSParam.CharVal.
-{tmsparam.i DCFPrefix   return}.  lcGSDcf = TMSParam.CharVal.
+{Func/tmsparam.i DefMSISDNPr return}.  m_pref  = TMSParam.CharVal.
+{Func/tmsparam.i DCFPrefix   return}.  lcGSDcf = TMSParam.CharVal.
 
 /* This function returns true if given MSISDN belongs to EMA MSISDN range */
 FUNCTION fIsEmaMsisdn RETURNS LOG (INPUT icMSISDN AS CHAR):
@@ -27,7 +30,8 @@ FUNCTION fIsEmaMsisdn RETURNS LOG (INPUT icMSISDN AS CHAR):
 
    /* EMA MSISDN range. If belongs to EMA then return true */
    IF ((liMSISDN >= 633993700 AND liMSISDN <= 633993750) OR
-       (liMSISDN >= 633993500 AND liMSISDN <= 633993620)) THEN RETURN TRUE.
+       (liMSISDN >= 633993500 AND liMSISDN <= 633993620) OR
+       (liMSISDN >= 722600000 AND liMSISDN <= 722600009)) THEN RETURN TRUE.
    
    RETURN FALSE.   /* Not in EMA MSISDN range */
 
@@ -43,7 +47,7 @@ FUNCTION fSearchGenServNumber RETURNS CHAR
    IF  crit = "DATA" THEN  DO:
 
       Find first tmsparam where
-                 TmsParam.Brand      = gcBrand        AND 
+                 TmsParam.Brand      = Syst.Var:gcBrand        AND 
                  tmsparam.paramgroup = "subser"       AND
                  tmsparam.paramcode  = "DataNumber" 
       NO-LOCK NO-ERROR.
@@ -73,7 +77,7 @@ FUNCTION fSearchGenServNumber RETURNS CHAR
 
             /* check IF msisdn number is already in use */
             IF NOT can-find(FIRST msisdn where
-                                  msisdn.Brand = gcBrand AND 
+                                  msisdn.Brand = Syst.Var:gcBrand AND 
                                   msisdn.cli = lcGSData + string(liCLI))        
             THEN LEAVE MSISDN.
          END.
@@ -87,7 +91,7 @@ FUNCTION fSearchGenServNumber RETURNS CHAR
 
    ELSE IF crit = "FAX"  THEN DO:
       Find first tmsparam where
-                 TmsParam.Brand      = gcBrand        AND 
+                 TmsParam.Brand      = Syst.Var:gcBrand        AND 
                  tmsparam.paramgroup = "subser"       AND
                  tmsparam.paramcode  = "FaxNumber" EXCLUSIVE-LOCK NO-ERROR.
 
@@ -103,7 +107,7 @@ FUNCTION fSearchGenServNumber RETURNS CHAR
 
             /* check IF msisdn number is already in use */
             IF NOT can-find(FIRST msisdn where
-                                  msisdn.Brand = gcBrand AND 
+                                  msisdn.Brand = Syst.Var:gcBrand AND 
                                   msisdn.cli = lcGSFAX + string(liCLI))        
             THEN LEAVE MSISDN.
          END.
@@ -140,7 +144,7 @@ FUNCTION fSearchGenServNumber RETURNS CHAR
       REPEAT:
          /* check IF msisdn number is already in use */
          IF NOT can-find(FIRST msisdn where
-                               msisdn.Brand = gcBrand AND 
+                               msisdn.Brand = Syst.Var:gcBrand AND 
                                msisdn.cli = lcGSDcf + string(liCLI))    
          THEN LEAVE MSISDN.
 
@@ -168,7 +172,7 @@ FUNCTION fMakeMsidnHistoryTS RETURNS LOG
    FIND FIRST HistMSISDN WHERE 
               RECID(HistMSISDN) = irREcID EXCLUSIVE-LOCK.
           
-   IF idTimeStamp = 0 OR idTimeStamp = ? THEN idTimeStamp = fMakeTS().
+   IF idTimeStamp = 0 OR idTimeStamp = ? THEN idTimeStamp = Func.Common:mMakeTS().
    
    ASSIGN HistMSISDN.ValidTo = idTimeStamp.
 
@@ -177,7 +181,7 @@ FUNCTION fMakeMsidnHistoryTS RETURNS LOG
    /* make sure that there is atleast 1 second gap between rows */
    REPEAT:
       /* do this first so that ldtnewdate is available for ActionDate */
-      fSplitTS(ldNewFrom,
+      Func.Common:mSplitTS(ldNewFrom,
                OUTPUT ldtNewDate,
                OUTPUT liNewTime).
 
@@ -192,7 +196,7 @@ FUNCTION fMakeMsidnHistoryTS RETURNS LOG
          liNewTime  = 1.
       ELSE liNewTime = liNewTime + 1.
       
-      ldNewFrom = fMake2Dt(ldtNewDate,liNewTime).
+      ldNewFrom = Func.Common:mMake2DT(ldtNewDate,liNewTime).
    END.
    
    CREATE MSISDN.
@@ -208,7 +212,7 @@ FUNCTION fMakeMsidnHistory RETURNS CHAR
    (INPUT   irRecID AS RECID):
    
    fMakeMsidnHistoryTS(irRecid,
-                       fMakeTS()). 
+                       Func.Common:mMakeTS()). 
 END FUNCTION.
 
-
+&ENDIF

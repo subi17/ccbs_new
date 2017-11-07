@@ -7,32 +7,32 @@
   CHANGED ......: 10.03.03 tk tokens
                   20.03.03/aam one parameter added for tariff.p
                   04.03.03/tk  removed prompt-for
-                  04.04.03 kl run tariff, new parameter
-                  26.06.03 kl run tariff, new parameter
-                  04.07.03 kl run tariff, new parameter
+                  04.04.03 kl RUN Mc/tariff,.p new parameter
+                  26.06.03 kl RUN Mc/tariff,.p new parameter
+                  04.07.03 kl RUN Mc/tariff,.p new parameter
                   08.09.03/aam brand 
   Version ......: M15
   ---------------------------------------------------------------------- */
 
 &GLOBAL-DEFINE BrTable RateCCN
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'RateCCN'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'RateCCN'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhRateCCN AS HANDLE NO-UNDO.
    lhRateCCN = BUFFER RateCCN:HANDLE.
    RUN StarEventInitialize(lhRateCCN).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhRateCCN).
+      RUN Mc/eventview2.p(lhRateCCN).
    END.
 
 END.
@@ -80,9 +80,9 @@ form
                       FORMAT "X(20)"
 
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
-       " RATING CCNs "  + string(pvm,"99-99-99") + " "
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
+       " RATING CCNs "  + string(TODAY,"99-99-99") + " "
     FRAME sel.      
 
 form
@@ -97,21 +97,21 @@ form
        lcCCNName  NO-LABEL 
                   FORMAT "X(30)"
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form 
     "Brand:" lcBrand skip
     "Type :" liDialType
     HELP "Enter Dialling type "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Dialling type"
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Dialling type"
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 
@@ -154,15 +154,15 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a RateCCN  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
@@ -243,28 +243,28 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 1631 ufk[2]= 0  ufk[3]= 0  ufk[4]= 878
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)   
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
-        ufk[7]= 0  ufk[8]= 8   ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        Syst.Var:ufk[1]= 1631 Syst.Var:ufk[2]= 0  Syst.Var:ufk[3]= 0  Syst.Var:ufk[4]= 878
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)   
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
+        Syst.Var:ufk[7]= 0  Syst.Var:ufk[8]= 8   Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW RateCCN.DialType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) RateCCN.DialType WITH FRAME sel.
+        CHOOSE ROW RateCCN.DialType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) RateCCN.DialType WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW RateCCN.CCN ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) RateCCN.CCN WITH FRAME sel.
+        CHOOSE ROW RateCCN.CCN {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) RateCCN.CCN WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -272,10 +272,10 @@ BROWSE:
          END.
       END.
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -293,7 +293,7 @@ BROWSE:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -318,7 +318,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -344,7 +344,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND RateCCN WHERE recid(RateCCN) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -368,7 +368,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -383,9 +383,9 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
        UPDATE liDialType WITH FRAME f1.
@@ -403,27 +403,27 @@ BROWSE:
        END.
      END. /* Search-1 */
 
-     else if lookup(nap,"4,f4") > 0 THEN DO:  /* tariffs */
+     else if lookup(Syst.Var:nap,"4,f4") > 0 THEN DO:  /* tariffs */
         RUN local-find-this(FALSE).
 
         IF AVAILABLE RateCCN THEN DO:
-           RUN tariff(0,RateCCN.CCN,"",0,RateCCN.BDest,0). 
+           RUN Mc/tariff.p(0,RateCCN.CCN,"",0,RateCCN.BDest,0). 
            UFKEY = TRUE.
         END.
      end. 
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW" 
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO TRANSACTION:  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        RateCCN.DialType RateCCN.CCN .
 
        RUN local-find-NEXT.
@@ -445,7 +445,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        RateCCN.DialType RateCCN.CCN.
 
        IF ok THEN DO:
@@ -468,7 +468,7 @@ BROWSE:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 AND lcRight = "RW" THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 AND lcRight = "RW" THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -476,8 +476,8 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhRateCCN).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY RateCCN.DialType.
 
        RUN local-UPDATE-record(FALSE).
@@ -494,25 +494,25 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(RateCCN) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(RateCCN) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -601,7 +601,7 @@ PROCEDURE local-UPDATE-record:
       WITH FRAME lis
       EDITING:
              READKEY.
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                 PAUSE 0.
                 IF FRAME-FIELD = "DialType" THEN DO:
                    IF NOT CAN-FIND(DialType WHERE 

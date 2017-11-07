@@ -3,7 +3,7 @@
   FUNCTION .....: Initiates the logmodule. A flag decides
                   logoutput should be made OR NOT.
 
-                  Usage: {cliinlog.i "NEW" "xxxxx"} 
+                  Usage: {Mf/cliinlog.i "NEW" "xxxxx"} 
                  ("NEW" only for the "top" program in a chain of procedures.
                   "xxxxx" IF this second argument is set, the logfile will have
                    the prefix "xxxxx". IF left a default FileName
@@ -27,11 +27,11 @@ DO:
 
       /* Look in TMSParam which way status is going TO be Sent */
       /* via EMail OR TO a logfile.                          */
-      {tmsparam.i LogType RETURN}
+      {Func/tmsparam.i LogType RETURN}
       ilLogType = TMSParam.CharVal.
 
       /* Get the log-destination */
-      {tmsparam.i LogDest RETURN}
+      {Func/tmsparam.i LogDest RETURN}
       ilDestination = TMSParam.CharVal.
 
       IF substr(ilDestination,length(ilDestination),1) NE "/" THEN

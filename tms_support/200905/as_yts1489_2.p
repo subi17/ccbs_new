@@ -1,7 +1,7 @@
-{commpaa.i}
-katun = "anttis".
-gcBrand = "1".
-{msreqfunc.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
+{Func/msreqfunc.i}
 
 input from /apps/snet/200905/as_yts1489.log.
 output to /apps/snet/200905/as_yts1489_2.log append.

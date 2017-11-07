@@ -38,20 +38,19 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{nncoit2.i}
-{fcustpl.i}
-{timestamp.i}
-{fmakeservlimit.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'FixedFee'}
-{eventval.i}
-{fcustdata.i}
+{Syst/commali.i}
+{Func/nncoit2.i}
+{Func/fcustpl.i}
+{Func/fmakeservlimit.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'FixedFee'}
+{Syst/eventval.i}
+{Func/fcustdata.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhFixedFee AS HANDLE NO-UNDO.
    DEFINE VARIABLE lhSingleFee AS HANDLE NO-UNDO.
@@ -136,18 +135,18 @@ END.
 liFeeCust = MobSub.InvCust.
 
 FIND FIRST msowner WHERE 
-           msowner.brand = gcBrand AND 
+           msowner.brand = Syst.Var:gcBrand AND 
            msowner.CLI   = mobsub.Cli no-lock no-error.
 
 IF iiContract > 0 
 THEN FIND Contract WHERE 
-          Contract.Brand    = gcBrand AND
+          Contract.Brand    = Syst.Var:gcBrand AND
           Contract.Contract = STRING(iiContract) NO-LOCK NO-ERROR.
 
 /* use default if not given */          
 IF iiContract = 0 OR NOT AVAILABLE Contract 
 THEN FIND Contract  WHERE 
-          Contract.Brand    = gcBrand AND 
+          Contract.Brand    = Syst.Var:gcBrand AND 
           Contract.Contract = msowner.contract NO-LOCK NO-ERROR.
 
 IF avail contract THEN ASSIGN
@@ -155,8 +154,7 @@ IF avail contract THEN ASSIGN
    enddate   = contract.ToDate.
 
 FIND Customer WHERE Customer.CustNum = MobSub.CustNum NO-LOCK.
-username = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,     
-                            BUFFER Customer).
+username = Func.Common:mDispCustName(BUFFER Customer).
 IF liFeeCust = 0 THEN liFeeCust = Customer.InvCust.                            
 
 FIND BillTarg WHERE 
@@ -191,7 +189,7 @@ IF InterAct THEN DO WITH FRAME info:
    PAUSE 0.
    IF FeeModel ne "" THEN DO:
       FIND FeeModel  WHERE 
-           FeeModel.Brand    = gcBrand  AND 
+           FeeModel.Brand    = Syst.Var:gcBrand  AND 
            FeeModel.FeeModel = FeeModel NO-LOCK NO-ERROR.
 
       /* PriceList is stored on PricePlan record */
@@ -222,14 +220,14 @@ ACTION:
    REPEAT WITH FRAME info:
 
       IF ask-data THEN DO ON ENDKEY UNDO, RETRY:
-         EHTO = 9. RUN ufkey. 
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p. 
          UPDATE 
            FeeModel
            codate  
            WITH FRAME info EDITING:
             READKEY.
 
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME info:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME info:
                PAUSE 0. /* clears lowest line on screen */
 
                IF FRAME-FIELD = "FeeModel" THEN DO:
@@ -239,7 +237,7 @@ ACTION:
                      UNDO, RETURN.
                   END.   
                   FIND FeeModel  WHERE 
-                       FeeModel.Brand    = gcBrand   AND 
+                       FeeModel.Brand    = Syst.Var:gcBrand   AND 
                        FeeModel.FeeModel = 
                   INPUT FRAME info FeeModel NO-LOCK NO-ERROR.
                   IF NOT AVAIL FeeModel THEN DO:
@@ -269,29 +267,29 @@ ACTION:
       END.
 
       ASSIGN
-      ufk = 0 ufk[1] = 7 ufk[4] = 294 
-      ufk[5] = (IF lcRight = "RW" THEN 15 ELSE 0)
-      ufk[8] = 8 ehto = 0.
-      if FeeModel = "" THEN ufk[5] = 0.
-      RUN ufkey.
+      Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[4] = 294 
+      Syst.Var:ufk[5] = (IF lcRight = "RW" THEN 15 ELSE 0)
+      Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
+      if FeeModel = "" THEN Syst.Var:ufk[5] = 0.
+      RUN Syst/ufkey.p.
 
 
-      IF toimi = 1 THEN DO:
+      IF Syst.Var:toimi = 1 THEN DO:
         ask-data = TRUE.
         NEXT Action.
       END.
 
-      IF toimi = 4 THEN DO:
+      IF Syst.Var:toimi = 4 THEN DO:
          /* show items (contents) of this Billing Event */
-         run beitempl(FeeModel,lcPriceList).
+         RUN Mc/beitempl.p(FeeModel,lcPriceList).
          NEXT.
       END.
-      ELSE IF TOIMI = 5 AND lcRight = "RW" THEN DO:
+      ELSE IF Syst.Var:toimi = 5 AND lcRight = "RW" THEN DO:
          IF Fcheck-pl(FeeModel.FeeModel,
                       lcPriceList) = FALSE THEN NEXT Action.
          LEAVE Action. /* i.e. DO the job ... */
       END.   
-      ELSE IF TOIMI = 8 THEN DO:
+      ELSE IF Syst.Var:toimi = 8 THEN DO:
          HIDE FRAME info.
          UNDO, RETURN.
       END.
@@ -319,23 +317,23 @@ IF CoDate = ? THEN CoDate = TODAY.
 
 IF CoDate <= TODAY 
 THEN ldActStamp = 0.
-ELSE ldActStamp = fMake2DT(CoDate,1).
+ELSE ldActStamp = Func.Common:mMake2DT(CoDate,1).
 
 ok = TRUE.
 
 FOR                             
 EACH FMItem NO-LOCK  WHERE
-     FMItem.Brand     = gcBrand     AND 
+     FMItem.Brand     = Syst.Var:gcBrand     AND 
      FMItem.FeeModel  = FeeModel    AND
      FMItem.PriceList = lcPriceList AND
      FMItem.FromDate <= CoDate      AND
      FMItem.ToDate   >= CoDate,
 
      BillItem no-lock WHERE
-     BillItem.BRand    = gcBrand   AND 
+     BillItem.BRand    = Syst.Var:gcBrand   AND 
      BillItem.BillCode = FMItem.BillCode,
 FIRST PriceList NO-LOCK WHERE
-      PriceList.Brand     = gcBrand AND
+      PriceList.Brand     = Syst.Var:gcBrand AND
       PriceList.PriceList = lcPriceList:
 
      IF FMItem.BillType NE "NF" THEN /* Not no fee */
@@ -369,7 +367,7 @@ FIRST PriceList NO-LOCK WHERE
            ASSIGN
            SingleFee.FMItemId    = NEXT-VALUE(bi-seq).                             
            ASSIGN
-           SingleFee.Brand       = gcBrand 
+           SingleFee.Brand       = Syst.Var:gcBrand 
            SingleFee.CustNum     = liFeeCust  /* customer number         */
            SingleFee.BillTarget  = MobSub.BillTarget /* Billing Target        */
            SingleFee.CalcObj     = "MsSeq" +       /* MobSub id               */
@@ -429,7 +427,7 @@ FIRST PriceList NO-LOCK WHERE
            CREATE FixedFee.
 
            ASSIGN      
-           FixedFee.Brand      = gcBrand 
+           FixedFee.Brand      = Syst.Var:gcBrand 
            FixedFee.FFNum      = NEXT-VALUE(contract) /* sequence FOR contract   */
            FixedFee.BegPeriod  = Period           /* beginning Period        */
            FixedFee.CustNum    = liFeeCust        /* customer no.            */

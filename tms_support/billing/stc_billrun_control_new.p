@@ -7,17 +7,16 @@
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
-katun  = "Qvantel".
-gcBrand = "1".
-{date.i}
-{tmsconst.i}
-{timestamp.i}
-{cparam2.i}
-{contract_end_date.i}
-{fixedfee.i}
-{email.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Func/contract_end_date.i}
+{Func/fixedfee.i}
+{Func/email.i}
 {Func/fixedlinefunc.i}
+{Func/multitenantfunc.i}
 
 DEF VAR ldBeginStamp         AS DEC  NO-UNDO.
 DEF VAR ldEndStamp           AS DEC  NO-UNDO.
@@ -83,10 +82,21 @@ ASSIGN lcIPLContracts    = fCParamC("IPL_CONTRACTS")
        lcLogFolder       = fCParamC("StcContRepFolder").
 
 ASSIGN
-       lcSumFile    = lcLogFolder + "/STC_ControlReport_Summary_" + "#USER_" + "#DATE" + ".txt"
-       lcDetFile    = lcLogFolder + "/STC_ControlReport_Details_" + "#USER_" + "#DATE" + ".txt"
-       lcErrors     = lcLogFolder + "/STC_ControlReport_Errors_"  + "#USER_" + "#DATE" + ".txt"
-       lcMail       = lcLogFolder + "/Mail_"                      + "#USER_" + "#DATE" + ".txt"
+       lcSumFile    = lcLogFolder + "/" +
+                      CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) + 
+                      "_STC_ControlReport_Summary_" + "#USER_" + "#DATE" + 
+                      ".txt"
+       lcDetFile    = lcLogFolder + "/" +
+                      CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) +
+                      "STC_ControlReport_Details_" + "#USER_" + "#DATE" + 
+                      ".txt"
+       lcErrors     = lcLogFolder + "/" +
+                      CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) +
+                      "STC_ControlReport_Errors_"  + "#USER_" + "#DATE" + 
+                      ".txt"
+       lcMail       = lcLogFolder + "/" +
+                      CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) +
+                      "Mail_" + "#USER_" + "#DATE" + ".txt"
        ldtInputDate = TODAY.
 
 FUNCTION fGetOrigCLIType RETURNS CHARACTER
@@ -104,11 +114,11 @@ FUNCTION fGetOrigCLIType RETURNS CHARACTER
 
    IF pdtExtentDate <> ? THEN
       ASSIGN
-         ldTS        = fHMS2TS(pdtExtentDate,"00:00:00")
+         ldTS        = Func.Common:mHMS2TS(pdtExtentDate,"00:00:00")
          lcReqParam2 = "update".
    ELSE
       ASSIGN
-         ldTS        = fHMS2TS(pdtValidFrom,"00:00:00")
+         ldTS        = Func.Common:mHMS2TS(pdtValidFrom,"00:00:00")
          lcReqParam2 = "act,recreate".
  
    FIND FIRST bufMsRequest WHERE
@@ -208,8 +218,8 @@ IF NOT SESSION:BATCH THEN DO:
       lcDetFile    = fModifyFileName(lcDetFile,ldtInputDate,"USER")
       lcErrors     = fModifyFileName(lcErrors,ldtInputDate,"USER")
       lcMail       = fModifyFileName(lcMail,ldtInputDate,"USER")
-      ldBeginStamp = fHMS2TS(ldtInputDate,"00:00:00")
-      ldEndStamp   = fHMS2TS(ldtInputDate,"23:59:59").
+      ldBeginStamp = Func.Common:mHMS2TS(ldtInputDate,"00:00:00")
+      ldEndStamp   = Func.Common:mHMS2TS(ldtInputDate,"23:59:59").
 END.
 ELSE DO:
    
@@ -220,8 +230,8 @@ ELSE DO:
       lcDetFile    = fModifyFileName(lcDetFile,TODAY,"CRON")
       lcErrors     = fModifyFileName(lcErrors,TODAY,"CRON")
       lcMail       = fModifyFileName(lcMail,TODAY,"CRON")
-      ldBeginStamp = fHMS2TS(DATE(MONTH(Today),1,YEAR(TODAY)),"00:00:00")
-      ldEndStamp   = fMakeTS().
+      ldBeginStamp = Func.Common:mHMS2TS(DATE(MONTH(Today),1,YEAR(TODAY)),"00:00:00")
+      ldEndStamp   = Func.Common:mMakeTS().
 END.
 
 OUTPUT STREAM sErrors TO VALUE(lcErrors).
@@ -240,7 +250,7 @@ DO i = 1 TO NUM-ENTRIES(lcRequestTypes):
    liRequestType = INT(ENTRY(i,lcRequestTypes)).
 
    FOR EACH MsRequest NO-LOCK WHERE
-            MsRequest.Brand     = gcBrand       AND
+            MsRequest.Brand     = Syst.Var:gcBrand       AND
             MsRequest.ReqType   = liRequestType AND
             MsRequest.ReqStatus = 2             AND
             MsRequest.ActStamp >= ldBeginStamp  AND 
@@ -249,7 +259,7 @@ DO i = 1 TO NUM-ENTRIES(lcRequestTypes):
       /* must be from postpaid to any other subscription */
       IF MSRequest.reqtype EQ 0 THEN DO:
          IF NOT CAN-FIND (CLIType WHERE 
-                          CLIType.Brand   = gcBrand              AND
+                          CLIType.Brand   = Syst.Var:gcBrand              AND
                           CLIType.CLIType = MsRequest.ReqCParam1 AND
                           CLIType.PayType = 1) THEN NEXT. 
       END.
@@ -266,7 +276,7 @@ DO i = 1 TO NUM-ENTRIES(lcRequestTypes):
          pause 0.
       end.
 
-      fSplitTS(MsRequest.ActStamp,
+      Func.Common:mSplitTS(MsRequest.ActStamp,
                OUTPUT ldtActDate,
                OUTPUT liActTime).
 
@@ -279,7 +289,7 @@ DO i = 1 TO NUM-ENTRIES(lcRequestTypes):
                DCCLI.ValidTo   >= ldtActDate      AND 
                DCCLI.ValidFrom <= ldtActDate      USE-INDEX MsSeq,
          FIRST DayCampaign NO-LOCK WHERE
-               DayCampaign.Brand   = gcBrand       AND 
+               DayCampaign.Brand   = Syst.Var:gcBrand       AND 
                DayCampaign.DCEvent = DCCLI.DCEvent AND
                DayCampaign.DCType  = ({&DCTYPE_DISCOUNT}):
 
@@ -292,7 +302,7 @@ DO i = 1 TO NUM-ENTRIES(lcRequestTypes):
          IF liTermReq > 0 THEN DO:
             /* find singlefee associated */
             FIND FIRST SingleFee WHERE
-                       SingleFee.Brand      = gcBrand                   AND 
+                       SingleFee.Brand      = Syst.Var:gcBrand                   AND 
                        SingleFee.HostTable  = "MobSub"                  AND 
                        SingleFee.KeyValue   = STRING(MsRequest.MsSeq)   AND
                        SingleFee.FeeModel   = DayCampaign.TermFeeModel  AND
@@ -505,7 +515,7 @@ DO i = 1 TO NUM-ENTRIES(lcRequestTypes):
                DCCLI.ValidTo   >= ldtActDate      AND 
                DCCLI.ValidFrom <= ldtActDate      USE-INDEX MsSeq,
          FIRST DayCampaign NO-LOCK WHERE
-               DayCampaign.Brand   = gcBrand       AND 
+               DayCampaign.Brand   = Syst.Var:gcBrand       AND 
                DayCampaign.DCEvent = DCCLI.DCEvent AND
                DayCampaign.DCType  = ({&DCTYPE_INSTALLMENT}):
          
@@ -517,7 +527,7 @@ DO i = 1 TO NUM-ENTRIES(lcRequestTypes):
          IF liTermReq > 0 THEN DO:
 
             FIND FIRST SingleFee WHERE
-                       SingleFee.Brand      = gcBrand                  AND 
+                       SingleFee.Brand      = Syst.Var:gcBrand                  AND 
                        SingleFee.HostTable  = "MobSub"                 AND 
                        SingleFee.KeyValue   = STRING(MsRequest.MsSeq)  AND
                        SingleFee.FeeModel   = DayCampaign.TermFeeModel AND
@@ -559,7 +569,7 @@ DO i = 1 TO NUM-ENTRIES(lcRequestTypes):
              DCCLI.Amount > 0 then do:
 
             find bResidualFee NO-LOCK where
-                 bResidualFee.brand       = gcBrand                     and
+                 bResidualFee.brand       = Syst.Var:gcBrand                     and
                  bResidualFee.hosttable   = "mobsub"                    and
                  bResidualFee.keyvalue    = string(DCCLI.msseq)         and
                  bResidualFee.sourcetable = "dccli"                     and
@@ -672,7 +682,7 @@ IF SESSION:BATCH AND
    PUT STREAM slog UNFORMATTED
       "Greetings " SKIP(1)
       lcStatusMsg  SKIP(1)
-      "STC Control Report is finished at " + fTS2HMS(fMakeTS()) SKIP
+      "STC Control Report is finished at " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP
       "For period: "  STRING(TODAY - 1,"99.99.9999") " - " STRING(TODAY,"99.99.9999") SKIP(1)
       "Here are the reports:" SKIP
       lcErrors                SKIP

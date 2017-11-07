@@ -8,22 +8,21 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{msreqfunc.i}
+{Func/msreqfunc.i}
 
-{finvbal.i}
-{faccper.i}
-{fcustbal.i}
-{fcustcnt.i}
-{finvamt.i}
-{eventval.i} 
-{fbankday.i}
-{nnpcst.i}
-{finvnum.i}
-{fhdrtext.i}
-{frefundreq.i}
-{finvoiceacc.i}
-{fcreditvalid.i}
-{fparse.i}
+{Func/finvbal.i}
+{Func/faccper.i}
+{Func/fcustbal.i}
+{Func/fcustcnt.i}
+{Func/finvamt.i}
+{Syst/eventval.i} 
+{Func/fbankday.i}
+{Ar/nnpcst.i}
+{Func/finvnum.i}
+{Func/frefundreq.i}
+{Func/finvoiceacc.i}
+{Func/fcreditvalid.i}
+{Func/fparse.i}
 
 DEFINE TEMP-TABLE ttSubInvoice
        FIELD SubInvoice        AS INT
@@ -34,9 +33,9 @@ DEFINE TEMP-TABLE ttSubInvoice
        INDEX SubInvRow IS PRIMARY UNIQUE SubInvoice InvRow.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 END.
 
 DEF BUFFER bSubRequest FOR MsRequest.
@@ -255,7 +254,7 @@ PROCEDURE pFullCreditNote:
       RETURN.
    END.
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtCreditDate,
             OUTPUT liReqCnt).
             
@@ -297,7 +296,7 @@ PROCEDURE pFullCreditNote:
       IF liDDCancel = ? THEN liDDCancel = 0.
       
       /* don't activate before cancellation time after due date has passed */
-      ldActStamp = fMake2DT(MAX(TODAY,Invoice.DueDate + liDDCancel + 1),
+      ldActStamp = Func.Common:mMake2DT(MAX(TODAY,Invoice.DueDate + liDDCancel + 1),
                             100).
           
       /* payment for dd-invoices will be done on due date */
@@ -370,7 +369,7 @@ PROCEDURE pFullCreditNote:
             WHEN 3 THEN lcReqChar = "Advance p".
             END CASE. 
             
-            RUN makepaym (BUFFER Invoice,
+            RUN Ar/makepaym.p (BUFFER Invoice,
                           -1 * ldTotRefund,
                           TODAY,
                           liAccNum,
@@ -428,7 +427,7 @@ PROCEDURE pFullCreditNote:
  
       /* check IF invoice number is already in use */
       IF NOT can-find(FIRST Invoice where
-                            Invoice.Brand    = gcBrand AND 
+                            Invoice.Brand    = Syst.Var:gcBrand AND 
                             Invoice.ExtInvID = lcExtInvID AND
                             RECID(Invoice) NE liInvRecid) 
       THEN LEAVE ExtInvNum.
@@ -442,7 +441,7 @@ PROCEDURE pFullCreditNote:
    bCreditInv.ExtInvID = lcExtInvID.
       
    BUFFER-COPY Invoice EXCEPT InvNum ExtInvID TO bCreditInv.
-   bCreditInv.ChgStamp = fMakeTS().
+   bCreditInv.ChgStamp = Func.Common:mMakeTS().
  
    InvNum:
    REPEAT:
@@ -623,10 +622,10 @@ PROCEDURE pFullCreditNote:
 
       CREATE OPLog.
       ASSIGN
-         OPLog.CreStamp  = fMakeTS()
+         OPLog.CreStamp  = Func.Common:mMakeTS()
          OPLog.CustNum   = Customer.CustNum
          OPLog.EventDate = TODAY
-         OPLog.UserCode  = katun
+         OPLog.UserCode  = Syst.Var:katun
          OPLog.EventType = 11 /* Credit invoice (deduction also credited) */
          OPLog.InvNum    = Invoice.InvNum
          /* OPLog.Voucher */
@@ -644,10 +643,10 @@ PROCEDURE pFullCreditNote:
       /* Make a OPLog record */
       CREATE OPLog.
       ASSIGN
-         OPLog.CreStamp  = fMakeTS()
+         OPLog.CreStamp  = Func.Common:mMakeTS()
          OPLog.CustNum   = Customer.CustNum
          OPLog.EventDate = TODAY
-         OPLog.UserCode  = katun
+         OPLog.UserCode  = Syst.Var:katun
          OPLog.EventType = 4 /* Credit invoice (deduction also credited) */
          OPLog.InvNum    = Invoice.InvNum
          /* OPLog.Voucher */
@@ -720,7 +719,7 @@ PROCEDURE pFullCreditNote:
          
       /* in yoigo newest accounts are always used */
       FOR FIRST BillItem NO-LOCK WHERE
-                BillItem.Brand = gcBrand AND
+                BillItem.Brand = Syst.Var:gcBrand AND
                 BillItem.BillCode = bCreditRow.BillCode:
          bCreditRow.SlsAcc = fInvRowAccount(Customer.Category,
                                             bCreditInv.VatUsage).
@@ -730,17 +729,17 @@ PROCEDURE pFullCreditNote:
    /* credit invoice memo */
    CREATE Memo.
    ASSIGN
-      Memo.CreStamp  = fMakeTS()
+      Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = next-value(MemoSeq)
-      Memo.Brand     = gcBrand
+      Memo.Brand     = Syst.Var:gcBrand
       Memo.MemoTitle = "Credited"
       Memo.CreUser   = lcUserId
       Memo.HostTable = "Invoice"
       Memo.KeyValue  = STRING(bCreditInv.InvNum)
       Memo.CustNum   = Invoice.CustNum.
-      Memo.Memotext  = fGetHdrText(50,Customer.Language) + " " +
+      Memo.Memotext  = Func.Common:mGetHdrText(50,Customer.Language) + " " +
                        STRING(Invoice.InvNum) +  
-                       ". Handler: " + katun  +
+                       ". Handler: " + Syst.Var:katun  +
                        ". Reason Note/Jira : " + bCreditInv.xxmemo[1].
 
    /* customer balances */
@@ -777,15 +776,15 @@ PROCEDURE pFullCreditNote:
    
    CREATE Memo.
    ASSIGN
-      Memo.CreStamp  = fMakeTS()
+      Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.Brand     = gcBrand
+      Memo.Brand     = Syst.Var:gcBrand
       Memo.MemoTitle = "Credited"
       Memo.CreUser   = lcUserId
       Memo.HostTable = "Invoice"
       Memo.KeyValue  = STRING(Invoice.InvNum)
       Memo.CustNum   = Invoice.CustNum
-      Memo.Memotext  = "Credited by " + katun +
+      Memo.Memotext  = "Credited by " + Syst.Var:katun +
                        ". Reason Note/Jira: " + Invoice.xxmemo[1].
 
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhInvoice). 
@@ -828,7 +827,7 @@ PROCEDURE pFullCreditNote:
       END.
           
       IF NUM-ENTRIES(lcSubInvNums) = 0 THEN 
-         RUN nnpcst.p(Invoice.InvNum,
+         RUN Ar/nnpcst.p(Invoice.InvNum,
                     0,
                     TRUE,
                     INPUT TABLE wMarked).
@@ -838,7 +837,7 @@ PROCEDURE pFullCreditNote:
             
             IF LOOKUP(STRING(InvCCN.SubInvNum), lcSubInvNums) = 0 THEN NEXT.
             
-            RUN nnpcst.p(Invoice.InvNum,
+            RUN Ar/nnpcst.p(Invoice.InvNum,
                        SubInvoice.SubInvNum,
                        TRUE,
                        INPUT TABLE wMarked).
@@ -862,7 +861,7 @@ PROCEDURE pFullCreditNote:
 
    /* customer's invoicing Period */
    FIND FIRST Invoice WHERE
-              Invoice.Brand    = gcBrand          AND
+              Invoice.Brand    = Syst.Var:gcBrand          AND
               Invoice.CustNum  = Customer.CustNum AND
               Invoice.CrInvNum = 0                AND
               Invoice.InvAmt > 0 NO-LOCK NO-ERROR.

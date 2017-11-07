@@ -1,4 +1,3 @@
-{timestamp.i}
 
 def temp-table ttcli no-undo
     field clitype as char.
@@ -41,7 +40,7 @@ for each ttcli,
                msowner.msseq = mobsub.msseq and
                msowner.clitype = mobsub.clitype 
       by msowner.tsbeg:
-         fsplitts(msowner.tsbeg,
+         Func.Common:mSplitTS(msowner.tsbeg,
                   output ldtfrom,
                   output litime).
          leave.

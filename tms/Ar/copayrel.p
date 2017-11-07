@@ -12,10 +12,10 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{utumaa.i "new"}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'coevent'}
+{Syst/commali.i}
+{Syst/utumaa.i "new"}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'coevent'}
 
 assign tuni1 = "copayrel"
        tuni2 = "".
@@ -28,7 +28,7 @@ DEF VAR lcReseller   AS CHAR  FORMAT "X(10)"    NO-UNDO EXTENT 2.
 DEF VAR lcSalesman   AS CHAR  FORMAT "X(10)"    NO-UNDO EXTENT 2. 
 DEF VAR ldtCalcDate  AS DATE  FORMAT "99-99-99" NO-UNDO EXTENT 2.
 DEF VAR ldtOldPDate  AS DATE  FORMAT "99-99-99" NO-UNDO EXTENT 2.
-DEF VAR liCustNum    AS INT   FORMAT ">>>>>>>9" NO-UNDO EXTENT 2.
+DEF VAR liCustNum    AS INT   FORMAT ">>>>>>>>9" NO-UNDO EXTENT 2.
 DEF VAR llMark       AS LOGIC FORMAT "Yes/No"   NO-UNDO. 
 DEF VAR liCount      AS INT                     NO-UNDO. 
 DEF VAR ldtPaymDate  AS DATE  FORMAT "99-99-99" NO-UNDO. 
@@ -47,7 +47,7 @@ FORM
         HELP "Events of one rule, or all = 0 (empty)"
         VALIDATE(INPUT liCoRuleID = 0 OR 
                  CAN-FIND(CoRule WHERE 
-                          CoRule.Brand    = gcBrand AND
+                          CoRule.Brand    = Syst.Var:gcBrand AND
                           CORule.CoRuleID = INPUT liCoRuleID),
                  "Unknown rule")
         FORMAT ">>>>>>>>"
@@ -117,25 +117,25 @@ FORM
    SKIP(2)
 
    WITH ROW 1 SIDE-LABELS WIDTH 80
-        TITLE " " + ynimi + " COMMISSION REPORT " +
-        STRING(pvm,"99-99-99") + " "
+        TITLE " " + Syst.Var:ynimi + " COMMISSION REPORT " +
+        STRING(TODAY,"99-99-99") + " "
         FRAME valinta.
 
 VIEW FRAME valinta.
 PAUSE 0 NO-MESSAGE.
 
-FIND LAST Reseller WHERE Reseller.Brand = gcBrand NO-LOCK NO-ERROR.
+FIND LAST Reseller WHERE Reseller.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 IF AVAILABLE Reseller THEN ASSIGN lcReseller[2] = Reseller.Reseller.
-FIND LAST Salesman WHERE Salesman.Brand = gcBrand NO-LOCK NO-ERROR.
+FIND LAST Salesman WHERE Salesman.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 IF AVAILABLE Salesman THEN ASSIGN lcSalesman[2] = Salesman.Salesman.
-ASSIGN liCustNum[2]   = 99999999          
+ASSIGN liCustNum[2]   = 999999999          
        ldtCalcDate[1] = DATE(MONTH(TODAY),1,YEAR(TODAY))
        ldtCalcDate[2] = IF MONTH(TODAY) = 12 
                         THEN DATE(12,31,YEAR(TODAY))
                         ELSE DATE(MONTH(TODAY) + 1,1,YEAR(TODAY)) - 1.
 
 ASSIGN lcUfkey = FALSE
-       nap     = "first". 
+       Syst.Var:nap     = "first". 
 
 toimi:
 REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
@@ -154,26 +154,26 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
    if lcUfkey THEN DO:
 
       ASSIGN
-         ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0 
-         ufk[5]= 63  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
-         ufk[9]= 1
-         ehto = 3 
+         Syst.Var:ufk[1]= 132 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0 
+         Syst.Var:ufk[5]= 63  Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 
+         Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 
          lcUfkey = FALSE.
 
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
    END.
 
-   IF nap NE "first" THEN DO:
+   IF Syst.Var:nap NE "first" THEN DO:
       READKEY.
-      nap = KEYLABEL(LASTKEY).
+      Syst.Var:nap = KEYLABEL(LASTKEY).
    END.
-   ELSE ASSIGN nap = "1". 
+   ELSE ASSIGN Syst.Var:nap = "1". 
 
-   IF LOOKUP(nap,"1,f1") > 0 THEN DO:
+   IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO:
 
-      ehto = 9. 
-      RUN ufkey.p.
+      Syst.Var:ehto = 9. 
+      RUN Syst/ufkey.p.
 
       REPEAT WITH FRAME valinta ON ENDKEY UNDO, LEAVE:
 
@@ -189,7 +189,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
 
             READKEY.
 
-            IF LOOKUP(keylabel(LASTKEY),poisnap) > 0 THEN 
+            IF LOOKUP(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN 
             DO WITH FRAME valinta:
 
                HIDE MESSAGE.
@@ -214,25 +214,25 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
       NEXT toimi.
    END.
 
-   ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:
+   ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 THEN DO:
       LEAVE toimi.
    END.
 
-   ELSE IF LOOKUP(nap,"8,f8") > 0 THEN DO:
+   ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN DO:
       RETURN.
    END.
 
-END. /* toimi */
+END. /* Syst.Var:toimi */
 
-ehto = 5.
-RUN ufkey.
+Syst.Var:ehto = 5.
+RUN Syst/ufkey.p.
 
 IF lcFile = "" THEN DO:
    assign tila = true.
-   {utuloste.i "return"}
+   {Syst/utuloste.i "return"}
 END.
 
-RUN copayrep  (liCORuleID,
+RUN Ar/copayrep.p  (liCORuleID,
                lcReseller[1],
                lcReseller[2],
                lcSalesman[1],
@@ -249,7 +249,7 @@ RUN copayrep  (liCORuleID,
 
 IF lcFile = "" THEN DO:
    assign tila = false.
-   {utuloste.i}
+   {Syst/utuloste.i}
 END.
 
 llMark = FALSE.
@@ -266,7 +266,7 @@ ELSE
    TITLE " Finished ".
 
 IF llMark THEN DO:
-   RUN copayrem (INPUT TABLE ttMark,
+   RUN Ar/copayrem.p (INPUT TABLE ttMark,
                  INPUT  ldtPaymDate,
                  OUTPUT liCount).
 

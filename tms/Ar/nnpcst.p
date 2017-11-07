@@ -7,18 +7,18 @@
   MODIFIED .....: 14.02.07/aam yoigo version
   ------------------------------------------------------ */
 
-{commali.i}
-{invseq.i}
-{errors.i}
-{fcustbal.i}
-{nnpcst.i}
-{tmsconst.i}
-{eventval.i}
+{Syst/commali.i}
+{Func/invseq.i}
+{Mf/errors.i}
+{Func/fcustbal.i}
+{Ar/nnpcst.i}
+{Syst/tmsconst.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
 
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
-   {lib/eventlog.i}
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhSingleFee AS HANDLE NO-UNDO.
    lhSingleFee = BUFFER SingleFee:HANDLE.
@@ -171,7 +171,7 @@ FOR EACH SingleFee EXCLUSIVE-LOCK where
    IF SingleFee.CalcObj > "" AND SingleFee.CalcObj = Invoice.BillRun THEN DO:
       IF llDoEvent AND Invoice.InvType NE {&INV_TYPE_TEST} THEN
          RUN StarEventMakeDeleteEventWithMemo(lhSingleFee,
-                                              katun,
+                                              Syst.Var:katun,
                                               "InvoiceDeletion").
       DELETE SingleFee.
    END. 
@@ -196,7 +196,7 @@ FOR EACH SingleFee EXCLUSIVE-LOCK where
       IF llDoEvent AND Invoice.InvType NE {&INV_TYPE_TEST} THEN
          RUN StarEventMakeModifyEventWithMemo(
             lhSingleFee,
-            katun,
+            Syst.Var:katun,
             "InvoiceDeletion").
    END.
 
@@ -233,7 +233,7 @@ BY FATime.FATNum DESC:
 
    /* transferred rows */
    FOR EACH bFatime USE-INDEX OrigFat WHERE
-            bFatime.Brand   = gcBrand        AND
+            bFatime.Brand   = Syst.Var:gcBrand        AND
             bFatime.OrigFat = FATime.FatNum  AND
             bFATime.TransQty = 0             AND 
             (bFATime.InvNum = 0 OR
@@ -285,7 +285,7 @@ FOR EACH SubInvoice OF Invoice NO-LOCK:
    END.
  
    FOR FIRST ActionLog EXCLUSIVE-LOCK WHERE
-             ActionLog.Brand        = gcBrand               AND
+             ActionLog.Brand        = Syst.Var:gcBrand               AND
              ActionLog.TableName    = "MobSub"              AND
              ActionLog.KeyValue     = STRING(SubInvoice.MsSeq) AND
              ActionLog.ActionID     = "MINCONS"             AND
@@ -443,7 +443,7 @@ FOR EACH ttReCalc,
       (included/excluded) may have been converted in billing run according
       to the customer's VatIncl value -> now counters need to be in their 
       original tax status again */
-   RUN recalculate_invrowcounter.p(Invoice.CustNum,
+   RUN Inv/recalculate_invrowcounter.p(Invoice.CustNum,
                                    0,
                                    xInvSeq.InvSeq,       
                                    xInvSeq.FromDate,

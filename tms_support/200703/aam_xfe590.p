@@ -1,5 +1,5 @@
-{testpaa.i}
-katun = "snet".
+{Syst/testpaa.i}
+Syst.Var:katun = "snet".
 
 def var llfound as log no-undo.
 def var lireq   as int no-undo.
@@ -22,7 +22,7 @@ for each mobsub no-lock where
    end.
    
    if not llfound then do:
-      run topupcamp.p (mobsub.msseq,
+      RUN Mm/topupcamp.p (mobsub.msseq,
                        output lireq).
    end.
     

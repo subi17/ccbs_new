@@ -4,13 +4,11 @@
   CREATED ......: 19.12.12/aam
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{funcrunprocess_update.i}
-{date.i}
-{tmsconst.i}
-{funcrun_replica.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/funcrunprocess_update.i}
+{Syst/tmsconst.i}
+{Syst/funcrun_replica.i}
 
 DEF INPUT  PARAMETER idaInvDate     AS DATE NO-UNDO.
 DEF INPUT  PARAMETER iiInvType      AS INT  NO-UNDO.
@@ -70,12 +68,12 @@ PROCEDURE pCollectInvoices:
    DEF VAR ldaDate  AS DATE NO-UNDO.
    
    ASSIGN 
-      ldaDate = fLastDayOfMonth(TODAY)
+      ldaDate = Func.Common:mLastDayOfMonth(TODAY)
       liPeriod = YEAR(ldaDate) * 100 + MONTH(ldaDate).
 
    InvoiceSelect:
    FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE 
-            Invoice.Brand = gcBrand AND
+            Invoice.Brand = Syst.Var:gcBrand AND
             Invoice.InvDate = idaInvDate AND
             Invoice.InvType = iiInvType:
          

@@ -12,27 +12,26 @@
 
 &GLOBAL-DEFINE BrTable MNPOperation
 
-{commali.i} 
-{eventval.i}
-{timestamp.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MNPOperation'}
-{xmlfunction.i}
-{mnpmessages.i}
-{tmsconst.i}
-{mnpoperation.i}
+{Syst/commali.i} 
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MNPOperation'}
+{Func/xmlfunction.i}
+{Mnp/mnpmessages.i}
+{Syst/tmsconst.i}
+{Mnp/mnpoperation.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMNPOperation AS HANDLE NO-UNDO.
    lhMNPOperation = BUFFER MNPOperation:HANDLE.
    RUN StarEventInitialize(lhMNPOperation).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhMNPOperation).
+      RUN Mc/eventview2.p(lhMNPOperation).
    END.
 
 END.
@@ -91,10 +90,10 @@ form
     MNPOperation.CreatedTS       COLUMN-LABEL "Created"
     MNPOperation.StatusCode      COLUMN-LABEL "St"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
     " MNP messages "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form 
@@ -110,11 +109,11 @@ form
    lcErrorHandled LABEL "Error Handled"
 
 WITH OVERLAY ROW 6 centered 1 columns 
-   COLOR value(cfc)
-   TITLE COLOR value(ctc) " View Message " WITH side-labels
+   COLOR value(Syst.Var:cfc)
+   TITLE COLOR value(Syst.Var:ctc) " View Message " WITH side-labels
    FRAME lis.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = " By CLI ,  By Name  ,By 3, By 4".
@@ -186,31 +185,31 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk = 0
-        ufk[1] = 2821 /* WHEN lcRight = "RW" */
-        ufk[3] = 0 /* WHEN lcRight = "RW" */ 
-        ufk[4] = 0 /* 2822 */ /* WHEN lcRight = "RW" */
-        ufk[5] = 1968 /* WHEN lcRight = "RW" */
-        ufk[6] = 2820
-        ufk[7] = 2819
-        ufk[8] = 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
-         RUN ufkey.
+        Syst.Var:ufk = 0
+        Syst.Var:ufk[1] = 2821 /* WHEN lcRight = "RW" */
+        Syst.Var:ufk[3] = 0 /* WHEN lcRight = "RW" */ 
+        Syst.Var:ufk[4] = 0 /* 2822 */ /* WHEN lcRight = "RW" */
+        Syst.Var:ufk[5] = 1968 /* WHEN lcRight = "RW" */
+        Syst.Var:ufk[6] = 2820
+        Syst.Var:ufk[7] = 2819
+        Syst.Var:ufk[8] = 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MNPOperation.MessageType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MNPOperation.MessageType WITH FRAME sel.
+        CHOOSE ROW MNPOperation.MessageType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) MNPOperation.MessageType WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -227,7 +226,7 @@ BROWSE:
         NEXT LOOP.
       END.
       
-      ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+      ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
       IF rtab[FRAME-LINE] = ? AND NOT must-add THEN DO:
         BELL.
@@ -236,10 +235,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -264,7 +263,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -290,7 +289,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND MNPOperation WHERE recid(MNPOperation) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -314,7 +313,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -328,11 +327,11 @@ BROWSE:
        END.
      END. /* NEXT page */
      
-     IF LOOKUP(nap,"1,f1") > 0 AND lcRight = "RW" AND
-        ufk[1] > 0 THEN DO:
+     IF LOOKUP(Syst.Var:nap,"1,f1") > 0 AND lcRight = "RW" AND
+        Syst.Var:ufk[1] > 0 THEN DO:
         
         RUN local-find-this(false).
-        run mnpfunc.p(MNPOperation.mnpseq). 
+        RUN Mnp/mnpfunc.p(MNPOperation.mnpseq). 
         
         RUN local-find-first.
         must-print = true.
@@ -342,14 +341,14 @@ BROWSE:
      END.
      
      /* for fetching result pages (used in mnp testing phase) */
-     IF LOOKUP(nap,"3,f3") > 0 AND lcRight = "RW" AND
-        ufk[3] > 0 THEN DO:
+     IF LOOKUP(Syst.Var:nap,"3,f3") > 0 AND lcRight = "RW" AND
+        Syst.Var:ufk[3] > 0 THEN DO:
         
         RUN local-find-this(false).
         find mnpprocess where mnpprocess.mnpseq = MNPOperation.mnpseq NO-LOCK.
          
-        ehto = 10.
-        run ufkey.p.
+        Syst.Var:ehto = 10.
+        RUN Syst/ufkey.p.
 
         copy-lob MNPOperation.XMLResponse to lcLongXML.
         
@@ -376,7 +375,7 @@ BROWSE:
         NEXT LOOP.
      END.
      
-     ELSE IF LOOKUP(nap,"4,f4") > 0 AND lcRight = "RW" and ufk[4] > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 AND lcRight = "RW" and Syst.Var:ufk[4] > 0 THEN DO:
         
         RUN local-find-this(true).
          
@@ -391,7 +390,7 @@ BROWSE:
      END.
      
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:
         
         RUN local-find-this(false).
 
@@ -433,7 +432,7 @@ BROWSE:
      END.
       
       /* view */
-      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN DO:
        
         RUN local-find-this(false).
 
@@ -443,7 +442,7 @@ BROWSE:
 
       END.
      
-     ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 THEN DO:
 
         DEF BUFFER MNPBuzon FOR MNPOperation.
 
@@ -468,7 +467,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"7,f7") > 0 THEN DO:
         RUN local-find-this(false).
         
         copy-lob MNPOperation.XMLRequest to lcLongXML.
@@ -481,25 +480,25 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(MNPOperation) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(MNPOperation) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 PROCEDURE local-find-this:
@@ -545,7 +544,7 @@ PROCEDURE local-disp-row:
        DISPLAY 
           MNPOperation.MessageType
           lcReqType         
-          fTS2HMS(MNPOperation.CreatedTS) FORMAT "x(20)" @ MNPOperation.CreatedTS
+          Func.Common:mTS2HMS(MNPOperation.CreatedTS) FORMAT "x(20)" @ MNPOperation.CreatedTS
           MNPOperation.StatusCode
        WITH FRAME sel.
 END PROCEDURE.
@@ -556,8 +555,7 @@ PROCEDURE local-find-others.
       lcReqType   = "TMS" WHEN MNPOperation.Sender = 1
       lcReqType   = "MNP-ADAPT" WHEN MNPOperation.Sender = 2.
    
-   lcMNPStatus = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "MNPMessage",
+   lcMNPStatus = Func.Common:mTMSCodeName("MNPMessage",
                                "StatusCode",
                              STRING(MNPOperation.StatusCode)).
 
@@ -580,8 +578,8 @@ PROCEDURE local-UPDATE-record:
       DISP
          MNPOperation.MessageType 
          lcReqType
-         fTS2HMS(MNPOperation.CreatedTS) format "x(20)" @ MNPOperation.CreatedTS
-         fTS2HMS(MNPOperation.SentTS) format "x(20)" @ MNPOperation.SentTS
+         Func.Common:mTS2HMS(MNPOperation.CreatedTS) format "x(20)" @ MNPOperation.CreatedTS
+         Func.Common:mTS2HMS(MNPOperation.SentTS) format "x(20)" @ MNPOperation.SentTS
          (STRING(MNPOperation.StatusCode) + " " + lcMNPStatus) FORMAT "x(30)"
             @ MNPOperation.StatusCode
          MNPOperation.MNPSeq 

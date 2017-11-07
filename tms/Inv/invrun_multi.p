@@ -8,12 +8,11 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Invoice'}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Invoice'}
 
 DEF VAR ufkey         AS LOG  NO-UNDO.
 DEF VAR liCount       AS INT  NO-UNDO. 
@@ -85,7 +84,7 @@ FORM
       SKIP(3)
    
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + " BILLING RUN " + STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.Var:ynimi + " BILLING RUN " + STRING(TODAY,"99-99-99") + " "
      FRAME fCrit.
 
 FUNCTION fDefaultPeriod RETURNS LOGIC
@@ -129,20 +128,20 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
    IF ufkey THEN DO:
       ASSIGN
-         ufk    = 0
-         ufk[1] = 132 
-         ufk[5] = 795  
-         ufk[8] = 8 
-         ehto   = 0.
-      RUN ufkey.
+         Syst.Var:ufk    = 0
+         Syst.Var:ufk[1] = 132 
+         Syst.Var:ufk[5] = 795  
+         Syst.Var:ufk[8] = 8 
+         Syst.Var:ehto   = 0.
+      RUN Syst/ufkey.p.
    END.
-   ELSE ASSIGN toimi = 1
+   ELSE ASSIGN Syst.Var:toimi = 1
                ufkey = TRUE.
 
-   IF toimi = 1 THEN DO:
+   IF Syst.Var:toimi = 1 THEN DO:
 
-      ehto = 9. 
-      RUN ufkey.
+      Syst.Var:ehto = 9. 
+      RUN Syst/ufkey.p.
       
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
 
@@ -156,9 +155,9 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          WITH FRAME fCrit EDITING:
 
             READKEY.
-            nap = KEYLABEL(LASTKEY).
+            Syst.Var:nap = KEYLABEL(LASTKEY).
 
-            IF LOOKUP(nap,poisnap) > 0 THEN DO:
+            IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
 
                IF FRAME-FIELD = "ldtInvDate" THEN DO:
                   IF ldtInvDate ENTERED THEN DO:
@@ -177,11 +176,11 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    END.
 
    /* split customers into groups and start billing runs */
-   ELSE IF toimi = 5 THEN DO:
+   ELSE IF Syst.Var:toimi = 5 THEN DO:
 
       /* check that no test invoices exist */
       IF CAN-FIND(FIRST Invoice WHERE 
-                        Invoice.Brand   = gcBrand AND
+                        Invoice.Brand   = Syst.Var:gcBrand AND
                         Invoice.InvType = 99)
       THEN DO:
          MESSAGE "Test invoices must be deleted " SKIP
@@ -190,7 +189,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          NEXT.
       END.
       
-      RUN invrun_split(ldtInvDate,
+      RUN Inv/invrun_split.p(ldtInvDate,
                        ldtDueDate,
                        ldtDateFrom,
                        ldtDateTo,
@@ -210,18 +209,18 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       /* create screens for actual billing runs */
       IF lcFileList > "" THEN DO:
 
-         RUN invrun_start_screens(ldtInvDate,
+         RUN Inv/invrun_start_screens.p(ldtInvDate,
                                   lcFileList).
 
          IF RETURN-VALUE BEGINS "ERROR:" THEN DO TRANS:
             CREATE ErrorLog.
-            ASSIGN ErrorLog.Brand     = gcBrand
+            ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
                    ErrorLog.ActionID  = "SplitBillRun" 
                    ErrorLog.TableName = "Invoice"
                    ErrorLog.KeyValue  = STRING(ldtInvDate,"99-99-99")
                    ErrorLog.ErrorMsg  = RETURN-VALUE
-                   ErrorLog.UserCode  = katun.
-                   ErrorLog.ActionTS  = fMakeTS().
+                   ErrorLog.UserCode  = Syst.Var:katun.
+                   ErrorLog.ActionTS  = Func.Common:mMakeTS().
          END.
       
          IF RETURN-VALUE = "" THEN 
@@ -239,7 +238,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       LEAVE CritLoop.
    END.
 
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.Var:toimi = 8 THEN DO:
       LEAVE CritLoop.
    END.
 

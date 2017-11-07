@@ -8,7 +8,7 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF TEMP-TABLE ttMark NO-UNDO
     FIELD EventID AS INT.

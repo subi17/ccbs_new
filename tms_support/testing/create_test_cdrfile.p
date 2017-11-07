@@ -7,8 +7,8 @@ CREATED ......: 2.2.2015
 CHANGED ......:
 Version ......: Yoigo
 ----------------------------------------------------------------------- */
-{detailvalue.i}
-{cdrreader.i}
+{Func/detailvalue.i}
+{testing/cdrreader.i}
 DEF INPUT PARAM icCLI AS CHAR NO-UNDO.
 DEF INPUT PARAM icSecCLI AS CHAR NO-UNDO.
 DEF INPUT PARAM icIMSI AS CHARACTER NO-UNDO. 
@@ -70,9 +70,14 @@ FUNCTION fReplaceValue RETURNS LOGICAL
     iiPos AS INTEGER,
     icValue AS CHARACTER):
 
-    if ENTRY(iiPos,icLine,"|") ne "" then
-    icLine = replace(icLine,"|" + ENTRY(iiPos,icLine,"|") + "|","|" + 
-      icValue + "|") NO-ERROR. 
+    if ENTRY(iiPos,icLine,"|") ne "" then do:
+       if iiPos > 1 THEN 
+          icLine = replace(icLine,"|" + ENTRY(iiPos,icLine,"|") + "|",
+                           "|" + icValue + "|") NO-ERROR. 
+       else
+          icLine = replace(icLine,ENTRY(iiPos,icLine,"|") + "|",
+                           icValue + "|") NO-ERROR. 
+    end.
 
     RETURN (NOT ERROR-STATUS:ERROR).
 
@@ -120,6 +125,10 @@ repeat:
    /*Read Call/CDR type for correct data handling*/
    lcCDRType = ENTRY(liCDRTypePos,lcLine,"|").
 
+   IF TENANT-NAME("common") EQ {&TENANT_MASMOVIL} THEN DO:
+      IF NOT fReplaceValue(INPUT-OUTPUT lcLine,1,"ESPMM") THEN NEXT.
+   END.
+
    IF TRIM(ENTRY(liCallRecTypePos,lcLine,"|")) EQ "GE" THEN DO:
       
       IF NOT fReplaceValue(INPUT-OUTPUT lcLine,liOrigIMSI,icImsi) THEN NEXT.
@@ -155,7 +164,7 @@ repeat:
    END.
 
    /*CONN - data calls: divide data to in/out */
-   IF (lcCDRType = "CONN") THEN DO:
+   IF (lcCDRType = "CONN") AND iiMeas NE 0 THEN DO:
       IF NOT fReplaceValue(INPUT-OUTPUT lcLine,liDataInPos,
           STRING(1024 * iiMeas / 2)) THEN NEXT.
       if ERROR-STATUS:ERROR THEN NEXT.

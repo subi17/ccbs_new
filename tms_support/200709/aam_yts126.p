@@ -1,6 +1,5 @@
-{testpaa.i}
-katun = "ari".
-{timestamp.i}
+{Syst/testpaa.i}
+Syst.Var:katun = "ari".
 
 def var lclist as char no-undo.
 def var lcerr  as char no-undo.
@@ -28,7 +27,7 @@ for each order no-lock where
       can-find(invoice where invoice.invnum = order.invnum)
    then next.
    
-   run cashfee.p (order.orderid,
+   RUN Mc/cashfee.p (order.orderid,
                   2,
                   output lclist,
                   output ldamt,
@@ -39,7 +38,7 @@ for each order no-lock where
    
    put stream slog unformatted
       order.orderid            chr(9)
-      fts2hms(order.crstamp)   chr(9)
+      Func.Common:mTS2HMS(order.crstamp)   chr(9)
       order.statuscode         chr(9)
       ordercustomer.custid     chr(9)
       ordercustomer.firstname + " " + 

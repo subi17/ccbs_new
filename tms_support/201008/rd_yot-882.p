@@ -7,19 +7,18 @@ DEFINE STREAM sLog.
 
 OUTPUT STREAM sLog TO "yot-882.log".
 
-{commpaa.i}
-katun = "rafaeldv".
-gcBrand  = "1".
-{timestamp.i}
-{msisdn.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "rafaeldv".
+Syst.Var:gcBrand  = "1".
+{Func/msisdn.i}
 
 def buffer msisdnbuf for msisdn.
 DEF BUFFER bmsisdn FOR msisdn.
-ldTS = fMakeTS().
+ldTS = Func.Common:mMakeTS().
 llSimulated = FALSE. 
 
 FOR EACH bMSISDN NO-LOCK WHERE
-         bMSISDN.Brand = gcBrand AND
+         bMSISDN.Brand = Syst.Var:gcBrand AND
          ( bMSISDN.CLI BEGINS "62262262"  OR
            bMSISDN.CLI BEGINS "62298"     OR
            bMSISDN.CLI BEGINS "62299"     OR

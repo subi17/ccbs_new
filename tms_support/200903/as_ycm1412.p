@@ -1,8 +1,8 @@
-{commpaa.i}
-katun = "anttis".
-gcBrand = "1".
-{fsubstermreq.i}
-{msisdn.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
+{Func/fsubstermreq.i}
+{Func/msisdn.i}
 
 def stream sin.
 input stream sin from /apps/snet/200903/as_ycm1412.input.
@@ -54,7 +54,7 @@ repeat:
       output liSimStat,
       output liQuarTime
    ).
-   fSplitTS(MsRequest.ActStamp, OUTPUT ldaKillDate, OUTPUT liTime).
+   Func.Common:mSplitTS(MsRequest.ActStamp, OUTPUT ldaKillDate, OUTPUT liTime).
 /*
    disp msisdn.cli msisdn.statuscode /*msisdn.validto*/ msrequest.reqiparam2 (if avail order then order.mnpstatus else -1) termmobsub.activationts format "99999999.99999" liMsisdnStat liQuarTime.
 */

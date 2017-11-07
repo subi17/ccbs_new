@@ -1,6 +1,5 @@
-{xmlfunction.i}
-{mathfunction.i}
-{timestamp.i}
+{Func/xmlfunction.i}
+{Func/mathfunction.i}
 
 DEFINE INPUT PARAMETER pcCLI AS CHARACTER NO-UNDO.
 
@@ -149,7 +148,7 @@ PROCEDURE pPrePaidPlatform:
    SET-SIZE(lmXML) = 0.
 
    /* wait only 6 seconds for response */
-   RUN tg(lcHTTPHeader + lcXML,lcURL,3,2,"<").
+   RUN Gwy/tg.p(lcHTTPHeader + lcXML,lcURL,3,2,"<").
    
    lcReturn = RETURN-VALUE.
 
@@ -181,7 +180,7 @@ PROCEDURE pHeader:
             ttUCIP.ttValue  = STRING(NEXT-VALUE(PrePaidReq),"999999999")
             ttUCIP.ttFormat = "string".
          WHEN 4 THEN ASSIGN
-            ttUCIP.ttValue  = fISO860(fMakeTS())
+            ttUCIP.ttValue  = Func.Common:mISO860(Func.Common:mMakeTS())
             ttUCIP.ttName   = "originTimeStamp"
             ttUCIP.ttFormat = "dateTime.iso8601".
          WHEN 5 THEN ASSIGN

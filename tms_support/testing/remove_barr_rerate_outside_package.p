@@ -1,10 +1,8 @@
-{commpaa.i}
-gcbrand = "1".
-katun = "Qvantel".
-{timestamp.i}
-{date.i}
-{fdss.i}
-{barrfunc.i}
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
+{Func/fdss.i}
+{Func/barrfunc.i}
 
 def var lltrue        as log   no-undo.
 def var ldeTime       as dec   no-undo.
@@ -15,14 +13,14 @@ def var ldaFromdate   as date  no-undo.
 def var ldToDate      as date  no-undo.
 def var ldeStamp      as dec   no-undo.
 
-ldeStamp = fMakeTS().
+ldeStamp = Func.Common:mMakeTS().
 
 def buffer bmsrequest for msrequest.
 
 output to "/apps/yoigo/tms_support/testing/remove_barr_rerate_outside_package.txt".
 
 assign ldaFromdate = DATE(MONTH(today),1,YEAR(today))
-       ldToDate    = fLastDayOfMonth(TODAY).
+       ldToDate    = Func.Common:mLastDayOfMonth(TODAY).
 
 EACH_MOBSUB:
 for each mobsub no-lock where mobsub.paytype = false:
@@ -41,7 +39,7 @@ for each mobsub no-lock where mobsub.paytype = false:
             mobcdr.eventtype = "gprs" no-lock:
       IF Mobcdr.errorcode NE 0        THEN NEXT.
       IF MobCDR.BillCode NE "14100001" THEN NEXT.
-      ldeTime  = fMake2Dt(Mobcdr.datest, Mobcdr.TimeStart).
+      ldeTime  = Func.Common:mMake2DT(Mobcdr.datest, Mobcdr.TimeStart).
       if ldeTime >= MServiceLimit.FromTs then do:
          lltrue = true.
          leave.
@@ -50,12 +48,12 @@ for each mobsub no-lock where mobsub.paytype = false:
 
    if lltrue then do:
       IF fIsDSSActive(INPUT MobSub.CustNum, INPUT ldeStamp) THEN
-         RUN cust_rate.p(MobSub.CustNum,
+         RUN Rate/cust_rate.p(MobSub.CustNum,
                          ldaFromdate,
                          ldToDate,
                          TRUE).
       ELSE
-         RUN cli_rate.p(MobSub.CLI,
+         RUN Rate/cli_rate.p(MobSub.CLI,
                         ldaFromdate,
                         ldToDate,
                         TRUE).
@@ -65,12 +63,12 @@ for each mobsub no-lock where mobsub.paytype = false:
          FIND FIRST bMsRequest WHERE
                     ROWID(bMsRequest) = llrowid NO-LOCK NO-ERROR.
          IF AVAIL bMsRequest AND bMsRequest.SMSTEXT BEGINS "TOTAL" THEN DO:
-            RUN barrengine(
+            RUN Mm/barrengine.p(
                 MobSub.MsSeq,
                 "UNY_REST",
                 "5",
-                katun,
-                fMakeTS(),
+                Syst.Var:katun,
+                Func.Common:mMakeTS(),
                 "",
                 OUTPUT lcStatus).
             IF lcStatus = "ONC" THEN

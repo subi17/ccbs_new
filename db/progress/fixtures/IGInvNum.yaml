@@ -1,0 +1,2791 @@
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 1
+  InvNum: 315950
+  SeqPrefix: "261D"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 1
+  InvNum: 690475
+  SeqPrefix: "251D"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 1
+  InvNum: 585574
+  SeqPrefix: "241D"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 1
+  InvNum: 560801
+  SeqPrefix: "231D"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 1
+  InvNum: 326637
+  SeqPrefix: "221D"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 1
+  InvNum: 200441
+  SeqPrefix: "211D"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 1
+  InvNum: 151584
+  SeqPrefix: "201D"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 1
+  InvNum: 116886
+  SeqPrefix: "291D"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 1
+  InvNum: 60781
+  SeqPrefix: "281D"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 1
+  InvNum: 17007
+  SeqPrefix: "PODI"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 5
+  InvNum: 335
+  SeqPrefix: "265C"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 5
+  InvNum: 641
+  SeqPrefix: "255C"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 5
+  InvNum: 1219
+  SeqPrefix: "245C"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 5
+  InvNum: 773
+  SeqPrefix: "235C"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 5
+  InvNum: 360
+  SeqPrefix: "225C"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 5
+  InvNum: 108
+  SeqPrefix: "215C"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 5
+  InvNum: 125
+  SeqPrefix: "205C"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 5
+  InvNum: 261
+  SeqPrefix: "295C"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 5
+  InvNum: 513
+  SeqPrefix: "285C"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 5
+  InvNum: 6
+  SeqPrefix: "POCI"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 6
+  InvNum: 391
+  SeqPrefix: "266D"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 6
+  InvNum: 1528
+  SeqPrefix: "256D"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 6
+  InvNum: 1480
+  SeqPrefix: "246D"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 6
+  InvNum: 3021
+  SeqPrefix: "236D"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 6
+  InvNum: 3549
+  SeqPrefix: "226D"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 6
+  InvNum: 3217
+  SeqPrefix: "216D"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 6
+  InvNum: 3155
+  SeqPrefix: "206D"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 6
+  InvNum: 3836
+  SeqPrefix: "296D"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 6
+  InvNum: 3172
+  SeqPrefix: "286D"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 6
+  InvNum: 4361
+  SeqPrefix: "CDDI"
+  FromDate: 2006-11-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 7
+  InvNum: 3943
+  SeqPrefix: "267D"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 7
+  InvNum: 7216
+  SeqPrefix: "257D"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 7
+  InvNum: 5509
+  SeqPrefix: "247D"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 7
+  InvNum: 7835
+  SeqPrefix: "237D"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 7
+  InvNum: 7876
+  SeqPrefix: "227D"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 7
+  InvNum: 6773
+  SeqPrefix: "217D"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 7
+  InvNum: 4960
+  SeqPrefix: "207D"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 7
+  InvNum: 3948
+  SeqPrefix: "297D"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 7
+  InvNum: 3028
+  SeqPrefix: "287D"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 7
+  InvNum: 3979
+  SeqPrefix: "CDCI"
+  FromDate: 2006-11-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 8
+  InvNum: 204
+  SeqPrefix: "268C"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 8
+  InvNum: 878
+  SeqPrefix: "258C"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 8
+  InvNum: 788
+  SeqPrefix: "248C"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 8
+  InvNum: 1728
+  SeqPrefix: "238C"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 8
+  InvNum: 1355
+  SeqPrefix: "228C"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 8
+  InvNum: 1101
+  SeqPrefix: "218C"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 8
+  InvNum: 1217
+  SeqPrefix: "208C"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 8
+  InvNum: 2621
+  SeqPrefix: "298C"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 8
+  InvNum: 148
+  SeqPrefix: "288C"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 8
+  InvNum: 265
+  SeqPrefix: "CCDI"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 9
+  InvNum: 1058
+  SeqPrefix: "269C"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 9
+  InvNum: 1678
+  SeqPrefix: "259C"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 9
+  InvNum: 616
+  SeqPrefix: "249C"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 9
+  InvNum: 1538
+  SeqPrefix: "239C"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 9
+  InvNum: 2923
+  SeqPrefix: "229C"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 9
+  InvNum: 3528
+  SeqPrefix: "219C"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 9
+  InvNum: 615
+  SeqPrefix: "209C"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 9
+  InvNum: 630
+  SeqPrefix: "299C"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 9
+  InvNum: 242
+  SeqPrefix: "289C"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 9
+  InvNum: 633
+  SeqPrefix: "CCCI"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 12
+  SeqPrefix: "PEDI"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 13
+  SeqPrefix: "PECI"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IGIC1"
+  InvType: 99
+  InvNum: 102876
+  SeqPrefix: "TIGI"
+  FromDate: 2007-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 1
+  InvNum: 5395
+  SeqPrefix: "361D"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 1
+  InvNum: 10462
+  SeqPrefix: "351D"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 1
+  InvNum: 9272
+  SeqPrefix: "341D"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 1
+  InvNum: 9963
+  SeqPrefix: "331D"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 1
+  InvNum: 6068
+  SeqPrefix: "321D"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 1
+  InvNum: 4188
+  SeqPrefix: "311D"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 1
+  InvNum: 3176
+  SeqPrefix: "301D"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 1
+  InvNum: 2680
+  SeqPrefix: "391D"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 1
+  InvNum: 1815
+  SeqPrefix: "381D"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 1
+  InvNum: 652
+  SeqPrefix: "PODC"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 5
+  InvNum: 15
+  SeqPrefix: "365C"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 5
+  InvNum: 21
+  SeqPrefix: "355C"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 5
+  InvNum: 28
+  SeqPrefix: "345C"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 5
+  InvNum: 13
+  SeqPrefix: "335C"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 5
+  InvNum: 6
+  SeqPrefix: "325C"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 5
+  InvNum: 1
+  SeqPrefix: "315C"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 5
+  InvNum: 3
+  SeqPrefix: "305C"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 5
+  InvNum: 7
+  SeqPrefix: "395C"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 5
+  InvNum: 62
+  SeqPrefix: "385C"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 5
+  SeqPrefix: "POCC"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 6
+  InvNum: 19
+  SeqPrefix: "366D"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 6
+  InvNum: 67
+  SeqPrefix: "356D"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 6
+  InvNum: 54
+  SeqPrefix: "346D"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 6
+  InvNum: 209
+  SeqPrefix: "336D"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 6
+  InvNum: 214
+  SeqPrefix: "326D"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 6
+  InvNum: 163
+  SeqPrefix: "316D"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 6
+  InvNum: 180
+  SeqPrefix: "306D"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 6
+  InvNum: 194
+  SeqPrefix: "396D"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 6
+  InvNum: 357
+  SeqPrefix: "386D"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 6
+  InvNum: 272
+  SeqPrefix: "CDDC"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 7
+  InvNum: 178
+  SeqPrefix: "367D"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 7
+  InvNum: 389
+  SeqPrefix: "357D"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 7
+  InvNum: 131
+  SeqPrefix: "347D"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 7
+  InvNum: 365
+  SeqPrefix: "337D"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 7
+  InvNum: 404
+  SeqPrefix: "327D"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 7
+  InvNum: 289
+  SeqPrefix: "317D"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 7
+  InvNum: 229
+  SeqPrefix: "307D"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 7
+  InvNum: 214
+  SeqPrefix: "397D"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 7
+  InvNum: 320
+  SeqPrefix: "387D"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 7
+  InvNum: 184
+  SeqPrefix: "CDCC"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 8
+  InvNum: 11
+  SeqPrefix: "368C"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 8
+  InvNum: 36
+  SeqPrefix: "358C"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 8
+  InvNum: 48
+  SeqPrefix: "348C"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 8
+  InvNum: 61
+  SeqPrefix: "338C"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 8
+  InvNum: 73
+  SeqPrefix: "328C"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 8
+  InvNum: 41
+  SeqPrefix: "318C"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 8
+  InvNum: 84
+  SeqPrefix: "308C"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 8
+  InvNum: 222
+  SeqPrefix: "398C"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 8
+  InvNum: 24
+  SeqPrefix: "388C"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 8
+  InvNum: 14
+  SeqPrefix: "CCDC"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 9
+  InvNum: 54
+  SeqPrefix: "369C"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 9
+  InvNum: 79
+  SeqPrefix: "359C"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 9
+  InvNum: 27
+  SeqPrefix: "349C"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 9
+  InvNum: 105
+  SeqPrefix: "339C"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 9
+  InvNum: 145
+  SeqPrefix: "329C"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 9
+  InvNum: 204
+  SeqPrefix: "319C"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 9
+  InvNum: 31
+  SeqPrefix: "309C"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 9
+  InvNum: 27
+  SeqPrefix: "399C"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 9
+  InvNum: 23
+  SeqPrefix: "389C"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 9
+  InvNum: 21
+  SeqPrefix: "CCCC"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 12
+  SeqPrefix: "PEDC"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 13
+  SeqPrefix: "PECC"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  InvType: 99
+  InvNum: 3127
+  SeqPrefix: "TIPC"
+  FromDate: 2007-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 1
+  InvNum: 6857
+  SeqPrefix: "461D"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 1
+  InvNum: 12456
+  SeqPrefix: "451D"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 1
+  InvNum: 10431
+  SeqPrefix: "441D"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 1
+  InvNum: 10882
+  SeqPrefix: "431D"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 1
+  InvNum: 6493
+  SeqPrefix: "421D"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 1
+  InvNum: 4265
+  SeqPrefix: "411D"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 1
+  InvNum: 3212
+  SeqPrefix: "401D"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 1
+  InvNum: 2531
+  SeqPrefix: "491D"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 1
+  InvNum: 1965
+  SeqPrefix: "481D"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 1
+  InvNum: 753
+  SeqPrefix: "PODM"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 5
+  InvNum: 5
+  SeqPrefix: "465C"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 5
+  InvNum: 25
+  SeqPrefix: "455C"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 5
+  InvNum: 14
+  SeqPrefix: "445C"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 5
+  InvNum: 19
+  SeqPrefix: "435C"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 5
+  InvNum: 18
+  SeqPrefix: "425C"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 5
+  InvNum: 9
+  SeqPrefix: "415C"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 5
+  InvNum: 8
+  SeqPrefix: "405C"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 5
+  InvNum: 15
+  SeqPrefix: "495C"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 5
+  InvNum: 67
+  SeqPrefix: "485C"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 5
+  InvNum: 1
+  SeqPrefix: "POCM"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 6
+  InvNum: 33
+  SeqPrefix: "466D"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 6
+  InvNum: 151
+  SeqPrefix: "456D"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 6
+  InvNum: 147
+  SeqPrefix: "446D"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 6
+  InvNum: 367
+  SeqPrefix: "436D"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 6
+  InvNum: 489
+  SeqPrefix: "426D"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 6
+  InvNum: 265
+  SeqPrefix: "416D"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 6
+  InvNum: 361
+  SeqPrefix: "406D"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 6
+  InvNum: 467
+  SeqPrefix: "496D"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 6
+  InvNum: 1513
+  SeqPrefix: "486D"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 6
+  InvNum: 631
+  SeqPrefix: "CDDM"
+  FromDate: 2006-11-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 7
+  InvNum: 323
+  SeqPrefix: "467D"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 7
+  InvNum: 619
+  SeqPrefix: "457D"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 7
+  InvNum: 237
+  SeqPrefix: "447D"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 7
+  InvNum: 581
+  SeqPrefix: "437D"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 7
+  InvNum: 597
+  SeqPrefix: "427D"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 7
+  InvNum: 350
+  SeqPrefix: "417D"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 7
+  InvNum: 272
+  SeqPrefix: "407D"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 7
+  InvNum: 274
+  SeqPrefix: "497D"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 7
+  InvNum: 414
+  SeqPrefix: "487D"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 7
+  InvNum: 376
+  SeqPrefix: "CDCM"
+  FromDate: 2006-11-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 8
+  InvNum: 14
+  SeqPrefix: "468C"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 8
+  InvNum: 55
+  SeqPrefix: "458C"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 8
+  InvNum: 66
+  SeqPrefix: "448C"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 8
+  InvNum: 160
+  SeqPrefix: "438C"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 8
+  InvNum: 207
+  SeqPrefix: "428C"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 8
+  InvNum: 85
+  SeqPrefix: "418C"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 8
+  InvNum: 145
+  SeqPrefix: "408C"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 8
+  InvNum: 669
+  SeqPrefix: "498C"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 8
+  InvNum: 26
+  SeqPrefix: "488C"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 8
+  InvNum: 38
+  SeqPrefix: "CCDM"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 9
+  InvNum: 78
+  SeqPrefix: "469C"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 9
+  InvNum: 134
+  SeqPrefix: "459C"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 9
+  InvNum: 28
+  SeqPrefix: "449C"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 9
+  InvNum: 117
+  SeqPrefix: "439C"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 9
+  InvNum: 215
+  SeqPrefix: "429C"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 9
+  InvNum: 180
+  SeqPrefix: "419C"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 9
+  InvNum: 28
+  SeqPrefix: "409C"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 9
+  InvNum: 27
+  SeqPrefix: "499C"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 9
+  InvNum: 74
+  SeqPrefix: "489C"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 9
+  InvNum: 47
+  SeqPrefix: "CCCM"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 12
+  SeqPrefix: "PEDM"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 13
+  SeqPrefix: "PECM"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  InvType: 99
+  InvNum: 4388
+  SeqPrefix: "TIPM"
+  FromDate: 2007-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "UNKNOWN"
+  InvType: 6
+  SeqPrefix: "CDDU"
+  FromDate: 2006-11-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "UNKNOWN"
+  InvType: 8
+  SeqPrefix: "CCDU"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "UNKNOWN"
+  InvType: 12
+  SeqPrefix: "PEDU"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "UNKNOWN"
+  InvType: 13
+  SeqPrefix: "PECU"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 1
+  InvNum: 9087166
+  SeqPrefix: "161D"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 1
+  InvNum: 20887598
+  SeqPrefix: "151D"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 1
+  InvNum: 18851082
+  SeqPrefix: "141D"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 1
+  InvNum: 21216690
+  SeqPrefix: "131D"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 1
+  InvNum: 16387722
+  SeqPrefix: "121D"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 1
+  InvNum: 12708596
+  SeqPrefix: "111D"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 1
+  InvNum: 9397834
+  SeqPrefix: "101D"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 1
+  InvNum: 5580878
+  SeqPrefix: "191D"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 1
+  InvNum: 2609222
+  SeqPrefix: "181D"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 1
+  InvNum: 733883
+  SeqPrefix: "PODE"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 5
+  InvNum: 9342
+  SeqPrefix: "165C"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 5
+  InvNum: 17387
+  SeqPrefix: "155C"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 5
+  InvNum: 38753
+  SeqPrefix: "145C"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 5
+  InvNum: 24756
+  SeqPrefix: "135C"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 5
+  InvNum: 14104
+  SeqPrefix: "125C"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 5
+  InvNum: 6027
+  SeqPrefix: "115C"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 5
+  InvNum: 6159
+  SeqPrefix: "105C"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 5
+  InvNum: 7277
+  SeqPrefix: "195C"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 5
+  InvNum: 16928
+  SeqPrefix: "185C"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 5
+  InvNum: 729
+  SeqPrefix: "POCE"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 6
+  InvNum: 9906
+  SeqPrefix: "166D"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 6
+  InvNum: 37279
+  SeqPrefix: "156D"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 6
+  InvNum: 42959
+  SeqPrefix: "146D"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 6
+  InvNum: 77286
+  SeqPrefix: "136D"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 6
+  InvNum: 109080
+  SeqPrefix: "126D"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 6
+  InvNum: 107590
+  SeqPrefix: "116D"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 6
+  InvNum: 82849
+  SeqPrefix: "106D"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 6
+  InvNum: 116700
+  SeqPrefix: "196D"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 6
+  InvNum: 127749
+  SeqPrefix: "186D"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 6
+  InvNum: 283202
+  SeqPrefix: "CDDE"
+  FromDate: 2006-11-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 7
+  InvNum: 107485
+  SeqPrefix: "167D"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 7
+  InvNum: 212668
+  SeqPrefix: "157D"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 7
+  InvNum: 164730
+  SeqPrefix: "147D"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 7
+  InvNum: 314219
+  SeqPrefix: "137D"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 7
+  InvNum: 344541
+  SeqPrefix: "127D"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 7
+  InvNum: 357934
+  SeqPrefix: "117D"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 7
+  InvNum: 247635
+  SeqPrefix: "107D"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 7
+  InvNum: 182586
+  SeqPrefix: "197D"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 7
+  InvNum: 132792
+  SeqPrefix: "187D"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 7
+  InvNum: 141450
+  SeqPrefix: "CDCE"
+  FromDate: 2006-11-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 8
+  InvNum: 5338
+  SeqPrefix: "168C"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 8
+  InvNum: 21043
+  SeqPrefix: "158C"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 8
+  InvNum: 18302
+  SeqPrefix: "148C"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 8
+  InvNum: 36355
+  SeqPrefix: "138C"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 8
+  InvNum: 45167
+  SeqPrefix: "128C"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 8
+  InvNum: 49862
+  SeqPrefix: "118C"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 8
+  InvNum: 41570
+  SeqPrefix: "108C"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 8
+  InvNum: 133833
+  SeqPrefix: "198C"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 8
+  InvNum: 6447
+  SeqPrefix: "188C"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 8
+  InvNum: 145277
+  SeqPrefix: "CCDE"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 9
+  InvNum: 35629
+  SeqPrefix: "169C"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 9
+  InvNum: 55451
+  SeqPrefix: "159C"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 9
+  InvNum: 24021
+  SeqPrefix: "149C"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 9
+  InvNum: 73186
+  SeqPrefix: "139C"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 9
+  InvNum: 135203
+  SeqPrefix: "129C"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 9
+  InvNum: 254210
+  SeqPrefix: "119C"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 9
+  InvNum: 30401
+  SeqPrefix: "109C"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 9
+  InvNum: 23447
+  SeqPrefix: "199C"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 9
+  InvNum: 11829
+  SeqPrefix: "189C"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 9
+  InvNum: 29949
+  SeqPrefix: "CCCE"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 12
+  SeqPrefix: "PEDE"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 13
+  SeqPrefix: "PECE"
+  FromDate: 2006-12-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VAT1"
+  InvType: 99
+  InvNum: 2669164
+  SeqPrefix: "TIVA"
+  FromDate: 2007-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 1
+  SeqPrefix: "Y61D"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 1
+  SeqPrefix: "Y51D"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 1
+  SeqPrefix: "Y41D"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 1
+  SeqPrefix: "Y31D"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 1
+  SeqPrefix: "Y21D"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 1
+  SeqPrefix: "Y11D"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 1
+  SeqPrefix: "Y01D"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 1
+  SeqPrefix: "Y91D"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 1
+  SeqPrefix: "Y81D"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 5
+  SeqPrefix: "Y65C"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 5
+  SeqPrefix: "Y55C"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 5
+  SeqPrefix: "Y45C"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 5
+  SeqPrefix: "Y35C"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 5
+  SeqPrefix: "Y25C"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 5
+  SeqPrefix: "Y15C"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 5
+  SeqPrefix: "Y05C"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 5
+  SeqPrefix: "Y95C"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 5
+  SeqPrefix: "Y85C"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 6
+  SeqPrefix: "Y66D"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 6
+  SeqPrefix: "Y56D"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 6
+  SeqPrefix: "Y46D"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 6
+  SeqPrefix: "Y36D"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 6
+  SeqPrefix: "Y26D"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 6
+  SeqPrefix: "Y16D"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 6
+  SeqPrefix: "Y06D"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 6
+  SeqPrefix: "Y96D"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 6
+  SeqPrefix: "Y86D"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 7
+  SeqPrefix: "Y67D"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 7
+  SeqPrefix: "Y57D"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 7
+  SeqPrefix: "Y47D"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 7
+  SeqPrefix: "Y37D"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 7
+  SeqPrefix: "Y27D"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 7
+  SeqPrefix: "Y17D"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 7
+  SeqPrefix: "Y07D"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 7
+  SeqPrefix: "Y97D"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 7
+  SeqPrefix: "Y87D"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 8
+  SeqPrefix: "Y68C"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 8
+  SeqPrefix: "Y58C"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 8
+  SeqPrefix: "Y48C"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 8
+  SeqPrefix: "Y38C"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 8
+  SeqPrefix: "Y28C"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 8
+  SeqPrefix: "Y18C"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 8
+  SeqPrefix: "Y08C"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 8
+  SeqPrefix: "Y98C"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 8
+  SeqPrefix: "Y88C"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 9
+  SeqPrefix: "Y69C"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 9
+  SeqPrefix: "Y59C"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 9
+  SeqPrefix: "Y49C"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 9
+  SeqPrefix: "Y39C"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 9
+  SeqPrefix: "Y29C"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 9
+  SeqPrefix: "Y19C"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 9
+  SeqPrefix: "Y09C"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 9
+  SeqPrefix: "Y99C"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "VIP"
+  InvType: 9
+  SeqPrefix: "Y89C"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 1
+  SeqPrefix: "V61D"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 1
+  SeqPrefix: "V51D"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 1
+  SeqPrefix: "V41D"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 1
+  SeqPrefix: "V31D"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 1
+  SeqPrefix: "V21D"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 1
+  SeqPrefix: "V11D"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 1
+  SeqPrefix: "V01D"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 1
+  SeqPrefix: "V91D"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 1
+  SeqPrefix: "V81D"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 5
+  SeqPrefix: "V65C"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 5
+  SeqPrefix: "V55C"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 5
+  SeqPrefix: "V45C"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 5
+  SeqPrefix: "V35C"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 5
+  SeqPrefix: "V25C"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 5
+  SeqPrefix: "V15C"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 5
+  SeqPrefix: "V05C"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 5
+  SeqPrefix: "V95C"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 5
+  SeqPrefix: "V85C"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 6
+  SeqPrefix: "V66D"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 6
+  SeqPrefix: "V56D"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 6
+  SeqPrefix: "V46D"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 6
+  SeqPrefix: "V36D"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 6
+  SeqPrefix: "V26D"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 6
+  SeqPrefix: "V16D"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 6
+  SeqPrefix: "V06D"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 6
+  SeqPrefix: "V96D"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 6
+  SeqPrefix: "V86D"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 7
+  SeqPrefix: "V67D"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 7
+  SeqPrefix: "V57D"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 7
+  SeqPrefix: "V47D"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 7
+  SeqPrefix: "V37D"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 7
+  SeqPrefix: "V27D"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 7
+  SeqPrefix: "V17D"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 7
+  SeqPrefix: "V07D"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 7
+  SeqPrefix: "V97D"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 7
+  SeqPrefix: "V87D"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 8
+  SeqPrefix: "V68C"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 8
+  SeqPrefix: "V58C"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 8
+  SeqPrefix: "V48C"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 8
+  SeqPrefix: "V38C"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 8
+  SeqPrefix: "V28C"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 8
+  SeqPrefix: "V18C"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 8
+  SeqPrefix: "V08C"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 8
+  SeqPrefix: "V98C"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 8
+  SeqPrefix: "V88C"
+  FromDate: 2008-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 9
+  SeqPrefix: "V69C"
+  FromDate: 2016-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 9
+  SeqPrefix: "V59C"
+  FromDate: 2015-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 9
+  SeqPrefix: "V49C"
+  FromDate: 2014-02-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 9
+  SeqPrefix: "V39C"
+  FromDate: 2013-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 9
+  SeqPrefix: "V29C"
+  FromDate: 2012-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 9
+  SeqPrefix: "V19C"
+  FromDate: 2011-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 9
+  SeqPrefix: "V09C"
+  FromDate: 2010-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 9
+  SeqPrefix: "V99C"
+  FromDate: 2009-01-01
+
+bulkload: IGInvNum
+  Brand: "1"
+  InvGroup: "YOIGO"
+  InvType: 9
+  SeqPrefix: "V89C"
+  FromDate: 2008-01-01
+

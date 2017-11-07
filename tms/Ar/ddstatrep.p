@@ -8,9 +8,9 @@
   VERSION ......: SL 
   ------------------------------------------------------ */
 
-{commali.i}
-{cparam2.i}
-{utumaa.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/utumaa.i}
 
 DEF INPUT PARAMETER idtAuthDate1  AS DATE  NO-UNDO.
 DEF INPUT PARAMETER idtAuthDate2  AS DATE  NO-UNDO.
@@ -58,14 +58,17 @@ ASSIGN
     lcSessionNum           = SESSION:NUMERIC-FORMAT
     SESSION:NUMERIC-FORMAT = "European".
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
+
 form header
    lcLine1 AT 1 SKIP
-   ynimi  AT 1 FORMAT "x(30)" 
+   ynimi AT 1 FORMAT "x(30)" 
       "DIRECT DEBIT STATUS" AT 40
       "Page" AT 71
       liPage FORMAT "ZZ9" SKIP
    lcDateHeader AT 40 FORMAT "X(30)"
-      pvm FORMAT "99.99.99" AT 71 SKIP
+      TODAY FORMAT "99.99.99" AT 71 SKIP
    lcLine2 AT 1 SKIP
    "InvGroup"    AT 1
    "Name"        AT 10
@@ -91,7 +94,7 @@ FUNCTION fChkPage RETURNS LOGIC
     IF liLine + iAddLine >= skayt1 THEN DO:
 
         IF liPage > 0 THEN DO:
-           {uprfeed.i liLine}
+           {Syst/uprfeed.i liLine}
         END.
         
         liPage = liPage + 1.
@@ -112,7 +115,7 @@ VIEW FRAME fQty.
 
 /* authorization status */
 FOR EACH DDAuth NO-LOCK WHERE
-         DDAuth.Brand = gcBrand,
+         DDAuth.Brand = Syst.Var:gcBrand,
    FIRST Customer OF DDAuth NO-LOCK:
      
    IF DDAuth.AuthDate >= idtAuthDate1 AND
@@ -153,7 +156,7 @@ END.
 /* active customers */
 FOR EACH ttCust:
 
-   RUN nnsvte (ttCust.CustNum,
+   RUN Ar/nnsvte.p (ttCust.CustNum,
                idtAuthDate2,
                OUTPUT lcBankAcc).
    
@@ -251,7 +254,7 @@ FOR EACH ttAuth:
       fChkPage(0).
    
       FIND InvGroup WHERE 
-           InvGroup.Brand    = gcBrand AND
+           InvGroup.Brand    = Syst.Var:gcBrand AND
            InvGroup.InvGroup = ttAuth.InvGroup NO-LOCK.
       
       PUT STREAM tul
@@ -355,7 +358,7 @@ IF ilListUnsent AND CAN-FIND(FIRST ttInv) THEN DO:
          
    END.
    
-   {uprfeed.i liLine}
+   {Syst/uprfeed.i liLine}
 END.
 
 HIDE FRAME fQty NO-PAUSE. 

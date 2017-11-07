@@ -1,5 +1,5 @@
 
-{testpaa.i}
+{Syst/testpaa.i}
 
 FUNCTION fChkUser RETURNS logical
   (INPUT  login AS CHAR, INPUT  comment AS CHAR,
@@ -66,14 +66,14 @@ repeat WITH FRAME frm:
 
    HIDE MESSAGE no-pause.
 
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       login
       comment
    WITH FRAME adduser EDITING:
 
-      READKEY. nap = keylabel(LASTKEY).
-      IF lookup(nap,poisnap) > 0 THEN DO:
+      READKEY. Syst.Var:nap = keylabel(LASTKEY).
+      IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
          if frame-field = "login" THEN DO:
             if input login = "" THEN RETURN.
          END.
@@ -85,12 +85,12 @@ repeat WITH FRAME frm:
 
 task:
    repeat WITH FRAME frm ON ENDKEY UNDO, RETURN:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
-      IF toimi = 1 THEN NEXT  CRIT.
-      IF toimi = 8 THEN LEAVE CRIT.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
+      RUN Syst/ufkey.p.
+      IF Syst.Var:toimi = 1 THEN NEXT  CRIT.
+      IF Syst.Var:toimi = 8 THEN LEAVE CRIT.
 
-      IF toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
          bOk = FALSE.
          message "Are you SURE you want to add a user (Y/N) ?" UPDATE bOk.
          IF bOk THEN LEAVE task.

@@ -9,10 +9,10 @@
   -------------------------------------------------------------------------- */
 
 
-{msreqfunc.i}
-{fsubser.i}
-{fcpfat.i}
-{msopenbatch.i}
+{Func/msreqfunc.i}
+{Func/fsubser.i}
+{Func/fcpfat.i}
+{Func/msopenbatch.i}
 
 DEF INPUT PARAMETER iiRequest AS INT NO-UNDO.
 
@@ -51,7 +51,7 @@ PROCEDURE pSaldoPayment:
       RETURN.
    END.
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
         
@@ -120,8 +120,7 @@ PROCEDURE pSaldoPayment:
       
          /* payments that increase the limit */
          ldMobSubLimit = liMobSubLimit + 
-                         DYNAMIC-FUNCTION("fChkSaldoAccount" IN ghFunc1,
-                                          MobSub.CustNum,
+                         Func.Common:mChkSaldoAccount(MobSub.CustNum,
                                           MobSub.CLI,
                                           liFatPeriod,
                                           lcFatGroup).
@@ -130,8 +129,7 @@ PROCEDURE pSaldoPayment:
          lcOtherGroup = fCParamC(lcOtherGroup).
          IF lcOtherGroup > "" THEN 
          ldMobSubLimit = ldMobSubLimit + 
-                         DYNAMIC-FUNCTION("fChkSaldoAccount" IN ghFunc1,
-                                          MobSub.CustNum,
+                         Func.Common:mChkSaldoAccount(MobSub.CustNum,
                                           MobSub.CLI,
                                           liFatPeriod,
                                           lcOtherGroup).
@@ -210,17 +208,19 @@ PROCEDURE pSaldoPayment:
          lcSMSText = REPLACE(lcSMSText,"#AMOUNT",
                                        TRIM(STRING(MsRequest.ReqDParam1,
                                                    ">>>>>>9.99"))).
-             
-         /* replace tags */
-         fReplaceSMS(lcSMSText,
-                     MsRequest.MsSeq,
-                     TODAY,
-                     OUTPUT lcSMSText).
 
+         /* replace tags */
+        Func.Common:mReplaceSMS
+          ( Customer.CustName,
+            Mobsub.CLI,
+            lcSMSText,
+            MsRequest.MsSeq,
+            TODAY,
+            OUTPUT lcSMSText).
 
          /* don't send messages before 8 am. */
-         ldReqStamp = DYNAMIC-FUNCTION("fMakeOfficeTS" in ghFunc1).
-         IF ldReqStamp = ? THEN ldReqStamp = fMakeTS().
+         ldReqStamp = Func.Common:mMakeOfficeTS().
+         IF ldReqStamp = ? THEN ldReqStamp = Func.Common:mMakeTS().
 
          fMakeSchedSMS(MobSub.CustNum,
                        MobSub.CLI,

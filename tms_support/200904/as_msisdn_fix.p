@@ -1,8 +1,7 @@
-{commpaa.i}
-katun = "anttis".
-gcBrand = "1".
+{Syst/commpaa.i}
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 
-{timestamp.i}
 
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcCommLine AS CHARACTER NO-UNDO. 
@@ -12,7 +11,7 @@ output stream slog to /apps/snet/200804/as_msisdn_fix.log append.
 
 lcCommLine = "MODIFY,MSISDN=34622206123->34600007332,ICC=8934040408009692079,IMSI=214040101415007,OPERATOR=YOIGO,NW=ERICSSON,COS=2,PROFILE=1,PAYTYPE=POSTPAID,REQUESTID=0".
 
-ldeActStamp = fMakeTS().
+ldeActStamp = Func.Common:mMakeTS().
 
 CREATE Solog.
  ASSIGN
@@ -23,8 +22,8 @@ ASSIGN
   Solog.MsSeq        = 1226219 
   Solog.CLI          = "600007332" 
   Solog.Stat         = 0     /* just created */
-  Solog.Brand        = gcBrand
-  Solog.Users        = katun.
+  Solog.Brand        = Syst.Var:gcBrand
+  Solog.Users        = Syst.Var:katun.
 
 ASSIGN     
      Solog.TimeSlotTMS  = ldeActStamp

@@ -1,5 +1,5 @@
-{testpaa.i}
-katun = "ari".
+{Syst/testpaa.i}
+Syst.Var:katun = "ari".
 
 def var ldadate as date no-undo.
 def var lcfile as char no-undo.
@@ -12,7 +12,7 @@ ldadate = 10/4/9.
 
 run pfilename(ldadate).
 
-run /apps/snet/200910/aam_yot240_dump.p (ldadate,   
+RUN /apps/snet/200910/aam_yot240_dump.p (ldadate,   
                                          dumpfile.dumpid,
                                          lcfile,
                                          "full",
@@ -26,7 +26,7 @@ ldadate = 10/11/9.
 
 run pfilename(ldadate).
 
-run /apps/snet/200910/aam_yot240_dump.p (ldadate,   
+RUN /apps/snet/200910/aam_yot240_dump.p (ldadate,   
                                          dumpfile.dumpid,
                                          lcfile,
                                          "full",

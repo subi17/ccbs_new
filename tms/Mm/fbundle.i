@@ -7,18 +7,15 @@
 
 &GLOBAL-DEFINE fbundle YES
    
-{commali.i}
-{tmsconst.i}
-{date.i}
-{timestamp.i}
-{cparam2.i}
-{fcreatereq.i}
-{matrix.i}
-{transname.i}
-{ftaxdata.i}
-{xmlfunction.i}
-{date.i}
-{fdss.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Func/fcreatereq.i}
+{Func/matrix.i}
+{Func/transname.i}
+{Func/ftaxdata.i}
+{Func/xmlfunction.i}
+{Func/fdss.i}
 {Mm/bundle_type.i}
 
 FUNCTION fOngoingContractAct RETURNS LOG (INPUT iiMsSeq    AS INT,
@@ -57,21 +54,25 @@ END FUNCTION. /* FUNCTION fOngoingContractTerm */
 FUNCTION fIsBundle RETURNS LOGIC
    (icDCEvent AS CHAR):
  
-   DEF VAR llBundle AS LOG  NO-UNDO.
-   DEF VAR liCount  AS INT  NO-UNDO.
-   
+   DEF VAR llBundle            AS LOG  NO-UNDO.
+   DEF VAR liCount             AS INT  NO-UNDO.
+   DEF VAR lcPROFlexUpsellList AS CHAR NO-UNDO.
+
    DEF BUFFER bPerContract FOR DayCampaign.
    
    /* DUB is not considered as exchangable bundle */
    IF icDCEvent EQ "DUB" THEN RETURN FALSE.
    
-   llBundle = FALSE.
+   ASSIGN
+      llBundle            = FALSE
+      lcPROFlexUpsellList = fCParamC("PRO_FLEX_UPSELL_LIST").
    
    FOR FIRST bPerContract NO-LOCK WHERE 
-             bPerContract.Brand = gcBrand AND
+             bPerContract.Brand = Syst.Var:gcBrand AND
              bPerContract.DCEvent = icDCEvent AND
-             LOOKUP(STRING(bPerContract.DCType),
-                    {&PERCONTRACT_RATING_PACKAGE}) > 0:
+             ((LOOKUP(STRING(bPerContract.DCType), {&PERCONTRACT_RATING_PACKAGE}) > 0) OR 
+              bPerContract.BundleTarget = {&TELEVISION_BUNDLE} OR
+              (LOOKUP(icDCEvent, lcPROFlexUpsellList) > 0)): 
       llBundle = TRUE.              
    END.
       
@@ -87,12 +88,12 @@ FUNCTION fIsBundleAllowed RETURNS LOGIC
    DEF VAR lcResult AS CHAR NO-UNDO. 
    
    IF NOT fIsBundle(icDCEvent) THEN DO:
-      ocInfo = "Not a bundle".
+      ocInfo = "Not a bundle" + icDCEvent.
       RETURN FALSE.
    END.
    
    /* is the new bundle allowed */
-   IF fMatrixAnalyse(gcBrand,
+   IF fMatrixAnalyse(Syst.Var:gcBrand,
                      "PERCONTR",
                      "PerContract;SubsTypeTo",
                      icDCEvent + ";" + icCLIType,
@@ -106,6 +107,54 @@ FUNCTION fIsBundleAllowed RETURNS LOGIC
    RETURN TRUE.
 
 END FUNCTION.
+
+FUNCTION fGetAllowedBundlesForSubscriptionType RETURNS CHAR
+  (icCliType AS CHAR):
+  
+  DEF VAR liCount             AS INT  NO-UNDO.
+  DEF VAR lcCliType           AS CHAR NO-UNDO.
+  DEF VAR lcSubsTypePrefix    AS CHAR NO-UNDO.
+  DEF VAR lcAllowedBundleList AS CHAR NO-UNDO.
+
+  DEFINE BUFFER bf_MxItem FOR MxItem.
+  DEFINE BUFFER bf_Matrix FOR Matrix.
+
+  ASSIGN 
+    lcSubsTypePrefix = (IF icCliType BEGINS "CONTDSL" THEN
+                            "CONTDSL*,CONT*"
+                        ELSE IF icCliType BEGINS "CONTFH" THEN
+                            "CONT*"
+                        ELSE IF icCliType BEGINS "CONT" THEN
+                            "CONT*"
+                        ELSE IF icCliType BEGINS "TARJ" THEN
+                            "TARJ*"
+                        ELSE "")
+    lcSubsTypePrefix = lcSubsTypePrefix + (IF lcSubsTypePrefix <> "" THEN "," ELSE "") + icCliType.
+
+  IF lcSubsTypePrefix > "" THEN
+  DO liCount = 1 TO NUM-ENTRIES(lcSubsTypePrefix):
+      FOR EACH bf_Matrix WHERE bf_Matrix.Brand = Syst.Var:gcBrand AND bf_Matrix.MXKey = "PERCONTR" NO-LOCK By bf_Matrix.Prior:
+
+          IF bf_Matrix.MXRes <> 1 THEN
+              NEXT.
+
+          ASSIGN lcCliType = ENTRY(liCount,lcSubsTypePrefix).
+
+          FOR EACH bf_MxItem WHERE bf_MxItem.MxSeq = bf_Matrix.MxSeq AND bf_MxItem.MxName = "SubsTypeTo" AND bf_MxItem.MxValue = lcCliType NO-LOCK:             
+              FOR EACH MxItem WHERE MxItem.MxSeq = bf_MxItem.MxSeq AND MxItem.MXName = "PerContract" NO-LOCK:
+
+                  FIND FIRST DayCampaign WHERE Daycampaign.Brand = Syst.Var:gcBrand AND Daycampaign.DCEvent = MxItem.MxValue NO-LOCK NO-ERROR.
+                  IF AVAIL DayCampaign AND LOOKUP(DayCampaign.DcType, {&PERCONTRACT_RATING_PACKAGE} + ",6") > 0 AND LOOKUP(DayCampaign.DCEvent, lcAllowedBundleList) = 0 THEN
+                      ASSIGN lcAllowedBundleList = lcAllowedBundleList + (IF lcAllowedBundleList <> "" THEN "," ELSE "") + DayCampaign.DCEvent.
+
+              END.
+          END.
+      END.
+  END.
+
+  RETURN lcAllowedBundleList.
+
+END FUNCTION.  
 
 FUNCTION fGetActiveDataBundle RETURNS CHAR
    (iiMsSeq      AS INT,
@@ -159,9 +208,10 @@ FUNCTION fGetActiveBundle RETURNS CHAR
    (iiMsSeq      AS INT,
     idActiveTime AS DEC):
 
-   DEF VAR lcBundleList AS CHAR NO-UNDO.
-   DEF VAR liLoop       AS INT NO-UNDO.
-   DEF VAR licount      AS INT NO-UNDO.
+   DEF VAR lcBundleList        AS CHAR NO-UNDO.
+   DEF VAR liLoop              AS INT  NO-UNDO.
+   DEF VAR licount             AS INT  NO-UNDO.
+
    licount = NUM-ENTRIES({&REQ_ONGOING_STATUSES}).
 
    DEF BUFFER bMServiceLimit FOR MServiceLimit.
@@ -176,10 +226,10 @@ FUNCTION fGetActiveBundle RETURNS CHAR
       FIRST bServiceLimit NO-LOCK WHERE
             bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
       FIRST bDayCampaign NO-LOCK WHERE 
-            bDayCampaign.Brand   = gcBrand AND
+            bDayCampaign.Brand   = Syst.Var:gcBrand AND
             bDayCampaign.DCEvent = bServiceLimit.GroupCode AND
-            LOOKUP(STRING(bDayCampaign.DCType),
-                   {&PERCONTRACT_RATING_PACKAGE}) > 0 AND
+            LOOKUP(STRING(bDayCampaign.DCType),{&PERCONTRACT_RATING_PACKAGE}) > 0 AND
+            LOOKUP(bDayCampaign.DCEvent,"MM_DATA600") = 0 AND
             STRING(bDayCampaign.DCType) <> {&DCTYPE_CUMULATIVE_RATING}:
 
       /* Should not return DSS in active bundle list */
@@ -243,7 +293,7 @@ FUNCTION fGetCurrentTariff RETURNS CHAR
          ldeActStamp = MsOwner.TSBegin.
       END.
       IF ldeActStamp > 0 THEN
-         fSplitTS(ldeActStamp, OUTPUT odaActDate, OUTPUT liTime).
+         Func.Common:mSplitTS(ldeActStamp, OUTPUT odaActDate, OUTPUT liTime).
 
       RETURN MobSub.CLIType.
    END. /* IF lcTariffContract = "" THEN DO: */
@@ -257,17 +307,17 @@ FUNCTION fGetCurrentTariff RETURNS CHAR
       IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION}
       THEN NEXT.
 
-      fSplitTS(MsRequest.ActStamp, OUTPUT odaActDate, OUTPUT liTime).
+      Func.Common:mSplitTS(MsRequest.ActStamp, OUTPUT odaActDate, OUTPUT liTime).
       RETURN MsRequest.ReqCparam3.
    END.
    
    FOR EACH MServiceLimit NO-LOCK WHERE
             MServiceLimit.MsSeq   = MobSub.MsSeq AND
-            MServiceLimit.EndTS  >= fMakeTS(), 
+            MServiceLimit.EndTS  >= Func.Common:mMakeTS(), 
       FIRST ServiceLimit NO-LOCK USE-INDEX SLSeq WHERE
             ServiceLimit.SLSeq = MServiceLimit.SLSeq AND
             ServiceLimit.GroupCode = lcTariffContract:
-      fSplitTS(MServiceLimit.FromTS, OUTPUT odaActDate, OUTPUT liTime).
+      Func.Common:mSplitTS(MServiceLimit.FromTS, OUTPUT odaActDate, OUTPUT liTime).
       RETURN ServiceLimit.GroupCode.
    END.
    
@@ -307,7 +357,7 @@ FUNCTION fGetCurrentBundle RETURNS CHAR
    (iiMsSeq AS INT):
 
    RETURN fGetActiveBundle(iiMsSeq,
-                           fMakeTS()).
+                           Func.Common:mMakeTS()).
 END FUNCTION.
 
 FUNCTION fIsBonoVoIPAllowed RETURNS LOGICAL
@@ -398,7 +448,7 @@ FUNCTION fGetDataBundleInOrderAction RETURNS CHAR
    IF lcContracts = "" THEN RETURN "".
 
    FIND FIRST OrderAction WHERE
-              OrderAction.Brand = gcBrand AND
+              OrderAction.Brand = Syst.Var:gcBrand AND
               OrderAction.OrderId = iiOrderId AND
               OrderAction.ItemType = "BundleItem" AND
               LOOKUP(OrderAction.ItemKey,lcContracts) > 0
@@ -440,13 +490,13 @@ FUNCTION fConvBundleToBillItem RETURNS CHAR
    (icDataBundle AS CHAR):
 
    FOR FIRST DayCampaign WHERE
-             DayCampaign.Brand   = gcBrand AND
+             DayCampaign.Brand   = Syst.Var:gcBrand AND
              DayCampaign.DCEvent = icDataBundle NO-LOCK,
        FIRST FeeModel WHERE
-             FeeModel.Brand    = gcBrand AND
+             FeeModel.Brand    = Syst.Var:gcBrand AND
              FeeModel.FeeModel = DayCampaign.FeeModel NO-LOCK,
        FIRST FMItem WHERE
-             FMItem.Brand     = gcBrand AND
+             FMItem.Brand     = Syst.Var:gcBrand AND
              FMItem.FeeModel  = FeeModel.FeeModel AND
              FMItem.FromDate <= TODAY AND
              FMItem.ToDate   >= TODAY NO-LOCK:
@@ -490,10 +540,10 @@ FUNCTION fBundleWithSTC RETURNS LOG
    DEF VAR lcNativeVOIPTariffs AS CHAR NO-UNDO.
    DEF VAR lcNativeVoipBundles AS CHAR NO-UNDO. 
 
-   fSplitTS(ideActStamp,OUTPUT ldaReqDate,OUTPUT liReqTime).
+   Func.Common:mSplitTS(ideActStamp,OUTPUT ldaReqDate,OUTPUT liReqTime).
 
    IF liReqTime > 0 THEN
-      ideActStamp = fMake2Dt(ldaReqDate + 1,0).
+      ideActStamp = Func.Common:mMake2DT(ldaReqDate + 1,0).
 
    ASSIGN lcPostpaidDataBundles = fCParamC("POSTPAID_DATA_CONTRACTS")
           lcDataBundleCLITypes  = fCParamC("DATA_BUNDLE_BASED_CLITYPES").
@@ -548,17 +598,17 @@ FUNCTION fBundleWithSTCCustomer RETURNS LOG
    DEF VAR lcPostpaidDataBundles  AS CHAR NO-UNDO.
    DEF VAR lcDataBundleCLITypes   AS CHAR NO-UNDO.
 
-   fSplitTS(ideActStamp,OUTPUT ldaReqDate,OUTPUT liReqTime).
+   Func.Common:mSplitTS(ideActStamp,OUTPUT ldaReqDate,OUTPUT liReqTime).
 
    IF liReqTime > 0 THEN
-      ideActStamp = fMake2Dt(ldaReqDate + 1,0).
+      ideActStamp = Func.Common:mMake2DT(ldaReqDate + 1,0).
 
    ASSIGN lcPostpaidDataBundles = fCParamC("POSTPAID_DATA_CONTRACTS")
           lcDataBundleCLITypes  = fCParamC("DATA_BUNDLE_BASED_CLITYPES").
 
    /* Check STC Request with data bundle */
    FIND FIRST MsRequest NO-LOCK WHERE
-              MsRequest.Brand = gcBrand AND
+              MsRequest.Brand = Syst.Var:gcBrand AND
               MsRequest.Custnum = iiCustnum AND
               MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
               LOOKUP(STRING(MsRequest.ReqStat),"4,9,99,3") = 0 AND
@@ -570,7 +620,7 @@ FUNCTION fBundleWithSTCCustomer RETURNS LOG
 
    /* Check BTC Request with data bundle */
    FIND FIRST MsRequest NO-LOCK WHERE
-              MsRequest.Brand = gcBrand AND
+              MsRequest.Brand = Syst.Var:gcBrand AND
               MsRequest.Custnum = iiCustnum AND
               MsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE} AND
               LOOKUP(STRING(MsRequest.ReqStat),"4,9,99,3") = 0 AND
@@ -619,7 +669,7 @@ PROCEDURE pAdjustBal:
       liRequest = NEXT-VALUE(PrePaidReq).
    
       IF NOT CAN-FIND(FIRST PrePaidRequest WHERE
-                            PrePaidRequest.Brand     = gcBrand AND
+                            PrePaidRequest.Brand     = Syst.Var:gcBrand AND
                             PrepaidRequest.PPRequest = liRequest)
       THEN LEAVE.
    END. /* DO WHILE TRUE: */
@@ -628,9 +678,9 @@ PROCEDURE pAdjustBal:
  
    CREATE PrePaidRequest.
    ASSIGN
-      PrePaidRequest.TSRequest   = fMakeTS()
-      PrePaidRequest.UserCode    = katun
-      PrePaidRequest.Brand       = gcBrand
+      PrePaidRequest.TSRequest   = Func.Common:mMakeTS()
+      PrePaidRequest.UserCode    = Syst.Var:katun
+      PrePaidRequest.Brand       = Syst.Var:gcBrand
       PrePaidRequest.MsSeq       = bMobSub.MsSeq
       PrePaidRequest.CLI         = bMobSub.CLI
       PrePaidRequest.PPRequest   = liRequest
@@ -652,7 +702,7 @@ PROCEDURE pAdjustBal:
    ELSE IF icBundle = "TARJ7_UPSELL" THEN
       PrePaidRequest.PPReqPrefix = "975".
 
-   RUN pp_platform.p(gcBrand,PrePaidRequest.PPRequest).
+   RUN Gwy/pp_platform.p(Syst.Var:gcBrand,PrePaidRequest.PPRequest).
    
    lcXML = RETURN-VALUE.
       
@@ -662,7 +712,7 @@ PROCEDURE pAdjustBal:
    ASSIGN
       PrePaidRequest.Response   = lcXML
       PrePaidRequest.RespCode   = liRespCode
-      PrePaidRequest.TSResponse = fMakeTS().
+      PrePaidRequest.TSResponse = Func.Common:mMakeTS().
 
    /* OK response */
    IF liRespCode <= 2 THEN DO:
@@ -678,15 +728,17 @@ PROCEDURE pAdjustBal:
          TopUpQueue.Date      = TODAY
          TopUpQueue.Source    = PrePaidRequest.Source.
          
+      RELEASE TopUpQueue.
+
       CREATE Memo.
       ASSIGN
-         Memo.CreStamp  = fMakeTS()
-         Memo.Brand     = gcBrand
+         Memo.CreStamp  = Func.Common:mMakeTS()
+         Memo.Brand     = Syst.Var:gcBrand
          Memo.HostTable = "MobSub"
          Memo.KeyValue  = STRING(bMobSub.MsSeq)
          Memo.CustNum   = bMobSub.CustNum
          Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-         Memo.CreUser   = katun
+         Memo.CreUser   = Syst.Var:katun
          Memo.MemoTitle = UPPER(icBundle) + " Balance Adjustment"
          Memo.MemoText  = "Subscription's balance has been charged with " +
             TRIM(STRING(ABS(ROUND(PrePaidRequest.TopUpAmt / 100,2)),
@@ -709,7 +761,7 @@ PROCEDURE pEnoughBalance:
    DEFINE VARIABLE ldeCurrBal           AS DECIMAL   NO-UNDO.
   
    IF ideAmountChk > 0 THEN DO:
-      RUN balancequery.p(icCLI).
+      RUN Gwy/balancequery.p(icCLI).
       IF RETURN-VALUE > "" THEN
          ldeCurrBal = DECIMAL(RETURN-VALUE) / 100 NO-ERROR.
       IF ldeCurrBal < ideAmountChk THEN DO:
@@ -730,7 +782,7 @@ FUNCTION fCreateOrderAction RETURNS LOGICAL
     icParam   AS CHAR):
 
    CREATE OrderAction.
-   ASSIGN OrderAction.Brand = gcBrand
+   ASSIGN OrderAction.Brand = Syst.Var:gcBrand
           OrderAction.OrderId = iiOrderId
           OrderAction.ItemType = icType
           OrderAction.ItemKey = icKey

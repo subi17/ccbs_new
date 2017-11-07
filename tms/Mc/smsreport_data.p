@@ -1,9 +1,8 @@
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
-   katun = "cron"
-   gcBrand = "1".
-{timestamp.i}
-{tmsconst.i}
+   Syst.Var:katun = "cron"
+   Syst.Var:gcBrand = "1".
+{Syst/tmsconst.i}
 
 DEFINE TEMP-TABLE ttReport NO-UNDO
    FIELD name AS CHAR
@@ -32,7 +31,7 @@ FUNCTION fSales RETURNS LOGICAL
    (ldSaleDate AS DATE):
 
    FIND FIRST SalesMan NO-LOCK WHERE
-              SalesMan.Brand = gcBrand AND
+              SalesMan.Brand = Syst.Var:gcBrand AND
               SalesMan.SalesMan = Order.SalesMan NO-ERROR.
 
    IF AVAIL SalesMan THEN DO:
@@ -102,7 +101,7 @@ FUNCTION fFixNeg RETURNS INT
 END FUNCTION. 
 
 /* Today Orders */
-ldeBegin = fMake2Dt(TODAY,0).
+ldeBegin = Func.Common:mMake2DT(TODAY,0).
 DEFINE VARIABLE liPrepaidsToday AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liPostpaidsToday AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liPosSales AS INTEGER NO-UNDO. 
@@ -128,7 +127,7 @@ DEFINE VARIABLE liMGMSalesToday AS INTEGER NO-UNDO.
 
 /* Today Orders */
 FOR EACH Order WHERE
-         Order.Brand = gcBrand AND
+         Order.Brand = Syst.Var:gcBrand AND
          Order.CrStamp > ldeBegin NO-LOCK:
  
    FIND FIRST OrderAccessory OF Order NO-LOCK WHERE
@@ -148,9 +147,11 @@ FOR EACH Order WHERE
    
    liOrdersToday = liOrdersToday + 1.
    CASE Order.OrderChannel: 
-      WHEN "pos" OR WHEN "fusion_pos" then liPosSales = liPosSales + 1.
+      WHEN "pos" OR WHEN "fusion_pos" OR WHEN "fusion_pos_pro" OR WHEN "pos_pro" then 
+         liPosSales = liPosSales + 1.
       WHEN "cc" OR WHEN "fusion_cc" then liCCSales = liCCSales + 1.
-      WHEN "telesales" OR WHEN "fusion_telesales" then liTeleSales = liTeleSales + 1.
+      WHEN "telesales" OR WHEN "fusion_telesales" OR 
+          WHEN "telesales_pro" OR WHEN "fusion_telesales_pro" then liTeleSales = liTeleSales + 1.
       WHEN "self" then liSelfSales = liSelfSales + 1.
       WHEN "renewal" then liRenewal = liRenewal + 1.
       WHEN "renewal_telesales" or
@@ -181,12 +182,12 @@ FOR EACH Order WHERE
 END.
 
 /* Yesterday Orders */
-ldeBegin = fMake2Dt(TODAY - 1,0).
-ldeEnd   = fMake2Dt(TODAY,0).
+ldeBegin = Func.Common:mMake2DT(TODAY - 1,0).
+ldeEnd   = Func.Common:mMake2DT(TODAY,0).
 DEFINE VARIABLE liMGMSalesYesterday AS INTEGER NO-UNDO. 
 
 FOR EACH Order WHERE
-         Order.Brand = gcBrand AND
+         Order.Brand = Syst.Var:gcBrand AND
          Order.CrStamp >= ldeBegin AND
          Order.CrStamp < ldeEnd NO-LOCK:
 
@@ -210,7 +211,7 @@ DEFINE VARIABLE liSelfSalesCum AS INTEGER NO-UNDO.
 DEFINE VARIABLE liMGMSalesCum AS INTEGER NO-UNDO. 
 
 FOR EACH Order NO-LOCK WHERE
-         Order.Brand = gcBrand:
+         Order.Brand = Syst.Var:gcBrand:
 
    IF Order.PayType THEN
    liPrepaids = liPrepaids + 1.
@@ -218,9 +219,11 @@ FOR EACH Order NO-LOCK WHERE
    liPostpaids = liPostpaids + 1.
    
    CASE Order.OrderChannel: 
-      WHEN "pos" OR WHEN "fusion_pos" then liPosSalesCum = liPosSalesCum + 1.
+      WHEN "pos" OR WHEN "fusion_pos" OR WHEN "pos_pro" 
+         OR WHEN "fusion_pos_pro" then liPosSalesCum = liPosSalesCum + 1.
       WHEN "cc" OR WHEN "fusion_cc" then liCCSalesCum = liCCSalesCum + 1.
-      WHEN "telesales" OR WHEN "fusion_telesales" then liTeleSalesCum = liTeleSalesCum + 1.
+      WHEN "telesales" OR WHEN "fusion_telesales"
+         OR WHEN "telesales_pro" OR WHEN "fusion_telesales_pro" then liTeleSalesCum = liTeleSalesCum + 1.
       WHEN "self" then liSelfSalesCum = liSelfSalesCum + 1.
    END.
    
@@ -236,7 +239,7 @@ END.
 
 /* Total Ongoing MNPs */
 FOR EACH Order WHERE
-         Order.Brand = gcBrand AND
+         Order.Brand = Syst.Var:gcBrand AND
          Order.StatusCode = "12" AND
          Order.MNPStatus > 0 NO-LOCK:
    liMNPOngoing = liMNPOngoing + 1. 
@@ -251,11 +254,11 @@ DEFINE VARIABLE liMNPOutTotal     AS INTEGER NO-UNDO.
 DEFINE VARIABLE liOpNumber AS INTEGER NO-UNDO. 
 
 /* Today MNP Out */
-ldeBegin = fMake2Dt(TODAY,0).
-ldeEnd   = fMake2Dt(TODAY + 1,0).
+ldeBegin = Func.Common:mMake2DT(TODAY,0).
+ldeEnd   = Func.Common:mMake2DT(TODAY + 1,0).
 
 FOR EACH msrequest where
-         msrequest.brand = gcBrand and 
+         msrequest.brand = Syst.Var:gcBrand and 
          msrequest.reqtype = 18 and
          msrequest.reqstatus = 2 and
          msrequest.actstamp >= ldeBegin and
@@ -288,11 +291,11 @@ FUNCTION fTermSubs RETURNS INT
    DEFINE VARIABLE ldeEnd   AS DECIMAL NO-UNDO. 
    DEFINE VARIABLE i        AS INTEGER NO-UNDO. 
 
-   ldeBegin = fMake2Dt(idaDate,0).
-   ldeEnd   = fMake2Dt(idaDate + 1,0).
+   ldeBegin = Func.Common:mMake2DT(idaDate,0).
+   ldeEnd   = Func.Common:mMake2DT(idaDate + 1,0).
    
    FOR EACH MsRequest WHERE 
-            MsRequest.Brand = gcBrand AND
+            MsRequest.Brand = Syst.Var:gcBrand AND
             MsRequest.ReqType = 18 AND
             MsRequest.ReqStatus = 0 AND
             MsRequest.ActStamp >= ldeBegin AND 
@@ -301,7 +304,7 @@ FUNCTION fTermSubs RETURNS INT
    END.
 
    FOR EACH MsRequest WHERE 
-            MsRequest.Brand = gcBrand AND
+            MsRequest.Brand = Syst.Var:gcBrand AND
             MsRequest.ReqType = 18 AND
             MsRequest.ReqStatus = 2 AND
             MsRequest.ActStamp >= ldeBegin AND 
@@ -314,7 +317,7 @@ FUNCTION fTermSubs RETURNS INT
 END FUNCTION. 
 
 
-ldeBegin = fMake2Dt(DATE(MONTH(TODAY),1,YEAR(TODAY)),0).
+ldeBegin = Func.Common:mMake2DT(DATE(MONTH(TODAY),1,YEAR(TODAY)),0).
 DEFINE VARIABLE liPrivatePrepaidNew AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liPrivatePrepaidMNP AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liPrivatePostpaidNew AS INTEGER NO-UNDO. 
@@ -325,11 +328,11 @@ DEFINE VARIABLE liCorporatePostpaidNew AS INTEGER NO-UNDO.
 DEFINE VARIABLE liCorporatePostpaidMNP AS INTEGER NO-UNDO. 
 
 FOR EACH Order WHERE
-         Order.Brand = gcBrand AND
+         Order.Brand = Syst.Var:gcBrand AND
          Order.CrStamp >= ldeBegin NO-LOCK:
    
    FIND FIRST OrderCustomer WHERE
-              OrderCustomer.Brand = gcBrand AND
+              OrderCustomer.Brand = Syst.Var:gcBrand AND
               OrderCustomer.OrderId = Order.OrderId AND
               OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
    
@@ -520,4 +523,3 @@ fReportInt("t_mgm_sales", liMGMSalesToday).
 fReportInt("y_mgm_sales", liMGMSalesYesterday).
 fReportInt("total_mgm_sales", liMGMSalesCum).
 
-IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 

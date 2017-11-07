@@ -1,12 +1,12 @@
 /* monthlysubcount.p    04.01.11/aam 
 */
 
-{commpaa.i}
-katun = "cron".
-gcBrand = "1".
+{Syst/commpaa.i}
+Syst.Var:katun = "cron".
+Syst.Var:gcBrand = "1".
 
-{direct_dbconnect.i}
-{eventlog.i}
+{Func/direct_dbconnect.i}
+{Syst/eventlog.i}
 
 DEF VAR ldaPrevPeriod AS DATE NO-UNDO.
 
@@ -18,7 +18,7 @@ fInitializeConnectTables("PrepCDR","").
 
 ldaPrevPeriod = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1.
 
-RUN pDirectConnect2Dbs(gcBrand,
+RUN pDirectConnect2Dbs(Syst.Var:gcBrand,
                        "",
                        ldaPrevPeriod,
                        ldaPrevPeriod).
@@ -28,7 +28,7 @@ IF RETURN-VALUE BEGINS "ERROR" THEN DO:
    QUIT.
 END.
 
-RUN monthlysubcount_report.p (TODAY).
+RUN Mm/monthlysubcount_report.p (TODAY).
 
 fELog("MONTHLYSUBCOUNT","Finished").
 

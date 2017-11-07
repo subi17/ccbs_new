@@ -3,8 +3,8 @@
    create a request for refund payment 
 */
    
-{commali.i}
-{fcreatereq.i}
+{Syst/commali.i}
+{Func/fcreatereq.i}
 
 FUNCTION fRefundRequest RETURNS INTEGER
    (INPUT  iiCustNum     AS INT,  
@@ -32,7 +32,7 @@ FUNCTION fRefundRequest RETURNS INTEGER
 
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest(23,
                   idActStamp,

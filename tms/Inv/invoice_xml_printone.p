@@ -7,8 +7,8 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEF INPUT PARAMETER iiInvNum   AS INT  NO-UNDO.
 DEF INPUT PARAMETER icTransDir AS CHAR NO-UNDO.
@@ -29,7 +29,7 @@ IF icTransDir > "" THEN
 FIND FIRST Invoice WHERE Invoice.InvNum = iiInvNum NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Invoice THEN RETURN "ERROR:Invoice not found".
 
-RUN printdoc1co ("",
+RUN Inv/printdoc1co.p ("",
                  Invoice.CustNum,
                  Invoice.CustNum,
                  Invoice.ExtInvID,

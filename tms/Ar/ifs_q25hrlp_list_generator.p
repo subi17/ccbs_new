@@ -6,9 +6,9 @@
   CREATED ......: 29.3.2016
   Version ......: yoigo
 ---------------------------------------------------------------------- */
-{commpaa.i}
-gcbrand = "1".
-{tmsconst.i}
-{q25functions.i}
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
+{Syst/tmsconst.i}
+{Func/q25functions.i}
 fInitHRLPParameters().
 fGenerateQ25List().

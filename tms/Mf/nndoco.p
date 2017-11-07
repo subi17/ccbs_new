@@ -25,19 +25,19 @@
   VERSION ......: M15
   ------------------------------------------------------------------ */
 
-{errors.i}
+{Mf/errors.i}
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'fixcdr'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'fixcdr'}
 
 
 def buffer double  for FIXcdr.
 def buffer bufcdr  for FIXcdr.
 def buffer delcall for FIXcdr.
-{deldouble.i}
+{Mf/deldouble.i}
 
-{excel.i}
+{Func/excel.i}
 
 def var exdir     as c  no-undo.
 def var exname    as c  no-undo.
@@ -84,15 +84,15 @@ form
    help "Logfile's name,  empty: no log"                   skip
    "                Display double calls ........:" bDisp  skip(4)
 with
-   width 80 overlay color value(cfc) title color value(ctc)
-   " " + ynimi + " ERASE DOUBLE RETAIL CALLS " + string(pvm,"99-99-99") + " "
+   width 80 overlay color value(Syst.Var:cfc) title color value(Syst.Var:ctc)
+   " " + Syst.Var:ynimi + " ERASE DOUBLE RETAIL CALLS " + string(TODAY,"99-99-99") + " "
    no-labels frame start.
 
 assign
    cadate2 = date(month(today),1,year(today)) - 1
    cadate1 = date(month(cadate2),1,year(cadate2)).
 
-cfc = "sel". run ufcolor.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
 
 /* all mobile prefixes into a string ... 
 for each mobpref no-lock.
@@ -103,7 +103,7 @@ assign mobpref = substr(mobpref,1,length(mobpref) - 1).
 
 CRIT:
 repeat with frame start:
-   ehto = 9. run ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
    update
       cadate1  validate(cadate1 ne ?,"Give first date !")
@@ -115,7 +115,7 @@ repeat with frame start:
    /*
    editing.
       readkey.
-      if lookup(keylabel(lastkey),poisnap) > 0 then do:
+      if lookup(keylabel(lastkey),Syst.Var:poisnap) > 0 then do:
          pause 0.
          if frame-field = "exasno" then do:
             assign frame start exasno.
@@ -134,12 +134,12 @@ repeat with frame start:
    */.
 task:
    repeat with frame start:
-      assign ufk = 0 ufk[1] = 7 ufk[5] = 178 ufk[8] = 8 ehto = 0.
-      run ufkey.
-      if toimi = 1 then next  CRIT.
-      if toimi = 8 then leave CRIT.
+      assign Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 178 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
+      RUN Syst/ufkey.p.
+      if Syst.Var:toimi = 1 then next  CRIT.
+      if Syst.Var:toimi = 8 then leave CRIT.
 
-      if toimi = 5 then do:
+      if Syst.Var:toimi = 5 then do:
          bell. message
          "Are You sure You want to start ERASING (Y/N) ?" update ok.
          if ok then leave TASK.
@@ -153,7 +153,7 @@ task:
       do i = 1 to num-entries(rubrik).
          put stream excel unformatted entry(i,rubrik) tab.
       end.
-      run uexskip(2).
+      RUN Syst/uexskip.p(2).
    end.
 
    i = time.

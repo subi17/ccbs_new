@@ -9,8 +9,8 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{utumaa.i "new"}
+{Syst/commali.i}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "balrel"
        tuni2 = "".
@@ -48,14 +48,14 @@ form
    liCustNum[1] AT 10
       LABEL "Customers ........."
       HELP "Customer number"
-      FORMAT ">>>>>>>9"
+      FORMAT ">>>>>>>>9"
    "-"
    liCustNum[2]
       NO-LABEL 
       HELP "Customer number"
       VALIDATE(INPUT liCustNum[2] >= INPUT liCustNum[1],
                "Upper limit cannot be less than lower limit")
-      FORMAT ">>>>>>>9"
+      FORMAT ">>>>>>>>9"
    SKIP
 
    liInvType[1] AT 10
@@ -104,15 +104,15 @@ form
       FORMAT "X(47)"
    SKIP(2)
    WITH ROW 1 SIDE-LABELS WIDTH 80
-        TITLE " " + ynimi + " BALANCE REPORT " + STRING(pvm,"99-99-99") + " "
+        TITLE " " + Syst.Var:ynimi + " BALANCE REPORT " + STRING(TODAY,"99-99-99") + " "
 FRAME valinta.
 
 VIEW FRAME valinta.
 PAUSE 0 NO-MESSAGE.
 
-FIND LAST InvGroup WHERE InvGroup.Brand = gcBrand NO-LOCK NO-ERROR.
+FIND LAST InvGroup WHERE InvGroup.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 IF AVAILABLE InvGroup THEN ASSIGN lcInvGroup[2] = InvGroup.InvGroup.
-ASSIGN liCustNum[2]  = 99999999  
+ASSIGN liCustNum[2]  = 999999999  
        ldClaimQty[2] = 8
        liInvType     = 1
        liPaymPlan    = 0
@@ -120,7 +120,7 @@ ASSIGN liCustNum[2]  = 99999999
                        THEN DATE(12,1,YEAR(TODAY) - 1)
                        ELSE DATE(MONTH(TODAY) - 1,1,YEAR(TODAY))
        ufkey         = false
-       nap           = "1".
+       Syst.Var:nap           = "1".
 
 toimi:
 REPEAT WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
@@ -132,22 +132,22 @@ REPEAT WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       
    IF ufkey THEN DO:
       ASSIGN
-      ufk[1]= 132  
-      ufk[2]= 0  ufk[3]= 0 ufk[4]= 0
-      ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
-      ufk[9]= 1
-      ehto = 3 ufkey = FALSE.
-      RUN ufkey.p.
+      Syst.Var:ufk[1]= 132  
+      Syst.Var:ufk[2]= 0  Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+      Syst.Var:ufk[5]= 63 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 
+      Syst.Var:ufk[9]= 1
+      Syst.Var:ehto = 3 ufkey = FALSE.
+      RUN Syst/ufkey.p.
 
       READKEY.
-      nap = keylabel(lastkey).
+      Syst.Var:nap = keylabel(lastkey).
    END.
    ELSE ufkey = TRUE.
 
-   IF LOOKUP(nap,"1,f1") > 0 THEN DO:
+   IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO:
 
-      ehto = 9. 
-      RUN ufkey.p.
+      Syst.Var:ehto = 9. 
+      RUN Syst/ufkey.p.
       
       REPEAT WITH frame valinta ON ENDKEY UNDO, LEAVE:
          UPDATE 
@@ -161,14 +161,14 @@ REPEAT WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
          WITH FRAME valinta EDITING:
          
             READKEY. 
-            nap = KEYLABEL(LASTKEY).
+            Syst.Var:nap = KEYLABEL(LASTKEY).
 
-            IF nap = "F9" AND INDEX(FRAME-FIELD,"liInvType") > 0 
+            IF Syst.Var:nap = "F9" AND INDEX(FRAME-FIELD,"liInvType") > 0 
             THEN DO:
 
                liField = FRAME-INDEX.
                 
-               RUN h-tmscodes(INPUT "Invoice",  /* TableName*/
+               RUN Help/h-tmscodes.p(INPUT "Invoice",  /* TableName*/
                                     "InvType", /* FieldName */
                                     "Report", /* GroupCode */
                               OUTPUT lcCode).
@@ -178,12 +178,12 @@ REPEAT WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                   DISPLAY INTEGER(lcCode) ;& liInvType[liField].
                END.
 
-               ehto = 9.
-               RUN ufkey.
+               Syst.Var:ehto = 9.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
 
-            ELSE IF LOOKUP(nap,poisnap) > 0 THEN DO:
+            ELSE IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
                HIDE MESSAGE.
                IF FRAME-FIELD = "" THEN DO:
                END.
@@ -196,18 +196,18 @@ REPEAT WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       END.
    END.
 
-   ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:
+   ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 THEN DO:
       
       IF lcFile = "" THEN DO:  
          tila = TRUE.
-         {tmsreport.i "return"}
+         {Syst/tmsreport.i "return"}
       END.
       ELSE DO:
-         ehto = 5.
-         RUN ufkey.
+         Syst.Var:ehto = 5.
+         RUN Syst/ufkey.p.
       END. 
       
-      RUN balrep  (lcInvGroup[1],
+      RUN Ar/balrep.p  (lcInvGroup[1],
                    lcInvGroup[2],
                    liCustNum[1],
                    liCustNum[2],
@@ -221,7 +221,7 @@ REPEAT WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
 
       IF lcFile = "" THEN DO:
          tila = FALSE.
-         {tmsreport.i}        
+         {Syst/tmsreport.i}        
       END.
       
       MESSAGE "Balance report finished" 
@@ -231,11 +231,11 @@ REPEAT WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       LEAVE toimi.
    END.
 
-   ELSE IF LOOKUP(nap,"8,f8") > 0 THEN DO:
+   ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN DO:
       LEAVE toimi.
    END.
 
-END. /* toimi */
+END. /* Syst.Var:toimi */
 
 HIDE MESSAGE       NO-PAUSE.
 HIDE FRAME valinta NO-PAUSE.

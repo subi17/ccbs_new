@@ -9,15 +9,15 @@
   VERSIO .......: M15
 ---------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{ftransdir.i}
-{email.i}
-{edefine.i NEW}
-{refcode.i}
-{invotxtp.i}
-{fcustref.i}
-{fdivtxt.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/email.i}
+{Inv/edefine.i NEW}
+{Func/refcode.i}
+{Func/invotxtp.i}
+{Func/fcustref.i}
+{Func/fdivtxt.i}
 
 DEF TEMP-TABLE wError NO-UNDO
     FIELD Cust   AS INT
@@ -68,7 +68,7 @@ IF lcEPLFile = "" OR lcEPLFile = ?
 THEN lcEPLFile = "/tmp/cl". 
 
 FIND FIRST Company WHERE
-           Company.Brand = gcBrand 
+           Company.Brand = Syst.Var:gcBrand 
    NO-LOCK NO-ERROR. 
 IF NOT AVAIL Company THEN DO:
    fErrLine("Company data is missing.").
@@ -84,7 +84,7 @@ END.
 IF NOT llErrors THEN DO:
    /* message text */
    FIND FIRST InvText NO-LOCK WHERE
-              InvText.Brand     = gcBrand  AND
+              InvText.Brand     = Syst.Var:gcBrand  AND
               InvText.Target    = "EKIRJE" AND
               InvText.KeyValue  = "CLimit" AND
               InvText.FromDate <= TODAY    AND

@@ -3,11 +3,10 @@
   FUNCTION .....: daily/error call dump
   ------------------------------------------------------ */
 
-{commali.i}
-katun = "cron".
-gcBrand = "1".
-{date.i}
-{cparam2.i}
+{Syst/commali.i}
+Syst.Var:katun = "cron".
+Syst.Var:gcBrand = "1".
+{Func/cparam2.i}
 
 
 DEFINE VARIABLE idaDate AS DATE NO-UNDO. 
@@ -41,7 +40,8 @@ ASSIGN
    lcOdir     =  fCparamC("PentahoErrorCalls")
    lcSdir     =  fCParamC("PentahoSpool")
    ldate1     = idaDate
-   lcFileName   = "error_calls" + fDateFmt(ldate1,"yyyymmdd") + "_" + 
+   lcFileName   = CAPS(Syst.Parameters:Tenant) + 
+                "_error_calls" + Func.Common:mDateFmt(ldate1,"yyyymmdd") + "_" + 
                 REPLACE(STRING(TIME,"hh:mm:ss"),":","") + ".dump"
    ldate1     = idaDate - 1
    ldate2     = ldate1

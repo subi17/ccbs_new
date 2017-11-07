@@ -8,9 +8,8 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{camprundf.i}
-{timestamp.i}
+{Syst/commali.i}
+{Mc/camprundf.i}
 
 DEF INPUT  PARAMETER iiCustNum1    AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiCustNum2    AS INT  NO-UNDO.
@@ -22,8 +21,8 @@ DEF VAR liCount AS INT  NO-UNDO.
 DEF VAR liPer1  AS INT  NO-UNDO.
 DEF VAR liPer2  AS INT  NO-UNDO.
 
-ASSIGN liPer1 = fMake2Dt(idtDate1,0)
-       liPer2 = fMake2Dt(idtDate2,86399).
+ASSIGN liPer1 = Func.Common:mMake2DT(idtDate1,0)
+       liPer2 = Func.Common:mMake2DT(idtDate2,86399).
 
 EMPTY TEMP-TABLE ttCust.
 
@@ -33,7 +32,7 @@ WITH SIDE-LABELS OVERLAY ROW 15 CENTERED TITLE " Collecting "
 FRAME fQty1.
 
 FOR EACH Customer NO-LOCK WHERE
-         Customer.Brand    = gcBrand    AND
+         Customer.Brand    = Syst.Var:gcBrand    AND
          Customer.CustNum >= iiCustNum1 AND
          Customer.CustNum <= iiCustNum2,
     EACH MobSub OF Customer NO-LOCK WHERE
@@ -53,7 +52,7 @@ FOR EACH Customer NO-LOCK WHERE
 END.
 
 FOR EACH Customer NO-LOCK WHERE
-         Customer.Brand    = gcBrand    AND
+         Customer.Brand    = Syst.Var:gcBrand    AND
          Customer.CustNum >= iiCustNum1 AND
          Customer.CustNum <= iiCustNum2,
     EACH MsOwner OF Customer NO-LOCK WHERE

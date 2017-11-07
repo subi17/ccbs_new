@@ -1,5 +1,3 @@
-{date.i}
-{timestamp.i}
 
 def var ldastcdate as date no-undo.
 def var ldactstamp as dec no-undo.
@@ -13,7 +11,7 @@ def var i as int no-undo.
 def var j as int no-undo.
 
 DEFINE VARIABLE STC_DATE AS DATE NO-UNDO. 
-STC_DATE = fLastDayOfMonth(TODAY) + 1.
+STC_DATE = Func.Common:mLastDayOfMonth(TODAY) + 1.
 lcOutputFolder = "/apps/yoigo/tms_support/billing/".
 form
    STC_DATE format "99-99-9999" label  "BTC/STC DATE.." skip
@@ -43,13 +41,13 @@ lcOutputFile = lcOutputFolder + lcOutputFile.
 
 assign 
    ldastcdate = STC_DATE 
-   ldactstamp = fmake2dt(ldastcdate,0)
-   ldnextday  = fmake2dt(ldastcdate + 1,0)
-   ldprevto   = fmake2dt(ldastcdate - 1,86399)
-   ldprevlast = fmake2dt(ldastcdate - 1,0)
+   ldactstamp = Func.Common:mMake2DT(ldastcdate,0)
+   ldnextday  = Func.Common:mMake2DT(ldastcdate + 1,0)
+   ldprevto   = Func.Common:mMake2DT(ldastcdate - 1,86399)
+   ldprevlast = Func.Common:mMake2DT(ldastcdate - 1,0)
    ldprevfrom = if month(ldastcdate) = 1
-                then fmake2dt(date(12,1,year(ldastcdate) - 1),0)
-                else fmake2dt(date(month(ldastcdate) - 1,1,
+                then Func.Common:mMake2DT(date(12,1,year(ldastcdate) - 1),0)
+                else Func.Common:mMake2DT(date(month(ldastcdate) - 1,1,
                               year(ldastcdate)),0).
                 
 

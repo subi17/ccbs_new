@@ -14,10 +14,9 @@
                   03.03.03 tk tokens            
   Version ......: M15
   -------------------------------------------------------------------------- */
-{timestamp.i}
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'cli'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'cli'}
 
 DEF INPUT PARAM liCustNum  LIKE CLI.CustNum  NO-UNDO.
 /*
@@ -49,7 +48,7 @@ DEF VAR begTimeI   AS INT                 NO-UNDO.
 DEF VAR endTimeI   AS INT                 NO-UNDO.
 DEF BUFFER bufcli FOR CLI.
 
-dstamp = fMakeTS().
+dstamp = Func.Common:mMakeTS().
 
 form
    CLI.CLI
@@ -58,9 +57,9 @@ form
    CLI.ValueLimit
    CLI.Active
 WITH OVERLAY ROW 3 SCROLL 1 12 DOWN CENTERED
-   COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) " " +
+   COLOR VALUE(Syst.Var:cfc) TITLE COLOR VALUE(Syst.Var:ctc) " " +
    " Customer " + STRING(liCustNum) + " Maintain A-Sub details " 
-   + STRING(pvm,"99-99-99") + " " 
+   + STRING(TODAY,"99-99-99") + " " 
 FRAME sel.
 
 form
@@ -76,18 +75,18 @@ form
    HELP "Day WHEN A-sub will be disconnected - DD.MM.YY" endTime
    HELP "Time WHEN A-sub will be disconnected - HH:MM:SS"         SKIP
 WITH  OVERLAY ROW 6 CENTERED
-   COLOR VALUE(cfc) TITLE COLOR VALUE(ctc)
+   COLOR VALUE(Syst.Var:cfc) TITLE COLOR VALUE(Syst.Var:ctc)
    fr-header WITH NO-LABELS 
 FRAME lis.
 
 form /*  search with field CLI */
    lcCLI
    HELP "Give A-Sub number"
-   WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND A-Sub "
-   COLOR VALUE(cfc) NO-LABELS OVERLAY 
+   WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND A-Sub "
+   COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY 
 FRAME f1.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 FIND FIRST CLI WHERE 
@@ -159,17 +158,17 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 701 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 0   
-         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         Syst.Var:ufk[1]= 701 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= 0   
+         Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+         Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
-      CHOOSE ROW CLI.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-      IF AVAIL CLI THEN COLOR DISPLAY value(ccc) 
+      CHOOSE ROW CLI.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+      IF AVAIL CLI THEN COLOR DISPLAY value(Syst.Var:ccc) 
          CLI.CLI 
          CLI.Ref
          CLI.Pwd
@@ -179,7 +178,7 @@ BROWSE:
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-LINE] = ? AND NOT must-add THEN DO:
          BELL.
@@ -188,10 +187,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* Previous line */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND CLI WHERE recid(CLI) = rtab[1] NO-LOCK NO-ERROR.
             FIND PREV CLI WHERE CLI.CustNum = liCustNum NO-LOCK NO-ERROR.
@@ -221,7 +220,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO WITH FRAME sel:
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND CLI WHERE recid(CLI) = rtab[FRAME-DOWN] NO-LOCK .
             FIND NEXT CLI WHERE CLI.CustNum = liCustNum NO-LOCK NO-ERROR.
@@ -251,7 +250,7 @@ BROWSE:
       END. /* next line */
 
       /* previous page */
-      ELSE IF LOOKUP(nap,"prev-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
          Memory = rtab[1].
          FIND CLI WHERE recid(CLI) = Memory NO-LOCK NO-ERROR.
          FIND PREV CLI WHERE CLI.CustNum = liCustNum NO-LOCK NO-ERROR.
@@ -275,7 +274,7 @@ BROWSE:
       END. /* previous page */
 
       /* NEXT page */
-      ELSE IF LOOKUP(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+      ELSE IF LOOKUP(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
          /* cursor TO the downmost line */
          IF rtab[FRAME-DOWN] = ? THEN DO:
             MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -290,10 +289,10 @@ BROWSE:
       END. /* NEXT page */
 
       /* Haku 1 */
-      ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-         cfc = "puyr". RUN ufcolor.
+      ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+         Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
          lcCLI = "".
-         ehto = 9. RUN ufkey. ufkey = TRUE.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          UPDATE lcCLI WITH FRAME f1.  
          HIDE FRAME f1 NO-PAUSE.
          IF lcCLI <> "" THEN DO: 
@@ -327,7 +326,7 @@ BROWSE:
          END.
       END. /* Haku sar. 1 */
 
-      ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW" THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW" THEN DO:
          MESSAGE "ARE WE REAL WANT TO DO DELETING THERE ???"   SKIP
                  "If YES -> chang program " SKIP
                  VIEW-AS ALERT-BOX WARNING.
@@ -335,7 +334,7 @@ BROWSE:
       END.
 
 /*  when and if deleting CHECK: 1.active   2.series
-      ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* removal */
+      ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 THEN DO TRANSACTION:  /* removal */
          delline = FRAME-LINE.
          FIND CLI WHERE recid(CLI) = rtab[FRAME-LINE] NO-LOCK.
          IF CAN-FIND(FIRST bufcli  WHERE
@@ -350,7 +349,7 @@ BROWSE:
          END.
 
          /* line TO be deleted is lightened */
-         COLOR DISPLAY value(ctc) 
+         COLOR DISPLAY value(Syst.Var:ctc) 
             CLI.CLI
             CLI.Ref
             CLI.Pwd
@@ -376,7 +375,7 @@ BROWSE:
 
          ASSIGN ok = FALSE.
          MESSAGE "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-         COLOR DISPLAY value(ccc) 
+         COLOR DISPLAY value(Syst.Var:ccc) 
             CLI.CLI
             CLI.Ref
             CLI.Pwd
@@ -384,7 +383,7 @@ BROWSE:
             CLI.Active.
          IF ok THEN DO:
 
-            CLI.ClStamp = fMakeTS().
+            CLI.ClStamp = Func.Common:mMakeTS().
        /*    DELETE CLI. */
 
             /* in the LAST record was deleted ? */
@@ -401,7 +400,7 @@ BROWSE:
       END. /* removal */
 */
       /* change or only show */
-      ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+      ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
       DO WITH FRAME lis TRANSACTION:
          FIND CLI WHERE recid(CLI) = rtab[frame-line(sel)] EXCLUSIVE-LOCK.
 
@@ -409,13 +408,13 @@ BROWSE:
          AND lcRight = "RW"
             THEN ASSIGN ok = TRUE fr-header = " CHANGE ".
             ELSE ASSIGN ok = FALSE fr-header = " SHOW ".
-         ASSIGN ufkey = TRUE ehto = 9.
-         RUN ufkey.
-         cfc = "lis". RUN ufcolor.
+         ASSIGN ufkey = TRUE Syst.Var:ehto = 9.
+         RUN Syst/ufkey.p.
+         Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
 
-         fSplitTS(INPUT CLI.CrStamp, OUTPUT begDay, OUTPUT begTimeI).
+         Func.Common:mSplitTS(INPUT CLI.CrStamp, OUTPUT begDay, OUTPUT begTimeI).
          begTime = STRING(begtimeI,"hh:mm:ss").
-         fSplitTS(INPUT CLI.ClStamp, OUTPUT endDay, OUTPUT endTimeI).
+         Func.Common:mSplitTS(INPUT CLI.ClStamp, OUTPUT endDay, OUTPUT endTimeI).
          endTime = STRING(endTimeI,"hh:mm:ss").
 
          DISP 
@@ -440,23 +439,23 @@ BROWSE:
          xrecid = recid(CLI).
       END.
 
-      ELSE IF LOOKUP(nap,"home,h") > 0 THEN DO:  /* First record */
+      ELSE IF LOOKUP(Syst.Var:nap,"home,h") > 0 THEN DO:  /* First record */
          FIND FIRST CLI WHERE CLI.CustNum = liCustNum NO-LOCK NO-ERROR.
          ASSIGN Memory = recid(CLI) must-print = TRUE.
          NEXT LOOP.
       END.
 
-      ELSE IF LOOKUP(nap,"end,e") > 0 THEN DO : /* Last record */
+      ELSE IF LOOKUP(Syst.Var:nap,"end,e") > 0 THEN DO : /* Last record */
          FIND LAST CLI WHERE CLI.CustNum = liCustNum NO-LOCK NO-ERROR.
          ASSIGN Memory = recid(CLI) must-print = TRUE.
          NEXT LOOP.
       END.
 
-      ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+      ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
    END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 

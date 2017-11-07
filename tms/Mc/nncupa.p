@@ -8,11 +8,11 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{function.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'payment'}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/function.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'payment'}
 
 DEF INPUT PARAM CustNum AS i NO-UNDO.
 
@@ -36,7 +36,7 @@ with overlay centered width 80 no-label title " List customers payments "
 
 DO FOR TMSUser:
    FIND FIRST TMSUser no-lock where
-              TMSUser.UserCode = katun.
+              TMSUser.UserCode = Syst.Var:katun.
    fname = fChkPath(TMSUser.RepDir) + string(CustNum) + "paym.txt".
 END.
 
@@ -45,7 +45,7 @@ repeat WITH FRAME frm:
 
    HIDE MESSAGE no-pause.
 
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
    DISP
       cust.CustNum
@@ -58,13 +58,13 @@ repeat WITH FRAME frm:
 
 task:
    repeat WITH FRAME frm:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
-      IF toimi = 1 THEN NEXT  CRIT.
-      IF toimi = 4 THEN LEAVE CRIT.
-      IF toimi = 8 THEN LEAVE CRIT.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
+      RUN Syst/ufkey.p.
+      IF Syst.Var:toimi = 1 THEN NEXT  CRIT.
+      IF Syst.Var:toimi = 4 THEN LEAVE CRIT.
+      IF Syst.Var:toimi = 8 THEN LEAVE CRIT.
 
-      IF toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
          ok = FALSE.
          message "Are you SURE you want to start processing (Y/N) ?" UPDATE ok.
          IF ok THEN LEAVE task.

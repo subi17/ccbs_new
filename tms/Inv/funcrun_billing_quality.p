@@ -7,17 +7,16 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
-   gcBrand = "1"
-   katun   = "Cron".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun   = "Cron".
    
-{cparam2.i}
-{files.i}
-{coinv.i}
-{timestamp.i}
-{funcrunprocess_run.i}
-{direct_dbconnect.i}
+{Func/cparam2.i}
+{Func/files.i}
+{Func/coinv.i}
+{Syst/funcrunprocess_run.i}
+{Func/direct_dbconnect.i}
 
 DEF VAR liInvCnt       AS INT  NO-UNDO.
 DEF VAR liSubCnt       AS INT  NO-UNDO.
@@ -80,6 +79,7 @@ IF lcTransDir = ? THEN lcTransDir = "".
 
 /* format file name here, so that both reports get the same name */
 ASSIGN   
+   lcFile = REPLACE(lcFile,"#TENANT",CAPS(Syst.Parameters:Tenant))
    lcFile = REPLACE(lcFile,"#PERIOD",STRING(liPeriod,"999999"))
    lcFile = REPLACE(lcFile,"#INVDATE",STRING(ldaInvDate,"999999"))
    lcFile = REPLACE(lcFile,"#MODE",STRING(llBillDetails,"d/s") +
@@ -87,7 +87,7 @@ ASSIGN
                                     THEN STRING(llSubDetails,"d/s")
                                     ELSE "n")).
 
-RUN billing_report.p (ldaInvDate,
+RUN Inv/billing_report.p (ldaInvDate,
                       liInvType,
                       (IF llSubReport 
                        THEN "no*no**" 
@@ -109,7 +109,7 @@ IF llSubReport THEN DO:
    
    /* connect to correct cdr dbs */
    fInitializeConnectTables("MobCDR","").
-   RUN pDirectConnect2Dbs(gcBrand,
+   RUN pDirectConnect2Dbs(Syst.Var:gcBrand,
                           "",  
                           ldaEndPeriod,
                           ldaEndPeriod).
@@ -118,7 +118,7 @@ IF llSubReport THEN DO:
       QUIT.
    END.   
 
-   RUN unbilled_subsqty.p (liPeriod,
+   RUN Inv/unbilled_subsqty.p (liPeriod,
                            ldaFromDate,
                            ldaToDate,
                            "append*trans*" + lcTransDir + "*" + lcFile,

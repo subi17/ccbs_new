@@ -1,0 +1,110 @@
+bulkload: TriggerField
+  TriggerConfID: "ALL"
+  TableName: "*"
+  FieldName: "*"
+
+bulkload: TriggerField
+  TriggerConfID: "BDEST"
+  TableName: "Bdest"
+  FieldName: "Bdest"
+
+bulkload: TriggerField
+  TriggerConfID: "BDEST"
+  TableName: "BDest"
+  FieldName: "ratebdest"
+
+bulkload: TriggerField
+  TriggerConfID: "bdest"
+  TableName: "bdest"
+  FieldName: "ccn"
+
+bulkload: TriggerField
+  TriggerConfID: "bdest"
+  TableName: "bdest"
+  FieldName: "class"
+
+bulkload: TriggerField
+  TriggerConfID: "Mobcdr"
+  TableName: "Mobcdr"
+  FieldName: "DCevent"
+
+bulkload: TriggerField
+  TriggerConfID: "mServicelimit"
+  TableName: "mServicelimit"
+  FieldName: "Endts"
+
+bulkload: TriggerField
+  TriggerConfID: "mServicelimit"
+  TableName: "mServicelimit"
+  FieldName: "Fromts"
+
+bulkload: TriggerField
+  TriggerConfID: "mServicelimit"
+  TableName: "mServicelimit"
+  FieldName: "InclAmt"
+
+bulkload: TriggerField
+  TriggerConfID: "mServiceLimit"
+  TableName: "mServiceLimit"
+  FieldName: "slrule"
+
+bulkload: TriggerField
+  TriggerConfID: "Msowner"
+  TableName: "Msowner"
+  FieldName: "tsbegin"
+
+bulkload: TriggerField
+  TriggerConfID: "Msowner"
+  TableName: "Msowner"
+  FieldName: "tsend"
+
+bulkload: TriggerField
+  TriggerConfID: "MSREQUEST"
+  TableName: "SPECIAL CASE"
+  FieldName: "SPECIAL CASE"
+
+bulkload: TriggerField
+  TriggerConfID: "PlistConf"
+  TableName: "PlistConf"
+  FieldName: "dfrom"
+
+bulkload: TriggerField
+  TriggerConfID: "PlistConf"
+  TableName: "PlistConf"
+  FieldName: "dto"
+
+bulkload: TriggerField
+  TriggerConfID: "PlistConf"
+  TableName: "PlistConf"
+  FieldName: "Prior"
+
+bulkload: TriggerField
+  TriggerConfID: "PlistConf"
+  TableName: "PlistConf"
+  FieldName: "RatePlan"
+
+bulkload: TriggerField
+  TriggerConfID: "Tariff"
+  TableName: "Tariff"
+  FieldName: "BillItem"
+
+bulkload: TriggerField
+  TriggerConfID: "Tariff"
+  TableName: "Tariff"
+  FieldName: "price[1]"
+
+bulkload: TriggerField
+  TriggerConfID: "Tariff"
+  TableName: "Tariff"
+  FieldName: "ValidFrom"
+
+bulkload: TriggerField
+  TriggerConfID: "Tariff"
+  TableName: "Tariff"
+  FieldName: "ValidTo"
+
+bulkload: TriggerField
+  TriggerConfID: "TARIFF"
+  TableName: "Tariff"
+  FieldName: "StartCharge[1]"
+

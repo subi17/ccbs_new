@@ -9,15 +9,14 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
-ASSIGN gcBrand = "1" 
-       katun   = "Cron".
+ASSIGN Syst.Var:gcBrand = "1" 
+       Syst.Var:katun   = "Cron".
        
-{cparam2.i}
-{ftransdir.i}
-{eventlog.i}
-{timestamp.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Syst/eventlog.i}
 
 DEF VAR liCnt       AS INT  NO-UNDO.
 DEF VAR lcPaymFile  AS CHAR NO-UNDO.
@@ -52,8 +51,8 @@ END FUNCTION.
 
 
 FIND FIRST Company WHERE
-           Company.Brand = gcBrand NO-LOCK NO-ERROR.
-IF AVAILABLE Company THEN ynimi = Company.CompName.
+           Company.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
+IF AVAILABLE Company THEN Syst.Var:ynimi = Company.CompName.
 
 ASSIGN 
    lcReadDir  = fCParamC("PaymFiles")
@@ -89,7 +88,7 @@ FOR EACH ttFiles:
 
    liFiles = liFiles + 1.
    
-   RUN readpaymfile (ttFiles.PaymFile,
+   RUN Ar/readpaymfile.p (ttFiles.PaymFile,
                      lcLogFile,
                      OUTPUT liRead,
                      OUTPUT liError).
@@ -104,7 +103,7 @@ FOR EACH ttFiles:
    DO TRANS:
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = gcBrand   
+         ActionLog.Brand        = Syst.Var:gcBrand   
          ActionLog.TableName    = "Cron"  
          ActionLog.KeyValue     = "" 
          ActionLog.ActionID     = "PaymFile"
@@ -115,7 +114,7 @@ FOR EACH ttFiles:
                                   " Errors: " + STRING(liError) + 
                                   " Succesful: " + STRING(liRead - liError)
          ActionLog.ActionStatus = 3.
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
 
       /* file without the dir */
       lcPlainFile = ttFiles.PaymFile.

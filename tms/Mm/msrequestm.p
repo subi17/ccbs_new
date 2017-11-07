@@ -4,15 +4,15 @@
   APPLICATION ..: tms
   AUTHOR .......: aam
   CREATED ......: 16.12.04
-  CHANGED ......: 12.12.06 mvi added 2nd param ? to run msrequest        
+  CHANGED ......: 12.12.06 mvi added 2nd param ? to RUN Mm/msrequest.p        
                   31.10.07 jp  new parameter for msrequest
                   
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-run msrequest (0,
+RUN Mm/msrequest.p (0,
                ?, /* reqstat ? for all */
                0,
                0,

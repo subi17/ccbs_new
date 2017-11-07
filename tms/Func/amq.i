@@ -9,11 +9,10 @@
   Created ......: 27.11.2015
   Version ......: Yoigo
 ---------------------------------------------------------------------- */
-{commali.i}
-{date.i}
-{log.i}
-{ftransdir.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/log.i}
+{Func/ftransdir.i}
+{Syst/tmsconst.i}
 
 DEFINE VARIABLE lcHostName        AS CHARACTER     NO-UNDO.
 DEFINE VARIABLE lcReadLine        AS CHARACTER     NO-UNDO.
@@ -120,7 +119,7 @@ FUNCTION fCreateInitMsg RETURNS CHAR
 
 CREATE AMQMsg.
    ASSIGN AMQMsg.ConfFile = icConfig
-          AMQMsg.InsertTS = fMakeTS()
+          AMQMsg.InsertTS = Func.Common:mMakeTS()
           AMQMsg.MQName = icMQ
           AMQMsg.MsgContent = icMsg
           AMQMsg.StatusCode = icStatus

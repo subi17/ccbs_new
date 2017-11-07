@@ -12,15 +12,14 @@ DEFINE STREAM sLog.
 OUTPUT STREAM sLog TO VALUE(pcLogFile).
 INPUT STREAM sMSISDN FROM VALUE(pcInputFile).
 
-{commpaa.i}
-katun = "rafaeldv".
-gcBrand  = "1".
-{timestamp.i}
-{msisdn.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "rafaeldv".
+Syst.Var:gcBrand  = "1".
+{Func/msisdn.i}
 
 def buffer msisdnbuf for msisdn.
 DEFINE VARIABLE ldTS AS DECIMAL NO-UNDO. 
-ldTS = fMakeTS().
+ldTS = Func.Common:mMakeTS().
 
 REPEAT:
    IMPORT STREAM sMSISDN UNFORMATTED cCLI.
@@ -29,7 +28,7 @@ REPEAT:
    FIND FIRST msisdnnumber where
       msisdnnumber.cli = cClI NO-LOCK.
       
-   FIND FIRST msisdn where msisdn.brand = gcBrand and 
+   FIND FIRST msisdn where msisdn.brand = Syst.Var:gcBrand and 
       msisdn.cli = msisdnnumber.cli and 
       msisdn.statuscode = 0 and
       msisdn.validto > ldTS NO-LOCK NO-ERROR.

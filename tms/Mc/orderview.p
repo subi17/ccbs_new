@@ -20,7 +20,7 @@
                   OUTPUT Kille
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT  PARAMETER msseq  AS INT .
 
@@ -38,12 +38,11 @@ FIND MobSub  WHERE
 FIND Customer where 
      Customer.CustNum = MobSub.CustNum no-lock no-error.
 
-IF Avail Customer THEN lcUserName =  DYNAMIC-FUNCTION("fDispCustName" IN
-                                             ghFunc1, BUFFER Customer).
+IF Avail Customer THEN lcUserName = Func.Common:mDispCustName(BUFFER Customer).
 ELSE lcUserName = "".
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN ufkey. 
+   ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 3. RUN Syst/ufkey.p. 
  
  DISPLAY
  "A) Agreement Customer          "  @ menuc[1]    SKIP
@@ -63,17 +62,17 @@ DO WHILE TRUE:
    IF LOOKUP(KEYLABEL(LASTKEY),"x,F8") > 0  THEN LEAVE.
 
    IF FRAME-INDEX EQ 1 THEN DO:
-      run nnasse(Mobsub.AgrCust,
+      RUN Mc/nnasse.p(Mobsub.AgrCust,
                  "").
    END.
 
    ELSE IF FRAME-INDEX = 2 THEN DO:
-     RUN nnasse(mobsub.InvCust,
+     RUN Mc/nnasse.p(mobsub.InvCust,
                 "").
    END.
 
    ELSE IF FRAME-INDEX = 3 THEN DO:
-      run nnasse(mobsub.Custnum,
+      RUN Mc/nnasse.p(mobsub.Custnum,
                  "").
    END.             
   

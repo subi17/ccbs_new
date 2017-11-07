@@ -72,10 +72,10 @@ procedure upd-tt_table:
       .
       if available _TableStat then		/* _TableStat range may not be active...	*/
         assign
-          {lib/init-xrec.i tt_table.tbl-cre _TableStat-create}
-          {lib/init-xrec.i tt_table.tbl-rd  _TableStat-read}
-          {lib/init-xrec.i tt_table.tbl-upd _TableStat-update}
-          {lib/init-xrec.i tt_table.tbl-del _TableStat-delete}
+          {protop/lib/init-xrec.i tt_table.tbl-cre _TableStat-create}
+          {protop/lib/init-xrec.i tt_table.tbl-rd  _TableStat-read}
+          {protop/lib/init-xrec.i tt_table.tbl-upd _TableStat-update}
+          {protop/lib/init-xrec.i tt_table.tbl-del _TableStat-delete}
         .
     end.
    else
@@ -85,10 +85,10 @@ procedure upd-tt_table:
     do:
 
       assign
-        {lib/upd-xrec.i tt_table.tbl-cre _TableStat-create}
-        {lib/upd-xrec.i tt_table.tbl-rd  _TableStat-read}
-        {lib/upd-xrec.i tt_table.tbl-upd _TableStat-update}
-        {lib/upd-xrec.i tt_table.tbl-del _TableStat-delete}
+        {protop/lib/upd-xrec.i tt_table.tbl-cre _TableStat-create}
+        {protop/lib/upd-xrec.i tt_table.tbl-rd  _TableStat-read}
+        {protop/lib/upd-xrec.i tt_table.tbl-upd _TableStat-update}
+        {protop/lib/upd-xrec.i tt_table.tbl-del _TableStat-delete}
       .
 
       /* This uses the *base* statistics rather than the sampled data -- so it reveals
@@ -139,9 +139,9 @@ procedure age_table:
         tt_table.xvalid = no
 /***
  ***
-        {lib/upd-xrec.i tt_table.stat1 tt_table.stat1[3]}
-        {lib/upd-xrec.i tt_table.stat2 tt_table.stat2[3]}
-        {lib/upd-xrec.i tt_table.stat3 tt_table.stat3[3]}
+        {protop/lib/upd-xrec.i tt_table.stat1 tt_table.stat1[3]}
+        {protop/lib/upd-xrec.i tt_table.stat2 tt_table.stat2[3]}
+        {protop/lib/upd-xrec.i tt_table.stat3 tt_table.stat3[3]}
         tt_xstat.stat-ratio  = 100 * (( tt_xstat.stat1[x] - tt_xstat.stat2[x] ) / tt_xstat.stat1[x] )
         tt_xstat.stat-ratio  = ( if tt_xstat.stat-ratio = ? then 0 else tt_xstat.stat-ratio )
  ***

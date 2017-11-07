@@ -6,9 +6,9 @@
                                 use createpaym.p
 */   
 
-{commali.i}
-{tmsparam2.i}
-{fcustbal.i}
+{Syst/commali.i}
+{Func/tmsparam2.i}
+{Func/fcustbal.i}
 
 
 DEF INPUT  PARAMETER iiCustNum AS INT  NO-UNDO.
@@ -31,7 +31,7 @@ DEF VAR liAccount  AS DEC  NO-UNDO EXTENT 10.
 IF idtDate = ? THEN idtDate = TODAY.
 
 FIND Customer WHERE 
-     Customer.Brand   = gcBrand AND 
+     Customer.Brand   = Syst.Var:gcBrand AND 
      Customer.CustNum = iiCustNum NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Customer THEN DO:
    RETURN "ERROR:Unknown customer".
@@ -63,7 +63,7 @@ ASSIGN
    ldPosting[1] = idAmt
    ldPosting[2] = -1 * idAmt.
    
-RUN createpaym (iiCustNum,
+RUN Ar/createpaym.p (iiCustNum,
                 iiInvNum,
                 icCLI,
                 idtDate,

@@ -7,10 +7,10 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'FuncRunQueue'}
-{tmsconst.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'FuncRunQueue'}
+{Syst/tmsconst.i}
 
 DEF VAR liFRQueueID     AS INT  NO-UNDO.
 DEF VAR liFRQScheduleID AS INT  NO-UNDO.
@@ -39,7 +39,7 @@ FORM
       FORMAT "Production/Test"
    SKIP(7)
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + "  RUN FUNCTION QUEUE " + STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.Var:ynimi + "  RUN FUNCTION QUEUE " + STRING(TODAY,"99-99-99") + " "
      FRAME fCrit.
 
 FUNCTION fDispFuncRunQueue RETURNS LOGIC
@@ -58,7 +58,7 @@ END FUNCTION.
 
 
 ASSIGN
-   toimi     = -1
+   Syst.Var:toimi     = -1
    llRunMode = TRUE.
 
 CritLoop:
@@ -76,22 +76,22 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       fDispFuncRunQueue(liFRQueueID).
    END.
 
-   IF toimi < 0 THEN toimi = 1.
+   IF Syst.Var:toimi < 0 THEN Syst.Var:toimi = 1.
    ELSE DO:
       ASSIGN
-         ufk    = 0
-         ufk[1] = 7
-         ufk[5] = 795
-         ufk[8] = 8 
-         ehto   = 0.
-      RUN ufkey.
+         Syst.Var:ufk    = 0
+         Syst.Var:ufk[1] = 7
+         Syst.Var:ufk[5] = 795
+         Syst.Var:ufk[8] = 8 
+         Syst.Var:ehto   = 0.
+      RUN Syst/ufkey.p.
    END.
    
-   IF toimi = 1 THEN 
+   IF Syst.Var:toimi = 1 THEN 
    REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
 
-      ehto = 9.
-      RUN ufkey.
+      Syst.Var:ehto = 9.
+      RUN Syst/ufkey.p.
     
       UPDATE liFRQueueID liFRQScheduleID WITH FRAME fCrit 
       EDITING:
@@ -103,13 +103,13 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
             IF FRAME-FIELD = "liFRQueueID" THEN DO:
                ASSIGN
-                  si-recid    = ?
-                  gcHelpParam = "FRQueueID".
-               RUN funcrunqueue.p.
-               gcHelpParam = "".
+                  Syst.Var:si-recid    = ?
+                  Syst.Var:gcHelpParam = "FRQueueID".
+               RUN Syst/funcrunqueue.p.
+               Syst.Var:gcHelpParam = "".
             
-               IF si-recid NE ? THEN DO:
-                  FIND FuncRunQueue WHERE RECID(FuncRunQueue) = si-recid 
+               IF Syst.Var:si-recid NE ? THEN DO:
+                  FIND FuncRunQueue WHERE RECID(FuncRunQueue) = Syst.Var:si-recid 
                      NO-LOCK NO-ERROR.
                   IF AVAILABLE FuncRunQueue THEN 
                      DISP FuncRunQueue.FRQueueID @ liFRQueueID 
@@ -119,14 +119,14 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
             
             ELSE IF FRAME-FIELD = "liFRQScheduleID" THEN DO:
                ASSIGN
-                  si-recid    = ?
-                  gcHelpParam = "FRQScheduleID".
-               RUN funcrunqschedule.p (INPUT INPUT FRAME fCrit liFRQueueID).
-               gcHelpParam = "".
+                  Syst.Var:si-recid    = ?
+                  Syst.Var:gcHelpParam = "FRQScheduleID".
+               RUN Syst/funcrunqschedule.p (INPUT INPUT FRAME fCrit liFRQueueID).
+               Syst.Var:gcHelpParam = "".
             
-               IF si-recid NE ? THEN DO:
+               IF Syst.Var:si-recid NE ? THEN DO:
                   FIND FuncRunQSchedule WHERE 
-                     RECID(FuncRunQSchedule) = si-recid NO-LOCK NO-ERROR.
+                     RECID(FuncRunQSchedule) = Syst.Var:si-recid NO-LOCK NO-ERROR.
                   IF AVAILABLE FuncRunQSchedule THEN 
                      DISP FuncRunQSchedule.FRQScheduleID @ liFRQScheduleID 
                           (FuncRunQSchedule.RunMode = "Production") @ llRunMode
@@ -134,13 +134,13 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                END.
             END.
             
-            ehto = 9.
-            RUN ufkey.
+            Syst.Var:ehto = 9.
+            RUN Syst/ufkey.p.
 
             NEXT. 
          END.
          
-         ELSE IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN 
+         ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN 
          DO WITH FRAME fCrit:
          
             PAUSE 0.
@@ -161,7 +161,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    
    END.
    
-   ELSE IF toimi = 5 THEN DO:
+   ELSE IF Syst.Var:toimi = 5 THEN DO:
    
       FIND FIRST FuncRunQSchedule WHERE 
          FuncRunQSchedule.FRQScheduleID = liFRQScheduleID 
@@ -185,7 +185,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       SET llOk.
       IF NOT llOk THEN NEXT. 
         
-      RUN funcrunqueue_run.p(liFRQueueID,
+      RUN Syst/funcrunqueue_run.p(liFRQueueID,
                              liFRQScheduleID).
 
       MESSAGE "Queue has been launched." +
@@ -198,7 +198,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       LEAVE CritLoop.
    END.
 
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.Var:toimi = 8 THEN DO:
       LEAVE CritLoop.
    END.
 

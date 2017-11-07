@@ -8,32 +8,32 @@
                                only "all invoices" allowed when ilAutoMode
                   16.03.06/aam TF version             
                   18.04.06/aam use payments.p instead of nnlasu.p
-                  22.03.07 kl  new param for run payments
+                  22.03.07 kl  new param for RUN Ar/payments.p
 
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{finvbal.i}
-{fpaymplan.i}
-{fppinv.i}
+{Syst/commali.i}
+{Func/finvbal.i}
+{Func/fpaymplan.i}
+{Func/fppinv.i}
 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'PPInv'}
-{invdet.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'PPInv'}
+{Ar/invdet.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPPInv AS HANDLE NO-UNDO.
    lhPPInv = BUFFER PPInv:HANDLE.
    RUN StarEventInitialize(lhPPInv).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhPPInv).
+      RUN Mc/eventview2.p(lhPPInv).
    END.
 
 END.
@@ -80,8 +80,8 @@ form
     Invoice.InvAmt  COLUMN-LABEL "Inv.Amount"
     PPInv.Amount    COLUMN-LABEL "PP Amount"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) 
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) 
     lcTitle
     FRAME sel.
 
@@ -90,8 +90,8 @@ form
     PPInv.InvNum  
     SKIP(1)
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -116,9 +116,9 @@ IF NOT AVAILABLE PaymPlan THEN RETURN.
 ASSIGN lcTitle     = " INVOICES IN PLAN: " +
                      STRING(PaymPlan.CustNum) + "/" +
                      STRING(PaymPlan.PPDate,"99.99.9999") + " "
-       gcHelpParam = STRING(PaymPlan.CustNum) + ",TRUE".           
+       Syst.Var:gcHelpParam = STRING(PaymPlan.CustNum) + ",TRUE".           
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 ASSIGN orders   = "  By Invoice ,    ,   , By 4"
@@ -143,8 +143,8 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a PPInv  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -154,7 +154,7 @@ REPEAT WITH FRAME sel:
         
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
-           RUN hcustinv(PaymPlan.CustNum,FALSE).
+           RUN Help/hcustinv.p(PaymPlan.CustNum,FALSE).
                    
            IF siirto = ? THEN LEAVE.
            
@@ -256,34 +256,34 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 829
-         ufk[2]= IF PaymPlan.PPStatus < 3 OR PaymPlan.PPStatus = 7
+         Syst.Var:ufk[1]= 829
+         Syst.Var:ufk[2]= IF PaymPlan.PPStatus < 3 OR PaymPlan.PPStatus = 7
                  THEN 1781 ELSE 0
-         ufk[3]= 0  
-         ufk[4]= 1778  
-         ufk[5]= (IF lcRight = "RW" AND 
+         Syst.Var:ufk[3]= 0  
+         Syst.Var:ufk[4]= 1778  
+         Syst.Var:ufk[5]= (IF lcRight = "RW" AND 
                   LOOKUP(STRING(PaymPlan.PPStatus),"1,7") > 0 THEN 5 ELSE 0)
-         ufk[6]= (IF lcRight = "RW" AND
+         Syst.Var:ufk[6]= (IF lcRight = "RW" AND
                   LOOKUP(STRING(PaymPlan.PPStatus),"1,7") > 0 THEN 4 ELSE 0)
-         ufk[7]= 0  ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.Var:ufk[7]= 0  Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
          
-         IF ilAutoMode THEN ASSIGN ufk[5] = 0               
-                                   ufk[6] = 0.
+         IF ilAutoMode THEN ASSIGN Syst.Var:ufk[5] = 0               
+                                   Syst.Var:ufk[6] = 0.
          
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW PPInv.InvNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) PPInv.InvNum WITH FRAME sel.
+        CHOOSE ROW PPInv.InvNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) PPInv.InvNum WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8,2,F2") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8,2,F2") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -291,10 +291,10 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -312,7 +312,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -337,7 +337,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -363,7 +363,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND PPInv WHERE recid(PPInv) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -387,7 +387,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -402,7 +402,7 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* collect all customer's unpaid invoices */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 THEN DO:
      
         IF CAN-FIND(FIRST PPInv WHERE PPInv.PPlanID = iiPlanID) THEN DO:
            MESSAGE "Plan already has invoice lines"
@@ -436,18 +436,18 @@ REPEAT WITH FRAME sel:
      END.
 
      /* invoice's payments */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO:
      
         RUN local-find-this (FALSE).
-        RUN payments(0,PPInv.InvNum,"").
+        RUN Ar/payments.p(0,PPInv.InvNum,"").
         
         ufkey = TRUE.
         NEXT LOOP.
      END. 
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND Syst.Var:ufk[5] > 0
      THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         IF CAN-FIND(FIRST PPBatch WHERE PPBatch.PPlanID = iiPlanID)
         THEN DO:
            MESSAGE "Plan has already been divided into batches"
@@ -459,9 +459,9 @@ REPEAT WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND Syst.Var:ufk[6] > 0
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -488,7 +488,7 @@ REPEAT WITH FRAME sel:
        END. 
        
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        PPInv.InvNum PPInv.Amount .
 
        RUN local-find-NEXT.
@@ -510,7 +510,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        PPInv.InvNum PPInv.Amount .
 
        IF ok THEN DO:
@@ -531,14 +531,14 @@ REPEAT WITH FRAME sel:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN 
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN 
      REPEAT TRANSACTION
      ON ENDKEY UNDO, LEAVE:
 
        RUN local-find-this(FALSE).
 
-       ehto = 5.
-       RUN ufkey.
+       Syst.Var:ehto = 5.
+       RUN Syst/ufkey.p.
        
        /* show details */
        RUN pInvoiceDetails(PPInv.InvNum,
@@ -548,21 +548,21 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(PPInv) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(PPInv) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8,4,F4") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8,4,F4") > 0 THEN DO:
         /* move directly to batches */    
-        IF LOOKUP(nap,"4,F4") > 0 THEN ol2Batch = TRUE.
+        IF LOOKUP(Syst.Var:nap,"4,F4") > 0 THEN ol2Batch = TRUE.
  
         LEAVE LOOP.
      END.
@@ -571,8 +571,8 @@ REPEAT WITH FRAME sel:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-ASSIGN si-recid    = xrecid
-       gcHelpParam = "".
+ASSIGN Syst.Var:si-recid    = xrecid
+       Syst.Var:gcHelpParam = "".
 
 
 PROCEDURE local-find-this:

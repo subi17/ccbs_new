@@ -7,10 +7,10 @@
   Version ......: Yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
-gcBrand = "1".
-katun = "Qvantel".
-{msisdn.i}
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
+{Func/msisdn.i}
 
 DEF VAR lcDNI           AS CHAR NO-UNDO FORMAT "X(15)".
 DEF VAR MSISDN_status   AS INT  NO-UNDO FORMAT "Z9".
@@ -32,7 +32,7 @@ END.
 FUNCTION fReleaseSIM RETURNS LOG (INPUT icICC AS CHAR):
 
    FOR FIRST SIM EXCLUSIVE-LOCK WHERE
-             SIM.Brand EQ gcBrand AND
+             SIM.Brand EQ Syst.Var:gcBrand AND
              SIM.ICC   EQ icICC   AND
              SIM.SimStat <> 1:
       SIM.SimStat = 1.
@@ -48,7 +48,7 @@ FUNCTION fReleaseMSISDN RETURNS LOG (INPUT icMSISDN AS CHAR):
    ELSE MSISDN_status = 99.   /* use normal status value */
 
    FOR FIRST MSISDN EXCLUSIVE-LOCK WHERE
-             MSISDN.Brand = gcBrand AND
+             MSISDN.Brand = Syst.Var:gcBrand AND
              MSISDN.CLI   = icMSISDN AND
              MSISDN.StatusCode < 98:
       fMakeMsidnHistory(INPUT RECID(MSISDN)).
@@ -80,11 +80,11 @@ END FUNCTION.
 FUNCTION fDeleteSubscription RETURNS LOG (INPUT iiCustNum AS INT):
 
    FOR EACH MsOwner WHERE
-            MsOwner.Brand   = gcBrand AND
+            MsOwner.Brand   = Syst.Var:gcBrand AND
             MsOwner.CustNum = iiCustNum EXCLUSIVE-LOCK:
 
        FOR EACH FixedFee USE-INDEX Custnum WHERE
-                FixedFee.Brand     = gcBrand AND
+                FixedFee.Brand     = Syst.Var:gcBrand AND
                 FixedFee.Custnum   = MsOwner.CustNum AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue  = STRING(MsOwner.MsSeq) EXCLUSIVE-LOCK:
@@ -95,7 +95,7 @@ FUNCTION fDeleteSubscription RETURNS LOG (INPUT iiCustNum AS INT):
        END. /* FOR EACH FixedFee USE-INDEX HostTable WHERE */
 
        FOR EACH SingleFee USE-INDEX Custnum WHERE
-                SingleFee.Brand     = gcBrand AND
+                SingleFee.Brand     = Syst.Var:gcBrand AND
                 SingleFee.Custnum   = MsOwner.CustNum AND
                 SingleFee.HostTable = "Mobsub" AND
                 SingleFee.KeyValue  = STRING(MsOwner.MsSeq) EXCLUSIVE-LOCK:
@@ -148,13 +148,13 @@ FUNCTION fDeleteSubscription RETURNS LOG (INPUT iiCustNum AS INT):
        END.
 
        FOR EACH MobSub WHERE
-                MobSub.Brand = gcBrand AND
+                MobSub.Brand = Syst.Var:gcBrand AND
                 MobSub.CLI   = MsOwner.CLI EXCLUSIVE-LOCK:
           DELETE MobSub.
        END.
 
        FOR EACH TermMobSub WHERE
-                TermMobSub.Brand = gcBrand AND
+                TermMobSub.Brand = Syst.Var:gcBrand AND
                 TermMobSub.CLI   = MsOwner.CLI EXCLUSIVE-LOCK:
           DELETE TermMobSub.
        END.
@@ -168,14 +168,14 @@ END FUNCTION.
 /* Main Block */
 
 FOR EACH Customer WHERE
-         Customer.Brand = gcBrand AND
+         Customer.Brand = Syst.Var:gcBrand AND
          Customer.OrgId = lcDNI NO-LOCK,
     EACH MobSub WHERE
-         MobSub.Brand   = gcBrand AND
+         MobSub.Brand   = Syst.Var:gcBrand AND
          MobSub.AgrCust = Customer.CustNum NO-LOCK:
 
    FIND FIRST SIM WHERE
-              SIM.Brand EQ gcBrand    AND
+              SIM.Brand EQ Syst.Var:gcBrand    AND
               SIM.ICC   EQ MobSub.ICC NO-LOCK NO-ERROR.
    IF AVAIL SIM THEN   /* If stock not correct then ask confirmation */
       IF NOT (SIM.Stock EQ "TESTING" OR
@@ -197,7 +197,7 @@ FOR EACH Customer WHERE
 END.
 
 FOR EACH Customer WHERE
-         Customer.Brand = gcBrand AND
+         Customer.Brand = Syst.Var:gcBrand AND
          Customer.OrgId = lcDNI EXCLUSIVE-LOCK:
 
    fDeleteOrder(INPUT Customer.CustNum).

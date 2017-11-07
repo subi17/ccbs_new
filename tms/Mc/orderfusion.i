@@ -2,13 +2,12 @@
 &THEN
 &GLOBAL-DEFINE ORDERFUSION_I YES
 
-{Func/date.i}
 {Syst/tmsconst.i}
 
 &GLOBAL-DEFINE MASMOVIL_ERROR_ADAPTER_PARSING "1"
 &GLOBAL-DEFINE MASMOVIL_ERROR_ADAPTER_NETWORK "2"
 &GLOBAL-DEFINE MASMOVIL_ERROR_MASMOVIL "3"
-&GLOBAL-DEFINE MASMOVIL_RETRY_ERROR_CODES "APIKIT-00404,APIKIT-00405,APIKIT-00406,APIKIT-00415,WO-10000000,ESB-99999999,NU-00000001"
+&GLOBAL-DEFINE MASMOVIL_RETRY_ERROR_CODES "APIKIT-00404,APIKIT-00405,APIKIT-00406,APIKIT-00415,WO-10000000,ESB-99999999,NU-00000001,500-NO_RESULT_CODE"
 
 
 FUNCTION fFusionMessageError RETURNS CHAR
@@ -20,12 +19,30 @@ FUNCTION fFusionMessageError RETURNS CHAR
    ASSIGN
       ibFusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}
       ibFusionMessage.AdditionalInfo = icErrorDesc
-      ibFusionMessage.UpdateTS = fMakeTS().
+      ibFusionMessage.UpdateTS = Func.Common:mMakeTS().
 
    RELEASE ibFusionMessage.
 
    RETURN icErrorDesc.
 END.
+
+FUNCTION fTPServiceError RETURNS CHAR
+    (BUFFER TPService FOR TPService,
+     icErrorDesc AS CHAR):
+   
+   DEFINE BUFFER bf_TPService FOR TPService.
+
+   FIND FIRST bf_TPService WHERE bf_TPService.MsSeq   = TPService.MsSeq   AND 
+                                 bf_TPService.ServSeq = TPService.ServSeq EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+   IF AVAIL bf_TPService THEN    
+      ASSIGN 
+          bf_TPService.ServStatus = {&STATUS_ERROR}   
+          bf_TPService.TermReason = icErrorDesc
+          bf_TPService.UpdateTS   = Func.Common:mMakeTS().
+   
+   RETURN "".
+
+END FUNCTION.
 
 FUNCTION fCanRetryFusionMessage RETURNS LOGICAL
  (BUFFER ibFusionMessage FOR FusionMessage,
@@ -43,11 +60,13 @@ FUNCTION fCanRetryFusionMessage RETURNS LOGICAL
 
    /* automatic resending check */
    IF (icError BEGINS "NW_ERROR" AND 
-       LOOKUP(icResultCode,"1,2,3") = 0) OR
+       (LOOKUP(icResultCode,"1,2,3") = 0 OR
+        icResultDesc EQ "Could not parse JSON")) /* YTS-10682 */
+      OR
       (icResultCode EQ {&MASMOVIL_ERROR_ADAPTER_NETWORK} OR
       (icResultCode EQ {&MASMOVIL_ERROR_MASMOVIL} AND
        LOOKUP(icResultDesc,{&MASMOVIL_RETRY_ERROR_CODES}) > 0))
-       OR
+      OR
       LOOKUP(icResultCode,{&MASMOVIL_RETRY_ERROR_CODES}) > 0 THEN DO:
 
       FOR EACH bFusionMessage NO-LOCK WHERE
@@ -75,7 +94,7 @@ FUNCTION _fCreateFusionMessage RETURNS LOGICAL
    DEF VAR lcOrderType AS CHAR NO-UNDO. 
 
    FIND Order NO-LOCK WHERE
-        Order.Brand = Syst.Parameters:gcBrand AND
+        Order.Brand = Syst.Var:gcBrand AND
         Order.OrderID = iiOrderID.
 
    FIND CLIType NO-LOCK WHERE
@@ -89,13 +108,13 @@ FUNCTION _fCreateFusionMessage RETURNS LOGICAL
       lcOrderType = "xDSL + VOIP".
    ELSE IF CLIType.FixedLineType EQ 2 THEN
       lcOrderType = "FTTH + VOIP".
-
+     
    CREATE FusionMessage.
    ASSIGN
       FusionMessage.MessageSeq = NEXT-VALUE(FusionMessageSeq)
       FusionMessage.OrderID = iiOrderID
       FusionMessage.MsSeq = Order.Msseq WHEN AVAIL Order
-      FusionMessage.CreatedTS = fMakeTS()
+      FusionMessage.CreatedTS = Func.Common:mMakeTS()
       FusionMessage.MessageType = icMessageType
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_NEW}
       FusionMessage.Source = {&FUSIONMESSAGE_SOURCE_TMS}
@@ -110,7 +129,7 @@ FUNCTION fCreateFusionReserveNumberMessage RETURNS LOGICAL
    DEF BUFFER OrderFusion FOR OrderFusion.
 
    FIND OrderFusion NO-LOCK WHERE
-        OrderFusion.Brand = Syst.Parameters:gcBrand AND
+        OrderFusion.Brand = Syst.Var:gcBrand AND
         OrderFusion.OrderID = iiOrderId NO-ERROR.
    IF NOT AVAIL OrderFusion THEN DO:
       ocError = "ERROR:Order data not found".
@@ -144,7 +163,7 @@ FUNCTION fCreateFusionCreateOrderMessage RETURNS LOGICAL
    DEF BUFFER OrderFusion FOR OrderFusion.
 
    FIND OrderFusion NO-LOCK WHERE
-        OrderFusion.Brand = Syst.Parameters:gcBrand AND
+        OrderFusion.Brand = Syst.Var:gcBrand AND
         OrderFusion.OrderID = iiOrderId NO-ERROR.
    IF NOT AVAIL OrderFusion THEN DO:
       ocError = "ERROR:Order data not found".
@@ -184,7 +203,7 @@ FUNCTION fCreateFusionCancelOrderMessage RETURNS LOGICAL
    DEF BUFFER OrderFusion FOR OrderFusion.
 
    FIND OrderFusion NO-LOCK WHERE
-        OrderFusion.Brand = Syst.Parameters:gcBrand AND
+        OrderFusion.Brand = Syst.Var:gcBrand AND
         OrderFusion.OrderID = iiOrderId NO-ERROR.
    IF NOT AVAIL OrderFusion THEN DO:
       ocError = "ERROR:Order data not found".

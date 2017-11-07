@@ -9,7 +9,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 DEF STREAM whitelist.
@@ -39,7 +39,7 @@ def var whitelist  as c  no-undo format "x(40)".
 
 DO FOR TMSUser:
    FIND FIRST TMSUser no-lock where
-              TMSUser.UserCode = katun.
+              TMSUser.UserCode = Syst.Var:katun.
    whitelist = TMSUser.RepDir + "/".
 END.
 
@@ -52,10 +52,10 @@ form
     ClosedCust.Printed   format "*/"
     ClosedCust.Called
     WITH width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(cfc)
-    title color value(ctc) " " + ynimi +
+    COLOR value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " " + Syst.Var:ynimi +
     " Maintain closed customers "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form
@@ -64,22 +64,22 @@ form
     ClosedCust.DateOpen
     ClosedCust.State
     WITH  OVERLAY ROW 4 centered
-    COLOR value(cfc)
-    TITLE COLOR value(ctc)
+    COLOR value(Syst.Var:cfc)
+    TITLE COLOR value(Syst.Var:ctc)
     fr-header WITH side-labels 1 columns
     FRAME lis.
 
 form /*  search WITH FIELD CustNum */
     CustNum
     help "Give customer number"
-    with row 4 col 2 title color value(ctc) " FIND CUSTOMER "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND CUSTOMER "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 form /*  search WITH FIELD  */
     Date
     help "Give closing date"
-    with row 4 col 2 title color value(ctc) " FIND CLOSING Date "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f2.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND CLOSING Date "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME haku-f2.
 
 form /* UPDATE whitelist FileName */
     skip(1)
@@ -90,14 +90,14 @@ form /* UPDATE whitelist FileName */
        help "Filename of the whitelist file"
     skip(1)
     WITH ROW 8 centered width 55
-    title color value(cfc) " ADD OPENED NUMBERS TO A File "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME wl.
+    title color value(Syst.Var:cfc) " ADD OPENED NUMBERS TO A File "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME wl.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 ASSIGN
-   Month    = (year(pvm) * 100) + month(pvm).
+   Month    = (year(TODAY) * 100) + month(TODAY).
 
 FIND FIRST ClosedCust
 /* search condition */ no-lock no-error.
@@ -120,8 +120,8 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* ClosedCust -ADD  */
       HIDE FRAME lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      assign Syst.Var:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
    END.
 
 /* ADDING DISABLED
@@ -129,7 +129,7 @@ add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
            PROMPT-FOR ClosedCust.CustNum
            VALIDATE
@@ -218,38 +218,38 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35  ufk[2]= 28 ufk[3]= 911 ufk[4]= 912
-        ufk[5]= 903 ufk[6]= 4  ufk[7]= 0   ufk[8]= 8   ufk[9]= 1
-        ehto  = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        Syst.Var:ufk[1]= 35  Syst.Var:ufk[2]= 28 Syst.Var:ufk[3]= 911 Syst.Var:ufk[4]= 912
+        Syst.Var:ufk[5]= 903 Syst.Var:ufk[6]= 4  Syst.Var:ufk[7]= 0   Syst.Var:ufk[8]= 8   Syst.Var:ufk[9]= 1
+        Syst.Var:ehto  = 3 ufkey = FALSE.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW ClosedCust.CustNum ;(uchoose.i;) no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) ClosedCust.CustNum WITH FRAME sel.
+        CHOOSE ROW ClosedCust.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) ClosedCust.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW ClosedCust.Date ;(uchoose.i;) no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) ClosedCust.Date WITH FRAME sel.
+        CHOOSE ROW ClosedCust.Date {Syst/uchoose.i} no-error WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) ClosedCust.Date WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
-        CHOOSE ROW ClosedCust.?? ;(uchoose.i;) no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) ClosedCust.?? WITH FRAME sel.
+        CHOOSE ROW ClosedCust.?? {Syst/uchoose.i} no-error WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) ClosedCust.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW ClosedCust.??  ;(uchoose.i;) no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) ClosedCust.? WITH FRAME sel.
+        CHOOSE ROW ClosedCust.??  {Syst/uchoose.i} no-error WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) ClosedCust.? WITH FRAME sel.
       END.
 */
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -280,10 +280,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND ClosedCust where recid(ClosedCust) = rtab[1] no-lock.
            IF order = 1 THEN FIND prev ClosedCust
@@ -320,7 +320,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND ClosedCust where recid(ClosedCust) = rtab[FRAME-DOWN] no-lock .
@@ -357,7 +357,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND ClosedCust where recid(ClosedCust) = memory no-lock no-error.
         IF order = 1 THEN FIND prev ClosedCust
@@ -395,7 +395,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* cursor TO the downmost line */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -410,10 +410,10 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+     else if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        CustNum = ?.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE CustNum WITH FRAME haku-f1.
        HIDE FRAME haku-f1 no-pause.
        IF CustNum <> ? THEN DO:
@@ -432,10 +432,10 @@ BROWSE:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+     else if lookup(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        Date = ?.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Date WITH FRAME haku-f2.
        HIDE FRAME haku-f2 no-pause.
        IF Date <> ? THEN DO:
@@ -453,7 +453,7 @@ BROWSE:
      END. /* Haku sar. 2 */
 
      /* Change selected ROW IF State AND Printed are FALSE */
-     else if lookup(nap,"3,f3") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"3,f3") > 0 THEN DO:
         FIND ClosedCust where recid(ClosedCust) = rtab[FRAME-LINE].
         IF NOT ClosedCust.State AND NOT ClosedCust.Printed THEN DO:
            ASSIGN ok = FALSE.
@@ -461,7 +461,7 @@ BROWSE:
               UPDATE ok.
            IF ok THEN DO:
               DO TRANSAction:
-                 IF ClosedCust.DateOpen = ? THEN ASSIGN ClosedCust.DateOpen = pvm.
+                 IF ClosedCust.DateOpen = ? THEN ASSIGN ClosedCust.DateOpen = TODAY.
                  ELSE                      ASSIGN ClosedCust.DateOpen = ?.
                  DISPLAY ClosedCust.DateOpen.
               END.
@@ -480,7 +480,7 @@ BROWSE:
      END. /* f3 */
 
      /* Change ALL rows where State AND Printed are FALSE */
-     else if lookup(nap,"4,f4") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"4,f4") > 0 THEN DO:
         ASSIGN ok = FALSE.
         message "ARE YOU SURE YOU WANT TO CHANGE ALL (Y/N) ?" UPDATE ok.
         IF ok THEN DO:
@@ -489,7 +489,7 @@ BROWSE:
                        ClosedCust.State   = FALSE AND
                        ClosedCust.Printed = FALSE.
 
-                 IF ClosedCust.DateOpen = ? THEN ASSIGN ClosedCust.DateOpen = pvm.
+                 IF ClosedCust.DateOpen = ? THEN ASSIGN ClosedCust.DateOpen = TODAY.
                  ELSE                      ASSIGN ClosedCust.DateOpen = ?.
 
               END.
@@ -501,8 +501,8 @@ BROWSE:
      END. /* f4 */
 
      /* append numbers TO monthly File where State AND Printed are FALSE */
-     if lookup(nap,"5,f5") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+     if lookup(Syst.Var:nap,"5,f5") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         whitelist = whitelist + 
                     "wlo-" + substr(string(Month,"999999"),3) + ".dat".
         PAUSE 0.
@@ -562,12 +562,12 @@ BROWSE:
 
      END. /* f5 */
 
-     else if lookup(nap,"6,f6") > 0 THEN DO TRANSAction:  /* removal */
+     else if lookup(Syst.Var:nap,"6,f6") > 0 THEN DO TRANSAction:  /* removal */
        delline = FRAME-LINE.
        FIND ClosedCust where recid(ClosedCust) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.Var:ctc)
           ClosedCust.CustNum ClosedCust.Date ClosedCust.DateOpen ClosedCust.State
           ClosedCust.Printed ClosedCust.Called.
 
@@ -605,7 +605,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.Var:ccc)
           ClosedCust.CustNum ClosedCust.Date ClosedCust.DateOpen ClosedCust.State
           ClosedCust.Printed ClosedCust.Called.
 
@@ -626,14 +626,14 @@ BROWSE:
        ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     else if lookup(nap,"enter,return") > 0 THEN
+     else if lookup(Syst.Var:nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSAction:
        /* change */
        FIND ClosedCust where recid(ClosedCust) = rtab[frame-line(sel)] exclusive-lock.
        IF ClosedCust.Printed = FALSE THEN DO:
-          assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-          RUN ufkey.
-          cfc = "lis". RUN ufcolor.
+          assign fr-header = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9.
+          RUN Syst/ufkey.p.
+          Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
           DISPLAY ClosedCust.CustNum ClosedCust.Date ClosedCust.DateOpen.
           UPDATE ClosedCust.State.
           HIDE FRAME lis no-pause.
@@ -648,7 +648,7 @@ BROWSE:
        END.
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
        IF order = 1 THEN FIND FIRST ClosedCust
        /* search condition */ no-lock no-error.
        ELSE IF order = 2 THEN FIND FIRST ClosedCust USE-INDEX
@@ -661,7 +661,7 @@ BROWSE:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
        IF order = 1 THEN FIND LAST ClosedCust
        /* search condition */ no-lock no-error.
        ELSE IF order = 2 THEN FIND LAST ClosedCust USE-INDEX
@@ -674,11 +674,11 @@ BROWSE:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 

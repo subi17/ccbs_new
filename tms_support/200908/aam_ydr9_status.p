@@ -1,6 +1,6 @@
-{testpaa.i}
-katun  = "ari".
-{barrfunc.i}
+{Syst/testpaa.i}
+Syst.Var:katun = "ari".
+{Func/barrfunc.i}
 
 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 

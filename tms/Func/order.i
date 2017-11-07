@@ -4,17 +4,20 @@
                 14.02.06/aam assign firstname
                 20.11.06/aam new db structure
 */
-{commali.i}   
-{fwebuser.i}
-{fcustdata.i}
-{ftmrlimit.i}
-{tmsconst.i}
-{eventval.i}
-{femailinvoice.i}
-      
+{Syst/commali.i}   
+{Func/fwebuser.i}
+{Func/fcustdata.i}
+{Func/ftmrlimit.i}
+{Syst/tmsconst.i}
+{Syst/eventval.i}
+{Func/femailinvoice.i}
+{Func/profunc.i}
+{Func/custfunc.i}
+{Func/log.i}
+
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
-   {lib/eventlog.i}
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
+   {Func/lib/eventlog.i}
 END.
 
 DEF BUFFER bUpdOrderCustomer FOR OrderCustomer.
@@ -57,9 +60,9 @@ FUNCTION fUpdateEmail RETURNS LOGICAL
                           INPUT Customer.Custnum,
                           INPUT "Customer email address is changed").
 
-         liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+         liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                           INPUT TODAY,
-                                          INPUT katun,
+                                          INPUT Syst.Var:katun,
                                           INPUT 0, /* msseq */
                                           INPUT "", /* cli */
                                           INPUT Customer.CustNum,
@@ -91,9 +94,9 @@ FUNCTION fUpdateEmail RETURNS LOGICAL
                                 INPUT Customer.Custnum,
                                 INPUT "Customer email address is changed").
 
-            liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+            liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                              INPUT TODAY,
-                                             INPUT katun,
+                                             INPUT Syst.Var:katun,
                                              INPUT 0, /* msseq */
                                              INPUT "", /* cli */
                                              INPUT Customer.CustNum,
@@ -136,9 +139,9 @@ FUNCTION fUpdEmailDelType RETURNS LOGICAL
                ASSIGN Customer.Email = OrderCustomer.EMail
                       llEmailChange  = TRUE.
 
-            liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+            liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                              INPUT TODAY,
-                                             INPUT katun,
+                                             INPUT Syst.Var:katun,
                                              INPUT 0, /* msseq */
                                              INPUT "", /* cli */
                                              INPUT Customer.CustNum,
@@ -189,6 +192,74 @@ FUNCTION fUpdEmailDelType RETURNS LOGICAL
 
 END. /* FUNCTION fUpdEmailDelType */
 
+FUNCTION fClosePendingACC RETURNS LOGICAL
+    (INPUT icCloseType      AS CHARACTER,
+     INPUT icCustomerIdType AS CHARACTER,
+     INPUT icCustomerId     AS CHARACTER,
+     INPUT iiOrder          AS INTEGER):
+
+    DEFINE BUFFER bf_MsRequest FOR MsRequest.
+    DEFINE BUFFER bf_Customer  FOR Customer.
+    DEFINE BUFFER bf_CustCat   FOR CustCat.
+
+    DEF VARIABLE ldeCurrentTime AS DECIMAL NO-UNDO.
+
+    ASSIGN ldeCurrentTime = Func.Common:mMakeTS().
+
+    FOR EACH bf_MsRequest WHERE bf_MsRequest.Brand     = Syst.Var:gcBrand                                      AND 
+                                bf_MsRequest.ReqType   = {&REQTYPE_AGREEMENT_CUSTOMER_CHANGE}         AND 
+                                LOOKUP(STRING(bf_MsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0 AND 
+                                bf_MsRequest.ActStamp >= ldeCurrentTime                               NO-LOCK:
+
+        IF ENTRY(12,bf_MsRequest.ReqCParam1,";") = "" OR 
+           ENTRY(13,bf_MsRequest.ReqCParam1,";") = "" THEN
+           NEXT.
+
+        IF ENTRY(12,bf_MsRequest.ReqCParam1,";") = icCustomerIdType AND 
+           ENTRY(13,bf_MsRequest.ReqCParam1,";") = icCustomerId     THEN
+        DO:
+            FIND FIRST bf_Customer WHERE bf_Customer.CustNum = bf_MsRequest.CustNum NO-LOCK NO-ERROR.
+            IF AVAIL bf_Customer THEN
+            DO:
+                FIND FIRST bf_CustCat WHERE bf_CustCat.Brand = Syst.Var:gcBrand AND bf_CustCat.Category = bf_Customer.Category NO-LOCK NO-ERROR.
+                IF AVAIL bf_CustCat THEN 
+                DO:
+                    IF icCloseType = "Pro" THEN 
+                    DO:
+                        IF bf_CustCat.Pro = FALSE THEN 
+                            NEXT.
+                    END.
+                    ELSE /* Non-pro */ 
+                    DO:
+                        IF bf_CustCat.Pro = TRUE THEN 
+                            NEXT.
+                    END.
+
+                    BUFFER bf_MsRequest:FIND-CURRENT(EXCLUSIVE-LOCK, NO-WAIT).
+                    IF NOT AVAIL bf_MsRequest THEN 
+                    DO:
+                        fLog("Order.i:fClosePendingACC: Record bf_MsRequest not available for update" , Syst.Var:katun).
+                        NEXT.
+                    END.
+
+                    ASSIGN 
+                        bf_MsRequest.ReqStatus   = {&REQUEST_STATUS_CANCELLED}
+                        bf_MsRequest.UpdateStamp = Func.Common:mMakeTS()
+                        bf_MsRequest.DoneStamp   = Func.Common:mMakeTS()
+                        bf_MsRequest.Memo        = bf_MsRequest.Memo + 
+                                                   (IF bf_MsRequest.Memo > "" THEN ", " ELSE "") + 
+                                                   "Non-pro order#" + STRING(iiOrder) + " for ACCed customer is handled. That means ACCed customer " + 
+                                                   "has been added as Non-pro too system, so this pending ACC request is not valid anymore".
+                END.
+            END.    
+        END.   
+           
+    END.
+    RELEASE bf_MsRequest.
+    
+    RETURN TRUE.
+
+END FUNCTION.
 
 FUNCTION fMakeCustomer RETURNS LOGICAL
   (INPUT iiOrder   AS INT,
@@ -201,6 +272,8 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
    DEF BUFFER InvCust  FOR Customer.
    DEF BUFFER UserCust FOR Customer.
 
+   DEF VAR lcCategory AS CHAR NO-UNDO.
+
    FIND Customer WHERE
         Customer.CustNum = iiCustNum EXCLUSIVE-LOCK NO-ERROR.
    IF NOT AVAILABLE Customer THEN RETURN FALSE.     
@@ -211,13 +284,13 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
    */
 
    FIND FIRST Order NO-LOCK WHERE
-              Order.Brand   = gcBrand AND
+              Order.Brand   = Syst.Var:gcBrand AND
               Order.OrderId = iiOrder
               NO-ERROR.
    IF NOT AVAILABLE Order THEN RETURN FALSE. 
 
    FIND FIRST OrderCustomer EXCLUSIVE-LOCK WHERE
-              OrderCustomer.Brand   = gcBrand AND
+              OrderCustomer.Brand   = Syst.Var:gcBrand AND
               OrderCustomer.OrderID = iiOrder AND
               OrderCustomer.RowType = iiTarget NO-ERROR.
    IF NOT AVAILABLE OrderCustomer THEN RETURN FALSE. 
@@ -263,17 +336,15 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
    Customer.OutMarkSMS   = OrderCustomer.OutSMSMarketing
    Customer.OutMarkEmail = OrderCustomer.OutEMailMarketing
    Customer.OutMarkPOST  = OrderCustomer.OutPostMarketing
-   Customer.OutMarkBank  = OrderCustomer.OutBankMarketing.
+   Customer.OutMarkBank  = OrderCustomer.OutBankMarketing
+   Customer.DontSharePersData = OrderCustomer.DontSharePersData.
 
-   ASSIGN
-   Customer.AuthCustId      = Order.OrdererID WHEN
-                              Customer.CustIdType = "CIF" AND
-                              OrderCustomer.CustIdType = "CIF" AND
-                              OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
-   Customer.AuthCustIdType  = Order.OrdererIDType WHEN
-                              Customer.CustIdType = "CIF" AND
-                              OrderCustomer.CustIdType = "CIF" AND
-                              OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}.
+   IF OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
+      OrderCustomer.CustIdType = "CIF"
+   THEN ASSIGN
+           Customer.AuthCustId     = OrderCustomer.AuthCustId
+           Customer.AuthCustIdType = OrderCustomer.AuthCustIdType
+           .
 
    /* Electronic Invoice Project - update email and delivery type */
    fUpdEmailDelType(iiorder).
@@ -316,18 +387,25 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
          IF ilCleanLogs THEN fCleanEventObjects(). 
       END.
 
-      /* category according to id type */
-      Customer.Category = OrderCustomer.Category.      
-      FIND FIRST CustCat NO-LOCK WHERE
-         CustCat.Brand = gcBrand AND
-         LOOKUP(OrderCustomer.CustIDType,CustCat.CustIDType) > 0 AND
-         CustCat.SelfEmployed = OrderCustomer.SelfEmployed NO-ERROR.  
-      IF NOT AVAILABLE CustCat THEN    
-      FIND FIRST CustCat NO-LOCK WHERE
-         CustCat.Brand = gcBrand AND
-         LOOKUP(OrderCustomer.CustIDType,CustCat.CustIDType) > 0 NO-ERROR.
-      IF AVAIL CustCat THEN
-         Customer.Category = CustCat.Category.
+      fgetCustSegment(OrderCustomer.CustIDType, 
+                      OrderCustomer.SelfEmployed,
+                      OrderCustomer.pro, 
+                      OUTPUT lcCategory).
+
+      IF lcCategory > "" THEN 
+      DO:
+         ASSIGN Customer.Category = lcCategory.
+
+         IF Ordercustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN
+            Ordercustomer.Category = lcCategory.
+      END.
+      ELSE  /* category according to id type */
+         ASSIGN Customer.Category = OrderCustomer.Category.         
+
+      IF NOT OrderCustomer.Pro THEN
+         fClosePendingACC("Pro", Customer.CustIdType, Customer.OrgId, iiOrder).
+      ELSE 
+         fClosePendingACC("Non-Pro", Customer.CustIdType, Customer.OrgId, iiOrder).   
 
       IF iiTarget = 1 THEN DO:
          /* new user account */
@@ -337,7 +415,7 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
       ELSE DO:
 
          FOR FIRST bUpdOrderCustomer NO-LOCK WHERE
-                   bUpdOrderCustomer.Brand   = gcBrand AND
+                   bUpdOrderCustomer.Brand   = Syst.Var:gcBrand AND
                    bUpdOrderCustomer.OrderID = iiOrder AND
                    bUpdOrderCustomer.RowType = 1,
              FIRST AgrCust NO-LOCK WHERE
@@ -374,13 +452,13 @@ FUNCTION fGetTerminalOfferItemId RETURN INTEGER
 
    LoopItems:
    FOR EACH xOfferItem WHERE 
-      xOfferItem.Brand = gcBrand  AND
+      xOfferItem.Brand = Syst.Var:gcBrand  AND
       xOfferItem.Offer     = pcOffer AND 
       xOfferItem.ItemType  = "BillItem" AND
       xOfferItem.EndStamp   >= pdeTime AND
       xOfferItem.BeginStamp <= pdeTime NO-LOCK:
       FIND xBillItem WHERE 
-           xBillItem.Brand = gcBrand AND 
+           xBillItem.Brand = Syst.Var:gcBrand AND 
            xBillItem.BillCode = xOfferItem.ItemKey AND
            xBillItem.BIGroup = pcGroup NO-LOCK NO-ERROR.
       IF AVAIL xBillItem THEN DO:

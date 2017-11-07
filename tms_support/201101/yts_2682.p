@@ -3,11 +3,10 @@ DEFINE VARIABLE i AS INTEGER NO-UNDO.
 def buffer bmsrequest for msrequest.
 def stream sout.
 output stream sout to yts_2682.log.
-{date.i}
 
-{commpaa.i}
-gcBrand = "1".
-katun = "anttis".
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "anttis".
 
 put stream sout unformatted "MSISDN|old clitype|new clitype|Request creation time|request handling time|contract" skip.
 
@@ -40,22 +39,22 @@ FOR EACH msrequest where
    find mservicelimit where
         mservicelimit.msseq = bmsrequest.msseq and
         mservicelimit.slseq = servicelimit.slseq and
-        mservicelimit.endts > fMakeTS() NO-LOCK.
+        mservicelimit.endts > Func.Common:mMakeTS() NO-LOCK.
      
    put stream sout unformatted
       msrequest.cli "|" 
       bmsrequest.reqcparam1 "|"
       bmsrequest.reqcparam2 "|"
-      fts2hms(msrequest.actstamp) "|"
-      fts2hms(msrequest.donestamp) "|"
+      Func.Common:mTS2HMS(msrequest.actstamp) "|"
+      Func.Common:mTS2HMS(msrequest.donestamp) "|"
       msrequest.reqcparam3 "|"
-      fts2hms(mservicelimit.fromts) skip.
+      Func.Common:mTS2HMS(mservicelimit.fromts) skip.
 
    find current mservicelimit EXCLUSIVE-LOCK.
    mservicelimit.fromts = msrequest.actstamp.
    find current mservicelimit NO-LOCK.
 
-   run cli_rate.p (msrequest.cli,
+   RUN Rate/cli_rate.p (msrequest.cli,
                    2/1/11,
                    2/28/11,
                    true). 

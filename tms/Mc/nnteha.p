@@ -16,7 +16,7 @@
 
   ------------------------------------------------------ */
 
-  {commali.i}
+  {Syst/commali.i}
 
   DEF INPUT  PARAMETER nro    AS INT  NO-UNDO.
   DEF INPUT  PARAMETER kieli  AS INT  NO-UNDO.
@@ -30,7 +30,7 @@
 
   /* etsitAAn halutulla kielellA */
   FIND HdrText where 
-       HdrText.Brand = gcBrand AND
+       HdrText.Brand = Syst.Var:gcBrand AND
        te-nro = nro AND 
        te-kie = kieli no-lock no-error.
   IF AVAIL HdrText THEN ASSIGN rc = 0 teksti = te-text.
@@ -38,7 +38,7 @@
   /* ellei lOydy, haetaan suomenkielistA */
   ELSE DO:
      FIND HdrText where 
-          HdrText.Brand = gcBrand AND
+          HdrText.Brand = Syst.Var:gcBrand AND
           te-nro = nro AND 
           te-kie = 1 no-lock no-error.
      IF AVAIL HdrText THEN DO:

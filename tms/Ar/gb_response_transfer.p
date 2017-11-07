@@ -1,14 +1,14 @@
 /*Program moves google billing related logs and output files to target 
 directories.*/
-{commpaa.i}
-{gbilling.i}
-{ftransdir.i}
-{eventlog.i}
+{Syst/commpaa.i}
+{Func/gbilling.i}
+{Func/ftransdir.i}
+{Syst/eventlog.i}
 DEF VAR lcInputFile AS CHAR NO-UNDO.
 DEF VAR lcFileName AS CHAR NO-UNDO.
 DEF STREAM sFile.
 
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 fInitGBParameters().
 
 INPUT STREAM sFile THROUGH VALUE("ls -1tr " + lcGBSpoolDir).
@@ -25,7 +25,7 @@ REPEAT:
       /*Accept only activation files*/
       IF NOT lcFileName BEGINS "es_yoigo-" THEN NEXT.
       /*do not move file that is generated today*/
-      IF lcFilename MATCHES("*" + STRING(INT(fMakeTS())) + "*") THEN NEXT.
+      IF lcFilename MATCHES("*" + STRING(INT(Func.Common:mMakeTS())) + "*") THEN NEXT.
       /*check date*/
 
    END.

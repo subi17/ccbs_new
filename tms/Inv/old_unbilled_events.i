@@ -1,9 +1,8 @@
 /* old_unbilled_events.i      03.04.12/aam
 */
 
-{commali.i}
-{date.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 FUNCTION fOldUnbilledEventLimit RETURNS DATE
    (INPUT iiAddMonths AS INT):
@@ -17,7 +16,7 @@ FUNCTION fOldUnbilledEventLimit RETURNS DATE
    ASSIGN
       liOldMonth = liOldMonth + iiAddMonths
       ldaEventDate = ADD-INTERVAL(TODAY,-1 * liOldMonth,"months")
-      ldaEventDate = fLastDayOfMonth(ldaEventDate).
+      ldaEventDate = Func.Common:mLastDayOfMonth(ldaEventDate).
 
    RETURN ldaEventDate.
 

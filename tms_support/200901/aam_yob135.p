@@ -1,8 +1,7 @@
-{testpaa.i}
-{func.i}
+{Syst/testpaa.i}
 
-&GLOBAL-DEFINE STAR_EVENT_USER katun
-{lib/eventlog.i}
+&GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
+{Func/lib/eventlog.i}
 DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
 lhCustomer = BUFFER Customer:HANDLE.
 RUN StarEventInitialize(lhCustomer).

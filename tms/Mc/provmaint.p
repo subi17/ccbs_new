@@ -10,10 +10,10 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{tmsparam4.i}
-{cparam2.i}
-{provmaint.i}
+{Syst/commali.i}
+{Func/tmsparam4.i}
+{Func/cparam2.i}
+{Mc/provmaint.i}
 
 session:system-alert-boxes = true.
 
@@ -42,7 +42,7 @@ FORM
     "  Solog handling is currently.:" lcStatus FORMAT "x(3)"
     WITH ROW 4 OVERLAY
     CENTERED
-    COLOR VALUE(ccc)
+    COLOR VALUE(Syst.Var:ccc)
     TITLE "   PROVISIONING   "
     NO-LABEL
 FRAME frProvision.
@@ -64,7 +64,7 @@ FORM
     "Enter password:" lcPassWord
     WITH ROW 4 OVERLAY
     CENTERED
-    COLOR VALUE(ccc)
+    COLOR VALUE(Syst.Var:ccc)
     TITLE " PASSWORD "
     NO-LABEL
 FRAME frPassWord.
@@ -78,7 +78,7 @@ IF lcPassWord NE lcAskPwd THEN DO:
 END.
 
 HIDE FRAME frPassWord.
-liMaintB = INT(fCParamC4(gcBrand,"ServiceBreak","Activation")).
+liMaintB = INT(fCParamC4(Syst.Var:gcBrand,"ServiceBreak","Activation")).
 /* Display current status of solog handling */
 DISP lcStatus[liMaintB + 1]  WITH FRAME frProvision.
 
@@ -88,11 +88,11 @@ PAUSE 0.
 
 DO WHILE TRUE:
 
-   ASSIGN ufk    = 0 
-          ufk[8] = 8 
-          ehto = 3. 
+   ASSIGN Syst.Var:ufk    = 0 
+          Syst.Var:ufk[8] = 8 
+          Syst.Var:ehto = 3. 
    
-   RUN ufkey.
+   RUN Syst/ufkey.p.
    
    DISP "      On        " @ lcOnOff[1]
         "      Off       " @ lcOnOff[2]
@@ -122,7 +122,7 @@ DO WHILE TRUE:
                      STRING(TIME,"HH:MM:SS")                  + 
                      CHR(10)                                   + 
                      "User responsible of this action: "       + 
-                     katun.
+                     Syst.Var:katun.
          
          MESSAGE "Solog handling has been restarted." 
          VIEW-AS ALERT-BOX.
@@ -173,7 +173,7 @@ DO WHILE TRUE:
                      CHR(10)                                + 
                      "Solog handling is currently stopped!" + 
                      CHR(10)                                +
-                     "User responsible of this action: "    + katun.
+                     "User responsible of this action: "    + Syst.Var:katun.
          
          RUN pMailMaintBreak(lcMessage).
 
@@ -223,7 +223,7 @@ DO WHILE TRUE:
                      CHR(10)                                    +
                      "Solog handling is currently stopped!"     +
                      CHR(10)                                    +
-                     "User responsible of this action: "        + katun.         
+                     "User responsible of this action: "        + Syst.Var:katun.         
          RUN pMailMaintBreak(lcMessage).
          
          MESSAGE "SNS backend has been notified of this action"

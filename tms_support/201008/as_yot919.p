@@ -1,9 +1,9 @@
-{commpaa.i}
-katun = "anttis".
-gcBrand = "1".
-{flimitreq.i}
-{tmsconst.i}
-{fcustdata.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
+{Func/flimitreq.i}
+{Syst/tmsconst.i}
+{Func/fcustdata.i}
 
 DEF VAR llMSLimitIsDefault AS LOG NO-UNDO.
 DEF VAR pdMobsubLimit AS INT NO-UNDO.

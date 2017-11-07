@@ -1,3 +1,3 @@
-{commali.i} 
+{Syst/commali.i} 
 
-run mobsub(0,"").
+RUN Mm/mobsub.p(0,"").

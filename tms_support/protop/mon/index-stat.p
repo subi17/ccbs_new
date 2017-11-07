@@ -40,11 +40,11 @@
  *
  */
 
-{lib/protop.i}
+{protop/lib/protop.i}
 
 define variable support as character no-undo initial "Index Statistics".
 
-{lib/tt_index.i}
+{protop/lib/tt_index.i}
 
 /* restart
  *

@@ -1,0 +1,26 @@
+bulkload: MNPRetPlatform
+  Brand: "1"
+  RetentionPlatform: "1"
+  Percentage: 50
+  SMSSender: "800622022"
+  FromDate: 2012-06-04
+  ToDate: 2049-12-31
+  Name: "Emergia"
+
+bulkload: MNPRetPlatform
+  Brand: "1"
+  RetentionPlatform: "2"
+  Percentage: 50
+  SMSSender: "800622123"
+  FromDate: 2012-06-04
+  ToDate: 2049-12-31
+  Name: "Castilian1"
+
+bulkload: MNPRetPlatform
+  Brand: "1"
+  RetentionPlatform: "3"
+  SMSSender: "800622890"
+  FromDate: 2012-06-04
+  ToDate: 2049-12-31
+  Name: "Castilian2"
+

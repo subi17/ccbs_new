@@ -8,8 +8,8 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO.
 
@@ -21,14 +21,13 @@ DEF VAR liInvType AS INT                            NO-UNDO.
 DO FOR Customer:
    FIND Customer WHERE Customer.CustNum = iiCustNum NO-LOCK.
    lcName = STRING(Customer.CustNum) + " " +
-            DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                             BUFFER Customer).
+            Func.Common:mDispCustName(BUFFER Customer).
 END. 
 
 PAUSE 0.
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN ufkey. 
+   ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 3. RUN Syst/ufkey.p. 
 
       DISPLAY
 
@@ -45,11 +44,11 @@ DO WHILE TRUE:
    IF LOOKUP(KEYLABEL(LASTKEY),"x,F8") > 0  THEN LEAVE.
 
    ELSE IF FRAME-INDEX EQ 1 THEN DO:
-      RUN custpcpin(iiCustNum).
+      RUN Mc/custpcpin.p(iiCustNum).
    END.
 
    ELSE IF FRAME-INDEX EQ 2 THEN DO:
-      RUN custpinlet(iiCustNum).
+      RUN Mc/custpinlet.p(iiCustNum).
    END.
 
    ELSE IF FRAME-INDEX = 3 OR FRAME-INDEX = 0 THEN LEAVE.

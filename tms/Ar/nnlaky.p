@@ -5,7 +5,7 @@
   AUTHOR .......: TT
   CREATED ......: 26.02.97
   CHANGED ......: 09.10.98 pr RUN nninme (memo): F4
-                  20.05.02/tk RUN memo
+                  20.05.02/tk RUN Mc/memo.p
                   22.07.02 tk print full page on "end"
                   12.11.02 jr "nnlasku" => "invoice" in memo
                   21.03.03/aam claiming history
@@ -16,7 +16,7 @@
                   06.02.04 jp  CustNum for memos             
                   14.04.04/aam index CustName replaced with CustNum
                   18.04.06/aam use payments.p instead of nnlasu.p
-                  22.03.07 kl  new param for run payments
+                  22.03.07 kl  new param for RUN Ar/payments.p
 
   Version ......: M15
   ------------------------------------------------------ */
@@ -25,25 +25,24 @@
 &GLOBAL-DEFINE TimeStampDef NO
 &GLOBAL-DEFINE Brtable Invoice
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'invoice'}
-{invdet.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'invoice'}
+{Ar/invdet.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhInvoice AS HANDLE NO-UNDO.
    lhInvoice = BUFFER Invoice:HANDLE.
    RUN StarEventInitialize(lhInvoice).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhInvoice).
+      RUN Mc/eventview2.p(lhInvoice).
    END.
 
 END.
@@ -82,28 +81,28 @@ form
     avoinna            column-label "BalanceDue" format "->>>>>>9.99"
 
 WITH width 80 OVERLAY ROW 1 scroll 1 15 DOWN 
-    COLOR value(cfc) TITLE COLOR value(ctc)
-    " " + ynimi + " ALL INVOICES "
-    + string(pvm,"99-99-99") + " " FRAME sel.
+    COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc)
+    " " + Syst.Var:ynimi + " ALL INVOICES "
+    + string(TODAY,"99-99-99") + " " FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form /* Invoicen numerohakua varten */
     "Brand .:" lcBrand skip
     "Invoice:" liInvNum
     help "Give Invoice No."    
-    with row 4 col 2 title color value(ctc) " FIND INVOICE No."
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME F1.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND INVOICE No."
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME F1.
 
 form /* Invoicen asnolla hakua varten */
     "Brand ..:" lcBrand skip
     "Customer:" liCustNum
     help "Give Customer Name"
-    with row 4 col 2 title color value(ctc) " FIND CUSTOMER "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME F2.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND CUSTOMER "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME F2.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 
@@ -181,24 +180,24 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 92  ufk[2]= 707 ufk[3]= 927 ufk[4]= 1492
-         ufk[5]= 829  ufk[6]= 0  ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         Syst.Var:ufk[1]= 92  Syst.Var:ufk[2]= 707 Syst.Var:ufk[3]= 927 Syst.Var:ufk[4]= 1492
+         Syst.Var:ufk[5]= 829  Syst.Var:ufk[6]= 0  Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW Invoice.InvNum ;(uchoose.i;) no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Invoice.InvNum WITH FRAME sel.
+         CHOOSE ROW Invoice.InvNum {Syst/uchoose.i} no-error WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) Invoice.InvNum WITH FRAME sel.
       END.
       IF order = 2 THEN DO:
-         CHOOSE ROW Invoice.CustNum ;(uchoose.i;) no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Invoice.CustNum WITH FRAME sel.
+         CHOOSE ROW Invoice.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) Invoice.CustNum WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
-         CHOOSE ROW Invoice.InvDate ;(uchoose.i;) no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Invoice.InvDate WITH FRAME sel.
+         CHOOSE ROW Invoice.InvDate {Syst/uchoose.i} no-error WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) Invoice.InvDate WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? AND NOT must-add THEN DO:
@@ -208,13 +207,13 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
-      if nap = "cursor-right" THEN DO:
+      if Syst.Var:nap = "cursor-right" THEN DO:
          order = order + 1.
          IF order = 4 THEN order = 1.
       END.
-      if nap = "cursor-left" THEN DO:
+      if Syst.Var:nap = "cursor-left" THEN DO:
          order = order - 1.
          IF order = 0 THEN order = 3.
       END.
@@ -248,7 +247,7 @@ BROWSE:
       END.
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND Invoice where recid(Invoice) = rtab[1] no-lock.
             IF      order = 1 THEN FIND prev Invoice USE-INDEX InvNum
@@ -280,7 +279,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
 
          IF FRAME-LINE = FRAME-DOWN THEN DO:
@@ -314,7 +313,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up") > 0 THEN DO:
          memory = rtab[1].
          FIND Invoice where recid(Invoice) = memory no-lock no-error.
          IF      order = 1 THEN FIND prev Invoice USE-INDEX InvNum
@@ -350,7 +349,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
 
         /* cursor TO the downmost line */
 
@@ -368,13 +367,13 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:
 
-           cfc = "puyr". RUN ufcolor.
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
            liInvNum = 0.
-           ehto = 9. RUN ufkey. ufkey = TRUE.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME F1.
-           UPDATE lcBrand WHEN gcAllBrand
+           UPDATE lcBrand WHEN Syst.Var:gcAllBrand
                   liInvNum WITH FRAME F1.
            HIDE FRAME F1 no-pause.
 
@@ -396,13 +395,13 @@ BROWSE:
            END.
      END. /* Haku sar. 1 */
 
-     else if lookup(nap,"2,f2") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"2,f2") > 0 THEN DO:
 
-           cfc = "puyr". RUN ufcolor.
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
            liCustNum = 0.
-           ehto = 9. RUN ufkey. ufkey = TRUE.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME F2.
-           UPDATE lcBrand WHEN gcAllBrand
+           UPDATE lcBrand WHEN Syst.Var:gcAllBrand
                   liCustNum WITH FRAME F2.
            HIDE FRAME F2 no-pause.
 
@@ -419,10 +418,10 @@ BROWSE:
            END.
      END.
 
-     IF LOOKUP(nap,"3,F3") > 0 THEN DO : /* memo */
+     IF LOOKUP(Syst.Var:nap,"3,F3") > 0 THEN DO : /* memo */
         FIND Invoice WHERE RECID(Invoice) = rtab[FRAME-LINE(sel)]
         NO-LOCK NO-ERROR.
-        RUN memo(INPUT Invoice.CustNum,
+        RUN Mc/memo.p(INPUT Invoice.CustNum,
                  INPUT "invoice",
                  INPUT STRING(Invoice.InvNum),
                  INPUT "Invoice number").
@@ -430,22 +429,22 @@ BROWSE:
         NEXT.
      END.
 
-     else if lookup(nap,"4,f4") > 0 THEN DO : /* claiming history */
+     else if lookup(Syst.Var:nap,"4,f4") > 0 THEN DO : /* claiming history */
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE] no-lock no-error.
-        RUN claimhis(0,
+        RUN Ar/claimhis.p(0,
                      INPUT Invoice.InvNum).
         ufkey = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"5,f5") > 0 THEN DO : /* valitaan tAmA */
+     else if lookup(Syst.Var:nap,"5,f5") > 0 THEN DO : /* valitaan tAmA */
         FIND Invoice where recid(Invoice) = rtab[FRAME-LINE] no-lock no-error.
-        RUN payments(0,Invoice.InvNum,"").
+        RUN Ar/payments.p(0,Invoice.InvNum,"").
         ufkey = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"home") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home") > 0 THEN DO:
         IF      order = 1 THEN FIND FIRST Invoice USE-INDEX InvNum
         WHERE Invoice.Brand = lcBrand NO-LOCK no-error.
         ELSE IF order = 2 THEN FIND FIRST Invoice USE-INDEX CustNum
@@ -458,7 +457,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end") > 0 THEN DO : /* LAST record */
         IF      order = 1 THEN FIND LAST Invoice USE-INDEX InvNum
         WHERE Invoice.Brand = lcBrand NO-LOCK no-error.
         ELSE IF order = 2 THEN FIND LAST Invoice USE-INDEX CustNum
@@ -481,12 +480,12 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else IF lookup(nap,"enter,return") > 0 THEN 
+     else IF lookup(Syst.Var:nap,"enter,return") > 0 THEN 
      LP:
      REPEAT : 
 
-        ehto = 5.
-        run ufkey.
+        Syst.Var:ehto = 5.
+        RUN Syst/ufkey.p.
         ufkey = true.
 
         DO transaction
@@ -502,19 +501,19 @@ BROWSE:
            oldday = Invoice.DueDate.
 
            ASSIGN
-           ufk = 0
-           ufk[1] = IF lcRight = "RW" THEN 7 ELSE 0
-           ufk[8] = 8
-           ehto = 3.
-           run ufkey.
+           Syst.Var:ufk = 0
+           Syst.Var:ufk[1] = IF lcRight = "RW" THEN 7 ELSE 0
+           Syst.Var:ufk[8] = 8
+           Syst.Var:ehto = 3.
+           RUN Syst/ufkey.p.
 
            READKEY.
 
            if LOOKUP(KEYLABEL(LASTKEY),"1,f1") > 0 AND 
               lcRight = "RW" THEN DO:
 
-              ehto = 9.
-              run ufkey.
+              Syst.Var:ehto = 9.
+              RUN Syst/ufkey.p.
 
               FIND Current Invoice EXCLUSIVE-LOCK.
 
@@ -548,7 +547,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
@@ -557,7 +556,7 @@ HIDE FRAME sel no-pause.
 
 PROCEDURE local-disp-row:
 
-   RUN invbal(Invoice.InvNum,
+   RUN Ar/invbal.p(Invoice.InvNum,
               OUTPUT avoinna).
 
    memo = CAN-FIND(FIRST memo WHERE

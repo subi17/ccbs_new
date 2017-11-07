@@ -1,4 +1,3 @@
-{timestamp.i}
 
 for each msrequest no-lock where
          brand = "1" and
@@ -17,7 +16,7 @@ for each msrequest no-lock where
         
    disp msrequest.cli 
         mobsub.activationdate 
-        fts2hms(msrequest.donestamp) format "x(19)"
-        fts2hms(invoice.chgstamp) format "x(19)".
+        Func.Common:mTS2HMS(msrequest.donestamp) format "x(19)"
+        Func.Common:mTS2HMS(invoice.chgstamp) format "x(19)".
 end.        
     

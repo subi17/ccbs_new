@@ -1,4 +1,3 @@
-{timestamp.i}
 
 session:numeric-format = "european".
 
@@ -39,8 +38,8 @@ for each msrequest no-lock where
       /*                
       disp msowner.cli
            msowner.invcust
-        fts2hms(msrequest.donestamp) format "x(19)"
-        fts2hms(invoice.chgstamp) format "x(19)"
+        Func.Common:mTS2HMS(msrequest.donestamp) format "x(19)"
+        Func.Common:mTS2HMS(invoice.chgstamp) format "x(19)"
         msrequest.reqcparam3 format "x(12)".
       pause.
       */
@@ -95,7 +94,7 @@ for each ttcli,
                 mservicelimit.slseq = servicelimit.slseq and
                 mservicelimit.fromts >= 20101001 and
                 mservicelimit.fromts < 20101101:
-         fsplitts(mservicelimit.fromts,
+         Func.Common:mSplitTS(mservicelimit.fromts,
                   output ldastart,
                   output listart).
       end.

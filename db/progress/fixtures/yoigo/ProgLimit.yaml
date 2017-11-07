@@ -1,0 +1,855 @@
+bulkload: ProgLimit
+  GroupCode: "BONO_VOIP"
+  SLSeq: 50
+  ValidFrom: 2012-04-01
+  ValidTo: 2049-12-31
+  LimitTo: 100
+  BDest: "GPRSDATA_VOIP"
+
+bulkload: ProgLimit
+  GroupCode: "BONO_VOIP"
+  SLSeq: 50
+  ValidFrom: 2012-04-01
+  ValidTo: 2049-12-31
+  LimitFrom: 100.000001
+  LimitTo: 999999999.999999
+  BDest: "GPRSDATA2_VOIP"
+
+bulkload: ProgLimit
+  GroupCode: "CONT10"
+  SLSeq: 143
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  LimitTo: 1536
+  BDest: "GPRSDATA_CONT10"
+
+bulkload: ProgLimit
+  GroupCode: "CONT10"
+  SLSeq: 143
+  ValidFrom: 2017-02-01
+  ValidTo: 2049-12-31
+  LimitFrom: 1536.000001
+  LimitTo: 999999999.999999
+  BDest: "GPRSDATA2_CONT10"
+
+bulkload: ProgLimit
+  GroupCode: "CONT15"
+  SLSeq: 94
+  ValidFrom: 2014-10-01
+  ValidTo: 2049-12-31
+  LimitTo: 5120
+  BDest: "GPRSDATA_CONT15"
+
+bulkload: ProgLimit
+  GroupCode: "CONT15"
+  SLSeq: 94
+  ValidFrom: 2014-10-01
+  ValidTo: 2049-12-31
+  LimitFrom: 5120.000001
+  LimitTo: 999999999.999999
+  BDest: "GPRSDATA2_CONT15"
+
+bulkload: ProgLimit
+  GroupCode: "CONT9"
+  SLSeq: 92
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  LimitTo: 1228
+  BDest: "GPRSDATA_CONT9"
+
+bulkload: ProgLimit
+  GroupCode: "CONT9"
+  SLSeq: 92
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  LimitFrom: 1228.000001
+  LimitTo: 999999999.999999
+  BDest: "GPRSDATA2_CONT9"
+
+bulkload: ProgLimit
+  GroupCode: "CONTD2"
+  SLSeq: 7
+  ValidFrom: 2010-03-01
+  ValidTo: 2050-12-31
+  LimitTo: 10240
+  BDest: "GPRSD2_A"
+
+bulkload: ProgLimit
+  GroupCode: "CONTD2"
+  SLSeq: 7
+  ValidFrom: 2010-03-01
+  ValidTo: 2050-12-31
+  LimitFrom: 10240.000001
+  LimitTo: 999999999
+  BDest: "GPRSD2_B"
+
+bulkload: ProgLimit
+  GroupCode: "CONTD2"
+  SLSeq: 7
+  ValidFrom: 2009-12-01
+  ValidTo: 2010-02-28
+  LimitTo: 3072
+  BDest: "GPRSDATA1B"
+
+bulkload: ProgLimit
+  GroupCode: "CONTD2"
+  SLSeq: 7
+  ValidFrom: 2009-12-01
+  ValidTo: 2010-02-28
+  LimitFrom: 3072.000001
+  LimitTo: 6072
+  BDest: "GPRSDATA2"
+
+bulkload: ProgLimit
+  GroupCode: "CONTD2"
+  SLSeq: 7
+  ValidFrom: 2009-12-01
+  ValidTo: 2010-02-28
+  LimitFrom: 6072.000001
+  LimitTo: 999999999
+  BDest: "GPRSDATA3"
+
+bulkload: ProgLimit
+  GroupCode: "CONTD2ACT"
+  SLSeq: 8
+  ValidFrom: 2010-03-01
+  ValidTo: 2050-12-31
+  LimitTo: 5125
+  BDest: "GPRSDATA1A"
+
+bulkload: ProgLimit
+  GroupCode: "CONTD2ACT"
+  SLSeq: 8
+  ValidFrom: 2010-03-01
+  ValidTo: 2050-12-31
+  LimitFrom: 5125.000001
+  LimitTo: 999999999
+  BDest: "GPRSDATA2"
+
+bulkload: ProgLimit
+  GroupCode: "CONTD2ACT"
+  SLSeq: 8
+  ValidFrom: 2010-01-01
+  ValidTo: 2010-02-28
+  LimitTo: 3073
+  BDest: "GPRSDATA1A"
+
+bulkload: ProgLimit
+  GroupCode: "CONTD2ACT"
+  SLSeq: 8
+  ValidFrom: 2010-01-01
+  ValidTo: 2010-02-28
+  LimitFrom: 3073
+  LimitTo: 6072
+  BDest: "GPRSDATA2"
+
+bulkload: ProgLimit
+  GroupCode: "CONTD2ACT"
+  SLSeq: 8
+  ValidFrom: 2009-12-01
+  ValidTo: 2010-02-28
+  LimitFrom: 6072.000001
+  LimitTo: 999999999
+  BDest: "GPRSDATA3"
+
+bulkload: ProgLimit
+  GroupCode: "CONTD2ACT"
+  SLSeq: 8
+  ValidFrom: 2009-12-01
+  ValidTo: 2009-12-31
+  LimitTo: 3072
+  BDest: "GPRSDATA1A"
+
+bulkload: ProgLimit
+  GroupCode: "CONTD2ACT"
+  SLSeq: 8
+  ValidFrom: 2009-12-01
+  ValidTo: 2009-12-31
+  LimitFrom: 3072.000001
+  LimitTo: 6072
+  BDest: "GPRSDATA2"
+
+bulkload: ProgLimit
+  GroupCode: "CONTD2END"
+  SLSeq: 9
+  ValidFrom: 2010-03-01
+  ValidTo: 2050-12-31
+  LimitTo: 5125
+  BDest: "GPRSDATA1B"
+
+bulkload: ProgLimit
+  GroupCode: "CONTD2END"
+  SLSeq: 9
+  ValidFrom: 2010-03-01
+  ValidTo: 2050-12-31
+  LimitFrom: 5125.000001
+  LimitTo: 999999999
+  BDest: "GPRSDATA2"
+
+bulkload: ProgLimit
+  GroupCode: "CONTD2END"
+  SLSeq: 9
+  ValidFrom: 2009-12-01
+  ValidTo: 2010-02-28
+  LimitTo: 3072
+  BDest: "GPRSDATA1B"
+
+bulkload: ProgLimit
+  GroupCode: "CONTD2END"
+  SLSeq: 9
+  ValidFrom: 2009-12-01
+  ValidTo: 2010-02-28
+  LimitFrom: 3072.000001
+  LimitTo: 6072
+  BDest: "GPRSDATA2"
+
+bulkload: ProgLimit
+  GroupCode: "CONTD2END"
+  SLSeq: 9
+  ValidFrom: 2009-12-01
+  ValidTo: 2010-02-28
+  LimitFrom: 6072.000001
+  LimitTo: 999999999
+  BDest: "GPRSDATA3"
+
+bulkload: ProgLimit
+  GroupCode: "CONTD3"
+  SLSeq: 26
+  ValidFrom: 2011-05-01
+  ValidTo: 2049-12-31
+  LimitTo: 500
+  BDest: "GPRSD3_A"
+
+bulkload: ProgLimit
+  GroupCode: "CONTD3"
+  SLSeq: 26
+  ValidFrom: 2011-05-01
+  ValidTo: 2049-12-31
+  LimitFrom: 500.000001
+  LimitTo: 999999999
+  BDest: "GPRSD3_B"
+
+bulkload: ProgLimit
+  GroupCode: "CONTD4"
+  SLSeq: 32
+  ValidFrom: 2011-11-22
+  ValidTo: 2049-12-31
+  LimitTo: 1024
+  BDest: "GPRSD4_A"
+
+bulkload: ProgLimit
+  GroupCode: "CONTD4"
+  SLSeq: 32
+  ValidFrom: 2011-11-22
+  ValidTo: 2049-12-31
+  LimitFrom: 1024.000001
+  LimitTo: 999999999.999999
+  BDest: "GPRSD4_B"
+
+bulkload: ProgLimit
+  GroupCode: "CONTD9"
+  SLSeq: 57
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  LimitTo: 1024
+  BDest: "GPRSD9_A"
+
+bulkload: ProgLimit
+  GroupCode: "CONTD9"
+  SLSeq: 57
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  LimitFrom: 1024.000001
+  LimitTo: 999999999.999999
+  BDest: "GPRSD9_B"
+
+bulkload: ProgLimit
+  GroupCode: "CONTDATA"
+  SLSeq: 5
+  ValidFrom: 2010-03-01
+  ValidTo: 2050-12-31
+  LimitTo: 3072
+  BDest: "GPRSD1_A"
+
+bulkload: ProgLimit
+  GroupCode: "CONTDATA"
+  SLSeq: 5
+  ValidFrom: 2010-03-01
+  ValidTo: 2050-12-31
+  LimitFrom: 3072.000001
+  LimitTo: 999999999
+  BDest: "GPRSD1_B"
+
+bulkload: ProgLimit
+  GroupCode: "CONTDATA"
+  SLSeq: 5
+  ValidFrom: 2009-03-01
+  ValidTo: 2010-02-28
+  LimitTo: 3072
+  BDest: "GPRSDATA1B"
+
+bulkload: ProgLimit
+  GroupCode: "CONTDATA"
+  SLSeq: 5
+  ValidFrom: 2009-03-01
+  ValidTo: 2010-02-28
+  LimitFrom: 3072.000001
+  LimitTo: 6072
+  BDest: "GPRSDATA2"
+
+bulkload: ProgLimit
+  GroupCode: "CONTDATA"
+  SLSeq: 5
+  ValidFrom: 2009-03-01
+  ValidTo: 2010-02-28
+  LimitFrom: 6072.000001
+  LimitTo: 999999999
+  BDest: "GPRSDATA3"
+
+bulkload: ProgLimit
+  GroupCode: "CONTDATA"
+  SLSeq: 5
+  ValidFrom: 2008-06-01
+  ValidTo: 2009-02-28
+  LimitTo: 1024
+  BDest: "GPRSDATA1B"
+
+bulkload: ProgLimit
+  GroupCode: "CONTDATA"
+  SLSeq: 5
+  ValidFrom: 2008-06-01
+  ValidTo: 2009-02-28
+  LimitFrom: 1024.000001
+  LimitTo: 4024
+  BDest: "GPRSDATA2"
+
+bulkload: ProgLimit
+  GroupCode: "CONTDATA"
+  SLSeq: 5
+  ValidFrom: 2008-06-01
+  ValidTo: 2009-02-28
+  LimitFrom: 4024.000001
+  LimitTo: 999999999
+  BDest: "GPRSDATA3"
+
+bulkload: ProgLimit
+  GroupCode: "CONTDATAACT"
+  SLSeq: 4
+  ValidFrom: 2010-03-01
+  ValidTo: 2050-12-31
+  LimitTo: 3075
+  BDest: "GPRSDATA1A"
+
+bulkload: ProgLimit
+  GroupCode: "CONTDATAACT"
+  SLSeq: 4
+  ValidFrom: 2010-03-01
+  ValidTo: 2050-12-31
+  LimitFrom: 3075.000001
+  LimitTo: 999999999
+  BDest: "GPRSDATA2"
+
+bulkload: ProgLimit
+  GroupCode: "CONTDATAACT"
+  SLSeq: 4
+  ValidFrom: 2009-03-01
+  ValidTo: 2010-02-28
+  LimitTo: 3072
+  BDest: "GPRSDATA1A"
+
+bulkload: ProgLimit
+  GroupCode: "CONTDATAACT"
+  SLSeq: 4
+  ValidFrom: 2009-03-01
+  ValidTo: 2010-02-28
+  LimitFrom: 3072.000001
+  LimitTo: 6072
+  BDest: "GPRSDATA2"
+
+bulkload: ProgLimit
+  GroupCode: "CONTDATAACT"
+  SLSeq: 4
+  ValidFrom: 2009-03-01
+  ValidTo: 2010-02-28
+  LimitFrom: 6072.000001
+  LimitTo: 999999999
+  BDest: "GPRSDATA3"
+
+bulkload: ProgLimit
+  GroupCode: "CONTDATAACT"
+  SLSeq: 4
+  ValidFrom: 2008-06-01
+  ValidTo: 2009-02-28
+  LimitTo: 1024
+  BDest: "GPRSDATA1A"
+
+bulkload: ProgLimit
+  GroupCode: "CONTDATAACT"
+  SLSeq: 4
+  ValidFrom: 2006-06-01
+  ValidTo: 2009-02-28
+  LimitFrom: 1024.000001
+  LimitTo: 4024
+  BDest: "GPRSDATA2"
+
+bulkload: ProgLimit
+  GroupCode: "CONTDATAACT"
+  SLSeq: 4
+  ValidFrom: 2008-06-01
+  ValidTo: 2009-02-28
+  LimitFrom: 4024.000001
+  LimitTo: 999999999
+  BDest: "GPRSDATA3"
+
+bulkload: ProgLimit
+  GroupCode: "CONTDATAEND"
+  SLSeq: 6
+  ValidFrom: 2010-03-01
+  ValidTo: 2050-12-31
+  LimitTo: 3075
+  BDest: "GPRSDATA1B"
+
+bulkload: ProgLimit
+  GroupCode: "CONTDATAEND"
+  SLSeq: 6
+  ValidFrom: 2010-03-01
+  ValidTo: 2050-12-31
+  LimitFrom: 3075.000001
+  LimitTo: 999999999
+  BDest: "GPRSDATA2"
+
+bulkload: ProgLimit
+  GroupCode: "CONTDATAEND"
+  SLSeq: 6
+  ValidFrom: 2009-03-01
+  ValidTo: 2010-02-28
+  LimitTo: 3072
+  BDest: "GPRSDATA1B"
+
+bulkload: ProgLimit
+  GroupCode: "CONTDATAEND"
+  SLSeq: 6
+  ValidFrom: 2009-03-01
+  ValidTo: 2010-02-28
+  LimitFrom: 3072.000001
+  LimitTo: 6072
+  BDest: "GPRSDATA2"
+
+bulkload: ProgLimit
+  GroupCode: "CONTDATAEND"
+  SLSeq: 6
+  ValidFrom: 2009-03-01
+  ValidTo: 2010-02-28
+  LimitFrom: 6072.000001
+  LimitTo: 999999999
+  BDest: "GPRSDATA3"
+
+bulkload: ProgLimit
+  GroupCode: "CONTDATAEND"
+  SLSeq: 6
+  ValidFrom: 2009-01-01
+  ValidTo: 2009-02-28
+  LimitTo: 1024
+  BDest: "GPRSDATA1B"
+
+bulkload: ProgLimit
+  GroupCode: "CONTDATAEND"
+  SLSeq: 6
+  ValidFrom: 2009-01-01
+  ValidTo: 2009-02-28
+  LimitFrom: 1024.000001
+  LimitTo: 4024
+  BDest: "GPRSDATA2"
+
+bulkload: ProgLimit
+  GroupCode: "CONTDATAEND"
+  SLSeq: 6
+  ValidFrom: 2009-01-01
+  ValidTo: 2009-02-28
+  LimitFrom: 4024.000001
+  LimitTo: 999999999
+  BDest: "GPRSDATA3"
+
+bulkload: ProgLimit
+  GroupCode: "DATA5"
+  SLSeq: 71
+  ValidFrom: 2013-09-01
+  ValidTo: 2049-12-31
+  LimitTo: 500
+  BDest: "GPRSDATA_DATA5"
+
+bulkload: ProgLimit
+  GroupCode: "DATA5"
+  SLSeq: 71
+  ValidFrom: 2013-09-01
+  ValidTo: 2049-12-31
+  LimitFrom: 500.000001
+  LimitTo: 999999999.999999
+  BDest: "GPRSDATA2_DATA5"
+
+bulkload: ProgLimit
+  GroupCode: "DATA6"
+  SLSeq: 91
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  LimitTo: 1024
+  BDest: "GPRSDATA_DATA6"
+
+bulkload: ProgLimit
+  GroupCode: "DATA6"
+  SLSeq: 91
+  ValidFrom: 2014-05-01
+  ValidTo: 2049-12-31
+  LimitFrom: 1024.000001
+  LimitTo: 999999999.999999
+  BDest: "GPRSDATA2_DATA6"
+
+bulkload: ProgLimit
+  GroupCode: "DATA7"
+  SLSeq: 112
+  ValidFrom: 2015-12-01
+  ValidTo: 2049-12-31
+  LimitTo: 3072
+  BDest: "GPRSDATA_DATA7"
+
+bulkload: ProgLimit
+  GroupCode: "DATA7"
+  SLSeq: 112
+  ValidFrom: 2015-12-01
+  ValidTo: 2049-12-31
+  LimitFrom: 3072.000001
+  LimitTo: 999999999.999999
+  BDest: "GPRSDATA2_DATA7"
+
+bulkload: ProgLimit
+  GroupCode: "DSS"
+  SLSeq: 28
+  ValidFrom: 2011-11-23
+  ValidTo: 2049-12-31
+  LimitTo: 999999999.999999
+  BDest: "GPRSDSS_A"
+
+bulkload: ProgLimit
+  GroupCode: "DSS2"
+  SLSeq: 73
+  ValidFrom: 2013-09-01
+  ValidTo: 2049-12-31
+  LimitTo: 999999999.999999
+  BDest: "GPRSDSS2_A"
+
+bulkload: ProgLimit
+  GroupCode: "DUB"
+  SLSeq: 20
+  ValidFrom: 2011-01-31
+  ValidTo: 2049-12-31
+  LimitTo: 500
+  BDest: "GPRSDATA_DUB"
+
+bulkload: ProgLimit
+  GroupCode: "DUB"
+  SLSeq: 20
+  ValidFrom: 2011-01-31
+  ValidTo: 2049-12-31
+  LimitFrom: 500.000001
+  LimitTo: 999999999
+  BDest: "GPRSDATA_DUB"
+
+bulkload: ProgLimit
+  GroupCode: "DUB2"
+  SLSeq: 53
+  ValidFrom: 2012-05-01
+  ValidTo: 2049-12-31
+  LimitTo: 1024
+  BDest: "GPRSDATA_DUB2"
+
+bulkload: ProgLimit
+  GroupCode: "DUB2"
+  SLSeq: 53
+  ValidFrom: 2012-05-01
+  ValidTo: 2049-12-31
+  LimitFrom: 1024.000001
+  LimitTo: 999999999.999999
+  BDest: "GPRSDATA2_DUB2"
+
+bulkload: ProgLimit
+  GroupCode: "DUB3"
+  SLSeq: 61
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  LimitTo: 1024
+  BDest: "GPRSDATA_DUB3"
+
+bulkload: ProgLimit
+  GroupCode: "DUB3"
+  SLSeq: 61
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  LimitFrom: 1024.000001
+  LimitTo: 999999999.999999
+  BDest: "GPRSDATA2_DUB3"
+
+bulkload: ProgLimit
+  GroupCode: "HSPA_ROAM_EU"
+  SLSeq: 56
+  ValidFrom: 2016-04-28
+  ValidTo: 2049-12-31
+  LimitTo: 60
+  BDest: "ROAMGPRS_EU_A"
+
+bulkload: ProgLimit
+  GroupCode: "HSPA_ROAM_EU"
+  SLSeq: 56
+  ValidFrom: 2016-04-28
+  ValidTo: 2049-12-31
+  LimitFrom: 60.000001
+  LimitTo: 100
+  BDest: "ROAMGPRS_EU_B"
+
+bulkload: ProgLimit
+  GroupCode: "HSPA_ROAM_EU"
+  SLSeq: 56
+  ValidFrom: 2016-04-28
+  ValidTo: 2049-12-31
+  LimitFrom: 100.000001
+  LimitTo: 999999999.999999
+  BDest: "ROAMGPRS_EU_B"
+
+bulkload: ProgLimit
+  GroupCode: "HSPA_ROAM_EU"
+  SLSeq: 56
+  ValidFrom: 2014-07-01
+  ValidTo: 2016-04-27
+  LimitTo: 15
+  BDest: "ROAMGPRS_EU_A"
+
+bulkload: ProgLimit
+  GroupCode: "HSPA_ROAM_EU"
+  SLSeq: 56
+  ValidFrom: 2014-07-01
+  ValidTo: 2016-04-27
+  LimitFrom: 15.000001
+  LimitTo: 50
+  BDest: "ROAMGPRS_EU_B"
+
+bulkload: ProgLimit
+  GroupCode: "HSPA_ROAM_EU"
+  SLSeq: 56
+  ValidFrom: 2014-07-01
+  ValidTo: 2016-04-27
+  LimitFrom: 50.000001
+  LimitTo: 999999999.999999
+  BDest: "ROAMGPRS_EU_B"
+
+bulkload: ProgLimit
+  GroupCode: "HSPA_ROAM_EU"
+  SLSeq: 56
+  ValidFrom: 2013-07-01
+  ValidTo: 2014-06-30
+  LimitTo: 6.67
+  BDest: "ROAMGPRS_EU_A"
+
+bulkload: ProgLimit
+  GroupCode: "HSPA_ROAM_EU"
+  SLSeq: 56
+  ValidFrom: 2013-07-01
+  ValidTo: 2014-06-30
+  LimitFrom: 6.670001
+  LimitTo: 20
+  BDest: "ROAMGPRS_EU_B"
+
+bulkload: ProgLimit
+  GroupCode: "HSPA_ROAM_EU"
+  SLSeq: 56
+  ValidFrom: 2013-07-01
+  ValidTo: 2014-06-30
+  LimitFrom: 20.000001
+  LimitTo: 999999999.999999
+  BDest: "ROAMGPRS_EU_B"
+
+bulkload: ProgLimit
+  GroupCode: "HSPA_ROAM_EU"
+  SLSeq: 56
+  ValidFrom: 2012-10-10
+  ValidTo: 2013-06-30
+  LimitTo: 4.3
+  BDest: "ROAMGPRS_EU_A"
+
+bulkload: ProgLimit
+  GroupCode: "HSPA_ROAM_EU"
+  SLSeq: 56
+  ValidFrom: 2012-10-10
+  ValidTo: 2013-06-30
+  LimitFrom: 4.300001
+  LimitTo: 20
+  BDest: "ROAMGPRS_EU_B"
+
+bulkload: ProgLimit
+  GroupCode: "HSPA_ROAM_EU"
+  SLSeq: 56
+  ValidFrom: 2012-10-10
+  ValidTo: 2013-06-30
+  LimitFrom: 20.000001
+  LimitTo: 999999999.999999
+  BDest: "ROAMGPRS_EU_B"
+
+bulkload: ProgLimit
+  GroupCode: "MDUB"
+  SLSeq: 10
+  ValidFrom: 2010-03-01
+  ValidTo: 2049-12-31
+  LimitTo: 500
+  BDest: "GPRSDATA1B"
+
+bulkload: ProgLimit
+  GroupCode: "MDUB"
+  SLSeq: 10
+  ValidFrom: 2010-03-01
+  ValidTo: 2049-12-31
+  LimitFrom: 500.000001
+  LimitTo: 999999999
+  BDest: "GPRSDATA2"
+
+bulkload: ProgLimit
+  GroupCode: "MDUB2"
+  SLSeq: 21
+  ValidFrom: 2011-02-16
+  ValidTo: 2049-12-31
+  LimitTo: 1024
+  BDest: "GPRSDATA_MDUB2"
+
+bulkload: ProgLimit
+  GroupCode: "MDUB2"
+  SLSeq: 21
+  ValidFrom: 2011-02-16
+  ValidTo: 2049-12-31
+  LimitFrom: 1024.000001
+  LimitTo: 999999999.999999
+  BDest: "GPRSDATA2_MDUB2"
+
+bulkload: ProgLimit
+  GroupCode: "MDUB2"
+  SLSeq: 21
+  ValidFrom: 2011-02-01
+  ValidTo: 2011-02-15
+  LimitTo: 999999999.999999
+  BDest: "GPRSDATA_MDUB2"
+
+bulkload: ProgLimit
+  GroupCode: "MDUB3"
+  SLSeq: 30
+  ValidFrom: 2011-11-22
+  ValidTo: 2049-12-31
+  LimitTo: 3072
+  BDest: "GPRSDATA_MDUB3"
+
+bulkload: ProgLimit
+  GroupCode: "MDUB3"
+  SLSeq: 30
+  ValidFrom: 2011-11-22
+  ValidTo: 2049-12-31
+  LimitFrom: 3072.000001
+  LimitTo: 999999999.999999
+  BDest: "GPRSDATA2_MDUB3"
+
+bulkload: ProgLimit
+  GroupCode: "MDUB4"
+  SLSeq: 34
+  ValidFrom: 2011-11-22
+  ValidTo: 2049-12-31
+  LimitTo: 10240
+  BDest: "GPRSDATA_MDUB4"
+
+bulkload: ProgLimit
+  GroupCode: "MDUB4"
+  SLSeq: 34
+  ValidFrom: 2011-11-22
+  ValidTo: 2049-12-31
+  LimitFrom: 10240.000001
+  LimitTo: 999999999.999999
+  BDest: "GPRSDATA2_MDUB4"
+
+bulkload: ProgLimit
+  GroupCode: "MDUB5"
+  SLSeq: 46
+  ValidFrom: 2012-03-22
+  ValidTo: 2049-12-31
+  LimitTo: 800
+  BDest: "GPRSDATA_MDUB5"
+
+bulkload: ProgLimit
+  GroupCode: "MDUB5"
+  SLSeq: 46
+  ValidFrom: 2012-03-22
+  ValidTo: 2049-12-31
+  LimitFrom: 800.000001
+  LimitTo: 999999999.999999
+  BDest: "GPRSDATA2_MDUB5"
+
+bulkload: ProgLimit
+  GroupCode: "MDUB9"
+  SLSeq: 59
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  LimitTo: 1024
+  BDest: "GPRSDATA_MDUB9"
+
+bulkload: ProgLimit
+  GroupCode: "MDUB9"
+  SLSeq: 59
+  ValidFrom: 2012-12-01
+  ValidTo: 2049-12-31
+  LimitFrom: 1024.000001
+  LimitTo: 999999999.999999
+  BDest: "GPRSDATA2_MDUB9"
+
+bulkload: ProgLimit
+  GroupCode: "MDUBACT"
+  SLSeq: 11
+  ValidFrom: 2010-03-01
+  ValidTo: 2049-12-31
+  LimitTo: 500
+  BDest: "GPRSDATA1A"
+
+bulkload: ProgLimit
+  GroupCode: "MDUBACT"
+  SLSeq: 11
+  ValidFrom: 2010-03-01
+  ValidTo: 2049-12-31
+  LimitFrom: 500.000001
+  LimitTo: 999999999
+  BDest: "GPRSDATA2"
+
+bulkload: ProgLimit
+  GroupCode: "MDUBEND"
+  SLSeq: 12
+  ValidFrom: 2010-03-01
+  ValidTo: 2049-12-31
+  LimitTo: 500
+  BDest: "GPRSDATA1B"
+
+bulkload: ProgLimit
+  GroupCode: "MDUBEND"
+  SLSeq: 12
+  ValidFrom: 2010-03-01
+  ValidTo: 2049-12-31
+  LimitFrom: 500.000001
+  LimitTo: 999999999
+  BDest: "GPRSDATA2"
+
+bulkload: ProgLimit
+  GroupCode: "PMDUB"
+  SLSeq: 24
+  ValidFrom: 2011-05-01
+  ValidTo: 2049-12-31
+  LimitTo: 500
+  BDest: "GPRSDATA1B"
+
+bulkload: ProgLimit
+  GroupCode: "PMDUB"
+  SLSeq: 24
+  ValidFrom: 2011-05-01
+  ValidTo: 2049-12-31
+  LimitFrom: 500.000001
+  LimitTo: 999999999
+  BDest: "GPRSDATA2"
+

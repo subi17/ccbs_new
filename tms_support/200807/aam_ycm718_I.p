@@ -1,4 +1,3 @@
-{timestamp.i}
 
 def var i as int no-undo.
 
@@ -18,7 +17,7 @@ for each invoice no-lock use-index invdate where
           Memo.CreUser   = "YoigoRequest" 
           Memo.MemoTitle = "Erroneous Invoice"
           Memo.MemoText  = "Credited by Yoigo, YCM-717".
-          Memo.CreStamp  = fMakeTS().
+          Memo.CreStamp  = Func.Common:mMakeTS().
     
    i = i + 1.
    pause 0.

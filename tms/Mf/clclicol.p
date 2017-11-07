@@ -9,8 +9,7 @@
   Version ......: Cubio
   ------------------------------------------------------ */
 
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
 
 DEF INPUT  PARAMETER iiFromCust AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiToCust   AS INT  NO-UNDO. 
@@ -70,8 +69,8 @@ ASSIGN odtFound1 = idtDate2
 /* transfer CLIs to credit loss customer */
 FOR EACH ttCLI:
 
-   ASSIGN ldFromStamp = fHMS2TS(ttCLI.FromDate,"0")
-          ldToStamp   = fHMS2TS(ttCLI.ToDate,"23:59:59")
+   ASSIGN ldFromStamp = Func.Common:mHMS2TS(ttCLI.FromDate,"0")
+          ldToStamp   = Func.Common:mHMS2TS(ttCLI.ToDate,"23:59:59")
           odtFound1   = MIN(odtFound1,ttCLI.FromDate)
           odtFound2   = MAX(odtFound2,ttCLI.ToDate). 
           

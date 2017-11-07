@@ -1,0 +1,56 @@
+bulkload: SIMStat
+  SimStat: 1
+  SSName: "Available"
+
+bulkload: SIMStat
+  SimStat: 4
+  SSName: "IN USE (Subscription)"
+
+bulkload: SIMStat
+  SimStat: 5
+  SSName: "Temporally"
+
+bulkload: SIMStat
+  SimStat: 7
+  SSName: "LOST"
+
+bulkload: SIMStat
+  SimStat: 9
+  SSName: "RELEASED (optio for manual selection)"
+
+bulkload: SIMStat
+  SimStat: 13
+  SSName: "RESERVED"
+
+bulkload: SIMStat
+  SimStat: 14
+  SSName: "LOST (AFTER ICC CHANGE)"
+
+bulkload: SIMStat
+  SimStat: 20
+  SSName: "Chosen to order"
+
+bulkload: SIMStat
+  SimStat: 21
+  SSName: "Sent to logistics"
+
+bulkload: SIMStat
+  SimStat: 68
+  SSName: "Old LO"
+
+bulkload: SIMStat
+  SimStat: 69
+  SSName: "New LO"
+
+bulkload: SIMStat
+  SimStat: 70
+  SSName: "Universal SIM"
+
+bulkload: SIMStat
+  SimStat: 71
+  SSName: "Direct SIMS"
+
+bulkload: SIMStat
+  SimStat: 72
+  SSName: "OLD_MOVISTAR"
+

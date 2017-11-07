@@ -9,7 +9,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF shared VAR siirto AS CHAR.
 
@@ -27,23 +27,23 @@ DEF VAR tlli-ots    AS CHAR.
 form
    Currency.Currency  
    Currency.CurrName  column-label "Name"
-WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(cfc)
-   title color value(ctc) " Currency CODE "
+WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.Var:cfc)
+   title color value(Syst.Var:ctc) " Currency CODE "
    OVERLAY FRAME tlse.
 
 form
    Currency.Currency label "Code" SKIP
    Currency.CurrName label "Name" skip(1)
-WITH OVERLAY ROW 8 centered TITLE COLOR value(ctc) tlli-ots
-   COLOR value(cfc) side-labels 1 col  FRAME tlli.
+WITH OVERLAY ROW 8 centered TITLE COLOR value(Syst.Var:ctc) tlli-ots
+   COLOR value(Syst.Var:cfc) side-labels 1 col  FRAME tlli.
 
 form 
    Currency
    help "Give a country's Name or beginning of it"
-with row 4 col 2 title color value(ctc) " FIND Code  "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+with row 4 col 2 title color value(Syst.Var:ctc) " FIND Code  "
+   COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr.
 
-cfc = "tlse". RUN ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 Runko:
 repeat:
 
@@ -62,9 +62,9 @@ LOOP:
 
    IF must-add THEN DO:  /* Maa  lisays  */
       ASSIGN
-      cfc = "tlli"
+      Syst.Var:cfc = "tlli"
       tlli-ots = " ADD ".
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME tlli:
          PAUSE 0 no-message.
@@ -121,11 +121,11 @@ print-line:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk = 0 ufk[1] = 718 ufk[5] = 11
-         ufk[6] = 5 ufk[8] = 8  ufk[9] = 1
-         siirto = ? ehto = 3 ufkey = FALSE.
-         {uright1.i '"6"'}
-         RUN ufkey.p.
+         Syst.Var:ufk = 0 Syst.Var:ufk[1] = 718 Syst.Var:ufk[5] = 11
+         Syst.Var:ufk[6] = 5 Syst.Var:ufk[8] = 8  Syst.Var:ufk[9] = 1
+         siirto = ? Syst.Var:ehto = 3 ufkey = FALSE.
+         {Syst/uright1.i '"6"'}
+         RUN Syst/ufkey.p.
       END.
   END. /* print-line */
 
@@ -133,14 +133,14 @@ BROWSE:
       repeat WITH FRAME tlse ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE no-pause.
-         CHOOSE ROW Currency.CurrName ;(uchoose.i;) no-error WITH FRAME tlse.
-         COLOR DISPLAY value(ccc) Currency.CurrName WITH FRAME tlse.
+         CHOOSE ROW Currency.CurrName {Syst/uchoose.i} no-error WITH FRAME tlse.
+         COLOR DISPLAY value(Syst.Var:ccc) Currency.CurrName WITH FRAME tlse.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.
-         nap = keylabel(LASTKEY).
+         Syst.Var:nap = keylabel(LASTKEY).
 
          /* previous line */
-         if lookup(nap,"cursor-up") > 0 THEN DO
+         if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO
          WITH FRAME tlse:
             IF FRAME-LINE = 1 THEN DO:
                FIND Currency where recid(Currency) = rtab[FRAME-LINE] no-lock.
@@ -166,7 +166,7 @@ BROWSE:
          END. /* previous line */
 
          /* NEXT line */
-         if lookup(nap,"cursor-down") > 0 THEN DO WITH FRAME tlse:
+         if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO WITH FRAME tlse:
             IF FRAME-LINE = FRAME-DOWN THEN DO:
                FIND Currency where recid(Currency) = rtab[FRAME-LINE] no-lock .
                FIND NEXT Currency where no-lock no-error.
@@ -192,7 +192,7 @@ BROWSE:
          END. /* NEXT line */
 
          /* previous page */
-         else if lookup(nap,"page-up,prev-page") > 0 THEN DO WITH FRAME tlse:
+         else if lookup(Syst.Var:nap,"page-up,prev-page") > 0 THEN DO WITH FRAME tlse:
             FIND Currency where recid(Currency) = ylin no-lock no-error.
             FIND prev Currency where no-lock no-error.
             IF AVAILABLE Currency THEN DO:
@@ -214,7 +214,7 @@ BROWSE:
         END. /* previous page */
 
         /* NEXT page */
-        else if lookup(nap,"page-down,next-page") > 0 THEN DO WITH FRAME tlse:
+        else if lookup(Syst.Var:nap,"page-down,next-page") > 0 THEN DO WITH FRAME tlse:
            IF rtab[FRAME-DOWN] = ? THEN DO:
                BELL.
                message "YOU ARE ON THE LAST PAGE".
@@ -228,9 +228,9 @@ BROWSE:
         END. /* NEXT page */
 
         /* Currency */
-        if lookup(nap,"1,f1") > 0 THEN DO:  /* Currency */
-           cfc = "puyr". RUN ufcolor.
-           Currency = "". ehto = 9. RUN ufkey. ufkey = TRUE.
+        if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:  /* Currency */
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           Currency = "". Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE Currency WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
            if Currency <> "" THEN DO:
@@ -252,21 +252,21 @@ BROWSE:
         END. /* Currency */
 
         /* Valinta */
-        else if lookup(nap,"return,enter,5,f5") > 0 THEN DO:
+        else if lookup(Syst.Var:nap,"return,enter,5,f5") > 0 THEN DO:
            FIND Currency where recid(Currency) = rtab[FRAME-LINE] no-lock.
            siirto = string(Currency.Currency).
            LEAVE runko.
         END. /* Valinta */
 
         /* Lisays */
-        else if lookup(nap,"6,f6") > 0 THEN DO:
-           {uright2.i}
+        else if lookup(Syst.Var:nap,"6,f6") > 0 THEN DO:
+           {Syst/uright2.i}
            ASSIGN must-add = TRUE.
            NEXT LOOP.
         END. /* Lisays */
 
         /* Ensimmainen tietue */
-        else if lookup(nap,"home,h") > 0 THEN DO:
+        else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
            FIND FIRST Currency where no-lock no-error.
            ylin = recid(Currency).
            must-print = TRUE.
@@ -274,14 +274,14 @@ BROWSE:
         END. /* Ensimmainen tietue */
 
         /* LAST record */
-        else if lookup(nap,"end,e") > 0 THEN DO :
+        else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO :
            FIND LAST Currency where no-lock no-error.
            ylin = recid(Currency).
            must-print = TRUE.
            NEXT LOOP.
         END. /* LAST record */
 
-        else if nap = "8" or nap = "f8" THEN LEAVE runko. /* Paluu */
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" THEN LEAVE runko. /* Paluu */
 
      END.  /* BROWSE */
    END.  /* LOOP */

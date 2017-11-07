@@ -9,7 +9,7 @@
   Version ......: M15
   -------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 
 DEF STREAM ticket.
@@ -77,13 +77,13 @@ form
   "          Customers B-number list .." bnfile no-label format "x(20)"
 
 WITH
-   color value(cfc) title color value(ctc) " Accounting Report to Excel "
+   color value(Syst.Var:cfc) title color value(Syst.Var:ctc) " Accounting Report to Excel "
    OVERLAY width 80 side-labels FRAME krit.
 
 form
    bnfile format "x(16)" NO-LABEL
 WITH
-   color value(cfc) title color value(ctc) " Seekt customer/file "
+   color value(Syst.Var:cfc) title color value(Syst.Var:ctc) " Seekt customer/file "
    fsize DOWN OVERLAY ROW 3 col 60 FRAME act.
 
 
@@ -118,15 +118,15 @@ tab = chr(9).
 
 krit:
 repeat WITH FRAME krit:
-   cfc = "sel". RUN ufcolor.
-   ehto = 9. RUN ufkey.
+   Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    disp "<" + entry(cnum,cname) + ">" @ bnfile.
 
    UPDATE ticfile excfile WITH FRAME krit
    EDITING:
 
       READKEY.
-      IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO:
+      IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
     PAUSE 0.
     if frame-field = "ticfile" THEN DO:
        ASSIGN FRAME krit ticfile.
@@ -157,20 +157,20 @@ repeat WITH FRAME krit:
 
 toimi:
    repeat:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[4] = 856 ufk[5] = 63 Ufk[8] = 8 ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[4] = 856 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
 
       if search("./" + entry(cnum,cname)) = ? THEN DO:
     BELL. MESSAGE
     "Parameterfile"  entry(cnum,cname) "missing ! - hit ENTER !".
-    ufk[5] = 0.
+    Syst.Var:ufk[5] = 0.
     PAUSE no-message.
       END.
 
-      RUN ufkey.
-      IF toimi = 8 THEN LEAVE krit.
-      IF toimi = 1 THEN NEXT  krit.
-      IF toimi = 4 THEN DO WITH FRAME act.
-    cfc = "lis". RUN ufcolor.
+      RUN Syst/ufkey.p.
+      IF Syst.Var:toimi = 8 THEN LEAVE krit.
+      IF Syst.Var:toimi = 1 THEN NEXT  krit.
+      IF Syst.Var:toimi = 4 THEN DO WITH FRAME act.
+    Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
     CLEAR FRAME act ALL no-pause.
     DO i = 1 TO fsize WITH FRAME act.
        bnfile = entry(i,cname).
@@ -179,9 +179,9 @@ toimi:
     END.
     DOWN cnum - 1.
     CHOOSE ROW bnfile
-    help "Choose customer and press ENTER !" {uchoose.i} no-error
+    help "Choose customer and press ENTER !" {Syst/uchoose.i} no-error
     WITH FRAME act.
-    COLOR DISPLAY value(ccc) bnfile.
+    COLOR DISPLAY value(Syst.Var:ccc) bnfile.
 
     cnum = frame-line(act).
     bnfile = entry(cnum,cname).
@@ -189,7 +189,7 @@ toimi:
     disp "<" + bnfile + ">" @ bnfile WITH FRAME krit.
     NEXT toimi.
       END.
-      IF toimi = 5 THEN LEAVE toimi.
+      IF Syst.Var:toimi = 5 THEN LEAVE toimi.
    END.
 
 
@@ -274,7 +274,7 @@ TICKET:
     ELSE DO:
 
        /* calculate call's seconds on peak AND off-peak InstDuePeriod */
-       RUN nncapo(
+       RUN Mf/nncapo.p(
          INPUT  xdate,
          INPUT  tic_stim,
          INPUT  tic_ttim,
@@ -313,7 +313,7 @@ TICKET:
    "Min/peak"     tab
    "Min/off-peak".
 
-      RUN uexskip(2).
+      RUN Syst/uexskip.p(2).
 
       FOR EACH  wstat BY wstat.wdate:
 
@@ -324,7 +324,7 @@ TICKET:
     wstat.wsec[1] / 60         format "zzzzzzz9"   tab
     wstat.wsec[2] / 60         format "zzzzzzz9".
 
-    RUN uexskip(1).
+    RUN Syst/uexskip.p(1).
       END.
       OUTPUT STREAM excel  CLOSE.
       PAUSE 0 no-message.

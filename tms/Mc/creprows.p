@@ -18,11 +18,10 @@
 26.09.05/aam   MPMRid and ServRid to InvASub (ttCLI)
 */
 
-{commali.i}
-{timestamp.i}
-{fcurrency.i}
-{cparam2.i}
-{callquery.i}
+{Syst/commali.i}
+{Func/fcurrency.i}
+{Func/cparam2.i}
+{Func/callquery.i}
 
 DEF INPUT PARAMETER iInvno      AS INT NO-UNDO.
 DEF INPUT PARAMETER iiSubInvNum AS INT  NO-UNDO.
@@ -94,8 +93,8 @@ FOR EACH SubInvoice OF Invoice NO-LOCK WHERE
    EMPTY TEMP-TABLE ttCall.
 
    fMobCDRCollect(INPUT "post",
-                  INPUT gcBrand,
-                  INPUT katun,
+                  INPUT Syst.Var:gcBrand,
+                  INPUT Syst.Var:katun,
                   INPUT IF Invoice.FirstCall NE ?   
                         THEN Invoice.FirstCall
                         ELSE Invoice.FromDate,

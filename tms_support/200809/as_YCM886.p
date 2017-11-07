@@ -3,15 +3,14 @@ DEFINE VARIABLE liPasswordHistoryLength AS INTEGER NO-UNDO.
 DEFINE VARIABLE llSimulate AS LOGICAL NO-UNDO.
 DEFINE BUFFER bTMSPass FOR TMSPass.
 
-{commpaa.i}
-{cparam.i2}
-gcBrand = "1".
+{Syst/commpaa.i}
+{Func/cparam.i2}
+Syst.Var:gcBrand = "1".
 liPasswordHistoryLength = fCParamI("PassWdHistory").
 llSimulate = FALSE. 
 
-{log.i}
-{date.i}
-katun = "anttis".
+{Func/log.i}
+Syst.Var:katun = "anttis".
 
 fSetLogFileName("/apps/snet/200809/TMS+user+update+(20080916)_" + 
    STRING(YEAR(TODAY),"9999") +
@@ -65,7 +64,7 @@ FUNCTION fNew RETURNS LOGICAL
    DEFINE VARIABLE lcTemp AS CHARACTER NO-UNDO. 
    DEFINE VARIABLE ldeTS AS DECIMAL NO-UNDO. 
    DEFINE VARIABLE liUsernum AS INTEGER NO-UNDO. 
-   ldeTS = fMakeTS().
+   ldeTS = Func.Common:mMakeTS().
 
    fLog(icLine,"fAdd").   
    
@@ -148,7 +147,7 @@ FUNCTION fNew RETURNS LOGICAL
       ASSIGN
          tmspass.usercode = lcUsercode
          tmspass.Password = lcPassword 
-         tmspass.creator  = katun
+         tmspass.creator  = Syst.Var:katun
          tmspass.createts = ldeTS.
    END.
 
@@ -173,7 +172,7 @@ FUNCTION fModify RETURNS LOGICAL
    DEFINE VARIABLE ldeTS AS DECIMAL NO-UNDO. 
    DEFINE VARIABLE i AS INTEGER NO-UNDO. 
    DEFINE VARIABLE llModified AS LOGICAL NO-UNDO INIT FALSE. 
-   ldeTS = fMakeTS().
+   ldeTS = Func.Common:mMakeTS().
    fLog(icLine,"fModify").   
 
    lcUsercode = ENTRY(3,icLine,lcDelim).

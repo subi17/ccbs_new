@@ -6,16 +6,15 @@
   CREATED ......: 05.10.2009
   Version ......: yoigo
 ----------------------------------------------------------------------- */
-{commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+{Syst/commpaa.i}
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 
-{tmsconst.i}
-{ftransdir.i}
-{cparam2.i}
-{date.i}
-{log.i}
-{mnpcontingency.i}
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
+{Func/log.i}
+{Mnp/mnpcontingency.i}
 
 DEFINE VARIABLE lcSpoolDir AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcOutDir AS CHARACTER NO-UNDO. 
@@ -34,7 +33,7 @@ ASSIGN
    lcSpoolDir = lcRootDir + "/spool/" 
    lcOutDir   = lcRootDir + "/outgoing/" 
    lcLogDir   = fCParam("MNP","MPNLogDir")
-   lcTime = REPLACE(STRING(fMakeTS()),".","").
+   lcTime = REPLACE(STRING(Func.Common:mMakeTS()),".","").
 
 fSetLogFileName(lcLogDir + "contingency_client.log").
 

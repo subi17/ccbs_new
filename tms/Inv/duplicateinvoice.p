@@ -7,14 +7,15 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
-katun = "Cron".
-gcBrand = "1".
-{printdoc1tt.i}
-{cparam2.i}
-{duplicate_invoice.i}
-{tmsconst.i}
-{msreqfunc.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
+{Inv/printdoc1tt.i}
+{Func/cparam2.i}
+{Func/duplicate_invoice.i}
+{Syst/tmsconst.i}
+{Func/msreqfunc.i}
+{Func/multitenantfunc.i}
 
 DEF VAR liInvCount AS INTEGER NO-UNDO.
 DEF VAR liPrinted AS INT NO-UNDO. 
@@ -34,11 +35,11 @@ IF lcSpoolDir = ? OR TRIM(lcSpoolDir) = "" OR
    RETURN.
 END.
 
-ldeNow = fMakeTS().
+ldeNow = Func.Common:mMakeTS().
       
 DUP_REQ_LOOP:      
 FOR EACH MsRequest WHERE
-   MsRequest.Brand = gcBrand AND
+   MsRequest.Brand = Syst.Var:gcBrand AND
    MsRequest.ReqType = {&REQTYPE_DUPLICATE_INVOICE} AND
    MsRequest.ReqStatus = {&REQUEST_STATUS_NEW} AND 
    MsRequest.ActStamp <= ldeNow NO-LOCK
@@ -87,11 +88,13 @@ END.
                
 IF NOT CAN-FIND(FIRST ttInvoice) THEN RETURN.
 
-lcFile = lcSpoolDir + "NewDup" + STRING(YEAR(TODAY),"9999") +
+lcFile = lcSpoolDir + 
+         CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) +
+         "_NewDup" + STRING(YEAR(TODAY),"9999") +
    STRING(MONTH(TODAY),"99") + STRING(DAY(TODAY),"99") + ".txt".
 lcFileCall = lcInvoiceDir + "*" + lcFile.
 
-RUN invoice_xml.p (INPUT-OUTPUT TABLE ttInvoice,
+RUN Inv/invoice_xml.p (INPUT-OUTPUT TABLE ttInvoice,
                    TODAY, /* not used */
                    liInvCount,
                    FALSE, /* separate files */

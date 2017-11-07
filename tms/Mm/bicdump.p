@@ -27,19 +27,17 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
-katun = "Qvantel".
-gcBrand = "1".
+{Syst/commpaa.i}
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
 
-{email.i}
-{cparam2.i}
-{dumpfile_run.i}
-{timestamp.i}
-{fbankdata.i}
-{fcustdata.i}
-{tmsconst.i}
-{date.i}
-{customer_address.i}
+{Func/email.i}
+{Func/cparam2.i}
+{Syst/dumpfile_run.i}
+{Func/fbankdata.i}
+{Func/fcustdata.i}
+{Syst/tmsconst.i}
+{Func/customer_address.i}
 
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
@@ -61,7 +59,7 @@ DEF VAR liDumpTime AS INT NO-UNDO.
 DEF VAR lcClause AS CHAR NO-UNDO. 
 DEF VAR lcReason AS CHARACTER NO-UNDO. 
 
-fSplitTS(idLastDump, OUTPUT ldaDumpDate, OUTPUT liDumpTime).
+Func.Common:mSplitTS(idLastDump, OUTPUT ldaDumpDate, OUTPUT liDumpTime).
 
 ASSIGN
    lcMail = "/scratch/log/bic_missing/mail.txt"
@@ -109,7 +107,7 @@ END.
 
 /* Second part of this file, customer data check dump */
 FOR EACH Customer WHERE 
-   Customer.Brand = gcBrand NO-LOCK:
+   Customer.Brand = Syst.Var:gcBrand NO-LOCK:
 
    FIND FIRST MobSub WHERE
       MobSub.Custnum = Customer.Custnum AND
@@ -150,6 +148,11 @@ FOR EACH Customer WHERE
    ELSE IF TRIM(Customer.Address) = "" OR TRIM(Customer.PostOffice) = "" THEN
       lcReason = "Address or City is empty.".
 
+   /* Check for Customer Bank Account YTS-10339 */
+   ELSE IF NOT CAN-FIND( FIRST BankIdCode NO-LOCK WHERE
+      BankIdCode.BankCode = SUBSTRING(Customer.BankAcct,5,4)) THEN
+      lcReason = "Bank not included in SEPA BIC bank list".
+
    IF lcReason = "" THEN 
       lcReason = fCheckAddress(Customer.CustName + Customer.SurName2 +
                                   Customer.CompanyName,
@@ -181,4 +184,3 @@ OUTPUT STREAM mailcnt CLOSE.
 SendMail(lcMail,icFile).
 
 
-IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 

@@ -1,0 +1,320 @@
+bulkload: HiUsageLimit
+  Category: "1"
+  BillCode: "TOTAL"
+  Limit: 20
+
+bulkload: HiUsageLimit
+  Category: "10"
+  BillCode: "TOTAL"
+  Limit: 20
+
+bulkload: HiUsageLimit
+  Category: "11"
+  BillCode: "TOTAL"
+  Limit: 40
+
+bulkload: HiUsageLimit
+  Category: "12"
+  BillCode: "TOTAL"
+  Limit: 80
+
+bulkload: HiUsageLimit
+  Category: "13"
+  BillCode: "TOTAL"
+  Limit: 80
+
+bulkload: HiUsageLimit
+  Category: "14"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "15"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "16"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "17"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "18"
+  BillCode: "TOTAL"
+  Limit: 60
+
+bulkload: HiUsageLimit
+  Category: "19"
+  BillCode: "TOTAL"
+  Limit: 30
+
+bulkload: HiUsageLimit
+  Category: "2"
+  BillCode: "TOTAL"
+  Limit: 40
+
+bulkload: HiUsageLimit
+  Category: "20"
+  BillCode: "TOTAL"
+  Limit: 60
+
+bulkload: HiUsageLimit
+  Category: "21"
+  BillCode: "TOTAL"
+  Limit: 80
+
+bulkload: HiUsageLimit
+  Category: "22"
+  BillCode: "TOTAL"
+  Limit: 100
+
+bulkload: HiUsageLimit
+  Category: "23"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "24"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "25"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "26"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "27"
+  BillCode: "TOTAL"
+  Limit: 60
+
+bulkload: HiUsageLimit
+  Category: "28"
+  BillCode: "TOTAL"
+  Limit: 30
+
+bulkload: HiUsageLimit
+  Category: "29"
+  BillCode: "TOTAL"
+  Limit: 60
+
+bulkload: HiUsageLimit
+  Category: "3"
+  BillCode: "TOTAL"
+  Limit: 80
+
+bulkload: HiUsageLimit
+  Category: "30"
+  BillCode: "TOTAL"
+  Limit: 80
+
+bulkload: HiUsageLimit
+  Category: "31"
+  BillCode: "TOTAL"
+  Limit: 100
+
+bulkload: HiUsageLimit
+  Category: "32"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "33"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "34"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "35"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "36"
+  BillCode: "TOTAL"
+  Limit: 60
+
+bulkload: HiUsageLimit
+  Category: "37"
+  BillCode: "TOTAL"
+  Limit: 30
+
+bulkload: HiUsageLimit
+  Category: "38"
+  BillCode: "TOTAL"
+  Limit: 60
+
+bulkload: HiUsageLimit
+  Category: "39"
+  BillCode: "TOTAL"
+  Limit: 100
+
+bulkload: HiUsageLimit
+  Category: "4"
+  BillCode: "TOTAL"
+  Limit: 100
+
+bulkload: HiUsageLimit
+  Category: "40"
+  BillCode: "TOTAL"
+  Limit: 100
+
+bulkload: HiUsageLimit
+  Category: "41"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "42"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "43"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "44"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "45"
+  BillCode: "TOTAL"
+  Limit: 60
+
+bulkload: HiUsageLimit
+  Category: "46"
+  BillCode: "TOTAL"
+  Limit: 30
+
+bulkload: HiUsageLimit
+  Category: "47"
+  BillCode: "TOTAL"
+  Limit: 60
+
+bulkload: HiUsageLimit
+  Category: "48"
+  BillCode: "TOTAL"
+  Limit: 100
+
+bulkload: HiUsageLimit
+  Category: "49"
+  BillCode: "TOTAL"
+  Limit: 100
+
+bulkload: HiUsageLimit
+  Category: "5"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "50"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "51"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "52"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "53"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "54"
+  BillCode: "TOTAL"
+  Limit: 50
+
+bulkload: HiUsageLimit
+  Category: "55"
+  BillCode: "TOTAL"
+  Limit: 30
+
+bulkload: HiUsageLimit
+  Category: "56"
+  BillCode: "TOTAL"
+  Limit: 60
+
+bulkload: HiUsageLimit
+  Category: "57"
+  BillCode: "TOTAL"
+  Limit: 100
+
+bulkload: HiUsageLimit
+  Category: "58"
+  BillCode: "TOTAL"
+  Limit: 100
+
+bulkload: HiUsageLimit
+  Category: "59"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "6"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "60"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "61"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "62"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "63"
+  BillCode: "TOTAL"
+  Limit: 50
+
+bulkload: HiUsageLimit
+  Category: "7"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "8"
+  BillCode: "TOTAL"
+  Limit: 170
+
+bulkload: HiUsageLimit
+  Category: "9"
+  BillCode: "TOTAL"
+  Limit: 60
+
+bulkload: HiUsageLimit
+  Category: "99"
+  BillCode: "TOTAL"
+  Limit: 170
+

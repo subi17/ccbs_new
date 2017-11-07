@@ -1,0 +1,20 @@
+bulkload: SimMan
+  Mancode: "G&D"
+  ManName: "G&D"
+  Brand: "1"
+
+bulkload: SimMan
+  Mancode: "GEMALTO"
+  ManName: "Gemalto"
+  Brand: "1"
+
+bulkload: SimMan
+  Mancode: "MORPHO"
+  ManName: "Morpho"
+  Brand: "1"
+
+bulkload: SimMan
+  Mancode: "OBERHTUR"
+  ManName: "Oberhtur"
+  Brand: "1"
+

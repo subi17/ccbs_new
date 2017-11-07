@@ -9,9 +9,8 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{timestamp.i}
-{eventval.i}
+{Syst/commali.i} 
+{Syst/eventval.i}
 
 DEF NEW shared VAR siirto AS CHAR.
 
@@ -42,9 +41,9 @@ DEF VAR new_presel   AS LOG                    NO-UNDO INIT FALSE.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPresel AS HANDLE NO-UNDO.
    lhPresel = BUFFER Presel:HANDLE.
@@ -52,7 +51,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhPresel).
+      RUN Mc/eventview2.p(lhPresel).
    END.
 END.
 
@@ -65,10 +64,10 @@ form
     Presel.PsType 
     Presel.Orderer  format "x(25)"       /* COLUMN-LABEL FORMAT */
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
     " Browser of PreselectTransactions "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form
@@ -90,8 +89,8 @@ form
     ******/
 
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     NO-LABELS 
   /*  1 columns */
     FRAME lis.
@@ -99,16 +98,16 @@ WITH  OVERLAY ROW 4 centered
 form /* seek PRESELECT  BY  CustNum */
     CustNum
     HELP "Enter number of Customer"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUSTNO "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND CUSTNO "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek PRESELECT  BY CLI */
     CLI
     HELP "Enter Subscriper number"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CLI "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND CLI "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 pstypes = "NATIONAL,INTERNATIONAL,NAT & INT".
@@ -136,20 +135,20 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a Presel  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            new_presel = TRUE.
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR Presel.CustNum
            WITH FRAME lis EDITING:    
               READKEY.
-              IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+              IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                  PAUSE 0.
                  IF FRAME-FIELD = "CustNum" THEN DO:
                     FIND Customer WHERE Customer.CustNum = 
@@ -241,38 +240,38 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 702  ufk[2]= 36 ufk[3]= 0 ufk[4]= 0
-        ufk[5]= 5  ufk[6]= 4 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        Syst.Var:ufk[1]= 702  Syst.Var:ufk[2]= 36 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+        Syst.Var:ufk[5]= 5  Syst.Var:ufk[6]= 4 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW Presel.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Presel.CustNum WITH FRAME sel.
+        CHOOSE ROW Presel.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) Presel.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW Presel.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Presel.CLI WITH FRAME sel.
+        CHOOSE ROW Presel.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) Presel.CLI WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
-        CHOOSE ROW Presel.?? ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Presel.?? WITH FRAME sel.
+        CHOOSE ROW Presel.?? {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) Presel.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
-        CHOOSE ROW Presel.??  ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Presel.? WITH FRAME sel.
+        CHOOSE ROW Presel.??  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) Presel.? WITH FRAME sel.
       END.
 */
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -296,10 +295,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -324,7 +323,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -350,7 +349,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND Presel WHERE recid(Presel) = memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -374,7 +373,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -389,9 +388,9 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */                          
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET CustNum WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -411,10 +410,10 @@ BROWSE:
      END. /* Search-1 */
 
      /* Search BY col 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        SET CLI WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -432,19 +431,19 @@ BROWSE:
        END.
      END. /* Search-2 */
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:  /* add */
-        {uright2.i}
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 THEN DO:  /* add */
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANSAction:  /* DELETE */
-       {uright2.i}
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 THEN DO TRANSAction:  /* DELETE */
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        Presel.CustNum Customer.CustName  
        Presel.CLI Presel.PsType Presel.Orderer.
 
@@ -467,7 +466,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        Presel.CustNum Customer.CustName  
        Presel.CLI Presel.PsType Presel.Orderer.
        IF ok THEN DO:
@@ -488,16 +487,16 @@ BROWSE:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        new_presel = FALSE.
-       {uright2.i}
+       {Syst/uright2.i}
        /* change */
        RUN local-find-this(TRUE).
 
        FIND CLI where CLI.CLI = Presel.CLI NO-LOCK NO-ERROR.
-       RUN viewpres(presel.CLI).
+       RUN Mf/viewpres.p(presel.CLI).
        ufkey = TRUE.
 
        /* IF  User Wanted TO Cancel this Change TRANSACTION */
@@ -509,25 +508,25 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = recid(Presel) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN memory = recid(Presel) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -635,7 +634,7 @@ PROCEDURE local-update-record:
 
          IF FRAME-FIELD = "CLI" AND KEYLABEL(LASTKEY) = "F9" THEN DO:
 
-            RUN h-psubno(Customer.CustNum).
+            RUN Help/h-psubno.p(Customer.CustNum).
             IF siirto NE ? THEN DO:
                ASSIGN Presel.CLI = siirto.
                DISP Presel.CLI WITH FRAME lis.
@@ -643,7 +642,7 @@ PROCEDURE local-update-record:
             END.
          END.
 
-         IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+         IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
             PAUSE 0.
 
             IF FRAME-FIELD = "CustNum" THEN DO:
@@ -691,8 +690,8 @@ PROCEDURE local-update-record:
       Presel.CustName = asnimi.
       */
       /* Timestamps */
-      Presel.CrStamp = fMakeTS().
-      Presel.ChStamp = fMakeTS().
+      Presel.CrStamp = Func.Common:mMakeTS().
+      Presel.ChStamp = Func.Common:mMakeTS().
 
       IF new_presel AND llDoEvent 
       THEN RUN StarEventMakeCreateEvent(lhPresel).

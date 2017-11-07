@@ -7,23 +7,22 @@
  VERSION .......: 
  ============================================================================*/
          
-{commali.i} 
-{excel.i}
-{email.i}
-{cparam2.i}
+{Syst/commali.i} 
+{Func/excel.i}
+{Func/email.i}
+{Func/cparam2.i}
 
-{fcustcnt.i}
-{func.i}
-{cdrvar.i}
-{ficora.i}
-{chkbal2.i} 
-{mobol_tt.i}
-{fmakeservice.i}
-{fservlimit.i}
-{fsubser.i}
-{detailseq.i}
-{daycampaign.i}
-{error_codes.i}
+{Func/fcustcnt.i}
+{Mm/cdrvar.i}
+{Mm/ficora.i}
+{Rate/chkbal2.i} 
+{Rate/mobol_tt.i}
+{Func/fmakeservice.i}
+{Func/fservlimit.i}
+{Func/fsubser.i}
+{Func/detailseq.i}
+{Rate/daycampaign.i}
+{Rate/error_codes.i}
 
 DEF STREAM msg.
          
@@ -77,14 +76,14 @@ DEF VAR lcInvruncode       AS C  NO-UNDO.
        
 /* DEF VAR ctype   AS LO NO-UNDO FORMAT "New Calls/All Calls". */
 
-{rating_ttcall.i}
+{Rate/rating_ttcall.i}
 
 DEF TEMP-TABLE ttdetail no-undo like mcdrdtl.
 
-{onlinevar.i}
-{ticketfunc.i}
-{rate_roamzone.i}
-{mobcdr_rate.i}
+{Rate/onlinevar.i}
+{Rate/ticketfunc.i}
+{Rate/rate_roamzone.i}
+{Rate/mobcdr_rate.i}
 
 DEF VAR ok         AS LO NO-UNDO FORMAT "Yes/No".
 DEF VAR count      AS I  NO-UNDO.
@@ -122,7 +121,7 @@ DEF VAR lcPNPPL       AS C   NO-UNDO.
 DEF VAR lcTakeCLI     AS C   NO-UNDO. 
 DEF VAR llChanged AS LOG NO-UNDO.
 
-/* {fcustcnt.i} */
+/* {Func/fcustcnt.i} */
 
 DEF VAR lcSaldoFatime AS C  NO-UNDO.
 
@@ -130,24 +129,24 @@ DEF TEMP-TABLE ttCust NO-UNDO
    FIELD CustNum AS INT
    INDEX CustNum CustNum.
    
-{tmsparam.i SaldoAgreementAccount  return}. lcSaldoFatime = tmsparam.CharVal.
+{Func/tmsparam.i SaldoAgreementAccount  return}. lcSaldoFatime = tmsparam.CharVal.
 
-{cparam.i RepConfDir        return}.  xConfDir       = TmsParam.CharVAl.
-{cparam.i SL_prefix         return}.  SL_prefix      = TmsParam.CharVAl. /* 045 */
-{cparam.i DefIntlPref       return}.  INTL_Prefix    = TmsParam.CharVAl. /* 00  */
-{cparam.i DefPrefOwnGr      return}.  OWNGR_prefix   = TmsParam.CharVAl.
-{cparam.i DefPrefSpc        return}.  SPEC_prefix    = TmsParam.CharVAl.
-{cparam.i DefPrefSMS        return}.  SMS_prefix     = TmsParam.CharVAl.
-{cparam.i MinBillLen        return}.  MinBLen        = TmsParam.IntVal.
-{cparam.i DefPrefOSMS       return}.  ISMS_prefix    = TmsParam.CharVAl.
-{cparam.i AnalUsingInvT     return}.  Useinvtarg     = TmsParam.CharVAl.
-{cparam.i DefDataProd       return}.  data_prod      = TmsParam.CharVAl.
-{cparam.i IntCall_prefix    return}.  IC_prefix      = TmsParam.CharVAl. /*991*/
-{cparam.i IntOthCall_prefix return}.  OIC_prefix     = TmsParam.CharVAl. /*99*/
-{cparam.i ErrCDouble        return}.  errorcode      = TmsParam.IntVal.
-{cparam.i PulseRate         return}.  ldPulserate    = TmsParam.DecVal.
-{cparam.i UnknownCustomer   return}.  liUnkCust      = TmsParam.IntVal.
-{cparam.i Roaming%          return}.  ldeRoam%       = TmsParam.DecVal.
+{Func/cparam.i RepConfDir        return}.  xConfDir       = TmsParam.CharVAl.
+{Func/cparam.i SL_prefix         return}.  SL_prefix      = TmsParam.CharVAl. /* 045 */
+{Func/cparam.i DefIntlPref       return}.  INTL_Prefix    = TmsParam.CharVAl. /* 00  */
+{Func/cparam.i DefPrefOwnGr      return}.  OWNGR_prefix   = TmsParam.CharVAl.
+{Func/cparam.i DefPrefSpc        return}.  SPEC_prefix    = TmsParam.CharVAl.
+{Func/cparam.i DefPrefSMS        return}.  SMS_prefix     = TmsParam.CharVAl.
+{Func/cparam.i MinBillLen        return}.  MinBLen        = TmsParam.IntVal.
+{Func/cparam.i DefPrefOSMS       return}.  ISMS_prefix    = TmsParam.CharVAl.
+{Func/cparam.i AnalUsingInvT     return}.  Useinvtarg     = TmsParam.CharVAl.
+{Func/cparam.i DefDataProd       return}.  data_prod      = TmsParam.CharVAl.
+{Func/cparam.i IntCall_prefix    return}.  IC_prefix      = TmsParam.CharVAl. /*991*/
+{Func/cparam.i IntOthCall_prefix return}.  OIC_prefix     = TmsParam.CharVAl. /*99*/
+{Func/cparam.i ErrCDouble        return}.  errorcode      = TmsParam.IntVal.
+{Func/cparam.i PulseRate         return}.  ldPulserate    = TmsParam.DecVal.
+{Func/cparam.i UnknownCustomer   return}.  liUnkCust      = TmsParam.IntVal.
+{Func/cparam.i Roaming%          return}.  ldeRoam%       = TmsParam.DecVal.
 
 FUNCTION fBCopy RETURNS LOGICAL.
    
@@ -212,7 +211,7 @@ VALIDATE(INPUT cust-no1 <= INPUT cust-no2,"Invalid order of customers !") SKIP
    HELP "CLI type, EMPTY = all"
    VALIDATE(INPUT lcCLIType = "" OR
             CAN-FIND(CLIType WHERE 
-                     CLIType.Brand = gcBrand AND
+                     CLIType.Brand = Syst.Var:gcBrand AND
                      CLIType.CLIType = INPUT lcCLIType),
             "Unknown CLI type") 
    SKIP
@@ -228,10 +227,10 @@ HELP "Do you want re-analyse Rating CCN using Calltype and Destination"
    OVERLAY 
    ROW 1 
    WIDTH 80
-   COLOR VALUE(cfc) 
-   TITLE COLOR VALUE(ctc) 
-    " " + ynimi + "   ANALYSE/RATE MOBILE CALLS   " + 
-    string(pvm,"99.99.99") + " "  NO-LABELS  FRAME main.
+   COLOR VALUE(Syst.Var:cfc) 
+   TITLE COLOR VALUE(Syst.Var:ctc) 
+    " " + Syst.Var:ynimi + "   ANALYSE/RATE MOBILE CALLS   " + 
+    string(TODAY,"99.99.99") + " "  NO-LABELS  FRAME main.
    
 PAUSE 0.
 
@@ -240,7 +239,7 @@ MAIN:
 REPEAT WITH FRAME main:
 
 IF NOT bbatch THEN DO:
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
     
  DISPLAY
 "ALL" @ invgroup.IGName.
@@ -259,7 +258,7 @@ IF NOT bbatch THEN DO:
 WITH FRAME main  EDITING:
       READKEY.
             
-      IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME main:
+      IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME main:
          PAUSE 0.
          
          if frame-field = "ig-code" then do:
@@ -269,7 +268,7 @@ WITH FRAME main  EDITING:
             end.
             else do:
                find invgroup where 
-                    InvGroup.Brand    = gcBrand AND
+                    InvGroup.Brand    = Syst.Var:gcBrand AND
                     invgroup.Invgroup = ig-code no-lock no-error.
                if not avail invgroup then do:
                   bell.
@@ -338,15 +337,15 @@ WITH FRAME main  EDITING:
 ACTION:
    REPEAT WITH FRAME main:
       ASSIGN
-      ufk = 0 ehto = 0
-      ufk[1] = 7 
-      ufk[5] = 795
-      ufk[8] = 8.
-      RUN ufkey.
+      Syst.Var:ufk = 0 Syst.Var:ehto = 0
+      Syst.Var:ufk[1] = 7 
+      Syst.Var:ufk[5] = 795
+      Syst.Var:ufk[8] = 8.
+      RUN Syst/ufkey.p.
       
-      IF toimi = 1 THEN NEXT  main.
-      IF toimi = 8 THEN LEAVE main.
-      IF TOIMI = 5 THEN DO:
+      IF Syst.Var:toimi = 1 THEN NEXT  main.
+      IF Syst.Var:toimi = 8 THEN LEAVE main.
+      IF Syst.Var:toimi = 5 THEN DO:
          ok = false.
          MESSAGE "Do You REALLY want to START ANALYSIS RUN (Y/N) ?" UPDATE ok.
          IF NOT ok THEN NEXT action.
@@ -365,7 +364,7 @@ xdate2 = STRING(YEAR (cdate2),"9999") +
          STRING(DAY  (cdate2),"99")
 freenumbers = "10022,112,10068" .
 
-{tariff_tt.i}
+{Rate/tariff_tt.i}
 DEF VAR b_btluok           AS C  NO-UNDO.
 DEF VAR r_dest             AS C  NO-UNDO.
 
@@ -418,5 +417,5 @@ for each inv-cust no-lock where
         ELSE TRUE)         
        TRANSACTION WITH FRAME MobCDR: 
 
-       {prep_rate.i}
+       {Rate/prep_rate.i}
         

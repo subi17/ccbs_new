@@ -26,10 +26,10 @@
  VERSION .......: M15
 ============================================================================*/
 
-{commali.i}
-{utumaa.i "new"}
-{cparam2.i}
-{ddtrans.i}
+{Syst/commali.i}
+{Syst/utumaa.i "new"}
+{Func/cparam2.i}
+{Ar/ddtrans.i}
 
 ASSIGN tuni1 = "nnsvlu"
        tuni2 = "".
@@ -62,8 +62,8 @@ FORM
        help "Name of input file (F9 = list of files)"
    SKIP(6) 
    WITH WIDTH 80 ROW 1 SIDE-LABELS
-    COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) " " + ynimi +
-       " IMPORT DD AUTHORIZATIONS "  + string(pvm,"99-99-99") + " "
+    COLOR VALUE(Syst.Var:cfc) TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
+       " IMPORT DD AUTHORIZATIONS "  + string(TODAY,"99-99-99") + " "
     FRAME fStart.
 
 
@@ -73,7 +73,7 @@ VIEW FRAME fStart.
 MAIN:
 REPEAT WITH FRAME fStart:
 
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
    REPEAT WITH FRAME fStart ON ENDKEY UNDO, LEAVE:
    
@@ -102,7 +102,7 @@ REPEAT WITH FRAME fStart:
               THEN lcChoose = lcFromDir + "/" + lcChoose + "¤yes".
            END.
            
-           RUN choosefile (lcChoose,
+           RUN Mc/choosefile.p (lcChoose,
                            OUTPUT lcFile).
 
            IF lcFile NE "" THEN DO:
@@ -112,8 +112,8 @@ REPEAT WITH FRAME fStart:
               DISPLAY lcInfile.
            END. 
 
-           ehto = 9.
-           RUN ufkey.
+           Syst.Var:ehto = 9.
+           RUN Syst/ufkey.p.
 
         END. 
 
@@ -124,16 +124,16 @@ REPEAT WITH FRAME fStart:
     
    END.
    
-   ASSIGN ufk = 0
-          ufk[1] = 7
-          ufk[5] = (IF lcInfile NE "" THEN 795 ELSE 0)
-          ufk[8] = 8
-          ehto = 0.
-   run ufkey.p.
+   ASSIGN Syst.Var:ufk = 0
+          Syst.Var:ufk[1] = 7
+          Syst.Var:ufk[5] = (IF lcInfile NE "" THEN 795 ELSE 0)
+          Syst.Var:ufk[8] = 8
+          Syst.Var:ehto = 0.
+   RUN Syst/ufkey.p.
 
-   IF TOIMI = 5 THEN LEAVE. 
+   IF Syst.Var:toimi = 5 THEN LEAVE. 
 
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.Var:toimi = 8 THEN DO:
       HIDE FRAME fStart NO-PAUSE.
       RETURN.
    END. 
@@ -162,12 +162,12 @@ ASSIGN tila = TRUE
               STRING(DAY(TODAY),"99")    +
               "_" + STRING(TIME) + ".txt".
 
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
-ehto = 5.
-RUN ufkey.
+Syst.Var:ehto = 5.
+RUN Syst/ufkey.p.
 
-RUN ddauthin (lcInFile, 
+RUN Ar/ddauthin.p (lcInFile, 
               TRUE,      /* show messages */
               TRUE,      /* send mail     */
               OUTPUT liCount).

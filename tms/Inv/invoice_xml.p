@@ -6,10 +6,11 @@
   CREATED ......: 08.12.08
   ---------------------------------------------------------------------- */
 
-{printdoc1.i}
-{funcrunprocess_update.i}
-{host.i}
-{tmsconst.i}
+{Inv/printdoc1.i}
+{Syst/funcrunprocess_update.i}
+{Syst/host.i}
+{Syst/tmsconst.i}
+{Func/profunc.i}
 
 /* invoices TO be printed */
 DEFINE INPUT-OUTPUT PARAMETER TABLE FOR ttInvoice.
@@ -107,7 +108,7 @@ END FUNCTION.
 CREATE WIDGET-POOL "PrintHouse".
 
 FIND FIRST Company WHERE
-           Company.Brand = gcBrand NO-LOCK NO-ERROR.
+           Company.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 IF NOT AVAIL Company THEN RETURN.
 
 objDBConn = NEW Syst.CDRConnect("MobCDR").
@@ -251,8 +252,7 @@ PROCEDURE pInitialize:
          lcTarFile = REPLACE(lcTarFile,"#PHOUSE",icPrintHouse)
          lcTarFile = REPLACE(lcTarFile,"#PROC",
                              STRING(iiFRProcessID) + "#BATCH")
-         lcDate    = DYNAMIC-FUNCTION("fDateFmt" IN ghFunc1,
-                                      idaInvDate,
+         lcDate    = Func.Common:mDateFmt(idaInvDate,
                                      "yyyymmdd")
          lcTarFile = REPLACE(lcTarFile,"#IDATE",lcDate)
          lcTarBatchFile = REPLACE(lcTarFile,"#BATCH",STRING(liTarBatch)).
@@ -271,14 +271,14 @@ PROCEDURE pInitialize:
       sure that right version is deployed */
    IF lcXMLVersion NE lcCodeVersion THEN RETURN "ERROR:Version conflict".
    
-   FIND FIRST TMSUser WHERE TMSUser.UserCode = katun NO-LOCK NO-ERROR.
+   FIND FIRST TMSUser WHERE TMSUser.UserCode = Syst.Var:katun NO-LOCK NO-ERROR.
    IF AVAILABLE TMSUser AND TMSUser.UserName > "" THEN 
       lcTMSUser = TMSUser.UserName.
-   ELSE lcTMSUser = katun.
+   ELSE lcTMSUser = Syst.Var:katun.
 
    /* header texts to temp-table */
    FOR EACH HdrText NO-LOCK WHERE
-            HdrText.Brand = gcBrand:
+            HdrText.Brand = Syst.Var:gcBrand:
       CREATE ttHead.
       ASSIGN ttHead.Lang = HdrText.te-kie
              ttHead.Nbr  = HdrText.te-nro
@@ -322,9 +322,9 @@ PROCEDURE pInitXML:
    lhXML:INSERT-ATTRIBUTE("Version",lcXMLVersion). 
 
    lhXML:START-ELEMENT("Batch").
-   lhXML:WRITE-DATA-ELEMENT("Company",ynimi).
+   lhXML:WRITE-DATA-ELEMENT("Company",Syst.Var:ynimi).
    lhXML:WRITE-DATA-ELEMENT("Orderer",lcTMSUser).
-   lhXML:WRITE-DATA-ELEMENT("Created",fISOTimeZone(TODAY,TIME)).
+   lhXML:WRITE-DATA-ELEMENT("Created",Func.Common:mISOTimeZone(TODAY,TIME)).
    lhXML:END-ELEMENT("Batch").
 
 END PROCEDURE.
@@ -450,7 +450,7 @@ PROCEDURE pInvoice2XML:
 
       lhXML:WRITE-DATA-ELEMENT("InvoiceID",Invoice.ExtInvID).
       lhXML:START-ELEMENT("InvoiceDate").
-      lhXML:INSERT-ATTRIBUTE("DateTime",fISOTimeZone(Invoice.InvDate, 0)).
+      lhXML:INSERT-ATTRIBUTE("DateTime",Func.Common:mISOTimeZone(Invoice.InvDate, 0)).
       lhXML:WRITE-CHARACTERS(fDispDate(Invoice.InvDate, liLanguage)).
       lhXML:END-ELEMENT("InvoiceDate").      
       lhXML:WRITE-DATA-ELEMENT("DueDate",fDispDate(Invoice.DueDate,
@@ -465,15 +465,13 @@ PROCEDURE pInvoice2XML:
 
       lhXML:WRITE-DATA-ELEMENT("InvoiceType","Normal").
       
-      lcRowText = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "Invoice",
+      lcRowText = Func.Common:mTMSCodeName("Invoice",
                                    "DelType",
                                    STRING(Invoice.DelType)).
       IF lcRowText = "" THEN lcRowText = STRING(Invoice.DelType).
       lhXML:WRITE-DATA-ELEMENT("DeliveryType",lcRowText).
 
-      lcRowText = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "Invoice",
+      lcRowText = Func.Common:mTMSCodeName("Invoice",
                                    "ChargeType",
                                    STRING(Invoice.ChargeType)).
       IF lcRowText = "" THEN lcRowText = STRING(Invoice.ChargeType).
@@ -513,7 +511,15 @@ PROCEDURE pInvoice2XML:
       lhXML:END-ELEMENT("CustomerAddress").
   
       lhXML:WRITE-DATA-ELEMENT("CustomerTaxZone",Invoice.TaxZone).
- 
+     
+      FIND FIRST CustCat NO-LOCK WHERE
+                 CustCat.Brand EQ Syst.Var:gcBrand AND
+                 CustCat.Category EQ Customer.Category NO-ERROR.
+         IF AVAILABLE CustCat THEN
+            lhXML:WRITE-DATA-ELEMENT("Segment",CustCat.Segment).
+         ELSE
+            lhXML:WRITE-DATA-ELEMENT("Segment","").
+             
       lhXML:END-ELEMENT("Customer").
 
       RUN pGetInvoiceRowData.
@@ -712,41 +718,52 @@ PROCEDURE pSubInvoice2XML:
       
       /* subscription */
       lhXML:START-ELEMENT("ContractDetail").
-      IF ttSub.CliEvent = "F" THEN /* convergent tariff is partially installed. No mobile */
+      IF SubInvoice.FixedNumber NE ? AND
+         SubInvoice.FixedNumber > "" AND
+         ttSub.CliEvent EQ "F" AND NOT /* Conv partially installed. No mobile */
+         ttSub.PrintCLI THEN /* Mobile active during period. */
          lhXML:WRITE-DATA-ELEMENT("ContractID",SubInvoice.FixedNumber).
       ELSE 
          lhXML:WRITE-DATA-ELEMENT("ContractID",SubInvoice.CLI).
-      lhXML:START-ELEMENT("ContractType").
-      lhXML:INSERT-ATTRIBUTE("Name",ttSub.CTName).
-      lhXML:WRITE-CHARACTERS(ttSub.CLIType).
+      lhXML:START-ELEMENT("ContractType").      
+      IF fIsPro(Customer.Category) THEN
+         lhXML:INSERT-ATTRIBUTE("Name",ttSub.CTName + " PRO").  
+      ELSE
+         lhXML:INSERT-ATTRIBUTE("Name",ttSub.CTName). /* No PRO logic needed */               
+      lhXML:WRITE-CHARACTERS(ttSub.CLIType).      
       lhXML:END-ELEMENT("ContractType").
 
       IF ttSub.OldCLIType > "" THEN DO:
          lhXML:START-ELEMENT("OldContractType").
-         lhXML:WRITE-DATA-ELEMENT("TariffName",ttSub.OldCTName).
+         IF fIsPro(Customer.Category) THEN
+            lhXML:WRITE-DATA-ELEMENT("TariffName",ttSub.OldCTName + " PRO").
+         ELSE
+            lhXML:WRITE-DATA-ELEMENT("TariffName",ttSub.OldCTName). /* No PRO logic needed */
+         
          lhXML:WRITE-DATA-ELEMENT("TariffType",ttSub.OldCLIType).
          lhXML:WRITE-DATA-ELEMENT("TariffDate",ttSub.TariffActDate).
-         lhXML:END-ELEMENT("OldContractType").
+         lhXML:END-ELEMENT("OldContractType").         
       END.
-
+      
       lhXML:START-ELEMENT("ContractName").
       lhXML:WRITE-DATA-ELEMENT("FullName",ttSub.UserName).
       lhXML:END-ELEMENT("ContractName").
 
+      IF SubInvoice.FixedNumber > "" AND
+         SubInvoice.FixedNumber <> SubInvoice.CLI AND
+        (ttSub.CliEvent         <> "F" OR
+         ttSub.PrintCLI) THEN DO:
+         lhXML:START-ELEMENT("CustomContract").
+         lhXML:WRITE-DATA-ELEMENT("CustomType","AdditionalContractID").
+         lhXML:WRITE-DATA-ELEMENT("CustomContent",SubInvoice.FixedNumber).
+         lhXML:END-ELEMENT("CustomContract").
+      END.
       IF ttSub.MessageType > "" THEN DO:
          lhXML:START-ELEMENT("CustomContract").
          lhXML:WRITE-DATA-ELEMENT("CustomType","Message").
          lhXML:WRITE-DATA-ELEMENT("CustomContent",ttSub.MessageType).
          lhXML:END-ELEMENT("CustomContract").         
       END.
-      IF SubInvoice.FixedNumber > "" AND
-         ttSub.CliEvent        <> "F" THEN DO:
-         lhXML:START-ELEMENT("CustomContract").
-         lhXML:WRITE-DATA-ELEMENT("CustomType","AdditionalContractID").
-         lhXML:WRITE-DATA-ELEMENT("CustomContent",SubInvoice.FixedNumber).
-         lhXML:END-ELEMENT("CustomContract").
-      END.
-
 
       /* invoice rows */
       lhXML:START-ELEMENT("InvoiceRow").
@@ -783,7 +800,7 @@ PROCEDURE pSubInvoice2XML:
                                      fDispXMLDecimal(ttRow.RowData)).
          END.
          ELSE IF ttRow.RowDur NE 0 THEN DO:
-            lcLine = TRIM(fSec2C(DECIMAL(ttRow.RowDur),10)).
+            lcLine = TRIM(Func.Common:mSec2C(DECIMAL(ttRow.RowDur),10)).
             lhXML:WRITE-DATA-ELEMENT("Duration",lcLine).
          END.   
          /* Show Voice and Data month limit in FLATMFx row*/
@@ -892,7 +909,7 @@ PROCEDURE pSubInvoice2XML:
 
          ASSIGN 
             lcCTName  = ""  
-            ldEventTS = fMake2DT(ttCall.DateSt,ttCall.TimeSt).
+            ldEventTS = Func.Common:mMake2DT(ttCall.DateSt,ttCall.TimeSt).
 
          FIND FIRST ttCLIType WHERE
                     ttCLIType.CLI    = SubInvoice.CLI AND
@@ -965,7 +982,7 @@ PROCEDURE pSubInvoice2XML:
             END.
 
             ELSE IF ttCall.BillDur NE 0 OR ttCall.EventType EQ "CALL" THEN DO:
-               lcLine = TRIM(fSec2MinC(ttCall.BillDur,8)).
+               lcLine = TRIM(Func.Common:mSec2MinC(ttCall.BillDur,8)).
                lhXML:INSERT-ATTRIBUTE("Duration",lcLine).
             END.   
 

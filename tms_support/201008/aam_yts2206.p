@@ -1,5 +1,4 @@
-{testpaa.i}
-{timestamp.i}
+{Syst/testpaa.i}
 
 
 def var i as int no-undo.
@@ -22,7 +21,7 @@ for each msrequest no-lock where
          
    /*
    disp msrequest.reqcparam1 msrequest.reqcparam2
-        fts2hms(msrequest.donestamp) format "x(19)".
+        Func.Common:mTS2HMS(msrequest.donestamp) format "x(19)".
    */
 
    i = i + 1.  
@@ -50,7 +49,7 @@ for each msrequest no-lock where
          exclusive-lock.
       blimit.fromts = 20100801.   
 
-      run cli_rate.p (msrequest.cli,
+      RUN Rate/cli_rate.p (msrequest.cli,
                       8/1/10,
                       8/31/10,
                       true).

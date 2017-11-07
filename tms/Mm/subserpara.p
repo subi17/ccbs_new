@@ -7,17 +7,17 @@
   CHANGED ......: 14.01.04 jp servattr
                   01.07.04 tk subser.i moved
                   13.12.04/aam use ttSubserPara
-                  12.12.06/mvi new param to run msrequest (reqstat = ?)
+                  12.12.06/mvi new param to RUN Mm/msrequest.p (reqstat = ?)
                   31.10.07 jp  new parameter for msrequest
                   
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i} 
+{Syst/commali.i} 
 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mobsub'} 
-{eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mobsub'} 
+{Syst/eventval.i}
 
 DEF  NEW  shared VAR siirto AS CHAR.
 
@@ -29,16 +29,16 @@ DEF INPUT        PARAMETER iiMsSeq   AS INT  NO-UNDO.
 DEF INPUT        PARAMETER icServCom AS CHAR NO-UNDO.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhttSubserPara AS HANDLE NO-UNDO.
    lhttSubserPara = BUFFER ttSubserPara:HANDLE.
    RUN StarEventInitialize(lhttSubserPara).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhttSubserPara).
+      RUN Mc/eventview2.p(lhttSubserPara).
    END.
 
 END.
@@ -76,8 +76,8 @@ form
     llRequest              FORMAT "*/"   NO-LABEL SPACE(0)
     ttSubSerPara.SSDate    COLUMN-LABEL "Date" 
 WITH ROW FrmRow OVERLAY CENTERED FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) 
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) 
     " ATTRIBUTES FOR " + icServCom
     FRAME sel.
 
@@ -87,14 +87,14 @@ form
     ttSubserPara.ParaValue LABEL "Value of attribute" 
     ttSubSerPara.SSDate 
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,By 3, By 4".
@@ -164,27 +164,27 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 0  ufk[2]= 0 ufk[3]= 0  ufk[4]= 0
-        ufk[5]= 60 
-        ufk[6]= 66
-        ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+        Syst.Var:ufk[1]= 0  Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0  Syst.Var:ufk[4]= 0
+        Syst.Var:ufk[5]= 60 
+        Syst.Var:ufk[6]= 66
+        Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttSubserPara.servcom ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttSubserPara.servcom WITH FRAME sel.
+        CHOOSE ROW ttSubserPara.servcom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) ttSubserPara.servcom WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -208,10 +208,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -236,7 +236,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -262,7 +262,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ttSubserPara WHERE recid(ttSubserPara) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -286,7 +286,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -300,7 +300,7 @@ BROWSE:
        END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0 THEN DO:  /* request */
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND Syst.Var:ufk[5] > 0 THEN DO:  /* request */
         RUN local-find-this(FALSE).
         RUN local-find-others.
         IF NOT llRequest THEN 
@@ -308,7 +308,7 @@ BROWSE:
         VIEW-AS ALERT-BOX ERROR.
 
         ELSE DO:
-           RUN msrequest (1,
+           RUN Mm/msrequest.p (1,
                           ?, /* reqstat ? for all */
                           iiMsSeq,
                           0,
@@ -322,8 +322,8 @@ BROWSE:
      END.
  
      
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0 THEN DO:  /* history */
-        RUN ssparahist (iiMsSeq,
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND Syst.Var:ufk[6] > 0 THEN DO:  /* history */
+        RUN Mm/ssparahist.p (iiMsSeq,
                         icServCom).
         
         ufkey = TRUE.
@@ -331,7 +331,7 @@ BROWSE:
      END.
      
      
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -339,8 +339,8 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhttSubserPara).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -356,25 +356,25 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(ttSubserPara) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(ttSubserPara) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -467,7 +467,7 @@ PROCEDURE local-UPDATE-record:
    IF llChange THEN
    /* can service be changed from here */
    FOR FIRST CTServEl NO-LOCK WHERE 
-             CTServEl.Brand     = gcBrand              AND
+             CTServEl.Brand     = Syst.Var:gcBrand              AND
              CTServEl.ServCom   = ttSubSerPara.ServCom AND
              CTServEl.CLIType   = MobSub.CLIType       AND
              CTServEl.FromDate <= TODAY,
@@ -502,7 +502,7 @@ PROCEDURE local-UPDATE-record:
             IF FRAME-FIELD = "PAraValue" AND 
                keylabel(lastkey) = "F9"
             THEN DO:
-               RUN h-tmscodes(INPUT "ServAttr",        /* TableName*/
+               RUN Help/h-tmscodes.p(INPUT "ServAttr",        /* TableName*/
                                      ttSubSerPara.paraname, /* FieldName */
                                      ttSubserPara.ServCom, /* GroupCode */
                               OUTPUT siirto).
@@ -514,7 +514,7 @@ PROCEDURE local-UPDATE-record:
                
             END.
           
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME LIS:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME LIS:
             
                PAUSE 0.
                
@@ -530,7 +530,7 @@ PROCEDURE local-UPDATE-record:
                   ldPara = DECIMAL(INPUT ttSubserPara.paravalue) NO-ERROR.
                   IF ldPara > 0 THEN DO:
                      FIND FIRST ServAttr WHERE 
-                                ServAttr.Brand    = gcBrand            AND 
+                                ServAttr.Brand    = Syst.Var:gcBrand            AND 
                                 ServAttr.ServCom  = ttSubserPara.servcom AND 
                                 ServAttr.ServAttr = ttSubserPara.paraname
                      NO-LOCK NO-ERROR.

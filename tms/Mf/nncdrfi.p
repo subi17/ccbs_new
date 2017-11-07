@@ -14,8 +14,8 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commpaa.i}
-{tmsparam2.i}
+{Syst/commpaa.i}
+{Func/tmsparam2.i}
 
 def var pvmlog  as log  no-undo format "Yes/No" init TRUE.
 def var ticfile as char no-undo format "x(40)".
@@ -51,13 +51,13 @@ with centered overlay row 4 title " READ IN CALL RECORDS "
 ASSIGN ok = TRUE.
 
 IF ok THEN DO:
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       ticfile 
       pvmlog 
    WITH FRAME loki EDITING.
-      READKEY. nap = keylabel(LASTKEY).
-      IF lookup(nap,poisnap) > 0 THEN DO:
+      READKEY. Syst.Var:nap = keylabel(LASTKEY).
+      IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
          if frame-field = "ticfile" AND search(INPUT ticfile) = ? THEN DO:
             message "File '" + input ticfile + "' can't be found !"
             VIEW-AS ALERT-BOX error.
@@ -69,8 +69,8 @@ IF ok THEN DO:
 
    if ticfile = "" OR ticfile = "OnLine" THEN LEAVE.
 
-   ufk = 0. ehto = 3. 
-   RUN ufkey. PAUSE 0.
+   Syst.Var:ufk = 0. Syst.Var:ehto = 3. 
+   RUN Syst/ufkey.p. PAUSE 0.
 
    message "Are You SURE You want to start reading CDRs into database ?"
    UPDATE ok.

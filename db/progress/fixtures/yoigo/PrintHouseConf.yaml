@@ -1,0 +1,1270 @@
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "01"
+  FromDate: 2008-04-01
+  ToDate: 2008-06-30
+  PrintHouse: "UNISONO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "03"
+  FromDate: 2010-02-01
+  ToDate: 2010-04-30
+  PrintHouse: "INDRA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "03"
+  FromDate: 2008-07-01
+  ToDate: 2010-01-31
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "03"
+  FromDate: 2008-04-01
+  ToDate: 2008-06-30
+  PrintHouse: "UNISONO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "04"
+  FromDate: 2008-04-01
+  ToDate: 2008-06-30
+  PrintHouse: "UNISONO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "08"
+  FromDate: 2010-02-01
+  ToDate: 2012-02-26
+  PrintHouse: "INDRA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "08"
+  FromDate: 2008-07-01
+  ToDate: 2010-01-31
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "14"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "14"
+  FromDate: 2008-07-01
+  ToDate: 2010-01-31
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "15"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "16"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "17"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "18"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "19"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "20"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "21"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "22"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "23"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "24"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "25"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "26"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "27"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "28"
+  FromDate: 2013-03-13
+  ToDate: 2016-02-28
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "28"
+  FromDate: 2012-10-25
+  ToDate: 2013-03-12
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "28"
+  FromDate: 2012-02-27
+  ToDate: 2012-10-24
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "28"
+  FromDate: 2010-02-01
+  ToDate: 2012-02-26
+  PrintHouse: "INDRA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "28"
+  FromDate: 2008-07-01
+  ToDate: 2010-01-31
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "28"
+  FromDate: 2008-04-01
+  ToDate: 2008-06-30
+  PrintHouse: "UNISONO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "29"
+  FromDate: 2013-03-13
+  ToDate: 2016-02-28
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "29"
+  FromDate: 2012-10-25
+  ToDate: 2013-03-12
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "29"
+  FromDate: 2012-02-27
+  ToDate: 2012-10-24
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "29"
+  FromDate: 2010-02-01
+  ToDate: 2010-04-30
+  PrintHouse: "INDRA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "29"
+  FromDate: 2008-07-01
+  ToDate: 2010-01-31
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "30"
+  FromDate: 2013-03-13
+  ToDate: 2016-02-28
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "30"
+  FromDate: 2012-10-25
+  ToDate: 2013-03-12
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "30"
+  FromDate: 2012-07-01
+  ToDate: 2012-10-24
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "30"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "31"
+  FromDate: 2013-03-13
+  ToDate: 2016-02-28
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "31"
+  FromDate: 2012-10-25
+  ToDate: 2013-03-12
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "31"
+  FromDate: 2012-07-01
+  ToDate: 2012-10-24
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "31"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "32"
+  FromDate: 2013-03-13
+  ToDate: 2016-02-28
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "32"
+  FromDate: 2012-10-25
+  ToDate: 2013-03-12
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "32"
+  FromDate: 2012-07-01
+  ToDate: 2012-10-24
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "32"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "33"
+  FromDate: 2013-03-13
+  ToDate: 2016-02-28
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "33"
+  FromDate: 2012-10-25
+  ToDate: 2013-03-12
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "33"
+  FromDate: 2012-07-01
+  ToDate: 2012-10-24
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "33"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "34"
+  FromDate: 2013-03-13
+  ToDate: 2016-02-28
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "34"
+  FromDate: 2012-10-25
+  ToDate: 2013-03-12
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "34"
+  FromDate: 2012-07-01
+  ToDate: 2012-10-24
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "34"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "35"
+  FromDate: 2013-03-13
+  ToDate: 2016-02-28
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "35"
+  FromDate: 2012-10-25
+  ToDate: 2013-03-12
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "35"
+  FromDate: 2012-07-01
+  ToDate: 2012-10-24
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "35"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "36"
+  FromDate: 2013-03-13
+  ToDate: 2016-02-28
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "36"
+  FromDate: 2012-10-25
+  ToDate: 2013-03-12
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "36"
+  FromDate: 2012-07-01
+  ToDate: 2012-10-24
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "36"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "37"
+  FromDate: 2013-03-13
+  ToDate: 2016-02-28
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "37"
+  FromDate: 2012-10-25
+  ToDate: 2013-03-12
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "38"
+  FromDate: 2013-03-13
+  ToDate: 2016-02-28
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "38"
+  FromDate: 2012-10-25
+  ToDate: 2013-03-12
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "38"
+  FromDate: 2012-02-27
+  ToDate: 2012-10-24
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "39"
+  FromDate: 2013-03-13
+  ToDate: 2016-02-28
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "39"
+  FromDate: 2012-10-25
+  ToDate: 2013-03-12
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "39"
+  FromDate: 2012-07-01
+  ToDate: 2012-10-24
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "39"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "39"
+  FromDate: 2008-04-01
+  ToDate: 2008-06-30
+  PrintHouse: "UNISONO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "40"
+  FromDate: 2013-03-13
+  ToDate: 2016-02-28
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "40"
+  FromDate: 2012-10-25
+  ToDate: 2013-03-12
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "40"
+  FromDate: 2012-07-01
+  ToDate: 2012-10-24
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "40"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "41"
+  FromDate: 2013-03-13
+  ToDate: 2016-02-28
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "41"
+  FromDate: 2012-10-25
+  ToDate: 2013-03-12
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "41"
+  FromDate: 2012-07-01
+  ToDate: 2012-10-24
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "41"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "41"
+  FromDate: 2010-02-01
+  ToDate: 2010-04-30
+  PrintHouse: "INDRA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "41"
+  FromDate: 2009-01-01
+  ToDate: 2010-01-31
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "41"
+  FromDate: 2008-04-01
+  ToDate: 2008-06-30
+  PrintHouse: "UNISONO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "42"
+  FromDate: 2013-03-13
+  ToDate: 2016-02-28
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "42"
+  FromDate: 2012-10-25
+  ToDate: 2013-03-12
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "42"
+  FromDate: 2012-07-01
+  ToDate: 2012-10-24
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "42"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "43"
+  FromDate: 2013-03-13
+  ToDate: 2016-02-28
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "43"
+  FromDate: 2012-10-25
+  ToDate: 2013-03-12
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "43"
+  FromDate: 2012-07-01
+  ToDate: 2012-10-24
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "43"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "43"
+  FromDate: 2008-07-01
+  ToDate: 2010-01-31
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "44"
+  FromDate: 2013-03-13
+  ToDate: 2016-02-28
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "44"
+  FromDate: 2012-10-25
+  ToDate: 2013-03-12
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "44"
+  FromDate: 2012-07-01
+  ToDate: 2012-10-24
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "44"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "45"
+  FromDate: 2013-03-13
+  ToDate: 2016-02-28
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "45"
+  FromDate: 2012-10-25
+  ToDate: 2013-03-12
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "45"
+  FromDate: 2012-07-01
+  ToDate: 2012-10-24
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "45"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "46"
+  FromDate: 2013-03-13
+  ToDate: 2016-02-28
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "46"
+  FromDate: 2012-10-25
+  ToDate: 2013-03-12
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "46"
+  FromDate: 2012-07-01
+  ToDate: 2012-10-24
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "46"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "46"
+  FromDate: 2010-02-01
+  ToDate: 2012-02-26
+  PrintHouse: "INDRA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "46"
+  FromDate: 2008-07-01
+  ToDate: 2010-01-31
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "47"
+  FromDate: 2013-03-13
+  ToDate: 2016-02-28
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "47"
+  FromDate: 2012-10-25
+  ToDate: 2013-03-12
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "47"
+  FromDate: 2012-07-01
+  ToDate: 2012-10-24
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "47"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "48"
+  FromDate: 2012-02-27
+  ToDate: 2012-10-24
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "48"
+  FromDate: 2010-05-01
+  ToDate: 2012-02-26
+  PrintHouse: "INDRA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "49"
+  FromDate: 2013-03-13
+  ToDate: 2016-02-28
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "49"
+  FromDate: 2012-10-25
+  ToDate: 2013-03-12
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "49"
+  FromDate: 2012-07-01
+  ToDate: 2012-10-24
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "49"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "50"
+  FromDate: 2013-03-13
+  ToDate: 2016-02-28
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "50"
+  FromDate: 2012-10-25
+  ToDate: 2013-03-12
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "50"
+  FromDate: 2012-07-01
+  ToDate: 2012-10-24
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "50"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "51"
+  FromDate: 2013-03-13
+  ToDate: 2016-02-28
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "51"
+  FromDate: 2012-10-25
+  ToDate: 2013-03-12
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "51"
+  FromDate: 2012-07-01
+  ToDate: 2012-10-24
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "51"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "52"
+  FromDate: 2013-03-13
+  ToDate: 2016-02-28
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "52"
+  FromDate: 2012-10-25
+  ToDate: 2013-03-12
+  PrintHouse: "MGPLAZA"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "52"
+  FromDate: 2012-07-01
+  ToDate: 2012-10-24
+  PrintHouse: "IMPULSO"
+  Report: "Invoice"
+  FieldName: "Region"
+
+bulkload: PrintHouseConf
+  Brand: "1"
+  TableName: "Customer"
+  KeyValue: "52"
+  FromDate: 2012-02-27
+  ToDate: 2012-06-30
+  PrintHouse: "MEYDIS"
+  Report: "Invoice"
+  FieldName: "Region"
+

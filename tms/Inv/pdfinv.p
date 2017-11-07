@@ -14,16 +14,15 @@
   VERSION ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{eventval.i}
-{refcode.i}
-{fxmlfile.i}
-{pdfinvdf.i}
-{invotxtp.i} 
-{timestamp.i}
-{finvbal.i}
-{fdivtxt.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/eventval.i}
+{Func/refcode.i}
+{Func/fxmlfile.i}
+{Inv/pdfinvdf.i}
+{Func/invotxtp.i} 
+{Func/finvbal.i}
+{Func/fdivtxt.i}
 
 DEF INPUT-OUTPUT PARAMETER TABLE FOR ttPDFInv.
 DEF INPUT        PARAMETER ilPrintRep    AS LOG  NO-UNDO.
@@ -57,14 +56,14 @@ DEF VAR llInvFile    AS LOG   NO-UNDO.
 DEF VAR lcTxtTarget  AS CHAR  NO-UNDO.
 DEF VAR lcTxtKey     AS CHAR  NO-UNDO. 
 
-{fpdfrun.i}
+{Func/fpdfrun.i}
 
 DEF BUFFER bInvoice FOR Invoice.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
       
    DEFINE VARIABLE lhInvoice AS HANDLE NO-UNDO.
    lhInvoice = BUFFER bInvoice:HANDLE.
@@ -97,7 +96,7 @@ END FUNCTION.
 
 /* mail to user */
 IF iiSendMail = 2 THEN DO:
-   FIND TMSUser WHERE TMSUser.UserCode = katun NO-LOCK NO-ERROR.
+   FIND TMSUser WHERE TMSUser.UserCode = Syst.Var:katun NO-LOCK NO-ERROR.
    IF AVAILABLE TMSUser THEN lcMailAddr = TMSUser.EMail.
 END. 
 
@@ -378,8 +377,8 @@ IF iiSendMail > 0 THEN DO:
                                                 THEN "PDFRem"
                                                 ELSE "PDFInv")
                                           ELSE "PDFCLISpec"
-                   ITSendLog.UserCode   = katun.
-                   ITSendLog.SendStamp  = fMakeTS().
+                   ITSendLog.UserCode   = Syst.Var:katun.
+                   ITSendLog.SendStamp  = Func.Common:mMakeTS().
                          
          END.
          

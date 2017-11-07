@@ -36,10 +36,10 @@
                   18.08.06/aam    don't prompt user when tuni2 = "direct"
   Version ......: M15
   ------------------------------------------------------ */
-{commali.i}
-{utumaa.i}
-{email.i}
-{chkmail.i}
+{Syst/commali.i}
+{Syst/utumaa.i}
+{Func/email.i}
+{Func/chkmail.i}
 
 DEF VAR ret          AS i                      NO-UNDO.
 DEF NEW SHARED VAR umaara  AS I  NO-UNDO.
@@ -79,8 +79,8 @@ FORm
     "Name of output file:" oso FORMAT "x(50)"
     help "Name FOR output file OR device"           skip
 
-    WITH OVERLAY ROW 6 centered COLOR value(cfc)
-    title colOR value(ctc) " DESTINATION " NO-LABELS
+    WITH OVERLAY ROW 6 centered COLOR value(Syst.Var:cfc)
+    title colOR value(Syst.Var:ctc) " DESTINATION " NO-LABELS
     FRAME osoite.
 
 FORM
@@ -89,8 +89,8 @@ FORM
     HELP "Receivers of this report"   SKIP
     "Enter Name for the report:" mailsubj format "x(25)" 
 
-    WITH OVERLAY ROW 6 CENTERED COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) " EMail " NO-LABELS
+    WITH OVERLAY ROW 6 CENTERED COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " EMail " NO-LABELS
     FRAME EMail.
 
 
@@ -99,8 +99,8 @@ FORm skip(1)
      "Function ......:" tehnim1 SKIP
      "# of lines/page:" spit1  "lines" SKIP
      "- use .........:" skayt1 "lines" SKIP
-     WITH TITLE COLOR value(ctc) otsi1 NO-LABELS
-     ROW 13 col 2 COLOR value(cfc) OVERLAY
+     WITH TITLE COLOR value(Syst.Var:ctc) otsi1 NO-LABELS
+     ROW 13 col 2 COLOR value(Syst.Var:cfc) OVERLAY
      FRAME kirj1.
 
 FORm skip(1)
@@ -108,8 +108,8 @@ FORm skip(1)
      "Tehoste .....:" tehnim2 SKIP
      "Sivun pituus :" spit2 "lineA" SKIP
      "KAytettAvissA:" skayt2 "lineA" SKIP
-     WITH TITLE COLOR value(ctc) otsi2 NO-LABELS
-     ROW 13 col 43 COLOR value(cfc) OVERLAY
+     WITH TITLE COLOR value(Syst.Var:ctc) otsi2 NO-LABELS
+     ROW 13 col 43 COLOR value(Syst.Var:cfc) OVERLAY
      FRAME kirj2.
 
 FUNCTION GetFileName RETURNS CHAR.
@@ -129,7 +129,7 @@ FUNCTION GetFileName RETURNS CHAR.
 
 END FUNCTION.
 
-FIND TMSUser NO-LOCK WHERE TMSUser.UserCode = katun NO-ERROR.
+FIND TMSUser NO-LOCK WHERE TMSUser.UserCode = Syst.Var:katun NO-ERROR.
 IF AVAIL TMSUser THEN DO:
    IF TMSUser.RepDir NE "" THEN osohak = TMSUser.RepDir.
    lcUserEMail = TMSUser.EMail.
@@ -140,7 +140,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
    FIND FIRST TMSReport WHERE TMSReport.RepName = tuni1 NO-LOCK NO-ERROR.
    IF NOT AVAILABLE TMSReport THEN
    FIND FIRST TMSReport WHERE TMSReport.RepName = "********" NO-LOCK NO-ERROR.
-   FIND FIRST TMSRepCfg WHERE TMSRepCfg.UserCode = katun AND TMSRepCfg.RepName = tuni1
+   FIND FIRST TMSRepCfg WHERE TMSRepCfg.UserCode = Syst.Var:katun AND TMSRepCfg.RepName = tuni1
    NO-LOCK NO-ERROR.
    IF NOT AVAILABLE TMSRepCfg THEN
       FIND FIRST TMSRepCfg WHERE TMSRepCfg.RepName = tuni1 NO-LOCK NO-ERROR.
@@ -175,7 +175,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
    END.
 
    ASSIGN 
-     TMSPrinter = TMSPrinter.PrinterId.
+     Syst.Var:TMSPrinter = TMSPrinter.PrinterId.
 
    IF otsi1 = "" THEN ASSIGN
       otsi1   = " " + TMSReport.Memo + " "
@@ -193,7 +193,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
       FIND FIRST TMSReport WHERE TMSReport.RepName = tuni2 NO-LOCK NO-ERROR.
       IF NOT AVAILABLE TMSReport THEN
       FIND FIRST TMSReport WHERE TMSReport.RepName = "********" NO-LOCK NO-ERROR.
-      FIND FIRST TMSRepCfg WHERE TMSRepCfg.UserCode = katun AND TMSRepCfg.RepName = tuni2
+      FIND FIRST TMSRepCfg WHERE TMSRepCfg.UserCode = Syst.Var:katun AND TMSRepCfg.RepName = tuni2
       NO-LOCK NO-ERROR.
       IF NOT AVAILABLE TMSRepCfg THEN
          FIND FIRST TMSRepCfg WHERE TMSRepCfg.RepName = tuni2 NO-LOCK NO-ERROR.
@@ -222,14 +222,14 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
         rlev2   = PrintCodes.PageWidth.
    END.
 
-   cfc = "uprinter". RUN ufcolor.
+   Syst.Var:cfc = "uprinter". RUN Syst/ufcolor.p.
    ufkey = TRUE.
 
    /* Talletetaan ufk-arvot */
    DO i = 1 TO 9:
-       ASSIGN vufk[i] = ufk[i].
+       ASSIGN vufk[i] = Syst.Var:ufk[i].
    END.
-   ASSIGN vtoimi = toimi.
+   ASSIGN vtoimi = Syst.Var:toimi.
 
    LOOP:
    REPEAT ON ENDKEY UNDO LOOP, LEAVE LOOP:
@@ -245,19 +245,19 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk = 0
-         ufk[1] = 151 ufk[2] = 152 ufk[3] = 153 ufk[5] = 63
-         ufk[8] = 157 ufk[9] = 0 ehto = 0.
+         Syst.Var:ufk = 0
+         Syst.Var:ufk[1] = 151 Syst.Var:ufk[2] = 152 Syst.Var:ufk[3] = 153 Syst.Var:ufk[5] = 63
+         Syst.Var:ufk[8] = 157 Syst.Var:ufk[9] = 0 Syst.Var:ehto = 0.
 
-         IF tuni2 NE "" THEN ASSIGN ufk[4] = 154 ufk[6] = 155 ufk[7] = 156.
+         IF tuni2 NE "" THEN ASSIGN Syst.Var:ufk[4] = 154 Syst.Var:ufk[6] = 155 Syst.Var:ufk[7] = 156.
          ufkey = FALSE.
       END.
 
       toimi:
       REPEAT:
 
-         ehto = 0. RUN ufkey.
-         IF toimi = 1 THEN DO:     /* muutetaan kirjoitinta */
+         Syst.Var:ehto = 0. RUN Syst/ufkey.p.
+         IF Syst.Var:toimi = 1 THEN DO:     /* muutetaan kirjoitinta */
 
             RUN select-printer(INPUT-OUTPUT kirloo1).
             IF kirloo1 NE TMSPrinter.PrinterId THEN DO:
@@ -295,7 +295,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
                /* IF a slave printer was used, store the UNIX script name
                into shared 'kirjoitin' VARIABLE */
 
-               TMSPrinter = TMSPrinter.PrinterId.
+               Syst.Var:TMSPrinter = TMSPrinter.PrinterId.
 
                DISPLAY 
                   kirloo1 
@@ -307,7 +307,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
             NEXT toimi.
          END.
 
-         ELSE IF toimi = 2 THEN DO:
+         ELSE IF Syst.Var:toimi = 2 THEN DO:
             FIND FIRST PrintCodes WHERE 
                        PrintCodes.EffName = tehnim1 AND
                        PrintCodes.PrinterId = kirloo1 
@@ -339,8 +339,8 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
               NEXT toimi.
          END.
 
-         ELSE IF toimi = 3 THEN DO:
-            ehto = 9. RUN ufkey.
+         ELSE IF Syst.Var:toimi = 3 THEN DO:
+            Syst.Var:ehto = 9. RUN Syst/ufkey.p.
             UPDATE spit1 skayt1
                       validate(skayt1 <= input spit1, "Value is TOo large !")
             WITH FRAME kirj1.
@@ -348,7 +348,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
             NEXT LOOP.
          END.
 
-         ELSE IF toimi = 4 AND tuni2 NE "" THEN DO:
+         ELSE IF Syst.Var:toimi = 4 AND tuni2 NE "" THEN DO:
             FIND xTMSPrinter WHERE xTMSPrinter.PrinterId = kirloo2 NO-LOCK NO-ERROR.
             FIND NEXT xTMSPrinter NO-LOCK NO-ERROR.
             IF NOT AVAILABLE xTMSPrinter THEN
@@ -368,12 +368,12 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
             NEXT toimi.
          END.
 
-         ELSE IF toimi = 5 THEN DO:
+         ELSE IF Syst.Var:toimi = 5 THEN DO:
             str1 = kirfyy1.
             LEAVE toimi.
          END.
 
-         ELSE IF toimi = 6 AND tuni2 NE "" THEN DO:
+         ELSE IF Syst.Var:toimi = 6 AND tuni2 NE "" THEN DO:
             FIND FIRST xPrintCodes WHERE 
                        xPrintCodes.EffName = tehnim2 AND
                        xPrintCodes.PrinterId = kirloo2 
@@ -396,8 +396,8 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
               NEXT toimi.
          END.
 
-         ELSE IF toimi = 7 AND tuni2 NE "" THEN DO:
-            ehto = 9. RUN ufkey.
+         ELSE IF Syst.Var:toimi = 7 AND tuni2 NE "" THEN DO:
+            Syst.Var:ehto = 9. RUN Syst/ufkey.p.
             UPDATE spit2 skayt2
                       validate(skayt2 <= input spit2, "Value is TOo large!")
             WITH FRAME kirj2.
@@ -405,13 +405,13 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
             NEXT LOOP.
          END.
 
-         ELSE IF toimi = 8 THEN DO:
+         ELSE IF Syst.Var:toimi = 8 THEN DO:
             str1 = "".
             str2 = "".
             LEAVE LOOP.
          END.
 
-      END. /* toimi */
+      END. /* Syst.Var:toimi */
     END. /* IF UpdPerm */
 
     ELSE str1 = kirfyy1.
@@ -514,7 +514,7 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
 
 
       IF tuni2 NE "direct" THEN DO:
-         ufk = 0. ehto = 3. RUN ufkey.
+         Syst.Var:ufk = 0. Syst.Var:ehto = 3. RUN Syst/ufkey.p.
       END.
       
       /* Avataan streamit ja tulostetaan aloitustehosteet */
@@ -572,9 +572,9 @@ IF tila THEN DO: /* Tila = TRUE; OPEN STREAM AND INITIALISE printer */
 
    /* Palautetaan ufk-arvot */
    DO i = 1 TO 9:
-       ASSIGN ufk[i] = vufk[i].
+       ASSIGN Syst.Var:ufk[i] = vufk[i].
    END.
-   ASSIGN toimi = vtoimi.
+   ASSIGN Syst.Var:toimi = vtoimi.
 
    IF tuni2 NE "" AND tuni2 NE "direct" THEN HIDE FRAME kirj2 no-PAUSE.
 
@@ -597,8 +597,8 @@ ELSE DO: /* Tila = sulje */
       OUTPUT STREAM report TO VALUE(cfile).
       PUT STREAM report UNFORMATTED 
          "Report : " mailsubj SKIP
-         "Sender : " katun SKIP
-         "Day ...: " STRING(pvm,"99.99.9999") SKIP.
+         "Sender : " Syst.Var:katun SKIP
+         "Day ...: " STRING(TODAY,"99.99.9999") SKIP.
        OUTPUT STREAM report CLOSE.
 
        SendMail(TRIM(cfile),xmailattach).
@@ -623,7 +623,7 @@ ELSE DO: /* Tila = sulje */
          takaisin ja otetaan talteen scriptin nimi, jolla tulostetaan
          tilapaistiedosto, jossa teksti sijaitsee */
 
-         FIND TMSPrinter WHERE TMSPrinter.PrinterId = TMSPrinter NO-LOCK.
+         FIND TMSPrinter WHERE TMSPrinter.PrinterId = Syst.Var:TMSPrinter NO-LOCK.
          strnimi1 = substring(TMSPrinter.Device,2).
 
          UNIX SILENT value(strnimi1) value(oso).
@@ -684,7 +684,7 @@ PROCEDURE select-printer:
       lpname[i] = xprinter.PrinterId.
    END.
 
-   ehto = 4. RUN ufkey.
+   Syst.Var:ehto = 4. RUN Syst/ufkey.p.
    CLEAR FRAME psel.
    VIEW  FRAME psel.
    DISP  lpname WITH FRAME psel.

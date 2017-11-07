@@ -7,14 +7,13 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN 
-   gcBrand = "1" 
-   katun   = "Cron".
+   Syst.Var:gcBrand = "1" 
+   Syst.Var:katun   = "Cron".
        
-{eventlog.i}
-{timestamp.i}
+{Syst/eventlog.i}
 
 DEF TEMP-TABLE ttStatus NO-UNDO
    FIELD RunState AS CHAR.
@@ -34,13 +33,13 @@ ttStatus.RunState = "Running".
 
 FOR EACH ttStatus,
     EACH FuncRunExec NO-LOCK WHERE
-         FuncRunExec.Brand    = gcBrand AND
+         FuncRunExec.Brand    = Syst.Var:gcBrand AND
          FuncRunExec.RunState = ttStatus.RunState
 BY FuncRunExec.FRExecID:
 
    lcOrigState = FuncRunExec.RunState.
    
-   RUN funcrunexec_run.p (FuncRunExec.FRExecID,
+   RUN Syst/funcrunexec_run.p (FuncRunExec.FRExecID,
                           lcHost).
    
    /* nothing done or interrupted */
@@ -50,13 +49,13 @@ BY FuncRunExec.FRExecID:
       IF RETURN-VALUE BEGINS "ERROR:" THEN DO TRANS:
          CREATE ErrorLog.
          ASSIGN 
-            ErrorLog.Brand     = gcBrand
+            ErrorLog.Brand     = Syst.Var:gcBrand
             ErrorLog.ActionID  = "FREXECRUN" + STRING(FuncRunExec.FRExecID)
             ErrorLog.TableName = "FuncRunExec"
             ErrorLog.KeyValue  = STRING(FuncRunExec.FRExecID)
             ErrorLog.ErrorMsg  = RETURN-VALUE
-            ErrorLog.UserCode  = katun.
-            ErrorLog.ActionTS  = fMakeTS().
+            ErrorLog.UserCode  = Syst.Var:katun.
+            ErrorLog.ActionTS  = Func.Common:mMakeTS().
       END.
 
    END.   
@@ -67,8 +66,6 @@ BY FuncRunExec.FRExecID:
 END.
 
 EMPTY TEMP-TABLE ttStatus.
-
-IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1.
 
 fELog("FUNCRUNEXEC_RUN" +
          (IF lcHost > "" THEN "_" + lcHost ELSE ""),

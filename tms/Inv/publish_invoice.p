@@ -8,11 +8,12 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
-{fmakemsreq.i}
-{email.i}
-{host.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/email.i}
+{Syst/host.i}
+{Func/multitenantfunc.i}
 
 DEFINE INPUT PARAMETER iiMsRequest AS INT NO-UNDO.
 
@@ -25,11 +26,12 @@ DEF VAR lcContent      AS CHAR NO-UNDO.
 DEF VAR llgError       AS LOG  NO-UNDO.
 DEF VAR lcLogFile      AS CHAR NO-UNDO. 
 DEF VAR lcContLogDir   AS CHAR NO-UNDO. 
+DEF VAR lcTenant       AS CHAR NO-UNDO.
 
 DEFINE STREAM strout.
 
    FIND MsRequest WHERE
-        MsRequest.Brand     = gcBrand     AND
+        MsRequest.Brand     = Syst.Var:gcBrand     AND
         MsRequest.MsRequest = iiMsRequest NO-LOCK NO-ERROR.   
   
    IF NOT AVAIL MsRequest OR
@@ -48,13 +50,15 @@ DEFINE STREAM strout.
           lcAddrConfDir  = ""
           lcContLogDir   = ""
           lcToday        = ""
+          lcTenant       = fConvertTenantToBrand(BUFFER-TENANT-NAME(MsRequest))
           ldaDateFrom    = DATE(MONTH(TODAY),1,YEAR(TODAY))
           lcAddrConfDir  = fCParamC("RepConfDir")
           lcContLogDir   = fCParam("PublishInvoice","ContentLogDir")
           lcToday        = STRING(YEAR(TODAY),"9999") + 
                            STRING(MONTH(TODAY),"99")  +
                            STRING(DAY(TODAY),"99") 
-          lcLogFile      = lcContLogDir + "PIWebDisplay_" + lcToday + STRING(TIME) + ".log".
+          lcLogFile      = lcContLogDir + lcTenant +
+                           "_PIWebDisplay_" + lcToday + STRING(TIME) + ".log".
 
    OUTPUT STREAM strout TO VALUE(lcLogFile) APPEND.
 
@@ -67,11 +71,11 @@ DEFINE STREAM strout.
    END.
 
    /* Publish invoices to Newton */
-   RUN invoice_webdisp(ldaDateFrom,
+   RUN Inv/invoice_webdisp.p(ldaDateFrom,
                        1,     /* inv.type */
                        "",
                        0,
-                       99999999,
+                       999999999,
                        "",
                        "ZZZZZZZZZZZZ",
                        YES,
@@ -84,21 +88,23 @@ DEFINE STREAM strout.
 
    /* Mail recipients */
    GetRecipients(lcAddrConfDir).
+   xMailSubj = lcTenant + " " +  xMailSubj.
    /* Send via mail */
    SendMail(lcLogFile,"").
 
    IF llgError THEN LEAVE.
 
-   lcLogFile = lcContLogDir + "PIHPDdump_" + lcToday + STRING(TIME) + ".log".
+   lcLogFile = lcContLogDir + lcTenant + 
+               "_PIHPDdump_" + lcToday + STRING(TIME) + ".log".
 
    OUTPUT STREAM strout TO VALUE(lcLogFile) APPEND.
 
    FIND FIRST DumpFile NO-LOCK WHERE 
-              DumpFile.Brand    EQ gcBrand AND
+              DumpFile.Brand    EQ Syst.Var:gcBrand AND
               DumpFile.DumpName EQ {&DUMP_INVOICE_PUPU} NO-ERROR.
  
    IF AVAIL DumpFile THEN DO:
-      RUN dumpfile_run(DumpFile.DumpID,  /* Dump ID */
+      RUN Syst/dumpfile_run.p(DumpFile.DumpID,  /* Dump ID */
                        "Full",
                        "",
                        fIsThisReplica(),
@@ -116,6 +122,7 @@ DEFINE STREAM strout.
    
    /* Mail recipients */
    GetRecipients(lcAddrConfDir).
+   xMailSubj = lcTenant + " " +  xMailSubj.
    /* Send via mail */
    SendMail(lcLogFile,"").
 

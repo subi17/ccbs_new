@@ -10,15 +10,14 @@
 
  ---------------------------------------------------------------------------- */
 
-{commali.i}
-{excel.i}
-{date.i} 
+{Syst/commali.i}
+{Func/excel.i}
 /* temp-table */
-{paymfile.i}
-{farplog.i}
-{cparam2.i}
-{finvbal.i}
-{freadref.i}
+{Ar/paymfile.i}
+{Func/farplog.i}
+{Func/cparam2.i}
+{Func/finvbal.i}
+{Func/freadref.i}
 
 DEF INPUT  PARAMETER  ocr-file   AS c NO-UNDO.
 DEF INPUT  PARAMETER  ocr-acct   AS i NO-UNDO.
@@ -182,7 +181,7 @@ repeat:
             rc = rc + 1.
 
             FIND FIRST Invoice WHERE 
-                       Invoice.Brand  = gcBrand AND
+                       Invoice.Brand  = Syst.Var:gcBrand AND
                        Invoice.InvNum = ttPayment.Inv 
             NO-LOCK NO-ERROR.
             IF AVAIL Invoice AND Invoice.CrInvNum = 0 

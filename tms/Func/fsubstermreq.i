@@ -8,14 +8,14 @@
 
 &GLOBAL-DEFINE FSUBSTERMREQ_I YES
    
-{commali.i}
-{fcreatereq.i}
-{flimitreq.i}
-{tmsconst.i}
-{mnpoutchk.i}
-{timestamp.i}
-{msisdn_prefix.i}
+{Syst/commali.i}
+{Func/fcreatereq.i}
+{Func/flimitreq.i}
+{Syst/tmsconst.i}
+{Mnp/mnpoutchk.i}
+{Func/msisdn_prefix.i}
 {Func/fixedlinefunc.i}
+{Func/multitenantfunc.i}
 
 FUNCTION fTerminationRequest RETURNS INTEGER
    (INPUT  iiMsSeq        AS INT,    /* subscription         */
@@ -29,6 +29,7 @@ FUNCTION fTerminationRequest RETURNS INTEGER
     INPUT  icSource       AS CHAR,   /* source of request */
     INPUT  icCreator      AS CHAR,   /* who made the request */
     INPUT  iiOrigReq      AS INT,    /* father request */
+    INPUT  icTermType     AS CHAR,    /* Termination type full, Partial */
     OUTPUT ocResult       AS CHAR):
 
    DEF VAR liReqCreated AS INT NO-UNDO.
@@ -43,15 +44,15 @@ FUNCTION fTerminationRequest RETURNS INTEGER
 
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    /* Add some time interval so that sub-requests of 
       subs. creation request handled properly */
    IF CAN-FIND(FIRST bMsRequest WHERE
                bMsRequest.MsSeq   = iiMsSeq AND
                bMsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_CREATE} AND
-               bMsRequest.DoneStamp > fSecOffSet(idActStamp,-240)) THEN
-      idActStamp = fSecOffSet(idActStamp,240). /* 4 min delay */
+               bMsRequest.DoneStamp > Func.Common:mSecOffSet(idActStamp,-240)) THEN
+      idActStamp = Func.Common:mSecOffSet(idActStamp,240). /* 4 min delay */
 
    fCreateRequest(18,
                   idActStamp,
@@ -67,11 +68,13 @@ FUNCTION fTerminationRequest RETURNS INTEGER
       bCreaReq.ReqIParam2  = iiSIMStatus
       bCreaReq.ReqIParam3  = iiQuarantine
       bCreaReq.ReqIParam4  = iiPenaltyFee
+      bCreaReq.ReqCParam6  = icTermType
       bCreaReq.ReqSource   = icSource
       bCreaReq.OrigReq     = iiOrigReq
       liReqCreated         = bCreaReq.MsRequest.
 
-   IF fHasConvergenceTariff(iiMsSeq) THEN DO:
+   IF (fHasConvergenceTariff(iiMsSeq) AND
+       icTermType = {&TERMINATION_TYPE_FULL}) THEN DO:
 
       /* Do not change the memo text (used by DWH) */
       IF icTermReason EQ STRING({&SUBSCRIPTION_TERM_REASON_MNP}) THEN
@@ -106,11 +109,14 @@ FUNCTION fDeleteMsValidation RETURNS INTEGER
    END.
 
    /* Check that msisdn is available */
-   IF NOT CAN-FIND(FIRST MSISDN WHERE 
+   IF (NOT CAN-FIND(FIRST MSISDN WHERE 
                    MSISDN.CLI      = MobSub.CLI  AND 
-                   MSISDN.ValidTo >= fMakeTS()) THEN DO: 
+                   MSISDN.ValidTo >= Func.Common:mMakeTS()) AND
+      MobSub.MsStatus NE {&MSSTATUS_MOBILE_PROV_ONG} AND
+      MobSub.msStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE}) THEN DO: 
+      
       ocError = "System Error ! Unknown MSISDN number : "
-         + STRING(MobSub.MsSeq) + " : " + MobSub.CLI.
+                + STRING(MobSub.MsSeq) + " : " + MobSub.CLI.
       RETURN 2.
    END.
    
@@ -127,13 +133,15 @@ FUNCTION fDeleteMsValidation RETURNS INTEGER
       "There is already a scheduled KILL request"  + CHR(10) +
       "for Mobile Subscription " + MobSub.CLI      + CHR(10) +
       "Saved by user '" + bMsTermReq.UserCode + "'" + CHR(10) +
-      "Proposed time of deactivation " + fTS2HMS(bMsTermReq.ActStamp) + CHR(10)
+      "Proposed time of deactivation " + Func.Common:mTS2HMS(bMsTermReq.ActStamp) + CHR(10)
       + "Status " + STRING(bMsTermReq.ReqStatus).
       RETURN 3.
    END.
 
    /* Check that sim is available */ 
-   IF MobSub.MsStatus NE {&MSSTATUS_FIXED_PROV_ONG} AND
+   
+   IF (MobSub.MsStatus NE {&MSSTATUS_MOBILE_PROV_ONG} AND
+       MobSub.MsStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE}) AND
       NOT CAN-FIND(IMSI WHERE
                    IMSI.IMSI = MobSub.IMSI) THEN DO: 
       ocError = "System Error ! Mobile Subscription doesn't have any SIM card.".
@@ -189,13 +197,13 @@ OUTPUT ocError AS CHAR):
    DEFINE VARIABLE hh AS INTEGER NO-UNDO. 
    DEFINE VARIABLE mm AS INTEGER NO-UNDO. 
    
-   IF ideKillTS < fMakeTS() THEN DO:
+   IF ideKillTS < Func.Common:mMakeTS() THEN DO:
       ocError = "Kill time cannot be in the past!".
       RETURN 1.
    END.
    
    IF iiOrderer EQ 2 THEN DO:
-      lcKillTS = fTS2HMS(ideKillTS).
+      lcKillTS = Func.Common:mTS2HMS(ideKillTS).
       lcTime = ENTRY(2,lcKillTS," ").
       hh = int(entry(1,lcTime,":")).
       mm = int(entry(2,lcTime,":")).
@@ -222,7 +230,7 @@ FUNCTION fIsPenalty RETURNS LOG
             bDCCLI.ValidTo   >= TODAY        AND
             bDCCLI.CreateFees = TRUE:
       IF CAN-FIND(DayCampaign WHERE
-                  DayCampaign.Brand = gcBrand AND
+                  DayCampaign.Brand = Syst.Var:gcBrand AND
                   DayCampaign.DCEvent = bDCCLI.DCEvent AND
                   DayCampaign.TermFeeModel NE "" AND
                   DayCampaign.TermFeeCalc > 0) THEN DO:
@@ -259,15 +267,28 @@ OUTPUT ocError AS CHAR):
 END.
 
 FUNCTION fCheckOrderer RETURNS INT            
-(piOrderer AS INT,
-llYoigoCLI AS LOG,
-OUTPUT ocError AS CHAR):
-   
+(INPUT  piOrderer     AS INT,
+ INPUT  llYoigoCLI    AS LOG,
+ INPUT  llMasmovilCLI AS LOG,
+ OUTPUT ocError       AS CHAR):
+ 
+ DEF VAR lcTenant         AS CHAR NO-UNDO.
+ DEF VAR llYoigoTenant    AS LOGI NO-UNDO INIT FALSE.
+ DEF VAR llMasmovilTenant AS LOGI NO-UNDO INIT FALSE.
+ 
+   ASSIGN lcTenant = fGetCurrentTenant().
+   IF lcTenant = "" THEN 
+       ASSIGN lcTenant = {&TENANT_YOIGO}.
+
+   ASSIGN 
+       llYoigoTenant    = (IF lcTenant = {&TENANT_YOIGO}    THEN TRUE ELSE FALSE)  
+       llMasmovilTenant = (IF lcTenant = {&TENANT_MASMOVIL} THEN TRUE ELSE FALSE).
+
    IF LOOKUP(STRING(piOrderer),"1,2,3,4,5,9,10,11,12") = 0 THEN DO:
       ocError = "Unknown Orderer". 
       RETURN 1.
    END.
-   IF piOrderer = 3 AND NOT llYoigoCLI THEN DO:
+   IF piOrderer = 3 AND ((NOT llYoigoCLI AND llYoigoTenant) OR (NOT llMasmovilCLI AND llMasmovilTenant)) THEN DO:
       ocError = "Cannot choose Order cancellation with MNP numbers!".
       RETURN 2.
    END.
@@ -303,37 +324,50 @@ FUNCTION fCheckSimStat RETURNS INT
 END FUNCTION. 
 
 FUNCTION fInitialiseValues RETURNS INT            
-(  iiOrderer AS INT,
-   ilYoigoCLI AS LOG,
+(  INPUT iiOrderer     AS INT,
+   INPUT ilYoigoCLI    AS LOG,
+   INPUT ilMasmovilCLI AS LOG,
    OUTPUT piMSISDNStat AS INT,
-   OUTPUT piSimStat AS INT,
-   OUTPUT piQuarTime AS INT):
+   OUTPUT piSimStat    AS INT,
+   OUTPUT piQuarTime   AS INT):
+
+   DEF VAR lcTenant         AS CHAR NO-UNDO.
+   DEF VAR llYoigoTenant    AS LOGI NO-UNDO INIT FALSE.
+   DEF VAR llMasmovilTenant AS LOGI NO-UNDO INIT FALSE.
+
+   ASSIGN lcTenant = fGetCurrentTenant().
+   IF lcTenant = "" THEN 
+      ASSIGN lcTenant = {&TENANT_YOIGO}.
+
+   ASSIGN 
+      llYoigoTenant    = (IF lcTenant = {&TENANT_YOIGO}    THEN TRUE ELSE FALSE)  
+      llMasmovilTenant = (IF lcTenant = {&TENANT_MASMOVIL} THEN TRUE ELSE FALSE).
 
    CASE iiOrderer:
       WHEN 1 OR WHEN 4 OR WHEN 5 OR WHEN 9 OR WHEN 10 OR WHEN 13 OR WHEN 14 THEN
          ASSIGN
-            piMSISDNStat   = IF ilYoigoCLI THEN 4  ELSE 11
-            piQuarTime     = IF ilYoigoCLI THEN 90 ELSE -1 
+            piMSISDNStat   = (IF ((ilYoigoCLI AND llYoigoTenant) OR (ilMasmovilCLI AND llMasmovilTenant)) THEN 4  ELSE 11)
+            piQuarTime     = (IF ((ilYoigoCLI AND llYoigoTenant) OR (ilMasmovilCLI AND llMasmovilTenant)) THEN 90 ELSE -1) 
             piSimStat      = 7.
       WHEN 6 OR WHEN 7 OR WHEN 8 THEN
          ASSIGN
-            piMSISDNStat   = IF ilYoigoCLI THEN 4  ELSE 11
-            piQuarTime     = IF ilYoigoCLI THEN 30 ELSE -1 
+            piMSISDNStat   = (IF ((ilYoigoCLI AND llYoigoTenant) OR (ilMasmovilCLI AND llMasmovilTenant)) THEN 4  ELSE 11)
+            piQuarTime     = (IF ((ilYoigoCLI AND llYoigoTenant) OR (ilMasmovilCLI AND llMasmovilTenant)) THEN 30 ELSE -1) 
             piSimStat      = 7.
       WHEN 2 THEN
          ASSIGN
-            piMSISDNStat   = IF ilYoigoCLI THEN 6  ELSE 13
-            piQuarTime     = IF ilYoigoCLI THEN -1 ELSE -1
+            piMSISDNStat   = (IF ((ilYoigoCLI AND llYoigoTenant) OR (ilMasmovilCLI AND llMasmovilTenant)) THEN 6  ELSE 13)
+            piQuarTime     = (IF ((ilYoigoCLI AND llYoigoTenant) OR (ilMasmovilCLI AND llMasmovilTenant)) THEN -1 ELSE -1)
             piSimStat      = 7.
       WHEN 3 THEN 
          ASSIGN
-            piMSISDNStat   = IF ilYoigoCLI THEN 4  ELSE 11
-            piQuarTime     = IF ilYoigoCLI THEN 1  ELSE -1
+            piMSISDNStat   = (IF ((ilYoigoCLI AND llYoigoTenant) OR (ilMasmovilCLI AND llMasmovilTenant)) THEN 4  ELSE 11)
+            piQuarTime     = (IF ((ilYoigoCLI AND llYoigoTenant) OR (ilMasmovilCLI AND llMasmovilTenant)) THEN 1  ELSE -1)
             piSimStat      = 9.
       WHEN 11 OR WHEN 12 THEN 
          ASSIGN
-            piMSISDNStat   = IF ilYoigoCLI THEN 1  ELSE 11
-            piQuarTime     = IF ilYoigoCLI THEN -1 ELSE -1
+            piMSISDNStat   = (IF ((ilYoigoCLI AND llYoigoTenant) OR (ilMasmovilCLI AND llMasmovilTenant)) THEN 1  ELSE 11)
+            piQuarTime     = (IF ((ilYoigoCLI AND llYoigoTenant) OR (ilMasmovilCLI AND llMasmovilTenant)) THEN -1 ELSE -1)
             piSimStat      = 1.
 
    END.

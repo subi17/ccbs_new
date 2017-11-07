@@ -1,6 +1,5 @@
 /*Migration of mServiceLimit*/
 
-{timestamp.i}
 
 DEF VAR i               AS INT  NO-UNDO.
 DEF VAR ldNOW           AS DEC  NO-UNDO.
@@ -22,7 +21,7 @@ MESSAGE "Migrate the mServiceLimit With New Values ?"
    VIEW-AS ALERT-BOX QUESTION BUTTONS YES-NO-CANCEL
    TITLE "YDR-2284: MServiceLimit Migration" UPDATE llConfirm AS LOGICAL.
 
-ASSIGN ldNOW         = fMakeTS()
+ASSIGN ldNOW         = Func.Common:mMakeTS()
        lcCLITypeList = "CONT23,CONT24,CONTS,CONTSF".
 
 OUTPUT STREAM sSL TO "YDR-2284-Voice-5000-Min-Migration_20161003-action-10.txt".
@@ -93,7 +92,7 @@ PROCEDURE pUpd:
       .
       ASSIGN liOldSLSeq = ServiceLimit.SLSeq.
       IF llConfirm THEN
-         ASSIGN mServiceLimit.EndTS = fMake2Dt(09/30/2016,86399).
+         ASSIGN mServiceLimit.EndTS = Func.Common:mMake2DT(09/30/2016,86399).
    END.
 
    IF liOldSLSeq EQ 0 THEN NEXT.
@@ -116,7 +115,7 @@ PROCEDURE pUpd:
                 bMSL.DialType = bSL.DialType
                 bMSL.InclUnit = bSL.InclUnit
                 bMSL.InclAmt  = bSL.InclAmt
-                bMSL.FromTS   = fMake2Dt(10/01/2016,0)
+                bMSL.FromTS   = Func.Common:mMake2DT(10/01/2016,0)
                 bMSL.EndTS    = 99999999.99999
                 .
          FOR EACH ServiceLCounter EXCLUSIVE-LOCK WHERE

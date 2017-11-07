@@ -8,10 +8,9 @@
 ---------------------------------------------------------------------- */
 
 
-{commali.i}
-{dumpfile_run.i}
-{create_eventlog.i}
-{timestamp.i}
+{Syst/commali.i}
+{Syst/dumpfile_run.i}
+{Func/create_eventlog.i}
 
 DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -99,7 +98,7 @@ PROCEDURE pModifiedSubscriptions:
       liReqType = INTEGER(ENTRY(liCnt,lcTypeList)).
       
       FOR EACH MsRequest NO-LOCK WHERE
-               MsRequest.Brand   = gcBrand   AND
+               MsRequest.Brand   = Syst.Var:gcBrand   AND
                MsRequest.ReqType = liReqType AND
                MsRequest.ReqStat = 2         AND
                MsRequest.ActStamp > idLastDump
@@ -129,7 +128,7 @@ END PROCEDURE.
 PROCEDURE pAllSubscriptions:
 
    FOR EACH MobSub NO-LOCK WHERE
-            MobSub.Brand = gcBrand
+            MobSub.Brand = Syst.Var:gcBrand
    ON QUIT UNDO, RETRY
    ON STOP UNDO, RETRY:
 

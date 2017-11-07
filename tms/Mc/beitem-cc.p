@@ -20,23 +20,23 @@
 
 &GLOBAL-DEFINE BrTable FMItem
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'FMItem'}
-{tmsconst.i}
-{eventval.i}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'FMItem'}
+{Syst/tmsconst.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhFMItem AS HANDLE NO-UNDO.
    lhFMItem = BUFFER FMItem:HANDLE.
    RUN StarEventInitialize(lhFMItem).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhFMItem).
+      RUN Mc/eventview2.p(lhFMItem).
    END.
 
 END.
@@ -98,7 +98,7 @@ FIND TMSParam WHERE TMSParam.Brand = "1" AND
  IF AVAIL TMSParam THEN lcBIGroup = TMSParam.CharVal.
 
 
-{dialog.i}
+{Func/dialog.i}
  /* create records in ttable  for bill items */
 FOR EACH BillItem WHERE LOOKUP(BillItem.BIGroup , lcBIGroup ) > 0 AND
                         BillItem.Brand = "1" NO-LOCK:
@@ -119,8 +119,8 @@ form
     FMItem.Amount        format "->,>>9.99"
 
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc)
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc)
     " Items of B-Event " + 
         FeeModel.Brand + "/" + FeeModel.FeeModel + ": " + 
         FeeModel.FeeName + " "
@@ -140,8 +140,8 @@ form
     FMItem.Amount  FORMAT "->,>>9.99" SKIP
          
 WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -150,8 +150,8 @@ WITH  OVERLAY ROW 2 centered
 form /* seek Billing Event Item  BY BillCode */
     BillCode
     HELP "Enter BillCode"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND BillCode "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND BillCode "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 
@@ -165,11 +165,11 @@ FUNCTION fFetchPriceList RETURN LOGICAL ():
     RETURN TRUE.
 END FUNCTION.
 
- {brand.i} 
+ {Func/brand.i} 
 
  /*call cui browser -----------------------------*/
 
-{beitem.i 'cc'}
+{Mc/beitem.i 'cc'}
 
 /* ---------------------------------------------- */
 
@@ -194,15 +194,15 @@ END PROCEDURE.
 PROCEDURE choose-row:
 
  IF order = 1 THEN DO:
-        CHOOSE ROW FMItem.BillCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) FMItem.BillCode WITH FRAME sel.
+        CHOOSE ROW FMItem.BillCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) FMItem.BillCode WITH FRAME sel.
       END.
 END PROCEDURE.
 
 
 PROCEDURE highlight-row:
 
- COLOR DISPLAY VALUE(ctc)
+ COLOR DISPLAY VALUE(Syst.Var:ctc)
        FMItem.BillCode
        BillItem.BIName      WHEN AVAIL BillItem
        FMItem.FromDate
@@ -241,7 +241,7 @@ PROCEDURE local-update-record:
              FMItem.Amount 
              WITH FRAME lis EDITING:
              READKEY.
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
 
                 PAUSE 0.
                
@@ -286,7 +286,7 @@ PROCEDURE local-add-record:
           DEFINE VARIABLE loutValueId AS CHARACTER NO-UNDO. 
 
 
-          RUN h-dialog.p (INPUT TABLE ttable BY-REFERENCE ,
+          RUN Help/h-dialog.p (INPUT TABLE ttable BY-REFERENCE ,
                           INPUT lctitle,
                           OUTPUT lrecid,
                           OUTPUT loutValueId).
@@ -302,16 +302,16 @@ PROCEDURE local-add-record:
           END.
           
        FIND BillItem WHERE 
-            BillItem.Brand = gcBrand AND 
+            BillItem.Brand = Syst.Var:gcBrand AND 
             BillItem.BillCode = ttable.ValueId NO-LOCK NO-ERROR.
 
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
       
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
 
@@ -332,7 +332,7 @@ PROCEDURE local-add-record:
               END.
 
 
-              IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+              IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                  PAUSE 0.
                  IF FRAME-FIELD = "lipaytype" THEN DO: 
                     IF (INPUT lipaytype) > 2 OR (INPUT lipaytype) < 1

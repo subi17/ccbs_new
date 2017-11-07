@@ -29,16 +29,15 @@
 
 DEFINE INPUT PARAMETER piMsSeq LIKE MobSub.MsSeq.
 
-{commali.i}
-{timestamp.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MobSub'}
-{fsubstermreq.i}
-{msisdn_prefix.i}
-{tmsconst.i}
-{cparam2.i}
-{mnpoutchk.i}
-{main_add_lines.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MobSub'}
+{Func/fsubstermreq.i}
+{Func/msisdn_prefix.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Mnp/mnpoutchk.i}
+{Func/main_add_lines.i}
 
 IF lcRight NE "RW" THEN DO:
    MESSAGE
@@ -56,35 +55,39 @@ DEFINE VARIABLE lcOutOper     AS CHAR  NO-UNDO FORMAT "x(12)".
 DEFINE VARIABLE hh            AS INT   NO-UNDO.
 DEFINE VARIABLE mm            AS INT   NO-UNDO.
 
-DEFINE VARIABLE lcUserCode    AS CHAR  NO-UNDO.
-DEFINE VARIABLE ldtPContr     AS DATE  NO-UNDO.
-DEFINE VARIABLE llPenalty     AS LOG   NO-UNDO. 
-DEFINE VARIABLE lcUsrName     AS CHAR  NO-UNDO.
-DEFINE VARIABLE lcAgrName     AS CHAR  NO-UNDO.
-DEFINE VARIABLE lcInvName     AS CHAR  NO-UNDO.
-DEFINE VARIABLE ocResult      AS CHAR  NO-UNDO.
-DEFINE VARIABLE ldeKillTS     AS DEC   NO-UNDO.
-DEFINE VARIABLE liMsReq       AS INT   NO-UNDO.
-DEFINE VARIABLE liOrderer     AS INT   NO-UNDO.
-DEFINE VARIABLE lcOrderer     AS CHAR  NO-UNDO.
-DEFINE VARIABLE liQuarTime    AS INT   NO-UNDO.
-DEFINE VARIABLE lcQuarTime    AS CHAR  NO-UNDO.
-DEFINE VARIABLE lcCode        AS CHAR  NO-UNDO.
-DEFINE VARIABLE lcCodeName    AS CHAR  NO-UNDO.
-DEFINE VARIABLE liMsisdnStat  AS INT   NO-UNDO.
-DEFINE VARIABLE lcMsisdnStat  AS CHAR  NO-UNDO.
-DEFINE VARIABLE liLastKey     AS INT   NO-UNDO.
-DEFINE VARIABLE llPContr      AS LOG   NO-UNDO.
-DEFINE VARIABLE llAdmin       AS LOG   NO-UNDO.
-DEFINE VARIABLE llYoigoCLI    AS LOG   NO-UNDO.
-DEFINE VARIABLE liSimStat     AS INT   NO-UNDO.
-DEFINE VARIABLE lcSimStat     AS CHAR  NO-UNDO.
-DEFINE VARIABLE llHelp        AS LOG   NO-UNDO INIT TRUE.
-DEFINE VARIABLE lcError       AS CHAR  NO-UNDO.
-DEFINE VARIABLE liError       AS INT   NO-UNDO.
-DEFINE VARIABLE llBillPer     AS LOGICAL NO-UNDO.
-
-DEFINE VARIABLE llAddLineTerm   AS LOG  NO-UNDO.
+DEFINE VARIABLE lcUserCode       AS CHAR  NO-UNDO.
+DEFINE VARIABLE ldtPContr        AS DATE  NO-UNDO.
+DEFINE VARIABLE llPenalty        AS LOG   NO-UNDO. 
+DEFINE VARIABLE lcUsrName        AS CHAR  NO-UNDO.
+DEFINE VARIABLE lcAgrName        AS CHAR  NO-UNDO.
+DEFINE VARIABLE lcInvName        AS CHAR  NO-UNDO.
+DEFINE VARIABLE ocResult         AS CHAR  NO-UNDO.
+DEFINE VARIABLE ldeKillTS        AS DEC   NO-UNDO.
+DEFINE VARIABLE liMsReq          AS INT   NO-UNDO.
+DEFINE VARIABLE liOrderer        AS INT   NO-UNDO.
+DEFINE VARIABLE lcOrderer        AS CHAR  NO-UNDO.
+DEFINE VARIABLE liQuarTime       AS INT   NO-UNDO.
+DEFINE VARIABLE lcQuarTime       AS CHAR  NO-UNDO.
+DEFINE VARIABLE lcCode           AS CHAR  NO-UNDO.
+DEFINE VARIABLE lcCodeName       AS CHAR  NO-UNDO.
+DEFINE VARIABLE liMsisdnStat     AS INT   NO-UNDO.
+DEFINE VARIABLE lcMsisdnStat     AS CHAR  NO-UNDO.
+DEFINE VARIABLE liLastKey        AS INT   NO-UNDO.
+DEFINE VARIABLE llPContr         AS LOG   NO-UNDO.
+DEFINE VARIABLE llAdmin          AS LOG   NO-UNDO.
+DEFINE VARIABLE llYoigoCLI       AS LOG   NO-UNDO.
+DEFINE VARIABLE llMasmovilCLI    AS LOG   NO-UNDO.
+DEFINE VARIABLE liSimStat        AS INT   NO-UNDO.
+DEFINE VARIABLE lcSimStat        AS CHAR  NO-UNDO.
+DEFINE VARIABLE llHelp           AS LOG   NO-UNDO INIT TRUE.
+DEFINE VARIABLE lcError          AS CHAR  NO-UNDO.
+DEFINE VARIABLE liError          AS INT   NO-UNDO.
+DEFINE VARIABLE llBillPer        AS LOGICAL NO-UNDO.
+DEFINE VARIABLE lcTermType       AS CHAR  NO-UNDO INIT "Full".
+DEFINE VARIABLE lcTenant         AS CHAR NO-UNDO.
+DEFINE VARIABLE llYoigoTenant    AS LOGI NO-UNDO INIT FALSE.
+DEFINE VARIABLE llMasmovilTenant AS LOGI NO-UNDO INIT FALSE.
+DEFINE VARIABLE llAddLineTerm    AS LOG  NO-UNDO.
 
 DEFINE BUFFER UsrCustomer FOR Customer.
 DEFINE BUFFER AgrCustomer FOR Customer.
@@ -124,6 +127,9 @@ FORM
    " Deactivation Time :" KillTime                                       
       HELP "Exact time when a SCHEDULED kill shall be performed"       SKIP
 
+   " Termination type :" lcTermType
+      HELP "Termination type Full / Partial"                           SKIP
+   
    " MSISDN status ....:" liMsisdnStat FORMAT ">9"
       HELP "MSISDN status after termination (F9)"
       lcMsisdnStat FORMAT "x(32)"
@@ -135,26 +141,26 @@ FORM
       HELP "ICC status after termination (F9)" SKIP
 
 WITH
-   OVERLAY ROW 2 CENTERED COLOR VALUE(cfc)
-   TITLE COLOR VALUE(ctc) 
+   OVERLAY ROW 2 CENTERED COLOR VALUE(Syst.Var:cfc)
+   TITLE COLOR VALUE(Syst.Var:ctc) 
       " Subscription Termination / De-activation " + MobSub.CLI + " "
    NO-LABELS  
 FRAME main.
 
 IF getTMSRight("CCSUPER,SYST") EQ "RW" THEN llAdmin = TRUE.
 
+FIND MobSub WHERE MobSub.MsSeq = piMsSeq NO-LOCK.
+
 liError = fDeleteMsValidation(piMsSeq, 
-                          ?, /* termination reason not yet known */
-                          OUTPUT lcError).
+                              ?, /* termination reason not yet known */
+                              OUTPUT lcError).
 IF lcError NE "" THEN DO:
    MESSAGE lcError VIEW-AS ALERT-BOX ERROR.
    IF liError NE 0 THEN RETURN.
 END.
 
-FIND MobSub WHERE MobSub.MsSeq = piMsSeq NO-LOCK.
-
 ASSIGN
-   lcUserCode = katun
+   lcUserCode = Syst.Var:katun
    ldtPContr  = ?.
 
 llPenalty = fIsPenalty(0, Mobsub.MsSeq).
@@ -176,17 +182,17 @@ FIND FIRST AgrCustomer WHERE
 NO-LOCK NO-ERROR.
 
 IF Avail UsrCustomer THEN
-   lcUsrName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER UsrCustomer).
+   lcUsrName = Func.Common:mDispCustName(BUFFER UsrCustomer).
 ELSE
    lcUsrName = "".
 
 IF Avail InvCustomer THEN
-   lcInvName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER InvCustomer).
+   lcInvName = Func.Common:mDispCustName(BUFFER InvCustomer).
 ELSE
    lcInvName = "".
 
 IF Avail AgrCustomer THEN
-   lcAgrName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER AgrCustomer).
+   lcAgrName = Func.Common:mDispCustName(BUFFER AgrCustomer).
 ELSE
    lcAgrName = "".
 
@@ -209,7 +215,12 @@ IF MobSub.MSStatus = 3 /* NOT activated yet */ THEN DO:
 END.
 
 /* Yoigo MSISDN? */
-llYoigoCLI = fIsYoigoCLI(Mobsub.CLI).
+ASSIGN
+   lcTenant         = BUFFER-TENANT-NAME(MobSub)
+   llYoigoCLI       = fIsYoigoCLI(Mobsub.CLI) 
+   llMasmovilCLI    = fIsMasmovilCLI(Mobsub.CLI)   
+   llYoigoTenant    = (IF lcTenant = {&TENANT_YOIGO}    THEN TRUE ELSE FALSE)  
+   llMasmovilTenant = (IF lcTenant = {&TENANT_MASMOVIL} THEN TRUE ELSE FALSE).
 
 DISPLAY
    MobSub.MsSeq
@@ -228,7 +239,7 @@ WITH FRAME main.
 MAIN:
 REPEAT WITH FRAME main:
 
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       liOrderer 
       lcOutOper WHEN liOrderer EQ 2
@@ -236,7 +247,8 @@ REPEAT WITH FRAME main:
          VALIDATE(INPUT ldtKillDate = ? OR INPUT ldtKillDate >= TODAY,
          "Date other than EMPTY must not be earlier than today !")
       KillTime
-      liMsisdnStat   WHEN llYoigoCLI AND liOrderer EQ 5
+      lcTermType     WHEN fIsConvergenceTariff(Mobsub.clitype)
+      liMsisdnStat   WHEN ((llYoigoCLI AND llYoigoTenant) OR (llMasmovilCLI AND llMasmovilTenant)) AND liOrderer EQ 5
       liQuarTime     WHEN liOrderer EQ 5 AND liMsisdnStat EQ 4 AND
                           liQuarTime > -1
       liSimStat      WHEN liOrderer EQ 5
@@ -253,7 +265,7 @@ REPEAT WITH FRAME main:
       
       IF FRAME-FIELD = "liOrderer" AND KEYLABEL(LASTKEY) = "F9" THEN DO:
             
-         RUN h-tmscodes(INPUT "MsRequest",  /* TableName */
+         RUN Help/h-tmscodes.p(INPUT "MsRequest",  /* TableName */
                              "TermReason",  /* FieldName */
                              "Request",   /* GroupCode */
                        OUTPUT lcCode).
@@ -261,15 +273,14 @@ REPEAT WITH FRAME main:
 
          IF lcCode ne "" AND lcCode NE ? THEN DO:
                
-               IF INT(lcCode) = 3 AND NOT llYoigoCLI THEN DO:
+               IF INT(lcCode) = 3 AND ((NOT llYoigoCLI AND llYoigoTenant) OR (NOT llMasmovilCLI AND llMasmovilTenant)) THEN DO:
                   MESSAGE "Cannot choose Order cancellation with MNP numbers!"
                   VIEW-AS ALERT-BOX.
                   NEXT.
                END.
                
                liOrderer = INT(lcCode). 
-               lcOrderer = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                              "MsRequest",
+               lcOrderer = Func.Common:mTMSCodeName("MsRequest",
                               "TermReason",
                               lcCode).
            
@@ -277,14 +288,14 @@ REPEAT WITH FRAME main:
          END.   
 
          llHelp = TRUE. 
-         ehto = 9.
-         RUN ufkey.
+         Syst.Var:ehto = 9.
+         RUN Syst/ufkey.p.
          NEXT. 
       END.
       
       IF FRAME-FIELD = "liMsisdnStat" AND KEYLABEL(LASTKEY) = "F9" THEN DO:
          
-         RUN tmscodesel(INPUT "MSISDN",  
+         RUN Syst/tmscodesel.p(INPUT "MSISDN",  
                               "StatusCode",
                               "MSISDN",
                               "",
@@ -300,15 +311,15 @@ REPEAT WITH FRAME main:
             llHelp = TRUE. 
          END.   
          
-         ehto = 9.
-         RUN ufkey.
+         Syst.Var:ehto = 9.
+         RUN Syst/ufkey.p.
          NEXT. 
       
       END.
 
       IF FRAME-FIELD = "liSimStat" AND KEYLABEL(LASTKEY) = "F9" THEN DO:
             
-         RUN tmscodesel(INPUT "SIM",  
+         RUN Syst/tmscodesel.p(INPUT "SIM",  
                               "SimStat",
                               "SIM",
                               "",
@@ -324,13 +335,13 @@ REPEAT WITH FRAME main:
             llHelp = TRUE.
          END.   
 
-         ehto = 9.
-         RUN ufkey.
+         Syst.Var:ehto = 9.
+         RUN Syst/ufkey.p.
          NEXT. 
          
       END.
       
-      IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0  THEN DO WITH FRAME main:
+      IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0  THEN DO WITH FRAME main:
          PAUSE 0.
         
          IF FRAME-FIELD = "liOrderer" THEN DO: 
@@ -339,7 +350,7 @@ REPEAT WITH FRAME main:
                NEXT.
             END. 
 
-            IF INPUT liOrderer = 3 AND NOT llYoigoCLI THEN DO:
+            IF INPUT liOrderer = 3 AND ((NOT llYoigoCLI AND llYoigoTenant) OR (NOT llMasmovilCLI AND llMasmovilTenant)) THEN DO:
                MESSAGE "Cannot choose Order cancellation with MNP numbers!"
                VIEW-AS ALERT-BOX.
                NEXT-PROMPT liOrderer.
@@ -372,6 +383,7 @@ REPEAT WITH FRAME main:
                fInitialiseValues(
                   INPUT INPUT liOrderer,
                   INPUT llYoigoCLI,
+                  INPUT llMasmovilCLI,
                   OUTPUT liMsisdnStat,
                   OUTPUT liSimStat,
                   OUTPUT liQuarTime).
@@ -380,12 +392,10 @@ REPEAT WITH FRAME main:
                
                ASSIGN
                   ldtKillDate    = TODAY
-                  lcMsisdnStat   = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                           "MSISDN",
+                  lcMsisdnStat   = Func.Common:mTMSCodeName("MSISDN",
                            "StatusCode",
                            STRING(liMSISDNStat))
-                  lcSimStat      = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                           "SIM",
+                  lcSimStat      = Func.Common:mTMSCodeName("SIM",
                            "SimStat",
                            STRING(liSimStat)).
                
@@ -429,8 +439,7 @@ REPEAT WITH FRAME main:
                NEXT.
             END.
             
-            lcSimStat = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                        "SIM",
+            lcSimStat = Func.Common:mTMSCodeName("SIM",
                         "SimStat",
                         STRING(INPUT liSimStat)).
             DISPLAY lcSimStat WITH FRAME MAIN.
@@ -480,8 +489,7 @@ REPEAT WITH FRAME main:
                NEXT.
             END.
             
-            lcMsisdnStat = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                        "MSISDN",
+            lcMsisdnStat = Func.Common:mTMSCodeName("MSISDN",
                         "StatusCode",
                         STRING(INPUT liMSISDNStat)).
             DISPLAY lcMSISDNStat WITH FRAME MAIN.
@@ -555,6 +563,21 @@ REPEAT WITH FRAME main:
             END.
 
          END.
+         
+         ELSE IF FRAME-FIELD = "lcTermType" THEN DO:
+            IF lcTermType NE "Full" AND
+               lcTermType NE "Partial" THEN DO:
+               MESSAGE "Value must be Full or Partial!"
+                  VIEW-AS ALERT-BOX.
+               NEXT.
+            END.   
+            IF MobSub.msstatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE} AND
+               lcTermType EQ "Partial" THEN DO:
+               MESSAGE "Mobile already terminated, only Full possible"
+                  VIEW-AS ALERT-BOX.
+               NEXT.
+            END.
+         END.
 
          ELSE IF FRAME-FIELD = "liQuarTime" THEN DO:
             IF INPUT liQuarTime < 1 OR INPUT liQuarTime > 90 THEN DO:
@@ -575,19 +598,19 @@ REPEAT WITH FRAME main:
    REPEAT WITH FRAME main:
       
       ASSIGN
-         ufk = 0 
-         ehto = 0
-         ufk[1] = 7 
-         ufk[5] = 795
-         ufk[8] = 8.
+         Syst.Var:ufk = 0 
+         Syst.Var:ehto = 0
+         Syst.Var:ufk[1] = 7 
+         Syst.Var:ufk[5] = 795
+         Syst.Var:ufk[8] = 8.
 
-      RUN ufkey.
+      RUN Syst/ufkey.p.
       
-      IF toimi = 1 THEN NEXT  main.
+      IF Syst.Var:toimi = 1 THEN NEXT  main.
       
-      IF toimi = 8 THEN LEAVE main.
+      IF Syst.Var:toimi = 8 THEN LEAVE main.
       
-      IF TOIMI = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
          
          IF llPenalty THEN
             MESSAGE
@@ -602,7 +625,7 @@ REPEAT WITH FRAME main:
             Mobsub.MultiSimID > 0 THEN DO:
       
             FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSimID WHERE
-                       lbMobSub.Brand = gcBrand AND
+                       lbMobSub.Brand = Syst.Var:gcBrand AND
                        lbMobSub.MultiSimId = Mobsub.MultiSimId AND
                        lbMobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} AND
                        lbMobSub.Custnum = Mobsub.Custnum
@@ -625,7 +648,7 @@ REPEAT WITH FRAME main:
             END.
          END.
          ELSE IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                                CLIType.Brand = gcBrand AND
+                                CLIType.Brand = Syst.Var:gcBrand AND
                                 CLIType.CLIType = Mobsub.TariffBundle AND
                                 CLIType.LineType = {&CLITYPE_LINETYPE_MAIN})
                                 THEN DO:
@@ -633,12 +656,12 @@ REPEAT WITH FRAME main:
             llAddLineTerm = FALSE.
 
             FOR EACH bbMobSub NO-LOCK WHERE
-                     bbMobSub.Brand   = gcBrand AND
+                     bbMobSub.Brand   = Syst.Var:gcBrand AND
                      bbMobSub.InvCust = Mobsub.CustNum AND
                      bbMobSub.PayType = FALSE AND
                      bbMobSub.MsSeq NE Mobsub.MsSeq,
                FIRST CLIType NO-LOCK WHERE
-                     CLIType.Brand = gcBrand ANd
+                     CLIType.Brand = Syst.Var:gcBrand ANd
                      CLIType.CLIType = (IF Mobsub.TariffBundle > ""
                                         THEN Mobsub.TariffBundle
                                         ELSE Mobsub.CLIType) AND
@@ -665,8 +688,8 @@ REPEAT WITH FRAME main:
          END.
       
          liError = fDeleteMsValidation(Mobsub.MsSeq, 
-                             liOrderer, /* not yet known */
-                             OUTPUT lcError).
+                                       liOrderer, /* not yet known */
+                                       OUTPUT lcError).
          IF liError NE 0 THEN DO:
             MESSAGE lcError VIEW-AS ALERT-BOX ERROR.
             NEXT ACTION.
@@ -728,6 +751,7 @@ REPEAT WITH FRAME main:
                                     "4",
                                     lcUserCode,
                                     0,
+                                    lcTermType,
                                     OUTPUT ocResult).
                                     
       IF liMsReq = 0 THEN
@@ -750,7 +774,7 @@ REPEAT WITH FRAME main:
                12/31/2049).
 
          fAdditionalLineSTC(liMsReq,
-                            fMake2Dt(ldtKillDate + 1, 0),
+                            Func.Common:mMake2DT(ldtKillDate + 1, 0),
                             "DELETE").
          MESSAGE
             "Request ID for subscription termination is:" liMsReq

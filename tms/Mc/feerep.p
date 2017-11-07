@@ -7,10 +7,9 @@
   CHANGED ......: 
   Version ......: MTV3
   ------------------------------------------------------------------ */
-{testpaa.i}
-{excel.i}
-{accdatfi.i}
-{date.i}
+{Syst/testpaa.i}
+{Func/excel.i}
+{Ar/accdatfi.i}
 
 DEF VAR /* INPUT PARAMETER */ feedate1  AS DA  NO-UNDO.
 DEF VAR /* INPUT PARAMETER */ feedate2  AS DA  NO-UNDO.
@@ -24,7 +23,7 @@ assign
 
 
 output stream excel to value("/tmp/fees" + 
-                              fdatefmt(ldate,"yyyymmdd") + 
+                              Func.Common:mDateFmt(ldate,"yyyymmdd") + 
                               ".txt").
                                      
 DEF VAR xPrice      AS DE NO-UNDO.

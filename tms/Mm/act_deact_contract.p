@@ -7,18 +7,17 @@
   version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
-katun = "Cron".
-gcBrand = "1".
-{tmsconst.i}
-{ftransdir.i}
-{cparam2.i}
-{timestamp.i}
-{eventlog.i}
-{fmakemsreq.i}
-{mdub.i}
-{service.i}
-{fprepaidfee.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Func/fmakemsreq.i}
+{Func/mdub.i}
+{Func/service.i}
+{Func/fprepaidfee.i}
 {Mm/active_bundle.i}
 
 /* files and dirs */
@@ -35,9 +34,7 @@ DEF VAR lcOutDir         AS CHAR NO-UNDO.
 DEF VAR lcToday          AS CHAR NO-UNDO.
 DEF VAR lcTime           AS CHAR NO-UNDO.
 DEF VAR lcSep            AS CHAR NO-UNDO INIT ";".
-DEF VAR ldEndDate        AS DATE NO-UNDO.
 DEF VAR ldEndStamp       AS DEC  NO-UNDO.
-DEF VAR ldeActStamp      AS DEC  NO-UNDO.
 DEF VAR ldaActDate       AS DATE NO-UNDO.
 DEF VAR ldePMDUBFee      AS DEC  NO-UNDO.
 DEF VAR lcBONOContracts  AS CHAR NO-UNDO.
@@ -78,13 +75,18 @@ FUNCTION fHandleContract RETURNS CHAR(INPUT icContract   AS CHAR,
    DEF VAR llResult      AS LOG  NO-UNDO.
    DEF VAR liReturnValue AS INT  NO-UNDO.
    DEF VAR ldeFirstSecond AS DEC NO-UNDO. 
+   DEF VAR ldEndDate AS DATE NO-UNDO.
+   DEF VAR ldeActStamp      AS DEC  NO-UNDO.
 
    DEF BUFFER bMsRequest FOR MsRequest.
 
    /* Check if subscription type is not compatible with bundle */
    CASE icAction:
       WHEN "1" THEN DO:
-         IF fMatrixAnalyse(gcBrand,
+
+         ldeActStamp = Func.Common:mMakeTS().
+
+         IF fMatrixAnalyse(Syst.Var:gcBrand,
                            "PERCONTR",
                            "PerContract;SubsTypeTo",
                            icContract + ";" + MobSub.CLIType,
@@ -92,7 +94,7 @@ FUNCTION fHandleContract RETURNS CHAR(INPUT icContract   AS CHAR,
             RETURN "ERROR:Contract is not allowed for this subscription type".
 
          IF LOOKUP(icContract,lcBONOContracts) > 0 AND
-            NOT fAllowMDUBActivation() THEN
+            NOT fAllowMDUBActivation("") THEN
             RETURN "ERROR:Contract activation is not allowed".
 
          IF icContract EQ "BONO_VOIP" AND
@@ -108,7 +110,7 @@ FUNCTION fHandleContract RETURNS CHAR(INPUT icContract   AS CHAR,
          /* YPR */
          IF icContract EQ "VOICE3000" THEN DO:
             
-            ldeFirstSecond = fMake2Dt(DATE(MONTH(TODAY),1,YEAR(TODAY)),0).
+            ldeFirstSecond = Func.Common:mMake2DT(DATE(MONTH(TODAY),1,YEAR(TODAY)),0).
 
             FIND FIRST MsOwner NO-LOCK USE-INDEX MsSeq WHERE
                        MsOwner.MsSeq = Mobsub.MsSeq NO-ERROR.
@@ -128,7 +130,7 @@ FUNCTION fHandleContract RETURNS CHAR(INPUT icContract   AS CHAR,
       END. /* WHEN "1" THEN DO: */
       WHEN "0" THEN DO:
          IF LOOKUP(icContract,lcBONOContracts) > 0 THEN DO:
-            IF NOT fAllowMDUBTermination() THEN
+            IF NOT fAllowMDUBTermination("") THEN
                RETURN "ERROR:Contract termination is not allowed".
             /* Ongoing BTC with upgrade upsell */
             ELSE IF fOngoingBTC(INPUT MobSub.MsSeq,
@@ -142,11 +144,12 @@ FUNCTION fHandleContract RETURNS CHAR(INPUT icContract   AS CHAR,
                                      ldNextMonthActStamp,
                                      icContract) = "" THEN
             RETURN "ERROR:Contract termination is not allowed".
+   
+         ASSIGN ldEndDate   = Func.Common:mLastDayOfMonth(TODAY)
+                ldeActStamp = Func.Common:mMake2DT(ldEndDate,86399).
+
       END. /* WHEN "0" THEN DO: */
    END CASE. /* CASE icAction: */
-
-   IF icAction = "0" THEN
-      ldeActStamp = fMake2Dt(fLastDayOfMonth(ldaActDate),86399).
 
    liRequest = fPCActionRequest(MobSub.MsSeq,
                                 icContract,
@@ -160,6 +163,7 @@ FUNCTION fHandleContract RETURNS CHAR(INPUT icContract   AS CHAR,
                                 "",
                                 0,
                                 0,
+                                "",
                                 OUTPUT lcResult).
    
    IF liRequest = 0 THEN
@@ -183,6 +187,9 @@ FUNCTION fHandleService RETURNS CHAR(INPUT icService AS CHAR,
    DEF VAR liReq       AS INT  NO-UNDO.
    DEF VAR lcError     AS CHAR NO-UNDO.
    DEF VAR lcParam     AS CHAR NO-UNDO.
+
+   DEFINE VARIABLE ldeActStamp AS DECIMAL NO-UNDO. 
+   ldeActStamp = Func.Common:mMakeTS().
 
    CASE icAction:
       WHEN "1" THEN DO:
@@ -265,7 +272,7 @@ REPEAT:
    
       /* To prevent duplicate file handling (YTS-5280) */
       IF CAN-FIND (FIRST ActionLog NO-LOCK WHERE
-                         ActionLog.Brand = gcBrand AND
+                         ActionLog.Brand = Syst.Var:gcBrand AND
                          ActionLog.TableName = "Cron" AND
                          ActionLog.KeyValue = lcFileName AND
                          ActionLog.ActionID = "ContractBOB" AND
@@ -274,14 +281,14 @@ REPEAT:
       DO TRANS:
          CREATE ActionLog.
          ASSIGN 
-            ActionLog.Brand        = gcBrand   
+            ActionLog.Brand        = Syst.Var:gcBrand   
             ActionLog.TableName    = "Cron"  
             ActionLog.KeyValue     = lcFileName
             ActionLog.ActionID     = "ContractBOB"
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
                                      MONTH(TODAY)
             ActionLog.ActionStatus = 0
-            ActionLog.ActionTS     = fMakeTS().
+            ActionLog.ActionTS     = Func.Common:mMakeTS().
       END.
 
       INPUT STREAM sin FROM VALUE(lcInputFile).
@@ -292,12 +299,6 @@ REPEAT:
                lcToday + "_" + lcTime + ".log".
    OUTPUT STREAM sLog TO VALUE(lcLogFile).
    fBatchLog("START", lcLogFile).
-
-   ASSIGN ldEndDate   = fLastDayOfMonth(TODAY)
-          ldEndStamp  = fMake2Dt(ldEndDate,86399)
-          ldeActStamp = fMakeTS().
-
-   fSplitTs(ldeActStamp,OUTPUT ldaActDate,OUTPUT liActTime).
 
    LINE_LOOP:
    REPEAT:
@@ -326,7 +327,7 @@ REPEAT:
          ActionLog.ActionChar   = "Read: " + STRING(liRead) + 
                                   " Errors: " + STRING(liErrors) + 
                                   " Succesful: " + STRING(liRead - liErrors) + 
-                                  CHR(10) + "Finished: " + fTS2HMS(fMakeTS())
+                                  CHR(10) + "Finished: " + Func.Common:mTS2HMS(Func.Common:mMakeTS())
          ActionLog.ActionStatus = 3.
    END.
    
@@ -359,7 +360,7 @@ PROCEDURE pCheckContract:
 
    /* check invoice */
    FIND MobSub WHERE 
-        MobSub.Brand = gcBrand AND
+        MobSub.Brand = Syst.Var:gcBrand AND
         MobSub.CLI   = lcCLI NO-LOCK NO-ERROR.
    IF NOT AVAIL MobSub THEN RETURN "ERROR:Invalid MSISDN".
 
@@ -368,7 +369,7 @@ PROCEDURE pCheckContract:
    IF NOT AVAIL Customer THEN RETURN "ERROR:Customer not found".
 
    IF LOOKUP(lcContract,lcBONOContracts +
-             ",BONO_VOIP,VOICE3000,VOICE100") > 0 THEN DO:
+             ",BONO_VOIP,VOICE3000,VOICE100,VOICE200,VOICE200B") > 0 THEN DO:
       lcError = fHandleContract(lcContract,lcInputAction).
    END. /* IF LOOKUP(lcContract,lcBONOContracts */
    ELSE IF LOOKUP(lcContract,"BB,LTE") > 0 THEN

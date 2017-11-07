@@ -8,7 +8,7 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF VAR lcMenuc   AS CHAR  NO-UNDO EXTENT 6 FORMAT "X(35)". 
 DEF VAR liReqType AS INT   NO-UNDO EXTENT 6.
@@ -19,7 +19,7 @@ DEF VAR lcLetters AS CHAR  NO-UNDO.
 lcLetters = "A,B,C,D,E,F,G,H,I,J,K,L,M".
 
 FOR EACH RequestType NO-LOCK WHERE
-         RequestType.Brand = gcBrand AND
+         RequestType.Brand = Syst.Var:gcBrand AND
          RequestType.ReqType >= 20:
 
    IF LOOKUP(STRING(RequestType.ReqType),"20,22,23,31,34") > 0 
@@ -36,10 +36,10 @@ ASSIGN liMenu          = liMenu + 1
 PAUSE 0.
 
 DO WHILE TRUE:
-   ASSIGN ufk    = 0 
-          ufk[8] = 8 
-          ehto   = 3. 
-   RUN ufkey. 
+   ASSIGN Syst.Var:ufk    = 0 
+          Syst.Var:ufk[8] = 8 
+          Syst.Var:ehto   = 3. 
+   RUN Syst/ufkey.p. 
 
    DISPLAY
       lcMenuc
@@ -54,7 +54,7 @@ DO WHILE TRUE:
 
    ELSE IF FRAME-INDEX >= 1 AND FRAME-INDEX <= liMenu - 1 
    THEN DO:
-      RUN msreqstat (liReqType[FRAME-INDEX],
+      RUN Mm/msreqstat.p (liReqType[FRAME-INDEX],
                      0).
    END.
 

@@ -1,5 +1,5 @@
-{testpaa.i}
-{cparam2.i}
+{Syst/testpaa.i}
+{Func/cparam2.i}
 
 DEFINE VARIABLE lcInvoiceStatusDir     AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcInvoiceStatisticsDir AS CHARACTER NO-UNDO.
@@ -29,7 +29,7 @@ FUNCTION fCheckTMSParam RETURN LOGICAL
    IF pcoParamValue = ? THEN RETURN FALSE. ELSE RETURN TRUE.
 END.
 
-katun = "eka".
+Syst.Var:katun = "eka".
 
 IF NOT fCheckTMSParam(OUTPUT lcInvoiceStatusDir    , "invoicestates") 
    THEN RETURN.
@@ -67,13 +67,13 @@ WITH
 
 MainLoop:
 REPEAT WITH FRAME Main:
-   ASSIGN ufk = 0
-          ufk[1] = 7
-          ufk[4] = 9812
-          ufk[5] = 9813
-          ufk[8] = 8
-          ehto = 3.
-   RUN ufkey.
+   ASSIGN Syst.Var:ufk = 0
+          Syst.Var:ufk[1] = 7
+          Syst.Var:ufk[4] = 9812
+          Syst.Var:ufk[5] = 9813
+          Syst.Var:ufk[8] = 8
+          Syst.Var:ehto = 3.
+   RUN Syst/ufkey.p.
    UPDATE lcMSISDNFile GO-ON(F1 F4 F5)
    WITH FRAME MAIN EDITING:
       READKEY.
@@ -84,7 +84,7 @@ REPEAT WITH FRAME Main:
          cKeyLabel = CAPS(cKeyLabel).
          lKeybFunction = TRUE.
       END.
-      IF NOT lKeybFunction AND LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN 
+      IF NOT lKeybFunction AND LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN 
       DO:
          APPLY LASTKEY.
       END.
@@ -92,17 +92,17 @@ REPEAT WITH FRAME Main:
       DO:
           IF cKeyLabel = "F1" THEN
           DO:
-            toimi = 1.
+            Syst.Var:toimi = 1.
             lFunctionKey = TRUE.
           END.
           ELSE IF cKeyLabel = "F4" THEN
           DO:
-             toimi = 4.
+             Syst.Var:toimi = 4.
              lFunctionKey = TRUE.
           END.
           ELSE IF cKeyLabel = "F5" THEN
           DO:
-             toimi = 5.
+             Syst.Var:toimi = 5.
              lFunctionKey = TRUE.
           END.
           ELSE IF cKeyLabel = "F8" THEN
@@ -112,7 +112,7 @@ REPEAT WITH FRAME Main:
           APPLY LASTKEY.
           lFunctionKey = FALSE.
       END.
-      ELSE IF LOOKUP(KEYLABEL(LASTKEY), poisnap) > 0 THEN
+      ELSE IF LOOKUP(KEYLABEL(LASTKEY), Syst.Var:poisnap) > 0 THEN
       DO WITH FRAME Main:
          PAUSE 0.
          IF FRAME-FIELD = "lcMSISDNFile" AND lcMSISDNFile <> "" THEN
@@ -131,7 +131,7 @@ REPEAT WITH FRAME Main:
    END. /* EDITING */
    ACTION:
    REPEAT WITH FRAME Main:
-      IF toimi <> 0 THEN
+      IF Syst.Var:toimi <> 0 THEN
       DO:
          DEFINE VARIABLE lLeaveAction AS LOGICAL NO-UNDO. 
          DEFINE VARIABLE lLeaveProgram AS LOGICAL NO-UNDO. 
@@ -148,11 +148,11 @@ REPEAT WITH FRAME Main:
       APPLY LASTKEY.
    END. /* Action */
 
-   RUN newcopies2(
+   RUN Inv/newcopies2.p(
        lcMSISDNDir, lcInvoiceStatusDir, lcInvoiceStatisticsDir,
        lcTmpDir, lcInvoiceDir,
        lcMSISDNFile, 
-       toimi = 5,
+       Syst.Var:toimi = 5,
        OUTPUT iCountCombinations, OUTPUT iCountCLI, OUTPUT iCountMonths ).
    DISP iCountCombinations iCountCLI iCountMonths WITH FRAME Main.
 
@@ -168,7 +168,7 @@ PROCEDURE pDoAction:
      plLeaveAction = FALSE
      plNextMain = FALSE
      plLeaveProgram = FALSE.
-   IF toimi = 1 THEN
+   IF Syst.Var:toimi = 1 THEN
    DO:
       DEFINE VARIABLE iCountFiles AS INTEGER NO-UNDO. 
       DEFINE VARIABLE cFile AS CHARACTER NO-UNDO. 
@@ -182,7 +182,7 @@ PROCEDURE pDoAction:
 
       IF iCountFiles > 0 THEN
       DO:
-         RUN filebrowser(lcMSISDNDir).
+         RUN Syst/filebrowser.p(lcMSISDNDir).
          lcMSISDNFile = RETURN-VALUE.
          DISP lcMSISDNFile WITH FRAME Main.
          plNextMain = TRUE.
@@ -198,13 +198,13 @@ PROCEDURE pDoAction:
       END.
    END.
 
-   IF toimi = 8 THEN
+   IF Syst.Var:toimi = 8 THEN
    DO:
       plLeaveProgram = TRUE.
       RETURN.
    END.
 
-   IF toimi = 5 OR toimi = 4 THEN
+   IF Syst.Var:toimi = 5 OR Syst.Var:toimi = 4 THEN
    DO:
       IF lcMsisdnFile = "" THEN
       DO:

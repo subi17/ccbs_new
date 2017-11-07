@@ -1,4 +1,3 @@
-{timestamp.i}
 
 def var ldadate as date no-undo.
 def var litime as int no-undo.
@@ -14,7 +13,7 @@ for each mobcdr use-index date where
 
    i = i + 1.
          
-   fsplitts(mobcdr.readints,
+   Func.Common:mSplitTS(mobcdr.readints,
             output ldadate,
             output litime).
    mobcdr.readdate = ldadate.
@@ -35,7 +34,7 @@ for each prepcdr use-index date where
 
    i = i + 1.
          
-   fsplitts(prepcdr.readints,
+   Func.Common:mSplitTS(prepcdr.readints,
             output ldadate,
             output litime).
    prepcdr.readdate = ldadate.
@@ -56,7 +55,7 @@ for each errorcdr use-index date where
 
    i = i + 1.
          
-   fsplitts(errorcdr.readints,
+   Func.Common:mSplitTS(errorcdr.readints,
             output ldadate,
             output litime).
    errorcdr.readdate = ldadate.
@@ -77,7 +76,7 @@ for each fraudcdr use-index date where
 
    i = i + 1.
          
-   fsplitts(fraudcdr.readints,
+   Func.Common:mSplitTS(fraudcdr.readints,
             output ldadate,
             output litime).
    fraudcdr.readdate = ldadate.

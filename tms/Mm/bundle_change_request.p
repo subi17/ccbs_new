@@ -6,22 +6,21 @@
   CREATED ......: 10.11.10   
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{tmsconst.i}
-{timestamp.i}
-{fmakemsreq.i}
-{service.i}
-{msreqfunc.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/service.i}
+{Func/msreqfunc.i}
 {Mm/active_bundle.i}
-{rerate_request.i}
-{fsubstermreq.i}
-{fsendsms.i}
-{fbtc.i}
-{mnpoutchk.i}
-{main_add_lines.i}
-{invoicetarget.i}
-{dpmember.i}
+{Rate/rerate_request.i}
+{Func/fsubstermreq.i}
+{Func/fsendsms.i}
+{Func/fbtc.i}
+{Mnp/mnpoutchk.i}
+{Func/main_add_lines.i}
+{Mc/invoicetarget.i}
+{Mc/dpmember.i}
 
 DEF INPUT  PARAMETER iiMSrequest AS INT  NO-UNDO.
 
@@ -39,9 +38,9 @@ DEF TEMP-TABLE ttAdditionalSIM NO-UNDO
     FIELD CLI      AS CHAR.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMsOwner AS HANDLE NO-UNDO.
    lhMsOwner = BUFFER MsOwner:HANDLE.
@@ -71,13 +70,13 @@ IF NOT AVAILABLE MobSub THEN DO:
    RETURN "ERROR:Subscription not available".
 END. /* IF NOT AVAILABLE MobSub THEN DO: */
 
-fSplitTS(MsRequest.ActStamp,
+Func.Common:mSplitTS(MsRequest.ActStamp,
          OUTPUT ldaActivationDate,
          OUTPUT liActivationTime).
 
 IF liActivationTime > 0 THEN 
-   ldEndStamp = fMake2DT(ldaActivationDate,liActivationTime - 1).
-ELSE ldEndStamp = fMake2DT(ldaActivationDate - 1,86399).
+   ldEndStamp = Func.Common:mMake2DT(ldaActivationDate,liActivationTime - 1).
+ELSE ldEndStamp = Func.Common:mMake2DT(ldaActivationDate - 1,86399).
 
 CASE liOrigStatus:
 WHEN {&REQUEST_STATUS_NEW} THEN DO:
@@ -120,7 +119,7 @@ PROCEDURE pBundleChange:
       RETURN "ERROR:Not a bundle".
 
    FIND FIRST DayCampaign WHERE
-              DayCampaign.Brand   = gcBrand AND
+              DayCampaign.Brand   = Syst.Var:gcBrand AND
               DayCampaign.DCEvent = MsRequest.ReqCParam1 AND
               LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 
       NO-LOCK NO-ERROR.
@@ -128,7 +127,7 @@ PROCEDURE pBundleChange:
       RETURN "ERROR:Current bundle is unknown".
 
    FIND FIRST DayCampaign WHERE
-              DayCampaign.Brand   = gcBrand AND
+              DayCampaign.Brand   = Syst.Var:gcBrand AND
               DayCampaign.DCEvent = MsRequest.ReqCParam2 AND
               LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0 
       NO-LOCK NO-ERROR.
@@ -156,6 +155,7 @@ PROCEDURE pBundleChange:
                                   "",
                                   0,
                                   0,
+                                  "",
                                   OUTPUT lcError).
    IF liTerminate = 0 OR liTerminate = ? THEN 
       RETURN "ERROR: Bundle termination request creation failed; " + 
@@ -175,6 +175,7 @@ PROCEDURE pBundleChange:
                                  "",
                                  0,
                                  0,
+                                 "",
                                  OUTPUT lcError).
    IF liActivate = 0 THEN 
       RETURN "ERROR: Bundle activation request creation failed; " + 
@@ -223,7 +224,7 @@ PROCEDURE pFinalize:
       RUN pUpdateSubscription.
 
    /* re-activate/terminate service packages etc. */
-   RUN requestaction_exec.p(MsRequest.MsRequest,
+   RUN Mm/requestaction_exec.p(MsRequest.MsRequest,
                             MobSub.CLIType,       /* CLI Type */
                             0,                    /* order */
                             MsRequest.ActStamp,
@@ -243,7 +244,7 @@ PROCEDURE pFinalize:
    fReqStatus(2,"").
 
    /* Send SMS "STC_DONE" for IPL -> IPL and Flat Tariffs */
-   RUN requestaction_sms.p(INPUT MsRequest.MsRequest,
+   RUN Mm/requestaction_sms.p(INPUT MsRequest.MsRequest,
                            INPUT MobSub.CLIType,
                            INPUT {&REQUEST_SOURCE_BTC}).
 
@@ -267,8 +268,7 @@ PROCEDURE pFinalize:
                         MsRequest.ReqCParam2,
                         OUTPUT lcError).
       IF lcError NE "" THEN 
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(MobSub.MsSeq),
                           MobSub.CustNum,
                           "Bundle type change",
@@ -387,7 +387,7 @@ PROCEDURE pMultiSimBTC:
            Mobsub.MultiSimID > 0) THEN RETURN.
 
    FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-              lbMobSub.Brand  = gcBrand AND
+              lbMobSub.Brand  = Syst.Var:gcBrand AND
               lbMobSub.MultiSimID = MobSub.MultiSimID AND
               lbMobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} AND
               lbMobSub.Custnum = MobSub.Custnum NO-ERROR.
@@ -403,11 +403,11 @@ PROCEDURE pMultiSimBTC:
 
    CREATE ActionLog.
    ASSIGN
-      ActionLog.ActionTS     = fMakeTS()
-      ActionLog.Brand        = gcBrand
+      ActionLog.ActionTS     = Func.Common:mMakeTS()
+      ActionLog.Brand        = Syst.Var:gcBrand
       ActionLog.TableName    = "Customer"
       ActionLog.KeyValue     = STRING(MobSub.Custnum)
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.Var:katun
       ActionLog.ActionID     = "MultiSIMTermination"
       ActionLog.ActionPeriod = YEAR(idaActivationDate - 1) * 100 +
                                MONTH(idaActivationDate - 1)
@@ -471,11 +471,11 @@ PROCEDURE pActivateDSS2:
 
    /* end old bundles to the end of previous month */
    IF DAY(idActDate) = 1 THEN
-      ASSIGN ldeEndStamp = fMake2DT(idActDate - 1,86399)
+      ASSIGN ldeEndStamp = Func.Common:mMake2DT(idActDate - 1,86399)
              ldEndDate   = (idActDate - 1).
    ELSE
-      ASSIGN ldEndDate   = fLastDayOfMonth(idActDate)
-             ldeEndStamp = fMake2DT(ldEndDate,86399).
+      ASSIGN ldEndDate   = Func.Common:mLastDayOfMonth(idActDate)
+             ldeEndStamp = Func.Common:mMake2DT(ldEndDate,86399).
 
    /* If ongoing DSS termination request then return */
    IF fOngoingDSSTerm(INPUT MobSub.CustNum,
@@ -506,8 +506,7 @@ PROCEDURE pActivateDSS2:
                                  OUTPUT lcError).
          IF liRequest = 0 THEN
             /* write possible error to a memo */
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                              STRING(MobSub.MsSeq),
                              MobSub.Custnum,
                              "DSS2 activation failed",
@@ -559,10 +558,10 @@ PROCEDURE pCloseContracts:
                                    "", 
                                    0,
                                    0,
+                                   "",
                                    OUTPUT lcError).
       IF liRequest = 0 THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(MsRequest.MsSeq),
                           MsRequest.CustNum,
                           "Bundle type change",
@@ -612,12 +611,11 @@ PROCEDURE pCloseContracts:
 
    FOR EACH ttContract:
       FIND FIRST DayCampaign WHERE
-                 DayCampaign.Brand   = gcBrand AND
+                 DayCampaign.Brand   = Syst.Var:gcBrand AND
                  DayCampaign.DCEvent = ttContract.DCEvent AND
                  DayCampaign.ValidTo >= Today NO-LOCK NO-ERROR.
       IF NOT AVAIL DayCampaign THEN DO:
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(Mobsub.MsSeq),
                           Mobsub.CustNum,
                           "Periodical Contract",
@@ -639,11 +637,11 @@ PROCEDURE pCloseContracts:
                        "",
                        0,
                        0,
+                       "",
                        OUTPUT lcError).
       IF liRequest = 0 THEN
          /* Write memo */
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(MobSub.MsSeq),
                           MobSub.CustNum,
                           "Periodical Contract",
@@ -671,7 +669,7 @@ PROCEDURE pUpdateSubscription:
    
       CREATE bOwner.
       BUFFER-COPY MsOwner EXCEPT TsBegin TsEnd CLIEvent TO bOwner.
-      ASSIGN bOwner.TsBegin      = fSecOffSet(MsOwner.TsEnd,1)
+      ASSIGN bOwner.TsBegin      = Func.Common:mSecOffSet(MsOwner.TsEnd,1)
              bOwner.TsEnd        = 99999999.99999
              bOwner.TariffBundle = MsRequest.ReqCParam2.
 
@@ -682,7 +680,7 @@ PROCEDURE pUpdateSubscription:
          
       IF llDoEvent THEN fMakeCreateEvent((BUFFER bOwner:HANDLE),
                                          "",
-                                         katun,
+                                         Syst.Var:katun,
                                          "").
 
       RELEASE bOwner.

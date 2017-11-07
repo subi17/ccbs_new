@@ -12,10 +12,10 @@
   VERSION ......: M15 
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{finvnum.i}
-{billrund.i NEW}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/finvnum.i}
+{Inv/billrund.i NEW}
 
 def var invDte     as date format "99-99-99"     no-undo init today.
 def var lasno      as char format "x(12)"        no-undo.
@@ -25,8 +25,8 @@ def var b-acc      as lo                         no-undo.
 def var ciperiod   as i                          no-undo.
 def var i          as int  format "zzzzzzz9"     no-undo.
 
-DEF VAR asno1      AS INT  FORMAT ">>>>>>>9" NO-UNDO.
-DEF VAR asno2      AS INT  FORMAT ">>>>>>>9" NO-UNDO.
+DEF VAR asno1      AS INT  FORMAT ">>>>>>>>9" NO-UNDO.
+DEF VAR asno2      AS INT  FORMAT ">>>>>>>>9" NO-UNDO.
 def var atpvm1     as date format "99-99-99" no-undo.
 def var atpvm2     as date format "99-99-99" no-undo.
 def var mininv     like InvGroup.mininv   no-undo.
@@ -49,7 +49,7 @@ DEF VAR lcPrefix   AS CHAR NO-UNDO.
 
 DEF BUFFER bEventCust FOR Customer.
 
-{tmsparam.i oh-tuasno  RETURN}. unknown  = tmsparam.IntVal.
+{Func/tmsparam.i oh-tuasno  RETURN}. unknown  = tmsparam.IntVal.
 
 /* default values from cparam */
 defcurr  = fCParamC("DefCurrency").
@@ -66,14 +66,14 @@ if not avail currency OR defcurr = ? OR defcurr = "" then do:
 end.
 
 def var pHandle   as handle no-undo.
-run lamupers persistent set pHandle.
+RUN Inv/lamupers.p persistent set pHandle.
 
 form
    skip(17)
 with
-   overlay title color value(ctc)
-   " " + ynimi + " BILLING CLEANING RUN " + string(pvm,"99-99-99") + " "
-   color value(cfc) width 80
+   overlay title color value(Syst.Var:ctc)
+   " " + Syst.Var:ynimi + " BILLING CLEANING RUN " + string(TODAY,"99-99-99") + " "
+   color value(Syst.Var:cfc) width 80
    frame taka.
 
 form
@@ -115,21 +115,21 @@ form
      format "Killed/All"
      SKIP
 
-with title color value(ctc) " CRITERIA FOR CREATING INVOICES " side-labels
-   color value(cfc) row 2 centered overlay frame rajat.
+with title color value(Syst.Var:ctc) " CRITERIA FOR CREATING INVOICES " side-labels
+   color value(Syst.Var:cfc) row 2 centered overlay frame rajat.
 
 form
     " Consecutive invoice number: " lasno  no-label           skip
     " Minimum invoicing amount .: " mininv no-label           skip
 with
-   title color value (ctc) " INVOICE GROUP DATA " color value(cfc)
+   title color value (Syst.Var:ctc) " INVOICE GROUP DATA " color value(Syst.Var:cfc)
    overlay centered row 15 frame lasno.
 
-cfc = "sel". run ufcolor. ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. Syst.Var:ccc = Syst.Var:cfc.
 view frame taka. pause 0 no-message.
 
-cfc = "lis". run ufcolor.
-ehto = 9. run ufkey.
+Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
+Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
 ASSIGN
 atpvm2 = date(month(today),1,year(today)) - 1
@@ -140,12 +140,12 @@ llKilled = TRUE.
 IF asno1 = 0 THEN 
 ASSIGN
    asno1  = unknown + 1
-   asno2  = 99999999.
+   asno2  = 999999999.
 
 ELSE DO:
    FIND Customer WHERE Customer.CustNum = asno1 NO-LOCK NO-ERROR.
    FIND InvGroup WHERE 
-        InvGroup.Brand    = gcBrand AND
+        InvGroup.Brand    = Syst.Var:gcBrand AND
         InvGroup.InvGroup = Customer.InvGroup NO-LOCK NO-ERROR.
    IF NOT AVAIL InvGroup THEN DO:
       MESSAGE
@@ -185,7 +185,7 @@ toimi:
    repeat with frame valinta on endkey undo toimi, return:
       if kysy_rajat then do:
          /* We ask the limits */
-         ehto = 9. run ufkey.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          update
             InvGroup
             asno1 asno2   validate(input asno2  >= input asno1,
@@ -199,8 +199,8 @@ toimi:
          liMinDays
          llKilled
          with frame rajat editing :
-            readkey. nap = keylabel(lastkey).
-            if lookup(nap,poisnap) > 0 then do:
+            readkey. Syst.Var:nap = keylabel(lastkey).
+            if lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 then do:
                hide message no-pause.
 
                if frame-field = "InvGroup" then do:
@@ -213,7 +213,7 @@ toimi:
                   end.
 
                   find InvGroup where 
-                       InvGroup.Brand    = gcBrand AND
+                       InvGroup.Brand    = Syst.Var:gcBrand AND
                        InvGroup.InvGroup = InvGroup
                   no-lock no-error.
                   if not avail InvGroup then do:
@@ -280,7 +280,7 @@ toimi:
                END.
 
                ELSE IF FRAME-FIELD = "ciperiod" THEN DO:
-                  RUN uperch(INPUT FRAME rajat ciperiod,output i).
+                  RUN Syst/uperch.p(INPUT FRAME rajat ciperiod,output i).
                   IF i > 0 THEN NEXT.
 
                END.
@@ -295,16 +295,16 @@ toimi:
          kysy_rajat = false.
       end.
 
-      assign ufk = 0 ufk[1] = 132 ufk[2] = 0
-                     ufk[4] = 0 ufk[5] = 795
-                     ufk[8] = 8 ehto = 0.
-      run ufkey.
-      if toimi = 1 then do:
+      assign Syst.Var:ufk = 0 Syst.Var:ufk[1] = 132 Syst.Var:ufk[2] = 0
+                     Syst.Var:ufk[4] = 0 Syst.Var:ufk[5] = 795
+                     Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
+      RUN Syst/ufkey.p.
+      if Syst.Var:toimi = 1 then do:
          kysy_rajat = true.
          next toimi.
       end.
 
-      if toimi = 5 then do:
+      if Syst.Var:toimi = 5 then do:
 
          /* reject if lanro is ZERO */
          if lasno = "" then do:
@@ -317,14 +317,14 @@ toimi:
 
       end.
 
-      if toimi = 8 then do:
+      if Syst.Var:toimi = 8 then do:
          hide message no-pause.
          hide frame rajat no-pause.
          hide frame taka no-pause.
          return.
       end.
 
-   end. /* toimi */
+   end. /* Syst.Var:toimi */
 
 hide frame lasno no-pause.
 
@@ -332,14 +332,14 @@ hide frame lasno no-pause.
 message "Sorting customers and calls ...".
 XCUST:
 for each Customer   no-lock  where
-         Customer.Brand     = gcBrand  AND
+         Customer.Brand     = Syst.Var:gcBrand  AND
          Customer.CustNum  >= asno1    and
          Customer.CustNum  <= asno2    and
          Customer.CustNum  >  unknown  and
          Customer.InvGroup  = InvGroup,
 
    first InvGroup  no-lock where
-         InvGroup.Brand    = gcBrand AND
+         InvGroup.Brand    = Syst.Var:gcBrand AND
          InvGroup.InvGroup = Customer.InvGroup.
 
    /* only customers with killed subscriptions */

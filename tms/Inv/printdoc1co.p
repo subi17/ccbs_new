@@ -9,8 +9,8 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEFINE INPUT  PARAMETER icInvGrp       AS CHAR NO-UNDO.
 DEFINE INPUT  PARAMETER iiCustNum1     AS INT  NO-UNDO.
@@ -33,7 +33,7 @@ DEF VAR lcDate      AS CHAR NO-UNDO.
 DEF VAR llSeparate  AS LOG  NO-UNDO.
 DEF VAR lcBillRun   AS CHAR NO-UNDO. 
 
-{printdoc1tt.i}
+{Inv/printdoc1tt.i}
 
 
 FUNCTION fMakeTemp RETURNS LOGICAL.
@@ -88,7 +88,7 @@ IF NUM-ENTRIES(icFileType,"|") > 1 THEN ASSIGN
 
 IF icInvID1 = icInvID2 THEN 
 FOR FIRST Invoice NO-LOCK WHERE
-          Invoice.Brand    = gcBrand AND
+          Invoice.Brand    = Syst.Var:gcBrand AND
           Invoice.ExtInvID = icInvID1 AND
           Invoice.DelType  = iiDelType,
     FIRST Customer OF Invoice NO-LOCK:
@@ -102,7 +102,7 @@ END.
 
 ELSE IF iiInvDate NE ? THEN 
 FOR EACH Invoice NO-LOCK WHERE    
-         Invoice.Brand    = gcBrand    AND
+         Invoice.Brand    = Syst.Var:gcBrand    AND
          Invoice.InvDate  = iiInvDate  AND
          Invoice.ExtInvID >= icInvID1  AND      
          Invoice.ExtInvID <= icInvID2  AND   
@@ -129,7 +129,7 @@ END.
 
 ELSE 
 FOR EACH Invoice NO-LOCK WHERE               
-         Invoice.Brand  = gcBrand      AND
+         Invoice.Brand  = Syst.Var:gcBrand      AND
          Invoice.ExtInvID >= icInvID1  AND      
          Invoice.ExtInvID <= icInvID2  AND   
          Invoice.CustNum >= iiCustNum1 AND
@@ -162,8 +162,7 @@ ELSE icFile = REPLACE(icFile,"#IGRP","ALL").
 /* invoice date to file name */   
 IF ldtNameDate NE ? THEN DO:
    
-   lcDate = DYNAMIC-FUNCTION("fDateFmt" IN ghFunc1,
-                             ldtNameDate,
+   lcDate = Func.Common:mDateFmt(ldtNameDate,
                              "yyyymmdd").
    icFile = REPLACE(icFile,"#IDATE",lcDate).
 END.
@@ -190,7 +189,7 @@ WHEN "Doc1" OR WHEN "" THEN
                   OUTPUT oiInvCount). 
 
 WHEN "XML" THEN 
-   RUN invoice_xml (INPUT-OUTPUT TABLE ttInvoice,
+   RUN Inv/invoice_xml.p (INPUT-OUTPUT TABLE ttInvoice,
                     ldtNameDate,
                     oiInvCount,
                     llSeparate,

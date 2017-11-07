@@ -1,7 +1,7 @@
 DEF VAR lcFolder AS CHAR NO-UNDO FORMAT "x(40)".
-DEF VAR lcInputFile AS CHAR NO-UNDO init "config_tables.txt" FORMAT "x(40)".
+DEF VAR lcInputFile AS CHAR NO-UNDO init "utilities/tabledump/config_tables.txt" FORMAT "x(40)".
 
-lcFolder = "./config_tables/".
+lcFolder = "utilities/tabledump/config_tables/".
 
 UPDATE 
     lcInputFile LABEL "Input file   " SKIP
@@ -15,6 +15,8 @@ if FILE-INFO:FILE-TYPE EQ ? OR not FILE-INFO:FILE-TYPE begins "D" then do:
    RETURN.
 end.
 
+lcFolder = FILE-INFO:FULL-PATHNAME.
+
 FILE-INFO:FILE-NAME = lcInputFile.
 
 if FILE-INFO:FILE-TYPE EQ ? OR not FILE-INFO:FILE-TYPE begins "F" then do:
@@ -22,7 +24,7 @@ if FILE-INFO:FILE-TYPE EQ ? OR not FILE-INFO:FILE-TYPE begins "F" then do:
    RETURN.
 end.
 
-input from value(lcInputFile).
+input from value(FILE-INFO:FULL-PATHNAME).
 
 DEF VAR lcLine AS CHAR NO-UNDO. 
 DEF VAR lcOutputFolder AS CHAR NO-UNDO.
@@ -31,5 +33,5 @@ repeat:
    import unformatted lcLine.
    lcLine = TRIM(ENTRY(1,lcLine,":")).
    if lcLine eq "" or lcLine begins "#" then next.
-   run ./export_table.p lcLine lcFolder.
+   run utilities/tabledump/export_table.p lcLine lcFolder.
 end.

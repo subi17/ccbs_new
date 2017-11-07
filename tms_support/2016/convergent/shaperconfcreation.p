@@ -8,14 +8,14 @@
   ----------------------------------------------------------------------*/
   
 /* ***************************  Definitions  ************************** */
-{commpaa.i}
-katun = "Cron".
-gcBrand = "1".
-{cparam2.i}
-{eventlog.i}
-{ftransdir.i}
-{tariffconfig.i}
-{tariffcons.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Func/ftransdir.i}
+{2016/convergent/tariffconfig.i}
+{2016/convergent/tariffcons.i}
 
 DEFINE INPUT PARAMETER icIncDir   AS CHARACTER NO-UNDO.
 DEFINE INPUT PARAMETER icSpoolDir AS CHARACTER NO-UNDO.
@@ -157,7 +157,7 @@ DEFINE VARIABLE lcShaperConfID AS CHARACTER NO-UNDO.
       ELSE DO:                 
          CREATE ShaperConf.
          ASSIGN 
-            ShaperConf.Brand         = gcBrand
+            ShaperConf.Brand         = Syst.Var:gcBrand
             ShaperConf.ShaperConfID  = ttShaperConf.SConfId          
             ShaperConf.Template      = ttShaperConf.Template
             ShaperConf.TariffType    = ttShaperConf.TariffType

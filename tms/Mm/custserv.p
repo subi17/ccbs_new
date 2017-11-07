@@ -9,17 +9,16 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mobsub'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mobsub'}
 
 DEFINE INPUT PARAMETER CustNum AS INT NO-UNDO .
 DEFINE VARIABLE lcCustName AS CHARACTER NO-UNDO.
 
 FIND Customer WHERE 
      customer.custnum = CustNum NO-LOCK NO-ERROR.
-lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                               BUFFER Customer).
+lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                                     
 DEFINE TEMP-TABLE TTservice
 FIELD servcom  LIKE subser.servcom

@@ -8,17 +8,17 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{msreqfunc.i}
-{fmakemsreq.i}
-{ffeecont.i}
-{fsubser.i}
-{fctserval.i}
-{servcomfee.i}
-{barrgrp.i}
-{fnumberinq.i}
-{msopenbatch.i}
-{remfees.i}
-{barrfunc.i}
+{Func/msreqfunc.i}
+{Func/fmakemsreq.i}
+{Func/ffeecont.i}
+{Func/fsubser.i}
+{Func/fctserval.i}
+{Func/servcomfee.i}
+{Mm/barrgrp.i}
+{Func/fnumberinq.i}
+{Func/msopenbatch.i}
+{Func/remfees.i}
+{Func/barrfunc.i}
 
 DEF INPUT PARAMETER iiRequest AS INT NO-UNDO.
 
@@ -74,12 +74,12 @@ PROCEDURE pServCompSolog:
       RETURN.
    END.
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
         
    FIND ServCom NO-LOCK WHERE
-        ServCom.Brand   = gcBrand AND
+        ServCom.Brand   = Syst.Var:gcBrand AND
         ServCom.ServCom = MsRequest.ReqCParam1 NO-ERROR.
    
    IF NOT AVAILABLE ServCom THEN DO:
@@ -116,7 +116,7 @@ PROCEDURE pServCompSolog:
       /* remove fees concerning this service */
       RUN pDelFixedFee("",
                        ServCom.FeeModel,
-                       fLastDayOfMonth(ldtActDate),
+                       Func.Common:mLastDayOfMonth(ldtActDate),
                        ?,
                        TRUE,  /* clean credit fees also */
                        FALSE,  /* credit singlefee for billed items */
@@ -126,7 +126,7 @@ PROCEDURE pServCompSolog:
                        OUTPUT liReqCnt).
    
    /* create solog */
-   RUN setms.p(MsRequest.MSRequest,
+   RUN Mm/setms.p(MsRequest.MSRequest,
              TRUE,
              OUTPUT liReqCnt,
              OUTPUT lcError).
@@ -164,12 +164,12 @@ PROCEDURE pServAttrSolog:
    ASSIGN lcServCom  = ENTRY(1,MsRequest.ReqCParam1,".")
           lcServAttr = ENTRY(2,MsRequest.ReqCParam1,".").
    
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
         
    FIND ServCom NO-LOCK WHERE
-        ServCom.Brand   = gcBrand AND
+        ServCom.Brand   = Syst.Var:gcBrand AND
         ServCom.ServCom = lcServCom NO-ERROR.
    IF NOT AVAILABLE ServCom THEN DO:
       fReqError("Unknown service " + lcServCom).
@@ -177,7 +177,7 @@ PROCEDURE pServAttrSolog:
    END. 
 
    FIND ServAttr NO-LOCK WHERE
-        ServAttr.Brand    = gcBrand   AND
+        ServAttr.Brand    = Syst.Var:gcBrand   AND
         ServAttr.ServCom  = lcServCom AND
         ServAttr.ServAttr = lcServAttr NO-ERROR.
    IF NOT AVAILABLE ServAttr THEN DO:
@@ -213,7 +213,7 @@ PROCEDURE pServAttrSolog:
    END.
  
    /* create solog */
-   RUN setms(MsRequest.MSRequest,
+   RUN Mm/setms.p(MsRequest.MSRequest,
              TRUE,
              OUTPUT liReqCnt,
              OUTPUT lcError).
@@ -285,12 +285,12 @@ PROCEDURE pServCompUpdate:
       RETURN.
    END.
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
 
    FIND ServCom NO-LOCK WHERE
-        ServCom.Brand   = gcBrand AND
+        ServCom.Brand   = Syst.Var:gcBrand AND
         ServCom.ServCom = MsRequest.ReqCParam1 NO-ERROR.
    IF NOT AVAILABLE ServCom THEN DO:
       fReqError("Unknown service " + MsRequest.ReqCParam1).
@@ -322,11 +322,11 @@ PROCEDURE pServCompUpdate:
       IF NOT llOngoing AND
           fIsInList("Debt_HOTL,Debt_HOTLP,Internet", lcBarring) EQ TRUE THEN DO:
       
-         RUN barrengine.p(MobSub.MsSeq,
+         RUN Mm/barrengine.p(MobSub.MsSeq,
                           "#REFRESH",
                           {&REQUEST_SOURCE_SERVICE_CHANGE},
-                          katun,               /* creator */
-                          fMakeTS(),           /* activate */
+                          Syst.Var:katun,               /* creator */
+                          Func.Common:mMakeTS(),           /* activate */
                           "",                  /* sms */
                           OUTPUT lcError).
 
@@ -334,8 +334,7 @@ PROCEDURE pServCompUpdate:
          liRequest = INTEGER(lcError) NO-ERROR.
          /* Write possible error to a memo */
          IF liRequest = 0 OR liRequest = ? THEN
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                              STRING(Mobsub.MsSeq),
                              Mobsub.CustNum,
                              "Barring and suspension",
@@ -385,7 +384,7 @@ PROCEDURE pServCompUpdate:
           llReRate       = FALSE
           lcSMSTxt       = "".
 
-   ldCurrStamp = fMakeTS().
+   ldCurrStamp = Func.Common:mMakeTS().
 
    /* Note: Consider 2 (suspend status) as Close status for BB service */
    IF SubSer.ServCom = "BB" THEN DO:
@@ -496,7 +495,7 @@ PROCEDURE pServCompUpdate:
          /* fixedfee and restore the existing fixedfee itself     */
          IF SubSer.ServCom = "BB" THEN
             FOR FIRST FixedFee WHERE
-                      FixedFee.Brand     = gcBrand        AND
+                      FixedFee.Brand     = Syst.Var:gcBrand        AND
                       FixedFee.Custnum   = MobSub.CustNum AND
                       FixedFee.HostTable = "MobSub"       AND
                       FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
@@ -516,7 +515,7 @@ PROCEDURE pServCompUpdate:
          lcReqContr = "".
          /* if salesman defined then get contract id */
          IF MsRequest.Salesman > "" THEN 
-            lcReqContr = fFeeContract(gcBrand,
+            lcReqContr = fFeeContract(Syst.Var:gcBrand,
                                       MobSub.CustNum,
                                       MsRequest.Salesman,
                                       ldtFeeDate,
@@ -532,7 +531,7 @@ PROCEDURE pServCompUpdate:
          ELSE DO:
             /* Open the existing fixed fee related to the BB service */
             FOR FIRST FixedFee WHERE
-                      FixedFee.Brand     = gcBrand        AND
+                      FixedFee.Brand     = Syst.Var:gcBrand        AND
                       FixedFee.Custnum   = MobSub.CustNum AND
                       FixedFee.HostTable = "MobSub"       AND
                       FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
@@ -586,7 +585,7 @@ PROCEDURE pServCompUpdate:
    IF SubSer.ServCom = "SALDOAGR" AND
       liOldValue = 0 AND SubSer.SSStat > 0 
    THEN DO:
-      RUN prinmsal (MobSub.MsSeq,
+      RUN Mc/prinmsal.p (MobSub.MsSeq,
                     OUTPUT lcReqChar).
       IF lcReqChar > "" THEN DO:
          fReqLog("Saldo Agr. confirmation print failed: " + lcReqChar).
@@ -656,7 +655,7 @@ PROCEDURE pServCompUpdate:
          /* barring with lower priority was activated */
          llAlleviate = TRUE 
       THEN DO:
-          RUN creasfee (MobSub.CustNum,
+          RUN Mc/creasfee.p (MobSub.CustNum,
                         MobSub.MsSeq,
                         SubSer.SSDate,
                         "MobSub",
@@ -665,7 +664,7 @@ PROCEDURE pServCompUpdate:
                         ?,
                         "",
                         FALSE,
-                        katun,
+                        Syst.Var:katun,
                         "",
                         0,
                         "",
@@ -691,7 +690,7 @@ PROCEDURE pServCompUpdate:
    /* answering service activated */
    IF SubSer.ServCom = "PP2" AND liOldValue = 0 AND SubSer.SSStat = 1
    THEN DO:
-      RUN makedcf(MobSub.MsSeq,
+      RUN Mm/makedcf.p(MobSub.MsSeq,
                   SubSer.SSDate,
                   TRUE).
    END.
@@ -715,7 +714,7 @@ PROCEDURE pServCompUpdate:
       THEN fOpenSaldoBarring().
    END.
       
-   /* run rerate (needed especially with saldo-services) */
+   /* RUN Rate/rerate.p (needed especially with saldo-services) */
    IF llReRate AND NOT llDenyReRate THEN DO:
    
       fReRateTriggerEvent(INPUT MsRequest.MSRequest,RECID(MSRequest)).
@@ -740,7 +739,7 @@ PROCEDURE pServCompUpdate:
              lcOnlyVoiceContracts   = fCParamC("ONLY_VOICE_CONTRACTS").
 
       FOR FIRST bOrigRequest NO-LOCK WHERE
-                bOrigRequest.Brand     = gcBrand AND
+                bOrigRequest.Brand     = Syst.Var:gcBrand AND
                 bOrigRequest.MsRequest = MsRequest.OrigRequest:
          IF MsRequest.ReqIParam1 = 2 AND /* STC/BTC Initiator */
             (bOrigRequest.ReqType = 0 OR bOrigRequest.ReqType = 81) THEN DO:
@@ -760,10 +759,10 @@ PROCEDURE pServCompUpdate:
          END. /* IF bOrigRequest.ReqType = 0 */
          ELSE IF bOrigRequest.ReqType = 13 THEN DO:  /* New Subs with BB */
             FOR FIRST bOrder WHERE
-                      bOrder.Brand   = gcBrand AND
+                      bOrder.Brand   = Syst.Var:gcBrand AND
                       bOrder.OrderId = INT(bOrigRequest.ReqCParam2) NO-LOCK,
                 FIRST bOrderAccessory WHERE
-                      bOrderAccessory.Brand   = gcBrand AND
+                      bOrderAccessory.Brand   = Syst.Var:gcBrand AND
                       bOrderAccessory.OrderId = bOrder.OrderId AND
                       bOrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE} NO-LOCK:
                 lcSMSTxt = MsRequest.ReqCParam1 + "ActNewTerm".
@@ -822,10 +821,13 @@ PROCEDURE pServCompUpdate:
             lcSMSText = REPLACE(lcSMSText,"#REQDATE",STRING(ldtActDate,
                                                             "99.99.9999")). 
          /* replace tags */
-         fReplaceSMS(lcSMSText,
-                     MsRequest.MsSeq,
-                     TODAY,
-                     OUTPUT lcSMSText).
+         Func.Common:mReplaceSMS
+             ( Customer.CustName,
+               Mobsub.CLI,
+               lcSMSText,
+               MsRequest.MsSeq,
+               TODAY,
+               OUTPUT lcSMSText).
 
          fMakeSchedSMS2(MobSub.CustNum,
                        MobSub.CLI,
@@ -856,7 +858,7 @@ PROCEDURE pServCompUpdate:
       MsRequest.ReqCParam1 = "LP"                  AND 
       MsRequest.ReqIParam1 = 1                     THEN DO:
       CREATE Memo.
-      ASSIGN Memo.Brand     = gcBrand
+      ASSIGN Memo.Brand     = Syst.Var:gcBrand
              Memo.HostTable = "MobSub"
              Memo.KeyValue  = STRING(MsRequest.MsSeq)
              Memo.CustNum   = MsRequest.CustNum
@@ -865,7 +867,7 @@ PROCEDURE pServCompUpdate:
              Memo.MemoType  = "service"
              Memo.MemoTitle = "Collection Action"
              Memo.MemoText  = MsRequest.ReqCParam1 + " applied"
-             Memo.CreStamp  = fMakeTS().         
+             Memo.CreStamp  = Func.Common:mMakeTS().         
    END.       
             
    /* request handled succesfully */   
@@ -902,12 +904,12 @@ PROCEDURE pServAttrUpdate:
    ASSIGN lcServCom  = ENTRY(1,MsRequest.ReqCParam1,".")
           lcServAttr = ENTRY(2,MsRequest.ReqCParam1,".").
    
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
         
    FIND ServCom NO-LOCK WHERE
-        ServCom.Brand   = gcBrand AND
+        ServCom.Brand   = Syst.Var:gcBrand AND
         ServCom.ServCom = lcServCom NO-ERROR.
    IF NOT AVAILABLE ServCom THEN DO:
       fReqError("Unknown service " + lcServCom).
@@ -915,7 +917,7 @@ PROCEDURE pServAttrUpdate:
    END. 
 
    FIND ServAttr NO-LOCK WHERE
-        ServAttr.Brand    = gcBrand   AND
+        ServAttr.Brand    = Syst.Var:gcBrand   AND
         ServAttr.ServCom  = lcServCom AND
         ServAttr.ServAttr = lcServAttr NO-ERROR.
    IF NOT AVAILABLE ServAttr THEN DO:
@@ -1002,8 +1004,8 @@ PROCEDURE pServAttrUpdate:
              
          /* don't send messages before 8 am. */
          IF TIME > 28800
-         THEN ldReqStamp = fMakeTS().
-         ELSE ldReqStamp = fMake2DT(TODAY,28800).                    
+         THEN ldReqStamp = Func.Common:mMakeTS().
+         ELSE ldReqStamp = Func.Common:mMake2DT(TODAY,28800).                    
              
          fMakeSchedSMS(MobSub.CustNum,
                        MobSub.CLI,
@@ -1055,7 +1057,7 @@ PROCEDURE pReRate:
                                        ldtFrom,
                                        ldtTo,
                                        TRUE).
-      &ELSE RUN cli_rate (icCLI,
+      &ELSE RUN Rate/cli_rate.p (icCLI,
                           ldtFrom,
                           ldtTo,
                           TRUE).    

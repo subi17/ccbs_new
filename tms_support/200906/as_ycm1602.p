@@ -1,7 +1,7 @@
-{testpaa.i}
-katun = "anttis".
+{Syst/testpaa.i}
+Syst.Var:katun = "anttis".
 
-{barrfunc.i}
+{Func/barrfunc.i}
 
 FUNCTION fCheckStatus2 RETURNS CHARACTER
 (INPUT iiMsSeq AS INTEGER,
@@ -74,7 +74,7 @@ FIELD i AS INT
 INDEX i IS PRIMARY UNIQUE i. 
 
 DEFINE VARIABLE ldeActStamp AS DECIMAL NO-UNDO. 
-ldeActStamp = fmakets().
+ldeActStamp = Func.Common:mMakeTS().
 
 repeat:
    import stream sread unformatted lcline.
@@ -83,7 +83,7 @@ repeat:
 
    if i <= 1000  then next.
    
-   if i mod 1000 = 0 then ldeActStamp = fOffSet(ldeActStamp,1).
+   if i mod 1000 = 0 then ldeActStamp = Func.Common:mOffSet(ldeActStamp,1).
 
    limsseq = int(entry(3,lcline,";")).
 
@@ -112,10 +112,10 @@ repeat:
    if lcUser ne "CreSub / CreSub" then next.
    
    
-   RUN barrengine (Mobsub.MsSeq,
+   RUN Mm/barrengine.p (Mobsub.MsSeq,
                     "UN" + lcstat,     /* package for unbarring */
                       "5",                /* source  */
-                      katun,             /* creator */
+                      Syst.Var:katun,             /* creator */
                       ldeActStamp,  /* activate */
                       "",                 /* sms-text */
                       OUTPUT lcResult).

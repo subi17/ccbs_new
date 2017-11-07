@@ -10,13 +10,13 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 DEF INPUT PARAMETER ipMsSeq AS INTEGER NO-UNDO.
 DEF VAR lcStatus AS CHAR NO-UNDO.
 
 DO WHILE TRUE:
 
-   RUN tmscodesbr(INPUT  "MsRequest",
+   RUN Syst/tmscodesbr.p(INPUT  "MsRequest",
                   INPUT  "ReqStatus",
                   INPUT  "",
                   INPUT  "Order requests (type 13)",
@@ -24,7 +24,7 @@ DO WHILE TRUE:
                   OUTPUT lcStatus).
 
    IF lcStatus > "" THEN DO:
-      RUN msrequest(13,INTEGER(lcStatus),ipMsSeq,0,0,"").
+      RUN Mm/msrequest.p(13,INTEGER(lcStatus),ipMsSeq,0,0,"").
    END.
    ELSE LEAVE.
 

@@ -8,19 +8,18 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{msreqfunc.i}
+{Func/msreqfunc.i}
 
-{faccper.i}
-{fcustbal.i}
-{eventval.i} 
-{fbankday.i}
-{fhdrtext.i}
-{frefundreq.i}
+{Func/faccper.i}
+{Func/fcustbal.i}
+{Syst/eventval.i} 
+{Func/fbankday.i}
+{Func/frefundreq.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 END.
 
 DEF BUFFER bSubRequest FOR MsRequest.
@@ -74,7 +73,7 @@ PROCEDURE pManualPayment:
       RETURN.
    END.
    
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtAccDate,
             OUTPUT liReqCnt).
             
@@ -126,7 +125,7 @@ PROCEDURE pAdvPaym2Refund:
       ldtDate = ldtDate + 1
       liTime  = liTime - 86400. 
       
-   ldActStamp = fMake2Dt(ldtDate,liTime).
+   ldActStamp = Func.Common:mMake2DT(ldtDate,liTime).
           
    liSubReq = fRefundRequest(MsRequest.CustNum,
                              MsRequest.ReqIParam1,  /* invoice */
@@ -158,7 +157,7 @@ PROCEDURE pAdvPaym2Refund:
          ldPosting[1] = MsRequest.ReqDParam1
          ldPosting[2] = -1 * MsRequest.ReqDParam1.
    
-      RUN createpaym (MsRequest.CustNum,
+      RUN Ar/createpaym.p (MsRequest.CustNum,
                       MsRequest.ReqIParam1,      /* invoice */
                       MsRequest.ReqCParam1,      /* cli */
                       idtAccDate,                /* posting date */

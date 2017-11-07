@@ -1,0 +1,145 @@
+bulkload: OrderFunction
+  OFID: 3
+  OFName: "Release In Control"
+  OFModule: "Mc/orderinctrl.p,iiOrderId,0"
+
+bulkload: OrderFunction
+  OFID: 4
+  OFName: "Set In Control"
+  OFModule: "Mc/ordercontrol.p,iiOrder"
+
+bulkload: OrderFunction
+  OFID: 5
+  OFName: "Release Credit Hold"
+  OFModule: "Mc/credithold.p,iiOrderID,FALSE"
+
+bulkload: OrderFunction
+  OFID: 7
+  OFName: "Cash Invoice"
+  OFModule: "Mc/nnasla.p"
+
+bulkload: OrderFunction
+  OFID: 10
+  OFName: "Close Order"
+  OFModule: "Mc/closeorder.p,iiOrderID"
+
+bulkload: OrderFunction
+  OFID: 12
+  OFName: "Credit functions"
+  OFModule: "creditorder,iiOrderID"
+
+bulkload: OrderFunction
+  OFID: 14
+  OFName: "Print Text"
+  OFModule: "Mc/prinoinf.p"
+
+bulkload: OrderFunction
+  OFID: 15
+  OFName: "Hold order"
+  OFModule: "Mc/orderhold.p,iiOrderID,TRUE"
+
+bulkload: OrderFunction
+  OFID: 16
+  OFName: "Release Hold"
+  OFModule: "Mc/orderhold.p,iiOrderID,RELEASE"
+
+bulkload: OrderFunction
+  OFID: 18
+  OFName: "Order Event Log"
+  OFModule: "eventsel ,iiOrderID"
+
+bulkload: OrderFunction
+  OFID: 27
+  OFName: "Credit Hold Order"
+  OFModule: "Mc/credithold.p,iiOrderID,TRUE"
+
+bulkload: OrderFunction
+  OFID: 29
+  OFName: "Rescue Failed"
+  OFModule: "Mm/rescuefailed.p,iiorderid"
+
+bulkload: OrderFunction
+  OFID: 30
+  OFName: "Received Confirmation"
+  OFModule: "Mm/receiveconfirmation.p,iiorderid"
+
+bulkload: OrderFunction
+  OFID: 32
+  OFName: "Print Rescue Confirmation"
+  OFModule: "prrescueconf,iiorderid"
+
+bulkload: OrderFunction
+  OFID: 34
+  OFName: "Change Person/OrgID"
+  OFModule: "chpersonid,iiorderid"
+
+bulkload: OrderFunction
+  OFID: 36
+  OFName: "MNP Messages"
+  OFModule: "Mnp/mnpbr.p,iiOrderId"
+
+bulkload: OrderFunction
+  OFID: 39
+  OFName: "MNP Resend"
+  OFModule: "Mnp/mnpresend.p,iiOrderId"
+
+bulkload: OrderFunction
+  OFID: 40
+  OFName: "Credit Scoring"
+  OFModule: "Mc/creditscoringh.p,iiOrderId"
+
+bulkload: OrderFunction
+  OFID: 45
+  OFName: "Release Data Order"
+  OFModule: "Mc/orderrelease.p,iiOrderID"
+
+bulkload: OrderFunction
+  OFID: 47
+  OFName: "Show Offer"
+  OFModule: "Mc/offer.p"
+
+bulkload: OrderFunction
+  OFID: 49
+  OFName: "More documentation needed"
+  OFModule: "Mc/orderneeddoc.p,iiOrderId"
+
+bulkload: OrderFunction
+  OFID: 50
+  OFName: "Closed by Fraud"
+  OFModule: "Mc/orderbyfraud.p,iiOrderId"
+
+bulkload: OrderFunction
+  OFID: 53
+  OFName: "Show Action Items"
+  OFModule: "Mc/orderaction.p,iiOrderId"
+
+bulkload: OrderFunction
+  OFID: 55
+  OFName: "Change Customer Data"
+  OFModule: "Mc/orderhold.p,iiOrderId,MODIFY"
+
+bulkload: OrderFunction
+  OFID: 57
+  OFName: "Release in control with secure Correos"
+  OFModule: "Mc/orderinctrl.p,iiOrderId,1"
+
+bulkload: OrderFunction
+  OFID: 58
+  OFName: "Release in control with secure POS"
+  OFModule: "Mc/orderinctrl.p,iiOrderId,2"
+
+bulkload: OrderFunction
+  OFID: 59
+  OFName: "Document Management"
+  OFModule: "Mc/dms.p"
+
+bulkload: OrderFunction
+  OFID: 60
+  OFName: "Show Convergent data"
+  OFModule: "Mc/convview.p"
+
+bulkload: OrderFunction
+  OFID: 61
+  OFName: "Cancel fixed line order"
+  OFModule: "Mc/fusion_order_cancel.p,iiOrderId"
+

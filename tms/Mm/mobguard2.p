@@ -9,7 +9,7 @@
   ---------------------------------------------------------------------- */
 
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT  PARAMETER   ilAskDates AS LOG  NO-UNDO.
 DEF OUTPUT PARAMETER   ReasonC    AS CHAR NO-UNDO.
@@ -36,7 +36,7 @@ Tmscode.codename FORMAT "X(35)"  SKIP
 HELP "Earliest call date" " - " lddate2 
 HELP "Latest call date"
 VALIDATE(INPUT lddate1 <= INPUT lddate2,"Invalid order of dates !")  SKIP
-WITH CENTERED ROW 2 COLOR VALUE(cfc) TITLE 
+WITH CENTERED ROW 2 COLOR VALUE(Syst.Var:cfc) TITLE 
 "BROWSE CDRS" OVERLAY side-label no-label FRAME reason .
 
 RUN local-Show-record.
@@ -50,7 +50,7 @@ IF reasonc > "0" AND llAccept = TRUE THEN DO:
    ASSIGN
       eventlog.eventdate  = TODAY
       eventlog.eventtime  = STRING(TIME,"HH:MM:SS")
-      eventlog.usercode   = katun
+      eventlog.usercode   = Syst.Var:katun
       eventlog.action     = 'Check'.
  
    ASSIGN
@@ -68,7 +68,7 @@ PROCEDURE local-Show-record:
    
    REPEAT ON ENDKEY UNDO, LEAVE:
    
-      ASSIGN ufk = 0 ufk[8] = 8 ehto = 10. RUN ufkey.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 10. RUN Syst/ufkey.p.
       
       IF ilAskDates THEN ASSIGN
       ldDate1 = DATE(Month(Today),1,YEAR(Today))
@@ -91,7 +91,7 @@ PROCEDURE local-Show-record:
              
              IF FRAME-FIELD = "ReasonC" AND keylabel(lastkey) = "F9" 
              THEN DO:
-                RUN h-tmscodes(INPUT "FixCDR",  /* TableName*/
+                RUN Help/h-tmscodes.p(INPUT "FixCDR",  /* TableName*/
                                      "ReasonCode", /* FieldName */
                                      "ReasonCode", /* GroupCode */
                                OUTPUT siirto).
@@ -109,7 +109,7 @@ PROCEDURE local-Show-record:
                  ENd.
              END.
 
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME reason:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME reason:
                 PAUSE 0.
                 IF FRAME-FIELD = "ReasonC" THEN DO:
                    find first TMSCodes WHERE

@@ -1,12 +1,11 @@
 
 DEFINE VARIABLE lcCLI AS CHARACTER NO-UNDO. 
 
-{commpaa.i}
-katun = "rafaeldv".
-gcBrand  = "1".
-{timestamp.i}
-{msisdn.i}
-{tmsconst.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "rafaeldv".
+Syst.Var:gcBrand  = "1".
+{Func/msisdn.i}
+{Syst/tmsconst.i}
 
 lcCLI = "622442316".
 
@@ -15,7 +14,7 @@ FIND FIRST msisdnnumber where
 
 IF NOT AVAIL msisdnnumber THEN  RETURN.
 
-FIND FIRST msisdn where msisdn.brand = gcBrand and 
+FIND FIRST msisdn where msisdn.brand = Syst.Var:gcBrand and 
       msisdn.cli = msisdnnumber.cli NO-LOCK NO-ERROR.
 IF NOT AVAIL msisdn THEN RETURN.
 

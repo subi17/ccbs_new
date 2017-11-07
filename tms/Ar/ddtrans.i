@@ -1,7 +1,7 @@
 /* ddtrans.i      30.05.05/aam move processed file to archive
 */
 
-{ftransdir.i}
+{Func/ftransdir.i}
 
 DEF VAR lcArchive  AS CHAR  NO-UNDO.
 

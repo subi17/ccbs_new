@@ -6,9 +6,9 @@
   CREATED ......: 27.02.13
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
-{commali.i}
-{detailvalue.i}
-{dumpfile_run.i}
+{Syst/commali.i}
+{Func/detailvalue.i}
+{Syst/dumpfile_run.i}
 
 DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -91,7 +91,7 @@ FOR EACH PrepEDR NO-LOCK USE-INDEX ReadDate WHERE
               edrdtl.dtlseq = PrepEDR.DtlSeq NO-LOCK NO-ERROR.
    IF NOT AVAIL edrdtl THEN NEXT.
    
-   fSplitts(PrepEDR.ReadInTS, OUTPUT ldaDate, OUTPUT liTime).
+   Func.Common:mSplitTS(PrepEDR.ReadInTS, OUTPUT ldaDate, OUTPUT liTime).
    
    PUT STREAM sFile UNFORMATTED
       ENTRY(ttCSVPos.SourceFileName,edrdtl.detail,"|") lcDelimiter

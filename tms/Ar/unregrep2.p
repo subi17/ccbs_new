@@ -9,8 +9,8 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{utumaa.i}
+{Syst/commali.i}
+{Syst/utumaa.i}
 
 DEF INPUT PARAMETER iDate AS DA NO-UNDO.
 DEF INPUT PARAMETER iSpec  AS LO NO-UNDO.
@@ -62,13 +62,16 @@ ASSIGN
     viiva3 = fill("-",lev)
     viiva4 = fill("-",lev).
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
+
 form header
    viiva1 AT 1 SKIP
    ynimi at 1 format "x(28)" 
       "Unregistered Payments" AT 32
       "Page" AT 68  
       sl format "ZZZZ9" SKIP
-      pvm format "99.99.9999" AT 68 SKIP
+      TODAY FORMAT "99.99.9999" AT 68 SKIP
    viiva2 AT 1 skip(1)
 
    WITH width 95 NO-LABEL no-box FRAME sivuotsi.
@@ -77,7 +80,7 @@ FUNCTION CheckPage RETURNS LOGIC
     (iAddLine AS INT).
 
     IF rl >= skayt1 - iAddLine THEN DO:
-        {uprfeed.i rl}
+        {Syst/uprfeed.i rl}
         ASSIGN rlx = 0
                sl = sl + 1.
         view STREAM tul FRAME sivuotsi.  
@@ -102,7 +105,7 @@ ASSIGN sl = 1
        rl = 0.
 
 FOR EACH UnregPaym WHERE 
-         UnregPaym.Brand   = gcBrand AND
+         UnregPaym.Brand   = Syst.Var:gcBrand AND
          UnregPaym.AccDate <= iDate  AND
          UnregPaym.State NE 2
 no-lock.
@@ -254,7 +257,7 @@ ELSE DO:
 
 END.
 
-{uprfeed.i rl}
+{Syst/uprfeed.i rl}
 
 ASSIGN SESSION:NUMERIC-FORMAT = xSessionNum.
 

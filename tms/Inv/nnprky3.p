@@ -13,12 +13,11 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i "new"}
-{feplstart.i}
-{eplspec.i}
-{timestamp.i}
+{Syst/utumaa.i "new"}
+{Func/feplstart.i}
+{Inv/eplspec.i}
 
 assign tuni1 = "nnpura3"
        tuni2 = "".
@@ -53,9 +52,9 @@ form
    "CLI / CCN." AT 10 
    skip(14)
    WITH ROW 1 side-labels width 80
-        title " " + ynimi + 
+        title " " + Syst.Var:ynimi + 
         " CALL SUMMARY PER CLI (REPORT 3) " +
-        string(pvm,"99-99-99") + " "
+        string(TODAY,"99-99-99") + " "
         FRAME valinta.
 
 form
@@ -138,7 +137,7 @@ ASSIGN pvm1          = DATE(MONTH(TODAY),1,YEAR(TODAY))
        liAddress     = 1
        liPrintTo     = 1
        ufkey         = FALSE
-       nap           = "1".
+       Syst.Var:nap           = "1".
 
 toimi:
 repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
@@ -150,24 +149,24 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
         
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3.
-         RUN ufkey.p.
+         Syst.Var:ufk[1]= 132 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= 63 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3.
+         RUN Syst/ufkey.p.
          READKEY.
-         nap = keylabel(LASTKEY).
+         Syst.Var:nap = keylabel(LASTKEY).
       END.
       ELSE ufkey = TRUE.
 
-      if lookup(nap,"1,f1") > 0 THEN DO:
-         ASSIGN ehto = 9 ufkey = TRUE. 
-         RUN ufkey.p.
+      if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:
+         ASSIGN Syst.Var:ehto = 9 ufkey = TRUE. 
+         RUN Syst/ufkey.p.
 
          REPEAT ON ENDKEY UNDO, LEAVE:
             UPDATE 
             InvNum
             VALIDATE(CAN-FIND (FIRST Invoice WHERE
-                               Invoice.Brand  = gcBrand AND
+                               Invoice.Brand  = Syst.Var:gcBrand AND
                                Invoice.InvNum = INPUT invnum),
             "Unknown Invoice Number!")                   
             lcAtil 
@@ -175,7 +174,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                      CAN-FIND(FIRST CLI WHERE 
                                     CLI.CLI = INPUT lcAtil) OR
                      CAN-FIND(FIRST MSOwner WHERE 
-                                    MSOwner.Brand = gcBrand AND
+                                    MSOwner.Brand = Syst.Var:gcBrand AND
                                     MSOwner.CLI = INPUT lcAtil),
                      "Unknown CLI")
             liPrintTo
@@ -192,8 +191,8 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
                   CustNum = Invoice.CustNum
                   pvm1    = Invoice.FromDate
                   pvm2    = Invoice.ToDate
-                  liPer1  = fMake2DT(Invoice.FirstCall,1)
-                  liPer2  = fMake2DT(Invoice.ToDate,86399)
+                  liPer1  = Func.Common:mMake2DT(Invoice.FirstCall,1)
+                  liPer2  = Func.Common:mMake2DT(Invoice.ToDate,86399)
                   tilak   = 1.
 
                   DISPLAY pvm1 pvm2 WITH FRAME rajat.
@@ -214,7 +213,7 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
 
       END.
 
-      else if lookup(nap,"5,f5") > 0 AND InvNum > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"5,f5") > 0 AND InvNum > 0 THEN DO:
         
          IF liPrintTo = 1 AND lcTestFlag > "" THEN DO:
             IF NOT fEPLStart(lcTestFlag) THEN NEXT.
@@ -224,13 +223,13 @@ repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
            
       END.
 
-      else if lookup(nap,"8,f8") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"8,f8") > 0 THEN DO:
          RETURN.
       END.
-END. /* toimi */
+END. /* Syst.Var:toimi */
 
-ehto = 5.
-RUN ufkey.
+Syst.Var:ehto = 5.
+RUN Syst/ufkey.p.
 
 ASSIGN llOk      = TRUE
        lcErrFile = "".
@@ -239,7 +238,7 @@ IF llCover THEN DO:
 
    IF lcAtil > "" AND liAddress = 3 THEN DO: 
       FIND FIRST MsOwner NO-LOCK WHERE
-                 MsOwner.Brand   = gcBrand AND
+                 MsOwner.Brand   = Syst.Var:gcBrand AND
                  MsOwner.CLI     = lcAtil  AND
                  MsOwner.TsBeg  <= liPer2  AND
                  MsOwner.TsEnd  >= liPer1 NO-ERROR.
@@ -293,16 +292,16 @@ ELSE IF liPrintTo = 2 THEN DO:
 
     
    ASSIGN tila = TRUE.
-   {utuloste.i "return"}
+   {Syst/utuloste.i "return"}
 
-   RUN umakro (lcMacros).
+   RUN Syst/umakro.p (lcMacros).
 END.
 
 /* cover sheet */
 IF llCover THEN llCaSivu = -1.
 
 IF llOk THEN 
-RUN nnpura3 (INPUT CustNum,
+RUN Inv/nnpura3.p (INPUT CustNum,
              INPUT pvm1,
              INPUT pvm2,
              INPUT tilak,
@@ -335,7 +334,7 @@ END.
  
 ELSE IF liPrintTo = 2 THEN DO: 
    ASSIGN tila = FALSE.
-   {utuloste.i}
+   {Syst/utuloste.i}
 END.
 
 IF lcErrFile = "" AND liError NE -1 THEN DO:
@@ -343,7 +342,7 @@ IF lcErrFile = "" AND liError NE -1 THEN DO:
    /* log from print */
    DO FOR ITSendLog TRANS:
       CREATE ITSendLog.
-      ASSIGN ITSendLog.Brand      = gcBrand 
+      ASSIGN ITSendLog.Brand      = Syst.Var:gcBrand 
              ITSendLog.TxtType    = 5
              ITSendLog.ITNum      = 0
              ITSendLog.CustNum    = CustNum
@@ -353,8 +352,8 @@ IF lcErrFile = "" AND liError NE -1 THEN DO:
                                     ELSE 4
              ITSendLog.EMail      = ""
              ITSendLog.RepType    = "Spec3"
-             ITSendLog.UserCode   = katun.
-             ITSendLog.SendStamp  = fMakeTS().
+             ITSendLog.UserCode   = Syst.Var:katun.
+             ITSendLog.SendStamp  = Func.Common:mMakeTS().
    END.
     
    MESSAGE "Report 3 has been printed."
@@ -364,7 +363,7 @@ END.
 
 /* create fee */
 IF llCreFee THEN
-RUN creasfee (CustNum,
+RUN Mc/creasfee.p (CustNum,
               0,
               TODAY,
               "InvSpec",
@@ -373,7 +372,7 @@ RUN creasfee (CustNum,
               ?,
               "",
               TRUE,
-              katun,
+              Syst.Var:katun,
               "",
               0,
               "",

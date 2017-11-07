@@ -8,7 +8,7 @@
                   12.09.03/aam brand
   VERSION ......: M15
 ------------------------------------------------------ */
-{commali.i}
+{Syst/commali.i}
 
 DEF VAR email   AS CHAR                NO-UNDO FORMAT "x(40)".
 DEF VAR asno    LIKE Customer.CustNum  NO-UNDO.
@@ -25,27 +25,27 @@ HELP "From specific invoice or all unbilled calls = 0." invname SKIP
 "    E-mail .......:" email
 WITH
   ROW 7 WIDTH 65
-  NO-LABELS CENTERED OVERLAY COLOR VALUE(cfc)
-  TITLE COLOR VALUE(ctc) " " + "  Call specification for invoice or unbilled calls. " 
-  + STRING(pvm,"99-99-99") + " " FRAME main.
+  NO-LABELS CENTERED OVERLAY COLOR VALUE(Syst.Var:cfc)
+  TITLE COLOR VALUE(Syst.Var:ctc) " " + "  Call specification for invoice or unbilled calls. " 
+  + STRING(TODAY,"99-99-99") + " " FRAME main.
 
 rajat:
 REPEAT WITH FRAME rajat:
    PAUSE 0.
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE 
    asno
    WITH FRAME MAIN EDITING:
-       READKEY. nap = KEYLABEL(LASTKEY).
-       IF LOOKUP(nap,poisnap) > 0 THEN 
+       READKEY. Syst.Var:nap = KEYLABEL(LASTKEY).
+       IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN 
        DO:
            HIDE MESSAGE.
            IF FRAME-FIELD = "asno" THEN 
            DO:
                ASSIGN FRAME MAIN asno.
                FIND FIRST customer WHERE 
-                  Customer.Brand   = gcBrand AND
+                  Customer.Brand   = Syst.Var:gcBrand AND
                   Customer.CustNum = asno NO-ERROR.
                IF asno = 0 OR
                NOT AVAILABLE customer THEN
@@ -70,15 +70,15 @@ REPEAT WITH FRAME rajat:
          invno
          email
    WITH FRAME main EDITING:
-       READKEY. nap = KEYLABEL(LASTKEY).
-       IF LOOKUP(nap,poisnap) > 0 THEN 
+       READKEY. Syst.Var:nap = KEYLABEL(LASTKEY).
+       IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN 
        DO:
            HIDE MESSAGE.
            IF FRAME-FIELD = "invno" THEN 
            DO:
                ASSIGN FRAME main invno.
                FIND FIRST invoice WHERE 
-                  Invoice.Brand  = gcBrand AND
+                  Invoice.Brand  = Syst.Var:gcBrand AND
                   invoice.invnum = invno NO-ERROR.
                IF invno NE 0 AND
                NOT AVAILABLE invoice THEN
@@ -93,13 +93,13 @@ REPEAT WITH FRAME rajat:
 
 toimi:
       REPEAT WITH FRAME toimi:
-        ASSIGN ufk = 0 ehto = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8.
-        RUN ufkey.
-        IF toimi = 1 THEN NEXT  rajat.
-        IF toimi = 8 THEN LEAVE rajat.
-        IF toimi = 5 THEN 
+        ASSIGN Syst.Var:ufk = 0 Syst.Var:ehto = 0 Syst.Var:ufk[1] = 132 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8.
+        RUN Syst/ufkey.p.
+        IF Syst.Var:toimi = 1 THEN NEXT  rajat.
+        IF Syst.Var:toimi = 8 THEN LEAVE rajat.
+        IF Syst.Var:toimi = 5 THEN 
         DO:
-            RUN callemail(asno,invno,email).
+            RUN Mf/callemail.p(asno,invno,email).
             LEAVE toimi.
         END.      
 END.

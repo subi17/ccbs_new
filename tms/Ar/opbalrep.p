@@ -6,15 +6,14 @@
   CREATED ......: 06.03.03
   MODIFIED .....: 12.09.03/aam brand
                   02.01.06/aam values from TMSCodes  
-                  24.01.06/DYNAMIC-FUNCTION("fDispCustName"
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{fcustbal.i}
+{Syst/commali.i}
+{Func/fcustbal.i}
 
 /* print-linemuuttujat */
-{utumaa.i}
+{Syst/utumaa.i}
 
 DEF INPUT  PARAMETER idtDate     AS DATE  NO-UNDO.
 DEF OUTPUT PARAMETER oiCount     AS INT   NO-UNDO.
@@ -49,6 +48,8 @@ ASSIGN
     viiva3 = FILL("-",lev)
     viiva4 = FILL("-",lev).
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
 
 FORM HEADER
    viiva1 AT 1 SKIP
@@ -57,7 +58,7 @@ FORM HEADER
       "Page" AT 68             
       sl FORMAT "ZZZZ9" SKIP
    "Posted before " + STRING(idtDate,"99.99.9999") AT 35 FORMAT "X(30)"
-      pvm FORMAT "99.99.9999" AT 68 SKIP
+      TODAY FORMAT "99.99.9999" AT 68 SKIP
    viiva2 AT 1 SKIP
    "Customer"    AT 1
       "Name"        AT 10
@@ -77,7 +78,7 @@ FUNCTION fCheckPage RETURNS LOGIC
     (iAddLine AS INT).
 
     IF rl + iAddLine >= skayt1 THEN DO:
-        {uprfeed.i rl}
+        {Syst/uprfeed.i rl}
         ASSIGN rlx = 0
                sl = sl + 1.
         view STREAM tul FRAME sivuotsi.  
@@ -93,9 +94,8 @@ ASSIGN rl = 8.
 
 CustCollect:
 FOR EACH Customer WHERE
-         Customer.Brand = gcBrand USE-INDEX CustNum NO-LOCK:
-    lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                   BUFFER Customer).
+         Customer.Brand = Syst.Var:gcBrand USE-INDEX CustNum NO-LOCK:
+    lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                                                
     ldOPAmt = fGetCustBal(Customer.CustNum,"TOTAL","OP").
     IF ldOpAmt = 0 THEN NEXT. 
@@ -150,8 +150,7 @@ FOR EACH Customer WHERE
     FIRST OPLog NO-LOCK WHERE
           RECID(OPLog) = ttBal.OPLog:
 
-       lcType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "OpLog",
+       lcType = Func.Common:mTMSCodeName("OpLog",
                                  "EventType",
                                  STRING(OPLog.EventType)).
 
@@ -173,6 +172,6 @@ FOR EACH Customer WHERE
 
 END.
 
-{uprfeed.i rl}
+{Syst/uprfeed.i rl}
 
 

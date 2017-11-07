@@ -9,8 +9,7 @@
    FUNCTIONS .....: fSetInvoiceLogs
   ------------------------------------------------ */
 
-{commali.i}   
-{timestamp.i}
+{Syst/commali.i}   
 
 FUNCTION fCreateDPLLog RETURNS LOGICAL
   (INPUT pcUserName AS CHAR,
@@ -25,7 +24,7 @@ FUNCTION fCreateDPLLog RETURNS LOGICAL
 
    CREATE CallScanner.
    ASSIGN
-      CallScanner.TMSTime       = fmakeTS()
+      CallScanner.TMSTime       = Func.Common:mMakeTS()
       CallScanner.UserCode      = pcUserName
       CallScanner.SystemID      = pcSystemCode
       CallScanner.EventType     = pcEventType

@@ -17,7 +17,7 @@ REPEAT:
    DO:
        cTableName = TRIM(ENTRY(1, cLine, ":")).
        DISP cTableName FORMAT "X(30)".
-       run dynexport.p(pcDir, cTableName, 0, iDispInterval, lOutputFixture).
+       RUN utilities/dynexport.p(pcDir, cTableName, 0, iDispInterval, lOutputFixture).
    END.
 END.
 

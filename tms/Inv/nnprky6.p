@@ -11,9 +11,9 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i "new"}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "nnpura6"
        tuni2 = "".
@@ -38,7 +38,7 @@ form
 
    skip(13)
    WITH ROW 1 side-labels width 80
-        title " " + ynimi + " MOBILE calls SPECS # 2  " +
+        title " " + Syst.Var:ynimi + " MOBILE calls SPECS # 2  " +
         string(today,"99-99-99") + " "
         FRAME valinta.
 
@@ -74,17 +74,17 @@ toimi:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         Syst.Var:ufk[1]= 132 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= 63 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
+         RUN Syst/ufkey.p.
       END.
 
       READKEY.
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"1,f1") > 0 THEN DO:
-         ehto = 9. RUN ufkey.p.
+      if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          UPDATE 
             CustNum1
             validate(can-find(first customer where 
@@ -110,17 +110,17 @@ toimi:
          ufkey = TRUE.
          NEXT toimi.
       END.
-      else if lookup(nap,"5,f5") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"5,f5") > 0 THEN DO:
          LEAVE toimi.
       END.
-      else if lookup(nap,"8,f8") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"8,f8") > 0 THEN DO:
          RETURN.
       END.
-   END. /* toimi */
+   END. /* Syst.Var:toimi */
 
 /* Avataan striimi */
 ASSIGN tila = TRUE.
-{tmsreport.i "return"}
+{Syst/tmsreport.i "return"}
 
 message "Printing in process".            
 
@@ -130,7 +130,7 @@ RUN nnpura6(INPUT CustNum1, INPUT CustNum1,
 
 /* Suljetaan striimi */
 ASSIGN tila = FALSE.
-{tmsreport.i}
+{Syst/tmsreport.i}
 
 HIDE MESSAGE no-pause.
 HIDE FRAME rajat no-pause.

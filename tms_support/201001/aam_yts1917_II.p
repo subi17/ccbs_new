@@ -1,13 +1,12 @@
-{commpaa.i}
-gcbrand = "1".
-katun = "ari".
-{timestamp.i}
-{eventval.i}
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "ari".
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 END.
 
 

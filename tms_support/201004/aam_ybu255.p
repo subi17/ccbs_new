@@ -1,7 +1,6 @@
-{testpaa.i}
-katun = "Qvantel".
+{Syst/testpaa.i}
+Syst.Var:katun = "Qvantel".
 
-{timestamp.i}
 DEF VAR ldaActDate    AS DATE NO-UNDO.
 DEF VAR liTime        AS INT  NO-UNDO.
 def var j as int no-undo.
@@ -25,7 +24,7 @@ FOR EACH MsRequest NO-LOCK WHERE
          DayCampaign.DCEvent = MsRequest.ReqCParam3,
    first mobsub where mobsub.msseq = msrequest.msseq no-lock:
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldaActDate,
             OUTPUT liTime).
 
@@ -57,7 +56,7 @@ FOR EACH MsRequest NO-LOCK WHERE
             invoice.invtype = 1 no-lock no-error.
       if not available invoice then do:
 
-            RUN creasfee (MsRequest.CustNum,
+            RUN Mc/creasfee.p (MsRequest.CustNum,
                           MsRequest.MsSeq,
                           ldaActDate,
                           "FeeModel",

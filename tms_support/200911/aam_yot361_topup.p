@@ -1,7 +1,7 @@
-{testpaa.i}
-katun = "ari".
-{ftaxdata.i}
-{ftopup.i}
+{Syst/testpaa.i}
+Syst.Var:katun = "ari".
+{Func/ftaxdata.i}
+{Func/ftopup.i}
 
 def stream sread.
 input stream sread from /apps/snet/200911/PREPAGO_F_F_200911.txt.

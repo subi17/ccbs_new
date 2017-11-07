@@ -10,9 +10,9 @@
 &THEN
 &GLOBAL-DEFINE PUBLISH_INVOICE_I YES
 
-{commali.i}
-{fcreatereq.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/fcreatereq.i}
+{Syst/tmsconst.i}
 
 function fPublishIFSValidate returns logical
    (INPUT  idaPeriod AS DATE,
@@ -24,7 +24,7 @@ function fPublishIFSValidate returns logical
    DEFINE VARIABLE ldeNextMonth    AS DECIMAL NO-UNDO.
 
    IF CAN-FIND(FIRST ActionLog WHERE
-                     ActionLog.Brand        = gcBrand    AND
+                     ActionLog.Brand        = Syst.Var:gcBrand    AND
                      ActionLog.TableName    = "Invoice"  AND
                      ActionLog.ActionID     = "DelState" AND
                      ActionLog.ActionPeriod = YEAR(idaPeriod) * 100 + MONTH(idaPeriod)
@@ -45,7 +45,7 @@ function fPublishIFSValidate returns logical
       ldeNextMonth = liYear * 10000 + liMonth * 100 + 1.
 
       FIND FIRST MsRequest NO-LOCK WHERE
-                 MsRequest.Brand    = gcBrand                  AND
+                 MsRequest.Brand    = Syst.Var:gcBrand                  AND
                  MsRequest.ReqType  = ({&REQTYPE_PUBLISH_IFS}) AND
                  MsRequest.ActStamp > ldeCurrentMonth          AND
                  MsRequest.ActStamp < ldeNextMonth             AND

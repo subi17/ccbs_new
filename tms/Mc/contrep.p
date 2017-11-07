@@ -8,8 +8,8 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{utumaa.i}
+{Syst/commali.i}
+{Syst/utumaa.i}
 
 DEF INPUT PARAMETER icInvGrp1    AS CHAR  NO-UNDO. 
 DEF INPUT PARAMETER icInvGrp2    AS CHAR  NO-UNDO. 
@@ -51,6 +51,8 @@ ASSIGN
     viiva3   = fill("-",lev)
     viiva4   = fill("-",lev).
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
 
 form header
    viiva1 AT 1 SKIP
@@ -59,7 +61,7 @@ form header
       "Page" at 102  
       sl format "ZZZZ9" skip
    xDateHeader AT 40 FORMAT "X(30)"
-      pvm format "99-99-9999" at 103 skip
+      TODAY FORMAT "99-99-9999" at 103 skip
    viiva2 at 1 skip
    "Contract"   AT 1 
    "Customer"   TO 17
@@ -81,7 +83,7 @@ FUNCTION fCheckPage RETURNS LOGIC
     (iAddLine AS INT).
 
     if rl + iAddLine >= skayt1 then do:
-        {uprfeed.i rl}
+        {Syst/uprfeed.i rl}
         assign rlx = 0
                sl = sl + 1.
         view stream tul frame sivuotsi.  
@@ -117,7 +119,7 @@ IF idtClDate1 = ? AND idtClDate2 NE ?
 THEN idtClDate1 = DATE(01,01,2000).
 
 FOR EACH Contract NO-LOCK WHERE
-         Contract.Brand      = gcBrand      AND 
+         Contract.Brand      = Syst.Var:gcBrand      AND 
          Contract.CustNum   >= iiCustNum1   AND
          Contract.CustNum   <= iiCustNum2   AND
          Contract.Salesman  >= icSalesman1  AND
@@ -176,8 +178,7 @@ BY Contract.ToDate DESC:
 
    fCheckPage(0).
 
-   ASSIGN lcContrType = DYNAMIC-FUNCTION ("fTMSCodeName" in ghfunc1,
-                                          "Contract",
+   ASSIGN lcContrType = Func.Common:mTMSCodeName("Contract",
                                           "ContrType",
                                           STRING(Contract.ContrType))
           ldBilled    = 0.                                          
@@ -231,5 +232,5 @@ BY Contract.ToDate DESC:
 
 END.
 
-{uprfeed.i rl}
+{Syst/uprfeed.i rl}
 

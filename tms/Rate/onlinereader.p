@@ -9,32 +9,30 @@
   VERSION ......: YOIGO
 ------------------------------------------------------------------------ */
    
-{commali.i}
-{func.i}
-{email.i}
-{cparam2.i}
-{cdrvar.i}
-{fcustcnt.i}  
-{chkbal2.i}
-{mobol_tt.i}
-{fmakeservice.i}
-{timestamp.i}
-{fsubser.i}
-{fservlimit.i}
-{onlinevar.i}
-{daycampaign.i}
-{ficora.i}
-{heartbeat.i}
-{cdrstream_counter.i}
-{error_codes.i}
-{tmsconst.i}
-{rating_ttcall.i}
-{rate_roamzone.i}
-{onlinereader_oldcdr.i}
-{rating_double_check.i}
-{premiumnumber.i}
-{create_eventlog.i}
-{cdr_online.i}
+{Syst/commali.i}
+{Func/email.i}
+{Func/cparam2.i}
+{Mm/cdrvar.i}
+{Func/fcustcnt.i}  
+{Rate/chkbal2.i}
+{Rate/mobol_tt.i}
+{Func/fmakeservice.i}
+{Func/fsubser.i}
+{Func/fservlimit.i}
+{Rate/onlinevar.i}
+{Rate/daycampaign.i}
+{Mm/ficora.i}
+{Func/heartbeat.i}
+{Rate/cdrstream_counter.i}
+{Rate/error_codes.i}
+{Syst/tmsconst.i}
+{Rate/rating_ttcall.i}
+{Rate/rate_roamzone.i}
+{Rate/onlinereader_oldcdr.i}
+{Rate/rating_double_check.i}
+{Rate/premiumnumber.i}
+{Func/create_eventlog.i}
+{Rate/cdr_online.i}
 
 def INPUT PARAMETER    pvmlog      as lo   no-undo FORMAT "Yes/No" init true.
 def INPUT PARAMETER    ticfile     as char FORMAT "x(30)" no-undo.
@@ -90,10 +88,10 @@ DEF VAR lInvSeq     AS I   NO-UNDO.
 DEF VAR lcSetVersion  AS CHAR  NO-UNDO.
 DEF VAR ldtTMSTime    AS DATETIME NO-UNDO. 
 
-{tariff_tt.i}
+{Rate/tariff_tt.i}
 
-{mobcdr_rate.i}
-{detailseq.i}
+{Rate/mobcdr_rate.i}
+{Func/detailseq.i}
  
 DEF VAR b_btluok          AS C       NO-UNDO.
 DEF VAR r_dest            AS C       NO-UNDO.
@@ -115,9 +113,9 @@ DEF VAR lhttCall  AS HANDLE NO-UNDO.
 
 DEF VAR liTempDialType AS INT NO-UNDO.
 
-{tmsparam.i RepConfDir        return}. xConfDir        = tmsparam.CharVal.
-{tmsparam.i ErrCDouble        return}. errorcode       = tmsparam.IntVal.
-{tmsparam.i UnknownCustomer   RETURN}. liunkcust       = tmsparam.IntVal.
+{Func/tmsparam.i RepConfDir        return}. xConfDir        = tmsparam.CharVal.
+{Func/tmsparam.i ErrCDouble        return}. errorcode       = tmsparam.IntVal.
+{Func/tmsparam.i UnknownCustomer   RETURN}. liunkcust       = tmsparam.IntVal.
 
 
 CASE iiPort:
@@ -189,6 +187,10 @@ WHEN 2226 THEN ASSIGN
    liStream = 17
    lcReader = "MO6:Fixed2".
 
+WHEN 2240 THEN ASSIGN
+   liStream = 99
+   lcreader = "MO4:TAP3".
+
 WHEN 2250 THEN ASSIGN
    liStream = 30
    lcReader = "MO3:VAS-CGY".
@@ -197,9 +199,58 @@ WHEN 2270 THEN ASSIGN
    liStream = 40
    lcReader = "MO5:RoamFraud".
 
-OTHERWISE ASSIGN 
-   liStream = 99
-   lcreader = "MO4:Temporarily_online".
+/* MM-streams */
+WHEN 2310 THEN ASSIGN
+   liStream = 52
+   lcReader = "MOM:Postpaid".
+
+WHEN 2311 THEN ASSIGN
+   liStream = 54
+   lcReader = "MOM:Postpaid2".
+
+WHEN 2315 THEN ASSIGN
+   liStream = 56
+   lcReader = "MOM:Postpaid-Data".
+
+WHEN 2316 THEN ASSIGN
+   liStream = 58
+   lcReader = "MOM:Postpaid-Data2".
+
+WHEN 2320 THEN ASSIGN
+   liStream = 60
+   lcReader = "MOM2:Prepaid".
+
+WHEN 2321 THEN ASSIGN
+   liStream = 62
+   lcReader = "MOM2:Prepaid2".
+
+WHEN 2325 THEN ASSIGN
+   liStream = 64
+   lcReader = "MOM6:Fixed".
+
+WHEN 2340 THEN ASSIGN
+   liStream = 66
+   lcReader = "MOM4:TAP3".
+
+WHEN 2350 THEN ASSIGN
+   liStream = 68
+   lcReader = "MOM3:VAS-CGY".
+
+WHEN 2370 THEN ASSIGN
+   liStream = 70
+   lcReader = "MOM5:RoamFraud".
+
+
+OTHERWISE DO:
+   
+   IF TENANT-NAME(LDBNAME("common")) EQ {&TENANT_MASMOVIL} THEN
+      ASSIGN 
+         liStream = 110 
+         lcreader = "MOM7:Temporarily_online".
+   ELSE ASSIGN 
+      liStream = 100 
+      lcreader = "MO7:Temporarily_online".
+END.
 END CASE.
 
 form
@@ -400,10 +451,10 @@ else do:
 end.      
 
 
-ehto = 3. run ufkey.
+Syst.Var:ehto = 3. RUN Syst/ufkey.p.
    
    /* QUIT menutext */
-   run ufxkey(8,3).
+   RUN Syst/ufxkey.p(8,3).
    
    If NOT bOL then
       disp
@@ -411,8 +462,8 @@ ehto = 3. run ufkey.
       with frame err.
 
    
-{ticketfunc.i}
-{rating_package.i}
+{Rate/ticketfunc.i}
+{Rate/rating_package.i}
 
 fFillTT().
 ldtRefill = Today.
@@ -499,10 +550,8 @@ DO WHILE TRUE  WITH FRAME CLOG:
       end. /* bDispErrors */
    end.
 
-   IF LOOKUP(TRIM(Entry(1,callrec,lcSep)),'"ESPXF') = 0 AND 
-      LOOKUP(TRIM(Entry(1,callrec,lcSep)),'ESPXF') = 0 
-   THEN DO:
-
+   lcCustomerName = REPLACE(TRIM(ENTRY(1,callrec,lcSep)),'"',"").
+   IF LOOKUP(lcCustomerName,"ESPXF,ESPMM") EQ 0 THEN DO:
       /** fNagios(lcreader). **/
        
       DISP
@@ -551,21 +600,21 @@ DO TRANS:
                                                       
    /* it was a real CALL record, NOT a start OR END record */
    ELSE DO : 
-      {set_to_empty.i}   
+      {Rate/set_to_empty.i}   
       CASE lcSetVersion:
-      WHEN "0101MM" THEN DO:  {set0101mm.i}   END.
-      WHEN "0101YC" THEN DO:  {set0101yc.i}   END.
-      WHEN "0101YF" THEN DO:  {set0101yf.i}   END.
-      WHEN "0102GE" THEN DO:  {set0102gen.i}  END.
-      WHEN "0102YC" THEN DO:  {set0102yc.i}   END.
-      WHEN "0103MM" THEN DO:  {set0103mm.i}   END.
-      WHEN "0104GE" THEN DO:  {set0104ge.i}   END.
+      WHEN "0101MM" THEN DO:  {Rate/set0101mm.i}   END.
+      WHEN "0101YC" THEN DO:  {Rate/set0101yc.i}   END.
+      WHEN "0101YF" THEN DO:  {Rate/set0101yf.i}   END.
+      WHEN "0102GE" THEN DO:  {Rate/set0102gen.i}  END.
+      WHEN "0102YC" THEN DO:  {Rate/set0102yc.i}   END.
+      WHEN "0103MM" THEN DO:  {Rate/set0103mm.i}   END.
+      WHEN "0104GE" THEN DO:  {Rate/set0104ge.i}   END.
       WHEN "0104MM" OR WHEN
-           "0105MM" THEN DO:  {set0104mm.i}   END.
-      WHEN "0106MM" THEN DO:  {set0106mm.i}   END.
+           "0105MM" THEN DO:  {Rate/set0104mm.i}   END.
+      WHEN "0106MM" THEN DO:  {Rate/set0106mm.i}   END.
       END CASE.
 
-      {onlinesave.i}  
+      {Rate/onlinesave.i}  
 
       ASSIGN ttcall.rateccn = ttcall.spocmt.
 
@@ -610,7 +659,7 @@ DO TRANS:
       ASSIGN
          ttCall.ReadDate  = TODAY
          ttCall.ReadTime  = TIME
-         ttCall.ReadInTS  = fMake2Dt(ttCall.ReadDate, ttCall.ReadTime)
+         ttCall.ReadInTS  = Func.Common:mMake2DT(ttCall.ReadDate, ttCall.ReadTime)
          ldtTMSTime       = NOW
          TTCall.custNum   = liunkcust
          amt2 = amt2 + 1
@@ -632,6 +681,14 @@ DO TRANS:
       ttCall.dtlseq = fStreamSequence(INPUT ttCall.datest, liStream).
 
       oiErrorCode = fRawTicketCheck().
+      
+      IF oiErrorCode = 0 THEN DO:
+         IF (TENANT-NAME(LDBNAME(1)) EQ {&TENANT_MASMOVIL} AND
+             lcCustomerName NE "ESPMM") OR
+            (TENANT-NAME(LDBNAME(1)) EQ {&TENANT_YOIGO} AND
+             lcCustomerName NE "ESPXF") THEN 
+         oiErrorCode = {&CDR_ERROR_INCORRECT_BRAND}.
+      END.
 
       IF oiErrorCode = 0 THEN 
          oiErrorCode = fCallCaseCheck(ttCall.SpoCMT,ttCall.DateSt).
@@ -666,7 +723,7 @@ DO TRANS:
             (LOOKUP(STRING(ttCall.SpoCMT),"3,7") > 0 AND 
              ttCall.MSCID = "PRE" AND ttCall.PPFlag = 1))
          THEN DO:
-            IF ttCall.MSCID NE "FIXED" THEN
+            IF NOT ttCall.MSCID BEGINS "FIX" THEN
                fTicketCheck(INPUT "MSOWNER", 
                             STRING(ttCall.CLI),
                             OUTPUT oiERrorCode).               
@@ -866,7 +923,7 @@ DO TRANS:
            IF ttCall.Spocmt = 66 THEN liTempDialType = 4.
            ELSE liTempDialType = 1.
            FOR FIRST BDest NO-LOCK WHERE
-                     BDest.Brand  = gcBrand AND
+                     BDest.Brand  = Syst.Var:gcBrand AND
                      BDest.Bdest  = ttCall.BDest AND
                      BDest.DestType = ttCall.BType AND
                      BDest.Class  = 2 AND
@@ -954,7 +1011,7 @@ DO TRANS:
 
           /* data, voice and other packages */
          fPackageCalculation().
-                  
+
          IF ttCall.ErrorCode > 0 THEN DO:
             ttCall.InvSeq = 0.
             fBCopy().
@@ -1010,7 +1067,7 @@ DO TRANS:
       /* Update PremiumNumber Operator information only for VOICE */
       IF ttCall.MSCID <> "CCGW" THEN DO:
          FIND FIRST BillItem WHERE
-                    BillItem.Brand    = gcBrand AND
+                    BillItem.Brand    = Syst.Var:gcBrand AND
                     BillItem.BillCode = ttCall.BillCode NO-LOCK NO-ERROR.
          IF AVAILABLE BillItem AND BillItem.BIGroup = "6" THEN
             ttCall.ServiceName = fGetPremiumServiceName(ttCall.GsmBnr,

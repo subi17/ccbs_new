@@ -18,15 +18,14 @@ llsimulated = FALSE.
 OUTPUT STREAM sLog TO VALUE(lcLogFile).
 INPUT STREAM sMSISDN FROM VALUE(lcInputFile).
 
-{commpaa.i}
-katun = "rafaeldv".
-gcBrand  = "1".
-{timestamp.i}
-{msisdn.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "rafaeldv".
+Syst.Var:gcBrand  = "1".
+{Func/msisdn.i}
 
 def buffer msisdnbuf for msisdn.
 DEFINE VARIABLE ldTS AS DECIMAL NO-UNDO. 
-ldTS = fMakeTS().
+ldTS = Func.Common:mMakeTS().
 
 REPEAT:
    IMPORT STREAM sMSISDN UNFORMATTED cCLI.
@@ -40,7 +39,7 @@ REPEAT:
       NEXT.
    END.
       
-   FIND FIRST msisdn where msisdn.brand = gcBrand and 
+   FIND FIRST msisdn where msisdn.brand = Syst.Var:gcBrand and 
       msisdn.cli = msisdnnumber.cli NO-LOCK NO-ERROR.
    IF NOT AVAIL msisdn THEN DO:
       put stream sLog unformatted msisdnnumber.cli "|ERROR:MSISDN not found" skip.

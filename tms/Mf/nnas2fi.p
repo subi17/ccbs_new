@@ -8,7 +8,7 @@ CHANGED .....: 30.06.1999 pt get OUTPUT directory from TMSParam
 VERSION .....: M15
 =============================================================== */
 
-{commali.i}  
+{Syst/commali.i}  
 
 DEF STREAM whitelist.
 
@@ -77,11 +77,11 @@ FIND LAST Customer no-lock no-error.
 ASSIGN cust-nr2 = Customer.CustNum date1 = TODAY date2 = TODAY.
 
 
-{tmsparam.i WlFileDir return}.  
+{Func/tmsparam.i WlFileDir return}.  
 
 /*
 DO FOR kayt:
-   FIND kayt where kayt.ka-tun = katun no-lock.
+   FIND kayt where kayt.ka-tun = Syst.Var:katun no-lock.
    exdir = kayt.txtdir.
 END.
 
@@ -95,22 +95,22 @@ DISP wlname WITH FRAME rajat.
 
 rajat:
 repeat WITH FRAME rajat.
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE wlname cust-nr1 cust-nr2 date1 date2 q.
 
 toimi:
    repeat:
-      ASSIGN ufk = 0 ehto = 0 ufk[1] = 7  ufk[4] = 942 ufk[5] = 15 ufk[8] = 8.
-      RUN ufkey.
-      IF toimi = 1 THEN NEXT rajat.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ehto = 0 Syst.Var:ufk[1] = 7  Syst.Var:ufk[4] = 942 Syst.Var:ufk[5] = 15 Syst.Var:ufk[8] = 8.
+      RUN Syst/ufkey.p.
+      IF Syst.Var:toimi = 1 THEN NEXT rajat.
 
-      IF toimi = 4 THEN DO WITH FRAME cust.
-         ehto = 9. RUN ufkey.
+      IF Syst.Var:toimi = 4 THEN DO WITH FRAME cust.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          PAUSE 0.
          UPDATE cust-nr[1 FOR 14] EDITING:
             READKEY.
-            nap = keylabel(LASTKEY).
-            IF lookup(nap,poisnap) > 0 THEN DO:
+            Syst.Var:nap = keylabel(LASTKEY).
+            IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
                PAUSE 0 no-message.
 
                i = frame-index.
@@ -137,8 +137,8 @@ toimi:
          NEXT toimi.
       END.
 
-      IF toimi = 8 THEN UNDO rajat, LEAVE rajat.
-      IF toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 8 THEN UNDO rajat, LEAVE rajat.
+      IF Syst.Var:toimi = 5 THEN DO:
          BELL.
          message "Are you SURE You want to create this File (Y/N) ? " UPDATE ok.
          IF ok THEN LEAVE toimi.

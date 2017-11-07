@@ -9,7 +9,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 def  shared var siirto as char.
 
@@ -24,20 +24,20 @@ def var must-add    as logic                no-undo.
 form
       FeeModel.FeeModel FORMAT "X(16)"
       FeeModel.FeeName  format "x(50)"
-    with scroll 1 11 down  row 4 centered color value(cfc) overlay
-    title color value(ctc) " Billing Events " FRAME sel.                
+    with scroll 1 11 down  row 4 centered color value(Syst.Var:cfc) overlay
+    title color value(Syst.Var:ctc) " Billing Events " FRAME sel.                
 
 form /* SEEK Code */
     FeeModel
     help "Enter Code of a Billing Event "        
-    with row 4 col 2 title color value(ctc) " FIND CODE "
-    color value(cfc) no-labels overlay frame hayr.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND CODE "
+    color value(Syst.Var:cfc) no-labels overlay frame hayr.
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.Var:ccc = Syst.Var:cfc.
 MAIN:
 repeat:
 
-   find first FeeModel WHERE FeeModel.Brand = gcBrand 
+   find first FeeModel WHERE FeeModel.Brand = Syst.Var:gcBrand 
    no-lock no-error.
    if not available FeeModel then do:
       must-print = false.
@@ -69,7 +69,7 @@ print-line:
             with frame sel.
             rtab[frame-line] = recid(FeeModel).
             down with frame sel.
-            find next FeeModel WHERE FeeModel.Brand = gcBrand
+            find next FeeModel WHERE FeeModel.Brand = Syst.Var:gcBrand
             no-lock no-error.
          end.
          must-print = false.
@@ -78,10 +78,10 @@ print-line:
 
       if ufkey then do:
          assign
-         ufk = 0 ufk[1] = 35 ufk[5] = 11
-         ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
-         siirto = ? ehto = 3 ufkey = false.
-         run ufkey.p.
+         Syst.Var:ufk = 0 Syst.Var:ufk[1] = 35 Syst.Var:ufk[5] = 11
+         Syst.Var:ufk[6] = 0 Syst.Var:ufk[8] = 8  Syst.Var:ufk[9] = 1
+         siirto = ? Syst.Var:ehto = 3 ufkey = false.
+         RUN Syst/ufkey.p.
       end.
   end. /* print-line */
 
@@ -89,18 +89,18 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row FeeModel.FeeModel ;(uchoose.i;) no-error with frame sel.
-         color display value(ccc) FeeModel.FeeModel with frame sel.
+         choose row FeeModel.FeeModel {Syst/uchoose.i} no-error with frame sel.
+         color display value(Syst.Var:ccc) FeeModel.FeeModel with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.
-         nap = keylabel(lastkey).
+         Syst.Var:nap = keylabel(lastkey).
 
          /* previous line */
-         if lookup(nap,"cursor-up") > 0 then do
+         if lookup(Syst.Var:nap,"cursor-up") > 0 then do
          with frame sel:
             if frame-line = 1 then do:
                find FeeModel where recid(FeeModel) = rtab[frame-line] no-lock.
-               find prev FeeModel WHERE FeeModel.Brand = gcBrand
+               find prev FeeModel WHERE FeeModel.Brand = Syst.Var:gcBrand
                no-lock no-error.
                if not available FeeModel then do:
                   bell.
@@ -123,10 +123,10 @@ BROWSE:
          end. /* previous line */
 
          /* next line */
-         if lookup(nap,"cursor-down") > 0 then do with frame sel:
+         if lookup(Syst.Var:nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                find FeeModel where recid(FeeModel) = rtab[frame-line] no-lock .
-               find next FeeModel WHERE FeeModel.Brand = gcBrand
+               find next FeeModel WHERE FeeModel.Brand = Syst.Var:gcBrand
                no-lock no-error.
                if not available FeeModel then do:
                   bell.
@@ -150,14 +150,14 @@ BROWSE:
          end. /* next line */
 
          /* previous page */
-         else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
+         else if lookup(Syst.Var:nap,"page-up,prev-page") > 0 then do with frame sel:
             find FeeModel where recid(FeeModel) = memory no-lock no-error.
-            find prev FeeModel WHERE FeeModel.Brand = gcBrand
+            find prev FeeModel WHERE FeeModel.Brand = Syst.Var:gcBrand
             no-lock no-error.
             if available FeeModel then do:
 
                do i = 1 to (frame-down - 1):
-                  find prev FeeModel WHERE FeeModel.Brand = gcBrand
+                  find prev FeeModel WHERE FeeModel.Brand = Syst.Var:gcBrand
                   no-lock no-error.
                   if available FeeModel then memory = recid(FeeModel).
                   else i = frame-down.
@@ -174,7 +174,7 @@ BROWSE:
         end. /* previous page */
 
         /* next page */
-        else if lookup(nap,"page-down,next-page") > 0 then do with frame sel:
+        else if lookup(Syst.Var:nap,"page-down,next-page") > 0 then do with frame sel:
            if rtab[frame-down] = ? then do:
                bell.
                message "This is the last page !".
@@ -188,14 +188,14 @@ BROWSE:
         end. /* next page */
 
         /* Seek */
-        if lookup(nap,"1,f1") > 0 then do:  /* FeeModel */
-           cfc = "puyr". run ufcolor.
-           ehto = 9. run ufkey. ufkey = true.
+        if lookup(Syst.Var:nap,"1,f1") > 0 then do:  /* FeeModel */
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            update FeeModel with frame hayr.
            hide frame hayr no-pause.
            if FeeModel ENTERED then do:
               find first FeeModel where 
-                         FeeModel.Brand     = gcBrand  AND 
+                         FeeModel.Brand     = Syst.Var:gcBrand  AND 
                          FeeModel.FeeModel >= FeeModel
               no-lock no-error.
                if not available FeeModel then do:
@@ -213,28 +213,28 @@ BROWSE:
         end. /* Seek */
 
         /* Choose */
-        else if lookup(nap,"return,enter,5,f5") > 0 then do:
+        else if lookup(Syst.Var:nap,"return,enter,5,f5") > 0 then do:
            find FeeModel where recid(FeeModel) = rtab[frame-line] no-lock.
            siirto = string(FeeModel.FeeModel).
            leave MAIN.
         end. /* Choose */
         /* First record */
-        else if lookup(nap,"home,h") > 0 then do:
-           find first FeeModel no-lock WHERE FeeModel.Brand = gcBrand.
+        else if lookup(Syst.Var:nap,"home,h") > 0 then do:
+           find first FeeModel no-lock WHERE FeeModel.Brand = Syst.Var:gcBrand.
            memory = recid(FeeModel).
            must-print = true.
            next LOOP.
         end. /* First record */
 
         /* last record */
-        else if lookup(nap,"end,e") > 0 then do :
-           find last FeeModel no-lock WHERE FeeModel.Brand = gcBrand.
+        else if lookup(Syst.Var:nap,"end,e") > 0 then do :
+           find last FeeModel no-lock WHERE FeeModel.Brand = Syst.Var:gcBrand.
            memory = recid(FeeModel).
            must-print = true.
            next LOOP.
         end. /* last record */
 
-        else if nap = "8" or nap = "f8" then leave MAIN. /* Return */
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" then leave MAIN. /* Return */
 
      end.  /* BROWSE */
    end.  /* LOOP */

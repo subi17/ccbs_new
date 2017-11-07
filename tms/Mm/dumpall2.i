@@ -7,15 +7,14 @@
   CHANGED ......: 07.02.06 mvi/ dump files compressed with zip
                   05.09.06/aam  spool directed to /tmp
                   11.09.06 kl /tmp/ instead of /tmp
-                  14.09.06 kl commpaa + gcBrand
+                  14.09.06 kl commpaa + Syst.Var:gcBrand
 
   Version ......: TeleFinland
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
-{excel.i}
-{date.i}
-{cparam2.i}
+{Syst/commpaa.i}
+{Func/excel.i}
+{Func/cparam2.i}
 
 def var i as i no-undo.
 def var lcspooldir as ch no-undo.
@@ -23,12 +22,12 @@ def var lcoutdir as ch no-undo.
 def var lcdir as ch no-undo.
 def var lcfilename as ch no-undo.
 
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 assign 
    lcoutdir   = fCParam("dumpoutgoing","dumpall2.i")
    lcspooldir = fCParam("dumpspool","dumpall2.i")
-   lcFileName = "{1}" + fdatefmt(TODAY,"yyyymmdd") + 
+   lcFileName = "{1}" + Func.Common:mDateFmt(TODAY,"yyyymmdd") + 
                 STRING(TIME,"HH:MM:SS") + ".dump".
    lcFileName = REPLACE(lcFileName,":","").
 

@@ -8,13 +8,12 @@
   VERSIO .......: 
 ---------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{fcustbal.i}
-{fbankdata.i}
-{fmanualpaymreq.i}
-{fuserright.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/fcustbal.i}
+{Func/fbankdata.i}
+{Func/fmanualpaymreq.i}
+{Func/fuserright.i}
 
 DEF INPUT PARAMETER iiCustNum AS INT  NO-UNDO.
 DEF INPUT PARAMETER icCLI     AS CHAR NO-UNDO.
@@ -64,7 +63,7 @@ FORM
    ROW 3 CENTERED OVERLAY FRAME fCrit.
 
 FIND Customer WHERE 
-     Customer.Brand   = gcBrand AND
+     Customer.Brand   = Syst.Var:gcBrand AND
      Customer.CustNum = iiCustNum NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Customer THEN DO:
    MESSAGE "Unknown customer" iiCustNum
@@ -73,7 +72,7 @@ IF NOT AVAILABLE Customer THEN DO:
    RETURN.
 END.
 
-IF fTokenRights(katun,"SYST") = "" THEN DO:
+IF fTokenRights(Syst.Var:katun,"SYST") = "" THEN DO:
    MESSAGE "Function not allowed"
    VIEW-AS ALERT-BOX INFORMATION.
    RETURN.
@@ -96,8 +95,7 @@ IF LENGTH(lcBankAcc) > 10 THEN
                SUBSTRING(lcBankAcc,13,2) + " " +
                SUBSTRING(lcBankAcc,15). 
 
-lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                              BUFFER Customer).
+lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                               
 PAUSE 0.
 DISP Customer.CustNum
@@ -119,21 +117,21 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
  
    IF llUfkey THEN DO:
       ASSIGN
-      ufk    = 0
-      ufk[1] = 7  
-      ufk[5] = 1734 
-      ufk[8] = 8
-      ehto   = 0.
-      RUN ufkey.
+      Syst.Var:ufk    = 0
+      Syst.Var:ufk[1] = 7  
+      Syst.Var:ufk[5] = 1734 
+      Syst.Var:ufk[8] = 8
+      Syst.Var:ehto   = 0.
+      RUN Syst/ufkey.p.
    END.
    ELSE ASSIGN 
       llUfkey = TRUE
-      toimi   = 1.
+      Syst.Var:toimi   = 1.
 
-   IF toimi = 1 THEN DO:
+   IF Syst.Var:toimi = 1 THEN DO:
    
-      ASSIGN ehto = 9.
-      RUN ufkey.
+      ASSIGN Syst.Var:ehto = 9.
+      RUN Syst/ufkey.p.
 
       REPEAT ON ENDKEY UNDO, LEAVE:
       
@@ -144,7 +142,7 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
           
              READKEY.
              
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 
              THEN DO WITH FRAME fCrit:
              
                 PAUSE 0.
@@ -159,7 +157,7 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
 
    END.   
    
-   ELSE IF toimi = 5 THEN DO:
+   ELSE IF Syst.Var:toimi = 5 THEN DO:
       
       IF ldAmt = 0 THEN DO:
          MESSAGE "Amount has not been given"
@@ -181,8 +179,8 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
          NEXT.
       END.
       
-      ehto = 5. 
-      RUN ufkey.
+      Syst.Var:ehto = 5. 
+      RUN Syst/ufkey.p.
  
       /* 15 mins from now */
       ASSIGN 
@@ -193,7 +191,7 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
          ldtDate = ldtDate + 1
          liTime  = liTime - 86400.
          
-      ldActStamp = fMake2Dt(ldtDate,liTime).
+      ldActStamp = Func.Common:mMake2DT(ldtDate,liTime).
       
       liRequest = 
          fManualPaymentRequest(Customer.CustNum,
@@ -215,18 +213,18 @@ repeat WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
       ELSE 
          MESSAGE "Request ID for manual payment is" liRequest SKIP
                  "It will be activated on" 
-                 fTS2Hms(ldActStamp)
+                 Func.Common:mTS2HMS(ldActStamp)
          VIEW-AS ALERT-BOX 
          TITLE " REQUEST CREATED ".
            
       LEAVE toimi.
    END.
 
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.Var:toimi = 8 THEN DO:
       LEAVE toimi.
    END.
       
-END. /* toimi */
+END. /* Syst.Var:toimi */
 
 HIDE MESSAGE NO-PAUSE.
 HIDE FRAME fCrit NO-PAUSE.

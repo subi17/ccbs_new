@@ -8,10 +8,10 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 /* Maaritellaan print-linemuuttujat */
-{utumaa.i "new"}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "nnhara"
        tuni2 = "".
@@ -34,8 +34,8 @@ form
 
    skip(13)
    WITH ROW 1 side-labels width 80
-   title " " + ynimi + " ALARM LIST " +
-   string(pvm,"99-99-99") + " "
+   title " " + Syst.Var:ynimi + " ALARM LIST " +
+   string(TODAY,"99-99-99") + " "
    FRAME valinta.
 
 form
@@ -62,17 +62,17 @@ toimi:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       IF ufkey THEN DO:
     ASSIGN
-    ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-    ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-    ehto = 3 ufkey = FALSE.
-    RUN ufkey.p.
+    Syst.Var:ufk[1]= 132 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+    Syst.Var:ufk[5]= 63 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+    Syst.Var:ehto = 3 ufkey = FALSE.
+    RUN Syst/ufkey.p.
       END.
 
       READKEY.
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"1,f1") > 0 THEN DO:
-    ehto = 9. RUN ufkey.p.
+      if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:
+    Syst.Var:ehto = 9. RUN Syst/ufkey.p.
     UPDATE cust-nr1
       cust-nr2
       validate(input cust-nr2 = "" OR INPUT cust-nr2 >= INPUT cust-nr1,
@@ -83,25 +83,25 @@ toimi:
     ufkey = TRUE.
     NEXT toimi.
       END.
-      else if lookup(nap,"5,f5") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"5,f5") > 0 THEN DO:
     LEAVE toimi.
       END.
-      else if lookup(nap,"8,f8") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"8,f8") > 0 THEN DO:
     RETURN.
       END.
-   END. /* toimi */
+   END. /* Syst.Var:toimi */
 
 /* Avataan striimi */
 ASSIGN tila = TRUE.
-{tmsreport.i "return"}
+{Syst/tmsreport.i "return"}
 
 message "Writing report, cancel = ESC".
 
-RUN nnhara1(INPUT cust-nr1,input cust-nr2).
+RUN Mc/nnhara1.p(INPUT cust-nr1,input cust-nr2).
 
 /* Suljetaan striimi */
 ASSIGN tila = FALSE.
-{tmsreport.i}
+{Syst/tmsreport.i}
 
 HIDE MESSAGE no-pause.
 HIDE FRAME rajat no-pause.

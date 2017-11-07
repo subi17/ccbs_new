@@ -7,13 +7,14 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
-ASSIGN gcBrand = "1" 
-       katun   = "Cron".
+ASSIGN Syst.Var:gcBrand = "1" 
+       Syst.Var:katun   = "Cron".
        
-{cparam2.i}
-{eventlog.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Func/multitenantfunc.i}
 
 DEF VAR liCnt       AS INT  NO-UNDO.
 DEF VAR lcIFSFile   AS CHAR NO-UNDO.
@@ -36,13 +37,16 @@ llControl = (SESSION:PARAMETER = "control").
 IF llControl THEN lcControl = "_CONTROL".
 
 FIND FIRST Company WHERE
-           Company.Brand = gcBrand NO-LOCK NO-ERROR.
-IF AVAILABLE Company THEN ynimi = Company.CompName.
+           Company.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
+IF AVAILABLE Company THEN Syst.Var:ynimi = Company.CompName.
 
 IF llControl THEN 
    lcReadDir = fCParamC("IFSPaymStatusControl").
 ELSE lcReadDir  = fCParamC("IFSPaymStatusFile").
-   
+  
+lcReadDir = REPLACE(lcReadDir,"#TENANT", 
+            CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1))))).
+ 
 IF lcReadDir = "" OR lcReadDir = ? THEN RETURN "ERROR:Definitions missing".
    
 
@@ -71,7 +75,7 @@ FOR EACH ttFiles:
 
    liFiles = liFiles + 1.
    
-   RUN ifs_payment_status (ttFiles.IFSFile,
+   RUN Ar/ifs_payment_status.p (ttFiles.IFSFile,
                            llControl,
                            OUTPUT liRead,
                            OUTPUT liError).

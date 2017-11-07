@@ -7,12 +7,11 @@
   CHANGED ......: 
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{commali.i}
-{cparam2.i}
-{dumpfile_run.i}
-{finvbal.i}
-{timestamp.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/dumpfile_run.i}
+{Func/finvbal.i}
+{Syst/tmsconst.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -35,7 +34,7 @@ FUNCTION fTutkaTime RETURN CHARACTER
    DEF VAR tme        AS I  NO-UNDO.
 
             
-    fSplitTS(idTimeStamp, OUTPUT dte, OUTPUT tme) .
+    Func.Common:mSplitTS(idTimeStamp, OUTPUT dte, OUTPUT tme) .
 
     outstring = STRING(Month(dte),"99")        + "/"  +
                 STRING(DaY(dte),"99")         + "/"  + 
@@ -60,8 +59,8 @@ END FUNCTION.
             
              
 ASSIGN
-   ldStartTime = fHMS2TS(today - 1, "00:00:00").
-   ldEndTime   = fHMS2TS(today,    "00:00:00") .
+   ldStartTime = Func.Common:mHMS2TS(today - 1, "00:00:00").
+   ldEndTime   = Func.Common:mHMS2TS(today,    "00:00:00") .
 
 
 OUTPUT STREAM Tutka TO VALUE(icFile).

@@ -1,8 +1,8 @@
-{commpaa.i}
-katun = "anttis".
-gcBrand = "1".
+{Syst/commpaa.i}
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 
-{msreqfunc.i}
+{Func/msreqfunc.i}
 
 find msrequest where
      msrequest.msrequest = 30337730 and

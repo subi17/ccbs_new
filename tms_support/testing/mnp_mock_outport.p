@@ -8,14 +8,13 @@ CHANGED ......:
 Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
-   katun = "Qvantel"
-      gcBrand = "1".
-{cparam2.i}
-{xmlrpc/xmlrpc_client.i}
-{tmsconst.i}
-{timestamp.i}
+   Syst.Var:katun = "Qvantel"
+      Syst.Var:gcBrand = "1".
+{Func/cparam2.i}
+{fcgi_agent/xmlrpc/xmlrpc_client.i}
+{Syst/tmsconst.i}
 
 
 DEFINE VARIABLE ocResponse AS CHAR NO-UNDO.
@@ -84,15 +83,15 @@ PROCEDURE pUserInput:
       UPDATE lcCLI liCustNum WITH FRAME lis EDITING:
 
          IF ufkey THEN DO:
-            ASSIGN ehto = 9. RUN ufkey.p.
+            ASSIGN Syst.Var:ehto = 9. RUN Syst/ufkey.p.
             ufkey = false.
          END.
 
          READKEY.
 
-         nap = keylabel(lastkey).
+         Syst.Var:nap = keylabel(lastkey).
 
-         IF LOOKUP(nap,poisnap) > 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
 
             IF INPUT lcCLI > "" AND FRAME-FIELD = "lcCLI" THEN DO:
                FIND FIRST MobSub WHERE
@@ -155,6 +154,7 @@ PROCEDURE pAddRequestStructElement:
    DEF VAR lcMSISDNRangeStruct AS CHAR NO-UNDO.
    DEF VAR lcMSISDNICC         AS CHAR NO-UNDO.
    DEF VAR i                   AS INT  NO-UNDO.
+   DEF VAR lcTenant            AS CHAR NO-UNDO.
 
    ASSIGN 
       liSeq     = NEXT-VALUE(M2MSeq)
@@ -163,7 +163,7 @@ PROCEDURE pAddRequestStructElement:
 
    /* Adjust time limits */
    ASSIGN
-      ldeCreationTS = fMakeTS()
+      ldeCreationTS = Func.Common:mMakeTS()
       liCurHour = TIME
       liMorning =  8 * 3600
       liMidday  = 14 * 3600
@@ -175,7 +175,7 @@ PROCEDURE pAddRequestStructElement:
    ELSE IF liCurHour < liEvening THEN
       ldaNowDay = TODAY + 2.
 
-   ldePortTime = fHMS2TS(ldaNowDay,"02:00:00").
+   ldePortTime = Func.Common:mHMS2TS(ldaNowDay,"02:00:00").
 
    IF lcCLI > "" THEN DO:
       FIND FIRST MobSub WHERE
@@ -194,6 +194,8 @@ PROCEDURE pAddRequestStructElement:
       RETURN.
    END.
 
+   ASSIGN lcTenant = BUFFER-TENANT-NAME(Customer).
+
    initialize(lcConURL, 5).
 
    /* Main Struct */
@@ -205,7 +207,7 @@ PROCEDURE pAddRequestStructElement:
 
    /* Notify Struct */
    lcNotifyStruct = add_struct(lcNotifyArray, "").
-   add_timestamp(lcNotifyStruct, "fechaCreacion", fmakets()).
+   add_timestamp(lcNotifyStruct, "fechaCreacion", Func.Common:mMakeTS()).
    add_boolean(lcNotifyStruct, "sincronizada", FALSE).
    add_string(lcNotifyStruct, "codigoNotificacion", lcInitInfo).
 
@@ -240,12 +242,12 @@ PROCEDURE pAddRequestStructElement:
    add_string(lcRequestStruct, "codigoContrato", lcFormRequest).
 
    add_boolean(lcRequestStruct, "fechaVentanaCambioPorAbonado",FALSE ).
-   add_string(lcRequestStruct, "NRNReceptor", "004").
+   add_string(lcRequestStruct, "NRNReceptor", "730000").
    add_string(lcRequestStruct, "codigoOperadorReceptor", "004").
-   add_string(lcRequestStruct, "codigoOperadorDonante", "005").
-   add_timestamp(lcRequestStruct, "fechaSolicitudPorAbonado", fMakeTS()).
+   add_string(lcRequestStruct, "codigoOperadorDonante", (IF lcTenant = "TMasmovil" THEN "200" ELSE "005")).
+   add_timestamp(lcRequestStruct, "fechaSolicitudPorAbonado", Func.Common:mMakeTS()).
    add_timestamp(lcRequestStruct, "fechaLimiteCambioEstado",
-                 fHMS2TS(ldaNowDay - 1,"14:00:00")).
+                 Func.Common:mHMS2TS(ldaNowDay - 1,"14:00:00")).
    add_boolean(lcRequestStruct, "operadorDonanteAltaExtraordinaria", FALSE).
 
    /* Subscription Struct */

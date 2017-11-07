@@ -7,11 +7,11 @@
   Version ......: M15
   ----------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF VAR defdir AS c NO-UNDO.
 DO FOR TMSUser:
-  FIND TMSUser where TMSUser.UserCode = katun no-lock.
+  FIND TMSUser where TMSUser.UserCode = Syst.Var:katun no-lock.
   defdir = TMSUser.RepDir.
 END.
 

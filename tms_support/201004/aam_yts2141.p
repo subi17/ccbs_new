@@ -1,5 +1,5 @@
-{testpaa.i}
-katun = "qvantel".
+{Syst/testpaa.i}
+Syst.Var:katun = "qvantel".
 
 
 def var i as int no-undo.

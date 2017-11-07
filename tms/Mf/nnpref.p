@@ -11,10 +11,9 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{date.i}
-{tmsparam2.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/tmsparam2.i}
 
 DEF TEMP-TABLE Calls
    FIELD pref       AS c
@@ -75,7 +74,7 @@ repeat WITH FRAME frm:
 
    HIDE MESSAGE no-pause.
 
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       date1 date2 validate(input date2 >= input date1, "check order !")
       fname 
@@ -83,12 +82,12 @@ repeat WITH FRAME frm:
 
 task:
    repeat WITH FRAME frm ON ENDKEY UNDO, RETURN:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
-      IF toimi = 1 THEN NEXT  CRIT.
-      IF toimi = 8 THEN LEAVE CRIT.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
+      RUN Syst/ufkey.p.
+      IF Syst.Var:toimi = 1 THEN NEXT  CRIT.
+      IF Syst.Var:toimi = 8 THEN LEAVE CRIT.
 
-      IF toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
          ok = FALSE.
          message "Are you SURE you want to start processing (Y/N) ?" UPDATE ok.
          IF ok THEN LEAVE task.
@@ -127,8 +126,8 @@ task:
    OUTPUT STREAM excel TO value(fname).
 
    ASSIGN
-      cday1 = fDateFmt(date1,"yyyy-mm-dd")
-      cday2 = fDateFmt(date2,"yyyy-mm-dd").
+      cday1 = Func.Common:mDateFmt(date1,"yyyy-mm-dd")
+      cday2 = Func.Common:mDateFmt(date2,"yyyy-mm-dd").
 
    PUT STREAM excel UNFORMATTED
       "Prefix traffic between " 

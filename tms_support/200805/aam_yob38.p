@@ -1,5 +1,5 @@
-{testpaa.i}
-katun = "ari".
+{Syst/testpaa.i}
+Syst.Var:katun = "ari".
 
 def var lccli      as char no-undo.
 def var i          as int  no-undo.
@@ -59,7 +59,7 @@ repeat:
    
    ttseq.invnum = min(ttseq.invnum,integer(substring(invoice.extinvid,5))).
    
-   run del_inv.p (invoice.invnum).
+   RUN Inv/del_inv.p (invoice.invnum).
    
 end.
 

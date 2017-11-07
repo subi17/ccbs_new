@@ -1,5 +1,5 @@
-{testpaa.i}
-katun = "ari".
+{Syst/testpaa.i}
+Syst.Var:katun = "ari".
 
 def stream sread.
 input stream sread from /apps/snet/200908/FAT_BARRED_CUSTOMER.txt.
@@ -74,7 +74,7 @@ repeat:
       next.
    end.
 
-   run /home/ari/work/creafat.p (msowner.invcust,
+   RUN /home/ari/work/creafat.p (msowner.invcust,
                   msowner.msseq,
                   lcfatgrp,
                   ldamt,

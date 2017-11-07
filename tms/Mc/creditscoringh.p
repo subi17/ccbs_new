@@ -8,10 +8,9 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{tmsconst.i}
-{flimitreq.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/flimitreq.i}
 
 DEF INPUT PARAMETER piOrderId AS INT NO-UNDO.
 
@@ -27,10 +26,10 @@ DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
 DEFINE BUFFER bOrder FOR Order.
 
 FIND Order WHERE
-     Order.Brand = gcBrand AND
+     Order.Brand = Syst.Var:gcBrand AND
      Order.OrderId = piOrderId NO-LOCK NO-ERROR.
 
-RUN creditscoring.p(
+RUN Mc/creditscoring.p(
    piOrderId,
    (IF Order.OrderType = 2 THEN "RENEWAL_STC" ELSE "ORDER"),
    OUTPUT llOk,
@@ -39,10 +38,10 @@ RUN creditscoring.p(
 
 IF liEmployees < 10 THEN liEmployees = 10.
 
-ldeTime = fMakeTS().
+ldeTime = Func.Common:mMakeTS().
 
 FIND FIRST OrderCustomer WHERE 
-   OrderCustomer.Brand = gcBrand AND
+   OrderCustomer.Brand = Syst.Var:gcBrand AND
    OrderCustomer.OrderId = piOrderId AND
    OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
 
@@ -53,13 +52,13 @@ IF Order.OrderType EQ 2 THEN DO:
 END.
 ELSE DO:
    FOR EACH Order WHERE 
-      Order.Brand = gcBrand AND
+      Order.Brand = Syst.Var:gcBrand AND
       Order.StatusCode = "20" NO-LOCK:
       RUN pHandleOrder.
    END.
 
    FOR EACH Order WHERE 
-      Order.Brand = gcBrand AND
+      Order.Brand = Syst.Var:gcBrand AND
       Order.StatusCode = "21" NO-LOCK:
       RUN pHandleOrder.
    END.
@@ -70,7 +69,7 @@ IF llDoEvent THEN fCleanEventObjects().
 PROCEDURE pHandleOrder:
 
    FIND FIRST OrderCustomer WHERE 
-      OrderCustomer.Brand   = gcBrand AND
+      OrderCustomer.Brand   = Syst.Var:gcBrand AND
       OrderCustomer.OrderId = Order.OrderId AND
       OrderCustomer.RowType = 1 AND
       OrderCustomer.CustId  = lcCustId NO-LOCK NO-ERROR.
@@ -79,7 +78,7 @@ PROCEDURE pHandleOrder:
   
    FIND FIRST bOrder WHERE ROWID(bOrder) = ROWID(Order)
    EXCLUSIVE-LOCK NO-ERROR.
-  
+
    ASSIGN 
       bOrder.CredOK = llOk.
       bOrder.CREventQty = bOrder.CREventQty + 1. 
@@ -102,7 +101,7 @@ PROCEDURE pHandleOrder:
          WHEN "21" THEN DO:
          
             FIND FIRST Customer WHERE
-               Customer.Brand = gcBrand AND
+               Customer.Brand = Syst.Var:gcBrand AND
                Customer.OrgId = OrderCustomer.CustId AND
                Customer.CustIdType = "CIF" AND
                Customer.Role NE "inactive" NO-LOCK NO-ERROR.
@@ -129,18 +128,18 @@ PROCEDURE pHandleOrder:
 
       END CASE.
       
-      RUN orderhold.p(bOrder.OrderId, "RELEASE_BATCH").
+      RUN Mc/orderhold.p(bOrder.OrderId, "RELEASE_BATCH").
    
    END.
 
    CREATE Memo.
    ASSIGN
       Memo.CreStamp  = ldeTime
-      Memo.Brand     = gcBrand 
+      Memo.Brand     = Syst.Var:gcBrand 
       Memo.HostTable = "Order"
       Memo.KeyValue  = STRING(bOrder.OrderId)
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = katun 
+      Memo.CreUser   = Syst.Var:katun 
       Memo.MemoTitle = "Credit scoring " + (IF llOk THEN "ok" ELSE "fail")
       Memo.MemoText  = lcAnswerCodes.
 

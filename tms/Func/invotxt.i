@@ -37,7 +37,7 @@ Expls   = "Customer,Invoicing Group,Billing Item," +
           "Invoice,General (all customers)"
           /* Product Package,Product, */.
 
-Prog    = "nnasel,nnigse,nntuse,nncgse,nnmyse,h-invsect,mobsub,,,,,nnlase,,," 
+Prog    = "Mc/nnasel.p,Mc/nnigse.p,Help/nntuse.p,Mc/nncgse.p,Help/nnmyse.p,Help/h-invsect.p,Mm/mobsub.p,,,,,Ar/nnlase.p,,," 
             /* h-prodpack,h-product, */.
 
 ppos    = "Beg of Invoice,End of Invoice,Beg of Section,End of Section," + 
@@ -99,7 +99,7 @@ FUNCTION fValKeyValue RETURNS CHARACTER
 
       WHEN "salesman" THEN DO:
          FIND Salesman WHERE        
-             Salesman.Salesman = gcBrand AND
+             Salesman.Salesman = Syst.Var:gcBrand AND
              Salesman.Salesman = KeyValue
          NO-LOCK NO-ERROR.
          IF NOT AVAIL Salesman THEN DO:
@@ -112,7 +112,7 @@ FUNCTION fValKeyValue RETURNS CHARACTER
 
       WHEN "InvGroup" THEN DO:
          FIND InvGroup WHERE 
-            InvGroup.Brand    = gcBrand AND
+            InvGroup.Brand    = Syst.Var:gcBrand AND
             InvGroup.InvGroup = KeyValue
          NO-LOCK NO-ERROR.
          IF NOT AVAIL InvGroup THEN DO:
@@ -124,7 +124,7 @@ FUNCTION fValKeyValue RETURNS CHARACTER
 
       WHEN "BillItem" THEN DO:
          FIND BillItem WHERE 
-            BillItem.Brand    = gcBrand AND
+            BillItem.Brand    = Syst.Var:gcBrand AND
             BillItem.BillCode = KeyValue
          NO-LOCK NO-ERROR.
          IF NOT AVAIL BillItem THEN DO:
@@ -136,7 +136,7 @@ FUNCTION fValKeyValue RETURNS CHARACTER
 
       WHEN "CustGroup" THEN DO:
          FIND CustGroup WHERE 
-            CustGroup.Brand     = gcBrand AND
+            CustGroup.Brand     = Syst.Var:gcBrand AND
             CustGroup.CustGroup = KeyValue
          NO-LOCK NO-ERROR.
          IF NOT AVAIL CustGroup THEN DO:
@@ -148,7 +148,7 @@ FUNCTION fValKeyValue RETURNS CHARACTER
 
       WHEN "InvSect" THEN DO:
          FIND InvSect WHERE 
-            InvSect.Brand   = gcBrand AND
+            InvSect.Brand   = Syst.Var:gcBrand AND
             InvSect.InvSect = KeyValue
          NO-LOCK NO-ERROR.
          IF NOT AVAIL InvSect THEN DO:

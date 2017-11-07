@@ -1,7 +1,7 @@
-{testpaa.i}
-katun = "ari".
+{Syst/testpaa.i}
+Syst.Var:katun = "ari".
 
-{barrfunc.i}
+{Func/barrfunc.i}
 
 
 def var i as int no-undo.
@@ -37,11 +37,11 @@ repeat:
    lcstat = fCheckStatus(MobSub.MsSeq).
    if not lcstat begins "y_" then next.
    
-   RUN barrengine.p (Mobsub.MsSeq,
+   RUN Mm/barrengine.p (Mobsub.MsSeq,
                     "UN" + lcstat,     /* package for unbarring */
                       "5",                /* source  */
-                      katun,             /* creator */
-                      fMakeTS() + 0.0012,  /* activate */
+                      Syst.Var:katun,             /* creator */
+                      Func.Common:mMakeTS() + 0.0012,  /* activate */
                       "",                 /* sms-text */
                       OUTPUT lcResult).
 

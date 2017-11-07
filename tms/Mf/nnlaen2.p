@@ -20,11 +20,11 @@
   VERSION ......: M15
   ------------------------------------------------------------------------ */
 
-{commali.i}
-{fcustpl.i}
-{fvatfact.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'fixcdr'}
+{Syst/commali.i}
+{Func/fcustpl.i}
+{Func/fvatfact.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'fixcdr'}
 
 DEF INPUT PARAMETER  liCustNum LIKE Customer.CustNum NO-UNDO.
 
@@ -152,7 +152,7 @@ help "Latest date of call" skip(1)
 "    Billed     " lkm2 "calls," xCur2 summa2 "/" summa2a "w/VAT " SKIP(1)
 "    Pricelist(s) used:" xPLCode FORMAT "x(20)"                   SKIP(1)
 WITH
-   row 5 col 3 overlay no-labels title " " + ynimi +
+   row 5 col 3 overlay no-labels title " " + Syst.Var:ynimi +
    " Total value of calls, cust. " + string(Customer.CustNum) + " " +
    substr(Customer.CustName,1,16) + " " FRAME rajat.
 
@@ -167,18 +167,18 @@ rajat:
 repeat WITH FRAME rajat:
 
    PAUSE 0.
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE xCLI pvm1 pvm2
    validate (input pvm2 >= input pvm1,"Incorrect order !").
 
 toimi:
    repeat WITH FRAME toimi:
-      ASSIGN ufk = 0 ehto = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8.
-      RUN ufkey.
-      IF toimi = 1 THEN NEXT  rajat.
-      IF toimi = 8 THEN LEAVE rajat.
-      IF toimi = 5 THEN LEAVE toimi.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ehto = 0 Syst.Var:ufk[1] = 132 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8.
+      RUN Syst/ufkey.p.
+      IF Syst.Var:toimi = 1 THEN NEXT  rajat.
+      IF Syst.Var:toimi = 8 THEN LEAVE rajat.
+      IF Syst.Var:toimi = 5 THEN LEAVE toimi.
    END.
 
    ASSIGN lkm1 = 0 lkm2 = 0 summa1 = 0 summa2 = 0

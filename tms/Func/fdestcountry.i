@@ -1,7 +1,7 @@
 /* fdestcountry.i    30.11.09/aam 
 */
 
-{transname.i}
+{Func/transname.i}
 
 &IF "{&DestCountry}" NE "YES" 
 &THEN
@@ -45,7 +45,7 @@ FUNCTION fDestCountry RETURNS CHAR
       IF LOOKUP(icMSCID,"TAP3,NRTRDE") > 0 THEN DO:
          IF icServiceName > ""
          THEN lcNetwork = icServiceName.
-         ELSE RUN cdr_detail_value.p("MobCDR",
+         ELSE RUN Mm/cdr_detail_value.p("MobCDR",
                                      idaCallDate,
                                      iiDtlSeq,
                                      "Network owner",
@@ -59,7 +59,7 @@ FUNCTION fDestCountry RETURNS CHAR
       ELSE DO:
          IF icServiceName > ""
          THEN lcMSRN = icServiceName.
-         ELSE RUN cdr_detail_value.p("MobCDR",
+         ELSE RUN Mm/cdr_detail_value.p("MobCDR",
                                      idaCallDate,
                                      iiDtlSeq,
                                      "MSRN",

@@ -8,17 +8,17 @@
                   22.11.07/as  reqtype 18 and 19 cancel handling
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{msreqfunc.i}
-{msisdn.i}
-{fuserright.i}
-{eventval.i}
-{forderstamp.i}
-{fmakemsreq.i}
-{fmakesms.i}
-{fsendsms.i}
-{fdss.i}
-{fsubstermreq.i}
-{main_add_lines.i}
+{Func/msreqfunc.i}
+{Func/msisdn.i}
+{Func/fuserright.i}
+{Syst/eventval.i}
+{Func/forderstamp.i}
+{Func/fmakemsreq.i}
+{Func/fmakesms.i}
+{Func/fsendsms.i}
+{Func/fdss.i}
+{Func/fsubstermreq.i}
+{Func/main_add_lines.i}
 {Func/fixedlinefunc.i}
 
 DEFINE INPUT PARAMETER iiMsRequest  AS INTEGER NO-UNDO.
@@ -104,7 +104,7 @@ END.
 
 WHEN 23 THEN DO:
    IF MsRequest.ReqStat = 19 THEN
-      llCanUse = (fTokenRights(katun,"CCSUPER") = "RW").
+      llCanUse = (fTokenRights(Syst.Var:katun,"CCSUPER") = "RW").
       
    IF iiToStatus = 4 OR iiToStatus = 9 THEN DO:
      IF LOOKUP(STRING(MsRequest.ReqStat),"0,3,16,19") = 0 THEN 
@@ -153,7 +153,7 @@ IF MsRequest.ReqType = 0 AND (iiToStatus = 4 OR iiToStatus = 9) THEN DO:
       
    IF AVAIL Order THEN DO:
       
-      RUN closeorder.p(Order.OrderId,TRUE).
+      RUN Mc/closeorder.p(Order.OrderId,TRUE).
    
       IF RETURN-VALUE NE "" THEN DO:
          MESSAGE "Error with renewal order closing:" 
@@ -163,12 +163,12 @@ IF MsRequest.ReqType = 0 AND (iiToStatus = 4 OR iiToStatus = 9) THEN DO:
       
       CREATE Memo.
       ASSIGN
-         Memo.CreStamp  = fMakeTS() 
-         Memo.Brand     = gcBrand
+         Memo.CreStamp  = Func.Common:mMakeTS() 
+         Memo.Brand     = Syst.Var:gcBrand
          Memo.HostTable = "Order"
          Memo.KeyValue  = STRING(Order.OrderId)
          Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-         Memo.CreUser   = katun
+         Memo.CreUser   = Syst.Var:katun
          Memo.MemoTitle = "Cancelled due to STC cancellation"
          Memo.MemoText  = "".
 
@@ -212,19 +212,19 @@ CASE iiToStatus:
          END.
          
          FIND FIRST MobSub NO-LOCK WHERE 
-                    MobSub.Brand = gcBrand AND
+                    MobSub.Brand = Syst.Var:gcBrand AND
                     MobSub.MsSeq = MsRequest.MsSeq NO-ERROR.
 
          IF CAN-FIND(
                 FIRST CLIType NO-LOCK WHERE
-                      CLIType.Brand    = gcBrand                         AND
+                      CLIType.Brand    = Syst.Var:gcBrand                         AND
                       CLIType.CLIType  = (IF MobSub.TariffBundle > ""
                                              THEN MobSub.TariffBundle
                                           ELSE MobSub.CLIType)           AND
                       CLIType.LineType = {&CLITYPE_LINETYPE_ADDITIONAL}) AND
             CAN-FIND(
                 FIRST CLIType NO-LOCK WHERE
-                      CLIType.Brand   = gcBrand                       AND
+                      CLIType.Brand   = Syst.Var:gcBrand                       AND
                       CLIType.CLIType = (IF MsRequest.ReqCParam5 > ""
                                             THEN MsRequest.ReqCParam5
                                          ELSE MsRequest.ReqCParam2)   AND
@@ -326,7 +326,7 @@ CASE iiToStatus:
          DEFINE VARIABLE msisdn-recid AS RECID NO-UNDO.
          
          FIND FIRST MSISDN-back NO-LOCK WHERE
-            MSISDN-back.Brand = gcBrand AND
+            MSISDN-back.Brand = Syst.Var:gcBrand AND
             MSISDN-back.CLI   = MsRequest.ReqCParam2 USE-INDEX CLI.
          IF MSISDN-back.StatusCode = 27 THEN DO:
             msisdn-recid = recid(msisdn-back).
@@ -365,7 +365,7 @@ CASE iiToStatus:
       ELSE IF MsRequest.ReqType EQ {&REQTYPE_DSS}   AND
               MsRequest.ReqCparam1 EQ "DELETE"      AND
               iiFromStatus EQ {&REQUEST_STATUS_NEW} AND
-              fIsDSSActive(INPUT MsRequest.CustNum,INPUT fMakeTS())
+              fIsDSSActive(INPUT MsRequest.CustNum,INPUT Func.Common:mMakeTS())
       THEN DO:
 
          IF NOT CAN-FIND(FIRST MobSub WHERE MobSub.MsSeq = MsRequest.MsSeq)
@@ -389,7 +389,7 @@ CASE iiToStatus:
 
          IF NOT fCanDSSKeepActive(INPUT MsRequest.CustNum,
                                   INPUT 0, /* don't exclude current subs */
-                                  fMakeTS(),
+                                  Func.Common:mMakeTS(),
                                   INPUT MsRequest.ReqCparam3,
                                   OUTPUT lcError) THEN DO:
             MESSAGE
@@ -403,11 +403,11 @@ CASE iiToStatus:
 
          /* Additional SIM Termination logic */
          IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                           CLIType.Brand    = gcBrand                         AND
+                           CLIType.Brand    = Syst.Var:gcBrand                         AND
                            CLIType.CLIType  = MsRequest.ReqCparam1            AND
                            CLIType.LineType = {&CLITYPE_LINETYPE_ADDITIONAL}) AND
             CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                           CLIType.Brand    = gcBrand                   AND
+                           CLIType.Brand    = Syst.Var:gcBrand                   AND
                            CLIType.CLIType  = MsRequest.ReqCparam2      AND
                            CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) THEN DO:
             
@@ -439,7 +439,7 @@ CASE iiToStatus:
          SET llOk.
 
          IF llOk THEN 
-            RUN acc_sendsms(MsRequest.MsRequest,
+            RUN Mm/acc_sendsms.p(MsRequest.MsRequest,
                             MsRequest.CustNum,
                             "Cancelled",
                             lcCancelReason).
@@ -486,7 +486,7 @@ END.
 /* refund */
 IF MsRequest.ReqType = 23 AND LOOKUP(STRING(iiToStatus),"4,9") > 0 THEN DO:
  
-   RUN refundcancel(MsRequest.MsRequest,
+   RUN Ar/refundcancel.p(MsRequest.MsRequest,
                     "AP",
                     0,
                     MsRequest.CustNum,
@@ -506,7 +506,7 @@ ELSE DO:
    IF MsRequest.ReqType = 10 AND LOOKUP(STRING(iiToStatus),"4,9") > 0 THEN DO:
       /* cancel pending sms */
       FOR FIRST CallAlarm EXCLUSIVE-LOCK USE-INDEX CLI WHERE
-                CallAlarm.Brand    = gcBrand       AND
+                CallAlarm.Brand    = Syst.Var:gcBrand       AND
                 CallAlarm.CLI      = MsRequest.CLI AND
                 CallAlarm.DeliStat = 1             AND
                 CallAlarm.DeliPara = "PD":
@@ -533,7 +533,7 @@ ELSE DO:
       THEN ldtTdDate = DATE(1,1,YEAR(TODAY) + 1).
       ELSE ldtTdDate = DATE(MONTH(TODAY) + 1,1,YEAR(TODAY)).
 
-      ldActStamp = fMake2DT(ldtTdDate,3600).
+      ldActStamp = Func.Common:mMake2DT(ldtTdDate,3600).
 
       FIND CURRENT MsRequest EXCLUSIVE-LOCK NO-ERROR.
          IF AVAILABLE MsRequest THEN MsRequest.ActStamp = ldActStamp.
@@ -544,8 +544,8 @@ ELSE DO:
       iiFromStatus EQ 19 AND
       MsRequest.ReqType = 0 THEN DO:
    
-      IF MsRequest.ReqDParam1 < fMakeTS() THEN
-         ldeActStamp = fMake2DT(TODAY + 1, 0).
+      IF MsRequest.ReqDParam1 < Func.Common:mMakeTS() THEN
+         ldeActStamp = Func.Common:mMake2DT(TODAY + 1, 0).
       ELSE ldeActStamp = MSrequest.ReqDParam1.
 
       FIND CURRENT MsRequest EXCLUSIVE-LOCK NO-ERROR.
@@ -575,14 +575,14 @@ PROCEDURE ipMulitSIMTermination:
        MobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} THEN DO:
    
        FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-                  lbMobSub.Brand        = gcBrand                 AND
+                  lbMobSub.Brand        = Syst.Var:gcBrand                 AND
                   lbMobSub.MultiSimID   = MobSub.MultiSimID       AND
                   lbMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
                   lbMobSub.Custnum      = MobSub.Custnum NO-ERROR.
                      
        IF NOT AVAIL lbMobSub THEN DO:
           FIND FIRST TermMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-                     TermMobSub.Brand        = gcBrand                 AND
+                     TermMobSub.Brand        = Syst.Var:gcBrand                 AND
                      TermMobSub.MultiSimID   = MobSub.MultiSimID       AND
                      TermMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
                      TermMobSub.Custnum      = MobSub.Custnum NO-ERROR.
@@ -593,7 +593,7 @@ PROCEDURE ipMulitSIMTermination:
              FIND FIRST Msowner WHERE
                         Msowner.MsSeq = TermMobsub.MsSeq NO-LOCK NO-ERROR.
              IF AVAIL Msowner THEN
-                fSplitTS(Msowner.TSEnd,
+                Func.Common:mSplitTS(Msowner.TSEnd,
                          OUTPUT ldaSecSIMTermDate,
                          OUTPUT liSecSIMTermTime).
              ELSE ldaSecSIMTermDate = TODAY.
@@ -616,7 +616,7 @@ PROCEDURE ipMulitSIMTermination:
      /* TODO: cannot use this function in this case*/
      /*
       fAdditionalLineSTC(MsRequest.MsRequest,
-                         fMake2Dt(TODAY + 1, 0),
+                         Func.Common:mMake2DT(TODAY + 1, 0),
                          "").
      */
     END. /* ELSE DO: */

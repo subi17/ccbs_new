@@ -12,7 +12,7 @@
   Version ......: M15
   ------------------------------------------------------------------ */
 
-{commali.i} /* katun = "eka". */
+{Syst/commali.i} /* Syst.Var:katun = "eka". */
 
 DEF WORKFILE sums
    field accno   as i format "zzz9"
@@ -44,7 +44,7 @@ DEF VAR DLimit    AS DA NO-UNDO.
 
 DEF NEW shared STREAM excel.
 
-{tmsparam.i DateLimit return}. DLimit = TMSParam.DateVal.
+{Func/tmsparam.i DateLimit return}. DLimit = TMSParam.DateVal.
 
 MESSAGE
 "NOTE !" skip(1)
@@ -54,7 +54,7 @@ VIEW-AS ALERT-BOX information.
 
 /* get default direcory Name FOR OUTPUT */
 DO FOR TMSUser:
-   FIND TMSUser where TMSUser.UserCode = katun no-lock.
+   FIND TMSUser where TMSUser.UserCode = Syst.Var:katun no-lock.
    ASSIGN exdir = TMSUser.RepDir.
 END.
 
@@ -77,18 +77,18 @@ help "Earliest registration day of payment"
 help "Invoicing group's code, empty for all"  SKIP
 "                Decimal separator ...:" exdeci help "Period/Comma" skip(6)
 WITH
-   width 80 OVERLAY COLOR value(cfc) TITLE COLOR value(ctc)
-   " " + ynimi + " XOR-SUMMARY OF PAYMENTS WITH ACCOUNTS " +
-   string(pvm,"99-99-99") + " " NO-LABELS FRAME start.
+   width 80 OVERLAY COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc)
+   " " + Syst.Var:ynimi + " XOR-SUMMARY OF PAYMENTS WITH ACCOUNTS " +
+   string(TODAY,"99-99-99") + " " NO-LABELS FRAME start.
 
 exdate2 = date(month(TODAY),1,year(TODAY)) - 1.
 exdate1 = date(month(exdate2),1,year(exdate2)).
 
-cfc = "sel". RUN ufcolor.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
 
 CRIT:
 repeat WITH FRAME start:
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    DISP exName.
    UPDATE
       exName
@@ -100,7 +100,7 @@ repeat WITH FRAME start:
       exdeci
    WITH FRAME start EDITING.
       READKEY.
-      IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO:
+      IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
          PAUSE 0.
       END.
       APPLY LASTKEY.
@@ -108,12 +108,12 @@ repeat WITH FRAME start:
 
 task:
    repeat WITH FRAME start:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
-      IF toimi = 1 THEN NEXT  CRIT.
-      IF toimi = 8 THEN LEAVE CRIT.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
+      RUN Syst/ufkey.p.
+      IF Syst.Var:toimi = 1 THEN NEXT  CRIT.
+      IF Syst.Var:toimi = 8 THEN LEAVE CRIT.
 
-      IF toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
          ok = FALSE.
          message "Are you SURE you want to start processing (Y/N) ?" UPDATE ok.
          IF ok THEN LEAVE task.
@@ -131,7 +131,7 @@ task:
       CREATE FileExpLog.
       ASSIGN
       FileExpLog.TransType = "XOR-PAY"
-      FileExpLog.TransDate = pvm
+      FileExpLog.TransDate = TODAY
       FileExpLog.TransNum   = TransFile.
    END.   
 
@@ -139,15 +139,15 @@ task:
    "%FILE ID " 
    string(TransFile,"99999999")
    " CREATED "
-   string(pvm,"99.99.9999")
+   string(TODAY,"99.99.9999")
    " AT "
    string(time,"hh:mm:ss").
 
-   RUN uexskip(2).
+   RUN Syst/uexskip.p(2).
 
    PUT STREAM excel UNFORMATTED
       "Kontonr" tab "Kst" tab "Belopp" tab "Faktnr" tab "Kund" tab "Datum".
-   RUN uexskip(1).
+   RUN Syst/uexskip.p(1).
 
 
    message "Processing ...".                      
@@ -212,7 +212,7 @@ task:
                   Currency         format "x(9)"       tab   /* cust. nr. + xx */
                   Payment.PaymDate format "99.99.9999" tab.  /* registr. Date  */
 
-               RUN uexskip(1).
+               RUN Syst/uexskip.p(1).
 
             END.
 
@@ -257,7 +257,7 @@ task:
                tab tab
                sums.dte     format "99.99.9999"  tab.  /* registration Date */.
 
-            RUN uexskip(1).
+            RUN Syst/uexskip.p(1).
 
             DELETE sums.
 
@@ -275,7 +275,7 @@ task:
    "%KONTROLLBELOPP "  tab
    csum.
 
-   RUN uexskip(1).
+   RUN Syst/uexskip.p(1).
 
    OUTPUT STREAM excel CLOSE.
 

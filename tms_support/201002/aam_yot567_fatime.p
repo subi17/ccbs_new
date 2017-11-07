@@ -1,5 +1,5 @@
-{testpaa.i}
-katun = "Qvantel".
+{Syst/testpaa.i}
+Syst.Var:katun = "Qvantel".
 
 def var lcmaintask as char no-undo init "YOT-566".
 def var liperiod   as int  no-undo init 201002.
@@ -68,7 +68,7 @@ repeat:
         lccli    format "x(10)"
         ldamt    format ">>>9.99".
 
-   run /home/ari/work/creafat.p (msowner.invcust,
+   RUN /home/ari/work/creafat.p (msowner.invcust,
                   msowner.msseq,
                   lcfatgrp,
                   ldamt,

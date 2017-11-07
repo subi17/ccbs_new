@@ -7,13 +7,12 @@ CREATED ......: 8.5.2015
 CHANGED ......:
 Version ......: Yoigo
 ----------------------------------------------------------------------- */
-{commali.i}
-gcBrand = "1".
-{cparam2.i}
-/*{utumaa.i new }*/
-/*{edefine.i new}*/
-{tmsconst.i}
-{timestamp.i}
+{Syst/commali.i}
+Syst.Var:gcBrand = "1".
+{Func/cparam2.i}
+/*{Syst/utumaa.i new }*/
+/*{Inv/edefine.i new}*/
+{Syst/tmsconst.i}
 
 DEF INPUT PARAM iiOrderId AS INT NO-UNDO.
 DEF INPUT PARAM icEmailAddress AS CHAR NO-UNDO.
@@ -30,7 +29,7 @@ FUNCTION fTxtSendLog RETURNS LOGIC
 
    /* mark text as sent */
    CREATE ITSendLog.
-   ASSIGN ITSendLog.Brand      = gcBrand
+   ASSIGN ITSendLog.Brand      = Syst.Var:gcBrand
           ITSendLog.TxtType    = 1       /* inf. text */
           ITSendLog.ITNum      = -10     /* temp value for avoiding email sending twice */ 
           ITSendLog.CustNum    = iiOrderID
@@ -38,8 +37,8 @@ FUNCTION fTxtSendLog RETURNS LOGIC
           ITSendLog.SendMethod = iiSendMethod 
           ITSendLog.EMail      = icEmailAddress
           ITSendLog.RepType    = "ITOrd"
-          ITSendLog.UserCode   = katun.
-          ITSendLog.SendStamp  = fMakeTS().
+          ITSendLog.UserCode   = Syst.Var:katun.
+          ITSendLog.SendStamp  = Func.Common:mMakeTS().
 END.
 
 /*
@@ -53,36 +52,36 @@ lcEmailFile = fCParam("Printing","MailPrintFile") +
               "_" + STRING(iiOrderId) + "_conf.html".
 
 FIND Order WHERE
-  Order.Brand   = gcBrand  AND
+  Order.Brand   = Syst.Var:gcBrand  AND
   Order.OrderID = iiOrderID NO-LOCK NO-ERROR.
 
-FIND FIRST OrderCustomer WHERE OrderCustomer.Brand = gcBrand AND
+FIND FIRST OrderCustomer WHERE OrderCustomer.Brand = Syst.Var:gcBrand AND
                                OrderCustomer.OrderId = iiOrderId AND
                                OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
 
    IF (OrderCustomer.CustIdType EQ "CIF") AND 
       (Order.Ordertype = {&ORDER_TYPE_NEW}) THEN
-      RUN parse_tags.p (lcRootDir + "conf_email_company_new_es.html",
+      RUN Func/parse_tags.p (lcRootDir + "conf_email_company_new_es.html",
                         lcEmailFile, iiOrderId, 2, 
                         icEmailAddress, OUTPUT ocErrFile). /*2=conf mes*/
    ELSE IF (OrderCustomer.CustIdType EQ "CIF") AND 
            (Order.Ordertype = {&ORDER_TYPE_MNP}) THEN
-      RUN parse_tags.p (lcRootDir + 
+      RUN Func/parse_tags.p (lcRootDir + 
                         "conf_email_company_mnp_es.html",
                         lcEmailFile, iiOrderId, 2, 
                         icEmailAddress, OUTPUT ocErrFile). /*2=conf mes*/  
    ELSE IF Order.Ordertype = {&ORDER_TYPE_NEW} THEN
-      RUN parse_tags.p (lcRootDir + "conf_email_new_es.html",
+       RUN Func/parse_tags.p (lcRootDir + "conf_email_new_es.html",
                         lcEmailFile, iiOrderId, 2, 
                         icEmailAddress, OUTPUT ocErrFile). /* 2 = conf mes */
    ELSE IF Order.Ordertype = {&ORDER_TYPE_MNP} THEN
-      RUN parse_tags.p (lcRootDir + "conf_email_mnp_es.html",
+       RUN Func/parse_tags.p (lcRootDir + "conf_email_mnp_es.html",
                         lcEmailFile, iiOrderId, 2, 
                         icEmailAddress, OUTPUT ocErrFile). /* 2 = conf mes */
    /* fusion STC needs propably own template. TODO later
    ELSE IF (Order.Ordertype = {&ORDER_TYPE_STC} AND 
             Order.OrderChannel BEGINS "fusion") THEN  /* new fusion order */
-          RUN parse_tags.p (lcRootDir + "conf_email_new_es.html",
+          RUN Func/parse_tags.p (lcRootDir + "conf_email_new_es.html",
                            lcEmailFile, iiOrderId, 2, OUTPUT lcErrFile). /* 2 = conf mes */
    */
    ELSE ocErrFile = "Not supported type in order " + " " + 

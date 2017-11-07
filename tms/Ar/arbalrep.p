@@ -10,12 +10,12 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{accexcel.i}
-{fcustbal.i}
+{Syst/commali.i}
+{Func/accexcel.i}
+{Func/fcustbal.i}
 
 /* print-linemuuttujat */
-{utumaa.i}
+{Syst/utumaa.i}
 
 DEF INPUT PARAMETER iInvGrp1    AS CHAR  NO-UNDO.
 DEF INPUT PARAMETER iInvGrp2    AS CHAR  NO-UNDO.
@@ -58,6 +58,9 @@ ASSIGN
     viiva3 = fill("-",lev)
     viiva4 = fill("-",lev).
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
+
 form header
    viiva1 AT 1 SKIP
    ynimi at 1 format "x(30)" 
@@ -65,7 +68,7 @@ form header
       "Page" AT 81  
       sl format "ZZZZ9" SKIP
    xDateHeader AT 40 FORMAT "X(30)"
-      pvm format "99.99.9999" AT 81 SKIP
+      TODAY FORMAT "99.99.9999" AT 81 SKIP
    viiva2 AT 1 skip(1)
    WITH width 95 NO-LABEL no-box FRAME sivuotsi.
 
@@ -74,7 +77,7 @@ FUNCTION CheckPage RETURNS LOGIC
     (iAddLine AS INT).
 
     IF rl >= skayt1 - iAddLine THEN DO:
-        {uprfeed.i rl}
+        {Syst/uprfeed.i rl}
         ASSIGN rlx = 0
                sl = sl + 1.
         VIEW STREAM tul FRAME sivuotsi.  
@@ -109,7 +112,7 @@ ASSIGN sl = 1
 
 /* overpayments AND advance payments */
 FOR EACH InvGroup NO-LOCK WHERE
-         InvGroup.Brand     = gcBrand  AND
+         InvGroup.Brand     = Syst.Var:gcBrand  AND
          InvGroup.InvGroup >= iInvGrp1 AND
          InvGroup.InvGroup <= iInvGrp2,
 EACH Customer NO-LOCK WHERE
@@ -149,7 +152,7 @@ ASSIGN xQty = 0.
 
 /* unregistered payments */
 FOR EACH UnregPaym NO-LOCK WHERE
-    UnregPaym.Brand = gcBrand AND
+    UnregPaym.Brand = Syst.Var:gcBrand AND
     UnregPaym.State = 0: /* AND 
     UnregPaym.AccDate LE iDate2:  */
 
@@ -237,7 +240,7 @@ PUT STREAM tul
     SKIP.
 ASSIGN rl = rl + 2.
 
-{uprfeed.i rl}
+{Syst/uprfeed.i rl}
 
 ASSIGN SESSION:NUMERIC-FORMAT = xSessionNum.
 

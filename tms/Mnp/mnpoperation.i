@@ -6,9 +6,8 @@
   CREATED ......: 28.01.10
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{commali.i}
-{tmsconst.i}
-{timestamp.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
 
 DEF BUFFER bMNPOperation FOR MNPOperation.
 DEF BUFFER bMNPProcessResend FOR MNPProcess.
@@ -42,7 +41,7 @@ FUNCTION fResendMNPMessage RETURNS INT
    bMNPOperation.MNPOperationId = liMNPOperSeq.
 
    ASSIGN
-      bMNPOperation.CreatedTS = fMakeTS()
+      bMNPOperation.CreatedTS = Func.Common:mMakeTS()
       bMNPOperation.MessageType = ibMNPOperation.MessageType
       bMNPOperation.MNPSeq = ibMNPOperation.MNPSeq
       bMNPOperation.MsgTurn = ibMNPOperation.MsgTurn + 1

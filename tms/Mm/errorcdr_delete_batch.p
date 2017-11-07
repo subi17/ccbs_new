@@ -1,12 +1,12 @@
 /* errorcdr_delete_batch.p   04.01.11/aam divided from errocdr_delete.p
 */
 
-{commpaa.i}
-gcBrand = "1".
-katun = "cron".
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "cron".
 
-{eventlog.i}
-{direct_dbconnect.i}
+{Syst/eventlog.i}
+{Func/direct_dbconnect.i}
 
 DEF VAR ldaFromDate AS DATE NO-UNDO.
 DEF VAR ldaToDate   AS DATE NO-UNDO.
@@ -37,7 +37,7 @@ DO ldaDate = TODAY TO TODAY - 5 BY -1:
                 STRING(DAY(ldaDate),"99").
                 
    FOR FIRST ActionLog NO-LOCK USE-INDEX TableName WHERE
-             ActionLog.Brand     = gcBrand    AND
+             ActionLog.Brand     = Syst.Var:gcBrand    AND
              ActionLog.TableName = "ErrorCDR" AND
              ActionLog.KeyValue  = lcKeyValue AND
              ActionLog.ActionID  = "DELETECDR" AND
@@ -52,7 +52,7 @@ IF ldaFromDate = ? THEN ldaFromDate = 6/9/10.
 
 
 /* do two runs if db has been renewed during the period */
-RUN pGetDBPeriods(gcBrand,
+RUN pGetDBPeriods(Syst.Var:gcBrand,
                   "ErrorCDR",
                   ldaFromDate,
                   ldaToDate,
@@ -68,7 +68,7 @@ DO liRun = 1 TO 2:
    /* connect to correct cdr dbs */
    fInitializeConnectTables("ErrorCDR","").
 
-   RUN pDirectConnect2Dbs(gcBrand,
+   RUN pDirectConnect2Dbs(Syst.Var:gcBrand,
                           "",
                           ldaRunTo[liRun],
                           ldaRunTo[liRun]).
@@ -78,7 +78,7 @@ DO liRun = 1 TO 2:
       QUIT.
    END.
 
-   RUN errorcdr_delete.p (ldaRunFrom[liRun],
+   RUN Mm/errorcdr_delete.p (ldaRunFrom[liRun],
                           ldaRunTo[liRun],
                           OUTPUT liQty).
 

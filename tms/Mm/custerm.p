@@ -6,15 +6,14 @@
   CREATED ......: 
   CHANGED ......: 03.03.03 tk tokens
                   30.12.04/aam Secret from services
-                  24.01.06/jt DYNAMIC-FUNCTION("fDispCustName"
   VERSION ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mobsub'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mobsub'}
 
-{fsubser.i}
+{Func/fsubser.i}
 
 DEF INPUT  PARAMETER CustNum     AS I  NO-UNDO .
 
@@ -22,11 +21,10 @@ DEF VAR  amt       AS I   NO-UNDO.
 DEF VAR llSecret   AS LOG NO-UNDO FORMAT "Yes/No".
 DEF VAR lcCustName AS CHAR NO-UNDO.
 ASSIGN
-   ufk = 0 ehto = 3. RUN ufkey.
+   Syst.Var:ufk = 0 Syst.Var:ehto = 3. RUN Syst/ufkey.p.
 
    FIND Customer WHERE Customer.CustNum = CustNum NO-LOCK.
-   lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                  BUFFER Customer).
+   lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                                        
    IF NOT CAN-FIND(FIRST mobsub OF Customer) THEN DO:
       MESSAGE "Customer" CustNum "has NO terminals"

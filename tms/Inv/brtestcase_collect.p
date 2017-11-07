@@ -10,15 +10,13 @@
 DISABLE TRIGGERS FOR LOAD OF FixedFee.
 DISABLE TRIGGERS FOR LOAD OF SingleFee.
 
-{commali.i}
-{timestamp.i}
-{finvnum.i}
-{funcrunprocess_update.i}
-{date.i}
-{tmsconst.i}
-{ftaxdata.i}
-{old_unbilled_events.i}
-{billrund.i NEW}
+{Syst/commali.i}
+{Func/finvnum.i}
+{Syst/funcrunprocess_update.i}
+{Syst/tmsconst.i}
+{Func/ftaxdata.i}
+{Inv/old_unbilled_events.i}
+{Inv/billrund.i NEW}
 
 DEF INPUT  PARAMETER iiBRTestQueueID  AS INT  NO-UNDO. 
 DEF INPUT  PARAMETER idaPeriodBeg     AS DATE NO-UNDO.
@@ -126,7 +124,7 @@ FUNCTION fGetTaggedDate RETURNS DATE
    WHEN "#BillPeriodEnd" THEN ldaResult = idaPeriodEnd.
    WHEN "#CurrMonthBeg" THEN ldaResult = DATE(MONTH(TODAY),1,YEAR(TODAY)).
    WHEN "#CurrMonthEnd" THEN 
-      ldaResult = fLastDayOfMonth(DATE(MONTH(TODAY),1,YEAR(TODAY))).
+      ldaResult = Func.Common:mLastDayOfMonth(DATE(MONTH(TODAY),1,YEAR(TODAY))).
    WHEN "#PrevMonthBeg" THEN 
       ldaResult = ADD-INTERVAL(DATE(MONTH(TODAY),1,YEAR(TODAY)),-1,"month").
    WHEN "#PrevMonthEnd" THEN ldaResult = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1.
@@ -168,13 +166,13 @@ FUNCTION fErrorLog RETURNS LOGIC
 
    DO TRANS:
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
              ErrorLog.ActionID  = "BRANALYSIS"
              ErrorLog.TableName = "BRTestCase"
              ErrorLog.KeyValue  = STRING(iiCustNum)
              ErrorLog.ErrorMsg  = icError
-             ErrorLog.UserCode  = katun.
-             ErrorLog.ActionTS  = fMakeTS().
+             ErrorLog.UserCode  = Syst.Var:katun.
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
 
 END FUNCTION.
@@ -266,7 +264,7 @@ PROCEDURE pInitialize:
                STRING(YEAR(TODAY),"9999") + STRING(MONTH(TODAY),"99") +
                STRING(DAY(TODAY),"99") + STRING(TIME,"99999").
 
-   RUN lamupers.p PERSISTENT SET lhHandle.
+   RUN Inv/lamupers.p PERSISTENT SET lhHandle.
      
    RETURN "". 
       
@@ -320,8 +318,8 @@ PROCEDURE pInitCriteria:
              ", case " + STRING(iiBRTestCaseID).
 
    ASSIGN 
-      ttCriteria.PeriodBeg = fMake2DT(ttCriteria.BegDate,0)
-      ttCriteria.PeriodEnd = fMake2DT(ttCriteria.EndDate,86399).
+      ttCriteria.PeriodBeg = Func.Common:mMake2DT(ttCriteria.BegDate,0)
+      ttCriteria.PeriodEnd = Func.Common:mMake2DT(ttCriteria.EndDate,86399).
             
    /* get some periodical contract related data ready */ 
    IF ttCriteria.CriteriaTable = "DayCampaign" THEN DO:
@@ -392,8 +390,8 @@ PROCEDURE pInitMobCDR:
       ttCriteria.EndDate = MAX(ttCriteria.EndDate,ttField.EndDate).
 
    ASSIGN 
-      ttCriteria.PeriodBeg = fMake2DT(ttCriteria.BegDate,0)
-      ttCriteria.PeriodEnd = fMake2DT(ttCriteria.EndDate,86399).
+      ttCriteria.PeriodBeg = Func.Common:mMake2DT(ttCriteria.BegDate,0)
+      ttCriteria.PeriodEnd = Func.Common:mMake2DT(ttCriteria.EndDate,86399).
        
    RETURN "".
    
@@ -452,8 +450,8 @@ PROCEDURE pInitInvRowCounter:
       ttCriteria.EndDate = MAX(ttCriteria.EndDate,ttField.EndDate).
 
    ASSIGN 
-      ttCriteria.PeriodBeg = fMake2DT(ttCriteria.BegDate,0)
-      ttCriteria.PeriodEnd = fMake2DT(ttCriteria.EndDate,86399).
+      ttCriteria.PeriodBeg = Func.Common:mMake2DT(ttCriteria.BegDate,0)
+      ttCriteria.PeriodEnd = Func.Common:mMake2DT(ttCriteria.EndDate,86399).
  
    RETURN "".
    
@@ -714,7 +712,7 @@ PROCEDURE pCheckDayCampaign:
    END.          
    
    ELSE DO:
-      ldaNextPeriod = fMake2DT(ttCriteria.EndDate + 1,0).
+      ldaNextPeriod = Func.Common:mMake2DT(ttCriteria.EndDate + 1,0).
       
       CheckMLimit:
       FOR EACH ttServiceLimit NO-LOCK WHERE 
@@ -756,7 +754,7 @@ PROCEDURE pCheckDayCampaign:
          END.
 
          WHEN "Active" THEN
-            IF MServiceLimit.EndTS > fMakeTS() THEN DO:
+            IF MServiceLimit.EndTS > Func.Common:mMakeTS() THEN DO:
                olMatch = TRUE.
                LEAVE CheckMLimit.
             END.
@@ -1224,7 +1222,7 @@ PROCEDURE pCheckFixedFee:
 
    IF ttCriteria.CriteriaField = "BillCode" THEN
       FOR EACH FixedFee NO-LOCK WHERE
-               FixedFee.Brand = gcBrand AND
+               FixedFee.Brand = Syst.Var:gcBrand AND
                FixedFee.HostTable = "MobSub" AND
                FixedFee.KeyValue = STRING(MsOwner.MsSeq) AND
                FixedFee.InUse = TRUE AND
@@ -1258,7 +1256,7 @@ PROCEDURE pCheckFixedFee:
       END.
    ELSE IF ttCriteria.CriteriaField = "CalcObj" THEN
       FOR EACH FixedFee NO-LOCK WHERE
-               FixedFee.Brand = gcBrand AND
+               FixedFee.Brand = Syst.Var:gcBrand AND
                FixedFee.HostTable = "MobSub" AND
                FixedFee.KeyValue = STRING(MsOwner.MsSeq) AND
                FixedFee.InUse = TRUE AND
@@ -1311,7 +1309,7 @@ PROCEDURE pCheckSingleFee:
       liTo    = TRUNCATE(ttCriteria.PeriodEnd / 100,0).
    
    FOR EACH SingleFee NO-LOCK WHERE
-            SingleFee.Brand = gcBrand AND
+            SingleFee.Brand = Syst.Var:gcBrand AND
             SingleFee.HostTable = "MobSub" AND
             SingleFee.KeyValue = STRING(MsOwner.MsSeq) AND
             SingleFee.Active = TRUE AND
@@ -1343,7 +1341,7 @@ PROCEDURE pCheckFATime:
       liTo    = TRUNCATE(ttCriteria.PeriodEnd / 100,0).
    
    FOR EACH FATime NO-LOCK USE-INDEX MobSub WHERE
-            FATime.Brand = gcBrand AND
+            FATime.Brand = Syst.Var:gcBrand AND
             FATime.MsSeq = MsOwner.MsSeq AND
             FATime.InvNum = 0 AND
             FATime.FTGrp MATCHES(ttCriteria.ValueIncluded):
@@ -1414,7 +1412,7 @@ PROCEDURE pCreateInvoice:
 
       EMPTY TEMP-TABLE ttInvCust.
 
-      RUN bundle_first_month_fee.p(idaPeriodBeg,
+      RUN Mm/bundle_first_month_fee.p(idaPeriodBeg,
                                    idaPeriodEnd,
                                    Customer.CustNum,
                                    0,
@@ -1430,7 +1428,7 @@ PROCEDURE pCreateInvoice:
       END.
 
       /* If customer has DSS active then calculate bundle fee */
-      RUN dss_bundle_first_month_fee.p(idaPeriodBeg,
+      RUN Mm/dss_bundle_first_month_fee.p(idaPeriodBeg,
                                        idaPeriodEnd,
                                        Customer.CustNum,
                                        0,
@@ -1584,4 +1582,4 @@ PROCEDURE pInitializeMergeAnalysis:
 
 END PROCEDURE.
 
-{funcrun_analysis_results.i}
+{Inv/funcrun_analysis_results.i}

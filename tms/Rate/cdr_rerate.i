@@ -13,9 +13,8 @@
 
 &GLOBAL-DEFINE CDR_RERATE_I YES
 
-{commali.i}
-{date.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEF STREAM sRerateRep.
 
@@ -51,11 +50,11 @@ FUNCTION fRerateLogStart RETURNS INT
    
    ASSIGN
       liRerateID = NEXT-VALUE(RerateSeq).
-      lcStarted = fTS2HMS(fMakeTS()).
+      lcStarted = Func.Common:mTS2HMS(Func.Common:mMakeTS()).
 
    lcReport = 
       "Re-rate report" + CHR(10) + CHR(10) + 
-      "Re-rate run details:" + CHR(10) + 
+      "Re-rate RUN details:" + CHR(10) + 
       "Re-rate run ID" + lcSep + STRING(liRerateID) + CHR(10) +
       "User ID" + lcSep + icUserCode + CHR(10) + 
       "Started" + lcSep + ENTRY(1, lcStarted, " ") + lcSep + 
@@ -80,7 +79,7 @@ FUNCTION fRerateLogStart RETURNS INT
 
    CREATE ActionLog.
    ASSIGN
-      ActionLog.Brand = gcBrand
+      ActionLog.Brand = Syst.Var:gcBrand
       ActionLog.UserCode = icUserCode
       ActionLog.ActionID = "Rerate"
       ActionLog.ActionStatus = 0
@@ -90,7 +89,7 @@ FUNCTION fRerateLogStart RETURNS INT
       ActionLog.FromDate = idtFrom
       ActionLog.ToDate = idtTo.
    
-   ActionLog.ActionTS = fMakeTS().
+   ActionLog.ActionTS = Func.Common:mMakeTS().
    
    RELEASE ActionLog.
 
@@ -105,7 +104,7 @@ FUNCTION fRerateReportFile RETURNS INT
    DEF VAR lcReportFile AS CHARACTER NO-UNDO.
    
    FIND ActionLog EXCLUSIVE-LOCK WHERE
-        ActionLog.Brand = gcBrand AND
+        ActionLog.Brand = Syst.Var:gcBrand AND
         ActionLog.TableName = "MobCDR" AND
         ActionLog.KeyValue = STRING(iiRerateID) AND
         ActionLog.ActionId = "Rerate" NO-ERROR.
@@ -135,7 +134,7 @@ FUNCTION fRerateLogFinish RETURNS INT
    DEF VAR lcEnded AS CHARACTER NO-UNDO. 
 
    FIND ActionLog EXCLUSIVE-LOCK WHERE
-        ActionLog.Brand = gcBrand AND
+        ActionLog.Brand = Syst.Var:gcBrand AND
         ActionLog.TableName = "MobCDR" AND
         ActionLog.KeyValue = STRING(iiRerateID) AND
         ActionLog.ActionId = "Rerate" NO-ERROR.
@@ -143,7 +142,7 @@ FUNCTION fRerateLogFinish RETURNS INT
    IF NOT AVAIL ActionLog THEN RETURN 1.
    
    ASSIGN
-      lcEnded = fTS2HMS(fMakeTS())
+      lcEnded = Func.Common:mTS2HMS(Func.Common:mMakeTS())
       ActionLog.ActionChar =
          REPLACE(ActionLog.ActionChar, "#ENDDATE", ENTRY(1, lcEnded, " "))
       ActionLog.ActionChar = 

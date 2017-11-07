@@ -1,1 +1,1 @@
-RUN tmrulesel(0,0).
+RUN Mm/tmrulesel.p(0,0).

@@ -8,12 +8,12 @@
   VERSIO .......: M15
 ---------------------------------------------------------------------------- */
 
-{commali.i}
-{utumaa.i new}
-{cparam2.i}
-{edefine.i new}
-{finvtxt.i}
-{fcustdata.i}
+{Syst/commali.i}
+{Syst/utumaa.i new}
+{Func/cparam2.i}
+{Inv/edefine.i new}
+{Func/finvtxt.i}
+{Func/fcustdata.i}
 
 
 DEF INPUT  PARAMETER iiOldOwner AS INT  NO-UNDO.
@@ -58,7 +58,7 @@ DO liConfCnt = 1 TO 2:
       NEXT.
    END.
 
-   RUN printxt (Customer.CustNum,
+   RUN Mc/printxt.p (Customer.CustNum,
                 iiMsSeq, 
                 icCLI,
                 1,  /* 1=invtext */

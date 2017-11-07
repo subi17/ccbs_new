@@ -1,7 +1,7 @@
 /*
-  run order.p with input parameter
+  RUN Mc/order.p with input parameter
 
     07.10.03 tk
 */
 
-run order(2,2,"",0).
+RUN Mc/order.p(2,2,"",0).

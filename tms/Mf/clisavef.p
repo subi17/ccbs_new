@@ -9,7 +9,7 @@
   Version ......: M15
 --------------------------------------------------------------*/
 
-{function.i}
+{Func/function.i}
 
 DEFINE INPUT PARAMETER  lFileName AS CHARACTER NO-UNDO.
 DEFINE INPUT PARAMETER  pCustNr   AS INTEGER   NO-UNDO.

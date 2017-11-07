@@ -7,13 +7,12 @@
   version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
-ASSIGN gcBrand = "1"
-       katun   = "CRON".
-{timestamp.i}
-{cparam2.i}
-{tmsconst.i}
-{fmakemsreq.i}
+{Syst/commpaa.i}
+ASSIGN Syst.Var:gcBrand = "1"
+       Syst.Var:katun   = "CRON".
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
 
 DEF VAR ldaFromdate       AS DATE NO-UNDO.
 DEF VAR liTime            AS INT  NO-UNDO.
@@ -46,7 +45,7 @@ def buffer bmservicelimit for mservicelimit.
 def buffer bOrigrequest for msrequest.
 
 ASSIGN
-   ldeNow = fmakets()
+   ldeNow = Func.Common:mMakeTS()
    ldeToday = YEAR(TODAY) * 10000 +
               MONTH(TODAY) * 100 +
               DAY(TODAY).
@@ -58,7 +57,7 @@ FOR FIRST ServiceLimit WHERE
           MServiceLimit.DialType = ServiceLimit.DialType AND
           MServiceLimit.EndTS    = 99999999.99999 NO-LOCK:
 
-   fSplitTS(MServiceLimit.FromTS,OUTPUT ldaFromdate,OUTPUT liTime).
+   Func.Common:mSplitTS(MServiceLimit.FromTS,OUTPUT ldaFromdate,OUTPUT liTime).
 
    IF ldaFromdate >= TODAY THEN NEXT.
 
@@ -75,10 +74,10 @@ FOR FIRST ServiceLimit WHERE
       IF DAY(TODAY) NE 1 THEN NEXT.
    END.
    ELSE DO:
-      IF DAY(fLastDayOfMonth(TODAY)) >= DAY(ldaFromdate) THEN DO:
+      IF DAY(Func.Common:mLastDayOfMonth(TODAY)) >= DAY(ldaFromdate) THEN DO:
          IF DAY(TODAY) NE DAY(ldaFromdate) THEN NEXT.
       END.
-      ELSE IF TODAY NE fLastDayOfMonth(TODAY) THEN NEXT.      
+      ELSE IF TODAY NE Func.Common:mLastDayOfMonth(TODAY) THEN NEXT.      
    END.
  
    IF MServiceLimit.InclAmt NE 1228 THEN NEXT.

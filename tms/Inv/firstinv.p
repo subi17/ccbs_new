@@ -8,8 +8,8 @@
   Version ......: Shark
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{cparam2.i}
+{Syst/commali.i} 
+{Func/cparam2.i}
 
 DEF OUTPUT PARAMETER oiQty AS INT NO-UNDO.
 
@@ -73,7 +73,7 @@ FOR EACH Customer NO-LOCK WHERE
    IF llFound THEN DO:
 
       /* create invoice */
-      RUN nnlamu5 (Customer.InvCust,
+      RUN Inv/nnlamu5.p (Customer.InvCust,
                    0,
                    lcCLILst,
                    -1,
@@ -92,7 +92,7 @@ FOR EACH Customer NO-LOCK WHERE
                     Invoice.CrInvNum   = 0 NO-ERROR.
                    
          IF AVAILABLE Invoice THEN 
-         RUN eletterinv(Invoice.InvNum,
+         RUN Inv/eletterinv.p(Invoice.InvNum,
                         Invoice.InvNum,
                         Invoice.InvDate,
                         "",

@@ -10,23 +10,23 @@
 
 &GLOBAL-DEFINE BrTable RequestAction
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'RequestAction'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'RequestAction'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhRequestAction AS HANDLE NO-UNDO.
    lhRequestAction = BUFFER RequestAction:HANDLE.
    RUN StarEventInitialize(lhRequestAction).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhRequestAction).
+      RUN Mc/eventview2.p(lhRequestAction).
    END.
 
 END.
@@ -85,12 +85,12 @@ FORM
     lcAction FORMAT "X(11)" COLUMN-LABEL "Action"
     RequestAction.ValidTo
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) 
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) 
        "  ACTIONS OF TYPE " + STRING(iiReqType) + " (Active) "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 FORM
     RequestAction.Brand        COLON 20
@@ -99,7 +99,7 @@ FORM
        RequestType.ReqName NO-LABEL SKIP
     RequestAction.PayType      COLON 20 FORMAT ">>9"
        lcPayType NO-LABEL FORMAT "X(30)" SKIP
-    RequestAction.CLIType      COLON 20 
+    RequestAction.CLIType FORMAT "X(14)" COLON 20 
        CLIType.CLIName NO-LABEL SKIP
     RequestAction.ActionType   COLON 20
        lcActionType NO-LABEL FORMAT "X(30)" SKIP
@@ -109,24 +109,23 @@ FORM
     RequestAction.ValidFrom    COLON 20
     RequestAction.ValidTo      COLON 20    
 WITH  OVERLAY ROW 3 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 FORM 
     "CLIType:" lcCLIType FORMAT "X(15)"
     HELP "Enter CLIType"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CLIType"
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND CLIType"
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FUNCTION fActionDesc RETURNS CHAR
    (INPUT iiAction AS INT):
    
    IF iiAction = 0 THEN RETURN "".
    
-   RETURN DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                           "RequestAction",
+   RETURN Func.Common:mTMSCodeName("RequestAction",
                            "Action",
                            STRING(iiAction)).
 END FUNCTION.
@@ -136,8 +135,7 @@ FUNCTION fActionTypeDesc RETURNS CHAR
    
    IF icActionType = "" THEN RETURN "".
    
-   RETURN DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                           "RequestAction",
+   RETURN Func.Common:mTMSCodeName("RequestAction",
                            "ActionType",
                            icActionType).
 END FUNCTION.
@@ -145,8 +143,7 @@ END FUNCTION.
 FUNCTION fPayType RETURNS CHAR
    (INPUT iiPayType AS INT):
    
-   RETURN DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                           "CLIType",
+   RETURN Func.Common:mTMSCodeName("CLIType",
                            "PayType",
                            STRING(iiPayType)).
 END FUNCTION.
@@ -155,7 +152,7 @@ END FUNCTION.
 
 RUN pInitTempTable.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -184,8 +181,8 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a RequestAction  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -193,11 +190,11 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
-           DISPLAY gcBrand @ RequestAction.Brand
+           DISPLAY Syst.Var:gcBrand @ RequestAction.Brand
                    iiReqType @ RequestAction.ReqType.
 
            PROMPT-FOR 
@@ -208,7 +205,7 @@ REPEAT WITH FRAME sel:
 
               IF KEYLABEL(LASTKEY) = "F9" AND FRAME-FIELD = "PayType" THEN DO:
 
-                 RUN h-tmscodes(INPUT "CLIType",     /* TableName*/
+                 RUN Help/h-tmscodes.p(INPUT "CLIType",     /* TableName*/
                                       "PayType",       /* FieldName */
                                       "MobSub",     /* GroupCode */
                                 OUTPUT lcCode).
@@ -217,8 +214,8 @@ REPEAT WITH FRAME sel:
                     DISPLAY INTEGER(lcCode) ;& RequestAction.PayType
                             WITH FRAME lis.
 
-                 ehto = 9.
-                 RUN ufkey.
+                 Syst.Var:ehto = 9.
+                 RUN Syst/ufkey.p.
                  NEXT. 
               END.
                  
@@ -239,7 +236,7 @@ REPEAT WITH FRAME sel:
            IF INPUT RequestAction.CLIType NE "*" AND 
               INPUT RequestAction.CLIType > "" AND 
                                  NOT CAN-FIND(FIRST CLIType WHERE
-                                 CLIType.Brand = gcBrand AND
+                                 CLIType.Brand = Syst.Var:gcBrand AND
                                  CLIType.CLIType = INPUT RequestAction.CLIType) 
            THEN DO:
                MESSAGE "Unknown CLI type"
@@ -254,7 +251,7 @@ REPEAT WITH FRAME sel:
            
            CREATE RequestAction.
            ASSIGN 
-              RequestAction.Brand   = gcBrand
+              RequestAction.Brand   = Syst.Var:gcBrand
               RequestAction.RequestActionID = liActionID
               RequestAction.ReqType = iiReqType
               RequestAction.PayType = INPUT FRAME lis RequestAction.PayType
@@ -336,39 +333,39 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 739 
-        ufk[2]= 0  
-        ufk[3]= 0  
-        ufk[4]= 1827 WHEN NOT llActive
-        ufk[4]= 1828 WHEN llActive
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)  
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
-        ufk[7]= 0  
-        ufk[8]= 8 
-        ehto  = 3 
+        Syst.Var:ufk[1]= 739 
+        Syst.Var:ufk[2]= 0  
+        Syst.Var:ufk[3]= 0  
+        Syst.Var:ufk[4]= 1827 WHEN NOT llActive
+        Syst.Var:ufk[4]= 1828 WHEN llActive
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)  
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
+        Syst.Var:ufk[7]= 0  
+        Syst.Var:ufk[8]= 8 
+        Syst.Var:ehto  = 3 
         ufkey = FALSE.
         
         /* used as help */
-        IF gcHelpParam > "" THEN ASSIGN
-           ufk[4] = 0
-           ufk[5] = 11
-           ufk[6] = 0
-           ufk[7] = 0.
+        IF Syst.Var:gcHelpParam > "" THEN ASSIGN
+           Syst.Var:ufk[4] = 0
+           Syst.Var:ufk[5] = 11
+           Syst.Var:ufk[6] = 0
+           Syst.Var:ufk[7] = 0.
          
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW RequestAction.CLIType ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW RequestAction.CLIType {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) RequestAction.CLIType WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) RequestAction.CLIType WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"4,f4,5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"4,f4,5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -377,10 +374,10 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -398,7 +395,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -423,7 +420,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -449,7 +446,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ttAction WHERE recid(ttAction) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -473,7 +470,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -488,9 +485,9 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
        SET lcCLIType WITH FRAME f1.
@@ -512,7 +509,7 @@ REPEAT WITH FRAME sel:
        END.
      END. /* Search-1 */
 
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:  /* display filter */
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 THEN DO:  /* display filter */
         llActive = NOT llActive.
         RUN pInitTempTable.
         RUN local-find-first.
@@ -527,8 +524,8 @@ REPEAT WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
-        IF gcHelpParam > "" THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
+        IF Syst.Var:gcHelpParam > "" THEN DO:
            RUN local-find-this(FALSE).
            xRecid = RECID(RequestAction).
            LEAVE LOOP.
@@ -540,13 +537,13 @@ REPEAT WITH FRAME sel:
         END.    
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW" 
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO TRANSACTION:  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        lcPayType
        RequestAction.CLIType
        RequestAction.ActionType.
@@ -570,7 +567,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        lcPayType
        RequestAction.CLIType
        RequestAction.ActionType.
@@ -595,21 +592,21 @@ REPEAT WITH FRAME sel:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 AND lcRight = "RW" THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 AND lcRight = "RW" THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(FALSE).
 
-       IF gcHelpParam > "" THEN DO:
+       IF Syst.Var:gcHelpParam > "" THEN DO:
           xRecid = RECID(RequestAction).
           LEAVE LOOP.
        END.
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhRequestAction).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -625,28 +622,28 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(ttAction) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(ttAction) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
-ehto = 4.
-RUN ufkey.
+Syst.Var:ehto = 4.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -758,11 +755,11 @@ PROCEDURE local-UPDATE-record:
       RUN local-find-others.
       
       FIND RequestType WHERE 
-           RequestType.Brand   = gcBrand AND
+           RequestType.Brand   = Syst.Var:gcBrand AND
            RequestType.ReqType = RequestAction.ReqType NO-LOCK NO-ERROR.
       
       FIND CLIType WHERE 
-           CLIType.Brand   = gcBrand AND
+           CLIType.Brand   = Syst.Var:gcBrand AND
            CLIType.CLIType = RequestAction.CLIType NO-LOCK NO-ERROR.
            
       lcActionType = fActionTypeDesc(RequestAction.ActionType).
@@ -786,20 +783,20 @@ PROCEDURE local-UPDATE-record:
       
       IF NOT NEW RequestAction THEN REPEAT:
          ASSIGN 
-            ufk    = 0
-            ufk[1] = 7 WHEN lcRight = "RW"
-            ufk[4] = 1865
-            ufk[8] = 8
-            ehto   = 0.
+            Syst.Var:ufk    = 0
+            Syst.Var:ufk[1] = 7 WHEN lcRight = "RW"
+            Syst.Var:ufk[4] = 1865
+            Syst.Var:ufk[8] = 8
+            Syst.Var:ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.p.
 
-         IF toimi = 1 THEN LEAVE.
+         IF Syst.Var:toimi = 1 THEN LEAVE.
          
-         ELSE IF toimi = 4 THEN 
-            RUN requestactionrule(RequestAction.RequestActionID).
+         ELSE IF Syst.Var:toimi = 4 THEN 
+            RUN Syst/requestactionrule.p(RequestAction.RequestActionID).
             
-         ELSE IF toimi = 8 THEN LEAVE ActionDetails.
+         ELSE IF Syst.Var:toimi = 8 THEN LEAVE ActionDetails.
       END.
 
       FIND CURRENT RequestAction EXCLUSIVE-LOCK.
@@ -820,7 +817,7 @@ PROCEDURE local-UPDATE-record:
 
             IF FRAME-FIELD = "Action" THEN DO:
 
-               RUN h-tmscodes(INPUT "RequestAction",     /* TableName*/
+               RUN Help/h-tmscodes.p(INPUT "RequestAction",     /* TableName*/
                                     "Action",       /* FieldName */
                                     "Request",     /* GroupCode */
                               OUTPUT lcCode).
@@ -832,7 +829,7 @@ PROCEDURE local-UPDATE-record:
 
             ELSE IF FRAME-FIELD = "ActionType" THEN DO:
 
-               RUN h-tmscodes(INPUT "RequestAction",     /* TableName*/
+               RUN Help/h-tmscodes.p(INPUT "RequestAction",     /* TableName*/
                                     "ActionType",       /* FieldName */
                                     "Request",     /* GroupCode */
                               OUTPUT lcCode).
@@ -842,12 +839,12 @@ PROCEDURE local-UPDATE-record:
                   WITH FRAME lis.
             END.
 
-            ehto = 9.
-            RUN ufkey.
+            Syst.Var:ehto = 9.
+            RUN Syst/ufkey.p.
             NEXT. 
          END.
 
-         IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+         IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
             
             PAUSE 0.
 
@@ -880,7 +877,7 @@ PROCEDURE local-UPDATE-record:
       END.
 
       FIND FIRST bAction NO-LOCK WHERE
-                 bAction.Brand      = gcBrand AND
+                 bAction.Brand      = Syst.Var:gcBrand AND
                  bAction.ReqType    = RequestAction.ReqType    AND
                  bAction.CLIType    = RequestAction.CLIType    AND
                  bAction.PayType    = RequestAction.PayType    AND
@@ -916,7 +913,7 @@ PROCEDURE pInitTempTable:
    EMPTY TEMP-TABLE ttAction.
    
    FOR EACH RequestAction NO-LOCK WHERE
-            RequestAction.Brand   = gcBrand AND
+            RequestAction.Brand   = Syst.Var:gcBrand AND
             RequestAction.ReqType = iiReqType:
 
       IF llActive AND RequestAction.ValidTo < TODAY THEN NEXT.

@@ -8,7 +8,7 @@
   Version ......: yoigo
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 def shared var siirto as char.
 
@@ -24,15 +24,15 @@ form
     ServAttr.ServCom   
     ServAttr.ServAttr    
     ServAttr.SAName FORMAT "X(30)" COLUMN-LABEL "Name"
-    with scroll 1 11 down  row 4 centered color value(cfc)
-    title color value(ctc) " SERVICE COMPONENTS " overlay frame sel.
+    with scroll 1 11 down  row 4 centered color value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " SERVICE COMPONENTS " overlay frame sel.
 
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.Var:ccc = Syst.Var:cfc.
 
 ASSIGN
-   lcServCom = gcHelpParam
-   gcHelpParam = "".
+   lcServCom = Syst.Var:gcHelpParam
+   Syst.Var:gcHelpParam = "".
 
 MAIN:
 repeat:
@@ -75,14 +75,14 @@ repeat:
 
       if ufkey then do:
          assign
-         ufk = 0 
-         ufk[5] = 11
-         ufk[6] = 0  
-         ufk[8] = 8  
+         Syst.Var:ufk = 0 
+         Syst.Var:ufk[5] = 11
+         Syst.Var:ufk[6] = 0  
+         Syst.Var:ufk[8] = 8  
          siirto = ? 
-         ehto  = 3 
+         Syst.Var:ehto  = 3 
          ufkey = false.
-         run ufkey.
+         RUN Syst/ufkey.p.
       end.
   end. /* print-line */
 
@@ -90,17 +90,17 @@ repeat:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row ServAttr.ServCom ;(uchoose.i;) no-error with frame sel.
-         color display value(ccc) ServAttr.ServCom with frame sel.
+         choose row ServAttr.ServCom {Syst/uchoose.i} no-error with frame sel.
+         color display value(Syst.Var:ccc) ServAttr.ServCom with frame sel.
 
-         nap = keylabel(lastkey).
+         Syst.Var:nap = keylabel(lastkey).
 
          if frame-value = "" and rtab[frame-line] = ? and
-            lookup(nap,"8,f8") = 0
+            lookup(Syst.Var:nap,"8,f8") = 0
          then next.
 
          /* previous line */
-         if lookup(nap,"cursor-up") > 0 then do
+         if lookup(Syst.Var:nap,"cursor-up") > 0 then do
          with frame sel:
             if frame-line = 1 then do:
                find ServAttr where recid(ServAttr) = rtab[frame-line] 
@@ -129,7 +129,7 @@ repeat:
          end. /* previous line */
 
          /* next line */
-         if lookup(nap,"cursor-down") > 0 then do with frame sel:
+         if lookup(Syst.Var:nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                find ServAttr where recid(ServAttr) = rtab[frame-line] 
                     no-lock .
@@ -158,7 +158,7 @@ repeat:
          end. /* next line */
 
          /* previous page */
-         else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
+         else if lookup(Syst.Var:nap,"page-up,prev-page") > 0 then do with frame sel:
             find ServAttr where recid(ServAttr) = memory no-lock no-error.
             RUN local-find-prev.
 
@@ -180,7 +180,7 @@ repeat:
         end. /* previous page */
 
         /* next page */
-        else if lookup(nap,"page-down,next-page") > 0 then do with frame sel:
+        else if lookup(Syst.Var:nap,"page-down,next-page") > 0 then do with frame sel:
            if rtab[frame-down] = ? then do:
                bell.
                message "This is the last page !".
@@ -194,7 +194,7 @@ repeat:
         end. /* next page */
 
         /* Choose */
-        else if lookup(nap,"return,enter,5,f5") > 0 then do:
+        else if lookup(Syst.Var:nap,"return,enter,5,f5") > 0 then do:
            find ServAttr where recid(ServAttr) = rtab[frame-line] no-lock.
            IF lcServCom > "" THEN siirto = ServAttr.ServAttr.
            ELSE siirto = ServAttr.ServCom.
@@ -202,7 +202,7 @@ repeat:
         end. /* Choose */
 
         /* First record */
-        else if lookup(nap,"home,h") > 0 then do:
+        else if lookup(Syst.Var:nap,"home,h") > 0 then do:
            RUN local-find-first.
            memory = recid(ServAttr).
            must-print = true.
@@ -210,14 +210,14 @@ repeat:
         end. /* First record */
 
         /* last record */
-        else if lookup(nap,"end,e") > 0 then do :
+        else if lookup(Syst.Var:nap,"end,e") > 0 then do :
            RUN local-find-last.
            memory = recid(ServAttr).
            must-print = true.
            next LOOP.
         end. /* last record */
 
-        else if nap = "8" or nap = "f8" then leave MAIN. /* Return */
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" then leave MAIN. /* Return */
 
      end.  /* BROWSE */
    end.  /* LOOP */
@@ -238,10 +238,10 @@ PROCEDURE local-find-first:
 
    IF lcServCom > "" THEN 
       FIND FIRST ServAttr WHERE 
-                 ServAttr.Brand = gcBrand AND
+                 ServAttr.Brand = Syst.Var:gcBrand AND
                  ServAttr.ServCom = lcServCom NO-LOCK NO-ERROR.
    ELSE FIND FIRST ServAttr USE-INDEX ServCom WHERE
-                   ServAttr.Brand = gcBrand NO-LOCK NO-ERROR.
+                   ServAttr.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 
 END PROCEDURE.
 
@@ -249,10 +249,10 @@ PROCEDURE local-find-last:
 
    IF lcServCom > "" THEN 
       FIND LAST ServAttr WHERE 
-                ServAttr.Brand = gcBrand AND
+                ServAttr.Brand = Syst.Var:gcBrand AND
                 ServAttr.ServCom = lcServCom NO-LOCK NO-ERROR.
    ELSE FIND LAST ServAttr USE-INDEX ServCom WHERE
-                  ServAttr.Brand = gcBrand NO-LOCK NO-ERROR.
+                  ServAttr.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 
 END PROCEDURE.
 
@@ -260,10 +260,10 @@ PROCEDURE local-find-next:
 
    IF lcServCom > "" THEN 
       FIND NEXT ServAttr WHERE 
-                ServAttr.Brand = gcBrand AND
+                ServAttr.Brand = Syst.Var:gcBrand AND
                 ServAttr.ServCom = lcServCom NO-LOCK NO-ERROR.
    ELSE FIND NEXT ServAttr USE-INDEX ServCom WHERE
-                  ServAttr.Brand = gcBrand NO-LOCK NO-ERROR.
+                  ServAttr.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 
 END PROCEDURE.
 
@@ -271,10 +271,10 @@ PROCEDURE local-find-prev:
 
    IF lcServCom > "" THEN 
       FIND PREV ServAttr WHERE 
-                ServAttr.Brand = gcBrand AND
+                ServAttr.Brand = Syst.Var:gcBrand AND
                 ServAttr.ServCom = lcServCom NO-LOCK NO-ERROR.
    ELSE FIND PREV ServAttr USE-INDEX ServCom WHERE
-                  ServAttr.Brand = gcBrand NO-LOCK NO-ERROR.
+                  ServAttr.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 
 END PROCEDURE.
 

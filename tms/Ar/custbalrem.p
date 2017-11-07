@@ -5,4 +5,4 @@
 */
 
 
-RUN custbalrel (0).
+RUN Ar/custbalrel.p (0).

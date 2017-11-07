@@ -7,15 +7,14 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
-   gcBrand = "1"
-   katun   = "Cron".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun   = "Cron".
    
-{cparam2.i}
-{files.i}
-{timestamp.i}
-{funcrunprocess_run.i}
+{Func/cparam2.i}
+{Func/files.i}
+{Syst/funcrunprocess_run.i}
 
 DEF VAR lcMessage     AS CHAR NO-UNDO.
 DEF VAR liInvCnt      AS INT  NO-UNDO.
@@ -41,7 +40,7 @@ END.
 RUN pGetFuncRunProcessParameters(liFRProcessID).
 ASSIGN ldaInvDate  = fSetFuncRunDateParameter(1).
 
-RUN delete_test_invoice.p("",
+RUN Inv/delete_test_invoice.p("",
                           "",
                           ldaInvDate,
                           liFRProcessID,

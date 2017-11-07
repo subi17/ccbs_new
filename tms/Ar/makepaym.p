@@ -18,14 +18,14 @@
                     04.09.07/aam use createpaym.p
 */   
 
-{commali.i}
-{finvpayment.i}
-{eventval.i}
+{Syst/commali.i}
+{Func/finvpayment.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 END.
 
 
@@ -52,7 +52,7 @@ FIND Customer OF PaidInv NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Customer THEN RETURN "ERROR:Unknown customer".
 
 FIND InvGroup where 
-     InvGroup.Brand    = gcBrand AND 
+     InvGroup.Brand    = Syst.Var:gcBrand AND 
      InvGroup.InvGroup = Customer.InvGroup NO-LOCK NO-ERROR.
 
 ASSIGN 
@@ -64,7 +64,7 @@ ASSIGN
    liAccount[1] = iiAccNum
    liAccount[2] = PaidInv.ArAccNum.
    
-RUN createpaym (PaidInv.CustNum,
+RUN Ar/createpaym.p (PaidInv.CustNum,
                 PaidInv.InvNum,
                 PaidInv.CLI,
                 idtDate,

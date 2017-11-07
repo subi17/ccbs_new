@@ -6,14 +6,13 @@
   CREATED ......: 29.03.15
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
-{commpaa.i}
-katun = "Cron".
-gcBrand = "1".
-{timestamp.i}
-{log.i}
-{ftransdir.i}
-{replog_reader.i}
-{smsmessage.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
+{Func/log.i}
+{Func/ftransdir.i}
+{Func/replog_reader.i}
+{Func/smsmessage.i}
 
 FORM
    SKIP
@@ -110,11 +109,11 @@ PROCEDURE pHandleSMSQueue:
    DEF VAR lcMessage AS CHAR NO-UNDO. 
    DEFINE VARIABLE llHandled AS LOGICAL NO-UNDO. 
    
-   ldeTS = fMakeTS().
+   ldeTS = Func.Common:mMakeTS().
 
    /* Start Replog events dump file */
    IF lcDumpSpool > "" AND
-      (ldDate <> TODAY OR ldeTimeStamp <= fMakeTS()) THEN
+      (ldDate <> TODAY OR ldeTimeStamp <= Func.Common:mMakeTS()) THEN
       RUN pDumpFileRotation(INPUT "sms").
    
    LOOP:
@@ -146,7 +145,7 @@ PROCEDURE pHandleSMSQueue:
          "SMS" + lcDel +
          fNotNull(SMSMessage.MSISDN) + lcDel +
          fNotNull(STRING(SMSMessage.SMSSeq)) + lcDel +
-         fNotNull(STRING(fTimeStamp2DateTime(ldeTS))) + lcDel +
+         fNotNull(STRING(Func.Common:mTimeStamp2DateTime(ldeTS))) + lcDel +
          fNotNull(SMSMessage.DeliMsg) + lcDel + 
          fNotNull(STRING(SMSMessage.MsSeq)) + lcDel +
          fNotNull(SMSMessage.OrigAddress) + lcDel + 
@@ -157,7 +156,7 @@ PROCEDURE pHandleSMSQueue:
       IF llHandled THEN DO:
 
          ASSIGN
-            SMSMessage.DeliStamp = fMakeTS()
+            SMSMessage.DeliStamp = Func.Common:mMakeTS()
             SMSMessage.DeliStat = {&CA_DELISTAT_SENT}.
    
          oiHandled = oiHandled + 1.

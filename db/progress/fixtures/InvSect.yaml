@@ -1,0 +1,54 @@
+bulkload: InvSect
+  InvSect: "1"
+  ISName: "National fixed calls"
+  PrintHead: TRUE 
+  Brand: "1"
+
+bulkload: InvSect
+  InvSect: "2"
+  ISName: "National mobile calls (Future)"
+  PrintHead: TRUE 
+  Brand: "1"
+
+bulkload: InvSect
+  InvSect: "3"
+  ISName: "International calls"
+  PrintHead: TRUE 
+  Brand: "1"
+
+bulkload: InvSect
+  InvSect: "4"
+  ISName: "Roaming calls"
+  PrintHead: TRUE 
+  Brand: "1"
+
+bulkload: InvSect
+  InvSect: "5"
+  ISName: "Premium calls with special prefix"
+  PrintHead: TRUE 
+  Brand: "1"
+
+bulkload: InvSect
+  InvSect: "6"
+  ISName: "Data"
+  PrintHead: TRUE 
+  Brand: "1"
+
+bulkload: InvSect
+  InvSect: "7"
+  ISName: "Bundle data"
+  PrintHead: TRUE 
+  Brand: "1"
+
+bulkload: InvSect
+  InvSect: "8"
+  ISName: "Data roaming"
+  PrintHead: TRUE 
+  Brand: "1"
+
+bulkload: InvSect
+  InvSect: "9"
+  ISName: "IPL Data"
+  PrintHead: TRUE 
+  Brand: "1"
+

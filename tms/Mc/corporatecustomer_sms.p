@@ -7,14 +7,13 @@
   CHANGED ......:
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{commpaa.i}
-katun = "cron".
-gcBrand = "1".
-{fgettxt.i}
-{timestamp.i}
-{fmakesms.i}
-{transname.i}
-{fbundle.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "cron".
+Syst.Var:gcBrand = "1".
+{Func/fgettxt.i}
+{Func/fmakesms.i}
+{Func/transname.i}
+{Mm/fbundle.i}
 
 DEF VAR lcBundleCLITypes  AS CHAR NO-UNDO.
 DEF VAR lcReplacedTxt     AS CHAR NO-UNDO.
@@ -51,14 +50,14 @@ FUNCTION checkNewSubscriptions RETURNS LOGICAL:
    DEFINE VARIABLE ldeTs    AS DECIMAL NO-UNDO.
    DEFINE VARIABLE liStatus AS INT  NO-UNDO.
 
-   fSplitTS(fMakeTs(), OUTPUT ldaDate, OUTPUT liTime).
+   Func.Common:mSplitTS(Func.Common:mMakeTS(), OUTPUT ldaDate, OUTPUT liTime).
    ldaDate = ldaDate - 1.
-   ldeTs = fMake2Dt(ldaDate, liTime).
+   ldeTs = Func.Common:mMake2DT(ldaDate, liTime).
    
    DO liStatus = 1 TO 99:
 
       FOR EACH Mobsub NO-LOCK WHERE 
-               MobSub.Brand  = gcBrand AND
+               MobSub.Brand  = Syst.Var:gcBrand AND
                MobSub.MsStatus = liStatus AND
                MobSub.ActivationDate >= ldaDate AND
                MobSub.ActivationTS > ldeTs:
@@ -66,12 +65,16 @@ FUNCTION checkNewSubscriptions RETURNS LOGICAL:
          FIND FIRST Customer WHERE 
                     Customer.custnum = Mobsub.custnum AND
                    (Customer.category = "20" OR
+                    Customer.category = "21" OR
+                    Customer.category = "22" OR
                     Customer.category = "40" OR
-                    Customer.category = "41") NO-LOCK NO-ERROR.
+                    Customer.category = "41" OR
+                    Customer.category = "42" OR
+                    Customer.category = "43") NO-LOCK NO-ERROR.
          IF NOT AVAIL Customer THEN NEXT.
 
          FIND FIRST CallAlarm WHERE
-                    CallAlarm.Brand = gcBrand AND
+                    CallAlarm.Brand = Syst.Var:gcBrand AND
                     CallAlarm.CLI   = MobSub.CLI AND
                     CallAlarm.CreditType = 40 NO-LOCK NO-ERROR.
          IF AVAIL CallAlarm THEN NEXT. /* SMS is already created */
@@ -80,14 +83,14 @@ FUNCTION checkNewSubscriptions RETURNS LOGICAL:
             IF MobSub.TariffBundle = "" THEN NEXT.
 
             lcReplacedTxt = fConvBundleToBillItem(MobSub.TariffBundle).
-            lcReplacedTxt = fGetItemName(gcBrand,
+            lcReplacedTxt = fGetItemName(Syst.Var:gcBrand,
                                    "BillItem",
                                    lcReplacedTxt,
                                    Customer.Language,
                                    TODAY).
          END.
          ELSE
-            lcReplacedTxt = fGetItemName(gcBrand,
+            lcReplacedTxt = fGetItemName(Syst.Var:gcBrand,
                                   "CLIType",
                                   MobSub.CLIType,
                                   Customer.Language,
@@ -114,4 +117,3 @@ END FUNCTION.
 */
 
 checkNewSubscriptions().
-IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 

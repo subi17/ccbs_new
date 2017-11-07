@@ -21,9 +21,8 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{timestamp.i}
-{fprevoper.i}
+{Syst/commali.i}
+{Func/fprevoper.i}
 
 DEF INPUT  PARAMETER icInvGroup   AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER iiRuleCust1  AS INT  NO-UNDO. 
@@ -171,7 +170,7 @@ FUNCTION fCoShareTarget RETURNS LOGICAL.
 
          /* find salesman's parent (go through middle levels if necessary) */
          FIND Salesman NO-LOCK WHERE
-              Salesman.Brand    = gcBrand  AND
+              Salesman.Brand    = Syst.Var:gcBrand  AND
               Salesman.Salesman = ttSalesman.Salesman NO-ERROR.
          IF AVAILABLE Salesman THEN lcParent = Salesman.Parent.
 
@@ -179,7 +178,7 @@ FUNCTION fCoShareTarget RETURNS LOGICAL.
             IF lcParent = "" THEN LEAVE. 
 
             FIND bSalesman NO-LOCK WHERE 
-                 bSalesman.Brand    = gcBrand  AND
+                 bSalesman.Brand    = Syst.Var:gcBrand  AND
                  bSalesman.Salesman = lcParent NO-ERROR.
 
             IF NOT AVAILABLE bSalesman THEN LEAVE.
@@ -257,7 +256,7 @@ FUNCTION fCoShare RETURNS LOGICAL.
 
    /* remove possible old ones */
    FOR EACH bEvent EXCLUSIVE-LOCK WHERE
-            bEvent.Brand     = gcBrand   AND
+            bEvent.Brand     = Syst.Var:gcBrand   AND
             bEvent.HostTable = "CoEvent" AND
             bEvent.HostKey   = STRING(CoEvent.CoEventID):
 
@@ -271,7 +270,7 @@ FUNCTION fCoShare RETURNS LOGICAL.
       fCoShareTarget(). 
 
       CREATE bEvent.
-      ASSIGN bEvent.Brand     = gcBrand  
+      ASSIGN bEvent.Brand     = Syst.Var:gcBrand  
              bEvent.HostTable = "CoEvent"         
              bEvent.HostKey   = STRING(CoEvent.CoEventID)           
              bEvent.CoRuleID  = CoRule.CoRuleID     
@@ -307,7 +306,7 @@ FUNCTION fEventExists RETURNS LOGICAL
 
    /* already calculated */
    IF CAN-FIND(FIRST CoEvent WHERE
-                     CoEvent.Brand     = gcBrand             AND
+                     CoEvent.Brand     = Syst.Var:gcBrand             AND
                      CoEvent.HostTable = icHostTable         AND
                      CoEvent.HostKey   = icHostKey           AND
                      CoEvent.CoRuleID  = CoRule.CoRuleID     AND
@@ -318,7 +317,7 @@ FUNCTION fEventExists RETURNS LOGICAL
       /* if recalculation then delete old (if not already paid) */
       IF ilRecalc THEN DO:
          FOR EACH CoEvent EXCLUSIVE-LOCK WHERE
-                  CoEvent.Brand      = gcBrand             AND  
+                  CoEvent.Brand      = Syst.Var:gcBrand             AND  
                   CoEvent.HostTable  = icHostTable         AND
                   CoEvent.HostKey    = icHostKey           AND
                   CoEvent.CoRuleID   = CoRule.CoRuleID     AND
@@ -368,13 +367,13 @@ FUNCTION fCLIDates RETURNS LOGICAL
    (idBeg AS DEC,
     idEnd AS DEC).
     
-   fSplitTS(idBeg,
+   Func.Common:mSplitTS(idBeg,
             OUTPUT ldtBegDate,
             OUTPUT ldtTime). 
    
    IF idEnd >= 999999 
    THEN ldtEndDate = 12/31/2050.
-   ELSE fSplitTS(idEnd,
+   ELSE Func.Common:mSplitTS(idEnd,
                  OUTPUT ldtEndDate,
                  OUTPUT ldtTime). 
     
@@ -421,7 +420,7 @@ FUNCTION fCheckCLIDays RETURNS LOGICAL
    
    FIND MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
    IF AVAILABLE MobSub AND MobSub.ActivationTS > 0 THEN DO:
-      fSplitTS(MobSub.ActivationTS,
+      Func.Common:mSplitTS(MobSub.ActivationTS,
                OUTPUT ldtActDate,
                OUTPUT liTime).               
    END. 
@@ -429,7 +428,7 @@ FUNCTION fCheckCLIDays RETURNS LOGICAL
                   Solog.MsSeq = iiMsSeq AND
                   Solog.Stat  = 2       AND
                   Solog.CommLine BEGINS "CR":
-      fSplitTS(Solog.CompletedTS,
+      Func.Common:mSplitTS(Solog.CompletedTS,
                OUTPUT ldtActDate,
                OUTPUT liTime).               
    END.
@@ -469,7 +468,7 @@ FUNCTION fCheckCLI RETURNS LOGICAL
    /* first from mob */
    IF CoRule.CLIType NE "fixed" THEN 
    FOR FIRST MsOwner NO-LOCK WHERE
-             MsOwner.Brand  = gcBrand     AND
+             MsOwner.Brand  = Syst.Var:gcBrand     AND
              MsOwner.CLI    = icCLI       AND
              MsOwner.TSBeg <= liInvPer[2] AND
              MsOwner.TSEnd >= liInvPer[1] AND
@@ -519,7 +518,7 @@ FUNCTION fCollInvSum RETURNS LOGICAL
             END.
             ELSE 
             FOR FIRST BillItem NO-LOCK WHERE 
-                      BillItem.Brand    = gcBrand  AND
+                      BillItem.Brand    = Syst.Var:gcBrand  AND
                       BillItem.BillCode = icBillCode,
                 FIRST VatCode NO-LOCK WHERE
                       VatCode.VatCode = BillItem.VatCode:
@@ -573,7 +572,7 @@ FUNCTION fCheckContractBasis RETURNS INTEGER
    
    IF liBasisFound = 0 THEN 
    FOR EACH FixedFee NO-LOCK WHERE  
-            FixedFee.Brand   = gcBrand   AND
+            FixedFee.Brand   = Syst.Var:gcBrand   AND
             FixedFee.CustNum = iiCustNum:
          
          /* referee commission */
@@ -624,7 +623,7 @@ FUNCTION fCheckContractBasis RETURNS INTEGER
 
    IF liBasisFound = 0 THEN
    FOR EACH SingleFee NO-LOCK WHERE  
-            SingleFee.Brand   = gcBrand   AND
+            SingleFee.Brand   = Syst.Var:gcBrand   AND
             SingleFee.CustNum = iiCustNum AND
             (IF icContract > ""  AND ttSalesman.Reseller NE "RF"
              THEN SingleFee.Contract  = icContract 
@@ -693,13 +692,13 @@ DO ldtDate = idtDate1 TO idtDate2:
    END.
 END.
 
-ASSIGN liPeriod[1] = fHMS2TS(idtDate1,"00:00:00")
-       liPeriod[2] = fHMS2TS(idtDate2,"23:59:59").
+ASSIGN liPeriod[1] = Func.Common:mHMS2TS(idtDate1,"00:00:00")
+       liPeriod[2] = Func.Common:mHMS2TS(idtDate2,"23:59:59").
 
 /* delete all previous events if wanted */
 IF idtDelete NE ? THEN 
 FOR EACH CoEvent EXCLUSIVE-LOCK WHERE
-         CoEvent.Brand    = gcBrand   AND
+         CoEvent.Brand    = Syst.Var:gcBrand   AND
          CoEvent.CalcDate = idtDelete AND
          CoEvent.PaymDate = ?:
 
@@ -711,7 +710,7 @@ END.
 
 RuleLoop:
 FOR EACH CoRule NO-LOCK WHERE
-         CoRule.Brand    = gcBrand     AND
+         CoRule.Brand    = Syst.Var:gcBrand     AND
          CoRule.RuleType = 0           AND  /* 1 = template */
          CoRule.CoFrom  <= idtDate2    AND
          CoRule.CoTo    >= idtDate1    AND
@@ -741,7 +740,7 @@ FOR EACH CoRule NO-LOCK WHERE
          THEN NEXT. 
 
          FIND Salesman NO-LOCK WHERE 
-              Salesman.Brand    = gcBrand  AND
+              Salesman.Brand    = Syst.Var:gcBrand  AND
               Salesman.Salesman = CoTarg.CoTarg NO-ERROR.
 
          IF NOT AVAILABLE Salesman OR
@@ -763,7 +762,7 @@ FOR EACH CoRule NO-LOCK WHERE
 
          /* take all salesmen from defined level */
          FOR EACH Salesman NO-LOCK WHERE
-                  Salesman.Brand    = gcBrand       AND
+                  Salesman.Brand    = Syst.Var:gcBrand       AND
                   Salesman.Reseller = CoTarg.CoTarg AND
                   Salesman.RsLevel  = CoTarg.RsLevel:
 
@@ -798,7 +797,7 @@ FOR EACH CoRule NO-LOCK WHERE
    FOR EACH ttSalesman WHERE
             ttSalesman.Salesman > "",
        EACH Contract NO-LOCK WHERE
-            Contract.Brand      = gcBrand             AND
+            Contract.Brand      = Syst.Var:gcBrand             AND
             Contract.Salesman   = ttSalesman.Salesman AND
             Contract.CustNum   >= iiEventCust1        AND
             Contract.CustNum   <= iiEventCust2        AND
@@ -952,8 +951,8 @@ FOR EACH CoRule NO-LOCK WHERE
                             STRING(Invoice.InvNum))
             THEN NEXT.
 
-            ASSIGN liInvPer[1] = fHMS2TS(Invoice.FirstCall,"00:00:00")
-                   liInvPer[2] = fHMS2TS(Invoice.ToDate,"23:59:59").
+            ASSIGN liInvPer[1] = Func.Common:mHMS2TS(Invoice.FirstCall,"00:00:00")
+                   liInvPer[2] = Func.Common:mHMS2TS(Invoice.ToDate,"23:59:59").
                    
             FOR EACH ttBasis:
                 ttBasis.CommBase = 0.
@@ -1051,7 +1050,7 @@ FOR EACH CoRule NO-LOCK WHERE
 
          IF CoRule.CLIType NE "fixed" THEN
          FOR EACH MsOwner NO-LOCK WHERE
-                  MsOwner.Brand    = gcBrand          AND
+                  MsOwner.Brand    = Syst.Var:gcBrand          AND
                   MsOwner.CustNum  = Customer.CustNum AND
                   MsOwner.TSEnd    > liPeriod[1]      AND /* valid */
                   (IF ttCust.Contract NE "" AND ttSalesman.Reseller NE "RF"
@@ -1066,7 +1065,7 @@ FOR EACH CoRule NO-LOCK WHERE
             IF ttSalesman.Reseller = "RF" THEN DO:
                llTake = FALSE.
                FOR FIRST Salesman NO-LOCK WHERE
-                         Salesman.Brand    = gcBrand AND
+                         Salesman.Brand    = Syst.Var:gcBrand AND
                          Salesman.Salesman = ttSalesman.Salesman,
                    FIRST bOwner NO-LOCK WHERE
                          bOwner.MsSeq   = INTEGER(
@@ -1221,7 +1220,7 @@ FOR EACH CoRule NO-LOCK WHERE
             CREATE CoEvent.
             BUFFER-COPY ttEvent TO CoEvent.
             ASSIGN CoEvent.CalcDate = TODAY
-                   CoEvent.Brand    = gcBrand.
+                   CoEvent.Brand    = Syst.Var:gcBrand.
                           
             FIND FIRST ttMonths WHERE 
                        ttMonths.YEAR  = YEAR(CoEvent.CommTo) AND
@@ -1267,7 +1266,7 @@ FOR EACH CoRule NO-LOCK WHERE
 
                /* delete also related, shared commissions */
                FOR EACH bEvent EXCLUSIVE-LOCK WHERE
-                        bEvent.Brand     = gcBrand   AND
+                        bEvent.Brand     = Syst.Var:gcBrand   AND
                         bEvent.HostTable = "CoEvent" AND
                         bEvent.HostKey   = STRING(CoEvent.CoEventID):
                   DELETE bEvent.

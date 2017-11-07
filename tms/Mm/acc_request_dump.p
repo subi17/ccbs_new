@@ -7,9 +7,9 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{dumpfile_run.i}
-{create_eventlog.i}
+{Syst/commali.i}
+{Syst/dumpfile_run.i}
+{Func/create_eventlog.i}
 
 DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -62,7 +62,7 @@ BY DFField.OrderNbr:
                   DFField.DFField.
 END.
          
-fSplitTS(idLastDump,
+Func.Common:mSplitTS(idLastDump,
          OUTPUT ldaModified,
          OUTPUT liCnt).
 
@@ -75,7 +75,7 @@ OUTPUT STREAM sFile TO VALUE(icFile).
 
 MsRequestLoop:
 FOR EACH MsRequest NO-LOCK USE-INDEX CLI WHERE
-         MsRequest.Brand   = gcBrand AND
+         MsRequest.Brand   = Syst.Var:gcBrand AND
          MsRequest.ReqType = 10      
    ON QUIT UNDO, RETRY
    ON STOP UNDO, RETRY:
@@ -108,7 +108,7 @@ FOR EACH MsRequest NO-LOCK USE-INDEX CLI WHERE
       BY EventLog.EventDate DESC
       BY EventLog.EventTime DESC:
       
-         ldModified = fHMS2TS(EventLog.EventDate,EventLog.EventTime).
+         ldModified = Func.Common:mHMS2TS(EventLog.EventDate,EventLog.EventTime).
          IF ldModified >= MsRequest.DoneStamp THEN DO:
             lcModifier = EventLog.UserCode.
             LEAVE.

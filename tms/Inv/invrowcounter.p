@@ -6,23 +6,23 @@
   CREATED ......: 15.11.10
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'InvRowCounter'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'InvRowCounter'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhInvRowCounter AS HANDLE NO-UNDO.
    lhInvRowCounter = BUFFER InvRowCounter:HANDLE.
    RUN StarEventInitialize(lhInvRowCounter).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhInvRowCounter).
+      RUN Mc/eventview2.p(lhInvRowCounter).
    END.
 
 END.
@@ -83,8 +83,8 @@ FORM
     InvRowCounter.ToDate
     InvRowCounter.Quantity  FORMAT "->>>>>>>9"
     InvRowCounter.Amount
-WITH ROW FrmRow CENTERED OVERLAY FrmDown DOWN COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " INVOICE ROW COUNTERS " FRAME sel.
+WITH ROW FrmRow CENTERED OVERLAY FrmDown DOWN COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " INVOICE ROW COUNTERS " FRAME sel.
 
 FORM
     InvRowCounter.InvCust    COLON 20
@@ -122,19 +122,19 @@ FORM
     InvRowCounter.DataAmt     COLON 20 
        InvRowCounter.ExtraAmount COLON 50 
    WITH OVERLAY ROW 1 centered
-      COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) ac-hdr SIDE-LABELS FRAME lis.
+      COLOR VALUE(Syst.Var:cfc) TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr SIDE-LABELS FRAME lis.
 
 FORM 
     "BillCode:" lcBillCode FORMAT "X(16)"
     HELP "Enter billing item"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Billing Item "
-       COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Billing Item "
+       COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FORM 
     "MSISDN:" lcCLI FORMAT "X(16)"
     HELP "Enter MSISDN"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN "
-       COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND MSISDN "
+       COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FORM 
    ldaFromDate AT 2 
@@ -161,7 +161,7 @@ END.
 
 RUN pInitTempTable.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -237,27 +237,27 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk   = 0
-        ufk[1]= 703
-        ufk[7]= 0  
-        ufk[8]= 8 
-        ehto  = 3 
+        Syst.Var:ufk   = 0
+        Syst.Var:ufk[1]= 703
+        Syst.Var:ufk[7]= 0  
+        Syst.Var:ufk[8]= 8 
+        Syst.Var:ehto  = 3 
         ufkey = FALSE.
         
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW InvRowCounter.BillCode ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW InvRowCounter.BillCode {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) InvRowCounter.BillCode WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) InvRowCounter.BillCode WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"4,f4,5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"4,f4,5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -266,10 +266,10 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -287,7 +287,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -312,7 +312,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -338,7 +338,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ttCounter WHERE recid(ttCounter) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -362,7 +362,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -377,9 +377,9 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
        SET lcBillCode WITH FRAME f1.
@@ -402,9 +402,9 @@ REPEAT WITH FRAME sel:
      END. /* Search-1 */
 
      /* Search BY column 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f2.
        SET lcCLI WITH FRAME f2.
@@ -426,7 +426,7 @@ REPEAT WITH FRAME sel:
        END.
      END. /* Search-2 */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
 
@@ -435,8 +435,8 @@ REPEAT WITH FRAME sel:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhInvRowCounter).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -452,19 +452,19 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(ttCounter) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(ttCounter) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
@@ -567,23 +567,22 @@ PROCEDURE local-UPDATE-record:
       RUN local-find-others.
       
       FIND FIRST BillItem WHERE 
-                 BillItem.Brand = gcBrand AND
+                 BillItem.Brand = Syst.Var:gcBrand AND
                  BillItem.BillCode = InvRowCounter.BillCode NO-LOCK NO-ERROR.
 
       FIND FIRST CCN WHERE
-                 CCN.Brand = gcBrand AND
+                 CCN.Brand = Syst.Var:gcBrand AND
                  CCN.CCN = InvRowCounter.CCN NO-LOCK NO-ERROR.
                  
       IF InvRowCounter.DCEvent > "" THEN            
       FIND FIRST DayCampaign WHERE 
-           DayCampaign.Brand   = gcBrand AND
+           DayCampaign.Brand   = Syst.Var:gcBrand AND
            DayCampaign.DCEvent = InvRowCounter.DCEvent NO-LOCK NO-ERROR.
            
       FIND FIRST Customer WHERE Customer.CustNum = InvRowCounter.InvCust
          NO-LOCK NO-ERROR.
       IF AVAILABLE Customer THEN 
-         lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                       BUFFER Customer).
+         lcCustName = Func.Common:mDispCustName(BUFFER Customer).
       ELSE lcCustName = "".
 
       DISP 
@@ -619,13 +618,13 @@ PROCEDURE local-UPDATE-record:
       WITH FRAME lis.
 
       ASSIGN 
-        ufk    = 0
-        ufk[8] = 8
-        ehto   = 0.
+        Syst.Var:ufk    = 0
+        Syst.Var:ufk[8] = 8
+        Syst.Var:ehto   = 0.
          
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
-      IF toimi = 8 THEN LEAVE ActionDetails.
+      IF Syst.Var:toimi = 8 THEN LEAVE ActionDetails.
    END.
 
 END PROCEDURE.
@@ -693,8 +692,8 @@ END PROCEDURE.
 
 PROCEDURE pAskPeriod:
 
-   ehto = 9.
-   RUN ufkey.p.
+   Syst.Var:ehto = 9.
+   RUN Syst/ufkey.p.
 
    ASSIGN 
       ldaFromDate = TODAY - 90
@@ -719,10 +718,10 @@ END PROCEDURE.
 FINALLY:
 
    HIDE FRAME sel NO-PAUSE.
-   si-recid = xrecid.
+   Syst.Var:si-recid = xrecid.
 
-   ehto = 4.
-   RUN ufkey.
+   Syst.Var:ehto = 4.
+   RUN Syst/ufkey.p.
 
    fCleanEventObjects().
 END.

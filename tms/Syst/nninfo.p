@@ -7,8 +7,8 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/eventval.i} 
 
 DEF INPUT PARAMETER MenuId AS c NO-UNDO.
 
@@ -17,9 +17,9 @@ DEF VAR i   AS i.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMenuTree AS HANDLE NO-UNDO.
    lhMenuTree = BUFFER MenuTree:HANDLE.
@@ -27,14 +27,14 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhMenuTree).
+      RUN Mc/eventview2.p(lhMenuTree).
    END.
 END.
 
 DO i = 1 TO 8:
-   xfk[i] = ufk[i].
+   xfk[i] = Syst.Var:ufk[i].
 END.
-ASSIGN ufk = 0 ufk[1] = 2 ufk[8] = 8. ehto = 0.
+ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 2 Syst.Var:ufk[8] = 8. Syst.Var:ehto = 0.
 
 FIND MenuTree where MenuTree.MenuId = MenuId no-lock.
 
@@ -48,11 +48,11 @@ WITH OVERLAY ROW 2 centered
 PAUSE 0.            
 DISP MenuTree.Memo[1 FOR 15] WITH FRAME info.
 
-RUN ufkey.
+RUN Syst/ufkey.p.
 
-IF toimi = 1 THEN DO TRANS:
+IF Syst.Var:toimi = 1 THEN DO TRANS:
    PAUSE 0.
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    FIND MenuTree where MenuTree.MenuId = MenuId exclusive-lock.
    IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMenuTree).
    UPDATE MenuTree.Memo[1 FOR 15] WITH FRAME info.
@@ -62,8 +62,8 @@ END.
 HIDE FRAME info  no-pause.
 
 DO i = 1 TO 8.
-   ufk[i] = xfk[i].
+   Syst.Var:ufk[i] = xfk[i].
 END.
-ehto = 3.
-RUN ufkey.
+Syst.Var:ehto = 3.
+RUN Syst/ufkey.p.
 PAUSE 0.

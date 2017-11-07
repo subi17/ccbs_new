@@ -8,10 +8,9 @@
   VERSION ......: TeleF
   ------------------------------------------------------------------ */
 
-{testpaa.i}
-{excel.i}
-{email.i}
-{timestamp.i}
+{Syst/testpaa.i}
+{Func/excel.i}
+{Func/email.i}
 
 DEF VAR Reseller  LIKE Reseller.Reseller NO-UNDO.
 DEF VAR dFrom     AS DATE FORMAT "99-99-99" NO-UNDO.
@@ -36,7 +35,7 @@ form
  "         CLI .............:" CLI                                  
  skip(6)
 with row 1 width 80 NO-LABELS
-   title " " + ynimi + " CREATE RESELLER " + string(pvm,"99-99-99") + " "
+   title " " + Syst.Var:ynimi + " CREATE RESELLER " + string(TODAY,"99-99-99") + " "
 FRAME rajat.
 
 ASSIGN
@@ -46,7 +45,7 @@ ASSIGN
 loop:
 repeat with frame rajat:
    PAUSE 0 no-message.
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       Reseller
       Salesman1
@@ -59,7 +58,7 @@ repeat with frame rajat:
       
       HIDE MESSAGE NO-PAUSE.
       
-      IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO:
+      IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
          IF FRAME-FIELD = "Reseller" THEN DO:
             ASSIGN Reseller.
             IF Reseller = "" THEN DO:
@@ -67,7 +66,7 @@ repeat with frame rajat:
             END.
             ELSE DO:
                FIND FIRST Reseller NO-LOCK WHERE
-                          Reseller.Brand  = gcBrand AND
+                          Reseller.Brand  = Syst.Var:gcBrand AND
                           Reseller.Reseller = Reseller NO-ERROR.
                IF NOT AVAIL Reseller THEN DO:
                   MESSAGE "Unknown Reseeller !".
@@ -81,7 +80,7 @@ repeat with frame rajat:
             ASSIGN Salesman1.
             IF Salesman1 NE "" THEN DO:
                FIND FIRST Salesman NO-LOCK WHERE
-                          Salesman.Brand    = gcBrand AND
+                          Salesman.Brand    = Syst.Var:gcBrand AND
                           Salesman.Salesman = Salesman1 NO-ERROR.
                IF NOT AVAIL Salesman THEN DO:
                   MESSAGE "Unknown Salesman !".
@@ -100,7 +99,7 @@ repeat with frame rajat:
             ASSIGN Salesman2.
             IF Salesman2 NE "" THEN DO:
                FIND FIRST Salesman NO-LOCK WHERE
-                          Salesman.Brand    = gcBrand AND
+                          Salesman.Brand    = Syst.Var:gcBrand AND
                           Salesman.Salesman = Salesman2 NO-ERROR.
                IF NOT AVAIL Salesman THEN DO:
                   MESSAGE "Unknown Salesman !".
@@ -121,14 +120,14 @@ repeat with frame rajat:
    END.
    
    ASSIGN
-      ufk = 0
-      ufk[1] = 132
-      ufk[5] = 795
-      ufk[8] = 8
-      ehto = 0.
+      Syst.Var:ufk = 0
+      Syst.Var:ufk[1] = 132
+      Syst.Var:ufk[5] = 795
+      Syst.Var:ufk[8] = 8
+      Syst.Var:ehto = 0.
 
-   run ufkey.
-   case toimi:
+   RUN Syst/ufkey.p.
+   case Syst.Var:toimi:
       when 8 then return.
       when 1 then next loop.
       when 5 then leave loop.
@@ -139,8 +138,8 @@ end.
 if keylabel(lastkey) = "f4" then return.
 
 ASSIGN 
-   FromStamp = fHMS2TS(dFrom,"00:00:00")
-   ToStamp   = fHMS2TS(dTo,"23:59:59").
+   FromStamp = Func.Common:mHMS2TS(dFrom,"00:00:00")
+   ToStamp   = Func.Common:mHMS2TS(dTo,"23:59:59").
 
 output stream excel to /tmp/posrep.txt.
 
@@ -158,13 +157,13 @@ put stream excel unformatted
 
 
 FOR EACH Reseller NO-LOCK WHERE
-         Reseller.Brand    = gcBrand AND
+         Reseller.Brand    = Syst.Var:gcBrand AND
          Reseller.Reseller = Reseller,
    EACH Salesman NO-LOCK WHERE
-        Salesman.Brand    = gcBrand AND
+        Salesman.Brand    = Syst.Var:gcBrand AND
         Salesman.Reseller = Reseller.Reseller,
    EACH Order NO-LOCK WHERE 
-        Order.Brand = gcBrand AND
+        Order.Brand = Syst.Var:gcBrand AND
         Order.CrStamp <= FromStamp AND
         Order.CrStamp >= ToStamp   AND
         Order.Salesman = Salesman.Salesman:
@@ -179,11 +178,11 @@ FOR EACH Reseller NO-LOCK WHERE
    ELSE lcStatus = "".
           
    FIND MobSub NO-LOCK WHERE
-        MobSub.Brand = gcBrand AND
+        MobSub.Brand = Syst.Var:gcBrand AND
         MobSub.MsSeq = Order.MSSeq NO-ERROR.
 
    FIND FIRST OrderCustomer NO-LOCK WHERE
-              OrderCustomer.Brand   = gcBrand       AND
+              OrderCustomer.Brand   = Syst.Var:gcBrand       AND
               OrderCustomer.OrderID = Order.OrderID AND
               OrderCustomer.RowType = 1 NO-ERROR.
    IF NOT AVAILABLE OrderCustomer THEN NEXT.             
@@ -191,7 +190,7 @@ FOR EACH Reseller NO-LOCK WHERE
    put stream excel unformatted
       Reseller.Reseller      tab
       Salesman.Salesman      tab
-      fTS2HMS(Order.CrStamp) tab
+      Func.Common:mTS2HMS(Order.CrStamp) tab
       Order.OrderId          tab
       lcStatus               tab
       OrderCustomer.SurName1 + " " + OrderCustomer.Firstname tab

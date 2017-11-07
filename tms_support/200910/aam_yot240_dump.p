@@ -7,9 +7,9 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{detailseq.i}
-{dumpfile_run.i}
+{Syst/commali.i}
+{Func/detailseq.i}
+{Syst/dumpfile_run.i}
 
 def input parameter idadate as date no-undo.
 
@@ -53,8 +53,8 @@ ASSIGN
    ldaBaseDate  = idadate
    ldaFromDate  = ldaBaseDate - 1
    ldaToDate    = ldaBaseDate - 1
-   ldeStartTS   = fMake2DT(ldaFromDate,0)
-   ldeEndTS     = fMake2DT(ldaToDate,86399).
+   ldeStartTS   = Func.Common:mMake2DT(ldaFromDate,0)
+   ldeEndTS     = Func.Common:mMake2DT(ldaToDate,86399).
  
 OUTPUT STREAM sFile TO VALUE(icFile).
 

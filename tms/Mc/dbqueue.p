@@ -15,8 +15,8 @@
   VERSION ......: M15
 --------------------------------------------------------------*/
 
-{commpaa.i}
-{eventlog.i}
+{Syst/commpaa.i}
+{Syst/eventlog.i}
 
 FUNCTION fAmIUp RETURNS INT
   (INPUT type AS INT, INPUT val AS INT).

@@ -1,4 +1,3 @@
-{timestamp.i}
 
 def var i as int no-undo.
 def var j as int no-undo.
@@ -37,7 +36,7 @@ for each dccli no-lock where
                 msowner.msseq = dccli.msseq and
                 msowner.paytype = false:
              
-         fsplitts(msowner.tsend,
+         Func.Common:mSplitTS(msowner.tsend,
                   output ldtto,
                   output litime).
       end.      

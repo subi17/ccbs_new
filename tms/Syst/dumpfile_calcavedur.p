@@ -8,7 +8,6 @@
 ---------------------------------------------------------------------- */
 
 
-{timestamp.i}
 DEF INPUT PARAMETER iiDumpId AS INT NO-UNDO. 
 
 DEF VAR liavr AS INT NO-UNDO. 
@@ -75,14 +74,14 @@ DO lind = 1 TO NUM-ENTRIES(lcModes,","):
                DumpLog.DumpId = DumpFile.DumpId AND
                DumpLog.DumpLogStatus = 3 AND
                DumpLog.DumpType = lcDumpMode AND
-               DumpLog.CreateStart > fMake2DT(TODAY - liDays,0)
+               DumpLog.CreateStart > Func.Common:mMake2DT(TODAY - liDays,0)
                BY DumpLog.CreateStart:
          IF DumpLog.CreateEnd = 0 OR
             DumpLog.CreateStart = 0 THEN NEXT.
 
          ASSIGN
-            lDtStart = fTimeStamp2DateTime(DumpLog.CreateStart)
-            lDtEnd   = fTimeStamp2DateTime(DumpLog.CreateEnd)
+            lDtStart = Func.Common:mTimeStamp2DateTime(DumpLog.CreateStart)
+            lDtEnd   = Func.Common:mTimeStamp2DateTime(DumpLog.CreateEnd)
             liDumpDur = INT64(lDtEnd - lDtStart)
             liResDur  = liDumpDur / 1000.
 

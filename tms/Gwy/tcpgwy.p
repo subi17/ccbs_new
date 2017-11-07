@@ -12,11 +12,11 @@
   VERSION ......: XFERA
 ------------------------------------------------------ */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/log.i}
 
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 /*
 PARAMETERS:
@@ -79,7 +79,7 @@ ELSE IF ETIME > 3500 THEN DO:
 END.
 
 
-ldeTSNow = fMakeTS().
+ldeTSNow = Func.Common:mMakeTS().
 
 IF llDebug THEN DO:
 
@@ -148,8 +148,17 @@ PROCEDURE pServerResponse:
    llRC = SELF:READ(lmData,1,liDataSize,1) NO-ERROR.
 
    IF llRC = FALSE OR ERROR-STATUS:GET-MESSAGE(1) <> '' THEN DO:
-      IF NOT SESSION:BATCH THEN
-         MESSAGE llRC ERROR-STATUS:GET-MESSAGE(1) VIEW-AS ALERT-BOX.
+      IF NOT SESSION:BATCH THEN DO:
+         IF Syst.Var:katun EQ "Service" OR
+            Syst.Var:katun EQ "PerCont" OR
+            Syst.Var:katun EQ "STC" OR
+            Syst.Var:katun EQ "CreFixed" OR
+            Syst.Var:katun EQ "CreSub" OR
+            Syst.Var:katun EQ "request" THEN
+            fLogError(SUBST("TCPGWY: Unable to read response: &1, &2",
+                      llRC, ERROR-STATUS:GET-MESSAGE(1))).
+         ELSE MESSAGE llRC ERROR-STATUS:GET-MESSAGE(1) VIEW-AS ALERT-BOX.
+      END.
       lcResponse = 'ERR:Unable to read response'.
       RETURN.
    END.

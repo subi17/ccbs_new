@@ -9,11 +9,11 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{excel.i}
-{function.i}
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'fixedfee'}
+{Func/excel.i}
+{Func/function.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'fixedfee'}
 
 DEF VAR cname   AS c  NO-UNDO.
 def var fname   as c  no-undo format "x(40)".
@@ -31,7 +31,7 @@ form
    "              File Name ...:" fname
       help "Name of the output file"                                   skip(7)
 with centered width 80 no-label 
-   title " " + ynimi + "  Contract payment report " FRAME frm.
+   title " " + Syst.Var:ynimi + "  Contract payment report " FRAME frm.
 
 DO FOR TMSUser:
    FIND FIRST TMSUser no-lock where
@@ -46,19 +46,19 @@ repeat WITH FRAME frm:
 
    HIDE MESSAGE no-pause.
 
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       CustNum
       fname 
    WITH FRAME frm EDITING:
       READKEY.
-      nap = keylabel(LASTKEY).
-      IF lookup(nap,poisnap) > 0 THEN DO:
+      Syst.Var:nap = keylabel(LASTKEY).
+      IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
          if frame-field = "CustNum" THEN DO:
             ASSIGN CustNum.
             IF CustNum NE 0 THEN DO:
                FIND FIRST Customer where
-                          Customer.Brand   = gcBrand AND
+                          Customer.Brand   = Syst.Var:gcBrand AND
                           Customer.CustNum = CustNum
                no-lock no-error.
                IF AVAIL Customer THEN DISP Customer.CustName WITH FRAME frm.
@@ -76,12 +76,12 @@ repeat WITH FRAME frm:
 
 task:
    repeat WITH FRAME frm ON ENDKEY UNDO, RETURN:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
-      IF toimi = 1 THEN NEXT  CRIT.
-      IF toimi = 8 THEN LEAVE CRIT.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
+      RUN Syst/ufkey.p.
+      IF Syst.Var:toimi = 1 THEN NEXT  CRIT.
+      IF Syst.Var:toimi = 8 THEN LEAVE CRIT.
 
-      IF toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
          ok = FALSE.
          message "Are you SURE you want to start processing (Y/N) ?" UPDATE ok.
          IF ok THEN LEAVE task.
@@ -106,7 +106,7 @@ task:
       "Memo"      my-nl.
 
    FOR EACH FixedFee no-lock where
-            FixedFee.Brand = gcBrand AND
+            FixedFee.Brand = Syst.Var:gcBrand AND
            (IF CustNum NE 0 
             THEN FixedFee.CustNum = CustNum
             ELSE TRUE).

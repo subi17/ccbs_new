@@ -6,14 +6,12 @@
 */
 
 
-{commpaa.i}
-gcBrand = "1".
-Katun = "Cron".
-{tmsconst.i}
-{timestamp.i}
-{cparam2.i}
-{date.i}
-{amq.i}
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Cron".
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Func/amq.i}
 
 DEF VAR lcActionID        AS CHAR NO-UNDO.
 DEF VAR lcTableName       AS CHAR NO-UNDO.
@@ -22,12 +20,12 @@ DEF VAR lcSendStatus      AS CHAR NO-UNDO.
 
 lcTableName = "DMS".
 lcActionID = {&AMQ_RESENDER}.
-ldCurrentTimeTS = fMakeTS().
+ldCurrentTimeTS = Func.Common:mMakeTS().
 
 DO TRANS:
 
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.Var:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName NO-ERROR.
 
@@ -40,11 +38,11 @@ DO TRANS:
       /*First execution stamp*/
       CREATE ActionLog.
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.Var:gcBrand
          ActionLog.TableName    = lcTableName
          ActionLog.ActionID     = lcActionID
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
       RELEASE ActionLog.
       RETURN. /*No reporting in first time.*/
@@ -52,7 +50,7 @@ DO TRANS:
    ELSE DO:
       ASSIGN
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
       RELEASE Actionlog.
    END.
@@ -74,7 +72,7 @@ FOR EACH AmqMsg WHERE
    END.
    ELSE DO:
       AMQMsg.StatusCode = lcSendStatus.
-      AMQMsg.InsertTS = fMakeTS().
+      AMQMsg.InsertTS = Func.Common:mMakeTS().
    END.
 END.
 
@@ -82,7 +80,7 @@ END.
 
 DO TRANS:
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.Var:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName    AND
               ActionLog.ActionStatus NE {&ACTIONLOG_STATUS_SUCCESS}

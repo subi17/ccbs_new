@@ -11,16 +11,14 @@
 
 &GLOBAL-DEFINE AllIncludes YES
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{ftransdir.i}
-{email.i}
-{transname.i}
-{fhdrtext.i}
-{ddoutfilett.i}
-{customer_address.i}
-{funcrunprocess_update.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/email.i}
+{Func/transname.i}
+{Inv/ddoutfilett.i}
+{Func/customer_address.i}
+{Syst/funcrunprocess_update.i}
 
 /* invoices TO be printed */
 DEFINE INPUT-OUTPUT PARAMETER TABLE FOR ttInvoice.
@@ -175,14 +173,14 @@ PROCEDURE pInitialize:
       RETURN "ERROR: No invoices were found".
 
    FIND FIRST Company WHERE
-              Company.Brand = gcBrand NO-LOCK NO-ERROR.
+              Company.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
    IF NOT AVAIL Company THEN RETURN "ERROR:Company data not available".
 
    /* bank account that is dedicated for dd */
    lcBankID = "DD" + icBankCode.
    
    FOR FIRST BankAccount NO-LOCK WHERE
-             BankAccount.Brand   = gcBrand AND
+             BankAccount.Brand   = Syst.Var:gcBrand AND
              LOOKUP(lcBankID,BankAccount.InvForm) > 0:
       lcCompanyBank = BankAccount.BankAccount.
    END.
@@ -221,10 +219,10 @@ PROCEDURE pInitialize:
    DO liPCnt = 1 TO EXTENT(lcBaseHeader):
       IF liPCnt >= 15 THEN liPos = 435 + liPcnt.
       ELSE liPos = 350 + liPCnt.
-      lcBaseHeader[liPCnt] = fGetHdrText(liPos,1).
+      lcBaseHeader[liPCnt] = Func.Common:mGetHdrText(liPos,1).
    END.
 
-   lcBaseTaxZone = fGetItemName(gcBrand,
+   lcBaseTaxZone = fGetItemName(Syst.Var:gcBrand,
                                 "TaxZone",
                                 "1",
                                 1,
@@ -323,7 +321,7 @@ PROCEDURE pPrintInvoices:
       IF Invoice.TaxZone = "1" AND Customer.Language = 1 THEN
          lcTaxZone = lcBaseTaxZone.
       ELSE 
-         lcTaxZone = fGetItemName(gcBrand,
+         lcTaxZone = fGetItemName(Syst.Var:gcBrand,
                                   "TaxZone",
                                   Invoice.TaxZone,
                                   Customer.Language,
@@ -342,7 +340,7 @@ PROCEDURE pPrintInvoices:
          ELSE DO:
             IF liPCnt >= 15 THEN liPos = 435 + liPCnt.
             ELSE liPos = 350 + liPCnt.
-            lcHeader[liPCnt] = fGetHdrText(liPos,Customer.Language).
+            lcHeader[liPCnt] = Func.Common:mGetHdrText(liPos,Customer.Language).
          END.   
       END.
 
@@ -580,7 +578,7 @@ PROCEDURE pLogErrors:
                              STRING(DAY(TODAY),"99")    + 
                              "_" + STRING(TIME) + ".txt".                    
 
-      ldCurrStamp = fMakeTS().
+      ldCurrStamp = Func.Common:mMakeTS().
                            
       OUTPUT STREAM slog TO VALUE(lcErrFile).
       PUT STREAM slog UNFORMATTED
@@ -596,12 +594,12 @@ PROCEDURE pLogErrors:
 
          /* save to db for reporting */
          CREATE ErrorLog.
-         ASSIGN ErrorLog.Brand     = gcBrand
+         ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
                 ErrorLog.ActionID  = "DDFILETEST"
                 ErrorLog.TableName = "Invoice"
                 ErrorLog.KeyValue  = ttError.Inv
                 ErrorLog.ActionTS  = ldCurrStamp
-                ErrorLog.UserCode  = katun
+                ErrorLog.UserCode  = Syst.Var:katun
                 ErrorLog.ErrorMsg  = ttError.ErrMsg.
       END.
 

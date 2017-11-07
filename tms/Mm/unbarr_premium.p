@@ -7,11 +7,10 @@
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
-katun = "Cron".
-gcBrand = "1".
-{timestamp.i}
-{tmsconst.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
+{Syst/tmsconst.i}
 
 DEF VAR lcResult  AS CHAR NO-UNDO.
 
@@ -19,7 +18,7 @@ DEF VAR lcResult  AS CHAR NO-UNDO.
 IF SESSION:BATCH AND DAY(TODAY) = 1 THEN RETURN.
 
 FOR EACH MobSub NO-LOCK WHERE
-         MobSub.Brand = gcbrand and
+         MobSub.Brand = Syst.Var:gcBrand and
          MobSub.MsStatus = {&MSSTATUS_BARRED} and
          MobSub.ActivationDate < TODAY - 90 AND
          MobSub.ActivationDate > TODAY - 95 AND
@@ -33,11 +32,11 @@ FOR EACH MobSub NO-LOCK WHERE
    IF AVAIL Barring AND
             Barring.BarringStatus EQ {&BARR_STATUS_ACTIVE} AND
             Barring.UserCode EQ "CreSub / CreSub" THEN
-      RUN barrengine.p (MobSub.MsSeq,
+      RUN Mm/barrengine.p (MobSub.MsSeq,
                         "Prod_TotalPremium_Off=0",
                         {&REQUEST_SOURCE_SCRIPT}, /* source  */
                         "", /* creator */
-                        fMakeTS(), /* activate */
+                        Func.Common:mMakeTS(), /* activate */
                         "", /* SMS */
                         OUTPUT lcResult).
 END.

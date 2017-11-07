@@ -9,10 +9,10 @@ CHANGED ......:
 Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
-   katun = "Qvantel"
-   gcBrand = "1".
+   Syst.Var:katun = "Qvantel"
+   Syst.Var:gcBrand = "1".
 
 DEFINE VARIABLE lcCLI AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcCLIType AS CHARACTER NO-UNDO.
@@ -28,7 +28,7 @@ DEF VAR lcCDRDir AS CHAR NO-UNDO.
 DEF VAR lcCDRFile AS CHAR NO-UNDO. 
 
 /*Search correct directory*/
-lcRootDir = SEARCH("donotremove_testdir.txt").
+lcRootDir = SEARCH("testing/donotremove_testdir.txt").
 lcRootDir = REPLACE(lcrootDir, "donotremove_testdir.txt", "").
 
 
@@ -69,17 +69,17 @@ PROCEDURE pUserInput:
       WITH FRAME lis EDITING:
       
          IF ufkey THEN DO:
-            ASSIGN ehto = 9. RUN ufkey.p.
+            ASSIGN Syst.Var:ehto = 9. RUN Syst/ufkey.p.
             ufkey = false.
          END.
 
          READKEY.
          
-         nap = keylabel(lastkey).
+         Syst.Var:nap = keylabel(lastkey).
             
          IF KEYLABEL(LASTKEY) = "F9" AND 
             FRAME-FIELD = "lcCDRFile" THEN DO:
-            RUN filebrowser.p(
+            RUN Syst/filebrowser.p(
                lcRootDir + "edrfiles/*.asc").
             lcCDRFile = RETURN-VALUE.
             DISP lcCDRFile WITH FRAME lis.
@@ -88,7 +88,7 @@ PROCEDURE pUserInput:
          END.
 
 
-         IF LOOKUP(nap,poisnap) > 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
 
             IF FRAME-FIELD = "lcCli" THEN DO:
                FIND FIRST mobsub WHERE

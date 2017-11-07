@@ -1,8 +1,8 @@
-{commpaa.i}
-gcBrand = "1" .
-katun = "anttis".
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1" .
+Syst.Var:katun = "anttis".
 
-{msisdn.i}
+{Func/msisdn.i}
 
 DEFINE VARIABLE lccli AS CHARACTER NO-UNDO init "622079047".
 

@@ -2,11 +2,11 @@
 
    actions after payment to an invoice 
 */
-{commali.i}
-{finvbal.i}
-{fpplan.i}
-{fpaymact.i}
-{fcustbal.i}
+{Syst/commali.i}
+{Func/finvbal.i}
+{Func/fpplan.i}
+{Func/fpaymact.i}
+{Func/fcustbal.i}
 
 /* for calcint.p (interests) */
 DEF NEW SHARED VAR intpro  AS DEC EXTENT 10 NO-UNDO.
@@ -43,7 +43,7 @@ FUNCTION fInvoicePaymentUpdate RETURNS LOGIC
       liIntMethod = fCParamI("IntCalcMet").
       IF liIntMethod = ? OR liIntMethod = 0 THEN liIntMethod = 1.
 
-      RUN calcint (PaidInv.DueDate,
+      RUN Ar/calcint.p (PaidInv.DueDate,
                    idtPaymDate,
                    liIntMethod,
                    idPaymAmt,

@@ -9,24 +9,24 @@
                   30.12.04/aam Secret, RepCode, SaldoLimit from services
 -------------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{fcustbal.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MobSub'}
-{fsubser.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/fcustbal.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MobSub'}
+{Func/fsubser.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMobsub AS HANDLE NO-UNDO.
    lhMobsub = BUFFER mobsub:HANDLE.
    RUN StarEventInitialize(lhMobsub).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhMobsub).
+      RUN Mc/eventview2.p(lhMobsub).
    END.
 
 END.
@@ -58,12 +58,12 @@ DEF VAR lcMNP         AS CHARACTER NO-UNDO.
 
 
 
-{mobsub1.i}
+{Mm/mobsub1.i}
 
 DEF BUFFER AgrCustomer FOR Customer.
 DEF BUFFER InvCustomer FOR Customer.
 DEF BUFFER UserCustomer FOR Customer.
-{mobsub.frm}
+{Mm/mobsub.frm}
 
 form 
 SKIP(3)
@@ -78,8 +78,8 @@ ac-hdr = "CHANGE".
 loop:
 repeat:
 
-   assign ufkey = true ehto = 9.
-   run ufkey.
+   assign ufkey = true Syst.Var:ehto = 9.
+   RUN Syst/ufkey.p.
 
    update cli with frame askcli.
 
@@ -94,18 +94,18 @@ repeat:
 
    upd:
    repeat with frame lis trans:
-      ASSIGN ufkey = TRUE ufk = 0 ehto = 1
-      ufk[1] = 7
-      ufk[8] = 8.
-      RUN ufkey.
+      ASSIGN ufkey = TRUE Syst.Var:ufk = 0 Syst.Var:ehto = 1
+      Syst.Var:ufk[1] = 7
+      Syst.Var:ufk[8] = 8.
+      RUN Syst/ufkey.p.
 
-      if toimi = 8 then do:
+      if Syst.Var:toimi = 8 then do:
          next loop.
       end.
 
-      if toimi = 1 then do:
-         assign ufkey = true ehto = 9.
-         run ufkey.
+      if Syst.Var:toimi = 1 then do:
+         assign ufkey = true Syst.Var:ehto = 9.
+         RUN Syst/ufkey.p.
 
          if llDoEvent THEN RUN StarEventSetOldBuffer(lhMobSub).
          update mobsub.msstat with frame lis.
@@ -196,26 +196,26 @@ PROCEDURE local-find-others.
                                  fatime.invnum = 0).
          FIND msstat    OF msisdn                            NO-LOCK NO-ERROR.
          FIND msclass   WHERE 
-              MSClass.Brand = gcBrand AND
+              MSClass.Brand = Syst.Var:gcBrand AND
               MSClass.McCode  = MSISDN.McCode NO-LOCK NO-ERROR.
          FIND reseller    WHERE 
-              ReSeller.Brand    = gcBrand   AND 
+              ReSeller.Brand    = Syst.Var:gcBrand   AND 
               Reseller.Reseller = MobSub.Reseller  
          NO-LOCK NO-ERROR.
          FIND salesman  WHERE 
-              Salesman.Brand    = gcBrand AND 
+              Salesman.Brand    = Syst.Var:gcBrand AND 
               Salesman.Salesman = MobSub.SalesMan  
          NO-LOCK NO-ERROR.
          FIND sim       WHERE 
-              SIM.Brand       = gcBrand AND 
+              SIM.Brand       = Syst.Var:gcBrand AND 
               SIM.ICC         = MobSub.ICC     
          NO-LOCK NO-ERROR.
          FIND stock     WHERE 
-              Stock.Brand     = gcBrand  AND 
+              Stock.Brand     = Syst.Var:gcBrand  AND 
               Stock.Stock     = SIM.Stock     NO-LOCK NO-ERROR.
          FIND mobcount  WHERE MobCount.MsSeq  = MobSub.MsSeq  NO-LOCK NO-ERROR.
          FIND CliType   WHERE 
-              CliType.Brand   = gcBrand   AND 
+              CliType.Brand   = Syst.Var:gcBrand   AND 
               CliType.CliType = MobSub.CliType 
          NO-LOCK NO-ERROR.
 

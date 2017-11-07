@@ -1,6 +1,0 @@
-# tms__get_montly_balance
-NormalCase:
-   MsSeq:47
-   TMRuleSeq:3
-   ToDate:10/10/2040
-   Amount:30,20

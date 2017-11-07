@@ -1,0 +1,63 @@
+TMSParamRepLogHandler1: TMSParam
+  ParamGroup: "HPD.Interface"
+  ParamCode: "HPD.QueueCommon.Ack"
+  ParamType: "I"
+  IntVal: 1
+  Brand: "1"
+
+TMSParamRepLogHandler2: TMSParam
+  ParamGroup: "HPD.Interface"
+  ParamCode: "HPD.QueueCommon.ip"
+  ParamType: "C"
+  CharVal: "activemq"
+  Brand: "1"
+
+TMSParamRepLogHandler3: TMSParam
+  ParamGroup: "HPD.Interface"
+  ParamCode: "HPD.QueueCommon.Name"
+  ParamType: "C"
+  CharVal: "hpd.common"
+  Brand: "1"
+
+TMSParamRepLogHandler4: TMSParam
+  ParamGroup: "HPD.Interface"
+  ParamCode: "HPD.QueueCommon.Password"
+  ParamType: "C"
+  CharVal: "g6i!ZEUFGAOpVDgSWFT-6L"
+  Brand: "1"
+
+TMSParamRepLogHandler5: TMSParam
+  ParamGroup: "HPD.Interface"
+  ParamCode: "HPD.QueueCommon.port"
+  ParamType: "I"
+  IntVal: 61613
+  Brand: "1"
+
+TMSParamRepLogHandler6: TMSParam
+  ParamGroup: "HPD.Interface"
+  ParamCode: "HPD.QueueCommon.Separate"
+  ParamType: "I"
+  IntVal: 1
+  Brand: "1"
+
+TMSParamRepLogHandler7: TMSParam
+  ParamGroup: "HPD.Interface"
+  ParamCode: "HPD.QueueCommon.timeout"
+  ParamType: "I"
+  IntVal: 10
+  Brand: "1"
+
+TMSParamRepLogHandler8: TMSParam
+  ParamGroup: "HPD.Interface"
+  ParamCode: "HPD.QueueCommon.TransactSize"
+  ParamType: "I"
+  IntVal: 10000
+  Brand: "1"
+
+TMSParamRepLogHandler9: TMSParam
+  ParamGroup: "HPD.Interface"
+  ParamCode: "HPD.QueueCommon.UserName"
+  ParamType: "C"
+  CharVal: "tms"
+  Brand: "1"
+

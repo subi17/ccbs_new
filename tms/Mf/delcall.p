@@ -3,9 +3,9 @@
    CHANGES:    07.03.03/aam use fCustCount
 */
 
-{errors.i}
-{cdrconst.i}
-{fcustcnt.i}
+{Mf/errors.i}
+{Mf/cdrconst.i}
+{Func/fcustcnt.i}
 
 DEF INPUT PARAMETER xrecid AS rec.
 

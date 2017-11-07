@@ -1,4 +1,4 @@
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 DEF BUFFER bPositive FOR SLGAnalyse.
 DEF BUFFER bNegative FOR SLGAnalyse.
@@ -54,7 +54,7 @@ FUNCTION fPacketAnalyse RETURN LOGICAL
    ocSLGATypeList = "".
    /* */ 
    FOR EACH  bPositive NO-LOCK WHERE 
-             bPositive.Brand       = gcBrand      AND 
+             bPositive.Brand       = Syst.Var:gcBrand      AND 
              bPositive.BelongTo    = TRUE         AND 
              bPositive.CliType     = icClitype    AND
              bPositive.BillCode    = icBillItem   AND 
@@ -67,7 +67,7 @@ FUNCTION fPacketAnalyse RETURN LOGICAL
         refactoring if used again */
      /* 
       IF CAN-FIND(FIRST bNegative NO-LOCK WHERE
-                 bNegative.Brand       = gcBrand      AND 
+                 bNegative.Brand       = Syst.Var:gcBrand      AND 
                  bNegative.BelongTo    = FALSE        AND
                  bNegative.CliType     = icClitype    AND
                  bNegative.BillCode    = icBillItem   AND

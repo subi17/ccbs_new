@@ -1,5 +1,5 @@
-{testpaa.i}
-katun = "qvantel".
+{Syst/testpaa.i}
+Syst.Var:katun = "qvantel".
 
 def var i as int no-undo.
 def var j as int no-undo.
@@ -11,7 +11,7 @@ def temp-table ttcli no-undo
 
 def stream slog.
 
-run cli_ratep.p persistent set lhrate.
+RUN Rate/cli_ratep.p persistent set lhrate.
 run pinitializererate in lhrate.
 
 for each mobcdr no-lock use-index date where

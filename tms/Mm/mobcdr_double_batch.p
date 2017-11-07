@@ -5,13 +5,12 @@
   CREATED ......: 28.10.11
 ------------------------------------------------------ */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
-   gcBrand = "1"
-   katun = "cron".
-{eventlog.i}
-{timestamp.i}
-{cparam2.i}
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun = "cron".
+{Syst/eventlog.i}
+{Func/cparam2.i}
 
 DEF VAR liMarked    AS INT  NO-UNDO.
 DEF VAR ldaReadDate AS DATE NO-UNDO.
@@ -29,7 +28,7 @@ lcLogFile = REPLACE(lcLogFile,"#DATE",STRING(YEAR(TODAY),"9999") +
 
 fELog("DAILY","MobCDRDoubleCheckStarted:" + STRING(ldaReadDate,"99-99-9999")).
 
-RUN mobcdr_double_check.p ("ReadDate",
+RUN Mm/mobcdr_double_check.p ("ReadDate",
                            ldaReadDate,
                            ldaReadDate,
                            "",
@@ -48,7 +47,7 @@ fELog("DAILY","MobCDRDoubleCheckStopped:" +
 DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = gcBrand   
+      ActionLog.Brand        = Syst.Var:gcBrand   
       ActionLog.TableName    = "MobCDR"  
       ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                STRING(MONTH(TODAY),"99")  +
@@ -62,10 +61,10 @@ DO TRANS:
                                STRING(ldaReadDate,"99.99.9999") +
                                " were marked as doubles."
       ActionLog.ActionStatus = 3
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.Var:katun
       ActionLog.FromDate     = ldaReadDate
       ActionLog.ToDate       = ldaReadDate.
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
 END.
 
 QUIT.

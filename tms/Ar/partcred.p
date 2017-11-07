@@ -16,7 +16,7 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF TEMP-TABLE wMarked NO-UNDO
     FIELD Line AS INT
@@ -72,10 +72,10 @@ form
         HELP "Credited amount" 
     InvRow.CreditInvNum column-label "Cr Inv."    format ">>>>>>>9"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
        " Lines for invoice nbr " + string(iInvNum) + " " 
-       + string(pvm,"99-99-99") + " "
+       + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form
@@ -124,7 +124,7 @@ form
        SKIP
 
     WITH ROW 15 width 60 OVERLAY side-labels
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.Var:cfc)
     FRAME crother.
 
 FORM
@@ -135,10 +135,10 @@ FORM
 form /* seek InvRow  BY  InvRow */
     xBillCode
     HELP "Enter BillCode code"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND CODE "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -226,29 +226,28 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35   ufk[2]= 1805 ufk[3]= 1809 ufk[4]= 1808
-        ufk[5]= 1806 ufk[6]= 716  ufk[7]= 0    ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        Syst.Var:ufk[1]= 35   Syst.Var:ufk[2]= 1805 Syst.Var:ufk[3]= 1809 Syst.Var:ufk[4]= 1808
+        Syst.Var:ufk[5]= 1806 Syst.Var:ufk[6]= 716  Syst.Var:ufk[7]= 0    Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW InvRow.BillCode ;(uchoose.i
-                                     &ulos = "cursor-up cursor-down";) 
+        CHOOSE ROW InvRow.BillCode {Syst/uchoose.i &ulos = "cursor-up cursor-down"}
         NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) InvRow.BillCode WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) InvRow.BillCode WITH FRAME sel.
       END.
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-LINE] = ? AND
-         LOOKUP(nap,"cursor-up,cursor-down") = 0
+         LOOKUP(Syst.Var:nap,"cursor-up,cursor-down") = 0
       THEN NEXT.
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -265,10 +264,10 @@ REPEAT WITH FRAME sel:
         NEXT LOOP.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -301,7 +300,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -335,7 +334,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND InvRow WHERE recid(InvRow) = memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -359,7 +358,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -374,9 +373,9 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET xBillCode WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -398,7 +397,7 @@ REPEAT WITH FRAME sel:
      END. /* Search-1 */
 
      /* Interest AND overpayment */
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
         IF Invoice.InterestAmt = 0 AND
            Invoice.OverPaym    = 0 AND
@@ -416,7 +415,7 @@ REPEAT WITH FRAME sel:
 
      END.
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:  /* accept marked lines */
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 THEN DO:  /* accept marked lines */
 
         EMPTY TEMP-TABLE wMarked.
 
@@ -430,7 +429,7 @@ REPEAT WITH FRAME sel:
 
 
      /* mark this line */
-     ELSE IF LOOKUP(nap,"enter,return,2,f2") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return,2,f2") > 0 THEN DO:
 
        RUN local-find-this(FALSE).
 
@@ -443,7 +442,7 @@ REPEAT WITH FRAME sel:
      END.
 
      /* unmark this line */
-     ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 THEN DO:
 
        RUN local-find-this(FALSE).
 
@@ -458,7 +457,7 @@ REPEAT WITH FRAME sel:
      END.
 
      /* display calls */
-     ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 THEN DO:
 
        RUN local-find-this(FALSE).
 
@@ -477,7 +476,7 @@ REPEAT WITH FRAME sel:
            /* mobile ISValue */
            when 2 THEN DO:
               ASSIGN ufkey = TRUE.
-              RUN irowmcdr(Invoice.InvNum,
+              RUN Ar/irowmcdr.p(Invoice.InvNum,
                            InvRow.FromDate,
                            InvRow.ToDate,
                            InvRow.BillCode,
@@ -486,13 +485,13 @@ REPEAT WITH FRAME sel:
 
            when 3  THEN DO:
               ASSIGN ufkey = TRUE.
-              RUN irowffee(Invoice.InvNum,
+              RUN Ar/irowffee.p(Invoice.InvNum,
                            InvRow.BillCode,
                            InvRow.CLI).
            END.
            when 4  THEN DO:
               ASSIGN ufkey = TRUE.
-              RUN irowsfee(Invoice.InvNum,
+              RUN Ar/irowsfee.p(Invoice.InvNum,
                            InvRow.BillCode,
                            InvRow.CLI).
            END.
@@ -506,20 +505,20 @@ REPEAT WITH FRAME sel:
      END.
 
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = recid(InvRow) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN memory = recid(InvRow) must-print = TRUE.
         NEXT LOOP.
      END.
 
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN DO:
         LEAVE LOOP.
      END.
 
@@ -530,7 +529,7 @@ HIDE FRAME sel     NO-PAUSE.
 HIDE FRAME crother NO-PAUSE. 
 HIDE FRAME fVat    NO-PAUSE.
 
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 PROCEDURE local-find-this:
@@ -587,7 +586,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
 
     FIND BillItem WHERE 
-         BillItem.Brand    = gcBrand AND
+         BillItem.Brand    = Syst.Var:gcBrand AND
          BillItem.BillCode = InvRow.BillCode NO-LOCK NO-ERROR.
     ASSIGN BCName   = IF AVAILABLE BillItem THEN BillItem.BIName ELSE "".
 

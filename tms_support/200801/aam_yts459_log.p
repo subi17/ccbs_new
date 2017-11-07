@@ -1,4 +1,3 @@
-{timestamp.i}
 
 def buffer brow for invrow.
 
@@ -59,7 +58,7 @@ by chgstamp:
             order.cli     chr(9)
             order.msseq   chr(9)
             order.orderid chr(9)
-            fts2hms(invoice.chgstamp) chr(9)
+            Func.Common:mTS2HMS(invoice.chgstamp) chr(9)
             invoice.extinvid chr(9)
             invoice.invnum   chr(9)
             invrow.billcode chr(9)

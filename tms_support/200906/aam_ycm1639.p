@@ -1,4 +1,4 @@
-{penaltyfee.i}
+{Func/penaltyfee.i}
 
 def stream sread.
 input stream sread from /apps/snet/200906/aam_ycm1639_taclist.txt.

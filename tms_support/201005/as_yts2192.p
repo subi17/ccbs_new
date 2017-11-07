@@ -8,12 +8,12 @@
   CHANGED ......:
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{commpaa.i}
-katun  = "anttis".
-gcBrand = "1".
-{tmsconst.i}
-{msreqfunc.i}
-{orderfunc.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
+{Syst/tmsconst.i}
+{Func/msreqfunc.i}
+{Func/orderfunc.i}
 
 find mnpprocess where
    mnpprocess.portrequest = "00500111100512114906719" EXCLUSIVE-LOCK. 
@@ -34,7 +34,7 @@ END.
 
 /* Cancel pending SMS messages */
 FOR EACH CallAlarm WHERE
-         CallAlarm.Brand = gcBrand AND
+         CallAlarm.Brand = Syst.Var:gcBrand AND
          CallAlarm.CLI = Order.CLI AND
          CallAlarm.DeliStat = 1 AND
          CallAlarm.CreditType = 12 EXCLUSIVE-LOCK:
@@ -44,7 +44,7 @@ END.
 fSetOrderStatus(Order.OrderId,"7").
 
 ASSIGN         
-   MNPProcess.UpdateTS = fMakeTS()
+   MNPProcess.UpdateTS = Func.Common:mMakeTS()
    MNPProcess.StatusCode = {&MNP_ST_ACAN}
    MNPProcess.statusreason = "CANC_ABONA".
    Order.MNPStatus = MNPProcess.StatusCode + 1.

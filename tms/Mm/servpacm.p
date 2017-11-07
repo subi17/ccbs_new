@@ -8,7 +8,7 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-run servpac ("").
+RUN Mm/servpac.p ("").
 

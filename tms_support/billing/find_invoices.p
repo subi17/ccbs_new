@@ -1,4 +1,3 @@
-{timestamp.i}
 
 def stream slog.
 
@@ -60,8 +59,8 @@ for each invoice no-lock use-index invdate where
     end.
 
     assign
-       ldfromper = fmake2dt(invoice.fromdate,1)
-       ldtoper   = fmake2dt(invoice.todate,86399)
+       ldfromper = Func.Common:mMake2DT(invoice.fromdate,1)
+       ldtoper   = Func.Common:mMake2DT(invoice.todate,86399)
        lccli     = ""
        lctype    = ""
        limsseq   = 0.
@@ -74,8 +73,8 @@ for each invoice no-lock use-index invdate where
               else true):
                   
        if invrow.fromdate ne ? and invrow.todate ne ? then assign
-          ldrowperf = fmake2dt(invrow.fromdate,1)
-          ldrowpert = fmake2dt(invrow.todate,86399).
+          ldrowperf = Func.Common:mMake2DT(invrow.fromdate,1)
+          ldrowpert = Func.Common:mMake2DT(invrow.todate,86399).
        else assign
           ldrowperf = ldfromper
           ldrowpert = ldtoper.

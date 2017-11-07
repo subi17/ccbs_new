@@ -1,15 +1,14 @@
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN
-   katun   = "cron"
-   gcBrand = "1".
+   Syst.Var:katun   = "cron"
+   Syst.Var:gcBrand = "1".
 
-{timestamp.i}
-{cparam.i2}
-{xmlfunction.i}
-{fgettxt.i}
-{ftaxdata.i}
-{tsformat.i}
+{Func/cparam.i2}
+{Func/xmlfunction.i}
+{Func/fgettxt.i}
+{Func/ftaxdata.i}
+{Func/tsformat.i}
 
 DEFINE VARIABLE lcXML      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE ldeTaxPerc AS DECIMAL   NO-UNDO.
@@ -131,7 +130,7 @@ REPEAT:
       ldAmount = ROUND(ldAmount / (1 + ldVatPerc / 100),2).
    END.
    
-   RUN balancequery(lcCLI).
+   RUN Gwy/balancequery.p(lcCLI).
    ldCurrBal = INT(RETURN-VALUE) / 100.
 
    IF ldCurrBal NE ldAmount THEN DO:
@@ -175,16 +174,16 @@ PROCEDURE pAdjustBalance:
       liRequest = NEXT-VALUE(PrePaidReq).
    
       IF NOT CAN-FIND(FIRST PrePaidRequest WHERE
-                            PrePaidRequest.Brand     = gcBrand AND
+                            PrePaidRequest.Brand     = Syst.Var:gcBrand AND
                             PrepaidRequest.PPRequest = liRequest)
       THEN LEAVE.
    END.
     
    CREATE PrePaidRequest.
    ASSIGN
-      PrePaidRequest.TSRequest   = fMakeTS()
-      PrePaidRequest.UserCode    = katun
-      PrePaidRequest.Brand       = gcBrand
+      PrePaidRequest.TSRequest   = Func.Common:mMakeTS()
+      PrePaidRequest.UserCode    = Syst.Var:katun
+      PrePaidRequest.Brand       = Syst.Var:gcBrand
       PrePaidRequest.MsSeq       = MobSub.MsSeq
       PrePaidRequest.CLI         = MobSub.CLI
       PrePaidRequest.PPRequest   = liRequest
@@ -198,7 +197,7 @@ PROCEDURE pAdjustBalance:
       PrePaidRequest.TaxZone     = lcTaxZone
       PrePaidRequest.OrigRequest = liOrigReq.
    
-   RUN pp_platform(gcBrand,PrePaidRequest.PPRequest).
+   RUN Gwy/pp_platform.p(Syst.Var:gcBrand,PrePaidRequest.PPRequest).
    
    lcXML = RETURN-VALUE.
    
@@ -208,7 +207,7 @@ PROCEDURE pAdjustBalance:
    ASSIGN
       PrePaidRequest.Response   = lcXML
       PrePaidRequest.RespCode   = liRespCode
-      PrePaidRequest.TSResponse = fMakeTS().
+      PrePaidRequest.TSResponse = Func.Common:mMakeTS().
 
    /* OK response */
    IF liRespCode = 0 THEN DO:
@@ -227,17 +226,17 @@ PROCEDURE pAdjustBalance:
 
       CREATE Memo.
       ASSIGN 
-         Memo.Brand     = gcBrand
+         Memo.Brand     = Syst.Var:gcBrand
          Memo.HostTable = "MobSub"
          Memo.KeyValue  = STRING(MobSub.MsSeq)
          Memo.CustNum   = MobSub.CustNum
          Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-         Memo.CreUser   = katun 
+         Memo.CreUser   = Syst.Var:katun 
          Memo.MemoTitle = "MINUS ADJUSTMENT"
          Memo.MemoText  = "Deducted " + STRING(-1 * ldAmount) + 
                           " eur according to file " + lcPlainFile +
                           " (YCM-497).".
-         Memo.CreStamp  = fMakeTS().
+         Memo.CreStamp  = Func.Common:mMakeTS().
   
       fOK().
     

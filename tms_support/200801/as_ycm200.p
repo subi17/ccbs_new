@@ -24,10 +24,9 @@ disp j.
 
 /*PART 2*/ 
 /*
-{testpaa.i}
-katun = "anttis".
-{msisdn.i}
-{date.i}
+{Syst/testpaa.i}
+Syst.Var:katun = "anttis".
+{Func/msisdn.i}
 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 DEFINE VARIABLE j AS INTEGER NO-UNDO.
@@ -44,7 +43,7 @@ DO i = 622681440 TO 622701563:
       find msisdnnumber where msisdnnumber.cli = msisdn.cli 
          and msisdnnumber.rank = 1 NO-LOCK no-error.
       if avail msisdnnumber then do:
-         if msisdn.statuscode = 0 and msisdn.validto > fMakeTS() then do:
+         if msisdn.statuscode = 0 and msisdn.validto > Func.Common:mMakeTS() then do:
             j = j + 1.
          /*   MESSAGE msisdn.orderid VIEW-AS ALERT-BOX.*/
             find current msisdn exclusive-lock.
@@ -63,7 +62,6 @@ disp j.
 /*
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 DEFINE VARIABLE j AS INTEGER NO-UNDO.
-{date.i}
 define stream out.
 OUTPUT STREAM out TO "/home/anttis/order_msisdn2.txt".
 
@@ -74,7 +72,7 @@ DO i = 622681440 TO 622701563:
    use-index cli NO-LOCK no-error.
    if avail msisdn then do:
       if /*msisdn.statuscode ne 0*/ msisdn.statuscode ne 1 
-      and msisdn.validto > fMakeTS() then do:
+      and msisdn.validto > Func.Common:mMakeTS() then do:
          j = j + 1.
          put stream out unformatted msisdn.cli skip.
       end.
@@ -87,10 +85,9 @@ disp j.
 /*
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 DEFINE VARIABLE j AS INTEGER NO-UNDO.
-{testpaa.i}
-katun = "anttis".
-{msisdn.i}
-{date.i}
+{Syst/testpaa.i}
+Syst.Var:katun = "anttis".
+{Func/msisdn.i}
 define stream out.
 OUTPUT STREAM out TO "/home/anttis/newrange_msisdn.txt".
 
@@ -104,7 +101,7 @@ DO i = 622701564 TO 622737255:
       /*find first msisdnnumber where msisdnnumber.cli = msisdn.cli
       and (rank = 0) NO-LOCK no-error .
       IF AVAIL msisdnnumber then do:*/
-      if msisdn.validto > fMakeTS() and 
+      if msisdn.validto > Func.Common:mMakeTS() and 
          (msisdn.statuscode = 0 or msisdn.statuscode = 1) then do:
          j = j + 1.
          export stream out msisdn.

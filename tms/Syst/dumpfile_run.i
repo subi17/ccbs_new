@@ -1,8 +1,7 @@
 /* dumpfile_run.i    13.11.08/aam
 */
 
-{create_eventlog.i}
-{timestamp.i}
+{Func/create_eventlog.i}
 &GLOBAL-DEFINE DUMPLOG_ERROR_NOTIFICATION -12345
 
 /* convert defined delimiter into character(s) */
@@ -82,7 +81,7 @@ FUNCTION fWasRecordModified RETURNS LOGIC
                   
             /* changed on dump day */
             IF EventLog.EventDate = idaModified THEN DO:
-               ldEventTime = fHMS2TS(EventLog.EventDate,
+               ldEventTime = Func.Common:mHMS2TS(EventLog.EventDate,
                                      EventLog.EventTime).
                IF ldEventTime < idModified THEN NEXT.
             END.
@@ -144,7 +143,7 @@ PROCEDURE pFindFromEventLog:
 
    lhEvent = BUFFER EventLog:HANDLE.
    
-   fSplitTS(idModified,
+   Func.Common:mSplitTS(idModified,
             OUTPUT ldtEventDate,
             OUTPUT liEventTime).
 
@@ -193,7 +192,7 @@ PROCEDURE pFindFromEventLog:
       IF lhFind:QUERY-OFF-END THEN LEAVE.
 
       IF lhEvent::EventDate = ldtEventDate THEN DO:
-         ldEventTime = fHMS2TS(ldtEventDate,
+         ldEventTime = Func.Common:mHMS2TS(ldtEventDate,
                                lhEvent::EventTime).
          IF ldEventTime < idModified THEN NEXT.
       END.

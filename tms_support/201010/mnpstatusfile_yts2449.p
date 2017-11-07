@@ -6,23 +6,22 @@
   CREATED ......: 01/2010 
   Version ......: yoigo
 ----------------------------------------------------------------------- */
-{commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+{Syst/commpaa.i}
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 
-{tmsconst.i}
-{ftransdir.i}
-{cparam2.i}
-{eventlog.i}
-{eventval.i}
-{email.i}
-{timestamp.i}
-{msisdn.i}
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Syst/eventval.i}
+{Func/email.i}
+{Func/msisdn.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMNPProcess AS HANDLE NO-UNDO.
    lhMNPProcess = BUFFER MNPProcess:HANDLE.
@@ -162,7 +161,7 @@ REPEAT:
       END.
       
       ldeNCTime = ?.
-      ldeNCTime = fHMS2TS(date(int(substring(lcNCTime,5,2)),
+      ldeNCTime = Func.Common:mHMS2TS(date(int(substring(lcNCTime,5,2)),
           int(substring(lcNCTime,7,2)),
           int(substring(lcNCTime,1,4))),
           substring(lcNCTime,10)) NO-ERROR.
@@ -273,7 +272,7 @@ PROCEDURE pMNPStatusCheck:
            Order.OrderID = MNPProcess.Orderid EXCLUSIVE-LOCK.
       
       ASSIGN 
-         MNPProcess.UpdateTS = fMakeTS()
+         MNPProcess.UpdateTS = Func.Common:mMakeTS()
          MNPProcess.MNPUpdateTS = ideNCTime
          MNPProcess.StatusCode = {&MNP_ST_ASOL}
          Order.MNPStatus = MNPProcess.StatusCode + 1 WHEN Order.MNPStatus EQ 2.
@@ -301,7 +300,7 @@ PROCEDURE pMNPStatusCheck:
       IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMNPProcess).
       
       ASSIGN 
-         MNPProcess.UpdateTS = fMakeTS()
+         MNPProcess.UpdateTS = Func.Common:mMakeTS()
          MNPProcess.MNPUpdateTS = ideNCTime
          MNPProcess.StatusCode = {&MNP_ST_APOR}
          liMNPSeq = MNPProcess.MNPSeq.
@@ -323,10 +322,10 @@ PROCEDURE pMNPStatusCheck:
                 MNPProcess.StatusCode = ({&MNP_ST_BNOT})) EXCLUSIVE-LOCK:
       
             FIND msisdn where
-               msisdn.brand = gcBrand and
+               msisdn.brand = Syst.Var:gcBrand and
                msisdn.cli = bMNPSub.CLI  AND
                msisdn.statuscode = ({&MSISDN_ST_RETURN_NOTICE_SENT}) AND
-               msisdn.validto > fMakeTS() NO-LOCK NO-ERROR.
+               msisdn.validto > Func.Common:mMakeTS() NO-LOCK NO-ERROR.
 
             IF AVAIL msisdn THEN DO:
       
@@ -336,7 +335,7 @@ PROCEDURE pMNPStatusCheck:
                IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMNPProcess).
                
                ASSIGN
-                  MNPProcess.UpdateTS = fMakeTS()
+                  MNPProcess.UpdateTS = Func.Common:mMakeTS()
                   MNPProcess.StatusCode = ({&MNP_ST_BCAN}).
       
                IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMNPProcess).
@@ -358,9 +357,9 @@ PROCEDURE pMNPStatusCheck:
            MNPSub.MNPSeq = MNPProcess.MNPSeq NO-LOCK.
 
       FIND msisdn where
-         msisdn.brand = gcBrand and
+         msisdn.brand = Syst.Var:gcBrand and
          msisdn.cli = MNPSub.CLI  AND
-         msisdn.validto > fMakeTS() NO-LOCK NO-ERROR.
+         msisdn.validto > Func.Common:mMakeTS() NO-LOCK NO-ERROR.
 
       IF NOT AVAIL msisdn OR 
          msisdn.statuscode NE ({&MSISDN_ST_RETURN_NOTICE_SENT}) THEN DO:
@@ -376,7 +375,7 @@ PROCEDURE pMNPStatusCheck:
       IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMNPProcess).
       
       ASSIGN 
-         MNPProcess.UpdateTS = fMakeTS()
+         MNPProcess.UpdateTS = Func.Common:mMakeTS()
          MNPProcess.MNPUpdateTS = ideNCTime
          MNPProcess.StatusCode = ({&MNP_ST_BDEF}).
 

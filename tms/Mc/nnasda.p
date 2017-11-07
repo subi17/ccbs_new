@@ -8,9 +8,9 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'customer'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'customer'}
 
 DEF INPUT PARAM  CustNum LIKE Customer.CustNum.
 
@@ -29,7 +29,7 @@ form
    "     updated ....:"  Customer.UpdDate         SKIP
    "     updated by .:"  Customer.UpdUser up-name skip(1)
 WITH ROW 5 /*width 40*/ centered OVERLAY
-   NO-LABEL COLOR value(cfc) TITLE COLOR value(ctc)
+   NO-LABEL COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc)
    " Who/When Created/Changed This Customer " FRAME frm.
 
 DO FOR TMSUser:

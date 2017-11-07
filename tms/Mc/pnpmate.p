@@ -11,22 +11,22 @@
   VERSION ......: SCRUNKO3, (23.10.96)
   ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
+{Syst/commali.i}
+{Func/excel.i}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhpnplist AS HANDLE NO-UNDO.
    lhPnplist = BUFFER pnplist:HANDLE.
    RUN StarEventInitialize(lhPnplist).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhPnplist).
+      RUN Mc/eventview2.p(lhPnplist).
    END.
 
 END.
@@ -73,8 +73,8 @@ form
    pnplist.fromdate
    pnplist.toDate
 WITH ROW 3 WIDTH 55 CENTERED OVERLAY scroll 1 12 DOWN
-   COLOR value(cfc)
-   title color value(ctc) " " + pnpgroup.name
+   COLOR value(Syst.Var:cfc)
+   title color value(Syst.Var:ctc) " " + pnpgroup.name
    FRAME sel.
 
 form
@@ -88,15 +88,15 @@ HELP "CLI number (a-number), CLI Series (045*) WHEN PNPgroup"  SKIP
    "DATA .....:" pnplist.DialTypeUsed[5]    FORMAT "X/-" SKIP
    "Valid time:" pnplist.fromdate pnplist.todate     
 WITH OVERLAY ROW 4 centered
-   COLOR value(cfc)
-   TITLE COLOR value(ctc)
+   COLOR value(Syst.Var:cfc)
+   TITLE COLOR value(Syst.Var:ctc)
    fr-header  WITH no-labels
    FRAME lis.
 
 form /*  search WITH FIELD pnplist */
    haku-pnplist help "Give ...."
-with row 4 col 2 title color value(ctc) " FIND xxxxxxx "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
+with row 4 col 2 title color value(Syst.Var:ctc) " FIND xxxxxxx "
+   COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 FORM
    "Give filename :" lFileName  FORMAT "x(40)"
@@ -104,7 +104,7 @@ WITH
    ROW 8 OVERLAY CENTERED TITLE " Import CLI list from file " 
    NO-LABELS FRAME frmImport.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 RUN LOCAL-FIND-FIRST.
@@ -128,15 +128,15 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* pnplist -ADD  */
       HIDE FRAME lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD "
+      assign Syst.Var:cfc = "lis" ufkey = true fr-header = " ADD "
       
       must-add = FALSE.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
            CLEAR frame lis.
 
@@ -214,29 +214,29 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35  ufk[2]= 30 ufk[3]= 0 ufk[4]= 0
-        ufk[5]= 5  ufk[6]= 4 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        Syst.Var:ufk[1]= 35  Syst.Var:ufk[2]= 30 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+        Syst.Var:ufk[5]= 5  Syst.Var:ufk[6]= 4 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW pnplist.cli ;(uchoose.i;) no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) pnplist.cli WITH FRAME sel.
+        CHOOSE ROW pnplist.cli {Syst/uchoose.i} no-error WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) pnplist.cli WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW pnplist.cli ;(uchoose.i;) no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) pnplist.cli WITH FRAME sel.
+        CHOOSE ROW pnplist.cli {Syst/uchoose.i} no-error WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) pnplist.cli WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -257,10 +257,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND pnplist where recid(pnplist) = rtab[1] no-lock.
            RUN LOCAL-FIND-PREV.
@@ -285,7 +285,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND pnplist where recid(pnplist) = rtab[FRAME-DOWN] no-lock .
@@ -311,7 +311,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND pnplist where recid(pnplist) = memory no-lock no-error.
         RUN LOCAL-FIND-PREV.
@@ -335,7 +335,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* cursor TO the downmost line */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -350,10 +350,10 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+     else if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        haku-pnplist = 0.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE haku-pnplist WITH FRAME haku-f1.
        HIDE FRAME haku-f1 no-pause.
        if haku-pnplist <> 0 THEN DO:
@@ -371,17 +371,17 @@ BROWSE:
        END.
      END. /* Haku sar. 1 */
 
-     if lookup(nap,"5,f5") > 0 THEN DO:  /* lisays */
+     if lookup(Syst.Var:nap,"5,f5") > 0 THEN DO:  /* lisays */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* removal */
+     else if lookup(Syst.Var:nap,"6,f6") > 0 THEN DO TRANSACTION:  /* removal */
        delline = FRAME-LINE.
        FIND pnplist where recid(pnplist) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.Var:ctc)
           pnplist.cli 
           pnplist.DialTypeUsed[1]
           pnplist.DialTypeUsed[2] 
@@ -415,7 +415,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.Var:ccc)
           pnplist.cli pnplist.FromDate pnplist.ToDate.
        IF ok THEN DO:
            IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhpnplist).
@@ -434,14 +434,14 @@ BROWSE:
        ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
      
-     ELSE IF LOOKUP(nap,"7,F7") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"7,F7") > 0 THEN DO:
         PAUSE 0.
         UPDATE 
            lFileName 
         WITH FRAME frmImport EDITING:
            READKEY.
-           nap = KEYLABEL(LASTKEY).
-           IF LOOKUP(nap,poisnap) > 0 THEN DO:
+           Syst.Var:nap = KEYLABEL(LASTKEY).
+           IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
               ASSIGN lFileName.
               IF INPUT lFileName = "" THEN LEAVE.
               ELSE DO:
@@ -458,7 +458,7 @@ BROWSE:
                        IMPORT UNFORMATTED xls.
                        CREATE pnplist.
                        ASSIGN
-                          pnplist.Brand    = gcBrand 
+                          pnplist.Brand    = Syst.Var:gcBrand 
                           pnplist.pnpSeq   = ipPnpSeq
                           pnplist.cli      = TRIM(xls).
                     END.
@@ -470,15 +470,15 @@ BROWSE:
         HIDE FRAME frmImport.
      END.
      
-     else if lookup(nap,"enter,return") > 0 THEN DO WITH FRAME lis TRANSACTION:
+     else if lookup(Syst.Var:nap,"enter,return") > 0 THEN DO WITH FRAME lis TRANSACTION:
        /* change */
        FIND FIRST pnplist where 
             recid(pnplist) = rtab[frame-line(sel)]
        exclusive-lock.
-       assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
+       assign fr-header = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9.
+       RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN ufcolor.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
 
        RUN LOCAL-UPDATE-RECORD(FALSE).
        
@@ -486,25 +486,25 @@ BROWSE:
 
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
        RUN LOCAL-FIND-FIRST.
        ASSIGN memory = recid(pnplist) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
        RUN LOCAL-FIND-LAST.
        ASSIGN memory = recid(pnplist) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE LOCAL-DISP-ROW: 
    
@@ -605,8 +605,8 @@ PROCEDURE LOCAL-UPDATE-RECORD.
    WITH FRAME lis EDITING: 
       
       READKEY. 
-      nap = KEYLABEL(LASTKEY). 
-      IF lookup(nap,poisnap) > 0 THEN DO:
+      Syst.Var:nap = KEYLABEL(LASTKEY). 
+      IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
          if keylabel(lastkey) = "F4" THEN LEAVE . 
 
 

@@ -8,9 +8,9 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'CoTarg'}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'CoTarg'}
 
 DEF VAR liChecked   AS INT  NO-UNDO.
 DEF VAR liActivated AS INT  NO-UNDO.
@@ -22,7 +22,7 @@ FORM
    "in commission rule definitions." AT 10 
    SKIP(13)
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + "  COMMISSIONS  " + STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.Var:ynimi + "  COMMISSIONS  " + STRING(TODAY,"99-99-99") + " "
      FRAME fCrit.
 
 
@@ -33,13 +33,13 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    VIEW FRAME fCrit.
 
    ASSIGN
-      ufk    = 0
-      ufk[5] = 795
-      ufk[8] = 8 
-      ehto   = 0.
-   RUN ufkey.
+      Syst.Var:ufk    = 0
+      Syst.Var:ufk[5] = 795
+      Syst.Var:ufk[8] = 8 
+      Syst.Var:ehto   = 0.
+   RUN Syst/ufkey.p.
 
-   IF toimi = 5 THEN DO:
+   IF Syst.Var:toimi = 5 THEN DO:
       
       llOk = FALSE.
       MESSAGE "Start handling commissions?" 
@@ -48,7 +48,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       SET llOk.
       IF NOT llOk THEN NEXT. 
         
-      RUN commission_run(OUTPUT liChecked,
+      RUN Ar/commission_run.p(OUTPUT liChecked,
                          OUTPUT liActivated).
 
       MESSAGE liChecked "rows in commission queue were checked," SKIP
@@ -59,7 +59,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       LEAVE CritLoop.
    END.
 
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.Var:toimi = 8 THEN DO:
       LEAVE CritLoop.
    END.
 

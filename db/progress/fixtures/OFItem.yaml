@@ -1,0 +1,384 @@
+bulkload: OFItem
+  OFID: 3
+  StatusCode: "4"
+
+bulkload: OFItem
+  OFID: 3
+  StatusCode: "41"
+
+bulkload: OFItem
+  OFID: 3
+  StatusCode: "42"
+
+bulkload: OFItem
+  OFID: 3
+  StatusCode: "43"
+
+bulkload: OFItem
+  OFID: 3
+  StatusCode: "44"
+
+bulkload: OFItem
+  OFID: 3
+  StatusCode: "50"
+
+bulkload: OFItem
+  OFID: 3
+  StatusCode: "99"
+
+bulkload: OFItem
+  OFID: 3
+  StatusCode: "80"
+
+bulkload: OFItem
+  OFID: 4
+  StatusCode: "1"
+
+bulkload: OFItem
+  OFID: 4
+  StatusCode: "3"
+
+bulkload: OFItem
+  OFID: 4
+  StatusCode: "12"
+
+bulkload: OFItem
+  OFID: 4
+  StatusCode: "30"
+
+bulkload: OFItem
+  OFID: 4
+  StatusCode: "74"
+
+bulkload: OFItem
+  OFID: 7
+  StatusCode: "1"
+
+bulkload: OFItem
+  OFID: 7
+  StatusCode: "2"
+
+bulkload: OFItem
+  OFID: 7
+  StatusCode: "3"
+
+bulkload: OFItem
+  OFID: 7
+  StatusCode: "4"
+
+bulkload: OFItem
+  OFID: 7
+  StatusCode: "5"
+
+bulkload: OFItem
+  OFID: 7
+  StatusCode: "6"
+
+bulkload: OFItem
+  OFID: 7
+  StatusCode: "7"
+
+bulkload: OFItem
+  OFID: 7
+  StatusCode: "9"
+
+bulkload: OFItem
+  OFID: 7
+  StatusCode: "10"
+
+bulkload: OFItem
+  OFID: 7
+  StatusCode: "15"
+
+bulkload: OFItem
+  OFID: 7
+  StatusCode: "73"
+
+bulkload: OFItem
+  OFID: 7
+  StatusCode: "74"
+
+bulkload: OFItem
+  OFID: 7
+  StatusCode: "77"
+
+bulkload: OFItem
+  OFID: 7
+  StatusCode: "78"
+
+bulkload: OFItem
+  OFID: 7
+  StatusCode: "79"
+
+bulkload: OFItem
+  OFID: 7
+  StatusCode: "80"
+
+bulkload: OFItem
+  OFID: 7
+  StatusCode: "12"
+
+bulkload: OFItem
+  OFID: 7
+  StatusCode: "30"
+
+bulkload: OFItem
+  OFID: 7
+  StatusCode: "75"
+
+bulkload: OFItem
+  OFID: 7
+  StatusCode: "99"
+
+bulkload: OFItem
+  OFID: 10
+  StatusCode: "3"
+
+bulkload: OFItem
+  OFID: 10
+  StatusCode: "4"
+
+bulkload: OFItem
+  OFID: 10
+  StatusCode: "5"
+
+bulkload: OFItem
+  OFID: 10
+  StatusCode: "1"
+
+bulkload: OFItem
+  OFID: 10
+  StatusCode: "73"
+
+bulkload: OFItem
+  OFID: 10
+  StatusCode: "2"
+
+bulkload: OFItem
+  OFID: 10
+  StatusCode: "20"
+
+bulkload: OFItem
+  OFID: 10
+  StatusCode: "21"
+
+bulkload: OFItem
+  OFID: 10
+  StatusCode: "31"
+
+bulkload: OFItem
+  OFID: 10
+  StatusCode: "30"
+
+bulkload: OFItem
+  OFID: 10
+  StatusCode: "23"
+
+bulkload: OFItem
+  OFID: 10
+  StatusCode: "32"
+
+bulkload: OFItem
+  OFID: 10
+  StatusCode: "41"
+
+bulkload: OFItem
+  OFID: 10
+  StatusCode: "42"
+
+bulkload: OFItem
+  OFID: 10
+  StatusCode: "43"
+
+bulkload: OFItem
+  OFID: 10
+  StatusCode: "44"
+
+bulkload: OFItem
+  OFID: 10
+  StatusCode: "33"
+
+bulkload: OFItem
+  OFID: 10
+  StatusCode: "75"
+
+bulkload: OFItem
+  OFID: 10
+  StatusCode: "76"
+
+bulkload: OFItem
+  OFID: 10
+  StatusCode: "22"
+
+bulkload: OFItem
+  OFID: 10
+  StatusCode: "50"
+
+bulkload: OFItem
+  OFID: 10
+  StatusCode: "51"
+
+bulkload: OFItem
+  OFID: 10
+  StatusCode: "99"
+
+bulkload: OFItem
+  OFID: 10
+  StatusCode: "78"
+
+bulkload: OFItem
+  OFID: 10
+  StatusCode: "80"
+
+bulkload: OFItem
+  OFID: 16
+  StatusCode: "20"
+
+bulkload: OFItem
+  OFID: 16
+  StatusCode: "21"
+
+bulkload: OFItem
+  OFID: 16
+  StatusCode: "31"
+
+bulkload: OFItem
+  OFID: 16
+  StatusCode: "23"
+
+bulkload: OFItem
+  OFID: 16
+  StatusCode: "33"
+
+bulkload: OFItem
+  OFID: 16
+  StatusCode: "51"
+
+bulkload: OFItem
+  OFID: 18
+  StatusCode: "*"
+
+bulkload: OFItem
+  OFID: 36
+  StatusCode: "6"
+
+bulkload: OFItem
+  OFID: 36
+  StatusCode: "73"
+
+bulkload: OFItem
+  OFID: 36
+  StatusCode: "7"
+
+bulkload: OFItem
+  OFID: 36
+  StatusCode: "12"
+
+bulkload: OFItem
+  OFID: 36
+  StatusCode: "3"
+
+bulkload: OFItem
+  OFID: 36
+  StatusCode: "99"
+
+bulkload: OFItem
+  OFID: 39
+  StatusCode: "73"
+
+bulkload: OFItem
+  OFID: 40
+  StatusCode: "20"
+
+bulkload: OFItem
+  OFID: 40
+  StatusCode: "21"
+
+bulkload: OFItem
+  OFID: 40
+  StatusCode: "33"
+
+bulkload: OFItem
+  OFID: 47
+  StatusCode: "*"
+
+bulkload: OFItem
+  OFID: 49
+  StatusCode: "41"
+
+bulkload: OFItem
+  OFID: 49
+  StatusCode: "42"
+
+bulkload: OFItem
+  OFID: 49
+  StatusCode: "43"
+
+bulkload: OFItem
+  OFID: 50
+  StatusCode: "41"
+
+bulkload: OFItem
+  OFID: 50
+  StatusCode: "42"
+
+bulkload: OFItem
+  OFID: 50
+  StatusCode: "43"
+
+bulkload: OFItem
+  OFID: 50
+  StatusCode: "44"
+
+bulkload: OFItem
+  OFID: 53
+  StatusCode: "*"
+
+bulkload: OFItem
+  OFID: 55
+  StatusCode: "31"
+
+bulkload: OFItem
+  OFID: 57
+  StatusCode: "41"
+
+bulkload: OFItem
+  OFID: 57
+  StatusCode: "42"
+
+bulkload: OFItem
+  OFID: 57
+  StatusCode: "43"
+
+bulkload: OFItem
+  OFID: 57
+  StatusCode: "44"
+
+bulkload: OFItem
+  OFID: 58
+  StatusCode: "41"
+
+bulkload: OFItem
+  OFID: 58
+  StatusCode: "42"
+
+bulkload: OFItem
+  OFID: 58
+  StatusCode: "43"
+
+bulkload: OFItem
+  OFID: 58
+  StatusCode: "44"
+
+bulkload: OFItem
+  OFID: 59
+  StatusCode: "*"
+
+bulkload: OFItem
+  OFID: 60
+  StatusCode: "*"
+
+bulkload: OFItem
+  OFID: 61
+  StatusCode: "77"
+

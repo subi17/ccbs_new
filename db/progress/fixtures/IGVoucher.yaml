@@ -1,0 +1,4661 @@
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  Voucher: 81185
+  SeqPrefix: "260P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  Voucher: 293712
+  SeqPrefix: "250P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  Voucher: 244813
+  SeqPrefix: "240P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  Voucher: 289994
+  SeqPrefix: "230P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  Voucher: 89888
+  SeqPrefix: "220P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  Voucher: 10554
+  SeqPrefix: "210P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  Voucher: 3
+  SeqPrefix: "200P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  Voucher: 65
+  SeqPrefix: "290P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  Voucher: 313
+  SeqPrefix: "280P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  SeqPrefix: "270P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 1
+  Voucher: 49559
+  SeqPrefix: "261P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 1
+  Voucher: 124996
+  SeqPrefix: "251P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 1
+  Voucher: 128281
+  SeqPrefix: "241P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 1
+  Voucher: 114446
+  SeqPrefix: "231P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 1
+  Voucher: 54524
+  SeqPrefix: "221P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 1
+  Voucher: 29605
+  SeqPrefix: "211P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 1
+  Voucher: 21831
+  SeqPrefix: "201P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 1
+  Voucher: 14675
+  SeqPrefix: "291P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 1
+  SeqPrefix: "281P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 1
+  SeqPrefix: "271P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 2
+  SeqPrefix: "262P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 2
+  SeqPrefix: "252P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 2
+  SeqPrefix: "242P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 2
+  SeqPrefix: "232P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 2
+  SeqPrefix: "222P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 2
+  SeqPrefix: "212P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 2
+  SeqPrefix: "202P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 2
+  SeqPrefix: "292P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 2
+  SeqPrefix: "282P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 2
+  SeqPrefix: "272P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 3
+  SeqPrefix: "263P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 3
+  SeqPrefix: "253P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 3
+  SeqPrefix: "243P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 3
+  SeqPrefix: "233P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 3
+  SeqPrefix: "223P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 3
+  SeqPrefix: "213P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 3
+  SeqPrefix: "203P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 3
+  SeqPrefix: "293P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 3
+  SeqPrefix: "283P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 3
+  SeqPrefix: "273P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 4
+  SeqPrefix: "264P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 4
+  SeqPrefix: "254P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 4
+  SeqPrefix: "244P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 4
+  SeqPrefix: "234P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 4
+  SeqPrefix: "224P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 4
+  SeqPrefix: "214P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 4
+  SeqPrefix: "204P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 4
+  SeqPrefix: "294P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 4
+  SeqPrefix: "284P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 4
+  SeqPrefix: "274P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 5
+  SeqPrefix: "265P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 5
+  SeqPrefix: "255P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 5
+  SeqPrefix: "245P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 5
+  SeqPrefix: "235P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 5
+  SeqPrefix: "225P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 5
+  SeqPrefix: "215P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 5
+  SeqPrefix: "205P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 5
+  Voucher: 6056
+  SeqPrefix: "295P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 5
+  Voucher: 1526
+  SeqPrefix: "285P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 5
+  Voucher: 738
+  SeqPrefix: "275P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 6
+  SeqPrefix: "266P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 6
+  SeqPrefix: "256P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 6
+  SeqPrefix: "246P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 6
+  SeqPrefix: "236P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 6
+  SeqPrefix: "226P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 6
+  SeqPrefix: "216P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 6
+  SeqPrefix: "206P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 6
+  SeqPrefix: "296P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 6
+  SeqPrefix: "286P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 6
+  SeqPrefix: "276P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 7
+  Voucher: 177773
+  SeqPrefix: "267A"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 7
+  Voucher: 511739
+  SeqPrefix: "257A"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 7
+  Voucher: 538344
+  SeqPrefix: "247A"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 7
+  Voucher: 740703
+  SeqPrefix: "237A"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 7
+  Voucher: 752679
+  SeqPrefix: "227A"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 7
+  Voucher: 694602
+  SeqPrefix: "217A"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 7
+  Voucher: 593411
+  SeqPrefix: "207A"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 7
+  Voucher: 427677
+  SeqPrefix: "297A"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 7
+  Voucher: 212271
+  SeqPrefix: "287A"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 7
+  Voucher: 56716
+  SeqPrefix: "PGCA"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 8
+  Voucher: 315017
+  SeqPrefix: "268P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 8
+  Voucher: 688605
+  SeqPrefix: "258P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 8
+  Voucher: 584221
+  SeqPrefix: "248P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 8
+  Voucher: 549164
+  SeqPrefix: "238P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 8
+  Voucher: 324134
+  SeqPrefix: "228P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 8
+  Voucher: 199506
+  SeqPrefix: "218P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 8
+  Voucher: 151432
+  SeqPrefix: "208P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 8
+  Voucher: 104620
+  SeqPrefix: "298P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 8
+  Voucher: 66297
+  SeqPrefix: "288P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 8
+  Voucher: 16436
+  SeqPrefix: "278P"
+  FromDate: 2007-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 8
+  SeqPrefix: "DDIG"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 9
+  Voucher: 3452
+  SeqPrefix: "269A"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 9
+  Voucher: 14284
+  SeqPrefix: "259A"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 9
+  Voucher: 19840
+  SeqPrefix: "249A"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 9
+  Voucher: 34019
+  SeqPrefix: "239A"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 9
+  Voucher: 32422
+  SeqPrefix: "229A"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 9
+  Voucher: 27127
+  SeqPrefix: "219A"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 9
+  Voucher: 16371
+  SeqPrefix: "209A"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 9
+  Voucher: 17602
+  SeqPrefix: "299A"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 9
+  Voucher: 15429
+  SeqPrefix: "289A"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 9
+  Voucher: 8405
+  SeqPrefix: "279A"
+  FromDate: 2007-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 10
+  Voucher: 4287
+  SeqPrefix: "260A"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 10
+  Voucher: 4629
+  SeqPrefix: "250A"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 10
+  Voucher: 9238
+  SeqPrefix: "240A"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 10
+  Voucher: 10841
+  SeqPrefix: "230A"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 10
+  Voucher: 9303
+  SeqPrefix: "220A"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 10
+  Voucher: 9702
+  SeqPrefix: "210A"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 10
+  Voucher: 2996
+  SeqPrefix: "200A"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 10
+  Voucher: 2549
+  SeqPrefix: "290A"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 10
+  Voucher: 196
+  SeqPrefix: "280A"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 11
+  SeqPrefix: "26UA"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 11
+  SeqPrefix: "25UA"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 11
+  SeqPrefix: "24UA"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 11
+  SeqPrefix: "23UA"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 11
+  SeqPrefix: "22UA"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 11
+  SeqPrefix: "21UA"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 11
+  SeqPrefix: "20UA"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 11
+  SeqPrefix: "29UA"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 11
+  SeqPrefix: "28UA"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 12
+  Voucher: 54479
+  SeqPrefix: "26MA"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 12
+  Voucher: 229135
+  SeqPrefix: "25MA"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 12
+  Voucher: 325713
+  SeqPrefix: "24MA"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 12
+  Voucher: 430187
+  SeqPrefix: "23MA"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 12
+  Voucher: 284535
+  SeqPrefix: "22MA"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 12
+  Voucher: 172059
+  SeqPrefix: "21MA"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 12
+  Voucher: 180544
+  SeqPrefix: "20MA"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 12
+  Voucher: 189729
+  SeqPrefix: "29MA"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IGIC1"
+  PaymType: 12
+  Voucher: 93249
+  SeqPrefix: "28MA"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  Voucher: 526
+  SeqPrefix: "360P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  Voucher: 1497
+  SeqPrefix: "350P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  Voucher: 2617
+  SeqPrefix: "340P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  Voucher: 3965
+  SeqPrefix: "330P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  Voucher: 1057
+  SeqPrefix: "320P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  Voucher: 151
+  SeqPrefix: "310P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  SeqPrefix: "300P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  Voucher: 4
+  SeqPrefix: "390P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  Voucher: 7
+  SeqPrefix: "380P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  Voucher: 1
+  SeqPrefix: "370P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 1
+  Voucher: 556
+  SeqPrefix: "361P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 1
+  Voucher: 1255
+  SeqPrefix: "351P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 1
+  Voucher: 1373
+  SeqPrefix: "341P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 1
+  Voucher: 1071
+  SeqPrefix: "331P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 1
+  Voucher: 592
+  SeqPrefix: "321P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 1
+  Voucher: 346
+  SeqPrefix: "311P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 1
+  Voucher: 307
+  SeqPrefix: "301P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 1
+  Voucher: 386
+  SeqPrefix: "391P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 1
+  SeqPrefix: "381P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 1
+  SeqPrefix: "371P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 2
+  SeqPrefix: "362P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 2
+  SeqPrefix: "352P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 2
+  SeqPrefix: "342P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 2
+  SeqPrefix: "332P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 2
+  SeqPrefix: "322P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 2
+  SeqPrefix: "312P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 2
+  SeqPrefix: "302P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 2
+  SeqPrefix: "392P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 2
+  SeqPrefix: "382P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 2
+  SeqPrefix: "372P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 3
+  SeqPrefix: "363P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 3
+  SeqPrefix: "353P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 3
+  SeqPrefix: "343P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 3
+  SeqPrefix: "333P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 3
+  SeqPrefix: "323P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 3
+  SeqPrefix: "313P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 3
+  SeqPrefix: "303P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 3
+  SeqPrefix: "393P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 3
+  SeqPrefix: "383P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 3
+  SeqPrefix: "373P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 4
+  SeqPrefix: "364P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 4
+  SeqPrefix: "354P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 4
+  SeqPrefix: "344P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 4
+  SeqPrefix: "334P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 4
+  SeqPrefix: "324P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 4
+  SeqPrefix: "314P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 4
+  SeqPrefix: "304P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 4
+  SeqPrefix: "394P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 4
+  SeqPrefix: "384P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 4
+  SeqPrefix: "374P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 5
+  SeqPrefix: "365P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 5
+  SeqPrefix: "355P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 5
+  SeqPrefix: "345P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 5
+  SeqPrefix: "335P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 5
+  SeqPrefix: "325P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 5
+  SeqPrefix: "315P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 5
+  SeqPrefix: "305P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 5
+  Voucher: 464
+  SeqPrefix: "395P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 5
+  Voucher: 176
+  SeqPrefix: "385P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 5
+  Voucher: 38
+  SeqPrefix: "375P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 6
+  SeqPrefix: "366P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 6
+  SeqPrefix: "356P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 6
+  SeqPrefix: "346P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 6
+  SeqPrefix: "336P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 6
+  SeqPrefix: "326P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 6
+  SeqPrefix: "316P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 6
+  SeqPrefix: "306P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 6
+  SeqPrefix: "396P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 6
+  SeqPrefix: "386P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 6
+  SeqPrefix: "376P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 7
+  Voucher: 1459
+  SeqPrefix: "367A"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 7
+  Voucher: 4105
+  SeqPrefix: "357A"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 7
+  Voucher: 4894
+  SeqPrefix: "347A"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 7
+  Voucher: 8661
+  SeqPrefix: "337A"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 7
+  Voucher: 10640
+  SeqPrefix: "327A"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 7
+  Voucher: 11426
+  SeqPrefix: "317A"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 7
+  Voucher: 12076
+  SeqPrefix: "307A"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 7
+  Voucher: 7655
+  SeqPrefix: "397A"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 7
+  Voucher: 7725
+  SeqPrefix: "387A"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 7
+  Voucher: 2219
+  SeqPrefix: "PGCE"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 8
+  Voucher: 5394
+  SeqPrefix: "368P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 8
+  Voucher: 10444
+  SeqPrefix: "358P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 8
+  Voucher: 9239
+  SeqPrefix: "348P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 8
+  Voucher: 9831
+  SeqPrefix: "338P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 8
+  Voucher: 6002
+  SeqPrefix: "328P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 8
+  Voucher: 4170
+  SeqPrefix: "318P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 8
+  Voucher: 3160
+  SeqPrefix: "308P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 8
+  Voucher: 2345
+  SeqPrefix: "398P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 8
+  Voucher: 2020
+  SeqPrefix: "388P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 8
+  Voucher: 588
+  SeqPrefix: "378P"
+  FromDate: 2007-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 8
+  SeqPrefix: "DDIC"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 9
+  Voucher: 34
+  SeqPrefix: "369A"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 9
+  Voucher: 142
+  SeqPrefix: "359A"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 9
+  Voucher: 170
+  SeqPrefix: "349A"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 9
+  Voucher: 435
+  SeqPrefix: "339A"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 9
+  Voucher: 340
+  SeqPrefix: "329A"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 9
+  Voucher: 361
+  SeqPrefix: "319A"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 9
+  Voucher: 362
+  SeqPrefix: "309A"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 9
+  Voucher: 295
+  SeqPrefix: "399A"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 9
+  Voucher: 471
+  SeqPrefix: "389A"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 9
+  Voucher: 302
+  SeqPrefix: "379A"
+  FromDate: 2007-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 10
+  Voucher: 39
+  SeqPrefix: "360A"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 10
+  Voucher: 58
+  SeqPrefix: "350A"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 10
+  Voucher: 128
+  SeqPrefix: "340A"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 10
+  Voucher: 297
+  SeqPrefix: "330A"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 10
+  Voucher: 246
+  SeqPrefix: "320A"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 10
+  Voucher: 246
+  SeqPrefix: "310A"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 10
+  Voucher: 73
+  SeqPrefix: "300A"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 10
+  Voucher: 90
+  SeqPrefix: "390A"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 10
+  Voucher: 22
+  SeqPrefix: "380A"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 11
+  SeqPrefix: "36UA"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 11
+  SeqPrefix: "35UA"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 11
+  SeqPrefix: "34UA"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 11
+  SeqPrefix: "33UA"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 11
+  SeqPrefix: "32UA"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 11
+  SeqPrefix: "31UA"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 11
+  SeqPrefix: "30UA"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 11
+  SeqPrefix: "39UA"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 11
+  SeqPrefix: "38UA"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 12
+  Voucher: 579
+  SeqPrefix: "36MA"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 12
+  Voucher: 2857
+  SeqPrefix: "35MA"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 12
+  Voucher: 4073
+  SeqPrefix: "34MA"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 12
+  Voucher: 4821
+  SeqPrefix: "33MA"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 12
+  Voucher: 3299
+  SeqPrefix: "32MA"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 12
+  Voucher: 2957
+  SeqPrefix: "31MA"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 12
+  Voucher: 3554
+  SeqPrefix: "30MA"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 12
+  Voucher: 5071
+  SeqPrefix: "39MA"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIC1"
+  PaymType: 12
+  Voucher: 3927
+  SeqPrefix: "38MA"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  Voucher: 504
+  SeqPrefix: "460P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  Voucher: 2063
+  SeqPrefix: "450P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  Voucher: 2347
+  SeqPrefix: "440P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  Voucher: 4296
+  SeqPrefix: "430P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  Voucher: 1667
+  SeqPrefix: "420P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  Voucher: 235
+  SeqPrefix: "410P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  SeqPrefix: "400P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  Voucher: 9
+  SeqPrefix: "490P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  Voucher: 38
+  SeqPrefix: "480P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  SeqPrefix: "470P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 1
+  Voucher: 543
+  SeqPrefix: "461P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 1
+  Voucher: 1563
+  SeqPrefix: "451P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 1
+  Voucher: 1393
+  SeqPrefix: "441P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 1
+  Voucher: 1988
+  SeqPrefix: "431P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 1
+  Voucher: 1242
+  SeqPrefix: "421P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 1
+  Voucher: 532
+  SeqPrefix: "411P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 1
+  Voucher: 324
+  SeqPrefix: "401P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 1
+  Voucher: 348
+  SeqPrefix: "491P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 1
+  SeqPrefix: "481P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 1
+  SeqPrefix: "471P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 2
+  SeqPrefix: "462P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 2
+  SeqPrefix: "452P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 2
+  SeqPrefix: "442P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 2
+  SeqPrefix: "432P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 2
+  SeqPrefix: "422P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 2
+  SeqPrefix: "412P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 2
+  SeqPrefix: "402P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 2
+  SeqPrefix: "492P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 2
+  SeqPrefix: "482P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 2
+  SeqPrefix: "472P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 3
+  SeqPrefix: "463P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 3
+  SeqPrefix: "453P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 3
+  SeqPrefix: "443P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 3
+  SeqPrefix: "433P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 3
+  SeqPrefix: "423P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 3
+  SeqPrefix: "413P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 3
+  SeqPrefix: "403P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 3
+  SeqPrefix: "493P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 3
+  SeqPrefix: "483P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 3
+  SeqPrefix: "473P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 4
+  SeqPrefix: "464P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 4
+  SeqPrefix: "454P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 4
+  SeqPrefix: "444P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 4
+  SeqPrefix: "434P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 4
+  SeqPrefix: "424P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 4
+  SeqPrefix: "414P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 4
+  SeqPrefix: "404P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 4
+  SeqPrefix: "494P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 4
+  SeqPrefix: "484P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 4
+  SeqPrefix: "474P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 5
+  SeqPrefix: "465P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 5
+  SeqPrefix: "455P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 5
+  SeqPrefix: "445P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 5
+  SeqPrefix: "435P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 5
+  SeqPrefix: "425P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 5
+  SeqPrefix: "415P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 5
+  SeqPrefix: "405P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 5
+  Voucher: 1372
+  SeqPrefix: "495P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 5
+  Voucher: 276
+  SeqPrefix: "485P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 5
+  Voucher: 86
+  SeqPrefix: "475P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 6
+  SeqPrefix: "466P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 6
+  SeqPrefix: "456P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 6
+  SeqPrefix: "446P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 6
+  SeqPrefix: "436P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 6
+  SeqPrefix: "426P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 6
+  SeqPrefix: "416P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 6
+  SeqPrefix: "406P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 6
+  SeqPrefix: "496P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 6
+  SeqPrefix: "486P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 6
+  SeqPrefix: "476P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 7
+  Voucher: 2066
+  SeqPrefix: "467A"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 7
+  Voucher: 6525
+  SeqPrefix: "457A"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 7
+  Voucher: 7758
+  SeqPrefix: "447A"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 7
+  Voucher: 13679
+  SeqPrefix: "437A"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 7
+  Voucher: 14856
+  SeqPrefix: "427A"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 7
+  Voucher: 16439
+  SeqPrefix: "417A"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 7
+  Voucher: 15659
+  SeqPrefix: "407A"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 7
+  Voucher: 16451
+  SeqPrefix: "497P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 7
+  Voucher: 11527
+  SeqPrefix: "487A"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 7
+  Voucher: 2761
+  SeqPrefix: "PGME"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 8
+  Voucher: 6834
+  SeqPrefix: "468P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 8
+  Voucher: 12432
+  SeqPrefix: "458P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 8
+  Voucher: 10409
+  SeqPrefix: "448P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 8
+  Voucher: 10752
+  SeqPrefix: "438P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 8
+  Voucher: 6445
+  SeqPrefix: "428P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 8
+  Voucher: 4236
+  SeqPrefix: "418P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 8
+  Voucher: 3213
+  SeqPrefix: "408P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 8
+  Voucher: 2209
+  SeqPrefix: "498P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 8
+  Voucher: 2397
+  SeqPrefix: "488P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 8
+  Voucher: 724
+  SeqPrefix: "478P"
+  FromDate: 2007-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 8
+  SeqPrefix: "DDIM"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 9
+  Voucher: 42
+  SeqPrefix: "469A"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 9
+  Voucher: 291
+  SeqPrefix: "459A"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 9
+  Voucher: 290
+  SeqPrefix: "449A"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 9
+  Voucher: 541
+  SeqPrefix: "439A"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 9
+  Voucher: 487
+  SeqPrefix: "429A"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 9
+  Voucher: 734
+  SeqPrefix: "419A"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 9
+  Voucher: 600
+  SeqPrefix: "409A"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 9
+  Voucher: 541
+  SeqPrefix: "499A"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 9
+  Voucher: 1798
+  SeqPrefix: "489A"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 9
+  Voucher: 706
+  SeqPrefix: "479A"
+  FromDate: 2007-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 10
+  Voucher: 66
+  SeqPrefix: "460A"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 10
+  Voucher: 209
+  SeqPrefix: "450A"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 10
+  Voucher: 281
+  SeqPrefix: "440A"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 10
+  Voucher: 403
+  SeqPrefix: "430A"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 10
+  Voucher: 330
+  SeqPrefix: "420A"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 10
+  Voucher: 352
+  SeqPrefix: "410A"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 10
+  Voucher: 173
+  SeqPrefix: "400A"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 10
+  Voucher: 245
+  SeqPrefix: "490A"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 10
+  Voucher: 32
+  SeqPrefix: "480A"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 11
+  SeqPrefix: "46UA"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 11
+  SeqPrefix: "45UA"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 11
+  SeqPrefix: "44UA"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 11
+  SeqPrefix: "43UA"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 11
+  SeqPrefix: "42UA"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 11
+  SeqPrefix: "41UA"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 11
+  SeqPrefix: "40UA"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 11
+  SeqPrefix: "49UA"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 11
+  SeqPrefix: "48UA"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 12
+  Voucher: 846
+  SeqPrefix: "46MA"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 12
+  Voucher: 3425
+  SeqPrefix: "45MA"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 12
+  Voucher: 5031
+  SeqPrefix: "44MA"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 12
+  Voucher: 6732
+  SeqPrefix: "43MA"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 12
+  Voucher: 5650
+  SeqPrefix: "42MA"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 12
+  Voucher: 5172
+  SeqPrefix: "41MA"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 12
+  Voucher: 6845
+  SeqPrefix: "40MA"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 12
+  Voucher: 13865
+  SeqPrefix: "49MA"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "IPSIM1"
+  PaymType: 12
+  Voucher: 11629
+  SeqPrefix: "48MA"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "UNKNOWN"
+  SeqPrefix: "XX00"
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "UNKNOWN"
+  PaymType: 8
+  Voucher: 25
+  SeqPrefix: "DDUN"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "UNKNOWN"
+  PaymType: 12
+  Voucher: 15
+  SeqPrefix: "XXXX"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  Voucher: 1250047
+  SeqPrefix: "160P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  Voucher: 4789517
+  SeqPrefix: "150P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  Voucher: 4273965
+  SeqPrefix: "140P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  Voucher: 5443413
+  SeqPrefix: "130P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  Voucher: 1803040
+  SeqPrefix: "120P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  Voucher: 255580
+  SeqPrefix: "110P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  Voucher: 198
+  SeqPrefix: "100P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  Voucher: 2712
+  SeqPrefix: "190P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  Voucher: 8620
+  SeqPrefix: "180P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  Voucher: 59
+  SeqPrefix: "170P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 1
+  Voucher: 987633
+  SeqPrefix: "161P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 1
+  Voucher: 2467477
+  SeqPrefix: "151P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 1
+  Voucher: 2669902
+  SeqPrefix: "141P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 1
+  Voucher: 3033468
+  SeqPrefix: "131P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 1
+  Voucher: 1796628
+  SeqPrefix: "121P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 1
+  Voucher: 1154300
+  SeqPrefix: "111P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 1
+  Voucher: 859599
+  SeqPrefix: "101P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 1
+  Voucher: 448504
+  SeqPrefix: "191P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 1
+  SeqPrefix: "181P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 1
+  SeqPrefix: "171P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 2
+  SeqPrefix: "162P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 2
+  SeqPrefix: "152P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 2
+  SeqPrefix: "142P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 2
+  SeqPrefix: "132P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 2
+  SeqPrefix: "122P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 2
+  SeqPrefix: "112P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 2
+  SeqPrefix: "102P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 2
+  SeqPrefix: "192P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 2
+  SeqPrefix: "182P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 2
+  SeqPrefix: "172P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 3
+  SeqPrefix: "163P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 3
+  SeqPrefix: "153P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 3
+  SeqPrefix: "143P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 3
+  SeqPrefix: "133P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 3
+  SeqPrefix: "123P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 3
+  SeqPrefix: "113P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 3
+  SeqPrefix: "103P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 3
+  SeqPrefix: "193P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 3
+  SeqPrefix: "183P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 3
+  SeqPrefix: "173P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 4
+  SeqPrefix: "164P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 4
+  SeqPrefix: "154P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 4
+  SeqPrefix: "144P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 4
+  SeqPrefix: "134P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 4
+  SeqPrefix: "124P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 4
+  SeqPrefix: "114P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 4
+  SeqPrefix: "104P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 4
+  Voucher: 8
+  SeqPrefix: "194P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 4
+  Voucher: 79
+  SeqPrefix: "184P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 4
+  Voucher: 6
+  SeqPrefix: "174P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 5
+  SeqPrefix: "165P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 5
+  SeqPrefix: "155P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 5
+  SeqPrefix: "145P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 5
+  SeqPrefix: "135P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 5
+  SeqPrefix: "125P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 5
+  SeqPrefix: "115P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 5
+  SeqPrefix: "105P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 5
+  Voucher: 296568
+  SeqPrefix: "195P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 5
+  Voucher: 55140
+  SeqPrefix: "185P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 5
+  Voucher: 299236
+  SeqPrefix: "175P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 6
+  SeqPrefix: "166P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 6
+  SeqPrefix: "156P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 6
+  SeqPrefix: "146P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 6
+  SeqPrefix: "136P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 6
+  SeqPrefix: "126P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 6
+  SeqPrefix: "116P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 6
+  SeqPrefix: "106P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 6
+  SeqPrefix: "196P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 6
+  Voucher: 10
+  SeqPrefix: "186P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 6
+  Voucher: 5
+  SeqPrefix: "176P"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 7
+  Voucher: 3497256
+  SeqPrefix: "167A"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 7
+  Voucher: 10439085
+  SeqPrefix: "157A"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 7
+  Voucher: 11392471
+  SeqPrefix: "147A"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 7
+  Voucher: 16532917
+  SeqPrefix: "137A"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 7
+  Voucher: 17862463
+  SeqPrefix: "127A"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 7
+  Voucher: 18422131
+  SeqPrefix: "117A"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 7
+  Voucher: 15382697
+  SeqPrefix: "107A"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 7
+  Voucher: 10607908
+  SeqPrefix: "197A"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 7
+  Voucher: 5668064
+  SeqPrefix: "187A"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 7
+  Voucher: 1604179
+  SeqPrefix: "PGMA"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 8
+  Voucher: 9062525
+  SeqPrefix: "168P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 8
+  Voucher: 20838975
+  SeqPrefix: "158P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 8
+  Voucher: 18800770
+  SeqPrefix: "148P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 8
+  Voucher: 21016975
+  SeqPrefix: "138P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 8
+  Voucher: 16260379
+  SeqPrefix: "128P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 8
+  Voucher: 12652789
+  SeqPrefix: "118P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 8
+  Voucher: 9387778
+  SeqPrefix: "108P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 8
+  Voucher: 5769482
+  SeqPrefix: "198P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 8
+  Voucher: 2889989
+  SeqPrefix: "188P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 8
+  Voucher: 689600
+  SeqPrefix: "178P"
+  FromDate: 2007-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 8
+  SeqPrefix: "DDML"
+  FromDate: 2006-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 9
+  Voucher: 88918
+  SeqPrefix: "169A"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 9
+  Voucher: 398661
+  SeqPrefix: "159A"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 9
+  Voucher: 528222
+  SeqPrefix: "149A"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 9
+  Voucher: 843728
+  SeqPrefix: "139A"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 9
+  Voucher: 826749
+  SeqPrefix: "129A"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 9
+  Voucher: 854965
+  SeqPrefix: "119A"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 9
+  Voucher: 708992
+  SeqPrefix: "109A"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 9
+  Voucher: 502218
+  SeqPrefix: "199A"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 9
+  Voucher: 524005
+  SeqPrefix: "189A"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 9
+  Voucher: 432505
+  SeqPrefix: "179A"
+  FromDate: 2007-12-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 10
+  Voucher: 32964
+  SeqPrefix: "160A"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 10
+  Voucher: 127676
+  SeqPrefix: "150A"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 10
+  Voucher: 240759
+  SeqPrefix: "140A"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 10
+  Voucher: 281007
+  SeqPrefix: "130A"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 10
+  Voucher: 244202
+  SeqPrefix: "120A"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 10
+  Voucher: 298461
+  SeqPrefix: "110A"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 10
+  Voucher: 62258
+  SeqPrefix: "100A"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 10
+  Voucher: 73703
+  SeqPrefix: "190A"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 10
+  Voucher: 6822
+  SeqPrefix: "180A"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 11
+  SeqPrefix: "16UA"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 11
+  SeqPrefix: "15UA"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 11
+  SeqPrefix: "14UA"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 11
+  SeqPrefix: "13UA"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 11
+  SeqPrefix: "12UA"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 11
+  SeqPrefix: "11UA"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 11
+  SeqPrefix: "10UA"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 11
+  SeqPrefix: "19UA"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 11
+  SeqPrefix: "18UA"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 12
+  Voucher: 1343634
+  SeqPrefix: "16MA"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 12
+  Voucher: 5670774
+  SeqPrefix: "15MA"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 12
+  Voucher: 8456373
+  SeqPrefix: "14MA"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 12
+  Voucher: 11708885
+  SeqPrefix: "13MA"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 12
+  Voucher: 7801858
+  SeqPrefix: "12MA"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 12
+  Voucher: 5392608
+  SeqPrefix: "11MA"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 12
+  Voucher: 5758451
+  SeqPrefix: "10MA"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 12
+  Voucher: 5707952
+  SeqPrefix: "18MA"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VAT1"
+  PaymType: 12
+  Voucher: 3220496
+  SeqPrefix: "19MA"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "VIP"
+  SeqPrefix: "VI00"
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  SeqPrefix: "560P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  SeqPrefix: "550P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  SeqPrefix: "540P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  SeqPrefix: "530P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  SeqPrefix: "520P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  SeqPrefix: "510P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  SeqPrefix: "500P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  SeqPrefix: "590P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  SeqPrefix: "580P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 1
+  SeqPrefix: "561P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 1
+  SeqPrefix: "551P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 1
+  SeqPrefix: "541P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 1
+  SeqPrefix: "531P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 1
+  SeqPrefix: "521P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 1
+  SeqPrefix: "511P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 1
+  SeqPrefix: "501P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 1
+  SeqPrefix: "591P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 1
+  SeqPrefix: "581P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 2
+  SeqPrefix: "562P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 2
+  SeqPrefix: "552P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 2
+  SeqPrefix: "542P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 2
+  SeqPrefix: "532P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 2
+  SeqPrefix: "522P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 2
+  SeqPrefix: "512P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 2
+  SeqPrefix: "502P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 2
+  SeqPrefix: "592P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 2
+  SeqPrefix: "582P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 3
+  SeqPrefix: "563P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 3
+  SeqPrefix: "553P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 3
+  SeqPrefix: "543P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 3
+  SeqPrefix: "533P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 3
+  SeqPrefix: "523P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 3
+  SeqPrefix: "513P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 3
+  SeqPrefix: "503P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 3
+  SeqPrefix: "593P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 3
+  SeqPrefix: "583P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 4
+  SeqPrefix: "564P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 4
+  SeqPrefix: "554P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 4
+  SeqPrefix: "544P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 4
+  SeqPrefix: "534P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 4
+  SeqPrefix: "524P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 4
+  SeqPrefix: "514P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 4
+  SeqPrefix: "504P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 4
+  SeqPrefix: "594P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 4
+  SeqPrefix: "584P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 5
+  SeqPrefix: "565P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 5
+  SeqPrefix: "555P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 5
+  SeqPrefix: "545P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 5
+  SeqPrefix: "535P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 5
+  SeqPrefix: "525P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 5
+  SeqPrefix: "515P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 5
+  SeqPrefix: "505P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 5
+  SeqPrefix: "595P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 5
+  SeqPrefix: "585P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 6
+  SeqPrefix: "566P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 6
+  SeqPrefix: "556P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 6
+  SeqPrefix: "546P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 6
+  SeqPrefix: "536P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 6
+  SeqPrefix: "526P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 6
+  SeqPrefix: "516P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 6
+  SeqPrefix: "506P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 6
+  SeqPrefix: "596P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 6
+  SeqPrefix: "586P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 7
+  Voucher: 26228
+  SeqPrefix: "567A"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 7
+  Voucher: 54650
+  SeqPrefix: "557A"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 7
+  Voucher: 66705
+  SeqPrefix: "547A"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 7
+  Voucher: 57
+  SeqPrefix: "537A"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 7
+  SeqPrefix: "527A"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 7
+  SeqPrefix: "517A"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 7
+  SeqPrefix: "507A"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 7
+  SeqPrefix: "597A"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 7
+  SeqPrefix: "587A"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 8
+  SeqPrefix: "568P"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 8
+  SeqPrefix: "558P"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 8
+  SeqPrefix: "548P"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 8
+  SeqPrefix: "538P"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 8
+  SeqPrefix: "528P"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 8
+  SeqPrefix: "518P"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 8
+  SeqPrefix: "508P"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 8
+  SeqPrefix: "598P"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 8
+  SeqPrefix: "588P"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 9
+  SeqPrefix: "569A"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 9
+  SeqPrefix: "559A"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 9
+  SeqPrefix: "549A"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 9
+  SeqPrefix: "539A"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 9
+  SeqPrefix: "529A"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 9
+  SeqPrefix: "519A"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 9
+  SeqPrefix: "509A"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 9
+  SeqPrefix: "599A"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 9
+  SeqPrefix: "589A"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 10
+  SeqPrefix: "560A"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 10
+  SeqPrefix: "550A"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 10
+  SeqPrefix: "540A"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 10
+  SeqPrefix: "530A"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 10
+  SeqPrefix: "520A"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 10
+  SeqPrefix: "510A"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 10
+  SeqPrefix: "500A"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 10
+  SeqPrefix: "590A"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 10
+  SeqPrefix: "580A"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 11
+  SeqPrefix: "56UA"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 11
+  SeqPrefix: "55UA"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 11
+  SeqPrefix: "54UA"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 11
+  SeqPrefix: "53UA"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 11
+  SeqPrefix: "52UA"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 11
+  SeqPrefix: "51UA"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 11
+  SeqPrefix: "50UA"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 11
+  SeqPrefix: "59UA"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 11
+  SeqPrefix: "58UA"
+  FromDate: 2008-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 12
+  SeqPrefix: "56MA"
+  FromDate: 2016-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 12
+  SeqPrefix: "55MA"
+  FromDate: 2015-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 12
+  SeqPrefix: "54MA"
+  FromDate: 2014-02-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 12
+  SeqPrefix: "53MA"
+  FromDate: 2013-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 12
+  SeqPrefix: "52MA"
+  FromDate: 2012-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 12
+  SeqPrefix: "51MA"
+  FromDate: 2011-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 12
+  SeqPrefix: "50MA"
+  FromDate: 2010-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 12
+  SeqPrefix: "59MA"
+  FromDate: 2009-01-01
+
+bulkload: IGVoucher
+  Brand: "1"
+  InvGroup: "YOIGO"
+  PaymType: 12
+  SeqPrefix: "58MA"
+  FromDate: 2008-01-01
+

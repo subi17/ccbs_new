@@ -8,8 +8,8 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{msreqfunc.i}
-{fwebuser.i}
+{Func/msreqfunc.i}
+{Func/fwebuser.i}
 
 DEF INPUT PARAMETER iiRequest AS INT NO-UNDO.
 
@@ -44,7 +44,7 @@ PROCEDURE pUserAccount:
  
    llPrintLetter = TRUE.
  
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
 
@@ -92,7 +92,7 @@ PROCEDURE pUserAccount:
    /* print a letter */
    IF llPrintLetter THEN DO:
 
-      RUN prinuser(MsRequest.CustNum,
+      RUN Mc/prinuser.p(MsRequest.CustNum,
                    MsRequest.ReqCParam1, 
                    OUTPUT lcReqChar).
 
@@ -115,8 +115,8 @@ PROCEDURE pUserAccount:
          */
               
          /* don't send messages before 8 am. */
-         ldReqStamp = DYNAMIC-FUNCTION("fMakeOfficeTS" in ghFunc1).
-         IF ldReqStamp = ? THEN ldReqStamp = fMakeTS().
+         ldReqStamp = Func.Common:mMakeOfficeTS().
+         IF ldReqStamp = ? THEN ldReqStamp = Func.Common:mMakeTS().
 
          fMakeSchedSMS(Customer.CustNum,
                        Customer.SMSNumber,

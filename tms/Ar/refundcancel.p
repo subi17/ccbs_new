@@ -8,11 +8,11 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{eventval.i} 
-{fcustbal.i}
-{msreqfunc.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/eventval.i} 
+{Func/fcustbal.i}
+{Func/msreqfunc.i}
 
 DEF INPUT PARAMETER iiMsRequest  AS INT  NO-UNDO.
 DEF INPUT PARAMETER icCancelType AS CHAR NO-UNDO.
@@ -51,7 +51,7 @@ END.
           
 ELSE 
 FOR EACH MsRequest EXCLUSIVE-LOCK USE-INDEX CustNum WHERE
-         MsRequest.Brand      = gcBrand    AND
+         MsRequest.Brand      = Syst.Var:gcBrand    AND
          MsRequest.ReqType    = 23         AND
          MsRequest.CustNum    = iiCustNum  AND
          MsRequest.ReqIParam1 = iiInvNum   AND
@@ -105,7 +105,7 @@ PROCEDURE pCancelRefund:
       END CASE.    
 
       IF liPaymType NE ? THEN 
-      RUN createpaym (MsRequest.CustNum,
+      RUN Ar/createpaym.p (MsRequest.CustNum,
                       MsRequest.ReqIParam1,   /* invoice */
                       lcCLI,
                       TODAY,

@@ -11,10 +11,10 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{cparam2.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'invoice'}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'invoice'}
 
 DEF VAR tdebt  AS DE  NO-UNDO EXTENT 3.
 DEF VAR debt   AS DE  NO-UNDO.
@@ -39,8 +39,8 @@ form
    "               Invoices before: " Date  no-label format "99-99-9999"
    skip(8)
 WITH ROW 1 side-labels width 80
-   title color value(ctc) " " + ynimi + " SUMMARY OF UNPAID INVOICES " +
-   string(pvm,"99-99-99") + " " COLOR value(cfc) FRAME frm.
+   title color value(Syst.Var:ctc) " " + Syst.Var:ynimi + " SUMMARY OF UNPAID INVOICES " +
+   string(TODAY,"99-99-99") + " " COLOR value(Syst.Var:cfc) FRAME frm.
 
 form
    skip(1)
@@ -50,33 +50,33 @@ form
    "Date of latest invoice ..:" ldate  format "99-99-9999"           SKIP
    skip(1)
 WITH
-   centered ROW 5 COLOR value(cfc) TITLE COLOR value(ctc)
+   centered ROW 5 COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc)
    " UNPAID INVOICES "  NO-LABELS
    OVERLAY FRAME debt.
 
-ehto = 9. RUN ufkey.
+Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
 UPDATE Date WITH FRAME frm.
 
 message "Do You want to sum all unpaid invoices (Y/N) ?" UPDATE ok.
 IF NOT ok THEN RETURN.
 
-FIND FIRST Invoice WHERE Invoice.Brand = gcBrand no-lock. 
+FIND FIRST Invoice WHERE Invoice.Brand = Syst.Var:gcBrand no-lock. 
 edate = Invoice.InvDate.
-FIND LAST  Invoice WHERE Invoice.Brand = gcBrand no-lock. 
+FIND LAST  Invoice WHERE Invoice.Brand = Syst.Var:gcBrand no-lock. 
 ldate = Invoice.InvDate.
 
 message "Wait ...".
 
     FOR EACH Invoice no-lock where 
-             Invoice.Brand    = gcBrand AND
+             Invoice.Brand    = Syst.Var:gcBrand AND
              Invoice.InvDate <= Date.
 
        ASSIGN
           edate = minimum(Invoice.InvDate,edate)
           ldate = maximum(Invoice.InvDate,ldate).
 
-       RUN invbal(Invoice.InvNum, OUTPUT debt).
+       RUN Ar/invbal.p(Invoice.InvNum, OUTPUT debt).
 
        IF Invoice.DueDate < Date THEN tdebt[2] = tdebt[2] + debt.
        ELSE                           tdebt[1] = tdebt[1] + debt.
@@ -85,7 +85,7 @@ message "Wait ...".
     END.
 
 
-    cfc = "lis". RUN ufcolor.
+    Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
     DISPLAY tdebt edate ldate curr1 curr2 curr3 WITH FRAME debt.
 
 message "Press ENTER !".

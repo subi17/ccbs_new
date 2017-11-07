@@ -7,16 +7,15 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
-   gcBrand = "1"
-   katun   = "Cron".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun   = "Cron".
    
-{cparam2.i}
-{files.i}
-{timestamp.i}
-{funcrunprocess_run.i}
-{direct_dbconnect.i}
+{Func/cparam2.i}
+{Func/files.i}
+{Syst/funcrunprocess_run.i}
+{Func/direct_dbconnect.i}
 
 DEF VAR liInvCnt       AS INT  NO-UNDO.
 DEF VAR liFRProcessID  AS INT  NO-UNDO.
@@ -50,12 +49,12 @@ END.
 
 /* connect to correct cdr dbs */
 FIND FIRST Invoice USE-INDEX InvDate WHERE
-           Invoice.Brand = gcBrand AND
+           Invoice.Brand = Syst.Var:gcBrand AND
            Invoice.InvDate = ldaInvDate AND
            Invoice.InvType = liInvType NO-LOCK NO-ERROR.
 IF AVAILABLE Invoice THEN DO:
    fInitializeConnectTables("MobCDR","").
-   RUN pDirectConnect2Dbs(gcBrand,
+   RUN pDirectConnect2Dbs(Syst.Var:gcBrand,
                           "",  
                           Invoice.ToDate,
                           Invoice.ToDate).
@@ -65,7 +64,7 @@ IF AVAILABLE Invoice THEN DO:
    END.   
 END.
  
-RUN ccreport.p (ldaInvDate,
+RUN Mm/ccreport.p (ldaInvDate,
                 ldaInvDate,
                 liInvType,
                 "",

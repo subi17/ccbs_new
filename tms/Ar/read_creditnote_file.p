@@ -8,15 +8,15 @@
   Version ......: yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
-katun = "Cron".
-gcBrand = "1".
-{tmsconst.i}
-{ftransdir.i}
-{cparam2.i}
-{eventlog.i}
-{timestamp.i}
-{fcreditreq.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Func/fcreditreq.i}
+{Func/multitenantfunc.i}
 
 /* files and dirs */
 DEF VAR lcLine AS CHAR NO-UNDO.
@@ -30,6 +30,7 @@ DEF VAR lcSpoolDir AS CHAR NO-UNDO.
 DEF VAR lcReportFileOut AS CHAR NO-UNDO. 
 DEF VAR lcOutDir AS CHAR NO-UNDO. 
 DEF VAR lcSep AS CHAR NO-UNDO INIT "|".
+DEF VAR lcTenant AS CHARACTER NO-UNDO. 
 
 ASSIGN
    lcIncDir    = fCParam("CreditNote","IncDir") 
@@ -59,7 +60,11 @@ REPEAT:
    IF SEARCH(lcInputFile) NE ? THEN 
       INPUT STREAM sin FROM VALUE(lcInputFile).
    ELSE NEXT.
+   
+   lcTenant = ENTRY(1,ENTRY(1,lcFileName,"_"),"-").
 
+   IF NOT fsetEffectiveTenantForAllDB(
+         fConvertBrandToTenant(lcTenant)) THEN NEXT.
    /* extract date from filename */
    fBatchLog("START", lcInputFile).
    lcLogFile = lcSpoolDir + lcFileName + ".log".
@@ -124,7 +129,7 @@ PROCEDURE pCreateCreditNote :
 
    /* check invoice */
    FIND Invoice WHERE 
-        Invoice.Brand = gcBrand AND
+        Invoice.Brand = Syst.Var:gcBrand AND
         Invoice.ExtInvId = lcExtInvID NO-LOCK NO-ERROR.
    IF NOT AVAIL Invoice THEN RETURN "ERROR:Invalid invoice number".
 
@@ -179,15 +184,15 @@ PROCEDURE pCreateCreditNote :
    if lireq = 0 then RETURN "ERROR:" + lcError.
 
    create Memo.
-   assign Memo.Brand     = gcBrand
+   assign Memo.Brand     = Syst.Var:gcBrand
           Memo.HostTable = "Invoice"
           Memo.KeyValue  = string(Invoice.Invnum)
           Memo.CustNum   = Invoice.Custnum 
           Memo.MemoSeq   = next-value(memoseq)
-          Memo.CreUser   = katun 
+          Memo.CreUser   = Syst.Var:katun 
           Memo.MemoTitle = lcMemoTitle
           Memo.MemoText  = lcMemoContent
-          Memo.CreStamp  = fmakets().
+          Memo.CreStamp  = Func.Common:mMakeTS().
 
    RETURN "OK".
 

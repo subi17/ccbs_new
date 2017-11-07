@@ -11,9 +11,9 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{msisdn.i}
-{eventval.i} 
+{Syst/commali.i}
+{Func/msisdn.i}
+{Syst/eventval.i} 
 
 DEF INPUT PARAMETER ra-recid AS re NO-UNDO.
 
@@ -43,9 +43,9 @@ DEF VAR CLITo       AS c                      NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMSISDN AS HANDLE NO-UNDO.
    lhMSISDN = BUFFER MSISDN:HANDLE.
@@ -53,7 +53,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhMSISDN).
+      RUN Mc/eventview2.p(lhMSISDN).
    END.
 END.
 
@@ -63,8 +63,8 @@ form
     MSClass.McName   format "x(8)"  column-label "Class"
 
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) " MSISDN Nos in Range " + CLIFrom + " - " + CLITo
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " MSISDN Nos in Range " + CLIFrom + " - " + CLITo
     + " "
     FRAME sel.
 
@@ -72,8 +72,8 @@ form
    MSISDN.CLI     /* LABEL FORMAT */
 
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -82,8 +82,8 @@ WITH  OVERLAY ROW 4 centered
 form
     MSISDN.CustNum    label "Customer ..." Customer.CustName NO-LABEL AT 25 SKIP
     WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    title COLOR VALUE(ctc) " Customer Data of MSISDN " + MSISDN.CLI + " "
+    COLOR VALUE(Syst.Var:cfc)
+    title COLOR VALUE(Syst.Var:ctc) " Customer Data of MSISDN " + MSISDN.CLI + " "
     side-labels 
     FRAME cust.
 
@@ -91,20 +91,20 @@ form /* seek MSISDN number  BY  CLI */
     m_pref space(0)
     CLI format "x(9)"
     HELP "Enter MSISDN number"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN No. "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND MSISDN No. "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FIND MSRange WHERE recid(MSRange) = ra-recid no-lock.
 CLIFrom = MSRange.CLIFrom.  CLITo = MSRange.CLITo.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "By 1,By 2,By 3, By 4".
 
 
 FIND FIRST MSISDN WHERE 
-           MSISDN.Brand = gcBrand AND 
+           MSISDN.Brand = Syst.Var:gcBrand AND 
            MSISDN.CLI >= CLIFrom  AND 
            MSISDN.CLI <= CLITo    AND 
            MSISDN.CustNum = MSRange.Custnum 
@@ -130,13 +130,13 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a MSISDN  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR MSISDN.CLI
@@ -168,7 +168,7 @@ ADD-ROW:
 
       /* is there ANY record ? */
       FIND FIRST MSISDN WHERE 
-                 MSISDN.Brand = gcBrand AND
+                 MSISDN.Brand = Syst.Var:gcBrand AND
                  MSISDN.CLI >= CLIFrom  AND 
                  MSISDN.CLI <= CLITo    AND 
                  MSISDN.CustNum = MSRange.Custnum 
@@ -223,29 +223,29 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 209  ufk[2]= 0 ufk[3]= 238 ufk[4]= 788
-        ufk[5]= 0  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        Syst.Var:ufk[1]= 209  Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 238 Syst.Var:ufk[4]= 788
+        Syst.Var:ufk[5]= 0  Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MSISDN.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MSISDN.CLI WITH FRAME sel.
+        CHOOSE ROW MSISDN.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) MSISDN.CLI WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW MSISDN.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MSISDN.CLI WITH FRAME sel.
+        CHOOSE ROW MSISDN.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) MSISDN.CLI WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -269,10 +269,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -297,7 +297,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -323,7 +323,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND MSISDN WHERE recid(MSISDN) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -347,7 +347,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -362,9 +362,9 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISP m_pref WITH FRAME f1.
        SET CLI WITH FRAME f1.
@@ -387,7 +387,7 @@ BROWSE:
        END.
      END. /* Search-1 */
 
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN 
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 THEN 
 CUST:     
      REPEAT: /* show customer data */
         RUN local-find-this (FALSE).
@@ -410,9 +410,9 @@ CU-DATA:
            WITH FRAME cust.
 CU-ACTION:
            repeat WITH FRAME cust:
-              ASSIGN ufk = 0 ufk[8] = 8 ehto =  0.
-              RUN ufkey.
-              case toimi:
+              ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[8] = 8 Syst.Var:ehto =  0.
+              RUN Syst/ufkey.p.
+              case Syst.Var:toimi:
                  WHEN 8 THEN DO:
                     HIDE FRAME cust no-pause.
                     LEAVE cu-data.
@@ -426,26 +426,26 @@ CU-ACTION:
 
 
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(MSISDN) must-print = TRUE.
        NEXT LOOP.
      END.
 
 
-    ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+    ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(MSISDN) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -463,22 +463,22 @@ END PROCEDURE.
 
 PROCEDURE local-find-FIRST:
        IF order = 1 THEN FIND FIRST MSISDN
-       WHERE MSISDN.BRAnd = gcBrand AND MSISDN.CLI >= CLIFrom AND MSISDN.CLI <= CLITo  AND MSISDN.CustNum ~ = MSRange.Custnum NO-LOCK NO-ERROR.
+       WHERE MSISDN.BRAnd = Syst.Var:gcBrand AND MSISDN.CLI >= CLIFrom AND MSISDN.CLI <= CLITo  AND MSISDN.CustNum ~ = MSRange.Custnum NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
        IF order = 1 THEN FIND LAST MSISDN 
-       WHERE MSISDN.BRAND = gcBrand AND MSISDN.CLI >= CLIFrom AND MSISDN.CLI <= CLITo  AND MSISDN.CustNum = MSRange.Custnum NO-LOCK NO-ERROR.
+       WHERE MSISDN.BRAND = Syst.Var:gcBrand AND MSISDN.CLI >= CLIFrom AND MSISDN.CLI <= CLITo  AND MSISDN.CustNum = MSRange.Custnum NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
        IF order = 1 THEN FIND NEXT MSISDN
-       WHERE MSISDN.BRAND = gcBrand AND MSISDN.CLI >= CLIFrom AND MSISDN.CLI <= CLITo  AND MSISDN.CustNum = MSRange.Custnum NO-LOCK NO-ERROR.
+       WHERE MSISDN.BRAND = Syst.Var:gcBrand AND MSISDN.CLI >= CLIFrom AND MSISDN.CLI <= CLITo  AND MSISDN.CustNum = MSRange.Custnum NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
        IF order = 1 THEN FIND PREV MSISDN
-       WHERE MSISDN.BRAND = gcBrand AND MSISDN.CLI >= CLIFrom AND MSISDN.CLI <= CLITo  AND MSISDN.CustNum = MSRange.Custnum NO-LOCK NO-ERROR.
+       WHERE MSISDN.BRAND = Syst.Var:gcBrand AND MSISDN.CLI >= CLIFrom AND MSISDN.CLI <= CLITo  AND MSISDN.CustNum = MSRange.Custnum NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-disp-row:
@@ -495,7 +495,7 @@ PROCEDURE local-find-others.
    FIND Customer where Customer.CustNum = MSISDN.CustNum no-lock no-error.
    FIND MSStat of MSISDN no-lock no-error.
    FIND MSClass where 
-        MSClass.Brand = gcBrand AND
+        MSClass.Brand = Syst.Var:gcBrand AND
         MSClass.McCode = MSISDN.McCode no-lock no-error.
 END PROCEDURE.
 

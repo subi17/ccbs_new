@@ -1,5 +1,4 @@
 input from as_yot1111.input.
-{date.i}
 
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO.
 def stream sout.
@@ -35,7 +34,7 @@ repeat:
              Memo.CreUser   = "Qvantel/YOT-1110" 
              Memo.MemoTitle = "Delivery type changed"
              Memo.MemoText  = "Correos nos devuelve la carta. Inhabilitamos el envío de la misma".
-             Memo.CreStamp  = fmakets().
+             Memo.CreStamp  = Func.Common:mMakeTS().
    
       put stream sout unformatted 
             lcLine "|" 

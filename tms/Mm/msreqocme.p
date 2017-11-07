@@ -8,20 +8,20 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF VAR lcStatus AS CHAR NO-UNDO.
 
 DO WHILE TRUE:
 
-   RUN tmscodesbr(INPUT  "MsRequest",
+   RUN Syst/tmscodesbr.p(INPUT  "MsRequest",
                   INPUT  "ReqStatus",
                   INPUT  "",
                   INPUT  "Agr.Customer Changes",
                   INPUT  "10",
                   OUTPUT lcStatus).
 
-   IF lcStatus > "" THEN RUN ownerreq (0,0,INTEGER(lcStatus)).
+   IF lcStatus > "" THEN RUN Mm/ownerreq.p (0,0,INTEGER(lcStatus)).
    ELSE LEAVE.
 
 END.

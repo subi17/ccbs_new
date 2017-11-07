@@ -10,9 +10,9 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{tmsparam2.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/tmsparam2.i}
 
 DEF VAR ufkey  AS LOG NO-UNDO.
 
@@ -35,8 +35,8 @@ form
 "                Also the PREFIX HOSTING CLIs will be reported."
    skip(11)
    WITH ROW 1 side-labels width 80
-        title " " + ynimi + " A-SUBCRIBER NUMBERS TO File " +
-        string(pvm,"99-99-99") + " "
+        title " " + Syst.Var:ynimi + " A-SUBCRIBER NUMBERS TO File " +
+        string(TODAY,"99-99-99") + " "
         FRAME valinta.
 
 view FRAME valinta.
@@ -44,7 +44,7 @@ PAUSE 0 no-message.
 
 DO FOR TMSUser.
    FIND FIRST TMSUser no-lock where
-              TMSUser.UserCode = katun.
+              TMSUser.UserCode = Syst.Var:katun.
    fname = TMSUser.RepDir + "/asublist.txt".
 END.
 
@@ -55,7 +55,7 @@ ASSIGN
 toimi:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, RETURN:
       IF criteria THEN DO:
-         ehto = 9. RUN ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          UPDATE
            order label "Order by ......." format "Customer/A-Sub"
              help   "Choose listing order:  (C/A)" SKIP
@@ -76,28 +76,28 @@ toimi:
       END.
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         Syst.Var:ufk[1]= 132 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= 63 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
+         RUN Syst/ufkey.p.
       END.
 
-      READKEY. nap = keylabel(LASTKEY).
+      READKEY. Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"1,f1") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:
          criteria = TRUE.
          NEXT toimi.
       END.
-      else if lookup(nap,"5,f5") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"5,f5") > 0 THEN DO:
          ok = FALSE.
          message "Are You sure You want to start processing ?" UPDATE ok.
          IF ok THEN LEAVE toimi.
          ELSE       NEXT  toimi. 
       END.
-      else if lookup(nap,"8,f8") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"8,f8") > 0 THEN DO:
          RETURN.
       END.
-   END. /* toimi */
+   END. /* Syst.Var:toimi */
 
 message "Processing data ...".
 

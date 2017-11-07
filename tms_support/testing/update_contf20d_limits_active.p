@@ -1,8 +1,7 @@
-{commpaa.i}
-gcbrand = "1".
-katun = "Qvantel".
-{timestamp.i}
-{fdss.i}
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
+{Func/fdss.i}
 
 def var licount as int no-undo.
 def var llAvail as log no-undo.
@@ -20,7 +19,7 @@ for each mobsub where
     assign llAvail = true
            lldss   = false.
 
-    if fIsDSSActive(mobsub.custnum,fmakets()) then
+    if fIsDSSActive(mobsub.custnum,Func.Common:mMakeTS()) then
        lldss = true.
 
     for each mservicelimit where
@@ -42,7 +41,7 @@ for each mobsub where
           mservicelimit.inclamt = 1024.
           if lldss then
              RUN pUpdateDSSLimit(mobsub.custnum,"update",874,0,
-                                 fmakets(),output ldetotallimit).
+                                 Func.Common:mMakeTS(),output ldetotallimit).
        end.
 
        put unformatted string(mservicelimit.inclamt) + "|".

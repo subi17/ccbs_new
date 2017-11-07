@@ -8,7 +8,7 @@
 ----------------------------------------------------------------------- */
 
 /*ilkkasav&kariaika: remember to change the directories before releasing*/
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 /*Function counts milliseconds to format HHMMSS*/
 FUNCTION fMTimetoString RETURN CHARACTER

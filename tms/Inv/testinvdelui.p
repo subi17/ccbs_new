@@ -11,14 +11,13 @@
   TODO..........: add process logging
   -------------------------------------------------------------------------- */
 
-{commali.i} 
-{tmsparam2.i}
-{billrund.i NEW}
-{faccper.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Invoice'}
-{finvnum.i}
-{timestamp.i}
+{Syst/commali.i} 
+{Func/tmsparam2.i}
+{Inv/billrund.i NEW}
+{Func/faccper.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Invoice'}
+{Func/finvnum.i}
 
 IF lcRight NE "RW" THEN DO:
    MESSAGE " You cannot delete invoices ! " VIEW-AS ALERT-BOX.
@@ -47,9 +46,9 @@ SKIP (2)
 "           Invoices deleted ....:" liInvCount    SKIP 
 SKIP(5)
 WITH
-   OVERLAY TITLE COLOR value(ctc)
-   " " + ynimi + " DELETE TEST INVOICES " + string(pvm,"99-99-99") + " "
-   COLOR value(cfc) width 80 ROW 1 NO-LABELS
+   OVERLAY TITLE COLOR value(Syst.Var:ctc)
+   " " + Syst.Var:ynimi + " DELETE TEST INVOICES " + string(TODAY,"99-99-99") + " "
+   COLOR value(Syst.Var:cfc) width 80 ROW 1 NO-LABELS
    FRAME mainFrame.
 
 ASSIGN lcFloor        = ""
@@ -74,8 +73,8 @@ DISP liTestInvCount WITH FRAME mainFrame.
 
 mainLoop:
 REPEAT WITH FRAME mainFrame:
-   ehto = 9.
-   RUN ufkey.
+   Syst.Var:ehto = 9.
+   RUN Syst/ufkey.p.
 
    UPDATE 
      lcFloor
@@ -85,11 +84,11 @@ REPEAT WITH FRAME mainFrame:
    editLoop:
    EDITING:
       READKEY.
-      nap = KEYLABEL(LASTKEY).
+      Syst.Var:nap = KEYLABEL(LASTKEY).
       
-      IF LOOKUP(nap,poisnap) > 0 THEN DO: 
+      IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO: 
 
-         IF LOOKUP(nap,"f1") > 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"f1") > 0 THEN DO:
             IF INPUT llProceed THEN LEAVE editLoop.
          END.
          
@@ -101,19 +100,19 @@ REPEAT WITH FRAME mainFrame:
    IF NOT INPUT llProceed THEN RETURN.
 
    ASSIGN
-      ufk = 0      /* clear all */
-      ufk[1] = 7   /* change    */
-      ufk[5] = 795 /* start     */
-      ufk[8] = 8   /* return    */
-      ehto = 1.
-   RUN ufkey.
+      Syst.Var:ufk = 0      /* clear all */
+      Syst.Var:ufk[1] = 7   /* change    */
+      Syst.Var:ufk[5] = 795 /* start     */
+      Syst.Var:ufk[8] = 8   /* return    */
+      Syst.Var:ehto = 1.
+   RUN Syst/ufkey.p.
    
-   IF toimi = 1 THEN NEXT mainLoop.
-   IF toimi = 5 THEN DO:
+   IF Syst.Var:toimi = 1 THEN NEXT mainLoop.
+   IF Syst.Var:toimi = 5 THEN DO:
       RUN pDeleteTestInvoices.
       RETURN.
    END.
-   IF toimi = 8 THEN RETURN.
+   IF Syst.Var:toimi = 8 THEN RETURN.
 
 END.
 
@@ -121,7 +120,7 @@ END.
 PROCEDURE pDeleteTestInvoices:
 
    /* delete test invoices */
-   RUN delete_test_invoice.p (lcFloor,
+   RUN Inv/delete_test_invoice.p (lcFloor,
                               lcRoof,
                               ldtInvdate,
                               0,

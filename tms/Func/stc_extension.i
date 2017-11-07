@@ -3,11 +3,11 @@
 
 &GLOBAL-DEFINE STC_EXTENSION_I YES
 
-{commali.i}
-{penaltyfee.i}
-{fcustpl.i}
-{tmsconst.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/penaltyfee.i}
+{Func/fcustpl.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
 
 FUNCTION fCanExtendTerminalContract RETURNS LOGICAL
    (BUFFER Mobsub FOR MobSub,
@@ -35,7 +35,7 @@ FUNCTION fCanExtendTerminalContract RETURNS LOGICAL
             DCCLI.DCEvent BEGINS "TERM" AND
             DCCLI.CreateFees = TRUE,
       FIRST DayCampaign WHERE
-            DayCampaign.Brand = gcBrand AND
+            DayCampaign.Brand = Syst.Var:gcBrand AND
             DayCampaign.DCEvent = DCCLI.DCEvent AND
             DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND
             DayCampaign.TermFeeModel NE "" AND

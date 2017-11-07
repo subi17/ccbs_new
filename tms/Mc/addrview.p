@@ -8,12 +8,12 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
 DEF INPUT PARAMETER iiOrderId     AS INT  NO-UNDO.
 
 FIND FIRST OrderCustomer NO-LOCK where
-           OrderCustomer.Brand EQ Syst.Parameters:gcBrand AND
+           OrderCustomer.Brand EQ Syst.Var:gcBrand AND
            OrderCustomer.OrderId EQ iiOrderid AND
            OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
            NO-ERROR.
@@ -25,8 +25,8 @@ END.
 FORM
    "Country..........:" OrderCustomer.Country SKIP
    "Region...........:" OrderCustomer.Region SKIP
-   "Post Office......:" OrderCustomer.PostOffice SKIP
-   "Street...........:" OrderCustomer.Street SKIP
+   "Post Office......:" OrderCustomer.PostOffice FORMAT "X(59)" SKIP
+   "Street...........:" OrderCustomer.Street FORMAT "X(59)" SKIP
    "Street Type......:" OrderCustomer.StreetType SKIP
    "Building Number..:" OrderCustomer.BuildingNum SKIP
    "Bis Duplicate....:" OrderCustomer.BisDuplicate SKIP
@@ -37,10 +37,10 @@ FORM
    "Floor............:" OrderCustomer.Floor SKIP
    "Hand.............:" OrderCustomer.Hand SKIP
    "Km...............:" OrderCustomer.Km SKIP
-   "Zip..............:" OrderCustomer.ZipCode SKIP(2)
+   "Zip..............:" OrderCustomer.ZipCode FORMAT "X(50)" SKIP(2)
 WITH OVERLAY ROW 1 WIDTH 80 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) "Address"
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " Installation Address "
     NO-LABELS
     FRAME fAddr.
 PAUSE 0 NO-MESSAGE.
@@ -54,7 +54,7 @@ REPEAT WITH FRAME fAddr ON ENDKEY UNDO LOOP, NEXT LOOP:
    DISP
       OrderCustomer.Country  
       OrderCustomer.Region 
-      OrderCustomer.PostOffice 
+      OrderCustomer.PostOffice
       OrderCustomer.Street 
       OrderCustomer.StreetType 
       OrderCustomer.BuildingNum 
@@ -70,14 +70,14 @@ REPEAT WITH FRAME fAddr ON ENDKEY UNDO LOOP, NEXT LOOP:
 
    PAUSE 0.
    ASSIGN
-      ufk   = 0  
-      ufk[5]= 0
-      ufk[6]= 0
-      ufk[8]= 8 
-      ehto  = 0.
-   RUN ufkey.
+      Syst.Var:ufk   = 0  
+      Syst.Var:ufk[5]= 0
+      Syst.Var:ufk[6]= 0
+      Syst.Var:ufk[8]= 8 
+      Syst.Var:ehto  = 0.
+   RUN Syst/ufkey.p.
 
-   IF toimi = 8 THEN LEAVE.
+   IF Syst.Var:toimi = 8 THEN LEAVE.
 
 END. 
 

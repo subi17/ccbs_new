@@ -8,16 +8,17 @@
 ----------------------------------------------------------------------- */
 
 /* ***************************  Definitions  ************************** */
-{commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+{Syst/commpaa.i}
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 
-{tmsconst.i}
-{cparam2.i}
-{replog_reader.i}
-{host.i}
-{ftransdir.i}
-{eventlog.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Func/replog_reader.i}
+{Syst/host.i}
+{Func/ftransdir.i}
+{Syst/eventlog.i}
+{Func/multitenantfunc.i}
 
 DEFINE VARIABLE lcLine   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcSep    AS CHARACTER NO-UNDO INITIAL ";".
@@ -36,6 +37,8 @@ DEFINE VARIABLE lcReportFileOut AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcOutDir        AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcInvDetails    AS LONGCHAR  NO-UNDO.
 DEFINE VARIABLE lcInvDate       AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcBrand         AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcTenant        AS CHARACTER NO-UNDO.
 
 DEF VAR lcPDFFile AS CHAR NO-UNDO. 
 DEF VAR lcToday   AS CHAR NO-UNDO. 
@@ -68,6 +71,8 @@ FUNCTION fError RETURNS LOGIC
 END FUNCTION.   
 
 /* ***************************  Main Block  *************************** */
+
+fsetEffectiveTenantForAllDB("Default").
 
 ASSIGN
    lcIncDir   = fCParam("PDFInvoice","IncDir")
@@ -132,13 +137,24 @@ REPEAT:
       lcReportFileOut = ""
       lcProcessedFile = ""
       lcInvDetails    = ""
-      lcInvDate       = "".
+      lcInvDate       = ""
+      lcBrand         = ENTRY(1,ENTRY(1,lcFileName,"_"),"-").
 
-   IF NOT lcFileName BEGINS lcInvFile THEN DO:
+   IF LOOKUP(lcBrand, "Yoigo,Masmovil") = 0 THEN 
+   DO:
+      fError("Incorrect input filename format"). 
+      RUN pTransOnError.
+      NEXT.
+   END.  
+   ELSE IF NOT SUBSTRING(lcFileName,(INDEX(lcFileName,"_") + 1)) BEGINS lcInvFile THEN DO:
       fError("Incorrect input filename format"). 
       RUN pTransOnError.
       NEXT.
    END.
+   
+   ASSIGN lcTenant = fConvertBrandToTenant(lcBrand).
+
+   IF NOT fsetEffectiveTenantForAllDB(lcTenant) THEN NEXT.
           
    fBatchLog("START", lcInputFile).    
    
@@ -155,7 +171,7 @@ REPEAT:
       END.
       
       FIND FIRST Invoice NO-LOCK WHERE 
-                 Invoice.Brand    = gcBrand  AND 
+                 Invoice.Brand    = Syst.Var:gcBrand  AND 
                  Invoice.ExtInvID = lcInvNum NO-ERROR.  
       IF NOT AVAIL Invoice THEN DO:
          fError("Invalid Invoice Number").

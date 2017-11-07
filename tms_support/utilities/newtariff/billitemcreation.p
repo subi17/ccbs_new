@@ -9,14 +9,14 @@
   ----------------------------------------------------------------------*/
   
 /* ***************************  Definitions  ************************** */
-{commpaa.i}
-katun = "Cron".
-gcBrand = "1".
-{cparam2.i}
-{eventlog.i}
-{ftransdir.i}
-{tariffconfig.i}
-{tariffcons.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Func/ftransdir.i}
+{utilities/newtariff/tariffconfig.i}
+{utilities/newtariff/tariffcons.i}
 
 DEFINE TEMP-TABLE ttBillItem NO-UNDO
    FIELD BillItem   AS CHARACTER 
@@ -25,6 +25,7 @@ DEFINE TEMP-TABLE ttBillItem NO-UNDO
    FIELD PostAcct   AS CHARACTER 
    FIELD TaxClass   AS CHARACTER 
    FIELD IFSCode    AS CHARACTER 
+   FIELD ItemType   AS INT
    FIELD CostCenter AS CHARACTER. 
 
 DEFINE INPUT  PARAMETER icIncDir   AS CHARACTER NO-UNDO. 
@@ -55,7 +56,7 @@ END FUNCTION.
 
 /* ***************************  Main Block  *************************** */
 
-ASSIGN lcLogFile   = icSpoolDir + "billing.log"
+ASSIGN lcLogFile   = icSpoolDir + "billingitem.log"
        lcInputFile = icIncDir + "billingitem.txt".   
 
 INPUT STREAM BIIn FROM VALUE(lcInputFile).
@@ -78,7 +79,9 @@ REPEAT:
           ttBillItem.PostAcct   = TRIM(ENTRY(4,lcLine,";"))
           ttBillItem.TaxClass   = TRIM(ENTRY(5,lcLine,";"))
           ttBillItem.IFSCode    = TRIM(ENTRY(6,lcLine,";"))
-          ttBillItem.CostCenter = TRIM(ENTRY(7,lcLine,";")) NO-ERROR.
+          ttBillItem.CostCenter = TRIM(ENTRY(7,lcLine,";"))
+          ttBillItem.ItemType   = INT(ENTRY(8,lcLine,";")) 
+          WHEN NUM-ENTRIES(lcLine,";") > 7 NO-ERROR.
    
    IF ERROR-STATUS:ERROR THEN DO:
       fError("Incorrect input data").
@@ -104,6 +107,8 @@ REPEAT:
       liFirstLine = liFirstLine + 1.
       NEXT.
    END.
+   
+   IF TRIM(lcLine) eq "" THEN NEXT.
     
    CREATE ttTrans.
    ASSIGN 
@@ -191,7 +196,7 @@ PROCEDURE pCreateBillingItem:
       END.
       
       FIND BItemGroup WHERE  
-           BItemGroup.Brand   = gcBrand AND
+           BItemGroup.Brand   = Syst.Var:gcBrand AND
            BItemGroup.BIGroup = ttBillItem.BIGroup  
       NO-LOCK NO-ERROR.  
             
@@ -201,7 +206,7 @@ PROCEDURE pCreateBillingItem:
       END.
       
       FIND Account WHERE  
-           Account.Brand  = gcBrand AND
+           Account.Brand  = Syst.Var:gcBrand AND
            Account.AccNum = INTEGER(ttBillItem.PostAcct) 
       NO-LOCK NO-ERROR.
                         
@@ -219,7 +224,7 @@ PROCEDURE pCreateBillingItem:
       END.      
       
       CREATE BillItem.
-      ASSIGN BillItem.Brand       = gcBrand
+      ASSIGN BillItem.Brand       = Syst.Var:gcBrand
              BillItem.DispMPM     = FALSE
              BillItem.BillCode    = ttBillItem.BillItem
              Billitem.BIName      = ttBillItem.BIName
@@ -232,7 +237,8 @@ PROCEDURE pCreateBillingItem:
              BillItem.FSAccNum    = INTEGER(ttBillItem.PostAcct)
              BillItem.TaxClass    = ttBillItem.TaxClass
              BillItem.SAPRid      = ttBillItem.IFSCode
-             BillItem.CostCentre  = ttBillItem.CostCenter NO-ERROR.
+             BillItem.CostCentre  = ttBillItem.CostCenter
+             BillItem.ItemType    = ttBillItem.ItemType NO-ERROR.
              
       IF ERROR-STATUS:ERROR THEN DO: 
          fError("Error in creating BillingItem").
@@ -254,18 +260,19 @@ PROCEDURE pCreTranslations:
 
    FOR EACH ttTrans NO-LOCK:    
       IF CAN-FIND(FIRST BillItem WHERE 
-                        BillItem.Brand    = gcBrand            AND 
+                        BillItem.Brand    = Syst.Var:gcBrand            AND 
                         BillItem.BillCode = ttTrans.tLangType) THEN DO:
          
          IF CAN-FIND(FIRST RepText WHERE 
-                           RepText.Brand    = gcBrand                    AND
+                           RepText.Brand    = Syst.Var:gcBrand                    AND
+                           RepText.TextType = 1 AND
                            RepText.LinkCode = ttTrans.tLangType          AND
                            RepText.Language = INTEGER(ttTrans.tLangint)) THEN 
             NEXT.
                                                 
          CREATE RepText.
          ASSIGN 
-            RepText.Brand    = gcBrand    
+            RepText.Brand    = Syst.Var:gcBrand    
             RepText.TextType = 1               /* Default value */       
             RepText.LinkCode = ttTrans.tLangType        
             RepText.Language = INTEGER(ttTrans.tLangint)    

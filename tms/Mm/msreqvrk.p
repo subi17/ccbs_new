@@ -9,10 +9,9 @@
   Version ......: TF
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{vrkcheck.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/vrkcheck.i}
 
 DEF INPUT  PARAMETER iiRequest AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER ocError   AS CHAR NO-UNDO.
@@ -39,7 +38,7 @@ IF MsRequest.ReqStat < 12 OR MsRequest.ReqStat > 13 THEN DO:
    RETURN.
 END. 
 
-ASSIGN ldStamp    = fHMS2TS(TODAY - 1,STRING(TIME,"hh:mm:ss"))
+ASSIGN ldStamp    = Func.Common:mHMS2TS(TODAY - 1,STRING(TIME,"hh:mm:ss"))
        lcPersonID = ENTRY(11,MsRequest.ReqCParam1,";").
    
 IF lcPersonID = "" THEN DO:
@@ -63,8 +62,7 @@ IF NOT AVAIL VRKQuery THEN DO:
        IF liError = 2 THEN DO:
           ocError = "Invalid person ID".
           
-          DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                     "MsRequest",
+          Func.Common:mWriteMemo("MsRequest",
                      STRING(MsRequest.MsRequest),
                      0,
                      "VRK Failed",
@@ -133,8 +131,7 @@ IF VRKQuery.DeathDay NE ? THEN DO:
      ocError = "Person has died on " + STRING(VRKQuery.DeathDay,"99.99.9999")
      MsRequest.ReqDParam1 = 3. 
 
-   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-              "MsRequest",
+   Func.Common:mWriteMemo("MsRequest",
               STRING(MsRequest.MsRequest),
               0,
               "VRK",

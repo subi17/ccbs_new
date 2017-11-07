@@ -14,7 +14,7 @@
                                  'roamint' and 'roamlocal' changed the other
                                  way round
 */
-{error_codes.i}
+{Rate/error_codes.i}
   
    /* Is this double call */    
    IF Mobcdr.ErrorCode = errorcode OR
@@ -40,7 +40,7 @@
    &THEN
    ASSIGN
       ttCall.RerateID = liRerateSeq 
-      ttCall.RerateTS = fMakeTS().
+      ttCall.RerateTS = Func.Common:mMakeTS().
    fRerateCDRBefore (MobCDR.RateCCN,
                      MobCDR.ErrorCode,
                      MobCDR.Amount,
@@ -49,15 +49,14 @@
 
    anal:
    REPEAT WITH FRAME MobCDR:   
-   
+
+      {Rate/set_to_empty.i}
       
       ASSIGN 
          ttCall.ErrorCode = 0
          old_price        = ttCall.Amount
          mi-no            = ttCall.CLI
-         oiErrorCode      = 0
-         lcMSRN           = ""
-         lcTranslatedAddress = "".
+         oiErrorCode      = 0.
 
       IF ttCall.DateSt = 6/10/2014 AND
          ttCall.Spocmt = 93 AND
@@ -150,8 +149,7 @@
          ldeRoamarg           = 0 
          CreditType           = 0 
          rate-plcode          = ""
-         lcNotifyNumber       = ""
-         lcNetWorkOwner       = "".
+         lcNotifyNumber       = "".
 
       llRoamind = IF ttCall.RoamingInd = 1 THEN TRUE ELSE FALSE.
 
@@ -171,7 +169,7 @@
          IF LOOKUP(STRING(ttCall.Spocmt),"3,4,7,17,32") = 0 OR
             (LOOKUP(STRING(ttCall.SpoCMT),"3,7") > 0 AND 
              ttCall.MSCID = "PRE" AND ttCall.PPFlag = 1) THEN DO:
-            IF ttCall.MSCID NE "FIXED" THEN
+            IF NOT ttCall.MSCID BEGINS "FIX" THEN
                fTicketCheck(INPUT "MSOWNER",
                             STRING(ttCall.CLI),
                             OUTPUT oiERrorCode).
@@ -333,7 +331,7 @@
          IF ttCall.Spocmt = 66 THEN liTempDialType = 4.
          ELSE liTempDialType = 1.
          FOR FIRST BDest NO-LOCK WHERE
-                   BDest.Brand  = gcBrand AND
+                   BDest.Brand  = Syst.Var:gcBrand AND
                    BDest.Bdest  = ttCall.BDest AND
                    BDest.DestType = ttCall.BType AND
                    BDest.Class  = 2       AND
@@ -431,7 +429,7 @@
  
          /* data, voice and other packages */
          fPackageCalculation().
-            
+
          IF ttCall.ErrorCode > 0 THEN DO:
             ttCall.InvSeq = 0.
             fBCopy().
@@ -486,7 +484,7 @@
       /* Update PremiumNumber Operator information only for VOICE */
       IF ttCall.MSCID <> "CCGW" THEN DO:
          FIND FIRST BillItem WHERE
-                    BillItem.Brand    = gcBrand AND
+                    BillItem.Brand    = Syst.Var:gcBrand AND
                     BillItem.BillCode = ttCall.BillCode NO-LOCK NO-ERROR.
          IF AVAILABLE BillItem AND BillItem.BIGroup = "6" THEN
             ttCall.ServiceName = fGetPremiumServiceName(ttCall.GsmBnr,

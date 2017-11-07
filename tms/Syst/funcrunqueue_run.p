@@ -7,10 +7,9 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
-{timestamp.i}
-{eventlog.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Syst/eventlog.i}
 
 DEF INPUT  PARAMETER iiFRQueueID     AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiFRQScheduleID AS INT  NO-UNDO.
@@ -24,13 +23,13 @@ FUNCTION fErrorLog RETURNS LOGIC
    
    DO TRANS:
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
              ErrorLog.ActionID  = "FRQUEUERUN" + STRING(iiFRQScheduleID)
              ErrorLog.TableName = "FuncRunQSchedule"
              ErrorLog.KeyValue  = STRING(iiFRQScheduleID)
              ErrorLog.ErrorMsg  = icError
-             ErrorLog.UserCode  = katun.
-             ErrorLog.ActionTS  = fMakeTS().
+             ErrorLog.UserCode  = Syst.Var:katun.
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    
 END FUNCTION.
@@ -95,11 +94,11 @@ PROCEDURE pInitialize:
    
       ASSIGN
          lcActionKey = STRING(iiFRQScheduleID)
-         ldStarted   = fMakeTS().              
+         ldStarted   = Func.Common:mMakeTS().              
 
       /* already running */
       IF CAN-FIND(FIRST ActionLog WHERE
-                 ActionLog.Brand     = gcBrand AND
+                 ActionLog.Brand     = Syst.Var:gcBrand AND
                  ActionLog.TableName = "FuncRunQueue" AND
                  ActionLog.KeyValue  = lcActionKey AND
                  ActionLog.ActionID  = "FRQUEUE" + STRING(iiFRQueueID) AND
@@ -121,13 +120,13 @@ PROCEDURE pInitialize:
       
          CREATE ActionLog.
          ASSIGN 
-            ActionLog.Brand        = gcBrand   
+            ActionLog.Brand        = Syst.Var:gcBrand   
             ActionLog.TableName    = "FuncRunQueue"  
             ActionLog.KeyValue     = lcActionKey
             ActionLog.ActionID     = "FRQUEUE" + STRING(iiFRQueueID)
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
             ActionLog.ActionStatus = 0
-            ActionLog.UserCode     = katun
+            ActionLog.UserCode     = Syst.Var:katun
             ActionLog.ActionTS     = ldStarted
             ActionLog.ActionChar   = 
                "Scheduling: " + STRING(iiFRQScheduleID) + CHR(10) +
@@ -224,7 +223,7 @@ PROCEDURE pCancelQueue:
    DO TRANS:
    
       FIND FIRST ActionLog WHERE
-                 ActionLog.Brand     = gcBrand AND
+                 ActionLog.Brand     = Syst.Var:gcBrand AND
                  ActionLog.TableName = "FuncRunQueue" AND
                  ActionLog.KeyValue  = STRING(iiFRQScheduleID) AND
                  ActionLog.ActionID  = "FRQUEUE" + STRING(iiFRQueueID) AND
@@ -239,7 +238,7 @@ PROCEDURE pCancelQueue:
          EXCLUSIVE-LOCK.
       ASSIGN
          FuncRunQSchedule.RunState = "Cancelled"
-         FuncRunQSchedule.DoneTS   = fMakeTS().
+         FuncRunQSchedule.DoneTS   = Func.Common:mMakeTS().
    END.
    
 END PROCEDURE.
@@ -274,7 +273,7 @@ PROCEDURE pFinalize:
       lcActionKey = STRING(iiFRQScheduleID).
 
       FIND FIRST ActionLog WHERE
-                 ActionLog.Brand     = gcBrand AND
+                 ActionLog.Brand     = Syst.Var:gcBrand AND
                  ActionLog.TableName = "FuncRunQueue" AND
                  ActionLog.KeyValue  = lcActionKey AND
                  ActionLog.ActionID  = "FRQUEUE" + STRING(iiFRQueueID) AND
@@ -283,7 +282,7 @@ PROCEDURE pFinalize:
       
       FIND CURRENT FuncRunQSchedule EXCLUSIVE-LOCK.
       ASSIGN 
-         FuncRunQSchedule.DoneTS   = fMakeTS()
+         FuncRunQSchedule.DoneTS   = Func.Common:mMakeTS()
          FuncRunQSchedule.RunState = "Finished".
 
    END.

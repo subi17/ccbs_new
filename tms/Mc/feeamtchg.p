@@ -1,10 +1,10 @@
 /* feeamtchg.p          01.12.04/aam
 */
 
-{commali.i}
-{eventval.i}
-{cparam2.i}
-{nncoit2.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/cparam2.i}
+{Func/nncoit2.i}
 
 DEF VAR lcCLIType   AS CHAR NO-UNDO.
 DEF VAR ldOldAmt    AS DEC  NO-UNDO.
@@ -23,9 +23,9 @@ DEF VAR liQty       AS INT  NO-UNDO.
 DEF VAR llNewFee    AS LOG  NO-UNDO. 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhFixedFee AS HANDLE NO-UNDO.
    lhFixedFee = BUFFER FixedFee:HANDLE.
@@ -44,8 +44,8 @@ FORM liFee LABEL "Fees"
 WITH 1 DOWN OVERLAY ROW 15 CENTERED SIDE-LABELS FRAME fFeeQty.
 
  
-ehto = 9.
-RUN ufkey.
+Syst.Var:ehto = 9.
+RUN Syst/ufkey.p.
 
 REPEAT ON ENDKEY UNDO, RETURN:                            
    PAUSE 0.
@@ -87,7 +87,7 @@ REPEAT ON ENDKEY UNDO, RETURN:
    END.
 
    FIND CLIType WHERE 
-        CLIType.Brand   = gcBrand AND
+        CLIType.Brand   = Syst.Var:gcBrand AND
         CLIType.CLIType = lcCLIType NO-LOCK NO-ERROR.
    IF NOT AVAILABLE CLIType THEN DO:
        MESSAGE "Unknown CLI type"
@@ -107,8 +107,8 @@ REPEAT ON ENDKEY UNDO, RETURN:
    
 END.
 
-ehto = 5.
-RUN ufkey.
+Syst.Var:ehto = 5.
+RUN Syst/ufkey.p.
 
 OUTPUT STREAM sLog TO VALUE(lcEventDir + "/feeamtchg_" +
                             STRING(YEAR(TODAY),"9999") + 
@@ -130,7 +130,7 @@ PAUSE 0.
 VIEW FRAME fMobQty.
 
 FOR EACH MobSub NO-LOCK WHERE
-         MobSub.Brand   = gcBrand AND
+         MobSub.Brand   = Syst.Var:gcBrand AND
          MobSub.CLIType = lcCLIType:
 
    liMobSub = liMobSub + 1.
@@ -139,7 +139,7 @@ FOR EACH MobSub NO-LOCK WHERE
    DISP liMobSub WITH FRAME fMobQty.
    
    FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
-            FixedFee.Brand     = gcBrand              AND 
+            FixedFee.Brand     = Syst.Var:gcBrand              AND 
             FixedFee.HostTable = "MobSub"             AND
             FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
             LOOKUP(FixedFee.BillCode,lcBillCode) > 0  AND

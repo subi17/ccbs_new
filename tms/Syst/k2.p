@@ -1,5 +1,6 @@
-{excel.i}
-{country.i}
+{Func/excel.i}
+{Syst/country.i}
+{Func/fcreatedir.i}
 
 def var a      as c no-undo format "x(35)".
 DEF VAR b      AS c NO-UNDO.
@@ -9,15 +10,20 @@ DEF VAR clst   AS c NO-UNDO.
 DEF VAR row0   AS c NO-UNDO.
 def var rpath  as c no-undo format "x(20)".
 def var module as c no-undo.
+def var modulecheck as c no-undo.
 def var host   as c no-undo.
+DEFINE VARIABLE lcTMSBaseDir AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcDir        AS CHARACTER NO-UNDO.
 
 input through value("hostname").
 import unformatted host.
 input close.
 
 if host = "pallas"
-then rpath = "/tmsapps/".
+then rpath = "/tmsapps".
 else rpath = "/frontapps".
+
+lcTMSBaseDir = "/apps/tms".
 
 
 form 
@@ -50,15 +56,34 @@ repeat WITH FRAME a:
    else if search(a + ".i")   <> ? then module = a + ".i".
    else if search(a + ".cls") <> ? then module = a + ".cls".
 
-   INPUT THROUGH VALUE("find /apps/tms/ -follow -name '" + module + "'").
-   module = "?".
+   ASSIGN
+      lcDir = lcTMSBaseDir
+      modulecheck = module.
+
+   IF NUM-ENTRIES(module, "/") > 1
+   THEN DO:
+      IF fCreateDir(rpath + "/" + SUBSTRING(a,1,R-INDEX(a,"/") - 1)) > 0
+      THEN DO:
+         MESSAGE
+            "Cannot create compile directory !"  SKIP
+            rpath + "/" + SUBSTRING(a,1,R-INDEX(a,"/") - 1)
+         VIEW-AS ALERT-BOX.
+         RETURN.
+      END.
+      ASSIGN
+         lcDir       = lcDir + "/" + SUBSTRING(a,1,R-INDEX(a,"/") - 1)
+         modulecheck = ENTRY(NUM-ENTRIES(module,"/"),module,"/").
+   END.
+
+   INPUT THROUGH VALUE("find " + lcDir + " -follow -name '" + modulecheck + "'").
+   modulecheck = "?".
    REPEAT:
-      IMPORT UNFORMATTED module.
+      IMPORT UNFORMATTED modulecheck.
       IF INDEX(MODULE,"Work") = 0 AND
          INDEX(MODULE,"Dev")  = 0 THEN LEAVE.
    END.
 
-   IF module = "?" THEN DO:
+   IF modulecheck = "?" THEN DO:
 
       MESSAGE
          "File is not in production directory !"  SKIP
@@ -68,7 +93,7 @@ repeat WITH FRAME a:
 
    END.
 
-   clst = "/tmp/" + a + ".lst".
+   clst = "/tmp/" + ENTRY(NUM-ENTRIES(a,"/"),a,"/") + ".lst".
    compile value(module) save into value(rpath) listing value(clst) NO-ERROR.
 
    errmsg = "".
@@ -77,7 +102,7 @@ repeat WITH FRAME a:
          errmsg = errmsg + error-status:get-message(i) + my-nl.
    END.
 
-   input through value("grep \"0 Procedure\" " + clst).
+   input through value("grep ~"0 Procedure~" " + clst).
    repeat:
       IMPORT UNFORMATTED row0.
    END.
@@ -97,4 +122,3 @@ repeat WITH FRAME a:
 END.
 
 PUT SCREEN ROW 22 COL 1 FILL(" ",30).
-

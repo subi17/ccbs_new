@@ -21,38 +21,26 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{commpaa.i}
-gcbrand = "1".
-katun = "cron".
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "cron".
 
-{eventlog.i}
-{direct_dbconnect.i}
+{Syst/eventlog.i}
+{Func/direct_dbconnect.i}
 
-/* weekday related processes */
-CASE WEEKDAY(TODAY):
-
-   /* Sunday */
-   WHEN 1 THEN DO:
-      
-      fELog("DAILY","PrePaidReportStarted").
-      RUN ppcomprep.
-      fELog("DAILY","PrePaidReportStopped").
-   END.
-   
-END.
 
 fELog("DAILY","CallDumpStarted").
 
-RUN pCallDump ("MobCDR",
-               "calldump.p",
-               TODAY - 1).
-
 RUN pCallDump ("PrepCDR",
-               "calldump_prepaid.p",
+               "Mm/calldump_prepaid.p",
                TODAY - 1).
                 
+RUN pCallDump ("MobCDR",
+               "Mm/calldump.p",
+               TODAY - 1).
+
 RUN pCallDump ("MobCDR,ErrorCDR",
-               "error_calldump.p",
+               "Mm/error_calldump.p",
                TODAY - 1).
  
 fELog("DAILY","CallDumpStopped").
@@ -73,7 +61,7 @@ PROCEDURE pCallDump:
 
    /* connect to correct cdr dbs before starting the dump modules */
    fInitializeConnectTables(icTableNames,"").
-   RUN pDirectConnect2Dbs(gcBrand,
+   RUN pDirectConnect2Dbs(Syst.Var:gcBrand,
                           "", 
                           idaRunDate,
                           idaRunDate).
@@ -95,7 +83,7 @@ PROCEDURE pCallDump:
       
    IF ldaOldDb NE ? THEN DO:
       fInitializeConnectTables(icTableNames,"").
-      RUN pDirectConnect2Dbs(gcBrand,
+      RUN pDirectConnect2Dbs(Syst.Var:gcBrand,
                              "", 
                              ldaOldDb,
                              ldaOldDb).

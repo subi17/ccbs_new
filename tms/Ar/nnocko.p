@@ -49,15 +49,14 @@
 
  ---------------------------------------------------------------------------- */
 
-{commali.i}
-{excel.i}
-{date.i} 
+{Syst/commali.i}
+{Func/excel.i}
 /* temp-table */
-{paymfile.i}
-{farplog.i}
-{cparam2.i}
-{finvbal.i}
-{freadref.i}
+{Ar/paymfile.i}
+{Func/farplog.i}
+{Func/cparam2.i}
+{Func/finvbal.i}
+{Func/freadref.i}
 
 DEF INPUT  PARAMETER  ocr-file   AS c NO-UNDO.
 DEF INPUT  PARAMETER  ocr-acct   AS i NO-UNDO.
@@ -241,7 +240,7 @@ repeat:
          /* is payment already Booked */
          IF xDDRet = "" THEN 
          FOR FIRST Payment NO-LOCK USE-INDEX PaymArc WHERE
-                   Payment.Brand   = gcBrand              AND
+                   Payment.Brand   = Syst.Var:gcBrand              AND
                    Payment.PaymArc = ttPayment.ArchiveId  AND
                    Payment.AccDate = ttPayment.AccDate:
             /* corrections may have the same archive id */
@@ -299,7 +298,7 @@ FOR EACH ttPayment WHERE
 
       /* is payment already booked */
       for first Payment no-lock use-index paymarc where
-                Payment.Brand    = gcBrand              AND
+                Payment.Brand    = Syst.Var:gcBrand              AND
                 Payment.PaymArc  = ttPayment.ArchiveId  AND
                 Payment.AccDate  = ttPayment.AccDate:
      
@@ -341,7 +340,7 @@ FOR EACH ttPayment WHERE
                ldMaxAmt = 99999999.             
 
             FOR EACH Invoice NO-LOCK USE-INDEX CustNum WHERE
-                     Invoice.Brand    = gcBrand           AND
+                     Invoice.Brand    = Syst.Var:gcBrand           AND
                      Invoice.CustNum  = ttPayment.CustNum AND
                      Invoice.InvAmt   > 0                 AND
                      Invoice.PaymState NE 2               AND
@@ -460,7 +459,7 @@ FOR EACH ttPayment WHERE
    ELSE IF ttPayment.Inv > 0 THEN DO:
    
        FIND FIRST Invoice WHERE 
-                  Invoice.Brand  = gcBrand AND
+                  Invoice.Brand  = Syst.Var:gcBrand AND
                   Invoice.InvNum = ttPayment.Inv 
        NO-LOCK NO-ERROR.
        IF AVAIL Invoice AND Invoice.CrInvNum = 0 

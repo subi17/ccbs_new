@@ -6,14 +6,13 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
-ASSIGN gcBrand = "1" 
-       katun   = "Cron".
+ASSIGN Syst.Var:gcBrand = "1" 
+       Syst.Var:katun   = "Cron".
        
-{cparam2.i}
-{eventlog.i}
-{timestamp.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
 
 DEF VAR lcFile      AS CHAR NO-UNDO.
 DEF VAR liRead      AS INT  NO-UNDO. 
@@ -46,8 +45,8 @@ END FUNCTION.
 /******** Main start ******/
 
 FIND FIRST Company WHERE
-           Company.Brand = gcBrand NO-LOCK NO-ERROR.
-IF AVAILABLE Company THEN ynimi = Company.CompName.
+           Company.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
+IF AVAILABLE Company THEN Syst.Var:ynimi = Company.CompName.
 
 lcFile = fCParamC("PHouseZipCodeFile").
    
@@ -68,7 +67,7 @@ FOR EACH ttFiles:
 
    liFiles = liFiles + 1.
    
-   RUN read_printhouse_zipcode.p (ttFiles.ZipCodeFile,
+   RUN Mc/read_printhouse_zipcode.p (ttFiles.ZipCodeFile,
                                   OUTPUT liRead,
                                   OUTPUT liError).
    

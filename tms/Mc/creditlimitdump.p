@@ -1,5 +1,5 @@
-{commali.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -21,7 +21,7 @@ OUTPUT STREAM sOut TO VALUE(icFile).
 
 IF icDumpMode = "Full" THEN
    FOR EACH Limit NO-LOCK WHERE
-            Limit.Brand      = gcBrand                 AND
+            Limit.Brand      = Syst.Var:gcBrand                 AND
             Limit.LimitType  = {&LIMIT_TYPE_RISKLIMIT} AND
             Limit.ToDate    >= TODAY:
       PUT STREAM sOut UNFORMATTED 
@@ -32,7 +32,7 @@ IF icDumpMode = "Full" THEN
    END.
 ELSE
    FOR EACH Limit NO-LOCK WHERE
-            Limit.Brand      = gcBrand                 AND
+            Limit.Brand      = Syst.Var:gcBrand                 AND
             Limit.LimitType  = {&LIMIT_TYPE_RISKLIMIT} AND
             Limit.FromDate   = TODAY - 1               AND
             Limit.ToDate    >= TODAY:

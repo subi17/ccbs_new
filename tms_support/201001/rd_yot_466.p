@@ -1,7 +1,6 @@
-{commpaa.i}
-katun = "rafaeldv".
-gcBrand  = "1".
-{timestamp.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "rafaeldv".
+Syst.Var:gcBrand  = "1".
 
 DEFINE VARIABLE ldTS AS DECIMAL NO-UNDO. 
 DEFINE VARIABLE plSimulated AS LOGICAL NO-UNDO. 
@@ -10,10 +9,10 @@ DEFINE STREAM sLog.
 OUTPUT STREAM sLog TO 'yot_466.log'.
 
 plSimulated = FALSE.
-ldTS = fMakeTS(). 
+ldTS = Func.Common:mMakeTS(). 
 
 FOR EACH SIMbuf EXCLUSIVE-LOCK WHERE 
-         SIMbuf.Brand = gcBrand AND
+         SIMbuf.Brand = Syst.Var:gcBrand AND
          LOOKUP(SUBSTRING(SIMbuf.ICC,7,4) ,"0909,1009,1109,1209,0110") = 0 AND 
          SIMbuf.Stock = "RETAILER" AND 
          SIMbuf.SimStat = 1 :

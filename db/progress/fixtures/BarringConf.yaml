@@ -1,0 +1,379 @@
+bulkload: BarringConf
+  BarringGroup: "ATC"
+  BarringCode: "ATC_International_off"
+  Mask: "0000000100000"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "0020000"
+  NWDeactParam: "0"
+  UIPriority: 20
+  IFSPriority: 190
+
+bulkload: BarringConf
+  BarringGroup: "ATC"
+  BarringCode: "ATC_Roaming_off"
+  Mask: "1000000000000"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "1000000"
+  NWDeactParam: "0"
+  UIPriority: 10
+  IFSPriority: 200
+
+bulkload: BarringConf
+  BarringGroup: "ATC"
+  BarringCode: "ATC_Service_Suspension"
+  Mask: "1111111000000"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "1111111"
+  NWDeactParam: "0"
+  UIPriority: 40
+  IFSPriority: 160
+  OldCode: "Y_SARC"
+
+bulkload: BarringConf
+  BarringGroup: "ATC"
+  BarringCode: "ATC_TotalPremium_Off"
+  Mask: "0001000000000"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "0001000"
+  NWDeactParam: "0"
+  UIPriority: 30
+  IFSPriority: 180
+
+bulkload: BarringConf
+  BarringGroup: "Customer"
+  BarringCode: "Cust_International_off"
+  Mask: "0000000100000"
+  AllowedAppIDs: "501,502,601,602"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "0020000"
+  NWDeactParam: "0"
+  UIPriority: 20
+  IFSPriority: 230
+
+bulkload: BarringConf
+  BarringGroup: "Customer"
+  BarringCode: "Cust_LOST"
+  Mask: "1011011000000"
+  AllowedAppIDs: "501,502,601,602"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "1011011"
+  NWDeactParam: "0"
+  UIPriority: 40
+  IFSPriority: 210
+  OldCode: "C_LOS"
+
+bulkload: BarringConf
+  BarringGroup: "Customer"
+  BarringCode: "Cust_Roaming_off"
+  Mask: "1000000000000"
+  AllowedAppIDs: "501,502,601,602"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "1000000"
+  NWDeactParam: "0"
+  UIPriority: 10
+  IFSPriority: 240
+
+bulkload: BarringConf
+  BarringGroup: "Customer"
+  BarringCode: "Cust_TotalPremium_off"
+  Mask: "0001000000000"
+  AllowedAppIDs: "501,502,601,602"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "0001000"
+  NWDeactParam: "0"
+  UIPriority: 30
+  IFSPriority: 220
+  OldCode: "C_BPAC"
+
+bulkload: BarringConf
+  BarringGroup: "Customer"
+  BarringCode: "C_BPSUB"
+  Mask: "0000000010000"
+  AllowedAppIDs: "650"
+  BarringStatus: "active"
+  NWComponent: "BPSUB"
+  NWActParam: "1"
+  UIPriority: 80
+  IFSPriority: 270
+  OldCode: "C_BPSUB"
+
+bulkload: BarringConf
+  BarringGroup: "Customer"
+  BarringCode: "C_BRAIC"
+  Mask: "1000000100000"
+  AllowedAppIDs: "501,502,601,602"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "1020000"
+  NWDeactParam: "0"
+  UIPriority: 60
+  IFSPriority: 250
+  OldCode: "C_BRAIC"
+
+bulkload: BarringConf
+  BarringGroup: "Customer"
+  BarringCode: "C_BRIAP"
+  Mask: "1001000100000"
+  AllowedAppIDs: "501,502,601,602"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "1021000"
+  NWDeactParam: "0"
+  UIPriority: 70
+  IFSPriority: 260
+  OldCode: "C_BRIAP"
+
+bulkload: BarringConf
+  BarringGroup: "Collections"
+  BarringCode: "Debt_Hotl"
+  Mask: "0001001000100"
+  AllowedAppIDs: "701"
+  BarringStatus: "active"
+  AllowedPaymentType: "Postpaid"
+  NWComponent: "HOTLINE"
+  NWActParam: "1,HOTTYPE=HOTL"
+  NWDeactParam: "0,HOTTYPE=HOTL"
+  UIPriority: 20
+  IFSPriority: 20
+  OldCode: "D_HOTL"
+
+bulkload: BarringConf
+  BarringGroup: "Collections"
+  BarringCode: "Debt_HOTLP"
+  Mask: "0001000000001"
+  AllowedAppIDs: "701"
+  BarringStatus: "active"
+  AllowedPaymentType: "Postpaid"
+  NWComponent: "HOTLINE"
+  NWActParam: "1,HOTTYPE=HOTLP"
+  NWDeactParam: "0,HOTTYPE=HOTLP"
+  UIPriority: 40
+  IFSPriority: 10
+  OldCode: "D_HOTLP"
+
+bulkload: BarringConf
+  BarringGroup: "Collections"
+  BarringCode: "Debt_LP"
+  Mask: "0000000000010"
+  AllowedAppIDs: "507,701"
+  BarringStatus: "active"
+  NWComponent: "LP"
+  NWActParam: "REDIRECTION_COLLECTION_1"
+  NWDeactParam: "remove"
+  UIPriority: 30
+  IFSPriority: 40
+  OldCode: "LP"
+
+bulkload: BarringConf
+  BarringGroup: "Collections"
+  BarringCode: "Debt_Restricted"
+  Mask: "1011011000000"
+  AllowedAppIDs: "701"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "1011011"
+  NWDeactParam: "0"
+  UIPriority: 10
+  IFSPriority: 30
+  OldCode: "D_REST"
+
+bulkload: BarringConf
+  BarringGroup: "Customer"
+  BarringCode: "Internet"
+  Mask: "0000001000000"
+  AllowedAppIDs: "501,502,601,602"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "0000001"
+  NWDeactParam: "0"
+  UIPriority: 50
+  IFSPriority: 170
+  OldCode: "NAM"
+
+bulkload: BarringConf
+  BarringGroup: "Risk Limits"
+  BarringCode: "Limits_International_off"
+  Mask: "0000000100000"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "0020000"
+  NWDeactParam: "0"
+  UIPriority: 20
+  IFSPriority: 140
+
+bulkload: BarringConf
+  BarringGroup: "Risk Limits"
+  BarringCode: "Limits_Restricted"
+  Mask: "1011011000000"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "1011011"
+  NWDeactParam: "0"
+  UIPriority: 40
+  IFSPriority: 120
+  OldCode: "Y_REST"
+
+bulkload: BarringConf
+  BarringGroup: "Risk Limits"
+  BarringCode: "Limits_Roaming_off"
+  Mask: "1000000000000"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "1000000"
+  NWDeactParam: "0"
+  UIPriority: 10
+  IFSPriority: 150
+
+bulkload: BarringConf
+  BarringGroup: "Risk Limits"
+  BarringCode: "Limits_TotalPremium_Off"
+  Mask: "0001000000000"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "0001000"
+  NWDeactParam: "0"
+  UIPriority: 30
+  IFSPriority: 130
+  OldCode: "Y_HURP"
+
+bulkload: BarringConf
+  BarringGroup: "Product"
+  BarringCode: "Prod_Int"
+  Mask: "1011011000000"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "1011011"
+  NWDeactParam: "0"
+  UIPriority: 40
+  IFSPriority: 310
+  OldCode: "Y_PRODINT"
+
+bulkload: BarringConf
+  BarringGroup: "Product"
+  BarringCode: "Prod_TotalPremium_Off"
+  Mask: "0001000000000"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "0001000"
+  NWDeactParam: "0"
+  UIPriority: 10
+  IFSPriority: 280
+  OldCode: "Y_HURP"
+
+bulkload: BarringConf
+  BarringGroup: "Risk"
+  BarringCode: "Risk_International_off"
+  Mask: "0000000100000"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "0020000"
+  NWDeactParam: "0"
+  UIPriority: 20
+  IFSPriority: 80
+
+bulkload: BarringConf
+  BarringGroup: "Risk"
+  BarringCode: "Risk_Restricted"
+  Mask: "1011011000000"
+  AllowedAppIDs: "701"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "1011011"
+  NWDeactParam: "0"
+  UIPriority: 40
+  IFSPriority: 60
+  OldCode: "Y_REST"
+
+bulkload: BarringConf
+  BarringGroup: "Risk"
+  BarringCode: "Risk_Roaming_off"
+  Mask: "1000000000000"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "1000000"
+  NWDeactParam: "0"
+  UIPriority: 10
+  IFSPriority: 110
+
+bulkload: BarringConf
+  BarringGroup: "Risk"
+  BarringCode: "Risk_Suspension"
+  Mask: "1111111000000"
+  AllowedAppIDs: "701"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "1111111"
+  NWDeactParam: "0"
+  UIPriority: 50
+  IFSPriority: 50
+  OldCode: "Y_SARC"
+
+bulkload: BarringConf
+  BarringGroup: "Risk"
+  BarringCode: "Risk_TotalPremium_Off"
+  Mask: "0001000000000"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "0001000"
+  NWDeactParam: "0"
+  UIPriority: 30
+  IFSPriority: 70
+  OldCode: "Y_HURP"
+
+bulkload: BarringConf
+  BarringGroup: "Product"
+  BarringCode: "Y_BPSUB"
+  Mask: "0000000010000"
+  AllowedAppIDs: "650"
+  BarringStatus: "active"
+  NWComponent: "BPSUB"
+  NWActParam: "1"
+  UIPriority: 20
+  IFSPriority: 290
+  OldCode: "Y_BPSUB"
+
+bulkload: BarringConf
+  BarringGroup: "Risk"
+  BarringCode: "Y_HURG"
+  Mask: "1001000100000"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "1021000"
+  NWDeactParam: "0"
+  UIPriority: 70
+  IFSPriority: 100
+  OldCode: "Y_HURG"
+
+bulkload: BarringConf
+  BarringGroup: "Product"
+  BarringCode: "Y_HURP_P"
+  Mask: "0001000000000"
+  AllowedAppIDs: "650"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "0001000"
+  NWDeactParam: "0"
+  UIPriority: 30
+  IFSPriority: 300
+  OldCode: "Y_HURP_P"
+
+bulkload: BarringConf
+  BarringGroup: "Risk"
+  BarringCode: "Y_HURRIC"
+  Mask: "1000000100000"
+  BarringStatus: "active"
+  NWComponent: "BARRING"
+  NWActParam: "1020000"
+  NWDeactParam: "0"
+  UIPriority: 60
+  IFSPriority: 90
+  OldCode: "Y_HURRIC"
+

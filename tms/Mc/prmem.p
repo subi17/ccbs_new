@@ -7,9 +7,8 @@
  Version ..........: M15
 --------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{utumaa.i new }
+{Syst/commali.i}
+{Syst/utumaa.i new }
 
 DEF INPUT PARAMETER  HostTable LIKE memo.HostTable  NO-UNDO.
 DEF INPUT PARAMETER  KeyValue  LIKE memo.KeyValue   NO-UNDO.
@@ -40,7 +39,7 @@ DEF VAR db-name   AS C  NO-UNDO.
 /* Line Feed Char used as line separator in MemoText field */
 LF = chr(10).
 
-FIND FIRST memo WHERE memo.Brand     = gcBrand   AND
+FIND FIRST memo WHERE memo.Brand     = Syst.Var:gcBrand   AND
                       memo.HostTable = HostTable AND
                       memo.KeyValue  = KeyValue  AND 
                       memo.MemoSeq   = MemoSeq NO-LOCK NO-ERROR.
@@ -48,11 +47,14 @@ FIND FIRST memo WHERE memo.Brand     = gcBrand   AND
 ASSIGN tuni1 = "memo"
        tuni2 = "".
        tila  = true.
-{tmsreport.i RETURN}
+{Syst/tmsreport.i RETURN}
+
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
 
 FORM HEADER                                                 
    FILL ("=",78) FORMAT "x(78)"                                          SKIP
-   ynimi "MEMO/NOTE" AT 34 pvm FORMAT "99.99.99" TO 78                   SKIP
+   ynimi "MEMO/NOTE" AT 34 TODAY FORMAT "99.99.99" TO 78                   SKIP
    memo.MemoTitle AT 28 "Page "  AT 71        sl FORMAT "zz9"      TO 78    SKIP
    FILL ("=",78) FORMAT "x(78)"                                          SKIP
    WITH
@@ -70,19 +72,19 @@ FORM HEADER
 
 /* Get label for table */
 tabLbl = HostTable.
-RUN ufile1(INPUT HostTable, OUTPUT db-name, OUTPUT tabLbl).
+RUN Syst/ufile1.p(INPUT HostTable, OUTPUT db-name, OUTPUT tabLbl).
 
 /* user names */
 FIND TMSUser WHERE TMSUser.UserCode = memo.CreUser NO-LOCK NO-ERROR.
 IF AVAIL TMSUser THEN cru-name = TMSUser.UserName.
 ELSE cru-name = "? UNKNOWN USER ?".
-CrTime = fTS2hms(memo.CreStamp).
+CrTime = Func.Common:mTS2HMS(memo.CreStamp).
 
 IF memo.ChgUser NE "" THEN DO:
    FIND TMSUser WHERE TMSUser.UserCode = memo.ChgUser NO-LOCK NO-ERROR.
    IF AVAIL TMSUser THEN mou-name = TMSUser.UserName.
    ELSE mou-name = "? UNKNOWN USER ?".
-   mo-time = fTS2hms(memo.ChgStamp).
+   mo-time = Func.Common:mTS2HMS(memo.ChgStamp).
 END.
 
 MemoTitle = "Memo belongs to   " + tabLbl + " '" + KeyValue + "'".
@@ -90,7 +92,7 @@ MemoTitle = "Memo belongs to   " + tabLbl + " '" + KeyValue + "'".
 
 /* copy memotext (line BY line) into temp table */
 
-RUN ulfscon(memo.memotext,60,OUTPUT TABLE t-text).
+RUN Syst/ulfscon.p(memo.memotext,60,OUTPUT TABLE t-text).
 
 /* print page header */
 sl = 1.
@@ -119,6 +121,6 @@ PUT STREAM tul UNFORMATTED CHR(12).
 
 /* close stream */
 tila = false.
-{tmsreport.i}
+{Syst/tmsreport.i}
 
 

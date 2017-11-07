@@ -18,11 +18,11 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{chkmail.i}
-{commali.i}
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'TMSReport'}
+{Func/chkmail.i}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'TMSReport'}
 
 DEF NEW shared VAR si-tul LIKE TMSReport.RepName NO-UNDO.
 
@@ -42,9 +42,9 @@ DEF VAR moremail     AS CHAR   init ""     NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhTMSReport AS HANDLE NO-UNDO.
    lhTMSReport = BUFFER TMSReport:HANDLE.
@@ -52,7 +52,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhTMSReport).
+      RUN Mc/eventview2.p(lhTMSReport).
    END.
 END.
 
@@ -65,9 +65,9 @@ form
     TMSReport.ChEMail   format "Y/N" Column-label "C"
     TMSReport.EMail  format "x(20)"
 WITH width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(cfc) TITLE COLOR value(ctc)
-    ynimi + " PRINTOUTS "
-    + string(pvm,"99-99-99")
+    COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc)
+    Syst.Var:ynimi + " PRINTOUTS "
+    + string(TODAY,"99-99-99")
     FRAME sel.
 
 form
@@ -86,11 +86,11 @@ form
     moremail       NO-LABEL format "x(70)"
     HELP "More E-mail addresses" SKIP
 
-    WITH  OVERLAY ROW 8 centered COLOR value(cfc)
-    TITLE COLOR value(ctc) fr-header WITH side-labels
+    WITH  OVERLAY ROW 8 centered COLOR value(Syst.Var:cfc)
+    TITLE COLOR value(Syst.Var:ctc) fr-header WITH side-labels
     FRAME lis.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 PAUSE 0 no-message.
 view FRAME sel.
 FIND FIRST TMSReport no-lock no-error.
@@ -113,15 +113,15 @@ repeat WITH FRAME sel ON ENDKEY UNDO LOOP, NEXT LOOP:
 
    IF must-add THEN DO:  /* TMSReport -ADD  */
       ASSIGN
-      cfc = "lis"
+      Syst.Var:cfc = "lis"
       ufkey = TRUE
       fr-header = " ADD ".
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis:
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN ufkey.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          PROMPT-FOR TMSReport.RepName
          VALIDATE
             (RepName = "" OR
@@ -210,17 +210,17 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 164 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)  
-         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         Syst.Var:ufk[1]= 164 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)  
+         Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+         Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
-      CHOOSE ROW TMSReport.Memo ;(uchoose.i;) no-error WITH FRAME sel.
-      COLOR DISPLAY value(ccc) TMSReport.Memo WITH FRAME sel.
+      CHOOSE ROW TMSReport.Memo {Syst/uchoose.i} no-error WITH FRAME sel.
+      COLOR DISPLAY value(Syst.Var:ccc) TMSReport.Memo WITH FRAME sel.
 
       IF rtab[FRAME-LINE] = ? AND NOT must-add THEN DO:
          BELL.
@@ -229,10 +229,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND TMSReport where recid(TMSReport) = rtab[1] no-lock.
             FIND prev TMSReport no-lock no-error.
@@ -260,7 +260,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
 
          IF FRAME-LINE = FRAME-DOWN THEN DO:
@@ -290,7 +290,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up") > 0 THEN DO:
          memory = rtab[1].
          FIND TMSReport where recid(TMSReport) = memory no-lock no-error.
          FIND prev TMSReport no-lock no-error.
@@ -316,7 +316,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
 
         /* cursor TO the downmost line */
 
@@ -333,26 +333,26 @@ BROWSE:
         END.
      END. /* NEXT page */
 
-     if lookup(nap,"1,f1") > 0 THEN DO:  /* lisAys */
+     if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:  /* lisAys */
         FIND TMSReport where recid(TMSReport) = rtab[FRAME-LINE] no-lock.
         ASSIGN si-tul = TMSReport.RepName.
-        RUN ututum.p.
+        RUN Syst/ututum.p.
         ufkey = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisAys */
+     else if lookup(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisAys */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 AND lcRight = "RW" 
+     else if lookup(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO:  /* removal */
         delline = FRAME-LINE.
         FIND TMSReport where recid(TMSReport) = rtab[FRAME-LINE] no-lock.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(ctc) TMSReport.RepName TMSReport.Memo
+        COLOR DISPLAY value(Syst.Var:ctc) TMSReport.RepName TMSReport.Memo
         TMSReport.PageWidth TMSReport.UpdPerm .
 
         FIND NEXT TMSReport no-lock no-error.
@@ -374,7 +374,7 @@ BROWSE:
 
         ASSIGN ok = FALSE.
         message "ARE YOU SURE YOU WANT TO REMOVE (Y/N)? " UPDATE ok.
-        COLOR DISPLAY value(ccc) TMSReport.RepName TMSReport.Memo
+        COLOR DISPLAY value(Syst.Var:ccc) TMSReport.RepName TMSReport.Memo
         TMSReport.PageWidth TMSReport.UpdPerm  TMSReport.ChEMail 
         TMSReport.EMail.
         IF ok THEN DO:
@@ -394,13 +394,13 @@ BROWSE:
         ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     else if lookup(nap,"enter,return") > 0 THEN DO WITH FRAME lis:
+     else if lookup(Syst.Var:nap,"enter,return") > 0 THEN DO WITH FRAME lis:
         /* change */
-        {uright2.i}
+        {Syst/uright2.i}
         FIND TMSReport where recid(TMSReport) = rtab[frame-line(sel)]
         exclusive-lock.
-        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-        cfc = "lis". RUN ufcolor.
+        assign fr-header = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9.
+        Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
         moremail = SUBSTRING(TMSReport.EMail,51,50).
         DISPLAY 
             TMSReport.RepName
@@ -412,7 +412,7 @@ BROWSE:
 
         IF lcRight = "RW" THEN DO :
 
-           run ufkey.
+           RUN Syst/ufkey.p.
 
            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhTMSReport).
 
@@ -444,7 +444,7 @@ BROWSE:
         xrecid = recid(TMSReport).
      END.
 
-     else if lookup(nap,"end") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end") > 0 THEN DO : /* LAST record */
         FIND LAST TMSReport no-lock.
         ASSIGN
         memory = recid(TMSReport)
@@ -452,7 +452,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"home") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home") > 0 THEN DO:
         FIND FIRST TMSReport no-lock.
         ASSIGN
         memory = recid(TMSReport)
@@ -460,11 +460,11 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 

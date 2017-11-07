@@ -1,4 +1,3 @@
-{timestamp.i}
 
 def stream slog.
 

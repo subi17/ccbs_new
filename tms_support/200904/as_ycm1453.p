@@ -1,8 +1,8 @@
-{commpaa.i}
-katun = "anttis".
-gcBrand = "1".
-{fsubstermreq.i}
-{msisdn.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
+{Func/fsubstermreq.i}
+{Func/msisdn.i}
 
 def stream sin.
 input stream sin from /apps/snet/200904/as_ycm1453.input.
@@ -55,7 +55,7 @@ repeat:
       output liQuarTime
    ).
 
-   fSplitTS(MsRequest.ActStamp, OUTPUT ldaKillDate, OUTPUT liTime).
+   Func.Common:mSplitTS(MsRequest.ActStamp, OUTPUT ldaKillDate, OUTPUT liTime).
   
    if msisdn.statuscode ne liMsisdnStat then do:
       put stream slog unformatted msisdn.cli "|" 

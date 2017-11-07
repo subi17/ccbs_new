@@ -11,7 +11,7 @@
   SHARED .......: INPUT: msseq
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT  PARAMETER msseq  AS INT .
 
@@ -24,13 +24,12 @@ FIND MobSub  WHERE MobSub.Msseq = msseq NO-LOCK NO-ERROR.
 
 FIND Customer where Customer.CustNum = MobSub.AgrCust no-lock no-error.
 
-IF Avail Customer THEN lcUserName =  DYNAMIC-FUNCTION("fDispCustName" IN
-                                     ghFunc1, BUFFER Customer).
+IF Avail Customer THEN lcUserName =  Func.Common:mDispCustName(BUFFER Customer).
 ELSE                    lcUserName = "".
                                      
 
 DO WHILE TRUE:
-   ASSIGN  ufk = 0 ufk[8] = 8 ehto = 3. RUN ufkey. 
+   ASSIGN  Syst.Var:ufk = 0 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 3. RUN Syst/ufkey.p. 
  DISPLAY
  "A) Change status to subscription            "  @ menuc[1]   SKIP
  "X) QUIT                                     "  @ menuc[2]   SKIP
@@ -45,7 +44,7 @@ DO WHILE TRUE:
    IF LOOKUP(KEYLABEL(LASTKEY),"x,F8") > 0  THEN LEAVE.
 
    IF FRAME-INDEX = 1 THEN DO:
-     RUN msstatch(MobSub.msseq).
+     RUN Mm/msstatch.p(MobSub.msseq).
    END.
 
    ELSE IF FRAME-INDEX = 2 OR FRAME-INDEX = 0 THEN LEAVE.

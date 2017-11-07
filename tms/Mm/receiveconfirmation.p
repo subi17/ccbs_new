@@ -1,16 +1,15 @@
-{commali.i}
-{eventval.i}
-{timestamp.i}
-{orderfunc.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/orderfunc.i}
 
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 
 DEF VAR llOK AS LOG NO-UNDO.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
       
    DEFINE VARIABLE lhOrder AS HANDLE NO-UNDO.
    lhOrder = BUFFER Order:HANDLE.
@@ -21,7 +20,7 @@ END.
 DEF BUFFER BufOrder FOR Order.
 
 FIND FIRST Order WHERE 
-           Order.Brand   = gcBrand and 
+           Order.Brand   = Syst.Var:gcBrand and 
            Order.OrderID = iiOrder EXCLUSIVE-LOCK NO-ERROR.
 
 MESSAGE "Oletko varma että palvelusopimus allekirjoitettu "
@@ -61,7 +60,7 @@ IF llOK THEN DO:
    BUFFER-COPY order Except Orderid TO BufOrder.
                       
    ASSIGN
-      BufOrder.CrStamp       = fMakeTS()
+      BufOrder.CrStamp       = Func.Common:mMakeTS()
       BufOrder.Orderid       = NEXT-VALUE(OrderId)
       BufOrder.tupas         = 8
       BufOrder.CredOK        = TRUE

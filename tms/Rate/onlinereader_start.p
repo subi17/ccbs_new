@@ -7,8 +7,8 @@
   VERSION ......: Yoigo
   -------------------------------------------------------------------------- */
 
-{commpaa.i}
-{direct_dbconnect.i}
+{Syst/commpaa.i}
+{Func/direct_dbconnect.i}
 
 DEF VAR llDateLog       AS LOG  NO-UNDO INIT TRUE.
 DEF VAR llDispErrors    AS LOG  NO-UNDO INIT TRUE.
@@ -16,7 +16,7 @@ DEF VAR liPortNum       AS INT  NO-UNDO.
 DEF VAR lcTableNames    AS CHAR NO-UNDO.
 DEF VAR lcOldTableNames AS CHAR NO-UNDO.
 
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 liPortNum = INTEGER(SESSION:PARAMETER) NO-ERROR.
 IF ERROR-STATUS:ERROR OR liPortNum = 0 THEN QUIT.
@@ -31,7 +31,7 @@ ELSE lcTableNames = "MobCDR,McdrDtl2,PrepCDR,ErrorCDR".
 DO WHILE TRUE:
 
    fInitializeConnectTables(lcTableNames,"").
-   RUN pDirectConnect2Dbs(gcBrand,
+   RUN pDirectConnect2Dbs(Syst.Var:gcBrand,
                           "",
                           TODAY,
                           TODAY).
@@ -63,7 +63,7 @@ DO WHILE TRUE:
    fInitializeConnectTables(lcOldTableNames,"old").
 
    IF lcOldTableNames > "" THEN 
-      RUN pDirectConnect2Dbs(gcBrand,
+      RUN pDirectConnect2Dbs(Syst.Var:gcBrand,
                              "old",
                              TODAY - 1,
                              TODAY - 1).
@@ -73,12 +73,12 @@ DO WHILE TRUE:
    IF liPortNum = 2230 THEN 
       RUN roamcdr.p (liPortNum).
    ELSE IF liPortNum = 2260 THEN  DO:
-      RUN edr_reader.p ("EDR_OnLine",
+      RUN Rate/edr_reader.p ("EDR_OnLine",
 			               liPortNum).
    END.
       
    ELSE 
-      RUN onlinereader.p(llDateLog,
+      RUN Rate/onlinereader.p(llDateLog,
                          "Mobile_OnLine",
                          llDispErrors,
                          liPortNum).

@@ -1,5 +1,4 @@
-{testpaa.i}
-{timestamp.i}
+{Syst/testpaa.i}
 
 def var limsseq as int no-undo.
 def var i as int no-undo.
@@ -55,7 +54,7 @@ for each breq no-lock where
       ldreq = ldreq + prepaidrequest.topupamt / 100.      
    end.
 
-   RUN balancequery(MobSub.CLI).
+   RUN Gwy/balancequery.p(MobSub.CLI).
    ldBal = INT(RETURN-VALUE) / 100.
    
 
@@ -66,7 +65,7 @@ for each breq no-lock where
       j format ">>9"
       mobsub.cli format "x(10)"
       mobsub.msseq 
-      fts2hms(mobsub.activationts) format "x(19)"
+      Func.Common:mTS2HMS(mobsub.activationts) format "x(19)"
       lddiff format "->>>>>9.99"
       /*
       ldbal format "->>>9.99"
@@ -82,7 +81,7 @@ for each breq no-lock where
       put stream slog unformatted
       mobsub.msseq chr(9)
       mobsub.cli   chr(9)
-      fts2hms(mobsub.activationts) chr(9)
+      Func.Common:mTS2HMS(mobsub.activationts) chr(9)
       ldreq        chr(9)
       ldcdr        chr(9)
       ldreq - ldcdr chr(9)

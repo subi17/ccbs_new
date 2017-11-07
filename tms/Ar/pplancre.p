@@ -10,18 +10,18 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{finvbal.i}
-{fpaymplan.i}
-{fppbatch.i}
-{fppinv.i}
-{eventval.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/finvbal.i}
+{Func/fpaymplan.i}
+{Func/fppbatch.i}
+{Func/fppinv.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPaymPlan AS HANDLE NO-UNDO.
    lhPaymPlan = BUFFER PaymPlan:HANDLE.
@@ -50,13 +50,13 @@ IF liBankDays = ? THEN liBankDays = 0.
 
 
 FIND Customer WHERE Customer.CustNum = iiCustNum NO-LOCK NO-ERROR.
-IF NOT AVAILABLE Customer OR Customer.Brand NE gcBrand THEN DO:
+IF NOT AVAILABLE Customer OR Customer.Brand NE Syst.Var:gcBrand THEN DO:
    ocError = "Unknown customer " + STRING(iiCustNum).
    RETURN.
 END.
 
 CREATE PaymPlan.
-ASSIGN PaymPlan.Brand    = gcBrand
+ASSIGN PaymPlan.Brand    = Syst.Var:gcBrand
        PaymPlan.PPlanID  = NEXT-VALUE(PPlan)
        PaymPlan.CustNum  = iiCustNum
        PaymPlan.PPDate   = TODAY

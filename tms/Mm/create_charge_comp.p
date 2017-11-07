@@ -9,10 +9,9 @@
   Version ......: 
   ---------------------------------------------------------------------- */
 
-{timestamp.i}
-{fmakemsreq.i}
-{tmsconst.i}
-{ftaxdata.i}
+{Func/fmakemsreq.i}
+{Syst/tmsconst.i}
+{Func/ftaxdata.i}
 
 DEF INPUT  PARAMETER  icSource   AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER  iiMsSeq    AS INT NO-UNDO.
@@ -51,9 +50,9 @@ IF MobSub.PayType THEN DO:
     CREATE PrePaidRequest.
 
     ASSIGN
-          PrePaidRequest.TSRequest   = fMakeTS()
+          PrePaidRequest.TSRequest   = Func.Common:mMakeTS()
           PrePaidRequest.UserCode    = icUserCode 
-          PrePaidRequest.Brand       = gcBrand
+          PrePaidRequest.Brand       = Syst.Var:gcBrand
           PrePaidRequest.PPRequest   =  NEXT-VALUE(PrePaidReq)
           PrePaidRequest.PPStatus    = 0
           PrePaidRequest.Request     = "AdjustmentTRequest"

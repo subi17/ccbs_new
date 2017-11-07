@@ -10,11 +10,10 @@
 DEF VAR liNumbOfDeleted AS INT NO-UNDO. 
 DEF VAR ldStartTime AS DEC NO-UNDO.
 DEF VAR ldEndTime AS DEC NO-UNDO.
-{tmsconst.i}
-{timestamp.i}
+{Syst/tmsconst.i}
 
-ldStartTime = fHMS2TS(today - 2, "00:00:00").
-ldEndTime   = fHMS2TS(today - 1, "00:00:00") .
+ldStartTime = Func.Common:mHMS2TS(today - 2, "00:00:00").
+ldEndTime   = Func.Common:mHMS2TS(today - 1, "00:00:00") .
 
 
 FOR EACH CallScanner EXCLUSIVE-LOCK WHERE
@@ -34,6 +33,6 @@ ASSIGN
    ActionLog.ActionChar = STRING(liNumbOfDeleted)
    ActionLog.FromDate = TODAY - 2
    ActionLog.ToDate = TODAY - 2
-   ActionLog.ActionTS = fMakeTS().
+   ActionLog.ActionTS = Func.Common:mMakeTS().
    RELEASE ActionLog.
 

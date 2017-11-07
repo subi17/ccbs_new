@@ -7,16 +7,15 @@ CREATED ......: 21.12.09
 Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
-katun = "MNPResend".
-gcBrand = "1".
+{Syst/commpaa.i}
+Syst.Var:katun = "MNPResend".
+Syst.Var:gcBrand = "1".
 
-{tmsconst.i}
-{timestamp.i}
-{cparam2.i}
-{eventval.i}
-{log.i}
-{heartbeat.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Syst/eventval.i}
+{Func/log.i}
+{Func/heartbeat.i}
 llDoEvent = FALSE. /* could generate too logs */
 
 DEFINE VARIABLE liLoop     AS INTEGER   NO-UNDO.
@@ -32,9 +31,9 @@ DEFINE VARIABLE liResent   AS INTEGER NO-UNDO.
 DEF BUFFER bMNPOperation FOR MNPOperation.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMNPOperation AS HANDLE NO-UNDO.
    lhMNPOperation = BUFFER bMNPOperation:HANDLE.
@@ -94,14 +93,12 @@ PROCEDURE pResendErrors:
    lcStatusCodes = SUBST("&1,&2,&3,&4", {&MNP_ST_AREC}, {&MNP_ST_AREC_CLOSED}, {&MNP_ST_APOR}, {&MNP_ST_ACAN}).
 
    MNPPROCESS_LOOP:
-   FOR EACH MNPOperation WHERE
-      MNPOperation.ErrorHandled = {&MNP_ERRORHANDLED_NO} AND
-      LOOKUP(MNPOperation.ErrorCode,lcErrorCodes) > 0 AND
-      MNPOperation.Sender = {&MNP_SENDER_TMS} AND
-      MNPOperation.StatusCode > 10 NO-LOCK,
-      FIRST MNPProcess NO-LOCK WHERE
-            MNPProcess.MNPSeq = MNPOperation.MNPSeq AND
-            LOOKUP(STRING(MNPProcess.StatusCode),lcStatusCodes) = 0:
+   FOR EACH MNPOperation WHERE MNPOperation.ErrorHandled                   = {&MNP_ERRORHANDLED_NO} AND
+                               LOOKUP(MNPOperation.ErrorCode,lcErrorCodes) > 0                      AND
+                               MNPOperation.Sender                         = {&MNP_SENDER_TMS}      AND
+                               MNPOperation.StatusCode                     > 10                     NO-LOCK,
+      FIRST MNPProcess NO-LOCK WHERE MNPProcess.MNPSeq = MNPOperation.MNPSeq AND LOOKUP(STRING(MNPProcess.StatusCode),lcStatusCodes) = 0
+      TENANT-WHERE TENANT-ID() >= 0:
       
       fLogBasic("Resent " +
                 MNPOperation.MessageType + ":" +
@@ -110,10 +107,10 @@ PROCEDURE pResendErrors:
                 MNPProcess.Portrequest + ":" +
                 MNPProcess.FormRequest).
 
-      FIND bMNPOperation EXCLUSIVE-LOCK WHERE
-           RECID(bMNPOperation) = RECID(MNPOperation).
+      FIND bMNPOperation EXCLUSIVE-LOCK WHERE RECID(bMNPOperation) = RECID(MNPOperation).
       
-      IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMNPOperation). 
+      IF llDoEvent THEN 
+         RUN StarEventSetOldBuffer(lhMNPOperation). 
       
       ASSIGN
          bMNPOperation.ErrorHandled = 0
@@ -122,7 +119,8 @@ PROCEDURE pResendErrors:
          bMNPOperation.MsgTurn = MNPOperation.MsgTurn + 1
          bMNPOperation.StatusCode = {&MNP_MSG_WAITING_SEND}.
    
-      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMNPOperation).
+      IF llDoEvent THEN 
+         RUN StarEventMakeModifyEvent(lhMNPOperation).
 
       RELEASE bMNPOperation. 
       

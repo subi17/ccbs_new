@@ -1,8 +1,0 @@
-# newton__check_renove
-ChkRenoveDayCampaign:
-   Brand:"1"
-   DCEvent:"TERM18"
-   TermFeeCalc:5
-   TermFeeModel:"RenoveFeeModel"
-
-

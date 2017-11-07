@@ -1,12 +1,11 @@
 
 /* read msisdn from a list */
 
-{commpaa.i}
-katun = "rafaeldv".
-gcBrand  = "1".
-{timestamp.i}
-{msisdn.i}
-{tmsconst.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "rafaeldv".
+Syst.Var:gcBrand  = "1".
+{Func/msisdn.i}
+{Syst/tmsconst.i}
 
 DEF BUFFER bMSISDN FOR MSISDN.
 DEF BUFFER bbMSISDN FOR MSISDN. 

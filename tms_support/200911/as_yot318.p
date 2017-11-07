@@ -1,8 +1,7 @@
-{commpaa.i}
-katun = "anttis".
-gcBrand = "1".
-{timestamp.i}
-{barrfunc.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
+{Func/barrfunc.i}
 
 def buffer MsRequest2 for MsRequest.
 def stream slog.
@@ -16,10 +15,10 @@ DEFINE VARIABLE lcBarrComList AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcBarrStatus AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE ldeTime AS DECIMAL NO-UNDO.
 
-ldeTime = fMakeTS().
+ldeTime = Func.Common:mMakeTS().
 
 FOR EACH mobsub where
-   mobsub.brand  = gcBrand and
+   mobsub.brand  = Syst.Var:gcBrand and
    mobsub.clitype = "tarj3" NO-LOCK:
 
    i = i + 1.
@@ -27,7 +26,7 @@ FOR EACH mobsub where
 /*   if i mod 750 = 0 then do:
       j = j + 1.
 */
-      ldeTime = fSecOffSet(fMakeTS(), 5 * i).
+      ldeTime = Func.Common:mSecOffSet(Func.Common:mMakeTS(), 5 * i).
 /*   end. */
 /*   lcBarring = fCheckStatus(MobSub.MsSeq). */
    run checkmsbarring(mobsub.msseq,
@@ -48,7 +47,7 @@ FOR EACH mobsub where
    ELSE DO:
 
 
-       RUN barrengine (MobSub.MsSeq,
+       RUN Mm/barrengine.p (MobSub.MsSeq,
                    "Y_SARC",
                    "5",                 /* source  */
                    "YOT-317",           /* creator */
@@ -62,7 +61,7 @@ FOR EACH mobsub where
       mobsub.msseq " " 
       mobsub.cli " " 
       lcBarrStatus " "
-      fts2hms(ldeTime) " " 
+      Func.Common:mTS2HMS(ldeTime) " " 
       lcError skip.
    
 END.

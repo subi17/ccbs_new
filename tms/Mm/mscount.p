@@ -11,9 +11,9 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{mobsub1.i}
+{Mm/mobsub1.i}
 
 DEF VAR amt1 AS i  NO-UNDO  EXTENT 50. /* all */
 DEF VAR amt2 AS i  NO-UNDO  EXTENT 50. /* alive */
@@ -34,7 +34,7 @@ repeat:
 END.      
     
 
-   FOR EACH MobSub WHERE Mobsub.Brand = gcBrand AND 
+   FOR EACH MobSub WHERE Mobsub.Brand = Syst.Var:gcBrand AND 
    (IF CustNum NE 0 THEN MobSub.CustNum = CustNum ELSE TRUE) no-lock:
 
       /* ALL */
@@ -52,7 +52,7 @@ END.
 
   FOR EACH MSOwner no-lock where
            MSOwner.TsEnd   <= 999999999  AND
-           MSOwner.Brand    = gcBrand    AND 
+           MSOwner.Brand    = Syst.Var:gcBrand    AND 
      NOT CAN-FIND(First mobsub WHERE mobsub.msseq = msowner.msseq)     . 
 
        ASSIGN
@@ -73,7 +73,7 @@ END.
       DOWN WITH FRAME Qty.
    END.
 
-   ASSIGN ufk = 0 ehto = 3. RUN ufkey.
+   ASSIGN Syst.Var:ufk = 0 Syst.Var:ehto = 3. RUN Syst/ufkey.p.
 
    message "Press ENTER to continue !".
    PAUSE no-message.

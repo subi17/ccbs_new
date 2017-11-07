@@ -8,10 +8,10 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'DumpFile'}
-{host.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'DumpFile'}
+{Syst/host.i}
 
 DEF VAR liDumpID      AS INT  NO-UNDO.
 DEF VAR liDumped      AS INT  NO-UNDO.
@@ -41,7 +41,7 @@ FORM
    DumpFile.TransDir COLON 20 
    SKIP(6)
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + "  DUMP FILE  " + STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.Var:ynimi + "  DUMP FILE  " + STRING(TODAY,"99-99-99") + " "
      FRAME fCrit.
 
 FUNCTION fDispDumpFile RETURNS LOGIC
@@ -63,7 +63,7 @@ END FUNCTION.
 
 
 ASSIGN
-   toimi      = -1
+   Syst.Var:toimi      = -1
    lcDumpMode = "Full".
 
 CritLoop:
@@ -77,22 +77,22 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       fDispDumpFile(liDumpID).
    END.
 
-   IF toimi < 0 THEN toimi = 1.
+   IF Syst.Var:toimi < 0 THEN Syst.Var:toimi = 1.
    ELSE DO:
       ASSIGN
-         ufk    = 0
-         ufk[1] = 7
-         ufk[5] = 795
-         ufk[8] = 8 
-         ehto   = 0.
-      RUN ufkey.
+         Syst.Var:ufk    = 0
+         Syst.Var:ufk[1] = 7
+         Syst.Var:ufk[5] = 795
+         Syst.Var:ufk[8] = 8 
+         Syst.Var:ehto   = 0.
+      RUN Syst/ufkey.p.
    END.
    
-   IF toimi = 1 THEN 
+   IF Syst.Var:toimi = 1 THEN 
    REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
 
-      ehto = 9.
-      RUN ufkey.
+      Syst.Var:ehto = 9.
+      RUN Syst/ufkey.p.
     
       UPDATE liDumpId lcDumpMode lcFileNameTag WITH FRAME fCrit 
       EDITING:
@@ -101,24 +101,24 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          IF KEYLABEL(LASTKEY) = "F9" AND FRAME-FIELD = "liDumpID" THEN DO:
 
             ASSIGN
-               si-recid    = ?
-               gcHelpParam = "dumpid".
-            RUN dumpfile.
-            gcHelpParam = "".
+               Syst.Var:si-recid    = ?
+               Syst.Var:gcHelpParam = "dumpid".
+            RUN Syst/dumpfile.p.
+            Syst.Var:gcHelpParam = "".
             
-            IF si-recid NE ? THEN DO:
-               FIND DumpFile WHERE RECID(DumpFile) = si-recid NO-LOCK NO-ERROR.
+            IF Syst.Var:si-recid NE ? THEN DO:
+               FIND DumpFile WHERE RECID(DumpFile) = Syst.Var:si-recid NO-LOCK NO-ERROR.
                IF AVAILABLE DumpFile THEN 
                   DISP DumpFile.DumpID @ liDumpID WITH FRAME fCrit.
             END.
             
-            ehto = 9.
-            RUN ufkey.
+            Syst.Var:ehto = 9.
+            RUN Syst/ufkey.p.
 
             NEXT. 
          END.
          
-         ELSE IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN 
+         ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN 
          DO WITH FRAME fCrit:
          
             PAUSE 0.
@@ -158,7 +158,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    
    END.
    
-   ELSE IF toimi = 5 THEN DO:
+   ELSE IF Syst.Var:toimi = 5 THEN DO:
       
       llOk = FALSE.
       MESSAGE "Start creating a dump file?" 
@@ -167,7 +167,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       SET llOk.
       IF NOT llOk THEN NEXT. 
 
-      RUN dumpfile_run(liDumpID,
+      RUN Syst/dumpfile_run.p(liDumpID,
                        lcDumpMode,
                        lcFileNameTag,
                        fIsThisReplica(),
@@ -183,7 +183,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       LEAVE CritLoop.
    END.
 
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.Var:toimi = 8 THEN DO:
       LEAVE CritLoop.
    END.
 

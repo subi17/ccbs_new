@@ -1,7 +1,7 @@
-{commpaa.i}
-gcBrand = "1".
-katun = "YTC-161".
-{msreqfunc.i}
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "YTC-161".
+{Func/msreqfunc.i}
 
 def stream loki.
 output stream loki to /apps/snet/200910/as_ytc162.log append.

@@ -1,0 +1,260 @@
+bulkload: Region
+  Region: "01"
+  RgName: "Álava"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "02"
+  RgName: "Albacete"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "03"
+  RgName: "Alicante"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "04"
+  RgName: "Almería"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "05"
+  RgName: "Ávila"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "06"
+  RgName: "Badajoz"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "07"
+  RgName: "Baleares"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "08"
+  RgName: "Barcelona"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "09"
+  RgName: "Burgos"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "10"
+  RgName: "Cáceres"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "11"
+  RgName: "Cádiz"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "12"
+  RgName: "Castellón"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "13"
+  RgName: "Ciudad Real"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "14"
+  RgName: "Córdoba"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "15"
+  RgName: "La Coruña"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "16"
+  RgName: "Cuenca"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "17"
+  RgName: "Gerona"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "18"
+  RgName: "Granada"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "19"
+  RgName: "Guadalajara"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "20"
+  RgName: "Guipúzcoa"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "21"
+  RgName: "Huelva"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "22"
+  RgName: "Huesca"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "23"
+  RgName: "Jaén"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "24"
+  RgName: "León"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "25"
+  RgName: "Lérida"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "26"
+  RgName: "La Rioja"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "27"
+  RgName: "Lugo"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "28"
+  RgName: "Madrid"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "29"
+  RgName: "Málaga"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "30"
+  RgName: "Murcia"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "31"
+  RgName: "Navarra"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "32"
+  RgName: "Orense"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "33"
+  RgName: "Asturias"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "34"
+  RgName: "Palencia"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "35"
+  RgName: "Las Palmas"
+  TaxZone: "2"
+
+bulkload: Region
+  Region: "36"
+  RgName: "Pontevedra"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "37"
+  RgName: "Salamanca"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "38"
+  RgName: "Sta.Cruz Tenerife"
+  TaxZone: "2"
+
+bulkload: Region
+  Region: "39"
+  RgName: "Cantabria"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "40"
+  RgName: "Segovia"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "41"
+  RgName: "Sevilla"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "42"
+  RgName: "Soria"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "43"
+  RgName: "Tarragona"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "44"
+  RgName: "Teruel"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "45"
+  RgName: "Toledo"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "46"
+  RgName: "Valencia"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "47"
+  RgName: "Valladolid"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "48"
+  RgName: "Vizcaya"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "49"
+  RgName: "Zamora"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "50"
+  RgName: "Zaragoza"
+  TaxZone: "1"
+
+bulkload: Region
+  Region: "51"
+  RgName: "Ceuta"
+  TaxZone: "3"
+
+bulkload: Region
+  Region: "52"
+  RgName: "Melilla"
+  TaxZone: "4"
+

@@ -10,10 +10,10 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{fcustbal.i}
-{utumaa.i "new"}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/fcustbal.i}
+{Syst/utumaa.i "new"}
 
 assign 
    tuni1 = "custrep"
@@ -39,7 +39,7 @@ DEF INPUT PARAMETER Category  AS CH  NO-UNDO.
 DEF VAR pre AS CH NO-UNDO.
 
 assign tila = TRUE.
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
 PUT stream tul UNFORMATTED
    "CustNum"        tab
@@ -98,7 +98,7 @@ PUT stream tul UNFORMATTED
 
 
 FOR EACH Customer WHERE
-         Customer.Brand     = gcBrand   AND 
+         Customer.Brand     = Syst.Var:gcBrand   AND 
          Customer.CustNum  >= CustNum1  AND
          Customer.CustNum  <= CustNum2  AND
         (IF ZipCode   NE "" THEN
@@ -194,7 +194,7 @@ NO-LOCK:
 END.
 
 assign tila = FALSE.
-{utuloste.i}
+{Syst/utuloste.i}
 
 
 

@@ -1,6 +1,5 @@
-{testpaa.i}
-katun = "ari".
-{timestamp.i}
+{Syst/testpaa.i}
+Syst.Var:katun = "ari".
 
 def buffer breq    for msrequest.
 def buffer bupdreq for msrequest.
@@ -46,7 +45,7 @@ for each msrequest no-lock where
                 exclusive-lock.
             bupdreq.createfees = true.
 
-            fsplitts(breq.actstamp,
+            Func.Common:mSplitTS(breq.actstamp,
                      output ldtactdate,
                      output litime).
                      
@@ -65,7 +64,7 @@ for each msrequest no-lock where
             ldCoefficient = 1 - ((liDaysPassed + 1) / 547).
             IF ldCoefficient < 0 THEN ldCoefficient = 0.
 
-            RUN creasfee (MsRequest.CustNum,
+            RUN Mc/creasfee.p (MsRequest.CustNum,
                           MsRequest.MsSeq,
                           ldtActDate,
                           "MobSub",

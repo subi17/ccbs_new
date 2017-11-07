@@ -8,9 +8,9 @@
   Version ......: xfera 
   ---------------------------------------------------------------------- */
 
-{commali.i}.
-{dataformat.i}
-{cparam2.i}
+{Syst/commali.i}.
+{Func/dataformat.i}
+{Func/cparam2.i}
 
 DEFINE INPUT PARAM piTMRuleSeq AS INT NO-UNDO. 
 DEFINE INPUT PARAM piMsSeq     AS INT NO-UNDO. 
@@ -93,33 +93,33 @@ FORM
     ttTMCounter.Limitamt  FORMAT ">>>>>9" COLUMN-LABEL "Limit"
     ttTMCounter.LimitId   FORMAT ">9"  COLUMN-LABEL "LID"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN SCROLL 1
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + lcHeader + " "
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + lcHeader + " "
     FRAME sel.
 
 FORM /* seek TMCounter  BY TMCounterId and TMCounterOffice */
     "CustNbr:" lcCustnum FORMAT ">>>>>>>9" 
     HELP "Enter Customer Number" SKIP
    WITH OVERLAY row 4 col 2 
-   TITLE COLOR VALUE(ctc) " FIND Customer "
-   COLOR VALUE(cfc)
+   TITLE COLOR VALUE(Syst.Var:ctc) " FIND Customer "
+   COLOR VALUE(Syst.Var:cfc)
    NO-LABELS FRAME f1.
 
 FORM /* seek  MSBalance */
    "Subscr.ID:" liMsSeq FORMAT ">>>>>>>9"
       HELP "Enter Subscription ID"
-   WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Subscription "
-      COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+   WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Subscription "
+      COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 FORM /* seek TMCounter  BY TMCounterId and TMCounterOffice */
     "Usage exceeds....:" ldeAmount FORMAT ">>>>>>9.999"
    HELP "Enter value" SKIP
    WITH OVERLAY row 4 col 2 
-   TITLE COLOR VALUE(ctc) " COUNTER FILTER "
-   COLOR VALUE(cfc)
+   TITLE COLOR VALUE(Syst.Var:ctc) " COUNTER FILTER "
+   COLOR VALUE(Syst.Var:cfc)
    NO-LABELS FRAME f3.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = " By Customer    , By Subscription, By Usage       ".
@@ -187,41 +187,41 @@ BROWSE:
       
       IF ufkey THEN DO:
          ASSIGN
-         ufk = 0
-         ufk[1]= 714 WHEN (piCustnum EQ 0 AND piMsSeq EQ 0)
-         ufk[2]= 1645 WHEN (piMsSeq EQ 0)
-         ufk[3]= 9016
-         ufk[5]= 0 
-         ufk[6]= 0 
-         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
-         RUN ufkey.
+         Syst.Var:ufk = 0
+         Syst.Var:ufk[1]= 714 WHEN (piCustnum EQ 0 AND piMsSeq EQ 0)
+         Syst.Var:ufk[2]= 1645 WHEN (piMsSeq EQ 0)
+         Syst.Var:ufk[3]= 9016
+         Syst.Var:ufk[5]= 0 
+         Syst.Var:ufk[6]= 0 
+         Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW ttTMCounter.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) ttTMCounter.CustNum WITH FRAME sel.
+         CHOOSE ROW ttTMCounter.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) ttTMCounter.CustNum WITH FRAME sel.
       END.
       
       IF order = 2 THEN DO:
-         CHOOSE ROW ttTMCounter.MsSeq ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) ttTMCounter.MsSeq WITH FRAME sel.
+         CHOOSE ROW ttTMCounter.MsSeq {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) ttTMCounter.MsSeq WITH FRAME sel.
       END.
       
       IF order = 3 THEN DO:
-         CHOOSE ROW lcValue ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) lcValue WITH FRAME sel.
+         CHOOSE ROW lcValue {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) lcValue WITH FRAME sel.
       END.
       
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -245,10 +245,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             RUN local-find-this(FALSE).
             RUN local-find-PREV.
@@ -273,7 +273,7 @@ BROWSE:
       END. /* PREVious ROW */
 
          /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
          WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             RUN local-find-this(FALSE).
@@ -299,7 +299,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
          Memory = rtab[1].
          FIND ttTMCounter WHERE recid(ttTMCounter) = Memory NO-LOCK NO-ERROR.
          RUN local-find-PREV.
@@ -323,7 +323,7 @@ BROWSE:
       END. /* PREVious page */
       
       /* NEXT page */
-      ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+      ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
          /* PUT Cursor on downmost ROW */
          IF rtab[FRAME-DOWN] = ? THEN DO:
             MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -338,10 +338,10 @@ BROWSE:
       END. /* NEXT page */
      
       /* Search BY column 1 */
-      ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
+      ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 AND Syst.Var:ufk[1] > 0
       THEN DO ON ENDKEY UNDO, NEXT LOOP:
-         cfc = "puyr". RUN ufcolor.
-         ehto = 9. RUN ufkey. ufkey = TRUE.
+         Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          CLEAR FRAME f1.
          ASSIGN
             lcCustnum  = 0.
@@ -370,11 +370,11 @@ BROWSE:
       END. 
      
       /* Search BY MsSeq */
-      ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
+      ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 AND Syst.Var:ufk[2] > 0
       THEN DO ON ENDKEY UNDO, NEXT LOOP:
              
-         cfc = "puyr". RUN ufcolor.
-         ehto = 9. RUN ufkey. ufkey = TRUE.
+         Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          CLEAR FRAME f2.
          ASSIGN
                liMsSeq = 0.
@@ -412,11 +412,11 @@ BROWSE:
       END. 
            
       /* Filter by Usage */
-      ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0
+      ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 AND Syst.Var:ufk[3] > 0
       THEN DO ON ENDKEY UNDO, NEXT LOOP:
              
-         cfc = "puyr". RUN ufcolor.
-         ehto = 9. RUN ufkey. ufkey = TRUE.
+         Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
          CLEAR FRAME f3.
          ldeAmountPrev = ldeAmount. 
          DISP ldeAmount WITH FRAME f3.
@@ -456,25 +456,25 @@ BROWSE:
          END.
       END.
            
-      ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
          RUN local-find-FIRST.
          ASSIGN Memory = recid(ttTMCounter) must-print = TRUE.
          NEXT LOOP.
       END.
 
-      ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+      ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
          RUN local-find-LAST.
          ASSIGN Memory = recid(ttTMCounter) must-print = TRUE.
          NEXT LOOP.
       END.
 
-      ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+      ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
    END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE local-find-this:
 

@@ -8,9 +8,9 @@
   -------------------------------------------------------------------------- */
 
 
-{msreqfunc.i}
-{fgettxt.i}
-{fmakesms.i}
+{Func/msreqfunc.i}
+{Func/fgettxt.i}
+{Func/fmakesms.i}
 
 
 DEF INPUT PARAMETER iiRequest AS INT NO-UNDO.
@@ -57,7 +57,7 @@ PROCEDURE pCreateSMS:
       RETURN.
    END.
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
 

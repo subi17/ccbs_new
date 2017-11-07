@@ -8,7 +8,7 @@
 
 &GLOBAL-DEFINE SERVCOMFEE_I YES
 
-{setfees.i}
+{Func/setfees.i}
 
 /* fee for opening an service */
 FUNCTION fServiceOpenFee RETURNS LOGICAL

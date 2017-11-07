@@ -8,8 +8,8 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{dumpfile_run.i}
+{Syst/commali.i}
+{Syst/dumpfile_run.i}
 
 DEF INPUT-OUTPUT PARAMETER TABLE-HANDLE ihTempTable.
 DEF INPUT  PARAMETER idLastDump       AS DEC  NO-UNDO.
@@ -69,7 +69,7 @@ DEF VAR liLastDumpTime AS INT NO-UNDO.
 DEF VAR lcLastDumpTime AS CHAR NO-UNDO. 
 DEF VAR liOrderId AS INT NO-UNDO. 
 
-fSplitTs(idLastDump, OUTPUT ldaLastDumpDate, OUTPUT liLastDumpTime).
+Func.Common:mSplitTS(idLastDump, OUTPUT ldaLastDumpDate, OUTPUT liLastDumpTime).
 
 lcLastDumpTime = STRING(liLastDumpTime,"hh:mm:ss").
  
@@ -85,7 +85,7 @@ FOR EACH EventLog NO-LOCK where
    IF ERROR-STATUS:ERROR THEN NEXT.
    
    FOR EACH OrderPayment NO-LOCK WHERE
-            OrderPayment.Brand = gcBrand AND
+            OrderPayment.Brand = Syst.Var:gcBrand AND
             OrderPayment.OrderId = liOrderID:
       fCollect().
    END.

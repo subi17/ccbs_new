@@ -1,7 +1,7 @@
-{commali.i}
-{timestamp.i}
-{filltemptable.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/filltemptable.i}
+{Func/cparam2.i}
+{Syst/host.i}
 
 DEF TEMP-TABLE ttDB NO-UNDO
    FIELD ConnName  AS CHAR
@@ -11,11 +11,7 @@ DEF TEMP-TABLE ttDB NO-UNDO
    FIELD DBOrder   AS INT
    INDEX ConnName ConnName TableName.
 
-DEF TEMP-TABLE ttInvCust
-   FIELD CustNum LIKE Customer.InvCust
-   INDEX CustNum CustNum.
-
-DEF TEMP-TABLE ttCLI
+DEF TEMP-TABLE ttCLI NO-UNDO
    FIELD ttCli AS CHAR FORMAT "X(18)" 
    INDEX ttCli ttCli.
 
@@ -201,8 +197,10 @@ FUNCTION fGetArchiveDBs RETURNS LOGIC
     idaFromDate AS DATE,
     idaToDate   AS DATE):
     
+   DEFINE VARIABLE lcHost AS CHARACTER NO-UNDO.
+
    FOR EACH DBConfig NO-LOCK WHERE
-            DBConfig.Brand = gcBrand AND
+            DBConfig.Brand = Syst.Var:gcBrand AND
             DBConfig.TableName = icTable AND
             DBConfig.DBState   = 1 AND 
             DBConfig.ToDate   >= idaFromDate AND
@@ -212,9 +210,15 @@ FUNCTION fGetArchiveDBs RETURNS LOGIC
       ASSIGN 
          ttDB.ConnName  = DBConfig.DBConnName
          ttDB.TableName = icTable
-         ttDB.ConnParam = "-H " + DBConfig.Host + " -S " + DBConfig.Service
          ttDb.Connect   = TRUE
          ttDB.DBOrder   = 1.
+
+      RUN pHostName(OUTPUT lcHost).
+
+      IF LOOKUP(lcHost,"pallas,arneb") > 0 AND
+         DBConfig.DirectConnect > "" THEN
+         ttDB.ConnName = DBConfig.DirectConnect + "/" + DBConfig.DBConnName.
+      ELSE ttDB.ConnParam = "-H " + DBConfig.Host + " -S " + DBConfig.Service.
    END.
    
 END FUNCTION.
@@ -235,7 +239,7 @@ FUNCTION fSetCollectionDBs RETURNS LOGIC
 
    IF idaActive = ? THEN 
    FOR FIRST DBConfig NO-LOCK WHERE
-             DBConfig.Brand = gcBrand AND
+             DBConfig.Brand = Syst.Var:gcBrand AND
              DBConfig.TableName = ttDB.TableName AND
              DBConfig.DBState = 0 AND 
              DBConfig.ToDate >= TODAY AND
@@ -246,7 +250,7 @@ FUNCTION fSetCollectionDBs RETURNS LOGIC
    END.   
    IF idaActive = ? THEN 
    FOR FIRST DBConfig NO-LOCK WHERE
-             DBConfig.Brand = gcBrand AND
+             DBConfig.Brand = Syst.Var:gcBrand AND
              DBConfig.TableName = ttDB.TableName AND
              DBConfig.DBState = 0:
       ASSIGN 
@@ -321,7 +325,7 @@ FUNCTION fGetCDRDtl RETURNS LOGICAL
    
    IF ldaActive = ? THEN DO:
       FOR FIRST DBConfig NO-LOCK WHERE
-                DBConfig.Brand = gcBrand AND
+                DBConfig.Brand = Syst.Var:gcBrand AND
                 DBConfig.TableName = ttDB.TableName AND
                 DBConfig.DBState = 0:
          ASSIGN      
@@ -365,8 +369,8 @@ FUNCTION fGetCDRDtl RETURNS LOGICAL
       
       IF ttDB.Connect THEN DO:
          lcDBName = "dtlQuery".
-         CONNECT VALUE (ttDB.ConnName + " " +
-                        ttDB.ConnParam + " -ld " + lcDBName) NO-ERROR.
+         multitenancy.TenantInformation:mConnectDBSupressError
+               (ttDB.ConnName + " " + ttDB.ConnParam + " -ld " + lcDBName).
       END.
       ELSE lcDBName = ttDB.ConnName NO-ERROR.
       
@@ -511,7 +515,8 @@ FUNCTION fMobCDRCollect RETURNS INTEGER
    END.
    
    /* unbillable error calls */
-   IF lcErrorQuery > "" THEN DO:
+   IF LOOKUP("error",icCDRType) > 0 OR
+      lcErrorQuery > "" THEN DO:
       fSetCollectionDBs("roamcdr",
                         "ErrorCDR",
                         idaFromDate,
@@ -530,8 +535,8 @@ FUNCTION fMobCDRCollect RETURNS INTEGER
         
       IF ttDB.Connect THEN DO:
          lcDBName = "mcdrQuery".
-         CONNECT VALUE (ttDB.ConnName + " " + 
-                        ttDB.ConnParam + " -ld " + lcDBName) NO-ERROR.
+         multitenancy.TenantInformation:mConnectDBSupressError
+                  (ttDB.ConnName + " " + ttDB.ConnParam + " -ld " + lcDBName).
       END.
       ELSE lcDBName = ttDB.ConnName NO-ERROR.
       
@@ -588,7 +593,7 @@ FUNCTION fMobCDRCollect RETURNS INTEGER
       FOR EACH ttCli .
          CREATE CallScanner .
          ASSIGN
-            CallScanner.TMSTime     = fmakeTS()
+            CallScanner.TMSTime     = Func.Common:mMakeTS()
             CallScanner.UserCode    = icUser
             CallScanner.SystemID    = "XFERA_CUI" 
             CallScanner.EventType   = lcQueryCase

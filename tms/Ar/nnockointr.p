@@ -18,12 +18,11 @@
   Version ......: M15
  ---------------------------------------------------------------------------- */
 
-{commali.i}
-{excel.i}
-{date.i} 
+{Syst/commali.i}
+{Func/excel.i}
 /* temp-table */
-{paymfile.i}
-{farplog.i}
+{Ar/paymfile.i}
+{Func/farplog.i}
 
 DEF INPUT  PARAMETER  ocr-file   AS c NO-UNDO.
 DEF INPUT  PARAMETER  ocr-acct   AS i NO-UNDO.
@@ -107,7 +106,7 @@ FUNCTION fClearInvNo   RETURNS INTEGER
 
 END FUNCTION.
 
-{cparam.i DateLimit RETURN} DateLimit = TMSParam.DateVal.
+{Func/cparam.i DateLimit RETURN} DateLimit = TMSParam.DateVal.
 
 rc = 0.
 
@@ -152,7 +151,7 @@ ELSE DO:
       dd  = INT(SUBSTR(xDate,5,2))
       mm  = INT(SUBSTR(xDate,3,2))
       yyy = INT(SUBSTR(xDate,1,2))
-      yyy = fAddCent(yyy)
+      yyy = Func.Common:mAddCent(yyy)
 
       chkdate     = DATE(mm,dd,yyy)
       x_writeDate = chkdate
@@ -163,7 +162,7 @@ ELSE DO:
    /* check log */
    IF NOT fCheckArplog(ocr-file,
                        LogPrefix,
-                       katun)
+                       Syst.Var:katun)
    THEN RETURN. 
 
    /* open the ocr PaymFile again */
@@ -252,7 +251,7 @@ ELSE DO:
                      Invoice.DueDate < x_PayDate
                   BY Invoice.DueDate:
 
-               RUN invbal (Invoice.InvNum,OUTPUT paybal).
+               RUN Ar/invbal.p (Invoice.InvNum,OUTPUT paybal).
                IF paybal <= 0 THEN NEXT.
 
                InvNum = Invoice.InvNum.

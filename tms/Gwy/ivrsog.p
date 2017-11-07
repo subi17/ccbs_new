@@ -8,7 +8,6 @@
   Version ......: 
   --------------------------------------------------------------------------- */
 
-{timestamp.i}
 
 DEFINE INPUT PARAMETER piSoLog    AS INTEGER   NO-UNDO.
 DEFINE INPUT PARAMETER pcCommLine AS CHARACTER NO-UNDO.
@@ -27,7 +26,7 @@ DEFINE VARIABLE llTimeOut  AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE lcLogDir   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcLogFile  AS CHARACTER NO-UNDO.
 
-RUN sogpost(pcCommLine,"LOGIN ivr ivr",OUTPUT lcError).
+RUN Gwy/sogpost.p(pcCommLine,"LOGIN ivr ivr",OUTPUT lcError).
 
 IF lcError BEGINS "ERROR:" THEN RETURN lcError.
 
@@ -56,7 +55,7 @@ IF RETURN-VALUE = "OK" THEN REPEAT ON STOP UNDO, LEAVE ON QUIT UNDO, LEAVE:
                ".log".
 
    OUTPUT TO VALUE(lcLogDir + lcLogFile) APPEND.
-   PUT UNFORMATTED "OK: " fTS2HMS(fMakeTS()) " " llTimeOut " " lcResponse CHR(10).
+   PUT UNFORMATTED "OK: " Func.Common:mTS2HMS(Func.Common:mMakeTS()) " " llTimeOut " " lcResponse CHR(10).
    OUTPUT CLOSE.
 
    IF NOT llTimeOut THEN DO:

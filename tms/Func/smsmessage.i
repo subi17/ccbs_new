@@ -7,8 +7,7 @@
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{timestamp.i}
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 &IF "{&SMSMESSAGE_I}" NE "YES"
 &THEN
@@ -35,7 +34,7 @@ FUNCTION fCreateSMS RETURNS INTEGER
     iiSMSType  AS INT):
    
    DEF VAR ldeCreStamp AS DEC NO-UNDO. 
-   ldeCreStamp = fMakeTS().
+   ldeCreStamp = Func.Common:mMakeTS().
 
    CREATE SMSMessage.
    ASSIGN SMSMessage.SMSSeq      = NEXT-VALUE(SMSSeq)
@@ -64,7 +63,7 @@ FUNCTION fCreateResponseSMS RETURNS INTEGER
     ideDeliStamp AS DEC):
    
    DEF VAR ldeCreStamp AS DEC NO-UNDO. 
-   ldeCreStamp = fMakeTS().
+   ldeCreStamp = Func.Common:mMakeTS().
 
    CREATE SMSMessage.
    ASSIGN SMSMessage.SMSSeq      = NEXT-VALUE(SMSSeq)

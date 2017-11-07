@@ -3,9 +3,9 @@
 
 &GLOBAL-DEFINE flimitreq YES
 
-{commali.i}
-{fcreatereq.i}
-{eventval.i}
+{Syst/commali.i}
+{Func/fcreatereq.i}
+{Syst/eventval.i}
 
 DEF BUFFER bufLimit FOR Limit.
 /* somehow have to prevent calling fCleanEventObjects */
@@ -13,9 +13,9 @@ DEF VAR llCleanFLimitReqEventLog AS LOGICAL NO-UNDO INIT TRUE.
 
 IF llDoEvent THEN DO:
 
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhBufLimit     AS HANDLE    NO-UNDO.
    lhBufLimit = BUFFER bufLimit:HANDLE.
@@ -40,7 +40,7 @@ FUNCTION fLimitRequest RETURNS INTEGER
    
    /* Check ongoing limit requests */
    FIND FIRST MsRequest WHERE
-      MsRequest.Brand = gcBrand AND
+      MsRequest.Brand = Syst.Var:gcBrand AND
       MsRequest.Reqtype = 40 AND
       MsRequest.CustNum = iiCustnum AND
       LOOKUP(STRING(MsRequest.ReqStatus),"0,1,3") >  0 
@@ -53,7 +53,7 @@ FUNCTION fLimitRequest RETURNS INTEGER
    
    /* Check ongoing agreement customer requests */
    FIND FIRST MsRequest WHERE
-      MsRequest.Brand = gcBrand AND
+      MsRequest.Brand = Syst.Var:gcBrand AND
       MsRequest.Reqtype = 10 AND
       MsRequest.CustNum = iiCustnum AND
       LOOKUP(STRING(MsRequest.ReqStatus),"0,1,3,7") >  0 
@@ -66,7 +66,7 @@ FUNCTION fLimitRequest RETURNS INTEGER
 
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest(40,
                   idActStamp,

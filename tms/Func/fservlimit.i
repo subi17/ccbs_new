@@ -1,11 +1,11 @@
-{tmsconst.i}
-{fdss.i}
+{Syst/tmsconst.i}
+{Func/fdss.i}
 
 DEF TEMP-TABLE ttServiceLCounter NO-UNDO
-   LIKE ServiceLCounter.
+   LIKE ServiceLCounter USE-INDEX msseq USE-INDEX Custnum.
 
 DEF TEMP-TABLE ttSLCounterItem NO-UNDO
-   LIKE SLCounterItem
+   LIKE SLCounterItem USE-INDEX msseq
    FIELD Picked AS INT.
    
 FUNCTION fConvertAmountUnit RETURNS DECIMAL
@@ -85,14 +85,14 @@ FUNCTION fIsServiceLimitAllowed RETURNS LOG
          FIND FIRST ServiceLCounter WHERE
                     ServiceLCounter.Custnum = iicustnum           AND
                     serviceLCounter.SLseq   = iiSlseq             AND 
-                    ServiceLCounter.Period  = liPeriod  
-              EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+                    ServiceLCounter.Period  = liPeriod            AND
+                    ServiceLCounter.MsId    = iiMSID              EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
       ELSE
          FIND FIRST ServiceLCounter WHERE
                     ServiceLCounter.Msseq   = msseq               AND
                     serviceLCounter.SLseq   = iiSlseq             AND 
-                    ServiceLCounter.Period  = liPeriod  
-              EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+                    ServiceLCounter.Period  = liPeriod            AND
+                    ServiceLCounter.MsId    = iiMSID              EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
 
       liQty = liQty + 1.
       
@@ -233,12 +233,14 @@ FUNCTION fTempTableIsServiceLimitAllowed RETURNS LOG
          FIND FIRST ttServiceLCounter WHERE
                     ttServiceLCounter.Custnum = iiCustnum AND
                     ttserviceLCounter.SLseq   = iiSlseq   AND 
-                    ttServiceLCounter.Period  = liPeriod  NO-ERROR.
+                    ttServiceLCounter.Period  = liPeriod  AND 
+                    ttServiceLCounter.MsId    = iiMSID    NO-ERROR.
       ELSE
          FIND FIRST ttServiceLCounter WHERE
                     ttServiceLCounter.Msseq   = msseq    AND
                     ttserviceLCounter.SLseq   = iiSlseq  AND 
-                    ttServiceLCounter.Period  = liPeriod NO-ERROR.
+                    ttServiceLCounter.Period  = liPeriod AND 
+                    ttServiceLCounter.MsId    = iiMSID   NO-ERROR.
 
       /* NEW ServiceLimit Counter */
       IF NOT AVAIL ttServiceLCounter THEN DO:
@@ -705,72 +707,81 @@ FUNCTION fServiceLCounter2Temp RETURNS LOGICAL
    DEF VAR liPeriodFrom AS INT NO-UNDO. 
    DEF VAR liPeriodTo AS INT NO-UNDO. 
    DEF VAR ldeServiceLCounterAmt AS DEC NO-UNDO.
+   DEF VAR liPeriodType AS INT NO-UNDO.
 
-   ASSIGN
-      liPeriodFrom = YEAR(idaFromDate) * 100 + MONTH(idaFromDate)
-      liPeriodTo   = YEAR(idaToDate) * 100 + MONTH(idaToDate).
+   DO liPeriodType = 1 to 2:
 
-   FOR EACH ServiceLCounter NO-LOCK WHERE
-            ServiceLCounter.MsSeq   = iiMsSeq AND 
-            ServiceLCounter.Period >= liPeriodFrom AND 
-            ServiceLcounter.Period <= liPeriodTo:
+      IF liPeriodType = 1 THEN ASSIGN
+         liPeriodFrom = YEAR(idaFromDate) * 100 + MONTH(idaFromDate)
+         liPeriodTo   = YEAR(idaToDate) * 100 + MONTH(idaToDate).
+      ELSE ASSIGN
+         liPeriodFrom = (liPeriodFrom * 100) + 1
+         liPeriodTo   = (liPeriodTo * 100) + 31.
 
-      IF CAN-FIND(FIRST ttServiceLCounter WHERE
-                 ttServiceLCounter.MSSeq   = ServiceLCounter.MSSeq   AND
-                 ttServiceLCounter.SLSeq   = ServiceLCounter.SLSeq   AND
-                 ttServiceLCounter.Period  = ServiceLCounter.Period)
-      THEN NEXT. 
+      FOR EACH ServiceLCounter NO-LOCK WHERE
+               ServiceLCounter.MsSeq   = iiMsSeq AND
+               ServiceLCounter.Period >= liPeriodFrom AND
+               ServiceLcounter.Period <= liPeriodTo:
 
-      CREATE ttServiceLCounter.
-      BUFFER-COPY ServiceLCounter TO ttServiceLCounter.
-      ASSIGN
-      ttServiceLCounter.Amt    = 0
-      ttServiceLCounter.Latest = 0
-      ttServiceLCounter.Limit  = 0.
+         IF CAN-FIND(FIRST ttServiceLCounter WHERE
+                    ttServiceLCounter.MSSeq   = ServiceLCounter.MSSeq   AND
+                    ttServiceLCounter.SLSeq   = ServiceLCounter.SLSeq   AND
+                    ttServiceLCounter.Period  = ServiceLCounter.Period)
+         THEN NEXT.
+
+         CREATE ttServiceLCounter.
+         BUFFER-COPY ServiceLCounter TO ttServiceLCounter.
+         ASSIGN
+         ttServiceLCounter.Amt    = 0
+         ttServiceLCounter.Latest = 0
+         ttServiceLCounter.Limit  = 0.
+
+         FOR EACH SLCounterItem NO-LOCK WHERE
+                  SLCounterItem.MsSeq   = ServiceLCounter.MsSeq AND
+                  SLCounterItem.Period = ServiceLCounter.Period AND
+                  SLCounterItem.SLSeq = ServiceLCounter.SLSeq:
+
+            IF CAN-FIND(FIRST ttSLCounterItem WHERE
+                       ttSLCounterItem.MSSeq   = SLCounterItem.MSSeq   AND
+                       ttSLCounterItem.SLSeq   = SLCounterItem.SLSeq   AND
+                       ttSLCounterItem.Period  = SLCounterItem.Period AND
+                       ttSLCounterItem.SLCItem = SLCounterItem.SLCItem)
+            THEN NEXT.
+
+            CREATE ttSLCounterItem.
+            BUFFER-COPY SLCounterItem TO ttSLCounterItem.
+            ASSIGN
+               ttSLCounterItem.Picked = 0.
+         END.
+      END.
    
-      FOR EACH SLCounterItem NO-LOCK WHERE
-               SLCounterItem.MsSeq   = ServiceLCounter.MsSeq AND 
-               SLCounterItem.Period = ServiceLCounter.Period AND 
-               SLCounterItem.SLSeq = ServiceLCounter.SLSeq:
+      IF liPeriodType EQ 1 THEN
+      FOR EACH ServiceLCounter NO-LOCK WHERE
+               ServiceLCounter.Custnum = iiCustnum AND 
+               ServiceLCounter.Period >= liPeriodFrom AND 
+               ServiceLcounter.Period <= liPeriodTo:
 
-         IF CAN-FIND(FIRST ttSLCounterItem WHERE
-                    ttSLCounterItem.MSSeq   = SLCounterItem.MSSeq   AND
-                    ttSLCounterItem.SLSeq   = SLCounterItem.SLSeq   AND
-                    ttSLCounterItem.Period  = SLCounterItem.Period AND
-                    ttSLCounterItem.SLCItem = SLCounterItem.SLCItem)
+         IF CAN-FIND(FIRST ttServiceLCounter WHERE
+                    ttServiceLCounter.CustNum = ServiceLCounter.CustNum AND 
+                    ttServiceLCounter.SLSeq   = ServiceLCounter.SLSeq   AND
+                    ttServiceLCounter.Period  = ServiceLCounter.Period)
          THEN NEXT. 
 
-         CREATE ttSLCounterItem.
-         BUFFER-COPY SLCounterItem TO ttSLCounterItem.
+         CREATE ttServiceLCounter.
+         BUFFER-COPY ServiceLCounter TO ttServiceLCounter.
+         ASSIGN ttServiceLCounter.Latest =  0
+                ttServiceLCounter.Amt = 0
+                ttServiceLCounter.Limit = 0.
+
+         /* Get other bundle usages */
          ASSIGN
-            ttSLCounterItem.Picked = 0.
+            ldeServiceLCounterAmt = fGetOtherBundleUsages(ServiceLCounter.Custnum,
+                                                          ServiceLCounter.Period)
+            ttServiceLCounter.Amt = (ldeServiceLCounterAmt * 1024 * 1024).
       END.
-   END.
-
-   FOR EACH ServiceLCounter NO-LOCK WHERE
-            ServiceLCounter.Custnum = iiCustnum AND 
-            ServiceLCounter.Period >= liPeriodFrom AND 
-            ServiceLcounter.Period <= liPeriodTo:
-
-      IF CAN-FIND(FIRST ttServiceLCounter WHERE
-                 ttServiceLCounter.CustNum = ServiceLCounter.CustNum AND 
-                 ttServiceLCounter.SLSeq   = ServiceLCounter.SLSeq   AND
-                 ttServiceLCounter.Period  = ServiceLCounter.Period)
-      THEN NEXT. 
-
-      CREATE ttServiceLCounter.
-      BUFFER-COPY ServiceLCounter TO ttServiceLCounter.
-      ASSIGN ttServiceLCounter.Latest =  0
-             ttServiceLCounter.Amt = 0
-             ttServiceLCounter.Limit = 0.
-
-      /* Get other bundle usages */
-      ASSIGN
-         ldeServiceLCounterAmt = fGetOtherBundleUsages(ServiceLCounter.Custnum,
-                                                       ServiceLCounter.Period)
-         ttServiceLCounter.Amt = (ldeServiceLCounterAmt * 1024 * 1024).
-   END.
     
+   END.
+
 END FUNCTION.    
 
 FUNCTION fTemp2ServiceLCounter RETURNS LOGICAL:

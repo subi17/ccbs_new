@@ -356,7 +356,7 @@ PROCEDURE pShowSchema:
       ttXMLSchema.XML = FILL("  ", ttXMLSchema.LevelNum - 1) + ttXMLSchema.XML.
    END.
    
-   RUN xmlbrowser.p(INPUT TABLE ttXMLSchema).
+   RUN Mc/xmlbrowser.p(INPUT TABLE ttXMLSchema).
 
    EMPTY TEMP-TABLE ttXMLSchema.
 

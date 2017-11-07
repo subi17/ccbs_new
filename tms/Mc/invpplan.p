@@ -8,7 +8,7 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT PARAMETER iiInvNum  AS INT  NO-UNDO.
 
@@ -24,8 +24,7 @@ ASSIGN lcLetters = "A,B,C,D,E,F"
 /* get names from tmscodes */
 DO liType = 1 TO 3:
    lcMenuc[liType + 1] = " " + ENTRY(liType + 1,lcLetters) + ") " +
-                         DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                          "PaymPlan",
+                         Func.Common:mTMSCodeName("PaymPlan",
                                           "PPType",
                                           STRING(liType)).
 END.
@@ -40,10 +39,10 @@ FIND Invoice WHERE Invoice.InvNum = iiInvNum NO-LOCK.
 
 DO WHILE TRUE:
 
-      ASSIGN ufk    = 0 
-             ufk[8] = 8 
-             ehto   = 3. 
-      RUN ufkey. 
+      ASSIGN Syst.Var:ufk    = 0 
+             Syst.Var:ufk[8] = 8 
+             Syst.Var:ehto   = 3. 
+      RUN Syst/ufkey.p. 
 
       DISPLAY
          lcMenuc[1] SKIP(1)
@@ -62,19 +61,19 @@ DO WHILE TRUE:
       IF LOOKUP(KEYLABEL(LASTKEY),"x,8,F8") > 0 THEN LEAVE.
 
       IF FRAME-INDEX = 1 THEN DO:
-         RUN paymplan (Invoice.CustNum,0,0).
+         RUN Ar/paymplan.p (Invoice.CustNum,0,0).
       END.
       
       ELSE IF FRAME-INDEX = 2  THEN DO:
-          RUN duedatechg (iiInvNum).
+          RUN Ar/duedatechg.p (iiInvNum).
       END.
 
       ELSE IF FRAME-INDEX = 3  THEN DO:
-         RUN ppaymcrea (iiInvNum).
+         RUN Ar/ppaymcrea.p (iiInvNum).
       END.
 
       ELSE IF FRAME-INDEX = 4  THEN DO:
-         RUN paymplan (Invoice.CustNum,-1,0).
+         RUN Ar/paymplan.p (Invoice.CustNum,-1,0).
       END.
 
       ELSE LEAVE.

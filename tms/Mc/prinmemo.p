@@ -8,12 +8,11 @@
   VERSIO .......: M15
 ---------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{utumaa.i new }
-{feplstart.i}
-{cparam2.i}
-{edefine.i new}
+{Syst/commali.i}
+{Syst/utumaa.i new }
+{Func/feplstart.i}
+{Func/cparam2.i}
+{Inv/edefine.i new}
 
 DEF INPUT PARAMETER icHostTable LIKE Memo.HostTable  NO-UNDO.
 DEF INPUT PARAMETER icKeyValue  LIKE Memo.KeyValue   NO-UNDO.
@@ -94,8 +93,7 @@ FUNCTION fTargetAddr RETURNS LOGICAL
           lcPost   = ""
           lcTarget = "".
           
-   lcTarget = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "InvText",
+   lcTarget = Func.Common:mTMSCodeName("InvText",
                                "AddrTarget",
                                STRING(iiAddress)).
            
@@ -112,7 +110,7 @@ FUNCTION fTargetAddr RETURNS LOGICAL
    DISPLAY lcTarget lcName lcAddr lcPost WITH FRAME rajat.
 END.
 
-FIND FIRST Memo WHERE Memo.Brand     = gcBrand     AND
+FIND FIRST Memo WHERE Memo.Brand     = Syst.Var:gcBrand     AND
                       Memo.HostTable = icHostTable AND
                       Memo.KeyValue  = icKeyValue  AND 
                       Memo.MemoSeq   = iiMemoSeq NO-LOCK NO-ERROR.
@@ -146,7 +144,7 @@ ASSIGN tuni1         = "Memo"
        liLetterClass = fCParamI("EPLGenLClass")
        liAddress     = 1
        llUfkey       = FALSE
-       nap           = "1"
+       Syst.Var:nap           = "1"
        lcTitle       = '"' + Memo.MemoTitle + '"'
        llEPL         = FALSE.
 
@@ -165,20 +163,20 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
             
    IF llUfkey THEN DO:
       ASSIGN
-      ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-      ufk[5]= 63  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-      ehto = 3.
-      RUN ufkey.p.
+      Syst.Var:ufk[1]= 132 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+      Syst.Var:ufk[5]= 63  Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+      Syst.Var:ehto = 3.
+      RUN Syst/ufkey.p.
 
       READKEY.
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
    END.
    ELSE llUfkey = TRUE.
 
-   if lookup(nap,"1,f1") > 0 THEN DO:
+   if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:
    
-      ASSIGN ehto = 9.
-      RUN ufkey.p.
+      ASSIGN Syst.Var:ehto = 9.
+      RUN Syst/ufkey.p.
 
       REPEAT ON ENDKEY UNDO, LEAVE:
       
@@ -193,7 +191,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
              IF FRAME-FIELD = "liAddress" AND keylabel(lastkey) = "F9" 
              THEN DO:
               
-                RUN h-tmscodes(INPUT "InvText",   /* TableName*/
+                RUN Help/h-tmscodes.p(INPUT "InvText",   /* TableName*/
                                      "AddrTarget", /* FieldName */
                                      "Printing",   /* GroupCode */
                                OUTPUT lcCode).
@@ -201,13 +199,13 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
                 IF lcCode NE "" AND lcCode NE ? THEN 
                 DISPLAY INTEGER(lcCode) @ liAddress WITH FRAME rajat.
                 
-                ehto = 9.
-                RUN ufkey.
+                Syst.Var:ehto = 9.
+                RUN Syst/ufkey.p.
                 
                 NEXT.
              END.
              
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 
              THEN DO WITH FRAME rajat:
              
                 PAUSE 0.
@@ -227,7 +225,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
 
    END.   
    
-   else if lookup(nap,"5,f5") > 0 THEN DO:
+   else if lookup(Syst.Var:nap,"5,f5") > 0 THEN DO:
       
       IF lcName = "" OR
          lcPost = ""
@@ -242,8 +240,8 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
          IF NOT llOk THEN NEXT.
       END.
       
-      ehto = 5. 
-      RUN ufkey.
+      Syst.Var:ehto = 5. 
+      RUN Syst/ufkey.p.
  
       IF llEPl THEN DO:
          IF NOT fEPLStart(lcTestFlag) THEN NEXT.
@@ -251,11 +249,11 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
        
       ELSE DO:
          tila = TRUE.
-         {tmsreport.i RETURN}
+         {Syst/tmsreport.i RETURN}
 
       END.
 
-      RUN printxt (Memo.CustNum,
+      RUN Mc/printxt.p (Memo.CustNum,
                    0,                      /* msseq  */
                    "",
                    2,                      /* 2=memo */
@@ -269,7 +267,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
       
       IF NOT llEPL THEN DO:
          tila = FALSE.
-         {utuloste.i}
+         {Syst/utuloste.i}
       END.
 
       IF lcErrFile = "" THEN 
@@ -286,11 +284,11 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
       LEAVE toimi.
    END.
 
-   else if lookup(nap,"8,f8") > 0 THEN DO:
+   else if lookup(Syst.Var:nap,"8,f8") > 0 THEN DO:
       LEAVE toimi.
    END.
       
-END. /* toimi */
+END. /* Syst.Var:toimi */
 
 HIDE MESSAGE no-pause.
 HIDE FRAME rajat no-pause.

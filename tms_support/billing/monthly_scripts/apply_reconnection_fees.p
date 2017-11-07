@@ -1,4 +1,3 @@
-{timestamp.i}
 
 def stream sread.
 def stream slog.
@@ -155,7 +154,7 @@ repeat:
       if lcmemo > "" then do:
          CREATE Memo.
          ASSIGN
-         Memo.CreStamp  = fMakeTS()
+         Memo.CreStamp  = Func.Common:mMakeTS()
          Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
          Memo.Brand     = "1"
          Memo.MemoTitle = "Reconnection Fee"

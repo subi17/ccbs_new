@@ -9,7 +9,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF shared VAR siirto AS CHAR.
 
@@ -28,18 +28,18 @@ form
     Exchange.ExCode  column-label "Ex.num"
     ExName        column-label "Name"
 WITH
-    scroll 1 11 DOWN  ROW 4 centered COLOR value(cfc)
-    title color value(ctc) " EXCHANGES "
+    scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " EXCHANGES "
     OVERLAY FRAME tlse.
 
 form /* Maa :n hakua varten */
     haku
     help "Ange vAxelkod"
 WITH
-    row 4 col 2 title color value(ctc) " FIND CODE  "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    row 4 col 2 title color value(Syst.Var:ctc) " FIND CODE  "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr.
 
-cfc = "tlse". RUN ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 Runko:
 repeat:
 
@@ -77,10 +77,10 @@ print-line:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk = 0 ufk[1] = 35 ufk[5] = 11
-         ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
-         siirto = ? ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         Syst.Var:ufk = 0 Syst.Var:ufk[1] = 35 Syst.Var:ufk[5] = 11
+         Syst.Var:ufk[6] = 0 Syst.Var:ufk[8] = 8  Syst.Var:ufk[9] = 1
+         siirto = ? Syst.Var:ehto = 3 ufkey = FALSE.
+         RUN Syst/ufkey.p.
       END.
   END. /* print-line */
 
@@ -88,14 +88,14 @@ BROWSE:
       repeat WITH FRAME tlse ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE no-pause.
-         CHOOSE ROW Exchange.ExCode ;(uchoose.i;) no-error WITH FRAME tlse.
-         COLOR DISPLAY value(ccc) Exchange.ExCode WITH FRAME tlse.
+         CHOOSE ROW Exchange.ExCode {Syst/uchoose.i} no-error WITH FRAME tlse.
+         COLOR DISPLAY value(Syst.Var:ccc) Exchange.ExCode WITH FRAME tlse.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.
-         nap = keylabel(LASTKEY).
+         Syst.Var:nap = keylabel(LASTKEY).
 
          /* previous line */
-         if lookup(nap,"cursor-up") > 0 THEN DO
+         if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO
          WITH FRAME tlse:
             IF FRAME-LINE = 1 THEN DO:
                FIND Exchange where recid(Exchange) = rtab[FRAME-LINE] no-lock.
@@ -121,7 +121,7 @@ BROWSE:
          END. /* previous line */
 
          /* NEXT line */
-         if lookup(nap,"cursor-down") > 0 THEN DO WITH FRAME tlse:
+         if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO WITH FRAME tlse:
             IF FRAME-LINE = FRAME-DOWN THEN DO:
                FIND Exchange where recid(Exchange) = rtab[FRAME-LINE] no-lock .
                FIND NEXT Exchange no-lock no-error.
@@ -147,7 +147,7 @@ BROWSE:
          END. /* NEXT line */
 
          /* previous page */
-         else if lookup(nap,"page-up,prev-page") > 0 THEN DO WITH FRAME tlse:
+         else if lookup(Syst.Var:nap,"page-up,prev-page") > 0 THEN DO WITH FRAME tlse:
             FIND Exchange where recid(Exchange) = ylin no-lock no-error.
             FIND prev Exchange no-lock no-error.
             IF AVAILABLE Exchange THEN DO:
@@ -169,7 +169,7 @@ BROWSE:
         END. /* previous page */
 
         /* NEXT page */
-        else if lookup(nap,"page-down,next-page") > 0 THEN DO WITH FRAME tlse:
+        else if lookup(Syst.Var:nap,"page-down,next-page") > 0 THEN DO WITH FRAME tlse:
            IF rtab[FRAME-DOWN] = ? THEN DO:
                BELL.
                message "YOU ARE ON THE LAST PAGE".
@@ -183,9 +183,9 @@ BROWSE:
         END. /* NEXT page */
 
         /* Haku */
-        if lookup(nap,"1,f1") > 0 THEN DO:  /* haku */
-           cfc = "puyr". RUN ufcolor.
-           haku = "". ehto = 9. RUN ufkey. ufkey = TRUE.
+        if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:  /* haku */
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           haku = "". Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE haku WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
            IF haku <> "" THEN DO:
@@ -206,20 +206,20 @@ BROWSE:
         END. /* Haku */
 
         /* Valinta */
-        else if lookup(nap,"return,enter,5,f5") > 0 THEN DO:
+        else if lookup(Syst.Var:nap,"return,enter,5,f5") > 0 THEN DO:
            FIND Exchange where recid(Exchange) = rtab[FRAME-LINE] no-lock.
            siirto = string(Exchange.ExCode).
            LEAVE runko.
         END. /* Valinta */
 
         /* Lisays */
-        else if lookup(nap,"6,f6") > 0 THEN DO:
+        else if lookup(Syst.Var:nap,"6,f6") > 0 THEN DO:
            ASSIGN must-add = TRUE.
            NEXT LOOP.
         END. /* Lisays */
 
         /* Ensimmainen tietue */
-        else if lookup(nap,"home,h") > 0 THEN DO:
+        else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
            FIND FIRST Exchange no-lock.
            ylin = recid(Exchange).
            must-print = TRUE.
@@ -227,14 +227,14 @@ BROWSE:
         END. /* Ensimmainen tietue */
 
         /* LAST record */
-        else if lookup(nap,"end,e") > 0 THEN DO :
+        else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO :
            FIND LAST Exchange no-lock.
            ylin = recid(Exchange).
            must-print = TRUE.
            NEXT LOOP.
         END. /* LAST record */
 
-        else if nap = "8" or nap = "f8" THEN LEAVE runko. /* Paluu */
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" THEN LEAVE runko. /* Paluu */
 
      END.  /* BROWSE */
    END.  /* LOOP */

@@ -8,9 +8,8 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEFINE INPUT  PARAMETER icInvGrp       AS CHAR NO-UNDO.
 DEFINE INPUT  PARAMETER iiCustNum1     AS INT  NO-UNDO.
@@ -47,7 +46,7 @@ DEF VAR lcFileTxt   AS CHAR NO-UNDO.
 DEF VAR lcFileXml   AS CHAR NO-UNDO. 
 DEF VAR liNBCCount  AS INT  NO-UNDO. 
 
-{ddoutfilett.i}
+{Inv/ddoutfilett.i}
 
 DEF TEMP-TABLE ttDueDate NO-UNDO
    FIELD DueDate  AS DATE
@@ -133,7 +132,7 @@ END.
 
 IF icInvID1 = icInvID2 THEN 
 FOR FIRST Invoice NO-LOCK WHERE
-          Invoice.Brand    = gcBrand AND
+          Invoice.Brand    = Syst.Var:gcBrand AND
           Invoice.ExtInvID = icInvID1,
     FIRST Customer OF Invoice NO-LOCK:
    
@@ -145,7 +144,7 @@ END.
 
 ELSE IF iiInvDate NE ? THEN 
 FOR EACH Invoice NO-LOCK WHERE    
-         Invoice.Brand    = gcBrand    AND
+         Invoice.Brand    = Syst.Var:gcBrand    AND
          Invoice.InvDate  = iiInvDate  AND
          Invoice.ExtInvID >= icInvID1  AND      
          Invoice.ExtInvID <= icInvID2  AND   
@@ -169,7 +168,7 @@ END.
 
 ELSE 
 FOR EACH Invoice NO-LOCK WHERE               
-         Invoice.Brand  = gcBrand      AND
+         Invoice.Brand  = Syst.Var:gcBrand      AND
          Invoice.ExtInvID >= icInvID1  AND      
          Invoice.ExtInvID <= icInvID2  AND   
          Invoice.CustNum >= iiCustNum1 AND
@@ -234,8 +233,7 @@ FOR EACH ttDueDate:
    ELSE lcFile = REPLACE(icFile,"#IGRP","ALL").
    
    /* due date to file name */   
-   lcDate = DYNAMIC-FUNCTION("fDateFmt" IN ghFunc1,
-                             ttDueDate.DueDate,
+   lcDate = Func.Common:mDateFmt(ttDueDate.DueDate,
                              "yyyymmdd").
    ASSIGN 
       lcFileXml = REPLACE(lcFileXml,"#DDATE",lcDate)
@@ -251,7 +249,7 @@ FOR EACH ttDueDate:
    
    IF icCSBFileForm EQ "XML" OR
       icCSBFileForm EQ "BOTH" THEN 
-      RUN ddoutfile_xml.p (INPUT-OUTPUT TABLE ttInvoice,  
+      RUN Inv/ddoutfile_xml.p (INPUT-OUTPUT TABLE ttInvoice,  
                     ttDueDate.DueDate,
                     ttDueDate.BankCode,
                     liPicked,
@@ -287,18 +285,18 @@ DO TRANS:
 
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = gcBrand   
+      ActionLog.Brand        = Syst.Var:gcBrand   
       ActionLog.TableName    = "Invoice"  
       ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                STRING(MONTH(TODAY),"99") + 
                                STRING(DAY(TODAY),"99")
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.Var:katun
       ActionLog.ActionID     = "DDFILES"
       ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
       ActionLog.ActionChar   = " Files: " + STRING(oiFileCount) + CHR(10) +
                                " Invoices: " + STRING(oiInvCount)
       ActionLog.ActionStatus = 3.
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
 END.
 
 RETURN ocError.

@@ -8,7 +8,7 @@
   Version ......: xfera 
   ---------------------------------------------------------------------- */
 
-{commali.i}.
+{Syst/commali.i}.
 
 DEFINE INPUT PARAM piMsSeq     AS INT NO-UNDO. 
 DEFINE INPUT PARAM piCustNum   AS INT NO-UNDO. 
@@ -37,7 +37,7 @@ DEFINE VARIABLE ok           AS LOGICAL format "Yes/No" NO-UNDO.
 FORM
     TMRule.Name COLUMN-LABEL "Ticket management rules"
 WITH ROW FrmRow CENTER width 42 OVERLAY FrmDown DOWN SCROLL 1
-    COLOR VALUE(cfc)   
+    COLOR VALUE(Syst.Var:cfc)   
     FRAME sel.
 
 orders = "TMC".
@@ -52,7 +52,7 @@ ELSE DO:
    RETURN.
 END.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 LOOP:
@@ -110,31 +110,31 @@ BROWSE:
       
       IF ufkey THEN DO:
         ASSIGN
-        ufk = 0
-        ufk[1]= 968  
-        ufk[2]= 1521 WHEN piCustnum > 0  
-        ufk[3]= 0
-        ufk[5]= 0
-        ufk[6]= 0 
-        ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
-         RUN ufkey.
+        Syst.Var:ufk = 0
+        Syst.Var:ufk[1]= 968  
+        Syst.Var:ufk[2]= 1521 WHEN piCustnum > 0  
+        Syst.Var:ufk[3]= 0
+        Syst.Var:ufk[5]= 0
+        Syst.Var:ufk[6]= 0 
+        Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW TMRule.Name ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TMRule.Name WITH FRAME sel.
+        CHOOSE ROW TMRule.Name {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) TMRule.Name WITH FRAME sel.
       END.
       
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -158,10 +158,10 @@ BROWSE:
         NEXT.
       END.
       
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -186,7 +186,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -212,7 +212,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND TMRule WHERE recid(TMRule) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -236,7 +236,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -250,43 +250,43 @@ BROWSE:
        END.
      END. /* NEXT page */
      
-     ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 AND Syst.Var:ufk[2] > 0 THEN DO:
         RUN local-find-this(false).
         HIDE FRAME sel no-pause.
         VIEW FRAME sel.
-        RUN tmlimit(TMRule.TMRuleSeq,piMsSeq,piCustNum,1).
+        RUN Mm/tmlimit.p(TMRule.TMRuleSeq,piMsSeq,piCustNum,1).
         ufkey = true.
         NEXT LOOP.
      END.
      
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO:
         RUN local-find-this(false).
         HIDE FRAME sel no-pause.
-        RUN tmcounter(TMRule.TMRuleSeq,piMsSeq,piCustNum).
+        RUN Mm/tmcounter.p(TMRule.TMRuleSeq,piMsSeq,piCustNum).
         VIEW FRAME sel.
         ufkey = true.
         NEXT LOOP.
      END.
      
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(TMRule) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(TMRule) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE local-find-this:
 
@@ -304,7 +304,7 @@ END PROCEDURE.
 PROCEDURE local-find-FIRST:
 
    FIND FIRST TMRule WHERE
-         TMRule.Brand     = gcBrand AND
+         TMRule.Brand     = Syst.Var:gcBrand AND
          TMRule.FromDate <= TODAY AND
          TMRule.ToDate   >= TODAY
    NO-LOCK NO-ERROR.
@@ -314,7 +314,7 @@ END PROCEDURE.
 PROCEDURE local-find-LAST:
    
    FIND LAST TMRule WHERE
-         TMRule.Brand = gcBrand AND
+         TMRule.Brand = Syst.Var:gcBrand AND
          TMRule.FromDate <= TODAY AND
          TMRule.ToDate   >= TODAY
    NO-LOCK NO-ERROR.
@@ -324,7 +324,7 @@ END PROCEDURE.
 PROCEDURE local-find-NEXT:
    
    FIND NEXT TMRule WHERE
-         TMRule.Brand = gcBrand AND
+         TMRule.Brand = Syst.Var:gcBrand AND
          TMRule.FromDate <= TODAY AND
          TMRule.ToDate   >= TODAY
    NO-LOCK NO-ERROR.
@@ -334,7 +334,7 @@ END PROCEDURE.
 PROCEDURE local-find-PREV:
    
    FIND PREV TMRule WHERE
-         TMRule.Brand = gcBrand AND
+         TMRule.Brand = Syst.Var:gcBrand AND
          TMRule.FromDate <= TODAY AND
          TMRule.ToDate   >= TODAY
    NO-LOCK NO-ERROR.

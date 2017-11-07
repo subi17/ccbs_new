@@ -8,13 +8,13 @@
   version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
-ASSIGN gcBrand = "1"
-       katun   = "CRON".
-{timestamp.i}
-{cparam2.i}
-{tmsconst.i}
-{fmakemsreq.i}
+{Syst/commpaa.i}
+ASSIGN Syst.Var:gcBrand = "1"
+       Syst.Var:katun   = "CRON".
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/multitenantfunc.i}
 
 DEF VAR liConfDays       AS INT  NO-UNDO.
 DEF VAR liReq            AS INT  NO-UNDO.
@@ -33,7 +33,9 @@ IF lcLogDir = "" OR lcLogDir = ? THEN lcLogDir = "/scratch/log/bb_cancel/".
 
 IF liConfDays = 0 OR liConfDays = ? THEN liConfDays = 90.
 
-lcLogFile = lcLogDir + "cancel_susp_bb_serv_" +
+lcLogFile = lcLogDir + 
+            CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1)))) +
+            "_cancel_susp_bb_serv_" +
             STRING(YEAR(TODAY))       +
             STRING(MONTH(TODAY),"99") +
             STRING(DAY(TODAY),"99") + ".txt".
@@ -49,7 +51,7 @@ PUT STREAM sout UNFORMATTED
 
 
 FOR EACH  MobSub WHERE
-          MobSub.Brand = gcBrand AND
+          MobSub.Brand = Syst.Var:gcBrand AND
           MobSub.ActivationDate < (TODAY - liConfDays) NO-LOCK:
     
     ASSIGN liReq       = 0
@@ -64,14 +66,14 @@ FOR EACH  MobSub WHERE
              MsRequest.ReqStatus  = {&REQUEST_STATUS_DONE} NO-LOCK
              BY MsRequest.UpdateStamp DESC:
         IF MsRequest.ReqIParam1 = 2 THEN DO:
-           fSplitTS(MsRequest.ActStamp, ldMsEndDate, liMsEndTime).
+           Func.Common:mSplitTS(MsRequest.ActStamp, ldMsEndDate, liMsEndTime).
            IF liConfDays >= (TODAY - ldMsEndDate) THEN LEAVE.
 
            liReq = fServiceRequest(INPUT MobSub.MsSeq,
                                    INPUT "BB",
                                    INPUT 0,                 /* deactivate  */
                                    INPUT "",
-                                   INPUT fMakeTS(),
+                                   INPUT Func.Common:mMakeTS(),
                                    INPUT "",                /* SalesMan */
                                    INPUT FALSE,             /* Set fees */
                                    INPUT FALSE,             /* SMS      */

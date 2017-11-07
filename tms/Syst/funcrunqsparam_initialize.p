@@ -7,9 +7,8 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{timestamp.i}
-{funcrunqsparam_initialize.i}
+{Syst/commali.i} 
+{Syst/funcrunqsparam_initialize.i}
 
 DEF INPUT PARAMETER iiFRQScheduleID AS INT NO-UNDO.
    
@@ -27,7 +26,7 @@ IF NOT AVAILABLE bQueueSched OR
    LOOKUP(bQueueSched.RunState,"Scheduled,Initialized,Running") = 0 THEN 
    RETURN ERROR.
    
-fSplitTS(bQueueSched.StartTS,
+Func.Common:mSplitTS(bQueueSched.StartTS,
          OUTPUT ldaRunDate,
          OUTPUT liRunTime).
      

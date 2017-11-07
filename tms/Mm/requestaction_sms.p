@@ -7,9 +7,9 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{requestaction_exec.i}
-{fsendsms.i}
+{Syst/commali.i}
+{Mm/requestaction_exec.i}
+{Func/fsendsms.i}
 {lib/smpp/smpp_defs.i}
 
 DEF INPUT PARAMETER iiMsRequest  AS INT  NO-UNDO.
@@ -31,7 +31,7 @@ IF NOT AVAILABLE bOrigRequest THEN RETURN "ERROR:Unknown request".
 lhRequest = BUFFER bOrigRequest:HANDLE.
 
 FIND FIRST CLIType WHERE
-           CLIType.Brand   = gcBrand AND
+           CLIType.Brand   = Syst.Var:gcBrand AND
            CLIType.CLIType = icCLIType NO-LOCK NO-ERROR.
 IF AVAILABLE CLIType THEN liPayType = CLIType.PayType.
 

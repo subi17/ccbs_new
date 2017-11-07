@@ -13,14 +13,13 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'SIM'}
-{fmakemsreq.i}
-{msreqfunc.i}
-{mnpoutchk.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'SIM'}
+{Func/fmakemsreq.i}
+{Func/msreqfunc.i}
+{Mnp/mnpoutchk.i}
+{Syst/tmsconst.i}
 
 IF lcRight NE "RW" THEN DO:
    MESSAGE 
@@ -67,8 +66,8 @@ skip(1)
 "       NEW SIM (ICC) ..........:" new-icc 
 help "Enter new SERIAL Number of a SIM CARD (ICC)"                   SKIP(1)
  WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) " CHANGE SIM FOR MSISDN " + MobSub.CLI + " "
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " CHANGE SIM FOR MSISDN " + MobSub.CLI + " "
     NO-LABELS 
     /*1 columns*/
     FRAME main.
@@ -78,7 +77,7 @@ FUNCTION fCheckNewSIM RETURNS CHAR
  iiSimDeliv AS INT):
    
    FIND new-SIM NO-LOCK WHERE 
-      new-SIM.Brand = gcBrand AND 
+      new-SIM.Brand = Syst.Var:gcBrand AND 
       new-SIM.ICC = icICC
    NO-ERROR.
    
@@ -130,7 +129,7 @@ FIND MobSub   WHERE
 NO-LOCK.
 
 FIND SIM      WHERE 
-     SIM.Brand    = gcBrand AND 
+     SIM.Brand    = Syst.Var:gcBrand AND 
      SIM.ICC      = MobSub.ICC
 NO-LOCK NO-ERROR.
      
@@ -150,13 +149,12 @@ FIND UserCustomer WHERE
      UserCustomer.CustNum = Mobsub.CustNum
 NO-LOCK NO-ERROR.
            
-IF Avail UserCustomer THEN UserName =  DYNAMIC-FUNCTION("fDispCustName" IN
-                                       ghFunc1, BUFFER UserCustomer).
+IF Avail UserCustomer THEN UserName = Func.Common:mDispCustName(BUFFER UserCustomer).
 ELSE UserName = "".
 
 FIND LAST MSISDN   WHERE 
      MSISDN.CLI    = MobSub.CLI  AND 
-     MSISDN.ValidTo > fMakeTS()
+     MSISDN.ValidTo > Func.Common:mMakeTS()
 NO-LOCK NO-ERROR.
 IF NOT avail msisdn THEN DO:
     MESSAGE 
@@ -173,8 +171,8 @@ END.
 **************************************************************************/
 
 /* search the default "lost-string" of SIMStat */
-{tmsparam.i SIMStatusLost return} ss-code-lost = TMSParam.IntVal.
-{tmsparam.i SIMStatusAtc  return} ss-code-atc  = TMSParam.IntVal.
+{Func/tmsparam.i SIMStatusLost return} ss-code-lost = TMSParam.IntVal.
+{Func/tmsparam.i SIMStatusAtc  return} ss-code-atc  = TMSParam.IntVal.
 
 
 
@@ -221,8 +219,8 @@ WITH FRAME main.
 MAIN:
 REPEAT WITH FRAME main:
 
-   ehto = 9. 
-   RUN ufkey.
+   Syst.Var:ehto = 9. 
+   RUN Syst/ufkey.p.
 
    UPDATE
       liSimdeliv
@@ -231,7 +229,7 @@ REPEAT WITH FRAME main:
    WITH FRAME main EDITING:
              READKEY.
              IF LASTKEY = KEYCODE("F2") THEN NEXT.
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME main:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME main:
                 PAUSE 0.
 
                 IF FRAME-FIELD = "lisimdeliv" THEN DO:
@@ -271,20 +269,20 @@ REPEAT WITH FRAME main:
 ACTION:                            
    REPEAT WITH FRAME main:
       ASSIGN
-      ufk = 0 ehto = 0
-      ufk[1] = 7 
-      ufk[5] = 795
-      ufk[8] = 8.
+      Syst.Var:ufk = 0 Syst.Var:ehto = 0
+      Syst.Var:ufk[1] = 7 
+      Syst.Var:ufk[5] = 795
+      Syst.Var:ufk[8] = 8.
 
-      IF new-icc = "" THEN ufk[5] = 0.
+      IF new-icc = "" THEN Syst.Var:ufk[5] = 0.
 
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
-      IF toimi = 1 THEN NEXT  main.
-      IF toimi = 8 THEN LEAVE main.
-      IF TOIMI = 5 THEN DO:
+      IF Syst.Var:toimi = 1 THEN NEXT  main.
+      IF Syst.Var:toimi = 8 THEN LEAVE main.
+      IF Syst.Var:toimi = 5 THEN DO:
          
-         RUN charge_dialog.p(
+         RUN Mc/charge_dialog.p(
             MobSub.MsSeq,
             (IF MobSub.PayType THEN "ICC_PREPAID" ELSE "ICC_POSTPAID"),
             OUTPUT ldeFee).
@@ -307,8 +305,8 @@ ACTION:
                     INPUT  Mobsub.Cli,
                     INPUT  Mobsub.CustNum,
                     INPUT  1,
-                    INPUT  katun,
-                    INPUT  fMakeTS(),
+                    INPUT  Syst.Var:katun,
+                    INPUT  Func.Common:mMakeTS(),
                     INPUT  "CHANGEICC",
                     INPUT  new-icc,
                     INPUT  "", /*for old SIM*/

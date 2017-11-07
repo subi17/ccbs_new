@@ -16,17 +16,17 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
-gcBrand = "1".
-katun = "anttis".
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "anttis".
 DEFINE TEMP-TABLE ttRoamCDR LIKE RoamCDR.
 DEFINE TEMP-TABLE ttRoamGPRS LIKE RoamGPRS.
 {/apps/snet/200805/roamtariff2.i}
 {csvfuntion.i}
-{cparam.i2}
+{Func/cparam.i2}
 
 
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 /*
 DEFINE INPUT PARAMETER pcPLMN     AS CHARACTER NO-UNDO.
 DEFINE INPUT PARAMETER pdaDate1   AS DATE      NO-UNDO.
@@ -36,7 +36,6 @@ DEFINE INPUT PARAMETER plTest     AS LOGICAL   NO-UNDO.
 */
 
 
-{timestamp.i}
 
 DEFINE STREAM sCDR.
 

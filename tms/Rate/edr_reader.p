@@ -6,16 +6,15 @@
   CREATED ......: 6.2.2013
   Version ......: xfera 
   ---------------------------------------------------------------------- */
-{commali.i}
-{timestamp.i}
-{tmsconst.i}
-{onlinereader_oldcdr.i}
-{detailseq.i}
-{heartbeat.i}
-{cparam2.i}
-{edr_reader.i}
-{log.i}
-{cdr_online.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Rate/onlinereader_oldcdr.i}
+{Func/detailseq.i}
+{Func/heartbeat.i}
+{Func/cparam2.i}
+{Rate/edr_reader.i}
+{Func/log.i}
+{Rate/cdr_online.i}
 
 def INPUT PARAMETER    icFileName  as char FORMAT "x(30)" no-undo.
 DEF INPUT PARAMETER    iiPort      AS INT  NO-UNDO.
@@ -126,9 +125,9 @@ END.
 VIEW FRAME clog . pause 0.
 DISP " PORT " + STRING(iiport) + " WAITING..." @ cdrfile WITH FRAME cLOG.
 
-ehto = 3.
-RUN ufkey.p.
-RUN ufxkey.p(8,3).
+Syst.Var:ehto = 3.
+RUN Syst/ufkey.p.
+RUN Syst/ufxkey.p(8,3).
 
 IF NOT llOL THEN INPUT STREAM sCDR FROM VALUE(icFileName).
    
@@ -182,7 +181,7 @@ DO WHILE TRUE WITH FRAME clog:
    IF callrec begins "#" THEN DO:
       IF lcErrorLogFile > "" THEN DO:
          OUTPUT STREAM sErrorFile to VALUE(lcErrorLogFile) APPEND.
-         PUT STREAM sErrorFile UNFORMATTED fTS2HMS(fMakeTS()) ": " callrec SKIP.
+         PUT STREAM sErrorFile UNFORMATTED Func.Common:mTS2HMS(Func.Common:mMakeTS()) ": " callrec SKIP.
          OUTPUT STREAM sErrorFile CLOSE.
       END.
       NEXT EDR_LOOP.
@@ -226,7 +225,7 @@ DO WHILE TRUE WITH FRAME clog:
          lcStartDate       = ENTRY(ttCSVPos.EventDate,lcCDR,"|")
          lcStartTime       = ENTRY(ttCSVPos.EventTime,lcCDR,"|")
          ttEDR.dtlseq      = fStreamSequence(INPUT ttEDR.datest, liStream)
-         ttEDR.ReadInTS    = fMakeTS()
+         ttEDR.ReadInTS    = Func.Common:mMakeTS()
          ttEDR.ReadDate    = TODAY
          ttEDR.ReadTime    = TIME 
          ttEDR.SubscriberFee = DEC(ENTRY(ttCSVPos.SubscriberFee,lcCDR,"|"))

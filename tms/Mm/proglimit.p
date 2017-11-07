@@ -8,19 +8,19 @@
   VERSION ......: SCRUNKO3
   ------------------------------------------------------ */
 
-{commali.i} 
-{eventval.i}
+{Syst/commali.i} 
+{Syst/eventval.i}
 
 if llDoEvent THEN DO:
-    &GLOBAL-DEFINE STAR_EVENT_USER katun
-    {lib/eventlog.i}
+    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
+    {Func/lib/eventlog.i}
         
     DEF VAR lhProgLimit AS HANDLE NO-UNDO.
     lhProgLimit = BUFFER ProgLimit:HANDLE.
     RUN StarEventInitialize(lhProgLimit).
                     
     ON F12 ANYWHERE DO:
-        run eventview2.p(lhProgLimit).
+        RUN Mc/eventview2.p(lhProgLimit).
     END.
 END.
 
@@ -73,9 +73,9 @@ form
    ProgLimit.ValidTo     FORMAT "99-99-99" COLUMN-LABEL "To"
 
 WITH width 74 OVERLAY CENTERED scroll 1 15 DOWN
-   COLOR value(cfc)
-   title color value(ctc) " " + ynimi + lcTitle + " "  
-   + string(pvm,"99-99-99") + " "  FRAME sel.
+   COLOR value(Syst.Var:cfc)
+   title color value(Syst.Var:ctc) " " + Syst.Var:ynimi + lcTitle + " "  
+   + string(TODAY,"99-99-99") + " "  FRAME sel.
 
 form          
    ProgLimit.GroupCode       COLON 23               SKIP
@@ -89,15 +89,15 @@ form
    ProgLimit.LimitFrom     COLON 23                    SKIP
    ProgLimit.LimitTo       COLON 23                  
 WITH OVERLAY ROW 4 centered
-   COLOR value(cfc)
-   TITLE COLOR value(ctc)
+   COLOR value(Syst.Var:cfc)
+   TITLE COLOR value(Syst.Var:ctc)
    fr-header WITH SIDE-LABELS FRAME lis.
 
 form /*  search WITH FIELD ProgLimit */
     lcEvent
     help "Give ...."
-    with row 4 col 2 title color value(ctc) " FIND Event "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND Event "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 FIND FIRST ServiceLimit WHERE 
            ServiceLimit.SLSeq = iiSLSEq NO-LOCK NO-ERROR.
@@ -110,7 +110,7 @@ ELSE DO:
    RETURN.
 
 END.
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 RUN LOCAL-FIND-FIRST.
@@ -133,14 +133,14 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* ProgLimit -ADD  */
       HIDE FRAME lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      assign Syst.Var:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
 
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
 
            CREATE ProgLimit.
@@ -224,40 +224,40 @@ repeat WITH FRAME sel:
          
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 0  ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-        ufk[5]= 5  ufk[6]= 4 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 0  Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+        Syst.Var:ufk[5]= 5  Syst.Var:ufk[6]= 4 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
 
-        IF llShowHistory = TRUE THEN ufk[4]= 38.
-        ELSE                         ufk[4]= 37.
-        RUN ufkey.p.
+        IF llShowHistory = TRUE THEN Syst.Var:ufk[4]= 38.
+        ELSE                         Syst.Var:ufk[4]= 37.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
 
       IF order = 1 THEN DO:
-        CHOOSE ROW ProgLimit.LimitFrom ;(uchoose.i;) no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) ProgLimit.validfrom WITH FRAME sel.
+        CHOOSE ROW ProgLimit.LimitFrom {Syst/uchoose.i} no-error WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) ProgLimit.validfrom WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW ProgLimit.LimitFrom ;(uchoose.i;) no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) ProgLimit.validto WITH FRAME sel.
+        CHOOSE ROW ProgLimit.LimitFrom {Syst/uchoose.i} no-error WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) ProgLimit.validto WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
             NEXT.
          END.
       END.
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -272,7 +272,7 @@ repeat WITH FRAME sel:
       END.
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND ProgLimit where recid(ProgLimit) = rtab[1] no-lock.
            RUN LOCAL-FIND-PREV.
@@ -297,7 +297,7 @@ repeat WITH FRAME sel:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND ProgLimit where recid(ProgLimit) = rtab[FRAME-DOWN] no-lock .
@@ -323,7 +323,7 @@ repeat WITH FRAME sel:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND ProgLimit where recid(ProgLimit) = memory no-lock no-error.
         RUN LOCAL-FIND-PREV.
@@ -347,7 +347,7 @@ repeat WITH FRAME sel:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* cursor TO the downmost line */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -361,29 +361,29 @@ repeat WITH FRAME sel:
        END.
      END. /* NEXT page */
 
-     if lookup(nap,"5,f5") > 0 THEN DO:  /* lisays */
+     if lookup(Syst.Var:nap,"5,f5") > 0 THEN DO:  /* lisays */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF lookup(nap,"4,f4") > 0 THEN DO:  
+     ELSE IF lookup(Syst.Var:nap,"4,f4") > 0 THEN DO:  
 
          IF llShowHistory = FALSE THEN llShowHistory = TRUE.
          ELSE                          llShowHistory = FALSE.
 
          run local-find-first.
-         run ufkey.
+         RUN Syst/ufkey.p.
          must-print = true.
          ufkey = true.
          NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* removal */
+     else if lookup(Syst.Var:nap,"6,f6") > 0 THEN DO TRANSACTION:  /* removal */
        delline = FRAME-LINE.
        FIND ProgLimit where recid(ProgLimit) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.Var:ctc)
           
           ProgLimit.ValidTo
           ProgLimit.ValidFrom
@@ -413,7 +413,7 @@ repeat WITH FRAME sel:
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
 
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.Var:ccc)
           ProgLimit.ValidTo
           ProgLimit.ValidFrom
           ProgLimit.LimitFrom
@@ -439,15 +439,15 @@ repeat WITH FRAME sel:
        ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     else if lookup(nap,"enter,return") > 0 THEN DO WITH FRAME lis TRANSACTION:
+     else if lookup(Syst.Var:nap,"enter,return") > 0 THEN DO WITH FRAME lis TRANSACTION:
        /* change */
        FIND FIRST ProgLimit where 
             recid(ProgLimit) = rtab[frame-line(sel)]
        exclusive-lock.
-       assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
+       assign fr-header = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9.
+       RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN ufcolor.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhProgLimit).
 
@@ -462,7 +462,7 @@ repeat WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhProgLimit).
 
        run local-find-first.
-       run ufkey.
+       RUN Syst/ufkey.p.
        must-print = true.
        ufkey = true.
        NEXT LOOP.
@@ -470,25 +470,25 @@ repeat WITH FRAME sel:
      
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
        RUN LOCAL-FIND-FIRST.
        ASSIGN memory = recid(ProgLimit) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
        RUN LOCAL-FIND-LAST.
        ASSIGN memory = recid(ProgLimit) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE LOCAL-DISP-ROW: 
    
@@ -614,7 +614,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
    
 
    FIND FIRST Bdest WHERE 
-              Bdest.Brand = gcBrand AND 
+              Bdest.Brand = Syst.Var:gcBrand AND 
               BDest.BDest = ProgLimit.BDest AND
               BDest.ToDate >= ProgLimit.ValidFrom AND
               BDest.FromDate <= ProgLimit.ValidTo NO-LOCK NO-ERROR.
@@ -663,13 +663,13 @@ PROCEDURE LOCAL-UPDATE-RECORD.
           FRAME-FIELD = "ServiceLimitGroup"  THEN DO:
       END.   
       
-      nap = KEYLABEL(LASTKEY). 
-      IF lookup(nap,poisnap) > 0 THEN DO:
+      Syst.Var:nap = KEYLABEL(LASTKEY). 
+      IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
          if keylabel(lastkey) = "F4" THEN LEAVE . 
 
          IF FRAME-FIELD = "Bdest" THEN DO:
             FIND FIRST Bdest WHERE 
-                       Bdest.Brand = gcBrand AND
+                       Bdest.Brand = Syst.Var:gcBrand AND
                        Bdest.Bdest = input frame lis ProgLimit.Bdest AND
                        BDest.ToDate >= INPUT FRAME lis ProgLimit.ValidFrom AND
                        BDest.FromDate <= INPUT FRAME lis ProgLimit.ValidTo

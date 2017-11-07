@@ -5,7 +5,7 @@
 DEF BUFFER bMNPSubChk FOR MNPSub.
 DEF BUFFER bMNPProcessChk FOR MNPProcess.
 
-{tmsconst.i}
+{Syst/tmsconst.i}
 FUNCTION fIsMNPOutOngoing RETURNS LOGICAL
 (icCLI AS CHAR):
 

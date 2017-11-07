@@ -53,7 +53,7 @@
 &scoped-define frameset_3rows <frameset rows="10%,30%,30%,30%" frameborder="0">
 &scoped-define frameset_2cols <frameset cols="50%,50%"         frameborder="0">
 
-{lib/protop.i}
+{protop/lib/protop.i}
 
 define variable gcPrevActive  as character  no-undo. /* detect changes in active modules */
 define variable gcPrevHtmlDir as character  no-undo. /* detect changes in html directory */
@@ -75,7 +75,7 @@ procedure html_display:
    * recreate the static html / css files. 
    */
   publish "get-html-dir" (output cHtmlDir).
-  if cHtmlDir <> gcPrevHtmlDir then run html_init.
+  if cHtmlDir <> gcPrevHtmlDir then RUN html_init.
 
   /* Find out if modules have been de-activated. If so, replace the current
    * html file with a blank page to avoid users looking at old data. If the 
@@ -88,7 +88,7 @@ procedure html_display:
         and lookup(tt_ui-hdr.display_type,gcPrevActive) > 0:
 
       /* change contents of the page with that of the blank page */
-      run html_blank ( cHtmlDir + substitute('&1_&2.html'
+      RUN html_blank ( cHtmlDir + substitute('&1_&2.html'
                                                 , tt_ui-hdr.display_type
                                                 , tt_ui-hdr.display_variant)).
   end.
@@ -99,7 +99,7 @@ procedure html_display:
   /* Generate blank screen. Note that this screen needs to be generated again 
    * in case there has been a change in active modules. 
    */
-  run html_blank ( cHtmlDir + 'blank.html').
+  RUN html_blank ( cHtmlDir + 'blank.html').
 
   /* Write module.
    * From release xi on the summary screen is optional. 
@@ -116,7 +116,7 @@ procedure html_display:
     do:
       output to value( cHtmlDir + 'temp.html').
 
-      run html_header.
+      RUN html_header.
 
       /* different handling of summary and non-summary screen */
       if tt_ui-hdr.display_type = 'summary' then
@@ -285,7 +285,7 @@ procedure html_display:
         skip '  </table> </td> <!-- actual data ends here -->' 
         .
 
-      run html_links.
+      RUN html_links.
 
       put unformatted 
         skip '  </tr> </table>'
@@ -294,7 +294,7 @@ procedure html_display:
         skip.
       output close.
 
-      run html_rename ( input cHtmlDir + 'temp.html',
+      RUN html_rename ( input cHtmlDir + 'temp.html',
                         input cHtmlDir + substitute('&1_&2.html'
                                                 , tt_ui-hdr.display_type
                                                 , tt_ui-hdr.display_variant)).
@@ -373,7 +373,7 @@ procedure html_blank:
   publish "get-html-dir" (output cHtmlDir).
 
   output to value( cHtmlDir + 'temp.html').
-  run html_header.
+  RUN html_header.
   put unformatted 
          '<body>' 
     skip '  <script>'
@@ -386,7 +386,7 @@ procedure html_blank:
     skip '  <tr> <td width=80%> &nbsp; </td>'
     .
   
-  run html_links.
+  RUN html_links.
   
   put unformatted 
     skip '  </tr> </table>'
@@ -395,7 +395,7 @@ procedure html_blank:
     skip.
   output close.
 
-  run html_rename(input cHtmlDir + 'temp.html',
+  RUN html_rename(input cHtmlDir + 'temp.html',
                   input cFileName ).
 
 end procedure. /* html_blank */
@@ -406,9 +406,9 @@ end procedure. /* html_blank */
  */
 procedure html_init:
   /* write static pages */
-  run html_css.
-  run html_framesets.
-  run html_title.
+  RUN html_css.
+  RUN html_framesets.
+  RUN html_title.
 
   /* remember html dir for detection of changes */
   publish "get-html-dir" (output gcPrevHtmlDir).
@@ -565,7 +565,7 @@ procedure html_title:
   do:
     output to value( cHtmlDir + 'title.html').
 
-    run html_header.
+    RUN html_header.
 
     put unformatted 
            '<body vlink="#FFFF00" alink="#FFFF00" link="#FFFF00">'
@@ -610,5 +610,5 @@ end procedure. /* html_rename */
 subscribe to "vdisplay"     anywhere run-procedure "html_display".
 subscribe to "html-display" anywhere run-procedure "html_display".
 
-run html_init.
+RUN html_init.
 return.

@@ -8,15 +8,15 @@
 ----------------------------------------------------------------------- */
 &GLOBAL-DEFINE MailTitleSpaces Allow
 
-{commali.i}
-{tmsconst.i}
-{fmakemsreq.i}
-{cparam2.i}
-{email.i}
-{femailinvoice.i}
-{ftransdir.i}
-{heartbeat.i}
-{fusioninvoice.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/cparam2.i}
+{Func/email.i}
+{Func/femailinvoice.i}
+{Func/ftransdir.i}
+{Func/heartbeat.i}
+{Inv/fusioninvoice.i}
 
 DEF INPUT PARAMETER iiMSrequest AS INT  NO-UNDO.
 
@@ -63,7 +63,7 @@ IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 /* Email Address Conf File */
 ASSIGN lcAddrConfDir = fCParamC("RepConfDir")
        ldaDateFrom   = MsRequest.ReqDtParam1
-       ldaInvDateTo  = fLastDayOfMonth(ldaDateFrom)
+       ldaInvDateTo  = Func.Common:mLastDayOfMonth(ldaDateFrom)
        xMailFrom     = fCparam("EIF","EmailFromAddress")
        lcEmailFile   = fCparam("EIF","EmailFile")
        lcTransDir    = fCParam("EIF","MailArcDir")
@@ -148,9 +148,9 @@ FOR EACH FusionInvoice EXCLUSIVE-LOCK WHERE
          END.
          ELSE DO:
             liRequest = fEmailInvoiceRequest(
-                                 INPUT fMakeTS(),
+                                 INPUT Func.Common:mMakeTS(),
                                  INPUT TODAY,
-                                 INPUT katun,
+                                 INPUT Syst.Var:katun,
                                  INPUT 0,
                                  INPUT "",
                                  INPUT Customer.CustNum,

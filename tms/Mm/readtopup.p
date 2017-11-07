@@ -1,9 +1,8 @@
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{ftopup.i}
-{ftaxdata.i}
-{ftransdir.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/ftopup.i}
+{Func/ftaxdata.i}
+{Func/ftransdir.i}
 
 DEF INPUT  PARAMETER icFile   AS CHAR NO-UNDO.
 DEF OUTPUT PARAMETER oiRead   AS INT  NO-UNDO. 

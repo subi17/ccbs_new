@@ -8,10 +8,9 @@
 ---------------------------------------------------------------------- */
 
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{ftransdir.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
 
 DEF INPUT  PARAMETER idaFromDate      AS DATE NO-UNDO.
 DEF INPUT  PARAMETER idaToDate        AS DATE NO-UNDO.
@@ -152,7 +151,7 @@ PROCEDURE pCollectCounters:
    IF icExtInvID > "" THEN DO:
    
       FIND FIRST Invoice WHERE 
-                 Invoice.Brand = gcBrand AND
+                 Invoice.Brand = Syst.Var:gcBrand AND
                  Invoice.ExtInvID = icExtInvID NO-LOCK NO-ERROR.
       IF NOT AVAILABLE Invoice THEN 
          RETURN "ERROR:Unknown invoice".

@@ -2,8 +2,8 @@
    
    invoice account handling 
 */
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEF VAR lcOwnUse   AS CHAR NO-UNDO.
 DEF VAR lcVipUse   AS CHAR NO-UNDO.

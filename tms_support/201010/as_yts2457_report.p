@@ -3,7 +3,6 @@ input from as_yts2457.txt.
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lrRecid AS RECID NO-UNDO. 
 DEFINE VARIABLE ldeStamp AS DECIMAL NO-UNDO. 
-{date.i}
 
 DEFINE TEMP-TABLE ttCli
 FIELD rateccn AS int format ">>9" label "RATECCN"
@@ -16,7 +15,7 @@ repeat:
    find mobcdr where
       recid(mobcdr) = lrRecid NO-LOCK.
 
-   ldeStamp = fhms2ts(mobcdr.datest, string(mobcdr.timestart,"HH:MM:SS")).
+   ldeStamp = Func.Common:mHMS2TS(mobcdr.datest, string(mobcdr.timestart,"HH:MM:SS")).
 
    find first msowner where
       msowner.cli = mobcdr.gsmbnr and

@@ -11,11 +11,11 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{fcustbal.i}
+{Syst/commali.i}
+{Func/fcustbal.i}
 
 /* print-linemuuttujat */
-{utumaa.i}
+{Syst/utumaa.i}
 
 DEF INPUT PARAMETER kund1   AS INT   NO-UNDO.
 DEF INPUT PARAMETER kund2   AS INT   NO-UNDO.
@@ -56,11 +56,14 @@ viiva2 = fill("=",lev)
 viiva3 = fill("-",lev)
 viiva4 = fill("-",lev).
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
+
 form header
    viiva1 AT 2 SKIP
    ynimi at 2 "ALARMLIST" AT 55
    "page" at 106 sl format "ZZZZ9" SKIP
-   string(pvm,"99-99-99") AT 108 SKIP
+   string(TODAY,"99-99-99") AT 108 SKIP
    viiva2 AT 2 skip(1)
    "Cust nr"    AT 2
    "Cust name"  AT 10
@@ -93,14 +96,14 @@ eka = TRUE.
 print-line:
 repeat:
    FOR EACH Customer no-lock where
-            Customer.Brand   = gcBrand AND
+            Customer.Brand   = Syst.Var:gcBrand AND
             Customer.CustNum >= kund1  AND
             (IF kund2 NE 0 THEN Customer.CustNum <= kund2 ELSE TRUE):
 
          /* onko kjA pyytAnyt keskeytystA ? */
          READKEY PAUSE 0.
-         nap = keylabel(LASTKEY).
-         if nap = "ESC" THEN DO:
+         Syst.Var:nap = keylabel(LASTKEY).
+         if Syst.Var:nap = "ESC" THEN DO:
             message "Abort printing (Y/N) ?"
             UPDATE ke.
             IF ke THEN DO:

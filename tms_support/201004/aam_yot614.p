@@ -1,5 +1,5 @@
-{testpaa.i}
-katun = "ari".
+{Syst/testpaa.i}
+Syst.Var:katun = "ari".
 
 
 def var ldadate as date no-undo.
@@ -39,7 +39,7 @@ for each ttcli:
    disp ttcli.cli format "x(12)" with frame b 30 down no-box.
    down with frame b.
 
-   run cli_rate.p (ttcli.cli,
+   RUN Rate/cli_rate.p (ttcli.cli,
                    3/1/10,
                    3/31/10,
                    true).

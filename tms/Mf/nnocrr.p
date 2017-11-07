@@ -30,7 +30,7 @@ ref = (InvNum * 10) + ( (length(string(InvNum)) + 2) MODULO 10).
 
 
 /* Calculate the LAST control digit */
-RUN nnrela(INPUT ref, OUTPUT ref1).
+RUN Mf/nnrela.p(INPUT ref, OUTPUT ref1).
 
 /* Build the 'kundreferens' into CHAR VARIABLE */
 cInvNum = string(ref) + string(ref1).
@@ -46,7 +46,7 @@ cInvNum = string(ref) + string(ref1).
 cInvNum = fill(" ",11 - length(cInvNum)) + cInvNum.
 
 /* Calvulate the control digit FOR the amount */
-RUN nnrela(INPUT amount * 100, OUTPUT ref2).
+RUN Mf/nnrela.p(INPUT amount * 100, OUTPUT ref2).
 
 /* convert the amount into a CHAR VARIABLE */
 camount = string(amount ,"-zzzzzzz.99").

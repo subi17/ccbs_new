@@ -8,12 +8,12 @@
   VERSIO .......: M15
 ---------------------------------------------------------------------------- */
 
-{commali.i}
-{utumaa.i new}
-{cparam2.i}
-{edefine.i new}
-{finvtxt.i}
-{fcustdata.i}
+{Syst/commali.i}
+{Syst/utumaa.i new}
+{Func/cparam2.i}
+{Inv/edefine.i new}
+{Func/finvtxt.i}
+{Func/fcustdata.i}
 
 
 DEF INPUT  PARAMETER iiPaymPlan AS INT  NO-UNDO.
@@ -48,7 +48,7 @@ IF liITNum = 0 THEN DO:
    RETURN.
 END.
 
-RUN printxt (iiCustNum,    /* letter to the one who ordered the change */
+RUN Mc/printxt.p (iiCustNum,    /* letter to the one who ordered the change */
              PaymPlan.PPlanID, 
              "PP",
              1,  /* 1=invtext */

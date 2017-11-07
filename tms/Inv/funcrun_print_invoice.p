@@ -7,17 +7,16 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
-   gcBrand = "1"
-   katun   = "Cron".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun   = "Cron".
    
-{timestamp.i}
-{cparam2.i}
-{printdoc1tt.i}
-{email.i}
-{funcrunprocess_run.i}
-{host.i}
+{Func/cparam2.i}
+{Inv/printdoc1tt.i}
+{Func/email.i}
+{Syst/funcrunprocess_run.i}
+{Syst/host.i}
 
 DEF VAR ldaInvDate       AS DATE NO-UNDO.
 DEF VAR liInvType        AS INT  NO-UNDO.
@@ -52,13 +51,13 @@ FUNCTION fErrorLog RETURNS LOGIC
    
    DO TRANS:
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
              ErrorLog.ActionID  = "FRINVPRINT" + STRING(iiFRExecID)
              ErrorLog.TableName = "FuncRunExec"
              ErrorLog.KeyValue  = STRING(iiFRExecID)
              ErrorLog.ErrorMsg  = icError
-             ErrorLog.UserCode  = katun.
-             ErrorLog.ActionTS  = fMakeTS().
+             ErrorLog.UserCode  = Syst.Var:katun.
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    
 END FUNCTION.
@@ -97,19 +96,19 @@ FUNCTION fCreateActionLog RETURNS LOGICAL
    DO TRANS:
       CREATE ActionLog.
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.Var:gcBrand
          ActionLog.TableName    = "FuncRunProcess"
          ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") +
                                   STRING(MONTH(TODAY),"99") +
                                   STRING(DAY(TODAY),"99")
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionID     = "FRPROCESS" + STRING(liFRProcessID)
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
          ActionLog.ActionChar   = icMsg
          ActionLog.ActionStatus = IF RETURN-VALUE BEGINS "ERROR:"
                                   THEN 1
                                   ELSE 2.
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
    END.   
 END FUNCTION.
 
@@ -161,8 +160,8 @@ QUIT.
 PROCEDURE pInitialize:
 
    FIND FIRST Company WHERE
-              Company.Brand = gcBrand NO-LOCK NO-ERROR.
-   IF AVAILABLE Company THEN ynimi = Company.CompName.
+              Company.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
+   IF AVAILABLE Company THEN Syst.Var:ynimi = Company.CompName.
 
    ASSIGN 
       llReplica = fIsThisReplica()
@@ -180,7 +179,7 @@ PROCEDURE pInitialize:
 
    ASSIGN 
       llLast    = FALSE
-      ldStarted = fMakeTS().
+      ldStarted = Func.Common:mMakeTS().
 
    FOR FIRST FuncRunProcess NO-LOCK WHERE
              FuncRunProcess.FRProcessID = liFRProcessID,
@@ -256,8 +255,7 @@ PROCEDURE pPrintInvoices:
    /* invoice date to file name */   
    IF ldaNameDate NE ? THEN DO:
    
-      lcDate = DYNAMIC-FUNCTION("fDateFmt" IN ghFunc1,
-                                ldaNameDate,
+      lcDate = Func.Common:mDateFmt(ldaNameDate,
                                 "yyyymmdd").
       lcPrintFile = REPLACE(lcPrintFile,"#IDATE",lcDate).
    END.
@@ -275,7 +273,7 @@ PROCEDURE pPrintInvoices:
       /* tar file is not needed for no paper invoices */
       IF LOOKUP(lcPrintHouse,"NOPAPER,DELTYPE10") > 0 THEN llTarFile = FALSE.
  
-      RUN invoice_xml.p (INPUT-OUTPUT TABLE ttInvoice,
+      RUN Inv/invoice_xml.p (INPUT-OUTPUT TABLE ttInvoice,
                          ldaInvDate,
                          liInvCount,
                          llSeparate,
@@ -299,9 +297,8 @@ PROCEDURE pPrintInvoices:
                        OUTPUT liPrinted). 
 
    ASSIGN 
-      ldFinished  = fMakeTS()
-      liDurDays   = DYNAMIC-FUNCTION("fTSDuration" IN ghFunc1,
-                                     ldStarted,
+      ldFinished  = Func.Common:mMakeTS()
+      liDurDays   = Func.Common:mTSDuration(ldStarted,
                                      ldFinished,
                                      OUTPUT liDurTime)
       lcActionID  = IF lcFileType BEGINS "XML"
@@ -323,12 +320,12 @@ PROCEDURE pPrintInvoices:
    DO TRANS:
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = gcBrand   
+         ActionLog.Brand        = Syst.Var:gcBrand   
          ActionLog.TableName    = "Invoice"  
          ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                   STRING(MONTH(TODAY),"99") + 
                                   STRING(DAY(TODAY),"99")
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionID     = lcActionID
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
          ActionLog.ActionDec    = liPrinted
@@ -336,7 +333,7 @@ PROCEDURE pPrintInvoices:
          ActionLog.ActionStatus = IF RETURN-VALUE BEGINS "ERROR:"
                                   THEN 1
                                   ELSE 2.
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
    END.
 
    /*YTS-9144 changes done to send message to activemq only if it is a last process of the execution*/
@@ -347,7 +344,7 @@ PROCEDURE pPrintInvoices:
                 LOOKUP(bFRProcess.RunState,"Initialized,Running") > 0 AND
                 bFRProcess.FRProcessID <> liFRProcessID NO-ERROR.
       IF NOT AVAILABLE bFRProcess THEN DO:
-         RUN funcrun_invpdf_creation (INPUT liFRExecID) NO-ERROR.
+         RUN Inv/funcrun_invpdf_creation.p (INPUT liFRExecID) NO-ERROR.
          fCreateActionLog("RunMode: "      + lcRunMode             +
                           " CreatePDF: "   + STRING(llgFuncRunPDF) +
                           " FRConfigID: "  + STRING(liFRConfigID)  +

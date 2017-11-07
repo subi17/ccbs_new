@@ -11,9 +11,9 @@
   Version ......: M15
   ----------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i} 
-{fecgtask.i}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Func/fecgtask.i}
 
 DEF INPUT PARAMETER CustGroup LIKE CustGroup.CustGroup NO-UNDO.
 
@@ -42,9 +42,9 @@ DEF VAR lcTask       AS CHAR           NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCGMember AS HANDLE NO-UNDO.
    lhCGMember = BUFFER CGMember:HANDLE.
@@ -52,7 +52,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhCGMember).
+      RUN Mc/eventview2.p(lhCGMember).
    END.
 END.
 
@@ -64,23 +64,23 @@ form
     Customer.ZipCode   format "x(12)"   column-label "District"
     Customer.RepCodes format "x(6)"    column-label "Rep."
 WITH centered OVERLAY scroll 1 13 DOWN ROW 2
-    color value(cfc) title color value(ctc) " CHOOSE MEMBERS INTO GROUP " +
-    CustGroup + " (" + gcBrand + ") " FRAME sel.
+    color value(Syst.Var:cfc) title color value(Syst.Var:ctc) " CHOOSE MEMBERS INTO GROUP " +
+    CustGroup + " (" + Syst.Var:gcBrand + ") " FRAME sel.
 
 form /* FIND Customer BY number */
     CustNum help "Enter Customer No."
-    with row 4 col 2 title color value(ctc) " FIND CUST. No. "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND CUST. No. "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* FIND Customer BY Name */
     CustName help "Enter Customer's name"
-    with row 4 col 2 title color value(ctc) " FIND Name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND Name "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /* FIND Customer BY abbreviation */
     SearchName help "Enter abbreviation of name"
-    with row 4 col 2 title color value(ctc) " FIND ABBREVIATION "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr3.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND ABBREVIATION "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
 form
    mess[1]  NO-LABEL SKIP
@@ -94,10 +94,10 @@ mess[1] = "This customer has:".
 mess[4] = "where starting Amount is allowed.".
 mess[5] = "This overrides all those settings.".
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc. view FRAME sel.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc. view FRAME sel.
 
 
-FIND FIRST Customer  USE-INDEX CustNum  WHERE Customer.Brand = gcBrand 
+FIND FIRST Customer  USE-INDEX CustNum  WHERE Customer.Brand = Syst.Var:gcBrand 
 NO-LOCK no-error.
 IF AVAIL Customer  THEN
    ASSIGN memory = recid(Customer) must-print = TRUE must-add    = FALSE.
@@ -134,11 +134,11 @@ print-line:
 
           rtab[FRAME-LINE] = recid(Customer).
           IF order = 1 THEN FIND NEXT Customer
-          USE-INDEX CustNum WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+          USE-INDEX CustNum WHERE Customer.Brand = Syst.Var:gcBrand NO-LOCK no-error.
           ELSE IF order = 2 THEN FIND NEXT Customer
-          USE-INDEX SearchName WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+          USE-INDEX SearchName WHERE Customer.Brand = Syst.Var:gcBrand NO-LOCK no-error.
           ELSE IF order = 3 THEN FIND NEXT Customer
-          USE-INDEX CustName WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+          USE-INDEX CustName WHERE Customer.Brand = Syst.Var:gcBrand NO-LOCK no-error.
        END.
        ELSE DO:  CLEAR no-pause.  rtab[FRAME-LINE] = ?. END.
        IF FRAME-LINE = FRAME-DOWN THEN LEAVE. DOWN.
@@ -158,27 +158,27 @@ print-line:
 
     IF ufkey THEN DO:
     ASSIGN
-    ufk[1]= 707 ufk[2]= 708 ufk[3]= 30 ufk[4]= 0
-    ufk[5]= 515 ufk[6]= 0   ufk[7]= 726 ufk[8]= 8 ufk[9]= 1
-    ehto = 3 ufkey = FALSE.  RUN ufkey.
+    Syst.Var:ufk[1]= 707 Syst.Var:ufk[2]= 708 Syst.Var:ufk[3]= 30 Syst.Var:ufk[4]= 0
+    Syst.Var:ufk[5]= 515 Syst.Var:ufk[6]= 0   Syst.Var:ufk[7]= 726 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+    Syst.Var:ehto = 3 ufkey = FALSE.  RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause. IF order = 1 THEN
-    CHOOSE ROW Customer.CustNum ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW Customer.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 2 THEN
-    CHOOSE ROW Customer.SearchName ;(uchoose.i;) no-error WITH FRAME sel.
+    CHOOSE ROW Customer.SearchName {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 3 THEN
-    CHOOSE ROW Customer.CustName ;(uchoose.i;) no-error WITH FRAME sel.
-      COLOR DISPLAY value(ccc)
+    CHOOSE ROW Customer.CustName {Syst/uchoose.i} no-error WITH FRAME sel.
+      COLOR DISPLAY value(Syst.Var:ccc)
       Customer.CustNum Customer.SearchName Customer.CustName
       WITH FRAME sel.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
     order = order + 1. IF order = 4 THEN order = 1. END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
     order = order - 1. IF order = 0 THEN order = 3. END.
 
       IF order <> ex-order THEN DO:
@@ -186,11 +186,11 @@ print-line:
     FIND Customer where recid(Customer) = memory.
     DO i = 1 TO FRAME-LINE - 1:
        IF order = 1 THEN FIND prev Customer
-       USE-INDEX CustNum WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+       USE-INDEX CustNum WHERE Customer.Brand = Syst.Var:gcBrand NO-LOCK no-error.
        ELSE IF order = 2 THEN FIND prev Customer
-       USE-INDEX SearchName WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+       USE-INDEX SearchName WHERE Customer.Brand = Syst.Var:gcBrand NO-LOCK no-error.
        ELSE IF order = 3 THEN FIND prev Customer
-       USE-INDEX CustName WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+       USE-INDEX CustName WHERE Customer.Brand = Syst.Var:gcBrand NO-LOCK no-error.
        IF AVAILABLE Customer  THEN
           ASSIGN firstline = i memory = recid(Customer).
        ELSE LEAVE.
@@ -201,19 +201,19 @@ print-line:
     bell. message "You are on an empty row, move upwards !".
     PAUSE 1 no-message. NEXT.
       END.
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
     IF FRAME-LINE = 1 THEN DO:
        FIND Customer where recid(Customer) = rtab[1] no-lock.
        IF order = 1 THEN FIND prev Customer
-       USE-INDEX CustNum WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+       USE-INDEX CustNum WHERE Customer.Brand = Syst.Var:gcBrand NO-LOCK no-error.
        ELSE IF order = 2 THEN FIND prev Customer
-       USE-INDEX SearchName WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+       USE-INDEX SearchName WHERE Customer.Brand = Syst.Var:gcBrand NO-LOCK no-error.
        ELSE IF order = 3 THEN FIND prev Customer
-       USE-INDEX CustName WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+       USE-INDEX CustName WHERE Customer.Brand = Syst.Var:gcBrand NO-LOCK no-error.
        IF NOT AVAILABLE Customer  THEN DO:
           message "YOU ARE ON THE FIRST ROW !".
           BELL. PAUSE 1 no-message. NEXT BROWSE.
@@ -230,16 +230,16 @@ print-line:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
     IF FRAME-LINE = FRAME-DOWN THEN DO:
        FIND Customer where recid(Customer) = rtab[FRAME-DOWN] no-lock .
        IF order = 1 THEN FIND NEXT Customer
-       USE-INDEX CustNum WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+       USE-INDEX CustNum WHERE Customer.Brand = Syst.Var:gcBrand NO-LOCK no-error.
        ELSE IF order = 2 THEN FIND NEXT Customer
-       USE-INDEX SearchName WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+       USE-INDEX SearchName WHERE Customer.Brand = Syst.Var:gcBrand NO-LOCK no-error.
        ELSE IF order = 3 THEN FIND NEXT Customer
-       USE-INDEX CustName WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+       USE-INDEX CustName WHERE Customer.Brand = Syst.Var:gcBrand NO-LOCK no-error.
        IF NOT AVAILABLE Customer  THEN DO:
           message "YOU ARE ON THE LAST ROW !".
           BELL.  PAUSE 1 no-message. NEXT BROWSE.
@@ -258,25 +258,25 @@ print-line:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
     memory = rtab[1].
     FIND Customer where recid(Customer) = memory no-lock no-error.
     IF order = 1 THEN FIND prev Customer
-    USE-INDEX CustNum WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+    USE-INDEX CustNum WHERE Customer.Brand = Syst.Var:gcBrand NO-LOCK no-error.
     ELSE IF order = 2 THEN FIND prev Customer
-    USE-INDEX SearchName WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+    USE-INDEX SearchName WHERE Customer.Brand = Syst.Var:gcBrand NO-LOCK no-error.
     ELSE IF order = 3 THEN FIND prev Customer
-    USE-INDEX CustName  WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+    USE-INDEX CustName  WHERE Customer.Brand = Syst.Var:gcBrand NO-LOCK no-error.
     IF AVAILABLE Customer  THEN DO:
        memory = recid(Customer).
        /* go back one page */
        DO line = 1 TO (FRAME-DOWN - 1):
           IF order = 1 THEN FIND prev Customer
-          USE-INDEX CustNum WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+          USE-INDEX CustNum WHERE Customer.Brand = Syst.Var:gcBrand NO-LOCK no-error.
           ELSE IF order = 2 THEN FIND prev Customer
-          USE-INDEX SearchName WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+          USE-INDEX SearchName WHERE Customer.Brand = Syst.Var:gcBrand NO-LOCK no-error.
           ELSE IF order = 3 THEN FIND prev Customer
-          USE-INDEX CustName WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+          USE-INDEX CustName WHERE Customer.Brand = Syst.Var:gcBrand NO-LOCK no-error.
           IF AVAILABLE Customer  THEN memory = recid(Customer).
           ELSE line = FRAME-DOWN.
        END.
@@ -289,7 +289,7 @@ print-line:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
    /* cursor TO the downmost line */
    IF rtab[FRAME-DOWN] = ? THEN DO:
        message "YOU ARE ON THE LAST PAGE". BELL. PAUSE 1 no-message.
@@ -302,14 +302,14 @@ print-line:
      END. /* NEXT page */
 
      /* Haku 1 */
-     if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-   cfc = "puyr". RUN ufcolor.
-   CustNum = 0. ehto = 9. RUN ufkey. ufkey = TRUE.
+     if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
+   Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+   CustNum = 0. Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE CustNum WITH FRAME hayr.
    HIDE FRAME hayr no-pause.
    IF CustNum <> 0 THEN DO:
       FIND FIRST Customer where 
-                 Customer.Brand    = gcBrand AND
+                 Customer.Brand    = Syst.Var:gcBrand AND
                  Customer.CustNum >= CustNum
       USE-INDEX CustNum no-lock no-error.
       IF NOT AVAILABLE Customer  THEN DO:
@@ -322,14 +322,14 @@ print-line:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-   cfc = "puyr". run ufcolor. SearchName = "".
-   ehto = 9. RUN ufkey. ufkey = TRUE.
+     if lookup(Syst.Var:nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
+   Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p. SearchName = "".
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE SearchName WITH FRAME hayr3.
    HIDE FRAME hayr3 no-pause.
    if SearchName <> "" THEN DO:
       FIND FIRST Customer  where 
-                 Customer.Brand       = gcBrand AND
+                 Customer.Brand       = Syst.Var:gcBrand AND
                  Customer.SearchName >= SearchName
       no-lock no-error.
       IF NOT AVAILABLE Customer  THEN DO:
@@ -342,14 +342,14 @@ print-line:
      END. /* Haku sar. 2 */
 
      /* Haku sarakk. 3 */
-     if lookup(nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
-   cfc = "puyr". run ufcolor. CustName = "".
-   ehto = 9. RUN ufkey. ufkey = TRUE.
+     if lookup(Syst.Var:nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
+   Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p. CustName = "".
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
    UPDATE CustName WITH FRAME hayr2.
    HIDE FRAME hayr2 no-pause.
    if CustName <> "" THEN DO:
       FIND FIRST Customer  where 
-                 Customer.Brand     = gcBrand AND
+                 Customer.Brand     = Syst.Var:gcBrand AND
                  Customer.CustName >= CustName
       no-lock no-error.
       IF NOT AVAILABLE Customer  THEN DO:
@@ -361,26 +361,26 @@ print-line:
    END.
      END. /* Haku sar. 3 */
 
-     else if lookup(nap,"7,f7") > 0 THEN DO WITH FRAME sel: 
+     else if lookup(Syst.Var:nap,"7,f7") > 0 THEN DO WITH FRAME sel: 
         FIND Customer where recid(Customer) = rtab[FRAME-LINE] no-lock.
 
         ASSIGN
            ufkey = TRUE
-           ufk   = 0
-           ehto  = 1
-           ufk[1] = 1883 ufk[2] = 1888 
-           ufk[4] = 0 ufk[5]= 0 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8.
-        run ufkey.   
+           Syst.Var:ufk   = 0
+           Syst.Var:ehto  = 1
+           Syst.Var:ufk[1] = 1883 Syst.Var:ufk[2] = 1888 
+           Syst.Var:ufk[4] = 0 Syst.Var:ufk[5]= 0 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8.
+        RUN Syst/ufkey.p.   
 
-        IF toimi = 8 THEN NEXT BROWSE.
+        IF Syst.Var:toimi = 8 THEN NEXT BROWSE.
 
-        IF toimi = 1 THEN RUN commontt(Customer.CustNum).
+        IF Syst.Var:toimi = 1 THEN RUN Mc/commontt.p(Customer.CustNum).
 
-        IF toimi = 2 THEN RUN mobilett(Customer.CustNum).
+        IF Syst.Var:toimi = 2 THEN RUN Mc/mobilett.p(Customer.CustNum).
 
      END.
 
-     else if lookup(nap,"enter,return,5,F5") > 0 THEN
+     else if lookup(Syst.Var:nap,"enter,return,5,F5") > 0 THEN
      DO WITH FRAME lis TRANSAction:
 
         /* ADD OR REMOVE */
@@ -410,32 +410,32 @@ print-line:
         END.
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
    IF order = 1 THEN FIND FIRST Customer
-   USE-INDEX CustNum WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+   USE-INDEX CustNum WHERE Customer.Brand = Syst.Var:gcBrand NO-LOCK no-error.
    ELSE IF order = 2 THEN FIND FIRST Customer
-   USE-INDEX SearchName WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+   USE-INDEX SearchName WHERE Customer.Brand = Syst.Var:gcBrand NO-LOCK no-error.
    ELSE IF order = 3 THEN FIND FIRST Customer
-   USE-INDEX CustName WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+   USE-INDEX CustName WHERE Customer.Brand = Syst.Var:gcBrand NO-LOCK no-error.
    ASSIGN memory = recid(Customer) must-print = TRUE.
    NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
    IF order = 1 THEN FIND LAST Customer
-   USE-INDEX CustNum WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+   USE-INDEX CustNum WHERE Customer.Brand = Syst.Var:gcBrand NO-LOCK no-error.
    ELSE IF order = 2 THEN FIND LAST Customer
-   USE-INDEX SearchName WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+   USE-INDEX SearchName WHERE Customer.Brand = Syst.Var:gcBrand NO-LOCK no-error.
    ELSE IF order = 3 THEN FIND LAST Customer
-   USE-INDEX CustName WHERE Customer.Brand = gcBrand NO-LOCK no-error.
+   USE-INDEX CustName WHERE Customer.Brand = Syst.Var:gcBrand NO-LOCK no-error.
    ASSIGN memory = recid(Customer) must-print = TRUE.
    NEXT LOOP.
      END.
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
   END.  /* BROWSE */
 END.  /* LOOP */
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE local-disp-row:
 

@@ -78,17 +78,17 @@ CLASS Gwy.MasmovilSender INHERITS gearbox.daemons.Daemon:
          CASE bFusionMessage.MessageType:
 
             WHEN {&FUSIONMESSAGE_TYPE_RESERVE_NUMBER} THEN DO:
-               RUN masmovil_reserve_number.p(FusionMessage.MessageSeq).
+               RUN Gwy/masmovil_reserve_number.p(FusionMessage.MessageSeq).
                lcReturnValue = RETURN-VALUE.
             END.
             
             WHEN {&FUSIONMESSAGE_TYPE_CREATE_ORDER} THEN DO:
-               RUN masmovil_create_order.p(FusionMessage.MessageSeq).
+               RUN Gwy/masmovil_create_order.p(FusionMessage.MessageSeq).
                lcReturnValue = RETURN-VALUE.
             END.
             
             WHEN {&FUSIONMESSAGE_TYPE_CANCEL_ORDER} THEN DO:
-               RUN masmovil_cancel_order.p(FusionMessage.MessageSeq). 
+               RUN Gwy/masmovil_cancel_order.p(FusionMessage.MessageSeq). 
                lcReturnValue = RETURN-VALUE.
             END.
 

@@ -1,2 +1,2 @@
-{commali.i}
-RUN nnasse(0,"").
+{Syst/commali.i}
+RUN Mc/nnasse.p(0,"").

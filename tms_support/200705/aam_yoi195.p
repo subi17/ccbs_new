@@ -1,7 +1,7 @@
-{testpaa.i}
-{fmakemsreq.i}
+{Syst/testpaa.i}
+{Func/fmakemsreq.i}
 
-katun = "ari".
+Syst.Var:katun = "ari".
 
 def var i       as int  no-undo.
 def var j       as int  no-undo.
@@ -46,7 +46,7 @@ for each msowner no-lock where
          Memo.Custnum   = MobSub.CustNum
          memo.HostTable = "Customer"
          memo.KeyValue  = STRING(Mobsub.CustNum)
-         memo.CreUser   = katun
+         memo.CreUser   = Syst.Var:katun
          memo.MemoTitle = "Periodical Contract"
          Memo.memotext  = DCCLI.DCEvent + 
                           ": Terminated along with the subscription" +

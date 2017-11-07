@@ -6,14 +6,13 @@
   CREATED ......: 25.03.13
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
-{timestamp.i}
-{fmakemsreq.i}
-{msreqfunc.i}
-{fcreditreq.i}
-{fixedfee.i}
-{ordercancel.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/msreqfunc.i}
+{Func/fcreditreq.i}
+{Func/fixedfee.i}
+{Func/ordercancel.i}
 
 DEF INPUT PARAMETER iiMsRequest AS INT  NO-UNDO.
 
@@ -32,7 +31,7 @@ IF NOT AVAIL MsRequest THEN
 
 liOrigStatus = MsRequest.ReqStatus.
 
-fSplitTS(MsRequest.ActStamp,
+Func.Common:mSplitTS(MsRequest.ActStamp,
          OUTPUT ldaActivationDate,
          OUTPUT liActivationTime).
 
@@ -78,7 +77,7 @@ PROCEDURE pInstallmentContractChange:
    DEF VAR ldaLastUnBilledDate    AS DATE NO-UNDO.
 
    FIND FIRST DayCampaign WHERE 
-              DayCampaign.Brand   = gcBrand AND
+              DayCampaign.Brand   = Syst.Var:gcBrand AND
               DayCampaign.DCEvent = MsRequest.ReqCParam2 NO-LOCK NO-ERROR.
    IF NOT AVAIL DayCampaign OR 
       DayCampaign.ValidFrom > TODAY OR
@@ -96,7 +95,7 @@ PROCEDURE pInstallmentContractChange:
    liFFBegPeriod = YEAR(DCCLI.ValidFrom) * 100 + MONTH(DCCLI.ValidFrom).
 
    FIND FIRST FixedFee NO-LOCK USE-INDEX CustNum WHERE
-              FixedFee.Brand     = gcBrand   AND
+              FixedFee.Brand     = Syst.Var:gcBrand   AND
               FixedFee.CustNum   = MobSub.CustNum AND
               FixedFee.HostTable = "MobSub"  AND
               FixedFee.KeyValue  = STRING(MsRequest.MsSeq) AND
@@ -105,7 +104,7 @@ PROCEDURE pInstallmentContractChange:
               FixedFee.SourceKey = STRING(DCCLI.PerContractId) NO-ERROR.
    IF NOT AVAIL FixedFee THEN
       FIND FixedFee NO-LOCK USE-INDEX CustNum WHERE
-           FixedFee.Brand     = gcBrand   AND
+           FixedFee.Brand     = Syst.Var:gcBrand   AND
            FixedFee.CustNum   = MobSub.CustNum AND
            FixedFee.HostTable = "MobSub"  AND
            FixedFee.KeyValue  = STRING(MsRequest.MsSeq) AND
@@ -117,7 +116,7 @@ PROCEDURE pInstallmentContractChange:
 
          IF FFItem.Billed = TRUE AND
             CAN-FIND (FIRST Invoice USE-INDEX InvNum WHERE
-                            Invoice.Brand   = gcBrand AND
+                            Invoice.Brand   = Syst.Var:gcBrand AND
                             Invoice.InvNum  = FFItem.InvNum AND
                             Invoice.InvType = 1 NO-LOCK) THEN
             ldeCreditNoteAmount = ldeCreditNoteAmount + FFItem.Amt.
@@ -140,8 +139,8 @@ PROCEDURE pInstallmentContractChange:
                                      1,YEAR(ldaLastUnBilledDate)).
 
    ASSIGN
-      ldaLastDayOfLastMonth = fLastDayOfMonth(ldaFirstDayOfLastMonth)
-      ldPeriodTo = fMake2Dt(ldaLastDayOfLastMonth,86399).
+      ldaLastDayOfLastMonth = Func.Common:mLastDayOfMonth(ldaFirstDayOfLastMonth)
+      ldPeriodTo = Func.Common:mMake2DT(ldaLastDayOfLastMonth,86399).
    
    /* Terminate current payterm contract */
    liTermReq = fPCActionRequest(MobSub.MsSeq,
@@ -156,6 +155,7 @@ PROCEDURE pInstallmentContractChange:
                                 "",
                                 0,
                                 DCCLI.PerContractId,
+                                "",
                                 OUTPUT lcError).
    IF liTermReq = 0 OR liTermReq = ? THEN
       RETURN "ERROR:Current Installment Contract termination request " +
@@ -174,6 +174,7 @@ PROCEDURE pInstallmentContractChange:
                                "",
                                MsRequest.ReqDParam2, /* residual fee */
                                DCCLI.PerContractId,
+                               "",
                                OUTPUT lcError).
    IF liActReq = 0 OR liActReq = ? THEN
        UNDO, RETURN "ERROR:New Installment Contract termination request " +

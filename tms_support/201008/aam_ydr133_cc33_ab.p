@@ -1,4 +1,3 @@
-{timestamp.i}
 
 def var lccli as char no-undo.
 
@@ -9,7 +8,7 @@ for each mobcdr no-lock use-index spocmt where
 
    pause 0.
    disp datest 
-        fts2hms(readints) format "x(19)"
+        Func.Common:mTS2HMS(readints) format "x(19)"
         gsmbnr
         cli
         roaming.

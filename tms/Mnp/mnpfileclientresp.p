@@ -6,15 +6,15 @@ AUTHOR .......: anttis
 CREATED ......: 06.10.09
 Version ......: xfera
 ----------------------------------------------------------------------- */
-{commpaa.i}
-katun = "Cron".
-gcBrand = "1".
-{tmsconst.i}
-{ftransdir.i}
-{cparam2.i}
-{mnpcontingency.i}
-{log.i}
-{xmlrpc/xmlrpc_client.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
+{Mnp/mnpcontingency.i}
+{Func/log.i}
+{fcgi_agent/xmlrpc/xmlrpc_client.i}
 
 DEFINE VARIABLE lcError AS CHAR NO-UNDO. 
 

@@ -13,22 +13,22 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'dpbasis'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'dpbasis'}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhDPBasis AS HANDLE NO-UNDO.
    lhDPBasis = BUFFER DPBasis:HANDLE.
    RUN StarEventInitialize(lhDPBasis).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhDPBasis).
+      RUN Mc/eventview2.p(lhDPBasis).
    END.
 
 END.
@@ -69,8 +69,8 @@ FORM
     TargName          COLUMN-LABEL "Name of Target" FORMAT "x(30)"
 
 WITH ROW FrmRow CENTERED OVERLAY FrmDown DOWN
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) " " +
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " " +
     DPConf.DPCName + " Contains: " 
     FRAME sel.
 
@@ -82,8 +82,8 @@ WITH
     ROW 2 
     CENTERED
     NO-LABEL
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -91,12 +91,12 @@ WITH
 FORM /* seek DPBasis  by KeyField */
     KeyField
     HELP "Enter Billing Code or CCN"             
-    WITH ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND DISCOUNT "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH ROW 4 COL 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND DISCOUNT "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FIND DPConf WHERE DPConf.DPConfNum = DPConfNum NO-LOCK no-error.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.  
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.  
 VIEW FRAME sel.                              
 
 orders = "By Product,By BDestination,By 3, By 4".
@@ -129,17 +129,17 @@ REPEAT WITH FRAME sel:
 
    IF must-add THEN DO:  /* Add a DPBasis  */
       ASSIGN 
-      cfc = "lis" 
+      Syst.Var:cfc = "lis" 
       ufkey = true 
       ac-hdr = " ADD (F4: RETURN) " 
       must-add = false.
-      RUN ufcolor.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. 
-        RUN ufkey.
+        Syst.Var:ehto = 9. 
+        RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
 
@@ -173,7 +173,7 @@ ADD-ROW:
               READKEY.     
               IF KEYLABEL(LASTKEY) = "F4" THEN UNDO ADD-ROW, LEAVE ADD-ROW.
 
-              IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+              IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                  HIDE MESSAGE.
 
                  IF FRAME-FIELD = "BillCode" AND 
@@ -190,7 +190,7 @@ ADD-ROW:
                     END.
                     /* check if BillCode is valid */
                     IF NOT CAN-FIND(BillItem WHERE 
-                            BillItem.Brand    = gcBrand AND
+                            BillItem.Brand    = Syst.Var:gcBrand AND
                             BillItem.BillCode = INPUT DPBasis.BillCode) 
                     THEN DO:
                        MESSAGE 
@@ -216,7 +216,7 @@ ADD-ROW:
 
                     /* is CCN valid ? */
                     IF NOT CAN-FIND(FIRST CCN WHERE 
-                                    CCN.Brand = gcBrand AND
+                                    CCN.Brand = Syst.Var:gcBrand AND
                                     CCN.CCN = INPUT DPBasis.CCN)
                     THEN DO:
                        MESSAGE 
@@ -228,7 +228,7 @@ ADD-ROW:
                     LEAVE.
                  END.  /* CCN */  
 
-              END. /* if poisnap */
+              END. /* if Syst.Var:poisnap */
               APPLY LASTKEY.
 
            END.  /* editing */
@@ -367,25 +367,25 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN  
-        ufk[1]= 816 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)  
-        ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
-        ehto = 3  
+        Syst.Var:ufk[1]= 816 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)  
+        Syst.Var:ufk[7]= 0   Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3  
         ufkey = false.
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW targName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) targName WITH FRAME sel.
+        CHOOSE ROW targName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) targName WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTkey).
+      Syst.Var:nap = keylabel(LASTkey).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -393,10 +393,10 @@ BROWSE:
          END.
       END.
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -414,7 +414,7 @@ BROWSE:
       END.
 
       /* PREVious row */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-line = 1 THEN DO:
            RUN local-find-this(false).
            RUN local-find-PREV.
@@ -439,7 +439,7 @@ BROWSE:
       END. /* PREVious row */
 
       /* NEXT row */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-line = FRAME-down THEN DO:
            RUN local-find-this(false).
@@ -465,7 +465,7 @@ BROWSE:
       END. /* NEXT row */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND DPBasis WHERE recid(DPBasis) = memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -489,7 +489,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* Put Cursor on downmost Row */
        IF rtab[FRAME-down] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -504,14 +504,14 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search by column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDkey undo, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDkey undo, NEXT LOOP:
 
 ASK-F1:
         REPEAT WITH FRAME F1 
         ON ENDKEY UNDO ask-f1, LEAVE ask-f1.
 
-          cfc = "puyr". RUN ufcolor.
-          ehto = 9. RUN ufkey. ufkey = true.
+          Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+          Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
           CLEAR FRAME f1.
           SET KeyField WITH FRAME f1.
           LEAVE.
@@ -535,18 +535,18 @@ ASK-F1:
        NEXT LOOP.
      END. /* Search-1 */
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW"  THEN DO:  /* ADD */
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW"  THEN DO:  /* ADD */
         must-add = true.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW"
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSAction:  /* DELETE */
        delrow = FRAME-line.
        RUN local-find-this (false).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        DPBasis.CCN DPBasis.BillCode .
 
        RUN local-find-NEXT.
@@ -568,7 +568,7 @@ ASK-F1:
 
        ASSIGN ok = false.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        DPBasis.CCN DPBasis.BillCode .
        IF ok THEN DO:
 
@@ -591,7 +591,7 @@ ASK-F1:
      END. /* DELETE */
 
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
 
@@ -602,10 +602,10 @@ ASK-F1:
        NEXT loop.
 /*
        /* change */
-       {uright2.i}
+       {Syst/uright2.i}
        RUN local-find-this(true).
-       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = true Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY DPBasis.BillCode DPBasis.CCN.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDPBasis).
@@ -624,25 +624,25 @@ ASK-F1:
        LEAVE. */
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = recid(DPBasis) must-print = true.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN memory = recid(DPBasis) must-print = true.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -690,14 +690,14 @@ PROCEDURE local-find-others.
    TargName = "ALL Calls".
    IF DPBasis.BillCode NE "" THEN DO:
       FIND BillItem WHERE 
-         BillItem.Brand    = gcBrand AND
+         BillItem.Brand    = Syst.Var:gcBrand AND
          BillItem.BillCode = DPBasis.BillCode NO-LOCK NO-ERROR.
       IF AVAIL BillItem THEN targName  = BillItem.BIName.
                      ELSE targName  = "! Unknown BillCode !".
    END.
    ELSE IF DPBasis.CCN NE 0 THEN DO:
       FIND FIRST CCN WHERE  
-         CCN.Brand = gcBrand AND
+         CCN.Brand = Syst.Var:gcBrand AND
          CCN.CCN = DPBasis.CCN NO-LOCK NO-ERROR.
       IF AVAIL CCN THEN TargName = CCN.CCNName.
                      ELSE targName = "! Unknown CCN !".

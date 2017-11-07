@@ -9,18 +9,17 @@
                   order and order is in status 6 
   Version ......: yoigo
 -------------------------------------------------------------------------- */
-{commali.i} 
-{timestamp.i}
-{cparam2.i}
-{eventval.i}
-{forderstamp.i}
-{tmsconst.i}
-{order.i}
-{fcustdata.i}
+{Syst/commali.i} 
+{Func/cparam2.i}
+{Syst/eventval.i}
+{Func/forderstamp.i}
+{Syst/tmsconst.i}
+{Func/order.i}
+{Func/fcustdata.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
-   {lib/eventlog.i}
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
+   {Func/lib/eventlog.i}
 END.
 
 DEF INPUT  PARAMETER  iiOrderId  LIKE Order.OrderId.
@@ -48,7 +47,7 @@ DEF BUFFER bOrderCustomer FOR OrderCustomer.
 DEF BUFFER bMobSub FOR MobSub.
 
 FIND FIRST Order WHERE
-           Order.Brand   = gcBrand AND
+           Order.Brand   = Syst.Var:gcBrand AND
            Order.OrderId = iiOrderId 
 EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
 
@@ -66,7 +65,7 @@ IF iiRole = 2 AND Order.InvCustRole NE 2 THEN RETURN.
 IF iiRole = 3 AND Order.UserRole NE 3    THEN RETURN.
 
 FIND FIRST OrderCustomer NO-LOCK WHERE
-           OrderCustomer.Brand   = gcBrand   AND
+           OrderCustomer.Brand   = Syst.Var:gcBrand   AND
            OrderCustomer.OrderID = iiOrderID AND
            OrderCustomer.RowType = iiRole NO-ERROR.
 IF NOT AVAILABLE OrderCustomer THEN DO:
@@ -87,7 +86,7 @@ ELSE IF iiRole = 1 THEN DO:
      (Order.MNPStatus > 0 AND OrderCustomer.PersonId EQ "NEW") THEN
       liOldCustNum = OrderCustomer.CustNum.
    ELSE 
-   run searchcust (INPUT  "ORGID|" +
+   RUN Mc/searchcust.p (INPUT  "ORGID|" +
                           /* if agrcust=invcust=user then show only those
                              that are invcusts to themselves */
                           (IF Order.InvCustRole = 1 AND
@@ -104,13 +103,13 @@ END.
 ELSE IF iiRole = 2 THEN DO:
 
    FIND FIRST bOrderCustomer NO-LOCK WHERE
-              bOrderCustomer.Brand   = gcBrand   AND
+              bOrderCustomer.Brand   = Syst.Var:gcBrand   AND
               bOrderCustomer.OrderID = iiOrderID AND
               bOrderCustomer.RowType = 1 NO-ERROR.
  
    IF AVAILABLE bOrderCustomer THEN DO:
 
-      run searchcust (INPUT  "INVCUST" + 
+      RUN Mc/searchcust.p (INPUT  "INVCUST" + 
                           /* if user=agrcust then show only that customer's
                              invcust */
                           (IF Order.UserRole = 1
@@ -132,13 +131,13 @@ END.
 ELSE IF iiRole = 3 THEN  DO:
 
    FIND FIRST bOrderCustomer NO-LOCK WHERE
-              bOrderCustomer.Brand   = gcBrand   AND
+              bOrderCustomer.Brand   = Syst.Var:gcBrand   AND
               bOrderCustomer.OrderID = iiOrderID AND
               bOrderCustomer.RowType = Order.InvCustRole NO-ERROR.
    
    IF AVAILABLE bOrderCustomer THEN DO:
 
-      run searchcust (INPUT  "USERCUST",
+      RUN Mc/searchcust.p (INPUT  "USERCUST",
                       INPUT  STRING(bOrderCustomer.CustNum),
                       INPUT  ilDisp,
                       OUTPUT lioldcustnum).
@@ -155,7 +154,7 @@ IF liOldCustnum = 0 THEN DO:
    IF new-Custnum = 0 OR new-custnum = ?
    THEN new-custnum = 300. 
 
-   RUN copymobcu(INPUT-OUTPUT new-CustNum, INPUT FALSE).
+   RUN Mm/copymobcu.p(INPUT-OUTPUT new-CustNum, INPUT FALSE).
 
    llOk = fmakeCustomer(Order.OrderID,
                         iiRole,    
@@ -218,7 +217,7 @@ ELSE DO:
       RETURN "ERROR:Customer not found".
 
    FIND FIRST OrderCustomer NO-LOCK WHERE
-              OrderCustomer.Brand   = gcBrand   AND
+              OrderCustomer.Brand   = Syst.Var:gcBrand   AND
               OrderCustomer.OrderID = iiOrderID AND
               OrderCustomer.RowType = iiRole  NO-ERROR.
 
@@ -226,12 +225,13 @@ ELSE DO:
       
    /* YDR-1207, Always update marketing fields */
    ASSIGN
-      Customer.DirMarkSMS   = OrderCustomer.OperSMSMarketing
-      Customer.DirMarkEmail = OrderCustomer.OperEMailMarketing
-      Customer.DirMarkPOST  = OrderCustomer.OperPostMarketing
-      Customer.OutMarkSMS   = OrderCustomer.OutSMSMarketing
-      Customer.OutMarkEmail = OrderCustomer.OutEMailMarketing
-      Customer.OutMarkPOST  = OrderCustomer.OutPostMarketing.
+      Customer.DirMarkSMS        = OrderCustomer.OperSMSMarketing
+      Customer.DirMarkEmail      = OrderCustomer.OperEMailMarketing
+      Customer.DirMarkPOST       = OrderCustomer.OperPostMarketing
+      Customer.OutMarkSMS        = OrderCustomer.OutSMSMarketing
+      Customer.OutMarkEmail      = OrderCustomer.OutEMailMarketing
+      Customer.OutMarkPOST       = OrderCustomer.OutPostMarketing
+      Customer.DontSharePersData = OrderCustomer.DontSharePersData.
       
    /* Renove order handling */
    IF Order.OrderType = {&ORDER_TYPE_RENEWAL} THEN DO:
@@ -249,16 +249,18 @@ ELSE DO:
    END.
    ELSE IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN DO:
       /* bank account is changed with a separate request from stc process */
-      ASSIGN
-         Customer.SMSNumber   = OrderCustomer.MobileNumber.
+      ASSIGN Customer.SMSNumber   = OrderCustomer.MobileNumber.
       fUpdateEmail(Order.OrderId).
+      /* YPRO migrate YPRO-92 category */
+      IF ordercustomer.pro AND ordercustomer.category NE customer.category THEN
+         Customer.category = ordercustomer.category.
    END.
 
    /* DCH NEW/MNP */
    ELSE DO:
 
       FIND FIRST OrderCustomer EXCLUSIVE-LOCK WHERE
-                 OrderCustomer.Brand   = gcBrand   AND
+                 OrderCustomer.Brand   = Syst.Var:gcBrand   AND
                  OrderCustomer.OrderID = iiOrderID AND
                  OrderCustomer.RowType = iiRole  NO-ERROR.
 
@@ -278,27 +280,36 @@ ELSE DO:
          IF llDoEvent THEN RUN StarEventMakeModifyEvent ( lhOrderCustomer ).
 
          FIND FIRST MobSub NO-LOCK WHERE
-                    MobSub.Brand   = gcBrand AND
+                    MobSub.Brand   = Syst.Var:gcBrand AND
                     MobSub.MsSeq   = Order.MsSeq AND
                     MobSub.CustNum = Customer.CustNum NO-ERROR.
 
-         IF AVAILABLE MobSub THEN DO:
-            IF MobSub.PayType = FALSE AND
-               NOT CAN-FIND(FIRST bMobSub WHERE
-                                  bMobSub.Brand     = gcBrand AND
-                                  bMobSub.MsSeq    <> MobSub.MsSeq AND
+         IF AVAILABLE MobSub THEN 
+         DO:
+            IF MobSub.PayType = FALSE THEN
+            DO:
+                IF CAN-FIND(FIRST bMobSub WHERE
+                                  bMobSub.Brand     = Syst.Var:gcBrand          AND
+                                  bMobSub.MsSeq    <> MobSub.MsSeq     AND
                                   bMobSub.CustNum   = Customer.CustNum AND
-                                  bMobSub.PayType   = FALSE) THEN
-               llUpdateCust = TRUE.
+                                  bMobSub.PayType   = FALSE)           THEN
+                    ASSIGN Customer.Category = OrderCustomer.Category.
+                ELSE 
+                    ASSIGN llUpdateCust = TRUE.
+            END.
          END.
          ELSE DO:
-            IF Order.PayType = FALSE AND
-               NOT CAN-FIND(FIRST bMobSub WHERE
-                                  bMobSub.Brand     = gcBrand AND
-                                  bMobSub.MsSeq    <> Order.MsSeq AND
+            IF Order.PayType = FALSE THEN 
+            DO:
+                IF CAN-FIND(FIRST bMobSub WHERE
+                                  bMobSub.Brand     = Syst.Var:gcBrand          AND
+                                  bMobSub.MsSeq    <> Order.MsSeq      AND
                                   bMobSub.CustNum   = Customer.CustNum AND
-                                  bMobSub.PayType   = FALSE) THEN
-               llUpdateCust = TRUE.
+                                  bMobSub.PayType   = FALSE)           THEN
+                    ASSIGN Customer.Category = OrderCustomer.Category.
+                ELSE 
+                    ASSIGN llUpdateCust = TRUE.
+            END.
          END.
 
          IF llUpdateCust THEN DO:
@@ -320,6 +331,7 @@ ELSE DO:
                Customer.ZipCode         = OrderCustomer.ZipCode
                Customer.PostOffice      = OrderCustomer.PostOffice
                Customer.Region          = OrderCustomer.Region
+               Customer.InvGroup        = fDefInvGroup(OrderCustomer.Region)
                Customer.Country         = OrderCustomer.Country
                Customer.DirMarkEmail    = OrderCustomer.OperEMailMarketing
                Customer.DirMarkPOST     = OrderCustomer.OperPostMarketing
@@ -332,21 +344,20 @@ ELSE DO:
                Customer.FoundationDate  = OrderCustomer.FoundationDate WHEN
                                           OrderCustomer.CustIdType = "CIF"
                Customer.Profession      = TRIM(OrderCustomer.Profession) WHEN
-                                          TRIM(OrderCustomer.Profession) > "".
-
-            IF iiRole = 1 AND OrderCustomer.CustIdType = "CIF" AND
-               Customer.CustIdType = "CIF" THEN DO:
-               IF OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN ASSIGN
-                  Customer.AuthCustId      = Order.OrdererID
-                  Customer.AuthCustIdType  = Order.OrdererIDType.
-            END.
-
-            fUpdEmailDelType(Order.OrderId).
+                                          TRIM(OrderCustomer.Profession) > ""
+               Customer.AuthCustId      = OrderCustomer.AuthCustId
+                  WHEN OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+               Customer.AuthCustIdType  = OrderCustomer.AuthCustIdType
+                  WHEN OrderCustomer.Rowtype = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+               Customer.Category   = OrderCustomer.Category WHEN
+                                     OrderCustomer.CustID EQ Customer.OrgID AND
+                                     OrderCustomer.CustIDType EQ Customer.CustIDType.
 
             /* check if bank data is now available */
             IF iiRole = 1 OR iiRole = 2 THEN DO:
                IF AVAILABLE Customer AND Customer.BankAcc = "" AND
-                  Customer.OrgID = OrderCustomer.CustID
+                  Customer.OrgID = OrderCustomer.CustID AND
+                  Customer.CustidType = OrderCustomer.CustIDType
                THEN DO:
 
                   FIND Current Customer EXCLUSIVE-LOCK.
@@ -356,11 +367,20 @@ ELSE DO:
                      Order.MNPStatus > 0 THEN
                      ASSIGN
                         Customer.OrgId = OrderCustomer.CustId
-                        Customer.CustIdType = OrderCustomer.CustIdType.
+                        Customer.CustIdType = OrderCustomer.CustIdType
+                        Customer.Category = OrderCustomer.Category.
                END.
             END.
 
          END. /* IF llUpdateCust THEN DO: */
+
+         IF NOT OrderCustomer.Pro THEN /* Order is with non-pro, so closing all ACC requests for pro */
+            fClosePendingACC("Pro", OrderCustomer.CustIdType, OrderCustomer.CustId, Order.OrderId).
+         ELSE                          /* Order is with non-pro, so closing all ACC requests for pro */   
+            fClosePendingACC("Non-pro", OrderCustomer.CustIdType, OrderCustomer.CustId, Order.OrderId).
+
+         fUpdEmailDelType(Order.OrderId).
+
       END.
    END.
 
@@ -372,7 +392,7 @@ ELSE DO:
 
    IF llDoEvent THEN RUN StarEventMakeModifyEventWithMemo(
                            lhCustomer,
-                           katun,
+                           Syst.Var:katun,
                            lcMemo).
    
    RELEASE Customer.

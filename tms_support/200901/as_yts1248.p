@@ -1,7 +1,7 @@
-{commpaa.i}
-katun = "anttis".
-gcBrand = "1".
-{fmakemsreq.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
+{Func/fmakemsreq.i}
 
 def stream sin.
 input stream sin from /apps/snet/200901/as_yts1248.log.
@@ -51,7 +51,7 @@ if i > 10 then leave.
                               TRIM(SubSer.ServCom),
                               SubSer.SSStat,
                               SubSer.SSParam,
-                              fMakeTS(),
+                              Func.Common:mMakeTS(),
                               "",
                               FALSE,      /* fees */
                               FALSE,      /* sms */

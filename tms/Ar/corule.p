@@ -15,10 +15,10 @@
   ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE BrTable CoRule
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'corule'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'corule'}
 
 DEF BUFFER bCoRule  FOR CoRule.
 DEF BUFFER bCoBasis FOR CoBasis.
@@ -26,9 +26,9 @@ DEF BUFFER bCoTarg  FOR CoTarg.
 DEF BUFFER bCoShare FOR CoShare.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCoRule AS HANDLE NO-UNDO.
    lhCoRule = BUFFER CoRule:HANDLE.
@@ -39,7 +39,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhbCoRule).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhCoRule).
+      RUN Mc/eventview2.p(lhCoRule).
    END.
 
 END.
@@ -90,9 +90,9 @@ form
     CoRule.CommAmount FORMAT ">>>>>9" 
     CoRule.Priority   
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
-       " COMMISSION RULES "  + string(pvm,"99-99-99") + " "
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
+       " COMMISSION RULES "  + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form            
@@ -156,7 +156,7 @@ form
     CoRule.ActivationSMS COLON 20 FORMAT "X(20)"
        lcActivationSMS NO-LABEL FORMAT "X(30)" SKIP
 WITH OVERLAY ROW 1 centered
-    COLOR VALUE(cfc) TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc) TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS FRAME lis.
 
 form            
@@ -168,34 +168,33 @@ form
        VALIDATE(INPUT CoRule.CoTo NE ?,
                 "Date is mandatory")
 WITH  OVERLAY ROW 7 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) " Copy a New Rule From Template " 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " Copy a New Rule From Template " 
     SIDE-LABELS 
     FRAME fTemplate.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek  */
     "Brand :" lcBrand skip
     "RuleID:" liRule
     HELP "Enter rule ID "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND ID"
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND ID"
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
 form /* seek  */
     "Brand .....:" lcBrand skip
     "Description:" lcDesc
     HELP "Enter description"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND description "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND description "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 FUNCTION fBasisType RETURNS LOGICAL
    (iiType AS INT):
 
-   lcBasis = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                              "CoRule",
+   lcBasis = Func.Common:mTMSCodeName("CoRule",
                               "BasisType",
                               STRING(iiType)).
                               
@@ -205,8 +204,7 @@ END FUNCTION.
 FUNCTION fCommPoint RETURNS LOGICAL
    (iiPoint AS INT).
 
-   lcPoint = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                              "CoRule",
+   lcPoint = Func.Common:mTMSCodeName("CoRule",
                               "CommPoint",
                               STRING(iiPoint)).
     
@@ -219,7 +217,7 @@ FUNCTION fFatGroup RETURNS LOGIC
    lcFtgName = "".
    IF icGroup > "" THEN DO:
       FIND FIRST FatGroup WHERE 
-                 FatGroup.Brand = gcBrand AND
+                 FatGroup.Brand = Syst.Var:gcBrand AND
                  FatGroup.FTGrp = icGroup 
       NO-LOCK NO-ERROR.
       IF AVAILABLE FatGroup THEN
@@ -232,8 +230,7 @@ END FUNCTION.
 FUNCTION fPayType RETURNS LOGICAL
    (iiType AS INT):
 
-   lcPayType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "CLIType",
+   lcPayType = Func.Common:mTMSCodeName("CLIType",
                                 "PayType",
                                 STRING(iiType)).
                               
@@ -242,8 +239,7 @@ END FUNCTION.
 FUNCTION fRuleType RETURNS LOGICAL
    (iiType AS INT):
 
-   lcRuleType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "CoRule",
+   lcRuleType = Func.Common:mTMSCodeName("CoRule",
                                  "RuleType",
                                  STRING(iiType)).
                               
@@ -255,7 +251,7 @@ FUNCTION fDispCreationSMS RETURNS LOGIC
    lcCreationSMS = "".
    
    FOR FIRST InvText NO-LOCK WHERE
-             InvText.Brand     = gcBrand   AND 
+             InvText.Brand     = Syst.Var:gcBrand   AND 
              InvText.Target    = "SMS"     AND
              InvText.KeyValue  = icSMSText AND
              InvText.FromDate <= TODAY     AND
@@ -276,7 +272,7 @@ FUNCTION fDispActivationSMS RETURNS LOGIC
    lcActivationSMS = "".
    
    FOR FIRST InvText NO-LOCK WHERE
-             InvText.Brand     = gcBrand   AND 
+             InvText.Brand     = Syst.Var:gcBrand   AND 
              InvText.Target    = "SMS"     AND
              InvText.KeyValue  = icSMSText AND
              InvText.FromDate <= TODAY     AND
@@ -294,7 +290,7 @@ END FUNCTION.
 
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -316,15 +312,15 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a CoRule  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -336,7 +332,7 @@ REPEAT WITH FRAME sel:
                  LOOKUP(FRAME-FIELD,"RuleType,PayType") > 0 THEN DO:
             
                  IF FRAME-FIELD = "PayType" THEN DO:
-                    RUN h-tmscodes(INPUT "CLIType",     /* TableName */
+                    RUN Help/h-tmscodes.p(INPUT "CLIType",     /* TableName */
                                          "PayType",  /* FieldName */
                                          "MobSub", /* GroupCode */
                                    OUTPUT lcCode).
@@ -348,7 +344,7 @@ REPEAT WITH FRAME sel:
                  END.
                                       
                  ELSE IF FRAME-FIELD = "RuleType" THEN DO:
-                    RUN h-tmscodes(INPUT "CoRule",     /* TableName */
+                    RUN Help/h-tmscodes.p(INPUT "CoRule",     /* TableName */
                                          "RuleType",  /* FieldName */
                                          "Commission", /* GroupCode */
                                    OUTPUT lcCode).
@@ -359,8 +355,8 @@ REPEAT WITH FRAME sel:
                     END.
                  END.
  
-                 ehto = 9.
-                 RUN ufkey.
+                 Syst.Var:ehto = 9.
+                 RUN Syst/ufkey.p.
                  NEXT. 
               END.
            
@@ -372,7 +368,7 @@ REPEAT WITH FRAME sel:
 
            CREATE CoRule.
            ASSIGN
-           CoRule.Brand      = gcBrand 
+           CoRule.Brand      = Syst.Var:gcBrand 
            CoRule.CoRuleID   = NEXT-VALUE(CoRule)
            CoRule.CustNum    = 0
            CoRule.RuleDesc   = INPUT FRAME lis CoRule.RuleDesc
@@ -450,30 +446,30 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk   = 0
-        ufk[1]= 816  
-        ufk[4]= 1872
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-        ufk[8]= 8 
-        ehto = 3 ufkey = FALSE.
-        RUN ufkey.
+        Syst.Var:ufk   = 0
+        Syst.Var:ufk[1]= 816  
+        Syst.Var:ufk[4]= 1872
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.Var:ufk[8]= 8 
+        Syst.Var:ehto = 3 ufkey = FALSE.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW CoRule.CoRuleID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CoRule.CoRuleID WITH FRAME sel.
+        CHOOSE ROW CoRule.CoRuleID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) CoRule.CoRuleID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW CoRule.RuleDesc ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CoRule.RuleDesc WITH FRAME sel.
+        CHOOSE ROW CoRule.RuleDesc {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) CoRule.RuleDesc WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -482,10 +478,10 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -503,7 +499,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -528,7 +524,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -554,7 +550,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND CoRule WHERE recid(CoRule) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -578,7 +574,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -593,23 +589,23 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* search */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO:
 
         ASSIGN
-        ufk = 0
-        ufk[1]= 35  ufk[2]= 717  
-        ufk[8]= 8 
-        ehto = 0
+        Syst.Var:ufk = 0
+        Syst.Var:ufk[1]= 35  Syst.Var:ufk[2]= 717  
+        Syst.Var:ufk[8]= 8 
+        Syst.Var:ehto = 0
         ufkey = TRUE.
-        RUN ufkey.
+        RUN Syst/ufkey.p.
 
         /* Search BY column 1 */
-        IF toimi = 1 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-           cfc = "puyr". run ufcolor.
-           ehto = 9. RUN ufkey. ufkey = TRUE.
+        IF Syst.Var:toimi = 1 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f1.
            DISPLAY lcBrand WITH FRAME F1.
-           UPDATE lcBrand WHEN gcAllBrand
+           UPDATE lcBrand WHEN Syst.Var:gcAllBrand
                   liRule WITH FRAME f1.
            HIDE FRAME f1 NO-PAUSE.
 
@@ -627,12 +623,12 @@ REPEAT WITH FRAME sel:
         END. /* Search-1 */
 
         /* Search BY column 2 */
-        ELSE IF toimi = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-           cfc = "puyr". run ufcolor.
-           ehto = 9. RUN ufkey. ufkey = TRUE.
+        ELSE IF Syst.Var:toimi = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f2.
            DISPLAY lcBrand WITH FRAME F2.
-           UPDATE lcBrand WHEN gcAllBrand
+           UPDATE lcBrand WHEN Syst.Var:gcAllBrand
                   lcDesc WITH FRAME f2.
            HIDE FRAME f2 NO-PAUSE.
 
@@ -651,37 +647,37 @@ REPEAT WITH FRAME sel:
 
      END.
 
-     ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0 THEN DO:  /* BASIS */
-       {uright2.i}
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 AND Syst.Var:ufk[3] > 0 THEN DO:  /* BASIS */
+       {Syst/uright2.i}
        RUN local-find-this (FALSE).
        IF AVAILABLE CoRule 
-       THEN RUN cobasis (CoRule.CoRuleID). 
+       THEN RUN Mc/cobasis.p (CoRule.CoRuleID). 
        ufkey = true. 
      END.
 
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:  /* TARGETS */
-       {uright2.i}
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 THEN DO:  /* TARGETS */
+       {Syst/uright2.i}
        RUN local-find-this (FALSE).
        IF AVAILABLE CoRule 
-       THEN RUN cotarg (CoRule.CoRuleID, "rule"). 
+       THEN RUN Ar/cotarg.p (CoRule.CoRuleID, "rule"). 
        ufkey = true. 
      END.
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" 
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" 
      THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW"
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        CoRule.CoRuleID CoRule.RuleDesc .
 
        RUN local-find-NEXT.
@@ -713,7 +709,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        CoRule.CoRuleID CoRule.RuleDesc .
 
        IF ok THEN DO:
@@ -735,7 +731,7 @@ REPEAT WITH FRAME sel:
      END. /* DELETE */
 
      /* copy from template */
-     ELSE IF LOOKUP(nap,"7,f7") > 0 AND ufk[7] > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"7,f7") > 0 AND Syst.Var:ufk[7] > 0 THEN DO:
      
         RUN local-find-this(FALSE).
         
@@ -746,8 +742,8 @@ REPEAT WITH FRAME sel:
            NEXT.
         END.
      
-        ehto = 9.
-        RUN ufkey.
+        Syst.Var:ehto = 9.
+        RUN Syst/ufkey.p.
         ufkey = TRUE.
         
         REPEAT WITH FRAME fTemplate ON ENDKEY UNDO, NEXT LOOP:
@@ -774,7 +770,7 @@ REPEAT WITH FRAME sel:
            FIND bCoRule WHERE RECID(bCoRule) = RECID(CoRule) NO-LOCK.
            CREATE CoRule.
            ASSIGN 
-           CoRule.Brand     = gcBrand 
+           CoRule.Brand     = Syst.Var:gcBrand 
            CoRule.CoRuleID  = NEXT-VALUE(CoRule)
            CoRule.RuleDesc  = INPUT FRAME fTemplate CoRule.RuleDesc
            CoRule.CoFrom    = INPUT FRAME fTemplate CoRule.CoFrom
@@ -811,7 +807,7 @@ REPEAT WITH FRAME sel:
         
      END.
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -820,7 +816,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCoRule).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        must-print = FALSE.
        
@@ -840,25 +836,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(CoRule) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(CoRule) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 fCleanEventObjects().
 
@@ -877,37 +873,37 @@ END PROCEDURE.
 
 PROCEDURE local-find-FIRST:
        IF order = 1 THEN FIND FIRST CoRule USE-INDEX CoRuleID
-          WHERE CoRule.Brand = gcBrand
+          WHERE CoRule.Brand = Syst.Var:gcBrand
         NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND FIRST CoRule USE-INDEX RuleDesc
-          WHERE CoRule.Brand = gcBrand
+          WHERE CoRule.Brand = Syst.Var:gcBrand
         NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
        IF order = 1 THEN FIND LAST CoRule USE-INDEX CoRuleID
-          WHERE CoRule.Brand = gcBrand
+          WHERE CoRule.Brand = Syst.Var:gcBrand
         NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND LAST CoRule USE-INDEX RuleDesc
-          WHERE CoRule.Brand = gcBrand
+          WHERE CoRule.Brand = Syst.Var:gcBrand
         NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
        IF order = 1 THEN FIND NEXT CoRule USE-INDEX CoRuleID
-          WHERE CoRule.Brand = gcBrand
+          WHERE CoRule.Brand = Syst.Var:gcBrand
         NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND NEXT CoRule USE-INDEX RuleDesc
-          WHERE CoRule.Brand = gcBrand
+          WHERE CoRule.Brand = Syst.Var:gcBrand
         NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
        IF order = 1 THEN FIND PREV CoRule USE-INDEX CoRuleID
-          WHERE CoRule.Brand = gcBrand
+          WHERE CoRule.Brand = Syst.Var:gcBrand
         NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND PREV CoRule USE-INDEX RuleDesc
-          WHERE CoRule.Brand = gcBrand
+          WHERE CoRule.Brand = Syst.Var:gcBrand
         NO-LOCK NO-ERROR.
 END PROCEDURE.
 
@@ -956,7 +952,7 @@ PROCEDURE local-UPDATE-record:
       lcParent = "".
       IF CoRule.ParentRule > 0 THEN DO:
          FIND bCoRule NO-LOCK WHERE 
-              bCoRule.Brand    = gcBrand AND  
+              bCoRule.Brand    = Syst.Var:gcBrand AND  
               bCoRule.CoRuleId = CoRule.ParentRule NO-ERROR.
          IF AVAILABLE bCoRule THEN lcParent = bCoRule.RuleDesc.
       END.
@@ -990,24 +986,24 @@ PROCEDURE local-UPDATE-record:
            CoRule.ActivationSMS
       WITH FRAME lis.
       
-      IF NEW CoRule THEN toimi = 1.
+      IF NEW CoRule THEN Syst.Var:toimi = 1.
       ELSE DO: 
          ASSIGN 
-            ehto   = 0
-            ufk    = 0
-            ufk[1] = 7 WHEN lcRight = "RW" AND gcHelpParam = ""
-            ufk[3] = 1550 WHEN lcRight = "RW" AND gcHelpParam = ""
-            ufk[8] = 8.
-         RUN ufkey.
+            Syst.Var:ehto   = 0
+            Syst.Var:ufk    = 0
+            Syst.Var:ufk[1] = 7 WHEN lcRight = "RW" AND Syst.Var:gcHelpParam = ""
+            Syst.Var:ufk[3] = 1550 WHEN lcRight = "RW" AND Syst.Var:gcHelpParam = ""
+            Syst.Var:ufk[8] = 8.
+         RUN Syst/ufkey.p.
       END.
       
-      IF toimi = 1 THEN 
+      IF Syst.Var:toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
 
          FIND CURRENT CoRule EXCLUSIVE-LOCK.
             
-         ehto = 9.
-         RUN ufkey.
+         Syst.Var:ehto = 9.
+         RUN Syst/ufkey.p.
       
          UPDATE
             CoRule.RuleDesc WHEN NOT NEW CoRule
@@ -1037,7 +1033,7 @@ PROCEDURE local-UPDATE-record:
             
                IF FRAME-FIELD = "PPReqPrefix" THEN DO:
                
-                  RUN h-tmscodes(INPUT "PrepaidRequest",     /* TableName */
+                  RUN Help/h-tmscodes.p(INPUT "PrepaidRequest",     /* TableName */
                                        "PPReqPrefix",  /* FieldName */
                                        "Prepaid", /* GroupCode */
                                  OUTPUT lcCode).
@@ -1050,7 +1046,7 @@ PROCEDURE local-UPDATE-record:
                                       
                ELSE IF FRAME-FIELD = "PPSource" THEN DO:
                
-                  RUN h-tmscodes(INPUT "PrepaidRequest",     /* TableName */
+                  RUN Help/h-tmscodes.p(INPUT "PrepaidRequest",     /* TableName */
                                        "Source",  /* FieldName */
                                        "Prepaid", /* GroupCode */
                                  OUTPUT lcCode).
@@ -1063,16 +1059,16 @@ PROCEDURE local-UPDATE-record:
 
                ELSE IF INDEX(FRAME-FIELD,"SMS") > 0 THEN DO:
                   ASSIGN
-                     gcHelpParam = "tmrlimit"
-                     si-recid    = ?
+                     Syst.Var:gcHelpParam = "tmrlimit"
+                     Syst.Var:si-recid    = ?
                      lcField     = FRAME-FIELD.
                
-                  RUN invotxt("SMS","").
+                  RUN Mc/invotxt.p("SMS","").
         
-                  gcHelpParam = "".
+                  Syst.Var:gcHelpParam = "".
                         
-                  IF si-recid NE ? THEN DO:
-                     FIND InvText WHERE RECID(InvText) = si-recid
+                  IF Syst.Var:si-recid NE ? THEN DO:
+                     FIND InvText WHERE RECID(InvText) = Syst.Var:si-recid
                         NO-LOCK NO-ERROR.
                      IF AVAILABLE InvText THEN DO WITH FRAME lis:
                         IF lcField = "CreationSMS" THEN 
@@ -1082,12 +1078,12 @@ PROCEDURE local-UPDATE-record:
                   END.   
                END.
                 
-               ehto = 9.
-               RUN ufkey.
+               Syst.Var:ehto = 9.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
             
-            ELSE IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 
+            ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 
             THEN DO WITH FRAME lis:
              
                PAUSE 0.
@@ -1098,7 +1094,7 @@ PROCEDURE local-UPDATE-record:
                      DO i = 1 TO NUM-ENTRIES(INPUT CoRule.CLIType):
                         
                         IF NOT CAN-FIND(CLIType WHERE 
-                             CLIType.Brand   = gcBrand AND
+                             CLIType.Brand   = Syst.Var:gcBrand AND
                              CLIType.CLIType = ENTRY(i,INPUT CoRule.CLIType))
                         THEN DO:
                            MESSAGE "Unknown CLI type" 
@@ -1124,8 +1120,7 @@ PROCEDURE local-UPDATE-record:
  
                ELSE IF FRAME-FIELD = "PPReqPrefix" THEN DO:
                   IF INPUT CoRule.PPReqPrefix > "" THEN DO:
-                     IF DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                         "PrepaidRequest",
+                     IF Func.Common:mTMSCodeName("PrepaidRequest",
                                          "PPReqPrefix",
                                          INPUT INPUT CoRule.PPReqPrefix) = ""
                      THEN DO:
@@ -1138,8 +1133,7 @@ PROCEDURE local-UPDATE-record:
 
                ELSE IF FRAME-FIELD = "PPSource" THEN DO:
                   IF INPUT CoRule.PPSource > "" THEN DO:
-                     IF DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                         "PrepaidRequest",
+                     IF Func.Common:mTMSCodeName("PrepaidRequest",
                                          "Source",
                                          INPUT INPUT CoRule.PPSource) = ""
                      THEN DO:
@@ -1191,10 +1185,10 @@ PROCEDURE local-UPDATE-record:
       END.
 
       /* copy to a new rule */
-      ELSE IF toimi = 3 THEN DO:
+      ELSE IF Syst.Var:toimi = 3 THEN DO:
  
-         ehto = 9.
-         RUN ufkey.
+         Syst.Var:ehto = 9.
+         RUN Syst/ufkey.p.
         
          REPEAT WITH FRAME fTemplate ON ENDKEY UNDO, LEAVE:
             PAUSE 0.

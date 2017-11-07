@@ -8,8 +8,8 @@
   VERSIO .......: SCRUNKO3, (23.10.96)
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/eventval.i} 
 
 DEF INPUT PARAMETER UserCode LIKE TMSUser.UserCode NO-UNDO.
 
@@ -37,9 +37,9 @@ def var memb         as lo  format "*/"        NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhUserGrp AS HANDLE NO-UNDO.
    lhUserGrp = BUFFER UserGrp:HANDLE.
@@ -51,7 +51,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhUserGrp).
+      RUN Mc/eventview2.p(lhUserGrp).
    END.
 END.
 
@@ -60,8 +60,8 @@ form
     memb                column-label "Member"
     UserGrp.UserGroup      /* COLUMN-LABEL FORMAT */
     UserGrp.UGName      /* COLUMN-LABEL FORMAT */
-WITH centered OVERLAY scroll 1 13 DOWN ROW 2 COLOR value(cfc)
-    TITLE COLOR value(ctc)
+WITH centered OVERLAY scroll 1 13 DOWN ROW 2 COLOR value(Syst.Var:cfc)
+    TITLE COLOR value(Syst.Var:ctc)
     " Join CustNo " + string(UserCode) + " into group(s) "
     FRAME sel.
 
@@ -74,20 +74,20 @@ WITH
 form /* Customer Group :n haku kentällä UserGroup */
     UserGroup
     help "Type Group Code"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND CODE "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* Customer Group :n haku kentällä UGName */
     UGName
     help "Type first characters of a name"
-    with row 4 col 2 title color value(ctc) " FIND name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND name "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 FIND TMSUser where TMSUser.UserCode = UserCode no-lock.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 FIND FIRST UserGrp
@@ -163,29 +163,29 @@ SELAUS:
 
       IF ufkey THEN DO:
    ASSIGN
-   ufk[1]= 35   ufk[2]= 30 ufk[3]= 927 ufk[4]= 510
-   ufk[5]= 515  ufk[6]= 0  ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
-   ehto = 3 ufkey = FALSE.
-   RUN ufkey.p.
+   Syst.Var:ufk[1]= 35   Syst.Var:ufk[2]= 30 Syst.Var:ufk[3]= 927 Syst.Var:ufk[4]= 510
+   Syst.Var:ufk[5]= 515  Syst.Var:ufk[6]= 0  Syst.Var:ufk[7]= 0   Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+   Syst.Var:ehto = 3 ufkey = FALSE.
+   RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
-   CHOOSE ROW UserGrp.UserGroup ;(uchoose.i;) no-error WITH FRAME sel.
-   COLOR DISPLAY value(ccc) UserGrp.UserGroup WITH FRAME sel.
+   CHOOSE ROW UserGrp.UserGroup {Syst/uchoose.i} no-error WITH FRAME sel.
+   COLOR DISPLAY value(Syst.Var:ccc) UserGrp.UserGroup WITH FRAME sel.
       END.
       ELSE IF jarj = 2 THEN DO:
-   CHOOSE ROW UserGrp.UGName ;(uchoose.i;) no-error WITH FRAME sel.
-   COLOR DISPLAY value(ccc) UserGrp.UGName WITH FRAME sel.
+   CHOOSE ROW UserGrp.UGName {Syst/uchoose.i} no-error WITH FRAME sel.
+   COLOR DISPLAY value(Syst.Var:ccc) UserGrp.UGName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
    jarj = jarj + 1. IF jarj > jarjlkm THEN jarj = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
    jarj = jarj - 1. IF jarj = 0 THEN jarj = jarjlkm.
       END.
 
@@ -212,10 +212,10 @@ SELAUS:
    NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* edellinen rivi */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
    IF FRAME-LINE = 1 THEN DO:
       FIND UserGrp where recid(UserGrp) = rtab[1] no-lock.
       IF jarj = 1 THEN FIND prev UserGrp
@@ -243,7 +243,7 @@ SELAUS:
       END. /* edellinen rivi */
 
       /* seuraava rivi */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
    IF FRAME-LINE = FRAME-DOWN THEN DO:
       FIND UserGrp where recid(UserGrp) = rtab[FRAME-DOWN] no-lock .
@@ -272,7 +272,7 @@ SELAUS:
       END. /* seuraava rivi */
 
       /* edellinen sivu */
-      else if lookup(nap,"prev-page,page-up") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up") > 0 THEN DO:
    muisti = rtab[1].
    FIND UserGrp where recid(UserGrp) = muisti no-lock no-error.
    IF jarj = 1 THEN FIND prev UserGrp
@@ -302,7 +302,7 @@ SELAUS:
      END. /* edellinen sivu */
 
      /* seuraava sivu */
-     else if lookup(nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
        /* kohdistin alimmalle riville */
        IF rtab[FRAME-DOWN] = ? THEN DO:
       message "YOU ARE ON THE LAST PAGE !".
@@ -317,10 +317,10 @@ SELAUS:
      END. /* seuraava sivu */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+     else if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        UserGroup = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE UserGroup WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if UserGroup <> "" THEN DO:
@@ -339,11 +339,11 @@ SELAUS:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        UGName = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE UGName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if UGName <> "" THEN DO:
@@ -360,10 +360,10 @@ SELAUS:
        END.
      END. /* Haku sar. 2 */
 
-     else if lookup(nap,"3,f3") > 0 THEN     /* memo */
+     else if lookup(Syst.Var:nap,"3,f3") > 0 THEN     /* memo */
      DO TRANS WITH FRAME memo ON ENDKEY UNDO, NEXT LOOP:
-       assign ehto = 9 cfc = "lis" ufkey = TRUE.
-       RUN ufkey. RUN ufcolor.
+       assign Syst.Var:ehto = 9 Syst.Var:cfc = "lis" ufkey = TRUE.
+       RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
        FIND UserGrp where recid(UserGrp) = rtab[frame-line(sel)]
        exclusive-lock.
 
@@ -382,14 +382,14 @@ SELAUS:
        HIDE FRAME memo no-pause.
      END.
 
-     else if lookup(nap,"4,f4") > 0 THEN DO TRANSAction:  /* poisto */
+     else if lookup(Syst.Var:nap,"4,f4") > 0 THEN DO TRANSAction:  /* poisto */
    FIND UserGrp where recid(UserGrp) = rtab[FRAME-LINE] no-lock.
-   RUN nnugme1(UserGrp.UserGroup).
+   RUN Syst/nnugme1.p(UserGrp.UserGroup).
    ufkey = TRUE.
    NEXT LOOP.
      END.
 
-     if lookup(nap,"5,f5,enter,return") > 0 THEN DO TRANS: /* ADD OR REMOVE */
+     if lookup(Syst.Var:nap,"5,f5,enter,return") > 0 THEN DO TRANS: /* ADD OR REMOVE */
 
    FIND UserGrp where recid(UserGrp) = rtab[FRAME-LINE] no-lock.
 
@@ -413,7 +413,7 @@ SELAUS:
    END.
      END.
 
-     else if lookup(nap,"home") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home") > 0 THEN DO:
        IF jarj = 1 THEN FIND FIRST UserGrp
        /* hakuehto */ no-lock no-error.
        ELSE IF jarj = 2 THEN FIND FIRST UserGrp USE-INDEX UGName
@@ -422,7 +422,7 @@ SELAUS:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end") > 0 THEN DO : /* viimeinen tietue */
+     else if lookup(Syst.Var:nap,"end") > 0 THEN DO : /* viimeinen tietue */
        IF jarj = 1 THEN FIND LAST UserGrp
        /* hakuehto */ no-lock no-error.
        ELSE IF jarj = 2 THEN FIND LAST UserGrp USE-INDEX UGName
@@ -431,11 +431,11 @@ SELAUS:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* SELAUS */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 

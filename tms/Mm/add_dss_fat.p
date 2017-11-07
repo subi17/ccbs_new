@@ -8,13 +8,12 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
-gcBrand = "1".
-katun   = "CRON".
-{cparam2.i}
-{timestamp.i}
-{fdss.i}
-{fcpfat.i}
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "CRON".
+{Func/cparam2.i}
+{Func/fdss.i}
+{Func/fcpfat.i}
 
 DEF VAR lcPromotionPath          AS CHAR NO-UNDO.
 DEF VAR ldaPromoFromDate         AS DATE NO-UNDO.
@@ -51,15 +50,15 @@ ASSIGN
    ldaFromDate      = ldaPromoFromDate.
 
 IF DAY(TODAY) = 1 THEN
-   ldaToDate = fLastDayOfMOnth(TODAY - 1).
+   ldaToDate = Func.Common:mLastDayOfMonth(TODAY - 1).
 ELSE
-   ldaToDate = fLastDayOfMOnth(TODAY).
+   ldaToDate = Func.Common:mLastDayOfMonth(TODAY).
 
 ASSIGN
-   ldeStamp         = fMakeTS()
-   ldPeriodFrom     = fMake2Dt(ldaFromDate,0)
-   ldPeriodTo       = fMake2Dt(ldaToDate,86399)
-   ldNextMonthStamp = fMake2Dt((ldaToDate + 1),0)
+   ldeStamp         = Func.Common:mMakeTS()
+   ldPeriodFrom     = Func.Common:mMake2DT(ldaFromDate,0)
+   ldPeriodTo       = Func.Common:mMake2DT(ldaToDate,86399)
+   ldNextMonthStamp = Func.Common:mMake2DT((ldaToDate + 1),0)
    liPeriod         = YEAR(ldaToDate) * 100 + MONTH(ldaToDate)
    lcLogFile        = lcPromotionPath + "/add_dss_fat_" + STRING(liPeriod) +
                       "_" + STRING(ldeStamp) + ".log".
@@ -107,7 +106,7 @@ FOR EACH ttDSSFat NO-LOCK:
    END. /* IF fFatExists */
 
    /* Create FAT */
-   RUN creafat.p(ttDSSFat.CustNum,
+   RUN Mc/creafat.p(ttDSSFat.CustNum,
                  ttDSSFat.DSSMsSeq,
                  "DSSCPFREE",
                  ?, /* amount */
@@ -190,7 +189,7 @@ PROCEDURE pGetCustomerSubscriptions:
              FIRST bServiceLimit NO-LOCK USE-INDEX SlSeq WHERE
                    bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
              FIRST bDayCampaign NO-LOCK WHERE
-                   bDayCampaign.Brand = gcBrand AND
+                   bDayCampaign.Brand = Syst.Var:gcBrand AND
                    bDayCampaign.DCEvent = bServiceLimit.GroupCode AND
                    LOOKUP(bDayCampaign.DCType,
                           {&PERCONTRACT_RATING_PACKAGE}) > 0:

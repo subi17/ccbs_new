@@ -8,8 +8,8 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{dumpfile_run.i}
+{Syst/commali.i}
+{Syst/dumpfile_run.i}
 
 DEF INPUT-OUTPUT PARAMETER TABLE-HANDLE ihTempTable.
 DEF INPUT  PARAMETER idLastDump       AS DEC  NO-UNDO.
@@ -85,7 +85,7 @@ DO liCnt = 1 TO NUM-ENTRIES(icEventSource,"|"):
                TMSCodes.TableName = "MsRequest" AND
                TMSCodes.FieldName = "ReqStatus",
           EACH MsRequest NO-LOCK USE-INDEX UpdateStamp WHERE
-               MsRequest.Brand       = gcBrand AND
+               MsRequest.Brand       = Syst.Var:gcBrand AND
                MsRequest.ReqStatus   = INTEGER(TMSCodes.CodeValue) AND
                MsRequest.UpdateStamp >= idLastDump:
                  

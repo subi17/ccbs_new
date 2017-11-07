@@ -9,14 +9,14 @@
   ----------------------------------------------------------------------*/  
 
 /* ***************************  Definitions  ************************** */
-{commpaa.i}
-katun = "Cron".
-gcBrand = "1".
-{cparam2.i}
-{eventlog.i}
-{ftransdir.i}
-{tariffconfig.i}
-{tariffcons.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Func/ftransdir.i}
+{2016/convergent/tariffconfig.i}
+{2016/convergent/tariffcons.i}
 
 DEFINE INPUT  PARAMETER icIncDir    AS CHARACTER NO-UNDO. 
 DEFINE INPUT  PARAMETER icSpoolDir  AS CHARACTER NO-UNDO.
@@ -148,7 +148,7 @@ IF RETURN-VALUE <> "OK" THEN DO:
    RETURN RETURN-VALUE.
 END.
    
-RUN configcreations.p PERSISTENT SET h_config. 
+RUN 2016/convergent/configcreations.p PERSISTENT SET h_config. 
 
 RUN pDataCreValidation.
 
@@ -764,18 +764,18 @@ PROCEDURE pCreTranslations:
 
    FOR EACH ttTrans NO-LOCK:
       IF CAN-FIND(FIRST CLIType WHERE 
-                        CLIType.Brand   = gcBrand            AND 
+                        CLIType.Brand   = Syst.Var:gcBrand            AND 
                         CLIType.CLIType = ttTrans.tLangType) THEN DO:
 
          IF CAN-FIND(FIRST RepText WHERE
-                           RepText.Brand    = gcBrand                    AND
+                           RepText.Brand    = Syst.Var:gcBrand                    AND
                            RepText.LinkCode = ttTrans.tLangType          AND
                            RepText.Language = INTEGER(ttTrans.tLangint)) THEN 
             NEXT. 
                              
          CREATE RepText.
          ASSIGN 
-            RepText.Brand    = gcBrand    
+            RepText.Brand    = Syst.Var:gcBrand    
             RepText.TextType = 9               /* Default value */       
             RepText.LinkCode = ttTrans.tLangType        
             RepText.Language = INTEGER(ttTrans.tLangint)    

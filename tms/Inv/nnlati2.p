@@ -14,10 +14,10 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 /* print-linemuuttujat */
-{utumaa.i NEW }
+{Syst/utumaa.i NEW }
 
 assign tuni1 = "nnlati"
        tuni2 = "".
@@ -41,6 +41,9 @@ DEF WORKFILE wcountry
    FIELD wnet   AS DE
    FIELD wdiscount   AS DE.
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
+
 form
      skip(1)
      "  Note:  This program prints out a summary with Billed amounts  "
@@ -61,19 +64,18 @@ form
      "-"
      sm-code2 NO-LABEL 
      HELP "Salesman to" skip(5)
-
 WITH
-   width 80 COLOR value(cfc)
-   title color value(ctc) " " + ynimi +
+   width 80 COLOR value(Syst.Var:cfc)
+   title color value(Syst.Var:ctc) " " + ynimi +
    " BILLING BY SALESMAN/CUSTOMER/COUNTRY(Service) " +
-   string(pvm,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
+   string(TODAY,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
 
 form header
 
    fill("=",114) format "x(114)" SKIP
    ynimi at 2 format "x(25)" "BILLING STATISTICS BY" at 40 date1 "-" date2
    "Page" at 105 sl format "ZZZZ9" SKIP
-   "SALESMAN / CUSTOMER / Country "  at 40 string(pvm,"99-99-99") AT 107 SKIP
+   "SALESMAN / CUSTOMER / Country "  at 40 string(TODAY,"99-99-99") AT 107 SKIP
    fill("=",114) format "x(114)" skip(1)
    "CustNo" at 4 "Customer's Name" at 11 "Billed (ex VATAmt)" TO 57
    space(1) "Disc% used" SKIP
@@ -81,15 +83,15 @@ form header
    WITH width 114 NO-LABEL no-box FRAME sivuotsi.
 
 /* Haetaan pvm-ehdotus ensin viim. laskuttamattom., sitten viim. laskutetusta */
-ASSIGN date1  = pvm.
+ASSIGN date1  = TODAY.
 FIND FIRST Invoice no-lock no-error.
 IF AVAIL Invoice THEN ASSIGN date1 = Invoice.InvDate.
 date2 = date1.
 
-cfc = "sel". RUN ufcolor.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
 LOOP:
 repeat WITH FRAME rajat:
-    ehto = 9. RUN ufkey.
+    Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
     UPDATE
 
@@ -103,17 +105,17 @@ repeat WITH FRAME rajat:
 
 TOIMI:
    repeat:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
-      IF toimi = 1 THEN NEXT LOOP.
-      IF toimi = 8 THEN LEAVE LOOP.
-      IF toimi = 5 THEN LEAVE TOIMI.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
+      RUN Syst/ufkey.p.
+      IF Syst.Var:toimi = 1 THEN NEXT LOOP.
+      IF Syst.Var:toimi = 8 THEN LEAVE LOOP.
+      IF Syst.Var:toimi = 5 THEN LEAVE TOIMI.
    END.
 
 
    /* Avataan striimi */
    ASSIGN tila = TRUE.
-   {tmsreport.i "return"}
+   {Syst/tmsreport.i "return"}
 
    message "Printing ...".                        
 
@@ -178,7 +180,7 @@ TOIMI:
 
       /* Tarvitaanko uusi sivu */
       IF rl >= skayt1 THEN DO:
-         {uprfeed.i rl}
+         {Syst/uprfeed.i rl}
          ASSIGN rl = 7  sl = sl + 1.
          view STREAM tul FRAME sivuotsi.
       END.
@@ -232,7 +234,7 @@ MAA:     FOR EACH FixCDR  no-lock where
             IF maalkm < 6 THEN DO:
                /* Tarvitaanko uusi sivu */
                IF rl >= skayt1 - 2 THEN DO:
-                  {uprfeed.i rl}
+                  {Syst/uprfeed.i rl}
                   ASSIGN
                   sl = sl + 1.
                   view STREAM tul FRAME sivuotsi.  rl = 7.
@@ -260,7 +262,7 @@ MAA:     FOR EACH FixCDR  no-lock where
       IF last-of (Customer.Salesman) THEN DO:
         /* Tarvitaanko uusi sivu */
          IF rl >= skayt1 - 2 THEN DO:
-            {uprfeed.i rl}
+            {Syst/uprfeed.i rl}
             ASSIGN rl = 7  sl = sl + 1.
             view STREAM tul FRAME sivuotsi.
          END.
@@ -273,13 +275,13 @@ MAA:     FOR EACH FixCDR  no-lock where
          (accum sub-total BY Customer.Salesman Invoice.AmtExclVAT)
                   format "zz,zzz,zz9.99-" AT 45 SKIP.
          rl = rl + 2.
-         {uprfeed.i rl}
+         {Syst/uprfeed.i rl}
       END.
    END.
 
    /* Tarvitaanko uusi sivu */
    IF rl >= skayt1 - 2 THEN DO:
-      {uprfeed.i rl}
+      {Syst/uprfeed.i rl}
       ASSIGN
         sl = sl + 1.
       view STREAM tul FRAME sivuotsi.  rl = 7.
@@ -291,7 +293,7 @@ MAA:     FOR EACH FixCDR  no-lock where
        "TOTAL" AT 11
        (accum total Invoice.AmtExclVAT) format "zz,zzz,zz9.99-" AT 45 SKIP.
    rl = rl + 2.
-   {uprfeed.i rl}.
+   {Syst/uprfeed.i rl}.
 
    MESSAGE "Report completed !" VIEW-AS ALERT-BOX.
 

@@ -6,8 +6,8 @@
                   13.11.07/aam RequestType,RequestStatus
 */
 
-{requestrunner.i}
-{log.i}
+{Syst/requestrunner.i}
+{Func/log.i}
 
 DEF INPUT  PARAMETER iiRequest  AS INT  NO-UNDO.
 
@@ -26,12 +26,12 @@ ASSIGN
    liReqStat = MsRequest.ReqStatus.
 
 FOR FIRST RequestType NO-LOCK WHERE
-          RequestType.Brand   = gcBrand   AND
+          RequestType.Brand   = Syst.Var:gcBrand   AND
           RequestType.ReqType = liReqType AND 
           RequestType.InUse:
 
    lcUser = RequestType.UserCode.
-   IF lcUser = "" THEN lcUser = katun.
+   IF lcUser = "" THEN lcUser = Syst.Var:katun.
  
    /* logging on type level */
    IF RequestType.LogOn THEN DO:

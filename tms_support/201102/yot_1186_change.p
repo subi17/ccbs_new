@@ -1,8 +1,7 @@
-{commpaa.i}
-katun = "vikasagr".
-gcbrand = "1".
-{timestamp.i}
-{msisdn.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "vikasagr".
+Syst.Var:gcBrand = "1".
+{Func/msisdn.i}
 
 define variable ldenow    as decimal no-undo.
 define variable llheader  as logical no-undo init true.
@@ -14,7 +13,7 @@ define stream sreport.
 output stream slog to "/apps/yoigo/tms_support/201102/yot_1186_change.log".
 output stream sreport to "/apps/yoigo/tms_support/201102/yot_1186_change.xls".
 
-ldenow = fmakets().
+ldenow = Func.Common:mMakeTS().
 
 each_loop:
 for each msisdnnumber where
@@ -22,7 +21,7 @@ for each msisdnnumber where
          msisdnnumber.cli <= "633099999" and
          msisdnnumber.rank = 0 no-lock,
     first msisdn where
-          msisdn.brand = gcbrand and
+          msisdn.brand = Syst.Var:gcBrand and
           msisdn.cli   = msisdnnumber.cli and
           msisdn.validto > ldenow no-lock:
 

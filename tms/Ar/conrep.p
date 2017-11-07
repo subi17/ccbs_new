@@ -7,10 +7,9 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{cparam2.i}
-{utumaa.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/utumaa.i}
 
 DEF INPUT  PARAMETER icUserCode  AS CHAR  NO-UNDO. 
 DEF INPUT  PARAMETER idtConDate  AS DATE  NO-UNDO.
@@ -40,6 +39,9 @@ ASSIGN
     viiva3   = FILL("-",lev)
     viiva4   = FILL("-",lev).
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
+
 form header
    viiva1 AT 1 SKIP
    ynimi at 1 FORMAT "x(30)" 
@@ -47,7 +49,7 @@ form header
       "Page" at 68  
       sl FORMAT "ZZZZ9" SKIP
    lcDateHeader AT 35 FORMAT "X(30)"
-      pvm FORMAT "99.99.9999" at 69 SKIP
+      TODAY FORMAT "99.99.9999" at 69 SKIP
    viiva2 at 1 SKIP
    "Customer"     TO 8
    "Name"         AT 10
@@ -67,7 +69,7 @@ FUNCTION fCheckPage RETURNS LOGIC
     IF rl + iAddLine >= skayt1 THEN DO:
 
         IF sl > 0 THEN DO:
-           {uprfeed.i rl}
+           {Syst/uprfeed.i rl}
         END.
         
         sl = sl + 1.
@@ -98,7 +100,7 @@ IF icFile > "" THEN DO:
 END.
       
 FOR EACH Contact NO-LOCK WHERE
-         Contact.Brand    = gcBrand    AND
+         Contact.Brand    = Syst.Var:gcBrand    AND
          Contact.UserCode = icUserCode AND
          Contact.ConDate  = idtConDate AND
          (IF iiHandled < 2
@@ -122,7 +124,7 @@ BREAK BY Contact.UserCode
 
    FIND Customer OF Contact NO-LOCK NO-ERROR. 
    IF Contact.ConState = 1 THEN DO:
-      fSplitTS(Contact.ConStamp,
+      Func.Common:mSplitTS(Contact.ConStamp,
                OUTPUT ldtConDate,
                OUTPUT liConTime).
       lcConDate = STRING(ldtConDate,"99-99-99") + " " + 
@@ -168,7 +170,7 @@ IF icFile > "" THEN DO:
 END.
 
 ELSE DO:
-   {uprfeed.i rl}
+   {Syst/uprfeed.i rl}
 END.   
 
 

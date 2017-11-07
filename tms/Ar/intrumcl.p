@@ -9,11 +9,11 @@
  VERSION .......: M15
  ============================================================================*/
 
-{commali.i}                      
-{cparam2.i}
-{ftransdir.i}
-{utumaa.i NEW}
-{intrumcr.i}
+{Syst/commali.i}                      
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Syst/utumaa.i NEW}
+{Ar/intrumcr.i}
 
 ASSIGN tuni1 = "intrumcl"
        tuni2 = "".
@@ -44,15 +44,15 @@ lcInfile AT 10 LABEL "File Name"
     help "Name of Output File"
 SKIP(5)
 WITH  OVERLAY ROW 1 WIDTH 80
-   COLOR VALUE(cfc)
-   TITLE COLOR VALUE(ctc) 
-   " " + ynimi + " CREDIT LOSS POSTING  " + STRING(pvm,"99-99-99") + " "
+   COLOR VALUE(Syst.Var:cfc)
+   TITLE COLOR VALUE(Syst.Var:ctc) 
+   " " + Syst.Var:ynimi + " CREDIT LOSS POSTING  " + STRING(TODAY,"99-99-99") + " "
    SIDE-LABELS FRAME main.
 
 MAIN:
 REPEAT WITH FRAME main:
 
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
     PAUSE 0.
     UPDATE
@@ -70,7 +70,7 @@ REPEAT WITH FRAME main:
            THEN ASSIGN liCount = R-INDEX(INPUT lcInfile,"/")
                        lcDir   = SUBSTRING(INPUT lcInfile,1,liCount - 1).
 
-           RUN choosefile (IF lcDir NE "" 
+           RUN Mc/choosefile.p (IF lcDir NE "" 
                            THEN lcDir
                            ELSE INPUT lcInfile,
                            OUTPUT lcFile).
@@ -81,8 +81,8 @@ REPEAT WITH FRAME main:
               DISPLAY lcInfile.
            END. 
 
-           ehto = 9.
-           RUN ufkey.
+           Syst.Var:ehto = 9.
+           RUN Syst/ufkey.p.
         END. 
 
         ELSE APPLY LASTKEY. 
@@ -91,15 +91,15 @@ REPEAT WITH FRAME main:
     ACTION:
     REPEAT WITH FRAME main:
       ASSIGN
-      ufk = 0 ehto = 0
-      ufk[1] = 7 
-      ufk[5] = (IF lcInfile ne "" THEN 795 ELSE 0).
-      ufk[8] = 8.
-      RUN ufkey.
+      Syst.Var:ufk = 0 Syst.Var:ehto = 0
+      Syst.Var:ufk[1] = 7 
+      Syst.Var:ufk[5] = (IF lcInfile ne "" THEN 795 ELSE 0).
+      Syst.Var:ufk[8] = 8.
+      RUN Syst/ufkey.p.
 
-      IF toimi = 1 THEN NEXT  main.
-      IF toimi = 8 THEN LEAVE main.
-      IF TOIMI = 5 THEN DO:
+      IF Syst.Var:toimi = 1 THEN NEXT  main.
+      IF Syst.Var:toimi = 8 THEN LEAVE main.
+      IF Syst.Var:toimi = 5 THEN DO:
 
          IF SEARCH(lcInfile) = ? THEN DO:
             MESSAGE "File cannot be found. Check the path and name."
@@ -117,7 +117,7 @@ REPEAT WITH FRAME main:
 
    Message "Processing...".
 
-   RUN intrumcr.p (OUTPUT TABLE ttError,
+   RUN Ar/intrumcr.p (OUTPUT TABLE ttError,
                    lcInfile,
                    OUTPUT liRead,
                    OUTPUT liFound,
@@ -133,13 +133,13 @@ REPEAT WITH FRAME main:
    IF CAN-FIND(FIRST ttError) THEN DO:
 
       ASSIGN tila = TRUE.
-      {utuloste.i "return"}
+      {Syst/utuloste.i "return"}
 
-      RUN intrumcrp (INPUT TABLE ttError,
+      RUN Ar/intrumcrp.p (INPUT TABLE ttError,
                      lcInfile).
 
       ASSIGN tila = FALSE.
-      {utuloste.i}
+      {Syst/utuloste.i}
 
       MESSAGE "Error list was printed." 
       VIEW-AS ALERT-BOX. 

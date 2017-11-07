@@ -1,9 +1,9 @@
 /* offer_start.p   27.03.09/aam
 
-   run offer from menu
+   RUN Mc/offer.p from menu
 
 */
 
-{commali.i}
+{Syst/commali.i}
 
-RUN offer ("",TRUE).
+RUN Mc/offer.p ("",TRUE).

@@ -8,21 +8,21 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 DEF INPUT PARAMETER invDate   AS DA NO-UNDO.
 
-{eventval.i}
+{Syst/eventval.i}
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhxxcustomer AS HANDLE NO-UNDO.
    lhxxcustomer = BUFFER customer:HANDLE.
    RUN StarEventInitialize(lhxxcustomer).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhxxcustomer).
+      RUN Mc/eventview2.p(lhxxcustomer).
    END.
 END.
 
@@ -30,7 +30,7 @@ DEF BUFFER xxCustomer FOR customer.
 DEF VAR    Updated    AS  I   NO-UNDO.
 
 FOR EACH Invoice NO-LOCK where 
-         Invoice.Brand    = gcBrand AND 
+         Invoice.Brand    = Syst.Var:gcBrand AND 
          Invoice.InvDate >= invdate,
    FIRST Customer OF Invoice No-LOCK
 Break 
@@ -43,7 +43,7 @@ By Invoice.CustNum.
    IF LAST-OF(Invoice.CustNum) THEN DO:
 
       FIND LAST CustClass USE-INDEX amt WHERE
-             CustClass.Brand = gcBrand AND 
+             CustClass.Brand = Syst.Var:gcBrand AND 
              CustClass.amt <= (ACCUM SUB-TOTAL BY invoice.CustNum Invoice.amt) /
                               (ACCUM SUB-COUNT BY invoice.CustNum Invoice.amt)
       NO-LOCK no-error.

@@ -1,0 +1,37 @@
+/**
+ * Get subscription billing permission 
+ *
+ * @input       id;int;mandatry;id of subscription
+ * @output      status;int;billing permission status
+ * @Exceptions  1;Subscription not found
+ */
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
+
+/* Input parameters */
+DEF VAR piMsSeq AS INT NO-UNDO.
+DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
+
+IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
+piMsSeq = get_int(param_toplevel_id, "0").
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{viptool/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
+
+{Syst/commpaa.i}
+Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
+Syst.Var:gcBrand = "1".
+{Syst/tmsconst.i}
+{Func/flimitreq.i}
+
+IF ghAuthLog::UserName = "viptool" THEN DO:
+{viptool/src/vip_check.i}
+END.
+
+fGetLimit(  MobSub.InvCust, 
+            MobSub.MsSeq,
+            {&LIMIT_TYPE_BILLPERM},
+            0, /* Limit ID */
+            0, /* TMRuleSeq */
+            TODAY).
+IF NOT AVAIL Limit THEN add_int(response_toplevel_id, "", 0).
+ELSE add_int(response_toplevel_id,"", INT(Limit.LimitAmt)).

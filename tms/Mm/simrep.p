@@ -8,11 +8,11 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{function.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/function.i}
 
-{utumaa.i new}
+{Syst/utumaa.i new}
 
 ASSIGN tuni1 = ""
        tuni2 = "".
@@ -25,7 +25,7 @@ FORM
    "     This program will generate a SIM card report for chosen customer" skip
    SKIP(5)
 WITH NO-LABELS CENTERED OVERLAY ROW 3 WIDTH 76 
-TITLE " " + ynimi + " SIM CARD REPORT FOR CUSTOMER " + string(CustNum) + " "
+TITLE " " + Syst.Var:ynimi + " SIM CARD REPORT FOR CUSTOMER " + string(CustNum) + " "
 FRAME fname.
 
 FIND FIRST Customer NO-LOCK WHERE
@@ -40,7 +40,7 @@ END.
 VIEW FRAME fname.
 
 tila = true.
-{utuloste.i return}
+{Syst/utuloste.i return}
 
 PUT stream tul UNFORMATTED
    "SIM card report for customer " 
@@ -59,7 +59,7 @@ FOR EACH MobSub NO-LOCK WHERE
          IMSI.ICC = MobSub.ICC:
 
    PUT stream tul UNFORMATTED
-      DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER Customer)
+      Func.Common:mDispCustName(BUFFER Customer)
       MobSub.CLI tab
       IMSI.PIN1 tab
       IMSI.PIN2 tab
@@ -73,7 +73,7 @@ PUT STREAM tul UNFORMATTED chr(12).
 
 /* Close the printer stream */
 tila = FALSE.
-{utuloste.i}
+{Syst/utuloste.i}
 
 MESSAGE "Printing complete !" VIEW-AS ALERT-BOX.
 

@@ -10,9 +10,9 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{email.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/email.i}
 
 DEF INPUT  PARAMETER idtDate1 AS DATE NO-UNDO.
 DEF INPUT  PARAMETER idtDate2 AS DATE NO-UNDO.
@@ -198,14 +198,14 @@ FOR EACH ttCust:
                bEventCust.InvCust = Customer.CustNum:
                
          llFound = CAN-FIND(FIRST SingleFee WHERE
-                                  SingleFee.Brand   = gcBrand            AND
+                                  SingleFee.Brand   = Syst.Var:gcBrand            AND
                                   SingleFee.CustNum = bEventCust.CustNum AND
                                   SingleFee.Active  = TRUE               AND
                                   SingleFee.Billed  = FALSE).
                                  
          IF NOT llFound
          THEN FOR EACH FixedFee NO-LOCK WHERE
-                       FixedFee.Brand   = gcBrand            AND
+                       FixedFee.Brand   = Syst.Var:gcBrand            AND
                        FixedFee.CustNum = bEventCust.CustNum AND
                        FixedFee.InUse   = TRUE,
                  FIRST FFItem OF FixedFee NO-LOCK WHERE
@@ -224,7 +224,7 @@ FOR EACH ttCust:
    
    lcDate = "".
    FOR EACH Invoice NO-LOCK WHERE
-            Invoice.Brand   = gcBrand          AND
+            Invoice.Brand   = Syst.Var:gcBrand          AND
             Invoice.CustNum = Customer.CustNum AND
             Invoice.InvType < 3
    BY Invoice.InvDate DESC:

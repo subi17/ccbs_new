@@ -6,16 +6,15 @@
   CREATED ......: 25.11.2013
   Version ......: yoigo
 ---------------------------------------------------------------------- */
-{commpaa.i}
-katun = "Qvantel".
-gcBrand = "1".
-{cparam2.i}
-{timestamp.i}
-{tmsconst.i}
-{ftransdir.i}
-{email.i}
-{eventlog.i}
-{fusioninvoice.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/email.i}
+{Syst/eventlog.i}
+{Inv/fusioninvoice.i}
 
 DEF VAR lcProcessedFile AS CHAR NO-UNDO.
 DEF VAR lcIncDir AS CHAR NO-UNDO. 
@@ -111,14 +110,14 @@ REPEAT:
       liNumTF = 0
       liNumErr = 0
       liLineNum = 0
-      ldThisRun = fMakeTS().
+      ldThisRun = Func.Common:mMakeTS().
    
    lcLogFile = lcLogDir + lcFileName + ".LOG". 
    
    RUN pMarkStarted. 
    IF RETURN-VALUE NE "OK" THEN LEAVE FILE_LOOP. 
 
-   fSplitTS(ldThisRun, OUTPUT ldaToday, OUTPUT liTime).
+   Func.Common:mSplitTS(ldThisRun, OUTPUT ldaToday, OUTPUT liTime).
    
    IF SESSION:BATCH THEN fBatchLog("START", lcInputFile). 
 
@@ -226,7 +225,7 @@ PROCEDURE pMarkStarted:
    
    /* check that there isn't already another run for the same purpose */
    IF CAN-FIND(FIRST ActionLog USE-INDEX ActionID WHERE
-                     ActionLog.Brand        = gcBrand     AND    
+                     ActionLog.Brand        = Syst.Var:gcBrand     AND    
                      ActionLog.ActionID     = "TELEFONICA" AND
                      ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE}) THEN
       lcError = "Batch not started due to ongoing run".
@@ -241,12 +240,12 @@ PROCEDURE pMarkStarted:
       DO TRANS:
          CREATE ActionLog.
          ASSIGN
-            ActionLog.Brand        = gcBrand
+            ActionLog.Brand        = Syst.Var:gcBrand
             ActionLog.ActionID     = "TELEFONICA"
             ActionLog.ActionTS     = ldThisRun
             ActionLog.TableName    = "Cron"
             ActionLog.KeyValue     = lcFileName
-            ActionLog.UserCode     = katun
+            ActionLog.UserCode     = Syst.Var:katun
             ActionLog.ActionStatus = {&ACTIONLOG_STATUS_LOGGED}
             ActionLog.ActionPeriod = YEAR(ldaInvDate) * 100 + MONTH(ldaInvDate) 
             ActionLog.ActionChar   = lcError.
@@ -260,12 +259,12 @@ PROCEDURE pMarkStarted:
       CREATE ActionLog.
       
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.Var:gcBrand
          ActionLog.ActionID     = "TELEFONICA"
          ActionLog.ActionTS     = ldThisRun
          ActionLog.TableName    = "Cron"
          ActionLog.KeyValue     = lcFileName
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE}
          ActionLog.ActionPeriod = YEAR(ldaInvDate) * 100 + MONTH(ldaInvDate).
       RELEASE ActionLog.   
@@ -280,7 +279,7 @@ PROCEDURE pMarkError:
 
    /* mark this run finished */
    FOR FIRST ActionLog USE-INDEX ActionID WHERE
-             ActionLog.Brand        = gcBrand AND    
+             ActionLog.Brand        = Syst.Var:gcBrand AND    
              ActionLog.ActionID     = "TELEFONICA" AND
              ActionLog.ActionTS     = ldThisRun AND
              ActionLog.TableName    = "Cron" AND
@@ -300,7 +299,7 @@ PROCEDURE pMarkFinished:
 
    /* mark this run finished */
    FOR FIRST ActionLog USE-INDEX ActionID WHERE
-             ActionLog.Brand        = gcBrand AND    
+             ActionLog.Brand        = Syst.Var:gcBrand AND    
              ActionLog.ActionID     = "TELEFONICA" AND
              ActionLog.ActionTS     = ldThisRun AND
              ActionLog.TableName    = "Cron" AND
@@ -312,7 +311,7 @@ PROCEDURE pMarkFinished:
          ActionLog.ActionChar   = 
             SUBST("Yoigo+TF: &1, TF: &2, Yoigo: &3, Errors: &4", 
                   liNumYoigoTF, liNumTF, liNumYoigo, liNumErr) + CHR(10) + 
-                  "Finished: " + fTS2HMS(fMakeTS()). 
+                  "Finished: " + Func.Common:mTS2HMS(Func.Common:mMakeTS()). 
    END.
    
 END PROCEDURE.
@@ -322,7 +321,7 @@ PROCEDURE pCollectFusionInvoices:
    DEF VAR liSubs AS INT NO-UNDO. 
 
    FOR EACH Invoice NO-LOCK WHERE
-            Invoice.Brand = gcBrand AND
+            Invoice.Brand = Syst.Var:gcBrand AND
             Invoice.InvDate >= ldaInvDate AND
             Invoice.InvType = 1 AND
             (Invoice.DelType = {&INV_DEL_TYPE_FUSION_EMAIL_PENDING} OR
@@ -376,7 +375,7 @@ PROCEDURE pCollectFusionInvoices:
          FOR EACH Invrow NO-LOCK WHERE 
                   Invrow.InvNum = Invoice.Invnum,
             FIRST BillItem NO-LOCK WHERE
-                  BillItem.Brand = gcBrand AND
+                  BillItem.Brand = Syst.Var:gcBrand AND
                   BillItem.BillCode = InvRow.BillCode:
 
              IF LOOKUP(BillItem.BillCode,"CONTFF2MF,CONTSF14MF,CONTSF10MF") > 0 THEN 
@@ -474,7 +473,7 @@ PROCEDURE pAnalyzeTelefonicaInvoices:
       IF ttTF.Mapping = {&FI_MAPPING_TF} THEN DO: 
          
          FIND Customer NO-LOCK WHERE
-              Customer.Brand = gcBrand AND
+              Customer.Brand = Syst.Var:gcBrand AND
               Customer.OrgId = ttTF.CustomerId AND
               Customer.CustIdType NE "passport" AND
               Customer.Roles NE "inactive" NO-ERROR.

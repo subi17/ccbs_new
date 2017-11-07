@@ -9,16 +9,15 @@
 
 &GLOBAL-DEFINE TraceLog NO
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{ftransdir.i}
-{coinv.i}
-{funcrunprocess_update.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/coinv.i}
+{Syst/funcrunprocess_update.i}
 
 &IF "{&TraceLog}" = "YES" 
 &THEN
-{log.i}
+{Func/log.i}
 &ENDIF 
 
 DEF INPUT  PARAMETER iiPeriod         AS INT  NO-UNDO.
@@ -267,8 +266,8 @@ PROCEDURE pInitialize:
                                       STRING(ilDetails,"detailed/summary"))
       ldaFromPeriod  = fInt2Date(iiPeriod,1)
       ldaToPeriod    = fInt2Date(iiPeriod,2)
-      ldFromPeriod   = fMake2DT(ldaFromPeriod,0)
-      ldToPeriod     = fMake2DT(ldaToPeriod,86399).
+      ldFromPeriod   = Func.Common:mMake2DT(ldaFromPeriod,0)
+      ldToPeriod     = Func.Common:mMake2DT(ldaToPeriod,86399).
 
    IF NUM-ENTRIES(lcFile,"/") > 1 THEN ASSIGN
       lcPlainFile = ENTRY(NUM-ENTRIES(lcFile,"/"),lcFile,"/")
@@ -287,7 +286,7 @@ PROCEDURE pInitialize:
       ldaBillPeriodEnd =  ldaToPeriod.
 
    FOR FIRST ReportConf NO-LOCK WHERE
-             ReportConf.Brand    = gcBrand AND
+             ReportConf.Brand    = Syst.Var:gcBrand AND
              ReportConf.ReportID = "UnbilledSubsQty":
 
       FOR EACH ReportConfRow OF ReportConf NO-LOCK WHERE
@@ -312,7 +311,7 @@ PROCEDURE pCollectSubscriptions:
    
    /* first get billed ones */
    FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
-            Invoice.Brand = gcBrand        AND
+            Invoice.Brand = Syst.Var:gcBrand        AND
             Invoice.InvDate >= idaInvDate1 AND
             Invoice.InvDate <= idaInvDate2 AND
             Invoice.InvType  = 1,
@@ -327,7 +326,7 @@ PROCEDURE pCollectSubscriptions:
       billing period */
    OpenSubscriptions:
    FOR EACH MsOwner NO-LOCK WHERE
-            MsOwner.Brand   = gcBrand AND
+            MsOwner.Brand   = Syst.Var:gcBrand AND
             MsOwner.PayType = FALSE   AND
             MsOwner.TsEnd  >= ldFromPeriod AND
             MsOwner.TsBeg  <= ldToPeriod:
@@ -510,7 +509,7 @@ PROCEDURE pCollectCustomers:
    END.
    
    FOR EACH FixedFee NO-LOCK USE-INDEX HostTable WHERE
-            FixedFee.Brand     = gcBrand AND
+            FixedFee.Brand     = Syst.Var:gcBrand AND
             FixedFee.HostTable = "Customer" AND
             FixedFee.InUse     = TRUE,
       FIRST FFItem OF FixedFee NO-LOCK WHERE

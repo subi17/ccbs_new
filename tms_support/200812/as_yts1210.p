@@ -1,8 +1,7 @@
-{commpaa.i}
-katun = "anttis".
-gcBrand = "1".
-{timestamp.i}
-{barrfunc.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
+{Func/barrfunc.i}
 
 DEF VAR lrOLBRec      AS RECID                  NO-UNDO.
 
@@ -35,11 +34,11 @@ FOR EACH msrequest where
          IF AVAILABLE MsRequest2 THEN DO:
          
 
-          RUN barrengine.p (MobSub.MsSeq,
+          RUN Mm/barrengine.p (MobSub.MsSeq,
                       "UN" + "Y_PRODINT",
                       "5",                 /* source  */
                       "",                  /* creator */
-                      fMakeTS(),           /* activate */
+                      Func.Common:mMakeTS(),           /* activate */
                       "",                  /* sms */
                       OUTPUT lcError).
 

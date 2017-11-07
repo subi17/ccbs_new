@@ -8,24 +8,23 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'OfferItem'}
-{eventval.i}
-{timestamp.i}
-{cparam2.i}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'OfferItem'}
+{Syst/eventval.i}
+{Func/cparam2.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhOfferItem AS HANDLE NO-UNDO.
    lhOfferItem = BUFFER OfferItem:HANDLE.
    RUN StarEventInitialize(lhOfferItem).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhOfferItem).
+      RUN Mc/eventview2.p(lhOfferItem).
    END.
 
 END.
@@ -78,8 +77,8 @@ FORM
     ldtFromDate        FORMAT "99-99-99"    COLUMN-LABEL "From"
     ldtToDate          FORMAT "99-99-99"    COLUMN-LABEL "To"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) 
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) 
        " ITEMS FOR OFFER " + STRING(icOffer) + " "
     FRAME sel.
 
@@ -102,8 +101,8 @@ FORM
     OfferItem.DispInUI COLON 20 SKIP
     OfferItem.DispOnInvoice COLON 20 
 WITH  OVERLAY ROW 3 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -112,8 +111,7 @@ FUNCTION fItemType RETURNS LOGIC
    (icItemType AS CHAR):
 
    IF icItemType > "" THEN 
-      lcType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "OfferItem",
+      lcType = Func.Common:mTMSCodeName("OfferItem",
                                 "ItemType",
                                 icItemType).
    ELSE lcType = "".
@@ -134,19 +132,19 @@ FUNCTION fItemName RETURNS LOGIC
    CASE icItemType:
    WHEN "BillItem" THEN DO:
       FIND FIRST BillItem WHERE
-                 BillItem.Brand    = gcBrand AND
+                 BillItem.Brand    = Syst.Var:gcBrand AND
                  BillItem.BillCode = icItemValue NO-LOCK NO-ERROR.
       IF AVAILABLE BillItem THEN lcItemName = BillItem.BIName.
    END.
    WHEN "FATime" THEN DO:
       FIND FIRST FatGroup WHERE
-                 FatGroup.Brand = gcBrand AND
+                 FatGroup.Brand = Syst.Var:gcBrand AND
                  FatGroup.FtGrp = icItemValue NO-LOCK NO-ERROR.
       IF AVAILABLE FatGroup THEN lcItemName = FatGroup.FtgName.
    END.
    WHEN "DiscountPlan" THEN DO:
       FIND FIRST DiscountPlan WHERE
-                 DiscountPlan.Brand = gcBrand AND
+                 DiscountPlan.Brand = Syst.Var:gcBrand AND
                  DiscountPlan.DPRuleId = icItemValue NO-LOCK NO-ERROR.
       IF AVAILABLE DiscountPlan THEN
          ASSIGN lcItemName = DiscountPlan.DPName
@@ -154,7 +152,7 @@ FUNCTION fItemName RETURNS LOGIC
    END.
    WHEN "Topup" THEN DO:
       FOR FIRST TopupScheme NO-LOCK WHERE
-                TopupScheme.Brand = gcBrand AND
+                TopupScheme.Brand = Syst.Var:gcBrand AND
                 TopupScheme.TopupScheme = icItemValue,
           FIRST TopupSchemeRow OF TopupScheme NO-LOCK WHERE
                 TopupSchemeRow.EndStamp >= ldOfferFrom AND
@@ -171,13 +169,13 @@ FUNCTION fItemName RETURNS LOGIC
    END.                                            
    WHEN "PerContract" THEN DO:
       FIND FIRST DayCampaign WHERE
-                 DayCampaign.Brand   = gcBrand AND
+                 DayCampaign.Brand   = Syst.Var:gcBrand AND
                  DayCampaign.DCEvent = icItemValue NO-LOCK NO-ERROR.
       IF AVAILABLE DayCampaign THEN lcItemName = DayCampaign.DCName.
    END.
    WHEN "ServicePackage" THEN DO:
        FIND ServPac WHERE
-            ServPac.Brand   = gcBrand AND
+            ServPac.Brand   = Syst.Var:gcBrand AND
             ServPac.ServPac = icItemValue NO-LOCK NO-ERROR.
        IF AVAILABLE ServPac THEN lcItemName = ServPac.SPName. 
    END.
@@ -196,11 +194,11 @@ FUNCTION fPenaltyFeeAmount RETURNS DECIMAL
    ldPenalty = 0.
    
    FOR FIRST DayCampaign NO-LOCK WHERE
-             DayCampaign.Brand   = gcBrand AND
+             DayCampaign.Brand   = Syst.Var:gcBrand AND
              DayCampaign.DCEvent = icPerContract AND
              DayCampaign.TermFeeCalc > 0,
        FIRST FMItem NO-LOCK WHERE
-             FMItem.Brand     = gcBrand AND
+             FMItem.Brand     = Syst.Var:gcBrand AND
              FMItem.FeeModel  = DayCampaign.TermFeeModel AND
              FMItem.ToDate   >= TODAY AND
              FMItem.FromDate <= TODAY:
@@ -219,7 +217,7 @@ FUNCTION fTopUpAmount RETURNS DECIMAL
    ldTopup = 0.
    
    FOR FIRST TopupScheme NO-LOCK WHERE
-             TopupScheme.Brand = gcBrand AND
+             TopupScheme.Brand = Syst.Var:gcBrand AND
              TopupScheme.TopupScheme = icTopupScheme,
        FIRST TopupSchemeRow OF TopupScheme NO-LOCK WHERE
              TopupSchemeRow.EndStamp >= ldOfferFrom AND
@@ -233,11 +231,11 @@ FUNCTION fTopUpAmount RETURNS DECIMAL
 END FUNCTION.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 FIND FIRST Offer WHERE 
-           Offer.Brand = gcBrand AND
+           Offer.Brand = Syst.Var:gcBrand AND
            Offer.Offer = icOffer NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Offer THEN DO:
    MESSAGE "Offer not available"
@@ -246,8 +244,8 @@ IF NOT AVAILABLE Offer THEN DO:
 END.
 
 ASSIGN
-   ldOfferFrom = fMake2DT(Offer.FromDate,0)
-   ldOfferTo   = fMake2DT(Offer.ToDate,86399).
+   ldOfferFrom = Func.Common:mMake2DT(Offer.FromDate,0)
+   ldOfferTo   = Func.Common:mMake2DT(Offer.ToDate,86399).
 
 RUN local-Find-First.
 
@@ -255,7 +253,7 @@ IF AVAILABLE OfferItem THEN ASSIGN
    Memory       = recid(OfferItem)
    must-print   = TRUE
    must-add     = FALSE
-   ldDefFrom    = fMake2DT(TODAY,0).
+   ldDefFrom    = Func.Common:mMake2DT(TODAY,0).
 ELSE DO:
    IF lcRight NE "RW" THEN DO:
       MESSAGE "No items available" VIEW-AS ALERT-BOX INFORMATION.
@@ -265,7 +263,7 @@ ELSE DO:
       Memory       = ?
       must-print   = FALSE
       must-add     = FALSE
-      ldDefFrom    = fMake2DT(Offer.FromDate,0).
+      ldDefFrom    = Func.Common:mMake2DT(Offer.FromDate,0).
 END.
 
 LOOP:
@@ -276,8 +274,8 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a OfferItem  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -285,25 +283,19 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis ALL NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANS WITH FRAME lis:
 
            DISPLAY icOffer @ OfferItem.Offer.
 
-           i = 1. 
-           FOR EACH OfferItem NO-LOCK BY OfferItem.OfferItemId DESC:
-              i = OfferItem.OfferItemID + 1.
-              LEAVE.
-           END.
- 
            CREATE OfferItem.
            ASSIGN 
-              OfferItem.Brand   = gcBrand 
-              OfferItem.OfferItemID = i
+              OfferItem.Brand   = Syst.Var:gcBrand 
+              OfferItem.OfferItemID = NEXT-VALUE(OfferItemSeq)
               OfferItem.Offer   = icOffer
               OfferItem.BeginStamp = ldDefFrom.
-              OfferItem.EndStamp   = fMake2DT(12/31/2049,86399).
+              OfferItem.EndStamp   = Func.Common:mMake2DT(12/31/2049,86399).
 
            RUN local-UPDATE-record.
 
@@ -379,37 +371,37 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk   = 0
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)  
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
-        ufk[7] = 1752
-        ufk[8]= 8 
-        ehto  = 3 
+        Syst.Var:ufk   = 0
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)  
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
+        Syst.Var:ufk[7] = 1752
+        Syst.Var:ufk[8]= 8 
+        Syst.Var:ehto  = 3 
         ufkey = FALSE.
         
         /* used as help */
-        IF gcHelpParam > "" THEN ASSIGN
-           ufk[5] = 11
-           ufk[6] = 0.
+        IF Syst.Var:gcHelpParam > "" THEN ASSIGN
+           Syst.Var:ufk[5] = 11
+           Syst.Var:ufk[6] = 0.
  
         ELSE IF NOT ilUpdate THEN ASSIGN
-           ufk[5] = 0
-           ufk[6] = 0.
+           Syst.Var:ufk[5] = 0
+           Syst.Var:ufk[6] = 0.
           
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW OfferItem.ItemType ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW OfferItem.ItemType {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) OfferItem.ItemType WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) OfferItem.ItemType WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,7,f7,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,7,f7,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -418,10 +410,10 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -439,7 +431,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -464,7 +456,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -490,7 +482,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND OfferItem WHERE recid(OfferItem) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -514,7 +506,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */       
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -528,8 +520,8 @@ REPEAT WITH FRAME sel:
        END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0 THEN DO:  /* add */
-        IF gcHelpParam > "" THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND Syst.Var:ufk[5] > 0 THEN DO:  /* add */
+        IF Syst.Var:gcHelpParam > "" THEN DO:
            xRecid = rtab[FRAME-LINE].
            LEAVE LOOP.
         END.
@@ -540,13 +532,13 @@ REPEAT WITH FRAME sel:
         END.    
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0 
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND Syst.Var:ufk[6] > 0 
      THEN DO TRANS:  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
           OfferItem.ItemType
           OfferItem.ItemKey
           ldItemAmount.
@@ -570,7 +562,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N)?" UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
           OfferItem.ItemType
           OfferItem.ItemKey
           ldItemAmount.
@@ -594,21 +586,21 @@ REPEAT WITH FRAME sel:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANS
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(FALSE).
 
-       IF gcHelpParam > "" THEN DO:
+       IF Syst.Var:gcHelpParam > "" THEN DO:
           xRecid = rtab[FRAME-LINE (sel)].
           LEAVE LOOP.
        END.
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOfferItem).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -624,34 +616,34 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(OfferItem) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(OfferItem) must-print = TRUE.
         NEXT LOOP.
      END.
          
-     ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO: 
-        RUN eventsel.p("offeritem", "#BEGIN" + chr(255) + gcBrand + chr(255) + icOffer).
+     ELSE IF LOOKUP(Syst.Var:nap,"7,f7") > 0 THEN DO: 
+        RUN Mc/eventsel.p("offeritem", "#BEGIN" + chr(255) + Syst.Var:gcBrand + chr(255) + icOffer).
         ufkey = TRUE.
         NEXT.
      END.   
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
-ehto = 4.
-RUN ufkey.
+Syst.Var:ehto = 4.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -672,25 +664,25 @@ END PROCEDURE.
 PROCEDURE local-find-FIRST:
 
    IF order = 1 THEN FIND FIRST OfferItem WHERE 
-      OfferItem.Brand = gcBrand AND
+      OfferItem.Brand = Syst.Var:gcBrand AND
       OfferItem.Offer = icOffer NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
    IF order = 1 THEN FIND LAST OfferItem WHERE 
-      OfferItem.Brand = gcBrand AND
+      OfferItem.Brand = Syst.Var:gcBrand AND
       OfferItem.Offer = icOffer NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
    IF order = 1 THEN FIND NEXT OfferItem WHERE 
-      OfferItem.Brand = gcBrand AND
+      OfferItem.Brand = Syst.Var:gcBrand AND
       OfferItem.Offer = icOffer NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
    IF order = 1 THEN FIND PREV OfferItem WHERE 
-      OfferItem.Brand = gcBrand AND
+      OfferItem.Brand = Syst.Var:gcBrand AND
       OfferItem.Offer = icOffer NO-LOCK NO-ERROR.
 END PROCEDURE.
 
@@ -713,10 +705,10 @@ PROCEDURE local-find-others.
 
    DEF VAR liTime AS INT NO-UNDO.
    
-   fSplitTS(OfferItem.BeginStamp,
+   Func.Common:mSplitTS(OfferItem.BeginStamp,
              OUTPUT ldtFromDate,
              OUTPUT liTime).
-   fSplitTS(OfferItem.EndStamp,
+   Func.Common:mSplitTS(OfferItem.EndStamp,
             OUTPUT ldtToDate,
             OUTPUT liTime).
 
@@ -745,8 +737,8 @@ PROCEDURE local-UPDATE-record:
       RUN local-find-others.
       
       ASSIGN
-         lcBegin = fTS2HMS(OfferItem.BeginStamp)
-         lcEnd   = fTS2HMS(OfferItem.EndStamp).
+         lcBegin = Func.Common:mTS2HMS(OfferItem.BeginStamp)
+         lcEnd   = Func.Common:mTS2HMS(OfferItem.EndStamp).
      
       fItemType(OfferItem.ItemType).
          
@@ -775,29 +767,29 @@ PROCEDURE local-UPDATE-record:
       
          ASSIGN 
             llUpdateAmount = FALSE
-            ufk    = 0
-            ufk[1] = 7 WHEN lcRight = "RW" AND ilUpdate
-            ufk[6] = 1752
-            ufk[8] = 8
-            ehto   = 0.
+            Syst.Var:ufk    = 0
+            Syst.Var:ufk[1] = 7 WHEN lcRight = "RW" AND ilUpdate
+            Syst.Var:ufk[6] = 1752
+            Syst.Var:ufk[8] = 8
+            Syst.Var:ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       
-         IF toimi = 6 THEN DO: 
-            RUN eventsel.p("offeritem", "#BEGIN" + chr(255) + OfferItem.Brand + chr(255) + OfferItem.Offer
+         IF Syst.Var:toimi = 6 THEN DO: 
+            RUN Mc/eventsel.p("offeritem", "#BEGIN" + chr(255) + OfferItem.Brand + chr(255) + OfferItem.Offer
                + chr(255) + STRING(OfferItem.OfferItemId)).
             LEAVE.
          END.   
          
-         IF toimi = 8 THEN LEAVE.
+         IF Syst.Var:toimi = 8 THEN LEAVE.
       END.
 
       UpdateField:
       REPEAT TRANS WITH FRAME lis ON ENDKEY UNDO, LEAVE:
                 
          FIND CURRENT OfferItem EXCLUSIVE-LOCK.
-         ehto = 9.
-         RUN ufkey.
+         Syst.Var:ehto = 9.
+         RUN Syst/ufkey.p.
          
          UPDATE
             OfferItem.ItemType   WHEN NEW OfferItem
@@ -824,7 +816,7 @@ PROCEDURE local-UPDATE-record:
             THEN DO:
 
                IF FRAME-FIELD = "ItemType" THEN DO:
-                  RUN h-tmscodes(INPUT "OfferItem", 
+                  RUN Help/h-tmscodes.p(INPUT "OfferItem", 
                                        "ItemType", 
                                        "Offer", 
                                  OUTPUT lcCode).
@@ -836,35 +828,35 @@ PROCEDURE local-UPDATE-record:
                ELSE IF LOOKUP(FRAME-FIELD,"ItemKey") > 0 THEN DO:
                   
                   CASE INPUT FRAME lis OfferItem.ItemType:
-                  WHEN "BillItem"    THEN lcHelp = "nntuse".
-                  WHEN "FATime"      THEN lcHelp = "h-fatgroup".
-                  WHEN "Topup"       THEN lcHelp = "topupscheme".
-                  WHEN "PerContract" THEN lcHelp = "h-daycamp".
-                  WHEN "ServicePackage" THEN lcHelp = "h-servpa".
-                  WHEN "DiscountPlan" THEN lcHelp = "h-discountplan".
+                  WHEN "BillItem"    THEN lcHelp = "Help/nntuse.p".
+                  WHEN "FATime"      THEN lcHelp = "Help/h-fatgroup.p".
+                  WHEN "Topup"       THEN lcHelp = "Mm/topupscheme.p".
+                  WHEN "PerContract" THEN lcHelp = "Help/h-daycamp.p".
+                  WHEN "ServicePackage" THEN lcHelp = "Help/h-servpa.p".
+                  WHEN "DiscountPlan" THEN lcHelp = "Help/h-discountplan.p".
                   OTHERWISE lcHelp = "".
                   END CASE.
                   
                   IF lcHelp > "" THEN DO:
                      ASSIGN 
-                        gcHelpParam  = "offeritem"
+                        Syst.Var:gcHelpParam  = "offeritem"
                         siirto = ?.
 
                      RUN VALUE(lcHelp).
                      
-                     gcHelpParam = "".
+                     Syst.Var:gcHelpParam = "".
 
                      IF siirto NE "" AND siirto NE ? THEN 
                         DISPLAY siirto @ OfferItem.ItemKey WITH FRAME lis.
                   END.
                END.
                
-               ehto = 9.
-               RUN ufkey.
+               Syst.Var:ehto = 9.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
 
-            ELSE IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN 
+            ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN 
             DO WITH FRAME lis:
                PAUSE 0.
 

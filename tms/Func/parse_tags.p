@@ -13,13 +13,13 @@ DEFINE VARIABLE lcOriginalNumericFormat AS CHARACTER NO-UNDO.
 lcOriginalNumericFormat = SESSION:NUMERIC-FORMAT.
 SESSION:NUMERIC-FORMAT = "European".
 
-{commali.i}
-{femaildata.i}
-{email.i}
-{ftransdir.i}
+{Syst/commali.i}
+{Mc/femaildata.i}
+/*{Func/email.i}*/
+{Func/ftransdir.i}
 /*{femaildata2.i}*/
 
-ASSIGN gcBrand = "1".
+ASSIGN Syst.Var:gcBrand = "1".
 
 DEF INPUT PARAM icFile AS CHAR NO-UNDO.
 DEF INPUT PARAM icOUTPUTFile AS CHAR NO-UNDO.
@@ -157,7 +157,7 @@ OUTPUT STREAM soutfile CLOSE.
 INPUT STREAM sinfile CLOSE.
 
 FIND FIRST OrderCustomer NO-LOCK WHERE
-           OrderCustomer.Brand   = gcBrand     AND
+           OrderCustomer.Brand   = Syst.Var:gcBrand     AND
            OrderCustomer.OrderID = iiOrderNbr  AND
            OrderCustomer.RowType = 1 NO-ERROR.
 
@@ -192,11 +192,15 @@ ELSE DO:
                                /*"_" + STRING(TIME) +*/ ".txt".
 
    OUTPUT STREAM slog TO VALUE(lcErrFile) APPEND.
-   PUT STREAM slog UNFORMATTED
-       STRING(TODAY) + "_" + STRING(TIME) + "|" +
-       OrderCustomer.Email + "|" +
-       STRING(wError.onbr) + "|" + 
-       wError.ErrMsg.
+
+   FOR EACH wError NO-LOCK:
+    
+      PUT STREAM slog UNFORMATTED
+          STRING(TODAY) + "_" + STRING(TIME) + "|" +
+          OrderCustomer.Email + "|" +
+          STRING(wError.onbr) + "|" + 
+          wError.ErrMsg.
+   END.
 
    OUTPUT STREAM slog CLOSE.
 

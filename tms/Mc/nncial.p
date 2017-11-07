@@ -12,10 +12,10 @@ MODIFIED .......: 01.10.1998 kl CustNum
 VERSION ........: M15
 ------------------------------------------------------------------------ */
 
-{commali.i}
-{fixedfee.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'fixedfee'}
+{Syst/commali.i}
+{Func/fixedfee.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'fixedfee'}
 
 DEF VAR idate   AS DA NO-UNDO.
 DEF VAR CustNum AS i  NO-UNDO.
@@ -25,7 +25,7 @@ DEF TEMP-TABLE ttCust NO-UNDO
     FIELD CustNum AS INT
     INDEX CustNum CustNum.
 
-idate = pvm.
+idate = TODAY.
 
 form
   idate label "Date of next invoice ..." format "99-99-99"
@@ -46,20 +46,20 @@ WITH
    OVERLAY FRAME LOG ROW 4 12 DOWN width 80 TITLE
    " SUMMARY OF EXPIRING CONTRACT PAYMENTS ". 
 
-ehto = 9. RUN ufkey.
+Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 PAUSE 0.
 view FRAME LOG.
 UPDATE 
    idate 
    CustNum VALIDATE(INPUT CustNum = 0 OR
                     CAN-FIND(FIRST Customer WHERE 
-                                   Customer.Brand   = gcBrand AND
+                                   Customer.Brand   = Syst.Var:gcBrand AND
                                    Customer.CustNum = INPUT CustNum),
                     "Unknown customer !")
 WITH FRAME Date.
 PAUSE 0.
 
-ufk = 0. ehto = 3. RUN ufkey.
+Syst.Var:ufk = 0. Syst.Var:ehto = 3. RUN Syst/ufkey.p.
 
 period = year(idate) * 100 + month(idate).
 
@@ -75,7 +75,7 @@ ELSE DO:
    MESSAGE "Collecting fees ..".
 
    FOR EACH FixedFee no-lock WHERE
-            FixedFee.Brand      = gcBrand AND
+            FixedFee.Brand      = Syst.Var:gcBrand AND
             FixedFee.EndPeriod <= Period,
       FIRST FFItem of FixedFee no-lock where 
             FFItem.BillPeriod <= Period AND
@@ -106,7 +106,7 @@ BY Customer.CustName
 WITH FRAME LOG.
 
    FIND FIRST Salesman no-lock where 
-              Salesman.Brand    = gcBrand AND
+              Salesman.Brand    = Syst.Var:gcBrand AND
               Salesman.Salesman = Customer.Salesman.
    DISP 
       Salesman.SmName   format "x(15)"

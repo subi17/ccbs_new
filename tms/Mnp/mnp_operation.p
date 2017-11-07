@@ -20,15 +20,15 @@ DEF VAR liLanguage AS INT NO-UNDO.
 
 DEF BUFFER bMNPOngoing FOR MNPProcess.
 
-{commali.i}
-{mnpmessages.i}
-{mnp.i}
-{tmsconst.i}
-{forderstamp.i}
-{orderfunc.i}
-{log.i}
-{eventval.i}
-{ordercancel.i}
+{Syst/commali.i}
+{Mnp/mnpmessages.i}
+{Mnp/mnp.i}
+{Syst/tmsconst.i}
+{Func/forderstamp.i}
+{Func/orderfunc.i}
+{Func/log.i}
+{Syst/eventval.i}
+{Func/ordercancel.i}
 
 FIND MNPProcess WHERE
      MNPProcess.MNPSeq = piMNPSeq NO-LOCK NO-ERROR.
@@ -58,7 +58,7 @@ CASE pcOperation:
          RETURN "ERROR:Cannot cancel MNPProcess with current status".
             
       FIND Order WHERE
-         Order.Brand = gcBrand AND
+         Order.Brand = Syst.Var:gcBrand AND
          Order.OrderID = MNPProcess.OrderId NO-LOCK.
 
       IF MNPProcess.StatusCode = {&MNP_ST_NEW} THEN DO:
@@ -96,7 +96,7 @@ CASE pcOperation:
          END.
       
          ASSIGN         
-            MNPProcess.UpdateTS = fMakeTS()
+            MNPProcess.UpdateTS = Func.Common:mMakeTS()
             MNPProcess.StatusCode = {&MNP_ST_ACAN}
             MNPProcess.StatusReason = pcParam
             Order.MNPStatus = MNPProcess.StatusCode + 1.
@@ -109,9 +109,9 @@ CASE pcOperation:
             Order.OrderType EQ {&ORDER_TYPE_STC} AND
             (fIsConvergenceTariff(Order.CliType) OR
              Order.OrderChannel BEGINS "retention") THEN
-            RUN orderinctrl.p(Order.OrderId, 0, TRUE).   
+            RUN Mc/orderinctrl.p(Order.OrderId, 0, TRUE).   
          ELSE
-            RUN cancelorder.p(Order.OrderId, TRUE).
+            RUN Mc/cancelorder.p(Order.OrderId, TRUE).
 
          llResponse = TRUE.
 
@@ -123,7 +123,7 @@ CASE pcOperation:
             liPeriods = 1.
 
             IF liPeriods > fMNPPeriods(
-               input fMakeTS(),
+               input Func.Common:mMakeTS(),
                input MNPProcess.PortingTime,
                INPUT 0,
                OUTPUT ldaDueDate) THEN
@@ -177,12 +177,12 @@ CASE pcOperation:
          RETURN "ERROR:Only rejected process can be closed".
 
       FIND Order WHERE
-           Order.Brand = gcBrand AND
+           Order.Brand = Syst.Var:gcBrand AND
            Order.OrderID = MNPProcess.OrderId NO-LOCK.
 
       IF Order.StatusCode NE "73" THEN RETURN "ERROR:Order is in wrong status".
 
-      RUN closeorder.p(Order.Orderid, TRUE).
+      RUN Mc/closeorder.p(Order.Orderid, TRUE).
       IF RETURN-VALUE NE "" THEN RETURN "ERROR:" + RETURN-VALUE.
 
       IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 AND
@@ -219,7 +219,7 @@ CASE pcOperation:
       liPeriods = 1. /* YDR-115 */
 
       IF liPeriods > fMNPPeriods(
-         input fMakeTS(),
+         input Func.Common:mMakeTS(),
          input MNPProcess.PortingTime,
          INPUT 0,
          OUTPUT ldaDueDate) THEN

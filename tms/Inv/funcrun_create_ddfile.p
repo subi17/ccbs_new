@@ -7,13 +7,13 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
-   gcBrand = "1"
-   katun   = "Cron".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun   = "Cron".
    
-{cparam2.i}
-{funcrunprocess_run.i}
+{Func/cparam2.i}
+{Syst/funcrunprocess_run.i}
 
 DEF VAR ldaInvDate    AS DATE NO-UNDO.
 DEF VAR liInvType     AS INT  NO-UNDO.
@@ -59,9 +59,9 @@ END.
 IF llCSBValidation EQ ? THEN llCSBValidation = FALSE.
 IF lcInputFileDir  EQ ? THEN lcInputFileDir = "".
 
-RUN ddoutfileco.p ("",
+RUN Inv/ddoutfileco.p ("",
                    0,
-                   99999999,
+                   999999999,
                    "",
                    "_",
                    ldaInvDate,

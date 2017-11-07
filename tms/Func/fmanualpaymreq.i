@@ -3,8 +3,8 @@
    create a request for a manual payment 
 */
    
-{commali.i}
-{fcreatereq.i}
+{Syst/commali.i}
+{Func/fcreatereq.i}
 
 FUNCTION fManualPaymentRequest RETURNS INTEGER
    (INPUT  iiCustNum     AS INT,  
@@ -22,7 +22,7 @@ FUNCTION fManualPaymentRequest RETURNS INTEGER
 
    /* another request already pending */
    IF CAN-FIND(FIRST MsRequest USE-INDEX CustNum WHERE
-                     MsRequest.Brand      = gcBrand           AND
+                     MsRequest.Brand      = Syst.Var:gcBrand           AND
                      MsRequest.ReqType    = 34                AND
                      MsRequest.CustNum    = Customer.CustNum  AND
                      LOOKUP(STRING(MsRequest.ReqStatus),"0,1,3") > 0)
@@ -33,7 +33,7 @@ FUNCTION fManualPaymentRequest RETURNS INTEGER
 
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest(34,
                   idActStamp,

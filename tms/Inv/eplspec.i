@@ -9,11 +9,11 @@
   
 */
 
-{cparam2.i}
-{ftransdir.i}
-{email.i}
-{edefine.i NEW}
-{faddress.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/email.i}
+{Inv/edefine.i NEW}
+{Func/faddress.i}
 
 DEF TEMP-TABLE wError NO-UNDO
     FIELD CLI    AS CHAR
@@ -49,7 +49,7 @@ FUNCTION fSetAddress RETURNS LOGICAL
 
    IF iiAddress = 3 THEN DO:
       FIND FIRST MsOwner WHERE
-           MsOwner.Brand   = gcBrand   AND
+           MsOwner.Brand   = Syst.Var:gcBrand   AND
            MsOwner.CustNum = iiCustNum AND
            MsOwner.MSSeq   = iiMSSeq NO-LOCK NO-ERROR.
       IF NOT AVAILABLE MsOwner THEN DO:
@@ -94,7 +94,7 @@ FUNCTION fStartEPL RETURNS LOGICAL.
    EMPTY TEMP-TABLE wError. 
 
    FIND FIRST Company WHERE
-              Company.Brand = gcBrand 
+              Company.Brand = Syst.Var:gcBrand 
    NO-LOCK NO-ERROR. 
    IF NOT AVAIL Company THEN DO:
       fErrLine("Company data is missing.",

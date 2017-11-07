@@ -7,7 +7,8 @@
     Created     : Wed Oct 29 15:19:10 EET 2014
     Notes       : 
   ----------------------------------------------------------------------*/
-{tmsconst.i}
+{Syst/tmsconst.i}
+
 USING Progress.Lang.*.
 USING HPD.InvoiceCommon.
 USING HPD.DumpFile.

@@ -7,14 +7,13 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 ASSIGN 
-   gcBrand = "1" 
-   katun   = "Cron".
+   Syst.Var:gcBrand = "1" 
+   Syst.Var:katun   = "Cron".
        
-{eventlog.i}
-{timestamp.i}
+{Syst/eventlog.i}
 
 DEF TEMP-TABLE ttStatus NO-UNDO
    FIELD RunState AS CHAR.
@@ -23,7 +22,7 @@ DEF VAR lcOrigState AS CHAR NO-UNDO.
 DEF VAR liHandled   AS INT  NO-UNDO.
 DEF VAR ldCurrent   AS DEC  NO-UNDO.
 
-ldCurrent = fMakeTS().
+ldCurrent = Func.Common:mMakeTS().
 
 CREATE ttStatus.
 ttStatus.RunState = "Scheduled".
@@ -32,7 +31,7 @@ ttStatus.RunState = "Running".
 
 
 FOR EACH FuncRunQueue NO-LOCK WHERE
-         FuncRunQueue.Brand  = gcBrand AND
+         FuncRunQueue.Brand  = Syst.Var:gcBrand AND
          FuncRunQueue.Active = TRUE,
     EACH ttStatus,
     EACH FuncRunQSchedule NO-LOCK WHERE
@@ -43,7 +42,7 @@ BY FuncRunQSchedule.StartTS:
 
    lcOrigState = FuncRunQSchedule.RunState.
    
-   RUN funcrunqueue_run.p (FuncRunQSchedule.FRQueueID,
+   RUN Syst/funcrunqueue_run.p (FuncRunQSchedule.FRQueueID,
                            FuncRunQSchedule.FRQScheduleID).
    
    /* nothing done or interrupted */
@@ -53,14 +52,14 @@ BY FuncRunQSchedule.StartTS:
       IF RETURN-VALUE BEGINS "ERROR:" THEN DO TRANS:
          CREATE ErrorLog.
          ASSIGN 
-            ErrorLog.Brand     = gcBrand
+            ErrorLog.Brand     = Syst.Var:gcBrand
             ErrorLog.ActionID  = "FRQUEUERUN" + 
                                  STRING(FuncRunQueue.FRQueueID)
             ErrorLog.TableName = "FuncRunQueue"
             ErrorLog.KeyValue  = STRING(FuncRunQueue.FRQueueID)
             ErrorLog.ErrorMsg  = RETURN-VALUE
-            ErrorLog.UserCode  = katun.
-            ErrorLog.ActionTS  = fMakeTS().
+            ErrorLog.UserCode  = Syst.Var:katun.
+            ErrorLog.ActionTS  = Func.Common:mMakeTS().
       END.
 
    END.   
@@ -71,8 +70,6 @@ BY FuncRunQSchedule.StartTS:
 END.
 
 EMPTY TEMP-TABLE ttStatus.
-
-IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1.
 
 fELog("FUNCRUNQUEUE_RUN","handled" + STRING(liHandled)).
 

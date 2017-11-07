@@ -7,11 +7,10 @@ CREATED ......: 04.03.11
 Version ......: yoigo
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{tmsconst.i}
-{dumpfile_run.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Syst/dumpfile_run.i}
 
 DEF INPUT PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT PARAMETER icFile        AS CHAR NO-UNDO.
@@ -55,7 +54,7 @@ FUNCTION fTS2ModifiedHMS RETURNS CHARACTER
    DEFINE VARIABLE tme AS INTEGER NO-UNDO. 
    DEFINE VARIABLE lcStamp AS CHARACTER NO-UNDO. 
 
-   fSplitTS(ideTimeStamp, OUTPUT dte, OUTPUT tme).
+   Func.Common:mSplitTS(ideTimeStamp, OUTPUT dte, OUTPUT tme).
    lcStamp = STRING(TRUNCATE(ideTimeStamp,0)).
    lcStamp = STRING(lcStamp,"9999-99-99") + " " + STRING(tme,"HH:MM:SS").
    RETURN lcStamp.
@@ -63,7 +62,7 @@ END FUNCTION.
 
 
    FOR EACH mnpprocess where
-            mnpprocess.brand = gcBrand AND
+            mnpprocess.brand = Syst.Var:gcBrand AND
             mnpprocess.mnptype = {&MNP_TYPE_IN} and
             mnpprocess.updatets > idLastDump NO-LOCK:
 
@@ -105,7 +104,7 @@ END FUNCTION.
    END.
 
    FOR EACH mnpprocess where
-            mnpprocess.brand = gcBrand AND
+            mnpprocess.brand = Syst.Var:gcBrand AND
             mnpprocess.mnptype = {&MNP_TYPE_OUT} and
             mnpprocess.updatets > idLastDump NO-LOCK:
 
@@ -171,7 +170,7 @@ PROCEDURE pMNPINKPI:
         mnpprocess.mnpseq = piMNPSeq NO-LOCK.
    
    find order where
-        order.brand = gcBrand and
+        order.brand = Syst.Var:gcBrand and
         order.orderid = mnpprocess.orderid NO-LOCK.
 
    /* check order status */
@@ -433,7 +432,7 @@ PROCEDURE pMNPOutKPI:
               msrequest.msseq = mnpsub.msseq and
               msrequest.reqtype = 18 and
               msrequest.actstamp >= mnpprocess.portingtime and
-              msrequest.actstamp < fsecoffset(mnpprocess.portingtime, 600) 
+              msrequest.actstamp < Func.Common:mSecOffSet(mnpprocess.portingtime, 600) 
          use-index msseq no-error.
          
          IF AVAIL msrequest then do:

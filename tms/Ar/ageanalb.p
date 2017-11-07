@@ -9,16 +9,16 @@
   ------------------------------------------------------ */
 
 
-{commpaa.i}
-{utumaa.i "new"}
-{ageanal.i}
-{cparam2.i}
-{email.i}
+{Syst/commpaa.i}
+{Syst/utumaa.i "new"}
+{Ar/ageanal.i}
+{Func/cparam2.i}
+{Func/email.i}
 
 DEF VAR exfile      AS CHAR  FORMAT "X(40)"    NO-UNDO.
 DEF VAR lcConfDir   AS CHAR                    NO-UNDO.
 
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 ASSIGN lcConfDir = fCParamC("RepConfDir")
        exfile    = "/tmp/ageanal_" + 
@@ -28,7 +28,7 @@ ASSIGN lcConfDir = fCParamC("RepConfDir")
                    "_" + STRING(TIME) + ".txt".
 
 FIND FIRST Company NO-LOCK.
-ynimi = Company.CompName.
+Syst.Var:ynimi = Company.CompName.
 
 CREATE ttCriter.
 ASSIGN ttCriter.InvGroup = ""
@@ -48,7 +48,7 @@ ASSIGN ttCriter.InvGroup = ""
        ttCriter.OnlySum  = TRUE
        ttCriter.SortBy   = 1.
 
-RUN ageanal (INPUT TABLE TCustGroup,
+RUN Ar/ageanal.p (INPUT TABLE TCustGroup,
              INPUT TABLE ttCriter).
 
 /* send the report AS email */

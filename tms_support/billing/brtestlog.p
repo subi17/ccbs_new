@@ -1,6 +1,6 @@
-{commpaa.i}
-katun = "Qvantel".
-gcBrand = "1".
+{Syst/commpaa.i}
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
 
 DEFINE VARIABLE liBRTestQResultID AS INTEGER NO-UNDO. 
 DEFINE VARIABLE lcFile1 AS CHARACTER NO-UNDO. 
@@ -62,8 +62,7 @@ FOR EACH BRTestQResultRow NO-LOCK WHERE
    FIND FIRST Customer WHERE Customer.CustNum = BRTestQResultRow.InvCust
          NO-LOCK NO-ERROR.
    IF AVAILABLE Customer THEN
-      lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                    BUFFER Customer).
+      lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
    FIND FIRST MobSub WHERE MobSub.MsSeq = BRTestQResultRow.MsSeq
       NO-LOCK NO-ERROR.

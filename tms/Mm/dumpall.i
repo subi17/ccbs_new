@@ -34,4 +34,4 @@ if "{2}" = "order" or "{2}" = "msrequest" then lcDelim = " \"\\\":\\\"\" ".
       else lcFields = lcFields + lcDelim + lcDump. 
    end.
 
-   run dumpall2.i "{2}" lcFields.
+   RUN Mm/dumpall2.i "{2}" lcFields.

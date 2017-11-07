@@ -1,6 +1,6 @@
-{commpaa.i}
-katun = "anttis".
-gcBrand = "1".
+{Syst/commpaa.i}
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 
 DEFINE VARIABLE oiCustomer AS INTEGER NO-UNDO. 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 

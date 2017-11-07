@@ -1,9 +1,8 @@
-{commpaa.i}
-gcBrand = "1".
-{tmsconst.i}
-{fmakemsreq.i}
-{timestamp.i}
-{fsubsterminal.i}
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/fsubsterminal.i}
 DEF VAR lcCounter AS INT NO-UNDO.
 DEF VAR lcOrders AS CHAR NO-UNDO.
 DEF VAR liLoop AS INT NO-UNDO.
@@ -75,7 +74,7 @@ DO liLoop = 1 TO NUM-ENTRIES(lcOrders):
          liCreated = fPCActionRequest(Order.MsSeq,
                                       "PAYTERM24_15",
                                       "act",
-                                      fMakeTS(),
+                                      Func.Common:mMakeTS(),
                                       TRUE, /* create fees */
                                       {&REQUEST_SOURCE_NEWTON},
                                       "",

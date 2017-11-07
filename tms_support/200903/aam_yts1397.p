@@ -1,5 +1,5 @@
-{testpaa.i}
-katun = "ari".
+{Syst/testpaa.i}
+Syst.Var:katun = "ari".
 
 
 def stream sread.
@@ -40,7 +40,7 @@ repeat:
    j = j + 1.
    disp i j.
    /*
-   run topupcamp.p (order.msseq,
+   RUN Mm/topupcamp.p (order.msseq,
                     output lireq).
    */                                
 end.

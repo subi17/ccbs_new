@@ -1,0 +1,7 @@
+ADD FIELD "PRO" OF "OrderCustomer" AS LOGICAL
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "PRO"
+  COLUMN-LABEL "PRO"
+  HELP "PRO customer"
+  ORDER 1150

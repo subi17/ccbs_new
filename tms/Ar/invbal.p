@@ -5,9 +5,9 @@
                20.05.03/aam finvbal
 */
 
-{commali.i}
-{cparam2.i}
-{finvbal.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/finvbal.i}
 
 def input  parameter iiInvNum  like Invoice.InvNum no-undo.
 def output parameter BalDue    as dec              no-undo.

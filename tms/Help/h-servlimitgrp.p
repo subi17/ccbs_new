@@ -9,7 +9,7 @@
   Version ......: 5.1
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF  shared VAR siirto AS CHAR.
 
@@ -24,16 +24,16 @@ DEF VAR must-add    AS logic                NO-UNDO.
 form
       ServiceLimitGroup.GroupCode
       ServiceLimitGroup.GroupName  format "x(30)"
-    WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(cfc)
-    title color value(ctc) " ServiceLimit Groups " OVERLAY FRAME sel.
+    WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " ServiceLimit Groups " OVERLAY FRAME sel.
 
 form /* SEEK Code */
     ob-code
     help "Enter RepType of an Object Billing RepType"
-    with row 4  col 2 title color value(ctc) " FIND CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    with row 4  col 2 title color value(Syst.Var:ctc) " FIND CODE "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 MAIN:
 repeat:
 
@@ -76,10 +76,10 @@ print-line:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk = 0 ufk[1] = 35 ufk[5] = 11
-         ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
-         siirto = ? ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         Syst.Var:ufk = 0 Syst.Var:ufk[1] = 35 Syst.Var:ufk[5] = 11
+         Syst.Var:ufk[6] = 0 Syst.Var:ufk[8] = 8  Syst.Var:ufk[9] = 1
+         siirto = ? Syst.Var:ehto = 3 ufkey = FALSE.
+         RUN Syst/ufkey.p.
       END.
   END. /* print-line */
 
@@ -87,14 +87,14 @@ BROWSE:
       repeat WITH FRAME sel ON ENDKEY UNDO, RETURN:
 
          HIDE MESSAGE no-pause.
-         CHOOSE ROW ServiceLimitGroup.GroupCode ;(uchoose.i;) no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) ServiceLimitGroup.GroupCode WITH FRAME sel.
+         CHOOSE ROW ServiceLimitGroup.GroupCode {Syst/uchoose.i} no-error WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) ServiceLimitGroup.GroupCode WITH FRAME sel.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.
-         nap = keylabel(LASTKEY).
+         Syst.Var:nap = keylabel(LASTKEY).
 
          /* previous line */
-         if lookup(nap,"cursor-up") > 0 THEN DO
+         if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO
          WITH FRAME sel:
             IF FRAME-LINE = 1 THEN DO:
                FIND ServiceLimitGroup where recid(ServiceLimitGroup) = rtab[FRAME-LINE] no-lock.
@@ -120,7 +120,7 @@ BROWSE:
          END. /* previous line */
 
          /* NEXT line */
-         if lookup(nap,"cursor-down") > 0 THEN DO WITH FRAME sel:
+         if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO WITH FRAME sel:
             IF FRAME-LINE = FRAME-DOWN THEN DO:
                FIND ServiceLimitGroup where recid(ServiceLimitGroup) = rtab[FRAME-LINE] no-lock .
                FIND NEXT ServiceLimitGroup no-lock no-error.
@@ -146,7 +146,7 @@ BROWSE:
          END. /* NEXT line */
 
          /* previous page */
-         else if lookup(nap,"page-up,prev-page") > 0 THEN DO WITH FRAME sel:
+         else if lookup(Syst.Var:nap,"page-up,prev-page") > 0 THEN DO WITH FRAME sel:
             FIND ServiceLimitGroup where recid(ServiceLimitGroup) = Memory no-lock no-error.
             FIND prev ServiceLimitGroup no-lock no-error.
             IF AVAILABLE ServiceLimitGroup THEN DO:
@@ -168,7 +168,7 @@ BROWSE:
         END. /* previous page */
 
         /* NEXT page */
-        else if lookup(nap,"page-down,next-page") > 0 THEN DO WITH FRAME sel:
+        else if lookup(Syst.Var:nap,"page-down,next-page") > 0 THEN DO WITH FRAME sel:
            IF rtab[FRAME-DOWN] = ? THEN DO:
                BELL.
                message "This is the last page !".
@@ -182,9 +182,9 @@ BROWSE:
         END. /* NEXT page */
 
         /* Seek */
-        if lookup(nap,"1,f1") > 0 THEN DO:  /* ob-code */
-           cfc = "puyr". run ufcolor.
-           ehto = 9. RUN ufkey. ufkey = TRUE.
+        if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:  /* ob-code */
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE ob-code WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
            IF ob-code ENTERED THEN DO:
@@ -205,13 +205,13 @@ BROWSE:
         END. /* Seek */
 
         /* CHOOSE */
-        else if lookup(nap,"return,enter,5,f5") > 0 THEN DO:
+        else if lookup(Syst.Var:nap,"return,enter,5,f5") > 0 THEN DO:
            FIND ServiceLimitGroup where recid(ServiceLimitGroup) = rtab[FRAME-LINE] no-lock.
            siirto = string(ServiceLimitGroup.GroupCode).
            LEAVE MAIN.
         END. /* CHOOSE */
         /* FIRST record */
-        else if lookup(nap,"home,h") > 0 THEN DO:
+        else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
            FIND FIRST ServiceLimitGroup no-lock.
            Memory = recid(ServiceLimitGroup).
            must-print = TRUE.
@@ -219,14 +219,14 @@ BROWSE:
         END. /* FIRST record */
 
         /* LAST record */
-        else if lookup(nap,"end,e") > 0 THEN DO :
+        else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO :
            FIND LAST ServiceLimitGroup no-lock.
            Memory = recid(ServiceLimitGroup).
            must-print = TRUE.
            NEXT LOOP.
         END. /* LAST record */
 
-        else if nap = "8" or nap = "f8" THEN LEAVE MAIN. /* RETURN */
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" THEN LEAVE MAIN. /* RETURN */
 
      END.  /* BROWSE */
    END.  /* LOOP */

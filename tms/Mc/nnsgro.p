@@ -8,7 +8,7 @@
                   26.04.02/tk eventlogging added  
                   12.07.02/tk delete smgmembers on delete
                   25.02.03/tk tokens
-                  18.03.03/tk run memo
+                  18.03.03/tk RUN Mc/memo.p
                   17.09.03/aam brand
                   06.02.04 jp custnum for memo
   VERSIO .......: M15
@@ -16,22 +16,22 @@
 
 &GLOBAL-DEFINE BrTable SMGroup
 
-{commali.i} 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'smgroup'}
+{Syst/commali.i} 
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'smgroup'}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhSMGroup AS HANDLE NO-UNDO.
    lhSMGroup = BUFFER SMGroup:HANDLE.
    RUN StarEventInitialize(lhSMGroup).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhSMGroup).
+      RUN Mc/eventview2.p(lhSMGroup).
    END.
 
 END.
@@ -63,10 +63,10 @@ form
     SMGroup.SGName  
 
 WITH width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(cfc)
-    title color value(ctc) " " + ynimi +
+    COLOR value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " " + Syst.Var:ynimi +
     " Salesman Groups "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
 FRAME sel.
 
 
@@ -81,28 +81,28 @@ form
     SMGroup.SmGroup
     SMGroup.SGName 
 WITH  OVERLAY ROW 4 centered
-    COLOR value(cfc)
-    TITLE COLOR value(ctc)
+    COLOR value(Syst.Var:cfc)
+    TITLE COLOR value(Syst.Var:ctc)
     lm-ots WITH side-labels 1 columns
 FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* Salesman group :n haku kentällä SMGroup */
     "Brand:" lcBrand skip
     "Group:" SMGroup
     help "Enter Code of Group"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND CODE "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* Salesman group :n haku kentällä SGName */
     "Brand:" lcBrand skip
     "Name :" SGName
     help "Enter Name of Group"
-    with row 4 col 2 title color value(ctc) " FIND Name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND Name "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 FIND FIRST SMGroup
@@ -132,13 +132,13 @@ repeat WITH FRAME sel:
     END.
 
    IF lisattava THEN DO:  /* smgroupn lisäys  */
-      assign cfc = "lis" ufkey = true lm-ots = " ADD " lisattava = FALSE.
-      RUN ufcolor.
+      assign Syst.Var:cfc = "lis" ufkey = true lm-ots = " ADD " lisattava = FALSE.
+      RUN Syst/ufcolor.p.
 lisaa:
       repeat WITH FRAME lis ON ENDKEY UNDO lisaa, LEAVE lisaa.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
            PROMPT-FOR SMGroup.SmGroup
            VALIDATE
@@ -223,32 +223,32 @@ SELAUS:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35  ufk[2]= 30 ufk[3]= 927 ufk[4]= 510
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-        ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
-        {uright1.i '"3,5,6"'}
-        RUN ufkey.p.
+        Syst.Var:ufk[1]= 35  Syst.Var:ufk[2]= 30 Syst.Var:ufk[3]= 927 Syst.Var:ufk[4]= 510
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
+        {Syst/uright1.i '"3,5,6"'}
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW SMGroup.SmGroup ;(uchoose.i;) no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) SMGroup.SmGroup WITH FRAME sel.
+        CHOOSE ROW SMGroup.SmGroup {Syst/uchoose.i} no-error WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) SMGroup.SmGroup WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW SMGroup.SGName ;(uchoose.i;) no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) SMGroup.SGName WITH FRAME sel.
+        CHOOSE ROW SMGroup.SGName {Syst/uchoose.i} no-error WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) SMGroup.SGName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > orderlkm THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = orderlkm.
       END.
 
@@ -275,10 +275,10 @@ SELAUS:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* edellinen rivi */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND SMGroup where recid(SMGroup) = rtab[1] no-lock.
            IF order = 1 THEN FIND prev SMGroup
@@ -307,7 +307,7 @@ SELAUS:
       END. /* edellinen rivi */
 
       /* seuraava rivi */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND SMGroup where recid(SMGroup) = rtab[FRAME-DOWN] no-lock .
@@ -336,7 +336,7 @@ SELAUS:
       END. /* seuraava rivi */
 
       /* edellinen sivu */
-      else if lookup(nap,"prev-page,page-up") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up") > 0 THEN DO:
         Memory = rtab[1].
         FIND SMGroup where recid(SMGroup) = Memory no-lock no-error.
         IF order = 1 THEN FIND prev SMGroup
@@ -366,7 +366,7 @@ SELAUS:
      END. /* edellinen sivu */
 
      /* seuraava sivu */
-     else if lookup(nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
        /* kohdistin alimmalle riville */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -381,12 +381,12 @@ SELAUS:
      END. /* seuraava sivu */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+     else if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        SMGroup = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F1.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.Var:gcAllBrand
               SMGroup WITH FRAME f1.
        HIDE FRAME f1 no-pause.
 
@@ -403,13 +403,13 @@ SELAUS:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        SGName = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F2.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.Var:gcAllBrand
               SGName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
 
@@ -425,27 +425,27 @@ SELAUS:
        END.
      END. /* Haku sar. 2 */
 
-     else if lookup(nap,"4,f4") > 0 THEN DO TRANSAction:  /* members */
+     else if lookup(Syst.Var:nap,"4,f4") > 0 THEN DO TRANSAction:  /* members */
         FIND SMGroup where recid(SMGroup) = rtab[FRAME-LINE] no-lock.
-        RUN nnsgme1(SMGroup.SmGroup).
+        RUN Mc/nnsgme1.p(SMGroup.SmGroup).
         ufkey = TRUE.
         NEXT LOOP.
      END.
 
-     if lookup(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
-        {uright2.i}
+     if lookup(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
+        {Syst/uright2.i}
         lisattava = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 AND lcRight = "RW"
+     else if lookup(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSAction:  /* poisto */
-       {uright2.i}
+       {Syst/uright2.i}
        privi = FRAME-LINE.
        FIND SMGroup where recid(SMGroup) = rtab[FRAME-LINE] no-lock.
 
        /* valaistaan poistettava rivi */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.Var:ctc)
        SMGroup.SmGroup SMGroup.SGName /* sd */.
 
        IF order = 1 THEN FIND NEXT SMGroup
@@ -474,7 +474,7 @@ SELAUS:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.Var:ccc)
        SMGroup.SmGroup SMGroup.SGName /* sd */.
        IF ok THEN DO:
 
@@ -500,10 +500,10 @@ SELAUS:
        ELSE privi = 0. /* ei poistettukaan */
      END. /* poisto */
 
-     else if lookup(nap,"3,f3") > 0 THEN DO:    /* memo */
+     else if lookup(Syst.Var:nap,"3,f3") > 0 THEN DO:    /* memo */
         FIND SMGroup where recid(SMGroup) = rtab[frame-line(sel)]
         no-lock.
-        RUN memo(INPUT 0,
+        RUN Mc/memo.p(INPUT 0,
                  INPUT "SMGroup",
                  INPUT STRING(SMGroup.SMGroup),
                  INPUT "Salesman group").
@@ -511,15 +511,15 @@ SELAUS:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"enter,return") > 0 THEN
+     else if lookup(Syst.Var:nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSAction:
        /* muutos */
-       {uright2.i}
+       {Syst/uright2.i}
        FIND SMGroup where recid(SMGroup) = rtab[frame-line(sel)]
        exclusive-lock.
-       assign lm-ots = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". RUN ufcolor.
+       assign lm-ots = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9.
+       RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY 
          SMGroup.SmGroup
          SMGroup.SGName.
@@ -539,7 +539,7 @@ SELAUS:
 
      END.
 
-     else if lookup(nap,"home") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home") > 0 THEN DO:
        IF order = 1 THEN FIND FIRST SMGroup
        WHERE SMGroup.Brand = lcBrand no-lock no-error.
        ELSE IF order = 2 THEN FIND FIRST SMGroup USE-INDEX SGName
@@ -548,7 +548,7 @@ SELAUS:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end") > 0 THEN DO : /* viimeinen tietue */
+     else if lookup(Syst.Var:nap,"end") > 0 THEN DO : /* viimeinen tietue */
        IF order = 1 THEN FIND LAST SMGroup
        WHERE SMGroup.Brand = lcBrand no-lock no-error.
        ELSE IF order = 2 THEN FIND LAST SMGroup USE-INDEX SGName
@@ -557,11 +557,11 @@ SELAUS:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* SELAUS */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 

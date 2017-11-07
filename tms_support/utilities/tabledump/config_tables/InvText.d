@@ -29,6 +29,21 @@
 324 01/04/12 31/12/49 "EMAIL" "SendEmailInvoice" 1 "This is your electronic invoice" "<html><body>HI #NAME, <br/>YOUR #MONTH #YEAR BILL IS READY.<br/><br/>Your electronic invoice for this month is now ready for you to take a look at it. It comes to #AMOUNT euros.<br/>To get to it <a href=""#LINK"">click here</a> within the next 30 days or log on to <a href=""#MiYoigoLINK"">Mi Yoigo</a>, where you can look at your most recent bills.<br/><br/>And don&#39t forget &#151 we aren&#39t spam! Add #EMAIL to your contact list to make sure our emails always land in your Inbox.<br/><br/>Thanks!</body></html>" 5 5 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes
 325 01/04/12 31/12/49 "EMAIL" "SendEmailInvoice" 1 "=?iso-8859-1?Q?Esta es tu factura electr=F3nica?=" "<html><body>HOLA #NAME, <br/>YA ESTÁ TU FACTURA #MONTH #YEAR.<br/><br/>Tu factura electrónica de este mes ya está lista para que le eches un vistazo. El total es #AMOUNT euros.<br/>Puedes acceder haciendo <a href=""#LINK"">clic aquí</a> durante los próximos 30 días o puedes entrar en <a href=""#MiYoigoLINK"">Mi Yoigo</a>, donde tienes disponibles tus últimas facturas.<br/><br/>¡Ah! Recuerda que no somos spam. Añade #EMAIL a tus contactos y así nuestros emails llegarán siempre a tu Bandeja de entrada.<br/><br/>¡Gracias!</body></html> " 1 5 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes
 331 01/04/12 31/12/49 "EMAIL" "SendEmailInvoice" 1 "Hona hemen zure faktura elektronikoa" "<html><body>KAIXO, #NAME: <br/>#YEAR #MONTH FAKTURA PREST DAGO.<br/><br/>Prest duzu hilabete honetako faktura elektronikoa, begiratu bat eman diezaiozun. Guztira #AMOUNT euro dira. <br/>Bertara sartzeko, <a href=""#LINK"">egin klik hemen</a> hurrengo 30 egunetan; bestela, sartu <a href=""#MiYoigoLINK"">Mi Yoigo</a>, non zure azken fakturak izango dituzun eskuragarri. <br/><br/>Ah! Ez ahaztu mezu hau ez dela spama. Gehitu #EMAIL helbidea zure kontaktuetan, gure mezu elektroniko guztiak zure Sarrerako ontzira irits daitezen beti.<br/><br/>Eskerrik asko!</body></html>" 3 5 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes
+560 05/07/17 31/12/49 "EMAIL" "SVA_Centralita" 1 "Centralita PRO  #STATUS" "Nombre Cliente: #CUSTNAME
+ORDER ID: #ORDERID
+#CUSTTYPE: #CUSTID" 1 0 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes
+557 05/07/17 31/12/49 "EMAIL" "SVA_FAXTOEMAIL" 1 "SVA_ FAXTOMAIL YOIGO #STATUS" "Nombre Cliente: #CUSTNAME
+ORDER ID: #ORDERID
+#CUSTTYPE: #CUSTID
+Dirección de correo electrónico: #EMAIL
+Numeración: #NUMBER" 1 0 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes
+559 05/07/17 31/12/49 "EMAIL" "SVA_IPFIJA" 1 "SVA_ IP FIJA YOIGO #STATUS" "Nombre Cliente: #CUSTNAME
+ORDER ID: #ORDERID
+#CUSTTYPE: #CUSTID" 1 0 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes
+558 05/07/17 31/12/49 "EMAIL" "SVA_OFFICE365" 1 "SVA_ OFFICE 365 YOIGO #STATUS" "Nombre Cliente: #CUSTNAME
+ORDER ID: #ORDERID
+#CUSTTYPE: #CUSTID
+Dirección de correo electrónico: #EMAIL" 1 0 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes
 326 01/04/12 31/12/49 "General" "EmailConfeInvoice" 1 "eInvoice sending finished" "CCBS has finished sending Email invoices." 5 5 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes
 242 01/08/11 31/12/49 "General" "EmailConfSMSInv" 1 "SMS invoice sending finished" "CCBS has finished sending SMS invoices." 5 5 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes
 45 02/06/07 31/12/49 "General" "PassWdCheck2" 1 "" "The password must contain at least 1 UPPER CASE letter and 1 number.
@@ -1215,6 +1230,7 @@ Tu pedido
 -----------
 Número de teléfono: #MSISDN
 Modalidad: Renuevo
+#CTNAME
 
 #CAMPAIGN
 #FATIME
@@ -1268,6 +1284,7 @@ Your order
 ------------
 Phone number: #MSISDN
 Type: Renuevo
+#CTNAME
 
 #CAMPAIGN
 #FATIME
@@ -1329,6 +1346,7 @@ Your order
 ------------
 Phone number: #MSISDN
 Type: Renuevo
+#CTNAME
 
 Your products
 ---------------
@@ -1383,6 +1401,7 @@ Tu pedido
 ----------
 Número de teléfono: #MSISDN
 Modalidad: Renuevo
+#CTNAME
 
 Tus productos
 ---------------
@@ -1606,7 +1625,7 @@ nuevo telefono. Llamanos lo antes posible al 622 para confirmar tus datos, la ll
 137 25/03/09 31/12/49 "SMS" "MNPDone" 1 "" "¡Bienvenido/a, ya eres de Yoigo! La portabilidad de tu #CLI esta hecha. Desde ahora, si necesitas informacion de Yoigo, llama gratis al 622." 1 5 "" "" "" "1" 0 0 0 "ES Wellcome message when porting is done" no "" "" "R2" "" "MNP" yes
 33 01/01/07 16/05/07 "SMS" "MNPDone2" 1 "" "¡Bienvenid@, ya eres de Yoigo! La portabilidad de #CLI se ha completado." 1 5 "" "" "" "1" 0 0 0 "Welcome message when porting is done" no "" "" "" "" "" yes
 16 01/12/06 01/05/07 "SMS" "MNPDoneTemp" 1 "" "¡Bienvenid@ a Yoigo! La portabilidad se ha completado. Tu número provisional está desactivado y ya puedes utilizar tu número de siempre #CLI ." 1 5 "" "" "" "1" 0 0 1 "Confirmation to Temporary number when MNP done" no "" "" "" "" "" yes
-345 04/06/12 31/12/49 "SMS" "MNPEnumePOS" 1 "AREC ENUME Mnp request status Rejected" "Yoigo info: Tu operador rechaza tu portabilidad del #CLI por un error en datos. Necesitamos hablar contigo, por favor llamanos gratis al 800 622 111." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "MNP" yes
+345 04/06/12 31/12/49 "SMS" "MNPEnumePOS" 1 "AREC ENUME Mnp request status Rejected" "Yoigo info: Tu portabilidad movil ha sido rechazada por operador actual incorrecto. La volvemos a solicitar al operador correcto. Gracias." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "MNP" yes
 14 01/05/07 24/03/09 "SMS" "MNPFinRem" 1 "" "¡Ha llegado la hora! Desde las 6:00 sustituye la vieja SIM por la de Yoigo y olvídate de a quién o a qué hora llamas, con Yoigo pagas siempre lo mismo." 1 5 "" "" "" "1" 0 0 0 "ES Informing customer to change YOIGO SIM" no "" "" "" "" "" yes
 39 01/05/07 11/09/12 "SMS" "MNPFinRem" 1 "" "Your hour has arrived. From 6:00 replaces your old SIM by the Yoigo one and forget to whom and what time you call, with Yoigo you always pay the same." 5 5 "" "" "" "1" 0 0 0 "ENG Informing customer to change YOIGO SIM" no "" "" "R2" "" "" yes
 136 25/03/09 11/09/12 "SMS" "MNPFinRem" 1 "" "Yoigo info: A partir de las 6.00am ya seras de Yoigo. Pon la nueva SIM de Yoigo en tu móvil. Recogela en tienda o llama si no la has recibido al 800 622 600." 1 5 "" "" "" "1" 0 0 0 "ES Informing customer to change YOIGO SIM" no "" "" "R2" "" "" yes
@@ -1615,8 +1634,8 @@ nuevo telefono. Llamanos lo antes posible al 622 para confirmar tus datos, la ll
 363 05/09/12 20/11/12 "SMS" "MNPFinRemDirect" 1 "Informing customer to change to Yoigo SIM (Direct)" "Yoigo info: Tomorrow from 6.00am you will be Yoigo. Put the new Yoigo SIM in your phone. If you have not received it yet, call free 1707 option 2." 5 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "MNP" yes
 364 05/09/12 31/12/49 "SMS" "MNPFinRemPos" 1 "Informing customer to change to Yoigo SIM (POS)" "Yoigo info: A partir de las 06:00 seras de Yoigo. Puedes recoger tu nueva SIM de Yoigo en la tienda desde las 14:00 de hoy. " 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "MNP" yes
 365 05/09/12 20/11/12 "SMS" "MNPFinRemPos" 1 "Informing customer to change to Yoigo SIM (POS)" "Yoigo info: Tomorrow from 06:00 you will be Yoigo. You can pick your new Yoigo SIM in the store today from 14:00." 5 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "MNP" yes
-346 04/06/12 31/12/49 "SMS" "MNPIccidPos" 1 "MNP AREC ICCID (POS)" "Yoigo info: Tu operador rechaza tu portabilidad del #CLI por un error en datos. Necesitamos hablar contigo, por favor llamanos gratis al 800 622 111." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R1" "" "MNP" yes
-168 30/07/10 31/12/49 "SMS" "MNPIdentDirect" 1 "" "Yoigo info: Tu operador rechaza tu portabilidad del #CLI por un error en datos. Necesitamos hablar contigo, por favor llamanos gratis al 800 622 111." 1 5 "" "" "" "1" 0 0 0 "IDENT rejection CC;Self order" no "" "" "R1" "" "MNP" yes
+346 04/06/12 31/12/49 "SMS" "MNPIccidPos" 1 "MNP AREC ICCID (POS)" "Yoigo info: Tu operador rechaza tu portabilidad del #CLI por error en datos. Necesitamos hablar contigo, llamanos gratis al 800 622 111 de 9 a 18h L a V." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R1" "" "MNP" yes
+168 30/07/10 31/12/49 "SMS" "MNPIdentDirect" 1 "" "Yoigo info: Tu operador rechaza tu portabilidad del #CLI por error en datos. Necesitamos hablar contigo, llamanos gratis al 800 622 111 de 9 a 18h L a V." 1 5 "" "" "" "1" 0 0 0 "IDENT rejection CC;Self order" no "" "" "R1" "" "MNP" yes
 169 30/07/10 20/11/12 "SMS" "MNPIdentDirect" 1 "" "Yoigo info: Your operator rejects your portability #CLI due to an error in your personal data. We need to talk to you, please call us free at 800 622 111" 5 5 "" "" "" "1" 0 0 0 "IDENT rejection CC;Self order" no "" "" "R1" "" "MNP" yes
 170 30/07/10 31/12/49 "SMS" "MNPIdentPOS" 1 "" "Yoigo info: Por error en los datos se ha rechazado tu portabilidad. Lo sentimos de verdad. Por favor, ve a una tienda Yoigo paraque tramiten tu portabilidad." 1 5 "" "" "" "1" 0 0 0 "IDENT rejection POS;Exclusive channels" no "" "" "R2" "" "MNP" yes
 171 30/07/10 20/11/12 "SMS" "MNPIdentPOS" 1 "" "Yoigo info: Due to an error in your personal data your portability has been rejected. We are sorry. Please go to a Yoigo store to process your portability" 5 5 "" "" "" "1" 0 0 0 "IDENT rejection POS;Exclusive channels" no "" "" "R2" "" "MNP" yes
@@ -1703,6 +1722,7 @@ nuevo telefono. Llamanos lo antes posible al 622 para confirmar tus datos, la ll
 119 12/11/08 31/12/49 "SMS" "PREMIUMFRAUD2" 1 "Limit 2 exceeded" "Has superado tu limite de consumo en llamadas Premium. Suspendemos tu linea temporalmente para tu seguridad. Para reactivarla llamanos al 622." 1 5 "" "" "" "1" 0 0 0 "PREMIUM FRAUD" no "" "" "R1+R3" "" "Fraud_Control" yes
 477 01/09/14 31/12/49 "SMS" "PREMIUMFRAUD3" 1 "Limit 3 exceeded" "Llevas gastado mas de 40 euros en servicios Premium. Para seguir usando estos servicios, responde SI a este mensaje. Si no los quieres, responde NO." 1 5 "" "" "" "1" 0 0 0 "PREMIUM FRAUD" no "" "" "R1+R3" "22745" "" yes
 2 01/11/06 24/06/12 "SMS" "PreToPost" 1 "" "Desde ahora ya eres de contrato. A final de mes recibirás tu primera factura. Yoigo" 1 5 "" "" "I" "1" 0 0 0 "Pre to Postpaid migration" no "" "" "" "" "" yes
+556 12/06/17 31/12/49 "SMS" "Q25ExtensionCetelem" 1 "Quota 25 extension request created" "?Ya esta! Te confirmamos que Yoigo y Cetelem hemos aplazado el Pago Final de tu movil en 12 pagos (#AMOUNT/mes) desde #MONTHNAME de #YEAR. TIN y TAE 0%." 1 5 "" "" "i" "1" 0 0 0 "" no "" "" "R2" "" "" yes
 515 01/02/16 31/12/49 "SMS" "Q25ExtensionSabadell" 1 "Quota 25 extension request created" "¡Ya esta! Te confirmamos que Yoigo y Sabadell hemos aplazado el Pago Final de tu movil en 12 pagos (#AMOUNT/mes) desde #MONTHNAME de #YEAR. TIN y TAE 0%." 1 5 "" "" "i" "1" 0 0 0 "" no "" "" "R2" "" "" yes
 516 01/02/16 31/12/49 "SMS" "Q25ExtensionUNOE" 1 "Quota 25 extension request created" "¡Ya esta! Te confirmamos que Yoigo y BBVA hemos aplazado el Pago Final de tu movil en 12 pagos (#AMOUNTE/mes) desde #MONTHNAME de #YEAR. TIN y TAE 0%." 1 5 "" "" "I" "1" 0 0 0 "" no "" "" "R2" "" "" yes
 517 01/02/16 31/12/49 "SMS" "Q25ExtensionYoigo" 1 "Quota 25 extension request (Yoigo)" "¡Ya esta! Te confirmamos que Yoigo ha aplazado el Pago Final de tu movil en 12 pagos (#AMOUNTE/mes) desde #MONTHNAME de #YEAR. TIN y TAE 0%." 1 5 "" "" "I" "1" 0 0 0 "" no "" "" "R2" "" "" yes
@@ -1784,6 +1804,66 @@ nuevo telefono. Llamanos lo antes posible al 622 para confirmar tus datos, la ll
 114 29/09/08 04/02/14 "SMS" "STC_DONE" 1 "STC Done" "Ya esta hecho el cambio de suscripcion que pediste, tienes #CLITYPE. Mas info sobre tu tarifa en www.yoigo.com o llamando al 622." 1 5 "" "" "I" "1" 0 0 0 "" no "" "" "R2" "" "STC" yes
 473 05/02/14 31/12/49 "SMS" "STC_DONE" 1 "STC Done" "Ya esta hecho el cambio de tarifa que pediste, ahora tienes #CLITYPE. Tienes toda la info sobre tu tarifa en www.yoigo.com" 1 5 "" "" "I" "1" 0 0 0 "" no "" "" "R2" "" "" yes
 474 05/02/14 31/12/49 "SMS" "STC_Requested" 1 "STC Requested SMS" "Tu cambio a la tarifa #CLITYPE se hara el #DATE. Si no lo pediste llama al 622. +info en www.yoigo.com" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R1" "" "" yes
+535 29/05/17 31/12/49 "SMS" "TARJ10Act" 1 "Yoigo info:Welcome SMS  - New adds LA PREPAGO 1GB + 20min" "Yoigo info: Bienvenido a La Prepago de 1 GB: 1GB a alta veloc hasta 4G y 20 min gratis por 8,5 Eur/mes. Despues llamar 3 cent/min + 20 cent establec. IVA incl." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+536 29/05/17 31/12/49 "SMS" "TARJ10DeAct" 1 "Warning SMS - Not activation or renewal because not enough balance" "Yoigo info: Necesitas un saldo minimo de 7,03 Eur para renovar el GB y los
+minutos de tu tarifa. Recarga ahora o navega a baja veloc. a 3,63 cent/MB
+IVA incl." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+537 29/05/17 31/12/49 "SMS" "TARJ10RenewalNOK" 1 "Not activation or renewal because not enough balance" "Yoigo info: Necesitas un saldo minimo de 7,03 Eur para renovar el GB y los
+minutos de tu tarifa. Recarga ahora o navega a baja veloc. a 3,63 cent/MB
+IVA incl." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+538 29/05/17 31/12/49 "SMS" "TARJ10RenewalOk" 1 "Warning  SMS - 1 GB +20min successful renewal" "Yoigo info: Ya tienes 1 GB a alta veloc. + 20 min hasta el dia #DATE.
+Recuerda ese dia tener al menos 8 euros de saldo para que se renueve para
+el mes siguiente" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+539 29/05/17 31/12/49 "SMS" "TARJ10RenewalReminder" 1 "Warning SMS - Reminder the day before renewal" "Yoigo info: Manana a primera hora se renueva el GB a alta veloc y los 20
+min gratis de tu tarifa. Recuerda tener al menos 7,02 Eur de saldo para que se activen." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+540 29/05/17 31/12/49 "SMS" "TARJ10STC" 1 "STC to La prepago de 1GB" "Yoigo info: Tu cambio de tarifa a la Prepago de 1GB se hara el 1 de
+proximo mes. Recuerda tener ese dia al menos 7,02 EUR de saldo para que se
+active la tarifa" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+541 29/05/17 31/12/49 "SMS" "TARJ10STCScheduled" 1 "STC SMS - STC already scheduled SMS (La Prepago 1GB)" "Yoigo info: Tu cambio a la Tarifa de 1GB se hara maÃ±ana por ela maÃ±ana.
+Recuerda tener minimo 8 euros de saldo para renovar la cuota." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+542 29/05/17 31/12/49 "SMS" "TARJ11ACT" 1 "Welcome SMS  - New adds LA prepago 2GB +50min" "Yoigo info: Bienvenido a La Prepago de 2 GB: 2GB a alta veloc hasta 4G y 50 min gratis por 10 E/mes. Despues llamar a 3 cen/min + 20 cen de establec. IVA incl." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+543 29/05/17 31/12/49 "SMS" "TARJ11DeAct" 1 "Warning SMS - Not activation or renewal because not enough balance" "Yoigo info: Necesitas un saldo minimo de 8,26 E para renovar los GB y
+minutos de tu tarifa. Recarga ahora o navega a baja velocidad a 3,63
+cent/MB IVA incluido" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+544 29/05/17 31/12/49 "SMS" "TARJ11RenewalNOK" 1 "Not activation or renewal because not enough balance" "Yoigo info: Necesitas un saldo minimo de 8,26 E para renovar los GB y
+minutos de tu tarifa. Recarga ahora o navega a baja velocidad a 3,63
+cent/MB IVA incluido" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+545 29/05/17 31/12/49 "SMS" "TARJ11RenewalOK" 1 "Warning  SMS - 2 GB +50min successful renewal" "Yoigo info: Ya tienes 2 GB a alta veloc. + 50 min hasta el dia #DATE.
+Recuerda ese dia tener al menos 8,26 euros de saldo para que se renueve la
+tarifa." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+546 29/05/17 31/12/49 "SMS" "TARJ11RenewalReminder" 1 "Warning SMS - Reminder the day before renewal" "Yoigo info: Manana a primera hora se renuevan los GB a alta veloc y los 50
+min gratis de tu tarifa. Recuerda tener minimo 8,26E de saldo para poder
+activarlos" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+547 29/05/17 31/12/49 "SMS" "TARJ11STC" 1 "STC to La prepago de 2GB" "Yoigo info: Tu cambio de tarifa a la Prepago 2GB se hara manana a primera
+hora. Recuerda tener como minimo un saldo 8,26 euros para que se active la
+tarifa" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+548 29/05/17 31/12/49 "SMS" "TARJ11STCScheduled" 1 "STC SMS - STC already scheduled SMS (La Prepago 2GB)" "Yoigo info: Tu cambio de tarifa a la Prepago 2GB se hara el 1 del proximo
+mes. Recuerda ese dia tener como minimo un saldo de 8,26 para que se active la tarifa." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+549 29/05/17 31/12/49 "SMS" "TARJ12Act" 1 "Welcome SMS  - New adds LA prepago 4GB + 100min" "Yoigo info: Bienvenido a La Prepago de 4GB: 4GB a alta veloc hasta 4G y 100 min gratis por 15 E/mes. Despues llamadas a 3 cent/min + 20cent estab. llam IVA incl" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+550 29/05/17 31/12/49 "SMS" "TARJ12DeAct" 1 "Warning SMS - Not activation or renewal because not enough balance" "Yoigo info: Necesitas un saldo minimo de 12,40 Eur para renovar los GB y
+los minutos de tu tarifa. Recarga ahora o navega a baja veloc. a 3,63
+cen/MB IVA incl" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_bundle" yes
+551 29/05/17 31/12/49 "SMS" "TARJ12RenewalNOK" 1 "Not activation or renewal because not enough balance" "Yoigo info: Necesitas un saldo minimo de 12,40 Eur para renovar los GB y
+los minutos de tu tarifa. Recarga ahora o navega a baja veloc. a 3,63
+cen/MB IVA incl" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+552 29/05/17 31/12/49 "SMS" "TARJ12RenewalOK" 1 "Warning  SMS - 4 GB + 100min successful renewal" "Yoigo info: Ya tienes 4 GB a alta veloc. +100 min hasta el dia #DATE.
+Recuerda ese dia tener al menos 12,40 Eur de saldo para que se renueve la
+tarifa." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+553 29/05/17 31/12/49 "SMS" "TARJ12RenewalReminder" 1 "Warning SMS - Reminder the day before renewal" "Yoigo info: Manana a primera hora se renuevan los GBs y los 100 min gratis
+de tu tarifa. Recuerda tener al menos 12,40 Eur de saldo para poder
+activarlos." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_bundle" yes
+554 29/05/17 31/12/49 "SMS" "TARJ12STC" 1 "STC to La prepago de 4GB" "Yoigo info: Tu cambio de tarifa az la Prpeago de 4GB se hara maÃ±aina a
+primera hora. Recuerda tener al menos 12,40 Eur de saldo para que se active la tarifa." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+555 29/05/17 31/12/49 "SMS" "TARJ12STCScheduled" 1 "STC SMS - STC already scheduled SMS (La Prepago 4GB)" "Yoigo info: Tu cambio de tarifa a la Prepago 4GB se hara el 1 del proximo
+mes. Recuerda ese dia tener al menos 12,40 Eur de saldo para que se active
+la tarifa." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_bundle" yes
+7059 01/05/17 31/12/49 "SMS" "TARJ13Act" 1 "Welcome SMS  - New adds LA PREPAGO DE LLAMADAS ILIMITADAS" "Yoigo info: Ya tienes La Prepago de llamadas ilmitadas + 100MB por 12 E/mes. Si no hay saldo para renovar la cuota, llamar 6 cen/min + 20 cen est. llam IVA inc." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+7060 01/05/17 31/12/49 "SMS" "TARJ13DeAct" 1 "Warning SMS - Not activation or renewal because not enough balance" "Yoigo info: No tienes saldo para renovar tu tarifa. Necesitas al menos 9,92 Eur para activar llamadas ilimitadas. Recarga o llama a 6 cen/min + 20 cen establec." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+7062 01/05/17 31/12/49 "SMS" "TARJ13RenewalNOK" 1 "Not activation or renewal because not enough balance" "Yoigo info: No tienes saldo para renovar tu tarifa. Necesitas al menos 9,92 Eur para activar llamadas ilimitadas. Recarga o llama a 6 cen/min + 20 cen establec." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+7063 01/05/17 31/12/49 "SMS" "TARJ13RenewalOK" 1 "Warning  SMS - 4 GB + 100min successful renewal" "Yoigo info: Ya tienes llamadas ilimitadas +100 MB hasta el dia #DATE. Recuerda ese dia tener al menos 9,92 Eur de saldo para que se renueve la tarifa." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+7064 01/05/17 31/12/49 "SMS" "TARJ13RenewalReminder" 1 "Warning SMS - Reminder the day before renewal" "Yoigo info: Manana a primera hora se renuevan los 100 MB a alta velocidad de tu tarifa. Recuerda tener al menos 9,92E de saldo para que se pueda renovar." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+7065 01/05/17 31/12/49 "SMS" "TARJ13STC" 1 "STC to La PREPAGO DE LLAMADAS ILIMITADAS" "Yoigo info: Tu cambio a la Tarifa de llamadas ilimitadas se hara manana. Recuerda tener al menos 9,92 Eur de saldo para que se active la tarifa." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
+7066 01/05/17 31/12/49 "SMS" "TARJ13STCScheduled" 1 "STC SMS - STC already scheduled SMS (La PREPAGO DE LLAMADAS ILIMITADAS)" "Yoigo info: Tu cambio a la Tarifa de Llamadas Ilimitadas se hara el dia 1 del mes que viene. Recuerda tener al menos 9,92 Eur de saldo para que se active." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes
 69 01/01/08 19/10/11 "SMS" "TARJ2_CONT" 1 "Change of subscription type SMS" "It is already done the change from Tarjeta 2 to Contrato, thus we are. The balance that you have will be discounted from you invoice and your calls to Yoigo already are 0 cents/min." 5 5 "" "" "I" "1" 0 0 0 "" no "" "" "" "" "" yes
 70 01/01/08 19/10/11 "SMS" "TARJ2_CONT" 1 "Change of subscription type SMS" "Ya esta hecho el cambio de Tarjeta 2 a Contrato, así somos. El saldo que tenías, lo descontaremos de tu factura y tus llamadas a Yoigos ya son 0 cent/min." 1 5 "" "" "I" "1" 0 0 0 "" no "" "" "" "" "" yes
 73 01/01/08 19/10/11 "SMS" "TARJ2_CONT2" 1 "Change of subscription type SMS" "It is already done the change from Tarjeta 2 to Contrato 2, thus we are. Forget to make top up. The balance that you have will be discounted from you invoice." 5 5 "" "" "I" "1" 0 0 0 "" no "" "" "" "" "" yes
@@ -1881,7 +1961,7 @@ nuevo telefono. Llamanos lo antes posible al 622 para confirmar tus datos, la ll
 460 01/11/13 31/12/49 "SMS" "UpsellTARJ7Act" 1 "Upsell activation request received" "En este momento te estamos activando tus 300 MB a alta velocidad. En breve podras utilizarlos." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R1" "" "Upsell" yes
 461 01/11/13 31/12/49 "SMS" "UpsellTARJ7Failed" 1 "TARJ7 Upsell failed due to AIR or base bundle not active" "Por un error en los sistemas no se han activado los 300 MB a alta velocidad y no se te han cobrado los 3 E.Lo sentimos ¿puedes intentarlo mas tarde?" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R1" "" "Upsell" yes
 462 01/11/13 31/12/49 "SMS" "UpsellTARJ7NoBal" 1 "Upsell activation failed, no balance" "No podemos activar tus 300 MB a alta veloc porque no tienes saldo suficiente. Recuerda, necesitas minimo  3E. Haz una recarga e intentalo de nuevo" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R1" "" "Upsell" yes
-479 01/01/15 31/12/49 "SMS" "VOICE100Limit" 1 "VOICE100 minutes limit is exceeded" "Has usado todos los min. incluidos en tu Tarifa Plana. Desde ahora y hasta fin de mes llamadas a 0 cent/min +20 cent establec. IVA incluido." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R1" "" "Voice_Limit" yes
+479 01/01/15 31/12/49 "SMS" "VOICE100Limit" 1 "VOICE100 or VOICE200 minutes limit is exceeded" "Has usado todos los min. incluidos en tu Tarifa Plana. Desde ahora y hasta fin de mes llamadas a 0 cent/min +20 cent establec. IVA incluido." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R1" "" "Voice_Limit" yes
 411 01/12/12 31/12/49 "SMS" "VOICE3000Limit" 1 "The VOICE3000 contract limit is exceeded" "Has llegado al limite de 3000 minutos de tu promocion. A partir de ahora tus llamadas a fijos y moviles nacionales son 1 cent/min (imp no incl.)" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R1" "22622" "Voice_Limit" yes
 529 01/10/16 31/12/49 "SMS" "VOICE4800Limit" 1 "The VOICE4800 contract limit is reached" "Recuerda, para hacer un uso razonable de tu tarifa hay un limite de 5000 min/mes. Te quedan 200 min. Despues: llam. nac. 14,52 cent/min y estb. llam. 18,15 cent." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R1" "" "" yes
 530 01/10/16 31/12/49 "SMS" "VOICE5000Limit" 1 "The VOICE5000 contract limit is reached" "Para hacer un uso razonable de tu tarifa hay un limite de 5000 min/mes. Los has superado. A partir de ahora: llam. nac. 14,52 cent/min y estb. llam. 18,15 cent." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R1" "" "" yes

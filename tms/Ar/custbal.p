@@ -7,12 +7,11 @@
   CHANGED ......: 
   Version ......: 
   ---------------------------------------------------------------------- */
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'CustBal'}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'CustBal'}
 
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO.
 
@@ -83,16 +82,16 @@ form
     lcBalType            COLUMN-LABEL "Desc."   FORMAT "X(28)" 
     ttCustBal.Amt        COLUMN-LABEL "Balance" FORMAT "->>,>>>,>>9.99" 
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc)
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc)
        " DETAILED A/R BALANCES "
     FRAME sel.
 
 form /* seek  CustBal */
     "MSISDN:" lcCLI FORMAT "X(12)"  
     HELP "Enter MSISDN"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND MSISDN "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FUNCTION fMakeTemp RETURNS LOGIC
    (icType AS CHAR,
@@ -110,7 +109,7 @@ FUNCTION fMakeTemp RETURNS LOGIC
 END FUNCTION.    
     
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 RUN pGetBalances.
@@ -189,27 +188,27 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk    = 0
-        ufk[1] = 36
-        ufk[4] = 1642
-        ufk[8] = 8 
-        ehto   = 3 
+        Syst.Var:ufk    = 0
+        Syst.Var:ufk[1] = 36
+        Syst.Var:ufk[4] = 1642
+        Syst.Var:ufk[8] = 8 
+        Syst.Var:ehto   = 3 
         ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
         
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttCustBal.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttCustBal.CLI WITH FRAME sel.
+        CHOOSE ROW ttCustBal.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) ttCustBal.CLI WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -218,10 +217,10 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -239,7 +238,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -264,7 +263,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -290,7 +289,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ttCustBal WHERE recid(ttCustBal) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -314,7 +313,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -329,11 +328,11 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 AND Syst.Var:ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        UPDATE lcCLI WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -355,7 +354,7 @@ REPEAT WITH FRAME sel:
      END. /* Search-1 */
 
      /* refund balances */
-     ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0 THEN DO:  
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 AND Syst.Var:ufk[4] > 0 THEN DO:  
         RUN local-find-this(FALSE).
 
         IF ttCustBal.BalType NE "AP" THEN DO:
@@ -364,7 +363,7 @@ REPEAT WITH FRAME sel:
            NEXT.
         END.
         
-        RUN refundadvp(iiCustNum,
+        RUN Ar/refundadvp.p(iiCustNum,
                        ttCustBal.CLI).
 
         RUN pGetBalances.
@@ -376,25 +375,25 @@ REPEAT WITH FRAME sel:
         NEXT LOOP.
      END.
      
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(ttCustBal) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(ttCustBal) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 PROCEDURE local-find-this:
@@ -454,8 +453,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
 
    
-   lcBalType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                "CustBal",
+   lcBalType = Func.Common:mTMSCodeName("CustBal",
                                 "BalType",
                                 ttCustBal.BalType).
 END PROCEDURE.

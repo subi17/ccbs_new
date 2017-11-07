@@ -1,6 +1,6 @@
-{commpaa.i}
-gcbrand = "1".
-katun = "Qvantel".
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
 
 DEF VAR ldReqAmt  AS DEC  NO-UNDO.
 DEF VAR ldaDate   AS DATE NO-UNDO.
@@ -15,10 +15,10 @@ OUTPUT TO "/apps/yoigo/tms_support/testing/contm2_fee_change.txt" append.
 
 EACH_MOBSUB:
 FOR FIRST DayCampaign WHERE
-          DayCampaign.Brand = gcBrand AND
+          DayCampaign.Brand = Syst.Var:gcBrand AND
           DayCampaign.DCEvent = "CONTM2" NO-LOCK,
     EACH DCCLI WHERE
-         DCCLI.Brand = gcBrand AND
+         DCCLI.Brand = Syst.Var:gcBrand AND
          DCCLI.DCEvent = "CONTM2" AND
          DCCLI.ValidTo >= ldaDate NO-LOCK,
    FIRST MobSub WHERE
@@ -30,20 +30,20 @@ FOR FIRST DayCampaign WHERE
    STATUS DEFAULT STRING(licount).
 
    FOR EACH FixedFee NO-LOCK USE-INDEX HostTable WHERE
-            FixedFee.Brand     = gcBrand   AND 
+            FixedFee.Brand     = Syst.Var:gcBrand   AND 
             FixedFee.HostTable = "MobSub"  AND
             FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
             FixedFee.CalcObj   = DCCLI.DCEvent:
 
       IF FixedFee.Amt <> ldAmt THEN NEXT EACH_MOBSUB.
 
-      RUN closefee.p(FixedFee.FFNum,
+      RUN Mc/closefee.p(FixedFee.FFNum,
                      (ldaDate - 1),
                      FALSE, /* credit billed fees */
                      TRUE,
                      MobSub.MsSeq,
                      "", /* Data bundle id */
-                     katun, /* eventlog.usercode */
+                     Syst.Var:katun, /* eventlog.usercode */
                      "SummerCampaign-PriceChange", /* eventlog.memo */
                      0,
                      OUTPUT ldReqAmt).
@@ -56,7 +56,7 @@ FOR FIRST DayCampaign WHERE
       NEXT.
    END.
 
-   RUN creasfee.p(MobSub.CustNum,
+   RUN Mc/creasfee.p(MobSub.CustNum,
                   MobSub.MsSeq,
                   (IF ldaDate > DCCLI.ValidFrom THEN ldaDate ELSE DCCLI.ValidFrom),
                   "FeeModel",
@@ -67,7 +67,7 @@ FOR FIRST DayCampaign WHERE
                   STRING(TODAY,"99.99.9999") +  /* memo */
                   "¤" +  DCCLI.DCEvent ,  /* calcobject */
                   FALSE,              /* no messages to screen */
-                  katun,
+                  Syst.Var:katun,
                   "SummerCampaign-PriceChange",
                   0, /* order id */
                   "DCCLI",

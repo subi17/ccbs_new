@@ -1,9 +1,8 @@
-{commpaa.i}
-gcbrand = "1".
-katun = "Qvantel".
-{ftransdir.i}
-{timestamp.i}
-{printdoc1tt.i}
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
+{Func/ftransdir.i}
+{Inv/printdoc1tt.i}
 
 def stream sInputFile.
 def stream sout.
@@ -68,7 +67,7 @@ DO WHILE TRUE
     EMPTY TEMP-TABLE ttInputFileContent.
     EMPTY TEMP-TABLE ttInvoice.
 
-    ASSIGN ldThisRun = fMakeTS()
+    ASSIGN ldThisRun = Func.Common:mMakeTS()
            liPrinted = 0
            liTotalInvoices = liTotalInvoices + liInvCount
            liInvCount = 0.

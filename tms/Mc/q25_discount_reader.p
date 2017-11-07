@@ -8,13 +8,13 @@
   Version ......: yoigo
 -------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
-   katun   = "Cron"
-   gcBrand = "1".
-{tmsconst.i}
-{ftransdir.i}
-{cparam2.i}
+   Syst.Var:katun   = "Cron"
+   Syst.Var:gcBrand = "1".
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
 
 DEF VAR lcIncDir        AS CHAR NO-UNDO.
 DEF VAR lcProcDir       AS CHAR NO-UNDO.
@@ -98,7 +98,7 @@ REPEAT:
       END.
 
       FIND FIRST MobSub NO-LOCK WHERE
-                 MobSub.Brand = gcBrand AND
+                 MobSub.Brand = Syst.Var:gcBrand AND
                  MobSub.CLI = lcMSISDN NO-ERROR.
       IF NOT AVAILABLE MobSub THEN DO:
          fError("Unknown Subscription").
@@ -115,7 +115,7 @@ REPEAT:
 
       CREATE Limit.
       ASSIGN
-         Limit.Brand     = gcBrand
+         Limit.Brand     = Syst.Var:gcBrand
          Limit.MsSeq     = MobSub.MsSeq
          Limit.LimitAmt  = ldLimitAmt
          Limit.LimitType = {&LIMIT_TYPE_Q25_DISCOUNT}

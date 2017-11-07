@@ -10,12 +10,11 @@
 DISABLE TRIGGERS FOR LOAD OF FixedFee.
 DISABLE TRIGGERS FOR LOAD OF SingleFee.
 
-{commpaa.i}
-{cparam2.i}
-{timestamp.i}
-{billrund.i NEW}
-{funcrunprocess_run.i}
-{funcrunprocess_update.i}
+{Syst/commpaa.i}
+{Func/cparam2.i}
+{Inv/billrund.i NEW}
+{Syst/funcrunprocess_run.i}
+{Syst/funcrunprocess_update.i}
 
 DEF VAR liCustQty    AS INT  NO-UNDO.
 DEF VAR lhHandle     AS HANDLE NO-UNDO.
@@ -63,9 +62,9 @@ QUIT.
 PROCEDURE pInitialize:
 
    ASSIGN
-      gcBrand      = '1'
-      katun        = 'cron'
-      ldeBegTime   = fMakeTS()
+      Syst.Var:gcBrand      = '1'
+      Syst.Var:katun        = 'cron'
+      ldeBegTime   = Func.Common:mMakeTS()
       ldaEBADueDate = ?
       ldaIberPayDueDate = ?.
 
@@ -126,7 +125,7 @@ PROCEDURE pInitialize:
             FuncRunResult.FRResultSeq = FuncRunProcess.ProcSeq:
 
       FIND FIRST Customer WHERE
-                 Customer.Brand   = gcBrand AND 
+                 Customer.Brand   = Syst.Var:gcBrand AND 
                  Customer.CustNum = FuncRunResult.IntParam
       NO-LOCK NO-ERROR.
       
@@ -145,7 +144,7 @@ PROCEDURE pInitialize:
                        ENTRY(2,FuncRunResult.CharParam,":").
    END.
 
-   RUN lamupers.p PERSISTENT SET lhHandle.
+   RUN Inv/lamupers.p PERSISTENT SET lhHandle.
 
 END PROCEDURE.
    
@@ -168,11 +167,11 @@ PROCEDURE pCreateInvoices:
       CREATE ActionLog.
    
       ASSIGN
-         ActionLog.ActionTS     = fMakeTS()
-         ActionLog.Brand        = gcBrand
+         ActionLog.ActionTS     = Func.Common:mMakeTS()
+         ActionLog.Brand        = Syst.Var:gcBrand
          ActionLog.TableName    = "Invoice"
          ActionLog.KeyValue     = lcBillRun
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionID     = "BillRun"
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
                                   MONTH(TODAY)
@@ -209,10 +208,9 @@ PROCEDURE pFinalize:
    DEF INPUT PARAMETER icProcessError AS CHAR NO-UNDO.
     
 
-   ldeEndTime = fMakeTS().
+   ldeEndTime = Func.Common:mMakeTS().
 
-   liDurDays = DYNAMIC-FUNCTION("fTSDuration" IN ghFunc1,
-                                ldeBegTime,
+   liDurDays = Func.Common:mTSDuration(ldeBegTime,
                                 ldeEndTime,
                                 OUTPUT liDurTime).
 
@@ -241,7 +239,7 @@ PROCEDURE pFinalize:
    DO TRANS:
 
       FIND FIRST ActionLog WHERE
-                 ActionLog.Brand        = gcBrand   AND
+                 ActionLog.Brand        = Syst.Var:gcBrand   AND
                  ActionLog.TableName    = "Invoice" AND
                  ActionLog.KeyValue     = lcBillRun AND
                  ActionLog.ActionID     = "BillRun" AND
@@ -251,11 +249,11 @@ PROCEDURE pFinalize:
          CREATE ActionLog.
    
          ASSIGN
-            ActionLog.ActionTS     = fMakeTS()
-            ActionLog.Brand        = gcBrand
+            ActionLog.ActionTS     = Func.Common:mMakeTS()
+            ActionLog.Brand        = Syst.Var:gcBrand
             ActionLog.TableName    = "Invoice"
             ActionLog.KeyValue     = lcBillRun
-            ActionLog.UserCode     = katun
+            ActionLog.UserCode     = Syst.Var:katun
             ActionLog.ActionID     = "BillRun"
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
                                      MONTH(TODAY)

@@ -6,10 +6,10 @@
 /* check if deposit/adv.payment invoice is created from order or from
    owner change request */
 
-{commali.i}
-{msreqfunc.i}
-{forderstamp.i}
-{orderfunc.i}
+{Syst/commali.i}
+{Func/msreqfunc.i}
+{Func/forderstamp.i}
+{Func/orderfunc.i}
 FUNCTION fBalanceInvoicePaid RETURNS LOGIC
    (INPUT iiInvNum    AS INT,
     INPUT iiPaymState AS INT):
@@ -20,13 +20,13 @@ FUNCTION fBalanceInvoicePaid RETURNS LOGIC
    llUpdated = FALSE.
    
    FOR EACH SingleFee NO-LOCK WHERE
-            SingleFee.Brand  = gcBrand AND
+            SingleFee.Brand  = Syst.Var:gcBrand AND
             SingleFee.InvNum = iiInvNum:
                      
       IF SingleFee.HostTable = "Order" THEN DO:
                       
          FIND Order WHERE
-              Order.Brand   = gcBrand AND
+              Order.Brand   = Syst.Var:gcBrand AND
               Order.OrderID = INTEGER(SingleFee.KeyValue) NO-LOCK NO-ERROR.                    
          IF NOT AVAILABLE Order THEN NEXT.
                       

@@ -11,10 +11,10 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MthCall'}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MthCall'}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 DEF STREAM whitelist.
@@ -46,9 +46,9 @@ def var whitelist    as c   format "x(40)"  NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhClosedCust AS HANDLE NO-UNDO.
    lhClosedCust = BUFFER ClosedCust:HANDLE.
@@ -60,13 +60,13 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhClosedCust).
+      RUN Mc/eventview2.p(lhClosedCust).
    END.
 END.
 
 DO FOR TMSUser:
    FIND FIRST TMSUser no-lock where
-              TMSUser.UserCode = katun.
+              TMSUser.UserCode = Syst.Var:katun.
    whitelist = TMSUser.RepDir + "/".
 END.
 
@@ -81,10 +81,10 @@ form
    MthCall.CloseType    /*  column-label "V"      */
 WITH
    width 80 OVERLAY scroll 1 15 DOWN
-   COLOR value(cfc)
-   title color value(ctc) " " + ynimi +
+   COLOR value(Syst.Var:cfc)
+   title color value(Syst.Var:ctc) " " + Syst.Var:ynimi +
    " Maintain monthly call counters "
-   + string(pvm,"99-99-99") + " "
+   + string(TODAY,"99-99-99") + " "
    FRAME sel.
 
 form
@@ -101,22 +101,22 @@ form
     "Closing value ....:" MthCall.CloseType
     "(1 = Limit 2 = Invoice 3 = Both)"
     WITH  OVERLAY ROW 4 centered
-    COLOR value(cfc)
-    TITLE COLOR value(ctc)
+    COLOR value(Syst.Var:cfc)
+    TITLE COLOR value(Syst.Var:ctc)
     fr-header WITH NO-LABEL
     FRAME lis.
 
 form /*  search WITH FIELD CustNum */
     seek-cust-nr
     help "Give customer number"
-    with row 4 col 2 title color value(ctc) " FIND CUSTOMER number "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND CUSTOMER number "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /*  search WITH FIELD Month */
     seek-mth
     help "Give month (YYMM)"
-    with row 4 col 2 title color value(ctc) " FIND MONTH "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND MONTH "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* UPDATE whitelist FileName */
     skip(1)
@@ -127,10 +127,10 @@ form /* UPDATE whitelist FileName */
        help "Filename of the whitelist file"
     skip(1)
     WITH ROW 8 centered width 55
-    title color value(cfc) " ADD CLOSED NUMBERS TO A File "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME wl.
+    title color value(Syst.Var:cfc) " ADD CLOSED NUMBERS TO A File "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME wl.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 FIND FIRST MthCall
@@ -153,7 +153,7 @@ ASSIGN
 */
 
 ASSIGN
-   Month = year(pvm) * 100 + month(pvm).
+   Month = year(TODAY) * 100 + month(TODAY).
 
 LOOP:
 repeat WITH FRAME sel:
@@ -168,19 +168,19 @@ repeat WITH FRAME sel:
 /* ADDING DISABLED !!
    IF must-add THEN DO:  /* MthCall -ADD  */
       HIDE FRAME lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      assign Syst.Var:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
 
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new:
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         ASSIGN CustNum = 0 Month = 0 Limit = 0 Called = 0 CloseDate = ?.
         UPDATE CustNum Month Limit Called CloseDate WITH FRAME lis EDITING:
            READKEY.
-           nap = keylabel(LASTKEY).
-           IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO:
+           Syst.Var:nap = keylabel(LASTKEY).
+           IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
               if frame-field = "cust-nr" THEN DO:
                  ASSIGN CustNum.
                  IF CustNum = 0 THEN LEAVE add-new.
@@ -292,42 +292,42 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35  ufk[2]= 910 
-        ufk[3]= (IF lcRight = "RW" THEN 913 ELSE 0) 
-        ufk[4]= (IF lcRight = "RW" THEN 909 ELSE 0)
-        ufk[5]= (IF lcRight = "RW" THEN 903 ELSE 0)
-        ufk[6]= (IF lcRight = "RW" THEN 4   ELSE 0)
-        ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        Syst.Var:ufk[1]= 35  Syst.Var:ufk[2]= 910 
+        Syst.Var:ufk[3]= (IF lcRight = "RW" THEN 913 ELSE 0) 
+        Syst.Var:ufk[4]= (IF lcRight = "RW" THEN 909 ELSE 0)
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 903 ELSE 0)
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4   ELSE 0)
+        Syst.Var:ufk[7]= 0   Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW MthCall.CustNum ;(uchoose.i;) no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) MthCall.CustNum WITH FRAME sel.
+        CHOOSE ROW MthCall.CustNum {Syst/uchoose.i} no-error WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) MthCall.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW MthCall.Month ;(uchoose.i;) no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) MthCall.Month WITH FRAME sel.
+        CHOOSE ROW MthCall.Month {Syst/uchoose.i} no-error WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) MthCall.Month WITH FRAME sel.
       END.
       IF order = 3 THEN DO:
-        CHOOSE ROW MthCall.CloseDate ;(uchoose.i;) no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) MthCall.CloseDate WITH FRAME sel.
+        CHOOSE ROW MthCall.CloseDate {Syst/uchoose.i} no-error WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) MthCall.CloseDate WITH FRAME sel.
       END.
 /*    ELSE IF order = 4 THEN DO:
-        CHOOSE ROW MthCall.??  ;(uchoose.i;) no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) MthCall.? WITH FRAME sel.
+        CHOOSE ROW MthCall.??  {Syst/uchoose.i} no-error WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) MthCall.? WITH FRAME sel.
       END.
 */
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -358,10 +358,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND MthCall where recid(MthCall) = rtab[1] no-lock.
            IF order = 1 THEN FIND prev MthCall
@@ -399,7 +399,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND MthCall where recid(MthCall) = rtab[FRAME-DOWN] no-lock .
@@ -438,7 +438,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND MthCall where recid(MthCall) = memory no-lock no-error.
         IF order = 1 THEN FIND prev MthCall
@@ -476,7 +476,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* cursor TO the downmost line */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -491,10 +491,10 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+     else if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        seek-cust-nr = ?.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE seek-cust-nr WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        IF seek-cust-nr <> ? THEN DO:
@@ -513,11 +513,11 @@ BROWSE:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        seek-mth = ?.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE seek-mth WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        IF seek-mth <> ? THEN DO:
@@ -534,7 +534,7 @@ BROWSE:
        END.
      END. /* Haku sar. 2 */
 
-     if lookup(nap,"3,f3") > 0 AND lcRight = "RW" THEN DO TRANSAction:
+     if lookup(Syst.Var:nap,"3,f3") > 0 AND lcRight = "RW" THEN DO TRANSAction:
         FIND MthCall where recid(MthCall) = rtab[FRAME-LINE]
            exclusive-lock.
         /* can't change IF already Printed */
@@ -561,17 +561,17 @@ BROWSE:
      END.
 
      /* change ALL FOR active MONTH */
-     if lookup(nap,"4,f4") > 0 AND lcRight = "RW" THEN DO:
+     if lookup(Syst.Var:nap,"4,f4") > 0 AND lcRight = "RW" THEN DO:
         FIND MthCall where recid(MthCall) = rtab[FRAME-LINE] no-lock.
-        RUN nnmtyp2(MthCall.Month).
+        RUN Mf/nnmtyp2.p(MthCall.Month).
         ASSIGN must-print = TRUE ufkey = TRUE.
         NEXT LOOP.
      END.
 
      /* append numbers TO monthly File where Printed is FALSE */
-     if lookup(nap,"5,f5") > 0 AND lcRight = "RW" 
+     if lookup(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" 
      THEN DO ON ENDKEY UNDO, NEXT LOOP: 
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         whitelist = whitelist + 
                     "wlc-" + substr(string(Month,"999999"),3) + ".dat".
 
@@ -636,13 +636,13 @@ BROWSE:
 
      END. /* f5 */
 
-     else if lookup(nap,"6,f6") > 0 AND lcRight = "RW"
+     else if lookup(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSAction:  /* removal */
        delline = FRAME-LINE.
        FIND MthCall where recid(MthCall) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.Var:ctc)
           MthCall.CustNum MthCall.Month MthCall.Called MthCall.Limit
           MthCall.CloseDate MthCall.CloseType.
 
@@ -680,7 +680,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.Var:ccc)
           MthCall.CustNum MthCall.Month MthCall.Called MthCall.Limit
           MthCall.CloseDate MthCall.CloseType.
        IF ok THEN DO:
@@ -701,16 +701,16 @@ BROWSE:
        ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     else if lookup(nap,"enter,return") > 0 AND lcRight = "RW" THEN
+     else if lookup(Syst.Var:nap,"enter,return") > 0 AND lcRight = "RW" THEN
      DO WITH FRAME lis TRANSAction:
        /* change */
        HIDE FRAME lis.
        FIND MthCall where recid(MthCall) = rtab[frame-line(sel)]
        exclusive-lock.
        IF MthCall.Printed = FALSE THEN DO:
-          assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-          RUN ufkey.
-          cfc = "lis". RUN ufcolor.
+          assign fr-header = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9.
+          RUN Syst/ufkey.p.
+          Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
           FIND Customer where
                Customer.CustNum = MthCall.CustNum no-lock no-error.
           IF AVAIL Customer THEN cust-name = CustName.
@@ -734,13 +734,13 @@ BROWSE:
      END.
 /*
      /* change ALL FOR active MONTH */
-     if lookup(nap,"7,f7") > 0 THEN DO:
-        RUN nnigcl(Month).
+     if lookup(Syst.Var:nap,"7,f7") > 0 THEN DO:
+        RUN Mc/nnigcl.p(Month).
         ASSIGN must-print = TRUE ufkey = TRUE.
         NEXT LOOP.
      END.
 */
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
        IF order = 1 THEN FIND FIRST MthCall
        /* search condition */ no-lock no-error.
        ELSE IF order = 2 THEN FIND FIRST MthCall USE-INDEX Month
@@ -753,7 +753,7 @@ BROWSE:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
        IF order = 1 THEN FIND LAST MthCall
        /* search condition */ no-lock no-error.
        ELSE IF order = 2 THEN FIND LAST MthCall USE-INDEX Month
@@ -766,11 +766,11 @@ BROWSE:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 

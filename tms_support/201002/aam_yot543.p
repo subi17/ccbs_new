@@ -1,11 +1,10 @@
-{testpaa.i}
-katun = "YOT-541".
-{timestamp.i}
+{Syst/testpaa.i}
+Syst.Var:katun = "YOT-541".
 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
    lhCustomer = BUFFER Customer:HANDLE.
@@ -37,16 +36,16 @@ repeat:
       RUN StarEventMakeModifyEvent (lhCustomer).
 
       CREATE Memo.
-      ASSIGN Memo.Brand     = gcBrand
+      ASSIGN Memo.Brand     = Syst.Var:gcBrand
              Memo.HostTable = "Customer"
              Memo.KeyValue  = string(customer.custnum)
              Memo.CustNum   = customer.custnum
              Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-             Memo.CreUser   = katun 
+             Memo.CreUser   = Syst.Var:katun 
              Memo.MemoTitle = "Información del cliente modificada"
              Memo.MemoText  = "Correos nos devuelve la carta. " + 
                               "Inhabilitamos el envío de la misma". 
-             Memo.CreStamp  = fMakeTS().
+             Memo.CreStamp  = Func.Common:mMakeTS().
 
       j = j + 1.
    end.

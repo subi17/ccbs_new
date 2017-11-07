@@ -1,10 +1,10 @@
-{commpaa.i} 
-katun = "anttis".
-gcBrand = "1".
-{msreqfunc.i}
-{daycampaign.i}
-{eventval.i}
-{fmakeservlimit.i}
+{Syst/commpaa.i} 
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
+{Func/msreqfunc.i}
+{Rate/daycampaign.i}
+{Syst/eventval.i}
+{Func/fmakeservlimit.i}
 
 def buffer m for msrequest.
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
@@ -33,7 +33,7 @@ FOR EACH msrequest where
    /* day campaign id */
    lcDCEvent = MsRequest.ReqCParam3.
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
 
@@ -46,7 +46,7 @@ FOR EACH msrequest where
    IF NOT AVAIL MsOwner THEN NEXT.
   
    FIND FIRST DCCLI WHERE
-             DCCLI.Brand      = gcBrand         AND
+             DCCLI.Brand      = Syst.Var:gcBrand         AND
              DCCLI.DCEvent    = lcDCEvent       AND
              DCCLI.MsSeq      = MsRequest.MsSeq AND
              DCCLI.ValidTo   >= ldtActDate      AND
@@ -65,7 +65,7 @@ FOR EACH msrequest where
       ldCoefficient = 1 - ((liDaysPassed + 1) / 547).
       IF ldCoefficient < 0 THEN ldCoefficient = 0.
 
-      RUN creasfee(MsOwner.CustNum,
+      RUN Mc/creasfee.p(MsOwner.CustNum,
                     MsRequest.MsSeq,
                     ldtActDate,
                     "MobSub",

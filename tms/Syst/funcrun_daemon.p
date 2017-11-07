@@ -6,17 +6,17 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
-   gcBrand = "1"
-   katun   = "fr_daemon".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun   = "fr_daemon".
    
-{heartbeat.i}
-{timestamp.i}
-{log.i}
-{cparam2.i}
-{eventlog.i}
-{host.i}
+{Func/heartbeat.i}
+{Func/log.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Syst/host.i}
+{Func/multitenantfunc.i}
 
 DEF VAR liLoop               AS INT  NO-UNDO.
 DEF VAR lcLockFile           AS CHAR NO-UNDO.
@@ -29,6 +29,7 @@ DEF VAR ldtLastMonitoring    AS DATETIME NO-UNDO.
 DEF VAR ldaLastLoggingDay    AS DATE NO-UNDO.
 DEF VAR lcHost               AS CHAR NO-UNDO.
 DEF VAR llReplica            AS LOG  NO-UNDO INIT FALSE.
+DEF VAR lcTenant             AS CHARACTER NO-UNDO. 
 
 /******** Main start *********/
 
@@ -41,10 +42,11 @@ ASSIGN
                                        "minutes")
    ldtLastMonitoring    = NOW                                    
    ldaLastLoggingDay    = TODAY
-   ldtStarted           = NOW.
+   ldtStarted           = NOW
+   lcTenant             = fGetCurrentBrand().
 
 IF lcLockFile = ? OR lcLockFile = "" THEN
-   lcLockFile = "/tmp/funcrun_daemon.lock".
+   lcLockFile = SUBST("/tmp/funcrun_daemon_&1.lock",lcTenant).
    
 UNIX SILENT VALUE("touch " + lcLockFile).   
 
@@ -90,7 +92,7 @@ DO WHILE TRUE
 
    /* monitoring */   
    IF INTERVAL(NOW,ldtLastMonitoring,"minutes") > 10 THEN DO:
-      fKeepAlive("FUNCRUN:Daemon").
+      fKeepAlive(SUBST("FUNCRUN:Daemon &1", lcTenant)).
       ldtLastMonitoring = NOW.
    END.
    
@@ -162,7 +164,7 @@ PROCEDURE pRunQueue:
    
       IF RETRY THEN LEAVE.
       
-      RUN funcrunqueue_batch.p.
+      RUN Syst/funcrunqueue_batch.p.
    END.
 
 END PROCEDURE.
@@ -173,7 +175,7 @@ PROCEDURE pRunExecution:
    
       IF RETRY THEN LEAVE.
       
-      RUN funcrunexec_batch.p.
+      RUN Syst/funcrunexec_batch.p.
    END.
 
 END PROCEDURE.
@@ -187,7 +189,7 @@ PROCEDURE pWriteLog:
 
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = gcBrand   
+         ActionLog.Brand        = Syst.Var:gcBrand   
          ActionLog.TableName    = "FuncRun"  
          ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                   STRING(MONTH(TODAY),"99")  +
@@ -198,8 +200,8 @@ PROCEDURE pWriteLog:
                                    ELSE "")
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
          ActionLog.ActionStatus = 3
-         ActionLog.UserCode     = katun
-         ActionLog.ActionTS     = fMakeTS()
+         ActionLog.UserCode     = Syst.Var:katun
+         ActionLog.ActionTS     = Func.Common:mMakeTS()
          ActionLog.ActionChar   = "Started " + 
                                   SUBSTRING(ISO-DATE(idtStarted),1,19) + 
                                   ", " + STRING(iiLoops) + " loops".

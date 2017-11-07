@@ -1,0 +1,10 @@
+bulkload: Company
+  CompName: "Xfera Moviles S.A."
+  Address: "Avda. de la Vega 15, 28100 Madrid"
+  Phone: "1707"
+  Brand: "1"
+  Phone2: "622 622 622"
+  Phone3: "www.yoigo.com"
+  CompanyID: "A-82528548"
+  HomeLocation: "Alcobendas (Madrid)"
+

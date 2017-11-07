@@ -3,8 +3,7 @@
    add / remove subscription from 'shaper' (controls speed for data subscr.)
 */
 
-{timestamp.i}
-{fmakemsreq.i}
+{Func/fmakemsreq.i}
 
 FUNCTION fTerminateShaper RETURNS LOGIC
    (INPUT  iiMsSeq       AS INT,
@@ -28,8 +27,8 @@ FUNCTION fTerminateShaper RETURNS LOGIC
       IF Subser.SSStat > 0 THEN DO: 
 
          IF idtEventDate = TODAY 
-         THEN ldActStamp = fSecOffSet(fMakeTS(),-1). /* YTS-2473 */
-         ELSE ldActStamp = fMake2DT(idtEventDate,0).
+         THEN ldActStamp = Func.Common:mSecOffSet(Func.Common:mMakeTS(),-1). /* YTS-2473 */
+         ELSE ldActStamp = Func.Common:mMake2DT(idtEventDate,0).
          
          ocParameter = SubSer.SSParam.
          

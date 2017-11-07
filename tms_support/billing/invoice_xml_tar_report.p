@@ -1,4 +1,3 @@
-{timestamp.i}
 def var lcsep as char no-undo.
 def var lcfile as char no-undo.
 def var ldainvdate as date no-undo.
@@ -26,8 +25,8 @@ hide frame ftar no-pause.
 if ldainvdate = ? or lcfile = "" then return.
     
 assign 
-   ldfrom = fmake2dt(ldainvdate,0)
-   ldto   = fmake2dt(ldainvdate,86399).
+   ldfrom = Func.Common:mMake2DT(ldainvdate,0)
+   ldto   = Func.Common:mMake2DT(ldainvdate,86399).
    
 def stream slog.
 output stream slog to value(lcfile).

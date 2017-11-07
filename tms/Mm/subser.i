@@ -2,8 +2,8 @@
    subser validations   2008/as
 */
 
-{commali.i}
-{fmakemsreq.i}
+{Syst/commali.i}
+{Func/fmakemsreq.i}
 
 FUNCTION fSubSerSSStat RETURNS INT
 (INPUT iiMsseq AS INTEGER,
@@ -12,7 +12,7 @@ INPUT iiNewSSStat AS INTEGER,
 OUTPUT ocError AS CHARACTER):
   
    FIND FIRST ServCom where 
-      ServCom.Brand   = gcBrand    AND 
+      ServCom.Brand   = Syst.Var:gcBrand    AND 
       ServCom.ServCom = icServCom NO-LOCK NO-ERROR.
    
    /* 1 */
@@ -56,7 +56,7 @@ INPUT idaSSDate AS DATE):
                                  icServCom,
                                  iiSSStat).
    IF ldeActStamp > 0 THEN DO:
-      fSplitTS(ldeActStamp,
+      Func.Common:mSplitTS(ldeActStamp,
                OUTPUT ldtActDate,
                OUTPUT liActSec).
 

@@ -14,25 +14,24 @@
                                use GroupType
   VERSION ......: M15
   ------------------------------------------------------ */
-{commali.i}
-{func.i}
-{eventval.i}
+{Syst/commali.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPNPGroup AS HANDLE NO-UNDO.
    lhPNPGroup = BUFFER PNPGroup:HANDLE.
    RUN StarEventInitialize(lhPNPGroup).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhPNPGroup).
+      RUN Mc/eventview2.p(lhPNPGroup).
    END.
 END.
 
-{remfees.i}
+{Func/remfees.i}
 
 DEF  INPUT PARAMETER   icCLI AS CHAR NO-UNDO.
 
@@ -66,10 +65,10 @@ form
    PNPGroup.dFrom
    PNPGroup.dTo
 WITH width 80 OVERLAY scroll 1 15 DOWN
-   COLOR value(cfc)
-   title color value(ctc) " " + ynimi +
+   COLOR value(Syst.Var:cfc)
+   title color value(Syst.Var:ctc) " " + Syst.Var:ynimi +
    "  " + icCLI + " PNP groups "
-   + string(pvm,"99-99-99") + " "
+   + string(TODAY,"99-99-99") + " "
    FRAME sel.
 
 form
@@ -81,18 +80,18 @@ form
    "Valid From.:" PNPGroup.dfrom                 SKIP
    "Valid To...:" PNPGroup.dto      
 WITH OVERLAY ROW 4 centered
-   COLOR value(cfc)
-   TITLE COLOR value(ctc)
+   COLOR value(Syst.Var:cfc)
+   TITLE COLOR value(Syst.Var:ctc)
    fr-header WITH no-labels
    FRAME lis.
 
 form /*  search WITH FIELD PNPGroup */
     haku-PNPGroup
     help "Give ...."
-    with row 4 col 2 title color value(ctc) " FIND xxxxxxx "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND xxxxxxx "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 RUN LOCAL-FIND-FIRST.
@@ -119,14 +118,14 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* PNPGroup -ADD  */
       HIDE FRAME lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      assign Syst.Var:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
 
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         
         DO TRANSACTION:
            FIND FIRST mobsub where 
@@ -136,7 +135,7 @@ repeat WITH FRAME sel:
                       Customer.CustNum = Mobsub.CustNum NO-LOCK NO-ERROR.
            
            FIND FIRST xxPnpgroup WHERE
-                      xxPnpgroup.Brand    = gcBrand AND 
+                      xxPnpgroup.Brand    = Syst.Var:gcBrand AND 
                       xxPnpgroup.Pnpgroup = "FRIENDS" NO-LOCK NO-ERROR.
 
            IF AVAIL xxPnpgroup THEN DO:
@@ -145,7 +144,7 @@ repeat WITH FRAME sel:
              TO PnpGroup.
               ASSIGN
                  PNPGroup.pnpseq    = NEXT-VALUE(pnpseq)
-                 PNPGroup.Brand     = gcBrand
+                 PNPGroup.Brand     = Syst.Var:gcBrand
                  PNPGroup.groupType = 2
                  Pnpgroup.PnpGroup  = icCLI
                  Pnpgroup.dFrom     = today
@@ -158,8 +157,7 @@ repeat WITH FRAME sel:
                          Customer.Custnum = Mobsub.CustNum NO-LOCK NO-ERROR. 
               IF Avail Customer THEN 
               ASSIGN   
-              PNPGroup.name      = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                                  BUFFER Customer) .
+              PNPGroup.name      = Func.Common:mDispCustName(BUFFER Customer) .
            END.
            RUN LOCAL-UPDATE-RECORD(true).
            IF LOOKUP(KEYFUNCTION(LASTKEY),"ENDKEY,END-ERROR") > 0 OR
@@ -178,7 +176,7 @@ repeat WITH FRAME sel:
               IF DAY(ldtDate) NE 1 
               THEN ldtDate = DATE(MONTH(ldtDate),1,YEAR(ldtDate)).
               
-              RUN creasfee (MobSub.CustNum,
+              RUN Mc/creasfee.p (MobSub.CustNum,
                             MobSub.MsSeq,
                             ldtDate,
                             "PNP",
@@ -187,7 +185,7 @@ repeat WITH FRAME sel:
                             ?,
                             "",
                             TRUE,
-                            katun,
+                            Syst.Var:katun,
                             "",
                             0,
                             "",
@@ -258,25 +256,25 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 0  ufk[2]= 0 ufk[3]= 0 ufk[4]= 1764
-        ufk[5]= 5  ufk[6]= 4 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        Syst.Var:ufk[1]= 0  Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 1764
+        Syst.Var:ufk[5]= 5  Syst.Var:ufk[6]= 4 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW PNPGroup.PNPGroup ;(uchoose.i;) no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) PNPGroup.PNPGroup WITH FRAME sel.
+        CHOOSE ROW PNPGroup.PNPGroup {Syst/uchoose.i} no-error WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) PNPGroup.PNPGroup WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -297,10 +295,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND PNPGroup where recid(PNPGroup) = rtab[1] no-lock.
            RUN LOCAL-FIND-PREV.
@@ -325,7 +323,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND PNPGroup where recid(PNPGroup) = rtab[FRAME-DOWN] no-lock .
@@ -351,7 +349,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND PNPGroup where recid(PNPGroup) = memory no-lock no-error.
         RUN LOCAL-FIND-PREV.
@@ -375,7 +373,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* cursor TO the downmost line */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -389,17 +387,17 @@ BROWSE:
        END.
      END. /* NEXT page */
 
-     if lookup(nap,"5,f5") > 0 THEN DO:  /* lisays */
+     if lookup(Syst.Var:nap,"5,f5") > 0 THEN DO:  /* lisays */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* removal */
+     else if lookup(Syst.Var:nap,"6,f6") > 0 THEN DO TRANSACTION:  /* removal */
        delline = FRAME-LINE.
        FIND PNPGroup where recid(PNPGroup) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.Var:ctc)
           PNPGroup.PNPGroup 
           PNPGroup.PNPGroup.
 
@@ -424,7 +422,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.Var:ccc)
           PNPGroup.PNPGroup 
           PNPGroup.PNPGroup.
        IF ok THEN DO:
@@ -435,7 +433,7 @@ BROWSE:
 
            /* in the LAST record was deleted ? */
            IF NOT can-find(FIRST PNPGroup
-              WHERE PNPGroup.Brand = gcBrand ) THEN DO:
+              WHERE PNPGroup.Brand = Syst.Var:gcBrand ) THEN DO:
               CLEAR FRAME sel no-pause.
               PAUSE 0 no-message.
               LEAVE LOOP.
@@ -446,7 +444,7 @@ BROWSE:
        ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     ELSE IF LOOKUP(nap,"4,F4") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"4,F4") > 0 THEN DO:
        FIND FIRST PNPGroup WHERE 
             RECID(PNPGroup) = rtab[FRAME-LINE] 
        NO-LOCK NO-ERROR.
@@ -455,26 +453,26 @@ BROWSE:
        NO-LOCK NO-ERROR.
                         
        IF PNPGroup.GroupType = 0 THEN
-          RUN pnplist(PNPGroup.pnpSeq).
-        ELSE  run matepnplist.p(PNPGroup.pnpseq,PNPGroup.PNPGroup).
+          RUN Mc/pnplist.p(PNPGroup.pnpSeq).
+        ELSE  RUN Mc/matepnplist.p(PNPGroup.pnpseq,PNPGroup.PNPGroup).
 
        ufkey = true.
-       run ufkey.
+       RUN Syst/ufkey.p.
        PAUSE 0.
      END.
 
-     else if lookup(nap,"7,f7") > 0 THEN DO:  /* hinnasto */
+     else if lookup(Syst.Var:nap,"7,f7") > 0 THEN DO:  /* hinnasto */
      END.
 
-     else if lookup(nap,"enter,return") > 0 THEN DO WITH FRAME lis TRANSACTION:
+     else if lookup(Syst.Var:nap,"enter,return") > 0 THEN DO WITH FRAME lis TRANSACTION:
        /* change */
        FIND FIRST PNPGroup where 
             recid(PNPGroup) = rtab[frame-line(sel)]
        exclusive-lock.
-       assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
+       assign fr-header = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9.
+       RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN ufcolor.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPNPGroup).
 
@@ -486,30 +484,30 @@ BROWSE:
 
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
        RUN LOCAL-FIND-FIRST.
        ASSIGN memory = recid(PNPGroup) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
        RUN LOCAL-FIND-LAST.
        ASSIGN memory = recid(PNPGroup) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE LOCAL-DISP-ROW: 
 
    FIND FIRST CCN WHERE
-              CCN.Brand  = gcBRand AND 
+              CCN.Brand  = Syst.Var:gcBrand AND 
               CCN.CCN    = PNPGroup.ccn
    NO-LOCK NO-ERROR.
 
@@ -527,7 +525,7 @@ PROCEDURE LOCAL-FIND-NEXT.
 
    IF order = 1 THEN 
       FIND NEXT PNPGroup WHERE
-                PNPGroup.Brand     = gcBrand AND
+                PNPGroup.Brand     = Syst.Var:gcBrand AND
                 PNPGroup.GroupType = 2       AND
                 PNPGroup.PNPGroup  = icCLi
       NO-LOCK NO-ERROR.
@@ -538,7 +536,7 @@ PROCEDURE LOCAL-FIND-PREV.
 
    IF order = 1 THEN 
       FIND PREV PNPGroup WHERE
-                PNPGroup.Brand     = gcBrand AND
+                PNPGroup.Brand     = Syst.Var:gcBrand AND
                 PNPGroup.GroupType = 2       AND
                 PNPGroup.PNPGroup  = icCLi
       NO-LOCK NO-ERROR.
@@ -548,7 +546,7 @@ END PROCEDURE.
 PROCEDURE LOCAL-FIND-FIRST.
    IF order = 1 THEN 
       FIND FIRST PNPGroup WHERE
-                 PNPGroup.Brand     = gcBrand AND
+                 PNPGroup.Brand     = Syst.Var:gcBrand AND
                  PNPGroup.GroupType = 2       AND
                  PNPGroup.PNPGroup  = icCLi
       NO-LOCK NO-ERROR.
@@ -559,7 +557,7 @@ PROCEDURE LOCAL-FIND-LAST.
 
    IF order = 1 THEN 
       FIND LAST PNPGroup WHERE
-                PNPGroup.Brand     = gcBrand AND
+                PNPGroup.Brand     = Syst.Var:gcBrand AND
                 PNPGroup.GroupType = 2       AND
                 PNPGroup.PNPGroup  = icCLi
       NO-LOCK NO-ERROR.
@@ -578,7 +576,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
    IF NOT bNew THEN DO:
 
       FIND FIRST CCN WHERE
-                 CCN.Brand = gcBrand AND 
+                 CCN.Brand = Syst.Var:gcBrand AND 
                  CCN.CCN   = PNPGroup.ccn
       NO-LOCK NO-ERROR.
 
@@ -601,8 +599,8 @@ PROCEDURE LOCAL-UPDATE-RECORD.
    WITH FRAME lis EDITING: 
 
       READKEY. 
-      nap = KEYLABEL(LASTKEY). 
-      IF lookup(nap,poisnap) > 0 THEN DO:
+      Syst.Var:nap = KEYLABEL(LASTKEY). 
+      IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
          if keylabel(lastkey) = "F4" THEN LEAVE . 
 
 
@@ -632,7 +630,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
             END.
 
             IF CAN-FIND(FIRST xxPNPGroup WHERE
-                              xxPNPGroup.Brand    = gcBrand                 AND
+                              xxPNPGroup.Brand    = Syst.Var:gcBrand                 AND
                               xxPNPGroup.PNPGroup = input PNPGroup.PNPGroup AND
                               xxPNPGroup.dto      = input PNPGroup.dto      AND
                               RECID(xxPNPGroup)   ne RECID(PNPGroup))
@@ -685,7 +683,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
                           ?,
                           TRUE,  /* clean credit fees also */
                           TRUE,  /* credit singlefee for billed items */
-                          katun,
+                          Syst.Var:katun,
                           "",
                           OUTPUT ldAmt,
                           OUTPUT liCnt).

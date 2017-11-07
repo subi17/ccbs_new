@@ -1,5 +1,5 @@
-{commpaa.i}
-gcBrand = "1".
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
 
 DEF STREAM sOL.
 DEF STREAM sOO.
@@ -26,17 +26,17 @@ REPEAT TRANSACTION:
 
    PUT STREAM sOO UNFORMATTED liOrderID ";".
    FIND FIRST Order NO-LOCK WHERE
-              Order.Brand   = gcBrand   AND
+              Order.Brand   = Syst.Var:gcBrand   AND
               Order.OrderID = liOrderID NO-ERROR.
    IF AVAILABLE Order AND Order.CustNum = 0 THEN
    DO:
       FIND FIRST OrderCustomer NO-LOCK WHERE
-                 OrderCustomer.Brand   = gcBrand       AND
+                 OrderCustomer.Brand   = Syst.Var:gcBrand       AND
                  OrderCustomer.OrderID = Order.OrderID AND
                  OrderCustomer.RowType = 1 NO-ERROR.
       IF AVAILABLE OrderCustomer THEN DO:
          FIND FIRST Customer NO-LOCK WHERE
-                    Customer.Brand      = gcBrand                  AND
+                    Customer.Brand      = Syst.Var:gcBrand                  AND
                     Customer.OrgID      = OrderCustomer.CustID     AND
                     Customer.CustIDType = OrderCustomer.CustIDType NO-ERROR.
          IF AVAILABLE Customer THEN DO:
@@ -51,28 +51,27 @@ REPEAT TRANSACTION:
          END.
       END.
 
-      RUN createcustomer(INPUT Order.OrderID,1,FALSE,TRUE,OUTPUT liCustomer).
+      RUN Mm/createcustomer.p(INPUT Order.OrderID,1,FALSE,TRUE,OUTPUT liCustomer).
       
       PUT STREAM sOO UNFORMATTED
           liCustomer ";"
           "New;Customer Created in TMS".
       llCorporate = CAN-FIND(OrderCustomer WHERE
-                             OrderCustomer.Brand      = gcBrand       AND
+                             OrderCustomer.Brand      = Syst.Var:gcBrand       AND
                              OrderCustomer.OrderID    = Order.OrderID AND
                              OrderCustomer.RowType    = 1             AND
                              OrderCustomer.CustIdType = "CIF").
 
       FOR EACH OrderCustomer NO-LOCK WHERE
-               OrderCustomer.Brand   = gcBrand AND
+               OrderCustomer.Brand   = Syst.Var:gcBrand AND
                OrderCustomer.OrderID = Order.OrderID:
          IF llCorporate AND (OrderCustomer.RowType = 1 OR OrderCustomer.RowType = 5) THEN DO:
-            RUN createcustcontact.p(OrderCustomer.OrderID,
+            RUN Mm/createcustcontact.p(OrderCustomer.OrderID,
                                     liCustomer,
                                     OrderCustomer.RowType,
                                     OUTPUT lcError).
             IF lcError > "" THEN DO:
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                "Order",
+               Func.Common:mWriteMemo("Order",
                                 STRING(OrderCustomer.OrderID),
                                 liCustomer,
                                 "CUSTOMER CONTACT CREATION FAILED",

@@ -14,10 +14,9 @@
  VERSION .......:
 ============================================================================*/
 
-{commali.i}
-{timestamp.i}
-{fsubser.i}
-{msopenbatch.i}
+{Syst/commali.i}
+{Func/fsubser.i}
+{Func/msopenbatch.i}
 
 DEF STREAM AlarmBatch.
 DEF STREAM log.
@@ -33,7 +32,7 @@ DEF VAR llDone          AS LOG NO-UNDO.
 DEF VAR liCurrPeriod    AS INT NO-UNDO.
 DEF VAR liCreditType    AS INT NO-UNDO.
 
-{cparam.i AlarmBatchDir RETURN}. AlarmBatchDir = tmsparam.charval. 
+{Func/cparam.i AlarmBatchDir RETURN}. AlarmBatchDir = tmsparam.charval. 
 
 ASSIGN
    emailfile      = AlarmBatchDir + "tmsmail.log"
@@ -47,7 +46,7 @@ PUT STREAM alarmbatch UNFORMATTED
    TODAY "|" string(time,"hh:mm:ss") "|Start" SKIP.
  
 FOR EACH Mobsub NO-LOCK WHERE
-         MobSub.Brand    = gcBrand AND
+         MobSub.Brand    = Syst.Var:gcBrand AND
          LOOKUP(STRING(Mobsub.msstatus),"7,37,47") > 0:
    
    liCreditType = fCreditTypeValue(MobSub.MsSeq,

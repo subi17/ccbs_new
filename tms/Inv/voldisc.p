@@ -12,7 +12,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{fcustcnt.i}
+{Func/fcustcnt.i}
 
 /* configurations */
 DEF TEMP-TABLE ttConf NO-UNDO

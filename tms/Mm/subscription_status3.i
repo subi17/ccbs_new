@@ -52,10 +52,10 @@ PROCEDURE subscription_status2.
    DEF VAR ContIDList  AS CHAR NO-UNDO.
    DEF VAR oiAcct      AS INT  NO-UNDO.
    
-   {cparam.i DefFixOverduedays return}. fixoverdue  = tmsparam.IntVal. 
-   {cparam.i DefMobOverduedays return}. moboverdue  = tmsparam.IntVal. 
-   {cparam.i DefFixUnpdaiLimit return}. fixlimit    = tmsparam.IntVal. 
-   {cparam.i DefMobUnpaidLimit return}. moblimit    = tmsparam.IntVal. 
+   {Func/cparam.i DefFixOverduedays return}. fixoverdue  = tmsparam.IntVal. 
+   {Func/cparam.i DefMobOverduedays return}. moboverdue  = tmsparam.IntVal. 
+   {Func/cparam.i DefFixUnpdaiLimit return}. fixlimit    = tmsparam.IntVal. 
+   {Func/cparam.i DefMobUnpaidLimit return}. moblimit    = tmsparam.IntVal. 
 
    for each Tinvno.
        delete Tinvno.
@@ -75,7 +75,7 @@ PROCEDURE subscription_status2.
          forced    = false.
 
       FOR EACH Invoice NO-LOCK WHERE 
-               Invoice.Brand    = gcBrand              AND 
+               Invoice.Brand    = Syst.Var:gcBrand              AND 
                Invoice.CustNum  = Customer.CustNum     AND 
                Invoice.dueDate <= today - moboverdue   AND 
                Invoice.Invtype  = 1                    AND 
@@ -156,14 +156,14 @@ PROCEDURE subscription_status2.
 
 
       FOR EACH Invoice NO-LOCK WHERE 
-               Invoice.Brand    = gcBrand              AND 
+               Invoice.Brand    = Syst.Var:gcBrand              AND 
                Invoice.CustNum  = Customer.CustNum     AND 
                Invoice.Invtype  = 1                    AND 
                Invoice.CrInvNum = 0 .
 
          IF  Invoice.duedate > today THEN NEXT.
                           
-         run invbal(INPUT Invoice.InvNum, OUTPUT balance).
+         RUN Ar/invbal.p(INPUT Invoice.InvNum, OUTPUT balance).
 
          unpaidbal = unpaidbal + balance.
       END.

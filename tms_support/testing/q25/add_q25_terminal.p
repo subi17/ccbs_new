@@ -1,8 +1,8 @@
 /* Terminal creation for specified orders */
-{commpaa.i}
-{tmsconst.i}
-{fsubsterminal.i}
-gcbrand = "1".
+{Syst/commpaa.i}
+{Syst/tmsconst.i}
+{Func/fsubsterminal.i}
+Syst.Var:gcBrand = "1".
 
 DEF VAR lcOrders AS CHAR NO-UNDO.
 DEF VAR liLoop AS INT NO-UNDO.

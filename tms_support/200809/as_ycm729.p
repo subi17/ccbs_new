@@ -1,7 +1,7 @@
-{commpaa.i}
-{fmakemsreq.i}
-katun = "CreSub".
-gcBrand = "1".
+{Syst/commpaa.i}
+{Func/fmakemsreq.i}
+Syst.Var:katun = "CreSub".
+Syst.Var:gcBrand = "1".
 DEFINE VARIABLE liRequest AS INTEGER NO-UNDO.
 DEFINE VARIABLE lcResult AS CHARACTER NO-UNDO. 
 

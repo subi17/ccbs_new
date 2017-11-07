@@ -9,7 +9,7 @@
   Version ......: M15
   ------------------------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT PARAMETER CustGroup LIKE CustGroup.CustGroup       NO-UNDO.
 DEF INPUT PARAMETER asno1   LIKE Customer.CustNum       NO-UNDO.
@@ -52,7 +52,7 @@ PUT STREAM excel UNFORMATTED
 "Customer's Name" tab
 "Size"            tab
 "Conn".
-RUN uexskip(1).
+RUN Syst/uexskip.p(1).
 
 FOR
     EACH Customer no-lock            where
@@ -88,7 +88,7 @@ FOR
       Size                    tab
       Customer.ConnType format "0/5".
 
-      RUN uexskip(1).
+      RUN Syst/uexskip.p(1).
 END.
 
 OUTPUT STREAM excel CLOSE.

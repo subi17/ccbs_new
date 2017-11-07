@@ -20,18 +20,17 @@
 
 &GLOBAL-DEFINE BrTable Memo
 
-{commali.i} 
-{timestamp.i}
-{eventval.i}
-{fuserright.i}            
+{Syst/commali.i} 
+{Syst/eventval.i}
+{Func/fuserright.i}            
 
 DEF INPUT PARAMETER iCustNum  LIKE memo.CustNum    NO-UNDO.
 DEF INPUT PARAMETER HostTable LIKE memo.HostTable  NO-UNDO.
 DEF INPUT PARAMETER KeyValue  LIKE memo.KeyValue   NO-UNDO.
 DEF INPUT PARAMETER ftitle    AS  C FORMAT "x(20)" NO-UNDO.
 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'Memo'} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'Memo'} 
 /* check for hosttable, not memo table */
 
 DEF VAR MemoTitle  LIKE memo.MemoTitle  NO-UNDO.
@@ -61,9 +60,9 @@ DEF VAR lcSystUser   AS CHAR                   NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMemo AS HANDLE NO-UNDO.
    lhMemo = BUFFER Memo:HANDLE.
@@ -71,7 +70,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2(lhMemo).
+      RUN Mc/eventview2.p(lhMemo).
    END.
 END.
 
@@ -83,42 +82,42 @@ form
     CommitDate          COLUMN-LABEL "Date" FORMAT "x(10)"
 
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) " MEMOS OF " + fTitle + " " + KeyValue + " "
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " MEMOS OF " + fTitle + " " + KeyValue + " "
     FRAME sel.
 
 form
     memo.MemoTitle     /* LABEL FORMAT */ 
     WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc)
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc)
     ac-hdr WITH side-labels
     FRAME lis1.
 
 form
     memo.MemoText VIEW-AS EDITOR Size 60 BY 10 SCROLLBAR-VERTICAL
     WITH  OVERLAY ROW 5 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) " memo TEXT " FRAME lis2 NO-LABELS.
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " memo TEXT " FRAME lis2 NO-LABELS.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek Status Code  BY  MemoTitle */
     MemoTitle
     help "Enter Status Code"
-    WITH ROW 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH ROW 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND CODE "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Status Code  BY UserCode */
     UserCode
     help "Enter Status"
-    WITH ROW 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH ROW 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Name "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
-lcSystUser = fTokenRights(katun,"SYST").
+lcSystUser = fTokenRights(Syst.Var:katun,"SYST").
 
 orders = "By Code,By Name,By 3, By 4".
 
@@ -152,13 +151,13 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a memo  */
-      ASSIGN cfc = "lis" ufkey = TRUE ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = TRUE ac-hdr = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis1 ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN ufkey.   
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.   
         ON F4 GO.
         REPEAT TRANSACTION WITH FRAME lis1:
            RELEASE Memo.
@@ -181,11 +180,11 @@ REPEAT WITH FRAME sel:
            CREATE Memo.
            ASSIGN 
               Memo.Brand   = lcBrand
-              memo.CreStamp  = fMakeTS()
+              memo.CreStamp  = Func.Common:mMakeTS()
               memo.Custnum   = iCustnum
               memo.HostTable = HostTable
               memo.KeyValue  = KeyValue
-              memo.CreUser   = katun
+              memo.CreUser   = Syst.Var:katun
               memo.MemoTitle = INPUT FRAME lis1 Memo.MemoTitle
               memo.MemoText = INPUT FRAME lis2 Memo.MemoText
               memo.MemoSeq = NEXT-VALUE(MemoSeq).
@@ -260,29 +259,29 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 0   ufk[2]= 0  
-        ufk[3]= 1796   
-        ufk[4]= 983
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)  
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
-        ufk[7]= 991 ufk[8]= 8   ufk[9]= 1
-        ehto = 3    ufkey = FALSE.
-        RUN ufkey.
+        Syst.Var:ufk[1]= 0   Syst.Var:ufk[2]= 0  
+        Syst.Var:ufk[3]= 1796   
+        Syst.Var:ufk[4]= 983
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)  
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
+        Syst.Var:ufk[7]= 991 Syst.Var:ufk[8]= 8   Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3    ufkey = FALSE.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW memo.MemoTitle ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) memo.MemoTitle WITH FRAME sel.
+        CHOOSE ROW memo.MemoTitle {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) memo.MemoTitle WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW memo.CreUser ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) memo.CreUser WITH FRAME sel.
+        CHOOSE ROW memo.CreUser {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) memo.CreUser WITH FRAME sel.
       END.
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -290,10 +289,10 @@ BROWSE:
          END.
       END.
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -311,7 +310,7 @@ BROWSE:
       END.
 
       /* previous ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-prev.
@@ -336,7 +335,7 @@ BROWSE:
       END. /* previous ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -362,7 +361,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* prev page */
-      ELSE IF LOOKUP(nap,"prev-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND memo WHERE RECID(memo) = memory NO-LOCK NO-ERROR.
         RUN local-find-prev.
@@ -386,7 +385,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -401,9 +400,9 @@ BROWSE:
      END. /* NEXT page */
 
      /* view send log */
-     ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO:  
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 THEN DO:  
        RUN local-find-this (FALSE).
-       RUN itsendlo(0,
+       RUN Mc/itsendlo.p(0,
                     0,
                     2,
                     Memo.MemoSeq).
@@ -413,22 +412,22 @@ BROWSE:
      END. 
 
 
-     ELSE IF LOOKUP(nap,"4,F4") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"4,F4") > 0 THEN DO:
         RUN about-memo.
         NEXT.
      END.
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW" 
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO TRANSAction:  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
-       IF katun NE Memo.CreUser AND lcSystUser NE "RW" THEN DO:
+       IF Syst.Var:katun NE Memo.CreUser AND lcSystUser NE "RW" THEN DO:
           MESSAGE "Only creator can delete the memo."
           VIEW-AS ALERT-BOX INFORMATION.
           NEXT. 
@@ -464,12 +463,12 @@ BROWSE:
        END. /* IF NOT AVAILABLE memo THEN DO: */
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        memo.MemoTitle memo.CreUser CommitDate .
  
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        memo.MemoTitle memo.CreUser CommitDate .
        IF ok THEN DO:
            IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhMemo).
@@ -491,16 +490,16 @@ BROWSE:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO:  /* PRINT */
+     ELSE IF LOOKUP(Syst.Var:nap,"7,f7") > 0 THEN DO:  /* PRINT */
         
         FIND memo WHERE RECID(memo) = rtab[FRAME-LINE(sel)] NO-LOCK NO-ERROR.
         
         IF Memo.CustNum > 0 
-        THEN RUN prinmemo (Memo.HostTable,  
+        THEN RUN Mc/prinmemo.p (Memo.HostTable,  
                            Memo.KeyValue,
                            Memo.MemoSeq).
         
-        ELSE RUN prmem (INPUT Memo.HostTable,
+        ELSE RUN Mc/prmem.p (INPUT Memo.HostTable,
                         INPUT Memo.KeyValue,
                         INPUT Memo.MemoSeq).
         ufkey = TRUE.          
@@ -508,7 +507,7 @@ BROWSE:
      END.
 
      /* change */
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN DO:
        task:
        REPEAT WITH FRAME lis1 TRANSACTION
        ON ENDKEY UNDO, LEAVE:
@@ -521,7 +520,7 @@ BROWSE:
          END. /* IF NOT AVAILABLE memo THEN DO: */
 
          ASSIGN ac-hdr = " Title ".
-         cfc = "lis". RUN ufcolor. 
+         Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. 
          CLEAR FRAME lis1 NO-PAUSE.
          HIDE FRAME sel NO-PAUSE.
          DISPLAY memo.MemoTitle.
@@ -530,26 +529,26 @@ BROWSE:
          WITH FRAME lis2.
          
          ASSIGN
-          ufk = 0
-          ufk[1] = (IF lcRight = "RW" THEN 7 ELSE 0)
-          ufk[8] = 8
-          ehto = 0.
+          Syst.Var:ufk = 0
+          Syst.Var:ufk[1] = (IF lcRight = "RW" THEN 7 ELSE 0)
+          Syst.Var:ufk[8] = 8
+          Syst.Var:ehto = 0.
 
          /* only owner can change a memo */
-         IF katun NE Memo.CreUser AND lcSystUser NE "RW" THEN ufk[1] = 0.
+         IF Syst.Var:katun NE Memo.CreUser AND lcSystUser NE "RW" THEN Syst.Var:ufk[1] = 0.
           
-         RUN ufkey.
+         RUN Syst/ufkey.p.
 
-         IF toimi = 1 AND lcRight = "RW" THEN
+         IF Syst.Var:toimi = 1 AND lcRight = "RW" THEN
          DO:
-            ufkey = TRUE. ehto = 9. RUN ufkey.
+            ufkey = TRUE. Syst.Var:ehto = 9. RUN Syst/ufkey.p.
             RUN local-update-record.                                  
          
             /* IF  User Wanted TO Cancel this Change TRANSACTION */
             IF LOOKUP(KEYFUNCTION(LASTKEY),"endkey,end-error") > 0 OR
             KEYLABEL(lastkey) = "F4" THEN 
             DO:
-               ufkey = TRUE. ehto = 9.
+               ufkey = TRUE. Syst.Var:ehto = 9.
                HIDE FRAME lis1 NO-PAUSE.
                HIDE FRAME lis2 NO-PAUSE.
                RUN local-disp-row.
@@ -582,17 +581,17 @@ BROWSE:
                ASSIGN
                   Memo.MemoTitle
                   Memo.MemoText.
-               memo.ChgUser  = katun.
-               memo.ChgStamp = fMakeTS().
+               memo.ChgUser  = Syst.Var:katun.
+               memo.ChgStamp = Func.Common:mMakeTS().
                IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMemo).
             END.
          END.
 
          FIND CURRENT Memo NO-LOCK.
 
-         IF toimi = 8 THEN RUN local-find-others.
+         IF Syst.Var:toimi = 8 THEN RUN local-find-others.
 
-         ufkey = TRUE. ehto = 9.
+         ufkey = TRUE. Syst.Var:ehto = 9.
          HIDE FRAME lis1 NO-PAUSE.
          HIDE FRAME lis2 NO-PAUSE.
 
@@ -603,25 +602,25 @@ BROWSE:
        RUN local-find-this (FALSE).
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = RECID(memo) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN memory = RECID(memo) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE local-find-this:
 
@@ -682,7 +681,7 @@ PROCEDURE local-disp-row:
 END PROCEDURE.
 
 PROCEDURE local-find-others.
-   CommitDate = fTS2HMS(memo.CreStamp).
+   CommitDate = Func.Common:mTS2HMS(memo.CreStamp).
 END PROCEDURE.
 
 PROCEDURE local-update-record:
@@ -706,11 +705,11 @@ PROCEDURE about-memo:
 
     IF memo.ChgStamp NE 0 THEN
     modtext =   "and modified by user " + memo.ChgUser + 
-                " at " + fTS2HMS(memo.ChgStamp).
+                " at " + Func.Common:mTS2HMS(memo.ChgStamp).
 
     MESSAGE
     "Memo '" + memo.MemoTitle + "'" SKIP
-    "was created by user" memo.CreUser "at" fTS2HMS(memo.CreStamp) SKIP
+    "was created by user" memo.CreUser "at" Func.Common:mTS2HMS(memo.CreStamp) SKIP
     modtext
     VIEW-AS ALERT-BOX TITLE " ABOUT ". 
 

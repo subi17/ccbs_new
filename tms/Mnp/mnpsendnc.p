@@ -6,39 +6,33 @@
   CREATED ......: 12/2009
   Version ......: xfera
   ---------------------------------------------------------------------- */
+ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
-{commpaa.i}
-{timestamp.i}
-{log.i}
-{cparam2.i}
-{mnp.i}
-{tmsconst.i}
+{Syst/commpaa.i}
+ASSIGN
+   Syst.Var:katun = "MNP"
+   Syst.Var:gcBrand = "1".
+{Func/log.i}
+{Func/cparam2.i}
+{Mnp/mnp.i}
+{Syst/tmsconst.i}
+{Func/heartbeat.i}
+{Func/multitenantfunc.i}
 
-katun = "MNP".
-gcBrand = "1".
-{heartbeat.i}
-
-DEFINE VARIABLE liLoop     AS INTEGER   NO-UNDO.
-DEFINE VARIABLE lcTime     AS CHARACTER NO-UNDO.
-DEFINE VARIABLE liPause    AS INTEGER   NO-UNDO.
-DEFINE VARIABLE ldRetry    AS DECIMAL   NO-UNDO INIT 30.
-DEFINE VARIABLE llNagBeat  AS LOG       NO-UNDO INIT TRUE.
-DEFINE VARIABLE lcURL      AS CHARACTER NO-UNDO.
-DEFINE VARIABLE llNCTime   AS LOGICAL NO-UNDO.
-DEFINE VARIABLE liSent     AS INTEGER NO-UNDO. 
-DEFINE VARIABLE lierrors   AS INTEGER NO-UNDO. 
-DEFINE VARIABLE lcLogDir AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcHost AS CHARACTER NO-UNDO. 
-DEF VAR lcAddress AS CHAR NO-UNDO. 
-
-lcUrl = fCParam("MNP","MNPSendHost").
-lcAddress = fCParam("MNP","MNPSendURL").
-lcHost = entry(2,lcUrl," ") + ":" + entry(4, lcUrl, " ").
-
-IF NOT (lcUrl > "" AND lcAddress > "") THEN DO:
-   MESSAGE "Missing MNPSendHost or MNPSendURL TMSParam" VIEW-AS ALERT-BOX.
-   RETURN.
-END.
+DEFINE VARIABLE liLoop      AS INTEGER   NO-UNDO.
+DEFINE VARIABLE lcTime      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE liPause     AS INTEGER   NO-UNDO.
+DEFINE VARIABLE ldRetry     AS DECIMAL   NO-UNDO INIT 30.
+DEFINE VARIABLE llNagBeat   AS LOG       NO-UNDO INIT TRUE.
+DEFINE VARIABLE llNCTime    AS LOGICAL   NO-UNDO.
+DEFINE VARIABLE liSent      AS INTEGER   NO-UNDO. 
+DEFINE VARIABLE lierrors    AS INTEGER   NO-UNDO. 
+DEFINE VARIABLE lcLogDir    AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcURL       AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcHost      AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcAddress   AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE liTenant    AS INTEGER   NO-UNDO.
+DEFINE VARIABLE lcTenant    AS CHARACTER NO-UNDO.
 
 FORM
    SKIP(1)
@@ -53,7 +47,8 @@ FRAME frmMain .
 
 DEFINE VARIABLE liLoops AS INTEGER NO-UNDO.
 
-DO WHILE TRUE:
+DO WHILE TRUE
+    ON ERROR UNDO, THROW:
 
    liLoop = liLoop + 1.
 
@@ -67,14 +62,32 @@ DO WHILE TRUE:
 
    llNCTime = fIsNCSendTime().
 
-   IF llNCTime THEN DO:
+   IF llNCTime THEN 
+   DO liTenant = 0 TO 1
+      ON ERROR UNDO, THROW:
+
+      ASSIGN lcTenant = (IF liTenant = 0 THEN {&TENANT_YOIGO} ELSE IF liTenant = 1 THEN {&TENANT_MASMOVIL} ELSE "").
+
+      IF lcTenant = "" OR (NOT fsetEffectiveTenantForAllDB(lcTenant)) THEN
+          UNDO, THROW NEW Progress.Lang.AppError("Unable to change tenant. Abort!",1). 
+
+      lcUrl     = fCParam("MNP","MNPSendHost").
+      lcAddress = fCParam("MNP","MNPSendURL").
+      lcHost    = ENTRY(2,lcUrl," ") + ":" + ENTRY(4, lcUrl, " ").
+
+      IF NOT (lcUrl > "" AND lcAddress > "") THEN DO:
+         MESSAGE "Missing MNPSendHost or MNPSendURL TMSParam on tenant '" + lcTenant + "'" VIEW-AS ALERT-BOX.
+         UNDO, THROW NEW Progress.Lang.AppError("Missing MNPSendHost or MNPSendURL TMSParam on tenant '" + lcTenant + "'",1).
+      END.
+
       /* new requests */
-      FOR EACH MNPOperation NO-LOCK WHERE
-               MNPOperation.Sender     = 1 AND
-               MNPOperation.StatusCode = {&MNP_MSG_WAITING_SEND}
-         liLoops = 1 TO 60:
+      FOR EACH MNPOperation NO-LOCK WHERE MNPOperation.Sender = 1 AND MNPOperation.StatusCode = {&MNP_MSG_WAITING_SEND} 
+         liLoops = 1 TO 60 ON ERROR UNDO, THROW:
+
          RUN pSendXML(RECID(MNPOperation)).
-         IF llNagBeat = FALSE THEN LEAVE.
+         
+         IF llNagBeat = FALSE THEN 
+             LEAVE.
       END.
    END.
 
@@ -107,41 +120,35 @@ PROCEDURE pSendXML:
 
    DEFINE INPUT PARAMETER piRecId AS INTEGER NO-UNDO.
 
-   DEFINE VARIABLE lcResponse AS LONGCHAR NO-UNDO.
-   DEFINE VARIABLE lcResponseData AS LONGCHAR NO-UNDO.
-   DEFINE VARIABLE lcXMLRequest AS LONGCHAR NO-UNDO.
-   DEFINE VARIABLE lcError AS CHARACTER NO-UNDO.
-   DEFINE VARIABLE lcResponseBody AS LONGCHAR NO-UNDO.
-   DEFINE VARIABLE lcRespCode AS CHAR NO-UNDO.
+   DEFINE VARIABLE lcResponse      AS LONGCHAR  NO-UNDO.
+   DEFINE VARIABLE lcResponseData  AS LONGCHAR  NO-UNDO.
+   DEFINE VARIABLE lcXMLRequest    AS LONGCHAR  NO-UNDO.
+   DEFINE VARIABLE lcError         AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcResponseBody  AS LONGCHAR  NO-UNDO.
+   DEFINE VARIABLE lcRespCode      AS CHAR      NO-UNDO.
+   DEFINE VARIABLE liContentLength AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lcHttpHead      AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE llcPdfData      AS LONGCHAR.
+   DEFINE VARIABLE lmpContents     AS MEMPTR    NO-UNDO. 
 
-   FIND MNPOperation WHERE
-        RECID(MNPOperation) = piRecId
-   EXCLUSIVE-LOCK NO-ERROR.
-   FIND MNPProcess WHERE
-        MNPProcess.MNPSeq = MNPOperation.MNPSeq
-   NO-LOCK NO-ERROR.
-   IF NOT AVAIL MNPProcess THEN NEXT.
+   FIND MNPOperation WHERE RECID(MNPOperation) = piRecId EXCLUSIVE-LOCK NO-ERROR.
+   
+   FIND MNPProcess WHERE MNPProcess.MNPSeq = MNPOperation.MNPSeq NO-LOCK NO-ERROR.
+   IF NOT AVAIL MNPProcess THEN 
+       NEXT.
 
-   PUT SCREEN ROW 23 COL 4
-   "Running " + MNPProcess.FormRequest + "                                    ".
+   PUT SCREEN ROW 23 COL 4 "Running " + MNPProcess.FormRequest + "                                    ".
 
    COPY-LOB MNPOperation.XMLRequest TO lcXMLRequest.
 
-   DEFINE VARIABLE liContentLength AS INTEGER NO-UNDO.
-   DEFINE VARIABLE lcHttpHead AS CHARACTER NO-UNDO.
-   DEFINE VARIABLE llcPdfData AS LONGCHAR.
-   DEF VAR lmpContents AS MEMPTR NO-UNDO.
-
    /* special handling for pdf-files */
-   IF MNPOperation.MessageType = "crearSolicitudCancelacionPortabilidadMovilIniciadaPorDonante" THEN DO:
-
+   IF MNPOperation.MessageType = "crearSolicitudCancelacionPortabilidadMovilIniciadaPorDonante" THEN 
+   DO:
       /* in normal situation only one file should exist */
-      FIND FIRST MNPCancelProposal WHERE
-         MNPCancelProposal.MNPSeq = MNPProcess.MNPSeq NO-LOCK NO-ERROR.
+      FIND FIRST MNPCancelProposal WHERE MNPCancelProposal.MNPSeq = MNPProcess.MNPSeq NO-LOCK NO-ERROR.
 
-      IF NOT AVAIL MNPCancelProposal OR
-         LENGTH(MNPCancelProposal.PDF) EQ ? THEN DO:
-      
+      IF NOT AVAIL MNPCancelProposal OR LENGTH(MNPCancelProposal.PDF) EQ ? THEN 
+      DO:
          ASSIGN
             MNPOperation.ErrorDesc = "PDF file not found"
             MNPOperation.ErrorHandled = {&MNP_ERRORHANDLED_NO}
@@ -173,13 +180,15 @@ PROCEDURE pSendXML:
                     liContentLength).
 
    etime(true).
-   RUN tcpgwy_large(lcHttpHead + lcXMLRequest,lcURL,60,1,"", output lcResponseData).
+   RUN Gwy/tcpgwy_large.p(lcHttpHead + lcXMLRequest,lcURL,60,1,"", output lcResponseData).
    fLogBasic("HANDLING " + string(etime) + " " + MNPProcess.formrequest).
 
    lcResponse = ENTRY(1, lcResponseData ,CHR(10)).
 
    lcRespCode = ENTRY(2,lcResponse," ") NO-ERROR.
-   IF ERROR-STATUS:ERROR OR NOT lcRespCode BEGINS "20" THEN DO:
+   
+   IF ERROR-STATUS:ERROR OR NOT lcRespCode BEGINS "20" THEN 
+   DO:
 
       lcError = STRING(lcResponse) NO-ERROR.
 
@@ -192,19 +201,19 @@ PROCEDURE pSendXML:
    END.
    ELSE llNagBeat = TRUE.
 
-   FIND MNPOperation WHERE
-        RECID(MNPOperation) = piRecId
-   EXCLUSIVE-LOCK.
+   FIND MNPOperation WHERE RECID(MNPOperation) = piRecId EXCLUSIVE-LOCK.
 
    lcResponseBody = SUBSTRING(lcResponseData, INDEX(lcResponseData,"<?xml")) NO-ERROR.
+
    IF ERROR-STATUS:ERROR THEN
       COPY-LOB lcResponseData TO MNPOperation.XMLResponse.
    ELSE 
       COPY-LOB lcResponseBody TO MNPOperation.XMLResponse.
    
    ASSIGN
-      MNPOperation.SentTS = fMakeTS()
+      MNPOperation.SentTS = Func.Common:mMakeTS()
       MNPOperation.StatusCode = {&MNP_MSG_WAITING_RESPONSE_HANDLE}. /* Waiting for response handling */
+   
    liSent = liSent + 1.
 END.
 

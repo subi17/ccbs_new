@@ -8,16 +8,15 @@
    09.09.2015 hugo.lujan [Q25] - TMS - Cancel Renewal Order
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{timestamp.i}
-{fpcmaintreq.i}
-{fmakemsreq.i}
-{msreqfunc.i}
-{tmsconst.i}
-{ordercancel.i}
-{coinv.i}
-{dpmember.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/fpcmaintreq.i}
+{Func/fmakemsreq.i}
+{Func/msreqfunc.i}
+{Syst/tmsconst.i}
+{Func/ordercancel.i}
+{Func/coinv.i}
+{Mc/dpmember.i}
 
 DEFINE INPUT PARAMETER iiMsRequest  AS INTEGER  NO-UNDO.
 
@@ -70,12 +69,12 @@ IF AVAIL bSubMsRequest THEN DO:
    RETURN.
 END. /* IF AVAIL bSubMsRequest THEN DO: */
 
-fSplitTS(bRenewalMsRequest.ActStamp,OUTPUT ldaRenewalDate,OUTPUT liRenewalTime).
+Func.Common:mSplitTS(bRenewalMsRequest.ActStamp,OUTPUT ldaRenewalDate,OUTPUT liRenewalTime).
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 END.
 
 FUNCTION fCollectActivationFees RETURNS LOGICAL (
@@ -89,7 +88,7 @@ FUNCTION fCollectActivationFees RETURNS LOGICAL (
    IF icDCEvent BEGINS "PAYTERM" THEN DO:
       
       FOR FIRST FixedFee USE-INDEX Custnum WHERE
-                FixedFee.Brand     = gcBrand   AND
+                FixedFee.Brand     = Syst.Var:gcBrand   AND
                 FixedFee.Custnum   = bSubMsRequest.Custnum AND
                 FixedFee.HostTable = "MobSub"  AND
                 FixedFee.KeyValue  = STRING(bSubMsRequest.MsSeq) AND
@@ -98,7 +97,7 @@ FUNCTION fCollectActivationFees RETURNS LOGICAL (
                 FixedFee.SourceKey = STRING(iiPercontractID):
             
          FOR FIRST SingleFee USE-INDEX Custnum WHERE
-                   SingleFee.Brand       = gcBrand AND
+                   SingleFee.Brand       = Syst.Var:gcBrand AND
                    SingleFee.Custnum     = FixedFee.CustNum AND
                    SingleFee.HostTable   = FixedFee.HostTable AND
                    SingleFee.KeyValue    = FixedFee.KeyValue AND
@@ -116,7 +115,7 @@ FUNCTION fCollectActivationFees RETURNS LOGICAL (
          END.
       
          FOR FIRST SingleFee USE-INDEX Custnum NO-LOCK WHERE
-                   SingleFee.Brand = gcBrand AND
+                   SingleFee.Brand = Syst.Var:gcBrand AND
                    SingleFee.Custnum = bSubMsRequest.CustNum AND
                    SingleFee.HostTable = "Mobsub" AND
                    SingleFee.KeyValue = STRING(bSubMsRequest.MsSeq) AND
@@ -136,7 +135,7 @@ FUNCTION fCollectActivationFees RETURNS LOGICAL (
       bSubMsRequest.ReqCParam2 EQ "recreate" THEN DO:
    
       FOR FIRST SingleFee USE-INDEX Custnum WHERE
-                SingleFee.Brand = gcBrand AND
+                SingleFee.Brand = Syst.Var:gcBrand AND
                 SingleFee.Custnum = bSubMsRequest.CustNum AND
                 SingleFee.HostTable = "Mobsub" AND
                 SingleFee.KeyValue = STRING(bSubMsRequest.MsSeq) AND
@@ -166,7 +165,7 @@ FUNCTION fCollectTerminationFees RETURNS LOGICAL (
    IF icDCEvent BEGINS "PAYTERM" THEN DO:
       
       FOR FIRST FixedFee USE-INDEX Custnum WHERE
-                FixedFee.Brand     = gcBrand   AND
+                FixedFee.Brand     = Syst.Var:gcBrand   AND
                 FixedFee.Custnum   = bSubMsRequest.Custnum AND
                 FixedFee.HostTable = "MobSub"  AND
                 FixedFee.KeyValue  = STRING(bSubMsRequest.MsSeq) AND
@@ -175,7 +174,7 @@ FUNCTION fCollectTerminationFees RETURNS LOGICAL (
                 FixedFee.SourceKey = STRING(iiPercontractID):
             
          FOR FIRST SingleFee USE-INDEX Custnum NO-LOCK WHERE
-                   SingleFee.Brand         = gcBrand                     AND
+                   SingleFee.Brand = Syst.Var:gcBrand AND
                    SingleFee.Custnum       = bSubMsRequest.CustNum       AND
                    SingleFee.HostTable     = "Mobsub"                    AND
                    SingleFee.KeyValue      = STRING(bSubMsRequest.MsSeq) AND
@@ -196,7 +195,7 @@ FUNCTION fCollectTerminationFees RETURNS LOGICAL (
    ELSE IF icDCEvent BEGINS "TERM" THEN DO:
    
       FOR FIRST SingleFee USE-INDEX Custnum WHERE
-                SingleFee.Brand = gcBrand AND
+                SingleFee.Brand = Syst.Var:gcBrand AND
                 SingleFee.Custnum = bSubMsRequest.CustNum AND
                 SingleFee.HostTable = "Mobsub" AND
                 SingleFee.KeyValue = STRING(bSubMsRequest.MsSeq) AND
@@ -258,7 +257,7 @@ PROCEDURE pRevertRenewalOrder:
             (bSubMsRequest.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION} OR
              bSubMsRequest.ReqType    = {&REQTYPE_CONTRACT_TERMINATION}),
        FIRST DayCampaign NO-LOCK WHERE
-             DayCampaign.Brand   = gcBrand AND
+             DayCampaign.Brand   = Syst.Var:gcBrand AND
              DayCampaign.DCEvent = bSubMsRequest.ReqCparam3 AND
             (DayCampaign.DCType EQ {&DCTYPE_DISCOUNT} OR
              DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT}):
@@ -268,11 +267,11 @@ PROCEDURE pRevertRenewalOrder:
        IF bSubMsRequest.ReqType = {&REQTYPE_CONTRACT_ACTIVATION} THEN DO:
       
           IF DayCampaign.DCEvent EQ {&DCTYPE_INSTALLMENT} THEN
-             fTS2Date(bMsRequest.ActStamp, output ldaRequestDate).
+             Func.Common:mTS2Date(bMsRequest.ActStamp, output ldaRequestDate).
           ELSE ldaRequestDate = 1/1/2000.
 
           FIND FIRST DCCLI NO-LOCK WHERE
-                     DCCLI.Brand      = gcBrand AND
+                     DCCLI.Brand      = Syst.Var:gcBrand AND
                      DCCLI.DCEvent    = DayCampaign.DCEvent AND
                      DCCLI.MsSeq      = bSubMsRequest.MsSeq AND
                      DCCLI.ValidFrom <= TODAY AND
@@ -291,7 +290,7 @@ PROCEDURE pRevertRenewalOrder:
              REPEAT:
                 liCount = liCount + 1.
                 FIND FIRST bDCCLI NO-LOCK WHERE
-                           bDCCLI.Brand      = gcBrand AND
+                           bDCCLI.Brand      = Syst.Var:gcBrand AND
                            bDCCLI.DCEvent    = DayCampaign.DCEvent AND
                            bDCCLI.MsSeq      = bSubMsRequest.MsSeq AND
                            bDCCLI.ValidFrom <= TODAY AND
@@ -303,7 +302,7 @@ PROCEDURE pRevertRenewalOrder:
              IF bSubMsRequest.ReqCparam2 = "recreate" AND
                 bSubMsRequest.ReqIParam1 > 0 THEN DO:
                 FIND FIRST bDCCLI NO-LOCK WHERE
-                           bDCCLI.Brand      = gcBrand AND
+                           bDCCLI.Brand      = Syst.Var:gcBrand AND
                            bDCCLI.DCEvent    = DayCampaign.DCEvent AND
                            bDCCLI.MsSeq      = bSubMsRequest.MsSeq AND
                            bDCCLI.ValidFrom <= TODAY AND
@@ -324,8 +323,7 @@ PROCEDURE pRevertRenewalOrder:
                                         FALSE,
                                         OUTPUT lcError).
                 IF liTermRequest = 0 THEN
-                   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                    "MobSub",
+                   Func.Common:mWriteMemo("MobSub",
                                     STRING(bSubMsRequest.MsSeq),
                                     bSubMsRequest.CustNum,
                                     DayCampaign.DCEvent + " Termination",
@@ -335,9 +333,9 @@ PROCEDURE pRevertRenewalOrder:
              ELSE IF DayCampaign.DCType  = {&DCTYPE_INSTALLMENT} THEN DO:
 
                  ASSIGN
-                 ldaLastDayOfLastMonth = fLastDayOfMonth(
+                 ldaLastDayOfLastMonth = Func.Common:mLastDayOfMonth(
                                          ADD-INTERVAL(DCCLI.ValidFrom, -1, "months"))
-                 ldPeriodTo = fMake2Dt(ldaLastDayOfLastMonth,86399).
+                 ldPeriodTo = Func.Common:mMake2DT(ldaLastDayOfLastMonth,86399).
 
                 /* terminate payterm contract */
                 liTermRequest = fPCActionRequest(bSubMsRequest.MsSeq,
@@ -352,10 +350,10 @@ PROCEDURE pRevertRenewalOrder:
                                         "",
                                         0,
                                         DCCLI.PerContractID,
+                                        "",
                                         OUTPUT lcError).
                 IF liTermRequest = 0 THEN
-                   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                    "MobSub",
+                   Func.Common:mWriteMemo("MobSub",
                                     STRING(bSubMsRequest.MsSeq),
                                     bSubMsRequest.CustNum,
                                     DayCampaign.DCEvent + " Termination",
@@ -367,7 +365,7 @@ PROCEDURE pRevertRenewalOrder:
              /* Re-activate the previous contract which
                 was terminated due to Renewal Order */
              IF llReCreate THEN DO:
-                fSplitTS(bSubMsRequest.ActStamp,OUTPUT ldaTermDate,OUTPUT liTermTime).
+                Func.Common:mSplitTS(bSubMsRequest.ActStamp,OUTPUT ldaTermDate,OUTPUT liTermTime).
                 ASSIGN ldaTermDate  = ldaTermDate - 1
                        liTermPeriod = YEAR(ldaTermDate) * 100 + MONTH(ldaTermDate).
             
@@ -375,7 +373,7 @@ PROCEDURE pRevertRenewalOrder:
                                                  DayCampaign.DCEvent,
                                                  "reactivate" + (IF liTermRequest > 0 THEN
                                                    ":wait" + STRING(liTermRequest) ELSE ""),
-                                                 fSecOffSet(fMakeTS(),5),
+                                                 Func.Common:mSecOffSet(Func.Common:mMakeTS(),5),
                                                  TRUE,
                                                  {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER},
                                                  "",
@@ -386,10 +384,10 @@ PROCEDURE pRevertRenewalOrder:
                                                  (IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} 
                                                   THEN bDCCLI.PerContractID
                                                   ELSE 0),
+                                                  "",
                                                  OUTPUT lcError).
                 IF liTermRequest = 0 THEN
-                   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                    "MobSub",
+                   Func.Common:mWriteMemo("MobSub",
                                     STRING(bSubMsRequest.MsSeq),
                                     bSubMsRequest.CustNum,
                                     DayCampaign.DCEvent + " Reactivation",
@@ -403,13 +401,13 @@ PROCEDURE pRevertRenewalOrder:
 
        ELSE IF bSubMsRequest.ReqType = {&REQTYPE_CONTRACT_TERMINATION}
        THEN DO:
-          fSplitTS(bSubMsRequest.ActStamp,OUTPUT ldaTermDate,OUTPUT liTermTime).
+          Func.Common:mSplitTS(bSubMsRequest.ActStamp,OUTPUT ldaTermDate,OUTPUT liTermTime).
           ASSIGN liTermPeriod = YEAR(ldaTermDate) * 100 + MONTH(ldaTermDate).
 
           liTermRequest = fPCActionRequest(bSubMsRequest.MsSeq,
                                            DayCampaign.DCEvent,
                                            "reactivate",
-                                           fMakeTS(),
+                                           Func.Common:mMakeTS(),
                                            TRUE,
                                            {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER},
                                            "",
@@ -418,10 +416,10 @@ PROCEDURE pRevertRenewalOrder:
                                            "",
                                            0,
                                            bSubMsRequest.ReqIParam3, 
+                                           "",
                                            OUTPUT lcError).
           IF liTermRequest = 0 THEN
-             DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                              "MobSub",
+             Func.Common:mWriteMemo("MobSub",
                               STRING(bSubMsRequest.MsSeq),
                               bSubMsRequest.CustNum,
                               DayCampaign.DCEvent + " Reactivation",
@@ -438,8 +436,7 @@ PROCEDURE pRevertRenewalOrder:
    /* Q25 */
    RUN pCloseQ25Discount IN THIS-PROCEDURE.
    IF RETURN-VALUE BEGINS "ERROR" THEN
-       DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                        "MobSub",
+       Func.Common:mWriteMemo("MobSub",
                         STRING(MobSub.MsSeq),
                         MobSub.CustNum,
                         "Revert renewal order",
@@ -469,7 +466,7 @@ PROCEDURE pCloseQ25Discount:
    DEF BUFFER bMsRequest FOR MSRequest.
 
    FIND FIRST OrderAction NO-LOCK WHERE
-              OrderAction.Brand    EQ gcBrand AND
+              OrderAction.Brand    EQ Syst.Var:gcBrand AND
               OrderAction.OrderId  EQ MsRequest.ReqIParam1 AND
               OrderAction.ItemType EQ "Q25Discount" NO-ERROR.
       
@@ -484,7 +481,7 @@ PROCEDURE pCloseQ25Discount:
       RETURN "ERROR:Q25 discount cancellation (discount amount)". 
 
    FIND SingleFee NO-LOCK WHERE
-        SingleFee.Brand       = gcBrand AND
+        SingleFee.Brand       = Syst.Var:gcBrand AND
         SingleFee.HostTable   = "Mobsub" AND
         SingleFee.KeyValue    = STRING(Mobsub.MsSeq) AND
         SingleFee.SourceTable = "DCCLI" AND
@@ -513,14 +510,14 @@ PROCEDURE pCloseQ25Discount:
    ELSE DO:
       
       FOR EACH DCCLI NO-LOCK WHERE
-               DCCLI.Brand   EQ gcBrand AND
+               DCCLI.Brand   EQ Syst.Var:gcBrand AND
                DCCLI.DCEvent EQ "RVTERM12" AND
                DCCLI.MsSeq   EQ MobSub.MsSeq AND
                DCCLI.ValidTo >= TODAY:
 
          ASSIGN
-            ldeFrom = fmake2dt(dccli.contractdate,0)
-            ldeto = fmake2dt(dccli.contractdate,86399).
+            ldeFrom = Func.Common:mMake2DT(dccli.contractdate,0)
+            ldeto = Func.Common:mMake2DT(dccli.contractdate,86399).
       
          /* extension must originate from the cancelled renewal order. YTS-9378 */
          IF NOT CAN-FIND(FIRST bmsrequest NO-LOCK where
@@ -536,7 +533,7 @@ PROCEDURE pCloseQ25Discount:
             MobSub.MsSeq,
             "RVTERM12",
             "term",
-            fMakeTS(),
+            Func.Common:mMakeTS(),
             TRUE, /* create fees */
             {&REQUEST_SOURCE_REVERT_RENEWAL_ORDER},
             "",
@@ -545,6 +542,7 @@ PROCEDURE pCloseQ25Discount:
             "",
             0, /* payterm residual fee */
             DCCLI.PercontractId,
+            "",
             OUTPUT lcResult).
 
          IF liRequest EQ 0 THEN
@@ -556,7 +554,7 @@ PROCEDURE pCloseQ25Discount:
    
    DISCOUNT_LOOP:
    FOR EACH DiscountPlan NO-LOCK WHERE
-            DiscountPlan.Brand = gcBrand AND
+            DiscountPlan.Brand = Syst.Var:gcBrand AND
      LOOKUP(DiscountPlan.DPRuleID,"RVTERMDT1DISC,RVTERMDT4DISC") > 0:
 
       FOR EACH dpmember NO-LOCK WHERE
@@ -597,7 +595,7 @@ PROCEDURE pCloseQ25Discount:
         
       /* Month 25 and after: Create new single fee 
          (CRVTERMDT) with corresponding amount*/
-       RUN creasfee.p(
+       RUN Mc/creasfee.p(
           SingleFee.CustNum,
           MobSub.MsSeq,
           TODAY,

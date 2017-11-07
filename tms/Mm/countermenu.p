@@ -7,7 +7,7 @@
   changePVM ....:
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT  PARAMETER iiMsSeq  AS INT .
 
@@ -34,12 +34,11 @@ END.
 FIND Customer where 
      Customer.CustNum = liCustnum no-lock no-error.
 
-IF Avail Customer THEN lcUserName =  DYNAMIC-FUNCTION("fDispCustName" IN
-                                             ghFunc1, BUFFER Customer).
+IF Avail Customer THEN lcUserName = Func.Common:mDispCustName(BUFFER Customer).
 ELSE lcUserName = "".
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN ufkey. 
+   ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 3. RUN Syst/ufkey.p. 
  
  DISPLAY
  "A) Service Limits              "  @ menuc[1]    SKIP
@@ -55,13 +54,13 @@ DO WHILE TRUE:
    IF LOOKUP(KEYLABEL(LASTKEY),"x,F8") > 0  THEN LEAVE.
 
    IF FRAME-INDEX EQ 1 THEN DO:
-      RUN mservicelimit.p(iiMsSeq, 0, 0).
+      RUN Mm/mservicelimit.p(iiMsSeq, 0, 0).
    END.
    ELSE IF FRAME-INDEX = 2 THEN DO:
-      RUN counter.p("MobSub",STRING(iiMsSeq)).
+      RUN Mc/counter.p("MobSub",STRING(iiMsSeq)).
    END.
    ELSE IF FRAME-INDEX = 3 THEN 
-      RUN invrowcounter.p (0,iiMsSeq,0,"").
+      RUN Inv/invrowcounter.p (0,iiMsSeq,0,"").
 
    ELSE IF FRAME-INDEX > 3 OR FRAME-INDEX = 0 THEN LEAVE.
 

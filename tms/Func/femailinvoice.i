@@ -12,22 +12,20 @@
 
 &GLOBAL-DEFINE fEMAILINVOICE YES
 
-{commali.i}
-{tmsconst.i}
-{date.i}
-{cparam2.i}
-{timestamp.i}
-{fcreatereq.i}
-{msreqfunc.i}
-{fgettxt.i}
-{q25functions.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Func/fcreatereq.i}
+{Func/msreqfunc.i}
+{Func/fgettxt.i}
+{Func/q25functions.i}
 
 FUNCTION fPendingEmailActRequest RETURNS LOG (INPUT iiCustnum AS INT):
    
    DEF VAR llExist AS LOG NO-UNDO.
    
    llExist = CAN-FIND (FIRST MsRequest NO-LOCK WHERE
-                       MsRequest.Brand = gcBrand                    AND
+                       MsRequest.Brand = Syst.Var:gcBrand                    AND
                        MsRequest.ReqType = {&REQTYPE_ACTIVATE_EMAIL_INVOICE} AND
                        MsRequest.Custnum = iiCustnum                AND
    LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0).
@@ -43,15 +41,15 @@ FUNCTION fCancelPendingEmailActRequest RETURNS LOG (INPUT iiCustnum AS INT,
    DEF BUFFER bMsRequest FOR MsRequest.
 
    FIND FIRST bMsRequest WHERE
-              bMsRequest.Brand = gcBrand                    AND
+              bMsRequest.Brand = Syst.Var:gcBrand                    AND
               bMsRequest.ReqType = {&REQTYPE_ACTIVATE_EMAIL_INVOICE} AND
               bMsRequest.Custnum = iiCustnum                AND
         LOOKUP(STRING(bMsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0
         EXCLUSIVE-LOCK NO-ERROR.
    IF AVAIL bMsRequest THEN
       ASSIGN bMsRequest.ReqStatus   = {&REQUEST_STATUS_CANCELLED}
-             bMsRequest.UpdateStamp = fMakeTS()
-             bMsRequest.DoneStamp   = fMakeTS()
+             bMsRequest.UpdateStamp = Func.Common:mMakeTS()
+             bMsRequest.DoneStamp   = Func.Common:mMakeTS()
              bMsRequest.Memo        = bMsRequest.Memo + 
                                       (IF bMsRequest.Memo > ""
                                        THEN ", " ELSE "") + icMemo.
@@ -174,7 +172,7 @@ FUNCTION fGetEmailText RETURNS CHAR (INPUT icTarget    AS CHAR,
 
    DO WHILE TRUE:
       FOR FIRST InvText NO-LOCK WHERE 
-                InvText.Brand     = gcBrand      AND
+                InvText.Brand     = Syst.Var:gcBrand      AND
                 InvText.Target    = icTarget     AND
                 InvText.KeyValue  = icKeyValue   AND
                 InvText.FromDate <= TODAY AND
@@ -214,9 +212,9 @@ FUNCTION fEmailInvoiceRequest RETURNS INTEGER
 
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
-   idActStamp = fSecOffSet(idActStamp,120). /* 2 mins delay */
+   idActStamp = Func.Common:mSecOffSet(idActStamp,120). /* 2 mins delay */
 
    ocResult = fChkRequest(iiCustNum,
                           {&REQTYPE_ACTIVATE_EMAIL_INVOICE},
@@ -225,12 +223,12 @@ FUNCTION fEmailInvoiceRequest RETURNS INTEGER
    IF ocResult > "" THEN RETURN 0.
 
    IF iiorder > 0 THEN
-      FIND FIRST Order NO-LOCK WHERE Order.Brand = gcBrand AND
+      FIND FIRST Order NO-LOCK WHERE Order.Brand = Syst.Var:gcBrand AND
                                      Order.OrderId = iiOrder NO-ERROR.
 
    /* If Email address is already validated then no need to send again */
    IF CAN-FIND (FIRST MsRequest NO-LOCK WHERE
-                      MsRequest.Brand = gcBrand AND
+                      MsRequest.Brand = Syst.Var:gcBrand AND
                       MsRequest.ReqType = {&REQTYPE_ACTIVATE_EMAIL_INVOICE} AND
                       MsRequest.Custnum = iiCustnum                AND
                       MsRequest.ReqStatus = {&REQUEST_STATUS_DONE} AND
@@ -239,7 +237,7 @@ FUNCTION fEmailInvoiceRequest RETURNS INTEGER
    /* iiOrder can come as 0 from other request than new customer creation */
    IF (iiOrder = 0 OR Order.Paytype) AND 
       NOT (CAN-FIND (FIRST Mobsub NO-LOCK WHERE
-                           Mobsub.Brand = gcBrand AND
+                           Mobsub.Brand = Syst.Var:gcBrand AND
                            Mobsub.Custnum = iiCustNum AND
                            Mobsub.paytype = FALSE)) THEN RETURN 1.
    fCreateRequest({&REQTYPE_ACTIVATE_EMAIL_INVOICE},
@@ -273,7 +271,7 @@ FUNCTION feInvoiceValidate RETURNS LOGICAL(INPUT idaPeriod AS DATE,
    DEF VAR ldeNextMonth    AS DEC NO-UNDO. 
    
    IF NOT CAN-FIND(FIRST ActionLog WHERE
-                         ActionLog.Brand    = gcBrand AND
+                         ActionLog.Brand    = Syst.Var:gcBrand AND
                          ActionLog.ActionID = "PRINTINVXML" AND
                          ActionLog.ActionPeriod = YEAR(idaPeriod) * 100 +
                                                   MONTH(idaPeriod)
@@ -292,7 +290,7 @@ FUNCTION feInvoiceValidate RETURNS LOGICAL(INPUT idaPeriod AS DATE,
              ldeNextMonth = liYear * 10000 + liMonth * 100 + 1.
 
       FIND FIRST MsRequest WHERE
-                 MsRequest.Brand    = gcBrand AND
+                 MsRequest.Brand    = Syst.Var:gcBrand AND
                  MsRequest.ReqType  = {&REQTYPE_SEND_EMAIL_INVOICE} AND
                  MsRequest.ActStamp > ldeCurrentMonth AND
                  MsRequest.ActStamp < ldeNextMonth AND

@@ -8,10 +8,10 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'payment'}
-{refufile.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'payment'}
+{Ar/refufile.i}
 
 DEF NEW shared VAR siirto AS CHAR.
 
@@ -51,9 +51,9 @@ form
     Payment.AccDate   FORMAT "99-99-99"      COLUMN-LABEL "Created"
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
-       " REFUND PAYMENTS "  + string(pvm,"99-99-99") + " "
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
+       " REFUND PAYMENTS "  + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 FORM
@@ -77,7 +77,7 @@ FORM
        FORMAT ">,>>>,>>9"
        SKIP
 WITH  OVERLAY ROW 16 WIDTH 80
-    COLOR VALUE(cfc)  TITLE COLOR VALUE(ctc) " PAYMENT CONFIGURATION "
+    COLOR VALUE(Syst.Var:cfc)  TITLE COLOR VALUE(Syst.Var:ctc) " PAYMENT CONFIGURATION "
     SIDE-LABELS FRAME fBank.
 
 
@@ -98,8 +98,8 @@ form
       Payment.Posting[4] AT 15 NO-LABEL SKIP
       
 WITH  OVERLAY ROW 3 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -107,14 +107,14 @@ WITH  OVERLAY ROW 3 centered
 form /* seek  ttPaym */
     "Customer:" liCustNum
     HELP "Enter customer nbr"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Customer "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Customer "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  ttPaym */
     "Amount:" ldAmt FORMAT "->,>>>,>>9.99"
     HELP "Enter amount"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Amount "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Amount "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 FUNCTION fDispTotal RETURNS LOGICAL.
@@ -132,7 +132,7 @@ FUNCTION fDispTotal RETURNS LOGICAL.
     
 END FUNCTION.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "By Customer ," +
@@ -142,7 +142,7 @@ MESSAGE "Collect payments ..".
 
 /* collect all undelivered refund payments */
 FOR EACH Payment NO-LOCK WHERE
-         Payment.Brand    = gcBrand     AND
+         Payment.Brand    = Syst.Var:gcBrand     AND
          Payment.AccDate >= TODAY - 120 AND
          Payment.PaymType = 6           AND
          Payment.ExpStamp = 0:
@@ -161,7 +161,7 @@ PAUSE 0.
 DISPLAY ldtDate WITH FRAME fBank.
 
 FIND FIRST BankAcc NO-LOCK WHERE
-           BankAcc.Brand = gcBrand AND
+           BankAcc.Brand = Syst.Var:gcBrand AND
            BankAcc.BankAcc BEGINS "8" NO-ERROR.
 IF AVAILABLE BankAcc THEN DO:
    lcBankAcc = BankAcc.BankAcc.
@@ -236,31 +236,31 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 714  ufk[2]= 789  ufk[3]= 1804
-        ufk[4] = 927
-        ufk[5]= (IF lcRight = "RW" THEN 1757 ELSE 0)
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-        ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 714  Syst.Var:ufk[2]= 789  Syst.Var:ufk[3]= 1804
+        Syst.Var:ufk[4] = 927
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 1757 ELSE 0)
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
 
-        RUN ufkey.p.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW ttPaym.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) ttPaym.CustNum WITH FRAME sel.
+         CHOOSE ROW ttPaym.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) ttPaym.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW ttPaym.Amt ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) ttPaym.Amt WITH FRAME sel.
+         CHOOSE ROW ttPaym.Amt {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) ttPaym.Amt WITH FRAME sel.
       END.
 
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -268,10 +268,10 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -289,7 +289,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -314,7 +314,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -340,7 +340,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ttPaym WHERE recid(ttPaym) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -364,7 +364,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -378,10 +378,10 @@ REPEAT WITH FRAME sel:
        END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". run ufcolor.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f1.
         UPDATE liCustNum WITH FRAME f1.
         HIDE FRAME f1 NO-PAUSE.
@@ -404,10 +404,10 @@ REPEAT WITH FRAME sel:
         END.
      END. /* Search-1 */
 
-     ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". run ufcolor.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f2.
         UPDATE ldAmt WITH FRAME f2.
         HIDE FRAME f2 NO-PAUSE.
@@ -430,10 +430,10 @@ REPEAT WITH FRAME sel:
         END.
      END. /* Search-2 */
 
-     ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO:
-         ASSIGN ehto = 9
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 THEN DO:
+         ASSIGN Syst.Var:ehto = 9
                 ufkey = TRUE.
-         RUN ufkey.
+         RUN Syst/ufkey.p.
          REPEAT WITH FRAME fBank ON ENDKEY UNDO, LEAVE:
             
             UPDATE lcBankAcc ldtDate WITH FRAME fBank EDITING:
@@ -441,16 +441,16 @@ REPEAT WITH FRAME sel:
 
                IF keylabel(lastkey) = "F9" AND FRAME-FIELD = "lcBankAcc"
                THEN DO:
-                   ASSIGN gcHelpParam = "bank"
-                          si-recid    = 0.
-                   RUN bankacc.
-                   gcHelpParam = "".
+                   ASSIGN Syst.Var:gcHelpParam = "bank"
+                          Syst.Var:si-recid    = 0.
+                   RUN Mc/bankacc.p.
+                   Syst.Var:gcHelpParam = "".
                    
-                   ehto = 9.
-                   RUN ufkey.
+                   Syst.Var:ehto = 9.
+                   RUN Syst/ufkey.p.
        
-                   IF si-recid > 0 THEN DO:
-                      FIND BankAcc WHERE RECID(BankAcc) = si-recid 
+                   IF Syst.Var:si-recid > 0 THEN DO:
+                      FIND BankAcc WHERE RECID(BankAcc) = Syst.Var:si-recid 
                       NO-LOCK NO-ERROR.
                       IF AVAILABLE BankAcc THEN DO:
                          lcBankAcc = BankAcc.BankAcc.
@@ -462,7 +462,7 @@ REPEAT WITH FRAME sel:
                    NEXT. 
                END.
               
-               ELSE IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0
+               ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0
                THEN DO WITH FRAME fBank:
                   PAUSE 0.                
     
@@ -470,7 +470,7 @@ REPEAT WITH FRAME sel:
                   
                      IF INPUT lcBankAcc > "" THEN DO:
                         FIND BankAcc WHERE
-                             BankAcc.Brand = gcBrand AND
+                             BankAcc.Brand = Syst.Var:gcBrand AND
                              BankAcc.BankAcc = INPUT lcBankAcc 
                              NO-LOCK NO-ERROR.
                         IF NOT AVAILABLE BankAcc THEN DO:
@@ -493,10 +493,10 @@ REPEAT WITH FRAME sel:
          NEXT.
      END.
      
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
         RUN local-find-this (FALSE).
 
-        RUN memo(INPUT 0,
+        RUN Mc/memo.p(INPUT 0,
                  INPUT "payment",
                  INPUT STRING(ttPaym.Voucher),
                  INPUT "Voucher number").
@@ -506,7 +506,7 @@ REPEAT WITH FRAME sel:
      END.
      
      /* create payment file */
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW"
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW"
      THEN DO:  /* add */
 
         IF NOT CAN-FIND(FIRST ttPaym) THEN DO:
@@ -526,7 +526,7 @@ REPEAT WITH FRAME sel:
         
         IF NOT ok THEN NEXT LOOP.
         
-        RUN refufile (INPUT-OUTPUT TABLE ttPaym,
+        RUN Ar/refufile.p (INPUT-OUTPUT TABLE ttPaym,
                       lcBankAcc,
                       ldtDate,
                       OUTPUT i,
@@ -552,14 +552,14 @@ REPEAT WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW"
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        ttPaym.CustNum Customer.CustName ttPaym.Amt.
 
        RUN local-find-NEXT.
@@ -581,7 +581,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        ttPaym.CustNum Customer.CustName ttPaym.Amt.
 
        IF ok THEN DO:
@@ -603,14 +603,14 @@ REPEAT WITH FRAME sel:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0
      THEN REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        
        RUN local-find-this(FALSE).
 
        ASSIGN ac-hdr = " VIEW " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -624,25 +624,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(ttPaym) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(ttPaym) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -703,7 +703,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
 
    FIND Customer WHERE
-        Customer.Brand   = gcBrand AND
+        Customer.Brand   = Syst.Var:gcBrand AND
         Customer.CustNum = ttPaym.CustNum NO-LOCK NO-ERROR. 
    
    FIND Payment WHERE Payment.Voucher = ttPaym.Voucher NO-LOCK.

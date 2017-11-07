@@ -7,11 +7,10 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{date.i}
-{cparam2.i}
-{ftransdir.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Syst/tmsconst.i}
 
 DEF STREAM sdump.
 
@@ -78,7 +77,7 @@ FOR EACH MNPOperation WHERE
       lcPortRequest lcDelimiter
       SUBSTRING(lcMsSeqs,1,LENGTH(lcMsSeqs) - 1) lcDelimiter
       SUBSTRING(lcmsisdns,1,LENGTH(lcmsisdns) - 1) lcDelimiter
-      fts2hms(mnpoperation.createdts) lcDelimiter
+      Func.Common:mTS2HMS(mnpoperation.createdts) lcDelimiter
       mnpoperation.errorcode lcDelimiter
       mnpoperation.errordesc skip.
 

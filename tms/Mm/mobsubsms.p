@@ -7,8 +7,7 @@
  Version .......: M15
  ============================================================================*/
 
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
 
 DEF INPUT PARAMETER  iiMSSeq AS INT    NO-UNDO.
 
@@ -31,8 +30,7 @@ FIND Customer WHERE
      Customer.CustNum = mobsub.CustNum NO-LOCK NO-ERROR.
 
 ASSIGN 
-   lcUserName = DYNAMIC-FUNCTION("fDispCustName" IN
-                ghFunc1, BUFFER Customer).
+   lcUserName = Func.Common:mDispCustName(BUFFER Customer).
 form 
 skip(1)
 
@@ -46,8 +44,8 @@ skip(1)
 "          " updText[4]  AUTO-RETURN                         SKIP(2) 
 
 WITH  OVERLAY ROW 1 centered width 80
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) " SMS INFORMATION FOR  " + mobsub.cli  
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " SMS INFORMATION FOR  " + mobsub.cli  
     NO-LABELS FRAME main.
 
 PAUSE 0.
@@ -63,7 +61,7 @@ DISP liqty WITH FRAME main.
 MAIN:
 REPEAT WITH FRAME main:
 
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    username = "(" + lcUserName  + ").".
 
 disp mobsub.cli   username .
@@ -80,7 +78,7 @@ WITH FRAME main EDITING:
 
                IF FRAME-FIELD = "lckeyvalue" AND  
                   LOOKUP(KEYLABEL(LASTKEY),"F9") > 0 THEN DO:
-                  run h-invotxt(INPUT "SMS","", mobsub.msseq).
+                  RUN Help/h-invotxt.p(INPUT "SMS","", mobsub.msseq).
                   If siirto ne ? THEN ASSIGN
                      
                      updtext[1] = substring(siirto,  1,40)
@@ -110,7 +108,7 @@ WITH FRAME main EDITING:
 
                DISP liqty WITH FRAME main.
 
-               IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME main:
+               IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME main:
                 PAUSE 0.
                   IF FRAME-FIELD = "lckeyvalue" THEN DO:
                   END.
@@ -125,15 +123,15 @@ WITH FRAME main EDITING:
 ACTION:
    REPEAT WITH FRAME main:
       ASSIGN
-      ufk = 0 ehto = 0
-      ufk[1] = 7 
-      ufk[5] = 2355
-      ufk[8] = 8.
-      RUN ufkey.
+      Syst.Var:ufk = 0 Syst.Var:ehto = 0
+      Syst.Var:ufk[1] = 7 
+      Syst.Var:ufk[5] = 2355
+      Syst.Var:ufk[8] = 8.
+      RUN Syst/ufkey.p.
 
-      IF toimi = 1 THEN NEXT  main.
-      IF toimi = 8 THEN LEAVE main.
-      IF TOIMI = 5 THEN DO:
+      IF Syst.Var:toimi = 1 THEN NEXT  main.
+      IF Syst.Var:toimi = 8 THEN LEAVE main.
+      IF Syst.Var:toimi = 5 THEN DO:
 
          ok = FALSE.
          
@@ -157,7 +155,7 @@ ACTION:
          IF NOT ok THEN NEXT Action.
 
          CREATE CallAlarm.
-         CallAlarm.ActStamp = fmakets().
+         CallAlarm.ActStamp = Func.Common:mMakeTS().
          ASSIGN
             CallAlarm.CLSeq    = 0
             CallAlarm.CASeq    = NEXT-VALUE(CallAlarm)
@@ -170,7 +168,7 @@ ACTION:
             CallAlarm.Limit    = 0
             CallAlarm.CreditType = 9
             CallAlarm.Orig       = "800622800"
-            CallAlarm.Brand      = gcBrand .
+            CallAlarm.Brand      = Syst.Var:gcBrand .
 
          LEAVE Action.
       END.

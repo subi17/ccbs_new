@@ -107,25 +107,24 @@
   Version ......: M15
   ------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}                                               
-{timestamp.i} 
-{utumaa.i}
-{bankrej.i}
-{fvoucher.i}
-{fapvat.i}
+{Syst/commali.i}
+{Func/cparam2.i}                                               
+{Syst/utumaa.i}
+{Ar/bankrej.i}
+{Func/fvoucher.i}
+{Func/fapvat.i}
 /* temp-table */
-{paymfile.i}
-{faccper.i}
-{fcustbal.i}
-{fclvat.i}
-{finvbal.i}
-{fpplan.i}
-{fcpfat.i}
-{email.i}
-{ftransdir.i}
-{forderstamp.i}
-{orderfunc.i}
+{Ar/paymfile.i}
+{Func/faccper.i}
+{Func/fcustbal.i}
+{Func/fclvat.i}
+{Func/finvbal.i}
+{Func/fpplan.i}
+{Func/fcpfat.i}
+{Func/email.i}
+{Func/ftransdir.i}
+{Func/forderstamp.i}
+{Func/orderfunc.i}
 
 
 DEF INPUT  PARAMETER TABLE FOR ttPayment. 
@@ -283,15 +282,18 @@ form
    ttPayment.AmtPaid   column-label "Paid"          format "->>>>,>>9.99"
    ttPayment.CustName  column-label "Cust. Name"    format "x(23)"
 with
-   overlay centered row 10 1 down color value(cfc) title color value(ctc)
+   overlay centered row 10 1 down color value(Syst.Var:cfc) title color value(Syst.Var:ctc)
    " Payments " frame log.
+
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
 
 form header
    fill("=",122) format "x(122)" skip
    ynimi "SUMMARY OF RETURN FILE" at 45 "Page" at 113
       sl format "ZZZZ9" skip
    icPaymFile AT 1 FORMAT "X(100)" 
-      string(pvm,"99-99-99") to 122 skip
+      string(TODAY,"99-99-99") to 122 skip
    fill ("=",122) format "x(122)" skip(1)
 
    "Date"           AT 1
@@ -340,7 +342,7 @@ FUNCTION fCreateOpLog RETURNS LOGICAL
      iInv  AS INT,
      iAmt  AS DEC). 
 
-    {opstamp.i}
+    {Mf/opstamp.i}
 
     /* Make an overpayment transaction */   
     CREATE OPLog.
@@ -348,7 +350,7 @@ FUNCTION fCreateOpLog RETURNS LOGICAL
     OPLog.CreStamp  = op-tstamp
     OPLog.CustNum   = Customer.CustNum
     OPLog.EventDate = ttPayment.PaymDate
-    OPLog.UserCode  = katun
+    OPLog.UserCode  = Syst.Var:katun
     OPLog.EventType = iType      
     OPLog.InvNum    = iInv
     OPLog.Voucher   = ConVno
@@ -364,15 +366,15 @@ FUNCTION fCreateMemo RETURNS LOGICAL
     icMessage   AS CHAR):
 
    CREATE Memo.
-   ASSIGN Memo.Brand     = gcBrand
+   ASSIGN Memo.Brand     = Syst.Var:gcBrand
           Memo.HostTable = icHostTable
           Memo.KeyValue  = icKeyValue
           Memo.CustNum   = iiCustNum
           Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-          Memo.CreUser   = katun 
+          Memo.CreUser   = Syst.Var:katun 
           Memo.MemoTitle = icTitle
           Memo.MemoText  = icMessage.
-          Memo.CreStamp  = fMakeTS().
+          Memo.CreStamp  = Func.Common:mMakeTS().
 
 END FUNCTION.
    
@@ -391,7 +393,7 @@ FUNCTION fOldUnpaid RETURNS LOGICAL
 
    FindUnpaid:
    FOR EACH bInvoice NO-LOCK WHERE
-            bInvoice.Brand    = gcBrand          AND
+            bInvoice.Brand    = Syst.Var:gcBrand          AND
             bInvoice.CustNum  = Invoice.CustNum  AND
             bInvoice.CrInvNum = 0                AND
             bInvoice.InvNum  NE Invoice.InvNum   AND
@@ -469,20 +471,20 @@ IF liDDCancel = ? THEN liDDCancel = 0.
 /* account for saldo payment and egift */
 IF lcSubBalFat > "" THEN 
 FOR FIRST FatGroup NO-LOCK WHERE
-          FatGroup.Brand = gcBrand AND
+          FatGroup.Brand = Syst.Var:gcBrand AND
           FatGroup.FtGrp = lcSubBalFat,
     FIRST BillItem NO-LOCK WHERE
-          BillItem.Brand    = gcBrand AND
+          BillItem.Brand    = Syst.Var:gcBrand AND
           BillItem.BillCode = FatGroup.BillCode:
           
    liSaldoAcc = BillItem.AccNum.
 END.
 IF lcSubBalGift > "" THEN 
 FOR FIRST FatGroup NO-LOCK WHERE
-          FatGroup.Brand = gcBrand AND
+          FatGroup.Brand = Syst.Var:gcBrand AND
           FatGroup.FtGrp = lcSubBalGift,
     FIRST BillItem NO-LOCK WHERE
-          BillItem.Brand    = gcBrand AND
+          BillItem.Brand    = Syst.Var:gcBrand AND
           BillItem.BillCode = FatGroup.BillCode:
           
    liEGiftAcc = BillItem.AccNum.
@@ -585,7 +587,7 @@ BY ttPayment.POrder:
          fError(1,ErrorMsg).
          AddMsg   = "Invoice already credited".
       
-         RUN refundcancel(0,
+         RUN Ar/refundcancel.p(0,
                           "DD",
                           Invoice.InvNum,
                           Invoice.CustNum,
@@ -595,7 +597,7 @@ BY ttPayment.POrder:
      
       IF err = -3 THEN DO: 
          FIND FIRST Payment NO-LOCK USE-INDEX InvNum WHERE
-                    Payment.Brand      = gcBrand        AND
+                    Payment.Brand      = Syst.Var:gcBrand        AND
                     Payment.InvNum     = Invoice.InvNum AND
                     Payment.PaymType   = 8              AND
                     Payment.PaymSrc    = "DD"           AND
@@ -621,7 +623,7 @@ BY ttPayment.POrder:
       IF LOOKUP(ttPayment.Origin,"RS,RG") > 0 THEN DO:
          FIND FIRST MobSub NO-LOCK WHERE
                     MobSub.MsSeq = ttPayment.CustNum NO-ERROR.
-         IF AVAILABLE MobSub AND MobSub.Brand = gcBrand 
+         IF AVAILABLE MobSub AND MobSub.Brand = Syst.Var:gcBrand 
          THEN DO:
             err = -2.
             FIND Customer OF MobSub NO-LOCK.
@@ -634,7 +636,7 @@ BY ttPayment.POrder:
       ELSE DO:
          FIND Customer WHERE Customer.CustNum = ttPayment.CustNum 
              NO-LOCK NO-ERROR.
-         IF AVAILABLE Customer AND Customer.Brand = gcBrand 
+         IF AVAILABLE Customer AND Customer.Brand = Syst.Var:gcBrand 
          THEN err = -1.
 
          ELSE ASSIGN ErrorMsg = "Unknown cust. " + STRING(ttPayment.CustNum)
@@ -655,7 +657,7 @@ BY ttPayment.POrder:
              exclusive-lock no-error.
 
        IF not avail Invoice OR Invoice.InvAmt < 0 OR 
-          Invoice.Brand NE gcBrand
+          Invoice.Brand NE Syst.Var:gcBrand
        then do:
           fError(1,"Unknown invoice nbr").
        END.
@@ -677,7 +679,7 @@ BY ttPayment.POrder:
       THEN DO:
          /* is payment already Booked */
          for each Payment no-lock use-index PaymArc where
-                  Payment.Brand   = gcBrand              and
+                  Payment.Brand   = Syst.Var:gcBrand              and
                   Payment.PaymArc = ttPayment.ArchiveId  and
                   Payment.InvNum  = ttPayment.Inv        and 
                   Payment.AccDate = ttPayment.AccDate:
@@ -695,7 +697,7 @@ BY ttPayment.POrder:
       /* check without archive id */
       ELSE         
       FOR FIRST Payment NO-LOCK USE-INDEX InvNum WHERE
-                Payment.Brand   = gcBrand           AND
+                Payment.Brand   = Syst.Var:gcBrand           AND
                 Payment.InvNum  = ttPayment.Inv     AND
                 Payment.AccDate = ttPayment.AccDate AND
                 Payment.PaymAmt = -1 * ttPayment.AmtPaid AND
@@ -714,7 +716,7 @@ BY ttPayment.POrder:
          ldtAccDate = ttPayment.AccDate.
          
          FOR EACH AccPeriod NO-LOCK WHERE
-                  AccPeriod.Brand     = gcBrand AND
+                  AccPeriod.Brand     = Syst.Var:gcBrand AND
                   AccPeriod.FromDate  > ttPayment.AccDate AND
                   AccPeriod.PerLocked = FALSE
          BY AccPeriod.FromDate:
@@ -733,7 +735,7 @@ BY ttPayment.POrder:
    if err le 0 then do:  /* payment will be made */
 
       FIND InvGroup where 
-           InvGroup.Brand    = gcBrand AND 
+           InvGroup.Brand    = Syst.Var:gcBrand AND 
            InvGroup.InvGroup = Customer.InvGroup 
          no-lock no-error.
       if avail InvGroup then
@@ -968,8 +970,7 @@ BY ttPayment.POrder:
      OTHERWISE   x-acct[2] = Invoice.ARAccNum.
      END CASE.
 
-      lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                     BUFFER Customer).
+      lcCustName = Func.Common:mDispCustName(BUFFER Customer).
       
       CREATE Payment.
       
@@ -986,7 +987,7 @@ BY ttPayment.POrder:
       END.
       
       ASSIGN 
-         Payment.Brand     = gcBrand 
+         Payment.Brand     = Syst.Var:gcBrand 
          Payment.CustNum   = Customer.CustNum
          Payment.CustName  = lcCustName
          Payment.TotAmt    = ttPayment.AmtPaid + Diff + ttPayment.Interest
@@ -1012,7 +1013,7 @@ BY ttPayment.POrder:
       IF ldCredLoss > 0 AND x-amt[10] + x-amt[11] NE 0
       THEN Payment.PaymType = 2.
 
-      Payment.ImportStamp = fMakeTS().
+      Payment.ImportStamp = Func.Common:mMakeTS().
 
       if err = 0 OR err = -3 then assign 
          Payment.InvNum   = Invoice.InvNum
@@ -1035,7 +1036,7 @@ BY ttPayment.POrder:
 
          /* account type */
          FIND Account WHERE 
-            Account.Brand  = gcBrand AND
+            Account.Brand  = Syst.Var:gcBrand AND
             Account.AccNum = Payment.AccNum[t] NO-LOCK NO-ERROR.
          IF AVAIL Account THEN 
              Payment.AccType[t] = Account.AccType.
@@ -1123,7 +1124,7 @@ BY ttPayment.POrder:
          ttPayment.AmtPaid > 0
       then do:
          /* calculate interest */
-         RUN calcint(Invoice.DueDate,
+         RUN Ar/calcint.p(Invoice.DueDate,
                      ttPayment.PaymDate,
                      IntCalcMet,
                      ttPayment.AmtPaid,
@@ -1252,7 +1253,7 @@ BY ttPayment.POrder:
          EMPTY TEMP-TABLE ttFat.
          
          FOR EACH Payment NO-LOCK WHERE
-                  Payment.Brand           = gcBrand          AND
+                  Payment.Brand           = Syst.Var:gcBrand          AND
                   Payment.CustNum         = Customer.CustNum AND
                   Payment.PaymType        = 7                AND
                   MONTH(Payment.PaymDate) = MONTH(ttPayment.PaymDate) AND
@@ -1267,7 +1268,7 @@ BY ttPayment.POrder:
                             ELSE lcSubBalFat.         
                               
              FOR EACH Fatime NO-LOCK WHERE
-                      Fatime.Brand   = gcBrand           AND
+                      Fatime.Brand   = Syst.Var:gcBrand           AND
                       Fatime.FtGrp   = lcFat             AND
                       Fatime.CustNum = Payment.CustNum   AND
                       Fatime.MsSeq   = MobSub.MsSeq      AND
@@ -1342,7 +1343,7 @@ BY ttPayment.POrder:
             IF liCount > 10000 THEN LEAVE.
 
             IF NOT CAN-FIND(FIRST Payment WHERE
-                                  Payment.Brand      = gcBrand AND
+                                  Payment.Brand      = Syst.Var:gcBrand AND
                                   Payment.ExtVoucher = lcExtVoucher AND
                                   RECID(Payment) NE lrRecid)
             THEN LEAVE.
@@ -1385,7 +1386,7 @@ BY ttPayment.POrder:
             Invoice.ClaimState = 1 + INTEGER(ttPayment.ErrorCode) / 10
             Invoice.ClaimStatus = REPLACE(STRING(Invoice.ClaimState),",",".")
             Invoice.DDState    = 2
-            Invoice.ClaimStamp = fMakeTS().
+            Invoice.ClaimStamp = Func.Common:mMakeTS().
                
          CREATE ClaimHist.
          ASSIGN 
@@ -1399,7 +1400,7 @@ BY ttPayment.POrder:
                                    THEN ttPayment.PaymDate
                                    ELSE TODAY
             ClaimHist.ClaimAmt   = Invoice.InvAmt - Invoice.PaidAmt
-            ClaimHist.Handler    = katun.
+            ClaimHist.Handler    = Syst.Var:katun.
       END.       
    END.
  
@@ -1463,8 +1464,7 @@ BY ttPayment.POrder:
        
        IF (err LE 0 OR err = 11) AND AVAILABLE Customer THEN DO:
           IF err = 11 THEN 
-             lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                           BUFFER Customer).
+             lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
           lcPrintLine = lcPrintLine + " " + 
                         STRING(Customer.CustNum,"zzzzzzz9") + " " +
@@ -1519,7 +1519,7 @@ BY ttPayment.POrder:
 
    IF err = 1                                                     AND 
       (not can-find(first UnregPaym where 
-                     UnregPaym.Brand     = gcBrand             and
+                     UnregPaym.Brand     = Syst.Var:gcBrand             and
                      UnregPaym.ArchiveId = ttPayment.ArchiveId and
                      UnregPaym.AccDate   = ttPayment.AccDate   and
                      UnregPaym.PaidAmt   = ttPayment.AmtPaid +
@@ -1533,7 +1533,7 @@ BY ttPayment.POrder:
 
       create UnregPaym.
       assign UnregPaym.UrSeq     = NEXT-VALUE(UrSeq)
-             UnregPaym.Brand     = gcBrand 
+             UnregPaym.Brand     = Syst.Var:gcBrand 
              UnregPaym.ArchiveId = ttPayment.ArchiveId
              UnregPaym.AccDate   = ttPayment.AccDate
              UnregPaym.PaymDate  = ttPayment.PaymDate
@@ -1634,11 +1634,11 @@ IF icPaymFile NE "EMPTY" THEN DO:
       "********"                       at 49 skip.
    rl = rl + 1.
 
-   {uprfeed.i rl}
+   {Syst/uprfeed.i rl}
 
    IF str1 > "" THEN DO:
       ASSIGN tila = false.
-      {utuloste.i}
+      {Syst/utuloste.i}
    END.
    ELSE OUTPUT STREAM tul CLOSE.
 END.

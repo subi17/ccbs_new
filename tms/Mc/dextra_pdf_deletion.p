@@ -10,14 +10,13 @@
 ----------------------------------------------------------------------- */
 
 /* ***************************  Definitions  ************************** */
-{commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+{Syst/commpaa.i}
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 
-{tmsconst.i}
-{cparam2.i}
-{timestamp.i}
-{forderstamp.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Func/forderstamp.i}
 
 DEFINE VARIABLE lcIncDir     AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFilename   AS CHARACTER NO-UNDO.
@@ -48,7 +47,7 @@ REPEAT:
    IF ERROR-STATUS:ERROR THEN NEXT.
         
    FOR FIRST Order WHERE 
-            Order.Brand      = gcBrand AND
+            Order.Brand      = Syst.Var:gcBrand AND
             Order.OrderId    = liOrderId                       AND
            (Order.StatusCode = {&ORDER_STATUS_CLOSED}          OR
             Order.StatusCode = {&ORDER_STATUS_CLOSED_BY_FRAUD} OR
@@ -59,7 +58,7 @@ REPEAT:
       ASSIGN ldeTimeStamp = fGetOrderStamp(Order.OrderId,"Close").
       IF ldeTimeStamp eq 0 THEN NEXT.
 
-      llgClose = fTS2Date(ldeTimeStamp, OUTPUT ldtCloseDate).
+      llgClose = Func.Common:mTS2Date(ldeTimeStamp, OUTPUT ldtCloseDate).
       IF llgClose EQ FALSE THEN NEXT.
 
       IF Order.OrderChannel BEGINS "Retention"  AND

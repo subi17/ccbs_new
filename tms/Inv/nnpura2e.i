@@ -3,7 +3,7 @@
 
 
 IF licalask <= 6 THEN DO:
-    {erepgen.i}
+    {Inv/erepgen.i}
 
     PUT STREAM eKirje UNFORMATTED 
     " I" MY-NL

@@ -9,15 +9,15 @@
                   06.02.04 jp custnum for memo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'product'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'product'}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhProduct AS HANDLE NO-UNDO.
    lhProduct = BUFFER Product:HANDLE.
@@ -28,7 +28,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhPPItem).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhProduct).
+      RUN Mc/eventview2.p(lhProduct).
    END.
 
 
@@ -59,34 +59,34 @@ form
     Product.Product       /* COLUMN-LABEL FORMAT */
     Product.ProdName     /* COLUMN-LABEL FORMAT */
     WITH width 80 OVERLAY SCROLL 1 15 DOWN
-    COLOR VALUE(cfc)
-    title COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.Var:cfc)
+    title COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
     " Products "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form
     Product.Product      /* LABEL FORMAT */
     Product.ProdName    /* LABEL FORMAT */
     WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc)
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc)
     ac-hdr WITH side-labels 1 columns
     FRAME lis.
 
 form /* seek Product  BY  Product */
     Product
     help "Enter Product Code"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 title COLOR VALUE(Syst.Var:ctc) " FIND CODE "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Product BY ProdName */
     ProdName
     help "Enter Product Name"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND Name "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 title COLOR VALUE(Syst.Var:ctc) " FIND Name "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -115,13 +115,13 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a Product  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
            PROMPT-FOR Product.Product
            VALIDATE
@@ -198,31 +198,31 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35  ufk[2]= 30 ufk[3]= 251 ufk[4]= 927
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-        ufk[7]= 1760 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        Syst.Var:ufk[1]= 35  Syst.Var:ufk[2]= 30 Syst.Var:ufk[3]= 251 Syst.Var:ufk[4]= 927
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.Var:ufk[7]= 1760 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW Product.Product ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Product.Product WITH FRAME sel.
+        CHOOSE ROW Product.Product {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) Product.Product WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW Product.ProdName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Product.ProdName WITH FRAME sel.
+        CHOOSE ROW Product.ProdName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) Product.ProdName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -246,10 +246,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND Product WHERE recid(Product) = rtab[FRAME-LINE] NO-LOCK.
            RUN local-find-prev.
@@ -274,7 +274,7 @@ BROWSE:
       END. /* previous ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND Product WHERE recid(Product) = rtab[FRAME-DOWN] NO-LOCK .
@@ -300,7 +300,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* prev page */
-      ELSE IF LOOKUP(nap,"prev-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND Product WHERE recid(Product) = memory NO-LOCK NO-ERROR.
         RUN local-find-prev.
@@ -324,7 +324,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -339,10 +339,10 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        Product = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Product WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF Product <> "" THEN DO:
@@ -361,11 +361,11 @@ BROWSE:
      END. /* Search-1 */
 
      /* Search BY col 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        ProdName = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE ProdName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF ProdName <> "" THEN DO:
@@ -382,18 +382,18 @@ BROWSE:
        END.
      END. /* Search-2 */
 
-     ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO TRANS:  /* Within ProdPack */
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 THEN DO TRANS:  /* Within ProdPack */
 
        FIND Product WHERE recid(Product) = rtab[FRAME-line(sel)].
-       RUN ppcomp2(Product.Product).
+       RUN Mc/ppcomp2.p(Product.Product).
        ufkey = TRUE.
        NEXT LOOP.
      END.
 
-     IF LOOKUP(nap,"4,F4") > 0 THEN DO TRANS: /* memo */
+     IF LOOKUP(Syst.Var:nap,"4,F4") > 0 THEN DO TRANS: /* memo */
        FIND Product WHERE RECID(Product) = rtab[FRAME-LINE(sel)]
        NO-LOCK NO-ERROR.
-       RUN memo(INPUT 0,
+       RUN Mc/memo.p(INPUT 0,
                 INPUT "PRODUCT",
                 INPUT STRING(Product.Product),
                 INPUT "Product Id").
@@ -401,18 +401,18 @@ BROWSE:
        NEXT.
      END.
 
-     IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
+     IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW"
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSAction:  /* DELETE */
        delrow = FRAME-LINE.
        FIND Product WHERE recid(Product) = rtab[FRAME-LINE] NO-LOCK.
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        Product.Product Product.ProdName /* sd */.
 
        RUN local-find-NEXT.
@@ -436,7 +436,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        Product.Product Product.ProdName.
        IF ok THEN DO:
            IF CAN-FIND(FIRST PPItem WHERE
@@ -476,21 +476,21 @@ BROWSE:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF lookup(nap,"7,f7") > 0 THEN DO:
+     ELSE IF lookup(Syst.Var:nap,"7,f7") > 0 THEN DO:
         FIND Product WHERE recid(Product) = rtab[FRAME-line(sel)] NO-LOCK.
-        RUN invotxt("Product",Product.Product).
+        RUN Mc/invotxt.p("Product",Product.Product).
         ASSIGN memory = recid(Product) must-print = TRUE ufkey=true.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSAction:
        /* change */
        FIND Product WHERE recid(Product) = rtab[FRAME-line(sel)]
        EXCLUSIVE-LOCK.
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". RUN ufcolor.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9.
+       RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY 
           Product.Product
           Product.ProdName.
@@ -512,25 +512,25 @@ BROWSE:
 
      END.
 
-     ELSE IF LOOKUP(nap,"home,h") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,h") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = recid(Product) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"end,e") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN memory = recid(Product) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 

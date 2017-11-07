@@ -8,14 +8,13 @@
   version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
-ASSIGN gcBrand = "1"
-       katun   = "CRON".
-{timestamp.i}
-{cparam2.i}
-{tmsconst.i}
-{fmakemsreq.i}
-{ftransdir.i}
+{Syst/commpaa.i}
+ASSIGN Syst.Var:gcBrand = "1"
+       Syst.Var:katun   = "CRON".
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/ftransdir.i}
 
 DEF VAR liReq            AS INT  NO-UNDO.
 DEF VAR lcError          AS CHAR NO-UNDO.
@@ -110,7 +109,7 @@ FOR EACH ttSubscription NO-LOCK,
                                    INPUT "BB",
                                    INPUT 0,                 /* deactivate  */
                                    INPUT "",
-                                   INPUT fMakeTS(),
+                                   INPUT Func.Common:mMakeTS(),
                                    INPUT "",                /* SalesMan */
                                    INPUT FALSE,             /* Set fees */
                                    INPUT FALSE,             /* SMS      */

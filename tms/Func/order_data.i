@@ -10,16 +10,15 @@
 &THEN
 &GLOBAL-DEFINE ORDER_DATA_I YES
 
-{commali.i}
-{date.i}
-{cparam2.i}
-{fbundle.i}
-{transname.i}
-{ftaxdata.i}
-{tmsconst.i}
-{offer.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Mm/fbundle.i}
+{Func/transname.i}
+{Func/ftaxdata.i}
+{Syst/tmsconst.i}
+{Mc/offer.i}
 {Func/financed_terminal.i}
-{mnp.i}
+{Mnp/mnp.i}
 
 FUNCTION fGetOrderDeliveryDateEstimation RETURNS DATE
   (INPUT iiOrderId AS INT):
@@ -31,7 +30,7 @@ FUNCTION fGetOrderDeliveryDateEstimation RETURNS DATE
    DEF BUFFER OrderCustomer FOR OrderCustomer.
 
    FIND FIRST OrderCustomer NO-LOCK WHERE
-              OrderCustomer.Brand = gcBrand AND
+              OrderCustomer.Brand = Syst.Var:gcBrand AND
               OrderCustomer.OrderId = iiOrderId AND
               OrderCustomer.RowType = 1 NO-ERROR.
 
@@ -73,7 +72,7 @@ FUNCTION fGetOfferSMSValues RETURNS LOGICAL
    lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
 
    FIND FIRST Order NO-LOCK WHERE
-              Order.Brand = gcBrand AND
+              Order.Brand = Syst.Var:gcBrand AND
               Order.Orderid = iiOrderId NO-ERROR.
    IF NOT AVAIL Order THEN RETURN FALSE.
 
@@ -81,7 +80,7 @@ FUNCTION fGetOfferSMSValues RETURNS LOGICAL
               OrderCustomer.RowType = 1 NO-ERROR.
    IF NOT AVAIL OrderCustomer THEN RETURN FALSE.
 
-   fTs2Date(Order.Crstamp, OUTPUT ldaOrderDate).
+   Func.Common:mTS2Date(Order.Crstamp, OUTPUT ldaOrderDate).
 
    IF LOOKUP(Order.CLIType,lcBundleCLITypes) > 0 THEN
       lcTariff = fGetDataBundleInOrderAction(Order.OrderID,Order.CLIType).
@@ -100,21 +99,20 @@ FUNCTION fGetOfferSMSValues RETURNS LOGICAL
                                "1",
                                ldaOrderDate).
 
-   ocTariffName = fGetItemName(gcBrand,
+   ocTariffName = fGetItemName(Syst.Var:gcBrand,
                                "CLIType",
                                lcTariff,
                                liLanguage,
                                ldaOrderDate).
    FIND Region WHERE Region.Region = OrderCustomer.Region NO-LOCK NO-ERROR.
    IF AVAIL Region THEN
-      ocTaxZone = fGetItemName(gcBrand,
+      ocTaxZone = fGetItemName(Syst.Var:gcBrand,
                                "TaxZone",
                                Region.TaxZone,
                                liLanguage,
                                ldaOrderDate).
 
-   IF CLIType.CLIType EQ "TARJ7" OR 
-      CLIType.CLIType EQ "TARJ9" THEN
+   IF LOOKUP(CLIType.CLIType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 THEN
       odeMFWithTax = (1 + ldeTaxPerc / 100) * CLIType.CommercialFee.
    ELSE IF CLiType.CompareFee > 0 THEN
       odeMFWithTax = (1 + ldeTaxPerc / 100) * CLIType.CompareFee.
@@ -125,11 +123,11 @@ FUNCTION fGetOfferSMSValues RETURNS LOGICAL
       odeMFWithTax EQ 9.99 THEN odeMFWithTax = 10. /* 9.99 -> 10 */ 
 
    FIND FIRST OrderAccessory NO-LOCK WHERE
-              OrderAccessory.Brand = gcBrand AND
+              OrderAccessory.Brand = Syst.Var:gcBrand AND
               OrderAccessory.OrderId = Order.OrderId AND
               OrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE} NO-ERROR.
    IF AVAIL OrderAccessory THEN ASSIGN
-      ocDeviceName = fGetItemName(gcBrand,
+      ocDeviceName = fGetItemName(Syst.Var:gcBrand,
                                "BillItem",
                                OrderAccessory.ProductCode,
                                liLanguage,
@@ -163,11 +161,11 @@ FUNCTION fGetOrderInstallmentData RETURNS LOGICAL
    DEF BUFFER TFConf FOR TFConf.
 
    FIND FIRST Order NO-LOCK WHERE
-              Order.Brand = gcBrand AND
+              Order.Brand = Syst.Var:gcBrand AND
               Order.Orderid = iiOrderId NO-ERROR.
    IF NOT AVAIL Order THEN RETURN FALSE.
 
-   fTs2Date(Order.Crstamp, OUTPUT ldaOrderDate).
+   Func.Common:mTS2Date(Order.Crstamp, OUTPUT ldaOrderDate).
 
    ldeDeferredPayment = fGetOfferDeferredPayment(Order.Offer,
                               Order.CrStamp,
@@ -183,7 +181,7 @@ FUNCTION fGetOrderInstallmentData RETURNS LOGICAL
       lcBankCode = {&TF_BANK_CETELEM}.
    ELSE
       FOR FIRST Reseller NO-LOCK WHERE
-                Reseller.Brand = gcBrand AND
+                Reseller.Brand = Syst.Var:gcBrand AND
                 Reseller.Reseller = Order.Reseller,
           FIRST ResellerTF NO-LOCK USE-INDEX ResellerTF WHERE
                 ResellerTF.Brand = Reseller.Brand AND
@@ -194,8 +192,7 @@ FUNCTION fGetOrderInstallmentData RETURNS LOGICAL
 
       IF lcBankCode EQ "" THEN lcBankCode = "0000".
 
-      ocBankName = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                    "FixedFee",
+      ocBankName = Func.Common:mTMSCodeName("FixedFee",
                                     "TFBank",
                                     lcBankCode).
 
@@ -260,7 +257,7 @@ FUNCTION fGetOrderOfferSMS RETURNS CHAR
    ASSIGN lcFusionCLITypes = fCParamC("FUSION_SUBS_TYPE").
 
    FIND FIRST Order NO-LOCK WHERE
-              Order.Brand = gcBrand AND
+              Order.Brand = Syst.Var:gcBrand AND
               Order.OrderId = iiOrderId NO-ERROR.
    IF NOT AVAIL Order THEN RETURN "".
 
@@ -318,8 +315,7 @@ FUNCTION fGetOrderOfferSMS RETURNS CHAR
 
    lcDeviceName = "+" +  lcDeviceName.
 
-
-   RUN offer_penaltyfee.p(Order.OrderID,
+   RUN Mc/offer_penaltyfee.p(Order.OrderID,
                         Output liPermancyLength,
                         OUTPUT ldePermanencyAmount).
 
@@ -391,13 +387,13 @@ FUNCTION fGetOrderOfferSMS RETURNS CHAR
       ". Si no nos contestas en 48h cancelaremos tu pedido".
 
    FOR FIRST OfferItem NO-LOCK WHERE
-             OfferItem.Brand = gcBrand AND
+             OfferItem.Brand = Syst.Var:gcBrand AND
              OfferItem.Offer  = Order.Offer AND
              OfferItem.ItemType = "DiscountPlan" AND
              OfferItem.BeginStamp <= Order.CrStamp AND
              OfferItem.EndStamp >= Order.CrStamp,
        FIRST DiscountPlan NO-LOCK WHERE
-             DiscountPlan.Brand = gcBrand AND
+             DiscountPlan.Brand = Syst.Var:gcBrand AND
              DiscountPlan.DPRuleID = OfferItem.ItemKey:
 
       IF OfferItem.Amount > 0 AND

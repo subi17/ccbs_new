@@ -8,7 +8,7 @@
                   16.09.03 jp Brand 
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF SHARED VAR siirto AS CHAR.
 
@@ -37,11 +37,11 @@ FORM
     DMarketing.DirMark                 /* column-label "Form's code" */
 
     WITH CENTERED OVERLAY SCROLL 1 13 DOWN ROW 3
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) " Direct Marketing " FRAME sel.
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " Direct Marketing " FRAME sel.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
    FIND FIRST DMarketing USE-INDEX DirMarkName WHERE 
-              DMArketing.Brand = gcBrand 
+              DMArketing.Brand = Syst.Var:gcBrand 
    NO-LOCK NO-ERROR.
    IF NOT AVAILABLE DMarketing THEN DO:
       BELL.
@@ -95,10 +95,10 @@ print-line:
                DISPLAY DMarketing.DirMark DMarketing.DirMarkName.
                rtab[FRAME-LINE] = RECID(DMarketing).
                IF order = 2 THEN FIND NEXT DMarketing
-               USE-INDEX DirMark WHERE DMarketing.Brand = gcBrand 
+               USE-INDEX DirMark WHERE DMarketing.Brand = Syst.Var:gcBrand 
                NO-LOCK NO-ERROR.
                ELSE IF order = 1 THEN FIND NEXT DMarketing
-               USE-INDEX DirMarkName  WHERE DMarketing.Brand = gcBrand 
+               USE-INDEX DirMarkName  WHERE DMarketing.Brand = Syst.Var:gcBrand 
                NO-LOCK NO-ERROR.
             END.
             ELSE DO:
@@ -128,30 +128,30 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 0  ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 11 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3   ufkey = FALSE.
-         RUN ufkey.p.
+         Syst.Var:ufk[1]= 0  Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= 11 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3   ufkey = FALSE.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 2 THEN DO:
-         CHOOSE ROW DMarketing.DirMark ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) DMarketing.DirMark WITH FRAME sel.
+         CHOOSE ROW DMarketing.DirMark {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) DMarketing.DirMark WITH FRAME sel.
       END.
       ELSE IF order = 1 THEN DO:
-        CHOOSE ROW DMarketing.DirMarkName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) DMarketing.DirMarkName WITH FRAME sel.
+        CHOOSE ROW DMarketing.DirMarkName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) DMarketing.DirMarkName WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = KEYLABEL(LASTKEY).
+      Syst.Var:nap = KEYLABEL(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order = 3 THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = 2.
       END.
 
@@ -160,10 +160,10 @@ BROWSE:
          FIND DMarketing WHERE RECID(DMarketing) = memory.
          DO i = 1 TO FRAME-LINE - 1:
             IF order = 2 THEN FIND PREV DMarketing
-            USE-INDEX DirMark  WHERE DMarketing.Brand = gcBrand 
+            USE-INDEX DirMark  WHERE DMarketing.Brand = Syst.Var:gcBrand 
             NO-LOCK NO-ERROR.
             ELSE IF order = 1 THEN FIND PREV DMarketing
-            USE-INDEX DirMarkName  WHERE DMarketing.Brand = gcBrand 
+            USE-INDEX DirMarkName  WHERE DMarketing.Brand = Syst.Var:gcBrand 
             NO-LOCK NO-ERROR.
             IF AVAILABLE DMarketing THEN
                ASSIGN firstline = i memory = RECID(DMarketing).
@@ -180,17 +180,17 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = KEYLABEL(LASTKEY).
+      ASSIGN Syst.Var:nap = KEYLABEL(LASTKEY).
 
       /* previous line */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND DMarketing WHERE RECID(DMarketing) = rtab[1] NO-LOCK.
             IF order = 2 THEN FIND PREV DMarketing
-            USE-INDEX DirMark  WHERE DMarketing.Brand = gcBrand 
+            USE-INDEX DirMark  WHERE DMarketing.Brand = Syst.Var:gcBrand 
             NO-LOCK NO-ERROR.
             ELSE IF order = 1 THEN FIND PREV DMarketing WHERE 
-                                             DMarketing.Brand = gcBrand 
+                                             DMarketing.Brand = Syst.Var:gcBrand 
              USE-INDEX DirMarkName NO-LOCK NO-ERROR.
             IF NOT AVAILABLE DMarketing THEN DO:
                MESSAGE "YOU ARE ON THE FIRST ROW !".
@@ -214,15 +214,15 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND DMarketing WHERE RECID(DMarketing) = rtab[FRAME-DOWN] NO-LOCK .
             IF order = 2 THEN FIND NEXT DMarketing
-            USE-INDEX DirMark  WHERE DMarketing.Brand = gcBrand
+            USE-INDEX DirMark  WHERE DMarketing.Brand = Syst.Var:gcBrand
             NO-LOCK NO-ERROR.
             ELSE IF order = 1 THEN FIND NEXT DMarketing
-            USE-INDEX DirMarkName  WHERE DMarketing.Brand = gcBrand
+            USE-INDEX DirMarkName  WHERE DMarketing.Brand = Syst.Var:gcBrand
             NO-LOCK NO-ERROR.
             IF NOT AVAILABLE DMarketing THEN DO:
                MESSAGE "YOU ARE ON THE LAST ROW !".
@@ -246,14 +246,14 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      ELSE IF LOOKUP(nap,"prev-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND DMarketing WHERE RECID(DMarketing) = memory NO-LOCK NO-ERROR.
          IF order = 2 THEN FIND PREV DMarketing
-         USE-INDEX DirMark  WHERE DMarketing.Brand = gcBrand 
+         USE-INDEX DirMark  WHERE DMarketing.Brand = Syst.Var:gcBrand 
          NO-LOCK NO-ERROR.
          ELSE IF order = 1 THEN FIND PREV DMarketing
-         USE-INDEX DirMarkName  WHERE DMarketing.Brand = gcBrand 
+         USE-INDEX DirMarkName  WHERE DMarketing.Brand = Syst.Var:gcBrand 
          NO-LOCK NO-ERROR.
          IF AVAILABLE DMarketing THEN DO:
             memory = RECID(DMarketing).
@@ -261,10 +261,10 @@ BROWSE:
             /* go back one page */
             DO line = 1 TO (FRAME-DOWN - 1):
                IF order = 2 THEN FIND PREV DMarketing
-               USE-INDEX DirMark  WHERE DMarketing.Brand = gcBrand 
+               USE-INDEX DirMark  WHERE DMarketing.Brand = Syst.Var:gcBrand 
                NO-LOCK NO-ERROR.
                ELSE IF order = 1 THEN FIND PREV DMarketing
-               USE-INDEX DirMarkName  WHERE DMarketing.Brand = gcBrand 
+               USE-INDEX DirMarkName  WHERE DMarketing.Brand = Syst.Var:gcBrand 
                NO-LOCK NO-ERROR.
                IF AVAILABLE DMarketing THEN memory = RECID(DMarketing).
                ELSE line = FRAME-DOWN.
@@ -281,7 +281,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -296,35 +296,35 @@ BROWSE:
         END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(nap,"5,f5,enter,return") > 0 THEN DO: /* valinta */
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5,enter,return") > 0 THEN DO: /* valinta */
         FIND DMarketing WHERE RECID(DMarketing) = rtab[FRAME-LINE] NO-LOCK.
         siirto = STRING(DirMark).
         LEAVE LOOP.
      END.
 
 
-     ELSE IF LOOKUP(nap,"home,h") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,h") > 0 THEN DO:
         IF order = 2 THEN FIND FIRST DMarketing
-        USE-INDEX DirMark  WHERE DMarketing.Brand = gcBrand NO-LOCK NO-ERROR.
+        USE-INDEX DirMark  WHERE DMarketing.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
         ELSE IF order = 1 THEN FIND FIRST DMarketing
-        USE-INDEX DirMarkName  WHERE DMarketing.Brand = gcBrand 
+        USE-INDEX DirMarkName  WHERE DMarketing.Brand = Syst.Var:gcBrand 
         NO-LOCK NO-ERROR.
         ASSIGN memory = RECID(DMarketing) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"end,e") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 2 THEN FIND LAST DMarketing
-        USE-INDEX DirMark  WHERE DMarketing.Brand = gcBrand
+        USE-INDEX DirMark  WHERE DMarketing.Brand = Syst.Var:gcBrand
         NO-LOCK NO-ERROR.
         ELSE IF order = 1 THEN FIND LAST DMarketing
-        USE-INDEX DirMarkName  WHERE DMarketing.Brand = gcBrand
+        USE-INDEX DirMarkName  WHERE DMarketing.Brand = Syst.Var:gcBrand
         NO-LOCK NO-ERROR.
         ASSIGN memory = RECID(DMarketing) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN DO:
        /* haettava = TRUE. */
         HIDE FRAME sel NO-PAUSE.
         LEAVE LOOP.
@@ -335,5 +335,5 @@ END.  /* LOOP */
 
 HIDE FRAME sel  NO-PAUSE.
 /*HIDE FRAME alku NO-PAUSE. */
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 

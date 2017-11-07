@@ -36,6 +36,7 @@
 &GLOBAL-DEFINE CDR_ERROR_ROAMING_OUT_DOUBLE_CALL           8041 /* Roaming Out double calls */
 &GLOBAL-DEFINE CDR_ERROR_ROAMING_GPRS_ZERO_DATA            8042 /* Roaming GPRS (international) with zero data amount */
 &GLOBAL-DEFINE CDR_ERROR_NATIONAL_GPRS_ZERO_DATA           8043 /* National GPRS with zero data amount */
+&GLOBAL-DEFINE CDR_ERROR_INCORRECT_BRAND                   8048 /* Wrong customer (tenant)*/
 &GLOBAL-DEFINE CDR_ERROR_NON_INVOICEABLE_CALL              8049 /* Not Invoiceable Calls */
 &GLOBAL-DEFINE CDR_ERROR_NON_BILLABLE_UNKNOWN_TICKET       9000 /* NON-BILLABLE, UNKNOWN TICKET */
 &GLOBAL-DEFINE CDR_ERROR_SSP_CALL                          9001 /* SSP Call; not billable */
@@ -71,4 +72,7 @@
 
 &GLOBAL-DEFINE CDR_ERROR_UNKNOWN_MSISDN_FIXED              6001 /* Unknown fixed line CDR for the Billing System */
 &GLOBAL-DEFINE CDR_ERROR_MSISDN_NOT_ACTIVE_FIXED           6002 /* Fixed line number not active in the BS when connection was opened */
+
+&GLOBAL-DEFINE CDR_ERROR_NON_BILLABLE_ROAM_MT_CALL         9062 /* */
+&GLOBAL-DEFINE CDR_ERROR_NON_BILLABLE_ROAM_MT_MMS          9066 /* */
 &ENDIF

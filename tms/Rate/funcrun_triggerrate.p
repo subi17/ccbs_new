@@ -1,18 +1,17 @@
 /* ----------------------------------------------------------------------
   MODULE .......: funcrun_triggerrate
-  TASK .........: Run rerate from FuncRun
+  TASK .........: RUN Rate/rerate.p from FuncRun
   AUTHOR .......: 14.02.12/aam 
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
-   gcBrand = "1"
-   katun   = "Cron".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun   = "Cron".
    
-{cparam2.i}
-{files.i}
-{timestamp.i}
-{funcrunprocess_run.i}
+{Func/cparam2.i}
+{Func/files.i}
+{Syst/funcrunprocess_run.i}
 
 DEF VAR liItems       AS INT  NO-UNDO.
 DEF VAR liFRProcessID AS INT  NO-UNDO.
@@ -34,7 +33,7 @@ END.
 
 RUN pGetFuncRunProcessParameters(liFRProcessID).
 
-RUN triggerrate.p (liFRProcessID,
+RUN Rate/triggerrate.p (liFRProcessID,
                    liUpdateInterval,
                    OUTPUT liItems).
                    

@@ -5,7 +5,7 @@
   AUTHOR .......: JP
   CREATED ......: 13-01-00 
   MODIFIED .....: 
-                  13.11.01 lp  RUN memo added
+                  13.11.01 lp  RUN Mc/memo.p added
                   30.01.02/aam shorter FORMAT FOR ac-type-name
                   26.04.02/tk  eventlogging added
                   05.03.03/tk  tokens
@@ -18,22 +18,22 @@
 ------------------------------------------------------ */
 
 &GLOBAL-DEFINE BrTable Account
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'account'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'account'}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhAccount AS HANDLE NO-UNDO.
    lhAccount = BUFFER Account:HANDLE.
    RUN StarEventInitialize(lhAccount).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhAccount). 
+      RUN Mc/eventview2.p(lhAccount). 
    END.
 
 END.
@@ -65,8 +65,7 @@ def var ok         as log format "Yes/No"    NO-UNDO.
 FUNCTION paiv RETURNS CHARACTER(AccType AS INTEGER).
   ac-type-name = "".
   IF AccType > 0 THEN DO:
-     ac-type-name = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                     "Account",                                
+     ac-type-name = Func.Common:mTMSCodeName("Account",                                
                                      "AccType",
                                      STRING(AccType)).
   END.  
@@ -82,10 +81,10 @@ form
     Account.AccType             /* COLUMN-LABEL FORMAT */
     ac-type-name        column-label "TypeName" format "x(25)"
     WITH width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(cfc)
-    title color value(ctc) " " + ynimi +
+    COLOR value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " " + Syst.Var:ynimi +
     " ACCOUNTS "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form
@@ -95,34 +94,34 @@ form
     Account.AccType   /* LABEL FORMAT */
     ac-type-name         label "TypeName" format "x(30)"
     WITH  OVERLAY ROW 4 centered
-    COLOR value(cfc)
-    TITLE COLOR value(ctc)
+    COLOR value(Syst.Var:cfc)
+    TITLE COLOR value(Syst.Var:ctc)
     fr-header WITH side-labels 1 columns
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* BROWSE search WITH FIELD Account */
     "Brand .:" lcBrand skip
     "Account:" haku-ac-nr FORMAT ">>>>>>>9"
     help "Give number of Account"
-    with row 4 col 2 title color value(ctc) " FIND number "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND number "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 form /* BROWSE search WITH FIELD AccName */
     "Brand:" lcBrand skip
     "Name :" haku-ac-name
     help "Give Name of Account"
-    with row 4 col 2 title color value(ctc) " FIND Name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f2.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND Name "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME haku-f2.
 
 form /* memo */
 WITH
     OVERLAY ROW 7 centered NO-LABEL
-    color value(cfc) title color value(cfc) " Update memo "
+    color value(Syst.Var:cfc) title color value(Syst.Var:cfc) " Update memo "
     FRAME memo.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 FIND FIRST Account WHERE Account.Brand = lcBrand
@@ -153,13 +152,13 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* Account -ADD  */
       HIDE FRAME lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      assign Syst.Var:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
 
            DISPLAY lcBrand @ Account.Brand.
@@ -167,7 +166,7 @@ add-new:
            PROMPT-FOR Account.AccNum
            VALIDATE
               (Account.AccNum = 0 OR
-              NOT can-find(Account WHERE Account.brand = gcBrand
+              NOT can-find(Account WHERE Account.brand = Syst.Var:gcBrand
                            using  Account.AccNum),
               "BROWSE " + string(INPUT Account.AccNum) +
               " already exists !").
@@ -182,7 +181,7 @@ add-new:
            EDITING:
 
              READKEY.
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 
              THEN DO WITH FRAME lis:
                 PAUSE 0.
                 IF FRAME-FIELD = "AccType" THEN DO:
@@ -270,31 +269,31 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 36  ufk[2]= 30 ufk[3]= 927 ufk[4]= 0
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-        ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        Syst.Var:ufk[1]= 36  Syst.Var:ufk[2]= 30 Syst.Var:ufk[3]= 927 Syst.Var:ufk[4]= 0
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW Account.AccNum ;(uchoose.i;) no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) Account.AccNum WITH FRAME sel.
+        CHOOSE ROW Account.AccNum {Syst/uchoose.i} no-error WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) Account.AccNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW Account.AccName ;(uchoose.i;) no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) Account.AccName WITH FRAME sel.
+        CHOOSE ROW Account.AccName {Syst/uchoose.i} no-error WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) Account.AccName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -321,10 +320,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND Account where recid(Account) = rtab[1] no-lock.
            IF order = 1 THEN FIND prev Account
@@ -356,7 +355,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND Account where recid(Account) = rtab[FRAME-DOWN] no-lock .
@@ -389,7 +388,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND Account where recid(Account) = memory no-lock no-error.
         IF order = 1 THEN FIND prev Account
@@ -419,7 +418,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* cursor TO the downmost line */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -434,12 +433,12 @@ BROWSE:
      END. /* NEXT page */
 
      /* SEARCH 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+     else if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        haku-ac-nr = 0.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME haku-f1.
-       UPDATE lcBrand WHEN gcAllBrand 
+       UPDATE lcBrand WHEN Syst.Var:gcAllBrand 
               haku-ac-nr WITH FRAME haku-f1.
        HIDE FRAME haku-f1 no-pause.
        IF haku-ac-nr <> 0 THEN DO:
@@ -455,13 +454,13 @@ BROWSE:
      END. /* SEARCH 1 */
 
      /* SEARCH 2 */
-     else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        haku-ac-name = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME haku-f2.
-       UPDATE lcBrand WHEN gcAllBrand 
+       UPDATE lcBrand WHEN Syst.Var:gcAllBrand 
               haku-ac-name WITH FRAME haku-f2.
        HIDE FRAME haku-f2 no-pause.
        if haku-ac-name <> "" THEN DO:
@@ -477,11 +476,11 @@ BROWSE:
        END.
      END. /* SEARCH 2 */
 
-     if lookup(nap,"3,f3") > 0 
+     if lookup(Syst.Var:nap,"3,f3") > 0 
      THEN DO TRANS: /* memo */
         FIND account where recid(account) = rtab[frame-line(sel)]
         NO-LOCK NO-ERROR.
-        RUN memo(INPUT 0,
+        RUN Mc/memo.p(INPUT 0,
                  INPUT "ACCOUNT",
                  INPUT STRING(account.AccNum),
                  INPUT "Account number").
@@ -489,19 +488,19 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     if lookup(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
+     if lookup(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 AND lcRight = "RW" 
+     else if lookup(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO TRANSAction:  /* removal */
-       {uright2.i}
+       {Syst/uright2.i}
        delline = FRAME-LINE.
        FIND Account where recid(Account) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.Var:ctc)
        Account.Brand
        Account.AccNum Account.AccName AccType ac-type-name.
 
@@ -531,7 +530,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.Var:ccc)
        Account.Brand
        Account.AccNum Account.AccName AccType ac-type-name.
        IF ok THEN DO:
@@ -553,15 +552,15 @@ BROWSE:
        ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     else if lookup(nap,"enter,return") > 0 THEN
+     else if lookup(Syst.Var:nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSAction:
-       {uright2.i}
+       {Syst/uright2.i}
        /* change */
        FIND Account where recid(Account) = rtab[frame-line(sel)]
        exclusive-lock.
-       assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". RUN ufcolor.
+       assign fr-header = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9.
+       RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
        /* Checks names of Account type */
        ac-type-name = paiv(AccType).
 
@@ -582,7 +581,7 @@ BROWSE:
           EDITING:
 
              READKEY.
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
              PAUSE 0.
                IF FRAME-FIELD = "AccType" THEN DO:
                /* Checks names of Account type */
@@ -611,7 +610,7 @@ BROWSE:
        xrecid = recid(Account).
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
        IF order = 1 THEN FIND FIRST Account
        WHERE Account.Brand = lcBrand no-lock no-error.
        ELSE IF order = 2 THEN FIND FIRST Account USE-INDEX AccName
@@ -620,7 +619,7 @@ BROWSE:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
        IF order = 1 THEN FIND LAST Account
        WHERE Account.Brand = lcBrand no-lock no-error.
        ELSE IF order = 2 THEN FIND LAST Account USE-INDEX AccName
@@ -629,11 +628,11 @@ BROWSE:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 

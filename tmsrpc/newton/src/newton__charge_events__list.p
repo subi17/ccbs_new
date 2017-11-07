@@ -1,0 +1,52 @@
+/**
+ * Get charge events  ids.
+ *
+ * @input conditions;struct;mandatory;supports 
+ * @output struct;array of active charge events ids  
+*/
+
+{newton/src/flistrpc.i}
+
+DEF VAR pcTenant  AS CHARACTER NO-UNDO.
+
+lcStruct = validate_struct(pcStruct, "brand!,paytype").
+
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+pcTenant = get_string(pcStruct,"brand").
+
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
+
+DEF VAR lcQuery AS CHARACTER NO-UNDO. 
+
+lcQuery = 'FOR EACH FeeModel NO-LOCK WHERE FeeModel.Brand = "1" AND ' + 
+                   'FeeModel.FMGroup = 1, ' +
+              'FIRST FMItem OF FeeModel WHERE ' + 
+                    'FMItem.ToDate >= TODAY '.
+
+IF LOOKUP("paytype",lcStruct) > 0 THEN DO:
+
+   DEFINE VARIABLE lcpricelist AS CHARACTER NO-UNDO. 
+  
+   lcpricelist = "FMItemPriceList" + get_string(pcStruct,"paytype").
+ 
+   FIND TMSParam WHERE TMSParam.Brand = "1" AND
+                       TMSParam.ParamGroup = "CCAdminTool" AND
+                       TMSParam.ParamCode = lcpricelist NO-LOCK NO-ERROR. 
+
+  
+   lcQuery = lcQuery + ' AND FMItem.PriceList = ' + QUOTER(TMSParam.CharVal) .
+
+   IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+END.
+
+fListQuery(
+   "FeeModel,FMItem",
+   lcQuery,
+   "FeeModel").
+
+
+

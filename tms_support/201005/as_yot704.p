@@ -1,5 +1,4 @@
 input from as_yot704.input.
-{date.i}
 
 def stream slog.
 output stream slog to as_yot704.output append.
@@ -29,7 +28,7 @@ repeat:
 
       CREATE Memo.
       ASSIGN
-         Memo.CreStamp  = fMakeTS()
+         Memo.CreStamp  = Func.Common:mMakeTS()
          Memo.Brand     = "1" 
          Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
          Memo.CustNum   = customer.CustNum

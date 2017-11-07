@@ -53,8 +53,8 @@ form
                    lcresp[2] FORMAT "X(78)"                  SKIP
                    lcresp[3] FORMAT "X(78)"                  SKIP 
 WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) /*ac-hdr*/ " VIEW SOLog " 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) /*ac-hdr*/ " VIEW SOLog " 
     NO-LABELS 
     /*1 columns*/
     FRAME lis.
@@ -62,14 +62,14 @@ WITH  OVERLAY ROW 2 centered
 form
     Solog.CommLine FORMAT "X(65)" VIEW-AS EDITOR Size 76 BY 16 
     WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) " VIEW SOLOG Commmand " FRAME lfCommline NO-LABELS.
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " VIEW SOLOG Commmand " FRAME lfCommline NO-LABELS.
 
 form
     Solog.Response FORMAT "X(65)" VIEW-AS EDITOR Size 76 BY 16
     WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) " VIEW SOLOG Response " FRAME lfResponse NO-LABELS.
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " VIEW SOLOG Response " FRAME lfResponse NO-LABELS.
                    
     
 PROCEDURE local-UPDATE-record:
@@ -108,27 +108,27 @@ PROCEDURE local-UPDATE-record:
 
       WITH FRAME lis.
       
-      ASSIGN ufk = 0 ufk[1] = 2244 ufk[2] = 9823 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 llRefresh = FALSE.
-      RUN ufkey.p.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 2244 Syst.Var:ufk[2] = 9823 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 llRefresh = FALSE.
+      RUN Syst/ufkey.p.
    END.
 
      READKEY.
-     nap = keylabel(lastkey).
+     Syst.Var:nap = keylabel(lastkey).
      
-     IF LOOKUP(nap,"1,f1") > 0 THEN DO:
-        ufk = 0. ehto = 3. RUN ufkey.
+     IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO:
+        Syst.Var:ufk = 0. Syst.Var:ehto = 3. RUN Syst/ufkey.p.
         DISP solog.commline WITH FRAME lfCommline.
         HIDE FRAME lfCommline.
         llRefresh = TRUE.
      END.
-     ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO:
-        ufk = 0. ehto = 3. RUN ufkey.
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 THEN DO:
+        Syst.Var:ufk = 0. Syst.Var:ehto = 3. RUN Syst/ufkey.p.
         DISP solog.response WITH FRAME lfResponse.
         HIDE FRAME lfResponse.
         llRefresh = TRUE.
      END.
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE.
    END.
    HIDE FRAME lis.
 END PROCEDURE.

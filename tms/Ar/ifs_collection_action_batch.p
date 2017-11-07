@@ -7,13 +7,14 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
-ASSIGN gcBrand = "1" 
-       katun   = "Cron".
+ASSIGN Syst.Var:gcBrand = "1" 
+       Syst.Var:katun   = "Cron".
        
-{cparam2.i}
-{eventlog.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Func/multitenantfunc.i}
 
 DEF VAR liCnt       AS INT  NO-UNDO.
 DEF VAR lcIFSFile   AS CHAR NO-UNDO.
@@ -32,13 +33,15 @@ DEF STREAM sRead.
 
 
 FIND FIRST Company WHERE
-           Company.Brand = gcBrand NO-LOCK NO-ERROR.
-IF AVAILABLE Company THEN ynimi = Company.CompName.
+           Company.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
+IF AVAILABLE Company THEN Syst.Var:ynimi = Company.CompName.
 
 lcReadDir  = fCParamC("IFSCollActionFile").
    
 IF lcReadDir = "" OR lcReadDir = ? THEN RETURN "ERROR:Definitions missing".
-   
+
+lcReadDir = REPLACE(lcReadDir,"#TENANT",
+            CAPS(fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1))))).   
 
 fELog("IFS_COLLECTION_ACTION","Started").
 
@@ -64,7 +67,7 @@ FOR EACH ttFiles:
 
    liFiles = liFiles + 1.
    
-   RUN ifs_collection_action (ttFiles.IFSFile,
+   RUN Ar/ifs_collection_action.p (ttFiles.IFSFile,
                               OUTPUT liRead,
                               OUTPUT liError).
                         

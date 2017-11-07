@@ -1,13 +1,13 @@
-{commpaa.i}
-gcbrand = "1".
-katun = "Qvantel".
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
    lhCustomer = BUFFER Customer:HANDLE.

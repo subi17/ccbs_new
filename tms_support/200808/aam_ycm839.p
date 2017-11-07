@@ -1,8 +1,7 @@
-{testpaa.i}
-gcbrand = "1".
-katun = "YoigoRequest".
-{fcreditreq.i}
-{timestamp.i}
+{Syst/testpaa.i}
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "YoigoRequest".
+{Func/fcreditreq.i}
 
 def var i as int no-undo.
 def var j as int no-undo.
@@ -90,7 +89,7 @@ repeat:
              Memo.CreUser   = msrequest.usercode 
              Memo.MemoTitle = "Erroneous Invoice"
              Memo.MemoText  = "Credited by Yoigo, YCM-838".
-             Memo.CreStamp  = fMakeTS().
+             Memo.CreStamp  = Func.Common:mMakeTS().
    end.
    
    pause 0.

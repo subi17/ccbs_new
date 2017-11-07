@@ -14,10 +14,9 @@
                   30.11.06/aam input ilNewSubs
   Version ......: M15
   ---------------------------------------------------------------------- */
-{commali.i}
-{timestamp.i}
-{ffeecont.i}
-{service.i}
+{Syst/commali.i}
+{Func/ffeecont.i}
+{Func/service.i}
 
 DEF INPUT  PARAMETER iiMsSeq   LIKE MobSub.MsSeq     NO-UNDO. 
 DEF INPUT  PARAMETER idtDate   AS DATE               NO-UNDO. 

@@ -9,22 +9,22 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'CurRate'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'CurRate'}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCurRate AS HANDLE NO-UNDO.
    lhCurRate = BUFFER CurRate:HANDLE.
    RUN StarEventInitialize(lhCurRate).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhCurRate).
+      RUN Mc/eventview2.p(lhCurRate).
    END.
 
 END.
@@ -58,10 +58,10 @@ form
    Currency.CurrName 
    CurRate.ExchRate
 WITH width 80 OVERLAY scroll 1 15 DOWN
-   COLOR value(cfc)
-   title color value(ctc) " " + ynimi +
+   COLOR value(Syst.Var:cfc)
+   title color value(Syst.Var:ctc) " " + Syst.Var:ynimi +
    " Maintain Currency Rates "
-   + string(pvm,"99-99-99") + " "
+   + string(TODAY,"99-99-99") + " "
    FRAME sel.
 
 form
@@ -70,24 +70,24 @@ form
    Currency.CurrName 
    CurRate.ExchRate
 WITH  OVERLAY ROW 4 centered
-   COLOR value(cfc)
-   TITLE COLOR value(ctc)
+   COLOR value(Syst.Var:cfc)
+   TITLE COLOR value(Syst.Var:ctc)
    fr-header WITH side-labels 1 columns
    FRAME lis.
 
 form /*  search WITH FIELD Currency */
     Currency
     help "Give ...."
-    with row 4 col 2 title color value(ctc) " FIND Currency CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND Currency CODE "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /*  search WITH FIELD RateDate */
     RateDate
     help "Give ..."
-    with row 4 col 2 title color value(ctc) " FIND Currency Date "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND Currency Date "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 FIND FIRST CurRate
@@ -119,13 +119,13 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* CurRate -ADD  */
       HIDE FRAME lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      assign Syst.Var:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN ufkey.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
            CREATE CurRate.
            UPDATE 
@@ -133,9 +133,9 @@ add-new:
               CurRate.RateDate
               CurRate.ExchRate
            WITH FRAME lis EDITING.
-              READKEY. nap = keylabel(LASTKEY).
+              READKEY. Syst.Var:nap = keylabel(LASTKEY).
               if keylabel(lastkey) = "F4" THEN UNDO add-new, LEAVE add-new.
-              IF lookup(nap,poisnap) > 0 THEN DO:
+              IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
                  if frame-field = "currency" THEN DO:
                     if input frame lis CurRate.Currency = "" THEN
                        UNDO add-new, LEAVE add-new.
@@ -256,31 +256,31 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35  ufk[2]= 30 ufk[3]= 0 ufk[4]= 0
-        ufk[5]= (if lcRight = "RW" THEN 5 ELSE 0)
-        ufk[6]= (if lcRight = "RW" THEN 4 ELSE 0)
-        ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        Syst.Var:ufk[1]= 35  Syst.Var:ufk[2]= 30 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+        Syst.Var:ufk[5]= (if lcRight = "RW" THEN 5 ELSE 0)
+        Syst.Var:ufk[6]= (if lcRight = "RW" THEN 4 ELSE 0)
+        Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-        CHOOSE ROW CurRate.Currency ;(uchoose.i;) no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) CurRate.Currency WITH FRAME sel.
+        CHOOSE ROW CurRate.Currency {Syst/uchoose.i} no-error WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) CurRate.Currency WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW CurRate.RateDate ;(uchoose.i;) no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) CurRate.RateDate WITH FRAME sel.
+        CHOOSE ROW CurRate.RateDate {Syst/uchoose.i} no-error WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) CurRate.RateDate WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -307,10 +307,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND CurRate where recid(CurRate) = rtab[1] no-lock.
            IF order = 1 THEN FIND prev CurRate
@@ -345,7 +345,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND CurRate where recid(CurRate) = rtab[FRAME-DOWN] no-lock .
@@ -381,7 +381,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND CurRate where recid(CurRate) = memory no-lock no-error.
         IF order = 1 THEN FIND prev CurRate
@@ -411,7 +411,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* cursor TO the downmost line */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -426,10 +426,10 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
+     else if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        Currency = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Currency WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if Currency <> "" THEN DO:
@@ -448,11 +448,11 @@ BROWSE:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        RateDate = ?.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE RateDate WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        IF RateDate <> ? THEN DO:
@@ -469,12 +469,12 @@ BROWSE:
        END.
      END. /* Haku sar. 2 */
 
-     if lookup(nap,"5,f5") > 0 and lcRight = "RW" THEN DO:  /* lisays */
+     if lookup(Syst.Var:nap,"5,f5") > 0 and lcRight = "RW" THEN DO:  /* lisays */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 AND lcRight = "RW"
+     else if lookup(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSAction:  /* removal */
        delline = FRAME-LINE.
        FIND CurRate where recid(CurRate) = rtab[FRAME-LINE] no-lock.
@@ -484,7 +484,7 @@ BROWSE:
        no-lock no-error.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.Var:ctc)
           CurRate.Currency 
           CurRate.RateDate 
           Currency.CurrName 
@@ -524,7 +524,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.Var:ccc)
           CurRate.Currency 
           CurRate.RateDate 
           Currency.CurrName 
@@ -548,7 +548,7 @@ BROWSE:
        ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     else if lookup(nap,"enter,return") > 0 THEN
+     else if lookup(Syst.Var:nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSAction:
        /* change */
        FIND CurRate where recid(CurRate) = rtab[frame-line(sel)]
@@ -558,9 +558,9 @@ BROWSE:
                   Currency.Currency = CurRate.Currency
        no-lock no-error.
 
-       assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". RUN ufcolor.
+       assign fr-header = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9.
+       RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY 
           CurRate.Currency
           Currency.CurrName
@@ -584,7 +584,7 @@ BROWSE:
 
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
        IF order = 1 THEN FIND FIRST CurRate
        /* search condition */ no-lock no-error.
        ELSE IF order = 2 THEN FIND FIRST CurRate USE-INDEX RateDate
@@ -593,7 +593,7 @@ BROWSE:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
        IF order = 1 THEN FIND LAST CurRate
        /* search condition */ no-lock no-error.
        ELSE IF order = 2 THEN FIND LAST CurRate USE-INDEX RateDate
@@ -602,11 +602,11 @@ BROWSE:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 

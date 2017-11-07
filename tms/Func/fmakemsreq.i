@@ -42,12 +42,12 @@
 
 &GLOBAL-DEFINE fmakemsreq YES
 
-{msreqfunc.i}
-{fcreatereq.i}
-{fctserval.i}
-{fcustdata.i}
-{tmsconst.i}
-{fixedlinefunc.i}
+{Func/msreqfunc.i}
+{Func/fcreatereq.i}
+{Func/fctserval.i}
+{Func/fcustdata.i}
+{Syst/tmsconst.i}
+{Func/fixedlinefunc.i}
 
 DEF BUFFER bReqOwner FOR MsOwner.
 DEF BUFFER bReqComp  FOR ServCom.
@@ -70,7 +70,7 @@ FUNCTION fActivateTARJ7Promo RETURN LOGICAL
             Order.OrderType <= 2 AND
             Order.StatusCode = {&ORDER_STATUS_DELIVERED},
       FIRST OrderAction NO-LOCK WHERE
-            OrderAction.Brand = gcBrand AND
+            OrderAction.Brand = Syst.Var:gcBrand AND
             OrderAction.OrderId = Order.OrderId AND
             OrderAction.ItemType = "Promotion" AND
             OrderAction.ItemKey  = "TARJ7" BY Order.CRStamp DESC:
@@ -146,10 +146,11 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
     INPUT  icDMSInfo      AS CHAR,   /* For DMS usage contract_id, channel */
     OUTPUT ocResult       AS CHAR).
 
-   DEF VAR llCRes      AS LOG  NO-UNDO.
-   DEF VAR lcCReqTime  AS CHAR NO-UNDO.
-   DEF VAR liCReqTime  AS INT  NO-UNDO.
-   DEF VAR ldtCReqDate AS DATE NO-UNDO.
+   DEF VAR llCRes        AS LOG  NO-UNDO.
+   DEF VAR lcCReqTime    AS CHAR NO-UNDO.
+   DEF VAR liCReqTime    AS INT  NO-UNDO.
+   DEF VAR ldtCReqDate   AS DATE NO-UNDO.
+   DEF VAR llProCustomer AS LOGI NO-UNDO.
 
    ocResult = fChkRequest(iiMsSeq,
                           0,
@@ -165,7 +166,7 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
              liCReqTime  = TIME.
 
       /* all web requests are scheduled to 1st of next month */
-      IF katun = "WEB" THEN lcCReqTime = "1".
+      IF Syst.Var:katun = "WEB" THEN lcCReqTime = "1".
       
       /* should old type be closed only on last of month 
          -> set request date as the 1st of next month */
@@ -193,7 +194,7 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
                            600.
       END. 
       
-      idChgStamp = fMake2DT(ldtCReqDate,
+      idChgStamp = Func.Common:mMake2DT(ldtCReqDate,
                             liCReqTime).
     
    END. 
@@ -205,8 +206,11 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
                           icCreator).
    IF ocResult > "" THEN RETURN 0.                       
    
+   /* PRO */
+   ASSIGN llProCustomer = fIsProSubscription(iiMsSeq).
+
    fCreateRequest(0,
-                  fMakeTS(),
+                  Func.Common:mMakeTS(),
                   icCreator,
                   ilCreateFees,
                   ilSendSMS).
@@ -225,6 +229,7 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
           bCreaReq.ReqDParam2  = ideFee
           bCreaReq.ReqIParam1  = iiCreditCheck
           bCreaReq.ReqIParam2  = iiOrderID
+          bCreaReq.ReqIParam4  = (IF llProCustomer OR icSource EQ {&REQUEST_SOURCE_MIGRATION} THEN 1 ELSE 0) /* This is for request action rules, so only bundles specific to PRO customer are activated*/
           bCreaReq.ReqIParam5  = iiRequestFlags
           bCreaReq.Salesman    = icSalesman
           bCreaReq.ReqSource   = icSource
@@ -234,10 +239,10 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
    RELEASE bCreaReq.
 
    /* initial actions */
-   RUN requestaction_init.p (liReqCreated).
+   RUN Mm/requestaction_init.p (liReqCreated).
 
    /* Send right away SMS related to the CLI Type change */
-   RUN requestaction_sms.p(INPUT liReqCreated,
+   RUN Mm/requestaction_sms.p(INPUT liReqCreated,
                            INPUT icNewType,
                            INPUT icSource).
   
@@ -263,7 +268,7 @@ FUNCTION fServiceActStamp RETURNS DECIMAL
    /* check if there are scheduling rules for closing service */
    IF iiValue = 0 THEN DO:   
       FIND bReqComp NO-LOCK WHERE
-           bReqComp.Brand   = gcBrand AND
+           bReqComp.Brand   = Syst.Var:gcBrand AND
            bReqComp.ServCom = icServCom NO-ERROR.
       IF AVAILABLE bReqComp AND bReqComp.CloseTime = 1  
       THEN llSerClose = TRUE.
@@ -272,12 +277,12 @@ FUNCTION fServiceActStamp RETURNS DECIMAL
    /* otherwise check links to other components; some of them may have
       a rule for closing */
    ELSE FOR EACH ScUpdRule NO-LOCK WHERE
-                 ScUpdRule.Brand    = gcBrand   AND
+                 ScUpdRule.Brand    = Syst.Var:gcBrand   AND
                  ScUpdRule.ServCom  = icServCom AND
                  ScUpdRule.OldValue = 0         AND
                  ScUpdRule.NewValue = 1,
            FIRST bReqComp NO-LOCK WHERE
-                 bReqComp.Brand   = gcBrand AND
+                 bReqComp.Brand   = Syst.Var:gcBrand AND
                  bReqComp.ServCom = ScUpdRule.UpdServCom:
 
       IF bReqComp.CloseTime = 1 THEN DO:
@@ -304,7 +309,7 @@ FUNCTION fServiceActStamp RETURNS DECIMAL
       liCReqTime = 60.
    END.
        
-   ldChgStamp = fMake2DT(ldtCReqDate,
+   ldChgStamp = Func.Common:mMake2DT(ldtCReqDate,
                          liCReqTime).
    
    IF ldChgStamp = ? THEN ldChgStamp = 0.
@@ -372,9 +377,9 @@ FUNCTION fServiceRequest RETURNS INTEGER
    
    /* links to other components */
    IF CAN-FIND(FIRST ScUpdRule WHERE
-                     ScUpdRule.Brand   = gcBrand AND
+                     ScUpdRule.Brand   = Syst.Var:gcBrand AND
                      ScUpdRule.ServCom = icServCom) AND
-      LOOKUP(katun,"WEB,NEWTON") > 0
+      LOOKUP(Syst.Var:katun,"WEB,NEWTON") > 0
    THEN DO:
    
       liOldValue = IF iiValue > 0 THEN 0 ELSE 1. 
@@ -467,7 +472,7 @@ FUNCTION fSaldoPaymentRequest RETURNS INTEGER
    IF ocResult > "" THEN RETURN 0.                       
 
    /* set activation time if caller has not determined it */
-   IF idChgStamp = ? THEN idChgStamp = fMakeTS().
+   IF idChgStamp = ? THEN idChgStamp = Func.Common:mMakeTS().
 
    fCreateRequest(2,
                   idChgStamp,
@@ -556,7 +561,7 @@ FUNCTION fAddressRequest RETURNS INTEGER
    lcInvGroup  = fDefInvGroup(icRegion).
    
    FIND InvGroup WHERE
-        InvGroup.Brand    = gcBrand AND
+        InvGroup.Brand    = Syst.Var:gcBrand AND
         InvGroup.InvGroup = lcInvGroup NO-LOCK NO-ERROR.
    FIND Region WHERE Region.Region = icRegion NO-LOCK NO-ERROR.
    
@@ -584,7 +589,7 @@ FUNCTION fAddressRequest RETURNS INTEGER
 
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest(6,
                   idActStamp,
@@ -643,7 +648,7 @@ FUNCTION fUserAccountRequest RETURNS INTEGER
    IF ocResult > "" THEN RETURN 0.                       
 
    /* activation time is always immediately */
-   ldChgStamp = fMakeTS().
+   ldChgStamp = Func.Common:mMakeTS().
 
    fCreateRequest(5,
                   ldChgStamp,
@@ -684,7 +689,7 @@ FUNCTION fPerContractPIN RETURNS INTEGER
 
    /* activation time */
    IF idActStamp = ? OR idActStamp = 0
-   THEN idActStamp = fMakeTS().
+   THEN idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest(7,
                   idActStamp,
@@ -726,7 +731,7 @@ FUNCTION fPCUpdateRequest RETURNS INTEGER
    END. 
    /* validate contrat type */
    IF NOT CAN-FIND(FIRST DayCampaign WHERE 
-                         DayCampaign.Brand   = gcBrand AND
+                         DayCampaign.Brand   = Syst.Var:gcBrand AND
                          DayCampaign.DCEvent = icContrType)
    THEN DO:
       ocResult = "Invalid contract type".
@@ -745,7 +750,7 @@ FUNCTION fPCUpdateRequest RETURNS INTEGER
    IF ocResult > "" THEN RETURN 0. 
    /* activation time */
    IF idActStamp = ? OR idActStamp = 0
-   THEN idActStamp = fMakeTS().
+   THEN idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest(8,
                   idActStamp,
@@ -783,6 +788,7 @@ FUNCTION fPCActionRequest RETURNS INTEGER
     INPUT  icSMS          AS CHAR,   /* sms */
     INPUT  ideResidualFee AS DEC,    /* payterm residual fee */
     INPUT  iiPerContID    AS INT,    /* Periodical Contract-ID */
+    INPUT  icSVAParams    AS CHAR,   /* Parameters to be stoerd for SVA vase*/
     OUTPUT ocResult       AS CHAR):
 
    DEF VAR liReqType  AS INT  NO-UNDO.
@@ -792,6 +798,7 @@ FUNCTION fPCActionRequest RETURNS INTEGER
    DEF VAR lcBONOContracts  AS CHAR NO-UNDO.
    
    DEF BUFFER bMsRequest FOR MsRequest.
+   DEF BUFFER ServiceLimit FOR ServiceLimit.
 
    lcBONOContracts = fCParamC("BONO_CONTRACTS").
    
@@ -829,7 +836,7 @@ FUNCTION fPCActionRequest RETURNS INTEGER
    END. 
 
    IF NOT CAN-FIND(FIRST DayCampaign WHERE 
-                         DayCampaign.Brand   = gcBrand AND
+                         DayCampaign.Brand   = Syst.Var:gcBrand AND
                          DayCampaign.DCEvent = icContrType)
    THEN DO:
       ocResult = "Invalid contract type".
@@ -847,7 +854,7 @@ FUNCTION fPCActionRequest RETURNS INTEGER
   
    /* activation time */
    IF idActStamp = ? OR idActStamp = 0 THEN
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest(liReqtype,
                   idActStamp,
@@ -874,6 +881,7 @@ FUNCTION fPCActionRequest RETURNS INTEGER
    ASSIGN bCreaReq.ReqSource   = icSource
           bCreaReq.ReqCParam2  = icActType
           bCreaReq.ReqCParam3  = icContrType
+          bCreaReq.ReqCparam6  = icSVAParams
           bCreaReq.ReqIParam3  = iiPerContID 
           bCreaReq.ReqIParam2  = liWaitFor
           bCreaReq.ReqDParam2  = ideResidualFee
@@ -887,6 +895,22 @@ FUNCTION fPCActionRequest RETURNS INTEGER
    IF liReqType EQ 8 AND icContrType EQ "TARJ7" THEN DO:
       IF fActivateTARJ7Promo(iiMsSeq, idActStamp) THEN
          bCreaReq.ReqDParam1 = 1228.
+   END.
+
+   IF liReqType EQ 8 AND 
+      LOOKUP(icContrType,"TARJ7,TARJ9") > 0 AND
+      CAN-FIND(FIRST Order NO-LOCK WHERE
+                     Order.MsSeq = iiMsSeq AND
+                     Order.CLIType = icContrType AND
+                     Order.Crstamp >= 20170301 AND
+                     Order.Crstamp < 20170405.25200 AND
+                     Order.OrderType < 2) THEN DO:
+      
+      FIND ServiceLimit NO-LOCK where
+           ServiceLimit.groupcode = icContrType and
+           ServiceLimit.dialtype = {&DIAL_TYPE_GPRS} no-error.
+      IF AVAIL ServiceLimit THEN     
+         bCreaReq.ReqDParam1 = ServiceLimit.inclamt * 2.
    END.
    
    /* Landing Page Enhancement with Upgrade UPSELL */
@@ -913,7 +937,7 @@ FUNCTION fPCActionRequest RETURNS INTEGER
    IF LOOKUP(icContrType,lcBONOContracts + ",HSPA_ROAM_EU,TARJ_UPSELL") > 0 THEN DO:
       FIND FIRST bReqOwner WHERE bReqOwner.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
       IF AVAILABLE bReqOwner THEN
-         RUN requestaction_sms.p(INPUT liReqCreated,
+         RUN Mm/requestaction_sms.p(INPUT liReqCreated,
                                  INPUT bReqOwner.CLIType,
                                  INPUT icSource).
    END. /* IF liReqType = 9 AND */
@@ -947,7 +971,7 @@ FUNCTION fPaymPlanRequest RETURNS INTEGER
    END.
    
    /* set activation time */
-   ldActStamp = fMakeTS().
+   ldActStamp = Func.Common:mMakeTS().
 
    fCreateRequest(11,
                   ldActStamp,
@@ -1002,7 +1026,7 @@ FUNCTION fMarketingRequest RETURNS INTEGER
 
    /* activation time */
    IF idActStamp = ? OR idActStamp = 0
-   THEN idActStamp = fMakeTS().
+   THEN idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest(12,
                   idActStamp,
@@ -1049,10 +1073,10 @@ PROCEDURE pCheckServiceLinks:
           iiNewValue  = MIN(iiNewValue,1)
           ocCreated   = "".
           
-   IF idLinkStamp = 0 THEN idLinkStamp = fMakeTS().
+   IF idLinkStamp = 0 THEN idLinkStamp = Func.Common:mMakeTS().
  
    FOR EACH ScUpdRule NO-LOCK WHERE
-            ScUpdRule.Brand    = gcBrand    AND
+            ScUpdRule.Brand    = Syst.Var:gcBrand    AND
             ScUpdRule.ServCom  = icServCom  AND
             ScUpdRule.OldValue = iiOldValue AND
             ScUpdRule.NewValue = iiNewValue:
@@ -1112,6 +1136,20 @@ PROCEDURE pCheckServiceLinks:
   
 END PROCEDURE.
 
+FUNCTION fIsOrderForProCustomer RETURNS LOGICAL
+   (INPUT iiOrderID AS INTEGER):
+
+   DEF BUFFER Order FOR Order.
+
+   FIND FIRST Order NO-LOCK WHERE Order.Brand = Syst.Var:gcBrand AND Order.OrderID = iiOrderID NO-ERROR.
+
+   IF INDEX(Order.orderchannel,"PRO") > 0 THEN
+       RETURN TRUE.
+   ELSE 
+       RETURN FALSE.
+   
+END FUNCTION.
+
 FUNCTION fSubscriptionRequest RETURNS INTEGER
    (INPUT  iiMSSeq       AS INT,    /* MSSeq */
     INPUT  icCli         AS CHAR,
@@ -1119,8 +1157,8 @@ FUNCTION fSubscriptionRequest RETURNS INTEGER
     INPUT  iiTrafficType AS INT,
     INPUT  icCreator     AS CHAR,
     INPUT  idActStamp    AS DEC,    /* when request should be handled */
-    INPUT  icReqParam    AS CHAR,
-    INPUT  icReqParam2   AS CHAR,  /*New SIM or ISDN*/
+    INPUT  icReqParam    AS CHAR,  /*Type of operation*/ 
+    INPUT  icReqParam2   AS CHAR,  /*Order / New SIM or ISDN*/
     INPUT  icReqParam3   AS CHAR,  /*DMS usage, old SIM*/
     INPUT  icReqParam4   AS CHAR,  /*DMS usage, reason*/
     INPUT  icReqParam6   AS CHAR,  /*DMS usage, contract_id*/
@@ -1129,9 +1167,11 @@ FUNCTION fSubscriptionRequest RETURNS INTEGER
     INPUT  icReqSource   AS CHAR,
     OUTPUT ocResult      AS CHAR).
 
-   DEFINE VARIABLE liReqType AS INTEGER   NO-UNDO.
-   DEFINE VARIABLE lcSpecial AS CHARACTER NO-UNDO.
-      
+   DEFINE VARIABLE liReqType     AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lcSpecial     AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE llProCustomer AS LOGICAL   NO-UNDO INIT FALSE.
+   DEFINE VARIABLE liOrderId     AS INTEGER   NO-UNDO.
+
    IF (icReqParam EQ "CREATE" OR
       icReqParam EQ "CREATE-FIXED") AND
       (iiMSSeq  = 0 OR
@@ -1167,8 +1207,15 @@ FUNCTION fSubscriptionRequest RETURNS INTEGER
 
    /* activation time */
    IF idActStamp = ? OR idActStamp = 0 THEN
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
+   IF liReqType = {&REQTYPE_SUBSCRIPTION_CREATE} THEN 
+   DO:  
+       ASSIGN
+           liOrderId     = INT(icReqParam2) 
+           llProCustomer = fIsOrderForProCustomer(liOrderId).
+   END.
+     
    fCreateRequest(liReqType,
                   idActStamp,
                   icCreator,
@@ -1185,6 +1232,7 @@ FUNCTION fSubscriptionRequest RETURNS INTEGER
       bCreaReq.ReqCParam4 = icReqParam4
       bCreaReq.ReqCParam6 = icReqParam6
       bCreaReq.ReqIParam1 = iiTrafficType
+      bCreaReq.ReqIParam4 = (IF llProCustomer THEN 1 ELSE 0) /* This is for request action rules, so only bundles specific to PRO customer are activated */
       bCreaReq.ReqDParam2 = ideCharge
       bCreaReq.ReqSource  = icReqSource
       liReqCreated        = bCreaReq.MsRequest.
@@ -1214,7 +1262,7 @@ FUNCTION fODInvoiceRequest RETURNS INTEGER
 
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest(20,
                   idActStamp,
@@ -1259,7 +1307,7 @@ FUNCTION fSubRequest RETURNS INTEGER
    
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest(iiReqtype,
                   idActStamp,
@@ -1299,7 +1347,7 @@ FUNCTION fAfterSalesRequest RETURNS INTEGER
    
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest(46,
                   idActStamp,
@@ -1333,7 +1381,7 @@ FUNCTION fChargeCompRequest RETURNS INTEGER
 
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest({&REQTYPE_CHARGE_AND_COMPENSATION},
                   idActStamp,
@@ -1374,7 +1422,7 @@ FUNCTION fEmailSendingRequest RETURNS INTEGER
 
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest({&REQTYPE_EMAIL_SENDING},
                   idActStamp,
@@ -1415,7 +1463,7 @@ FUNCTION fRevertRenewalOrderRequest RETURNS INTEGER
    
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest({&REQTYPE_REVERT_RENEWAL_ORDER},
                   idActStamp,
@@ -1464,7 +1512,7 @@ FUNCTION fInstallmentChangeRequest RETURNS INTEGER
    IF ocResult > "" THEN RETURN 0.
 
    fCreateRequest({&REQTYPE_INSTALLMENT_CONTRACT_CHANGE},
-                  fMakeTS(),
+                  Func.Common:mMakeTS(),
                   icCreator,
                   TRUE, 
                   FALSE).   /* sms */
@@ -1484,6 +1532,52 @@ FUNCTION fInstallmentChangeRequest RETURNS INTEGER
 
    RETURN liReqCreated.
      
+END FUNCTION.
+
+FUNCTION fConvFixedSTCReq RETURNS INTEGER
+   (INPUT icCLIType   AS CHAR,
+    INPUT iiMsSeq     AS INT,
+    INPUT ideActStamp AS DEC,
+    INPUT icReqSource AS CHAR,
+    INPUT iiMsRequest AS INT):
+
+   DEF VAR liRequest AS INT  NO-UNDO.
+   DEF VAR lcError   AS CHAR NO-UNDO.
+   DEF VAR lcResult  AS CHAR NO-UNDO.
+
+   IF fListMatrix(Syst.Var:gcBrand,
+                  "CONVFIXEDSTC",
+                  "SubsTypeFrom;SubsTypeTo",
+                  icCLIType,
+                  OUTPUT lcResult) = 1 THEN DO:
+      liRequest = fCTChangeRequest(iiMsSeq,
+                                   lcResult,
+                                   "",    /* lcBundleID */
+                                   "",    /* lcBankAcc = bank code validation is already done in newton */
+                                   ideActStamp,
+                                   0,     /* liCreditcheck 0 = Credit check ok */
+                                   0,     /* extend contract 0=no extend_term_contract */
+                                   ""     /* pcSalesman */,
+                                   FALSE, /* charge */
+                                   TRUE,  /* send sms */
+                                   "",
+                                   0,
+                                   icReqSource,
+                                   0,     /* piOrderID */
+                                   iiMsRequest,
+                                   "",    /*contract_id*/
+                                   OUTPUT lcError).
+
+      IF liRequest = 0 THEN
+         Func.Common:mWriteMemo("MobSub",
+                          STRING(iiMsSeq),
+                          0,
+                          "STC to " + lcResult + "failed",
+                          lcError).
+   END.
+
+   RETURN liRequest.
+
 END FUNCTION.
 
 &ENDIF            

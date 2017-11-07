@@ -6,7 +6,7 @@
              10.04.2002/ht  ImportStamp added
              03.05.2002/aam use PaymVouch (fvoucher.i)
              17.05.2002/aam partial credit 
-             03.06.2002/aam katun added TO memo
+             03.06.2002/aam Syst.Var:katun added TO memo
              26.09.2002/aam customer balances in table CustBal 
              23.10.2002/aam makepaym.p separated from this
              15.04.2003/aam makepaym returns voucher nbr
@@ -14,9 +14,9 @@
              18.04.2006/aam update payment plan
 */   
 
-{commali.i}
-{tmsparam2.i}
-{fpplan.i}
+{Syst/commali.i}
+{Func/tmsparam2.i}
+{Func/fpplan.i}
 
 DEF INPUT PARAMETER iInvno AS INT  NO-UNDO.
 DEF INPUT PARAMETER iDate  AS Date NO-UNDO.
@@ -48,8 +48,8 @@ FIRST blasku exclusive-lock where
     blasku.CrInvNum = Invoice.InvNum:
 
     /* CURRENT balances */
-    RUN invbal (Invoice.InvNum, OUTPUT xDebit).
-    RUN invbal (blasku.InvNum, OUTPUT xcredit).
+    RUN Ar/invbal.p (Invoice.InvNum, OUTPUT xDebit).
+    RUN Ar/invbal.p (blasku.InvNum, OUTPUT xcredit).
 
     /* Balance FOR debit invoice must be greater OR equal TO the 
        credit Balance */
@@ -65,7 +65,7 @@ FIRST blasku exclusive-lock where
     /* FIRST the debit invoice */
     DO liRetry = 1 TO 5:  /* in case of an undo error try again */
 
-       RUN makepaym (BUFFER Invoice,
+       RUN Ar/makepaym.p (BUFFER Invoice,
                      xDebit,
                      iDate,
                      xClearAcc,
@@ -76,7 +76,7 @@ FIRST blasku exclusive-lock where
                      "",
                      "Credited with invoice " +
                         string(blasku.InvNum) +
-                        " Handler: " + katun,
+                        " Handler: " + Syst.Var:katun,
                      OUTPUT liVoucher
                     ).
 
@@ -98,7 +98,7 @@ FIRST blasku exclusive-lock where
     /* THEN the credit invoice */
     DO liRetry = 1 TO 5:  /* in case of an undo error try again */
 
-       RUN makepaym (BUFFER blasku,
+       RUN Ar/makepaym.p (BUFFER blasku,
                      xCredit,
                      iDate,
                      xClearAcc,
@@ -109,7 +109,7 @@ FIRST blasku exclusive-lock where
                      "",
                      "Credit for invoice " +
                         string(Invoice.InvNum) +
-                        " Handler: " + katun,
+                        " Handler: " + Syst.Var:katun,
                      OUTPUT liVoucher
                     ).
 

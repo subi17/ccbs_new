@@ -6,11 +6,11 @@
 
 &IF "{&CParamFunctionDefined}" NE "YES"
 &THEN
-{cparam2.i}
+{Func/cparam2.i}
 &ENDIF
 
-{lib/starfop.i}
-{email.i}
+{Mc/lib/starfop.i}
+{Func/email.i}
 
 DEF VAR lcFile       AS CHAR  NO-UNDO. 
 DEF VAR lcXLTDir     AS CHAR  NO-UNDO. 

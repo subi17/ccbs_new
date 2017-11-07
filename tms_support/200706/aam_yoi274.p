@@ -1,7 +1,6 @@
-{testpaa.i}
-katun = "ari".
+{Syst/testpaa.i}
+Syst.Var:katun = "ari".
 
-{timestamp.i}
 
 def stream sread.
 input stream sread from /apps/snet/200706/clitype_change_yoi274.txt.
@@ -22,7 +21,7 @@ ldtcurr = 6/20/7.
 
 def buffer bowner for msowner.
 
-ldchg = fmake2dt(ldtcurr,28800).
+ldchg = Func.Common:mMake2DT(ldtcurr,28800).
 
 
 repeat:
@@ -102,7 +101,7 @@ repeat:
    /* monthly fee for cont2 */
    if clitype.feemodel1 > "" then do:
    
-      RUN creasfee (MobSub.CustNum,
+      RUN Mc/creasfee.p (MobSub.CustNum,
                     MobSub.MsSeq,
                     ldtcurr,
                     "MobSub",

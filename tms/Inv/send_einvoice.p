@@ -8,16 +8,16 @@
 ----------------------------------------------------------------------- */
 &GLOBAL-DEFINE MailTitleSpaces Allow
 
-{commali.i}
-{tmsconst.i}
-{fmakemsreq.i}
-{cparam2.i}
-{email.i}
-{femailinvoice.i}
-{ftransdir.i}
-{edefine.i NEW}
-{heartbeat.i}
-{refcode.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/cparam2.i}
+{Func/email.i}
+{Func/femailinvoice.i}
+{Func/ftransdir.i}
+{Inv/edefine.i NEW}
+{Func/heartbeat.i}
+{Func/refcode.i}
 
 DEF INPUT PARAMETER iiMSrequest AS INT  NO-UNDO.
 
@@ -77,7 +77,7 @@ ASSIGN lcAddrConfDir = fCParamC("RepConfDir")
 
 INVOICE_LOOP:
 FOR EACH Invoice WHERE
-         Invoice.Brand    = gcBrand AND
+         Invoice.Brand    = Syst.Var:gcBrand AND
          Invoice.InvType  = 1 AND
          Invoice.InvDate >= ldaDateFrom AND
          Invoice.InvAmt  >= 0 AND
@@ -183,7 +183,7 @@ lcTransDir = lcTransDir + "/einvoice.log".
 
 IF lcTransDir > "" AND SEARCH(lcAddrConfDir) <> ? THEN DO:
    FOR FIRST InvText NO-LOCK WHERE
-             InvText.Brand     = gcBrand            AND
+             InvText.Brand     = Syst.Var:gcBrand            AND
              InvText.Target    = "General"          AND
              InvText.KeyValue  = "EmailConfeInvoice" AND
              InvText.Language  = 5                  AND 

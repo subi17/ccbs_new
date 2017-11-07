@@ -12,9 +12,8 @@
   VERSION ......: M15
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEF /* NEW */ SHARED VAR siirto AS CHAR.
 
@@ -44,7 +43,7 @@ DEF VAR lhist        AS LO  FORMAT "*/ "       NO-UNDO.
 DEF VAR lclstamp     AS DEC                    NO-UNDO.
 
 DEF VAR pHandle      AS HANDLE                 NO-UNDO.
-RUN clipers PERSISTENT SET pHandle.
+RUN Mf/clipers.p PERSISTENT SET pHandle.
 
 DEF TEMP-TABLE ttCLI LIKE CLI.
 DEF BUFFER bufatno FOR CLI.
@@ -57,7 +56,7 @@ FORM
    lcfrom            COLUMN-LABEL "Valid from" FORMAT "x(16)"
    lcto              COLUMN-LABEL "Valid to"   FORMAT "x(16)"
 WITH CENTERED OVERLAY ROW 2 13 DOWN
-   COLOR value(cfc) title COLOR value(ctc) 
+   COLOR value(Syst.Var:cfc) title COLOR value(Syst.Var:ctc) 
    " HISTORY OF A-SUB NUMBER " + an1 + " " 
 FRAME sel.
 
@@ -65,11 +64,11 @@ FORM /* Numeron haku kentällä CustNum */
    haku-CLI  
       HELP "Enter A-sub no. or its first digits"          
 WITH
-   ROW 4 COL 2 TITLE COLOR VALUE(ctc) " FIND A-SUB. NO " 
-   COLOR VALUE(cfc) NO-LABELS OVERLAY 
+   ROW 4 COL 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND A-SUB. NO " 
+   COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY 
 FRAME haku-f1.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 FIND FIRST CLI WHERE 
@@ -147,38 +146,38 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 0  ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 0   ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = false.
-         run ufkey.p.
+         Syst.Var:ufk[1]= 0  Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= 0   Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = false.
+         RUN Syst/ufkey.p.
       END.
 
       hide MESSAGE NO-PAUSE.
       IF jarj = 1 THEN DO:
-         CHOOSE ROW lcfrom {uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) lcfrom WITH FRAME sel.
+         CHOOSE ROW lcfrom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) lcfrom WITH FRAME sel.
       END.
 /*      ELSE IF jarj = 2 THEN DO:
-         CHOOSE ROW CLI.CLI {uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) CLI.CLI WITH FRAME sel.
+         CHOOSE ROW CLI.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) CLI.CLI WITH FRAME sel.
       END.
     IF jarj = 3 THEN DO:
-         CHOOSE ROW CLI.?? {uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) CLI.?? WITH FRAME sel.
+         CHOOSE ROW CLI.?? {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) CLI.?? WITH FRAME sel.
       END.
       ELSE IF jarj = 4 THEN DO:
-         CHOOSE ROW CLI.??  {uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) CLI.? WITH FRAME sel.
+         CHOOSE ROW CLI.??  {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) CLI.? WITH FRAME sel.
       END.
 */
       IF rtab[frame-line] = ? THEN NEXT.
 
-      nap = keylabel(lastkey).
+      Syst.Var:nap = keylabel(lastkey).
 
-      IF lookup(nap,"cursor-right") > 0 THEN DO:
+      IF lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
          jarj = jarj + 1. IF jarj > jarjlkm THEN jarj = 1.
       END.
-      IF lookup(nap,"cursOR-left") > 0 THEN DO:
+      IF lookup(Syst.Var:nap,"cursOR-left") > 0 THEN DO:
          jarj = jarj - 1. IF jarj = 0 THEN jarj = jarjlkm.
       END.
 
@@ -202,10 +201,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(lastkey).
+      ASSIGN Syst.Var:nap = keylabel(lastkey).
 
       /* edellinen rivi */
-      IF lookup(nap,"cursOR-up") > 0 THEN DO WITH FRAME sel:
+      IF lookup(Syst.Var:nap,"cursOR-up") > 0 THEN DO WITH FRAME sel:
          IF frame-line = 1 THEN DO:
             FIND CLI WHERE recid(CLI) = rtab[1] NO-LOCK.
             RUN pFindPrev.
@@ -230,7 +229,7 @@ BROWSE:
       END. /* edellinen rivi */
 
       /* seuraava rivi */
-      ELSE IF lookup(nap,"cursOR-down") > 0 THEN DO
+      ELSE IF lookup(Syst.Var:nap,"cursOR-down") > 0 THEN DO
       WITH FRAME sel:
          IF frame-line = frame-down THEN DO:
             FIND CLI WHERE recid(CLI) = rtab[frame-down] NO-LOCK .
@@ -256,7 +255,7 @@ BROWSE:
       END. /* seuraava rivi */
 
       /* edellinen sivu */
-      ELSE IF lookup(nap,"prev-page,page-up") > 0 THEN DO:
+      ELSE IF lookup(Syst.Var:nap,"prev-page,page-up") > 0 THEN DO:
          muisti = rtab[1].
          FIND CLI WHERE recid(CLI) = muisti NO-LOCK NO-ERROR.
          RUN pFindPrev.
@@ -280,7 +279,7 @@ BROWSE:
      END. /* edellinen sivu */
 
      /* seuraava sivu */
-     ELSE IF lookup(nap,"NEXT-page,page-down") > 0 THEN DO WITH FRAME sel:
+     ELSE IF lookup(Syst.Var:nap,"NEXT-page,page-down") > 0 THEN DO WITH FRAME sel:
         /* kohdistin alimmalle riville */
         IF rtab[frame-down] = ? THEN DO:
             MESSAGE "THIS IS THE LAST PAGE !".
@@ -295,10 +294,10 @@ BROWSE:
      END. /* seuraava sivu */
 /*
      /* Haku 1 */
-     ELSE IF lookup(nap,"1,f1") > 0 THEN DO on endkey undo, NEXT LOOP:
-        cfc = "puyr". run ufcolor.
+     ELSE IF lookup(Syst.Var:nap,"1,f1") > 0 THEN DO on endkey undo, NEXT LOOP:
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
         haku-CLI = "".
-        ehto = 9. run ufkey. ufkey = true.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
         UPDATE haku-CLI WITH FRAME haku-f1.
         HIDE FRAME haku-f1 NO-PAUSE.
         IF haku-CLI <> "" THEN DO:
@@ -318,38 +317,38 @@ BROWSE:
      END. /* Haku sar. 1 */
 */     
 
-     ELSE IF lookup(nap,"enter,return") > 0 THEN DO:
+     ELSE IF lookup(Syst.Var:nap,"enter,return") > 0 THEN DO:
         muisti = rtab[frame-line(sel)].
         RUN pUpdateCLI IN pHandle(INPUT-OUTPUT muisti).
         must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF lookup(nap,"home") > 0 THEN DO:
+     ELSE IF lookup(Syst.Var:nap,"home") > 0 THEN DO:
         RUN pFindFirst.
         ASSIGN muisti = recid(CLI) must-print = true.
         NEXT LOOP.
      END.
 
-     ELSE IF lookup(nap,"end") > 0 THEN DO : /* viimeinen tietue */
+     ELSE IF lookup(Syst.Var:nap,"end") > 0 THEN DO : /* viimeinen tietue */
         RUN pFindLast.
         ASSIGN muisti = recid(CLI) must-print = true.
         NEXT LOOP.
      END.
 
-     ELSE IF lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 DELETE PROCEDURE pHandle.
 
 PROCEDURE LOCAL-DISP-ALL: 
 
-   lcTo = fTS2HMS(CLI.clStamp). 
+   lcTo = Func.Common:mTS2HMS(CLI.clStamp). 
    IF CLI.clStamp GE lclstamp THEN lcTo = "UNTIL FURTHER". 
 
    FIND FIRST Customer WHERE 
@@ -360,7 +359,7 @@ PROCEDURE LOCAL-DISP-ALL:
       CLI.CustNum 
       Customer.CustName 
       CLI.Owner  
-      fTS2HMS(CLI.crStamp) @ lcfrom  
+      Func.Common:mTS2HMS(CLI.crStamp) @ lcfrom  
       lcto 
    WITH FRAME SEL. 
 

@@ -13,10 +13,10 @@
   VERSION ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{utumaa.i}
-{fvatfact.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/utumaa.i}
+{Func/fvatfact.i}
 
 DEF INPUT PARAMETER idtDate1     AS DATE  NO-UNDO.
 DEF INPUT PARAMETER idtDate2     AS DATE  NO-UNDO.
@@ -75,6 +75,9 @@ ASSIGN
     viiva3   = fill("-",lev)
     viiva4   = fill("-",lev).
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
+
 form header
    viiva1 AT 1 SKIP
    ynimi at 1 format "x(30)" 
@@ -82,7 +85,7 @@ form header
       "Page" at 102  
       sl format "ZZZZ9" skip
    xDateHeader AT 40 FORMAT "X(30)"
-      pvm format "99.99.9999" at 103 skip
+      TODAY FORMAT "99.99.9999" at 103 skip
    viiva2 at 1 skip
    "Subscription type" AT 1
    "Product"           AT 31
@@ -140,7 +143,7 @@ FUNCTION CheckPage RETURNS LOGIC
     (iAddLine AS INT).
 
     IF rl >= skayt1 - iAddLine THEN DO:
-        {uprfeed.i rl}
+        {Syst/uprfeed.i rl}
         ASSIGN rlx = 0
                sl = sl + 1.
         VIEW STREAM tul frame sivuotsi.  
@@ -171,7 +174,7 @@ ASSIGN lcPeriod1 = STRING(YEAR(idtDate1),"9999") +
 
 /* invoiced data from desired period, fixed calls and mobile calls */
 FOR EACH Customer NO-LOCK WHERE
-    Customer.Brand     = gcBrand    AND
+    Customer.Brand     = Syst.Var:gcBrand    AND
     Customer.InvGroup >= icInvGrp1  AND
     Customer.InvGroup <= icInvGrp2,
 EACH InvSeq NO-LOCK WHERE
@@ -289,13 +292,13 @@ BREAK BY ttBal.SubType
       ASSIGN lcSubType = "".
       IF LOOKUP(ttBal.SubType,"fixed,unknown") = 0 THEN DO:
          FIND CLIType WHERE 
-              CLIType.Brand   = gcBrand AND
+              CLIType.Brand   = Syst.Var:gcBrand AND
               CLIType.CliType = ttBal.SubType NO-LOCK NO-ERROR.
          IF AVAILABLE CLIType THEN lcSubType = CLIType.CliName.
       END. 
 
       FIND BillItem WHERE 
-           BillItem.Brand    = gcBrand AND
+           BillItem.Brand    = Syst.Var:gcBrand AND
            BillItem.BillCode = ttBal.prod NO-LOCK NO-ERROR.
 
       PUT STREAM tul
@@ -370,7 +373,7 @@ BREAK BY ttBal.SubType
 
 END. 
 
-{uprfeed.i rl}
+{Syst/uprfeed.i rl}
 
 HIDE FRAME fQty NO-PAUSE.
 ASSIGN SESSION:NUMERIC-FORMAT = xSessionNum.

@@ -1,0 +1,32 @@
+/* RPC to return DSS related information.
+ *
+ * @input: custnum;int;mandatory;customer number
+ * @output array;containing DSS details
+ * @struct cli;string;
+           cli_type;string;
+           data_bundle_limit;double;
+           dss_limit;double
+*/
+{fcgi_agent/xmlrpc/xmlrpc_access.i}
+
+/* Input parameters */
+DEF VAR pcstruct            AS CHAR NO-UNDO.
+DEF VAR top_array           AS CHAR NO-UNDO.
+DEF VAR lcResultStruct      AS CHAR NO-UNDO.
+DEF VAR ldePortingTime      AS DATETIME NO-UNDO.
+DEF VAR lcValue             AS CHAR NO-UNDO.
+
+IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
+
+lcResultStruct = add_struct(response_toplevel_id, "").
+
+add_string(lcResultStruct,"descripcion","La operacion se ha realizado con exito").
+add_string(lcResultStruct, "codigoRespuesta", "0000 00000").
+/*
+add_string(lcResultStruct,"descripcion",'El estado de la solicitud de alta de portabilidad movil debe ser "ASOL" para poder ser confirmada. El estado de la solicitud es "ACON"').
+add_string(lcResultStruct, "codigoRespuesta", "CONF COEST").
+add_string(lcResultStruct,"descripcion",'El estado de la solicitud de alta de portabilidad movil debe ser "ASOL" para poder ser rechazar. El estado de la solicitud es "AREC"').
+add_string(lcResultStruct, "codigoRespuesta", "RECH REEST").
+*/
+
+

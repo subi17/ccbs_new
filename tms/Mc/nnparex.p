@@ -8,9 +8,9 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{function.i}
+{Func/function.i}
 
 DEF NEW shared STREAM excel.
 
@@ -57,13 +57,13 @@ form
      "Output File:" at 15 exfile help "Name of output file"
      skip(1)
 WITH
-   width 80 COLOR value(cfc)
-   title color value(ctc) " " + ynimi +
+   width 80 COLOR value(Syst.Var:cfc)
+   title color value(Syst.Var:ctc) " " + Syst.Var:ynimi +
    " INVOICE SUMMARY SALESMAN/AGENT "
-   + string(pvm,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
+   + string(TODAY,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
 
 DO FOR TMSUser.
-   FIND TMSUser where TMSUser.UserCode = katun no-lock.
+   FIND TMSUser where TMSUser.UserCode = Syst.Var:katun no-lock.
    ASSIGN exdir = fChkPath(TMSUser.RepDir).
 END.
 
@@ -71,14 +71,14 @@ assign exfile   = exdir + "partcomm.txt".
 
 /* Make Date proposal */
 ASSIGN
-date1 = date(month(pvm),1,year(pvm)).
+date1 = date(month(TODAY),1,year(TODAY)).
 date2 = date1 + 35.
 date2 = date(month(date2),1,year(date2)) - 1.
 
-cfc = "sel". RUN ufcolor.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
 LOOP:
 repeat WITH FRAME rajat:
-    ehto = 9. RUN ufkey.
+    Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
     UPDATE 
     date1    
@@ -89,7 +89,7 @@ repeat WITH FRAME rajat:
             Salesman.Salesman = input Salesman),"Unknown Salesman !")
     exfile EDITING:
        READKEY.
-       IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO WITH FRAME rajat:
+       IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME rajat:
           PAUSE 0.
           if frame-field = "sm-code" THEN DO:
              disp LC(exdir + "partcomm." + input Salesman + ".txt") 
@@ -105,11 +105,11 @@ repeat WITH FRAME rajat:
 
 TOIMI:
    repeat:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
-      IF toimi = 1 THEN NEXT LOOP.
-      IF toimi = 8 THEN LEAVE LOOP.
-      IF toimi = 5 THEN DO:
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
+      RUN Syst/ufkey.p.
+      IF Syst.Var:toimi = 1 THEN NEXT LOOP.
+      IF Syst.Var:toimi = 8 THEN LEAVE LOOP.
+      IF Syst.Var:toimi = 5 THEN DO:
          LEAVE TOIMI.
       END.   
    END.
@@ -117,27 +117,27 @@ TOIMI:
    OUTPUT STREAM excel TO value(exfile).
 
    PUT STREAM excel UNFORMATTED
-      ynimi  tab "Invoice summary by Salesman / agent".
-      RUN uexskip(1).
+      Syst.Var:ynimi  tab "Invoice summary by Salesman / agent".
+      RUN Syst/uexskip.p(1).
 
    PUT STREAM excel UNFORMATTED
       "All amounts are from invoice rows; amounts are rounded and ex VAT".
-      RUN uexskip(1).
+      RUN Syst/uexskip.p(1).
 
    PUT STREAM excel UNFORMATTED
       "Invoicing Group" tab.
       if InvGroup = "" then put stream excel "ALL".
       ELSE PUT STREAM excel UNFORMATTED InvGroup.
-      RUN uexskip(1).
+      RUN Syst/uexskip.p(1).
 
    PUT STREAM excel UNFORMATTED
       "Salesman:" tab Salesman tab SmName.
-      RUN uexskip(1).
+      RUN Syst/uexskip.p(1).
 
    PUT STREAM excel UNFORMATTED
       "Invoices written:" tab date1 format "99.99.9999" " - "
                               date2 format "99.99.9999".
-      RUN uexskip(1).
+      RUN Syst/uexskip.p(1).
 
    PUT STREAM excel UNFORMATTED
    tab   
@@ -145,7 +145,7 @@ TOIMI:
    "Calls"        tab
    "Contr.Fees"   tab
    "Inv.ex.VAT"   tab.
-   RUN uexskip(2).
+   RUN Syst/uexskip.p(2).
 
    message "Printing ...".
 
@@ -200,7 +200,7 @@ TOIMI:
          Calls          tab
          cfees          tab
          totinv         tab.
-         RUN uexskip(1).
+         RUN Syst/uexskip.p(1).
       END.
    END.
 
@@ -213,7 +213,7 @@ TOIMI:
    cfees   = round((accum total cfees),0).
    totinv  = round((accum total totinv),0).
 
-   RUN uexskip(1).
+   RUN Syst/uexskip.p(1).
 
    PUT STREAM excel UNFORMATTED
    "All Salesman"    tab
@@ -221,7 +221,7 @@ TOIMI:
    Calls             tab
    cfees             tab
    totinv            tab.
-   RUN uexskip(1).
+   RUN Syst/uexskip.p(1).
 
    OUTPUT STREAM excel CLOSE.
 

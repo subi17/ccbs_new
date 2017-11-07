@@ -1,13 +1,12 @@
 /* create_rerate_trigger_all.p   14.02.12/aam
 */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
-   gcBrand = "1"
-   katun = "cron".
-{eventlog.i}
-{cparam2.i}
-{date.i}
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun = "cron".
+{Syst/eventlog.i}
+{Func/cparam2.i}
 
 DEF VAR llCreated  AS LOG  NO-UNDO.
 DEF VAR liRateDay  AS INT  NO-UNDO.
@@ -19,7 +18,7 @@ fELog("Trigger_rerate_all","Started").
 
 ASSIGN 
    lcLastDays = fCParamC("RerateALLDays")
-   ldaLastDay = fLastDayOfMonth(TODAY)
+   ldaLastDay = Func.Common:mLastDayOfMonth(TODAY)
    llCreated  = FALSE.
 IF lcLastDays = ? THEN lcLastDays = "". 
    

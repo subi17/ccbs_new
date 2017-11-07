@@ -8,10 +8,9 @@
   VERSION ......: Yoigo
  ---------------------------------------------------------------------------- */
 
-{commali.i}
-{paymfile.i}
-{cparam2.i}
-{timestamp.i}
+{Syst/commali.i}
+{Ar/paymfile.i}
+{Func/cparam2.i}
 
 DEF INPUT  PARAMETER  icFile     AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER  iiAccNum   AS INT  NO-UNDO.
@@ -69,8 +68,7 @@ FUNCTION fErrorLog RETURNS DECIMAL
    IF liCustNum > 0 THEN DO:
       FIND Customer WHERE Customer.CustNum = liCustNum NO-LOCK NO-ERROR.
       IF AVAILABLE Customer THEN 
-         lcErrCust = DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1,
-                                      BUFFER Customer).
+         lcErrCust = Func.Common:mPrintCustName(BUFFER Customer).
    END.
    
    PUT STREAM sError UNFORMATTED
@@ -87,12 +85,12 @@ FUNCTION fErrorLog RETURNS DECIMAL
    DO TRANS:
       /* save to db for reporting */
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
              ErrorLog.ActionID  = "DDRET"
              ErrorLog.TableName = "Invoice"
              ErrorLog.KeyValue  = STRING(liInvNum)
              ErrorLog.ActionTS  = ldCurrStamp
-             ErrorLog.UserCode  = katun
+             ErrorLog.UserCode  = Syst.Var:katun
              ErrorLog.ErrorMsg  = icMessage.
    END.
       
@@ -132,7 +130,7 @@ lcErrorFile = lcErrorFile + "_" +
 FIND FIRST Company NO-LOCK.
 ASSIGN 
    lcCompanyID = REPLACE(Company.CompanyID,"-","")
-   ldCurrStamp = fMakeTS()
+   ldCurrStamp = Func.Common:mMakeTS()
    liRead      = 0
    ldTotalAmt  = 0.
 
@@ -161,8 +159,7 @@ REPEAT:
       
       ASSIGN liRead       = liRead + 1
              lcErrorDescr = lcError + " " +
-                             DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                              "Payment",
+                             Func.Common:mTMSCodeName("Payment",
                                               "DDError",
                                               lcError).
  

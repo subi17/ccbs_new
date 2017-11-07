@@ -8,11 +8,11 @@
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
-{fmakemsreq.i}
-{cparam2.i}
-{log.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/cparam2.i}
+{Func/log.i}
 
 DEF INPUT PARAMETER iiMSRequest AS INT  NO-UNDO.
 
@@ -122,7 +122,7 @@ OUTPUT STREAM sPushLog TO VALUE(lcPushLogFile).
 
 PUSH_INVOICE_LOOP:
 FOR EACH Invoice WHERE
-         Invoice.Brand    = gcBrand AND
+         Invoice.Brand    = Syst.Var:gcBrand AND
          Invoice.InvType  = 1 AND
          Invoice.InvDate >= ldaDateFrom AND
          Invoice.InvAmt  >= 0 NO-LOCK:

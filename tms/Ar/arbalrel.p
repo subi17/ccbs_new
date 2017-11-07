@@ -12,9 +12,9 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i "new"}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "arbalrel"
        tuni2 = "".
@@ -41,42 +41,42 @@ form
       SPACE(2)
    SKIP(4)
    WITH ROW 1 SIDE-LABELS WIDTH 80
-        TITLE " " + ynimi + " BALANCE REPORT " + STRING(pvm,"99-99-99") + " "
+        TITLE " " + Syst.Var:ynimi + " BALANCE REPORT " + STRING(TODAY,"99-99-99") + " "
 FRAME valinta.
 
 VIEW FRAME valinta.
 PAUSE 0 NO-MESSAGE.
 
-FIND LAST InvGroup WHERE InvGroup.Brand = gcBrand NO-LOCK NO-ERROR.
+FIND LAST InvGroup WHERE InvGroup.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 IF AVAILABLE InvGroup THEN ASSIGN lcInvGroup[2] = InvGroup.InvGroup.
 
 DISPLAY lcInvGroup WITH frame valinta.
 ASSIGN
    ufkey = false
-   nap   = "first".
+   Syst.Var:nap   = "first".
 
 toimi:
    REPEAT WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 132  
-         ufk[2]= 0  ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
-         ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         Syst.Var:ufk[1]= 132  
+         Syst.Var:ufk[2]= 0  Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= 63 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 
+         Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
+         RUN Syst/ufkey.p.
       END.
 
-      IF nap NE "first" THEN DO:
+      IF Syst.Var:nap NE "first" THEN DO:
          READKEY.
          ASSIGN
-         nap = keylabel(lastkey).
+         Syst.Var:nap = keylabel(lastkey).
       END.
-      ELSE ASSIGN nap = "1".
+      ELSE ASSIGN Syst.Var:nap = "1".
 
-      IF LOOKUP(nap,"1,f1") > 0 THEN DO:
-         ehto = 9. 
-         RUN ufkey.p.
+      IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO:
+         Syst.Var:ehto = 9. 
+         RUN Syst/ufkey.p.
          REPEAT WITH frame valinta ON ENDKEY UNDO, LEAVE:
             UPDATE 
                lcInvGroup[1]
@@ -89,25 +89,25 @@ toimi:
          NEXT toimi.
       END.
 
-      ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 THEN DO:
          LEAVE toimi.
       END.
 
-      ELSE IF LOOKUP(nap,"8,f8") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN DO:
          RETURN.
       END.
-   END. /* toimi */
+   END. /* Syst.Var:toimi */
 
 ASSIGN tila = TRUE.
-{tmsreport.i "return"}
+{Syst/tmsreport.i "return"}
 
 MESSAGE "Printing in process...".            
 
-RUN arbalrep.p(lcInvGroup[1],
+RUN Ar/arbalrep.p(lcInvGroup[1],
                lcInvGroup[2]).
 
 ASSIGN tila = FALSE.
-{tmsreport.i}        
+{Syst/tmsreport.i}        
 
 MESSAGE "Printing complete !" VIEW-AS ALERT-BOX.
 

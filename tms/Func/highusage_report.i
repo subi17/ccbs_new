@@ -156,14 +156,13 @@ END FUNCTION.
 /**   This simplifies the current highusagerep.p to:
 
 
-{highusage_report.i}
+{Func/highusage_report.i}
 
-{commali.i}
-{excel.i}
-{timestamp.i}
-{email.i}
-{highusage.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/email.i}
+{Func/highusage.i}
+{Func/cparam2.i}
 
 DEF input parameter   ideCreateTS  AS DE    NO-UNDO FORMAT "99999999.99999".
 DEF  input parameter   iStatus       AS INT  NO-UNDO.
@@ -175,8 +174,8 @@ DEF VAR excelfile          AS CHAR              NO-UNDO.
 DEF VAR xHighSpenderDir    AS CHAR              NO-UNDO.
 DEF VAR lcOutPath          AS CHAR              NO-UNDO.
 
-{cparam.i RepConfDir            return}.  xConfDir        = tmsparam.CharVal.
-{cparam.i HighSpenderDirectory  return}.  xhighspenderDir = tmsparam.CharVal.
+{Func/cparam.i RepConfDir            return}.  xConfDir        = tmsparam.CharVal.
+{Func/cparam.i HighSpenderDirectory  return}.  xhighspenderDir = tmsparam.CharVal.
 ASSIGN
       tiednimi    = fCParam("CRONSPOOL","highspendnew.p") + "highspender_" +
 
@@ -233,13 +232,12 @@ FUNCTION process_highspender_row RETURN LOGICAL
   DEF VAR memotext AS CHAR NO-UNDO.
   DEF VAR memostamp AS CHAR NO-UNDO.
 
-  lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                      BUFFER phInvCust).
+  lcCustName = Func.Common:mDispCustName(BUFFER phInvCust).
   IF avail memo THEN  DO:
      ASSIGN memotext = REPLACE(memo.memotext,chr(10)," ") .
      IF memo.CreStamp > memo.ChgStamp THEN
-        memostamp = fTS2HMS(memo.CreStamp) .
-     ELSE memostamp = fTS2HMS(memo.ChgStamp).
+        memostamp = Func.Common:mTS2HMS(memo.CreStamp) .
+     ELSE memostamp = Func.Common:mTS2HMS(memo.ChgStamp).
 
   END.
   ELSE   ASSIGN memotext = "" memostamp = "".
@@ -273,7 +271,7 @@ FUNCTION process_highspender_row RETURN LOGICAL
     RETURN TRUE.
 END FUNCTION.
 
-loop_highspender_table(gcBrand, ideCreateTS, iStatus).
+loop_highspender_table(Syst.Var:gcBrand, ideCreateTS, iStatus).
 
 OUTPUT STREAM excel CLOSE.
 

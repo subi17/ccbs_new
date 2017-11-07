@@ -1,0 +1,12 @@
+bulkload: Currency
+  Currency: "EUR"
+  CurrName: "Euro"
+  SubUnit: "1/100"
+  SubName: "Cnt"
+
+bulkload: Currency
+  Currency: "SDR"
+  CurrName: "Special Drawing Righ"
+  SubUnit: "1/100"
+  SubName: "SDR"
+

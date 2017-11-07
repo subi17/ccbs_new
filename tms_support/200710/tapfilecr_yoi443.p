@@ -18,12 +18,11 @@
 
 {roamtariff.i}
 {csvfuntion.i}
-{commali.i}
-{cparam.i2}
+{Syst/commali.i}
+{Func/cparam.i2}
 
-{timestamp.i}
 
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 DEFINE INPUT PARAMETER pcPLMN     AS CHARACTER NO-UNDO.
 DEFINE INPUT PARAMETER pdaDate1   AS DATE      NO-UNDO.

@@ -16,22 +16,22 @@
   Version ......: M15
   ------------------------------------------------------------------*/
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'company'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'company'}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCompany AS HANDLE NO-UNDO.
    lhCompany = BUFFER Company:HANDLE.
    RUN StarEventInitialize(lhCompany).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhCompany).
+      RUN Mc/eventview2.p(lhCompany).
    END.
 
 END.
@@ -43,8 +43,9 @@ DEF VAR llOk AS LOG NO-UNDO.
 
 
 form
-   skip(4)
+   skip(3)
    Company.CompName     label "Company name .." AT 10 FORMAT "X(40)" SKIP
+   Company.CreditorName label "Creditor name.." AT 10 FORMAT "X(40)" SKIP
    Company.Address      label "Address ......." AT 10 FORMAT "X(40)" SKIP
    Company.PostOffice   label "Post Office ..." AT 10 FORMAT "X(40)" SKIP
    Company.Phone        label "Phone 1 ......." AT 10 FORMAT "X(40)" SKIP
@@ -58,26 +59,27 @@ form
    Company.Address4     label "Addit. Address3" AT 10 FORMAT "X(40)" SKIP
    SKIP(1)
    
-with title color value(ctc) " " + ynimi + " COMPANY INFORMATION "
-     + string(pvm,"99-99-99") + " "
-     COLOR value(cfc) ROW 1 col 1 width 80 side-labels
+with title color value(Syst.Var:ctc) " " + Syst.Var:ynimi + " COMPANY INFORMATION "
+     + string(TODAY,"99-99-99") + " "
+     COLOR value(Syst.Var:cfc) ROW 1 col 1 width 80 side-labels
      FRAME yri.
 
-cfc = "yri". RUN ufcolor.
+Syst.Var:cfc = "yri". RUN Syst/ufcolor.p.
 
 PAUSE 0 no-message.
 
 OLRefresh:
 repeat ON ENDKEY UNDO OLRefresh, NEXT OLRefresh:
 
-   FIND FIRST Company WHERE Company.Brand = gcBrand exclusive-lock no-error.
+   FIND FIRST Company WHERE Company.Brand = Syst.Var:gcBrand exclusive-lock no-error.
    IF NOT AVAILABLE Company THEN DO:
       CREATE Company.
-      Company.Brand = gcBrand.
+      Company.Brand = Syst.Var:gcBrand.
    END.
 
    DISPLAY 
    Company.CompName 
+   Company.CreditorName 
    Company.Address 
    Company.PostOffice 
    Company.Phone 
@@ -95,23 +97,24 @@ repeat ON ENDKEY UNDO OLRefresh, NEXT OLRefresh:
    repeat:
 
       ASSIGN
-      ufk    = 0 
-      ufk[1] = (IF lcRight = "RW" THEN 91 ELSE 0)
-      ufk[3] = (IF lcRight = "RW" THEN 927 ELSE 0)
-      ufk[5] = (IF lcRight = "RW" THEN 15 ELSE 0) 
-      ufk[8] = 8  
-      ehto   = 0. 
+      Syst.Var:ufk    = 0 
+      Syst.Var:ufk[1] = (IF lcRight = "RW" THEN 91 ELSE 0)
+      Syst.Var:ufk[3] = (IF lcRight = "RW" THEN 927 ELSE 0)
+      Syst.Var:ufk[5] = (IF lcRight = "RW" THEN 15 ELSE 0) 
+      Syst.Var:ufk[8] = 8  
+      Syst.Var:ehto   = 0. 
       
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
-      IF toimi = 1 AND lcRight = "RW" THEN DO:
-         cfc = "yri". RUN ufcolor.
-         ehto = 9. RUN ufkey.
+      IF Syst.Var:toimi = 1 AND lcRight = "RW" THEN DO:
+         Syst.Var:cfc = "yri". RUN Syst/ufcolor.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCompany).
 
          UPDATE 
             Company.CompName 
+            Company.CreditorName 
             Company.Address 
             Company.PostOffice 
             Company.Phone 
@@ -126,27 +129,27 @@ repeat ON ENDKEY UNDO OLRefresh, NEXT OLRefresh:
 
          IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCompany).
 
-         cfc = "yri". RUN ufcolor.
+         Syst.Var:cfc = "yri". RUN Syst/ufcolor.p.
          PAUSE 0 no-message.
          NEXT toimi.
       END.
 
-      ELSE IF toimi = 3 AND lcRight = "RW" THEN DO:
+      ELSE IF Syst.Var:toimi = 3 AND lcRight = "RW" THEN DO:
       
-        RUN memo(INPUT 0,
+        RUN Mc/memo.p(INPUT 0,
                  INPUT "Company",
                  INPUT STRING(Company.UnitCode),
                  INPUT "Company").
 
       END.
 
-      ELSE IF toimi = 5 AND lcRight = "RW" THEN DO:
+      ELSE IF Syst.Var:toimi = 5 AND lcRight = "RW" THEN DO:
          ASSIGN
-         ynimi = CompName. /* common-alueelle */
+         Syst.Var:ynimi = CompName. /* common-alueelle */
          LEAVE OLRefresh.
       END.
 
-      ELSE IF toimi = 8 THEN DO:
+      ELSE IF Syst.Var:toimi = 8 THEN DO:
          
          llOk = FALSE.
          MESSAGE "Do You want to leave without saving ?"
@@ -159,6 +162,6 @@ repeat ON ENDKEY UNDO OLRefresh, NEXT OLRefresh:
          IF llOk THEN UNDO OLRefresh, LEAVE OLRefresh.
       END.
          
-   END. /* toimi */
+   END. /* Syst.Var:toimi */
 END. /* OLRefresh */
 

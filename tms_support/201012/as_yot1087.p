@@ -1,12 +1,12 @@
-{commpaa.i}
-katun = "Qvantel".
-gcBrand = "1".
+{Syst/commpaa.i}
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
 
-{fbankdata.i}
-{fctchange.i}
-{fmakemsreq.i}
-{fcharge_comp_loaded.i}
-{tmsconst.i}
+{Func/fbankdata.i}
+{Func/fctchange.i}
+{Func/fmakemsreq.i}
+{Func/fcharge_comp_loaded.i}
+{Syst/tmsconst.i}
 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 DEFINE VARIABLE lcError AS CHARACTER NO-UNDO. 
@@ -27,7 +27,7 @@ put stream sout unformatted "SUBSC.ID|MSISDN|RESULT" skip.
 */
 LOOPPI:
 FOR EACH mobsub where
-         mobsub.brand = gcBrand AND
+         mobsub.brand = Syst.Var:gcBrand AND
          mobsub.clitype = "TARJ2" NO-LOCK:
    
    i = i + 1.

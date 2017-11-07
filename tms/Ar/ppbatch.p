@@ -13,25 +13,25 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{finvbal.i}
-{fppbatch.i}
+{Syst/commali.i}
+{Func/finvbal.i}
+{Func/fppbatch.i}
 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'PPBatch'}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'PPBatch'}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPPBatch AS HANDLE NO-UNDO.
    lhPPBatch = BUFFER PPBatch:HANDLE.
    RUN StarEventInitialize(lhPPBatch).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhPPBatch).
+      RUN Mc/eventview2.p(lhPPBatch).
    END.
 
 END.
@@ -93,8 +93,8 @@ form
     PPBatch.PaidAmt   
     lcStatus         COLUMN-LABEL "Status"     FORMAT "X(11)"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) 
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) 
     lcTitle
     FRAME sel.
 
@@ -124,8 +124,8 @@ form
           FORMAT "X(30)"
     PPBatch.RefNum   COLON 20
 WITH  OVERLAY ROW 6 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -204,8 +204,7 @@ END.
 
 DO i = 0 TO 5:
    lcStatusLst = lcStatusLst + 
-                DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "PPBatch","PBStatus",STRING(i)) + ",". 
+                Func.Common:mTMSCodeName("PPBatch","PBStatus",STRING(i)) + ",". 
 END.
 
 FIND PaymPlan WHERE 
@@ -224,7 +223,7 @@ FOR EACH PPBatch OF PaymPlan NO-LOCK:
           llDivBatches    = FALSE.
 END.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 ASSIGN orders    = "  By Batch ,    ,   "
@@ -253,15 +252,15 @@ REPEAT WITH FRAME sel:
    END.
 
    IF must-add THEN DO:  /* Add a PPBatch  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
         liBatch = 1.
         FIND LAST PPBatch OF PaymPlan NO-LOCK NO-ERROR.
@@ -378,38 +377,38 @@ REPEAT WITH FRAME sel:
 
       IF ufkey AND NOT llDivBatches THEN DO:
          ASSIGN
-         ufk   = 0
-         ufk[3]= 1777
-         ufk[2]= (IF lcRight = "RW" AND 
+         Syst.Var:ufk   = 0
+         Syst.Var:ufk[3]= 1777
+         Syst.Var:ufk[2]= (IF lcRight = "RW" AND 
                   LOOKUP(STRING(PaymPlan.PPStatus),"1,7") > 0 THEN 1779 ELSE 0)
-         ufk[5]= (IF lcRight = "RW" AND 
+         Syst.Var:ufk[5]= (IF lcRight = "RW" AND 
                   LOOKUP(STRING(PaymPlan.PPStatus),"1,7") > 0 THEN 5 ELSE 0)
-         ufk[6]= (IF lcRight = "RW" AND
+         Syst.Var:ufk[6]= (IF lcRight = "RW" AND
                   LOOKUP(STRING(PaymPlan.PPStatus),"1,7") > 0 THEN 4 ELSE 0)
-         ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
          
-         IF CAN-FIND(FIRST PPBatch OF PaymPlan) THEN ufk[2] = 0.
+         IF CAN-FIND(FIRST PPBatch OF PaymPlan) THEN Syst.Var:ufk[2] = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
       
       HIDE MESSAGE NO-PAUSE.
       
       IF NOT llDivBatches THEN DO:
          IF order = 1 THEN DO:
-            CHOOSE ROW PPBatch.PPBatch ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-            COLOR DISPLAY VALUE(ccc) PPBatch.PPBatch WITH FRAME sel.
+            CHOOSE ROW PPBatch.PPBatch {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+            COLOR DISPLAY VALUE(Syst.Var:ccc) PPBatch.PPBatch WITH FRAME sel.
          END.
       
-         nap = keylabel(LASTKEY).
+         Syst.Var:nap = keylabel(LASTKEY).
       END.
-      ELSE ASSIGN nap          = "f2"
+      ELSE ASSIGN Syst.Var:nap          = "f2"
                   llDivBatches = FALSE.
       
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"3,f3,2,f2,5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"3,f3,2,f2,5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -417,10 +416,10 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -438,7 +437,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -463,7 +462,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -489,7 +488,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND PPBatch WHERE recid(PPBatch) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -513,7 +512,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -528,8 +527,8 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* create batches automatically according to chosen invoices */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0 THEN DO:  /* add */
-        {uright2.i}
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 AND Syst.Var:ufk[2] > 0 THEN DO:  /* add */
+        {Syst/uright2.i}
         
         IF iiBatchQty = 0 THEN DO:
            /* ask nbr of batches from user */
@@ -538,9 +537,9 @@ REPEAT WITH FRAME sel:
            ASSIGN liBatch     = 0  
                   ldtFromDate = ?
                   ldtToDate   = ?
-                  ehto        = 9
+                  Syst.Var:ehto        = 9
                   ufkey       = TRUE.
-           RUN ufkey.
+           RUN Syst/ufkey.p.
         
            REPEAT ON ENDKEY UNDO, LEAVE:
               UPDATE liBatch 
@@ -582,17 +581,17 @@ REPEAT WITH FRAME sel:
            
      END. 
      
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND Syst.Var:ufk[5] > 0
      THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND Syst.Var:ufk[6] > 0
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
@@ -608,7 +607,7 @@ REPEAT WITH FRAME sel:
        END. 
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        PPBatch.PPBatch PPBatch.DueDate PPBatch.Amount .
 
        RUN local-find-NEXT.
@@ -630,7 +629,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        PPBatch.PPBatch PPBatch.DueDate PPBatch.Amount .
 
        IF ok THEN DO:
@@ -649,7 +648,7 @@ REPEAT WITH FRAME sel:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -658,7 +657,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPPBatch).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY PPBatch.PPBatch.
 
        RUN local-UPDATE-record.                                  
@@ -677,19 +676,19 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(PPBatch) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(PPBatch) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8,3,F3") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8,3,F3") > 0 THEN DO:
 
         IF ldBatchTot NE PaymPlan.Amount AND 
            (PaymPlan.PPStatus < 3 OR PaymPlan.PPStatus = 7)
@@ -710,7 +709,7 @@ REPEAT WITH FRAME sel:
                lcInfo = "".
                
         /* move directly to invoices */    
-        IF LOOKUP(nap,"3,F3") > 0 THEN ol2Inv = TRUE.
+        IF LOOKUP(Syst.Var:nap,"3,F3") > 0 THEN ol2Inv = TRUE.
         
         LEAVE LOOP.
      END.
@@ -719,7 +718,7 @@ REPEAT WITH FRAME sel:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-ASSIGN si-recid    = xrecid.
+ASSIGN Syst.Var:si-recid    = xrecid.
 
 
 PROCEDURE local-find-this:
@@ -803,7 +802,7 @@ PROCEDURE local-UPDATE-record:
          (PaymPlan.PPStatus < 4 OR PaymPlan.PPStatus = 7)
       THEN DO:
       
-         ehto = 9. RUN ufkey.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
        
          REPEAT:
          
@@ -818,7 +817,7 @@ PROCEDURE local-UPDATE-record:
                 FRAME-FIELD = "PBStatus" 
              THEN DO:
                
-               RUN h-tmscodes(INPUT "PPBatch",     /* TableName */
+               RUN Help/h-tmscodes.p(INPUT "PPBatch",     /* TableName */
                                     "PBStatus",  /* FieldName */
                                     "AccRec", /* GroupCode */
                               OUTPUT lcCode).
@@ -829,13 +828,13 @@ PROCEDURE local-UPDATE-record:
                   WITH FRAME lis.   
                END.
                                       
-               ehto = 9.
-               RUN ufkey.
+               Syst.Var:ehto = 9.
+               RUN Syst/ufkey.p.
                NEXT. 
             END.
 
          
-             ELSE IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 
+             ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 
              THEN DO WITH FRAME lis:
              
                 PAUSE 0.

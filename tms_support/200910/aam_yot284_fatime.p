@@ -1,5 +1,5 @@
-{testpaa.i}
-katun = "ari".
+{Syst/testpaa.i}
+Syst.Var:katun = "ari".
 
 def stream sread.
 input stream sread from /apps/snet/200910/CONTRATO_F_F_200910.txt.
@@ -58,7 +58,7 @@ repeat:
         lccli    format "x(10)"
         ldamt    format ">>>9.99".
  
-   run /home/ari/work/creafat.p (msowner.invcust,
+   RUN /home/ari/work/creafat.p (msowner.invcust,
                   msowner.msseq,
                   lcfatgrp,
                   ldamt,

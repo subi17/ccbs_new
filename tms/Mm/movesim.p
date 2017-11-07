@@ -9,9 +9,9 @@
  Version .......: M15
  ============================================================================*/
 
-{commali.i}
-{utumaa.i new}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/utumaa.i new}
+{Syst/eventval.i} 
 
 ASSIGN tuni1 = "*******"
        tuni2 = "".
@@ -37,9 +37,9 @@ DEF BUFFER xSIM FOR SIM.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhStoBal AS HANDLE NO-UNDO.
    lhStoBal = BUFFER StoBal:HANDLE.
@@ -51,7 +51,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhSim).
+      RUN Mc/eventview2.p(lhSim).
    END.
 END.
 
@@ -75,36 +75,36 @@ WITH
    width 80
    OVERLAY
    TITLE 
-   " " + ynimi + 
+   " " + Syst.Var:ynimi + 
    " MOVE SIM CARDS " +
-   string(pvm,"99.99.9999") + " "
+   string(TODAY,"99.99.9999") + " "
    NO-LABELS
    FRAME MAIN.
 
 
 /* get default codes */
-{tmsparam.i "MainStock"     return}. Stock1 = TMSParam.CharVal.
-{tmsparam.i "DefDelivStock" return}. Stock2 = TMSParam.CharVal.
-{tmsparam.i "SIMStatusNew"  return}. SIMStat  = TMSParam.IntVal.
+{Func/tmsparam.i "MainStock"     return}. Stock1 = TMSParam.CharVal.
+{Func/tmsparam.i "DefDelivStock" return}. Stock2 = TMSParam.CharVal.
+{Func/tmsparam.i "SIMStatusNew"  return}. SIMStat  = TMSParam.IntVal.
 
 PAUSE 0.
 
 MAIN:
 REPEAT WITH FRAME main:
 
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE
    Stock1 Stock2 SIMStat SimArt icc1 icc2
    WITH FRAME main EDITING:
       READKEY.
 
-      IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME main:
+      IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME main:
          HIDE MESSAGE.
 
          IF FRAME-FIELD = "stock1" THEN DO:
             FIND Stock WHERE 
-                 Stock.Brand = gcBrand   AND 
+                 Stock.Brand = Syst.Var:gcBrand   AND 
                  Stock.Stock = INPUT Stock1 NO-LOCK NO-ERROR.
             IF NOT AVAIL Stock THEN DO:
                BELL.
@@ -116,7 +116,7 @@ REPEAT WITH FRAME main:
 
          ELSE IF FRAME-FIELD = "SimArt" THEN DO:
             FIND SimArt WHERE 
-                 SimArt.Brand  = gcBrand AND 
+                 SimArt.Brand  = Syst.Var:gcBrand AND 
                  SimArt.SimArt = INPUT SimArt NO-LOCK NO-ERROR.
             IF NOT AVAIL SimArt THEN DO:
                BELL.
@@ -127,7 +127,7 @@ REPEAT WITH FRAME main:
          END.
          ELSE IF FRAME-FIELD = "Stock2" THEN DO:
             FIND Stock2 WHERE 
-                 Stock2.Brand  = gcBrand AND 
+                 Stock2.Brand  = Syst.Var:gcBrand AND 
                  Stock2.Stock = INPUT Stock2 NO-LOCK NO-ERROR.
             IF NOT AVAIL Stock2 THEN DO:
                BELL.
@@ -155,7 +155,7 @@ REPEAT WITH FRAME main:
                Qty = integer(substr(INPUT icc2,2)).
 
                FIND xSIM WHERE 
-                    xSim.Brand = gcBrand AND 
+                    xSim.Brand = Syst.Var:gcBrand AND 
                     xSIM.ICC   = INPUT icc1 NO-LOCK.
                IF NOT AVAIL xSIM THEN DO:
                   BELL.
@@ -165,7 +165,7 @@ REPEAT WITH FRAME main:
 
                DO i = 1 TO Qty - 1.  
                   FIND NEXT xSIM WHERE
-                            xSim.Brand = gcBrand 
+                            xSim.Brand = Syst.Var:gcBrand 
                   no-lock no-error.
                   IF NOT AVAIL xSIM THEN DO:
                      BELL.
@@ -190,24 +190,24 @@ REPEAT WITH FRAME main:
 ACTION:
    REPEAT WITH FRAME main:
       ASSIGN
-      ufk = 0 ehto = 0
-      ufk[1] = 7 
-      ufk[5] = 795
-      ufk[8] = 8.
+      Syst.Var:ufk = 0 Syst.Var:ehto = 0
+      Syst.Var:ufk[1] = 7 
+      Syst.Var:ufk[5] = 795
+      Syst.Var:ufk[8] = 8.
 
       IF length(icc1) NE length(icc2) THEN DO:
          MESSAGE 
          "Both ICC ID Codes must be of same length !"
          VIEW-AS ALERT-BOX ERROR TITLE " INVALID ICC ID CODE(S) ".
-         ufk[5] = 0.
+         Syst.Var:ufk[5] = 0.
       END.   
 
 
-      RUN ufkey.
+      RUN Syst/ufkey.p.
 
-      IF toimi = 1 THEN NEXT  main.
-      IF toimi = 8 THEN LEAVE main.
-      IF TOIMI = 5 THEN DO:
+      IF Syst.Var:toimi = 1 THEN NEXT  main.
+      IF Syst.Var:toimi = 8 THEN LEAVE main.
+      IF Syst.Var:toimi = 5 THEN DO:
 
          i = 0.
          FOR 
@@ -242,10 +242,10 @@ ACTION:
             SIM.SimArt = SimArt  AND
             SIM.ICC    >= icc1   AND
             SIM.ICC    <= icc2   AND 
-            SIM.Brand   = gcBrand :
+            SIM.Brand   = Syst.Var:gcBrand :
 
        FIND  StoBal WHERE
-             Stobal.Brand  = gcBrand    AND 
+             Stobal.Brand  = Syst.Var:gcBrand    AND 
              StoBal.SimArt = SIM.SimArt AND
              StoBal.StoBal = SIM.Stock
        EXCLUSIVE-LOCK no-error.
@@ -266,12 +266,12 @@ ACTION:
        FIND  StoBal WHERE
              StoBal.SimArt = SIM.SimArt AND
              StoBal.StoBal = SIM.Stock  AND 
-             StoBal.Brand  = gcBrand 
+             StoBal.Brand  = Syst.Var:gcBrand 
        EXCLUSIVE-LOCK NO-ERROR.
        IF NOT AVAIL StoBal THEN DO:
           CREATE StoBal.
           ASSIGN
-             Stobal.Brand     = gcBrand 
+             Stobal.Brand     = Syst.Var:gcBrand 
              StoBal.SimArt    = SIM.SimArt
              StoBal.StoBal    = SIM.Stock
              StoBal.Balance   = StoBal.Balance    + 1

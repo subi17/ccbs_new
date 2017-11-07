@@ -7,14 +7,14 @@
   VERSION ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT  PARAMETER iiFatNum    AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER oiVoucher   AS INT  NO-UNDO.
 
 
 FIND FATime WHERE 
-     FATime.Brand  = gcBrand AND
+     FATime.Brand  = Syst.Var:gcBrand AND
      FATime.FATNum = iiFatNum NO-LOCK NO-ERROR.
 IF NOT AVAILABLE FATime THEN RETURN "FATime not found".
 
@@ -22,17 +22,17 @@ IF NOT AVAILABLE FATime THEN RETURN "FATime not found".
    -> make an adv.payment out of unused amount */
 FOR FIRST FatGroup OF FATime NO-LOCK,
     FIRST BillItem NO-LOCK WHERE
-          BillItem.Brand    = gcBrand AND
+          BillItem.Brand    = Syst.Var:gcBrand AND
           BillItem.BillCode = FatGroup.BillCode,
     FIRST Account NO-LOCK WHERE
-          Account.Brand   = gcBrand         AND
+          Account.Brand   = Syst.Var:gcBrand         AND
           Account.AccNum  = BillItem.AccNum AND
           Account.AccType = 19:
               
    /* adv.payment is posted to invoicing customer */
    FIND Customer OF FATime NO-LOCK.
    
-   RUN advpaym (Customer.InvCust,
+   RUN Ar/advpaym.p (Customer.InvCust,
                 Fatime.Amt - Fatime.Used - Fatime.TransQty,
                 TODAY,
                 Account.AccNum,

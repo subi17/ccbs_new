@@ -12,8 +12,8 @@
 &THEN
 
 &GLOBAL-DEFINE barrfunc YES
-{fmakemsreq.i}
-{tmsconst.i}
+{Func/fmakemsreq.i}
+{Syst/tmsconst.i}
 
 DEFINE TEMP-TABLE ttBarringCmd NO-UNDO
    FIELD BarrCode AS CHAR
@@ -460,7 +460,7 @@ FUNCTION fExistBarredSubForCustomer RETURNS LOGICAL
    DEF BUFFER MobSub FOR MobSub.
 
    FOR EACH MobSub NO-LOCK WHERE 
-            MobSub.Brand = gcBrand AND 
+            MobSub.Brand = Syst.Var:gcBrand AND 
             MobSub.CustNum = piCustNum AND 
             MobSub.MsStatus = 8 : 
       lcActiveBarrings = fGetActiveBarrings(MobSub.MsSeq).

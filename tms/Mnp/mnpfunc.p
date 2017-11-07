@@ -7,10 +7,10 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i} 
-{mnpmessages.i}
-{tmsconst.i}
-{create_eventlog.i}
+{Syst/commali.i} 
+{Mnp/mnpmessages.i}
+{Syst/tmsconst.i}
+{Func/create_eventlog.i}
 
 DEF INPUT PARAMETER pimnpseq AS INT . 
 DEF VAR lhTable AS HANDLE NO-UNDO.
@@ -113,7 +113,7 @@ IF llOngoingMNPMsg THEN DO:
    RETURN "".
 END.
 
-RUN selectbox.p(
+RUN Syst/selectbox.p(
   "Create MNP Message",
   lcOptions,
   OUTPUT lcSelected).
@@ -122,8 +122,8 @@ CASE lcSelected:
 
    WHEN {&MNP_CANCEL} THEN DO:
      
-     ehto = 10.
-     run ufkey.p.
+     Syst.Var:ehto = 10.
+     RUN Syst/ufkey.p.
      
      UPDATE 
       lcCancellationReason column-label "Reason code"
@@ -132,7 +132,7 @@ CASE lcSelected:
 
      if lookup(keylabel(LASTKEY),"f1,return") > 0 then do:
          
-         RUN mnp_operation.p(MNPProcess.MNPSeq,
+         RUN Mnp/mnp_operation.p(MNPProcess.MNPSeq,
             "cancel",
             lcCancellationReason).
          IF RETURN-VALUE NE "OK" THEN
@@ -141,8 +141,8 @@ CASE lcSelected:
    END.
    
    WHEN {&MNP_REJECT} THEN DO:
-     ehto = 10.
-     run ufkey.p.
+     Syst.Var:ehto = 10.
+     RUN Syst/ufkey.p.
      
      UPDATE 
       lcRejectionReason column-label "Reason code"
@@ -151,7 +151,7 @@ CASE lcSelected:
 
      if lookup(keylabel(LASTKEY),"f1,return") > 0 then do:
          
-         RUN mnp_operation.p(MNPProcess.MNPSeq,
+         RUN Mnp/mnp_operation.p(MNPProcess.MNPSeq,
             "reject",
             lcRejectionReason).
          IF RETURN-VALUE NE "OK" THEN
@@ -169,8 +169,8 @@ CASE lcSelected:
    WHEN {&MNP_NMN_DETAIL} THEN fSendMigrationNumberDetailRequest(MNPProcess.PortRequest).
    WHEN {&MNP_NR_DETAIL} THEN DO:
      
-     ehto = 10.
-     run ufkey.p.
+     Syst.Var:ehto = 10.
+     RUN Syst/ufkey.p.
      
      UPDATE 
       lcNumberRangeCode column-label "Code"
@@ -185,8 +185,8 @@ CASE lcSelected:
    WHEN {&MNP_PR_DETAIL} THEN fSendPortabilityDetailQuery(MNPProcess.PortRequest).
    WHEN {&MNP_PR_REQUESTED} THEN DO:
      
-     ehto = 10.
-     run ufkey.p.
+     Syst.Var:ehto = 10.
+     RUN Syst/ufkey.p.
      
      UPDATE 
       liPages column-label "Pages"
@@ -200,7 +200,7 @@ CASE lcSelected:
    END.
    WHEN {&MNP_NT_CANCEL} THEN DO:
       fSendNumberTerminationCancel(MNPProcess.PortRequest).
-      fMakeCreateEvent(lhTable,"",katun,"").
+      fMakeCreateEvent(lhTable,"",Syst.Var:katun,"").
    END.
    WHEN {&MNP_NT_DETAIL} THEN fSendNumberTerminationDetail(MNPProcess.PortRequest).
 
@@ -215,8 +215,8 @@ PROCEDURE pCreatePortabilityQuery:
    
    DEF FRAME a.     
    CREATE ttPortabilityQuery.
-   ehto = 10.
-   run ufkey.p.
+   Syst.Var:ehto = 10.
+   RUN Syst/ufkey.p.
 
    UPDATE ttPortabilityQuery WITH 
       FRAME a overlay 2 col row 2 centered
@@ -234,8 +234,8 @@ PROCEDURE pCreateNumberRangesQuery:
    
    DEF FRAME a.     
    CREATE ttNumberRangesQuery.
-   ehto = 10.
-   run ufkey.p.
+   Syst.Var:ehto = 10.
+   RUN Syst/ufkey.p.
 
    UPDATE ttNumberRangesQuery WITH 
       FRAME a overlay 1 col row 2 centered
@@ -253,8 +253,8 @@ PROCEDURE pCreateNumberTermQuery:
    
    DEF FRAME a.     
    CREATE ttNumberTermQuery.
-   ehto = 10.
-   run ufkey.p.
+   Syst.Var:ehto = 10.
+   RUN Syst/ufkey.p.
 
    UPDATE ttNumberTermQuery WITH 
       FRAME a overlay 2 col row 2 centered

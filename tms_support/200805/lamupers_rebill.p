@@ -49,7 +49,7 @@
                            credit loss posting (makepaym)
             31.12.2002/aam eventlog row for cancel event,
                            delete db-eventlog when run cancelled,
-                           katun instead of lUser (lUser was not assigned)
+                           Syst.Var:katun instead of lUser (lUser was not assigned)
             11.02.2003/aam ChargeType and DelType from customer to invoice 
             21.02.2003/aam BillInterest determines interest billing,
                            BillDblVat allows different vat methods,
@@ -136,8 +136,7 @@
             23.11.2005/aam new parameters to pCreateInv from pDepositInv
             30.11.2005/aam vat handling for adv.payment type fat rows  
             02.12.2005/aam check fatime.period before using it 
-            18.01.2006/aam qty for fat rows always 1,
-                           fPrintCustName()
+            18.01.2006/aam qty for fat rows always 1
             06.02.2006/jp  ttServiceCounter
             28.04.2006/aam new fat logic (priority,fatperc),
                            ttEventCust
@@ -170,30 +169,29 @@
             23.08.2007/aam ttIr and whole invoice as msseq based
 */
 
-{commali.i}                                                                   
-{country.i}
-{fixedfee.i}
-{cparam.i2}
-{timestamp.i}
-{fapvat.i}
-{billrund.i {1}}
-{fcustbal.i}
-{fcustcnt.i}
-{nncoit2.i}
-{fcurrency.i}
-{eventval.i}
-{fvasinv.i}
-{fduedate.i}
-{fsubser.i}
-{eventlog.i}
-{finvnum.i}
-{ftaxdata.i}
-{log.i}
+{Syst/commali.i}                                                                   
+{Syst/country.i}
+{Func/fixedfee.i}
+{Func/cparam.i2}
+{Func/fapvat.i}
+{Inv/billrund.i {1}}
+{Func/fcustbal.i}
+{Func/fcustcnt.i}
+{Func/nncoit2.i}
+{Func/fcurrency.i}
+{Syst/eventval.i}
+{Func/fvasinv.i}
+{Func/fduedate.i}
+{Func/fsubser.i}
+{Syst/eventlog.i}
+{Func/finvnum.i}
+{Func/ftaxdata.i}
+{Func/log.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhInvoice AS HANDLE NO-UNDO.
    lhInvoice = BUFFER Invoice:HANDLE.
@@ -213,9 +211,9 @@ FUNCTION fVolDiscFixed RETURNS LOG (BUFFER VFixCDR FOR FixCDR) IN fhVDHandle.
 FUNCTION fVolDiscMob   RETURNS LOG (BUFFER VMobCDR FOR MobCDR) IN fhVDHandle. 
 
 /* load volume discount procedures */
-RUN voldisc    PERSISTENT SET fhVDHandle. 
-RUN domcopers  PERSISTENT SET fhDCHandle.
-RUN cust_ratep PERSISTENT SET fhRRHandle.
+RUN Inv/voldisc.p    PERSISTENT SET fhVDHandle. 
+RUN Mm/domcopers.p  PERSISTENT SET fhDCHandle.
+RUN Rate/cust_ratep.p PERSISTENT SET fhRRHandle.
 &ENDIF
 
 DEF VAR lUpdacc       AS LOG  NO-UNDO.
@@ -554,13 +552,13 @@ FUNCTION fErrorLog RETURNS LOGIC
  
    /* save to db for reporting */
    CREATE ErrorLog.
-   ASSIGN ErrorLog.Brand     = gcBrand
+   ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
           ErrorLog.ActionID  = "BRUN"
           ErrorLog.TableName = "Customer"
           ErrorLog.KeyValue  = STRING(iiCustnum)
           ErrorLog.ErrorChar = icCLI
           ErrorLog.ErrorMsg  = icError.
-          ErrorLog.ActionTS  = fMakeTS().
+          ErrorLog.ActionTS  = Func.Common:mMakeTS().
     
 END FUNCTION.
 
@@ -737,7 +735,7 @@ FUNCTION fInvRowVAT RETURNS LOGICAL
                 ttIR.VatCode = 0.
                   
          FIND BillItem NO-LOCK WHERE 
-              BillItem.Brand    = gcBrand AND
+              BillItem.Brand    = Syst.Var:gcBrand AND
               BillItem.BillCode = ttir.BillCode NO-ERROR.
          IF NOT AVAILABLE BillItem THEN NEXT. /* will be rejected later on */
 
@@ -895,8 +893,8 @@ PROCEDURE pCreateInv:
    ASSIGN ldtBSDate     = TODAY
           liBSTime      = TIME
           liLastCreated = 0
-          ldBillPer[1]  = fMake2Dt(pDate1,0)
-          ldBillPer[2]  = fMake2Dt(pDate2,86399).
+          ldBillPer[1]  = Func.Common:mMake2DT(pDate1,0)
+          ldBillPer[2]  = Func.Common:mMake2DT(pDate2,86399).
 
    HIDE MESSAGE no-pause.
    PAUSE 0.
@@ -963,7 +961,7 @@ PROCEDURE pCreateInv:
       /* invseq handling */
       EMPTY TEMP-TABLE ttInvSeq.
 
-      gcBrand = xCustomer.Brand.
+      Syst.Var:gcBrand = xCustomer.Brand.
 
       /* get a list of subscriptions that should not be billed */
       lcBillDeny = "".
@@ -1056,7 +1054,7 @@ PROCEDURE pCreateInv:
          liArAccNum  = 0.
 
       /* ROW FOR starting the invoice */
-      fELog(katun,"INVOICE:Started:Customer:" + string(xcustomer.CustNum)).
+      fELog(Syst.Var:katun,"INVOICE:Started:Customer:" + string(xcustomer.CustNum)).
 
       FIND FIRST ttInvSeq NO-ERROR.
       
@@ -1094,7 +1092,7 @@ PROCEDURE pCreateInv:
 
          /* duplicated VAT handling was found */
          IF NOT llAllowDbl AND lDBLVat THEN DO:
-            fELog(katun,"INVOICE:DBLVAT:Customer:" + string(xcustomer.CustNum)).
+            fELog(Syst.Var:katun,"INVOICE:DBLVAT:Customer:" + string(xcustomer.CustNum)).
             fErrorLog(xCustomer.CustNum,
                       "",
                       "DBLVAT").
@@ -1118,7 +1116,7 @@ PROCEDURE pCreateInv:
 
          lcRepCode = SUBSTRING(xCustomer.RepCodes,liCnt,1).
          
-         RUN creasfee (xCustomer.CustNum,
+         RUN Mc/creasfee.p (xCustomer.CustNum,
                        0,
                        pDate2,
                        "InvSpec",
@@ -1137,10 +1135,10 @@ PROCEDURE pCreateInv:
 
             lcMobRep = "".
             
-             ASSIGN ldFromPer = fMake2Dt(IF ttCLI.FromDate NE ?
+             ASSIGN ldFromPer = Func.Common:mMake2DT(IF ttCLI.FromDate NE ?
                                          THEN ttCLi.FromDate
                                          ELSE poDate,86399)
-                    ldToPer   = fMake2Dt(IF ttCLI.ToDate NE ?
+                    ldToPer   = Func.Common:mMake2DT(IF ttCLI.ToDate NE ?
                                          THEN ttCLI.ToDate
                                          ELSE pDate2,0) /* use 0 -> get owner
                                                         of last full day */.
@@ -1150,7 +1148,7 @@ PROCEDURE pCreateInv:
              THEN ldToPer = ldToPer + 0.86399.
 
              FOR FIRST MSOwner NO-LOCK WHERE
-                       MSOwner.Brand = gcBrand   AND
+                       MSOwner.Brand = Syst.Var:gcBrand   AND
                        MsOwner.CLI   = ttCLI.CLI AND
                        MsOwner.TsBeg <= ldToPer  AND
                        MsOwner.TsEnd >= ldFromPer:
@@ -1163,7 +1161,7 @@ PROCEDURE pCreateInv:
          
                   lcRepCode = SUBSTRING(lcMobRep,liCnt,1).
          
-                  RUN creasfee (MsOwner.CustNum,
+                  RUN Mc/creasfee.p (MsOwner.CustNum,
                                 MsOwner.MSSeq,
                                 pDate2,
                                 "CLISpec",
@@ -1187,7 +1185,7 @@ PROCEDURE pCreateInv:
                 THEN TRUE
                 ELSE ttEventCust.CustNum = xCustomer.CustNum),
           EACH FixedFee no-lock where
-               FixedFee.Brand   = gcBrand             AND 
+               FixedFee.Brand   = Syst.Var:gcBrand             AND 
                FixedFee.CustNum = ttEventCust.CustNum AND
                FixedFee.InUse   = TRUE:
 
@@ -1316,7 +1314,7 @@ PROCEDURE pCreateInv:
             /* FATime */                  
             FOR EACH bttEventCust,
                 EACH FATime NO-LOCK USE-INDEX FATType WHERE
-                     Fatime.Brand      = gcBrand               AND 
+                     Fatime.Brand      = Syst.Var:gcBrand               AND 
                      Fatime.CustNum    = bttEventCust.CustNum  AND 
                     (FATime.InvNum    = 0 or Fatime.InvNum = -1 * liSeq) AND
                      FATime.FatType    = 1 /* FIXED FEES */    AND
@@ -1325,7 +1323,7 @@ PROCEDURE pCreateInv:
                      THEN FATime.Period <= ciperiod 
                      ELSE FATime.Period = FFItem.BillPeriod),
                FIRST FatGroup NO-LOCK WHERE
-                     FatGroup.Brand = gcBrand AND 
+                     FatGroup.Brand = Syst.Var:gcBrand AND 
                      FatGroup.FTGrp = FATime.FTGrp,
                EACH  FatGMember of FatGroup NO-LOCK WHERE
                      FatGMember.MemberType = 1             AND
@@ -1354,7 +1352,7 @@ PROCEDURE pCreateInv:
                   IF FixedFee.VatIncl NE Fatime.VatIncl AND
                      xCustomer.VatUsage < 3 THEN 
                   FOR FIRST BillItem NO-LOCK WHERE
-                            BillItem.Brand    = gcBrand AND
+                            BillItem.Brand    = Syst.Var:gcBrand AND
                             BillItem.BillCode = FFItem.BillCode:
                           
                       ldVatPerc = fRegionTaxPerc(xCustomer.Region,
@@ -1383,13 +1381,13 @@ PROCEDURE pCreateInv:
 
       IF iiInvType = 6 OR iiInvType = 7 THEN 
       FOR EACH SingleFee EXCLUSIVE-LOCK USE-INDEX HostTable WHERE
-               SingleFee.Brand     = gcBrand AND
+               SingleFee.Brand     = Syst.Var:gcBrand AND
                SingleFee.HostTable = "Order" AND
                SingleFee.KeyValue  = STRING(liOrderId) AND
                SingleFee.Billed    = FALSE   AND
                SingleFee.Active    = TRUE,
          FIRST Order NO-LOCK WHERE
-               Order.Brand   = gcBrand AND
+               Order.Brand   = Syst.Var:gcBrand AND
                Order.OrderID = liOrderId:
                
          /* combine by product code */
@@ -1433,7 +1431,7 @@ PROCEDURE pCreateInv:
           EACH SingleFee EXCLUSIVE-LOCK WHERE
                SingleFee.CustNum     = ttEventCust.CustNum AND
                SingleFee.BillPeriod <= ciperiod            AND
-               SingleFee.Brand       = gcBrand             AND 
+               SingleFee.Brand       = Syst.Var:gcBrand             AND 
                SingleFee.Billed      = FALSE               AND
                SingleFee.Active      = TRUE:
 
@@ -1474,7 +1472,7 @@ PROCEDURE pCreateInv:
          END.
          ELSE IF SingleFee.HostTable = "Order" THEN 
          FOR FIRST Order NO-LOCK WHERE
-                   Order.Brand   = gcBrand AND
+                   Order.Brand   = Syst.Var:gcBrand AND
                    Order.OrderID = INTEGER(SingleFee.KeyValue):
             ASSIGN 
                lcCLI   = Order.CLI
@@ -1534,7 +1532,7 @@ PROCEDURE pCreateInv:
          IF iiInvType NE 6 AND iiInvType NE 7 THEN 
          FOR EACH bttEventCust,
              EACH FATime NO-LOCK USE-INDEX FATType WHERE
-                  Fatime.Brand      = gcBrand               AND 
+                  Fatime.Brand      = Syst.Var:gcBrand               AND 
                   Fatime.CustNum    = bttEventCust.CustNum  AND 
                   (FATime.InvNum    = 0 or Fatime.InvNum = -1 * liSeq) AND
                   FATime.FatType    = 3 /* single fees */   AND
@@ -1543,7 +1541,7 @@ PROCEDURE pCreateInv:
                    THEN FATime.Period <= ciperiod 
                    ELSE FATime.Period = SingleFee.BillPeriod),
              FIRST FatGroup NO-LOCK WHERE
-                   FatGroup.Brand = gcBrand AND 
+                   FatGroup.Brand = Syst.Var:gcBrand AND 
                    FatGroup.FTGrp = FATime.FTGrp,
              EACH  FatGMember of FatGroup NO-LOCK WHERE
                    FatGMember.MemberType = 1             AND
@@ -1570,7 +1568,7 @@ PROCEDURE pCreateInv:
                 IF SingleFee.VatIncl NE Fatime.VatIncl AND
                    xCustomer.VatUsage < 3 THEN 
                 FOR FIRST BillItem NO-LOCK WHERE
-                          BillItem.Brand    = gcBrand AND
+                          BillItem.Brand    = Syst.Var:gcBrand AND
                           BillItem.BillCode = SingleFee.BillCode:
                           
                     ldVatPerc = fRegionTaxPerc(xCustomer.Region,
@@ -1612,7 +1610,7 @@ PROCEDURE pCreateInv:
                   MsOwner.TsBeg   <= ldBillPer[2]      AND
                   MsOwner.TsEnd   >= ldBillPer[1],
             FIRST CLIType NO-LOCK WHERE
-                  CLIType.Brand   = gcBrand AND
+                  CLIType.Brand   = Syst.Var:gcBrand AND
                   CLIType.CLIType = MsOwner.CLIType AND
                   CLIType.MinimAmt > 0:
 
@@ -1673,8 +1671,8 @@ PROCEDURE pCreateInv:
                   ldtTo   = pDate2.
                     
                ASSIGN     
-                  ldFromPer = fMake2Dt(ldtFrom,0)
-                  ldToPer   = fMake2Dt(ldtTo,86399)
+                  ldFromPer = Func.Common:mMake2DT(ldtFrom,0)
+                  ldToPer   = Func.Common:mMake2DT(ldtTo,86399)
                   ldeTerm   = 99999999.99999
                   ldMinCons = 0
                   lcMinItem = "".
@@ -1686,7 +1684,7 @@ PROCEDURE pCreateInv:
                          MsOwner.TsBeg  <= ldToPer           AND
                          MsOwner.TsEnd  >= ldFromPer,
                    FIRST CLIType NO-LOCK WHERE
-                         CLIType.Brand   = gcBrand AND
+                         CLIType.Brand   = Syst.Var:gcBrand AND
                          CLIType.CLIType = MsOwner.CLIType:
 
                   IF CLIType.ArAccNum > 0 THEN 
@@ -1694,7 +1692,7 @@ PROCEDURE pCreateInv:
                
                   /* this period already handled */
                   IF CAN-FIND(FIRST ActionLog WHERE
-                     ActionLog.Brand        = gcBrand       AND
+                     ActionLog.Brand        = Syst.Var:gcBrand       AND
                      ActionLog.TableName    = "MobSub"      AND
                      ActionLog.KeyValue     = STRING(MsOwner.MsSeq) AND
                      ActionLog.ActionID     = "MINCONS"     AND
@@ -1778,7 +1776,7 @@ PROCEDURE pCreateInv:
          IF FIRST-OF(ttCLI.CLI) THEN DO:
             /* is something defined for this cli */
             IF CAN-FIND(FIRST FATime WHERE
-                              FATime.Brand = gcBrand AND 
+                              FATime.Brand = Syst.Var:gcBrand AND 
                               FATime.CLI   = ttcli.CLI)              
             THEN ASSIGN ldtFrom = ttCLI.FromDate
                         ldtTo   = ttCLI.ToDate.
@@ -1796,7 +1794,7 @@ PROCEDURE pCreateInv:
                    lcPer2 = YEAR(ldtTo) * 100 + MONTH(ldtTo).
                    
             FOR EACH FATime NO-LOCK WHERE
-                     Fatime.Brand    = gcBrand          AND 
+                     Fatime.Brand    = Syst.Var:gcBrand          AND 
                      FATime.cli      = ttcli.CLI        AND
                      (FATime.InvNum  = 0 OR Fatime.InvNum = -1 * liSeq) AND
                      FATime.FatType  = 0  /* calls */   AND
@@ -2047,7 +2045,7 @@ PROCEDURE pCreateInv:
             IF llBillInt AND lcDepoItem = "" AND lcIntItem > "" AND
                iiInvType NE 6 AND iiInvType NE 7 THEN 
             FOR EACH CustIntEvent no-lock USE-INDEX CustNum where
-                     CustIntEvent.Brand        = gcBrand           AND 
+                     CustIntEvent.Brand        = Syst.Var:gcBrand           AND 
                      CustIntEvent.CustNum      = xcustomer.CustNum AND
                      CustIntEvent.BilledInvNum = 0,
                FIRST Invoice NO-LOCK WHERE
@@ -2119,7 +2117,7 @@ PROCEDURE pCreateInv:
                            ttIR.VatPerc = 0.
  
                IF NOT CAN-FIND(BillItem WHERE 
-                               BillItem.Brand    = gcBrand AND
+                               BillItem.Brand    = Syst.Var:gcBrand AND
                                BillItem.BillCode = ttir.BillCode)
                THEN DO:
                   ASSIGN lRejBill    = TRUE
@@ -2157,7 +2155,7 @@ PROCEDURE pCreateInv:
 
             /* reject reason found, write it to log */
             IF lRejBill THEN DO:    
-                fELog(katun,"INVOICE:" + lcRejReason + 
+                fELog(Syst.Var:katun,"INVOICE:" + lcRejReason + 
                         ":Customer:" + string(xCustomer.CustNum)).
                 fErrorLog(xCustomer.CustNum,
                           lcRejCLI,
@@ -2194,7 +2192,7 @@ PROCEDURE pCancel:
 
    FOR EACH newinv:
 
-      RUN del_inv (newinv.InvNum). 
+      RUN Inv/del_inv.p (newinv.InvNum). 
 
       /* no need to save eventlog to db */
       FOR EACH EventLog EXCLUSIVE-LOCK WHERE
@@ -2204,7 +2202,7 @@ PROCEDURE pCancel:
       END.
 
       /* row to external eventlog however */
-      fELog(katun,"INVOICE:" + string(newinv.InvNum) + ":Cancelled").
+      fELog(Syst.Var:katun,"INVOICE:" + string(newinv.InvNum) + ":Cancelled").
 
       DELETE newinv.
    END.
@@ -2399,7 +2397,7 @@ PROCEDURE pFixCDR:
                    FixCDR.CurrUnit,
                    "",
                    FixCDR.TariffID,
-                   gcBrand,
+                   Syst.Var:gcBrand,
                    OUTPUT ldNet,
                    OUTPUT ldGross).
 
@@ -2448,9 +2446,9 @@ PROCEDURE pFixCDR:
          /* webspeed calculations: CLI */
          lCLI = "".
          /* 1: a known freephone number */
-         lD2D = fHMS2TS(FixCDR.Date,string(FixCDR.TimeStart,"hh:mm:ss")).
+         lD2D = Func.Common:mHMS2TS(FixCDR.Date,string(FixCDR.TimeStart,"hh:mm:ss")).
          FIND FIRST BDestHist where
-                    BDestHist.Brand   = gcBrand        AND 
+                    BDestHist.Brand   = Syst.Var:gcBrand        AND 
                     BDestHist.BDest   = FixCDR.BDest   AND
                     BDestHist.CustNum = FixCDR.InvCust AND
                     BDestHist.vFrom  <= lD2D           AND
@@ -2621,7 +2619,7 @@ PROCEDURE pMobCDR:
                    MobCDR.CurrUnit,
                    "",
                    MobCDR.TariffNum,
-                   gcBrand,
+                   Syst.Var:gcBrand,
                    OUTPUT ldNet,
                    OUTPUT ldGross).
 
@@ -3224,7 +3222,7 @@ PROCEDURE pInvoiceHeader:
          liMsSeq = ttRowVat.MsSeq.
 
          CREATE ttInv.
-         ASSIGN ttInv.ChgStamp     = fMakeTS()
+         ASSIGN ttInv.ChgStamp     = Func.Common:mMakeTS()
                 ttInv.Brand        = Customer.Brand 
                 ttInv.InvNum       = lISeq
                 ttInv.InvSeq       = lISeq
@@ -3331,15 +3329,13 @@ PROCEDURE pInvoiceHeader:
             
             /* is there a delivery address */
             FIND FIRST OrderCustomer WHERE
-                       OrderCustomer.Brand   = gcBrand   AND
+                       OrderCustomer.Brand   = Syst.Var:gcBrand   AND
                        OrderCustomer.OrderID = liOrderID AND
                        OrderCustomer.RowType = 4 
             NO-LOCK NO-ERROR.
             IF AVAILABLE OrderCustomer THEN DO:
                ASSIGN 
-                  ttInv.IDelName    = DYNAMIC-FUNCTION("fPrintOrderName"
-                                                          IN ghFunc1,
-                                                       BUFFER OrderCustomer)
+                  ttInv.IDelName    = Func.Common:mPrintOrderName(BUFFER OrderCustomer)
                   ttInv.IDelAddr    = OrderCustomer.Address
                   ttInv.IDelZipCode = OrderCustomer.ZipCode
                   ttInv.IDelPost    = OrderCustomer.PostOffice.
@@ -3355,15 +3351,13 @@ PROCEDURE pInvoiceHeader:
                      
             /* actual invoice customer */             
             FIND FIRST OrderCustomer WHERE
-                       OrderCustomer.Brand   = gcBrand   AND
+                       OrderCustomer.Brand   = Syst.Var:gcBrand   AND
                        OrderCustomer.OrderID = liOrderID AND
                        OrderCustomer.RowType = Order.InvCustRole 
             NO-LOCK NO-ERROR.
             IF AVAILABLE OrderCustomer THEN DO:
                ASSIGN 
-               ttInv.CustName    = DYNAMIC-FUNCTION("fPrintOrderName"
-                                                       IN ghFunc1,
-                                                    BUFFER OrderCustomer)
+               ttInv.CustName   = Func.Common:mPrintOrderName(BUFFER OrderCustomer)
                ttInv.Address    = OrderCustomer.Address
                ttInv.PostOffice = OrderCustomer.ZipCode + " " + 
                                   OrderCustomer.PostOffice.
@@ -3392,8 +3386,7 @@ PROCEDURE pInvoiceHeader:
             ttInv.IDelCountry = Customer.IDelCountry                        
             ttInv.FirstName   = Customer.FirstName
             ttInv.SurName2    = Customer.SurName2
-            ttInv.CustName    = DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1,
-                                                 BUFFER Customer).
+            ttInv.CustName    = Func.Common:mPrintCustName(BUFFER Customer).
 
          /* check that due date is a regular day */
          ttInv.DueDate = fChkDueDate(ttInv.DueDate).
@@ -3488,7 +3481,7 @@ PROCEDURE pInvoiceHeader:
                   ttIR.MsSeq   = ttRowVat.MsSeq AND
                   ttIR.RowType = 7,
             FIRST Account NO-LOCK WHERE
-                  Account.Brand  = gcBrand AND
+                  Account.Brand  = Syst.Var:gcBrand AND
                   Account.AccNum = ttIR.SlsAcc:
                      
             IF Account.AccType = 19 THEN 
@@ -3572,7 +3565,7 @@ PROCEDURE pInvoiceHeader:
          IF liMinDays > 0 THEN DO:
 
             FOR EACH Invoice NO-LOCK WHERE
-                     Invoice.Brand   = gcBrand AND
+                     Invoice.Brand   = Syst.Var:gcBrand AND
                      Invoice.CustNum = Customer.CustNum:
                IF pDate2 - Invoice.ToDate < liLastBill
                THEN liLastBill = pDate2 - Invoice.ToDate.
@@ -3693,7 +3686,7 @@ PROCEDURE pInvoiceHeader:
 
             /* check and mark direct debiting */
             IF Invoice.ChargeType = 2 AND Invoice.InvAmt NE 0 THEN 
-            RUN nnsvte (Invoice.CustNum,
+            RUN Ar/nnsvte.p (Invoice.CustNum,
                         TODAY,
                         OUTPUT Invoice.DDBankAcc). 
 
@@ -3782,13 +3775,13 @@ PROCEDURE pInvoiceHeader:
             /* mark invoice nbr to order */
             IF liOrderID > 0 THEN 
             FOR FIRST Order EXCLUSIVE-LOCK WHERE
-                      Order.Brand   = gcBrand AND
+                      Order.Brand   = Syst.Var:gcBrand AND
                       Order.OrderID = liOrderID:
                Order.InvNum = Invoice.InvNum.
 
                /* ar account for cash invoices */
                FOR FIRST CLIType NO-LOCK WHERE
-                         CLIType.Brand   = gcBrand AND
+                         CLIType.Brand   = Syst.Var:gcBrand AND
                          CLIType.CLIType = Order.CLIType:
                   IF CLIType.ArAccNum > 0 THEN DO:
                      FIND CURRENT Invoice EXCLUSIVE-LOCK.
@@ -3802,7 +3795,7 @@ PROCEDURE pInvoiceHeader:
             IF LOOKUP(STRING(Invoice.InvType),"1,99") > 0 THEN DO:
                CREATE ActionLog.
                ASSIGN 
-                  ActionLog.Brand        = gcBrand   
+                  ActionLog.Brand        = Syst.Var:gcBrand   
                   ActionLog.TableName    = "MobSub"  
                   ActionLog.KeyValue     = STRING(Invoice.MsSeq) 
                   ActionLog.ActionChar   = Invoice.CLI
@@ -3815,7 +3808,7 @@ PROCEDURE pInvoiceHeader:
             END.                                           
                
             /* ROW FOR when invoice is created */
-            fELog(katun,"INVOICE:"  + string(lInvNo) + ":Created:" +
+            fELog(Syst.Var:katun,"INVOICE:"  + string(lInvNo) + ":Created:" +
                         "Customer:" + string(Invoice.CustNum)).
 
             IF lReduce NE 0 THEN DO:
@@ -3829,7 +3822,7 @@ PROCEDURE pInvoiceHeader:
                CREATE OPLog.
                ASSIGN OPLog.CustNum    = Invoice.CustNum
                       OPLog.EventDate  = Invoice.InvDate
-                      OPLog.UserCode   = katun
+                      OPLog.UserCode   = Syst.Var:katun
                       OPLog.EventType  = 3
                       OPLog.InvNum     = Invoice.InvNum
                       OPLog.Amt        = 0 - lReduce
@@ -3848,7 +3841,7 @@ PROCEDURE pInvoiceHeader:
                CREATE OPLog.
                ASSIGN OPLog.CustNum   = Invoice.CustNum
                       OPLog.EventDate = Invoice.InvDate
-                      OPLog.UserCode  = katun
+                      OPLog.UserCode  = Syst.Var:katun
                       OPLog.EventType = 11
                       OPLog.InvNum    = Invoice.InvNum
                       OPLog.Amt       = 0 - lAdvRed
@@ -3894,7 +3887,7 @@ PROCEDURE pInvoiceHeader:
             THEN DO:
 
                FIND CURRENT Invoice EXCLUSIVE-LOCK. 
-               RUN makepaym (BUFFER Invoice,
+               RUN Ar/makepaym.p (BUFFER Invoice,
                              Invoice.InvAmt,
                              Invoice.InvDate,
                              liCLossAcc,
@@ -3906,7 +3899,7 @@ PROCEDURE pInvoiceHeader:
                              (IF Customer.CustNum = liCLossCust
                               THEN "Credit loss customer"
                               ELSE "Cleaning run") + 
-                             " Handler: " + katun,
+                             " Handler: " + Syst.Var:katun,
                              OUTPUT liVoucher).
 
                 Invoice.PaymState = 3. 
@@ -3919,7 +3912,7 @@ PROCEDURE pInvoiceHeader:
             THEN DO:
                                 
                FIND CURRENT Invoice EXCLUSIVE-LOCK.
-               RUN makepaym (BUFFER Invoice,
+               RUN Ar/makepaym.p (BUFFER Invoice,
                              Invoice.InvAmt,
                              Invoice.InvDate,
                              IF Customer.Category = lcOwnUse
@@ -3932,7 +3925,7 @@ PROCEDURE pInvoiceHeader:
                              "",
                              (IF Customer.Category = lcOwnUse
                               THEN "Own"
-                              ELSE "VIP") + " use.  Handler: " + katun,
+                              ELSE "VIP") + " use.  Handler: " + Syst.Var:katun,
                              OUTPUT liVoucher).
             END.
                  
@@ -4001,7 +3994,7 @@ PROCEDURE pInvoiceHeader:
                /* another process has used the same number */
                IF ERROR-STATUS:ERROR OR Invoice.ExtInvID = ""  OR
                   CAN-FIND(FIRST bChkInv USE-INDEX ExtInvID WHERE
-                                 bChkInv.Brand    = gcBrand AND 
+                                 bChkInv.Brand    = Syst.Var:gcBrand AND 
                                  bChkInv.ExtInvID = lcExtInvID AND
                                  RECID(bChkInv) NE RECID(Invoice)) 
                THEN DO:
@@ -4046,7 +4039,7 @@ PROCEDURE pInvoiceHeader:
                                      STRING(ttInv.InvAmt).
                
             /* ROW FOR NOT created invoices */
-            fELog(katun,"INVOICE:" + lcRejReason + 
+            fELog(Syst.Var:katun,"INVOICE:" + lcRejReason + 
                         ":Customer:" + string(ttInv.CustNum)).
             fErrorLog(ttInv.CustNum,
                       ttInv.CLI,
@@ -4122,7 +4115,7 @@ END PROCEDURE.
 
 
 PROCEDURE pGenerateReport:
-   fLog("new invoices generated by billing run",katun).
+   fLog("new invoices generated by billing run", Syst.Var:katun).
    FOR EACH newinv NO-LOCK,
       FIRST invoice NO-LOCK WHERE
             invoice.invnum = newinv.invnum:

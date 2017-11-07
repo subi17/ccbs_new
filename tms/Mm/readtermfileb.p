@@ -10,15 +10,15 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
-ASSIGN gcBrand = "1" 
-       katun   = "Cron".
+ASSIGN Syst.Var:gcBrand = "1" 
+       Syst.Var:katun   = "Cron".
        
-{cparam2.i}
-{ftransdir.i}
-{eventlog.i}
-{timestamp.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Syst/eventlog.i}
+{Func/multitenantfunc.i}
 
 DEF VAR liCnt       AS INT  NO-UNDO.
 DEF VAR lcTermFile AS CHAR NO-UNDO.
@@ -30,6 +30,9 @@ DEF VAR lcTransDir  AS CHAR NO-UNDO.
 DEF VAR lcReadDir   AS CHAR NO-UNDO.
 DEF VAR lcLogFile   AS CHAR NO-UNDO. 
 DEF VAR lcLogTrans  AS CHAR NO-UNDO.
+DEF VAR lcFoundTenants AS CHAR NO-UNDO.
+DEF VAR liCounter   AS INT NO-UNDO.
+DEF VAR lcTenant    AS CHAR NO-UNDO.
 
 DEF TEMP-TABLE ttFiles NO-UNDO
    FIELD TermFile AS CHAR
@@ -49,11 +52,6 @@ FUNCTION fCollTemp RETURNS LOGIC
    ASSIGN ttFiles.TermFile = icTermFile.
    
 END FUNCTION.
-
-
-FIND FIRST Company WHERE
-           Company.Brand = gcBrand NO-LOCK NO-ERROR.
-IF AVAILABLE Company THEN ynimi = Company.CompName.
 
 ASSIGN
    lcReadDir  = fCParamC("SubsTermFiles")
@@ -88,8 +86,15 @@ FOR EACH ttFiles:
    IF NUM-ENTRIES(lcPlainFile,"/") > 1 THEN
       lcPlainFile = ENTRY(NUM-ENTRIES(lcPlainFile,"/"),lcPlainFile,"/").
 
+   /* Set effective tenant based on file name. If not regocniced go next file
+   */
+   lcTenant = ENTRY(1,ENTRY(1,lcPlainFile,"_"),"-").
+
+   IF NOT fsetEffectiveTenantForAllDB(
+      fConvertBrandToTenant(lcTenant)) THEN NEXT.
+
    IF CAN-FIND (FIRST ActionLog NO-LOCK WHERE
-                      ActionLog.Brand = gcBrand AND
+                      ActionLog.Brand = Syst.Var:gcBrand AND
                       ActionLog.TableName = "Cron" AND
                       ActionLog.KeyValue = lcPlainFile AND
                       ActionLog.ActionID = "SubsTerm" AND
@@ -98,28 +103,32 @@ FOR EACH ttFiles:
    DO TRANS:
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = gcBrand   
+         ActionLog.Brand        = Syst.Var:gcBrand   
          ActionLog.TableName    = "Cron"  
          ActionLog.KeyValue     = lcPlainFile
          ActionLog.ActionID     = "SubsTerm"
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
                                   MONTH(TODAY)
          ActionLog.ActionStatus = 0
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
    END.
    
-   RUN readtermfile.p (ttFiles.TermFile,
-                     lcLogFile,
+   RUN Mm/readtermfile.p (ttFiles.TermFile,
+                     REPLACE(lcLogFile,"#TENANT",lcTenant),
                      OUTPUT liRead,
                      OUTPUT liError).
-   
+   IF lcFoundTenants EQ "" THEN
+      lcFoundTenants = lcTenant.
+   ELSE IF INDEX(lcFoundTenants,lcTenant) EQ 0 THEN
+      lcFoundTenants = lcFoundTenants + "," + lcTenant.
+     
    DO TRANS:
       ASSIGN 
          ActionLog.ActionDec    = liRead
          ActionLog.ActionChar   = "Read: " + STRING(liRead) + 
                                   " Errors: " + STRING(liError) + 
                                   " Succesful: " + STRING(liRead - liError) + 
-                                  CHR(10) + "Finished: " + fTS2HMS(fMakeTS())
+                                  CHR(10) + "Finished: " + Func.Common:mTS2HMS(Func.Common:mMakeTS())
          ActionLog.ActionStatus = 3.
    END.
    
@@ -131,9 +140,13 @@ END.
 
 fELog("READTERM","stopped,Files:" + STRING(liFiles)).
 
-/* move the log file to transfer directory */
-RUN pTransferFile(lcLogFile,
-                  lcLogTrans).
+DO liCounter = 1 TO NUM-ENTRIES(lcFoundTenants):
+
+   /* move the log file to transfer directory */
+   RUN pTransferFile(REPLACE(lcLogFile,"#TENANT",
+                             ENTRY(liCounter,lcFoundTenants)),
+                     lcLogTrans).
+END.
 
 PROCEDURE pFindFiles:
 

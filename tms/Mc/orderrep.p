@@ -10,8 +10,7 @@
   Version ......: MTV3
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
 
 def var dfrom as da no-undo.
 def var dto   as da no-undo.
@@ -57,7 +56,7 @@ form
  "         Date to .....:" dto no-label format "99-99-99"
  skip(10)
 with row 1 width 80 NO-LABELS
-   title " " + ynimi + " ORDER REPORT " + string(pvm,"99-99-99") + " "
+   title " " + Syst.Var:ynimi + " ORDER REPORT " + string(TODAY,"99-99-99") + " "
 FRAME rajat.
 
 form
@@ -76,21 +75,21 @@ dfrom = today - 30.
 loop:
 repeat with frame rajat:
    PAUSE 0 no-message.
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
    dfrom 
    dto.
 
    ASSIGN
-      ufk = 0
-      ufk[1] = 132
-      ufk[5] = 63
-      ufk[8] = 8
-      ehto = 0
+      Syst.Var:ufk = 0
+      Syst.Var:ufk[1] = 132
+      Syst.Var:ufk[5] = 63
+      Syst.Var:ufk[8] = 8
+      Syst.Var:ehto = 0
       ufkey = true.
 
-   run ufkey.
-   case toimi:
+   RUN Syst/ufkey.p.
+   case Syst.Var:toimi:
       when 8 then return.
       when 1 then next loop.
       when 5 then leave loop.
@@ -102,8 +101,8 @@ if keylabel(lastkey) = "f4" then return.
 
 
 assign 
-   fromstamp = fHMS2TS(dfrom,"00:00:00")
-   tostamp = fHMS2TS(dTo,"23:59:59").
+   fromstamp = Func.Common:mHMS2TS(dfrom,"00:00:00")
+   tostamp = Func.Common:mHMS2TS(dTo,"23:59:59").
 
 for each statuscodes.
    assign
@@ -114,7 +113,7 @@ end.
 message "Calculating....".
 
 for each order no-lock where
-         order.brand = gcBrand and
+         order.brand = Syst.Var:gcBrand and
          order.crstamp >= fromstamp and
          order.crstamp <= tostamp and
          order.tupas >= 2 and
@@ -147,7 +146,7 @@ for each statuscodes no-lock.
    down with frame result.
 end.
 
-ASSIGN ufk = 0 ehto = 3. RUN ufkey.
+ASSIGN Syst.Var:ufk = 0 Syst.Var:ehto = 3. RUN Syst/ufkey.p.
 
 message "Press ENTER to continue !".
 pause no-message.

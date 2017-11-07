@@ -1,4 +1,3 @@
-{date.i}
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 DEFINE VARIABLE j AS INTEGER NO-UNDO. 
 
@@ -8,7 +7,7 @@ output stream sout to /apps/yoigo/tms_support/billing/log/check_fusion_invoices.
 DEFINE VARIABLE llFound AS LOGICAL NO-UNDO. 
 DEFINE VARIABLE ldeNow AS DECIMAL NO-UNDO. 
 
-ldeNow = fMakeTS().
+ldeNow = Func.Common:mMakeTS().
 
 FOR EACH invoice NO-LOCK where
          invoice.brand = "1" and

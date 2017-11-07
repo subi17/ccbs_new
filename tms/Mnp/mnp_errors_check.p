@@ -1,5 +1,4 @@
 /* monitoring script to check mnp message errors */
-{timestamp.i}
 
 DEFINE VARIABLE liTotal AS INTEGER NO-UNDO.
 DEFINE VARIABLE ldeFrom AS DECIMAL NO-UNDO.
@@ -18,7 +17,7 @@ IF lcParam NE "" THEN DO:
 END.
 ELSE liMinutes = 15.
 
-ldeFrom = fSecOffSet(fMakeTS(), liMinutes * -60).
+ldeFrom = Func.Common:mSecOffSet(Func.Common:mMakeTS(), liMinutes * -60).
 
 FOR EACH mnpoperation WHERE
    createdts > ldeFrom NO-LOCK:

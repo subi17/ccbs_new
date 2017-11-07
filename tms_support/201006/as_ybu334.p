@@ -8,7 +8,6 @@ DEFINE VARIABLE litime AS INTEGER NO-UNDO.
 
 /* Customer number, MSISDN, billing item, number of CDRs, euro amount, invoice number (if invoiced) */
 
-{date.i}
 
 DEFINE VARIABLE ldeAmount AS DECIMAL NO-UNDO. 
 DEFINE VARIABLE liAmount AS INTEGER NO-UNDO. 
@@ -40,7 +39,7 @@ FOR EACH mservicelimit where
       find mobsub where
            mobsub.msseq = msowner.msseq NO-LOCK no-error.
       
-      fSplitTS(mservicelimit.fromts + 0.00001, output ldaDate, output litime).
+      Func.Common:mSplitTS(mservicelimit.fromts + 0.00001, output ldaDate, output litime).
       ldaDateEnd = DATE(MONTH(ldaDate) + 1, 1, 
          (IF MONTH(ldaDate) eq 12 then YEAR(ldaDate) + 1 ELSE YEAR(ldaDate))).
 

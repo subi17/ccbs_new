@@ -7,15 +7,14 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN 
-   gcBrand = "1"
-   katun   = "Cron".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun   = "Cron".
    
-{cparam2.i}
-{files.i}
-{timestamp.i}
-{funcrunprocess_run.i}
+{Func/cparam2.i}
+{Func/files.i}
+{Syst/funcrunprocess_run.i}
 
 DEF VAR ldaInvDate    AS DATE NO-UNDO.
 DEF VAR lcMessage     AS CHAR NO-UNDO.
@@ -49,7 +48,7 @@ IF ldaInvDate = ? OR liInvType = ? THEN DO:
    QUIT.
 END.   
 
-RUN invoice_extinvid.p(ldaInvDate,
+RUN Inv/invoice_extinvid.p(ldaInvDate,
                        liInvType,
                        2,   /* action */  
                        liFRProcessID,

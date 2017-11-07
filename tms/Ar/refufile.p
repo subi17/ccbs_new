@@ -9,13 +9,12 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{refufile.i}
-{fbankdata.i}
-{cparam2.i}
-{ftransdir.i}
-{timestamp.i}
-{refcode.i}
+{Syst/commali.i}
+{Ar/refufile.i}
+{Func/fbankdata.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/refcode.i}
 
 DEF INPUT-OUTPUT PARAMETER TABLE FOR ttPaym.
 
@@ -104,7 +103,7 @@ END.
 FOR EACH ttPaym:
 
    FIND Payment WHERE Payment.Voucher = ttPaym.Voucher EXCLUSIVE-LOCK NO-ERROR.
-   IF NOT AVAILABLE Payment OR Payment.Brand NE gcBrand THEN DO:
+   IF NOT AVAILABLE Payment OR Payment.Brand NE Syst.Var:gcBrand THEN DO:
       ocInfo = "Payment " + STRING(ttPaym.Voucher) + " missing".
       RETURN.
    END.
@@ -116,7 +115,7 @@ FOR EACH ttPaym:
    END. 
 
    /* customers must have a bank account; first check from dd-authorization */
-   RUN nnsvte (Customer.CustNum,
+   RUN Ar/nnsvte.p (Customer.CustNum,
                TODAY, 
                OUTPUT ttPaym.CustBank).
    IF ttPaym.CustBank = "" THEN ttPaym.CustBank = Customer.BankAcc.
@@ -146,7 +145,7 @@ END.
 ASSIGN liBatch = NEXT-VALUE(PaymVouch)
        lcFile  = lcFile + STRING(liBatch) + lcFileExt
        ocInfo  = "File creation was interrupted (" + lcFile + ")".
-       ldTime  = fMakeTS().
+       ldTime  = Func.Common:mMakeTS().
 
 
 OUTPUT STREAM sFile TO VALUE(lcFile).
@@ -212,7 +211,7 @@ FOR EACH ttPaym,
    lcNewLine.
 
    ASSIGN Payment.ExpStamp = ldTime
-          Payment.ExpUser  = katun
+          Payment.ExpUser  = Syst.Var:katun
           Payment.PaymFile = STRING(liBatch)
           oiDone           = oiDone + 1
           ldTotal          = ldTotal + ttPaym.Amt.

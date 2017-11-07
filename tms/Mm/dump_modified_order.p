@@ -8,13 +8,14 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{dumpfile_run.i}
-{create_eventlog.i}
-{tmsconst.i}
-{cparam2.i}
-{forderstamp.i}
-{fixedlinefunc.i}
+{Syst/commali.i}
+{Syst/dumpfile_run.i}
+{Func/create_eventlog.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Func/forderstamp.i}
+{Func/fixedlinefunc.i}
+{Func/profunc.i}
 
 DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -47,7 +48,7 @@ FUNCTION fCollect RETURNS LOGIC:
 
    lhReqField = lhTable:BUFFER-FIELD("OrderId").
    IF CAN-FIND(FIRST ttOrder WHERE
-                     ttOrder.Brand   = gcBrand AND
+                     ttOrder.Brand   = Syst.Var:gcBrand AND
                      ttOrder.OrderId = lhReqField:BUFFER-VALUE)
    THEN RETURN FALSE.
 
@@ -83,7 +84,7 @@ BY DFField.OrderNbr:
                   DFField.DFField.
 END.
 
-fSplitTS(idLastDump,
+Func.Common:mSplitTS(idLastDump,
          OUTPUT ldaModified,
          OUTPUT liCnt).
 
@@ -91,8 +92,8 @@ ASSIGN
    lhCollect   = BUFFER ttOrder:HANDLE
    lhTable     = BUFFER Order:HANDLE
    lcKeyFields = fEventKeyFields(lhTable)
-   ldtLastDump = fTimeStamp2DateTime(idLastDump)
-   ldCrStamp   = fMakeTS().
+   ldtLastDump = Func.Common:mTimeStamp2DateTime(idLastDump)
+   ldCrStamp   = Func.Common:mMakeTS().
 
 OUTPUT STREAM sFile TO VALUE(icFile).
 
@@ -101,7 +102,7 @@ DEF VAR liRowType     AS INT NO-UNDO.
 
 IF icDumpMode = "Full" THEN DO:
    FOR EACH Order NO-LOCK WHERE
-            Order.Brand = gcBrand:
+            Order.Brand = Syst.Var:gcBrand:
       fCollect().
    END.
 END.
@@ -113,7 +114,7 @@ ELSE DO:
       IF LOOKUP(STRING(liOrderStatus),{&ORDER_INACTIVE_STATUSES}) > 0 THEN NEXT.
 
       FOR EACH Order NO-LOCK WHERE
-               Order.Brand = gcBrand AND
+               Order.Brand = Syst.Var:gcBrand AND
                Order.StatusCode = STRING(liOrderStatus):
          fCollect().
       END.
@@ -122,11 +123,11 @@ ELSE DO:
    /* Dump only orders which are in final stage based on the timestamp */
    DO liRowType = 1 TO 4:
       FOR EACH OrderTimeStamp NO-LOCK WHERE
-               OrderTimeStamp.Brand = gcBrand AND
+               OrderTimeStamp.Brand = Syst.Var:gcBrand AND
                OrderTimeStamp.RowType = liRowType AND
                OrderTimeStamp.TimeStamp >= idLastDump,
           FIRST Order NO-LOCK WHERE
-                Order.Brand = gcBrand AND
+                Order.Brand = Syst.Var:gcBrand AND
                 Order.OrderID = OrderTimeStamp.OrderID:
          IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 THEN NEXT.
          fCollect().
@@ -151,7 +152,7 @@ ELSE DO:
       THEN DO:
       
          FOR EACH Order NO-LOCK  USE-INDEX Stamp WHERE
-                  Order.Brand = gcBrand AND
+                  Order.Brand = Syst.Var:gcBrand AND
                   Order.CrStamp >= idLastDump:
 
                   fCollect().
@@ -181,6 +182,15 @@ FOR EACH ttOrder NO-LOCK:
          
         IF lcField BEGINS "#" THEN DO:
             CASE lcField:
+            WHEN "#Segment" THEN DO:
+               FIND FIRST Ordercustomer WHERE
+                          Ordercustomer.brand EQ Syst.Var:gcBrand AND
+                          Ordercustomer.orderid EQ ttOrder.orderid AND
+                          Ordercustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-LOCK NO-ERROR.
+               IF AVAIL ordercustomer THEN           
+                  lcValue = fGetSegment(ordercustomer.CustNum, 
+                                        ordercustomer.orderid).
+            END.
             WHEN "#SCStamp" THEN DO:
                lcValue = STRING(fGetOrderStamp(ttOrder.OrderID,"1")).
                IF icDumpMode = "Full" AND
@@ -191,7 +201,7 @@ FOR EACH ttOrder NO-LOCK:
                   lcValue = REPLACE(ttOrder.orderChannel,"fusion","conv").
                ELSE
                   lcValue = ttOrder.orderChannel.
-            END.   
+            END.              
             OTHERWISE lcValue = "".
             END CASE.
         END.

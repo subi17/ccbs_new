@@ -10,19 +10,19 @@
 
 &GLOBAL-DEFINE BrTable TMRule
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'TMRule'}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'TMRule'}
 
-{eventval.i}
-{tmsconst.i}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
 
 DEF BUFFER bItemValue FOR TMRItemValue.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhTMRule AS HANDLE NO-UNDO.
    lhTMRule = BUFFER TMRule:HANDLE.
@@ -37,7 +37,7 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhbItemValue).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhTMRule).
+      RUN Mc/eventview2.p(lhTMRule).
    END.
 
 END.
@@ -83,13 +83,13 @@ FORM
     TMRule.PayType      
     TMRule.CounterItems FORMAT "X(18)"
 WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN 
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
        "  TM RULES " + "  " +
-       string(pvm,"99-99-99") + " "
+       string(TODAY,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 FORM
     TMRule.Brand          COLON 15
@@ -116,8 +116,8 @@ FORM
        lcPeriodName NO-LABEL FORMAT "X(30)"
     TMRule.NewCustomer    COLON 15 FORMAT "Yes/No"
 WITH  OVERLAY ROW 3 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -125,14 +125,13 @@ FORM
     "Brand:" lcBrand skip
     "Rule :" lcName FORMAT "X(20)" 
     HELP "Enter rule name"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Rule "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Rule "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FUNCTION fLimitSourceName RETURNS LOGIC
    (iiLimitSource AS INT):
 
-   lcSrcName = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "TMRule",
+   lcSrcName = Func.Common:mTMSCodeName("TMRule",
                                  "LimitSource",
                                  STRING(iiLimitSource)).
                                  
@@ -142,8 +141,7 @@ END FUNCTION.
 FUNCTION fCounterAmount RETURNS LOGIC
    (icCounterAmount AS CHAR):
 
-   lcCounterAmount = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "TMRule",
+   lcCounterAmount = Func.Common:mTMSCodeName("TMRule",
                                       "CounterAmount",
                                       icCounterAmount).
                                  
@@ -154,8 +152,7 @@ END FUNCTION.
 FUNCTION fCounterPeriodName RETURNS LOGIC
    (iiCounterPeriod AS INT):
 
-   lcPeriodName = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "TMRule",
+   lcPeriodName = Func.Common:mTMSCodeName("TMRule",
                                    "CounterPeriod",
                                    STRING(iiCounterPeriod)).
                                  
@@ -165,8 +162,7 @@ END FUNCTION.
 FUNCTION fLimitCompareName RETURNS LOGIC
    (iiLimitCompare AS INT):
 
-   lcLimitCompare = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                     "TMRule",
+   lcLimitCompare = Func.Common:mTMSCodeName("TMRule",
                                      "LimitCompare",
                                      STRING(iiLimitCompare)).
                                  
@@ -176,8 +172,7 @@ END FUNCTION.
 FUNCTION fCounterTypeName RETURNS LOGIC
    (iiCounterType AS INT):
 
-   lcCounterType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                    "TMRule",
+   lcCounterType = Func.Common:mTMSCodeName("TMRule",
                                     "CounterType",
                                     STRING(iiCounterType)).
                                  
@@ -187,8 +182,7 @@ END FUNCTION.
 FUNCTION fPayTypeName RETURNS LOGIC
    (iiPayType AS INT):
 
-   lcPayType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "CLIType",
+   lcPayType = Func.Common:mTMSCodeName("CLIType",
                                  "PayType",
                                  STRING(iiPayType)).
                                  
@@ -198,15 +192,14 @@ END FUNCTION.
 FUNCTION fTicketTypeName RETURNS LOGIC
    (iiTicketType AS INT):
 
-   lcTicketType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "TMRule",
+   lcTicketType = Func.Common:mTMSCodeName("TMRule",
                                  "TicketType",
                                  STRING(iiTicketType)).
                                  
    DISP lcTicketType WITH FRAME lis.
 END FUNCTION.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 
@@ -235,8 +228,8 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a TMRule  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -244,7 +237,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
@@ -348,35 +341,35 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk   = 0
-        ufk[1]= 816
-        ufk[4] = (IF llShowHistory THEN 38 ELSE 37) 
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)  
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)  
-        ufk[7]= 0  
-        ufk[8]= 8 
-        ehto  = 3 
+        Syst.Var:ufk   = 0
+        Syst.Var:ufk[1]= 816
+        Syst.Var:ufk[4] = (IF llShowHistory THEN 38 ELSE 37) 
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)  
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)  
+        Syst.Var:ufk[7]= 0  
+        Syst.Var:ufk[8]= 8 
+        Syst.Var:ehto  = 3 
         ufkey = FALSE.
         
         /* used as help */
-        IF gcHelpParam > "" THEN ASSIGN
-           ufk[5] = 11
-           ufk[6] = 0
-           ufk[7] = 0.
+        IF Syst.Var:gcHelpParam > "" THEN ASSIGN
+           Syst.Var:ufk[5] = 11
+           Syst.Var:ufk[6] = 0
+           Syst.Var:ufk[7] = 0.
          
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW TMRule.Name ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TMRule.Name WITH FRAME sel.
+        CHOOSE ROW TMRule.Name {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) TMRule.Name WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -385,10 +378,10 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -406,7 +399,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -431,7 +424,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -457,7 +450,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND TMRule WHERE recid(TMRule) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -481,7 +474,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -496,13 +489,13 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       SET lcBrand WHEN gcAllBrand 
+       SET lcBrand WHEN Syst.Var:gcAllBrand 
            lcName WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        
@@ -518,7 +511,7 @@ REPEAT WITH FRAME sel:
        END.
      END. /* Search-1 */
        
-     ELSE IF nap = "4" OR nap = "f4" THEN DO:
+     ELSE IF Syst.Var:nap = "4" OR Syst.Var:nap = "f4" THEN DO:
         llShowHistory = NOT llShowHistory.
         CLEAR FRAME sel ALL no-pause.
         RUN local-find-first.
@@ -529,8 +522,8 @@ REPEAT WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0 THEN DO:  /* add */
-        IF gcHelpParam > "" THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND Syst.Var:ufk[5] > 0 THEN DO:  /* add */
+        IF Syst.Var:gcHelpParam > "" THEN DO:
            xRecid = rtab[FRAME-LINE].
            LEAVE LOOP.
         END.
@@ -541,13 +534,13 @@ REPEAT WITH FRAME sel:
         END.    
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0  
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND Syst.Var:ufk[6] > 0  
      THEN DO TRANSACTION:  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        TMRule.TMRuleSeq TMRule.Name
        TMRule.FromDate TMRule.ToDate TMRule.CounterItems .
 
@@ -570,7 +563,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        TMRule.TMRuleSeq TMRule.Name
        TMRule.FromDate TMRule.ToDate TMRule.CounterItems.
        
@@ -598,21 +591,21 @@ REPEAT WITH FRAME sel:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 AND lcRight = "RW" THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 AND lcRight = "RW" THEN
      REPEAT WITH FRAME lis /*  TRANSACTION */
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(FALSE).
 
-       IF gcHelpParam > "" THEN DO:
+       IF Syst.Var:gcHelpParam > "" THEN DO:
           xRecid = rtab[FRAME-LINE (sel)].
           LEAVE LOOP.
        END.
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhTMRule).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY TMRule.TMRuleSeq.
 
        RUN local-UPDATE-record.                                  
@@ -629,28 +622,28 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(TMRule) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(TMRule) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
-ehto = 4.
-RUN ufkey.
+Syst.Var:ehto = 4.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -786,28 +779,28 @@ PROCEDURE local-UPDATE-record:
       
       IF llDispMenu THEN DO:
          ASSIGN 
-            ufk    = 0
-            ufk[1] = 7    WHEN lcRight = "RW"
-            ufk[2] = 1518 WHEN lcRight = "RW"   
-            ufk[5] = 1520
-            ufk[6] = 1521
-            ufk[7] = 1522
-            ufk[8] = 8
-            ehto   = 0.
+            Syst.Var:ufk    = 0
+            Syst.Var:ufk[1] = 7    WHEN lcRight = "RW"
+            Syst.Var:ufk[2] = 1518 WHEN lcRight = "RW"   
+            Syst.Var:ufk[5] = 1520
+            Syst.Var:ufk[6] = 1521
+            Syst.Var:ufk[7] = 1522
+            Syst.Var:ufk[8] = 8
+            Syst.Var:ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
-      ELSE ASSIGN toimi      = 1
+      ELSE ASSIGN Syst.Var:toimi      = 1
                   llDispMenu = TRUE.
                   
-      IF toimi = 1 THEN DO TRANS:
+      IF Syst.Var:toimi = 1 THEN DO TRANS:
          RUN pUpdate.
       END.
             
       /* select items from which counter is accumulated */   
-      ELSE IF toimi = 2 THEN DO TRANS:
+      ELSE IF Syst.Var:toimi = 2 THEN DO TRANS:
 
-         RUN fieldselection.p ("TMQueue",
+         RUN Syst/fieldselection.p ("TMQueue",
                              "COUNTER ITEMS",
                              TMRule.CounterItems,
                              (IF TMRule.TicketType EQ {&TICKET_TYPE_FRAUD}
@@ -895,17 +888,17 @@ PROCEDURE local-UPDATE-record:
       END.
          
       /* update item values */
-      ELSE IF toimi = 5 THEN RUN tmritemvalue.p (TMRule.TMRuleSeq).
+      ELSE IF Syst.Var:toimi = 5 THEN RUN Syst/tmritemvalue.p (TMRule.TMRuleSeq).
       
       /* update limits */
-      ELSE IF toimi = 6 THEN RUN tmrlimit.p (TMRule.TMRuleSeq).
+      ELSE IF Syst.Var:toimi = 6 THEN RUN Syst/tmrlimit.p (TMRule.TMRuleSeq).
                          
       /* functions */
-      ELSE IF toimi = 7 THEN do:
-          RUN tmrulefunc (TMRule.TMRuleSeq).
+      ELSE IF Syst.Var:toimi = 7 THEN do:
+          RUN Syst/tmrulefunc.p (TMRule.TMRuleSeq).
       end.
       
-      ELSE IF toimi = 8 THEN LEAVE.
+      ELSE IF Syst.Var:toimi = 8 THEN LEAVE.
    END.
 
 END PROCEDURE.
@@ -923,8 +916,8 @@ PROCEDURE pUpdate:
       
    llUpdateSource = (NEW TMRule OR
                      NOT CAN-FIND(FIRST TMRLimit OF TMRule)).
-   ehto = 9.
-   RUN ufkey.
+   Syst.Var:ehto = 9.
+   RUN Syst/ufkey.p.
    
    REPEAT ON ENDKEY UNDO, LEAVE:
    
@@ -952,12 +945,12 @@ PROCEDURE pUpdate:
             lcFrameField = FRAME-FIELD.
 
             IF FRAME-FIELD = "PayType" THEN 
-               RUN h-tmscodes(INPUT "CLIType", 
+               RUN Help/h-tmscodes.p(INPUT "CLIType", 
                                     lcFrameField, 
                                     ?, 
                                     OUTPUT lcCode).
             ELSE 
-               RUN h-tmscodes(INPUT "TMRule", 
+               RUN Help/h-tmscodes.p(INPUT "TMRule", 
                                     lcFrameField, 
                                     "TMR", 
                                     OUTPUT lcCode).
@@ -982,19 +975,18 @@ PROCEDURE pUpdate:
                END CASE.   
             END.
 
-            ehto = 9.
-            RUN ufkey.
+            Syst.Var:ehto = 9.
+            RUN Syst/ufkey.p.
 
             NEXT. 
          END.
 
-         IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+         IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
             PAUSE 0.
             
             IF FRAME-FIELD = "TicketType" THEN DO:
 
-               IF NOT DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
-                                       "TMRule",
+               IF NOT Func.Common:mTMSCodeChk("TMRule",
                                        "TicketType",
                                        STRING(INPUT TMRule.TicketType))
                THEN DO:
@@ -1008,8 +1000,7 @@ PROCEDURE pUpdate:
  
             ELSE IF FRAME-FIELD = "PayType" THEN DO:
 
-               IF NOT DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
-                                       "CLIType",
+               IF NOT Func.Common:mTMSCodeChk("CLIType",
                                        "PayType",
                                        STRING(INPUT TMRule.PayType))
                THEN DO:
@@ -1023,8 +1014,7 @@ PROCEDURE pUpdate:
  
             ELSE IF FRAME-FIELD = "CounterAmount" THEN DO:
 
-               IF NOT DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
-                                       "TMRule",
+               IF NOT Func.Common:mTMSCodeChk("TMRule",
                                        "CounterAmount",
                                        INPUT INPUT TMRule.CounterAmount)
                THEN DO:
@@ -1038,8 +1028,7 @@ PROCEDURE pUpdate:
  
             ELSE IF FRAME-FIELD = "LimitSource" THEN DO:
 
-               IF NOT DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
-                                       "TMRule",
+               IF NOT Func.Common:mTMSCodeChk("TMRule",
                                        "LimitSource",
                                        STRING(INPUT TMRule.LimitSource))
                THEN DO:
@@ -1057,8 +1046,7 @@ PROCEDURE pUpdate:
  
             ELSE IF FRAME-FIELD = "CounterPeriod" THEN DO:
 
-               IF NOT DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
-                                       "TMRule",
+               IF NOT Func.Common:mTMSCodeChk("TMRule",
                                        "CounterPeriod",
                                        STRING(INPUT TMRule.CounterPeriod))
                THEN DO:
@@ -1072,8 +1060,7 @@ PROCEDURE pUpdate:
  
             ELSE IF FRAME-FIELD = "CounterType" THEN DO:
 
-               IF NOT DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
-                                       "TMRule",
+               IF NOT Func.Common:mTMSCodeChk("TMRule",
                                        "CounterType",
                                        STRING(INPUT TMRule.CounterType))
                THEN DO:
@@ -1087,8 +1074,7 @@ PROCEDURE pUpdate:
 
             ELSE IF FRAME-FIELD = "LimitCompare" THEN DO:
 
-               IF NOT DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
-                                       "TMRule",
+               IF NOT Func.Common:mTMSCodeChk("TMRule",
                                        "LimitCompare",
                                        STRING(INPUT TMRule.LimitCompare))
                THEN DO:

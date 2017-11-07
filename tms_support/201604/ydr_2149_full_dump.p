@@ -1,8 +1,8 @@
-{commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+{Syst/commpaa.i}
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 
-{host.i}
+{Syst/host.i}
 
 DEF VAR lcDumpFile AS CHAR NO-UNDO. 
 DEF VAR lcDate     AS CHAR NO-UNDO. 
@@ -20,12 +20,12 @@ ASSIGN
 OUTPUT STREAM strout TO VALUE(lcDumpFile).
 
 FIND FIRST DumpFile NO-LOCK WHERE 
-           DumpFile.Brand    = gcBrand AND 
+           DumpFile.Brand    = Syst.Var:gcBrand AND 
            DumpFile.DumpName = "ARECDWHDump" NO-ERROR.
 
 IF AVAIL DumpFile THEN DO:
    
-   RUN dumpfile_run(DumpFile.DumpID,  /* Dump ID */
+   RUN Syst/dumpfile_run.p(DumpFile.DumpID,  /* Dump ID */
                     "Full",
                     "",
                     fIsThisReplica(),

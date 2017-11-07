@@ -8,7 +8,7 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 def shared var siirto as char.
 
@@ -27,8 +27,8 @@ form
     UserGrp.UserGroup
     UserGrp.UGName  format "x(30)"
     UserGrp.memo[1]  format "x(20)"
-with scroll 1 11 down  row 4 centered color value(cfc)
-    title color value(ctc) " User Groups " overlay frame tlse.
+with scroll 1 11 down  row 4 centered color value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " User Groups " overlay frame tlse.
 
 form
     UserGrp.UserGroup skip
@@ -36,17 +36,17 @@ form
     UserGrp.memo[1]    skip
 
 with overlay row 8 centered
-    title color value(ctc) tlli-ots
-    color value(cfc) side-labels 1 col
+    title color value(Syst.Var:ctc) tlli-ots
+    color value(Syst.Var:cfc) side-labels 1 col
     frame tlli.
 
 form /* Invoicing Group :n hakua varten */
     UserGroup
     help "Enter Code of an User Group"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
-    color value(cfc) no-labels overlay frame hayr.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND CODE "
+    color value(Syst.Var:cfc) no-labels overlay frame hayr.
 
-cfc = "tlse". run ufcolor. assign ccc = cfc.
+Syst.Var:cfc = "tlse". RUN Syst/ufcolor.p. assign Syst.Var:ccc = Syst.Var:cfc.
 Runko:
 repeat:
 
@@ -64,9 +64,9 @@ LOOP:
    Repeat with frame tlse:
    if must-add then do:  /* Invoicing Group  lisays  */
       assign
-      cfc = "tlli"
+      Syst.Var:cfc = "tlli"
       tlli-ots = " ADD ".
-      run ufcolor.
+      RUN Syst/ufcolor.p.
 add-new:
       repeat with frame tlli:
          pause 0 no-message.
@@ -126,10 +126,10 @@ print-line:
 
       if ufkey then do:
          assign
-         ufk = 0 ufk[1] = 35 ufk[5] = 11
-         /* ufk[6] = 5  no new records here ... */
-         ufk[8] = 8  ufk[9] = 1 siirto = ? ehto = 3 ufkey = false.
-         run ufkey.p.
+         Syst.Var:ufk = 0 Syst.Var:ufk[1] = 35 Syst.Var:ufk[5] = 11
+         /* Syst.Var:ufk[6] = 5  no new records here ... */
+         Syst.Var:ufk[8] = 8  Syst.Var:ufk[9] = 1 siirto = ? Syst.Var:ehto = 3 ufkey = false.
+         RUN Syst/ufkey.p.
       end.
   end. /* print-line */
 
@@ -137,14 +137,14 @@ BROWSE:
       repeat with frame tlse on endkey undo, return:
 
          hide message no-pause.
-         choose row UserGrp.UserGroup ;(uchoose.i;) no-error with frame tlse.
-         color display value(ccc) UserGrp.UserGroup with frame tlse.
+         choose row UserGrp.UserGroup {Syst/uchoose.i} no-error with frame tlse.
+         color display value(Syst.Var:ccc) UserGrp.UserGroup with frame tlse.
 
          if frame-value = "" and rtab[frame-line] = ? then next.
-         nap = keylabel(lastkey).
+         Syst.Var:nap = keylabel(lastkey).
 
          /* previous line */
-         if lookup(nap,"cursor-up") > 0 then do
+         if lookup(Syst.Var:nap,"cursor-up") > 0 then do
          with frame tlse:
             if frame-line = 1 then do:
                find UserGrp where recid(UserGrp) = rtab[frame-line] no-lock.
@@ -170,7 +170,7 @@ BROWSE:
          end. /* previous line */
 
          /* next line */
-         if lookup(nap,"cursor-down") > 0 then do with frame tlse:
+         if lookup(Syst.Var:nap,"cursor-down") > 0 then do with frame tlse:
             if frame-line = frame-down then do:
                find UserGrp where recid(UserGrp) = rtab[frame-line] no-lock .
                find next UserGrp no-lock no-error.
@@ -196,7 +196,7 @@ BROWSE:
          end. /* next line */
 
          /* previous page */
-         else if lookup(nap,"page-up,prev-page") > 0 then do with frame tlse:
+         else if lookup(Syst.Var:nap,"page-up,prev-page") > 0 then do with frame tlse:
             find UserGrp where recid(UserGrp) = muisti no-lock no-error.
             find prev UserGrp no-lock no-error.
             if available UserGrp then do:
@@ -218,7 +218,7 @@ BROWSE:
         end. /* previous page */
 
         /* next page */
-        else if lookup(nap,"page-down,next-page") > 0 then do with frame tlse:
+        else if lookup(Syst.Var:nap,"page-down,next-page") > 0 then do with frame tlse:
            if rtab[frame-down] = ? then do:
                bell.
                message "This is the last page !".
@@ -232,10 +232,10 @@ BROWSE:
         end. /* next page */
 
         /* Haku */
-        if lookup(nap,"1,f1") > 0 then do:  /* haku */
-           cfc = "puyr". run ufcolor.
+        if lookup(Syst.Var:nap,"1,f1") > 0 then do:  /* haku */
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
            UserGroup = "".
-           ehto = 9. run ufkey. ufkey = true.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            update UserGroup with frame hayr.
            hide frame hayr no-pause.
            if UserGroup <> "" then do:
@@ -255,13 +255,13 @@ BROWSE:
         end. /* Haku */
 
         /* Valinta */
-        else if lookup(nap,"return,enter,5,f5") > 0 then do:
+        else if lookup(Syst.Var:nap,"return,enter,5,f5") > 0 then do:
            find UserGrp where recid(UserGrp) = rtab[frame-line] no-lock.
            siirto = string(UserGrp.UserGroup).
            leave runko.
         end. /* Valinta */
         /* Ensimmainen tietue */
-        else if lookup(nap,"home,h") > 0 then do:
+        else if lookup(Syst.Var:nap,"home,h") > 0 then do:
            find first UserGrp no-lock.
            muisti = recid(UserGrp).
            must-print = true.
@@ -269,14 +269,14 @@ BROWSE:
         end. /* Ensimmainen tietue */
 
         /* last record */
-        else if lookup(nap,"end,e") > 0 then do :
+        else if lookup(Syst.Var:nap,"end,e") > 0 then do :
            find last UserGrp no-lock.
            muisti = recid(UserGrp).
            must-print = true.
            next LOOP.
         end. /* last record */
 
-        else if nap = "8" or nap = "f8" then leave runko. /* Paluu */
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" then leave runko. /* Paluu */
 
      end.  /* BROWSE */
    end.  /* LOOP */

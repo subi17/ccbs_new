@@ -1,11 +1,10 @@
 
 DISABLE TRIGGERS FOR LOAD OF MobSub.
 
-{commpaa.i}
-katun = "Cron".
-gcBrand = "1".
-{timestamp.i}
-{fbundle.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
+{Mm/fbundle.i}
 
 DEF VAR lcTariff     AS CHAR NO-UNDO.
 DEF VAR liNum        AS INT  NO-UNDO.
@@ -42,7 +41,7 @@ FUNCTION fGetTermTariff RETURNS CHAR
          ldeActStamp = MsOwner.TSBegin.
       END.
       IF ldeActStamp > 0 THEN
-         fSplitTS(ldeActStamp, OUTPUT odaActDate, OUTPUT liTime).
+         Func.Common:mSplitTS(ldeActStamp, OUTPUT odaActDate, OUTPUT liTime).
 
       RETURN TermMobsub.CLIType.
    END. /* IF lcTariffContract = "" THEN DO: */
@@ -56,7 +55,7 @@ FUNCTION fGetTermTariff RETURNS CHAR
       IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION}
       THEN NEXT.
 
-      fSplitTS(MsRequest.ActStamp, OUTPUT odaActDate, OUTPUT liTime).
+      Func.Common:mSplitTS(MsRequest.ActStamp, OUTPUT odaActDate, OUTPUT liTime).
       RETURN MsRequest.ReqCparam3.
    END.
    

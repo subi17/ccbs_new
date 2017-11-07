@@ -1,0 +1,144 @@
+bulkload: RatePref
+  Prefix: "MOB"
+  Brand: "1"
+
+bulkload: RatePref
+  Prefix: "MOB"
+  DialType: 1
+  Brand: "1"
+
+bulkload: RatePref
+  Prefix: "MOB"
+  DialType: 2
+  Brand: "1"
+
+bulkload: RatePref
+  Prefix: "MOB"
+  DialType: 4
+  Brand: "1"
+
+bulkload: RatePref
+  Prefix: "MOB"
+  DialType: 5
+  Brand: "1"
+
+bulkload: RatePref
+  Prefix: "MOB"
+  DialType: 6
+  Brand: "1"
+
+bulkload: RatePref
+  Prefix: "MOB"
+  DialType: 7
+  Brand: "1"
+
+bulkload: RatePref
+  Prefix: "MOB"
+  DialType: 8
+  Brand: "1"
+
+bulkload: RatePref
+  Prefix: "MOB"
+  DialType: 9
+  Brand: "1"
+
+bulkload: RatePref
+  Prefix: "MOB"
+  DialType: 10
+  Brand: "1"
+
+bulkload: RatePref
+  Prefix: "MOB"
+  DialType: 11
+  Brand: "1"
+
+bulkload: RatePref
+  Prefix: "MOB"
+  DialType: 12
+  Brand: "1"
+
+bulkload: RatePref
+  Prefix: "MOB"
+  DialType: 13
+  Brand: "1"
+
+bulkload: RatePref
+  Prefix: "MOB"
+  DialType: 14
+  Brand: "1"
+
+bulkload: RatePref
+  Prefix: "MOB"
+  DialType: 15
+  Brand: "1"
+
+bulkload: RatePref
+  Prefix: "MOB"
+  DialType: 16
+  Brand: "1"
+
+bulkload: RatePref
+  Prefix: "MOB"
+  DialType: 20
+  Brand: "1"
+
+bulkload: RatePref
+  Prefix: "Mob"
+  DialType: 21
+  Brand: "1"
+
+bulkload: RatePref
+  Prefix: "Mob"
+  DialType: 22
+  Brand: "1"
+
+bulkload: RatePref
+  Prefix: "MOB"
+  DialType: 23
+  Brand: "1"
+
+bulkload: RatePref
+  Prefix: "MOB"
+  DialType: 24
+  Brand: "1"
+
+bulkload: RatePref
+  Prefix: "MOB"
+  DialType: 50
+  Brand: "1"
+
+bulkload: RatePref
+  Prefix: "MOB"
+  DialType: 4
+  Brand: "2"
+
+bulkload: RatePref
+  Prefix: "MOB"
+  DialType: 5
+  Brand: "2"
+
+bulkload: RatePref
+  Prefix: "MOB"
+  DialType: 6
+  Brand: "2"
+
+bulkload: RatePref
+  Prefix: "MOB"
+  DialType: 7
+  Brand: "2"
+
+bulkload: RatePref
+  Prefix: "MOB"
+  DialType: 8
+  Brand: "2"
+
+bulkload: RatePref
+  Prefix: "MOB"
+  DialType: 9
+  Brand: "2"
+
+bulkload: RatePref
+  Prefix: "MOB"
+  DialType: 10
+  Brand: "2"
+

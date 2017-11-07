@@ -16,8 +16,8 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEF INPUT PARAM lcMacros  AS C NO-UNDO.
 
@@ -51,10 +51,10 @@ IF lcMacros = "" OR lcMacros = ? THEN RETURN.
 
 /* get printer's physical name */
 FIND FIRST TMSPrinter where
-           TMSPrinter.PrinterId = TMSPrinter
+           TMSPrinter.PrinterId = Syst.Var:TMSPrinter
 NO-LOCK NO-ERROR.
 IF NOT AVAIL TMSPrinter THEN 
-MESSAGE "SYSTEM ERROR: printer record" TMSPrinter "does not exist"
+MESSAGE "SYSTEM ERROR: printer record" Syst.Var:TMSPrinter "does not exist"
 VIEW-AS ALERT-BOX ERROR.
 
 /* IF NOT into PaymFile or email*/

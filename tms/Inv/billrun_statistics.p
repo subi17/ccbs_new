@@ -7,9 +7,8 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEF INPUT PARAMETER idaInvDate AS DATE NO-UNDO.
 DEF INPUT PARAMETER iiInvType  AS INT  NO-UNDO.
@@ -79,7 +78,8 @@ IF icRunMode = "test" THEN DO:
       lcFile = lcTransDir + "/" + ENTRY(NUM-ENTRIES(lcFile,"/"),lcFile,"/").
 END.
 IF lcFile = ? OR lcFile = "" THEN
-   lcFile = "/tmp/billrun_statistics_#IDATE.txt".
+   lcFile = SUBST("/tmp/&1_billrun_statistics_#IDATE.txt",
+                  Syst.Parameters:Tenant).
 lcFile = REPLACE(lcFile,"#IDATE",STRING(YEAR(idaInvDate),"9999") +
                                  STRING(MONTH(idaInvDate),"99") + 
                                  STRING(DAY(idaInvDate),"99")).
@@ -109,12 +109,12 @@ END.
 
 ldAbsHour[1] = ldStart.
 DO liCnt = 2 to EXTENT(ldAbsHour):
-   ldAbsHour[liCnt] = fSecOffSet(ldAbsHour[liCnt - 1],3600). 
+   ldAbsHour[liCnt] = Func.Common:mSecOffSet(ldAbsHour[liCnt - 1],3600). 
 END.
 
 DO liCnt = 1 TO EXTENT(ldAbsHour):
 
-   fSplitTS(ldAbsHour[liCnt],
+   Func.Common:mSplitTS(ldAbsHour[liCnt],
             OUTPUT ldaDate,
             OUTPUT liTime).
  
@@ -143,7 +143,7 @@ FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
        END.
     END.
       
-    fSplitTS(Invoice.ChgStamp,
+    Func.Common:mSplitTS(Invoice.ChgStamp,
              OUTPUT ldaDate,
              OUTPUT liTime).
     
@@ -250,8 +250,8 @@ END.
 
 
 ASSIGN
-   ldtStart = fTimeStamp2DateTime(ldStart)
-   ldtEnd   = fTimeStamp2DateTime(ldEnd)
+   ldtStart = Func.Common:mTimeStamp2DateTime(ldStart)
+   ldtEnd   = Func.Common:mTimeStamp2DateTime(ldEnd)
    liDur    = INTERVAL(ldtEnd,ldtStart,"seconds")
    liDays   = TRUNCATE(liDur / 86400,0)
    liDur    = liDur MOD 86400
@@ -273,7 +273,7 @@ PUT STREAM sLog UNFORMATTED
 FOR EACH ttCumulative:
    DISP STREAM sLog 
       ttCumulative.ttHour  COLUMN-LABEL "Hour" FORMAT ">9"
-      fts2hms(ttCumulative.StartStamp) 
+      Func.Common:mTS2HMS(ttCumulative.StartStamp) 
          COLUMN-LABEL "Started"
          FORMAT "x(19)"
       ttCumulative.InvQty  

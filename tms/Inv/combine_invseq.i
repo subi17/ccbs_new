@@ -1,7 +1,7 @@
 /* combine_InvSeq.i   18.01.12/aam 
 */
 
-{invrowcounter_move.i}
+{Inv/invrowcounter_move.i}
 
 DEF TEMP-TABLE ttInvSeq NO-UNDO 
    FIELD MsSeq AS INT

@@ -409,6 +409,12 @@ ADD SEQUENCE "ITGroupID"
   CYCLE-ON-LIMIT no
   MIN-VAL 0
 
+ADD SEQUENCE "DPMemberID"
+  INITIAL 0
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 0
+
 ADD TABLE "AccessSchema"
   AREA "Sta_Data_128"
   LABEL "Access schemas"
@@ -530,13 +536,14 @@ ADD INDEX "AccessSchemaRuleSeq" ON "AccessSchemaRule"
   INDEX-FIELD "AccessSchemaRuleSeq" ASCENDING 
 
 ADD TABLE "Account"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Accounts"
   DESCRIPTION "Accounts"
   DUMP-NAME "account"
 
 ADD FIELD "AccNum" OF "Account" AS integer 
-  FORMAT ">>>>>9"
+  FORMAT ">>>>>>>9"
   INITIAL "0"
   LABEL "Account"
   POSITION 2
@@ -597,14 +604,14 @@ ADD FIELD "Brand" OF "Account" AS character
   ORDER 60
 
 ADD INDEX "AccNum" ON "Account" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "AccNum" ASCENDING 
 
 ADD INDEX "AccName" ON "Account" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "AccName" ASCENDING 
 
@@ -747,6 +754,7 @@ ADD INDEX "Brand" ON "ActionFlag"
   INDEX-FIELD "TimeStamp" DESCENDING 
 
 ADD TABLE "ActionLog"
+  MULTITENANT yes
   AREA "Dyn_Data_64"
   LABEL "Action Log"
   DESCRIPTION "Action log
@@ -1322,6 +1330,7 @@ ADD INDEX "BankId" ON "Bank"
   INDEX-FIELD "BankOffice" ASCENDING 
 
 ADD TABLE "BankAccount"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   LABEL "Company's Bank Accounts"
   DESCRIPTION "Company's bank accounts"
@@ -1446,7 +1455,7 @@ ADD FIELD "BankCodes" OF "BankAccount" AS character
   ORDER 120
 
 ADD FIELD "DDAllocation" OF "BankAccount" AS decimal 
-  FORMAT "Z9.99"
+  FORMAT "ZZ9.99"
   INITIAL "0"
   LABEL "DDAllocation"
   POSITION 14
@@ -1456,8 +1465,18 @@ ADD FIELD "DDAllocation" OF "BankAccount" AS decimal
   DECIMALS 2
   ORDER 130
 
+ADD FIELD "PresenterId" OF "BankAccount" AS character 
+  FORMAT "X(35)"
+  INITIAL ""
+  LABEL "Presenter Id"
+  POSITION 15
+  MAX-WIDTH 70
+  COLUMN-LABEL "PresenterId"
+  HELP "Presenter ID for CSB19.14"
+  ORDER 140
+
 ADD INDEX "UnitBank" ON "BankAccount" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
@@ -1465,7 +1484,7 @@ ADD INDEX "UnitBank" ON "BankAccount"
   INDEX-FIELD "BankAccount" ASCENDING 
 
 ADD INDEX "AccNum" ON "BankAccount" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "BankAccount" ASCENDING 
 
@@ -1697,6 +1716,7 @@ ADD INDEX "bbnumber" ON "BBRead"
   INDEX-FIELD "UserCode" ASCENDING 
 
 ADD TABLE "BDest"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "B-Destinations"
   DESCRIPTION "B-Destinations"
@@ -1896,8 +1916,18 @@ ADD FIELD "BdestID" OF "BDest" AS integer
   HELP "Unique ID"
   ORDER 220
 
+ADD FIELD "RateBDest" OF "BDest" AS character 
+  FORMAT "X(25)"
+  INITIAL ""
+  LABEL "Rating Destination"
+  POSITION 23
+  MAX-WIDTH 50
+  COLUMN-LABEL "RateBDest"
+  HELP "Rating B-destination"
+  ORDER 230
+
 ADD INDEX "BDest" ON "BDest" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
@@ -1906,24 +1936,25 @@ ADD INDEX "BDest" ON "BDest"
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD INDEX "BDestID" ON "BDest" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "BdestID" ASCENDING 
 
 ADD INDEX "BDName" ON "BDest" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "BDName" ASCENDING 
   INDEX-FIELD "BDest" ASCENDING 
 
 ADD INDEX "CCN" ON "BDest" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CCN" ASCENDING 
   INDEX-FIELD "BDName" ASCENDING 
   INDEX-FIELD "BDest" ASCENDING 
 
 ADD TABLE "BDestConf"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "BDest Configuration"
   DESCRIPTION "BDest configuration"
@@ -2053,19 +2084,20 @@ ADD FIELD "GroupType" OF "BDestConf" AS integer
   ORDER 130
 
 ADD INDEX "BDCGroup" ON "BDestConf" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "BDCGroup" ASCENDING 
 
 ADD INDEX "GroupType" ON "BDestConf" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "GroupType" ASCENDING 
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD TABLE "BDestConfItem"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "BDest Configuration Item"
   DESCRIPTION "BDest configuration item"
@@ -2142,18 +2174,18 @@ ADD FIELD "BDCItemID" OF "BDestConfItem" AS integer
   ORDER 70
 
 ADD INDEX "BDCGroup" ON "BDestConfItem" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "BDCGroup" ASCENDING 
 
 ADD INDEX "BDCItemID" ON "BDestConfItem" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "BDCItemID" ASCENDING 
 
 ADD INDEX "BDest" ON "BDestConfItem" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "BDest" ASCENDING 
   INDEX-FIELD "ToDate" DESCENDING 
@@ -2252,6 +2284,7 @@ ADD INDEX "CustNum_s" ON "BDestHist"
   INDEX-FIELD "vTo" ASCENDING 
 
 ADD TABLE "BDestTrans"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "BDestTrans"
   DESCRIPTION "B-Destination short number translations"
@@ -2314,6 +2347,24 @@ ADD FIELD "FromDate" OF "BDestTrans" AS date
   HELP "First effective day"
   ORDER 70
 
+ADD FIELD "MinLength" OF "BDestTrans" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Minimum Length"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "MinLength"
+  ORDER 80
+
+ADD FIELD "MaxLength" OF "BDestTrans" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Maximum Length"
+  POSITION 9
+  MAX-WIDTH 4
+  COLUMN-LABEL "MaxLength"
+  ORDER 90
+
 ADD INDEX "BDestTrans" ON "BDestTrans" 
   AREA "Dyn_Index_1"
   PRIMARY
@@ -2322,12 +2373,13 @@ ADD INDEX "BDestTrans" ON "BDestTrans"
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD TABLE "BillItem"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   LABEL "Billing Items"
   DESCRIPTION "Billing items"
   DUMP-NAME "billitem"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-billitem.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-billitem.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-billitem.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-billitem.p" CRC "?" 
 
 ADD FIELD "BillCode" OF "BillItem" AS character 
   FORMAT "x(16)"
@@ -2350,7 +2402,7 @@ ADD FIELD "BIName" OF "BillItem" AS character
   ORDER 20
 
 ADD FIELD "AccNum" OF "BillItem" AS integer 
-  FORMAT ">>>>>9"
+  FORMAT ">>>>>>>9"
   INITIAL "0"
   LABEL "Account"
   POSITION 4
@@ -2383,7 +2435,7 @@ ADD FIELD "DispMPM" OF "BillItem" AS logical
   ORDER 50
 
 ADD FIELD "EUAccNum" OF "BillItem" AS integer 
-  FORMAT ">>>>>9"
+  FORMAT ">>>>>>>9"
   INITIAL "0"
   LABEL "EU Sales Account"
   POSITION 7
@@ -2393,7 +2445,7 @@ ADD FIELD "EUAccNum" OF "BillItem" AS integer
   ORDER 60
 
 ADD FIELD "FSAccNum" OF "BillItem" AS integer 
-  FORMAT ">>>>>9"
+  FORMAT ">>>>>>>9"
   INITIAL "0"
   LABEL "Foreign Sales Account"
   POSITION 8
@@ -2483,7 +2535,7 @@ ADD FIELD "EUVATCode" OF "BillItem" AS integer
   ORDER 300
 
 ADD FIELD "EUConAccNum" OF "BillItem" AS integer 
-  FORMAT ">>>>>9"
+  FORMAT ">>>>>>>9"
   INITIAL "0"
   LABEL "EU Cons. Sales"
   POSITION 18
@@ -2503,7 +2555,7 @@ ADD FIELD "CostCentre" OF "BillItem" AS character
   ORDER 320
 
 ADD FIELD "AltAccNum" OF "BillItem" AS integer 
-  FORMAT ">>>>>9"
+  FORMAT ">>>>>>>9"
   INITIAL "0"
   LABEL "Own Use Account"
   POSITION 20
@@ -2564,30 +2616,40 @@ ADD FIELD "Active" OF "BillItem" AS logical
   HELP "Is billing item active"
   ORDER 380
 
+ADD FIELD "ItemType" OF "BillItem" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Item Type"
+  POSITION 26
+  MAX-WIDTH 4
+  HELP "Type 0 for mobile 1 for convergent"
+  ORDER 390
+
 ADD INDEX "BillCode" ON "BillItem" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "BillCode" ASCENDING 
 
 ADD INDEX "BIGroup" ON "BillItem" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "BIGroup" ASCENDING 
   INDEX-FIELD "BillCode" ASCENDING 
 
 ADD INDEX "BIName" ON "BillItem" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "BIName" ASCENDING 
 
 ADD TABLE "BillTarget"
-  AREA "Sta_Data_256"
+  MULTITENANT yes
+  AREA "Sta_Data_2_128"
   LABEL "Billing Target"
   DESCRIPTION "Customer's Billing Target"
-  DUMP-NAME "billtarg"
+  DUMP-NAME "billtarget"
 
 ADD FIELD "CustNum" OF "BillTarget" AS integer 
   FORMAT ">>>>>>>>9"
@@ -2621,34 +2683,35 @@ ADD FIELD "DiscPlan" OF "BillTarget" AS character
   ORDER 80
 
 ADD FIELD "RatePlan" OF "BillTarget" AS character 
-  FORMAT "x(12)"
+  FORMAT "x(15)"
   INITIAL ""
   LABEL "Rating Plan"
   POSITION 15
-  MAX-WIDTH 24
+  MAX-WIDTH 30
   COLUMN-LABEL "RatePlan"
   HELP "Rating plan code"
   ORDER 130
 
 ADD INDEX "CustNum" ON "BillTarget" 
-  AREA "Sta_Index_1"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "BillTarget" ASCENDING 
 
 ADD INDEX "RatePlan" ON "BillTarget" 
-  AREA "Sta_Index_1"
+  AREA "Sta_Index_3"
   INDEX-FIELD "RatePlan" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
 
 ADD TABLE "BItemGroup"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Product Groups"
   DESCRIPTION "Product Groups"
   DUMP-NAME "bitemgro"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-bitemgroup.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-bitemgroup.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-bitemgroup.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-bitemgroup.p" CRC "?" 
 
 ADD FIELD "BIGroup" OF "BItemGroup" AS character 
   FORMAT "x(8)"
@@ -2722,19 +2785,20 @@ ADD FIELD "InvoiceOrder" OF "BItemGroup" AS integer
   ORDER 70
 
 ADD INDEX "BIGroup" ON "BItemGroup" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "BIGroup" ASCENDING 
 
 ADD INDEX "BIGName" ON "BItemGroup" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "BIGName" ASCENDING 
 
 ADD TABLE "BRAND"
-  AREA "Sta_Data_256"
+  MULTITENANT yes
+  AREA "Sta_Data_2_256"
   DESCRIPTION "Brand info
 "
   DUMP-NAME "brand"
@@ -2830,16 +2894,17 @@ ADD FIELD "PostOffice" OF "BRAND" AS character
   ORDER 90
 
 ADD INDEX "Brand" ON "BRAND" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
 
 ADD INDEX "BRName" ON "BRAND" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "BRName" ASCENDING 
 
 ADD TABLE "BRTestCase"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "BR Test Case"
   DESCRIPTION "Billrun test case"
@@ -2940,6 +3005,7 @@ ADD INDEX "Description" ON "BRTestCase"
   INDEX-FIELD "Description" ASCENDING 
 
 ADD TABLE "BRTestCriteria"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   LABEL "BR Test Criteria"
   DESCRIPTION "Billrun test case criteria"
@@ -3084,6 +3150,7 @@ ADD INDEX "BRTestQueueID" ON "BRTestCriteria"
   INDEX-FIELD "CriteriaField" ASCENDING 
 
 ADD TABLE "BRTestQResult"
+  MULTITENANT yes
   AREA "Sta_Data_2_256"
   LABEL "BR Test Queue Result"
   DESCRIPTION "Billrun test queue result"
@@ -3142,6 +3209,7 @@ ADD INDEX "BRTestQueueID" ON "BRTestQResult"
   INDEX-FIELD "TestRunStamp" DESCENDING 
 
 ADD TABLE "BRTestQResultRow"
+  MULTITENANT yes
   AREA "Sta_Data_2_256"
   LABEL "BR Test Queue Result Row"
   DESCRIPTION "Billrun test queue result row"
@@ -3253,6 +3321,7 @@ ADD INDEX "BRTestQRowID" ON "BRTestQResultRow"
   INDEX-FIELD "BRTestQRowID" ASCENDING 
 
 ADD TABLE "BRTestQRow"
+  MULTITENANT yes
   AREA "Sta_Data_2_256"
   LABEL "BR Test Queue Row"
   DESCRIPTION "Billrun test queue row"
@@ -3323,6 +3392,7 @@ ADD INDEX "BRTestQueueID" ON "BRTestQRow"
   INDEX-FIELD "BRTestCaseID" ASCENDING 
 
 ADD TABLE "BRTestQueue"
+  MULTITENANT yes
   AREA "Sta_Data_2_256"
   LABEL "BR Test Queue"
   DESCRIPTION "Billrun test queue"
@@ -3432,6 +3502,65 @@ ADD INDEX "b-asno" ON "BSer"
   AREA "Sta_Index_2"
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "CliFrom" ASCENDING 
+
+ADD TABLE "BTarget_old"
+  AREA "Sta_Data_256"
+  LABEL "Billing Target"
+  DESCRIPTION "Customer's Billing Target"
+  DUMP-NAME "billtarg"
+
+ADD FIELD "CustNum" OF "BTarget_old" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Customer"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Customer"
+  HELP "Customer Number"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "BillTarget" OF "BTarget_old" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Billing Target"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "BT"
+  HELP "No. for customer's billing target"
+  ORDER 20
+
+ADD FIELD "DiscPlan" OF "BTarget_old" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Discount Plan"
+  POSITION 9
+  MAX-WIDTH 24
+  COLUMN-LABEL "Discount Plan"
+  HELP "Code of a Discount Plan"
+  ORDER 80
+
+ADD FIELD "RatePlan" OF "BTarget_old" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "Rating Plan"
+  POSITION 15
+  MAX-WIDTH 24
+  COLUMN-LABEL "RatePlan"
+  HELP "Rating plan code"
+  ORDER 130
+
+ADD INDEX "CustNum" ON "BTarget_old" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "BillTarget" ASCENDING 
+
+ADD INDEX "RatePlan" ON "BTarget_old" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "RatePlan" ASCENDING 
+  INDEX-FIELD "CustNum" ASCENDING 
 
 ADD TABLE "CallLimit"
   AREA "Sta_Data_128"
@@ -3569,6 +3698,7 @@ ADD INDEX "Cli_s" ON "CallLimit"
   INDEX-FIELD "Dto" DESCENDING 
 
 ADD TABLE "Campaign"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Campaign"
   DESCRIPTION "Campaign header, rows in CampRow
@@ -3644,19 +3774,19 @@ ADD FIELD "AccessSchemaSeq" OF "Campaign" AS integer
   ORDER 70
 
 ADD INDEX "Campaign" ON "Campaign" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "Campaign" ASCENDING 
 
 ADD INDEX "CaName" ON "Campaign" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CaName" ASCENDING 
 
 ADD INDEX "ToDate" ON "Campaign" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "ToDate" DESCENDING 
 
@@ -3738,6 +3868,7 @@ ADD INDEX "Campaign" ON "CampPrice"
   INDEX-FIELD "CLI" ASCENDING 
 
 ADD TABLE "CampRow"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "CampRow"
   DESCRIPTION "Campaign rows
@@ -3807,7 +3938,7 @@ ADD FIELD "CRowItem" OF "CampRow" AS character
   ORDER 60
 
 ADD INDEX "Campaign" ON "CampRow" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "Campaign" ASCENDING 
@@ -3815,17 +3946,17 @@ ADD INDEX "Campaign" ON "CampRow"
   INDEX-FIELD "CRowItem" ASCENDING 
 
 ADD INDEX "BillCode" ON "CampRow" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "BillCode" ASCENDING 
 
 ADD INDEX "CLIType" ON "CampRow" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CLIType" ASCENDING 
 
 ADD INDEX "CRowType" ON "CampRow" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CRowType" ASCENDING 
   INDEX-FIELD "CLIType" ASCENDING 
@@ -3911,6 +4042,7 @@ ADD INDEX "CustNum" ON "CampStat"
   INDEX-FIELD "CampDate" DESCENDING 
 
 ADD TABLE "CCN"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "CCN"
   DESCRIPTION "CCN"
@@ -3959,19 +4091,19 @@ ADD FIELD "Brand" OF "CCN" AS character
   ORDER 70
 
 ADD INDEX "CCN" ON "CCN" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CCN" ASCENDING 
 
 ADD INDEX "CCNName" ON "CCN" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CCNName" ASCENDING 
 
 ADD INDEX "RepCCN" ON "CCN" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "RepCCN" ASCENDING 
   INDEX-FIELD "CCN" ASCENDING 
@@ -4253,7 +4385,8 @@ ADD INDEX "b-nr" ON "cfoSer"
   INDEX-FIELD "ValidTo" DESCENDING 
 
 ADD TABLE "CGMember"
-  AREA "Sta_Data_256"
+  MULTITENANT yes
+  AREA "Sta_Data_2_256"
   LABEL "Customer Group Members"
   DESCRIPTION "Customer Group Member records;  join customers&cust.groups"
   DUMP-NAME "cgmember"
@@ -4310,7 +4443,7 @@ ADD FIELD "Brand" OF "CGMember" AS character
   ORDER 40
 
 ADD INDEX "CustGroup" ON "CGMember" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
@@ -4318,7 +4451,7 @@ ADD INDEX "CustGroup" ON "CGMember"
   INDEX-FIELD "CustNum" ASCENDING 
 
 ADD INDEX "CustName" ON "CGMember" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CustGroup" ASCENDING 
@@ -4326,19 +4459,20 @@ ADD INDEX "CustName" ON "CGMember"
   INDEX-FIELD "CustNum" ASCENDING 
 
 ADD INDEX "CustNum" ON "CGMember" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "CustGroup" ASCENDING 
 
 ADD INDEX "CustNum_s" ON "CGMember" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "CustGroup" ASCENDING 
 
 ADD TABLE "ClaimHist"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Claiming history"
   DESCRIPTION "Claiming history of invoice"
@@ -4447,26 +4581,26 @@ ADD FIELD "SubInvNum" OF "ClaimHist" AS integer
   ORDER 100
 
 ADD INDEX "InvNum_s" ON "ClaimHist" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "InvNum" ASCENDING 
   INDEX-FIELD "Claim" ASCENDING 
 
 ADD INDEX "ClaimDate" ON "ClaimHist" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "ClaimDate" DESCENDING 
   INDEX-FIELD "InvNum" ASCENDING 
 
 ADD INDEX "CustNum" ON "ClaimHist" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "ClaimDate" DESCENDING 
 
 ADD INDEX "InvNum" ON "ClaimHist" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "InvNum" ASCENDING 
   INDEX-FIELD "Claim" ASCENDING 
@@ -4799,6 +4933,7 @@ ADD INDEX "Salesman" ON "CoEvent"
   INDEX-FIELD "CoEventID" ASCENDING 
 
 ADD TABLE "Company"
+  MULTITENANT yes
   AREA "Sta_Data_32"
   LABEL "Company"
   DESCRIPTION "Company data"
@@ -4940,8 +5075,18 @@ ADD FIELD "Address2" OF "Company" AS character
   HELP "Additional address"
   ORDER 490
 
+ADD FIELD "CreditorName" OF "Company" AS character 
+  FORMAT "X(30)"
+  INITIAL ""
+  LABEL "Creditor Name"
+  POSITION 17
+  MAX-WIDTH 60
+  COLUMN-LABEL "CreditorName"
+  HELP "Creditor Name in DD file"
+  ORDER 520
+
 ADD INDEX "unitcode" ON "Company" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
@@ -5096,6 +5241,7 @@ ADD INDEX "UserStamp" ON "Contact"
   INDEX-FIELD "ConStamp" DESCENDING 
 
 ADD TABLE "Contract"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Contract"
   DESCRIPTION "Customers' contracts
@@ -5223,37 +5369,37 @@ ADD FIELD "HistCont" OF "Contract" AS character
   ORDER 80
 
 ADD INDEX "Contract" ON "Contract" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "Contract" ASCENDING 
 
 ADD INDEX "ContrType" ON "Contract" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "ContrType" ASCENDING 
   INDEX-FIELD "CloseDate" DESCENDING 
 
 ADD INDEX "CustNum" ON "Contract" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "FromDate" DESCENDING 
 
 ADD INDEX "CustNum_s" ON "Contract" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "FromDate" DESCENDING 
 
 ADD INDEX "FromDate" ON "Contract" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "FromDate" DESCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
 
 ADD INDEX "Salesman" ON "Contract" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "Salesman" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
@@ -5295,6 +5441,7 @@ ADD INDEX "CcLName" ON "ConvLang"
   INDEX-FIELD "CcLName" ASCENDING 
 
 ADD TABLE "CoRule"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   LABEL "Commission Rule"
   DESCRIPTION "Defined rules for the commission to be paid to Salesman."
@@ -5587,37 +5734,37 @@ ADD FIELD "Priority" OF "CoRule" AS integer
   ORDER 360
 
 ADD INDEX "CoRuleID" ON "CoRule" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CoRuleID" ASCENDING 
 
 ADD INDEX "CoFrom" ON "CoRule" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "coFrom" DESCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
 
 ADD INDEX "CustNum" ON "CoRule" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "RuleDesc" ASCENDING 
 
 ADD INDEX "CustNum_s" ON "CoRule" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "RuleDesc" ASCENDING 
 
 ADD INDEX "RuleDesc" ON "CoRule" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "RuleDesc" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
 
 ADD INDEX "RuleType" ON "CoRule" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "RuleType" ASCENDING 
   INDEX-FIELD "coFrom" DESCENDING 
@@ -5773,6 +5920,7 @@ ADD INDEX "CCN" ON "CostCentre"
   INDEX-FIELD "CCName" ASCENDING 
 
 ADD TABLE "CoTarg"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   DUMP-NAME "cotarg"
 
@@ -5909,7 +6057,7 @@ ADD FIELD "CreatedTS" OF "CoTarg" AS decimal
   ORDER 170
 
 ADD INDEX "CoRuleID" ON "CoTarg" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CoRuleID" ASCENDING 
@@ -5917,33 +6065,34 @@ ADD INDEX "CoRuleID" ON "CoTarg"
   INDEX-FIELD "CoTarg" ASCENDING 
 
 ADD INDEX "CommStatus" ON "CoTarg" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CommStatus" ASCENDING 
   INDEX-FIELD "CoTarg" ASCENDING 
 
 ADD INDEX "CoTargID" ON "CoTarg" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "CoTargId" ASCENDING 
 
 ADD INDEX "OrderId" ON "CoTarg" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "OrderId" ASCENDING 
 
 ADD INDEX "PromotedID" ON "CoTarg" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "PromotedID" ASCENDING 
 
 ADD INDEX "TargType" ON "CoTarg" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "TargType" ASCENDING 
   INDEX-FIELD "CoTarg" ASCENDING 
 
 ADD TABLE "Counter"
+  MULTITENANT yes
   AREA "Sta_Data_2_256"
   LABEL "Counter"
   DESCRIPTION "Counter"
@@ -6547,6 +6696,7 @@ ADD INDEX "subunit" ON "Currency"
   INDEX-FIELD "Currency" ASCENDING 
 
 ADD TABLE "CustBal"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Customer's balances"
   DESCRIPTION "Customer's balances
@@ -6700,19 +6850,20 @@ ADD FIELD "CreditLoss" OF "CustBal" AS decimal
   DECIMALS 2
   ORDER 1410
 
-ADD INDEX "CustNum" ON "CustBal" 
-  AREA "Sta_Index_2"
+ADD INDEX "Custnum" ON "CustBal" 
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "CLI" ASCENDING 
 
 ADD INDEX "MsSeq" ON "CustBal" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "MsSeq" ASCENDING 
 
 ADD TABLE "CustCat"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Customer Category"
   DESCRIPTION "Customer category"
@@ -6749,7 +6900,7 @@ ADD FIELD "MaxCredit" OF "CustCat" AS integer
   ORDER 30
 
 ADD FIELD "ArAccNum" OF "CustCat" AS integer 
-  FORMAT ">>>>>9"
+  FORMAT ">>>>>>>9"
   INITIAL "0"
   LABEL "Receivables Account"
   POSITION 5
@@ -6849,21 +7000,41 @@ ADD FIELD "ActivationLimit" OF "CustCat" AS integer
   COLUMN-LABEL "ActivationLimit"
   ORDER 130
 
+ADD FIELD "PRO" OF "CustCat" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "PRO"
+  POSITION 15
+  MAX-WIDTH 1
+  COLUMN-LABEL "PRO"
+  HELP "PRO customer"
+  ORDER 140
+
+ADD FIELD "Segment" OF "CustCat" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Segment"
+  POSITION 16
+  MAX-WIDTH 40
+  COLUMN-LABEL "Segment"
+  HELP "Segment"
+  ORDER 150
+
 ADD INDEX "Category" ON "CustCat" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "Category" ASCENDING 
 
 ADD INDEX "CatName" ON "CustCat" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CatName" ASCENDING 
   INDEX-FIELD "MaxCredit" ASCENDING 
 
 ADD TABLE "CustClass"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_256"
   DESCRIPTION "
 "
   DUMP-NAME "custclas"
@@ -6939,12 +7110,13 @@ ADD INDEX "CCName" ON "CustClass"
   INDEX-FIELD "CustClass" ASCENDING 
 
 ADD TABLE "CustContact"
+  MULTITENANT yes
   AREA "Sta_Data_32"
   LABEL "CustContact"
   DESCRIPTION "CustContact"
   DUMP-NAME "custcontact"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-custcontact.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-custcontact.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-custcontact.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-custcontact.p" CRC "?" 
 
 ADD FIELD "CustNum" OF "CustContact" AS integer 
   FORMAT ">>>>>>>>9"
@@ -7246,12 +7418,11 @@ ADD INDEX "CustContact" ON "CustContact"
   INDEX-FIELD "CustType" ASCENDING 
 
 ADD TABLE "CustCount"
-  AREA "Sta_Data_256"
+  MULTITENANT yes
+  AREA "Sta_Data_2_256"
   LABEL "Customer counters"
-  DESCRIPTION "Customer counters
-
-"
-  DUMP-NAME "custcoun"
+  DESCRIPTION "Customer counters"
+  DUMP-NAME "custcount"
 
 ADD FIELD "CustNum" OF "CustCount" AS integer 
   FORMAT ">>>>>>>>9"
@@ -7275,13 +7446,49 @@ ADD FIELD "Unbilled" OF "CustCount" AS decimal
   ORDER 20
 
 ADD INDEX "CustNum" ON "CustCount" 
+  AREA "Sta_Index_3"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "CustNum" ASCENDING 
+
+ADD TABLE "CustCount_old"
+  AREA "Sta_Data_256"
+  LABEL "Customer counters"
+  DESCRIPTION "Customer counters
+
+"
+  DUMP-NAME "custcoun"
+
+ADD FIELD "CustNum" OF "CustCount_old" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Customer"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Customer"
+  HELP "Customer's number"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "Unbilled" OF "CustCount_old" AS decimal 
+  FORMAT "->>>>>>>9.99"
+  INITIAL "0"
+  LABEL "Unbilled"
+  POSITION 3
+  MAX-WIDTH 17
+  HELP "Amount of customer's unbilled events"
+  DECIMALS 2
+  ORDER 20
+
+ADD INDEX "CustNum" ON "CustCount_old" 
   AREA "Sta_Index_2"
   UNIQUE
   PRIMARY
   INDEX-FIELD "CustNum" ASCENDING 
 
 ADD TABLE "CustGroup"
-  AREA "Sta_Data_256"
+  MULTITENANT yes
+  AREA "Sta_Data_2_256"
   LABEL "Customer Groups"
   DESCRIPTION "Customer Groups"
   DUMP-NAME "custgrou"
@@ -7398,18 +7605,19 @@ ADD FIELD "Brand" OF "CustGroup" AS character
   ORDER 450
 
 ADD INDEX "CustGroup" ON "CustGroup" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CustGroup" ASCENDING 
 
 ADD INDEX "CGName" ON "CustGroup" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CGName" ASCENDING 
 
 ADD TABLE "CustIntEvent"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   LABEL "Customer's Interest Events"
   DESCRIPTION "Customer's interest events"
@@ -7613,34 +7821,34 @@ ADD FIELD "SubInvNum" OF "CustIntEvent" AS integer
   ORDER 180
 
 ADD INDEX "CustNum_s" ON "CustIntEvent" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "PaymDate" ASCENDING 
 
 ADD INDEX "BilledInvNum" ON "CustIntEvent" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "BilledInvNum" ASCENDING 
 
 ADD INDEX "CustNum" ON "CustIntEvent" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "PaymDate" DESCENDING 
 
 ADD INDEX "InvNum" ON "CustIntEvent" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "InvNum" ASCENDING 
   INDEX-FIELD "PaymDate" DESCENDING 
 
 ADD INDEX "InvNum_s" ON "CustIntEvent" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "InvNum" ASCENDING 
   INDEX-FIELD "PaymDate" ASCENDING 
 
 ADD INDEX "VoucheSta_s" ON "CustIntEvent" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Voucher" ASCENDING 
 
 ADD TABLE "CustLetter"
@@ -7696,11 +7904,13 @@ ADD INDEX "Brand" ON "CustLetter"
   INDEX-FIELD "Brand" ASCENDING 
 
 ADD TABLE "Customer"
+  MULTITENANT yes
   AREA "Sta_Data_32"
   LABEL "Customer"
   DESCRIPTION "Customer"
   DUMP-NAME "custome1"
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-customer.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-customer.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-customer.p" CRC "?" 
 
 ADD FIELD "CustNum" OF "Customer" AS integer 
   FORMAT ">>>>>>>>9"
@@ -8803,6 +9013,16 @@ ADD FIELD "AuthCustId" OF "Customer" AS character
   HELP "Authorization Customer ID"
   ORDER 1580
 
+ADD FIELD "DontSharePersData" OF "Customer" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "No"
+  LABEL "DontSharePersData"
+  POSITION 125
+  MAX-WIDTH 1
+  COLUMN-LABEL "DontSharePersData"
+  HELP "Do Not Share Personal Data among Mas Movil Group"
+  ORDER 1590
+
 ADD INDEX "CustNum_s" ON "Customer" 
   AREA "Sta_Index_1"
   UNIQUE
@@ -8888,6 +9108,7 @@ ADD INDEX "ZipCode" ON "Customer"
   INDEX-FIELD "CustNum" ASCENDING 
 
 ADD TABLE "CustomerReport"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "CustomerReport"
   DESCRIPTION "Temporary customer report values"
@@ -9207,6 +9428,7 @@ ADD INDEX "Salesman" ON "CustPP"
   INDEX-FIELD "Salesman" ASCENDING 
 
 ADD TABLE "CustTemp"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Customer Templates"
   DESCRIPTION "Template definition for Customer creation
@@ -9266,14 +9488,14 @@ ADD FIELD "Brand" OF "CustTemp" AS character
   ORDER 50
 
 ADD INDEX "TemplNum" ON "CustTemp" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "TemplNum" ASCENDING 
 
 ADD INDEX "TemplName" ON "CustTemp" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "TemplName" ASCENDING 
   INDEX-FIELD "TemplNum" ASCENDING 
@@ -9683,6 +9905,7 @@ ADD INDEX "DumpID" ON "DFField"
   INDEX-FIELD "OrderNbr" ASCENDING 
 
 ADD TABLE "DFTimeTable"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Dump Time Table"
   DESCRIPTION "Time table for dump files"
@@ -9806,15 +10029,25 @@ ADD FIELD "UseReplica" OF "DFTimeTable" AS logical
   HELP "To find Production/Replication"
   ORDER 120
 
+ADD FIELD "DumpTrigger" OF "DFTimeTable" AS logical 
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "Triggered Dump"
+  POSITION 16
+  MAX-WIDTH 1
+  COLUMN-LABEL "DumpTrigger"
+  HELP "Triggered Dump"
+  ORDER 130
+
 ADD INDEX "DumpID" ON "DFTimeTable" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "DumpID" ASCENDING 
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD TABLE "DialType"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_256"
   LABEL "Dialling Type"
   DESCRIPTION "Dialling Type
 Dialling Type
@@ -9903,11 +10136,12 @@ ADD INDEX "DGName" ON "DiscGroup"
   INDEX-FIELD "DiscGroup" ASCENDING 
 
 ADD TABLE "DiscountPlan"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   LABEL "Discount Plans"
   DUMP-NAME "discountplan"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-discountplan.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-discountplan.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-discountplan.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-discountplan.p" CRC "?" 
 
 ADD FIELD "Brand" OF "DiscountPlan" AS character 
   FORMAT "x(12)"
@@ -10115,6 +10349,7 @@ ADD INDEX "DPId" ON "DiscountPlan"
   INDEX-FIELD "DPId" ASCENDING 
 
 ADD TABLE "DiscPlan"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Discount Plan"
   DUMP-NAME "discplan"
@@ -10161,14 +10396,14 @@ ADD FIELD "Brand" OF "DiscPlan" AS character
   ORDER 60
 
 ADD INDEX "DiscPlan" ON "DiscPlan" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "DiscPlan" ASCENDING 
 
 ADD INDEX "DPName" ON "DiscPlan" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "DPName" ASCENDING 
   INDEX-FIELD "DiscPlan" ASCENDING 
@@ -10260,7 +10495,8 @@ ADD INDEX "DirMarkName" ON "DMarketing"
   INDEX-FIELD "DirMarkName" ASCENDING 
 
 ADD TABLE "DPBasis"
-  AREA "Sta_Data_256"
+  MULTITENANT yes
+  AREA "Sta_Data_2_256"
   LABEL "Volume Discount Basis"
   DESCRIPTION "Basis of volume discount (DpConf).
 "
@@ -10320,18 +10556,19 @@ ADD FIELD "KeyField" OF "DPBasis" AS character
   ORDER 100
 
 ADD INDEX "DpConfNum" ON "DPBasis" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "DPConfNum" ASCENDING 
   INDEX-FIELD "BasisType" DESCENDING 
 
 ADD INDEX "KeyField" ON "DPBasis" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "DPConfNum" ASCENDING 
   INDEX-FIELD "KeyField" ASCENDING 
 
 ADD TABLE "DPConf"
-  AREA "Sta_Data_256"
+  MULTITENANT yes
+  AREA "Sta_Data_2_256"
   LABEL "Volume Discount Config."
   DESCRIPTION "Configuration for volume discount. Additional configurations in DpBasis.
 "
@@ -10453,36 +10690,37 @@ ADD FIELD "StepUsage" OF "DPConf" AS integer
   ORDER 110
 
 ADD INDEX "DpConfNum" ON "DPConf" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "DPConfNum" ASCENDING 
 
 ADD INDEX "Basis" ON "DPConf" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "DiscPlan" ASCENDING 
   INDEX-FIELD "DiscType" ASCENDING 
   INDEX-FIELD "ValidFrom" DESCENDING 
 
 ADD INDEX "DPCName" ON "DPConf" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "DPCName" ASCENDING 
   INDEX-FIELD "ValidFrom" DESCENDING 
 
 ADD INDEX "ValidFrom" ON "DPConf" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "DiscPlan" ASCENDING 
   INDEX-FIELD "ValidFrom" DESCENDING 
 
 ADD TABLE "DPMember"
+  MULTITENANT yes
   AREA "Sta_Data_2_256"
   LABEL "Discount Plan Member"
   DUMP-NAME "dpmember"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-dpmember.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-dpmember.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-dpmember.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-dpmember.p" CRC "?" 
 
 ADD FIELD "DPId" OF "DPMember" AS integer 
   FORMAT "zzzzzzz9"
@@ -10556,6 +10794,16 @@ ADD FIELD "OrderId" OF "DPMember" AS integer
   COLUMN-LABEL "OrderId"
   ORDER 70
 
+ADD FIELD "DPMemberId" OF "DPMember" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "DPMemberId"
+  POSITION 9
+  MAX-WIDTH 4
+  COLUMN-LABEL "DPMemberId"
+  HELP "Discount plan member Id"
+  ORDER 80
+
 ADD INDEX "DPId" ON "DPMember" 
   AREA "Sta_Index_4"
   PRIMARY
@@ -10568,7 +10816,13 @@ ADD INDEX "DPHostKey" ON "DPMember"
   INDEX-FIELD "HostTable" ASCENDING 
   INDEX-FIELD "KeyValue" ASCENDING 
 
+ADD INDEX "DPMemberId" ON "DPMember" 
+  AREA "Sta_Index_4"
+  UNIQUE
+  INDEX-FIELD "DPMemberId" ASCENDING 
+
 ADD TABLE "DPRate"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Discount Plan Rate"
   DESCRIPTION "This table will contain actual amount/percentage"
@@ -10622,6 +10876,7 @@ ADD INDEX "DPId" ON "DPRate"
   INDEX-FIELD "DPId" ASCENDING 
 
 ADD TABLE "DPSubject"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Discount Plan Subject"
   DUMP-NAME "dpsubject"
@@ -10675,11 +10930,12 @@ ADD INDEX "DPSubject" ON "DPSubject"
   INDEX-FIELD "ValidTo" DESCENDING 
 
 ADD TABLE "DPTarget"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Discount Plan Target"
   DUMP-NAME "dptarget"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-dptarget.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-dptarget.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-dptarget.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-dptarget.p" CRC "?" 
 
 ADD FIELD "DPId" OF "DPTarget" AS integer 
   FORMAT ">>>>>>>9"
@@ -11097,7 +11353,89 @@ ADD INDEX "FileName" ON "DumpFile"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "FileName" ASCENDING 
 
+ADD TABLE "DumpHPD"
+  MULTITENANT yes
+  AREA "Sta_Data_128"
+  LABEL "Dump Range"
+  DESCRIPTION "Dump HPD"
+  DUMP-NAME "DumpHPD"
+
+ADD FIELD "DumpID" OF "DumpHPD" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Dump ID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "ID"
+  HELP "Dump ID"
+  ORDER 10
+
+ADD FIELD "Active" OF "DumpHPD" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "yes"
+  LABEL "Active"
+  POSITION 3
+  MAX-WIDTH 1
+  HELP "Is dump range active"
+  ORDER 20
+
+ADD FIELD "Continuous" OF "DumpHPD" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "yes"
+  LABEL "Continuous"
+  POSITION 4
+  MAX-WIDTH 1
+  HELP "Is the dump range continuous"
+  ORDER 30
+
+ADD FIELD "StartTime" OF "DumpHPD" AS character 
+  FORMAT "x(19)"
+  INITIAL ""
+  LABEL "Start Time"
+  POSITION 5
+  MAX-WIDTH 38
+  COLUMN-LABEL "StartTime"
+  HELP "Start time of a dump DD.MM.YYYY HH:MM:SS"
+  ORDER 40
+
+ADD FIELD "FinalTime" OF "DumpHPD" AS character 
+  FORMAT "x(19)"
+  INITIAL ""
+  LABEL "Final Time"
+  POSITION 6
+  MAX-WIDTH 38
+  COLUMN-LABEL "FinalTime"
+  HELP "Final time of a dump DD.MM.YYYY HH:MM:SS"
+  ORDER 50
+
+ADD FIELD "UnitsToDump" OF "DumpHPD" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Units to dump"
+  POSITION 7
+  MAX-WIDTH 4
+  COLUMN-LABEL "UnitsToDump"
+  HELP "How many units to dump. Zero value means no restriction."
+  ORDER 60
+
+ADD FIELD "UnitType" OF "DumpHPD" AS character 
+  FORMAT "x(12)"
+  INITIAL "days"
+  LABEL "Unit type"
+  POSITION 8
+  MAX-WIDTH 24
+  COLUMN-LABEL "UnitType"
+  HELP "The type of the unit (years, months, weeks, days, hours, minutes, seconds)"
+  ORDER 70
+
+ADD INDEX "DumpID" ON "DumpHPD" 
+  AREA "Sta_Index_4"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "DumpID" ASCENDING 
+
 ADD TABLE "DumpLog"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   LABEL "Dump Log"
   DESCRIPTION "Collect all dump file status information"
@@ -11238,6 +11576,7 @@ ADD INDEX "FileName" ON "DumpLog"
   INDEX-FIELD "FileName" DESCENDING 
 
 ADD TABLE "ErrorLog"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   LABEL "Error Log"
   DESCRIPTION "Error log"
@@ -11614,6 +11953,7 @@ ADD INDEX "DataType" ON "ExpLog"
   INDEX-FIELD "ExpNum" ASCENDING 
 
 ADD TABLE "FATConfig"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "FAT Configuration"
   DESCRIPTION "FAT configuration
@@ -11721,7 +12061,7 @@ ADD FIELD "Brand" OF "FATConfig" AS character
   ORDER 100
 
 ADD INDEX "FTGrp" ON "FATConfig" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "FtGrp" ASCENDING 
@@ -11730,6 +12070,7 @@ ADD INDEX "FTGrp" ON "FATConfig"
   INDEX-FIELD "ValidTo" DESCENDING 
 
 ADD TABLE "FATGMember"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "FAT Group Members"
   DESCRIPTION "Members for the FAT Group (FtGrp)"
@@ -11787,7 +12128,7 @@ ADD FIELD "Brand" OF "FATGMember" AS character
   ORDER 50
 
 ADD INDEX "FtGrp" ON "FATGMember" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
@@ -11796,12 +12137,13 @@ ADD INDEX "FtGrp" ON "FATGMember"
   INDEX-FIELD "FtgMember" ASCENDING 
 
 ADD TABLE "FATGroup"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   LABEL "FAT Group"
   DESCRIPTION "FAT Group for products"
   DUMP-NAME "fatgroup"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-fatgroup.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-fatgroup.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-fatgroup.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-fatgroup.p" CRC "?" 
 
 ADD FIELD "FtGrp" OF "FATGroup" AS character 
   FORMAT "x(8)"
@@ -11982,41 +12324,42 @@ ADD FIELD "ValidPeriods" OF "FATGroup" AS integer
   ORDER 170
 
 ADD INDEX "FtGrp" ON "FATGroup" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "FtGrp" ASCENDING 
 
 ADD INDEX "FatType" ON "FATGroup" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "FATType" ASCENDING 
   INDEX-FIELD "FtGrp" ASCENDING 
 
 ADD INDEX "FtgName" ON "FATGroup" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "FtgName" ASCENDING 
 
 ADD INDEX "GroupType" ON "FATGroup" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "GroupType" ASCENDING 
   INDEX-FIELD "FtGrp" ASCENDING 
 
 ADD INDEX "Priority" ON "FATGroup" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "Priority" DESCENDING 
 
 ADD TABLE "FATime"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   LABEL "Free Air Time"
   DESCRIPTION "Free air time (or free qty or free sum)"
   DUMP-NAME "fatime"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-fatime.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-fatime.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-fatime.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-fatime.p" CRC "?" 
 
 ADD FIELD "FATNum" OF "FATime" AS integer 
   FORMAT ">>>>>>9"
@@ -12369,7 +12712,7 @@ ADD FIELD "Brand" OF "FATime" AS character
   ORDER 300
 
 ADD INDEX "FatType" ON "FATime" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "CLI" ASCENDING 
@@ -12378,53 +12721,53 @@ ADD INDEX "FatType" ON "FATime"
   INDEX-FIELD "Period" ASCENDING 
 
 ADD INDEX "CLI" ON "FATime" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CLI" ASCENDING 
 
 ADD INDEX "CLI_s" ON "FATime" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "CLI" ASCENDING 
 
 ADD INDEX "CustNum_s" ON "FATime" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "CustNum" ASCENDING 
 
 ADD INDEX "FATId" ON "FATime" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "FATId" ASCENDING 
 
 ADD INDEX "FATNum" ON "FATime" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "FATNum" ASCENDING 
 
 ADD INDEX "ftgrd" ON "FATime" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "FTGrp" ASCENDING 
 
 ADD INDEX "HostTable" ON "FATime" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "HostTable" ASCENDING 
   INDEX-FIELD "KeyValue" ASCENDING 
 
 ADD INDEX "InvNum" ON "FATime" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "InvNum" ASCENDING 
   INDEX-FIELD "SubInvNum" ASCENDING 
 
 ADD INDEX "Mobsub" ON "FATime" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "MsSeq" ASCENDING 
   INDEX-FIELD "Period" ASCENDING 
 
 ADD INDEX "OrigFat" ON "FATime" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "OrigFat" ASCENDING 
 
@@ -12472,6 +12815,7 @@ ADD INDEX "FrameName" ON "FColor"
   INDEX-FIELD "FrameName" ASCENDING ABBREVIATED 
 
 ADD TABLE "FeeModel"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   LABEL "Billing Event"
   DESCRIPTION "A group of single and/or periodical fees"
@@ -12529,25 +12873,26 @@ ADD FIELD "FMGroup" OF "FeeModel" AS integer
   ORDER 50
 
 ADD INDEX "FeeModel" ON "FeeModel" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "FeeModel" ASCENDING 
 
 ADD INDEX "FeeGroup" ON "FeeModel" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "FMGroup" ASCENDING 
 
 ADD INDEX "FeeName" ON "FeeModel" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "FeeName" ASCENDING 
   INDEX-FIELD "FeeModel" ASCENDING 
 
 ADD TABLE "FFItem"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   LABEL "Contract's Billing Periods"
   DESCRIPTION "Monthly item (one billable transaction) of a contract fee"
@@ -12584,26 +12929,26 @@ ADD FIELD "BillPeriod" OF "FFItem" AS integer
   ORDER 30
 
 ADD FIELD "Amt" OF "FFItem" AS decimal 
-  FORMAT "->>>,>>9.99"
+  FORMAT "->>>,>>9.999"
   INITIAL "0"
   LABEL "Amount"
   POSITION 5
   MAX-WIDTH 17
   COLUMN-LABEL "Amount"
   HELP "Payable Contract Payment per bill"
-  DECIMALS 2
+  DECIMALS 3
   ORDER 40
 
 ADD FIELD "OwnCost" OF "FFItem" AS decimal 
   DESCRIPTION "Our own costs per bill"
-  FORMAT "->>>,>>9.99"
+  FORMAT "->>>,>>9.999"
   INITIAL "0"
   LABEL "Our costs"
   POSITION 6
   MAX-WIDTH 17
   COLUMN-LABEL "Our costs"
   HELP "Our own costs per bill"
-  DECIMALS 2
+  DECIMALS 3
   ORDER 50
 
 ADD FIELD "Billed" OF "FFItem" AS logical 
@@ -12812,12 +13157,13 @@ ADD INDEX "TransDate" ON "FileExpLog"
   INDEX-FIELD "TransType" DESCENDING 
 
 ADD TABLE "FixedFee"
+  MULTITENANT yes
   AREA "Sta_Data_32"
   LABEL "Constant / Contract Fees"
   DESCRIPTION "Constant / contract fees"
   DUMP-NAME "fixedfee"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-fixedfee.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-fixedfee.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-fixedfee.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-fixedfee.p" CRC "?" 
 
 ADD FIELD "CustNum" OF "FixedFee" AS integer 
   FORMAT ">>>>>>>>9"
@@ -12852,14 +13198,14 @@ ADD FIELD "Memo" OF "FixedFee" AS character
   ORDER 40
 
 ADD FIELD "Amt" OF "FixedFee" AS decimal 
-  FORMAT "->>>,>>9.99"
+  FORMAT "->>>,>>9.999"
   INITIAL "0"
   LABEL "To Pay"
   POSITION 5
   MAX-WIDTH 17
   COLUMN-LABEL "To Pay"
   HELP "Contract payment per bill"
-  DECIMALS 2
+  DECIMALS 3
   ORDER 50
 
 ADD FIELD "Interval" OF "FixedFee" AS integer 
@@ -12876,14 +13222,14 @@ ADD FIELD "Interval" OF "FixedFee" AS integer
 
 ADD FIELD "OwnCost" OF "FixedFee" AS decimal 
   DESCRIPTION "Our own costs per bill"
-  FORMAT "->>>,>>9.99"
+  FORMAT "->>>,>>9.999"
   INITIAL "0"
   LABEL "Our costs"
   POSITION 7
   MAX-WIDTH 17
   COLUMN-LABEL "Our costs"
   HELP "Our own costs per bill"
-  DECIMALS 2
+  DECIMALS 3
   ORDER 70
 
 ADD FIELD "FFNum" OF "FixedFee" AS integer 
@@ -13029,14 +13375,14 @@ ADD FIELD "FeeModel" OF "FixedFee" AS character
   ORDER 180
 
 ADD FIELD "InclAmt" OF "FixedFee" AS decimal 
-  FORMAT "->>>>>9.99"
+  FORMAT "->>>,>>9.999"
   INITIAL "0"
   LABEL "Included Amount"
   POSITION 22
   MAX-WIDTH 17
   COLUMN-LABEL "Incl.Amt"
   HELP "Amount of billable material that is included in this fee"
-  DECIMALS 2
+  DECIMALS 3
   ORDER 190
 
 ADD FIELD "InclBillCode" OF "FixedFee" AS character 
@@ -13110,7 +13456,7 @@ ADD FIELD "FinancedResult" OF "FixedFee" AS character
   ORDER 250
 
 ADD FIELD "OrderId" OF "FixedFee" AS integer 
-  FORMAT ">>>>>>>>9"
+  FORMAT "->>>>>>>>9"
   INITIAL "0"
   LABEL "OrderId"
   POSITION 30
@@ -13137,13 +13483,13 @@ ADD FIELD "SourceKey" OF "FixedFee" AS character
   ORDER 280
 
 ADD FIELD "CalcAmt" OF "FixedFee" AS decimal 
-  FORMAT "->>>,>>9.99"
+  FORMAT "->>>,>>9.999"
   INITIAL ?
   LABEL "Calculated Amount"
   POSITION 33
   MAX-WIDTH 17
   COLUMN-LABEL "CalcAmt"
-  DECIMALS 2
+  DECIMALS 3
   ORDER 290
 
 ADD FIELD "TFBank" OF "FixedFee" AS character 
@@ -13227,6 +13573,7 @@ ADD INDEX "used" ON "FixedFee"
   INDEX-FIELD "InUse" ASCENDING 
 
 ADD TABLE "FixedFeeTF"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Financed Contract Fees"
   DESCRIPTION "Extension of FixedFee table. Contains financing info"
@@ -13395,12 +13742,13 @@ ADD INDEX "OrgId" ON "FixedFeeTF"
   INDEX-FIELD "OrgId" ASCENDING 
 
 ADD TABLE "FMItem"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   LABEL "Billing Event Items"
   DESCRIPTION "List of billable items of a single 'billing event'"
   DUMP-NAME "bcitem"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-fmitem.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-fmitem.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-fmitem.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-fmitem.p" CRC "?" 
 
 ADD FIELD "FeeModel" OF "FMItem" AS character 
   FORMAT "x(8)"
@@ -13453,14 +13801,14 @@ ADD FIELD "Interval" OF "FMItem" AS integer
   ORDER 50
 
 ADD FIELD "Amount" OF "FMItem" AS decimal 
-  FORMAT "-z,zz9.99"
+  FORMAT "->,>>9.999"
   INITIAL "0"
   LABEL "Price"
   POSITION 7
   MAX-WIDTH 17
   COLUMN-LABEL "Price"
   HELP "Billable price of an item"
-  DECIMALS 2
+  DECIMALS 3
   ORDER 60
 
 ADD FIELD "BillType" OF "FMItem" AS character 
@@ -13506,14 +13854,14 @@ ADD FIELD "FFEndDate" OF "FMItem" AS date
   ORDER 100
 
 ADD FIELD "InclAmt" OF "FMItem" AS decimal 
-  FORMAT "->>>>>9.99"
+  FORMAT "->,>>9.999"
   INITIAL "0"
   LABEL "Included Amount"
   POSITION 12
   MAX-WIDTH 17
   COLUMN-LABEL "Incl.Amt"
   HELP "Amount of billable material that is included in this fee"
-  DECIMALS 2
+  DECIMALS 3
   ORDER 110
 
 ADD FIELD "FromDate" OF "FMItem" AS date 
@@ -13597,7 +13945,7 @@ ADD FIELD "FirstMonthBR" OF "FMItem" AS integer
   ORDER 190
 
 ADD INDEX "FeeModel" ON "FMItem" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
@@ -13607,7 +13955,7 @@ ADD INDEX "FeeModel" ON "FMItem"
   INDEX-FIELD "FromDate" DESCENDING 
 
 ADD INDEX "BillCode" ON "FMItem" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "FeeModel" ASCENDING 
   INDEX-FIELD "BillCode" ASCENDING 
@@ -13839,6 +14187,7 @@ ADD INDEX "ConfName" ON "FuncRunConfig"
   INDEX-FIELD "ConfName" ASCENDING 
 
 ADD TABLE "FuncRunExec"
+  MULTITENANT yes
   AREA "Dyn_Data_128"
   LABEL "Function execution"
   DESCRIPTION "Execution of function"
@@ -14008,6 +14357,7 @@ ADD INDEX "RunState" ON "FuncRunExec"
   INDEX-FIELD "RunState" ASCENDING 
 
 ADD TABLE "FuncRunExecLog"
+  MULTITENANT yes
   AREA "Dyn_Data_128"
   LABEL "Function status"
   DESCRIPTION "Status of a function"
@@ -14113,6 +14463,7 @@ ADD INDEX "ParamSeq" ON "FuncRunParam"
   INDEX-FIELD "ParamSeq" ASCENDING 
 
 ADD TABLE "FuncRunProcess"
+  MULTITENANT yes
   AREA "Dyn_Data_64"
   LABEL "Function process"
   DESCRIPTION "Single process of a function"
@@ -14255,6 +14606,7 @@ ADD INDEX "FRProcessID" ON "FuncRunProcess"
   INDEX-FIELD "FRProcessID" ASCENDING 
 
 ADD TABLE "FuncRunQRow"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Function Queue Row"
   DESCRIPTION "Row for function queue configuration"
@@ -14332,6 +14684,7 @@ ADD INDEX "FRConfigID" ON "FuncRunQRow"
   INDEX-FIELD "FRConfigID" ASCENDING 
 
 ADD TABLE "FuncRunQSchedule"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Function Queue Timing"
   DESCRIPTION "Timetable for function queue"
@@ -14417,6 +14770,7 @@ ADD INDEX "RunState" ON "FuncRunQSchedule"
   INDEX-FIELD "StartTS" DESCENDING 
 
 ADD TABLE "FuncRunQSParam"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   LABEL "Function Queue Parameters"
   DESCRIPTION "Parameters for scheduled function queue"
@@ -14548,6 +14902,7 @@ ADD INDEX "FuncRunQRow" ON "FuncRunQSParam"
   INDEX-FIELD "ParamSeq" ASCENDING 
 
 ADD TABLE "FuncRunQueue"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Function Queue"
   DESCRIPTION "Configuration for function queue"
@@ -14602,6 +14957,7 @@ ADD INDEX "BrandQueue" ON "FuncRunQueue"
   INDEX-FIELD "FRQueueID" ASCENDING 
 
 ADD TABLE "FuncRunResult"
+  MULTITENANT yes
   AREA "Dyn_Data_128"
   LABEL "Function feed"
   DESCRIPTION "Feed to a function process"
@@ -14701,6 +15057,7 @@ ADD INDEX "FRExecID" ON "FuncRunResult"
   INDEX-FIELD "FRResultSeq" ASCENDING 
 
 ADD TABLE "FusionInvoice"
+  MULTITENANT yes
   AREA "Dyn_Data_32"
   LABEL "FusionInvoice"
   DESCRIPTION "FusionInvoice"
@@ -15077,6 +15434,7 @@ ADD INDEX "InvNum" ON "FusionInvoice"
   INDEX-FIELD "InvNum" ASCENDING 
 
 ADD TABLE "HdrText"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "HdrText"
   DESCRIPTION "Header texts for reports"
@@ -15124,7 +15482,7 @@ ADD FIELD "Brand" OF "HdrText" AS character
   ORDER 40
 
 ADD INDEX "te-nro" ON "HdrText" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
@@ -15132,23 +15490,24 @@ ADD INDEX "te-nro" ON "HdrText"
   INDEX-FIELD "te-kie" ASCENDING 
 
 ADD INDEX "te-kie" ON "HdrText" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "te-kie" ASCENDING 
   INDEX-FIELD "te-nro" ASCENDING 
 
 ADD INDEX "te-text" ON "HdrText" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "te-text" ASCENDING 
 
 ADD TABLE "HighUsage"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   DUMP-NAME "highusag"
 
 ADD FIELD "InvSeq" OF "HighUsage" AS integer 
-  FORMAT ">>>>>>9"
+  FORMAT ">>>>>>>>9"
   INITIAL "0"
   LABEL "InvSeq"
   POSITION 2
@@ -15283,27 +15642,28 @@ ADD FIELD "launch" OF "HighUsage" AS character
   ORDER 130
 
 ADD INDEX "InvSeq" ON "HighUsage" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "InvSeq" ASCENDING 
   INDEX-FIELD "CLI" ASCENDING 
 
 ADD INDEX "Amount" ON "HighUsage" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Amount" DESCENDING 
 
 ADD INDEX "CLI" ON "HighUsage" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "CLI" ASCENDING 
   INDEX-FIELD "CrStamp" DESCENDING 
 
 ADD INDEX "HiUsageStatus" ON "HighUsage" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "HiUsageStatus" ASCENDING 
   INDEX-FIELD "CrStamp" DESCENDING 
 
 ADD TABLE "HiUsageKat"
+  MULTITENANT yes
   AREA "Sta_Data_2_256"
   DUMP-NAME "hiusagek"
 
@@ -15375,6 +15735,7 @@ ADD INDEX "Category" ON "HiUsageKat"
   INDEX-FIELD "CustClass" ASCENDING 
 
 ADD TABLE "HiUsageLimit"
+  MULTITENANT yes
   AREA "Sta_Data_2_256"
   DUMP-NAME "hiusagel"
 
@@ -15812,7 +16173,7 @@ ADD FIELD "BillCode" OF "InvASub" AS character
   ORDER 70
 
 ADD FIELD "InvSeq" OF "InvASub" AS integer 
-  FORMAT ">>>>>>9"
+  FORMAT ">>>>>>>>9"
   INITIAL "0"
   LABEL "InvSeq"
   POSITION 10
@@ -15923,7 +16284,7 @@ ADD INDEX "InvNum" ON "InvASub"
   INDEX-FIELD "BillCode" ASCENDING 
 
 ADD TABLE "InvAttach"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_256"
   LABEL "Invoice Attachments"
   DESCRIPTION "Attachment definitions for EPL printing of invoices"
   DUMP-NAME "invattac"
@@ -16020,7 +16381,7 @@ ADD FIELD "PrintStamp" OF "InvAttach" AS decimal
   ORDER 90
 
 ADD INDEX "CustNum" ON "InvAttach" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   UNIQUE
   PRIMARY
   INDEX-FIELD "CustNum" ASCENDING 
@@ -16031,7 +16392,7 @@ ADD INDEX "PrintStamp" ON "InvAttach"
   INDEX-FIELD "PrintStamp" DESCENDING 
 
 ADD INDEX "ToDate" ON "InvAttach" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "ToDate" DESCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
 
@@ -16476,14 +16837,16 @@ ADD INDEX "IGName" ON "InvGroup"
   INDEX-FIELD "IGName" ASCENDING 
 
 ADD TABLE "Invoice"
+  MULTITENANT yes
   AREA "Dyn_Data_32"
   LABEL "Invoice"
   DESCRIPTION "Invoice"
   DUMP-NAME "invoice"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-invoice.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-invoice.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-invoice.p" CRC "?" 
 
 ADD FIELD "InvNum" OF "Invoice" AS integer 
-  FORMAT "zzzzzzz9"
+  FORMAT "zzzzzzzz9"
   INITIAL "0"
   LABEL "InvNo"
   POSITION 2
@@ -16782,7 +17145,7 @@ ADD FIELD "CashDiscDate" OF "Invoice" AS date
   ORDER 230
 
 ADD FIELD "ARAccNum" OF "Invoice" AS integer 
-  FORMAT ">>>>>9"
+  FORMAT ">>>>>>>9"
   INITIAL "0"
   LABEL "Fkonto"
   POSITION 32
@@ -16865,7 +17228,7 @@ ADD FIELD "xxMemo" OF "Invoice" AS character
   ORDER 330
 
 ADD FIELD "CrInvNum" OF "Invoice" AS integer 
-  FORMAT "zzzzzzz9"
+  FORMAT "zzzzzzzz9"
   INITIAL "0"
   LABEL "Credit InvNo"
   POSITION 40
@@ -17491,10 +17854,11 @@ ADD INDEX "InvType" ON "Invoice"
   INDEX-FIELD "InvDate" DESCENDING 
 
 ADD TABLE "InvoiceTarget"
-  AREA "Sta_Data_256"
+  MULTITENANT yes
+  AREA "Sta_Data_2_128"
   LABEL "Invoice Target"
   DESCRIPTION "Invoice target"
-  DUMP-NAME "invoicetarget"
+  DUMP-NAME "invoicetarget-------1"
 
 ADD FIELD "ITGroupID" OF "InvoiceTarget" AS integer 
   FORMAT ">>>>>>>>>>9"
@@ -17547,22 +17911,23 @@ ADD FIELD "ToDate" OF "InvoiceTarget" AS date
   ORDER 50
 
 ADD INDEX "InvoiceTargetID" ON "InvoiceTarget" 
-  AREA "Sta_Index_1"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "InvoiceTargetID" ASCENDING 
 
 ADD INDEX "ITGroupID" ON "InvoiceTarget" 
-  AREA "Sta_Index_1"
+  AREA "Sta_Index_3"
   INDEX-FIELD "ITGroupID" ASCENDING 
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD INDEX "MsSeq" ON "InvoiceTarget" 
-  AREA "Sta_Index_1"
+  AREA "Sta_Index_3"
   INDEX-FIELD "MsSeq" ASCENDING 
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD TABLE "InvoiceTargetGroup"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Invoice Target Group"
   DESCRIPTION "Invoice target group"
@@ -17664,14 +18029,89 @@ ADD INDEX "DefaultGroup" ON "InvoiceTargetGroup"
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "DefaultGroup" ASCENDING 
 
+ADD TABLE "InvoiceTarget_old"
+  AREA "Sta_Data_256"
+  LABEL "Invoice Target"
+  DESCRIPTION "Invoice target"
+  DUMP-NAME "invoicetarget"
+
+ADD FIELD "ITGroupID" OF "InvoiceTarget_old" AS integer 
+  FORMAT ">>>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Target Group ID"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "IT Group"
+  HELP "Unique ID for target group"
+  ORDER 10
+
+ADD FIELD "InvoiceTargetID" OF "InvoiceTarget_old" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Invoice Target ID"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "Target ID"
+  HELP "Unique id for invoice target"
+  ORDER 20
+
+ADD FIELD "MsSeq" OF "InvoiceTarget_old" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Subscription ID"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "Subscr.ID"
+  HELP "Subscription ID"
+  ORDER 30
+
+ADD FIELD "FromDate" OF "InvoiceTarget_old" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid From"
+  POSITION 5
+  MAX-WIDTH 4
+  COLUMN-LABEL "From"
+  HELP "Valid from"
+  ORDER 40
+
+ADD FIELD "ToDate" OF "InvoiceTarget_old" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "Valid To"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "To"
+  HELP "Valid to"
+  ORDER 50
+
+ADD INDEX "InvoiceTargetID" ON "InvoiceTarget_old" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "InvoiceTargetID" ASCENDING 
+
+ADD INDEX "ITGroupID" ON "InvoiceTarget_old" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "ITGroupID" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD INDEX "MsSeq" ON "InvoiceTarget_old" 
+  AREA "Sta_Index_1"
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
 ADD TABLE "InvRow"
+  MULTITENANT yes
   AREA "Dyn_Data_64"
   LABEL "Invoice Rows"
   DESCRIPTION "Invoice rows"
   DUMP-NAME "invrow"
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-invrow.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-invrow.p" CRC "?" 
 
 ADD FIELD "InvNum" OF "InvRow" AS integer 
-  FORMAT "zzzzzzz9"
+  FORMAT "zzzzzzzz9"
   INITIAL "0"
   LABEL "InvoiceNo"
   POSITION 2
@@ -17795,7 +18235,7 @@ ADD FIELD "FFItemNum" OF "InvRow" AS integer
   ORDER 120
 
 ADD FIELD "InvRowNum" OF "InvRow" AS integer 
-  FORMAT ">>>>>>>9"
+  FORMAT ">>>>>>>>9"
   INITIAL "0"
   LABEL "RowId"
   POSITION 14
@@ -17921,7 +18361,7 @@ ADD FIELD "CostCentre" OF "InvRow" AS character
   ORDER 240
 
 ADD FIELD "CreditInvNum" OF "InvRow" AS integer 
-  FORMAT ">>>>>>>9"
+  FORMAT ">>>>>>>>9"
   INITIAL "0"
   LABEL "Credit invoice"
   POSITION 28
@@ -18257,6 +18697,7 @@ ADD INDEX "ISName" ON "InvSect"
   INDEX-FIELD "InvSect" ASCENDING 
 
 ADD TABLE "InvSeq"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Invoice Sequence"
   DESCRIPTION "Customers invoice sequences"
@@ -18294,7 +18735,7 @@ ADD FIELD "ToDate" OF "InvSeq" AS date
   ORDER 30
 
 ADD FIELD "InvSeq" OF "InvSeq" AS integer 
-  FORMAT ">>>>>>9"
+  FORMAT ">>>>>>>>9"
   INITIAL "0"
   LABEL "InvSeq"
   POSITION 5
@@ -18373,6 +18814,7 @@ ADD INDEX "MsSeq" ON "InvSeq"
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD TABLE "InvText"
+  MULTITENANT yes
   AREA "Sta_Data_32"
   LABEL "Invoice Texts"
   DESCRIPTION "Texts to be printed to invoices"
@@ -18632,7 +19074,7 @@ ADD FIELD "Active" OF "InvText" AS logical
   ORDER 250
 
 ADD INDEX "target" ON "InvText" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "Target" ASCENDING 
@@ -18640,18 +19082,19 @@ ADD INDEX "target" ON "InvText"
   INDEX-FIELD "FromDate" ASCENDING 
 
 ADD INDEX "FromDate" ON "InvText" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "FromDate" DESCENDING 
   INDEX-FIELD "Target" ASCENDING 
   INDEX-FIELD "KeyValue" ASCENDING 
 
 ADD INDEX "ITNum" ON "InvText" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "ITNum" ASCENDING 
 
 ADD TABLE "IPRange"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   DUMP-NAME "iprange"
 
@@ -18714,17 +19157,18 @@ ADD FIELD "PLMN" OF "IPRange" AS character
   ORDER 60
 
 ADD INDEX "IPRange" ON "IPRange" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "NetworkAddress" ASCENDING 
 
 ADD INDEX "FromDate" ON "IPRange" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "FirstIP" ASCENDING 
   INDEX-FIELD "LastIP" ASCENDING 
 
 ADD TABLE "ITSendLog"
+  MULTITENANT yes
   AREA "Dyn_Data_128"
   DUMP-NAME "itsendlo"
 
@@ -18909,11 +19353,13 @@ ADD INDEX "LangName" ON "Language"
   INDEX-FIELD "Language" ASCENDING 
 
 ADD TABLE "Limit"
-  AREA "Sta_Data_256"
+  MULTITENANT yes
+  AREA "Limit_Data"
   LABEL "Limit"
   DESCRIPTION "Limits for customer and subscription"
-  DUMP-NAME "limit"
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-limit.p" CRC "?" 
+  DUMP-NAME "limit-------1"
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-limit.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-limit.p" CRC "?" 
 
 ADD FIELD "CustNum" OF "Limit" AS integer 
   FORMAT ">>>>>>>9"
@@ -18978,8 +19424,6 @@ ADD FIELD "LimitPerc" OF "Limit" AS decimal
   ORDER 80
 
 ADD FIELD "TMRuleSeq" OF "Limit" AS integer 
-  DESCRIPTION "
-"
   FORMAT ">>>>>>>>9"
   INITIAL "0"
   LABEL "Rule Sequence"
@@ -19039,7 +19483,7 @@ ADD FIELD "Brand" OF "Limit" AS character
   ORDER 120
 
 ADD INDEX "CustNum" ON "Limit" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   PRIMARY
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "LimitType" ASCENDING 
@@ -19048,20 +19492,178 @@ ADD INDEX "CustNum" ON "Limit"
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD INDEX "LimitType" ON "Limit" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "LimitType" ASCENDING 
   INDEX-FIELD "LimitID" ASCENDING 
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD INDEX "MsSeq" ON "Limit" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "MsSeq" ASCENDING 
   INDEX-FIELD "LimitType" ASCENDING 
   INDEX-FIELD "TMRuleSeq" ASCENDING 
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD INDEX "TMRuleSeq" ON "Limit" 
+  AREA "Sta_Index_4"
+  INDEX-FIELD "TMRuleSeq" ASCENDING 
+  INDEX-FIELD "LimitID" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD TABLE "Limit_old"
+  AREA "Sta_Data_256"
+  LABEL "Limit"
+  DESCRIPTION "Limits for customer and subscription"
+  DUMP-NAME "limit"
+
+ADD FIELD "CustNum" OF "Limit_old" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "Customer"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "Cust"
+  HELP "Customer number"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "MsSeq" OF "Limit_old" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Subscription ID"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "MobSub"
+  HELP "Mobile subscription ID"
+  ORDER 20
+
+ADD FIELD "FromDate" OF "Limit_old" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "From"
+  POSITION 4
+  MAX-WIDTH 4
+  HELP "Date when rule becomes effective"
+  ORDER 50
+
+ADD FIELD "LimitAmt" OF "Limit_old" AS decimal 
+  FORMAT "->>>>>>9.99"
+  INITIAL "0"
+  LABEL "Limit Amount"
+  POSITION 5
+  MAX-WIDTH 17
+  COLUMN-LABEL "Amount"
+  HELP "Limit amount"
+  DECIMALS 2
+  ORDER 70
+
+ADD FIELD "LimitID" OF "Limit_old" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Limit ID"
+  POSITION 6
+  MAX-WIDTH 4
+  COLUMN-LABEL "ID"
+  HELP "Limit ID"
+  ORDER 40
+
+ADD FIELD "LimitPerc" OF "Limit_old" AS decimal 
+  FORMAT ">>9.99"
+  INITIAL "0"
+  LABEL "Limit Percent"
+  POSITION 7
+  MAX-WIDTH 17
+  COLUMN-LABEL "Percent"
+  HELP "Limit percent"
+  DECIMALS 2
+  ORDER 80
+
+ADD FIELD "TMRuleSeq" OF "Limit_old" AS integer 
+  DESCRIPTION "
+"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Rule Sequence"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "Seq"
+  HELP "Rule ID"
+  ORDER 30
+
+ADD FIELD "ToDate" OF "Limit_old" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "To"
+  POSITION 9
+  MAX-WIDTH 4
+  HELP "Date when rule expires"
+  ORDER 60
+
+ADD FIELD "LimitType" OF "Limit_old" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Limit Type"
+  POSITION 10
+  MAX-WIDTH 4
+  COLUMN-LABEL "Type"
+  HELP "Type of limit"
+  ORDER 90
+
+ADD FIELD "ValueType" OF "Limit_old" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Value Type"
+  POSITION 11
+  MAX-WIDTH 4
+  COLUMN-LABEL "Type"
+  HELP "Type of limit value"
+  ORDER 100
+
+ADD FIELD "DefValue" OF "Limit_old" AS logical 
+  FORMAT "Yes/No"
+  INITIAL "Yes"
+  LABEL "Default Value"
+  POSITION 12
+  MAX-WIDTH 1
+  COLUMN-LABEL "Default"
+  HELP "Limit has the default value"
+  ORDER 110
+
+ADD FIELD "Brand" OF "Limit_old" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 13
+  MAX-WIDTH 16
+  COLUMN-LABEL "Brand"
+  HELP "Code Of Brand"
+  ORDER 120
+
+ADD INDEX "CustNum" ON "Limit_old" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "LimitType" ASCENDING 
+  INDEX-FIELD "TMRuleSeq" ASCENDING 
+  INDEX-FIELD "LimitID" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD INDEX "LimitType" ON "Limit_old" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "LimitType" ASCENDING 
+  INDEX-FIELD "LimitID" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD INDEX "MsSeq" ON "Limit_old" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "LimitType" ASCENDING 
+  INDEX-FIELD "TMRuleSeq" ASCENDING 
+  INDEX-FIELD "ToDate" DESCENDING 
+
+ADD INDEX "TMRuleSeq" ON "Limit_old" 
   AREA "Sta_Index_2"
   INDEX-FIELD "TMRuleSeq" ASCENDING 
   INDEX-FIELD "LimitID" ASCENDING 
@@ -19388,12 +19990,12 @@ ADD FIELD "XMLMessage" OF "M2MReceive" AS character
   ORDER 100
 
 ADD INDEX "RecStatus" ON "M2MReceive" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   PRIMARY
   INDEX-FIELD "RecStatus" ASCENDING 
 
 ADD TABLE "M2MTime"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_256"
   DUMP-NAME "m2mtime"
 
 ADD FIELD "Date" OF "M2MTime" AS date 
@@ -19434,6 +20036,7 @@ ADD INDEX "Date" ON "M2MTime"
   INDEX-FIELD "TimeTo" ASCENDING 
 
 ADD TABLE "Matrix"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   DUMP-NAME "Matrix"
 
@@ -19508,11 +20111,12 @@ ADD INDEX "Brand" ON "Matrix"
   INDEX-FIELD "Prior" ASCENDING 
 
 ADD TABLE "Memo"
-  AREA "Sta_Data_32"
+  MULTITENANT yes
+  AREA "Memo32_Data"
   LABEL "Memo pool"
   DESCRIPTION "This file is a common storage area for all kind of memos
 assigned to different tables/records"
-  DUMP-NAME "memo"
+  DUMP-NAME "memo-------1"
 
 ADD FIELD "HostTable" OF "Memo" AS character 
   FORMAT "x(12)"
@@ -19664,7 +20268,7 @@ ADD FIELD "Source" OF "Memo" AS character
   ORDER 140
 
 ADD INDEX "HostTable" ON "Memo" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_6"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
@@ -19673,25 +20277,251 @@ ADD INDEX "HostTable" ON "Memo"
   INDEX-FIELD "MemoSeq" DESCENDING 
 
 ADD INDEX "CustNum" ON "Memo" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_6"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "HostTable" ASCENDING 
   INDEX-FIELD "KeyValue" ASCENDING 
 
 ADD INDEX "CustOrder" ON "Memo" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_7"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "MemoSeq" DESCENDING 
 
 ADD INDEX "MemoSeq" ON "Memo" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_7"
   UNIQUE
   INDEX-FIELD "MemoSeq" ASCENDING 
 
 ADD INDEX "MemoType" ON "Memo" 
+  AREA "Sta_Index_7"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "MemoType" ASCENDING 
+  INDEX-FIELD "CustNum" ASCENDING 
+
+ADD TABLE "Memo_old"
+  AREA "Sta_Data_32"
+  LABEL "Memo pool"
+  DESCRIPTION "This file is a common storage area for all kind of memos
+assigned to different tables/records"
+  DUMP-NAME "memo"
+
+ADD FIELD "HostTable" OF "Memo_old" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "HostTable"
+  POSITION 2
+  MAX-WIDTH 24
+  COLUMN-LABEL "HostTable"
+  HELP "Name of table where this memo record is assigned"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "KeyValue" OF "Memo_old" AS character 
+  DESCRIPTION "Key value of hosting rec converted into formatted string expression"
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "KeyValue"
+  POSITION 3
+  MAX-WIDTH 32
+  COLUMN-LABEL "KeyValue"
+  HELP "Unique value of hosting record"
+  ORDER 20
+  MANDATORY
+
+ADD FIELD "MemoSeq" OF "Memo_old" AS integer 
+  DESCRIPTION "sequence from memoSeq sequence"
+  FORMAT ">>>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Seq"
+  POSITION 4
+  MAX-WIDTH 4
+  COLUMN-LABEL "Seq"
+  HELP "Unique, consecutive sequence no. of memo record"
+  ORDER 30
+  MANDATORY
+
+ADD FIELD "CreStamp" OF "Memo_old" AS decimal 
+  DESCRIPTION "Time Stamp yyyymmdd.time (sec)"
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Created"
+  POSITION 5
+  MAX-WIDTH 20
+  COLUMN-LABEL "Created"
+  HELP "Date and time when this memo record was CREATED"
+  DECIMALS 5
+  ORDER 40
+
+ADD FIELD "CreUser" OF "Memo_old" AS character 
+  FORMAT "X(8)"
+  INITIAL ""
+  LABEL "Created By"
+  POSITION 6
+  MAX-WIDTH 16
+  COLUMN-LABEL "Created by"
+  HELP "User who CREATED this memo record"
+  ORDER 50
+
+ADD FIELD "ChgStamp" OF "Memo_old" AS decimal 
+  DESCRIPTION "Time Stamp yyyymmdd.time (sec)"
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "ModTime"
+  POSITION 7
+  MAX-WIDTH 20
+  COLUMN-LABEL "ModTime"
+  HELP "Modification Date and Time"
+  DECIMALS 5
+  ORDER 60
+
+ADD FIELD "ChgUser" OF "Memo_old" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Mod By"
+  POSITION 8
+  MAX-WIDTH 16
+  COLUMN-LABEL "Mod By"
+  HELP "User who MODIFIED this memo"
+  ORDER 70
+
+ADD FIELD "MemoTitle" OF "Memo_old" AS character 
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Title"
+  POSITION 9
+  MAX-WIDTH 80
+  COLUMN-LABEL "Title/topic"
+  HELP "Title or topic of this memo"
+  ORDER 80
+
+ADD FIELD "MemoText" OF "Memo_old" AS character 
+  FORMAT "x(900)"
+  INITIAL ""
+  LABEL "MemoText"
+  POSITION 10
+  MAX-WIDTH 1800
+  COLUMN-LABEL "MemoText"
+  HELP "MemoText"
+  ORDER 90
+
+ADD FIELD "Brand" OF "Memo_old" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Brand"
+  POSITION 11
+  MAX-WIDTH 16
+  COLUMN-LABEL "Brand"
+  HELP "Code Of Brand"
+  ORDER 100
+
+ADD FIELD "CustNum" OF "Memo_old" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "Customer"
+  POSITION 12
+  MAX-WIDTH 4
+  COLUMN-LABEL "Customer"
+  HELP "Customer's number"
+  ORDER 110
+  MANDATORY
+
+ADD FIELD "MemoType" OF "Memo_old" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "MemoType"
+  POSITION 13
+  MAX-WIDTH 24
+  COLUMN-LABEL "MemoType"
+  HELP "Type of memo"
+  ORDER 120
+
+ADD FIELD "Priority" OF "Memo_old" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Priority"
+  POSITION 14
+  MAX-WIDTH 4
+  COLUMN-LABEL "Pri"
+  HELP "Priority"
+  ORDER 130
+
+ADD FIELD "Source" OF "Memo_old" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Source"
+  POSITION 15
+  MAX-WIDTH 16
+  COLUMN-LABEL "Source"
+  ORDER 140
+
+ADD INDEX "HostTable" ON "Memo_old" 
   AREA "Sta_Index_2"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "HostTable" ASCENDING 
+  INDEX-FIELD "KeyValue" ASCENDING 
+  INDEX-FIELD "MemoSeq" DESCENDING 
+
+ADD INDEX "CustNum" ON "Memo_old" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "HostTable" ASCENDING 
+  INDEX-FIELD "KeyValue" ASCENDING 
+
+ADD INDEX "CustNum_new" ON "Memo_old" 
+  AREA "Sta_Index_3"
+  INACTIVE
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "HostTable" ASCENDING 
+  INDEX-FIELD "KeyValue" ASCENDING 
+
+ADD INDEX "CustOrder" ON "Memo_old" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "MemoSeq" DESCENDING 
+
+ADD INDEX "CustOrder_new" ON "Memo_old" 
+  AREA "Sta_Index_4"
+  INACTIVE
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "CustNum" ASCENDING 
+  INDEX-FIELD "MemoSeq" DESCENDING 
+
+ADD INDEX "HostTable_new" ON "Memo_old" 
+  AREA "Sta_Index_5"
+  UNIQUE
+  INACTIVE
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "HostTable" ASCENDING 
+  INDEX-FIELD "KeyValue" ASCENDING 
+  INDEX-FIELD "MemoSeq" DESCENDING 
+
+ADD INDEX "MemoSeq" ON "Memo_old" 
+  AREA "Sta_Index_2"
+  UNIQUE
+  INDEX-FIELD "MemoSeq" ASCENDING 
+
+ADD INDEX "MemoSeq_new" ON "Memo_old" 
+  AREA "Sta_Index_4"
+  UNIQUE
+  INACTIVE
+  INDEX-FIELD "MemoSeq" ASCENDING 
+
+ADD INDEX "MemoType" ON "Memo_old" 
+  AREA "Sta_Index_2"
+  INDEX-FIELD "Brand" ASCENDING 
+  INDEX-FIELD "MemoType" ASCENDING 
+  INDEX-FIELD "CustNum" ASCENDING 
+
+ADD INDEX "MemoType_new" ON "Memo_old" 
+  AREA "Sta_Index_3"
+  INACTIVE
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "MemoType" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
@@ -19958,6 +20788,7 @@ ADD INDEX "Module" ON "MenuTree"
   INDEX-FIELD "Position" ASCENDING 
 
 ADD TABLE "MNPCal"
+  MULTITENANT yes
   AREA "Sta_Data_32"
   DUMP-NAME "mnpcal"
 
@@ -20012,8 +20843,18 @@ ADD FIELD "MNPTariff" OF "MNPCal" AS character
   HELP "Tariff"
   ORDER 60
 
+ADD FIELD "DeliveryType" OF "MNPCal" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Delivery Type"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "DelType"
+  HELP "Delivery Type"
+  ORDER 70
+
 ADD INDEX "Region" ON "MNPCal" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "Region" ASCENDING 
   INDEX-FIELD "MessageType" ASCENDING 
@@ -20030,6 +20871,7 @@ ADD INDEX "OrderChannel" ON "MNPCal"
   INDEX-FIELD "MessageType" ASCENDING 
 
 ADD TABLE "MNPCancelProposal"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   DUMP-NAME "mnpcancel"
 
@@ -20089,17 +20931,18 @@ ADD FIELD "Pdf" OF "MNPCancelProposal" AS blob
   ORDER 60
 
 ADD INDEX "MNPSeq" ON "MNPCancelProposal" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   PRIMARY
   INDEX-FIELD "MNPSeq" ASCENDING 
   INDEX-FIELD "CreatedTS" DESCENDING 
 
 ADD INDEX "StatusCode" ON "MNPCancelProposal" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "StatusCode" ASCENDING 
   INDEX-FIELD "CreatedTS" DESCENDING 
 
 ADD TABLE "MNPDetails"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   DUMP-NAME "mnpdetails"
 
@@ -20252,15 +21095,16 @@ ADD FIELD "DonorExtraOrdinary" OF "MNPDetails" AS logical
   ORDER 150
 
 ADD INDEX "MNPSeq" ON "MNPDetails" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   PRIMARY
   INDEX-FIELD "MNPSeq" ASCENDING 
 
 ADD INDEX "CustId" ON "MNPDetails" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "CustId" ASCENDING 
 
 ADD TABLE "MNPMessage"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   DUMP-NAME "mnpmessa"
 
@@ -20323,16 +21167,17 @@ ADD FIELD "MsgTurn" OF "MNPMessage" AS integer
   ORDER 90
 
 ADD INDEX "MNPSeq" ON "MNPMessage" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   PRIMARY
   INDEX-FIELD "MNPSeq" ASCENDING 
 
 ADD INDEX "Sender" ON "MNPMessage" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Sender" ASCENDING 
   INDEX-FIELD "StatusCode" ASCENDING 
 
 ADD TABLE "MNPOperation"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   DUMP-NAME "mnpoper"
 
@@ -20481,31 +21326,32 @@ ADD FIELD "ErrorDesc" OF "MNPOperation" AS character
   ORDER 140
 
 ADD INDEX "MNPOperation" ON "MNPOperation" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "MNPOperationID" ASCENDING 
 
 ADD INDEX "CreatedTS" ON "MNPOperation" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "CreatedTS" DESCENDING 
 
 ADD INDEX "ErrorCode" ON "MNPOperation" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "ErrorHandled" ASCENDING 
   INDEX-FIELD "ErrorCode" ASCENDING 
 
 ADD INDEX "MNPSeq" ON "MNPOperation" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_5"
   INDEX-FIELD "MNPSeq" ASCENDING 
   INDEX-FIELD "CreatedTS" ASCENDING 
 
 ADD INDEX "Sender" ON "MNPOperation" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Sender" ASCENDING 
   INDEX-FIELD "StatusCode" ASCENDING 
 
 ADD TABLE "MNPOperator"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   DUMP-NAME "mnpoperator"
 
@@ -20600,8 +21446,11 @@ ADD INDEX "OperName" ON "MNPOperator"
   INDEX-FIELD "OperName" ASCENDING 
 
 ADD TABLE "MNPProcess"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   DUMP-NAME "mnpproce"
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-mnpprocess.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-mnpprocess.p" CRC "?" 
 
 ADD FIELD "OrderId" OF "MNPProcess" AS integer 
   FORMAT "->,>>>,>>9"
@@ -20731,75 +21580,76 @@ ADD FIELD "PortingTime" OF "MNPProcess" AS decimal
   ORDER 140
 
 ADD INDEX "MNPSeq" ON "MNPProcess" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   PRIMARY
   INDEX-FIELD "MNPSeq" ASCENDING 
 
 ADD INDEX "FormRequest" ON "MNPProcess" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "FormRequest" ASCENDING 
 
 ADD INDEX "MNPType" ON "MNPProcess" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "MNPType" ASCENDING 
   INDEX-FIELD "StatusCode" ASCENDING 
   INDEX-FIELD "CreatedTS" DESCENDING 
 
 ADD INDEX "OperCreated" ON "MNPProcess" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "MNPType" ASCENDING 
   INDEX-FIELD "OperCode" ASCENDING 
   INDEX-FIELD "CreatedTS" DESCENDING 
 
 ADD INDEX "OperPorting" ON "MNPProcess" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "MNPType" ASCENDING 
   INDEX-FIELD "OperCode" ASCENDING 
   INDEX-FIELD "PortingTime" DESCENDING 
 
 ADD INDEX "OperStatus" ON "MNPProcess" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "MNPType" ASCENDING 
   INDEX-FIELD "OperCode" ASCENDING 
   INDEX-FIELD "StatusCode" ASCENDING 
 
 ADD INDEX "OrderId" ON "MNPProcess" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "OrderId" ASCENDING 
 
 ADD INDEX "PortingTime" ON "MNPProcess" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "MNPType" ASCENDING 
   INDEX-FIELD "StatusCode" ASCENDING 
   INDEX-FIELD "PortingTime" DESCENDING 
 
 ADD INDEX "PortRequest" ON "MNPProcess" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "PortRequest" ASCENDING 
 
 ADD INDEX "StateFlag" ON "MNPProcess" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "MNPType" ASCENDING 
   INDEX-FIELD "StateFlag" ASCENDING 
   INDEX-FIELD "StatusCode" ASCENDING 
 
 ADD INDEX "StatusCode" ON "MNPProcess" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "StatusCode" ASCENDING 
 
 ADD INDEX "UpdateTS" ON "MNPProcess" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "MNPType" ASCENDING 
   INDEX-FIELD "UpdateTS" DESCENDING 
 
 ADD TABLE "MNPRetentionRule"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "MNPRetentionRule"
   DESCRIPTION "MNP retention rules"
@@ -20897,17 +21747,18 @@ ADD FIELD "ToDate" OF "MNPRetentionRule" AS date
   ORDER 100
 
 ADD INDEX "RetentionRuleID" ON "MNPRetentionRule" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "RetentionRuleID" ASCENDING 
 
 ADD INDEX "ToDate" ON "MNPRetentionRule" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD TABLE "MNPRetPlatform"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "MNPRetPlatform"
   DESCRIPTION "MNP retention platform configuration"
@@ -20977,17 +21828,18 @@ ADD FIELD "Name" OF "MNPRetPlatform" AS character
   ORDER 70
 
 ADD INDEX "MNPRetPlatform" ON "MNPRetPlatform" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "RetentionPlatform" ASCENDING 
 
 ADD INDEX "ToDate" ON "MNPRetPlatform" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD TABLE "MNPSub"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   DUMP-NAME "mnpsub"
 
@@ -21043,20 +21895,20 @@ ADD FIELD "RetentionPlatform" OF "MNPSub" AS character
   ORDER 80
 
 ADD INDEX "MNPSeq" ON "MNPSub" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   PRIMARY
   INDEX-FIELD "MNPSeq" ASCENDING 
 
 ADD INDEX "CLI" ON "MNPSub" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "CLI" ASCENDING 
 
 ADD INDEX "MsSeq" ON "MNPSub" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "MsSeq" ASCENDING 
 
 ADD TABLE "MNPXml"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_256"
   DUMP-NAME "mnpxml"
 
 ADD FIELD "XMLSeq" OF "MNPXml" AS integer 
@@ -21131,10 +21983,11 @@ ADD INDEX "Prefix" ON "MobPref"
   INDEX-FIELD "Prefix" ASCENDING 
 
 ADD TABLE "MServiceLimit"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   DUMP-NAME "mservice"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-mservicelimit.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-mservicelimit.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-mservicelimit.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-mservicelimit.p" CRC "?" 
 
 ADD FIELD "SLSeq" OF "MServiceLimit" AS integer 
   FORMAT ">>>>>>9"
@@ -21230,7 +22083,7 @@ ADD FIELD "MSID" OF "MServiceLimit" AS integer
   ORDER 90
 
 ADD INDEX "msseq" ON "MServiceLimit" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_5"
   UNIQUE
   PRIMARY
   INDEX-FIELD "MsSeq" ASCENDING 
@@ -21239,30 +22092,31 @@ ADD INDEX "msseq" ON "MServiceLimit"
   INDEX-FIELD "EndTS" DESCENDING 
 
 ADD INDEX "Active" ON "MServiceLimit" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "MsSeq" ASCENDING 
   INDEX-FIELD "DialType" ASCENDING 
   INDEX-FIELD "FromTS" ASCENDING 
   INDEX-FIELD "EndTS" ASCENDING 
 
 ADD INDEX "CustNum" ON "MServiceLimit" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "custnum" ASCENDING 
   INDEX-FIELD "DialType" ASCENDING 
   INDEX-FIELD "SLSeq" ASCENDING 
   INDEX-FIELD "EndTS" DESCENDING 
 
 ADD INDEX "slseq" ON "MServiceLimit" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "SLSeq" ASCENDING 
   INDEX-FIELD "DialType" ASCENDING 
   INDEX-FIELD "EndTS" DESCENDING 
 
 ADD TABLE "MServiceLPool"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   DUMP-NAME "mservicelpool"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-mservicelpool.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-mservicelpool.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-mservicelpool.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-mservicelpool.p" CRC "?" 
 
 ADD FIELD "SLSeq" OF "MServiceLPool" AS integer 
   FORMAT ">>>>>>9"
@@ -21335,7 +22189,7 @@ ADD INDEX "MSSeq" ON "MServiceLPool"
   INDEX-FIELD "EndTS" DESCENDING 
 
 ADD INDEX "CustNum" ON "MServiceLPool" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "custnum" ASCENDING 
   INDEX-FIELD "SLSeq" ASCENDING 
   INDEX-FIELD "EndTS" DESCENDING 
@@ -21550,6 +22404,7 @@ ADD INDEX "Month" ON "MthCall"
   INDEX-FIELD "CustNum" ASCENDING 
 
 ADD TABLE "MXItem"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   DUMP-NAME "MXItem"
 
@@ -21595,8 +22450,8 @@ ADD TABLE "NatHoliday"
   LABEL "National holidays"
   DESCRIPTION "National holidays (weekend prices used)"
   DUMP-NAME "natholid"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-natholiday.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-natholiday.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-natholiday.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-natholiday.p" CRC "?" 
 
 ADD FIELD "Holiday" OF "NatHoliday" AS date 
   FORMAT "99-99-9999"
@@ -21979,7 +22834,7 @@ ADD FIELD "CLI" OF "OPLog" AS character
   ORDER 110
 
 ADD INDEX "CustNum" ON "OPLog" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "CreStamp" DESCENDING 
@@ -21989,19 +22844,19 @@ ADD INDEX "CLI" ON "OPLog"
   INDEX-FIELD "CLI" ASCENDING 
 
 ADD INDEX "CustDate" ON "OPLog" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "EventDate" DESCENDING 
   INDEX-FIELD "Voucher" ASCENDING 
 
 ADD INDEX "CustInv" ON "OPLog" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "InvNum" ASCENDING 
   INDEX-FIELD "EventDate" DESCENDING 
 
 ADD INDEX "InvNum" ON "OPLog" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "InvNum" ASCENDING 
   INDEX-FIELD "SubInvNum" ASCENDING 
   INDEX-FIELD "EventDate" DESCENDING 
@@ -22148,6 +23003,7 @@ ADD INDEX "Origin" ON "PaymCfg"
   INDEX-FIELD "Origin" ASCENDING 
 
 ADD TABLE "PaymConfig"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   LABEL "Payment Configuration"
   DESCRIPTION "Configuration rules for payments"
@@ -22251,7 +23107,7 @@ ADD FIELD "TaxRules" OF "PaymConfig" AS logical
   ORDER 100
 
 ADD INDEX "PaymType" ON "PaymConfig" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
@@ -22260,12 +23116,12 @@ ADD INDEX "PaymType" ON "PaymConfig"
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD INDEX "PaymConfig" ON "PaymConfig" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "PaymConfig" ASCENDING 
 
 ADD INDEX "PaymSrc" ON "PaymConfig" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "PaymSrc" ASCENDING 
   INDEX-FIELD "PaymType" ASCENDING 
@@ -22314,10 +23170,13 @@ ADD INDEX "PaymConfig" ON "PaymConfTax"
   INDEX-FIELD "TaxZone" ASCENDING 
 
 ADD TABLE "Payment"
+  MULTITENANT yes
   AREA "Dyn_Data_32"
   LABEL "Payments"
   DESCRIPTION "Payments"
   DUMP-NAME "payment"
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-payment.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-payment.p" CRC "?" 
 
 ADD FIELD "InvNum" OF "Payment" AS integer 
   FORMAT "zzzzzzz9"
@@ -22927,7 +23786,8 @@ ADD INDEX "PPStatus" ON "PaymPlan"
   INDEX-FIELD "CustNum" ASCENDING 
 
 ADD TABLE "PaymVouch"
-  AREA "Sta_Data_256"
+  MULTITENANT yes
+  AREA "Sta_Data_2_256"
   LABEL "Payment Voucher"
   DESCRIPTION "Number series for payment vouchers"
   DUMP-NAME "paymvouc"
@@ -22972,7 +23832,7 @@ ADD FIELD "FromDate" OF "PaymVouch" AS date
   ORDER 40
 
 ADD INDEX "Voucher" ON "PaymVouch" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "VoucherType" ASCENDING 
@@ -23205,6 +24065,7 @@ ADD INDEX "perslvlkey" ON "PersResp"
   INDEX-FIELD "PersKey" ASCENDING 
 
 ADD TABLE "PIndicator"
+  MULTITENANT yes
   AREA "Sta_Data_32"
   LABEL "PIndicator"
   DESCRIPTION " Performance Indicator"
@@ -23289,6 +24150,7 @@ ADD INDEX "HostTable" ON "PIndicator"
   INDEX-FIELD "TimeStamp" DESCENDING 
 
 ADD TABLE "PListConf"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   DESCRIPTION "Price configuration
 
@@ -23366,7 +24228,7 @@ ADD FIELD "Brand" OF "PListConf" AS character
   ORDER 90
 
 ADD INDEX "RatePlan" ON "PListConf" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "RatePlan" ASCENDING 
@@ -23375,7 +24237,7 @@ ADD INDEX "RatePlan" ON "PListConf"
   INDEX-FIELD "Prior" ASCENDING 
 
 ADD INDEX "Browse" ON "PListConf" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "RatePlan" ASCENDING 
   INDEX-FIELD "dFrom" ASCENDING 
@@ -23548,6 +24410,7 @@ ADD INDEX "PNPSeq" ON "PNPCLI"
   INDEX-FIELD "PNPSeq" ASCENDING 
 
 ADD TABLE "PNPGroup"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   DUMP-NAME "pnpgroup"
 
@@ -23695,7 +24558,7 @@ ADD FIELD "PNPListLimit" OF "PNPGroup" AS integer
   ORDER 140
 
 ADD INDEX "PNPGroup" ON "PNPGroup" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
@@ -23704,19 +24567,19 @@ ADD INDEX "PNPGroup" ON "PNPGroup"
   INDEX-FIELD "dTo" DESCENDING 
 
 ADD INDEX "CCN" ON "PNPGroup" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CCN" ASCENDING 
 
 ADD INDEX "Name" ON "PNPGroup" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "GroupType" ASCENDING 
   INDEX-FIELD "Name" ASCENDING 
   INDEX-FIELD "PNPGroup" ASCENDING 
 
 ADD INDEX "PNPSeq" ON "PNPGroup" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "PNPSeq" ASCENDING 
@@ -23993,7 +24856,7 @@ ADD INDEX "Region" ON "PostCode"
   INDEX-FIELD "ZipCode" ASCENDING 
 
 ADD INDEX "PostOffice" ON "PostCode" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Country" ASCENDING 
   INDEX-FIELD "PostOffice" ASCENDING 
 
@@ -24222,6 +25085,7 @@ ADD INDEX "InvNum" ON "PPInv"
   INDEX-FIELD "InvNum" ASCENDING 
 
 ADD TABLE "ppInvseq"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Invoice Sequence"
   DESCRIPTION "Customers invoice sequences"
@@ -24358,6 +25222,7 @@ ADD INDEX "BillCode" ON "PPItem"
   INDEX-FIELD "ProdPack" ASCENDING 
 
 ADD TABLE "PremiumNumber"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Premium Numbers"
   DESCRIPTION "Premium number descriptions"
@@ -24412,7 +25277,7 @@ ADD FIELD "ValidTo" OF "PremiumNumber" AS date
   ORDER 50
 
 ADD INDEX "BNumberPrefix" ON "PremiumNumber" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
@@ -24456,6 +25321,7 @@ ADD INDEX "PSEName" ON "PreselErr"
   INDEX-FIELD "PSEName" ASCENDING 
 
 ADD TABLE "PriceList"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Price Lists"
   DESCRIPTION "Price list header"
@@ -24572,26 +25438,26 @@ ADD FIELD "Brand" OF "PriceList" AS character
   ORDER 110
 
 ADD INDEX "PriceList" ON "PriceList" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "PriceList" ASCENDING 
 
 ADD INDEX "DedicList" ON "PriceList" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "DedicList" ASCENDING 
   INDEX-FIELD "PriceList" ASCENDING 
 
 ADD INDEX "DedicName" ON "PriceList" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "DedicList" ASCENDING 
   INDEX-FIELD "PLName" ASCENDING 
 
 ADD INDEX "PLName" ON "PriceList" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "PLName" ASCENDING 
@@ -24698,7 +25564,8 @@ ADD INDEX "EffName" ON "PrintCodes"
   INDEX-FIELD "EffName" ASCENDING 
 
 ADD TABLE "PrintHouseConf"
-  AREA "Sta_Data_256"
+  MULTITENANT yes
+  AREA "Sta_Data_2_256"
   LABEL "Printhouse Configuration"
   DESCRIPTION "Printhouse configuration"
   DUMP-NAME "printhouseconf"
@@ -24884,6 +25751,7 @@ ADD INDEX "ProdName" ON "Product"
   INDEX-FIELD "Product" ASCENDING 
 
 ADD TABLE "ProgLimit"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   DUMP-NAME "proglimit"
 
@@ -24958,7 +25826,7 @@ ADD FIELD "ValidTo" OF "ProgLimit" AS date
   ORDER 70
 
 ADD INDEX "ValidTo" ON "ProgLimit" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "GroupCode" ASCENDING 
   INDEX-FIELD "SLSeq" ASCENDING 
@@ -24966,13 +25834,14 @@ ADD INDEX "ValidTo" ON "ProgLimit"
   INDEX-FIELD "LimitTo" ASCENDING 
 
 ADD INDEX "LimitTo" ON "ProgLimit" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "GroupCode" ASCENDING 
   INDEX-FIELD "SLSeq" ASCENDING 
   INDEX-FIELD "LimitTo" ASCENDING 
   INDEX-FIELD "ValidFrom" ASCENDING 
 
 ADD TABLE "RateCCN"
+  MULTITENANT yes
   AREA "Sta_Data_2_256"
   DUMP-NAME "rateccn"
 
@@ -25059,6 +25928,7 @@ ADD INDEX "CCN" ON "RateCCN"
   INDEX-FIELD "CCN" ASCENDING 
 
 ADD TABLE "RatePlan"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Rating Plan"
   DESCRIPTION "Rating plan for invoice target"
@@ -25113,14 +25983,14 @@ ADD FIELD "PNPRatePlan" OF "RatePlan" AS character
   ORDER 90
 
 ADD INDEX "RatePlan" ON "RatePlan" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "RatePlan" ASCENDING 
 
 ADD INDEX "RPName" ON "RatePlan" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "RPName" ASCENDING 
 
@@ -25193,6 +26063,7 @@ ADD INDEX "DialType" ON "RatePref"
   INDEX-FIELD "Prefix" ASCENDING 
 
 ADD TABLE "Region"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Region"
   DESCRIPTION "Customer region"
@@ -25233,88 +26104,103 @@ ADD FIELD "TaxZone" OF "Region" AS character
   ORDER 50
 
 ADD INDEX "Region" ON "Region" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Region" ASCENDING 
 
 ADD INDEX "RgName" ON "Region" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "RgName" ASCENDING 
 
 ADD TABLE "RepLog"
   AREA "CDF_Data"
-  LABEL "Replication Log"
   DESCRIPTION "This is the replication log table for replicating the record"
   DUMP-NAME "replog"
 
-ADD FIELD "RecordId" OF "RepLog" AS recid 
-  FORMAT ">>>>>>>>>9"
-  INITIAL ?
-  LABEL "Record Id"
+ADD FIELD "RowID" OF "RepLog" AS character 
+  DESCRIPTION "RowID in character format"
+  FORMAT "x(18)"
+  INITIAL ""
+  LABEL "RowID"
   POSITION 2
-  MAX-WIDTH 8
-  COLUMN-LABEL "RecordId"
+  MAX-WIDTH 36
+  COLUMN-LABEL "RowID"
   ORDER 10
-  MANDATORY
+
+ADD FIELD "KeyValue" OF "RepLog" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "KeyValue"
+  POSITION 3
+  MAX-WIDTH 60
+  COLUMN-LABEL "KeyValue"
+  ORDER 20
 
 ADD FIELD "TableName" OF "RepLog" AS character 
   FORMAT "x(15)"
   INITIAL ""
-  LABEL "TableName"
-  POSITION 3
-  MAX-WIDTH 30
-  COLUMN-LABEL "TableName"
-  ORDER 20
-
-ADD FIELD "KeyValue" OF "RepLog" AS character 
-  FORMAT "x(15)"
-  INITIAL ""
-  LABEL "KeyValue"
+  LABEL "Table name"
   POSITION 4
   MAX-WIDTH 30
-  COLUMN-LABEL "KeyValue"
+  COLUMN-LABEL "TableName"
   ORDER 30
 
 ADD FIELD "EventType" OF "RepLog" AS character 
-  FORMAT "x(15)"
+  FORMAT "x(6)"
   INITIAL ""
-  LABEL "EventType"
+  LABEL "Event type"
   POSITION 5
-  MAX-WIDTH 30
+  MAX-WIDTH 12
   COLUMN-LABEL "EventType"
   ORDER 40
 
-ADD FIELD "CreatedTS" OF "RepLog" AS decimal 
-  FORMAT "99999999.99999"
-  INITIAL "0"
-  LABEL "CreatedTS"
+ADD FIELD "EventTime" OF "RepLog" AS datetime-tz 
+  FORMAT "99-99-9999 HH:MM:SS.SSS+HH:MM"
+  INITIAL "?"
+  LABEL "Event time"
   POSITION 6
-  MAX-WIDTH 20
-  COLUMN-LABEL "CreatedTS"
-  DECIMALS 5
+  MAX-WIDTH 12
+  COLUMN-LABEL "EventTime"
   ORDER 50
 
-ADD FIELD "EventTS" OF "RepLog" AS datetime 
-  FORMAT "99-99-9999 HH:MM:SS.SSS"
-  INITIAL ?
-  LABEL "EventTS"
+ADD FIELD "SendTime" OF "RepLog" AS datetime-tz 
+  FORMAT "99-99-9999 HH:MM:SS.SSS+HH:MM"
+  INITIAL "?"
+  LABEL "Send time"
   POSITION 7
-  MAX-WIDTH 8
-  COLUMN-LABEL "EventTS"
+  MAX-WIDTH 12
+  COLUMN-LABEL "SendTime"
   ORDER 60
 
-ADD INDEX "CreatedTS" ON "RepLog" 
+ADD FIELD "SendCount" OF "RepLog" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "Send count"
+  POSITION 8
+  MAX-WIDTH 4
+  COLUMN-LABEL "SendCount"
+  ORDER 70
+
+ADD FIELD "TenantName" OF "RepLog" AS character 
+  FORMAT "X(15)"
+  INITIAL ""
+  LABEL "Tenant name"
+  POSITION 9
+  MAX-WIDTH 30
+  COLUMN-LABEL "TenantName"
+  HELP "Tenant name"
+  ORDER 80
+
+ADD INDEX "SendTime" ON "RepLog" 
   AREA "CDF_Index"
   PRIMARY
-  INDEX-FIELD "CreatedTS" ASCENDING 
-
-ADD INDEX "EventTS" ON "RepLog" 
-  AREA "CDF_Index"
-  INDEX-FIELD "EventTS" ASCENDING 
+  INDEX-FIELD "SendTime" ASCENDING 
+  INDEX-FIELD "TenantName" ASCENDING 
+  INDEX-FIELD "EventTime" ASCENDING 
 
 ADD TABLE "ReportConf"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_256"
   LABEL "Report Configuration"
   DESCRIPTION "Report configuration"
   DUMP-NAME "reportconf"
@@ -25356,7 +26242,7 @@ ADD INDEX "ReportID" ON "ReportConf"
   INDEX-FIELD "ReportID" ASCENDING 
 
 ADD TABLE "ReportConfRow"
-  AREA "Sta_Data_256"
+  AREA "Sta_Data_2_256"
   LABEL "Report Configuration Row"
   DESCRIPTION "Report configuration row"
   DUMP-NAME "reportconfrow"
@@ -25484,11 +26370,13 @@ ADD INDEX "ReportID" ON "ReportConfRow"
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD TABLE "RepText"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Report Texts"
   DESCRIPTION "Report texts"
   DUMP-NAME "reptext"
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-reptext.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-reptext.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-reptext.p" CRC "?" 
 
 ADD FIELD "TextType" OF "RepText" AS integer 
   FORMAT ">9"
@@ -25579,7 +26467,7 @@ ADD FIELD "ToDate" OF "RepText" AS date
   ORDER 90
 
 ADD INDEX "LinkCode" ON "RepText" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
@@ -25589,13 +26477,14 @@ ADD INDEX "LinkCode" ON "RepText"
   INDEX-FIELD "ToDate" DESCENDING 
 
 ADD INDEX "Language" ON "RepText" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "TextType" ASCENDING 
   INDEX-FIELD "Language" ASCENDING 
   INDEX-FIELD "LinkCode" ASCENDING 
 
 ADD TABLE "RequestAction"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   LABEL "Request Actions"
   DESCRIPTION "Request actions"
@@ -25702,32 +26591,33 @@ ADD FIELD "RequestActionID" OF "RequestAction" AS integer
   ORDER 100
 
 ADD INDEX "RequestActionID" ON "RequestAction" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "RequestActionID" ASCENDING 
 
 ADD INDEX "CLIType" ON "RequestAction" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CLIType" ASCENDING 
   INDEX-FIELD "ReqType" ASCENDING 
   INDEX-FIELD "ValidTo" DESCENDING 
 
 ADD INDEX "PayType" ON "RequestAction" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "PayType" ASCENDING 
   INDEX-FIELD "ReqType" ASCENDING 
   INDEX-FIELD "ValidTo" DESCENDING 
 
 ADD INDEX "ReqType" ON "RequestAction" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "ReqType" ASCENDING 
   INDEX-FIELD "ValidTo" DESCENDING 
 
 ADD TABLE "RequestActionRule"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   LABEL "Request Action Rule"
   DESCRIPTION "Request action rule"
@@ -25792,7 +26682,7 @@ ADD FIELD "ExclParamValue" OF "RequestActionRule" AS character
   ORDER 60
 
 ADD INDEX "ParamField" ON "RequestActionRule" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "RequestActionID" ASCENDING 
   INDEX-FIELD "ParamField" ASCENDING 
@@ -26123,8 +27013,8 @@ ADD TABLE "RequestType"
   LABEL "Request configuration"
   DESCRIPTION "Request type configuration"
   DUMP-NAME "requesttype"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-requesttype.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-requesttype.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-requesttype.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-requesttype.p" CRC "?" 
 
 ADD FIELD "Brand" OF "RequestType" AS character 
   FORMAT "x(8)"
@@ -26265,6 +27155,7 @@ ADD INDEX "Queue" ON "RequestType"
   INDEX-FIELD "ReqType" ASCENDING 
 
 ADD TABLE "Reseller"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Resellers"
   DESCRIPTION "Resellers"
@@ -26379,27 +27270,28 @@ ADD FIELD "FUC2" OF "Reseller" AS character
   ORDER 110
 
 ADD INDEX "Reseller" ON "Reseller" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "Reseller" ASCENDING 
 
 ADD INDEX "RsName" ON "Reseller" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "RsName" ASCENDING 
   INDEX-FIELD "Reseller" ASCENDING 
 
 ADD INDEX "Salesman" ON "Reseller" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "Salesman" ASCENDING 
   INDEX-FIELD "Reseller" ASCENDING 
 
 ADD TABLE "ResellerTF"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "ResellerTF"
   DESCRIPTION "ResellerTF"
@@ -26737,6 +27629,7 @@ ADD INDEX "RoamZone" ON "RZItem"
   INDEX-FIELD "PlmnCode" ASCENDING 
 
 ADD TABLE "SaldoCounter"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   DUMP-NAME "callcoun"
 
@@ -26888,8 +27781,11 @@ ADD INDEX "SOName" ON "Salesoffice"
   INDEX-FIELD "SalesOffice" ASCENDING 
 
 ADD TABLE "ServiceLCounter"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   DUMP-NAME "servcou1"
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-servicelcounter.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-servicelcounter.p" CRC "?" 
 
 ADD FIELD "invseq" OF "ServiceLCounter" AS integer 
   FORMAT ">>>>>>>>>>9"
@@ -26996,16 +27892,17 @@ ADD INDEX "MSSeq" ON "ServiceLCounter"
   INDEX-FIELD "SLSeq" ASCENDING 
 
 ADD INDEX "CustNum" ON "ServiceLCounter" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "Period" DESCENDING 
   INDEX-FIELD "SLSeq" ASCENDING 
 
 ADD TABLE "ServiceLimit"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   DUMP-NAME "service1"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-servicelimit.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-servicelimit.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-servicelimit.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-servicelimit.p" CRC "?" 
 
 ADD FIELD "WebDisp" OF "ServiceLimit" AS integer 
   FORMAT "9"
@@ -27152,16 +28049,17 @@ ADD FIELD "BDestLimit" OF "ServiceLimit" AS integer
   ORDER 200
 
 ADD INDEX "GroupCode" ON "ServiceLimit" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "GroupCode" ASCENDING 
 
 ADD INDEX "SLSeq" ON "ServiceLimit" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "SLSeq" ASCENDING 
 
 ADD TABLE "ServiceLimitGroup"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   DESCRIPTION "
 
@@ -27220,18 +28118,19 @@ ADD FIELD "GroupCode" OF "ServiceLimitGroup" AS character
   ORDER 10
 
 ADD INDEX "GroupCode" ON "ServiceLimitGroup" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "GroupCode" ASCENDING 
 
 ADD INDEX "GroupName" ON "ServiceLimitGroup" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "GroupName" ASCENDING 
 
 ADD TABLE "ServiceLimitTarget"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   DUMP-NAME "servlt"
 
@@ -27286,18 +28185,19 @@ ADD FIELD "InsideRate" OF "ServiceLimitTarget" AS character
   ORDER 50
 
 ADD INDEX "SLSeq" ON "ServiceLimitTarget" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "SLSeq" ASCENDING 
   INDEX-FIELD "ServiceLMember" ASCENDING 
 
 ADD TABLE "SingleFee"
+  MULTITENANT yes
   AREA "Sta_Data_32"
   LABEL "Single Fee"
   DESCRIPTION "Single billable fee"
   DUMP-NAME "singlefe"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "rd-singlefee.p" CRC "?" 
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "rw-singlefee.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-singlefee.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-singlefee.p" CRC "?" 
 
 ADD FIELD "FMItemId" OF "SingleFee" AS integer 
   FORMAT "zzzzzzzz9"
@@ -27320,25 +28220,25 @@ ADD FIELD "BillPeriod" OF "SingleFee" AS integer
   ORDER 20
 
 ADD FIELD "Amt" OF "SingleFee" AS decimal 
-  FORMAT "->,>>>,>>9.99"
+  FORMAT "->,>>>,>>9.999"
   INITIAL "0"
   LABEL "Amount"
   POSITION 4
   MAX-WIDTH 17
   COLUMN-LABEL "Amount"
   HELP "Payable Amount ex VAT"
-  DECIMALS 2
+  DECIMALS 3
   ORDER 30
 
 ADD FIELD "OwnCost" OF "SingleFee" AS decimal 
-  FORMAT "->,>>>,>>9.99"
+  FORMAT "->,>>>,>>9.999"
   INITIAL "0"
   LABEL "Our costs"
   POSITION 5
   MAX-WIDTH 17
   COLUMN-LABEL "Our costs"
   HELP "Our own costs per bill"
-  DECIMALS 2
+  DECIMALS 3
   ORDER 40
 
 ADD FIELD "Billed" OF "SingleFee" AS logical 
@@ -27394,7 +28294,7 @@ ADD FIELD "CustNum" OF "SingleFee" AS integer
   MANDATORY
 
 ADD FIELD "Concerns" OF "SingleFee" AS integer 
-  FORMAT "999999"
+  FORMAT "99999999"
   INITIAL "0"
   LABEL "Concerns"
   POSITION 11
@@ -27624,31 +28524,31 @@ ADD FIELD "OrderId" OF "SingleFee" AS integer
   ORDER 290
 
 ADD INDEX "CustNum_s" ON "SingleFee" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_5"
   PRIMARY
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "BillPeriod" ASCENDING 
   INDEX-FIELD "Billed" ASCENDING 
 
 ADD INDEX "BillCode" ON "SingleFee" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "BillCode" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
 
 ADD INDEX "CalcObj" ON "SingleFee" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CalcObj" ASCENDING 
 
 ADD INDEX "Contract" ON "SingleFee" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "Contract" ASCENDING 
   INDEX-FIELD "BillCode" ASCENDING 
 
-ADD INDEX "CustNum" ON "SingleFee" 
-  AREA "Sta_Index_2"
+ADD INDEX "Custnum" ON "SingleFee" 
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "HostTable" ASCENDING 
@@ -27656,31 +28556,32 @@ ADD INDEX "CustNum" ON "SingleFee"
   INDEX-FIELD "BillPeriod" DESCENDING 
 
 ADD INDEX "FMItemId" ON "SingleFee" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   UNIQUE
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "FMItemId" ASCENDING 
 
 ADD INDEX "HostTable" ON "SingleFee" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "HostTable" ASCENDING 
   INDEX-FIELD "KeyValue" ASCENDING ABBREVIATED 
 
 ADD INDEX "InvNum" ON "SingleFee" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "InvNum" ASCENDING 
 
 ADD INDEX "InvNum_s" ON "SingleFee" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   INDEX-FIELD "InvNum" ASCENDING 
 
 ADD TABLE "SLCounterItem"
-  AREA "Sta_Data_128"
+  MULTITENANT yes
+  AREA "Sta_Data_2_128"
   DESCRIPTION "Keep a count of items for ServiceLCounter"
-  DUMP-NAME "slcounteritem"
+  DUMP-NAME "slcounteritem-------1"
 
 ADD FIELD "SLSeq" OF "SLCounterItem" AS integer 
   FORMAT ">>>>>>9"
@@ -27720,6 +28621,56 @@ ADD FIELD "SLCItem" OF "SLCounterItem" AS character
   ORDER 40
 
 ADD INDEX "msseq" ON "SLCounterItem" 
+  AREA "Sta_Index_5"
+  PRIMARY
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "Period" DESCENDING 
+  INDEX-FIELD "SLSeq" ASCENDING 
+  INDEX-FIELD "SLCItem" ASCENDING 
+
+ADD TABLE "SLCounterItem_old"
+  AREA "Sta_Data_128"
+  DESCRIPTION "Keep a count of items for ServiceLCounter"
+  DUMP-NAME "slcounteritem"
+
+ADD FIELD "SLSeq" OF "SLCounterItem_old" AS integer 
+  FORMAT ">>>>>>9"
+  INITIAL "0"
+  LABEL "SLSeq"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "SLseq"
+  HELP "Sequence for Servicelimit"
+  ORDER 10
+
+ADD FIELD "MsSeq" OF "SLCounterItem_old" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "MsSeq"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "MsSeq"
+  HELP "Link to mobsub-table"
+  ORDER 20
+
+ADD FIELD "Period" OF "SLCounterItem_old" AS integer 
+  FORMAT "999999"
+  INITIAL "0"
+  LABEL "Period"
+  POSITION 4
+  MAX-WIDTH 4
+  HELP "Period what Servicecounter is to be"
+  ORDER 30
+
+ADD FIELD "SLCItem" OF "SLCounterItem_old" AS character 
+  FORMAT "x(15)"
+  INITIAL ""
+  LABEL "SLCItem"
+  POSITION 5
+  MAX-WIDTH 30
+  ORDER 40
+
+ADD INDEX "msseq" ON "SLCounterItem_old" 
   AREA "Sta_Index_2"
   PRIMARY
   INDEX-FIELD "MsSeq" ASCENDING 
@@ -27727,12 +28678,21 @@ ADD INDEX "msseq" ON "SLCounterItem"
   INDEX-FIELD "SLSeq" ASCENDING 
   INDEX-FIELD "SLCItem" ASCENDING 
 
+ADD INDEX "msseq_new" ON "SLCounterItem_old" 
+  AREA "Sta_Index_5"
+  INACTIVE
+  INDEX-FIELD "MsSeq" ASCENDING 
+  INDEX-FIELD "Period" DESCENDING 
+  INDEX-FIELD "SLSeq" ASCENDING 
+  INDEX-FIELD "SLCItem" ASCENDING 
+
 ADD TABLE "SLGAnalyse"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   DUMP-NAME "slganaly"
 
 ADD FIELD "Clitype" OF "SLGAnalyse" AS character 
-  FORMAT "x(8)"
+  FORMAT "x(13)"
   INITIAL ""
   LABEL "CLI Type"
   POSITION 2
@@ -27842,7 +28802,7 @@ ADD FIELD "Prior" OF "SLGAnalyse" AS integer
   ORDER 120
 
 ADD INDEX "BillCode" ON "SLGAnalyse" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "BillCode" ASCENDING 
@@ -27850,7 +28810,7 @@ ADD INDEX "BillCode" ON "SLGAnalyse"
   INDEX-FIELD "ValidTo" DESCENDING 
 
 ADD INDEX "BelongTo" ON "SLGAnalyse" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "BelongTo" ASCENDING 
   INDEX-FIELD "Clitype" ASCENDING 
@@ -27861,14 +28821,14 @@ ADD INDEX "BelongTo" ON "SLGAnalyse"
   INDEX-FIELD "ValidTo" DESCENDING 
 
 ADD INDEX "CliType" ON "SLGAnalyse" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "Clitype" ASCENDING 
   INDEX-FIELD "BillCode" ASCENDING 
   INDEX-FIELD "ValidTo" DESCENDING 
 
 ADD INDEX "ServiceLimitGroup" ON "SLGAnalyse" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "ServiceLimitGroup" ASCENDING 
   INDEX-FIELD "Clitype" ASCENDING 
@@ -28016,10 +28976,13 @@ ADD INDEX "SGName" ON "SMGroup"
   INDEX-FIELD "SmGroup" ASCENDING 
 
 ADD TABLE "SubInvoice"
+  MULTITENANT yes
   AREA "Dyn_Data_32"
   LABEL "Sub Invoice"
   DESCRIPTION "Subinvoice within a combined invoice"
   DUMP-NAME "subinvoice"
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-subinvoice.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-subinvoice.p" CRC "?" 
 
 ADD FIELD "Brand" OF "SubInvoice" AS character 
   FORMAT "x(8)"
@@ -28031,7 +28994,7 @@ ADD FIELD "Brand" OF "SubInvoice" AS character
   ORDER 10
 
 ADD FIELD "InvNum" OF "SubInvoice" AS integer 
-  FORMAT "zzzzzzz9"
+  FORMAT "zzzzzzzz9"
   INITIAL "0"
   LABEL "Invoice Number"
   POSITION 3
@@ -28209,7 +29172,7 @@ ADD FIELD "InvSeq" OF "SubInvoice" AS integer
   ORDER 200
 
 ADD FIELD "CrInvNum" OF "SubInvoice" AS integer 
-  FORMAT ">>>>>>>9"
+  FORMAT "zzzzzzzz9"
   INITIAL "0"
   LABEL "Credit Invoice"
   POSITION 24
@@ -28249,6 +29212,14 @@ ADD FIELD "VATAccount" OF "SubInvoice" AS integer
   HELP "Account number of VAT"
   EXTENT 10
   ORDER 220
+
+ADD FIELD "FixedNumber" OF "SubInvoice" AS character 
+  FORMAT "x(11)"
+  INITIAL ?
+  LABEL "FixedNumber"
+  POSITION 31
+  MAX-WIDTH 22
+  ORDER 230
 
 ADD INDEX "InvNum" ON "SubInvoice" 
   AREA "Dyn_Index_1"
@@ -28298,6 +29269,7 @@ ADD INDEX "tablename" ON "TableToken"
   INDEX-FIELD "tablename" ASCENDING 
 
 ADD TABLE "Tariff"
+  MULTITENANT yes
   AREA "Sta_Data_32"
   LABEL "Tariffs"
   DESCRIPTION "B-number tariffs, either general or customer depended"
@@ -28594,8 +29566,18 @@ ADD FIELD "ServRid" OF "Tariff" AS character
   HELP "Service reporting id"
   ORDER 310
 
+ADD FIELD "FirstBillableSec" OF "Tariff" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  LABEL "1st Billable Sec"
+  POSITION 35
+  MAX-WIDTH 4
+  COLUMN-LABEL "1.Sec"
+  HELP "First Billable second"
+  ORDER 320
+
 ADD INDEX "CCN" ON "Tariff" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_4"
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CCN" ASCENDING 
@@ -28605,7 +29587,7 @@ ADD INDEX "CCN" ON "Tariff"
   INDEX-FIELD "ValidTo" DESCENDING 
 
 ADD INDEX "CCNCust" ON "Tariff" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CCN" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
@@ -28613,7 +29595,7 @@ ADD INDEX "CCNCust" ON "Tariff"
   INDEX-FIELD "ValidFrom" DESCENDING 
 
 ADD INDEX "CustNum" ON "Tariff" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "CCN" ASCENDING 
@@ -28622,7 +29604,7 @@ ADD INDEX "CustNum" ON "Tariff"
   INDEX-FIELD "BDest" ASCENDING 
 
 ADD INDEX "CustNum_s" ON "Tariff" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "CustNum" ASCENDING 
   INDEX-FIELD "CCN" ASCENDING 
   INDEX-FIELD "ValidFrom" DESCENDING 
@@ -28630,7 +29612,7 @@ ADD INDEX "CustNum_s" ON "Tariff"
   INDEX-FIELD "BDest" ASCENDING 
 
 ADD INDEX "PriceList" ON "Tariff" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "PriceList" ASCENDING 
   INDEX-FIELD "CCN" ASCENDING 
@@ -28638,13 +29620,13 @@ ADD INDEX "PriceList" ON "Tariff"
   INDEX-FIELD "ValidFrom" DESCENDING 
 
 ADD INDEX "TariffNum" ON "Tariff" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "TariffNum" ASCENDING 
 
 ADD INDEX "TariffType" ON "Tariff" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "TariffType" ASCENDING 
 
@@ -28716,6 +29698,7 @@ ADD INDEX "TaxZone" ON "TaxZone"
   INDEX-FIELD "TaxZone" ASCENDING 
 
 ADD TABLE "TCC"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "Technical Call Case"
   DESCRIPTION "Technical CCN"
@@ -28914,7 +29897,7 @@ ADD FIELD "TCCPayer" OF "TCC" AS integer
   ORDER 201
 
 ADD INDEX "TCC" ON "TCC" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
@@ -28923,19 +29906,19 @@ ADD INDEX "TCC" ON "TCC"
   INDEX-FIELD "ValidTo" DESCENDING 
 
 ADD INDEX "BCC" ON "TCC" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "BCC" ASCENDING 
   INDEX-FIELD "ValidTo" DESCENDING 
 
 ADD INDEX "DialType" ON "TCC" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "DialType" ASCENDING 
   INDEX-FIELD "ErrorCode" ASCENDING 
 
 ADD INDEX "TCCName" ON "TCC" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "Brand" ASCENDING 
   INDEX-FIELD "TCCName" ASCENDING 
 
@@ -29027,6 +30010,7 @@ ADD INDEX "TCC" ON "TCCError"
   INDEX-FIELD "ValidTo" DESCENDING 
 
 ADD TABLE "TerminalConf"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "TerminalConf"
   DESCRIPTION "Terminal Configurations"
@@ -29084,6 +30068,7 @@ ADD INDEX "ValidTo" ON "TerminalConf"
   INDEX-FIELD "ValidTo" DESCENDING 
 
 ADD TABLE "TFConf"
+  MULTITENANT yes
   AREA "Sta_Data_128"
   LABEL "TFConf"
   DESCRIPTION "Terminal financial configuration values"
@@ -29164,17 +30149,18 @@ ADD FIELD "ValidTo" OF "TFConf" AS date
   ORDER 80
 
 ADD INDEX "TFConfID" ON "TFConf" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "TFConfId" ASCENDING 
 
 ADD INDEX "RVPercentage" ON "TFConf" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "RVPercentage" ASCENDING 
   INDEX-FIELD "ValidTo" DESCENDING 
 
 ADD TABLE "TMSCodes"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   LABEL "Selection Lists"
   DESCRIPTION "General selection list values in TMS application"
@@ -29266,7 +30252,7 @@ ADD FIELD "InUse" OF "TMSCodes" AS integer
   ORDER 80
 
 ADD INDEX "TableName" ON "TMSCodes" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "TableName" ASCENDING 
@@ -29274,11 +30260,12 @@ ADD INDEX "TableName" ON "TMSCodes"
   INDEX-FIELD "CodeValue" ASCENDING 
 
 ADD INDEX "CodeGroup" ON "TMSCodes" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "CodeGroup" ASCENDING 
   INDEX-FIELD "FieldName" ASCENDING 
 
 ADD TABLE "TMSPass"
+  MULTITENANT yes
   AREA "Sta_Data_32"
   LABEL "TMS Passwords"
   DESCRIPTION "TMS Passwords"
@@ -29334,7 +30321,7 @@ ADD FIELD "Creator" OF "TMSPass" AS character
   MANDATORY
 
 ADD INDEX "UserCode" ON "TMSPass" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "UserCode" ASCENDING 
@@ -29726,6 +30713,7 @@ ADD INDEX "RepName" ON "TMSReport"
   INDEX-FIELD "RepName" ASCENDING 
 
 ADD TABLE "TMSUser"
+  MULTITENANT yes
   AREA "Sta_Data_32"
   LABEL "Users"
   DESCRIPTION "Users"
@@ -29975,29 +30963,29 @@ ADD FIELD "AdminUser" OF "TMSUser" AS logical
   ORDER 250
 
 ADD INDEX "UserCode" ON "TMSUser" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "UserCode" ASCENDING ABBREVIATED 
 
 ADD INDEX "ForeignId" ON "TMSUser" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "ForeignId" ASCENDING 
   INDEX-FIELD "UserCode" ASCENDING 
   INDEX-FIELD "UserName" ASCENDING 
 
 ADD INDEX "UserGroup" ON "TMSUser" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   INDEX-FIELD "UserGroup" ASCENDING 
 
 ADD INDEX "UserName" ON "TMSUser" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "UserName" ASCENDING 
   INDEX-FIELD "UserCode" ASCENDING 
 
 ADD INDEX "UserNum" ON "TMSUser" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   INDEX-FIELD "UserNum" ASCENDING 
 
@@ -31132,6 +32120,7 @@ ADD INDEX "UGName" ON "UserGrp"
   INDEX-FIELD "UGName" ASCENDING 
 
 ADD TABLE "UserLimit"
+  MULTITENANT yes
   AREA "Sta_Data_64"
   LABEL "UserLimit"
   DESCRIPTION "User or usergroup limits"
@@ -31189,7 +32178,7 @@ ADD FIELD "LimitAmt" OF "UserLimit" AS decimal
   ORDER 50
 
 ADD INDEX "Limit" ON "UserLimit" 
-  AREA "Sta_Index_2"
+  AREA "Sta_Index_3"
   UNIQUE
   PRIMARY
   INDEX-FIELD "Brand" ASCENDING 
@@ -32790,82 +33779,7 @@ ADD INDEX "BankId" ON "xxyBank"
   INDEX-FIELD "BankId" ASCENDING 
   INDEX-FIELD "BankOffice" ASCENDING 
 
-UPDATE TABLE "BDest"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "BillItem"
-  BUFFER-POOL "Alternate"
-
-UPDATE INDEX "CustNum" OF "BillTarget"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "CustCat"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "Customer"
-  BUFFER-POOL "Alternate"
-
-UPDATE INDEX "AgrCust" OF "Customer"
-  BUFFER-POOL "Alternate"
-
-UPDATE INDEX "CustNum_s" OF "Customer"
-  BUFFER-POOL "Alternate"
-
-UPDATE INDEX "InvCust" OF "Customer"
-  BUFFER-POOL "Alternate"
-
-UPDATE INDEX "FFNum" OF "FFItem"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "InvSeq"
-  BUFFER-POOL "Alternate"
-
-UPDATE INDEX "InvSeq" OF "InvSeq"
-  BUFFER-POOL "Alternate"
-
-UPDATE INDEX "MsSeq" OF "InvSeq"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "IPRange"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "MServiceLimit"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "MXItem"
-  BUFFER-POOL "Alternate"
-
-UPDATE INDEX "MXSeq" OF "MXItem"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "PListConf"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "ProgLimit"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "Region"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "RepText"
-  BUFFER-POOL "Alternate"
-
-UPDATE INDEX "MSSeq" OF "SaldoCounter"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "ServiceLimit"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "ServiceLimitGroup"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "ServiceLimitTarget"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "SLGAnalyse"
-  BUFFER-POOL "Alternate"
-
-UPDATE TABLE "Tariff"
+UPDATE INDEX "CustNum" OF "BTarget_old"
   BUFFER-POOL "Alternate"
 
 UPDATE TABLE "VATCode"
@@ -32876,4 +33790,4 @@ PSC
 bufpool=yes
 cpstream=1252
 .
-0000669940
+0000690494

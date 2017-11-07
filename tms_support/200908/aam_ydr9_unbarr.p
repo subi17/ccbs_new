@@ -1,6 +1,6 @@
-{testpaa.i}
-katun  = "ari".
-{barrfunc.i}
+{Syst/testpaa.i}
+Syst.Var:katun = "ari".
+{Func/barrfunc.i}
 
 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
@@ -38,11 +38,11 @@ repeat:
    else if lcBarrStatus = "D_REST" then do:
 
      /* create barring request */
-     RUN barrengine (mobsub.MsSeq,
+     RUN Mm/barrengine.p (mobsub.MsSeq,
                      "UN" + lcBarrStatus,
                      "5",           /* source  */
                      "YDR-8",       /* creator */
-                     fMakeTS() + 0.0012, /* activate, 2min delay */
+                     Func.Common:mMakeTS() + 0.0012, /* activate, 2min delay */
                      "",                 /* SMS */
                      OUTPUT lcResult).
       put stream slog mobsub.cli " " lcBarrStatus " " lcResult skip.

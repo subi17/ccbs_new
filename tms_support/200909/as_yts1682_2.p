@@ -1,7 +1,7 @@
-{commpaa.i}
-katun = "anttis".
-gcBrand = "1".
-{msisdn.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
+{Func/msisdn.i}
 
 DEFINE VARIABLE lcClis AS CHARACTER NO-UNDO. 
 lcclis = "622005433 622498064 622521745 622538026".

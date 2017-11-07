@@ -3,8 +3,8 @@
    create a request for sms message 
 */
    
-{commali.i}
-{fcreatereq.i}
+{Syst/commali.i}
+{Func/fcreatereq.i}
 
 FUNCTION fSMSRequest RETURNS INTEGER
    (INPUT  iiMsSeq      AS INT,    /* subscription         */
@@ -22,7 +22,7 @@ FUNCTION fSMSRequest RETURNS INTEGER
 
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest(30,
                   idActStamp,

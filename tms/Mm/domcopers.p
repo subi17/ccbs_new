@@ -9,9 +9,9 @@
   Version ......: 
   ------------------------------------------------------------------ */
 
-{commali.i}
-{cparam2.i}
-{error_codes.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Rate/error_codes.i}
 
 DEF VAR logfile       AS CHAR NO-UNDO.
 

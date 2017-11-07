@@ -7,17 +7,18 @@
   Version ......: yoigo
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+{Syst/commpaa.i}
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 
-{tmsconst.i}
-{ftransdir.i}
-{cparam2.i}
-{eventlog.i}
-{barrfunc.i}
-{tmsconst.i}
-{tsformat.i}
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Func/barrfunc.i}
+{Syst/tmsconst.i}
+{Func/tsformat.i}
+{Func/multitenantfunc.i}
 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO.
@@ -38,6 +39,7 @@ DEFINE VARIABLE lcOutDir AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcConfDir AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE liNumOK AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liNumErr AS INTEGER NO-UNDO. 
+DEFINE VARIABLE lcTenant AS CHARACTER NO-UNDO. 
 
 /* field variables */
 DEFINE VARIABLE liMsSeq AS INT NO-UNDO. 
@@ -84,9 +86,15 @@ REPEAT:
    ASSIGN
       liNumErr = 0
       liNumOK = 0.
-   
+  
+   lcTenant = ENTRY(1,ENTRY(1,lcFileName,"_"),"-").
+   /* Set effective tenant based on file name. If not regocniced go next file
+   */
+   IF NOT fsetEffectiveTenantForAllDB(
+         fConvertBrandToTenant(lcTenant)) THEN NEXT.
+
    fBatchLog("START", lcInputFile).
-   lcLogFile = lcSpoolDir + "barring_status_" + ftsformat("yyyymmdd_HHMMss", fMakeTS()) + ".log".
+   lcLogFile = lcSpoolDir + lcTenant + "_barring_status_" + ftsformat("yyyymmdd_HHMMss", Func.Common:mMakeTS()) + ".log".
    OUTPUT STREAM sLog TO VALUE(lcLogFile) append.
 
    PUT STREAM sLog UNFORMATTED
@@ -161,12 +169,15 @@ PROCEDURE pSetBarring:
    IF MobSub.PayType THEN
       RETURN "ERROR:Subscription is prepaid".
 
+   IF MobSub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} /*17*/ THEN
+      RETURN "ERROR:No active mobile line".
+
    /* create barring request */
-   RUN barrengine.p (iiMsSeq,
+   RUN Mm/barrengine.p (iiMsSeq,
                    icBarringList,
                    {&REQUEST_SOURCE_SCRIPT}, /* source  */
                    "", /* creator */
-                   fMakeTS(), /* activate */
+                   Func.Common:mMakeTS(), /* activate */
                    "", /* SMS */
                    OUTPUT lcResult).
 
@@ -179,7 +190,7 @@ PROCEDURE pSetBarring:
       
       CREATE Memo.
       ASSIGN 
-         Memo.Brand     = gcBrand
+         Memo.Brand     = Syst.Var:gcBrand
          Memo.HostTable = "MobSub"
          Memo.KeyValue  = STRING(MobSub.MsSeq)
          Memo.CustNum   = MobSub.CustNum
@@ -189,7 +200,7 @@ PROCEDURE pSetBarring:
          Memo.MemoTitle = "Modified barring" 
          Memo.MemoText  = REPLACE(REPLACE(icBarringList,"=0","-released"),
                                   "=1","-applied")
-         Memo.CreStamp  = fMakeTS().
+         Memo.CreStamp  = Func.Common:mMakeTS().
       RETURN "OK".
    END.
    ELSE RETURN "ERROR:" + lcResult. 

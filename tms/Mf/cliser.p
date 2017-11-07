@@ -7,8 +7,8 @@
   MODIFIED .....: 
   VERSION ......: M15
   --------------------------------------------------------------------- */
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEF INPUT PARAM startCLI LIKE CLI.CLI          NO-UNDO.
 DEF INPUT PARAM endCLI   LIKE CLI.CLI          NO-UNDO.
@@ -81,7 +81,7 @@ ASSIGN
 
 /* Move CLIs to new customer */
 
-RUN climove.p(CLISER.CustNum,   /* from cust */
+RUN Mf/climove.p(CLISER.CustNum,   /* from cust */
               newcust,          /* to cust   */
               startcli,         /* from CLI  */
               endcli,           /* to CLI    */

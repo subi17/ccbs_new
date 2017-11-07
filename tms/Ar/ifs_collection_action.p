@@ -7,12 +7,11 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{ftransdir.i}
-{barrfunc.i}
-{transname.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/barrfunc.i}
+{Func/transname.i}
 
 DEF INPUT  PARAMETER icFile   AS CHAR NO-UNDO.
 DEF OUTPUT PARAMETER oiRead   AS INT  NO-UNDO. 
@@ -36,6 +35,7 @@ DEF VAR lcBarrPacket   AS CHAR NO-UNDO.
 DEF VAR lrActionID     AS RECID NO-UNDO.
 DEF VAR llLogWritten   AS LOG  NO-UNDO.
 DEF VAR lcDebitBarrings AS CHAR NO-UNDO. 
+DEF VAR lcCompanyID    AS CHAR NO-UNDO.
 
 DEF STREAM sRead.
 DEF STREAM sLog.
@@ -63,14 +63,14 @@ FUNCTION fError RETURNS LOGIC
 
    DO TRANS:
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
              ErrorLog.ActionID  = "COLLACTION"
              ErrorLog.TableName = "MobSub"
              ErrorLog.KeyValue  = STRING(liMsSeq)
              ErrorLog.ErrorChar = lcPlainFile
              ErrorLog.ErrorMsg  = lcReadLine + CHR(10) + icMessage
-             ErrorLog.UserCode  = katun.
-             ErrorLog.ActionTS  = fMakeTS().
+             ErrorLog.UserCode  = Syst.Var:katun.
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    
 END FUNCTION.
@@ -84,7 +84,7 @@ RUN pInitialize.
 
 /* check that there isn't already another run handling this file */
 IF CAN-FIND(FIRST ActionLog USE-INDEX TableName WHERE
-                  ActionLog.Brand        = gcBrand      AND    
+                  ActionLog.Brand        = Syst.Var:gcBrand      AND    
                   ActionLog.TableName    = "MobSub"     AND
                   ActionLog.KeyValue     = lcPlainFile  AND
                   ActionLog.ActionID     = "IFSCOLLECT" AND
@@ -94,14 +94,14 @@ THEN RETURN.
 DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = gcBrand   
+      ActionLog.Brand        = Syst.Var:gcBrand   
       ActionLog.TableName    = "MobSub"  
       ActionLog.KeyValue     = lcPlainFile
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.Var:katun
       ActionLog.ActionID     = "IFSCOLLECT"
       ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
       ActionLog.ActionStatus = 0.
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
       lrActionID             = RECID(ActionLog).
 END.
 
@@ -164,7 +164,7 @@ PROCEDURE pInitialize:
       lcTransDir     = fCParamC("IFSCollActionLogTrans") 
       lcArcDir       = fCParamC("IFSCollActionArc")
       lcDebitBarrings = fGetBarringsInGroup("Collections")
-      ldToday        = fMake2DT(TODAY,1)
+      ldToday        = Func.Common:mMake2DT(TODAY,1)
       llLogWritten   = FALSE.
 
    IF lcLogFile = ? OR lcLogFile = "" THEN 
@@ -172,7 +172,7 @@ PROCEDURE pInitialize:
  
    liSeq = 1.
    FOR EACH ActionLog NO-LOCK WHERE
-            ActionLog.Brand    = gcBrand      AND
+            ActionLog.Brand    = Syst.Var:gcBrand      AND
             ActionLog.ActionID = "IFSCOLLECT" AND
             ActionLog.ActionTS >= ldToday:
       liSeq = liSeq + 1.
@@ -224,6 +224,7 @@ PROCEDURE pReadEvents:
          lcActionDate = SUBSTRING(lcReadLine,63,8)           
          lcDebitDate  = SUBSTRING(lcReadLine,71,8)   
          lcAmount     = SUBSTRING(lcReadLine,79,16) 
+         lcCompanyID  = SUBSTRING(lcReadLine,99,4) 
          lcBarrPacket = ""
          NO-ERROR.
       
@@ -317,7 +318,8 @@ PROCEDURE pSetBarring:
    FIND MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
    IF NOT AVAILABLE MobSub THEN 
       RETURN "ERROR:Subscription not found".
-  
+   ELSE IF MobSub.msStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN
+      RETURN "ERROR:Not allowed for fixed only".
    ASSIGN
       /* check current barring (or pending) */
       llOngoing  = fCheckBarrStatus(iiMsSeq, OUTPUT lcResult, OUTPUT lrIdle )
@@ -364,11 +366,11 @@ PROCEDURE pSetBarring:
    END.
      
    /* create barring request */
-   RUN barrengine.p(iiMsSeq,
+   RUN Mm/barrengine.p(iiMsSeq,
                    icBarrCommand,
                    "9",                /* source  */
                    "Collection",       /* creator */
-                   fMakeTS() + 0.0012, /* activate, 2min delay */
+                   Func.Common:mMakeTS() + 0.0012, /* activate, 2min delay */
                    "",                 /* SMS */
                    OUTPUT lcResult).
 
@@ -386,7 +388,7 @@ PROCEDURE pSetBarring:
       END.   
 
       lcBarring = ENTRY(1,icBarrCommand,"=").
-      lcBarrTrans = fGetItemName(gcBrand,
+      lcBarrTrans = fGetItemName(Syst.Var:gcBrand,
                                  "BarringCode",
                                  lcBarring,
                                  5,
@@ -396,7 +398,7 @@ PROCEDURE pSetBarring:
 
       CREATE Memo.
       ASSIGN 
-         Memo.Brand     = gcBrand
+         Memo.Brand     = Syst.Var:gcBrand
          Memo.HostTable = "MobSub"
          Memo.KeyValue  = STRING(MobSub.MsSeq)
          Memo.CustNum   = MobSub.CustNum
@@ -408,7 +410,7 @@ PROCEDURE pSetBarring:
                          (IF icSetBarring EQ "UN"
                           THEN " released"
                           ELSE " applied")
-         Memo.CreStamp  = fMakeTS().
+         Memo.CreStamp  = Func.Common:mMakeTS().
       
       RETURN "OK".
    END.             

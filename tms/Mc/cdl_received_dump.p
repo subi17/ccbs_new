@@ -7,12 +7,12 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{dumpfile_run.i}
-{create_eventlog.i}
-{tmsconst.i}
-{cparam2.i}
-{smsmessage.i}
+{Syst/commali.i}
+{Syst/dumpfile_run.i}
+{Func/create_eventlog.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Func/smsmessage.i}
 
 DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -87,7 +87,7 @@ FOR EACH SMSMessage NO-LOCK WHERE
          CASE lcField:
          WHEN "#CONTRACT_ID" THEN DO:
             FIND FIRST Order NO-LOCK WHERE
-                       Order.Brand = gcBrand AND
+                       Order.Brand = Syst.Var:gcBrand AND
                        Order.OrderID = SMSMessage.OrderID NO-ERROR.
             IF AVAIL Order AND SMSMessage.OrderID > 0 THEN
                lcValue = Order.ContractId.

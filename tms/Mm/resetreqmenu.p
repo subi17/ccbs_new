@@ -21,11 +21,11 @@
 
 &GLOBAL-DEFINE BrTable MsRequest
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'OrdStat'}
-{msisdn.i}
-{msreqfunc.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'OrdStat'}
+{Func/msisdn.i}
+{Func/msreqfunc.i}
 
 DEF INPUT  PARAMETER iiMsRequest  AS INT  NO-UNDO.
 
@@ -51,10 +51,10 @@ END.
 DO WHILE TRUE:
 
    ASSIGN 
-      ufk    = 0 
-      ufk[8] = 8 
-      ehto   = 3. 
-   RUN ufkey. 
+      Syst.Var:ufk    = 0 
+      Syst.Var:ufk[8] = 8 
+      Syst.Var:ehto   = 3. 
+   RUN Syst/ufkey.p. 
 
    PAUSE 0.
    DISPLAY
@@ -266,7 +266,7 @@ DO WHILE TRUE:
             DEFINE VARIABLE msisdn-recid AS RECID NO-UNDO.
             
             FIND FIRST MSISDN-back NO-LOCK WHERE
-               MSISDN-back.Brand = gcBrand AND
+               MSISDN-back.Brand = Syst.Var:gcBrand AND
                MSISDN-back.CLI   = MsRequest.ReqCParam2 USE-INDEX CLI.
             IF MSISDN-back.StatusCode = 27 THEN DO:
                msisdn-recid = recid(msisdn-back).

@@ -7,8 +7,8 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEF INPUT PARAMETER iiCustNum   AS INT NO-UNDO.
 
@@ -82,7 +82,7 @@ DEF VAR lcAllowedDSS2SubsType   AS CHAR        NO-UNDO.
 DEF VAR lcExcludeBundles        AS CHAR        NO-UNDO.
 DEF VAR lcFirstMonthUsageBasedBundles AS CHAR  NO-UNDO.
 
-{dss_bundle_first_month_fee.i}
+{Mm/dss_bundle_first_month_fee.i}
 
 form
     ttDSSInfo.CLI           FORMAT "X(9)"  LABEL "MSISDN"
@@ -96,9 +96,9 @@ form
     ttDSSInfo.Priority      FORMAT ">>9"  LABEL "Pr."
     ttDSSInfo.BundleFeeCalc FORMAT "Yes/No" LABEL "PMF" 
 WITH ROW FrmRow width 78 centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " +
-       " DSS Billing Information "  + string(pvm,"99-99-99") + " "
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " +
+       " DSS Billing Information "  + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form
@@ -117,12 +117,12 @@ form
     ttDSSInfo.BundleFeeCalc COLON 20                  LABEL "First Month Fee"
     ttDSSInfo.BundleFee     COLON 20                  LABEL "Bundle Fee"
 WITH  OVERLAY ROW 3 width 50 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 RUN local-find-first.
@@ -191,28 +191,28 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-           ufk    = 0
-           ufk[8] = 8
-           ehto   = 3 
+           Syst.Var:ufk    = 0
+           Syst.Var:ufk[8] = 8
+           Syst.Var:ehto   = 3 
            ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW ttDSSInfo.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) ttDSSInfo.CLI WITH FRAME sel.
+         CHOOSE ROW ttDSSInfo.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) ttDSSInfo.CLI WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW ttDSSInfo.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) ttDSSInfo.CLI WITH FRAME sel.
+         CHOOSE ROW ttDSSInfo.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) ttDSSInfo.CLI WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -220,10 +220,10 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -241,7 +241,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -266,7 +266,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -292,7 +292,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ttDSSInfo WHERE ROWID(ttDSSInfo) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -316,7 +316,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -330,13 +330,13 @@ REPEAT WITH FRAME sel:
        END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(FALSE).
 
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 5. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE Syst.Var:ehto = 5. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        /* IF  User Wanted TO Cancel this Change TRANSACTION */
        IF LOOKUP(KEYFUNCTION(LASTKEY),"endkey,end-error") > 0 OR
@@ -349,25 +349,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"HOME,H") > 0 THEN DO : /* FIRST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"HOME,H") > 0 THEN DO : /* FIRST record */
         RUN local-find-FIRST.
         ASSIGN Memory = ROWID(ttDSSInfo) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = ROWID(ttDSSInfo) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE local-find-this:
 
@@ -437,13 +437,13 @@ PROCEDURE local-UPDATE-record:
 
      RUN local-find-others.
 
-     ASSIGN lcMobSubActTS  = fTS2HMS(ttDSSInfo.ActTS)
-            lcBundleFromTS = fTS2HMS(ttDSSInfo.BundleFromTS).
+     ASSIGN lcMobSubActTS  = Func.Common:mTS2HMS(ttDSSInfo.ActTS)
+            lcBundleFromTS = Func.Common:mTS2HMS(ttDSSInfo.BundleFromTS).
 
      IF ttDSSInfo.BundleEndTS = 99999999.99999 THEN
-        lcBundleENDTS  = fTS2HMS(20491231.86399).
+        lcBundleENDTS  = Func.Common:mTS2HMS(20491231.86399).
      ELSE
-        lcBundleENDTS  = fTS2HMS(ttDSSInfo.BundleEndTS).
+        lcBundleENDTS  = Func.Common:mTS2HMS(ttDSSInfo.BundleEndTS).
 
      DISP ttDSSInfo.CLI
           ttDSSInfo.CLIType
@@ -462,12 +462,12 @@ PROCEDURE local-UPDATE-record:
      WITH FRAME lis.
 
      ASSIGN 
-         ehto = 0
-         ufk  = 0
-         ufk[8] = 8.
-     RUN ufkey.
+         Syst.Var:ehto = 0
+         Syst.Var:ufk  = 0
+         Syst.Var:ufk[8] = 8.
+     RUN Syst/ufkey.p.
 
-     IF toimi = 8 THEN LEAVE.
+     IF Syst.Var:toimi = 8 THEN LEAVE.
 
   END.
 
@@ -499,9 +499,9 @@ PROCEDURE pGetDSSBillingInfo:
 
    ASSIGN liPeriod     = YEAR(TODAY) * 100 + MONTH(TODAY)
           ldFromDate   = DATE(MONTH(today), 1, YEAR(today))
-          ldToDate     = fLastDayOfMonth(TODAY)
-          ldPeriodFrom = fMake2Dt(ldFromDate,0)
-          ldPeriodTo   = fMake2Dt(ldToDate,86399).
+          ldToDate     = Func.Common:mLastDayOfMonth(TODAY)
+          ldPeriodFrom = Func.Common:mMake2DT(ldFromDate,0)
+          ldPeriodTo   = Func.Common:mMake2DT(ldToDate,86399).
 
    /* Check wheather customer is linked with DSS service or not */
    lcBundleId = fGetActiveDSSId(Customer.CustNum,ldPeriodTo).
@@ -535,7 +535,7 @@ PROCEDURE pGetDSSBillingInfo:
          FIRST bServiceLimit NO-LOCK USE-INDEX SlSeq WHERE
                bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
          FIRST bDayCampaign NO-LOCK WHERE
-               bDayCampaign.Brand = gcBrand AND
+               bDayCampaign.Brand = Syst.Var:gcBrand AND
                bDayCampaign.DCEvent = bServiceLimit.GroupCode:
 
          IF CAN-FIND(FIRST ttDSSInfo WHERE
@@ -672,7 +672,7 @@ PROCEDURE pGetDSSBillingInfo:
          ELSE IF LOOKUP(bDayCampaign.DCEvent,{&DSS_BUNDLES}) > 0 THEN DO:
             IF bMServiceLimit.EndTS = ldPeriodTo AND
                CAN-FIND (FIRST MsRequest NO-LOCK WHERE
-                         MsRequest.Brand = gcBrand           AND
+                         MsRequest.Brand = Syst.Var:gcBrand           AND
                          MsRequest.ReqType = {&REQTYPE_DSS}  AND
                          MsRequest.Custnum = ttMsOwner.Custnum AND
                          MsRequest.ReqCParam1 = "DELETE"     AND
@@ -727,7 +727,7 @@ PROCEDURE pGetDSSBillingInfo:
             /* for each used because there might exist  
                same type of fixed fee in the past */
             FOR EACH FixedFee NO-LOCK USE-INDEX HostTable WHERE
-                     FixedFee.Brand     = gcBrand AND
+                     FixedFee.Brand     = Syst.Var:gcBrand AND
                      FixedFee.HostTable = "MobSub" AND
                      FixedFee.KeyValue  = STRING(ttDSSInfo.MsSeq) AND
                      FixedFee.FeeModel  = bDayCampaign.FeeModel AND
@@ -766,10 +766,10 @@ PROCEDURE pGetDSSBillingInfo:
              ldeDataAllocated = 0.
 
       FOR FIRST DayCampaign NO-LOCK WHERE
-                DayCampaign.Brand   = gcBrand AND
+                DayCampaign.Brand   = Syst.Var:gcBrand AND
                 DayCampaign.DCEvent = ttDSSInfo.BundleId,
           FIRST FixedFee NO-LOCK USE-INDEX HostTable WHERE
-                FixedFee.Brand     = gcBrand AND
+                FixedFee.Brand     = Syst.Var:gcBrand AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue  = STRING(ttDSSInfo.MsSeq) AND
                 FixedFee.FeeModel  = DayCampaign.FeeModel AND
@@ -778,7 +778,7 @@ PROCEDURE pGetDSSBillingInfo:
                 FixedFee.BegDate  <= ldToDate   AND
                 FixedFee.EndPer   >= liPeriod,
           FIRST FMItem NO-LOCK WHERE
-                FMItem.Brand     = gcBrand AND
+                FMItem.Brand     = Syst.Var:gcBrand AND
                 FMItem.FeeModel  = FixedFee.FeeModel AND
                 FMItem.FromDate <= FixedFee.BegDate  AND
                 FMItem.ToDate   >= FixedFee.BegDate:

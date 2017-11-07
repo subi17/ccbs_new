@@ -10,9 +10,9 @@
 */
 
 
-{commali.i}
-{fcustbal.i}
-{finvamt.i}
+{Syst/commali.i}
+{Func/fcustbal.i}
+{Func/finvamt.i}
 
 DEF INPUT PARAMETER iInv AS INT NO-UNDO.
 

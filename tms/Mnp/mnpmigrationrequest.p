@@ -8,18 +8,17 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{testpaa.i}
-katun = "anttis".
-{timestamp.i}
-{mnpmessages.i}
-{mnp.i}
+{Syst/testpaa.i}
+Syst.Var:katun = "anttis".
+{Mnp/mnpmessages.i}
+{Mnp/mnp.i}
 
 DEFINE VARIABLE lcXML AS CHAR NO-UNDO. /* xml should be < 32000 chars */
 DEFINE VARIABLE liSeq         AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcFormRequest AS CHARACTER NO-UNDO.
      
-ehto = 10.
-run ufkey.p.
+Syst.Var:ehto = 10.
+RUN Syst/ufkey.p.
 
 CREATE ttMigrationRequest.
 
@@ -38,14 +37,14 @@ ASSIGN
 
 CREATE MNPProcess.
 ASSIGN 
-   MNPProcess.CreatedTS   = fMakeTS()
+   MNPProcess.CreatedTS   = Func.Common:mMakeTS()
    MNPProcess.MNPSeq      = next-value(m2mrequest)
    MNPProcess.FormRequest = lcFormRequest
    MNPProcess.OrderId     = 0
    MNPProcess.StatusCode  = 0
-   MNPProcess.Brand       = gcBrand
+   MNPProcess.Brand       = Syst.Var:gcBrand
    MNPProcess.MNPType     = 5
-   MNPProcess.UserCode    = katun
+   MNPProcess.UserCode    = Syst.Var:katun
    MNPProcess.UpdateTS    = MNPProcess.CreatedTS.
 
 IF fSendMigrationRequest(INPUT TABLE ttMigrationRequest BY-REFERENCE) THEN

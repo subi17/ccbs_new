@@ -12,9 +12,9 @@
   VERSION ......: M15
   ------------------------------------------------------------------ */
 
-{cdrconst.i}
-{TMSQueue.i}
-{fcustcnt.i}
+{Mf/cdrconst.i}
+{Mf/TMSQueue.i}
+{Func/fcustcnt.i}
 
 def var mobpref  as c  no-undo.
 def var deldbl   as i  no-undo.
@@ -98,7 +98,7 @@ function fDelDouble returns integer
                      0 - (double.GrossPrice - double.DiscValue)).
 
             find first invgroup where   
-                       invgroup.brand    = gcBrand AND
+                       invgroup.brand    = Syst.Var:gcBrand AND
                        invgroup.InvGroup = Customer.InvGroup
             no-lock no-error.
 

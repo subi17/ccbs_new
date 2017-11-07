@@ -8,8 +8,8 @@
 
 &GLOBAL-DEFINE FCREDITVALID_I YES
   
-{finvbal.i}
-{fparse.i}
+{Func/finvbal.i}
+{Func/fparse.i}
 
 FUNCTION fCheckCreditNoteRequest RETURNS CHARACTER 
          (INPUT iiCustNum AS INT,
@@ -18,7 +18,7 @@ FUNCTION fCheckCreditNoteRequest RETURNS CHARACTER
     DEFINE VARIABLE lcReturn AS CHARACTER NO-UNDO INITIAL "". 
    /* already in process (also status 3 prevents a new request) */
    IF CAN-FIND(FIRST MsRequest USE-INDEX CustNum WHERE
-                     MsRequest.Brand      = gcBrand         AND
+                     MsRequest.Brand      = Syst.Var:gcBrand         AND
                      MsRequest.ReqType    = 22              AND
                      MsRequest.CustNum    = iiCustNum AND
                      MsRequest.ReqIParam1 = iiInvNum  AND

@@ -8,8 +8,8 @@
   Version ......:
   ------------------------------------------------------------------ */
 
-{commali.i}  
-{mobsub1.i}
+{Syst/commali.i}  
+{Mm/mobsub1.i}
 
 DEF VAR InvGroup  LIKE Customer.InvGroup NO-UNDO.
 DEF VAR CustNum1  AS I   no-undo format "zzzzzz9".
@@ -40,8 +40,8 @@ HELP "Subscription Status, 0 for all" StatName SKIP
 "                Detailed information .:" details SKIP
 SKIP(5)
 WITH
-   width 80 OVERLAY COLOR value(cfc) TITLE COLOR value(ctc)
-   " " + ynimi + " SUBSCRIPTION REPORT " + string(pvm,"99-99-99") + " "
+   width 80 OVERLAY COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc)
+   " " + Syst.Var:ynimi + " SUBSCRIPTION REPORT " + string(TODAY,"99-99-99") + " "
    NO-LABELS FRAME start.
 
 ASSIGN 
@@ -51,11 +51,11 @@ ASSIGN
    actdate1 = date(month(actdate2),1,year(actdate2)).
 
 
-cfc = "sel". RUN ufcolor.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
 
 CRIT:
 repeat WITH FRAME start:
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE
       InvGroup
@@ -68,7 +68,7 @@ repeat WITH FRAME start:
       details
    WITH FRAME start EDITING.
       READKEY.
-      IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO:
+      IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
          PAUSE 0.
          if frame-field = "CustNum1" THEN DO:
             ASSIGN FRAME start CustNum1.
@@ -86,7 +86,7 @@ repeat WITH FRAME start:
             ASSIGN CLIType.
             IF CLIType NE "" THEN DO:
                FIND CLIType WHERE 
-                    Clitype.Brand   = gcBrand AND 
+                    Clitype.Brand   = Syst.Var:gcBrand AND 
                     CLIType.CLIType = CLIType NO-LOCK NO-ERROR.
                IF NOT AVAIL CLIType THEN DO:
                   MESSAGE "Unknown CLIType !".
@@ -112,13 +112,13 @@ repeat WITH FRAME start:
 
 task:
    repeat WITH FRAME start:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
-      IF toimi = 1 THEN NEXT  CRIT.
-      IF toimi = 8 THEN LEAVE CRIT.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
+      RUN Syst/ufkey.p.
+      IF Syst.Var:toimi = 1 THEN NEXT  CRIT.
+      IF Syst.Var:toimi = 8 THEN LEAVE CRIT.
 
-      IF toimi = 5 THEN DO:
-         RUN mobsubreppr.p(
+      IF Syst.Var:toimi = 5 THEN DO:
+         RUN Mm/mobsubreppr.p(
             InvGroup,
             CustNum1,
             CustNum2,

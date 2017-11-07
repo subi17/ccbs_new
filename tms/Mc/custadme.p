@@ -8,8 +8,8 @@
   Version ......: M15
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO.
                                  
@@ -21,8 +21,7 @@ DEF VAR liInvType AS INT                           NO-UNDO.
 DO FOR Customer:
    FIND Customer WHERE Customer.CustNum = iiCustNum NO-LOCK.
    lcName = STRING(Customer.CustNum) + " " +
-            DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                             BUFFER Customer).
+            Func.Common:mDispCustName(BUFFER Customer).
 END. 
 
 /* invoice type to be created */
@@ -32,7 +31,7 @@ IF liInvType = 0 OR liInvType = ? THEN liInvType = 3.
 PAUSE 0.
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN ufkey. 
+   ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 3. RUN Syst/ufkey.p. 
 
       DISPLAY
 
@@ -52,24 +51,24 @@ DO WHILE TRUE:
    IF LOOKUP(KEYLABEL(LASTKEY),"x,F8") > 0  THEN LEAVE.
 
    ELSE IF FRAME-INDEX = 1 THEN DO:
-      RUN tariff(0,0,"",iiCustNum,"",0). 
+      RUN Mc/tariff.p(0,0,"",iiCustNum,"",0). 
    END.               
 
    ELSE IF FRAME-INDEX EQ 2 THEN DO:
-      RUN contract(iiCustNum,
+      RUN Mc/contract.p(iiCustNum,
                    "").
    END.
 
    ELSE IF FRAME-INDEX EQ 3 THEN DO:
-      RUN invotxt("Customer",iiCustNum).
+      RUN Mc/invotxt.p("Customer",iiCustNum).
    END.
 
    ELSE IF FRAME-INDEX EQ 4 THEN DO:
-      RUN nncgme2(iiCustNum).
+      RUN Mc/nncgme2.p(iiCustNum).
    END.
 
    ELSE IF FRAME-INDEX EQ 5 THEN DO:
-      RUN conlist ("",
+      RUN Ar/conlist.p ("",
                    ?,
                    iiCustNum).
    END. 

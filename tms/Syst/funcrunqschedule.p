@@ -7,24 +7,23 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'FuncRunQSchedule'}
-{eventval.i}
-{timestamp.i}
-{tmsconst.i}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'FuncRunQSchedule'}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhFuncRunQSchedule AS HANDLE NO-UNDO.
    lhFuncRunQSchedule = BUFFER FuncRunQSchedule:HANDLE.
    RUN StarEventInitialize(lhFuncRunQSchedule).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhFuncRunQSchedule).
+      RUN Mc/eventview2.p(lhFuncRunQSchedule).
    END.
 
 END.
@@ -69,8 +68,8 @@ FORM
     FuncRunQSchedule.RunState FORMAT "X(13)" COLUMN-LABEL "Status"
     lcDoneTime                FORMAT "X(19)" COLUMN-LABEL "Done"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) 
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) 
        " SCHEDULING QUEUE " + STRING(iiFRQueueID) + " "
     FRAME sel.
 
@@ -96,8 +95,8 @@ FORM
        FORMAT "X(19)" LABEL "Done" 
        FuncRunQSchedule.DoneTS NO-LABEL SKIP
 WITH  OVERLAY ROW 3 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -111,7 +110,7 @@ IF NOT AVAILABLE FuncRunQueue THEN DO:
 END.
 lcQueueDesc = FuncRunQueue.QueueDesc.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 RUN local-Find-First.
@@ -139,8 +138,8 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a FuncRunQSchedule  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
@@ -148,7 +147,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis ALL NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANS WITH FRAME lis:
 
@@ -174,7 +173,7 @@ REPEAT WITH FRAME sel:
            UNDO add-row, LEAVE add-row.
 
            FuncRunQSchedule.RunState = "Scheduled".
-           RUN funcrunqsparam_initialize.p (FuncRunQSchedule.FRQScheduleID).
+           RUN Syst/funcrunqsparam_initialize.p (FuncRunQSchedule.FRQScheduleID).
 
            RUN pInvoiceTypeParameters.
            
@@ -247,34 +246,34 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk   = 0
-        ufk[5] = (IF lcRight = "RW" AND FuncRunQueue.Active THEN 5 ELSE 0)  
-        ufk[6] = (IF lcRight = "RW" AND FuncRunQueue.Active THEN 4 ELSE 0)  
-        ufk[8]= 8 
-        ehto  = 3 
+        Syst.Var:ufk   = 0
+        Syst.Var:ufk[5] = (IF lcRight = "RW" AND FuncRunQueue.Active THEN 5 ELSE 0)  
+        Syst.Var:ufk[6] = (IF lcRight = "RW" AND FuncRunQueue.Active THEN 4 ELSE 0)  
+        Syst.Var:ufk[8]= 8 
+        Syst.Var:ehto  = 3 
         ufkey = FALSE.
         
         /* used as help */
-        IF gcHelpParam > "" THEN ASSIGN
-           ufk[5] = 11
-           ufk[6] = 0
-           ufk[7] = 0.
+        IF Syst.Var:gcHelpParam > "" THEN ASSIGN
+           Syst.Var:ufk[5] = 11
+           Syst.Var:ufk[6] = 0
+           Syst.Var:ufk[7] = 0.
          
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW FuncRunQSchedule.FRQScheduleID ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW FuncRunQSchedule.FRQScheduleID {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) FuncRunQSchedule.FRQScheduleID 
+        COLOR DISPLAY VALUE(Syst.Var:ccc) FuncRunQSchedule.FRQScheduleID 
            WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -282,10 +281,10 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -303,7 +302,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -328,7 +327,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -354,7 +353,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND FuncRunQSchedule WHERE recid(FuncRunQSchedule) = Memory 
            NO-LOCK NO-ERROR.
@@ -380,7 +379,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */       
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -395,8 +394,8 @@ REPEAT WITH FRAME sel:
        END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0 THEN DO:  /* add */
-        IF gcHelpParam > "" THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND Syst.Var:ufk[5] > 0 THEN DO:  /* add */
+        IF Syst.Var:gcHelpParam > "" THEN DO:
            xRecid = rtab[FRAME-LINE].
            LEAVE LOOP.
         END.
@@ -407,7 +406,7 @@ REPEAT WITH FRAME sel:
         END.    
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0 
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND Syst.Var:ufk[6] > 0 
      THEN DO TRANS:  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
@@ -419,7 +418,7 @@ REPEAT WITH FRAME sel:
        END.
        
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
           FuncRunQSchedule.FRQScheduleID
           lcStartTime
           FuncRunQSchedule.RunState.
@@ -443,7 +442,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N)?" UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
           FuncRunQSchedule.FRQScheduleID
           lcStartTime
           FuncRunQSchedule.RunState.
@@ -472,21 +471,21 @@ REPEAT WITH FRAME sel:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANS
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(FALSE).
 
-       IF gcHelpParam > "" THEN DO:
+       IF Syst.Var:gcHelpParam > "" THEN DO:
           xRecid = rtab[FRAME-LINE (sel)].
           LEAVE LOOP.
        END.
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhFuncRunQSchedule).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -502,28 +501,28 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(FuncRunQSchedule) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(FuncRunQSchedule) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
-ehto = 4.
-RUN ufkey.
+Syst.Var:ehto = 4.
+RUN Syst/ufkey.p.
 
 fCleanEventObjects().
 
@@ -583,9 +582,9 @@ PROCEDURE local-find-others.
        lcDoneTime = "".
        
     IF FuncRunQSchedule.StartTS > 0 THEN 
-       lcStartTime = fTS2HMS(FuncRunQSchedule.StartTS).
+       lcStartTime = Func.Common:mTS2HMS(FuncRunQSchedule.StartTS).
     IF FuncRunQSchedule.DoneTS > 0 THEN 
-       lcDoneTime = fTS2HMS(FuncRunQSchedule.DoneTS).
+       lcDoneTime = Func.Common:mTS2HMS(FuncRunQSchedule.DoneTS).
 
 END PROCEDURE.
 
@@ -604,7 +603,7 @@ PROCEDURE local-UPDATE-record:
          lcUpdStartTime = "".
          
       IF FuncRunQSchedule.StartTS > 0 THEN DO:
-         fSplitTS(FuncRunQSchedule.StartTS,
+         Func.Common:mSplitTS(FuncRunQSchedule.StartTS,
                   OUTPUT ldaUpdStartDate,
                   OUTPUT liTime).
          lcUpdStartTime = SUBSTRING(STRING(liTime,"hh:mm:ss"),1,5).
@@ -625,32 +624,32 @@ PROCEDURE local-UPDATE-record:
 
       IF NOT NEW FuncRunQSchedule THEN DO:
          ASSIGN 
-            ufk    = 0
-            ufk[1] = 7    WHEN FuncRunQSchedule.RunState = "Scheduled"
-            ufk[2] = 1125
-            ufk[3] = 1181
-            ufk[4] = 1180
+            Syst.Var:ufk    = 0
+            Syst.Var:ufk[1] = 7    WHEN FuncRunQSchedule.RunState = "Scheduled"
+            Syst.Var:ufk[2] = 1125
+            Syst.Var:ufk[3] = 1181
+            Syst.Var:ufk[4] = 1180
             /*
-            ufk[5] = 1189 WHEN FuncRunQSchedule.RunState = "Running"
-            ufk[5] = 1190 WHEN FuncRunQSchedule.RunState = "Paused"
+            Syst.Var:ufk[5] = 1189 WHEN FuncRunQSchedule.RunState = "Running"
+            Syst.Var:ufk[5] = 1190 WHEN FuncRunQSchedule.RunState = "Paused"
             */
-            ufk[6] = 1188 WHEN LOOKUP(FuncRunQSchedule.RunState, 
+            Syst.Var:ufk[6] = 1188 WHEN LOOKUP(FuncRunQSchedule.RunState, 
                                       "Running,Paused") > 0
-            ufk[8] = 8
-            ehto   = 0.
+            Syst.Var:ufk[8] = 8
+            Syst.Var:ehto   = 0.
          
-         RUN ufkey.
+         RUN Syst/ufkey.p.
       END.
-      ELSE toimi = 1.
+      ELSE Syst.Var:toimi = 1.
       
-      IF toimi = 1 THEN DO:
+      IF Syst.Var:toimi = 1 THEN DO:
 
          UpdateField:
          REPEAT TRANS WITH FRAME lis ON ENDKEY UNDO, LEAVE:
                 
             FIND CURRENT FuncRunQSchedule EXCLUSIVE-LOCK.
-            ehto = 9.
-            RUN ufkey.
+            Syst.Var:ehto = 9.
+            RUN Syst/ufkey.p.
          
             lcOldMode = FuncRunQSchedule.RunMode.
              
@@ -662,7 +661,7 @@ PROCEDURE local-UPDATE-record:
  
                READKEY.
 
-               IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN 
+               IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN 
                DO WITH FRAME lis:
                   PAUSE 0.
                   
@@ -742,7 +741,7 @@ PROCEDURE local-UPDATE-record:
                IF NUM-ENTRIES(INPUT lcUpdStartTime,":") > 1 THEN 
                   liTime = liTime + 
                            INTEGER(ENTRY(2,INPUT lcUpdStartTime,":")) * 60.
-               FuncRunQSchedule.StartTS = fMake2DT(ldaUpdStartDate,     
+               FuncRunQSchedule.StartTS = Func.Common:mMake2DT(ldaUpdStartDate,     
                                               liTime).
             END.
             
@@ -754,22 +753,22 @@ PROCEDURE local-UPDATE-record:
             RUN pInvoiceTypeParameters.
       END.
 
-      ELSE IF toimi = 2 THEN 
-         RUN errorlog.p ("FuncRunQSchedule",
+      ELSE IF Syst.Var:toimi = 2 THEN 
+         RUN Mc/errorlog.p ("FuncRunQSchedule",
                          STRING(FuncRunQSchedule.FRQScheduleID),
                          "").
 
-      ELSE IF toimi = 3 THEN DO:
-         RUN funcrunexec.p (0,FuncRunQSchedule.FRQScheduleID).
+      ELSE IF Syst.Var:toimi = 3 THEN DO:
+         RUN Syst/funcrunexec.p (0,FuncRunQSchedule.FRQScheduleID).
          IF RETURN-VALUE = "Updated" THEN 
             LEAVE. 
       END.
       
-      ELSE IF toimi = 4 THEN DO:
-         RUN funcrunqsparam.p (FuncRunQSchedule.FRQScheduleID).
+      ELSE IF Syst.Var:toimi = 4 THEN DO:
+         RUN Syst/funcrunqsparam.p (FuncRunQSchedule.FRQScheduleID).
       END.
 
-      ELSE IF toimi = 5 THEN DO:
+      ELSE IF Syst.Var:toimi = 5 THEN DO:
          RUN pUpdateStatus(FuncRunQSchedule.FRQScheduleID,
                            IF FuncRunQSchedule.RunState = "Paused"
                            THEN "Running"
@@ -778,14 +777,14 @@ PROCEDURE local-UPDATE-record:
          IF i > 0 THEN LEAVE.                  
       END.
       
-      ELSE IF toimi = 6 THEN DO:
+      ELSE IF Syst.Var:toimi = 6 THEN DO:
          RUN pUpdateStatus(FuncRunQSchedule.FRQScheduleID,
                            "Cancelled",
                            OUTPUT i).
          IF i > 0 THEN LEAVE.                  
       END.
       
-      ELSE IF toimi = 8 THEN LEAVE. 
+      ELSE IF Syst.Var:toimi = 8 THEN LEAVE. 
    END.
    
 END PROCEDURE.
@@ -894,7 +893,7 @@ PROCEDURE pUpdateStatus:
             CREATE FuncRunExecLog.
             ASSIGN 
                FuncRunExecLog.FRExecID    = FuncRunExec.FRExecID
-               FuncRunExecLog.StatusStamp = fMakeTS()
+               FuncRunExecLog.StatusStamp = Func.Common:mMakeTS()
                FuncRunExecLog.FRStatus    = FuncRunExec.RunState.
                
             IF lcChangeState NE "Initialized" THEN 
@@ -912,21 +911,21 @@ PROCEDURE pUpdateStatus:
          FIND CURRENT FuncRunQSchedule EXCLUSIVE-LOCK.
          ASSIGN 
             FuncRunQSchedule.RunState = lcNewState
-            FuncRunQSchedule.DoneTS   = fMakeTS().
+            FuncRunQSchedule.DoneTS   = Func.Common:mMakeTS().
          
          IF lcNewState = "Cancelled" THEN DO:   
             CREATE ErrorLog.
             ASSIGN 
-               ErrorLog.Brand     = gcBrand
+               ErrorLog.Brand     = Syst.Var:gcBrand
                ErrorLog.ActionID  = "FRQUEUERUN" + STRING(iiFRQScheduleID)
                ErrorLog.TableName = "FuncRunQSchedule"
                ErrorLog.KeyValue  = STRING(iiFRQScheduleID)
                ErrorLog.ErrorMsg  = "Queue run stopped manually"
-               ErrorLog.UserCode  = katun.
-               ErrorLog.ActionTS  = fMakeTS().
+               ErrorLog.UserCode  = Syst.Var:katun.
+               ErrorLog.ActionTS  = Func.Common:mMakeTS().
 
             FIND FIRST ActionLog WHERE
-                 ActionLog.Brand     = gcBrand AND
+                 ActionLog.Brand     = Syst.Var:gcBrand AND
                  ActionLog.TableName = "FuncRunQueue" AND
                  ActionLog.KeyValue  = STRING(FuncRunQSchedule.FRQueueID) AND
                  ActionLog.ActionID  = "FRQUEUE" + 
@@ -1000,7 +999,7 @@ PROCEDURE pInvoiceTypeParameters:
       END CASE.
    END.
 
-   RUN funcrunqsparam_initialize.p (FuncRunQSchedule.FRQScheduleID).
+   RUN Syst/funcrunqsparam_initialize.p (FuncRunQSchedule.FRQScheduleID).
    
 END PROCEDURE.
 

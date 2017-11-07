@@ -8,8 +8,8 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{tmsparam2.i}
+{Syst/commali.i}
+{Func/tmsparam2.i}
 
 DEF VAR ufkey         AS LOG  NO-UNDO.
 DEF VAR lcInvGroup    AS CHAR NO-UNDO.
@@ -47,7 +47,7 @@ FORM
       FORMAT "X(8)"
       VALIDATE(INPUT lcInvGroup = "" OR
                CAN-FIND(InvGroup WHERE 
-                        InvGroup.Brand    = gcBrand AND
+                        InvGroup.Brand    = Syst.Var:gcBrand AND
                         InvGroup.InvGroup = INPUT lcInvGroup),
               "Unknown invoicing group")
 
@@ -72,7 +72,7 @@ FORM
    liCustNum2 
       NO-LABEL 
       HELP  "Maximum limit for customer numbers"
-      FORMAT ">>>>>>>9"
+      FORMAT ">>>>>>>>9"
       VALIDATE(INPUT liCustNum2 >= INPUT liCustNum1,
                "Upper limit cannot be less than lower limit")
       SKIP(1)
@@ -91,14 +91,14 @@ FORM
 
    SKIP(7)
    WITH ROW 1 SIDE-LABELS WIDTH 80
-        TITLE " " + ynimi + " SENDING OF INFORMATION TEXTS " +
-              STRING(pvm,"99-99-99") + " "
+        TITLE " " + Syst.Var:ynimi + " SENDING OF INFORMATION TEXTS " +
+              STRING(TODAY,"99-99-99") + " "
         FRAME fCriter.
 
 VIEW FRAME fCriter.
 PAUSE 0 NO-MESSAGE.
 
-ASSIGN liCustNum2    = 99999999
+ASSIGN liCustNum2    = 999999999
        ldtDate1      = TODAY
        ldtDate2      = TODAY
        llFirst       = TRUE.
@@ -120,25 +120,25 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 7   ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 795 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
-         ufk[9]= 1
-         ehto = 3 
+         Syst.Var:ufk[1]= 7   Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= 795 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 
+         Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 
          ufkey = FALSE.
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
-      IF llFirst THEN ASSIGN nap     = "1"  
+      IF llFirst THEN ASSIGN Syst.Var:nap     = "1"  
                              llFirst = FALSE.
       ELSE DO:                             
          READKEY.
-         ASSIGN nap = keylabel(LASTKEY).
+         ASSIGN Syst.Var:nap = keylabel(LASTKEY).
       END. 
 
-      IF LOOKUP(nap,"1,f1") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO:
 
          repeat WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
-             ehto = 9. RUN ufkey.p.
+             Syst.Var:ehto = 9. RUN Syst/ufkey.p.
              UPDATE 
                 lcInvGroup
                 llExtCustGrp
@@ -149,14 +149,14 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
              WITH FRAME fCriter EDITING:
                 READKEY.
 
-                IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+                IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
 
                    IF FRAME-FIELD = "lcInvGroup" THEN DO:
                       IF INPUT lcInvGroup = "" 
                       THEN DISPLAY "ALL" ;& InvGroup.IGName. 
                       ELSE DO:
                          FIND InvGroup WHERE 
-                              InvGroup.Brand    = gcBrand AND
+                              InvGroup.Brand    = Syst.Var:gcBrand AND
                               InvGroup.InvGroup = INPUT lcInvGroup
                          NO-LOCK NO-ERROR.
                          IF AVAILABLE InvGroup THEN DISPLAY InvGroup.IGName.
@@ -172,10 +172,10 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
                       IF INPUT llExtCustGrp = TRUE THEN DO:
 
-                         RUN gathecg(INPUT-OUTPUT table ttCustGroup).
+                         RUN Mc/gathecg.p(INPUT-OUTPUT table ttCustGroup).
 
-                         ehto = 9.
-                         RUN ufkey.
+                         Syst.Var:ehto = 9.
+                         RUN Syst/ufkey.p.
 
                          FOR EACH ttCustGroup:
                             lcExtCustGrp = lcExtCustGrp + 
@@ -214,7 +214,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
          NEXT toimi.
       END.
 
-      ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 THEN DO:
 
          llOk = FALSE. 
 
@@ -226,18 +226,18 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
          IF NOT llOk THEN NEXT.
 
-         ehto = 5.
-         RUN ufkey.
+         Syst.Var:ehto = 5.
+         RUN Syst/ufkey.p.
 
          /* collect customers */
-         RUN itsendco (lcInvGroup,
+         RUN Mc/itsendco.p (lcInvGroup,
                        INPUT TABLE ttCustGroup,
                        liCustNum1,
                        liCustNum2,
                        OUTPUT TABLE ttCust).
 
          /* send texts */
-         RUN itsend   (INPUT TABLE ttCust,
+         RUN Mc/itsend.p   (INPUT TABLE ttCust,
                        ldtDate1,
                        ldtDate2,
                        OUTPUT liCount,
@@ -256,11 +256,11 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
       END.
 
-      ELSE IF LOOKUP(nap,"8,f8") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN DO:
          LEAVE toimi.
       END.
 
-END. /* toimi */
+END. /* Syst.Var:toimi */
 
 HIDE MESSAGE NO-PAUSE.
 HIDE FRAME fCriter NO-PAUSE.    

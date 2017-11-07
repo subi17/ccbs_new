@@ -1,6 +1,6 @@
 /*This functionality does not create entry if it already exist. 
 Just error code is returned. Changing needs another program/function.*/
-{tmsconst.i}
+{Syst/tmsconst.i}
 FUNCTION fCreateEntryC RETURNS CHAR
    ( icParamCode AS CHAR,
      icParamGroup AS CHAR,

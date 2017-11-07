@@ -1,7 +1,7 @@
-{testpaa.i}
-{fmakemsreq.i}
+{Syst/testpaa.i}
+{Func/fmakemsreq.i}
 
-katun = "ari".
+Syst.Var:katun = "ari".
 
 def var i       as int  no-undo.
 def var j       as int  no-undo.
@@ -34,12 +34,12 @@ for each msowner no-lock where
       */
            
 
-      fsplitts(msrequest.actstamp,
+      Func.Common:mSplitTS(msrequest.actstamp,
                output ldtdate,
                output i).
          
               
-      RUN creasfee (MsOwner.CustNum,
+      RUN Mc/creasfee.p (MsOwner.CustNum,
                     MsRequest.MsSeq,
                     ldtdate ,
                     "MobSub",

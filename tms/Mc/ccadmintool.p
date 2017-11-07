@@ -1,6 +1,6 @@
 
 
-{commali.i}
+{Syst/commali.i}
 
 /* CC admin tool */
 
@@ -9,14 +9,14 @@
     REPEAT:
 
       ASSIGN
-        ufk       = 0
-        ufk[2]    = 754 /* BILLING ITEMS */
-        ufk[5]    = 401 /* EVENT MANAG */
-        ufk[8]    = 8
-        ehto      = 0.
-       RUN ufkey .
+        Syst.Var:ufk       = 0
+        Syst.Var:ufk[2]    = 754 /* BILLING ITEMS */
+        Syst.Var:ufk[5]    = 401 /* EVENT MANAG */
+        Syst.Var:ufk[8]    = 8
+        Syst.Var:ehto      = 0.
+       RUN Syst/ufkey.p .
        
-       IF toimi = 2 THEN DO:
+       IF Syst.Var:toimi = 2 THEN DO:
       
           DEFINE VARIABLE lcBIGroup AS CHARACTER NO-UNDO. 
           FIND TMSParam WHERE TMSParam.Brand = "1" AND
@@ -24,12 +24,12 @@
                               TMSParam.ParamCode = "BIGroup" NO-LOCK NO-ERROR.
           IF AVAIL TMSParam THEN DO:
             lcBIGroup = TMSParam.CharVal.
-            RUN nntuyp_run (lcBIGroup, "update-mode-cc").
+            RUN Mc/nntuyp_run.p (lcBIGroup, "update-mode-cc").
           END.
 
        END.
 
-       IF toimi = 5 THEN DO:
+       IF Syst.Var:toimi = 5 THEN DO:
           DEFINE VARIABLE liFMGroup AS INTEGER NO-UNDO. 
           FIND TMSParam WHERE TMSParam.Brand = "1" AND
                               TMSParam.ParamGroup = "CCAdminTool" AND
@@ -37,12 +37,12 @@
 
           IF AVAIL TMSParam THEN DO:
              liFMGroup = TMSParam.IntVal.
-             RUN bevent_run (liFMGroup).
+             RUN Mc/bevent_run.p (liFMGroup).
           END.
 
        END.
 
-       IF toimi = 8 THEN LEAVE.
+       IF Syst.Var:toimi = 8 THEN LEAVE.
 
     END. /* ADMIN-CC */
 

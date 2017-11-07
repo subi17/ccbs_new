@@ -1,4 +1,4 @@
-{error_codes.i}
+{Rate/error_codes.i}
 
 CREATE ttCall.
 ASSIGN

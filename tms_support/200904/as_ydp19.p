@@ -1,8 +1,7 @@
-{commpaa.i}
-katun = "anttis".
-gcBrand = "1".
+{Syst/commpaa.i}
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 
-{timestamp.i}
 
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcCommLine AS CHARACTER NO-UNDO. 
@@ -45,7 +44,7 @@ repeat:
          ttCLI.clitype = trim(entry(2,lcLine,"|")).
    end.
 end.
-ldeActStamp = fMakeTS().
+ldeActStamp = Func.Common:mMakeTS().
 
 FILE_LOOP:
 FOR EACH ttCli NO-LOCK:
@@ -133,8 +132,8 @@ FOR EACH ttCli NO-LOCK:
         Solog.MsSeq        = msowner.MsSeq 
         Solog.CLI          = msowner.Cli 
         Solog.Stat         = 0     /* just created */
-        Solog.Brand        = gcBrand
-        Solog.Users        = katun.
+        Solog.Brand        = Syst.Var:gcBrand
+        Solog.Users        = Syst.Var:katun.
    ASSIGN     
         Solog.TimeSlotTMS  = ldeActStamp
         Solog.ActivationTS = ldeActStamp
@@ -185,8 +184,8 @@ FOR EACH mobsub where
         Solog.MsSeq        = mobSub.MsSeq 
         Solog.CLI          = mobSub.Cli 
         Solog.Stat         = 0     /* just created */
-        Solog.Brand        = gcBrand
-        Solog.Users        = katun.
+        Solog.Brand        = Syst.Var:gcBrand
+        Solog.Users        = Syst.Var:katun.
    ASSIGN     
         Solog.TimeSlotTMS  = ldeActStamp
         Solog.ActivationTS = ldeActStamp

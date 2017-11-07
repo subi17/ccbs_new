@@ -1,6 +1,6 @@
-{commpaa.i}
-katun = "anttis".
-gcBrand = "1".
+{Syst/commpaa.i}
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 
 DEFINE VARIABLE msreqs AS CHARACTER NO-UNDO. 
 

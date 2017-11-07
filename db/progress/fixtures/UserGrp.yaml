@@ -1,0 +1,85 @@
+bulkload: UserGrp
+  UserGroup: "Billing"
+  UGName: "Yoigo billing group user"
+  CreDate: 2003-03-21
+  ChgDate: 2009-05-29
+  CreUser: "eka"
+  ChgUser: "cst001"
+  ShowTokens: "AR,BILL,CC,CCSUPER,COMM,CUSTOMER,FIX,MAIN,MOB,MOBMAIN,ORDER"
+  ModifyTokens: "AR,BILL,CC,CCSUPER,CUSTOMER,MOB,MOBMAIN,ORDER"
+
+bulkload: UserGrp
+  UserGroup: "CCSUPER"
+  UGName: "Yoigo ADMIN user"
+  CreDate: 2008-02-28
+  ChgDate: 2009-06-23
+  CreUser: "jaakko"
+  ChgUser: "anttis"
+  ShowTokens: "AR,BILL,CC,CCSUPER,CUSTOMER,MOB,MOBMAIN,ORDER,SULKU"
+  ModifyTokens: "AR,BILL,CC,CCSUPER,CUSTOMER,MOB,MOBMAIN,ORDER,SULKU"
+
+bulkload: UserGrp
+  UserGroup: "CustCare"
+  UGName: "Customer Care"
+  CreDate: 2003-03-21
+  ChgDate: 2009-06-23
+  CreUser: "eka"
+  ChgUser: "anttis"
+  ShowTokens: "CC,CUSTOMER,MOB,MOBMAIN,ORDER,SULKU"
+  ModifyTokens: "CC,CUSTOMER,MOB,MOBMAIN,ORDER,SULKU"
+
+bulkload: UserGrp
+  UserGroup: "NOTinUSE"
+  UGName: "De-activated user rights"
+  CreDate: 2005-03-10
+  ChgDate: 2009-06-23
+  CreUser: "marikav"
+  ChgUser: "anttis"
+
+bulkload: UserGrp
+  UserGroup: "readonly"
+  UGName: "Readonly used For UNISONO"
+  CreDate: 2003-03-11
+  ChgDate: 2008-11-04
+  CreUser: "eka"
+  ChgUser: "anttis"
+  ShowTokens: "MOB,ORDER"
+
+bulkload: UserGrp
+  UserGroup: "RoamOutIP"
+  UGName: "Roaming OUT IP range tool"
+  CreDate: 2012-10-29
+  CreUser: "anttis"
+  ShowTokens: "ROAM_OUT_IP"
+  ModifyTokens: "ROAM_OUT_IP"
+
+bulkload: UserGrp
+  UserGroup: "Syst"
+  UGName: "Qvantel ADMIN users"
+  CreDate: 2003-03-21
+  ChgDate: 2009-06-09
+  CreUser: "eka"
+  ChgUser: "rafaeldv"
+  ShowTokens: "AR,BILL,CC,CCSUPER,COMM,CUSTOMER,FIX,MAIN,MOB,MOBMAIN,ORDER,ROAM_OUT_IP,SULKU,SYST"
+  ModifyTokens: "AR,BILL,CC,CCSUPER,COMM,CUSTOMER,FIX,MAIN,MOB,MOBMAIN,ORDER,ROAM_OUT_IP,SULKU,SYST"
+
+bulkload: UserGrp
+  UserGroup: "testi"
+  UGName: "testi"
+  CreDate: 2003-02-20
+  ChgDate: 2009-02-19
+  CreUser: "eka"
+  ChgUser: "sonjas"
+  ShowTokens: "AR,BILL,CC,COMM,FIX,MAIN,MOB,SYST"
+  ModifyTokens: "AR,BILL,CC,COMM,FIX,MAIN,MOB,SYST"
+
+bulkload: UserGrp
+  UserGroup: "Vendor"
+  UGName: "Vendor users"
+  CreDate: 2009-02-18
+  ChgDate: 2009-06-05
+  CreUser: "ari"
+  ChgUser: "toniv"
+  ShowTokens: "AR,BILL,CC,CCSUPER,COMM,CUSTOMER,FIX,MAIN,MOB,MOBMAIN,ORDER,ROAM_OUT_IP,SULKU,SYST,VENDOR"
+  ModifyTokens: "AR,BILL,CC,CCSUPER,COMM,CUSTOMER,FIX,MAIN,MOB,MOBMAIN,ORDER,ROAM_OUT_IP,SULKU,SYST,VENDOR"
+

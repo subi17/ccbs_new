@@ -60,16 +60,15 @@
   VERSION ......: M15
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{refcode.i}
+{Syst/commali.i}
+{Func/refcode.i}
 
 /* print-linemuuttujat */
-{utumaa.i}
-{cparam2.i}
-{edefine.i}
+{Syst/utumaa.i}
+{Func/cparam2.i}
+{Inv/edefine.i}
 
-{nnpura.i}
-{fdivtxt.i}
+{Func/fdivtxt.i}
 
 def input  parameter CustNum       as int  format "zzzzzz9"   NO-UNDO.
 def input  parameter pvm1          as date format "99-99-99"  NO-UNDO.
@@ -121,10 +120,10 @@ DEF VAR CallCustNum LIKE Customer.CustNum  NO-UNDO.
 DEF VAR InvCustNum  LIKE Customer.InvCust  NO-UNDO.
 DEF VAR RateCustNum LIKE Customer.RateCust NO-UNDO.
 
-{nnpurac.i}
-{nnpura3.i}
-{ereppage.i}
-{spechead.i}
+{Inv/nnpurac.i}
+{Inv/nnpura3.i}
+{Inv/ereppage.i}
+{Inv/spechead.i}
 
 epltul = (iiTarg = 1).
 
@@ -145,7 +144,7 @@ form header
       lcASubHeader[2] format "x(4)" AT 96                  /* Sivu */
       sl format "ZZZZ9" SKIP
    lcASubDateHeader AT 45 FORMAT "X(30)"
-      pvm AT 96 FORMAT "99.99.9999" SKIP
+      TODAY AT 96 FORMAT "99.99.9999" SKIP
    viiva2 AT 2 skip
    WITH width 130 NO-LABEL no-box FRAME sivuotsi.
 
@@ -176,7 +175,7 @@ FUNCTION fChgPage RETURNS LOGICAL
    IF rl + iiAddLine > skayt1 THEN DO:
    
       IF sl > 0 THEN DO:
-         {uprfeed.i rl}
+         {Syst/uprfeed.i rl}
       END.
       
       sl = sl + 1.
@@ -265,7 +264,7 @@ repeat:
          FIND invgroup of Customer no-lock no-error.
          IF AVAIL invgroup AND InvGroup.CompName > "" 
          THEN company = InvGroup.CompName.
-         ELSE company = ynimi.
+         ELSE company = Syst.Var:ynimi.
 
          /* cover sheet txt */ 
          IF llCaSivu < 0 THEN DO:
@@ -280,7 +279,7 @@ repeat:
                       liPrCust = MsOwner.CustNum.
             END.
             
-            RUN printxt (liPrCust,
+            RUN Mc/printxt.p (liPrCust,
                          liMsSeq, 
                          "",
                          1,                      /* 1=invtext */
@@ -295,7 +294,7 @@ repeat:
  
          IF epltul THEN DO:
             fNewPage(999).
-            {nnpura3e.i}
+            {Inv/nnpura3e.i}
          END.
 
          ELSE DO:
@@ -334,7 +333,7 @@ repeat:
          /* Tarvitaanko uusi sivu */
          IF epltul THEN DO:
             fNewPage(5).
-            {nnpura3e.i}
+            {Inv/nnpura3e.i}
          END.
          ELSE DO:
             fChgPage(5).
@@ -377,7 +376,7 @@ repeat:
          /* Tarvitaanko uusi sivu */
          IF epltul THEN DO:
             fNewPage(3).
-            {nnpura3e.i}
+            {Inv/nnpura3e.i}
          END.
          ELSE DO:
             fChgPage(3).
@@ -431,13 +430,13 @@ repeat:
          /* Tarvitaanko uusi sivu */
          IF epltul THEN DO:
             fNewPage(0).
-            {nnpura3e.i}
+            {Inv/nnpura3e.i}
          END.
          ELSE DO:
             fChgPage(0).
          END.
 
-         ASSIGN ckestos     = fSec2C(dkestos,10)
+         ASSIGN ckestos     = Func.Common:mSec2C(dkestos,10)
                 ldServPrice = dtopay - dMpmPrice.
                 
          IF llDispMPM
@@ -487,7 +486,7 @@ repeat:
              IF epltul THEN DO:
                 ASSIGN licalask = lireppage. 
                 fNewPage(0).
-                {nnpura3e.i}
+                {Inv/nnpura3e.i}
              END.
              ELSE DO:
                 fChgPage(999).
@@ -501,13 +500,13 @@ repeat:
          /* Tarvitaanko uusi sivu */
          IF epltul THEN DO:
             fNewPage(2).
-            {nnpura3e.i}
+            {Inv/nnpura3e.i}
          END.
          ELSE DO:
             fChgPage(2).
          END.
 
-         ASSIGN ckestos     = fSec2C(pdkestos,10)
+         ASSIGN ckestos     = Func.Common:mSec2C(pdkestos,10)
                 pdtopay     = round(pdtopay,3)
                 ldServPrice = pdtopay - pdMpmPrice.
 
@@ -586,13 +585,13 @@ repeat:
          /* Tarvitaanko uusi sivu */
          IF epltul THEN DO:
             fNewPage(2).
-            {nnpura3e.i}
+            {Inv/nnpura3e.i}
          END.
          ELSE DO:
             fChgPage(2).
          END.
 
-         ASSIGN ckestos     = fSec2C(ydkestos,10)
+         ASSIGN ckestos     = Func.Common:mSec2C(ydkestos,10)
                 liCLIQty    = liCLIQty + 1
                 ldServPrice = ydtopay - ydMpmPrice.
 
@@ -654,14 +653,14 @@ repeat:
       /* Tulostetaan Customer-yhteensA-line */
       IF last-of(Customer.CustNum) THEN DO:
 
-         ASSIGN ckestos     = fSec2C(adkestos,12)
+         ASSIGN ckestos     = Func.Common:mSec2C(adkestos,12)
                 ldServPrice = adtopay - adMpmPrice.
 
          IF epltul THEN DO:
 
             IF liCLIQty > 1 THEN DO:
                fNewPage(1).
-               {nnpura3e.i}
+               {Inv/nnpura3e.i}
                
                PUT STREAM eKirje UNFORMATTED
                " I" 
@@ -712,7 +711,7 @@ repeat:
                rl = rl + 2.
             END.   
          
-            {uprfeed.i rl}
+            {Syst/uprfeed.i rl}
 
          END.
 

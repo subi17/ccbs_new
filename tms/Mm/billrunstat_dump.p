@@ -6,11 +6,10 @@
   CREATED ......: 12.08.11
   Version ......: yoigo
 ---------------------------------------------------------------------- */
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{dumpfile_run.i}
-{ftransdir.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/dumpfile_run.i}
+{Func/ftransdir.i}
 
 DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -101,21 +100,21 @@ FOR EACH FuncRunQSchedule NO-LOCK:
           fNotNull(STRING(FuncRunQueue.FRQueueID))                        lcDel
           fNotNull(STRING(FuncRunQueue.QueueDesc))                        lcDel
           fNotNull(STRING(FuncRunQSchedule.FRQScheduleID))                lcDel
-          fNotNull(STRING(fTimeStamp2DateTime(FuncRunQSchedule.StartTS))) lcDel
-          fNotNull(STRING(fTimeStamp2DateTime(FuncRunQSchedule.DoneTS)))  lcDel
+          fNotNull(STRING(Func.Common:mTimeStamp2DateTime(FuncRunQSchedule.StartTS))) lcDel
+          fNotNull(STRING(Func.Common:mTimeStamp2DateTime(FuncRunQSchedule.DoneTS)))  lcDel
           fNotNull(STRING(FuncRunQSchedule.RunState))                     lcDel
           fNotNull(STRING(FuncRunQSchedule.RunMode))                      lcDel
           fNotNull(STRING(FuncRunConfig.FRConfigID))                      lcDel
           fNotNull(STRING(FuncRunConfig.ConfName))                        lcDel
           fNotNull(STRING(FuncRunExec.FRExecID))                          lcDel
           fNotNull(STRING(FuncRunExec.FRQRowSeq))                         lcDel
-          fNotNull(STRING(fTimeStamp2DateTime(FuncRunExec.StartTS)))      lcDel
-          fNotNull(STRING(fTimeStamp2DateTime(FuncRunExec.EndTS)))        lcDel
+          fNotNull(STRING(Func.Common:mTimeStamp2DateTime(FuncRunExec.StartTS)))      lcDel
+          fNotNull(STRING(Func.Common:mTimeStamp2DateTime(FuncRunExec.EndTS)))        lcDel
           fNotNull(STRING(FuncRunExec.RunState))                          lcDel
           fNotNull(STRING(FuncRunProcess.FRProcessID))                    lcDel
           fNotNull(STRING(FuncRunProcess.ProcSeq))                        lcDel
-          fNotNull(STRING(fTimeStamp2DateTime(FuncRunProcess.StartTS)))   lcDel
-          fNotNull(STRING(fTimeStamp2DateTime(FuncRunProcess.EndTS)))     lcDel
+          fNotNull(STRING(Func.Common:mTimeStamp2DateTime(FuncRunProcess.StartTS)))   lcDel
+          fNotNull(STRING(Func.Common:mTimeStamp2DateTime(FuncRunProcess.EndTS)))     lcDel
           fNotNull(STRING(FuncRunProcess.RunState))                       lcDel
           fNotNull(STRING(FuncRunProcess.Processed))                      SKIP.
    END. /* FOR EACH FuncRunExec NO-LOCK WHERE */

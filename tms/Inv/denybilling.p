@@ -9,16 +9,15 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{ftransdir.i}
-{eventval.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhLimit AS HANDLE NO-UNDO.
    lhLimit = BUFFER Limit:HANDLE.
@@ -90,13 +89,13 @@ IF SEARCH(icFile) = ? THEN RETURN "ERROR:File not found".
 INPUT STREAM sRead FROM VALUE(icFile).
 OUTPUT STREAM sLog TO VALUE(icLogFile) APPEND.
 
-ldCurrent = fMakeTS().
+ldCurrent = Func.Common:mMakeTS().
 
 PUT STREAM sLog UNFORMATTED
    "File: " icFile
    SKIP
    "Started: " 
-   fTS2HMS(ldCurrent)
+   Func.Common:mTS2HMS(ldCurrent)
    SKIP(1).
 
 ASSIGN
@@ -238,7 +237,7 @@ REPEAT:
       
       CREATE Limit.
       ASSIGN 
-         Limit.Brand     = gcBrand
+         Limit.Brand     = Syst.Var:gcBrand
          Limit.MsSeq     = MobSub.MsSeq   
          Limit.LimitType = 3               
          Limit.TMRuleSeq = 0               

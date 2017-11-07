@@ -14,10 +14,10 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 /* print-linemuuttujat */
-{utumaa.i NEW }
+{Syst/utumaa.i NEW }
 
 assign tuni1 = "nnlati"
        tuni2 = "".
@@ -33,6 +33,9 @@ DEF VAR rlx AS i  NO-UNDO.
 DEF VAR rl  AS i  NO-UNDO.
 DEF VAR sl  AS i  NO-UNDO.
 DEF VAR fst AS lo NO-UNDO.
+
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
 
 form
      skip(1)
@@ -51,30 +54,30 @@ form
      "Reseller/agent .:" AT 19 Reseller 
         help "One for certain, empty for all" TO 44 skip(5)
 WITH
-   width 80 COLOR value(cfc)
-   title color value(ctc) " " + ynimi + " INVOICE STATISTICS SALESMAN/CUSTOMER "    + string(pvm,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
+   width 80 COLOR value(Syst.Var:cfc)
+   title color value(Syst.Var:ctc) " " + ynimi + " INVOICE STATISTICS SALESMAN/CUSTOMER "    + string(TODAY,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
 
 form header
 
    fill("=",114) format "x(114)" SKIP
    ynimi at 2 format "x(25)" "INVOICE STATISTICS" at 40 date1 "-" date2
    "Page" at 105 sl format "ZZZZ9" SKIP
-   "SALESMAN / CUSTOMER"  at 40 string(pvm,"99-99-99") AT 107 SKIP
+   "SALESMAN / CUSTOMER"  at 40 string(TODAY,"99-99-99") AT 107 SKIP
    fill("=",114) format "x(114)" skip(1)
    "CustNr" at 4 "Customer name" at 11 "Invoice without VAT" TO 57 SKIP
    fill("-",114) format "x(114)" SKIP
    WITH width 114 NO-LABEL no-box FRAME sivuotsi.
 
 /* Get Date proposal */
-ASSIGN date1  = pvm.
+ASSIGN date1  = TODAY.
 FIND FIRST Invoice no-lock no-error.
 IF AVAIL Invoice THEN ASSIGN date1 = Invoice.InvDate.
 date2 = date1.
 
-cfc = "sel". RUN ufcolor.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
 LOOP:
 repeat WITH FRAME rajat:
-    ehto = 9. RUN ufkey.
+    Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
     UPDATE
     date1
@@ -83,7 +86,7 @@ repeat WITH FRAME rajat:
     sm-code2     Reseller
 WITH FRAME rajat EDITING:
    READKEY. 
-      IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+      IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
          IF FRAME-FIELD = "date2" THEN DO:
             IF INPUT date2 < INPUT date1 THEN DO:
                MESSAGE "Invalid Order !".
@@ -119,16 +122,16 @@ END.
 
 TOIMI:
    repeat:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
-      IF toimi = 1 THEN NEXT LOOP.
-      IF toimi = 8 THEN LEAVE LOOP.
-      IF toimi = 5 THEN LEAVE TOIMI.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
+      RUN Syst/ufkey.p.
+      IF Syst.Var:toimi = 1 THEN NEXT LOOP.
+      IF Syst.Var:toimi = 8 THEN LEAVE LOOP.
+      IF Syst.Var:toimi = 5 THEN LEAVE TOIMI.
    END.
 
    /* Avataan striimi */
    ASSIGN tila = TRUE.
-   {tmsreport.i "return"}
+   {Syst/tmsreport.i "return"}
 
    message "Printing, break = ESC".
 

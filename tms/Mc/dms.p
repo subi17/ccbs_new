@@ -8,7 +8,7 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT PARAMETER iiOrderId     AS INT  NO-UNDO.
 DEF INPUT PARAMETER icContractId  AS CHAR NO-UNDO.
@@ -59,17 +59,17 @@ REPEAT WITH FRAME lis ON ENDKEY UNDO LOOP, NEXT LOOP:
            DMS.DMSStatusTS.
 
    ASSIGN
-      ufk   = 0  
-      ufk[5]= 9850
-      ufk[8]= 8 
-      ehto  = 0.
-   RUN ufkey.
+      Syst.Var:ufk   = 0  
+      Syst.Var:ufk[5]= 9850
+      Syst.Var:ufk[8]= 8 
+      Syst.Var:ehto  = 0.
+   RUN Syst/ufkey.p.
 
-   IF toimi = 5 AND ufk[5] > 0 THEN DO:
-      RUN dmsdoc.p (DMS.DMSID).
+   IF Syst.Var:toimi = 5 AND Syst.Var:ufk[5] > 0 THEN DO:
+      RUN Mc/dmsdoc.p (DMS.DMSID).
    END.
    
-   ELSE IF toimi = 8 THEN LEAVE.
+   ELSE IF Syst.Var:toimi = 8 THEN LEAVE.
 
 END. 
 

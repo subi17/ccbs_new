@@ -8,10 +8,9 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{finvnum.i}
-{funcrunprocess_update.i}
+{Syst/commali.i}
+{Func/finvnum.i}
+{Syst/funcrunprocess_update.i}
 
 DEF INPUT  PARAMETER idtInvDate       AS DATE NO-UNDO.
 DEF INPUT  PARAMETER iiInvType        AS INT  NO-UNDO.
@@ -71,7 +70,7 @@ FUNCTION fError RETURNS LOGIC
    DO TRANS:
       CREATE ErrorLog.
       ASSIGN 
-         ErrorLog.Brand     = gcBrand
+         ErrorLog.Brand     = Syst.Var:gcBrand
          ErrorLog.ActionID  = "INVEXTID"
          ErrorLog.TableName = "Invoice"
          ErrorLog.KeyValue  = STRING(YEAR(idtInvDate),"9999") + 
@@ -81,8 +80,8 @@ FUNCTION fError RETURNS LOGIC
                               STRING(Invoice.CustNum) +
                               " Nbr: " + STRING(Invoice.InvNum)
          ErrorLog.ErrorChar = Invoice.ExtInvID
-         ErrorLog.UserCode  = katun.
-         ErrorLog.ActionTS  = fMakeTS().
+         ErrorLog.UserCode  = Syst.Var:katun.
+         ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
  
 END FUNCTION.
@@ -94,7 +93,7 @@ FUNCTION fCreateActionLog RETURNS LOGIC
    DO TRANS:
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = gcBrand   
+         ActionLog.Brand        = Syst.Var:gcBrand   
          ActionLog.TableName    = "Invoice"  
          ActionLog.ActionID     = "ExtInvID"
          ActionLog.KeyValue     = STRING(YEAR(idtInvDate),"9999") + 
@@ -102,7 +101,7 @@ FUNCTION fCreateActionLog RETURNS LOGIC
                                   STRING(DAY(idtInvDate),"99")
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
          ActionLog.ActionDec    = iiInvType
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionStatus = iiStatus
          ActionLog.ActionChar   = icText
          ActionLog.ActionTS     = ldThisRun.
@@ -141,19 +140,19 @@ END FUNCTION.
 ASSIGN
    llRenumber   = FALSE
    liRenumbered = 0
-   ldThisRun    = fMakeTS().
+   ldThisRun    = Func.Common:mMakeTS().
 
 /* if numbering of new invoices required, then make sure that there are not
    any billing runs active */
 IF iiAction = 2 THEN DO:
 
    ASSIGN
-      lcStarted  = fTS2HMS(ldThisRun)
-      ldCheckRun = fOffSet(ldThisRun,-72).
+      lcStarted  = Func.Common:mTS2HMS(ldThisRun)
+      ldCheckRun = Func.Common:mOffSet(ldThisRun,-72).
 
    /* check that there isn't already another run for the same purpose */
    IF CAN-FIND(FIRST ActionLog USE-INDEX ActionID WHERE
-                     ActionLog.Brand        = gcBrand     AND    
+                     ActionLog.Brand        = Syst.Var:gcBrand     AND    
                      ActionLog.ActionID     = "ExtInvID"  AND
                      ActionLog.ActionTS    >= ldCheckRun  AND
                      ActionLog.ActionStatus = 0           AND
@@ -179,7 +178,7 @@ IF iiAction = 2 THEN DO:
       END.
       
       IF NOT CAN-FIND(FIRST ActionLog USE-INDEX ActionID WHERE
-                            ActionLog.Brand        = gcBrand    AND    
+                            ActionLog.Brand        = Syst.Var:gcBrand    AND    
                             ActionLog.ActionID     = "BillRun"  AND
                             ActionLog.ActionTS    >= ldCheckRun AND
                             ActionLog.TableName    = "Invoice"  AND
@@ -191,7 +190,7 @@ IF iiAction = 2 THEN DO:
          RETURN "ERROR:Billing run ongoing".
       END.
          
-      lcCurrent = fTS2HMS(fMakeTS()).
+      lcCurrent = Func.Common:mTS2HMS(Func.Common:mMakeTS()).
    
       PAUSE 0.
       DISPLAY lcStarted lcCurrent WITH FRAME fWait.
@@ -260,8 +259,10 @@ PROCEDURE pCheckNumbering:
    DEF INPUT  PARAMETER idtInvDate   AS DATE NO-UNDO.
    DEF INPUT  PARAMETER iiInvType    AS INT  NO-UNDO.
 
+   DEF VAR liPrefixLength AS INTEGER NO-UNDO. 
+
    FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
-            Invoice.Brand   = gcBrand    AND
+            Invoice.Brand   = Syst.Var:gcBrand    AND
             Invoice.InvDate = idtInvDate AND
             Invoice.InvType = iiInvType
    BY Invoice.ExtInvID
@@ -283,7 +284,11 @@ PROCEDURE pCheckNumbering:
          NEXT.
       END.
    
-      liInvID = INTEGER(SUBSTRING(Invoice.ExtInvID,5)) NO-ERROR.
+      IF LENGTH(Invoice.ExtInvID) EQ 14 THEN liPrefixLength = 6.
+      ELSE liPrefixLength = 4.
+      
+      liInvID = INTEGER(SUBSTRING(Invoice.ExtInvID,liPrefixLength + 1)) NO-ERROR.
+   
       IF ERROR-STATUS:ERROR OR liInvID = 0 THEN DO:
          fError("Invalid ID " + Invoice.ExtInvID).
          NEXT.
@@ -292,14 +297,15 @@ PROCEDURE pCheckNumbering:
       IF liInvID NE liPrevious + 1 THEN DO:
    
          /* gap in this batch */
-         IF liPrevious > 0 AND lcPrevious = SUBSTRING(Invoice.ExtInvID,1,4)
+         IF liPrevious > 0 AND
+            lcPrevious = SUBSTRING(Invoice.ExtInvID,1,liPrefixLength)
          THEN DO:
             fError("Gap before " + Invoice.ExtInvID).
          END.
 
          /* 1st with this prefix in this batch, previous one should be found 
             in the system also */
-         ELSE IF lcPrevious NE SUBSTRING(Invoice.ExtInvID,1,4) AND 
+         ELSE IF lcPrevious NE SUBSTRING(Invoice.ExtInvID,1,liPrefixLength) AND 
             liInvId > 1 
          THEN DO:
 
@@ -309,11 +315,11 @@ PROCEDURE pCheckNumbering:
                it is probably intentional */
             DO liOtherID = liInvID - 1 TO liInvID - 10 BY -1:
 
-               lcOtherID = SUBSTRING(Invoice.ExtInvID,1,4) +
+               lcOtherID = SUBSTRING(Invoice.ExtInvID,1,liPrefixLength) +
                            STRING(liOtherID,"99999999").
             
                IF CAN-FIND(FIRST Invoice WHERE 
-                                 Invoice.Brand    = gcBrand AND
+                                 Invoice.Brand    = Syst.Var:gcBrand AND
                                  Invoice.ExtInvID = lcOtherID)
                THEN DO:
                   liOtherBatch = liOtherID.
@@ -330,10 +336,10 @@ PROCEDURE pCheckNumbering:
    
       ASSIGN
          liPrevious = liInvID
-         lcPrevious = SUBSTRING(Invoice.ExtInvID,1,4).
+         lcPrevious = SUBSTRING(Invoice.ExtInvID,1,liPrefixLength).
     
       IF NOT CAN-FIND(FIRST IgInvNum WHERE
-                            IgInvNum.Brand   = gcBrand AND
+                            IgInvNum.Brand   = Syst.Var:gcBrand AND
                             IgInvNum.InvType = Invoice.InvType AND
                             IgInvNum.SeqPrefix = lcPrevious)
       THEN DO:
@@ -358,13 +364,13 @@ PROCEDURE pRenumber:
    DEF VAR liNumber   AS INT  NO-UNDO.
    DEF VAR lcExtInvID AS CHAR NO-UNDO.
    DEF VAR liCnt      AS INT  NO-UNDO.
-
+   DEF VAR liPrefixLength AS INT  NO-UNDO.
 
    /* current sequences */
    FOR EACH InvGroup NO-LOCK WHERE
-            InvGroup.Brand = gcBrand,
+            InvGroup.Brand = Syst.Var:gcBrand,
       FIRST IgInvNum NO-LOCK WHERE
-            IgInvNum.Brand    = gcBrand AND
+            IgInvNum.Brand    = Syst.Var:gcBrand AND
             IgInvNum.InvGroup = InvGroup.InvGroup AND
             IgInvNum.InvType  = iiInvType AND
             IgInvNum.FromDate <= idtInvDate:
@@ -380,7 +386,7 @@ PROCEDURE pRenumber:
    
       /* remove current numbers from invoices */
       FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
-               Invoice.Brand      = gcBrand    AND
+               Invoice.Brand      = Syst.Var:gcBrand    AND
                Invoice.InvDate    = idtInvDate AND
                Invoice.InvType    = iiInvType  AND
                Invoice.PrintState = 0          AND
@@ -389,10 +395,14 @@ PROCEDURE pRenumber:
                Customer.CustNum = Invoice.CustNum:
 
          IF Invoice.ExtInvID = "" THEN NEXT.
+         
+         IF LENGTH(Invoice.ExtInvID) EQ 14 THEN liPrefixLength = 6.
+         ELSE liPrefixLength = 4.
       
          ASSIGN 
-            lcPrefix = SUBSTRING(Invoice.ExtInvID,1,4)
-            liNumber = INTEGER(SUBSTRING(Invoice.ExtInvId,5)) NO-ERROR.
+            lcPrefix = SUBSTRING(Invoice.ExtInvID,1,liPrefixLength)
+            liNumber = INTEGER(SUBSTRING(Invoice.ExtInvId,liPrefixLength + 1))
+         NO-ERROR.
 
          IF NOT ERROR-STATUS:ERROR THEN DO:
             FIND FIRST ttGroup WHERE
@@ -421,7 +431,7 @@ PROCEDURE pRenumber:
             lcExtInvID = ttGroup.InvPrefix + STRING(liNumber,"99999999").
          
             IF CAN-FIND(FIRST Invoice WHERE 
-                              Invoice.Brand    = gcBrand AND
+                              Invoice.Brand    = Syst.Var:gcBrand AND
                               Invoice.ExtInvID = lcExtInvID)
             THEN DO:
                ttGroup.InvNum = liNumber.
@@ -432,7 +442,7 @@ PROCEDURE pRenumber:
          END.              
 
          FOR FIRST IgInvNum EXCLUSIVE-LOCK WHERE
-                   IgInvNum.Brand    = gcBrand AND
+                   IgInvNum.Brand    = Syst.Var:gcBrand AND
                    IgInvNum.InvGroup = ttGroup.InvGroup AND
                    IgInvNum.InvType  = iiInvType AND
                    IgInvNum.FromDate <= idtInvDate AND
@@ -445,7 +455,7 @@ PROCEDURE pRenumber:
    
    /* set new numbers */
    FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
-            Invoice.Brand      = gcBrand    AND
+            Invoice.Brand      = Syst.Var:gcBrand    AND
             Invoice.InvDate    = idtInvDate AND
             Invoice.ExtInvID   = ""         AND 
             Invoice.InvType    = iiInvType  AND
@@ -462,7 +472,7 @@ PROCEDURE pRenumber:
 
       REPEAT:
          IF NOT CAN-FIND(FIRST bInv WHERE 
-                               bInv.Brand = gcBrand AND
+                               bInv.Brand = Syst.Var:gcBrand AND
                                bInv.ExtInvID = lcExtInvID) 
          THEN LEAVE.
          
@@ -512,7 +522,7 @@ PROCEDURE pMarkFinished:
 
    /* mark this run finished */
    FIND FIRST ActionLog USE-INDEX ActionID WHERE
-              ActionLog.Brand        = gcBrand     AND    
+              ActionLog.Brand        = Syst.Var:gcBrand     AND    
               ActionLog.ActionID     = "ExtInvID"  AND
               ActionLog.ActionTS     = ldThisRun   AND
               ActionLog.ActionStatus = 0 NO-LOCK NO-ERROR.

@@ -1,8 +1,7 @@
-{commpaa.i}
-katun = "anttis".
-gcBrand = "1".
-{msisdn.i}
-{date.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
+{Func/msisdn.i}
 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 
@@ -12,7 +11,7 @@ output stream sout to /home/anttis/ycm1074_gift4.txt.
 FOR EACH msisdn2 NO-LOCK where
    pos = "gift" and
    statuscode = 4 and
-   validto > fmakets():
+   validto > Func.Common:mMakeTS():
    
    put stream sout unformatted msisdn2.cli "|" msisdn2.pos "|" msisdn2.statuscode "|" msisdn2.validfrom "|" msisdn2.validto skip.
 
@@ -30,7 +29,7 @@ output stream sout to /home/anttis/ycm1074_gift1.txt.
 FOR EACH msisdn2 NO-LOCK where
    pos = "gift" and
    statuscode = 1 and
-   validto > fmakets():
+   validto > Func.Common:mMakeTS():
    
    put stream sout unformatted msisdn2.cli "|" msisdn2.pos "|" msisdn2.statuscode "|" msisdn2.validfrom "|" msisdn2.validto skip.
    

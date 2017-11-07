@@ -1,0 +1,17 @@
+UPDATE FIELD "ActivationTS" OF "MobSub"
+  FORMAT "99999999.99999"
+
+UPDATE FIELD "InvNum" OF "Order"
+  FORMAT ">>>>>>>>9"
+
+UPDATE FIELD "TupasRM" OF "Order"
+  FORMAT "x(60)"
+
+UPDATE FIELD "Clitype" OF "CLIType" 
+  FORMAT "x(13)"
+
+UPDATE FIELD "Clitype" OF "MobSub"
+  FORMAT "x(13)"
+
+UPDATE FIELD "CLIType" OF "Order" 
+  FORMAT "x(13)"

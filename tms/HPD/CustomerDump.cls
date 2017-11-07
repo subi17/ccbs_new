@@ -57,6 +57,19 @@ CLASS HPD.CustomerDump FINAL INHERITS GenericDump:
 
    END METHOD.
 
+   METHOD PRIVATE CHARACTER mGetSegment():
+
+      FOR
+         FIRST CustCat FIELDS (Brand Category Segment) NO-LOCK WHERE
+            CustCat.Brand    = "1" AND
+            CustCat.Category = lhMainTable::Category:
+         RETURN CustCat.Segment.
+      END.
+
+      RETURN "".
+
+   END METHOD.
+
 
    METHOD PUBLIC OVERRIDE CHARACTER mSpecialHandling
       (icField     AS CHARACTER,
@@ -79,6 +92,18 @@ CLASS HPD.CustomerDump FINAL INHERITS GenericDump:
                           THEN STRING(LOOKUP(lhMainTable::Category, lcSelfEmpCategories) > 0)
                           */
                           ELSE STRING(mSelfEmployed()).
+         WHEN "SubLimit"
+         THEN IF ilCheckOnly
+              THEN RETURN "OK".
+              ELSE RETURN "".
+         WHEN "ActLimit"
+         THEN IF ilCheckOnly
+              THEN RETURN "OK".
+              ELSE RETURN "".
+         WHEN "Segment"
+         THEN IF ilCheckOnly
+              THEN RETURN "OK".
+              ELSE RETURN mGetSegment().
          OTHERWISE RETURN "".
       END CASE.
 

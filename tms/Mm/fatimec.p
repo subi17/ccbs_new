@@ -4,9 +4,9 @@
 */
 
 
-{commali.i}
+{Syst/commali.i}
 
-run fatime("",
+RUN Mm/fatime.p("",
            0,
            "",
            0).

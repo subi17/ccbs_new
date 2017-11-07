@@ -13,10 +13,10 @@
 
 &GLOBAL-DEFINE BrTable stobal
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'StoBal'}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'StoBal'}
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
 DEF VAR Stock  LIKE StoBal.StoBal  NO-UNDO.
@@ -42,9 +42,9 @@ DEF VAR ok           AS log format "Yes/No"  NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhStoBal AS HANDLE NO-UNDO.
    lhStoBal = BUFFER StoBal:HANDLE.
@@ -52,7 +52,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhStoBal).
+      RUN Mc/eventview2.p(lhStoBal).
    END.
 END.
 
@@ -67,21 +67,21 @@ form
     StoBal.OrdPoint
              /* COLUMN-LABEL FORMAT */
 WITH ROW FrmRow width 80  OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
-    title COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.Var:cfc)
+    title COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
     " Stock Balances "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 form
     StoBal.StoBal     /* LABEL FORMAT */
     StoBal.SimArt    /* LABEL FORMAT */
             /* LABEL FORMAT */
 
     WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc)
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc)
     ac-hdr WITH side-labels 1 columns
     FRAME lis.
 
@@ -103,18 +103,18 @@ form /* seek Balance Record  BY  Stock */
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     Stock
     help "Enter Stock Code"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND SCODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 title COLOR VALUE(Syst.Var:ctc) " FIND SCODE "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Balance Record  BY SimArt */
     "Brand Code:" lcBrand  HELP "Enter Brand"
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     SimArt
     help "Enter Article Code"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND ACODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 title COLOR VALUE(Syst.Var:ctc) " FIND ACODE "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -145,13 +145,13 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a StoBal  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN ufkey.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
            CLEAR FRAME lis no-pause.
 
@@ -159,7 +159,7 @@ ADD-ROW:
            UPDATE StoBal.StoBal
            WITH FRAME lis EDITING:
               READKEY.
-              IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+              IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
                  IF FRAME-FIELD = "Stobal" THEN DO:
                     IF INPUT Stobal = "" THEN UNDO ADD-ROW, LEAVE ADD-ROW.
 
@@ -259,31 +259,31 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 203  ufk[2]= 204 ufk[3]= 237 ufk[4]= 202
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-        ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        Syst.Var:ufk[1]= 203  Syst.Var:ufk[2]= 204 Syst.Var:ufk[3]= 237 Syst.Var:ufk[4]= 202
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW StoBal.StoBal ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) StoBal.StoBal WITH FRAME sel.
+        CHOOSE ROW StoBal.StoBal {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) StoBal.StoBal WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW StoBal.SimArt ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) StoBal.SimArt WITH FRAME sel.
+        CHOOSE ROW StoBal.SimArt {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) StoBal.SimArt WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -307,10 +307,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-prev.
@@ -335,7 +335,7 @@ BROWSE:
       END. /* previous ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -361,7 +361,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* prev page */
-      ELSE IF LOOKUP(nap,"prev-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND StoBal WHERE recid(StoBal) = Memory NO-LOCK NO-ERROR.
         RUN local-find-prev.
@@ -385,7 +385,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -400,10 +400,10 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        Stock = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISP lcBrand WITH FRAME f1.
        UPDATE Stock WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -424,11 +424,11 @@ BROWSE:
      END. /* Search-1 */
 
      /* Search BY col 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        SimArt = "".
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE SimArt WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF SimArt <> "" THEN DO:
@@ -446,19 +446,17 @@ BROWSE:
        END.
      END. /* Search-2 */
 
-     ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO TRANS:  /* INIVID. CARDS */
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 THEN DO TRANS:  /* INIVID. CARDS */
        ufkey = TRUE.
        RUN local-find-this(FALSE). 
 
-       rt_param[1] = StoBal.StoBal. 
-       rt_param[2] = "0". /* ALL SIM batches */
-       run simall.
+       RUN Mm/simall.p.
 
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO TRANSACTION:  /* DET. BAL */
-       ufkey = TRUE. ufk = 0. ehto = 3. RUN ufkey.
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 THEN DO TRANSACTION:  /* DET. BAL */
+       ufkey = TRUE. Syst.Var:ufk = 0. Syst.Var:ehto = 3. RUN Syst/ufkey.p.
        RUN local-find-this(TRUE).                                        
        PAUSE 0.
        DISPLAY
@@ -476,18 +474,18 @@ BROWSE:
      END.
 
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW"
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION:  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        StoBal.StoBal StoBal.SimArt .
 
        RUN local-find-NEXT.
@@ -509,7 +507,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        StoBal.StoBal StoBal.SimArt .
        IF ok THEN DO:
 
@@ -529,13 +527,13 @@ BROWSE:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSACTION:
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
-       RUN ufkey.
-       cfc = "lis". run ufcolor.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9.
+       RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY 
           StoBal.StoBal
           StoBal.SimArt.
@@ -557,25 +555,25 @@ BROWSE:
        xrecid = recid(StoBal).
      END.
 
-     ELSE IF LOOKUP(nap,"home,h") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,h") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(StoBal) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,e") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,e") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(StoBal) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -647,7 +645,7 @@ PROCEDURE local-UPDATE-record:
    WITH FRAME lis
    EDITING:
       READKEY.
-      IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+      IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
          PAUSE 0.
          IF FRAME-FIELD = "simart"  THEN 
          DO:

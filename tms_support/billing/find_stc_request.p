@@ -1,4 +1,3 @@
-{timestamp.i}
 
 def var ldaeventdate as date no-undo.
 def var lidelay as int no-undo.
@@ -66,8 +65,8 @@ for each msrequest no-lock use-index reqtype where
   
    if lidelay > 0 then do:
       assign 
-         ldtactivated = fTimeStamp2DateTime(msrequest.actstamp)  
-         ldtdone      = fTimeStamp2DateTime(msrequest.donestamp).
+         ldtactivated = Func.Common:mTimeStamp2DateTime(msrequest.actstamp)  
+         ldtdone      = Func.Common:mTimeStamp2DateTime(msrequest.donestamp).
          
       if interval(ldtdone,ldtactivated,"hours") < lidelay then next.
    end.  
@@ -84,8 +83,8 @@ for each msrequest no-lock use-index reqtype where
       msrequest.msseq chr(9)
       msrequest.reqcparam1 chr(9)
       msrequest.reqcparam2 chr(9)
-      fts2hms(msrequest.actstamp)  chr(9)
-      fts2hms(msrequest.donestamp)  skip.
+      Func.Common:mTS2HMS(msrequest.actstamp)  chr(9)
+      Func.Common:mTS2HMS(msrequest.donestamp)  skip.
 end.
 
 hide frame fqty no-pause.

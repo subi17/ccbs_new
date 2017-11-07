@@ -6,11 +6,10 @@
   CREATED ......: 07.11.12
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
-{commali.i}
-{cparam2.i}
-{dumpfile_run.i}
-{timestamp.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/dumpfile_run.i}
+{Syst/tmsconst.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -40,7 +39,7 @@ WITH SIDE-LABELS 1 DOWN ROW 8 CENTERED OVERLAY
     TITLE " Collecting " FRAME fColl.
 
 FOR EACH EDRHistory NO-LOCK WHERE
-         EDRHistory.Brand = gcBrand AND
+         EDRHistory.Brand = Syst.Var:gcBrand AND
          EDRHistory.UpdateDate = TODAY - 1:
 
    /* only the latest rerate should be picked */
@@ -97,7 +96,7 @@ PROCEDURE pDumpRow:
       ROUND(ihCDR::amount,2) lcSep  
       (IF AVAIL MobCDR THEN STRING(MobCDR.BillDur) ELSE "") lcSep
       ihCDR::ErrorCode lcSep
-      (IF AVAIL MobCDR THEN fTS2HMS(MobCDR.ReadinTS) ELSE "") lcSep
+      (IF AVAIL MobCDR THEN Func.Common:mTS2HMS(MobCDR.ReadinTS) ELSE "") lcSep
       icLineType
    SKIP.
 

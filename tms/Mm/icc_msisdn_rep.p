@@ -11,12 +11,11 @@
   Version ......: 
   ---------------------------------------------------------------------- */
 
-{email.i}
-{timestamp.i}
-{commali.i}
-{cparam2.i}
-{msisdn.i}
-{ftransdir.i}
+{Func/email.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/msisdn.i}
+{Func/ftransdir.i}
 
 OUTPUT THROUGH cat.
 
@@ -47,7 +46,7 @@ FUNCTION fIsInputFile RETURNS LOGICAL (INPUT pFileName AS CHARACTER):
     RETURN TRUE.
 END.
 
-/* Added validation to STATUSCODE 1 (ValidTo must be GT than fMakeTS() */
+/* Added validation to STATUSCODE 1 (ValidTo must be GT than Func.Common:mMakeTS() */
 
 
 /* These flags indicate whether TMSParams can be found etc. 
@@ -98,7 +97,7 @@ ASSIGN
 /* File checking */
 
 /* Adding timestamp to error file, SIM file and MSISDN file */
-lcTimeStampPart = REPLACE(fUTCTime(0),":","_").  
+lcTimeStampPart = REPLACE(Func.Common:mUTCTime(0),":","_").  
 
 RUN pSplitFileName(lcErrorFile, OUTPUT lcNamePart, OUTPUT lcExtPart).
 lcErrorFile = lcNamePart + lcTimeStampPart + "." + lcExtPart.
@@ -219,7 +218,8 @@ PROCEDURE pChangeToHardCodedErrorFile:
       Hardcoded error file is the last chance file operation
       for error operations. */
 
-   lcErrorFile = "/tmp/icc_msisdn_rep_errorfile" + pcTimeStampPart + ".txt".
+   lcErrorFile = "/tmp/" +  CAPS(Syst.Parameters:Tenant) +
+                 "_icc_msisdn_rep_errorfile" + pcTimeStampPart + ".txt".
    pcNewErrorFile = lcErrorFile.
 
    RUN pReportFileError("Error file ", pcOrigErrorFile, "ErrorFile",

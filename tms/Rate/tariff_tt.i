@@ -25,7 +25,7 @@
   VERSION.......: M15
 --------------------------------------------------------------------------- */
 
-{fcustpl.i}
+{Func/fcustpl.i}
 
 /* variables FOR calculation results */
 DEF VAR discpr      AS dec  NO-UNDO. /* discount percentage         */
@@ -56,7 +56,7 @@ DEF VAR bRRate    AS lo NO-UNDO.
 DEF VAR liXCCN       AS INT  NO-UNDO.
 DEF VAR lcXBDest     AS CHAR NO-UNDO.
 
-{price_tt.i}
+{Rate/price_tt.i}
 
 FUNCTION fRateCCN RETURNS INTEGER
   (iBDest    AS CHAR,

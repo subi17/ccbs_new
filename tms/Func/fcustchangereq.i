@@ -7,8 +7,8 @@
 
 &GLOBAL-DEFINE FCUSTCHANGEREQ_I YES
 
-{commali.i}
-{fcreatereq.i}
+{Syst/commali.i}
+{Func/fcreatereq.i}
 
 /* changes to subscription's customer data */
 FUNCTION fMSCustChangeRequest RETURNS INTEGER
@@ -61,10 +61,10 @@ FUNCTION fMSCustChangeRequest RETURNS INTEGER
    IF ocResult > "" THEN RETURN 0.                       
 
    /* set activation time if caller has not determined it */
-   IF idChgStamp = ? THEN idChgStamp = fMakeTS().
+   IF idChgStamp = ? THEN idChgStamp = Func.Common:mMakeTS().
 
    /* 1. phase of agrcust change is always run immediately */ 
-   IF icChgType = "agrcust" THEN ldFirstAct = fMakeTS().
+   IF icChgType = "agrcust" THEN ldFirstAct = Func.Common:mMakeTS().
    ELSE ldFirstAct = idChgStamp.
    
    fCreateRequest(liReqType,

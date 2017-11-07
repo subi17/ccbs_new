@@ -9,7 +9,6 @@ output stream sout to value(icOutputFile) append.
 put stream sout unformatted 
   "TEST chk_subs_invoice.p" skip(1).
 
-{timestamp.i}
 DEFINE VARIABLE j AS INTEGER NO-UNDO. 
 
 def var lisubs as int no-undo.
@@ -33,8 +32,8 @@ def var liqty        as int no-undo.
 if ldtfrom = ? or ldtto = ? then return.
 
 assign
-   ldperiodfrom  = fmake2dt(ldtfrom,0)
-   ldperiodto    = fmake2dt(ldtto,86399).
+   ldperiodfrom  = Func.Common:mMake2DT(ldtfrom,0)
+   ldperiodto    = Func.Common:mMake2DT(ldtto,86399).
    
 if ldtinv = ? then do:
    if month(ldtto) = 12 

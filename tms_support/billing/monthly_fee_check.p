@@ -1,10 +1,8 @@
-{commpaa.i}
-katun = "Qvantel".
-gcBrand = "1".
-{date.i}
-{cparam2.i}
-{timestamp.i}
-{tmsconst.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
+{Func/cparam2.i}
+{Syst/tmsconst.i}
 
 DEFINE VARIABLE lcOutputFile       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liCount            AS INTEGER   NO-UNDO. 
@@ -43,13 +41,13 @@ DEF STREAM sout.
 DEF STREAM strout.
 
 IF DAY(TODAY) = 1 THEN
-   ldaToDate = fLastDayOfMOnth(TODAY - 1).
+   ldaToDate = Func.Common:mLastDayOfMonth(TODAY - 1).
 ELSE
-   ldaToDate = fLastDayOfMOnth(TODAY).
+   ldaToDate = Func.Common:mLastDayOfMonth(TODAY).
 
 ldaFromDate = DATE(MONTH(ldaToDate),1,YEAR(ldaToDate)).
 
-ASSIGN ldeFromStamp = fMake2DT(ldaFromDate,0)
+ASSIGN ldeFromStamp = Func.Common:mMake2DT(ldaFromDate,0)
        liPeriod     = YEAR(ldaFromDate) * 100 + MONTH(ldaFromDate).
 
 ASSIGN 
@@ -76,10 +74,10 @@ put STREAM strout unformatted
 
 looppi:
 FOR EACH daycampaign where
-         daycampaign.brand = gcBrand AND
+         daycampaign.brand = Syst.Var:gcBrand AND
          daycampaign.dcevent begins "PAYTERM" NO-LOCK,
     EACH dccli where
-         dccli.brand    = gcBrand             and
+         dccli.brand    = Syst.Var:gcBrand             and
          dccli.dcevent  = daycampaign.dcevent and
          dccli.validto >= ldaFromDate NO-LOCK:
    
@@ -114,7 +112,7 @@ FOR EACH daycampaign where
    ELSE liCustnum = mobsub.custnum.
          
    FIND FIRST fixedfee where
-              fixedfee.brand     = gcBrand             and
+              fixedfee.brand     = Syst.Var:gcBrand             and
               fixedfee.custnum   = liCustnum           and
               fixedfee.hosttable = "mobsub"            and
               fixedfee.keyvalue  = string(dccli.msseq) and
@@ -155,7 +153,7 @@ FOR EACH daycampaign where
    
       if dccli.amount > 0 then do:
          FIND FIRST SingleFee NO-LOCK WHERE
-                    SingleFee.Brand       = gcBrand                     AND
+                    SingleFee.Brand       = Syst.Var:gcBrand                     AND
                     SingleFee.Custnum     = liCustnum                   AND
                     SingleFee.HostTable   = "mobsub"                    AND
                     SingleFee.KeyValue    = string(dccli.msseq)         AND
@@ -178,7 +176,7 @@ FOR EACH daycampaign where
 
    ASSIGN lcKey = "1"      + CHR(255) + string(liCustnum) + CHR(255) +
                   "MobSub" + CHR(255) + string(dccli.msseq)
-          ldeActStamp = fmake2dt(dccli.validfrom, 0).
+          ldeActStamp = Func.Common:mMake2DT(dccli.validfrom, 0).
 
    IF AVAIL fixedfee THEN
       lcFFItemKey = string(fixedfee.FFNum) + CHR(255) + string(liPeriod).
@@ -223,7 +221,7 @@ FOR EACH daycampaign where
       avail(eventlog)                           "|"
       avail(beventlog)                          "|"
       lcEventlogDetails                         "|"
-      (IF ldeTerminated > 0 THEN fts2hms(ldeTerminated) ELSE "") skip.
+      (IF ldeTerminated > 0 THEN Func.Common:mTS2HMS(ldeTerminated) ELSE "") skip.
 
 end.
 
@@ -277,7 +275,7 @@ FOR EACH servicelimit NO-LOCK,
    
       release beventlog.
        
-      fsplitts(mservicelimit.fromts, 
+      Func.Common:mSplitTS(mservicelimit.fromts, 
                output ldaContractDate, 
                output liContractTime).
 
@@ -335,7 +333,7 @@ FOR EACH servicelimit NO-LOCK,
       END.
 
       FIND FIRST fixedfee NO-LOCK WHERE
-                 fixedfee.brand      = gcBrand                     and
+                 fixedfee.brand      = Syst.Var:gcBrand                     and
                  fixedfee.hosttable  = "mobsub"                    and
                  fixedfee.custnum    = liCustnum                   and
                  fixedfee.keyvalue   = string(mservicelimit.msseq) and
@@ -410,7 +408,7 @@ FOR EACH servicelimit NO-LOCK,
          avail(beventlog)                 "|"
          lcEventlogDetails                "|"
         (IF ldeTerminated > 0 THEN 
-            fts2hms(ldeTerminated) 
+            Func.Common:mTS2HMS(ldeTerminated) 
          ELSE "")                         SKIP.
    
       liCount = liCount + 1.
@@ -425,12 +423,12 @@ ASSIGN liBundleCount = 0
        lcBundleBasedCLITypes = fCParam("Bundles","BUNDLE_BASED_CLITYPES").
 
 FOR EACH MobSub NO-LOCK WHERE 
-         MobSub.Brand = gcBrand:             
+         MobSub.Brand = Syst.Var:gcBrand:             
     RUN pCheckSubscription((BUFFER Mobsub:HANDLE)).
 END.
 
 FOR EACH MsRequest NO-LOCK WHERE
-         MsRequest.Brand     = gcBrand AND 
+         MsRequest.Brand     = Syst.Var:gcBrand AND 
          MsRequest.ReqType   = 18      AND 
          MsRequest.ReqStatus = 2       AND 
          MsRequest.ActStamp >= ldeFromStamp:
@@ -455,7 +453,7 @@ PROCEDURE pCheckSubscription:
    IF CLIType.FixedLineDownLoad > "" THEN DO:
 
       FIND RequestAction NO-LOCK WHERE
-           RequestAction.Brand = gcBrand AND
+           RequestAction.Brand = Syst.Var:gcBrand AND
            RequestAction.CLIType = ihSub::CLIType AND
            RequestAction.ReqType = 14 AND
            RequestAction.ValidTo >= TODAY AND
@@ -468,7 +466,10 @@ PROCEDURE pCheckSubscription:
                          ihSub::CLI,
                          RequestAction.ActionKey).
 
-      IF ihSub::MSStatus EQ {&MSSTATUS_FIXED_PROV_ONG} THEN NEXT.
+      IF ihSub::MSStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} THEN NEXT.
+
+      /* TODO: missing partial convergent termination support */
+      IF ihSub::MSStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN NEXT.
    END.
 
    IF ihSub::TariffBundle EQ "" AND
@@ -535,7 +536,7 @@ PROCEDURE pBundleCheck:
            iiCustNum "|"
            iiMsSeq   "|"
            icCLI     "|"
-           lcBundle  SKIP.
+           icBundle  SKIP.
 
         liBundleCount = liBundleCount + 1.
      END.
@@ -549,3 +550,4 @@ OUTPUT STREAM strout CLOSE.
 MESSAGE "Done," liCount "missing contracts found" VIEW-AS ALERT-BOX.
 
 MESSAGE "Bundle tariff Count : " liBundleCount VIEW-AS ALERT-BOX.
+

@@ -7,14 +7,13 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
-   gcBrand = "1"
-   katun   = "Cron".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun   = "Cron".
    
-{timestamp.i}
-{log.i}
-{cparam2.i}
+{Func/log.i}
+{Func/cparam2.i}
 
 DEF VAR llHandled  AS LOG  NO-UNDO INIT FALSE. 
 DEF VAR lcProgram  AS CHAR NO-UNDO. 
@@ -22,7 +21,7 @@ DEF VAR llgRequest AS LOG  NO-UNDO.
 
 /******** Main start *********/
 FOR EACH RequestType NO-LOCK WHERE 
-         RequestType.Brand = gcBrand AND 
+         RequestType.Brand = Syst.Var:gcBrand AND 
          RequestType.Mode  = "Batch" AND
          RequestType.InUse:
 
@@ -32,10 +31,10 @@ FOR EACH RequestType NO-LOCK WHERE
             RequestStatus.InUse: 
 
       IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
-                        MsRequest.Brand     EQ gcBrand               AND
+                        MsRequest.Brand     EQ Syst.Var:gcBrand               AND
                         MsRequest.ReqType   EQ RequestType.ReqType   AND
                         MsRequest.ReqStatus EQ RequestStatus.ReqStat AND
-                        MsRequest.ActStamp  <= fMakeTS())            THEN 
+                        MsRequest.ActStamp  <= Func.Common:mMakeTS())            THEN 
          llgRequest = TRUE.                  
 
    END.
@@ -60,24 +59,23 @@ FOR EACH RequestType NO-LOCK WHERE
             RequestStatus.InUse:
 
       FOR EACH MsRequest NO-LOCK WHERE 
-               MsRequest.Brand     EQ gcBrand               AND
+               MsRequest.Brand     EQ Syst.Var:gcBrand               AND
                MsRequest.ReqType   EQ RequestType.ReqType   AND 
                MsRequest.ReqStatus EQ RequestStatus.ReqStat AND
-               MsRequest.ActStamp <= fMakeTS()
+               MsRequest.ActStamp <= Func.Common:mMakeTS()
             BY MsRequest.ActStamp 
             BY MsRequest.MsRequest:
 
          IF RequestStatus.Program > "" THEN lcProgram = RequestStatus.Program.
          ELSE lcProgram = RequestType.Program.
    
-         IF SEARCH(lcProgram + ".r") = ? THEN DO:
-            IF SEARCH(lcProgram + ".p") = ? THEN DO:
-               fLogError(SUBST("ERROR:Module &1 not found", lcProgram)).
-               LEAVE.
-            END.
+         IF SEARCH(lcProgram) = ?
+         THEN DO:
+            fLogError(SUBST("ERROR:Module &1 not found", lcProgram)).
+            LEAVE.
          END.
 
-         RUN VALUE(lcProgram + ".p")(MsRequest.MsRequest).
+         RUN VALUE(lcProgram)(MsRequest.MsRequest).
          IF RETURN-VALUE BEGINS "ERROR" THEN NEXT.
          llHandled = TRUE.
          LEAVE.

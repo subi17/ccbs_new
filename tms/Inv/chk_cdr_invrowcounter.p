@@ -1,10 +1,8 @@
-{commali.i}
-{funcrunprocess_update.i}
-{timestamp.i}
-{date.i}
-{cparam2.i}
-{istc.i}
-{chk_cdr_invrowcounter.i &ttReference = "REFERENCE-ONLY"}
+{Syst/commali.i}
+{Syst/funcrunprocess_update.i}
+{Func/cparam2.i}
+{Func/istc.i}
+{Inv/chk_cdr_invrowcounter.i &ttReference = "REFERENCE-ONLY"}
 
 DEF INPUT  PARAMETER TABLE FOR ttSubs.
 DEF INPUT  PARAMETER icRunID       AS CHAR NO-UNDO.
@@ -36,14 +34,15 @@ lcDir = fCParamC("ChkUnbilledIRCounterDir").
 IF lcDir = "" OR lcDir = ? THEN lcDir = "/scratch/log/invrowcounter".
 
 DEF STREAM sLog.
-OUTPUT STREAM sLog TO VALUE(lcDir + "/chk_cdr_invrowcounter_" + 
+OUTPUT STREAM sLog TO VALUE(lcDir + "/" + Syst.Parameters:Tenant + "_" + 
+                            "chk_cdr_invrowcounter_" + 
                             STRING(year(today),"9999") + 
                             STRING(month(today),"99") + 
                             STRING(day(today),"99") + "_" +
                             STRING(icRunID) + ".log") APPEND.
 
 ldaToDate = idaPeriodEnd.
-IF ldaToDate = ? THEN ldaToDate = fLastDayOfMonth(TODAY).
+IF ldaToDate = ? THEN ldaToDate = Func.Common:mLastDayOfMonth(TODAY).
 
 FOR EACH ttSubs,
    FIRST MsOwner NO-LOCK WHERE

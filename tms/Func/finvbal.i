@@ -9,8 +9,8 @@
 
 */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 &IF "{&InvBalDefined}" NE "YES" 
 &THEN

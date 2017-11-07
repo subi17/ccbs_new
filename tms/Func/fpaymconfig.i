@@ -3,8 +3,8 @@
    payment accounting rules 
 */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 FUNCTION fGetPaymentAccounts RETURNS LOGIC
    (iiPaymType AS INT,
@@ -27,7 +27,7 @@ FUNCTION fGetPaymentAccounts RETURNS LOGIC
       END CASE.
       
       FOR FIRST PaymConfig NO-LOCK WHERE
-                PaymConfig.Brand     = gcBrand    AND
+                PaymConfig.Brand     = Syst.Var:gcBrand    AND
                 PaymConfig.PaymType  = iiPaymType AND
                 PaymConfig.PaymSrc   = lcConfSrc  AND
                 PaymConfig.FromDate <= idtAccDate AND

@@ -10,7 +10,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF shared VAR order AS INT NO-UNDO.
 
@@ -21,18 +21,18 @@ DEF VAR liCustNum AS INT                 NO-UNDO.
 form
    nhaku
    help "Give number of an invoice"
-   with title color value(ctc) " INVOICE No. "
-   ROW 2 col 2 COLOR value(cfc) NO-LABELS
+   with title color value(Syst.Var:ctc) " INVOICE No. "
+   ROW 2 col 2 COLOR value(Syst.Var:cfc) NO-LABELS
    OVERLAY FRAME asno.
 
 form
     liCustNum FORMAT ">>>>>>>9"
     help "Give customer's number"           
     WITH ROW 2 col 2 TITLE
-    color value(ctc) " CUSTOMER'S Number "
-    NO-LABELS COLOR value(cfc) OVERLAY FRAME nimi.
+    color value(Syst.Var:ctc) " CUSTOMER'S Number "
+    NO-LABELS COLOR value(Syst.Var:cfc) OVERLAY FRAME nimi.
 
-    assign cfc = "puyr". RUN ufcolor.
+    assign Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
     PAUSE 0 no-message.
 
 LOOP:
@@ -40,24 +40,24 @@ repeat:
     /* haku laskunumerolla */
     IF order = 1 THEN DO WITH FRAME asno:
        ASSIGN nhaku = 0.
-       ehto = 9. RUN ufkey.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p.
        UPDATE nhaku.
        HIDE FRAME asno.
        IF nhaku NE 0 THEN DO:
           FIND FIRST Invoice where 
-                     Invoice.Brand  = gcBrand AND
+                     Invoice.Brand  = Syst.Var:gcBrand AND
                      Invoice.InvNum <= nhaku
           USE-INDEX InvNum no-lock no-error.
 
-          IF AVAILABLE Invoice THEN ASSIGN si-recid = recid(Invoice).
+          IF AVAILABLE Invoice THEN ASSIGN Syst.Var:si-recid = recid(Invoice).
           ELSE DO:
              message "CAN'T FIND !".
-             si-recid = ?.
+             Syst.Var:si-recid = ?.
              BELL.
              PAUSE 1 no-message.
           END.
        END.
-       ELSE ASSIGN si-recid = ?.
+       ELSE ASSIGN Syst.Var:si-recid = ?.
        HIDE FRAME asno no-pause.
        LEAVE LOOP.
     END.
@@ -65,24 +65,24 @@ repeat:
     /* haku asiakas */
     ELSE IF order = 2 THEN DO WITH FRAME nimi:
        liCustNum = 0.
-       ehto = 9. RUN ufkey.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p.
        UPDATE liCustNum.
        HIDE FRAME nimi.
        if liCustNum > 0 THEN DO:
           FIND FIRST Invoice where 
-                     Invoice.Brand  = gcBrand AND
+                     Invoice.Brand  = Syst.Var:gcBrand AND
                      Invoice.CustNum >= liCustNum
           no-lock no-error.
 
-          IF AVAILABLE Invoice THEN ASSIGN si-recid = recid(Invoice).
+          IF AVAILABLE Invoice THEN ASSIGN Syst.Var:si-recid = recid(Invoice).
           ELSE DO:
              message "CAN'T FIND !".
-             si-recid = ?.
+             Syst.Var:si-recid = ?.
              BELL.
              PAUSE 1 no-message.
           END.
        END.
-       ELSE ASSIGN si-recid = ?.
+       ELSE ASSIGN Syst.Var:si-recid = ?.
        HIDE FRAME nimi no-pause.
        LEAVE LOOP.
     END.

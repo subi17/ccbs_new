@@ -1,4 +1,3 @@
-{timestamp.i}
 
 def var i as int no-undo.
 
@@ -39,7 +38,7 @@ for each invoice no-lock use-index invdate where
    /*
    disp invdate invamt paidamt paymstate 
         can-find(first payment where payment.invnum = invoice.invnum)
-        fts2hms(invoice.chgstamp) format "x(20)"
+        Func.Common:mTS2HMS(invoice.chgstamp) format "x(20)"
         invoice.custnum.
         
          .

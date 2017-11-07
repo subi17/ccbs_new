@@ -1,12 +1,12 @@
-{commali.i}
-{eventval.i}
-{orderfunc.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/orderfunc.i}
 DEFINE INPUT PARAMETER piOrderId AS INTEGER NO-UNDO.
 
 DEFINE VARIABLE lcStatus AS CHARACTER NO-UNDO.
 
 FIND Order WHERE
-     Order.Brand   = gcBrand AND
+     Order.Brand   = Syst.Var:gcBrand AND
      Order.OrderId = piOrderId
 NO-LOCK.
 
@@ -30,9 +30,9 @@ END.
 FIND CURRENT Order EXCLUSIVE-LOCK.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhOrder AS HANDLE NO-UNDO.
    lhOrder = BUFFER Order:HANDLE.

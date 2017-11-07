@@ -29,13 +29,13 @@
   Version ......: M15
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{utumaa.i "new"}
-{tmsparam2.i}
-{fcurrency.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'invoice'}
-{invjournal.i}
+{Syst/commali.i}
+{Syst/utumaa.i "new"}
+{Func/tmsparam2.i}
+{Func/fcurrency.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'invoice'}
+{Ar/invjournal.i}
 
 assign tuni1 = "nnlalu"
        tuni2 = "".
@@ -80,12 +80,12 @@ form
 
    liCustNum[1] at 2
       label "Customer numbers ......."
-      format ">>>>>>>9"
+      format ">>>>>>>>9"
       help "Customers"
    "-"
    liCustNum[2]   
       no-label
-      format ">>>>>>>9"
+      format ">>>>>>>>9"
       help "Customers"
       SKIP
       
@@ -133,12 +133,12 @@ form
       HELP "Print an account level summary from all postings" skip(1)
    
    with row 1 side-labels width 80
-        title color value(ctc) " " + ynimi + "  INVOICE JOURNAL  " +
-        string(pvm,"99-99-99") + " " color value(cfc)
+        title color value(Syst.Var:ctc) " " + Syst.Var:ynimi + "  INVOICE JOURNAL  " +
+        string(TODAY,"99-99-99") + " " color value(Syst.Var:cfc)
         frame rajat.
 
 
-cfc = "puli". run ufcolor.
+Syst.Var:cfc = "puli". RUN Syst/ufcolor.p.
 pause 0 no-message.
 
 assign pvm2         = date(month(today),01,year(today)) - 1
@@ -146,7 +146,7 @@ assign pvm2         = date(month(today),01,year(today)) - 1
        llInvoices   = TRUE
        latil        = true 
        tikoo        = true 
-       liCustNum[2] = 99999999
+       liCustNum[2] = 999999999
        liInvType2   = 98
        liPaymState2 = 9
        lcExtInvID2  = FILL("Z",12)
@@ -164,7 +164,7 @@ repeat with frame rajat on endkey undo toimi, next toimi:
 
       IF InvGroup > "" THEN DO:
          FIND InvGroup WHERE 
-              InvGroup.Brand    = gcBrand AND
+              InvGroup.Brand    = Syst.Var:gcBrand AND
               InvGroup.InvGroup = InvGroup NO-LOCK NO-ERROR.
          IF AVAILABLE InvGroup THEN DISPLAY InvGroup.igname @ igname
             WITH FRAME rajat.
@@ -173,11 +173,11 @@ repeat with frame rajat on endkey undo toimi, next toimi:
       IF extname = ""
       THEN DISPLAY "NOT SELECTED" @ extname WITH FRAME rajat.
 
-      assign ufk = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      run ufkey.
+      assign Syst.Var:ufk = 0 Syst.Var:ufk[1] = 132 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
+      RUN Syst/ufkey.p.
 
-      if toimi = 1 then do:
-         ehto = 9. run ufkey.
+      if Syst.Var:toimi = 1 then do:
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
          repeat with frame rajat on endkey undo, leave:
          
@@ -213,9 +213,9 @@ repeat with frame rajat on endkey undo toimi, next toimi:
 
             with frame rajat editing:
 
-               readkey. nap = keylabel(lastkey).
+               readkey. Syst.Var:nap = keylabel(lastkey).
 
-               IF nap = "F9" AND 
+               IF Syst.Var:nap = "F9" AND 
                   (INDEX(FRAME-FIELD,"liInvType") > 0 OR
                    INDEX(FRAME-FIELD,"liPaymState") > 0)
                THEN DO:
@@ -225,7 +225,7 @@ repeat with frame rajat on endkey undo toimi, next toimi:
                   IF LOOKUP(FRAME-FIELD,"liInvType1,liInvType2") > 0
                   THEN DO:
 
-                     RUN h-tmscodes(INPUT "Invoice",  /* TableName*/
+                     RUN Help/h-tmscodes.p(INPUT "Invoice",  /* TableName*/
                                           "InvType", /* FieldName */
                                           "Report", /* GroupCode */
                                     OUTPUT lcCode).
@@ -241,7 +241,7 @@ repeat with frame rajat on endkey undo toimi, next toimi:
                   ELSE IF LOOKUP(FRAME-FIELD,"liPaymState1,liPaymState2") > 0
                   THEN DO:
 
-                     RUN h-tmscodes(INPUT "Invoice",  /* TableName*/
+                     RUN Help/h-tmscodes.p(INPUT "Invoice",  /* TableName*/
                                           "PaymState", /* FieldName */
                                           "AccRec", /* GroupCode */
                                     OUTPUT lcCode).
@@ -254,12 +254,12 @@ repeat with frame rajat on endkey undo toimi, next toimi:
                      END.
                   END.
 
-                  ehto = 9.
-                  RUN ufkey.
+                  Syst.Var:ehto = 9.
+                  RUN Syst/ufkey.p.
                   NEXT. 
                END.
 
-               if lookup(nap,poisnap) > 0 then do:
+               if lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 then do:
                   hide message.
                   if frame-field = "InvGroup" then do:
                      assign frame rajat InvGroup.
@@ -269,7 +269,7 @@ repeat with frame rajat on endkey undo toimi, next toimi:
                      end.
                      else do:
                         find InvGroup where
-                             InvGroup.Brand    = gcBrand AND
+                             InvGroup.Brand    = Syst.Var:gcBrand AND
                              InvGroup.InvGroup = InvGroup
                         no-lock no-error.
                         if not avail InvGroup then do:
@@ -293,10 +293,10 @@ repeat with frame rajat on endkey undo toimi, next toimi:
                         disp "NOT SELECTED" @ extname with frame rajat.
                      end.
                      else do:
-                        RUN gathecg(INPUT-OUTPUT table TCustGroup).
+                        RUN Mc/gathecg.p(INPUT-OUTPUT table TCustGroup).
                         /* DISPLAY Customer groups */
-                        EHTO = 9.
-                        run ufkey.
+                        Syst.Var:ehto = 9.
+                        RUN Syst/ufkey.p.
                         FOR EACH TCustGroup.
                            dExtCustGrp = dExtCustGrp + TCustGroup.CustGroup +
                            ",".
@@ -329,14 +329,14 @@ repeat with frame rajat on endkey undo toimi, next toimi:
       end.
 
 
-      if toimi = 5 then do:
+      if Syst.Var:toimi = 5 then do:
 
          leave toimi.
       end.
 
-      if toimi = 8 then return.
+      if Syst.Var:toimi = 8 then return.
 
-end. /* toimi */
+end. /* Syst.Var:toimi */
 
 
 IF extcustgrp = FALSE THEN 
@@ -363,14 +363,14 @@ ASSIGN ttCriter.InvGroup    = InvGroup
        ttCriter.Summary     = tikoo.
 
 assign tila = true.
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
-RUN invjournal (INPUT TABLE TCustGroup,
+RUN Ar/invjournal.p (INPUT TABLE TCustGroup,
                 INPUT TABLE ttCriter,
                 OUTPUT i).
                   
 assign tila = false.
-{utuloste.i}
+{Syst/utuloste.i}
 
 IF RETURN-VALUE BEGINS "ERROR:" THEN 
    MESSAGE "Printing failed:" RETURN-VALUE

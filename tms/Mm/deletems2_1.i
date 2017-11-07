@@ -5,11 +5,11 @@ DEF VAR delcmd   AS C  NO-UNDO.
 
 
 /* get default IMSI FOR FNSUB */
-{tmsparam.i DefIMSI return}. DefIMSI = TMSParam.CharVal.
+{Func/tmsparam.i DefIMSI return}. DefIMSI = TMSParam.CharVal.
 
 
 /* get default IMSI FOR FNSUB */
-{tmsparam.i DefIMSI return}. DefIMSI = TMSParam.CharVal.
+{Func/tmsparam.i DefIMSI return}. DefIMSI = TMSParam.CharVal.
 
 FUNCTION fSONG RETURNS LOG(mi-no AS CHARACTER).
 

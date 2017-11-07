@@ -10,8 +10,7 @@
   Version ......: yoigo
 -------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
 
 FUNCTION fCreateTopUpRequest RETURNS INTEGER
    (iiMsSeq      AS INT,
@@ -29,21 +28,21 @@ FUNCTION fCreateTopUpRequest RETURNS INTEGER
    DEFINE VARIABLE liReturn    AS INTEGER   NO-UNDO.
 
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
       
    DO WHILE TRUE:
       liReturn = NEXT-VALUE(PrePaidReq).
       
       IF NOT CAN-FIND(FIRST PrePaidRequest WHERE
-                            PrePaidRequest.Brand     = gcBrand AND
+                            PrePaidRequest.Brand     = Syst.Var:gcBrand AND
                             PrepaidRequest.PPRequest = liReturn)
       THEN LEAVE.
    END.
    
    CREATE PrepaidRequest.
    ASSIGN
-      PrepaidRequest.Brand       = gcBrand
-      PrepaidRequest.UserCode    = katun
+      PrepaidRequest.Brand       = Syst.Var:gcBrand
+      PrepaidRequest.UserCode    = Syst.Var:katun
       PrepaidRequest.PPRequest   = liReturn
       PrePaidRequest.PPReqPrefix = icPrefix
       PrePaidRequest.MsSeq       = iiMsSeq

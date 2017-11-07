@@ -1,6 +1,6 @@
-{testpaa.i}
-katun = "anttis".
-{msisdn.i}
+{Syst/testpaa.i}
+Syst.Var:katun = "anttis".
+{Func/msisdn.i}
 
 find msisdn where
    msisdn.brand = "1" and

@@ -11,7 +11,7 @@
   Version ......: M15
   ------------------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF NEW shared STREAM excel.
 
@@ -28,7 +28,7 @@ DEF VAR SmName  AS c  NO-UNDO.
 
 /* get default direcory name FOR OUTPUT */
 DO FOR TMSUser:
-   FIND TMSUser where TMSUser.UserCode = katun no-lock.
+   FIND TMSUser where TMSUser.UserCode = Syst.Var:katun no-lock.
    ASSIGN exdir = TMSUser.RepDir.
 END.
 
@@ -45,12 +45,12 @@ help "Earliest call date"
 "-" exdate2 format "99-99-99" help "Latest call date"  skip
 "                Directory for output .:" exdir format "x(30)" skip(7)
 WITH
-   width 80 OVERLAY COLOR value(cfc) TITLE COLOR value(ctc)
-   " " + ynimi + " SUMMARY calls SMAN/PROD " + string(pvm,"99-99-99") + " "
+   width 80 OVERLAY COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc)
+   " " + Syst.Var:ynimi + " SUMMARY calls SMAN/PROD " + string(TODAY,"99-99-99") + " "
    NO-LABELS FRAME rajat.
 
 
-cfc = "sel". RUN ufcolor.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
 
 ASSIGN
 exdate2 = date(month(TODAY),1,year(TODAY)) - 1
@@ -63,7 +63,7 @@ hdr     = "Sman,Name,ProdCode,ProdName,AmtCalls,AmtMinPeak," +
 rajat:
 repeat WITH FRAME rajat:
 
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE
    exdate1
    exdate2 validate(input exdate2 >= input exdate1,"Invalid order !")
@@ -71,12 +71,12 @@ repeat WITH FRAME rajat:
 
 toimi:
    repeat WITH fram rajat:
-      ASSIGN ufk = 0 ufk[1] = 15 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 15 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
+      RUN Syst/ufkey.p.
 
-      IF toimi = 1 THEN NEXT rajat.
-      IF toimi = 8 THEN LEAVE rajat.
-      IF toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 1 THEN NEXT rajat.
+      IF Syst.Var:toimi = 8 THEN LEAVE rajat.
+      IF Syst.Var:toimi = 5 THEN DO:
          ok = FALSE.
          message "Do You REALLY want to start printing (Y/N) ?"
          UPDATE ok.
@@ -90,16 +90,16 @@ toimi:
    exPaymFile = exdir + "/smprod.txt".
    OUTPUT STREAM excel TO value(exPaymFile).
 
-   PUT STREAM excel UNFORMATTED ynimi.
-   RUN uexskip(2).
+   PUT STREAM excel UNFORMATTED Syst.Var:ynimi.
+   RUN Syst/uexskip.p(2).
    PUT STREAM excel UNFORMATTED
     "All calls by salesman/product during "
     string(exdate1,"99.99.9999") " - " string(exdate2,"99.99.9999").
-   RUN uexskip(2).
+   RUN Syst/uexskip.p(2).
    DO i = 1 TO num-entries(hdr).
       PUT STREAM excel UNFORMATTED entry(i,hdr) tab.
    END.
-   RUN uexskip(2).
+   RUN Syst/uexskip.p(2).
    i = 0.
    FOR
 
@@ -153,7 +153,7 @@ toimi:
          round(
          (accum sub-total BY FixCDR.BillCode netto), 0)              tab.
 
-         RUN uexskip(1).
+         RUN Syst/uexskip.p(1).
 
       END. 
 

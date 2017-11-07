@@ -12,7 +12,6 @@
 
 {Syst/tmsconst.i}
 {Syst/commpaa.i}
-{Func/timestamp.i}
 {Func/upsellbundle.i}
 
 /*Logic:*
@@ -27,49 +26,50 @@
    4. Free lock taken in step 1.
 */
 
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
-DEF VAR lcTableName AS CHAR NO-UNDO.
-DEF VAR lcActionId AS CHAR NO-UNDO.
-DEF VAR ldCampaignStart AS DEC NO-UNDO.
-DEF VAR ldCampaignEnd AS DEC NO-UNDO.
-DEF VAR ldCurrentTimeTS AS DEC  NO-UNDO.
-DEF VAR ldCollPeriodStartTS AS DEC NO-UNDO.
-DEF VAR ldCollPeriodEndTS AS DEC NO-UNDO. /*now - 1 minute*/
-DEF VAR lcResult AS CHAR NO-UNDO.
-DEF VAR lcUpsell AS CHAR NO-UNDO.
-DEF VAR lcLogDir AS CHAR NO-UNDO.
-DEF VAR lcLogFile AS CHAR NO-UNDO.
-DEF VAR ldaReadDate  AS DATE NO-UNDO.
-DEF VAR llgSimulate AS LOG NO-UNDO.
-DEF VAR lcOutROw AS CHAR NO-UNDO.
+DEF VAR lcTableName           AS CHAR NO-UNDO.
+DEF VAR lcActionId            AS CHAR NO-UNDO.
+DEF VAR ldCampaignStartApril  AS DEC  NO-UNDO.
+DEF VAR ldCampaignStart       AS DEC  NO-UNDO.
+DEF VAR ldCampaignEnd         AS DEC  NO-UNDO.
+DEF VAR ldCurrentTimeTS       AS DEC  NO-UNDO.
+DEF VAR ldCollPeriodStartTS   AS DEC  NO-UNDO.
+DEF VAR ldCollPeriodEndTS     AS DEC  NO-UNDO. /*now - 1 minute*/
+DEF VAR lcResult              AS CHAR NO-UNDO.
+DEF VAR lcUpsell              AS CHAR NO-UNDO.
+DEF VAR lcLogDir              AS CHAR NO-UNDO.
+DEF VAR lcLogFile             AS CHAR NO-UNDO.
+DEF VAR ldaReadDate           AS DATE NO-UNDO.
+DEF VAR llgSimulate           AS LOG  NO-UNDO.
+DEF VAR lcOutROw              AS CHAR NO-UNDO.
 
 DEF STREAM sLogFile.
 
-llgSimulate = FALSE. /*TRUE-> only log writing, FALSE->make real updates*/
-lcTableName = "March2017Promo". /*For execution lock*/
-lcActionId = "UpsellForAzul". /*For execution lock*/
-ldCampaignStart = 20170301. /*Dates when order must be done */
-ldCampaignEnd = 20170401. /*Dates when order must be done */
-lcUpsell = "FLEX_UPSELL". /*Upsell that will be aded in the promo*/
-ldaReadDate  = TODAY.
+ASSIGN
+   llgSimulate       = FALSE              /*TRUE-> only log writing, FALSE->make real updates*/
+   lcTableName       = "March2017Promo"   /*For execution lock*/
+   lcActionId        = "UpsellForAzul"    /*For execution lock*/
+   ldCampaignStartApril   = fCParamDe("March2017AprilFromDate")
+   ldCampaignStart   = fCParamDe("March2017PromoFromDate") /*Dates when order must be done */
+   ldCampaignEnd     = fCParamDe("March2017PromoToDate")   /*Dates when order must be done */
+   lcUpsell          = "FLEX_UPSELL"      /*Upsell that will be aded in the promo*/
+   ldaReadDate       = TODAY
+   ldCurrentTimeTS   = Func.Common:mMakeTS()
+   lcLogDir          = fCParam("March2017Promo","March2017LogDir").
 
-ldCurrentTimeTS = fMakeTS().
-
-
-lcLogDir     = fCParam("March2017Promo","March2017LogDir").
 IF lcLogDir EQ "" OR lcLogDir EQ ? THEN lcLogDir = "/tmp/".
 
-lcLogFile    = lcLogDir + "March2017Promo_hourly_" +
-                      STRING(YEAR(ldaReadDate)) +
-                      STRING(MONTH(ldaReadDate),"99") +
-                      STRING(DAY(ldaReadDate),"99") +
-                      REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".log".
+lcLogFile = lcLogDir + "March2017Promo_hourly_" +
+            STRING(YEAR(ldaReadDate)) +
+            STRING(MONTH(ldaReadDate),"99") +
+            STRING(DAY(ldaReadDate),"99") +
+            REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".log".
 
 OUTPUT STREAM sLogFile TO VALUE(lcLogFile) APPEND.
 
 PUT STREAM sLogFile UNFORMATTED "Azul Upsell Activation starts " +
-                                 fTS2HMS(ldCurrentTimeTS) SKIP.
+                                 Func.Common:mTS2HMS(ldCurrentTimeTS) SKIP.
 IF llgSimulate EQ TRUE THEN
    PUT STREAM sLogFile UNFORMATTED "Simulation mode" SKIP.
 
@@ -82,7 +82,8 @@ FUNCTION fIsAzul RETURNS LOG
    (icCliType AS CHAR):
    IF icCliType EQ "CONTDSL59" OR
       icCliType EQ "CONTFH59_50" OR
-      icCliType EQ "CONTFH69_300" THEN
+      icCliType EQ "CONTFH69_300" OR
+      icCliType EQ "CONT25" THEN
       RETURN TRUE.
  
    RETURN FALSE.
@@ -91,46 +92,75 @@ END.
 FUNCTION fCollect RETURNS CHAR
    (idStartTS AS DEC,
     idEndTS AS DEC):
+
    DEF BUFFER Order FOR Order.
-   DEF BUFFER ORdertimestamp FOR Ordertimestamp.
-   FOR EACH Ordertimestamp NO-LOCK WHERE
-            Ordertimestamp.Brand EQ gcBrand AND
+   DEF BUFFER Mobsub FOR Mobsub.
+   DEF BUFFER OrderTimestamp FOR OrderTimestamp.
+
+   DEF VAR lcErr AS CHAR NO-UNDO.
+   
+   FOR EACH OrderTimestamp NO-LOCK WHERE
+            OrderTimestamp.Brand EQ Syst.Var:gcBrand AND
             OrderTimestamp.RowType EQ {&ORDERTIMESTAMP_DELIVERY} AND
-            Ordertimestamp.TimeStamp < idEndTS AND
-            Ordertimestamp.TimeStamp >= idStartTS:
-      
+            OrderTimestamp.TimeStamp < idEndTS AND
+            OrderTimestamp.TimeStamp >= idStartTS:
+
+      lcErr = "".
+
       FIND FIRST ttOrderList WHERE
                  ttOrderList.OrderID EQ OrderTimestamp.OrderId NO-ERROR.
       IF AVAIL ttOrderList THEN NEXT. /*Skip duplicates*/
       
-      FIND FIRST Order WHERE
-                 Order.Brand EQ gcBrand AND
+      FIND FIRST Order NO-LOCK WHERE
+                 Order.Brand EQ Syst.Var:gcBrand AND
                  Order.OrderID EQ OrderTimestamp.OrderId NO-ERROR.
       IF NOT AVAIL Order THEN NEXT. /*This should not happen*/
 
-      /*Order must be for Azul*/
+      /*Order must be for Azul or CONT25 (april promo) */
       IF NOT fIsAzul(Order.CliType) THEN NEXT.
 
-      /*Order must be created in March*/
-      IF Order.Brand EQ gcBrand AND 
-         NOT(Order.CrStamp GE ldCampaignStart AND
-             Order.CrStamp LT ldCampaignEnd) THEN NEXT.
-
+      /* April promotion */
+      /* Only MNP orders to CONT25 get the promotion */
+      IF Order.CliType EQ "CONT25" THEN DO:
+         IF Order.OrderType EQ {&ORDER_TYPE_MNP} THEN DO:
+            IF NOT (Order.CrStamp >= ldCampaignStartApril AND
+                    Order.CrStamp < ldCampaignEnd) THEN NEXT.
+         END.
+         ELSE NEXT. /*CONT25 non-MNP orders do net get the activation*/
+      END.
+      ELSE DO:
+         /*Order must be created in March*/
+         IF NOT(Order.CrStamp GE ldCampaignStart AND
+                Order.CrStamp LT ldCampaignEnd) THEN NEXT.
+      END.
       /*No Flex upsell is allowed*/
          /*This is checked in activation phase in fUpsellForAzul*/
 
-      /*Do not make the activation for STC*/
-      IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN NEXT.
+      IF Order.OrderType NE {&ORDER_TYPE_NEW} AND
+         Order.OrderType NE {&ORDER_TYPE_MNP} AND
+         Order.OrderType NE {&ORDER_TYPE_STC} THEN NEXT.
 
-      /*Do not make the activation for reactivation orders. TODO Prio2*/
-
+      FIND FIRST Mobsub NO-LOCK WHERE
+                 Mobsub.MsSeq EQ Order.MsSeq NO-ERROR.
+      IF NOT AVAIL Mobsub THEN DO:
+         lcErr = "No active mobsub " + STRING(Order.MsSeq).
+         PUT STREAM sLogFile UNFORMATTED lcErr SKIP.
+         NEXT.
+      END.  
+      IF fIsAzul(Mobsub.CliType) NE TRUE THEN DO:
+         lcErr = "No campaign CLITYPE" + 
+                 STRING(Order.Orderid) + "|" +
+                 STRING(Order.clitype) + "|" +
+                 STRING(Mobsub.clitype).
+         PUT STREAM sLogFile UNFORMATTED lcErr SKIP.
+         NEXT.
+      END.
 
       /*After all validations: this order needs upsell*/
       CREATE ttOrderList.
       ASSIGN
          ttOrderList.OrderID = Order.Orderid
          ttOrderList.MsSeq = Order.MsSeq.
-      
 
    END.
 END.
@@ -152,7 +182,7 @@ FUNCTION fUpsellForAzul RETURNS CHAR
       fCreateUpsellBundle(iiMsSeq,
                            lcUpsell,
                            {&REQUEST_SOURCE_YOIGO_TOOL},
-                           fMakeTS(),
+                           Func.Common:mMakeTS(),
                            OUTPUT liRequest,
                            OUTPUT lcError).
       IF lcError NE "" THEN RETURN lcError.                    
@@ -163,7 +193,7 @@ END.
 DO TRANS:
 
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.Var:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName NO-ERROR.
 
@@ -176,11 +206,11 @@ DO TRANS:
       /*First execution stamp*/
       CREATE ActionLog.
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.Var:gcBrand
          ActionLog.TableName    = lcTableName
          ActionLog.ActionID     = lcActionID
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionTS     = ldCampaignStart.
       RELEASE ActionLog.
       RETURN. /*No reporting in first time.*/
@@ -191,7 +221,7 @@ DO TRANS:
          ldCollPeriodStartTS = ActionLog.ActionTS
 
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
 
       RELEASE Actionlog.
@@ -199,7 +229,7 @@ DO TRANS:
 END.
 
 /*Actual execution:*/
-ldCollPeriodEndTS = fSecOffSet(ldCurrentTimeTS, -60). /*Now - 1 minute*/
+ldCollPeriodEndTS = Func.Common:mSecOffSet(ldCurrentTimeTS, -60). /*Now - 1 minute*/
 fCollect(ldCollPeriodStartTS, ldCollPeriodEndTS). /*Select orders that need activation*/
 
 /*Activate upsells*/
@@ -216,7 +246,7 @@ END.
 /*Release execution lock*/
 DO TRANS:
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.Var:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName    AND
               ActionLog.ActionStatus NE  {&ACTIONLOG_STATUS_SUCCESS}
@@ -230,6 +260,6 @@ DO TRANS:
 END.
 
 PUT STREAM sLogFile UNFORMATTED "Azul Upsell Activation done " +
-                                 fTS2HMS(fMakeTS()) SKIP.
+                                 Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
 OUTPUT STREAM sLogFile CLOSE.
 

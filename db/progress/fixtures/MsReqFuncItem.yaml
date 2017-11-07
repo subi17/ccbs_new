@@ -1,0 +1,84 @@
+bulkload: MsReqFuncItem
+  ItemId: "1"
+  ItemDesc: "Cancel request (set status to 4)"
+  Module: "Syst/chmsreqst.p"
+  IParam: 4
+
+bulkload: MsReqFuncItem
+  ItemId: "10"
+  ItemDesc: "Bypass sub-request(set status to 8)"
+  Module: "Syst/chmsreqst.p"
+  IParam: 8
+
+bulkload: MsReqFuncItem
+  ItemId: "11"
+  ItemDesc: "Change refund type and accept"
+  Module: "Ar/chgrefundtype.p"
+  IParam: 15
+
+bulkload: MsReqFuncItem
+  ItemId: "12"
+  ItemDesc: "Change refund payment date"
+  Module: "Ar/chgrefundate.p"
+  IParam: 16
+
+bulkload: MsReqFuncItem
+  ItemId: "13"
+  ItemDesc: "Change charge type"
+  Module: "Inv/chgchargetype.p"
+
+bulkload: MsReqFuncItem
+  ItemId: "14"
+  ItemDesc: "Reset activation"
+  Module: "stc_nw_act"
+  IParam: 5
+
+bulkload: MsReqFuncItem
+  ItemId: "15"
+  ItemDesc: "Release request (set status to 8)"
+  Module: "Syst/chmsreqst.p"
+  IParam: 8
+
+bulkload: MsReqFuncItem
+  ItemId: "2"
+  ItemDesc: "Reset request (set status to 0)"
+  Module: "Syst/chmsreqst.p"
+
+bulkload: MsReqFuncItem
+  ItemId: "3"
+  ItemDesc: "Handle request (set status to 9)"
+  Module: "Syst/chmsreqst.p"
+  IParam: 9
+
+bulkload: MsReqFuncItem
+  ItemId: "4"
+  ItemDesc: "Bypass network (Set status to 6)"
+  Module: "Syst/chmsreqst.p"
+  IParam: 6
+
+bulkload: MsReqFuncItem
+  ItemId: "5"
+  ItemDesc: "Approve request (set status to 15)"
+  Module: "Syst/chmsreqst.p"
+  IParam: 15
+
+bulkload: MsReqFuncItem
+  ItemId: "6"
+  ItemDesc: "Run immediately"
+  Module: "Syst/runreqnow.p"
+
+bulkload: MsReqFuncItem
+  ItemId: "7"
+  ItemDesc: "Approve ICC change for handling"
+  Module: "Syst/chmsreqst.p"
+
+bulkload: MsReqFuncItem
+  ItemId: "8"
+  ItemDesc: "Approve ACC handling"
+  Module: "Syst/chmsreqst.p"
+
+bulkload: MsReqFuncItem
+  ItemId: "9"
+  ItemDesc: "Release request (set status to 0)"
+  Module: "Syst/chmsreqst.p"
+

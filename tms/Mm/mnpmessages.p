@@ -12,25 +12,24 @@
 
 &GLOBAL-DEFINE BrTable MNPMessage
 
-{commali.i} 
-{eventval.i}
-{timestamp.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MNPMessage'}
-{xmlfunction.i}
+{Syst/commali.i} 
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MNPMessage'}
+{Func/xmlfunction.i}
 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMNPMessage AS HANDLE NO-UNDO.
    lhMNPMessage = BUFFER MNPMessage:HANDLE.
    RUN StarEventInitialize(lhMNPMessage).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhMNPMessage).
+      RUN Mc/eventview2.p(lhMNPMessage).
    END.
 
 END.
@@ -71,14 +70,14 @@ form
     MNPMessage.StatusCode      COLUMN-LABEL "St"
     lcStChange                 COLUMN-LABEL "Msg State"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
     " M2M messages "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = " By CLI ,  By Name  ,By 3, By 4".
@@ -150,27 +149,27 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk = 0
-        ufk[5] = 1968 WHEN lcRight = "RW"
-        ufk[7] = 2808
-        ufk[8] = 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
-         RUN ufkey.
+        Syst.Var:ufk = 0
+        Syst.Var:ufk[5] = 1968 WHEN lcRight = "RW"
+        Syst.Var:ufk[7] = 2808
+        Syst.Var:ufk[8] = 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MNPMessage.MessageType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MNPMessage.MessageType WITH FRAME sel.
+        CHOOSE ROW MNPMessage.MessageType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) MNPMessage.MessageType WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -194,10 +193,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -222,7 +221,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -248,7 +247,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND MNPMessage WHERE recid(MNPMessage) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -272,7 +271,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -286,7 +285,7 @@ BROWSE:
        END.
      END. /* NEXT page */
      
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:
         
         RUN local-find-this(false).
         
@@ -320,7 +319,7 @@ BROWSE:
         END.
      
         /* must be 1 hour old (does not understand daychange) */
-        IF fMakeTS() - MNPMessage.SentTS < 0.03600 THEN DO:
+        IF Func.Common:mMakeTS() - MNPMessage.SentTS < 0.03600 THEN DO:
            MESSAGE
              "Resend can't be done since original message is not 1 hour old!"
            VIEW-AS ALERT-BOX MESSAGE.
@@ -362,7 +361,7 @@ BROWSE:
         RELEASE bufMessage.
                    
         ASSIGN  
-           MNPMessage.CreatedTS = fMakeTS()
+           MNPMessage.CreatedTS = Func.Common:mMakeTS()
            MNPMessage.StatusCode = 1
            MNPMessage.MsgTurn = MNPMessage.MsgTurn + 1.
         
@@ -382,7 +381,7 @@ BROWSE:
 
      END.
 
-     ELSE IF LOOKUP(nap,"7,f7") > 0 AND lcRight = "RW" THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"7,f7") > 0 AND lcRight = "RW" THEN DO:
         RUN local-find-this(false).
         IF MNPMessage.XMLMessage NE "" THEN RUN pShowSchema(MNPMessage.XMLMessage).
         ELSE MESSAGE "XML-message empty !" VIEW-AS ALERT-BOX.
@@ -391,25 +390,25 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(MNPMessage) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(MNPMessage) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 PROCEDURE local-find-this:

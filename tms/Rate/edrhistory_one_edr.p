@@ -7,12 +7,11 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'EDRHistory'}
-{timestamp.i}
-{callquery.i}
-{eventval.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'EDRHistory'}
+{Func/callquery.i}
+{Syst/eventval.i}
 
 DEF INPUT PARAMETER icCLI     AS CHAR NO-UNDO.
 DEF INPUT PARAMETER idaDateSt AS DATE NO-UNDO.
@@ -68,8 +67,8 @@ FORM
     ttHistory.Amount  FORMAT ">>>>9.999"
     ttHistory.Rated  FORMAT "X(8)" COLUMN-LABEL "Changed" 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " Changes "
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " Changes "
     FRAME sel.
 
 form
@@ -93,8 +92,8 @@ form
       lcUpdateTime NO-LABEL FORMAT "X(8)" SKIP
     ttHistory.UpdateSource COLON 20  
 WITH  OVERLAY ROW 1 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -104,7 +103,7 @@ RUN pInitHistory.
 lcTime = STRING(iiTimeSt,"hh:mm:ss").
 PAUSE 0.
 DISP icCLI idaDateSt lcTime lcGSMBNr WITH FRAME fHead.
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -178,24 +177,24 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk    = 0
-        ufk[8] = 8 
-        ehto   = 3 
+        Syst.Var:ufk    = 0
+        Syst.Var:ufk[8] = 8 
+        Syst.Var:ehto   = 3 
         ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW ttHistory.BillCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) ttHistory.BillCode WITH FRAME sel.
+         CHOOSE ROW ttHistory.BillCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) ttHistory.BillCode WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -204,10 +203,10 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -225,7 +224,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -250,7 +249,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -276,7 +275,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ttHistory WHERE recid(ttHistory) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -300,7 +299,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -314,14 +313,14 @@ REPEAT WITH FRAME sel:
        END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(FALSE).
 
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 5. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE Syst.Var:ehto = 5. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ttHistory.InvCust.
 
        RUN local-UPDATE-record.                                  
@@ -336,25 +335,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(ttHistory) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(ttHistory) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -437,18 +436,17 @@ PROCEDURE local-UPDATE-record:
       FIND FIRST Customer WHERE Customer.CustNum = ttHistory.InvCust 
          NO-LOCK NO-ERROR.
       IF AVAILABLE Customer THEN 
-          lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                        BUFFER Customer).
+          lcCustName = Func.Common:mDispCustName(BUFFER Customer).
       ELSE lcCustName = "".
       
       FIND FIRST BillItem WHERE
-          BillItem.Brand = gcBrand AND
+          BillItem.Brand = Syst.Var:gcBrand AND
           BillItem.BillCode = ttHistory.BillCode NO-LOCK NO-ERROR.
       IF AVAILABLE BillItem THEN lcBIName = BillItem.BIName.
       ELSE lcBIName = "".
 
       FIND FIRST BDest WHERE
-          BDest.Brand = gcBrand AND
+          BDest.Brand = Syst.Var:gcBrand AND
           BDest.BDest = ttHistory.BDest NO-LOCK NO-ERROR.
       IF AVAILABLE BDest THEN lcBDestName = BDest.BDName.
       ELSE lcBDestName = "".
@@ -476,12 +474,12 @@ PROCEDURE local-UPDATE-record:
       WITH FRAME lis.
 
       ASSIGN 
-         ehto = 0
-         ufk  = 0
-         ufk[8] = 8.
-      RUN ufkey.
+         Syst.Var:ehto = 0
+         Syst.Var:ufk  = 0
+         Syst.Var:ufk[8] = 8.
+      RUN Syst/ufkey.p.
       
-      IF toimi = 8 THEN LEAVE.
+      IF Syst.Var:toimi = 8 THEN LEAVE.
    END.
 
 END PROCEDURE.
@@ -501,7 +499,7 @@ PROCEDURE pInitHistory:
       CREATE ttHistory.
       BUFFER-COPY MobCDR TO ttHistory.
       ASSIGN 
-         ttHistory.Brand = gcBrand
+         ttHistory.Brand = Syst.Var:gcBrand
          ttHistory.Rated = "Current"
          ttHistory.UpdateSource = "Current"
          lcGSMBnr = MobCDR.GSMBnr.
@@ -513,8 +511,8 @@ PROCEDURE pInitHistory:
       EMPTY TEMP-TABLE ttCall.
      
       fMobCDRCollect(INPUT "post",
-                     INPUT gcBrand,
-                     INPUT katun,
+                     INPUT Syst.Var:gcBrand,
+                     INPUT Syst.Var:katun,
                      INPUT idaDateSt,
                      INPUT idaDateSt,
                      INPUT 0,
@@ -547,7 +545,7 @@ PROCEDURE pInitHistory:
    END.
    
    FOR EACH EDRHistory NO-LOCK WHERE
-            EDRHistory.Brand  = gcBrand AND
+            EDRHistory.Brand  = Syst.Var:gcBrand AND
             EDRHistory.CLI    = icCLI AND
             EDRHistory.DateSt = idaDateSt AND
             EDRHistory.TimeSt = iiTimeSt AND

@@ -8,14 +8,12 @@
        
 &GLOBAL-DEFINE upsellbundle YES
 
-{timestamp.i}
-{fmakemsreq.i}
-{date.i}
-{tmsconst.i}
-{fbundle.i}
-{fsendsms.i}
-{fdss.i}
-{fprepaidfee.i}
+{Func/fmakemsreq.i}
+{Syst/tmsconst.i}
+{Mm/fbundle.i}
+{Func/fsendsms.i}
+{Func/fdss.i}
+{Func/fprepaidfee.i}
 {Func/upsellcount.i}
 
 FUNCTION fGetUpSellBasicContract RETURNS CHAR
@@ -34,7 +32,7 @@ FUNCTION fGetUpSellBasicContract RETURNS CHAR
    DEF BUFFER bMobSub       FOR MobSub. 
    DEF BUFFER DayCampaign   FOR DayCampaign.
 
-   ldTS = fMakeTS().
+   ldTS = Func.Common:mMakeTS().
 
    /* If caller is bob tool and DSS return basic bundle as DSS. */
    /* If Subs. is postpaid and DSS is active then return Basic bundle as DSS */
@@ -49,7 +47,7 @@ FUNCTION fGetUpSellBasicContract RETURNS CHAR
       IF NOT AVAIL bMobSub THEN RETURN "".
   
       FOR EACH bServiceLimit NO-LOCK WHERE
-          {dss_search.i "bServiceLimit.GroupCode"},
+          {Func/dss_search.i "bServiceLimit.GroupCode"},
           EACH bMServiceLimit NO-LOCK WHERE
                bMServiceLimit.CustNum  = iiCustNum              AND
                bMServiceLimit.DialType = bServiceLimit.DialType AND
@@ -71,6 +69,7 @@ FUNCTION fGetUpSellBasicContract RETURNS CHAR
    ELSE DO:
       IF icCaller EQ {&REQUEST_SOURCE_YOIGO_TOOL} OR
          icUpsellId EQ "DATA200_UPSELL" OR 
+         icUpsellId MATCHES "DSS*FLEX*UPSELL" OR
          icUpsellId EQ "DSS200_UPSELL"  THEN DO:
          FOR EACH bMServiceLimit NO-LOCK WHERE
                   bMServiceLimit.MsSeq   = iiMsSeq AND
@@ -80,7 +79,7 @@ FUNCTION fGetUpSellBasicContract RETURNS CHAR
             FIRST bServiceLimit NO-LOCK USE-INDEX SLSeq WHERE
                   bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
             FIRST DayCampaign NO-LOCK WHERE
-                  DayCampaign.Brand = gcBrand AND
+                  DayCampaign.Brand = Syst.Var:gcBrand AND
                   DayCampaign.DCEvent = bServiceLimit.GroupCode AND
                   INDEX(DayCampaign.DCEvent,"UPSELL") = 0 AND
                   DayCampaign.DCEvent <> "BONO_VOIP" AND
@@ -97,11 +96,11 @@ FUNCTION fGetUpSellBasicContract RETURNS CHAR
             FIRST bServiceLimit NO-LOCK USE-INDEX SLSeq WHERE
                   bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
             FIRST DayCampaign NO-LOCK WHERE
-                  DayCampaign.Brand = gcBrand AND
+                  DayCampaign.Brand = Syst.Var:gcBrand AND
                   DayCampaign.DCEvent = bServiceLimit.GroupCode AND
                   DayCampaign.BundleUpsell NE "DATA200_UPSELL" AND
                   DayCampaign.BundleUpsell > "":
-            IF {dss_search.i "DayCampaign.DCEvent"} THEN NEXT.
+            IF {Func/dss_search.i "DayCampaign.DCEvent"} THEN NEXT.
             RETURN bServiceLimit.GroupCode.
          END. /* FOR EACH bMServiceLimit NO-LOCK WHERE */
       END.
@@ -131,6 +130,7 @@ FUNCTION fCreateUpsell RETURNS INT
                                 "",
                                 0,
                                 0,
+                                "",
                                 OUTPUT ocError).
    
    RETURN liRequest.
@@ -156,6 +156,7 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
 
    DEF BUFFER lbMobSub             FOR MobSub. 
    DEF BUFFER bDSSMobSub           FOR MobSub.
+   DEF BUFFER DayCampaign          FOR DayCampaign.
 
    FIND FIRST lbMobSub WHERE 
               lbMobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR. 
@@ -165,7 +166,7 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
    END.
 
    IF NOT CAN-FIND (FIRST DayCampaign WHERE
-                          DayCampaign.Brand   = gcBrand   AND
+                          DayCampaign.Brand   = Syst.Var:gcBrand   AND
                           DayCampaign.DCEvent = icDCEvent AND
                           DayCampaign.ValidTo >= TODAY NO-LOCK) THEN DO:
       ocError = "Incorrect upsell type".
@@ -194,7 +195,7 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
       RETURN FALSE.
    END.
    FIND FIRST DayCampaign WHERE
-              DayCampaign.Brand    = gcBrand AND
+              DayCampaign.Brand    = Syst.Var:gcBrand AND
               DayCampaign.DCEvent  = lcBaseContract AND
               DayCampaign.ValidTo >= TODAY NO-LOCK NO-ERROR.
    IF NOT AVAIL DayCampaign THEN DO:
@@ -210,7 +211,8 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
       /* allow upsell to any data contract by bob tool */
       ELSE IF icSource NE {&REQUEST_SOURCE_YOIGO_TOOL} THEN
          ocError = "Incorrect upsell type".
-      ELSE IF ocError <> "" THEN
+      
+      IF ocError <> "" THEN
          RETURN FALSE.
    END. /* IF lcCustBaseContract = {&DSS} AND */
   

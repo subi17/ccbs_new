@@ -8,8 +8,8 @@
   Version ......: TMS Master
   ------------------------------------------------------ */
 
-{commali.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
 
 DEF INPUT PARAMETER   icStatusCode  AS CHAR NO-UNDO.
 DEF INPUT PARAMETER   iiOrderID     AS INT  NO-UNDO.
@@ -25,7 +25,7 @@ DEF TEMP-TABLE ttBrowser NO-UNDO
 
 if iiorderid > 0 THEN 
 FIND FIRST Order NO-LOCK WHERE 
-           Order.Brand   = gcBrand AND 
+           Order.Brand   = Syst.Var:gcBrand AND 
            Order.OrderID = iiOrderID NO-ERROR.
            
 DEF VAR lcCodeName   AS CHAR NO-UNDO.
@@ -46,13 +46,19 @@ DO i = 1 TO 2:
       FIRST OrderFunction NO-LOCK WHERE 
             OrderFunction.OFID = OFItem.OFID:
 
+      IF AVAILABLE Order AND
+         OrderFunction.OfModule EQ "Mc/orderinctrl.p,iiOrderId,2" AND
+         (Order.DeliveryType NE {&ORDER_DELTYPE_POS} OR
+          INDEX(Order.OrderChannel,"pos") > 0 OR
+          Order.OrderType > 2) THEN NEXT.
+
       IF AVAIL Order AND
-               OrderFunction.OfModule EQ "orderinctrl,iiOrderId,1" AND
+               OrderFunction.OfModule EQ "Mc/orderinctrl.p,iiOrderId,1" AND
                (INDEX(Order.OrderChannel,"pos") > 0 OR
                 Order.OrderType > 2) THEN NEXT.
 
-      IF AVAIL Order AND Order.DeliverySecure EQ 1 AND
-               OrderFunction.OfModule EQ "orderinctrl,iiOrderId,0" THEN NEXT.
+      IF AVAIL Order AND Order.DeliverySecure > 0 AND
+               OrderFunction.OfModule EQ "Mc/orderinctrl.p,iiOrderId,0" THEN NEXT.
       
       CREATE ttBrowser.     
       ASSIGN
@@ -98,7 +104,7 @@ WITH ROW FrmRow width 40 OVERLAY FrmDown DOWN
     FRAME sel.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -172,31 +178,31 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-           ufk    = 0
-           ufk[1] = 0
-           ufk[2] = 0
-           ufk[5] = 11
-           ufk[8] = 8 
-           ehto   = 3 
+           Syst.Var:ufk    = 0
+           Syst.Var:ufk[1] = 0
+           Syst.Var:ufk[2] = 0
+           Syst.Var:ufk[5] = 11
+           Syst.Var:ufk[8] = 8 
+           Syst.Var:ehto   = 3 
            ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW ttBrowser.OFName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) ttBrowser.OFName WITH FRAME sel.
+         CHOOSE ROW ttBrowser.OFName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) ttBrowser.OFName WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW ttBrowser.OFName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) ttBrowser.OFName WITH FRAME sel.
+         CHOOSE ROW ttBrowser.OFName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) ttBrowser.OFName WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -204,10 +210,10 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -225,7 +231,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -250,7 +256,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -276,7 +282,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ttBrowser WHERE ROWID(ttBrowser) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -300,7 +306,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -314,7 +320,7 @@ REPEAT WITH FRAME sel:
        END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(nap,"5,f5,enter,return") > 0 THEN DO: 
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5,enter,return") > 0 THEN DO: 
         RUN local-find-this(FALSE).
         DEF VAR lcModule AS CHAR NO-UNDO .
         DEF VAR lcInput1 AS CHAR NO-UNDO.
@@ -340,63 +346,64 @@ REPEAT WITH FRAME sel:
         
            lcModule = ENTRY(1,ttbrowser.ofmodule,",").
            
-           IF lcModule = "prinoinf" THEN DO:
-              RUN prinoinf (INPUT 0,iiOrderID,FALSE,OUTPUT lcError).           
+           IF lcModule = "Mc/prinoinf.p" THEN DO:
+              RUN Mc/prinoinf.p (INPUT 0,iiOrderID,FALSE,OUTPUT lcError).           
 
               IF lcError > "" THEN MESSAGE
               lcerror
               VIEW-AS ALERT-BOX.
            END.
-           ELSE IF lcModule = "orderhold" THEN DO:
+           ELSE IF lcModule = "Mc/orderhold.p" THEN DO:
               lcAction = "".
               lcAction = ENTRY(3,ttbrowser.ofmodule,",") NO-ERROR.
               RUN VALUE(lcModule) (iiOrderid, lcAction).
 
            END.
-           ELSE IF lcModule = "credithold" THEN DO:
+           ELSE IF lcModule = "Mc/credithold.p" THEN DO:
               llTrue = ilTrue =
                 (STRING(ENTRY(3,ttbrowser.ofmodule,",")) = "TRUE").
 
               RUN VALUE(lcModule) (iiOrderid, llTrue).
            END.
            
-           ELSE IF lcModule = "Eventsel" THEN DO:
-              RUN
-              eventsel ("Order", Order.Brand +  CHR(255) +                                  STRING(Order.OrderID)).                
+           ELSE IF lcModule = "Eventsel" OR lcModule = "Mc/eventsel.p" THEN DO:
+              RUN Mc/eventsel.p("Order", Order.Brand + CHR(255) + STRING(Order.OrderID)).
            END.
 
-           ELSE IF lcModule = "nnasla" THEN DO:
-              RUN nnasla(0,Order.OrderID).
+           ELSE IF lcModule = "nnasla" OR lcModule = "Mc/nnasla.p" THEN DO:
+              RUN Mc/nnasla.p(0,Order.OrderID).
            END. 
            
-           ELSE IF lcModule = "mnpbr" THEN DO:
-              RUN mnpbr(Order.OrderId,0,0).
+           ELSE IF lcModule = "mnpbr" OR lcModule = "Mnp/mnpbr.p" THEN DO:
+              RUN Mnp/mnpbr.p(Order.OrderId,0,0).
            END. 
            
-           ELSE IF lcModule = "offer" THEN DO:
-              IF Order.Offer NE "" THEN RUN offer.p(Order.Offer,FALSE).
+           ELSE IF lcModule = "offer" OR lcModule = "Mc/offer.p" THEN DO:
+              IF Order.Offer NE "" THEN RUN Mc/offer.p(Order.Offer,FALSE).
            END. 
            
-           ELSE IF lcModule = "orderinctrl" THEN DO:
-              IF TRIM(ENTRY(3,ttbrowser.ofmodule,",")) EQ "1"
-              THEN RUN VALUE(lcModule) (iiOrderid, 1, FALSE).
-              ELSE RUN VALUE(lcModule) (iiOrderid, 0, FALSE).
+           ELSE IF lcModule = "Mc/orderinctrl.p" THEN DO:
+              CASE TRIM(ENTRY(3,ttbrowser.ofmodule,",")):
+                 WHEN "1" THEN RUN VALUE(lcModule) (iiOrderid, 1, FALSE).
+                 WHEN "2" THEN RUN VALUE(lcModule) (iiOrderid, 2, FALSE).
+                 OTHERWISE RUN VALUE(lcModule) (iiOrderid, 0, FALSE).
+              END CASE.
            END.
-           
-           ELSE IF lookup(lcModule,"closeorder,orderneeddoc") > 0 THEN DO:
+
+           ELSE IF lookup(lcModule,"Mc/closeorder.p,Mc/orderneeddoc.p") > 0 THEN DO:
               RUN VALUE(lcModule) (iiOrderid,FALSE).
            END. 
 
-           ELSE IF lcModule = "orderbyfraud" THEN DO:
+           ELSE IF lcModule = "Mc/orderbyfraud.p" THEN DO:
               RUN VALUE(lcModule) (iiOrderid,FALSE,{&ORDER_STATUS_CLOSED_BY_FRAUD}).
            END.
 
-           ELSE IF lcModule = "dpmember" THEN DO:
+           ELSE IF lcModule = "Mc/dpmember.p" THEN DO:
               RUN VALUE(lcModule) (0,"MobSub",Order.MsSeq).
            END.
 
-           ELSE IF lcModule = "dms" THEN DO:
-              RUN dms.p(Order.OrderId,Order.ContractID).
+           ELSE IF lcModule = "dms" OR lcModule = "Mc/dms.p" THEN DO:
+              RUN Mc/dms.p(Order.OrderId,Order.ContractID).
            END.
            
            ELSE IF Num-ENTRIES(ttbrowser.ofmodule,",") = 2 THEN DO:
@@ -405,8 +412,8 @@ REPEAT WITH FRAME sel:
                 MESSAGE RETURN-VALUE VIEW-AS ALERT-BOX.
            END.
 
-           ELSE IF lcModule = "convview" THEN DO:
-              RUN convview.p(Order.Orderid).
+           ELSE IF lcModule = "convview" OR lcModule = "Mc/convview.p" THEN DO:
+              RUN Mc/convview.p(Order.Orderid).
            END.
 
            ELSE 
@@ -417,25 +424,25 @@ REPEAT WITH FRAME sel:
         END.
      END.
 
-     ELSE IF LOOKUP(nap,"HOME,H") > 0 THEN DO : /* FIRST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"HOME,H") > 0 THEN DO : /* FIRST record */
         RUN local-find-FIRST.
         ASSIGN Memory = ROWID(ttBrowser) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = ROWID(ttBrowser) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 PROCEDURE local-find-this:

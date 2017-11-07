@@ -8,7 +8,7 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF INPUT PARAMETER  InvNum     AS I  NO-UNDO.
 DEF INPUT PARAMETER  BillCode      AS C  NO-UNDO.
@@ -16,7 +16,7 @@ DEF INPUT PARAMETER  BillCode      AS C  NO-UNDO.
 DEF VAR  Qty        AS I  NO-UNDO.
 
 ASSIGN
-   ufk = 0 ehto = 3. RUN ufkey.
+   Syst.Var:ufk = 0 Syst.Var:ehto = 3. RUN Syst/ufkey.p.
 
    FIND FIRST SingleFee WHERE 
               SingleFee.InvNum  = InvNum AND
@@ -36,7 +36,7 @@ ASSIGN
          BREAK BY SingleFee.Memo[1].
 
       FIND BillItem WHERE 
-           BillItem.Brand    = gcBrand AND
+           BillItem.Brand    = Syst.Var:gcBrand AND
            BillItem.BillCode = SingleFee.BillCode NO-LOCK no-ERROR.
 
       DISP

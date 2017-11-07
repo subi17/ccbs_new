@@ -37,4 +37,4 @@ lcDelim = " \"|\" ".
       else lcFields = lcFields + lcDelim + lcDump. 
    end.
 
-   run /apps/snet/200709/aam_yoi414.i lcFields.
+   RUN /apps/snet/200709/aam_yoi414.i lcFields.

@@ -1,4 +1,4 @@
-{heartbeat.i}
+{Func/heartbeat.i}
 
 DEFINE VARIABLE ldaDate     AS DATE      NO-UNDO.
 DEFINE VARIABLE lcTime      AS CHARACTER NO-UNDO.
@@ -18,7 +18,7 @@ DO WHILE TRUE:
    
    PUT SCREEN ROW 22 "Sending SMSs ......".
 
-   RUN smscgwy("CallAlarm","","").
+   RUN Gwy/smscgwy.p("CallAlarm","","").
 
    ASSIGN
       ldaDate = TODAY

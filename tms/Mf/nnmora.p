@@ -8,10 +8,10 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
 /* Maaritellaan print-linemuuttujat */
-{utumaa.i "new"}
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "nnmora"
        tuni2 = "".
@@ -35,8 +35,8 @@ form
 "                rapport' med valda kriterier. (Ej kriterier = ALLT)."
    skip(14)
    WITH ROW 1 side-labels width 80
-   title " " + ynimi + " LAND/OPERATOR RAPPORT " +
-   string(pvm,"99-99-99") + " " FRAME valinta.
+   title " " + Syst.Var:ynimi + " LAND/OPERATOR RAPPORT " +
+   string(TODAY,"99-99-99") + " " FRAME valinta.
 
 form
    skip(1)
@@ -61,7 +61,7 @@ view FRAME valinta.
 PAUSE 0 no-message.
 
 /* Lasketaan oletuskaudet */
-kausi1 = integer(string(year(pvm) - 2000,"99") + string(month(pvm),"99")).
+kausi1 = integer(string(year(TODAY) - 2000,"99") + string(month(TODAY),"99")).
 kausi2 = kausi1.
 
 DISPLAY kausi1 WITH FRAME rajat.
@@ -72,17 +72,17 @@ toimi:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       IF ufkey THEN DO:
     ASSIGN
-    ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-    ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-    ehto = 3 ufkey = FALSE.
-    RUN ufkey.p.
+    Syst.Var:ufk[1]= 132 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+    Syst.Var:ufk[5]= 63 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+    Syst.Var:ehto = 3 ufkey = FALSE.
+    RUN Syst/ufkey.p.
       END.
 
       READKEY.
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"1,f1") > 0 THEN DO:
-    ehto = 9. RUN ufkey.p.
+      if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:
+    Syst.Var:ehto = 9. RUN Syst/ufkey.p.
     UPDATE btnro1
       btnro2
       validate (input btnro2 = "" OR INPUT btnro2 >= INPUT btnro1,
@@ -97,21 +97,21 @@ toimi:
     ufkey = TRUE.
     NEXT toimi.
       END.
-      else if lookup(nap,"5,f5") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"5,f5") > 0 THEN DO:
     LEAVE toimi.
       END.
-      else if lookup(nap,"8,f8") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"8,f8") > 0 THEN DO:
     RETURN.
       END.
-   END. /* toimi */
+   END. /* Syst.Var:toimi */
 
 /* Avataan striimi */
 ASSIGN tila = TRUE.
-{tmsreport.i "return"}
+{Syst/tmsreport.i "return"}
 
 message "Utskrivning pAgAr, avbryt = ESC".
 
-RUN nnmora1(
+RUN nnmora1.p(
     INPUT oper1,
     INPUT oper2,
     INPUT btnro1,
@@ -121,7 +121,7 @@ RUN nnmora1(
 
 /* Suljetaan striimi */
 ASSIGN tila = FALSE.
-{tmsreport.i}
+{Syst/tmsreport.i}
 
 HIDE MESSAGE no-pause.
 HIDE FRAME rajat no-pause.

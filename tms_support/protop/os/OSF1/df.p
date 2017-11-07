@@ -48,7 +48,7 @@
  *
  */
 
-{lib/protop.i}
+{protop/lib/protop.i}
 
 define variable support as character no-undo initial "Disk Free".
 
@@ -106,7 +106,7 @@ procedure update_disk-free:
         tt_disk-free.threshold  = p_thold
         tt_disk-free.fs-size    = p_fs-size
         tt_disk-free.fs-free    = p_fs-free
-        {lib/init-xrec.i tt_disk-free.fs-grow p_fs-free}
+        {protop/lib/init-xrec.i tt_disk-free.fs-grow p_fs-free}
       .
 
     end.
@@ -124,7 +124,7 @@ procedure age_disk-free:
      else
       assign
         tt_disk-free.xvalid = no
-        {lib/upd-xrec.i tt_disk-free.fs-grow tt_disk-free.fs-grow[3]}
+        {protop/lib/upd-xrec.i tt_disk-free.fs-grow tt_disk-free.fs-grow[3]}
         tt_disk-free.pct-used  = 100 * (( tt_disk-free.fs-size - tt_disk-free.fs-free ) / tt_disk-free.fs-size )
         tt_disk-free.pct-used  = ( if tt_disk-free.pct-used = ? then 0 else tt_disk-free.pct-used )
         tt_disk-free.alert =  ( if tt_disk-free.pct-used >= tt_disk-free.threshold then "*****" else "" )

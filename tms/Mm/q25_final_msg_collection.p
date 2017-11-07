@@ -7,11 +7,11 @@
   created ......: 11.11.15
   version ......: yoigo
 ---------------------------------------------------------------------- */
-{commpaa.i}
-ASSIGN gcBrand = "1"
-       katun   = "CRON".
-{q25functions.i}
-{ftransdir.i}
+{Syst/commpaa.i}
+ASSIGN Syst.Var:gcBrand = "1"
+       Syst.Var:katun   = "CRON".
+{Func/q25functions.i}
+{Func/ftransdir.i}
 
 DEF VAR liStartDay        AS INT  NO-UNDO.
 DEF VAR liEndDay          AS INT  NO-UNDO.
@@ -87,7 +87,7 @@ DO:
          fMove2TransDir(lcQ25DWHLogFile, "", lcQ25DWHLogDir).
          LEAVE Execution. /* DWH logs created, no need to continue */
       END.
-      fQ25LogWriting(STRING(fMakeTS()) + "Start final MESSAGE sending. " + 
+      fQ25LogWriting(STRING(Func.Common:mMakeTS()) + "Start final MESSAGE sending. " + 
                      STRING(liTotalCount) + " messages to be send.",
                      {&Q25_LOGGING_COUNTERS}, {&Q25_MONTH_24_FINAL_MSG},
                      liRunMode).

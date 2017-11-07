@@ -9,14 +9,14 @@
   ----------------------------------------------------------------------*/
 
 /* ***************************  Definitions  ************************** */
-{commpaa.i}
-katun = "Cron".
-gcBrand = "1".
-{cparam2.i}
-{eventlog.i}
-{ftransdir.i}
-{tariffconfig.i}
-{tariffcons.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Func/ftransdir.i}
+{utilities/newtariff/tariffconfig.i}
+{utilities/newtariff/tariffcons.i}
 
 DEFINE VARIABLE lcLine            AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcLogFile         AS CHARACTER NO-UNDO.
@@ -80,38 +80,34 @@ DO TRANSACTION:
       lcOutDir   = fCParam("TariffCreation","OutDir").
    
    /* File reading and parsing */
-   INPUT STREAM sFile THROUGH VALUE("ls -1 " + lcIncDir).
-   
-   REPEAT:
-   
+   INPUT STREAM sFile FROM OS-DIR(lcIncDir).
+   REPEAT:   
       IMPORT STREAM sFile UNFORMATTED lcFileName.
 
-      IF INDEX(lcFileName,"billingitem") > 0 THEN DO:
+      IF INDEX(lcFileName,"billingitem") > 0 THEN 
+      DO:
          CREATE ttFiles.
          ASSIGN
             ttFiles.FName  = lcFileName
             ttFiles.FOrder = 1.
       END.
-      ELSE IF INDEX(lcFileName,"shaperconf") > 0 THEN DO:
+      ELSE IF INDEX(lcFileName,"shaperconf") > 0 THEN 
+      DO:
          CREATE ttFiles.
          ASSIGN
             ttFiles.FName  = lcFileName
             ttFiles.FOrder = 2.
-      END.
-      ELSE IF INDEX(lcFileName,"rateplan") > 0 THEN DO:
+      END.      
+      ELSE IF INDEX(lcFileName,"tariffcreation") > 0 THEN 
+      DO:
          CREATE ttFiles.
          ASSIGN
             ttFiles.FName  = lcFileName
             ttFiles.FOrder = 3.
-      END.
-      ELSE IF INDEX(lcFileName,"tariffcreation") > 0 THEN DO:
-         CREATE ttFiles.
-         ASSIGN
-            ttFiles.FName  = lcFileName
-            ttFiles.FOrder = 4.
       END.  
    END.
-   
+   INPUT STREAM sFile CLOSE.
+
    FOR EACH ttFiles NO-LOCK:
       DISP ttFiles WITH 2 COl.
    END.
@@ -120,29 +116,17 @@ DO TRANSACTION:
          BY ttFiles.FOrder:
       
       IF INDEX(ttFiles.FName,"billingitem") > 0 THEN 
-         RUN billitemcreation.p(lcIncDir,
-                                lcSpoolDir) NO-ERROR.
+         RUN utilities/newtariff/billitemcreation.p(lcIncDir,lcSpoolDir) NO-ERROR.
       ELSE IF INDEX(ttFiles.FName,"shaperconf") > 0 THEN
-         RUN shaperconfcreation.p(lcIncDir,
-                                  lcSpoolDir) NO-ERROR.      
-      ELSE IF INDEX(ttFiles.FName,"rateplan") > 0 THEN 
-         RUN rateplan.p(lcIncDir,
-                        lcSpoolDir,
-                        OUTPUT lcPayType,
-                        OUTPUT lcRatePlan) NO-ERROR.
+         RUN utilities/newtariff/shaperconfcreation.p(lcIncDir, lcSpoolDir) NO-ERROR.      
       ELSE IF INDEX(ttFiles.FName,"tariffcreation") > 0 THEN 
-        RUN tariffcreation.p(lcIncDir,
-                             lcSpoolDir,
-                             lcPayType,
-                             lcRatePlan) NO-ERROR.
+        RUN utilities/newtariff/tariffcreation.p(lcIncDir,lcSpoolDir) NO-ERROR.
 
       IF ERROR-STATUS:ERROR   OR
          RETURN-VALUE <> "OK" THEN DO:
+         MESSAGE RETURN-VALUE error-status:get-message(1) view-as ALERT-BOX.
          UNDO NEW-TARIFF, LEAVE.
       END.
    END.
-      
-   INPUT STREAM sFile CLOSE.
-
 END. /* do */
 

@@ -7,8 +7,8 @@
   CHANGED ......:
   Version ......: yoigo
 ----------------------------------------------------------------------- */
-{msreqfunc.i}
-{fuserright.i}
+{Func/msreqfunc.i}
+{Func/fuserright.i}
 
 DEFINE INPUT PARAMETER iiMsRequest  AS INTEGER NO-UNDO.
 DEFINE INPUT PARAMETER iiFromStatus AS INTEGER NO-UNDO.
@@ -33,7 +33,7 @@ IF MsRequest.ReqDParam2 NE 2 THEN DO:
 END.
 
 /* has user got priviliges */
-IF fTokenRights(katun,"CCSUPER") NE "RW" THEN DO:
+IF fTokenRights(Syst.Var:katun,"CCSUPER") NE "RW" THEN DO:
    MESSAGE "You are not authorized to use this function"
    VIEW-AS ALERT-BOX INFORMATION.
    RETURN.

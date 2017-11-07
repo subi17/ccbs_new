@@ -8,9 +8,9 @@
   Version ......: Yoigo
   -------------------------------------------------------------------------- */
 
-{commali.i}
-{msreqfunc.i}
-{billrund.i NEW}
+{Syst/commali.i}
+{Func/msreqfunc.i}
+{Inv/billrund.i NEW}
 
 DEF INPUT  PARAMETER iiRequest AS INT NO-UNDO.
 
@@ -28,7 +28,7 @@ ASSIGN
    lcReqType  = "InvReq"
    ldActStamp = MsRequest.ActStamp.
 
-RUN lamupers PERSISTENT SET hInvRun.
+RUN Inv/lamupers.p PERSISTENT SET hInvRun.
 
 
 /* exceptionally handle all type 20 requests at the same time, 
@@ -36,7 +36,7 @@ RUN lamupers PERSISTENT SET hInvRun.
    request separately (a bunch of requests are created with same
    activation stamp each day) */
 FOR EACH MsRequest NO-LOCK WHERE
-         MsRequest.Brand     = gcBrand AND
+         MsRequest.Brand     = Syst.Var:gcBrand AND
          MsRequest.ReqType   = 20      AND
          MsRequest.ReqStat   = 0       AND
          MsRequest.ActStamp <= ldActStamp:
@@ -165,7 +165,7 @@ PROCEDURE pODInvoice:
    /* fee for creating an invoice */
    IF MsRequest.CreateFees THEN DO:
    
-      RUN creasfee (MsRequest.CustNum,
+      RUN Mc/creasfee.p (MsRequest.CustNum,
                     0,
                     TODAY,
                     "ODInvoice",
@@ -174,7 +174,7 @@ PROCEDURE pODInvoice:
                     ?,
                     "",             /* memo */
                     FALSE,          /* no messages to screen */
-                    katun,
+                    Syst.Var:katun,
                     "",
                     0,
                     "",

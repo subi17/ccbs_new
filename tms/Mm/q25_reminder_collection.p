@@ -9,11 +9,11 @@
 ---------------------------------------------------------------------- */
 
 
-{commpaa.i}
-ASSIGN gcBrand = "1"
-       katun   = "CRON".
-{q25functions.i}
-{ftransdir.i}
+{Syst/commpaa.i}
+ASSIGN Syst.Var:gcBrand = "1"
+       Syst.Var:katun   = "CRON".
+{Func/q25functions.i}
+{Func/ftransdir.i}
 
 DEF VAR liStartDay               AS INT  NO-UNDO.
 DEF VAR liEndDay                 AS INT  NO-UNDO.
@@ -127,14 +127,14 @@ DO:
       last weekday of the month. */
    /* Check that if last day parameter is bigger than last day of month, use
       last day of the month */
-   IF (liQ22Q23SendingEndDay > DAY(fLastDayOfMonth(ldaExecuteDate))) THEN
-      liQ22Q23SendingEndDay = DAY(fLastDayOfMonth(ldaExecuteDate)).
+   IF (liQ22Q23SendingEndDay > DAY(Func.Common:mLastDayOfMonth(ldaExecuteDate))) THEN
+      liQ22Q23SendingEndDay = DAY(Func.Common:mLastDayOfMonth(ldaExecuteDate)).
    IF fisLastDayToSend(ldaExecuteDate, liQ22Q23SendingEndDay) THEN DO:
       ldaEndDateMonth22 = DATE(MONTH(ldaEndDateMonth22),
-                               DAY(fLastDayOfMonth(ldaEndDateMonth22)),
+                               DAY(Func.Common:mLastDayOfMonth(ldaEndDateMonth22)),
                                YEAR(ldaEndDateMonth22)).
       ldaEndDateMonth23 = DATE(MONTH(ldaEndDateMonth23),
-                               DAY(fLastDayOfMonth(ldaEndDateMonth23)),
+                               DAY(Func.Common:mLastDayOfMonth(ldaEndDateMonth23)),
                                YEAR(ldaEndDateMonth23)).
    END.
    /* at month 24 all messages are needed to be send before 20th day.
@@ -142,7 +142,7 @@ DO:
       needed to send some extra messages at the end. 19th day is last. */
    IF fisLastDayToSend(ldaExecuteDate, liQ24SendingEndDay) THEN
       ldaEndDateMonth24 = DATE(MONTH(ldaEndDateMonth24),
-                               DAY(fLastDayOfMonth(ldaEndDateMonth24)),
+                               DAY(Func.Common:mLastDayOfMonth(ldaEndDateMonth24)),
                                YEAR(ldaEndDateMonth24)).
                                
    /* TESTING SUPPORT 

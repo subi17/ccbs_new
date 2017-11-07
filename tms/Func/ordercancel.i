@@ -10,16 +10,15 @@
 &THEN
 
 &GLOBAL-DEFINE ordercancel YES
-{commali.i}
-{eventval.i} 
-{tmsconst.i}
-{timestamp.i}
-{fcreditvalid.i}
-{fcreditreq.i}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Syst/tmsconst.i}
+{Func/fcreditvalid.i}
+{Func/fcreditreq.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun 
-   {lib/eventlog.i}
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
+   {Func/lib/eventlog.i}
 END.
 
 DEFINE TEMP-TABLE ttInvoice NO-UNDO
@@ -35,7 +34,7 @@ FUNCTION fReleaseIMEI RETURNS LOGICAL
    (iiOrderId AS INT):
 
    FIND FIRST OrderAccessory WHERE
-              OrderAccessory.Brand = gcBrand AND
+              OrderAccessory.Brand = Syst.Var:gcBrand AND
               OrderAccessory.OrderId = iiOrderId AND
               OrderAccessory.TerminalType = ({&TERMINAL_TYPE_PHONE})
    EXCLUSIVE-LOCK NO-ERROR.
@@ -69,7 +68,7 @@ FUNCTION fReleaseSIM RETURNS LOGICAL
    DEF BUFFER SIM FOR SIM.
    
    FIND Order WHERE
-        Order.Brand = gcBrand AND
+        Order.Brand = Syst.Var:gcBrand AND
         Order.OrderId = iiOrderId NO-LOCK NO-ERROR.
    IF NOT AVAIL Order THEN RETURN FALSE.
 
@@ -80,11 +79,11 @@ FUNCTION fReleaseSIM RETURNS LOGICAL
 
    CREATE ActionLog.
    ASSIGN
-      ActionLog.ActionTS     = fMakeTS()
-      ActionLog.Brand        = gcBrand  
+      ActionLog.ActionTS     = Func.Common:mMakeTS()
+      ActionLog.Brand        = Syst.Var:gcBrand  
       ActionLog.TableName    = "Order"  
       ActionLog.KeyValue     = STRING(Order.Orderid)
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.Var:katun
       ActionLog.ActionID     = "SIMRELEASE"
       ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
       ActionLog.ActionStatus = 0
@@ -191,7 +190,7 @@ PROCEDURE pCreditInstallment:
    END.
       
    FIND SingleFee USE-INDEX Custnum WHERE
-        SingleFee.Brand       = gcBrand AND
+        SingleFee.Brand       = Syst.Var:gcBrand AND
         SingleFee.Custnum     = FixedFee.CustNum AND
         SingleFee.HostTable   = FixedFee.HostTable AND
         SingleFee.KeyValue    = FixedFee.KeyValue AND
@@ -252,8 +251,7 @@ PROCEDURE pCreditInstallment:
                               "",
                               OUTPUT lcError).
       IF liReq = 0 THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(liMsSeq),
                           FixedFee.Custnum,
                           "CREDIT NOTE CREATION FAILED",
@@ -285,13 +283,13 @@ PROCEDURE pCreatePaytermCreditNote:
    DEF BUFFER BillItem FOR BillItem.
 
    FIND FIRST Order NO-LOCK WHERE
-              Order.Brand = gcBrand AND
+              Order.Brand = Syst.Var:gcBrand AND
               Order.OrderID = iiOrderId NO-ERROR.
    IF NOT AVAIL Order THEN RETURN.
 
    /* collect billed installments + commission fees */
    FOR EACH Invoice NO-LOCK WHERE
-            Invoice.Brand = gcBrand AND
+            Invoice.Brand = Syst.Var:gcBrand AND
             Invoice.Custnum = Order.Custnum AND
             Invoice.InvType = {&INV_TYPE_NORMAL},
       FIRST SubInvoice OF Invoice NO-LOCK WHERE
@@ -304,7 +302,7 @@ PROCEDURE pCreatePaytermCreditNote:
                InvRow.CreditInvNum = 0 AND
                InvRow.BillCode BEGINS "PAYTERM",
          FIRST BillItem NO-LOCK WHERE
-               BillItem.Brand = gcBrand AND
+               BillItem.Brand = Syst.Var:gcBrand AND
                BillItem.BillCode = InvRow.BillCode AND
                BillItem.BiGroup = "33":
 
@@ -334,8 +332,7 @@ PROCEDURE pCreatePaytermCreditNote:
                               "",
                               OUTPUT lcError).
       IF liReq = 0 THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(Order.MsSeq),
                           Order.Custnum,
                           "CREDIT NOTE CREATION FAILED",
@@ -365,7 +362,7 @@ PROCEDURE pCreateRenewalCreditNote:
    DEF VAR ldeCreditAmt LIKE InvRow.Amt. 
 
    FIND FIRST Order NO-LOCK WHERE
-              Order.Brand = gcBrand AND
+              Order.Brand = Syst.Var:gcBrand AND
               Order.OrderID = iiOrderId NO-ERROR.
    IF NOT AVAIL Order THEN RETURN.
 
@@ -377,17 +374,17 @@ PROCEDURE pCreateRenewalCreditNote:
    IF Order.Custnum NE MobSub.Custnum THEN DO:
 
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
              ErrorLog.ActionID  = "ORDERCANCEL"
              ErrorLog.TableName = "Order"
              ErrorLog.KeyValue  = STRING(Order.OrderId) 
              ErrorLog.ErrorMsg  = "Credit note not created due to ACC"
-             ErrorLog.UserCode  = katun
-             ErrorLog.ActionTS  = fMakeTS().
+             ErrorLog.UserCode  = Syst.Var:katun
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
 
    FIND FIRST FixedFee NO-LOCK WHERE
-              FixedFee.Brand = gcBrand AND
+              FixedFee.Brand = Syst.Var:gcBrand AND
               FixedFee.Custnum = Order.Custnum AND
               FixedFee.HostTable = "MobSub" AND
               FixedFee.KeyValue = STRING(Order.MsSeq) AND
@@ -439,7 +436,7 @@ PROCEDURE pCreateRenewalCreditNote:
          IF ERROR-STATUS:ERROR THEN NEXT.
 
          FIND FIRST SingleFee NO-LOCK WHERE
-                    SingleFee.Brand = gcBrand AND
+                    SingleFee.Brand = Syst.Var:gcBrand AND
                     SingleFee.FMItemId = liFMItemId NO-ERROR.
         
          IF NOT AVAIL SingleFee OR NOT SingleFee.Billed THEN NEXT.
@@ -493,8 +490,7 @@ PROCEDURE pCreateRenewalCreditNote:
                               "",
                               OUTPUT lcError).
       IF liReq = 0 THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(MobSub.MsSeq),
                           MobSub.Custnum,
                           "CREDIT NOTE CREATION FAILED",

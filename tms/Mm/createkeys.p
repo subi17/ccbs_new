@@ -9,7 +9,7 @@
   Version ......: Tele Finland
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
               
 DEF INPUT PARAMETER MsSeq LIKE Mobsub.MsSeq NO-UNDO.
               

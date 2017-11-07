@@ -3,16 +3,15 @@
   TASK .........: Update satisfaction value (IAS) 
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
-katun = "Cron".
-gcBrand = "1".
-{tmsconst.i}
-{ftransdir.i}
-{cparam2.i}
-{eventlog.i}
-{eventval.i}
-{email.i}
-{timestamp.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Syst/eventval.i}
+{Func/email.i}
 
 /* files and dirs */
 DEF VAR lcLine AS CHAR NO-UNDO.
@@ -73,7 +72,7 @@ REPEAT:
    liYear  = INT(SUBSTRING(lcFileName,9,4)).
    liMonth = INT(SUBSTRING(lcFileName,13,2)).
    liDay   = INT(SUBSTRING(lcFileName,15,2)).
-   ldReadTS = fHMS2TS(DATE(liMonth,liDay,liYear),"00:00:00").
+   ldReadTS = Func.Common:mHMS2TS(DATE(liMonth,liDay,liYear),"00:00:00").
 
    fBatchLog("START", lcInputFile).
    lcLogFile = lcSpoolDir + lcFileName + ".log".
@@ -130,7 +129,7 @@ FUNCTION fFindIAS RETURNS LOGICAL
     pcKeyValue AS CHAR,
     pdTimeStamp AS DEC):
    FIND FIRST PIndicator NO-LOCK WHERE
-              PIndicator.Brand = gcBrand AND
+              PIndicator.Brand = Syst.Var:gcBrand AND
               PIndicator.HostTable = pcHostTable AND 
               PIndicator.KeyValue = pcKeyValue AND
               PIndicator.IndicatorType = {&P_INDICATOR_TYPE_SATISFACTION_VALUE} AND
@@ -145,7 +144,7 @@ FUNCTION fCreateIAS RETURNS LOGICAL
     pcKeyValue AS CHAR,
     pdTimeStamp AS DEC):
     CREATE PIndicator.
-    ASSIGN PIndicator.Brand = gcBrand 
+    ASSIGN PIndicator.Brand = Syst.Var:gcBrand 
            PIndicator.HostTable = pcHostTable
            PIndicator.KeyValue = pcKeyValue
            PIndicator.IndicatorType = {&P_INDICATOR_TYPE_SATISFACTION_VALUE}
@@ -193,7 +192,7 @@ IF ERROR-STATUS:ERROR THEN RETURN "ERROR: Wrong file format".
 
 /* validate mobsub */
 FIND MobSub NO-LOCK WHERE
-     MobSub.Brand = gcBrand AND
+     MobSub.Brand = Syst.Var:gcBrand AND
      Mobsub.Cli = lcCli NO-ERROR.
 IF NOT AVAIL MobSub THEN RETURN "ERROR:Subscription not found".
 

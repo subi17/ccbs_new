@@ -16,10 +16,10 @@ DEF VAR lcHomeCurr     AS CHAR  NO-UNDO.
 DEF VAR liExchRateMet  AS INT   NO-UNDO. 
 
 /* home currency */
-{tmsparam.i DefCurrency RETURN} lcHomeCurr = TMSParam.CharVal.
+{Func/tmsparam.i DefCurrency RETURN} lcHomeCurr = TMSParam.CharVal.
 
 /* should rates be multiplied or divided with exchange rate */
-{tmsparam.i ExchRateMet}  
+{Func/tmsparam.i ExchRateMet}  
 IF AVAILABLE TMSParam THEN liExchRateMet = TMSParam.IntVal.
 
 

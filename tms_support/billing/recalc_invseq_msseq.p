@@ -1,5 +1,5 @@
-{commpaa.i}
-gcBrand = "1".
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
 
 def var i as int no-undo.
 def var j as int no-undo.

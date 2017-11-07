@@ -9,23 +9,22 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i} 
-{timestamp.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'mobsub'}
-{eventval.i}
+{Syst/commali.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'mobsub'}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhHighUsage AS HANDLE NO-UNDO.
    lhHighUsage = BUFFER HighUsage:HANDLE.
    RUN StarEventInitialize(lhHighUsage).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhHighUsage).
+      RUN Mc/eventview2.p(lhHighUsage).
    END.
 
 END.
@@ -75,10 +74,10 @@ FORM
     lcchanged               COLUMN-LABEL "Last change" 
 
 WITH ROW FrmRow width 70 OVERLAY FrmDown  DOWN CENTERED
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
     "  HIGH SPENDER HISTORY   "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form
@@ -101,8 +100,8 @@ form
     
 
 WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     NO-LABEL
     FRAME lis.
 
@@ -112,18 +111,18 @@ form /* seek  HighUsage */
     HELP "Enter Customer Number "
     "Period" lihakuperiod 
     HELP "Enter Period" 
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUSTOMER "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND CUSTOMER "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  CLI */
     CLI
     HELP "Enter MSISDN Number"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND MSISDN "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "   By Customer ,   By MSISDN    ,    By amount  , By 4".
@@ -201,37 +200,37 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 0   ufk[2]= 0 ufk[3]= 0  ufk[4]= 0
-        ufk[5]= 0
-        ufk[6]= 0
-        ufk[7]= 0
-        ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+        Syst.Var:ufk[1]= 0   Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0  Syst.Var:ufk[4]= 0
+        Syst.Var:ufk[5]= 0
+        Syst.Var:ufk[6]= 0
+        Syst.Var:ufk[7]= 0
+        Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW InvSeq.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) InvSeq.CustNum WITH FRAME sel.
+        CHOOSE ROW InvSeq.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) InvSeq.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW HighUsage.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) HighUsage.CLI WITH FRAME sel.
+        CHOOSE ROW HighUsage.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) HighUsage.CLI WITH FRAME sel.
       END.
 
       IF order = 3 THEN DO:
-        CHOOSE ROW HighUsage.amount ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) HighUsage.Amount WITH FRAME sel.
+        CHOOSE ROW HighUsage.amount {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) HighUsage.Amount WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -255,10 +254,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -283,7 +282,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -309,7 +308,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND HighUsage WHERE recid(HighUsage) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -333,7 +332,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -346,20 +345,20 @@ BROWSE:
            NEXT LOOP.
        END.
      END. /* NEXT page */
-     ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"7,f7") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
        /* mobsub detailed information */
 
        RUN local-find-this(FALSE).
 
-       run highusagemore.p(INPUT HighUsage.invseq, HighUsage.cli).
+       RUN Mm/highusagemore.p(INPUT HighUsage.invseq, HighUsage.cli).
 
        ufkey = TRUE. 
        NEXT LOOP.
      END.
 
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -367,8 +366,8 @@ BROWSE:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhHighUsage).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY Highusage.cli   .
 
        RUN local-UPDATE-record.                                  
@@ -385,25 +384,25 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(HighUsage) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(HighUsage) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 PROCEDURE local-find-this:
@@ -480,7 +479,7 @@ PROCEDURE local-find-others.
       llOpenInvoice    = FALSE
       llClaimPerm      = FALSE.
    FOR EACH invoice WHERE 
-            Invoice.Brand    = gcBrand AND 
+            Invoice.Brand    = Syst.Var:gcBrand AND 
             Invoice.Custnum  = Invseq.CustNum
             NO-LOCK.
       ASSIGN 
@@ -494,7 +493,7 @@ PROCEDURE local-find-others.
       ldeInvoiceAverage = 0 .
 
    FOR EACH Invoice NO-LOCK WHERE 
-            Invoice.Brand    = gcBrand AND 
+            Invoice.Brand    = Syst.Var:gcBrand AND 
             Invoice.Custnum  = Invseq.CustNum AND
             Invoice.InvDate >= today - 90,
       FIRST SubInvoice OF Invoice NO-LOCK WHERE
@@ -518,10 +517,10 @@ PROCEDURE local-find-others.
               Customer.Custnum = Msowner.CustNum NO-LOCK NO-ERROR.
               
    IF avail Customer THEN 
-   Username = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER Customer).
+   Username = Func.Common:mDispCustName(BUFFER Customer).
    
-   lcCreated = "(" + fTS2HMS(HighUsage.crstamp) + ")".     
-   lcChanged = "(" + fTS2HMS(HighUsage.chstamp) + ")" .               
+   lcCreated = "(" + Func.Common:mTS2HMS(HighUsage.crstamp) + ")".     
+   lcChanged = "(" + Func.Common:mTS2HMS(HighUsage.chstamp) + ")" .               
 
    FIND FIRST TMSCodes WHERE
               TMSCodes.TableName = "HighUsage"      AND

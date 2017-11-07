@@ -9,7 +9,7 @@
   ---------------------------------------------------------------------- */
 
 
-{commali.i}
+{Syst/commali.i}
 
 DEF VAR ReasonC        AS CHAR NO-UNDO.
 DEF VAR ReasonT        AS CHAR NO-UNDO FORMAT "X(60)" .
@@ -29,7 +29,7 @@ FORMAT
 "Reason Code" ReasonC format "9"  Tmscode.codename FORMAT "X(35)"  SKIP
 "Reason Text" ReasonT format "x(60)"                     
 
-WITH CENTERED ROW 2 COLOR VALUE(cfc) TITLE 
+WITH CENTERED ROW 2 COLOR VALUE(Syst.Var:cfc) TITLE 
 "BROWSE CDRS" OVERLAY side-label no-label FRAME reason .
 
 
@@ -43,7 +43,7 @@ IF reasonc > "0" THEN DO:
    ASSIGN
       eventlog.eventdate  = TODAY
       eventlog.eventtime  = STRING(TIME,"HH:MM:SS")
-      eventlog.usercode   = katun
+      eventlog.usercode   = Syst.Var:katun
       eventlog.action     = 'Check'.
  
    ASSIGN
@@ -73,7 +73,7 @@ PROCEDURE local-Show-record:
              READKEY.
              IF FRAME-FIELD = "ReasonC" AND keylabel(lastkey) = "F9" 
              THEN DO:
-                RUN h-tmscodes(INPUT "FixCDR",  /* TableName*/
+                RUN Help/h-tmscodes.p(INPUT "FixCDR",  /* TableName*/
                                      "ReasonCode", /* FieldName */
                                      "ReasonCode", /* GroupCode */
                                OUTPUT siirto).
@@ -91,7 +91,7 @@ PROCEDURE local-Show-record:
                  ENd.
              END.
 
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME reason:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME reason:
                 PAUSE 0.
                 IF FRAME-FIELD = "ReasonC" THEN DO:
                    find first TMSCodes WHERE

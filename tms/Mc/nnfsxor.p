@@ -30,9 +30,9 @@
   Version ......: M15
   ------------------------------------------------------------------ */
 
-{commali.i}
-{country.i}
-{invsta2.frm}
+{Syst/commali.i}
+{Syst/country.i}
+{Mf/invsta2.frm}
 
 DEF VAR exdir     AS c  NO-UNDO.
 DEF VAR exname-i  AS c  NO-UNDO.
@@ -92,7 +92,7 @@ DEF TEMP-TABLE w-acct
 
 /* get default direcory Name FOR OUTPUT */
 DO FOR TMSUser:
-   FIND TMSUser where TMSUser.UserCOde = katun no-lock.
+   FIND TMSUser where TMSUser.UserCOde = Syst.Var:katun no-lock.
    ASSIGN exdir = TMSUser.RepDir.
 END.
 
@@ -102,15 +102,15 @@ dos-skip   = chr(13) + chr(10).
 exname-i   = exdir + "/" + "xorinv-i.txt".
 exname-e   = exdir + "/" + "xorinv-e.txt".
 
-{tmsparam.i RoundAcc   return}. RoundAcc   = TMSParam.IntVal.
-{tmsparam.i OTIntAcc   return}. OTIntAcc   = TMSParam.IntVal.
-{tmsparam.i VatAcc     return}. VatAcc     = TMSParam.IntVal.
-{tmsparam.i OverPayAcc return}. OverPayAcc = TMSParam.IntVal.
-{tmsparam.i ReceivAcc  return}. ReceivAcc  = TMSParam.IntVal.
+{Func/tmsparam.i RoundAcc   return}. RoundAcc   = TMSParam.IntVal.
+{Func/tmsparam.i OTIntAcc   return}. OTIntAcc   = TMSParam.IntVal.
+{Func/tmsparam.i VatAcc     return}. VatAcc     = TMSParam.IntVal.
+{Func/tmsparam.i OverPayAcc return}. OverPayAcc = TMSParam.IntVal.
+{Func/tmsparam.i ReceivAcc  return}. ReceivAcc  = TMSParam.IntVal.
 
 form
    skip(19)
-WITH no-box COLOR value(cfc) width 80 OVERLAY FRAME bground.
+WITH no-box COLOR value(Syst.Var:cfc) width 80 OVERLAY FRAME bground.
 
 form
    skip(1)
@@ -127,15 +127,15 @@ help "Invoicing group's code, empty for all"  SKIP
 "                Decimal separator ...:" exdeci help "Period/Comma" 
 "                Invoice states ......:" state1 "-" state2 skip(1)
 WITH
-   width 73 OVERLAY COLOR value(cfc) TITLE COLOR value(ctc) 
-   " " + ynimi + " XOR-SUMMARY OF ACCOUNTS " +
-   string(pvm,"99-99-99") + " " centered NO-LABELS FRAME start.
+   width 73 OVERLAY COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc) 
+   " " + Syst.Var:ynimi + " XOR-SUMMARY OF ACCOUNTS " +
+   string(TODAY,"99-99-99") + " " centered NO-LABELS FRAME start.
 
 ASSIGN
    exdate2 = date(month(TODAY),1,year(TODAY)) - 1
    exdate1 = date(month(exdate2),1,year(exdate2)).
 
-cfc = "sel". RUN ufcolor.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
 
 view FRAME bground.
 PAUSE 0.
@@ -143,7 +143,7 @@ view FRAME statu.
 
 CRIT:
 repeat WITH FRAME start:
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE
       exname-i exname-e
       exdate1  validate(exdate1 ne ?,"Give first Date !")
@@ -156,7 +156,7 @@ repeat WITH FRAME start:
       state2  validate(state2 < 2,"Value too high ! (0 OR 1)")
    WITH FRAME start EDITING.
       READKEY.
-      IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO:
+      IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
          PAUSE 0.
       END.
       APPLY LASTKEY.
@@ -173,12 +173,12 @@ repeat WITH FRAME start:
 task:
    repeat WITH FRAME start:
 
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
-      IF toimi = 1 THEN NEXT  CRIT.
-      IF toimi = 8 THEN LEAVE CRIT.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
+      RUN Syst/ufkey.p.
+      IF Syst.Var:toimi = 1 THEN NEXT  CRIT.
+      IF Syst.Var:toimi = 8 THEN LEAVE CRIT.
 
-      IF toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
          ok = FALSE.
          message "Are you SURE you want to start processing (Y/N) ?" UPDATE ok.
          IF ok THEN LEAVE task.
@@ -210,7 +210,7 @@ task:
       CREATE FileExpLog.
       ASSIGN
       FileExpLog.TransType = "XOR-INV"
-      FileExpLog.TransDate = pvm
+      FileExpLog.TransDate = TODAY
       FileExpLog.TransNum   = TransFile.
    END.
 
@@ -222,7 +222,7 @@ task:
    "%FILE ID "
    string(TransFile,"99999999")
    " EXTERNAL, CREATED "
-   string(pvm,"99.99.9999")
+   string(TODAY,"99.99.9999")
    " AT "
    string(time,"hh:mm:ss").
 
@@ -495,7 +495,7 @@ task:
    "%FILE ID "
    string(TransFile,"99999999")
    " INTERNAL, CREATED "
-   string(pvm,"99.99.9999")
+   string(TODAY,"99.99.9999")
    " AT "
    string(time,"hh:mm:ss")
    dos-skip

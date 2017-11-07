@@ -7,16 +7,17 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{fmakemsreq.i}
-{forderstamp.i}
-{orderfunc.i}
-{fsubsterminal.i}
-{tmsconst.i}
-{offer.i}
-{fcpfat.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/fmakemsreq.i}
+{Func/forderstamp.i}
+{Func/orderfunc.i}
+{Func/fsubsterminal.i}
+{Syst/tmsconst.i}
+{Mc/offer.i}
+{Func/fcpfat.i}
+{Syst/tmsconst.i}
+{Mc/dpmember.i}
 
 DEFINE INPUT PARAMETER iiMSrequest AS INT NO-UNDO.
 
@@ -40,6 +41,7 @@ DEFINE VARIABLE ldLastMonthDate AS DATE      NO-UNDO.
 DEFINE VARIABLE liLastPeriod    AS INTEGER   NO-UNDO.
 DEFINE VARIABLE ldeTimeStamp    AS DECIMAL   NO-UNDO. 
 DEFINE VARIABLE ldeFinalFee     AS DECIMAL   NO-UNDO.
+DEFINE VARIABLE lcDPRuleID      AS CHARACTER NO-UNDO.
 
 /* msrequest parameters */
 DEFINE VARIABLE lcError AS CHARACTER NO-UNDO. 
@@ -59,7 +61,7 @@ IF NOT AVAILABLE MsRequest OR
 IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 
 FIND Order WHERE
-     Order.Brand   = gcBrand AND 
+     Order.Brand   = Syst.Var:gcBrand AND 
      Order.OrderId = MsRequest.ReqIParam1 EXCLUSIVE-LOCK NO-ERROR.
    
 IF NOT AVAILABLE Order THEN DO:
@@ -91,11 +93,10 @@ THEN DO:
 END.
 
 /* Send order confirmation email */
-RUN prinoconf.p (Order.OrderID).
+RUN Mc/prinoconf.p (Order.OrderID).
 
 IF RETURN-VALUE BEGINS "ERROR" THEN DO:
-   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                  "Order",
+   Func.Common:mWriteMemo("Order",
                   STRING(Order.OrderID),
                   0,
                   "Order Confirmation Failed",
@@ -135,13 +136,13 @@ IF Order.SMSType = 1 THEN DO:
                        Order.CLI,
                        41,
                        lcRenoveSMSText,
-                       fMakeTS()).
+                       Func.Common:mMakeTS()).
       END.
    END.
 END.
 
-fSplitTS(Order.CRStamp, OUTPUT ldaDate, OUTPUT liTime). 
-ldeTermTS = fMake2Dt(ldaDate - 1, 0).
+Func.Common:mSplitTS(Order.CRStamp, OUTPUT ldaDate, OUTPUT liTime). 
+ldeTermTS = Func.Common:mMake2DT(ldaDate - 1, 0).
 
 /* terminals, do this before periodical contract creation */
 fCreateSubsTerminal(BUFFER Order).
@@ -151,7 +152,7 @@ IF Order.FatAmount > 0 OR Order.FtGrp > "" THEN DO:
 
    IF Order.FtGrp > "" AND 
       CAN-FIND(FIRST FatGroup WHERE
-                     FatGroup.Brand = gcBrand AND
+                     FatGroup.Brand = Syst.Var:gcBrand AND
                      FatGroup.FtGrp = Order.FtGrp)
    THEN lcFatGroup = Order.FtGrp.
    ELSE lcFatGroup = fCParamC("OrderCampaignFat").
@@ -159,7 +160,7 @@ IF Order.FatAmount > 0 OR Order.FtGrp > "" THEN DO:
    IF lcFatGroup = ? OR lcFatGroup = "" THEN 
       lcError = "FATime group for campaign not defined".
       
-   ELSE RUN creafat (MobSub.CustNum,
+   ELSE RUN Mc/creafat.p (MobSub.CustNum,
                      MobSub.MsSeq,
                      lcFatGroup,
                      Order.FatAmount,
@@ -171,8 +172,7 @@ IF Order.FatAmount > 0 OR Order.FtGrp > "" THEN DO:
 
    /* write possible error to an order memo */
    IF lcError > "" THEN
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "Order",
+      Func.Common:mWriteMemo("Order",
                        STRING(Order.OrderID),
                        MobSub.CustNum,
                        "FATIME CREATION FAILED",
@@ -180,7 +180,7 @@ IF Order.FatAmount > 0 OR Order.FtGrp > "" THEN DO:
 END. /* IF Order.FatAmount > 0 OR Order.FtGrp > "" THEN DO: */
 
 /* terminate and activate periodical contracts */
-RUN requestaction_exec.p (MsRequest.MsRequest,
+RUN Mm/requestaction_exec.p (MsRequest.MsRequest,
                         MobSub.CLIType,
                         Order.OrderID,
                         Order.CrStamp,
@@ -191,14 +191,14 @@ RUN requestaction_exec.p (MsRequest.MsRequest,
 
 /* initial topup, fatime, per.contracts from offer */
 IF Order.Offer > "" THEN 
-   RUN offeritem_exec.p (MobSub.MsSeq,
+   RUN Mc/offeritem_exec.p (MobSub.MsSeq,
                        Order.OrderID,
                        ?,
                        MsRequest.MsRequest,
                        {&REQUEST_SOURCE_RENEWAL}).
  
 /* per.contract and service package created with the order */
-RUN orderaction_exec.p (MobSub.MsSeq,
+RUN Mm/orderaction_exec.p (MobSub.MsSeq,
                       Order.OrderID,
                       ?,
                       MsRequest.MsRequest,
@@ -215,17 +215,17 @@ IF Order.CLIType = "CONT5" THEN DO:
 END. /* IF Order.CLIType = "CONT5" THEN DO: */
 
 /* update customer data */
-RUN createcustomer.p(INPUT Order.OrderId,1,FALSE,TRUE,output oiCustomer).
+RUN Mm/createcustomer.p(INPUT Order.OrderId,1,FALSE,TRUE,output oiCustomer).
 
 /* update corporate customer contact data */
 IF OrderCustomer.CustID = "CIF" THEN DO:
 
    FOR EACH OrderCustomer NO-LOCK WHERE
-            OrderCustomer.Brand   = gcBrand   AND
+            OrderCustomer.Brand   = Syst.Var:gcBrand   AND
             OrderCustomer.OrderID = Order.OrderID AND
             OrderCustomer.RowType = 5:
 
-      RUN createcustcontact.p(
+      RUN Mm/createcustcontact.p(
           Order.OrderId,
           MsRequest.Custnum,
           OrderCustomer.RowType,
@@ -233,8 +233,7 @@ IF OrderCustomer.CustID = "CIF" THEN DO:
 
       /* write possible error to an order memo */
       IF lcError > "" THEN DO:
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "Order",
+         Func.Common:mWriteMemo("Order",
                           STRING(Order.OrderID),
                           oiCustomer,
                           "CUSTOMER CONTACT CREATION FAILED",
@@ -249,7 +248,7 @@ IF Order.OrderType = 2 AND Order.ICC > "" AND
    NOT Order.OrderChannel BEGINS "Renewal_POS" THEN DO:
    ASSIGN liRequest = 0
           lcError   = ""
-          katun     = Order.SalesMan WHEN Order.SalesMan > "".
+          Syst.Var:katun     = Order.SalesMan WHEN Order.SalesMan > "".
 
    liRequest = fSubscriptionRequest
                    (INPUT  Order.MSSeq,
@@ -257,7 +256,7 @@ IF Order.OrderType = 2 AND Order.ICC > "" AND
                     INPUT  Order.CustNum,
                     INPUT  1,
                     INPUT  "",
-                    INPUT  fMakeTS(),
+                    INPUT  Func.Common:mMakeTS(),
                     INPUT  "CHANGEICC",
                     INPUT  Order.ICC,
                     INPUT  "", /*for old SIM*/ 
@@ -268,8 +267,7 @@ IF Order.OrderType = 2 AND Order.ICC > "" AND
                     INPUT  {&REQUEST_SOURCE_RENEWAL},
                     OUTPUT lcError).
    IF liRequest = 0 THEN
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "Order",
+      Func.Common:mWriteMemo("Order",
                        STRING(Order.OrderID),
                        Order.CustNum,
                        "ICC change request creation failed",
@@ -280,17 +278,23 @@ IF Order.OrderType = 2 AND Order.ICC > "" AND
       MsRequest.ReqSource = {&REQUEST_SOURCE_ICC_CHANGE_AUTO}.
       fReqStatus(19,"").
 
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "MsRequest",
+      Func.Common:mWriteMemo("MsRequest",
                        STRING(liRequest),
                        Order.CustNum,
                        "ICC TYPE CHANGE AUTO",
                        Order.OrderChannel).
    END. /* ELSE DO: */
 
-   katun = "request".
+   Syst.Var:katun = "request".
 
 END. /* IF Order.OrderType = 2 AND Order.ICC > "" AND */
+
+IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
+   fCloseDiscount(ENTRY(LOOKUP(MobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}),
+                  MobSub.MsSeq,
+                  Func.Common:mLastDayOfMonth(TODAY),
+                  FALSE).
+END.
 
 /* skip dextra handling */
 

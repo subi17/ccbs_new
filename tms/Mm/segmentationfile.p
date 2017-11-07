@@ -6,22 +6,22 @@
   CREATED ......: 07.08.09
   Version ......: yoigo
 ----------------------------------------------------------------------- */
-{commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+{Syst/commpaa.i}
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 
-{tmsconst.i}
-{ftransdir.i}
-{cparam2.i}
-{eventlog.i}
-{eventval.i}
-{email.i}
-{timestamp.i}
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Syst/eventval.i}
+{Func/email.i}
+{Func/multitenantfunc.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhSegmentation AS HANDLE NO-UNDO.
    lhSegmentation = BUFFER Segmentation:HANDLE.
@@ -55,7 +55,8 @@ DEFINE VARIABLE lcConfDir AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liNumOK AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liNumErr AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liNumNotUpd AS INTEGER NO-UNDO.
-
+DEFINE VARIABLE lcBrand AS CHAR NO-UNDO.
+DEFINE VARIABLE lcTenant AS CHAR NO-UNDO.
 
 ASSIGN
    lcIncDir    = fCParam("Segmentation","IncomingDir") 
@@ -95,6 +96,15 @@ REPEAT:
    IF SEARCH(lcInputFile) NE ? THEN
       INPUT STREAM sin FROM VALUE(lcInputFile).
    ELSE NEXT.
+   lcBrand = SUBSTRING(lcFileName,1, (INDEX(lcFileName,"_") - 1)).
+   IF LOOKUP(lcBrand, "Yoigo,Masmovil") = 0 THEN
+   DO:
+      fError("Incorrect input filename format").
+      liNumErr = liNumErr + 1 .
+      NEXT.
+   END.
+   /* Check and handle only current brand files */
+   IF lcBrand NE fgetBrandNamebyTenantId(TENANT-ID(LDBNAME(1))) THEN NEXT.
    
    fBatchLog("START", lcInputFile).
    lcLogFile = lcSpoolDir + lcFileName + ".log".
@@ -188,7 +198,7 @@ PROCEDURE pUpdateSegmentStatus:
          Segmentation.SegmentOffer = icSegmentOffer
          Segmentation.SegmentDate = idaSegmentDate
          Segmentation.SegmentCons = ideSegmentConsumption
-         Segmentation.SegmentCreation = fMakeTS().
+         Segmentation.SegmentCreation = Func.Common:mMakeTS().
    END.
 
    /* nothing to do */
@@ -206,7 +216,7 @@ PROCEDURE pUpdateSegmentStatus:
          Segmentation.SegmentOffer = icSegmentOffer
          Segmentation.SegmentDate = idaSegmentDate
          Segmentation.SegmentCons = ideSegmentConsumption
-         Segmentation.SegmentCreation = fMakeTS().
+         Segmentation.SegmentCreation = Func.Common:mMakeTS().
       IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhSegmentation).
       RELEASE Segmentation.
    END.   

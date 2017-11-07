@@ -1,8 +1,7 @@
-{commpaa.i}
-katun = "anttis".
-gcBrand = "1".
-{date.i}
-{msisdn.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
+{Func/msisdn.i}
 
 DEFINE VARIABLE ldDate AS DATE NO-UNDO.
 DEFINE VARIABLE secs AS INTEGER NO-UNDO.
@@ -20,7 +19,7 @@ FOR EACH m2 WHERE
       m2.validto < 99999999 AND
       m2.pos = "GIFT" then do:
 
-      fSplitTS(m2.validto, output ldDate, output secs).
+      Func.Common:mSplitTS(m2.validto, output ldDate, output secs).
 
       fMakeMsidnHistory(recid(m2)).
 

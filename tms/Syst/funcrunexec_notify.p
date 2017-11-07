@@ -7,10 +7,9 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{email.i}
-{fmakesms.i}
+{Syst/commali.i}
+{Func/email.i}
+{Func/fmakesms.i}
 
 DEF INPUT PARAMETER iiFRExecID    AS INT  NO-UNDO.
 DEF INPUT PARAMETER icMessage     AS CHAR NO-UNDO.
@@ -27,13 +26,13 @@ FUNCTION fErrorLog RETURNS LOGIC
    
    DO TRANS:
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
              ErrorLog.ActionID  = "FRNOTIFY" + STRING(iiFRExecID)
              ErrorLog.TableName = "FuncRunExec"
              ErrorLog.KeyValue  = STRING(iiFRExecID)
              ErrorLog.ErrorMsg  = icError
-             ErrorLog.UserCode  = katun.
-             ErrorLog.ActionTS  = fMakeTS().
+             ErrorLog.UserCode  = Syst.Var:katun.
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    
 END FUNCTION.
@@ -138,7 +137,7 @@ PROCEDURE pSendSMS:
    DEF VAR liNumber  AS INT  NO-UNDO.
    DEF VAR ldCurrent AS DEC  NO-UNDO.
    
-   ldCurrent = fMakeTS().
+   ldCurrent = Func.Common:mMakeTS().
    
    DO liNumber = 1 TO NUM-ENTRIES(icSMSNumber):
    

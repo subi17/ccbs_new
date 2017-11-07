@@ -1,10 +1,9 @@
 
-{commpaa.i}
-katun = "rafaeldv".
-gcBrand = "1".
+{Syst/commpaa.i}
+Syst.Var:katun = "rafaeldv".
+Syst.Var:gcBrand = "1".
 
-{timestamp.i}
-{tmsconst.i}
+{Syst/tmsconst.i}
 
  DEFINE VARIABLE pcSearch AS CHARACTER NO-UNDO.
  DEFINE VARIABLE pcFor AS CHARACTER NO-UNDO. 
@@ -14,12 +13,12 @@ gcBrand = "1".
  DEFINE VARIABLE ldTSLock AS DECIMAL NO-UNDO.
 
  ldate2 = DATE(07,25,2009).
- ldTSLock =  fHMS2TS(ldate2,"00:00:00").
+ ldTSLock =  Func.Common:mHMS2TS(ldate2,"00:00:00").
 
  pcSearch = "63338".
 
  pcFor = {&MSISDN_STOCK_ONLINE}.
- ldTS =  fHMS2TS(TODAY,"00:00:00").
+ ldTS =  Func.Common:mHMS2TS(TODAY,"00:00:00").
 
  pcSearch = "*" + pcSearch + "*".
 
@@ -42,4 +41,4 @@ gcBrand = "1".
 
   RELEASE MSISDN.
 
- IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
+ 

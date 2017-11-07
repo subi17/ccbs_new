@@ -7,13 +7,11 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{finvnum.i}
-{funcrunprocess_update.i}
-{date.i}
-{tmsconst.i}
-{ftaxdata.i}
+{Syst/commali.i}
+{Func/finvnum.i}
+{Syst/funcrunprocess_update.i}
+{Syst/tmsconst.i}
+{Func/ftaxdata.i}
 
 DEF INPUT  PARAMETER iiBRTestQueueID  AS INT  NO-UNDO.
 DEF INPUT  PARAMETER idaInvDate       AS DATE NO-UNDO.
@@ -47,13 +45,13 @@ FUNCTION fErrorLog RETURNS LOGIC
    
    DO TRANS:
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
              ErrorLog.ActionID  = "BRANALYSIS"
              ErrorLog.TableName = "BRTestCase"
              ErrorLog.KeyValue  = STRING(iiCustNum)
              ErrorLog.ErrorMsg  = icError
-             ErrorLog.UserCode  = katun.
-             ErrorLog.ActionTS  = fMakeTS().
+             ErrorLog.UserCode  = Syst.Var:katun.
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    
 END FUNCTION.
@@ -87,7 +85,7 @@ RETURN RETURN-VALUE.
 
 /***** Main end ******/
 
-{funcrun_analysis_results.i}
+{Inv/funcrun_analysis_results.i}
 
 PROCEDURE pInitialize:
 

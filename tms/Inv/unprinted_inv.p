@@ -1,5 +1,5 @@
-{commali.i}
-{finvbal.i}
+{Syst/commali.i}
+{Func/finvbal.i}
 
 def var ldbal as dec no-undo.
 def var i     as int no-undo.

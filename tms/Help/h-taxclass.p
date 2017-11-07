@@ -9,7 +9,7 @@
   Version ......: yoigo
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 def shared var siirto as char.
 
@@ -24,16 +24,16 @@ def var must-add    as logic                no-undo.
 form
     TaxClass.TaxClass   
     TaxClass.TCName    
-    with scroll 1 11 down  row 4 centered color value(cfc)
-    title color value(ctc) " TAX CLASSES " overlay frame sel.
+    with scroll 1 11 down  row 4 centered color value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " TAX CLASSES " overlay frame sel.
 
 form /* SEEK Code */
     lcEvent
     help "Enter class"
-    with row 4 col 2 title color value(ctc) " FIND CLASS"
-    color value(cfc) no-labels overlay frame hayr.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND CLASS"
+    color value(Syst.Var:cfc) no-labels overlay frame hayr.
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.Var:ccc = Syst.Var:cfc.
 
 MAIN:
 repeat:
@@ -76,11 +76,11 @@ print-line:
 
       if ufkey then do:
          assign
-         ufk = 0 
-         ufk[1] = 28 ufk[5] = 11
-         ufk[6] = 0  ufk[8] = 8  ufk[9] = 1
-         siirto = ? ehto = 3 ufkey = false.
-         run ufkey.
+         Syst.Var:ufk = 0 
+         Syst.Var:ufk[1] = 28 Syst.Var:ufk[5] = 11
+         Syst.Var:ufk[6] = 0  Syst.Var:ufk[8] = 8  Syst.Var:ufk[9] = 1
+         siirto = ? Syst.Var:ehto = 3 ufkey = false.
+         RUN Syst/ufkey.p.
       end.
   end. /* print-line */
 
@@ -88,17 +88,17 @@ print-line:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row TaxClass.TaxClass ;(uchoose.i;) no-error with frame sel.
-         color display value(ccc) TaxClass.TaxClass with frame sel.
+         choose row TaxClass.TaxClass {Syst/uchoose.i} no-error with frame sel.
+         color display value(Syst.Var:ccc) TaxClass.TaxClass with frame sel.
 
-         nap = keylabel(lastkey).
+         Syst.Var:nap = keylabel(lastkey).
 
          if frame-value = "" and rtab[frame-line] = ? and
-            lookup(nap,"8,f8") = 0
+            lookup(Syst.Var:nap,"8,f8") = 0
          then next.
 
          /* previous line */
-         if lookup(nap,"cursor-up") > 0 then do
+         if lookup(Syst.Var:nap,"cursor-up") > 0 then do
          with frame sel:
             if frame-line = 1 then do:
                find TaxClass where recid(TaxClass) = rtab[frame-line] 
@@ -128,7 +128,7 @@ print-line:
          end. /* previous line */
 
          /* next line */
-         if lookup(nap,"cursor-down") > 0 then do with frame sel:
+         if lookup(Syst.Var:nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                find TaxClass where recid(TaxClass) = rtab[frame-line] 
                     no-lock .
@@ -158,7 +158,7 @@ print-line:
          end. /* next line */
 
          /* previous page */
-         else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
+         else if lookup(Syst.Var:nap,"page-up,prev-page") > 0 then do with frame sel:
             find TaxClass where recid(TaxClass) = memory no-lock no-error.
             find prev TaxClass no-lock no-error.
             if available TaxClass then do:
@@ -180,7 +180,7 @@ print-line:
         end. /* previous page */
 
         /* next page */
-        else if lookup(nap,"page-down,next-page") > 0 then do with frame sel:
+        else if lookup(Syst.Var:nap,"page-down,next-page") > 0 then do with frame sel:
            if rtab[frame-down] = ? then do:
                bell.
                message "This is the last page !".
@@ -194,10 +194,10 @@ print-line:
         end. /* next page */
 
         /* Seek */
-        if lookup(nap,"1,f1") > 0 then do on ENDkey undo, NEXT LOOP:
+        if lookup(Syst.Var:nap,"1,f1") > 0 then do on ENDkey undo, NEXT LOOP:
            /*lcEvent*/
-           cfc = "puyr". run ufcolor.
-           ehto = 9. run ufkey. ufkey = true.
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set lcEvent with frame hayr.
            hide frame hayr no-pause.
            if lcEvent ENTERED then do:
@@ -219,14 +219,14 @@ print-line:
         end. /* Seek */
 
         /* Choose */
-        else if lookup(nap,"return,enter,5,f5") > 0 then do:
+        else if lookup(Syst.Var:nap,"return,enter,5,f5") > 0 then do:
            find TaxClass where recid(TaxClass) = rtab[frame-line] no-lock.
            siirto = string(TaxClass.TaxClass).
            leave MAIN.
         end. /* Choose */
 
         /* First record */
-        else if lookup(nap,"home,h") > 0 then do:
+        else if lookup(Syst.Var:nap,"home,h") > 0 then do:
            find first TaxClass no-lock no-error.
            memory = recid(TaxClass).
            must-print = true.
@@ -234,14 +234,14 @@ print-line:
         end. /* First record */
 
         /* last record */
-        else if lookup(nap,"end,e") > 0 then do :
+        else if lookup(Syst.Var:nap,"end,e") > 0 then do :
            find last TaxClass no-lock no-error.
            memory = recid(TaxClass).
            must-print = true.
            next LOOP.
         end. /* last record */
 
-        else if nap = "8" or nap = "f8" then leave MAIN. /* Return */
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" then leave MAIN. /* Return */
 
      end.  /* BROWSE */
    end.  /* LOOP */

@@ -3,8 +3,8 @@
    create a price change request 
 */
 
-{commali.i}   
-{fcreatereq.i}
+{Syst/commali.i}   
+{Func/fcreatereq.i}
 
 FUNCTION fFeeModelPriceRequest RETURNS INTEGER
    (INPUT  icBillCode    AS CHAR,   /* billing item */
@@ -58,7 +58,7 @@ FUNCTION fFeeModelPriceRequest RETURNS INTEGER
 
    /* set activation time by default to tomorrow if not given */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMake2Dt(TODAY + 1,1).
+      idActStamp = Func.Common:mMake2DT(TODAY + 1,1).
 
    fCreateRequest(27,
                   idActStamp,

@@ -1,10 +1,10 @@
 
 
 
-{commpaa.i}
-katun = "rafaeldv".
-gcbrand = "1".
-{service.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "rafaeldv".
+Syst.Var:gcBrand = "1".
+{Func/service.i}
 
 DEFINE STREAM sout.
 DEFINE VARIABLE iDispInterval AS INTEGER NO-UNDO INITIAL 1000.
@@ -17,7 +17,7 @@ DEFINE VARIABLE liNumForb AS INTEGER NO-UNDO.
 DEFINE VARIABLE liNumOff AS INTEGER NO-UNDO. 
 DEFINE VARIABLE ldTS AS DECIMAL NO-UNDO.
 
-ldTS = fHMS2TS( DATE(11,4,2009),
+ldTS = Func.Common:mHMS2TS( DATE(11,4,2009),
                 "08:00:00").
 FIND FIRST ServPac WHERE
            ServPac.ServPac = "OI_SMSB20" NO-LOCK NO-ERROR.
@@ -25,7 +25,7 @@ FIND FIRST ServPac WHERE
 OUTPUT STREAM sout TO fix_new_smsbundle2.log . 
 
 FOR EACH MobSub NO-LOCK WHERE
-         MobSub.Brand = gcBrand AND
+         MobSub.Brand = Syst.Var:gcBrand AND
          LOOKUP(MobSub.CliType,"TARJ,TARJ4") > 0 AND
          MobSub.ActivationTS > ldTS AND
          Mobsub.ActivationTS < 20091123.00000  AND 

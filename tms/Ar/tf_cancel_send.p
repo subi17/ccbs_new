@@ -8,13 +8,12 @@
                   11.12.2015 Modified program work as a part of automated process
   Version ......: yoigo
 ---------------------------------------------------------------------- */
-{commali.i}
-{cparam2.i}
-{date.i}
-{tmsconst.i}
-{eventlog.i}
-{ftransdir.i}
-{msreqfunc.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Syst/eventlog.i}
+{Func/ftransdir.i}
+{Func/msreqfunc.i}
 
 DEF INPUT PARAMETER iiMSrequest AS INT  NO-UNDO.
 
@@ -169,11 +168,11 @@ PROCEDURE pCreateFile:
          IF ldaBankDate EQ ? THEN DO:
 
             FIND FIRST Order NO-LOCK WHERE
-                       Order.Brand = gcBrand AND
+                       Order.Brand = Syst.Var:gcBrand AND
                        Order.OrderId = FixedFee.OrderId NO-ERROR.
 
             IF AVAIL Order AND FixedFee.OrderId > 0 THEN DO:
-               fTS2Date(Order.CrStamp, OUTPUT ldaBankDate).
+               Func.Common:mTS2Date(Order.CrStamp, OUTPUT ldaBankDate).
                IF INDEX(Order.OrderChannel, "POS") = 0 THEN
                         ldaBankDate = ldaBankDate + 16.
                IF DAY(ldaBankDate) >= 25 THEN 
@@ -255,12 +254,12 @@ PROCEDURE pCreateFile:
       CREATE ActionLog.
       
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.Var:gcBrand
          ActionLog.ActionID     = "TF_" + icFileType
-         ActionLog.ActionTS     = fMakeTS()
+         ActionLog.ActionTS     = Func.Common:mMakeTS()
          ActionLog.TableName    = "Cron"
          ActionLog.KeyValue     = icBank
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_LOGGED}
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
          ActionLog.ActionChar   = lcSummary.
@@ -293,10 +292,10 @@ PROCEDURE pPrintLine:
    IF FixedFee.BillCode EQ "RVTERM" THEN
       lcCodFpago = "0212".
    ELSE DO:
-      FIND FIRST Order WHERE Order.brand = gcBrand AND
+      FIND FIRST Order WHERE Order.brand = Syst.Var:gcBrand AND
                              Order.OrderId = liOrderId NO-ERROR.
       IF AVAIL Order THEN DO:
-         fTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
+         Func.Common:mTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
          IF ldaOrderDate >= 5/1/2015 THEN
              lcCodFpago = "0034".
          ELSE

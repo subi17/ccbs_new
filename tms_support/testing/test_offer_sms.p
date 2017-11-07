@@ -1,9 +1,9 @@
-{commpaa.i}
-katun = "Qvantel".
-gcBrand = "1".
-{order_data.i}
-{msisdn_prefix.i}
-{smsmessage.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
+{Func/order_data.i}
+{Func/msisdn_prefix.i}
+{Func/smsmessage.i}
 
 DEF VAR liOrderId LIKE Order.OrderID.
 DEF VAR llFirstSMS AS LOG NO-UNDO INIT TRUE.

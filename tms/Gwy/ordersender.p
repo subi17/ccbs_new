@@ -12,26 +12,22 @@
      this module is run from orderrun.p 
 ****/
 
-{commali.i}
-{cparam2.i}
-{eventval.i}
-{timestamp.i}
-{tmsconst.i}
-{finvtxt.i}
-{fcustdata.i}
-{fctchange.i}
-{fmakemsreq.i}
-{msisdn.i}
-{heartbeat.i}
-{forderstamp.i}
-{orderfunc.i}
-{freacmobsub.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/heartbeat.i}
+{Func/forderstamp.i}
+{Func/orderfunc.i}
+{Func/freacmobsub.i}
 {Func/fixedlinefunc.i}
+{Func/multitenantfunc.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 END.
 
 DEFINE INPUT  PARAMETER piOrderId  AS INTEGER NO-UNDO.
@@ -78,9 +74,13 @@ IF piOrderID = 0 THEN DO lii = 1 to EXTENT(lcStatuses):
    
    LOOP:
    FOR EACH xxOrder NO-LOCK WHERE  
-            xxOrder.Brand      = gcBrand     AND
-            xxOrder.StatusCode = lcStatus:
+            xxOrder.Brand      = Syst.Var:gcBrand     AND
+            xxOrder.StatusCode = lcStatus
+      TENANT-WHERE BUFFER-TENANT-ID(xxOrder) GE 0:
    
+      IF NOT fsetEffectiveTenantForAllDB(BUFFER-TENANT-NAME(xxOrder))
+      THEN NEXT.
+
       FIND FIRST OrderCustomer OF xxOrder WHERE
                  OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
       IF AVAILABLE OrderCustomer AND 
@@ -91,7 +91,7 @@ IF piOrderID = 0 THEN DO lii = 1 to EXTENT(lcStatuses):
             
       IF LOCKED(Order) THEN NEXT.       
       
-      {ordersender.i LOOP}
+      {Mc/ordersender.i LOOP}
    
       oiOrderQty = oiOrderQty + 1.
  
@@ -104,10 +104,10 @@ ELSE DO:
 
    ORDERLOOP:
    FOR FIRST Order EXCLUSIVE-LOCK WHERE  
-             Order.Brand   = gcBrand  AND
+             Order.Brand   = Syst.Var:gcBrand  AND
              Order.OrderId = piOrderId:
 
-      {ordersender.i ORDERLOOP}
+      {Mc/ordersender.i ORDERLOOP}
    
       oiOrderQty = oiOrderQty + 1.
       

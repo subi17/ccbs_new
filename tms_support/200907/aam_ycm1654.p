@@ -1,6 +1,6 @@
-{testpaa.i}
-katun = "ari".
-{barrfunc.i}
+{Syst/testpaa.i}
+Syst.Var:katun = "ari".
+{Func/barrfunc.i}
 
 def var lcline  as char no-undo.
 def var limsseq as int  no-undo.
@@ -149,7 +149,7 @@ repeat:
       next.
    end.
    
-   run cli_rate.p (mobsub.cli,
+   RUN Rate/cli_rate.p (mobsub.cli,
                    7/1/9,
                    7/31/9,
                    true).

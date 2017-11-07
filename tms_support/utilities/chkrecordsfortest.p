@@ -1,4 +1,3 @@
-{timestamp.i}
 
 DEFINE STREAM sTestIds.
 
@@ -42,7 +41,7 @@ FUNCTION fCheckIfBarringHistoryInMonths RETURN LOGICAL
    (INPUT piMsSeq AS INTEGER, INPUT piDayCount AS INTEGER):
    
    DEFINE VARIABLE ldeTimeStamp AS INTEGER NO-UNDO. 
-   ldeTimeStamp = fMake2Dt(TODAY - piDayCount, 0).
+   ldeTimeStamp = Func.Common:mMake2DT(TODAY - piDayCount, 0).
                 
    FOR FIRST MsRequest NO-LOCK WHERE
             MsRequest.MsSeq = piMsSeq AND
@@ -262,7 +261,7 @@ FUNCTION fHandlePrepaid RETURN LOGICAL:
     DEFINE VARIABLE dt18MonthsAgo2 AS DATE NO-UNDO. 
     DEFINE VARIABLE diTIme2 AS INTEGER NO-UNDO. 
 
-    fSplitTS(Order.CrStamp, output dtOrderCreation, output diTime2).
+    Func.Common:mSplitTS(Order.CrStamp, output dtOrderCreation, output diTime2).
     fGetValuesOnLimits(dtOrderCreation, dt18MonthsAgo2, ?, "PrePaid", "18 months", "").
     IF fIsPreactivated(MobSub.MsSeq) THEN
     DO:
@@ -292,7 +291,7 @@ FOR EACH MobSub WHERE MobSub.MsSeq >= iMobSubSeqLimit NO-LOCK:
 
              DEFINE VARIABLE dtCreation AS DATE NO-UNDO.
              DEFINE VARIABLE diTime AS INTEGER NO-UNDO. 
-             fSplitTS(Order.CrStamp, output dtCreation, output diTime).
+             Func.Common:mSplitTS(Order.CrStamp, output dtCreation, output diTime).
 
              IF MobSub.PayType eq FALSE THEN /* PostPaid */
              DO:

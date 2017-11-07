@@ -1,7 +1,7 @@
-{testpaa.i}
-katun = "Qvantel".
-{ftaxdata.i}
-{ftopup.i}
+{Syst/testpaa.i}
+Syst.Var:katun = "Qvantel".
+{Func/ftaxdata.i}
+{Func/ftopup.i}
 
 def var lcmaintask as char no-undo init "YOT-566".
 def var liperiod   as int  no-undo init 201002.

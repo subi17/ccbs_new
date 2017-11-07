@@ -18,10 +18,10 @@
   Version ......: M15
  -------------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'tariff'}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'tariff'}
 
 DEF VAR i       AS i  NO-UNDO.
 def var ok      as lo no-undo format "Yes/No".
@@ -42,9 +42,9 @@ DEF VAR CCN  LIKE CCN.CCN FORMAT ">>>9"   NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhTariff AS HANDLE NO-UNDO.
    lhTariff = BUFFER Tariff:HANDLE.
@@ -52,7 +52,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhTariff).
+      RUN Mc/eventview2.p(lhTariff).
    END.
 END.
 
@@ -76,8 +76,8 @@ form
    "               Update prices ..:" ch
       help "Update or just display new rates"                  
       skip(3)
-WITH COLOR value(cfc)
-   title color value(ctc) " " + ynimi + " Update rates for CCNs "
+WITH COLOR value(Syst.Var:cfc)
+   title color value(Syst.Var:ctc) " " + Syst.Var:ynimi + " Update rates for CCNs "
    OVERLAY width 80 ROW 1 NO-LABELS centered
    FRAME Limit.
 
@@ -91,7 +91,7 @@ WITH ROW 3 centered OVERLAY FRAME frm 11 DOWN.
 
 Limit:
 repeat WITH FRAME Limit:
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE
       PriceList
@@ -101,8 +101,8 @@ repeat WITH FRAME Limit:
       tz [1 FOR 6]
       ch
    WITH FRAME Limit EDITING:
-      READKEY. nap = keylabel(LASTKEY).
-      IF lookup(nap,poisnap) > 0 THEN DO:
+      READKEY. Syst.Var:nap = keylabel(LASTKEY).
+      IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
 
          if frame-field = "CCN" THEN DO:
             ASSIGN CCN.
@@ -115,7 +115,7 @@ repeat WITH FRAME Limit:
              END.
              ELSE DO:
                 FIND FIRST CCN where 
-                           CCN.Brand = gcBrand AND
+                           CCN.Brand = Syst.Var:gcBrand AND
                            CCN.CCN   = CCN 
                 no-lock no-error.
                 IF AVAIL CCN THEN 
@@ -134,7 +134,7 @@ repeat WITH FRAME Limit:
             if PriceList = "" then disp "ALL" @ pn.
             ELSE DO:
                FIND PriceList where     
-                    PriceList.Brand     = gcBrand AND
+                    PriceList.Brand     = Syst.Var:gcBrand AND
                     PriceList.PriceList = PriceList
                no-lock no-error.
                IF AVAIL PriceList THEN 
@@ -162,23 +162,23 @@ repeat WITH FRAME Limit:
 
 toimi:
    repeat WITH FRAME Limit:
-      ASSIGN ufk = 0 ehto = 0 ufk[1] = 7 ufk[5] = 795 ufk[8] = 8.
-      RUN ufkey.
-      IF toimi = 1 THEN NEXT  Limit.
-      IF toimi = 8 THEN LEAVE Limit.
-      IF toimi = 5 THEN DO:
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ehto = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 795 Syst.Var:ufk[8] = 8.
+      RUN Syst/ufkey.p.
+      IF Syst.Var:toimi = 1 THEN NEXT  Limit.
+      IF Syst.Var:toimi = 8 THEN LEAVE Limit.
+      IF Syst.Var:toimi = 5 THEN DO:
          BELL.
          ok = FALSE.
          message "Are You sure You want to start counting ? (Y/N) " UPDATE ok.
          IF ok THEN LEAVE toimi.
       END.
-   END.  /* toimi */
+   END.  /* Syst.Var:toimi */
 
    IF pr > 0 THEN perce = 1 + (pr / 100).
    ELSE IF pr < 0 THEN perce = 1 + (-1 * pr / 100).
 
    FOR EACH Tariff exclusive-lock where
-            Tariff.Brand  = gcBrand  AND
+            Tariff.Brand  = Syst.Var:gcBrand  AND
             Tariff.CCN    = CCN      AND 
            /* only one Date AT a time */
             Tariff.ValidFrom = vdate AND

@@ -3,10 +3,9 @@
    Remove old unbilled events from billing
 */
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{eventval.i} 
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/eventval.i} 
 
 DEF INPUT  PARAMETER iiInvCust    AS INT  NO-UNDO.
 DEF INPUT  PARAMETER idaEventDate AS DATE NO-UNDO.
@@ -26,9 +25,9 @@ DEF VAR lcSep       AS CHAR NO-UNDO INIT "|".
 DEF STREAM sLog.
 
 IF (ilFees OR ilFATimes) AND llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEF VAR lhSingleFee AS HANDLE NO-UNDO.
    lhSingleFee = BUFFER SingleFee:HANDLE.
@@ -192,7 +191,7 @@ PROCEDURE pRemoveFees:
       liCustNum1 = iiInvCust
       liCustNum2 = iiInvCust.
    ELSE ASSIGN
-      liCustNum2 = 99999999.
+      liCustNum2 = 999999999.
     
    liBillPeriod = YEAR(idaEventDate) * 100 + MONTH(idaEventDate).
    
@@ -225,7 +224,7 @@ PROCEDURE pRemoveFees:
                EXCLUSIVE-LOCK.
             IF llDoEvent THEN RUN StarEventMakeDeleteEventWithMemo(
                                        lhSingleFee,
-                                       katun,
+                                       Syst.Var:katun,
                                        "RemoveOldEvents").
             DELETE SingleFee.
             
@@ -238,7 +237,7 @@ PROCEDURE pRemoveFees:
          END.
 
          FOR EACH FixedFee NO-LOCK WHERE
-                  FixedFee.Brand = gcBrand AND
+                  FixedFee.Brand = Syst.Var:gcBrand AND
                   FixedFee.CustNum = Customer.CustNum AND
                   FixedFee.InUse = TRUE,
              EACH bFFItem OF FixedFee NO-LOCK WHERE
@@ -345,7 +344,7 @@ PROCEDURE pLogAction:
   
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = gcBrand   
+         ActionLog.Brand        = Syst.Var:gcBrand   
          ActionLog.TableName    = "BillEvents"  
          ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                   STRING(MONTH(TODAY),"99") + 
@@ -358,7 +357,7 @@ PROCEDURE pLogAction:
          ActionLog.ActionDec    = 0
          ActionLog.ActionChar   = lcResult
          ActionLog.ActionStatus = 3.
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
    END.
    
 END PROCEDURE. 

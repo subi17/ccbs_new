@@ -1,10 +1,9 @@
-{commpaa.i}
+{Syst/commpaa.i}
 ASSIGN
-   gcBrand = "1"
-   katun = "cron".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun = "cron".
 
-{cparam2.i}
-{timestamp.i}
+{Func/cparam2.i}
 
 DEF VAR lcFile      AS CHAR NO-UNDO.
 DEF VAR lcDir       AS CHAR NO-UNDO.
@@ -104,8 +103,8 @@ FILE-INFO:FILE-NAME = lcCheckDir + "/01".
 llCanCheck = (FILE-INFO:FILE-TYPE NE ?).
 
 ASSIGN 
-   ldBegin = fMake2DT(ldaRunDate,0)
-   ldEnd   = fMake2DT(ldaRunDate,86399).
+   ldBegin = Func.Common:mMake2DT(ldaRunDate,0)
+   ldEnd   = Func.Common:mMake2DT(ldaRunDate,86399).
   
 FOR FIRST FuncRunQSchedule NO-LOCK WHERE
           FuncRunQSchedule.FRQueueID = liQueueID AND

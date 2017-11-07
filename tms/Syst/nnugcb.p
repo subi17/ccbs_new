@@ -7,8 +7,8 @@
   Version ......: M15
   ----------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i} 
+{Syst/commali.i}
+{Syst/eventval.i} 
 
 DEF INPUT PARAMETER UserGroup LIKE UserGrp.UserGroup NO-UNDO.
 
@@ -34,9 +34,9 @@ def var mess         as c   format "x(34)"  NO-UNDO EXTENT 5.
 def var memb         as lo format "*/" NO-UNDO.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhUgMember AS HANDLE NO-UNDO.
    lhUgMember = BUFFER UgMember:HANDLE.
@@ -44,7 +44,7 @@ IF llDoEvent THEN DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhUgMember).
+      RUN Mc/eventview2.p(lhUgMember).
    END.
 END.
 
@@ -58,27 +58,27 @@ form
     TMSUser.UserNum                     column-label "UserNo"
     TMSUser.UserName  format "x(16)"    column-label "Name"
 WITH centered OVERLAY scroll 1 13 DOWN ROW 2
-    color value(cfc) title color value(ctc) " CHOOSE MEMBERS INTO GROUP " +
+    color value(Syst.Var:cfc) title color value(Syst.Var:ctc) " CHOOSE MEMBERS INTO GROUP " +
     UserGroup + " " FRAME sel.
 
 
 
 form /* FIND User BY number */
     UserCode help "Enter User Id"
-    with row 4 col 2 title color value(ctc) " FIND USERID "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND USERID "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* FIND User BY name */
     UserName help "Enter User's name"
-    with row 4 col 2 title color value(ctc) " FIND name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND name "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /* FIND User BY abbreviation */
     UserNum help "Enter User No."
-    with row 4 col 2 title color value(ctc) " FIND USER NO."
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr3.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND USER NO."
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc. view FRAME sel.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc. view FRAME sel.
 
 
 FIND FIRST TMSUser USE-INDEX UserCode no-lock no-error.
@@ -141,23 +141,23 @@ BROWSE:
    repeat WITH FRAME sel ON ENDKEY UNDO, RETURN:
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 542 ufk[2]= 543 ufk[3]= 30  ufk[4]= 0
-         ufk[5]= 515 ufk[6]= 0   ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.  RUN ufkey.
+         Syst.Var:ufk[1]= 542 Syst.Var:ufk[2]= 543 Syst.Var:ufk[3]= 30  Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= 515 Syst.Var:ufk[6]= 0   Syst.Var:ufk[7]= 0   Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.  RUN Syst/ufkey.p.
       END.
       HIDE MESSAGE no-pause. IF order = 1 THEN
-         CHOOSE ROW TMSUser.UserCode ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW TMSUser.UserCode {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 2 THEN
-         CHOOSE ROW TMSUser.UserNum ;(uchoose.i;) no-error WITH FRAME sel.
+         CHOOSE ROW TMSUser.UserNum {Syst/uchoose.i} no-error WITH FRAME sel.
       ELSE IF order = 3 THEN
-         CHOOSE ROW TMSUser.UserName ;(uchoose.i;) no-error WITH FRAME sel.
-      COLOR DISPLAY value(ccc)
+         CHOOSE ROW TMSUser.UserName {Syst/uchoose.i} no-error WITH FRAME sel.
+      COLOR DISPLAY value(Syst.Var:ccc)
       TMSUser.UserCode TMSUser.UserNum TMSUser.UserName WITH FRAME sel.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
-      nap = keylabel(LASTKEY).
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      Syst.Var:nap = keylabel(LASTKEY).
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order = 4 THEN order = 1. END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = 3. END.
 
       IF order <> ex-order THEN DO:
@@ -180,11 +180,11 @@ BROWSE:
          bell. message "You are on an empty row, move upwards !".
          PAUSE 1 no-message. NEXT.
       END.
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND TMSUser where recid(TMSUser) = rtab[1] no-lock.
             IF order = 1 THEN FIND prev TMSUser
@@ -211,7 +211,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND TMSUser where recid(TMSUser) = rtab[FRAME-DOWN] no-lock .
@@ -241,7 +241,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND TMSUser where recid(TMSUser) = memory no-lock no-error.
          IF order = 1 THEN FIND prev TMSUser
@@ -272,7 +272,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "YOU ARE ON THE LAST PAGE". BELL. PAUSE 1 no-message.
@@ -285,9 +285,9 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". RUN ufcolor.
-        UserCode = "". ehto = 9. RUN ufkey. ufkey = TRUE.
+     if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+        UserCode = "". Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE UserCode WITH FRAME hayr.
         HIDE FRAME hayr no-pause.
         if UserCode <> "" THEN DO:
@@ -303,9 +303,9 @@ BROWSE:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-        cfc = "puyr". RUN ufcolor. UserNum = 0.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+     if lookup(Syst.Var:nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p. UserNum = 0.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE UserNum WITH FRAME hayr3.
         HIDE FRAME hayr3 no-pause.
         IF UserNum <> 0 THEN DO:
@@ -321,9 +321,9 @@ BROWSE:
      END. /* Haku sar. 2 */
 
      /* Haku sarakk. 3 */
-     if lookup(nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
-        cfc = "puyr". run ufcolor. UserName = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+     if lookup(Syst.Var:nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p. UserName = "".
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE UserName WITH FRAME hayr2.
         HIDE FRAME hayr2 no-pause.
         if UserName <> "" THEN DO:
@@ -338,7 +338,7 @@ BROWSE:
         END.
      END. /* Haku sar. 3 */
 
-     else if lookup(nap,"enter,return,5,F5") > 0 THEN
+     else if lookup(Syst.Var:nap,"enter,return,5,F5") > 0 THEN
      DO WITH FRAME lis TRANSAction:
 
         /* ADD OR REMOVE */
@@ -364,7 +364,7 @@ BROWSE:
         END.
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
         IF order = 1 THEN FIND FIRST TMSUser
         USE-INDEX UserCode no-lock no-error.
         ELSE IF order = 2 THEN FIND FIRST TMSUser
@@ -375,7 +375,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 1 THEN FIND LAST TMSUser
         USE-INDEX UserCode no-lock no-error.
         ELSE IF order = 2 THEN FIND LAST TMSUser
@@ -385,9 +385,9 @@ BROWSE:
         ASSIGN memory = recid(TMSUser) must-print = TRUE.
         NEXT LOOP.
      END.
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
   END.  /* BROWSE */
 END.  /* LOOP */
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 

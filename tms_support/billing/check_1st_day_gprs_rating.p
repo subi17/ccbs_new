@@ -11,13 +11,11 @@ Customer number, MSISDN, STC date, old subs type, new subs type, billig item, nu
 
 */
 
-{timestamp.i}
-{tmsconst.i}
+{Syst/tmsconst.i}
 
 DEF VAR ldtInputDate AS DATE NO-UNDO. 
 DEF VAR ldBeginStamp AS DEC NO-UNDO. 
 DEF VAR ldEndStamp AS DEC NO-UNDO. 
-DEF VAR gcBrand AS CHAR NO-UNDO INITIAL "1". 
 DEF VAR liQty AS INT NO-UNDO. 
 DEF VAR ldAmt As DEC NO-UNDO.
 DEF VAR lcInvNum AS CHAR NO-UNDO. 
@@ -44,7 +42,7 @@ FUNCTION fReadCDRs RETURNS LOGICAL
        IF Mobcdr.errorcode NE 0        THEN NEXT.
        IF MobCDR.BillCode NE "14100001" THEN NEXT. 
 
-       ldeTime  = fMake2Dt(Mobcdr.datest, Mobcdr.TimeStart).
+       ldeTime  = Func.Common:mMake2DT(Mobcdr.datest, Mobcdr.TimeStart).
 /*       IF Mobcdr.ReadInTS < pdStartTS THEN NEXT.
        IF Mobcdr.ReadInTS > pdEndTS   THEN NEXT. */
 
@@ -68,17 +66,17 @@ END FUNCTION.
 
 
 ldtInputDate = DATE(11,1,2011).
-ldBeginStamp = fHMS2TS(ldtInputDate,"00:00:00").
-ldEndStamp = fHMS2TS(ldtInputDate,"23:59:59").
+ldBeginStamp = Func.Common:mHMS2TS(ldtInputDate,"00:00:00").
+ldEndStamp = Func.Common:mHMS2TS(ldtInputDate,"23:59:59").
 DEFINE VARIABLE ldeLastMonthLastSecond AS DECIMAL NO-UNDO. 
-ldeLastMonthLastSecond = fSecOffSet(ldBeginStamp,-1).
+ldeLastMonthLastSecond = Func.Common:mSecOffSet(ldBeginStamp,-1).
 
 OUTPUT STREAM sLog TO VALUE("/apps/yoigo/tms_support/billing/check_1st_day_gprs_rating_" + STRING(YEAR(ldtInputdate) * 10000 
          + 100 * MONTH(ldtInputdate)
          + DAY(ldtInputdate)) + ".log").
 
 FOR EACH MsRequest NO-LOCK WHERE
-         MsRequest.Brand = gcBrand AND
+         MsRequest.Brand = Syst.Var:gcBrand AND
          MsRequest.ReqType = ({&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}) AND
          MsRequest.ReqStatus = ({&REQUEST_STATUS_DONE}) AND
          MsRequest.ActStamp >= ldBeginStamp AND 
@@ -120,7 +118,7 @@ FOR EACH MsRequest NO-LOCK WHERE
 END.
 
 FOR EACH MsRequest NO-LOCK WHERE
-         MsRequest.Brand = gcBrand AND
+         MsRequest.Brand = Syst.Var:gcBrand AND
          MsRequest.ReqType = 81 AND
          MsRequest.ReqStatus = ({&REQUEST_STATUS_DONE}) AND
          MsRequest.ActStamp >= ldBeginStamp AND 

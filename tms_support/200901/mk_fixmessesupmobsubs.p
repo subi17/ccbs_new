@@ -1,6 +1,5 @@
-{commpaa.i} katun = "SOG". gcbrand = "1".
-{fsubser.i}
-{timestamp.i}
+{Syst/commpaa.i} Syst.Var:katun = "SOG". Syst.Var:gcBrand = "1".
+{Func/fsubser.i}
 
 def stream slog.
 output stream slog to /apps/snet/200901/as_yts1250.log.
@@ -42,7 +41,7 @@ REPEAT:
    ASSIGN lcPayType = "PREPAID"
          lcProfile = "2".
 
-   lcActStamp = fMakeTS().
+   lcActStamp = Func.Common:mMakeTS().
 
    lcCommline = " CREATE,MSISDN=34" + MobSub.Cli + ",ICC=" + 
                 Imsi.ICC + ",IMSI=" + Imsi.IMSI + 
@@ -65,8 +64,8 @@ REPEAT:
         Solog.MsSeq        = MobSub.MsSeq    /* Mobile Subscription No.    */
         Solog.CLI          = MobSub.Cli      /* MSISDN                     */
         Solog.Stat         = 0               /* just created               */
-        Solog.Brand        = gcBrand
-        Solog.Users        = katun.
+        Solog.Brand        = Syst.Var:gcBrand
+        Solog.Users        = Syst.Var:katun.
    ASSIGN     
         Solog.TimeSlotTMS  = lcActStamp
         Solog.ActivationTS = lcActStamp

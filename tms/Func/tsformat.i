@@ -14,7 +14,7 @@ Param 1:    Output format (see possible masks below)
 Param 2:    Timestamp
 Returns:    Timestamp converted to requested format.
 
-e.g. fTSFormat("dd.mm.yyyy HH:MM", fMakeTS()):
+e.g. fTSFormat("dd.mm.yyyy HH:MM", Func.Common:mMakeTS()):
 
 Mask  Description
 ====  ===========
@@ -45,7 +45,6 @@ TT    Uppercase time marker string THEN  AM or PM.
 &THEN
 &GLOBAL-DEFINE tsformat YES
 
-{date.i}
 
 FUNCTION fTSFormatItem RETURNS CHAR
 (ldaDate AS DATE,
@@ -136,7 +135,7 @@ FUNCTION fTSFormat RETURNS CHAR
    DEFINE VARIABLE ldaDate    AS DATE NO-UNDO.
    DEFINE VARIABLE liTime     AS INTEGER NO-UNDO. 
    
-   fSplitTS(ideTS,ldaDate,liTime).
+   Func.Common:mSplitTS(ideTS,ldaDate,liTime).
    
    loop_pattern:
    DO WHILE liStart <= LENGTH(icFormat):

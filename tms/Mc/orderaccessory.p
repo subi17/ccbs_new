@@ -7,25 +7,24 @@
   CHANGED ......: 28.08.07/aam Discount
   Version ......: yoigo
   ---------------------------------------------------------------------- */
-{commali.i}
-{timestamp.i}
+{Syst/commali.i}
 
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'OrderAccessory'}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'OrderAccessory'}
 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhOrderAccessory AS HANDLE NO-UNDO.
    lhOrderAccessory = BUFFER OrderAccessory:HANDLE.
    RUN StarEventInitialize(lhOrderAccessory).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhOrderAccessory).
+      RUN Mc/eventview2.p(lhOrderAccessory).
    END.
 
 END.
@@ -72,15 +71,15 @@ form
     ttAccessory.Discount FORMAT "->>>9.99" 
     ttAccessory.OrderID FORMAT ">>>>>>>9" COLUMN-LABEL "Order"
 WITH ROW FrmRow CENTERED OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) lcHeader FRAME sel.
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) lcHeader FRAME sel.
 
 form
     ttAccessory.OrderID      COLON 22 FORMAT ">>>>>>>9" 
     ttAccessory.ProductCode  COLON 22
        FORMAT "X(16)"
        VALIDATE(CAN-FIND(BillItem WHERE 
-                         BillItem.Brand   = gcBrand AND
+                         BillItem.Brand   = Syst.Var:gcBrand AND
                          BillItem.BillCode = INPUT ttAccessory.ProductCode),
                 "Unknown billing item")
     lcBIName      
@@ -93,16 +92,16 @@ form
     ttAccessory.HardBook      COLON 22 FORMAT "9"
     ttAccessory.HardBookState COLON 22 FORMAT "X(20)" 
 WITH  OVERLAY ROW 6 CENTERED
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 form /* seek  ttAccessory */
     "Billing Item:" lcBillItem FORMAT "x(12)"
     HELP "Enter billing item"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Billing Item "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Billing Item "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
 FUNCTION fBIName RETURNS LOGIC
@@ -111,7 +110,7 @@ FUNCTION fBIName RETURNS LOGIC
    lcBIName = "".
    
    FIND BillItem WHERE   
-        BillItem.Brand   = gcBrand AND
+        BillItem.Brand   = Syst.Var:gcBrand AND
         BillItem.BillCode = icBillItem NO-LOCK NO-ERROR.
    IF AVAILABLE BillItem THEN lcBIName = BillItem.BIName. 
    
@@ -123,7 +122,7 @@ IF iiCustNum > 0 THEN DO:
    FOR EACH OrderCustomer NO-LOCK WHERE
             OrderCustomer.CustNum = iiCustNum,
        EACH OrderAccessory NO-LOCK WHERE
-            OrderAccessory.Brand   = gcBrand AND
+            OrderAccessory.Brand   = Syst.Var:gcBrand AND
             OrderAccessory.OrderID = OrderCustomer.OrderID:
             
       IF CAN-FIND(FIRST ttAccessory WHERE
@@ -142,7 +141,7 @@ END.
 
 ELSE DO:
    FOR EACH OrderAccessory NO-LOCK WHERE
-            OrderAccessory.Brand   = gcBrand AND
+            OrderAccessory.Brand   = Syst.Var:gcBrand AND
             OrderAccessory.OrderID = iiOrderID:
       CREATE ttAccessory.
       BUFFER-COPY OrderAccessory TO ttAccessory.
@@ -153,7 +152,7 @@ ELSE DO:
 
 END.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 
@@ -176,22 +175,22 @@ REPEAT WITH FRAME sel:
    END.
     
    IF must-add THEN DO:  /* Add a ttAccessory  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN ufkey.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
            PROMPT-FOR ttAccessory.ProductCode WITH FRAME lis EDITING:
            
                READKEY. 
-               nap = KEYLABEL(LASTKEY).
+               Syst.Var:nap = KEYLABEL(LASTKEY).
                APPLY LASTKEY.
            END.
 
@@ -199,7 +198,7 @@ REPEAT WITH FRAME sel:
            THEN LEAVE add-row.
 
            IF CAN-FIND(FIRST OrderAccessory WHERE
-                       OrderAccessory.Brand   = gcBrand   AND
+                       OrderAccessory.Brand   = Syst.Var:gcBrand   AND
                        OrderAccessory.OrderID = iiOrderID AND
                        OrderAccessory.ProductCode = 
                                    INPUT ttAccessory.ProductCode)
@@ -283,27 +282,27 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk    = 0
-        ufk[1] = 35
-        ufk[8] = 8 
-        ehto   = 3 
+        Syst.Var:ufk    = 0
+        Syst.Var:ufk[1] = 35
+        Syst.Var:ufk[8] = 8 
+        Syst.Var:ehto   = 3 
         ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
         
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ttAccessory.ProductCode ;(uchoose.i;) NO-ERROR 
+        CHOOSE ROW ttAccessory.ProductCode {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttAccessory.ProductCode WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) ttAccessory.ProductCode WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -312,10 +311,10 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -333,7 +332,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -358,7 +357,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -384,7 +383,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ttAccessory WHERE recid(ttAccessory) = Memory
             NO-LOCK NO-ERROR.
@@ -409,7 +408,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -424,11 +423,11 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 AND Syst.Var:ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        UPDATE lcBillItem WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -454,20 +453,20 @@ REPEAT WITH FRAME sel:
      END. /* Search-1 */
 
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0  
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND Syst.Var:ufk[5] > 0  
      THEN DO:  /* add */
-        {uright2.i}
+        {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
      
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND Syst.Var:ufk[6] > 0
      THEN DO TRANSACTION:  /* DELETE */
-       {uright2.i}
+       {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        ttAccessory.ProductCode ttAccessory.IMEI.
 
        RUN local-find-NEXT.
@@ -489,7 +488,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        ttAccessory.ProductCode ttAccessory.IMEI.
 
        IF ok THEN DO:
@@ -515,7 +514,7 @@ REPEAT WITH FRAME sel:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
 
@@ -528,7 +527,7 @@ REPEAT WITH FRAME sel:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrderAccessory).
 
        ASSIGN ac-hdr = " TERMINAL " ufkey = TRUE.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record.                                  
        HIDE FRAME lis NO-PAUSE.
@@ -544,25 +543,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(ttAccessory) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(ttAccessory) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 fCleanEventObjects().
 
@@ -653,7 +652,7 @@ PROCEDURE local-UPDATE-record:
       IF lcRight = "RW" AND FALSE
       THEN REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE:
       
-         ehto = 9. RUN ufkey.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
       
          UPDATE
          ttAccessory.IMEI    
@@ -663,7 +662,7 @@ PROCEDURE local-UPDATE-record:
             
             READKEY.
  
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 
             THEN DO WITH FRAME lis:
              
                PAUSE 0.
@@ -687,22 +686,22 @@ PROCEDURE local-UPDATE-record:
          VIEW-LOOP:
          REPEAT ON ENDKEY UNDO, LEAVE:
        
-           ufk = 0.
-           ufk[6] = 1752.
-           ufk[8] = 8.
-           ehto = 1. RUN ufkey.
+           Syst.Var:ufk = 0.
+           Syst.Var:ufk[6] = 1752.
+           Syst.Var:ufk[8] = 8.
+           Syst.Var:ehto = 1. RUN Syst/ufkey.p.
            
-           IF toimi = 6 THEN DO:
+           IF Syst.Var:toimi = 6 THEN DO:
              
               FIND OrderAccessory WHERE RECID(OrderAccessory) = 
                      ttAccessory.DbRec NO-LOCK.
-              RUN eventsel ("OrderAccessory",OrderAccessory.Brand +  CHR(255)
+              RUN Mc/eventsel.p ("OrderAccessory",OrderAccessory.Brand +  CHR(255)
                   + STRING(OrderAccessory.OrderID)). 
               NEXT VIEW-LOOP.
 
            END.
            
-           ELSE IF toimi = 8 THEN DO:
+           ELSE IF Syst.Var:toimi = 8 THEN DO:
               LEAVE VIEW-LOOP.
            END.
          

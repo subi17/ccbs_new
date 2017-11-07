@@ -6,11 +6,11 @@
 &THEN
 &GLOBAL-DEFINE FCREDITREQ_I YES
    
-{fcreatereq.i}
-{cparam2.i}
-{faccper.i}
-{fcreditvalid.i}
-{fparse.i}
+{Func/fcreatereq.i}
+{Func/cparam2.i}
+{Func/faccper.i}
+{Func/fcreditvalid.i}
+{Func/fparse.i}
 
 FUNCTION fFullCreditNoteRequest RETURNS INTEGER
    (INPUT  iiCustNum       AS INT,  
@@ -38,7 +38,7 @@ FUNCTION fFullCreditNoteRequest RETURNS INTEGER
 
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest(22,
                   idActStamp,
@@ -208,7 +208,7 @@ FUNCTION fFullCreditNote RETURNS INT
    /* move to next day if activation time has passed */
    IF liActTime < TIME AND ldInvDate = TODAY THEN ldInvDate = ldInvDate + 1.
    /* requests will be run in the evening of given date */
-   ldActStamp = fMake2DT(ldInvDate,liActTime).
+   ldActStamp = Func.Common:mMake2DT(ldInvDate,liActTime).
 
    /* make a request */
    lii = fFullCreditNoteRequest(Invoice.Custnum,

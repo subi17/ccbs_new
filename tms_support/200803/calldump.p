@@ -13,12 +13,11 @@
   VERSION ......: SHARK
   ------------------------------------------------------ */
 
-{commali.i}
-{date.i}
-{fvatfact.i}
-{excel.i}
-{coinv.i}
-{cparam.i2}
+{Syst/commali.i}
+{Func/fvatfact.i}
+{Func/excel.i}
+{Func/coinv.i}
+{Func/cparam.i2}
 
 DEFINE INPUT PARAMETER  iiper AS INTEGER NO-UNDO.
 DEFINE INPUT PARAMETER  idaDate AS DATE NO-UNDO.
@@ -52,7 +51,7 @@ assign
    lcOdir     =  fCparam("dumpoutgoing","calldump.p")
    lcSdir     =  fCParam("dumpspool","calldump.p")
    ldate1     = idadate 
-   filename   = "calls" + fDateFmt(ldate1,"yyyymmdd") + ".dump"
+   filename   = "calls" + Func.Common:mDateFmt(ldate1,"yyyymmdd") + ".dump"
    ldate1     = idadate - 1
    ldate2     = ldate1
    numform    = session:numeric-format
@@ -158,10 +157,10 @@ for each ttCalls NO-LOCK:
      lcCCNName = "".
 
    find ccn where 
-        CCN.Brand = gcBrand AND
+        CCN.Brand = Syst.Var:gcBrand AND
         ccn.ccn = ttcalls.ccn no-lock no-error.
    find billitem where 
-        BillItem.Brand    = gcBrand AND
+        BillItem.Brand    = Syst.Var:gcBrand AND
         billitem.billcode = ttCalls.billcode no-lock no-error.
    assign
      lcBiName  = Billitem.biname when avail billitem

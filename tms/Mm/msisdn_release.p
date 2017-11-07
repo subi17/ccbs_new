@@ -8,11 +8,11 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
-katun = "Cron".
-gcBrand = "1".
-{tmsconst.i}
-{msisdn.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
+{Syst/tmsconst.i}
+{Func/msisdn.i}
 DEFINE VARIABLE secs AS INTEGER NO-UNDO.
 DEFINE VARIABLE ldDate AS DATE NO-UNDO.
 DEFINE VARIABLE lcPath AS CHARACTER NO-UNDO.
@@ -32,13 +32,13 @@ def buffer msisdnBuf for msisdn.
 put stream sout unformatted "MSISDN|Days in quarantine" skip.
 
 FOR EACH msisdnBuf NO-LOCK WHERE
-         msisdnBuf.brand = gcBrand
+         msisdnBuf.brand = Syst.Var:gcBrand
    USE-INDEX CLI BREAK BY msisdnBuf.cli:
 
    IF FIRST-OF(msisdnBuf.cli) AND 
       (msisdnBuf.statuscode = 4 OR msisdnBuf.statuscode = 15) THEN DO:
 
-      fSplitTS(msisdnBuf.validFrom, output ldDate, output secs).
+      Func.Common:mSplitTS(msisdnBuf.validFrom, output ldDate, output secs).
 
       IF msisdnBuf.StatusCode = 4 THEN liQuarTime = 90. ELSE liQuarTime = 10.
 

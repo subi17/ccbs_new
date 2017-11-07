@@ -9,9 +9,9 @@
 
 DISABLE TRIGGERS FOR LOAD OF FixedFee.
 
-{commali.i}
-{cparam2.i}
-{funcrunprocess_update.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/funcrunprocess_update.i}
 
 DEF INPUT  PARAMETER idaFromDate      AS DATE NO-UNDO.
 DEF INPUT  PARAMETER idaToDate        AS DATE NO-UNDO.
@@ -31,13 +31,13 @@ DEF VAR lcAllowedDSS2SubsType         AS CHAR NO-UNDO.
 DEF VAR lcExcludeBundles              AS CHAR NO-UNDO.
 DEF VAR lcFirstMonthUsageBasedBundles AS CHAR  NO-UNDO.
 
-{dss_bundle_first_month_fee.i}
+{Mm/dss_bundle_first_month_fee.i}
 
 /******** Main start ********/
 
 ASSIGN
-   ldPeriodFrom    = fMake2Dt(idaFromDate,0)
-   ldPeriodTo      = fMake2Dt(idaToDate,86399)
+   ldPeriodFrom    = Func.Common:mMake2DT(idaFromDate,0)
+   ldPeriodTo      = Func.Common:mMake2DT(idaToDate,86399)
    liPeriod        = YEAR(idaToDate) * 100 + MONTH(idaToDate)
    lcIPLContracts  = fCParamC("IPL_CONTRACTS")
    lcBONOContracts = fCParamC("BONO_CONTRACTS")
@@ -47,7 +47,7 @@ ASSIGN
 
 IF iiInvCust > 0 THEN DO:
    FIND FIRST Customer WHERE
-              Customer.Brand   = gcBrand AND
+              Customer.Brand   = Syst.Var:gcBrand AND
               Customer.CustNum = iiInvCust NO-LOCK NO-ERROR.
    IF NOT AVAILABLE Customer THEN RETURN "Customer not found".
 
@@ -62,7 +62,7 @@ IF RETURN-VALUE BEGINS "ERROR" THEN RETURN RETURN-VALUE.
 IF oiHandled > 0 AND iiInvCust = 0 THEN DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-         ActionLog.Brand        = gcBrand   
+         ActionLog.Brand        = Syst.Var:gcBrand   
          ActionLog.TableName    = "FixedFee"  
          ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") +
                                   STRING(MONTH(TODAY),"99")  +
@@ -75,10 +75,10 @@ IF oiHandled > 0 AND iiInvCust = 0 THEN DO TRANS:
          ActionLog.ActionChar   = STRING(oiHandled) + 
                                   " first month fees were updated"
          ActionLog.ActionStatus = 3
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.FromDate     = idaFromDate
          ActionLog.ToDate       = idaToDate.
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
 END.
 
 RETURN "".
@@ -150,7 +150,7 @@ PROCEDURE pGetCustomerSubscriptions:
          FIRST bServiceLimit NO-LOCK USE-INDEX SlSeq WHERE
                bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
          FIRST bDayCampaign NO-LOCK WHERE
-               bDayCampaign.Brand = gcBrand AND
+               bDayCampaign.Brand = Syst.Var:gcBrand AND
                bDayCampaign.DCEvent = bServiceLimit.GroupCode AND
                LOOKUP(bDayCampaign.DCType,
                      {&PERCONTRACT_RATING_PACKAGE}) > 0:
@@ -306,10 +306,10 @@ PROCEDURE pGetCustomerSubscriptions:
       ldFeeAmount = 0.
 
       FOR FIRST DayCampaign NO-LOCK WHERE
-                DayCampaign.Brand   = gcBrand AND
+                DayCampaign.Brand   = Syst.Var:gcBrand AND
                 DayCampaign.DCEvent = ttSub.BundleId,
           FIRST FixedFee NO-LOCK USE-INDEX HostTable WHERE
-                FixedFee.Brand     = gcBrand AND
+                FixedFee.Brand     = Syst.Var:gcBrand AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue  = STRING(ttSub.MsSeq) AND
                 FixedFee.FeeModel  = DayCampaign.FeeModel AND
@@ -318,7 +318,7 @@ PROCEDURE pGetCustomerSubscriptions:
                 FixedFee.BegDate  <= idaToDate AND
                 FixedFee.EndPer   >= liPeriod,
           FIRST FMItem NO-LOCK WHERE
-                FMItem.Brand     = gcBrand AND
+                FMItem.Brand     = Syst.Var:gcBrand AND
                 FMItem.FeeModel  = FixedFee.FeeModel AND
                 FMItem.FromDate <= FixedFee.BegDate AND
                 FMItem.ToDate   >= FixedFee.BegDate AND

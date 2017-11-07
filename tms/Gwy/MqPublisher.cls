@@ -20,7 +20,6 @@ CLASS Gwy.MqPublisher:
    DEFINE PRIVATE VARIABLE objConnectionFactory AS CLASS ConnectionFactory NO-UNDO.
    DEFINE PRIVATE VARIABLE objQueue             AS CLASS Queue             NO-UNDO.
 
-   DEFINE PRIVATE VARIABLE gcBrand          AS CHARACTER   NO-UNDO INITIAL "1".
    DEFINE PRIVATE VARIABLE lcHostName       AS CHARACTER   NO-UNDO.
    DEFINE PRIVATE VARIABLE liPort           AS INTEGER     NO-UNDO.
    DEFINE PRIVATE VARIABLE liTimeOut        AS INTEGER     NO-UNDO.
@@ -61,10 +60,10 @@ CLASS Gwy.MqPublisher:
    CONSTRUCTOR PUBLIC MqPublisher ( icConfigurationPrefix AS CHARACTER ):
       
       ASSIGN
-         lcHostName  = Parameters:getc(icConfigurationPrefix + ".ip")
-         liPort      = Parameters:geti(icConfigurationPrefix + ".Port")
-         liTimeOut   = Parameters:geti(icConfigurationPrefix + ".TimeOut")
-         lcQueueName = Parameters:getc(icConfigurationPrefix + ".Name")
+         lcHostName  = Syst.Parameters:getc(icConfigurationPrefix + ".ip")
+         liPort      = Syst.Parameters:geti(icConfigurationPrefix + ".Port")
+         liTimeOut   = Syst.Parameters:geti(icConfigurationPrefix + ".TimeOut")
+         lcQueueName = Syst.Parameters:getc(icConfigurationPrefix + ".Name")
          .
       
       DO ON ERROR UNDO, THROW:

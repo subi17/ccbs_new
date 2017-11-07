@@ -10,13 +10,12 @@
 
 &GLOBAL-DEFINE AllIncludes YES
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{ftransdir.i}
-{email.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/email.i}
 
-{ddpaymentt.i}
+{Ar/ddpaymentt.i}
 
 /* invoices to be paid */
 DEFINE INPUT-OUTPUT PARAMETER TABLE FOR ttInvoice.
@@ -80,7 +79,7 @@ FOR EACH ttInvoice,
    FIRST Customer OF Invoice NO-LOCK
 BY Invoice.ExtInvID:
 
-   RUN makepaym (BUFFER Invoice,
+   RUN Ar/makepaym.p (BUFFER Invoice,
                  Invoice.InvAmt,
                  idtPaymDate,
                  liBankAcc,
@@ -129,7 +128,7 @@ IF CAN-FIND(FIRST ttError) THEN DO:
                            STRING(DAY(TODAY),"99")    + 
                            "_" + STRING(TIME) + ".txt".                    
 
-    ldCurrStamp = fMakeTS().
+    ldCurrStamp = Func.Common:mMakeTS().
                            
     OUTPUT STREAM slog TO VALUE(lcErrFile).
     PUT STREAM slog UNFORMATTED
@@ -145,12 +144,12 @@ IF CAN-FIND(FIRST ttError) THEN DO:
 
        /* save to db for reporting */
        CREATE ErrorLog.
-       ASSIGN ErrorLog.Brand     = gcBrand
+       ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
               ErrorLog.ActionID  = "DDPAYM"
               ErrorLog.TableName = "Invoice"
               ErrorLog.KeyValue  = ttError.Inv
               ErrorLog.ActionTS  = ldCurrStamp
-              ErrorLog.UserCode  = katun
+              ErrorLog.UserCode  = Syst.Var:katun
               ErrorLog.ErrorMsg  = ttError.ErrMsg.
     END.
 

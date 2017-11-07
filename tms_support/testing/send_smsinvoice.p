@@ -1,11 +1,11 @@
-{commpaa.i}
-assign gcbrand = "1"
-       katun = "Qvantel".
-{fmakemsreq.i}
-{tmsconst.i}
-{cparam2.i}
-{femailinvoice.i}
-{email.i}
+{Syst/commpaa.i}
+assign Syst.Var:gcBrand = "1"
+       Syst.Var:katun = "Qvantel".
+{Func/fmakemsreq.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
+{Func/femailinvoice.i}
+{Func/email.i}
 
 def stream sin.
 def stream sout.
@@ -51,7 +51,7 @@ repeat:
 
    liInvnum = 0.
    FOR EACH Invoice WHERE
-            Invoice.Brand    = gcBrand AND
+            Invoice.Brand    = Syst.Var:gcBrand AND
             Invoice.CustNum  = Customer.CustNum AND
             Invoice.InvDate  = 11/01/2012 AND
             Invoice.InvType  = 1 AND
@@ -93,7 +93,7 @@ repeat:
                      MobSub.CLI,
                      44,
                      lcSMSReplacedText,
-                     fMakeTS(),
+                     Func.Common:mMakeTS(),
                      "622",
                      "36000-75600").
       IF AVAIL CallAlarm THEN RELEASE CallAlarm. 

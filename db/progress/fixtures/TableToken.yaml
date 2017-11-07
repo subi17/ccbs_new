@@ -1,0 +1,1472 @@
+bulkload: TableToken
+  tablename: "Account"
+  tokencode: "AR"
+
+bulkload: TableToken
+  tablename: "AccPeriod"
+  tokencode: "AR"
+
+bulkload: TableToken
+  tablename: "ActionLog"
+  tokencode: "CCSUPER,SYST"
+
+bulkload: TableToken
+  tablename: "application"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "AreaCode"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "AreaPair"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "AreaPlan"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "ASubType"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "Bank"
+  tokencode: "AR"
+
+bulkload: TableToken
+  tablename: "BankAccount"
+  tokencode: "AR"
+
+bulkload: TableToken
+  tablename: "BarringConf"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "BBoard"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "BBRead"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "BDest"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "BDestConf"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "BDestConfItem"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "BDestHist"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "BDestTrans"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "BeaCap"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "BillItem"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "BillTarget"
+  tokencode: "CC,CCSUPER,CUSTOMER"
+
+bulkload: TableToken
+  tablename: "BillType"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "BItemGroup"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "Bnet"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "BRAND"
+  tokencode: "CCSUPER,MAIN"
+
+bulkload: TableToken
+  tablename: "BRTestCase"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "BRTestCriteria"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "BRTestQResult"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "BRTestQResultRow"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "BRTestQRow"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "BRTestQueue"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "BSer"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "BSubRepl"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "CallCounter"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "Campaign"
+  tokencode: "CC,CCSUPER,CUSTOMER"
+
+bulkload: TableToken
+  tablename: "CampRow"
+  tokencode: "CC,CCSUPER,CUSTOMER"
+
+bulkload: TableToken
+  tablename: "CampStat"
+  tokencode: "CC,CCSUPER,CUSTOMER"
+
+bulkload: TableToken
+  tablename: "CCN"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "CCRule"
+  tokencode: "AR"
+
+bulkload: TableToken
+  tablename: "CDRAmt"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "CDRStreamCounter"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "CGMember"
+  tokencode: "CC,CCSUPER"
+
+bulkload: TableToken
+  tablename: "ClaimHist"
+  tokencode: "AR"
+
+bulkload: TableToken
+  tablename: "CLI"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "CLIErrorCode"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "CLIFile"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "CLIPref"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "CLIQueue"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "CLISer"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "CLIType"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "CLIWL"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "ClosedCust"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "CMT"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "CoBasis"
+  tokencode: "COMM"
+
+bulkload: TableToken
+  tablename: "CoEvent"
+  tokencode: "COMM"
+
+bulkload: TableToken
+  tablename: "Company"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "Contact"
+  tokencode: "CC,CCSUPER"
+
+bulkload: TableToken
+  tablename: "Contract"
+  tokencode: "CC,CCSUPER,COMM"
+
+bulkload: TableToken
+  tablename: "CoRule"
+  tokencode: "COMM"
+
+bulkload: TableToken
+  tablename: "CoShare"
+  tokencode: "COMM"
+
+bulkload: TableToken
+  tablename: "CostCentre"
+  tokencode: "AR"
+
+bulkload: TableToken
+  tablename: "CoTarg"
+  tokencode: "COMM"
+
+bulkload: TableToken
+  tablename: "Counter"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "Country"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "CreditCard"
+  tokencode: "AR"
+
+bulkload: TableToken
+  tablename: "CreditCardDebit"
+  tokencode: "AR"
+
+bulkload: TableToken
+  tablename: "CreditRelease"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "CronLog"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "CronTask"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "CTServAttr"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "CTServEl"
+  tokencode: "CCSUPER"
+
+bulkload: TableToken
+  tablename: "CTService"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "CTServPac"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "CurRate"
+  tokencode: "CCSUPER,MAIN"
+
+bulkload: TableToken
+  tablename: "Currency"
+  tokencode: "CCSUPER,MAIN"
+
+bulkload: TableToken
+  tablename: "CustBal"
+  tokencode: "AR"
+
+bulkload: TableToken
+  tablename: "CustCat"
+  tokencode: "CC,CCSUPER,CUSTOMER"
+
+bulkload: TableToken
+  tablename: "CustClass"
+  tokencode: "CC,CCSUPER,CUSTOMER"
+
+bulkload: TableToken
+  tablename: "CustCount"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "CustGroup"
+  tokencode: "CC,CCSUPER,CUSTOMER"
+
+bulkload: TableToken
+  tablename: "CustIntEvent"
+  tokencode: "AR"
+
+bulkload: TableToken
+  tablename: "CustLetter"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "Customer"
+  tokencode: "CC,CCSUPER,CUSTOMER,SULKU"
+
+bulkload: TableToken
+  tablename: "CustPNPGroup"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "CustPNPSer"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "CustPP"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "CustTemp"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "DataCDR"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "DataCLI"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "DayCampaign"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "DBConfig"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "DCServiceAttribute"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "DCServiceComponent"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "DCServicePackage"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "DDAuth"
+  tokencode: "AR"
+
+bulkload: TableToken
+  tablename: "Department"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "DFField"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "DFTimeTable"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "DialType"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "DiscGroup"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "DiscountPlan"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "DiscPlan"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "Division"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "DPBasis"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "DPConf"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "DPMember"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "DPRate"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "DPSubject"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "DPTarget"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "DTypeConf"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "DumpFile"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "DumpLog"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "EDRHistory"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "EPGroup"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "EPMember"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "ErrorLog"
+  tokencode: "CCSUPER,SYST"
+
+bulkload: TableToken
+  tablename: "eventlog"
+  tokencode: "ROAM_OUT_IP,SYST"
+
+bulkload: TableToken
+  tablename: "EventLogConf"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "Exchange"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "ExpLog"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "FATConfig"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "FATGMember"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "FATGroup"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "FATime"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "FColor"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "FeeModel"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "FFItem"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "FileExpLog"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "filegroup"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "files"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "FinBank"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "FixCDR"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "FixedFee"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "FMItem"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "Fraud"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "FraudCDR"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "FuncRunConfig"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "FuncRunExec"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "FuncRunExecLog"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "FuncRunParam"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "FuncRunProcess"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "FuncRunQRow"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "FuncRunQSchedule"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "FuncRunQSParam"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "FuncRunQueue"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "FuncRunResult"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "FusionInvoice"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "HdrText"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "HighUsage"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "Holiday"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "IFiSpx"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "IgInvNum"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "IgVoucher"
+  tokencode: "AR"
+
+bulkload: TableToken
+  tablename: "IMEIRegister"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "IMSI"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "Interest"
+  tokencode: "AR"
+
+bulkload: TableToken
+  tablename: "InvASub"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "InvCCN"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "InvGroup"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "Invoice"
+  tokencode: "BILL,CC,CCSUPER,CUSTOMER,ORDER"
+
+bulkload: TableToken
+  tablename: "InvoiceTarget"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "InvoiceTargetGroup"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "InvRow"
+  tokencode: "BILL,CC,CCSUPER,CUSTOMER,ORDER"
+
+bulkload: TableToken
+  tablename: "InvRowCounter"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "InvRunLog"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "InvSect"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "InvSeq"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "InvText"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "IPRange"
+  tokencode: "ROAM_OUT_IP"
+
+bulkload: TableToken
+  tablename: "ITSendLog"
+  tokencode: "CC,CCSUPER,CUSTOMER,ORDER"
+
+bulkload: TableToken
+  tablename: "jobparameter"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "JobQueue"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "KillMs"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "Language"
+  tokencode: "CC,CUSTOMER,MAIN"
+
+bulkload: TableToken
+  tablename: "localProgram"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "M2MDetail"
+  tokencode: "MOB,ORDER"
+
+bulkload: TableToken
+  tablename: "m2mqueue"
+  tokencode: "MOB,ORDER"
+
+bulkload: TableToken
+  tablename: "M2MTime"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "MCDRFile"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "MedCTX"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "MedDefTrunk"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "MedHist"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "MedSect"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "MedTrunk"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "Memo"
+  tokencode: "MAIN,MOB,ORDER,SULKU"
+
+bulkload: TableToken
+  tablename: "menu"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "MenuClass"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "menuitem"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "MenuText"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "MenuTree"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "messages"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "MinConsumption"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "MNPCal"
+  tokencode: "MOB,ORDER"
+
+bulkload: TableToken
+  tablename: "MNPMessage"
+  tokencode: "MOB,ORDER"
+
+bulkload: TableToken
+  tablename: "MNPOperation"
+  tokencode: "MOB,ORDER"
+
+bulkload: TableToken
+  tablename: "MNPOperator"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "MNPProcess"
+  tokencode: "MOB,ORDER"
+
+bulkload: TableToken
+  tablename: "MNPSubs"
+  tokencode: "MOB,ORDER"
+
+bulkload: TableToken
+  tablename: "MobCDR"
+  tokencode: "BILL,MOBMAIN"
+
+bulkload: TableToken
+  tablename: "MobCount"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "MobError"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "MobPref"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "MobSub"
+  tokencode: "MOB,MOBMAIN,SULKU"
+
+bulkload: TableToken
+  tablename: "moreinfo"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "moreinfoitem"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "MsALog"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "MsBalance"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "MSClass"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "MSISDN"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "MSOwner"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "MSRange"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "MsRequest"
+  tokencode: "CC,CUSTOMER,MOB,ORDER"
+
+bulkload: TableToken
+  tablename: "MSStat"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "MthCall"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "NatHoliday"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "Nationality"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "NatPref"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "nnktex"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "nnltex"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "nnpreh"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "nnprta"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "NumPlan"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "Offer"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "OfferCriteria"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "OfferItem"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "OLRefresh"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "Operator"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "OperIndir"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "OPLog"
+  tokencode: "AR"
+
+bulkload: TableToken
+  tablename: "Order"
+  tokencode: "CC,CCSUPER,CUSTOMER,ORDER,SYST"
+
+bulkload: TableToken
+  tablename: "OrderAccessory"
+  tokencode: "CC,CCSUPER,CUSTOMER,ORDER"
+
+bulkload: TableToken
+  tablename: "OrderAction"
+  tokencode: "ORDER"
+
+bulkload: TableToken
+  tablename: "OrderService"
+  tokencode: "CC,CUSTOMER,ORDER"
+
+bulkload: TableToken
+  tablename: "OrderTopup"
+  tokencode: "CC,CCSUPER,CUSTOMER,ORDER,SYST"
+
+bulkload: TableToken
+  tablename: "OrdStat"
+  tokencode: "MOB,MOBMAIN,ORDER,SYST"
+
+bulkload: TableToken
+  tablename: "PaymCfg"
+  tokencode: "AR"
+
+bulkload: TableToken
+  tablename: "PaymConfig"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "PaymConfTax"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "Payment"
+  tokencode: "AR"
+
+bulkload: TableToken
+  tablename: "PaymLog"
+  tokencode: "AR"
+
+bulkload: TableToken
+  tablename: "PaymPlan"
+  tokencode: "AR"
+
+bulkload: TableToken
+  tablename: "PaymVouch"
+  tokencode: "AR"
+
+bulkload: TableToken
+  tablename: "PersLeave"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "Personnel"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "PersResp"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "PListConf"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "PLMN"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "PNPGroup"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "PNPList"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "PostCode"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "PostingRule"
+  tokencode: "AR"
+
+bulkload: TableToken
+  tablename: "PPBatch"
+  tokencode: "AR"
+
+bulkload: TableToken
+  tablename: "PPInv"
+  tokencode: "AR"
+
+bulkload: TableToken
+  tablename: "PPItem"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "PremiumNumber"
+  tokencode: "CCSUPER"
+
+bulkload: TableToken
+  tablename: "PrePaidRequest"
+  tokencode: "BILL,CC,CCSUPER,SYST"
+
+bulkload: TableToken
+  tablename: "PrepEDR"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "Presel"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "PreselErr"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "PriceList"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "PrintCodes"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "printer"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "PrintHouseConf"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "ProdPack"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "Product"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "progjob"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "program"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "progwin"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "RateCCN"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "RatePlan"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "RatePref"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "Region"
+  tokencode: "AR,BILL,CC,CUSTOMER"
+
+bulkload: TableToken
+  tablename: "ReportConf"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "ReportConfRow"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "RepText"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "RequestAction"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "RequestActionRule"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "RequestParam"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "RequestQueue"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "RequestStatus"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "RequestType"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "RerateLog"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "Reseller"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "rightgroup"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "RoamCountry"
+  tokencode: "MOBMAIN,SYST"
+
+bulkload: TableToken
+  tablename: "Roamgroup"
+  tokencode: "MOBMAIN,SYST"
+
+bulkload: TableToken
+  tablename: "RoamOper"
+  tokencode: "MOBMAIN,SYST"
+
+bulkload: TableToken
+  tablename: "RoamTariff"
+  tokencode: "MOBMAIN,SYST"
+
+bulkload: TableToken
+  tablename: "rscode"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "RsOItem"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "rsoper"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "RsOrder"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "Salesman"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "Salesoffice"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "ScComp"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "ScUpdRule"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "searchfields"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "ServAttr"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "ServCom"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "ServEl"
+  tokencode: "CCSUPER"
+
+bulkload: TableToken
+  tablename: "ServFee"
+  tokencode: "CC,CCSUPER,CUSTOMER,MOB"
+
+bulkload: TableToken
+  tablename: "Service"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "ServPac"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "ShaperConf"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "SIM"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "SimArt"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "SimBatch"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "SimMan"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "SIMStat"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "SingleFee"
+  tokencode: "BILL,CC,CCSUPER"
+
+bulkload: TableToken
+  tablename: "SMGMember"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "SMGroup"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "SOBox"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "SOLog"
+  tokencode: "CC,CUSTOMER,MOB"
+
+bulkload: TableToken
+  tablename: "SPRule"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "starfind"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "StoBal"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "Stock"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "SubInvoice"
+  tokencode: "AR,BILL,CC"
+
+bulkload: TableToken
+  tablename: "SubSer"
+  tokencode: "CCSUPER"
+
+bulkload: TableToken
+  tablename: "SubsTerminal"
+  tokencode: "MOB"
+
+bulkload: TableToken
+  tablename: "SULKU"
+  tokencode: "SULKU"
+
+bulkload: TableToken
+  tablename: "tabletoken"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "Tariff"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "TaxClass"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "TaxZone"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "TCC"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "TerminalConf"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "TMRItemValue"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "TMRLimit"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "TMRule"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "TMSCodes"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "TMSParam"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "TMSPrinter"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "TMSQueue"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "TMSRepCfg"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "TMSRepModel"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "TMSReport"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "TMSUser"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "token"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "TopupScheme"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "TopupSchemeRow"
+  tokencode: "VENDOR"
+
+bulkload: TableToken
+  tablename: "TranCDR"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "TroCateg"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "TroEvent"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "TroHist"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "TroStatus"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "TroTicket"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "TroType"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "Trunk"
+  tokencode: "FIX"
+
+bulkload: TableToken
+  tablename: "UGMember"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "UnregLog"
+  tokencode: "AR"
+
+bulkload: TableToken
+  tablename: "UnregPaym"
+  tokencode: "AR"
+
+bulkload: TableToken
+  tablename: "usergroup"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "usergrouprights"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "UserGrp"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "UserLimit"
+  tokencode: "CC,CCSUPER,SYST"
+
+bulkload: TableToken
+  tablename: "usermenu"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "username"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "userprogram"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "UserRight"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "usersettings"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "UserSman"
+  tokencode: "SYST"
+
+bulkload: TableToken
+  tablename: "VATCode"
+  tokencode: "MAIN"
+
+bulkload: TableToken
+  tablename: "VolDisc"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "WInvPwd"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "WInvRepo"
+  tokencode: "BILL"
+
+bulkload: TableToken
+  tablename: "WInvSession"
+  tokencode: "BILL"
+

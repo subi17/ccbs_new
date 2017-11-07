@@ -9,7 +9,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 def shared var siirto as char.
 
@@ -24,16 +24,16 @@ def var must-add    as logic                no-undo.
 form
       VATCode.VatCode  
       VATCode.VCName  
-    with scroll 1 11 down  row 4 centered color value(cfc)
-    title color value(ctc) " VAT CODES " overlay frame sel.
+    with scroll 1 11 down  row 4 centered color value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " VAT CODES " overlay frame sel.
 
 form /* SEEK code */
     VatCode
     help "Enter VAT CODE"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
-    color value(cfc) no-labels overlay frame hayr.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND CODE "
+    color value(Syst.Var:cfc) no-labels overlay frame hayr.
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.Var:ccc = Syst.Var:cfc.
 
 
 
@@ -79,10 +79,10 @@ print-line:
 
       if ufkey then do:
          assign
-         ufk = 0 ufk[1] = 35 ufk[5] = 11
-         ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
-         siirto = ? ehto = 3 ufkey = false.
-         run ufkey.p.
+         Syst.Var:ufk = 0 Syst.Var:ufk[1] = 35 Syst.Var:ufk[5] = 11
+         Syst.Var:ufk[6] = 0 Syst.Var:ufk[8] = 8  Syst.Var:ufk[9] = 1
+         siirto = ? Syst.Var:ehto = 3 ufkey = false.
+         RUN Syst/ufkey.p.
       end.
   end. /* print-line */
 
@@ -90,14 +90,14 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row VATCode.VatCode ;(uchoose.i;) no-error with frame sel.
-         color display value(ccc) VATCode.VatCode with frame sel.
+         choose row VATCode.VatCode {Syst/uchoose.i} no-error with frame sel.
+         color display value(Syst.Var:ccc) VATCode.VatCode with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.
-         nap = keylabel(lastkey).
+         Syst.Var:nap = keylabel(lastkey).
 
          /* previous line */
-         if lookup(nap,"cursor-up") > 0 then do
+         if lookup(Syst.Var:nap,"cursor-up") > 0 then do
          with frame sel:
             if frame-line = 1 then do:
                find VATCode where recid(VATCode) = rtab[frame-line] no-lock.
@@ -123,7 +123,7 @@ BROWSE:
          end. /* previous line */
 
          /* next line */
-         if lookup(nap,"cursor-down") > 0 then do with frame sel:
+         if lookup(Syst.Var:nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                find VATCode where recid(VATCode) = rtab[frame-line] no-lock .
                find next VATCode no-lock no-error.
@@ -149,7 +149,7 @@ BROWSE:
          end. /* next line */
 
          /* previous page */
-         else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
+         else if lookup(Syst.Var:nap,"page-up,prev-page") > 0 then do with frame sel:
             find VATCode where recid(VATCode) = memory no-lock no-error.
             find prev VATCode no-lock no-error.
             if available VATCode then do:
@@ -171,7 +171,7 @@ BROWSE:
         end. /* previous page */
 
         /* next page */
-        else if lookup(nap,"page-down,next-page") > 0 then do with frame sel:
+        else if lookup(Syst.Var:nap,"page-down,next-page") > 0 then do with frame sel:
            if rtab[frame-down] = ? then do:
                bell.
                message "This is the last page !".
@@ -185,9 +185,9 @@ BROWSE:
         end. /* next page */
 
         /* Seek */
-        if lookup(nap,"1,f1") > 0 then do:  /* VatCode */
-           cfc = "puyr". run ufcolor.
-           ehto = 9. run ufkey. ufkey = true.
+        if lookup(Syst.Var:nap,"1,f1") > 0 then do:  /* VatCode */
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set VatCode with frame hayr.
            hide frame hayr no-pause.
            if VatCode ENTERED then do:
@@ -208,13 +208,13 @@ BROWSE:
         end. /* Seek */
 
         /* Choose */
-        else if lookup(nap,"return,enter,5,f5") > 0 then do:
+        else if lookup(Syst.Var:nap,"return,enter,5,f5") > 0 then do:
            find VATCode where recid(VATCode) = rtab[frame-line] no-lock.
            siirto = string(VATCode.VatCode).
            leave MAIN.
         end. /* Choose */
         /* First record */
-        else if lookup(nap,"home,h") > 0 then do:
+        else if lookup(Syst.Var:nap,"home,h") > 0 then do:
            find first VATCode no-lock.
            memory = recid(VATCode).
            must-print = true.
@@ -222,14 +222,14 @@ BROWSE:
         end. /* First record */
 
         /* last record */
-        else if lookup(nap,"end,e") > 0 then do :
+        else if lookup(Syst.Var:nap,"end,e") > 0 then do :
            find last VATCode no-lock.
            memory = recid(VATCode).
            must-print = true.
            next LOOP.
         end. /* last record */
 
-        else if nap = "8" or nap = "f8" then leave MAIN. /* Return */
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" then leave MAIN. /* Return */
 
      end.  /* BROWSE */
    end.  /* LOOP */

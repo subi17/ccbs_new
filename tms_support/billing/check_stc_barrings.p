@@ -1,7 +1,7 @@
-{commpaa.i}
-katun = "Qvantel".
-gcBrand  = "1".
-{barrfunc.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand  = "1".
+{Func/barrfunc.i}
 
 DEFINE VARIABLE lrBarring AS ROWID no-UNDO.
 DEFINE VARIABLE lcBarring AS CHARACTER NO-UNDO. 
@@ -36,7 +36,7 @@ output stream sout to value(lcOutputFile).
 
 ASSIGN
    ldaDate = DATE(MONTH(ldaDate),1,YEAR(ldaDate))
-   ldaLastDayOfMonth = fLastDayOfMOnth(ldaDate)
+   ldaLastDayOfMonth = Func.Common:mLastDayOfMonth(ldaDate)
    liFrom = YEAR(ldaDate) * 10000 + MONTH(ldaDate) * 100 + DAY(ldaDate)
    liTo = liFrom + 1.
 
@@ -44,7 +44,7 @@ put stream sout unformatted
    "MSISDN|MSSEQ|CUSTNUM|SUBS.TYPE|CURRENT_BARRING|COUNTER_TYPE|COUNTER_AMOUNT|COUNTER_LIMIT|LIMIT_EXCEEDED" skip.
 
 FOR EACH msrequest NO-LOCK where
-         msrequest.brand = gcBrand and
+         msrequest.brand = Syst.Var:gcBrand and
          msrequest.reqtype = 35 and
          msrequest.reqstatus = 2 and
          msrequest.actstamp > liFrom and

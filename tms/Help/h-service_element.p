@@ -8,7 +8,7 @@
   Version ......: yoigo
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 def shared var siirto as char.
 
@@ -25,20 +25,20 @@ form
     ServEl.ServPac   
     ServEl.ServCom    
     ServCom.SCName FORMAT "X(30)" COLUMN-LABEL "Name"
-    with scroll 1 11 down  row 4 centered color value(cfc)
-    title color value(ctc) " SERVICE COMPONENTS " overlay frame sel.
+    with scroll 1 11 down  row 4 centered color value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " SERVICE COMPONENTS " overlay frame sel.
 
 form /* SEEK Code */
     lcEvent
     help "Enter component"
-    with row 4 col 2 title color value(ctc) " FIND Component "
-    color value(cfc) no-labels overlay frame hayr.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND Component "
+    color value(Syst.Var:cfc) no-labels overlay frame hayr.
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.Var:ccc = Syst.Var:cfc.
 
 ASSIGN
-   lcServPac = gcHelpParam
-   gcHelpParam = "".
+   lcServPac = Syst.Var:gcHelpParam
+   Syst.Var:gcHelpParam = "".
 
 MAIN:
 repeat:
@@ -81,15 +81,15 @@ repeat:
 
       if ufkey then do:
          assign
-         ufk = 0 
-         ufk[1] = 816 WHEN lcServPac > "" 
-         ufk[5] = 11
-         ufk[6] = 0  
-         ufk[8] = 8  
+         Syst.Var:ufk = 0 
+         Syst.Var:ufk[1] = 816 WHEN lcServPac > "" 
+         Syst.Var:ufk[5] = 11
+         Syst.Var:ufk[6] = 0  
+         Syst.Var:ufk[8] = 8  
          siirto = ? 
-         ehto  = 3 
+         Syst.Var:ehto  = 3 
          ufkey = false.
-         run ufkey.
+         RUN Syst/ufkey.p.
       end.
   end. /* print-line */
 
@@ -97,17 +97,17 @@ repeat:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row ServEl.ServPac ;(uchoose.i;) no-error with frame sel.
-         color display value(ccc) ServEl.ServPac with frame sel.
+         choose row ServEl.ServPac {Syst/uchoose.i} no-error with frame sel.
+         color display value(Syst.Var:ccc) ServEl.ServPac with frame sel.
 
-         nap = keylabel(lastkey).
+         Syst.Var:nap = keylabel(lastkey).
 
          if frame-value = "" and rtab[frame-line] = ? and
-            lookup(nap,"8,f8") = 0
+            lookup(Syst.Var:nap,"8,f8") = 0
          then next.
 
          /* previous line */
-         if lookup(nap,"cursor-up") > 0 then do
+         if lookup(Syst.Var:nap,"cursor-up") > 0 then do
          with frame sel:
             if frame-line = 1 then do:
                find ServEl where recid(ServEl) = rtab[frame-line] 
@@ -136,7 +136,7 @@ repeat:
          end. /* previous line */
 
          /* next line */
-         if lookup(nap,"cursor-down") > 0 then do with frame sel:
+         if lookup(Syst.Var:nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                find ServEl where recid(ServEl) = rtab[frame-line] 
                     no-lock .
@@ -165,7 +165,7 @@ repeat:
          end. /* next line */
 
          /* previous page */
-         else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
+         else if lookup(Syst.Var:nap,"page-up,prev-page") > 0 then do with frame sel:
             find ServEl where recid(ServEl) = memory no-lock no-error.
             RUN local-find-prev.
 
@@ -187,7 +187,7 @@ repeat:
         end. /* previous page */
 
         /* next page */
-        else if lookup(nap,"page-down,next-page") > 0 then do with frame sel:
+        else if lookup(Syst.Var:nap,"page-down,next-page") > 0 then do with frame sel:
            if rtab[frame-down] = ? then do:
                bell.
                message "This is the last page !".
@@ -201,15 +201,15 @@ repeat:
         end. /* next page */
 
         /* Seek */
-        if lookup(nap,"1,f1") > 0 then do on ENDkey undo, NEXT LOOP:
+        if lookup(Syst.Var:nap,"1,f1") > 0 then do on ENDkey undo, NEXT LOOP:
            /*lcEvent*/
-           cfc = "puyr". run ufcolor.
-           ehto = 9. run ufkey. ufkey = true.
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set lcEvent with frame hayr.
            hide frame hayr no-pause.
            if lcEvent ENTERED then do:
               find first ServEl where 
-                         ServEl.Brand = gcBrand AND
+                         ServEl.Brand = Syst.Var:gcBrand AND
                          ServEl.ServPac = lcServPac AND
                          ServEl.ServCom >= lcEvent
               no-lock no-error.
@@ -228,7 +228,7 @@ repeat:
         end. /* Seek */
 
         /* Choose */
-        else if lookup(nap,"return,enter,5,f5") > 0 then do:
+        else if lookup(Syst.Var:nap,"return,enter,5,f5") > 0 then do:
            find ServEl where recid(ServEl) = rtab[frame-line] no-lock.
            IF lcServPac > "" THEN siirto = ServEl.ServCom.
            ELSE siirto = ServEl.ServPac.
@@ -236,7 +236,7 @@ repeat:
         end. /* Choose */
 
         /* First record */
-        else if lookup(nap,"home,h") > 0 then do:
+        else if lookup(Syst.Var:nap,"home,h") > 0 then do:
            RUN local-find-first.
            memory = recid(ServEl).
            must-print = true.
@@ -244,14 +244,14 @@ repeat:
         end. /* First record */
 
         /* last record */
-        else if lookup(nap,"end,e") > 0 then do :
+        else if lookup(Syst.Var:nap,"end,e") > 0 then do :
            RUN local-find-last.
            memory = recid(ServEl).
            must-print = true.
            next LOOP.
         end. /* last record */
 
-        else if nap = "8" or nap = "f8" then leave MAIN. /* Return */
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" then leave MAIN. /* Return */
 
      end.  /* BROWSE */
    end.  /* LOOP */
@@ -262,7 +262,7 @@ hide frame sel no-pause.
 PROCEDURE local-disp-row:
 
     FIND FIRST ServCom WHERE
-               ServCom.Brand  = gcBrand AND
+               ServCom.Brand  = Syst.Var:gcBrand AND
                ServCom.ServCom = ServEl.ServCom NO-LOCK NO-ERROR.
     display ServEl.ServPac
             ServEl.ServCom
@@ -275,10 +275,10 @@ PROCEDURE local-find-first:
 
    IF lcServPac > "" THEN 
       FIND FIRST ServEl WHERE 
-                 ServEl.Brand = gcBrand AND
+                 ServEl.Brand = Syst.Var:gcBrand AND
                  ServEl.ServPac = lcServPac NO-LOCK NO-ERROR.
    ELSE FIND FIRST ServEl USE-INDEX ServPac WHERE
-                   ServEl.Brand = gcBrand NO-LOCK NO-ERROR.
+                   ServEl.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 
 END PROCEDURE.
 
@@ -286,10 +286,10 @@ PROCEDURE local-find-last:
 
    IF lcServPac > "" THEN 
       FIND LAST ServEl WHERE 
-                ServEl.Brand = gcBrand AND
+                ServEl.Brand = Syst.Var:gcBrand AND
                 ServEl.ServPac = lcServPac NO-LOCK NO-ERROR.
    ELSE FIND LAST ServEl USE-INDEX ServPac WHERE
-                  ServEl.Brand = gcBrand NO-LOCK NO-ERROR.
+                  ServEl.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 
 END PROCEDURE.
 
@@ -297,10 +297,10 @@ PROCEDURE local-find-next:
 
    IF lcServPac > "" THEN 
       FIND NEXT ServEl WHERE 
-                ServEl.Brand = gcBrand AND
+                ServEl.Brand = Syst.Var:gcBrand AND
                 ServEl.ServPac = lcServPac NO-LOCK NO-ERROR.
    ELSE FIND NEXT ServEl USE-INDEX ServPac WHERE
-                  ServEl.Brand = gcBrand NO-LOCK NO-ERROR.
+                  ServEl.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 
 END PROCEDURE.
 
@@ -308,10 +308,10 @@ PROCEDURE local-find-prev:
 
    IF lcServPac > "" THEN 
       FIND PREV ServEl WHERE 
-                ServEl.Brand = gcBrand AND
+                ServEl.Brand = Syst.Var:gcBrand AND
                 ServEl.ServPac = lcServPac NO-LOCK NO-ERROR.
    ELSE FIND PREV ServEl USE-INDEX ServPac WHERE
-                  ServEl.Brand = gcBrand NO-LOCK NO-ERROR.
+                  ServEl.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 
 END PROCEDURE.
 

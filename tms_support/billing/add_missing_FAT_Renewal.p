@@ -1,8 +1,7 @@
-{commpaa.i}
-gcbrand = "1".
-katun = "Qvantel".
-{tmsconst.i}
-{timestamp.i}
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
+{Syst/tmsconst.i}
 
 DEF VAR ldeAlreadyFatAmt AS DEC  NO-UNDO.
 DEF VAR ldeBundleFromTS  AS DEC  NO-UNDO.
@@ -95,8 +94,8 @@ for each Order where
       IF ldeBundleFromTS = Order.CrStamp THEN
          llFATAllowed = TRUE.
       ELSE IF ldeBundleFromTS > 0 THEN DO:
-         fSplitTS(Order.CrStamp, ldOrderDate, liOrderTime).
-         fSplitTS(ldeBundleFromTS, ldBundleDate, liBundleTime).
+         Func.Common:mSplitTS(Order.CrStamp, ldOrderDate, liOrderTime).
+         Func.Common:mSplitTS(ldeBundleFromTS, ldBundleDate, liBundleTime).
          IF ldOrderDate = ldBundleDate THEN llFATAllowed = TRUE.
       END.
 
@@ -119,7 +118,7 @@ for each Order where
       status default STRING(icount).
 
       IF NOT llsimulate AND llFATAllowed THEN DO:
-         RUN creafat.p (Order.CustNum,
+         RUN Mc/creafat.p (Order.CustNum,
                         Order.MsSeq,
                         lcnewftgrp,
                         ?, /* amount */

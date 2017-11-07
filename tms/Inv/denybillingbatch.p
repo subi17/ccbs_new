@@ -3,13 +3,14 @@
   TASK .........: Reads and process deny billing files from cron 
 ----------------------------------------------------------------------- */
 
-{commpaa.i}
-katun = "Cron".
-gcBrand = "1".
-{cparam2.i}
-{eventlog.i}
-{ftransdir.i}
-{eventval.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Func/ftransdir.i}
+{Syst/eventval.i}
+{Func/multitenantfunc.i}
 
 DEFINE VARIABLE lcIncDir AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcProcDir AS CHARACTER NO-UNDO. 
@@ -22,6 +23,7 @@ DEFINE VARIABLE lcInputFile AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFileDir AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcProcessedFile AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcReportFileOut AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcTenant AS CHARACTER NO-UNDO. 
 
 DEFINE VARIABLE liRead AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liErrors AS INTEGER NO-UNDO. 
@@ -44,13 +46,17 @@ REPEAT:
    lcLogFile   = lcSpoolDir + lcFileName + ".log".
 
    IF SEARCH(lcInputFile) = ? THEN NEXT.
-
+   /* Set effective tenant based on file name. If not regocniced go next file
+   */
+   lcTenant = ENTRY(1,ENTRY(1,lcFileName,"_"),"-").
+   IF NOT fsetEffectiveTenantForAllDB(
+         fConvertBrandToTenant(lcTenant)) THEN NEXT.
    fBatchLog("START", lcInputFile).
 
    liRead = 0.
    liErrors = 0. 
 
-   RUN denybilling (lcInputFile,
+   RUN Inv/denybilling.p (lcInputFile,
                     lcLogFile,
                     OUTPUT liRead,
                     OUTPUT liErrors).

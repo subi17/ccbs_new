@@ -15,8 +15,8 @@
   Version ......: M15
 ----------------------------------------------------------------------- */
 
-{commali.i} 
-{utumaa.i "new"}
+{Syst/commali.i} 
+{Syst/utumaa.i "new"}
 
 assign tuni1 = "nnrank"
        tuni2 = "".
@@ -86,7 +86,7 @@ viiva3 = fill("-",lev).
 
 /* get default directory name FOR OUTPUT */
 DO FOR TMSUser:
-   FIND TMSUser where TMSUser.UserCode = katun no-lock.
+   FIND TMSUser where TMSUser.UserCode = Syst.Var:katun no-lock.
    ASSIGN exdir = TMSUser.RepDir.
 END.
 
@@ -151,13 +151,16 @@ help "Name for output file" NO-LABEL    Qty TO 78
 WITH
    overlay width 80 title " Customer ranking list " NO-LABELS FRAME rajat.
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
+
 FORM HEADER
    viiva1       AT 2 SKIP
    ynimi        AT 2 
    "RANKING LIST OF CUSTOMERS"  AT 45 
    "page"       AT 106 sl FORMAT "ZZZZ9" SKIP
    "Billed values are ex vat amt and calls only, contract fees are omitted" AT 2
-    STRING(pvm,"99-99-99") AT 108 SKIP 
+    STRING(TODAY,"99-99-99") AT 108 SKIP 
    "According to invoices written during " AT 2
    string(period1) " - " string(period2) SKIP
    "External C-Group..:" AT 2 CGName  SKIP
@@ -197,7 +200,7 @@ DISP CGName IGName SmName RsName soname biname bigname WITH FRAME rajat.
 
 rajat:
 repeat WITH FRAME rajat.
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE
    camt CustGroup InvGroup Salesman Reseller 
@@ -205,14 +208,14 @@ repeat WITH FRAME rajat.
    WITH FRAME rajat EDITING:
       READKEY.
 
-      IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO:
+      IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
          HIDE MESSAGE.
 
          if frame-field = "CustGroup" THEN DO:
             if input CustGroup = "" then CGName = "NONE".
             ELSE DO:
                FIND CustGroup where
-               CustGroup.Brand     = gcBrand AND
+               CustGroup.Brand     = Syst.Var:gcBrand AND
                CustGroup.CustGroup = INPUT CustGroup no-lock no-error.
                IF NOT AVAIL CustGroup THEN DO:
                   BELL.
@@ -228,7 +231,7 @@ repeat WITH FRAME rajat.
             if input InvGroup = "" then IGName = "ALL INVOICING GROUPS".
             ELSE DO:
                FIND InvGroup where
-               InvGroup.Brand    = gcBrand AND
+               InvGroup.Brand    = Syst.Var:gcBrand AND
                InvGroup.InvGroup = INPUT InvGroup no-lock no-error.
                IF NOT AVAIL InvGroup THEN DO:
                   BELL.
@@ -244,7 +247,7 @@ repeat WITH FRAME rajat.
             if input Salesman = "" then SmName = "ALL SALESMEN".
             ELSE DO:
                FIND Salesman where
-               SalesMan.Brand    = gcBrand AND
+               SalesMan.Brand    = Syst.Var:gcBrand AND
                Salesman.Salesman = INPUT Salesman no-lock no-error.
                IF NOT AVAIL Salesman THEN DO:
                   BELL.
@@ -260,7 +263,7 @@ repeat WITH FRAME rajat.
             if input Reseller = "" then  RsName = "ALL AGENTS".
             ELSE DO:
                FIND Reseller where
-               Reseller.Brand    = gcBrand AND
+               Reseller.Brand    = Syst.Var:gcBrand AND
                Reseller.Reseller = INPUT Reseller no-lock no-error.
                IF NOT AVAIL Reseller THEN DO:
                   BELL.
@@ -288,7 +291,7 @@ repeat WITH FRAME rajat.
             ELSE 
             DO:
                FIND BillItem WHERE
-                    BillItem.Brand     = gcBrand AND
+                    BillItem.Brand     = Syst.Var:gcBrand AND
                     BillItem.BillCode  = INPUT lcBillCode No-LOCK NO-ERROR.
                IF NOT AVAIL BillItem THEN 
                DO:
@@ -307,7 +310,7 @@ repeat WITH FRAME rajat.
             ELSE
             DO:
                FIND BitemGroup WHERE
-                    BItemGroup.Brand    = gcBrand AND
+                    BItemGroup.Brand    = Syst.Var:gcBrand AND
                     BItemGroup.BIGroup  = INPUT BiGroup No-LOCK NO-ERROR.
                IF NOT AVAIL BitemGroup THEN
                DO:
@@ -318,7 +321,7 @@ repeat WITH FRAME rajat.
                IF AVAIL BitemGroup AND INPUT lcBillCode NE "" THEN
                DO:
                   FIND BillItem NO-LOCK WHERE 
-                       BillItem.Brand    = gcBrand AND
+                       BillItem.Brand    = Syst.Var:gcBrand AND
                        BillItem.BillCode = lcBillCode.
                   IF BItemGroup.BIGroup NE BillItem.BIGroup THEN
                   DO:
@@ -332,12 +335,12 @@ repeat WITH FRAME rajat.
          END.
 
          else if frame-field  = "period1" THEN DO:
-            RUN uperch(INPUT INPUT period1,output i).
+            RUN Syst/uperch.p(INPUT INPUT period1,output i).
             IF i > 0 THEN NEXT.
          END.
 
          else if frame-field  = "period2" THEN DO:
-            RUN uperch(INPUT INPUT period2,output i).
+            RUN Syst/uperch.p(INPUT INPUT period2,output i).
             IF i > 0 THEN NEXT.
             IF INPUT period2 < INPUT period1 THEN DO:
                BELL.
@@ -388,19 +391,19 @@ repeat WITH FRAME rajat.
 
 toimi:
    repeat WITH FRAME toimi:
-      ASSIGN ufk = 0 ehto = 0 ufk[1] = 7 ufk[5] = 847 ufk[6] = 638 ufk[8] = 8.
-      RUN ufkey.
-      IF toimi = 1 THEN NEXT  rajat.
-      IF toimi = 5 THEN LEAVE toimi.
-      IF toimi = 6 THEN 
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ehto = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 847 Syst.Var:ufk[6] = 638 Syst.Var:ufk[8] = 8.
+      RUN Syst/ufkey.p.
+      IF Syst.Var:toimi = 1 THEN NEXT  rajat.
+      IF Syst.Var:toimi = 5 THEN LEAVE toimi.
+      IF Syst.Var:toimi = 6 THEN 
       DO:
          ASSIGN tila = TRUE.
-         {tmsreport.i "return"}
+         {Syst/tmsreport.i "return"}
          llprint = TRUE.
          VIEW STREAM tul FRAME sivuots.
          LEAVE toimi.
       END.   
-      IF toimi = 8 THEN LEAVE rajat.
+      IF Syst.Var:toimi = 8 THEN LEAVE rajat.
    END.
    ASSIGN
    date1 = Date (integer(substr(string(period1),5,2)),
@@ -417,31 +420,31 @@ toimi:
        OUTPUT STREAM excel TO value(exname).
 
        put stream excel unformatted ynimi tab "RANKING LIST OF CUSTOMERS; Billed VALUES ARE EX VATAmt AND Calls ONLY, CONTRACT FEES ARE OMITTED,".
-          RUN uexskip(1).
+          RUN Syst/uexskip.p(1).
 
        PUT STREAM excel UNFORMATTED
           "According to invoices written during " +
           string(period1) " - " string(period2).
-          RUN uexskip(2).
+          RUN Syst/uexskip.p(2).
 
        put stream excel unformatted "This File contains " camt
                                     " BEST customers of:".
-          RUN uexskip(1).
+          RUN Syst/uexskip.p(1).
 
        PUT STREAM excel UNFORMATTED
-          "External C-Group" tab CGName. RUN uexskip(1).
+          "External C-Group" tab CGName. RUN Syst/uexskip.p(1).
        PUT STREAM excel UNFORMATTED
-          "invoicing Group" tab IGName.  RUN uexskip(1).
+          "invoicing Group" tab IGName.  RUN Syst/uexskip.p(1).
        PUT STREAM excel UNFORMATTED
-          "salesman"        tab SmName.  RUN uexskip(1).
+          "salesman"        tab SmName.  RUN Syst/uexskip.p(1).
        PUT STREAM excel UNFORMATTED
-          "agent"           tab RsName.  RUN uexskip(1).
+          "agent"           tab RsName.  RUN Syst/uexskip.p(1).
        PUT STREAM excel UNFORMATTED
-           "Product"        tab BiName.  RUN uexskip(1).
+           "Product"        tab BiName.  RUN Syst/uexskip.p(1).
        PUT STREAM excel UNFORMATTED
-           "Product Group"  tab BigName. RUN uexskip(1).
+           "Product Group"  tab BigName. RUN Syst/uexskip.p(1).
        put stream excel unformatted "SORTED BY " soname.
-          RUN uexskip(2).
+          RUN Syst/uexskip.p(2).
 
 
        /* column headings on 2 rows */
@@ -459,7 +462,7 @@ toimi:
           string(periods[i]) tab
           "-------->"        tab.
        END.
-       RUN uexskip(1).
+       RUN Syst/uexskip.p(1).
 
        PUT STREAM excel UNFORMATTED
        "no."            tab
@@ -473,7 +476,7 @@ toimi:
           IF periods[i] > 0 THEN PUT STREAM excel UNFORMATTED
           "Amount" tab "# of Min" tab "# of Calls" tab.
        END.
-       RUN uexskip(1).
+       RUN Syst/uexskip.p(1).
    END.
 
    message "Calculating total Billed amounts by customer, wait ...".
@@ -481,7 +484,7 @@ toimi:
  pick:
    FOR
    EACH  Customer USE-INDEX CustNum no-lock where
-         Customer.Brand = gcBrand AND
+         Customer.Brand = Syst.Var:gcBrand AND
 
          (if CustGroup ne "" THEN can-find(CGMember where
                           CGMember.CustNum  = Customer.CustNum           AND
@@ -492,7 +495,7 @@ toimi:
          (if Reseller ne "" THEN Customer.Reseller = Reseller ELSE TRUE),
 
    EACH  Invoice no-lock where
-         Invoice.Brand = gcBrand AND
+         Invoice.Brand = Syst.Var:gcBrand AND
          Invoice.Custnum = Customer.CustNum AND
          Invoice.InvDate >= date1   AND
          Invoice.InvDate <= date2
@@ -516,7 +519,7 @@ toimi:
           IF INPUT BiGroup NE "" THEN 
           DO:
              FIND BillItem NO-LOCK WHERE
-                  BillItem.Brand = gcBrand AND
+                  BillItem.Brand = Syst.Var:gcBrand AND
                   BillItem.BillCode = InvRow.BillCode NO-ERROR.
              IF AVAILABLE BillItem AND 
                 BillItem.BIGroup NE INPUT BiGroup THEN NEXT.
@@ -648,7 +651,7 @@ CUSTOMER:
 
          /* search customer's ALL invoices from that Period */
          FOR EACH Invoice no-lock where
-                  Invoice.Brand    = gcBrand AND
+                  Invoice.Brand    = Syst.Var:gcBrand AND
                   Invoice.CustNum  = Customer.CustNum AND
                   Invoice.InvDate  >= idate1         AND
                   Invoice.InvDate  <= idate2,
@@ -662,7 +665,7 @@ CUSTOMER:
              IF INPUT BiGroup NE "" THEN
              DO:
                 FIND BillItem NO-LOCK WHERE
-                     BillItem.Brand = gcBrand AND
+                     BillItem.Brand = Syst.Var:gcBrand AND
                      BillItem.BillCode = InvRow.BillCode NO-ERROR.
                 IF AVAILABLE BillItem AND
                    BillItem.BIGroup NE INPUT BiGroup THEN NEXT.
@@ -688,7 +691,7 @@ CUSTOMER:
                 PUT STREAM excel UNFORMATTED tab.
          END.
       END.
-      IF NOT llprint THEN RUN uexskip(1).
+      IF NOT llprint THEN RUN Syst/uexskip.p(1).
    END.
    IF NOT llprint THEN
    OUTPUT STREAM excel CLOSE.
@@ -700,7 +703,7 @@ CUSTOMER:
       END.
 
       ASSIGN tila = FALSE.
-      {tmsreport.i}
+      {Syst/tmsreport.i}
    END.
    PAUSE 0.
    IF NOT llprint THEN 

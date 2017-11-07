@@ -1,4 +1,3 @@
-{date.i}
 
 find mnpprocess where
    mnpprocess.mnptype = 2 and
@@ -7,6 +6,6 @@ find mnpprocess where
 
 assign
    mnpprocess.statuscode = 6
-   mnpprocess.updatets = fMakeTS().
+   mnpprocess.updatets = Func.Common:mMakeTS().
 
 

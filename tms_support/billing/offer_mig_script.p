@@ -9,10 +9,9 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
-ASSIGN gcBrand = "1"
-       katun   = "Qvantel".
-{timestamp.i}
+{Syst/commpaa.i}
+ASSIGN Syst.Var:gcBrand = "1"
+       Syst.Var:katun   = "Qvantel".
 
 DEFINE VARIABLE liNumEntries    AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liCount         AS INTEGER   NO-UNDO.
@@ -28,7 +27,7 @@ DEFINE BUFFER bGetOfferCriteria FOR OfferCriteria.
 
 DEFINE STREAM slog.
 
-ldeCurrStamp = fMakeTS().
+ldeCurrStamp = Func.Common:mMakeTS().
 
 OUTPUT STREAM slog TO "/apps/yoigo/tms_support/billing/offer_mig_ipl_20110810.xls" append.
 
@@ -37,11 +36,11 @@ PUT STREAM slog UNFORMATTED "Offer ID" CHR(9)
 
 EACH_OFFER:
 FOR EACH Offer WHERE
-         Offer.Brand  = gcBrand AND
+         Offer.Brand  = Syst.Var:gcBrand AND
          Offer.Active = TRUE    AND
          Offer.ToDate >= TODAY  NO-LOCK,
    FIRST OfferCriteria WHERE
-         OfferCriteria.Brand        = gcBrand       AND
+         OfferCriteria.Brand        = Syst.Var:gcBrand       AND
          OfferCriteria.Offer        = Offer.Offer   AND
          OfferCriteria.CriteriaType = "CLITYPE"     AND
          OfferCriteria.BeginStamp  <= ldeCurrStamp  AND
@@ -120,14 +119,14 @@ PROCEDURE pCreateOfferItem:
     END. /* FOR EACH bOfferItem NO-LOCK BY bOfferItem.OfferItemID */
 
     IF NOT CAN-FIND(FIRST OfferItem WHERE
-                          OfferItem.Brand    = gcBrand      AND
+                          OfferItem.Brand    = Syst.Var:gcBrand      AND
                           OfferItem.Offer    = icOfferID    AND
                           OfferItem.ItemType = icItemType   AND
                           OfferItem.ItemKey  = icBundleName AND
                           OfferItem.BeginStamp <= ldeCurrStamp AND
                           OfferItem.EndStamp   >= ldeCurrStamp) THEN DO:
        CREATE OfferItem.
-       ASSIGN OfferItem.Brand        = gcBrand
+       ASSIGN OfferItem.Brand        = Syst.Var:gcBrand
               OfferItem.Offer        = icOfferID
               OfferItem.OfferItemID  = (liLastSeq + 1)
               OfferItem.BeginStamp   = (ldeCurrStamp + 0.00001)
@@ -137,7 +136,7 @@ PROCEDURE pCreateOfferItem:
               OfferItem.VatIncl      = YES
               OfferItem.DispInUI     = YES
               OfferItem.DispOnInvoice = YES NO-ERROR.
-              OfferItem.EndStamp     = fMake2DT(12/31/2049,86399) NO-ERROR.
+              OfferItem.EndStamp     = Func.Common:mMake2DT(12/31/2049,86399) NO-ERROR.
        IF ERROR-STATUS:ERROR THEN
           PUT STREAM slog UNFORMATTED
               icOfferID CHR(9)

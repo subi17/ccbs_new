@@ -1,0 +1,87 @@
+bulkload: Stock
+  Stock: "CC"
+  StoName: "Customer Care"
+  StoFile1: "/tmp/iccfilename.txt"
+  StoFile2: "/tmp/subsdatafile.txt"
+  StoFile3: "/tmp/simdisrfile.txt"
+  Brand: "1"
+  StoType: "CC"
+
+bulkload: Stock
+  Stock: "CC_CAN_ISL"
+  StoName: "CC Canary Islands"
+  Brand: "1"
+  StoType: "CC"
+  ZipCodeExp: "35*,38*"
+
+bulkload: Stock
+  Stock: "GIFT"
+  StoName: "Gift"
+  Brand: "1"
+
+bulkload: Stock
+  Stock: "MNP"
+  StoName: "MNP Number"
+  StoFile1: "/tmp/iccfilename.txt"
+  StoFile2: "/tmp/subsdatafile.txt"
+  StoFile3: "/tmp/simdisrfile.txt"
+  Brand: "1"
+  StoType: "MNP"
+
+bulkload: Stock
+  Stock: "MNP_CAN_ISL"
+  StoName: "MNP Canary Islands"
+  Brand: "1"
+  StoType: "MNP"
+  ZipCodeExp: "35*,38*"
+
+bulkload: Stock
+  Stock: "NEW"
+  StoName: "New Number"
+  StoFile1: "/tmp/iccfilename.txt"
+  StoFile2: "/tmp/subsdatafile.txt"
+  StoFile3: "/tmp/simdisrfile.txt"
+  Brand: "1"
+  StoType: "NEW"
+
+bulkload: Stock
+  Stock: "NEW_CAN_ISL"
+  StoName: "NEW Canary Islands"
+  Brand: "1"
+  StoType: "NEW"
+  ZipCodeExp: "35*,38*"
+
+bulkload: Stock
+  Stock: "PREACTIV"
+  StoName: "Pre Activated"
+  Brand: "1"
+
+bulkload: Stock
+  Stock: "RETAILER"
+  StoName: "Retailer (POS)"
+  StoFile1: "/tmp/iccfilename.txt"
+  StoFile2: "/tmp/subsdatafile.txt"
+  StoFile3: "/tmp/simdisrfile.txt"
+  Brand: "1"
+
+bulkload: Stock
+  Stock: "RETURNED"
+  StoName: "Returned from customer"
+  StoFile1: "/tmp/iccfilename.txt"
+  StoFile2: "/tmp/subsdatafile.txt"
+  StoFile3: "/tmp/simdisrfile.txt"
+  Brand: "1"
+
+bulkload: Stock
+  Stock: "VIP"
+  StoName: "VIP"
+  Brand: "1"
+
+bulkload: Stock
+  Stock: "YOIGO"
+  StoName: "YOIGO (for internal use only)"
+  StoFile1: "/tmp/iccfilename.txt"
+  StoFile2: "/tmp/subsdatafile.txt"
+  StoFile3: "/tmp/simdisrfile.txt"
+  Brand: "1"
+

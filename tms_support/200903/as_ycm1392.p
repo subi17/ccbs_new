@@ -1,7 +1,7 @@
-{commpaa.i}
-katun = "anttis".
-gcBrand = "1".
-{msisdn.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
+{Func/msisdn.i}
 
 find first msisdn where
    msisdn.brand = "1" and

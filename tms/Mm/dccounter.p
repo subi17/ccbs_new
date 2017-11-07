@@ -8,8 +8,8 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{daycampaign.i}
+{Syst/commali.i}
+{Rate/daycampaign.i}
 
 DEF  INPUT PARAMETER iiMsseq       AS INT    NO-UNDO.
 DEF  INPUT PARAMETER icEvent       AS CHAR   NO-UNDO.
@@ -60,8 +60,8 @@ form
    lcAmount                            column-label "Usage"
  
 WITH OVERLAY CENTERED  scroll 1 15 DOWN
-   COLOR value(cfc)
-   title color value(ctc) " " + /*ynimi +*/
+   COLOR value(Syst.Var:cfc)
+   title color value(Syst.Var:ctc) " " + /*Syst.Var:ynimi +*/
    " COUNTERS for period " + STRING(liPeriod) + " " + icEvent + " "
    FRAME sel.
 
@@ -77,25 +77,24 @@ form
    "Usage ........:" lcAmount SKIP
 
 WITH OVERLAY ROW 2 centered
-   COLOR value(cfc)
-   TITLE COLOR value(ctc)
+   COLOR value(Syst.Var:cfc)
+   TITLE COLOR value(Syst.Var:ctc)
    fr-header WITH no-labels side-labels
    FRAME lis.
 
 form /*  search WITH FIELD DCCounter */
     lcEvent
     help "Give ...."
-    with row 4 col 2 title color value(ctc) " FIND xxxxxxx "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND xxxxxxx "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 FUNCTION fDispUnit RETURNS LOGICAL
    (iiUnit AS INT).
    IF iiUnit > 0 THEN
-      lcUnit = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-               "DayCampaign","InclUnit",STRING(iiUnit)).
+      lcUnit = Func.Common:mTMSCodeName("DayCampaign","InclUnit",STRING(iiUnit)).
    ELSE lcUnit = "".
    DISPLAY lcUnit WITH FRAME lis.
    RETURN (iiUnit = 0 OR (iiUnit > 0 AND lcUnit > "")).
@@ -106,8 +105,7 @@ FUNCTION fDispUnit2 RETURNS LOGICAL
    (iiUnit AS INT).
    
    IF iiUnit > 0 THEN
-   lcUnit = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-   "Tariff","DataType",STRING(iiUnit)).
+   lcUnit = Func.Common:mTMSCodeName("Tariff","DataType",STRING(iiUnit)).
    ELSE lcUnit = "".
                                   
    DISPLAY lcUnit   WITH FRAME lis.
@@ -139,14 +137,14 @@ repeat WITH FRAME sel:
 
    IF must-add THEN DO:  /* DCCounter -ADD  */
       HIDE FRAME lis.
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      assign Syst.Var:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
       
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 5. RUN ufkey.
+        Syst.Var:ehto = 5. RUN Syst/ufkey.p.
         DO TRANSACTION:
 
            CREATE DCCounter.
@@ -218,28 +216,28 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk   = 0
-        ufk[1]= 35  
-        ufk[5] = 11 
-        ufk[6]= 0 /* 4   */
-        ufk[8]= 8.
+        Syst.Var:ufk   = 0
+        Syst.Var:ufk[1]= 35  
+        Syst.Var:ufk[5] = 11 
+        Syst.Var:ufk[6]= 0 /* 4   */
+        Syst.Var:ufk[8]= 8.
         
-        IF iiMsseq > 0 THEN ufk[1] = 0.
-        ASSIGN ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        IF iiMsseq > 0 THEN Syst.Var:ufk[1] = 0.
+        ASSIGN Syst.Var:ehto = 3 ufkey = FALSE.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       
       
       IF order = 1 THEN DO:
-        CHOOSE ROW DCCounter.dcdate ;(uchoose.i;) no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) DCCounter.dcdate WITH FRAME sel.
+        CHOOSE ROW DCCounter.dcdate {Syst/uchoose.i} no-error WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) DCCounter.dcdate WITH FRAME sel.
       END. 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -247,10 +245,10 @@ BROWSE:
          END.
       END.
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -265,7 +263,7 @@ BROWSE:
       END.
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND DCCounter where recid(DCCounter) = rtab[1] no-lock.
            RUN LOCAL-FIND-PREV.
@@ -290,7 +288,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND DCCounter where recid(DCCounter) = rtab[FRAME-DOWN] no-lock .
@@ -316,7 +314,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND DCCounter where recid(DCCounter) = memory no-lock no-error.
         RUN LOCAL-FIND-PREV.
@@ -340,7 +338,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* cursor TO the downmost line */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -354,15 +352,15 @@ BROWSE:
        END.
      END. /* NEXT page */
 
-     else if lookup(nap,"enter,return,f5") > 0 THEN DO WITH FRAME lis TRANSACTION:
+     else if lookup(Syst.Var:nap,"enter,return,f5") > 0 THEN DO WITH FRAME lis TRANSACTION:
        /* change */
        FIND FIRST DCCounter where 
             recid(DCCounter) = rtab[frame-line(sel)]
        /*exclusive-lock*/ no-lock.
-       assign fr-header = " VIEW " ufkey = TRUE ehto = 5.
-       RUN ufkey.
+       assign fr-header = " VIEW " ufkey = TRUE Syst.Var:ehto = 5.
+       RUN Syst/ufkey.p.
 
-       cfc = "lis". RUN ufcolor.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
 
        RUN LOCAL-UPDATE-RECORD(FALSE).
        
@@ -370,30 +368,30 @@ BROWSE:
 
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
        RUN LOCAL-FIND-FIRST.
        ASSIGN memory = recid(DCCounter) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
        RUN LOCAL-FIND-LAST.
        ASSIGN memory = recid(DCCounter) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE LOCAL-DISP-ROW: 
    
    FIND FIRST BillItem WHERE 
-              BillItem.Brand    = gcBrand AND
+              BillItem.Brand    = Syst.Var:gcBrand AND
               BillItem.BillCode = DCCounter.BillCode 
    NO-LOCK NO-ERROR.
     
@@ -502,7 +500,7 @@ END PROCEDURE.
 PROCEDURE local-find-others.
    
    FIND FIRST DayCampaign WHERE
-      DayCampaign.Brand = gcBrand AND
+      DayCampaign.Brand = Syst.Var:gcBrand AND
       DayCampaign.DCEvent = dccli.dcevent NO-LOCK NO-ERROR.
    
    FIND FIRST TMSCodes WHERE

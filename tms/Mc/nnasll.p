@@ -29,12 +29,12 @@
  Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
-{utumaa.i}
-{cparam2.i}
-{fcustbal.i}
-{fdivtxt.i}
+{Syst/utumaa.i}
+{Func/cparam2.i}
+{Func/fcustbal.i}
+{Func/fdivtxt.i}
 
 DEF INPUT PARAMETER CustGroup LIKE CustGroup.CustGroup       NO-UNDO.
 DEF INPUT PARAMETER asno1   LIKE Customer.CustNum       NO-UNDO.
@@ -99,12 +99,15 @@ IF ppvm2 > 1/1/9999 THEN fake[4] = ?. ELSE fake[4] = ppvm2.
 if cday = ? then callcheck = "NO Calls CHECKED".
 else             callcheck = "NO Calls SINCE " + string(cday,"99.99.99").
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
+
 form header
    fill("=",90) format "x(90)" SKIP
    ynimi "LARGE CUSTOMER LIST" at 33 "Page" at 83 sl format "ZZZ9" TO 90 SKIP
 
    "SORTED BY " + entry(order1,jar1) + entry(order2,jar2)  at 33 format "x(36)"
-   string(pvm,"99-99-99") TO 90 SKIP
+   string(TODAY,"99-99-99") TO 90 SKIP
    fill("-",90) format "x(90)" SKIP
    hdr0 AT 2 SKIP
    hdr1 AT 2 SKIP
@@ -117,7 +120,7 @@ WITH
    width 90 NO-LABEL no-box FRAME sivuots.
 
 form
-   {nnasse.f}
+   {Mc/nnasse.f}
 WITH no-box side-labels FRAME perus.
 
 ASSIGN sl = 0 rl = 0.
@@ -127,9 +130,9 @@ message "Printing in process, cancel: press 'END'".
 print-line:
 FOR
     EACH Customer no-lock            where
-         Customer.Brand     = gcBrand AND
+         Customer.Brand     = Syst.Var:gcBrand AND
         (if CustGroup ne "" THEN can-find(CGMember where
-                                        CGMember.Brand     = gcBrand AND
+                                        CGMember.Brand     = Syst.Var:gcBrand AND
                                         CGMember.CustGroup = CustGroup  AND
                                         CGMember.CustNum  = Customer.CustNum)
                           ELSE TRUE)                                       AND
@@ -167,8 +170,8 @@ FOR
 
    /* onko kjA pyytAnyt keskeytystA ? */
    READKEY PAUSE 0.
-   nap = keylabel(LASTKEY).
-   if nap = "END" THEN DO:
+   Syst.Var:nap = keylabel(LASTKEY).
+   if Syst.Var:nap = "END" THEN DO:
       message "Do You really want to cancel (Y/N) ?"
       UPDATE ke.
       IF ke THEN DO:
@@ -179,13 +182,13 @@ FOR
    END.
 
    FIND FIRST Salesman where
-              Salesman.Brand    = gcBrand AND
+              Salesman.Brand    = Syst.Var:gcBrand AND
               Salesman.Salesman = Customer.Salesman no-lock no-error.
    IF AVAIL Salesman THEN mynimi = Salesman.SmName.
    else                   mynimi = "! UNKNOWN !".
 
    FIND FIRST Reseller where
-              Reseller.Brand    = gcBrand AND
+              Reseller.Brand    = Syst.Var:gcBrand AND
               Reseller.Reseller = Customer.Reseller no-lock no-error.
    IF AVAIL Reseller THEN rsname = Reseller.RsName.
    else                 rsname = "! UNKNOWN !".
@@ -214,7 +217,7 @@ FOR
 
    dkatnimi = "".
    FIND FIRST CustCat where 
-              CustCat.Brand    = gcBrand AND
+              CustCat.Brand    = Syst.Var:gcBrand AND
               CustCat.Category = Customer.Category 
       no-lock no-error.
    IF AVAIL CustCat THEN ASSIGN dkatnimi = CustCat.CatName.
@@ -230,7 +233,7 @@ FOR
    hdr0 =  "".
    if CustGroup ne "" THEN DO:
       FIND CustGroup where 
-           CustGroup.Brand     = gcBrand AND
+           CustGroup.Brand     = Syst.Var:gcBrand AND
            CustGroup.CustGroup = CustGroup no-lock.
       hdr0 = "Customers in an External Group '" + CustGroup + "': " +
       CustGroup.CGName.
@@ -272,13 +275,13 @@ FOR
 
    /* is there a memo text ? */
    IF CAN-FIND(FIRST memo WHERE
-                     memo.Brand     = gcBrand AND
+                     memo.Brand     = Syst.Var:gcBrand AND
                      memo.HostTable = "Customer" AND
                      memo.KeyValue  = STRING(Customer.CustNum) AND
                      memo.memotext NE "") THEN
    DO:
       FOR EACH memo WHERE
-               memo.Brand     = gcBrand AND
+               memo.Brand     = Syst.Var:gcBrand AND
                memo.HostTable = "Customer" AND
                memo.KeyValue  = STRING(Customer.CustNum) AND
                memo.memotext NE "" NO-LOCK:

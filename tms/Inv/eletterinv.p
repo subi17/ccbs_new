@@ -38,9 +38,9 @@
 VERSIO .......: M15
 ---------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{edefine.i NEW}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Inv/edefine.i NEW}
 
 DEFINE INPUT  PARAMETER iiInvNum1      AS INTEGER   NO-UNDO.
 DEFINE INPUT  PARAMETER iiInvNum2      AS INTEGER   NO-UNDO.
@@ -59,7 +59,7 @@ DEFINE OUTPUT PARAMETER ocError        AS CHAR      NO-UNDO.
 DEF VAR ldtNameDate AS DATE NO-UNDO. 
 DEF VAR lcDate      AS CHAR NO-UNDO.
 
-{invprdf.i}
+{Inv/invprdf.i}
 
 
 FUNCTION fMakeTemp RETURNS LOGICAL.
@@ -112,7 +112,7 @@ END FUNCTION.
 
 IF iiInvNum1 = iiInvNum2 THEN 
 FOR FIRST Invoice NO-LOCK WHERE
-          Invoice.Brand  = gcBrand AND
+          Invoice.Brand  = Syst.Var:gcBrand AND
           Invoice.InvNum = iiInvNum1,
     FIRST Customer OF Invoice NO-LOCK:
    
@@ -124,7 +124,7 @@ END.
 
 ELSE IF iiInvDate NE ? THEN 
 FOR EACH Invoice NO-LOCK WHERE    
-         Invoice.Brand    = gcBrand    AND
+         Invoice.Brand    = Syst.Var:gcBrand    AND
          Invoice.InvDate  = iiInvDate  AND
          /* delivery type is on paper */
          Invoice.DelType <= 1          AND
@@ -151,7 +151,7 @@ END.
 
 ELSE 
 FOR EACH Invoice NO-LOCK WHERE               
-         Invoice.Brand  = gcBrand    AND
+         Invoice.Brand  = Syst.Var:gcBrand    AND
          Invoice.InvNum >= iiInvNum1  AND  
          Invoice.InvNum <= iiInvNum2  AND    
          /* delivery type is on paper */
@@ -183,15 +183,14 @@ ELSE icFile = REPLACE(icFile,"#IGRP","ALL").
 /* invoice date to file name */   
 IF ldtNameDate NE ? THEN DO:
    
-   lcDate = DYNAMIC-FUNCTION("fDateFmt" IN ghFunc1,
-                             ldtNameDate,
+   lcDate = Func.Common:mDateFmt(ldtNameDate,
                              "yyyymmdd").
    icFile = REPLACE(icFile,"#IDATE",lcDate).
 END.
 ELSE icFile = REPLACE(icFile,"#IDATE","").
 
 /* print */
-RUN eplfile (INPUT-OUTPUT TABLE wInvoice,  
+RUN Inv/eplfile.p (INPUT-OUTPUT TABLE wInvoice,  
              ?,           /* print date (= Invoice.InvDate) */
              (IF ilPrintService 
               THEN 2

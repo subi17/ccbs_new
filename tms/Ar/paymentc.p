@@ -4,12 +4,12 @@
   APPLICATION ..: TMS
   AUTHOR .......: aam
   CREATED ......: 25-10-02
-  MODIFIED .....: 22.03.07 kl  new param for run payments
+  MODIFIED .....: 22.03.07 kl  new param for RUN Ar/payments.p
 
   VERSION ......: M15
 ----------------------------------------------------------------------------*/
 
-{commali.i}
+{Syst/commali.i}
 
 /* call payments with customer 0 -> all */
-RUN payments.p (0,0,"").
+RUN Ar/payments.p (0,0,"").

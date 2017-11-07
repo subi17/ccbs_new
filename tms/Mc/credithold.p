@@ -2,20 +2,19 @@
    changed:             20.11.06/aam new db structure, ask verification
 */
 
-{commali.i}
-{eventval.i}
-{timestamp.i}
-{forderstamp.i}
-{orderfunc.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/forderstamp.i}
+{Func/orderfunc.i}
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF INPUT PARAMETER ilOrder AS LOG NO-UNDO.
 
 DEF VAR llOk AS LOG NO-UNDO.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
       
    DEFINE VARIABLE lhOrder AS HANDLE NO-UNDO.
    lhOrder = BUFFER Order:HANDLE.
@@ -23,7 +22,7 @@ IF llDoEvent THEN DO:
 END.               
 
 FIND FIRST Order WHERE 
-           Order.Brand   = gcBrand and 
+           Order.Brand   = Syst.Var:gcBrand and 
            Order.OrderID = iiOrder EXCLUSIVE-LOCK NO-ERROR.
 
 IF llDoEvent THEN RUN StarEventSetOldBuffer(lhOrder).
@@ -46,7 +45,7 @@ IF ilOrder  /* HOLD */ THEN DO:
                    "Change",
                    0.0).
                                 
-   RUN memo(INPUT Order.Custnum,
+   RUN Mc/memo.p(INPUT Order.Custnum,
             INPUT "ORDER" ,
             INPUT STRING(Order.OrderID),
             INPUT "CreditHold").   

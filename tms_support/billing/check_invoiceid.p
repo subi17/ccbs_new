@@ -1,5 +1,5 @@
-{testpaa.i}
-katun = "snet".
+{Syst/testpaa.i}
+Syst.Var:katun = "snet".
 
 def var ldtInvDate as date no-undo.
 def var liInvType  as int  no-undo init 1.
@@ -35,7 +35,7 @@ if liaction = 1 then do:
 end.
 
    
-RUN invoice_extinvid.p(ldtInvDate,
+RUN Inv/invoice_extinvid.p(ldtInvDate,
                        liInvType,
                        liaction,
                        0,

@@ -10,7 +10,7 @@
   Version ......: M15
   -------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 DEF shared VAR siirto AS CHAR.
 
@@ -40,9 +40,9 @@ form
     Account.AccNum   FORMAT ">>>>>>>9"
 
     WITH centered OVERLAY scroll 1 13 DOWN ROW 3
-    COLOR value(cfc)
-    TITLE COLOR value(ctc) 
-       " Account FINDING FROM (" + gcBrand + ") '" + pgseek + "' " FRAME sel.
+    COLOR value(Syst.Var:cfc)
+    TITLE COLOR value(Syst.Var:ctc) 
+       " Account FINDING FROM (" + Syst.Var:gcBrand + ") '" + pgseek + "' " FRAME sel.
 
 
 form
@@ -55,9 +55,9 @@ form
 
 with row 1 centered overlay title " Account FINDING " FRAME alku.
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
    FIND FIRST Account USE-INDEX AccNum WHERE 
-      Account.Brand = gcBrand NO-LOCK no-error.
+      Account.Brand = Syst.Var:gcBrand NO-LOCK no-error.
    IF NOT AVAIL Account THEN DO:
       BELL.
       message "No accounts - press ENTER !".
@@ -77,27 +77,27 @@ repeat WITH FRAME sel:
        ASSIGN toseek = FALSE nrohaku = FALSE.
        PAUSE 0 no-message.
 alku:  repeat WITH FRAME alku ON ENDKEY UNDO LOOP, LEAVE LOOP:
-          ehto = 9. RUN ufkey. ufkey = TRUE.
+          Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
           UPDATE pgseek WITH FRAME alku EDITING:
-             READKEY. nap = keylabel(LASTKEY).
+             READKEY. Syst.Var:nap = keylabel(LASTKEY).
              /* onko painettu home */
-             if lookup(nap,"home") > 0  
-             then assign nrohaku = true nap = "enter".
-             APPLY keycode(nap).
+             if lookup(Syst.Var:nap,"home") > 0  
+             then assign nrohaku = true Syst.Var:nap = "enter".
+             APPLY keycode(Syst.Var:nap).
           END.
 
           if pgseek = "" THEN LEAVE LOOP.
 
           IF NOT nrohaku THEN DO:
              FIND FIRST Account where 
-                Account.Bran     = gcBrand AND
+                Account.Bran     = Syst.Var:gcBrand AND
                 Account.AccName >= pgseek
              no-lock no-error.
              order = 1.
           END.
           ELSE DO:
              FIND FIRST Account where 
-                Account.Bran    = gcBrand AND
+                Account.Bran    = Syst.Var:gcBrand AND
                 Account.AccNum >= integer(pgseek)
              no-lock no-error.
              order = 2.
@@ -138,10 +138,10 @@ print-line:
                rtab[FRAME-LINE] = recid(Account).
                IF order = 2 THEN FIND NEXT Account
                USE-INDEX AccNum WHERE 
-                  Account.Brand = gcBrand NO-LOCK no-error.
+                  Account.Brand = Syst.Var:gcBrand NO-LOCK no-error.
                ELSE IF order = 1 THEN FIND NEXT Account
                USE-INDEX AccName WHERE 
-                  Account.Brand = gcBrand NO-LOCK no-error.
+                  Account.Brand = Syst.Var:gcBrand NO-LOCK no-error.
             END.
             ELSE DO:
                CLEAR no-pause.
@@ -170,30 +170,30 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 0  ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 11 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         Syst.Var:ufk[1]= 0  Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= 11 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 2 THEN DO:
-         CHOOSE ROW Account.AccNum ;(uchoose.i;) no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Account.AccNum WITH FRAME sel.
+         CHOOSE ROW Account.AccNum {Syst/uchoose.i} no-error WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) Account.AccNum WITH FRAME sel.
       END.
       ELSE IF order = 1 THEN DO:
-         CHOOSE ROW Account.AccName ;(uchoose.i;) no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Account.AccName WITH FRAME sel.
+         CHOOSE ROW Account.AccName {Syst/uchoose.i} no-error WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) Account.AccName WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order = 3 THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = 2.
       END.
 
@@ -203,10 +203,10 @@ BROWSE:
          DO i = 1 TO FRAME-LINE - 1:
             IF order = 2 THEN FIND PREV Account
             USE-INDEX AccNum WHERE 
-               Account.Brand = gcBrand NO-LOCK no-error.
+               Account.Brand = Syst.Var:gcBrand NO-LOCK no-error.
             ELSE IF order = 1 THEN FIND PREV Account
             USE-INDEX AccName WHERE 
-               Account.Brand = gcBrand NO-LOCK no-error.
+               Account.Brand = Syst.Var:gcBrand NO-LOCK no-error.
             IF AVAILABLE Account THEN
                ASSIGN firstline = i memory = recid(Account).
             ELSE LEAVE.
@@ -222,18 +222,18 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND FIRST Account where recid(Account) = rtab[1] no-lock.
             IF order = 2 THEN FIND PREV Account
             USE-INDEX AccNum WHERE 
-               Account.Brand = gcBrand NO-LOCK no-error.
+               Account.Brand = Syst.Var:gcBrand NO-LOCK no-error.
             ELSE IF order = 1 THEN FIND PREV Account
             USE-INDEX AccName WHERE 
-               Account.Brand = gcBrand NO-LOCK no-error.
+               Account.Brand = Syst.Var:gcBrand NO-LOCK no-error.
             IF NOT AVAILABLE Account THEN DO:
                message "YOU ARE ON THE FIRST ROW !".
                BELL.
@@ -256,16 +256,16 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND FIRST Account where recid(Account) = rtab[FRAME-DOWN] no-lock .
             IF order = 2 THEN FIND NEXT Account
             USE-INDEX AccNum WHERE 
-               Account.Brand = gcBrand NO-LOCK no-error.
+               Account.Brand = Syst.Var:gcBrand NO-LOCK no-error.
             ELSE IF order = 1 THEN FIND NEXT Account
             USE-INDEX AccName WHERE 
-               Account.Brand = gcBrand NO-LOCK no-error.
+               Account.Brand = Syst.Var:gcBrand NO-LOCK no-error.
             IF NOT AVAILABLE Account THEN DO:
                message "YOU ARE ON THE LAST ROW !".
                BELL.
@@ -288,15 +288,15 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND FIRST Account where recid(Account) = memory no-lock no-error.
          IF order = 2 THEN FIND PREV Account
          USE-INDEX AccNum WHERE 
-            Account.Brand = gcBrand NO-LOCK no-error.
+            Account.Brand = Syst.Var:gcBrand NO-LOCK no-error.
          ELSE IF order = 1 THEN FIND PREV Account
          USE-INDEX AccName WHERE 
-            Account.Brand = gcBrand NO-LOCK no-error.
+            Account.Brand = Syst.Var:gcBrand NO-LOCK no-error.
          IF AVAILABLE Account THEN DO:
             memory = recid(Account).
 
@@ -304,10 +304,10 @@ BROWSE:
             DO line = 1 TO (FRAME-DOWN - 1):
                IF order = 2 THEN FIND PREV Account
                USE-INDEX AccNum WHERE 
-                  Account.Brand = gcBrand NO-LOCK no-error.
+                  Account.Brand = Syst.Var:gcBrand NO-LOCK no-error.
                ELSE IF order = 1 THEN FIND PREV Account
                USE-INDEX AccName WHERE 
-                  Account.Brand = gcBrand NO-LOCK no-error.
+                  Account.Brand = Syst.Var:gcBrand NO-LOCK no-error.
                IF AVAILABLE Account THEN memory = recid(Account).
                ELSE line = FRAME-DOWN.
             END.
@@ -323,7 +323,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "YOU ARE ON THE LAST PAGE !".
@@ -338,36 +338,36 @@ BROWSE:
         END.
      END. /* NEXT page */
 
-     else if lookup(nap,"5,f5,enter,return") > 0 THEN DO: /* valinta */
+     else if lookup(Syst.Var:nap,"5,f5,enter,return") > 0 THEN DO: /* valinta */
         FIND FIRST Account where recid(Account) = rtab[FRAME-LINE] no-lock.
         siirto = string(AccNum).
         LEAVE LOOP.
      END.
 
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
         IF order = 2 THEN FIND FIRST Account
         USE-INDEX AccNum WHERE 
-           Account.Brand = gcBrand NO-LOCK no-error.
+           Account.Brand = Syst.Var:gcBrand NO-LOCK no-error.
         ELSE IF order = 1 THEN FIND FIRST Account
         USE-INDEX AccName WHERE 
-           Account.Brand = gcBrand NO-LOCK no-error.
+           Account.Brand = Syst.Var:gcBrand NO-LOCK no-error.
         ASSIGN memory = recid(Account) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 2 THEN FIND LAST Account
         USE-INDEX AccNum WHERE 
-           Account.Brand = gcBrand NO-LOCK no-error.
+           Account.Brand = Syst.Var:gcBrand NO-LOCK no-error.
         ELSE IF order = 1 THEN FIND LAST Account
         USE-INDEX AccName WHERE 
-           Account.Brand = gcBrand NO-LOCK no-error.
+           Account.Brand = Syst.Var:gcBrand NO-LOCK no-error.
         ASSIGN memory = recid(Account) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN DO:
         toseek = TRUE.
         HIDE FRAME sel no-pause.
         NEXT LOOP.
@@ -378,5 +378,5 @@ END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
 HIDE FRAME alku no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 

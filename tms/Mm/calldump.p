@@ -13,15 +13,14 @@
   VERSION ......: SHARK
   ------------------------------------------------------ */
 
-{commali.i}
-katun = "cron".
-gcBrand = "1".
+{Syst/commali.i}
+Syst.Var:katun = "cron".
+Syst.Var:gcBrand = "1".
 
-{date.i}
-{fvatfact.i}
-{excel.i}
-{coinv.i}
-{cparam2.i}
+{Func/fvatfact.i}
+{Func/excel.i}
+{Func/coinv.i}
+{Func/cparam2.i}
 
 DEFINE VARIABLE  iiper AS INTEGER NO-UNDO INIT 0.
 
@@ -74,7 +73,8 @@ assign
    lcOdir     =  fCparam("dumpoutgoing","calldump.p")
    lcSdir     =  fCParam("dumpspool","calldump.p")
    ldate1     = idaDate
-   filename   = "calls" + fDateFmt(ldate1,"yyyymmdd") + "_" + 
+   filename   = CAPS(Syst.Parameters:Tenant) +
+                "_calls" + Func.Common:mDateFmt(ldate1,"yyyymmdd") + "_" + 
                 REPLACE(STRING(TIME,"hh:mm:ss"),":","") + ".dump"
    ldate1     = idaDate - 1
    ldate2     = ldate1
@@ -85,8 +85,9 @@ assign
 IF lcLogDir = "" OR lcLogDir = ? THEN llLog = FALSE.
 ELSE DO:
    llLog = TRUE.
-   OUTPUT STREAM sLog TO VALUE(lcLogDir + "/dailycalls_" +
-                               STRING(ldate1,"999999") + ".log") APPEND.
+   OUTPUT STREAM sLog TO VALUE(lcLogDir + "/" +
+       CAPS(Syst.Parameters:Tenant) +
+       "_dailycalls_" + STRING(ldate1,"999999") + ".log") APPEND.
 END.                               
                                
 if iiper ne 0 then ASSIGN
@@ -96,7 +97,7 @@ if iiper ne 0 then ASSIGN
 
 dformat = "yyyy-mm-dd".
 
-DEFINE TEMP-TABLE ttCalls
+DEFINE TEMP-TABLE ttCalls NO-UNDO
    FIELD calldate   AS DATE
    FIELD Mobtype    AS CHARACTER
    FIELD CLI        AS CHARACTER
@@ -183,10 +184,10 @@ for each ttCalls NO-LOCK:
      lcCCNName = "".
 
    find ccn where 
-        CCN.Brand = gcBrand AND
+        CCN.Brand = Syst.Var:gcBrand AND
         ccn.ccn = ttcalls.ccn no-lock no-error.
    find billitem where 
-        BillItem.Brand    = gcBrand AND
+        BillItem.Brand    = Syst.Var:gcBrand AND
         billitem.billcode = ttCalls.billcode no-lock no-error.
    assign
      lcBiName  = Billitem.biname when avail billitem

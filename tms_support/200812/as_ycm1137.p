@@ -1,8 +1,8 @@
-{commpaa.i}
-katun = "anttis".
-gcBrand = "1".
+{Syst/commpaa.i}
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 
-{msisdn.i}
+{Func/msisdn.i}
 
 input from /apps/snet/200812/Yoigo_Preactivated_Terminations_July.txt.
 

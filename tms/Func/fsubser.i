@@ -9,7 +9,7 @@
 
 &GLOBAL-DEFINE FSUBSER_I YES
 
-{commali.i}
+{Syst/commali.i}
 
 DEF BUFFER bSubCur     FOR SubSer.
 DEF BUFFER bSubParaCur FOR SubSerPara.
@@ -139,7 +139,7 @@ FUNCTION fUpdateSubSer RETURNS LOGICAL
       /* if solog-update requested, check if it is needed */  
       IF ilSolog THEN DO:
          FIND bHLRServCom WHERE
-              bHLRServCom.Brand   = gcBrand AND
+              bHLRServCom.Brand   = Syst.Var:gcBrand AND
               bHLRServCom.ServCom = bSubCur.ServCom NO-LOCK NO-ERROR.
          IF NOT AVAILABLE bHLRServCom OR
             bHLRServCom.ActType > 0 
@@ -200,7 +200,7 @@ FUNCTION fUpdateSubSerPara RETURNS LOGICAL
       /* if solog-update requested, check if it is needed */  
       IF ilSolog THEN DO:
          FIND bHLRServCom WHERE
-              bHLRServCom.Brand   = gcBrand AND
+              bHLRServCom.Brand   = Syst.Var:gcBrand AND
               bHLRServCom.ServCom = bSubParaCur.ServCom NO-LOCK NO-ERROR.
          IF NOT AVAILABLE bHLRServCom OR
             bHLRServCom.ActType > 0 

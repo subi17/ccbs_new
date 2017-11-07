@@ -8,11 +8,11 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
-{cparam2.i}
-{utumaa.i "new"}
-{edefine.i "new"}
+{Func/cparam2.i}
+{Syst/utumaa.i "new"}
+{Inv/edefine.i "new"}
 
 assign tuni1 = "nnpura7"
        tuni2 = "".
@@ -35,9 +35,9 @@ form
    "CLI / Billing Item / CCN." AT 10 
    skip(14)
    WITH ROW 1 side-labels width 80
-        title " " + ynimi + 
+        title " " + Syst.Var:ynimi + 
         " CALL SUMMARY PER CCN (REPORT 7) " +
-        string(pvm,"99-99-99") + " "
+        string(TODAY,"99-99-99") + " "
         FRAME valinta.
 
 form
@@ -90,29 +90,29 @@ toimi:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
-         RUN ufkey.p.
+         Syst.Var:ufk[1]= 132 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= 63 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
+         RUN Syst/ufkey.p.
       END.
 
-      IF llStart THEN ASSIGN nap     = "1"
+      IF llStart THEN ASSIGN Syst.Var:nap     = "1"
                              llStart = FALSE.
       ELSE DO:
          READKEY.
-         nap = keylabel(LASTKEY).
+         Syst.Var:nap = keylabel(LASTKEY).
       END.
 
-      if lookup(nap,"1,f1") > 0 THEN DO:
-         ASSIGN ehto = 9 ufkey = TRUE. 
-         RUN ufkey.p.
+      if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:
+         ASSIGN Syst.Var:ehto = 9 ufkey = TRUE. 
+         RUN Syst/ufkey.p.
 
          REPEAT ON ENDKEY UNDO, LEAVE:
             UPDATE 
             InvNum
             VALIDATE(INPUT InvNum = 0 OR
                      CAN-FIND (FIRST Invoice WHERE
-                               Invoice.Brand  = gcBrand AND
+                               Invoice.Brand  = Syst.Var:gcBrand AND
                                Invoice.InvNum = INPUT invnum),
             "Unknown Invoice Number!")                   
             WITH FRAME rajat.
@@ -134,7 +134,7 @@ toimi:
                UPDATE
                CustNum
                   validate(CAN-FIND(FIRST Customer WHERE 
-                                    Customer.Brand   = gcBrand AND
+                                    Customer.Brand   = Syst.Var:gcBrand AND
                                     Customer.CustNum = INPUT CustNum),
                            "Unknown customer")                            
                pvm1
@@ -156,20 +156,20 @@ toimi:
 
       END.
 
-      else if lookup(nap,"5,f5") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"5,f5") > 0 THEN DO:
          LEAVE toimi.
       END.
 
-      else if lookup(nap,"8,f8") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"8,f8") > 0 THEN DO:
          RETURN.
       END.
-END. /* toimi */
+END. /* Syst.Var:toimi */
 
 /* Avataan striimi */
 ASSIGN tila = TRUE.
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
-RUN umakro (TRUE,
+RUN Syst/umakro.p (TRUE,
             lcMacros).
 
 message "Printing in progress, ESC = cancel".
@@ -184,7 +184,7 @@ RUN nnpura7 (INPUT CustNum,
 
 /* Suljetaan striimi */
 ASSIGN tila = FALSE.
-{utuloste.i}
+{Syst/utuloste.i}
 
 HIDE MESSAGE no-pause.
 HIDE FRAME rajat no-pause.

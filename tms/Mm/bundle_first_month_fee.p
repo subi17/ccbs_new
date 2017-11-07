@@ -9,14 +9,13 @@
 
 DISABLE TRIGGERS FOR LOAD OF FixedFee.
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{tmsconst.i}
-{finvnum.i}
-{funcrunprocess_update.i}
-{bundle_first_month_fee.i}
-{fbundle.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Func/finvnum.i}
+{Syst/funcrunprocess_update.i}
+{Mm/bundle_first_month_fee.i}
+{Mm/fbundle.i}
 
 DEF INPUT  PARAMETER idaFromDate      AS DATE NO-UNDO.
 DEF INPUT  PARAMETER idaToDate        AS DATE NO-UNDO.
@@ -49,14 +48,14 @@ DEF TEMP-TABLE ttSub NO-UNDO
 
 ASSIGN
    /* set 1 second after midnight to skip STC contract activations */
-   ldPeriodFrom    = fMake2Dt(idaFromDate,1)
-   ldPeriodFromSTC = fMake2Dt(idaFromDate,0)
-   ldPeriodTo      = fMake2Dt(idaToDate,86399)
+   ldPeriodFrom    = Func.Common:mMake2DT(idaFromDate,1)
+   ldPeriodFromSTC = Func.Common:mMake2DT(idaFromDate,0)
+   ldPeriodTo      = Func.Common:mMake2DT(idaToDate,86399)
    lcIPLContracts  = fCParamC("IPL_CONTRACTS")
    lcBONOContracts = fCParamC("BONO_CONTRACTS")
    lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
    lcFirstMonthUsageBasedBundles = fCParamC("FIRST_MONTH_USAGE_BASED_BUNDLES")
-   ldeCollectStart = fMakeTS().
+   ldeCollectStart = Func.Common:mMakeTS().
 
 IF iiInvCust > 0 THEN
    RUN pGetCustomerSubscriptions(iiInvCust).
@@ -65,7 +64,7 @@ ELSE
 
 IF RETURN-VALUE BEGINS "ERROR" THEN RETURN RETURN-VALUE.
 
-ldeCollectEnd = fMakeTs().
+ldeCollectEnd = Func.Common:mMakeTS().
 
 RUN pCalculateFees. 
 IF RETURN-VALUE BEGINS "ERROR" THEN RETURN RETURN-VALUE.
@@ -109,15 +108,15 @@ PROCEDURE pGetCustomerSubscriptions:
                   MsRequest.ActStamp >= ldPeriodFrom AND
                   MsRequest.ActStamp <= ldPeriodTo USE-INDEX MsSeq,
              FIRST DayCampaign NO-LOCK WHERE
-                   DayCampaign.Brand = gcBrand AND
+                   DayCampaign.Brand = Syst.Var:gcBrand AND
                    DayCampaign.DCEvent = MsRequest.ReqCParam3 AND
                    LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0:
              
-             fTS2Date(INPUT  MsRequest.ActStamp,
+             Func.Common:mTS2Date(INPUT  MsRequest.ActStamp,
                       OUTPUT ldaMsReqDate).
 
              FIND FIRST FMItem NO-LOCK WHERE
-                        FMItem.Brand        = gcBrand              AND
+                        FMItem.Brand        = Syst.Var:gcBrand              AND
                         FMItem.FeeModel     = DayCampaign.FeeModel AND
                         FMItem.FromDate    <= ldaMsReqDate         AND
                         FMItem.ToDate      >= ldaMsReqDate         AND
@@ -161,13 +160,13 @@ PROCEDURE pGetAllSubscriptions:
       liReqStatus = INT(ENTRY(liCount, lcReqStatuses)).
 
       FOR EACH MsRequest NO-LOCK WHERE
-               MsRequest.Brand = gcBrand AND
+               MsRequest.Brand = Syst.Var:gcBrand AND
                MsRequest.ReqType = 8     AND
                MsRequest.ReqStat = liReqStatus    AND
                MsRequest.ActStamp >= ldPeriodFrom AND
                MsRequest.ActStamp <= ldPeriodTo,
          FIRST DayCampaign NO-LOCK WHERE
-               DayCampaign.Brand = gcBrand AND
+               DayCampaign.Brand = Syst.Var:gcBrand AND
                DayCampaign.DCEvent = MsRequest.ReqCParam3 AND
                LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0,
          FIRST MsOwner WHERE 
@@ -175,11 +174,11 @@ PROCEDURE pGetAllSubscriptions:
                MsOwner.TSEnd   >= ldPeriodFrom    AND
                MsOwner.TsBegin <= ldPeriodTo NO-LOCK:
        
-         fTS2Date(INPUT  MsRequest.ActStamp,
+         Func.Common:mTS2Date(INPUT  MsRequest.ActStamp,
                   OUTPUT ldaMsReqDate).
 
          FIND FIRST FMItem NO-LOCK WHERE
-                    FMItem.Brand        = gcBrand              AND
+                    FMItem.Brand        = Syst.Var:gcBrand              AND
                     FMItem.FeeModel     = DayCampaign.FeeModel AND
                     FMItem.FromDate    <= ldaMsReqDate         AND
                     FMItem.ToDate      >= ldaMsReqDate         AND
@@ -268,12 +267,12 @@ PROCEDURE pCollectSubscription:
          ttSub.ServiceLimit = ServiceLimit.GroupCode
          liCollected        = liCollected + 1.
          
-      fSplitTS(MServiceLimit.FromTS,
+      Func.Common:mSplitTS(MServiceLimit.FromTS,
                OUTPUT ldaDate,
                OUTPUT liTime).
       ttSub.FromDate = ldaDate.
       
-      fSplitTS(MServiceLimit.EndTS,
+      Func.Common:mSplitTS(MServiceLimit.EndTS,
                OUTPUT ldaDate,
                OUTPUT liTime).
       ttSub.ToDate = ldaDate.
@@ -303,10 +302,10 @@ PROCEDURE pCalculateFees:
 
    FOR EACH ttSub,
       FIRST DayCampaign NO-LOCK WHERE
-            DayCampaign.Brand   = gcBrand AND
+            DayCampaign.Brand   = Syst.Var:gcBrand AND
             DayCampaign.DCEvent = ttSub.ServiceLimit,
       FIRST FixedFee NO-LOCK USE-INDEX HostTable WHERE
-            FixedFee.Brand     = gcBrand AND
+            FixedFee.Brand     = Syst.Var:gcBrand AND
             FixedFee.HostTable = "MobSub" AND
             FixedFee.KeyValue  = STRING(ttSub.MsSeq) AND
             FixedFee.FeeModel  = DayCampaign.FeeModel AND
@@ -316,7 +315,7 @@ PROCEDURE pCalculateFees:
             FixedFee.BegDate  <= idaToDate AND
             FixedFee.EndPer   >= liPeriod,
       FIRST FMItem NO-LOCK WHERE
-            FMItem.Brand     = gcBrand AND
+            FMItem.Brand     = Syst.Var:gcBrand AND
             FMItem.FeeModel  = FixedFee.FeeModel AND
             FMItem.FromDate <= FixedFee.BegDate AND
             FMItem.ToDate   >= FixedFee.BegDate AND
@@ -327,7 +326,7 @@ PROCEDURE pCalculateFees:
       IF NOT AVAILABLE FFItem OR 
          (FFItem.Billed AND icRunMode NE "test") THEN NEXT. 
     
-      ldFeeAmount = fCalculateFirstMonthFee(gcBrand,
+      ldFeeAmount = fCalculateFirstMonthFee(Syst.Var:gcBrand,
                                             ttSub.MsSeq,
                                             ttSub.ServiceLimit,
                                             FixedFee.Amt,
@@ -365,7 +364,7 @@ PROCEDURE pCalculateFees:
    IF oiHandled > 0 AND iiInvCust = 0 THEN DO TRANS:
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = gcBrand   
+         ActionLog.Brand        = Syst.Var:gcBrand   
          ActionLog.TableName    = "FixedFee"  
          ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                   STRING(MONTH(TODAY),"99")  +
@@ -376,18 +375,18 @@ PROCEDURE pCalculateFees:
                                   MONTH(TODAY)
          ActionLog.ActionDec    = oiHandled
          ActionLog.ActionChar   = "Collection started: " +
-                                    fts2hms(ldeCollectStart) + CHR(10) + 
+                                    Func.Common:mTS2HMS(ldeCollectStart) + CHR(10) + 
                                   "Collection ended: " + 
-                                    fts2hms(ldeCollectEnd) + CHR(10) +
+                                    Func.Common:mTS2HMS(ldeCollectEnd) + CHR(10) +
                                   STRING(liCollected) + 
                                     " cases were collected" + CHR(10) +
                                   STRING(oiHandled) + 
                                   " first month fees were updated"
          ActionLog.ActionStatus = 3
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.FromDate     = idaFromDate
          ActionLog.ToDate       = idaToDate.
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
    END.
 
    RETURN "".

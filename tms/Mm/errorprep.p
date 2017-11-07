@@ -9,8 +9,8 @@
   VERSION ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{msisdn.i}
+{Syst/commali.i}
+{Func/msisdn.i}
 
 DEF INPUT PARAMETER  errorcode AS INT             NO-UNDO.
 def /* new */ shared var siirto AS char.
@@ -52,7 +52,7 @@ DEF VAR SL_prefix    AS C                      NO-UNDO.
 DEF VAR mi-no        AS C                      NO-UNDO.
 DEf var roamview     AS i                      NO-UNDO.
 
-{cparam.i DefMSISDNPr  return} SL_prefix = tmsparam.CharVal.
+{Func/cparam.i DefMSISDNPr  return} SL_prefix = tmsparam.CharVal.
 
 form
     PrepCDR.ErrorCode
@@ -63,10 +63,10 @@ form
     PrepCDR.GsmBnr                                FORMAT "x(15)"
 
 WITH ROW FrmRow width 80 overlay FrmDown  down
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
     " Erroneus Mobile Calls "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form
@@ -75,8 +75,8 @@ form
             /* label format */
 
 WITH  overlay row 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -86,12 +86,12 @@ form /* seek Mobile Call  by  DateSt */
     HELP "Error Code"
     DateSt
     HELP "Enter first desired call date where that code should occur"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE/DATE "
-    COLOR VALUE(cfc) NO-labels overlay FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND CODE/DATE "
+    COLOR VALUE(Syst.Var:cfc) NO-labels overlay FRAME f1.
 
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "By Error Code,By A-Customer,BY MSISDN No.,By 4".
@@ -121,13 +121,13 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a PrepCDR  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
-      RUN ufcolor.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR PrepCDR.DateSt
@@ -209,33 +209,33 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN                               
-        ufk[1]= 35  ufk[2]= 0   ufk[3]= 1102 ufk[4]= 1101
-        ufk[5]= 265 ufk[6]= 0   ufk[7]= 0    ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = false.
-        RUN ufkey.p.
+        Syst.Var:ufk[1]= 35  Syst.Var:ufk[2]= 0   Syst.Var:ufk[3]= 1102 Syst.Var:ufk[4]= 1101
+        Syst.Var:ufk[5]= 265 Syst.Var:ufk[6]= 0   Syst.Var:ufk[7]= 0    Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = false.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        choose row PrepCDR.ErrorCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) PrepCDR.ErrorCode WITH FRAME sel.
+        choose row PrepCDR.ErrorCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) PrepCDR.ErrorCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        choose row PrepCDR.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) PrepCDR.CustNum WITH FRAME sel.
+        choose row PrepCDR.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) PrepCDR.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        choose row PrepCDR.CLI ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) PrepCDR.CLI WITH FRAME sel.
+        choose row PrepCDR.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) PrepCDR.CLI WITH FRAME sel.
       END.
       IF rtab[FRAME-line] = ? THEN NEXT.
 
-      nap = keylabel(LASTkey).
+      Syst.Var:nap = keylabel(LASTkey).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -259,10 +259,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTkey).
+      ASSIGN Syst.Var:nap = keylabel(LASTkey).
 
       /* PREVious row */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-line = 1 THEN DO:
            RUN local-find-this(false).
            RUN local-find-PREV.
@@ -287,7 +287,7 @@ BROWSE:
       END. /* PREVious row */
 
       /* NEXT row */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-line = FRAME-down THEN DO:
            RUN local-find-this(false).
@@ -313,7 +313,7 @@ BROWSE:
       END. /* NEXT row */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND PrepCDR WHERE recid(PrepCDR) = memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -337,7 +337,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* Put Cursor on downmost Row */
        IF rtab[FRAME-down] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -352,9 +352,9 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search by column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = true.
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        DateSt = 1/1/1999.
        UPDATE ErrorCode DateSt WITH FRAME f1.
@@ -376,16 +376,16 @@ BROWSE:
        END.
      END. /* Search-1 */
 
-     ELSE IF LOOKUP(nap,"3,F3") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"3,F3") > 0 THEN DO:
         RUN local-find-this(FALSE).
         /* build an international style MSISDN No. from National CLI */
         mi-no = PrepCDR.CLI.
-        RUN msowner2(mi-no).
+        RUN Mm/msowner2.p(mi-no).
         ufkey = TRUE.
         NEXT.
      END.   
 
-     ELSE IF LOOKUP(nap,"4,F4") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"4,F4") > 0 THEN DO:
         RUN local-find-this(FALSE).
         FIND mobError WHERE Moberror.MobError = PrepCDR.ErrorCode NO-LOCK.
         MESSAGE MobError.MEName.
@@ -394,12 +394,12 @@ BROWSE:
      END.   
 
 
-     ELSE IF LOOKUP(nap,"enter,return,5,f5") > 0 THEN DO:  /* VIEW */
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return,5,f5") > 0 THEN DO:  /* VIEW */
        RUN local-find-this(FALSE).
 
        CREATE ttCall.
        BUFFER-COPY PrepCDR TO ttCall.
-       RUN viewmbd.p(INPUT TABLE ttcall,
+       RUN Mm/viewmbd.p(INPUT TABLE ttcall,
                     ttcall.datest,
                     ttcall.timest,
                     ttCall.cli,
@@ -410,13 +410,13 @@ BROWSE:
         NEXT loop.
      END.    
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(true).
-       ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = true Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY PrepCDR.DateSt.
 
        RUN local-update-record.                                  
@@ -431,25 +431,25 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = recid(PrepCDR) must-print = true.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN memory = recid(PrepCDR) must-print = true.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 

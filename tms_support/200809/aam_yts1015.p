@@ -1,4 +1,4 @@
-{rate_roamzone.i}
+{Rate/rate_roamzone.i}
 def var i as int no-undo.
 
 find mobsub where cli = "622866585" no-lock.

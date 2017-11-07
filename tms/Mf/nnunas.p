@@ -10,9 +10,9 @@
    VERSION .......: M15
 -------------------------------------------------------------------------- */
 
-{commali.i}                      
-{excel.i}
-{tmsparam2.i}
+{Syst/commali.i}                      
+{Func/excel.i}
+{Func/tmsparam2.i}
 
 DEF VAR i      AS i  NO-UNDO.
 DEF VAR hdr    AS c  NO-UNDO.
@@ -32,7 +32,7 @@ ASSIGN
    ukcust = fCParamI("UnknownCustomer").
 
 DO FOR TMSUser:
-   FIND FIRST TMSUser where TMSUser.UserCode = katun no-lock.
+   FIND FIRST TMSUser where TMSUser.UserCode = Syst.Var:katun no-lock.
    exdir = TMSUser.RepDir.
 END.   
 
@@ -59,7 +59,7 @@ rajat:
 repeat WITH FRAME rajat:
    PAUSE 0.
    DISP  exName.
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
    UPDATE 
       day1 
@@ -68,11 +68,11 @@ repeat WITH FRAME rajat:
 
 toimi:
    repeat WITH FRAME rajat:
-      ASSIGN ehto = 0 ufk = 0 ufk[1] = 7 ufk[5] = 15 ufk[8] = 8.
-      RUN ufkey.
-      IF toimi = 1 THEN NEXT  rajat.
-      IF toimi = 8 THEN LEAVE rajat.
-      IF toimi = 5 THEN LEAVE toimi.
+      ASSIGN Syst.Var:ehto = 0 Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 15 Syst.Var:ufk[8] = 8.
+      RUN Syst/ufkey.p.
+      IF Syst.Var:toimi = 1 THEN NEXT  rajat.
+      IF Syst.Var:toimi = 8 THEN LEAVE rajat.
+      IF Syst.Var:toimi = 5 THEN LEAVE toimi.
    END.
 
    PAUSE 0.
@@ -80,7 +80,7 @@ toimi:
 
    OUTPUT STREAM excel TO value(exName).           
 
-   PUT STREAM excel UNFORMATTED  ynimi my-nl my-nl.
+   PUT STREAM excel UNFORMATTED  Syst.Var:ynimi my-nl my-nl.
 
    PUT STREAM excel UNFORMATTED 
       "Calls from Unidentified A-subscriber numbers " +

@@ -8,8 +8,8 @@
   Version ......: yoigo
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEFINE INPUT  PARAMETER icInvGrp       AS CHAR NO-UNDO.
 DEFINE INPUT  PARAMETER iiCustNum1     AS INT  NO-UNDO.
@@ -26,7 +26,7 @@ DEF VAR lcFile      AS CHAR NO-UNDO.
 DEF VAR liPaymCount AS INT  NO-UNDO.
 DEF VAR liPicked    AS INT  NO-UNDO. 
 
-{refundfilett.i}
+{Ar/refundfilett.i}
 
 DEF TEMP-TABLE ttAccDate NO-UNDO
    FIELD AccDate AS DATE
@@ -62,7 +62,7 @@ FUNCTION fMakeTemp RETURNS LOGICAL.
 END FUNCTION.
 
 FOR EACH MsRequest NO-LOCK USE-INDEX ReqType WHERE    
-         MsRequest.Brand       = gcBrand      AND
+         MsRequest.Brand       = Syst.Var:gcBrand      AND
          MsRequest.ReqType     = 23           AND
          MsRequest.ReqStat     = 16           AND
          MsRequest.CustNum    >= iiCustNum1   AND
@@ -102,12 +102,11 @@ FOR EACH ttAccDate:
    ELSE lcFile = REPLACE(icFile,"#IGRP","ALL").
    
    /* due date to file name */   
-   lcDate = DYNAMIC-FUNCTION("fDateFmt" IN ghFunc1,
-                             ttAccDate.AccDate,
+   lcDate = Func.Common:mDateFmt(ttAccDate.AccDate,
                              "yyyymmdd").
    lcFile = REPLACE(lcFile,"#DATE",lcDate).
 
-   RUN refundfile (INPUT-OUTPUT TABLE ttRequest,  
+   RUN Ar/refundfile.p (INPUT-OUTPUT TABLE ttRequest,  
                    ttAccDate.AccDate,
                    liPicked,
                    lcFile,

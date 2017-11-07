@@ -8,10 +8,9 @@
 ---------------------------------------------------------------------- */
 
 
-{commali.i}
-{cparam2.i}
-{ftransdir.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
 
 DEF INPUT  PARAMETER idaEventDate1 AS DATE NO-UNDO.
 DEF INPUT  PARAMETER idaEventDate2 AS DATE NO-UNDO.
@@ -40,8 +39,8 @@ ASSIGN
                                       STRING(MONTH(idaEventDate2),"99") +
                                       STRING(DAY(idaEventDate2),"99"))
    ocFile    = REPLACE(ocFile,"#ACTION",icActionID)
-   ldBeginTS = fMake2DT(idaEventDate1,0)
-   ldEndTS   = fMake2DT(idaEventDate2,86399).
+   ldBeginTS = Func.Common:mMake2DT(idaEventDate1,0)
+   ldEndTS   = Func.Common:mMake2DT(idaEventDate2,86399).
    
 ocFile = fUniqueFileName(ocFile,".txt").
 
@@ -57,7 +56,7 @@ PUT STREAM sFile UNFORMATTED
    "Error"       SKIP.
 
 FOR EACH ErrorLog NO-LOCK WHERE
-         ErrorLog.Brand     = gcBrand    AND
+         ErrorLog.Brand     = Syst.Var:gcBrand    AND
          ErrorLog.ActionID  = icActionID AND
          ErrorLog.ActionTS >= ldBeginTS  AND
          ErrorLog.ActionTS <= ldEndTS:
@@ -68,7 +67,7 @@ FOR EACH ErrorLog NO-LOCK WHERE
       ErrorLog.ActionID   CHR(9)
       ErrorLog.TableName  CHR(9)
       ErrorLog.KeyValue   CHR(9)
-      fTS2HMS(ErrorLog.ActionTS)  CHR(9)
+      Func.Common:mTS2HMS(ErrorLog.ActionTS)  CHR(9)
       ErrorLog.UserCode   CHR(9)
       ErrorLog.ErrorChar  CHR(9)
       ENTRY(1,ErrorLog.ErrorMsg,CHR(10)) SKIP.

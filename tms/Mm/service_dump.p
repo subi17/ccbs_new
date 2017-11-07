@@ -1,12 +1,11 @@
-{commpaa.i}
-{timestamp.i}
-gcbrand = "1".
-katun = "cron".
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "cron".
 
-{eventlog.i}
+{Syst/eventlog.i}
 
 fELog("DAILY","ServiceDumpStarted").
-run servicedump.
+RUN Mm/servicedump.p.
 fELog("DAILY","ServiceDumpStopped").
 
 quit.

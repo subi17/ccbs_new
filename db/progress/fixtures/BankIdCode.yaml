@@ -1,0 +1,1864 @@
+bulkload: BankIdCode
+  BIC: "BDEPESM1XXX"
+  BankCode: "0003"
+  BankName: "BANCO DE DEPOSITOS, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BANDESSSXXX"
+  BankCode: "0004"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BSABESBBXXX"
+  BankCode: "0008"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "ALLFESMMXXX"
+  BankCode: "0011"
+  BankName: "ALLFUNDS BANK, S.A."
+
+bulkload: BankIdCode
+  BIC: "DEUTESBBXXX"
+  BankCode: "0019"
+  BankName: "DEUTSCHE BANK, S.A.E."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BCNDESM1XXX"
+  BankCode: "0021"
+  BankName: "BANCO CONDAL, S.A."
+
+bulkload: BankIdCode
+  BIC: "POPUESMMXXX"
+  BankCode: "0024"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "ESPCESMMXXX"
+  BankCode: "0030"
+  BankName: "BANCO ESPAÑOL DE CREDITO, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "ETCHES2GXXX"
+  BankCode: "0031"
+  BankName: "BANCO ETCHEVERRIA, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "SABNESMMXXX"
+  BankCode: "0036"
+  BankName: "SANTANDER INVESTMENT, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BGUIES22XXX"
+  BankCode: "0042"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "GALEES2GXXX"
+  BankCode: "0046"
+  BankName: "BANCO GALLEGO, S.A."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BSCHESMMXXX"
+  BankCode: "0049"
+  BankName: "BANCO SANTANDER, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BVADESMMXXX"
+  BankCode: "0057"
+  BankName: "BANCO DEPOSITARIO BBVA, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BNPAESMMXXX"
+  BankCode: "0058"
+  BankName: "BNP PARIBAS ESPAÑA, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "MADRESMMXXX"
+  BankCode: "0059"
+  BankName: "BANCO DE MADRID, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BMARES2MXXX"
+  BankCode: "0061"
+  BankName: "BANCA MARCH, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CAHMESMMXXX"
+  BankCode: "0063"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BARCESMMXXX"
+  BankCode: "0065"
+  BankName: "BARCLAYS BANK, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "PSTRESMMXXX"
+  BankCode: "0072"
+  BankName: "BANCO PASTOR, S.A."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "OPENESMMXXX"
+  BankCode: "0073"
+  BankName: "OPEN BANK, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "POPUESMMXXX"
+  BankCode: "0075"
+  BankName: "BANCO POPULAR ESPAÑOL, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BAPUES22XXX"
+  BankCode: "0078"
+  BankName: "BANCA PUEYO, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BSABESBBXXX"
+  BankCode: "0081"
+  BankName: "BANCO DE SABADELL, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CASTES2SXXX"
+  BankCode: "0082"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "RENBESMMXXX"
+  BankCode: "0083"
+  BankName: "RENTA 4 BANCO, S.A."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "NORTESMMXXX"
+  BankCode: "0086"
+  BankName: "BANCO BANIF, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CGDIESMMXXX"
+  BankCode: "0089"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "VALEESVVXXX"
+  BankCode: "0093"
+  BankName: "BANCO DE VALENCIA, S.A."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BVALESMMXXX"
+  BankCode: "0094"
+  BankName: "RBC INVESTOR SERVICES ESPAÑA, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "VASCES2PXXX"
+  BankCode: "0095"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "POPUESMMXXX"
+  BankCode: "0097"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "AHCRESVVXXX"
+  BankCode: "0099"
+  BankName: "BANKIA BANCA PRIVADA, S.A."
+
+bulkload: BankIdCode
+  BIC: "LOYDESMMXXX"
+  BankCode: "0106"
+  BankName: "LLOYDS TSB BANK PLC, S.E."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BNLIESM1XXX"
+  BankCode: "0107"
+  BankName: "BANCA NAZIONALE DEL LAVORO, S.P.A., S.E."
+
+bulkload: BankIdCode
+  BIC: "SOGEESMMXXX"
+  BankCode: "0108"
+  BankName: "SOCIETE GENERALE, S.E."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "INBBESM1XXX"
+  BankCode: "0113"
+  BankName: "BANCO INDUSTRIAL DE BILBAO, S.A."
+
+bulkload: BankIdCode
+  BIC: "OCBAESM1XXX"
+  BankCode: "0121"
+  BankName: "BANCO OCCIDENTAL, S.A."
+
+bulkload: BankIdCode
+  BIC: "CITIES2XXXX"
+  BankCode: "0122"
+  BankName: "CITIBANK ESPAÑA, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BAOFESM1XXX"
+  BankCode: "0125"
+  BankName: "BANCOFAR, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BKBKESMMXXX"
+  BankCode: "0128"
+  BankName: "BANKINTER, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "INALESM1XXX"
+  BankCode: "0129"
+  BankName: "BBVA BANCO DE FINANCIACION, S.A."
+
+bulkload: BankIdCode
+  BIC: "CGDIESMMXXX"
+  BankCode: "0130"
+  BankName: "BANCO CAIXA GERAL, S.A."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BESMESMMXXX"
+  BankCode: "0131"
+  BankName: "BANCO ESPIRITO SANTO, S.A., S.E."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "PRNEESM1XXX"
+  BankCode: "0132"
+  BankName: "BANCO DE PROMOCION DE NEGOCIOS, S.A. (PROMOBANC)"
+
+bulkload: BankIdCode
+  BIC: "MIKBESB1XXX"
+  BankCode: "0133"
+  BankName: "NUEVO MICRO BANK, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "AREBESMMXXX"
+  BankCode: "0136"
+  BankName: "ARESBANK, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BKOAES22XXX"
+  BankCode: "0138"
+  BankName: "BANKOA, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BPMEESBBXXX"
+  BankCode: "0142"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "PARBESMXXXX"
+  BankCode: "0144"
+  BankName: "BNP PARIBAS SECURITIES SERVICES, S.E."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "DEUTESM1XXX"
+  BankCode: "0145"
+  BankName: "DEUTSCHE BANK A.G., S.E."
+
+bulkload: BankIdCode
+  BIC: "BNPAESMSXXX"
+  BankCode: "0149"
+  BankName: "BNP PARIBAS, S.E."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CHASESM3XXX"
+  BankCode: "0151"
+  BankName: "JPMORGAN CHASE BANK NATIONAL ASSOCIATION, S.E."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BPLCESMMXXX"
+  BankCode: "0152"
+  BankName: "BARCLAYS BANK PLC, S.E."
+
+bulkload: BankIdCode
+  BIC: "BSUIESMMXXX"
+  BankCode: "0154"
+  BankName: "CREDIT AGRICOLE CORPORATE AND INVESTMENT BANK,S.E."
+
+bulkload: BankIdCode
+  BIC: "BRASESMMXXX"
+  BankCode: "0155"
+  BankName: "BANCO DO BRASIL, S.A., S.E."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "ABNAESMMXXX"
+  BankCode: "0156"
+  BankName: "THE ROYAL BANK OF SCOTLAND PLC, S.E."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "COBAESMXXXX"
+  BankCode: "0159"
+  BankName: "COMMERZBANK AKTIENGESELLSCHAFT, S.E."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BOTKESMXXXX"
+  BankCode: "0160"
+  BankName: "THE BANK OF TOKYO-MITSUBISHI UFJ, LTD, S.E."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BKTRESM1XXX"
+  BankCode: "0161"
+  BankName: "DEUTSCHE BANK TRUST COMPANY AMERICAS, S.E."
+
+bulkload: BankIdCode
+  BIC: "MIDLESMMXXX"
+  BankCode: "0162"
+  BankName: "HSBC BANK PLC, S.E."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "GEBAESMMXXX"
+  BankCode: "0167"
+  BankName: "BNP PARIBAS FORTIS, S.A., N.V., S.E."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BBRUESMXXXX"
+  BankCode: "0168"
+  BankName: "ING BELGIUM, S.A., S.E."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "NACNESMMXXX"
+  BankCode: "0169"
+  BankName: "BANCO DE LA NACION ARGENTINA, S.E."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BBVAESMMXXX"
+  BankCode: "0182"
+  BankName: "BANCO BILBAO VIZCAYA ARGENTARIA, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BEDFESM1XXX"
+  BankCode: "0184"
+  BankName: "BANCO EUROPEO DE FINANZAS, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BSABESBBXXX"
+  BankCode: "0185"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BFIVESBBXXX"
+  BankCode: "0186"
+  BankName: "BANCO MEDIOLANUM, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "ALCLESMMXXX"
+  BankCode: "0188"
+  BankName: "BANCO ALCALA, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BBPIESMMXXX"
+  BankCode: "0190"
+  BankName: "BANCO BPI, S.A., S.E."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "WELAESMMXXX"
+  BankCode: "0196"
+  BankName: "PORTIGON AG, S.E."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMMXXX"
+  BankCode: "0198"
+  BankName: "BANCO COOPERATIVO ESPAÑOL, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "PRVBESB1XXX"
+  BankCode: "0200"
+  BankName: "PRIVAT BANK DEGROOF, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "DECRESM1XXX"
+  BankCode: "0205"
+  BankName: "DEUTSCHE BANK CREDIT, S.A."
+
+bulkload: BankIdCode
+  BIC: "PROAESMMXXX"
+  BankCode: "0211"
+  BankName: "EBN BANCO DE NEGOCIOS, S.A."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "POHIESMMXXX"
+  BankCode: "0216"
+  BankName: "TARGOBANK, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "HLFXESMMXXX"
+  BankCode: "0217"
+  BankName: "LLOYDS BANK INTERNATIONAL, S.A."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "FCEFESM1XXX"
+  BankCode: "0218"
+  BankName: "FCE BANK PLC S.E."
+
+bulkload: BankIdCode
+  BIC: "BMCEESMMXXX"
+  BankCode: "0219"
+  BankName: "BANQUE MAROCAINE COMMERCE EXTERIEUR INTERNAT.,S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "FIOFESM1XXX"
+  BankCode: "0220"
+  BankName: "BANCO FINANTIA SOFINLOC, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "GEECESB1XXX"
+  BankCode: "0223"
+  BankName: "GENERAL ELECTRIC CAPITAL BANK, S.A."
+
+bulkload: BankIdCode
+  BIC: "SCFBESMMXXX"
+  BankCode: "0224"
+  BankName: "SANTANDER CONSUMER FINANCE, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "FIEIESM1XXX"
+  BankCode: "0225"
+  BankName: "BANCO CETELEM, S.A."
+
+bulkload: BankIdCode
+  BIC: "UBSWESMMXXX"
+  BankCode: "0226"
+  BankName: "UBS BANK, S.A"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "UNOEESM1XXX"
+  BankCode: "0227"
+  BankName: "UNOE BANK, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "IXIUESM1XXX"
+  BankCode: "0228"
+  BankName: "BANCO EXELBANK, S.A."
+
+bulkload: BankIdCode
+  BIC: "POPLESMMXXX"
+  BankCode: "0229"
+  BankName: "BANCOPOPULAR-E, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "DSBLESMMXXX"
+  BankCode: "0231"
+  BankName: "DEXIA SABADELL, S.A."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "INVLESMMXXX"
+  BankCode: "0232"
+  BankName: "BANCO INVERSIS, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "POPIESMMXXX"
+  BankCode: "0233"
+  BankName: "POPULAR BANCA PRIVADA, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CCOCESMMXXX"
+  BankCode: "0234"
+  BankName: "BANCO CAMINOS, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "PIESESM1XXX"
+  BankCode: "0235"
+  BankName: "BANCO PICHINCHA ESPAÑA, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "LOYIESMMXXX"
+  BankCode: "0236"
+  BankName: "LLOYDS BANK INTERNATIONAL, S.A."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CSURES2CXXX"
+  BankCode: "0237"
+  BankName: "CAJASUR BANCO, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "PSTRESMMXXX"
+  BankCode: "0238"
+  BankName: "BANCO PASTOR, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "EVOBESMMXXX"
+  BankCode: "0239"
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "TRESES2BXXX"
+  BankCode: "0486"
+  BankName: "BANCO GRUPO CAJATRES, S.A."
+
+bulkload: BankIdCode
+  BIC: "GBMNESMMXXX"
+  BankCode: "0487"
+  BankName: "BANCO MARE NOSTRUM, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BFASESMMXXX"
+  BankCode: "0488"
+  BankName: "BANCO FINANCIERO Y DE AHORROS, S.A."
+
+bulkload: BankIdCode
+  BIC: "ICROESMMXXX"
+  BankCode: "1000"
+  BankName: "INSTITUTO DE CREDITO OFICIAL"
+
+bulkload: BankIdCode
+  BIC: "BSUDESM1XXX"
+  BankCode: "1113"
+  BankName: "BANQUE SUDAMERIS"
+
+bulkload: BankIdCode
+  BIC: "SCSIESM1XXX"
+  BankCode: "1116"
+  BankName: "BANQUE SCANDINAVE EN SUISSE"
+
+bulkload: BankIdCode
+  BIC: "SCBLESM1XXX"
+  BankCode: "1127"
+  BankName: "STANDARD CHARTERED BANK"
+
+bulkload: BankIdCode
+  BIC: "IRVTESM1XXX"
+  BankCode: "1156"
+  BankName: "THE BANK OF NEW YORK MELLON"
+
+bulkload: BankIdCode
+  BIC: "ESBFESM1XXX"
+  BankCode: "1164"
+  BankName: "ESPIRITO SANTO BANK OF FLORIDA"
+
+bulkload: BankIdCode
+  BIC: "BNACESM1XXX"
+  BankCode: "1168"
+  BankName: "BANCO NACIONAL DE CUBA"
+
+bulkload: BankIdCode
+  BIC: "COURESB1XXX"
+  BankCode: "1173"
+  BankName: "BANQUE COURTOIS"
+
+bulkload: BankIdCode
+  BIC: "HYVEESM1XXX"
+  BankCode: "1182"
+  BankName: "UNICREDIT BANK AG"
+
+bulkload: BankIdCode
+  BIC: "HANDES21XXX"
+  BankCode: "1191"
+  BankName: "SVENSKA HANDELSBANKEN"
+
+bulkload: BankIdCode
+  BIC: "PKBSES21XXX"
+  BankCode: "1193"
+  BankName: "PKB PRIVATBANK AG."
+
+bulkload: BankIdCode
+  BIC: "AEEVESM1XXX"
+  BankCode: "1196"
+  BankName: "BANCO DE LAS ACTIVIDADES ECONOMICAS EXTERIORES"
+
+bulkload: BankIdCode
+  BIC: "BILLESB1XXX"
+  BankCode: "1197"
+  BankName: "BANQUE INTERNATIONALE A LUXEMBOURG"
+
+bulkload: BankIdCode
+  BIC: "CRGEESM1XXX"
+  BankCode: "1199"
+  BankName: "BANCA CARIGE SPA-CASSA RISPARMIO GENOVA E IMPERIA"
+
+bulkload: BankIdCode
+  BIC: "TRESES2BXXX"
+  BankCode: "1208"
+
+bulkload: BankIdCode
+  BIC: "ABCMESM1XXX"
+  BankCode: "1209"
+  BankName: "ALLIED BANKING CORPORATION"
+
+bulkload: BankIdCode
+  BIC: "REDEESM1XXX"
+  BankCode: "1210"
+  BankName: "BANQUE REGIONALE D'ESCOMPTE ET DE DEPOTS"
+
+bulkload: BankIdCode
+  BIC: "PNBMESM1XXX"
+  BankCode: "1221"
+  BankName: "PHILIPPINE NATIONAL BANK, S.A."
+
+bulkload: BankIdCode
+  BIC: "RHRHESM1XXX"
+  BankCode: "1224"
+  BankName: "RHEINHYP RHEINISCHE HYPOTHEKENBANK A.G."
+
+bulkload: BankIdCode
+  BIC: "BSSAESB1XXX"
+  BankCode: "1227"
+  BankName: "BANQUE SCS ALLIANCE"
+
+bulkload: BankIdCode
+  BIC: "BOCAES21XXX"
+  BankCode: "1231"
+  BankName: "BANCO CANARIAS DE VENEZUELA, CA"
+
+bulkload: BankIdCode
+  BIC: "BCMAESM1XXX"
+  BankCode: "1233"
+  BankName: "ATTIJARIWAFA BANK"
+
+bulkload: BankIdCode
+  BIC: "PRBAESM1XXX"
+  BankCode: "1234"
+  BankName: "BANCO DE LA PROVINCIA DE BUENOS AIRES"
+
+bulkload: BankIdCode
+  BIC: "HELAESM1XXX"
+  BankCode: "1236"
+  BankName: "LANDESBANK HESSEN-THUERINGEN GIROZENTRALE"
+
+bulkload: BankIdCode
+  BIC: "BIMEESM1XXX"
+  BankCode: "1238"
+  BankName: "BANCO INTERNACIONAL, S.A."
+
+bulkload: BankIdCode
+  BIC: "LOFPESB1XXX"
+  BankCode: "1240"
+  BankName: "LONDON FORFAITING A PARIS, S.A."
+
+bulkload: BankIdCode
+  BIC: "STOLESM1XXX"
+  BankCode: "1241"
+  BankName: "BANCO SBS-AGRO"
+
+bulkload: BankIdCode
+  BIC: "SOLAESB1XXX"
+  BankCode: "1242"
+  BankName: "LANDESBANK BADEN-WÜRTTEMBERG"
+
+bulkload: BankIdCode
+  BIC: "BEIVESM1XXX"
+  BankCode: "1245"
+  BankName: "BES INVESTIMENTO SA"
+
+bulkload: BankIdCode
+  BIC: "WAFAESM1XXX"
+  BankCode: "1248"
+  BankName: "WAFABANK"
+
+bulkload: BankIdCode
+  BIC: "NPBSES21XXX"
+  BankCode: "1249"
+  BankName: "NORWICH AND PETERBOROUGH BUILDING SOCIETY"
+
+bulkload: BankIdCode
+  BIC: "IHZUES21XXX"
+  BankCode: "1251"
+  BankName: "PRIVATBANK IHAG ZURICH"
+
+bulkload: BankIdCode
+  BIC: "AARBESM1XXX"
+  BankCode: "1255"
+  BankName: "AAREAL BANK AG"
+
+bulkload: BankIdCode
+  BIC: "TRESES2BXXX"
+  BankCode: "1296"
+
+bulkload: BankIdCode
+  BIC: "TRESES2BXXX"
+  BankCode: "1302"
+
+bulkload: BankIdCode
+  BIC: "TRESES2BXXX"
+  BankCode: "1348"
+
+bulkload: BankIdCode
+  BIC: "TRESES2BXXX"
+  BankCode: "1375"
+
+bulkload: BankIdCode
+  BIC: "CRCGESB1XXX"
+  BankCode: "1451"
+  BankName: "CAISSE REGIONALE CREDIT AGRICOLE MUTUEL SUD MED,SE"
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "NEWGESM1XXX"
+  BankCode: "1454"
+  BankName: "NEWEDGE GROUP, S.E."
+
+bulkload: BankIdCode
+  BIC: "LLISESM1XXX"
+  BankCode: "1457"
+  BankName: "DE LAGE LANDEN INTERNATIONAL B.V., S.E."
+
+bulkload: BankIdCode
+  BIC: "PRABESMMXXX"
+  BankCode: "1459"
+  BankName: "COOP.CENTR. RAIFFEISEN-BOERENL.(RABOBANK NED.)S.E."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CRESESMMXXX"
+  BankCode: "1460"
+  BankName: "CREDIT SUISSE AG, S.E."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "ASSCESM1XXX"
+  BankCode: "1462"
+  BankName: "ASSOCIATES CAPITAL CORPORATION, PLC. S.E."
+
+bulkload: BankIdCode
+  BIC: "PSABESM1XXX"
+  BankCode: "1463"
+  BankName: "BANQUE PSA FINANCE, S.E."
+
+bulkload: BankIdCode
+  BIC: "NFFSESM1XXX"
+  BankCode: "1464"
+  BankName: "NEWCOURT FINANCE (FRANCE) S.N.C., S.E."
+
+bulkload: BankIdCode
+  BIC: "INGDESMMXXX"
+  BankCode: "1465"
+  BankName: "ING DIRECT, N.V. S.E."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "FRANESM1XXX"
+  BankCode: "1466"
+  BankName: "FRANFINANCE, S.E."
+
+bulkload: BankIdCode
+  BIC: "EHYPESMXXXX"
+  BankCode: "1467"
+  BankName: "HYPOTHEKENBANK FRANKFURT AG, S.E."
+
+bulkload: BankIdCode
+  BIC: "SHSAESM1XXX"
+  BankCode: "1469"
+  BankName: "BANCO SYGMA HISPANIA, S.E."
+
+bulkload: BankIdCode
+  BIC: "BPIPESM1XXX"
+  BankCode: "1470"
+  BankName: "BANCO PORTUGUES DE INVESTIMENTO, S.A. S.E."
+
+bulkload: BankIdCode
+  BIC: "UCSSESM1XXX"
+  BankCode: "1472"
+  BankName: "CREDIT AGRICOLE LEASING & FACTORING, S.E."
+
+bulkload: BankIdCode
+  BIC: "PRIBESMXXXX"
+  BankCode: "1473"
+  BankName: "BANQUE PRIVEE EDMOND DE ROTHSCHILD EUROPE, S.E"
+
+bulkload: BankIdCode
+  BIC: "CITIESMXXXX"
+  BankCode: "1474"
+  BankName: "CITIBANK INTERNATIONAL PLC, S.E."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CCSEESM1XXX"
+  BankCode: "1475"
+  BankName: "CORTAL CONSORS, S.E."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "MLIBESM1XXX"
+  BankCode: "1478"
+  BankName: "MERRILL LYNCH INTERNATIONAL BANK LTD., S.E."
+
+bulkload: BankIdCode
+  BIC: "NATXESMMXXX"
+  BankCode: "1479"
+  BankName: "NATIXIS, S.A., S.E."
+
+bulkload: BankIdCode
+  BIC: "VOWAES21XXX"
+  BankCode: "1480"
+  BankName: "VOLKSWAGEN BANK GMBH, S.E."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BOFAES2XXXX"
+  BankCode: "1485"
+  BankName: "BANK OF AMERICA, NATIONAL ASSOCIATION, S.E."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "PICTESMMXXX"
+  BankCode: "1488"
+  BankName: "PICTET & CIE (EUROPE), S.A., S.E."
+
+bulkload: BankIdCode
+  BIC: "SELFESMMXXX"
+  BankCode: "1490"
+  BankName: "SELF TRADE BANK, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "TRIOESMMXXX"
+  BankCode: "1491"
+  BankName: "TRIODOS BANK, N.V., S.E."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCITESMMXXX"
+  BankCode: "1494"
+  BankName: "INTESA SANPAOLO S.P.A., S.E."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "ESSIESMMXXX"
+  BankCode: "1497"
+  BankName: "BANCO ESPIRITO SANTO DE INVESTIMENTO, S.A., S.E."
+
+bulkload: BankIdCode
+  BIC: "DPBBESM1XXX"
+  BankCode: "1501"
+  BankName: "DEUTSCHE PFANDBRIEFBANK AG, S.E."
+
+bulkload: BankIdCode
+  BIC: "IKBDESM1XXX"
+  BankCode: "1502"
+  BankName: "IKB DEUTSCHE INDUSTRIEBANK AG, S.E."
+
+bulkload: BankIdCode
+  BIC: "TRESES2BXXX"
+  BankCode: "1504"
+
+bulkload: BankIdCode
+  BIC: "ARABESMMXXX"
+  BankCode: "1505"
+  BankName: "EUROPE ARAB BANK PLC, S.E."
+
+bulkload: BankIdCode
+  BIC: "MLCBESM1XXX"
+  BankCode: "1506"
+  BankName: "MERRILL LYNCH INTERNATIONAL BANK LTD., S.E."
+
+bulkload: BankIdCode
+  BIC: "EFGBESMMXXX"
+  BankCode: "1522"
+  BankName: "EFG BANK (LUXEMBOURG) S.A., S.E."
+
+bulkload: BankIdCode
+  BIC: "UBIBESMMXXX"
+  BankCode: "1524"
+  BankName: "UBI BANCA INTERNATIONAL, S.A., S.E."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCDMESMMXXX"
+  BankCode: "1525"
+  BankName: "BANQUE CHAABI DU MAROC, S.E."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "KBLXESMMXXX"
+  BankCode: "1534"
+  BankName: "KBL EUROPEAN PRIVATE BANKERS, S.A. S.E."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "ICBKESMMXXX"
+  BankCode: "1538"
+  BankName: "INDUSTRIAL & COMMERCIAL BANK OF CHINA(EUROPE)SA,SE"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BACAESMMXXX"
+  BankCode: "1544"
+  BankName: "ANDBANK ESPAÑA, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "AGRIESMMXXX"
+  BankCode: "1545"
+  BankName: "CREDIT AGRICOLE LUXEMBOURG, S.E."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "ETICES21XXX"
+  BankCode: "1550"
+  BankName: "BANCA POPOLARE ETICA"
+
+bulkload: BankIdCode
+  BIC: "TRESES2BXXX"
+  BankCode: "1613"
+
+bulkload: BankIdCode
+  BIC: "TRESES2BXXX"
+  BankCode: "1654"
+
+bulkload: BankIdCode
+  BIC: "CECAESMMXXX"
+  BankCode: "2000"
+  BankName: "CECABANK, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM010"
+  BankCode: "2010"
+  BankName: "M.P. Y CAJA GENERAL AHORROS DE BADAJOZ"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CESCESBBXXX"
+  BankCode: "2013"
+  BankName: "CATALUNYA BANC, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM017"
+  BankCode: "2017"
+  BankName: "C.A.M.P. CIRCULO CATOLICO DE OBREROS DE BURGOS"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CAIXESBBXXX"
+  BankCode: "2018"
+  BankName: "CAJA DE AHORROS MUNICIPAL DE BURGOS"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM024"
+  BankCode: "2024"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CSURES2CXXX"
+  BankCode: "2025"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM030"
+  BankCode: "2030"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM031"
+  BankCode: "2031"
+  BankName: "CAJA GENERAL DE AHORROS DE GRANADA"
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM032"
+  BankCode: "2032"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM037"
+  BankCode: "2037"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CAHMESMMXXX"
+  BankCode: "2038"
+  BankName: "BANKIA, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CECAESMMXXX"
+  BankCode: "2040"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM041"
+  BankCode: "2041"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM042"
+  BankCode: "2042"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM043"
+  BankCode: "2043"
+  BankName: "CAJA DE AHORROS DE MURCIA"
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM045"
+  BankCode: "2045"
+  BankName: "CAJA DE AHORROS Y M.P. DE ONTINYENT"
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM048"
+  BankCode: "2048"
+  BankName: "LIBERBANK, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM051"
+  BankCode: "2051"
+  BankName: "CAJA DE AHORROS Y M.P. DE LAS BALEARES"
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CAHMESMMXXX"
+  BankCode: "2052"
+  BankName: "CAJA INSULAR DE AHORROS DE CANARIAS"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CANVES2PXXX"
+  BankCode: "2054"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM056"
+  BankCode: "2056"
+  BankName: "COLONYA - CAIXA D'ESTALVIS DE POLLENSA"
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM059"
+  BankCode: "2059"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM065"
+  BankCode: "2065"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM066"
+  BankCode: "2066"
+  BankName: "CAJA DE AHORROS DE SANTANDER Y CANTABRIA"
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM069"
+  BankCode: "2069"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM071"
+  BankCode: "2071"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM073"
+  BankCode: "2073"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM074"
+  BankCode: "2074"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM105"
+  BankCode: "2075"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CAHMESMMXXX"
+  BankCode: "2077"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CAGLESMMVIG"
+  BankCode: "2080"
+  BankName: "NCG BANCO, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM081"
+  BankCode: "2081"
+  BankName: "CAIXA D'ESTALVIS DEL PENEDES"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CAZRES2ZXXX"
+  BankCode: "2085"
+  BankName: "IBERCAJA BANCO, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM086"
+  BankCode: "2086"
+  BankName: "BANCO GRUPO CAJATRES, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CAAMES2AXXX"
+  BankCode: "2090"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CAGLESMMXXX"
+  BankCode: "2091"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CECAESMMXXX"
+  BankCode: "2092"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM094"
+  BankCode: "2094"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BASKES2BXXX"
+  BankCode: "2095"
+  BankName: "KUTXABANK, S.A"
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CSPAES2LXXX"
+  BankCode: "2096"
+  BankName: "CAJA ESPAÑA DE INVERSIONES, CAJA DE AHORROS Y M.P."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM097"
+  BankCode: "2097"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM098"
+  BankCode: "2098"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM099"
+  BankCode: "2099"
+  BankName: "CAJA DE AHORROS Y M.P. DE EXTREMADURA"
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CAIXESBBXXX"
+  BankCode: "2100"
+  BankName: "CAIXABANK, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CGGKES22XXX"
+  BankCode: "2101"
+  BankName: "CAJA DE AHORROS Y M.P. DE GIPUZKOA Y SAN SEBASTIAN"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "UCJAES2MXXX"
+  BankCode: "2103"
+  BankName: "UNICAJA BANCO, S.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CSSOES2SXXX"
+  BankCode: "2104"
+  BankName: "CAJA DE AHORROS DE SALAMANCA Y SORIA"
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM105"
+  BankCode: "2105"
+  BankName: "CAJA DE AHORROS DE CASTILLA-LA MANCHA"
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CECAESMM106"
+  BankCode: "2106"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BBVAESMM107"
+  BankCode: "2107"
+  BankName: "UNNIM BANC, S.A"
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CSPAES2L108"
+  BankCode: "2108"
+  BankName: "BANCO DE CAJA ESPAÑA INVER. SALAMANCA Y SORIA,S.A."
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM001"
+  BankCode: "3001"
+  BankName: "CAJA R. DE ALMENDRALEJO, S.C.C."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM005"
+  BankCode: "3005"
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM007"
+  BankCode: "3007"
+  BankName: "CAJA R. DE GIJON, C.C"
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM008"
+  BankCode: "3008"
+  BankName: "CAJA R. DE NAVARRA, S.C.C."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM009"
+  BankCode: "3009"
+  BankName: "CAJA R. DE EXTREMADURA, S.C.C."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM016"
+  BankCode: "3016"
+  BankName: "CAJA R. DE SALAMANCA, S.C.C."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM017"
+  BankCode: "3017"
+  BankName: "CAJA R. DE SORIA, S.C.C."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM018"
+  BankCode: "3018"
+  BankName: "CAJA R.R.S.AGUSTIN DE FUENTE ALAMO M., S.C.C."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM020"
+  BankCode: "3020"
+  BankName: "CAJA R. DE UTRERA, S.C.A.C."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM021"
+  BankCode: "3021"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM060"
+  BankCode: "3022"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM023"
+  BankCode: "3023"
+  BankName: "CAJA R. DE GRANADA, S.C.C."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CDENESBBXXX"
+  BankCode: "3025"
+  BankName: "CAIXA DE C. DELS ENGINYERS-C.C. INGENIEROS, S.C.C"
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CCRIES2A029"
+  BankCode: "3029"
+  BankName: "CAJA DE CREDITO DE PETREL, CAJA RURAL, C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CLPEES2MXXX"
+  BankCode: "3035"
+  BankName: "CAJA LABORAL POPULAR COOP. DE CREDITO"
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CCRIES2A045"
+  BankCode: "3045"
+  BankName: "CAIXA R. ALTEA, C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM056"
+  BankCode: "3056"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CCRIES2AXXX"
+  BankCode: "3057"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CCRIES2AXXX"
+  BankCode: "3058"
+  BankName: "CAJAS RURALES UNIDAS, S. COOP. DE CREDITO"
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM059"
+  BankCode: "3059"
+  BankName: "CAJA R. DE ASTURIAS, S.C.C."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM060"
+  BankCode: "3060"
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM062"
+  BankCode: "3062"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM063"
+  BankCode: "3063"
+  BankName: "CAJA R. DE CORDOBA, S.C.C."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM064"
+  BankCode: "3064"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM067"
+  BankCode: "3067"
+  BankName: "CAJA R. DE JAEN, BARCELONA Y MADRID, S.C.C."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM070"
+  BankCode: "3070"
+  BankName: "CAIXA R. GALEGA, S.C.C.L.G."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM076"
+  BankCode: "3076"
+  BankName: "CAJASIETE, CAJA RURAL, S.C.C."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMMXXX"
+  BankCode: "3078"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM080"
+  BankCode: "3080"
+  BankName: "CAJA R. DE TERUEL, S.C.C."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM081"
+  BankCode: "3081"
+  BankName: "CAJA R. DE CASTILLA-LA MANCHA, S.C.C."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CCRIES2A082"
+  BankCode: "3082"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BSABESBBXXX"
+  BankCode: "3083"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CVRVES2BXXX"
+  BankCode: "3084"
+  BankName: "IPAR KUTXA RURAL, S.C.C."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM085"
+  BankCode: "3085"
+  BankName: "CAJA R. DE ZAMORA, C.C."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM089"
+  BankCode: "3089"
+  BankName: "CAJA R. BAENA NTRA. SRA. GUADALUPE S.C.C.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CCRIES2A094"
+  BankCode: "3094"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CCRIES2A095"
+  BankCode: "3095"
+  BankName: "CAJA R. S. ROQUE DE ALMENARA S.C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM096"
+  BankCode: "3096"
+  BankName: "CAIXA R. DE L'ALCUDIA, S.C.V.C."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM098"
+  BankCode: "3098"
+  BankName: "CAJA R. NTRA. SRA. DEL ROSARIO, S.C.A.C."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM102"
+  BankCode: "3102"
+  BankName: "CAIXA R. S. VICENT FERRER DE LA VALL D'UIXO,C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM104"
+  BankCode: "3104"
+  BankName: "CAJA R. DE CAÑETE TORRES NTRA.SRA.DEL CAMPO,S.C.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CCRIES2A105"
+  BankCode: "3105"
+  BankName: "CAIXA R. DE CALLOSA D'EN SARRIA, C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM110"
+  BankCode: "3110"
+  BankName: "CAJA R. CATOLICO AGRARIA, S.C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM111"
+  BankCode: "3111"
+  BankName: "CAIXA R. LA VALL 'S. ISIDRO', S.C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CCRIES2A112"
+  BankCode: "3112"
+  BankName: "CAJA R. S. JOSE DE BURRIANA, S.C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM113"
+  BankCode: "3113"
+  BankName: "CAJA R. S. JOSE DE ALCORA S.C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMMXXX"
+  BankCode: "3114"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM115"
+  BankCode: "3115"
+  BankName: "CAJA R. 'NUESTRA MADRE DEL SOL', S.C.A.C."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM116"
+  BankCode: "3116"
+  BankName: "CAJA R. COMARCAL DE MOTA DEL CUERVO, S.C.L.C.A."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM117"
+  BankCode: "3117"
+  BankName: "CAIXA R. D'ALGEMESI, S.C.V.C."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CCRIES2A118"
+  BankCode: "3118"
+  BankName: "CAIXA RURAL TORRENT C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CCRIES2A119"
+  BankCode: "3119"
+  BankName: "CAJA R. S. JAIME ALQUERIAS NIÑO PERDIDO S.C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CCRIES2A121"
+  BankCode: "3121"
+  BankName: "CAJA R. DE CHESTE, S.C.C."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CCRIES2A123"
+  BankCode: "3123"
+  BankName: "CAIXA R. DE TURIS, C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM127"
+  BankCode: "3127"
+  BankName: "CAJA R. DE CASAS IBAÑEZ, S.C.C.CASTILLA-LA MANCHA"
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM190"
+  BankCode: "3128"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM130"
+  BankCode: "3130"
+  BankName: "CAJA R. S. JOSE DE ALMASSORA, S.C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM134"
+  BankCode: "3134"
+  BankName: "CAJA R. NTRA. SRA. LA ESPERANZA DE ONDA, S.C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CCRIES2A135"
+  BankCode: "3135"
+  BankName: "CAJA R. S. JOSE DE NULES S.C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CCRIES2AXXX"
+  BankCode: "3137"
+  BankName: "CAJA R. DE CASINOS S.C.C.V."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM138"
+  BankCode: "3138"
+  BankName: "CAJA R. DE BETXI, S.C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM140"
+  BankCode: "3140"
+  BankName: "CAJA R. DE GUISSONA, S.C.C."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM144"
+  BankCode: "3144"
+  BankName: "CAJA R. DE VILLAMALEA, S.C.C.A. CASTILLA-LA MANCHA"
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CCCVESM1XXX"
+  BankCode: "3146"
+  BankName: "CAJA DE CREDITO COOPERATIVO, S.C.C."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM147"
+  BankCode: "3147"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM150"
+  BankCode: "3150"
+  BankName: "CAJA R. DE ALBAL, C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CCRIES2A152"
+  BankCode: "3152"
+  BankName: "CAJA R. DE VILLAR C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CCRIES2A157"
+  BankCode: "3157"
+  BankName: "CAJA R. LA JUNQUERA DE CHILCHES, S.C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM159"
+  BankCode: "3159"
+  BankName: "CAIXA POPULAR-CAIXA RURAL, S.C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CCRIES2A160"
+  BankCode: "3160"
+  BankName: "CAIXA R.S.JOSEP DE VILAVELLA, S.C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMMXXX"
+  BankCode: "3161"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM162"
+  BankCode: "3162"
+  BankName: "CAIXA R. BENICARLO, S.C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CCRIES2A165"
+  BankCode: "3165"
+  BankName: "CAJA R. S. ISIDRO DE VILAFAMES, S.C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM166"
+  BankCode: "3166"
+  BankName: "CAIXA RURAL LES COVES DE VINROMA, S.C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CXAVESB1XXX"
+  BankCode: "3171"
+  BankName: "CAIXA DELS ADVOCATS-CAJA DE LOS ABOGADOS, S.C.C."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CCOCESMMXXX"
+  BankCode: "3172"
+  BankName: "CAJA CAMINOS, S.C.C."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM174"
+  BankCode: "3174"
+  BankName: "CAIXA R. VINAROS, S.C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM177"
+  BankCode: "3177"
+  BankName: "CAJA R. DE CANARIAS, S.C.C."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "CCRIES2A179"
+  BankCode: "3179"
+  BankName: "CAJA R. DE ALGINET, S.C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CASDESBBXXX"
+  BankCode: "3183"
+  BankName: "CAJA DE ARQUITECTOS S.C.C."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CCRIES2A186"
+  BankCode: "3186"
+  BankName: "CAIXA R. ALBALAT DELS SORELLS, C.C.V."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM187"
+  BankCode: "3187"
+  BankName: "CAJA R. DEL SUR, S. COOP. DE CREDITO"
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "CCRIES2A188"
+  BankCode: "3188"
+  BankName: "CREDIT VALENCIA, C.R.C.C.V."
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM189"
+  BankCode: "3189"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM190"
+  BankCode: "3190"
+  BankName: "C.R. DE ALBACETE, CIUDAD REAL Y CUENCA, S.C.C."
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "BCOEESMM191"
+  BankCode: "3191"
+  BankName: "NUEVA CAJA RURAL DE ARAGON SOC. COOP. DE CREDITO"
+  BankType: "IBERPAY"
+
+bulkload: BankIdCode
+  BIC: "RENTESMMXXX"
+  BankCode: "3501"
+  BankName: "RENTA 4 SOCIEDAD DE VALORES, S.A."
+
+bulkload: BankIdCode
+  BIC: "AHCFESMMXXX"
+  BankCode: "3524"
+  BankName: "AHORRO CORPORACIÓN FINANCIERA, S.A., SOCIEDAD DE VALORES"
+
+bulkload: BankIdCode
+  BIC: "MISVESMMXXX"
+  BankCode: "3563"
+  BankName: "MAPFRE INVERSIÓN, SOCIEDAD DE VALORES, S.A."
+
+bulkload: BankIdCode
+  BIC: "INSGESMMXXX"
+  BankCode: "3575"
+  BankName: "INVERSEGUROS, SOCIEDAD DE VALORES, S.A."
+
+bulkload: BankIdCode
+  BIC: "CAPIESMMXXX"
+  BankCode: "3604"
+  BankName: "CM CAPITAL MARKETS BOLSA, SOCIEDAD DE VALORES, S.A."
+
+bulkload: BankIdCode
+  BIC: "LISEESMMXXX"
+  BankCode: "3641"
+  BankName: "LINK SECURITIES, SOCIEDAD DE VALORES, S.A."
+
+bulkload: BankIdCode
+  BIC: "CSSOES2SFIN"
+  BankCode: "3656"
+  BankName: "FINANDUERO, SOCIEDAD DE VALORES, S.A."
+
+bulkload: BankIdCode
+  BIC: "MLCEESMMXXX"
+  BankCode: "3661"
+  BankName: "MERRILL LYNCH CAPITAL MARKETS ESPAÑA, S.A., SOCIEDAD DE VALORES"
+
+bulkload: BankIdCode
+  BIC: "IVALESMMXXX"
+  BankCode: "3669"
+  BankName: "INTERMONEY VALORES, SOCIEDAD DE VALORES, S.A."
+
+bulkload: BankIdCode
+  BIC: "GVCBESBBETB"
+  BankCode: "3682"
+  BankName: "GVC GAESCO VALORES, SOCIEDAD DE VALORES, S.A."
+
+bulkload: BankIdCode
+  BIC: "MNTYESMMXXX"
+  BankCode: "6814"
+  BankName: "MONTY GLOBAL PAYMENTS, S.A."
+
+bulkload: BankIdCode
+  BIC: "BMEUESM1XXX"
+  BankCode: "6852"
+  BankName: "BMCE EUROSERVICES, S.A."
+
+bulkload: BankIdCode
+  BIC: "CSFAESM1XXX"
+  BankCode: "8233"
+  BankName: "CELERIS SERVICIOS FINANCIEROS, S.A., E.F.C."
+
+bulkload: BankIdCode
+  BIC: "UCINESMMXXX"
+  BankCode: "8512"
+  BankName: "UNION DE CREDITOS INMOBILIARIOS, S.A., E.F.C."
+
+bulkload: BankIdCode
+  BIC: "BSABESBBXXX"
+  BankCode: "8824"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "SBFCESMMXXX"
+  BankCode: "8835"
+  BankName: "SANTANDER BRASIL, E.F.C., S.A."
+
+bulkload: BankIdCode
+  BIC: "ESPBESMMXXX"
+  BankCode: "9000"
+  BankName: "BANCO DE ESPAÑA"
+  BankType: "EBA"
+
+bulkload: BankIdCode
+  BIC: "IPAYESMMXXX"
+  BankCode: "9020"
+  BankName: "SOCIEDAD ESPAÑOLA DE SISTEMAS DE PAGO, S.A."
+
+bulkload: BankIdCode
+  BIC: "XBCNESBBXXX"
+  BankCode: "9091"
+  BankName: "SOCIEDAD RECTORA BOLSA VALORES DE BARCELONA, S.A.,S.R.B.V."
+
+bulkload: BankIdCode
+  BIC: "XRBVES2BXXX"
+  BankCode: "9092"
+  BankName: "SOCIEDAD RECTORA BOLSA DE VALORES DE BILBAO, S.A.,S.R.B.V."
+
+bulkload: BankIdCode
+  BIC: "XRVVESVVXXX"
+  BankCode: "9093"
+  BankName: "SOCIEDAD RECTORA BOLSA VALORES DE VALENCIA, S.A., S.R.B.V."
+
+bulkload: BankIdCode
+  BIC: "MEFFESBBXXX"
+  BankCode: "9094"
+  BankName: "BME CLEARING, S.A."
+
+bulkload: BankIdCode
+  BIC: "IBRCESMMXXX"
+  BankCode: "9096"
+  BankName: "SOCIEDAD DE GESTIÓN DE LOS SISTEMAS DE REGISTRO COMPENSACIÓN Y LIQUIDACIÓN DE VALORES, S.A.U."
+

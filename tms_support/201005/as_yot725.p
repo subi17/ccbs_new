@@ -1,8 +1,7 @@
-{commpaa.i}
-katun = "anttis".
-gcBrand  = "1".
-{date.i}
-{msreqfunc.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand  = "1".
+{Func/msreqfunc.i}
 
 input from Bono8_promotion.csv.
 
@@ -64,7 +63,7 @@ repeat:
    find current mservicelimit no-lock.
    find current bmservicelimit no-lock.
 
-   RUN cli_rate.p (Mobsub.cli,
+   RUN Rate/cli_rate.p (Mobsub.cli,
                  5/1/2010,
                  5/31/2010,
                  TRUE).
@@ -88,9 +87,9 @@ repeat:
 
    CREATE Memo.
    ASSIGN
-      Memo.CreStamp  = fMakeTS()
+      Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.Brand     = gcBrand
+      Memo.Brand     = Syst.Var:gcBrand
       Memo.MemoTitle = "Bono 8 campaign May 2010"
       Memo.CreUser   = "YOT-724"
       Memo.HostTable = "MobSub"

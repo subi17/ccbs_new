@@ -7,8 +7,8 @@
                   12.09.03 jp Brand
   VERSION ......: M15
 ----------------------------------------------------------------------------- */
-{commali.i}
-{fcurrency.i}
+{Syst/commali.i}
+{Func/fcurrency.i}
 
 DEF SHARED TEMP-TABLE nnpvti
    FIELD pt-tuno AS CHAR
@@ -42,11 +42,11 @@ FOR EACH MobCDR NO-LOCK WHERE
          InvSeq.Billed,      
    FIRST Customer NO-LOCK WHERE 
          Customer.CustNum = MobCDR.InvCust AND 
-         Customer.Brand   = gcBrand :
+         Customer.Brand   = Syst.Var:gcBrand :
 
    /* skip groups that are not invoiced */
    FIND InvGroup OF Customer  WHERE
-        InvGroup.Brand = gcBrand NO-LOCK.
+        InvGroup.Brand = Syst.Var:gcBrand NO-LOCK.
    IF InvGroup.BillPerm = FALSE THEN NEXT.
 
    kpl = kpl + 1.

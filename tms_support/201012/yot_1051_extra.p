@@ -1,6 +1,6 @@
-{commpaa.i}
-katun = "Qvantel".
-gcBrand = "1".
+{Syst/commpaa.i}
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
 
 DEFINE VARIABLE lcError AS CHARACTER NO-UNDO. 
 
@@ -43,12 +43,12 @@ REPEAT:
    end.
    
    if can-find(first fatime where
-                     fatime.brand = gcbrand and
+                     fatime.brand = Syst.Var:gcBrand and
                      fatime.msseq = mobsub.msseq and
                      fatime.ftgrp = "BONO8CP" use-index MobSub) then do:
    
       FOR EACH fatime where
-               fatime.brand = gcbrand and
+               fatime.brand = Syst.Var:gcBrand and
                fatime.msseq = mobsub.msseq and
                fatime.ftgrp = "BONO8CP" use-index MobSub:
          put stream sout unformatted
@@ -62,7 +62,7 @@ REPEAT:
       next LOOPPI.
    end.
 
-   RUN creafat.p (mobsub.CustNum,
+   RUN Mc/creafat.p (mobsub.CustNum,
                mobsub.MsSeq,
                "BONO8CP",
                ?, /* amount */
@@ -83,7 +83,7 @@ REPEAT:
    END.
       
    FOR EACH fatime where
-            fatime.brand = gcbrand and
+            fatime.brand = Syst.Var:gcBrand and
             fatime.msseq = mobsub.msseq and
             fatime.ftgrp = "BONO8CP" use-index Mobsub:
       put stream sout unformatted

@@ -11,10 +11,10 @@ DEFINE STREAM sLog.
 OUTPUT STREAM sLog TO VALUE(pcLogFile).
 INPUT STREAM sMSISDN FROM VALUE(pcInputFile).
 
-{commpaa.i}
-katun = "rafaeldv".
-gcBrand  = "1".
-{msisdn.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "rafaeldv".
+Syst.Var:gcBrand  = "1".
+{Func/msisdn.i}
 
 REPEAT:
    IMPORT STREAM sMSISDN UNFORMATTED cCLI.

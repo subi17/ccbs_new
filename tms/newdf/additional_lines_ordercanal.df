@@ -1,0 +1,6 @@
+ADD FIELD "TariffType" OF "CLIType" AS integer
+  FORMAT "9"
+  INITIAL 0
+  LABEL "Tariff Type"
+  COLUMN-LABEL "TariffType"
+  ORDER 330

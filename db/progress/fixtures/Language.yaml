@@ -1,0 +1,20 @@
+bulkload: Language
+  Language: 1
+  LangName: "Spanish"
+
+bulkload: Language
+  Language: 2
+  LangName: "Catalan"
+
+bulkload: Language
+  Language: 3
+  LangName: "Basque (Euskara)"
+
+bulkload: Language
+  Language: 4
+  LangName: "Galician"
+
+bulkload: Language
+  Language: 5
+  LangName: "English"
+

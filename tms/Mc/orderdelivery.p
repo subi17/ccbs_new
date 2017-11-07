@@ -7,11 +7,10 @@
   CHANGED ......: 
   Version ......: xfera 
   ---------------------------------------------------------------------- */
-{commali.i}
-{lib/tokenlib.i}
-{timestamp.i}
-{transname.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Func/transname.i}
+{Syst/tmsconst.i}
 
 DEFINE INPUT PARAMETER iiOrderId AS INTEGER NO-UNDO. 
 
@@ -62,15 +61,15 @@ FORM
     "Order ID ..........:" OrderDelivery.OrderId SKIP 
     "TimeStamp .........:" OrderDelivery.LOTimeStamp FORMAT "99-99-9999 hh:mm:ss"
     SKIP
-    "LO Status .........:" liLOStatusId FORMAT ">>>9" lcLOStatus FORMAT "x(30)" SKIP
+    "LO Status .........:" liLOStatusId FORMAT ">>>>9" lcLOStatus FORMAT "x(30)" SKIP
     "Logistic Operator..:" OrderDelivery.LOId lcLO FORMAT "x(30)" SKIP
     "Courier  ..........:" OrderDelivery.CourierId lcCourier FORMAT "x(30)" SKIP
     "Courier Shipping Id:" OrderDelivery.CourierShippingId FORMAT "x(30)" SKIP
     "Incident info......:" OrderDelivery.IncidentInfoId lcIncidentInfoId FORMAT "x(30)" SKIP
     "Measures info......:" OrderDelivery.MeasuresInfoId lcMeasuresInfoId FORMAT "x(30)" SKIP
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     NO-LABELS 
     FRAME lis.
 
@@ -87,7 +86,7 @@ ELSE DO:
    RETURN.
 END.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 LOOP:
@@ -143,27 +142,27 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk = 0
-        ufk[1]= 0  ufk[2]= 0 ufk[3]= 0
-        ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
-         RUN ufkey.
+        Syst.Var:ufk = 0
+        Syst.Var:ufk[1]= 0  Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0
+        Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW OrderDelivery.LOTimeStamp ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) OrderDelivery.LOTimeStamp WITH FRAME sel.
+        CHOOSE ROW OrderDelivery.LOTimeStamp {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) OrderDelivery.LOTimeStamp WITH FRAME sel.
       END.
       
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -187,10 +186,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -215,7 +214,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -241,7 +240,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND OrderDelivery WHERE recid(OrderDelivery) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -265,7 +264,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -280,7 +279,7 @@ BROWSE:
      END. /* NEXT page */
       
     /* view */
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN DO:
 
        RUN local-view-record.
        ufkey = TRUE. 
@@ -288,25 +287,25 @@ BROWSE:
 
      END.
      
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(OrderDelivery) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(OrderDelivery) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE local-find-this:
 
@@ -325,7 +324,7 @@ PROCEDURE local-find-FIRST:
 
    IF order = 1 THEN 
       FIND FIRST OrderDelivery WHERE 
-         OrderDelivery.Brand = gcBrand AND
+         OrderDelivery.Brand = Syst.Var:gcBrand AND
          OrderDelivery.OrderId = iiOrderID USE-INDEX OrderId NO-LOCK NO-ERROR.
 
 END PROCEDURE.
@@ -334,7 +333,7 @@ PROCEDURE local-find-LAST:
 
    IF order = 1 THEN 
       FIND LAST OrderDelivery WHERE 
-         OrderDelivery.Brand = gcBrand AND
+         OrderDelivery.Brand = Syst.Var:gcBrand AND
          OrderDelivery.OrderId = iiOrderID USE-INDEX OrderId NO-LOCK NO-ERROR.
 
 END PROCEDURE.
@@ -343,7 +342,7 @@ PROCEDURE local-find-NEXT:
 
    IF order = 1 THEN 
       FIND NEXT OrderDelivery WHERE 
-         OrderDelivery.Brand = gcBrand AND
+         OrderDelivery.Brand = Syst.Var:gcBrand AND
          OrderDelivery.OrderId = iiOrderID USE-INDEX OrderId NO-LOCK NO-ERROR.
 
 END PROCEDURE.
@@ -352,7 +351,7 @@ PROCEDURE local-find-PREV:
 
    IF order = 1 THEN
       FIND PREV OrderDelivery WHERE 
-         OrderDelivery.Brand = gcBrand AND
+         OrderDelivery.Brand = Syst.Var:gcBrand AND
          OrderDelivery.OrderId = iiOrderID USE-INDEX OrderId NO-LOCK NO-ERROR.
 
 END PROCEDURE.
@@ -373,40 +372,44 @@ PROCEDURE local-disp-row:
 END PROCEDURE.
 
 PROCEDURE local-find-others.
+
    IF STRING(OrderDelivery.LOStatusId) BEGINS {&LO_STATUS_ROUTER_PREFIX} THEN
-      liLOStatusId = INT(SUBSTRING(STRING(OrderDelivery.LOStatusId),
-                             LENGTH({&LO_STATUS_ROUTER_PREFIX}) + 1)).
-   ELSE liLOStatusId = OrderDelivery.LOStatusId.                          
+      liLOStatusId = INT(SUBSTRING(STRING(OrderDelivery.LOStatusId),LENGTH({&LO_STATUS_ROUTER_PREFIX}) + 1)).
+   ELSE IF STRING(OrderDelivery.LOStatusId) BEGINS {&LO_STATUS_TV_STB_PREFIX} THEN
+      liLOStatusId = INT(SUBSTRING(STRING(OrderDelivery.LOStatusId),LENGTH({&LO_STATUS_TV_STB_PREFIX}) + 1)).
+   ELSE 
+      liLOStatusId = OrderDelivery.LOStatusId.   
+                             
    lcLOStatus = fGetItemName( 
-      gcBrand, 
+      Syst.Var:gcBrand, 
       "LOStatusId", 
       STRING(liLOStatusId),
       5,
       TODAY).
    
    lcLO = fGetItemName( 
-      gcBrand, 
+      Syst.Var:gcBrand, 
       "LOId", 
       STRING(OrderDelivery.LOId),
       5,
       TODAY).
    
    lcCourier = fGetItemName( 
-      gcBrand, 
+      Syst.Var:gcBrand, 
       "CourierId", 
       STRING(OrderDelivery.CourierId),
       5,
       TODAY).
    
    lcIncidentInfoId = fGetItemName( 
-      gcBrand, 
+      Syst.Var:gcBrand, 
       "IncidentInfoId", 
       STRING(OrderDelivery.IncidentInfoId),
       5,
       TODAY).
    
    lcMeasuresInfoId = fGetItemName( 
-      gcBrand, 
+      Syst.Var:gcBrand, 
       "MeasuresInfoId", 
       STRING(OrderDelivery.MeasuresInfoId),
       5,
@@ -416,8 +419,8 @@ END PROCEDURE.
 
 PROCEDURE local-view-record:
 
-   ufk = 0.
-   RUN ufkey.
+   Syst.Var:ufk = 0.
+   RUN Syst/ufkey.p.
 
    RUN local-find-this(FALSE).
   

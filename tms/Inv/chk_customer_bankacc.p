@@ -1,4 +1,4 @@
-{fbankdata.i}
+{Func/fbankdata.i}
 
 define input parameter icOutputFile as char.
 DEFINE VARIABLE ok AS LOGICAL NO-UNDO init true.

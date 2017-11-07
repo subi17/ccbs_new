@@ -1,7 +1,6 @@
-{testpaa.i}
-katun = "ari".
+{Syst/testpaa.i}
+Syst.Var:katun = "ari".
 
-{timestamp.i}
 
 def var i       as int  no-undo.
 def var j       as int  no-undo.
@@ -31,7 +30,7 @@ for each prepaidrequest no-lock where
 
        i = i + 1.
        
-       fsplitts(prepaidrequest.tsrequest,
+       Func.Common:mSplitTS(prepaidrequest.tsrequest,
                 output ldtdate,
                 output litime).
                 
@@ -66,7 +65,7 @@ for each prepaidrequest no-lock where
                liaccount[1 for 2] format ">>>>>>>9" skip(1).
           */
 
-          RUN createpaym (payment.CustNum,
+          RUN Ar/createpaym.p (payment.CustNum,
                           payment.InvNum,
                           prepaidrequest.CLI,
                           ldtacc,

@@ -8,16 +8,14 @@
    Version ......: xfera 
    --------------------------------------------------- */               
                                                                 
-{commpaa.i} 
-katun = "cron".
-gcbrand = "1".
+{Syst/commpaa.i} 
+Syst.Var:katun = "cron".
+Syst.Var:gcBrand = "1".
 
-{eventlog.i}
-{date.i}
-{timestamp.i}
-{cparam2.i}
-{xmlfunction.i}
-{tsformat.i}
+{Syst/eventlog.i}
+{Func/cparam2.i}
+{Func/xmlfunction.i}
+{Func/tsformat.i}
 
 DEF VAR lcSpooldir   AS C    NO-UNDO.
 DEF VAR lcOutdir     AS C    NO-UNDO.
@@ -32,7 +30,7 @@ FUNCTION fFormatTS RETURNS CHAR
 (its AS dec):
    def var ldadate as date no-undo.
    def var liTime as i no-undo.
-   fSplitTS(its,ldaDate,liTime).
+   Func.Common:mSplitTS(its,ldaDate,liTime).
    RETURN
       STRING(YEAR(ldadate),"9999") +
       STRING(MONTH(ldadate),"99") +
@@ -53,16 +51,16 @@ ASSIGN
    session:numeric-format = "AMERICAN"
    lcoutdir   =  fCParam("dumpoutgoing","topupdump.p") 
    lcspooldir =  fCParam("dumpspool","topupdump.p")
-   lcfilename = "top_up_information_ccbs_" + STRING(fdatefmt(TODAY,"yyyymmdd"))
+   lcfilename = "top_up_information_ccbs_" + STRING(Func.Common:mDateFmt(TODAY,"yyyymmdd"))
    + ".dat". 
 
 OUTPUT STREAM excel TO VALUE(lcspooldir + lcfilename).
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 
 FOR EACH PrepaidRequest NO-LOCK WHERE
-         PrepaidRequest.Brand = gcBrand AND
-         PrepaidRequest.TSRequest > fMake2dt(TODAY - 1,1800) AND
-         PrepaidRequest.TSRequest < fMake2dt(TODAY, 1799):
+         PrepaidRequest.Brand = Syst.Var:gcBrand AND
+         PrepaidRequest.TSRequest > Func.Common:mMake2DT(TODAY - 1,1800) AND
+         PrepaidRequest.TSRequest < Func.Common:mMake2DT(TODAY, 1799):
    
    IF Prepaidrequest.Source EQ "ATM" THEN DO:
       ASSIGN   

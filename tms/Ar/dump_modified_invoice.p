@@ -8,8 +8,8 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{dumpfile_run.i}
+{Syst/commali.i}
+{Syst/dumpfile_run.i}
 
 DEF INPUT-OUTPUT PARAMETER TABLE-HANDLE ihTempTable.
 DEF INPUT  PARAMETER idLastDump       AS DEC  NO-UNDO.
@@ -67,17 +67,17 @@ ASSIGN
    lhTable     = BUFFER Invoice:HANDLE
    lcTableName = lhTable:NAME.
 
-fSplitTS(idLastDump,
+Func.Common:mSplitTS(idLastDump,
          OUTPUT ldaModified,
          OUTPUT liTime).
 
-ldtLastDump = fTimeStamp2DateTime(idLastDump).
+ldtLastDump = Func.Common:mTimeStamp2DateTime(idLastDump).
 
 
 /* collect only those that have been modified since last dump */
 
 FOR EACH Invoice NO-LOCK WHERE
-         Invoice.Brand = gcBrand:
+         Invoice.Brand = Syst.Var:gcBrand:
          
    IF fWasRecordModified(lhTable,
                          icEventSource,

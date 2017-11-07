@@ -1,15 +1,15 @@
-{commpaa.i}
-katun  = "anttis".
-gcBrand = "1".
-{tmsconst.i}
-{msreqfunc.i}
-{orderfunc.i}
-{mnp.i}
-{eventval.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
+{Syst/tmsconst.i}
+{Func/msreqfunc.i}
+{Func/orderfunc.i}
+{Mnp/mnp.i}
+{Syst/eventval.i}
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-      {lib/eventlog.i}
+      {Func/lib/eventlog.i}
 END.
 
 DEFINE VARIABLE llSimulate AS LOGICAL NO-UNDO.
@@ -33,7 +33,7 @@ do i = 1 to num-entries(lcProcesses, " ") trans:
          MNPProcess.statuscode = 2) EXCLUSIVE-LOCK.
 
    find order where
-        order.brand = gcBrand and
+        order.brand = Syst.Var:gcBrand and
         order.orderid = MNPProcess.orderid and
         order.statuscode = "12" EXCLUSIVE-LOCK.
    find OrderCustomer of order where
@@ -64,7 +64,7 @@ do i = 1 to num-entries(lcProcesses, " ") trans:
   
    /* Cancel pending SMS messages */
    FOR EACH CallAlarm WHERE
-            CallAlarm.Brand = gcBrand AND
+            CallAlarm.Brand = Syst.Var:gcBrand AND
             CallAlarm.CLI = Order.CLI AND
             CallAlarm.DeliStat = 1 AND
             CallAlarm.CreditType = 12 EXCLUSIVE-LOCK:
@@ -89,11 +89,11 @@ do i = 1 to num-entries(lcProcesses, " ") trans:
 
          CREATE ActionLog.
          ASSIGN
-            ActionLog.ActionTS     = fMakeTS()
-            ActionLog.Brand        = gcBrand  
+            ActionLog.ActionTS     = Func.Common:mMakeTS()
+            ActionLog.Brand        = Syst.Var:gcBrand  
             ActionLog.TableName    = "Order"  
             ActionLog.KeyValue     = STRING(Order.Orderid)
-            ActionLog.UserCode     = katun
+            ActionLog.UserCode     = Syst.Var:katun
             ActionLog.ActionID     = "SIMRELEASE"
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
             ActionLog.ActionStatus = 2
@@ -114,7 +114,7 @@ do i = 1 to num-entries(lcProcesses, " ") trans:
       
       fMNPCallAlarm(
           lcSMS,
-          fMakeTS(),
+          Func.Common:mMakeTS(),
           MNPProcess.FormRequest,
           Order.CLI,
           Order.CustNum,
@@ -130,20 +130,20 @@ do i = 1 to num-entries(lcProcesses, " ") trans:
       END.
 
       ASSIGN         
-         MNPProcess.UpdateTS = fMakeTS()
+         MNPProcess.UpdateTS = Func.Common:mMakeTS()
          MNPProcess.MNPUpdateTS = MNPProcess.UpdateTS
          MNPProcess.StatusCode = {&MNP_ST_ACAN}
          Order.MNPStatus = MNPProcess.StatusCode + 1.
 
       FIND CURRENT Order NO-LOCK.
 
-    /*  run cancelorder.p(Order.OrderID). */
+    /*  RUN Mc/cancelorder.p(Order.OrderID). */
 
       /* YDR-70 */
       IF Order.OrderChannel = "pos" THEN DO:
          
          FIND OrderAccessory WHERE
-              OrderAccessory.Brand = gcBrand AND
+              OrderAccessory.Brand = Syst.Var:gcBrand AND
               OrderAccessory.OrderId = Order.OrderId AND
               OrderAccessory.TerminalType = ({&TERMINAL_TYPE_PHONE})
          EXCLUSIVE-LOCK NO-ERROR.

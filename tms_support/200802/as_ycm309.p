@@ -1,11 +1,8 @@
-DEFINE VARIABLE katun AS CHARACTER NO-UNDO.
-DEFINE VARIABLE gcBrand AS CHARACTER NO-UNDO.
-katun = "cron".
-gcbrand = "1".
+DEFINE VARIABLE Syst.Var:katun AS CHARACTER NO-UNDO.
+Syst.Var:katun = "cron".
 
-{date.i}
-{xmlfunction.i}
-{tsformat.i}
+{Func/xmlfunction.i}
+{Func/tsformat.i}
 
 DEF VAR lcFilename   AS C    NO-UNDO.
 

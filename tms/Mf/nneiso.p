@@ -9,8 +9,8 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
+{Syst/commali.i}
+{Func/excel.i}
 
 def var cust-name as char no-undo format "x(30)".
 def var date1     as Date no-undo format "99-99-9999" init TODAY.
@@ -54,17 +54,17 @@ PAUSE 0 no-message.
 
 DO FOR TMSUser:
    FIND TMSUser where 
-        TMSUser.UserCode = katun
+        TMSUser.UserCode = Syst.Var:katun
    no-lock no-error.
    exPaymFile = TMSUser.RepDir + "/" + "nocalls.txt".
 END.
 
-ehto = 9. RUN ufkey.
+Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
 UPDATE date1 date2 cust-name excel WITH FRAME haku.
 IF excel THEN UPDATE exPaymFile WITH FRAME haku.
 
-ufk = 0. ehto = 3. RUN ufkey.
+Syst.Var:ufk = 0. Syst.Var:ehto = 3. RUN Syst/ufkey.p.
 HIDE FRAME haku.
 PAUSE 0 no-message.
 
@@ -84,7 +84,7 @@ IF excel THEN DO:
 END.
 
 FOR EACH Customer no-lock where 
-         Customer.ContrEnd <= pvm AND
+         Customer.ContrEnd <= TODAY AND
    (if cust-name ne "" THEN index(CustName,cust-name) NE 0 ELSE TRUE),
    FIRST Salesman no-lock where
          Salesman.Salesman = Customer.Salesman
@@ -114,7 +114,7 @@ BY Customer.CustNum WITH FRAME asi.
 
       IF FRAME-LINE = FRAME-DOWN THEN DO:
          message "Next page, hit SPACE - break, hit ENTER".
-         READKEY. nap = keylabel(LASTKEY).
+         READKEY. Syst.Var:nap = keylabel(LASTKEY).
          if lookup(keylabel(lastkey),"enter,return") > 0 THEN LEAVE.
          CLEAR FRAME asi ALL.
          up FRAME-LINE - 1.
@@ -123,7 +123,7 @@ BY Customer.CustNum WITH FRAME asi.
    END.
 END.
 
-if nap = "" THEN DO:
+if Syst.Var:nap = "" THEN DO:
    message "Press any key to return !".
    PAUSE no-message.
 END.

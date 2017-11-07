@@ -9,13 +9,12 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}       
-{timestamp.i}
-{finvbal.i}
-{subscription_status3.i}
-{email.i}
-{excel.i}
-{sog.i}
+{Syst/commali.i}       
+{Func/finvbal.i}
+{Mm/subscription_status3.i}
+{Func/email.i}
+{Func/excel.i}
+{Func/sog.i}
 
 def var CustomerFrom as I no-undo FORMAT "zzzzzzzz9".
 def var CustomerTo   as I no-undo FORMAT "zzzzzzzz9" .
@@ -47,7 +46,7 @@ form
  "         Create SoLog req.:" llcheck no-label       SKIP
  skip(4)
 with row 1 width 80 NO-LABELS
-   title " " + ynimi + " SUBSCRIPTION STATUS  " + string(pvm,"99-99-99") + " "
+   title " " + Syst.Var:ynimi + " SUBSCRIPTION STATUS  " + string(TODAY,"99-99-99") + " "
 FRAME rajat.
 
 assign 
@@ -64,7 +63,7 @@ repeat:
 loop:
 repeat with frame rajat:
    PAUSE 0 no-message.
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
    CustomerFrom 
    CustomerTo
@@ -72,15 +71,15 @@ repeat with frame rajat:
    llcheck .
 
    ASSIGN
-      ufk = 0
-      ufk[1] = 132
-      ufk[5] = 63
-      ufk[8] = 8
-      ehto = 0
+      Syst.Var:ufk = 0
+      Syst.Var:ufk[1] = 132
+      Syst.Var:ufk[5] = 63
+      Syst.Var:ufk[8] = 8
+      Syst.Var:ehto = 0
    ufkey = true.
 
-   run ufkey.
-   case toimi:
+   RUN Syst/ufkey.p.
+   case Syst.Var:toimi:
       when 8 then return.
       when 1 then next loop.
       when 5 then leave loop.
@@ -182,7 +181,7 @@ end.
          
          CREATE CallAlarm.
          ASSIGN
-            CallAlarm.ActStamp   = fmakets()
+            CallAlarm.ActStamp   = Func.Common:mMakeTS()
             CallAlarm.CLSeq      = 1
             CallAlarm.CASeq      = 1
             CallAlarm.CustNo     = ttChange.CustNum
@@ -192,7 +191,7 @@ end.
             CallAlarm.DeliPara   = lcAction
             CallAlarm.DeliMsg    = lcAction
             CallAlarm.Limit      = 100
-            CallAlarm.Brand      = gcBrand 
+            CallAlarm.Brand      = Syst.Var:gcBrand 
             CallAlarm.Orig       = "800622800"
             CallAlarm.CreditType = 66.
 

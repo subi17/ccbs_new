@@ -13,10 +13,10 @@
   ---------------------------------------------------------------------- */
 
 
-{commali.i}
+{Syst/commali.i}
 
-{msisdn.i}
-{fctserval.i}
+{Func/msisdn.i}
+{Func/fctserval.i}
 
 DEF INPUT PARAMETER iiMsSeq LIKE MobSub.MsSeq NO-UNDO.
 DEF INPUT PARAMETER idtDate AS DATE           NO-UNDO.
@@ -31,8 +31,8 @@ DEF VAR lcmi-no      AS CHAR NO-UNDO.
 DEF VAR occli        AS CHAR No-UNDO.
 DEF VAR liValue      AS INT  NO-UNDO.
 
-{cparam.i "DefCCode"         return}.  def-ccode = TMSparam.CharVal.
-{cparam.i DCFVoiceMailPref   RETURN}.  DCFPref   = TMSparam.CharVal.
+{Func/cparam.i "DefCCode"         return}.  def-ccode = TMSparam.CharVal.
+{Func/cparam.i DCFVoiceMailPref   RETURN}.  DCFPref   = TMSparam.CharVal.
 
 
 FIND MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK.
@@ -58,7 +58,7 @@ IF liValue = ? OR
 END.
                         
 FIND ServCom WHERE 
-     ServCom.Brand   = gcBrand AND 
+     ServCom.Brand   = Syst.Var:gcBrand AND 
      ServCom.ServCom = "PP2" no-lock.
 
 FIND FIRST subser WHERE 
@@ -79,7 +79,7 @@ ASSIGN SubSer.SSStat    = 1
 
 /* default attributes from clitype definitions */
 FOR FIRST CTServEl NO-LOCK WHERE
-          CtServEl.Brand     = gcBrand AND
+          CtServEl.Brand     = Syst.Var:gcBrand AND
           CtServEl.ServCom   = SubSer.ServCom AND
           CTServEl.CLIType   = MobSub.CLIType AND
           CTServEl.FromDate <= idtDate,
@@ -119,7 +119,7 @@ IF not avail MSISDN then do:
    create MSISDN.
    ASSIGN 
       MSISDN.cli        = lccli
-      MSISDN.brand      = gcbrand 
+      MSISDN.brand      = Syst.Var:gcBrand 
       MSISDN.custnum    = mobsub.custnum
       MSISDN.statuscode = 4.
 ENd.           

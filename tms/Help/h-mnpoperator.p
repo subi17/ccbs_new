@@ -7,8 +7,8 @@
   Version ......: yoigo
   ------------------------------------------------------ */
 
-{commali.i}
-{fcustdata.i}
+{Syst/commali.i}
+{Func/fcustdata.i}
 
 DEF SHARED VAR siirto AS CHAR.
 
@@ -36,24 +36,24 @@ form
     MNPOperator.OperCode   
     MNPOperator.OperName
 WITH ROW FrmRow CENTERED OVERLAY FrmDown DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) "  MNP Operators  " 
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) "  MNP Operators  " 
     FRAME sel.
 
 form /* seek  MNPOperator */
     "MNPOperator:" lcMNPOperator
     HELP "Enter MNPOperator"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MNPOperator "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND MNPOperator "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  */
     "Name:" lcOperCode
     HELP "Enter MNPOperator name"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Name "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -120,32 +120,32 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-           ufk    = 0
-           ufk[1] = 35
-           ufk[2] = 30
-           ufk[5] = 11
-           ufk[8] = 8 
-           ehto   = 3 
+           Syst.Var:ufk    = 0
+           Syst.Var:ufk[1] = 35
+           Syst.Var:ufk[2] = 30
+           Syst.Var:ufk[5] = 11
+           Syst.Var:ufk[8] = 8 
+           Syst.Var:ehto   = 3 
            ufkey  = FALSE.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-         CHOOSE ROW MNPOperator.OperName ;(uchoose.i;) NO-ERROR 
+         CHOOSE ROW MNPOperator.OperName {Syst/uchoose.i} NO-ERROR 
             WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) MNPOperator.OperName WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) MNPOperator.OperName WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW MNPOperator.OperCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) MNPOperator.OperCode WITH FRAME sel.
+         CHOOSE ROW MNPOperator.OperCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) MNPOperator.OperCode WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -153,10 +153,10 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -174,7 +174,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -199,7 +199,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -225,7 +225,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND MNPOperator WHERE recid(MNPOperator) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -249,7 +249,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -263,10 +263,10 @@ REPEAT WITH FRAME sel:
        END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". run ufcolor.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f1.
         lcMNPOperator = "".
         UPDATE lcMNPOperator WITH FRAME f1.
@@ -292,10 +292,10 @@ REPEAT WITH FRAME sel:
         END.
      END. /* Search-1 */
 
-     ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". run ufcolor.
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f2.
         lcOperCode = "".
         UPDATE lcOperCode WITH FRAME f2.
@@ -322,7 +322,7 @@ REPEAT WITH FRAME sel:
      END. /* Search-2 */
 
 
-     ELSE IF LOOKUP(nap,"5,f5,enter,return") > 0 THEN DO: 
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5,enter,return") > 0 THEN DO: 
         RUN local-find-this(FALSE).
 
         IF AVAILABLE MNPOperator THEN DO:
@@ -331,25 +331,25 @@ REPEAT WITH FRAME sel:
         END.
      END.
 
-     ELSE IF LOOKUP(nap,"HOME,H") > 0 THEN DO : /* FIRST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"HOME,H") > 0 THEN DO : /* FIRST record */
         RUN local-find-FIRST.
         ASSIGN Memory = recid(MNPOperator) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(MNPOperator) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 PROCEDURE local-find-this:
@@ -368,12 +368,12 @@ PROCEDURE local-find-FIRST:
 
    IF order = 1 THEN 
       FIND FIRST MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand AND
+                MNPOperator.Brand EQ Syst.Var:gcBrand AND
                 MNPOperator.Active EQ True
                 USE-INDEX OperName NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
       FIND FIRST MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand AND
+                MNPOperator.Brand EQ Syst.Var:gcBrand AND
                 MNPOperator.Active EQ True
                 USE-INDEX OperCode NO-LOCK NO-ERROR.
 
@@ -383,12 +383,12 @@ PROCEDURE local-find-LAST:
 
    IF order = 1 THEN 
       FIND LAST MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand AND
+                MNPOperator.Brand EQ Syst.Var:gcBrand AND
                 MNPOperator.Active EQ True
                 USE-INDEX OperName NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
       FIND LAST MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand AND
+                MNPOperator.Brand EQ Syst.Var:gcBrand AND
                 MNPOperator.Active EQ True
                 USE-INDEX OperCode NO-LOCK NO-ERROR.
 
@@ -398,12 +398,12 @@ PROCEDURE local-find-NEXT:
 
    IF order = 1 THEN 
       FIND NEXT MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand AND
+                MNPOperator.Brand EQ Syst.Var:gcBrand AND
                 MNPOperator.Active EQ True
                 USE-INDEX OperName NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
       FIND NEXT MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand AND
+                MNPOperator.Brand EQ Syst.Var:gcBrand AND
                 MNPOperator.Active EQ True
                 USE-INDEX OperCode NO-LOCK NO-ERROR.
 
@@ -413,12 +413,12 @@ PROCEDURE local-find-PREV:
 
    IF order = 1 THEN 
       FIND PREV MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand AND
+                MNPOperator.Brand EQ Syst.Var:gcBrand AND
                 MNPOperator.Active EQ True
                 USE-INDEX OperName NO-LOCK NO-ERROR.
    ELSE IF order = 2 THEN 
       FIND PREV MNPOperator WHERE
-                MNPOperator.Brand EQ gcBrand AND
+                MNPOperator.Brand EQ Syst.Var:gcBrand AND
                 MNPOperator.Active EQ True
                 USE-INDEX OperCode NO-LOCK NO-ERROR.
 

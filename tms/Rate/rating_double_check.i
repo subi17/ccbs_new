@@ -2,8 +2,8 @@
    do a double call check for a single cdr
 */
 
-{commali.i}
-{error_codes.i}
+{Syst/commali.i}
+{Rate/error_codes.i}
 
 /* post/pre dbs are renewed at the same time -> one variable is enough */
 DEF VAR ldaYesterday AS DATE NO-UNDO INIT ?.
@@ -15,14 +15,14 @@ DEF TEMP-TABLE ttDBConfig NO-UNDO
    INDEX TableName TableName ToDate.
 
 FOR EACH DBConfig NO-LOCK WHERE
-         DBConfig.Brand = gcBrand AND
+         DBConfig.Brand = Syst.Var:gcBrand AND
          DBConfig.TableName = "MobCDR" AND
          DBConfig.DBState <= 1:
    CREATE ttDBConfig.
    BUFFER-COPY DBConfig TO ttDBConfig.
 END.
 FOR EACH DBConfig NO-LOCK WHERE
-         DBConfig.Brand = gcBrand AND
+         DBConfig.Brand = Syst.Var:gcBrand AND
          DBConfig.TableName = "PrepCDR" AND
          DBConfig.DBState <= 1:
    CREATE ttDBConfig.
@@ -247,7 +247,7 @@ FUNCTION fIsDoubleCall RETURNS LOGICAL
                                             ttCall.Dtlseq,
                                             "Access point name NI").
 
-         RUN olddb_double_check.p(ttCall.CLI,
+         RUN Rate/olddb_double_check.p(ttCall.CLI,
                                   ttCall.DateSt,
                                   ttCall.TimeStart,
                                   ttCall.BillDur,

@@ -9,10 +9,10 @@
   VERSION ......: M15
 --------------------------------------------------------------*/
 
-{commali.i}
-{function.i}
-{cparam2.i}
-{mailx.i}
+{Syst/commali.i}
+{Func/function.i}
+{Func/cparam2.i}
+{Func/mailx.i}
 
 DEF INPUT PARAMETER fname AS c  NO-UNDO.
 DEF INPUT PARAMETER move  AS lo NO-UNDO.

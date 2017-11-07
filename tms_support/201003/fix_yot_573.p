@@ -1,12 +1,11 @@
 
 /* read msisdn from a list */
 
-{commpaa.i}
-katun = "rafaeldv".
-gcBrand  = "1".
-{timestamp.i}
-{msisdn.i}
-{tmsconst.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "rafaeldv".
+Syst.Var:gcBrand  = "1".
+{Func/msisdn.i}
+{Syst/tmsconst.i}
 
 DEF BUFFER bMSISDN FOR MSISDN.
 DEF BUFFER bbMSISDN FOR MSISDN. 
@@ -49,7 +48,7 @@ REPEAT:
  
    /* find the old one */
    FIND NEXT bMSISDN WHERE 
-              bMSISDN.Brand = gcbrand and 
+              bMSISDN.Brand = Syst.Var:gcBrand and 
               bMSISDN.CLI = lcCLI  NO-LOCK NO-ERROR.
    ASSIGN 
    lcOldStock = bMSISDN.POS
@@ -57,7 +56,7 @@ REPEAT:
 
    /* get again the new one */
    FIND FIRST bbMSISDN WHERE 
-              bbMSISDN.Brand = gcbrand and 
+              bbMSISDN.Brand = Syst.Var:gcBrand and 
               bbMSISDN.CLI = lcCLI  NO-LOCK NO-ERROR.
 
         /* change status and stock  */

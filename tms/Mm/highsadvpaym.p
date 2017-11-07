@@ -8,14 +8,14 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{commpaa.i}
-gcbrand = "1".
-katun = "cron".
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "cron".
 
-{eventlog.i}
+{Syst/eventlog.i}
 
 fELog("HIGHSPENDER","AdvPaymStarted").
-run highspendnew ("ADVPAYM").
+RUN Mm/highspendnew.p ("ADVPAYM").
 fELog("HIGHSPENDER","AdvPaymStopped").
 
 quit.

@@ -1,7 +1,7 @@
-{commali.i}
-{email.i}
-{tmsconst.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/email.i}
+{Syst/tmsconst.i}
+{Func/cparam2.i}
 
 FUNCTION fUpdateMaintBreak RETURNS INTEGER
    (idFrom AS DECIMAL,
@@ -9,7 +9,7 @@ FUNCTION fUpdateMaintBreak RETURNS INTEGER
     iiMaintB AS DECIMAL):
    
    FIND TMSParam EXCLUSIVE-LOCK WHERE
-        TMSParam.Brand      = gcBrand      AND
+        TMSParam.Brand      = Syst.Var:gcBrand      AND
         TMSParam.ParamGroup = "sogrequest" AND
         TMSParam.ParamCode  = "MaintBreakFrom".
     
@@ -17,7 +17,7 @@ FUNCTION fUpdateMaintBreak RETURNS INTEGER
    RELEASE TMSParam.
 
    FIND TMSParam EXCLUSIVE-LOCK WHERE
-        TMSParam.Brand      = gcBrand      AND
+        TMSParam.Brand      = Syst.Var:gcBrand      AND
         TMSParam.ParamGroup = "sogrequest" AND
         TMSParam.ParamCode  = "MaintBreakTo".
 
@@ -25,7 +25,7 @@ FUNCTION fUpdateMaintBreak RETURNS INTEGER
    RELEASE TMSParam.
    
    FIND TMSParam EXCLUSIVE-LOCK WHERE
-        TMSParam.Brand = gcBrand AND
+        TMSParam.Brand = Syst.Var:gcBrand AND
         TMSParam.ParamGroup = "ServiceBreak" AND
         TMSParam.ParamCode  = "Activation".
    ASSIGN TMSParam.CharVal = STRING(iiMaintB).

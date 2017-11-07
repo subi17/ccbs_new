@@ -16,7 +16,7 @@
                   05.10.01 kl two column labels hard-coded
                   13.02.02 ht CollCustNum for "collection for Intrum"
                   26.04.02 tk eventlogging added
-                  20.05.02/tk RUN memo
+                  20.05.02/tk RUN Mc/memo.p
                   20.05.02/tk invoice texts
                   31.05.02 aam UnbilledLimit includes days, NOT months 
                   09.09.02/jp some validation
@@ -36,23 +36,23 @@
 
 &GLOBAL-DEFINE BrTable InvGroup
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'invgroup'}
-{function.i}
-{eventval.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'invgroup'}
+{Func/function.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhInvGroup AS HANDLE NO-UNDO.
    lhInvGroup = BUFFER InvGroup:HANDLE.
    RUN StarEventInitialize(lhInvGroup).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2.p(lhInvGroup).
+      RUN Mc/eventview2.p(lhInvGroup).
    END.
 
 END.
@@ -91,13 +91,13 @@ form
     InvGroup.MinInvAmt      column-label "MInv" format "zz9.99"
     InvGroup.TaxZone        FORMAT "X(5)" COLUMN-LABEL "TaxZ."
     WITH width 80 OVERLAY scroll 1 15 DOWN ROW 1
-    COLOR value(cfc)
-    title color value(ctc) " " + ynimi +
+    COLOR value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " " + Syst.Var:ynimi +
     " Invoice groups "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 form
     InvGroup.InvGroup    /* LABEL FORMAT */ COLON 22
@@ -108,7 +108,7 @@ form
        HELP "Use invoice number sequence from this group"
        VALIDATE(INPUT InvGroup.InvForm = INPUT InvGroup.InvGroup OR
                 CAN-FIND(InvGroup WHERE
-                         InvGroup.Brand    = gcBrand AND
+                         InvGroup.Brand    = Syst.Var:gcBrand AND
                          InvGroup.InvGroup = INPUT InvGroup.InvForm),
                 "Unknown group") 
     InvGroup.CompName   /* LABEL FORMAT */ COLON 22
@@ -132,22 +132,22 @@ form
         help "Days from last to bill to ignore minimum invoicing amount"
     InvGroup.Banned COLON 22
 WITH  OVERLAY ROW 4 centered
-    COLOR value(cfc) TITLE COLOR value(ctc) fr-header 
+    COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc) fr-header 
     side-labels FRAME lis.
 
 form /* Invoicing Group search WITH FIELD InvGroup */
     "Brand:" lcBrand skip       
     "Code :" haku-ig-code
     help "Give a code"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND CODE "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 form /* Invoicing Group search WITH FIELD IGName */
     "Brand:" lcBrand skip
     "Name :" haku-ig-name
     help "Give a name"
-    with row 4 col 2 title color value(ctc) " FIND NAME "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f2.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND NAME "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME haku-f2.
 
 FUNCTION fZoneName RETURNS LOGIC
    (icTaxZone AS CHAR):
@@ -160,7 +160,7 @@ FUNCTION fZoneName RETURNS LOGIC
 END FUNCTION.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 run pFindFirst.
@@ -189,15 +189,15 @@ repeat WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* InvGroup -ADD  */
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      assign Syst.Var:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
       
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
        
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN ufkey.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
          DO TRANSAction:
          
@@ -213,8 +213,8 @@ repeat WITH FRAME sel:
             InvGroup.TaxZone
             InvGroup.UnbilledLimit
          EDITING:
-            READKEY. nap = keylabel(LASTKEY).
-            IF lookup(nap,poisnap) > 0 THEN DO:
+            READKEY. Syst.Var:nap = keylabel(LASTKEY).
+            IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
                if frame-field = "InvGroup" THEN DO:
                   if input frame lis InvGroup.InvGroup = "" THEN 
                      UNDO, LEAVE add-new.
@@ -259,7 +259,7 @@ repeat WITH FRAME sel:
          IF NEW InvGroup THEN DO:
             fOLRefresh(TRUE).
             /* create invoice run logs for new group */
-            RUN invrunlog(YEAR(TODAY) * 100 + MONTH(TODAY),
+            RUN Mc/invrunlog.p(YEAR(TODAY) * 100 + MONTH(TODAY),
                           YEAR(TODAY) * 100 + 12).
          END.
 
@@ -326,32 +326,32 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 35  ufk[2]= 30 ufk[3]= 927 ufk[4]= 1120
-         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
-         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-         ufk[7]= 1760 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.Var:ufk[1]= 35  Syst.Var:ufk[2]= 30 Syst.Var:ufk[3]= 927 Syst.Var:ufk[4]= 1120
+         Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
+         Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+         Syst.Var:ufk[7]= 1760 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
 
-         RUN ufkey.p.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
-         CHOOSE ROW InvGroup.InvGroup ;(uchoose.i;) no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) InvGroup.InvGroup WITH FRAME sel.
+         CHOOSE ROW InvGroup.InvGroup {Syst/uchoose.i} no-error WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) InvGroup.InvGroup WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-         CHOOSE ROW InvGroup.IGName ;(uchoose.i;) no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) InvGroup.IGName WITH FRAME sel.
+         CHOOSE ROW InvGroup.IGName {Syst/uchoose.i} no-error WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) InvGroup.IGName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -375,10 +375,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND InvGroup where recid(InvGroup) = rtab[1] no-lock.
             run pFindPrev.
@@ -404,7 +404,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND InvGroup where recid(InvGroup) = rtab[FRAME-DOWN] no-lock .
@@ -432,7 +432,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND InvGroup where recid(InvGroup) = memory no-lock no-error.
          run pFindPrev.
@@ -456,7 +456,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "YOU ARE ON THE LAST PAGE !".
@@ -471,13 +471,13 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN ufcolor.
+     else if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
         haku-ig-code = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISP lcBrand with frame haku-f1.
         UPDATE 
-           lcBrand when gcAllBrand
+           lcBrand when Syst.Var:gcAllBrand
            haku-ig-code WITH FRAME haku-f1.
         HIDE FRAME haku-f1 no-pause.
         if haku-ig-code <> "" THEN DO:
@@ -493,14 +493,14 @@ BROWSE:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". RUN ufcolor.
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
         haku-ig-name = "".
-        ehto = 9. RUN ufkey. ufkey = TRUE.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISP lcBrand WITH FRAME haku-f2.
         UPDATE 
-           lcBrand when gcAllBrand
+           lcBrand when Syst.Var:gcAllBrand
            haku-ig-name WITH FRAME haku-f2.
         HIDE FRAME haku-f2 no-pause.
         if haku-ig-name <> "" THEN DO:
@@ -515,11 +515,11 @@ BROWSE:
         END.
      END. /* Haku sar. 2 */
 
-     ELSE IF LOOKUP(nap,"3,f3") > 0   /* memo */
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0   /* memo */
      THEN DO TRANS:
         FIND InvGroup WHERE RECID(InvGroup) = rtab[FRAME-LINE(sel)]
         NO-LOCK NO-ERROR.
-        RUN memo(INPUT 0,
+        RUN Mc/memo.p(INPUT 0,
                  INPUT "INVGROUP",
                  INPUT STRING(InvGroup.InvGroup),
                  INPUT "Invoice group code").
@@ -528,21 +528,21 @@ BROWSE:
      END.
 
      /* number sequences */
-     ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 AND Syst.Var:ufk[4] > 0 THEN DO:
      
         FIND InvGroup WHERE RECID(InvGroup) = rtab[FRAME-LINE(sel)]
            NO-LOCK NO-ERROR.
            
         REPEAT WITH FRAME sel:
-           ASSIGN ufk    = 0
-                  ufk[1] = 1100
-                  ufk[2] = 1119
-                  ufk[8] = 8
-                  ehto   = 0.
-           RUN ufkey.
+           ASSIGN Syst.Var:ufk    = 0
+                  Syst.Var:ufk[1] = 1100
+                  Syst.Var:ufk[2] = 1119
+                  Syst.Var:ufk[8] = 8
+                  Syst.Var:ehto   = 0.
+           RUN Syst/ufkey.p.
             
            /* invoice number sequences */
-           IF toimi = 1 THEN DO:
+           IF Syst.Var:toimi = 1 THEN DO:
 
               IF AVAILABLE InvGroup THEN DO:
                  IF InvGroup.InvForm NE InvGroup.InvGroup THEN DO: 
@@ -551,39 +551,39 @@ BROWSE:
                     VIEW-AS ALERT-BOX INFORMATION.
                  END.
 
-                 ELSE RUN iginvnum(InvGroup.InvGroup).
+                 ELSE RUN Mc/iginvnum.p(InvGroup.InvGroup).
               END.
            END.
 
            /* voucher number sequences */
-           ELSE IF toimi = 2 THEN DO:
+           ELSE IF Syst.Var:toimi = 2 THEN DO:
 
               IF AVAILABLE InvGroup THEN DO:
-                 RUN igvoucher(InvGroup.InvGroup).
+                 RUN Mc/igvoucher.p(InvGroup.InvGroup).
               END.
            END.
             
-           ELSE IF toimi = 8 THEN LEAVE.
+           ELSE IF Syst.Var:toimi = 8 THEN LEAVE.
         END.
 
         ufkey = TRUE.
         NEXT LOOP.        
      END.          
  
-     if lookup(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
+     if lookup(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
 
          must-add = TRUE.
          NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 AND lcRight = "RW"
+     else if lookup(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSAction:  /* removal */
 
         delline = FRAME-LINE.
         FIND InvGroup where recid(InvGroup) = rtab[FRAME-LINE] no-lock.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(ctc) 
+        COLOR DISPLAY value(Syst.Var:ctc) 
            InvGroup.Brand 
            InvGroup.InvGroup 
            InvGroup.IGName 
@@ -612,7 +612,7 @@ BROWSE:
 
         ASSIGN ok = FALSE.
         message "DO YOU REALLY WANT TO ERASE (Y/N) ? " UPDATE ok.
-        COLOR DISPLAY value(ccc) 
+        COLOR DISPLAY value(Syst.Var:ccc) 
            InvGroup.InvGroup 
            InvGroup.IGName 
            InvGroup.BillPerm 
@@ -623,7 +623,7 @@ BROWSE:
         IF ok THEN DO:
 
             FIND FIRST Customer WHERE 
-                       Customer.Brand = gcBrand AND
+                       Customer.Brand = Syst.Var:gcBrand AND
                        Customer.InvGroup = InvGroup.InvGroup
             no-lock no-error.
             IF AVAIL Customer THEN DO:
@@ -653,23 +653,23 @@ BROWSE:
         ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     ELSE IF lookup(nap,"7,f7") > 0 THEN DO:
+     ELSE IF lookup(Syst.Var:nap,"7,f7") > 0 THEN DO:
         FIND InvGroup WHERE recid(InvGroup) = rtab[FRAME-LINE] NO-LOCK.
-        RUN invotxt("InvGroup",InvGroup.InvGroup).
+        RUN Mc/invotxt.p("InvGroup",InvGroup.InvGroup).
         must-print=true.
         ufkey=true.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"enter,return") > 0 THEN
+     else if lookup(Syst.Var:nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSAction:
         /* change */
 
         FIND InvGroup where recid(InvGroup) = rtab[frame-line(sel)]
         exclusive-lock.
-        ASSIGN ufkey = TRUE ehto = 9.
-        RUN ufkey.
-        cfc = "lis". RUN ufcolor.
+        ASSIGN ufkey = TRUE Syst.Var:ehto = 9.
+        RUN Syst/ufkey.p.
+        Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
         assign fr-header = " CHANGE ".
 
         fZoneName(InvGroup.TaxZone).
@@ -703,8 +703,8 @@ BROWSE:
                   InvGroup.Banned
            WITH FRAME lis EDITING:
            
-              READKEY. nap = keylabel(LASTKEY).
-              IF lookup(nap,poisnap) > 0 THEN DO:
+              READKEY. Syst.Var:nap = keylabel(LASTKEY).
+              IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
             
                  IF FRAME-FIELD = "InvForm" THEN DO:
                  END.
@@ -734,25 +734,25 @@ BROWSE:
         xrecid = recid(InvGroup).
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
         run pFindFirst.
         ASSIGN memory = recid(InvGroup) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
         run pFindLast.
         ASSIGN memory = recid(InvGroup) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE local-disp-row:
 

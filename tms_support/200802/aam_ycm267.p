@@ -1,8 +1,8 @@
-{testpaa.i}
-katun = "ari".
-gcbrand = "1".
-{cparam.i2}
-{fmakemsreq.i}
+{Syst/testpaa.i}
+Syst.Var:katun = "ari".
+Syst.Var:gcBrand = "1".
+{Func/cparam.i2}
+{Func/fmakemsreq.i}
 
 def var lctermcontr as char no-undo.
 def var lirequest   as int  no-undo.
@@ -34,7 +34,7 @@ for each order no-lock where
    IF (Order.OrderChannel = "pos" AND OrderAccessory.IMEI > "") OR
       (OrderAccessory.ProductCode > "" AND 
        CAN-FIND(FIRST BillItem WHERE
-                      BillItem.Brand    = gcBrand AND
+                      BillItem.Brand    = Syst.Var:gcBrand AND
                       BillItem.BillCode = OrderAccessory.ProductCode AND
                       BillItem.BIGroup  = "7")) 
    THEN DO:                   
@@ -51,7 +51,7 @@ for each order no-lock where
       
          ldstamp = MobSub.ActivationTS.
          if ldstamp = 0 then 
-            ldstamp = fmake2dt(mobsub.activationdate,0).
+            ldstamp = Func.Common:mMake2DT(mobsub.activationdate,0).
          
          liRequest = fPCActionRequest(MobSub.MsSeq,
                                       lcTermContr,
@@ -64,8 +64,7 @@ for each order no-lock where
                                        
          IF liRequest = 0 THEN DO:                              
             /* write possible error to an order memo */
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "Order",
+            Func.Common:mWriteMemo("Order",
                              STRING(Order.OrderID),
                              0,
                              "PERIODICAL CONTRACT CREATION FAILED",

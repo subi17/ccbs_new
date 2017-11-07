@@ -1,14 +1,14 @@
-{commpaa.i}
-katun = "YOT-858".
-gcBrand = "1".
-{orderfunc.i}
-{msreqfunc.i}
-{eventval.i}
-{log.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "YOT-858".
+Syst.Var:gcBrand = "1".
+{Func/orderfunc.i}
+{Func/msreqfunc.i}
+{Syst/eventval.i}
+{Func/log.i}
 
-  &GLOBAL-DEFINE STAR_EVENT_USER katun
+  &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
 DEFINE VARIABLE lcCodes AS CHARACTER NO-UNDO. 
 lcCodes = "00500111100720184824405 00500111100720194426511 00500311100720114109167".
@@ -58,7 +58,7 @@ do i = 1 to num-entries(lcCodes,  " ") with frame a:
    
 /* Cancel pending SMS messages */
    FOR EACH CallAlarm WHERE
-            CallAlarm.Brand = gcBrand AND
+            CallAlarm.Brand = Syst.Var:gcBrand AND
             CallAlarm.CLI = Order.CLI AND
             CallAlarm.DeliStat = 1 AND
             CallAlarm.CreditType = 12 EXCLUSIVE-LOCK:
@@ -79,11 +79,11 @@ do i = 1 to num-entries(lcCodes,  " ") with frame a:
 
          CREATE ActionLog.
          ASSIGN
-            ActionLog.ActionTS     = fMakeTS()
-            ActionLog.Brand        = gcBrand  
+            ActionLog.ActionTS     = Func.Common:mMakeTS()
+            ActionLog.Brand        = Syst.Var:gcBrand  
             ActionLog.TableName    = "Order"  
             ActionLog.KeyValue     = STRING(Order.Orderid)
-            ActionLog.UserCode     = katun
+            ActionLog.UserCode     = Syst.Var:katun
             ActionLog.ActionID     = "SIMRELEASE"
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
             ActionLog.ActionStatus = 2
@@ -101,7 +101,7 @@ do i = 1 to num-entries(lcCodes,  " ") with frame a:
 
 
    ASSIGN         
-      MNPProcess.UpdateTS = fMakeTS()
+      MNPProcess.UpdateTS = Func.Common:mMakeTS()
       MNPProcess.StatusCode = {&MNP_ST_ACAN}
       Order.MNPStatus = MNPProcess.StatusCode + 1.
 
@@ -111,7 +111,7 @@ do i = 1 to num-entries(lcCodes,  " ") with frame a:
    IF Order.OrderChannel = "pos" THEN DO:
       
       FIND OrderAccessory WHERE
-           OrderAccessory.Brand = gcBrand AND
+           OrderAccessory.Brand = Syst.Var:gcBrand AND
            OrderAccessory.OrderId = Order.OrderId AND
            OrderAccessory.TerminalType = ({&TERMINAL_TYPE_PHONE})
       EXCLUSIVE-LOCK NO-ERROR.

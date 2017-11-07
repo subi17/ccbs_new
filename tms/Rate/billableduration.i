@@ -1,4 +1,4 @@
-{commali.i}
+{Syst/commali.i}
 
 DEFINE TEMP-TABLE ttDuration NO-UNDO 
    FIELD CallCase     AS CHARACTER
@@ -20,10 +20,10 @@ ASSIGN
    ttDuration.ToDate      = 12/31/49.
 
 FOR EACH BDestConf NO-LOCK WHERE
-         BDestConf.Brand     = gcBrand AND
+         BDestConf.Brand     = Syst.Var:gcBrand AND
          BDestConf.GroupType = 1,
     EACH BDestConfItem NO-LOCK WHERE
-         BDestConfItem.Brand = gcBrand AND
+         BDestConfItem.Brand = Syst.Var:gcBrand AND
          BDestConfItem.BDCGroup = BDestConf.BDCGroup:
          
    CREATE ttDuration.

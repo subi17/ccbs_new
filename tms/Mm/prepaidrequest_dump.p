@@ -7,9 +7,9 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{dumpfile_run.i}
-{create_eventlog.i}
+{Syst/commali.i}
+{Syst/dumpfile_run.i}
+{Func/create_eventlog.i}
 
 DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -63,14 +63,14 @@ BY DFField.OrderNbr:
                   DFField.DFField.
 END.
          
-fSplitTS(idLastDump,
+Func.Common:mSplitTS(idLastDump,
          OUTPUT ldaModified,
          OUTPUT liCnt).
 
 ASSIGN
    lhTable     = BUFFER PrepaidRequest:HANDLE
    lcKeyFields = fEventKeyFields(lhTable)
-   ldCurrent   = fMakeTS().
+   ldCurrent   = Func.Common:mMakeTS().
 
 IF icDumpMode = "Modified" THEN ldFromStamp = idLastDump.
 ELSE ldFromStamp = 20060101.
@@ -83,7 +83,7 @@ FOR EACH TMSCodes NO-LOCK WHERE
          TMSCodes.TableName = "PrepaidRequest" AND
          TMSCodes.FieldName = "Source",
     EACH PrepaidRequest NO-LOCK WHERE
-         PrepaidRequest.Brand   = gcBrand AND
+         PrepaidRequest.Brand   = Syst.Var:gcBrand AND
          PrepaidRequest.Source  = TMSCodes.CodeValue AND
          PrePaidRequest.TSRequest > ldFromStamp AND
          PrePaidRequest.TSRequest <= ldCurrent

@@ -8,8 +8,7 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{errors.i}
-{timestamp.i}
+{Mf/errors.i}
 
 /* create - update time stamp */
 function fPutExpLog returns logical
@@ -31,7 +30,7 @@ function fPutExpLog returns logical
             ExpLog.DataType = xRepType
             ExpLog.ExpType  = xexp.
       end.
-      assign ExpLog.ExpStamp = fMakeTS().
+      assign ExpLog.ExpStamp = Func.Common:mMakeTS().
 
    end.
 

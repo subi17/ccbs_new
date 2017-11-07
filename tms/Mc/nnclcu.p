@@ -8,8 +8,8 @@
   Version ......: M15
 ------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
+{Syst/commali.i}
+{Func/excel.i}
 
 DEF VAR line    AS c  NO-UNDO.
 def var exFile  as c  no-undo format "x(30)".
@@ -41,7 +41,7 @@ with centered width 80 no-label title " Closed customers " FRAME frm.
 
 DO FOR TMSUser:
    FIND FIRST TMSUser no-lock where
-              TMSUser.UserCode = katun.
+              TMSUser.UserCode = Syst.Var:katun.
    exFile = TMSUser.RepDir + "/contrend.txt".
 END.
 
@@ -50,7 +50,7 @@ repeat WITH FRAME frm:
 
    HIDE MESSAGE no-pause.
 
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       date1 
       date2 validate(input date2 >= input date1,"Invalid order !")
@@ -59,12 +59,12 @@ repeat WITH FRAME frm:
 
 task:
    repeat WITH FRAME frm ON ENDKEY UNDO, RETURN:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
-      IF toimi = 1 THEN NEXT  CRIT.
-      IF toimi = 8 THEN LEAVE CRIT.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
+      RUN Syst/ufkey.p.
+      IF Syst.Var:toimi = 1 THEN NEXT  CRIT.
+      IF Syst.Var:toimi = 8 THEN LEAVE CRIT.
 
-      IF toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
          ok = FALSE.      
          message "Are you SURE you want to start processing (Y/N) ?" UPDATE ok.
          IF ok THEN LEAVE task.

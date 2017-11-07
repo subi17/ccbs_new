@@ -1,4 +1,3 @@
-{timestamp.i}
 
 def temp-table ttcli no-undo
     field clitype as char.
@@ -43,7 +42,7 @@ for each ttcli,
                msowner.msseq = mobsub.msseq and
                msowner.paytype = false 
       by msowner.tsbeg:
-         fsplitts(msowner.tsbeg,
+         Func.Common:mSplitTS(msowner.tsbeg,
                   output ldtfrom,
                   output litime).
          leave.
@@ -63,7 +62,7 @@ for each ttcli,
  
       CREATE Memo.
       ASSIGN
-         Memo.CreStamp  = fMakeTS()
+         Memo.CreStamp  = Func.Common:mMakeTS()
          Memo.Brand     = "1"
          Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
          Memo.CustNum   = MobSub.CustNum

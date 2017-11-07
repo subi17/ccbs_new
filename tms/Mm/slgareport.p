@@ -1,9 +1,8 @@
-{commali.i}
-{excel.i}
-{timestamp.i}
-{email.i}
-{highusage.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/excel.i}
+{Func/email.i}
+{Func/highusage.i}
+{Func/cparam2.i}
 
 
 DEF VAR tiednimi AS c no-undo.
@@ -58,26 +57,26 @@ FOR EACH SLGANalyse NO-LOCK.
 
 
    FIND FIRST CliType WHERE 
-              CliType.Brand   = gcBrand   AND 
+              CliType.Brand   = Syst.Var:gcBrand   AND 
               Clitype.CliType = SLGAnalyse.CliType NO-LOCK.
               
                  
    FIND FIRST BillItem WHERE 
-              BillItem.Brand    = gcBrand AND 
+              BillItem.Brand    = Syst.Var:gcBrand AND 
               BillItem.BillCode = slganalyse.BillCode NO-LOCK NO-ERROR.
               
    IF AVAIL CCN THEN lcCCN = CCN.CCNName.
    ELSE              lcCCN = "N/A"  . 
       
    FIND FIRST CCN WHERE 
-              CCN.Brand = gcBrand AND 
+              CCN.Brand = Syst.Var:gcBrand AND 
               CCN.CCN   = slganalyse.CCN NO-LOCK NO-ERROR.
               
    IF AVAIL CCN THEN lcCCN = CCN.CCNName.
    ELSE              lcCCN = "N/A"  .
               
    FIND FIRST Bdest WHERE 
-              Bdest.Brand = gcBrand AND 
+              Bdest.Brand = Syst.Var:gcBrand AND 
               Bdest.Bdest = slganalyse.Bdest AND
               BDest.ToDate >= SLGAnalyse.ValidFrom AND
               BDest.FromDate <= SLGAnalyse.ValidTo NO-LOCK NO-ERROR.

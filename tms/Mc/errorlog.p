@@ -10,24 +10,23 @@
 
 &GLOBAL-DEFINE BrTable ErrorLog
 
-{commali.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'ErrorLog'}
-{timestamp.i}
+{Syst/commali.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'ErrorLog'}
 
-{eventval.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhErrorLog AS HANDLE NO-UNDO.
    lhErrorLog = BUFFER ErrorLog:HANDLE.
    RUN StarEventInitialize(lhErrorLog).
 
    ON F12 ANYWHERE DO:
-      RUN eventview2(lhErrorLog).
+      RUN Mc/eventview2.p(lhErrorLog).
    END.
 
 END.
@@ -71,9 +70,9 @@ form
     ldtDate            FORMAT "99-99-99" COLUMN-LABEL "Date"
     ErrorLog.ErrorMsg  FORMAT "X(31)"    COLUMN-LABEL "Error"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
-       " ERROR LOG "  + string(pvm,"99-99-99") + " "
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
+       " ERROR LOG "  + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form
@@ -90,19 +89,19 @@ form
     ErrorLog.ErrorMsg   COLON 16 
        VIEW-AS EDITOR SIZE 60 BY 5
 WITH  OVERLAY ROW 3 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
-{brand.i}
+{Func/brand.i}
 
 form /* seek  ErrorLog */
     "Brand :" lcBrand skip
     "Action:" lcActionID
     HELP "Enter action ID "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Action ID "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Action ID "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
 form /* seek  ErrorLog */
@@ -111,8 +110,8 @@ form /* seek  ErrorLog */
        HELP "Enter table name "
     "Key .:" lcKey
        HELP "Enter key value for table"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Table "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Table "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 IF icTableName > "" THEN 
@@ -123,7 +122,7 @@ IF icTableName > "" OR icActionID > "" THEN ASSIGN
  FrmRow   = 3
  FrmDown  = 13.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 
@@ -198,36 +197,36 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk   = 0
-        ufk[1]= 1124  
-        ufk[2]= 2121
-        ufk[8]= 8 
-        ehto  = 3 
+        Syst.Var:ufk   = 0
+        Syst.Var:ufk[1]= 1124  
+        Syst.Var:ufk[2]= 2121
+        Syst.Var:ufk[8]= 8 
+        Syst.Var:ehto  = 3 
         ufkey = FALSE.
 
         IF icTableName > "" THEN ASSIGN 
-           ufk[1] = 0
-           ufk[2] = 0.
+           Syst.Var:ufk[1] = 0
+           Syst.Var:ufk[2] = 0.
         ELSE IF icActionID > "" THEN 
-           ufk[1] = 0.
+           Syst.Var:ufk[1] = 0.
 
-        RUN ufkey.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW ErrorLog.ActionID ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ErrorLog.ActionID WITH FRAME sel.
+        CHOOSE ROW ErrorLog.ActionID {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) ErrorLog.ActionID WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW ErrorLog.TableName ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ErrorLog.TableName WITH FRAME sel.
+        CHOOSE ROW ErrorLog.TableName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) ErrorLog.TableName WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -236,10 +235,10 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -257,7 +256,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -282,7 +281,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -308,7 +307,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ErrorLog WHERE recid(ErrorLog) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -332,7 +331,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -347,14 +346,14 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 AND Syst.Var:ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
 
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.Var:gcAllBrand
               lcActionID WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
 
@@ -372,14 +371,14 @@ REPEAT WITH FRAME sel:
      END. /* Search-1 */
 
      /* Search BY column 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 AND Syst.Var:ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
        
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.Var:gcAllBrand
               lcTable 
               lcKey
        WITH FRAME f2.
@@ -408,13 +407,13 @@ REPEAT WITH FRAME sel:
        END.
      END. /* Search-2 */
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW" AND ufk[6] > 0 
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW" AND Syst.Var:ufk[6] > 0 
      THEN DO TRANSACTION:  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        ErrorLog.TableName ErrorLog.KeyValue ldtDate.
 
        RUN local-find-NEXT.
@@ -436,7 +435,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        ErrorLog.TableName ErrorLog.KeyValue ldtDate.
 
        IF ok THEN DO:
@@ -458,7 +457,7 @@ REPEAT WITH FRAME sel:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -466,8 +465,8 @@ REPEAT WITH FRAME sel:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhErrorLog).
 
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 5. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE Syst.Var:ehto = 5. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ErrorLog.TableName.
 
        RUN local-UPDATE-record.                                  
@@ -484,25 +483,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(ErrorLog) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(ErrorLog) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -526,28 +525,28 @@ PROCEDURE local-find-FIRST:
    
          IF icKeyValue > "" THEN 
             FIND FIRST ErrorLog USE-INDEX TableName WHERE
-                       ErrorLog.Brand     = gcBrand     AND
+                       ErrorLog.Brand     = Syst.Var:gcBrand     AND
                        ErrorLog.TableName = icTableName AND
                        ErrorLog.KeyValue  = icKeyValue NO-LOCK NO-ERROR.      
 
          ELSE 
             FIND FIRST ErrorLog USE-INDEX TableName WHERE
-                       ErrorLog.Brand     = gcBrand     AND
+                       ErrorLog.Brand     = Syst.Var:gcBrand     AND
                        ErrorLog.TableName = icTableName NO-LOCK NO-ERROR.
       END.                 
 
       ELSE IF icActionID > "" THEN 
          FIND FIRST ErrorLog USE-INDEX ActionID WHERE
-                    ErrorLog.Brand    = gcBrand AND
+                    ErrorLog.Brand    = Syst.Var:gcBrand AND
                     ErrorLog.ActionID = icActionID NO-LOCK NO-ERROR.
                                
       ELSE FIND FIRST ErrorLog USE-INDEX ActionID WHERE
-                      ErrorLog.Brand = gcBrand NO-LOCK NO-ERROR.
+                      ErrorLog.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
    END.      
 
    ELSE IF order = 2 THEN DO:
       FIND FIRST ErrorLog USE-INDEX TableName WHERE
-                 ErrorLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                 ErrorLog.Brand = Syst.Var:gcBrand  NO-LOCK NO-ERROR.
    END.
  
 END PROCEDURE.
@@ -560,28 +559,28 @@ PROCEDURE local-find-LAST:
    
          IF icKeyValue > "" THEN 
             FIND LAST ErrorLog USE-INDEX TableName WHERE
-                      ErrorLog.Brand     = gcBrand     AND
+                      ErrorLog.Brand     = Syst.Var:gcBrand     AND
                       ErrorLog.TableName = icTableName AND
                       ErrorLog.KeyValue  = icKeyValue NO-LOCK NO-ERROR.      
 
          ELSE 
             FIND LAST ErrorLog USE-INDEX TableName WHERE
-                      ErrorLog.Brand     = gcBrand     AND
+                      ErrorLog.Brand     = Syst.Var:gcBrand     AND
                       ErrorLog.TableName = icTableName NO-LOCK NO-ERROR.
       END.                 
 
       ELSE IF icActionID > "" THEN 
          FIND LAST ErrorLog USE-INDEX ActionID WHERE
-                   ErrorLog.Brand    = gcBrand AND
+                   ErrorLog.Brand    = Syst.Var:gcBrand AND
                    ErrorLog.ActionID = icActionID NO-LOCK NO-ERROR.
                                
       ELSE FIND LAST ErrorLog USE-INDEX ActionID WHERE
-                     ErrorLog.Brand = gcBrand NO-LOCK NO-ERROR.
+                     ErrorLog.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
    END.      
 
    ELSE IF order = 2 THEN DO:
       FIND LAST ErrorLog USE-INDEX TableName WHERE
-                ErrorLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                ErrorLog.Brand = Syst.Var:gcBrand  NO-LOCK NO-ERROR.
    END.
  
 END PROCEDURE.
@@ -594,28 +593,28 @@ PROCEDURE local-find-NEXT:
    
          IF icKeyValue > "" THEN 
             FIND NEXT ErrorLog USE-INDEX TableName WHERE
-                      ErrorLog.Brand     = gcBrand     AND
+                      ErrorLog.Brand     = Syst.Var:gcBrand     AND
                       ErrorLog.TableName = icTableName AND
                       ErrorLog.KeyValue  = icKeyValue NO-LOCK NO-ERROR.      
 
          ELSE 
             FIND NEXT ErrorLog USE-INDEX TableName WHERE
-                      ErrorLog.Brand     = gcBrand     AND
+                      ErrorLog.Brand     = Syst.Var:gcBrand     AND
                       ErrorLog.TableName = icTableName NO-LOCK NO-ERROR.
       END.                 
 
       ELSE IF icActionID > "" THEN 
          FIND NEXT ErrorLog USE-INDEX ActionID WHERE
-                   ErrorLog.Brand    = gcBrand AND
+                   ErrorLog.Brand    = Syst.Var:gcBrand AND
                    ErrorLog.ActionID = icActionID NO-LOCK NO-ERROR.
                                
       ELSE FIND NEXT ErrorLog USE-INDEX ActionID WHERE
-                     ErrorLog.Brand = gcBrand NO-LOCK NO-ERROR.
+                     ErrorLog.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
    END.      
  
    ELSE IF order = 2 THEN DO:
       FIND NEXT ErrorLog USE-INDEX TableName WHERE
-                ErrorLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                ErrorLog.Brand = Syst.Var:gcBrand  NO-LOCK NO-ERROR.
    END.
  
 END PROCEDURE.
@@ -628,28 +627,28 @@ PROCEDURE local-find-PREV:
    
          IF icKeyValue > "" THEN 
             FIND PREV ErrorLog USE-INDEX TableName WHERE
-                      ErrorLog.Brand     = gcBrand     AND
+                      ErrorLog.Brand     = Syst.Var:gcBrand     AND
                       ErrorLog.TableName = icTableName AND
                       ErrorLog.KeyValue  = icKeyValue NO-LOCK NO-ERROR.      
 
          ELSE 
             FIND PREV ErrorLog USE-INDEX TableName WHERE
-                      ErrorLog.Brand     = gcBrand     AND
+                      ErrorLog.Brand     = Syst.Var:gcBrand     AND
                       ErrorLog.TableName = icTableName NO-LOCK NO-ERROR.
       END.                 
 
       ELSE IF icActionID > "" THEN 
          FIND PREV ErrorLog USE-INDEX ActionID WHERE
-                   ErrorLog.Brand    = gcBrand AND
+                   ErrorLog.Brand    = Syst.Var:gcBrand AND
                    ErrorLog.ActionID = icActionID NO-LOCK NO-ERROR.
                                
       ELSE FIND PREV ErrorLog USE-INDEX ActionID WHERE
-                     ErrorLog.Brand = gcBrand NO-LOCK NO-ERROR.
+                     ErrorLog.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
    END.      
 
    ELSE IF order = 2 THEN DO:
       FIND PREV ErrorLog USE-INDEX TableName WHERE
-                ErrorLog.Brand = gcBrand  NO-LOCK NO-ERROR.
+                ErrorLog.Brand = Syst.Var:gcBrand  NO-LOCK NO-ERROR.
    END.
    
 END PROCEDURE.
@@ -672,7 +671,7 @@ END PROCEDURE.
 
 PROCEDURE local-find-others.
 
-    fSplitTS(ErrorLog.ActionTS,
+    Func.Common:mSplitTS(ErrorLog.ActionTS,
              OUTPUT ldtDate,
              OUTPUT liTime).
 

@@ -8,13 +8,12 @@
 ---------------------------------------------------------------------- */
 
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{ftransdir.i}
-{customer_address.i}
-{funcrunprocess_update.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Func/customer_address.i}
+{Syst/funcrunprocess_update.i}
+{Syst/tmsconst.i}
 
 DEF INPUT  PARAMETER idaInvDate       AS DATE NO-UNDO.
 DEF INPUT  PARAMETER iiInvType        AS INT  NO-UNDO.
@@ -244,7 +243,7 @@ PROCEDURE pInitialize:
    END.
 
    FOR FIRST Invoice NO-LOCK USE-INDEX InvDate WHERE
-                Invoice.Brand = gcBrand AND
+                Invoice.Brand = Syst.Var:gcBrand AND
                 Invoice.InvDate = idaInvDate AND
                 Invoice.InvType = iiInvType:
          liBillPeriod = YEAR(Invoice.ToDate) * 100 + MONTH(Invoice.ToDate).
@@ -357,7 +356,7 @@ PROCEDURE pInitialize:
 
 
    FOR FIRST ReportConf NO-LOCK WHERE
-             ReportConf.Brand    = gcBrand AND
+             ReportConf.Brand    = Syst.Var:gcBrand AND
              ReportConf.ReportID = "BillingReport":
 
       FOR EACH ReportConfRow OF ReportConf NO-LOCK WHERE
@@ -395,10 +394,10 @@ PROCEDURE pCollectInvoices:
    DEF VAR lcPrintHouse AS CHAR NO-UNDO.
    DEF VAR ldPrintStamp AS DEC  NO-UNDO.
     
-   ldPrintStamp = fMake2DT(idaInvDate + 2,86399).  
+   ldPrintStamp = Func.Common:mMake2DT(idaInvDate + 2,86399).  
 
    FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
-            Invoice.Brand    = gcBrand    AND
+            Invoice.Brand    = Syst.Var:gcBrand    AND
             Invoice.InvDate  = idaInvDate AND
             Invoice.InvType  = iiInvType,
       FIRST Customer NO-LOCK WHERE
@@ -543,8 +542,8 @@ PROCEDURE pCollectInvoices:
       END.
       /* 5: invoices */
       ASSIGN 
-         ldPeriodBeg  = fMake2Dt(Invoice.FromDate,0)
-         ldPeriodEnd  = fMake2Dt(Invoice.ToDate,86399)
+         ldPeriodBeg  = Func.Common:mMake2DT(Invoice.FromDate,0)
+         ldPeriodEnd  = Func.Common:mMake2DT(Invoice.ToDate,86399)
          liSubsActive = 0.
 
       FOR EACH SubInvoice OF Invoice NO-LOCK:
@@ -648,8 +647,7 @@ PROCEDURE pPrintReport:
    END.
    ELSE OUTPUT STREAM sFile TO VALUE(lcFile).
 
-   lcInvoiceType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                   "Invoice",
+   lcInvoiceType = Func.Common:mTMSCodeName("Invoice",
                    "InvType",
                    STRING(iiInvType)) .
 
@@ -666,7 +664,7 @@ PROCEDURE pPrintReport:
    BREAK BY ttInvGroup.InvGroup:
    
       FIND FIRST InvGroup WHERE
-                 InvGroup.Brand = gcBrand AND
+                 InvGroup.Brand = Syst.Var:gcBrand AND
                  InvGroup.InvGroup = ttInvGroup.InvGroup NO-LOCK NO-ERROR.
                  
       IF FIRST(ttInvGroup.InvGroup) THEN 
@@ -741,8 +739,7 @@ PROCEDURE pPrintReport:
             BY ttSection.RowInfo:
                
          IF ttSection.RowType < 900 THEN 
-            lcDescription = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                             "Invoice",
+            lcDescription = Func.Common:mTMSCodeName("Invoice",
                                              lcFieldName,
                                              STRING(ttSection.RowType)).
          ELSE DO:

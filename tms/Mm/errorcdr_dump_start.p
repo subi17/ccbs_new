@@ -7,8 +7,8 @@
   version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{direct_dbconnect.i}
+{Syst/commali.i}
+{Func/direct_dbconnect.i}
 
 def input  parameter icdumpid      as int  no-undo.
 def input  parameter icfile        as char no-undo.
@@ -67,14 +67,14 @@ PROCEDURE pStartDump:
    /* connect to correct cdr dbs */
    fInitializeConnectTables("MobCDR,McdrDtl2,ErrorCDR","").
 
-   RUN pDirectConnect2Dbs(gcBrand,
+   RUN pDirectConnect2Dbs(Syst.Var:gcBrand,
                           "",
                           idaConnectDate,
                           idaConnectDate).
 
    IF RETURN-VALUE BEGINS "ERROR" THEN RETURN RETURN-VALUE.
  
-   run errorcdr_dump.p(icDumpID,
+   RUN Mm/errorcdr_dump.p(icDumpID,
                        icFile,
                        icDumpMode,
                        idLastDump,

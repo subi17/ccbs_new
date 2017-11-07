@@ -1,7 +1,7 @@
-{commpaa.i}
-gcBrand = "1".
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
 
-{fmakesms.i}
+{Func/fmakesms.i}
 
 DEFINE VARIABLE liCount       AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE liSubCount    AS INTEGER   NO-UNDO. 
@@ -70,7 +70,7 @@ PROCEDURE pSendSMS:
 DEFINE VARIABLE ldTimeStamp AS DECIMAL NO-UNDO.
 
    FOR EACH MobSub NO-LOCK WHERE 
-            MobSub.Brand   = gcBrand AND 
+            MobSub.Brand   = Syst.Var:gcBrand AND 
             MobSub.PayType = FALSE:
       
       liLoopCount = liLoopCount + 1.
@@ -84,7 +84,7 @@ DEFINE VARIABLE ldTimeStamp AS DECIMAL NO-UNDO.
                         ttInputData.MSISDN EQ MobSub.CLI) THEN NEXT.
 
       FIND FIRST Customer NO-LOCK where 
-                 Customer.Brand   = gcBrand        AND 
+                 Customer.Brand   = Syst.Var:gcBrand        AND 
                  Customer.CustNum = MobSub.CustNum NO-ERROR.
 
       IF NOT AVAIL Customer THEN NEXT.
@@ -116,7 +116,7 @@ DEFINE VARIABLE ldTimeStamp AS DECIMAL NO-UNDO.
              
             assign 
                ldTimeStamp = 0
-               ldTimeStamp = fmakets(). 
+               ldTimeStamp = Func.Common:mMakeTS(). 
 
             fMakeSchedSMS2(MobSub.CustNum,
                            MobSub.CLI,

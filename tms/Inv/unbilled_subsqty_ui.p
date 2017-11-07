@@ -8,19 +8,19 @@
 ---------------------------------------------------------------------- */
 &GLOBAL-DEFINE TraceLog NO
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 &IF "{&TraceLog}" = "YES" 
 &THEN
-{log.i}
+{Func/log.i}
 fSetLogFileName("/tmp/unbilled_subs.log").
 fSetLogEntryTypes("4GLTrace:4").
 fClearLog().
 &ENDIF
 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MobSub'}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MobSub'}
 
 DEF VAR ufkey         AS LOG  NO-UNDO.
 DEF VAR liCount       AS INT  NO-UNDO. 
@@ -73,8 +73,8 @@ FORM
    SKIP(6)
 
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + " UNBILLED SUBSCRIPTIONS " + 
-           STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.Var:ynimi + " UNBILLED SUBSCRIPTIONS " + 
+           STRING(TODAY,"99-99-99") + " "
      FRAME fCrit.
 
 
@@ -104,23 +104,23 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
    IF ufkey THEN DO:
       ASSIGN
-         ufk    = 0
-         ufk[1] = 132 
-         ufk[3] = 1069
-         ufk[5] = 795
-         ufk[8] = 8 
-         ehto   = 0.
-      RUN ufkey.
+         Syst.Var:ufk    = 0
+         Syst.Var:ufk[1] = 132 
+         Syst.Var:ufk[3] = 1069
+         Syst.Var:ufk[5] = 795
+         Syst.Var:ufk[8] = 8 
+         Syst.Var:ehto   = 0.
+      RUN Syst/ufkey.p.
    END.
    
    ELSE ASSIGN 
-      toimi = 1
+      Syst.Var:toimi = 1
       ufkey = TRUE.
 
-   IF toimi = 1 THEN DO:
+   IF Syst.Var:toimi = 1 THEN DO:
 
-      ehto = 9. 
-      RUN ufkey.
+      Syst.Var:ehto = 9. 
+      RUN Syst/ufkey.p.
       
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
 
@@ -131,9 +131,9 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          WITH FRAME fCrit EDITING:
 
             READKEY.
-            nap = KEYLABEL(LASTKEY).
+            Syst.Var:nap = KEYLABEL(LASTKEY).
 
-            IF LOOKUP(nap,poisnap) > 0 THEN DO:
+            IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
 
             END.
 
@@ -145,10 +145,10 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
    END.
 
-   ELSE IF toimi = 3 THEN 
-      RUN report_config.p ("UnbilledSubsQty").
+   ELSE IF Syst.Var:toimi = 3 THEN 
+      RUN Syst/report_config.p ("UnbilledSubsQty").
  
-   ELSE IF toimi = 5 THEN DO:
+   ELSE IF Syst.Var:toimi = 5 THEN DO:
       
       IF lcFile = "" OR lcFile = ? THEN DO:
          MESSAGE "File name has not been given."
@@ -168,7 +168,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          NEXT.
       END.
            
-      RUN unbilled_subsqty.p (liPeriod,
+      RUN Inv/unbilled_subsqty.p (liPeriod,
                               ldaInvDate[1],
                               ldaInvDate[2],
                               lcFile,
@@ -185,7 +185,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       LEAVE CritLoop.
    END.
 
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.Var:toimi = 8 THEN DO:
       LEAVE CritLoop.
    END.
 

@@ -7,7 +7,7 @@
   Version ......: TMS Master
   ------------------------------------------------------ */
  
-{commali.i}
+{Syst/commali.i}
 
 DEFINE INPUT PARAMETER iiType  AS INTEGER NO-UNDO. 
 
@@ -46,8 +46,8 @@ DEF VAR ReqStat   AS INTEGER   NO-UNDO.
 FORM "New status:" ReqStat FORMAT "z9"
 
  WITH  OVERLAY ROW 4 centered
- COLOR VALUE(cfc)
- TITLE COLOR VALUE(ctc) " Add status "
+ COLOR VALUE(Syst.Var:cfc)
+ TITLE COLOR VALUE(Syst.Var:ctc) " Add status "
  NO-LABELS
  FRAME upd.
 
@@ -57,17 +57,17 @@ RUN pInitMenuText.
 /*************************** Browsing part **********************************/
 DO WHILE TRUE: 
    
-   ASSIGN ufk    = 0
-          ufk[1] = 0
-          ufk[2] = 0
+   ASSIGN Syst.Var:ufk    = 0
+          Syst.Var:ufk[1] = 0
+          Syst.Var:ufk[2] = 0
           
-          ufk[5] = 11
-          ufk[6] = 6970
-          ufk[7] = 4
-          ufk[8] = 8
-          ehto   = 3.
+          Syst.Var:ufk[5] = 11
+          Syst.Var:ufk[6] = 6970
+          Syst.Var:ufk[7] = 4
+          Syst.Var:ufk[8] = 8
+          Syst.Var:ehto   = 3.
 
-      RUN ufkey.
+      RUN Syst/ufkey.p.
    
    DISPLAY lcStatText[1]  @ menuc[1] SKIP
            lcStatText[2]  @ menuc[2] SKIP   
@@ -148,7 +148,7 @@ DO WHILE TRUE:
          MsRequest Type and MsRequest Status to store
          values with browser */
       
-      RUN msreqfuncitem(MsReqStatFunc.FuncGroup,
+      RUN Syst/msreqfuncitem.p(MsReqStatFunc.FuncGroup,
                         OUTPUT lcReturn).
       FIND CURRENT MsReqStatFunc EXCLUSIVE-LOCK.
       ASSIGN MsReqStatFunc.FuncGroup = lcReturn.

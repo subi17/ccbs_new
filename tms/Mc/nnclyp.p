@@ -14,16 +14,16 @@ DEF VAR ufkey       AS LOG NO-UNDO  init TRUE.
 DEF VAR i           AS i   NO-UNDO.
 DEF VAR new_custlet AS LOG NO-UNDO INIT FALSE.
 
-{commali.i}
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'CustLetter'}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'CustLetter'}
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCustLetter AS HANDLE NO-UNDO.
    lhCustLetter = BUFFER CustLetter:HANDLE.
@@ -31,7 +31,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhCustLetter).
+      RUN Mc/eventview2.p(lhCustLetter).
    END.
 END.
 
@@ -39,14 +39,14 @@ END.
 form /* memo */
 WITH
     OVERLAY ROW 1 centered NO-LABEL
-    color value(cfc) title color value(cfc) " Update letter "
+    color value(Syst.Var:cfc) title color value(Syst.Var:cfc) " Update letter "
     FRAME memo.
 
 DO TRANS WITH FRAME memo ON ENDKEY UNDO, RETURN:
 
-   assign ehto = 9 cfc = "lis" ufkey = TRUE.
-   RUN ufkey. RUN ufcolor.
-   FIND FIRST CustLetter WHERE CustLetter.Brand = gcBrand
+   assign Syst.Var:ehto = 9 Syst.Var:cfc = "lis" ufkey = TRUE.
+   RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
+   FIND FIRST CustLetter WHERE CustLetter.Brand = Syst.Var:gcBrand
       exclusive-lock no-error.
    IF NOT AVAIL CustLetter THEN 
    DO:
@@ -56,7 +56,7 @@ DO TRANS WITH FRAME memo ON ENDKEY UNDO, RETURN:
       END.
       new_custlet = TRUE.
       CREATE CustLetter.
-      CustLetter.Brand = gcBrand.
+      CustLetter.Brand = Syst.Var:gcBrand.
    END.
 
    IF NOT new_custlet AND
@@ -86,7 +86,7 @@ END.
 
 DO i = 1 TO 17 TRANS:
    IF CustLetter.LtrText[i] entered THEN DO:
-      CustLetter.ChgDate = pvm.
+      CustLetter.ChgDate = TODAY.
       LEAVE.
    END.
 END.

@@ -1,12 +1,11 @@
-{testpaa.i}
-katun = "anttis".
+{Syst/testpaa.i}
+Syst.Var:katun = "anttis".
 
-{eventval.i}
-{coinv.i}
-{fmakemsreq.i}
-{msisdn.i}
-{timestamp.i}
-{ftmrlimit.i}
+{Syst/eventval.i}
+{Func/coinv.i}
+{Func/fmakemsreq.i}
+{Func/msisdn.i}
+{Func/ftmrlimit.i}
 
 def var lcline     as char no-undo.
 def var litarget   as int  no-undo.
@@ -28,9 +27,9 @@ def buffer btargetcust for customer.
 def buffer bsourcecust for customer.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMobSub AS HANDLE NO-UNDO.
    lhMobSub = BUFFER MobSub:HANDLE.
@@ -178,7 +177,7 @@ PROCEDURE pOwnerChange:
       RETURN.
    END. 
  
-   fSplitTS(MobSub.activationts,
+   Func.Common:mSplitTS(MobSub.activationts,
             OUTPUT ldtActDate,
             OUTPUT liActTime).
  
@@ -227,7 +226,7 @@ PROCEDURE pOwnerChange:
          ELSE DO:
         
             FIND CLIType WHERE 
-                 CLIType.Brand   = gcBrand AND
+                 CLIType.Brand   = Syst.Var:gcBrand AND
                  CLIType.CLIType = MobSub.CLIType NO-LOCK NO-ERROR.
             IF AVAILABLE CLIType THEN ASSIGN 
                BillTarget.BillTarget = CLIType.BillTarget
@@ -244,7 +243,7 @@ PROCEDURE pOwnerChange:
       liFeePeriod = YEAR(ldtActDate) * 100 + MONTH(ldtActDate).
     
       FOR EACH FATime EXCLUSIVE-LOCK USE-INDEX MobSub WHERE
-               FATime.Brand  = gcBrand      AND
+               FATime.Brand  = Syst.Var:gcBrand      AND
                FATime.MsSeq  = MobSub.MsSeq AND
                FATime.InvNum = 0            AND
                FATime.Period >= liFeePeriod:
@@ -264,7 +263,7 @@ PROCEDURE pOwnerChange:
       END.
   /* 
       FIND FIRST MSISDN NO-LOCK WHERE 
-                 MSISDN.Brand = gcBrand AND
+                 MSISDN.Brand = Syst.Var:gcBrand AND
                  MSISDN.CLI = MobSub.CLI NO-ERROR.
       IF AVAILABLE MSISDN THEN DO:
          fLocalMakeMsidnHistory(RECID(MSISDN)).
@@ -279,7 +278,7 @@ PROCEDURE pOwnerChange:
              
       /* SIM */
       FIND FIRST SIM EXCLUSIVE-LOCK WHERE
-                 SIM.Brand = gcBrand   AND
+                 SIM.Brand = Syst.Var:gcBrand   AND
                  SIM.ICC   = MobSub.ICC NO-ERROR.
       IF AVAILABLE SIM THEN SIM.CustNum = liNewUser.
    END. 
@@ -300,7 +299,7 @@ PROCEDURE pOwnerChange:
                     DAY(ldtFeeDate).
                     
       FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
-               FixedFee.Brand     = gcBrand              AND
+               FixedFee.Brand     = Syst.Var:gcBrand              AND
                FixedFee.HostTable = "MobSub"             AND 
                FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
                FixedFee.InUse     = TRUE AND
@@ -326,7 +325,7 @@ PROCEDURE pOwnerChange:
       liFeePeriod = TRUNCATE(liFeePeriod / 100,0).
       
       FOR EACH SingleFee EXCLUSIVE-LOCK WHERE
-               SingleFee.Brand      = gcBrand              AND
+               SingleFee.Brand      = Syst.Var:gcBrand              AND
                SingleFee.HostTable  = "MobSub"             AND 
                SingleFee.KeyValue   = STRING(MobSub.MsSeq) AND
                SingleFee.Active     = TRUE                 AND
@@ -451,7 +450,7 @@ PROCEDURE pReRate:
    DEFINE INPUT PARAMETER idtFrom  AS DATE NO-UNDO.
    DEFINE INPUT PARAMETER icCLI    AS CHAR NO-UNDO.
  
-   RUN cli_rate (icCLI,
+   RUN Rate/cli_rate.p (icCLI,
                  idtFrom,
                  6/30/9,
                  TRUE).    
@@ -464,7 +463,7 @@ PROCEDURE pPrepaidRate:
    DEFINE INPUT PARAMETER idtFrom  AS DATE NO-UNDO.
    DEFINE INPUT PARAMETER icCLI    AS CHAR NO-UNDO.
 
-   RUN cli_prepaidrate (icCLI,      
+   RUN Rate/cli_prepaidrate.p (icCLI,      
                         idtFrom, 
                         6/30/9,     
                         TRUE).      /* silent = true */  

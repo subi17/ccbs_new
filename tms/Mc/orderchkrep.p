@@ -3,13 +3,12 @@ jl
 
 */
 
-{commpaa.i}
-{date.i}
-{cparam2.i}
+{Syst/commpaa.i}
+{Func/cparam2.i}
 
 ASSIGN
-   katun   = "cron"
-   gcBrand = "1".
+   Syst.Var:katun   = "cron"
+   Syst.Var:gcBrand = "1".
 
 DEF STREAM sLog.
 DEF VAR lcNPStatName AS CHAR NO-UNDO. 
@@ -21,7 +20,7 @@ DEF VAR lcSpoolDir   AS CHAR NO-UNDO.
 ASSIGN
    lcSpoolDir = fCParam("DUMPSPOOL","orderchkrep.p")
    lcOutDir   = fCParam("DUMPOUTGOING","orderchkrep.p")
-   lcFileName = "CHECKLIST" + fdatefmt(TODAY,"yyyymmdd") + ".dump".
+   lcFileName = "CHECKLIST" + Func.Common:mDateFmt(TODAY,"yyyymmdd") + ".dump".
 
 OUTPUT STREAM sLog TO VALUE(lcSpoolDir + lcfilename).
 

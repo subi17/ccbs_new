@@ -8,18 +8,16 @@
   CHANGED ......: 
   ------------------------------------------------------------------------*/
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{fgettxt.i}
-{date.i}
-{fduedate.i}
-{ftransdir.i}
-{tmsconst.i}
-{ftaxdata.i}
-{ftopup.i}
-{fcreditreq.i}
-{fcpfat.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/fgettxt.i}
+{Func/fduedate.i}
+{Func/ftransdir.i}
+{Syst/tmsconst.i}
+{Func/ftaxdata.i}
+{Func/ftopup.i}
+{Func/fcreditreq.i}
+{Func/fcpfat.i}
 
 DEF VAR lcGBOutDir AS CHAR NO-UNDO.
 DEF VAR lcGBInDir AS CHAR NO-UNDO.
@@ -173,8 +171,7 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
                                 icRefId, /*reason note*/
                                 OUTPUT ocErrInfo).
          IF liRequest = 0 THEN DO:
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                              STRING(bMobSub.MsSeq),
                              bMobSub.Custnum,
                              "CREDIT NOTE CREATION FAILED",

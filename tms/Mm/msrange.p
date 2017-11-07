@@ -14,11 +14,11 @@
 
 &GLOBAL-DEFINE BrTable msrange
 
-{commali.i} 
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MSRange'}
-{msisdn.i}
+{Syst/commali.i} 
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MSRange'}
+{Func/msisdn.i}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -57,9 +57,9 @@ DEF BUFFER xxMSISDN FOR MSISDN.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMSRange AS HANDLE NO-UNDO.
    lhMSRange = BUFFER MSRange:HANDLE.
@@ -71,7 +71,7 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhMSISDN).
+      RUN Mc/eventview2.p(lhMSISDN).
    END.
 END.
 
@@ -84,13 +84,13 @@ form
     MSRange.ReserveDate
     MSRange.ExpireDate
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
     " MSISDN number Ranges "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 
 
 form
@@ -99,8 +99,8 @@ form
     MSRange.CustNum    /* LABEL FORMAT */
 
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -112,8 +112,8 @@ help "Customer to whom a MSISDN range shall be reserved "
   Customer.CustName 
 
 WITH  OVERLAY ROW 2 WITH centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) " Search And Reserve a MSISDN Range "
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " Search And Reserve a MSISDN Range "
     NO-LABELS 
     FRAME f3.
 
@@ -123,24 +123,24 @@ form /* seek number Range  BY  CLIFrom */
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "MsisdnFrom:" CLIFrom
     HELP "Enter MSISDN number"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND MSISDN "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek number Range  BY CustNum */
     "Brand Code:" lcBrand  HELP "Enter Brand"
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "CustomerNo:" CustNum
     HELP "Enter Customer No."
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUSTOMER "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND CUSTOMER "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "By MSISDN  ,By Customer,By 3, By 4".
 
-{tmsparam.i MSStatusRes return}. stat-res = TMSParam.IntVal.
-{tmsparam.i MSStatusUnr return}. stat-ava = TMSParam.IntVal.
+{Func/tmsparam.i MSStatusRes return}. stat-res = TMSParam.IntVal.
+{Func/tmsparam.i MSStatusUnr return}. stat-ava = TMSParam.IntVal.
 
 FIND FIRST MSRange
 WHERE msrange.Brand = lcBrand NO-LOCK NO-ERROR.
@@ -169,13 +169,13 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a MSRange  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         REPEAT  WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR 
@@ -185,8 +185,8 @@ ADD-ROW:
            MSRange.ExpireDate
            WITH FRAME LIS EDITING:
               READKEY.
-              nap = keylabel(LASTKEY).
-              IF lookup(nap,poisnap) >0 THEN DO WITH FRAME lis:
+              Syst.Var:nap = keylabel(LASTKEY).
+              IF lookup(Syst.Var:nap,Syst.Var:poisnap) >0 THEN DO WITH FRAME lis:
                  PAUSE 0.
 
                  if frame-field = "CLIFrom" THEN DO:
@@ -372,33 +372,33 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 209 ufk[2]= 702 
-        ufk[3]= (IF lcRight = "RW" THEN 243 ELSE 0)
-        ufk[4]= 258 
-        ufk[5]= (IF lcRight = "RW" THEN 257 ELSE 0)
-        ufk[6]= (IF lcRight = "RW" THEN 4   ELSE 0)
-        ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        Syst.Var:ufk[1]= 209 Syst.Var:ufk[2]= 702 
+        Syst.Var:ufk[3]= (IF lcRight = "RW" THEN 243 ELSE 0)
+        Syst.Var:ufk[4]= 258 
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 257 ELSE 0)
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4   ELSE 0)
+        Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MSRange.CLIFrom ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MSRange.CLIFrom WITH FRAME sel.
+        CHOOSE ROW MSRange.CLIFrom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) MSRange.CLIFrom WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW MSRange.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MSRange.CustNum WITH FRAME sel.
+        CHOOSE ROW MSRange.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) MSRange.CustNum WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -422,10 +422,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -450,7 +450,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -476,7 +476,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND MSRange WHERE recid(MSRange) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -500,7 +500,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -515,12 +515,12 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        Disp lcBrand With FRAME f1.
-       SET  lcBrand WHEN gcAllBrand = TRUE
+       SET  lcBrand WHEN Syst.Var:gcAllBrand = TRUE
             CLIFrom WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF CLIFrom ENTERED THEN DO:
@@ -536,13 +536,13 @@ BROWSE:
      END. /* Search-1 */
 
      /* Search BY col 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". run ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        Disp lcBrand With FRAME F2.
-       SET  lcBrand WHEN gcAllBrand = TRUE 
+       SET  lcBrand WHEN Syst.Var:gcAllBrand = TRUE 
             CustNum WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF CustNum ENTERED THEN DO:
@@ -557,25 +557,25 @@ BROWSE:
        END.
      END. /* Search-2 */
 
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:  
-        run msisdnr(rtab[frame-line(sel)]).
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:  
+        RUN Mm/msisdnr.p(rtab[frame-line(sel)]).
         ufkey = TRUE.
         NEXT LOOP.
      END.   
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" 
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" 
      THEN DO ON ENDKEY UNDO, NEXT LOOP:  
         /* search & reserve */
-         cfc = "lis". 
-         RUN ufcolor.
-         ehto = 9. 
-         RUN ufkey. 
+         Syst.Var:cfc = "lis". 
+         RUN Syst/ufcolor.p.
+         Syst.Var:ehto = 9. 
+         RUN Syst/ufkey.p. 
          ufkey = TRUE.
 
 
 
 
-        run msrange1( INPUT stat-res,
+        RUN Mm/msrange1.p( INPUT stat-res,
                       INPUT Customer.CustNum,
                       OUTPUT ok,
                       OUTPUT MSISDN1,
@@ -601,19 +601,19 @@ BROWSE:
         APPLY LASTKEY.
      END. /* F3 */
 
-     ELSE IF LOOKUP(nap,"3,f3") > 0 AND lcRight = "RW" THEN DO:  /* add */
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 AND lcRight = "RW" THEN DO:  /* add */
          message "Don't use manual add until further !".     
          PAUSE 2 no-message.
          NEXT.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW" 
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO :  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        MSRange.CLIFrom MSRange.CustNum .
 
        RUN local-find-NEXT.
@@ -635,7 +635,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        MSRange.CLIFrom MSRange.CustNum .
        
        IF ok THEN DO :
@@ -644,12 +644,12 @@ BROWSE:
          i = 0.
          FOR 
          EACH xxMSISDN NO-LOCK WHERE 
-              xxMSISDN.Brand      = gcBrand         AND 
+              xxMSISDN.Brand      = Syst.Var:gcBrand         AND 
               xxMSISDN.CLI       >= MSRange.CLIFrom AND
               xxMSISDN.CLI       <= MSRange.CLITo   AND
               xxMSISDN.CustNum    = MSRange.CustNum AND 
               xxMSISDN.POS        = MSRANGE.Salesman AND 
-              xxMSISDN.ValidTo   >= fmakeTS()        AND 
+              xxMSISDN.ValidTo   >= Func.Common:mMakeTS()        AND 
               xxMSISDN.StatusCode = 1                
               BREAK BY xxMSISDN.CLI:
 
@@ -698,25 +698,25 @@ put screen row 1 string(i).
 
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(MSRange) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(MSRange) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -819,7 +819,7 @@ PROCEDURE LOCAL-CREATE-MSRange:
       MSRange.CLIFrom     = CLIFrom
       MSRange.CLITo       = CLITo
       MSRange.CustNum     = CustNum
-      MSRange.ReserveDate = pvm
+      MSRange.ReserveDate = TODAY
       MSRange.ExpireDate  = ExpireDate
       MSRange.SalesMan    = ocPosCode
       Memory              = recid(MSRange).

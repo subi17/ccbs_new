@@ -8,14 +8,14 @@
   version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{timestamp.i}
-{cparam2.i}
-{coinv.i}
-{fvatfact.i}
-{ftransdir.i}
-{funcrunprocess_update.i}
-{old_unbilled_events.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/coinv.i}
+{Func/fvatfact.i}
+{Func/ftransdir.i}
+{Syst/funcrunprocess_update.i}
+{Inv/old_unbilled_events.i}
+{Func/multitenantfunc.i}
 
 DEFINE INPUT  PARAMETER iiFRProcessID      AS INT  NO-UNDO.
 DEFINE INPUT  PARAMETER iiUpdateInterval   AS INT  NO-UNDO.
@@ -53,7 +53,8 @@ ASSIGN ldUnBillPeriod = fInt2Date(iiBillPeriod,1)
        lcOdir         = fCParamC("CDRTransDir")
        lcSdir         = fCParamC("CDRSpoolDir")
        lcTdir         = fCParamC("UnbilledTrackDir")
-       lcfilename     = "unbilled_calls_" + STRING(iiBillPeriod) + ".dump"
+       lcfilename     = CAPS(Syst.Parameters:Tenant) +
+                        "_unbilled_calls_" + STRING(iiBillPeriod) + ".dump"
        lcNumeric      = SESSION:NUMERIC-FORMAT
        SESSION:NUMERIC-FORMAT = "AMERICAN"
        lhsub          = BUFFER Mobsub:HANDLE.

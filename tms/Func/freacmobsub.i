@@ -11,9 +11,9 @@
 &THEN
 &GLOBAL-DEFINE fcreamobsub YES
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/fcreatereq.i}
 {Func/fixedlinefunc.i}
+{Func/cparam2.i}
 
 FUNCTION freacprecheck RETURNS CHARACTER
    (INPUT  iiMsSeq        AS INTEGER,    /* Subscription ID    */
@@ -41,7 +41,9 @@ FUNCTION freacprecheck RETURNS CHARACTER
    IF liReacDays = ? OR liReacDays = 0 THEN
       liReacDays = 30.
 
-   IF CAN-FIND(FIRST MobSub WHERE MobSub.MsSeq = iiMsSeq) THEN
+   IF CAN-FIND(FIRST MobSub WHERE 
+                     MobSub.MsSeq = iiMsSeq AND
+                     Mobsub.cli NE Mobsub.fixednumber) THEN
       RETURN "Subscription is already active".
    ELSE DO:
       FIND FIRST bTermMobSub WHERE bTermMobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
@@ -51,8 +53,18 @@ FUNCTION freacprecheck RETURNS CHARACTER
    
   /*YPR-4770*/ 
   /*reactivation is not allowed for convergent tariffs.*/
-  IF fIsConvergenceTariff(bTermMobSub.CLIType) THEN 
-     RETURN "Not allowed for fixed line tariffs".
+  /*COFF Partial termination, allowing also for partial terminated 
+    If partial terminated fixed number should be "" in convergent tariffs */
+
+   IF fIsConvergenceTariff(bTermMobSub.CLIType) AND
+      bTermMobSub.fixednumber NE "" THEN
+      RETURN "Not allowed for fixed line tariffs".
+   ELSE IF fIsConvergenceTariff(bTermMobSub.CLIType) AND 
+        NOT CAN-FIND(FIRST MobSub WHERE
+                           MobSub.MsSeq = iiMsSeq AND
+                           Mobsub.cli EQ Mobsub.fixednumber) THEN
+      RETURN "Not allowed when fixed line terminated".
+   
 
    /* Check that no other reactivation requests is under work */
    FIND FIRST bMsReacReq WHERE
@@ -65,7 +77,7 @@ FUNCTION freacprecheck RETURNS CHARACTER
       "There is already a scheduled reactivation request"             + CHR(10) +
       "for Mobile Subscription " + bTermMobSub.CLI                    + CHR(10) +
       "Saved by user '" + bMsReacReq.UserCode + "'"                   + CHR(10) +
-      "Proposed time of reactivation " + fTS2HMS(bMsReacReq.ActStamp) + CHR(10) +
+      "Proposed time of reactivation " + Func.Common:mTS2HMS(bMsReacReq.ActStamp) + CHR(10) +
       "Status " + STRING(bMsReacReq.ReqStatus).
    
    FIND FIRST bMsowner WHERE 
@@ -73,14 +85,14 @@ FUNCTION freacprecheck RETURNS CHARACTER
    IF NOT AVAILABLE bMsowner THEN
       RETURN "MsOwner record not found".
 
-   fSplitTS(INPUT bMsowner.tsend, OUTPUT ldTermDate, OUTPUT liTermTime).
+   Func.Common:mSplitTS(INPUT bMsowner.tsend, OUTPUT ldTermDate, OUTPUT liTermTime).
    IF today > (ldTermDate + liReacDays) AND NOT ilSkipCheck THEN DO:
       /* YOT-4715, reactivation over 30 days was not possible */
       ASSIGN liReactMsseq = fCParamI("ReactMsseq").
       IF btermmobsub.msseq EQ liReactMsseq THEN DO: 
          /* Bypass this one MsSeq only once and remove value from Cparam */
          FIND FIRST TMSParam EXCLUSIVE-LOCK WHERE
-                    TMSParam.Brand     = gcBrand AND
+                    TMSParam.Brand     = Syst.Var:gcBrand AND
                     TMSParam.ParamCode = "ReactMsseq" NO-ERROR.
          IF AVAILABLE TMSParam THEN DO:
             ASSIGN TMSParam.IntVal = -1.
@@ -96,8 +108,15 @@ FUNCTION freacprecheck RETURNS CHARACTER
    IF CAN-FIND (FIRST mobsub where mobsub.cli = bTermMobSub.cli) THEN
       RETURN "Subscription is already active with same MSISDN".
 
+   IF CAN-FIND (FIRST order where
+                      order.brand = Syst.Var:gcBrand AND
+                      order.cli = bTermMobSub.cli and
+                      order.ordertype < 2 AND
+               lookup(order.statuscode,{&ORDER_INACTIVE_STATUSES}) = 0) THEN
+      RETURN "Ongoing active order with same MSISDN".
+
    IF NOT CAN-FIND (FIRST MSISDN where 
-                          MSISDN.Brand = gcBrand AND
+                          MSISDN.Brand = Syst.Var:gcBrand AND
                           MSISDN.CLI   = bTermMobSub.CLI) THEN
       RETURN "MSISDN not found".
 
@@ -109,13 +128,13 @@ FUNCTION freacprecheck RETURNS CHARACTER
    IF NOT AVAILABLE SIM THEN RETURN "SIM not found".
    ELSE DO:
       FIND FIRST mobsub WHERE
-                 mobsub.brand = gcBrand AND
+                 mobsub.brand = Syst.Var:gcBrand AND
                  mobsub.imsi = imsi.imsi NO-LOCK NO-ERROR.
       IF AVAIL mobsub THEN RETURN "SIM is already in use".
    END.
 
    FIND FIRST CLIType NO-LOCK WHERE
-              CLIType.Brand = gcBrand AND
+              CLIType.Brand = Syst.Var:gcBrand AND
               CLIType.CLIType = (IF bTermMobsub.TariffBundle > ""
                                  THEN bTermMobsub.TariffBundle
                                  ELSE bTermMobsub.CLIType) NO-ERROR.
@@ -124,11 +143,11 @@ FUNCTION freacprecheck RETURNS CHARACTER
             CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN DO:
 
       FOR EACH bMobSub NO-LOCK WHERE
-               bMobSub.Brand   = gcBrand AND
+               bMobSub.Brand   = Syst.Var:gcBrand AND
                bMobSub.InvCust = bTermMobSub.CustNum AND
                bMobSub.PayType = FALSE,
          FIRST CLIType NO-LOCK WHERE
-               CLIType.Brand = gcBrand AND
+               CLIType.Brand = Syst.Var:gcBrand AND
                CLIType.CLIType = bMobSub.TariffBundle AND
                CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}:
          llPrimaryActive = TRUE.
@@ -139,7 +158,7 @@ FUNCTION freacprecheck RETURNS CHARACTER
          IF btermmobsub.msseq EQ liReactMsseq THEN DO:
          /* Bypass this one MsSeq only once and remove value from Cparam */
             FIND FIRST TMSParam EXCLUSIVE-LOCK WHERE
-                       TMSParam.Brand     = gcBrand AND
+                       TMSParam.Brand     = Syst.Var:gcBrand AND
                        TMSParam.ParamCode = "ReactMsseq" NO-ERROR.
             IF AVAILABLE TMSParam THEN DO:
                ASSIGN TMSParam.IntVal = -1.
@@ -202,7 +221,7 @@ FUNCTION fReactivationRequest RETURNS INTEGER
          RETURN 0.
       END.
       ELSE IF MNPProcess.StatusCode = {&MNP_ST_BNOT} THEN DO:
-         RUN mnp_operation.p(MNPProcess.MNPSeq,
+         RUN Mnp/mnp_operation.p(MNPProcess.MNPSeq,
                              "cancelarSolicitudBajaNumeracionMovil","").
          IF RETURN-VALUE NE "OK" THEN DO:
             IF RETURN-VALUE BEGINS "ERROR:" THEN

@@ -7,10 +7,9 @@
   CHANGED ......:
   Version ......: xfera
 ----------------------------------------------------------------------- */
-{commali.i}
-{timestamp.i}
-{mnpmessages.i}
-{mnp.i}
+{Syst/commali.i}
+{Mnp/mnpmessages.i}
+{Mnp/mnp.i}
 
 DEFINE INPUT PARAMETER pcPortRequest AS CHARACTER NO-UNDO. 
 DEFINE INPUT PARAMETER TABLE FOR ttMigrationNumberRequest.
@@ -28,14 +27,14 @@ END.
  (may not be a good idea, but it's enough for testing) */
 CREATE MNPProcess.
 ASSIGN 
-   MNPProcess.CreatedTS   = fMakeTS()
+   MNPProcess.CreatedTS   = Func.Common:mMakeTS()
    MNPProcess.MNPSeq      = next-value(m2mrequest)
    MNPProcess.FormRequest = MNPProcessFather.FormRequest
    MNPProcess.OrderId     = 0
    MNPProcess.StatusCode  = 0
-   MNPProcess.Brand       = gcBrand
+   MNPProcess.Brand       = Syst.Var:gcBrand
    MNPProcess.MNPType     = 6
-   MNPProcess.UserCode    = katun
+   MNPProcess.UserCode    = Syst.Var:katun
    MNPProcess.UpdateTS    = MNPProcess.CreatedTS.
 
 IF fSendMigrationNumberRequest(INPUT TABLE ttMigrationNumberRequest BY-REFERENCE) THEN RETURN "".

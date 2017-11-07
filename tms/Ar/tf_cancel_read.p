@@ -6,15 +6,14 @@
   CREATED ......: 11.11.2014
   Version ......: yoigo
 ---------------------------------------------------------------------- */
-{commpaa.i}
-katun = "Qvantel".
-gcBrand = "1".
-{cparam2.i}
-{timestamp.i}
-{tmsconst.i}
-{tsformat.i}
-{ftransdir.i}
-{eventlog.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Func/tsformat.i}
+{Func/ftransdir.i}
+{Syst/eventlog.i}
 
 DEF VAR lcProcessedFile AS CHAR NO-UNDO.
 DEF VAR lcIncDir AS CHAR NO-UNDO. 
@@ -136,12 +135,12 @@ REPEAT:
       CREATE ActionLog.
       
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.Var:gcBrand
          ActionLog.ActionID     = "TF_CREAD_" + lcTFBank
-         ActionLog.ActionTS     = fMakeTS()
+         ActionLog.ActionTS     = Func.Common:mMakeTS()
          ActionLog.TableName    = "Cron"
          ActionLog.KeyValue     = lcFilename
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_LOGGED}
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
          ActionLog.ActionChar   = lcSummary.

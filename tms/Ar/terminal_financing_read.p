@@ -6,17 +6,16 @@
   CREATED ......: 12.6.2013
   Version ......: yoigo
 ---------------------------------------------------------------------- */
-{commpaa.i}
-katun = "Qvantel".
-gcBrand = "1".
-{cparam2.i}
-{timestamp.i}
-{tmsconst.i}
-{tsformat.i}
-{ftransdir.i}
-{eventlog.i}
-{coinv.i}
-{host.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Func/tsformat.i}
+{Func/ftransdir.i}
+{Syst/eventlog.i}
+{Func/coinv.i}
+{Syst/host.i}
       
 &GLOBAL-DEFINE TF_PAYTERM_CODES "0018,0024,0034,0125,0127,0129,0131,0225,0227,0229,0231"
 &GLOBAL-DEFINE TF_PAYTERM_WITH_RESIDUAL "0125,0127,0129,0131,0225,0227,0229,0231"
@@ -132,7 +131,7 @@ REPEAT:
 
    ASSIGN
       lcLogFileName = lcFileName + "_" + 
-         ftsformat("yyyymmdd_HHMMss", fMakeTS()) + ".log"
+         ftsformat("yyyymmdd_HHMMss", Func.Common:mMakeTS()) + ".log"
 
    lcErrorLog = lcLogSpoolDir + "BANK_RESPONSE_LOG_" +
          lcBankName + "_" +
@@ -181,7 +180,7 @@ REPEAT:
 
       /* Fill a possible gap */
       FOR EACH ActionLog NO-LOCK WHERE
-               ActionLog.Brand = gcBrand AND
+               ActionLog.Brand = Syst.Var:gcBrand AND
                ActionLog.ActionId = ("TF_READ_" + lcTFBank) AND
                ActionLog.ACtionStatus NE {&ACTIONLOG_STATUS_CANCELLED} AND
                ActionLog.ToDate < ldaFromDate 
@@ -196,12 +195,12 @@ REPEAT:
          CREATE ActionLog.
          
          ASSIGN
-            ActionLog.Brand        = gcBrand
+            ActionLog.Brand        = Syst.Var:gcBrand
             ActionLog.ActionID     = "TF_READ_" + lcTFBank
-            ActionLog.ActionTS     = fMakeTS()
+            ActionLog.ActionTS     = Func.Common:mMakeTS()
             ActionLog.TableName    = "Cron"
             ActionLog.KeyValue     = lcLogFileName
-            ActionLog.UserCode     = katun
+            ActionLog.UserCode     = Syst.Var:katun
             ActionLog.FromDate     = ldaFromDate 
             ActionLog.Todate       = ldaToDate
             ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE}
@@ -212,11 +211,11 @@ REPEAT:
       END.
 
       FIND DumpFile NO-LOCK WHERE
-           DumpFile.Brand = gcBrand AND
+           DumpFile.Brand = Syst.Var:gcBrand AND
            DumpFile.DumpName = "IFSInstallmentAction" NO-ERROR.
    
       IF AVAIL DumpFile THEN
-         RUN dumpfile_run.p(dumpfile.dumpid,
+         RUN Syst/dumpfile_run.p(dumpfile.dumpid,
                           "modified",
                           lcTFBank,
                           FALSE,
@@ -356,7 +355,7 @@ PROCEDURE pProcessData:
       END.
 
       FIND Order NO-LOCK WHERE
-           Order.Brand = gcBrand AND
+           Order.Brand = Syst.Var:gcBrand AND
            Order.OrderId = ttTFPayment.OrderId NO-ERROR.
       IF NOT AVAIL Order THEN DO:
          fWriteLog(ttTFPayment.content,"ERROR:Order not found").
@@ -364,7 +363,7 @@ PROCEDURE pProcessData:
       END.
 
       FIND FixedFee NO-LOCK WHERE
-           FixedFee.Brand = gcBrand AND
+           FixedFee.Brand = Syst.Var:gcBrand AND
            FixedFee.Custnum = Order.Custnum AND
            FixedFee.HostTable = "MobSub" AND
            FixedFee.KeyValue = STRING(Order.MsSeq) AND
@@ -374,7 +373,7 @@ PROCEDURE pProcessData:
 
       IF NOT AVAIL FixedFee THEN
       FIND FixedFee NO-LOCK WHERE
-           FixedFee.Brand = gcBrand AND
+           FixedFee.Brand = Syst.Var:gcBrand AND
            FixedFee.Custnum = Order.Custnum AND
            FixedFee.HostTable = "MobSub" AND
            FixedFee.KeyValue = STRING(Order.MsSeq) AND
@@ -412,7 +411,7 @@ PROCEDURE pProcessData:
          END.
                
          FIND bResidualFee EXCLUSIVE-LOCK WHERE
-              bResidualFee.Brand = gcBrand AND
+              bResidualFee.Brand = Syst.Var:gcBrand AND
               bResidualFee.Custnum = FixedFee.Custnum AND
               bResidualFee.HostTable = FixedFee.HostTable AND
               bResidualFee.KeyValue = Fixedfee.KeyValue AND
@@ -468,7 +467,7 @@ PROCEDURE pProcessData:
                           (ttTFPayment.PaytermAmt +
                            ttTFPayment.ResidualAmt) * 100 + 0.05,1).
 
-         fTS2Date(Order.CrStamp, OUTPUT ldaOrderdate).
+         Func.Common:mTS2Date(Order.CrStamp, OUTPUT ldaOrderdate).
 
          FIND FIRST TFConf NO-LOCK WHERE
                     TFConf.RVPercentage = ldeRVPerc AND
@@ -501,7 +500,7 @@ PROCEDURE pProcessData:
             
          /* should not be possible but better to check */
          FIND FIRST SingleFee NO-LOCK WHERE
-                    SingleFee.Brand = gcBrand AND
+                    SingleFee.Brand = Syst.Var:gcBrand AND
                     SingleFee.Custnum = FixedFee.Custnum AND
                     SingleFee.HostTable = "MobSub" AND
                     SingleFee.KeyValue = FixedFee.KeyValue AND
@@ -515,7 +514,7 @@ PROCEDURE pProcessData:
    
          IF liFeePeriod > 0 AND NOT AVAIL SingleFee THEN DO:
          
-            RUN creasfee.p (
+            RUN Mc/creasfee.p (
               fixedfee.CustNum,
               Order.MsSeq,
               ldaFeePeriod,
@@ -578,11 +577,11 @@ PROCEDURE pProcessData:
       IF INDEX(Order.OrderChannel,"pos") > 0 AND 
          FixedFee.BillCode NE "RVTERM" THEN
       FOR FIRST OrderTimeStamp NO-LOCK WHERE
-                OrderTimeStamp.Brand = gcBrand AND
+                OrderTimeStamp.Brand = Syst.Var:gcBrand AND
                 OrderTimeStamp.OrderId = Order.OrderId AND
                 OrderTimeStamp.RowType = {&ORDERTIMESTAMP_DELIVERY}:
          
-         fTs2Date(OrderTimeStamp.TimeStamp, OUTPUT ldaDate).
+         Func.Common:mTS2Date(OrderTimeStamp.TimeStamp, OUTPUT ldaDate).
 
          IF ldaFromDate EQ ? THEN ASSIGN
             ldaFromDate = ldaDate

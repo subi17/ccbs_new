@@ -8,8 +8,8 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{dumpfile_run.i}
+{Syst/commali.i}
+{Syst/dumpfile_run.i}
 
 DEF INPUT-OUTPUT PARAMETER TABLE-HANDLE ihTempTable.
 DEF INPUT  PARAMETER idLastDump       AS DECIMAL   NO-UNDO.
@@ -75,7 +75,7 @@ DEF VAR liEventTime AS INT NO-UNDO.
 DEF VAR lcBrand AS CHAR NO-UNDO. 
 DEF VAR liOrderId AS INT NO-UNDO. 
 
-fSplitTS(idLastDump,
+Func.Common:mSplitTS(idLastDump,
          OUTPUT ldaEventDate,
          OUTPUT liEventTime).
 
@@ -83,7 +83,7 @@ FOR EACH EventLog WHERE
          EventLog.EventDate >= ldaEventDate AND
          EventLog.TableName = "Order" NO-LOCK USE-INDEX EventDate:
          
-   ldeEventTime = fHMS2TS(EventLog.EventDate,
+   ldeEventTime = Func.Common:mHMS2TS(EventLog.EventDate,
                          EventLog.EventTime).
 
    IF ldeEventTime < idLastDump THEN NEXT.

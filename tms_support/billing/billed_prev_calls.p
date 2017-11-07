@@ -9,13 +9,12 @@
   Version ......: Yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
-gcbrand = "1".
-{timestamp.i}
-{cparam2.i}
-{coinv.i}
-{fvatfact.i}
-{ftransdir.i}
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
+{Func/cparam2.i}
+{Func/coinv.i}
+{Func/fvatfact.i}
+{Func/ftransdir.i}
 
 DEFINE VARIABLE liBillPeriod     AS INTEGER    NO-UNDO.
 DEFINE VARIABLE liCallPeriod     AS INTEGER    NO-UNDO.
@@ -79,7 +78,7 @@ OUTPUT STREAM sFile TO VALUE(lcfilename).
 /* Traverse all the Call's which are made before this billing period
    however its not billed previously but billed in this billing period */
 FOR EACH Invoice WHERE
-         Invoice.Brand    = gcBrand        AND
+         Invoice.Brand    = Syst.Var:gcBrand        AND
          Invoice.InvDate >= ldInvFromDate  AND
          Invoice.InvDate <= ldInvToDate    AND
          Invoice.InvType  = 1 NO-LOCK,

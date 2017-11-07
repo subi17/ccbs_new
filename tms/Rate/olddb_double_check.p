@@ -1,10 +1,10 @@
 /* olddb_double_check.p     23.06.11/aam 
 */
 
-{commali.i}
-{direct_dbconnect.i}
-{error_codes.i}
-{rate_roamzone.i}
+{Syst/commali.i}
+{Func/direct_dbconnect.i}
+{Rate/error_codes.i}
+{Rate/rate_roamzone.i}
 
 DEF INPUT PARAMETER  icCLI       AS CHAR NO-UNDO.
 DEF INPUT PARAMETER  idaDateSt   AS DATE NO-UNDO.
@@ -36,7 +36,7 @@ IF NOT CONNECTED(icOldDB) THEN DO:
 
    llAlreadyConnected = FALSE. 
    fInitializeConnectTables(icOldCDR,"old").
-   RUN pDirectConnect2Dbs(gcBrand,
+   RUN pDirectConnect2Dbs(Syst.Var:gcBrand,
                           "old",
                           idaDateSt,
                           idaDateSt).

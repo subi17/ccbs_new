@@ -1,9 +1,9 @@
 input from mnp_old_ongoing.txt.
-{commpaa.i}
-katun = "anttis".
-gcBrand = "1".
-{orderfunc.i}
-{tmsconst.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
+{Func/orderfunc.i}
+{Syst/tmsconst.i}
 
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO. 
 DEF STREAM slog.
@@ -41,7 +41,7 @@ repeat:
          find current mnpprocess EXCLUSIVE-LOCK.
          assign
             mnpprocess.statuscode = 7
-            mnpprocess.updatets = fMakeTS()
+            mnpprocess.updatets = Func.Common:mMakeTS()
             mnpprocess.statusreason = "CANC_TECNI".
       end.
       next.
@@ -53,7 +53,7 @@ repeat:
          find current mnpprocess EXCLUSIVE-LOCK.
          assign
             mnpprocess.statuscode = 7
-            mnpprocess.updatets = fMakeTS()
+            mnpprocess.updatets = Func.Common:mMakeTS()
             mnpprocess.statusreason = "CANC_TECNI".
       end.
       next.
@@ -70,7 +70,7 @@ repeat:
          find current mnpprocess EXCLUSIVE-LOCK.
          assign
             mnpprocess.statuscode = 7
-            mnpprocess.updatets = fMakeTS()
+            mnpprocess.updatets = Func.Common:mMakeTS()
             mnpprocess.statusreason = "CANC_TECNI".
       end.
       next.
@@ -84,7 +84,7 @@ repeat:
       find current mnpprocess EXCLUSIVE-LOCK.
       assign
          mnpprocess.statuscode = 7
-         mnpprocess.updatets = fMakeTS()
+         mnpprocess.updatets = Func.Common:mMakeTS()
          mnpprocess.statusreason = "CANC_TECNI"
          order.mnpstatus = 8.
   end.

@@ -1,0 +1,18 @@
+bulkload: CGMember
+  CustGroup: "622622652"
+  CustNum: 329366
+  CustName: "EL MAZOUNI"
+  Brand: "1"
+
+bulkload: CGMember
+  CustGroup: "622622652"
+  CustNum: 2434497
+  CustName: "FONTA"
+  Brand: "1"
+
+bulkload: CGMember
+  CustGroup: "622622652"
+  CustNum: 2898560
+  CustName: "NAVAS"
+  Brand: "1"
+

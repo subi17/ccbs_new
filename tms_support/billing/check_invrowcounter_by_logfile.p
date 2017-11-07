@@ -1,7 +1,6 @@
-{commpaa.i}
-gcbrand = "1".
-{date.i}
-{chk_cdr_invrowcounter.i}
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
+{Inv/chk_cdr_invrowcounter.i}
 
 def var i as int no-undo.
 def var ldatodate as date no-undo.
@@ -29,7 +28,7 @@ IF lcinputfile = "" THEN DO:
 END. /* IF lcinputfile = "" THEN DO: */
 
 assign 
-  ldatodate = flastdayofmonth(TODAY).
+  ldatodate = Func.Common:mLastDayOfMonth(TODAY).
 
 input stream sin from value(lcinputfile).
 
@@ -75,7 +74,7 @@ END.
 
 lcRunID = REPLACE(STRING(TIME,"HH:MM:SS"),":","") + "_logfile".
    
-RUN chk_cdr_invrowcounter.p(INPUT TABLE ttSubs BY-REFERENCE,
+RUN Inv/chk_cdr_invrowcounter.p(INPUT TABLE ttSubs BY-REFERENCE,
                             lcRunID, /* fr run id */
                             ldatodate,
                             0, /* fr process id */

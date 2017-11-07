@@ -9,7 +9,7 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
+{Syst/commali.i}
 
 def shared var siirto as char.
 
@@ -24,20 +24,20 @@ def var must-add    as logic                no-undo.
 form
       RatePlan.RatePlan
       RatePlan.RPName  format "x(30)"
-    with scroll 1 11 down  row 4 centered color value(cfc)
-    title color value(ctc) " Rating Plans " overlay frame sel.
+    with scroll 1 11 down  row 4 centered color value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " Rating Plans " overlay frame sel.
 
 form /* SEEK Code */
     RatePlan
     help "Enter Code of a Rating Plan"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
-    color value(cfc) no-labels overlay frame hayr.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND CODE "
+    color value(Syst.Var:cfc) no-labels overlay frame hayr.
 
-cfc = "sel". run ufcolor. assign ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.Var:ccc = Syst.Var:cfc.
 MAIN:
 repeat:
 
-   find first RatePlan WHERE RAteplan.Brand = gcBrand  no-lock no-error.
+   find first RatePlan WHERE RAteplan.Brand = Syst.Var:gcBrand  no-lock no-error.
    if not available RatePlan then do:
       must-print = false.
       must-add = true.
@@ -68,7 +68,7 @@ print-line:
             with frame sel.
             rtab[frame-line] = recid(RatePlan).
             down with frame sel.
-            find next RatePlan  WHERE RAteplan.Brand = gcBrand no-lock no-error.
+            find next RatePlan  WHERE RAteplan.Brand = Syst.Var:gcBrand no-lock no-error.
          end.
          must-print = false.
          up frame-line(sel) - 1 with frame sel.
@@ -76,10 +76,10 @@ print-line:
 
       if ufkey then do:
          assign
-         ufk = 0 ufk[1] = 35 ufk[5] = 11
-         ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
-         siirto = ? ehto = 3 ufkey = false.
-         run ufkey.p.
+         Syst.Var:ufk = 0 Syst.Var:ufk[1] = 35 Syst.Var:ufk[5] = 11
+         Syst.Var:ufk[6] = 0 Syst.Var:ufk[8] = 8  Syst.Var:ufk[9] = 1
+         siirto = ? Syst.Var:ehto = 3 ufkey = false.
+         RUN Syst/ufkey.p.
       end.
   end. /* print-line */
 
@@ -87,18 +87,18 @@ BROWSE:
       repeat with frame sel on endkey undo, retuRN:
 
          hide message no-pause.
-         choose row RatePlan.RatePlan ;(uchoose.i;) no-error with frame sel.
-         color display value(ccc) RatePlan.RatePlan with frame sel.
+         choose row RatePlan.RatePlan {Syst/uchoose.i} no-error with frame sel.
+         color display value(Syst.Var:ccc) RatePlan.RatePlan with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.
-         nap = keylabel(lastkey).
+         Syst.Var:nap = keylabel(lastkey).
 
          /* previous line */
-         if lookup(nap,"cursor-up") > 0 then do
+         if lookup(Syst.Var:nap,"cursor-up") > 0 then do
          with frame sel:
             if frame-line = 1 then do:
                find RatePlan where recid(RatePlan) = rtab[frame-line] no-lock.
-               find prev RatePlan  WHERE RAteplan.Brand = gcBrand 
+               find prev RatePlan  WHERE RAteplan.Brand = Syst.Var:gcBrand 
                no-lock no-error.
                if not available RatePlan then do:
                   bell.
@@ -121,10 +121,10 @@ BROWSE:
          end. /* previous line */
 
          /* next line */
-         if lookup(nap,"cursor-down") > 0 then do with frame sel:
+         if lookup(Syst.Var:nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                find RatePlan where recid(RatePlan) = rtab[frame-line] no-lock .
-               find next RatePlan  WHERE RAteplan.Brand = gcBrand
+               find next RatePlan  WHERE RAteplan.Brand = Syst.Var:gcBrand
                no-lock no-error.
                if not available RatePlan then do:
                   bell.
@@ -148,14 +148,14 @@ BROWSE:
          end. /* next line */
 
          /* previous page */
-         else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
+         else if lookup(Syst.Var:nap,"page-up,prev-page") > 0 then do with frame sel:
             find RatePlan where recid(RatePlan) = memory no-lock no-error.
-            find prev RatePlan  WHERE RAteplan.Brand = gcBrand
+            find prev RatePlan  WHERE RAteplan.Brand = Syst.Var:gcBrand
             no-lock no-error.
             if available RatePlan then do:
 
                do i = 1 to (frame-down - 1):
-                  find prev RatePlan  WHERE RAteplan.Brand = gcBrand
+                  find prev RatePlan  WHERE RAteplan.Brand = Syst.Var:gcBrand
                   no-lock no-error.
                   if available RatePlan then memory = recid(RatePlan).
                   else i = frame-down.
@@ -172,7 +172,7 @@ BROWSE:
         end. /* previous page */
 
         /* next page */
-        else if lookup(nap,"page-down,next-page") > 0 then do with frame sel:
+        else if lookup(Syst.Var:nap,"page-down,next-page") > 0 then do with frame sel:
            if rtab[frame-down] = ? then do:
                bell.
                message "This is the last page !".
@@ -186,14 +186,14 @@ BROWSE:
         end. /* next page */
 
         /* Seek */
-        if lookup(nap,"1,f1") > 0 then do:  /* RatePlan */
-           cfc = "puyr". run ufcolor.
-           ehto = 9. run ufkey. ufkey = true.
+        if lookup(Syst.Var:nap,"1,f1") > 0 then do:  /* RatePlan */
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set RatePlan with frame hayr.
            hide frame hayr no-pause.
            if RatePlan ENTERED then do:
               find first RatePlan where 
-                         RatePlan.Brand     = gcBrand AND 
+                         RatePlan.Brand     = Syst.Var:gcBrand AND 
                          RatePlan.RatePlan >= RatePlan
               no-lock no-error.
                if not available RatePlan then do:
@@ -211,28 +211,28 @@ BROWSE:
         end. /* Seek */
 
         /* Choose */
-        else if lookup(nap,"return,enter,5,f5") > 0 then do:
+        else if lookup(Syst.Var:nap,"return,enter,5,f5") > 0 then do:
            find RatePlan where recid(RatePlan) = rtab[frame-line] no-lock.
            siirto = string(RatePlan.RatePlan).
            leave MAIN.
         end. /* Choose */
         /* First record */
-        else if lookup(nap,"home,h") > 0 then do:
-           find first RatePlan  WHERE RAteplan.Brand = gcBrand no-lock.
+        else if lookup(Syst.Var:nap,"home,h") > 0 then do:
+           find first RatePlan  WHERE RAteplan.Brand = Syst.Var:gcBrand no-lock.
            memory = recid(RatePlan).
            must-print = true.
            next LOOP.
         end. /* First record */
 
         /* last record */
-        else if lookup(nap,"end,e") > 0 then do :
-           find last RatePlan  WHERE RAteplan.Brand = gcBrand no-lock.
+        else if lookup(Syst.Var:nap,"end,e") > 0 then do :
+           find last RatePlan  WHERE RAteplan.Brand = Syst.Var:gcBrand no-lock.
            memory = recid(RatePlan).
            must-print = true.
            next LOOP.
         end. /* last record */
 
-        else if nap = "8" or nap = "f8" then leave MAIN. /* Return */
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" then leave MAIN. /* Return */
 
      end.  /* BROWSE */
    end.  /* LOOP */

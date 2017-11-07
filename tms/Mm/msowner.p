@@ -26,12 +26,11 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{eventval.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MSOwner'}
-{cparam2.i}
-{timestamp.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MSOwner'}
+{Func/cparam2.i}
 
 DEF /* NEW */ SHARED VAR siirto AS CHAR .
 
@@ -83,9 +82,9 @@ DEF BUFFER bCustomer FOR Customer.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMSOwner AS HANDLE NO-UNDO.
    lhMSOwner = BUFFER MSOwner:HANDLE.
@@ -93,15 +92,15 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhMSOwner).
+      RUN Mc/eventview2.p(lhMSOwner).
    END.
 END.
 
 form
-    MsOwner.AgrCust    FORMAT ">>>>>>>9"
-    MsOwner.InvCust    FORMAT ">>>>>>>9"
-    MSOwner.CustNum    format ">>>>>>>9"  COLUMN-LABEL "User"
-    lcCustName         FORMAT "x(14)" COLUMN-LABEL "User Name"
+    MsOwner.AgrCust    FORMAT ">>>>>>>>9"
+    MsOwner.InvCust    FORMAT ">>>>>>>>9"
+    MSOwner.CustNum    format ">>>>>>>>9"  COLUMN-LABEL "User"
+    lcCustName         FORMAT "x(10)" COLUMN-LABEL "User Name"
     ldtBegDate         FORMAT "99-99-99" COLUMN-LABEL "DateFrom"
        HELP "Begin date"
     lcBegTime          FORMAT "xx:xx:xx" COLUMN-LABEL "TimeFrom"
@@ -112,8 +111,8 @@ form
        HELP "End time"
 WITH OVERLAY ROW FrmRow FrmDown DOWN centered 
 
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) 
     " KNOWN OWNERS OF MOBILE SUBSCRIPTION ID" + STRING(MSOwner.MSSeq) + " "
     FRAME sel.
 
@@ -155,8 +154,8 @@ form
     "Mandate .........:" Msowner.MandateID FORMAT "x(31)" NO-LABEL
                          Msowner.MandateDate FORMAT "99-99-9999" NO-LABEL SKIP
 WITH  OVERLAY ROW 1 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     /*1 columns*/
     FRAME lis.
@@ -214,7 +213,7 @@ FUNCTION fChkTime RETURNS LOGICAL
 END FUNCTION.                    
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 
 orders = "By Date,By 2,By 3, By 4".
 
@@ -247,13 +246,13 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a MSOwner  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR MSOwner.CLI
@@ -267,7 +266,7 @@ REPEAT WITH FRAME sel:
            CREATE MSOwner.
            ASSIGN
            MSOwner.CLI   = INPUT FRAME lis MSOwner.CLI
-           MSOwner.Brand = gcBrand .
+           MSOwner.Brand = Syst.Var:gcBrand .
 
            RUN local-UPDATE-record.
 
@@ -337,28 +336,28 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk = 0
-        ufk[1]= /*35*/ 0     ufk[2]= 0 ufk[3]= 0
-        ufk[4]= 7 WHEN llVendor AND NOT llTerminated
-        ufk[5]= 0  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
-        RUN ufkey.
+        Syst.Var:ufk = 0
+        Syst.Var:ufk[1]= /*35*/ 0     Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0
+        Syst.Var:ufk[4]= 7 WHEN llVendor AND NOT llTerminated
+        Syst.Var:ufk[5]= 0  Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MSOwner.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MSOwner.CustNum WITH FRAME sel.
+        CHOOSE ROW MSOwner.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) MSOwner.CustNum WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -382,10 +381,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -410,7 +409,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -436,7 +435,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND MSOwner WHERE recid(MSOwner) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -460,7 +459,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -474,7 +473,7 @@ BROWSE:
        END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(nap,"F4,4") > 0 AND NOT llTerminated THEN DO TRANS:
+     ELSE IF LOOKUP(Syst.Var:nap,"F4,4") > 0 AND NOT llTerminated THEN DO TRANS:
         RUN local-find-this(TRUE).
 
         llUpdate = FALSE.
@@ -495,7 +494,7 @@ BROWSE:
 
         IF llUpdate AND lcRight = "RW" THEN DO:
 
-           ehto = 9. RUN ufkey.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSOwner).
 
@@ -514,7 +513,7 @@ BROWSE:
               WITH FRAME sel EDITING:
                  READKEY.
 
-                 IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 
+                 IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 
                  THEN DO WITH FRAME sel:
                     PAUSE 0.
 
@@ -544,11 +543,11 @@ BROWSE:
               IF NOT fChkTime(INPUT-OUTPUT lcEndTime) THEN NEXT. 
               
               /* update actual time stamps */  
-              MSOwner.TSBegin = fHMS2TS(ldtBegDate,lcBegTime).
+              MSOwner.TSBegin = Func.Common:mHMS2TS(ldtBegDate,lcBegTime).
               
               IF ldtEndDate >= 12/31/2050
               THEN MsOwner.TSEnd = 99999999.99999.
-              ELSE MSOwner.TSEnd = fHMS2TS(ldtEndDate,lcEndTime).
+              ELSE MSOwner.TSEnd = Func.Common:mHMS2TS(ldtEndDate,lcEndTime).
            
               IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMSOwner).
               
@@ -567,13 +566,13 @@ BROWSE:
 
      END.
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 AND lcRight NE "R" THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 AND lcRight NE "R" THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(FALSE).
-       ASSIGN ac-hdr = " VIEW MSOwner " ufkey = TRUE ehto = 9. /*RUN ufkey.*/
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW MSOwner " ufkey = TRUE Syst.Var:ehto = 9. /*RUN Syst/ufkey.p.*/
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY MSOwner.CLI.
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSOwner).
        RUN local-UPDATE-record.                                  
@@ -592,25 +591,25 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(MSOwner) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(MSOwner) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -667,13 +666,13 @@ PROCEDURE local-find-others.
    FIND Customer WHERE 
         Customer.CustNum   = MSOwner.CustNum NO-LOCK NO-ERROR.
 
-   lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, BUFFER Customer).
+   lcCustName = Func.Common:mDispCustName(BUFFER Customer).
 
    FIND CLIType where 
-        CliType.Brand   = gcBrand  AND 
+        CliType.Brand   = Syst.Var:gcBrand  AND 
         CLIType.Clitype = MSOwner.Clitype NO-LOCK NO-ERROR.  
 
-   fSplitTS(MsOwner.TsBeg,
+   Func.Common:mSplitTS(MsOwner.TsBeg,
             OUTPUT ldtBegDate,
             OUTPUT liBegTime).
             
@@ -681,7 +680,7 @@ PROCEDURE local-find-others.
       ldtEndDate = 12/31/2054
       liEndTime  = 86399.
    ELSE DO:
-      fSplitTS(MsOwner.TsEnd,
+      Func.Common:mSplitTS(MsOwner.TsEnd,
                OUTPUT ldtEndDate,
                OUTPUT liEndTime).
    END. 
@@ -693,7 +692,7 @@ END PROCEDURE.
 
 PROCEDURE local-UPDATE-record:
 
-   ehto = 3. ufk = 0. run ufkey.p.
+   Syst.Var:ehto = 3. Syst.Var:ufk = 0. RUN Syst/ufkey.p.
    ufkey = true.
 
    DEF VAR llUpdate    AS LOG  NO-UNDO. 
@@ -716,19 +715,18 @@ PROCEDURE local-UPDATE-record:
       
       FIND bCustomer WHERE bCustomer.CustNum = MsOwner.AgrCust NO-LOCK.
       IF AVAILABLE bCustomer THEN
-         lcAgrName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, 
-                                      BUFFER bCustomer).
+         lcAgrName = Func.Common:mDispCustName(BUFFER bCustomer).
 
       FIND bCustomer WHERE bCustomer.CustNum = MsOwner.InvCust NO-LOCK.
       IF AVAILABLE bCustomer THEN
-         lcInvName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, 
-                                      BUFFER bCustomer).
+         lcInvName = Func.Common:mDispCustName(BUFFER bCustomer).
       
               
       DISP 
       MSOwner.CLI
       MSOwner.CLI + " / " + MSOwner.FixedNumber WHEN
-         MSOwner.FixedNumber NE "" AND MSOwner.FixedNumber NE ? @ MSOwner.CLI
+         (MSOwner.FixedNumber NE "" AND MSOwner.FixedNumber NE ? AND 
+          MSOwner.FixedNumber NE MSOwner.Cli) @ MSOwner.CLI
       MSOwner.MsSeq
       MsOwner.AgrCust lcAgrName
       MsOwner.InvCust lcInvName
@@ -791,7 +789,7 @@ PROCEDURE local-UPDATE-record:
              WITH FRAME lis
           EDITING:
              READKEY.
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                 PAUSE 0.
                 IF FRAME-FIELD = "billtarget" THEN DO:
                    FIND FIRST billtarget WHERE 

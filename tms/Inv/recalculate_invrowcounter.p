@@ -6,9 +6,8 @@
    - create entries to TMQueue from cdrs
 */
 
-{commali.i}
-{callquery.i}
-{timestamp.i}
+{Syst/commali.i}
+{Func/callquery.i}
 
 DEF INPUT  PARAMETER iiInvCust   AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiMsSeq     AS INT  NO-UNDO.
@@ -97,8 +96,8 @@ PROCEDURE pCollectCDRs:
             InvSeq.InvSeq = ttInvSeq.InvSeq:
 
       fMobCDRCollect(INPUT "post",
-                     INPUT gcBrand,
-                     INPUT katun,
+                     INPUT Syst.Var:gcBrand,
+                     INPUT Syst.Var:katun,
                      INPUT InvSeq.FromDate,   
                      INPUT InvSeq.ToDate,
                      INPUT InvSeq.CustNum,
@@ -151,7 +150,7 @@ PROCEDURE pLogAction:
    IF liDeleted > 0 OR oiToQueue > 0 THEN DO TRANS:
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = gcBrand   
+         ActionLog.Brand        = Syst.Var:gcBrand   
          ActionLog.TableName    = "InvRowCounter"  
          ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                   STRING(MONTH(TODAY),"99") + 
@@ -170,7 +169,7 @@ PROCEDURE pLogAction:
                                   "InvCust: " + STRING(iiInvCust) + ", " + 
                                   "MsSeq: " + STRING(iiMsSeq)
          ActionLog.ActionStatus = 3.
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
    END.
    
 END PROCEDURE. 

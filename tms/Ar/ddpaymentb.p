@@ -9,14 +9,13 @@
   Version ......: M15
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
-ASSIGN gcBrand = "1" 
-       katun   = "ddpaym".
+ASSIGN Syst.Var:gcBrand = "1" 
+       Syst.Var:katun   = "ddpaym".
        
-{cparam2.i}
-{eventlog.i}
-{timestamp.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
 
 DEF VAR liCount    AS INT  NO-UNDO.
 DEF VAR lcError    AS CHAR NO-UNDO.
@@ -26,9 +25,9 @@ DEF STREAM sRead.
 
 fELog("DDPAYM","Started").
 
-RUN ddpaymentco ("",                   /* InvGroup  */
+RUN Ar/ddpaymentco.p ("",                   /* InvGroup  */
                  0,                    /* customers from */
-                 99999999,             /* customers to   */
+                 999999999,             /* customers to   */
                  "",                   /* invoices from  */
                  "ZZZZZ",              /* invoices to    */
                  TODAY,                /* duedate   */
@@ -41,7 +40,7 @@ RUN ddpaymentco ("",                   /* InvGroup  */
 IF NOT (liCount = 0 AND lcError BEGINS "INFO") THEN DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = gcBrand   
+      ActionLog.Brand        = Syst.Var:gcBrand   
       ActionLog.TableName    = "Cron"  
       ActionLog.KeyValue     = "" 
       ActionLog.ActionID     = "DDPayment"
@@ -50,7 +49,7 @@ IF NOT (liCount = 0 AND lcError BEGINS "INFO") THEN DO TRANS:
       ActionLog.ActionDec    = liCount
       ActionLog.ActionChar   = lcError
       ActionLog.ActionStatus = 3.
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
 END.
 
 fELog("DDPAYM","Stopped:" + STRING(liCount) +

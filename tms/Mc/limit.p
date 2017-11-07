@@ -8,17 +8,17 @@
   Version ......: xfera 
   ---------------------------------------------------------------------- */
 
-{commali.i}.
+{Syst/commali.i}.
 
 DEFINE INPUT PARAM piCustNum   AS INT NO-UNDO. 
 DEFINE INPUT PARAM piMsSeq     AS INT NO-UNDO. 
 DEFINE INPUT PARAM piLimitType AS INT NO-UNDO. 
 DEFINE INPUT PARAM piTMRuleSeq AS INT NO-UNDO. 
 
-{lib/tokenlib.i}
-{dataformat.i}
-{flimitreq.i}
-{tmsconst.i}
+{Mc/lib/tokenlib.i}
+{Func/dataformat.i}
+{Func/flimitreq.i}
+{Syst/tmsconst.i}
 
 DEF NEW shared VAR siirto AS CHAR.
 
@@ -81,8 +81,8 @@ FORM
     Limit.FromDate  FORMAT       "99-99-9999" COLUMN-LABEL "From"
     Limit.ToDate    FORMAT       "99-99-9999" COLUMN-LABEL "To"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN SCROLL 1
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + lcHeader + " "
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + lcHeader + " "
     FRAME sel.
 
 form 
@@ -92,8 +92,8 @@ form
    "Valid To ....:" Limit.ToDate FORMAT "99-99-9999" SKIP
 
 WITH OVERLAY ROW 6 centered
-   COLOR value(cfc)
-   TITLE COLOR value(ctc) " View Limit " WITH no-labels side-labels
+   COLOR value(Syst.Var:cfc)
+   TITLE COLOR value(Syst.Var:ctc) " View Limit " WITH no-labels side-labels
    FRAME vlimit.
 
 
@@ -102,15 +102,15 @@ FORM
                     lcValueDesc FORMAT "x(10)" NO-LABEL SKIP
 
 WITH  OVERLAY ROW 8 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) lcLisTitle  
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) lcLisTitle  
     SIDE-LABELS 
     FRAME lis.
 
 orders = "By Customer    ,By Subscription".
 
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -200,32 +200,32 @@ BROWSE:
         RUN local-find-this(FALSE).
         
         ASSIGN
-        ufk = 0
-        ufk[3] = 0 
-        ufk[4] = 1068   WHEN llAdmin AND NOT llTerminated
-        ufk[5] = 927    WHEN AVAIL Limit 
-        ufk[6] = 1752   WHEN AVAIL Limit 
-        ufk[8]= 8 
-        ehto = 3 ufkey = FALSE.
-        RUN ufkey.
+        Syst.Var:ufk = 0
+        Syst.Var:ufk[3] = 0 
+        Syst.Var:ufk[4] = 1068   WHEN llAdmin AND NOT llTerminated
+        Syst.Var:ufk[5] = 927    WHEN AVAIL Limit 
+        Syst.Var:ufk[6] = 1752   WHEN AVAIL Limit 
+        Syst.Var:ufk[8]= 8 
+        Syst.Var:ehto = 3 ufkey = FALSE.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW Limit.Custnum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Limit.Custnum WITH FRAME sel.
+        CHOOSE ROW Limit.Custnum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) Limit.Custnum WITH FRAME sel.
       END.
       IF order = 2 THEN DO:
-        CHOOSE ROW Limit.MsSeq ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) Limit.MsSeq WITH FRAME sel.
+        CHOOSE ROW Limit.MsSeq {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) Limit.MsSeq WITH FRAME sel.
       END.
       
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -242,9 +242,9 @@ BROWSE:
         NEXT LOOP.
       END.
       
-      IF LOOKUP(nap,"f4") > 0 AND ufk[4] > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"f4") > 0 AND Syst.Var:ufk[4] > 0 THEN DO:
          
-         RUN selectbox(
+         RUN Syst/selectbox.p(
             "LIMIT FUNCTIONS",
             "Set limit",
             OUTPUT lcSelected).
@@ -269,7 +269,7 @@ BROWSE:
          NEXT LOOP.
       END. 
 
-      ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+      ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
       IF rtab[FRAME-LINE] = ? AND NOT must-add THEN DO:
         BELL.
@@ -278,10 +278,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -306,7 +306,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -332,7 +332,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND Limit WHERE recid(Limit) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -356,7 +356,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -371,11 +371,11 @@ BROWSE:
      END. /* NEXT page */
          
       
-      ELSE IF LOOKUP(nap,"f5") > 0 AND ufk[5] > 0 THEN DO: 
+      ELSE IF LOOKUP(Syst.Var:nap,"f5") > 0 AND Syst.Var:ufk[5] > 0 THEN DO: 
          
          RUN local-find-this(FALSE).
          
-         RUN memo
+         RUN Mc/memo.p
             (Limit.Custnum,
             "Limit",
             STRING(Limit.Custnum) + ";" + STRING(Limit.TMRuleSeq),
@@ -386,11 +386,11 @@ BROWSE:
 
       END.   
       
-      ELSE IF LOOKUP(nap,"f6") > 0 AND ufk[5] > 0 THEN DO: 
+      ELSE IF LOOKUP(Syst.Var:nap,"f6") > 0 AND Syst.Var:ufk[5] > 0 THEN DO: 
       
          RUN local-find-this(FALSE).
          
-         RUN eventsel("limit",
+         RUN Mc/eventsel.p("limit",
          "#BEGIN" + chr(255) + STRING(piCustnum) + chr(255) + 
          STRING(Limit.LimitType) + chr(255) + string(pitmruleseq) + 
          chr(255) + STRING(Limit.LimitID) + chr(255) + 
@@ -403,13 +403,13 @@ BROWSE:
 
       END.   
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(Limit) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(Limit) must-print = TRUE.
         NEXT LOOP.
@@ -419,7 +419,7 @@ BROWSE:
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE local-find-this:
 
@@ -538,8 +538,7 @@ PROCEDURE local-find-others.
       OUTPUT lcValueType,
       OUTPUT lcValue). 
 
-   lcValueType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "Limit",
+   lcValueType = Func.Common:mTMSCodeName("Limit",
                                lcLimitType,
                                STRING(Limit.LimitAmt)).
 
@@ -560,15 +559,14 @@ PROCEDURE local-UPDATE-record:
    IF AVAIL Limit THEN ldeValue = Limit.LimitAmt.
    ELSE ldeValue = 0.
 
-   lcValueDesc = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-               "Limit",
+   lcValueDesc = Func.Common:mTMSCodeName("Limit",
                "Billing Permission",
                STRING(ldeValue)).
 
    UPDATE-LOOP:
    REPEAT ON ENDKEY UNDO, LEAVE:
    
-      ehto = 9. RUN ufkey.
+      Syst.Var:ehto = 9. RUN Syst/ufkey.p.
   
       DISP ldeValue lcValueDesc WITH FRAME lis.
    
@@ -578,14 +576,14 @@ PROCEDURE local-UPDATE-record:
 
       READKEY.
       
-      nap = keylabel(lastkey).
+      Syst.Var:nap = keylabel(lastkey).
       DEFINE VARIABLE lcNewLimits AS CHARACTER NO-UNDO.
       
-      IF LOOKUP(nap,"f2") > 0 THEN .
+      IF LOOKUP(Syst.Var:nap,"f2") > 0 THEN .
       
       IF FRAME-FIELD = "ldeValue" AND KEYLABEL(LASTKEY) = "F9" THEN DO:
             
-         RUN tmscodesel(INPUT "Limit",  
+         RUN Syst/tmscodesel.p(INPUT "Limit",  
                               lcLimitType,
                               "Limit",
                               "",
@@ -600,18 +598,17 @@ PROCEDURE local-UPDATE-record:
             DISPLAY ldeValue lcValueDesc WITH FRAME lis.
          END.   
 
-         ehto = 9.
-         RUN ufkey.
+         Syst.Var:ehto = 9.
+         RUN Syst/ufkey.p.
          NEXT. 
          
       END.
       
-      if lookup(nap,poisnap) > 0 THEN DO:
+      if lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
          
          IF ldeValue ENTERED THEN DO:
             
-            lcValueDesc = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                        "Limit",
+            lcValueDesc = Func.Common:mTMSCodeName("Limit",
                         lcLimitType,
                         STRING(INPUT ldeValue)).
             
@@ -625,7 +622,7 @@ PROCEDURE local-UPDATE-record:
 
          END.
    
-         IF LOOKUP(nap,"f4,f8,x") > 0 THEN UNDO, LEAVE.
+         IF LOOKUP(Syst.Var:nap,"f4,f8,x") > 0 THEN UNDO, LEAVE.
 
       END.
 

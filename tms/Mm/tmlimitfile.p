@@ -1,13 +1,16 @@
-{commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+/* Subscription and activation limits bob tool */
 
-{tmsconst.i}
-{flimitreq.i}
-{ftransdir.i}
-{cparam2.i}
-{eventlog.i}
-{fcustdata.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
+
+{Syst/tmsconst.i}
+{Func/flimitreq.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Func/fcustdata.i}
+{Func/multitenantfunc.i}
 
 &SCOPED-DEFINE STAT_00 "00" /* Threshold successfully updated */
 &SCOPED-DEFINE STAT_10 "10" /* ERROR: Client doesn.t exist */
@@ -60,6 +63,7 @@ DEFINE VARIABLE lcTime AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liDate AS INT NO-UNDO. 
 DEFINE VARIABLE lcToday AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE llRecovery AS LOGICAL NO-UNDO. 
+DEFINE VARIABLE lcTenant AS CHARACTER NO-UNDO. 
 
 lcToday =   STRING(YEAR(TODAY),"9999") + 
             STRING(MONTH(TODAY),"99") +
@@ -244,26 +248,33 @@ REPEAT:
  
    lcInputFile = lcIncDir + lcFileName.
    
-   IF SEARCH(lcInputFile) NE ? THEN 
+   IF SEARCH(lcInputFile) NE ? THEN
       INPUT STREAM sin FROM VALUE(lcInputFile).
    ELSE NEXT.
-   
+   /* Set effective tenant based on file name.
+      If not recognised go to next file */
+   lcTenant = ENTRY(1,lcFileName,"_").
+   IF NOT fsetEffectiveTenantForAllDB(
+      fConvertBrandToTenant(lcTenant)) THEN NEXT.  
+ 
    IF INDEX(lcFileName,"results") > 0 THEN DO:
       llRecovery = TRUE.
-      liDate = INT(SUBSTRING(ENTRY(3,lcFileName,"_"),1,8)) NO-ERROR.
+      liDate = INT(SUBSTRING(ENTRY(4,lcFileName,"_"),1,8)) NO-ERROR.
    END.
-   ELSE liDate = INT(SUBSTRING(ENTRY(2,lcFileName,"_"),1,8)) NO-ERROR.
+   ELSE liDate = INT(SUBSTRING(ENTRY(3,lcFileName,"_"),1,8)) NO-ERROR.
    
    IF ERROR-STATUS:ERROR THEN NEXT.
    IF INT(lcToday) < liDate THEN NEXT.
    
    lcTime = STRING(TIME,"HH:MM").
-   lcOutputFile = lcSpoolDir + "threshold_results_" + 
-      STRING(liDate) + ENTRY(1,lcTime,":") + ENTRY(2,lcTime,":") + ".txt".
+   lcOutputFile = lcSpoolDir + lcTenant + "_threshold_results_" + 
+                  STRING(liDate) + ENTRY(1,lcTime,":") + ENTRY(2,lcTime,":") + 
+                  ".txt".
    OUTPUT STREAM sReport TO VALUE(lcOutputFile).
    fBatchLog("START", lcOutputFile).
 
-   lcStatFile = lcSpoolDir + "threshold_summary_" + STRING(liDate) + ".txt".
+   lcStatFile = lcSpoolDir + lcTenant + "_threshold_summary_" + 
+                STRING(liDate) + ".txt".
    OUTPUT STREAM sStatistics TO VALUE(lcStatFile).
    fBatchLog("START", lcStatFile).
    
@@ -275,7 +286,6 @@ REPEAT:
 
    LINE_LOOP:
    REPEAT:
-      
       IMPORT STREAM sin UNFORMATTED lcLine.
    
       ASSIGN 

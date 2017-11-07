@@ -9,17 +9,16 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
-ASSIGN gcBrand = "1" 
-       katun   = "Cron".
+ASSIGN Syst.Var:gcBrand = "1" 
+       Syst.Var:katun   = "Cron".
        
-{timestamp.i}
-{cparam2.i}
-{ftransdir.i}
-{eventlog.i}
-{printdoc1tt.i}
-{email.i}
+{Func/cparam2.i}
+{Func/ftransdir.i}
+{Syst/eventlog.i}
+{Inv/printdoc1tt.i}
+{Func/email.i}
 
 DEF VAR liCnt        AS INT  NO-UNDO.
 DEF VAR liRead       AS INT  NO-UNDO. 
@@ -90,8 +89,8 @@ END FUNCTION.
 
 
 FIND FIRST Company WHERE
-           Company.Brand = gcBrand NO-LOCK NO-ERROR.
-IF AVAILABLE Company THEN ynimi = Company.CompName.
+           Company.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
+IF AVAILABLE Company THEN Syst.Var:ynimi = Company.CompName.
 
 lcFile = SESSION:PARAMETER.
 
@@ -127,7 +126,7 @@ END.
 ASSIGN 
    lcPrintHouse = ENTRY(2,lcFile,"_")
    llLast       = FALSE
-   ldStarted    = fMakeTS()
+   ldStarted    = Func.Common:mMakeTS()
    liOrder      = INTEGER(ENTRY(1,ENTRY(4,lcFile,"_"),".")) 
    NO-ERROR.
 
@@ -183,8 +182,7 @@ ASSIGN
 /* invoice date to file name */   
 IF ldtNameDate NE ? THEN DO:
    
-   lcDate = DYNAMIC-FUNCTION("fDateFmt" IN ghFunc1,
-                             ldtNameDate,
+   lcDate = Func.Common:mDateFmt(ldtNameDate,
                              "yyyymmdd").
    lcPrintFile = REPLACE(lcPrintFile,"#IDATE",lcDate).
 END.
@@ -196,7 +194,7 @@ IF NOT lcFileType BEGINS "XML" THEN
 
 /* print */
 IF lcFileType BEGINS "XML" THEN 
-   RUN invoice_xml (INPUT-OUTPUT TABLE ttInvoice,
+   RUN Inv/invoice_xml.p (INPUT-OUTPUT TABLE ttInvoice,
                     ldtNameDate,
                     liInvCount,
                     llSeparate,
@@ -220,9 +218,8 @@ ELSE
                   OUTPUT liPrinted). 
 
 ASSIGN 
-   ldFinished  = fMakeTS()
-   liDurDays   = DYNAMIC-FUNCTION("fTSDuration" IN ghFunc1,
-                                  ldStarted,
+   ldFinished  = Func.Common:mMakeTS()
+   liDurDays   = Func.Common:mTSDuration(ldStarted,
                                   ldFinished,
                                   OUTPUT liDurTime)
    lcActionID  = IF lcFileType BEGINS "XML"
@@ -247,10 +244,10 @@ IF NUM-ENTRIES(lcPlainFile,"/") > 1 THEN
 IF llDBWrite THEN DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = gcBrand   
+      ActionLog.Brand        = Syst.Var:gcBrand   
       ActionLog.TableName    = "Invoice"  
       ActionLog.KeyValue     = "" 
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.Var:katun
       ActionLog.ActionID     = lcActionID
       ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
       ActionLog.ActionDec    = liPrinted
@@ -258,14 +255,14 @@ IF llDBWrite THEN DO TRANS:
       ActionLog.ActionStatus = IF RETURN-VALUE BEGINS "ERROR:"
                                THEN 1
                                ELSE 2.
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
       ActionLog.KeyValue     = lcPlainFile.
 END.
 
 ELSE DO:
    PUT STREAM sAction UNFORMATTED
       lcFileType  "|"
-      katun       "|"
+      Syst.Var:katun       "|"
       lcActionID  "|"
       TODAY       "|"
       "Finished"  "|"

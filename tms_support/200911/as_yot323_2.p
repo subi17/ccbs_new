@@ -1,8 +1,7 @@
-{commpaa.i}
-katun = "anttis".
-gcBrand = "1".
-{timestamp.i}
-{msisdn.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
+{Func/msisdn.i}
 
 DEFINE VARIABLE iCLi as int64 no-undo.
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
@@ -14,7 +13,7 @@ output stream serr to  /apps/snet/200911/as_yot323_2_err.log.
 
 def buffer msisdnbuf for msisdn.
 DEFINE VARIABLE ldeNow AS DECIMAL NO-UNDO. 
-ldeNow = fMakeTS().
+ldeNow = Func.Common:mMakeTS().
 
 LOOPPI:
 DO iCli = 633400000 to 633499999:
@@ -22,7 +21,7 @@ DO iCli = 633400000 to 633499999:
    FIND FIRST msisdnnumber where
       msisdnnumber.cli = string(iCli) NO-LOCK.
       
-   FIND FIRST msisdn where msisdn.brand = gcBrand and 
+   FIND FIRST msisdn where msisdn.brand = Syst.Var:gcBrand and 
       msisdn.cli = msisdnnumber.cli and 
       msisdn.statuscode = 0 and
       msisdn.validto > ldeNow NO-LOCK NO-ERROR.

@@ -8,12 +8,12 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{commali.i}
-{tmsconst.i}
-{fcustpl.i}
-{fuserright.i}
-{lib/tokenlib.i}
-{fcharge_comp_loaded.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Func/fcustpl.i}
+{Func/fuserright.i}
+{Mc/lib/tokenlib.i}
+{Func/fcharge_comp_loaded.i}
 
 DEFINE INPUT PARAMETER iiMsSeq AS INTEGER NO-UNDO.
 DEFINE INPUT PARAMETER icOperation AS CHARACTER NO-UNDO.
@@ -35,7 +35,7 @@ FORM
     "Charge:" ldeCharge 
        HELP "Enter charge"
        FORMAT ">>9.99" SKIP
-    WITH CENTERED ROW 8 TITLE COLOR VALUE(ctc) " DEFINE CHARGE "
+    WITH CENTERED ROW 8 TITLE COLOR VALUE(Syst.Var:ctc) " DEFINE CHARGE "
     NO-LABELS OVERLAY FRAME f1.
 
 ok = FALSE.
@@ -51,7 +51,7 @@ IF NOT AVAIL Mobsub THEN DO:
 END.
 
 FIND FeeModel WHERE 
-     FeeModel.Brand = gcBrand AND
+     FeeModel.Brand = Syst.Var:gcBrand AND
      FeeModel.FeeModel = icOperation NO-LOCK NO-ERROR.
 IF NOT AVAIL FeeModel THEN DO:
    MESSAGE "Charge/Compensation Billing Event" icOperation "not found"
@@ -66,7 +66,7 @@ lcPriceList = fFeeModelPriceList(MobSub.Custnum,
                                  TODAY).
 
 FIND FIRST FMItem NO-LOCK  WHERE
-   FMItem.Brand     = gcBrand       AND
+   FMItem.Brand     = Syst.Var:gcBrand       AND
    FMItem.FeeModel  = FeeModel.FeeModel AND
    FMItem.PriceList = lcPriceList AND
    FMItem.FromDate <= TODAY     AND
@@ -82,10 +82,10 @@ END.
 IF FMItem.Amount >= 0 THEN llNegative = FALSE.  ELSE llNegative = TRUE.
 
  /* fetch user limits for charge and compensation */
-ldChargeLimit = fUserLimitAmt(katun, (IF Mobsub.PayType = TRUE
+ldChargeLimit = fUserLimitAmt(Syst.Var:katun, (IF Mobsub.PayType = TRUE
                       THEN {&PREP_CHARGE_LIMIT_TYPE}
                       ELSE {&POST_CHARGE_LIMIT_TYPE})).
-ldChargeMonthLimit = fUserLimitAmt(katun, (IF Mobsub.PayType = TRUE
+ldChargeMonthLimit = fUserLimitAmt(Syst.Var:katun, (IF Mobsub.PayType = TRUE
                         THEN {&PREP_CHARGE_MONTHLY_LIMIT_TYPE}
                         ELSE {&POST_CHARGE_MONTHLY_LIMIT_TYPE})).
 
@@ -104,7 +104,7 @@ IF MobSub.PayType = TRUE AND ldeCharge > 0 THEN DO: /* charges for prepaid */
 
  /* get current balance */
    ldCurrBal = 0.
-   RUN balancequery.p(MobSub.CLI).
+   RUN Gwy/balancequery.p(MobSub.CLI).
    ldCurrBal = INT(RETURN-VALUE) / 100 NO-ERROR.
 END.
 
@@ -141,7 +141,7 @@ END.
 
 /* Change charge only for Admin users*/
 ok = false.
-ehto = 9. RUN ufkey.
+Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
 LOOP:
 REPEAT:

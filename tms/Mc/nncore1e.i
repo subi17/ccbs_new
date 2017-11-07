@@ -6,7 +6,7 @@
 
 
 IF licalask <= 6 then do:
-    {erepgen.i}
+    {Inv/erepgen.i}
         
     put stream eKirje unformatted 
     " 8" 

@@ -1,4 +1,4 @@
-{fmakesms.i}
+{Func/fmakesms.i}
 
 /* get the SMS recipients */
 FUNCTION GetSMSRecipients RETURNS CHARACTER
@@ -73,7 +73,7 @@ FUNCTION fSMSNotify RETURN CHARACTER
                         ENTRY(i,lcSMSAddr,","),
                         44,
                         icType + " Invoice " + icSMSReplacedText,
-                        fMakeTS(),
+                        Func.Common:mMakeTS(),
                         "Fact. Yoigo",
                         STRING(iIniSeconds) + "-" + STRING(iEndSeconds)).
 

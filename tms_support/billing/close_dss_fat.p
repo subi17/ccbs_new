@@ -7,12 +7,11 @@
   Version ......: Yoigo
   ---------------------------------------------------------------------- */
 
-{commpaa.i}
-gcBrand = "1".
-katun   = "Qvantel".
-{cparam2.i}
-{timestamp.i}
-{fcpfat.i}
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
+{Func/cparam2.i}
+{Func/fcpfat.i}
 {Mm/active_bundle.i}
 
 DEF VAR ldaPromoFromDate         AS DATE NO-UNDO.
@@ -52,21 +51,21 @@ ELSE
 
 ASSIGN ldaPromoFromDate  = fCParamDa("DSSPromoFromDate")
        ldaPromoToDate    = fCParamDa("DSSPromoEndDate")
-       ldPromoPeriodFrom = fMake2Dt(ldaPromoFromDate,0)
-       ldPromoPeriodTo   = fMake2Dt(ldaPromoToDate,86399)
+       ldPromoPeriodFrom = Func.Common:mMake2DT(ldaPromoFromDate,0)
+       ldPromoPeriodTo   = Func.Common:mMake2DT(ldaPromoToDate,86399)
        ldaLastDayOfLastMonth = DATE(MONTH(ldaFirstDayOfLastMonth) + 1,1,
                                     YEAR(ldaFirstDayOfLastMonth)) - 1
        liLastMonthPeriod = YEAR(ldaFirstDayOfLastMonth) * 100 +
                            MONTH(ldaFirstDayOfLastMonth)
-       ldPeriodFrom = fMake2Dt(ldaFirstDayOfLastMonth,0)
-       ldPeriodTo   = fMake2Dt(ldaLastDayOfLastMonth,86399)
+       ldPeriodFrom = Func.Common:mMake2DT(ldaFirstDayOfLastMonth,0)
+       ldPeriodTo   = Func.Common:mMake2DT(ldaLastDayOfLastMonth,86399)
        lcLogFile    = "/apps/yoigo/tms_support/billing/close_dss_fat_" +
                       STRING(TODAY,"999999") + "_" + STRING(TIME) + ".txt".
 
 message ldPromoPeriodFrom skip ldPromoPeriodTo skip ldPeriodFrom skip ldPeriodTo skip liLastMonthPeriod view-as alert-box.
 
 FOR EACH FATime WHERE
-         FATime.Brand  = gcBrand AND
+         FATime.Brand  = Syst.Var:gcBrand AND
          FATime.FTGrp  = "DSSCPFREE" AND
          FATime.InvNum = 0 AND
          FATime.LastPeriod > liLastMonthPeriod NO-LOCK,
@@ -74,14 +73,14 @@ FOR EACH FATime WHERE
          Customer.CustNum = FATime.CustNum NO-LOCK:
 
    /* Check wheather subs. has active DSS service or not */
-   IF fGetActiveSpecificBundle(FATime.MsSeq,fMakeTS(),"DSS") = "" THEN DO:
+   IF fGetActiveSpecificBundle(FATime.MsSeq,Func.Common:mMakeTS(),"DSS") = "" THEN DO:
       Create ttDSSFat.
       ASSIGN ttDSSFat.DSSMsSeq = FATime.MsSeq
              ttDSSFat.CustNum  = FATime.CustNum
              ttDSSFat.CLI      = FATime.CLI
              ttDSSFat.Remark1  = "DSS is not active".
       NEXT.
-   END. /* IF fGetActiveSpecificBundle(FATime.MsSeq,fMakeTS() */
+   END. /* IF fGetActiveSpecificBundle(FATime.MsSeq,Func.Common:mMakeTS() */
 
    llKeepFAT = FALSE.
 
@@ -104,7 +103,7 @@ FOR EACH FATime WHERE
              FIRST bServiceLimit NO-LOCK USE-INDEX SlSeq WHERE
                    bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
              FIRST bDayCampaign NO-LOCK WHERE
-                   bDayCampaign.Brand = gcBrand AND
+                   bDayCampaign.Brand = Syst.Var:gcBrand AND
                    bDayCampaign.DCEvent = bServiceLimit.GroupCode AND
                    LOOKUP(bDayCampaign.DCType,
                           {&PERCONTRACT_RATING_PACKAGE}) > 0:

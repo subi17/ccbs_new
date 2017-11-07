@@ -6,13 +6,12 @@
   CREATED ......: 07.11.12
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
-{commali.i}
-{cparam2.i}
-{dumpfile_run.i}
-{timestamp.i}
-{tmsconst.i}
-{eventlog.i}
-{direct_dbconnect.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/dumpfile_run.i}
+{Syst/tmsconst.i}
+{Syst/eventlog.i}
+{Func/direct_dbconnect.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -25,7 +24,7 @@ DEF OUTPUT PARAMETER olInterrupted AS LOG  NO-UNDO.
 
 fInitializeConnectTables("MobCDR","").
 
-RUN pDirectConnect2Dbs(gcBrand,
+RUN pDirectConnect2Dbs(Syst.Var:gcBrand,
                        "",
                        TODAY - 1,
                        TODAY - 1).
@@ -35,7 +34,7 @@ IF RETURN-VALUE BEGINS "ERROR" THEN DO:
    RETURN.
 END.
 
-RUN edrhistory_dump.p(
+RUN Rate/edrhistory_dump.p(
    iiDumpID,
    icFile,
    icDumpMode,

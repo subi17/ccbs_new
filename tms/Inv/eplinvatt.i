@@ -3,8 +3,8 @@
    temporary version; print an attachment to the end of epl invoice 
 */
 
-{commali.i}
-{finvtxt.i}
+{Syst/commali.i}
+{Func/finvtxt.i}
 
 DEF VAR liAttITNum AS INT NO-UNDO.
 
@@ -36,7 +36,7 @@ FUNCTION fPrintAttachment RETURNS LOGIC
    THEN RETURN FALSE. 
    
    /* print letter */
-   RUN printxt (iiCustNum,
+   RUN Mc/printxt.p (iiCustNum,
                 0, 
                 "",
                 1,  /* 1=invtext */

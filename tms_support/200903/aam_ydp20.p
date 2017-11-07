@@ -1,6 +1,5 @@
-{testpaa.i}
-katun = "ari".
-{timestamp.i}
+{Syst/testpaa.i}
+Syst.Var:katun = "ari".
 
 def var lcres as char no-undo.
 def var ldtactdate as date no-undo.
@@ -53,11 +52,11 @@ for each msrequest no-lock where
       export stream slog singlefee.
       delete singlefee.
        
-      fsplitts(msrequest.actstamp,
+      Func.Common:mSplitTS(msrequest.actstamp,
                output ldtactdate,
                output litime).
                
-      RUN creasfee (Msrequest.CustNum,
+      RUN Mc/creasfee.p (Msrequest.CustNum,
                     MsRequest.MsSeq,
                     ldtActDate,
                     "FeeModel",

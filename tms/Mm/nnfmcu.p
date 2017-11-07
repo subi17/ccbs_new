@@ -9,13 +9,16 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
+{Syst/commali.i}
 
 
 def var arg  as c format "x(40)".
 
 DEF OUTPUT PARAMETER CustNum AS i NO-UNDO.
 DEF OUTPUT PARAMETER MsSeq AS I  NO-UNDO.
+DEFINE VARIABLE gcBrand AS CHARACTER NO-UNDO.
+gcBrand = Syst.Var:gcBrand.
+
 form
 skip(1)
 "  NOTE:   You can find a customer with different arguments." skip
@@ -38,30 +41,30 @@ MsSeq = 0.
 PAUSE 0.
 MAIN:
 repeat WITH FRAME frm:
-   ehto = 9. RUN ufkey.
-   UPDATE gcbrand WHEN gcallBrand = TRUE arg.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+   UPDATE gcBrand WHEN Syst.Var:gcAllBrand = TRUE arg.
 
 
 ACTION:
    repeat WITH FRAME frm:
       ASSIGN
-      ufk    =   0
-      ufk[1] =   7
-      ufk[2] = 209  /* MSISDN       */
-      ufk[3] = 210  /* ICC of SIM   */
-      ufk[4] = 211  /* FIND IMSI    */
-      ufk[5] = 715  /* FIND A-Sub   */
-      ufk[6] = 94   /* FIND invoice */
-      ufk[7] = 93
-      ufk[8] = 8
-      ehto   = 0.  RUN ufkey.
+      Syst.Var:ufk    =   0
+      Syst.Var:ufk[1] =   7
+      Syst.Var:ufk[2] = 209  /* MSISDN       */
+      Syst.Var:ufk[3] = 210  /* ICC of SIM   */
+      Syst.Var:ufk[4] = 211  /* FIND IMSI    */
+      Syst.Var:ufk[5] = 715  /* FIND A-Sub   */
+      Syst.Var:ufk[6] = 94   /* FIND invoice */
+      Syst.Var:ufk[7] = 93
+      Syst.Var:ufk[8] = 8
+      Syst.Var:ehto   = 0.  RUN Syst/ufkey.p.
 
-      IF toimi = 8 THEN LEAVE MAIN.
+      IF Syst.Var:toimi = 8 THEN LEAVE MAIN.
 
-      IF toimi = 1 THEN NEXT MAIN.
+      IF Syst.Var:toimi = 1 THEN NEXT MAIN.
 
-      IF toimi = 2 THEN DO:
-         IF gcbrand ne "*" THEN 
+      IF Syst.Var:toimi = 2 THEN DO:
+         IF gcBrand ne "*" THEN 
          FIND MSISDN where 
               MSISDN.CLI = arg  AND
               MSISDN.brand = gcBrand no-lock no-error.
@@ -89,13 +92,13 @@ ACTION:
 
             IF AVAIL MobSub THEN ASSIGN
                MsSeq = MobSub.MsSeq
-               gcbrand = mobsub.brand.
+               Syst.Var:gcBrand = mobsub.brand.
             LEAVE MAIN.
          END.
        END.
 
 
-      IF toimi = 3 THEN DO:
+      IF Syst.Var:toimi = 3 THEN DO:
          IF gcBrand ne "*" THEN 
          FIND SIM where 
               SIM.ICC   = arg AND 
@@ -123,14 +126,14 @@ ACTION:
                           MSOwner.TsEnd >= 99999999
                NO-LOCK NO-ERROR.
                IF AVAIL MSOwner THEN ASSIGN
-                  gcBrand = msowner.Brand 
+                  Syst.Var:gcBrand = msowner.Brand 
                   MsSeq   = MSOwner.MsSeq.
             END.
             LEAVE MAIN.
          END.   
       END.
 
-      IF toimi = 4 THEN DO:
+      IF Syst.Var:toimi = 4 THEN DO:
 
          FIND IMSI where 
               IMSI.IMSI = arg no-lock no-error.
@@ -158,13 +161,13 @@ ACTION:
                        MSOwner.TsEnd >= 99999999
             NO-LOCK NO-ERROR.
             IF AVAIL MSOwner THEN ASSIGN
-               gcBrand = msowner.Brand 
+               Syst.Var:gcBrand = msowner.Brand 
                MsSeq   = MSOwner.MsSeq.
             LEAVE MAIN.
          END.   
       END.
 
-      IF toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
          IF gcBrand ne "*" THEN 
          FIND MobSub where 
               Mobsub.Brand = gcBrand AND 
@@ -175,12 +178,12 @@ ACTION:
          IF AVAIL MobSub THEN DO:
             ASSIGN
                CustNum = MobSub.CustNum 
-               gcbrand = mobsub.brand.
+               Syst.Var:gcBrand = mobsub.brand.
             LEAVE MAIN.
          END.   
       END.
 
-      IF toimi = 6 THEN DO:
+      IF Syst.Var:toimi = 6 THEN DO:
          IF gcBrand ne "*" THEN 
          FIND Invoice where 
               Invoice.InvNum = integer(arg) AND
@@ -191,12 +194,12 @@ ACTION:
          IF AVAIL Invoice THEN DO:
             ASSIGN 
                CustNum = Invoice.CustNum
-               gcBrand = Invoice.Brand.
+               Syst.Var:gcBrand = Invoice.Brand.
             LEAVE MAIN.
          END.   
       END.  
 
-      IF TOIMI = 7 THEN DO:
+      IF Syst.Var:toimi = 7 THEN DO:
          IF gcBrand ne "*" THEN 
          FIND FIRST Customer  where 
                     Customer.CustName Begins arg AND
@@ -207,7 +210,7 @@ ACTION:
          IF AVAIL Customer THEN DO:
             ASSIGN 
                CustNum = Customer.CustNum
-               gcBrand = Customer.Brand.
+               Syst.Var:gcBrand = Customer.Brand.
             LEAVE MAIN.
          END.   
       END.

@@ -6,12 +6,10 @@ DEFINE OUTPUT PARAMETER pcAnswerCodes AS CHARACTER NO-UNDO.
 
 /* output through cat. */
 
-{xmlrpc/xmlrpc_client.i}
-{commali.i}
-{timestamp.i}
-{date.i}
-{tmsconst.i}
-{fbundle.i}
+{fcgi_agent/xmlrpc/xmlrpc_client.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
+{Mm/fbundle.i}
 
 /* Connection parameters from TMSParam */
 DEFINE VARIABLE cConnURL AS CHARACTER NO-UNDO. 
@@ -69,7 +67,10 @@ DEF VAR lcCashResult          AS CHARACTER NO-UNDO.
 DEF VAR ldePayInAdv           AS DECIMAL   NO-UNDO.
 DEF VAR lcBundleCLITypes      AS CHARACTER NO-UNDO.
 DEF VAR ldeResidualAmount     AS DECIMAL   NO-UNDO.
-DEF VAR lcUPSCode             AS CHARACTER NO-UNDO. 
+DEF VAR lcUPSCode             AS CHARACTER NO-UNDO.
+DEF VAR lcSegment             AS CHARACTER NO-UNDO.
+DEFINE VARIABLE piMobileDonorHolder AS INTEGER INITIAL ? NO-UNDO.
+DEFINE VARIABLE piFixDonorHolder AS INTEGER INITIAL ? NO-UNDO.
 
 /* Parameter and result struct indentifiers */
 DEFINE VARIABLE gcParamStruct AS CHARACTER NO-UNDO. 
@@ -172,10 +173,10 @@ IF pcActionType EQ "ORDER" THEN DO:
    FIND FIRST OrderCustomer WHERE
               OrderCustomer.Brand = "1" AND
               OrderCustomer.OrderId = piId AND
-              OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
+              OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-LOCK NO-ERROR.
    IF AVAILABLE OrderCustomer AND AVAILABLE Order THEN
    DO:
-      pcFoundingDate = fDateFmt(OrderCustomer.FoundationDate, "ddmmyyyy"). /* 3 */
+      pcFoundingDate = Func.Common:mDateFmt(OrderCustomer.FoundationDate, "ddmmyyyy"). /* 3 */
       
       FIND FIRST OrderAccessory OF Order WHERE
                  OrderAccessory.TerminalType EQ ({&TERMINAL_TYPE_PHONE}) NO-LOCK NO-ERROR.
@@ -183,7 +184,7 @@ IF pcActionType EQ "ORDER" THEN DO:
       ASSIGN pcCIF          = OrderCustomer.CustId                      /*  1 */
              pcZIP          = OrderCustomer.ZIP                         /*  2 */
              pcAddress       = OrderCustomer.Address                    /*  4 */
-             pcRepId         = Order.OrdererID                          /*  5 */
+             pcRepId         = OrderCustomer.AuthCustId                 /*  5 */
              pcRepName       = OrderCustomer.FirstName                  /*  6 */
              pcRepFSurname   = OrderCustomer.SurName1                   /*  7 */
              pcRepSSurname   = OrderCustomer.SurName2                   /*  8 */
@@ -194,7 +195,14 @@ IF pcActionType EQ "ORDER" THEN DO:
              lcOfferId     = Order.Offer
              lcSubsType    = Order.CLIType.
              lcKindOfNumber = "N".
-   
+
+      /* YPRO-25 Segment field WITH Customer Category */
+      FIND FIRST CustCat NO-LOCK WHERE
+                 CustCat.Brand    = Syst.Var:gcBrand AND
+                 CustCat.Category = OrderCustomer.Category NO-ERROR.
+      IF AVAILABLE CustCat THEN
+        lcSegment = CustCat.Segment.
+
       IF LOOKUP(Order.CLIType,lcBundleCLITypes) > 0 THEN DO:
          lcDataBundle = fGetDataBundleInOrderAction(Order.OrderID,
                                                     Order.CLIType).
@@ -219,18 +227,21 @@ IF pcActionType EQ "ORDER" THEN DO:
    FIND FIRST OrderCustomer WHERE
               OrderCustomer.Brand = "1" AND
               OrderCustomer.OrderId = piId AND
-              OrderCustomer.RowType = 4 NO-LOCK NO-ERROR.
+              OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY} NO-LOCK NO-ERROR.
    IF AVAILABLE OrderCustomer THEN
    DO:
       ASSIGN pcDelName       = OrderCustomer.Address                   /* 11 */ 
              pcDelZip        = OrderCustomer.ZIP                       /* 12 */
-             lcUPSCode       = OrderCustomer.KialaCode.
+             lcUPSCode       = IF Order.DeliveryType = {&ORDER_DELTYPE_POS} AND
+                                  OrderCustomer.KialaCode > ""
+                               THEN "YOI_" + OrderCustomer.KialaCode
+                               ELSE OrderCustomer.KialaCode.
    END. 
 
    FIND FIRST OrderCustomer WHERE
               OrderCustomer.Brand = "1" AND
               OrderCustomer.OrderId = piId AND
-              OrderCustomer.RowType = 5 NO-LOCK NO-ERROR.
+              OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT} NO-LOCK NO-ERROR.
    IF AVAILABLE OrderCustomer THEN
    DO:
       ASSIGN pcDeln          = OrderCustomer.FirstName                 /* 13 */
@@ -239,6 +250,18 @@ IF pcActionType EQ "ORDER" THEN DO:
              pcDelTelphone   = OrderCustomer.MobileNumber              /* 16 */
              pcDelMail       = OrderCustomer.Email.                    /* 17 */
    END.
+
+   ASSIGN
+      piMobileDonorHolder =
+         INTEGER(CAN-FIND(FIRST OrderCustomer NO-LOCK WHERE
+                    OrderCustomer.Brand = "1" AND
+                    OrderCustomer.OrderId = piId AND
+                    OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER}))
+      piFixDonorHolder =
+         INTEGER(CAN-FIND(FIRST OrderCustomer NO-LOCK WHERE
+                    OrderCustomer.Brand = "1" AND
+                    OrderCustomer.OrderId = piId AND
+                    OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER})).
 END.
 /* YDR-323 STC */
 ELSE IF LOOKUP(pcActionType, "NORMAL,RENEWAL_STC") > 0 THEN DO:
@@ -297,7 +320,7 @@ ELSE IF LOOKUP(pcActionType, "NORMAL,RENEWAL_STC") > 0 THEN DO:
      
    ASSIGN pcCIF          = Customer.OrgId                    /*  1 */
           pcZIP          = Customer.ZIP                      /*  2 */
-          pcFoundingDate = fDateFmt(Customer.FoundationDate, 
+          pcFoundingDate = Func.Common:mDateFmt(Customer.FoundationDate, 
                                     "ddmmyyyy")              /* 3 */
           pcAddress       = Customer.Address                 /* 4 */
           pcRepId         = Customer.OrgId                /* 5 */
@@ -326,6 +349,13 @@ ELSE IF LOOKUP(pcActionType, "NORMAL,RENEWAL_STC") > 0 THEN DO:
           lcSubsType      = (IF pcActionType EQ "RENEWAL_STC" THEN
                                 MsRequest.ReqCParam2
                              ELSE Mobsub.CliType).
+
+   /* YPRO-25 Segment field WITH Customer Category */
+   FIND FIRST CustCat NO-LOCK WHERE
+              CustCat.Brand    = Syst.Var:gcBrand AND
+              CustCat.Category = Customer.Category NO-ERROR.
+   IF AVAILABLE CustCat THEN
+     lcSegment = CustCat.Segment.
 
    FIND FIRST bContactPerson WHERE
               bContactPerson.Brand = "1" AND
@@ -359,10 +389,10 @@ IF LOOKUP(pcActionType,"ORDER,RENEWAL_STC") > 0 THEN DO:
    /* Find TERM and PayTerm contracts from offer */
    IF Order.Offer > "" THEN
       FOR FIRST Offer WHERE
-                Offer.Brand = gcBrand AND
+                Offer.Brand = Syst.Var:gcBrand AND
                 Offer.Offer = Order.Offer NO-LOCK,
           EACH  OfferItem WHERE
-                OfferItem.Brand       = gcBrand        AND
+                OfferItem.Brand       = Syst.Var:gcBrand        AND
                 OfferItem.Offer       = Offer.Offer    AND
                 OfferItem.ItemType    = "PerContract"  AND
                (OfferItem.ItemKey BEGINS "PAYTERM" OR
@@ -379,7 +409,7 @@ IF LOOKUP(pcActionType,"ORDER,RENEWAL_STC") > 0 THEN DO:
    /* Check Payment Method for direct channel */
    IF INDEX(Order.OrderChannel,"POS") = 0 THEN DO:
       FIND FIRST Orderpayment WHERE
-                 OrderPayment.Brand   = gcBrand AND
+                 OrderPayment.Brand   = Syst.Var:gcBrand AND
                  OrderPayment.OrderId = Order.OrderId NO-LOCK NO-ERROR.
       IF AVAIL OrderPayment THEN DO:
          IF OrderPayment.Method = {&ORDERPAYMENT_M_POD} THEN 
@@ -390,7 +420,7 @@ IF LOOKUP(pcActionType,"ORDER,RENEWAL_STC") > 0 THEN DO:
       END. /* IF AVAIL OrderPayment THEN DO: */
 
       /* Amount paid in direct channels */
-      RUN cashfee.p(Order.OrderID,
+      RUN Mc/cashfee.p(Order.OrderID,
                     2, /* action 2=just make a list of fees, don't create */
                     OUTPUT lcCashResult,
                     OUTPUT ldePayInAdv,
@@ -408,38 +438,7 @@ EMPTY TEMP-TABLE tt_param.
 
 IF plOK THEN
 DO:
-   pcCif =  pcCif.
-   pcZip =  pcZip. 
-   pcFoundingDate =  pcFoundingDate.  
-   pcAddress  =    pcAddress.
-   pcRepId =      pcRepId.  
-   pcRepName  = pcRepName.
-   pcRepFSurName = pcRepFSurname.
-   pcRepSSurName = pcRepSSurname.
-   pcRepEmail =    pcRepEmail.
-   pcDelName  =  pcDelName.
-   pcDelZip =     pcDelZip.
-   pcDeln =       pcDeln.
-   pcDelFSurName = pcDelFSurname.
-   pcDelSSurName = pcDelSSurname.
-   pcDelTelphone = pcDelTelphone.
-   pcDelMail =     pcDelMail.
-   pcRdEntidad =   pcRdEntidad.
-   pcRdSurcursal = pcRdSurcursal.
-   pcRdDc        =  pcRdDc.
-   pcNCuenta     =  pcNCuenta .
-   lcSalesman    =  lcSalesMan.
-   lcSimOnly    =  lcSimOnly.
-   lcOfferId    =  lcOfferId.
-   lcSubsType    =  lcSubsType.
-   lcKindOfNumber =  lcKindOfNumber.
    lcOldOperator =  SUBSTRING(lcOldOperator,1,16).
-   lcOldPaymType =  lcOldPaymType.
-   lcMNPMSISDN   =  lcMNPMSISDN.
-   lcPayTerm     =  lcPayTerm.
-   lcTerm        =  lcTerm.
-   lcPaymentMethod =  lcPaymentMethod.
-   lcUPSCode     = lcUPSCode.
 
    /* Construct the parameter struct from the parameter values */
    gcParamStruct = add_struct("", ""). 
@@ -477,6 +476,13 @@ DO:
    add_string  (gcParamStruct, "payment_method", lcPaymentMethod).
    add_double  (gcParamStruct, "buyback_price", ldeResidualAmount).
    add_string  (gcParamStruct, "kiala_code", lcUPSCode).
+   add_string  (gcParamStruct, "segment", lcSegment).
+
+   IF piMobileDonorHolder NE ?
+   THEN add_int  (gcParamStruct, "MobileDonorholder", piMobileDonorHolder).
+
+   IF piFixDonorHolder NE ?
+   THEN add_int  (gcParamStruct, "FixDonorholder", piFixDonorHolder).
 
    DEFINE VARIABLE lcResult AS LONGCHAR.
 

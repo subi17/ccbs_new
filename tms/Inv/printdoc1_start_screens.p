@@ -9,8 +9,8 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
+{Syst/commali.i}
+{Func/cparam2.i}
 
 DEF INPUT PARAMETER idtInvDate AS DATE NO-UNDO.
 DEF INPUT PARAMETER icFileList AS CHAR NO-UNDO.

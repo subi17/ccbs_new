@@ -1,12 +1,11 @@
     
-{commpaa.i}
-{timestamp.i}
-{xmlfunction.i}
-{heartbeat.i}
+{Syst/commpaa.i}
+{Func/xmlfunction.i}
+{Func/heartbeat.i}
 
 ASSIGN
-   gcBrand = "1"
-   katun   = "Request".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun   = "Request".
 
 DEFINE STREAM outfile.
 
@@ -159,7 +158,7 @@ PROCEDURE SocketIO:
    lcRequest = GET-STRING(lmData,1).
 
    OUTPUT TO /scratch/nagios/tms/ivr/ivr_request.xml APPEND.
-   PUT CONTROL "NEW MESSAGE: " fTS2HMS(fMakeTS()) CHR(10) lcRequest CHR(10).
+   PUT CONTROL "NEW MESSAGE: " Func.Common:mTS2HMS(Func.Common:mMakeTS()) CHR(10) lcRequest CHR(10).
    OUTPUT CLOSE.
 
    /* take away newline characters */
@@ -174,7 +173,7 @@ PROCEDURE SocketIO:
 
          ASSIGN
             liLoop  = liLoop + 1
-            lcTime2 = fTS2HMS(fMakeTS())
+            lcTime2 = Func.Common:mTS2HMS(Func.Common:mMakeTS())
             lcCLI   = fGetRPCNodeValue(lcXML,"Subscriber").
          
          DISP liLoop lcTime2 WITH FRAME frmMain.
@@ -182,7 +181,7 @@ PROCEDURE SocketIO:
          
          FIND FIRST PrePaidRequest WHERE
                     PrePaidRequest.CLI      = lcCLI   AND
-                    PrePaidRequest.Brand    = gcBrand AND
+                    PrePaidRequest.Brand    = Syst.Var:gcBrand AND
                     PrePaidRequest.Source   = "IVR"   AND
                    (PrePaidRequest.PPStatus = 0 OR
                     PrePaidRequest.PPStatus = 9)
@@ -191,18 +190,18 @@ PROCEDURE SocketIO:
          IF NOT AVAIL PrePaidRequest THEN DO TRANSACTION:
       
             CREATE PrePaidRequest.
-            PrePaidRequest.TSRequest = fMakeTS().
+            PrePaidRequest.TSRequest = Func.Common:mMakeTS().
 
             ASSIGN
                PrePaidRequest.CLI       = lcCLI
-               PrePaidRequest.Brand     = gcBrand
+               PrePaidRequest.Brand     = Syst.Var:gcBrand
                PrePaidRequest.Source    = "IVR"
                PrePaidRequest.PPRequest = NEXT-VALUE(PrePaidReq)
                PrePaidRequest.CommLine  = lcXML
                PrePaidRequest.PPStatus  = 0.
          
             FIND FIRST MobSub WHERE
-                       MobSub.Brand = gcBrand AND
+                       MobSub.Brand = Syst.Var:gcBrand AND
                        MobSub.CLI   = PrePaidRequest.CLI
             NO-LOCK NO-ERROR.
             
@@ -222,11 +221,11 @@ PROCEDURE SocketIO:
                ASSIGN
                   MsRequest.CreStamp   = PrePaidRequest.TSRequest
                   MsRequest.MsRequest  = NEXT-VALUE(MsRequest)
-                  MsRequest.Brand      = gcBrand
+                  MsRequest.Brand      = Syst.Var:gcBrand
                   MsRequest.MSSeq      = MobSub.MSSeq
                   MsRequest.CLI        = MobSub.CLI
                   MsRequest.CustNum    = MobSub.CustNum
-                  MsRequest.UserCode   = katun
+                  MsRequest.UserCode   = Syst.Var:katun
                   MsRequest.ActStamp   = MsRequest.CreStamp
                   MsRequest.ReqType    = 1
                   MsRequest.ReqCParam1 = "PROFILE"
@@ -311,7 +310,7 @@ PROCEDURE pResponse:
    SET-SIZE(lmXML) = 0.
 
    OUTPUT TO /scratch/nagios/tms/ivr/ivr_response.xml APPEND.
-   PUT CONTROL "NEW RESPONSE: " + fTS2HMS(fMakeTS()) CHR(10) lcXML CHR(10).
+   PUT CONTROL "NEW RESPONSE: " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) CHR(10) lcXML CHR(10).
    OUTPUT CLOSE.
 
    RETURN lcXML.

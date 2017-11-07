@@ -24,7 +24,6 @@
                   13.04.2004/aam index BillPeriod removed
                   14.06.2005/aam undo creation if billcode = ""
                   01.12.2005/aam hosttable is "customer" not "asiakas"
-                  24.01.2006/jt  DYNAMIC-FUNCTION("fDispCustName")
                   07.08.2006/jt  edded order by billcode
                   30.08.2006/aam find msowner/mobsub also using invcust
   Version ......: M15
@@ -32,10 +31,10 @@
 
 &GLOBAL-DEFINE BrTable SingleFee
 
-{commali.i}
-{eventval.i} 
-{lib/tokenlib.i}
-{lib/tokenchk.i 'fixedfee'}
+{Syst/commali.i}
+{Syst/eventval.i} 
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'fixedfee'}
 
 DEF new shared VAR siirto AS CHAR.
 
@@ -71,9 +70,9 @@ DEF VAR ldtDate       AS DATE                  NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhSingleFee AS HANDLE NO-UNDO.
    lhSingleFee = BUFFER SingleFee:HANDLE.
@@ -81,12 +80,12 @@ DO:
 
    ON F12 ANYWHERE 
    DO:
-      RUN eventview2.p(lhSingleFee).
+      RUN Mc/eventview2.p(lhSingleFee).
    END.
 END.
 
-{ffeecont.i}
-{fixedfee.i}
+{Func/ffeecont.i}
+{Func/fixedfee.i}
 
 form
     SingleFee.Brand       FORMAT "x(4)" 
@@ -99,13 +98,13 @@ form
     SingleFee.Amt
     SingleFee.Billed        format "I/" column-label "I"
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
     " Single Fees "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
-{brand.i}
+{Func/brand.i}
 lcBrand = "1".
 
 form
@@ -134,8 +133,8 @@ form
        "Billed on Invoice:" AT 40 SingleFee.InvNum  FORMAT "zzzzzzzzz"         
 
 WITH  OVERLAY ROW 1 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     NO-LABELS 
     FRAME lis.
 
@@ -143,37 +142,37 @@ form /* seek Billable item  BY  CustNum */
     "Brand ..:" lcBrand  HELP "Enter Brand"
     VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "Customer:" liCustNum HELP "Enter Customer No."
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUST. NO "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND CUST. NO "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Billable item  BY BillPeriod */
     "Brand :" lcBrand  HELP "Enter Brand"
       VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") SKIP
     "Period:"  BillPeriod HELP "Enter Billing Period"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Period "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Period "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 form /* seek Billable item  BY BillCode */
     "Brand ..:" lcBrand  HELP "Enter Brand"
       VALIDATE(CAN-FIND(Brand WHERE Brand.Brand = lcBrand),"Unknown brand") 
       SKIP
     "BillItem:"  lcBillCode HELP "Enter Billing Item code"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND BillItem "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f3.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND BillItem "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f3.
 
 
 form
     SingleFee.Memo
     WITH OVERLAY ROW 3 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc)
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc)
     " Invoice Text: Customer No " + STRING(singlefee.custnum) + "  " + 
                      singlefee.billcode +  " " 
     WITH NO-LABELS 1 columns
     FRAME f4.
 
 
-cfc = "sel". RUN ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "By Customer No.,   By Period  ,  By BillItem , By 4".
@@ -207,13 +206,13 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a SingleFee  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      RUN ufcolor.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR SingleFee.CustNum 
@@ -315,31 +314,31 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 702 ufk[2]= 0 /* 771  */ ufk[3]= 703 ufk[4]= 927
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-        ufk[7]= 2150 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
-        RUN ufkey.p.
+        Syst.Var:ufk[1]= 702 Syst.Var:ufk[2]= 0 /* 771  */ Syst.Var:ufk[3]= 703 Syst.Var:ufk[4]= 927
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.Var:ufk[7]= 2150 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
+        RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW SingleFee.CustNum ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) SingleFee.CustNum WITH FRAME sel.
+        CHOOSE ROW SingleFee.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) SingleFee.CustNum WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW SingleFee.BillCode ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) SingleFee.BillCode WITH FRAME sel.
+        CHOOSE ROW SingleFee.BillCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) SingleFee.BillCode WITH FRAME sel.
       END.
       
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      Syst.Var:nap = keylabel(LASTKEY).
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order <= 0 THEN order = maxOrder.
       END.
 
@@ -363,7 +362,7 @@ BROWSE:
         NEXT.
       END.
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -388,7 +387,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -414,7 +413,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND SingleFee WHERE recid(SingleFee) = memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -438,7 +437,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -453,12 +452,12 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR  FRAME f1.
        Disp lcBrand With FRAME f1.
-       SET  lcBrand WHEN gcAllBrand = TRUE 
+       SET  lcBrand WHEN Syst.Var:gcAllBrand = TRUE 
             liCustNum WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        
@@ -475,14 +474,14 @@ BROWSE:
 
      /* Search BY col 3 */
      
-     ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN ufcolor.
-       ehto = 9. RUN ufkey. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f3.
        Disp lcBrand With FRAME f3.
        
-       SET  lcBrand WHEN gcAllBrand = TRUE
+       SET  lcBrand WHEN Syst.Var:gcAllBrand = TRUE
             lcBillCode WITH FRAME f3.
        HIDE FRAME f3 NO-PAUSE.
 
@@ -498,23 +497,23 @@ BROWSE:
        END.
      END. /* Search-3 */
 
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN 
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 THEN 
      
      DO: /* MEMO */
         RUN local-find-this(false).
-        RUN memo(INPUT SingleFee.Custnum,
+        RUN Mc/memo.p(INPUT SingleFee.Custnum,
                  INPUT "SingleFee",
                  INPUT STRING(FMItemId),
                  INPUT "SingleFee").
-        ufkey = TRUE. ehto = 9.
+        ufkey = TRUE. Syst.Var:ehto = 9.
         NEXT LOOP.
      END.
 
      /* UPDATE memo */
-     ELSE IF LOOKUP(nap,"7,f7") > 0 THEN DO TRANS ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN ufcolor.
-        ehto = 9. 
-        RUN ufkey. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.Var:nap,"7,f7") > 0 THEN DO TRANS ON ENDKEY UNDO, NEXT LOOP:
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.Var:ehto = 9. 
+        RUN Syst/ufkey.p. ufkey = TRUE.
 
         RUN local-find-this(TRUE).
 
@@ -527,11 +526,11 @@ BROWSE:
         HIDE FRAME f4 NO-PAUSE.
      END.
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
         must-add = TRUE.
         NEXT LOOP.
      END.
-     ELSE IF LOOKUP(nap,"6,f6") > 0  AND lcRight = "RW"
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0  AND lcRight = "RW"
      THEN DO TRANSAction:  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
@@ -545,7 +544,7 @@ BROWSE:
         END.
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
           SingleFee.CustNum      
           SingleFee.BillTarget  
           lcCustName    
@@ -574,7 +573,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
           SingleFee.CustNum      
           SingleFee.BillTarget  
           lcCustName
@@ -588,7 +587,7 @@ BROWSE:
 
            IF llDoEvent THEN RUN StarEventMakeDeleteEventWithMemo(
                                     lhSingleFee,
-                                    katun,
+                                    Syst.Var:katun,
                                     "ManualCUI").
            DELETE SingleFee.
 
@@ -604,13 +603,13 @@ BROWSE:
        END.
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". RUN ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY SingleFee.CustNum.
 
        new_singlefee = FALSE.
@@ -628,13 +627,13 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = recid(SingleFee) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         DO endloop = 1 to FRAME-DOWN - 1.
            RUN local-find-prev.
@@ -644,13 +643,13 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE local-find-this:
 
@@ -707,8 +706,7 @@ PROCEDURE local-disp-row:
        
        RUN local-find-others.
        
-       lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                        BUFFER Customer).
+       lcCustName = Func.Common:mDispCustName(BUFFER Customer).
        CLEAR FRAME sel NO-PAUSE.
        DISPLAY 
        SingleFee.Brand 
@@ -788,7 +786,7 @@ PROCEDURE local-update-record:
  
       IF lcRight = "RW" THEN DO:
 
-         si-recid2 = SingleFee.CustNum.
+         Syst.Var:si-recid2 = SingleFee.CustNum.
 
          UPDATE
             SingleFee.Contract    WHEN NOT SingleFee.Billed
@@ -811,8 +809,8 @@ PROCEDURE local-update-record:
               IF FRAME-FIELD = "keyvalue" and keylabel(Lastkey) = "F9"
               THEN DO:
                   ASSIGN INPUT lbelongto.
-                  IF    lbelongto = TRUE THEN RUN nnasel.
-                  ELSE  IF lbelongto = FALSE THEN RUN h-mobsub.
+                  IF    lbelongto = TRUE THEN RUN Mc/nnasel.p.
+                  ELSE  IF lbelongto = FALSE THEN RUN Help/h-mobsub.p.
 
                   IF siirto NE ? THEN 
                   ASSIGN singlefee.keyvalue = siirto.
@@ -821,22 +819,22 @@ PROCEDURE local-update-record:
              END.
 
              IF FRAME-FIELD = "BillTarget" AND KEYLABEL(LASTKEY) = "F9" THEN DO:
-                RUN h-billtarg(INPUT INPUT FRAME lis Singlefee.CustNum).
+                RUN Help/h-billtarg.p(INPUT INPUT FRAME lis Singlefee.CustNum).
                 IF siirto NE ? THEN DO:
                    ASSIGN Singlefee.BillTarget = INT(siirto).
                    DISP Singlefee.BillTarget WITH FRAME lis.
-                   ASSIGN ehto = 9 ufkey = TRUE.
-                   RUN ufkey.p.
+                   ASSIGN Syst.Var:ehto = 9 ufkey = TRUE.
+                   RUN Syst/ufkey.p.
                    
                    NEXT.
                 END.
              END.
 
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                 PAUSE 0.
                 IF FRAME-FIELD = "CustNum" THEN DO:
                    FIND Customer WHERE 
-                        Customer.Brand   = gcBrand AND 
+                        Customer.Brand   = Syst.Var:gcBrand AND 
                         Customer.CustNum =
                    INPUT FRAME lis SingleFee.CustNum NO-LOCK NO-ERROR.
                    IF NOT AVAIL Customer THEN DO:
@@ -844,8 +842,7 @@ PROCEDURE local-update-record:
                       MESSAGE "Unknown customer !".
                       NEXT.
                    END.
-                   lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                                 BUFFER Customer).
+                   lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                    DISP lcCustName.
                 END.
 
@@ -947,7 +944,7 @@ PROCEDURE local-update-record:
                 END.
 
                 ELSE IF FRAME-FIELD = "Billperiod" THEN DO:
-                   RUN uperch(INPUT FRAME lis SingleFee.BillPeriod,OUTPUT rc).
+                   RUN Syst/uperch.p(INPUT FRAME lis SingleFee.BillPeriod,OUTPUT rc).
                    IF rc NE 0 THEN NEXT.
                    IF INPUT FRAME lis SingleFee.Concerns[1] = 0 THEN DISP
                       INPUT FRAME lis SingleFee.BillPeriod @ 
@@ -960,18 +957,18 @@ PROCEDURE local-update-record:
              APPLY LASTKEY.
           END. /* EDITING */
 
-          si-recid2 = 0.
+          Syst.Var:si-recid2 = 0.
 
          IF new_singlefee AND
             llDoEvent THEN RUN StarEventMakeCreateEventWithMemo(
                                  lhSingleFee,
-                                 katun,
+                                 Syst.Var:katun,
                                  "ManualCUI").
 
          IF NOT new_singlefee AND
             llDoEvent THEN RUN StarEventMakeModifyEventWithMemo(
                                  lhSingleFee,
-                                 katun,
+                                 Syst.Var:katun,
                                  "ManualCUI").
       END.
 

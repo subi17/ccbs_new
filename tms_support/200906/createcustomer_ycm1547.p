@@ -6,14 +6,13 @@
                   12.04.07/aam update old customer's bank data 
   Version ......: yoigo
 -------------------------------------------------------------------------- */
-{commali.i} 
-{timestamp.i}
-{cparam.i2}
-{eventval.i}
-/* {fwebuser.i} */ 
-{forderstamp.i}
-{order.i}
-{fcustdata.i}
+{Syst/commali.i} 
+{Func/cparam.i2}
+{Syst/eventval.i}
+/* {Func/fwebuser.i} */ 
+{Func/forderstamp.i}
+{Func/order.i}
+{Func/fcustdata.i}
 
 DEF INPUT  PARAMETER  iiOrderId  LIKE Order.OrderId.
 DEF INPUT  PARAMETER  iiRole     AS   INT.
@@ -37,7 +36,7 @@ DEF VAR llOk     AS LOG NO-UNDO.
 DEF BUFFER bOrderCustomer FOR OrderCustomer.
 
 FIND FIRST Order WHERE
-           Order.Brand   = gcBrand AND
+           Order.Brand   = Syst.Var:gcBrand AND
            Order.OrderId = iiOrderId 
 EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
 
@@ -54,7 +53,7 @@ IF iiRole = 2 AND Order.InvCustRole NE 2 THEN RETURN.
 IF iiRole = 3 AND Order.UserRole NE 3    THEN RETURN.
 
 FIND FIRST OrderCustomer NO-LOCK WHERE
-           OrderCustomer.Brand   = gcBrand   AND
+           OrderCustomer.Brand   = Syst.Var:gcBrand   AND
            OrderCustomer.OrderID = iiOrderID AND
            OrderCustomer.RowType = iiRole NO-ERROR.
 IF NOT AVAILABLE OrderCustomer THEN DO:
@@ -71,7 +70,7 @@ ELSE IF iiRole = 1 THEN DO:
 /*
    IF OrderCustomer.CustNum > 0 THEN liOldCustNum = OrderCustomer.CustNum.
    ELSE  */
-   run searchcust (INPUT  "ORGID|" +
+   RUN Mc/searchcust.p (INPUT  "ORGID|" +
                           /* if agrcust=invcust=user then show only those
                              that are invcusts to themselves */
                           (IF Order.InvCustRole = 1 AND
@@ -88,13 +87,13 @@ END.
 ELSE IF iiRole = 2 THEN DO:
 
    FIND FIRST bOrderCustomer NO-LOCK WHERE
-              bOrderCustomer.Brand   = gcBrand   AND
+              bOrderCustomer.Brand   = Syst.Var:gcBrand   AND
               bOrderCustomer.OrderID = iiOrderID AND
               bOrderCustomer.RowType = 1 NO-ERROR.
  
    IF AVAILABLE bOrderCustomer THEN DO:
 
-      run searchcust (INPUT  "INVCUST" + 
+      RUN Mc/searchcust.p (INPUT  "INVCUST" + 
                           /* if user=agrcust then show only that customer's
                              invcust */
                           (IF Order.UserRole = 1
@@ -116,13 +115,13 @@ END.
 ELSE IF iiRole = 3 THEN  DO:
 
    FIND FIRST bOrderCustomer NO-LOCK WHERE
-              bOrderCustomer.Brand   = gcBrand   AND
+              bOrderCustomer.Brand   = Syst.Var:gcBrand   AND
               bOrderCustomer.OrderID = iiOrderID AND
               bOrderCustomer.RowType = Order.InvCustRole NO-ERROR.
    
    IF AVAILABLE bOrderCustomer THEN DO:
 
-      run searchcust (INPUT  "USERCUST",
+      RUN Mc/searchcust.p (INPUT  "USERCUST",
                       INPUT  STRING(bOrderCustomer.CustNum),
                       INPUT  ilDisp,
                       OUTPUT lioldcustnum).
@@ -139,7 +138,7 @@ IF liOldCustnum = 0 THEN DO:
    IF new-Custnum = 0 OR new-custnum = ?
    THEN new-custnum = 300. 
 
-   RUN copymobcu(INPUT-OUTPUT new-CustNum, INPUT FALSE).
+   RUN Mm/copymobcu.p(INPUT-OUTPUT new-CustNum, INPUT FALSE).
 
    llOk = fmakeCustomer(Order.OrderID,
                         iiRole,    
@@ -187,9 +186,9 @@ END.
 ELSE DO:
 
    IF llDoEvent THEN DO:
-      &GLOBAL-DEFINE STAR_EVENT_USER katun
+      &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-      {lib/eventlog.i}
+      {Func/lib/eventlog.i}
 
       DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
       lhCustomer = BUFFER Customer:HANDLE.
@@ -214,7 +213,7 @@ ELSE DO:
    END.
    ELSE DO:
       FIND FIRST OrderCustomer EXCLUSIVE-LOCK WHERE
-                 OrderCustomer.Brand   = gcBrand   AND
+                 OrderCustomer.Brand   = Syst.Var:gcBrand   AND
                  OrderCustomer.OrderID = iiOrderID AND
                  OrderCustomer.RowType = iiRole  NO-ERROR.
 

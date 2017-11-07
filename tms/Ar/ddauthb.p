@@ -9,15 +9,15 @@
   Version ......: M15
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
-ASSIGN gcBrand = "1" 
-       katun   = "ddauth".
+ASSIGN Syst.Var:gcBrand = "1" 
+       Syst.Var:katun   = "ddauth".
 
-{utumaa.i "new"}
-{cparam2.i}
-{ddtrans.i}
-{eventlog.i}
+{Syst/utumaa.i "new"}
+{Func/cparam2.i}
+{Ar/ddtrans.i}
+{Syst/eventlog.i}
 
 ASSIGN tuni1 = "nnsvlu"
        tuni2 = "".
@@ -60,8 +60,8 @@ lcInFile  = fCparamC("DDebitAuthFile").
 IF lcInFile = "" THEN RETURN.
 
 FIND FIRST Company WHERE
-           Company.Brand = gcBrand NO-LOCK NO-ERROR.
-IF AVAILABLE Company THEN ynimi = Company.CompName.
+           Company.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
+IF AVAILABLE Company THEN Syst.Var:ynimi = Company.CompName.
 
 fELog("DDAUTH","Started").
 
@@ -107,7 +107,7 @@ FOR EACH ttFiles:
    ASSIGN spit1  = 80
           skayt1 = 80.
 
-   RUN ddauthin (ttFiles.AuthFile, 
+   RUN Ar/ddauthin.p (ttFiles.AuthFile, 
                  FALSE,      /* show messages */
                  TRUE,       /* send mail     */
                  OUTPUT liCount).

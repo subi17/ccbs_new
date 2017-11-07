@@ -9,4 +9,4 @@
   Version ......: 
   ---------------------------------------------------------------------- */
 
-RUN all_cparam.p("TMQueue").
+RUN Syst/all_cparam.p("TMQueue").

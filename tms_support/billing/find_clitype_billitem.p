@@ -1,4 +1,3 @@
-{timestamp.i}
 
 def stream slog.
 
@@ -46,8 +45,8 @@ if ldafromdate = ? or ldatodate = ? or lclogfile = "" or lcclitype = "" or
 assign
    liperiodfrom = year(ldafromdate) * 100 + month(ldafromdate)
    liperiodto   = year(ldatodate) * 100 + month(ldatodate)
-   ldperiodfrom = fmake2dt(ldafromdate,0)
-   ldperiodto   = fmake2dt(ldatodate,86399)
+   ldperiodfrom = Func.Common:mMake2DT(ldafromdate,0)
+   ldperiodto   = Func.Common:mMake2DT(ldatodate,86399)
    lhmob        = buffer mobsub:handle
    lhterm       = buffer termmobsub:handle.
 

@@ -1,5 +1,5 @@
-{testpaa.i}
-katun = "anttis".
+{Syst/testpaa.i}
+Syst.Var:katun = "anttis".
 
 def stream sread.
 input stream sread from /apps/snet/200709/change_ICC_stock_yoi422.txt.

@@ -2,8 +2,8 @@
    get a value from cdr details 
 */   
   
-{commali.i}        
-{callquery.i}
+{Syst/commali.i}        
+{Func/callquery.i}
 
 
 DEF INPUT  PARAMETER icCDRTable AS CHAR NO-UNDO.

@@ -1,8 +1,8 @@
-{commpaa.i}
-katun = "anttis".
-gcBrand = "1".
-{tmsconst.i}
-{flimitreq.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
+{Syst/tmsconst.i}
+{Func/flimitreq.i}
 
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE liMsSeq AS INTEGER NO-UNDO. 

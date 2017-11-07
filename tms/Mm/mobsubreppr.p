@@ -8,9 +8,9 @@
   Version ......:
   ------------------------------------------------------------------ */
 
-{commali.i}
-{excel.i}
-{utumaa.i "new"}
+{Syst/commali.i}
+{Func/excel.i}
+{Syst/utumaa.i "new"}
 
 ASSIGN tuni1 = ""
        tuni2 = "".
@@ -37,18 +37,18 @@ DEF TEMP-TABLE ttMobSub
    INDEX MSStatus IS PRIMARY MSStatus CLIType CLI.
 
 ASSIGN tila = true.
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
 message "Printing in progress, wait ...".
 
 FOR EACH Customer NO-LOCK WHERE 
-         Customer.Brand     = gcBrand  AND
+         Customer.Brand     = Syst.Var:gcBrand  AND
          Customer.CustNum  >= CustNum1 AND
          Customer.CustNum  <= CustNum2 AND
         (Customer.InvGroup  = InvGroup OR InvGroup = ""):
 
    FOR EACH MobSub NO-LOCK WHERE 
-            MobSub.Brand    = gcBrand AND
+            MobSub.Brand    = Syst.Var:gcBrand AND
             MobSub.CustNum  = Customer.CustNum AND
            (MobSub.MsStatus = MsStatus OR MsStatus = 0) AND
            (MobSub.CLIType  = CLIType OR CLIType = "") AND
@@ -93,7 +93,7 @@ BREAK
    
    IF LAST-OF(ttMobSub.CLIType) THEN DO:
       FIND CLIType NO-LOCK WHERE
-           clitype.Brand   = gcBrand AND 
+           clitype.Brand   = Syst.Var:gcBrand AND 
            CLIType.CLIType = ttMobSub.CLIType.
       
    
@@ -122,7 +122,7 @@ IF details then do:
 
    FOR EACH ttMobSub NO-LOCK:
       FIND CLIType NO-LOCK WHERE
-           clitype.Brand   = gcBrand AND 
+           clitype.Brand   = Syst.Var:gcBrand AND 
            CLIType.CLIType = ttMobSub.CLIType.
       
       put stream tul unformatted
@@ -139,7 +139,7 @@ IF details then do:
 END.
 
 ASSIGN tila = false.
-{utuloste.i}
+{Syst/utuloste.i}
 
 
 

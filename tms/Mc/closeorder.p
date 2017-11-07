@@ -6,27 +6,43 @@
 
 */
    
-{commali.i}
-{eventval.i}
-{timestamp.i}
-{forderstamp.i}
-{msreqfunc.i}
-{orderfunc.i}
-{tmsconst.i}
-{fcreditreq.i}
-{ordercancel.i}
-{msisdn.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/forderstamp.i}
+{Func/msreqfunc.i}
+{Func/orderfunc.i}
+{Syst/tmsconst.i}
+{Func/fcreditreq.i}
+{Func/ordercancel.i}
+{Func/msisdn.i}
 
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF INPUT PARAMETER ilSilent AS LOG NO-UNDO.
 
-DEF VAR llOk AS LOG NO-UNDO.
-DEF VAR lcError AS CHARACTER NO-UNDO.
-DEF VAR lcQuestion AS CHARACTER NO-UNDO. 
-DEF VAR lcCreditReason AS CHARACTER NO-UNDO. 
+DEF VAR llOk                    AS LOG  NO-UNDO.
+DEF VAR lcError                 AS CHAR NO-UNDO.
+DEF VAR lcQuestion              AS CHAR NO-UNDO. 
+DEF VAR lcCreditReason          AS CHAR NO-UNDO. 
+DEF VAR lcOldOrderStatus        AS CHAR NO-UNDO. 
+DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
+DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO. 
+
+/* Additional line mobile only ALFMO-5*/
+DEF VAR lcAddlineCliypes           AS CHARACTER NO-UNDO. 
+DEF VAR llDelete                   AS LOGICAL   NO-UNDO. 
+DEF VAR llMainLineMigrationOngoing AS LOGICAL   NO-UNDO.
+
+DEFINE BUFFER lbOrderCustomer FOR OrderCustomer.
+DEFINE BUFFER lbOrder         FOR Order.
+DEFINE BUFFER lbCustomer      FOR Customer.
+DEFINE BUFFER lbCustCat       FOR CustCat.
+/* Additional line mobile only ALFMO-5 */
+DEFINE BUFFER lbOrdCust       FOR OrderCustomer.
+DEFINE BUFFER lbOrd           FOR Order.
+DEFINE BUFFER lbMLOrder       FOR Order.
 
 FIND Order WHERE 
-     Order.Brand   = gcBrand AND 
+     Order.Brand   = Syst.Var:gcBrand AND 
      Order.OrderID = iiOrder EXCLUSIVE-LOCK NO-ERROR.
 
 IF not avail order THEN DO:
@@ -34,6 +50,8 @@ IF not avail order THEN DO:
    IF NOT ilSilent THEN MESSAGE lcError VIEW-AS ALERT-BOX ERROR.
    RETURN lcError.
 END.
+
+lcOldOrderStatus = Order.StatusCode.
 
 IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES} + ",12") > 0 THEN DO:
    lcError = SUBST("Cannot close order with status &1",Order.StatusCode).
@@ -156,9 +174,9 @@ IF LOOKUP(Order.OrderChannel,"renewal_pos_stc,retention_stc") > 0 THEN DO:
 END.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
       
    DEFINE VARIABLE lhOrder AS HANDLE NO-UNDO.
    lhOrder = BUFFER Order:HANDLE.
@@ -167,11 +185,11 @@ IF llDoEvent THEN DO:
 END.               
 
 IF Order.OrderType EQ {&ORDER_TYPE_NEW} AND
-  (Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT} OR
+  (Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT} OR /* shouldn't never get this value because of YDR-2575 */
    Order.StatusCode EQ {&ORDER_STATUS_RESIGNATION}) THEN DO:
    
    FIND FIRST MSISDN WHERE
-              MSISDN.Brand = gcBrand AND
+              MSISDN.Brand = Syst.Var:gcBrand AND
               MSISDN.CLI   = Order.CLI
    EXCLUSIVE-LOCK NO-ERROR.
    
@@ -201,12 +219,71 @@ fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_CLOSED}).
 IF llDoEvent THEN
    RUN StarEventMakeModifyEvent(lhOrder).
 
+/* Convergent and Mobile only Additional Line */
+/* Extra Line */
+FIND FIRST lbOrderCustomer NO-LOCK WHERE
+           lbOrderCustomer.Brand   = Syst.Var:gcBrand       AND
+           lbOrderCustomer.OrderId = Order.OrderId AND
+           lbOrderCustomer.RowType = 1             NO-ERROR.
+IF AVAILABLE lbOrderCustomer THEN 
+DO:
+   /* If Convergent main line is Closed then close the additional line(s) waiting for main line completion */
+   FIND FIRST lbCustomer WHERE lbCustomer.CustNum = lbOrderCustomer.CustNum NO-LOCK NO-ERROR.
+   IF AVAIL lbCustomer THEN 
+   DO:
+       FIND FIRST lbCustCat WHERE lbCustCat.Brand = Syst.Var:gcBrand AND lbCustCat.Category = lbCustomer.Category NO-LOCK NO-ERROR.
+       IF AVAIL lbCustCat THEN 
+       DO:
+           ASSIGN llMainLineMigrationOngoing = (IF lbCustCat.Pro <> lbOrderCustomer.Pro THEN TRUE ELSE FALSE).
+       END.
+   END.
+
+   /* If Main Line ongoing order is Closed, and if customer has any
+      ongoing additional line then it has to be closed */
+   fActionOnAdditionalLines(lbOrderCustomer.CustIdType,
+                            lbOrderCustomer.CustID,
+                            Order.CLIType,
+                            llMainLineMigrationOngoing,
+                            "CLOSE").         
+
+   /* If Main Line onging order is Closed, and if its associated extra line 
+      ongoing order is available then close extra line ongoing order. 
+                                     (OR)
+      If ongoing extra line is Closed, and if its associated main line is in 
+      ongoing state then reset multisimid and multisimtype values. */
+   ASSIGN lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
+          lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
+   IF lcExtraMainLineCLITypes                       NE "" AND
+      LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) GT 0  AND 
+      Order.MultiSimId                              NE 0  AND 
+      Order.MultiSimType                            EQ {&MULTISIMTYPE_PRIMARY} THEN 
+      fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
+                               Order.OrderId,    /* Main line Order Id  */ 
+                              "CLOSE").          /* Action              */
+   ELSE IF lcExtraLineCLITypes                    NE "" AND 
+        LOOKUP(Order.CLIType,lcExtraLineCLITypes) GT 0  AND
+        Order.MultiSimId                          NE 0  AND
+        Order.MultiSimType                        EQ {&MULTISIMTYPE_EXTRALINE} THEN
+   DO:
+      FIND FIRST lbMLOrder EXCLUSIVE-LOCK WHERE
+                 lbMLOrder.Brand        EQ Syst.Var:gcBrand    AND
+                 lbMLOrder.OrderId      EQ Order.MultiSimId           AND
+                 lbMLOrder.MultiSimId   EQ Order.OrderId              AND
+                 lbMLOrder.MultiSimType EQ {&MULTISIMTYPE_PRIMARY}    AND
+          LOOKUP(lbMLOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 NO-ERROR.
+
+      IF AVAIL lbMLOrder THEN 
+         ASSIGN lbMLOrder.MultiSimId   = 0 
+                lbMLOrder.MultiSimType = 0.
+   END.
+END.
+
 FOR EACH MNPProcess WHERE
    MNPProcess.OrderID = Order.OrderId AND
    MNPProcess.MNPType = {&MNP_TYPE_IN} AND
    MNPProcess.StatusCode = {&MNP_ST_AREC} EXCLUSIVE-LOCK:
    ASSIGN
-      MNPProcess.UpdateTS = fMakeTS()
+      MNPProcess.UpdateTS = Func.Common:mMakeTS()
       MNPProcess.StatusCode = {&MNP_ST_AREC_CLOSED}.
 END.
 
@@ -260,7 +337,7 @@ fMarkOrderStamp(Order.OrderID,
 
 IF llDoEvent THEN fCleanEventObjects().
 
-RUN cancelorder.p(Order.OrderId,TRUE).
+RUN Mc/cancelorder.p(Order.OrderId,TRUE).
 
 RETURN "".
 

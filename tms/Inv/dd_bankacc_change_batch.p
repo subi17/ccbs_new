@@ -7,13 +7,13 @@
   Version ......: Yoigo
   ------------------------------------------------------------------------- */
 
-{commpaa.i}
+{Syst/commpaa.i}
 
-ASSIGN gcBrand = "1" 
-       katun   = "Cron".
+ASSIGN Syst.Var:gcBrand = "1" 
+       Syst.Var:katun   = "Cron".
        
-{cparam2.i}
-{eventlog.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
 
 DEF VAR liCnt       AS INT  NO-UNDO.
 DEF VAR lcCSBFile   AS CHAR NO-UNDO.
@@ -32,8 +32,8 @@ DEF TEMP-TABLE ttFiles NO-UNDO
 DEF STREAM sRead.
 
 FIND FIRST Company WHERE
-           Company.Brand = gcBrand NO-LOCK NO-ERROR.
-IF AVAILABLE Company THEN ynimi = Company.CompName.
+           Company.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
+IF AVAILABLE Company THEN Syst.Var:ynimi = Company.CompName.
 
 lcReadDir = fCParamC("DDBankChgFile").
    
@@ -63,7 +63,7 @@ FOR EACH ttFiles:
 
    liFiles = liFiles + 1.
    
-   RUN dd_bankacc_change (ttFiles.CSBFile,
+   RUN Inv/dd_bankacc_change.p (ttFiles.CSBFile,
                           OUTPUT liRead,
                           OUTPUT liChanged,
                           OUTPUT liError).

@@ -15,6 +15,10 @@ else:
    var1 = sys.argv[1]
    var2 = sys.argv[2]
 
+if var2 == "CANCELADA":
+   var3 = "cancelled with script"
+else:
+   var3 = ""
 q = s.masmovil.Update_Fixed_status({
    "notificationID": "1",
    "notificationTime": datetime.datetime.now().isoformat(),
@@ -23,7 +27,8 @@ q = s.masmovil.Update_Fixed_status({
    "Status": {
          "Status":var2,
          "StatusDescription": "hello",
-         "lastDate": datetime.datetime.now().isoformat() 
+         "lastDate": datetime.datetime.now().isoformat(),
+         "additionalInfo": var3
    }
 
 })

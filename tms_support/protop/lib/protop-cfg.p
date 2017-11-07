@@ -44,7 +44,7 @@
  * 
  */
 
-{lib/protop.i}
+{protop/lib/protop.i}
 
 define variable i as integer no-undo.
 

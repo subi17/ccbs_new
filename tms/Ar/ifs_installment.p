@@ -7,8 +7,8 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{dumpfile_run.i}
+{Syst/commali.i}
+{Syst/dumpfile_run.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -56,13 +56,13 @@ OUTPUT STREAM sLog TO VALUE(icFile).
 /* check from last 20 days if there are ones that have been completed 
    yesterday */
 IF icDumpMode = "modified" THEN ASSIGN
-   ldFrom  = fMake2Dt(TODAY - 1,0)
-   ldTo    = fMake2Dt(TODAY - 1,86399)
-   ldCheck = fMake2Dt(TODAY - 20,0).
+   ldFrom  = Func.Common:mMake2DT(TODAY - 1,0)
+   ldTo    = Func.Common:mMake2DT(TODAY - 1,86399)
+   ldCheck = Func.Common:mMake2DT(TODAY - 20,0).
 /* take all */
 ELSE ASSIGN
-   ldFrom  = fMake2Dt(2/1/10,0)
-   ldTo    = fMake2Dt(TODAY - 1,86399)
+   ldFrom  = Func.Common:mMake2DT(2/1/10,0)
+   ldTo    = Func.Common:mMake2DT(TODAY - 1,86399)
    ldCheck = ldFrom.
 
 
@@ -71,21 +71,21 @@ FIND FIRST DumpFile WHERE DumpFile.DumpID = iiDumpID NO-LOCK NO-ERROR.
 
 RequestLoop:
 FOR EACH MsRequest NO-LOCK WHERE
-         MsRequest.Brand     = gcBrand AND
+         MsRequest.Brand     = Syst.Var:gcBrand AND
          MsRequest.ReqType   = 8       AND
          MsRequest.ReqStatus = 2       AND
          MsRequest.ActStamp >= ldCheck AND
          MsRequest.DoneStamp >= ldFrom AND
          MsRequest.DoneStamp <= ldTo,
    FIRST DayCampaign NO-LOCK USE-INDEX DCEvent WHERE
-         DayCampaign.Brand = gcBrand AND
+         DayCampaign.Brand = Syst.Var:gcBrand AND
          DayCampaign.DCEvent = MsRequest.ReqCParam3 AND
          DayCampaign.DCType = "5",
    FIRST DCCLI NO-LOCK WHERE
          DCCLI.MsSeq   = MsRequest.MsSeq AND
          DCCLI.DCEvent = MsRequest.ReqCParam3,
    FIRST FixedFee NO-LOCK WHERE
-         FixedFee.Brand     = gcBrand AND
+         FixedFee.Brand     = Syst.Var:gcBrand AND
          FixedFee.HostTable = "MobSub" AND
          FixedFee.KeyValue  = STRING(MsRequest.MsSeq) AND
          FixedFee.FeeModel  = DayCampaign.FeeModel

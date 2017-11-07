@@ -12,7 +12,6 @@
                   16.06.95 /tt --> LisAtty siirrot PROGRESS-Tiliniekkaan
                   24.07.95 /tt --> Mahdollistettu 2 yritystA
                   28.05.96 /tt --> Jos EI kpvientiA, ei myOs tulosteta tul2
-                  27.06.97 /pt --> pvm.formaatit 99.99.9999 headerissa
                   06.11.97 /pt --> change pvm-rajoihin FOR eachissa
                   23.11.97 /pt --> laskutusryhmArajaus
                   28.07.98 /pt --> rajaus PaymDate perusteella ei AccDate
@@ -41,16 +40,15 @@
                   15.09.03 aam  brand
                   01.04.04 aam  PaymFile as criteria ("batch")
                   04.05.04 aam  account with 6 digits
-                  21.12.05 aam  check payment source with fTMSCodeChk 
                   05.01.06 aam  longer format for amounts
   Version ......: M15
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{utumaa.i "new"}
-{fcurrency.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'payment'}
+{Syst/commali.i}
+{Syst/utumaa.i "new"}
+{Func/fcurrency.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'payment'}
 
 assign tuni1 = "nnsulu"
        tuni2 = "".
@@ -135,19 +133,22 @@ DEF VAR liBatch      AS INT   NO-UNDO EXTENT 2.
 
 form
    valik NO-LABEL
-   with overlay 2 down title color value(ctc) " CHOOSE SORT ORDER "
-   COLOR value(cfc) ROW 6 centered FRAME rival.
+   with overlay 2 down title color value(Syst.Var:ctc) " CHOOSE SORT ORDER "
+   COLOR value(Syst.Var:cfc) ROW 6 centered FRAME rival.
 
 ASSIGN
 viiva1 = fill("=",lev)
 viiva2 = fill("=",lev)
 viiva3 = fill("-",lev)
 
-pvm2        = date(month(pvm),1,year(pvm)) - 1
+pvm2        = date(month(TODAY),1,year(TODAY)) - 1
 pvm1        = date(month(pvm2),1,year(pvm2))
 InvNum2     = 99999999
 tosi2       = 99999999
 liPaymType2 = 9.
+
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
 
 form
    skip(1)
@@ -157,8 +158,8 @@ form
 "        Optionally also accounting data is being printed."      skip
 skip(13)
    WITH ROW 1 side-labels width 80
-        title color value(ctc) " " + ynimi + " PAYMENT JOURNAL " +
-        string(pvm,"99-99-99") + " " COLOR value(cfc)
+        title color value(Syst.Var:ctc) " " + ynimi + " PAYMENT JOURNAL " +
+        string(TODAY,"99-99-99") + " " COLOR value(Syst.Var:cfc)
         FRAME MAIN.
 
 form header
@@ -167,7 +168,7 @@ form header
      format "99.99.9999" "-" pvm2 format "99.99.9999" "Page" AT 103
      sl format "ZZZZ9" SKIP
    "InvGroup" at 1 InvGroup IGName format "x(20)"
-     Jar at 42 format "x(40)" string(pvm,"99-99-99") AT 105 SKIP
+     Jar at 42 format "x(40)" string(TODAY,"99-99-99") AT 105 SKIP
    viiva2 AT 1 skip(1)
 
    "Invoice"     TO  8
@@ -202,7 +203,7 @@ form header
    format "99.99.9999" "-" pvm2 format "99.99.9999"
    "Page" at 103 sl format "ZZZZ9" SKIP
    "InvGroup" at 1 InvGroup IGName format "x(24)"  AT 37
-   string(pvm,"99-99-99") AT 105 SKIP
+   string(TODAY,"99-99-99") AT 105 SKIP
    viiva2 AT 1 skip(1)
    "Account" at 1 
    "Debit"   TO 32 
@@ -261,15 +262,15 @@ form
    sutil     at 5 label "Acct nos. and amounts of each payment  " SKIP
    sukoo     at 5 label "A separate Acct Summary for bookkeeping" SKIP
    xOnlySum  at 5 label "Print only the Account Summary ........" SKIP
-with title color value(ctc) " PRINTOUT PARAMETERS " side-labels
-   COLOR value(cfc) ROW 7 centered OVERLAY FRAME options.
+with title color value(Syst.Var:ctc) " PRINTOUT PARAMETERS " side-labels
+   COLOR value(Syst.Var:cfc) ROW 7 centered OVERLAY FRAME options.
 
 FUNCTION fChgPage RETURNS LOGICAL
    (iAddLine AS INT).
 
    IF rl + iAddLine >= skayt1 THEN DO:
       if sl > 0 then do:
-         {uprfeed.i rl}
+         {Syst/uprfeed.i rl}
       end.
       ASSIGN rlx = 0
              sl = sl + 1
@@ -280,9 +281,9 @@ FUNCTION fChgPage RETURNS LOGICAL
 END FUNCTION.
 
 
-cfc = "sel". RUN ufcolor.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
 view FRAME MAIN.
-cfc = "puli". RUN ufcolor.
+Syst.Var:cfc = "puli". RUN Syst/ufcolor.p.
 PAUSE 0 no-message.
 
 ASSIGN vapv = 0 kake = 0 ermk = 0 PrVou = 0 sutil = TRUE sukoo = TRUE
@@ -295,10 +296,10 @@ DISPLAY pvm1 pvm2 sutil sukoo xOnlySum
 
 toimi:
    repeat WITH FRAME MAIN ON ENDKEY UNDO toimi, NEXT toimi:
-      ASSIGN ufk = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
-      IF toimi = 1 THEN DO:
-         ehto = 9. RUN ufkey.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 132 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
+      RUN Syst/ufkey.p.
+      IF Syst.Var:toimi = 1 THEN DO:
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          IF tosi2  = 9999999 THEN tosi2 = 0.
          repeat:
             UPDATE
@@ -320,15 +321,15 @@ toimi:
                 sukoo
                 xOnlySum
             WITH FRAME options EDITING:
-               READKEY. nap = keylabel(LASTKEY).
+               READKEY. Syst.Var:nap = keylabel(LASTKEY).
 
-               IF nap = "F9" AND 
+               IF Syst.Var:nap = "F9" AND 
                   LOOKUP(FRAME-FIELD,"liPaymType1,liPaymType2") > 0
                THEN DO:
 
                   lcFrameField = FRAME-FIELD.
 
-                  RUN h-tmscodes(INPUT "Payment",  /* TableName*/
+                  RUN Help/h-tmscodes.p(INPUT "Payment",  /* TableName*/
                                        "PaymType", /* FieldName */
                                        "AccRec", /* GroupCode */
                                  OUTPUT lcCode).
@@ -340,12 +341,12 @@ toimi:
                         ELSE DISPLAY INTEGER(lcCode) ;& liPaymType2.
                   END.
 
-                  ehto = 9.
-                  RUN ufkey.
+                  Syst.Var:ehto = 9.
+                  RUN Syst/ufkey.p.
                   NEXT. 
                END.
 
-               IF lookup(nap,poisnap) > 0 THEN DO:
+               IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
 
                   HIDE MESSAGE.
                   if frame-field = "InvGroup" THEN DO:
@@ -356,7 +357,7 @@ toimi:
                      END.
                      ELSE DO:
                         FIND InvGroup where 
-                             InvGroup.Brand    = gcBrand AND
+                             InvGroup.Brand    = Syst.Var:gcBrand AND
                              InvGroup.InvGroup = InvGroup
                         no-lock no-error.
                         IF NOT AVAIL InvGroup THEN DO:
@@ -372,8 +373,7 @@ toimi:
                      ASSIGN FRAME options PaymSrc.
                      IF PaymSrc NE "ALL" THEN DO:
                         DO i = 1 TO NUM-ENTRIES(PaymSrc):
-                           IF NOT DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
-                                                   "Payment",
+                           IF NOT Func.Common:mTMSCodeChk("Payment",
                                                    "PaymSrc",
                                                    ENTRY(i,PaymSrc))
                            THEN DO:
@@ -407,9 +407,9 @@ toimi:
       END.
 
 
-      IF toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
 
-         assign cfc = "uusi". RUN ufcolor.   ccc = cfc.
+         assign Syst.Var:cfc = "uusi". RUN Syst/ufcolor.p.   Syst.Var:ccc = Syst.Var:cfc.
          DO i = 1 TO 2 WITH FRAME rival:
             valik = valikko[i].
             DISPLAY valik.
@@ -421,8 +421,8 @@ rival:      repeat ON ENDKEY UNDO rival, LEAVE rival WITH FRAME rival:
                MESSAGE
                "Choose sort order, press ENTER !".
                READKEY PAUSE 0.
-               CHOOSE ROW valik ;(uchoose.i;) no-error.
-               COLOR DISPLAY value(ccc) valik WITH FRAME rival.
+               CHOOSE ROW valik {Syst/uchoose.i} no-error.
+               COLOR DISPLAY value(Syst.Var:ccc) valik WITH FRAME rival.
                i = FRAME-LINE.
                HIDE MESSAGE no-pause.
                ASSIGN order = i
@@ -433,11 +433,11 @@ rival:      repeat ON ENDKEY UNDO rival, LEAVE rival WITH FRAME rival:
             HIDE FRAME rival no-pause.
             LEAVE toimi.
       END.
-      IF toimi = 8 THEN RETURN.
-   END. /* toimi */
+      IF Syst.Var:toimi = 8 THEN RETURN.
+   END. /* Syst.Var:toimi */
 
 ASSIGN tila = TRUE.
-{utuloste.i "return"}
+{Syst/utuloste.i "return"}
 
 ASSIGN
 sl = 0
@@ -450,7 +450,7 @@ message "Printing ...".
 main : 
 repeat:
 FOR EACH  Payment no-lock USE-INDEX AccDate where  
-          Payment.Brand     = gcBrand     AND
+          Payment.Brand     = Syst.Var:gcBrand     AND
           Payment.AccDate  >= pvm1        AND 
           Payment.AccDate  <= pvm2        AND 
           Payment.InvNum   >= InvNum1     AND 
@@ -695,7 +695,7 @@ END.
 IF sukoo THEN DO:
 
    IF NOT xOnlySum THEN DO:
-       {uprfeed.i rl}
+       {Syst/uprfeed.i rl}
    END.
 
    ASSIGN
@@ -733,9 +733,9 @@ LEAVE main.
 END. /* main */
 
 /* Adjust LAST page */
-{uprfeed.i rl}
+{Syst/uprfeed.i rl}
 ASSIGN tila = FALSE.
-{utuloste.i}
+{Syst/utuloste.i}
 
 HIDE MESSAGE no-pause.
 HIDE FRAME options no-pause.

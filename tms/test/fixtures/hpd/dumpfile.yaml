@@ -1,0 +1,280 @@
+DumpFileCustomer: DumpFile
+  Brand: "1"
+  Description: "Customer dump to HPD"
+  DumpID: hash()
+  FileName: "customer_#DATE_#TIME.txt"
+  SpoolDir: "/store/riftp/pupu_dumps/spool"
+  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  Active: FALSE
+  DumpDelimiter: "|"
+  DecimalPoint: "."
+  MainTable: "Customer"
+  SideTables: "Common"
+  LinkKey: "HPD.CustomerDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_Customer"
+  DumpFormat: "ASCII"
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
+  BatchID: 1
+  
+DFField781: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: "CustNum"
+  DFLabel: "CustNum"
+  OrderNbr: 1
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField782: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: "@Version"
+  DFLabel: "1"
+  OrderNbr: 2
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField783: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: "CustNum"
+  DFLabel: "CustNum"
+  OrderNbr: 3
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField784: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: "CustIdType"
+  DFLabel: "CustIdType"
+  OrderNbr: 4
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField785: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: "OrgId"
+  DFLabel: "OrgId"
+  OrderNbr: 5
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField786: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: ""FirstName"
+  DFLabel: "FirstName"
+  OrderNbr: 6
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField787: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: ""CustName"
+  DFLabel: "CustName"
+  OrderNbr: 7
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField788: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: ""SurName2"
+  DFLabel: "SurName2"
+  OrderNbr: 8
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField789: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: "ZipCode"
+  DFLabel: "ZipCode"
+  OrderNbr: 9
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField790: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: "Region"
+  DFLabel: "Region"
+  OrderNbr: 10
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField791: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: "Language"
+  DFLabel: "Language"
+  OrderNbr: 11
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField792: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: "DelType"
+  DFLabel: "DelType"
+  OrderNbr: 12
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField793: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: ""CompanyName"
+  DFLabel: "CompanyName"
+  OrderNbr: 13
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField794: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: "Profession"
+  DFLabel: "Profession"
+  OrderNbr: 14
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField795: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: ""Address"
+  DFLabel: "Address"
+  OrderNbr: 15
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField796: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: ""PostOffice"
+  DFLabel: "PostOffice"
+  OrderNbr: 16
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField797: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: "Country"
+  DFLabel: "Country"
+  OrderNbr: 17
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField798: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: "Nationality"
+  DFLabel: "Nationality"
+  OrderNbr: 18
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField799: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: ""Email"
+  DFLabel: "Email"
+  OrderNbr: 19
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField800: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: "Phone"
+  DFLabel: "Phone"
+  OrderNbr: 20
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField801: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: "SMSNumber"
+  DFLabel: "SMSNumber"
+  OrderNbr: 21
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField802: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: "BankAcct"
+  DFLabel: "BankAcct"
+  OrderNbr: 22
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField803: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: "HonTitle"
+  DFLabel: "HonTitle"
+  OrderNbr: 23
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField804: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: "Birthday"
+  DFLabel: "Birthday"
+  OrderNbr: 24
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField805: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: "#SelfEmployed"
+  DFLabel: "SelfEmployed"
+  OrderNbr: 25
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField806: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: "FoundationDate"
+  DFLabel: "FoundationDate"
+  OrderNbr: 26
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField807: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: "AuthCustId"
+  DFLabel: "AuthCustId"
+  OrderNbr: 27
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField808: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: "AuthCustIdType"
+  DFLabel: "AuthCustIdType"
+  OrderNbr: 28
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31
+
+DFField809: DFField
+  DumpID: hash(DumpFileCustomer)
+  DFTable: "Customer"
+  DFField: ""#Employer"
+  DFLabel: "Employer"
+  OrderNbr: 29
+  FromDate: 2014-01-01
+  ToDate: 2049-12-31

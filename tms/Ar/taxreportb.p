@@ -8,9 +8,9 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{eventlog.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
 
 DEF VAR liCount       AS INT  NO-UNDO. 
 DEF VAR lcFile        AS CHAR NO-UNDO.
@@ -32,7 +32,7 @@ END.
 
 fELog("TAXREPORT","PostPaidStarted").
 
-RUN taxreport ("",             /* TaxZone */
+RUN Ar/taxreport.p ("",             /* TaxZone */
                "",             /* CustID */
                0,              /* InvType */
                98,             /* InvType, no test invoices */

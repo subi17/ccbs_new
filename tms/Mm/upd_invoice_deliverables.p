@@ -7,17 +7,17 @@
   version ......: yoigo
 ---------------------------------------------------------------------- */
 
-{commpaa.i}
-katun = "Cron".
-gcBrand = "1".
-{tmsconst.i}
-{ftransdir.i}
-{cparam2.i}
-{eventlog.i}
-{timestamp.i}
-{eventval.i}
-{fmakemsreq.i}
-{femailinvoice.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
+{Syst/tmsconst.i}
+{Func/ftransdir.i}
+{Func/cparam2.i}
+{Syst/eventlog.i}
+{Syst/eventval.i}
+{Func/fmakemsreq.i}
+{Func/femailinvoice.i}
+{Func/multitenantfunc.i}
 
 /* files and dirs */
 DEF VAR lcLine           AS CHAR NO-UNDO.
@@ -33,7 +33,8 @@ DEF VAR lcOutDir         AS CHAR NO-UNDO.
 DEF VAR lcToday          AS CHAR NO-UNDO.
 DEF VAR lcTime           AS CHAR NO-UNDO.
 DEF VAR lcSep            AS CHAR NO-UNDO INIT ";".
-DEF VAR lhCustomer      AS HANDLE NO-UNDO.
+DEF VAR lhCustomer       AS HANDLE NO-UNDO.
+DEF VAR lcTenant    AS CHAR NO-UNDO.
 
 DEF STREAM sin.
 DEF STREAM sFile.
@@ -50,8 +51,8 @@ ASSIGN
    lcTime      = REPLACE(STRING(TIME,"hh:mm:ss"),":","").
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
-   {lib/eventlog.i}
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
+   {Func/lib/eventlog.i}
    lhCustomer = BUFFER Customer:HANDLE.
 END. /* IF llDoEvent THEN DO: */
 
@@ -72,8 +73,8 @@ FUNCTION fLocalMemo RETURNS LOG(icHostTable AS CHAR,
                                 icUserId    AS CHAR):
    CREATE Memo.
    ASSIGN
-      Memo.Brand     = gcBrand
-      Memo.CreStamp  = fMakeTS()
+      Memo.Brand     = Syst.Var:gcBrand
+      Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
       Memo.Custnum   = (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0)
       Memo.HostTable = icHostTable
@@ -130,6 +131,8 @@ FUNCTION fSetInvDelType RETURNS CHAR(INPUT icDelType AS CHAR,
                RETURN "SMS invoice is already turned off".
          END. /* IF icAction = "0" THEN DO: */
          ELSE IF icAction = "1" THEN DO:
+            IF BUFFER-TENANT-NAME(Customer) EQ {&TENANT_MASMOVIL} THEN
+               RETURN "SMS invoice not allowed for MasMovil".
             IF Customer.DelType = {&INV_DEL_TYPE_SMS} THEN
                RETURN "SMS invoice is already turned on".
          END. /* ELSE  IF icAction = "0" THEN DO: */
@@ -171,9 +174,9 @@ FUNCTION fSetInvDelType RETURNS CHAR(INPUT icDelType AS CHAR,
                                         INPUT "Customer email is changed.").
             END. /* IF icEmail > "" AND Customer.Email <> icEmail THEN DO: */
 
-            liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+            liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                              INPUT TODAY,
-                                             INPUT katun,
+                                             INPUT Syst.Var:katun,
                                              INPUT MobSub.MsSeq,
                                              INPUT MobSub.CLI,
                                              INPUT Mobsub.Custnum,
@@ -276,7 +279,7 @@ FUNCTION fSetDetail RETURNS CHAR(INPUT icAction AS CHAR):
                            liAction,
                            (IF liAction = 1 THEN SubSer.SSParam
                             ELSE ""),
-                           fMakeTS(),
+                           Func.Common:mMakeTS(),
                            "",
                            FALSE,      /* fees */
                            FALSE,      /* sms */
@@ -302,11 +305,24 @@ REPEAT:
    IMPORT STREAM sFile UNFORMATTED lcFileName. 
    lcInputFile = lcIncDir + lcFileName.
 
-   IF SEARCH(lcInputFile) NE ? THEN 
+   IF SEARCH(lcInputFile) NE ? THEN DO:
+      IF fCheckFileNameChars(lcFileName) EQ FALSE THEN NEXT.
       INPUT STREAM sin FROM VALUE(lcInputFile).
+   END.
    ELSE NEXT.
 
-   lcLogFile = lcSpoolDir + "invoice_deliverables_" +
+   /* Set effective tenant based on file name. If not regocniced go next file
+   */   
+
+/* TODO:Temporarily disabled due to YTS-11466 */
+/*
+   lcTenant = ENTRY(1,ENTRY(1,lcFileName,"_"),"-").
+   IF NOT fsetEffectiveTenantForAllDB(
+         fConvertBrandToTenant(lcTenant)) THEN NEXT.
+*/
+   lcTenant = "Yoigo".
+
+   lcLogFile = lcSpoolDir + lcTenant + "_invoice_deliverables_" +
                lcToday + "_" + lcTime + ".log".
    OUTPUT STREAM sLog TO VALUE(lcLogFile).
    fBatchLog("START", lcLogFile).
@@ -366,7 +382,7 @@ PROCEDURE pInvoiceDeliverables:
 
    /* check invoice */
    FIND MobSub WHERE 
-        MobSub.Brand = gcBrand AND
+        MobSub.Brand = Syst.Var:gcBrand AND
         MobSub.CLI   = lcCLI NO-LOCK NO-ERROR.
    IF NOT AVAIL MobSub THEN RETURN "ERROR:Invalid MSISDN".
    ELSE IF MobSub.PayType THEN RETURN "ERROR:Not a postpaid subscription".
@@ -396,14 +412,14 @@ PROCEDURE pInvoiceDeliverables:
                  lcMemoContent,
                  lcMemoContent,
                  "Service",
-                 (IF lcChannel > "" THEN lcChannel ELSE katun)).
+                 (IF lcChannel > "" THEN lcChannel ELSE Syst.Var:katun)).
    ELSE
       fLocalMemo("Invoice",
                  STRING(Customer.CustNum),
                  lcMemoContent,
                  lcMemoContent,
                  "",
-                 (IF lcChannel > "" THEN lcChannel ELSE katun)).
+                 (IF lcChannel > "" THEN lcChannel ELSE Syst.Var:katun)).
 
    RETURN "OK".
 

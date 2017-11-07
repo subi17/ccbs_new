@@ -1,8 +1,7 @@
-{commpaa.i}
-katun = "anttis".
-gcBrand = "1".
+{Syst/commpaa.i}
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 
-{timestamp.i}
 
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcCommLine AS CHARACTER NO-UNDO. 
@@ -12,7 +11,7 @@ input from /apps/snet/200901/as_yts1272.input.
 def stream slog.
 output stream slog to /apps/snet/200901/as_yts1272.log append.
 
-ldeActStamp = fMakeTS().
+ldeActStamp = Func.Common:mMakeTS().
 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 
@@ -41,8 +40,8 @@ repeat:
         Solog.MsSeq        = termmobSub.MsSeq 
         Solog.CLI          = termmobSub.Cli 
         Solog.Stat         = 0     /* just created */
-        Solog.Brand        = gcBrand
-        Solog.Users        = katun.
+        Solog.Brand        = Syst.Var:gcBrand
+        Solog.Users        = Syst.Var:katun.
    ASSIGN     
         Solog.TimeSlotTMS  = ldeActStamp
         Solog.ActivationTS = ldeActStamp

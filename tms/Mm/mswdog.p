@@ -8,13 +8,12 @@
   MODIFIED .....: 05.04.00 jpo Bbatch session
                   14.10.02 jr  Removed BillLevel
                   04.01.05 aam Balance from SubSer
-                  26.01.06 jt  lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN                                             ghFunc1, BUFFER Customer).
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}                             
-{excel.i}
-{fsubser.i}
+{Syst/commali.i}                             
+{Func/excel.i}
+{Func/fsubser.i}
 
 DEF VAR xdays         AS I  NO-UNDO INIT 7.
 DEF VAR ok            AS LO NO-UNDO FORMAT "Yes/No".
@@ -36,8 +35,8 @@ DEF VAR liBalance     AS I  NO-UNDO.
 DEF VAR lcCustName    AS C  NO-UNDO.
 
 DEF STREAM fraud.
-{tmsparam.i WatchDogFile RETURN}.  outfile = TMSParam.CharVal.
-{cparam.i Fraudfile     RETURN}.  outfile2  = tmsparam.CharVal.
+{Func/tmsparam.i WatchDogFile RETURN}.  outfile = TMSParam.CharVal.
+{Func/cparam.i Fraudfile     RETURN}.  outfile2  = tmsparam.CharVal.
 
 hdr = "SubId,MSISDN,GSM No,Activated,Contract,CreditLimit,CustNo,"
     + "Customer's Name,Add'l Name,Address,PostCode,City,RatePlan,"
@@ -72,18 +71,18 @@ PAUSE 0.
 MAIN:
 REPEAT WITH FRAME main:
 IF NOT bbatch THEN DO:
-   ehto = 9. RUN ufkey.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
       UPDATE xdays outfile.
 
 ACTION:
    REPEAT WITH FRAME MAIN:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 15 ufk[8] = 8 ehto = 0.
-      RUN ufkey.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 15 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
+      RUN Syst/ufkey.p.
 
-      IF toimi = 8 THEN LEAVE main.
-      IF toimi = 1 THEN NEXT  main.
-      IF toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 8 THEN LEAVE main.
+      IF Syst.Var:toimi = 1 THEN NEXT  main.
+      IF Syst.Var:toimi = 5 THEN DO:
          MESSAGE "Do You REALLY want to start (Y/N) ?" UPDATE ok.
          IF NOT ok THEN NEXT Action.
          ELSE LEAVE Action.
@@ -97,15 +96,15 @@ END.  /* bbatch */
    
    /* Headers TO the PaymFile */
    PUT STREAM excel UNFORMATTED
-   ynimi " " 
+   Syst.Var:ynimi " " 
    "Watchdog Report of Mobile Subscribers, Printed out "
    YEAR (TODAY) FORMAT "9999" "-"
    MONTH(TODAY) FORMAT "99"   "-"
    DAY  (TODAY) FORMAT "99".
-   RUN uexskip(2).                           
+   RUN Syst/uexskip.p(2).                           
 
    PUT STREAM fraud UNFORMATTED
-   ynimi " Credit balance report of mobile subscribers, Printed out " 
+   Syst.Var:ynimi " Credit balance report of mobile subscribers, Printed out " 
    YEAR (TODAY) FORMAT "9999" "-"
    MONTH(TODAY) FORMAT "99"   "-"
    DAY  (TODAY) FORMAT "99" my-nl my-nl
@@ -120,11 +119,11 @@ END.  /* bbatch */
          ENTRY(i,hdr) 
          tab.
    END.
-   RUN uexskip(1).   
+   RUN Syst/uexskip.p(1).   
 
    FOR
    EACH MobSub NO-LOCK WHERE 
-        MobSub.Brand = gcBrand .
+        MobSub.Brand = Syst.Var:gcBrand .
 
       ASSIGN
       nocont   = FALSE
@@ -213,7 +212,7 @@ END.  /* bbatch */
             dbalance                tab     /* Unbilled Balance       */
             dlimit  .                      /* CreditInvNum Limit           */
 
-         RUN uexskip(1).
+         RUN Syst/uexskip.p(1).
 
       END.
    END.

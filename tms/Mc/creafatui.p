@@ -8,9 +8,9 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{fcustdata.i}
-{fixedfee.i}
+{Syst/commali.i}
+{Func/fcustdata.i}
+{Func/fixedfee.i}
 
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO. 
 DEF INPUT PARAMETER iiMsSeq   AS INT NO-UNDO. 
@@ -70,7 +70,7 @@ FORM
       SKIP
    SKIP(1)
    WITH ROW 4 OVERLAY SIDE-LABELS CENTERED 
-        TITLE " " + ynimi + "  GRANT FAT  " + STRING(pvm,"99-99-99") + " "
+        TITLE " " + Syst.Var:ynimi + "  GRANT FAT  " + STRING(TODAY,"99-99-99") + " "
         FRAME fCriter.
 
 VIEW FRAME fCriter.
@@ -94,11 +94,11 @@ toimi:
 REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
       FIND Customer NO-LOCK WHERE
-           Customer.Brand   = gcBrand AND
+           Customer.Brand   = Syst.Var:gcBrand AND
            Customer.CustNum = liCustNum NO-ERROR.
 
       FIND FatGroup NO-LOCK WHERE
-           FatGroup.Brand = gcBrand AND
+           FatGroup.Brand = Syst.Var:gcBrand AND
            FatGroup.FtGrp = lcFatGroup NO-ERROR.
  
       /* if amount is defined on the group, it cannot be overriden here */
@@ -120,23 +120,23 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 7   ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 795 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
-         ufk[9]= 1
-         ehto = 3.
-         RUN ufkey.
+         Syst.Var:ufk[1]= 7   Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= 795 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 
+         Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3.
+         RUN Syst/ufkey.p.
 
          READKEY.
-         nap = keylabel(LASTKEY).
+         Syst.Var:nap = keylabel(LASTKEY).
       END.
 
-      ELSE ASSIGN nap   = "1"  
+      ELSE ASSIGN Syst.Var:nap   = "1"  
                   ufkey = TRUE.
 
-      IF LOOKUP(nap,"1,f1") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO:
 
          repeat WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
-             ehto = 9. RUN ufkey.
+             Syst.Var:ehto = 9. RUN Syst/ufkey.p.
              UPDATE 
                 liCustNum WHEN iiCustNum = 0
                 lcCLI     WHEN iiMsSeq   = 0
@@ -146,7 +146,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
              WITH FRAME fCriter EDITING:
                 READKEY.
                 
-                IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+                IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
                   
                   IF FRAME-FIELD = "liCustNum" THEN DO:
                      IF INPUT liCustNum > 0 THEN DO:
@@ -154,7 +154,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
                         FIND Customer WHERE 
                              Customer.CustNum = INPUT liCustNum
                         NO-LOCK NO-ERROR.
-                        IF NOT AVAIL Customer OR Customer.Brand NE gcBrand
+                        IF NOT AVAIL Customer OR Customer.Brand NE Syst.Var:gcBrand
                         THEN DO:
                            MESSAGE "Unknown Customer"
                            VIEW-AS ALERT-BOX ERROR.
@@ -170,7 +170,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
                         /* check if cli is defined to chosen customer */
                         liSeq = 0.
                         FOR FIRST MsOwner NO-LOCK WHERE
-                                  MsOwner.Brand   = gcBrand         AND
+                                  MsOwner.Brand   = Syst.Var:gcBrand         AND
                                   MsOwner.CustNum = INPUT liCustNum AND
                                   MsOwner.CLI     = INPUT lcCLI:
                            liSeq = MsOwner.MsSeq.
@@ -188,7 +188,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
                   ELSE IF FRAME-FIELD = "lcFatGroup" THEN DO:
                      IF INPUT lcFatGroup > "" THEN DO:
                         FIND FatGroup WHERE
-                             FatGroup.Brand = gcBrand AND
+                             FatGroup.Brand = Syst.Var:gcBrand AND
                              FatGroup.FtGrp = INPUT lcFatGroup 
                         NO-LOCK NO-ERROR.
                         IF NOT AVAILABLE FatGroup THEN DO:
@@ -222,7 +222,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
       END.
 
-      ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 THEN DO:
 
          IF lcFatGroup = ""        OR 
             liFromPer = 0          OR
@@ -294,10 +294,10 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
          IF NOT llOk THEN NEXT.
 
-         ehto = 5.   
-         RUN ufkey.
+         Syst.Var:ehto = 5.   
+         RUN Syst/ufkey.p.
 
-         RUN creafat (liCustNum,
+         RUN Mc/creafat.p (liCustNum,
                       liSeq,
                       lcFatGroup,
                       ldAmt,
@@ -321,11 +321,11 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
       END.
 
-      ELSE IF LOOKUP(nap,"8,f8") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN DO:
          LEAVE toimi.
       END.
 
-END. /* toimi */
+END. /* Syst.Var:toimi */
 
 HIDE MESSAGE NO-PAUSE.
 HIDE FRAME fCriter NO-PAUSE.    

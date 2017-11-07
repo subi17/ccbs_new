@@ -1,20 +1,18 @@
 &GLOBAL-DEFINE AllIncludes YES
 
-{commali.i}
-{cparam2.i}
-{timestamp.i}
-{printdoc1tt.i}
-{transname.i}
-{ftransdir.i}
-{email.i}
-{fsubser.i}
-{nnpura.i}
-{customer_address.i}
-{fdestcountry.i}
-{tmsconst.i}
-{ftaxdata.i}
-{fbundle.i}
-{q25functions.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Inv/printdoc1tt.i}
+{Func/transname.i}
+{Func/ftransdir.i}
+{Func/email.i}
+{Func/fsubser.i}
+{Func/customer_address.i}
+{Func/fdestcountry.i}
+{Syst/tmsconst.i}
+{Func/ftaxdata.i}
+{Mm/fbundle.i}
+{Func/q25functions.i}
 
 &GLOBAL-DEFINE INSTALLMENT_DISCOUNT_BILLCODES "DISCPAYTERMDIR,DISCPAYTERMINDIR"
 
@@ -146,6 +144,7 @@ DEF TEMP-TABLE ttSub NO-UNDO
    FIELD TariffActDate   AS CHAR
    FIELD MessageType     AS CHAR
    FIELD GBValue         AS DEC
+   FIELD PrintCLI        AS LOGICAL INITIAL FALSE
    INDEX CLI CLI.
    
 DEF TEMP-TABLE ttCLIType NO-UNDO
@@ -198,9 +197,8 @@ FUNCTION fPopulateBillItemAndGroup RETURNS LOGICAL:
    
    DEFINE VARIABLE liGroupOrder AS INTEGER   NO-UNDO.
    DEFINE VARIABLE liGroupType  AS INTEGER   NO-UNDO.
-   
    FOR EACH BillItem NO-LOCK WHERE
-      BillItem.Brand = gcBrand
+      BillItem.Brand = Syst.Var:gcBrand
       BREAK BY BillItem.BIGroup:
       
       IF FIRST-OF(BillItem.BIGroup)
@@ -208,7 +206,7 @@ FUNCTION fPopulateBillItemAndGroup RETURNS LOGICAL:
          liGroupOrder = 0.
          liGroupType  = 0.
          FOR BItemGroup NO-LOCK WHERE
-            BItemGroup.Brand   = gcBrand AND
+            BItemGroup.Brand   = Syst.Var:gcBrand AND
             BItemGroup.BIGroup = BillItem.BIGroup:
 
             liGroupOrder = BItemGroup.InvoiceOrder.
@@ -219,7 +217,7 @@ FUNCTION fPopulateBillItemAndGroup RETURNS LOGICAL:
       FOR
          EACH Language NO-LOCK,
          EACH RepText NO-LOCK WHERE
-            RepText.Brand = gcBrand                AND
+            RepText.Brand = Syst.Var:gcBrand                AND
             RepText.TextType  = 1                  AND 
             RepText.LinkCode  = BillItem.BillCode  AND
             RepText.Language  = Language.Language:
@@ -347,7 +345,7 @@ FUNCTION fLocalItemName RETURNS CHARACTER
    DEF VAR lcName AS CHAR NO-UNDO. 
 
    /* translation or basic name */  
-   lcName = fGetItemName(gcBrand,
+   lcName = fGetItemName(Syst.Var:gcBrand,
                          icItem,
                          icCode,
                          iiLanguage,
@@ -395,7 +393,7 @@ FUNCTION fLocalCCName RETURNS CHARACTER:
    
    /* country name for roaming */
    IF LOOKUP(STRING(ttCall.SpoCMT),{&ROAMING_CALLCASE}) > 0 THEN DO:
-      lcCCName = fDestCountryName(gcBrand,
+      lcCCName = fDestCountryName(Syst.Var:gcBrand,
                                   liLanguage,
                                   ttCall.SpoCMT,
                                   ttCall.DateSt,
@@ -475,7 +473,7 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
    liFFCount = liAmtPos. 
    
    FOR EACH FixedFee NO-LOCK WHERE
-            FixedFee.Brand      = gcBrand                    AND
+            FixedFee.Brand      = Syst.Var:gcBrand                    AND
             FixedFee.CustNum    = Invoice.CustNum            AND
             FixedFee.HostTable  = "MobSub"                   AND
             FixedFee.KeyValue   = STRING(SubInvoice.MsSeq)   AND
@@ -485,7 +483,7 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
       
       IF FixedFee.BillCode EQ "PAYTERM" THEN
          FIND FIRST bQ25SingleFee NO-LOCK WHERE
-                    bQ25SingleFee.Brand       = gcBrand              AND
+                    bQ25SingleFee.Brand       = Syst.Var:gcBrand              AND
                     bQ25SingleFee.Custnum     = FixedFee.Custnum     AND
                     bQ25SingleFee.HostTable   = FixedFee.HostTable   AND
                     bQ25SingleFee.KeyValue    = Fixedfee.KeyValue    AND
@@ -586,7 +584,7 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
       END. 
         
       FOR FIRST bPenaltySingleFee NO-LOCK WHERE
-                bPenaltySingleFee.Brand       = gcBrand              AND
+                bPenaltySingleFee.Brand       = Syst.Var:gcBrand              AND
                 bPenaltySingleFee.Custnum     = FixedFee.Custnum     AND
                 bPenaltySingleFee.HostTable   = FixedFee.HostTable   AND
                 bPenaltySingleFee.KeyValue    = Fixedfee.KeyValue    AND
@@ -618,7 +616,7 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
          IF AVAIL bQ25SingleFee THEN DO: 
 
             FOR FIRST FMItem NO-LOCK WHERE
-                      FMItem.Brand     = gcBrand            AND
+                      FMItem.Brand     = Syst.Var:gcBrand            AND
                       FMItem.FeeModel  = FixedFee.FeeModel  AND
                       FMItem.ToDate   >= FixedFee.BegDate   AND
                       FMItem.FromDate <= FixedFee.BegDate:
@@ -632,9 +630,9 @@ FUNCTION fTFBankFooterText RETURNS LOGICAL
 
          IF FixedFee.OrderId > 0 THEN DO:
             FIND FIRST Order NO-LOCK WHERE
-                       Order.Brand = gcBrand AND
+                       Order.Brand = Syst.Var:gcBrand AND
                        Order.OrderId = FixedFee.OrderID NO-ERROR.
-            IF AVAIL Order THEN fTS2Date(Order.CrStamp, 
+            IF AVAIL Order THEN Func.Common:mTS2Date(Order.CrStamp, 
                                          OUTPUT ldaOrderDate).
          END.
     
@@ -701,11 +699,11 @@ PROCEDURE pGetInvoiceHeaderData:
       ldMaxRow   = 0.
 
    ASSIGN
-      ldFromPer   = fMake2Dt(IF Invoice.FirstCall NE ? 
+      ldFromPer   = Func.Common:mMake2DT(IF Invoice.FirstCall NE ? 
                              THEN Invoice.FirstCall
                              ELSE Invoice.FromDate,0)
-      ldInvoiceFromPer = fMake2Dt(Invoice.FromDate,0)
-      ldToPer     = fMake2DT(Invoice.ToDate,86399).
+      ldInvoiceFromPer = Func.Common:mMake2DT(Invoice.FromDate,0)
+      ldToPer     = Func.Common:mMake2DT(Invoice.ToDate,86399).
 
    /* get customer names, payment terms etc. */
    fSetCustData().
@@ -733,7 +731,7 @@ PROCEDURE pGetInvoiceHeaderData:
       liOrder = 1.
 
    FOR EACH bOldInvoice NO-LOCK WHERE
-            bOldInvoice.Brand = gcBrand AND
+            bOldInvoice.Brand = Syst.Var:gcBrand AND
             bOldInvoice.Custnum = Invoice.Custnum AND
             bOldInvoice.InvDate >= ldaInvoiceFrom AND
             bOldInvoice.ITGroupID = Invoice.ITGroupID AND
@@ -784,7 +782,7 @@ PROCEDURE pttMSOwner:
    ASSIGN
       olShouldCheckTermination = FALSE
       olPostPreDetected        = FALSE
-      ldeFirst                 = fSecOffSet(ideFirstCall,-1)
+      ldeFirst                 = Func.Common:mSecOffSet(ideFirstCall,-1)
       .
 
 
@@ -893,8 +891,7 @@ PROCEDURE pGetSubInvoiceHeaderData:
          FIND FIRST UserCustomer WHERE 
             UserCustomer.CustNum = SubInvoice.CustNum NO-LOCK NO-ERROR.
          IF AVAILABLE UserCustomer THEN 
-            ttSub.UserName = DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1,
-                                              BUFFER UserCustomer).
+            ttSub.UserName = Func.Common:mPrintCustName(BUFFER UserCustomer).
       END.
 
       RUN pttMSOwner(INPUT  SubInvoice.MSSeq,
@@ -927,7 +924,7 @@ PROCEDURE pGetSubInvoiceHeaderData:
                               MsRequest.ActStamp  >  ldeActStamp        AND
                               MsRequest.ActStamp <= ldToPer) THEN
                FOR FIRST SingleFee WHERE
-                         SingleFee.Brand     = gcBrand                  AND
+                         SingleFee.Brand     = Syst.Var:gcBrand                  AND
                          SingleFee.CustNum   = SubInvoice.CustNum       AND
                          SingleFee.HostTable = "MobSub"                 AND
                          SingleFee.KeyValue  = STRING(SubInvoice.MsSeq) AND
@@ -965,7 +962,7 @@ PROCEDURE pGetSubInvoiceHeaderData:
             IF ttMSOwner.CLIEvent = "iS"
             THEN lliSTR = TRUE.
             
-            fSplitTS(ttMsOwner.TsBeg,OUTPUT ldaOwnerDate,OUTPUT liOwnerTime).
+            Func.Common:mSplitTS(ttMsOwner.TsBeg,OUTPUT ldaOwnerDate,OUTPUT liOwnerTime).
 
             IF ttMsOwner.CLIEvent = "iSS" THEN DO:
                IF Invoice.DelType = {&INV_DEL_TYPE_FUSION_EMAIL} OR
@@ -973,11 +970,11 @@ PROCEDURE pGetSubInvoiceHeaderData:
                THEN DO:
                   IF ttMSOwner.FusionCLIType
                   THEN ldPeriodFrom = ttMsOwner.TsBeg.
-                  ELSE ldPeriodTo   = fSecOffSet(ttMsOwner.TsBeg,-1).
+                  ELSE ldPeriodTo   = Func.Common:mSecOffSet(ttMsOwner.TsBeg,-1).
                END.
                ELSE DO:
                   IF ttMSOwner.FusionCLIType
-                  THEN ldPeriodTo   = fSecOffSet(ttMsOwner.TsBeg,-1).
+                  THEN ldPeriodTo   = Func.Common:mSecOffSet(ttMsOwner.TsBeg,-1).
                   ELSE ldPeriodFrom = ttMsOwner.TsBeg.
                END.
             END.
@@ -1005,7 +1002,7 @@ PROCEDURE pGetSubInvoiceHeaderData:
                ttCLIType.TsEnd   = ttMsOwner.TsEnd.
 
             FIND FIRST CLIType WHERE 
-                       CLIType.Brand   = gcBrand AND
+                       CLIType.Brand   = Syst.Var:gcBrand AND
                        CLIType.CLIType = ttCLIType.CLIType NO-LOCK NO-ERROR.
             IF AVAILABLE CLIType THEN DO:
 
@@ -1034,10 +1031,10 @@ PROCEDURE pGetSubInvoiceHeaderData:
 
                IF lcGroupCode BEGINS "CONTF" THEN
                   FOR FIRST DayCampaign NO-LOCK WHERE 
-                            DayCampaign.Brand = gcBrand AND 
+                            DayCampaign.Brand = Syst.Var:gcBrand AND 
                             DayCampaign.DCEvent = lcGroupCode,
                       FIRST FMItem NO-LOCK WHERE
-                            FMItem.Brand = gcBrand AND
+                            FMItem.Brand = Syst.Var:gcBrand AND
                             FMItem.FeeModel = DayCampaign.FeeModel:
                      FIND FIRST ttRow WHERE  
                                 ttRow.SubInvNum = SubInvoice.SubInvNum AND
@@ -1071,6 +1068,9 @@ PROCEDURE pGetSubInvoiceHeaderData:
                ASSIGN ttSub.CLIType  = ttCLIType.CLIType
                       ttSub.CTName   = ttCLIType.CTName
                       ttSub.CliEvent = ttMSOwner.CLIEvent.
+
+            /* Mobile provisioned during month. Used for convergent */
+            IF ttMSOwner.CliEvent NE "F" THEN ttSub.PrintCLI = TRUE.
 
             /* Immediate STC logic non-fusion to non-fusion */
             IF lliSTR                AND
@@ -1452,7 +1452,7 @@ PROCEDURE pMarkPrinted:
       IF Invoice.InvType NE 99 THEN DO:
 
          CREATE ITSendLog.
-         ASSIGN ITSendLog.Brand      = gcBrand 
+         ASSIGN ITSendLog.Brand      = Syst.Var:gcBrand 
                 ITSendLog.TxtType    = 3
                 ITSendLog.ITNum      = 0
                 ITSendLog.CustNum    = Invoice.CustNum
@@ -1461,8 +1461,8 @@ PROCEDURE pMarkPrinted:
                 ITSendLog.EMail      = ""
                 ITSendLog.RepType    = "Inv"
                 ITSendLog.SendInfo   = icPrintHouse
-                ITSendLog.UserCode   = katun
-                ITSendLog.SendStamp  = fMakeTS().
+                ITSendLog.UserCode   = Syst.Var:katun
+                ITSendLog.SendStamp  = Func.Common:mMakeTS().
       END.
  
       RELEASE Invoice.    
@@ -1490,7 +1490,7 @@ PROCEDURE pErrorFile:
        "Customer"  CHR(9)
        "Error"     lcNewLine.
 
-   ldCurrStamp = fMakeTS().
+   ldCurrStamp = Func.Common:mMakeTS().
     
    FOR EACH ttError TRANS:
       PUT STREAM slog UNFORMATTED
@@ -1501,7 +1501,7 @@ PROCEDURE pErrorFile:
       /* save to db for reporting */
       IF ilDBWrite THEN DO:
          CREATE ErrorLog.
-         ASSIGN ErrorLog.Brand     = gcBrand
+         ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
                 ErrorLog.ActionID  = icActionID
                 ErrorLog.TableName = IF ttError.TableName > ""
                                      THEN ttError.TableName
@@ -1510,7 +1510,7 @@ PROCEDURE pErrorFile:
                                      THEN ttError.KeyValue
                                      ELSE ttError.Inv
                 ErrorLog.ActionTS  = ldCurrStamp
-                ErrorLog.UserCode  = katun
+                ErrorLog.UserCode  = Syst.Var:katun
                 ErrorLog.ErrorMsg  = ttError.ErrMsg.
       END.          
    END.

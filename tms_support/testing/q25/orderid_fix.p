@@ -1,4 +1,3 @@
-{date.i}
 
 DEF VAR lcMSISDN AS CHAR NO-UNDO.
 DEF VAR ldeFF AS DEC NO-UNDO.
@@ -39,7 +38,7 @@ if not avail Fixedfee then do:
    return.
 end.
 
-ldeFF = fmake2dt(fixedfee.begdate + 1,0).
+ldeFF = Func.Common:mMake2DT(fixedfee.begdate + 1,0).
 
 for each Order no-lock where
          Order.MsSeq = MobSub.MsSeq and

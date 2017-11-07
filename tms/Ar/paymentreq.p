@@ -8,18 +8,18 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{msreqfunc.i}
+{Func/msreqfunc.i}
 
-{faccper.i}
-{finvpayment.i}
-{fpaymconfig.i}
-{ftaxdata.i}
-{eventval.i}
+{Func/faccper.i}
+{Func/finvpayment.i}
+{Func/fpaymconfig.i}
+{Func/ftaxdata.i}
+{Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 END.
 
 
@@ -178,7 +178,7 @@ PROCEDURE pPayment:
    /* atleast two accounts are required */
    DO liReqCnt = 1 TO 2:
       FIND Account WHERE 
-           Account.Brand  = gcBrand AND
+           Account.Brand  = Syst.Var:gcBrand AND
            Account.AccNum = liAccount[liReqCnt] NO-LOCK NO-ERROR.
       IF NOT AVAILABLE Account THEN DO:
          fReqError("Accounts have not been defined").
@@ -197,7 +197,7 @@ PROCEDURE pPayment:
    /* payment source */
    IF lcPaymSrc = "" THEN lcPaymSrc = "REQ".
    
-   RUN createpaym (Customer.CustNum,
+   RUN Ar/createpaym.p (Customer.CustNum,
                    MsRequest.ReqIParam1,               /* invoice */
                    lcCLI,
                    ldtAccDate,                         /* posting date */
@@ -230,7 +230,7 @@ PROCEDURE pPayment:
          IF ldReqAmt NE 0 THEN DO:
          
             FIND InvGroup where 
-                 InvGroup.Brand    = gcBrand AND 
+                 InvGroup.Brand    = Syst.Var:gcBrand AND 
                  InvGroup.InvGroup = Customer.InvGroup NO-LOCK.
 
             fInvoicePaymentUpdate(BUFFER Invoice,

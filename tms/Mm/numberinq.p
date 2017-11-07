@@ -10,16 +10,15 @@
   VERSION ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{cparam2.i}
-{fsubser.i}
-{fctserval.i}
-{ffeecont.i}
-{service.i}
-{timestamp.i}
-{fctchange.i}
-{fmakemsreq.i}
-{fnumberinq.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Func/fsubser.i}
+{Func/fctserval.i}
+{Func/ffeecont.i}
+{Func/service.i}
+{Func/fctchange.i}
+{Func/fmakemsreq.i}
+{Func/fnumberinq.i}
 
 DEF INPUT PARAMETER iiMsSeq AS INT NO-UNDO.
 
@@ -140,8 +139,7 @@ IF NOT AVAILABLE Customer THEN DO:
    RETURN.
 END.
 
-lcUser = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                          BUFFER Customer).
+lcUser = Func.Common:mDispCustName(BUFFER Customer).
        
 PAUSE 0.
 DISP MobSub.CLI lcUser WITH FRAME fInquiry.
@@ -171,7 +169,7 @@ llFound = CAN-FIND(FIRST SubSer WHERE
 /* and attributes */
 IF llFound THEN
 FOR FIRST CTServEl NO-LOCK WHERE
-          CTServEl.Brand     = gcBrand        AND
+          CTServEl.Brand     = Syst.Var:gcBrand        AND
           CTServEl.ServCom   = lcNumberInq    AND
           CTServEl.CLIType   = MobSub.CLIType AND
           CTServEl.FromDate <= TODAY,
@@ -245,12 +243,12 @@ REPEAT WITH FRAME fInquiry ON ENDKEY UNDO lAction, NEXT lAction:
    WITH FRAME fInquiry. 
 
    ASSIGN
-      ufk[1]= 7  ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-      ufk[5]= 15 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
-      ehto = 0.
-   RUN ufkey.
+      Syst.Var:ufk[1]= 7  Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+      Syst.Var:ufk[5]= 15 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 
+      Syst.Var:ehto = 0.
+   RUN Syst/ufkey.p.
 
-   if toimi = 1 THEN DO:
+   if Syst.Var:toimi = 1 THEN DO:
    
       IF llPending THEN DO:
          MESSAGE "There are pending change requests for these parameters."
@@ -258,8 +256,8 @@ REPEAT WITH FRAME fInquiry ON ENDKEY UNDO lAction, NEXT lAction:
          NEXT. 
       END.
       
-      ehto = 9.
-      RUN ufkey.
+      Syst.Var:ehto = 9.
+      RUN Syst/ufkey.p.
 
       lUpdate:  
       REPEAT ON ENDKEY UNDO, LEAVE:
@@ -276,7 +274,7 @@ REPEAT WITH FRAME fInquiry ON ENDKEY UNDO lAction, NEXT lAction:
           
              READKEY.
              
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 
              THEN DO WITH FRAME fInquiry:
              
                 PAUSE 0.
@@ -367,9 +365,9 @@ REPEAT WITH FRAME fInquiry ON ENDKEY UNDO lAction, NEXT lAction:
 
    END.
    
-   ELSE IF toimi = 5 THEN DO:
+   ELSE IF Syst.Var:toimi = 5 THEN DO:
 
-      ldCurrStamp = fMakeTS().
+      ldCurrStamp = Func.Common:mMakeTS().
       
       /* if number is public atleast 1st channel must be active */
       IF NOT llSecret AND NOT llDAED THEN DO:
@@ -424,7 +422,7 @@ REPEAT WITH FRAME fInquiry ON ENDKEY UNDO lAction, NEXT lAction:
       LEAVE lAction.
    END.
 
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.Var:toimi = 8 THEN DO:
       LEAVE lAction.
    END.
       

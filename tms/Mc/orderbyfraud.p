@@ -1,15 +1,14 @@
 /* orderbyfraud.p    
 
 */
-   
-{commali.i}
-{eventval.i}
-{timestamp.i}
-{forderstamp.i}
-{orderfunc.i}
-{msisdn.i}
-{ordercancel.i}
-{msreqfunc.i}
+
+{Syst/commali.i}
+{Syst/eventval.i}
+{Func/forderstamp.i}
+{Func/orderfunc.i}
+{Func/msisdn.i}
+{Func/ordercancel.i}
+{Func/msreqfunc.i}
 
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF INPUT PARAMETER ilSilent AS LOG NO-UNDO.
@@ -20,7 +19,7 @@ DEF VAR lcMessage AS CHAR NO-UNDO.
 DEF VAR lcError   AS CHAR NO-UNDO.
 
 FIND Order WHERE 
-     Order.Brand   = gcBrand AND 
+     Order.Brand   = Syst.Var:gcBrand AND 
      Order.OrderID = iiOrder EXCLUSIVE-LOCK NO-ERROR.
 
 IF not avail order THEN DO:
@@ -49,9 +48,9 @@ IF NOT ilSilent THEN DO:
 END.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
       
    DEFINE VARIABLE lhOrder AS HANDLE NO-UNDO.
    lhOrder = BUFFER Order:HANDLE.
@@ -61,7 +60,7 @@ END.
 FUNCTION fReleaseMSISDN RETURNS LOGICAL :
 
    FIND FIRST MSISDN USE-INDEX OrderID WHERE
-              MSISDN.Brand = gcBrand AND
+              MSISDN.Brand = Syst.Var:gcBrand AND
               MSISDN.OrderId   = Order.OrderId AND 
               MSISDN.StatusCode = 2 EXCLUSIVE-LOCK NO-ERROR.   
 

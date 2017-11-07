@@ -1,9 +1,8 @@
-{commali.i}
-{eventval.i}
-{tmsconst.i}
-{timestamp.i}
-{fixedlinefunc.i}
-{orderfusion.i}
+{Syst/commali.i}
+{Syst/eventval.i}
+{Syst/tmsconst.i}
+{Func/fixedlinefunc.i}
+{Mc/orderfusion.i}
 
 DEF INPUT PARAM piOrderID AS INT NO-UNDO. 
 
@@ -11,14 +10,14 @@ DEF VAR lhBuff             AS HANDLE NO-UNDO.
 DEF VAR lcError            AS CHAR NO-UNDO. 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun 
-   {lib/eventlog.i}
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
+   {Func/lib/eventlog.i}
 END.
 
 /* check order exist */
 /* check order exist */
 FIND Order NO-LOCK WHERE
-     Order.Brand = gcbrand AND
+     Order.Brand = Syst.Var:gcBrand AND
      Order.OrderId = piOrderId NO-ERROR.
 IF NOT AVAIL Order THEN 
    RETURN SUBST("Unknown Order id &1",STRING(piOrderId)).
@@ -42,7 +41,7 @@ IF Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
     OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_CANCELLED} OR
     OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_NEW})) THEN DO:
 
-   RUN closeorder.p(Order.OrderId,TRUE).
+   RUN Mc/closeorder.p(Order.OrderId,TRUE).
 
    IF RETURN-VALUE NE "" THEN
       RETURN "Order closing failed: " + STRING(RETURN-VALUE).
@@ -55,7 +54,7 @@ IF Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
 
    ASSIGN
       OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_CANCELLED}
-      OrderFusion.UpdateTS = fMakeTS().
+      OrderFusion.UpdateTS = Func.Common:mMakeTS().
    
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhBuff).
 

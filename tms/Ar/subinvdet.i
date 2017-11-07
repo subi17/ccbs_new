@@ -9,12 +9,11 @@
 
 &IF "{&TMSCodeDef}" NE "NO"
 &THEN
-{commali.i}
+{Syst/commali.i}
 &ENDIF
 
 &IF "{&TimeStampDef}" NE "NO"
 &THEN
-{timestamp.i}
 &ENDIF
             
 DEF VAR lcCurrency   AS CHAR NO-UNDO.
@@ -107,8 +106,7 @@ PROCEDURE pSubInvoiceDetails:
    ASSIGN
       lcCurrency   = Invoice.Currency
       lcCreditNote = ""
-      lcVatUsage   = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "Invoice",
+      lcVatUsage   = Func.Common:mTMSCodeName("Invoice",
                                       "VatUsage",
                                       STRING(Invoice.VatUsage)).
 

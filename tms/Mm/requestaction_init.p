@@ -7,12 +7,12 @@
   Version ......: Yoigo
   --------------------------------------------------------------------------- */
 
-{commali.i}
-{fmakemsreq.i}
-{service.i}
-{cparam2.i}
-{requestaction_exec.i}
-{fsendsms.i}
+{Syst/commali.i}
+{Func/fmakemsreq.i}
+{Func/service.i}
+{Func/cparam2.i}
+{Mm/requestaction_exec.i}
+{Func/fsendsms.i}
 
 DEF INPUT PARAMETER iiMsRequest  AS INT  NO-UNDO.
 
@@ -41,7 +41,7 @@ IF NOT AVAILABLE MsOwner THEN
    RETURN "ERROR:Subscription not available".
 
 FIND FIRST CLIType WHERE
-           CLIType.Brand   = gcBrand AND
+           CLIType.Brand   = Syst.Var:gcBrand AND
            CLIType.CLIType = MsOwner.CLIType NO-LOCK NO-ERROR.
 IF AVAILABLE CLIType THEN liPayType = CLIType.PayType.
 
@@ -132,7 +132,7 @@ PROCEDURE pMsRequest:
       IF ERROR-STATUS:ERROR THEN NEXT. 
       
       FIND FIRST RequestType WHERE
-                 RequestType.Brand   = gcBrand AND
+                 RequestType.Brand   = Syst.Var:gcBrand AND
                  RequestType.ReqType = liPendingType
       NO-LOCK NO-ERROR.
       IF NOT AVAILABLE RequestType THEN NEXT.

@@ -8,22 +8,20 @@
   Version ......: xfera 
   ---------------------------------------------------------------------- */
 
-{commali.i}
-{cparam2.i}
-{lib/tokenlib.i}
-{lib/tokenchk.i 'MNPCal'}
-{timestamp.i}
-{xmlfunction.i}
-{ftaxdata.i}
-{timestamp.i}
-{tmsconst.i}
-{eventval.i}
-{mnp.i}
+{Syst/commali.i}
+{Func/cparam2.i}
+{Mc/lib/tokenlib.i}
+{Mc/lib/tokenchk.i 'MNPCal'}
+{Func/xmlfunction.i}
+{Func/ftaxdata.i}
+{Syst/tmsconst.i}
+{Syst/eventval.i}
+{Mnp/mnp.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
-   {lib/eventlog.i}
+   {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhMNPCal AS HANDLE NO-UNDO.
    lhMNPCal = BUFFER MNPCal:HANDLE.
@@ -56,6 +54,7 @@ DEFINE VARIABLE i            AS INTEGER                 NO-UNDO.
 DEFINE VARIABLE ok           AS LOGICAL format "Yes/No" NO-UNDO.
 DEF BUFFER MNPCalBuf FOR MNPCal.
 DEFINE VARIABLE lcRegion     AS CHARACTER               NO-UNDO.
+DEFINE VARIABLE lcDeliveryType AS CHARACTER NO-UNDO.
 DEFINE VARIABLE llAdmin      AS LOGICAL NO-UNDO. 
 DEFINE VARIABLE llSyst       AS LOGICAL NO-UNDO. 
 DEFINE VARIABLE liPeriodSum AS INTEGER NO-UNDO.  
@@ -71,31 +70,35 @@ FORM
     MNPCal.MNPProduct 
     MNPCal.MNPTariff
     MNPCal.MessageType FORMAT "x(10)"
-    MNPCal.Periods  
+    MNPCal.Periods
+    MNPCal.DeliveryType
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
     " MNP CALENDAR  "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 FORM
-    "Channel ....:" MNPCal.OrderChannel FORMAT "x(16)" 
+    "Channel .....:" MNPCal.OrderChannel FORMAT "x(16)" 
     HELP "Order Channel (F9)" SKIP
-    "Region .....:" MNPCal.Region       FORMAT "x(2)"
+    "Region ......:" MNPCal.Region       FORMAT "x(2)"
     HELP "Region (F9)" 
     lcRegion FORMAT "x(20)" SKIP
-    "Product.....:" MNPCal.MNPProduct      FORMAT "X(1)"
+    "Product......:" MNPCal.MNPProduct   FORMAT "X(1)"
     HELP "MNP Product (F9)" SKIP
-    "Tariff......:" MNPCal.MNPTariff       FORMAT "X(8)"
+    "Tariff.......:" MNPCal.MNPTariff    FORMAT "X(8)"
     HELP "Tariff (F9)" SKIP
-    "Message Type:" MNPCal.MessageType  FORMAT "x(8)"
+    "Message Type.:" MNPCal.MessageType  FORMAT "x(8)"
     HELP "Message Type (F9)" SKIP
-    "Periods ....:" MNPCal.Periods      FORMAT ">9"
-    HELP "Maximum amount of periods before making alarm"
+    "Periods .....:" MNPCal.Periods      FORMAT ">9"
+    HELP "Maximum amount of periods before making alarm" SKIP
+    "Delivery Type:" MNPCal.DeliveryType FORMAT ">>9"
+    HELP "Delivery Type (F9)"
+    lcDeliveryType FORMAT "x(20)"
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     NO-LABELS 
     FRAME lis.
 
@@ -107,7 +110,7 @@ WITH  OVERLAY ROW 4 centered
     NO-LABELS 
     FRAME fWindow.
 
-cfc = "sel". run ufcolor. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -132,14 +135,14 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a MNPCal  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
-      run ufcolor.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      RUN Syst/ufcolor.p.
 
 ADD-ROW:
 
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN ufkey.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
@@ -219,37 +222,37 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk = 0
-        ufk[1]= 0  ufk[2]= 0 ufk[3]= 0
-        ufk[5]= 5  WHEN llAdmin 
-        ufk[6]= 4  WHEN llAdmin 
-        ufk[7]= 9020 WHEN llSyst ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
-         RUN ufkey.
+        Syst.Var:ufk = 0
+        Syst.Var:ufk[1]= 0  Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0
+        Syst.Var:ufk[5]= 5  WHEN llAdmin 
+        Syst.Var:ufk[6]= 4  WHEN llAdmin 
+        Syst.Var:ufk[7]= 9020 WHEN llSyst Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
+         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
-        CHOOSE ROW MNPCal.OrderChannel ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MNPCal.OrderChannel WITH FRAME sel.
+        CHOOSE ROW MNPCal.OrderChannel {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) MNPCal.OrderChannel WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
-        CHOOSE ROW MNPCal.Region ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MNPCal.Region WITH FRAME sel.
+        CHOOSE ROW MNPCal.Region {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) MNPCal.Region WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
-        CHOOSE ROW MNPCal.MessageType ;(uchoose.i;) NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MNPCal.MessageType WITH FRAME sel.
+        CHOOSE ROW MNPCal.MessageType {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) MNPCal.MessageType WITH FRAME sel.
       END.
       
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -273,10 +276,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -301,7 +304,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -327,7 +330,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND MNPCal WHERE recid(MNPCal) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -351,7 +354,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -366,7 +369,7 @@ BROWSE:
       END. /* NEXT page */
      
      
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND llAdmin
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND llAdmin
       THEN DO:
      
         must-add = TRUE.
@@ -375,7 +378,7 @@ BROWSE:
         
      END. /* ADD NEW */
          
-     ELSE IF LOOKUP(nap,"6,f6") > 0  AND llAdmin 
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0  AND llAdmin 
       THEN DO TRANS:
 
         RUN local-find-this(FALSE).
@@ -395,13 +398,14 @@ BROWSE:
         
         RUN local-find-this(TRUE).
         
-        COLOR DISPLAY value(ctc)
+        COLOR DISPLAY value(Syst.Var:ctc)
            MNPCal.OrderChannel   
            MNPCal.Region
            MNPCal.MNPProduct 
            MNPCal.MNPTariff
            MNPCal.MessageType
            MNPCal.Periods
+           MNPCal.DeliveryType
            WITH FRAME sel.
         
         MESSAGE
@@ -414,13 +418,14 @@ BROWSE:
            ok = FALSE.
         END.
         
-        COLOR DISPLAY value(ccc)
+        COLOR DISPLAY value(Syst.Var:ccc)
            MNPCal.OrderChannel
            MNPCal.Region
            MNPCal.MNPProduct 
            MNPCal.MNPTariff 
            MNPCal.MessageType
            MNPCal.Periods
+           MNPCal.DeliveryType
            WITH FRAME sel.
        
         IF OK THEN DO:
@@ -450,14 +455,14 @@ BROWSE:
         
      END. /* DELETE */
             
-      ELSE IF LOOKUP(nap,"7,f7") > 0 AND llSyst
+      ELSE IF LOOKUP(Syst.Var:nap,"7,f7") > 0 AND llSyst
        THEN DO:
          
-         ehto = 9.
-         RUN ufkey.
+         Syst.Var:ehto = 9.
+         RUN Syst/ufkey.p.
 
          FIND FIRST TMSParam WHERE
-            TMSParam.Brand = gcBrand AND
+            TMSParam.Brand = Syst.Var:gcBrand AND
             TMSParam.ParamCode = "MNPMinWindow" AND
             TMSParam.ParamGroup = "MNP" NO-LOCK NO-ERROR.
          
@@ -512,15 +517,15 @@ BROWSE:
          NEXT LOOP. 
       END. 
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 AND llAdmin THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 AND llAdmin THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
 
        /* change */
        RUN local-find-this(FALSE).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN ufkey.
-       cfc = "lis". run ufcolor. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
 
        RUN local-UPDATE-record(FALSE).
        HIDE FRAME lis NO-PAUSE.
@@ -536,25 +541,25 @@ BROWSE:
 
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(MNPCal) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(MNPCal) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 fCleanEventObjects().
 
@@ -627,6 +632,7 @@ PROCEDURE local-disp-row:
       MNPCal.MNPTariff
       MNPCal.MessageType
       MNPCal.Periods
+      MNPCal.DeliveryType
    WITH FRAME sel.
 
 END PROCEDURE.
@@ -639,18 +645,28 @@ PROCEDURE local-UPDATE-record:
    
    DEFINE INPUT PARAMETER llNew AS LOGICAL NO-UNDO.
    DEFINE VARIABLE llDefault AS LOGICAL NO-UNDO. 
-   DEFINE VARIABLE liMinWindow AS INTEGER NO-UNDO. 
+   DEFINE VARIABLE liMinWindow AS INTEGER NO-UNDO.
 
    liMinWindow = fGetMinMNPWindow().
 
    IF MNPCal.Region = "99" AND MNPCal.OrderChannel = "" 
       THEN llDefault = TRUE. ELSE llDefault = FALSE.
-   
-   lcRegion = "".
+   ASSIGN
+      lcRegion = ""
+      lcDeliveryType = "".
+
    FIND FIRST Region NO-LOCK WHERE
       Region.Region = MNPCal.Region NO-ERROR.
    IF AVAIL Region THEN lcRegion = Region.RgName.
    IF MNPCal.Region EQ "99" THEN lcRegion = "DEFAULT".
+
+   FIND FIRST TMSCodes NO-LOCK WHERE
+      TMSCodes.TableName = "MNPCal"       AND
+      TMSCodes.FieldName = "DeliveryType" AND
+      TMSCodes.CodeValue = STRING(MNPCal.DeliveryType)
+   NO-ERROR.
+   IF AVAIL TMSCodes THEN lcDeliveryType = TMSCodes.CodeName.
+   ELSE lcDeliveryType = "DEFAULT".
    
    DISP
       MNPCal.Region lcRegion
@@ -658,7 +674,9 @@ PROCEDURE local-UPDATE-record:
       MNPCal.MNPProduct
       MNPCal.MNPTariff
       MNPCal.MessageType 
-      MNPCal.Periods WITH FRAME lis.
+      MNPCal.Periods
+      MNPCal.DeliveryType lcDeliveryType
+      WITH FRAME lis.
 
    MAIN:
    REPEAT ON ENDKEY UNDO, LEAVE:
@@ -670,24 +688,25 @@ PROCEDURE local-UPDATE-record:
       MNPCal.MNPTariff
       MNPCal.MessageType 
       MNPCal.Periods
+      MNPCal.DeliveryType
    WITH FRAME lis EDITING:
 
       READKEY.
       
-      nap = keylabel(lastkey).
+      Syst.Var:nap = keylabel(lastkey).
       /* IF  User Wanted TO Cancel this Change TRANSACTION */
       IF LOOKUP(KEYFUNCTION(LASTKEY),"endkey,end-error") > 0 OR
       KEYLABEL(lastkey) = "F4" THEN UNDO, LEAVE.
       
       IF KEYLABEL(lastkey) = "F2" THEN NEXT.
             
-      if nap = "F9" THEN DO:
+      if Syst.Var:nap = "F9" THEN DO:
          CASE FRAME-FIELD:
             WHEN "OrderChannel" THEN DO:
-               RUN h-tmscodes.p
+               RUN Help/h-tmscodes.p
                   ("MNPCal","OrderChannel","MNP", OUTPUT siirto).
-               ehto = 9.
-               RUN ufkey.
+               Syst.Var:ehto = 9.
+               RUN Syst/ufkey.p.
                IF siirto ne "" THEN DO:
                   DISP siirto @ MNPCal.OrderChannel WITH FRAME lis.
                   NEXT.
@@ -695,10 +714,10 @@ PROCEDURE local-UPDATE-record:
             END.
             
             WHEN "MessageType" THEN DO:
-            RUN h-tmscodes.p
+            RUN Help/h-tmscodes.p
                   ("MNPCal","MessageType","MNP", OUTPUT siirto).
-               ehto = 9.
-               RUN ufkey.
+               Syst.Var:ehto = 9.
+               RUN Syst/ufkey.p.
                IF siirto ne "" THEN DO:
                   DISP siirto @ MNPCal.MessageType WITH FRAM lis.
                   NEXT.
@@ -706,19 +725,30 @@ PROCEDURE local-UPDATE-record:
             END.
 
             WHEN "MNPProduct" THEN DO:
-            RUN h-tmscodes.p
+            RUN Help/h-tmscodes.p
                   ("MNPCal","MNPProduct","MNP", OUTPUT siirto).
-               ehto = 9.
-               RUN ufkey.
+               Syst.Var:ehto = 9.
+               RUN Syst/ufkey.p.
                IF siirto ne "" AND siirto NE ? THEN DO:
                   DISP siirto @ MNPCal.MNPProduct  WITH FRAME lis.
+                  NEXT.
+               END.
+            END.
+
+            WHEN "DeliveryType" THEN DO:
+            RUN Help/h-tmscodes.p
+                  ("MNPCal","DeliveryType","MNP", OUTPUT siirto).
+               Syst.Var:ehto = 9.
+               RUN Syst/ufkey.p.
+               IF siirto ne "" AND siirto NE ? THEN DO:
+                  DISP INTEGER(siirto) @ MNPCal.DeliveryType  WITH FRAME lis.
                   NEXT.
                END.
             END.
          END.
       END.
 
-      IF LOOKUP(nap,poisnap) > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
          
          IF FRAME-FIELD = "OrderChannel" THEN DO:
             FIND FIRST TMSCodes WHERE
@@ -736,7 +766,7 @@ PROCEDURE local-UPDATE-record:
             DISPLAY TMSCodes.CodeValue @ MNPCal.OrderChannel WITH FRAME lis.
          END.
          
-         IF FRAME-FIELD = "Region" THEN DO:
+         ELSE IF FRAME-FIELD = "Region" THEN DO:
             FIND FIRST Region NO-LOCK WHERE
                Region.Region = INPUT MNPCal.Region NO-ERROR.
             IF NOT AVAIL Region AND INPUT MNPCal.Region NE "99" THEN DO:
@@ -750,7 +780,27 @@ PROCEDURE local-UPDATE-record:
             ELSE lcRegion = Region.RgName.
             DISPLAY lcRegion WITH FRAME lis.
          END.
-         
+
+         ELSE IF FRAME-FIELD = "DeliveryType" THEN DO:
+
+            FIND FIRST TMSCodes NO-LOCK WHERE
+               TMSCodes.TableName = "MNPCal"       AND
+               TMSCodes.FieldName = "DeliveryType" AND
+               TMSCodes.CodeValue = STRING(INPUT MNPCal.DeliveryType)
+            NO-ERROR.
+
+            IF NOT AVAIL TMSCodes
+            THEN DO:
+               MESSAGE "Unknown delivery type" INPUT MNPCal.DeliveryType VIEW-AS ALERT-BOX.
+               lcDeliveryType = "".
+               DISPLAY lcDeliveryType WITH FRAME lis.
+               NEXT.
+            END.
+
+            lcDeliveryType = TMSCodes.CodeName.
+            DISPLAY lcDeliveryType WITH FRAME lis.
+         END.
+
          ELSE IF FRAME-FIELD = "MessageType" THEN DO:
             FIND FIRST TMSCodes WHERE
                TMSCodes.TableName = "MNPCal"   AND
@@ -782,7 +832,7 @@ PROCEDURE local-UPDATE-record:
             
             IF INPUT MNPCal.MNPTariff NE "" THEN DO:
                FIND FIRST CliType WHERE
-                  CliType.Brand   = gcBrand AND 
+                  CliType.Brand   = Syst.Var:gcBrand AND 
                   CliType.CliType = INPUT MNPCal.MNPTariff
                NO-LOCK NO-ERROR.
                IF NOT AVAIL Clitype THEN DO:
@@ -814,7 +864,8 @@ PROCEDURE local-UPDATE-record:
       INPUT INPUT MNPCal.OrderChannel,
       INPUT INPUT MNPCal.Region,
       INPUT INPUT MNPCal.MNPProduct,
-      INPUT INPUT MNPCal.MNPTariff).
+      INPUT INPUT MNPCal.MNPTariff,
+      INPUT INPUT MNPCal.DeliveryType).
    
    IF liPeriodSum < liMinWindow THEN DO:
       MESSAGE "Total period sum cannot be less than minimum"
@@ -839,6 +890,7 @@ PROCEDURE local-UPDATE-record:
       MNPCalBuf.MNPProduct = INPUT MNPCal.MNPProduct AND 
       MNPCalBuf.MNPTariff = INPUT MNPCal.MNPTariff AND 
       MNPCalBuf.MessageType = INPUT MNPCal.MessageType AND
+      MNPCalBuf.DeliveryType = INPUT MNPCal.DeliveryType AND
       ROWID(MNPCalBuf) NE ROWID(MNPCal) NO-LOCK NO-ERROR. 
    IF AVAIL MNPCalBuf THEN DO: 
       MESSAGE "Definition already exists!" VIEW-AS ALERT-BOX.        
@@ -865,7 +917,9 @@ PROCEDURE local-UPDATE-record:
          MNPCal.MNPProduct
          MNPCal.MNPTariff
          MNPCal.MessageType 
-         MNPCal.Periods.
+         MNPCal.Periods
+         MNPCal.DeliveryType
+         .
       
       IF NOT llNew AND llDoEvent THEN RUN StarEventMakeModifyEvent ( lhMNPCal ).
   

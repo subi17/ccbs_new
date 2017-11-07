@@ -9,7 +9,6 @@
   Version ......: SHARK
   ---------------------------------------------------------------------- */
 
-{timestamp.i}
 
 DEF STREAM sErrLog.
 
@@ -71,7 +70,7 @@ PROCEDURE pVRKCheck:
    CREATE VRKQuery.
 
    assign 
-      VRKQuery.CrStamp      = fMakeTS()
+      VRKQuery.CrStamp      = Func.Common:mMakeTS()
       VRKQuery.PersonId     = trim(substr(cResponse,1,11))
       VRKQuery.Lastname     = trim(substr(cResponse,12,50))
       VRKQuery.Firstname    = trim(substr(cResponse,62,50)) 

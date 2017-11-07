@@ -11,10 +11,10 @@
   Version ......: M15
   ------------------------------------------------------ */
 
-{commali.i}
-{utumaa.i}
-{cparam2.i}
-{edefine.i new}
+{Syst/commali.i}
+{Syst/utumaa.i}
+{Func/cparam2.i}
+{Inv/edefine.i new}
 
 def input parameter asno1  as int  format "zzzzzz9"  NO-UNDO.
 def input parameter asno2  as int  format "zzzzzz9"  NO-UNDO.
@@ -34,7 +34,7 @@ IF moduli = 4 THEN moduli = 5.
 
 IF moduli > 7 THEN RETURN. 
 
-rap_moduli = "nnpura" + STRING(moduli).
+rap_moduli = "Inv/nnpura" + STRING(moduli).
 
       /* Laitetaan memoryin nykyisen tehosteen sivuarvot */
       ASSIGN
@@ -43,7 +43,7 @@ rap_moduli = "nnpura" + STRING(moduli).
 
       /* Haetaan raporttitehoste */
       FIND FIRST TMSPrinter where
-                 TMSPrinter.PrinterId = TMSPrinter
+                 TMSPrinter.PrinterId = Syst.Var:TMSPrinter
       NO-LOCK NO-ERROR.
       if available TMSPrinter and TMSPrinter.Device ne "-" THEN DO:
          /* Haetaan raporttitehoste */
@@ -65,7 +65,7 @@ rap_moduli = "nnpura" + STRING(moduli).
       IF moduli = 2 THEN 
       RUN value(rap_moduli) 
                  (0,
-                  99999999,
+                  999999999,
                   pvm1,
                   pvm2,
                   1,       /* vain laskutetut puhelutapahtumat */
@@ -77,7 +77,7 @@ rap_moduli = "nnpura" + STRING(moduli).
       ELSE
       RUN value(rap_moduli) 
                  (0,
-                  99999999,
+                  999999999,
                   pvm1,
                   pvm2,
                   1,       /* vain laskutetut puhelutapahtumat */

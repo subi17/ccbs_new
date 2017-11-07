@@ -7,8 +7,8 @@
   MODIFIED .....: 
   Version ......: xfera
   ------------------------------------------------------ */
-{commali.i}
-{tmsconst.i}
+{Syst/commali.i}
+{Syst/tmsconst.i}
 
 DEF INPUT PARAMETER iiCustNum  AS INT NO-UNDO.
 DEF INPUT PARAMETER iiCustType AS INT NO-UNDO.
@@ -22,7 +22,7 @@ IF NOT AVAIL Customer THEN DO:
 END.
       
 FIND CustContact WHERE
-     CustContact.Brand = gcBrand AND
+     CustContact.Brand = Syst.Var:gcBrand AND
      CustContact.Custnum = Customer.Custnum AND
      CustContact.CustType = iiCustType NO-LOCK NO-ERROR.
 
@@ -82,12 +82,12 @@ REPEAT WITH FRAME fCustContact ON ENDKEY UNDO lCustMark, NEXT lCustMark:
       CustContact.Language lcLanguage.
 
    ASSIGN
-      ufk   = 0  
-      ufk[8]= 8 
-      ehto = 0.
-   RUN ufkey.
+      Syst.Var:ufk   = 0  
+      Syst.Var:ufk[8]= 8 
+      Syst.Var:ehto = 0.
+   RUN Syst/ufkey.p.
 
-   IF toimi = 8 THEN LEAVE.
+   IF Syst.Var:toimi = 8 THEN LEAVE.
 
 END. /* lCustMark */
 

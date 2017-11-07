@@ -1,10 +1,9 @@
-{commpaa.i}
-gcbrand = "1".
-katun = "Qvantel".
-{tmsconst.i}
-{timestamp.i}
-{fmakemsreq.i}
-{femailinvoice.i}
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
+{Syst/tmsconst.i}
+{Func/fmakemsreq.i}
+{Func/femailinvoice.i}
 
 DEF VAR liRequest AS INT  NO-UNDO.
 DEF VAR lcResult  AS CHAR NO-UNDO.
@@ -69,9 +68,9 @@ FOR EACH ttFusion NO-LOCK:
          PUT UNFORMATTED STRING(ttFusion.CustNum) "|UPDATED|InvoiceTargetGroup is updated from Fusion Email to Pending Fusion Email as customer deltype is pending email CustDelType: " STRING(Customer.DelType) SKIP.
       END.
       ELSE DO:
-         liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+         liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                           INPUT TODAY,
-                                          INPUT katun,
+                                          INPUT Syst.Var:katun,
                                           INPUT 0, /* msseq */
                                           INPUT "", /* cli */
                                           INPUT Customer.CustNum,
@@ -98,9 +97,9 @@ FOR EACH ttFusion NO-LOCK:
          PUT UNFORMATTED STRING(ttFusion.CustNum) "|UPDATED|InvoiceTargetGroup is updated from Fusion pending Email to Fusion Email and deltype is email CustDelType: " STRING(Customer.DelType) SKIP.
       END.
       ELSE DO:
-         liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+         liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                           INPUT TODAY,
-                                          INPUT katun,
+                                          INPUT Syst.Var:katun,
                                           INPUT 0, /* msseq */
                                           INPUT "", /* cli */
                                           INPUT Customer.CustNum,
