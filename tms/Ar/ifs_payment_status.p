@@ -9,14 +9,13 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Syst/eventval.i}
 {Syst/tmsconst.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -88,7 +87,7 @@ RUN pInitialize.
 
 /* check that there isn't already another run handling this file */
 IF CAN-FIND(FIRST ActionLog USE-INDEX TableName WHERE
-                  ActionLog.Brand        = gcBrand      AND    
+                  ActionLog.Brand        = Syst.Var:gcBrand      AND    
                   ActionLog.TableName    = "Invoice"    AND
                   ActionLog.KeyValue     = lcPlainFile  AND
                   ActionLog.ActionID     = "IFSPAYSTAT" AND
@@ -98,14 +97,14 @@ THEN RETURN.
 DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = gcBrand   
+      ActionLog.Brand        = Syst.Var:gcBrand   
       ActionLog.TableName    = "Invoice"  
       ActionLog.KeyValue     = lcPlainFile
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.Var:katun
       ActionLog.ActionID     = "IFSPAYSTAT"
       ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
       ActionLog.ActionStatus = 0.
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
       lrActionID             = RECID(ActionLog).
 END.
 
@@ -174,14 +173,14 @@ PROCEDURE pInitialize:
       lcTransDir = fCParamC("IFSPaymStatusLogTrans")
       lcArcDir   = fCParamC("IFSPaymStatusArc")
       liBankAcc  = fCParamI("BankAcc")
-      ldToday    = fMake2DT(TODAY,1).
+      ldToday    = Func.Common:mMake2DT(TODAY,1).
 
    IF lcLogFile = ? OR lcLogFile = "" THEN 
       lcLogFile = "/tmp/IFS_paymstatus_#DATE.log".
 
    liSeq = 1.
    FOR EACH ActionLog NO-LOCK WHERE
-            ActionLog.Brand    = gcBrand      AND
+            ActionLog.Brand    = Syst.Var:gcBrand      AND
             ActionLog.ActionID = "IFSPAYSTAT" AND
             ActionLog.ActionTS >= ldToday:
       liSeq = liSeq + 1.
@@ -252,7 +251,7 @@ PROCEDURE pReadEvents:
       END.
 
       FIND FIRST Invoice WHERE 
-                 Invoice.Brand    = gcBrand AND
+                 Invoice.Brand    = Syst.Var:gcBrand AND
                  Invoice.ExtInvID = lcInvID NO-LOCK NO-ERROR.
       IF NOT AVAILABLE Invoice THEN DO:
          fError("Unknown invoice").
@@ -338,23 +337,22 @@ PROCEDURE pReadEvents:
       /* YDR-1665 */
       IF lcClaimStatus BEGINS "1." THEN DO:
 
-         lcRejectionDesc = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                            "Invoice",
+         lcRejectionDesc = Func.Common:mTMSCodeName("Invoice",
                                             "ClaimStatus",
                                             lcClaimStatus).
 
          CREATE Memo.
-         ASSIGN Memo.Brand     = gcBrand
+         ASSIGN Memo.Brand     = Syst.Var:gcBrand
                 Memo.HostTable = "Invoice"
                 Memo.KeyValue  = STRING(Invoice.InvNum)
                 Memo.CustNum   = Invoice.CustNum
                 Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-                Memo.CreUser   = katun
+                Memo.CreUser   = Syst.Var:katun
                 Memo.MemoTitle = "Invoice rejection"
                 Memo.MemoText  = STRING(Invoice.InvNum) +
                                  ": " + lcClaimStatus +
                                  "; " + lcRejectionDesc.
-                Memo.CreStamp  = fMakeTS().
+                Memo.CreStamp  = Func.Common:mMakeTS().
       END.
 
       RUN pUpdateStatus(Invoice.InvNum,

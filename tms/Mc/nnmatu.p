@@ -32,9 +32,12 @@ DEF VAR ma-nro2      LIKE CCN.CCN FORMAT ">>>9" NO-UNDO.
 
 DEF VAR lev          AS i                 NO-UNDO init 114.
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
+
 form header /* tulosteen pAAotsikko */
    fill ("=",lev) format "x(80)"       SKIP
-   ynimi at 1 "COUNTRY NUMBERS" at 31 pvm format "99-99-99" TO 78
+   ynimi at 1 "COUNTRY NUMBERS" at 31 TODAY format "99-99-99" TO 78
    "Page"       at 66 sl format "ZZZ9" SKIP
    fill ("=",lev) format "x(80)"       SKIP
 
@@ -65,8 +68,8 @@ skip(4)
                     help "Excel File name"
                     AT 37                                             skip(4)
 WITH
-    COLOR value(cfc) TITLE COLOR value(cfc)
-    " " + ynimi + " Country number report " + string(pvm,"99-99-99") + " "
+    COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:cfc)
+    " " + ynimi + " Country number report " + string(TODAY,"99-99-99") + " "
     ROW 1 width 80 NO-LABEL
     FRAME rajat.
 
@@ -78,14 +81,14 @@ ASSIGN
 rajat:
 repeat WITH FRAME rajat:
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE
       ma-nro1    ma-nro2
       excel
    WITH FRAME rajat.
 
    IF excel THEN DO:
-      FIND FIRST TMSUser where TMSUser.UserCode = katun no-lock no-error.
+      FIND FIRST TMSUser where TMSUser.UserCode = Syst.Var:katun no-lock no-error.
       assign exPaymFile = TMSUser.RepDir + "/" + "country.txt".
       UPDATE exPaymFile WITH FRAME rajat.
       OUTPUT STREAM excel TO value(exPaymFile).
@@ -94,13 +97,13 @@ repeat WITH FRAME rajat:
 toimi:
    repeat WITH FRAME rajat:
       ASSIGN
-      ufk = 0 ehto = 0
-      ufk[1] = 7 ufk[5] = 63 ufk[8] = 8.
+      Syst.Var:ufk = 0 Syst.Var:ehto = 0
+      Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT  rajat.
-      IF toimi = 8 THEN LEAVE rajat.
-      IF toimi = 5 THEN  LEAVE toimi.
-   END.  /* toimi */
+      IF Syst.Var:toimi = 1 THEN NEXT  rajat.
+      IF Syst.Var:toimi = 8 THEN LEAVE rajat.
+      IF Syst.Var:toimi = 5 THEN  LEAVE toimi.
+   END.  /* Syst.Var:toimi */
 
    IF NOT excel THEN DO:
       tila = TRUE.
@@ -110,12 +113,12 @@ toimi:
    message "Printing ...".
 
    FOR EACH  CCN  no-lock  where
-             CCN.Brand = gcBrand AND
+             CCN.Brand = Syst.Var:gcBrand AND
              CCN.CCN  >= ma-nro1 AND
              CCN.CCN  <= ma-nro2,
 
        FIRST BDest no-lock  where
-             BDest.Brand = gcBrand AND
+             BDest.Brand = Syst.Var:gcBrand AND
              BDest.CCN   = CCN.CCN     
 
       BREAK

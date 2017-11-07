@@ -17,7 +17,6 @@
 
 {Syst/commali.i}
 {Func/excel.i}
-{Func/date.i} 
 {Func/cparam2.i}
 {Ar/bankrej.i}
 /* temp-table */

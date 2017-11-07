@@ -92,8 +92,8 @@ END.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {Syst/commpaa.i}
-katun = pcUsername.
-gcBrand = "1".
+Syst.Var:katun = pcUsername.
+Syst.Var:gcBrand = "1".
 
 IF pcOperation = "cancel" AND LOOKUP("pdf",lcstruct) > 0 THEN DO:
    
@@ -124,7 +124,7 @@ END.
 CREATE Memo.
 ASSIGN
     Memo.CreStamp  = {&nowTS}
-    Memo.Brand     = gcBrand
+    Memo.Brand     = Syst.Var:gcBrand
     Memo.HostTable = "MNPProcess"
     Memo.KeyValue  = STRING(MNPProcess.MNPSeq)
     Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
@@ -136,13 +136,13 @@ ASSIGN
 IF lookup(pcOperation,"cancel,close") > 0 THEN DO:
    
    FIND FIRST Order WHERE
-              Order.Brand = gcBrand AND
+              Order.Brand = Syst.Var:gcBrand AND
               Order.OrderID = MNPProcess.OrderId NO-LOCK NO-ERROR.
 
    CREATE Memo.
    ASSIGN
        Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = gcBrand
+       Memo.Brand     = Syst.Var:gcBrand
        Memo.HostTable = "Order"
        Memo.KeyValue  = STRING(MNPProcess.OrderId)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
@@ -157,5 +157,4 @@ END.
 lcRespStruct = add_struct(response_toplevel_id, "").
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

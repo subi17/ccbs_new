@@ -36,13 +36,13 @@ IF MsRequest.ReqStat NE 0 THEN DO:
 END.
 
 /* has user got priviliges */
-IF fTokenRights(katun,"CCSUPER") NE "RW" THEN DO:
+IF fTokenRights(Syst.Var:katun,"CCSUPER") NE "RW" THEN DO:
    MESSAGE "You are not authorized to use this function"
    VIEW-AS ALERT-BOX INFORMATION.
    RETURN.
 END.
 
-ehto = 9.
+Syst.Var:ehto = 9.
 RUN Syst/ufkey.p.
 
 liChargeType = MsRequest.ReqIParam2.
@@ -71,12 +71,12 @@ REPEAT ON ENDKEY UNDO, LEAVE:
             WITH FRAME fCharge.   
          END.
 
-         ehto = 9.
+         Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
          NEXT. 
       END.
 
-      ELSE IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 
+      ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 
       THEN DO WITH FRAME fCharge:
    
          IF INPUT liChargeType > 0 AND 

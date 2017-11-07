@@ -96,7 +96,7 @@ form header
    lcAddtHead AT 1 FORMAT "X(10)"
       lcVatHeader AT 15 FORMAT "X(10)"
       xDateHeader AT 40 FORMAT "X(35)"
-      pvm format "99.99.9999" AT 81 SKIP
+      TODAY FORMAT "99.99.9999" AT 81 SKIP
    viiva2 AT 1 skip(1)
    WITH width 95 NO-LABEL no-box FRAME sivuotsi.
 
@@ -147,13 +147,13 @@ END.
 FUNCTION fPrintAccount RETURNS LOGICAL.
 
         FIND Account WHERE 
-             Account.Brand  = gcBrand AND
+             Account.Brand  = Syst.Var:gcBrand AND
              Account.AccNum = wAccData.AccNum NO-LOCK NO-ERROR.
         FIND CostCentre WHERE
-             CostCentre.Brand      = gcBrand AND
+             CostCentre.Brand      = Syst.Var:gcBrand AND
              CostCentre.CostCentre = wAccData.CostCentre NO-LOCK NO-ERROR.
         FIND CustCat WHERE
-             CustCat.Brand   = gcBrand AND
+             CustCat.Brand   = Syst.Var:gcBrand AND
              CustCat.Category = wAccData.Category NO-LOCK NO-ERROR.
         
         IF ilPaper THEN DO:
@@ -245,7 +245,7 @@ EMPTY TEMP-TABLE ttInvoice.
    to check them for each event */
 IF iUnbilled THEN 
 FOR EACH Invoice NO-LOCK WHERE
-         Invoice.Brand   = gcBrand AND
+         Invoice.Brand   = Syst.Var:gcBrand AND
          Invoice.InvDate > idtUnbilled:
          
    IF LOOKUP(STRING(Invoice.InvType),lcTypeDen) = 0 THEN DO:
@@ -256,7 +256,7 @@ END.
 
 
 FOR EACH InvGroup NO-LOCK WHERE
-         InvGroup.Brand     = gcBrand  AND
+         InvGroup.Brand     = Syst.Var:gcBrand  AND
          InvGroup.InvGroup GE iIgcode1 AND
          InvGroup.InvGroup LE iIgcode2:
 
@@ -303,7 +303,7 @@ IF NOT iIgSplit THEN DO:
     CREATE wPrint.
     ASSIGN wPrint.InvGroup1 = iIgcode1
            wPrint.InvGroup2 = iIgcode2
-           wPrint.IGName    = ynimi.
+           wPrint.IGName    = Syst.Var:ynimi.
 END.
 
 /* 
@@ -443,7 +443,7 @@ PROCEDURE PrintAccLines:
          lcAddtHead             MY-NL
          xDateHeader            MY-NL
          lcVatHeader            MY-NL
-         "Printed on " + STRING(pvm,"99.99.9999") 
+         "Printed on " + STRING(TODAY,"99.99.9999") 
          MY-NL
          MY-NL.
 

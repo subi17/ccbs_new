@@ -8,7 +8,6 @@
 ----------------------------------------------------------------------- */
 {Syst/commali.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 
 DEF BUFFER bMNPOperation FOR MNPOperation.
 DEF BUFFER bMNPProcessResend FOR MNPProcess.
@@ -42,7 +41,7 @@ FUNCTION fResendMNPMessage RETURNS INT
    bMNPOperation.MNPOperationId = liMNPOperSeq.
 
    ASSIGN
-      bMNPOperation.CreatedTS = fMakeTS()
+      bMNPOperation.CreatedTS = Func.Common:mMakeTS()
       bMNPOperation.MessageType = ibMNPOperation.MessageType
       bMNPOperation.MNPSeq = ibMNPOperation.MNPSeq
       bMNPOperation.MsgTurn = ibMNPOperation.MsgTurn + 1

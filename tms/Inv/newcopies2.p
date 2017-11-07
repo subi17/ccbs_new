@@ -326,7 +326,7 @@ PROCEDURE pProduceInvoiceFiles:
           ilCredit   = TRUE
           iiInvType  = 0 
           tab        = CHR(124)
-          gcBrand    = "1".
+          Syst.Var:gcBrand    = "1".
           
    PUT STREAM sConfFound "MSISDN"       CHR(9) 
                          "Customer nbr" CHR(9) 
