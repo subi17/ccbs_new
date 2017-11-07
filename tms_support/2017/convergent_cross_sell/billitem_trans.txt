@@ -1,0 +1,13 @@
+BillCode;Language;LangCode;Language;Translation
+CONVDISC_CS100_6;1;Spanish;Descuento promoción
+CONVDISC_CS100_6;2;Catalan;Descompte promoció
+CONVDISC_CS100_6;3;Basque;Promozio-deskontua
+CONVDISC_CS100_6;5;English;Promotional discount
+CONVDISC_CS20F12;1;Spanish;Descuento promoción
+CONVDISC_CS20F12;2;Catalan;Descompte promoció
+CONVDISC_CS20F12;3;Basque;Promozio-deskontua
+CONVDISC_CS20F12;5;English;Promotional discount
+CONVDISC_CS20M12;1;Spanish;Descuento promoción
+CONVDISC_CS20M12;2;Catalan;Descompte promoció
+CONVDISC_CS20M12;3;Basque;Promozio-deskontua
+CONVDISC_CS20M12;5;English;Promotional discount

@@ -30,7 +30,7 @@ def var nro         as char format "x(5)"   NO-UNDO.
 DEF VAR rows        AS INT                  NO-UNDO.
 
 FOR EACH TMSParam no-lock where
-         TMSParam.Brand      = gcBrand AND
+         TMSParam.Brand      = Syst.Var:gcBrand AND
          TMSParam.ParamGroup = "CustNumbers".
 
    CREATE custser.
@@ -44,8 +44,8 @@ END.
 form
    custser.ParamCode column-label "Customer type"
    custser.CharVal column-label "Customer serie" format "x(15)"
-WITH scroll 1 rows DOWN  ROW 4 centered COLOR value(cfc)
-   title color value(ctc) " Number Series for New Customers " 
+WITH scroll 1 rows DOWN  ROW 4 centered COLOR value(Syst.Var:cfc)
+   title color value(Syst.Var:ctc) " Number Series for New Customers " 
    OVERLAY FRAME tlse.
 
 SCELE:
@@ -82,9 +82,9 @@ print-line:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk = 0 ufk[1] = 35 ufk[5] = 11
-         ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
-         siirto = ? ehto = 3 ufkey = FALSE.
+         Syst.Var:ufk = 0 Syst.Var:ufk[1] = 35 Syst.Var:ufk[5] = 11
+         Syst.Var:ufk[6] = 0 Syst.Var:ufk[8] = 8  Syst.Var:ufk[9] = 1
+         siirto = ? Syst.Var:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
   END. /* print-line */
@@ -94,13 +94,13 @@ BROWSE:
 
          HIDE MESSAGE no-pause.
          CHOOSE ROW custser.ParamCode {Syst/uchoose.i} no-error WITH FRAME tlse.
-         COLOR DISPLAY value(ccc) custser.ParamCode WITH FRAME tlse.
+         COLOR DISPLAY value(Syst.Var:ccc) custser.ParamCode WITH FRAME tlse.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.
-         nap = keylabel(LASTKEY).
+         Syst.Var:nap = keylabel(LASTKEY).
 
          /* previous line */
-         if lookup(nap,"cursor-up") > 0 THEN DO
+         if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO
          WITH FRAME tlse:
             IF FRAME-LINE = 1 THEN DO:
                FIND custser where recid(custser) = rtab[FRAME-LINE] no-lock.
@@ -128,7 +128,7 @@ BROWSE:
          END. /* previous line */
 
          /* NEXT line */
-         if lookup(nap,"cursor-down") > 0 THEN DO WITH FRAME tlse:
+         if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO WITH FRAME tlse:
             IF FRAME-LINE = FRAME-DOWN THEN DO:
                FIND custser where recid(custser) = rtab[FRAME-LINE] no-lock .
                FIND NEXT custser no-lock no-error.
@@ -154,7 +154,7 @@ BROWSE:
          END. /* NEXT line */
 
          /* previous page */
-         else if lookup(nap,"page-up,prev-page") > 0 THEN DO WITH FRAME tlse:
+         else if lookup(Syst.Var:nap,"page-up,prev-page") > 0 THEN DO WITH FRAME tlse:
             FIND custser where recid(custser) = upmost no-lock no-error.
             FIND prev custser no-lock no-error.
             IF AVAILABLE custser THEN DO:
@@ -176,7 +176,7 @@ BROWSE:
         END. /* previous page */
 
         /* NEXT page */
-        else if lookup(nap,"page-down,next-page") > 0 THEN DO WITH FRAME tlse:
+        else if lookup(Syst.Var:nap,"page-down,next-page") > 0 THEN DO WITH FRAME tlse:
            IF rtab[FRAME-DOWN] = ? THEN DO:
                BELL.
                message "This is the last page !".
@@ -190,14 +190,14 @@ BROWSE:
         END. /* NEXT page */
 
         /* Selection */
-        else if lookup(nap,"return,enter,5,f5") > 0 THEN DO:
+        else if lookup(Syst.Var:nap,"return,enter,5,f5") > 0 THEN DO:
            FIND custser where recid(custser) = rtab[FRAME-LINE] no-lock.
            siirto = custser.CharVal.
            LEAVE SCELE.
         END. /* Selection */
 
         /* FIRST record */
-        else if lookup(nap,"home,h") > 0 THEN DO:
+        else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
            FIND FIRST custser no-lock.
            upmost = recid(custser).
            must-print = TRUE.
@@ -205,14 +205,14 @@ BROWSE:
         END. /* LAST record */
 
         /* LAST record */
-        else if lookup(nap,"end,e") > 0 THEN DO :
+        else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO :
            FIND LAST custser no-lock.
            upmost = recid(custser).
            must-print = TRUE.
            NEXT LOOP.
         END. /* LAST record */
 
-        else if nap = "8" or nap = "f8" THEN LEAVE SCELE. /* Paluu */
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" THEN LEAVE SCELE. /* Paluu */
 
      END.  /* BROWSE */
    END.  /* LOOP */

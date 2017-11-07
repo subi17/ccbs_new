@@ -5,7 +5,6 @@
    Before actual RUN Mm/simulation.p can be done with 
    llcreatefee false value */
 
-{Func/timestamp.i}
 
 def stream sread.
 def stream slog.

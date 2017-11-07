@@ -1,7 +1,5 @@
 {Syst/commali.i}
 {Syst/funcrunprocess_update.i}
-{Func/timestamp.i}
-{Func/date.i}
 {Func/cparam2.i}
 {Func/istc.i}
 {Inv/chk_billed_invrowcounter.i &ttReference = "REFERENCE-ONLY"}
@@ -72,7 +70,7 @@ BY Invoice.InvNum:
          IF ldaISTCDateOld NE ? AND
             ldaISTCDateOld > MobCDR.DateSt
          THEN ldaToDate = ldaISTCDateOld - 1.
-         ELSE ldaToDate = fLastDayOfMonth(MobCDR.DateSt).
+         ELSE ldaToDate = Func.Common:mLastDayOfMonth(MobCDR.DateSt).
       END.
       
       FIND FIRST ttCounter WHERE 

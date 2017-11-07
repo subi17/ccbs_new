@@ -8,8 +8,8 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
@@ -94,7 +94,7 @@ REPEAT:
          fConvertBrandToTenant(lcTenant)) THEN NEXT.
 
    fBatchLog("START", lcInputFile).
-   lcLogFile = lcSpoolDir + lcTenant + "_barring_status_" + ftsformat("yyyymmdd_HHMMss", fMakeTS()) + ".log".
+   lcLogFile = lcSpoolDir + lcTenant + "_barring_status_" + ftsformat("yyyymmdd_HHMMss", Func.Common:mMakeTS()) + ".log".
    OUTPUT STREAM sLog TO VALUE(lcLogFile) append.
 
    PUT STREAM sLog UNFORMATTED
@@ -177,7 +177,7 @@ PROCEDURE pSetBarring:
                    icBarringList,
                    {&REQUEST_SOURCE_SCRIPT}, /* source  */
                    "", /* creator */
-                   fMakeTS(), /* activate */
+                   Func.Common:mMakeTS(), /* activate */
                    "", /* SMS */
                    OUTPUT lcResult).
 
@@ -190,7 +190,7 @@ PROCEDURE pSetBarring:
       
       CREATE Memo.
       ASSIGN 
-         Memo.Brand     = gcBrand
+         Memo.Brand     = Syst.Var:gcBrand
          Memo.HostTable = "MobSub"
          Memo.KeyValue  = STRING(MobSub.MsSeq)
          Memo.CustNum   = MobSub.CustNum
@@ -200,7 +200,7 @@ PROCEDURE pSetBarring:
          Memo.MemoTitle = "Modified barring" 
          Memo.MemoText  = REPLACE(REPLACE(icBarringList,"=0","-released"),
                                   "=1","-applied")
-         Memo.CreStamp  = fMakeTS().
+         Memo.CreStamp  = Func.Common:mMakeTS().
       RETURN "OK".
    END.
    ELSE RETURN "ERROR:" + lcResult. 

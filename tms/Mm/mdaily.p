@@ -22,8 +22,8 @@
 ------------------------------------------------------ */
 
 {Syst/commpaa.i}
-gcbrand = "1".
-katun = "cron".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "cron".
 
 {Syst/eventlog.i}
 {Func/direct_dbconnect.i}
@@ -61,7 +61,7 @@ PROCEDURE pCallDump:
 
    /* connect to correct cdr dbs before starting the dump modules */
    fInitializeConnectTables(icTableNames,"").
-   RUN pDirectConnect2Dbs(gcBrand,
+   RUN pDirectConnect2Dbs(Syst.Var:gcBrand,
                           "", 
                           idaRunDate,
                           idaRunDate).
@@ -83,7 +83,7 @@ PROCEDURE pCallDump:
       
    IF ldaOldDb NE ? THEN DO:
       fInitializeConnectTables(icTableNames,"").
-      RUN pDirectConnect2Dbs(gcBrand,
+      RUN pDirectConnect2Dbs(Syst.Var:gcBrand,
                              "", 
                              ldaOldDb,
                              ldaOldDb).

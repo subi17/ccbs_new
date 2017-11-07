@@ -1,4 +1,3 @@
-{Func/date.i}
 {Func/heartbeat.i}
 
 DEFINE VARIABLE lcDelivFile AS CHARACTER NO-UNDO FORMAT "X(23)".
@@ -26,7 +25,7 @@ DO WHILE TRUE:
    
    PUT SCREEN ROW 22 "Creating new file..".
 
-   lcDelivFile = "ccbs_" + fDateFMT(TODAY,"ddmmyyyy") + 
+   lcDelivFile = "ccbs_" + Func.Common:mDateFmt(TODAY,"ddmmyyyy") + 
                   REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".txt".
 
    RUN pOneDelivery IN lhHandle (lcDelivFile).

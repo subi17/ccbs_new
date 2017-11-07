@@ -15,7 +15,6 @@
 {Func/fcustbal.i}
 {Func/fcustcnt.i}
 {Syst/eventval.i} 
-{Func/fhdrtext.i}
 {Func/fbankdata.i}
 {Func/fpaymentreq.i}
 

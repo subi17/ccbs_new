@@ -12,7 +12,6 @@
   ---------------------------------------------------------------------- */
 
 {Func/email.i}
-{Func/timestamp.i}
 {Syst/commali.i}
 {Func/cparam2.i}
 {Func/msisdn.i}
@@ -47,7 +46,7 @@ FUNCTION fIsInputFile RETURNS LOGICAL (INPUT pFileName AS CHARACTER):
     RETURN TRUE.
 END.
 
-/* Added validation to STATUSCODE 1 (ValidTo must be GT than fMakeTS() */
+/* Added validation to STATUSCODE 1 (ValidTo must be GT than Func.Common:mMakeTS() */
 
 
 /* These flags indicate whether TMSParams can be found etc. 
@@ -98,7 +97,7 @@ ASSIGN
 /* File checking */
 
 /* Adding timestamp to error file, SIM file and MSISDN file */
-lcTimeStampPart = REPLACE(fUTCTime(0),":","_").  
+lcTimeStampPart = REPLACE(Func.Common:mUTCTime(0),":","_").  
 
 RUN pSplitFileName(lcErrorFile, OUTPUT lcNamePart, OUTPUT lcExtPart).
 lcErrorFile = lcNamePart + lcTimeStampPart + "." + lcExtPart.

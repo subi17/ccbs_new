@@ -14,7 +14,6 @@
 
 {Syst/commali.i}
 {Func/refcode.i}
-{Func/timestamp.i}
 {Mm/fbundle.i}
 {Mc/offer.i}
 {Func/fbankdata.i}
@@ -58,20 +57,20 @@ lcBeginTag = '<tr bgcolor="#f0f0f0"><td style="width:155px; text-align:left; pad
 lcMiddleTag = '</td><td style="width:34px; text-align:right; padding:0 5px 0 0 ;"><strong>'.
 lcEndTag = '&euro;</strong></td></tr>'.
 
-ASSIGN gcBrand = "1".
+ASSIGN Syst.Var:gcBrand = "1".
 
 FUNCTION fGetOrderData RETURNS CHAR ( INPUT iiOrderId AS INT):
 /* Check if order is needed to get */
    IF NOT AVAILABLE Order THEN DO:
       FIND Order WHERE
-           Order.Brand   = gcBrand AND
+           Order.Brand   = Syst.Var:gcBrand AND
            Order.OrderID = iiOrderId NO-LOCK NO-ERROR.
       IF NOT AVAILABLE Order THEN DO:
          RETURN ("Order " + STRING(iiOrderId) + " was not found.").
       END.
 
       FIND FIRST OrderCustomer NO-LOCK WHERE
-                 OrderCustomer.Brand   = gcBrand       AND
+                 OrderCustomer.Brand   = Syst.Var:gcBrand       AND
                  OrderCustomer.OrderID = Order.OrderID AND
                  OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
 
@@ -109,7 +108,7 @@ FUNCTION fGetOrderData RETURNS CHAR ( INPUT iiOrderId AS INT):
                                                        OUTPUT ldeFinalFee).
 
       FIND FIRST OrderAccessory NO-LOCK WHERE
-                 OrderAccessory.Brand  = gcBrand AND
+                 OrderAccessory.Brand  = Syst.Var:gcBrand AND
                  OrderAccessory.OrderID = Order.OrderID NO-ERROR.
       
       FIND FIRST companycustomer WHERE
@@ -125,7 +124,7 @@ FUNCTION fGetOrderData RETURNS CHAR ( INPUT iiOrderId AS INT):
    END.
    IF NOT AVAIL OrderCustomer THEN
       FIND FIRST OrderCustomer NO-LOCK WHERE
-                 OrderCustomer.Brand   = gcBrand       AND
+                 OrderCustomer.Brand   = Syst.Var:gcBrand       AND
                  OrderCustomer.OrderID = Order.OrderID AND
                  OrderCustomer.RowType = 1 NO-ERROR.
    IF AVAIL companycustomer THEN DO:
@@ -211,7 +210,7 @@ FUNCTION fBIName RETURNS CHARACTER
 
    DEF VAR lcBiName AS CHAR NO-UNDO.
 
-   lcBiName = fTranslationName(gcBrand,
+   lcBiName = fTranslationName(Syst.Var:gcBrand,
                                1,
                                BillItem.BillCode,
                                liLang,
@@ -273,7 +272,7 @@ FUNCTION fGetOFEES_internal RETURNS CHAR (INPUT iiOrderNBR AS INT,
                    Invoice.InvNum = Order.InvNum,
               EACH InvRow OF Invoice NO-LOCK,
              FIRST BillItem NO-LOCK WHERE
-                   BillItem.Brand    = gcBrand AND
+                   BillItem.Brand    = Syst.Var:gcBrand AND
                    BillItem.BillCode = InvRow.BillCode
          BY InvRow.InvRowNum:
 
@@ -333,18 +332,18 @@ FUNCTION fGetOFEES_internal RETURNS CHAR (INPUT iiOrderNBR AS INT,
          /* fees have been created but amounts have been zero */
          ELSE IF
             CAN-FIND(FIRST SingleFee USE-INDEX HostTable WHERE
-                           SingleFee.Brand     = gcBrand AND
+                           SingleFee.Brand     = Syst.Var:gcBrand AND
                            SingleFee.HostTable = "Order" AND
                            SingleFee.KeyValue  = STRING(Order.OrderID) AND
                            SingleFee.CalcObj   = "CASHFEE")
          THEN DO:
             FOR EACH SingleFee USE-INDEX HostTable WHERE
-                     SingleFee.Brand     = gcBrand AND
+                     SingleFee.Brand     = Syst.Var:gcBrand AND
                      SingleFee.HostTable = "Order" AND
                      SingleFee.KeyValue  = STRING(Order.OrderID) AND
                      SingleFee.CalcObj   = "CASHFEE",
                FIRST BillItem NO-LOCK WHERE
-                     BillItem.Brand    = gcBrand AND
+                     BillItem.Brand    = Syst.Var:gcBrand AND
                      BillItem.BillCode = SingleFee.BillCode
                BY SingleFee.BillCode:
 
@@ -389,8 +388,7 @@ FUNCTION fGetOFEES_internal RETURNS CHAR (INPUT iiOrderNBR AS INT,
                          OUTPUT lcErr).
             odInvtot = ldInvTot.
             IF lcErr <> "" THEN
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                "Order",
+               Func.Common:mWriteMemo("Order",
                                 STRING(Order.OrderID),
                                 0,
                                 "Confirmation Email Cash Invoice Data Failed",
@@ -398,7 +396,7 @@ FUNCTION fGetOFEES_internal RETURNS CHAR (INPUT iiOrderNBR AS INT,
          END.
 
          FOR FIRST OfferItem WHERE
-                   OfferItem.Brand       = gcBrand          AND
+                   OfferItem.Brand       = Syst.Var:gcBrand          AND
                    OfferItem.Offer       = Order.Offer      AND
                    OfferItem.ItemType    = "ServicePackage" AND
                    OfferItem.ItemKey     = "BB"             AND
@@ -477,7 +475,7 @@ FUNCTION fGetOFEES_internal RETURNS CHAR (INPUT iiOrderNBR AS INT,
          /* YDR-737 & YDR-1065 */
          IF INDEX(lcList,"iPhone") > 0 AND Order.CrStamp < 20130701 THEN
             FOR FIRST OfferItem NO-LOCK WHERE
-                      OfferItem.Brand = gcBrand AND
+                      OfferItem.Brand = Syst.Var:gcBrand AND
                       OfferItem.Offer = Order.Offer AND
                       OfferItem.ItemType = "Percontract" AND
                       OfferItem.ItemKey = "PAYTERM24_25" AND
@@ -1056,7 +1054,7 @@ PROCEDURE pGetLEGALFINANCING:
    DEF VAR lcErr AS CHAR NO-UNDO.
    lcErr = fGetOrderData (INPUT iiOrderNBR).
 
-   fSplitTS(Order.CrStamp,
+   Func.Common:mSplitTS(Order.CrStamp,
                OUTPUT ldtOrder,
                OUTPUT liOrderTime).
 
@@ -1116,7 +1114,7 @@ PROCEDURE pGetORDER_DATE:
    lcErr = fGetOrderData (INPUT iiOrderNBR).
 
    olgErr = FALSE.
-   fSplitTS(Order.CrStamp,
+   Func.Common:mSplitTS(Order.CrStamp,
                OUTPUT ldtOrderDate,
                OUTPUT liOrderTime).
 
@@ -1197,15 +1195,15 @@ PROCEDURE pGetDELIVERY_DATE:
                   ELSE "Si es nueva numeración fija, de 9-10 días y de 12-17 días si es portabilidad").
    ELSE IF Order.OrderType = 1 THEN DO:
       IF Order.PortingDate <> ? THEN
-         ldePortingTime = fMake2Dt(Order.PortingDate,0).
+         ldePortingTime = Func.Common:mMake2DT(Order.PortingDate,0).
       IF AVAIL OrderAccessory THEN
          lcProduct = "T".
       ELSE
          lcProduct = "S".
 
-      IF ldePortingTime <= fMakeTS() THEN
+      IF ldePortingTime <= Func.Common:mMakeTS() THEN
          ldamnp = fmnpchangewindowdate(
-                             fmakets(),
+                             Func.Common:mMakeTS(),
                              order.orderchannel,
                              lcDelRegion,
                              lcProduct,
@@ -1214,7 +1212,7 @@ PROCEDURE pGetDELIVERY_DATE:
       ELSE ldaMNP = Order.PortingDate.
       ldaDate = ldaMNP - 1.
       ldaDate = fMNPHoliday(ldaDate,FALSE).
-      lcResult = fDateFmt(ldaDate,"dd/mm/yy").
+      lcResult = Func.Common:mDateFmt(ldaDate,"dd/mm/yy").
    END.
    ELSE DO:
       IF lcDelRegion > "" THEN CASE lcDelRegion:
@@ -1246,7 +1244,7 @@ PROCEDURE pGetDELIVERY_DATE:
          ldaDate = ldaDate + 1.
          ldaDate = fMNPHoliday(ldaDate,TRUE).
       END.
-      lcResult = fDateFmt(ldaDate,"dd/mm/yy").
+      lcResult = Func.Common:mDateFmt(ldaDate,"dd/mm/yy").
    END.
 
 END. /*GetDELIVERY_DATE*/
@@ -1279,16 +1277,16 @@ PROCEDURE pGetMNP_DATE:
    lcErr = fGetOrderData (INPUT iiOrderNBR).
 
    IF Order.PortingDate <> ? THEN
-      ldePortingTime = fMake2Dt(Order.PortingDate,0).
+      ldePortingTime = Func.Common:mMake2DT(Order.PortingDate,0).
 
    IF AVAIL OrderAccessory THEN
       lcProduct = "T".
    ELSE
       lcProduct = "S".
 
-   IF ldePortingTime <= fMakeTS() THEN
+   IF ldePortingTime <= Func.Common:mMakeTS() THEN
       ldamnp = fmnpchangewindowdate(
-                          fmakets(),
+                          Func.Common:mMakeTS(),
                           order.orderchannel,
                           lcDelRegion,
                           lcProduct,
@@ -1393,7 +1391,7 @@ PROCEDURE pGetUPSHOURS:   /* UPS and Correos open hours */
    lcErr = fGetOrderData (INPUT iiOrderNBR).
 
    FIND FIRST OrderAction NO-LOCK WHERE
-              OrderAction.Brand = gcBrand AND
+              OrderAction.Brand = Syst.Var:gcBrand AND
               OrderAction.OrderId  = iiOrderNBR AND
               OrderAction.ItemType = "UPSHours" NO-ERROR.
    IF NOT AVAIL OrderAction THEN RETURN.
@@ -1489,7 +1487,7 @@ PROCEDURE pGetPAYMENT_METHOD:
    lcErr = fGetOrderData (INPUT iiOrderNBR).
 
    FIND FIRST OrderPayment NO-LOCK WHERE
-              OrderPayment.Brand   = gcBrand       AND
+              OrderPayment.Brand   = Syst.Var:gcBrand       AND
               OrderPayment.OrderID = Order.OrderID NO-ERROR.
    IF AVAILABLE OrderPayment THEN
       IF OrderPayment.method = 1 THEN
@@ -1614,7 +1612,7 @@ PROCEDURE pGetPENALTYFEE:
    END. /* IF ldAmt NE 0 AND Order.PayType = FALSE THEN DO: */
 
    IF CAN-FIND(FIRST CLIType WHERE
-                     CLIType.Brand = gcBrand AND
+                     CLIType.Brand = Syst.Var:gcBrand AND
                      CLIType.CLItype = Order.CliType AND
                     (CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
                      CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL})) THEN DO:
@@ -1625,7 +1623,7 @@ PROCEDURE pGetPENALTYFEE:
       ELSE lcTariffType = Order.CLIType.
 
       IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                        CLIType.Brand = gcBrand AND
+                        CLIType.Brand = Syst.Var:gcBrand AND
                         CLIType.CLItype = lcTariffType AND
                         CLItype.LineType = {&CLITYPE_LINETYPE_ADDITIONAL}) THEN
          lcList = lcList + CHR(10) + fTeksti(539,liLang).
@@ -1754,7 +1752,7 @@ PROCEDURE pGetTOTAL_FEE:
    DEF VAR lcErr AS CHAR NO-UNDO.
    lcErr = fGetOrderData (INPUT iiOrderNBR).
 
-   fSplitTS(Order.CrStamp,
+   Func.Common:mSplitTS(Order.CrStamp,
                OUTPUT ldtOrder,
                OUTPUT liOrderTime).
    ldeRVPerc = TRUNC(ldeFinalFee /
@@ -1790,13 +1788,13 @@ PROCEDURE pGetPERCONTR:
    lcDCEvent = fCParamC("PerContractID").
    lcText = "#PERCONTR".
    FOR FIRST DCCLI NO-LOCK WHERE
-             DCCLI.Brand      = gcBrand   AND
+             DCCLI.Brand      = Syst.Var:gcBrand   AND
              DCCLI.DCEvent    = lcDCEvent AND
              DCCLI.MsSeq      = liMsSeq   AND
              DCCLI.ValidTo   >= TODAY     AND
              DCCLI.ValidFrom <= TODAY,
        FIRST DayCampaign NO-LOCK WHERE
-             DayCampaign.Brand   = gcBrand AND
+             DayCampaign.Brand   = Syst.Var:gcBrand AND
              DayCampaign.DCEvent = DCCLI.DCEvent:
 
       lcText = REPLACE(lcText,"#PERCONTR",  
@@ -1871,7 +1869,7 @@ PROCEDURE pGetCTNAME:
       lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
       lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
 
-   fSplitTS(Order.CrStamp,
+   Func.Common:mSplitTS(Order.CrStamp,
             OUTPUT ldtOrder,
             OUTPUT liTime).
    ldeTaxPerc = fRegionTaxPerc(OrderCustomer.Region,
@@ -1907,14 +1905,14 @@ PROCEDURE pGetCTNAME:
       IF LOOKUP(lcCLIType ,lcBundleCLITypes) > 0 THEN DO:
          lcBundle = fGetDataBundleInOrderAction(Order.OrderID,lcCLIType).
          lcBundleBillItem = fConvBundleToBillItem(lcBundle).
-         lcTagCTName = fTranslationName(gcBrand,
+         lcTagCTName = fTranslationName(Syst.Var:gcBrand,
                                         1,
                                         lcBundleBillItem,
                                         liLang,
                                         ldtEventDate).
       END. /* IF LOOKUP(icCLIType,lcBundleCLITypes) > 0 THEN DO: */
       ELSE DO:
-         lcTagCTName = fTranslationName(gcBrand,
+         lcTagCTName = fTranslationName(Syst.Var:gcBrand,
                                         9,
                                         lcCLIType,
                                         liLang,
@@ -1927,7 +1925,7 @@ PROCEDURE pGetCTNAME:
 
       IF lcTagCTName = ? OR lcTagCTName = "" THEN DO:
          FIND CLIType WHERE
-              CLIType.Brand   = gcBrand AND
+              CLIType.Brand   = Syst.Var:gcBrand AND
               CLIType.CLIType = lcCLIType NO-LOCK NO-ERROR.
          IF AVAILABLE CLIType THEN lcTagCTName = CLIType.CLIName.
       END.
@@ -1950,7 +1948,7 @@ PROCEDURE pGetCTNAME:
    END.
 
    FOR FIRST CLIType NO-LOCK WHERE
-             CLIType.Brand = gcBrand AND
+             CLIType.Brand = Syst.Var:gcBrand AND
              CLIType.CLIType = (IF lcBundle > "" THEN lcBundle ELSE lcCLIType):
 
       DEF VAR ldeCallPrice AS DEC NO-UNDO.
@@ -1966,7 +1964,7 @@ PROCEDURE pGetCTNAME:
       DEFINE VARIABLE llAddLineDiscount AS LOG NO-UNDO.
       DEFINE VARIABLE ldDiscValue  AS DEC  NO-UNDO.
 
-      llgOrderDate = fSplitTS(Order.CrStamp,
+      llgOrderDate = Func.Common:mSplitTS(Order.CrStamp,
                               OUTPUT ldtOrderDate,
                               OUTPUT ldiOrderDate).
       
@@ -1999,7 +1997,7 @@ PROCEDURE pGetCTNAME:
 
           /* Additional line discount information in emails */
           FOR FIRST OrderAction NO-LOCK WHERE
-                    OrderAction.Brand    = gcBrand       AND
+                    OrderAction.Brand    = Syst.Var:gcBrand       AND
                     OrderAction.OrderID  = Order.OrderID AND
                     OrderAction.ItemType = "AddLineDiscount":
 
@@ -2021,7 +2019,7 @@ PROCEDURE pGetCTNAME:
 
           IF NOT llAddLineDiscount THEN
              FOR FIRST OfferItem WHERE
-                       OfferItem.Brand       = gcBrand             AND
+                       OfferItem.Brand       = Syst.Var:gcBrand             AND
                        OfferItem.Offer       = Order.Offer         AND
                        OfferItem.ItemType    = "discountplan"      AND
                        LOOKUP(OfferItem.ItemKey,
@@ -2029,7 +2027,7 @@ PROCEDURE pGetCTNAME:
                        OfferItem.BeginStamp <= Order.CrStamp       AND
                        OfferItem.EndStamp   >= Order.CrStamp     NO-LOCK,
                  FIRST DiscountPlan WHERE
-                       DiscountPlan.Brand    = gcBrand AND
+                       DiscountPlan.Brand    = Syst.Var:gcBrand AND
                        DiscountPlan.DPRuleId = OfferItem.ItemKey NO-LOCK,
                  FIRST DPRate WHERE
                        DPRate.DPId = DiscountPlan.DPId AND
@@ -2073,14 +2071,14 @@ PROCEDURE pGetCTNAME:
        
        /* TV Service */
        TVSERVICE_DETAILS:
-       FOR EACH OrderAction WHERE OrderAction.Brand    = gcBrand       AND
+       FOR EACH OrderAction WHERE OrderAction.Brand    = Syst.Var:gcBrand       AND
                                   OrderAction.OrderId  = Order.Orderid AND
                                   OrderAction.ItemType = "BundleItem"  NO-LOCK,
-           FIRST DayCampaign WHERE DayCampaign.Brand        = gcBrand              AND 
+           FIRST DayCampaign WHERE DayCampaign.Brand        = Syst.Var:gcBrand              AND 
                                    DayCampaign.DCEvent      = OrderAction.ItemKey  AND 
                                    DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} NO-LOCK:
 
-           FIND FIRST FMItem WHERE FMItem.Brand     = gcBrand              AND 
+           FIND FIRST FMItem WHERE FMItem.Brand     = Syst.Var:gcBrand              AND 
                                    FMItem.FeeModel  = DayCampaign.FeeModel AND
                                    FMItem.BillCode  = DayCampaign.BillCode AND
                                    FMItem.PriceList > ""                   AND 
@@ -2115,10 +2113,12 @@ PROCEDURE pGetCTNAME:
              llgEmailText = TRUE.   
           ELSE DO:
              FIND FIRST Orderaction NO-LOCK where
-                        Orderaction.brand = gcBrand AND
+                        Orderaction.brand = Syst.Var:gcBrand AND
                         orderaction.orderid = order.orderid AND
-                        orderaction.itemtype = "discount" AND
-                        orderaction.itemkey = STRING(DiscountPlan.DPID) NO-ERROR.
+                      ((orderaction.itemtype = "discount" AND
+                        orderaction.itemkey = STRING(DiscountPlan.DPID)) OR
+                       (orderaction.itemtype = "discountplan" AND
+                        orderaction.itemkey = DiscountPlan.DPRuleId)) NO-ERROR.
               IF AVAIL orderaction THEN    
                  llgEmailText = TRUE.
           END.
@@ -2149,10 +2149,12 @@ PROCEDURE pGetCTNAME:
              llgEmailText = TRUE.   
           ELSE DO:
              FIND FIRST Orderaction NO-LOCK where
-                        Orderaction.brand = gcBrand AND
+                        Orderaction.brand = Syst.Var:gcBrand AND
                         orderaction.orderid = order.orderid AND
-                        orderaction.itemtype = "discount" AND
-                        orderaction.itemkey = STRING(DiscountPlan.DPID) NO-ERROR.
+                      ((orderaction.itemtype = "discount" AND
+                        orderaction.itemkey = STRING(DiscountPlan.DPID)) OR
+                       (orderaction.itemtype = "discountplan" AND
+                        orderaction.itemkey = DiscountPlan.DPRuleId)) NO-ERROR.
               IF AVAIL orderaction THEN    
                  llgEmailText = TRUE.
           END.
@@ -2188,7 +2190,7 @@ PROCEDURE pGetCTNAME:
                  Order.MultiSimType                     = {&MULTISIMTYPE_PRIMARY} THEN DO:
       
           FIND FIRST lbELOrder NO-LOCK WHERE
-                     lbELOrder.Brand        = gcBrand          AND
+                     lbELOrder.Brand        = Syst.Var:gcBrand          AND
                      lbELOrder.OrderId      = Order.MultiSimId AND
                      lbELOrder.MultiSimId   = Order.OrderId    AND
                      lbELOrder.MultiSimType = {&MULTISIMTYPE_EXTRALINE} NO-ERROR.
@@ -2196,7 +2198,7 @@ PROCEDURE pGetCTNAME:
           IF AVAIL lbELOrder THEN DO:
              
              FIND FIRST lbELCLIType NO-LOCK WHERE 
-                        lbELCLIType.Brand   = gcBrand           AND 
+                        lbELCLIType.Brand   = Syst.Var:gcBrand           AND 
                         lbELCLIType.CLIType = lbELOrder.CLIType NO-ERROR.
 
              IF AVAIL lbELCLIType THEN 
@@ -2210,7 +2212,7 @@ PROCEDURE pGetCTNAME:
                       Order.MultiSimType                 = {&MULTISIMTYPE_EXTRALINE} THEN DO:
           
           FIND FIRST lbMLOrder NO-LOCK WHERE
-                     lbMLOrder.Brand        = gcBrand          AND
+                     lbMLOrder.Brand        = Syst.Var:gcBrand          AND
                      lbMLOrder.OrderId      = Order.MultiSimId AND
                      lbMLOrder.MultiSimId   = Order.OrderId    AND
                      lbMLOrder.MultiSimType = {&MULTISIMTYPE_PRIMARY} NO-ERROR.
@@ -2218,7 +2220,7 @@ PROCEDURE pGetCTNAME:
          IF AVAIL lbMLOrder THEN DO:
 
             FIND FIRST lbMLCLIType NO-LOCK WHERE 
-                       lbMLCLIType.Brand   = gcBrand AND 
+                       lbMLCLIType.Brand   = Syst.Var:gcBrand AND 
                        lbMLCLIType.CLIType = lbMLOrder.CLIType NO-ERROR.
 
             IF AVAIL lbMLCLIType THEN 
@@ -2266,7 +2268,7 @@ PROCEDURE pGetCTNAME:
 
    IF lcFATGroup > "" THEN DO:
       FIND FIRST OfferItem WHERE
-                 OfferItem.Brand = gcBrand AND
+                 OfferItem.Brand = Syst.Var:gcBrand AND
                  OfferItem.Offer = Order.Offer AND
                  OfferItem.ItemType = "Fatime" AND
                  OfferItem.ItemKey  = lcFATGroup AND
@@ -2280,7 +2282,7 @@ PROCEDURE pGetCTNAME:
    IF (Order.CLIType = "TARJ7" OR Order.CLIType = "TARJ9") AND
        Order.OrderType < 2 THEN DO:
        FIND FIRST OrderAction NO-LOCK WHERE
-              OrderAction.Brand    = gcBrand        AND
+              OrderAction.Brand    = Syst.Var:gcBrand        AND
               OrderAction.OrderId  = Order.OrderID  AND
               OrderAction.ItemType = "Promotion"    AND
               OrderAction.ItemKey  = Order.CLIType  NO-ERROR.
@@ -2388,7 +2390,7 @@ PROCEDURE pGetPicture:
       lcResult = "pictures/terminals/" + OrderAccessory.productcode + "/small".
    ELSE DO:
       FIND FIRST OrderAction WHERE
-                             OrderAction.Brand    = gcBrand AND
+                             OrderAction.Brand    = Syst.Var:gcBrand AND
                              OrderAction.OrderId  = Order.OrderId AND
                              OrderAction.ItemType = "SIMType" NO-LOCK NO-ERROR.
       IF AVAIL OrderAction AND OrderAction.ItemKey > "" THEN DO:
@@ -2426,7 +2428,7 @@ PROCEDURE pGetEXTRA_LINE_INFO:
       lcList                  = "".
 
    FIND FIRST lbOrder NO-LOCK WHERE
-              lbOrder.Brand   = gcBrand                     AND
+              lbOrder.Brand   = Syst.Var:gcBrand                     AND
               lbOrder.OrderId = iiOrderNBR                  AND
       (LOOKUP(lbOrder.CLIType,lcExtraMainLineCLITypes) > 0  OR
        LOOKUP(lbOrder.CLIType,lcExtraLineCLITypes)     > 0) NO-ERROR.
@@ -2436,7 +2438,7 @@ PROCEDURE pGetEXTRA_LINE_INFO:
       CASE lbOrder.MultiSimType:
          WHEN {&MULTISIMTYPE_PRIMARY} THEN DO:
             FIND FIRST lbELOrder NO-LOCK WHERE
-                       lbELOrder.Brand        = gcBrand            AND
+                       lbELOrder.Brand        = Syst.Var:gcBrand            AND
                        lbELOrder.OrderId      = lbOrder.MultiSimId AND
                        lbELOrder.MultiSimId   = lbOrder.OrderId    AND
                        lbELOrder.MultiSimType = {&MULTISIMTYPE_EXTRALINE} NO-ERROR.
@@ -2448,7 +2450,7 @@ PROCEDURE pGetEXTRA_LINE_INFO:
          END.
          WHEN {&MULTISIMTYPE_EXTRALINE} THEN DO:
             FIND FIRST lbMLOrder NO-LOCK WHERE
-                       lbMLOrder.Brand        = gcBrand            AND
+                       lbMLOrder.Brand        = Syst.Var:gcBrand            AND
                        lbMLOrder.OrderId      = lbOrder.MultiSimId AND
                        lbMLOrder.MultiSimId   = lbOrder.OrderId    AND
                        lbMLOrder.MultiSimType = {&MULTISIMTYPE_PRIMARY} NO-ERROR.

@@ -68,7 +68,7 @@ IF NOT AVAILABLE Customer THEN RETURN "Unknown customer".
 
 IF llDoEvent THEN DO:
 
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhFixedFee AS HANDLE NO-UNDO.
@@ -174,7 +174,7 @@ FOR EACH bCloseItem OF bCloseFee EXCLUSIVE-LOCK:
 
       /* If Groupcode is specified then charge is usage based month */
       IF icGroupCode > "" THEN
-         ldBRAmt = fCalculateLastMonthFee(gcBrand,
+         ldBRAmt = fCalculateLastMonthFee(Syst.Var:gcBrand,
                                           iiMsSeq,
                                           icGroupCode,
                                           ldeOriginalFee,
@@ -194,7 +194,7 @@ FOR EACH bCloseItem OF bCloseFee EXCLUSIVE-LOCK:
          /* Billed item can be changed if it is billed by test invoice */
          IF bCloseItem.Billed = TRUE AND
             CAN-FIND (FIRST Invoice USE-INDEX InvNum WHERE
-                            Invoice.Brand   = gcBrand AND
+                            Invoice.Brand   = Syst.Var:gcBrand AND
                             Invoice.InvNum  = bCloseItem.InvNum AND
                             Invoice.InvType = 99 NO-LOCK) THEN DO:
             ASSIGN
@@ -286,8 +286,7 @@ IF odBilled > 0 AND ilCredit THEN DO:
           SingleFee.Contract    = bCloseFee.Contract
           SingleFee.Active      = TRUE
           SingleFee.Amt         = -1 * odBilled.
-          SingleFee.Memo[1]     = DYNAMIC-FUNCTION("fHdrText" IN ghFunc1,
-                                                   198,
+          SingleFee.Memo[1]     = Func.Common:mGetHdrText(198,
                                                    Customer.Language).
    
    IF llDoEvent THEN RUN StarEventMakeCreateEventWithMemo(
