@@ -68,7 +68,7 @@ IF lcEPLFile = "" OR lcEPLFile = ?
 THEN lcEPLFile = "/tmp/cl". 
 
 FIND FIRST Company WHERE
-           Company.Brand = gcBrand 
+           Company.Brand = Syst.Var:gcBrand 
    NO-LOCK NO-ERROR. 
 IF NOT AVAIL Company THEN DO:
    fErrLine("Company data is missing.").
@@ -84,7 +84,7 @@ END.
 IF NOT llErrors THEN DO:
    /* message text */
    FIND FIRST InvText NO-LOCK WHERE
-              InvText.Brand     = gcBrand  AND
+              InvText.Brand     = Syst.Var:gcBrand  AND
               InvText.Target    = "EKIRJE" AND
               InvText.KeyValue  = "CLimit" AND
               InvText.FromDate <= TODAY    AND

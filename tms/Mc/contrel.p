@@ -122,8 +122,8 @@ form
    skip(5)                              
 
    with row 1 side-labels width 80
-        title " " + ynimi + " CONTRACT REPORT " +
-        string(pvm,"99-99-99") + " "
+        title " " + Syst.Var:ynimi + " CONTRACT REPORT " +
+        string(TODAY,"99-99-99") + " "
         frame valinta.
 
 
@@ -138,47 +138,47 @@ ASSIGN ldtToDate[1]   = DATE(MONTH(TODAY),1,YEAR(TODAY))
        liContrType[2] = 2.
 
 FIND LAST InvGroup NO-LOCK WHERE
-          InvGroup.Brand = gcBrand NO-ERROR.
+          InvGroup.Brand = Syst.Var:gcBrand NO-ERROR.
 IF AVAILABLE InvGroup THEN ASSIGN lcInvGroup[2] = InvGroup.InvGroup.
 
 FIND LAST Customer NO-LOCK USE-INDEX CustNum WHERE
-          Customer.Brand = gcBrand NO-ERROR.
+          Customer.Brand = Syst.Var:gcBrand NO-ERROR.
 IF AVAILABLE Customer THEN ASSIGN liCustNum[2] = Customer.CustNum.
 
 FIND LAST Salesman NO-LOCK WHERE
-          Salesman.Brand = gcBrand NO-ERROR.
+          Salesman.Brand = Syst.Var:gcBrand NO-ERROR.
 IF AVAILABLE Salesman THEN lcSalesman[2] = Salesman.Salesman.
 
 FIND LAST Reseller NO-LOCK WHERE
-          Reseller.Brand = gcBrand NO-ERROR.
+          Reseller.Brand = Syst.Var:gcBrand NO-ERROR.
 IF AVAILABLE Reseller THEN lcReseller[2] = Reseller.Reseller.
 
 assign ufkey = false
-       nap   = "first". 
+       Syst.Var:nap   = "first". 
 
 toimi:
 repeat with frame valinta on endkey undo toimi, next toimi:
 
       if ufkey then do:
          assign
-         ufk[1]= 132 
-         ufk[2]= 0  ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
-         ufk[9]= 1
-         ehto = 3 
+         Syst.Var:ufk[1]= 132 
+         Syst.Var:ufk[2]= 0  Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= 63 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 
+         Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 
          ufkey = false.
          RUN Syst/ufkey.p.
       end.
 
-      if nap ne "first" then do:
+      if Syst.Var:nap ne "first" then do:
           readkey.
           ASSIGN
-          nap = keylabel(lastkey).
+          Syst.Var:nap = keylabel(lastkey).
       end.
-      else assign nap = "1". 
+      else assign Syst.Var:nap = "1". 
 
-      if lookup(nap,"1,f1") > 0 then do:
-         ehto = 9. RUN Syst/ufkey.p.
+      if lookup(Syst.Var:nap,"1,f1") > 0 then do:
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
          repeat with frame valinta on endkey undo, leave:
 
@@ -212,7 +212,7 @@ repeat with frame valinta on endkey undo toimi, next toimi:
                      WITH FRAME valinta.   
                   END.   
 
-                  ehto = 9.
+                  Syst.Var:ehto = 9.
                   RUN Syst/ufkey.p.
                   NEXT. 
                END.
@@ -236,16 +236,16 @@ repeat with frame valinta on endkey undo toimi, next toimi:
          next toimi.
       end.
 
-      else if lookup(nap,"5,f5") > 0 then do:
+      else if lookup(Syst.Var:nap,"5,f5") > 0 then do:
          leave toimi.
       end.
 
-      else if lookup(nap,"8,f8") > 0 then do:
+      else if lookup(Syst.Var:nap,"8,f8") > 0 then do:
          return.
       end.
-end. /* toimi */
+end. /* Syst.Var:toimi */
 
-ehto = 5.
+Syst.Var:ehto = 5.
 RUN Syst/ufkey.p.
 
 tila = true.

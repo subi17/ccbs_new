@@ -21,8 +21,7 @@ DEF VAR liInvType AS INT                           NO-UNDO.
 DO FOR Customer:
    FIND Customer WHERE Customer.CustNum = iiCustNum NO-LOCK.
    lcName = STRING(Customer.CustNum) + " " +
-            DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                             BUFFER Customer).
+            Func.Common:mDispCustName(BUFFER Customer).
 END. 
 
 /* invoice type to be created */
@@ -32,7 +31,7 @@ IF liInvType = 0 OR liInvType = ? THEN liInvType = 3.
 PAUSE 0.
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p. 
+   ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 3. RUN Syst/ufkey.p. 
 
       DISPLAY
 

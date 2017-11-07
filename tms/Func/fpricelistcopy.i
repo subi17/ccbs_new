@@ -32,7 +32,7 @@ FUNCTION fCopyPriceList RETURN LOGICAL
             Day(Today).
 
    FIND FIRST PriceList WHERE 
-              PriceList.Brand     = gcBrand     AND 
+              PriceList.Brand     = Syst.Var:gcBrand     AND 
               PriceList.PriceList = icPriceList NO-LOCK NO-ERROR.
               
    CREATE xxPriceList.
@@ -44,7 +44,7 @@ FUNCTION fCopyPriceList RETURN LOGICAL
    IF ilRatePlan THEN fCopyRatePlan(icPriceList, xxPriceList.PriceList).
          
    FOR EACH Tariff no-lock where
-            Tariff.Brand      = gcBrand   AND
+            Tariff.Brand      = Syst.Var:gcBrand   AND
             Tariff.PriceList  = icPriceList AND
             Tariff.ValidTO   >= Today     AND 
             Tariff.CustNum    = 0.

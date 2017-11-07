@@ -8,7 +8,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/terminal_financing.i}
 
@@ -31,7 +31,7 @@ IF TRIM(pcUsername) EQ "" THEN RETURN appl_err("username is empty").
 
 {newton/src/settenant.i pcTenant}
 
-katun = "VISTA_" + pcUserName.
+Syst.Var:katun = "VISTA_" + pcUserName.
 
 IF LOOKUP(pcBankCode,{&TF_BANK_CODES}) EQ 0 THEN
    RETURN appl_err(SUBST("Incorrect bank code: &1", pcBankCode)).
@@ -47,5 +47,4 @@ IF liRequestID = 0 THEN RETURN appl_err(lcError).
 add_boolean(response_toplevel_id,?,TRUE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

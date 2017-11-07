@@ -18,7 +18,6 @@
 {Mc/camprundf.i}
 {Func/fcustpl.i}
 {Func/nncoit2.i}
-{Func/timestamp.i}
 {Func/fmakeservlimit.i}
 {Func/setfees.i}
 
@@ -59,7 +58,7 @@ DEF TEMP-TABLE ttCamp NO-UNDO
 
 /* valid campaigns */
 FOR EACH Campaign NO-LOCK WHERE
-         Campaign.Brand     = gcBrand     AND
+         Campaign.Brand     = Syst.Var:gcBrand     AND
          Campaign.Campaign >= icCampaign1 AND
          Campaign.Campaign <= icCampaign2,
     EACH CampRow OF Campaign NO-LOCK:
@@ -86,7 +85,7 @@ END.
 /* customers and clis to which campaign can be used */
 FOR EACH ttCust,
 FIRST Customer NO-LOCK WHERE
-      Customer.Brand   = gcBrand AND
+      Customer.Brand   = Syst.Var:gcBrand AND
       Customer.CustNum = ttCust.CustNum,
 FIRST MSOwner NO-LOCK USE-INDEX MSSeq WHERE
       MSOwner.MSSeq   = ttCust.MSSeq AND
@@ -115,7 +114,7 @@ FIRST MSOwner NO-LOCK USE-INDEX MSSeq WHERE
       
       /* already used for this cli */
       IF CAN-FIND(FIRST CampStat WHERE
-                        CampStat.Brand    = gcBrand         AND
+                        CampStat.Brand    = Syst.Var:gcBrand         AND
                         CampStat.Campaign = ttCamp.Campaign AND
                         CampStat.CLI      = MsOwner.CLI      AND
                         CampStat.CustNum  = MsOwner.CustNum)
@@ -137,7 +136,7 @@ FIRST MSOwner NO-LOCK USE-INDEX MSSeq WHERE
       THEN DO:
          liPer = TRUNCATE(MobSub.ActivationTS / 100,0).
              
-         fSplitTS(MobSub.ActivationTS,
+         Func.Common:mSplitTS(MobSub.ActivationTS,
                   OUTPUT ldtBegDate,
                   OUTPUT liBegTime).
       END.
@@ -145,7 +144,7 @@ FIRST MSOwner NO-LOCK USE-INDEX MSSeq WHERE
       IF ldtBegDate = ? THEN DO:
          liPer = TRUNCATE(MsOwner.TsBeg / 100,0).
              
-         fSplitTS(MsOwner.TsBeg,
+         Func.Common:mSplitTS(MsOwner.TsBeg,
                   OUTPUT ldtBegDate,
                   OUTPUT liBegTime).
       END.
@@ -191,7 +190,7 @@ FIRST MSOwner NO-LOCK USE-INDEX MSSeq WHERE
                                           ldtBegDate,
                                           ?,         /* price from feemodel */
                                           "",               /* contract */
-                                          katun,
+                                          Syst.Var:katun,
                                           "",
                                           0,
                                           "",
@@ -215,7 +214,7 @@ FIRST MSOwner NO-LOCK USE-INDEX MSSeq WHERE
    
          /* statistics from handled campaign events */ 
          CREATE CampStat.
-         ASSIGN CampStat.Brand    = gcBrand
+         ASSIGN CampStat.Brand    = Syst.Var:gcBrand
                 CampStat.Campaign = ttCamp.Campaign
                 CampStat.CustNum  = MsOwner.CustNum
                 CampStat.CLI      = MsOwner.CLI

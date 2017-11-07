@@ -72,7 +72,7 @@ FOR EACH tinvseq NO-LOCK:
         "PRICE"       TO 80.
 
         FIND FIRST ccn WHERE
-                   CCN.Brand = gcBrand AND
+                   CCN.Brand = Syst.Var:gcBrand AND
                    ccn.ccn   = fixcdr.ccn NO-LOCK NO-ERROR.
 
         PUT STREAM excel UNFORMATTED

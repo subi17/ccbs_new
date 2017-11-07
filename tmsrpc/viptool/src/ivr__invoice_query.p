@@ -21,8 +21,8 @@ DEF VAR piMaxCount AS INT NO-UNDO.
 
 {Syst/commpaa.i}
 ASSIGN
-   katun = "IVR_" + ghAuthLog::EndUserId.
-   gcBrand = "1".
+   Syst.Var:katun = "IVR_" + ghAuthLog::EndUserId.
+   Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
 
@@ -46,7 +46,7 @@ lcRespArray = add_array(response_toplevel_id,"").
 
 INVOICE_LOOP:
 FOR EACH Invoice WHERE 
-         Invoice.Brand = gcBrand AND
+         Invoice.Brand = Syst.Var:gcBrand AND
          Invoice.Custnum = MobSub.Custnum AND
          Invoice.InvType = 1 NO-LOCK USE-INDEX Custnum:
 
@@ -77,5 +77,4 @@ FOR EACH Invoice WHERE
 END.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

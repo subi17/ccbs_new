@@ -1,7 +1,6 @@
 {Syst/commpaa.i}
-{Func/timestamp.i}
-gcbrand = "1".
-katun = "cron".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "cron".
 
 {Syst/eventlog.i}
 
@@ -12,7 +11,7 @@ DEF VAR lcError AS CHAR   NO-UNDO.
 DEF VAR oiQty   AS INT    NO-UNDO.
 
 fELog("MDAILY_AMNP","HighSpenderStarted").
-RUN Mm/highusagerep.p(INPUT fMake2Dt(INPUT today - 90, INPUT 0),0).
+RUN Mm/highusagerep.p(INPUT Func.Common:mMake2DT(INPUT today - 90, INPUT 0),0).
 fELog("MDAILY_AMNP","HighSpenderStopped").
 
 fELog("MDAILY_AMNP","IccMSISDNRepStarted").

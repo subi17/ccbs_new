@@ -10,8 +10,8 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-gcbrand = "1".
-katun = "anttis".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "anttis".
 
 {Func/cparam2.i}
 
@@ -125,7 +125,7 @@ FORM
    SKIP(1)
    
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + "  CSB19 SPLIT TEST " + STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.Var:ynimi + "  CSB19 SPLIT TEST " + STRING(TODAY,"99-99-99") + " "
      FRAME fCrit.
 
 
@@ -138,7 +138,7 @@ FUNCTION fIGName RETURNS LOGIC
                
    ELSE DO:
       FIND InvGroup WHERE 
-           InvGroup.Brand    = gcBrand AND
+           InvGroup.Brand    = Syst.Var:gcBrand AND
            InvGroup.InvGroup = icInvGroup
       NO-LOCK NO-ERROR.
       IF AVAILABLE InvGroup THEN lcIgName = InvGroup.IGName.
@@ -153,8 +153,7 @@ FUNCTION fTypeName RETURNS LOGIC
    
    IF iiInvType = 0 
    THEN lcInvType = "ALL".
-   ELSE lcInvType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                     "Invoice",
+   ELSE lcInvType = Func.Common:mTMSCodeName("Invoice",
                                      "InvType",
                                      STRING(iiInvType)).
       
@@ -197,19 +196,19 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
    IF ufkey THEN DO:
       ASSIGN
-         ufk    = 0
-         ufk[1] = 132 
-         ufk[5] = 795
-         ufk[8] = 8 
-         ehto   = 0.
+         Syst.Var:ufk    = 0
+         Syst.Var:ufk[1] = 132 
+         Syst.Var:ufk[5] = 795
+         Syst.Var:ufk[8] = 8 
+         Syst.Var:ehto   = 0.
       RUN Syst/ufkey.p.
    END.
-   ELSE ASSIGN toimi = 1
+   ELSE ASSIGN Syst.Var:toimi = 1
                ufkey = TRUE.
 
-   IF toimi = 1 THEN DO:
+   IF Syst.Var:toimi = 1 THEN DO:
 
-      ehto = 9. 
+      Syst.Var:ehto = 9. 
       RUN Syst/ufkey.p.
       
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
@@ -226,9 +225,9 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          WITH FRAME fCrit EDITING:
 
             READKEY.
-            nap = KEYLABEL(LASTKEY).
+            Syst.Var:nap = KEYLABEL(LASTKEY).
 
-            IF nap = "F9" AND 
+            IF Syst.Var:nap = "F9" AND 
                LOOKUP(FRAME-FIELD,"liInvType,liPrintState") > 0 THEN DO:
 
                IF FRAME-FIELD = "liInvType" THEN DO:
@@ -261,18 +260,18 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                   END.    
                END.   
  
-               ehto = 9.
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.
 
-            IF LOOKUP(nap,poisnap) > 0 THEN DO:
+            IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
 
                IF FRAME-FIELD = "lcInvGroup" THEN DO:
 
                   IF INPUT lcInvGroup > "" AND
                      NOT CAN-FIND(InvGroup WHERE 
-                                  InvGroup.Brand    = gcBrand AND
+                                  InvGroup.Brand    = Syst.Var:gcBrand AND
                                   InvGroup.InvGroup = INPUT lcInvGroup)
                   THEN DO:
                      MESSAGE "Unknown invoicing group."
@@ -302,7 +301,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
    END.
 
-   ELSE IF toimi = 5 THEN DO:
+   ELSE IF Syst.Var:toimi = 5 THEN DO:
       
       IF lcFile = "" THEN DO:
          MESSAGE "File name has not been given."
@@ -340,7 +339,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          LEAVE CritLoop.
       
    END.
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.Var:toimi = 8 THEN DO:
       LEAVE CritLoop.
    END.
 

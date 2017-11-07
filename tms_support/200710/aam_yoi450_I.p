@@ -1,7 +1,6 @@
 {Syst/testpaa.i}
-katun = "ari".
+Syst.Var:katun = "ari".
 
-{Func/timestamp.i}
 
 def var i       as int  no-undo.
 def var j       as int  no-undo.
@@ -31,7 +30,7 @@ for each prepaidrequest no-lock where
 
        i = i + 1.
        
-       fsplitts(prepaidrequest.tsrequest,
+       Func.Common:mSplitTS(prepaidrequest.tsrequest,
                 output ldtdate,
                 output litime).
                 

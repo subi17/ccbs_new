@@ -17,7 +17,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/eventval.i}
 
 DEFINE VARIABLE pcTenant      AS CHARACTER NO-UNDO.
@@ -43,7 +43,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-katun = pcUserName.
+Syst.Var:katun = pcUserName.
 
 IF NUM-ENTRIES(pcID,"|") > 1 THEN
    ASSIGN
@@ -55,7 +55,7 @@ ELSE
 {newton/src/settenant.i pcTenant}
 
 FIND BillItem WHERE 
-     BillItem.Brand = gcBrand AND 
+     BillItem.Brand = Syst.Var:gcBrand AND 
      BillItem.BillCode = pcId EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
 
 IF NOT AVAIL BillItem THEN
@@ -69,7 +69,7 @@ DO:
 END.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
    {Func/lib/eventlog.i}
    DEF VAR lhBillItem AS HANDLE NO-UNDO.
    lhBillItem = BUFFER BillItem:HANDLE.
@@ -108,7 +108,7 @@ DO licount = 1 TO 5 :
    lctxt = get_string(pcStruct,lctitle[licount]).
 
    FIND RepText NO-LOCK  WHERE 
-        RepText.Brand     = gcBrand AND
+        RepText.Brand     = Syst.Var:gcBrand AND
         RepText.TextType  = 1       AND
         RepText.LinkCode  = pcId    AND
         RepText.Language  = licount AND
@@ -134,7 +134,7 @@ DO licount = 1 TO 5 :
    END.
    ELSE DO: /*create it */        
        CREATE RepText.
-       ASSIGN   RepText.Brand     = gcBrand 
+       ASSIGN   RepText.Brand     = Syst.Var:gcBrand 
                 RepText.TextType  = 1  
                 RepText.LinkCode  = pcId
                 RepText.Language  = licount 
@@ -151,5 +151,4 @@ add_struct(response_toplevel_id, "").
 
 FINALLY:
    IF llDoEvent THEN fCleanEventObjects().
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.
