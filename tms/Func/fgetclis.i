@@ -54,7 +54,7 @@ FUNCTION fGetCLIs RETURNS LOGICAL
 
          /* FIRST try TO FIND a mobile cli */
          FOR FIRST MSOwner no-lock where 
-                   MSOwner.Brand    = gcBrand AND
+                   MSOwner.Brand    = Syst.Var:gcBrand AND
                    MSOwner.CLI      = SubInvoice.CLI AND
                    MSOwner.TSBegin <= liToPer     AND
                    MSOwner.TSEnd   >= liFromPer,
@@ -63,8 +63,7 @@ FUNCTION fGetCLIs RETURNS LOGICAL
 
              ASSIGN wCLI.CustNum = MSOwner.CustNum
                     wCLI.OwnerID = RECID(MSOwner)
-                    wCLI.Owner   = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                                    BUFFER bCLICust).
+                    wCLI.Owner   = Func.Common:mDispCustName(BUFFER bCLICust).
          END.
 
 

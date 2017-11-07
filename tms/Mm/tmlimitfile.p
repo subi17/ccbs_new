@@ -1,8 +1,8 @@
 /* Subscription and activation limits bob tool */
 
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/flimitreq.i}

@@ -32,7 +32,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 {Syst/tmsconst.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Func/profunc.i}
 
 DEF VAR pcInputStruct AS CHAR NO-UNDO. 
@@ -224,7 +224,7 @@ IF lcCustomerIdType > "" AND
 
    lcQuery = 
       'FOR EACH OrderCustomer NO-LOCK WHERE' + 
-              ' OrderCustomer.Brand = ' + QUOTER(gcBrand) +
+              ' OrderCustomer.Brand = ' + QUOTER(Syst.Var:gcBrand) +
               ' AND OrderCustomer.CustIdType = ' + QUOTER(lcCustomerIdType) +
               ' AND OrderCustomer.CustId = ' + QUOTER(lcCustomerId) +
               ' AND OrderCustomer.RowType = 1'.
@@ -241,7 +241,7 @@ IF lcCustomerIdType > "" AND
 END.
 ELSE IF lcMsisdn > "" THEN ASSIGN
       lcQuery = 'FOR EACH Order NO-LOCK WHERE' +
-             ' Order.Brand = ' + QUOTER(gcBrand) +
+             ' Order.Brand = ' + QUOTER(Syst.Var:gcBrand) +
              ' AND Order.CLI = ' + QUOTER(lcMsisdn) +
              (IF liOrderId > 0
               THEN ' AND Order.OrderId = ' + QUOTER(liOrderId)
@@ -254,7 +254,7 @@ ELSE IF lcMsisdn > "" THEN ASSIGN
       lcBuffers = "Order,OrderFusion,OrderCustomer".
 ELSE IF liOrderId > 0 THEN ASSIGN
    lcQuery = 'FOR EACH OrderFusion NO-LOCK WHERE' +
-             ' OrderFusion.Brand = ' + QUOTER(gcBrand) +
+             ' OrderFusion.Brand = ' + QUOTER(Syst.Var:gcBrand) +
              ' AND OrderFusion.OrderID = ' + QUOTER(liOrderId)
    llAnd = TRUE
    lcBuffers = "OrderFusion,Order,OrderCustomer".
@@ -315,5 +315,4 @@ ELSE lcQuery = lcQuery + ' BY OrderDate DESC'.
 fListQuery(lcBuffers,lcQuery).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

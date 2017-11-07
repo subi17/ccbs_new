@@ -7,8 +7,8 @@ CREATED ......: 06.10.09
 Version ......: xfera
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}

@@ -70,8 +70,11 @@ help "Only (T)otal amount by Account or (D)etailed printout ?"
 skip(8)
 WITH
    width 80 overlay 
-   title " " + ynimi + " Account Summary " + STRING(pvm,"99-99-99") + " "
+   title " " + Syst.Var:ynimi + " Account Summary " + STRING(TODAY,"99-99-99") + " "
    NO-LABELS FRAME rajat.
+
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
 
 form header /* header FOR printout */                
    fill("=",78) format "x(78)" SKIP
@@ -80,7 +83,7 @@ form header /* header FOR printout */
       "Page" to 70 sl format "zzz9" TO 78
    "Acct " at 1 acct format "zzzzz9" AccName format "x(18)"
       "DURING " at 34 pvm1 format "99.99.99"  "-" pvm2 format "99.99.99"
-      string(pvm,"99.99.99") TO 78    SKIP
+      string(TODAY,"99.99.99") TO 78    SKIP
    fill("=",78) format "x(78)"
    skip(1)
    "Invoice"    TO  8
@@ -127,7 +130,7 @@ tnro2   = 9999999.
 
 rajat:
 repeat WITH FRAME rajat:
-   ehto = 9.  RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9.  RUN Syst/ufkey.p.
 
    UPDATE
    pvm1  pvm2  validate (input pvm2  >= input pvm1,"Invalid order !")
@@ -136,12 +139,12 @@ repeat WITH FRAME rajat:
    tot
    EDITING:
       READKEY.
-      IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO WITH FRAME rajat:
+      IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME rajat:
          HIDE MESSAGE.
          if frame-field = "acct" THEN DO:
             IF INPUT acct NE 0 THEN DO:
                FIND Account where
-                    Account.Brand  = gcBrand AND
+                    Account.Brand  = Syst.Var:gcBrand AND
                     Account.AccNum = INPUT acct no-lock no-error.
                IF NOT AVAIL Account THEN DO:
                   BELL.
@@ -158,14 +161,14 @@ repeat WITH FRAME rajat:
 toimi:
    repeat WITH FRAME toimi:
        ASSIGN
-       ufk = 0 ehto = 0 ufk[1] = 91  ufk[5] = 63 ufk[8] = 8.
-       IF acct = 0 THEN ufk[5] = 0.
+       Syst.Var:ufk = 0 Syst.Var:ehto = 0 Syst.Var:ufk[1] = 91  Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8.
+       IF acct = 0 THEN Syst.Var:ufk[5] = 0.
        RUN Syst/ufkey.p.
 
 
-       IF toimi = 1 THEN NEXT rajat.
-       IF toimi = 8 THEN LEAVE rajat.
-       IF toimi = 5 THEN DO:
+       IF Syst.Var:toimi = 1 THEN NEXT rajat.
+       IF Syst.Var:toimi = 8 THEN LEAVE rajat.
+       IF Syst.Var:toimi = 5 THEN DO:
 
           tila = TRUE.
           {Syst/tmsreport.i "leave rajat"}
@@ -183,7 +186,7 @@ toimi:
    view STREAM tul FRAME sivuots.
 
    FOR EACH Payment no-lock where
-           Payment.Brand    = gcBrand   AND
+           Payment.Brand    = Syst.Var:gcBrand   AND
            Payment.AccDate >= pvm1      AND
            Payment.AccDate <= pvm2      AND
 

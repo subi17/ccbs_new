@@ -1,6 +1,5 @@
 {Syst/commali.i}
 
-{Func/date.i}
 DEF VAR lcHostname AS CHAR NO-UNDO.
 INPUT THROUGH hostname.
 IMPORT lcHostName.
@@ -39,6 +38,6 @@ end.
 
 MNPProcess.StatusCode = 5.
 Order.MNPStatus = MNPProcess.StatusCode + 1.
-MNPProcess.UpdateTS = fMakeTS().
+MNPProcess.UpdateTS = Func.Common:mMakeTS().
 
 MESSAGE "Order " Order.OrderID " mnp process handled" VIEW-AS ALERT-BOX.

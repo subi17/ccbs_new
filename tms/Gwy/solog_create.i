@@ -12,7 +12,6 @@
 &GLOBAL-DEFINE SOLOG_CREATE_I YES
 
 {Syst/commali.i}
-{Func/date.i}
 
 FUNCTION fCreateSolog RETURNS INT
    (  INPUT iiMsSeq AS INT,
@@ -23,7 +22,7 @@ FUNCTION fCreateSolog RETURNS INT
    DEF VAR ldeTime AS DEC NO-UNDO. 
 
    ASSIGN
-      ldeTime = fMakeTS()
+      ldeTime = Func.Common:mMakeTS()
       liSolog = NEXT-VALUE(Solog).
 
    CREATE Solog.
@@ -34,8 +33,8 @@ FUNCTION fCreateSolog RETURNS INT
       Solog.MsSeq        = iiMsSeq
       Solog.CLI          = icCLI
       Solog.Stat         = 0
-      Solog.Brand        = gcBrand 
-      Solog.Users        = katun    
+      Solog.Brand        = Syst.Var:gcBrand 
+      Solog.Users        = Syst.Var:katun    
       Solog.MSrequest    = 0
       Solog.CommLine    = STRING(liSolog) + " " + icCommLine 
       Solog.TimeSlotTMS = ldeTime.
