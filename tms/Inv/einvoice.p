@@ -18,6 +18,7 @@
 {Func/email.i}
 {Func/smsnotify.i}
 {Func/heartbeat.i}
+{Func/aes_encrypt.i}
 
 &SCOPED-DEFINE MIDNIGHT-SECONDS 86400
 
@@ -31,15 +32,10 @@ DEF VAR lcMailContent           AS CHAR NO-UNDO.
 DEF VAR liBillPeriod            AS INT  NO-UNDO.
 DEF VAR lcMonitor AS CHAR NO-UNDO. 
 
-DEF VAR liSMSCntValue AS INT  NO-UNDO. 
 DEF VAR liStartTime   AS INT  NO-UNDO. 
 DEF VAR liStopTime    AS INT  NO-UNDO. 
-DEF VAR liPauseTime   AS INT  NO-UNDO.
-DEF VAR PauseFlag     AS LOG  NO-UNDO.
-DEF VAR lcSMSSchedule AS CHARACTER NO-UNDO.
 DEF VAR lEndSeconds   AS INTEGER   NO-UNDO.
 DEF VAR lIniSeconds   AS INTEGER   NO-UNDO.
-DEF VAR lNowSeconds   AS INTEGER   NO-UNDO.
 DEF VAR llFirstInv    AS LOGICAL   NO-UNDO.
 DEF VAR lcTemplate    AS CHAR      NO-UNDO.
 
@@ -52,8 +48,8 @@ DEF TEMP-TABLE eInvoiceContent NO-UNDO
    FIELD Amount          AS CHAR
    FIELD InvDate         AS CHAR
    FIELD InvNum          AS INT
-   FIELD IncNumCrypted   AS CHAR.
-invoice
+   FIELD InvNumCrypted   AS CHAR.
+
 
 FUNCTION fGenerateEmailTemplate RETURNS CHAR
    (iiMsSeq AS INT,
@@ -64,6 +60,7 @@ FUNCTION fGenerateEmailTemplate RETURNS CHAR
    DEF VAR lcTargetType AS CHAR NO-UNDO.
    DEF VAR llcMessage  AS LONGCHAR NO-UNDO.
    DEF VAR llgOK AS LOGICAL NO-UNDO.
+   DEF VAR lcPass AS CHAR NO-UNDO.
 
 
    CREATE eInvoiceContent.
@@ -73,7 +70,9 @@ FUNCTION fGenerateEmailTemplate RETURNS CHAR
       eInvoiceContent.Amount = STRING(ideAmount)
       eInvoiceContent.InvDate = icDate
       eInvoiceContent.InvNum = iiInvNum
-      eInvoiceContent.InvNumCrypted = "".
+      eInvoiceContent.InvNumCrypted = encrypt_data(STRING(iiInvNum),
+                                                   {&ENCRYPTION_METHOD},
+                                                   lcPass).
    llgOK = TEMP-TABLE eInvoiceContent:WRITE-JSON("LONGCHAR", /*writing type*/
                                              llcMessage, /*target*/
                                              TRUE). /*formatted to readabale*/
@@ -84,9 +83,6 @@ FUNCTION fGenerateEmailTemplate RETURNS CHAR
 
 RETURN "".
 END.
-
-
-
 
 FIND MSRequest WHERE 
      MSRequest.MSRequest = iiMSRequest
@@ -103,16 +99,12 @@ lcMonitor = fGetRequestNagiosToken(MsRequest.Reqtype).
 
 /* Email Address Conf File */
 ASSIGN lcAddrConfDir = fCParamC("RepConfDir")
+       lcPassPhrase  = fCParamC("EinvoicePass")
        lcContConFile = fCParamC("SMSInvContFile")
-       liSMSCntValue = fCParamI("SMSCountValue")
        /* ie. "32400-79200" Send between 9:00-22:00 */
-       lcSMSSchedule = fCParamC("SMSSchedule")
        ldaDateFrom   = MsRequest.ReqDtParam1
        liMonth       = MONTH(ldaDateFrom)
        liStartTime   = TIME
-       liStopTime    = 0
-       liPauseTime   = 0
-       PauseFlag     = FALSE
        llFirstInv    = FALSE.
 
 INVOICE_LOOP:
