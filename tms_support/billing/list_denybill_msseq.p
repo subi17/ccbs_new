@@ -1,4 +1,3 @@
-{Func/timestamp.i}
 
 def stream slog.
 

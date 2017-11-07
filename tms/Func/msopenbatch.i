@@ -54,7 +54,7 @@ FUNCTION fOpenSaldoBarring RETURNS LOGIC:
                             Solog.CommLine = lcCommLine)
       THEN DO:
       
-         ldCurrTime = fMakeTS().
+         ldCurrTime = Func.Common:mMakeTS().
       
          CREATE SOLog.
          ASSIGN SOlog.Solog        = NEXT-VALUE(Solog)
@@ -64,9 +64,9 @@ FUNCTION fOpenSaldoBarring RETURNS LOGIC:
                 SOLog.MsSeq        = MobSub.MsSeq   /* Mobile Subscription */
                 SOLog.CLI          = MobSub.CLI     /* MSISDN          */
                 SOLog.Stat         = 0              /* just created    */
-                Solog.Brand        = gcBrand 
+                Solog.Brand        = Syst.Var:gcBrand 
                 SOLog.CommLine     = lcCommLine
-                SoLog.Users        = katun.
+                SoLog.Users        = Syst.Var:katun.
       END.                                 
    END.                
 
@@ -86,7 +86,7 @@ FUNCTION fOpenSaldoBarring RETURNS LOGIC:
              CallAlarm.CASeq       = NEXT-VALUE(CallAlarm)
              CallAlarm.DeliStat    = 1            
              CallAlarm.Limit       = 100
-             CallAlarm.Brand       = gcBrand 
+             CallAlarm.Brand       = Syst.Var:gcBrand 
              CallAlarm.CreditType  = 66
              CallAlarm.CustNo      = bSaldoMobSub.CustNum
              CallAlarm.CLI         = bSaldoMobSub.CLI

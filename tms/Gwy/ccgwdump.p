@@ -1,6 +1,4 @@
 {Syst/commali.i}
-{Func/timestamp.i}
-{Func/date.i}
 {Func/cparam2.i}
 
 DEFINE VARIABLE lcBarring  AS CHARACTER NO-UNDO.
@@ -12,8 +10,8 @@ DEFINE VARIABLE lcOut      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFileName AS CHARACTER NO-UNDO.
 
 ASSIGN
-   ldeTS      = fMakeTS()
-   lcDate     = fDateFMT(TODAY,"YYYYMMDD")
+   ldeTS      = Func.Common:mMakeTS()
+   lcDate     = Func.Common:mDateFmt(TODAY,"YYYYMMDD")
    lcFileName = "ccgw_" + lcDate + ".dump"
    lcSpool    = fCParam("DUMPSPOOL","ccgwdump.p")
    lcOut      = fCParam("DUMPOUTGOING","ccgwdump.p").

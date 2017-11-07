@@ -10,7 +10,6 @@
 {Syst/commali.i}
 {Syst/dumpfile_run.i}
 {Func/create_eventlog.i}
-{Func/timestamp.i}
 
 DEF TEMP-TABLE ttSource NO-UNDO
    FIELD PPSource AS CHAR.
@@ -75,17 +74,17 @@ IF icDumpMode NE "modified" THEN idLastDump = 0.
 /* postpaid charges and compensation -----------------------------*/
 MsRequestLoop:
 FOR EACH MsRequest NO-LOCK USE-INDEX CLI WHERE
-         MsRequest.Brand   = gcBrand AND
+         MsRequest.Brand   = Syst.Var:gcBrand AND
          MsRequest.ReqType = 76 AND
          MsRequest.CreStamp >= idLastDump,
     FIRST FMItem NO-LOCK WHERE 
-          FMItem.Brand = gcBrand AND
+          FMItem.Brand = Syst.Var:gcBrand AND
           FMItem.FeeModel = MsRequest.ReqCParam1 AND
           DATETIME(FMItem.ToDate) >= 
-             fTimeStamp2DateTime(MsRequest.CreStamp) AND 
-          DATETIME(FMItem.FromDate) <= fTimeStamp2DateTime(MsRequest.CreStamp),
+             Func.Common:mTimeStamp2DateTime(MsRequest.CreStamp) AND 
+          DATETIME(FMItem.FromDate) <= Func.Common:mTimeStamp2DateTime(MsRequest.CreStamp),
     FIRST BillItem NO-LOCK WHERE 
-          BillItem.Brand = gcBrand AND
+          BillItem.Brand = Syst.Var:gcBrand AND
           BillItem.BillCode = FMItem.BillCode
    ON QUIT UNDO, RETRY
    ON STOP UNDO, RETRY:
@@ -100,7 +99,7 @@ FOR EACH MsRequest NO-LOCK USE-INDEX CLI WHERE
    FIND FIRST TMSUser WHERE TMSUser.UserCode = lcCreator NO-LOCK NO-ERROR.
    IF AVAILABLE TMSUser THEN lcCreator = TMSUser.UserName.
 
-   fSplitTS (MsRequest.CreStamp,
+   Func.Common:mSplitTS (MsRequest.CreStamp,
              OUTPUT ldDate,
              OUTPUT liTime).
 
@@ -152,18 +151,18 @@ END. /* end MsRequestLoop ----------------------------------------*/
 PrePaidRequestLoop:
 FOR EACH ttSource,
     EACH PrePaidRequest NO-LOCK WHERE
-         PrePaidRequest.Brand  = gcBrand AND
+         PrePaidRequest.Brand  = Syst.Var:gcBrand AND
          PrePaidRequest.Source = ttSource.PPSource AND
          PrePaidRequest.TSRequest >= idLastDump, 
     FIRST FMItem NO-LOCK WHERE 
-          FMItem.Brand = gcBrand AND
+          FMItem.Brand = Syst.Var:gcBrand AND
           FMItem.FeeModel = PrePaidRequest.ReqCParam1 AND
           DATETIME(FMItem.ToDate) >= 
-             fTimeStamp2DateTime(PrePaidRequest.TSRequest) AND 
+             Func.Common:mTimeStamp2DateTime(PrePaidRequest.TSRequest) AND 
           DATETIME(FMItem.FromDate) <= 
-             fTimeStamp2DateTime(PrePaidRequest.TSRequest),
+             Func.Common:mTimeStamp2DateTime(PrePaidRequest.TSRequest),
     FIRST BillItem NO-LOCK WHERE 
-          BillItem.Brand = gcBrand AND
+          BillItem.Brand = Syst.Var:gcBrand AND
           BillItem.BillCode = FMItem.BillCode
    ON QUIT UNDO, RETRY
    ON STOP UNDO, RETRY:
@@ -178,7 +177,7 @@ FOR EACH ttSource,
    FIND FIRST TMSUser WHERE TMSUser.UserCode = lcCreator NO-LOCK NO-ERROR.
    IF AVAILABLE TMSUser THEN lcCreator = TMSUser.UserName.
 
-   fSplitTS (PrePaidRequest.TSRequest,
+   Func.Common:mSplitTS (PrePaidRequest.TSRequest,
              OUTPUT ldDate,
              OUTPUT liTime).
 

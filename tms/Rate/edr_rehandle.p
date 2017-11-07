@@ -7,9 +7,8 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
-{Func/timestamp.i}
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/detailseq.i}
 {Func/cparam2.i}
@@ -68,8 +67,8 @@ FOR EACH PrepEDR NO-LOCK WHERE
    j = j + 1.
    
    PUT STREAM sout UNFORMATTED
-      fts2hms(fMakeTS()) ";"
-      fts2hms(PrepEDR.ReadInTS) ";"
+      Func.Common:mTS2HMS(Func.Common:mMakeTS()) ";"
+      Func.Common:mTS2HMS(PrepEDR.ReadInTS) ";"
       PrepEDR.CLI ";"
       PrepEDR.DateSt ";"
       PrepEDR.DtlSeq ";"
@@ -85,7 +84,7 @@ FOR EACH PrepEDR NO-LOCK WHERE
    FIND bPrepEDR EXCLUSIVE-LOCK WHERE
        ROWID(bPrepEDR) EQ ROWID(PrepEDR).
    BUFFER-COPY ttEDR USING MsSeq ErrorCode Custnum CLIType TO bPrepEDR.
-   bPrepEDR.ReadInTS = fMakeTS(). /* for HPD dump */
+   bPrepEDR.ReadInTS = Func.Common:mMakeTS(). /* for HPD dump */
    RELEASE bPrepEDR.
 
    IF ttEDR.ErrorCode EQ 0 THEN RUN pHandleEDR(BUFFER ttEDR).

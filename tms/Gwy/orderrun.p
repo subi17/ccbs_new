@@ -8,7 +8,7 @@
   --------------------------------------------------------------------------- */
 
 
-{Syst/commpaa.i}     gcBrand = "1" . katun = "Order".
+{Syst/commpaa.i}     Syst.Var:gcBrand = "1" . Syst.Var:katun = "Order".
 {Func/heartbeat.i}
 
 DEFINE VARIABLE liLoop     AS INTEGER   NO-UNDO.

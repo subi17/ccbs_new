@@ -1,5 +1,4 @@
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 
 DEF STREAM sOut.
 
@@ -22,8 +21,8 @@ DEF VAR liActTime    AS INT  NO-UNDO.
 ASSIGN
    ldaStartDate = DATE(MONTH(TODAY), 1, YEAR(TODAY))
    ldaEndDate   = DATE(MONTH(TODAY), 3, YEAR(TODAY))
-   ldStartTime  = fMake2Dt(ldaStartDate,0)
-   ldEndTime    = fMake2Dt(ldaEndDate  ,86399).
+   ldStartTime  = Func.Common:mMake2DT(ldaStartDate,0)
+   ldEndTime    = Func.Common:mMake2DT(ldaEndDate  ,86399).
 
 MESSAGE "Create Duplicate Invoice Request ?" SKIP
         "For Creating - YES" SKIP
@@ -62,7 +61,7 @@ FOR EACH EventLog NO-LOCK WHERE
       DO:
          CREATE ttCust.
          ASSIGN ttCust.CustNum = INT(EventLog.Key) 
-                ttCust.EndTS   = fHMS2TS(EventLog.EventDate, 
+                ttCust.EndTS   = Func.Common:mHMS2TS(EventLog.EventDate, 
                                          EventLog.EventTime).
                                          
          PUT STREAM sOut UNFORMATTED
@@ -106,10 +105,10 @@ FOR EACH ttCust:
          MsRequest.ReqType    = {&REQTYPE_DUPLICATE_INVOICE}
          MsRequest.Brand      = "1"
          MsRequest.UserCode   = "Qvantel"
-         MsRequest.ActStamp   = fMake2Dt(11/10/2016,0) 
+         MsRequest.ActStamp   = Func.Common:mMake2DT(11/10/2016,0) 
          MsRequest.ReqStatus  = 0
          MsRequest.CustNum    = ttCust.CustNum
-         MsRequest.CreStamp   = fMakeTS()
+         MsRequest.CreStamp   = Func.Common:mMakeTS()
          MsRequest.ReqIParam1 = Invoice.InvNum
          MsRequest.ReqCParam1 = Invoice.ExtInvID
          MsRequest.ReqSource  = {&REQUEST_SOURCE_SCRIPT}

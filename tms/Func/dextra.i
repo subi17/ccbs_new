@@ -11,7 +11,6 @@
 &GLOBAL-DEFINE DEXTRA_I YES
 {Syst/commali.i}
 {Func/fgettxt.i}
-{Func/date.i}
 {Func/fmakesms.i}
 {Syst/tmsconst.i}
 {Func/fcreatereq.i}
@@ -33,7 +32,7 @@ FUNCTION fSendDextraSMS RETURNS LOGICAL
    DEF BUFFER Order FOR Order.
    
    FIND FIRST Order NO-LOCK WHERE
-              Order.Brand   = gcBrand   AND
+              Order.Brand   = Syst.Var:gcBrand   AND
               Order.OrderID = iiOrderId NO-ERROR.
     
    IF NOT AVAIL Order THEN RETURN FALSE.
@@ -66,7 +65,7 @@ FUNCTION fSendDextraSMS RETURNS LOGICAL
    END.
 
    FIND FIRST OrderCustomer WHERE
-              OrderCustomer.Brand = gcBrand AND
+              OrderCustomer.Brand = Syst.Var:gcBrand AND
               OrderCustomer.Orderid = iiOrderId AND
               OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
 
@@ -117,7 +116,7 @@ FUNCTION fLogisticsRequest RETURNS INTEGER
    DEF BUFFER bOrder FOR Order.
 
    FIND bOrder NO-LOCK WHERE
-        bOrder.Brand = gcBrand AND
+        bOrder.Brand = Syst.Var:gcBrand AND
         bOrder.OrderID = iiOrderId NO-ERROR.
    IF NOT AVAIL bOrder THEN DO:
       ocResult = "ERROR: Order not found".
@@ -133,7 +132,7 @@ FUNCTION fLogisticsRequest RETURNS INTEGER
    
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest({&REQTYPE_LOGISTICS},
                   idActStamp,

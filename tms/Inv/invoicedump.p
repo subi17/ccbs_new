@@ -26,8 +26,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/date.i}
-{Func/timestamp.i}
 {Func/coinv.i}
 {Func/refcode.i}
 {Func/frefnum.i}
@@ -69,7 +67,7 @@ DEF TEMP-TABLE ttInv NO-UNDO
 
 ASSIGN lcNumeric = SESSION:NUMERIC-FORMAT
        icFile    = REPLACE(icFile,".gz","")
-       ldMark    = fMakeTS().
+       ldMark    = Func.Common:mMakeTS().
 
 FIND FIRST DumpFile WHERE DumpFile.DumpID = icDumpID NO-LOCK NO-ERROR.
 IF AVAILABLE DumpFile THEN DO:
@@ -90,7 +88,7 @@ OUTPUT STREAM excel TO VALUE(icFile).
 
 /* DUMP HEADERS - Commented WITH # */
 PUT STREAM excel UNFORMATTED
-  "#Dump started: " + fTS2C(ldMark) SKIP.
+  "#Dump started: " + Func.Common:mTs2C(ldMark) SKIP.
 
 /* FULL DUMP */
 IF icDumpMode = "Full" THEN DO:
@@ -99,14 +97,14 @@ IF icDumpMode = "Full" THEN DO:
    ELSE
       liOffsetMonths = INT(lcOffsetMonths).
 
-   liFromPeriod = fOffsetMonthsToPeriod(INPUT liOffsetMonths).
+   liFromPeriod = Func.Common:mOffsetMonthsToPeriod(INPUT liOffsetMonths).
    IF liFromPeriod = ? OR liFromPeriod = 0 THEN
       liFromPeriod = YEAR(TODAY) * 100 + MONTH(TODAY).
    ldFromDate = fInt2Date(INT(liFromPeriod),1).
 
    /* Dump ALL invoices */
    FOR EACH invoice NO-LOCK USE-INDEX InvDate WHERE
-            invoice.brand    = gcBrand    AND
+            invoice.brand    = Syst.Var:gcBrand    AND
             invoice.invdate >= ldFromDate AND
             Invoice.DeliveryState > 0
        ON QUIT UNDO, RETRY
@@ -141,7 +139,7 @@ END. /* IF icDumpMode = "Full" THEN DO: */
 ELSE DO:
 
    IF idLastDump > 0 THEN DO:
-      fSplitTS(idLastDump,ldtDate2,liTmp).
+      Func.Common:mSplitTS(idLastDump,ldtDate2,liTmp).
       ldFromDate = ldtDate2 - 4.
    END. /* IF idLastDump > 0 THEN DO: */
    ELSE
@@ -150,7 +148,7 @@ ELSE DO:
    EMPTY TEMP-TABLE ttInv.
 
    FOR EACH invoice NO-LOCK WHERE
-            invoice.brand    = gcBrand    AND
+            invoice.brand    = Syst.Var:gcBrand    AND
             invoice.invdate >= ldFromDate AND
             Invoice.DeliveryState > 0
       ON QUIT UNDO, RETRY
@@ -185,7 +183,7 @@ ELSE DO:
    END. /* FOR EACH Invoice NO-LOCK WHERE */
 
    /* collect invoices with eventlog records that have been modified since last dump */
-   fSplitTS(idLastDump,
+   Func.Common:mSplitTS(idLastDump,
             OUTPUT ldaModified,
             OUTPUT liTime).
 
@@ -238,11 +236,11 @@ ELSE DO:
 END. /* ELSE DO: - Modified - */
 
 ASSIGN
-   tsEnd     = fMakeTS().
+   tsEnd     = Func.Common:mMakeTS().
    totalTime = (tsEnd - ldMark) * 100000.
 
 PUT STREAM excel UNFORMATTED
-  "#Dump complete: " fTS2C(tsEnd) SKIP
+  "#Dump complete: " Func.Common:mTs2C(tsEnd) SKIP
   "#Process time : ". 
   
   IF totaltime / 3600 > 1 THEN DO:

@@ -15,14 +15,14 @@ DEF TEMP-TABLE ttDBConfig NO-UNDO
    INDEX TableName TableName ToDate.
 
 FOR EACH DBConfig NO-LOCK WHERE
-         DBConfig.Brand = gcBrand AND
+         DBConfig.Brand = Syst.Var:gcBrand AND
          DBConfig.TableName = "MobCDR" AND
          DBConfig.DBState <= 1:
    CREATE ttDBConfig.
    BUFFER-COPY DBConfig TO ttDBConfig.
 END.
 FOR EACH DBConfig NO-LOCK WHERE
-         DBConfig.Brand = gcBrand AND
+         DBConfig.Brand = Syst.Var:gcBrand AND
          DBConfig.TableName = "PrepCDR" AND
          DBConfig.DBState <= 1:
    CREATE ttDBConfig.

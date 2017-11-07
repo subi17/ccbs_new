@@ -63,8 +63,8 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-katun = "NewtonRPC".
-gcBrand = "1".
+Syst.Var:katun = "NewtonRPC".
+Syst.Var:gcBrand = "1".
 
 {Func/profunc.i}
 
@@ -113,7 +113,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 IF pcCLI NE "" THEN DO:
    
    FIND FIRST Mobsub WHERE
-      Mobsub.Brand = gcBrand AND
+      Mobsub.Brand = Syst.Var:gcBrand AND
       Mobsub.CLI = pcCLI NO-LOCK NO-ERROR.
    
    IF NOT AVAILABLE MobSub THEN DO:
@@ -123,7 +123,7 @@ IF pcCLI NE "" THEN DO:
 END.
 
 FIND customer NO-LOCK
-WHERE customer.brand = gcBrand AND
+WHERE customer.brand = Syst.Var:gcBrand AND
    customer.custnum = piCustnum NO-ERROR.
 
 IF NOT AVAILABLE customer THEN DO:
@@ -170,7 +170,7 @@ IF Customer.CustIdType = "CIF" THEN DO:
    add_date_or_time(top_struct, 'company_foundationdate', Customer.FoundationDate, 0).
 
    FIND CustContact NO-LOCK WHERE
-      CustContact.Brand = gcBrand AND
+      CustContact.Brand = Syst.Var:gcBrand AND
       CustContact.CustNum = Customer.Custnum AND
       CustContact.CustType = {&CUSTCONTACT_CONTACT} NO-ERROR.
       
@@ -241,8 +241,7 @@ IF Customer.Custnum EQ Customer.AgrCust THEN DO:
 END.
 
 
-lcDType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                           "Invoice",
+lcDType = Func.Common:mTMSCodeName("Invoice",
                            "DelType",
                            STRING(Customer.DelType)).
 add_string(top_struct,"delivery_channel",lcDType).
@@ -253,7 +252,7 @@ IF fExistBarredSubForCustomer(Customer.CustNum) THEN llOrdersAllowed = FALSE.
 add_boolean(top_struct,"orders_allowed",llOrdersAllowed).
 /* satisfaction value */
 FIND FIRST PIndicator  WHERE
-           PIndicator.Brand = gcBrand AND
+           PIndicator.Brand = Syst.Var:gcBrand AND
            PIndicator.HostTable = "Customer" AND
            PIndicator.KeyValue = STRING(Customer.CustNum) AND
            PIndicator.IndicatorType = {&P_INDICATOR_TYPE_SATISFACTION_VALUE}  
@@ -274,7 +273,7 @@ add_string(top_struct, "profession", Customer.Profession).
 add_string(top_struct, "site_name", Customer.CompanyName).
 
 FIND FIRST CustCat NO-LOCK WHERE 
-           CustCat.brand EQ gcBrand AND
+           CustCat.brand EQ Syst.Var:gcBrand AND
            CustCat.category EQ Customer.category NO-ERROR.
 IF AVAIL custcat THEN           
    add_string(top_struct, "segment", CustCat.Segment).
@@ -301,5 +300,4 @@ ELSE
    add_boolean(top_struct,"activation_limit_reached",FALSE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

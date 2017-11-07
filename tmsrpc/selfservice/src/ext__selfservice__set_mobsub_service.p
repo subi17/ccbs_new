@@ -35,8 +35,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
-gcBrand = "1".
+Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Mm/subser.i}
@@ -113,10 +113,10 @@ lcAppId = substring(pcTransId,1,3).
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName,lcAppId) THEN
    RETURN appl_err("Application Id does not match").
 
-katun = lcAppId + "_" + ghAuthLog::EndUserId.
+Syst.Var:katun = lcAppId + "_" + ghAuthLog::EndUserId.
 
 FIND FIRST ServCom NO-LOCK WHERE
-           ServCom.Brand = gcBrand AND
+           ServCom.Brand = Syst.Var:gcBrand AND
            ServCom.ServCom = pcServiceCode NO-ERROR.
 IF NOT AVAILABLE ServCom OR
    LOOKUP(ServCom.ServCom,"LP,NAM,BPSUB") > 0 THEN
@@ -146,7 +146,7 @@ IF CAN-FIND(FIRST MsRequest WHERE
 
 /* Check BB allowed */
 IF pcServiceCode = "BB" AND pcServiceStatus = "ON" AND
-   NOT fIsBBAllowed(Mobsub.MsSeq,fMakeTS()) THEN
+   NOT fIsBBAllowed(Mobsub.MsSeq,Func.Common:mMakeTS()) THEN
    RETURN appl_err("Service can not be activated because subscription " +
                    "does not have active data bundle").
 
@@ -189,20 +189,20 @@ FOR FIRST SubSer NO-LOCK WHERE
                                  SubSer.ServCom,
                                  liValue).
    IF ldActStamp > 0 THEN DO:
-      fSplitTS(ldActStamp,
+      Func.Common:mSplitTS(ldActStamp,
                OUTPUT ldtActDate,
                OUTPUT liReq).
       IF ldtActDate > SubSer.SSDate OR
          (DAY(ldtActDate) = 1 AND liReq < TIME - 120 AND
           DAY(SubSer.SSDate) NE 1)
       THEN .
-      ELSE ldActStamp = fMakeTS().
+      ELSE ldActStamp = Func.Common:mMakeTS().
    END.
-   ELSE ldActStamp = fMakeTS().
+   ELSE ldActStamp = Func.Common:mMakeTS().
 
    IF ldtActDate = TODAY
-   THEN ldActStamp = fMakeTS().
-   ELSE ldActStamp = fMake2DT(ldtActDate,1).
+   THEN ldActStamp = Func.Common:mMakeTS().
+   ELSE ldActStamp = Func.Common:mMake2DT(ldtActDate,1).
 
    /* Special handling for Black Berry service */
    IF Subser.ServCom = "BB" THEN DO:
@@ -229,7 +229,7 @@ FOR FIRST SubSer NO-LOCK WHERE
                            (IF Subser.ServCom = "LANG" THEN ""
                             ELSE lcParam),
                            ldActStamp,
-                           katun,
+                           Syst.Var:katun,
                            TRUE,      /* fees */
                            TRUE,      /* sms */
                            "",
@@ -251,8 +251,7 @@ FOR FIRST SubSer NO-LOCK WHERE
       WHEN "off" THEN lcOnOff = "Desactivar".
    END.
 
-   DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                    "MobSub",                             /* HostTable */
+   Func.Common:mWriteMemoWithType("MobSub",                             /* HostTable */
                     STRING(Mobsub.MsSeq),                 /* KeyValue  */
                     MobSub.CustNum,                       /* CustNum */
                     "Servicio modificado",                 /* MemoTitle */
@@ -279,8 +278,8 @@ IF pcServiceCode EQ "BB" AND
                            ServCom.ServCom,
                            1,
                            lcParam,
-                           fMakeTS(),
-                           katun,
+                           Func.Common:mMakeTS(),
+                           Syst.Var:katun,
                            TRUE,      /* fees */
                            TRUE,      /* sms */
                            "",
@@ -296,8 +295,7 @@ IF pcServiceCode EQ "BB" AND
       WHEN "off" THEN lcOnOff = "Desactivar".
    END.
 
-   DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                    "MobSub",                             /* HostTable */
+   Func.Common:mWriteMemoWithType("MobSub",                             /* HostTable */
                     STRING(Mobsub.MsSeq),                 /* KeyValue  */
                     MobSub.CustNum,                       /* CustNum */
                     "Servicio modificado",                 /* MemoTitle */
@@ -321,5 +319,4 @@ FINALLY:
    /* Store the transaction id */
    ghAuthLog::TransactionId = pcTransId.
 
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

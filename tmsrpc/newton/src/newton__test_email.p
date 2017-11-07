@@ -13,9 +13,8 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1} 
 
-{Func/timestamp.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 /* Input parameters */
 DEF VAR pcReference AS CHAR NO-UNDO.
@@ -42,5 +41,4 @@ RUN Mc/sendorderreq.p(piOrderId, "antti.savolainen@qvantel.com", OUTPUT lcErrFil
 add_boolean(response_toplevel_id, "", true).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.
