@@ -207,7 +207,18 @@ FUNCTION fCTChangeRequest RETURNS INTEGER
    IF ocResult > "" THEN RETURN 0.                       
    
    /* PRO */
-   ASSIGN llProCustomer = fIsProSubscription(iiMsSeq).
+   IF iiOrderId > 0 THEN DO:
+      FIND FIRST Order NO-LOCK WHERE
+                 Order.brand EQ "1" AND
+                 Order.orderid EQ iiOrderId NO-ERROR.
+      IF AVAIL Order AND INDEX(order.orderchannel,"pro") > 0 THEN DO:
+         llProCustomer = TRUE.
+      END.
+      ELSE
+         llProCustomer = FALSE.
+   END.
+   ELSE
+      llProCustomer = fIsProSubscription(iiMsSeq).
 
    fCreateRequest(0,
                   Func.Common:mMakeTS(),
