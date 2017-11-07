@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-katun = "ari".
+Syst.Var:katun = "ari".
 {Func/barrfunc.i}
 
 def var lcline  as char no-undo.

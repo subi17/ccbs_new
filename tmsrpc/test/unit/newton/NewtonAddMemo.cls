@@ -1,5 +1,5 @@
 /*
-   Depends = newton/src/newton__add_memo.p,Func/timestamp.i,fcgi_agent/xmlrpc/xmlrpc_access.i
+   Depends = newton/src/newton__add_memo.p,fcgi_agent/xmlrpc/xmlrpc_access.i
 */
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.

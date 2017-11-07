@@ -87,7 +87,7 @@ FOR EACH SMSMessage NO-LOCK WHERE
          CASE lcField:
          WHEN "#CONTRACT_ID" THEN DO:
             FIND FIRST Order NO-LOCK WHERE
-                       Order.Brand = gcBrand AND
+                       Order.Brand = Syst.Var:gcBrand AND
                        Order.OrderID = SMSMessage.OrderID NO-ERROR.
             IF AVAIL Order AND SMSMessage.OrderID > 0 THEN
                lcValue = Order.ContractId.

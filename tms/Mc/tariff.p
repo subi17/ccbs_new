@@ -38,7 +38,7 @@
 {Func/fcustpl.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -99,7 +99,7 @@ DEF VAR lBrHdr     AS CHAR               NO-UNDO.
 DEF VAR lcDataType AS CHAR               NO-UNDO.
 DEF VAR llShowHistory AS LOG NO-UNDO INIT FALSE. 
 
-lBrHdr = " TARIFF MAINTENANCE " + string(pvm,"99-99-99") + " " .
+lBrHdr = " TARIFF MAINTENANCE " + string(TODAY,"99-99-99") + " " .
 
 form
    Tariff.Brand       column-label "Bra"      format "x(3)"
@@ -115,8 +115,8 @@ form
    lcBdest            column-label "B"        format "x"
 WITH 
    width 80 OVERLAY scroll 1 15 DOWN ROW 1
-   COLOR value(cfc)
-   title color value(ctc) " " + ynimi + lBrHdr
+   COLOR value(Syst.Var:cfc)
+   title color value(Syst.Var:ctc) " " + Syst.Var:ynimi + lBrHdr
 FRAME sel.
 
 
@@ -217,7 +217,7 @@ form /* ADD */
    SPACE(1)
    SKIP
 WITH
-   WITH ROW 1 centered COLOR value(cfc) TITLE COLOR value(ctc) 
+   WITH ROW 1 centered COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc) 
    fr-header NO-LABEL OVERLAY
 FRAME lis.
 
@@ -228,24 +228,24 @@ form /* haku PriceList:lla */
    "Code :" plseek
    help "Give a pricelist code"
 WITH 
-   row 4 col 2 title color value(ctc) " FIND Price LIST "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr1.
+   row 4 col 2 title color value(Syst.Var:ctc) " FIND Price LIST "
+   COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr1.
 
 form /*  :n asno hakua varten */
    "Brand:" lcBrand skip
    "CCN .:" lcCSeek
    help "Give a CCN"
 WITH 
-   row 4 col 2 title color value(ctc) " FIND CCN "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+   row 4 col 2 title color value(Syst.Var:ctc) " FIND CCN "
+   COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /*  :n asno hakua varten */
    "Brand:" lcBrand skip
    "Cust :" liCustSeek
    help "Give customer number"
 WITH 
-   row 4 col 2 title color value(ctc) " FIND Customer "
-   COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr3.
+   row 4 col 2 title color value(Syst.Var:ctc) " FIND Customer "
+   COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
 IF irRowID NE 0 THEN DO WITH FRAME lis:
 
@@ -281,7 +281,7 @@ IF icBDest NE "" AND CAN-FIND(FIRST Tariff WHERE
 ELSE
    lBrHdr  = lBrHdr + "(CCN " + STRING(iiCCN) + ") ".
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 ASSIGN
@@ -332,7 +332,7 @@ repeat WITH FRAME sel:
    IF must-add THEN DO ON ENDKEY UNDO, LEAVE: /* Tariff -ADD  */
 
       assign
-         cfc       = "lis"
+         Syst.Var:cfc = "lis"
          ufkey     = true
          fr-header = " ADD "
          must-add  = FALSE.
@@ -340,7 +340,7 @@ repeat WITH FRAME sel:
       RUN Syst/ufcolor.p.
 
       CLEAR FRAME lis no-pause.
-      ehto = 9.
+      Syst.Var:ehto = 9.
       RUN Syst/ufkey.p.
       PAUSE 0.
 
@@ -423,21 +423,21 @@ repeat WITH FRAME sel:
    repeat WITH FRAME sel ON ENDKEY UNDO, RETURN:
 
       IF ufkey THEN DO:
-         ASSIGN ufk = 0
-         ufk[1] = 886 ufk[2]= 1163 ufk[3]= 0 /* 714 */
-         ufk[4] = (IF llShowHistory THEN 1827 ELSE 1828) 
-         ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)  
-         ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)   
-         ufk[7] = 796 ufk[8] = 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         ASSIGN Syst.Var:ufk = 0
+         Syst.Var:ufk[1] = 886 Syst.Var:ufk[2]= 1163 Syst.Var:ufk[3]= 0 /* 714 */
+         Syst.Var:ufk[4] = (IF llShowHistory THEN 1827 ELSE 1828) 
+         Syst.Var:ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)  
+         Syst.Var:ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)   
+         Syst.Var:ufk[7] = 796 Syst.Var:ufk[8] = 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
 
          /* no sense in finding with ccn when ccn is already chosen */
-         IF iiCCN > 0 THEN ufk[2] = 0. 
+         IF iiCCN > 0 THEN Syst.Var:ufk[2] = 0. 
          /* if pricelist or customer chosen then pricelist & customer 
             finds are both invalid*/
          ELSE IF icPlist NE "" OR iiCust > 0
-         THEN ASSIGN ufk[1] = 0
-                     ufk[3] = 0.
+         THEN ASSIGN Syst.Var:ufk[1] = 0
+                     Syst.Var:ufk[3] = 0.
 
          {Syst/uright1.i '"5,6"'}
 
@@ -447,17 +447,17 @@ repeat WITH FRAME sel:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW Tariff.PriceList {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Tariff.PriceList WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) Tariff.PriceList WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW Tariff.CCN {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) Tariff.CCN WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) Tariff.CCN WITH FRAME sel.
       END.
       
-      nap = KEYLABEL(LASTKEY).
+      Syst.Var:nap = KEYLABEL(LASTKEY).
 
       IF rtab[FRAME-LINE] = ? AND
-         LOOKUP(nap,"5,f5,8,f8") = 0
+         LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0
       THEN DO:
          BELL.
          message "Cursor is on a empty row, move upwards !".
@@ -465,14 +465,14 @@ repeat WITH FRAME sel:
          NEXT.
       END.
 
-      if LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      if LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
          if maxOrder > 1 then do:
             if maxOrder = 2 and order = 1 then order = 3.
             ELSE if order + 1 > maxOrder then order = 1.
             ELSE order = order + 1. 
          end. 
       END.
-      if LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      if LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
          if maxorder > 1 then do:
            if order - 1 < 1 then do:
               if maxOrder = 2 then order = 3.
@@ -499,7 +499,7 @@ repeat WITH FRAME sel:
       END.
 
       /* previous line */
-      if LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND Tariff where recid(Tariff) = rtab[1] NO-LOCK.
 
@@ -531,7 +531,7 @@ repeat WITH FRAME sel:
       END. /* previous line */
 
       /* NEXT line */
-      ELSE if LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE if LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND Tariff where recid(Tariff) = rtab[FRAME-DOWN] NO-LOCK .
@@ -564,7 +564,7 @@ repeat WITH FRAME sel:
       END. /* NEXT line */
 
       /* previous page */
-      ELSE if LOOKUP(nap,"prev-page,page-up,-") > 0 THEN DO:
+      ELSE if LOOKUP(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND Tariff where recid(Tariff) = memory NO-LOCK NO-ERROR.
 
@@ -591,7 +591,7 @@ repeat WITH FRAME sel:
      END. /* previous page */
 
      /* NEXT page */
-     ELSE if LOOKUP(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE if LOOKUP(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "YOU ARE ON THE LAST PAGE !".
@@ -607,12 +607,12 @@ repeat WITH FRAME sel:
      END. /* NEXT page */
 
      /* Haku sarakk. 1 */
-     ELSE if LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 THEN DO:  /* haku sar. 1 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+     ELSE if LOOKUP(Syst.Var:nap,"1,f1") > 0 AND Syst.Var:ufk[1] > 0 THEN DO:  /* haku sar. 1 */
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
         plseek = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr1.
-        UPDATE lcBrand WHEN gcAllBrand AND iiCCN = 0
+        UPDATE lcBrand WHEN Syst.Var:gcAllBrand AND iiCCN = 0
                plseek WITH FRAME hayr1.
         HIDE FRAME hayr1 no-pause.
 
@@ -668,12 +668,12 @@ repeat WITH FRAME sel:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     ELSE if ufk[2] > 0 AND LOOKUP(nap,"2,f2") > 0 THEN DO:  /* haku sar. 1 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+     ELSE if Syst.Var:ufk[2] > 0 AND LOOKUP(Syst.Var:nap,"2,f2") > 0 THEN DO:  /* haku sar. 1 */
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
         lcCSeek = 0.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr2.
-        UPDATE lcBrand WHEN gcAllBrand AND icPList = "" AND iiCust = 0
+        UPDATE lcBrand WHEN Syst.Var:gcAllBrand AND icPList = "" AND iiCust = 0
                lcCSeek WITH FRAME hayr2.
         HIDE FRAME hayr2 no-pause.
 
@@ -704,12 +704,12 @@ repeat WITH FRAME sel:
      END. /* Haku sar. 2 */
 
      /* Haku sarakk. 3 */
-     ELSE if ufk[3] > 0 AND LOOKUP(nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+     ELSE if Syst.Var:ufk[3] > 0 AND LOOKUP(Syst.Var:nap,"3,f3") > 0 THEN DO:  /* haku sar. 3 */
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
         liCustSeek = 0.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr3.
-        UPDATE lcBrand WHEN gcAllBrand AND iiCCN = 0
+        UPDATE lcBrand WHEN Syst.Var:gcAllBrand AND iiCCN = 0
                liCustSeek WITH FRAME hayr3.
         HIDE FRAME hayr3 no-pause.
 
@@ -732,7 +732,7 @@ repeat WITH FRAME sel:
         END.
      END. /* Haku sar. 3 */
      
-     ELSE IF nap = "4" OR nap = "f4" THEN DO:
+     ELSE IF Syst.Var:nap = "4" OR Syst.Var:nap = "f4" THEN DO:
         llShowHistory = NOT llShowHistory.
         CLEAR FRAME sel ALL no-pause.
         RUN local-find-first.
@@ -743,19 +743,19 @@ repeat WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     ELSE if LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
+     ELSE if LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE if LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW" THEN DO TRANSAction:  
+     ELSE if LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW" THEN DO TRANSAction:  
      /* removal */
 
         delline = FRAME-LINE.
         FIND Tariff where recid(Tariff) = rtab[FRAME-LINE] NO-LOCK.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(ctc) 
+        COLOR DISPLAY value(Syst.Var:ctc) 
            Tariff.ValidFrom
            Tariff.ValidTo
            Tariff.PriceList 
@@ -786,7 +786,7 @@ repeat WITH FRAME sel:
 
         ASSIGN ok = FALSE.
         message " ARE YOU SURE YOU WANT TO REMOVE (Y/N)? " UPDATE ok.
-        COLOR DISPLAY value(ccc) 
+        COLOR DISPLAY value(Syst.Var:ccc) 
            Tariff.ValidFrom
            Tariff.ValidTo
            Tariff.PriceList
@@ -815,7 +815,7 @@ repeat WITH FRAME sel:
         ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     ELSE if LOOKUP(nap,"enter,return") > 0 AND lcRight = "RW"  THEN DO
+     ELSE if LOOKUP(Syst.Var:nap,"enter,return") > 0 AND lcRight = "RW"  THEN DO
      WITH FRAME lis TRANSACTION ON ENDKEY UNDO,leave:
 
         /* change */
@@ -828,7 +828,7 @@ repeat WITH FRAME sel:
         assign
            fr-header = " CHANGE "
            ufkey     = TRUE
-           ehto      = 9.
+           Syst.Var:ehto      = 9.
 
         CLEAR FRAME lis no-pause.
 
@@ -836,7 +836,7 @@ repeat WITH FRAME sel:
 
         ASSIGN
            plname = ""
-           cfc    = "lis". 
+           Syst.Var:cfc = "lis". 
 
         RUN Syst/ufcolor.p.
 
@@ -854,11 +854,11 @@ repeat WITH FRAME sel:
         xrecid = recid(Tariff).
      END.
 
-     ELSE if LOOKUP(nap,"7,f7") > 0 THEN DO WITH FRAME sel:  /* kr/min */
+     ELSE if LOOKUP(Syst.Var:nap,"7,f7") > 0 THEN DO WITH FRAME sel:  /* kr/min */
         FIND FIRST Tariff where 
              recid(Tariff) = rtab[FRAME-LINE]
         NO-LOCK NO-ERROR.
-        ASSIGN ufk = 0 ufkey = TRUE ehto = 3. RUN Syst/ufkey.p.
+        ASSIGN Syst.Var:ufk = 0 ufkey = TRUE Syst.Var:ehto = 3. RUN Syst/ufkey.p.
         DISPLAY
            round(Tariff.Price[1] * 60 / 100,2) @ Tariff.Price[1]
            round(Tariff.StartCharge[1] * 60 / 100,2) @ Tariff.StartCharge[1].
@@ -868,7 +868,7 @@ repeat WITH FRAME sel:
         WITH FRAME sel.
         message "Press ENTER !".
         PAUSE no-message.
-        COLOR DISPLAY value(cfc)
+        COLOR DISPLAY value(Syst.Var:cfc)
            Tariff.Price[1]
            Tariff.StartCharge[1]
         WITH FRAME sel.
@@ -878,7 +878,7 @@ repeat WITH FRAME sel:
         WITH FRAME sel.
      END.
 
-     ELSE if LOOKUP(nap,"home,h") > 0 THEN DO:
+     ELSE if LOOKUP(Syst.Var:nap,"home,h") > 0 THEN DO:
         RUN local-find-first.
         ASSIGN
            memory     = recid(Tariff)
@@ -886,7 +886,7 @@ repeat WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     ELSE if LOOKUP(nap,"end,e") > 0 THEN DO : /* LAST record */
+     ELSE if LOOKUP(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
         RUN local-find-last.
         ASSIGN
            memory     = recid(Tariff)
@@ -894,13 +894,13 @@ repeat WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     ELSE if LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE if LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE local-find-FIRST:
 
@@ -1766,11 +1766,11 @@ PROCEDURE pUpdate.
       WITH FRAME lis EDITING:
 
          READKEY.
-         nap = KEYLABEL(LASTKEY).
+         Syst.Var:nap = KEYLABEL(LASTKEY).
 
-         IF nap = "F4" THEN UNDO, RETURN "FALSE".
+         IF Syst.Var:nap = "F4" THEN UNDO, RETURN "FALSE".
 
-         IF LOOKUP(nap,poisnap) > 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
 
             IF FRAME-FIELD = "CCN" THEN DO:
                ASSIGN INPUT FRAME lis Tariff.CCN.
@@ -2147,7 +2147,7 @@ PROCEDURE pUpdate.
                          WITH FRAME lis.
                       END.
 
-                      ehto = 9.
+                      Syst.Var:ehto = 9.
                       RUN Syst/ufkey.p.
                       PAUSE 0.
 
@@ -2167,7 +2167,7 @@ PROCEDURE pUpdate.
             NEXT.
          END.
 
-         IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+         IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
 
             IF FRAME-FIELD = "ValidFrom" THEN DO:
                IF INPUT Tariff.ValidFrom = ? THEN DO:

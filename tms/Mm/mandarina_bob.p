@@ -26,10 +26,9 @@ lcProcessMode = SESSION:PARAMETER.
 
 /* includes */
 {Syst/commpaa.i}
-gcbrand = "1".
+Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/lpfunctions.i}
 {Func/ftransdir.i}
@@ -109,11 +108,11 @@ END.
 ASSIGN 
    lcTableName = "MANDARINA"
    lcActionID  = "file_reading_" + lcProcessMode
-   ldCurrentTimeTS = fMakeTS(). 
+   ldCurrentTimeTS = Func.Common:mMakeTS(). 
  
 DO TRANS:
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.Var:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName NO-ERROR.
 
@@ -129,11 +128,11 @@ DO TRANS:
       /*First execution stamp*/
       CREATE ActionLog.
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.Var:gcBrand
          ActionLog.TableName    = lcTableName
          ActionLog.ActionID     = lcActionID
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
       RELEASE ActionLog.
       PUT STREAM sMandaLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";mandarina_bob_first_run" SKIP.
@@ -144,7 +143,7 @@ DO TRANS:
    ELSE DO:
       ASSIGN
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
       RELEASE Actionlog.
    END.
@@ -182,7 +181,7 @@ REPEAT:
 
       /* Check subscription */     
       FIND FIRST mobsub WHERE
-                 mobsub.Brand EQ gcBrand AND
+                 mobsub.Brand EQ Syst.Var:gcBrand AND
                  mobsub.CLI   EQ lcMSISDN 
            USE-INDEX CLI NO-LOCK NO-ERROR.
       IF NOT AVAILABLE mobsub THEN DO:
@@ -262,7 +261,7 @@ REPEAT:
          IF LcLP EQ "InternetBarring" THEN DO:
             IF LOOKUP("Internet", lcBarrings) = 0 OR 
                NOT CAN-FIND(FIRST Memo WHERE
-                                  Memo.Brand EQ gcBrand AND
+                                  Memo.Brand EQ Syst.Var:gcBrand AND
                                   Memo.CustNum EQ MobSub.CustNum AND
                                   Memo.HostTable EQ "MobSub" AND
                                   Memo.MemoTitle EQ "OTA Barring activado"
@@ -324,7 +323,7 @@ INPUT STREAM sFilesInDir CLOSE.
 
 DO TRANS:
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.Var:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName    AND
               ActionLog.ActionStatus NE  {&ACTIONLOG_STATUS_SUCCESS}
@@ -356,7 +355,7 @@ PROCEDURE pSetInternetBarring:
                                           ELSE "Internet=0"), /* Barring */
                        "11",                /* source   */
                        "Sistema",           /* creator  */
-                       fMakeTS(),           /* activate */
+                       Func.Common:mMakeTS(),           /* activate */
                        "",                  /* SMS      */
                        OUTPUT lcResult).
 
@@ -364,9 +363,8 @@ PROCEDURE pSetInternetBarring:
                                
    IF liRequest > 0 THEN DO:     
 
-   DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                    "Mobsub",
-                     mobsub.MsSeq,
+   Func.Common:mWriteMemoWithType("Mobsub",
+                     STRING(mobsub.MsSeq),
                      mobsub.CustNum,
                      (IF lcMode EQ "ON" THEN "OTA Barring activado" 
                                         ELSE "OTA Barring desactivado"),                       /* memo title */

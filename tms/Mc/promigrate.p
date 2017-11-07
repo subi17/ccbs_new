@@ -10,7 +10,7 @@
 {Func/setfees.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
 END.
 
@@ -44,7 +44,7 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
               Customer.custnum EQ Mobsub.agrcust NO-ERROR.
    IF NOT AVAIL Customer THEN lcError = "ERROR: NO Customer".
    FIND FIRST CLIType WHERE 
-              CLIType.brand EQ Syst.Parameters:gcBrand AND
+              CLIType.brand EQ Syst.Var:gcBrand AND
               CLIType.clitype EQ Mobsub.clitype NO-ERROR.
    IF NOT AVAIL CLIType THEN lcError = "ERROR: Unknown Clitype".
 
@@ -84,7 +84,7 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
                     ?,
                     "Pro Migrate",    /* memo   */
                     FALSE,           /* no messages to screen */
-                    katun,
+                    Syst.Var:katun,
                     "ProMigrate",
                     0,
                     "",
@@ -107,7 +107,7 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
                                 {&REQUEST_SOURCE_MIGRATION},
                                 {&REQUEST_ACTIONLIST_ALL}).
       FOR EACH bSubReq EXCLUSIVE-LOCK WHERE
-               bsubreq.Brand     = gcBrand AND
+               bsubreq.Brand     = Syst.Var:gcBrand AND
                bsubreq.origRequest = iiRequest:
          bsubreq.mandatory = 1.
       END.

@@ -2,7 +2,6 @@
 */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
 DEF VAR lrRerateLog AS ROWID NO-UNDO.
 
@@ -16,14 +15,14 @@ FUNCTION fInitializeRerateLog RETURNS LOGIC
     
    CREATE RerateLog.
    ASSIGN 
-       RerateLog.Brand   = gcBrand
+       RerateLog.Brand   = Syst.Var:gcBrand
        RerateLog.InvCust = iiInvCust
        RerateLog.MsSeq   = iiMsSeq
        RerateLog.CLI     = icCli
        RerateLog.EventSource = icSource
        RerateLog.PeriodBegin = idaFrom
        RerateLog.PeriodEnd   = idaTo
-       RerateLog.Started     = fMakeTS()
+       RerateLog.Started     = Func.Common:mMakeTS()
        RerateLog.StartDate   = TODAY
        lrRerateLog = ROWID(RerateLog).
       
@@ -37,7 +36,7 @@ FUNCTION fFinalizeRerateLog RETURNS LOGIC
    FIND FIRST RerateLog WHERE ROWID(RerateLog) = lrRerateLog 
       EXCLUSIVE-LOCK NO-ERROR.
    IF AVAILABLE RerateLog THEN ASSIGN 
-      RerateLog.Ended = fMakeTS()
+      RerateLog.Ended = Func.Common:mMakeTS()
       RerateLog.ChangedQty = iiChangedQty.
          
    RETURN (AVAILABLE RerateLog).

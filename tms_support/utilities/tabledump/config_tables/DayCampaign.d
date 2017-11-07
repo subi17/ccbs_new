@@ -80,6 +80,8 @@
 "FLEX_UPSELL" 01/03/17 4 31/12/49 "" 0 "" "" "FLEX upsell" 93 0 "1" "6" 1 2 1 0 "FLEX_MFUPS" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0
 "FREE100MINUTES" 01/06/16 0 31/12/49 "" 0 "" "" "Promo 100 min/mes gratis" 0 0 "1" "1" 1 2 3 0 "" "" "" 3 1 0 yes 1 0 0 1 "" 0 1 0
 "FTERM12-100" 27/10/16 0 31/12/49 "" 0 "" "" "FTERM12 periodical contract" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD" 2 1 2 yes 1 0 0 1 "" 0 0 0
+"FTERM12-177" 31/10/17 0 31/12/17 "" 0 "" "" "FTERM12-177 fixed line permanency" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD177" 0 1 2 yes 1 0 0 1 "" 0 0 0
+"FTERM12-233" 31/10/17 0 31/12/49 "" 0 "" "" "FTERM12-233 fixed line permanency" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD233" 2 1 2 yes 1 0 0 1 "" 0 0 0
 "FTERM8-100" 11/09/17 0 31/12/49 "" 0 "" "" "FTERM8 periodical contract" 0 0 "1" "3" 1 3 8 0 "" "" "FTERMPERIOD" 2 1 2 yes 1 0 0 1 "" 0 0 0
 "GPRS" 01/12/06 6 31/12/54 "14100001" 1.653 "1" "" "GPRS maximum charge per day" 93 1.653 "1" "2" 2 1 0 0 "" "" "" 1 1 0 yes 1 0 0 1 "" 0 1 0
 "HSPA_ROAM_EU" 10/10/12 4 31/12/49 "14104019" 0 "" "" "HSPA Roaming EU" 90 0 "1" "8" 1 2 0 0 "" "" "" 1 1 0 yes 1 0 0 1 "" 0 0 0

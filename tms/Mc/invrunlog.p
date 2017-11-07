@@ -126,11 +126,11 @@ ELSE IF iPeriod1 + iPeriod2 NE 0 THEN DO:
                ELSE DO:
 
                   FOR EACH InvGroup no-lock WHERE
-                           InvGroup.Brand    = gcBrand AND
+                           InvGroup.Brand    = Syst.Var:gcBrand AND
                            InvGroup.BillPerm = TRUE:
 
                      FIND FIRST InvRunLog WHERE
-                                InvRunLog.Brand   = gcBrand          AND
+                                InvRunLog.Brand   = Syst.Var:gcBrand          AND
                                 InvRunLog.Period  = iPeriod          AND
                                 InvRunLog.Date    = daPeriod         AND
                                 InvRunLog.InvCode = iCode            AND
@@ -140,7 +140,7 @@ ELSE IF iPeriod1 + iPeriod2 NE 0 THEN DO:
 
                      CREATE InvRunLog.
                      ASSIGN
-                        InvRunLog.Brand   = gcBrand 
+                        InvRunLog.Brand   = Syst.Var:gcBrand 
                         InvRunLog.Period  = iPeriod
                         InvRunLog.Date    = daPeriod
                         InvRunLog.InvCode = iCode
@@ -154,11 +154,11 @@ ELSE IF iPeriod1 + iPeriod2 NE 0 THEN DO:
                      iCode = iCode + 1.
 
                      FOR EACH InvGroup no-lock WHERE
-                              InvGroup.Brand    = gcBrand AND
+                              InvGroup.Brand    = Syst.Var:gcBrand AND
                               InvGroup.BillPerm = TRUE:
 
                         FIND FIRST InvRunLog WHERE
-                                   InvRunLog.Brand   = gcBrand  AND
+                                   InvRunLog.Brand   = Syst.Var:gcBrand  AND
                                    InvRunLog.Period  = iPeriod  AND
                                    InvRunLog.Date    = daPeriod AND
                                    InvRunLog.InvCode = iCode    AND
@@ -168,7 +168,7 @@ ELSE IF iPeriod1 + iPeriod2 NE 0 THEN DO:
 
                         CREATE InvRunLog.
                         ASSIGN
-                           InvRunLog.Brand   = gcBrand
+                           InvRunLog.Brand   = Syst.Var:gcBrand
                            InvRunLog.Period  = iPeriod
                            InvRunLog.Date    = daPeriod
                            InvRunLog.InvCode = iCode
@@ -198,10 +198,10 @@ RUN pCleanLog.
 PROCEDURE pCleanLog:
 
    FOR EACH InvRunLog EXCLUSIVE-LOCK WHERE
-            InvRunLog.Brand = gcBrand AND
+            InvRunLog.Brand = Syst.Var:gcBrand AND
             InvRunLog.State = 0 AND
         NOT CAN-FIND(FIRST InvGroup WHERE
-                           InvGroup.Brand    = gcBrand AND
+                           InvGroup.Brand    = Syst.Var:gcBrand AND
                            InvGroup.InvGroup = InvRunLog.InvGroup):
 
       DELETE InvRunLog.
