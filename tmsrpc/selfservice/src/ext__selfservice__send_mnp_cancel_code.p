@@ -17,8 +17,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-ASSIGN katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
-       gcBrand = "1".
+ASSIGN Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
+       Syst.Var:gcBrand = "1".
 {Func/fgettxt.i}
 {Func/fexternalapi.i}
 {Func/fmakesms.i}
@@ -50,7 +50,7 @@ lcApplicationId = substring(pcTransId,1,3).
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName, lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
-katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
+Syst.Var:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
 IF Order.CLI EQ "" THEN
    RETURN appl_err("Mobile number does not exist").
@@ -71,7 +71,7 @@ liNumber = RANDOM(1000,9999).
 lcSMSText = REPLACE(lcSMSText,"#code",STRING(liNumber)).
 
 /* Reguirement to delay SMS sending by Yoigo */
-ldReqStamp = fSecOffSet(ldReqStamp, RANDOM(105,120)).
+ldReqStamp = Func.Common:mSecOffSet(ldReqStamp, RANDOM(105,120)).
 
 /* Send SMS to customer */
 fMakeSchedSMS2(0,       /* Customer number not known */
@@ -91,5 +91,4 @@ FINALLY:
    /* Store the transaction id */
    ghAuthLog::TransactionId = pcTransId.
 
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

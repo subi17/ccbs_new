@@ -35,7 +35,7 @@ DEF VAR liError        AS INT       NO-UNDO.
 DEF VAR lcTermType     AS CHARACTER NO-UNDO. 
 
 FIND Order NO-LOCK WHERE
-     Order.Brand = gcBrand AND
+     Order.Brand = Syst.Var:gcBrand AND
      Order.OrderID = iiOrder NO-ERROR.
 IF NOT AVAIL Order THEN RETURN "".
 
@@ -82,8 +82,7 @@ IF LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 THEN DO:
       lcResult = fCashInvoiceCreditnote(Order.Invnum, lcCreditReason).
 
       IF lcResult > "" THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                           "Order",
+         Func.Common:mWriteMemo("Order",
                            STRING(Order.OrderId),
                            Order.Custnum,
                            "CREDIT NOTE CREATION FAILED",
@@ -153,7 +152,7 @@ ELSE DO:
 
       ASSIGN
          liTermReason = {&SUBSCRIPTION_TERM_REASON_DIRECT_ORDER_CANCELATION}
-         ldeTS = fSecOffSet(fMakeTS(),5).
+         ldeTS = Func.Common:mSecOffSet(Func.Common:mMakeTS(),5).
       
       liError = fDeleteMsValidation(Order.MsSeq,
                                     liTermReason,
@@ -207,13 +206,12 @@ ELSE DO:
    
          IF liReq > 0 THEN
             fAdditionalLineSTC(liReq,
-                               fMake2Dt(TODAY + 1, 0),
+                               Func.Common:mMake2DT(TODAY + 1, 0),
                                "DELETE").
       END.
       
       IF lcResult > "" THEN DO:
-        DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+        Func.Common:mWriteMemo("MobSub",
                           STRING(MobSub.MsSeq),
                           MobSub.Custnum,
                           "SUBCRIPTION TERMINATION FAILED",

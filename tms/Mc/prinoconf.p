@@ -12,7 +12,6 @@
 ---------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/utumaa.i new }
 {Func/feplstart.i}
 {Func/cparam2.i}
@@ -38,7 +37,7 @@ FUNCTION fTxtSendLog RETURNS LOGIC
 
    /* mark text as sent */
    CREATE ITSendLog.
-   ASSIGN ITSendLog.Brand      = gcBrand
+   ASSIGN ITSendLog.Brand      = Syst.Var:gcBrand
           ITSendLog.TxtType    = 1         /* 1=invtext */
           ITSendLog.ITNum      = liTextID  
           ITSendLog.CustNum    = iiOrderID
@@ -51,12 +50,12 @@ FUNCTION fTxtSendLog RETURNS LOGIC
                                  ELSE "foo@bar.fi"
           ITSendLog.RepType    = IF AVAILABLE Order THEN "ITOrd"
                                  ELSE "IT"
-          ITSendLog.UserCode   = katun
-          ITSendLog.SendStamp  = fMakeTS().
+          ITSendLog.UserCode   = Syst.Var:katun
+          ITSendLog.SendStamp  = Func.Common:mMakeTS().
 END.
 
 FIND Order WHERE
-     Order.Brand   = gcBrand  AND
+     Order.Brand   = Syst.Var:gcBrand  AND
      Order.OrderID = iiOrderID NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Order THEN RETURN "ERROR:Order not available".
 
@@ -74,7 +73,7 @@ IF LOOKUP(Order.OrderChannel,"pos,vip,gift,yoigo,renewal_pos," +
 
 IF Order.CLI = "" THEN RETURN "ERROR:MSISDN not defined".
 
-fSplitTS(Order.CrStamp,
+Func.Common:mSplitTS(Order.CrStamp,
          OUTPUT ldtDate,
          OUTPUT liTime).
 
@@ -114,7 +113,7 @@ END.
 DO WHILE TRUE:
 
    FOR FIRST InvText NO-LOCK WHERE 
-             InvText.Brand     = gcBrand     AND
+             InvText.Brand     = Syst.Var:gcBrand     AND
              InvText.Target    = "OrderConf" AND
              InvText.KeyValue  = lcEmailKey  AND
              InvText.FromDate <= ldtDate     AND

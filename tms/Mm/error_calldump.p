@@ -4,9 +4,8 @@
   ------------------------------------------------------ */
 
 {Syst/commali.i}
-katun = "cron".
-gcBrand = "1".
-{Func/date.i}
+Syst.Var:katun = "cron".
+Syst.Var:gcBrand = "1".
 {Func/cparam2.i}
 
 
@@ -42,7 +41,7 @@ ASSIGN
    lcSdir     =  fCParamC("PentahoSpool")
    ldate1     = idaDate
    lcFileName   = CAPS(Syst.Parameters:Tenant) + 
-                "_error_calls" + fDateFmt(ldate1,"yyyymmdd") + "_" + 
+                "_error_calls" + Func.Common:mDateFmt(ldate1,"yyyymmdd") + "_" + 
                 REPLACE(STRING(TIME,"hh:mm:ss"),":","") + ".dump"
    ldate1     = idaDate - 1
    ldate2     = ldate1

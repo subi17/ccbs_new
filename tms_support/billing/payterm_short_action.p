@@ -21,9 +21,8 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-ASSIGN gcBrand = "1"
-       katun   = "Qvantel".
-{Func/date.i}
+ASSIGN Syst.Var:gcBrand = "1"
+       Syst.Var:katun   = "Qvantel".
 {Syst/tmsconst.i}
 
 DEFINE VARIABLE ldaBegin AS DATE NO-UNDO.
@@ -164,11 +163,11 @@ FOR EACH EventLog NO-LOCK USE-INDEX EventDate WHERE
       payment months and length of Payterm contract */
    lifoundFFees = lifoundFFees + 1.
 
-   ldapercont = fLastDayOfMonth(DCCLI.ValidTo).
+   ldapercont = Func.Common:mLastDayOfMonth(DCCLI.ValidTo).
    IF ldapercont EQ ? THEN NEXT.
 
-   fTS2Date(DEC(FixedFee.EndPeriod * 100 + 1), OUTPUT ldaffee).
-   ldaffee = fLastDayOfMonth(ldaffee).
+   Func.Common:mTS2Date(DEC(FixedFee.EndPeriod * 100 + 1), OUTPUT ldaffee).
+   ldaffee = Func.Common:mLastDayOfMonth(ldaffee).
    lidif_FFvsDCCLI = 0.
 
    lcline = Mobsub.CLI + ";" + STRING(Mobsub.MsSeq) + ";" + DCCLI.DCEvent +
@@ -179,7 +178,7 @@ FOR EACH EventLog NO-LOCK USE-INDEX EventDate WHERE
       ELSE
          ASSIGN
             ldapercont = ADD-INTERVAL(ldapercont,-1,"months")
-            ldapercont = fLastDayOfMonth(ldapercont)
+            ldapercont = Func.Common:mLastDayOfMonth(ldapercont)
             lidif_FFvsDCCLI = lidif_FFvsDCCLI + 1.
    END. /* REPEAT loop */
 

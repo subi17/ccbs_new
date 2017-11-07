@@ -398,7 +398,7 @@ FUNCTION fGetVatData RETURNS LOGICAL
     
     IF icPriceList NE "" THEN DO:
        FIND PriceList WHERE         
-            PriceList.Brand     = gcBrand  AND
+            PriceList.Brand     = Syst.Var:gcBrand  AND
             PriceList.PriceList = icPriceList NO-LOCK NO-ERROR.
        /* pricelist determines whether VAT is included OR excluded  */
        ASSIGN xVatIncl  = IF AVAILABLE PriceList 
@@ -408,7 +408,7 @@ FUNCTION fGetVatData RETURNS LOGICAL
 
     lcTaxClass = "1".
     FOR FIRST bVatItem NO-LOCK WHERE
-              bVatItem.Brand    = gcBrand AND
+              bVatItem.Brand    = Syst.Var:gcBrand AND
               bVatItem.BillCode = icBillCode:
        lcTaxClass = bVatItem.TaxClass.
     END.
@@ -465,7 +465,7 @@ FUNCTION fMobCDRAcc RETURNS DECIMAL.
                 MobCDR.CurrUnit,
                 "",           
                 MobCDR.TariffNum,
-                gcBrand,
+                Syst.Var:gcBrand,
                 OUTPUT xAmt,
                 OUTPUT ldGross).
 
@@ -928,7 +928,7 @@ PROCEDURE FindUnbilled:
        -> much quicker when e.g. only one group is wanted 
     */
     FOR EACH Customer NO-LOCK WHERE
-             Customer.Brand    = gcBrand   AND
+             Customer.Brand    = Syst.Var:gcBrand   AND
              Customer.InvGroup = iIgcode   AND
              Customer.CustNum GE iCustNum1 AND
              Customer.CustNum LE iCustNum2:
@@ -943,7 +943,7 @@ PROCEDURE FindUnbilled:
        -> much quicker when e.g. only one group is wanted 
     */
     FOR EACH Customer NO-LOCK WHERE
-             Customer.Brand    = gcBrand   AND
+             Customer.Brand    = Syst.Var:gcBrand   AND
              Customer.InvGroup = iIgcode   AND
              Customer.CustNum GE iCustNum1 AND
              Customer.CustNum LE iCustNum2:
@@ -1010,7 +1010,7 @@ PROCEDURE FindUnbilled:
                       FixCDR.CurrUnit,
                       "",
                       FixCDR.TariffID,
-                      gcBrand,
+                      Syst.Var:gcBrand,
                       OUTPUT xAmt,
                       OUTPUT ldGross).
 
@@ -1051,7 +1051,7 @@ PROCEDURE FindUnbilled:
 
          /* contract fees */
          FOR EACH FixedFee NO-LOCK WHERE
-                  FixedFee.Brand   = gcBrand          AND
+                  FixedFee.Brand   = Syst.Var:gcBrand          AND
                   FixedFee.CustNum = Customer.CustNum AND
                   FixedFee.InUse   = TRUE:
 
@@ -1148,7 +1148,7 @@ PROCEDURE FindUnbilled:
 
          /* single fees */
          FOR EACH SingleFee NO-LOCK WHERE
-                  SingleFee.Brand   = gcBrand          AND 
+                  SingleFee.Brand   = Syst.Var:gcBrand          AND 
                   SingleFee.CustNum = Customer.CustNum AND
                   SingleFee.Active  = TRUE             AND 
                   SingleFee.Concerns[1] LE xCtperiod   AND
@@ -1263,7 +1263,7 @@ PROCEDURE FindUnbilled:
        
        IF wAccData.VatCode = -1 THEN DO:
           FIND BillItem NO-LOCK WHERE
-               BillItem.Brand = gcBrand AND
+               BillItem.Brand = Syst.Var:gcBrand AND
                BillItem.BillCode = wAccData.BillCode NO-ERROR.
           IF AVAILABLE BillItem 
           THEN wAccData.VatCode = BillItem.VatCode.
@@ -1363,7 +1363,7 @@ PROCEDURE FindInvoices:
                        ELSE iDate1.
 
    FOR EACH Customer NO-LOCK WHERE
-            Customer.Brand    = gcBrand    AND
+            Customer.Brand    = Syst.Var:gcBrand    AND
             Customer.InvGroup = iIgcode    AND
             Customer.CustNum  GE iCustNum1 AND
             Customer.CustNum  LE iCustNum2:
@@ -1371,7 +1371,7 @@ PROCEDURE FindInvoices:
    END.
    
    FOR EACH Customer NO-LOCK WHERE
-            Customer.Brand    = gcBrand    AND
+            Customer.Brand    = Syst.Var:gcBrand    AND
             Customer.InvGroup = iIgcode    AND
             Customer.CustNum  GE iCustNum1 AND
             Customer.CustNum  LE iCustNum2:

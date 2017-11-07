@@ -1,4 +1,3 @@
-{Func/timestamp.i}
 
 DEF VAR lcEmaSelection  AS CHAR NO-UNDO FORMAT "X(6)".
 DEF VAR MSISDN_status   AS INT  NO-UNDO FORMAT "Z9".
@@ -17,7 +16,7 @@ ELSE MSISDN_status = 99.   /* use normal status value */
 
 FOR EACH MSISDN NO-LOCK WHERE
          MSISDN.Brand = "1" AND
-         MSISDN.ValidTo GE fMakeTS() AND
+         MSISDN.ValidTo GE Func.Common:mMakeTS() AND
          MSISDN.StatusCode EQ MSISDN_status :
 DISP MSISDN.CLI.
 END.

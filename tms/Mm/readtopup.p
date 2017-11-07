@@ -1,5 +1,4 @@
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/ftopup.i}
 {Func/ftaxdata.i}

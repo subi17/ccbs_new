@@ -1,5 +1,4 @@
 {Syst/commali.i}
-{Func/date.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Syst/tmsconst.i}
@@ -39,7 +38,7 @@ FUNCTION fCreateMNPDump RETURNS LOGICAL
    OUTPUT STREAM sdump TO value (icFile).
    
    FOR EACH MNPProcess WHERE
-            MNPProcess.Brand = gcBrand AND
+            MNPProcess.Brand = Syst.Var:gcBrand AND
             MNPProcess.MNPType = iiType NO-LOCK:
       
       ASSIGN
@@ -77,9 +76,9 @@ FUNCTION fCreateMNPDump RETURNS LOGICAL
          put stream sdump unformatted 
             mnpprocess.portrequest lcDelimiter
             lccode lcDelimiter
-            fts2hms(mnpprocess.updatets) lcDelimiter
+            Func.Common:mTS2HMS(mnpprocess.updatets) lcDelimiter
             mnpprocess.statusreason lcDelimiter
-            fts2hms(mnpprocess.portingtime) lcDelimiter
+            Func.Common:mTS2HMS(mnpprocess.portingtime) lcDelimiter
             SUBSTRING(lcmsisdns,1,LENGTH(lcmsisdns) - 1) lcDelimiter
             MNPDetails.receptornrn lcDelimiter
             mnpprocess.formrequest lcDelimiter
@@ -98,8 +97,8 @@ FUNCTION fCreateMNPDump RETURNS LOGICAL
          put stream sdump unformatted 
             mnpprocess.portrequest lcDelimiter
             lccode lcDelimiter
-            fts2hms(mnpprocess.createdts) lcDelimiter
-            fts2hms(mnpprocess.updatets) lcDelimiter
+            Func.Common:mTS2HMS(mnpprocess.createdts) lcDelimiter
+            Func.Common:mTS2HMS(mnpprocess.updatets) lcDelimiter
             SUBSTRING(lcmsisdns,1,LENGTH(lcmsisdns) - 1) lcDelimiter
             mnpprocess.mnpseq skip.
       END.

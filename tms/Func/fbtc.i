@@ -54,7 +54,7 @@ FUNCTION fBundleChangeRequest RETURNS INTEGER
 
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    /* double check (duplicate RPC call) */
    ocResult = fChkRequest(iiMsSeq,
@@ -116,7 +116,7 @@ FUNCTION fIsBTCAllowed RETURNS LOGIC
              bSTC.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
              LOOKUP(STRING(bSTC.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0:
              
-      IF fMatrixAnalyse(gcBrand,
+      IF fMatrixAnalyse(Syst.Var:gcBrand,
                         "BTC-DENY",
                         "SubsTypeFrom;SubsTypeTo",
                         bSTC.ReqCParam1 + ";" + bSTC.ReqCParam2,
@@ -147,7 +147,7 @@ FUNCTION fIsBTCBundleAllowed RETURNS LOGIC
    DEF VAR lcCONTSContracts AS CHAR NO-UNDO.
    DEF VAR lcCONTSFContracts AS CHAR NO-UNDO.
 
-   ldActStamp = fMake2Dt(pdaActDate,0).
+   ldActStamp = Func.Common:mMake2DT(pdaActDate,0).
   
    IF pcOldBundle = "" OR pcNewBundle = "" OR 
       pcOldBundle = pcNewBundle THEN DO:
@@ -179,7 +179,7 @@ FUNCTION fIsBTCBundleAllowed RETURNS LOGIC
    END.
  
    /* is the new bundle allowed */
-   IF fMatrixAnalyse(gcBrand,
+   IF fMatrixAnalyse(Syst.Var:gcBrand,
                      "PERCONTR",
                      "PerContract;SubsTypeTo",
                      pcNewBundle + ";" + pcCLIType,
@@ -260,19 +260,19 @@ FUNCTION fMainAdditionalLine RETURNS LOGICAL
    DEF BUFFER CLIType       FOR CLIType.
 
    FIND FIRST CLIType NO-LOCK WHERE
-              CLIType.Brand = gcBrand AND
+              CLIType.Brand = Syst.Var:gcBrand AND
               CLIType.CLIType = pcNewBundle AND
               CLIType.LineType = {&CLITYPE_LINETYPE_ADDITIONAL} NO-ERROR.
    IF NOT AVAIL CLIType THEN RETURN TRUE.
    
    MOBSUB_LOOP:
    FOR EACH lbMobSub NO-LOCK WHERE
-            lbMobSub.Brand   = gcBrand AND
+            lbMobSub.Brand   = Syst.Var:gcBrand AND
             lbMobSub.InvCust = iiCustNum AND
             lbMobSub.MsSeq NE  iiMsSeq AND
             lbMobSub.PayType = FALSE,
       FIRST CLIType NO-LOCK WHERE
-            CLIType.Brand = gcBrand AND
+            CLIType.Brand = Syst.Var:gcBrand AND
             CLIType.CLIType = lbMobSub.TariffBundle AND
             CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}:
 
@@ -323,7 +323,7 @@ FUNCTION fValidateBTC RETURNS LOGICAL
          IF AVAIL MNPProcess THEN DO:
 
             IF 1 > fMNPPeriods(
-               input fMakeTS(),
+               input Func.Common:mMakeTS(),
                input MNPProcess.PortingTime,
                INPUT 0,
                OUTPUT ldaDueDate) THEN DO: 

@@ -9,7 +9,6 @@
 
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
 
@@ -152,7 +151,7 @@ PROCEDURE pCollectCounters:
    IF icExtInvID > "" THEN DO:
    
       FIND FIRST Invoice WHERE 
-                 Invoice.Brand = gcBrand AND
+                 Invoice.Brand = Syst.Var:gcBrand AND
                  Invoice.ExtInvID = icExtInvID NO-LOCK NO-ERROR.
       IF NOT AVAILABLE Invoice THEN 
          RETURN "ERROR:Unknown invoice".

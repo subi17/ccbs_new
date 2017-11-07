@@ -9,8 +9,8 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-katun    = "NewtonAd".
-gcBrand  = "1".
+Syst.Var:katun = "NewtonAd".
+Syst.Var:gcBrand  = "1".
 {Syst/tmsconst.i}
 
 /* Input parameters */
@@ -53,7 +53,7 @@ DO lii = 1 TO NUM-ENTRIES(OnOffTms):
              SubSer.MsSeq = MobSub.MsSeq AND
              SubSer.ServCom = lcService,
        FIRST ServCom NO-LOCK WHERE
-             ServCom.Brand = gcBrand AND
+             ServCom.Brand = Syst.Var:gcBrand AND
              ServCom.ServCom = SubSer.ServCom:
 
       /* Easy On-Off services */
@@ -89,5 +89,4 @@ DO lii = 1 TO NUM-ENTRIES(OnOffTms):
 END.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

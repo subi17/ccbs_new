@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-katun = "ari".
+Syst.Var:katun = "ari".
 
 def stream sread.
 input stream sread from /apps/snet/200909/CONTRATO_F_F_200909.txt.

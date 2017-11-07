@@ -11,7 +11,7 @@
 DEF VAR lcBrand  AS CHAR   NO-UNDO. 
 
 /* set default brand from global variable */
-lcBrand = gcBrand.
+lcBrand = Syst.Var:gcBrand.
 
 FUNCTION fChkBrand RETURNS LOG
    (icBrand  AS CHAR).
@@ -64,7 +64,7 @@ FUNCTION fChgBrand RETURNS LOGICAL
    DEF VAR liBCnt    AS INT  NO-UNDO. 
 
    /* not changed */
-   IF icNewBrand = gcBrand THEN DO:
+   IF icNewBrand = Syst.Var:gcBrand THEN DO:
       lcBrand = icNewBrand.
       RETURN FALSE.
    END.
@@ -82,14 +82,14 @@ FUNCTION fChgBrand RETURNS LOGICAL
 
    /* change current frame title */
    IF VALID-HANDLE(ihFrame) THEN 
-      ihFrame:TITLE = REPLACE(ihFrame:TITLE,ynimi,lcNewComp).
+      ihFrame:TITLE = REPLACE(ihFrame:TITLE,Syst.Var:ynimi,lcNewComp).
 
    /* set propath */
    fBrandPath(icNewBrand).
 
    /* set global variables */
-   ASSIGN ynimi   = lcNewComp
-          gcBrand = icNewBrand
+   ASSIGN Syst.Var:ynimi   = lcNewComp
+          Syst.Var:gcBrand = icNewBrand
           lcBrand = icNewBrand.
 
    RETURN TRUE. 
@@ -104,12 +104,12 @@ FUNCTION fRecFound RETURNS LOGICAL
       BELL.
       MESSAGE "NOT FOUND !".
       PAUSE 1 NO-MESSAGE.
-      lcBrand = gcBrand.
+      lcBrand = Syst.Var:gcBrand.
       RETURN FALSE.
    END.
 
    /* brand was changed */
-   IF gcAllBrand THEN DO:
+   IF Syst.Var:gcAllBrand THEN DO:
       fChgBrand({&BrTable}.Brand,
                 FRAME {&BrFrame}:HANDLE).
    END.                            

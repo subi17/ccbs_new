@@ -23,8 +23,8 @@ DEF VAR liDeliveryType  AS INT  NO-UNDO.
 
 {Syst/commpaa.i}
 ASSIGN
-   katun = "IVR_" + ghAuthLog::EndUserId. 
-   gcBrand = "1".
+   Syst.Var:katun = "IVR_" + ghAuthLog::EndUserId. 
+   Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 
 IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
@@ -49,5 +49,4 @@ END.
 add_int(response_toplevel_id,"",liDeliveryType).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.
