@@ -5,8 +5,6 @@
 
 {Syst/commali.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
-{Func/date.i}
 
 FUNCTION fGetUpSellCount RETURNS INT
    (INPUT icDCEvent AS CHAR,
@@ -23,12 +21,12 @@ FUNCTION fGetUpSellCount RETURNS INT
    DEF BUFFER bMServiceLimit FOR MServiceLimit.
    DEF BUFFER DayCampaign    FOR DayCampaign.
 
-   ASSIGN ldeMonthBegin = fHMS2TS(DATE(MONTH(TODAY),1,YEAR(TODAY)),"00:00:00")
-          ldeMonthEnd   = fHMS2TS(fLastDayOfMonth(TODAY),"23:59:59")
-          ldTS          = fMakeTS().
+   ASSIGN ldeMonthBegin = Func.Common:mHMS2TS(DATE(MONTH(TODAY),1,YEAR(TODAY)),"00:00:00")
+          ldeMonthEnd   = Func.Common:mHMS2TS(Func.Common:mLastDayOfMonth(TODAY),"23:59:59")
+          ldTS          = Func.Common:mMakeTS().
 
    FOR FIRST DayCampaign NO-LOCK WHERE
-             DayCampaign.Brand = gcBrand AND
+             DayCampaign.Brand = Syst.Var:gcBrand AND
              DayCampaign.DCEvent = icDCEvent,
        FIRST ServiceLimit NO-LOCK WHERE 
              ServiceLimit.GroupCode  = DayCampaign.DCEvent AND 

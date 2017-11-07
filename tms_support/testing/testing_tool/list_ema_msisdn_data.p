@@ -7,8 +7,6 @@
   Version ......: Yoigo
 ---------------------------------------------------------------------- */
 
-{Func/timestamp.i}
-
 DEF VAR lcFieldSelection AS CHAR NO-UNDO FORMAT "X(10)".
 DEF VAR lcFieldvalue     AS CHAR NO-UNDO FORMAT "X(10)".
 DEF VAR liFieldvalue     AS INT NO-UNDO.

@@ -35,7 +35,7 @@ PAUSE 0.
 VIEW FRAME fCLI.
 
 REPEAT WITH FRAME fCLI ON ENDKEY UNDO, LEAVE:
-   ehto = 9.
+   Syst.Var:ehto = 9.
    RUN Syst/ufkey.p.
 
    PAUSE 0.

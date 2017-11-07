@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-katun = "Qvantel".
-gcBrand = "1".
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
 
 {Func/fbankdata.i}
 {Func/fctchange.i}
@@ -27,7 +27,7 @@ put stream sout unformatted "SUBSC.ID|MSISDN|RESULT" skip.
 */
 LOOPPI:
 FOR EACH mobsub where
-         mobsub.brand = gcBrand AND
+         mobsub.brand = Syst.Var:gcBrand AND
          mobsub.clitype = "TARJ2" NO-LOCK:
    
    i = i + 1.

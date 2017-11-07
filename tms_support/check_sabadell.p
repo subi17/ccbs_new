@@ -1,4 +1,3 @@
-{Func/date.i}
 input from check_sabadell_payterm.log.
 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
@@ -67,7 +66,7 @@ repeat trans:
               bmsowner.tsbegin < 20140701 and
               bmsowner.clievent begins "is" no-error.
   IF AVAIL bmsowner then do:
-      fTS2Date(bmsowner.tsbegin, output ldaISTCDate).
+      Func.Common:mTS2Date(bmsowner.tsbegin, output ldaISTCDate).
       k = k + 1.
   end.
    
@@ -76,7 +75,7 @@ repeat trans:
      FIND FIRST mobsub NO-LOCK where
       mobsub.msseq = msowner.msseq no-error.
       IF NOT AVAIL mobsub then  do:
-         fTs2Date(msowner.tsend, output ldaEnddate). 
+         Func.Common:mTS2Date(msowner.tsend, output ldaEnddate). 
          MESSAGE "here" VIEW-AS ALERT-BOX.
       end.
   end.

@@ -23,7 +23,6 @@
 {Func/tsformat.i}
 {Func/xmlfunction.i}
 
-DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".
 DEF VAR lcResultStruct AS CHAR NO-UNDO. 
 DEF VAR pcId AS CHAR NO-UNDO. 
 DEF VAR pcIdArray AS CHAR NO-UNDO. 
@@ -48,7 +47,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    pcID = get_string(pcIDArray, STRING(liCounter)).
 
    FIND PrepaidRequest NO-LOCK WHERE
-        PrepaidRequest.Brand = gcBrand AND
+        PrepaidRequest.Brand = Syst.Var:gcBrand AND
         PrePaidRequest.PPRequest = INT(pcID) NO-ERROR. 
 
    IF NOT AVAIL PrepaidRequest THEN RETURN appl_err("Topup not found: "+ pcId).

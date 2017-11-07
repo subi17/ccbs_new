@@ -7,7 +7,6 @@ CREATED ......: 12.02.14
 Version ......: yoigo
 ----------------------------------------------------------------------- */
 {Syst/commali.i}
-{Func/date.i}
 {Func/istc.i}
 {Syst/tmsconst.i}
 {Inv/chk_cdr_invrowcounter.i}
@@ -32,22 +31,22 @@ IF iiDate EQ ? OR DAY(iiDate) EQ 1 THEN RETURN.
 
 ASSIGN
    ldaPeriodFrom = DATE(MONTH(iiDate),1,YEAR(iiDate))
-   ldaPeriodEnd = fLastDayOfMonth(iiDate).
+   ldaPeriodEnd = Func.Common:mLastDayOfMonth(iiDate).
 
 IF icMode EQ "month" THEN ASSIGN
    ldeFrom = YEAR(iiDate) * 10000 + MONTH(iiDate) * 100 + 2
-   ldeTo   = fMake2Dt(fLastDayOfMonth(iiDate) - 1,86399)
+   ldeTo   = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(iiDate) - 1,86399)
    lcActionID = STRING(YEAR(iiDate) * 100 + 
                 MONTH(iiDate)). 
 ELSE ASSIGN
-   ldeFrom = fMake2Dt(iiDate,0)
-   ldeTo   = fMake2Dt(iiDate,86399)
+   ldeFrom = Func.Common:mMake2DT(iiDate,0)
+   ldeTo   = Func.Common:mMake2DT(iiDate,86399)
    lcActionID = STRING(YEAR(iiDate) * 10000 + 
                 MONTH(iiDate) * 100 +
                 DAY(iiDate)).
 
 IF CAN-FIND (FIRST ActionLog NO-LOCK WHERE
-                   ActionLog.Brand = gcBrand AND
+                   ActionLog.Brand = Syst.Var:gcBrand AND
                    ActionLog.TableName = "Cron" AND
                    ActionLog.KeyValue BEGINS lcActionID AND
                    ActionLog.ActionID = "ISTC_IRC_CHK" AND
@@ -57,19 +56,19 @@ IF CAN-FIND (FIRST ActionLog NO-LOCK WHERE
 DO TRANS:
    CREATE ActionLog.
    ASSIGN
-      ActionLog.Brand        = gcBrand
+      ActionLog.Brand        = Syst.Var:gcBrand
       ActionLog.ActionID     = "ISTC_IRC_CHK"
-      ActionLog.ActionTS     = fMakeTS()
+      ActionLog.ActionTS     = Func.Common:mMakeTS()
       ActionLog.TableName    = "Cron"
       ActionLog.KeyValue     = lcActionID
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.Var:katun
       ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE}
       ActionLog.ActionPeriod = YEAR(iiDate) * 100 + MONTH(iiDate)
       ActionLog.ActionStatus = 0.
 END.
 
 FOR EACH msrequest NO-LOCK WHERE
-         msrequest.brand = gcBrand AND
+         msrequest.brand = Syst.Var:gcBrand AND
          msrequest.reqtype = 0 AND
          msrequest.reqstatus = 2 and
          msrequest.actstamp >= ldeFrom and
@@ -83,7 +82,7 @@ FOR EACH msrequest NO-LOCK WHERE
                      CLIType.CLIType EQ msrequest.reqcparam2 AND
                      CLIType.PayType EQ {&CLITYPE_PAYTYPE_PREPAID}) THEN NEXT.
 
-   fTS2Date(msrequest.actstamp, output ldaSTCDate).
+   Func.Common:mTS2Date(msrequest.actstamp, output ldaSTCDate).
    
    IF fGetISTCDate(msrequest.msseq,
                    msrequest.custnum,
@@ -132,7 +131,7 @@ END.
 DO TRANS:
    ASSIGN
       ActionLog.ActionDec    = liErrors
-      ActionLog.ActionChar   = "Finished at " + fTS2HMS(fMakeTS()) + CHR(10) + 
+      ActionLog.ActionChar   = "Finished at " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) + CHR(10) + 
                              SUBST("Checked &1, Errors &2", liChecked,liErrors) 
       ActionLog.ActionStatus = {&ACTIONLOG_STATUS_LOGGED}.
    RELEASE ActionLog.

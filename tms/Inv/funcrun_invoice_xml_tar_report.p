@@ -9,10 +9,9 @@
 
 {Syst/commpaa.i}
 ASSIGN 
-   gcBrand = "1"
-   katun   = "Cron".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun   = "Cron".
    
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/funcrunprocess_run.i}
 {Func/ftransdir.i}
@@ -66,8 +65,8 @@ ASSIGN
    lcDate    = STRING(YEAR(TODAY))       +
                STRING(MONTH(TODAY),"99") +
                STRING(DAY(TODAY),"99")
-   ldFrom    = fmake2dt(ldaInvDate,0)
-   ldTo      = fmake2dt(TODAY,86399) 
+   ldFrom    = Func.Common:mMake2DT(ldaInvDate,0)
+   ldTo      = Func.Common:mMake2DT(TODAY,86399) 
    liFRCount = 0.
    
 DO liCount = 1 TO NUM-ENTRIES(lcPHList):
@@ -86,7 +85,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcPHList):
              FuncRunQSchedule.StartTS  <= ldTo          AND
              FuncRunQSchedule.RunState NE "Initialized",
         EACH FuncRunExec NO-LOCK WHERE
-             FuncRunExec.Brand         EQ gcBrand AND
+             FuncRunExec.Brand         EQ Syst.Var:gcBrand AND
              FuncRunExec.FRQScheduleID EQ FuncRunQSchedule.FRQScheduleID AND
              FuncRunExec.RunState      EQ "Finished",
         EACH FuncRunConfig NO-LOCK WHERE

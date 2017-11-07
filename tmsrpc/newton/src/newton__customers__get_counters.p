@@ -22,10 +22,8 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
-{Func/timestamp.i}
 {Func/dataformat.i}
 
-DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".
 DEFINE VARIABLE resp_struct AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lctmcounters AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lctmcounter_struct AS CHARACTER NO-UNDO. 
@@ -70,7 +68,7 @@ resp_struct = add_struct(response_toplevel_id, "").
 
 /* Check ongoing limit requests */
 FIND FIRST MsRequest WHERE
-           MsRequest.Brand = gcBrand AND
+           MsRequest.Brand = Syst.Var:gcBrand AND
            MsRequest.Reqtype = 40 AND
            MsRequest.CustNum = piCustnum AND
            LOOKUP(STRING(MsRequest.ReqStatus),"0,1,3") >  0 
@@ -84,7 +82,7 @@ ELSE
 
 lctmcounters = add_array(resp_struct,"tmcounters").
 FOR EACH TMRule  NO-LOCK WHERE
-         TMRule.Brand = gcBrand AND
+         TMRule.Brand = Syst.Var:gcBrand AND
          TMRule.FromDate <= TODAY AND
          TMRule.ToDate >=  TODAY :
 

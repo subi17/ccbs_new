@@ -16,7 +16,6 @@
 
 /* Input parameters */
 DEF VAR pcCLI            AS CHAR  NO-UNDO.
-DEF VAR gcBrand          AS CHAR  NO-UNDO INIT "1".
 DEF VAR lcResponseStruct AS CHAR  NO-UNDO.
 DEF VAR ldeCreated       AS DEC   NO-UNDO.
 DEF VAR lrMNPProcess     AS ROWID NO-UNDO.
@@ -72,7 +71,7 @@ IF AVAIL MNPProcess THEN DO:
 END.
 
 FIND FIRST OrderDelivery WHERE
-           OrderDelivery.Brand = gcBrand AND
+           OrderDelivery.Brand = Syst.Var:gcBrand AND
            OrderDelivery.Orderid = Order.OrderId NO-LOCK NO-ERROR.
 IF AVAIL OrderDelivery THEN
    add_int(lcResponseStruct,"logistic_status", OrderDelivery.LOStatusId).

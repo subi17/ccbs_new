@@ -29,18 +29,18 @@ def var must-add    as logic                no-undo.
 form
     ttable.ValueId FORMAT "X(12)" 
     ttable.Description FORMAT  "x(40)"
-    with scroll 1 11 down  row 4 centered color value(cfc)
-    title color value(ctc) ititle overlay with frame sel.
+    with scroll 1 11 down  row 4 centered color value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) ititle overlay with frame sel.
 
 
 form /* SEEK Code */
     ob-code
     help "Enter Type "
-    with row 4  col 2 title color value(ctc) " FIND CODE "
-    color value(cfc) no-labels overlay frame hayr.
+    with row 4  col 2 title color value(Syst.Var:ctc) " FIND CODE "
+    color value(Syst.Var:cfc) no-labels overlay frame hayr.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.Var:ccc = Syst.Var:cfc.
 ovalueid = ?. 
 
 MAIN:
@@ -84,9 +84,9 @@ print-line:
 
       if ufkey then do:
          assign
-         ufk = 0 ufk[1] = 35 ufk[5] = 11
-         ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
-         ehto = 3 ufkey = false.
+         Syst.Var:ufk = 0 Syst.Var:ufk[1] = 35 Syst.Var:ufk[5] = 11
+         Syst.Var:ufk[6] = 0 Syst.Var:ufk[8] = 8  Syst.Var:ufk[9] = 1
+         Syst.Var:ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
       end.
   end. /* print-line */
@@ -96,15 +96,15 @@ BROWSE:
 
          hide message no-pause.
          choose row ttable.ValueId {Syst/uchoose.i} no-error with frame sel.
-         color display value(ccc) ttable.ValueId with frame sel.
+         color display value(Syst.Var:ccc) ttable.ValueId with frame sel.
 
-         nap = keylabel(lastkey).
+         Syst.Var:nap = keylabel(lastkey).
          if frame-value = "" and rtab[frame-line] = ? and
-            lookup(nap,"8,f8") = 0
+            lookup(Syst.Var:nap,"8,f8") = 0
          then next.
 
          /* previous line */
-         if lookup(nap,"cursor-up") > 0 then do
+         if lookup(Syst.Var:nap,"cursor-up") > 0 then do
          with frame sel:
             if frame-line = 1 then do:
                find ttable where recid(ttable) = rtab[frame-line] no-lock.
@@ -130,7 +130,7 @@ BROWSE:
          end. /* previous line */
 
          /* next line */
-         if lookup(nap,"cursor-down") > 0 then do with frame sel:
+         if lookup(Syst.Var:nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                find ttable where recid(ttable) = rtab[frame-line] no-lock .
                find next ttable no-lock no-error.
@@ -156,7 +156,7 @@ BROWSE:
          end. /* next line */
 
          /* previous page */
-         else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
+         else if lookup(Syst.Var:nap,"page-up,prev-page") > 0 then do with frame sel:
             find ttable where recid(ttable) = memory no-lock no-error.
             find prev ttable no-lock no-error.
             if available ttable then do:
@@ -178,7 +178,7 @@ BROWSE:
         end. /* previous page */
 
         /* next page */
-        else if lookup(nap,"page-down,next-page") > 0 then do with frame sel:
+        else if lookup(Syst.Var:nap,"page-down,next-page") > 0 then do with frame sel:
            if rtab[frame-down] = ? then do:
                bell.
                message "This is the last page !".
@@ -192,9 +192,9 @@ BROWSE:
         end. /* next page */
 
         /* Seek */
-        if lookup(nap,"1,f1") > 0 then do:  /* ob-code */
-           cfc = "puyr". RUN Syst/ufcolor.p.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+        if lookup(Syst.Var:nap,"1,f1") > 0 then do:  /* ob-code */
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            update ob-code with frame hayr.
            hide frame hayr no-pause.
            if ob-code ENTERED then do:
@@ -216,14 +216,14 @@ BROWSE:
 
 
         /* Choose */
-        else if lookup(nap,"return,enter,5,f5") > 0 then do:
+        else if lookup(Syst.Var:nap,"return,enter,5,f5") > 0 then do:
            find ttable where recid(ttable) = rtab[frame-line] no-lock.
             ovalueid = string(ttable.ValueId).
             orecid = recid(ttable).
            leave MAIN.
         end. /* Choose */
         /* First record */
-        else if lookup(nap,"home,h") > 0 then do:
+        else if lookup(Syst.Var:nap,"home,h") > 0 then do:
            find first ttable no-lock NO-ERROR.
            memory = recid(ttable).
            must-print = true.
@@ -231,7 +231,7 @@ BROWSE:
         end. /* First record */
 
         /* last record */
-        else if lookup(nap,"end,e") > 0 then do :
+        else if lookup(Syst.Var:nap,"end,e") > 0 then do :
            find last ttable no-lock NO-ERROR. 
 
            memory = recid(ttable).
@@ -239,7 +239,7 @@ BROWSE:
            next LOOP.
         end. /* last record */
 
-        else if nap = "8" or nap = "f8" then leave MAIN. /* Return */
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" then leave MAIN. /* Return */
 
      end.  /* BROWSE */
    end.  /* LOOP */
