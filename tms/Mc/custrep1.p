@@ -98,7 +98,7 @@ PUT stream tul UNFORMATTED
 
 
 FOR EACH Customer WHERE
-         Customer.Brand     = gcBrand   AND 
+         Customer.Brand     = Syst.Var:gcBrand   AND 
          Customer.CustNum  >= CustNum1  AND
          Customer.CustNum  <= CustNum2  AND
         (IF ZipCode   NE "" THEN

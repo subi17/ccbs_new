@@ -18,7 +18,6 @@ IF SESSION:BATCH THEN OUTPUT TO /dev/null.
 
 {Syst/commali.i}  /*{Syst/commpaa.i} */
 {Func/function.i}
-{Func/timestamp.i}
 {Func/tmsparam2.i}
 
 {Mf/cliinlog.i "NEW" "request"}
@@ -675,7 +674,7 @@ FOR EACH ttCli NO-LOCK:
       ttCli.pref chr(9)
       ttCli.cust chr(9)
       ttCli.Name chr(9)
-      fMakeTS()  chr(10).
+      Func.Common:mMakeTS()  chr(10).
 END.
 
 /* Called when a NEW CPS request is created */
@@ -683,7 +682,7 @@ PROCEDURE pCreatePresel.
 
    CREATE Presel.
    ASSIGN
-      Presel.CrStamp = fMakeTS() 
+      Presel.CrStamp = Func.Common:mMakeTS() 
       Presel.ChStamp = Presel.CrStamp 
       Presel.CustNum   = rsoper.CustNum 
       Presel.PsType   = rsoper.pstype 

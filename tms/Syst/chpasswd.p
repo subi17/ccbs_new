@@ -14,7 +14,6 @@ DEFINE OUTPUT PARAMETER olPasswordChanged AS LOGICAL NO-UNDO.
 
 {Syst/commali.i}
 {Func/fgettxt.i}
-{Func/timestamp.i}
 {Func/tmspass.i}
 
 /* ennakkoilmoitusraja        PassWdExpireNotify INT 
@@ -26,7 +25,7 @@ DEFINE TEMP-TABLE ttHistory
 FIELD passwd AS CHAR.
 
 DEFINE VARIABLE lcUserCode AS CHARACTER NO-UNDO FORMAT "X(16)". 
-lcUserCode = katun.
+lcUserCode = Syst.Var:katun.
 
 DEFINE VARIABLE lcNewPass  AS CHARACTER FORMAT "X(16)" NO-UNDO.
 DEFINE VARIABLE lcOldPass  AS CHARACTER FORMAT "X(16)" NO-UNDO.
@@ -71,8 +70,8 @@ SKIP(1)
 
 WITH 
    WIDTH 80 ROW 2 
-     TITLE " " + ynimi + " PASSWORD CHANGE "  +
-           STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.Var:ynimi + " PASSWORD CHANGE "  +
+           STRING(TODAY,"99-99-99") + " "
    NO-LABELS
 FRAME passFrame.
 
@@ -81,7 +80,7 @@ FRAME passFrame.
    -------------------------------------------------------------------- */
    
 FIND FIRST tmsuser NO-LOCK WHERE 
-           tmsuser.usercode = katun.
+           tmsuser.usercode = Syst.Var:katun.
            
 /* get the user's password history in temptable */
 liHistoryCount = 0.
@@ -96,9 +95,9 @@ END.
 
 DISPLAY liPassWdHistory lcUserCode WITH FRAME passFrame.
  
-ufk = 0.
-ufk[8] = 8.
-ehto = 3.
+Syst.Var:ufk = 0.
+Syst.Var:ufk[8] = 8.
+Syst.Var:ehto = 3.
 
 mainLoop:
 REPEAT:
@@ -119,16 +118,16 @@ REPEAT:
       UPDATE lcOldPass lcNewPass lcNewPass2 WITH FRAME passFrame EDITING:
          
          READKEY.
-         nap = KEYLABEL(LASTKEY).
+         Syst.Var:nap = KEYLABEL(LASTKEY).
 
-         IF LOOKUP(nap,"f4,f8") > 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"f4,f8") > 0 THEN DO:
             olPasswordChanged = FALSE.
             HIDE FRAME passFrame.
             RETURN.
          END.
          
          
-         IF LOOKUP(nap,poisnap) > 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
             
             IF FRAME-FIELD = "lcOldPass" THEN DO:
             END.
@@ -186,7 +185,7 @@ REPEAT:
                   /* user has not yet filled the history so create new */
                   CREATE tmspass.
                   ASSIGN
-                     tmspass.createts = fMakeTS()
+                     tmspass.createts = Func.Common:mMakeTS()
                      tmspass.usercode = tmsuser.usercode
                      tmspass.creator  = tmsuser.usercode
                      tmspass.password = lcNewPass:SCREEN-VALUE.
@@ -196,7 +195,7 @@ REPEAT:
                   FIND LAST tmspass EXCLUSIVE-LOCK WHERE  
                             tmspass.usercode = tmsuser.usercode.
                   ASSIGN     
-                     tmspass.createts = fMakeTS()
+                     tmspass.createts = Func.Common:mMakeTS()
                      tmspass.creator  = tmsuser.usercode
                      tmspass.password = lcNewPass:SCREEN-VALUE.
                END.

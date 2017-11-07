@@ -28,17 +28,15 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-katun = "Qvantel".
-gcBrand = "1".
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
 
 {Func/email.i}
 {Func/cparam2.i}
 {Syst/dumpfile_run.i}
-{Func/timestamp.i}
 {Func/fbankdata.i}
 {Func/fcustdata.i}
 {Syst/tmsconst.i}
-{Func/date.i}
 {Func/customer_address.i}
 
 
@@ -61,7 +59,7 @@ DEF VAR liDumpTime AS INT NO-UNDO.
 DEF VAR lcClause AS CHAR NO-UNDO. 
 DEF VAR lcReason AS CHARACTER NO-UNDO. 
 
-fSplitTS(idLastDump, OUTPUT ldaDumpDate, OUTPUT liDumpTime).
+Func.Common:mSplitTS(idLastDump, OUTPUT ldaDumpDate, OUTPUT liDumpTime).
 
 ASSIGN
    lcMail = "/scratch/log/bic_missing/mail.txt"
@@ -109,7 +107,7 @@ END.
 
 /* Second part of this file, customer data check dump */
 FOR EACH Customer WHERE 
-   Customer.Brand = gcBrand NO-LOCK:
+   Customer.Brand = Syst.Var:gcBrand NO-LOCK:
 
    FIND FIRST MobSub WHERE
       MobSub.Custnum = Customer.Custnum AND
@@ -186,4 +184,3 @@ OUTPUT STREAM mailcnt CLOSE.
 SendMail(lcMail,icFile).
 
 
-IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 

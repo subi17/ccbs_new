@@ -11,10 +11,9 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Func/tmsparam4.i}
 {Syst/commpaa.i}
-katun = "Newton".
-gcBrand = "1".
+Syst.Var:katun = "Newton".
+Syst.Var:gcBrand = "1".
 {Mc/provmaint.i}
-{Func/timestamp.i}
 
 DEF VAR pcTenant  AS CHAR NO-UNDO.
 DEF VAR pcMsisdn  AS CHAR NO-UNDO.
@@ -38,7 +37,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 {newton/src/settenant.i pcTenant}
 
 FIND FIRST MobSub NO-LOCK WHERE
-           MobSub.Brand = gcBrand AND
+           MobSub.Brand = Syst.Var:gcBrand AND
            MobSub.CLI = pcMsisdn NO-WAIT NO-ERROR. /* Find with MSISDN */
 IF NOT AVAILABLE MobSub THEN
    RETURN appl_err(SUBST("MSISDN not found &1", pcMsisdn)).
@@ -80,5 +79,4 @@ RELEASE MsBalance.
 add_int(response_toplevel_id, "",  piStatus).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

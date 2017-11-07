@@ -7,14 +7,13 @@
   Version ......: yoigo
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
 {Syst/eventlog.i}
-{Func/date.i}
 
 DEFINE VARIABLE idaDate AS DATE NO-UNDO. 
 DEFINE VARIABLE lcParam AS CHARACTER NO-UNDO.
@@ -45,8 +44,8 @@ ASSIGN
    lcSpoolDir = fCParam("SIMRelease","OutSpoolDir")
    lcOutDir   = fCParam("SIMRelease","OutDir").
 
-ldeTimeFrom = fDate2TS(idaDate).
-ldeTimeTo = fDate2TS(idaDate + 1).
+ldeTimeFrom = Func.Common:mDate2TS(idaDate).
+ldeTimeTo = Func.Common:mDate2TS(idaDate + 1).
 
 lcLogFile = lcSpoolDir + "icc_unblock_" + 
             STRING(YEAR(idaDate),"9999") +
@@ -57,14 +56,14 @@ OUTPUT STREAM sLog TO VALUE(lcLogFile).
 fBatchLog("START", lcLogFile).
 
 FOR EACH ActionLog WHERE
-   ActionLog.Brand = gcBrand AND
+   ActionLog.Brand = Syst.Var:gcBrand AND
    ActionLog.ActionID = "SIMRELEASE" AND
    ActionLog.ActionTS >= ldeTimeFrom AND
    ActionLog.ActionTS < ldeTimeTo AND
    ActionLog.ActionStatus = 2 NO-LOCK:
 
    FIND Order WHERE
-      Order.Brand = gcBrand AND
+      Order.Brand = Syst.Var:gcBrand AND
       Order.OrderId = INT(ActionLog.KeyValue) NO-LOCK NO-ERROR.
    IF NOT AVAIL Order THEN NEXT.
 
@@ -72,7 +71,7 @@ FOR EACH ActionLog WHERE
       SIM.ICC = ENTRY(1,ActionLog.ActionChar,"|") NO-LOCK NO-ERROR.
    IF NOT AVAIL SIM THEN NEXT.
    
-   fSplitTS(Order.CrStamp, OUTPUT ldaOrderDate, OUTPUT liOrderTime).
+   Func.Common:mSplitTS(Order.CrStamp, OUTPUT ldaOrderDate, OUTPUT liOrderTime).
 
    PUT STREAM sLog UNFORMATTED 
        ActionLog.KeyValue lcSep

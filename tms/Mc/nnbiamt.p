@@ -79,12 +79,12 @@ with centered width 80 no-label title " Bills per invoice group " FRAME frm.
 
 DO FOR TMSUser:
    FIND FIRST TMSUser no-lock where
-              TMSUser.UserCode = katun.
+              TMSUser.UserCode = Syst.Var:katun.
    fname = TMSUser.RepDir + "/billamt.txt".
 END.
 
 /* default Date values */
-FIND FIRST Invoice no-lock WHERE Invoice.Brand = gcBrand NO-ERROR.
+FIND FIRST Invoice no-lock WHERE Invoice.Brand = Syst.Var:gcBrand NO-ERROR.
 IF AVAILABLE Invoice THEN
 ASSIGN   
    date2 = Invoice.InvDate
@@ -95,7 +95,7 @@ repeat WITH FRAME frm:
 
    HIDE MESSAGE no-pause.
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    repeat WITH FRAME frm ON ENDKEY UNDO, LEAVE:
       UPDATE 
             date1   
@@ -178,12 +178,12 @@ repeat WITH FRAME frm:
 
 task:
    repeat WITH FRAME frm ON ENDKEY UNDO, RETURN:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT  CRIT.
-      IF toimi = 8 THEN LEAVE CRIT.
+      IF Syst.Var:toimi = 1 THEN NEXT  CRIT.
+      IF Syst.Var:toimi = 8 THEN LEAVE CRIT.
 
-      IF toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
          ok = FALSE.
          message "Are you SURE you want to start processing (Y/N) ?" UPDATE ok.
          IF ok THEN LEAVE task.
@@ -194,7 +194,7 @@ task:
    OUTPUT STREAM excel TO value(fname).
 
    FOR EACH Invoice no-lock where 
-            Invoice.Brand     = gcBrand  AND
+            Invoice.Brand     = Syst.Var:gcBrand  AND
             Invoice.InvDate  >= date1    AND
             Invoice.InvDate  <= date2    AND
             Invoice.PrintState >= status1  AND

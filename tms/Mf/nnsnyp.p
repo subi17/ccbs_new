@@ -35,7 +35,7 @@ def var ok         as   log format "Yes/No" NO-UNDO.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -60,10 +60,10 @@ form
     Operator.OperName    /* column-label "Oper. name" */  format "x(16)"
     /* sd */          /* COLUMN-LABEL FORMAT */
     WITH width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(cfc)
-    title color value(ctc) " " + ynimi +
+    COLOR value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " " + Syst.Var:ynimi +
     " National numberingplan "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form
@@ -74,22 +74,22 @@ form
     NumPlan.Operator   label "Operator code ......."
     Operator.OperName  label "Operators name ......"
 WITH
-    OVERLAY ROW 4 centered COLOR value(cfc) TITLE COLOR value(ctc)
+    OVERLAY ROW 4 centered COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc)
     fr-header WITH side-labels 1 columns FRAME lis.
 
 form /* Nummerserie search WITH FIELD AreaCode */
     h-rn-rnr
     help "Give areacode "
-    with row 4 col 2 title color value(ctc) " FIND AREACODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME h-f1.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND AREACODE "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME h-f1.
 
 form /* Nummerserie search WITH FIELD Operator */
     h-op-code
     help "Give operator code"
-    with row 4 col 2 title color value(ctc) " FIND OPERATOR "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME h-f2.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND OPERATOR "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME h-f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 FIND FIRST NumPlan
@@ -113,13 +113,13 @@ repeat WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* NumPlan -ADD  */
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.Var:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
            PROMPT-FOR NumPlan.AreaCode
            VALIDATE
@@ -214,11 +214,11 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 701 ufk[2]= 770 ufk[3]= 0 ufk[4]= 0
-        ufk[5]= 5  ufk[6]= 4 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 701 Syst.Var:ufk[2]= 770 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+        Syst.Var:ufk[5]= 5  Syst.Var:ufk[6]= 4 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
 
-       /* toist.  */ ufk[5] = 0. ufk[6] = 0.
+       /* toist.  */ Syst.Var:ufk[5] = 0. Syst.Var:ufk[6] = 0.
 
 
 
@@ -228,29 +228,29 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW NumPlan.AreaCode {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) NumPlan.AreaCode WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) NumPlan.AreaCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW NumPlan.Operator {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) NumPlan.Operator WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) NumPlan.Operator WITH FRAME sel.
       END.
 /*    IF order = 3 THEN DO:
         CHOOSE ROW NumPlan.?? {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) NumPlan.?? WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) NumPlan.?? WITH FRAME sel.
       END.
       ELSE IF order = 4 THEN DO:
         CHOOSE ROW NumPlan.??  {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) NumPlan.? WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) NumPlan.? WITH FRAME sel.
       END.
 */
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -281,10 +281,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND NumPlan where recid(NumPlan) = rtab[1] no-lock.
            IF order = 1 THEN FIND prev NumPlan
@@ -327,7 +327,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND NumPlan where recid(NumPlan) = rtab[FRAME-DOWN] no-lock .
@@ -371,7 +371,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND NumPlan where recid(NumPlan) = memory no-lock no-error.
         IF order = 1 THEN FIND prev NumPlan
@@ -409,7 +409,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* cursor TO the downmost line */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -424,10 +424,10 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+     else if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        h-rn-rnr = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE h-rn-rnr WITH FRAME h-f1.
        HIDE FRAME h-f1 no-pause.
        if h-rn-rnr <> "" THEN DO:
@@ -446,11 +446,11 @@ BROWSE:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        h-op-code = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE h-op-code WITH FRAME h-f2.
        HIDE FRAME h-f2 no-pause.
        if h-op-code <> "" THEN DO:
@@ -467,19 +467,19 @@ BROWSE:
        END.
      END. /* Haku sar. 2 */
  /*
-     if lookup(nap,"5,f5") > 0 THEN DO:  /* lisays */
+     if lookup(Syst.Var:nap,"5,f5") > 0 THEN DO:  /* lisays */
         must-add = TRUE.
         NEXT LOOP.
      END.
  */
 
  /*
-     else if lookup(nap,"6,f6") > 0 THEN DO TRANSAction:  /* removal */
+     else if lookup(Syst.Var:nap,"6,f6") > 0 THEN DO TRANSAction:  /* removal */
        delline = FRAME-LINE.
        FIND NumPlan where recid(NumPlan) = rtab[FRAME-LINE] no-lock.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.Var:ctc)
        NumPlan.AreaCode NumPlan.Operator AreaCode.AreaName .
 
        IF order = 1 THEN FIND NEXT NumPlan
@@ -516,7 +516,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        message "DO YOU REALLY WANT TO DELETE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.Var:ccc)
        NumPlan.AreaCode NumPlan.Operator /* sd */.
        IF ok THEN DO:
 
@@ -537,15 +537,15 @@ BROWSE:
      END. /* removal */
 */
 
-     else if lookup(nap,"enter,return") > 0 THEN
+     else if lookup(Syst.Var:nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSAction:
        /* change */
        {Syst/uright2.i}
        FIND NumPlan where recid(NumPlan) = rtab[frame-line(sel)]
        exclusive-lock.
-       assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
+       assign fr-header = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9.
        RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
        FIND Operator where Operator.Operator = 
           NumPlan.Operator no-lock no-error.
        FIND AreaCode where AreaCode.AreaCode = 
@@ -575,7 +575,7 @@ BROWSE:
        xrecid = recid(NumPlan).
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
        IF order = 1 THEN FIND FIRST NumPlan
        /* search condition */ no-lock no-error.
        ELSE IF order = 2 THEN FIND FIRST NumPlan USE-INDEX Operator
@@ -588,7 +588,7 @@ BROWSE:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
        IF order = 1 THEN FIND LAST NumPlan
        /* search condition */ no-lock no-error.
        ELSE IF order = 2 THEN FIND LAST NumPlan USE-INDEX Operator
@@ -601,11 +601,11 @@ BROWSE:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 

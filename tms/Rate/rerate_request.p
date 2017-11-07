@@ -83,7 +83,7 @@ THEN RETURN "ERROR:Invalid DBConfig".
 
 ASSIGN 
    lcReqType  = "Rerate"
-   ldActstamp = fMakeTS().
+   ldActstamp = Func.Common:mMakeTS().
 
 IF iiRequest >= 0 THEN DO:
    FIND FIRST MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
@@ -140,7 +140,7 @@ PROCEDURE pGetAllRequests:
       in order to avoid doing rerate initializing for each request */
    RERATE_REQUEST:
    FOR EACH MsRequest NO-LOCK WHERE
-            MsRequest.Brand     = gcBrand AND
+            MsRequest.Brand     = Syst.Var:gcBrand AND
             MsRequest.ReqType   = 65      AND
             MsRequest.ReqStat   = 0       AND
             MsRequest.ActStamp <= ldActStamp
@@ -170,7 +170,7 @@ PROCEDURE pGetCustomerRequests:
 
    CUSTOMER_REQUEST:
    FOR EACH MsRequest NO-LOCK USE-INDEX CustNum WHERE
-            MsRequest.Brand     = gcBrand AND
+            MsRequest.Brand     = Syst.Var:gcBrand AND
             MsRequest.CustNum   = iiInvCust AND
             MsRequest.ReqType   = 65      AND
             MsRequest.ReqStat   = 0       AND
@@ -202,18 +202,18 @@ PROCEDURE pHandleRequest:
              LOOKUP(STRING(bSubRequest.ReqStatus),
                     {&REQ_INACTIVE_STATUSES}) = 0:
       /* to skip some sub-request which have been delayed (dss termination) */
-      IF bSubRequest.ActStamp > foffset(MsRequest.ActStamp,1) THEN NEXT.
+      IF bSubRequest.ActStamp > Func.Common:mOffSet(MsRequest.ActStamp,1) THEN NEXT.
       RETURN "NEXT".
    END.
 
    IF llReport AND NOT llReportStarted THEN DO:
       IF VALID-HANDLE(lhSubsRerate) THEN 
-         RUN pInitializeRerateReport IN lhSubsRerate(katun,
+         RUN pInitializeRerateReport IN lhSubsRerate(Syst.Var:katun,
                                                      TODAY,
                                                      TODAY,
                                                      "").
       IF VALID-HANDLE(lhCustRerate) THEN 
-         RUN pInitializeRerateReport IN lhCustRerate(katun,
+         RUN pInitializeRerateReport IN lhCustRerate(Syst.Var:katun,
                                                      TODAY,
                                                      TODAY,
                                                      "").
@@ -263,8 +263,8 @@ PROCEDURE pRerate:
       END.
 
       ASSIGN
-         ldeFrom = fMake2DT(MsRequest.ReqDtParam1, 0)
-         ldeTo   = fMake2DT(MsRequest.ReqDtParam2 + 1, 0).
+         ldeFrom = Func.Common:mMake2DT(MsRequest.ReqDtParam1, 0)
+         ldeTo   = Func.Common:mMake2DT(MsRequest.ReqDtParam2 + 1, 0).
 
       llCustRerate = CAN-FIND(FIRST MsOwner NO-LOCK WHERE
                                     MsOwner.CLI = MsRequest.CLI AND
@@ -274,7 +274,7 @@ PROCEDURE pRerate:
       
       IF NOT llCustRerate THEN DO:
          /* Check DSS is active or not based on the last second of month */
-         ldeDSSActStamp = fMake2DT(MsRequest.ReqDtParam2,86399).
+         ldeDSSActStamp = Func.Common:mMake2DT(MsRequest.ReqDtParam2,86399).
          IF fIsDSSActive(INPUT Customer.CustNum,
                          INPUT ldeDSSActStamp) THEN llCustRerate = TRUE.
       END.

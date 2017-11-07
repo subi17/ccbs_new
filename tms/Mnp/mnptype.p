@@ -8,9 +8,9 @@ CHOISES:
 DO WHILE TRUE:
 
    ASSIGN
-      ufk    = 0
-      ufk[8] = 8
-      ehto   = 3.
+      Syst.Var:ufk    = 0
+      Syst.Var:ufk[8] = 8
+      Syst.Var:ehto   = 3.
 
    RUN Syst/ufkey.p.
 
