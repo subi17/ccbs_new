@@ -14,13 +14,12 @@ SESSION:NUMERIC-FORMAT = "EUROPEAN".
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/finvpayment.i}
 {Func/finvbal.i}
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 END.
@@ -137,7 +136,7 @@ REPEAT:
    IF ldtPaymDate = ? THEN ldtPaymDate = TODAY.
    
    FIND Invoice WHERE
-        Invoice.Brand    = gcBrand AND
+        Invoice.Brand    = Syst.Var:gcBrand AND
         Invoice.ExtInvID = lcExtInvID NO-LOCK NO-ERROR.
         
    IF NOT AVAILABLE Invoice THEN DO:
@@ -180,7 +179,7 @@ REPEAT:
    END.
    
    FIND InvGroup where 
-        InvGroup.Brand    = gcBrand AND 
+        InvGroup.Brand    = Syst.Var:gcBrand AND 
         InvGroup.InvGroup = Customer.InvGroup NO-LOCK NO-ERROR.
 
    ASSIGN 
@@ -227,15 +226,15 @@ REPEAT:
 
    CREATE Memo.
    ASSIGN 
-      Memo.Brand     = gcBrand
+      Memo.Brand     = Syst.Var:gcBrand
       Memo.HostTable = "Invoice"
       Memo.KeyValue  = STRING(Invoice.InvNum)
       Memo.CustNum   = Invoice.CustNum
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = katun 
+      Memo.CreUser   = Syst.Var:katun 
       Memo.MemoTitle = "Payment Posting"
       Memo.MemoText  = "Based on data delivered in file by Yoigo.".
-      Memo.CreStamp  = fMakeTS().
+      Memo.CreStamp  = Func.Common:mMakeTS().
 
    FIND Payment WHERE Payment.Voucher = liVoucher NO-LOCK.
 

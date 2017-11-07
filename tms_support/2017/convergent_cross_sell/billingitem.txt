@@ -1,0 +1,4 @@
+Billing item;Billing item name;Billing item group;Posting account;Tax class;IFS product code;Cost Center;ItemType
+CONVDISC_CS100_6;Cross Sell Promotion#1 - Fixed line discount;13;70518100;1;070;SL;1
+CONVDISC_CS20F12;Cross Sell Promotion#2 - Fixed line discount;13;70518100;1;070;SL;1
+CONVDISC_CS20M12;Cross Sell Promotion#2 - Mobile line discount;13;70518100;1;022;SL;0

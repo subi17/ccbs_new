@@ -1,7 +1,6 @@
 {Syst/testpaa.i}
-katun = "Qvantel".
+Syst.Var:katun = "Qvantel".
 {/home/ari/work/fcreditreq_chk.i}
-{Func/timestamp.i}
 
 def var lcline as char no-undo.
 def var liorderid as int no-undo.
@@ -61,7 +60,7 @@ end.
 
 hide frame fcoll no-pause.
          
-ldactstamp = fmake2dt(today,time). 
+ldactstamp = Func.Common:mMake2DT(today,time). 
 
 message "start reading"
 view-as alert-box.
@@ -162,7 +161,7 @@ repeat:
           Memo.CreUser   = msrequest.usercode 
           Memo.MemoTitle = "ORDER CREDIT NOTE"
           Memo.MemoText  = "Credited by Yoigo, " + lcTask.
-          Memo.CreStamp  = fmakets().
+          Memo.CreStamp  = Func.Common:mMakeTS().
 
    create ttreq.
    ttreq.invnum = invoice.invnum.

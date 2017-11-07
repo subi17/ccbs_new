@@ -5,10 +5,9 @@
 
 {Syst/commpaa.i}
 ASSIGN
-   gcBrand = "1"
-   katun   = "cron".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun   = "cron".
    
-{Func/timestamp.i}
 {Func/email.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
@@ -85,8 +84,8 @@ DEFINE TEMP-TABLE ttSologSum NO-UNDO
 
 IF lcRepDir = "" OR lcRepDir = ? THEN lcRepDir = "/tmp".
 
-ldFrom =  fHMS2TS(TODAY - 1,STRING(25119,"HH:MM:SS")).
-ldTo =  fHMS2TS(TODAY ,STRING(25119,"HH:MM:SS")).
+ldFrom =  Func.Common:mHMS2TS(TODAY - 1,STRING(25119,"HH:MM:SS")).
+ldTo =  Func.Common:mHMS2TS(TODAY ,STRING(25119,"HH:MM:SS")).
 
 
 lcAmtFile = lcRepDir + "/" + lctenant + "_Solog_report_" + 
@@ -114,7 +113,7 @@ DEFINE STREAM osDumpPent.
 DO liStatus = 1 TO 10:
 
 FOR EACH Solog NO-LOCK USE-INDEX Stat WHERE 
-         Solog.Brand = gcBrand  AND
+         Solog.Brand = Syst.Var:gcBrand  AND
          Solog.Stat  = liStatus AND
          Solog.ActivationTs       >= ldFrom AND
          Solog.ActivationTs       < ldTo    AND
@@ -183,7 +182,7 @@ FOR EACH Solog NO-LOCK USE-INDEX Stat WHERE
       ELSE IF INDEX(Solog.Response, "OK") > 0 THEN ttSolog.Response = TRUE.
 
       /* update summary */
-      fSplitTS(ttSolog.ActivTS,
+      Func.Common:mSplitTS(ttSolog.ActivTS,
                OUTPUT ldActivDate,
                OUTPUT liActivTime).
 
@@ -417,7 +416,7 @@ BY ttSolog.Action:
    PUT STREAM osDumpReport UNFORMATTED 
       ttSolog.SologId             CHR(9)
       ttSolog.Action              CHR(9)
-      fTs2HMS(Solog.ActivationTs) CHR(9)
+      Func.Common:mTS2HMS(Solog.ActivationTs) CHR(9)
       ttSolog.CliType             CHR(9)
       Solog.Cli                   CHR(9)
       lcImsi                      CHR(9)

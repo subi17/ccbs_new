@@ -18,7 +18,6 @@
 */
 
 {newton/src/header_get.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 
 DEF VAR piId AS INT NO-UNDO.
@@ -42,7 +41,7 @@ FUNCTION fAddHistory RETURNS LOGICAL
        DEF VAR lcHistory AS CHAR NO-UNDO.
        DEF VAR ldTS AS DEC NO-UNDO.
 
-       ldTS =  fHMS2TS(pdEventdate,pcEventTime).
+       ldTS =  Func.Common:mHMS2TS(pdEventdate,pcEventTime).
        lcHistory = add_struct(pcHistoriesArray,"").
        add_timestamp(lcHistory,"time",ldTS).
        add_string(lcHistory,"description",pcDescription).

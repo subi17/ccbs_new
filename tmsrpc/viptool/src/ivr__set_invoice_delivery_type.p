@@ -31,10 +31,9 @@ DEF VAR lhCustomer     AS HANDLE NO-UNDO.
 
 {Syst/commpaa.i}
 ASSIGN
-   katun = "IVR_" + ghAuthLog::EndUserId.
-   gcBrand = "1".
+   Syst.Var:katun = "IVR_" + ghAuthLog::EndUserId.
+   Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Syst/eventval.i}
 {Func/fmakemsreq.i}
 {Func/femailinvoice.i}
@@ -45,7 +44,7 @@ piDelType = get_int(param_toplevel_id,"1").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun   
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun   
    {Func/lib/eventlog.i}
    lhCustomer = BUFFER Customer:HANDLE.
 END.
@@ -78,9 +77,9 @@ IF Customer.DelType NE piDelType THEN DO:
    /* If DelType is Email then set to Email Pending first and send 
       an email to customer to activate the email service */
    IF piDelType = {&INV_DEL_TYPE_EMAIL} THEN DO:
-      liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+      liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                        INPUT TODAY,
-                                       INPUT katun,
+                                       INPUT Syst.Var:katun,
                                        INPUT MobSub.MsSeq,
                                        INPUT MobSub.CLI,
                                        INPUT Mobsub.Custnum,
@@ -125,5 +124,4 @@ END.
 add_boolean(response_toplevel_id,?,TRUE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

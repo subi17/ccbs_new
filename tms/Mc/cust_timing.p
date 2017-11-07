@@ -9,7 +9,6 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/sog.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'MSOwner'}
@@ -27,7 +26,7 @@ END.
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -44,7 +43,7 @@ END.
 DEF INPUT PARAMETER  iicustnum  AS INT  NO-UNDO.
 
 FIND FIRST customer NO-LOCK WHERE 
-           Customer.Brand   = gcBrand  AND 
+           Customer.Brand   = Syst.Var:gcBrand  AND 
            customer.CustNum = iiCustNum NO-ERROR.
 
 FIND FIRST EventLog WHERE 
@@ -165,7 +164,7 @@ WITH FRAME main.
 MAIN:
 REPEAT WITH FRAME main:
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    
    CREATE ttCustomer. 
 
@@ -187,7 +186,7 @@ REPEAT WITH FRAME main:
    
    WITH FRAME main EDITING:
              READKEY.
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME main:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME main:
                 PAUSE 0.
  
                 IF frame-field = "ldaTimingDate" THEN DO:
@@ -231,7 +230,7 @@ REPEAT WITH FRAME main:
                 
                 IF FRAME-FIELD = "ttInvCust" THEN DO:
                    FIND FIRST bCustomer WHERE 
-                              bCustomer.Brand   = gcBRand AND 
+                              bCustomer.Brand   = Syst.Var:gcBrand AND 
                               bCustomer.CustNum = INPUT ttCustomer.TTInvCust
                    NO-LOCK NO-ERROR.
                    IF NOT AVAIL bCustomer THEN DO:
@@ -246,7 +245,7 @@ REPEAT WITH FRAME main:
                 ELSE IF FRAME-FIELD = "TTInvCode" THEN DO:
                    IF INPUT FRAME main TTInvCode ne "00" THEN DO:
                       FIND FIRST InvRunlog  WHERE 
-                                 InvRunLog.Brand    = gcBRand AND 
+                                 InvRunLog.Brand    = Syst.Var:gcBrand AND 
                                  InvRunLog.InvCode = INPUT ttCustomer.TTInvCode
                       NO-LOCK NO-ERROR.
                       IF NOT AVAIL InvRunLog THEN DO:
@@ -265,17 +264,17 @@ REPEAT WITH FRAME main:
 ACTION:                            
    REPEAT WITH FRAME main:
       ASSIGN
-      ufk = 0 ehto = 0
-      ufk[1] = 7 
-      ufk[5] = 795
-      ufk[8] = 8.
+      Syst.Var:ufk = 0 Syst.Var:ehto = 0
+      Syst.Var:ufk[1] = 7 
+      Syst.Var:ufk[5] = 795
+      Syst.Var:ufk[8] = 8.
 
 
       RUN Syst/ufkey.p.
 
-      IF toimi = 1 THEN NEXT  main.
-      IF toimi = 8 THEN LEAVE main.
-      IF TOIMI = 5 THEN DO:
+      IF Syst.Var:toimi = 1 THEN NEXT  main.
+      IF Syst.Var:toimi = 8 THEN LEAVE main.
+      IF Syst.Var:toimi = 5 THEN DO:
 
 
          ok = FALSE.
@@ -287,7 +286,7 @@ ACTION:
          ASSIGN
            eventlog.eventdate      = TODAY                      
            eventlog.eventtime      = STRING(TIME,"HH:MM:SS")
-           eventlog.usercode       = Katun
+           eventlog.usercode       = Syst.Var:katun
            eventlog.action         = 'Timing'.
          ASSIGN
             eventlog.KEY            = String(Customer.custnum)
@@ -296,7 +295,7 @@ ACTION:
             EventLog.TimingDate     = ldaTimingDate
             EventLog.TimingTime     = ldaTimingTime.
          ASSIGN
-            EventLog.TimingTS       =  fHMS2TS(INPUT EventLog.TimingDate,
+            EventLog.TimingTS       =  Func.Common:mHMS2TS(INPUT EventLog.TimingDate,
             
                                  INPUT STRING(truncate(EventLog.TimingTime,0)
                                  ,"99") +
