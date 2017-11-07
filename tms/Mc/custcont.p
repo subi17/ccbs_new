@@ -17,7 +17,7 @@
 DEF INPUT PARAMETER iiCustNum AS INT NO-UNDO. 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -74,21 +74,21 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
            Customer.Phone.
 
    ASSIGN
-      ufk   = 0  
-      ufk[1]= 7  
-      ufk[5]= 1096 WHEN CAN-FIND(FIRST CustContact WHERE
-                                       CustContact.Brand = gcBrand AND
+      Syst.Var:ufk   = 0  
+      Syst.Var:ufk[1]= 7  
+      Syst.Var:ufk[5]= 1096 WHEN CAN-FIND(FIRST CustContact WHERE
+                                       CustContact.Brand = Syst.Var:gcBrand AND
                                        CustContact.Custnum = Customer.Custnum AND
                                        CustContact.CustType = 5)
-      ufk[8]= 8 
-      ehto = 0.
+      Syst.Var:ufk[8]= 8 
+      Syst.Var:ehto = 0.
    RUN Syst/ufkey.p.
 
-   IF toimi = 1 THEN DO:
+   IF Syst.Var:toimi = 1 THEN DO:
 
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
             
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          
          PROMPT Customer.Email
                 Customer.SMSNumber
@@ -168,9 +168,9 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
                                      INPUT Customer.Custnum,
                                      INPUT "Customer email address is changed").
 
-                  liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+                  liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                                    INPUT TODAY,
-                                                   INPUT katun,
+                                                   INPUT Syst.Var:katun,
                                                    INPUT 0, /* msseq */
                                                    INPUT "", /* cli */
                                                    INPUT Customer.CustNum,
@@ -208,9 +208,9 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
                                      INPUT Customer.Custnum,
                                      INPUT "Customer email address is changed").
 
-                     liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+                     liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                                       INPUT TODAY,
-                                                      INPUT katun,
+                                                      INPUT Syst.Var:katun,
                                                       INPUT 0, /* msseq */
                                                       INPUT "", /* cli */
                                                       INPUT Customer.CustNum,
@@ -256,11 +256,11 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
          LEAVE.
       END.
    END.
-   ELSE IF toimi = 5 AND ufk[5] > 0 THEN DO:
+   ELSE IF Syst.Var:toimi = 5 AND Syst.Var:ufk[5] > 0 THEN DO:
       RUN Mc/custcontact.p(customer.custnum, 5).
    END.
    
-   ELSE IF toimi = 8 THEN LEAVE.
+   ELSE IF Syst.Var:toimi = 8 THEN LEAVE.
 
 END. /* lCustMark */
 

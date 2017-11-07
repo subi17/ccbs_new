@@ -72,7 +72,7 @@ fInitializeRerateLog(0,
 fFillTT().
 
 liRerateSeq = fRerateLogStart (
-   katun,
+   Syst.Var:katun,
    idtFrom,
    idtTo,
    icCLI,

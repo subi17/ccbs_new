@@ -59,7 +59,7 @@ BY DFField.OrderNbr:
                   DFField.DFField.
 END.
 
-fSplitTS(idLastDump,
+Func.Common:mSplitTS(idLastDump,
          OUTPUT ldaModified,
          OUTPUT liCnt).
 ASSIGN
@@ -104,7 +104,7 @@ FOR EACH DMSDoc NO-LOCK WHERE
                END.
                ELSE IF DMS.HostTable = "Order" THEN DO:
                   FIND FIRST Order NO-LOCK WHERE
-                             Order.Brand = gcBrand AND
+                             Order.Brand = Syst.Var:gcBrand AND
                              Order.OrderID = DMS.HostID NO-ERROR.
                   IF AVAILABLE Order THEN
                      lcValue = STRING(Order.OrderId).

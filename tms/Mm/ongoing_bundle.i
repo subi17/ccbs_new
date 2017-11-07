@@ -5,7 +5,6 @@
 {Syst/tmsconst.i}
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 
 FUNCTION fGetActOngoingDataBundles RETURNS CHAR
    (iiMsSeq     AS INT,
@@ -19,7 +18,7 @@ FUNCTION fGetActOngoingDataBundles RETURNS CHAR
    DEF BUFFER bMsRequest     FOR MsRequest.
 
    IF idActStamp = 0 OR idActStamp = ? THEN
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    ASSIGN lcPostpaidDataBundles = fCParamC("POSTPAID_DATA_CONTRACTS")
           lcPrePaidDataBundles  = fCParamC("PREPAID_DATA_CONTRACTS").
