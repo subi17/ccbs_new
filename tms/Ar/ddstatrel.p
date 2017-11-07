@@ -57,8 +57,8 @@ FORM
    SKIP(5)
    
    with row 1 side-labels width 80
-        title " " + ynimi + " DD STATUS REPORT " +
-        string(pvm,"99-99-99") + " "
+        title " " + Syst.Var:ynimi + " DD STATUS REPORT " +
+        string(TODAY,"99-99-99") + " "
         frame fCrit.
 
 
@@ -79,20 +79,20 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
 
    IF ufkey THEN DO:
       ASSIGN
-         ufk[1] = 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-         ufk[5] = 63  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
-         ufk[9] = 1
-         ehto   = 3.
+         Syst.Var:ufk[1] = 132 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5] = 63  Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 
+         Syst.Var:ufk[9] = 1
+         Syst.Var:ehto   = 3.
       RUN Syst/ufkey.p.
       READKEY.
-      nap = KEYLABEL(LASTKEY).
+      Syst.Var:nap = KEYLABEL(LASTKEY).
    END.
-   ELSE ASSIGN nap   = "1"
+   ELSE ASSIGN Syst.Var:nap   = "1"
                ufkey = TRUE.
 
-   IF LOOKUP(nap,"1,f1") > 0 THEN DO:
+   IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO:
          
-      ehto = 9. RUN Syst/ufkey.p.
+      Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
       
@@ -103,9 +103,9 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
          WITH FRAME fCrit EDITING:
          
             READKEY.
-            nap = KEYLABEL(LASTKEY).
+            Syst.Var:nap = KEYLABEL(LASTKEY).
          
-            IF LOOKUP(nap,poisnap) > 0 THEN DO:
+            IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
 
             END.
             
@@ -121,15 +121,15 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO toimi, NEXT toimi:
          
    END.
       
-   ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:
+   ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 THEN DO:
       LEAVE toimi.
    END.
 
-   ELSE IF LOOKUP(nap,"8,f8") > 0 THEN DO:
+   ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN DO:
       RETURN.
    END.
       
-END. /* toimi */
+END. /* Syst.Var:toimi */
 
 /* Avataan striimi */
 IF lcFile = "" THEN DO:
@@ -139,7 +139,7 @@ END.
 
 MESSAGE "Printing in process".            
 
-ehto = 5.
+Syst.Var:ehto = 5.
 RUN Syst/ufkey.p.
 
 RUN Ar/ddstatrep.p (ldtAuthDate1,

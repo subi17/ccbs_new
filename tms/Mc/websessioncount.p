@@ -1,9 +1,8 @@
-{Func/date.i}
 {Syst/commpaa.i}
 {Func/cparam2.i}
 
-ASSIGN gcBrand = "1"
-       katun   = "batch".
+ASSIGN Syst.Var:gcBrand = "1"
+       Syst.Var:katun   = "batch".
 
 DEF VAR lcSpoolPath      AS CHAR NO-UNDO.
        ASSIGN

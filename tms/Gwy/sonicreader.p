@@ -14,14 +14,13 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-{Func/date.i}
 {Func/log.i}
 fSetLogFileName("/home/mikko/sonicreader.log").
 fClearLog().
 fSetLogEntryTypes(fGetValidLogEntryTypes()).
 fSetGlobalLoggingLevel(4).
 
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 DEFINE STREAM sLog.
 
@@ -105,7 +104,7 @@ FUNCTION fLogErrorStatus RETURNS LOGICAL
    ELSE icAction = THIS-PROCEDURE:NAME + "(" + icAction + ")".
    giErrorCount = giErrorCount + 1.
    gcLastErrorMessage = ERROR-STATUS:GET-MESSAGE(ERROR-STATUS:NUM-MESSAGES).
-   gdeLastErrorTime = fMakeTS().
+   gdeLastErrorTime = Func.Common:mMakeTS().
    IF gcLastErrorMessage = ? OR gcLastErrorMessage = "" THEN 
       gcLastErrorMessage = "Undefined Runtime Error".
       
@@ -113,7 +112,7 @@ FUNCTION fLogErrorStatus RETURNS LOGICAL
    IF glDebug AND gdeLastErrorTime > 0 THEN DO:
       PUT SCREEN ROW 12 "Errors....: " + STRING(giErrorCount). 
       PUT SCREEN ROW 13 "Last Error: " + SUBSTRIN(gcLastErrorMessage,1,67). 
-      PUT SCREEN ROW 14 "Lass ErrTS: " + fTS2C(gdeLastErrorTime).    
+      PUT SCREEN ROW 14 "Lass ErrTS: " + Func.Common:mTs2C(gdeLastErrorTime).    
    END.
   
    /* write errors to logfile */
@@ -208,7 +207,7 @@ END FUNCTION.
 RUN jms/ptpsession.p PERSISTENT SET lhPTPSession(lcSessionParams).
 
 PUT SCREEN ROW 1 "Aina XML Interface Reader (Online since " +
-   fTS2HMS(fMakeTS()) + ")".
+   Func.Common:mTS2HMS(Func.Common:mMakeTS()) + ")".
 
 /* Main loop */
 REPEAT WHILE glActive ON ENDKEY UNDO, LEAVE:
@@ -297,7 +296,7 @@ PROCEDURE pMessageReceived:
          fLog(lcMessage,"RecMSG").
       END.
    END.
-   gdeLastMessageTime = fMakeTS().
+   gdeLastMessageTime = Func.Common:mMakeTS().
 
    RUN deleteMessage IN ihMsg.
 
@@ -305,7 +304,7 @@ PROCEDURE pMessageReceived:
    IF glDebug AND gdeLastMessageTime > 0 THEN DO: 
       PUT SCREEN ROW 8  "Messages..: " + STRING(giMessagesReceived).
       PUT SCREEN ROW 9  "Last msg..: " + SUBSTRING(gcLastMessage,1,67).
-      PUT SCREEN ROW 10 "Last MsgTS: " + fTS2C(gdeLastMessageTime).
+      PUT SCREEN ROW 10 "Last MsgTS: " + Func.Common:mTs2C(gdeLastMessageTime).
    END.
 
 END.

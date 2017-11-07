@@ -7,7 +7,6 @@
   Version ......: yoigo
 -------------------------------------------------------------------------- */
 {Syst/commali.i} 
-{Func/timestamp.i}
 {Func/cparam.i2}
 {Syst/eventval.i}
 /* {Func/fwebuser.i} */ 
@@ -37,7 +36,7 @@ DEF VAR llOk     AS LOG NO-UNDO.
 DEF BUFFER bOrderCustomer FOR OrderCustomer.
 
 FIND FIRST Order WHERE
-           Order.Brand   = gcBrand AND
+           Order.Brand   = Syst.Var:gcBrand AND
            Order.OrderId = iiOrderId 
 EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
 
@@ -54,7 +53,7 @@ IF iiRole = 2 AND Order.InvCustRole NE 2 THEN RETURN.
 IF iiRole = 3 AND Order.UserRole NE 3    THEN RETURN.
 
 FIND FIRST OrderCustomer NO-LOCK WHERE
-           OrderCustomer.Brand   = gcBrand   AND
+           OrderCustomer.Brand   = Syst.Var:gcBrand   AND
            OrderCustomer.OrderID = iiOrderID AND
            OrderCustomer.RowType = iiRole NO-ERROR.
 IF NOT AVAILABLE OrderCustomer THEN DO:
@@ -88,7 +87,7 @@ END.
 ELSE IF iiRole = 2 THEN DO:
 
    FIND FIRST bOrderCustomer NO-LOCK WHERE
-              bOrderCustomer.Brand   = gcBrand   AND
+              bOrderCustomer.Brand   = Syst.Var:gcBrand   AND
               bOrderCustomer.OrderID = iiOrderID AND
               bOrderCustomer.RowType = 1 NO-ERROR.
  
@@ -116,7 +115,7 @@ END.
 ELSE IF iiRole = 3 THEN  DO:
 
    FIND FIRST bOrderCustomer NO-LOCK WHERE
-              bOrderCustomer.Brand   = gcBrand   AND
+              bOrderCustomer.Brand   = Syst.Var:gcBrand   AND
               bOrderCustomer.OrderID = iiOrderID AND
               bOrderCustomer.RowType = Order.InvCustRole NO-ERROR.
    
@@ -187,7 +186,7 @@ END.
 ELSE DO:
 
    IF llDoEvent THEN DO:
-      &GLOBAL-DEFINE STAR_EVENT_USER katun
+      &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
       {Func/lib/eventlog.i}
 
@@ -214,7 +213,7 @@ ELSE DO:
    END.
    ELSE DO:
       FIND FIRST OrderCustomer EXCLUSIVE-LOCK WHERE
-                 OrderCustomer.Brand   = gcBrand   AND
+                 OrderCustomer.Brand   = Syst.Var:gcBrand   AND
                  OrderCustomer.OrderID = iiOrderID AND
                  OrderCustomer.RowType = iiRole  NO-ERROR.
 

@@ -80,7 +80,7 @@ by ttorder.crstamp:
 
       j = j + 1.
       CREATE Memo.
-      ASSIGN Memo.Brand     = gcBrand
+      ASSIGN Memo.Brand     = Syst.Var:gcBrand
              Memo.HostTable = "Order"
              Memo.KeyValue  = STRING(Order.OrderID)
              Memo.CustNum   = Order.CustNum
@@ -88,7 +88,7 @@ by ttorder.crstamp:
              Memo.CreUser   = "ari" 
              Memo.MemoTitle = "Order cancelled"
              Memo.MemoText  = "Double order, YTS-65".
-             Memo.CreStamp  = fMakeTS().
+             Memo.CreStamp  = Func.Common:mMakeTS().
    end.
 
    pause 0.
@@ -130,7 +130,7 @@ by ttorder.crstamp:
 
       j = j + 1.
       CREATE Memo.
-      ASSIGN Memo.Brand     = gcBrand
+      ASSIGN Memo.Brand     = Syst.Var:gcBrand
              Memo.HostTable = "Order"
              Memo.KeyValue  = STRING(Order.OrderID)
              Memo.CustNum   = Order.CustNum
@@ -138,7 +138,7 @@ by ttorder.crstamp:
              Memo.CreUser   = "ari" 
              Memo.MemoTitle = "Order cancelled"
              Memo.MemoText  = "Double order, YTS-65".
-             Memo.CreStamp  = fMakeTS().
+             Memo.CreStamp  = Func.Common:mMakeTS().
    end.
 
    pause 0.
@@ -207,7 +207,7 @@ by ttorder.crstamp:
 
       j = j + 1.
       CREATE Memo.
-      ASSIGN Memo.Brand     = gcBrand
+      ASSIGN Memo.Brand     = Syst.Var:gcBrand
              Memo.HostTable = "Order"
              Memo.KeyValue  = STRING(Order.OrderID)
              Memo.CustNum   = Order.CustNum
@@ -215,7 +215,7 @@ by ttorder.crstamp:
              Memo.CreUser   = "ari" 
              Memo.MemoTitle = "Order cancelled"
              Memo.MemoText  = "Double order, YTS-65".
-             Memo.CreStamp  = fMakeTS().
+             Memo.CreStamp  = Func.Common:mMakeTS().
    end.
 
    pause 0.

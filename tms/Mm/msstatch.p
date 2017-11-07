@@ -4,8 +4,7 @@
   APPLICATION ..: TMS
   AUTHOR .......: mvi
   CREATED ......: 25.05.05
-  CHANGED ......: 26.01.06 jt nam = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                                   BUFFER Customer).
+  CHANGED ......: 26.01.06 jt nam = Func.Common:mDispCustName(BUFFER Customer).
                                          
   VERSION ......: TF
   ---------------------------------------------------------------------- */
@@ -16,7 +15,7 @@
 
 IF llDoEvent THEN DO:
 
-  &GLOBAL-DEFINE STAR_EVENT_USER katun
+  &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    
   {Func/lib/eventlog.i}
       
@@ -35,8 +34,7 @@ FIND Customer OF MobSub.
 
 DEF VAR nam AS C NO-UNDO.
 
-nam = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                        BUFFER Customer).
+nam = Func.Common:mDispCustName(BUFFER Customer).
                                        
 
 DEF VAR msstatus LIKE mobsub.msstatus NO-UNDO FORMAT ">9".
@@ -50,7 +48,7 @@ SKIP(2)
 "  Name     : " nam FORMAT "x(40)" SKIP(2)
 "  Status   : " msstatus FORMAT ">9" "View list of options by pressing <F9>" SKIP(4)
 WITH
-   CENTERED WIDTH 60 OVERLAY COLOR VALUE(cfc) TITLE COLOR VALUE(ctc)
+   CENTERED WIDTH 60 OVERLAY COLOR VALUE(Syst.Var:cfc) TITLE COLOR VALUE(Syst.Var:ctc)
    " Mobsub status change " + mobsub.cli + " "
    NO-LABELS FRAME stat.
    
@@ -62,7 +60,7 @@ DEF VAR s AS INT NO-UNDO.
 /* dont allow to change mobsub.msstatus for subscriptions
    with statuses 2,10,11,12,13,14 */
 s =  mobsub.msstatus.
-IF katun = "marikav" then do: end.
+IF Syst.Var:katun = "marikav" then do: end.
 ELSE IF s = 2  OR 
    s = 10 OR
    s = 11 OR
@@ -80,7 +78,7 @@ ASSIGN msstatus = mobsub.msstatus.
 
 loop:
 REPEAT WITH FRAME stat:
-   ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 0 ehto = 9 .
+   ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 0 Syst.Var:ehto = 9 .
    RUN Syst/ufkey.p.
    DISPLAY
       mobsub.cli
@@ -93,13 +91,13 @@ REPEAT WITH FRAME stat:
 
    action:
    REPEAT WITH FRAME stat:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[8] = 8 ufk[5] = 9033  ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[8] = 8 Syst.Var:ufk[5] = 9033  Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN LEAVE action.
-      IF toimi = 8 THEN DO:
+      IF Syst.Var:toimi = 1 THEN LEAVE action.
+      IF Syst.Var:toimi = 8 THEN DO:
          LEAVE loop.
       END.
-      IF toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
          MESSAGE "Status changed from " mobsub.msstatus " to " msstatus 
          VIEW-AS ALERT-BOX.
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).

@@ -12,7 +12,6 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'MobSub'}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/fctserval.i}
 {Func/fctchange.i}
 {Func/fmakemsreq.i}
@@ -21,7 +20,7 @@
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -202,7 +201,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
    
    IF lcNewCategory > "" THEN DO:
       FIND CustCat WHERE 
-           CustCat.Brand    = gcBrand AND
+           CustCat.Brand    = Syst.Var:gcBrand AND
            CustCat.Category = lcNewCategory NO-LOCK NO-ERROR.
       IF AVAILABLE CustCat THEN lcNewCatName = CustCat.CatName.
    END. 
@@ -235,28 +234,28 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
  
    IF ufkey THEN DO:
       ASSIGN
-         ufk   = 0 
-         ufk[1]= 7   
-         ufk[8]= 2 
-         ehto = 0.
+         Syst.Var:ufk   = 0 
+         Syst.Var:ufk[1]= 7   
+         Syst.Var:ufk[8]= 2 
+         Syst.Var:ehto = 0.
 
-      IF liNewCust1 = 0 THEN ufk[3] = 1055.   
+      IF liNewCust1 = 0 THEN Syst.Var:ufk[3] = 1055.   
       IF icAction = "view" THEN ASSIGN 
-         ufk[1] = 0
-         ufk[3] = 0.
+         Syst.Var:ufk[1] = 0
+         Syst.Var:ufk[3] = 0.
          
       RUN Syst/ufkey.p.
    END.
 
-   ELSE ASSIGN toimi = 1  
+   ELSE ASSIGN Syst.Var:toimi = 1  
                ufkey = TRUE.
 
    /* update new user */ 
-   IF toimi = 1 THEN DO:
+   IF Syst.Var:toimi = 1 THEN DO:
 
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
          
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          
          IF lcNewCategory = "" THEN lcNewCategory = lcAgrCategory.
          IF lcNewCountry  = "" THEN lcNewCountry  = lcAgrCountry.
@@ -284,12 +283,12 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
                    
                END. 
 
-               ehto = 9.
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT.
             END. 
  
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
             END.
             
             APPLY LASTKEY.
@@ -364,11 +363,11 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
             
             READKEY.
 
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
                   
                IF FRAME-FIELD = "lcNewCategory" THEN DO:
                   FIND CustCat WHERE 
-                       CustCat.Brand    = gcBrand AND
+                       CustCat.Brand    = Syst.Var:gcBrand AND
                        CustCat.Category = INPUT lcNewCategory 
                   NO-LOCK NO-ERROR.
 
@@ -440,7 +439,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
    END.
 
    /* copy name and address from current user customer  */
-   ELSE IF toimi = 3 THEN DO:
+   ELSE IF Syst.Var:toimi = 3 THEN DO:
    
       FIND MobSub WHERE MobSub.MsSeq = MsRequest.MsSeq NO-LOCK NO-ERROR.
       IF NOT AVAILABLE MobSub THEN DO:
@@ -449,8 +448,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
       END.   
       
       FIND Customer WHERE Customer.CustNum = MobSub.CustNum NO-LOCK NO-ERROR.
-      lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                    BUFFER Customer).
+      lcCustName = Func.Common:mDispCustName(BUFFER Customer).
       
       llOk = (lcNewLast = "").
       
@@ -477,7 +475,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
          lcNewTel      = Customer.SMSNumber.
    END. 
     
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.Var:toimi = 8 THEN DO:
 
       /* update msrequest */
       IF icAction = "change" AND AVAILABLE MsRequest THEN DO:

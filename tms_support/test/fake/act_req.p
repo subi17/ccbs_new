@@ -1,4 +1,3 @@
-{Func/timestamp.i}
 
 DEF VAR lcHostname AS CHAR NO-UNDO.
 INPUT THROUGH hostname.
@@ -23,8 +22,8 @@ IF NOT AVAIL MsRequest THEN MESSAGE "Request " liMsRequest " not found".
 ELSE DO:
 
    IF ldaDate NE TODAY THEN
-     ldeActstamp = fHMS2TS(ldaDate,"00:00:00").
-   ELSE ldeActstamp = fmakets().
+     ldeActstamp = Func.Common:mHMS2TS(ldaDate,"00:00:00").
+   ELSE ldeActstamp = Func.Common:mMakeTS().
 
    ASSIGN MsRequest.ActStamp = ldeActstamp.
 

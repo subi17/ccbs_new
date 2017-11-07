@@ -9,11 +9,10 @@
 
 {Syst/commpaa.i}
 ASSIGN
-   gcBrand = "1"
-   katun   = "request".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun   = "request".
    
 {Func/heartbeat.i}
-{Func/timestamp.i}
 {Func/log.i}
 {Syst/requestrunner.i}
 
@@ -94,13 +93,13 @@ IF ldaSystemDay = ? OR ldaSystemDay < TODAY THEN
 IF liQueue = 0 THEN DO:
    
    ASSIGN
-      gcHelpParam = "choose"
-      si-recid    = 0.
+      Syst.Var:gcHelpParam = "choose"
+      Syst.Var:si-recid    = 0.
       
    RUN Syst/requestqueue.p.
    
-   IF si-recid > 0 THEN DO:
-      FIND RequestQueue WHERE RECID(RequestQueue) = si-recid
+   IF Syst.Var:si-recid > 0 THEN DO:
+      FIND RequestQueue WHERE RECID(RequestQueue) = Syst.Var:si-recid
          NO-LOCK NO-ERROR.
       IF AVAILABLE RequestQueue THEN liQueue = RequestQueue.Queue.
    END.
@@ -109,7 +108,7 @@ END.
 IF liQueue = 0 THEN RETURN "ERROR:Queue has not been selected".
 
 FIND RequestQueue WHERE 
-     RequestQueue.Brand = gcBrand AND
+     RequestQueue.Brand = Syst.Var:gcBrand AND
      RequestQueue.Queue = liQueue NO-LOCK NO-ERROR.
 IF NOT AVAILABLE RequestQueue THEN RETURN "ERROR:Queue not defined".
      
@@ -128,7 +127,7 @@ DO WHILE TRUE
 
    /* get the latest configuration */ 
    FIND RequestQueue WHERE 
-        RequestQueue.Brand = gcBrand AND
+        RequestQueue.Brand = Syst.Var:gcBrand AND
         RequestQueue.Queue = liQueue NO-LOCK NO-ERROR.
 
    IF NOT RequestQueue.InUse THEN LEAVE REQUESTER.     
@@ -153,7 +152,7 @@ DO WHILE TRUE
 
    /* go through all types */ 
    FOR EACH RequestType NO-LOCK WHERE
-            RequestType.Brand = gcBrand  AND
+            RequestType.Brand = Syst.Var:gcBrand  AND
             RequestType.Queue = RequestQueue.Queue AND
             RequestType.InUse:
 
@@ -161,10 +160,10 @@ DO WHILE TRUE
 
       /* current time for getting scheduled requests */
       IF TODAY > ldaSystemDay THEN ldaSystemDay = TODAY.
-      ldCurrent = fMake2DT(ldaSystemDay,TIME).
+      ldCurrent = Func.Common:mMake2DT(ldaSystemDay,TIME).
             
       lcUser = RequestType.UserCode.
-      IF lcUser = "" THEN lcUser = katun.
+      IF lcUser = "" THEN lcUser = Syst.Var:katun.
  
       /* logging on type level */
       IF RequestType.LogOn THEN DO:

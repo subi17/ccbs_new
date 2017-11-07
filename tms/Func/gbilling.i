@@ -9,10 +9,8 @@
   ------------------------------------------------------------------------*/
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fgettxt.i}
-{Func/date.i}
 {Func/fduedate.i}
 {Func/ftransdir.i}
 {Syst/tmsconst.i}
@@ -173,8 +171,7 @@ FUNCTION fProcessPostpaidEntry RETURNS CHAR
                                 icRefId, /*reason note*/
                                 OUTPUT ocErrInfo).
          IF liRequest = 0 THEN DO:
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                              STRING(bMobSub.MsSeq),
                              bMobSub.Custnum,
                              "CREDIT NOTE CREATION FAILED",

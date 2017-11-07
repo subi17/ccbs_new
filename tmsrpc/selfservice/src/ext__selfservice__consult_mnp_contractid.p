@@ -22,9 +22,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-ASSIGN katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
-       gcBrand = "1".
-{Func/timestamp.i}
+ASSIGN Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
+       Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/forderstamp.i}
 {Func/fgettxt.i}
@@ -74,7 +73,7 @@ lcApplicationId = substring(pcTransId,1,3).
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName, lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
-katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
+Syst.Var:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
 IF LOOKUP(pcDelType,"EMAIL,SMS") = 0 THEN
    RETURN appl_err("Invalid Delivery Type").
@@ -90,7 +89,7 @@ FOR EACH Order WHERE
    IF liCount >= 3 THEN LEAVE.
    liTotalCount = liTotalCount + 1.
 
-   fSplitTS(Order.CrStamp,ldOrderDate,liOrderTime).
+   Func.Common:mSplitTS(Order.CrStamp,ldOrderDate,liOrderTime).
 
    IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN DO:
       IF Order.StatusCode = {&ORDER_STATUS_DELIVERED} THEN
@@ -98,7 +97,7 @@ FOR EACH Order WHERE
       ELSE
          ldeOrderStamp = fGetOrderStamp(Order.OrderId,"Close").
 
-      fSplitTS(ldeOrderStamp,ldFinalOrderDate,liFinalOrderTime).
+      Func.Common:mSplitTS(ldeOrderStamp,ldFinalOrderDate,liFinalOrderTime).
 
       IF ldFinalOrderDate <> ? THEN DO:
          IF ldFinalOrderDate < (TODAY - 30) THEN NEXT.
@@ -121,7 +120,7 @@ FOR EACH Order WHERE
    IF pcDelType = "EMAIL" THEN DO:
       IF lcEmail = "" THEN DO:
          FIND FIRST OrderCustomer WHERE
-                    OrderCustomer.Brand   = gcBrand AND
+                    OrderCustomer.Brand   = Syst.Var:gcBrand AND
                     OrderCustomer.OrderId = Order.OrderId AND
                     OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
          IF AVAIL OrderCustomer AND OrderCustomer.Email > "" THEN
@@ -149,7 +148,7 @@ ELSE IF NOT llOngoing THEN DO:
       RETURN appl_err("MNP order already cancelled").
    ELSE IF llDelivered THEN DO:
       FIND FIRST MobSub WHERE
-                 MobSub.Brand = gcBrand AND
+                 MobSub.Brand = Syst.Var:gcBrand AND
                  MobSub.CLI   = pcCLI NO-LOCK NO-ERROR.
       IF NOT AVAIL MobSub THEN
          RETURN appl_err("Subscription is cancelled").
@@ -180,8 +179,8 @@ IF pcDelType = "SMS" THEN DO:
 
 END. /* IF pcDelType = "SMS" THEN DO: */
 ELSE DO:
-   liRequest = fEmailSendingRequest(INPUT fMakeTS(),
-                                    INPUT katun,
+   liRequest = fEmailSendingRequest(INPUT Func.Common:mMakeTS(),
+                                    INPUT Syst.Var:katun,
                                     INPUT 0, /* custnum */
                                     INPUT pcCLI,
                                     INPUT lcEmail,
@@ -204,5 +203,4 @@ FINALLY:
    /* Store the transaction id */
    ghAuthLog::TransactionId = pcTransId.
 
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

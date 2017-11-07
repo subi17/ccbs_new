@@ -2,7 +2,7 @@
 
    check  IF user has write right   */
 
-IF NOT qupd THEN DO:
+IF NOT Syst.Var:qupd THEN DO:
    MESSAGE
    "You do NOT have right to change anything in" SKIP
    "this program"

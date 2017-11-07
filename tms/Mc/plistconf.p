@@ -26,7 +26,7 @@
 DEF INPUT PARAMETER  icRatePlan  AS CHAR NO-UNDO.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -85,8 +85,8 @@ form
    PListConf.dTo
    llActive          column-label "Act."
 with width 80 overlay scroll 1 15 down ROW 1
-   color value(cfc) title color value(ctc) " " + ynimi +
-   " Pricelist history " + string(pvm,"99-99-99") + " "
+   color value(Syst.Var:cfc) title color value(Syst.Var:ctc) " " + Syst.Var:ynimi +
+   " Pricelist history " + string(TODAY,"99-99-99") + " "
    frame sel.
 
 form
@@ -97,25 +97,25 @@ form
    "   Valid from date :" PListConf.dFrom       skip
    "   Valid to date ..:" PListConf.dTo
 with  overlay row 6 centered width 35
-   color value(cfc)
-   title color value(ctc)
+   color value(Syst.Var:cfc)
+   title color value(Syst.Var:ctc)
    fr-header with no-labels frame lis.
 
 form /* Price List search with field PList */
    PList help "Give pricelist's code"
-with row 4 col 2 title color value(ctc) " FIND CODE "
-   color value(cfc) no-labels overlay frame f1.
+with row 4 col 2 title color value(Syst.Var:ctc) " FIND CODE "
+   color value(Syst.Var:cfc) no-labels overlay frame f1.
 
 form /* Price List search with field PLName */
    PLName help "Give pricelist's name"
-with row 4 col 2 title color value(ctc) " FIND NAME "
-   color value(cfc) no-labels overlay frame f2.
+with row 4 col 2 title color value(Syst.Var:ctc) " FIND NAME "
+   color value(Syst.Var:cfc) no-labels overlay frame f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.Var:ccc = Syst.Var:cfc.
 view frame sel.
 
 FIND FIRST RatePlan WHERE
-           RatePlan.Brand    = gcBrand AND 
+           RatePlan.Brand    = Syst.Var:gcBrand AND 
            RatePlan.RatePlan = icRatePlan NO-LOCK NO-ERROR.
 IF NOT AVAILABLE RatePlan THEN RETURN.
 
@@ -138,13 +138,13 @@ repeat with frame sel:
     end.
 
    if must-add then do:  /* PListConf -ADD  */
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = false.
+      assign Syst.Var:cfc = "lis" ufkey = true fr-header = " ADD " must-add = false.
       RUN Syst/ufcolor.p.
       add-new:
       repeat with frame lis on endkey undo add-new, leave add-new.
          pause 0 no-message.
          clear frame lis no-pause.
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          do transaction:
             create PListConf.
             assign PListConf.Brand    = RatePlan.Brand 
@@ -218,9 +218,9 @@ BROWSE:
 
       if ufkey then do:
          assign
-         ufk[1] = 0 ufk[2] = 0 ufk[3] = 0 ufk[4] = 878
-         ufk[5] = 5 ufk[6] = 4 ufk[7] = 0 ufk[8] = 8 ufk[9]= 1
-         ehto = 3 ufkey = false.
+         Syst.Var:ufk[1] = 0 Syst.Var:ufk[2] = 0 Syst.Var:ufk[3] = 0 Syst.Var:ufk[4] = 878
+         Syst.Var:ufk[5] = 5 Syst.Var:ufk[6] = 4 Syst.Var:ufk[7] = 0 Syst.Var:ufk[8] = 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = false.
 
          {Syst/uright1.i '"5,6"'}
 
@@ -230,16 +230,16 @@ BROWSE:
       hide message no-pause.
       if order = 1 then do:
          choose row PListConf.RatePlan {Syst/uchoose.i} no-error with frame sel.
-         color display value(ccc) PListConf.RatePlan with frame sel.
+         color display value(Syst.Var:ccc) PListConf.RatePlan with frame sel.
       end.
       if rtab[frame-line] = ? then next.
 
-      nap = keylabel(lastkey).
+      Syst.Var:nap = keylabel(lastkey).
 
-      if lookup(nap,"cursor-right") > 0 then do:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 then do:
          order = order + 1. if order > ordercount then order = 1.
       end.
-      if lookup(nap,"cursor-left") > 0 then do:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 then do:
          order = order - 1. if order = 0 then order = ordercount.
       end.
 
@@ -264,10 +264,10 @@ BROWSE:
          next.
       end.
 
-      assign nap = keylabel(lastkey).
+      assign Syst.Var:nap = keylabel(lastkey).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 then do with frame sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 then do with frame sel:
          if frame-line = 1 then do:
             find PListConf where recid(PListConf) = rtab[1] no-lock.
             if order = 1 then find prev PListConf of RatePlan
@@ -297,7 +297,7 @@ BROWSE:
       end. /* previous line */
 
       /* next line */
-      else if lookup(nap,"cursor-down") > 0 then do with frame sel:
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 then do with frame sel:
          if frame-line = frame-down then do:
             find PListConf where recid(PListConf) = rtab[frame-down] no-lock .
 
@@ -327,7 +327,7 @@ BROWSE:
       end. /* next line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 then do:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 then do:
          memory = rtab[1].
          find PListConf where recid(PListConf) = memory no-lock no-error.
          if order = 1 then find prev PListConf of RatePlan
@@ -353,7 +353,7 @@ BROWSE:
      end. /* previous page */
 
      /* next page */
-     else if lookup(nap,"next-page,page-down,+") > 0 then do with frame sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 then do with frame sel:
         /* cursor to the downmost line */
         if rtab[frame-down] = ? then do:
             message "YOU ARE ON THE LAST PAGE !".
@@ -368,10 +368,10 @@ BROWSE:
      end. /* next page */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 then do on endkey undo, next LOOP:
-        cfc = "puyr". RUN Syst/ufcolor.p.
+     else if lookup(Syst.Var:nap,"1,f1") > 0 then do on endkey undo, next LOOP:
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
         PList = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
         update PList with frame f1.
         hide frame f1 no-pause.
         if PList <> "" then do:
@@ -390,7 +390,7 @@ BROWSE:
         end.
      end. /* Haku sar. 1 */
 
-     else if lookup(nap,"4,f4") > 0 THEN DO:  /* tariffs */
+     else if lookup(Syst.Var:nap,"4,f4") > 0 THEN DO:  /* tariffs */
         FIND PListConf where recid(PListConf) = rtab;<frame-line(sel);> 
             no-lock no-error.
 
@@ -402,7 +402,7 @@ BROWSE:
         END.
      end. 
 
-     else if lookup(nap,"5,f5") > 0 and ufk[5] > 0 then do:  /* lisays */
+     else if lookup(Syst.Var:nap,"5,f5") > 0 and Syst.Var:ufk[5] > 0 then do:  /* lisays */
 
          {Syst/uright2.i}
 
@@ -410,7 +410,7 @@ BROWSE:
          next LOOP.
      end.
 
-     else if lookup(nap,"6,f6") > 0 and ufk[6] > 0
+     else if lookup(Syst.Var:nap,"6,f6") > 0 and Syst.Var:ufk[6] > 0
      then do transaction:  /* removal */
 
         {Syst/uright2.i}
@@ -419,7 +419,7 @@ BROWSE:
         find PListConf where recid(PListConf) = rtab[frame-line] no-lock.
 
         /* line to be deleted is lightened */
-        color display value(ctc)
+        color display value(Syst.Var:ctc)
            PListConf.RatePlan
            PListConf.PriceList 
            PriceList.PLName 
@@ -459,7 +459,7 @@ BROWSE:
            "Are you SURE You want to delete ?"
         view-as alert-box question buttons YES-NO update ok.
 
-        color display value(ccc)
+        color display value(Syst.Var:ccc)
            PListConf.RatePlan
            PListConf.PriceList 
            PriceList.PLName 
@@ -487,7 +487,7 @@ BROWSE:
 
      end. /* removal */
 
-     else if lookup(nap,"enter,return") > 0 AND qupd
+     else if lookup(Syst.Var:nap,"enter,return") > 0 AND Syst.Var:qupd
      then do with frame lis transaction:
         /* change */
         {Syst/uright2.i}
@@ -495,9 +495,9 @@ BROWSE:
         find first PListConf where 
              recid(PListConf) = rtab[frame-line(sel)]
         exclusive-lock no-error.
-        assign fr-header = " CHANGE " ufkey = true ehto = 9.
+        assign fr-header = " CHANGE " ufkey = true Syst.Var:ehto = 9.
         RUN Syst/ufkey.p.
-        cfc = "lis". RUN Syst/ufcolor.p.
+        Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
         display PListConf.RatePlan .
 
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhPListConf).
@@ -512,28 +512,28 @@ BROWSE:
 
      end.
 
-     else if lookup(nap,"home,h") > 0 then do:
+     else if lookup(Syst.Var:nap,"home,h") > 0 then do:
         if order = 1 then find first PListConf of RatePlan
         use-index browse no-lock no-error.
         assign memory = recid(PListConf) must-print = true.
         next LOOP.
      end.
 
-     else if lookup(nap,"end,e") > 0 then do : /* last record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 then do : /* last record */
         if order = 1 then find last PListConf of RatePlan
         use-index browse no-lock no-error.
         assign memory = recid(PListConf) must-print = true.
         next LOOP.
      end.
 
-     else if lookup(nap,"8,f8") > 0 then leave LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 then leave LOOP.
 
   end.  /* BROWSE */
 
 end.  /* LOOP */
 
 hide frame sel no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 procedure pLocalUpdateOthers:
 
@@ -552,9 +552,9 @@ procedure pLocalUpdateOthers:
    with frame lis editing:
 
       readkey.
-      nap = keylabel(lastkey).
+      Syst.Var:nap = keylabel(lastkey).
 
-      if lookup(nap,poisnap) > 0 then do:
+      if lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 then do:
          if frame-field = "PriceList" then do:
             if input frame lis PListConf.PriceList = "" then return "9".
             assign PListConf.PriceList.

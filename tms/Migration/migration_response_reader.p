@@ -15,13 +15,12 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 {Syst/commpaa.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Migration/migrationfunc.i}
 {Func/ftransdir.i}
 {Func/orderfunc.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 DEF STREAM sin.
 DEF STREAM sFile.
@@ -46,7 +45,7 @@ DEF VAR lcErr AS CHAR NO-UNDO.
 ASSIGN
    lcTableName = "MB_Migration"
    lcActionID = "migration_response_reader"
-   ldCurrentTimeTS = fMakeTS()
+   ldCurrentTimeTS = Func.Common:mMakeTS()
    lcInDir = fCParam("MB_Migration", "MigrationInDir").
 
 IF lcLogDir EQ "" OR lcLogDir EQ ? THEN lcLogDir = "/tmp/".
@@ -75,19 +74,19 @@ lcLogFile = lcLogDir + "MM_MIGRATION_RESPONSE_" + lcTimePart + ".log".
 OUTPUT STREAM sLog TO VALUE(lcLogFile) APPEND.
 
 PUT STREAM sLog UNFORMATTED
-   "Migration file reading starts " + fTS2HMS(fMakeTS()) SKIP.
+   "Migration file reading starts " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
 
 /*Ensure that multiple instances of the program are not running*/
 DO TRANS:
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.Var:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName NO-ERROR.
 
    IF AVAIL ActionLog AND
       ActionLog.ActionStatus EQ {&ACTIONLOG_STATUS_PROCESSING} THEN DO:
       PUT STREAM sLog UNFORMATTED
-         "File processing alrady ongoing " + fTS2HMS(fMakeTS()) SKIP.
+         "File processing alrady ongoing " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
       OUTPUT STREAM sLog CLOSE.
       QUIT.
    END.
@@ -96,11 +95,11 @@ DO TRANS:
       /*First execution stamp*/
       CREATE ActionLog.
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.Var:gcBrand
          ActionLog.TableName    = lcTableName
          ActionLog.ActionID     = lcActionID
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
       RELEASE ActionLog.
       QUIT. /*No reporting in first time.*/
@@ -112,7 +111,7 @@ lcErr = fInitMigrationMQ("response").
 IF lcErr NE "" THEN DO:
    PUT STREAM sLog UNFORMATTED
       "MQ error. Migration file will be skipped: " + lcErr +
-      fTS2HMS(fMakeTS()) SKIP.
+      Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
 
 END.
 ELSE DO:
@@ -131,7 +130,7 @@ END.
 /*Release ActionLog lock*/
 DO TRANS:
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.Var:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName    AND
               ActionLog.ActionStatus NE  {&ACTIONLOG_STATUS_SUCCESS}
@@ -145,7 +144,7 @@ END.
 
 
 PUT STREAM sLog UNFORMATTED
-   "Migration file handling done " + fTS2HMS(fMakeTS()) SKIP.
+   "Migration file handling done " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
 OUTPUT STREAM sLog CLOSE.
 
 
@@ -163,7 +162,7 @@ PROCEDURE pReadFile:
    DEF VAR liOrderID AS INT NO-UNDO.
 
    PUT STREAM sLog UNFORMATTED
-      "List collection starts " + fTS2HMS(fMakeTS()) SKIP.
+      "List collection starts " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
    
    FILE_LINE:
    REPEAT TRANS:
@@ -189,7 +188,7 @@ PROCEDURE pReadFile:
          liOrderID = 0.
 
       FIND FIRST Order NO-LOCK /*EL?)*/ WHERE
-                 Order.brand EQ gcBrand AND
+                 Order.brand EQ Syst.Var:gcBrand AND
                  Order.CLI EQ lcMSISDN AND
                  Order.StatusCode EQ {&ORDER_STATUS_MIGRATION_ONGOING} 
                  NO-ERROR.
@@ -245,6 +244,6 @@ PROCEDURE pReadFile:
 
    PUT STREAM sLog UNFORMATTED
       "Read " + STRING(liLineNumber) + " lines. " 
-      "List collection done " + fTS2HMS(fMakeTS()) SKIP.
+      "List collection done " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
 END.
 
