@@ -85,7 +85,7 @@ FUNCTION fTerminationRequest RETURNS INTEGER
               bOrder.StatusCode = {&ORDER_STATUS_MNP} OR
               bOrder.StatusCode = {&ORDER_STATUS_MNP_REJECTED}):          
 
-         RUN fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_CLOSED}).
+         fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_CLOSED}).
       END.
                     
       /* Do not change the memo text (used by DWH) */
