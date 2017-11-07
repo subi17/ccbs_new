@@ -9,6 +9,9 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
+{Syst/tmsconst.i}
 {Mc/orderfusion.i}
 
 DEF VAR lcTopStruct        AS CHAR NO-UNDO. 
@@ -35,10 +38,8 @@ ASSIGN
       WHEN LOOKUP("update_ts", lcTopStructFields) > 0.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-{Syst/commpaa.i}
-katun = pcUserName.
-gcbrand = "1".
-{Syst/tmsconst.i}
+Syst.Var:katun = pcUserName.
+{newton/src/findtenant.i YES ordercanal Order OrderId piOrderId}
 
 IF TRIM(pcUserName) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
@@ -56,5 +57,4 @@ IF NOT RETURN-VALUE BEGINS "OK:" THEN
 add_string(response_toplevel_id, "", "").
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

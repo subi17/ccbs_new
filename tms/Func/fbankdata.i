@@ -7,9 +7,7 @@
    
 */
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
-{Func/date.i}  
 
 /* convert into data form */
 FUNCTION fBankAcc2Data RETURNS CHARACTER
@@ -307,7 +305,7 @@ FUNCTION fGetOrderMandateId RETURN LOGICAL
 
    DEF BUFFER OrderAction FOR OrderAction.
 
-   IF NOT AVAIL Order OR Order.CliType BEGINS "TARJ" THEN
+   IF NOT AVAIL Order OR Order.PayType EQ {&MOBSUB_PAYTYPE_PREPAID} THEN
       RETURN FALSE.
 
    FIND FIRST OrderAction NO-LOCK WHERE
@@ -316,7 +314,7 @@ FUNCTION fGetOrderMandateId RETURN LOGICAL
               OrderAction.ItemType  = "Mandate" NO-ERROR.
  
    IF AVAIL OrderAction THEN DO:
-      fSplitTS(Order.CrStamp,ldaDate,liTime).
+      Func.Common:mSplitTS(Order.CrStamp,ldaDate,liTime).
       ASSIGN
          ocMandateId = OrderAction.ItemKey
          odaMandateDate = ldaDate.
@@ -374,15 +372,15 @@ FUNCTION fChkBankAccChange RETURNS LOGICAL
    DEF BUFFER MsRequest FOR MsRequest.
 
    /* any postpaid subscriptions */
-   IF CAN-FIND (FIRST mobsub WHERE mobsub.Brand = gcBrand AND
+   IF CAN-FIND (FIRST mobsub WHERE mobsub.Brand = Syst.Var:gcBrand AND
                                    mobsub.custnum = iiCustNum AND
                                    mobsub.paytype = FALSE NO-LOCK) THEN
       RETURN FALSE.
 
-   ldeDate = fDate2TS(TODAY - 40).
+   ldeDate = Func.Common:mDate2TS(TODAY - 40).
 
    /* is terminated postpaid subscription during last 40 days */
-   FOR EACH MsRequest WHERE MsRequest.Brand = gcBrand AND
+   FOR EACH MsRequest WHERE MsRequest.Brand = Syst.Var:gcBrand AND
                             MsRequest.Reqtype = 18 AND
                             MsRequest.CustNum = iiCustNum AND
                             MsRequest.ActStamp > ldeDate AND
@@ -394,15 +392,22 @@ FUNCTION fChkBankAccChange RETURNS LOGICAL
                          msOwner.paytype = FALSE NO-LOCK) THEN
          RETURN FALSE.
    END.
+
    /* is STC from postpaid done during last 40 days */
-   IF CAN-FIND (FIRST MsRequest WHERE MsRequest.Brand = gcBrand AND
-                                      MsRequest.Reqtype = 0 AND
-                                      MsRequest.CustNum = iiCustNum AND
-                                      MsRequest.ActStamp > ldeDate AND
-                                      MsRequest.ReqStatus = 2 AND
-                                      MsRequest.ReqCParam1 BEGINS "CONT"
-                                      NO-LOCK) THEN
-      RETURN FALSE.
+   FOR EACH MsRequest NO-LOCK WHERE
+            MsRequest.Brand = Syst.Var:gcBrand AND
+            MsRequest.Reqtype = 0 AND
+            MsRequest.CustNum = iiCustNum AND
+            MsRequest.ActStamp > ldeDate AND
+            MsRequest.ReqStatus = 2:
+
+      IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                        CLIType.Brand = Syst.Var:gcBrand AND
+                        CLIType.CLIType = MsRequest.ReqCParam1 AND
+                        CLIType.PayType = {&CLITYPE_PAYTYPE_POSTPAID})
+         THEN RETURN FALSE.
+   END.
+
    /* otherwise account can be changed empty */
    RETURN TRUE.
 END FUNCTION.

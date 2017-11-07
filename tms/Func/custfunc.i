@@ -1,6 +1,6 @@
 /* ----------------------------------------------------------------------
-  MODULE .......: profunc.i
-  TASK .........: Functions for handling Yoigo PRO related functionality
+  MODULE .......: custfunc.i
+  TASK .........: Functions for handling Yoigo PRO customer functionality
                   Reference: YPRO-project
   APPLICATION ..: tms
   AUTHOR .......:
@@ -26,7 +26,7 @@ FUNCTION fgetCustSegment RETURNS CHAR
 
    IF ilProCust THEN DO:
       FIND FIRST CustCat NO-LOCK WHERE
-                 Custcat.brand EQ Syst.Parameters:gcBrand AND
+                 Custcat.brand EQ Syst.Var:gcBrand AND
                  Custcat.custidtype EQ icIdType AND
                  CustCat.selfemployed EQ ilSelfEmployed AND
                  CustCat.pro EQ ilProCust NO-ERROR.
@@ -48,7 +48,7 @@ FUNCTION fgetCustSegment RETURNS CHAR
          ocCategory = "11". 
       IF ocCategory > "" THEN DO:
          FIND FIRST CustCat NO-LOCK WHERE
-                    Custcat.brand EQ Syst.Parameters:gcBrand AND
+                    Custcat.brand EQ Syst.Var:gcBrand AND
                     Custcat.category EQ ocCategory NO-ERROR.
 
          IF AVAIL CustCat THEN
@@ -56,7 +56,7 @@ FUNCTION fgetCustSegment RETURNS CHAR
       END.
       ELSE DO:
          FIND FIRST CustCat NO-LOCK WHERE
-                    Custcat.brand EQ Syst.Parameters:gcBrand AND
+                    Custcat.brand EQ Syst.Var:gcBrand AND
                     CustCat.custidtype EQ icIdType AND
                     CustCat.selfemployed EQ ilSelfemployed AND
                     CustCat.pro EQ ilProCust NO-ERROR.
@@ -68,6 +68,30 @@ FUNCTION fgetCustSegment RETURNS CHAR
    END.
    RETURN lcSegment.
 END.
+
+FUNCTION fhasTVService RETURNS LOGICAL (INPUT iiMsseq AS INT):
+
+   DEF BUFFER TPService FOR TPService.
+   DEF BUFFER bTpService FOR TPService.
+
+   FIND FIRST TPService WHERE 
+              TPService.MsSeq EQ iiMsSeq AND
+              TPService.Operation EQ "ACTIVATION" AND
+              TPService.ServType  EQ "Television" AND
+              TPService.servStatus NE "ERROR" NO-LOCK NO-ERROR.
+   IF NOT AVAIL TPService THEN RETURN FALSE. /* No active TV Service */
+
+   FIND LAST bTPService WHERE 
+             bTPService.MsSeq EQ iiMsSeq AND
+             bTPService.createdts GT TPService.createdts AND
+             bTPService.ServStatus EQ "HANDLED" AND 
+             bTPService.Operation = "DEACTIVATION" AND
+             bTPService.ServType  = "Television"
+             NO-LOCK NO-ERROR.
+
+   IF AVAIL bTPService THEN RETURN FALSE. /* Deactivated */
+   ELSE RETURN TRUE. /* Still active */
+END FUNCTION.
 
 &ENDIF
 

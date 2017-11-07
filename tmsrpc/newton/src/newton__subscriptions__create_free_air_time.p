@@ -73,19 +73,16 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 {Syst/commpaa.i}
-katun = pcUserName.
-gcbrand = "1".
+Syst.Var:katun = pcUserName.
+Syst.Var:gcBrand = "1".
 {Func/fixedfee.i}
 {Func/fcounter.i}
-/* Check that mobsub is available */
-FIND MobSub WHERE
-     MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN DO:
-   RETURN appl_err("Mobile Subscription not available").
-END.
+
+{newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
+
  /* check FATGroup */
  FIND FatGroup WHERE
-      FatGroup.Brand = gcBrand AND
+      FatGroup.Brand = Syst.Var:gcBrand AND
       FatGroup.FtGrp = lcFatGroup  NO-LOCK NO-ERROR.
  IF NOT AVAIL FatGroup THEN DO:
     RETURN appl_err("Unknown FAT Group").
@@ -96,11 +93,11 @@ END.
     RETURN appl_err("Invalid period").
 END.
  /* check monthly limits */
- fMonthlyStamps(TODAY,
+ Func.Common:mMonthlyStamps(TODAY,
                 ldTS1,
                 ldTS2). 
  FOR EACH Counter NO-LOCK WHERE 
-          Counter.Brand = gcBrand AND
+          Counter.Brand = Syst.Var:gcBrand AND
           Counter.HostTable = "MobSub" AND
           Counter.KeyValue = STRING(MobSub.MsSeq) AND
           Counter.CounterType = liCounterType AND
@@ -135,5 +132,4 @@ END.
 add_boolean(response_toplevel_id,?,TRUE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

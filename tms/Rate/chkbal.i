@@ -3,7 +3,6 @@
    changes:         21.05.03/aam fInvBal, fclbal,
                                  fGetText, fAlarmMessage etc.
 
-                    17.06.03/jp  fIsPnpAllowed             
                     14.12.05/aam notifynumber from subser
 */
 {Syst/commali.i}
@@ -102,42 +101,4 @@ FUNCTION fAlarmMessage RETURNS LOGICAL
 
 
 END FUNCTION.
-
-
-FUNCTION fIsPnpAllowed RETURNS LOG
-   (INPUT  Cli          AS CHAR,
-    INPUT  CallDate     AS DATE,
-    INPUT  Old_PNP      AS LOG,
-    INPUT  New_PNP      AS LOG,
-    OUTPUT PNPAllowed   AS LOG).
-
-   DEF VAR period      AS INT NO-UNDO.
-   DEF VAR liCalc      AS INT NO-UNDO.
-
-   /* Compare Pnp Values before and after pnp analysis */
-   IF      old_pnp = TRUE  AND
-           new_pnp = TRUE     THEN liCalc =  0.
-   ELSE IF old_pnp = TRUE  AND
-           new_pnp = FALSE    THEN liCalc = -1.
-   ELSE IF old_pnp = FALSE AND
-           new_pnp = TRUE     THEN liCalc = 1.
-   ELSE IF old_pnp = FALSE AND
-           new_pnp = FALSE    THEN liCalc = 0.
-
-   ASSIGN
-      Period = Year(CallDate) * 100 + Month(CallDate).
-
-   FIND FIRST PnpQty WHERE
-              PnpQty.CLI    = CLI  AND
-              pnpQty.Period = Period EXCLUSIVE-LOCK NO-ERROR.
-
-   IF NOT AVAIL pnpQty THEN DO:
-      CREATE PnpQty.
-      ASSIGN
-         PnpQty.Cli    = CLI
-         PnpQty.Period = period
-         PnpQty.Qty    = 1
-         PnpAllowed    = TRUE.
-   END.
-END.   
 

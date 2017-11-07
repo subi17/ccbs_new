@@ -26,11 +26,14 @@ DEFINE VARIABLE lii              AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcReturnValue    AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcClassName      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE llInactivateDump AS LOGICAL   INITIAL NO NO-UNDO.
+DEFINE VARIABLE lcBrand          AS CHARACTER NO-UNDO.
 
 DEFINE VARIABLE HandlerObj AS CLASS HPD.DumpHandler NO-UNDO.
 
+lcBrand = multitenancy.TenantInformation:mGetEffectiveBrand().
+
 LOG-MANAGER:LOGFILE-NAME = "../var/log/hpd_filedump_" + STRING(iiDumpID) + 
-                           "_" + multitenancy.TenantInformation:mGetBrandNameForActiveTenant() + ".log".
+                           (IF lcBrand > "" THEN "_" + lcBrand ELSE "") + ".log".
 
 FIND FIRST DumpFile NO-LOCK WHERE
    DumpFile.DumpID = iiDumpID

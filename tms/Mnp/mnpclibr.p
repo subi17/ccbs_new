@@ -35,7 +35,7 @@ END.
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -89,10 +89,10 @@ form
     lcStatus               FORMAT "x(4)"    COLUMN-LABEL "Status"
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
     "  MNP PROCESS LIST  "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form
@@ -107,11 +107,11 @@ form
             /* LABEL FORMAT */
 
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr with no-labels side-labels
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr with no-labels side-labels
     FRAME lis.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  , By Status , By 4".
@@ -185,17 +185,17 @@ BROWSE:
       IF ufkey THEN DO:
         
         ASSIGN
-           ufk    = 0
-           ufk[1] = 0
-           ufk[2] = 0
-           ufk[3] = 0
-           ufk[4] = 0 /* 2821 */
-           ufk[5] = 0 /* 2822 */
-           ufk[6] = 2806          
-           ufk[7] = 2823 
-           ufk[8] = 8
-           ufk[9] = 1
-           ehto   = 3
+           Syst.Var:ufk    = 0
+           Syst.Var:ufk[1] = 0
+           Syst.Var:ufk[2] = 0
+           Syst.Var:ufk[3] = 0
+           Syst.Var:ufk[4] = 0 /* 2821 */
+           Syst.Var:ufk[5] = 0 /* 2822 */
+           Syst.Var:ufk[6] = 2806          
+           Syst.Var:ufk[7] = 2823 
+           Syst.Var:ufk[8] = 8
+           Syst.Var:ufk[9] = 1
+           Syst.Var:ehto   = 3
            ufkey  = FALSE.
       
          RUN Syst/ufkey.p.
@@ -205,26 +205,26 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW ttMNPProcess.FormRequest {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttMNPProcess.FormRequest WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) ttMNPProcess.FormRequest WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW ttMNPProcess.PortRequest {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttMNPProcess.PortRequest WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) ttMNPProcess.PortRequest WITH FRAME sel.
       END.
 
       IF order = 3 THEN DO:
         CHOOSE ROW ttMNPProcess.StatusCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ttMNPProcess.StatusCode WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) ttMNPProcess.StatusCode WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -248,10 +248,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -276,7 +276,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -302,7 +302,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ttMNPProcess WHERE recid(ttMNPProcess) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -326,7 +326,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -341,7 +341,7 @@ BROWSE:
      END. /* NEXT page */
 
     /* 
-     else if lookup(nap,"4,f4") > 0 then do:
+     else if lookup(Syst.Var:nap,"4,f4") > 0 then do:
        run local-find-this (false).
 
        RUN Mnp/mnpfunc.p(mnpprocess.mnpseq).
@@ -350,7 +350,7 @@ BROWSE:
      
      end. 
      */
-     else if lookup(nap,"7,f7") > 0 then do:
+     else if lookup(Syst.Var:nap,"7,f7") > 0 then do:
 
        run local-find-this (false).
        memory = recid(ttmnpprocess).
@@ -363,7 +363,7 @@ BROWSE:
      
      end. 
      
-     ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 THEN DO:
        RUN local-find-this (FALSE).
 
        memory = recid(ttmnpprocess).
@@ -378,14 +378,14 @@ BROWSE:
      
      END.
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(false).
 
-       ASSIGN ac-hdr = " MNP Process " ufkey = TRUE ehto = 5. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " MNP Process " ufkey = TRUE Syst.Var:ehto = 5. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ttMNPProcess.FormRequest.
 
        RUN local-UPDATE-record.                                  
@@ -400,25 +400,25 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(ttMNPProcess) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(ttMNPProcess) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 fCleanEventObjects().
 
 PROCEDURE local-find-this:
@@ -485,8 +485,7 @@ PROCEDURE local-find-others.
    IF AVAIL TMSCodes THEN lcStatus = TMSCodes.CodeName.
    ELSE lcStatus = "".
    
-   lcMNPType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "MNPProcess",
+   lcMNPType = Func.Common:mTMSCodeName("MNPProcess",
                                "MNPType",
                              STRING(ttMNPProcess.MNPType)).
 

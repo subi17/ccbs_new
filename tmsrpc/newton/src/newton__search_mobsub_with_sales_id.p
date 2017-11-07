@@ -18,7 +18,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {newton/src/json_key.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 
@@ -26,9 +26,10 @@ gcBrand = "1".
 &SCOPED-DEFINE EXCLUSIVERESELLERS "AX,BY,DX,KH,TA,MD"
 
 /* Input parameters */
-DEF VAR pcMSISDN AS CHAR NO-UNDO. 
-DEF VAR pcDNIType AS CHAR NO-UNDO. 
-DEF VAR pcDNI AS CHAR NO-UNDO. 
+DEF VAR pcTenant   AS CHAR NO-UNDO.
+DEF VAR pcMSISDN   AS CHAR NO-UNDO. 
+DEF VAR pcDNIType  AS CHAR NO-UNDO. 
+DEF VAR pcDNI      AS CHAR NO-UNDO. 
 DEF VAR pcReseller AS CHAR NO-UNDO. 
 DEF VAR pcChannel  AS CHAR NO-UNDO. 
 
@@ -40,17 +41,20 @@ DEF VAR sub_struct   AS CHAR NO-UNDO.
 DEF VAR lcCallType         AS CHAR NO-UNDO.
 DEF VAR lcIndirectChannels AS CHAR NO-UNDO. 
 
-lcCallType = validate_request(param_toplevel_id, "string,string,string,string").
+lcCallType = validate_request(param_toplevel_id, "string,string,string,string,string").
 IF lcCallType EQ ? THEN RETURN.
 
-pcMSISDN = get_string(param_toplevel_id, "0").
-pcDNIType = get_string(param_toplevel_id, "1").
-pcDNI = get_string(param_toplevel_id, "2").
-pcReseller = get_string(param_toplevel_id, "3"). 
+pcTenant = get_string(param_toplevel_id, "0").
+pcMSISDN = get_string(param_toplevel_id, "1").
+pcDNIType = get_string(param_toplevel_id, "2").
+pcDNI = get_string(param_toplevel_id, "3").
+pcReseller = get_string(param_toplevel_id, "4"). 
 
 lcIndirectChannels = fCParamC("InDirectChannels").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 FUNCTION fAddSubStruct RETURNS LOGICAL:
 
@@ -76,11 +80,11 @@ END FUNCTION.
 IF pcMSISDN BEGINS "8" OR
    pcMSISDN BEGINS "9" THEN   /* Fixed line number */
    FIND mobsub NO-LOCK WHERE
-        mobsub.brand = gcBrand AND
+        mobsub.brand = Syst.Var:gcBrand AND
         mobsub.fixednumber = pcMSISDN NO-ERROR.
 ELSE 
    FIND mobsub NO-LOCK WHERE
-        mobsub.brand = gcBrand AND
+        mobsub.brand = Syst.Var:gcBrand AND
         mobsub.cli = pcMSISDN NO-ERROR.
 
 IF NOT AVAILABLE mobsub THEN
@@ -100,7 +104,7 @@ IF Customer.CustIdType NE pcDNIType THEN
 
 /* there's no salesman record for WEB,MGM,GIFT,YOIGO,VIP */
 FIND Salesman WHERE
-     Salesman.Brand = gcBrand AND
+     Salesman.Brand = Syst.Var:gcBrand AND
      Salesman.Salesman = MobSub.Salesman NO-LOCK NO-ERROR.
 
 /* YDR-149
@@ -116,7 +120,7 @@ IF LOOKUP(pcReseller,{&EXCLUSIVERESELLERS}) > 0 THEN DO:
    /* YOT-5180, User Exclusive could find ANY subscription created from 
       direct channel without restriction of the reseller that made the activation*/
    FIND FIRST Order NO-LOCK WHERE 
-              Order.Brand = gcBrand      AND 
+              Order.Brand = Syst.Var:gcBrand      AND 
               Order.MsSeq = MobSub.MsSeq AND 
               Order.CLI   = MobSub.CLI   NO-ERROR. 
    
@@ -157,5 +161,4 @@ fAddSubStruct().
 add_int(top_struct, "sub_count", 1).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

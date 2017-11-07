@@ -13,8 +13,8 @@ DEF VAR pcMSISDN AS CHAR NO-UNDO.
 
 {Syst/commpaa.i}
 ASSIGN
-   katun = "IVR_" + ghAuthLog::EndUserId.
-   gcBrand = "1".
+   Syst.Var:katun = "IVR_" + ghAuthLog::EndUserId.
+   Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
 
@@ -26,10 +26,7 @@ IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
 pcMSISDN = get_string(param_toplevel_id,"0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST mobsub NO-LOCK WHERE 
-           mobsub.brand = gcBrand AND
-           mobsub.cli = pcMSISDN NO-ERROR.
-IF NOT AVAILABLE mobsub THEN RETURN appl_err("Subscription not found").
+{viptool/src/findtenant.i NO Ordercanal MobSub CLI pcMSISDN}
 
 ldaDate = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1.
 liPeriod = YEAR(ldaDate) * 100 + MONTH(ldaDate). 
@@ -43,5 +40,4 @@ ELSE liAmount = 0.
 add_int(response_toplevel_id, "", liAmount).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

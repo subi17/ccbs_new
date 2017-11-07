@@ -14,9 +14,7 @@
 
 {Syst/commali.i}
 {Syst/tmsconst.i}
-{Func/date.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/fmakemsreq.i}
 {Func/fparse.i}
 {Func/fixedfee.i}
@@ -81,7 +79,7 @@ FUNCTION fDSSRequest RETURNS INTEGER
 
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    fCreateRequest({&REQTYPE_DSS},
                   idActStamp,
@@ -118,7 +116,7 @@ FUNCTION fOngoingDSSAct RETURNS LOG (INPUT iiCustnum AS INT):
    DEF VAR llExist AS LOG NO-UNDO.
    
    llExist = CAN-FIND (FIRST MsRequest NO-LOCK WHERE
-                       MsRequest.Brand = gcBrand            AND
+                       MsRequest.Brand = Syst.Var:gcBrand            AND
                        MsRequest.ReqType = {&REQTYPE_DSS}   AND
                        MsRequest.Custnum = iiCustnum        AND
                        MsRequest.ReqCParam1 = "CREATE"      AND
@@ -135,7 +133,7 @@ FUNCTION fOngoingDSSTerm RETURNS LOG (INPUT iiCustnum   AS INT,
    DEF VAR llExist AS LOG NO-UNDO.
    
    llExist = CAN-FIND (FIRST MsRequest NO-LOCK WHERE
-                       MsRequest.Brand = gcBrand           AND
+                       MsRequest.Brand = Syst.Var:gcBrand           AND
                        MsRequest.ReqType = {&REQTYPE_DSS}  AND
                        MsRequest.Custnum = iiCustnum       AND
                        MsRequest.ReqCParam1 = "DELETE"     AND
@@ -173,6 +171,8 @@ FUNCTION fGetDSSMsSeqLimit RETURNS LOG (INPUT  iiCustNum   AS INT,
                                         OUTPUT odeDSSLimit AS DEC,
                                         OUTPUT ocBundleId  AS CHAR):
 
+   DEF BUFFER Servicelimit FOR Servicelimit.
+   DEF BUFFER Mservicelimit FOR mServicelimit.
    FOR EACH ServiceLimit NO-LOCK WHERE
             {Func/dss_search.i "ServiceLimit.GroupCode"},
       FIRST MServiceLimit NO-LOCK WHERE
@@ -217,7 +217,7 @@ FUNCTION fGetDSSMsSeqLimitTerm RETURNS LOG (INPUT  iiCustNum   AS INT,
                          bMServiceLimit.CustNum  = MServiceLimit.Custnum AND
                          bMServiceLimit.DialType = MServiceLimit.DialType AND
                          bMServiceLimit.SlSeq    = MServiceLimit.SlSeq    AND
-                         bMServiceLimit.EndTS    = fSecOffSet(MServiceLimit.FromTs,-1) AND
+                         bMServiceLimit.EndTS    = Func.Common:mSecOffSet(MServiceLimit.FromTs,-1) AND
                          bMServiceLimit.FromTs  <= ideBundleTermStamp)) THEN DO:
 
          ASSIGN oiDSSMsSeq  = MServiceLimit.MsSeq
@@ -282,7 +282,7 @@ FUNCTION fGetDSSUsage RETURNS DEC (INPUT iiCustNum    AS INT,
    DEF VAR ldeAmount   AS DEC NO-UNDO.
 
    liPeriod = YEAR(idActDate) * 100 + MONTH(idActDate).
-   ldeActStamp = fHMS2TS(fLastDayOfMonth(idActDate),"23:59:59").
+   ldeActStamp = Func.Common:mHMS2TS(Func.Common:mLastDayOfMonth(idActDate),"23:59:59").
 
    FOR EACH ServiceLimit NO-LOCK WHERE
             {Func/dss_search.i "ServiceLimit.GroupCode"},
@@ -325,9 +325,9 @@ FUNCTION fGetTotalDSSUsage RETURNS LOG (INPUT iiCustNum    AS INT,
    DEF BUFFER bServiceLCounter FOR ServiceLCounter.
 
    ASSIGN liPeriod = YEAR(idActDate) * 100 + MONTH(idActDate)
-          ldeActStamp = fHMS2TS(fLastDayOfMonth(idActDate),"23:59:59")
+          ldeActStamp = Func.Common:mHMS2TS(Func.Common:mLastDayOfMonth(idActDate),"23:59:59")
           ldaFromDate = DATE(MONTH(idActDate),1,YEAR(idActDate))
-          ldeFromTS   = fHMS2TS(ldaFromDate,"00:00:00").
+          ldeFromTS   = Func.Common:mHMS2TS(ldaFromDate,"00:00:00").
 
    FOR EACH ServiceLimit NO-LOCK WHERE
             {Func/dss_search.i "ServiceLimit.GroupCode"},
@@ -350,6 +350,7 @@ FUNCTION fGetTotalDSSUsage RETURNS LOG (INPUT iiCustNum    AS INT,
 
       FOR EACH bServiceLimit NO-LOCK WHERE
                 bServiceLimit.GroupCode = "DSS200_UPSELL" OR
+                bServiceLimit.GroupCode MATCHES "DSS*FLEX*UPSELL" OR 
                 bServiceLimit.GroupCode = ServiceLimit.Groupcode + "_UPSELL",
           FIRST bMServiceLimit NO-LOCK WHERE
                 bMServiceLimit.CustNum  = iiCustNum          AND
@@ -405,8 +406,8 @@ FUNCTION fGetOtherBundleUsages RETURNS DEC (INPUT iiCustNum   AS INT,
 
    ASSIGN ldFromDate = fInt2Date(iiPeriod,1)
           ldToDate   = fInt2Date(iiPeriod,2)
-          ldeFromTS  = fMake2Dt(ldFromDate,0)
-          ldeEndTS   = fMake2Dt(ldToDate,86399)
+          ldeFromTS  = Func.Common:mMake2DT(ldFromDate,0)
+          ldeEndTS   = Func.Common:mMake2DT(ldToDate,86399)
           lcExcludeBundles = fCParamC("EXCLUDE_BUNDLES").
 
    lcBundleId = fGetActiveDSSId(iiCustNum,ldeEndTS).
@@ -432,7 +433,7 @@ FUNCTION fGetOtherBundleUsages RETURNS DEC (INPUT iiCustNum   AS INT,
             FIRST bServiceLimit NO-LOCK WHERE
                   bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
             FIRST bDayCampaign WHERE
-                  bDayCampaign.Brand = gcBrand AND
+                  bDayCampaign.Brand = Syst.Var:gcBrand AND
                   bDayCampaign.DCEvent = bServiceLimit.GroupCode NO-LOCK:
 
             IF LOOKUP(STRING(bDayCampaign.DCType),
@@ -559,7 +560,7 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
              lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
 
    FOR EACH bMobSub WHERE
-            bMobSub.Brand   = gcBrand   AND
+            bMobSub.Brand   = Syst.Var:gcBrand   AND
             bMobSub.InvCust = iiCustnum AND
             NOT bMobSub.PayType NO-LOCK:
 
@@ -584,7 +585,7 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
          FIRST bServiceLimit NO-LOCK WHERE
                bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
          FIRST bDayCampaign WHERE
-               bDayCampaign.Brand = gcBrand AND
+               bDayCampaign.Brand = Syst.Var:gcBrand AND
                bDayCampaign.DCEvent = bServiceLimit.GroupCode NO-LOCK:
 
          /* might happen with ACC if the old customer has still active DSS */
@@ -609,7 +610,7 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
             IF (LOOKUP(bDayCampaign.DCEvent,lcDSS2PrimarySubsType) > 0) OR
                (LOOKUP(bMobSub.CLIType,lcDSS2PrimarySubsType)      > 0  AND
                  CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                                CLIType.Brand      = gcBrand         AND
+                                CLIType.Brand      = Syst.Var:gcBrand         AND
                                 CLIType.CLIType    = bMobSub.CLIType AND
                                 CLIType.BaseBundle = bDayCampaign.DCEvent)) THEN
             llDSS2PrimaryAvail = TRUE.
@@ -707,14 +708,14 @@ FUNCTION fIsDSSAllowed RETURNS LOG
       RETURN FALSE.
    END. /* IF NOT AVAILABLE MobSub THEN DO: */
 
-   IF fMatrixAnalyse(gcBrand,
+   IF fMatrixAnalyse(Syst.Var:gcBrand,
                      "PERCONTR",
                      "PerContract;SubsTypeTo",
                      icBundleId + ";" + MobSub.CLIType,
                      OUTPUT ocResult) NE 1 THEN DO:
       ocResult = "ERROR:Contract is not allowed for this subscription type".
       RETURN FALSE.
-   END. /* IF fMatrixAnalyse(gcBrand */
+   END. /* IF fMatrixAnalyse(Syst.Var:gcBrand */
 
    RETURN fIsDSSAllowedForCustomer(INPUT iiCustnum,
                                    INPUT ideActStamp,
@@ -765,14 +766,14 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
          RETURN FALSE.
       END. /* IF NOT AVAILABLE bMobSub THEN DO: */
 
-      IF fMatrixAnalyse(gcBrand,
+      IF fMatrixAnalyse(Syst.Var:gcBrand,
                         "PERCONTR",
                         "PerContract;SubsTypeTo",
                         "DSS2" + ";" + bMobSub.CLIType,
                         OUTPUT ocResult) NE 1 THEN DO:
          ocResult = "ERROR:Contract is not allowed for this subscription type".
          RETURN FALSE.
-      END. /* IF fMatrixAnalyse(gcBrand */
+      END. /* IF fMatrixAnalyse(Syst.Var:gcBrand */
 
       IF LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType)   > 0  AND 
         (LOOKUP(bMobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
@@ -789,7 +790,7 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
 
    MOBSUB_LOOP:
    FOR EACH bMobSub WHERE
-            bMobSub.Brand   = gcBrand   AND
+            bMobSub.Brand   = Syst.Var:gcBrand   AND
             bMobSub.InvCust = iiCustnum AND
             NOT bMobSub.PayType NO-LOCK:
 
@@ -839,7 +840,7 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
          FIRST bServiceLimit NO-LOCK WHERE
                bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
          FIRST bDayCampaign NO-LOCK WHERE
-               bDayCampaign.Brand = gcBrand AND
+               bDayCampaign.Brand = Syst.Var:gcBrand AND
                bDayCampaign.DCEvent = bServiceLimit.GroupCode AND
                LOOKUP(bDayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0:
 
@@ -860,7 +861,7 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
             IF (LOOKUP(bDayCampaign.DCEvent,lcDSS2PrimarySubsType) > 0) OR
                (LOOKUP(bMobSub.CLIType,lcDSS2PrimarySubsType)      > 0  AND 
                 CAN-FIND(FIRST CLIType NO-LOCK WHERE 
-                               CLIType.Brand      = gcBrand         AND 
+                               CLIType.Brand      = Syst.Var:gcBrand         AND 
                                CLIType.CLIType    = bMobSub.CLIType AND 
                                CLIType.BaseBundle = bDayCampaign.DCEvent)) THEN DO:
                ASSIGN oiDSS2PriMsSeq     = bMobSub.MsSeq
@@ -891,6 +892,75 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
 
 END.
 
+FUNCTION fgetFlexUpsellBundle RETURNS CHAR
+     (INPUT  iiCustnum      AS INT,
+      INPUT  iiMsSeq        AS INT,
+      INPUT  icDSSId        AS CHAR,
+      INPUT  icBundle       AS CHAR,
+      INPUT  ideActStamp    AS DEC):
+   /* DSS related variables */
+   DEF VAR ldeDSSLimit   AS DEC  NO-UNDO.
+   DEF VAR liDSSMsSeq    AS INT  NO-UNDO.
+   DEF VAR ldeCurrMonthLimit AS DEC NO-UNDO.
+   DEF VAR ldeConsumedData AS DEC NO-UNDO.
+   DEF VAR ldeOtherMonthLimit AS DEC NO-UNDO.
+   DEF VAR lcResult AS CHAR NO-UNDO.
+   DEF VAR lcAllowedDSS2SubsType   AS CHAR NO-UNDO.
+   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO.
+   DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO.
+   DEF VAR llDSSneeded             AS LOG  NO-UNDO.
+
+   DEF BUFFER Mobsub FOR Mobsub.
+   ASSIGN lcAllowedDSS2SubsType   = fCParamC("DSS2_SUBS_TYPE")
+          lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
+          lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
+   IF icDSSId BEGINS "DSS" THEN
+      llDSSNeeded = TRUE.
+   IF icDSSId EQ "DSS" THEN DO: 
+      IF NOT fIsDSSActive(INPUT iiCustnum,INPUT Func.Common:mMakeTS()) THEN
+         llDSSNeeded = FALSE.
+   END.
+   ELSE IF icDSSId EQ "DSS2" THEN DO:
+      FIND FIRST MobSub WHERE Mobsub.msseq EQ iiMsseq NO-LOCK NO-ERROR.
+      IF AVAIL MobSub THEN DO:
+         IF fMatrixAnalyse(Syst.Var:gcBrand,
+                           "PERCONTR",
+                           "PerContract;SubsTypeTo",
+                           "DSS2" + ";" + MobSub.CLIType,
+                           OUTPUT lcResult) NE 1 THEN
+            llDSSNeeded = FALSE.
+         
+         ELSE IF LOOKUP(Mobsub.CLIType,lcAllowedDSS2SubsType)   > 0  AND
+           (LOOKUP(Mobsub.CLIType,lcExtraMainLineCLITypes) > 0  OR
+            LOOKUP(Mobsub.CLIType,lcExtraLineCLITypes)     > 0) THEN
+            IF NOT fCheckExtraLineMatrixSubscription(Mobsub.MsSeq,
+                                                     Mobsub.MultiSimId,
+                                                     Mobsub.MultiSimType) THEN
+            llDSSNeeded = FALSE.
+         ELSE IF NOT fIsDSS2Allowed(iiCustnum,0,ideActStamp,liDSSMsseq,
+                                    lcResult) THEN
+            llDSSNeeded = FALSE.
+      END.
+      ELSE
+         llDSSNeeded = FALSE. /* Should not ever come here */
+   END.
+   ELSE /* not known/supported DSS */
+      llDSSNeeded = FALSE.
+   IF llDSSNeeded THEN DO: 
+      IF icBundle MATCHES "*FLEX_500MB_UPSELL" THEN DO:
+         RETURN "DSS_FLEX_500MB_UPSELL".
+      END.
+      ELSE IF icBundle MATCHES "*FLEX_5GB_UPSELL" THEN
+         RETURN "DSS_FLEX_5GB_UPSELL".
+   END.
+   ELSE
+      IF icBundle MATCHES "*FLEX_500MB_UPSELL" THEN DO:
+         RETURN "FLEX_500MB_UPSELL".
+      END.
+      ELSE IF icBundle MATCHES "*FLEX_5GB_UPSELL" THEN
+         RETURN "FLEX_5GB_UPSELL".
+END.
+
 FUNCTION fCanDSSKeepActive RETURNS LOG
    (INPUT  iiCustnum      AS INT,
     INPUT  iiMsSeq        AS INT,
@@ -910,6 +980,7 @@ FUNCTION fCanDSSKeepActive RETURNS LOG
    DEF BUFFER bServiceLCounter FOR ServiceLCounter.
    DEF BUFFER bMobSub          FOR MobSub.
    DEF BUFFER bDayCampaign     FOR DayCampaign.
+   DEF BUFFER MsRequest        FOR MsRequest.
 
    lcExcludeBundles = fCParamC("EXCLUDE_BUNDLES").
 
@@ -917,8 +988,9 @@ FUNCTION fCanDSSKeepActive RETURNS LOG
       ASSIGN lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
              lcDSS2PrimarySubsType = fCParamC("DSS2_PRIMARY_SUBS_TYPE").
 
+   MOBSUB_LOOP:
    FOR EACH bMobSub WHERE
-            bMobSub.Brand   = gcBrand   AND
+            bMobSub.Brand   = Syst.Var:gcBrand   AND
             bMobSub.InvCust = iiCustnum AND
             NOT bMobSub.PayType NO-LOCK:
 
@@ -946,14 +1018,20 @@ FUNCTION fCanDSSKeepActive RETURNS LOG
                    LOOKUP(MsRequest.ReqCParam2,lcAllowedDSS2SubsType) = 0)
       THEN NEXT.
 
-      IF icBundleId = "DSS" AND
-         CAN-FIND (FIRST MsRequest NO-LOCK WHERE
-                   MsRequest.MsSeq   = bMobSub.MsSeq AND
-                   MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
-                   MsRequest.ActStamp <= ideActStamp AND
-                   LOOKUP(STRING(MsRequest.ReqStatus),
-                          {&REQ_INACTIVE_STATUSES} + ",3") = 0 AND
-                   MsRequest.ReqCParam2 BEGINS "TARJ") THEN NEXT.
+      IF icBundleId = "DSS" THEN DO:
+         FOR EACH MsRequest NO-LOCK WHERE
+                  MsRequest.MsSeq   = bMobSub.MsSeq AND
+                  MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
+                  MsRequest.ActStamp <= ideActStamp AND
+                  LOOKUP(STRING(MsRequest.ReqStatus),
+                         {&REQ_INACTIVE_STATUSES} + ",3") = 0:
+
+             IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                               CLIType.CLIType = MsRequest.ReqCparam2 AND
+                               CLIType.PayType = {&CLITYPE_PAYTYPE_PREPAID})
+               THEN NEXT MOBSUB_LOOP.
+         END.
+      END.
 
       /* Exclude subs. if ACC request is ongoing */
       IF CAN-FIND (FIRST MsRequest NO-LOCK WHERE
@@ -973,7 +1051,7 @@ FUNCTION fCanDSSKeepActive RETURNS LOG
          FIRST bServiceLimit NO-LOCK WHERE
                bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
          FIRST bDayCampaign NO-LOCK WHERE
-               bDayCampaign.Brand = gcBrand AND
+               bDayCampaign.Brand = Syst.Var:gcBrand AND
                bDayCampaign.DCEvent = bServiceLimit.GroupCode AND
                LOOKUP(bDayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0:
 
@@ -1046,7 +1124,7 @@ FUNCTION fIsDSSTransferAllowed RETURNS LOG
              lcDSS2PrimarySubsType   = fCParamC("DSS2_PRIMARY_SUBS_TYPE").
 
    FOR EACH bMobSub WHERE
-            bMobSub.Brand   = gcBrand      AND
+            bMobSub.Brand   = Syst.Var:gcBrand      AND
             bMobSub.InvCust = iiCustnum    AND
             NOT bMobSub.PayType NO-LOCK BY ActivationDate:
 
@@ -1072,7 +1150,7 @@ FUNCTION fIsDSSTransferAllowed RETURNS LOG
          FIRST bServiceLimit NO-LOCK WHERE
                bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
          FIRST bDayCampaign WHERE
-               bDayCampaign.Brand = gcBrand AND
+               bDayCampaign.Brand = Syst.Var:gcBrand AND
                bDayCampaign.DCEvent = bServiceLimit.GroupCode AND
                LOOKUP(STRING(bDayCampaign.DCType),
                       {&PERCONTRACT_RATING_PACKAGE}) > 0 NO-LOCK:
@@ -1143,7 +1221,7 @@ FUNCTION fTransferDSS RETURNS LOG
    DEF BUFFER bServiceLimit    FOR ServiceLimit.
    DEF BUFFER bMobSub          FOR MobSub.
 
-   ASSIGN ldMonthEndDate      = fLastDayOfMonth(idActionDate)
+   ASSIGN ldMonthEndDate      = Func.Common:mLastDayOfMonth(idActionDate)
           ldNextMonthFromDate = ldMonthEndDate + 1
           liPeriod            = YEAR(idActionDate) * 100 + MONTH(idActionDate).
 
@@ -1156,7 +1234,7 @@ FUNCTION fTransferDSS RETURNS LOG
 
    DO TRANSACTION:
       FIND FIRST FixedFee WHERE
-                 FixedFee.Brand     = gcBrand   AND
+                 FixedFee.Brand     = Syst.Var:gcBrand   AND
                  FixedFee.HostTable = "MobSub"  AND
                  FixedFee.KeyValue  = STRING(iiCurrentDSSMsSeq) AND
                  FixedFee.CalcObj   = {&DSS}    AND
@@ -1219,7 +1297,7 @@ FUNCTION fTransferDSS RETURNS LOG
           EACH bMServiceLimit WHERE
                bMServiceLimit.MsSeq  = iiCurrentDSSMsSeq   AND
                bMServiceLimit.SLSeq  = bServiceLimit.SLSeq AND
-               bMServiceLimit.EndTS  >= fMakeTS() EXCLUSIVE-LOCK:
+               bMServiceLimit.EndTS  >= Func.Common:mMakeTS() EXCLUSIVE-LOCK:
          ASSIGN bMServiceLimit.MsSeq = bMobSub.MsSeq
                 llTransferDSS        = TRUE.
       END. /* FOR EACH bServiceLimit WHERE */
@@ -1252,7 +1330,7 @@ FUNCTION fGetActiveBundleLimit RETURNS DEC
       FIRST bServiceLimit NO-LOCK WHERE
             bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
       FIRST DayCampaign NO-LOCK WHERE 
-            DayCampaign.Brand   = gcBrand AND
+            DayCampaign.Brand   = Syst.Var:gcBrand AND
             DayCampaign.DCEvent = bServiceLimit.GroupCode AND
             LOOKUP(STRING(DayCampaign.DCType),
                    {&PERCONTRACT_RATING_PACKAGE}) > 0:
@@ -1341,8 +1419,8 @@ FUNCTION fMakeDSSCommLine RETURNS CHAR
       (ProvMsRequest.ReqCparam2 = "" OR
        INDEX(ProvMsRequest.ReqCparam2,"LIMIT") > 0) THEN
       fGetDSSMsSeqLimit(INPUT ProvMsRequest.CustNum,
-                        INPUT (IF ProvMsRequest.ActStamp > fMakeTS() THEN
-                               ProvMsRequest.ActStamp ELSE fMakeTS()),
+                        INPUT (IF ProvMsRequest.ActStamp > Func.Common:mMakeTS() THEN
+                               ProvMsRequest.ActStamp ELSE Func.Common:mMakeTS()),
                         OUTPUT liDSSMsSeq,
                         OUTPUT ldeCurrentDSSLimit,
                         OUTPUT lcDSSBundleId).
@@ -1414,13 +1492,13 @@ PROCEDURE pUpdateDSSLimit:
          MDSSServiceLimit.EndTS >= ideFromTS AND
          MDSSServiceLimit.FromTS <= ideFromTS THEN DO:
             
-         fSplitTS(ideFromTS, output ldaDate, output litime).
+         Func.Common:mSplitTS(ideFromTS, output ldaDate, output litime).
 
          ASSIGN
             ldePoolFromTS = ?
-            ldeFirstSecondOfMonth = fHMS2TS(DATE(MONTH(ldaDate),1,
+            ldeFirstSecondOfMonth = Func.Common:mHMS2TS(DATE(MONTH(ldaDate),1,
                                                  YEAR(ldaDate)), "00:00:00").
-            ldeLastSecondOfMonth = fHMS2TS(fLastDayOfMonth(ldaDate),"23:59:59").
+            ldeLastSecondOfMonth = Func.Common:mHMS2TS(Func.Common:mLastDayOfMonth(ldaDate),"23:59:59").
          
             /* should not normally happen, means that other bundle has already
                been added to future (older bundle has gone to error) */
@@ -1449,14 +1527,14 @@ PROCEDURE pUpdateDSSLimit:
                ASSIGN
                   ldePoolAmt = MDSSServiceLimit.InclAmt
                   ldePoolFromTS = (IF AVAIL MserviceLPool
-                                   THEN fSecOffSet(MserviceLPool.EndTs,1)
+                                   THEN Func.Common:mSecOffSet(MserviceLPool.EndTs,1)
                                    ELSE MDSSServiceLimit.FromTS).
             END.
 
             FIND FIRST MserviceLPool WHERE
                        MserviceLPool.Custnum = MDSSServiceLimit.Custnum AND
                        MserviceLPool.SLSeq = MDSSServiceLimit.SLSeq AND
-                       MserviceLPool.EndTS = fSecOffSet(ideFromTS,-1) 
+                       MserviceLPool.EndTS = Func.Common:mSecOffSet(ideFromTS,-1) 
             NO-LOCK NO-ERROR.
             IF NOT AVAIL MserviceLPool THEN DO:
                CREATE MServiceLPool.
@@ -1465,7 +1543,7 @@ PROCEDURE pUpdateDSSLimit:
                   MServiceLPool.Custnum = MDSSServiceLimit.Custnum
                   MserviceLPool.SLSeq   = MDSSServiceLimit.SlSeq
                   MserviceLPool.FromTS  = ldePoolFromTS
-                  MserviceLPool.EndTS   = fSecOffSet(ideFromTS,-1)
+                  MserviceLPool.EndTS   = Func.Common:mSecOffSet(ideFromTS,-1)
                   MserviceLPool.LimitAmt = ldePoolAmt.
 
                IF MserviceLPool.EndTS < MserviceLPool.FromTS THEN
@@ -1474,7 +1552,7 @@ PROCEDURE pUpdateDSSLimit:
                IF llDoEvent THEN 
                   fMakeCreateEvent((BUFFER MserviceLPool:HANDLE),
                                    "",
-                                   katun,
+                                   Syst.Var:katun,
                                    "").
 
                
@@ -1516,7 +1594,7 @@ PROCEDURE pUpdateDSSLimit:
             USE-INDEX Custnum NO-ERROR.
                   
             ldePoolFromTS = (IF AVAIL MserviceLPool
-                             THEN fSecOffSet(MserviceLPool.EndTs,1)
+                             THEN Func.Common:mSecOffSet(MserviceLPool.EndTs,1)
                              ELSE MDSSServiceLimit.FromTS).
                   
             FIND FIRST MserviceLPool WHERE
@@ -1538,7 +1616,7 @@ PROCEDURE pUpdateDSSLimit:
                IF llDoEvent THEN 
                   fMakeCreateEvent((BUFFER MserviceLPool:HANDLE),
                                    "",
-                                   katun,
+                                   Syst.Var:katun,
                                    "").
             END.
           END.
@@ -1622,8 +1700,7 @@ PROCEDURE pUpdateDSSNetworkLimit:
                            OUTPUT lcError).
 
    IF liCreated = 0 THEN
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                 "Customer",
+      Func.Common:mWriteMemo("Customer",
                  STRING(iiCustNum),
                  iiCustNum,
                  "Update DSS Network Limit/Quota",
@@ -1676,8 +1753,7 @@ PROCEDURE pUpdateDSSNetwork:
                            OUTPUT lcError).
 
    IF liCreated = 0 THEN
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "Customer",
+      Func.Common:mWriteMemo("Customer",
                        STRING(iiCustNum),
                        iiCustNum,
                        "Unable to create " + icAction + " request",
@@ -1706,7 +1782,7 @@ PROCEDURE pUpdateDSSConsumption:
               bMsRequest.MsRequest = iiMainRequest NO-LOCK NO-ERROR.
    IF NOT AVAIL bMsRequest THEN RETURN.
 
-   fSplitTS(bMsRequest.ActStamp,OUTPUT ldaActDate,OUTPUT liActTime).
+   Func.Common:mSplitTS(bMsRequest.ActStamp,OUTPUT ldaActDate,OUTPUT liActTime).
 
    /* Check whether DSS bundle is active or not for this customer */
    IF NOT fGetTotalDSSUsage(INPUT bMsRequest.CustNum,INPUT ldaActDate,
@@ -1754,8 +1830,7 @@ PROCEDURE pUpdateDSSConsumption:
                         FALSE, /* mandatory for father request */
                         OUTPUT lcError).
       IF liRequest = 0 THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(bMsRequest.MsSeq),
                           bMsRequest.Custnum,
                           "Contract consumption adjustment failed;",

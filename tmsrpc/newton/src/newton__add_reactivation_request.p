@@ -17,11 +17,10 @@
 ---------------------------------------------------------------------- */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Func/cparam2.i}
 {Func/fcreatereq.i}
 {Mnp/mnp.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/freacmobsub.i}
 
@@ -54,12 +53,12 @@ IF lcStruct EQ ? THEN RETURN.
 
 /* Required Params */
 liMsSeq  = get_pos_int(pcReacStruct, "msseq").
-katun    = "VISTA_" + get_string(pcReacStruct, "salesman").
+Syst.Var:katun = "VISTA_" + get_string(pcReacStruct, "salesman").
 
 lcMemoTitle = get_string(pcMemoStruct, "title").
 lcMemoContent = get_string(pcMemoStruct, "content").
 
-IF TRIM(katun) EQ "VISTA_" THEN
+IF TRIM(Syst.Var:katun) EQ "VISTA_" THEN
    RETURN appl_err("username is empty").
 
 IF LOOKUP("ActStamp", pcReacStruct) GT 0 THEN
@@ -67,9 +66,11 @@ IF LOOKUP("ActStamp", pcReacStruct) GT 0 THEN
 
 /* Set Reactivation time */
 IF ldActStamp = 0 OR ldActStamp = ? THEN
-   ldActStamp = fMakeTS().
+   ldActStamp = Func.Common:mMakeTS().
 
-lcResult = freacprecheck(INPUT liMsSeq, INPUT katun, INPUT FALSE).
+{newton/src/findtenant.i NO ordercanal TermMobSub MsSeq liMsSeq}
+
+lcResult = freacprecheck(INPUT liMsSeq, INPUT Syst.Var:katun, INPUT FALSE).
 IF lcResult > "" THEN DO:
    lcResult = REPLACE(lcResult, CHR(10), " ").
    RETURN appl_err(lcResult).
@@ -80,7 +81,7 @@ FIND FIRST bTermMobSub WHERE
 IF AVAIL bTermMobSub AND bTermMobSub.MultiSIMId > 0 AND
    bTermMobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} THEN DO:
    FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-              lbMobSub.Brand  = gcBrand AND
+              lbMobSub.Brand  = Syst.Var:gcBrand AND
               lbMobSub.MultiSimID = bTermMobSub.MultiSimID AND
               lbMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
               lbMobSub.Custnum = bTermMobSub.Custnum NO-ERROR.
@@ -93,7 +94,7 @@ END. /* IF AVAIL bTermMobSub THEN DO: */
 liMsReq = fReactivationRequest(INPUT liMsSeq,
                                INPUT 0,
                                INPUT ldActStamp,
-                               INPUT katun,
+                               INPUT Syst.Var:katun,
                                INPUT {&REQUEST_SOURCE_NEWTON},
                                OUTPUT lcResult).
 IF liMsReq > 0 THEN
@@ -106,18 +107,17 @@ IF lcMemoTitle > "" AND liMsReq > 0 THEN DO:
    CREATE Memo.
    ASSIGN
        Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = gcBrand
+       Memo.Brand     = Syst.Var:gcBrand
        Memo.HostTable = "MobSub"
        Memo.KeyValue  = STRING(liMsSeq)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = katun
+       Memo.CreUser   = Syst.Var:katun
        Memo.MemoTitle = lcMemoTitle
        Memo.MemoText  = lcMemoContent
        Memo.CustNum   = (IF AVAILABLE TermMobSub THEN TermMobSub.CustNum ELSE 0).
 END. /* IF lcMemoTitle > "" THEN DO: */
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.
 
 

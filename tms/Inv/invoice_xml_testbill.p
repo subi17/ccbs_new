@@ -28,7 +28,7 @@ lcFile = lcTestDir + "/" + icBillRun + "*" + lcFile.
    
 RUN Inv/printdoc1co.p ("",
                  0,
-                 99999999,
+                 999999999,
                  "",
                  "ZZZZ",
                  idaInvDate,

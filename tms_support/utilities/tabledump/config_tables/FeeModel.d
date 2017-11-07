@@ -58,6 +58,7 @@
 "CONTF55" "CONTRATOF 55 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTF8MF" "Contrato Flat 8 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTFF2MF" "CONTRATOFF 2 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"CONTFH1000MF" "La Combinada Azul 1Gbps" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTFH300MF" "Convergent FIBER 300MB monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTFH50MF" "Convergent FIBER 50MB monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTM2MF" "CONTRATOM2 monthly fe" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
@@ -97,6 +98,8 @@
 "FLEX_5GB_UPSELLMF" "5GB Flex Upsell" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FLEX_MFUPS" "Flex upsell monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FTERMPERIOD" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"FTERMPERIOD177" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"FTERMPERIOD233" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "HANDSET" "Terminal" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "ICC_POSTPAID" "Change of ICC Charge Postpaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "ICC_PREPAID" "Change of ICC Charge Prepaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1

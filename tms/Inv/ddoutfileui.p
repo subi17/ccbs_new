@@ -49,14 +49,14 @@ FORM
    liCustNum[1] COLON 20
       LABEL  "Customers"
       HELP   "Customers"
-      FORMAT ">>>>>>>9"
+      FORMAT ">>>>>>>>9"
    "-"
    liCustNum[2]
       NO-LABEL
       HELP "Customers"
       VALIDATE(INPUT liCustNum[2] >= INPUT liCustNum[1],
                "Invalid definition")
-      FORMAT ">>>>>>>9"
+      FORMAT ">>>>>>>>9"
       SKIP(1)
 
    ldtInvDate COLON 20 
@@ -68,14 +68,14 @@ FORM
    lcInvID[1] COLON 20
       LABEL "Invoices"
       HELP  "Invoices"
-      FORMAT "X(12)"
+      FORMAT "X(14)"
    "-"
    lcInvID[2]
       NO-LABEL
       HELP "Invoices"
       VALIDATE(INPUT lcInvID[2] >= INPUT lcInvID[1],
                "Invalid definition")
-      FORMAT "X(12)"
+      FORMAT "X(14)"
       SKIP           
             
    liInvType COLON 20
@@ -103,7 +103,7 @@ FORM
    lcFile COLON 20
       LABEL "File Name"
       HELP "Name of the output file"
-      FORMAT "X(50)"
+      FORMAT "X(58)" VIEW-AS EDITOR SIZE 55 BY 1 
       SKIP
    lcTransDir COLON 20
       LABEL "Transfer Directory"
@@ -116,7 +116,7 @@ FORM
    SKIP
    
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + "  INVOICES TO CSB19  " + STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.Var:ynimi + "  INVOICES TO CSB19  " + STRING(TODAY,"99-99-99") + " "
      FRAME fCrit.
 
 
@@ -129,7 +129,7 @@ FUNCTION fIGName RETURNS LOGIC
                
    ELSE DO:
       FIND InvGroup WHERE 
-           InvGroup.Brand    = gcBrand AND
+           InvGroup.Brand    = Syst.Var:gcBrand AND
            InvGroup.InvGroup = icInvGroup
       NO-LOCK NO-ERROR.
       IF AVAILABLE InvGroup THEN lcIgName = InvGroup.IGName.
@@ -144,8 +144,7 @@ FUNCTION fTypeName RETURNS LOGIC
    
    IF iiInvType = 0 
    THEN lcInvType = "ALL".
-   ELSE lcInvType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                     "Invoice",
+   ELSE lcInvType = Func.Common:mTMSCodeName("Invoice",
                                      "InvType",
                                      STRING(iiInvType)).
       
@@ -155,7 +154,7 @@ END FUNCTION.
 
 
 ASSIGN ufkey           = FALSE
-       liCustNum[2]    = 99999999
+       liCustNum[2]    = 999999999
        lcInvID[2]      = FILL("Z",12)
        ldtInvDate      = TODAY
        liPrintState[1] = 1
@@ -186,19 +185,19 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
    IF ufkey THEN DO:
       ASSIGN
-         ufk    = 0
-         ufk[1] = 132 
-         ufk[5] = 795
-         ufk[8] = 8 
-         ehto   = 0.
+         Syst.Var:ufk    = 0
+         Syst.Var:ufk[1] = 132 
+         Syst.Var:ufk[5] = 795
+         Syst.Var:ufk[8] = 8 
+         Syst.Var:ehto   = 0.
       RUN Syst/ufkey.p.
    END.
-   ELSE ASSIGN toimi = 1
+   ELSE ASSIGN Syst.Var:toimi = 1
                ufkey = TRUE.
 
-   IF toimi = 1 THEN DO:
+   IF Syst.Var:toimi = 1 THEN DO:
 
-      ehto = 9. 
+      Syst.Var:ehto = 9. 
       RUN Syst/ufkey.p.
       
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
@@ -215,9 +214,9 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          WITH FRAME fCrit EDITING:
 
             READKEY.
-            nap = KEYLABEL(LASTKEY).
+            Syst.Var:nap = KEYLABEL(LASTKEY).
 
-            IF nap = "F9" AND 
+            IF Syst.Var:nap = "F9" AND 
                LOOKUP(FRAME-FIELD,"liInvType,liPrintState") > 0 THEN DO:
 
                IF FRAME-FIELD = "liInvType" THEN DO:
@@ -250,18 +249,18 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                   END.    
                END.   
 
-               ehto = 9.
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.
 
-            IF LOOKUP(nap,poisnap) > 0 THEN DO:
+            IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
 
                IF FRAME-FIELD = "lcInvGroup" THEN DO:
 
                   IF INPUT lcInvGroup > "" AND
                      NOT CAN-FIND(InvGroup WHERE 
-                                  InvGroup.Brand    = gcBrand AND
+                                  InvGroup.Brand    = Syst.Var:gcBrand AND
                                   InvGroup.InvGroup = INPUT lcInvGroup)
                   THEN DO:
                      MESSAGE "Unknown invoicing group."
@@ -290,7 +289,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
    END.
 
-   ELSE IF toimi = 5 THEN DO:
+   ELSE IF Syst.Var:toimi = 5 THEN DO:
       
       IF lcFile = "" THEN DO:
          MESSAGE "File name has not been given."
@@ -315,7 +314,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                        0,
                        "",
                        FALSE,  /* schema validation disabled */
-                       FALSE,  /* input files */
+                       "",  /* input files */
                        OUTPUT liCount,
                        OUTPUT liFiles,
                        OUTPUT lcError).
@@ -330,7 +329,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       LEAVE CritLoop.
    END.
 
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.Var:toimi = 8 THEN DO:
       LEAVE CritLoop.
    END.
 

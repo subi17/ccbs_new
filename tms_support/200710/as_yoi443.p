@@ -18,7 +18,7 @@ END.
 
 
 {Syst/testpaa.i}
-katun = "anttis".
+Syst.Var:katun = "anttis".
 
 def stream sread.
 input stream sread from /home/anttis/taps/virheet.txt.

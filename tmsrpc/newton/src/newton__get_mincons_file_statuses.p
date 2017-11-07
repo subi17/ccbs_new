@@ -1,3 +1,13 @@
+/**
+ * MINCONS details 
+
+ * @input  brand;string;mandatory;tenant
+ * @output filename;string
+           start_processing;datetime
+           end_processing;datetime
+           result;int
+           result_text;string  
+ */
 /* ----------------------------------------------------------------------
   MODULE .......: NEWTON__GET_MINCONS_STATUSES.P
   TASK .........: Find six latest Actionlogs about mincons.
@@ -12,16 +22,23 @@
 {Syst/commpaa.i}
 
 ASSIGN
-katun = "cron"
-gcbrand = "1".
-DEF VAR resp_array AS CHARACTER NO-UNDO.
+Syst.Var:katun = "cron"
+Syst.Var:gcBrand = "1".
+
+DEF VAR pcTenant    AS CHARACTER NO-UNDO.
+DEF VAR resp_array  AS CHARACTER NO-UNDO.
 DEF VAR resp_struct AS CHARACTER NO-UNDO.
 DEF VAR file_struct AS CHARACTER NO-UNDO.
 
 DEF VAR liCount AS INTEGER NO-UNDO.
 
-IF NOT get_paramcount(param_toplevel_id) EQ 0 THEN
-    RETURN param_err("Unexpected parameters").
+IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
+
+pcTenant = get_string(param_toplevel_id,"0").
+
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 resp_array = add_array(response_toplevel_id, "").
 liCount = 1.
@@ -39,4 +56,3 @@ FOR EACH ActionLog WHERE Actionlog.actionID EQ "MINCONS" AND
    IF liCount > 6 THEN LEAVE.
 END.
 
-IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.

@@ -8,12 +8,11 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Syst/eventlog.i}
 {Func/fmakemsreq.i}
 {Func/upsellbundle.i}
@@ -84,7 +83,7 @@ REPEAT:
    
       /* To prevent duplicate file handling (YTS-5280) */
       IF CAN-FIND (FIRST ActionLog NO-LOCK WHERE
-                         ActionLog.Brand = gcBrand AND
+                         ActionLog.Brand = Syst.Var:gcBrand AND
                          ActionLog.TableName = "Cron" AND
                          ActionLog.KeyValue = lcFileName AND
                          ActionLog.ActionID = "upsellBOB" AND
@@ -93,14 +92,14 @@ REPEAT:
       DO TRANS:
          CREATE ActionLog.
          ASSIGN 
-            ActionLog.Brand        = gcBrand   
+            ActionLog.Brand        = Syst.Var:gcBrand   
             ActionLog.TableName    = "Cron"  
             ActionLog.KeyValue     = lcFileName
             ActionLog.ActionID     = "upsellBOB"
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
                                      MONTH(TODAY)
             ActionLog.ActionStatus = 0
-            ActionLog.ActionTS     = fMakeTS().
+            ActionLog.ActionTS     = Func.Common:mMakeTS().
       END.
 
       INPUT STREAM sin FROM VALUE(lcInputFile).
@@ -112,11 +111,11 @@ REPEAT:
    OUTPUT STREAM sLog TO VALUE(lcLogFile).
    fBatchLog("START", lcLogFile).
 
-   ASSIGN ldEndDate   = fLastDayOfMonth(TODAY)
-          ldEndStamp  = fMake2Dt(ldEndDate,86399)
-          ldeActStamp = fMakeTS().
+   ASSIGN ldEndDate   = Func.Common:mLastDayOfMonth(TODAY)
+          ldEndStamp  = Func.Common:mMake2DT(ldEndDate,86399)
+          ldeActStamp = Func.Common:mMakeTS().
 
-   fSplitTs(ldeActStamp,OUTPUT ldaActDate,OUTPUT liActTime).
+   Func.Common:mSplitTS(ldeActStamp,OUTPUT ldaActDate,OUTPUT liActTime).
 
    LINE_LOOP:
    REPEAT:
@@ -145,7 +144,7 @@ REPEAT:
          ActionLog.ActionChar   = "Read: " + STRING(liRead) + 
                                   " Errors: " + STRING(liErrors) + 
                                   " Succesful: " + STRING(liRead - liErrors) + 
-                                  CHR(10) + "Finished: " + fTS2HMS(fMakeTS())
+                                  CHR(10) + "Finished: " + Func.Common:mTS2HMS(Func.Common:mMakeTS())
          ActionLog.ActionStatus = 3.
    END.
    
@@ -174,7 +173,7 @@ PROCEDURE pBobCheckUpsell:
    ASSIGN
       lcCLI          = TRIM(ENTRY(1,pcLine,lcSep))
       lcUpsell       = TRIM(ENTRY(2,pcLine,lcSep))
-      lcUpSellList   = "DATA6_UPSELL,DSS_UPSELL,DSS2_UPSELL,DSS200_UPSELL,DATA200_UPSELL,FLEX_UPSELL".
+      lcUpSellList   = "DATA6_UPSELL,DSS_UPSELL,DSS2_UPSELL,DSS200_UPSELL,DATA200_UPSELL,FLEX_UPSELL,FLEX_500MB_UPSELL,FLEX_5GB_UPSELL,DSS_FLEX_500MB_UPSELL,DSS_FLEX_5GB_UPSELL".
 
    IF lcUpsell = ? OR 
       LOOKUP(lcUpsell,lcUpSellList) = 0 THEN
@@ -184,12 +183,12 @@ PROCEDURE pBobCheckUpsell:
 
    /* check invoice */
    FIND MobSub WHERE 
-        MobSub.Brand = gcBrand AND
+        MobSub.Brand = Syst.Var:gcBrand AND
         MobSub.CLI   = lcCLI NO-LOCK NO-ERROR.
    IF NOT AVAIL MobSub OR MobSub.PayType = TRUE THEN 
       RETURN "ERROR:TARJ contract or Invalid MSISDN".
       
-   lcDssId = fGetActiveDSSId(MobSub.CustNum,fMakeTS()).
+   lcDssId = fGetActiveDSSId(MobSub.CustNum,Func.Common:mMakeTS()).
  
    IF lcDssID EQ "" AND 
       lcUpsell BEGINS "DSS" THEN 
@@ -201,6 +200,10 @@ PROCEDURE pBobCheckUpsell:
          lcUpsell = "DSS_UPSELL".
       ELSE IF lcUpsell EQ "DATA200_UPSELL" THEN 
          lcUpsell = "DSS200_UPSELL".
+      ELSE IF lcUpsell EQ "FLEX_500MB_UPSELL" THEN
+         lcUpsell = "DSS_FLEX_500MB_UPSELL".
+      ELSE IF lcUpsell EQ "FLEX_5GB_UPSELL" THEN
+         lcUpsell = "DSS_FLEX_5GB_UPSELL".
       ELSE IF lcUpsell NE "DSS_UPSELL" AND lcUpsell NE "DSS200_UPSELL" THEN
          RETURN "ERROR:Upsell is not DSS compatible".
    END.
@@ -220,6 +223,10 @@ PROCEDURE pBobCheckUpsell:
             lcUpsell = "DSS2_UPSELL".
          ELSE IF lcUpsell EQ "DATA200_UPSELL" THEN 
             lcUpsell = "DSS200_UPSELL".
+         ELSE IF lcUpsell EQ "FLEX_500MB_UPSELL" THEN
+            lcUpsell = "DSS_FLEX_500MB_UPSELL".
+         ELSE IF lcUpsell EQ "FLEX_5GB_UPSELL" THEN
+            lcUpsell = "DSS_FLEX_5GB_UPSELL".
       END.
       ELSE IF lcUpsell NE "DATA6_UPSELL"   AND 
               lcUpsell NE "FLEX_UPSELL"    AND 
@@ -230,7 +237,7 @@ PROCEDURE pBobCheckUpsell:
    fCreateUpsellBundle(MobSub.MsSeq,
                        lcUpsell,
                        {&REQUEST_SOURCE_YOIGO_TOOL},
-                       fMakeTS(),
+                       Func.Common:mMakeTS(),
                        OUTPUT liRequest,
                        OUTPUT lcError). 
 
@@ -252,18 +259,21 @@ PROCEDURE pBobCheckUpsell:
       WHEN "DATA200_UPSELL" THEN 
          lcMemoTitle = "DATA 200 MB upsell". 
       WHEN "FLEX_UPSELL" THEN 
-         lcMemoTitle = "FLEX upsell".    
+         lcMemoTitle = "FLEX upsell".
+      WHEN "FLEX_500MB_UPSELL" THEN
+         lcMemoTitle = "FLEX 500MB upsell".
+      WHEN "FLEX_5GB_UPSELL" THEN
+         lcMemoTitle = "FLEX 5GB upsell".    
    END CASE.
       
    lcMemoText = "Ampliación " +  lcUpsell + " - Activar".
-   DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                    "MobSub",                             /* HostTable */
+   Func.Common:mWriteMemoWithType("MobSub",                             /* HostTable */
                     STRING(Mobsub.MsSeq),                 /* KeyValue  */
                     MobSub.CustNum,                       /* CustNum   */
                     lcMemoTitle,                          /* MemoTitle */
                     lcMemoText,                           /* MemoText  */
                     "Service",                            /* MemoType  */
-                    katun + "_" + Mobsub.Cli).
+                    Syst.Var:katun + "_" + Mobsub.Cli).
 
    RETURN "OK".
 

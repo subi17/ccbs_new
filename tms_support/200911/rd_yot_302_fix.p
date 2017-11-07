@@ -23,11 +23,11 @@ DEFINE STREAM sin.
 DEFINE STREAM sout.
 
 {Syst/commpaa.i}
-katun = "rafaeldv".
-gcBrand = "1".
+Syst.Var:katun = "rafaeldv".
+Syst.Var:gcBrand = "1".
 {Syst/eventval.i}
 IF llDoEvent THEN DO:
-  &GLOBAL-DEFINE STAR_EVENT_USER katun
+  &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
   {Func/lib/eventlog.i}
    DEFINE VARIABLE lhCustContact AS HANDLE NO-UNDO.
 END.
@@ -56,7 +56,7 @@ REPEAT:
 
    /* find corporate customer */
    FIND Customer NO-LOCK WHERE
-        Customer.brand = gcbrand and 
+        Customer.brand = Syst.Var:gcBrand and 
         Customer.CustNum = liCustNum  NO-ERROR. 
 
     IF NOT AVAIL Customer THEN DO:
@@ -82,7 +82,7 @@ REPEAT:
 
    /* let find the mobsub */
    FIND FIRST Mobsub WHERE
-      Mobsub.Brand = gcBrand AND
+      Mobsub.Brand = Syst.Var:gcBrand AND
       Mobsub.CLI = lcCLI NO-LOCK NO-ERROR. 
 
    IF NOT AVAIL MobSub THEN DO:
@@ -101,7 +101,7 @@ REPEAT:
 
    /* find nif customer */
    FIND bCustNIF NO-LOCK WHERE
-        bCustNIF.Brand = gcBrand AND
+        bCustNIF.Brand = Syst.Var:gcBrand AND
         bCustNIF.OrgId = lcOrdererId NO-ERROR. 
 
    IF AVAIL bCustNIF  THEN DO:
@@ -117,7 +117,7 @@ REPEAT:
 
           /* check customer contact */ 
           FIND CustContact WHERE
-               CustContact.Brand = gcBrand AND
+               CustContact.Brand = Syst.Var:gcBrand AND
                CustContact.Custnum = Customer.Custnum AND
                CustContact.CustType = 1 NO-LOCK NO-ERROR.
 
@@ -145,7 +145,7 @@ REPEAT:
                 IF lldoevent THEN RUN StarEventSetOldBuffer(lhCustContact).
              END.
              ASSIGN
-                CustContact.Brand          = gcBrand
+                CustContact.Brand          = Syst.Var:gcBrand
                 CustContact.Custnum        = Customer.CustNum
                 CustContact.CustType       = 1
                 CustContact.CustIdType     = lcOrdererIDType

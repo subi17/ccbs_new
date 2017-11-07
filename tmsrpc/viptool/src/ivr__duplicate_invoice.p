@@ -21,8 +21,8 @@ DEF VAR pcExtInviId AS CHAR NO-UNDO.
 
 {Syst/commpaa.i}
 ASSIGN
-   katun = "IVR_" + ghAuthLog::EndUserId.
-   gcBrand = "1".
+   Syst.Var:katun = "IVR_" + ghAuthLog::EndUserId.
+   Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/duplicate_invoice.i}
@@ -35,11 +35,7 @@ IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
 pcExtInviId = get_string(param_toplevel_id,"0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-/* check invoice */
-FIND FIRST Invoice WHERE 
-           Invoice.Brand = gcBrand AND
-           Invoice.ExtInvId = pcExtInviId NO-LOCK NO-ERROR.
-IF NOT AVAIL Invoice THEN RETURN appl_err("Invoice not found").
+{viptool/src/findtenant.i YES Common Invoice ExtInvId pcExtInviId}
 
 FOR EACH SubInvoice WHERE
          SubInvoice.InvNum = Invoice.InvNum NO-LOCK:
@@ -60,5 +56,4 @@ IF liRequestID = 0 THEN RETURN appl_err(lcError).
 add_boolean(response_toplevel_id,?,TRUE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

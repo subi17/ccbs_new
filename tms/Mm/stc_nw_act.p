@@ -9,7 +9,6 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 {Syst/commali.i}
-{Func/date.i}
 {Func/msreqfunc.i}
 {Gwy/provision.i}
 
@@ -28,11 +27,11 @@ FIND MsRequest WHERE
 NO-LOCK NO-ERROR.
 
 FIND bOldType WHERE
-     bOldType.Brand   = gcBrand AND
+     bOldType.Brand   = Syst.Var:gcBrand AND
      bOldType.CLIType = MsRequest.ReqCParam1 NO-LOCK NO-ERROR.
 
 FIND CLIType WHERE
-     CLIType.Brand   = gcBrand AND
+     CLIType.Brand   = Syst.Var:gcBrand AND
      CLIType.CLIType = MsRequest.ReqCParam2 NO-LOCK NO-ERROR.
 
 /* stc activation solog needed only when paytype changes */ 
@@ -62,7 +61,7 @@ IF bOldType.PayType NE CliType.PayType THEN DO TRANSACTION:
       Solog.Solog = NEXT-VALUE(Solog).
  
    ASSIGN
-      Solog.CreatedTS    = fMakeTS()
+      Solog.CreatedTS    = Func.Common:mMakeTS()
       Solog.MsSeq        = MsRequest.MsSeq    /* Mobile Subscription No.    */
       Solog.CLI          = MsRequest.CLI      /* MSISDN                     */
       Solog.Stat         = 0                  /* just created               */

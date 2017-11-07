@@ -96,9 +96,8 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 resp_array = add_array(response_toplevel_id, "").
 
 {Syst/commpaa.i}
-gcBrand = "1".
-katun = "NewtonRPC".
-{Func/timestamp.i}            
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "NewtonRPC".
 {Func/finvbal.i}
 {Func/fcreditvalid.i}
 {Syst/tmsconst.i}
@@ -168,8 +167,8 @@ FUNCTION fAddSubInvoices RETURNS LOGICAL
    DEF VAR ldeInvPeriodStart AS DEC NO-UNDO.
    DEF VAR ldeInvPeriodEnd   AS DEC NO-UNDO.
 
-   ASSIGN ldeInvPeriodStart = fMake2Dt(Invoice.FromDate,0)
-          ldeInvPeriodEnd   = fMake2Dt(Invoice.ToDate,86399).
+   ASSIGN ldeInvPeriodStart = Func.Common:mMake2DT(Invoice.FromDate,0)
+          ldeInvPeriodEnd   = Func.Common:mMake2DT(Invoice.ToDate,86399).
 
    lcSubInvoices = add_array(pcStruct,"sub_invoices").
 
@@ -224,57 +223,43 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
    pcID = get_string(pcIDArray, STRING(liCounter)).
 
-   FIND Invoice WHERE
-        Invoice.Brand = "1" AND
-        Invoice.InvNum = INT(pcId) NO-LOCK NO-ERROR.
-
-   IF NOT AVAILABLE Invoice THEN DO:  
-      RETURN appl_err("Invoice not found: " + pcId).
-   END.
- 
+   {newton/src/findtenant.i YES Common Invoice InvNum INT(pcID)}
+  
    FIND Customer WHERE 
         Customer.CustNum = Invoice.CustNum NO-LOCK NO-ERROR.
 
    ASSIGN 
-   lcInvType    = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "Invoice",
+   lcInvType    = Func.Common:mTMSCodeName("Invoice",
                                    "InvType",
                                    STRING(Invoice.InvType))
                                        
-   lcPrintState = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "Invoice",
+   lcPrintState = Func.Common:mTMSCodeName("Invoice",
                                    "PrintState",
                                    STRING(Invoice.PrintState))
                  
-   lcClaimState = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "Invoice",
+   lcClaimState = Func.Common:mTMSCodeName("Invoice",
                                    "ClaimStatus",
                                     Invoice.ClaimStatus)
 
-   lcPaymState  = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "Invoice",
+   lcPaymState  = Func.Common:mTMSCodeName("Invoice",
                                    "PaymState",
                                    STRING(Invoice.PaymState))
              
-   lcCType      = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "Invoice",
+   lcCType      = Func.Common:mTMSCodeName("Invoice",
                                    "ChargeType",
                                    STRING(Invoice.ChargeType))
 
-   lcDType      = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "Invoice",
+   lcDType      = Func.Common:mTMSCodeName("Invoice",
                                    "DelType",
                                    STRING(Invoice.DelType))
 
-   lcVatUsage   = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "Invoice",
+   lcVatUsage   = Func.Common:mTMSCodeName("Invoice",
                                    "VatUsage",
                                    STRING(Invoice.VatUsage))
 
    lcDDState   = IF Invoice.DDBankAcc = ""
                  THEN ""
-                 ELSE DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                       "Invoice",
+                 ELSE Func.Common:mTMSCodeName("Invoice",
                                        "DDState",
                                        STRING(Invoice.DDState))
    lcCrExtID   = "".
@@ -331,7 +316,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       ELSE
          add_string(lcInvStruct,"credit_reason_group","").
 
-      FOR EACH Memo WHERE Memo.Brand     = gcBrand         AND
+      FOR EACH Memo WHERE Memo.Brand     = Syst.Var:gcBrand         AND
                           Memo.CustNum   = Invoice.CustNum AND
                           Memo.HostTable = "Invoice"       AND
                           Memo.KeyValue  = STRING(Invoice.InvNum) NO-LOCK:
@@ -395,5 +380,4 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 END.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

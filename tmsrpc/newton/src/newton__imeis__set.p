@@ -63,10 +63,10 @@ ASSIGN
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {Syst/commpaa.i}
-katun = "VISTA_" + pcUserName.
-gcbrand = "1".
+Syst.Var:katun = "VISTA_" + pcUserName.
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
-&GLOBAL-DEFINE STAR_EVENT_USER katun 
+&GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
 {Syst/eventval.i}
 {Func/lib/eventlog.i}
 {Func/order.i}
@@ -74,12 +74,7 @@ gcbrand = "1".
 {Func/msreqfunc.i}
 {Func/fpcmaintreq.i}
 
-/* check order exist */
-FIND Order NO-LOCK WHERE
-     Order.Brand = gcBrand AND
-     Order.OrderId = piOrderId NO-ERROR.
-IF NOT AVAIL Order THEN
-   RETURN appl_err(SUBST("Unknown Order id &1",STRING(piOrderId))).
+{newton/src/findtenant.i YES ordercanal Order OrderId piOrderId}
 
 IF INDEX(Order.OrderChannel,"pos") = 0 THEN
    RETURN appl_err("Only POS order channels are supported").
@@ -90,22 +85,22 @@ IF LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES} + ",73") > 0 THEN
 IF NOT llUpdateImeiOnly THEN DO:
 
 FIND Offer WHERE 
-     Offer.Brand = gcBrand AND 
+     Offer.Brand = Syst.Var:gcBrand AND 
      Offer.Offer = pcOfferId NO-LOCK NO-ERROR.
 IF NOT AVAIL Offer THEN
    RETURN appl_err("Offer " + pcOfferId + " is not defined").
 
 /* payterm must match with original and new order YDR-328 */
 FIND FIRST OfferItem WHERE
-           OfferItem.Brand = gcBrand AND
+           OfferItem.Brand = Syst.Var:gcBrand AND
            OfferItem.Offer = Offer.Offer AND
            OfferItem.ItemType = "PerContract" AND
            OfferItem.ItemKey BEGINS "PAYTERM" AND
-           OfferItem.BeginStamp <= fMakeTS() AND
-           OfferItem.EndStamp >= fMakeTS() NO-LOCK NO-ERROR.
+           OfferItem.BeginStamp <= Func.Common:mMakeTS() AND
+           OfferItem.EndStamp >= Func.Common:mMakeTS() NO-LOCK NO-ERROR.
 
 FIND FIRST bOfferItem WHERE
-           bOfferItem.Brand = gcBrand AND
+           bOfferItem.Brand = Syst.Var:gcBrand AND
            bOfferItem.Offer = Order.Offer AND
            bOfferItem.ItemType = "PerContract" AND
            bOfferItem.ItemKey BEGINS "PAYTERM" AND
@@ -125,7 +120,7 @@ END. /* IF AVAIL(OfferItem) AND AVAIL(bOfferItem) THEN DO: */
 IF pcIMEI > "" THEN DO:
    
    liTermOfferItemID = fGetTerminalOfferItemId(Offer.Offer, 
-                        {&BITEM_GRP_TERMINAL}, fMakeTS()).
+                        {&BITEM_GRP_TERMINAL}, Func.Common:mMakeTS()).
    IF liTermOfferItemID = 0 THEN
       RETURN appl_err("Terminal not found from offer " + Offer.Offer).
    
@@ -139,13 +134,13 @@ END.
 i = 0.
 RELEASE OfferItem.
 FOR EACH bOfferItem NO-LOCK WHERE
-         bOfferItem.Brand = gcBrand AND
+         bOfferItem.Brand = Syst.Var:gcBrand AND
          bOfferItem.Offer = Offer.Offer AND
          bOfferItem.ItemType = "PerContract" AND
-         bOfferItem.EndStamp >= fMakeTS() AND
-         bOfferItem.BeginStamp <= fMakeTS() USE-INDEX ItemType,
+         bOfferItem.EndStamp >= Func.Common:mMakeTS() AND
+         bOfferItem.BeginStamp <= Func.Common:mMakeTS() USE-INDEX ItemType,
    FIRST DayCampaign NO-LOCK WHERE
-         DayCampaign.Brand = gcBrand AND
+         DayCampaign.Brand = Syst.Var:gcBrand AND
          DayCampaign.DcEvent = bOfferItem.ItemKey AND
          DayCampaign.DcType = {&DCTYPE_DISCOUNT}:
 
@@ -173,7 +168,7 @@ IF Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} THEN DO:
    IF NOT AVAIL MobSub THEN RETURN appl_err("Subcription not found").
    
    FIND SubsTerminal EXCLUSIVE-LOCK WHERE
-        SubsTerminal.Brand = gcBrand AND
+        SubsTerminal.Brand = Syst.Var:gcBrand AND
         SubsTerminal.OrderId = Order.OrderId AND
         SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE} NO-ERROR.
 
@@ -208,7 +203,7 @@ IF Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} THEN DO:
       END.
 
       ASSIGN
-         SubsTerminal.Brand = gcBrand
+         SubsTerminal.Brand = Syst.Var:gcBrand
          SubsTerminal.OrderId = Order.OrderId
          SubsTerminal.IMEI = pcIMEI
          SubsTerminal.MsSeq = MobSub.MsSeq
@@ -228,7 +223,7 @@ IF Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} THEN DO:
             DCCLI.ValidFrom <= TODAY AND
             DCCLI.ValidTo >= TODAY,
       FIRST DayCampaign WHERE
-            DayCampaign.Brand = gcBrand AND
+            DayCampaign.Brand = Syst.Var:gcBrand AND
             DayCampaign.DCEvent = DCCLI.DCEvent AND
             DayCampaign.DCType = {&DCTYPE_DISCOUNT} 
       NO-LOCK BY DCCLI.ValidFrom DESC:
@@ -331,7 +326,7 @@ END.
 ELSE DO:
 
    FIND OrderAccessory EXCLUSIVE-LOCK WHERE
-        OrderAccessory.Brand = gcBrand AND
+        OrderAccessory.Brand = Syst.Var:gcBrand AND
         OrderAccessory.OrderId = Order.OrderId AND
         OrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE} NO-ERROR.
 
@@ -368,7 +363,7 @@ ELSE DO:
       ELSE DO:
          CREATE OrderAccessory.
          ASSIGN
-            OrderAccessory.Brand = gcBrand
+            OrderAccessory.Brand = Syst.Var:gcBrand
             OrderAccessory.OrderId = Order.OrderID.
             OrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE}.
       END.
@@ -449,5 +444,4 @@ add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:
    IF llDoEvent THEN fCleanEventObjects().
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

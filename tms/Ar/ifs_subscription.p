@@ -12,6 +12,7 @@
 {Syst/dumpfile_run.i}
 {Func/barrfunc.i}
 {Syst/tmsconst.i}
+{Func/multitenantfunc.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -108,7 +109,7 @@ END FUNCTION.
 FUNCTION fCollectCustomer RETURNS LOGIC:
 
    FOR EACH MobSub NO-LOCK WHERE
-            MobSub.Brand   = gcBrand AND
+            MobSub.Brand   = Syst.Var:gcBrand AND
             MobSub.AgrCust = Customer.CustNum:
       IF CAN-FIND(FIRST ttPicked WHERE ttPicked.MsSeq = MobSub.MsSeq) THEN
          NEXT.
@@ -118,7 +119,7 @@ FUNCTION fCollectCustomer RETURNS LOGIC:
    END.   
    
    FOR EACH TermMobSub NO-LOCK WHERE
-            TermMobSub.Brand   = gcBrand AND
+            TermMobSub.Brand   = Syst.Var:gcBrand AND
             TermMobSub.AgrCust = Customer.CustNum:
       IF CAN-FIND(FIRST ttPicked WHERE ttPicked.MsSeq = TermMobSub.MsSeq) THEN
          NEXT.
@@ -137,11 +138,11 @@ OUTPUT STREAM sLog TO VALUE(icFile).
 
 FIND FIRST DumpFile WHERE DumpFile.DumpID = iiDumpID NO-LOCK NO-ERROR.
 
-fSplitTS(idLastDump,
+Func.Common:mSplitTS(idLastDump,
          OUTPUT ldaModified,
          OUTPUT liModTime).
 
-ldtLastDump = fTimeStamp2DateTime(idLastDump).
+ldtLastDump = Func.Common:mTimeStamp2DateTime(idLastDump).
 
 ASSIGN
    lhMobSub     = BUFFER MobSub:HANDLE
@@ -221,7 +222,7 @@ PROCEDURE pModifiedSubscriptions:
          DO liStatus = 1 TO 99:
 
             FOR EACH MobSub NO-LOCK WHERE
-                     MobSub.Brand    = gcBrand AND
+                     MobSub.Brand    = Syst.Var:gcBrand AND
                      MobSub.MsStatus = liStatus AND
                      MobSub.ActivationDate >= ldaModified AND
                      MobSub.ActivationTS >= idLastDump:
@@ -229,7 +230,7 @@ PROCEDURE pModifiedSubscriptions:
             END.
  
             FOR EACH TermMobSub NO-LOCK WHERE
-                     TermMobSub.Brand    = gcBrand AND
+                     TermMobSub.Brand    = Syst.Var:gcBrand AND
                      TermMobSub.MsStatus = liStatus AND
                      TermMobSub.ActivationDate >= ldaModified AND
                      TermMobSub.ActivationTS >= idLastDump:
@@ -254,7 +255,7 @@ PROCEDURE pModifiedSubscriptions:
                          idLastDump,
                          "fCollectMsOwner").
  
-   ldChkStamp = fOffSet(idLastDump,-3).
+   ldChkStamp = Func.Common:mOffSet(idLastDump,-3).
       
    FOR EACH ttPicked:
    
@@ -288,7 +289,7 @@ PROCEDURE pActiveSubscriptions:
    /* active subscriptions */
    MobLoop:
    FOR EACH MobSub NO-LOCK WHERE 
-            MobSub.Brand = gcBrand AND
+            MobSub.Brand = Syst.Var:gcBrand AND
             MobSub.CLI > ""        AND
             MobSub.AgrCust > 0
       ON QUIT UNDO, RETRY
@@ -316,7 +317,7 @@ PROCEDURE pTerminatedSubscriptions:
    /* terminated */
    TermMobLoop:
    FOR EACH TermMobSub NO-LOCK WHERE 
-            TermMobSub.Brand = gcBrand
+            TermMobSub.Brand = Syst.Var:gcBrand
       ON QUIT UNDO, RETRY
       ON STOP UNDO, RETRY:
 
@@ -349,7 +350,7 @@ PROCEDURE pVirtualSubscriptions:
             TMSCodes.FieldName = "StatusCode" AND
             TMSCodes.CodeValue NE "6",
        EACH Order NO-LOCK USE-INDEX StatusCode WHERE
-            Order.Brand      = gcBrand AND
+            Order.Brand      = Syst.Var:gcBrand AND
             Order.StatusCode = TMSCodes.CodeValue AND
             Order.InvNum > 0  AND
             Order.CustNum > 0
@@ -443,7 +444,7 @@ PROCEDURE pWrite2File:
    WHEN "TermMobSub" THEN DO:
       FIND FIRST MsOwner WHERE MsOwner.MsSeq = liMsSeq NO-LOCK NO-ERROR.
       IF AVAILABLE MsOwner AND MsOwner.TsEnd < 99999999 THEN DO:
-         fSplitTS(MsOwner.TSEnd,
+         Func.Common:mSplitTS(MsOwner.TSEnd,
                   OUTPUT ldaSubsDate,
                   OUTPUT liTime).
          END_DATE = fDate2String(ldaSubsDate).
@@ -475,7 +476,7 @@ PROCEDURE pWrite2File:
    END.
 
    WHEN "Order" THEN DO:
-      fSplitTS(Order.CrStamp,   
+      Func.Common:mSplitTS(Order.CrStamp,   
                OUTPUT ldaActDate,
                OUTPUT liTime).
 
@@ -484,13 +485,13 @@ PROCEDURE pWrite2File:
          LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 THEN DO:
 
          FIND FIRST OrderTimeStamp WHERE
-                    OrderTimeStamp.Brand   = gcBrand   AND
+                    OrderTimeStamp.Brand   = Syst.Var:gcBrand   AND
                     OrderTimeStamp.OrderID = Order.OrderID AND
                     OrderTimeStamp.RowType = 3 NO-LOCK NO-ERROR.
          
          IF AVAIL OrderTimeStamp THEN DO:
             
-            fSplitTS(OrderTimeStamp.TimeStamp,   
+            Func.Common:mSplitTS(OrderTimeStamp.TimeStamp,   
                      OUTPUT ldaSubsDate,
                      OUTPUT liTime).
             END_DATE = fDate2String(ldaSubsDate).
@@ -541,7 +542,8 @@ PROCEDURE pWrite2File:
       /* 20 */ STRING(END_DATE,"X(8)")
       /* 21 */ STRING(SUBS_STATUS,"X(15)")
       /* 22 */ FILL(" ",1)
-      /* 23 */ STRING(TERM_REASON,"X(50)")  
+      /* 23 */ STRING(TERM_REASON,"X(50)") 
+      /* 24 */ STRING(fgetCompanyId(),"X(4)")
       SKIP.
 
 END PROCEDURE.  /* pWrite2File */

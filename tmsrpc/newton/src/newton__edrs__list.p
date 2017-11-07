@@ -12,9 +12,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 ASSIGN
-   katun = "NewtonRPC"
-   gcBrand = "1".
-{Func/date.i}
+   Syst.Var:katun = "NewtonRPC"
+   Syst.Var:gcBrand = "1".
 {Func/callquery.i}
 
 DEF VAR resp_array AS CHAR NO-UNDO. 
@@ -32,17 +31,14 @@ IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
 piMsSeq = get_pos_int(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST mobsub NO-LOCK WHERE
-           mobsub.msseq = piMsSeq NO-ERROR.
-IF NOT AVAILABLE mobsub THEN
-   RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
+{newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
 
 resp_array = add_array(response_toplevel_id, "").
 tthCDR = TEMP-TABLE ttCall:HANDLE.
 
 fMobCDRCollect(INPUT "edr",
-               INPUT gcBrand,
-               INPUT katun,
+               INPUT Syst.Var:gcBrand,
+               INPUT Syst.Var:katun,
                INPUT TODAY - 30,
                INPUT TODAY,
                INPUT 0,
@@ -61,7 +57,7 @@ FOR EACH ttCall NO-LOCK WHERE
          ttCall.MsSeq = MobSub.Msseq AND
          ttCall.ErrorCode = 0:
 
-   ldeEventTime = fMake2Dt(ttCall.DateSt, ttCall.TimeStart).
+   ldeEventTime = Func.Common:mMake2DT(ttCall.DateSt, ttCall.TimeStart).
 
    CASE ttCall.SuccessCode:
       WHEN 1 THEN lcSuccessCode = "OK".
@@ -78,6 +74,5 @@ END.
 
 FINALLY:
    EMPTY TEMP-TABLE ttCall.
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-   IF VALID-HANDLE(tthCDR) THEN DELETE OBJECT tthCDR NO-ERROR.
+      IF VALID-HANDLE(tthCDR) THEN DELETE OBJECT tthCDR NO-ERROR.
 END.

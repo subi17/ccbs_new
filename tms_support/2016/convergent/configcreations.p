@@ -10,8 +10,8 @@
 
 /* ***************************  Definitions  ************************** */
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Func/ftransdir.i}
@@ -85,7 +85,7 @@ DO liBDCount = 1 TO NUM-ENTRIES(lcBDestList):
                            THEN 93 ELSE 81.
     
    FIND FIRST BDest WHERE 
-              BDest.Brand = gcBrand        AND 
+              BDest.Brand = Syst.Var:gcBrand        AND 
               BDest.BDest = lcBDestination NO-LOCK NO-ERROR.
  
    IF NOT AVAILABLE BDest THEN DO:
@@ -99,7 +99,7 @@ DO liBDCount = 1 TO NUM-ENTRIES(lcBDestList):
      
       CREATE BDest. 
       ASSIGN 
-         BDest.Brand    = gcBrand    
+         BDest.Brand    = Syst.Var:gcBrand    
          BDest.BDestID  = liBDLValue
          BDest.BDest    = lcBDestination
          BDest.BDName   = icTariffCode + " " + 
@@ -134,7 +134,7 @@ DEFINE INPUT PARAMETER icTariffName AS CHARACTER NO-UNDO.
 
    CREATE ServiceLimitGroup.
    ASSIGN 
-      ServiceLimitGroup.Brand     = gcBrand
+      ServiceLimitGroup.Brand     = Syst.Var:gcBrand
       ServiceLimitGroup.GroupCode = icTariffCode    
       ServiceLimitGroup.GroupName = icTariffName    
       ServiceLimitGroup.ValidFrom = TODAY 
@@ -219,14 +219,14 @@ DEFINE VARIABLE liSTCount       AS INTEGER   NO-UNDO.
          lcBCList        = "10100001,10100003,10100005,CFOTHER,CFYOIGO".                   
 
    FIND FIRST BDest WHERE 
-              BDest.Brand = gcBrand AND 
+              BDest.Brand = Syst.Var:gcBrand AND 
               BDest.BDest = lcFinalLimitIN NO-LOCK NO-ERROR.
    
    IF NOT AVAILABLE BDest THEN                 
       RETURN "ERROR: BDest-IN doesn't exists".             
 
    FIND FIRST BDest WHERE 
-              BDest.Brand = gcBrand AND 
+              BDest.Brand = Syst.Var:gcBrand AND 
               BDest.BDest = lcFinalLimitOUT NO-LOCK NO-ERROR.
 
    IF NOT AVAILABLE BDest THEN 
@@ -266,7 +266,7 @@ DEFINE OUTPUT PARAMETER lcFeeModel   AS CHARACTER NO-UNDO.
                        
    CREATE FeeModel.
    ASSIGN 
-      FeeModel.Brand    = gcBrand
+      FeeModel.Brand    = Syst.Var:gcBrand
       FeeModel.FeeModel = lcFeeModel
       FeeModel.FeeName  = icFMName               
       FeeModel.FMGroup  = 0 NO-ERROR.
@@ -310,7 +310,7 @@ DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.
    
    IF lcTariffBundle NE "" THEN DO:
       FIND FIRST CLIType WHERE
-                 CLIType.Brand   = gcBrand       AND
+                 CLIType.Brand   = Syst.Var:gcBrand       AND
                  CLIType.CLIType = lcMainPTariff NO-LOCK NO-ERROR.
 
       IF AVAILABLE CLIType THEN
@@ -319,12 +319,12 @@ DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.
    END.
    IF LOOKUP(icFeeModel, "10") > 0 THEN 
    FIND FIRST RatePlan WHERE 
-              RatePlan.Brand    = gcBrand AND 
+              RatePlan.Brand    = Syst.Var:gcBrand AND 
               RatePlan.RatePlan = "CONTRATOCONVS"
    NO-LOCK NO-ERROR.
    ELSE 
    FIND FIRST RatePlan WHERE
-              RatePlan.Brand    = gcBrand AND
+              RatePlan.Brand    = Syst.Var:gcBrand AND
               RatePlan.RatePlan = "CONTRATOCONVS"
               NO-LOCK NO-ERROR.
                 
@@ -332,7 +332,7 @@ DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.
       RETURN lcRateplan + " ERROR: RatePlan doesn't exists " + REPLACE(icTariffCode,"CONT","CONTRATO").
    
    FIND FIRST PListConf WHERE 
-              PListConf.Brand    = gcBrand           AND 
+              PListConf.Brand    = Syst.Var:gcBrand           AND 
               PListConf.RatePlan = RatePlan.RatePlan AND 
               PListConf.PriceList BEGINS "CONTRATO"  NO-LOCK NO-ERROR.   
    
@@ -348,7 +348,7 @@ DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.
    IF NOT AVAIL FMItem THEN DO:           
    CREATE FMItem. 
    ASSIGN     
-      FMItem.Brand             = gcBrand
+      FMItem.Brand             = Syst.Var:gcBrand
       FMItem.PriceList         = PListConf.PriceList                                               
       FMItem.BillCode          = icMFBC            
       FMItem.FeeModel          = icFeeModel                  
@@ -389,7 +389,7 @@ DEFINE VARIABLE lcFeeModel  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcTOC       AS CHARACTER NO-UNDO.
 
    IF CAN-FIND(FIRST DayCampaign WHERE
-                     DayCampaign.Brand   = gcBrand AND
+                     DayCampaign.Brand   = Syst.Var:gcBrand AND
                      DayCampaign.DCEvent = icTariffCode) THEN
       /*RETURN "ERROR: DayCampaign already exists".*/
       DISP icTariffCode.
@@ -404,7 +404,7 @@ DEFINE VARIABLE lcTOC       AS CHARACTER NO-UNDO.
    
    CREATE DayCampaign.
    ASSIGN 
-      DayCampaign.Brand           = gcBrand
+      DayCampaign.Brand           = Syst.Var:gcBrand
       DayCampaign.DCEvent         = icTariffCode 
       DayCampaign.DCName          = icDCName
       DayCampaign.ValidFrom       = TODAY 
@@ -474,7 +474,7 @@ DEFINE VARIABLE liComponentID AS INTEGER NO-UNDO.
            
     CREATE DCServicePackage.
     ASSIGN                            
-       DCServicePackage.Brand               = gcBrand 
+       DCServicePackage.Brand               = Syst.Var:gcBrand 
        DCServicePackage.DCEvent             = icTariffCode 
        DCServicePackage.DCServicePackageID  = liPackageID
        DCServicePackage.ServPac             = "SHAPER"                    
@@ -545,7 +545,7 @@ DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcpriceplan AS CHARACTER NO-UNDO.
 
    IF NOT CAN-FIND(FIRST CLIType WHERE 
-                         CLIType.Brand   = gcBrand    AND 
+                         CLIType.Brand   = Syst.Var:gcBrand    AND 
                          CLIType.CLIType = icCLIType) THEN DO:
      
      /* Find highest value of billing target and contrtype */    
@@ -561,7 +561,7 @@ DEFINE VARIABLE lcpriceplan AS CHARACTER NO-UNDO.
          Else, already available value has to be incremented by 1 */
       IF lcTariffBundle NE "" THEN DO:   
          FIND FIRST CLIType WHERE 
-                    CLIType.Brand   = gcBrand       AND 
+                    CLIType.Brand   = Syst.Var:gcBrand       AND 
                     CLIType.CLIType = lcMainPTariff NO-LOCK NO-ERROR.
                 
          IF AVAILABLE CLIType THEN
@@ -586,7 +586,7 @@ DEFINE VARIABLE lcpriceplan AS CHARACTER NO-UNDO.
       ELSE
          lcpriceplan = "CONTRATOCONVS".
       ASSIGN 
-         CLIType.Brand         = gcBrand
+         CLIType.Brand         = Syst.Var:gcBrand
          CLIType.CLIType       = icCLIType
          CLIType.CLIName       = icCLIName                            
          CLIType.BaseBundle    = icBaseBundle
@@ -648,16 +648,16 @@ DEFINE VARIABLE liCTServEl AS INTEGER NO-UNDO.
 
    IF icPayType EQ "Postpaid" THEN  
       FIND FIRST CLIType WHERE 
-                 CLIType.Brand   = gcBrand  AND 
+                 CLIType.Brand   = Syst.Var:gcBrand  AND 
                  CLIType.CLIType = "CONTS"  NO-LOCK NO-ERROR.
    ELSE IF icPayType EQ "Prepaid" THEN 
       FIND FIRST CLIType WHERE 
-                 CLIType.Brand   = gcBrand  AND 
+                 CLIType.Brand   = Syst.Var:gcBrand  AND 
                  CLIType.CLIType = "TARJ7"  NO-LOCK NO-ERROR.       
    
    IF AVAILABLE CLIType THEN DO:              
       FOR EACH CTServPac WHERE 
-               CTServPac.Brand   = gcBrand         AND 
+               CTServPac.Brand   = Syst.Var:gcBrand         AND 
                CTServPac.CLIType = CLIType.CLIType NO-LOCK:
          CREATE bCTServPac.
          BUFFER-COPY CTServPac EXCEPT CTServPac.CLIType 
@@ -670,7 +670,7 @@ DEFINE VARIABLE liCTServEl AS INTEGER NO-UNDO.
             RETURN "ERROR: Creating CTServPac".
             
          FOR EACH CTServEl WHERE 
-                  CTServEl.Brand   = gcBrand           AND 
+                  CTServEl.Brand   = Syst.Var:gcBrand           AND 
                   CTServEl.CLIType = CTServPac.CLIType AND 
                   CTServEl.ServPac = CTServPac.ServPac NO-LOCK:
             CREATE bCTServEl.
@@ -687,7 +687,7 @@ DEFINE VARIABLE liCTServEl AS INTEGER NO-UNDO.
                RETURN "ERROR: Creating CTServEl".
                
             FIND ServCom WHERE
-                 ServCom.Brand   = gcBrand AND
+                 ServCom.Brand   = Syst.Var:gcBrand AND
                  ServCom.ServCom = CTServEl.ServCom NO-LOCK NO-ERROR.
             
             IF AVAILABLE ServCom AND ServCom.ServAttr = TRUE THEN    

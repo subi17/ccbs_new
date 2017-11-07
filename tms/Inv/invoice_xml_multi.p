@@ -10,7 +10,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'Invoice'}
@@ -91,7 +90,7 @@ FORM
    SKIP(1)
    
 WITH ROW 1 SIDE-LABELS WIDTH 80
-     TITLE " " + ynimi + "  INVOICES TO XML  " + STRING(pvm,"99-99-99") + " "
+     TITLE " " + Syst.Var:ynimi + "  INVOICES TO XML  " + STRING(TODAY,"99-99-99") + " "
      FRAME fCrit.
 
 
@@ -120,20 +119,20 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
    IF ufkey THEN DO:
       ASSIGN
-         ufk    = 0
-         ufk[1] = 132 
-         ufk[3] = 1128
-         ufk[5] = 63  
-         ufk[8] = 8 
-         ehto   = 0.
+         Syst.Var:ufk    = 0
+         Syst.Var:ufk[1] = 132 
+         Syst.Var:ufk[3] = 1128
+         Syst.Var:ufk[5] = 63  
+         Syst.Var:ufk[8] = 8 
+         Syst.Var:ehto   = 0.
       RUN Syst/ufkey.p.
    END.
-   ELSE ASSIGN toimi = 1
+   ELSE ASSIGN Syst.Var:toimi = 1
                ufkey = TRUE.
 
-   IF toimi = 1 THEN DO:
+   IF Syst.Var:toimi = 1 THEN DO:
 
-      ehto = 9. 
+      Syst.Var:ehto = 9. 
       RUN Syst/ufkey.p.
       
       REPEAT WITH FRAME fCrit ON ENDKEY UNDO, LEAVE:
@@ -147,9 +146,9 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          WITH FRAME fCrit EDITING:
 
             READKEY.
-            nap = KEYLABEL(LASTKEY).
+            Syst.Var:nap = KEYLABEL(LASTKEY).
 
-            IF LOOKUP(nap,poisnap) > 0 THEN DO:
+            IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
             END.
 
             APPLY LASTKEY.
@@ -161,14 +160,14 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
    END.
 
    /* quantity of invoices */ 
-   ELSE IF toimi = 3 THEN DO:
+   ELSE IF Syst.Var:toimi = 3 THEN DO:
       
       liPreQty = 0.
       
       DO liDelType = 1 TO 11 BY 1:
          RUN Inv/printdoc1co.p ("",
                           0,
-                          99999999,
+                          999999999,
                           "",
                           "ZZZZ",
                           ldtInvDate,
@@ -193,7 +192,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
 
    /* printing */
-   ELSE IF toimi = 5 THEN DO:
+   ELSE IF Syst.Var:toimi = 5 THEN DO:
       
       IF ldtInvDate = ? THEN DO:
          MESSAGE "Invoice date has not been chosen"
@@ -226,13 +225,13 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
          IF RETURN-VALUE BEGINS "ERROR:" THEN DO:
             IF llDBWrite THEN DO TRANS:
                CREATE ErrorLog.
-               ASSIGN ErrorLog.Brand     = gcBrand
+               ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
                       ErrorLog.ActionID  = "PRINTINVXML" 
                       ErrorLog.TableName = "Invoice"
                       ErrorLog.KeyValue  = STRING(ldtInvDate,"99-99-99")
                       ErrorLog.ErrorMsg  = RETURN-VALUE
-                      ErrorLog.UserCode  = katun.
-                      ErrorLog.ActionTS  = fMakeTS().
+                      ErrorLog.UserCode  = Syst.Var:katun.
+                      ErrorLog.ActionTS  = Func.Common:mMakeTS().
             END.          
 
             ELSE DO:
@@ -250,7 +249,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
                PUT STREAM sLog UNFORMATTED
                   STRING(TODAY,"99.99.9999") SKIP
                   STRING(TIME,"hh:mm:ss") SKIP
-                  katun SKIP
+                  Syst.Var:katun SKIP
                   RETURN-VALUE SKIP.
                OUTPUT STREAM sLog CLOSE.
             END.
@@ -271,7 +270,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
       LEAVE CritLoop.
    END.
 
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.Var:toimi = 8 THEN DO:
       LEAVE CritLoop.
    END.
 

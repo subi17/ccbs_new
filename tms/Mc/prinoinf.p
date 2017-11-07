@@ -10,7 +10,6 @@
 ---------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/utumaa.i new }
 {Func/feplstart.i}
 {Func/cparam2.i}
@@ -111,8 +110,7 @@ FUNCTION fTargetAddr RETURNS LOGICAL.
           
    /* receiver is always the owner */
    IF AVAILABLE OrderCustomer THEN ASSIGN 
-      lcName = DYNAMIC-FUNCTION("fDispOrderName" IN ghFunc1,
-                                BUFFER OrderCustomer)
+      lcName = Func.Common:mDispOrderName(BUFFER OrderCustomer)
       lcAddr = OrderCustomer.Address
       lcPost = OrderCustomer.ZipCode + " " + OrderCustomer.PostOffice.
 
@@ -140,7 +138,7 @@ ELSE DO:
    lcDefTxt = fCParamC("EPLOrderTxt").
 
    FIND FIRST InvText NO-LOCK WHERE
-              InvText.Brand    = gcBrand AND
+              InvText.Brand    = Syst.Var:gcBrand AND
               InvText.Target   = "General" AND
               InvText.KeyValue = lcDefTxt NO-ERROR.
    IF AVAILABLE InvText THEN liITNum = InvText.ITNum.
@@ -149,7 +147,7 @@ END.
 IF iiOrderID > 0 THEN DO:
 
    FIND Order NO-LOCK WHERE
-        Order.Brand   = gcBrand AND
+        Order.Brand   = Syst.Var:gcBrand AND
         Order.OrderID = iiOrderID NO-ERROR.
    IF NOT AVAILABLE Order THEN DO:
       ocError = "Unknown order " + STRING(iiOrderID).
@@ -163,7 +161,7 @@ IF iiOrderID > 0 THEN DO:
           liMSSeq = Order.MSSeq.
 
    FIND FIRST OrderCustomer NO-LOCK WHERE
-              OrderCustomer.Brand   = gcBrand       AND
+              OrderCustomer.Brand   = Syst.Var:gcBrand       AND
               OrderCustomer.OrderID = Order.OrderID AND
               OrderCustomer.RowType = 1 NO-ERROR.
    
@@ -176,7 +174,7 @@ ASSIGN tuni1         = "InvText"
                        THEN InvText.LetterClass
                        ELSE fCParamI("EPLGenLClass")
        llUfkey       = FALSE
-       nap           = "1"
+       Syst.Var:nap           = "1"
        llEPL         = TRUE
        lcTestFlag    = fCParamC("EPLTest")
        liPer         = YEAR(TODAY) * 10000 +
@@ -195,25 +193,25 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
  
       fTxtTitle().
    END.
-   ELSE nap = "5".
+   ELSE Syst.Var:nap = "5".
 
    fTargetAddr().
             
    IF llUfkey THEN DO:
       ASSIGN
-      ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-      ufk[5]= 63  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-      ehto = 3.
+      Syst.Var:ufk[1]= 132 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+      Syst.Var:ufk[5]= 63  Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+      Syst.Var:ehto = 3.
       RUN Syst/ufkey.p.
 
       READKEY.
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
    END.
    ELSE llUfkey = TRUE.
 
-   if lookup(nap,"1,f1") > 0 THEN DO:
+   if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:
    
-      ASSIGN ehto = 9.
+      ASSIGN Syst.Var:ehto = 9.
       RUN Syst/ufkey.p.
 
       REPEAT ON ENDKEY UNDO, LEAVE:
@@ -236,17 +234,17 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
                 ELSE IF KEYLABEL(LASTKEY) = "F4" THEN UNDO, LEAVE.
                     
                 ELSE IF keylabel(lastkey) = "F9" THEN DO:
-                   ASSIGN gcHelpParam = "prt"
-                          si-recid    = 0.
+                   ASSIGN Syst.Var:gcHelpParam = "prt"
+                          Syst.Var:si-recid    = 0.
                    RUN Mc/invotxt.p ("",
                                 "").
-                   gcHelpParam = "".
+                   Syst.Var:gcHelpParam = "".
                    
-                   ehto = 9.
+                   Syst.Var:ehto = 9.
                    RUN Syst/ufkey.p.
        
-                   IF si-recid > 0 THEN DO:
-                      FIND InvText WHERE RECID(InvText) = si-recid 
+                   IF Syst.Var:si-recid > 0 THEN DO:
+                      FIND InvText WHERE RECID(InvText) = Syst.Var:si-recid 
                       NO-LOCK NO-ERROR.
                       IF AVAILABLE InvText THEN DO:
 
@@ -266,7 +264,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
                 ELSE NEXT. 
              END.
              
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 
              THEN DO WITH FRAME rajat:
              
                 PAUSE 0.
@@ -282,7 +280,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
 
    END.   
    
-   else if lookup(nap,"5,f5") > 0 THEN DO:
+   else if lookup(Syst.Var:nap,"5,f5") > 0 THEN DO:
       
       IF liITNum = 0 THEN DO:
          ocError = "Text has not been chosen".
@@ -311,7 +309,7 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
       END.
       
       IF NOT ilSilent THEN DO:      
-         ehto = 5. 
+         Syst.Var:ehto = 5. 
          RUN Syst/ufkey.p.
       END.
       
@@ -363,11 +361,11 @@ repeat WITH FRAME rajat ON ENDKEY UNDO toimi, NEXT toimi:
       LEAVE toimi.
    END.
 
-   else if lookup(nap,"8,f8") > 0 THEN DO:
+   else if lookup(Syst.Var:nap,"8,f8") > 0 THEN DO:
       LEAVE toimi.
    END.
       
-END. /* toimi */
+END. /* Syst.Var:toimi */
 
 HIDE MESSAGE no-pause.
 HIDE FRAME rajat no-pause.

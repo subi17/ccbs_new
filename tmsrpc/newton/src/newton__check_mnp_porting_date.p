@@ -11,8 +11,8 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
-katun = "NewtonRPC".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "NewtonRPC".
 {Mnp/mnp.i}
 
 /* Input parameters */
@@ -24,15 +24,19 @@ DEF VAR lcStruct         AS CHAR NO-UNDO.
 DEF VAR pcProduct        AS CHAR NO-UNDO. 
 DEF VAR pcTariff         AS CHAR NO-UNDO.
 DEF VAR piDelType        AS INT  NO-UNDO.
+DEF VAR pcTenant         AS CHAR NO-UNDO.
 DEF VAR ldMNPPortingDate AS DATE NO-UNDO.
 DEF VAR ldeCurrentTime   AS DEC  NO-UNDO.
 
-IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
 
-pcStruct = get_struct(param_toplevel_id, "0").
+pcTenant = get_string(param_toplevel_id, "0").
+pcStruct = get_struct(param_toplevel_id, "1").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 lcStruct = validate_request(pcStruct,"mnp_porting_date!,order_channel!,region!,product,tariff,delivery_type").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN pdMNPPortingDate = get_date(pcStruct,"mnp_porting_date")
@@ -65,9 +69,11 @@ IF pcRegion = "" OR pcRegion = ? THEN
 IF pcProduct NE "T" AND pcProduct NE "S" AND pcProduct NE "" THEN
    RETURN appl_err("Invalid MNP product code, expecting T/S/Empty").
    
-ldeCurrentTime = fMake2DT(TODAY,28800).
-IF ldeCurrentTime < fMakeTS() THEN
-   ldeCurrentTime = fMakeTS().
+ldeCurrentTime = Func.Common:mMake2DT(TODAY,28800).
+IF ldeCurrentTime < Func.Common:mMakeTS() THEN
+   ldeCurrentTime = Func.Common:mMakeTS().
+
+{newton/src/settenant.i pcTenant}
 
 ldMNPPortingDate = fMNPChangeWindowDate(ldeCurrentTime,
                                         pcOrderChannel,
@@ -87,5 +93,4 @@ pdMNPPortingDate = fMNPHoliday(pdMNPPortingDate,TRUE).
 add_datetime(response_toplevel_id, "", pdMNPPortingDate).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

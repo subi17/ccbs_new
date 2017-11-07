@@ -9,15 +9,15 @@
   ----------------------------------------------------------------------*/
 
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
 {Syst/eventlog.i}
-{Func/date.i}
 {Inv/billrund.i NEW}
+{Func/multitenantfunc.i}
 
 DEFINE VARIABLE lcLine   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcSep    AS CHARACTER NO-UNDO INITIAL ";".
@@ -45,7 +45,8 @@ DEFINE VARIABLE lcToday         AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFuncRunQAllow AS CHARACTER NO-UNDO.
 DEFINE VARIABLE i               AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE ldtInvDate      AS DATE      NO-UNDO.
-
+DEFINE VARIABLE lcBrand         AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcTenant      AS CHARACTER NO-UNDO.
 /* field variables */
 DEFINE VARIABLE liCustNum AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcAction  AS CHARACTER NO-UNDO.
@@ -55,15 +56,17 @@ DEFINE VARIABLE lcAction  AS CHARACTER NO-UNDO.
 /* ***************************  Main Block  *************************** */
 
 EMPTY TEMP-TABLE ttInvCust.
+
+fsetEffectiveTenantForAllDB("Default").
       
 ASSIGN
    lcIncDir        = fCParam("TestInvoices","IncDir") 
-   lcProcDir       = fCParam("TestInvoices","IncProcDir")
    lcSpoolDir      = fCParam("TestInvoices","OutSpoolDir")
+   lcProcDir       = fCParam("TestInvoices","IncProcDir")
    lcOutDir        = fCParam("TestInvoices","OutDir")
    lcFuncRunQAllow = fCParam("TestInvoices","FuncRunConfigList")
    ldtFromDate     = DATE((MONTH(TODAY)), 1 , YEAR(TODAY))
-   ldtToDate       = fLastDayOfMonth(TODAY)
+   ldtToDate       = Func.Common:mLastDayOfMonth(TODAY)
    liFeePeriod     = INTEGER(STRING(YEAR(TODAY)) + STRING(MONTH(TODAY),"99")).
 
 RUN Inv/lamupers.p PERSISTENT SET lhandle.
@@ -126,14 +129,26 @@ REPEAT:
    
    ASSIGN
       liNumOk  = 0
-      liNumErr = 0.
-   
-   IF NOT lcFileName BEGINS lcToday THEN DO:
+      liNumErr = 0
+      lcBrand  = ENTRY(1,ENTRY(1,lcFileName,"-"),"_").
+
+   IF LOOKUP(lcBrand,"Yoigo,Masmovil") = 0 THEN
+   DO:
+      fError("Brand information is invalid/missing on input filename"). 
+      RUN pTransOnError.
+      NEXT.
+   END.
+   ELSE IF NOT ENTRY(2,lcFileName,"-") BEGINS lcToday THEN 
+   DO:
       fError("Incorrect input filename format"). 
       RUN pTransOnError.
       NEXT.
    END.
-          
+   
+   ASSIGN lcTenant = fConvertBrandToTenant(lcBrand).
+
+   IF NOT fsetEffectiveTenantForAllDB(lcTenant) THEN NEXT.
+
    RUN pCheckFuncRunQueue.
    
    IF RETURN-VALUE <> "" THEN DO: 
@@ -175,7 +190,7 @@ REPEAT:
       END.   
       
       FIND Invoice WHERE
-           Invoice.Brand          = gcBrand      AND  
+           Invoice.Brand          = Syst.Var:gcBrand      AND  
            Invoice.CustNum        = liCustNum    AND
            MONTH(Invoice.InvDate) = MONTH(TODAY) AND  
            Invoice.InvType        = 99           EXCLUSIVE-LOCK NO-ERROR. 
@@ -287,7 +302,7 @@ REPEAT:
                                             lcBillRunID).
                                             
               FIND Invoice WHERE 
-                   Invoice.Brand          = gcBrand      AND 
+                   Invoice.Brand          = Syst.Var:gcBrand      AND 
                    Invoice.CustNum        = liCustNum    AND
                    MONTH(Invoice.InvDate) = MONTH(TODAY) AND  
                    Invoice.InvType        = 99           NO-LOCK NO-ERROR.

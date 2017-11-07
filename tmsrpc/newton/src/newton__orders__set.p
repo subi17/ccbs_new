@@ -19,7 +19,6 @@
 /* NOTE: There's Web side error translations for this RPC. YBU-3023 */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-{Func/timestamp.i}
 
 DEF VAR lhBuff AS HANDLE NO-UNDO.
 DEF VAR piOrderId AS INTEGER NO-UNDO. 
@@ -52,10 +51,10 @@ ASSIGN
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {Syst/commpaa.i}
-katun = pcUserName.
-gcbrand = "1".
+Syst.Var:katun = pcUserName.
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
-&GLOBAL-DEFINE STAR_EVENT_USER katun 
+&GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
 {Func/lib/eventlog.i}
 
 /* validate order struct */
@@ -93,19 +92,14 @@ IF NUM-ENTRIES(lcMemoFields) >  0 THEN ASSIGN
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /* Busines logic validations */
-
-FIND Order NO-LOCK WHERE
-     Order.Brand = gcBrand AND
-     Order.OrderId = piOrderId NO-ERROR.
-IF NOT AVAIL Order THEN 
-   RETURN appl_err(SUBST("Unknown Order id &1",STRING(piOrderId))).
+{newton/src/findtenant.i YES ordercanal Order OrderId piOrderId}
 
 IF TRIM(pcUserName) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 IF piAdditionalDoc NE ? THEN DO:
    
    FIND OrderCustomer WHERE 
-        OrderCustomer.Brand = gcBrand AND 
+        OrderCustomer.Brand = Syst.Var:gcBrand AND 
         OrderCustomer.OrderId = piOrderId AND
         OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
 
@@ -136,7 +130,7 @@ IF NUM-ENTRIES(lcOrderFields) > 0 THEN DO:
          RETURN appl_err("Wrong fusion order status, cannot update ICC").
 
       FIND FIRST SIM EXCLUSIVE-LOCK WHERE
-                 SIM.brand EQ gcBrand AND
+                 SIM.brand EQ Syst.Var:gcBrand AND
                  SIM.ICC EQ pcIcc AND
                  SIM.simstat EQ 1 NO-ERROR.
       IF NOT AVAILABLE SIM THEN
@@ -168,7 +162,7 @@ IF NUM-ENTRIES(lcOrderFields) > 0 THEN DO:
          RETURN appl_err("Wrong fusion order status, cannot update IMEI").
       
       FIND OrderAccessory EXCLUSIVE-LOCK WHERE
-           OrderAccessory.Brand = gcBrand AND
+           OrderAccessory.Brand = Syst.Var:gcBrand AND
            OrderAccessory.OrderId = Order.OrderId AND
            OrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE} NO-ERROR.
 
@@ -245,6 +239,5 @@ END.
 add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-   fCleanEventObjects().
+      fCleanEventObjects().
 END.

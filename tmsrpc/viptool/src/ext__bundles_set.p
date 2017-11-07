@@ -24,8 +24,8 @@
 
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId. 
-gcBrand = "1".
+Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId. 
+Syst.Var:gcBrand = "1".
 {Func/mdub.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
@@ -64,9 +64,7 @@ pcActionValue = get_string(param_toplevel_id,"2").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST MobSub  WHERE 
-           MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN RETURN appl_err("MobSub not found").
+{viptool/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
 ASSIGN lcPostpaidVoiceTariffs = fCParamC("POSTPAID_VOICE_TARIFFS")
        lcPrepaidVoiceTariffs  = fCParamC("PREPAID_VOICE_TARIFFS")
@@ -81,7 +79,7 @@ IF LOOKUP(pcBundleId,lcBONOContracts + ",BONO_VOIP") = 0 AND
 THEN RETURN appl_err("Incorrect Bundle Id").
 
 /* Check if subscription type is not compatible with bundle */
-IF fMatrixAnalyse(gcBrand,
+IF fMatrixAnalyse(Syst.Var:gcBrand,
                   "PERCONTR",
                   "PerContract;SubsTypeTo",
                   pcBundleId + ";" + MobSub.CLIType,
@@ -89,7 +87,7 @@ IF fMatrixAnalyse(gcBrand,
    RETURN appl_err("Bundle is not supported").
 END.
    
-ldeActStamp = fMakeTS().
+ldeActStamp = Func.Common:mMakeTS().
 
 CASE pcActionValue :
    /* termination */
@@ -97,11 +95,11 @@ CASE pcActionValue :
       /* Subscription level */
       IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO:
          /* should exist MDUB valid to the future */   
-         IF (fGetActiveMDUB(INPUT ldNextMonthActStamp) NE pcBundleId) THEN
+         IF (fGetActiveMDUB(INPUT "",INPUT ldNextMonthActStamp) NE pcBundleId) THEN
             RETURN appl_err("Bundle termination is not allowed").
 
          /* should not exist any pending request for MDUB */
-         IF fPendingMDUBTermReq() THEN
+         IF fPendingMDUBTermReq("") THEN
             RETURN appl_err("Bundle already cancelled").
 
          /* Ongoing BTC with upgrade upsell */
@@ -133,12 +131,12 @@ CASE pcActionValue :
       /* Subscription level */
       IF LOOKUP(pcBundleId,lcBONOContracts) > 0 THEN DO:
          /* should not exist any MDUB valid to the future */
-         IF fGetActiveMDUB(INPUT ldeActStamp) > "" THEN
+         IF fGetActiveMDUB(INPUT "", INPUT ldeActStamp) > "" THEN
             RETURN appl_err("Bundle already active").
 
          /* should not exist any pending request for MDUB */
          IF LOOKUP(pcBundleId,lcAllowedBONOContracts) = 0 OR
-            fPendingMDUBActReq() THEN
+            fPendingMDUBActReq("") THEN
             RETURN appl_err("Bundle activation is not allowed").
 
          /* check service package definition exist for SHAPER and HSDPA */
@@ -182,8 +180,8 @@ IF pcBundleId = {&PMDUB} AND liActionValue = 1 THEN DO:
 END. /* IF pcBundleId = {&PMDUB} AND */
 
 IF liActionValue = 0 THEN DO:
-   fSplitTs(ldeActStamp, output ldaActDate, output liTime).
-   ldeActStamp = fMake2Dt(fLastDayOfMonth(ldaActDate),86399).
+   Func.Common:mSplitTS(ldeActStamp, output ldaActDate, output liTime).
+   ldeActStamp = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(ldaActDate),86399).
 END.
 
 IF pcBundleId = {&DSS} THEN DO:
@@ -268,17 +266,16 @@ add_int(response_toplevel_id, "", liRequest).
 CREATE Memo.
 ASSIGN
       Memo.CreStamp  = {&nowTS}
-      Memo.Brand     = gcBrand 
+      Memo.Brand     = Syst.Var:gcBrand 
       Memo.HostTable = "MobSub" 
       Memo.KeyValue  = STRING(MobSub.MsSeq) 
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = katun 
+      Memo.CreUser   = Syst.Var:katun 
       Memo.MemoTitle = "Mobile Data Usage Bundle"
       Memo.MemoText  = "External API bundle activation/deactivation"
       Memo.CustNum   = MobSub.CustNum
       Memo.MemoType  = "service".
  
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.
 

@@ -1,4 +1,4 @@
-/* Script for fixing "Subscription deleted by error as not outporting option" 
+ff/* Script for fixing "Subscription deleted by error as not outporting option" 
    issues (e.g. YCM-1453 & YCM-1533) */
 
 {Syst/commali.i}
@@ -57,12 +57,13 @@ repeat:
    fInitialiseValues(
       2,
       (termmobsub.CLI BEGINS "622" OR termmobsub.CLI BEGINS "633"),
+      false,
       output liMsisdnStat,
       output liSimStat,
       output liQuarTime
    ).
 
-   fSplitTS(MsRequest.ActStamp, OUTPUT ldaKillDate, OUTPUT liTime).
+   Func.Common:mSplitTS(MsRequest.ActStamp, OUTPUT ldaKillDate, OUTPUT liTime).
      
    find mobsub where
     mobsub.cli  = msisdn.cli NO-LOCK NO-eRROR.

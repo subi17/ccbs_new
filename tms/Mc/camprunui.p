@@ -49,12 +49,12 @@ FORM
    liCustNum1 AT 10
       LABEL "Customers ......"
       HELP  "Minimum limit for customer numbers"
-      FORMAT ">>>>>>>9"
+      FORMAT ">>>>>>>>9"
    "-" AT 41
    liCustNum2 
       NO-LABEL 
       HELP  "Maximum limit for customer numbers"
-      FORMAT ">>>>>>>9"
+      FORMAT ">>>>>>>>9"
       VALIDATE(INPUT liCustNum2 >= INPUT liCustNum1,
                "Upper limit cannot be less than lower limit")
       SKIP
@@ -73,18 +73,18 @@ FORM
 
    SKIP(7)
    WITH ROW 1 SIDE-LABELS WIDTH 80
-        TITLE " " + ynimi + " CAMPAIGN RUN " +
-              STRING(pvm,"99-99-99") + " "
+        TITLE " " + Syst.Var:ynimi + " CAMPAIGN RUN " +
+              STRING(TODAY,"99-99-99") + " "
         FRAME fCriter.
 
 VIEW FRAME fCriter.
 PAUSE 0 NO-MESSAGE.
 
-ASSIGN liCustNum2    = 99999999
+ASSIGN liCustNum2    = 999999999
        ldtDate1      = TODAY
        ldtDate2      = TODAY.
 
-FIND LAST Campaign NO-LOCK WHERE Campaign.Brand = gcBrand NO-ERROR.
+FIND LAST Campaign NO-LOCK WHERE Campaign.Brand = Syst.Var:gcBrand NO-ERROR.
 IF AVAILABLE Campaign THEN lcCampaign2 = Campaign.Campaign.
 
 
@@ -104,23 +104,23 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 7   ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 795 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
-         ufk[9]= 1
-         ehto = 3.
+         Syst.Var:ufk[1]= 7   Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= 795 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 
+         Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3.
          RUN Syst/ufkey.p.
 
          READKEY.
-         nap = keylabel(LASTKEY).
+         Syst.Var:nap = keylabel(LASTKEY).
       END.
 
-      ELSE ASSIGN nap   = "1"  
+      ELSE ASSIGN Syst.Var:nap   = "1"  
                   ufkey = TRUE.
 
-      IF LOOKUP(nap,"1,f1") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO:
 
          repeat WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
-             ehto = 9. RUN Syst/ufkey.p.
+             Syst.Var:ehto = 9. RUN Syst/ufkey.p.
              UPDATE 
                 lcCampaign1 
                 lcCampaign2
@@ -131,7 +131,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
              WITH FRAME fCriter EDITING:
                 READKEY.
 
-                IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+                IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
 
                 END. 
 
@@ -143,7 +143,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
       END.
 
-      ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 THEN DO:
 
          llOk = FALSE. 
 
@@ -155,7 +155,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
          IF NOT llOk THEN NEXT.
 
-         ehto = 5.
+         Syst.Var:ehto = 5.
          RUN Syst/ufkey.p.
 
          /* collect customers */
@@ -180,11 +180,11 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO toimi, NEXT toimi:
 
       END.
 
-      ELSE IF LOOKUP(nap,"8,f8") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN DO:
          LEAVE toimi.
       END.
 
-END. /* toimi */
+END. /* Syst.Var:toimi */
 
 HIDE MESSAGE NO-PAUSE.
 HIDE FRAME fCriter NO-PAUSE.    

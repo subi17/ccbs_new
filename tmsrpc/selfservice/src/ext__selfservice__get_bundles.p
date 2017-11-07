@@ -20,9 +20,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
-gcBrand = "1".
-{Func/timestamp.i}
+Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/matrix.i}
 {Func/fdss.i}
@@ -46,19 +45,17 @@ ASSIGN pcTransId = get_string(param_toplevel_id, "0")
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{selfservice/src/findtenant.i NO ordercanal MobSub Cli pcCLI}
+
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName,substring(pcTransId,1,3)) THEN
    RETURN appl_err("Application Id does not match").
-
-FIND FIRST MobSub  WHERE 
-           MobSub.CLI = pcCLI NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN RETURN appl_err("Subscription not found").
 
 IF LOOKUP(pcBundleId,lcBONOContracts) = 0 AND
    pcBundleId <> {&DSS} THEN
    RETURN appl_err("Incorrect Bundle Id").
 
 /* Check if subscription type is not compatible with bundle */
-IF fMatrixAnalyse(gcBrand,
+IF fMatrixAnalyse(Syst.Var:gcBrand,
                   "PERCONTR",
                   "PerContract;SubsTypeTo",
                   pcBundleId + ";" + MobSub.CLIType,
@@ -66,12 +63,12 @@ IF fMatrixAnalyse(gcBrand,
    RETURN appl_err("Bundle is not allowed for this subscription type").
 END.
 
-ASSIGN ldEndStamp = fMake2Dt(fLastDayOfMonth(TODAY),86399)
+ASSIGN ldEndStamp = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(TODAY),86399)
        liStatus   = 0. /* deactivated */
 
 /* if exist any MDUB valid to the future then service is activated */   
 FOR EACH ServiceLimitGroup NO-LOCK WHERE 
-         ServiceLimitGroup.Brand     = gcBrand AND
+         ServiceLimitGroup.Brand     = Syst.Var:gcBrand AND
          ServiceLimitGroup.GroupCode = pcBundleId,
     EACH ServiceLimit NO-LOCK WHERE 
          ServiceLimit.GroupCode  = pcBundleId AND 
@@ -145,5 +142,4 @@ FINALLY:
    /* Store the transaction id */
    ghAuthLog::TransactionId = pcTransId.
 
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

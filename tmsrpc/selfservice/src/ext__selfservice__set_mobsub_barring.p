@@ -26,10 +26,9 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
-gcBrand = "1".
+Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/barrfunc.i}
 {Func/fexternalapi.i}
 {Func/transname.i}
@@ -67,19 +66,15 @@ ASSIGN pcTransId = get_string(param_toplevel_id, "0")       /*501....*/
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{selfservice/src/findtenant.i NO ordercanal MobSub Cli pcCLI}
+
 ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
        lcAppEndUserId  = ghAuthLog::EndUserId.
 
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName, lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
-katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
-
-FIND MobSub NO-LOCK WHERE
-     MobSub.Brand = gcBrand AND
-     MobSub.CLI = pcCLI NO-ERROR.
-IF NOT AVAILABLE MobSub THEN
-  RETURN appl_err("Subscription not found").
+Syst.Var:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
 /*YPR-4774*/
 /*(De)Activation is not allowed if fixed line provisioning is pending*/
@@ -159,7 +154,7 @@ RUN Mm/barrengine.p(MobSub.MsSeq,
                  {&REQUEST_SOURCE_EXTERNAL_API},
                  (IF lcApplicationId EQ "701" THEN "Collection"
                   ELSE ""),
-                 fMakeTS(),
+                 Func.Common:mMakeTS(),
                  "",
                  OUTPUT lcStatus).
 
@@ -178,13 +173,12 @@ IF liReq > 0 THEN DO:
 
    /*YPR-1966, add different memo writing*/
    IF lcApplicationId EQ "701" THEN DO:
-      lcItemName = fGetItemName(gcBrand,
+      lcItemName = fGetItemName(Syst.Var:gcBrand,
                                 "BarringCode",
                                 pcBCode,
                                 5, /*en*/
                                 TODAY).
-      DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                    "MobSub",                             /* HostTable */
+      Func.Common:mWriteMemoWithType("MobSub",                             /* HostTable */
                     STRING(Mobsub.MsSeq),                 /* KeyValue  */
                     MobSub.CustNum,                       /* CustNum */
                     "Collection Action",                  /* MemoTitle */
@@ -197,13 +191,12 @@ IF liReq > 0 THEN DO:
                     lcDetailedUser).
    END.
    ELSE DO:
-      lcItemName = fGetItemName(gcBrand,
+      lcItemName = fGetItemName(Syst.Var:gcBrand,
                                 "BarringCode",
                                 pcBCode,
                                 1, /*es*/
                                 TODAY).
-      DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                    "MobSub",                             /* HostTable */
+      Func.Common:mWriteMemoWithType("MobSub",                             /* HostTable */
                     STRING(Mobsub.MsSeq),                 /* KeyValue  */
                     MobSub.CustNum,                       /* CustNum */
                     "Bloqueo modificado",                 /* MemoTitle */
@@ -222,5 +215,4 @@ FINALLY:
    /* Store the transaction id */
    ghAuthLog::TransactionId = pcTransId.
 
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

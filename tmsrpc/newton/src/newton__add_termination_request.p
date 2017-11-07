@@ -18,8 +18,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i} 
 
 {Syst/commpaa.i}
-gcBrand = "1".
-{Func/timestamp.i}
+Syst.Var:gcBrand = "1".
 {Func/fsubstermreq.i}
 {Mm/fbundle.i}
 {Func/msisdn_prefix.i}
@@ -40,14 +39,18 @@ DEF VAR pcTermStruct AS CHAR NO-UNDO.
 DEF VAR lcTermStruct AS CHAR NO-UNDO.
 
 /* Local variables */
-DEF VAR ocResult AS CHAR NO-UNDO.
-DEF VAR llPenalty AS LOG NO-UNDO.
-DEF VAR liError AS INT NO-UNDO.
-DEF VAR llYoigoCLI AS LOG NO-UNDO.
-DEF VAR lcKillTS AS CHAR NO-UNDO.
-DEF VAR liReq AS INT NO-UNDO.
-DEF VAR lcOpCode AS CHARACTER NO-UNDO. 
-DEF VAR ldaTermDate AS DATE NO-UNDO. 
+DEF VAR ocResult         AS CHAR      NO-UNDO.
+DEF VAR llPenalty        AS LOG       NO-UNDO.
+DEF VAR liError          AS INT       NO-UNDO.
+DEF VAR llYoigoCLI       AS LOG       NO-UNDO.
+DEF VAR llMasmovilCLI    AS LOG       NO-UNDO.
+DEF VAR lcKillTS         AS CHAR      NO-UNDO.
+DEF VAR liReq            AS INT       NO-UNDO.
+DEF VAR lcOpCode         AS CHARACTER NO-UNDO. 
+DEF VAR ldaTermDate      AS DATE      NO-UNDO. 
+DEF VAR lcTenant         AS CHAR      NO-UNDO.
+DEF VAR llYoigoTenant    AS LOG       NO-UNDO INIT FALSE.
+DEF VAR llMasmovilTenant AS LOG       NO-UNDO INIT FALSE.
 
 /* Output parameters */
 DEF VAR result AS LOGICAL.
@@ -63,17 +66,18 @@ IF lcTermStruct EQ ? THEN RETURN.
 
 /* required params */
 piMsSeq     = get_pos_int(pcTermStruct, "msseq").
-katun       = "VISTA_" + get_string(pcTermStruct, "salesman").
+Syst.Var:katun = "VISTA_" + get_string(pcTermStruct, "salesman").
 piOrderer   = get_pos_int(pcTermStruct, "orderer").
 pdeKillTS   = get_timestamp(pcTermStruct, "killts").
 IF LOOKUP("termination_type", lcTermStruct) GT 0 THEN
    pcTermType  = get_string(pcTermStruct, "termination_type").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF TRIM(katun) EQ "VISTA_" THEN DO:
+IF TRIM(Syst.Var:katun) EQ "VISTA_" THEN DO:
    RETURN appl_err("username is empty").
 END.
 
+{newton/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 IF NOT (pcTermType EQ {&TERMINATION_TYPE_PARTIAL} OR
         pcTermType EQ {&TERMINATION_TYPE_FULL}) THEN
       RETURN appl_err("Incorrect termination type").
@@ -92,8 +96,14 @@ IF pcTermType EQ {&TERMINATION_TYPE_PARTIAL} AND
 END.
 
 /* Yoigo MSISDN? */
-llYoigoCLI = fIsYoigoCLI(MobSub.CLI).            
-liError = fCheckOrderer(piOrderer, llYoigoCLI, ocResult).            
+ASSIGN 
+    lcTenant         = BUFFER-TENANT-NAME(MobSub)
+    llYoigoCLI       = fIsYoigoCLI(MobSub.CLI)
+    llMasmovilCLI    = fIsMasmovilCLI(MobSub.CLI)
+    llYoigoTenant    = (IF lcTenant = {&TENANT_YOIGO}    THEN TRUE ELSE FALSE)  
+    llMasmovilTenant = (IF lcTenant = {&TENANT_MASMOVIL} THEN TRUE ELSE FALSE).
+
+liError = fCheckOrderer(piOrderer, llYoigoCLI, llMasmovilCLI, ocResult).            
 IF liError NE 0 THEN DO:
    RETURN appl_err(ocResult).
 END.
@@ -106,6 +116,7 @@ END.
 fInitialiseValues(
    INPUT piOrderer,
    INPUT llYoigoCLi,
+   INPUT llMasmovilCLI,
    OUTPUT piMsisdnStat,
    OUTPUT piSimStat,
    OUTPUT piQuarTime).
@@ -133,7 +144,7 @@ IF piOrderer EQ 5 THEN DO:
    END.
    
    IF LOOKUP("msisdnstat", lcTermStruct) GT 0 THEN DO:
-      IF llYoigoCLI THEN DO:
+      IF ((llYoigoCLI AND llYoigoTenant) OR (llMasmovilCLI AND llMasmovilTenant)) THEN DO:
          piMSISDNStat = get_pos_int(pcTermStruct, "msisdnstat").
          liError = fCheckMsisdnStat(piMSISDNStat, OUTPUT ocResult).
          IF liError NE 0 THEN DO:
@@ -146,7 +157,7 @@ IF piOrderer EQ 5 THEN DO:
    END.
 
    IF LOOKUP("quartime", lcTermStruct) GT 0 THEN DO: 
-      IF llYoigoCLI AND piMSISDNStat EQ 4 THEN DO:
+      IF ((llYoigoCLI AND llYoigoTenant) OR (llMasmovilCLI AND llMasmovilTenant)) AND piMSISDNStat EQ 4 THEN DO:
          piQuarTime  = get_pos_int(pcTermStruct, "quartime").
          IF piQuarTime < 1 OR piQuarTime > 90 THEN DO:
             RETURN appl_err("Value must be between 1 and 90!").
@@ -196,10 +207,10 @@ liReq = fTerminationRequest(
 
 IF liReq > 0 THEN DO:
 
-   fTS2Date(pdeKillTS, OUTPUT ldaTermDate).
+   Func.Common:mTS2Date(pdeKillTS, OUTPUT ldaTermDate).
 
    fAdditionalLineSTC(liReq,
-                      fMake2Dt(ldaTermDate + 1, 0),
+                      Func.Common:mMake2DT(ldaTermDate + 1, 0),
                       "DELETE").
    
    add_boolean(response_toplevel_id, "", true).
@@ -208,5 +219,4 @@ ELSE
    add_boolean(response_toplevel_id, "", false).
    
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

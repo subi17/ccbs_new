@@ -11,8 +11,8 @@
 
 {Syst/commpaa.i}
 
-ASSIGN gcBrand = "1" 
-       katun   = "csb19b".
+ASSIGN Syst.Var:gcBrand = "1" 
+       Syst.Var:katun   = "csb19b".
        
 {Func/cparam2.i}
 {Syst/eventlog.i}
@@ -35,7 +35,7 @@ fELog("DDOUT","Started").
 
 RUN Inv/ddoutfileco.p ("",                   /* InvGroup  */
                  0,                    /* customers from */
-                 99999999,             /* customers to   */
+                 999999999,             /* customers to   */
                  "",                   /* invoices from  */
                  "ZZZZZ",              /* invoices to    */
                  TODAY,                /* invdate   */

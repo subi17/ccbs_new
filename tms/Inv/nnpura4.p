@@ -28,7 +28,6 @@
                                  unit price, price apiece & dataamt added
                   16.02.2004/aam cover sheet               
                   14.04.2004/aam index change on mobcdr
-                  23.04.2004/aam use fHideBSub from func.i
                   17.05.2004/aam unit price for vas tickets from netprice
                   15.06.2004/aam functions to nnpura4.i
                   22.06.2004/aam pulses 
@@ -49,7 +48,6 @@
 /* print-linemuuttujat */
 {Syst/utumaa.i}
 {Inv/edefine.i}
-{Inv/nnpura.i}
 {Func/fcurrency.i}
 
 /* xml / pdf */
@@ -57,8 +55,8 @@
 {Func/fpdfrun.i}
 {Func/fdivtxt.i}
 
-def input  parameter CustNum1      as int FORMAT "zzzzzz9"   NO-UNDO.
-def input  parameter CustNum2      as int FORMAT "zzzzzz9"   NO-UNDO.
+def input  parameter CustNum1      as int FORMAT "zzzzzzzz9"   NO-UNDO.
+def input  parameter CustNum2      as int FORMAT "zzzzzzzz9"   NO-UNDO.
 def input  parameter pvm1          as date FORMAT "99-99-99" NO-UNDO.
 def input  parameter pvm2          as date FORMAT "99-99-99" NO-UNDO.
 def input  parameter tilak         as int  FORMAT "9"        NO-UNDO.
@@ -111,6 +109,9 @@ ELSE ASSIGN lev        = 106
             viiva4     = FILL(" ",5)  + fill("-",lev - 5)
             viiva5     = FILL(" ",4)  + fill("-",lev - 4).
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
+
 form header
    viiva1 AT 1 SKIP
    ynimi at 1 FORMAT "x(30)"
@@ -119,7 +120,7 @@ form header
       sl FORMAT "ZZZ9" SKIP
    lcAtil at 1 FORMAT "x(15)"
       lcRep4SubHead AT 45 FORMAT "X(35)"
-      pvm at 97 FORMAT "99-99-9999" SKIP
+      TODAY at 97 FORMAT "99-99-9999" SKIP
    viiva2 AT 1 skip(1)
 WITH width 130 NO-LABEL no-box FRAME sivuotsi.
 
@@ -251,7 +252,7 @@ IF llPDFPrint THEN DO:
    
    /* mail to user */
    IF iiMail = 2 THEN DO:
-      FIND TMSUser WHERE TMSUser.UserCode = katun NO-LOCK NO-ERROR.
+      FIND TMSUser WHERE TMSUser.UserCode = Syst.Var:katun NO-LOCK NO-ERROR.
       IF AVAILABLE TMSUser THEN lcMailAddr = TMSUser.EMail.
    END. 
       
@@ -280,7 +281,7 @@ END.
 ELSE DO:
 
    FOR EACH Customer NO-LOCK WHERE
-            Customer.Brand    = gcBrand  AND
+            Customer.Brand    = Syst.Var:gcBrand  AND
             Customer.CustNum >= CustNum1 AND
             Customer.CustNum <= CustNum2:
 
@@ -640,7 +641,7 @@ BREAK BY ttCall.VATIncl
             fNewPage(0).
             {Inv/nnpura4e.i}
             
-            lcRep4Dur = fSec2C(DECIMAL(ENTRY(liTaff,ttCall.CDur,"/")),10).
+            lcRep4Dur = Func.Common:mSec2C(DECIMAL(ENTRY(liTaff,ttCall.CDur,"/")),10).
             
             PUT STREAM eKirje UNFORMATTED 
             MY-NL
@@ -703,7 +704,7 @@ BREAK BY ttCall.VATIncl
             
             fChgPage(0).
             
-            lcRep4Dur = fSec2C(DECIMAL(ENTRY(liTaff,ttCall.CDur,"/")),10).
+            lcRep4Dur = Func.Common:mSec2C(DECIMAL(ENTRY(liTaff,ttCall.CDur,"/")),10).
             
             PUT STREAM tul 
             SKIP

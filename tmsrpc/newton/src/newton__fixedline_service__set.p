@@ -12,7 +12,7 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Mm/subser.i}
@@ -81,7 +81,7 @@ FIND FIRST Mobsub WHERE Mobsub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Mobsub THEN
     RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
 
-katun = "Newton".
+Syst.Var:katun = "Newton".
 
 DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
    pcStruct = get_struct(pcInputArray, STRING(liInputCounter - 1)).
@@ -99,7 +99,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
 
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-   FIND FIRST DayCampaign WHERE DayCampaign.Brand = gcBrand AND DayCampaign.DCEvent = pcServiceId NO-LOCK NO-ERROR.
+   FIND FIRST DayCampaign WHERE DayCampaign.Brand = Syst.Var:gcBrand AND DayCampaign.DCEvent = pcServiceId NO-LOCK NO-ERROR.
    IF AVAIL DayCampaign AND DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
    DO:
        ASSIGN lcBundleType = (IF DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN "Television" ELSE "").
@@ -109,6 +109,8 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
                RUN pDeActivateTVService.
            WHEN "on" THEN
                RUN pActivateTVService.
+           OTHERWISE  
+               RETURN appl_err("Invalid parameter 'value': " + pcValue).
        END CASE.
    END.
    ELSE IF fIsSVA(pcServiceId, OUTPUT liParams) THEN    /*SVAs*/ /*'off', 'on', 'cancel activation', 'cancel deactivation'*/
@@ -139,7 +141,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
       CREATE Memo.
       ASSIGN
           Memo.CreStamp  = {&nowTS}
-          Memo.Brand     = gcBrand
+          Memo.Brand     = Syst.Var:gcBrand
           Memo.HostTable = "MobSub"
           Memo.KeyValue  = STRING(Mobsub.MsSeq)
           Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
@@ -157,12 +159,14 @@ PROCEDURE pDeActivateTVService:
     DEFINE VARIABLE lcResult    AS CHARACTER NO-UNDO.
     DEFINE VARIABLE liServSeq   AS INTEGER   NO-UNDO.
 
-    IF CAN-FIND(FIRST TPService WHERE TPService.MsSeq     = piMsSeq            AND 
-                                      TPService.Operation = {&TYPE_ACTIVATION} AND 
-                                      TPService.ServType  = lcBundleType       NO-LOCK) THEN
+    IF CAN-FIND(FIRST TPService WHERE TPService.MsSeq      = piMsSeq             AND 
+                                      TPService.Operation  = {&TYPE_ACTIVATION}  AND 
+                                      TPService.ServType   = lcBundleType        AND
+                                      TPService.ServStatus <> {&STATUS_CANCELED} AND 
+                                      TPService.ServStatus <> {&STATUS_ERROR}    NO-LOCK) THEN
     DO:
         IF NOT fDeactivateTVService(piMsSeq, pcParam2) THEN 
-            RETURN "Setup box logistics/activation process is already initiated. Cancellation not allowed now.".  
+            RETURN appl_err("Cancellation failed.").  
     END.
     ELSE 
         RETURN appl_err("No tv service active for cancellation").
@@ -177,9 +181,11 @@ PROCEDURE pActivateTVService:
     FIND FIRST TPService WHERE TPService.MsSeq       = piMsSeq            AND 
                                TPService.Operation   = {&TYPE_ACTIVATION} AND  
                                TPService.ServType    = lcBundleType       AND 
-                               TPService.ServStatus <> "HANDLED"          NO-LOCK NO-ERROR.
+                               TPService.ServStatus <> {&STATUS_HANDLED}  AND 
+                               TPService.ServStatus <> {&STATUS_CANCELED} AND 
+                               TPService.ServStatus <> {&STATUS_ERROR}    NO-LOCK NO-ERROR.
     IF AVAIL TPService THEN 
-        RETURN "There exists an ongoing tv service request.".
+        RETURN appl_err("There exists an ongoing tv service request.").
 
     ASSIGN liServSeq = fCreateNewTPService(piMsSeq, 
                                            pcServiceId, 
@@ -196,11 +202,3 @@ PROCEDURE pActivateTVService:
     RETURN "".
 
 END PROCEDURE.
-
-FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN 
-      DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
-
-
-

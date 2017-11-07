@@ -14,16 +14,15 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/ftransdir.i}
 {Func/email.i}
 {Func/transname.i}
-{Func/fhdrtext.i}
 {Inv/ddoutfilett.i}
 {Func/customer_address.i}
 {Syst/funcrunprocess_update.i}
 {Func/fbankdata.i}
 {Func/fsepa.i}
+{Func/multitenantfunc.i}
 
 /* invoices TO be printed */
 DEFINE INPUT-OUTPUT PARAMETER TABLE FOR ttInvoice.
@@ -229,14 +228,14 @@ PROCEDURE pInitialize:
       RETURN "ERROR: No invoices were found".
 
    FIND Company WHERE
-        Company.Brand = gcBrand NO-LOCK NO-ERROR.
+        Company.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
    IF NOT AVAIL Company THEN RETURN "ERROR:Company data not available".
 
    /* bank account that is dedicated for dd */
    lcBankID = "DD" + icBankCode.
    
    FOR FIRST BankAccount NO-LOCK WHERE
-             BankAccount.Brand   = gcBrand AND
+             BankAccount.Brand   = Syst.Var:gcBrand AND
              LOOKUP(lcBankID,BankAccount.InvForm) > 0:
       IF LENGTH(BankAccount.BankAccount) < 24 THEN 
          RETURN "ERROR:Invalid bank account".
@@ -305,7 +304,7 @@ PROCEDURE pInitXML:
    ASSIGN
       ldaPmtDate = TODAY
       liPmtTime = TIME
-      lcHeaderTimeStamp = fISOTimeZone(ldaPmtDate,liPmtTime).
+      lcHeaderTimeStamp = Func.Common:mISOTimeZone(ldaPmtDate,liPmtTime).
 
    IF INT(SUBSTRING(BankAccount.BankAccount,5,4)) > 0 THEN
       lcCompBIC = BankAccount.BIC.
@@ -342,7 +341,7 @@ PROCEDURE pCustHeader:
       lhXML:START-ELEMENT("Id").
        lhXML:START-ELEMENT("OrgId").
         lhXML:START-ELEMENT("Othr").
-         lhXML:WRITE-DATA-ELEMENT("Id",BankAccount.CreditorId).
+         lhXML:WRITE-DATA-ELEMENT("Id",BankAccount.PresenterId).
         lhXML:END-ELEMENT("Othr").
        lhXML:END-ELEMENT("OrgId").
       lhXML:END-ELEMENT("Id").
@@ -358,7 +357,7 @@ PROCEDURE pPrintInvoices:
 
    OUTPUT STREAM sList TO VALUE(lcListFile) APPEND.
    PUT STREAM sList UNFORMATTED
-      "Date and time of creation: " fTS2HMS(fMakeTS()) SKIP
+      "Date and time of creation: " Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP
       "Invoice number" SKIP.
 
    PrintMainLoop:
@@ -446,7 +445,8 @@ PROCEDURE pCollectData2XML:
 
    /* YOIGO - FACTURA 131D12345678 PERIODO: 01/01/2013 AL 01/01/2013 */
    ASSIGN 
-      lcUstrd = "YOIGO - FACTURA " + Invoice.ExtInvId + 
+      lcUstrd = CAPS(fgetBrandNamebyTenantId(BUFFER-TENANT-ID(Invoice))) +
+                " - FACTURA " + Invoice.ExtInvId + 
                 " PERIODO: " + STRING(Invoice.FromDate,"99/99/99") + 
                 " AL " + STRING(Invoice.ToDate,"99/99/99").
 
@@ -472,7 +472,7 @@ PROCEDURE pCollectData2XML:
    
    /* Find last invoice to check is bank account same */
    FIND FIRST bInvoiceBA NO-LOCK WHERE
-              bInvoiceBA.Brand = gcBrand AND
+              bInvoiceBA.Brand = Syst.Var:gcBrand AND
               bInvoiceBA.CustNum = Invoice.CustNum AND
               bInvoiceBA.InvDate >= 2/1/2014 AND
               bInvoiceBA.InvDate < Invoice.InvDate AND
@@ -496,7 +496,7 @@ PROCEDURE pCollectData2XML:
       liBankChngStatus = 0.
 
    FIND FIRST bInvoice NO-LOCK WHERE
-              bInvoice.Brand = gcBrand AND
+              bInvoice.Brand = Syst.Var:gcBrand AND
               bInvoice.CustNum = Invoice.CustNum AND
               bInvoice.InvDate >= 2/1/2014 AND
               bInvoice.ITGroupID = Invoice.ITGroupID AND
@@ -516,7 +516,7 @@ PROCEDURE pCollectData2XML:
    IF NOT AVAIL bInvoice OR bInvoice.MandateId NE Invoice.MandateId THEN DO:
       /* Check if previous invoice has same mandate -> RCUR */
       FIND FIRST bInvoiceDD NO-LOCK WHERE
-                 bInvoiceDD.Brand = gcBrand AND
+                 bInvoiceDD.Brand = Syst.Var:gcBrand AND
                  bInvoiceDD.CustNum = Invoice.CustNum AND
                  bInvoiceDD.InvDate >= 2/1/2014 AND
                  bInvoiceDD.InvDate < Invoice.InvDate AND
@@ -528,7 +528,7 @@ PROCEDURE pCollectData2XML:
       /* Check if customer has two invoices with same date -> RCUR */
       IF NOT AVAIL bInvoiceDD THEN 
          FIND FIRST bInvoiceDD2 NO-LOCK WHERE
-                    bInvoiceDD2.Brand = gcBrand AND
+                    bInvoiceDD2.Brand = Syst.Var:gcBrand AND
                     bInvoiceDD2.CustNum = Invoice.CustNum AND
                     bInvoiceDD2.InvDate = Invoice.InvDate AND
                     bInvoiceDD2.MandateId EQ Invoice.MandateId AND
@@ -564,7 +564,7 @@ PROCEDURE pCollectData2XML:
          ttDDCreditor.PmtInfId = lcPmtInfId
          ttDDCreditor.SeqTp = lcSeqTp
          ttDDCreditor.ReqdColltnDt = Invoice.DueDate
-         ttDDCreditor.CompNm = SUBSTRING("YOIGO",1,70)
+         ttDDCreditor.CompNm = SUBST(Company.CreditorName,1,70)
          ttDDCreditor.CompAdd = SUBSTRING(Company.Address,1,70)
          ttDDCreditor.CompIBAN = BankAccount.BankAccount
          ttDDCreditor.CompBIC = lcCompBIC
@@ -583,7 +583,7 @@ PROCEDURE pCollectData2XML:
       ttDDItem.MandateId = Invoice.MandateID
       ttDDItem.MandateDATE = ldaMandateDate
       ttDDItem.MandateFlag = llMandateFlag
-      ttDDItem.CustNm = SUBSTRING(CAPS(fCheckSEPASpecialChar(DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1, BUFFER Customer))),1,70)
+      ttDDItem.CustNm = SUBSTRING(CAPS(fCheckSEPASpecialChar(Func.Common:mPrintCustName(BUFFER Customer))),1,70)
       ttDDItem.CustAdd = SUBSTRING(CAPS(fCheckSEPASpecialChar(Customer.Address)),1,70)
       ttDDItem.CustZip = SUBSTRING(Customer.ZipCode + " " + CAPS(fCheckSEPASpecialChar(Customer.PostOffice)),1,70)
       ttDDItem.CustIBAN = Invoice.DDBankAcc
@@ -832,7 +832,7 @@ PROCEDURE pLogErrors:
    END.
 
    IF CAN-FIND(FIRST ttError) THEN DO:
-      ldCurrStamp = fMakeTS().
+      ldCurrStamp = Func.Common:mMakeTS().
                            
       OUTPUT STREAM slog TO VALUE(lcErrFile).
       PUT STREAM slog UNFORMATTED
@@ -848,12 +848,12 @@ PROCEDURE pLogErrors:
 
          /* save to db for reporting */
          CREATE ErrorLog.
-         ASSIGN ErrorLog.Brand     = gcBrand
+         ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
                 ErrorLog.ActionID  = "DDFILE"
                 ErrorLog.TableName = "Invoice"
                 ErrorLog.KeyValue  = ttError.Inv
                 ErrorLog.ActionTS  = ldCurrStamp
-                ErrorLog.UserCode  = katun
+                ErrorLog.UserCode  = Syst.Var:katun
                 ErrorLog.ErrorMsg  = ttError.ErrMsg.
       END.
 

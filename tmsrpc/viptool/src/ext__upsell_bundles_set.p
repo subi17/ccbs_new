@@ -13,8 +13,8 @@
 
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
-gcBrand = "1".
+Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/upsellbundle.i}
 {Func/fgettxt.i}
@@ -34,9 +34,7 @@ pcUpsellId = get_string(param_toplevel_id,"1").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST MobSub  WHERE 
-           MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN RETURN appl_err("Subscription not found").
+{viptool/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
       
 FIND FIRST Customer WHERE
            Customer.Custnum = MobSub.Custnum NO-LOCK NO-ERROR.
@@ -47,7 +45,7 @@ IF pcUpsellId = "CONTD1_UPSELL" THEN pcUpsellId = "CONTDATA_UPSELL".
 IF pcUpsellId EQ {&TARJ_UPSELL} THEN DO:
 
    /* Check if subscription type is not compatible with bundle */
-   IF fMatrixAnalyse(gcBrand,
+   IF fMatrixAnalyse(Syst.Var:gcBrand,
                      "PERCONTR",
                      "PerContract;SubsTypeTo",
                      pcUpsellId + ";" + MobSub.CLIType,
@@ -75,7 +73,7 @@ IF pcUpsellId EQ {&TARJ_UPSELL} THEN DO:
    liRequest = fPCActionRequest(MobSub.MsSeq,
                                 pcUpsellId,
                                 "act",
-                                fMakeTS(),
+                                Func.Common:mMakeTS(),
                                 TRUE, /* fees */
                                 {&REQUEST_SOURCE_EXTERNAL_API},
                                 "",   /* creator */
@@ -92,7 +90,7 @@ ELSE IF NOT fCreateUpsellBundle(
    MobSub.MsSeq,
    pcUpsellId,
    {&REQUEST_SOURCE_EXTERNAL_API},
-   fMakeTS(),
+   Func.Common:mMakeTS(),
    OUTPUT liRequest,
    OUTPUT lcError) THEN DO:
 
@@ -120,5 +118,4 @@ END.
 add_boolean(response_toplevel_id,"",True).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

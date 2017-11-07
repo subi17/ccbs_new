@@ -23,18 +23,15 @@ DEF VAR liDeliveryType  AS INT  NO-UNDO.
 
 {Syst/commpaa.i}
 ASSIGN
-   katun = "IVR_" + ghAuthLog::EndUserId. 
-   gcBrand = "1".
+   Syst.Var:katun = "IVR_" + ghAuthLog::EndUserId. 
+   Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 
 IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
 pcMSISDN = get_string(param_toplevel_id,"0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST MobSub WHERE 
-           MobSub.Brand = gcBrand AND
-           MobSub.CLI   = pcMSISDN NO-LOCK NO-ERROR.
-IF NOT AVAILABLE MobSub THEN RETURN appl_err("Subscription not found").
+{viptool/src/findtenant.i NO Ordercanal MobSub CLI pcMSISDN}
 
 FIND FIRST Customer WHERE 
            Customer.CustNum = MobSub.CustNum NO-LOCK NO-ERROR.
@@ -52,5 +49,4 @@ END.
 add_int(response_toplevel_id,"",liDeliveryType).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

@@ -7,10 +7,9 @@
   Version ......: Yoigo
 ---------------------------------------------------------------------- */
 {Syst/commpaa.i}
-gcBrand = "1".
-katun = "Qvantel".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
 
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Func/fmakemsreq.i}
@@ -20,7 +19,7 @@ katun = "Qvantel".
 {Func/fbtc.i}
 {Func/ftransdir.i}
 {Func/email.i}
-
+{Func/multitenantfunc.i}
 
 DEFINE VARIABLE lcOutPutDir        AS CHAR NO-UNDO.
 DEFINE VARIABLE lcIncomingDir      AS CHAR NO-UNDO.
@@ -106,6 +105,7 @@ DEFINE TEMP-TABLE ttSubscription
    FIELD CLIType    AS CHAR
    FIELD Handled    AS LOG
    FIELD EmailId    AS CHAR
+   FIELD Brand      AS CHAR 
    INDEX CLI IS PRIMARY UNIQUE CLI.
 
 DEF TEMP-TABLE ttOrder    NO-UNDO LIKE Order.
@@ -147,15 +147,15 @@ FUNCTION fCheckMSISDN RETURNS LOG (INPUT iiStatus_MSISDN AS INT,
 
    IF icUsedMSISDN > "" THEN DO:
       FIND FIRST MSISDN EXCLUSIVE-LOCK WHERE
-                 MSISDN.Brand = gcBrand AND
+                 MSISDN.Brand = Syst.Var:gcBrand AND
                  MSISDN.CLI   = icUsedMSISDN AND   /* Search with given MSISDN number */
-                 MSISDN.ValidTo GE fMakeTS() AND
+                 MSISDN.ValidTo GE Func.Common:mMakeTS() AND
                  MSISDN.StatusCode EQ iiStatus_MSISDN NO-WAIT NO-ERROR. /* Normal or EMA */
    END.
    ELSE DO: /* Find first free */
       FIND FIRST MSISDN EXCLUSIVE-LOCK WHERE
-                 MSISDN.Brand = gcBrand AND
-                 MSISDN.ValidTo GE fMakeTS() AND
+                 MSISDN.Brand = Syst.Var:gcBrand AND
+                 MSISDN.ValidTo GE Func.Common:mMakeTS() AND
                  MSISDN.StatusCode EQ iiStatus_MSISDN NO-WAIT NO-ERROR. /* Normal or EMA */
    END.
    IF NOT AVAILABLE MSISDN THEN
@@ -170,7 +170,7 @@ FUNCTION fCheckSIM RETURNS LOG (INPUT icSimIcc AS CHAR):
    IF icSimIcc > "" THEN DO:
       FIND FIRST SIM EXCLUSIVE-LOCK WHERE
                  SIM.ICC   EQ icSimIcc AND   /* Search with given ICC number */
-                 SIM.Brand EQ gcBrand AND
+                 SIM.Brand EQ Syst.Var:gcBrand AND
                  SIM.SimStat EQ 1 NO-WAIT NO-ERROR.
 
       IF AVAILABLE SIM THEN   /* If stock not correct then ask confirmation */
@@ -189,7 +189,7 @@ FUNCTION fCheckSIM RETURNS LOG (INPUT icSimIcc AS CHAR):
    END.
    ELSE DO:
       FIND FIRST SIM EXCLUSIVE-LOCK WHERE
-                 SIM.Brand EQ gcBrand AND
+                 SIM.Brand EQ Syst.Var:gcBrand AND
                 (SIM.Stock EQ "TESTING" OR
                  SIM.Stock EQ "EMATESTING") AND
                  SIM.SimStat EQ 1 NO-WAIT NO-ERROR.
@@ -273,9 +273,9 @@ FUNCTION fCreateOrder RETURNS CHAR (INPUT icIdType       AS CHAR,
       BUFFER-COPY ttOrder EXCEPT OrderId MsSeq Salesman TO Order.
 
       ASSIGN
-         Order.Brand           = gcBrand
+         Order.Brand           = Syst.Var:gcBrand
          Order.OrderId         = NEXT-VALUE(OrderId)
-         Order.CrStamp         = fMakeTS()
+         Order.CrStamp         = Func.Common:mMakeTS()
          Order.StatusCode      = "1"
          Order.CLI             = MSISDN.CLI
          Order.CLIType         = lcCLIType
@@ -311,7 +311,9 @@ FUNCTION fCreateOrder RETURNS CHAR (INPUT icIdType       AS CHAR,
              ttSubscription.CustIdType = lcCustIdType
              ttSubscription.CustId     = lcCustId
              ttSubscription.FileName   = ttInputFileContent.FileName
-             ttSubscription.EmailId    = ttBatchInputFile.EmailId.
+             ttSubscription.EmailId    = ttBatchInputFile.EmailId
+             ttSubscription.Brand      = fConvertTenantToBrand(BUFFER-TENANT-NAME(Order))
+             .
    END. /* IF NOT CAN-FIND(FIRST ttSubscription WHERE */
 
    RETURN "".
@@ -338,7 +340,7 @@ FUNCTION fCreateOrderCustomer RETURNS CHAR (INPUT iiOrderId     AS INT,
    END.
 
    ASSIGN
-      OrderCustomer.Brand   = gcBrand
+      OrderCustomer.Brand   = Syst.Var:gcBrand
       OrderCustomer.OrderId = iiOrderId
       OrderCustomer.RowType = 1.
 
@@ -354,7 +356,7 @@ FUNCTION fCreateOrderTopup RETURNS LOGICAL:
    CREATE OrderTopup.
    ASSIGN
       OrderTopup.Amount = 20.00
-      OrderTopup.Brand = gcBrand
+      OrderTopup.Brand = Syst.Var:gcBrand
       OrderTopup.OrderId = Order.OrderId.
    lCreate = TRUE.
    RETURN lCreate.
@@ -370,25 +372,24 @@ PROCEDURE pHandleOtherRows:
    FILE_LOOP:
    FOR EACH ttBatchInputFile WHERE ttBatchInputFile.Valid = TRUE:
 
-      lcLogFile = lcOutOngoingDir + "/" + ttBatchInputFile.FileName +
-                  "_POST_" + STRING(ldThisRun) + ".LOG".
+      lcLogFile = lcOutOngoingDir + "/" + ttBatchInputFile.FileName + "_POST_" + STRING(ldThisRun) + ".LOG".
+
       OUTPUT STREAM sOutput TO VALUE(lcLogFile) APPEND.
 
       FILE_CONTENT_LOOP:
-      FOR EACH ttInputFileContent WHERE
-               ttInputFileContent.FileName = ttBatchInputFile.FileName AND
-               ttInputFileContent.LineType <> "SUBSCRIPTION"
-               BY ttInputFileContent.LineNo:
+      FOR EACH ttInputFileContent WHERE ttInputFileContent.FileName = ttBatchInputFile.FileName AND ttInputFileContent.LineType <> "SUBSCRIPTION"
+            BY ttInputFileContent.LineNo:
 
          /* Exclude Bono activation with new subscription
             because it is added by OrderAction */
-         IF llNewSubs AND ttInputFileContent.LineType = "ACT_BONO"
-         THEN NEXT FILE_CONTENT_LOOP.
+         IF llNewSubs AND ttInputFileContent.LineType = "ACT_BONO" THEN 
+             NEXT FILE_CONTENT_LOOP.
 
          /* skip header line and no test case */
-         IF ttInputFileContent.InputLine = "" OR
-            ttInputFileContent.InputLine BEGINS "H" THEN NEXT FILE_CONTENT_LOOP.
-         ELSE IF ttInputFileContent.TestList = "" THEN DO:
+         IF ttInputFileContent.InputLine = "" OR  ttInputFileContent.InputLine BEGINS "H" THEN 
+             NEXT FILE_CONTENT_LOOP.
+         ELSE IF ttInputFileContent.TestList = "" THEN 
+         DO:
             PUT STREAM sOutput UNFORMATTED ttInputFileContent.InputLine SKIP.
             NEXT FILE_CONTENT_LOOP.
          END.
@@ -415,9 +416,7 @@ PROCEDURE pHandleOtherRows:
                    lcOutProcDir).
 
       /* Delete all handled subscriptions */
-      FOR EACH ttSubscription WHERE
-               ttSubscription.FileName = ttBatchInputFile.FileName AND
-               ttSubscription.Handled = TRUE:
+      FOR EACH ttSubscription WHERE ttSubscription.FileName = ttBatchInputFile.FileName AND ttSubscription.Handled = TRUE:
          DELETE ttSubscription.
       END. /* FOR EACH ttSubscription WHERE */
 
@@ -435,18 +434,24 @@ PROCEDURE pActBono:
    DEF VAR ldActTS            AS DEC  NO-UNDO.
    DEF VAR liSubCount         AS INT  NO-UNDO.
    DEF VAR liBonoCount        AS INT  NO-UNDO.
+   DEF VAR lcTenant           AS CHAR NO-UNDO.
 
    DEF BUFFER bMsRequest      FOR MsRequest.
 
    liContractEntries = NUM-ENTRIES(ttInputFileContent.TestList).
 
-   FOR EACH ttSubscription WHERE
-            ttSubscription.FileName = ttInputFileContent.FileName AND
-            ttSubscription.CustNum > 0,
-      FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK:
+   FOR EACH ttSubscription WHERE ttSubscription.FileName = ttInputFileContent.FileName AND ttSubscription.CustNum > 0:
+
+      ASSIGN lcTenant = fConvertBrandToTenant(ttSubscription.Brand).
+      IF lcTenant > "" THEN
+          fsetEffectiveTenantForAllDB(lcTenant).
+
+      FIND FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK NO-ERROR.
+      IF NOT AVAIL MobSub THEN 
+          NEXT.
 
       ASSIGN ttSubscription.Handled = TRUE
-             ldActTS  = fMakeTS()
+             ldActTS  = Func.Common:mMakeTS()
              lcRemark = ""
              liSubCount = liSubCount + 1
              liBonoCount = liBonoCount + 1.
@@ -510,16 +515,22 @@ PROCEDURE pActContract:
    DEF VAR lcError            AS CHAR NO-UNDO.
    DEF VAR ldActTS            AS DEC  NO-UNDO.
    DEF VAR liSubCount         AS INT  NO-UNDO.
+   DEF VAR lcTenant           AS CHAR NO-UNDO.
 
    DEF BUFFER bMsRequest      FOR MsRequest.
 
-   FOR EACH ttSubscription WHERE
-            ttSubscription.FileName = ttInputFileContent.FileName AND
-            ttSubscription.CustNum > 0,
-      FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK:
+   FOR EACH ttSubscription WHERE ttSubscription.FileName = ttInputFileContent.FileName AND ttSubscription.CustNum > 0:
+
+      ASSIGN lcTenant = fConvertBrandToTenant(ttSubscription.Brand).
+      IF lcTenant > "" THEN
+          fsetEffectiveTenantForAllDB(lcTenant).
+
+      FIND FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK NO-ERROR.
+      IF NOT AVAIL MobSub THEN
+          NEXT.
 
       ASSIGN ttSubscription.Handled = TRUE
-             ldActTS  = fMakeTS()
+             ldActTS  = Func.Common:mMakeTS()
              lcRemark = ""
              liContractCount = 0
              liSubCount = liSubCount + 1.
@@ -565,7 +576,7 @@ PROCEDURE pActContract:
                              bMsRequest.MsRequest = liRequest
                        EXCLUSIVE-LOCK NO-ERROR.
                   IF AVAIL bMsRequest THEN
-                     bMsRequest.ReqCparam4 = katun + "|" + STRING(TODAY,"99-99-9999").
+                     bMsRequest.ReqCparam4 = Syst.Var:katun + "|" + STRING(TODAY,"99-99-9999").
                END. /* IF lcContractID = "SPOTIFY" THEN DO: */
             END. /* ELSE DO: */
          END. /* ELSE DO: */
@@ -589,14 +600,20 @@ PROCEDURE pDeactContract:
    DEF VAR llError            AS LOG  NO-UNDO.
    DEF VAR ldActTS            AS DEC  NO-UNDO.
    DEF VAR liSubCount         AS INT  NO-UNDO.
+   DEF VAR lcTenant           AS CHAR NO-UNDO.
 
-   FOR EACH ttSubscription WHERE
-            ttSubscription.FileName = ttInputFileContent.FileName AND
-            ttSubscription.CustNum > 0,
-      FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK:
+   FOR EACH ttSubscription WHERE ttSubscription.FileName = ttInputFileContent.FileName AND ttSubscription.CustNum > 0:
+
+      ASSIGN lcTenant = fConvertBrandToTenant(ttSubscription.Brand).
+      IF lcTenant > "" THEN
+          fsetEffectiveTenantForAllDB(lcTenant).
+
+      FIND FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK NO-ERROR.
+      IF NOT AVAIL MobSub THEN 
+          NEXT.
 
       ASSIGN ttSubscription.Handled = TRUE
-             ldActTS  = fSecOffSet(fMakeTS(),120) /* 2 mins gap */
+             ldActTS  = Func.Common:mSecOffSet(Func.Common:mMakeTS(),120) /* 2 mins gap */
              lcRemark = ""
              liSubCount = liSubCount + 1.
 
@@ -608,18 +625,18 @@ PROCEDURE pDeactContract:
             liRequest    = 0
             llError      = FALSE
             lcError      = ""
-            ldActTS  = fSecOffSet(fMakeTS(),120) /* 2 mins gap */
+            ldActTS  = Func.Common:mSecOffSet(Func.Common:mMakeTS(),120) /* 2 mins gap */
             lcContractID = ENTRY(liContractCount,ttInputFileContent.TestList).
 
          IF lcContractID = "BONO" THEN DO:
             lcContractID = fGetCurrentSpecificBundle(INPUT ttSubscription.MsSeq,
                                                      INPUT "BONO").
 
-            ldActTS = fMake2Dt(fLastDayOfMonth(TODAY),86399).
+            ldActTS = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(TODAY),86399).
 
             IF lcContractID = "" THEN DO:
                FIND FIRST OrderAction WHERE
-                          OrderAction.Brand = gcBrand AND
+                          OrderAction.Brand = Syst.Var:gcBrand AND
                           OrderAction.OrderId = ttSubscription.OrderId AND
                           OrderAction.ItemType = "BundleItem" AND
                           OrderAction.ItemKey BEGINS "MDUB" NO-LOCK NO-ERROR.
@@ -635,7 +652,7 @@ PROCEDURE pDeactContract:
             lcRemark = lcRemark + "," + lcContractID.
 
             IF LOOKUP(lcContractID,"DSS,BONO_VOIP,SPOTIFY") > 0 THEN
-               ldActTS = fMake2Dt(fLastDayOfMonth(TODAY),86399).
+               ldActTS = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(TODAY),86399).
 
             /* terminate periodical contract */
             liRequest = fPCActionRequest(ttSubscription.MsSeq,
@@ -676,22 +693,28 @@ PROCEDURE pService:
    DEF VAR lcError            AS CHAR NO-UNDO.
    DEF VAR ldActTS            AS DEC  NO-UNDO.
    DEF VAR liSubCount         AS INT  NO-UNDO.
+   DEF VAR lcTenant           AS CHAR NO-UNDO.
 
    DEF BUFFER bMsRequest      FOR MsRequest.
 
-   FOR EACH ttSubscription WHERE
-            ttSubscription.FileName = ttInputFileContent.FileName AND
-            ttSubscription.CustNum > 0,
-      FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK:
+   FOR EACH ttSubscription WHERE ttSubscription.FileName = ttInputFileContent.FileName AND ttSubscription.CustNum > 0:
+
+      ASSIGN lcTenant = fConvertBrandToTenant(ttSubscription.Brand).
+      IF lcTenant > "" THEN
+          fsetEffectiveTenantForAllDB(lcTenant).
+
+      FIND FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK NO-ERROR.
+      IF NOT AVAIL MobSub THEN
+          NEXT.
 
       ASSIGN ttSubscription.Handled = TRUE
              lcRemark = ""
              liSubCount = liSubCount + 1.
 
       IF icAction = "Activation" THEN
-         ldActTS = fMakeTS().
+         ldActTS = Func.Common:mMakeTS().
       ELSE
-         ldActTS = fSecOffSet(fMakeTS(),120). /* 2 mins gap */
+         ldActTS = Func.Common:mSecOffSet(Func.Common:mMakeTS(),120). /* 2 mins gap */
 
       IF liSubCount = 1 THEN
          PUT STREAM sOutput UNFORMATTED ttInputFileContent.InputLine SKIP.
@@ -775,15 +798,21 @@ PROCEDURE pSTC:
    DEF VAR liSTCEntries       AS INT  NO-UNDO.
    DEF VAR lcDataBundleId     AS CHAR NO-UNDO.
    DEF VAR liCreditcheck      AS INT  NO-UNDO.
+   DEF VAR lcTenant           AS CHAR NO-UNDO.
 
    DEF BUFFER NewCLIType      FOR CLIType.
 
    liSTCEntries = NUM-ENTRIES(ttInputFileContent.TestList).
 
-   FOR EACH ttSubscription WHERE
-            ttSubscription.FileName = ttInputFileContent.FileName AND
-            ttSubscription.CustNum > 0,
-      FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK:
+   FOR EACH ttSubscription WHERE ttSubscription.FileName = ttInputFileContent.FileName AND ttSubscription.CustNum > 0:
+
+      ASSIGN lcTenant = fConvertBrandToTenant(ttSubscription.Brand).
+      IF lcTenant > "" THEN
+          fsetEffectiveTenantForAllDB(lcTenant).
+
+      FIND FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK NO-ERROR.
+      IF NOT AVAIL MobSub THEN
+          NEXT.
 
       ASSIGN ttSubscription.Handled = TRUE
              lcRemark = ""
@@ -821,26 +850,26 @@ PROCEDURE pSTC:
                 lcNewCLIType = "CONTSF".
 
       FIND FIRST NewCliType WHERE
-                 NewCLIType.Brand   = gcBrand AND
+                 NewCLIType.Brand   = Syst.Var:gcBrand AND
                  NewCLIType.CLIType = lcNewCLIType NO-LOCK NO-ERROR.
       IF NOT AVAIL NewCLIType THEN
          lcRemark = lcRemark + "," + "Invalid CLIType specified " + lcNewCLIType.
 
       IF ttInputFileContent.ActDate = ? OR lcNewCLIType BEGINS "TARJ" OR
          MobSub.CLIType BEGINS "TARJ" THEN
-         ldActTS = fMake2Dt((fLastDayOfMonth(TODAY) + 1),0).
+         ldActTS = Func.Common:mMake2DT((Func.Common:mLastDayOfMonth(TODAY) + 1),0).
       ELSE
-         ldActTS = fMake2Dt(ttInputFileContent.ActDate,0).
+         ldActTS = Func.Common:mMake2DT(ttInputFileContent.ActDate,0).
 
-      /* Set the katun to check correct barring */
-      katun = "NewtonAd".
+      /* Set the Syst.Var:katun to check correct barring */
+      Syst.Var:katun = "NewtonAd".
       /* Various validations */
       IF NOT fValidateMobTypeCh(MobSub.MsSeq,NewCLIType.CLIType,
                                 ldActTS,FALSE,FALSE,0,"",OUTPUT lcError) THEN
       lcRemark = lcRemark + "," + lcError.
 
-      /* Set the katun again with original username */
-      katun = "Qvantel".
+      /* Set the Syst.Var:katun again with original username */
+      Syst.Var:katun = "Qvantel".
       IF fValidateNewCliType(NewCLIType.CLIType,lcDataBundleId,
                              TRUE,OUTPUT lcError) NE 0 THEN
         lcRemark = lcRemark + "," + lcError.
@@ -861,7 +890,7 @@ PROCEDURE pSTC:
                                       "" /* pcSalesman */,
                                       FALSE,
                                       TRUE,
-                                      katun,
+                                      Syst.Var:katun,
                                       0,
                                       {&REQUEST_SOURCE_SCRIPT},
                                       0,
@@ -896,13 +925,19 @@ PROCEDURE pBTC:
    DEF VAR lcBundleType       AS CHAR NO-UNDO.
    DEF VAR liBTCCount         AS INT  NO-UNDO.
    DEF VAR liBTCEntries       AS INT  NO-UNDO.
+   DEF VAR lcTenant           AS CHAR NO-UNDO.
 
    liBTCEntries = NUM-ENTRIES(ttInputFileContent.TestList).
 
-   FOR EACH ttSubscription WHERE
-            ttSubscription.FileName = ttInputFileContent.FileName AND
-            ttSubscription.CustNum > 0,
-      FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK:
+   FOR EACH ttSubscription WHERE ttSubscription.FileName = ttInputFileContent.FileName AND ttSubscription.CustNum > 0:
+      
+      ASSIGN lcTenant = fConvertBrandToTenant(ttSubscription.Brand).
+      IF lcTenant > "" THEN
+          fsetEffectiveTenantForAllDB(lcTenant).
+
+      FIND FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK NO-ERROR.
+      IF NOT AVAIL MobSub THEN 
+          NEXT.
 
       ASSIGN ttSubscription.Handled = TRUE
              lcRemark = ""
@@ -954,11 +989,11 @@ PROCEDURE pBTC:
                    lcRemark   = lcRemark + "," + lcErrorMsg.
 
          IF ttInputFileContent.ActDate = ? OR lcBundleType = "BONO" THEN
-            ldaActDate = (fLastDayOfMonth(TODAY) + 1).
+            ldaActDate = (Func.Common:mLastDayOfMonth(TODAY) + 1).
          ELSE
             ldaActDate = ttInputFileContent.ActDate.
 
-         ldActTS = fMake2Dt(ldaActDate,0).
+         ldActTS = Func.Common:mMake2DT(ldaActDate,0).
 
          IF lcErrorMsg = ""  AND
             NOT fValidateBTC(MobSub.MsSeq,
@@ -1006,15 +1041,21 @@ PROCEDURE pUpdateSegment:
    DEF VAR lcRemark           AS CHAR NO-UNDO.
    DEF VAR liSubCount         AS INT  NO-UNDO.
    DEF VAR liSegmentCount     AS INT  NO-UNDO.
+   DEF VAR lcTenant           AS CHAR NO-UNDO.
 
    DEF BUFFER bMobSub FOR MobSub.
 
    liSegmentEntries = NUM-ENTRIES(ttInputFileContent.TestList).
 
-   FOR EACH ttSubscription WHERE
-            ttSubscription.FileName = ttInputFileContent.FileName AND
-            ttSubscription.CustNum > 0,
-      FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK:
+   FOR EACH ttSubscription WHERE ttSubscription.FileName = ttInputFileContent.FileName AND ttSubscription.CustNum > 0:
+
+      ASSIGN lcTenant = fConvertBrandToTenant(ttSubscription.Brand).
+      IF lcTenant > "" THEN
+          fsetEffectiveTenantForAllDB(lcTenant).
+
+      FIND FIRST MobSub WHERE MobSub.MsSeq = ttSubscription.MsSeq NO-LOCK NO-ERROR.
+      IF NOT AVAIL MobSub THEN
+          NEXT.
 
       ASSIGN ttSubscription.Handled = TRUE
              lcRemark = ""

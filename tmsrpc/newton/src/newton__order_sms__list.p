@@ -11,7 +11,6 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/tmsconst.i}
 
-DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".
 DEF VAR lcResultStruct AS CHARACTER NO-UNDO. 
 DEF VAR pcStruct AS CHARACTER NO-UNDO. 
 DEF VAR lcStruct AS CHARACTER NO-UNDO. 
@@ -37,12 +36,7 @@ IF LOOKUP("offset",lcStruct) > 0 THEN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST Order NO-LOCK WHERE
-           Order.Brand = gcBrand AND
-           Order.OrderId = liOrderId NO-ERROR.
-
-IF NOT AVAIL Order THEN
-   RETURN appl_err("Order not found").
+{newton/src/findtenant.i YES ordercanal Order OrderId liOrderId}
 
 lcResultStruct = add_struct(response_toplevel_id, "").
 lcIdStruct = add_array(lcResultStruct, "results").

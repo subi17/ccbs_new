@@ -9,7 +9,6 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/transname.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
@@ -96,7 +95,7 @@ FUNCTION fErrorLog RETURNS LOGIC
    
    DO TRANS:
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
              ErrorLog.ActionID  = "DUMP" + STRING(iiDumpID)
              ErrorLog.TableName = IF AVAILABLE DumpFile 
                                   THEN DumpFile.DumpName
@@ -106,8 +105,8 @@ FUNCTION fErrorLog RETURNS LOGIC
                                   STRING(DAY(TODAY),"99")
              ErrorLog.ErrorChar = icDumpMode
              ErrorLog.ErrorMsg  = icError
-             ErrorLog.UserCode  = katun.
-             ErrorLog.ActionTS  = fMakeTS().
+             ErrorLog.UserCode  = Syst.Var:katun.
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    
 END FUNCTION.
@@ -121,7 +120,7 @@ FUNCTION fWriteLog RETURNS LOGIC
    OUTPUT STREAM sLog TO VALUE(lcLogFile) APPEND.
    
    PUT STREAM sLog UNFORMATTED 
-      fISOTimeZone(TODAY,TIME)   " "
+      Func.Common:mISOTimeZone(TODAY,TIME)   " "
       icAction                   " " 
       DumpFile.FileCategory      " "
       icMessage SKIP.
@@ -166,8 +165,8 @@ IF NOT DumpFile.Active AND NOT llTestRun THEN DO:
    RETURN "INFORMATION:" + lcError.
 END.
 
-ldeToday = fHMS2TS(TODAY,'').
-ldeTomorrow = fHMS2TS(TODAY + 1,'').
+ldeToday = Func.Common:mHMS2TS(TODAY,'').
+ldeTomorrow = Func.Common:mHMS2TS(TODAY + 1,'').
 
 lcActionKey = STRING(YEAR(TODAY),"9999") + 
               STRING(MONTH(TODAY),"99") + 
@@ -186,7 +185,7 @@ END.
 
 
 ASSIGN
-   ldStarted     = fMakeTS()
+   ldStarted     = Func.Common:mMakeTS()
    llInterrupted = FALSE
    lcFinished    = "FINISH"
    lcLogFile     = DumpFile.LogFile.
@@ -344,7 +343,7 @@ DO FOR DumpLog TRANS:
       ASSIGN
          DumpLog.Filesize      = DECIMAL(FILE-INFO:FILE-SIZE).
    END.
-   DumpLog.CreateEnd     = fMakeTS().
+   DumpLog.CreateEnd     = Func.Common:mMakeTS().
 
    IF llInterrupted THEN ASSIGN
       DumpLog.DumpLogStatus = 5.
@@ -403,7 +402,7 @@ PROCEDURE pInitialize:
       lcFile = REPLACE(lcFile,"#CAT",DumpFile.FileCategory)
       lcFile = REPLACE(lcFile,"#RUN",icRunNameTag)
       lcFile = REPLACE(lcFile,"#TENANT",
-                       CAPS(multitenancy.TenantInformation:mGetBrandNameForActiveTenant())).
+                       CAPS(multitenancy.TenantInformation:mGetEffectiveBrand())).
    
    /* sequential nbr for the same day */
    IF INDEX(lcFile,"#DSEQ") > 0 THEN DO:
@@ -499,14 +498,14 @@ PROCEDURE pInitialize:
                  bDumpLog.DumpId = iiDumpID AND
                  bDumpLog.DumpLogStatus NE 5 USE-INDEX DumpId NO-ERROR.
       IF AVAIL bDumpLog THEN DO:
-         IF NOT bDumpLog.CreateStart > fHMS2TS(TODAY - 65,'') THEN ldLastDump = 0.
+         IF NOT bDumpLog.CreateStart > Func.Common:mHMS2TS(TODAY - 65,'') THEN ldLastDump = 0.
          ELSE ldLastDump = bDumpLog.CreateStart.
       END.
 
       IF ldLastDump = 0 THEN RETURN 
          "ERROR:Log for previous dump was not found within last 2 months".
          
-      ldtLastDump = fTimeStamp2DateTime(ldLastDump).   
+      ldtLastDump = Func.Common:mTimeStamp2DateTime(ldLastDump).   
    END.
 
    RETURN "".
@@ -531,7 +530,7 @@ PROCEDURE pGetRecords:
    IF NOT VALID-HANDLE(lhCollect) THEN 
       RETURN "ERROR:Collection temp-table not initialized".
    
-   fSplitTS(ldLastDump,
+   Func.Common:mSplitTS(ldLastDump,
             OUTPUT ldaModified,
             OUTPUT liModTime).
     
@@ -564,7 +563,7 @@ PROCEDURE pGetRecords:
          lhField = lhTABLE:BUFFER-FIELD(liCnt).
          IF lhField:NAME = "Brand" THEN DO:
             lcFind = lcFind + " WHERE " + DumpFile.MainTable + 
-                              '.Brand = "' + gcBrand + '"'.
+                              '.Brand = "' + Syst.Var:gcBrand + '"'.
             LEAVE.
          END.
       END.

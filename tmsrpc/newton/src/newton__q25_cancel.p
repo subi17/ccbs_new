@@ -23,8 +23,7 @@
 */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
-{Func/timestamp.i}
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/msreqfunc.i} /* fReqStatus */
 {Func/fmakemsreq.i}
@@ -105,12 +104,9 @@ IF pcmemoStruct > "" THEN DO:
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
 
-katun = "VISTA_" + lcusername.
+Syst.Var:katun = "VISTA_" + lcusername.
 
-FIND FIRST MobSub WHERE
-           MobSub.MsSeq EQ limsseq NO-LOCK NO-ERROR.
-IF NOT AVAILABLE MobSub THEN
-   RETURN appl_err("Subscription not found").
+{newton/src/findtenant.i NO ordercanal MobSub MsSeq limsseq}
 
 DO liLoop = 1 TO NUM-ENTRIES({&REQ_ONGOING_STATUSES}):
    liReqStatus = INT(ENTRY(liLoop,{&REQ_ONGOING_STATUSES})).
@@ -135,7 +131,7 @@ END.
 ELSE DO: /* Cancel Quota 25 Extension */
 
    FIND DCCLI NO-LOCK WHERE
-        DCCLI.Brand   EQ gcBrand AND
+        DCCLI.Brand   EQ Syst.Var:gcBrand AND
         DCCLI.DCEvent EQ "RVTERM12" AND
         DCCLI.MsSeq   EQ MobSub.MsSeq AND
         DCCLI.ValidTo >= TODAY
@@ -154,7 +150,7 @@ ELSE DO: /* Cancel Quota 25 Extension */
    WHEN "remove" THEN ASSIGN
       lcAction = "term"
       llCreateFees = TRUE
-      ldePeriodTo = fMakeTS().
+      ldePeriodTo = Func.Common:mMakeTS().
    WHEN "cancel" THEN DO: 
 
       IF ADD-INTERVAL(TODAY, -5, "months") >= DCCLI.ValidFrom THEN
@@ -165,7 +161,7 @@ ELSE DO: /* Cancel Quota 25 Extension */
          llCreateFees = FALSE.
 
       FIND FixedFee NO-LOCK USE-INDEX CustNum WHERE
-           FixedFee.Brand     = gcBrand   AND
+           FixedFee.Brand     = Syst.Var:gcBrand   AND
            FixedFee.CustNum   = MobSub.CustNum AND
            FixedFee.HostTable = "MobSub"  AND
            FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
@@ -179,7 +175,7 @@ ELSE DO: /* Cancel Quota 25 Extension */
       FOR EACH FFItem OF FixedFee NO-LOCK USE-INDEX FFNum:
          IF FFItem.Billed = TRUE AND
             CAN-FIND (FIRST Invoice USE-INDEX InvNum WHERE
-                            Invoice.Brand   = gcBrand AND
+                            Invoice.Brand   = Syst.Var:gcBrand AND
                             Invoice.InvNum  = FFItem.InvNum AND
                             Invoice.InvType = 1 NO-LOCK) THEN NEXT.
          liLastUnBilledPeriod = FFItem.BillPeriod.
@@ -190,7 +186,7 @@ ELSE DO: /* Cancel Quota 25 Extension */
          liLastUnBilledPeriod = FixedFee.BegPeriod.
 
       ldaLastUnBilledDate = fPer2Date(liLastUnBilledPeriod,0) - 1.
-      ldePeriodTo = fMake2Dt(ldaLastUnBilledDate,86399).
+      ldePeriodTo = Func.Common:mMake2DT(ldaLastUnBilledDate,86399).
 
    END.
    OTHERWISE RETURN appl_err("Incorrect action").
@@ -222,11 +218,11 @@ IF lcmemo_title > "" THEN DO:
    CREATE Memo.
    ASSIGN
        Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = gcBrand
+       Memo.Brand     = Syst.Var:gcBrand
        Memo.HostTable = "MobSub"
        Memo.KeyValue  = STRING(MobSub.MsSeq)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = katun
+       Memo.CreUser   = Syst.Var:katun
        Memo.MemoTitle = lcmemo_title
        Memo.MemoText  = lcmemo_content
        Memo.CustNum   = MobSub.CustNum.
@@ -235,5 +231,4 @@ END. /* IF lcmemo_title > "" AND lcmemo_content > "" THEN DO: */
 add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

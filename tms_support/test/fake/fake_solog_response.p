@@ -1,9 +1,8 @@
 /* Set Solog to status Ok for a defined list of ServCom */
 
 {Syst/commpaa.i}
-katun = "fakeSolog".
-gcBrand = "1".
-{Func/timestamp.i}
+Syst.Var:katun = "fakeSolog".
+Syst.Var:gcBrand = "1".
 {Func/msreqfunc.i}
 {Func/fgettxt.i}
 {Func/fmakesms.i}
@@ -13,7 +12,7 @@ INPUT THROUGH hostname.
 IMPORT lcHostName.
 INPUT CLOSE.
 
-IF LOOKUP(lcHostName,'angetenar,alpheratz,sadachbia,yanai') = 0 THEN DO:
+IF LOOKUP(lcHostName,'angetenar,alpheratz,sadachbia,yanai,yoigodev') = 0 THEN DO:
    MESSAGE 'This script is not allowed to run in'
    lcHostName VIEW-AS ALERT-BOX.
    RETURN.
@@ -69,7 +68,6 @@ DO WHILE TRUE :
 
 END.
 
-IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
 
 QUIT.
 
@@ -87,7 +85,7 @@ DEFINE VARIABLE liLang      AS INTEGER   NO-UNDO.
 DEFINE VARIABLE ldeSMSTime  AS DEC       NO-UNDO.
 
 FOR EACH MsRequest NO-LOCK WHERE
-         MsRequest.Brand = gcBrand AND
+         MsRequest.Brand = Syst.Var:gcBrand AND
          LOOKUP(STRING(MsRequest.ReqType),"0,1,13,15,18,19,82,83") > 0 AND
          MsRequest.ReqStatus = 5 :
         /*   AND
@@ -98,10 +96,11 @@ FOR EACH MsRequest NO-LOCK WHERE
      liCli = INT(MsRequest.cli) NO-ERROR.
      IF ERROR-STATUS:ERROR THEN NEXT.
      IF ((licli >= 633993700 AND licli <= 633993750) OR
-         (licli >= 633993500 AND licli <= 633993620)) THEN NEXT.
+         (licli >= 633993500 AND licli <= 633993620) OR 
+         (liCli >= 722600000 AND liCli <= 722600009)) THEN NEXT.
 
       FIND SoLog WHERE
-           Solog.Brand = gcBrand AND
+           Solog.Brand = Syst.Var:gcBrand AND
            SoLog.MsSeq = MsRequest.MsSeq AND
            SoLog.Stat = 0 AND
            SoLog.MsRequest = MsRequest.MsRequest
@@ -109,7 +108,7 @@ FOR EACH MsRequest NO-LOCK WHERE
       IF NOT AVAIL SoLog THEN NEXT.
 
       ASSIGN
-         Solog.CompletedTS = fMakeTS()
+         Solog.CompletedTS = Func.Common:mMakeTS()
          Solog.stat        = 2
          SoLog.Response    = "OK (FAKE)".
 
@@ -166,7 +165,7 @@ PROCEDURE pSoLog:
       bufSolog.Stat = 0 THEN DO:
 
        ASSIGN
-            bufSolog.CompletedTS = fMakeTS()
+            bufSolog.CompletedTS = Func.Common:mMakeTS()
             bufSolog.stat        = 2.
 
        IF lcStatus = "OK" THEN bufSoLog.Response = bufSoLog.response + lcStatus.

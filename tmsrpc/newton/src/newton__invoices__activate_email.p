@@ -8,8 +8,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-ASSIGN gcBrand = "1"
-       katun   = "tmsrpc".
+ASSIGN Syst.Var:gcBrand = "1"
+       Syst.Var:katun   = "tmsrpc".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/msreqfunc.i}
@@ -30,8 +30,10 @@ piRequestId = get_int(param_toplevel_id,"0").
 pcHashKey   = get_string(param_toplevel_id,"1").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/findtenant.i NO Mobile MsRequest MsRequest piRequestId}
+
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
    lhCustomer = BUFFER Customer:HANDLE.
    lhInvoiceTargetGroup = BUFFER InvoiceTargetGroup:HANDLE.
@@ -46,11 +48,6 @@ IF lcSaltKey = "" OR lcSaltKey = ? THEN
 
 liConfDays = fCParamI("WaitingCanceleInvoiceDays").
 IF liConfDays = 0 OR liConfDays = ? THEN liConfDays = 90.
-
-FIND FIRST MsRequest WHERE
-           MsRequest.MsRequest = piRequestId NO-LOCK NO-ERROR.
-IF NOT AVAIL MsRequest THEN
-   RETURN appl_err("Invalid Request Id").
 
 IF MsRequest.ReqStatus = {&REQUEST_STATUS_DONE} THEN
    RETURN appl_err("Customer already activated the link").
@@ -117,5 +114,4 @@ fReqStatus(2,"eInvoice has been activated").
 add_boolean(response_toplevel_id,?,TRUE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

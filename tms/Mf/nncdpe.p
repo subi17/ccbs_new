@@ -29,7 +29,7 @@ DEF VAR exPaymFile   AS c  NO-UNDO.
 
 /* get default direcory Name FOR OUTPUT */
 DO FOR TMSUser:
-   FIND TMSUser where TMSUser.UserCode = katun no-lock.
+   FIND TMSUser where TMSUser.UserCode = Syst.Var:katun no-lock.
    ASSIGN exdir = TMSUser.Repdir.
 END.
 
@@ -51,12 +51,12 @@ help "Directory where summary File is to be written" SKIP
 help "Name of File where summary PaymFile is to be written"
 skip(4)
 WITH
-   width 80 OVERLAY COLOR value(cfc) TITLE COLOR value(ctc)
-   " " + ynimi + " CALL SUMMARY BY BillCode " + string(pvm,"99-99-99") + " "
+   width 80 OVERLAY COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc)
+   " " + Syst.Var:ynimi + " CALL SUMMARY BY BillCode " + string(TODAY,"99-99-99") + " "
    NO-LABELS FRAME rajat.
 
 
-cfc = "sel". RUN Syst/ufcolor.p.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
 
 ASSIGN
 exdate2 = date(month(TODAY),1,year(TODAY)) - 1
@@ -69,7 +69,7 @@ hdr     = "ProdGroup,GroupName,Date,ProdCod,ProdName,AmtCalls," +
 rajat:
 repeat WITH FRAME rajat:
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE
    exdate1
    exdate2 validate(input exdate2 >= input exdate1,"Impossible order !")
@@ -78,12 +78,12 @@ repeat WITH FRAME rajat:
 
 toimi:
    repeat WITH fram rajat:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
 
-      IF toimi = 1 THEN NEXT rajat.
-      IF toimi = 8 THEN LEAVE rajat.
-      IF toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 1 THEN NEXT rajat.
+      IF Syst.Var:toimi = 8 THEN LEAVE rajat.
+      IF Syst.Var:toimi = 5 THEN DO:
          ok = FALSE.
          message "Are You Sure You want to start (Y/N) ?"
          UPDATE ok.
@@ -96,11 +96,11 @@ toimi:
    exPaymFile = exdir + "/" + exName.
    OUTPUT STREAM excel TO value(exPaymFile).
 
-   PUT STREAM excel UNFORMATTED ynimi.  RUN Syst/uexskip.p(2).
+   PUT STREAM excel UNFORMATTED Syst.Var:ynimi.  RUN Syst/uexskip.p(2).
    PUT STREAM excel UNFORMATTED 
      "SUMMARY OF ALL Calls BY DATE/PRODUCT GROUP/PRODUCT".  RUN Syst/uexskip.p(2).
    PUT STREAM excel UNFORMATTED
-     "Printed by" tab katun tab pvm format "99.99.9999".  RUN Syst/uexskip.p(2).
+     "Printed by" tab Syst.Var:katun tab TODAY format "99.99.9999".  RUN Syst/uexskip.p(2).
    DO i = 1 TO num-entries(hdr).
       PUT STREAM excel UNFORMATTED entry(i,hdr) tab.
    END.
@@ -111,7 +111,7 @@ toimi:
             FixCDR.Date <= exdate2,
 
        FIRST BillItem no-lock where
-             BillItem.Brand    = gcBrand AND
+             BillItem.Brand    = Syst.Var:gcBrand AND
              BillItem.BillCode = FixCDR.BillCode
 
    BREAK

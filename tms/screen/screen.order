@@ -1,3 +1,3 @@
 echo "ORDER HANDLER SCREENS"
 sleep 2
-screen 1 pike -C /apps/yoigo/tms terminal -- Gwy/orderrun common ordercanal mobile counter star reratelog mcdr tenant=yoigo umask=0022
+screen 1 pike -C /apps/yoigo/tms terminal -- Gwy/orderrun common ordercanal mobile counter star reratelog mcdr -clientlog /scratch/log/screen/orderrun.log -logthreshold 1048576 -logginglevel 1 tenant=super umask=0022

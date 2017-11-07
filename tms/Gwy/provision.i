@@ -6,6 +6,7 @@
 
 {Syst/commali.i}
 {Syst/tmsconst.i}
+{Func/multitenantfunc.i}
 
 DEF BUFFER provSolog     FOR Solog.
 DEF BUFFER provMobsub    FOR Mobsub.
@@ -62,7 +63,7 @@ function fMakeCommLine returns CHAR
    END. /* FOR LAST Order WHERE */
 
    FIND FIRST Order WHERE
-              Order.Brand   = gcBrand AND
+              Order.Brand   = Syst.Var:gcBrand AND
               Order.OrderId = liOrderId NO-LOCK NO-ERROR.
   
    /* CREATE extra parameters */ 
@@ -92,7 +93,9 @@ function fMakeCommLine returns CHAR
                              ELSE STRING(Order.PayType,"PREPAID/POSTPAID"))
                 lcProfile = (IF AVAILABLE CLIType 
                              THEN CLIType.ServicePack
-                             ELSE STRING(Order.PayType,"12/11")).
+                             ELSE IF BUFFER-TENANT-NAME(Order) = {&TENANT_MASMOVIL}
+                             THEN STRING(Order.PayType,"52/51")
+                             ELSE STRING(Order.PayType,"42/41")).
 
       END. /* ELSE IF Avail Order THEN DO: */
 
@@ -105,14 +108,14 @@ function fMakeCommLine returns CHAR
       IF Avail Order AND Order.MnpStatus > 0 THEN DO:
 
          FIND FIRST MNPOperator WHERE
-                    MNPOperator.Brand = gcBrand AND
+                    MNPOperator.Brand = Syst.Var:gcBrand AND
                     MNPOperator.OperName = STRING(order.curroper) AND
                     MNPOperator.Active = True
          NO-LOCK NO-ERROR.
 
          IF NOT AVAIL MNPOperator THEN
             FIND FIRST MNPOperator WHERE
-                       MNPOperator.Brand = gcBrand AND
+                       MNPOperator.Brand = Syst.Var:gcBrand AND
                        MNPOperator.OperName = STRING(order.curroper) AND
                        MNPOperator.Active = False
             NO-LOCK NO-ERROR.
@@ -130,6 +133,8 @@ function fMakeCommLine returns CHAR
          IF CLIType.CLIType EQ "CONTM2" THEN
             lcAdkey = lcAdkey + "BARRING=0110000,".
       END.
+
+      lcAdkey = lcAdKey + "SERVICE_OPERATOR=" + CAPS(fConvertTenantToBrand(BUFFER-TENANT-NAME(provSolog))) + ",".
 
    END.
 
@@ -245,7 +250,7 @@ function fMakeCommLine2 returns CHAR
    END. /* FOR LAST Order WHERE */
 
    FIND FIRST Order WHERE
-              Order.Brand   = gcBrand AND
+              Order.Brand   = Syst.Var:gcBrand AND
               Order.OrderId = liOrderId NO-LOCK NO-ERROR.
   
    IF ProvMSrequest.ReqCParam1 = "CHANGEMSISDN" THEN DO:
@@ -333,7 +338,7 @@ FUNCTION fGetShaperConfCommLine RETURN CHAR
    DEF VAR lcCommLine AS CHAR NO-UNDO. 
 
    FIND FIRST ShaperConf NO-LOCK WHERE
-              ShaperConf.Brand = gcBrand AND
+              ShaperConf.Brand = Syst.Var:gcBrand AND
               ShaperConf.ShaperConfID = icShaperConfID
    NO-ERROR.
 

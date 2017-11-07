@@ -20,7 +20,6 @@
                   28.05.2004/aam SMS
                   10.08.2004/aam bank account from param DDebitBankAccount
                   29.11.2005/aam output file to Invoice.DDFile
-                  24.01.2006/jt  DYNAMIC-FUNCTION("fDispCustName"
  VERSION .......: M15
  ============================================================================*/
 
@@ -29,7 +28,6 @@
 {Func/refcode.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
-{Func/timestamp.i}
 {Func/fbankday.i}
 {Func/frefnum.i}
 {Func/fmakesms.i}
@@ -93,8 +91,8 @@ DEF VAR i-date1     AS DA   FORMAT "99-99-99"         NO-UNDO.
 DEF VAR i-date2     AS DA   FORMAT "99-99-99"         NO-UNDO.
 DEF VAR lano1       AS I    FORMAT ">>>>>>>9"         NO-UNDO.
 DEF VAR lano2       AS I    FORMAT ">>>>>>>9"         NO-UNDO.
-DEF VAR asno1       AS I    FORMAT ">>>>>>>9"         NO-UNDO.
-DEF VAR asno2       AS I    FORMAT ">>>>>>>9"         NO-UNDO.
+DEF VAR asno1       AS I    FORMAT ">>>>>>>>9"        NO-UNDO.
+DEF VAR asno2       AS I    FORMAT ">>>>>>>>9"        NO-UNDO.
 DEF VAR lcInvGroup     LIKE    invgroup.InvGroup          NO-UNDO.
 DEF VAR CustGroup     LIKE    custgroup.custgroup       NO-UNDO.
 DEF VAR status1     AS I    FORMAT "9"                NO-UNDO.
@@ -156,7 +154,7 @@ lcSMSMessage = fGetTxt("SMS",
 IF cur = "EUR" THEN cur = "1".             /*        1 = euro             */
 ELSE                cur = " ".             /* " " ja 0 = markka           */
 
-ots-pvm = string(pvm,"99.99.99").                   
+ots-pvm = string(TODAY,"99.99.99").                   
 
 lcBankAcc = fCParamC("DDebitBankAccount").
 
@@ -165,9 +163,9 @@ form
 "  INSTRUCTION: This program creates a direct debit file" skip
 "               from invoices defined below:"
    SKIP(13)
-   WITH TITLE COLOR value(ctc)
-   " " + ynimi + " DIRECT DEBIT FILE CREATION " + ots-pvm + " "
-COLOR value(cfc) width 80 OVERLAY FRAME taka.
+   WITH TITLE COLOR value(Syst.Var:ctc)
+   " " + Syst.Var:ynimi + " DIRECT DEBIT FILE CREATION " + ots-pvm + " "
+COLOR value(Syst.Var:cfc) width 80 OVERLAY FRAME taka.
 
 form
    " Invoice group  ..........:" lcInvGroup  NO-LABEL FORMAT "X(10)"
@@ -214,24 +212,24 @@ form
       HELP "Pick invoices that have already been sent to DD"
       SKIP
       
-with title color value(ctc) " DIRECT DEBIT INVOICE CRITERIA " side-labels
-COLOR value(cfc) ROW 7 centered OVERLAY FRAME rajat.
+with title color value(Syst.Var:ctc) " DIRECT DEBIT INVOICE CRITERIA " side-labels
+COLOR value(Syst.Var:cfc) ROW 7 centered OVERLAY FRAME rajat.
 
-cfc = "sel". RUN Syst/ufcolor.p. ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. Syst.Var:ccc = Syst.Var:cfc.
 view FRAME taka. PAUSE 0 no-message.
 
 view FRAME rajat. view FRAME statu. PAUSE 0 no-message.
 
 /* Haetaan pvm-ehdotus */
 ASSIGN 
-   i-date1  = pvm
-   i-date2  = pvm
+   i-date1  = TODAY
+   i-date2  = TODAY
 
-cfc = "lis". RUN Syst/ufcolor.p.
-ehto = 9. RUN Syst/ufkey.p.
+Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
+Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
 ASSIGN lano1 = 000000 lano2 = 99999999
-       asno1 = 0      asno2 = 99999999.
+       asno1 = 0      asno2 = 999999999.
 
 VIEW FRAME taka. PAUSE 0 NO-MESSAGE.
 
@@ -245,7 +243,7 @@ LOOP:
 repeat ON ENDKEY UNDO, NEXT:
 
    /* KysellAAn rajaukset */
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    PAUSE 0 no-message.
    
    REPEAT ON ENDKEY UNDO, LEAVE:
@@ -260,9 +258,9 @@ repeat ON ENDKEY UNDO, NEXT:
       llRerun
    WITH FRAME rajat EDITING:
 
-      READKEY. nap = keylabel(LASTKEY).
+      READKEY. Syst.Var:nap = keylabel(LASTKEY).
 
-      IF nap = "F9" AND 
+      IF Syst.Var:nap = "F9" AND 
          INDEX(FRAME-FIELD,"status") > 0 
       THEN DO:
 
@@ -285,12 +283,12 @@ repeat ON ENDKEY UNDO, NEXT:
             END.
          END.
                 
-         ehto = 9.
+         Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
          NEXT. 
       END.
        
-      IF lookup(nap,poisnap) > 0 THEN DO:
+      IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
       
          PAUSE 0.
          
@@ -305,7 +303,7 @@ repeat ON ENDKEY UNDO, NEXT:
             IF INPUT lano1 = INPUT lano2 THEN DO:
 
                FIND FIRST Invoice NO-LOCK where
-                          Invoice.Brand   = gcBrand AND
+                          Invoice.Brand   = Syst.Var:gcBrand AND
                           Invoice.InvNum  = INPUT lano1.
                FIND FIRST Customer NO-LOCK where
                           Customer.CustNum = Invoice.CustNum.
@@ -335,7 +333,7 @@ repeat ON ENDKEY UNDO, NEXT:
 
              ELSE DO:
                 Find invgroup where 
-                     InvGroup.Brand   = gcBrand AND
+                     InvGroup.Brand   = Syst.Var:gcBrand AND
                      invgroup.InvGroup = lcInvGroup 
                    NO-LOCK NO-ERROR.
                 IF NOT AVAILABLE InvGroup THEN DO:
@@ -354,7 +352,7 @@ repeat ON ENDKEY UNDO, NEXT:
              if CustGroup = "" then disp "NONE" @ custgroup.cgname.
              ELSE DO:
                 FIND custgroup where 
-                     CustGroup.Brand     = gcBrand AND
+                     CustGroup.Brand     = Syst.Var:gcBrand AND
                      custgroup.custgroup = CustGroup 
                    NO-LOCK NO-ERROR.
                 IF NOT AVAIL custgroup THEN DO:
@@ -388,20 +386,20 @@ repeat ON ENDKEY UNDO, NEXT:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
    
       ASSIGN
-      ufk = 0 ufk[1] = 132 ufk[4] = 0  ufk[5] = 795 ufk[8] = 8 ehto = 0.
-      IF lcBankAcc = "" THEN ufk[5] = 0.
+      Syst.Var:ufk = 0 Syst.Var:ufk[1] = 132 Syst.Var:ufk[4] = 0  Syst.Var:ufk[5] = 795 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
+      IF lcBankAcc = "" THEN Syst.Var:ufk[5] = 0.
       
       RUN Syst/ufkey.p.
 
-      IF TOIMI = 1 THEN NEXT loop.
+      IF Syst.Var:toimi = 1 THEN NEXT loop.
 
-      ELSE IF TOIMI = 8 THEN DO:
+      ELSE IF Syst.Var:toimi = 8 THEN DO:
          HIDE FRAME rajat NO-PAUSE.
          HIDE FRAME taka  NO-PAUSE.
          RETURN.
       END.
       
-      ELSE IF TOIMI = 5 THEN DO:
+      ELSE IF Syst.Var:toimi = 5 THEN DO:
       
          IF llRerun THEN DO:
             ok = FALSE.
@@ -426,13 +424,13 @@ repeat ON ENDKEY UNDO, NEXT:
          
       END.
       
-   END. /* toimi */
+   END. /* Syst.Var:toimi */
 END.  /* LOOP */
 
 MESSAGE "Creating direct debit file ...".
 
 FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
-         Invoice.Brand   = gcBrand     AND
+         Invoice.Brand   = Syst.Var:gcBrand     AND
          Invoice.InvDate >= i-date1     AND
          Invoice.InvDate <= i-date2     AND
          Invoice.InvNum >= lano1       AND
@@ -464,7 +462,7 @@ FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
       /* is an ext cust group selected ? */
       if CustGroup ne "" AND
          NOT can-find(first CGMember where 
-                            CGMember.Brand     = gcBrand AND
+                            CGMember.Brand     = Syst.Var:gcBrand AND
                             CGMember.custgroup = CustGroup and
                             CGMember.custnum   = Customer.CustNum) 
       THEN NEXT. 
@@ -539,8 +537,7 @@ FOR EACH ttBankAcc:
             Invoice.InvNum = ttInv.InvNum,
       FIRST Customer OF Invoice NO-LOCK:
       
-      lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                     BUFFER Customer).
+      lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                                                        
       /* check how many bank days are left before due date,
          minimum is 4 bank days */
@@ -679,7 +676,7 @@ FOR EACH ttBankAcc:
                         Customer.SMSNumber,
                         8,
                         lcTxt,
-                        fMakeTS()).
+                        Func.Common:mMakeTS()).
       END.
 
    END.  /* foreach ttInv */

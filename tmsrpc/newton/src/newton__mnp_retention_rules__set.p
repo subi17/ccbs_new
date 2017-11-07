@@ -14,38 +14,43 @@
 */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
+{Syst/eventval.i}
 
-DEF VAR pcStruct AS CHAR NO-UNDO. 
-DEF VAR piID AS INT NO-UNDO. 
+DEF VAR pcStruct   AS CHAR NO-UNDO. 
+DEF VAR piID       AS INT  NO-UNDO. 
 DEF VAR pcUsername AS CHAR NO-UNDO. 
-DEF VAR llEqual AS LOG NO-UNDO.
-DEF VAR lcStruct AS CHAR NO-UNDO. 
+DEF VAR llEqual    AS LOG  NO-UNDO.
+DEF VAR lcStruct   AS CHAR NO-UNDO. 
+DEF VAR pcTenant   AS CHAR NO-UNDO.
 
 DEFINE TEMP-TABLE ttMNPRetentionRule NO-UNDO LIKE MNPRetentionRule.
 
-IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
-pcStruct = get_struct(param_toplevel_id, "0").
+IF validate_request(param_toplevel_id, "string,struct") = ? THEN RETURN.
+
+pcTenant = get_string(param_toplevel_id, "0").
+pcStruct = get_struct(param_toplevel_id, "1").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
 lcStruct = validate_struct(pcStruct,"id!,paytype,consumption_average,penalty_left,penalty_months_left,segment_offer,sms_token,username!,valid_to").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 pcUsername = "VISTA_" + get_string(pcStruct, "username").
+
 piID = get_int(pcStruct, "id").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-{Syst/commpaa.i}
-{Syst/eventval.i}
-ASSIGN
-   katun = pcUsername
-   gcBrand = "1".
+Syst.Var:katun = pcUsername.
 
-FIND FIRST MNPRetentionRule WHERE
-           MNPRetentionRule.RetentionRuleID = piID
-NO-LOCK NO-ERROR.
+{newton/src/settenant.i pcTenant}
 
+FIND FIRST MNPRetentionRule WHERE MNPRetentionRule.RetentionRuleID = piID NO-LOCK NO-ERROR.
 IF NOT AVAIL MNPRetentionrule THEN
    RETURN appl_err(SUBST("Unknown MNP retention rule: &1", piID)).
 
@@ -96,7 +101,7 @@ IF LOOKUP("sms_token",lcStruct) > 0 THEN DO:
 
    IF ttMNPRetentionRule.SMSText > "" THEN DO:
       FIND FIRST InvText NO-LOCK WHERE
-                 InvText.Brand = gcBrand AND
+                 InvText.Brand = Syst.Var:gcBrand AND
                  InvText.Target = "SMS" AND
                  InvText.KeyValue = ttMNPRetentionRule.SMSText AND
                  InvText.FromDate <= TODAY AND
@@ -140,7 +145,6 @@ END.
 add_boolean(response_toplevel_id, ?, TRUE).
  
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-   IF llDoEvent THEN fCleanEventObjects().
+      IF llDoEvent THEN fCleanEventObjects().
    EMPTY TEMP-TABLE ttMNPRetentionRule.
 END.

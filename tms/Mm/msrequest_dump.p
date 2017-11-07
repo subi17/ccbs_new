@@ -9,6 +9,7 @@
 
 {Syst/commali.i}
 {Syst/dumpfile_run.i}
+{Func/profunc.i}
 
 DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -76,11 +77,11 @@ PROCEDURE pInitialize:
                      DFField.DFField.
    END.
          
-   fSplitTS(idLastDump,
+   Func.Common:mSplitTS(idLastDump,
             OUTPUT ldaModified,
             OUTPUT liCnt).
 
-   ldtLastDump = fTimeStamp2DateTime(idLastDump).
+   ldtLastDump = Func.Common:mTimeStamp2DateTime(idLastDump).
 
    ASSIGN
       lhTable     = BUFFER MsRequest:HANDLE
@@ -96,11 +97,11 @@ PROCEDURE pInitialize:
    END.
 
    IF icDumpMode = "Full" THEN DO:
-      ldFromStamp = fMake2Dt(TODAY - 65,0).
+      ldFromStamp = Func.Common:mMake2DT(TODAY - 65,0).
       IF idLastDump = 0 THEN
-         idLastdump = fMake2Dt(TODAY - 65,0).
+         idLastdump = Func.Common:mMake2DT(TODAY - 65,0).
    END.
-   ELSE ldFromStamp = fMake2Dt(TODAY - 30,0).
+   ELSE ldFromStamp = Func.Common:mMake2DT(TODAY - 30,0).
    
    OUTPUT STREAM sFile TO VALUE(icFile).
 
@@ -127,9 +128,14 @@ PROCEDURE pDumpToFile:
    
       IF lcField BEGINS "#" THEN DO:
          CASE lcField:
+         WHEN "#Segment" THEN DO:
+            IF msrequest.CustNum > 0 THEN   
+               lcValue = fGetSegment(msrequest.CustNum,0).
+            ELSE lcvalue = "".
+         END.         
          WHEN "#Memo" THEN DO:
             FOR EACH Memo NO-LOCK WHERE
-                     Memo.Brand = gcBrand AND
+                     Memo.Brand = Syst.Var:gcBrand AND
                      Memo.HostTable = "MsRequest" AND
                      Memo.KeyValue  = STRING(MsRequest.MsRequest)
             BY Memo.CreStamp:
@@ -188,7 +194,7 @@ PROCEDURE pDumpRequests:
    FOR EACH ttStatus NO-LOCK:
       /* YOT-4874 Add to dump also old requests where new updatestamp */
       FOR EACH MsRequest NO-LOCK USE-INDEX UpdateStamp WHERE
-               MsRequest.Brand     = gcBrand AND
+               MsRequest.Brand     = Syst.Var:gcBrand AND
                MsRequest.ReqStatus = ttStatus.ReqStatus AND
                MsRequest.UpdateStamp >= idLastDump AND
                MsRequest.ActStamp < ldFromStamp
@@ -205,7 +211,7 @@ PROCEDURE pDumpRequests:
       END.
 
       FOR EACH MsRequest NO-LOCK USE-INDEX ReqStatus WHERE
-               MsRequest.Brand     = gcBrand AND
+               MsRequest.Brand     = Syst.Var:gcBrand AND
                MsRequest.ReqStatus = ttStatus.ReqStatus AND
                MsRequest.ActStamp >= ldFromStamp
          ON QUIT UNDO, RETRY

@@ -19,8 +19,8 @@
 
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
-gcBrand = "1".
+Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/upsellbundle.i}
 
@@ -39,11 +39,9 @@ piMsSeq = get_int(param_toplevel_id,"0").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST MobSub WHERE 
-           MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN RETURN appl_err("Subscription not found").
+{viptool/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
-ldeCurrentTS = fMakeTS().
+ldeCurrentTS = Func.Common:mMakeTS().
 
 lcResultStruct = add_struct(response_toplevel_id, "").
 
@@ -56,7 +54,7 @@ lcContract = fGetUpSellBasicContract(MobSub.MsSeq,
 IF lcContract NE "" THEN DO:
 
    FIND FIRST DayCampaign WHERE
-              DayCampaign.Brand = gcBrand AND
+              DayCampaign.Brand = Syst.Var:gcBrand AND
               DayCampaign.DCEvent = lcContract AND
               DayCampaign.ValidTo >= TODAY NO-LOCK NO-ERROR.
    IF AVAIL DayCampaign THEN
@@ -126,7 +124,7 @@ IF Mobsub.PayType = FALSE THEN
                                                 {&REQUEST_SOURCE_EXTERNAL_API}).
 IF lcCustomerContract NE "" THEN DO:
    FIND FIRST DayCampaign WHERE
-              DayCampaign.Brand = gcBrand AND
+              DayCampaign.Brand = Syst.Var:gcBrand AND
               DayCampaign.DCEvent = lcCustomerContract AND
               DayCampaign.ValidTo >= TODAY NO-LOCK NO-ERROR.
    IF AVAIL DayCampaign THEN
@@ -148,5 +146,4 @@ IF lcCustomerContract NE "" THEN DO:
 END.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

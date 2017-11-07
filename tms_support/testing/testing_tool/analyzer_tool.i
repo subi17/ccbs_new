@@ -29,19 +29,19 @@ FUNCTION fCheckDCCLIContract RETURNS LOGICAL
           BUFFER bbttAnalyzerReport FOR ttAnalyzerReport):
 
    FOR FIRST DayCampaign WHERE
-             DayCampaign.Brand = gcBrand AND
+             DayCampaign.Brand = Syst.Var:gcBrand AND
              DayCampaign.DcEvent = icDcEvent NO-LOCK,
        FIRST DCCLI WHERE
              DCCLI.MsSeq = iiMsSeq AND
              DCCLI.DcEvent = DayCampaign.DcEvent AND
              DCCLI.ValidTo >= idActDate NO-LOCK:
 
-      ASSIGN bbttAnalyzerReport.FromTS = fMake2Dt(DCCLI.ValidFrom,0)
-             bbttAnalyzerReport.EndTS  = fMake2Dt(DCCLI.ValidTo,0).
+      ASSIGN bbttAnalyzerReport.FromTS = Func.Common:mMake2DT(DCCLI.ValidFrom,0)
+             bbttAnalyzerReport.EndTS  = Func.Common:mMake2DT(DCCLI.ValidTo,0).
 
       IF DayCampaign.FeeModel > "" THEN DO:
       FIND FIRST FixedFee NO-LOCK USE-INDEX HostTable WHERE
-                 FixedFee.Brand     = gcBrand AND
+                 FixedFee.Brand     = Syst.Var:gcBrand AND
                  FixedFee.HostTable = "MobSub" AND
                  FixedFee.KeyValue  = STRING(DCCLI.MsSeq) AND
                  FixedFee.FeeModel  = DayCampaign.FeeModel AND
@@ -63,7 +63,7 @@ FUNCTION fCheckDCCLIContract RETURNS LOGICAL
 
       IF icAction = "Termination" AND DayCampaign.TermFeeModel > "" THEN DO:
          FIND FIRST SingleFee WHERE
-                    SingleFee.Brand = gcBrand AND
+                    SingleFee.Brand = Syst.Var:gcBrand AND
                     SingleFee.HostTable = "MobSub" AND
                     SingleFee.KeyValue  = STRING(DCCLI.MsSeq) AND
                     SingleFee.FeeModel  = DayCampaign.TermFeeModel AND
@@ -93,10 +93,10 @@ FUNCTION fCheckServLimitContract RETURNS LOGICAL
 
    DEF BUFFER bSubMsRequest       FOR MsRequest.
 
-   ldNextMonthActStamp = fMake2Dt(fLastDayOfMonth(idActDate) + 1,0).
+   ldNextMonthActStamp = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(idActDate) + 1,0).
 
    FOR FIRST DayCampaign WHERE
-             DayCampaign.Brand = gcBrand AND
+             DayCampaign.Brand = Syst.Var:gcBrand AND
              DayCampaign.DcEvent = icDcEvent NO-LOCK,
        EACH  ServiceLimit WHERE
              ServiceLimit.GroupCode = DayCampaign.DcEvent NO-LOCK,
@@ -111,11 +111,11 @@ FUNCTION fCheckServLimitContract RETURNS LOGICAL
              bbttAnalyzerReport.EndTS  = MServiceLimit.EndTS
              bbttAnalyzerReport.Limit  = MServiceLimit.InclAmt.
 
-      fSplitTS(MServiceLimit.FromTS,OUTPUT ldtActDate,OUTPUT liActTime).
+      Func.Common:mSplitTS(MServiceLimit.FromTS,OUTPUT ldtActDate,OUTPUT liActTime).
 
       IF DayCampaign.FeeModel > "" THEN DO:
          FIND FIRST FixedFee NO-LOCK USE-INDEX HostTable WHERE
-                    FixedFee.Brand     = gcBrand AND
+                    FixedFee.Brand     = Syst.Var:gcBrand AND
                     FixedFee.HostTable = "MobSub" AND
                     FixedFee.KeyValue  = STRING(MServiceLimit.MsSeq) AND
                     FixedFee.FeeModel  = DayCampaign.FeeModel AND
@@ -158,13 +158,13 @@ FUNCTION fCheckService RETURNS LOGICAL
               SubSer.MsSeq   =  iiMsSeq AND
               SubSer.SsDate  <= idActDate NO-LOCK NO-ERROR.
    IF AVAIL SubSer THEN DO:
-      bbttAnalyzerReport.FromTS = fMake2Dt(SubSer.SsDate,0).
+      bbttAnalyzerReport.FromTS = Func.Common:mMake2DT(SubSer.SsDate,0).
 
       IF CAN-FIND(FIRST MobSub WHERE
                         MobSub.MsSeq = MsRequest.MsSeq AND
                         MobSub.PayType = FALSE) THEN DO:
          FIND FIRST FixedFee NO-LOCK USE-INDEX HostTable WHERE
-                    FixedFee.Brand     = gcBrand AND
+                    FixedFee.Brand     = Syst.Var:gcBrand AND
                     FixedFee.HostTable = "MobSub" AND
                     FixedFee.KeyValue  = STRING(MsRequest.MsSeq) AND
                     FixedFee.FeeModel  = "BBMF" AND
@@ -188,18 +188,15 @@ PROCEDURE pContractActivation:
    DEF VAR ldtActDate             AS DATE NO-UNDO.
    DEF VAR liActTime              AS INT  NO-UNDO.
 
-   FOR EACH MsRequest NO-LOCK WHERE
-            MsRequest.MsSeq   = iiMsSeq AND
-            MsRequest.ReqType = {&REQTYPE_CONTRACT_ACTIVATION}
-            USE-INDEX MsSeq:
+   FOR EACH MsRequest NO-LOCK WHERE MsRequest.MsSeq = iiMsSeq AND MsRequest.ReqType = {&REQTYPE_CONTRACT_ACTIVATION} USE-INDEX MsSeq:
 
       /* Exclude Request part of STC or BTC */
-      IF MsRequest.ReqSource = {&REQUEST_SOURCE_STC} OR
-         MsRequest.ReqSource = {&REQUEST_SOURCE_BTC} THEN NEXT.
+      IF MsRequest.ReqSource = {&REQUEST_SOURCE_STC} OR MsRequest.ReqSource = {&REQUEST_SOURCE_BTC} THEN 
+          NEXT.
 
       /* Exclude if source is not script and not a new subscription */
-      IF NOT ttInputFileContent.NewSubs AND
-         MsRequest.ReqSource <> {&REQUEST_SOURCE_SCRIPT} THEN NEXT.
+      IF NOT ttInputFileContent.NewSubs AND MsRequest.ReqSource <> {&REQUEST_SOURCE_SCRIPT} THEN 
+          NEXT.
 
       CREATE ttAnalyzerReport.
       ASSIGN ttAnalyzerReport.FileName    = ttInputFileContent.FileName
@@ -216,7 +213,7 @@ PROCEDURE pContractActivation:
          ttAnalyzerReport.Remark = "Contract request is ongoing".
 
       FIND FIRST DayCampaign WHERE
-                 DayCampaign.Brand = gcBrand AND
+                 DayCampaign.Brand = Syst.Var:gcBrand AND
                  DayCampaign.DcEvent = MsRequest.ReqCparam3
            NO-LOCK NO-ERROR.
       IF NOT AVAIL DayCampaign THEN
@@ -224,7 +221,7 @@ PROCEDURE pContractActivation:
 
       IF ttAnalyzerReport.Remark > "" THEN NEXT.
 
-      fSplitTS(MsRequest.ActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
+      Func.Common:mSplitTS(MsRequest.ActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
       IF LOOKUP(DayCampaign.DCType,"1,4,6") = 0 THEN
          fCheckDCCLIContract(INPUT MsRequest.ReqCparam3,
                              INPUT MsRequest.MsSeq,
@@ -243,13 +240,15 @@ PROCEDURE pContractActivation:
       ttAnalyzerReport.Remark = TRIM(ttAnalyzerReport.Remark,lcDel).
    END. /* FOR EACH MsRequest WHERE */
 
-   IF NOT llDefault THEN DO:
+   IF NOT llDefault THEN 
+   DO:
       CREATE ttAnalyzerReport.
       ASSIGN ttAnalyzerReport.FileName    = ttInputFileContent.FileName
              ttAnalyzerReport.ActionType  = "Contract Activation"
              ttAnalyzerReport.CLI         = ttInputFileContent.CLI
              ttAnalyzerReport.Remark      = "No Contract Activation Request".
    END. /* IF NOT llDefault THEN DO: */
+
 END PROCEDURE.
 
 PROCEDURE pContractDeactivation:
@@ -288,7 +287,7 @@ PROCEDURE pContractDeactivation:
          ttAnalyzerReport.Remark = "Contract request is ongoing".
 
       FIND FIRST DayCampaign WHERE
-                 DayCampaign.Brand = gcBrand AND
+                 DayCampaign.Brand = Syst.Var:gcBrand AND
                  DayCampaign.DcEvent = MsRequest.ReqCparam3
            NO-LOCK NO-ERROR.
       IF NOT AVAIL DayCampaign THEN
@@ -296,7 +295,7 @@ PROCEDURE pContractDeactivation:
 
       IF ttAnalyzerReport.Remark > "" THEN NEXT.
 
-      fSplitTS(MsRequest.ActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
+      Func.Common:mSplitTS(MsRequest.ActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
       IF LOOKUP(DayCampaign.DCType,"1,4,6") = 0 THEN
          fCheckDCCLIContract(INPUT MsRequest.ReqCparam3,
                              INPUT MsRequest.MsSeq,
@@ -363,7 +362,7 @@ PROCEDURE pServiceActivation:
 
       IF ttAnalyzerReport.Remark > "" THEN NEXT.
 
-      fSplitTS(MsRequest.ActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
+      Func.Common:mSplitTS(MsRequest.ActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
       fCheckService(INPUT MsRequest.ReqCparam1,
                     INPUT MsRequest.MsSeq,
                     INPUT ldtActDate,
@@ -418,7 +417,7 @@ PROCEDURE pServiceDeactivation:
 
       IF ttAnalyzerReport.Remark > "" THEN NEXT.
 
-      fSplitTS(MsRequest.ActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
+      Func.Common:mSplitTS(MsRequest.ActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
       fCheckService(INPUT MsRequest.ReqCparam1,
                     INPUT MsRequest.MsSeq,
                     INPUT ldtActDate,
@@ -523,11 +522,11 @@ PROCEDURE pSTC:
 
          IF bttAnalyzerReport.Remark > "" THEN NEXT.
 
-         fSplitTS(bSubMsRequest.ActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
+         Func.Common:mSplitTS(bSubMsRequest.ActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
 
          IF LOOKUP(STRING(bSubMsRequest.ReqType),"8,9") > 0 THEN DO:
             FIND FIRST DayCampaign WHERE
-                       DayCampaign.Brand = gcBrand AND
+                       DayCampaign.Brand = Syst.Var:gcBrand AND
                        DayCampaign.DcEvent = bSubMsRequest.ReqCparam3
                  NO-LOCK NO-ERROR.
             IF NOT AVAIL DayCampaign THEN DO:
@@ -653,10 +652,10 @@ PROCEDURE pBTC:
 
          IF bttAnalyzerReport.Remark > "" THEN NEXT.
 
-         fSplitTS(bSubMsRequest.ActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
+         Func.Common:mSplitTS(bSubMsRequest.ActStamp,OUTPUT ldtActDate,OUTPUT liActTime).
          IF LOOKUP(STRING(bSubMsRequest.ReqType),"8,9") > 0 THEN DO:
             FIND FIRST DayCampaign WHERE
-                       DayCampaign.Brand = gcBrand AND
+                       DayCampaign.Brand = Syst.Var:gcBrand AND
                        DayCampaign.DcEvent = bSubMsRequest.ReqCparam3
                  NO-LOCK NO-ERROR.
             IF NOT AVAIL DayCampaign THEN DO:

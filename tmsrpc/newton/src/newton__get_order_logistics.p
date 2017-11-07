@@ -13,6 +13,8 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 
 DEFINE VARIABLE piOrderId              AS INTEGER   NO-UNDO. 
@@ -25,15 +27,9 @@ piOrderId = get_pos_int(param_toplevel_id, "0").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST Order WHERE
-   Order.Brand    = "1" AND
-   Order.OrderId  = piOrderId NO-LOCK NO-ERROR.
-
-IF NOT AVAIL Order THEN
-   RETURN appl_err(SUBST("Order &1 not found", piOrderId)).
+{newton/src/findtenant.i YES ordercanal Order OrderId piOrderId}
 
 /* validation ends */
-
 top_array = add_array(response_toplevel_id, "").
 
 FOR EACH OrderDelivery WHERE
@@ -54,4 +50,7 @@ FOR EACH OrderDelivery WHERE
    add_int(od_struct, "measures_info_id", OrderDelivery.MeasuresInfoId ). 
 
 END.
+
+FINALLY:
+   END.
 
