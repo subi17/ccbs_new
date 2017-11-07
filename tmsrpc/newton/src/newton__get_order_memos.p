@@ -16,7 +16,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcbrand = "1".
+Syst.Var:gcBrand = "1".
 
 DEFINE VARIABLE pcTenant      AS CHAR      NO-UNDO.
 DEFINE VARIABLE piOrderId     AS INTEGER   NO-UNDO. 
@@ -78,5 +78,4 @@ END.
 add_int(top_struct, "more_memos", liLeftCounter).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

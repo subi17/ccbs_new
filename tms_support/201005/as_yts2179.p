@@ -1,7 +1,6 @@
 {Syst/commpaa.i}
-katun  = "anttis".
-gcBrand = "1".
-{Func/date.i}
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 
 
 DEFINE VARIABLE lcBarrStatus AS CHARACTER NO-UNDO. 
@@ -23,15 +22,15 @@ FOR EACH msrequest where
    find MobSub where
         MobSub.msseq = msrequest.msseq NO-LOCK no-error.
    IF NOT AVAIL MobSub then do:
-      put stream sout unformatted msrequest.cli "|" fts2hms(msrequest.actstamp) "|TERMINATED" skip.
+      put stream sout unformatted msrequest.cli "|" Func.Common:mTS2HMS(msrequest.actstamp) "|TERMINATED" skip.
       next.
    end.
 
    RUN checkmsbarring(
          INPUT MobSub.msseq,
-         INPUT katun,
+         INPUT Syst.Var:katun,
          OUTPUT lcBarrComList,
          OUTPUT lcBarrStatus).
  
-   put stream sout unformatted MobSub.cli "|" fts2hms(msrequest.actstamp) "|" lcBarrStatus skip.
+   put stream sout unformatted MobSub.cli "|" Func.Common:mTS2HMS(msrequest.actstamp) "|" lcBarrStatus skip.
 end.

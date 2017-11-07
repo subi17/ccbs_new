@@ -19,7 +19,7 @@ FUNCTION fCheckArplog RETURNS LOGICAL
 
    /* same file being rerun */
    FIND FIRST PaymLog NO-LOCK WHERE
-      PaymLog.Brand    = gcBrand AND
+      PaymLog.Brand    = Syst.Var:gcBrand AND
       PaymLog.PaymFile = icPrefix + icFile NO-ERROR.
    IF AVAILABLE PaymLog THEN DO:
 
@@ -55,14 +55,14 @@ FUNCTION fCreateArplog RETURNS LOGICAL
 
    /* same PaymFile being rerun */
    IF CAN-FIND(FIRST PaymLog WHERE
-                     PaymLog.Brand    = gcBrand AND
+                     PaymLog.Brand    = Syst.Var:gcBrand AND
                      PaymLog.PaymFile = icPrefix + icFile)
    THEN ASSIGN lcDouble = ":Rerun" + STRING(TIME).
 
    /* create a log entry */
    CREATE PaymLog.
    ASSIGN
-   PaymLog.Brand    = gcBrand
+   PaymLog.Brand    = Syst.Var:gcBrand
    PaymLog.PaymFile = icPrefix + icFile + lcDouble
    PaymLog.UserCode = icUser
    PaymLog.BookDate = TODAY.

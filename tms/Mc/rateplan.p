@@ -19,7 +19,7 @@
 {Mc/lib/tokenchk.i 'rateplan'}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -65,10 +65,10 @@ form
     RatePlan.RatePlan FORMAT "X(13)" /* column-label format */
     RatePlan.RPName     /* column-label format */
 WITH ROW FrmRow width 80 overlay FrmDown  down
-    COLOR VALUE(cfc)
-    title COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.Var:cfc)
+    title COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
     " Rating Plans "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form
@@ -76,8 +76,8 @@ form
     RatePlan.RPName       /* label format */
 
 WITH  overlay row 4 centered
-    COLOR VALUE(cfc)
-    title COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    title COLOR VALUE(Syst.Var:ctc) ac-hdr 
     side-labels 
     1 columns
     FRAME lis.
@@ -88,18 +88,18 @@ form /* seek RatePlan  by  RatePlan */
     "Brand:" lcBrand skip
     "Code :" RatePlan
     help "Enter Rating Plan's code"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CODE "
-    COLOR VALUE(cfc) no-labels overlay FRAME f1.
+    WITH row 4 col 2 title COLOR VALUE(Syst.Var:ctc) " FIND CODE "
+    COLOR VALUE(Syst.Var:cfc) no-labels overlay FRAME f1.
 
 form /* seek RatePlan  by RPName */
     "Brand:" lcBrand skip
     "Name :" DGName
     help "Enter Rating Plan's name"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND NAME "
-    COLOR VALUE(cfc) no-labels overlay FRAME f2.
+    WITH row 4 col 2 title COLOR VALUE(Syst.Var:ctc) " FIND NAME "
+    COLOR VALUE(Syst.Var:cfc) no-labels overlay FRAME f2.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -130,13 +130,13 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a RatePlan  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, leave ADD-ROW.
         PAUSE 0 no-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR RatePlan.RatePlan
@@ -221,33 +221,33 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35 ufk[2]= 30 ufk[3]= 876 ufk[4]= 927
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
-        ufk[7]= 814   
-        ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = false.
+        Syst.Var:ufk[1]= 35 Syst.Var:ufk[2]= 30 Syst.Var:ufk[3]= 876 Syst.Var:ufk[4]= 927
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
+        Syst.Var:ufk[7]= 814   
+        Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = false.
         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         choose row RatePlan.RatePlan {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) RatePlan.RatePlan WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) RatePlan.RatePlan WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         choose row RatePlan.RPName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) RatePlan.RPName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) RatePlan.RPName WITH FRAME sel.
       END.
 
       IF rtab[FRAME-line] = ? THEN NEXT.
 
-      nap = keylabel(LASTkey).
+      Syst.Var:nap = keylabel(LASTkey).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -271,10 +271,10 @@ REPEAT WITH FRAME sel:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTkey).
+      ASSIGN Syst.Var:nap = keylabel(LASTkey).
 
       /* previous row */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-line = 1 THEN DO:
            RUN local-find-this(false).
            RUN local-find-prev.
@@ -299,7 +299,7 @@ REPEAT WITH FRAME sel:
       END. /* previous row */
 
       /* NEXT row */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-line = FRAME-down THEN DO:
            RUN local-find-this(false).
@@ -325,7 +325,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT row */
 
       /* prev page */
-      ELSE IF LOOKUP(nap,"prev-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND RatePlan WHERE recid(RatePlan) = memory NO-LOCK NO-ERROR.
         RUN local-find-prev.
@@ -349,7 +349,7 @@ REPEAT WITH FRAME sel:
      END. /* previous page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* Put Cursor on downmost Row */
        IF rtab[FRAME-down] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -364,12 +364,12 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search by column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO on ENDkey undo, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.Var:gcAllBrand
               RatePlan WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
 
@@ -386,13 +386,13 @@ REPEAT WITH FRAME sel:
      END. /* Search-1 */
 
      /* Search by col 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO on ENDkey undo, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.Var:gcAllBrand
               RPName WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
 
@@ -409,7 +409,7 @@ REPEAT WITH FRAME sel:
      END. /* Search-2 */
 
      /* price list configuration  */
-     ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 THEN DO:
 
         run local-find-this(false).
 
@@ -421,7 +421,7 @@ REPEAT WITH FRAME sel:
      END.
 
      /* Update Memo */
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO: 
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 THEN DO: 
         run local-find-this(FALSE).
 
         RUN Mc/memo.p(INPUT 0,
@@ -432,12 +432,12 @@ REPEAT WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
         must-add = true.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW" 
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO TRANSACTION:  /* DELETE */
        {Syst/uright2.i}
        delrow = FRAME-line.
@@ -453,7 +453,7 @@ REPEAT WITH FRAME sel:
        END.
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        RatePlan.RatePlan RatePlan.RPName .
 
        RUN local-find-NEXT.
@@ -475,7 +475,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = false.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        RatePlan.RatePlan RatePlan.RPName .
        IF ok THEN DO:
 
@@ -497,7 +497,7 @@ REPEAT WITH FRAME sel:
      END. /* DELETE */
 
      /* translations */
-     ELSE IF LOOKUP(nap,"7,f7") > 0 AND ufk[7] > 0 THEN DO:  
+     ELSE IF LOOKUP(Syst.Var:nap,"7,f7") > 0 AND Syst.Var:ufk[7] > 0 THEN DO:  
         FIND RatePlan WHERE RECID(RatePlan) = rtab[FRAME-LINE] NO-LOCK.
         RUN Mc/invlang.p(11,RatePlan.RatePlan).
           
@@ -505,14 +505,14 @@ REPEAT WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
        {Syst/uright2.i}
        RUN local-find-this(FALSE).
        ASSIGN ac-hdr = " CHANGE " ufkey = true.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY 
           RatePlan.RatePlan
           RatePlan.RPName.
@@ -537,25 +537,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = recid(RatePlan) must-print = true.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN memory = recid(RatePlan) must-print = true.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN leave LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN leave LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -623,17 +623,17 @@ PROCEDURE local-update-record:
       DISP RatePlan.RPName WITH FRAME lis.
 
       ASSIGN
-         ufk    = 0
-         ufk[1] = 7 WHEN lcRight = "RW"
-         ufk[8] = 8
-         ehto   = 0.
+         Syst.Var:ufk    = 0
+         Syst.Var:ufk[1] = 7 WHEN lcRight = "RW"
+         Syst.Var:ufk[8] = 8
+         Syst.Var:ehto   = 0.
       RUN Syst/ufkey.p.
          
-      IF toimi = 1 THEN 
+      IF Syst.Var:toimi = 1 THEN 
       ChangeType:
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
 
-         ehto = 9.
+         Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
          
          PROMPT-FOR RatePlan.RPName WITH FRAME lis.

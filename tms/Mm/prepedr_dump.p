@@ -91,7 +91,7 @@ FOR EACH PrepEDR NO-LOCK USE-INDEX ReadDate WHERE
               edrdtl.dtlseq = PrepEDR.DtlSeq NO-LOCK NO-ERROR.
    IF NOT AVAIL edrdtl THEN NEXT.
    
-   fSplitts(PrepEDR.ReadInTS, OUTPUT ldaDate, OUTPUT liTime).
+   Func.Common:mSplitTS(PrepEDR.ReadInTS, OUTPUT ldaDate, OUTPUT liTime).
    
    PUT STREAM sFile UNFORMATTED
       ENTRY(ttCSVPos.SourceFileName,edrdtl.detail,"|") lcDelimiter

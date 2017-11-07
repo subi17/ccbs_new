@@ -57,13 +57,13 @@ form
      "Output File:" at 15 exfile help "Name of output file"
      skip(1)
 WITH
-   width 80 COLOR value(cfc)
-   title color value(ctc) " " + ynimi +
+   width 80 COLOR value(Syst.Var:cfc)
+   title color value(Syst.Var:ctc) " " + Syst.Var:ynimi +
    " INVOICE SUMMARY SALESMAN/AGENT "
-   + string(pvm,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
+   + string(TODAY,"99-99-99") + " " NO-LABELS OVERLAY FRAME rajat.
 
 DO FOR TMSUser.
-   FIND TMSUser where TMSUser.UserCode = katun no-lock.
+   FIND TMSUser where TMSUser.UserCode = Syst.Var:katun no-lock.
    ASSIGN exdir = fChkPath(TMSUser.RepDir).
 END.
 
@@ -71,14 +71,14 @@ assign exfile   = exdir + "partcomm.txt".
 
 /* Make Date proposal */
 ASSIGN
-date1 = date(month(pvm),1,year(pvm)).
+date1 = date(month(TODAY),1,year(TODAY)).
 date2 = date1 + 35.
 date2 = date(month(date2),1,year(date2)) - 1.
 
-cfc = "sel". RUN Syst/ufcolor.p.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
 LOOP:
 repeat WITH FRAME rajat:
-    ehto = 9. RUN Syst/ufkey.p.
+    Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
     UPDATE 
     date1    
@@ -89,7 +89,7 @@ repeat WITH FRAME rajat:
             Salesman.Salesman = input Salesman),"Unknown Salesman !")
     exfile EDITING:
        READKEY.
-       IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO WITH FRAME rajat:
+       IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME rajat:
           PAUSE 0.
           if frame-field = "sm-code" THEN DO:
              disp LC(exdir + "partcomm." + input Salesman + ".txt") 
@@ -105,11 +105,11 @@ repeat WITH FRAME rajat:
 
 TOIMI:
    repeat:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT LOOP.
-      IF toimi = 8 THEN LEAVE LOOP.
-      IF toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 1 THEN NEXT LOOP.
+      IF Syst.Var:toimi = 8 THEN LEAVE LOOP.
+      IF Syst.Var:toimi = 5 THEN DO:
          LEAVE TOIMI.
       END.   
    END.
@@ -117,7 +117,7 @@ TOIMI:
    OUTPUT STREAM excel TO value(exfile).
 
    PUT STREAM excel UNFORMATTED
-      ynimi  tab "Invoice summary by Salesman / agent".
+      Syst.Var:ynimi  tab "Invoice summary by Salesman / agent".
       RUN Syst/uexskip.p(1).
 
    PUT STREAM excel UNFORMATTED

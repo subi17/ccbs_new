@@ -1,11 +1,10 @@
     
 {Syst/commpaa.i}
-{Func/timestamp.i}
 {Func/xmlfunction.i}
 {Func/heartbeat.i}
 {Func/fgettxt.i}
 
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 DEFINE STREAM outfile.
 
@@ -31,7 +30,7 @@ FUNCTION fCallAlarm RETURNS LOGICAL
       liLang      = 1
       lcAlarmMess = fGetTxt(INPUT "SMS", pcAction, TODAY, liLang)
       lcAlarmMess = REPLACE(lcAlarmMess,"#TOPUP", TRIM(STRING(pdeAmt / 100,">>>99.99")))
-      ldeActStamp = fMakeTS().
+      ldeActStamp = Func.Common:mMakeTS().
    
    CREATE CallAlarm.
    ASSIGN
@@ -47,7 +46,7 @@ FUNCTION fCallAlarm RETURNS LOGICAL
       CallAlarm.Limit      = 0
       CallAlarm.CreditType = 22
       CallAlarm.Orig       = "800622800"
-      CallAlarm.Brand      = gcBrand.
+      CallAlarm.Brand      = Syst.Var:gcBrand.
       
    RELEASE CallAlarm.
 
@@ -210,7 +209,7 @@ PROCEDURE SocketIO:
    lcRequest = GET-STRING(lmData,1).
 
 OUTPUT TO /scratch/nagios/tms/ivr/ivr_request.xml APPEND.
-PUT CONTROL "NEW MESSAGE: " fTS2HMS(fMakeTS()) CHR(10) lcRequest CHR(10).
+PUT CONTROL "NEW MESSAGE: " Func.Common:mTS2HMS(Func.Common:mMakeTS()) CHR(10) lcRequest CHR(10).
 OUTPUT CLOSE.
 
    /* take away newline characters */
@@ -249,11 +248,11 @@ OUTPUT CLOSE.
          DO TRANSACTION:
       
             CREATE PrePaidRequest.
-            PrePaidRequest.TSRequest = fMakeTS().
+            PrePaidRequest.TSRequest = Func.Common:mMakeTS().
 
             ASSIGN
                PrePaidRequest.CLI       = fGetRPCNodeValue(lcXML,"Subscriber")
-               PrePaidRequest.Brand     = gcBrand
+               PrePaidRequest.Brand     = Syst.Var:gcBrand
                PrePaidRequest.Source    = "IVR"
                PrePaidRequest.PPRequest = NEXT-VALUE(PrePaidReq)
                PrePaidRequest.CommLine  = lcXML
@@ -269,7 +268,7 @@ OUTPUT CLOSE.
          END.
 
          FIND FIRST MobSub WHERE
-                    MobSub.Brand = gcBrand AND
+                    MobSub.Brand = Syst.Var:gcBrand AND
                     MobSub.CLI   = lcCLI
          NO-LOCK NO-ERROR.
 
@@ -291,7 +290,7 @@ OUTPUT CLOSE.
             IF ENTRY(3,lcSogResponse," ") NE "OK" THEN DO TRANSACTION:
 
                FIND FIRST PrePaidRequest WHERE
-                          PrePaidRequest.Brand     = gcBrand AND
+                          PrePaidRequest.Brand     = Syst.Var:gcBrand AND
                           PrePaidRequest.PPRequest = liMyRequest
                EXCLUSIVE-LOCK NO-ERROR.
                ASSIGN
@@ -331,10 +330,10 @@ OUTPUT CLOSE.
                IF liPPRequest NE 0 THEN DO:
 
                   PUT SCREEN ROW 6 COL 1 "6: " + STRING(ETIME,"zzzzz9").
-                  RUN Gwy/pp_platform.p(gcBrand,liPPRequest).
+                  RUN Gwy/pp_platform.p(Syst.Var:gcBrand,liPPRequest).
 
                   FIND FIRST bufPP WHERE
-                             bufPP.Brand     = gcBrand AND
+                             bufPP.Brand     = Syst.Var:gcBrand AND
                              bufPP.PPRequest = liPPRequest
                   NO-LOCK NO-ERROR.
 
@@ -391,20 +390,20 @@ OUTPUT CLOSE.
       IF llRC = FALSE OR ERROR-STATUS:GET-MESSAGE(1) <> '' THEN DO:
          lcResponse = 'Unable To Write Response Bytes'.
          OUTPUT TO /scratch/nagios/tms/ivr/ivr_response_errors.txt APPEND.
-         PUT UNFORMATTED lcResponse  ": " fTS2HMS(fMakeTS()) " " lcCLI CHR(10).
+         PUT UNFORMATTED lcResponse  ": " Func.Common:mTS2HMS(Func.Common:mMakeTS()) " " lcCLI CHR(10).
          OUTPUT CLOSE.
       END.
    
       DO TRANSACTION:
       
          FIND FIRST PrePaidRequest WHERE
-                    PrePaidRequest.Brand     = gcBrand AND
+                    PrePaidRequest.Brand     = Syst.Var:gcBrand AND
                     PrePaidRequest.PPRequest = liMyRequest
          EXCLUSIVE-LOCK NO-ERROR.
 
          CREATE SoLog.
          ASSIGN
-            SoLog.CreatedTS         = fMakeTS()
+            SoLog.CreatedTS         = Func.Common:mMakeTS()
             SoLog.CLI               = PrePaidRequest.CLI
             SoLog.ActivationTS      = SoLog.CreatedTS
             SoLog.CompletedTS       = SoLog.CreatedTS
@@ -414,7 +413,7 @@ OUTPUT CLOSE.
             SoLog.MsSeq             = MobSub.MsSeq WHEN AVAIL MobSub
             SoLog.Stat              = 2 WHEN PrePaidRequest.RespCode =  0
             SoLog.Stat              = 1 WHEN PrePaidRequest.RespCode NE 0
-            SoLog.Brand             = gcBrand
+            SoLog.Brand             = Syst.Var:gcBrand
             SoLog.Response          = lcSogResponse
             SoLog.Users             = "IVR First call"
             PrePaidRequest.PPStatus = 2.
@@ -470,7 +469,7 @@ PROCEDURE pResponse:
    SET-SIZE(lmXML) = 0.
 
 OUTPUT TO /scratch/nagios/tms/ivr/ivr_response.xml APPEND.
-PUT CONTROL "NEW RESPONSE: " + fTS2HMS(fMakeTS()) CHR(10) lcXML CHR(10).
+PUT CONTROL "NEW RESPONSE: " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) CHR(10) lcXML CHR(10).
 OUTPUT CLOSE.
 
    RETURN lcXML.

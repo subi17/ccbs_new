@@ -10,7 +10,6 @@
 
 {Syst/commali.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 DEF INPUT PARAMETER iiOrderId     AS INT  NO-UNDO.
 DEF VAR lcUpdateTS AS CHAR NO-UNDO.
 DEF VAR lcInstallationTime AS CHAR NO-UNDO.
@@ -19,7 +18,7 @@ DEF VAR lcFixedTime AS CHAR NO-UNDO.
 
 
 FIND FIRST OrderFusion NO-LOCK where
-           OrderFusion.Brand eq Syst.Parameters:gcBrand AND
+           OrderFusion.Brand eq Syst.Var:gcBrand AND
            OrderFusion.OrderID EQ iiOrderID NO-ERROR.
 
 IF NOT AVAIL OrderFusion THEN DO:
@@ -57,8 +56,8 @@ FORM
  
 
 WITH OVERLAY ROW 1 WIDTH 80 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) "Convergent data"
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) "Convergent data"
     NO-LABELS
     FRAME fData.
 
@@ -66,9 +65,9 @@ PAUSE 0 NO-MESSAGE.
 /*VIEW FRAME fData. */
 /*CLEAR FRAME fData NO-PAUSE.*/
    ASSIGN
-   lcUpdateTS = fTS2HMS(OrderFusion.UpdateTS)
-   lcInstallationTime = fTS2HMS(OrderFusion.FixedInstallationTS)
-   lcFixedTime = fTS2HMS(OrderFusion.FixedStatusTS).
+   lcUpdateTS = Func.Common:mTS2HMS(OrderFusion.UpdateTS)
+   lcInstallationTime = Func.Common:mTS2HMS(OrderFusion.FixedInstallationTS)
+   lcFixedTime = Func.Common:mTS2HMS(OrderFusion.FixedStatusTS).
 
 
 DISP OrderFusion.OrderID
@@ -94,21 +93,21 @@ REPEAT WITH FRAME fData ON ENDKEY UNDO LOOP, NEXT LOOP:
 
    PAUSE 0.
    ASSIGN
-      ufk   = 0  
-      ufk[5]= 9853
-      ufk[6]= 9854
-      ufk[8]= 8 
-      ehto  = 0.
+      Syst.Var:ufk   = 0  
+      Syst.Var:ufk[5]= 9853
+      Syst.Var:ufk[6]= 9854
+      Syst.Var:ufk[8]= 8 
+      Syst.Var:ehto  = 0.
    RUN Syst/ufkey.p.
 
-   IF toimi EQ 5 THEN DO:
+   IF Syst.Var:toimi EQ 5 THEN DO:
      RUN Mc/fusionmessage.p(iiOrderID).
    END.
-   IF toimi EQ 6 THEN DO:
+   IF Syst.Var:toimi EQ 6 THEN DO:
      RUN Mc/addrview.p(iiOrderId).
    END.
    
-   ELSE IF toimi = 8 THEN LEAVE.
+   ELSE IF Syst.Var:toimi = 8 THEN LEAVE.
 
 END. 
 

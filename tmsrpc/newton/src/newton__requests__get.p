@@ -22,9 +22,6 @@
  */
 
 {newton/src/header_get.i}
-DEFINE VARIABLE katun AS CHARACTER NO-UNDO. 
-&SCOPED-DEFINE BrandVarDefined YES
-{Func/func.p}
 DEF VAR liId AS INT NO-UNDO. 
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
@@ -45,7 +42,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    FIND Customer WHERE Customer.CustNum = MsRequest.CustNum NO-LOCK NO-ERROR.
    IF AVAIL Customer THEN DO:
       add_int(lcResultStruct, "customer_number", Customer.Custnum). 
-      add_string(lcResultStruct, "name", fDispCustName(BUFFER Customer)). 
+      add_string(lcResultStruct, "name", Func.Common:mDispCustName(BUFFER Customer)). 
    END.
 
    add_timestamp(lcResultStruct, "activated_at", MsRequest.ActStamp).

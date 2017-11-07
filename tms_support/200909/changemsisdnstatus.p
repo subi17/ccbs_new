@@ -12,8 +12,8 @@ OUTPUT STREAM sLog TO VALUE(pcLogFile).
 INPUT STREAM sMSISDN FROM VALUE(pcInputFile).
 
 {Syst/commpaa.i}
-katun = "rafaeldv".
-gcBrand  = "1".
+Syst.Var:katun = "rafaeldv".
+Syst.Var:gcBrand  = "1".
 {Func/msisdn.i}
 
 REPEAT:

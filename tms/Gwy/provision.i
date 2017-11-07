@@ -63,7 +63,7 @@ function fMakeCommLine returns CHAR
    END. /* FOR LAST Order WHERE */
 
    FIND FIRST Order WHERE
-              Order.Brand   = gcBrand AND
+              Order.Brand   = Syst.Var:gcBrand AND
               Order.OrderId = liOrderId NO-LOCK NO-ERROR.
   
    /* CREATE extra parameters */ 
@@ -108,14 +108,14 @@ function fMakeCommLine returns CHAR
       IF Avail Order AND Order.MnpStatus > 0 THEN DO:
 
          FIND FIRST MNPOperator WHERE
-                    MNPOperator.Brand = gcBrand AND
+                    MNPOperator.Brand = Syst.Var:gcBrand AND
                     MNPOperator.OperName = STRING(order.curroper) AND
                     MNPOperator.Active = True
          NO-LOCK NO-ERROR.
 
          IF NOT AVAIL MNPOperator THEN
             FIND FIRST MNPOperator WHERE
-                       MNPOperator.Brand = gcBrand AND
+                       MNPOperator.Brand = Syst.Var:gcBrand AND
                        MNPOperator.OperName = STRING(order.curroper) AND
                        MNPOperator.Active = False
             NO-LOCK NO-ERROR.
@@ -250,7 +250,7 @@ function fMakeCommLine2 returns CHAR
    END. /* FOR LAST Order WHERE */
 
    FIND FIRST Order WHERE
-              Order.Brand   = gcBrand AND
+              Order.Brand   = Syst.Var:gcBrand AND
               Order.OrderId = liOrderId NO-LOCK NO-ERROR.
   
    IF ProvMSrequest.ReqCParam1 = "CHANGEMSISDN" THEN DO:
@@ -338,7 +338,7 @@ FUNCTION fGetShaperConfCommLine RETURN CHAR
    DEF VAR lcCommLine AS CHAR NO-UNDO. 
 
    FIND FIRST ShaperConf NO-LOCK WHERE
-              ShaperConf.Brand = gcBrand AND
+              ShaperConf.Brand = Syst.Var:gcBrand AND
               ShaperConf.ShaperConfID = icShaperConfID
    NO-ERROR.
 
