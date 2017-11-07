@@ -8,14 +8,13 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
 {Syst/eventlog.i}
-{Func/date.i}
 {Syst/eventval.i}
 {Func/msreqfunc.i}
 {Func/orderfunc.i}
@@ -24,7 +23,7 @@ gcBrand = "1".
 {Func/fsubstermreq.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
    {Func/lib/eventlog.i}
    DEFINE VARIABLE lhOrderFusion AS HANDLE NO-UNDO.
    lhOrderFusion = BUFFER OrderFusion:HANDLE.
@@ -206,13 +205,13 @@ PROCEDURE pUpdateFusionOrder:
 
    /* find order */   
    FIND Order NO-LOCK WHERE 
-        Order.Brand = gcBrand AND
+        Order.Brand = Syst.Var:gcBrand AND
         Order.OrderId = piOrderId NO-ERROR.
    IF NOT AVAILABLE Order THEN 
       RETURN "ERROR:Invalid Order ID".
 
    FIND OrderFusion NO-LOCK WHERE
-        OrderFusion.Brand = gcBrand AND 
+        OrderFusion.Brand = Syst.Var:gcBrand AND 
         OrderFusion.OrderID = Order.OrderID NO-ERROR.
    IF NOT AVAILABLE OrderFusion THEN 
       RETURN "ERROR:Order type is not Fusion".
@@ -275,7 +274,7 @@ PROCEDURE pUpdateFusionOrder:
             FIND FIRST MsRequest NO-LOCK WHERE
                        MsRequest.MsSeq = Order.MsSeq AND
                        MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
-                       MsRequest.Actstamp > fMakeTs() AND
+                       MsRequest.Actstamp > Func.Common:mMakeTS() AND
                        MsRequest.ReqIParam2 = Order.OrderID NO-ERROR.
             IF NOT AVAIL MsRequest OR MsRequest.ReqStatus EQ 4
                THEN fSetOrderStatus(Order.OrderID,"7").
@@ -346,7 +345,7 @@ PROCEDURE pUpdateFusionOrder:
             OUTPUT liQuarTime).
          liReq = fTerminationRequest(
                         Order.MsSeq,
-                        fSecOffSet(fMakeTS(),5), /* when request handled */
+                        Func.Common:mSecOffSet(Func.Common:mMakeTS(),5), /* when request handled */
                         liMsisdnStat, /* msisdn status code: available */
                         liSimStat, /* sim status code : available */
                         liQuarTime, /* quarantie time */
@@ -376,7 +375,7 @@ PROCEDURE pUpdateFusionOrder:
       OrderFusion.FixedStatus    = UPPER(pcFixedStatus) WHEN pcFixedStatus > ""
       OrderFusion.FixedSubStatus = pcFixedSubStatus WHEN pcFixedSubStatus > ""
       OrderFusion.ExternalTicket = pcExternalTicket WHEN pcExternalTicket > ""
-      OrderFusion.UpdateTS       = fMakeTS().
+      OrderFusion.UpdateTS       = Func.Common:mMakeTS().
 
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhOrderFusion).
 

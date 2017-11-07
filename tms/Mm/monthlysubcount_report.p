@@ -9,7 +9,6 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/date.i}
 {Func/cparam2.i}
 {Func/email.i}
 {Func/multitenantfunc.i}
@@ -55,7 +54,7 @@ ASSIGN
               DAY(ldtDate) 
    liloop2  = Msowner.msseq.
 
-ldeStamp = fSecOffSet(ldeStamp,-1).
+ldeStamp = Func.Common:mSecOffSet(ldeStamp,-1).
 
 SUBS_LOOP:
 DO liLoop = 1 TO liloop2.

@@ -1,5 +1,4 @@
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/dumpfile_run.i}
 {Func/cparam2.i}
 

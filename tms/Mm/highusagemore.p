@@ -13,7 +13,6 @@
   -------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 DEF INPUT PARAMETER iinvseq  AS INT  NO-UNDO.
 DEF INPUT PARAMETER icli     AS CHAR NO-UNDO.
 
@@ -36,7 +35,7 @@ PAUSE 0.
 
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p. 
+   ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 3. RUN Syst/ufkey.p. 
  
  DISPLAY
  "A) Total call amount per day            "  @ menuc[1]    SKIP 
@@ -75,7 +74,7 @@ DO WHILE TRUE:
    ELSE IF FRAME-INDEX = 5 THEN DO:
       lcEmail = "".
       FIND first tmsuser WHERE 
-                 tmsuser.UserCode = katun NO-LOCK NO-ERROR.
+                 tmsuser.UserCode = Syst.Var:katun NO-LOCK NO-ERROR.
 
       if avail tmsuser and 
                tmsuser.email ne "" THEN ASSIGN 
@@ -93,7 +92,7 @@ DO WHILE TRUE:
       
       
       
-      RUN Mm/highusagerep.p(INPUT fMake2Dt(INPUT today - 90, INPUT 0),   
+      RUN Mm/highusagerep.p(INPUT Func.Common:mMake2DT(INPUT today - 90, INPUT 0),   
                              lcEmail,
                              int(siirto)).
    END.

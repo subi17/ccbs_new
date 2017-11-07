@@ -9,7 +9,6 @@
   VERSIO .......: SCRUNKO3, (23.10.96)
   --------------------------------------------------------------------- */
 {Syst/commali.i}
-{Func/timestamp.i}
 
 DEF /* NEW */ shared VAR siirto AS CHAR.
 
@@ -73,8 +72,8 @@ form
     "          " Presel.ErrText                        skip(1)
 
 WITH  OVERLAY ROW 2 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) " PRESELECTION "
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " PRESELECTION "
     NO-LABELS 
   /*  1 columns */
     FRAME lis.
@@ -97,8 +96,8 @@ form
                                                       skip(1)
 
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) " PRESELECTION "
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " PRESELECTION "
     NO-LABELS 
   /*  1 columns */
     FRAME lispres.
@@ -114,7 +113,7 @@ form
     pecode                    COLUMN-LABEL "Rc"
     chang                     COLUMN-LABEL "Ch"
 WITH centered OVERLAY ROW 2 13 DOWN
-    COLOR value(cfc) TITLE COLOR value(ctc) 
+    COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc) 
     " PRESELECT. OF CLI SERIES " + an1 + "-" + an2 + " " 
     FRAME sel.
 
@@ -122,19 +121,19 @@ WITH centered OVERLAY ROW 2 13 DOWN
 form /* Numeron haku kentällä CustNum */
     haku-CLI 
     help "Enter A-sub no. or its first digits"         
-    with row 4 col 2 title color value(ctc) " FIND A-SUB. NO "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku-f1.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND A-SUB. NO "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME haku-f1.
 
 form 
 SKIP(1)
 "   You have still some marked CLI left!        " SKIP
 "   Do you wish to continue anyway? (Y/N)"     
     ok help "Continue without saving?"       SKIP(1)
-    with row 6 centered title color value(ctc) " NOT SAVED "
+    with row 6 centered title color value(Syst.Var:ctc) " NOT SAVED "
     NO-LABELS OVERLAY FRAME saved.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 pstypes = "NATIONAL,INTERNATIONAL,NAT & INT".
@@ -231,38 +230,38 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 36  ufk[2]= 0 ufk[3]= /*1500*/ 0 ufk[4]= 1501
-         ufk[5]= 1500   ufk[6]= 15 ufk[7]= 1503 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.Var:ufk[1]= 36  Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= /*1500*/ 0 Syst.Var:ufk[4]= 1501
+         Syst.Var:ufk[5]= 1500   Syst.Var:ufk[6]= 15 Syst.Var:ufk[7]= 1503 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
          CHOOSE ROW CLI.CLI {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) CLI.CLI WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) CLI.CLI WITH FRAME sel.
       END.
 /*    ELSE IF jarj = 2 THEN DO:
          CHOOSE ROW CLI.CLI {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) CLI.CLI WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) CLI.CLI WITH FRAME sel.
       END.
       IF jarj = 3 THEN DO:
          CHOOSE ROW CLI.?? {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) CLI.?? WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) CLI.?? WITH FRAME sel.
       END.
       ELSE IF jarj = 4 THEN DO:
          CHOOSE ROW CLI.??  {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) CLI.? WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) CLI.? WITH FRAME sel.
       END.
 */
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
          jarj = jarj + 1. IF jarj > jarjlkm THEN jarj = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
          jarj = jarj - 1. IF jarj = 0 THEN jarj = jarjlkm.
       END.
 
@@ -293,10 +292,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* edellinen rivi */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND CLI where recid(CLI) = rtab[1] no-lock.
             IF jarj = 1 THEN FIND prev CLI
@@ -329,7 +328,7 @@ BROWSE:
       END. /* edellinen rivi */
 
       /* seuraava rivi */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND CLI where recid(CLI) = rtab[FRAME-DOWN] no-lock .
@@ -363,7 +362,7 @@ BROWSE:
       END. /* seuraava rivi */
 
       /* edellinen sivu */
-      else if lookup(nap,"prev-page,page-up") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up") > 0 THEN DO:
          muisti = rtab[1].
          FIND CLI where recid(CLI) = muisti no-lock no-error.
          IF jarj = 1 THEN FIND prev CLI
@@ -401,7 +400,7 @@ BROWSE:
      END. /* edellinen sivu */
 
      /* seuraava sivu */
-     else if lookup(nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
         /* kohdistin alimmalle riville */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "THIS IS THE LAST PAGE !".
@@ -416,10 +415,10 @@ BROWSE:
      END. /* seuraava sivu */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-        cfc = "puyr". RUN Syst/ufcolor.p.
+     else if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
         haku-CLI = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         UPDATE haku-CLI WITH FRAME haku-f1.
         HIDE FRAME haku-f1 no-pause.
         if haku-CLI <> "" THEN DO:
@@ -437,13 +436,13 @@ BROWSE:
         END.
      END. /* Haku sar. 1 */
 
-     else if lookup(nap,"5,f5") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"5,f5") > 0 THEN DO:
        FIND CLI where recid(CLI) = rtab[FRAME-LINE] NO-LOCK NO-ERROR.
        RUN Mf/viewpres.p(CLI.CLI).
        ufkey = TRUE.
      END.
 
-     else if lookup(nap,"4,f4") > 0 THEN DO: /* mark */
+     else if lookup(Syst.Var:nap,"4,f4") > 0 THEN DO: /* mark */
        FIND CLI where recid(CLI) = rtab[FRAME-LINE] NO-LOCK.
           /* is this CLI marked FOR Presel */
           FIND FIRST Presel WHERE Presel.CLI = CLI.CLI AND
@@ -485,10 +484,10 @@ BROWSE:
 
      END.
 
-     else if lookup(nap,"7,f7") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"7,f7") > 0 THEN DO:
 
         ASSIGN
-        ehto  = 9
+        Syst.Var:ehto  = 9
         ufkey = TRUE.
         RUN Syst/ufkey.p.
 
@@ -507,7 +506,7 @@ BROWSE:
 
      END. 
 
-     else if lookup(nap,"6,f6") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"6,f6") > 0 THEN DO:
        FIND FIRST psel NO-LOCK NO-ERROR.
        IF NOT AVAIL psel THEN DO:
           MESSAGE 
@@ -516,7 +515,7 @@ BROWSE:
        END.
        ELSE DO:
          ASSIGN
-         ehto  = 9
+         Syst.Var:ehto  = 9
          ufkey = TRUE.
          RUN Syst/ufkey.p.
 
@@ -529,7 +528,7 @@ BROWSE:
 
      END.
 
-     else if lookup(nap,"enter,return") > 0 THEN
+     else if lookup(Syst.Var:nap,"enter,return") > 0 THEN
      DO:
        FIND CLI where recid(CLI) = rtab[FRAME-LINE] NO-LOCK NO-ERROR.
        RUN Mf/viewpres.p(CLI.CLI).
@@ -537,7 +536,7 @@ BROWSE:
      END.
 
      /**********
-     else if lookup(nap,"enter,return") > 0 THEN
+     else if lookup(Syst.Var:nap,"enter,return") > 0 THEN
      DO:
        FIND CLI where recid(CLI) = rtab[FRAME-LINE] NO-LOCK NO-ERROR.
        RUN presel2.
@@ -545,7 +544,7 @@ BROWSE:
      END.
      ***********/
 
-     else if lookup(nap,"home") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home") > 0 THEN DO:
         IF jarj = 1 THEN FIND FIRST CLI
         where CLI.CLI >= an1 AND CLI.CLI <= an2 USE-INDEX CLI no-lock no-error.
    /*   ELSE IF jarj = 2 THEN FIND FIRST CLI USE-INDEX CLI
@@ -558,7 +557,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end") > 0 THEN DO : /* viimeinen tietue */
+     else if lookup(Syst.Var:nap,"end") > 0 THEN DO : /* viimeinen tietue */
         IF jarj = 1 THEN FIND LAST CLI
         where CLI.CLI >= an1 AND CLI.CLI <= an2 USE-INDEX CLI no-lock no-error.
   /*    ELSE IF jarj = 2 THEN FIND LAST CLI USE-INDEX CLI
@@ -571,7 +570,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN DO:
         FIND FIRST psel NO-LOCK NO-ERROR.
         PAUSE 0.
         IF AVAIL psel THEN DO:
@@ -588,7 +587,7 @@ BROWSE:
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -692,7 +691,7 @@ DO TRANSAction:
    EDITING:
       READKEY.
 
-      IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lispres:
+      IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lispres:
       PAUSE 0.
             IF FRAME-FIELD = "dpstype" THEN DO:
                IF INPUT FRAME lispres dpstype > 3  OR
@@ -750,8 +749,8 @@ DO TRANSAction:
             Presel.Orderer  = ordere
             Presel.AuthNo   = authn
             Presel.AuthDate = authdat.
-            Presel.CrStamp = fMakeTS().
-            Presel.ChStamp = fMakeTS().
+            Presel.CrStamp = Func.Common:mMakeTS().
+            Presel.ChStamp = Func.Common:mMakeTS().
 
       END. /* FOR EACH */
    END.  /* IF DO ALL */ 
@@ -794,8 +793,8 @@ DO TRANSAction:
        Presel.Orderer  = ordere
        Presel.AuthNo   = authn
        Presel.AuthDate = authdat.
-       Presel.CrStamp = fMakeTS().
-       Presel.ChStamp = fMakeTS().
+       Presel.CrStamp = Func.Common:mMakeTS().
+       Presel.ChStamp = Func.Common:mMakeTS().
 
    END. /* FOR EACH psel */
  END. /* ELSE */

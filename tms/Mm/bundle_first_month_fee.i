@@ -5,7 +5,6 @@
 &THEN
 &GLOBAL-DEFINE BundleFirstMonthFee YES
 
-{Func/date.i}
 {Func/detailvalue.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
@@ -135,7 +134,7 @@ FUNCTION fCalculatePrepaidFirstMonthFAT RETURNS DEC
    ASSIGN
       ldFatAmount = idAmount
       ldaPeriodFrom = DATE((iiPeriod mod 100), 1, INT(iiPeriod / 100))
-      ldaPeriodTo = fLastDayOfMonth(ldaPeriodFrom).
+      ldaPeriodTo = Func.Common:mLastDayOfMonth(ldaPeriodFrom).
 
    FIND LAST PrepCDR NO-LOCK WHERE
              PrepCDR.CLI = icCLI AND

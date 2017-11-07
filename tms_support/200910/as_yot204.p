@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-katun = "anttis".
-gcBrand = "1".
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 
 RUN /apps/tms/utilities/fix_subterm_outport.p(
    "/apps/snet/200910/as_yot204.input2",

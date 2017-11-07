@@ -11,10 +11,9 @@
 
 {Syst/commpaa.i}
 ASSIGN
-   gcBrand = "1"
-   katun   = "Cron".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun   = "Cron".
    
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/heartbeat.i}
 {Func/barrfunc.i}
@@ -120,14 +119,14 @@ FUNCTION fErrorLog RETURNS LOGIC
  
    /* save to db for reporting */
    CREATE ErrorLog.
-   ASSIGN ErrorLog.Brand     = gcBrand
+   ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
           ErrorLog.ActionID  = "TMQUEUE"
           ErrorLog.TableName = "Customer"
           ErrorLog.KeyValue  = STRING(iiCustnum)
           ErrorLog.ErrorChar = icCLI
           ErrorLog.ErrorMsg  = icError
-          ErrorLog.UserCode  = katun.
-          ErrorLog.ActionTS  = fMakeTS().
+          ErrorLog.UserCode  = Syst.Var:katun.
+          ErrorLog.ActionTS  = Func.Common:mMakeTS().
     
 END FUNCTION.
 
@@ -351,7 +350,7 @@ END FUNCTION.
 
 ASSIGN
    lhSource   = BUFFER TMQueue:HANDLE
-   lcStarted  = fTS2HMS(fMakeTS())
+   lcStarted  = Func.Common:mTS2HMS(Func.Common:mMakeTS())
    lcLogFile  = fCParamC("TMQueueDeleteLog")
    liInterval = fCParamI("TMQueueInterval")
    liTransQty = fCParamI("TMQueueTransQty")
@@ -483,7 +482,7 @@ DO WHILE TRUE:
       fKeepAlive(lcMonitor).
    END.
    
-   lcCurrent = fTS2HMS(fMakeTS()).
+   lcCurrent = Func.Common:mTS2HMS(Func.Common:mMakeTS()).
         
    PAUSE 0.
    DISP lcStarted
@@ -512,7 +511,6 @@ END.  /* MainLoop */
 
 DELETE OBJECT lhField.
 DELETE OBJECT lhSource. 
-IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
 
 IF lcInvSeqList = "" THEN QUIT.
 
@@ -612,7 +610,7 @@ PROCEDURE pAnalyseQueueRow:
                      LEAVE FieldCheck.
                   END.
 
-                  lcCountry = fDestCountry(gcBrand,
+                  lcCountry = fDestCountry(Syst.Var:gcBrand,
                                            TMQueue.SpoCMT,
                                            TMQueue.DateSt,
                                            TMQueue.EventId,
@@ -706,8 +704,8 @@ PROCEDURE pAnalyseQueueRow:
                      ldeMonthBegin = 0
                      ldeMonthEnd   = 0
                      ldeTotalLimit = 0
-                     ldeMonthBegin = fMake2Dt(ldaFrom,0)
-                     ldeMonthEnd   = fMake2Dt(ttPeriod.PeriodEnd,86399).
+                     ldeMonthBegin = Func.Common:mMake2DT(ldaFrom,0)
+                     ldeMonthEnd   = Func.Common:mMake2DT(ttPeriod.PeriodEnd,86399).
 
                   /* YDR-2109 Get Total fraud Limit Counter value for 
                      New Bundles, upsells and roaming upsells */
@@ -853,7 +851,7 @@ PROCEDURE pAnalyseQueueRow:
    ldDone = ldDone + 1.
     
    IF ldQty MOD 100 = 0 AND lcInvSeqList = "" THEN DO:
-      lcCurrent = fTS2HMS(fMakeTS()).
+      lcCurrent = Func.Common:mTS2HMS(Func.Common:mMakeTS()).
         
       PAUSE 0.
       DISP ldQty    
@@ -901,7 +899,7 @@ PROCEDURE pUpdateTempTables:
  
    GetRules:
    FOR EACH TMRule NO-LOCK WHERE
-            TMRule.Brand     = gcBrand AND
+            TMRule.Brand     = Syst.Var:gcBrand AND
             TMRule.FromDate <= TODAY   AND
             TMRule.ToDate   >= TODAY:
             
@@ -1019,8 +1017,8 @@ PROCEDURE pUpdateTempTables:
    END.
    
    ASSIGN
-      ldTempUpdated = fMakeTS()
-      lcTempUpdated = fTS2HMS(ldTempUpdated)
+      ldTempUpdated = Func.Common:mMakeTS()
+      lcTempUpdated = Func.Common:mTS2HMS(ldTempUpdated)
       ldtUpdated    = TODAY
       lcConfLog     = fCParamC("TMQueueConfLog").
 
@@ -1037,7 +1035,7 @@ PROCEDURE pUpdateTempTables:
    IF ldDone > 0 THEN DO TRANS:
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = gcBrand   
+         ActionLog.Brand        = Syst.Var:gcBrand   
          ActionLog.TableName    = "Analysis"  
          ActionLog.KeyValue     = STRING(TODAY,"99.99.99") 
          ActionLog.ActionID     = "TMQUEUE"
@@ -1178,7 +1176,7 @@ PROCEDURE pCheckLimits:
             IF TMCounter.LimitAmt = 0 THEN DO:
                
                liPeriod = YEAR(TMQueue.DateST) * 100 + MONTH(TMQueue.DateST).
-               ldeActStamp = fHMS2TS(fLastDayOfMonth(TMQueue.DateST),"23:59:59").
+               ldeActStamp = Func.Common:mHMS2TS(Func.Common:mLastDayOfMonth(TMQueue.DateST),"23:59:59").
 
                FOR FIRST ServiceLimit WHERE
                          ServiceLimit.GroupCode = TMQueue.DCEvent AND
@@ -1301,7 +1299,7 @@ PROCEDURE pLimitAction:
                                   lcParam[1],         /* ServCom */
                                   INTEGER(lcParam[2]),/* SSStat */
                                   lcParam[3],         /* SSParam */
-                                  fMakeTS() + 0.0012, /* act, 2min delay */
+                                  Func.Common:mMakeTS() + 0.0012, /* act, 2min delay */
                                   "",                 /* salesman */
                                   TRUE,               /* fees */
                                   TRUE,               /* sms */          
@@ -1328,7 +1326,7 @@ PROCEDURE pLimitAction:
          /* YOT-1778 stop send SMS upsells for this month */
          IF (lcSMSSendRule EQ {&SMS_SENDRULE_OFFICEH_EXCEPT_LAST_DAY} OR
              lcSMSSendRule EQ {&SMS_SENDRULE_24H_EXCEPT_LAST_DAY}) AND
-            TODAY EQ fLastDayOfMonth(TODAY) AND
+            TODAY EQ Func.Common:mLastDayOfMonth(TODAY) AND
             TIME > 75300 /* 20:55 */ THEN DO:
             FIND CURRENT TMCounter EXCLUSIVE-LOCK.
             ASSIGN TMCounter.LimitID = iiLimitID.
@@ -1339,7 +1337,7 @@ PROCEDURE pLimitAction:
                                  9,                  /* type=info */
                                  "InvText",          /* source of message */
                                  lcSMSTxt,
-                                 fSecOffSet(fMakeTS(),120), /* act, 2min delay */
+                                 Func.Common:mSecOffSet(Func.Common:mMakeTS(),120), /* act, 2min delay */
                                  "5",
                                  "TMQueue",
                                  lcSender,
@@ -1389,7 +1387,7 @@ PROCEDURE pLimitAction:
                                OUTPUT lcSender).
                IF (lcSMSSendRule EQ {&SMS_SENDRULE_OFFICEH_EXCEPT_LAST_DAY} OR
                    lcSMSSendRule EQ {&SMS_SENDRULE_24H_EXCEPT_LAST_DAY}) AND
-                   TODAY EQ fLastDayOfMonth(TODAY) AND
+                   TODAY EQ Func.Common:mLastDayOfMonth(TODAY) AND
                    TIME > 75300 /* 20:55 */ THEN lcSMSTxt = "".
             END.
 
@@ -1397,7 +1395,7 @@ PROCEDURE pLimitAction:
                             ttLimits.ActionParam + "=1",
                             "5",                /* source  */
                             "TMQueue",          /* creator */
-                            fMakeTS() + 0.0012, /* activate, 2min delay */
+                            Func.Common:mMakeTS() + 0.0012, /* activate, 2min delay */
                             lcSMSTxt,
                             OUTPUT lcResult).
 

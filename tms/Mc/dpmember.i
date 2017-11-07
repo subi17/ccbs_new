@@ -5,13 +5,12 @@
 &GLOBAL-DEFINE DPMEMBER_I YES
 
 {Syst/commali.i}
-{Func/date.i}
 {Syst/eventval.i}
 {Syst/tmsconst.i}
 {Func/fixedlinefunc.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -29,7 +28,7 @@ FUNCTION fCalcDPMemberValidTo RETURNS DATE
    
    ASSIGN
       ldaValidTo = ADD-INTERVAL(idaValidFrom,iiValidPeriods - 1,"months")
-      ldaValidTo = fLastDayOfMonth(ldaValidTo).
+      ldaValidTo = Func.Common:mLastDayOfMonth(ldaValidTo).
       
    RETURN ldaValidTo.   
     
@@ -57,7 +56,7 @@ FUNCTION fAddDiscountPlanMember RETURNS INTEGER
    END.
 
    FIND FIRST DiscountPlan WHERE
-              DiscountPlan.Brand = gcBrand AND
+              DiscountPlan.Brand = Syst.Var:gcBrand AND
               DiscountPlan.DPRuleID = icDiscountPlan NO-LOCK NO-ERROR.
    IF NOT AVAILABLE DiscountPlan THEN DO:
       ocError = "ERROR: Unknown Discount Plan".
@@ -108,7 +107,7 @@ FUNCTION fCloseDiscount RETURNS LOGICAL
    DEF BUFFER DPMember FOR DPMember.
 
    FOR FIRST DiscountPlan WHERE
-             DiscountPlan.Brand    = gcBrand AND
+             DiscountPlan.Brand    = Syst.Var:gcBrand AND
              DiscountPlan.DPRuleID = icDiscountPlan NO-LOCK,
        EACH  DPMember WHERE
              DPMember.DPId      = DiscountPlan.DPId AND
@@ -151,7 +150,7 @@ FUNCTION fCreateAddLineDiscount RETURNS CHARACTER
                                {&ADDLINE_DISCOUNTS}).
 
    FOR FIRST DiscountPlan NO-LOCK WHERE
-             DiscountPlan.Brand    = gcBrand          AND
+             DiscountPlan.Brand    = Syst.Var:gcBrand          AND
              DiscountPlan.DPRuleID = lcNewAddLineDisc AND
              DiscountPlan.ValidTo >= idtDate,
        FIRST DPRate NO-LOCK WHERE
@@ -218,7 +217,7 @@ FUNCTION fCreateExtraLineDiscount RETURNS CHARACTER
    DEF VAR lcResult         AS CHAR NO-UNDO.
 
    FOR FIRST DiscountPlan NO-LOCK WHERE
-             DiscountPlan.Brand    = gcBrand         AND
+             DiscountPlan.Brand    = Syst.Var:gcBrand         AND
              DiscountPlan.DPRuleID = lcExtraLineDisc AND
              DiscountPlan.ValidTo >= idtDate,
        FIRST DPRate NO-LOCK WHERE
@@ -250,7 +249,7 @@ FUNCTION fCloseExtraLineDiscount RETURNS LOGICAL
     INPUT idtDate         AS DATE):
 
   FOR FIRST DiscountPlan NO-LOCK WHERE
-             DiscountPlan.Brand    = gcBrand         AND
+             DiscountPlan.Brand    = Syst.Var:gcBrand         AND
              DiscountPlan.DPRuleID = lcExtraLineDisc AND
              DiscountPlan.ValidTo >= idtDate,
        FIRST DPRate NO-LOCK WHERE
