@@ -17,10 +17,8 @@
 &GLOBAL-DEFINE msreqfunc YES
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/fmakesms.i}
 {Func/fgettxt.i}
-{Func/freplacesms.i}
 
 DEF BUFFER bRequest  FOR MsRequest.
 
@@ -106,11 +104,11 @@ FUNCTION fReqStatus RETURNS LOGICAL
       /* another process is handling this */
       IF LOCKED(bRequest) THEN RETURN FALSE.
       
-      ASSIGN bRequest.UpdateStamp = fMakeTS()
+      ASSIGN bRequest.UpdateStamp = Func.Common:mMakeTS()
              bRequest.ReqStatus   = iiStatus.
 
       IF bRequest.ReqStatus >= 2 AND bRequest.ReqStatus <= 4 THEN 
-         bRequest.DoneStamp = fMakeTS().
+         bRequest.DoneStamp = Func.Common:mMakeTS().
 
       IF icMemo > "" THEN 
       bRequest.Memo = bRequest.Memo + 
@@ -145,7 +143,7 @@ FUNCTION fReqStatus RETURNS LOGICAL
                     bRequest.ReqStatus NE 4)
                 THEN DO:
                    
-                   ASSIGN bRequest.UpdateStamp = fMakeTS()
+                   ASSIGN bRequest.UpdateStamp = Func.Common:mMakeTS()
                           bRequest.ReqStatus   = liMainStatus.
                          
                    IF liMainStatus = 3 THEN       
@@ -189,11 +187,11 @@ FUNCTION fChangeReqStatus RETURNS LOGICAL
       IF LOCKED(bRequest) THEN RETURN FALSE.
 
 
-      ASSIGN bRequest.UpdateStamp = fMakeTS()
+      ASSIGN bRequest.UpdateStamp = Func.Common:mMakeTS()
              bRequest.ReqStatus   = iiStatus.
 
       IF bRequest.ReqStatus >= 2 AND bRequest.ReqStatus <= 4 THEN
-         bRequest.DoneStamp = fMakeTS().
+         bRequest.DoneStamp = Func.Common:mMakeTS().
 
       IF icMemo > "" THEN
       bRequest.Memo = bRequest.Memo +
@@ -228,7 +226,7 @@ FUNCTION fChangeReqStatus RETURNS LOGICAL
                     bRequest.ReqStatus NE 4)
                 THEN DO:
 
-                   ASSIGN bRequest.UpdateStamp = fMakeTS()
+                   ASSIGN bRequest.UpdateStamp = Func.Common:mMakeTS()
                           bRequest.ReqStatus   = liMainStatus.
 
                    IF liMainStatus = 3 THEN

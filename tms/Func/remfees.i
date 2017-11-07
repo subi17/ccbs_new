@@ -76,7 +76,7 @@ PROCEDURE pDelFixedFee:
    END.
 
    FOR EACH FixedFee EXCLUSIVE-LOCK USE-INDEX HostTable WHERE
-            FixedFee.Brand      = gcBrand              AND
+            FixedFee.Brand      = Syst.Var:gcBrand              AND
             FixedFee.HostTable  = "MobSub"             AND
             FixedFee.KeyValue   = STRING(Mobsub.MsSeq) AND 
             (IF icBillCode > ""
@@ -241,7 +241,7 @@ PROCEDURE pCreditSingleFee:
    IF idAmt = 0 THEN RETURN.
    
    CREATE SingleFee.
-   ASSIGN SingleFee.Brand      = gcBrand
+   ASSIGN SingleFee.Brand      = Syst.Var:gcBrand
           SingleFee.FMItemId   = NEXT-VALUE(bi-seq)
           SingleFee.CustNum    = MobSub.InvCust
           SingleFee.BillTarget = MobSub.BillTarget
@@ -256,8 +256,7 @@ PROCEDURE pCreditSingleFee:
           SingleFee.Contract   = icContract
           SingleFee.Active     = TRUE
           SingleFee.Amt        = idAmt.
-          SingleFee.Memo[1]    = DYNAMIC-FUNCTION("fHdrText" IN ghFunc1,
-                                                  187,
+          SingleFee.Memo[1]    = Func.Common:mGetHdrText(187,
                                                   Customer.Language).
 
    fMakeCreateEvent((BUFFER SingleFee:HANDLE),"",icUserCode,icMemo).

@@ -2,8 +2,6 @@
 &THEN
 &GLOBAL-DEFINE ISTC_I YES
 
-{Func/date.i}
-{Func/timestamp.i}
 
 DEF TEMP-TABLE ttMsOwner NO-UNDO
    FIELD CustNum          AS INT
@@ -30,7 +28,7 @@ FUNCTION fGetISTCDate RETURNS DATE
    DEF BUFFER MsOwner FOR MsOwner.
 
    ASSIGN ldeFromTs = YEAR(idaPeriod) * 10000 + MONTH(idaPeriod) * 100 + 1
-          ldeEndTs  = fMake2Dt(fLastDayOfMonth(idaPeriod),86399).
+          ldeEndTs  = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(idaPeriod),86399).
    
    IF iiCustnum > 0 THEN
    FIND FIRST MsOwner NO-LOCK WHERE
@@ -48,7 +46,7 @@ FUNCTION fGetISTCDate RETURNS DATE
 
    IF NOT AVAIL MsOwner THEN RETURN ?.
 
-   fTs2Date(MsOwner.TsBegin, OUTPUT ldaISTCDate).
+   Func.Common:mTS2Date(MsOwner.TsBegin, OUTPUT ldaISTCDate).
 
    RETURN ldaISTCDate.
 END.
@@ -76,8 +74,8 @@ FUNCTION fGetMsOwnerTempTable RETURNS LOG (INPUT iiInvCust           AS INT,
    DEF BUFFER bMsOwner              FOR MsOwner.
    DEF BUFFER bbMsOwner             FOR MsOwner.
 
-   ASSIGN ldePeriodFrom = fMake2Dt(idaFromDate,0)
-          ldePeriodTo   = fMake2Dt(idaToDate,86399).
+   ASSIGN ldePeriodFrom = Func.Common:mMake2DT(idaFromDate,0)
+          ldePeriodTo   = Func.Common:mMake2DT(idaToDate,86399).
 
    FOR EACH bMsOwner NO-LOCK WHERE
             bMsOwner.InvCust  = iiInvCust     AND
@@ -110,13 +108,13 @@ FUNCTION fGetMsOwnerTempTable RETURNS LOG (INPUT iiInvCust           AS INT,
                     bbMSOwner.CLIEvent BEGINS "iS" NO-LOCK NO-ERROR.
          IF AVAIL bbMSOwner THEN DO:
 
-            fSplitTS(bbMsOwner.TsBeg,OUTPUT ldaFromDate,OUTPUT liTime).
+            Func.Common:mSplitTS(bbMsOwner.TsBeg,OUTPUT ldaFromDate,OUTPUT liTime).
 
             ASSIGN ttMsOwner.PeriodFrom = bbMsOwner.TsBegin
                    ttMsOwner.FromDate   = ldaFromDate
                    lciSTCCLIType = bbMSOwner.CLIType
                    lciSTCTariffBundle = bbMSOwner.TariffBundle
-                   ldeiSTCFromTs = fSecOffSet(bbMsOwner.TsBeg,-1).
+                   ldeiSTCFromTs = Func.Common:mSecOffSet(bbMsOwner.TsBeg,-1).
          END.
       END.
 

@@ -70,8 +70,8 @@ FORM
     lcSelected             FORMAT "x(1)"  NO-LABEL
    
 WITH ROW FrmRow OVERLAY 15 DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + icTitle + " " 
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + icTitle + " " 
     CENTERED
     FRAME sel.
 
@@ -82,14 +82,14 @@ FORM "Item identifer..:" MsReqFuncItem.ItemId   SKIP
      "Int. parameter..:" MsReqFuncItem.IParam   SKIP
 
 WITH  OVERLAY ROW 4 centered
- COLOR VALUE(cfc)
- TITLE COLOR VALUE(ctc) " Add/Update "
+ COLOR VALUE(Syst.Var:cfc)
+ TITLE COLOR VALUE(Syst.Var:ctc) " Add/Update "
  NO-LABELS 
  FRAME upd.
 
 IF icTitle = "" THEN icTitle = "Requests".
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 /* column-labels for parameters */
@@ -115,12 +115,12 @@ REPEAT WITH FRAME sel:
    END.
    
    IF must-add THEN DO:  /* Add a record  */
-      ASSIGN cfc = "upd" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "upd" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.   
    ADD-ROW:
       REPEAT WITH FRAME upd ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME upd:
            
            CLEAR FRAME upd NO-PAUSE.
@@ -200,13 +200,13 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
          ASSIGN
-           ufk    = 0
-           ufk[1] = 0 
-           ufk[2] = 0
-           ufk[5] = 5 
-           ufk[6] = 7
-           ufk[8] = 8 
-           ehto   = 3 
+           Syst.Var:ufk    = 0
+           Syst.Var:ufk[1] = 0 
+           Syst.Var:ufk[2] = 0
+           Syst.Var:ufk[5] = 5 
+           Syst.Var:ufk[6] = 7
+           Syst.Var:ufk[8] = 8 
+           Syst.Var:ehto   = 3 
            ufkey  = FALSE.
       
          RUN Syst/ufkey.p.
@@ -217,19 +217,19 @@ REPEAT WITH FRAME sel:
       IF order = 1 THEN DO:
          CHOOSE ROW MsReqFuncItem.ItemDesc {Syst/uchoose.i} 
          NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) MsReqFuncItem.ItemDesc WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) MsReqFuncItem.ItemDesc WITH FRAME sel.
       END.
       
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"5,f5") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"5,f5") > 0 THEN DO:
          must-add = TRUE.
          NEXT LOOP.
       END.
       
       
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -238,7 +238,7 @@ REPEAT WITH FRAME sel:
       END.
       
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -263,7 +263,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            
@@ -293,7 +293,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND MsReqFuncItem WHERE RECID(MsReqFuncItem) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -317,7 +317,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -331,23 +331,23 @@ REPEAT WITH FRAME sel:
        END.
      END. /* NEXT page */
      
-     ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 THEN DO:
         RUN local-find-this(TRUE).
         RUN pUpdateRecord.
         RUN local-disp-ROW.
      END.
-     ELSE IF LOOKUP(nap,"HOME,H") > 0 THEN DO : /* FIRST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"HOME,H") > 0 THEN DO : /* FIRST record */
         RUN local-find-FIRST.
         ASSIGN Memory = RECID(MsReqFuncItem) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = RECID(MsReqFuncItem) must-print = TRUE.
         NEXT LOOP.
      END.
-     IF LOOKUP(nap,"enter,return") > 0 THEN DO:
+     IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN DO:
         
         RUN local-find-this(FALSE).
      
@@ -367,7 +367,7 @@ REPEAT WITH FRAME sel:
         
      END.
      
-     IF LOOKUP(nap,"delete") > 0 THEN DO TRANSACTION:
+     IF LOOKUP(Syst.Var:nap,"delete") > 0 THEN DO TRANSACTION:
            
         delrow = FRAME-LINE.
         RUN local-find-this (FALSE).
@@ -383,7 +383,7 @@ REPEAT WITH FRAME sel:
            END.
         END. 
         /* Highlight */
-        COLOR DISPLAY VALUE(ctc)
+        COLOR DISPLAY VALUE(Syst.Var:ctc)
         MsReqFuncItem.ItemId MsReqFuncItem.ItemDesc.
          
         RUN local-find-NEXT.
@@ -408,7 +408,7 @@ REPEAT WITH FRAME sel:
          
          ASSIGN ok = FALSE.
          MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-         COLOR DISPLAY VALUE(ccc) MsReqFuncItem.ItemId MsReqFuncItem.ItemDesc.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) MsReqFuncItem.ItemId MsReqFuncItem.ItemDesc.
            
          IF ok THEN DO:
             FIND ttSelected EXCLUSIVE-LOCK WHERE
@@ -430,7 +430,7 @@ REPEAT WITH FRAME sel:
       ELSE delrow = 0. /* UNDO DELETE */
    END. /* DELETE */
      
-   ELSE IF LOOKUP(nap,"8,f8") > 0 THEN DO:
+   ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN DO:
       
       ocReturn = "".
       
@@ -450,7 +450,7 @@ END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 PROCEDURE local-find-this:

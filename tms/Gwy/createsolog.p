@@ -83,7 +83,7 @@ IF MsRequest.ReqType = {&REQTYPE_DSS} AND
           lcALLPostpaidUPSELLBundles = fCParamC("POSTPAID_DATA_UPSELLS").
 
    IF CAN-FIND(FIRST bbMsRequest NO-LOCK WHERE
-                    bbMsRequest.Brand   = gcBrand AND
+                    bbMsRequest.Brand   = Syst.Var:gcBrand AND
                     bbMsRequest.ReqType = {&REQTYPE_CONTRACT_ACTIVATION} AND
                     bbMsRequest.Custnum = MsRequest.CustNum AND
            (LOOKUP(bbMsRequest.ReqCParam3,lcALLPostpaidBundles) > 0 OR
@@ -94,7 +94,7 @@ IF MsRequest.ReqType = {&REQTYPE_DSS} AND
              "completed".
 
    IF CAN-FIND(FIRST bbMsRequest NO-LOCK WHERE
-                    bbMsRequest.Brand   = gcBrand AND
+                    bbMsRequest.Brand   = Syst.Var:gcBrand AND
                     bbMsRequest.ReqType = {&REQTYPE_SERVICE_CHANGE} AND
                     bbMsRequest.Custnum = MsRequest.CustNum AND
                     bbMsRequest.ReqCparam1 = "SHAPER"  AND
@@ -106,8 +106,8 @@ IF MsRequest.ReqType = {&REQTYPE_DSS} AND
 
    IF NOT fIsDSSAllowed(INPUT  MsRequest.CustNum,
                         INPUT  MsRequest.MsSeq,
-                        INPUT  (IF MsRequest.ActStamp > fMakeTS() THEN
-                                MsRequest.ActStamp ELSE fMakeTS()),
+                        INPUT  (IF MsRequest.ActStamp > Func.Common:mMakeTS() THEN
+                                MsRequest.ActStamp ELSE Func.Common:mMakeTS()),
                         INPUt  MsRequest.ReqCparam3,
                         INPUT  "",
                         OUTPUT ldeCurrMonthLimit,
@@ -157,13 +157,13 @@ FUNCTION fLocalMemo RETURNS LOGIC
 
    CREATE Memo.
    ASSIGN
-      Memo.Brand     = gcBrand
-      Memo.CreStamp  = fMakeTS()
+      Memo.Brand     = Syst.Var:gcBrand
+      Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
       Memo.Custnum   = iiCustNum
       Memo.HostTable = icHostTable
       Memo.KeyValue  = icKey
-      Memo.CreUser   = katun
+      Memo.CreUser   = Syst.Var:katun
       Memo.MemoTitle = icTitle
       Memo.Memotext  = icText.
       
@@ -242,7 +242,7 @@ PROCEDURE pSolog:
                                        INPUT SubSer.ServCom,
                                        INPUT 0,
                                        INPUT "",
-                                       INPUT fMakeTS(),
+                                       INPUT Func.Common:mMakeTS(),
                                        INPUT "",                /* SalesMan */
                                        INPUT TRUE,              /* Set fees */
                                        INPUT FALSE,             /* SMS      */
@@ -297,14 +297,14 @@ PROCEDURE pSolog:
    
    ldActStamp = MSRequest.ActStamp.
    IF liOffSet NE 0 THEN 
-      ldActStamp = fSecOffSet(ldActStamp,liOffSet).
+      ldActStamp = Func.Common:mSecOffSet(ldActStamp,liOffSet).
       
    CREATE Solog.
    ASSIGN
       Solog.Solog = NEXT-VALUE(Solog).
  
    ASSIGN
-      Solog.CreatedTS    = fMakeTS()
+      Solog.CreatedTS    = Func.Common:mMakeTS()
       Solog.MsSeq        = MsreQuest.MsSeq    /* Mobile Subscription No.    */
       Solog.CLI          = lcCLI              /* MSISDN                     */
       Solog.Stat         = 0                  /* just created               */

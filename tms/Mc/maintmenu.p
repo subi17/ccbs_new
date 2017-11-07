@@ -66,8 +66,8 @@ DEF VAR menuc AS CHAR EXTENT 9 NO-UNDO.
 FORM
 
    WITH ROW 1 17 DOWN WIDTH 80
-   COLOR VALUE(cfc)
-   TITLE COLOR VALUE(ctc) " " + "ADMIN LEVEL MAINTENANCE MENU" + " "
+   COLOR VALUE(Syst.Var:cfc)
+   TITLE COLOR VALUE(Syst.Var:ctc) " " + "ADMIN LEVEL MAINTENANCE MENU" + " "
    CENTERED
 
 FRAME frMain.
@@ -83,7 +83,7 @@ FORM
     menuc[8] FORMAT "x(56)" SKIP
     menuc[9] FORMAT "x(56)" SKIP
     WITH ROW 2 COL 22 OVERLAY 
-    COLOR VALUE(ccc)
+    COLOR VALUE(Syst.Var:ccc)
     TITLE "   MAINTENANCE ACTION   "
     NO-LABEL
 FRAME frTop.
@@ -96,7 +96,7 @@ FORM
     lcDesc[4] FORMAT "x(56)" SKIP
 
     WITH ROW 13 COL 22 OVERLAY 
-    COLOR VALUE(cfc)
+    COLOR VALUE(Syst.Var:cfc)
     TITLE "      INFO      "  
     NO-LABEL
 FRAME frDesc.
@@ -105,8 +105,8 @@ FORM
 
     ttMaintMenu.MaintType FORMAT "x(12)"
     WITH ROW 2 OVERLAY 15 DOWN COL 2 WIDTH 20
-    TITLE COLOR VALUE(ctc) " " + "MAINTENANCE TYPE" + " "
-    COLOR VALUE(cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + "MAINTENANCE TYPE" + " "
+    COLOR VALUE(Syst.Var:cfc)
     NO-LABEL
 
 FRAME frLeft.
@@ -203,12 +203,12 @@ REPEAT WITH FRAME frLeft:
    REPEAT WITH FRAME frLeft ON ENDKEY UNDO, RETURN:
       IF ufkey THEN DO:
          ASSIGN
-           ufk    = 0
-           ufk[1] = 0
-           ufk[2] = 0
-           ufk[5] = 11
-           ufk[8] = 8 
-           ehto   = 3 
+           Syst.Var:ufk    = 0
+           Syst.Var:ufk[1] = 0
+           Syst.Var:ufk[2] = 0
+           Syst.Var:ufk[5] = 11
+           Syst.Var:ufk[8] = 8 
+           Syst.Var:ehto   = 3 
            ufkey  = FALSE.
       
          RUN Syst/ufkey.p.
@@ -220,10 +220,10 @@ REPEAT WITH FRAME frLeft:
                 CURSOR-UP CURSOR-LEFT CURSOR-RIGHT " " TAB F8)
          WITH FRAME frLeft. 
       END.
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -232,7 +232,7 @@ REPEAT WITH FRAME frLeft:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME frLeft:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME frLeft:
          IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -263,7 +263,7 @@ REPEAT WITH FRAME frLeft:
                       "").
       END. /* PREVious ROW */
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME frLeft:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -302,7 +302,7 @@ REPEAT WITH FRAME frLeft:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ttMaintMenu WHERE ROWID(ttMaintMenu) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -326,7 +326,7 @@ REPEAT WITH FRAME frLeft:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME frLeft:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME frLeft:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -340,7 +340,7 @@ REPEAT WITH FRAME frLeft:
        END.
      END. /* NEXT page */
      
-     ELSE IF LOOKUP(nap,"5,f5,enter,return") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5,enter,return") > 0 THEN DO:
         RUN local-find-this(FALSE).
 
         IF AVAILABLE ttMaintMenu THEN DO:
@@ -354,24 +354,24 @@ REPEAT WITH FRAME frLeft:
         END.
      END.
 
-     ELSE IF LOOKUP(nap,"HOME,H") > 0 THEN DO : /* FIRST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"HOME,H") > 0 THEN DO : /* FIRST record */
         RUN local-find-FIRST.
         ASSIGN Memory = ROWID(ttMaintMenu) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = ROWID(ttMaintMenu) must-print = TRUE.
         NEXT LOOP.
      END.
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME frLeft NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 PROCEDURE local-find-this:

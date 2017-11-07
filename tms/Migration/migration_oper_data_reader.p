@@ -14,7 +14,6 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 {Syst/commpaa.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/barrfunc.i}
@@ -23,7 +22,7 @@
 {Migration/migrationfunc.i}
 {Func/ftransdir.i}
 
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 DEF STREAM sin.
 DEF STREAM sFile.
@@ -71,7 +70,7 @@ DEFINE TEMP-TABLE ttRootlevel NO-UNDO SERIALIZE-NAME ""
 ASSIGN
    lcTableName = "MB_Migration"
    lcActionID = "migration_oper_data_reader"
-   ldCurrentTimeTS = fMakeTS()
+   ldCurrentTimeTS = Func.Common:mMakeTS()
    lcLogDir = fCParam("MB_Migration", "MigrationLogDir")
    lcInDir = fCParam("MB_Migration", "MigrationInDir").
 
@@ -101,19 +100,19 @@ lcLogFile = lcLogDir + "MM_MIGRATION_FINAL_DATA__" + lcTimePart + ".log".
 OUTPUT STREAM sLog TO VALUE(lcLogFile) APPEND.
 
 PUT STREAM sLog UNFORMATTED
-   "Migration filefinal data reading starts " + fTS2HMS(fMakeTS()) SKIP.
+   "Migration filefinal data reading starts " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
 
 /*Ensure that multiple instances of the program are not running*/
 DO TRANS:
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.Var:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName NO-ERROR.
 
    IF AVAIL ActionLog AND
       ActionLog.ActionStatus EQ {&ACTIONLOG_STATUS_PROCESSING} THEN DO:
       PUT STREAM sLog UNFORMATTED
-         "File processing alrady ongoing " + fTS2HMS(fMakeTS()) SKIP.
+         "File processing alrady ongoing " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
       OUTPUT STREAM sLog CLOSE.
       QUIT.
    END.
@@ -122,11 +121,11 @@ DO TRANS:
       /*First execution stamp*/
       CREATE ActionLog.
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.Var:gcBrand
          ActionLog.TableName    = lcTableName
          ActionLog.ActionID     = lcActionID
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
       RELEASE ActionLog.
       QUIT. /*No reporting in first time.*/
@@ -137,7 +136,7 @@ lcErr = fInitMigrationMQ("oper_data_reader").
 IF lcErr NE "" THEN DO:
    PUT STREAM sLog UNFORMATTED
    "MQ error. Operational data file will be skipped: " + lcErr +
-      fTS2HMS(fMakeTS()) SKIP.
+      Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
 
 END.
 ELSE DO:
@@ -163,7 +162,7 @@ END.
 /*Release ActionLog lock*/
 DO TRANS:
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.Var:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName    AND
               ActionLog.ActionStatus NE  {&ACTIONLOG_STATUS_SUCCESS}
@@ -176,7 +175,7 @@ DO TRANS:
 END.
 
 PUT STREAM sLog UNFORMATTED
-   "Migration finalization file handling done " + fTS2HMS(fMakeTS()) SKIP.
+   "Migration finalization file handling done " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
 OUTPUT STREAM sLog CLOSE.
 
 /*Precheck functions. Function returns text in case of error.*/
@@ -196,7 +195,7 @@ FUNCTION fUpsellExists RETURNS CHAR
    (icUPS AS CHAR):
    DEF BUFFER DayCampaign for DayCampaign.
    FIND FIRST DayCampaign WHERE
-              DayCampaign.Brand EQ gcBrand AND
+              DayCampaign.Brand EQ Syst.Var:gcBrand AND
               DayCampaign.DCEvent EQ icUps NO-ERROR.
    IF NOT AVAIL DayCampaign THEN RETURN "Item not found " + icUPS.
 
@@ -302,7 +301,7 @@ FUNCTION fSetMigrationBarring RETURNS CHAR
                        icCommand,
                        {&REQUEST_SOURCE_MIGRATION},
                        "",
-                       fMakeTS(),
+                       Func.Common:mMakeTS(),
                        "",
                        OUTPUT lcStat).
 
@@ -342,7 +341,7 @@ FUNCTION fSetMigrationUpsell RETURNS CHAR
        fCreateUpsellBundle(iiMsSeq,
                            icCommand,
                            {&REQUEST_SOURCE_MIGRATION},
-                           fMakeTS(),
+                           Func.Common:mMakeTS(),
                            OUTPUT liReq,
                            OUTPUT lcError).
        IF lcError NE "" THEN DO:
@@ -372,7 +371,7 @@ FUNCTION fSetMigrationUpsells RETURNS CHAR
           fCreateUpsellBundle(iiMsSeq,
                               lcUpsell,
                               {&REQUEST_SOURCE_MIGRATION},
-                              fMakeTS(),
+                              Func.Common:mMakeTS(),
                               OUTPUT liReq,
                               OUTPUT lcError).
           IF lcError NE "" THEN DO:
@@ -397,7 +396,7 @@ FUNCTION fSetMigrationTerminals RETURNS CHAR
    DO i = 1 TO NUM-ENTRIES(icTerminals):
       lcTerminal =  STRING(ENTRY(i,icTerminals)).
       CREATE SubsTerminal.
-      ASSIGN SubsTerminal.brand = gcBrand
+      ASSIGN SubsTerminal.brand = Syst.Var:gcBrand
              SubsTerminal.OrderID = iiOrderid
              SubsTerminal.imei = lcTerminal.
 
@@ -472,7 +471,7 @@ FUNCTION fSetMigrationBonos RETURNS CHAR
        liRequest = fPCActionRequest(iiMsSeq,
                                 icCommand,
                                 "act",
-                                fMakeTS(),
+                                Func.Common:mMakeTS(),
                                 TRUE,    /* fees */
                                 {&REQUEST_SOURCE_MIGRATION},
                                 "",   /* creator */
@@ -667,7 +666,7 @@ PROCEDURE pReadInputJSON:
    IF ilgSimulate EQ TRUE THEN lcMode = "Simulation".
 
    PUT STREAM sLog UNFORMATTED
-      "List collection starts " + fTS2HMS(fMakeTS()) + 
+      "List collection starts " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) + 
       "Mode: " + lcMode SKIP.
 
 
@@ -688,7 +687,7 @@ PROCEDURE pReadInputJSON:
          lcMSISDN = ttRootLevel.msisdn. 
          limsseq = 0.
          FIND FIRST mobsub NO-LOCK WHERE
-                    mobsub.brand = gcBrand AND
+                    mobsub.brand = Syst.Var:gcBrand AND
                     mobsub.cli = lcMSISDN NO-ERROR.
          IF AVAIL mobsub then do:
             liMsSeq = mobsub.msseq.
@@ -754,7 +753,7 @@ PROCEDURE pReadInputJSON:
    END.
 
    PUT STREAM sLog UNFORMATTED
-      "Collection done " + fTS2HMS(fMakeTS()) SKIP.
+      "Collection done " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
    RETURN "".   
 END.
 

@@ -5,13 +5,13 @@
    Report error cases that were not changed after the run */
 
 {Syst/commpaa.i}
-gcbrand = "1".
-katun = "Qvantel".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
 
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {/apps/tms/Func/lib/eventlog.i}
 
@@ -78,8 +78,7 @@ repeat trans:
       RUN StarEventMakeModifyEvent(lhCustomer).
 
       /* Write memo */
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                 "customer",
+      Func.Common:mWriteMemo("customer",
                  STRING(Customer.CustNum),
                  Customer.CustNum,
                  "Cuenta EVO caducada",

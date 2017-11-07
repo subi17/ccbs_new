@@ -10,7 +10,6 @@
 {Syst/commali.i}
 {Func/cparam2.i}
 {Syst/eventval.i}
-{Func/timestamp.i}
 
 DEF INPUT  PARAMETER iiRequest AS INT  NO-UNDO. 
 DEF OUTPUT PARAMETER olCreated AS LOG  NO-UNDO. 
@@ -30,7 +29,7 @@ DEF VAR liInvType     AS INT  NO-UNDO.
 
 
 IF llDoEvent THEN DO FOR SingleFee:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    
    {Func/lib/eventlog.i}
       
@@ -73,7 +72,7 @@ IF MsRequest.ReqIParam1 = 0 THEN DO:
        
    /* is there already a customer with given personid */
    IF CAN-FIND(FIRST Customer WHERE
-                     Customer.Brand = gcBrand AND
+                     Customer.Brand = Syst.Var:gcBrand AND
                      Customer.OrgID = ENTRY(11,MsRequest.ReqCParam1,";"))
    THEN DO: 
       ocError = "There is already a customer with given person ID. " +
@@ -145,7 +144,7 @@ IF ldAmount = 0 OR ldAmount = ? THEN DO:
 END.
 
 FIND BillItem NO-LOCK WHERE     
-     BillItem.Brand    = gcBrand AND
+     BillItem.Brand    = Syst.Var:gcBrand AND
      BillItem.BillCode = lcDepoItem NO-ERROR.
 IF NOT AVAILABLE BillItem THEN DO:
    ocError = "Unknown billing item " + lcDepoItem.
@@ -164,7 +163,7 @@ ASSIGN liBillPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
 
 /* already done (should invoice creation be tried if billed = false ?) */
 FOR FIRST SingleFee NO-LOCK WHERE
-          SingleFee.Brand     = gcBrand     AND
+          SingleFee.Brand     = Syst.Var:gcBrand     AND
           SingleFee.HostTable = "MsRequest" AND
           SingleFee.KeyValue  = STRING(MsRequest.MsRequest) AND
           SingleFee.BillCode  = lcDepoItem:
@@ -178,7 +177,7 @@ DO FOR SingleFee:
    CREATE SingleFee.
 
    ASSIGN
-   SingleFee.Brand       = gcBrand 
+   SingleFee.Brand       = Syst.Var:gcBrand 
    SingleFee.FMItemId    = NEXT-VALUE(bi-seq)
    SingleFee.CustNum     = liDepoCust    
    SingleFee.BillTarget  = 1
@@ -221,7 +220,7 @@ ELSE DO:
           olCreated = TRUE.
    
    FOR FIRST SingleFee NO-LOCK WHERE
-             SingleFee.Brand    = gcBrand AND
+             SingleFee.Brand    = Syst.Var:gcBrand AND
              SingleFee.FMItemId = liSingle,
        FIRST Invoice NO-LOCK WHERE
              Invoice.InvNum = SingleFee.InvNum:
@@ -275,8 +274,8 @@ PROCEDURE pCreateCustomer:
    FIND Customer WHERE Customer.CustNum = liDefCust EXCLUSIVE-LOCK NO-ERROR.
    IF AVAILABLE Customer THEN DO:
       
-      ASSIGN Customer.ChgStamp   = fMakeTS()
-             Customer.CreUser    = katun
+      ASSIGN Customer.ChgStamp   = Func.Common:mMakeTS()
+             Customer.CreUser    = Syst.Var:katun
              Customer.InvCust    = Customer.CustNum
              Customer.PaymCust   = Customer.CustNum
              Customer.RepCust    = Customer.CustNum
@@ -292,7 +291,7 @@ PROCEDURE pCreateCustomer:
       fReqValues().
       
       FIND CustCat WHERE 
-           CustCat.Brand    = gcBrand AND
+           CustCat.Brand    = Syst.Var:gcBrand AND
            CustCat.Category = Customer.Category 
       NO-LOCK NO-ERROR.
       IF AVAILABLE CustCat THEN Customer.PaymTerm = CustCat.PaymTerm.

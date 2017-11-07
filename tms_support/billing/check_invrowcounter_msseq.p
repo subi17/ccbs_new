@@ -1,4 +1,3 @@
-{Func/date.i}
 {Func/istc.i}
 
 def var i as int no-undo.
@@ -20,7 +19,7 @@ def temp-table ttcounter no-undo
 
 assign 
   ldafromdate = date(month(today),1,year(today))
-  ldatodate = flastdayofmonth(ldafromdate).
+  ldatodate = Func.Common:mLastDayOfMonth(ldafromdate).
 
 pause 0.
 update liMsSeq format ">>>>>>>9" label "Subscr.ID" skip
