@@ -1,4 +1,3 @@
-{Func/date.i}
 /*
 find mnpprocess where
      mnpprocess.portrequest = "00300511110131191337899" and
@@ -6,7 +5,7 @@ find mnpprocess where
 
 assign
    mnpprocess.statuscode = 7
-   mnpprocess.updatets = fmakets()
+   mnpprocess.updatets = Func.Common:mMakeTS()
    mnpprocess.statusreason = "CANC_TECNI".
 */
 find mnpprocess where
@@ -15,5 +14,5 @@ find mnpprocess where
 
 assign
    mnpprocess.statuscode = 7
-   mnpprocess.updatets = fmakets()
+   mnpprocess.updatets = Func.Common:mMakeTS()
    mnpprocess.statusreason = "CANC_TECNI".

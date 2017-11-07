@@ -22,10 +22,9 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-katun = "NewtonAd".
-gcBrand = "1".
+Syst.Var:katun = "NewtonAd".
+Syst.Var:gcBrand = "1".
 {Func/highusage_report.i}
-{Func/timestamp.i}
 {newton/src/json_key.i}
 {Func/barrfunc.i}
 
@@ -120,5 +119,4 @@ END FUNCTION.
 loop_highspender_table("1", 0.0, 0).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

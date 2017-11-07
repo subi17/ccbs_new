@@ -1,9 +1,7 @@
 {Syst/commpaa.i}
-assign gcbrand = "1"
-       katun = "Qvantel".
+assign Syst.Var:gcBrand = "1"
+       Syst.Var:katun = "Qvantel".
 {Syst/tmsconst.i}
-{Func/date.i}
-{Func/timestamp.i}
 {Func/fixedfee.i}
 {Mm/active_bundle.i}
 
@@ -51,8 +49,8 @@ END. /* IF lcOutputFile = "" THEN DO: */
 /******** Main start ********/
 
 ASSIGN
-   ldPeriodFrom   = fMake2Dt(ldaFromDate,0)
-   ldPeriodTo     = fMake2Dt(ldaToDate,86399).
+   ldPeriodFrom   = Func.Common:mMake2DT(ldaFromDate,0)
+   ldPeriodTo     = Func.Common:mMake2DT(ldaToDate,86399).
 
 OUTPUT TO VALUE(lcOutputFile).
 
@@ -88,13 +86,13 @@ for each msrequest where
 
     case mobsub.clitype:
        when "contrd" then
-           lcbundle = fGetActiveSpecificBundle(mobsub.msseq,fmakets(),mobsub.clitype).
+           lcbundle = fGetActiveSpecificBundle(mobsub.msseq,Func.Common:mMakeTS(),mobsub.clitype).
        when "contf" then do:
            lcbundle = fGetActiveSpecificBundle(mobsub.msseq,msrequest.actstamp,mobsub.clitype).
-           lcconfbundle = fGetActiveSpecificBundle(mobsub.msseq,fmakets(),"bono").
+           lcconfbundle = fGetActiveSpecificBundle(mobsub.msseq,Func.Common:mMakeTS(),"bono").
        end.
        otherwise
-           lcbundle = fGetActiveSpecificBundle(mobsub.msseq,fmakets(),"bono"). 
+           lcbundle = fGetActiveSpecificBundle(mobsub.msseq,Func.Common:mMakeTS(),"bono"). 
     end case.
 
     IF lcbundle = "" THEN do:

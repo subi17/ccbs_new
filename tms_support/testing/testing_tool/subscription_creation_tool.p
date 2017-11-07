@@ -93,7 +93,7 @@ PROCEDURE pReadFileAndProcess:
 
         ASSIGN liLoop      = liLoop + 1
                llFileAvail = FALSE
-               ldThisRun   = fMakeTS().
+               ldThisRun   = Func.Common:mMakeTS().
 
         INPUT STREAM sFile THROUGH VALUE("ls -1 " + lcInIncomingDir + "/*.RPT").
 
@@ -245,7 +245,7 @@ PROCEDURE pReProcessTT:
                 DO:
                     ASSIGN lcCustData = ENTRY(3,ttInputFileContent.InputLine,"|").
                      
-                    FIND FIRST Customer NO-LOCK WHERE Customer.Brand = gcBrand AND Customer.OrgId = ENTRY(2,lcCustData,"-") NO-ERROR.
+                    FIND FIRST Customer NO-LOCK WHERE Customer.Brand = Syst.Var:gcBrand AND Customer.OrgId = ENTRY(2,lcCustData,"-") NO-ERROR.
                     IF AVAIL Customer THEN 
                     DO:
                        ttInputFileContent.CustIDType = Customer.CustIdType.
@@ -270,7 +270,7 @@ PROCEDURE pReProcessTT:
                     lcOfferId = ENTRY(6,ttInputFileContent.InputLine,"|").                  
                     IF lcOfferId > "" THEN 
                     DO:  /* Offer ID is not mandatory */
-                        IF NOT CAN-FIND(FIRST Offer WHERE Offer.Brand = gcBrand AND Offer.Offer = lcOfferId NO-LOCK) THEN 
+                        IF NOT CAN-FIND(FIRST Offer WHERE Offer.Brand = Syst.Var:gcBrand AND Offer.Offer = lcOfferId NO-LOCK) THEN 
                         DO:
                             lcOfferId = "".
                             fLogEntry(ttInputFileContent.InputLine, "Invalid OfferId").
@@ -665,7 +665,7 @@ PROCEDURE pInitialize:
         lcBONOContracts       = fCParamC("BONO_CONTRACTS").    
 
     FOR FIRST InvText NO-LOCK WHERE
-              InvText.Brand     = gcBrand                AND
+              InvText.Brand     = Syst.Var:gcBrand                AND
               InvText.Target    = "EMAIL"                AND
               InvText.KeyValue  = "EmailConfTestingTool" AND
               InvText.Language  = 5                      AND 

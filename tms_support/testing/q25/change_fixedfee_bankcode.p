@@ -1,6 +1,5 @@
 
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 
 def var liFFNum as int no-undo.
 def var lcTFBank as char no-undo.
@@ -25,7 +24,7 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
          OrderCustomer.OrderId = Order.OrderId AND
          OrderCustomer.RowType = 1 BY OrderTimeStamp.TimeStamp:
 
-   fTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
+   Func.Common:mTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
 
    FIND FIRST FMItem NO-LOCK WHERE
               FMItem.Brand     = "1" AND

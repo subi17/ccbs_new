@@ -13,12 +13,11 @@
 {Syst/commali.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'DumpHPD'}
-{Func/timestamp.i}
 
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -46,8 +45,9 @@ FORM
     DumpHPD.FinalTime         COLON 20
     DumpHPD.UnitsToDump       COLON 20
     DumpHPD.UnitType          COLON 20
-WITH  OVERLAY ROW 2 centered COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) " HPD RELATED SETTINGS " SIDE-LABELS FRAME fHPD.
+    DumpHPD.CoolTime          COLON 20
+WITH  OVERLAY ROW 2 centered COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " HPD RELATED SETTINGS " SIDE-LABELS FRAME fHPD.
 
 FIND DumpFile NO-LOCK WHERE DumpFile.DumpID = iiDumpID NO-ERROR.
 
@@ -84,23 +84,24 @@ REPEAT WITH FRAME fHPD:
        DumpHPD.StartTime
        DumpHPD.FinalTime
        DumpHPD.UnitsToDump 
-       DumpHPD.UnitType 
+       DumpHPD.UnitType
+       DumpHPD.CoolTime
    WITH FRAME fHPD.
    
    ASSIGN 
-      ufk    = 0
-      ufk[1] = 7    WHEN lcRight = "RW"
-      ufk[8] = 8
-      ehto   = 0.
+      Syst.Var:ufk    = 0
+      Syst.Var:ufk[1] = 7    WHEN lcRight = "RW"
+      Syst.Var:ufk[8] = 8
+      Syst.Var:ehto   = 0.
          
    RUN Syst/ufkey.p.
 
-   IF toimi = 1
+   IF Syst.Var:toimi = 1
    THEN REPEAT WITH FRAME fHPD ON ENDKEY UNDO, LEAVE:
 
       FIND CURRENT DumpHPD EXCLUSIVE-LOCK.
 
-      ehto = 9.
+      Syst.Var:ehto = 9.
       RUN Syst/ufkey.p.
 
       UPDATE
@@ -109,7 +110,8 @@ REPEAT WITH FRAME fHPD:
          DumpHPD.StartTime
          DumpHPD.FinalTime
          DumpHPD.UnitsToDump 
-         DumpHPD.UnitType 
+         DumpHPD.UnitType
+         DumpHPD.CoolTime
       WITH FRAME fHPD EDITING:
  
          READKEY.
@@ -125,13 +127,13 @@ REPEAT WITH FRAME fHPD:
             DumpHPD.UnitType = siirto.
             DISPLAY DumpHPD.UnitType WITH FRAME fHPD.
 
-            ehto = 9.
+            Syst.Var:ehto = 9.
             RUN Syst/ufkey.p.
 
             NEXT.
          END.
 
-         ELSE IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN
+         ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN
          DO WITH FRAME fHPD:
 
             IF FRAME-FIELD = "UnitType" THEN DO:
@@ -168,7 +170,7 @@ REPEAT WITH FRAME fHPD:
       LEAVE.
    END.
    
-   ELSE IF toimi = 8 THEN LEAVE.
+   ELSE IF Syst.Var:toimi = 8 THEN LEAVE.
 
 END.
 

@@ -30,7 +30,7 @@
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Func/fbankdata.i}
 {Func/fctchange.i}
 {Func/fmakemsreq.i}
@@ -94,7 +94,7 @@ IF NOT fchkTMSCodeValues(ghAuthLog::UserName,lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
 FIND FIRST NewCliType WHERE
-           NewCLIType.Brand = gcBrand AND
+           NewCLIType.Brand = Syst.Var:gcBrand AND
            NewCLIType.CLIType = pcCliType NO-LOCK.
 IF NOT AVAIL NewCLIType THEN
    RETURN appl_err("Unknown CLIType specified").
@@ -102,11 +102,11 @@ IF NOT AVAIL NewCLIType THEN
 IF LOOKUP(pcCliType,lcBundleCLITypes) > 0 AND pcDataBundleId = "" THEN
    RETURN appl_err("Subscription based bundle is missing").
 
-fSplitTS(pdActivation,OUTPUT ldaActDate,OUTPUT liActTime).
+Func.Common:mSplitTS(pdActivation,OUTPUT ldaActDate,OUTPUT liActTime).
 
-ASSIGN pdActivation = fMake2Dt(ldaActDate, 0).
+ASSIGN pdActivation = Func.Common:mMake2DT(ldaActDate, 0).
 
-katun = "NewtonAd". /* check correct barring */
+Syst.Var:katun = "NewtonAd". /* check correct barring */
 
 IF fValidateMobTypeCh(
    MobSub.Msseq,
@@ -143,7 +143,7 @@ IF lcError > "" THEN DO:
    RETURN appl_err(lcError).
 END.
 
-katun = fgetAppUserId(INPUT lcApplicationId, 
+Syst.Var:katun = fgetAppUserId(INPUT lcApplicationId, 
                       INPUT lcAppEndUserId).
                       
 liRequest = fCTChangeRequest(MobSub.msseq,
@@ -171,11 +171,11 @@ END.
 CREATE Memo.
 ASSIGN
       Memo.CreStamp  = {&nowTS}
-      Memo.Brand     = gcBrand 
+      Memo.Brand     = Syst.Var:gcBrand 
       Memo.HostTable = "MobSub" 
       Memo.KeyValue  = STRING(MobSub.MsSeq) 
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = katun 
+      Memo.CreUser   = Syst.Var:katun 
       Memo.MemoTitle = "Subscription Type Change"
       Memo.MemoText  = "External API subscription type change " + 
                        MobSub.CLIType + " --> " + pcCliType
@@ -191,5 +191,4 @@ FINALLY:
    /* Store the transaction id */
    ghAuthLog::TransactionId = pcTransId.
 
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

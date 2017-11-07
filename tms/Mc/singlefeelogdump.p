@@ -20,7 +20,6 @@ At TRACK side data between eventlog dump and singlefee dump is merged to be used
 */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Syst/dumpfile_run.i}

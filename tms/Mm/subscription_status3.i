@@ -75,7 +75,7 @@ PROCEDURE subscription_status2.
          forced    = false.
 
       FOR EACH Invoice NO-LOCK WHERE 
-               Invoice.Brand    = gcBrand              AND 
+               Invoice.Brand    = Syst.Var:gcBrand              AND 
                Invoice.CustNum  = Customer.CustNum     AND 
                Invoice.dueDate <= today - moboverdue   AND 
                Invoice.Invtype  = 1                    AND 
@@ -156,7 +156,7 @@ PROCEDURE subscription_status2.
 
 
       FOR EACH Invoice NO-LOCK WHERE 
-               Invoice.Brand    = gcBrand              AND 
+               Invoice.Brand    = Syst.Var:gcBrand              AND 
                Invoice.CustNum  = Customer.CustNum     AND 
                Invoice.Invtype  = 1                    AND 
                Invoice.CrInvNum = 0 .

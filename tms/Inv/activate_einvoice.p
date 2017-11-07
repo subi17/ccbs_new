@@ -9,8 +9,6 @@
 
 {Syst/commali.i}
 {Syst/tmsconst.i}
-{Func/date.i}
-{Func/timestamp.i}
 {Func/email.i}
 {Func/femailinvoice.i}
 {Func/ftransdir.i}

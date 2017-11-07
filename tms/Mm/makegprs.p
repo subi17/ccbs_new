@@ -10,7 +10,6 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/msisdn.i}
 {Func/sog.i}
 {Func/tmsparam3.i}
@@ -47,7 +46,7 @@ IF iSOLOG > 0 THEN DO:
                xsolog.ActivationTS 
                xsolog.solog  to csolog.
    ASSIGN
-   csolog.ActivationTS = fmakeTS() + 0.00002
+   csolog.ActivationTS = Func.Common:mMakeTS() + 0.00002
    csolog.CreatedTS    = csolog.ActivationTS
    csolog.stat      = 0
    csolog.response     = ""
@@ -65,7 +64,7 @@ IF iSOLOG > 0 THEN DO:
 
 
    IF csolog.TimeSlotTMS = 0 THEN DO:
-      csolog.timeslottms = fmakets().
+      csolog.timeslottms = Func.Common:mMakeTS().
       MESSAGE 
       "Service order request #" string(csolog.solog) 
       " has been saved to the system."
@@ -83,7 +82,7 @@ IF iSOLOG > 0 THEN DO:
    " has been saved to the system."
                                                                     SKIP(1)
    "This activation request is scheduled and will be sent to "         SKIP
-   "activation server " fTS2HMS(csolog.TimeSlotTMS) "."                           VIEW-AS ALERT-BOX TITLE "Service Order Request".  
+   "activation server " Func.Common:mTS2HMS(csolog.TimeSlotTMS) "."                           VIEW-AS ALERT-BOX TITLE "Service Order Request".  
 END.   
 
 

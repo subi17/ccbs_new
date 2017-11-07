@@ -11,7 +11,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/multitenantfunc.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
@@ -28,10 +27,10 @@ DEFINE STREAM sDump.
 OUTPUT STREAM sDump TO VALUE(icFile).
 
 FOR EACH PrePaidRequest NO-LOCK WHERE
-         PrePaidRequest.Brand  = gcBrand  AND
+         PrePaidRequest.Brand  = Syst.Var:gcBrand  AND
          PrePaidRequest.Source = "CC",
    FIRST Payment NO-LOCK WHERE
-         Payment.Brand  = gcBrand AND
+         Payment.Brand  = Syst.Var:gcBrand AND
          Payment.RefNum = STRING(PrePaidRequest.PPRequest):
    
    PUT STREAM sDump UNFORMATTED
@@ -39,7 +38,7 @@ FOR EACH PrePaidRequest NO-LOCK WHERE
       PrePaidRequest.UserCode CHR(9)
       PrePaidRequest.TopUpAmt CHR(9)
       ""                      CHR(9)
-      fTS2HMS(PrePaidRequest.TSRequest) CHR(10).
+      Func.Common:mTS2HMS(PrePaidRequest.TSRequest) CHR(10).
    oiEvents = oiEvents + 1.
 END.
 
