@@ -94,7 +94,7 @@ FUNCTION fTicketCheck RETURN LOG
       WHEN "MSOWNER" THEN DO:
       
          FIND FIRST msowner WHERE
-                    msowner.brand    EQ gcBrand        AND
+                    msowner.brand    EQ Syst.Var:gcBrand        AND
                     msowner.CLI       =  icValue       AND
                     msowner.tsend    >= CallTimeStamp  AND
                     msowner.tsbegin  <= CallTimeStamp NO-LOCK NO-ERROR.
@@ -113,7 +113,7 @@ FUNCTION fTicketCheck RETURN LOG
       WHEN "MSOWNER_FIXED" THEN DO:
 
          FIND FIRST msowner WHERE
-                    msowner.brand       EQ gcBrand        AND
+                    msowner.brand       EQ Syst.Var:gcBrand        AND
                     msowner.FixedNumber EQ icValue        AND
                     msowner.tsend       GE CallTimeStamp  AND
                     msowner.tsbegin     LE CallTimeStamp NO-LOCK NO-ERROR.
@@ -122,7 +122,7 @@ FUNCTION fTicketCheck RETURN LOG
             oiValue = {&CDR_ERROR_MSISDN_NOT_ACTIVE_FIXED}.
 
             FIND FIRST Msowner WHERE
-                       Msowner.brand EQ gcBrand AND
+                       Msowner.brand EQ Syst.Var:gcBrand AND
                        Msowner.fixednumber = icValue NO-LOCK NO-ERROR.
 
             IF NOT AVAIL msowner THEN 

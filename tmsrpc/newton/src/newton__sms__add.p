@@ -10,7 +10,6 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-{Func/date.i}
 
 /* Input parameters */
 DEF VAR pcTenant  AS CHAR    NO-UNDO.
@@ -49,7 +48,7 @@ IF pcCLi BEGINS "+" THEN pcCLi = REPLACE(pcCLI, "+","00").
 
 IF lcOrig EQ "sms report" THEN liCreditType = 25 . 
 
-ldeQuarantine = fSecOffSet(fMakeTS(), -10).
+ldeQuarantine = Func.Common:mSecOffSet(Func.Common:mMakeTS(), -10).
 
 FIND FIRST CallAlarm WHERE
            CallAlarm.CLI = pcCLI AND

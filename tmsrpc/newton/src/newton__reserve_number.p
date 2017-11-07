@@ -12,7 +12,6 @@ DEF VAR pcFor     AS CHAR NO-UNDO.
 DEF VAR plReserve AS LOG  NO-UNDO.
 
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 
 IF validate_request(param_toplevel_id, "string,string,boolean") EQ ? THEN RETURN.
 
@@ -37,7 +36,7 @@ IF NOT AVAIL MSISDN OR (plReserve AND msisdn.LockedTo > {&nowts}) THEN DO:
    RETURN appl_err(SUBST("Number &1 not found or not free", pcCli)).
 END.
 
-msisdn.LockedTo = fOffSet({&nowts},1). /* reserve number for 1 hour */
+msisdn.LockedTo = Func.Common:mOffSet({&nowts},1). /* reserve number for 1 hour */
 RELEASE msisdn.
 
 add_boolean(response_toplevel_id, "", true).

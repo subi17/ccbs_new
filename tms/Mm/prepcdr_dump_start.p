@@ -58,7 +58,7 @@ PROCEDURE pStartDump:
    /* connect to correct cdr dbs */
    fInitializeConnectTables("PrepCDR,McdrDtl2","").
 
-   RUN pDirectConnect2Dbs(gcBrand,
+   RUN pDirectConnect2Dbs(Syst.Var:gcBrand,
                           "",
                           idaConnectDate,
                           idaConnectDate).

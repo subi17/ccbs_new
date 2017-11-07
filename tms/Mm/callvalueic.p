@@ -48,7 +48,7 @@ form
 "    Not Billed " lkm1 "calls, EUR" summa1 "/" summa1a "w/VAT " SKIP
 "    Billed     " lkm2 "calls, EUR" summa2 "/" summa2a "w/VAT " SKIP(1)
 WITH
-   row 5 col 3 overlay no-labels title " " + ynimi +
+   row 5 col 3 overlay no-labels title " " + Syst.Var:ynimi +
    " Total value of calls, inv.cust. " + string(Customer.CustNum) + " " 
    FRAME rajat.
 
@@ -72,7 +72,7 @@ VIEW FRAME rajat.
 rajat:
 repeat WITH FRAME rajat:
 
-   ehto = 9. 
+   Syst.Var:ehto = 9. 
    RUN Syst/ufkey.p.
 
    UPDATE pvm1 
@@ -81,11 +81,11 @@ repeat WITH FRAME rajat:
 
    toimi:
    repeat WITH FRAME toimi:
-      ASSIGN ufk = 0 ehto = 0 ufk[1] = 132 ufk[5] = 63 ufk[8] = 8.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ehto = 0 Syst.Var:ufk[1] = 132 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT  rajat.
-      IF toimi = 8 THEN LEAVE rajat.
-      IF toimi = 5 THEN LEAVE toimi.
+      IF Syst.Var:toimi = 1 THEN NEXT  rajat.
+      IF Syst.Var:toimi = 8 THEN LEAVE rajat.
+      IF Syst.Var:toimi = 5 THEN LEAVE toimi.
    END.
 
    ASSIGN lkm1 = 0 lkm2 = 0 summa1 = 0 summa2 = 0.
@@ -100,8 +100,8 @@ repeat WITH FRAME rajat:
    EMPTY TEMP-TABLE ttCall.
     
    fMobCDRCollect(INPUT "post",
-                  INPUT gcBrand,
-                  INPUT katun,
+                  INPUT Syst.Var:gcBrand,
+                  INPUT Syst.Var:katun,
                   INPUT pvm1,
                   INPUT pvm2,
                   INPUT iiInvCust,

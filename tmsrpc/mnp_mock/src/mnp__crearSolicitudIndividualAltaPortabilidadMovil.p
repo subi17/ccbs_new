@@ -8,7 +8,6 @@
            dss_limit;double
 */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-{Func/timestamp.i}
 
 /* Input parameters */
 DEF VAR pcstruct            AS CHAR NO-UNDO.
@@ -29,7 +28,7 @@ ntanaCambio,MSISDN,ICCID,sourceApplication").
 IF LOOKUP("fechaVentanaCambio", lcValidateFields) > 0 THEN
    ldePortingTime = get_timestamp(lcXMLStruct, "fechaVentanaCambio").
 ELSE
-   ldePortingTime = fMake2Dt(TODAY + 3,7200).
+   ldePortingTime = Func.Common:mMake2DT(TODAY + 3,7200).
 
 REPEAT:
    lcvalue = "005D0" + STRING(RANDOM(1,100000000),"999999999") + 

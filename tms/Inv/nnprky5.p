@@ -37,8 +37,8 @@ form
 
    skip(13)
    WITH ROW 1 side-labels width 80
-        title " " + ynimi + " FREEPHONECALL REPORT " +
-        string(pvm,"99-99-99") + " "
+        title " " + Syst.Var:ynimi + " FREEPHONECALL REPORT " +
+        string(TODAY,"99-99-99") + " "
         FRAME valinta.
 
 form
@@ -70,17 +70,17 @@ toimi:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.Var:ufk[1]= 132 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= 63 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
       READKEY.
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"1,f1") > 0 THEN DO:
-         ehto = 9. RUN Syst/ufkey.p.
+      if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          UPDATE CustNum1
              CustNum2 validate(input CustNum2 >= input CustNum1, "Invalid order !")
                 pvm1
@@ -101,13 +101,13 @@ toimi:
          ufkey = TRUE.      
          NEXT toimi.
       END.
-      else if lookup(nap,"5,f5") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"5,f5") > 0 THEN DO:
          LEAVE toimi.
       END.
-      else if lookup(nap,"8,f8") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"8,f8") > 0 THEN DO:
          RETURN.
       END.
-   END. /* toimi */
+   END. /* Syst.Var:toimi */
 
 /* Avataan striimi */
 ASSIGN tila = TRUE.

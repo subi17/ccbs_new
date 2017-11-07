@@ -12,7 +12,7 @@ DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF VAR llOk AS LOG NO-UNDO.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    
    {Func/lib/eventlog.i}
       
@@ -22,7 +22,7 @@ IF llDoEvent THEN DO:
 END.               
 
 FIND FIRST Order WHERE 
-           Order.Brand   = gcBrand AND 
+           Order.Brand   = Syst.Var:gcBrand AND 
            Order.OrderID = iiOrder NO-LOCK NO-ERROR.
 
 IF not avail order THEN DO:

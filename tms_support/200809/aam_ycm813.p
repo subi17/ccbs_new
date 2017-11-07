@@ -1,7 +1,7 @@
 {Syst/testpaa.i}
-katun = "ari".
+Syst.Var:katun = "ari".
 
-&GLOBAL-DEFINE STAR_EVENT_USER katun
+&GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
 {Func/lib/eventlog.i}
 

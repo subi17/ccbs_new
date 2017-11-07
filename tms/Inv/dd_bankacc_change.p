@@ -9,13 +9,12 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/ftransdir.i}
 {Func/fbankdata.i}
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
@@ -69,12 +68,12 @@ FUNCTION fError RETURNS LOGIC
    DO TRANS:
       /* save to db for reporting */
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
              ErrorLog.ActionID  = "DDBankChg"
              ErrorLog.TableName = "Customer"
              ErrorLog.KeyValue  = STRING(liCustNum)
              ErrorLog.ActionTS  = ldCurrStamp
-             ErrorLog.UserCode  = katun
+             ErrorLog.UserCode  = Syst.Var:katun
              ErrorLog.ErrorMsg  = icMessage + CHR(10) +
                                   "New bank account: " + lcNewBank.
    END.
@@ -100,7 +99,7 @@ PROCEDURE pInitialize:
    FIND FIRST Company NO-LOCK.
    ASSIGN 
       lcCompanyID = REPLACE(Company.CompanyID,"-","")
-      ldCurrStamp = fMakeTS()
+      ldCurrStamp = Func.Common:mMakeTS()
       oiRead      = 0
       lcLogFile   = fCParamC("DDBankChgLog")
       lcTransDir  = fCParamC("DDBankChgLogTrans")
@@ -251,7 +250,7 @@ PROCEDURE pFinalize:
    DO TRANS:
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = gcBrand   
+         ActionLog.Brand        = Syst.Var:gcBrand   
          ActionLog.TableName    = "Customer"  
          ActionLog.KeyValue     = "CSB19" 
          ActionLog.ActionID     = "DDBankChg"
@@ -267,8 +266,8 @@ PROCEDURE pFinalize:
                                         " errors occurred"
                                    ELSE "")
          ActionLog.ActionStatus = 3
-         ActionLog.UserCode     = katun.
-         ActionLog.ActionTS     = fMakeTS().
+         ActionLog.UserCode     = Syst.Var:katun.
+         ActionLog.ActionTS     = Func.Common:mMakeTS().
    END.
 
    fCleanEventObjects().
