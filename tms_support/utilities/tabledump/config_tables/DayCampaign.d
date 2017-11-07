@@ -34,6 +34,7 @@
 "CONTF55" 01/12/11 0 31/12/49 "" 0 "" "" "La Mega Plana 100" 0 0 "1" "1" 1 1 0 0 "CONTF55" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1 1 0
 "CONTF8" 14/04/15 1 31/12/49 "FLATMF8" 0 "" "" "La Plana 1,2 GB" 0 0 "1" "1" 1 1 0 0 "CONTF8MF" "" "" 1 1 0 yes 1 0 0 1 "DATA200_UPSELL" 1 1 0
 "CONTFF2" 01/10/13 0 31/12/49 "" 0 "" "" "FUSIÓN PLANA A LO YOIGO" 0 0 "1" "1" 1 1 0 0 "CONTFF2MF" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1 1 0
+"CONTFH1000" 11/10/17 0 31/12/49 "CONTFH1000MF" 0 "" "" "La Combinada Azul 1Gbps" 0 0 "1" "1" 1 1 0 0 "CONTFH1000MF" "" "" 0 1 0 yes 1 0 0 1 "" 0 1 0
 "CONTFH300" 27/10/16 0 31/12/49 "CONTFH300MF" 0 "" "" "La Combinada 300" 0 0 "1" "1" 1 1 0 0 "CONTFH300MF" "" "" 0 1 0 yes 1 0 0 1 "" 0 0 0
 "CONTFH50" 27/10/16 0 31/12/49 "CONTFH50" 0 "" "" "La Combinada 50" 0 0 "1" "1" 1 1 0 0 "CONTFH50MF" "" "" 0 1 0 yes 1 0 0 1 "" 0 0 0
 "CONTM" 01/12/12 0 31/12/49 "CONTMMF" 0 "" "" "Contrato M" 0 0 "1" "7" 4 4 0 0 "CONTMMF" "" "" 0 1 0 yes 1 0 0 1 "" 0 1 0
@@ -66,6 +67,7 @@
 "DSS2_UPSELL" 01/09/13 4 31/12/49 "DSS2" 0 "" "" "Internet compartido - Ampliación 1,5 GB" 93 0 "1" "6" 1 2 1 0 "DSS2MFUPS" "" "" 3 1 0 yes 100 0 0 1 "" 0 1 0
 "DSS_FLEX_500MB_UPSELL" 05/07/17 4 31/12/49 "" 0 "" "" "500MB Flex upsell" 93 0 "1" "6" 1 2 1 0 "" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0
 "DSS_FLEX_5GB_UPSELL" 05/07/17 4 31/12/49 "" 0 "" "" "DSS 5GB Flex Upsell" 93 0 "1" "6" 1 2 1 0 "" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0
+"DSS_FLEX_UPSELL" 01/11/17 4 31/12/49 "" 0 "" "" "DSS FLEX upsell" 93 0 "1" "6" 1 2 1 0 "FLEX_MFUPS" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0
 "DSS_UPSELL" 23/11/11 4 31/12/49 "DSS" 0 "" "" "Internet compartido - Ampliación 1,5 GB" 93 0 "1" "6" 1 2 1 0 "DSSMFUPS" "" "" 3 1 0 yes 100 0 0 1 "" 0 1 0
 "DSS_UPSELL_UPGRADE" 23/03/12 4 31/12/49 "UPGRADEDATA" 0 "" "" "Upsell Upgrade DSS customer" 93 0 "1" "6" 1 2 1 0 "" "" "" 3 1 0 yes 100 0 0 2 "" 0 1 0
 "DUB" 31/01/11 4 31/12/49 "DUB" 0 "" "" "Data Usage Bundle 500 MB" 93 0 "1" "4" 4 1 0 0 "" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1 1 0
@@ -78,6 +80,8 @@
 "FLEX_UPSELL" 01/03/17 4 31/12/49 "" 0 "" "" "FLEX upsell" 93 0 "1" "6" 1 2 1 0 "FLEX_MFUPS" "" "" 0 1 0 yes 100 0 0 1 "" 0 1 0
 "FREE100MINUTES" 01/06/16 0 31/12/49 "" 0 "" "" "Promo 100 min/mes gratis" 0 0 "1" "1" 1 2 3 0 "" "" "" 3 1 0 yes 1 0 0 1 "" 0 1 0
 "FTERM12-100" 27/10/16 0 31/12/49 "" 0 "" "" "FTERM12 periodical contract" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD" 2 1 2 yes 1 0 0 1 "" 0 0 0
+"FTERM12-177" 31/10/17 0 31/12/17 "" 0 "" "" "FTERM12-177 fixed line permanency" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD177" 0 1 2 yes 1 0 0 1 "" 0 0 0
+"FTERM12-233" 31/10/17 0 31/12/49 "" 0 "" "" "FTERM12-233 fixed line permanency" 0 0 "1" "3" 1 3 12 0 "" "" "FTERMPERIOD233" 2 1 2 yes 1 0 0 1 "" 0 0 0
 "FTERM8-100" 11/09/17 0 31/12/49 "" 0 "" "" "FTERM8 periodical contract" 0 0 "1" "3" 1 3 8 0 "" "" "FTERMPERIOD" 2 1 2 yes 1 0 0 1 "" 0 0 0
 "GPRS" 01/12/06 6 31/12/54 "14100001" 1.653 "1" "" "GPRS maximum charge per day" 93 1.653 "1" "2" 2 1 0 0 "" "" "" 1 1 0 yes 1 0 0 1 "" 0 1 0
 "HSPA_ROAM_EU" 10/10/12 4 31/12/49 "14104019" 0 "" "" "HSPA Roaming EU" 90 0 "1" "8" 1 2 0 0 "" "" "" 1 1 0 yes 1 0 0 1 "" 0 0 0

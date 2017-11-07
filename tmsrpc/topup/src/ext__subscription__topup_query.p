@@ -18,7 +18,6 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-DEF VAR gcBrand AS CHARACTER INIT "1".
 
 /* Input parameters */
 DEF VAR pcCLI     AS CHAR NO-UNDO.
@@ -27,7 +26,7 @@ DEF VAR top_struct AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
 
-pcCLI    = get_string(param_toplevel_id, "1").
+pcCLI    = get_string(param_toplevel_id, "0").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 

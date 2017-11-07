@@ -15,7 +15,6 @@
   Version ......: M15
   ---------------------------------------------------------------------- */
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/ffeecont.i}
 {Func/service.i}
 

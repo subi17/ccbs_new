@@ -92,8 +92,8 @@ IF NOT AVAIL FMItem THEN DO:
 END.
 
 {Syst/commpaa.i}
-gcBrand = "1".
-katun = pcUserName.
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = pcUserName.
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
@@ -143,5 +143,4 @@ RELEASE FeeModel.
 add_struct(response_toplevel_id, "").
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

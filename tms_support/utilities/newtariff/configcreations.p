@@ -10,8 +10,8 @@
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 /* ***************************  Definitions  ************************** */
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Func/ftransdir.i}
@@ -51,6 +51,18 @@ FUNCTION fTMSCValue RETURNS CHARACTER
     ELSE RETURN "".
 
 END FUNCTION.  
+
+FUNCTION fGetNextMXSeq RETURNS INTEGER ():
+
+   DEFINE BUFFER Matrix FOR Matrix.
+
+   FOR EACH Matrix NO-LOCK BY Matrix.MXSeq DESCENDING:
+     RETURN Matrix.MXSeq + 1.
+   END.
+
+   RETURN 1.
+
+END FUNCTION.
 
 FUNCTION fGetNextMatrixPriority RETURNS INTEGER 
    (icKey AS CHARACTER):
@@ -203,10 +215,10 @@ PROCEDURE pRatePlan:
     DEFINE BUFFER bPriceList           FOR PriceList.
     DEFINE BUFFER bTariff              FOR Tariff.
 
-    FIND FIRST bf_RatePlanCopyFrom WHERE bf_RatePlanCopyFrom.Brand = gcBrand AND bf_RatePlanCopyFrom.RatePlan = icReferenceRatePlan NO-LOCK NO-ERROR.
+    FIND FIRST bf_RatePlanCopyFrom WHERE bf_RatePlanCopyFrom.Brand = Syst.Var:gcBrand AND bf_RatePlanCopyFrom.RatePlan = icReferenceRatePlan NO-LOCK NO-ERROR.
     IF AVAIL bf_RatePlanCopyFrom THEN 
     DO:
-        FIND FIRST RatePlan WHERE RatePlan.Brand = gcBrand AND RatePlan.RatePlan = icRatePlan NO-LOCK NO-ERROR.
+        FIND FIRST RatePlan WHERE RatePlan.Brand = Syst.Var:gcBrand AND RatePlan.RatePlan = icRatePlan NO-LOCK NO-ERROR.
         IF NOT AVAIL RatePlan THEN 
         DO:
             CREATE RatePlan.
@@ -215,7 +227,7 @@ PROCEDURE pRatePlan:
                     RatePlan.RatePlan = icRatePlan
                     RatePlan.RPName   = icRPName.        
                 
-            FOR EACH bf_PListConfCopyFrom WHERE bf_PListConfCopyFrom.Brand    = gcBrand                      AND 
+            FOR EACH bf_PListConfCopyFrom WHERE bf_PListConfCopyFrom.Brand    = Syst.Var:gcBrand                      AND 
                                                 bf_PListConfCopyFrom.RatePlan = bf_RatePlanCopyFrom.RatePlan AND
                                                 bf_PListConfCopyFrom.dFrom   <= TODAY                        AND
                                                 bf_PListConfCopyFrom.dTo     >= TODAY                        NO-LOCK:
@@ -223,7 +235,7 @@ PROCEDURE pRatePlan:
                 IF icRatePlanAction = "New" AND (bf_PListConfCopyFrom.RatePlan EQ bf_PListConfCopyFrom.PriceList)  THEN 
                 DO:
                     /* A copy of existing rateplan's pricelist and related tariffs is created */
-                    FIND FIRST PriceList WHERE PriceList.Brand = gcBrand AND PriceList.PriceList = bf_PListConfCopyFrom.PriceList NO-LOCK NO-ERROR.
+                    FIND FIRST PriceList WHERE PriceList.Brand = Syst.Var:gcBrand AND PriceList.PriceList = bf_PListConfCopyFrom.PriceList NO-LOCK NO-ERROR.
                     IF AVAIL PriceList THEN 
                     DO:
                         CREATE bPriceList.
@@ -232,7 +244,7 @@ PROCEDURE pRatePlan:
                                 bPriceList.PriceList = RatePlan.RatePlan
                                 bPriceList.PLName    = RatePlan.RPName.
 
-                        FOR EACH Tariff WHERE Tariff.Brand = gcBrand AND Tariff.PriceList = PriceList.PriceList NO-LOCK:                     
+                        FOR EACH Tariff WHERE Tariff.Brand = Syst.Var:gcBrand AND Tariff.PriceList = PriceList.PriceList NO-LOCK:                     
                             CREATE bTariff.
                             BUFFER-COPY Tariff EXCEPT TariffNum PriceList ValidFrom TO bTariff
                                 ASSIGN 
@@ -269,7 +281,7 @@ END PROCEDURE.
 PROCEDURE pCustomRates:    
     DEFINE PARAMETER BUFFER ttTariff FOR ttTariff.    
 
-    FIND FIRST Tariff WHERE Tariff.Brand      = gcBrand            AND 
+    FIND FIRST Tariff WHERE Tariff.Brand      = Syst.Var:gcBrand            AND 
                             Tariff.PriceList  = ttTariff.PriceList AND 
                             Tariff.CCN        = INT(ttTariff.CCN)  AND 
                             Tariff.BDest      = ttTariff.BDest     AND 
@@ -279,7 +291,7 @@ PROCEDURE pCustomRates:
     DO:
         CREATE Tariff.
         ASSIGN 
-            Tariff.Brand          = gcBrand
+            Tariff.Brand          = Syst.Var:gcBrand
             Tariff.TariffNum      = NEXT-VALUE(Tariff)
             Tariff.PriceList      = ttTariff.PriceList
             Tariff.CCN            = INT(ttTariff.CCN)
@@ -316,11 +328,16 @@ END PROCEDURE.
 PROCEDURE pCLIType:
    DEFINE PARAMETER BUFFER ttCliType FOR ttCliType.
    
-   DEFINE VARIABLE liFinalBT  AS INTEGER   NO-UNDO.
-   DEFINE VARIABLE liFinalCR  AS INTEGER   NO-UNDO.
-   DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE liFinalBT   AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE liFinalCR   AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lcRatePlan  AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcActionKey AS CHARACTER NO-UNDO.
 
-   IF NOT CAN-FIND(FIRST CLIType WHERE CLIType.Brand = gcBrand AND CLIType.CLIType = ttCliType.CliType) THEN 
+   DEFINE BUFFER bf_RequestAction     FOR RequestAction.
+   DEFINE BUFFER bf_RequestActionRule FOR RequestActionRule.
+   DEFINE BUFFER bf_MxItem            FOR MxItem.
+
+   IF NOT CAN-FIND(FIRST CLIType WHERE CLIType.Brand = Syst.Var:gcBrand AND CLIType.CLIType = ttCliType.CliType) THEN 
    DO:     
       /* Find highest value of billing target and contrtype */    
       FOR EACH CLIType NO-LOCK:
@@ -336,7 +353,7 @@ PROCEDURE pCLIType:
          Else, already available value has to be incremented by 1 */
       IF ttCliType.TariffBundle NE "" THEN 
       DO:   
-         FIND FIRST CLIType WHERE CLIType.Brand = gcBrand AND CLIType.CLIType = ttCLIType.ParentTariff NO-LOCK NO-ERROR.                
+         FIND FIRST CLIType WHERE CLIType.Brand = Syst.Var:gcBrand AND CLIType.CLIType = ttCLIType.ParentTariff NO-LOCK NO-ERROR.                
          IF AVAILABLE CLIType THEN
             ASSIGN lcRatePlan = CLIType.PricePlan
                    liFinalBT  = CLIType.BillTarget.               
@@ -344,10 +361,11 @@ PROCEDURE pCLIType:
        
       CREATE CLIType.
       ASSIGN 
-         CLIType.Brand             = gcBrand
+         CLIType.Brand             = Syst.Var:gcBrand
          CLIType.CLIType           = ttCliType.CliType
          CLIType.CLIName           = ttCliType.CliName
          CLIType.BaseBundle        = ttCliType.BaseBundle
+         CliType.FixedBundle       = ttCliType.FixedLineBaseBundle
          CLIType.PayType           = ttCliType.PayType
          CLIType.UsageType         = ttCliType.UsageType
          CLIType.PricePlan         = (IF lcRatePlan NE "" THEN 
@@ -356,7 +374,7 @@ PROCEDURE pCLIType:
                                           ttCliType.RatePlan 
                                       ELSE 
                                           REPLACE(ttCliType.CliType,"CONT","CONTRATO")) 
-         CLIType.ServicePack       = (IF ttCliType.PayType EQ 1 THEN "11" ELSE "12")
+         CLIType.ServicePack       = (IF ttCliType.PayType EQ 1 THEN "41" ELSE "42")
          ClIType.ServiceClass      = ttCliType.ServiceClass
          CLIType.BillTarget        = (liFinalBT + 1) 
          CLIType.ContrType         = (IF CLIType.PayType EQ 1 THEN (liFinalCR + 1) ELSE 1)
@@ -375,11 +393,28 @@ PROCEDURE pCLIType:
          RUN pCTServPac(ttCliType.CliType, ttCliType.CopyServicesFromCliType).      
       
       IF ttCliType.AllowedBundles > "" THEN
-      DO:    
+      DO:
           RUN pMatrix(ttCliType.CliType, 
                       ((IF ttCliType.BaseBundle          > "" THEN (ttCliType.BaseBundle          + ",") ELSE "") + 
                        (IF ttCliType.FixedLineBaseBundle > "" THEN (ttCliType.FixedLineBaseBundle + ",") ELSE "") + ttCliType.AllowedBundles)).
 
+          /* Matrix for additional lines */
+          FOR EACH MxItem WHERE MxItem.MxSeq   > 0                                 AND 
+                                MxItem.MxName  = "SubsTypeFrom"                    AND 
+                                MxItem.MxValue = ttCliType.CopyServicesFromCliType NO-LOCK:
+
+              IF NOT CAN-FIND(FIRST bf_MxItem WHERE bf_MxItem.MxSeq   = MxItem.MXSeq      AND 
+                                                    bf_MxItem.MxName  = MxItem.MxName     AND 
+                                                    bf_MxItem.MxValue = ttCliType.CliType NO-LOCK) THEN
+
+              DO:      
+                 CREATE bf_MXItem.
+                 ASSIGN
+                    bf_MXItem.MxSeq   = MxItem.MXSeq
+                    bf_MXItem.MxValue = ttCliType.CliType
+                    bf_MXItem.MxName  = MxItem.MxName.   
+              END.   
+          END.
       END.
 
       IF ttCliType.TariffBundle = "" THEN    
@@ -390,13 +425,66 @@ PROCEDURE pCLIType:
                          ttCliType.AllowedBundles,
                          (ttCliType.PayType = 2)).         
 
-      IF ttCliType.BundleType = False THEN     
+      IF ttCliType.BundleType = False THEN
+      DO:
          RUN pRequestAction(ttCliType.CliType, 
                             (ttCliType.PayType = 1),
                             ttCliType.BaseBundle, 
                             ttCliType.FixedLineBaseBundle, 
                             ttCliType.BundlesForActivateOnSTC, 
-                            ttCliType.ServicesForReCreateOnSTC).      
+                            ttCliType.ServicesForReCreateOnSTC). 
+
+         /* Copy request action rules */
+         FOR EACH Requestaction NO-LOCK WHERE Requestaction.Clitype = ttCliType.CopyServicesFromCliType:
+
+             ASSIGN lcActionKey = Requestaction.ActionKey. 
+             IF Requestaction.ActionType = "DayCampaign" AND Requestaction.ActionKey BEGINS "CONTFH" THEN 
+                 ASSIGN lcActionKey = ttCliType.FixedLineBaseBundle.
+
+             IF NOT CAN-FIND(FIRST bf_RequestAction WHERE bf_RequestAction.Brand      = Syst.Var:gcBrand                  AND
+                                                          bf_RequestAction.CliType    = ttCliType.CliType        AND
+                                                          bf_RequestAction.ReqType    = Requestaction.ReqType    AND
+                                                          bf_RequestAction.ValidTo   >= TODAY                    AND 
+                                                          bf_RequestAction.PayType    = Requestaction.PayType    AND
+                                                          bf_RequestAction.ActionType = Requestaction.ActionType AND
+                                                          bf_RequestAction.ActionKey  = lcActionKey              AND
+                                                          bf_RequestAction.Action     = Requestaction.Action     NO-LOCK) THEN
+             DO:
+                 CREATE bf_RequestAction.
+                 ASSIGN     
+                    bf_RequestAction.Brand           = Syst.Var:gcBrand
+                    bf_RequestAction.RequestActionID = fGetNextRequestActionSequence()
+                    bf_RequestAction.ReqType         = Requestaction.ReqType
+                    bf_RequestAction.CLIType         = ttCliType.CliType
+                    bf_RequestAction.PayType         = Requestaction.PayType
+                    bf_RequestAction.Action          = Requestaction.Action
+                    bf_RequestAction.ActionKey       = lcActionKey
+                    bf_RequestAction.ActionType      = Requestaction.ActionType           
+                    bf_RequestAction.ValidFrom       = TODAY
+                    bf_RequestAction.ValidTo         = DATE(12,31,2049). 
+
+                 FOR EACH RequestActionRule WHERE RequestActionRule.RequestActionID = Requestaction.RequestActionID NO-LOCK:
+
+                     IF NOT CAN-FIND(FIRST bf_RequestActionRule WHERE 
+                                           bf_RequestActionRule.RequestActionid = RequestActionRule.RequestActionID AND 
+                                           bf_RequestActionRule.ParamField      = RequestActionRule.ParamField      AND 
+                                           bf_RequestActionRule.ToDate          >= TODAY                            NO-LOCK) THEN 
+                     DO:                                                                     
+                         CREATE bf_RequestActionRule.
+                         ASSIGN
+                             bf_RequestActionRule.RequestActionid = RequestActionRule.RequestActionID
+                             bf_RequestActionRule.ParamField      = RequestActionRule.ParamField
+                             bf_RequestActionRule.ParamValue      = RequestActionRule.ParamValue
+                             bf_RequestActionRule.ExclParamValue  = RequestActionRule.ExclParamValue
+                             bf_RequestActionRule.FromDate        = TODAY
+                             bf_RequestActionRule.ToDate          = DATE(12,31,2049).
+                     END.
+                         
+                 END.    
+             END.
+         END.
+
+      END.   
 
       IF NOT (CliType.FixedLineDownload > "" OR CliType.FixedLineUpload > "") THEN /* Non-convergent */
       DO:
@@ -408,10 +496,21 @@ PROCEDURE pCLIType:
          /*TODO: Parent of Tariff bundle needs to be excluded */
          RUN pUpdateTMSParam("BB_PROFILE_1",ttCliType.CliType).
       END.
+      ELSE IF INDEX(ttCliType.CliName,"Azul") > 0 OR INDEX(ttCliType.CliName,"Morada") > 0 THEN 
+         RUN pUpdateTMSParam("Extra_MainLine_CLITypes",ttCliType.CliType). 
       
-      IF ttCLIType.PayType = 1 AND (ttCliType.MobileBaseBundleDataLimit > 0 OR CliType.FixedLineDownload > "" OR CliType.FixedLineUpload > "") THEN       
-         RUN pUpdateTMSParam("DATA_BUNDLE_BASED_CLITYPES", ttCliType.CliType).
+      IF ttCLIType.PayType = 1 THEN 
+      DO:
+          IF LOOKUP("DSS2",ttCliType.AllowedBundles) > 0 THEN 
+          DO:
+              RUN pUpdateTMSParam("DSS2_PRIMARY_SUBS_TYPE", ttCliType.CliType).
+              RUN pUpdateTMSParam("DSS2_SUBS_TYPE"        , ttCliType.CliType).
+          END.    
 
+          IF (ttCliType.MobileBaseBundleDataLimit > 0 OR CliType.FixedLineDownload > "" OR CliType.FixedLineUpload > "") THEN       
+              RUN pUpdateTMSParam("DATA_BUNDLE_BASED_CLITYPES", ttCliType.CliType).
+      END.
+         
       IF ttCLIType.PayType = 1 AND ttCLIType.UsageType = 1 THEN 
          RUN pUpdateTMSParam("POSTPAID_VOICE_TARIFFS", ttCliType.CliType).
       ELSE IF ttCLIType.PayType = 2 AND ttCLIType.UsageType = 1 THEN 
@@ -438,7 +537,7 @@ PROCEDURE pCTServPac:
    DEFINE BUFFER bf_CTServEl_CopyFrom   FOR CTServEl.
    DEFINE BUFFER bf_CTServAttr_CopyFrom FOR CTServAttr.
    
-   FOR EACH bf_CTServPac_CopyFrom WHERE bf_CTServPac_CopyFrom.Brand = gcBrand AND bf_CTServPac_CopyFrom.CLIType = icCopyServicesFromCliType NO-LOCK
+   FOR EACH bf_CTServPac_CopyFrom WHERE bf_CTServPac_CopyFrom.Brand = Syst.Var:gcBrand AND bf_CTServPac_CopyFrom.CLIType = icCopyServicesFromCliType NO-LOCK
        ON ERROR UNDO, THROW:
 
       IF LOOKUP(bf_CTServPac_CopyFrom.ServPac,"Y_HURP,D_HOTL") = 0 AND 
@@ -449,7 +548,7 @@ PROCEDURE pCTServPac:
       BUFFER-COPY bf_CTServPac_CopyFrom EXCEPT CLIType TO CTServPac
          ASSIGN CTServPac.CLIType  = icCLIType.            
           
-      FOR EACH bf_CTServEl_CopyFrom WHERE bf_CTServEl_CopyFrom.Brand = gcBrand AND bf_CTServEl_CopyFrom.CLIType = bf_CTServPac_CopyFrom.CLIType AND bf_CTServEl_CopyFrom.ServPac = bf_CTServPac_CopyFrom.ServPac NO-LOCK
+      FOR EACH bf_CTServEl_CopyFrom WHERE bf_CTServEl_CopyFrom.Brand = Syst.Var:gcBrand AND bf_CTServEl_CopyFrom.CLIType = bf_CTServPac_CopyFrom.CLIType AND bf_CTServEl_CopyFrom.ServPac = bf_CTServPac_CopyFrom.ServPac NO-LOCK
           ON ERROR UNDO, THROW:
 
          CREATE CTServEl.
@@ -458,12 +557,13 @@ PROCEDURE pCTServPac:
                CTServEl.CTServEl = NEXT-VALUE(CTServEl)
                CTServEl.CLIType  = icCLIType.
 
-         FIND ServCom WHERE ServCom.Brand = gcBrand AND ServCom.ServCom = CTServEl.ServCom NO-LOCK NO-ERROR.
+         FIND ServCom WHERE ServCom.Brand = Syst.Var:gcBrand AND ServCom.ServCom = CTServEl.ServCom NO-LOCK NO-ERROR.
          IF AVAILABLE ServCom AND ServCom.ServAttr = TRUE THEN
          DO:
              FOR EACH bf_CTServAttr_CopyFrom WHERE bf_CTServAttr_CopyFrom.CTServEl = bf_CTServEl_CopyFrom.CTServEl NO-LOCK
                  ON ERROR UNDO, THROW:
                 CREATE CTServAttr.
+
                 BUFFER-COPY bf_CTServAttr_CopyFrom EXCEPT CTServEl TO CTServAttr
                    ASSIGN CTServAttr.CTServEl = CTServEl.CTServEl.
              END.
@@ -487,6 +587,7 @@ PROCEDURE pSLGAnalyse:
     DEFINE VARIABLE liCount                       AS INTEGER   NO-UNDO.
     DEFINE VARIABLE lcSubsTypePrefix              AS CHARACTER NO-UNDO.
     DEFINE VARIABLE lcBillCodeList                AS CHARACTER NO-UNDO.
+    DEFINE VARIABLE lcSMSBillCodeList             AS CHARACTER NO-UNDO.
     DEFINE VARIABLE lcConvergentBillCodeList      AS CHARACTER NO-UNDO.
     DEFINE VARIABLE lcMxValue                     AS CHARACTER NO-UNDO.
     DEFINE VARIABLE lcBaseBundleOfCopyFromCliType AS CHARACTER NO-UNDO.
@@ -497,7 +598,8 @@ PROCEDURE pSLGAnalyse:
     DEFINE BUFFER bf_CliTypeCF  FOR CliType.
 
     ASSIGN
-        lcBillCodeList           = "14100001,10100001,10100003,10100005,CFOTHER,CFYOIGO" 
+        lcBillCodeList           = "14100001,10100001,10100003,10100005,CFOTHER,CFYOIGO,14104019,10104013" 
+        lcSMSBillCodeList        = "12100001,12100002,12100003,12100004"
         lcConvergentBillCodeList = "F10100003,F10100005"
         lcSubsTypePrefix = (IF icCliType BEGINS "CONTDSL" THEN 
                                 "CONTDSL*,CONT*" 
@@ -511,7 +613,7 @@ PROCEDURE pSLGAnalyse:
 
     ASSIGN lcSubsTypePrefix = lcSubsTypePrefix + (IF lcSubsTypePrefix <> "" THEN "," ELSE "") + icCliType.
 
-    FIND FIRST bf_CliTypeCF WHERE bf_CliTypeCF.Brand = gcBrand AND bf_CliTypeCF.ClIType = icCliTypeCopyFrom NO-LOCK NO-ERROR.    
+    FIND FIRST bf_CliTypeCF WHERE bf_CliTypeCF.Brand = Syst.Var:gcBrand AND bf_CliTypeCF.ClIType = icCliTypeCopyFrom NO-LOCK NO-ERROR.    
     IF AVAIL bf_CliTypeCF THEN 
         ASSIGN lcBaseBundleOfCopyFromCliType = bf_CliTypeCF.BaseBundle.    
 
@@ -519,7 +621,7 @@ PROCEDURE pSLGAnalyse:
     IF lcSubsTypePrefix > "" THEN
     DO liCount = 1 TO NUM-ENTRIES(lcSubsTypePrefix)
        ON ERROR UNDO, THROW:
-        FOR EACH bf_Matrix WHERE bf_Matrix.Brand = gcBrand AND bf_Matrix.MXKey = "PERCONTR" NO-LOCK By bf_Matrix.Prior
+        FOR EACH bf_Matrix WHERE bf_Matrix.Brand = Syst.Var:gcBrand AND bf_Matrix.MXKey = "PERCONTR" NO-LOCK By bf_Matrix.Prior
             ON ERROR UNDO, THROW:
             
             IF bf_Matrix.MXRes <> 1 THEN 
@@ -531,7 +633,7 @@ PROCEDURE pSLGAnalyse:
                 ON ERROR UNDO, THROW:
                 FOR EACH MxItem WHERE MxItem.MxSeq = bf_MxItem.MxSeq AND MxItem.MXName = "PerContract" NO-LOCK
                     ON ERROR UNDO, THROW:
-                    FIND FIRST DayCampaign WHERE Daycampaign.Brand = gcBrand AND Daycampaign.DCEvent = MxItem.MxValue NO-LOCK NO-ERROR.
+                    FIND FIRST DayCampaign WHERE Daycampaign.Brand = Syst.Var:gcBrand AND Daycampaign.DCEvent = MxItem.MxValue NO-LOCK NO-ERROR.
                     IF AVAIL DayCampaign AND LOOKUP(DayCampaign.DcType, {&PERCONTRACT_RATING_PACKAGE} + ",6") > 0 AND LOOKUP(DayCampaign.DCEvent, icAllowedBundles) = 0 THEN                 
                         ASSIGN icAllowedBundles = icAllowedBundles + (IF icAllowedBundles <> "" THEN "," ELSE "") + DayCampaign.DCEvent.
                 END.
@@ -539,7 +641,10 @@ PROCEDURE pSLGAnalyse:
 
         END.
     END.    
-    
+  
+    IF LOOKUP(icFixedLineBaseBundle, icAllowedBundles) = 0 THEN 
+        ASSIGN icAllowedBundles = icAllowedBundles + (IF icAllowedBundles <> "" THEN "," ELSE "") + icFixedLineBaseBundle.
+
     IF icAllowedBundles > "" THEN 
     DO liCount = 1 TO NUM-ENTRIES(icAllowedBundles)
        ON ERROR UNDO, THROW:
@@ -548,7 +653,7 @@ PROCEDURE pSLGAnalyse:
         DO liCnt = 1 TO NUM-ENTRIES(lcConvergentBillCodeList)
            ON ERROR UNDO, THROW:
 
-            FIND FIRST bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand             = gcBrand                               AND 
+            FIND FIRST bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand             = Syst.Var:gcBrand                               AND 
                                            bf_SLGAnalyse.ServiceLimitGroup = "CONTDSL"                             AND
                                            bf_SLGAnalyse.CLIType           = icCliTypeCopyFrom                     AND
                                            bf_SLGAnalyse.ValidTo           >= TODAY                                AND 
@@ -567,22 +672,66 @@ PROCEDURE pSLGAnalyse:
         DO liCnt = 1 TO NUM-ENTRIES(lcConvergentBillCodeList)
            ON ERROR UNDO, THROW:
 
-            FIND FIRST bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand             = gcBrand                               AND 
+            FIND FIRST bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand             = Syst.Var:gcBrand                               AND 
                                            bf_SLGAnalyse.ServiceLimitGroup BEGINS "CONTFH"                         AND
                                            bf_SLGAnalyse.CLIType           = icCliTypeCopyFrom                     AND
                                            bf_SLGAnalyse.ValidTo           >= TODAY                                AND 
                                            bf_SLGAnalyse.BillCode          = ENTRY(liCnt,lcConvergentBillCodeList) NO-LOCK NO-ERROR.
             IF AVAIL bf_SLGAnalyse THEN
             DO:
-                CREATE SLGAnalyse.
-                BUFFER-COPY bf_SLGAnalyse EXCEPT CliType ValidFrom ValidTo TO SLGAnalyse
-                    ASSIGN
-                        SLGAnalyse.CliType              = icCliType
-                        SLGAnalyse.ServiceLimitGroup    = icFixedLineBaseBundle 
-                        SLGAnalyse.ValidFrom            = TODAY
-                        SLGAnalyse.ValidTo              = DATE(12,31,2049).
+                IF NOT CAN-FIND(FIRST SLGAnalyse WHERE SLGAnalyse.Brand             = Syst.Var:gcBrand                AND
+                                                       SLGAnalyse.BelongTo          = bf_SLGAnalyse.BelongTo AND
+                                                       SLGAnalyse.CliType           = icCliType              AND 
+                                                       SLGAnalyse.BillCode          = bf_SLGAnalyse.BillCode AND
+                                                       SLGAnalyse.CCN               = bf_SLGAnalyse.CCN      AND
+                                                       SLGAnalyse.BDest             = bf_SLGAnalyse.BDest    AND 
+                                                       SLGAnalyse.Prior             = bf_SLGAnalyse.Prior    AND
+                                                       SLGAnalyse.ValidTo           >= TODAY                 AND 
+                                                       SLGAnalyse.ServiceLimitGroup = icFixedLineBaseBundle  AND 
+                                                       SLGAnalyse.SLGAType          = bf_SLGAnalyse.SLGAType NO-LOCK) THEN 
+                DO:
+                    CREATE SLGAnalyse.
+                    BUFFER-COPY bf_SLGAnalyse EXCEPT CliType ServiceLimitGroup ValidFrom ValidTo TO SLGAnalyse
+                        ASSIGN
+                            SLGAnalyse.CliType              = icCliType
+                            SLGAnalyse.ServiceLimitGroup    = icFixedLineBaseBundle 
+                            SLGAnalyse.ValidFrom            = TODAY
+                            SLGAnalyse.ValidTo              = DATE(12,31,2049).
+                END.        
             END.
-        END.          
+        END.   
+        ELSE IF ENTRY(liCount,icAllowedBundles) = "SMS5000" THEN
+        DO liCnt = 1 TO NUM-ENTRIES(lcSMSBillCodeList)
+           ON ERROR UNDO, THROW:
+
+           FIND FIRST bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand            = Syst.Var:gcBrand                        AND 
+                                          bf_SLGAnalyse.BillCode         = ENTRY(liCnt,lcSMSBillCodeList) AND
+                                          bf_SLGAnalyse.CLIType          = icCliTypeCopyFrom              AND
+                                          bf_SLGAnalyse.ValidTo          >= TODAY                         AND 
+                                          bf_SLGAnalyse.ServiceLimitGroup = "SMS5000"                     NO-LOCK NO-ERROR.
+           IF AVAIL bf_SLGAnalyse THEN
+           DO:
+               IF NOT CAN-FIND(FIRST SLGAnalyse WHERE SLGAnalyse.Brand             = Syst.Var:gcBrand                         AND
+                                                      SLGAnalyse.BelongTo          = bf_SLGAnalyse.BelongTo          AND
+                                                      SLGAnalyse.CliType           = icCliType                       AND 
+                                                      SLGAnalyse.BillCode          = bf_SLGAnalyse.BillCode          AND
+                                                      SLGAnalyse.CCN               = bf_SLGAnalyse.CCN               AND
+                                                      SLGAnalyse.BDest             = bf_SLGAnalyse.BDest             AND 
+                                                      SLGAnalyse.Prior             = bf_SLGAnalyse.Prior             AND
+                                                      SLGAnalyse.ValidTo           >= TODAY                          AND 
+                                                      SLGAnalyse.ServiceLimitGroup = bf_SLGAnalyse.ServiceLimitGroup AND 
+                                                      SLGAnalyse.SLGAType          = bf_SLGAnalyse.SLGAType          NO-LOCK) THEN 
+               DO: 
+                   CREATE SLGAnalyse.
+                   BUFFER-COPY bf_SLGAnalyse EXCEPT CliType ValidFrom ValidTo TO SLGAnalyse
+                       ASSIGN
+                           SLGAnalyse.CliType           = icCliType
+                           SLGAnalyse.ValidFrom         = TODAY
+                           SLGAnalyse.ValidTo           = DATE(12,31,2049).
+               END.        
+           END.
+
+        END.   
         ELSE IF ENTRY(liCount,icAllowedBundles) = "VOICE100" THEN
         DO liCnt = 1 TO NUM-ENTRIES(lcBillCodeList)
            ON ERROR UNDO, THROW:
@@ -590,19 +739,31 @@ PROCEDURE pSLGAnalyse:
             IF ENTRY(liCount,lcBillCodeList) = "14100001" THEN 
                 NEXT.
 
-            FIND FIRST bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand            = gcBrand                       AND 
+            FIND FIRST bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand            = Syst.Var:gcBrand                       AND 
                                            bf_SLGAnalyse.BillCode         = ENTRY(liCnt,lcBillCodeList) AND
                                            bf_SLGAnalyse.CLIType          = icCliTypeCopyFrom             AND
                                            bf_SLGAnalyse.ValidTo          >= TODAY                        AND 
                                            bf_SLGAnalyse.ServiceLimitGroup = "VOICE100"                   NO-LOCK NO-ERROR.
             IF AVAIL bf_SLGAnalyse THEN
             DO:
-                CREATE SLGAnalyse.
-                BUFFER-COPY bf_SLGAnalyse EXCEPT CliType ValidFrom ValidTo TO SLGAnalyse
-                    ASSIGN
-                        SLGAnalyse.CliType           = icCliType
-                        SLGAnalyse.ValidFrom         = TODAY
-                        SLGAnalyse.ValidTo           = DATE(12,31,2049).
+                IF NOT CAN-FIND(FIRST SLGAnalyse WHERE SLGAnalyse.Brand             = Syst.Var:gcBrand                         AND
+                                                       SLGAnalyse.BelongTo          = bf_SLGAnalyse.BelongTo          AND
+                                                       SLGAnalyse.CliType           = icCliType                       AND 
+                                                       SLGAnalyse.BillCode          = bf_SLGAnalyse.BillCode          AND
+                                                       SLGAnalyse.CCN               = bf_SLGAnalyse.CCN               AND
+                                                       SLGAnalyse.BDest             = bf_SLGAnalyse.BDest             AND 
+                                                       SLGAnalyse.Prior             = bf_SLGAnalyse.Prior             AND
+                                                       SLGAnalyse.ValidTo           >= TODAY                          AND 
+                                                       SLGAnalyse.ServiceLimitGroup = bf_SLGAnalyse.ServiceLimitGroup AND 
+                                                       SLGAnalyse.SLGAType          = bf_SLGAnalyse.SLGAType          NO-LOCK) THEN 
+                DO:
+                    CREATE SLGAnalyse.
+                    BUFFER-COPY bf_SLGAnalyse EXCEPT CliType ValidFrom ValidTo TO SLGAnalyse
+                        ASSIGN
+                            SLGAnalyse.CliType           = icCliType
+                            SLGAnalyse.ValidFrom         = TODAY
+                            SLGAnalyse.ValidTo           = DATE(12,31,2049).
+                END.        
             END.
         END.
         ELSE IF ENTRY(liCount,icAllowedBundles) = "FREE100MINUTES" THEN
@@ -612,36 +773,60 @@ PROCEDURE pSLGAnalyse:
             IF ENTRY(liCount,lcBillCodeList) = "14100001" THEN 
                 NEXT.
 
-            FIND FIRST bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand            = gcBrand                       AND 
+            FIND FIRST bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand            = Syst.Var:gcBrand                       AND 
                                            bf_SLGAnalyse.BillCode         = ENTRY(liCnt,lcBillCodeList) AND
                                            bf_SLGAnalyse.CLIType          = icCliTypeCopyFrom             AND
                                            bf_SLGAnalyse.ValidTo          >= TODAY                        AND 
                                            bf_SLGAnalyse.ServiceLimitGroup = "FREE100MINUTES"             NO-LOCK NO-ERROR.
             IF AVAIL bf_SLGAnalyse THEN
             DO:
-                CREATE SLGAnalyse.
-                BUFFER-COPY bf_SLGAnalyse EXCEPT CliType ValidFrom ValidTo TO SLGAnalyse
-                    ASSIGN
-                        SLGAnalyse.CliType           = icCliType
-                        SLGAnalyse.ValidFrom         = TODAY
-                        SLGAnalyse.ValidTo           = DATE(12,31,2049).
+                IF NOT CAN-FIND(FIRST SLGAnalyse WHERE SLGAnalyse.Brand             = Syst.Var:gcBrand                         AND
+                                                       SLGAnalyse.BelongTo          = bf_SLGAnalyse.BelongTo          AND
+                                                       SLGAnalyse.CliType           = icCliType                       AND 
+                                                       SLGAnalyse.BillCode          = bf_SLGAnalyse.BillCode          AND
+                                                       SLGAnalyse.CCN               = bf_SLGAnalyse.CCN               AND
+                                                       SLGAnalyse.BDest             = bf_SLGAnalyse.BDest             AND 
+                                                       SLGAnalyse.Prior             = bf_SLGAnalyse.Prior             AND
+                                                       SLGAnalyse.ValidTo           >= TODAY                          AND 
+                                                       SLGAnalyse.ServiceLimitGroup = bf_SLGAnalyse.ServiceLimitGroup AND 
+                                                       SLGAnalyse.SLGAType          = bf_SLGAnalyse.SLGAType          NO-LOCK) THEN 
+                DO:
+                    CREATE SLGAnalyse.
+                    BUFFER-COPY bf_SLGAnalyse EXCEPT CliType ValidFrom ValidTo TO SLGAnalyse
+                        ASSIGN
+                            SLGAnalyse.CliType           = icCliType
+                            SLGAnalyse.ValidFrom         = TODAY
+                            SLGAnalyse.ValidTo           = DATE(12,31,2049).
+                END.
             END.
         END.
         ELSE
         DO:
             /* Default bundles for CONT* or TRAJ* subscription types */
-            FIND FIRST bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand             = gcBrand                         AND 
-                                           bf_SLGAnalyse.ServiceLimitGroup = ENTRY(liCount,icAllowedBundles) AND
-                                           bf_SLGAnalyse.CLIType           = icCliTypeCopyFrom               AND
-                                           bf_SLGAnalyse.ValidTo           >= TODAY                          NO-LOCK NO-ERROR.            
-            IF AVAIL bf_SLGAnalyse THEN
-            DO:
-                CREATE SLGAnalyse.
-                BUFFER-COPY bf_SLGAnalyse EXCEPT CliType ValidFrom ValidTo TO SLGAnalyse
-                    ASSIGN
-                        SLGAnalyse.CliType   = icCliType                        
-                        SLGAnalyse.ValidFrom = TODAY
-                        SLGAnalyse.ValidTo   = DATE(12,31,2049).
+            FOR EACH bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand             = Syst.Var:gcBrand                         AND 
+                                         bf_SLGAnalyse.ServiceLimitGroup = ENTRY(liCount,icAllowedBundles) AND
+                                         bf_SLGAnalyse.CLIType           = icCliTypeCopyFrom               AND
+                                         bf_SLGAnalyse.ValidTo           >= TODAY                          NO-LOCK:
+
+                IF NOT CAN-FIND(FIRST SLGAnalyse WHERE SLGAnalyse.Brand             = Syst.Var:gcBrand                         AND
+                                                       SLGAnalyse.BelongTo          = bf_SLGAnalyse.BelongTo          AND
+                                                       SLGAnalyse.CliType           = icCliType                       AND 
+                                                       SLGAnalyse.BillCode          = bf_SLGAnalyse.BillCode          AND
+                                                       SLGAnalyse.CCN               = bf_SLGAnalyse.CCN               AND
+                                                       SLGAnalyse.BDest             = bf_SLGAnalyse.BDest             AND 
+                                                       SLGAnalyse.Prior             = bf_SLGAnalyse.Prior             AND
+                                                       SLGAnalyse.ValidTo           >= TODAY                          AND 
+                                                       SLGAnalyse.ServiceLimitGroup = bf_SLGAnalyse.ServiceLimitGroup AND 
+                                                       SLGAnalyse.SLGAType          = bf_SLGAnalyse.SLGAType          NO-LOCK) THEN 
+                DO:
+                    CREATE SLGAnalyse.
+                    BUFFER-COPY bf_SLGAnalyse EXCEPT CliType ValidFrom ValidTo TO SLGAnalyse
+                        ASSIGN
+                            SLGAnalyse.CliType   = icCliType                        
+                            SLGAnalyse.ValidFrom = TODAY
+                            SLGAnalyse.ValidTo   = DATE(12,31,2049).
+                END. 
+
             END.
         END.                                         
     END.    
@@ -654,7 +839,7 @@ PROCEDURE pSLGAnalyse:
         IF (LOOKUP("FREE100MINUTES",icAllowedBundles) > 0 OR LOOKUP("VOICE100",icAllowedBundles) > 0) AND ENTRY(liCount,lcBillCodeList) <> "14100001" THEN 
             NEXT.
 
-        FIND FIRST bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand             = gcBrand                       AND 
+        FIND FIRST bf_SLGAnalyse WHERE bf_SLGAnalyse.Brand             = Syst.Var:gcBrand                       AND 
                                        bf_SLGAnalyse.BillCode          = ENTRY(liCount,lcBillCodeList) AND
                                        bf_SLGAnalyse.CLIType           = icCliTypeCopyFrom             AND    
                                        (IF lcBaseBundleOfCopyFromCliType > "" THEN 
@@ -664,13 +849,26 @@ PROCEDURE pSLGAnalyse:
                                        bf_SLGAnalyse.ValidTo          >= TODAY                        NO-LOCK NO-ERROR.
         IF AVAIL bf_SLGAnalyse THEN
         DO:
-            CREATE SLGAnalyse.
-            BUFFER-COPY bf_SLGAnalyse EXCEPT CliType ServiceLimitGroup ValidFrom ValidTo TO SLGAnalyse
-                ASSIGN
-                    SLGAnalyse.CliType           = icCliType 
-                    SLGAnalyse.ServiceLimitGroup = (IF icMobileBaseBundle > "" THEN icMobileBaseBundle ELSE icCliType)
-                    SLGAnalyse.ValidFrom         = TODAY
-                    SLGAnalyse.ValidTo           = DATE(12,31,2049).
+            IF NOT CAN-FIND(FIRST SLGAnalyse WHERE SLGAnalyse.Brand             = Syst.Var:gcBrand                         AND
+                                                   SLGAnalyse.BelongTo          = bf_SLGAnalyse.BelongTo          AND
+                                                   SLGAnalyse.CliType           = icCliType                       AND 
+                                                   SLGAnalyse.BillCode          = bf_SLGAnalyse.BillCode          AND
+                                                   SLGAnalyse.CCN               = bf_SLGAnalyse.CCN               AND
+                                                   SLGAnalyse.BDest             = bf_SLGAnalyse.BDest             AND 
+                                                   SLGAnalyse.Prior             = bf_SLGAnalyse.Prior             AND
+                                                   SLGAnalyse.ValidTo           >= TODAY                          AND 
+                                                   SLGAnalyse.ServiceLimitGroup = bf_SLGAnalyse.ServiceLimitGroup AND 
+                                                   SLGAnalyse.SLGAType          = bf_SLGAnalyse.SLGAType          NO-LOCK) THEN 
+            DO:
+                CREATE SLGAnalyse.
+                BUFFER-COPY bf_SLGAnalyse EXCEPT CliType ServiceLimitGroup ValidFrom ValidTo TO SLGAnalyse
+                    ASSIGN
+                        SLGAnalyse.CliType           = icCliType 
+                        SLGAnalyse.ServiceLimitGroup = (IF icMobileBaseBundle > "" THEN icMobileBaseBundle ELSE icCliType)
+                        SLGAnalyse.ValidFrom         = TODAY
+                        SLGAnalyse.ValidTo           = DATE(12,31,2049).
+            END.
+                      
         END.
     END.
 
@@ -682,11 +880,11 @@ END PROCEDURE.
 PROCEDURE pDayCampaign:
    DEFINE PARAMETER BUFFER ttDayCampaign FOR ttDayCampaign.   
    
-   IF NOT CAN-FIND(FIRST DayCampaign WHERE DayCampaign.Brand = gcBrand AND DayCampaign.DCEvent = ttDayCampaign.DCEvent) THEN
+   IF NOT CAN-FIND(FIRST DayCampaign WHERE DayCampaign.Brand = Syst.Var:gcBrand AND DayCampaign.DCEvent = ttDayCampaign.DCEvent) THEN
    DO:
       CREATE DayCampaign.
       ASSIGN 
-         DayCampaign.Brand           = gcBrand
+         DayCampaign.Brand           = Syst.Var:gcBrand
          DayCampaign.DCEvent         = ttDayCampaign.DCEvent 
          DayCampaign.DCName          = ttDayCampaign.DCName
          DayCampaign.PayType         = ttDayCampaign.PayType
@@ -700,7 +898,7 @@ PROCEDURE pDayCampaign:
          DayCampaign.CCN             = (IF ttDayCampaign.DCType = "PackageWithCounter" OR ttDayCampaign.DCType = "Upsell" OR ttDayCampaign.PayType = 2 THEN 93 ELSE 0)         
          DayCampaign.InstanceLimit   = (IF ttDayCampaign.DCType = "Upsell" THEN 100 ELSE 1)
          DayCampaign.BillCode        = ttDayCampaign.BillCode          
-         DayCampaign.InclUnit        = (IF ttDayCampaign.DCType = "PackageWithCounter" OR ttDayCampaign.DCType = "Upsell" OR ttDayCampaign.PayType = 2 THEN 4 ELSE 1) 
+         DayCampaign.InclUnit        = (IF ttDayCampaign.DCEvent BEGINS "CONTFH" THEN 0 ELSE IF ttDayCampaign.DCType = "PackageWithCounter" OR ttDayCampaign.DCType = "Upsell" OR ttDayCampaign.PayType = 2 THEN 4 ELSE 1) 
          DayCampaign.CalcMethod      = (IF ttDayCampaign.DCType = "PackageWithCounter" OR ttDayCampaign.PayType = 2 THEN 4 ELSE 1)  
          DayCampaign.InclStartCharge = YES                          
          DayCampaign.MaxChargeIncl   = 0                            
@@ -708,7 +906,7 @@ PROCEDURE pDayCampaign:
          DayCampaign.Effective       = INTEGER(fTMSCodeValue("Daycampaign","Effective","PerContr"))         
          DayCampaign.DurType         = (IF ttDayCampaign.SLCreated AND NOT ttDayCampaign.PayType = 2 THEN 1 ELSE 4)
          DayCampaign.DurMonth        = 0
-         DayCampaign.DurUnit         = (IF ttDayCampaign.DCType = "PackageWithCounter" OR ttDayCampaign.PayType = 2 THEN 0 ELSE 1)
+         DayCampaign.DurUnit         = (IF ttDayCampaign.DCEvent BEGINS "CONTFH" THEN 0 ELSE IF ttDayCampaign.DCType = "PackageWithCounter" OR ttDayCampaign.PayType = 2 THEN 0 ELSE 1)
          DayCampaign.WeekDay         = ""
          DayCampaign.BundleUpsell    = ttDayCampaign.UpSell
          DayCampaign.FeeModel        = ttDayCampaign.BillCode
@@ -750,7 +948,7 @@ PROCEDURE pDCServicePackage:
 
    CREATE DCServicePackage.
    ASSIGN                            
-      DCServicePackage.Brand              = gcBrand 
+      DCServicePackage.Brand              = Syst.Var:gcBrand 
       DCServicePackage.DCEvent            = icDCEvent 
       DCServicePackage.DCServicePackageID = liPackageID
       DCServicePackage.ServPac            = icServPac                    
@@ -780,12 +978,12 @@ PROCEDURE pFeeModel:
    DEFINE INPUT  PARAMETER icFeeModelName AS CHARACTER NO-UNDO.   
    DEFINE OUTPUT PARAMETER olCreated      AS LOGICAL   NO-UNDO.
 
-   FIND FIRST FeeModel WHERE FeeModel.Brand = gcBrand AND FeeModel.FeeModel = icFeeModel NO-LOCK NO-ERROR.    
+   FIND FIRST FeeModel WHERE FeeModel.Brand = Syst.Var:gcBrand AND FeeModel.FeeModel = icFeeModel NO-LOCK NO-ERROR.    
    IF NOT AVAILABLE FeeModel THEN
    DO:
       CREATE FeeModel.
       ASSIGN 
-         FeeModel.Brand    = gcBrand
+         FeeModel.Brand    = Syst.Var:gcBrand
          FeeModel.FeeModel = icFeeModel
          FeeModel.FeeName  = icFeeModelName               
          FeeModel.FMGroup  = 0
@@ -807,21 +1005,21 @@ PROCEDURE pFMItem:
    DO:
        IF ttCliType.TariffBundle NE "" THEN 
        DO:
-          FIND FIRST CLIType WHERE CLIType.Brand = gcBrand AND CLIType.CLIType = ttCliType.ParentTariff NO-LOCK NO-ERROR.
+          FIND FIRST CLIType WHERE CLIType.Brand = Syst.Var:gcBrand AND CLIType.CLIType = ttCliType.ParentTariff NO-LOCK NO-ERROR.
           IF AVAILABLE CLIType THEN
              ASSIGN lcRatePlan = CLIType.PricePlan.
        END.
        
        ASSIGN lcRatePlan = (IF lcRatePlan NE "" THEN lcRatePlan ELSE REPLACE(ttCliType.CliType,"CONT","CONTRATO")).
 
-       FIND FIRST RatePlan WHERE RatePlan.Brand = gcBrand AND RatePlan.RatePlan = lcRatePlan NO-LOCK NO-ERROR.           
+       FIND FIRST RatePlan WHERE RatePlan.Brand = Syst.Var:gcBrand AND RatePlan.RatePlan = lcRatePlan NO-LOCK NO-ERROR.           
        IF AVAIL RatePlan THEN   
-          FIND FIRST PListConf WHERE PListConf.Brand = gcBrand AND PListConf.RatePlan = RatePlan.RatePlan AND PListConf.PriceList BEGINS "CONTRATO" NO-LOCK NO-ERROR.   
+          FIND FIRST PListConf WHERE PListConf.Brand = Syst.Var:gcBrand AND PListConf.RatePlan = RatePlan.RatePlan AND PListConf.PriceList BEGINS "CONTRATO" NO-LOCK NO-ERROR.   
    END.
 
    CREATE FMItem. 
    ASSIGN     
-      FMItem.Brand             = gcBrand
+      FMItem.Brand             = Syst.Var:gcBrand
       FMItem.FeeModel          = ttFMItem.FeeModel
       FMItem.BillCode          = ttFMItem.BillCode
       FMItem.PriceList         = (IF ttFMItem.PriceList <> "" THEN 
@@ -849,12 +1047,12 @@ END PROCEDURE.
 PROCEDURE pServiceLimitGroup:
    DEFINE PARAMETER BUFFER ttServiceLimitGroup FOR ttServiceLimitGroup.   
 
-   FIND FIRST ServiceLimitGroup WHERE ServiceLimitGroup.Brand = gcBrand AND ServiceLimitGroup.GroupCode = ttServiceLimitGroup.GroupCode NO-LOCK NO-ERROR.
+   FIND FIRST ServiceLimitGroup WHERE ServiceLimitGroup.Brand = Syst.Var:gcBrand AND ServiceLimitGroup.GroupCode = ttServiceLimitGroup.GroupCode NO-LOCK NO-ERROR.
    IF NOT AVAILABLE ServiceLimitGroup THEN
    DO:
       CREATE ServiceLimitGroup.
       ASSIGN 
-         ServiceLimitGroup.Brand     = gcBrand
+         ServiceLimitGroup.Brand     = Syst.Var:gcBrand
          ServiceLimitGroup.GroupCode = ttServiceLimitGroup.GroupCode    
          ServiceLimitGroup.GroupName = ttServiceLimitGroup.GroupName    
          ServiceLimitGroup.ValidFrom = TODAY 
@@ -958,7 +1156,7 @@ PROCEDURE pBDestination:
     DEFINE VARIABLE liBDLValue     AS INTEGER   NO-UNDO.
     DEFINE BUFFER bf_BDest FOR BDest.
 
-    FIND FIRST BDest WHERE BDest.Brand = gcBrand AND BDest.BDest = ttBDest.BDest NO-LOCK NO-ERROR. 
+    FIND FIRST BDest WHERE BDest.Brand = Syst.Var:gcBrand AND BDest.BDest = ttBDest.BDest NO-LOCK NO-ERROR. 
     IF NOT AVAILABLE BDest THEN 
     DO:    
         FIND LAST bf_BDest USE-INDEX BDestID NO-LOCK NO-ERROR.    
@@ -969,7 +1167,7 @@ PROCEDURE pBDestination:
      
         CREATE BDest. 
         ASSIGN 
-            BDest.Brand    = gcBrand    
+            BDest.Brand    = Syst.Var:gcBrand    
             BDest.BDestID  = liBDLValue
             BDest.BDest    = ttBDest.BDest
             BDest.BDName   = ttBDest.BDName
@@ -1006,7 +1204,7 @@ PROCEDURE pRequestAction:
    DEFINE VARIABLE lcActionTypeList  AS CHARACTER NO-UNDO.
 
    /* TODO: SMS related configuration */
-   FIND FIRST CliType WHERE ClIType.Brand = gcBrand AND CliType.ClIType = icCLIType NO-LOCK NO-ERROR.
+   FIND FIRST CliType WHERE ClIType.Brand = Syst.Var:gcBrand AND CliType.ClIType = icCLIType NO-LOCK NO-ERROR.
    IF NOT AVAIL CliType THEN 
       UNDO, THROW NEW Progress.Lang.AppError("CLIType doesn't exists for creating request actions", 1).
 
@@ -1044,7 +1242,7 @@ PROCEDURE pRequestAction:
          lcActionType  = ENTRY(liCount, lcActionTypeList)
          liRequestType = INT(ENTRY(liCount, lcRequestTypeList)).
 
-      FIND FIRST RequestAction WHERE RequestAction.Brand      = gcBrand         AND
+      FIND FIRST RequestAction WHERE RequestAction.Brand      = Syst.Var:gcBrand         AND
                                      RequestAction.ReqType    = liRequestType   AND
                                      RequestAction.CliType    = CliType.CliType AND
                                      RequestAction.ActionType = lcActionType    AND
@@ -1056,7 +1254,7 @@ PROCEDURE pRequestAction:
       DO:
          CREATE RequestAction.
          ASSIGN     
-            RequestAction.Brand           = gcBrand
+            RequestAction.Brand           = Syst.Var:gcBrand
             RequestAction.RequestActionID = fGetNextRequestActionSequence()
             RequestAction.ReqType         = liRequestType
             RequestAction.CLIType         = CliType.CliType
@@ -1084,7 +1282,7 @@ PROCEDURE pRequestAction:
    ELSE
    DO:
        /* STC */
-       FIND FIRST RequestAction WHERE RequestAction.Brand      = gcBrand                             AND 
+       FIND FIRST RequestAction WHERE RequestAction.Brand      = Syst.Var:gcBrand                             AND 
                                       RequestAction.CliType    = CliType.CliType                     AND   
                                       RequestAction.ReqType    = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND 
                                       RequestAction.PayType    = 0                                   AND 
@@ -1104,7 +1302,7 @@ PROCEDURE pRequestAction:
        END.
 
        /* Activation */ 
-       FIND FIRST RequestAction WHERE RequestAction.Brand      = gcBrand                        AND 
+       FIND FIRST RequestAction WHERE RequestAction.Brand      = Syst.Var:gcBrand                        AND 
                                       RequestAction.CliType    = CliType.CliType                AND
                                       RequestAction.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION} AND 
                                       RequestAction.PayType    = 0                              AND
@@ -1132,7 +1330,7 @@ PROCEDURE pRequestAction:
        END.
 
        /* Deactivation */
-       FIND FIRST RequestAction WHERE RequestAction.Brand      = gcBrand                         AND 
+       FIND FIRST RequestAction WHERE RequestAction.Brand      = Syst.Var:gcBrand                         AND 
                                       RequestAction.CliType    = CliType.CliType                 AND
                                       RequestAction.ReqType    = {&REQTYPE_CONTRACT_TERMINATION} AND 
                                       RequestAction.PayType    = 0                               AND
@@ -1297,7 +1495,7 @@ PROCEDURE pUpdateRequestActionRule:
     DEFINE INPUT PARAMETER icParamValue     AS CHARACTER NO-UNDO.
     DEFINE INPUT PARAMETER icExclParamValue AS CHARACTER NO-UNDO.
 
-    FIND FIRST RequestAction WHERE RequestAction.Brand      = gcBrand      AND 
+    FIND FIRST RequestAction WHERE RequestAction.Brand      = Syst.Var:gcBrand      AND 
                                    RequestAction.CliType    = icCliType    AND 
                                    RequestAction.ReqType    = iiReqType    AND 
                                    RequestAction.PayType    = iiPayType    AND 
@@ -1331,13 +1529,13 @@ PROCEDURE pMatrix:
 
    DEFINE VARIABLE liCount AS INTEGER NO-UNDO.
 
-   FIND FIRST Matrix WHERE Matrix.Brand = gcBrand AND Matrix.MXKey = "PERCONTR" AND Matrix.MxName = icCLIType NO-LOCK NO-ERROR.
+   FIND FIRST Matrix WHERE Matrix.Brand = Syst.Var:gcBrand AND Matrix.MXKey = "PERCONTR" AND Matrix.MxName = icCLIType NO-LOCK NO-ERROR.
    IF NOT AVAIL Matrix THEN 
    DO:
        CREATE Matrix.
        ASSIGN
-          Matrix.Brand  = gcBrand
-          Matrix.MXSeq  = NEXT-VALUE(imsi)
+          Matrix.Brand  = Syst.Var:gcBrand
+          Matrix.MXSeq  = fGetNextMXSeq()
           Matrix.mxkey  = "PERCONTR"
           Matrix.mxname = icCLIType
           Matrix.prior  = fGetNextMatrixPriority("PERCONTR")
@@ -1397,7 +1595,7 @@ PROCEDURE pUpdateTMSParam:
    DEFINE INPUT PARAMETER icParamCode AS CHARACTER NO-UNDO.   
    DEFINE INPUT PARAMETER icCLIType   AS CHARACTER NO-UNDO.   
 
-   FIND FIRST TMSParam WHERE TMSParam.Brand = gcBrand  AND TMSParam.ParamCode EQ icParamCode NO-LOCK NO-ERROR.
+   FIND FIRST TMSParam WHERE TMSParam.Brand = Syst.Var:gcBrand  AND TMSParam.ParamCode EQ icParamCode NO-LOCK NO-ERROR.
    IF AVAIL TMSParam THEN 
    DO:
       IF LOOKUP(icCliType, TMSParam.CharVal) = 0 THEN 

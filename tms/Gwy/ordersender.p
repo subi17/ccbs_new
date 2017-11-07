@@ -15,13 +15,8 @@
 {Syst/commali.i}
 {Func/cparam2.i}
 {Syst/eventval.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
-{Func/finvtxt.i}
-{Func/fcustdata.i}
-{Func/fctchange.i}
 {Func/fmakemsreq.i}
-{Func/msisdn.i}
 {Func/heartbeat.i}
 {Func/forderstamp.i}
 {Func/orderfunc.i}
@@ -30,7 +25,7 @@
 {Func/multitenantfunc.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 END.
@@ -79,7 +74,7 @@ IF piOrderID = 0 THEN DO lii = 1 to EXTENT(lcStatuses):
    
    LOOP:
    FOR EACH xxOrder NO-LOCK WHERE  
-            xxOrder.Brand      = gcBrand     AND
+            xxOrder.Brand      = Syst.Var:gcBrand     AND
             xxOrder.StatusCode = lcStatus
       TENANT-WHERE BUFFER-TENANT-ID(xxOrder) GE 0:
    
@@ -109,7 +104,7 @@ ELSE DO:
 
    ORDERLOOP:
    FOR FIRST Order EXCLUSIVE-LOCK WHERE  
-             Order.Brand   = gcBrand  AND
+             Order.Brand   = Syst.Var:gcBrand  AND
              Order.OrderId = piOrderId:
 
       {Mc/ordersender.i ORDERLOOP}

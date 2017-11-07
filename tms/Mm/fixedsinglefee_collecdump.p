@@ -23,7 +23,6 @@ The information (fields) we need are:
 */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Syst/dumpfile_run.i}

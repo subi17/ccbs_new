@@ -70,7 +70,7 @@ FUNCTION fCopyDefFatime RETURNS LOGICAL
       FatGroup.FtGrp NE icFatGrp
    THEN DO:
       FIND FatGroup WHERE 
-           FatGroup.Brand = gcBrand AND
+           FatGroup.Brand = Syst.Var:gcBrand AND
            FatGroup.FtGrp = icFatGrp NO-LOCK NO-ERROR.
       IF NOT AVAILABLE FatGroup THEN RETURN FALSE.
    END.
@@ -83,7 +83,7 @@ FUNCTION fCopyDefFatime RETURNS LOGICAL
    
    /* get default rows */             
    FOR EACH bCPFatime NO-LOCK WHERE
-            bCPFatime.Brand = gcBrand  AND
+            bCPFatime.Brand = Syst.Var:gcBrand  AND
             bCPFatime.FTGrp = icFatGrp AND
             bCPFatime.CLI   = "Def"
    BY bCPFatime.Period:
@@ -110,7 +110,7 @@ FUNCTION fCopyDefFatime RETURNS LOGICAL
           /* if amount has been limited then calculate previous events */
           IF FatGroup.AmtLimit > 0 THEN 
           FOR EACH Fatime NO-LOCK WHERE
-                   Fatime.Brand   = gcBrand   AND
+                   Fatime.Brand   = Syst.Var:gcBrand   AND
                    Fatime.FtGrp   = icFatGrp  AND
                    Fatime.CustNum = iiCustNum AND
                    Fatime.MsSeq   = iiMsSeq:
@@ -205,7 +205,7 @@ FUNCTION fCopyDefFatime RETURNS LOGICAL
          FATime.LastPeriod = fFATLastPeriod(FATime.Period,
                                             FatGroup.ValidPeriods).
  
-      fMakeCreateEvent(lhTable,"FtGrp,FatNum",katun,"").
+      fMakeCreateEvent(lhTable,"FtGrp,FatNum",Syst.Var:katun,"").
             
       RELEASE Fatime.
       
@@ -233,7 +233,7 @@ FUNCTION fCreateFatime RETURNS LOGICAL
       FatGroup.FtGrp NE icFatGrp
    THEN DO:
       FIND FatGroup WHERE 
-           FatGroup.Brand = gcBrand AND
+           FatGroup.Brand = Syst.Var:gcBrand AND
            FatGroup.FtGrp = icFatGrp NO-LOCK NO-ERROR.
       IF NOT AVAILABLE FatGroup THEN RETURN FALSE.
    END.
@@ -241,7 +241,7 @@ FUNCTION fCreateFatime RETURNS LOGICAL
    IF FatGroup.AmtLimit > 0 THEN DO:
       ldAmtLimit = FatGroup.AmtLimit.
       FOR EACH Fatime NO-LOCK WHERE
-               Fatime.Brand   = gcBrand   AND
+               Fatime.Brand   = Syst.Var:gcBrand   AND
                Fatime.FtGrp   = icFatGrp  AND
                Fatime.CustNum = iiCustNum AND
                Fatime.MsSeq   = iiMsSeq:
@@ -270,7 +270,7 @@ FUNCTION fCreateFatime RETURNS LOGICAL
           Fatime.MSSeq     = iiMsSeq
           /* check amount limit */
           Fatime.Amt       = MIN(idAmt,ldAmtLimit)
-          Fatime.Brand     = gcBrand
+          Fatime.Brand     = Syst.Var:gcBrand
           Fatime.PayerType = PROGRAM-NAME(2).
           
    IF icMemo > "" THEN DO liMemoCnt = 1 TO 5:
@@ -299,7 +299,7 @@ FUNCTION fCreateFatime RETURNS LOGICAL
       FATime.LastPeriod = fFATLastPeriod(FATime.Period,
                                          FatGroup.ValidPeriods).
     
-   fMakeCreateEvent(lhTable,"FtGrp,FatNum",katun,"").
+   fMakeCreateEvent(lhTable,"FtGrp,FatNum",Syst.Var:katun,"").
 
    RELEASE Fatime.
    
@@ -335,7 +335,7 @@ FUNCTION fCreateFatRow RETURNS CHARACTER
       FatGroup.FtGrp NE icFatGrp
    THEN DO:
       FIND FatGroup WHERE 
-           FatGroup.Brand = gcBrand AND
+           FatGroup.Brand = Syst.Var:gcBrand AND
            FatGroup.FtGrp = icFatGrp NO-LOCK NO-ERROR.
       IF NOT AVAILABLE FatGroup THEN RETURN "Unknown FAT group".
    END.
@@ -343,7 +343,7 @@ FUNCTION fCreateFatRow RETURNS CHARACTER
    IF FatGroup.AmtLimit > 0 THEN DO:
       ldAmtLimit = FatGroup.AmtLimit.
       FOR EACH Fatime NO-LOCK WHERE
-               Fatime.Brand   = gcBrand   AND
+               Fatime.Brand   = Syst.Var:gcBrand   AND
                Fatime.FtGrp   = icFatGrp  AND
                Fatime.CustNum = iiCustNum AND
                Fatime.MsSeq   = iiMsSeq   AND
@@ -368,7 +368,7 @@ FUNCTION fCreateFatRow RETURNS CHARACTER
    /* are there clitypes that should be excluded */
    IF iiMsSeq > 0 THEN DO:
       IF CAN-FIND(FIRST FATConfig WHERE
-                        FATConfig.Brand      = gcBrand  AND
+                        FATConfig.Brand      = Syst.Var:gcBrand  AND
                         FATConfig.FTGrp      = icFatGrp AND
                         FATConfig.ConfType   = 4        AND
                         FATConfig.ConfTarget = "CLIType" AND
@@ -387,7 +387,7 @@ FUNCTION fCreateFatRow RETURNS CHARACTER
          
          IF lcChkValue > "" THEN 
          FOR FIRST FATConfig NO-LOCK WHERE
-                   FATConfig.Brand      = gcBrand   AND
+                   FATConfig.Brand      = Syst.Var:gcBrand   AND
                    FATConfig.FTGrp      = icFatGrp  AND
                    FATConfig.ConfType   = 4         AND
                    FATConfig.ConfTarget = "CLITYPE" AND
@@ -402,7 +402,7 @@ FUNCTION fCreateFatRow RETURNS CHARACTER
    lcSkipPeriod = "".
    /* are there other groups that are mutually excluded */
    FOR EACH FATConfig NO-LOCK WHERE
-            FATConfig.Brand      = gcBrand   AND
+            FATConfig.Brand      = Syst.Var:gcBrand   AND
             FATConfig.FTGrp      = icFatGrp  AND
             FATConfig.ConfType   = 1         AND
             FATConfig.ValidFrom <= TODAY     AND
@@ -425,7 +425,7 @@ FUNCTION fCreateFatRow RETURNS CHARACTER
                 FATime.CLI      = icCLI     AND
                 FATime.Period  >= iiFromPer,
           FIRST bCPFatGroup NO-LOCK WHERE
-                bCpFatGroup.Brand    = gcBrand      AND
+                bCpFatGroup.Brand    = Syst.Var:gcBrand      AND
                 bCPFatGroup.FTGrp    = FATime.FTGrp AND
                 bCpFatGroup.BillCode = FATConfig.ConfRule1:
           lcSkipPeriod = lcSkipPeriod + 
@@ -483,7 +483,7 @@ FUNCTION fCreateFatRow RETURNS CHARACTER
                 Fatime.FatType   = FatGroup.FatType
                 Fatime.Transfer  = FatGroup.Transfer
                 Fatime.Interval  = FatGroup.Interval
-                Fatime.Brand     = gcBrand
+                Fatime.Brand     = Syst.Var:gcBrand
                 Fatime.PayerType = PROGRAM-NAME(2)
                 liFatCreated     = liFatCreated + 1.
           
@@ -502,7 +502,7 @@ FUNCTION fCreateFatRow RETURNS CHARACTER
          /* is there a rule for default value that overrides group default */
          IF liPeriodCnt = 1 THEN 
          FOR FIRST FATConfig NO-LOCK WHERE
-                   FATConfig.Brand      = gcBrand    AND
+                   FATConfig.Brand      = Syst.Var:gcBrand    AND
                    FATConfig.FTGrp      = icFatGrp   AND
                    FATConfig.ConfType   = 2          AND
                    FATConfig.ConfTarget = "Transfer" AND
@@ -517,7 +517,7 @@ FUNCTION fCreateFatRow RETURNS CHARACTER
             FATime.LastPeriod = fFATLastPeriod(FATime.Period,
                                                FatGroup.ValidPeriods).
            
-         fMakeCreateEvent(lhTable,"FtGrp,FatNum",katun,"").
+         fMakeCreateEvent(lhTable,"FtGrp,FatNum",Syst.Var:katun,"").
          
          RELEASE Fatime.
       END.
@@ -547,7 +547,7 @@ FUNCTION fCloseFat RETURNS LOGICAL
    DEF BUFFER Invoice FOR Invoice.
 
    FOR EACH FATime NO-LOCK WHERE
-            FATime.Brand = gcBrand  AND
+            FATime.Brand = Syst.Var:gcBrand AND
             FATime.MsSeq = iiMsSeq  AND
             FATime.FTGrp = icFatGrp AND
             (IF FATime.LastPeriod > 0 THEN
@@ -575,7 +575,7 @@ FUNCTION fFatExists RETURNS LOGICAL (icFatGrp     AS CHAR,
    DEF VAR llExists  AS  LOG  NO-UNDO.
    
    FOR EACH FATime NO-LOCK WHERE
-            FATime.Brand = gcBrand AND
+            FATime.Brand = Syst.Var:gcBrand AND
             FATime.MsSeq = iiMsSeq AND
             Fatime.Custnum = iiCustnum AND
             FATime.FTGrp = icFatGrp AND

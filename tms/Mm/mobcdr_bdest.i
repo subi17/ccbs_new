@@ -45,12 +45,12 @@ FUNCTION fMobCDRBDestName RETURNS CHAR
                          
    IF liBType = ? THEN 
    FIND FIRST BDest WHERE
-      Bdest.Brand    = gcBrand      AND 
+      Bdest.Brand    = Syst.Var:gcBrand      AND 
       BDest.BDest    = icBDestination AND
       BDest.ToDate  >= idaDate AND
       BDest.FromDate <= idaDate NO-LOCK NO-ERROR.
    ELSE FIND FIRST BDest WHERE
-      Bdest.Brand    = gcBrand      AND 
+      Bdest.Brand    = Syst.Var:gcBrand      AND 
       BDest.BDest    = icBDestination AND
       BDest.DestType = liBType AND
       BDest.ToDate  >= idaDate AND

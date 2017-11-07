@@ -82,10 +82,10 @@ IF NOT ok THEN DO:
 END.
 
 IF ok THEN DO:
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE pvmlog bDispErrors WITH FRAME loki.
 
-   ufk = 0. ehto = 3. 
+   Syst.Var:ufk = 0. Syst.Var:ehto = 3. 
    RUN Syst/ufkey.p. PAUSE 0.
 
    message "Are You SURE You want to start reading CDRs into database ?"

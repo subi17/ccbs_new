@@ -106,17 +106,17 @@ DEF VAR liEventTime AS INT NO-UNDO.
 DEF VAR ldeToday AS DEC NO-UNDO.
 DEF VAR ldeLastDump AS DEC NO-UNDO.
 
-ldeToday = fHMS2TS(TODAY, "00:00:00").
+ldeToday = Func.Common:mHMS2TS(TODAY, "00:00:00").
 
-fSplitTS(idLastDump,
+Func.Common:mSplitTS(idLastDump,
          OUTPUT ldaEventDate,
          OUTPUT liEventTime).
 
-ldeLastDump = fHMS2TS(ldaEventDate, "00:00:00").
+ldeLastDump = Func.Common:mHMS2TS(ldaEventDate, "00:00:00").
 
 IF icDumpMode = "Full" THEN DO:
    FOR EACH MsOwner NO-LOCK WHERE
-            MsOwner.Brand = gcBrand:
+            MsOwner.Brand = Syst.Var:gcBrand:
       lhCollect:BUFFER-CREATE.
       lhCollect:BUFFER-COPY(lhTable).
    END.
@@ -128,21 +128,21 @@ ELSE DO:
             Eventlog.tablename = "MsOwner" USE-INDEX EventDate:
    
       FIND FIRST MsOwner NO-LOCK WHERE
-                 MsOwner.Brand = gcBrand AND
+                 MsOwner.Brand = Syst.Var:gcBrand AND
                  MsOwner.CLI = ENTRY(2,EventLog.Key,CHR(255)) AND
                  MsOWner.TsEnd = DEC(ENTRY(3, EventLog.Key,CHR(255))) NO-ERROR.
 
       IF AVAIL MsOwner THEN DO:
-         IF EventLog.Action = "Create" THEN DO: /* YTS-10342 fix. */
-            /* IF create-date is not yesterday, wrong MSOwner was found. Do a new search */
+         IF EventLog.Action = "Create" THEN DO:
+         /* Always dump the latest ongoing msowner with create. YTS-11639 */
+         fCollect().
+            /* IF create-date is not yesterday, other MSOwner can be found. YTS-10342 */
             IF MsOwner.TSBegin <  ldeLastDump OR 
                MsOwner.TSBegin >= ldeToday THEN DO: 
                /* This begin date for create is not yesterday, so continue to search a new one */
-               IF MsOwner.TSBegin >= ldeToday THEN
-                  fCollect().
                RELEASE MSOwner.
                FIND FIRST MsOwner NO-LOCK WHERE
-                          MsOwner.Brand = gcBrand AND
+                          MsOwner.Brand = Syst.Var:gcBrand AND
                           MsOwner.CLI = ENTRY(2,EventLog.Key,CHR(255)) AND
                           MsOwner.TSBegin >= ldeLastDump AND  
                           MSOwner.TSBegin < ldeToday NO-ERROR.
@@ -156,7 +156,7 @@ ELSE DO:
          /* YTS-10342 New MSOwner-search to be able to find MSOwners 
             whose TSEnd is changed after midnight before dump start. */
          FIND FIRST MsOwner NO-LOCK WHERE
-                    MsOwner.Brand = gcBrand AND
+                    MsOwner.Brand = Syst.Var:gcBrand AND
                     MsOwner.CLI = ENTRY(2,EventLog.Key,CHR(255)) AND
                     MsOwner.TSBegin >= ldeLastDump NO-ERROR.
          IF AVAIL MsOwner THEN fCollect().

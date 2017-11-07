@@ -8,11 +8,10 @@ Version ......: xfera
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-katun = "MNPResend".
-gcBrand = "1".
+Syst.Var:katun = "MNPResend".
+Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/eventval.i}
 {Func/log.i}
@@ -32,7 +31,7 @@ DEFINE VARIABLE liResent   AS INTEGER NO-UNDO.
 DEF BUFFER bMNPOperation FOR MNPOperation.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 

@@ -11,7 +11,6 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/msisdn.i}
 {Func/cparam2.i}
 
@@ -194,7 +193,7 @@ END.
 
 MAIN:
 REPEAT WITH FRAME range.
-   ehto = 9.  RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9.  RUN Syst/ufkey.p.
 
    UPDATE 
       Size 
@@ -218,7 +217,7 @@ REPEAT WITH FRAME range.
       cLastKeyLabel = KEYLABEL(LASTKEY).
 
       /* Rank input checking when typing; description generated */
-      IF FRAME-FIELD = "lcMSCode" AND LOOKUP(cLastKeyLabel, poisnap) > 0 THEN
+      IF FRAME-FIELD = "lcMSCode" AND LOOKUP(cLastKeyLabel, Syst.Var:poisnap) > 0 THEN
       DO:
           DEFINE VARIABLE inputMsCode AS CHARACTER NO-UNDO. 
           
@@ -227,8 +226,7 @@ REPEAT WITH FRAME range.
 
           DISPLAY lcMsCode.
 
-          lcMSCodeDesc = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                            "MSISDNNumber","Rank", inputMsCode).
+          lcMSCodeDesc = Func.Common:mTMSCodeName("MSISDNNumber","Rank", inputMsCode).
           DISPLAY lcMSCodeDesc.
       END. /* IF FRAME-FIELD = "lcMSCode" AND LOOKUP(... */
 
@@ -246,14 +244,13 @@ REPEAT WITH FRAME range.
             DISPLAY lcMsCode WITH FRAME range.
          END. /* IF lcCode NE "" ... */
          
-         lcMSCodeDesc = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                           "MSISDNNumber","Rank", lcCode).
+         lcMSCodeDesc = Func.Common:mTMSCodeName("MSISDNNumber","Rank", lcCode).
          
          DISPLAY lcMSCodeDesc. 
       END. /* IF FRAME-FIELD = "lcMSCode" AND cLastKeyLabel */
 
       /* POS code input checking when typing; description generated */
-      IF FRAME-FIELD = "ocPosCode" AND LOOKUP(cLastKeyLabel, poisnap) > 0 THEN
+      IF FRAME-FIELD = "ocPosCode" AND LOOKUP(cLastKeyLabel, Syst.Var:poisnap) > 0 THEN
       DO:
           DEFINE VARIABLE inputOsCode AS CHARACTER NO-UNDO. 
           
@@ -265,8 +262,7 @@ REPEAT WITH FRAME range.
           inputMsCode2 = TRIM(INPUT lcMsCode).
           lcMsCode = inputMsCode2.
 
-          lcResPosDesc = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                            "MSISDN","POS", inputOsCode).
+          lcResPosDesc = Func.Common:mTMSCodeName("MSISDN","POS", inputOsCode).
 
           DISPLAY lcResPosDesc.
           DISPLAY ocPosCode.
@@ -286,24 +282,23 @@ REPEAT WITH FRAME range.
             DISPLAY ocPosCode WITH FRAME range.
          END. /* IF lcCode NE "" */
          
-         lcResPosDesc = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                           "MSISDN", "POS", lcCode).
+         lcResPosDesc = Func.Common:mTMSCodeName("MSISDN", "POS", lcCode).
          
          DISPLAY lcResPosDesc. 
       END. /* IF FRAME-FIELD = "ocPosCode" AND cLastKeyLabel */
 
       APPLY LASTKEY.
-      ehto = 9.
+      Syst.Var:ehto = 9.
       RUN Syst/ufkey.p.
    END. /* EDITING */
 
 ACTION:
    REPEAT WITH FRAME range.
-      ASSIGN ehto = 0 ufk = 0 ufk[1] = 7 ufk[5] =  15 ufk[8] = 8.
+      ASSIGN Syst.Var:ehto = 0 Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] =  15 Syst.Var:ufk[8] = 8.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT main.
-      IF toimi = 8 THEN LEAVE main.
-      IF TOIMI = 5 THEN DO:
+      IF Syst.Var:toimi = 1 THEN NEXT main.
+      IF Syst.Var:toimi = 8 THEN LEAVE main.
+      IF Syst.Var:toimi = 5 THEN DO:
          IF Size =  0 THEN 
          DO:
             MESSAGE
@@ -313,7 +308,7 @@ ACTION:
          END. /* IF Size = 0 */  
 
          LEAVE Action.
-      END. /* IF toimi = 5 */
+      END. /* IF Syst.Var:toimi = 5 */
    END. /* REPEAT WITH FRAME range, Action */
 
    DEF VAR minMSISDN AS DEC NO-UNDO.
@@ -526,8 +521,8 @@ PROCEDURE MarkRankedMSISDNInRange:
          x-MSISDN.CLI         <=  icEndCLI     AND
          x-MSISDN.StatusCode  >= iBeginStatus  AND
          x-MSISDN.StatusCode  <= iEndStatus    AND
-         x-MSISDN.Brand        = gcBrand       AND 
-         x-MSISDN.ValidTo      > fMakeTS()     AND 
+         x-MSISDN.Brand        = Syst.Var:gcBrand       AND 
+         x-MSISDN.ValidTo      > Func.Common:mMakeTS()     AND 
          x-MSISDN.pos          = ""
       BREAK BY x-MSISDN.CLI:
          

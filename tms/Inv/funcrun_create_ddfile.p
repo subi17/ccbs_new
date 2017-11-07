@@ -9,8 +9,8 @@
 
 {Syst/commpaa.i}
 ASSIGN 
-   gcBrand = "1"
-   katun   = "Cron".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun   = "Cron".
    
 {Func/cparam2.i}
 {Syst/funcrunprocess_run.i}
@@ -61,7 +61,7 @@ IF lcInputFileDir  EQ ? THEN lcInputFileDir = "".
 
 RUN Inv/ddoutfileco.p ("",
                    0,
-                   99999999,
+                   999999999,
                    "",
                    "_",
                    ldaInvDate,

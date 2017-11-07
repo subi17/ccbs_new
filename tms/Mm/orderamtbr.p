@@ -58,21 +58,21 @@ form
     ttData.CodeName     FORMAT "X(30)"    
     ttData.CodeAmt
 WITH ROW FrmRow OVERLAY FrmDown DOWN
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) " " + ac-hdr + " " 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + ac-hdr + " " 
     CENTERED FRAME sel.
 
 form /* seek  CodeValue */
     "Code value:" liCodeValue
     HELP "Enter code value"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE VALUE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND CODE VALUE "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek CodeName */
     "Code Name:" lcCodeName
     HELP "Enter code name"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE NAME "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND CODE NAME "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 DO liCount = 1 TO NUM-ENTRIES(icRunParam,";"):
@@ -106,7 +106,7 @@ FOR EACH TMSCodes NO-LOCK WHERE
 
 END.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 /* column-labels for parameters */
@@ -181,12 +181,12 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-           ufk    = 0
-           ufk[1] = 9064
-           ufk[2] = 30
-           ufk[5] = 11
-           ufk[8] = 8 
-           ehto   = 3 
+           Syst.Var:ufk    = 0
+           Syst.Var:ufk[1] = 9064
+           Syst.Var:ufk[2] = 30
+           Syst.Var:ufk[5] = 11
+           Syst.Var:ufk[8] = 8 
+           Syst.Var:ehto   = 3 
            ufkey  = FALSE.
 
         RUN Syst/ufkey.p.
@@ -195,17 +195,17 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
          CHOOSE ROW ttData.CodeValue {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) ttData.CodeValue WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) ttData.CodeValue WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW ttData.CodeName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) ttData.CodeName WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) ttData.CodeName WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -213,10 +213,10 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -234,7 +234,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -259,7 +259,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -285,7 +285,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ttData WHERE ROWID(ttData) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -309,7 +309,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -323,10 +323,10 @@ REPEAT WITH FRAME sel:
        END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". RUN Syst/ufcolor.p.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f1.
         liCodeValue = ?.
         UPDATE liCodeValue WITH FRAME f1.
@@ -352,10 +352,10 @@ REPEAT WITH FRAME sel:
         END.
      END. /* Search-1 */
 
-     ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-        cfc = "puyr". RUN Syst/ufcolor.p.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         CLEAR FRAME f2.
         lcCodeName = "".
         UPDATE lcCodeName WITH FRAME f2.
@@ -382,7 +382,7 @@ REPEAT WITH FRAME sel:
      END. /* Search-2 */
 
 
-     ELSE IF LOOKUP(nap,"5,f5,enter,return") > 0 THEN DO: 
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5,enter,return") > 0 THEN DO: 
         RUN local-find-this(FALSE).
 
         IF AVAILABLE ttData THEN DO:
@@ -391,25 +391,25 @@ REPEAT WITH FRAME sel:
         END.
      END.
 
-     ELSE IF LOOKUP(nap,"HOME,H") > 0 THEN DO : /* FIRST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"HOME,H") > 0 THEN DO : /* FIRST record */
         RUN local-find-FIRST.
         ASSIGN Memory = ROWID(ttData) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = ROWID(ttData) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE local-find-this:
 
@@ -479,7 +479,7 @@ PROCEDURE local-find-others.
       IF icTableName = "Order" THEN DO:
 
          FOR EACH Order NO-LOCK WHERE
-                  Order.Brand      = gcBrand AND
+                  Order.Brand      = Syst.Var:gcBrand AND
                   Order.StatusCode = STRING(ttData.CodeValue):
 
             ttData.CodeAmt = ttData.CodeAmt + 1.
@@ -494,7 +494,7 @@ PROCEDURE local-find-others.
       ELSE IF icTableName = "MsRequest" THEN DO:
 
          FOR EACH MsRequest NO-LOCK WHERE
-                  MsRequest.Brand     = gcBrand    AND
+                  MsRequest.Brand     = Syst.Var:gcBrand    AND
                   MsRequest.ReqType   = liParam[1] AND
                   MsRequest.ReqStatus = ttData.CodeValue:
 

@@ -12,8 +12,8 @@
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Func/ftransdir.i}
@@ -325,7 +325,7 @@ PROCEDURE pProcessTT:
 
    IF lcTariffBundle > "" THEN
    DO:
-       IF NOT CAN-FIND(FIRST CliType WHERE CliType.Brand = gcBrand AND CliType.CliType = lcCliType NO-LOCK) THEN 
+       IF NOT CAN-FIND(FIRST CliType WHERE CliType.Brand = Syst.Var:gcBrand AND CliType.CliType = lcCliType NO-LOCK) THEN 
        DO:
            /* Main Tariff */
            CREATE ttCliType.
@@ -562,10 +562,13 @@ PROCEDURE pCreateServiceLimit_Voice:
     DEFINE INPUT PARAMETER iiVLLastMonthCalc  AS INTEGER   NO-UNDO.    
     DEFINE INPUT PARAMETER icMobileFixedLine  AS CHARACTER NO-UNDO.    
 
-    DEFINE VARIABLE liCount    AS INTEGER   NO-UNDO.
-    DEFINE VARIABLE lcBCList   AS CHARACTER NO-UNDO.
+    DEFINE VARIABLE liCount           AS INTEGER   NO-UNDO.
+    DEFINE VARIABLE lcBCList          AS CHARACTER NO-UNDO.
+    DEFINE VARIABLE lcFixedLineBCList AS CHARACTER NO-UNDO.
 
-    ASSIGN lcBCList = "10100001,10100003,10100005,CFOTHER,CFYOIGO".
+    ASSIGN 
+        lcBCList          = "10100001,10100003,10100005,CFOTHER,CFYOIGO"
+        lcFixedLineBCList = "F10100003,F10100005".
 
     CREATE ttServiceLimit.      
     ASSIGN
@@ -579,36 +582,63 @@ PROCEDURE pCreateServiceLimit_Voice:
        ttServiceLimit.LastMonthCalc  = iiVLLastMonthCalc.        
 
      IF ilPostpaid THEN 
-     DO:   
-         DO liCount = 1 TO NUM-ENTRIES(lcBCList):                
+     DO: 
+         IF icMobileFixedLine = "FixedLine" THEN 
+         DO:    
+            ASSIGN lcBCList = lcFixedLineBCList.
 
-             CREATE ttServiceLimitTarget.
-             ASSIGN
+            CREATE ttServiceLimitTarget.
+            ASSIGN
                 ttServiceLimitTarget.GroupCode      = ttServiceLimit.GroupCode
                 ttServiceLimitTarget.SLCode         = ttServiceLimit.SLCode
-                ttServiceLimitTarget.ServiceLMember = ENTRY(liCount, lcBCList) 
-                ttServiceLimitTarget.InSideRate     = icDCEvemt + "_VOICE_IN" 
-                ttServiceLimitTarget.OutSideRate    = icDCEvemt + "_VOICE_OUT".
+                ttServiceLimitTarget.ServiceLMember = "F10100003"
+                ttServiceLimitTarget.InSideRate     = icDCEvemt + "_MIN_IN" 
+                ttServiceLimitTarget.OutSideRate    = icDCEvemt + "_MIN_OUT".  
+
+            CREATE ttBDest.
+            ASSIGN
+                 ttBDest.GroupCode = ttServiceLimitTarget.GroupCode        
+                 ttBDest.SLCode    = ttServiceLimitTarget.SLCode          
+                 ttBDest.BDest     = ttServiceLimitTarget.InSideRate
+                 ttBDest.BDName    = ttServiceLimitTarget.GroupCode + " " + "MIN IN"                 
+                 ttBDest.CCN       = 81.
+
+            CREATE ttBDest.
+            ASSIGN
+                 ttBDest.GroupCode = ttServiceLimitTarget.GroupCode                  
+                 ttBDest.SLCode    = ttServiceLimitTarget.SLCode 
+                 ttBDest.BDest     = ttServiceLimitTarget.OutSideRate
+                 ttBDest.BDName    = ttServiceLimitTarget.GroupCode + " " + "MIN OUT"                 
+                 ttBDest.CCN       = 81.
          END.
-
-         CREATE ttBDest.
-         ASSIGN
-             ttBDest.GroupCode = ttServiceLimitTarget.GroupCode        
-             ttBDest.SLCode    = ttServiceLimitTarget.SLCode          
-             ttBDest.BDest     = ttServiceLimitTarget.InSideRate
-             ttBDest.BDName    = ttServiceLimitTarget.GroupCode + " " + "VOICE IN"                 
-             ttBDest.CCN       = 81.
-
-         CREATE ttBDest.
-         ASSIGN
-             ttBDest.GroupCode = ttServiceLimitTarget.GroupCode                  
-             ttBDest.SLCode    = ttServiceLimitTarget.SLCode 
-             ttBDest.BDest     = ttServiceLimitTarget.OutSideRate
-             ttBDest.BDName    = ttServiceLimitTarget.GroupCode + " " + "VOICE OUT"                 
-             ttBDest.CCN       = 81.
-         
-         IF icMobileFixedLine = "Mobile" THEN 
+         ELSE
          DO:
+             DO liCount = 1 TO NUM-ENTRIES(lcBCList):
+                 CREATE ttServiceLimitTarget.
+                 ASSIGN
+                    ttServiceLimitTarget.GroupCode      = ttServiceLimit.GroupCode
+                    ttServiceLimitTarget.SLCode         = ttServiceLimit.SLCode
+                    ttServiceLimitTarget.ServiceLMember = ENTRY(liCount, lcBCList) 
+                    ttServiceLimitTarget.InSideRate     = icDCEvemt + "_VOICE_IN" 
+                    ttServiceLimitTarget.OutSideRate    = icDCEvemt + "_VOICE_OUT".
+             END.
+
+             CREATE ttBDest.
+             ASSIGN
+                 ttBDest.GroupCode = ttServiceLimitTarget.GroupCode        
+                 ttBDest.SLCode    = ttServiceLimitTarget.SLCode          
+                 ttBDest.BDest     = ttServiceLimitTarget.InSideRate
+                 ttBDest.BDName    = ttServiceLimitTarget.GroupCode + " " + "VOICE IN"                 
+                 ttBDest.CCN       = 81.
+
+             CREATE ttBDest.
+             ASSIGN
+                 ttBDest.GroupCode = ttServiceLimitTarget.GroupCode                  
+                 ttBDest.SLCode    = ttServiceLimitTarget.SLCode 
+                 ttBDest.BDest     = ttServiceLimitTarget.OutSideRate
+                 ttBDest.BDName    = ttServiceLimitTarget.GroupCode + " " + "VOICE OUT"                 
+                 ttBDest.CCN       = 81.
+
              CREATE ttTMRItemValue.
              ASSIGN 
                  ttTMRItemValue.TMRuleSeq = 34
@@ -619,8 +649,9 @@ PROCEDURE pCreateServiceLimit_Voice:
              ASSIGN 
                  ttTMRItemValue.TMRuleSeq = 42
                  ttTMRItemValue.CliType = icCliType    
-                 ttTMRItemValue.BDest   = icDCEvemt + "_VOICE_IN".      
+                 ttTMRItemValue.BDest   = icDCEvemt + "_VOICE_IN".     
          END.
+
      END.
 
      RETURN "".
@@ -654,71 +685,109 @@ PROCEDURE pCreateServiceLimit_BDest:
        ttServiceLimit.LastMonthCalc  = iiBDLLastMonthCalc.
 
     IF ilPostpaid THEN 
-    DO:   
-        DO liCount = 1 TO NUM-ENTRIES(lcBCList):                
-             CREATE ttServiceLimitTarget.
-             ASSIGN
+    DO: 
+        IF icMobileFixedLine = "FixedLine" THEN 
+        DO:
+            CREATE ttServiceLimitTarget.
+            ASSIGN
                 ttServiceLimitTarget.GroupCode      = ttServiceLimit.GroupCode
                 ttServiceLimitTarget.SLCode         = ttServiceLimit.SLCode
-                ttServiceLimitTarget.ServiceLMember = ENTRY(liCount, lcBCList) 
-                ttServiceLimitTarget.InSideRate     = icDCEvemt + "_VOICE_IN" 
-                ttServiceLimitTarget.OutSideRate    = icDCEvemt + "_VOICE_OUT".
-         END.
+                ttServiceLimitTarget.ServiceLMember = "F10100005"
+                ttServiceLimitTarget.InSideRate     = icDCEvemt + "_QTY_IN" 
+                ttServiceLimitTarget.OutSideRate    = icDCEvemt + "_QTY_OUT".
 
-         FIND FIRST ttBDest WHERE ttBDest.GroupCode = ttServiceLimitTarget.GroupCode  AND 
-                                  ttBDest.SLCode    = ttServiceLimitTarget.SLCode     AND 
-                                  ttBDest.BDest     = ttServiceLimitTarget.InSideRate NO-LOCK NO-ERROR.
-         IF NOT AVAIL ttBDest THEN 
-         DO:                         
-             CREATE ttBDest.
-             ASSIGN
-                 ttBDest.GroupCode = ttServiceLimitTarget.GroupCode       
-                 ttBDest.SLCode    = ttServiceLimitTarget.SLCode           
-                 ttBDest.BDest     = ttServiceLimitTarget.InSideRate
-                 ttBDest.BDName    = ttServiceLimitTarget.GroupCode + " " + "VOICE IN"                 
-                 ttBDest.CCN       = 81.
-         END.    
+            FIND FIRST ttBDest WHERE ttBDest.GroupCode = ttServiceLimitTarget.GroupCode  AND 
+                                     ttBDest.SLCode    = ttServiceLimitTarget.SLCode     AND 
+                                     ttBDest.BDest     = ttServiceLimitTarget.InSideRate NO-LOCK NO-ERROR.
+            IF NOT AVAIL ttBDest THEN 
+            DO:                         
+                CREATE ttBDest.
+                ASSIGN
+                    ttBDest.GroupCode = ttServiceLimitTarget.GroupCode       
+                    ttBDest.SLCode    = ttServiceLimitTarget.SLCode           
+                    ttBDest.BDest     = ttServiceLimitTarget.InSideRate
+                    ttBDest.BDName    = ttServiceLimitTarget.GroupCode + " " + "QTY IN"                 
+                    ttBDest.CCN       = 81.
+            END.    
 
-         FIND FIRST ttBDest WHERE ttBDest.GroupCode = ttServiceLimitTarget.GroupCode   AND 
-                                  ttBDest.SLCode    = ttServiceLimitTarget.SLCode      AND 
-                                  ttBDest.BDest     = ttServiceLimitTarget.OutSideRate NO-LOCK NO-ERROR.
-         IF NOT AVAIL ttBDest THEN 
-         DO:
-             CREATE ttBDest.
-             ASSIGN
-                 ttBDest.GroupCode = ttServiceLimitTarget.GroupCode    
-                 ttBDest.SLCode    = ttServiceLimitTarget.SLCode              
-                 ttBDest.BDest     = ttServiceLimitTarget.OutSideRate
-                 ttBDest.BDName    = ttServiceLimitTarget.GroupCode + " " + "VOICE OUT"                 
-                 ttBDest.CCN       = 81.   
-         END.    
+            FIND FIRST ttBDest WHERE ttBDest.GroupCode = ttServiceLimitTarget.GroupCode   AND 
+                                     ttBDest.SLCode    = ttServiceLimitTarget.SLCode      AND 
+                                     ttBDest.BDest     = ttServiceLimitTarget.OutSideRate NO-LOCK NO-ERROR.
+            IF NOT AVAIL ttBDest THEN 
+            DO:
+                CREATE ttBDest.
+                ASSIGN
+                    ttBDest.GroupCode = ttServiceLimitTarget.GroupCode    
+                    ttBDest.SLCode    = ttServiceLimitTarget.SLCode              
+                    ttBDest.BDest     = ttServiceLimitTarget.OutSideRate
+                    ttBDest.BDName    = ttServiceLimitTarget.GroupCode + " " + "QTY OUT"                 
+                    ttBDest.CCN       = 81.   
+            END.
+        END.
+        ELSE
+        DO:
+            DO liCount = 1 TO NUM-ENTRIES(lcBCList):                
+                 CREATE ttServiceLimitTarget.
+                 ASSIGN
+                    ttServiceLimitTarget.GroupCode      = ttServiceLimit.GroupCode
+                    ttServiceLimitTarget.SLCode         = ttServiceLimit.SLCode
+                    ttServiceLimitTarget.ServiceLMember = ENTRY(liCount, lcBCList) 
+                    ttServiceLimitTarget.InSideRate     = icDCEvemt + "_VOICE_IN" 
+                    ttServiceLimitTarget.OutSideRate    = icDCEvemt + "_VOICE_OUT".
+            END.
 
-         IF icMobileFixedLine = "Mobile" THEN 
-         DO:
-             FIND FIRST ttTMRItemValue WHERE ttTMRItemValue.TMRuleSeq = 34        AND 
-                                             ttTMRItemValue.CliType   = icCliType AND 
-                                             ttTMRItemValue.BDest     = icDCEvemt + "_VOICE_IN" NO-LOCK NO-ERROR.
-             IF NOT AVAIL ttTMRItemValue THEN 
-             DO:
-                 CREATE ttTMRItemValue.
-                 ASSIGN 
-                     ttTMRItemValue.TMRuleSeq = 34
-                     ttTMRItemValue.CliType = icCliType    
-                     ttTMRItemValue.BDest   = icDCEvemt + "_VOICE_IN".
-             END.
+            FIND FIRST ttBDest WHERE ttBDest.GroupCode = ttServiceLimitTarget.GroupCode  AND 
+                                     ttBDest.SLCode    = ttServiceLimitTarget.SLCode     AND 
+                                     ttBDest.BDest     = ttServiceLimitTarget.InSideRate NO-LOCK NO-ERROR.
+            IF NOT AVAIL ttBDest THEN 
+            DO:                         
+                CREATE ttBDest.
+                ASSIGN
+                    ttBDest.GroupCode = ttServiceLimitTarget.GroupCode       
+                    ttBDest.SLCode    = ttServiceLimitTarget.SLCode           
+                    ttBDest.BDest     = ttServiceLimitTarget.InSideRate
+                    ttBDest.BDName    = ttServiceLimitTarget.GroupCode + " " + "VOICE IN"                 
+                    ttBDest.CCN       = 81.
+            END.    
+
+            FIND FIRST ttBDest WHERE ttBDest.GroupCode = ttServiceLimitTarget.GroupCode   AND 
+                                     ttBDest.SLCode    = ttServiceLimitTarget.SLCode      AND 
+                                     ttBDest.BDest     = ttServiceLimitTarget.OutSideRate NO-LOCK NO-ERROR.
+            IF NOT AVAIL ttBDest THEN 
+            DO:
+                CREATE ttBDest.
+                ASSIGN
+                    ttBDest.GroupCode = ttServiceLimitTarget.GroupCode    
+                    ttBDest.SLCode    = ttServiceLimitTarget.SLCode              
+                    ttBDest.BDest     = ttServiceLimitTarget.OutSideRate
+                    ttBDest.BDName    = ttServiceLimitTarget.GroupCode + " " + "VOICE OUT"                 
+                    ttBDest.CCN       = 81.   
+            END.
+
+            FIND FIRST ttTMRItemValue WHERE ttTMRItemValue.TMRuleSeq = 34        AND 
+                                            ttTMRItemValue.CliType   = icCliType AND 
+                                            ttTMRItemValue.BDest     = icDCEvemt + "_VOICE_IN" NO-LOCK NO-ERROR.
+            IF NOT AVAIL ttTMRItemValue THEN 
+            DO:
+                CREATE ttTMRItemValue.
+                ASSIGN 
+                    ttTMRItemValue.TMRuleSeq = 34
+                    ttTMRItemValue.CliType = icCliType    
+                    ttTMRItemValue.BDest   = icDCEvemt + "_VOICE_IN".
+            END.
              
-             FIND FIRST ttTMRItemValue WHERE ttTMRItemValue.TMRuleSeq = 42        AND 
-                                             ttTMRItemValue.CliType   = lcCliType AND 
-                                             ttTMRItemValue.BDest     = icDCEvemt + "_VOICE_IN" NO-LOCK NO-ERROR.
-             IF NOT AVAIL ttTMRItemValue THEN 
-             DO:    
-                 CREATE ttTMRItemValue.
-                 ASSIGN 
-                     ttTMRItemValue.TMRuleSeq = 42
-                     ttTMRItemValue.CliType   = icCliType    
-                     ttTMRItemValue.BDest     = icDCEvemt + "_VOICE_IN".
-             END.       
-         END.
+            FIND FIRST ttTMRItemValue WHERE ttTMRItemValue.TMRuleSeq = 42        AND 
+                                            ttTMRItemValue.CliType   = lcCliType AND 
+                                            ttTMRItemValue.BDest     = icDCEvemt + "_VOICE_IN" NO-LOCK NO-ERROR.
+            IF NOT AVAIL ttTMRItemValue THEN 
+            DO:    
+                CREATE ttTMRItemValue.
+                ASSIGN 
+                    ttTMRItemValue.TMRuleSeq = 42
+                    ttTMRItemValue.CliType   = icCliType    
+                    ttTMRItemValue.BDest     = icDCEvemt + "_VOICE_IN".
+            END.
+        END.
      END.
          
      RETURN "".
@@ -836,13 +905,15 @@ PROCEDURE pBundle:
     DEFINE INPUT PARAMETER iiBDLFirstMonthCalc AS INTEGER   NO-UNDO.
     DEFINE INPUT PARAMETER iiBDLLastMonthCalc  AS INTEGER   NO-UNDO.
 
-    DEFINE VARIABLE liCount    AS INTEGER   NO-UNDO.
-    DEFINE VARIABLE lcBCList   AS CHARACTER NO-UNDO.
-    DEFINE VARIABLE lcBONOList AS CHARACTER NO-UNDO.
+    DEFINE VARIABLE liCount           AS INTEGER   NO-UNDO.
+    DEFINE VARIABLE lcBCList          AS CHARACTER NO-UNDO.
+    DEFINE VARIABLE lcFixedLineBCList AS CHARACTER NO-UNDO.
+    DEFINE VARIABLE lcBONOList        AS CHARACTER NO-UNDO.
 
     ASSIGN 
-        lcBCList   = "10100001,10100003,10100005,CFOTHER,CFYOIGO"
-        lcBONOList = fCParamC("BONO_CONTRACTS") .
+        lcBCList          = "10100001,10100003,10100005,CFOTHER,CFYOIGO"
+        lcFixedLineBCList = "F10100003,F10100005" 
+        lcBONOList        = fCParamC("BONO_CONTRACTS") .
 
     CREATE ttDayCampaign.
     ASSIGN
@@ -857,68 +928,97 @@ PROCEDURE pBundle:
         ttDayCampaign.DataLimit   = ideDataLimit
         ttDayCampaign.SLCreated   = Yes WHEN (ideDataLimit > 0 OR ideVoiceLimit > 0 OR ideBDestLimit > 0).
 
-    CREATE ttFMItem.
-    ASSIGN 
-        ttFMItem.FeeModel     = ttDayCampaign.BillCode
-        ttFMItem.BillCode     = ttDayCampaign.BillCode
-        ttFMItem.PriceList    = ""
-        ttFMItem.Amount       = ideCommercialFee
-        ttFMItem.FirstMonthBR = iiFirstMonthBR
-        ttFMItem.BrokenRental = iiLastMonthBR.
-     
+    IF icMobileFixedLine = "FixedLine" THEN 
+    DO:
+        IF INDEX(icBundleName, "Casa") = 0 THEN 
+        DO:
+            CREATE ttFMItem.
+            ASSIGN 
+                ttFMItem.FeeModel     = ttDayCampaign.BillCode
+                ttFMItem.BillCode     = ttDayCampaign.BillCode
+                ttFMItem.PriceList    = "CONTRATOFIXED"
+                ttFMItem.Amount       = ideCommercialFee
+                ttFMItem.FirstMonthBR = iiFirstMonthBR
+                ttFMItem.BrokenRental = iiLastMonthBR.
+        END.
+        ELSE
+        DO:      
+            CREATE ttFMItem.
+            ASSIGN 
+                ttFMItem.FeeModel     = ttDayCampaign.BillCode
+                ttFMItem.BillCode     = ttDayCampaign.BillCode
+                ttFMItem.PriceList    = "CONTRATOFIXEDONLY"
+                ttFMItem.Amount       = ideCommercialFee
+                ttFMItem.FirstMonthBR = iiFirstMonthBR
+                ttFMItem.BrokenRental = iiLastMonthBR.    
+        END.    
+    END.
+    ELSE 
+    DO:    
+        CREATE ttFMItem.
+        ASSIGN 
+            ttFMItem.FeeModel     = ttDayCampaign.BillCode
+            ttFMItem.BillCode     = ttDayCampaign.BillCode
+            ttFMItem.PriceList    = ""
+            ttFMItem.Amount       = ideCommercialFee
+            ttFMItem.FirstMonthBR = iiFirstMonthBR
+            ttFMItem.BrokenRental = iiLastMonthBR.
+    END. 
+
     CREATE ttServiceLimitGroup.
     ASSIGN 
         ttServiceLimitGroup.GroupCode = ttDayCampaign.DCEvent
         ttServiceLimitGroup.GroupName = ttDayCampaign.DCName.
-     
-     IF icBundleType = "PackageWithCounter" THEN 
-     DO:
-         IF ideDataLimit > 0 THEN
-         DO:
-             RUN pCreateProgressiveRatingLimit_Data(lcCliType,
-                                                    ttDayCampaign.DCEvent,
-                                                    (iiPayType = 1),
-                                                    ideDataLimit,
-                                                    iiDLFirstMonthCalc,
-                                                    iiDLLastMonthCalc,
-                                                    icMobileFixedLine).
-         END. 
-     END.
-     ELSE IF icBundleType = "ServicePackage" THEN 
-     DO:   
-         IF ideDataLimit > 0 THEN 
-         DO:         
-             RUN pCreateServiceLimit_Data(lcCliType,
-                                          ttDayCampaign.DCEvent,
-                                          (iiPayType = 1),
-                                          ideDataLimit,
-                                          iiDLFirstMonthCalc,
-                                          iiDLLastMonthCalc,
-                                          icMobileFixedLine).             
-         END.
 
-         IF ideVoiceLimit > 0 THEN 
-         DO:
-            RUN pCreateServiceLimit_Voice(lcCliType,
-                                          ttDayCampaign.DCEvent,
-                                          (iiPayType = 1),
-                                          ideVoiceLimit,
-                                          iiVLFirstMonthCalc,
-                                          iiVLLastMonthCalc,
-                                          icMobileFixedLine).
-         END.
-
-         IF ideBDestLimit > 0 THEN 
-         DO:
-            RUN pCreateServiceLimit_BDest(lcCliType,
-                                          ttDayCampaign.DCEvent,
-                                          (iiPayType = 1),
-                                          ideBDestLimit,
-                                          iiBDLFirstMonthCalc,
-                                          iiBDLLastMonthCalc, 
-                                          icMobileFixedLine).
-         END. 
+    IF icBundleType = "PackageWithCounter" THEN 
+    DO:
+        IF ideDataLimit > 0 THEN
+        DO:
+            RUN pCreateProgressiveRatingLimit_Data(lcCliType,
+                                                   ttDayCampaign.DCEvent,
+                                                   (iiPayType = 1),
+                                                   ideDataLimit,
+                                                   iiDLFirstMonthCalc,
+                                                   iiDLLastMonthCalc,
+                                                   icMobileFixedLine).
+        END. 
     END.
+    ELSE IF icBundleType = "ServicePackage" THEN 
+    DO:   
+        IF ideDataLimit > 0 THEN 
+        DO:         
+            RUN pCreateServiceLimit_Data(lcCliType,
+                                         ttDayCampaign.DCEvent,
+                                         (iiPayType = 1),
+                                         ideDataLimit,
+                                         iiDLFirstMonthCalc,
+                                         iiDLLastMonthCalc,
+                                         icMobileFixedLine).             
+        END.
+
+        IF ideVoiceLimit > 0 THEN 
+        DO:
+           RUN pCreateServiceLimit_Voice(lcCliType,
+                                         ttDayCampaign.DCEvent,
+                                         (iiPayType = 1),
+                                         ideVoiceLimit,
+                                         iiVLFirstMonthCalc,
+                                         iiVLLastMonthCalc,
+                                         icMobileFixedLine).
+        END.
+
+        IF ideBDestLimit > 0 AND 
+           (icMobileFixedLine NE "mobile" OR ideVoiceLimit EQ 0) THEN 
+        DO:
+           RUN pCreateServiceLimit_BDest(lcCliType,
+                                         ttDayCampaign.DCEvent,
+                                         (iiPayType = 1),
+                                         ideBDestLimit,
+                                         iiBDLFirstMonthCalc,
+                                         iiBDLLastMonthCalc, 
+                                         icMobileFixedLine).
+        END. 
+   END. 
     
 END PROCEDURE.    
 
@@ -1028,7 +1128,7 @@ PROCEDURE pValidateData:
             DO:
                IF ttTariffCre.FieldValue = "" THEN
                   UNDO, THROW NEW Progress.Lang.AppError("Copy services from clitype is blank", 1).
-               ELSE IF NOT CAN-FIND(FIRST CliType WHERE CliType.Brand = gcBrand AND CliType.CliType = ttTariffCre.FieldValue NO-LOCK) THEN 
+               ELSE IF NOT CAN-FIND(FIRST CliType WHERE CliType.Brand = Syst.Var:gcBrand AND CliType.CliType = ttTariffCre.FieldValue NO-LOCK) THEN 
                   UNDO, THROW NEW Progress.Lang.AppError("Invalid 'copy services from clitype'", 1).   
                ELSE 
                   lcCopyServicesFromCliType = ttTariffCre.FieldValue.
@@ -1049,7 +1149,7 @@ PROCEDURE pValidateData:
             END.
             WHEN {&RRP} THEN 
             DO:
-               IF ttTariffCre.FieldValue EQ "" AND NOT CAN-FIND(FIRST RatePlan WHERE RatePlan.Brand = gcBrand AND RatePlan.RatePlan = ttTariffCre.FieldValue NO-LOCK) THEN 
+               IF ttTariffCre.FieldValue EQ "" AND NOT CAN-FIND(FIRST RatePlan WHERE RatePlan.Brand = Syst.Var:gcBrand AND RatePlan.RatePlan = ttTariffCre.FieldValue NO-LOCK) THEN 
                   UNDO, THROW NEW Progress.Lang.AppError("Reference Rateplan is invalid", 1).
                ELSE 
                   ASSIGN lcReferenceRatePlan = ttTariffCre.FieldValue.
@@ -1243,9 +1343,9 @@ PROCEDURE pValidateData:
 
       ELSE IF lcRatePlanAction = "New" AND lcRatePlan = lcReferenceRatePlan THEN 
          UNDO, THROW NEW Progress.Lang.AppError("Rateplan and Reference Rateplan are same, which is contradicting to Rateplan action", 1).         
-      ELSE IF lcRatePlanAction = "New" AND CAN-FIND(FIRST RatePlan WHERE RatePlan.Brand = gcBrand AND RatePlan.RatePlan = lcRatePlan NO-LOCK) THEN 
+      ELSE IF lcRatePlanAction = "New" AND CAN-FIND(FIRST RatePlan WHERE RatePlan.Brand = Syst.Var:gcBrand AND RatePlan.RatePlan = lcRatePlan NO-LOCK) THEN 
          UNDO, THROW NEW Progress.Lang.AppError("Rateplan already exists, which is contradicting with Rateplan action", 1).         
-      ELSE IF lcRatePlanAction = "UseExisting" AND NOT CAN-FIND(FIRST RatePlan WHERE RatePlan.Brand = gcBrand AND RatePlan.RatePlan = lcReferenceRatePlan NO-LOCK) THEN 
+      ELSE IF lcRatePlanAction = "UseExisting" AND NOT CAN-FIND(FIRST RatePlan WHERE RatePlan.Brand = Syst.Var:gcBrand AND RatePlan.RatePlan = lcReferenceRatePlan NO-LOCK) THEN 
          UNDO, THROW NEW Progress.Lang.AppError("Reference Rateplan doesn't exists, which is contradicting with Rateplan action", 1).
       ELSE
       DO:
@@ -1333,7 +1433,7 @@ PROCEDURE pSaveTranslation:
    FOR EACH ttTrans NO-LOCK
        ON ERROR UNDO, THROW:
       
-       FIND FIRST RepText WHERE RepText.Brand    = gcBrand                   AND 
+       FIND FIRST RepText WHERE RepText.Brand    = Syst.Var:gcBrand                   AND 
                                 RepText.TextType = ttTrans.tTextType         AND 
                                 RepText.LinkCode = ttTrans.tLangType         AND 
                                 RepText.Language = INTEGER(ttTrans.tLangint) AND 
@@ -1348,7 +1448,7 @@ PROCEDURE pSaveTranslation:
        DO:                           
            CREATE RepText.
            ASSIGN 
-              RepText.Brand    = gcBrand    
+              RepText.Brand    = Syst.Var:gcBrand    
               RepText.TextType = ttTrans.tTextType                /* Default value */       
               RepText.LinkCode = ttTrans.tLangType        
               RepText.Language = INTEGER(ttTrans.tLangint)    

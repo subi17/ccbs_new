@@ -16,8 +16,8 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-katun    = "NewtonAd".
-gcBrand  = "1".
+Syst.Var:katun = "NewtonAd".
+Syst.Var:gcBrand  = "1".
 {Syst/tmsconst.i}
 {Func/barrfunc.i}
 {Func/transname.i}
@@ -61,7 +61,7 @@ DEF TEMP-TABLE ttBarringList NO-UNDO
    FIELD BarringStatus AS CHAR
    INDEX UIPriority UIPriority ASC.
 
-DEF TEMP-TABLE ttServices
+DEF TEMP-TABLE ttServices NO-UNDO
    FIELD digit AS INT
    FIELD service_es AS INT
    FIELD service_en AS INT
@@ -119,7 +119,7 @@ FUNCTION fGetGroupOrder RETURNS LOGICAL.
    DEF VAR liPriority AS INT NO-UNDO.
 
    EMPTY TEMP-TABLE ttBGroup.
-   FOR EACH Tmscodes WHERE
+   FOR EACH Tmscodes NO-LOCK WHERE
             Tmscodes.TableName EQ "Barring" AND
             Tmscodes.FieldName EQ "BarringGroup":
 
@@ -142,14 +142,14 @@ FUNCTION fGetServiceName RETURN CHARACTER
    DEF BUFFER TMSCodes FOR TMSCodes.
    DEF VAR lcTransKey AS CHAR NO-UNDO.
 
-   FIND FIRST Tmscodes WHERE
+   FIND FIRST Tmscodes NO-LOCK WHERE
               Tmscodes.TableName EQ "BarringConf" AND
               Tmscodes.FieldName EQ "ServiceMask" AND
               Tmscodes.CodeValue EQ pcDigit NO-ERROR.
 
    IF NOT AVAIL Tmscodes THEN RETURN pcDigit.
 
-   RETURN fGetItemName(gcBrand,
+   RETURN fGetItemName(Syst.Var:gcBrand,
                 "TMSCodes",
                 tmscodes.tablename + "|" +
                 tmscodes.fieldname + "|" +
@@ -162,7 +162,7 @@ FUNCTION fGetBarringName RETURN CHARACTER
   (INPUT pcCode AS CHARACTER,
    INPUT piLang AS INTEGER):
 
-   RETURN fGetItemName(gcBrand,
+   RETURN fGetItemName(Syst.Var:gcBrand,
                "BarringCode",
                 pcCode,
                 piLang,
@@ -175,14 +175,14 @@ FUNCTION fGetBarringGroupName RETURN CHARACTER
 
    DEF BUFFER TMSCodes FOR TMSCodes.
 
-   FIND FIRST Tmscodes WHERE
+   FIND FIRST Tmscodes NO-LOCK WHERE
               Tmscodes.TableName EQ "Barring" AND
               Tmscodes.FieldName EQ "BarringGroup" AND
               Tmscodes.CodeValue EQ pcBarringGroup NO-ERROR.
 
    IF NOT AVAIL Tmscodes THEN RETURN pcBarringGroup.
 
-   RETURN fGetItemName(gcBrand,
+   RETURN fGetItemName(Syst.Var:gcBrand,
                 "TMSCodes",
                 Tmscodes.TableName + "|" +
                 Tmscodes.FieldName + "|" +
@@ -269,11 +269,10 @@ DO liCount = 1 TO NUM-ENTRIES(lcServices):
 
    mask_struct = add_struct(mask_array,"").
    add_string(mask_struct, "service_en", lcEnSer).
-    add_string(mask_struct, "service_es", lcSpSer ).
+   add_string(mask_struct, "service_es", lcSpSer ).
 END.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-   EMPTY TEMP-TABLE ttBarringList.
+      EMPTY TEMP-TABLE ttBarringList.
    EMPTY TEMP-TABLE ttBGroup.
 END.

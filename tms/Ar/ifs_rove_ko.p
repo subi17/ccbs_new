@@ -8,7 +8,6 @@
 ----------------------------------------------------------------------- */
 {Syst/commali.i}
 {Syst/dumpfile_run.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/multitenantfunc.i}
 {Mc/shipping_cost.i}
@@ -42,22 +41,22 @@ PROCEDURE pDump:
    DEF VAR ldeTo   AS DEC NO-UNDO. 
 
    ASSIGN
-      ldeFrom = fMake2Dt(TODAY - 1,0).
-      ldeTo   = fMake2Dt(TODAY - 1,86399).
+      ldeFrom = Func.Common:mMake2DT(TODAY - 1,0).
+      ldeTo   = Func.Common:mMake2DT(TODAY - 1,86399).
 
    LOOP:
    FOR EACH OrderTimeStamp WHERE
-            OrderTimeStamp.Brand      = gcBrand AND
+            OrderTimeStamp.Brand      = Syst.Var:gcBrand AND
             OrderTimeStamp.RowType    = {&ORDERTIMESTAMP_CLOSE} AND
             OrderTimeStamp.TimeStamp >= ldeFrom AND
             OrderTimeStamp.TimeStamp <= ldeTo NO-LOCK,
       FIRST OrderPayment NO-LOCK WHERE
-            OrderPayment.Brand = gcBrand AND
+            OrderPayment.Brand = Syst.Var:gcBrand AND
             OrderPayment.OrderId = OrderTimeStamp.OrderId AND
             (OrderPayment.Method = {&ORDERPAYMENT_M_CREDIT_CARD} OR
              OrderPayment.Method = {&ORDERPAYMENT_M_PAYPAL}),
       FIRST Order NO-LOCK USE-INDEX OrderId WHERE
-            Order.Brand = gcBrand AND
+            Order.Brand = Syst.Var:gcBrand AND
             Order.OrderId = OrderTimeStamp.OrderId AND
             LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 AND
             INDEX(Order.OrderChannel,"pos") = 0 AND
@@ -78,11 +77,11 @@ PROCEDURE pDumpRetention:
    
    DEF VAR liOrderId AS INT NO-UNDO. 
    DEF VAR ldeNow AS DEC NO-UNDO. 
-   ldeNow = fMakeTS().
+   ldeNow = Func.Common:mMakeTS().
 
    LOOP:
    FOR EACH ActionLog EXCLUSIVE-LOCK USE-INDEX ActionID WHERE
-            ActionLog.Brand = gcBrand AND
+            ActionLog.Brand = Syst.Var:gcBrand AND
             ActionLog.ActionID = "OrderCancelRetention" AND
             ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE}:
 
@@ -90,13 +89,13 @@ PROCEDURE pDumpRetention:
       IF ERROR-STATUS:ERROR THEN NEXT LOOP.
 
       FOR FIRST Order NO-LOCK USE-INDEX OrderId WHERE
-                Order.Brand = gcBrand AND
+                Order.Brand = Syst.Var:gcBrand AND
                 Order.OrderId = liOrderId AND
                 LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 AND
                 LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) = 0 AND
                 INDEX(Order.OrderChannel,"retention") = 1,
           FIRST OrderPayment NO-LOCK WHERE
-                OrderPayment.Brand = gcBrand AND
+                OrderPayment.Brand = Syst.Var:gcBrand AND
                 OrderPayment.OrderId = Order.OrderId AND
                (OrderPayment.Method = {&ORDERPAYMENT_M_CREDIT_CARD} OR
                 OrderPayment.Method = {&ORDERPAYMENT_M_PAYPAL}):
@@ -114,7 +113,7 @@ PROCEDURE pDumpRetention:
                      MNPProcess.MNPSeq = MNPSub.MNPSeq AND
                      MNPProcess.MNPType = 2 AND
                      MNPProcess.CreatedTS < Order.CrStamp NO-LOCK:
-               IF fOffSet(MNPProcess.PortingTime,15 * 24) > ldeNow THEN NEXT LOOP.
+               IF Func.Common:mOffSet(MNPProcess.PortingTime,15 * 24) > ldeNow THEN NEXT LOOP.
             END.
 
             RUN pWriteToFile.
@@ -135,12 +134,12 @@ PROCEDURE pDumpSubTerm:
    DEF VAR liOrderId AS INT NO-UNDO. 
 
    ASSIGN
-      ldeFrom  = fHMS2TS(TODAY - 1,"00:00:00").
-      ldeTo  = fHMS2TS(TODAY - 1,"23:59:59").
+      ldeFrom  = Func.Common:mHMS2TS(TODAY - 1,"00:00:00").
+      ldeTo  = Func.Common:mHMS2TS(TODAY - 1,"23:59:59").
 
    LOOP:
    FOR EACH ActionLog NO-LOCK USE-INDEX ActionID WHERE
-            ActionLog.Brand = gcBrand AND
+            ActionLog.Brand = Syst.Var:gcBrand AND
             ActionLog.ActionID = "OrderCancel" AND
             ActionLog.ActionTS >= ldeFrom AND
             ActionLog.ActionTS <= ldeto AND
@@ -150,14 +149,14 @@ PROCEDURE pDumpSubTerm:
       IF ERROR-STATUS:ERROR THEN NEXT LOOP.
 
       FOR FIRST Order NO-LOCK USE-INDEX OrderId WHERE
-                Order.Brand = gcBrand AND
+                Order.Brand = Syst.Var:gcBrand AND
                 Order.OrderId = liOrderId AND
                 Order.InvNum = 0 AND
                 LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 AND
                 INDEX(Order.OrderChannel,"pos") = 0 AND
                 INDEX(Order.OrderChannel,"retention") = 0,
          FIRST OrderPayment NO-LOCK WHERE
-               OrderPayment.Brand = gcBrand AND
+               OrderPayment.Brand = Syst.Var:gcBrand AND
                OrderPayment.OrderId = Order.OrderId AND
                (OrderPayment.Method = {&ORDERPAYMENT_M_CREDIT_CARD} OR 
                 OrderPayment.Method = {&ORDERPAYMENT_M_PAYPAL}):
@@ -180,7 +179,7 @@ PROCEDURE pWriteToFile:
    IF AVAILABLE EventLog THEN
       ldOperationDate = EventLog.EventDate.
    ELSE
-      fSplitTS(Order.CrStamp,
+      Func.Common:mSplitTS(Order.CrStamp,
                OUTPUT ldOperationDate,
                OUTPUT liTime).
    IF OrderPayment.Method EQ {&ORDERPAYMENT_M_PAYPAL} THEN DO:

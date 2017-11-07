@@ -9,10 +9,9 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-gcBrand = "1".
-katun   = "Qvantel".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/fdss.i}
 
 DEF VAR lcSimulate               AS CHAR NO-UNDO.
@@ -62,7 +61,7 @@ FUNCTION fFatExists RETURNS LOGICAL (icFatGrp     AS CHAR,
    DEF VAR llExists  AS  LOG  NO-UNDO.
    
    FOR EACH FATime NO-LOCK WHERE
-            FATime.Brand = gcBrand AND
+            FATime.Brand = Syst.Var:gcBrand AND
             FATime.MsSeq = iiMsSeq AND
             FATime.FTGrp = icFatGrp AND
             FATime.InvNum = 0 AND
@@ -83,9 +82,9 @@ ASSIGN
    ldaFromDate      = ldaPromoFromDate.
 
 IF DAY(TODAY) = 1 THEN
-   ldaToDate = fLastDayOfMOnth(TODAY - 1).
+   ldaToDate = Func.Common:mLastDayOfMonth(TODAY - 1).
 ELSE
-   ldaToDate = fLastDayOfMOnth(TODAY).
+   ldaToDate = Func.Common:mLastDayOfMonth(TODAY).
 
 IF ldaToDate > ldaPromoToDate THEN DO:
    MESSAGE "Promotion period has been expired. FAT will not be created."
@@ -94,9 +93,9 @@ IF ldaToDate > ldaPromoToDate THEN DO:
 END.
 
 ASSIGN
-   ldPeriodFrom     = fMake2Dt(ldaFromDate,0)
-   ldPeriodTo       = fMake2Dt(ldaToDate,86399)
-   ldNextMonthStamp = fMake2Dt((ldaToDate + 1),0)
+   ldPeriodFrom     = Func.Common:mMake2DT(ldaFromDate,0)
+   ldPeriodTo       = Func.Common:mMake2DT(ldaToDate,86399)
+   ldNextMonthStamp = Func.Common:mMake2DT((ldaToDate + 1),0)
    liPeriod         = YEAR(ldaToDate) * 100 + MONTH(ldaToDate).
 
 message ldaPromoFromDate skip ldaPromoToDate SKIP ldPeriodTo skip ldNextMonthStamp skip lcSimulate view-as alert-box.
@@ -221,7 +220,7 @@ PROCEDURE pGetCustomerSubscriptions:
              FIRST bServiceLimit NO-LOCK USE-INDEX SlSeq WHERE
                    bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
              FIRST bDayCampaign NO-LOCK WHERE
-                   bDayCampaign.Brand = gcBrand AND
+                   bDayCampaign.Brand = Syst.Var:gcBrand AND
                    bDayCampaign.DCEvent = bServiceLimit.GroupCode AND
                    LOOKUP(bDayCampaign.DCType,
                           {&PERCONTRACT_RATING_PACKAGE}) > 0:

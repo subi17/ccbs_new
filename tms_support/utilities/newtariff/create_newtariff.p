@@ -10,8 +10,8 @@
 
 /* ***************************  Definitions  ************************** */
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Func/ftransdir.i}
@@ -124,6 +124,7 @@ DO TRANSACTION:
 
       IF ERROR-STATUS:ERROR   OR
          RETURN-VALUE <> "OK" THEN DO:
+         MESSAGE RETURN-VALUE error-status:get-message(1) view-as ALERT-BOX.
          UNDO NEW-TARIFF, LEAVE.
       END.
    END.
