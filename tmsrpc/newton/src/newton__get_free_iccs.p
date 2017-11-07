@@ -9,8 +9,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-katun = "Newton".
-gcBrand = "1".
+Syst.Var:katun = "Newton".
+Syst.Var:gcBrand = "1".
 
 DEF VAR top_array AS CHAR NO-UNDO.
 DEF VAR result_array AS CHAR NO-UNDO. 
@@ -41,7 +41,7 @@ result_array = add_array(response_toplevel_id, "").
 
 do liType =  1 to num-entries(lcTypes):
 FOR EACH SIM NO-LOCK WHERE
-         SIM.Brand = gcBrand AND
+         SIM.Brand = Syst.Var:gcBrand AND
          SIM.Stock = "RETAILER" AND
          SIM.SimStat = 1 and
          Sim.simart = entry(liType,lcTypes):
@@ -54,5 +54,4 @@ END.
 end.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

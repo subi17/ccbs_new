@@ -9,7 +9,6 @@
 
 {Syst/commali.i}
 {Func/msisdn.i}
-{Func/func.p} 
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'PrepEDR'} 
 {Func/feventlog.i}

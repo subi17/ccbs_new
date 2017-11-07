@@ -7,7 +7,6 @@
  *
  *-----------------------------------------------------------------*/
 {Syst/commpaa.i}
-{Func/timestamp.i}
 
 DEF VAR sid LIKE solog.solog.
 DEF VAR sologi AS C NO-UNDO.
@@ -91,27 +90,27 @@ REPEAT:
   
       
    ASSIGN
-     ufk[1] = 816  /* FIND */
-     ufk[2] = 9033 /* UPDATE STATUS */
-     ufk[5] = 9035 /* PREV BY CLI */
-     ufk[6] = 9034 /* NEXT BY CLI */
-     ufk[8] = 8. /* RETURN */
-   IF num = 1 THEN ufk[5] = 0.
-   IF num = amt THEN ufk[6] = 0.
+     Syst.Var:ufk[1] = 816  /* FIND */
+     Syst.Var:ufk[2] = 9033 /* UPDATE STATUS */
+     Syst.Var:ufk[5] = 9035 /* PREV BY CLI */
+     Syst.Var:ufk[6] = 9034 /* NEXT BY CLI */
+     Syst.Var:ufk[8] = 8. /* RETURN */
+   IF num = 1 THEN Syst.Var:ufk[5] = 0.
+   IF num = amt THEN Syst.Var:ufk[6] = 0.
    RUN Syst/ufkey.p.
-   ASSIGN nap = keylabel(LASTKEY).
+   ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
-   IF lookup(nap,"f1,1") > 0 THEN DO:
+   IF lookup(Syst.Var:nap,"f1,1") > 0 THEN DO:
       /* find */
       RUN local-find(?).
       NEXT main.
    END.
-   ELSE IF lookup(nap,"f2,2") > 0 THEN DO:
+   ELSE IF lookup(Syst.Var:nap,"f2,2") > 0 THEN DO:
       /* update status */
       UPDATE stat WITH FRAME sog TITLE "EDIT SOLOG".
       
    END.
-   ELSE IF lookup(nap,"f5,5") > 0 THEN DO:
+   ELSE IF lookup(Syst.Var:nap,"f5,5") > 0 THEN DO:
       /* prev solog */
       itmp = solog.solog.
       FIND PREV solog NO-LOCK WHERE 
@@ -122,7 +121,7 @@ REPEAT:
       END.          
       NEXT.
    END.
-   ELSE IF lookup(nap,"f6,6") > 0 THEN DO:
+   ELSE IF lookup(Syst.Var:nap,"f6,6") > 0 THEN DO:
       /* next solog */
       itmp = solog.solog.
       FIND NEXT solog NO-LOCK WHERE
@@ -190,10 +189,10 @@ END.
 PROCEDURE local-disp:
    ASSIGN
        stat = solog.stat
-       timesl = fts2hms(solog.timeslottms)
-       crtime = fts2hms(solog.createdts)
-       actime = fts2hms(solog.activationts)
-       cotime = fts2hms(solog.completedts)
+       timesl = Func.Common:mTS2HMS(solog.timeslottms)
+       crtime = Func.Common:mTS2HMS(solog.createdts)
+       actime = Func.Common:mTS2HMS(solog.activationts)
+       cotime = Func.Common:mTS2HMS(solog.completedts)
        commli = solog.commline
        cli = solog.cli
        sologi = STRING(solog.solog)

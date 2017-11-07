@@ -98,7 +98,7 @@ function fDelDouble returns integer
                      0 - (double.GrossPrice - double.DiscValue)).
 
             find first invgroup where   
-                       invgroup.brand    = gcBrand AND
+                       invgroup.brand    = Syst.Var:gcBrand AND
                        invgroup.InvGroup = Customer.InvGroup
             no-lock no-error.
 

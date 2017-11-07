@@ -17,7 +17,7 @@ FUNCTION fSeqInvGroup RETURNS CHARACTER
    DEF VAR lcSeqGroup AS CHAR NO-UNDO.
    
    FIND bCurInvGroup NO-LOCK WHERE
-        bCurInvGroup.Brand    = gcBrand AND
+        bCurInvGroup.Brand    = Syst.Var:gcBrand AND
         bCurInvGroup.InvGroup = icInvGroup NO-ERROR.
    IF NOT AVAILABLE bCurInvGroup THEN RETURN "".
    
@@ -42,7 +42,7 @@ FUNCTION fGetExtVoucher RETURNS CHARACTER
           liVoucher  = ?.
    
    FOR FIRST bSeqIGVoucher NO-LOCK WHERE
-             bSeqIGVoucher.Brand     = gcBrand    AND
+             bSeqIGVoucher.Brand     = Syst.Var:gcBrand    AND
              bSeqIGVoucher.InvGroup  = icInvGroup AND 
              bSeqIGVoucher.PaymType   = iiType     AND 
              bSeqIGVoucher.FromDate <= idtAccDate:
@@ -54,7 +54,7 @@ FUNCTION fGetExtVoucher RETURNS CHARACTER
    /* try general if dedicated was not found */
    IF liVoucher = ? THEN 
    FOR FIRST bSeqIGVoucher NO-LOCK WHERE
-             bSeqIGVoucher.Brand     = gcBrand    AND
+             bSeqIGVoucher.Brand     = Syst.Var:gcBrand    AND
              bSeqIGVoucher.InvGroup  = icInvGroup AND 
              bSeqIGVoucher.PaymType   = 0          AND 
              bSeqIGVoucher.FromDate <= idtAccDate:
@@ -70,7 +70,7 @@ FUNCTION fGetExtVoucher RETURNS CHARACTER
       /* Payment can be found immediately after Voucher is assigned, 
          even before transaction has ended */
       IF NOT CAN-FIND(FIRST Payment WHERE 
-                            Payment.Brand      = gcBrand AND
+                            Payment.Brand      = Syst.Var:gcBrand AND
                             Payment.ExtVoucher = ocPrefix + 
                                                  STRING(liVoucher,"99999999"))
       THEN LEAVE.
@@ -100,7 +100,7 @@ FUNCTION fUpdateExtVoucher RETURNS LOGICAL
    DO WHILE TRUE:
    
       FIND FIRST bSeqIGVoucher EXCLUSIVE-LOCK WHERE
-                 bSeqIGVoucher.Brand     = gcBrand    AND
+                 bSeqIGVoucher.Brand     = Syst.Var:gcBrand    AND
                  bSeqIGVoucher.InvGroup  = icInvGroup AND
                  bSeqIGVoucher.PaymType  = iiType     AND
                  bSeqIGVoucher.FromDate <= idtAccDate 

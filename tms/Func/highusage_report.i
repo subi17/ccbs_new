@@ -160,7 +160,6 @@ END FUNCTION.
 
 {Syst/commali.i}
 {Func/excel.i}
-{Func/timestamp.i}
 {Func/email.i}
 {Func/highusage.i}
 {Func/cparam2.i}
@@ -233,13 +232,12 @@ FUNCTION process_highspender_row RETURN LOGICAL
   DEF VAR memotext AS CHAR NO-UNDO.
   DEF VAR memostamp AS CHAR NO-UNDO.
 
-  lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                      BUFFER phInvCust).
+  lcCustName = Func.Common:mDispCustName(BUFFER phInvCust).
   IF avail memo THEN  DO:
      ASSIGN memotext = REPLACE(memo.memotext,chr(10)," ") .
      IF memo.CreStamp > memo.ChgStamp THEN
-        memostamp = fTS2HMS(memo.CreStamp) .
-     ELSE memostamp = fTS2HMS(memo.ChgStamp).
+        memostamp = Func.Common:mTS2HMS(memo.CreStamp) .
+     ELSE memostamp = Func.Common:mTS2HMS(memo.ChgStamp).
 
   END.
   ELSE   ASSIGN memotext = "" memostamp = "".
@@ -273,7 +271,7 @@ FUNCTION process_highspender_row RETURN LOGICAL
     RETURN TRUE.
 END FUNCTION.
 
-loop_highspender_table(gcBrand, ideCreateTS, iStatus).
+loop_highspender_table(Syst.Var:gcBrand, ideCreateTS, iStatus).
 
 OUTPUT STREAM excel CLOSE.
 

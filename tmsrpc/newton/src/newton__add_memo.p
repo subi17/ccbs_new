@@ -14,7 +14,6 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1} 
 
-{Func/timestamp.i}
 
 /* Input parameters */
 DEF VAR pcTenant    AS CHAR NO-UNDO.

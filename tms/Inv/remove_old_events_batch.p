@@ -7,8 +7,8 @@
 
 {Syst/commpaa.i}
 ASSIGN 
-   gcBrand = "1"
-   katun = "cron".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun = "cron".
 {Syst/eventlog.i}
 {Inv/old_unbilled_events.i}
 
@@ -31,7 +31,7 @@ RUN Inv/remove_old_events.p(0,
 IF RETURN-VALUE BEGINS "ERROR" THEN DO TRANS:
    CREATE ErrorLog.
    ASSIGN 
-      ErrorLog.Brand     = gcBrand
+      ErrorLog.Brand     = Syst.Var:gcBrand
       ErrorLog.ActionID  = "RemoveOld"
       ErrorLog.TableName = "BillEvents"
       ErrorLog.KeyValue  = STRING(YEAR(ldaEventDate),"9999") + 
@@ -39,8 +39,8 @@ IF RETURN-VALUE BEGINS "ERROR" THEN DO TRANS:
                            STRING(DAY(ldaEventDate),"99")
       ErrorLog.ErrorMsg  = RETURN-VALUE
       ErrorLog.ErrorChar = ""
-      ErrorLog.UserCode  = katun.
-      ErrorLog.ActionTS  = fMakeTS().
+      ErrorLog.UserCode  = Syst.Var:katun.
+      ErrorLog.ActionTS  = Func.Common:mMakeTS().
 END.
 
 fELog("REMOVE_OLD_UNBILLED_EVENTS","Stopped:" + STRING(liEvents)).

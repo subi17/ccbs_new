@@ -29,7 +29,7 @@ FUNCTION fGetPremiumServiceName RETURNS CHAR
    DO liDigits = liLength TO 5 BY -1:
       lcGsmBnrPrefix = SUBSTRING(icGsmBnr,1,liDigits).
       FIND FIRST PremiumNumber WHERE
-                 PremiumNumber.Brand = gcBrand AND
+                 PremiumNumber.Brand = Syst.Var:gcBrand AND
                  PremiumNumber.BNumberPrefix = lcGsmBnrPrefix AND
                  PremiumNumber.ValidTo >= idtDate AND
                  PremiumNumber.ValidFrom <= idtDate 

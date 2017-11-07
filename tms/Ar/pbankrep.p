@@ -47,6 +47,9 @@ ASSIGN
     lcLine3   = FILL("-",liWidth)
     lcLine4   = FILL("-",liWidth).
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
+
 form header
    lcLine1 AT 1 SKIP
    ynimi  AT 1 FORMAT "x(30)" 
@@ -55,7 +58,7 @@ form header
       liPage FORMAT "ZZZZ9" SKIP
    lcGrpHeader AT 1 FORMAT "X(30)"
       lcDateHeader AT 35 FORMAT "X(30)"
-      pvm FORMAT "99.99.99" AT 71 SKIP
+      TODAY FORMAT "99.99.99" AT 71 SKIP
    lcLine2 AT 1 SKIP
 
    "Bank Account"    AT 7
@@ -103,7 +106,7 @@ VIEW FRAME fQty.
 
 /* separate loop -> info can be shown to user */
 FOR EACH Payment NO-LOCK WHERE
-         Payment.Brand       = gcBrand      AND
+         Payment.Brand       = Syst.Var:gcBrand      AND
          Payment.AccDate    >= idtDate1     AND
          Payment.AccDate    <= idtDate2     AND
          Payment.BankAcc  NE ""             AND
@@ -154,7 +157,7 @@ BY ttPaid.PaymSrc:
       fChkPage(2). 
 
       FIND InvGroup WHERE 
-           InvGroup.Brand    = gcBrand AND
+           InvGroup.Brand    = Syst.Var:gcBrand AND
            InvGroup.InvGroup = ttPaid.InvGrp 
       NO-LOCK NO-ERROR.
 

@@ -4,7 +4,6 @@
 {Syst/commali.i}
 {Func/cparam2.i}
 {Func/fcustcnt.i}
-{Func/func.p}
 {Mm/cdrvar.i}
 {Mm/ficora.i}
 {Rate/chkbal2.i} 
