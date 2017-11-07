@@ -1,11 +1,10 @@
 {Syst/commpaa.i}
-katun = "anttis".
-gcbrand = "1".
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 
-{Func/date.i}
 {Func/msisdn.i}
 DEFINE VARIABLE ldeNow AS DECIMAL NO-UNDO. 
-ldeNow = fMakeTS().
+ldeNow = Func.Common:mMakeTS().
 
 def stream sout.
 output stream sout to as_yot1057.txt.

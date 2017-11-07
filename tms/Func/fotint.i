@@ -17,7 +17,7 @@ FUNCTION fOtIntPerc RETURNS DECIMAL
 
     /* FIRST get the category */
     FIND CustCat WHERE 
-         CustCat.Brand    = gcBrand AND
+         CustCat.Brand    = Syst.Var:gcBrand AND
          CustCat.Category = iCategory NO-LOCK NO-ERROR.
 
     /* general percent FOR ALL */
@@ -27,7 +27,7 @@ FUNCTION fOtIntPerc RETURNS DECIMAL
        get the valid percent 
     */
     FIND FIRST Interest WHERE 
-        Interest.Brand      = gcBrand AND
+        Interest.Brand      = Syst.Var:gcBrand AND
         Interest.ValidFrom <= iDate   AND
         Interest.IntType    = CustCat.IntType
     NO-LOCK NO-ERROR.                      
@@ -35,7 +35,7 @@ FUNCTION fOtIntPerc RETURNS DECIMAL
     /* IF category related percent NOT AVAILABLE THEN use general percent */
     IF NOT AVAILABLE Interest THEN 
     FIND FIRST Interest WHERE
-        Interest.Brand      = gcBrand AND
+        Interest.Brand      = Syst.Var:gcBrand AND
         Interest.ValidFrom <= iDate   AND
         Interest.IntType    = 0
     NO-LOCK NO-ERROR. 

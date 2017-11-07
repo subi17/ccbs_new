@@ -9,8 +9,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i} 
 {Syst/commpaa.i}
-gcBrand = "1".
-{Func/timestamp.i}
+Syst.Var:gcBrand = "1".
 {Func/fsubstermreq.i}
 {Syst/tmsconst.i}
 {Func/msisdn_prefix.i}
@@ -36,7 +35,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 {newton/src/findtenant.i YES ordercanal Order OrderId piOrderId}
 
 ASSIGN
-   katun = "VISTA_" + Order.Salesman
+   Syst.Var:katun = "VISTA_" + Order.Salesman
    llCloseOrder = FALSE.
   
 /* check that order is from today and coming from POS channel */
@@ -45,7 +44,7 @@ IF Order.OrderType = {&ORDER_TYPE_NEW} THEN DO:
    IF fIsConvergenceTariff(Order.CLIType) THEN 
        RETURN appl_err("Convergent order cancellation is not supported" ).
 
-   ldeToday = fHMS2TS(TODAY,"00:00:00").
+   ldeToday = Func.Common:mHMS2TS(TODAY,"00:00:00").
    IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) = 0 THEN
       RETURN appl_err("Order channel is not POS").
    ELSE IF Order.CrStamp < ldeToday THEN
@@ -128,7 +127,7 @@ PROCEDURE pTerminateSubscription:
 
   /* terminate the subscription */
   ASSIGN liTermReason = {&SUBSCRIPTION_TERM_REASON_POS_ORDER_CANCELATION}
-         ldeTS = fMakeTS().
+         ldeTS = Func.Common:mMakeTS().
 
   /* some validations*/
   liError = fDeleteMsValidation(Order.MsSeq, liTermReason, ocResult).
@@ -179,11 +178,10 @@ PROCEDURE pCancelRenewalOrder:
                Order.MsSeq,
                Order.OrderId,
                "",
-               fMakeTS(),
+               Func.Common:mMakeTS(),
                "6",
                OUTPUT ocResult).
 END PROCEDURE.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

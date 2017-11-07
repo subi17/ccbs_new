@@ -9,7 +9,6 @@
 {Syst/commali.i}
 {Syst/tmsconst.i}
 {Syst/dumpfile_run.i}
-{Func/date.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
 

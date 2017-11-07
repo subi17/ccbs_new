@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-gcBrand = "1".
-katun = "YTC-161".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "YTC-161".
 {Func/msreqfunc.i}
 
 def stream loki.

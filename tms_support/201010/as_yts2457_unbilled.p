@@ -1,6 +1,5 @@
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 DEFINE VARIABLE ldeStamp AS DECIMAL NO-UNDO. 
-{Func/date.i}
 
 def stream slog.
 output stream slog to as_yts2457_unbilled_october.txt.
@@ -11,7 +10,7 @@ FOR EACH mobcdr where
    
    if mobcdr.cli eq mobcdr.gsmbnr then next.
    
-   ldeStamp = fhms2ts(mobcdr.datest, string(mobcdr.timestart,"HH:MM:SS")).
+   ldeStamp = Func.Common:mHMS2TS(mobcdr.datest, string(mobcdr.timestart,"HH:MM:SS")).
 
    find first msowner where
       msowner.cli = mobcdr.gsmbnr and

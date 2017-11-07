@@ -1,2 +1,2 @@
-op-tstamp = fMakeTs().
+op-tstamp = Func.Common:mMakeTS().
 

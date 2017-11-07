@@ -21,7 +21,6 @@
 {Func/fxmlfile.i}
 {Inv/pdfinvdf.i}
 {Func/invotxtp.i} 
-{Func/timestamp.i}
 {Func/finvbal.i}
 {Func/fdivtxt.i}
 
@@ -62,7 +61,7 @@ DEF VAR lcTxtKey     AS CHAR  NO-UNDO.
 DEF BUFFER bInvoice FOR Invoice.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    
    {Func/lib/eventlog.i}
       
@@ -97,7 +96,7 @@ END FUNCTION.
 
 /* mail to user */
 IF iiSendMail = 2 THEN DO:
-   FIND TMSUser WHERE TMSUser.UserCode = katun NO-LOCK NO-ERROR.
+   FIND TMSUser WHERE TMSUser.UserCode = Syst.Var:katun NO-LOCK NO-ERROR.
    IF AVAILABLE TMSUser THEN lcMailAddr = TMSUser.EMail.
 END. 
 
@@ -378,8 +377,8 @@ IF iiSendMail > 0 THEN DO:
                                                 THEN "PDFRem"
                                                 ELSE "PDFInv")
                                           ELSE "PDFCLISpec"
-                   ITSendLog.UserCode   = katun.
-                   ITSendLog.SendStamp  = fMakeTS().
+                   ITSendLog.UserCode   = Syst.Var:katun.
+                   ITSendLog.SendStamp  = Func.Common:mMakeTS().
                          
          END.
          
