@@ -21,7 +21,7 @@ DEF VAR pcStruct     AS CHARACTER NO-UNDO.
 DEF VAR lcReplaceTxt AS CHARACTER NO-UNDO. 
 
 ASSIGN
-   gcBrand      = "1"
+   Syst.Var:gcBrand      = "1"
    lcReplaceTxt = "y@yoigo.es" /* Replace value for #SENDER tag */
    pcSender     = "800622800".
 
@@ -46,7 +46,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 {newton/src/settenant.i pcTenant}
 
 FIND MobSub NO-LOCK WHERE
-     MobSub.Brand EQ gcBrand AND
+     MobSub.Brand EQ Syst.Var:gcBrand AND
      Mobsub.CLI   EQ pcCLI NO-ERROR.
 IF NOT AVAIL MobSub THEN
    RETURN appl_err("Requested subscriber not found ").
@@ -65,8 +65,7 @@ IF ERROR-STATUS:ERROR THEN
 ELSE add_boolean(response_toplevel_id,?,FALSE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.
 
 /* INTERNAL PROCEDURES */
 PROCEDURE pSendTestSMS:

@@ -38,7 +38,7 @@ fr-header = " PRICE DETAILS ".
 
 
 FIND FIRST Tariff where
-           Tariff.Brand = gcBrand AND 
+           Tariff.Brand = Syst.Var:gcBrand AND 
            Tariff.TariffNum = iiTariffNum
 no-lock no-error.
 
@@ -168,7 +168,7 @@ form /* ADD */
    SPACE(1)
    SKIP
 WITH
-   WITH ROW 1 centered COLOR value(cfc) TITLE COLOR value(ctc) 
+   WITH ROW 1 centered COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc) 
    fr-header NO-LABEL OVERLAY
 FRAME lis.
 

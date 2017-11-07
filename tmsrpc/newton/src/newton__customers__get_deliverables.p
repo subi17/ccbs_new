@@ -14,7 +14,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Mc/invoicetarget.i}
 
@@ -43,8 +43,7 @@ lcFusionSubsType = fCParamC("FUSION_SUBS_TYPE").
 
 lcTopStruct = add_struct(response_toplevel_id,"").
 
-lcDType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                           "Invoice",
+lcDType = Func.Common:mTMSCodeName("Invoice",
                            "DelType",
                            STRING(Customer.DelType)).
 add_string(lcTopStruct,"delivery_channel",lcDType).
@@ -70,8 +69,7 @@ FOR EACH InvoiceTargetGroup NO-LOCK WHERE
     IF lcFusionDelType EQ "" AND
        LOOKUP(MobSub.CLIType,lcFusionSubsType) > 0 THEN DO: 
       
-      lcFusionDelType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "Invoice",
+      lcFusionDelType = Func.Common:mTMSCodeName("Invoice",
                                  "DelType",
                                  STRING(invoicetargetgroup.DelType)).
       IF lcFusionDelType EQ "" THEN
@@ -94,6 +92,5 @@ FOR EACH InvoiceTargetGroup NO-LOCK WHERE
 END.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.
 

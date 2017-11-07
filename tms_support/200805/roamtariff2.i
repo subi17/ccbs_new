@@ -14,7 +14,6 @@
 
 &GLOBAL-DEFINE roamtariff YES
 
-{Func/timestamp.i}
 
 FUNCTION fFindTariff RETURNS RECID
   (INPUT pdaDate    AS DATE,
@@ -542,7 +541,7 @@ FUNCTION fRoamTariff RETURNS DECIMAL
          CASE lhField:NAME:
       
             /* common fields */
-            WHEN "TSRead"       THEN lhField:BUFFER-VALUE = fMakeTS().
+            WHEN "TSRead"       THEN lhField:BUFFER-VALUE = Func.Common:mMakeTS().
             WHEN "DateRead"     THEN lhField:BUFFER-VALUE = TODAY.
             WHEN "DateStart"    THEN lhField:BUFFER-VALUE = ldeDate.
             WHEN "TimeStart"    THEN lhField:BUFFER-VALUE = liTime.

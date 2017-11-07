@@ -13,7 +13,6 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 {Syst/commpaa.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Migration/migrationfunc.i}
@@ -187,7 +186,7 @@ END.
 ASSIGN
    lcTableName = "MB_Migration"
    lcActionID = "migration_oper_data_status"
-   ldCurrentTimeTS = fMakeTS()
+   ldCurrentTimeTS = Func.Common:mMakeTS()
    lcLogDir = fCParam("MB_Migration", "MigrationLogDir").
 
 IF lcLogDir EQ "" OR lcLogDir EQ ? THEN lcLogDir = "/tmp/".
@@ -203,19 +202,19 @@ lcLogFile = lcLogDir + "MM_MIGRATION_OPER_DATA_READY_" + lcTimePart + ".log".
 OUTPUT STREAM sLog TO VALUE(lcLogFile) APPEND.
 
 PUT STREAM sLog UNFORMATTED
-   "Migration file reading starts " + fTS2HMS(fMakeTS()) SKIP.
+   "Migration file reading starts " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
 
 /*Ensure that multiple instances of the program are not running*/
 DO TRANS:
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.Var:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName NO-ERROR.
 
    IF AVAIL ActionLog AND
       ActionLog.ActionStatus EQ {&ACTIONLOG_STATUS_PROCESSING} THEN DO:
       PUT STREAM sLog UNFORMATTED
-         "File processing alrady ongoing " + fTS2HMS(fMakeTS()) SKIP.
+         "File processing alrady ongoing " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
       OUTPUT STREAM sLog CLOSE.
       QUIT.
    END.
@@ -224,15 +223,15 @@ DO TRANS:
       /*First execution stamp*/
       CREATE ActionLog.
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.Var:gcBrand
          ActionLog.TableName    = lcTableName
          ActionLog.ActionID     = lcActionID
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
       RELEASE ActionLog.
       /*store previous starting time before setting new value to db*/
-      ldCollPeriodStartTS = INT(fMakeTS()). 
+      ldCollPeriodStartTS = INT(Func.Common:mMakeTS()). 
 
       QUIT. /*No reporting in first time.*/
    END.
@@ -243,24 +242,24 @@ lcErr = fInitMigrationMQ("oper_status").
 IF lcErr NE "" THEN DO:
    PUT STREAM sLog UNFORMATTED
       "MQ error. Notification sending not possible " + lcErr +
-      fTS2HMS(fMakeTS()) SKIP.
+      Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
 
 END.
 ELSE DO: /*Initialization OK, ready to send data to Migration tool*/
    /*Actual processing*/
    ldCollPeriodStartTS = ActionLog.ActionTS.
-   ldCollPeriodEndTS = fSecOffSet(ldCurrentTimeTS, -60). /*now - 1 minute */
+   ldCollPeriodEndTS = Func.Common:mSecOffSet(ldCurrentTimeTS, -60). /*now - 1 minute */
 
    PUT STREAM sLog UNFORMATTED
-      "Failed case collection starts " + fTS2HMS(fMakeTS()) SKIP.
+      "Failed case collection starts " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
    fFailedOperDataSettings(ldCollPeriodStartTS, ldCollPeriodEndTS).
    
    PUT STREAM sLog UNFORMATTED
-      "Completed case collection starts" + fTS2HMS(fMakeTS()) SKIP.
+      "Completed case collection starts" + Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
    fOKOperDataSettings(ldCollPeriodStartTS, ldCollPeriodEndTS).
 
    PUT STREAM sLog UNFORMATTED
-      "Reporting part starts" + fTS2HMS(fMakeTS()) SKIP.
+      "Reporting part starts" + Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
    FOR EACH ttNotifyList:
       fNotifyWEB(ttNotifyList.msseq).
    END.
@@ -270,7 +269,7 @@ END.
 /*Release ActionLog lock*/
 DO TRANS:
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.Var:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName    AND
               ActionLog.ActionStatus NE  {&ACTIONLOG_STATUS_SUCCESS}
@@ -288,6 +287,6 @@ DO TRANS:
 END.
 
 PUT STREAM sLog UNFORMATTED
-   "Operational data check ends" + fTS2HMS(fMakeTS()) SKIP.
+   "Operational data check ends" + Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
 OUTPUT STREAM sLog CLOSE.
 

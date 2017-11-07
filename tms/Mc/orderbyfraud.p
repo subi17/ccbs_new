@@ -4,7 +4,6 @@
 
 {Syst/commali.i}
 {Syst/eventval.i}
-{Func/timestamp.i}
 {Func/forderstamp.i}
 {Func/orderfunc.i}
 {Func/msisdn.i}
@@ -20,7 +19,7 @@ DEF VAR lcMessage AS CHAR NO-UNDO.
 DEF VAR lcError   AS CHAR NO-UNDO.
 
 FIND Order WHERE 
-     Order.Brand   = gcBrand AND 
+     Order.Brand   = Syst.Var:gcBrand AND 
      Order.OrderID = iiOrder EXCLUSIVE-LOCK NO-ERROR.
 
 IF not avail order THEN DO:
@@ -49,7 +48,7 @@ IF NOT ilSilent THEN DO:
 END.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    
    {Func/lib/eventlog.i}
       
@@ -61,7 +60,7 @@ END.
 FUNCTION fReleaseMSISDN RETURNS LOGICAL :
 
    FIND FIRST MSISDN USE-INDEX OrderID WHERE
-              MSISDN.Brand = gcBrand AND
+              MSISDN.Brand = Syst.Var:gcBrand AND
               MSISDN.OrderId   = Order.OrderId AND 
               MSISDN.StatusCode = 2 EXCLUSIVE-LOCK NO-ERROR.   
 

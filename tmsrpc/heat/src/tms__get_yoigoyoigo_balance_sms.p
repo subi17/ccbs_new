@@ -11,16 +11,16 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {Syst/commpaa.i}
-katun = "XMLRPC-Heat".
-gcBrand = "1".
+Syst.Var:katun = "XMLRPC-Heat".
+Syst.Var:gcBrand = "1".
 {Func/fcreatereq.i}
 
 FUNCTION fReqStat RETURNS LOGICAL
 (iiStat AS INTEGER,
  icMsg AS CHAR):
    ASSIGN
-      bCreaReq.donestamp = fMakeTS()
-      bCreaReq.updatestamp = fMakeTS()
+      bCreaReq.donestamp = Func.Common:mMakeTS()
+      bCreaReq.updatestamp = Func.Common:mMakeTS()
       bCreaReq.reqstatus = iiStat
       bCreaReq.memo = icMsg.
 END FUNCTION. 
@@ -137,5 +137,4 @@ add_string(response_toplevel_id, "", lcMsg).
 fReqStat(2, lcMsg).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

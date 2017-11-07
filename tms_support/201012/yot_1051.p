@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-katun = "Qvantel".
-gcBrand = "1".
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
 
 DEFINE VARIABLE lcError AS CHARACTER NO-UNDO. 
 
@@ -22,7 +22,7 @@ put stream sout unformatted
 DEFINE VARIABLE liTest AS INTEGER NO-UNDO. 
 LOOPPI:
 FOR EACH order where
-   order.brand = gcBrand and
+   order.brand = Syst.Var:gcBrand and
    order.crstamp >= 20101201 AND
    order.crstamp < 20111201 NO-LOCK by order.crstamp:
 
@@ -30,14 +30,14 @@ FOR EACH order where
    if order.ordertype = 2 then next.
    
    IF CAN-FIND(FIRST OfferItem WHERE
-                     OfferItem.Brand = gcBrand AND
+                     OfferItem.Brand = Syst.Var:gcBrand AND
                      OfferItem.Offer = Order.Offer AND
                      OfferItem.ItemType = "BundleItem" AND
                      OfferItem.ItemKey = "MDUB" AND
                      OfferItem.EndStamp >= Order.CrStamp AND
                      OfferItem.BeginStamp <= Order.CrStamp) OR
       CAN-FIND(FIRST OrderAction WHERE
-                     OrderAction.Brand = gcBrand AND
+                     OrderAction.Brand = Syst.Var:gcBrand AND
                      OrderAction.OrderId = Order.OrderID AND
                      OrderAction.ItemType = "BundleItem" AND
                      OrderAction.ItemKey = "MDUB") THEN DO:
@@ -87,12 +87,12 @@ FOR EACH order where
       end.
       
       if can-find(first fatime where
-                        fatime.brand = gcbrand and
+                        fatime.brand = Syst.Var:gcBrand and
                         fatime.msseq = order.msseq and
                         fatime.ftgrp = "BONO8CP" use-index MobSub) then do:
       
          FOR EACH fatime where
-                  fatime.brand = gcbrand and
+                  fatime.brand = Syst.Var:gcBrand and
                   fatime.msseq = order.msseq and
                   fatime.ftgrp = "BONO8CP" use-index MobSub:
          /*    ldeFat = ldeFat + fatime.amt. */
@@ -128,7 +128,7 @@ FOR EACH order where
       END.
          
       FOR EACH fatime where
-               fatime.brand = gcbrand and
+               fatime.brand = Syst.Var:gcBrand and
                fatime.msseq = order.msseq and
                fatime.ftgrp = "BONO8CP" use-index Mobsub:
         /*  ldeFat = ldeFat + fatime.amt. */

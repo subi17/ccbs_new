@@ -26,6 +26,9 @@
 "1" 18 "Contract Target" "List" "Percentage" 2 no "" "CONTS32DISC" 01/06/14 31/12/49 "CONTS32DISC" "Discount La infinita 4 GB" "" "List" 0 0 0 4
 "1" 45 "Contract Target" "List" "Percentage" 1 no "" "CONVDISC" 01/04/17 31/12/49 "CONVDISC" "Convergent 20% discount" "" "List" 0 0 1 6
 "1" 57 "Contract Target" "List" "Percentage" 1 no "" "CONVDISC20_3" 05/07/17 31/12/49 "CONVDISC20_3" "Convergent New Adds Promotion" "" "List" 0 0 0 3
+"1" 71 "Contract Target" "List" "Percentage" 1 no "" "CONVDISC_CS100_6" 19/10/17 31/12/49 "CONVDISC_CS100_6" "Cross Sell Promotion#1 - Fixed line discount" "" "List" 0 0 1 6
+"1" 72 "Contract Target" "List" "Percentage" 1 no "" "CONVDISC_CS20F12" 19/10/17 31/12/49 "CONVDISC_CS20F12" "Cross Sell Promotion#2 - Fixed line discount" "" "List" 0 0 1 12
+"1" 73 "Contract Target" "List" "Percentage" 1 no "" "CONVDISC_CS20M12" 19/10/17 31/12/49 "CONVDISC_CS20M12" "Cross Sell Promotion#2 - Mobile line discount" "" "List" 0 0 1 12
 "1" 66 "Contract Target" "List" "Fixed" 1 no "" "DISCAGILETVIGIC" 22/08/17 31/12/49 "DISCAGILETVIGIC" "TV Service + SKY" "" "All" 0 0 1 0
 "1" 67 "Contract Target" "List" "Fixed" 1 no "" "DISCAGILETVIPSIC" 22/08/17 31/12/49 "DISCAGILETVIPSIC" "TV Service + SKY" "" "All" 0 0 1 0
 "1" 68 "Contract Target" "List" "Fixed" 1 no "" "DISCAGILETVIPSIM" 22/08/17 31/12/49 "DISCAGILETVIPSIM" "TV Service + SKY" "" "All" 0 0 1 0
@@ -45,8 +48,9 @@
 "1" 36 "Contract Target" "List" "Fixed" 1 no "" "DISCFH300" 01/11/16 31/12/49 "DISCFH300" "Fixed Fiber 300 MF Discount" "" "List" 0 0 0 12
 "1" 44 "Contract Target" "List" "Percentage" 1 no "" "DISCFH3002P" 01/02/17 31/12/49 "DISCFH3002P" "Fixed Fiber 300 MF Discount 2P" "" "List" 0 0 0 0
 "1" 50 "Contract Target" "List" "Percentage" 1 no "" "DISCFH3002PDWN" 02/05/17 31/12/49 "DISCFH3002PDWN" "Fixed Fiber 300 MF Discount 2P Downgrade" "" "List" 10 0 1 0
-"1" 41 "Contract Target" "List" "Percentage" 1 no "" "DISCFH300P" 01/02/17 31/12/49 "DISCFH300P" "Fixed Fiber 300 MF Discount (Percentage)" "" "List" 10 0 0 3
+"1" 41 "Contract Target" "List" "Percentage" 0 no "" "DISCFH300P" 01/02/17 31/12/49 "DISCFH300P" "Fixed Fiber 300 MF Discount (Percentage)" "" "List" 10 0 0 3
 "1" 51 "Contract Target" "List" "Percentage" 1 no "" "DISCFH300PDWN" 02/05/17 31/12/49 "DISCFH300PDWN" "Fixed Fiber 300 MF Discount Downgrade" "" "List" 10 0 1 0
+"1" 74 "Contract Target" "List" "Fixed" 0 no "" "DISCFH300" 30/10/17 31/12/49 "DISCFH300P_PRO" "Fixed Fiber 300 PRO MF Discount" "" "List" 0 0 0 3
 "1" 8 "Contract Target" "All " "Percentage" 2 no "" "DISCOUNT10" 01/09/13 31/12/49 "DISCOUNT10" "Discount 10 percent" "" "All " 0 0 0 0
 "1" 42 "Contract Target" "List" "Percentage" 1 no "" "DISCWINBACK" 22/02/17 31/12/49 "DISCWINBACK" "Winback ADSL Discount" "" "List" 0 0 0 6
 "1" 63 "Contract Target" "List" "Fixed" 1 no "" "FIDETVDISC" 01/07/17 31/12/49 "FIDETVDISC" "Loyalty & retention discount" "" "List" 0 0 1 6
