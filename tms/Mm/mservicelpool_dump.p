@@ -6,7 +6,6 @@
 {Syst/commali.i}
 {Syst/dumpfile_run.i}
 {Func/create_eventlog.i}
-{Func/timestamp.i}
 
 DEF INPUT  PARAMETER icDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -83,11 +82,11 @@ BY DFField.OrderNbr:
                   DFField.DFField.
 END.
 
-fSplitTS(idLastDump,
+Func.Common:mSplitTS(idLastDump,
          OUTPUT ldaModified,
          OUTPUT liTimeMod).
 
-ldtLastDump = fTimeStamp2DateTime(idLastDump).
+ldtLastDump = Func.Common:mTimeStamp2DateTime(idLastDump).
 
 ASSIGN lhMServiceLPool = BUFFER MServiceLPool:HANDLE.
 
@@ -171,7 +170,7 @@ PROCEDURE pReadMServiceLPool :
                  EventLog.Key       = lcEventKey NO-ERROR.
 
       IF AVAIL EventLog THEN /* YTS-11322/HLP-24688 */
-         ldEventTS = fHMS2TS(EventLog.EventDate, EventLog.EventTime).
+         ldEventTS = Func.Common:mHMS2TS(EventLog.EventDate, EventLog.EventTime).
       ELSE
          ldEventTS = MServiceLPool.FromTS.
 
@@ -185,7 +184,7 @@ PROCEDURE pReadMServiceLPool :
        IF lcSLCode NE "" THEN 
          lcContract = lcGroupCode + "/" + lcSLCode. 
 
-      IF MServiceLPool.EndTs >= 99999999 THEN ldValidTo = fHMS2TS(12/31/2049,"0").
+      IF MServiceLPool.EndTs >= 99999999 THEN ldValidTo = Func.Common:mHMS2TS(12/31/2049,"0").
       ELSE 
          ldValidTo = MServiceLPool.EndTS. 
 
@@ -202,9 +201,9 @@ PROCEDURE pWriteMServiceLPool :
             CASE lcField:
             WHEN "#Contract" THEN lcValue = lcContract.
             WHEN "#RowId" THEN lcValue =  STRING( ROWID(MServiceLPool)).
-            WHEN "#ValidFrom" THEN lcValue = fTS2HMS(MServiceLPool.FromTS).
-            WHEN "#ValidTo" THEN lcValue = fTS2HMS(ldValidTo).
-            WHEN "#EventTS" THEN lcValue = fTS2HMS(ldEventTS).
+            WHEN "#ValidFrom" THEN lcValue = Func.Common:mTS2HMS(MServiceLPool.FromTS).
+            WHEN "#ValidTo" THEN lcValue = Func.Common:mTS2HMS(ldValidTo).
+            WHEN "#EventTS" THEN lcValue = Func.Common:mTS2HMS(ldEventTS).
             WHEN "#AgrCustomer" THEN lcValue = STRING(MServiceLPool.CustNum).
             OTHERWISE lcValue = "".
             END CASE.

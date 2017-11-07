@@ -17,9 +17,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
-{Func/date.i}
 {Mm/fbundle.i}
 {Func/fbtc.i}
 {Func/fdss.i}
@@ -67,7 +66,7 @@ ASSIGN
    pcOldBundle = get_string(pcStruct,"old_bundle")
    pcNewBundle = get_string(pcStruct,"new_bundle")
    pdaActDate = get_date(pcStruct,"date")
-   katun = "VISTA_" + get_string(pcStruct,"username")
+   Syst.Var:katun = "VISTA_" + get_string(pcStruct,"username")
    llUpgradeUpsell = get_bool(pcStruct,"upgrade_upsell")
       WHEN LOOKUP("upgrade_upsell", lcstruct) > 0
    plExtendContract = get_bool(pcStruct,"extend_term_contract")
@@ -100,11 +99,11 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 {newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
 
 FIND FIRST DayCampaign NO-LOCK WHERE
-           DayCampaign.Brand = gcBrand AND
+           DayCampaign.Brand = Syst.Var:gcBrand AND
            DayCampaign.DCEvent = pcNewBundle NO-ERROR.
 IF NOT AVAIL DayCampaign THEN RETURN appl_err("DayCampaign not defined").
 
-IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
+IF TRIM(Syst.Var:katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 ASSIGN
     lcBONOContracts = fCParamC("BONO_CONTRACTS")
@@ -120,7 +119,7 @@ IF NOT fValidateBTC
     OUTPUT lcError)
    THEN RETURN appl_err(lcError). 
 
-ldActStamp = fMake2Dt(pdaActDate,
+ldActStamp = Func.Common:mMake2DT(pdaActDate,
                       IF pdaActDate = TODAY
                       THEN TIME
                       ELSE 0).
@@ -170,22 +169,21 @@ IF llUpgradeUpsell THEN DO:
         NO-LOCK NO-ERROR.
    IF NOT AVAILABLE TMSCodes THEN
       /* Write memo */
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "MobSub",
+      Func.Common:mWriteMemo("MobSub",
                        STRING(MobSub.MsSeq),
                        MobSub.CustNum,
                        "Upgrade Upsell Creation Failed",
                        "Upgrade Upsell Limit is not configured in TMS for " +
                        pcOldBundle + "TO" + pcNewBundle).
    ELSE DO:
-      IF fIsDSSActive(INPUT MobSub.CustNum,INPUT fMakeTS()) THEN
+      IF fIsDSSActive(INPUT MobSub.CustNum,INPUT Func.Common:mMakeTS()) THEN
          lcUpgradeUpsell = "DSS_UPSELL_UPGRADE".
       ELSE lcUpgradeUpsell = "UPGRADE_UPSELL".
 
       liUpsellCreated = fPCActionRequest(MobSub.MsSeq,
                                          lcUpgradeUpsell, 
                                          "act",
-                                         fMakeTS(),
+                                         Func.Common:mMakeTS(),
                                          TRUE,   /* create fee */
                                          {&REQUEST_SOURCE_BTC},
                                          "",
@@ -197,8 +195,7 @@ IF llUpgradeUpsell THEN DO:
                                          "",
                                          OUTPUT lcError).
       IF liUpsellCreated = 0 THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(MobSub.MsSeq),
                           MobSub.CustNum,
                           "Upgrade Upsell Creation Failed",
@@ -211,18 +208,16 @@ IF LOOKUP(pcNewBundle,lcBONOContracts) > 0 OR LOOKUP(pcNewBundle,lcVoiceBundles)
 ELSE
    lcMemoType  = "MobSub".
 
-DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                 "MobSub",                             /* HostTable */
+Func.Common:mWriteMemoWithType("MobSub",                             /* HostTable */
                  STRING(Mobsub.MsSeq),                 /* KeyValue  */
                  MobSub.CustNum,                       /* CustNum */
                  "Bono modificado",                    /* MemoTitle */
                  pcMemoContent + " " + pcOldBundle + " --> " + pcNewBundle,  /* MemoText */
                  lcMemoType,                           /* MemoType */
-                 katun).
+                 Syst.Var:katun).
 
 
 lcResultStruct = add_struct(response_toplevel_id, "").
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

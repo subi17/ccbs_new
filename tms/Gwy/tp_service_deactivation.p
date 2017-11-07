@@ -1,10 +1,8 @@
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/log.i}
-{Func/date.i}
 {Func/memo.i}
 {Func/cparam2.i}
 {Func/orderfunc.i}
@@ -42,7 +40,7 @@ PROCEDURE pProcessRequests:
     DEFINE BUFFER AgreeCustomer           FOR Customer.
     DEFINE BUFFER bf_TPService_Activation FOR TPService.
 
-    ASSIGN ldeNow = fMakeTS().
+    ASSIGN ldeNow = Func.Common:mMakeTS().
 
     MESSAGE_LOOP:
     FOR EACH TPService WHERE TPService.MsSeq > 0 AND TPService.Operation = {&TYPE_DEACTIVATION} AND TPService.ServStatus = {&WAITING_FOR_STB_DEACTIVATION} NO-LOCK 
@@ -85,7 +83,7 @@ PROCEDURE pProcessRequests:
        ELSE 
           ASSIGN liAgrCust = liSubscriptionAgrCust.
 
-       FIND FIRST AgreeCustomer WHERE AgreeCustomer.Brand   = gcBrand   AND 
+       FIND FIRST AgreeCustomer WHERE AgreeCustomer.Brand   = Syst.Var:gcBrand   AND 
                                       AgreeCustomer.CustNum = liAgrCust NO-LOCK NO-ERROR.
        IF NOT AVAIL AgreeCustomer THEN 
            RETURN fTPServiceError(BUFFER TPService,"Agreement customer not found").
@@ -98,7 +96,7 @@ PROCEDURE pProcessRequests:
           CREATE ttCustomer.
           ASSIGN
               ttCustomer.CustomerId   = lcCustomerId
-              ttCustomer.CustName     = REPLACE(DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1, BUFFER AgreeCustomer),"|","")
+              ttCustomer.CustName     = REPLACE(Func.Common:mPrintCustName(BUFFER AgreeCustomer),"|","")
               ttCustomer.Email        = AgreeCustomer.Email
               ttCustomer.Region       = AgreeCustomer.Region
               ttCustomer.Product      = TPService.Product

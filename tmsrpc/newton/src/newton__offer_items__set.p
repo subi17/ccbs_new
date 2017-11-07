@@ -18,7 +18,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/eventval.i}
 {Syst/tmsconst.i}
 {Mc/offer.i}
@@ -49,7 +49,7 @@ pcUserName = "VISTA_" + get_string(pcStruct, "username").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-katun = pcUserName.
+Syst.Var:katun = pcUserName.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
@@ -135,14 +135,14 @@ IF gi_xmlrpc_error NE 0 THEN DO:
 END.
 
 FIND Offer WHERE
-     Offer.Brand = gcBrand AND 
+     Offer.Brand = Syst.Var:gcBrand AND 
      Offer.Offer = ttOfferItem.Offer NO-LOCK NO-ERROR.
 IF NOT AVAIL Offer THEN DO:
    RETURN appl_err("Offer " + ttOfferItem.Offer + " does not exist").
 END.
 
-IF (OfferItem.BeginStamp < fMakeTs() OR 
-   ttOfferItem.BeginStamp < fMakeTs()) AND Offer.FromDate <= TODAY THEN DO: 
+IF (OfferItem.BeginStamp < Func.Common:mMakeTS() OR 
+   ttOfferItem.BeginStamp < Func.Common:mMakeTS()) AND Offer.FromDate <= TODAY THEN DO: 
 
    DEFINE VARIABLE cDeniedChangedInfo AS CHARACTER NO-UNDO. 
    cDeniedChangedInfo = fCheckInvalidChangeWithOldTs(). 
@@ -161,7 +161,7 @@ IF ttOfferItem.ItemType = "Topup" THEN DO:
    END.
 
    FIND FIRST TopupScheme WHERE 
-      TopupScheme.Brand = gcBrand AND
+      TopupScheme.Brand = Syst.Var:gcBrand AND
       TopupScheme.TopupScheme = ttOfferItem.ItemKey NO-LOCK NO-ERROR.
    IF AVAIL TopupScheme THEN
    DO:
@@ -175,8 +175,8 @@ IF fValidateOfferItem(TABLE ttOfferItem, FALSE, OUTPUT ocError) > 0 THEN DO:
    RETURN appl_err(ocError).
 END.
 
-IF ttOfferItem.EndStamp < fMakeTs() THEN DO:
-   ttOfferItem.EndStamp = fMakeTs().
+IF ttOfferItem.EndStamp < Func.Common:mMakeTS() THEN DO:
+   ttOfferItem.EndStamp = Func.Common:mMakeTS().
    add_timestamp(lcRespStruct, "valid_to", ttOfferItem.EndStamp).
 END.
 
@@ -206,5 +206,4 @@ RELEASE OfferItem.
 
 FINALLY:
    EMPTY TEMP-TABLE ttNamePairs.
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

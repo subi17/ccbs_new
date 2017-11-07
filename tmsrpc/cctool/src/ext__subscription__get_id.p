@@ -8,7 +8,6 @@
 
 /* Input parameters */
 DEF VAR pcCLI    AS CHAR NO-UNDO.
-DEF VAR gcBrand  AS CHARACTER NO-UNDO INIT "1".
 
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 

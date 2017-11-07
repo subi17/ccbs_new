@@ -9,7 +9,6 @@
   ------------------------------------------------------ */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fctserval.i}
 {Func/fctchange.i}
@@ -83,13 +82,13 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
    DISPLAY lcLetterRow WITH FRAME fCriter.
 
    ASSIGN
-      ufk   = 0  
-      ufk[5]= 1027  
-      ufk[8]= 8 
-      ehto = 0.
+      Syst.Var:ufk   = 0  
+      Syst.Var:ufk[5]= 1027  
+      Syst.Var:ufk[8]= 8 
+      Syst.Var:ehto = 0.
    RUN Syst/ufkey.p.
 
-   IF toimi = 5 THEN DO:
+   IF Syst.Var:toimi = 5 THEN DO:
 
       llOk = FALSE.
       MESSAGE "Customer's user account data will be changed." SKIP
@@ -119,7 +118,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO lCustMark, NEXT lCustMark:
       LEAVE.
    END.
    
-   ELSE IF toimi = 8 THEN LEAVE.
+   ELSE IF Syst.Var:toimi = 8 THEN LEAVE.
 
 END. /* lCustMark */
 

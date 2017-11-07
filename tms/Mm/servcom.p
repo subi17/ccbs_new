@@ -26,7 +26,7 @@
 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -84,8 +84,8 @@ form
     ServCom.Target      column-label "T" 
     ServCom.FeeModel    column-label "FeeModel" format "x(7)"
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) 
     "  Components of Service '" + Service + "'  "
     + " " 
     FRAME sel.
@@ -147,37 +147,37 @@ form
     
     ServCom.ServiceLimit COLON 20 
 WITH  OVERLAY ROW 1 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
 form /* seek ServCom  BY  ServCom */
     ServCom
     HELP "Enter Code of component"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND CODE "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek ServCom  BY ScName */
     SCName
     HELP "Enter Name of component"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Name "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Name "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 form /* memo */
     ServCom.Memo
     WITH OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc)
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc)
     " Memo: " + ServCom.ServCom + " " WITH NO-LABELS 1 columns
     FRAME memo.
 
 FIND Service WHERE 
      Service.Service = Service AND 
-     Service.Brand   = gcBrand NO-LOCK.
+     Service.Brand   = Syst.Var:gcBrand NO-LOCK.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "By Code,By Name,By 3, By 4".
@@ -185,7 +185,7 @@ orders = "By Code,By Name,By 3, By 4".
 
 FIND FIRST ServCom WHERE 
            ServCom.Service = Service AND 
-           ServCom.Brand = gcBrand NO-LOCK NO-ERROR.
+           ServCom.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 IF AVAILABLE ServCom THEN ASSIGN
    Memory       = recid(ServCom)
    must-print   = TRUE
@@ -203,13 +203,13 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a ServCom  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
       
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
@@ -217,7 +217,7 @@ REPEAT WITH FRAME sel:
            VALIDATE
               (ServCom.ServCom NOT ENTERED OR
               NOT CAN-FIND(ServCom using  ServCom.ServCom WHERE  
-                           Servcom.Brand = gcBrand ),
+                           Servcom.Brand = Syst.Var:gcBrand ),
               "ServCom " + string(INPUT ServCom.ServCom) +
               " already exists !").
            IF INPUT FRAME lis ServCom.ServCom NOT ENTERED THEN 
@@ -225,7 +225,7 @@ REPEAT WITH FRAME sel:
            CREATE ServCom.
            ASSIGN
            ServCom.Service  = Service  
-           ServCom.Brand   = gcBrand 
+           ServCom.Brand   = Syst.Var:gcBrand 
            ServCom.ServCom = INPUT FRAME lis ServCom.ServCom.
 
            RUN local-UPDATE-record.
@@ -246,7 +246,7 @@ REPEAT WITH FRAME sel:
       /* is there ANY record ? */
       FIND FIRST ServCom
       WHERE ServCom.Service = Service AND 
-            ServCom.Brand = gcBrand NO-LOCK NO-ERROR.
+            ServCom.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
       IF NOT AVAILABLE ServCom THEN LEAVE LOOP.
       NEXT LOOP.
    END.
@@ -297,11 +297,11 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 816  ufk[2]= 251 ufk[3]= 2350 ufk[4]= 927
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-        ufk[7]= 814 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 816  Syst.Var:ufk[2]= 251 Syst.Var:ufk[3]= 2350 Syst.Var:ufk[4]= 927
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.Var:ufk[7]= 814 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
         {Syst/uright1.i '"3,5,6"'}
         RUN Syst/ufkey.p.
       END.
@@ -309,17 +309,17 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW ServCom.ServCom {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ServCom.ServCom WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) ServCom.ServCom WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW ServCom.ScName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) ServCom.ScName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) ServCom.ScName WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -327,10 +327,10 @@ REPEAT WITH FRAME sel:
          END.
       END.
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -348,7 +348,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -373,7 +373,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -399,7 +399,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ServCom WHERE recid(ServCom) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -423,7 +423,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -437,27 +437,27 @@ REPEAT WITH FRAME sel:
        END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO:
 
         ASSIGN 
-           ufk    = 0
-           ufk[1] = 35
-           ufk[2] = 30
-           ufk[8] = 8
-           ehto   = 0
+           Syst.Var:ufk    = 0
+           Syst.Var:ufk[1] = 35
+           Syst.Var:ufk[2] = 30
+           Syst.Var:ufk[8] = 8
+           Syst.Var:ehto   = 0
            ufkey  = TRUE.
         RUN Syst/ufkey.p.
         
         /* Search BY column 1 */
-        IF toimi = 1 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-           cfc = "puyr". RUN Syst/ufcolor.p.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        IF Syst.Var:toimi = 1 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f1.
            SET ServCom WITH FRAME f1.
            HIDE FRAME f1 NO-PAUSE.
            IF ServCom ENTERED THEN DO:
               FIND FIRST ServCom WHERE 
-                         ServCom.Brand    = gcBrand AND 
+                         ServCom.Brand    = Syst.Var:gcBrand AND 
                          ServCom.ServCom >= ServCom AND 
                          ServCom.Service   = Service NO-LOCK NO-ERROR.
               IF NOT AVAILABLE ServCom THEN DO:
@@ -473,16 +473,16 @@ REPEAT WITH FRAME sel:
         END. /* Search-1 */
 
         /* Search BY col 2 */
-        ELSE IF toimi = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+        ELSE IF Syst.Var:toimi = 2 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-           cfc = "puyr". RUN Syst/ufcolor.p.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            CLEAR FRAME f2.
            SET ScName WITH FRAME f2.
            HIDE FRAME f2 NO-PAUSE.
            IF ScName ENTERED THEN DO:
               FIND FIRST ServCom WHERE 
-                         ServCom.Brand   = gcBrand AND 
+                         ServCom.Brand   = Syst.Var:gcBrand AND 
                          ServCom.ScName >= ScName AND 
                          ServCom.Service  = Service NO-LOCK NO-ERROR.
               IF NOT AVAILABLE ServCom THEN DO:
@@ -497,7 +497,7 @@ REPEAT WITH FRAME sel:
         END. /* Search-2 */
      END.
           
-     ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO TRANS:  /* Within ServPac */
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 THEN DO TRANS:  /* Within ServPac */
        RUN local-find-this(FALSE).                                        
        RUN Mm/servel2.p(ServCom.ServCom).
        ufkey = TRUE.
@@ -505,7 +505,7 @@ REPEAT WITH FRAME sel:
      END.
 
      /* attributes */
-     ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 THEN DO:
         RUN local-find-this(FALSE).
         IF ServCom.ServAttr = TRUE THEN 
         RUN Mc/servattr.p(INPUT ServCom.servcom).
@@ -522,7 +522,7 @@ REPEAT WITH FRAME sel:
      END.
 
      /* UPDATE memo */
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 THEN DO:
         RUN local-find-this(FALSE).
         RUN Mc/memo.p(INPUT 0,
                  INPUT "ServCom",
@@ -532,20 +532,20 @@ REPEAT WITH FRAME sel:
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
         {Syst/uright2.i}
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW"
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION:  /* DELETE */
        {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        ServCom.ServCom ServCom.ScName .
 
        RUN local-find-NEXT.
@@ -567,7 +567,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        ServCom.ServCom ServCom.ScName .
        IF ok THEN DO:
 
@@ -578,7 +578,7 @@ REPEAT WITH FRAME sel:
            /* was LAST record DELETEd ? */
            IF NOT CAN-FIND(FIRST ServCom
            WHERE ServCom.Service = Service AND 
-                 ServCom.Brand = gcBrand) THEN DO:
+                 ServCom.Brand = Syst.Var:gcBrand) THEN DO:
               CLEAR FRAME sel NO-PAUSE.
               PAUSE 0 NO-MESSAGE.
               LEAVE LOOP.
@@ -590,7 +590,7 @@ REPEAT WITH FRAME sel:
      END. /* DELETE */
 
      /* translations */
-     ELSE IF LOOKUP(nap,"7,f7") > 0 AND ufk[7] > 0 THEN DO:  
+     ELSE IF LOOKUP(Syst.Var:nap,"7,f7") > 0 AND Syst.Var:ufk[7] > 0 THEN DO:  
         FIND ServCom WHERE RECID(ServCom) = rtab[FRAME-LINE] NO-LOCK.
         RUN Mc/invlang.p(13,ServCom.ServCom).
           
@@ -599,14 +599,14 @@ REPEAT WITH FRAME sel:
      END.
 
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        {Syst/uright2.i}
        /* change */
        RUN local-find-this((lcRight = "RW")).
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY ServCom.ServCom.
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhServCom).
@@ -625,25 +625,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(ServCom) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(ServCom) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -662,36 +662,36 @@ END PROCEDURE.
 PROCEDURE local-find-FIRST:
        IF order = 1 THEN FIND FIRST ServCom
        WHERE ServCom.Service = Service AND 
-             ServCom.Brand = gcBrand NO-LOCK NO-ERROR.
+             ServCom.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND FIRST ServCom USE-INDEX SCName
        WHERE ServCom.Service = Service AND 
-             ServCom.Brand = gcBrand NO-LOCK NO-ERROR.
+             ServCom.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
        IF order = 1 THEN FIND LAST ServCom
-       WHERE ServCom.Service = Service AND ServCom.Brand = gcBrand 
+       WHERE ServCom.Service = Service AND ServCom.Brand = Syst.Var:gcBrand 
        NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND LAST ServCom USE-INDEX SCName
-       WHERE ServCom.Service = Service AND ServCom.Brand = gcBrand
+       WHERE ServCom.Service = Service AND ServCom.Brand = Syst.Var:gcBrand
         NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
        IF order = 1 THEN FIND NEXT ServCom
-       WHERE ServCom.Service = Service AND ServCom.Brand = gcBrand 
+       WHERE ServCom.Service = Service AND ServCom.Brand = Syst.Var:gcBrand 
        NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND NEXT ServCom USE-INDEX SCName
-       WHERE ServCom.Service = Service AND ServCom.Brand = gcBrand 
+       WHERE ServCom.Service = Service AND ServCom.Brand = Syst.Var:gcBrand 
        NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
        IF order = 1 THEN FIND PREV ServCom
-       WHERE ServCom.Service = Service AND ServCom.Brand = gcBrand
+       WHERE ServCom.Service = Service AND ServCom.Brand = Syst.Var:gcBrand
        NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND PREV ServCom USE-INDEX SCName
-       WHERE ServCom.Service = Service AND ServCom.Brand = gcBrand 
+       WHERE ServCom.Service = Service AND ServCom.Brand = Syst.Var:gcBrand 
        NO-LOCK NO-ERROR.
 END PROCEDURE.
 
@@ -726,13 +726,11 @@ PROCEDURE local-UPDATE-record:
 
       llCloseTime = (ServCom.CloseTime = 1).
 
-      lcActType = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                                  "ServCom",
+      lcActType = Func.Common:mTMSCodeName("ServCom",
                                   "ActType",
                                   STRING(ServCom.ActType)).
 
-      lcTarget = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                                  "ServCom",
+      lcTarget = Func.Common:mTMSCodeName("ServCom",
                                   "Target",
                                   STRING(ServCom.Target)).
       DISP 
@@ -760,7 +758,7 @@ PROCEDURE local-UPDATE-record:
       WITH FRAME lis.
 
       IF lcRight = "RW" THEN DO:
-         ehto = 9.
+         Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
       
          UPDATE
@@ -797,8 +795,7 @@ PROCEDURE local-UPDATE-record:
                                OUTPUT lcCode).
               
                 IF lcCode ne "" AND lcCode NE ? THEN DO:
-                   lcTarget = DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                                               "ServCom",
+                   lcTarget = Func.Common:mTMSCodeName("ServCom",
                                                "Target",
                                                lcCode).
                    DISPLAY INTEGER(lcCode) ;& ServCom.Target
@@ -806,7 +803,7 @@ PROCEDURE local-UPDATE-record:
                    WITH FRAME lis.   
                 END.
                
-                ehto = 9.
+                Syst.Var:ehto = 9.
                 RUN Syst/ufkey.p.
                 NEXT. 
              END.
@@ -815,18 +812,18 @@ PROCEDURE local-UPDATE-record:
                 FRAME-FIELD MATCHES("*SMSTxt")
              THEN DO WITH FRAME lis:
 
-                ASSIGN gcHelpParam = "prt"
-                       si-recid    = 0
+                ASSIGN Syst.Var:gcHelpParam = "prt"
+                       Syst.Var:si-recid    = 0
                        lcField     = FRAME-FIELD.
                 RUN Mc/invotxt.p ("",
                              "").
-                gcHelpParam = "".
+                Syst.Var:gcHelpParam = "".
                    
-                ehto = 9.
+                Syst.Var:ehto = 9.
                 RUN Syst/ufkey.p.
        
-                IF si-recid > 0 THEN DO:
-                   FIND InvText WHERE RECID(InvText) = si-recid 
+                IF Syst.Var:si-recid > 0 THEN DO:
+                   FIND InvText WHERE RECID(InvText) = Syst.Var:si-recid 
                    NO-LOCK NO-ERROR.
                    IF AVAILABLE InvText THEN DO:
 
@@ -851,7 +848,7 @@ PROCEDURE local-UPDATE-record:
              END.
 
  
-             ELSE IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN 
+             ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN 
              DO WITH FRAME lis:
              
                 PAUSE 0.
@@ -859,7 +856,7 @@ PROCEDURE local-UPDATE-record:
                 IF FRAME-FIELD = "FeeModel" THEN DO: 
                    IF INPUT FRAME lis ServCom.Feemodel NE "" THEN DO:
                       FIND Feemodel WHERE 
-                           FeeModel.Brand    = gcBrand AND 
+                           FeeModel.Brand    = Syst.Var:gcBrand AND 
                            FeeModel.FeeModel = INPUT FRAME lis ServCom.FeeModel
                       NO-LOCK NO-ERROR.
                       IF NOT AVAIL FeeModel THEN DO:
@@ -875,7 +872,7 @@ PROCEDURE local-UPDATE-record:
                 ELSE IF FRAME-FIELD = "ClFeeModel" THEN DO: 
                    IF INPUT FRAME lis ServCom.ClFeemodel NE "" THEN DO:
                       FIND Feemodel WHERE 
-                           FeeModel.Brand    = gcBrand AND 
+                           FeeModel.Brand    = Syst.Var:gcBrand AND 
                            FeeModel.FeeModel = INPUT FRAME lis 
                                                ServCom.ClFeeModel
                       NO-LOCK NO-ERROR.
@@ -892,7 +889,7 @@ PROCEDURE local-UPDATE-record:
                 ELSE IF FRAME-FIELD = "ChgFeeModel" THEN DO: 
                    IF INPUT FRAME lis ServCom.ChgFeemodel NE "" THEN DO:
                       FIND Feemodel WHERE 
-                           FeeModel.Brand    = gcBrand AND 
+                           FeeModel.Brand    = Syst.Var:gcBrand AND 
                            FeeModel.FeeModel = INPUT FRAME lis 
                                                ServCom.ChgFeeModel
                       NO-LOCK NO-ERROR.
@@ -909,7 +906,7 @@ PROCEDURE local-UPDATE-record:
                 ELSE IF FRAME-FIELD = "SMSTxt" THEN DO: 
                    IF INPUT FRAME lis ServCom.SMSTxt NE "" THEN DO:
                       IF NOT CAN-FIND(FIRST InvText WHERE
-                         InvText.Brand    = gcBrand AND
+                         InvText.Brand    = Syst.Var:gcBrand AND
                          InvText.Target   = "SMS"   AND
                          InvText.KeyValue = INPUT FRAME lis ServCom.SMSTxt)
                       THEN DO:
@@ -923,7 +920,7 @@ PROCEDURE local-UPDATE-record:
                 ELSE IF FRAME-FIELD = "ClSMSTxt" THEN DO: 
                    IF INPUT FRAME lis ServCom.ClSMSTxt NE "" THEN DO:
                       IF NOT CAN-FIND(FIRST InvText WHERE
-                         InvText.Brand    = gcBrand AND
+                         InvText.Brand    = Syst.Var:gcBrand AND
                          InvText.Target   = "SMS"   AND
                          InvText.KeyValue = INPUT FRAME lis ServCom.ClSMSTxt)
                       THEN DO:
@@ -937,7 +934,7 @@ PROCEDURE local-UPDATE-record:
                 ELSE IF FRAME-FIELD = "ChgSMSTxt" THEN DO: 
                    IF INPUT FRAME lis ServCom.ChgSMSTxt NE "" THEN DO:
                       IF NOT CAN-FIND(FIRST InvText WHERE
-                         InvText.Brand    = gcBrand AND
+                         InvText.Brand    = Syst.Var:gcBrand AND
                          InvText.Target   = "SMS"   AND
                          InvText.KeyValue = INPUT FRAME lis ServCom.ChgSMSTxt)
                       THEN DO:
@@ -976,8 +973,7 @@ PROCEDURE local-UPDATE-record:
                 ELSE IF FRAME-FIELD = "Target" THEN DO:
 
                    IF NOT 
-                   DYNAMIC-FUNCTION("fTMSCodeChk" in ghFunc1,
-                                    "ServCom",
+                   Func.Common:mTMSCodeChk("ServCom",
                                     "Target",
                                     STRING(INPUT FRAME lis ServCom.Target))
                    THEN DO:
@@ -987,8 +983,7 @@ PROCEDURE local-UPDATE-record:
                    END.
 
                    lcTarget = 
-                   DYNAMIC-FUNCTION("fTMSCodeName" in ghFunc1,
-                                    "ServCom",
+                   Func.Common:mTMSCodeName("ServCom",
                                     "Target",
                                     STRING(INPUT FRAME lis ServCom.Target)).
 
@@ -998,7 +993,7 @@ PROCEDURE local-UPDATE-record:
                 ELSE IF FRAME-FIELD = "ServiceLimit" THEN DO:
                    IF INPUT ServCom.ServiceLimit > "" THEN DO:
                       FIND ServiceLimitGroup WHERE 
-                           ServiceLimitGroup.Brand     = gcBrand AND
+                           ServiceLimitGroup.Brand     = Syst.Var:gcBrand AND
                            ServiceLimitGroup.GroupCode = 
                                INPUT ServCom.ServiceLimit
                       NO-LOCK NO-ERROR.

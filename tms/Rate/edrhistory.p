@@ -12,12 +12,11 @@
 {Syst/commali.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'EDRHistory'}
-{Func/timestamp.i}
 
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -70,9 +69,9 @@ form
     EDRHistory.Amount FORMAT ">>>>9.999" COLUMN-LABEL "Amount"
     EDRHistory.UpdateDate
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
-       " EDR History "  + string(pvm,"99-99-99") + " "
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
+       " EDR History "  + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form
@@ -96,8 +95,8 @@ form
       lcUpdateTime NO-LABEL FORMAT "X(8)" SKIP
     EDRHistory.UpdateSource COLON 20  
 WITH  OVERLAY ROW 1 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -108,19 +107,19 @@ FORM
    "Brand:" lcBrand skip
    "MSISDN:" lcCLI
       HELP "Enter MSISDN"
-   WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND MSISDN "
-       COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+   WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND MSISDN "
+       COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FORM
    "Brand:" lcBrand skip
    "Rated:" ldaRateDate
       HELP "Enter rating date"
-   WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Rating Date "
-       COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+   WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Rating Date "
+       COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 RUN local-find-first.
@@ -194,11 +193,11 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk    = 0
-        ufk[1] = 209
-        ufk[2] = 28
-        ufk[8] = 8 
-        ehto   = 3 
+        Syst.Var:ufk    = 0
+        Syst.Var:ufk[1] = 209
+        Syst.Var:ufk[2] = 28
+        Syst.Var:ufk[8] = 8 
+        Syst.Var:ehto   = 3 
         ufkey  = FALSE.
 
         RUN Syst/ufkey.p.
@@ -207,17 +206,17 @@ REPEAT WITH FRAME sel:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
          CHOOSE ROW EDRHistory.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) EDRHistory.CLI WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) EDRHistory.CLI WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW EDRHistory.UpdateDate {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY VALUE(ccc) EDRHistory.UpdateDate WITH FRAME sel.
+         COLOR DISPLAY VALUE(Syst.Var:ccc) EDRHistory.UpdateDate WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -226,10 +225,10 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -247,7 +246,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -272,7 +271,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -298,7 +297,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND EDRHistory WHERE recid(EDRHistory) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -322,7 +321,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -337,14 +336,14 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 AND Syst.Var:ufk[1] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
        
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.Var:gcAllBrand
               lcCLI WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
 
@@ -362,14 +361,14 @@ REPEAT WITH FRAME sel:
      END. /* Search-1 */
 
      /* Search BY column 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 AND Syst.Var:ufk[2] > 0
      THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f2.
        DISPLAY lcBrand WITH FRAME F2.
        
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.Var:gcAllBrand
               ldaRateDate WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
 
@@ -386,7 +385,7 @@ REPEAT WITH FRAME sel:
        END.
      END. /* Search-2 */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -394,8 +393,8 @@ REPEAT WITH FRAME sel:
 
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhEDRHistory).
 
-       ASSIGN ac-hdr = " VIEW " ufkey = TRUE ehto = 5. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " VIEW " ufkey = TRUE Syst.Var:ehto = 5. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY EDRHistory.InvCust.
 
        RUN local-UPDATE-record.                                  
@@ -412,25 +411,25 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(EDRHistory) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(EDRHistory) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -450,11 +449,11 @@ PROCEDURE local-find-FIRST:
 
    IF order = 1 THEN DO:
       FIND FIRST EDRHistory USE-INDEX CLI WHERE
-                 EDRHistory.Brand = gcBrand  NO-LOCK NO-ERROR.
+                 EDRHistory.Brand = Syst.Var:gcBrand  NO-LOCK NO-ERROR.
    END.
    ELSE IF order = 2 THEN DO:
       FIND FIRST EDRHistory USE-INDEX UpdateDate WHERE
-                 EDRHistory.Brand = gcBrand  NO-LOCK NO-ERROR.
+                 EDRHistory.Brand = Syst.Var:gcBrand  NO-LOCK NO-ERROR.
    END.
  
 END PROCEDURE.
@@ -463,11 +462,11 @@ PROCEDURE local-find-LAST:
 
    IF order = 1 THEN DO:
       FIND LAST EDRHistory USE-INDEX CLI WHERE
-                EDRHistory.Brand = gcBrand  NO-LOCK NO-ERROR.
+                EDRHistory.Brand = Syst.Var:gcBrand  NO-LOCK NO-ERROR.
    END.
    ELSE IF order = 2 THEN DO:
       FIND LAST EDRHistory USE-INDEX UpdateDate WHERE
-                EDRHistory.Brand = gcBrand  NO-LOCK NO-ERROR.
+                EDRHistory.Brand = Syst.Var:gcBrand  NO-LOCK NO-ERROR.
    END.
  
 END PROCEDURE.
@@ -476,11 +475,11 @@ PROCEDURE local-find-NEXT:
 
    IF order = 1 THEN DO:
       FIND NEXT EDRHistory USE-INDEX CLI WHERE
-                EDRHistory.Brand = gcBrand  NO-LOCK NO-ERROR.
+                EDRHistory.Brand = Syst.Var:gcBrand  NO-LOCK NO-ERROR.
    END.
    ELSE IF order = 2 THEN DO:
       FIND NEXT EDRHistory USE-INDEX UpdateDate WHERE
-                EDRHistory.Brand = gcBrand  NO-LOCK NO-ERROR.
+                EDRHistory.Brand = Syst.Var:gcBrand  NO-LOCK NO-ERROR.
    END.
  
 END PROCEDURE.
@@ -489,11 +488,11 @@ PROCEDURE local-find-PREV:
 
    IF order = 1 THEN DO:
       FIND PREV EDRHistory USE-INDEX CLI WHERE
-                EDRHistory.Brand = gcBrand  NO-LOCK NO-ERROR.
+                EDRHistory.Brand = Syst.Var:gcBrand  NO-LOCK NO-ERROR.
    END.
    ELSE IF order = 2 THEN DO:
       FIND PREV EDRHistory USE-INDEX UpdateDate WHERE
-                EDRHistory.Brand = gcBrand  NO-LOCK NO-ERROR.
+                EDRHistory.Brand = Syst.Var:gcBrand  NO-LOCK NO-ERROR.
    END.
  
 END PROCEDURE.
@@ -533,18 +532,17 @@ PROCEDURE local-UPDATE-record:
       FIND FIRST Customer WHERE Customer.CustNum = EDRHistory.InvCust 
          NO-LOCK NO-ERROR.
       IF AVAILABLE Customer THEN 
-          lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                        BUFFER Customer).
+          lcCustName = Func.Common:mDispCustName(BUFFER Customer).
       ELSE lcCustName = "".
       
       FIND FIRST BillItem WHERE
-          BillItem.Brand = gcBrand AND
+          BillItem.Brand = Syst.Var:gcBrand AND
           BillItem.BillCode = EDRHistory.BillCode NO-LOCK NO-ERROR.
       IF AVAILABLE BillItem THEN lcBIName = BillItem.BIName.
       ELSE lcBIName = "".
 
       FIND FIRST BDest WHERE
-          BDest.Brand = gcBrand AND
+          BDest.Brand = Syst.Var:gcBrand AND
           BDest.BDest = EDRHistory.BDest NO-LOCK NO-ERROR.
       IF AVAILABLE BDest THEN lcBDestName = BDest.BDName.
       ELSE lcBDestName = "".
@@ -572,18 +570,18 @@ PROCEDURE local-UPDATE-record:
       WITH FRAME lis.
 
       ASSIGN 
-         ehto = 0
-         ufk  = 0
-         ufk[4] = 1925
-         ufk[8] = 8.
+         Syst.Var:ehto = 0
+         Syst.Var:ufk  = 0
+         Syst.Var:ufk[4] = 1925
+         Syst.Var:ufk[8] = 8.
       RUN Syst/ufkey.p.
       
-      IF toimi = 4 THEN RUN Rate/edrhistory_one_edr.p(EDRHistory.CLI,
+      IF Syst.Var:toimi = 4 THEN RUN Rate/edrhistory_one_edr.p(EDRHistory.CLI,
                                                  EDRHistory.DateSt,
                                                  EDRHistory.TimeSt,
                                                  EDRHistory.DtlSeq).
 
-      ELSE IF toimi = 8 THEN LEAVE.
+      ELSE IF Syst.Var:toimi = 8 THEN LEAVE.
    END.
 
 END PROCEDURE.

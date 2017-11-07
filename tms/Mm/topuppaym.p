@@ -13,7 +13,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/fvoucher.i}
 {Syst/eventval.i}
 {Func/fcustbal.i}
@@ -63,10 +62,10 @@ FUNCTION fCreateOPLog RETURNS LOGICAL
    IF idAmt NE 0 THEN DO:
       CREATE OPLog.
       ASSIGN
-         OPLog.CreStamp  = fMakeTS()
+         OPLog.CreStamp  = Func.Common:mMakeTS()
          OPLog.CustNum   = Customer.CustNum
          OPLog.EventDate = Payment.PaymDate
-         OPLog.UserCode  = katun
+         OPLog.UserCode  = Syst.Var:katun
          OPLog.EventType = iiType 
          OPLog.InvNum    = Payment.InvNum
          OPLog.Voucher   = Payment.Voucher
@@ -93,7 +92,7 @@ IF AVAILABLE MobSub THEN DO:
 END.
 ELSE DO:
    FIND FIRST MsOwner NO-LOCK WHERE
-              MsOwner.Brand = gcBrand AND
+              MsOwner.Brand = Syst.Var:gcBrand AND
               MsOwner.CLI   = icCLI NO-ERROR.
    IF AVAILABLE MsOwner THEN 
       FIND Customer WHERE Customer.CustNum = MsOwner.InvCust NO-LOCK NO-ERROR.
@@ -116,7 +115,7 @@ END.
 lcSource = ENTRY(1,icSource,":").
 
 FIND PrePaidRequest WHERE
-     PrePaidRequest.Brand     = gcBrand AND
+     PrePaidRequest.Brand     = Syst.Var:gcBrand AND
      PrePaidRequest.PPRequest = iiRequest NO-LOCK NO-ERROR.
 IF NOT AVAILABLE PrePaidRequest OR iiRequest = ? THEN DO:
    IF lcSource NE "MCNOC" THEN DO:
@@ -132,7 +131,7 @@ ASSIGN lcInvGroup = Customer.InvGroup
 /* get correct invgroup through taxzone for atm events */
 IF lcSource = "ATM" THEN DO:
    FOR FIRST InvGroup NO-LOCK WHERE
-             InvGroup.Brand   = gcBrand AND
+             InvGroup.Brand   = Syst.Var:gcBrand AND
              InvGroup.TaxZone = PrepaidRequest.TaxZone:
       ASSIGN lcInvGroup = InvGroup.InvGroup
              lcTaxZone  = InvGroup.TaxZone.
@@ -209,7 +208,7 @@ WHEN "CC" OR WHEN "MANFIX" OR  WHEN "COMP" THEN DO:
       
       IF PrePaidRequest.OrigRequest > 0 THEN 
       FOR FIRST bOrigReq NO-LOCK WHERE
-                bOrigReq.Brand     = gcBrand AND
+                bOrigReq.Brand     = Syst.Var:gcBrand AND
                 bOrigReq.PPRequest = PrePaidRequest.OrigRequest:
 
          CASE bOrigReq.Source:
@@ -276,7 +275,7 @@ IF llMinus THEN DO:
    /* try to get original accounts */
    IF PrePaidRequest.OrigRequest > 0 THEN 
    FOR FIRST Payment NO-LOCK WHERE
-             Payment.Brand   = gcBrand AND
+             Payment.Brand   = Syst.Var:gcBrand AND
              Payment.CustNum = Customer.CustNum AND
              Payment.RefNum  = STRING(PrePaidRequest.OrigRequest):
       
@@ -353,7 +352,7 @@ REPEAT:
    ELSE LEAVE.
 END.
 
-ASSIGN Payment.Brand    = gcBrand
+ASSIGN Payment.Brand    = Syst.Var:gcBrand
        Payment.CustNum  = Customer.CustNum
        Payment.CustName = Customer.CustName + " " + Customer.FirstName
        Payment.InvNum   = 0
@@ -384,14 +383,14 @@ IF idVatAmt NE 0 THEN ASSIGN
    Payment.Posting[3] = -1 * idVatAmt.
  
 /* time when posted */
-Payment.ImportStamp = fMakeTS().
+Payment.ImportStamp = Func.Common:mMakeTS().
 
 /* account types */
 DO liCount = 1 TO 3:
    IF Payment.AccNum[liCount] = 0 THEN NEXT. 
 
    FIND Account where 
-        Account.Brand  = gcBrand AND 
+        Account.Brand  = Syst.Var:gcBrand AND 
         Account.AccNum = Payment.AccNum[liCount]
       NO-LOCK NO-ERROR.
    IF AVAILABLE Account THEN ASSIGN 
@@ -412,22 +411,22 @@ IF lcMemo > "" THEN DO:
    
    /* separate Memo */
    CREATE Memo.
-   ASSIGN Memo.Brand     = gcBrand
+   ASSIGN Memo.Brand     = Syst.Var:gcBrand
           Memo.HostTable = "payment"
           Memo.KeyValue  = STRING(Payment.Voucher)
           Memo.CustNum   = Payment.CustNum
           Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-          Memo.CreUser   = katun 
+          Memo.CreUser   = Syst.Var:katun 
           Memo.MemoTitle = "TOPUP Payment"
           Memo.MemoText  = lcMemo.
-          Memo.CreStamp  = fMakeTS().
+          Memo.CreStamp  = Func.Common:mMakeTS().
    
 END.
 
 
 IF llDoEvent THEN DO:
 
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhPayment AS HANDLE NO-UNDO.
@@ -465,7 +464,7 @@ REPEAT:
    IF liCount > 10000 THEN LEAVE.
 
    IF NOT CAN-FIND(FIRST Payment WHERE
-                         Payment.Brand      = gcBrand AND
+                         Payment.Brand      = Syst.Var:gcBrand AND
                          Payment.ExtVoucher = lcExtVoucher AND
                          RECID(Payment) NE lrRecid)
    THEN LEAVE.

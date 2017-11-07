@@ -180,7 +180,7 @@ FUNCTION fCollectFees RETURNS LOGICAL.
    FOR EACH FATime NO-LOCK WHERE
             FATime.invnum  = Invoice.InvNum,
       FIRST fatgroup NO-LOCK WHERE
-            FatGroup.Brand   = gcBrand AND
+            FatGroup.Brand   = Syst.Var:gcBrand AND
             fatgroup.ftgrp   = FATime.FTGrp,
       FIRST InvRow OF Invoice NO-LOCK WHERE
             InvRow.RowType = 7 AND
@@ -211,10 +211,10 @@ FUNCTION fFeeProdName RETURNS LOGICAL
    (INPUT idtDate AS DATE):
 
    FIND BillItem WHERE 
-        BillItem.Brand    = gcBrand AND
+        BillItem.Brand    = Syst.Var:gcBrand AND
         BillItem.BillCode = ttFee.Prod NO-LOCK NO-ERROR.
    
-   lcFeeProdName = fTranslationName(gcBrand,
+   lcFeeProdName = fTranslationName(Syst.Var:gcBrand,
                                     1,
                                     ttFee.Prod,
                                     liFeeLang,

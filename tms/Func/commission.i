@@ -3,7 +3,6 @@
 &GLOBAL-DEFINE COMMISSION_I YES
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
 DEF BUFFER bTargStatus FOR CoTarg.
 
@@ -18,13 +17,12 @@ FUNCTION fCommStatus RETURNS LOGIC
          EXCLUSIVE-LOCK.
          
       ASSIGN 
-         bTargStatus.HandledTS    = fMakeTS()
+         bTargStatus.HandledTS    = Func.Common:mMakeTS()
          bTargStatus.CommStatus   = iiStatus
          bTargStatus.StatusReason = iiReason.
          
       IF icMessage > "" THEN DO:
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "CoTarg",
+         Func.Common:mWriteMemo("CoTarg",
                           STRING(bTargStatus.CoTargID),
                           0,
                           "COMMISSION",

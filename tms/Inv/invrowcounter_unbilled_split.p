@@ -6,9 +6,7 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Syst/funcrunprocess_update.i}
-{Func/date.i}
 {Syst/funcrun_replica.i}
 
 DEF INPUT  PARAMETER iiBatchQty      AS INT  NO-UNDO.
@@ -67,7 +65,7 @@ PROCEDURE pCollectSubscriptions:
    DEF VAR ldaDate  AS DATE NO-UNDO.
    
    ASSIGN 
-      ldaDate = fLastDayOfMonth(TODAY)
+      ldaDate = Func.Common:mLastDayOfMonth(TODAY)
       liPeriod = YEAR(ldaDate) * 100 + MONTH(ldaDate).
 
    MsOwnerSelect:
