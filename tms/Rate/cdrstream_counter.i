@@ -39,7 +39,7 @@ FUNCTION fUpdateKPICounter RETURNS LOGIC
    ELSE lcCounterType = "KPIHTU".
    
    FIND FIRST CDRStreamCounter WHERE
-              CDRStreamCounter.Brand        = gcBrand AND
+              CDRStreamCounter.Brand        = Syst.Var:gcBrand AND
               CDRStreamCounter.ImportDate   = TODAY AND
               CDRStreamCounter.CounterType  = lcCounterType AND
               CDRStreamCounter.MSCID        = icMSCID AND
@@ -47,7 +47,7 @@ FUNCTION fUpdateKPICounter RETURNS LOGIC
    IF NOT AVAILABLE CDRStreamCounter THEN DO:
       CREATE CDRStreamCounter.
       ASSIGN 
-         CDRStreamCounter.Brand        = gcBrand
+         CDRStreamCounter.Brand        = Syst.Var:gcBrand
          CDRStreamCounter.ImportDate   = TODAY 
          CDRStreamCounter.CounterType  = lcCounterType
          CDRStreamCounter.MSCID        = icMSCID 

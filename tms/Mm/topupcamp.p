@@ -9,7 +9,6 @@
 
 {Syst/commali.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/ftaxdata.i}
 {Func/ftopup.i}
 {Func/cparam2.i}
@@ -41,7 +40,7 @@ FIND FIRST Order WHERE Order.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
 /* special cases */
 IF AVAILABLE Order THEN DO:
 
-   fSplitTS(Order.CrStamp, 
+   Func.Common:mSplitTS(Order.CrStamp, 
             OUTPUT ldaOrderDate, 
             OUTPUT liTime).
 
@@ -54,7 +53,7 @@ IF AVAILABLE Order THEN DO:
           OR
          (OrderAccessory.ProductCode > "" AND 
           CAN-FIND(FIRST BillItem WHERE
-                         BillItem.Brand    = gcBrand AND
+                         BillItem.Brand    = Syst.Var:gcBrand AND
                          BillItem.BillCode = OrderAccessory.ProductCode AND
                          BillItem.BIGroup  = "7")) 
       THEN DO:
@@ -76,7 +75,7 @@ IF lcCampaign = ? THEN lcCampaign = "".
 
 /* add initial topup for prepaid subscriptions */
 FOR EACH CampRow NO-LOCK WHERE
-         CampRow.Brand    = gcBrand        AND
+         CampRow.Brand    = Syst.Var:gcBrand        AND
          CampRow.CLIType  = MobSub.CLIType AND
          CampRow.CRowType = 5,
    FIRST Campaign OF CampRow NO-LOCK WHERE
@@ -86,18 +85,18 @@ FOR EACH CampRow NO-LOCK WHERE
           THEN Campaign.Campaign = lcCampaign
           ELSE TRUE),
     EACH FMItem NO-LOCK WHERE
-         FMItem.Brand     = gcBrand               AND
+         FMItem.Brand     = Syst.Var:gcBrand               AND
          FMItem.FeeModel  = CampRow.CRowItem      AND
          FMItem.PriceList = "TopUp"               AND
          FMItem.ToDate   >= ldaOrderDate AND
          FMItem.FromDate <= ldaOrderDate,
    FIRST BillItem NO-LOCK WHERE
-         BillItem.Brand    = gcBrand AND
+         BillItem.Brand    = Syst.Var:gcBrand AND
          BillItem.BillCode = FMItem.BillCode:
          
    /* take vat out from amount */
    FIND PriceList WHERE
-        PriceList.Brand     = gcBrand AND
+        PriceList.Brand     = Syst.Var:gcBrand AND
         PriceList.PriceList = FMItem.PriceList NO-LOCK.
            
    /* taxcode */

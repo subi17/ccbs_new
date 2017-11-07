@@ -40,7 +40,7 @@
    &THEN
    ASSIGN
       ttCall.RerateID = liRerateSeq 
-      ttCall.RerateTS = fMakeTS().
+      ttCall.RerateTS = Func.Common:mMakeTS().
    fRerateCDRBefore (MobCDR.RateCCN,
                      MobCDR.ErrorCode,
                      MobCDR.Amount,
@@ -331,7 +331,7 @@
          IF ttCall.Spocmt = 66 THEN liTempDialType = 4.
          ELSE liTempDialType = 1.
          FOR FIRST BDest NO-LOCK WHERE
-                   BDest.Brand  = gcBrand AND
+                   BDest.Brand  = Syst.Var:gcBrand AND
                    BDest.Bdest  = ttCall.BDest AND
                    BDest.DestType = ttCall.BType AND
                    BDest.Class  = 2       AND
@@ -484,7 +484,7 @@
       /* Update PremiumNumber Operator information only for VOICE */
       IF ttCall.MSCID <> "CCGW" THEN DO:
          FIND FIRST BillItem WHERE
-                    BillItem.Brand    = gcBrand AND
+                    BillItem.Brand    = Syst.Var:gcBrand AND
                     BillItem.BillCode = ttCall.BillCode NO-LOCK NO-ERROR.
          IF AVAILABLE BillItem AND BillItem.BIGroup = "6" THEN
             ttCall.ServiceName = fGetPremiumServiceName(ttCall.GsmBnr,

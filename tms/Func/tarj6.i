@@ -11,7 +11,6 @@
 &GLOBAL-DEFINE RATE_ERROR_CODES_I YES
 
 {Syst/commali.i}
-{Func/date.i}
 {Func/cparam2.i}
 {Func/fprepaidfee.i}
 
@@ -38,11 +37,11 @@ FUNCTION fGetTARJ6DataLimitAndCharges RETURNS INT
 
    ASSIGN
       ldaFrom  = DATE(MONTH(TODAY),1,YEAR(TODAY))
-      ldaTo    = fLastDayOfMonth(ldaFrom)
-      ldeFrom  = fMake2Dt(ldaFrom, 0)
-      ldeTo    = fMake2Dt(ldaTo, 86399)
-      ldeDayFrom = fMake2Dt(TODAY, 0)
-      ldeDayTo = fMake2Dt(TODAY, 86399)
+      ldaTo    = Func.Common:mLastDayOfMonth(ldaFrom)
+      ldeFrom  = Func.Common:mMake2DT(ldaFrom, 0)
+      ldeTo    = Func.Common:mMake2DT(ldaTo, 86399)
+      ldeDayFrom = Func.Common:mMake2DT(TODAY, 0)
+      ldeDayTo = Func.Common:mMake2DT(TODAY, 86399)
       ldeUpsellFee = fgetPrepaidFeeAmount("TARJ_UPSELL", TODAY).
       
    /* count upsells */
@@ -92,7 +91,7 @@ FUNCTION fGetTARJ6MonthlyDataLimit RETURNS INT
 
    ASSIGN
       ldaFrom  = DATE(MONTH(TODAY),1,YEAR(TODAY))
-      ldaTo    = fLastDayOfMonth(ldaFrom).
+      ldaTo    = Func.Common:mLastDayOfMonth(ldaFrom).
       
    /* count monthly 35MB charges */
    FOR EACH PrepEDR NO-LOCK WHERE

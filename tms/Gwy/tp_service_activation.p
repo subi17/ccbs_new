@@ -1,10 +1,8 @@
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/log.i}
-{Func/date.i}
 {Func/memo.i}
 {Func/cparam2.i}
 {Mc/orderfusion.i}
@@ -38,7 +36,7 @@ PROCEDURE pProcessRequests:
 
     DEFINE BUFFER AgreeCustomer FOR Customer.
 
-    ASSIGN ldeNow = fMakeTS().
+    ASSIGN ldeNow = Func.Common:mMakeTS().
     
     MESSAGE_LOOP:
     FOR EACH TPService WHERE TPService.MsSeq > 0 AND TPService.Operation = {&TYPE_ACTIVATION} AND TPService.ServStatus = {&WAITING_FOR_STB_ACTIVATION} NO-LOCK 
@@ -67,7 +65,7 @@ PROCEDURE pProcessRequests:
                   CREATE ttCustomer.
                   ASSIGN
                       ttCustomer.CustomerId   = lcCustomerId
-                      ttCustomer.CustName     = REPLACE(DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1, BUFFER AgreeCustomer),"|","")
+                      ttCustomer.CustName     = REPLACE(Func.Common:mPrintCustName(BUFFER AgreeCustomer),"|","")
                       ttCustomer.Email        = AgreeCustomer.Email
                       ttCustomer.Region       = AgreeCustomer.Region
                       ttCustomer.Product      = TPService.Product
