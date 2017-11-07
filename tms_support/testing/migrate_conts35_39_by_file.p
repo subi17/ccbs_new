@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-assign gcbrand = "1"
-       katun = "Qvantel2".
+assign Syst.Var:gcBrand = "1"
+       Syst.Var:katun = "Qvantel2".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Func/matrix.i}
@@ -26,7 +26,7 @@ repeat :
 import unformatted lcline.
 
 FOR FIRST MobSub WHERE
-          MobSub.Brand = gcBrand AND
+          MobSub.Brand = Syst.Var:gcBrand AND
           MobSub.CLI = entry(1,lcline,"|") NO-LOCK:
 
    assign liRequest = 0
@@ -76,7 +76,7 @@ FOR FIRST MobSub WHERE
                                     "CONTS32",
                                     20140601,
                                     {&REQUEST_SOURCE_SCRIPT},
-                                    katun,
+                                    Syst.Var:katun,
                                     TRUE,
                                     0,
                                     FALSE,

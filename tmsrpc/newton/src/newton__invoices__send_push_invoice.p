@@ -22,8 +22,8 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 IF TRIM(pcUserName) EQ "" THEN RETURN appl_err("username is empty").
 
 {Syst/commpaa.i}
-gcBrand = "1".
-katun = "VISTA_" + pcUserName.
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "VISTA_" + pcUserName.
 {Syst/tmsconst.i}
 {Func/fcreatereq.i}
 
@@ -42,7 +42,7 @@ ASSIGN
    ldeNextMonth    = liYear * 10000 + liMonth * 100 + 1.
 
 FIND FIRST MsRequest WHERE
-           MsRequest.Brand    = gcBrand AND
+           MsRequest.Brand    = Syst.Var:gcBrand AND
            MsRequest.ReqType  = ({&REQTYPE_PUSH_INVOICE}) AND
            MsRequest.ActStamp > ldeCurrentMonth AND
            MsRequest.ActStamp < ldeNextMonth AND
@@ -53,7 +53,7 @@ IF AVAIL MsRequest THEN
    RETURN appl_err("Push notification request for current month is ongoing").
 
 fCreateRequest(({&REQTYPE_PUSH_INVOICE}),
-                 fMakeTS(),
+                 Func.Common:mMakeTS(),
                  "",
                  false,     /* fees */
                  false).    /* send sms */
@@ -71,6 +71,5 @@ IF liRequestID = 0 THEN
 add_boolean(response_toplevel_id,?,TRUE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.
 

@@ -10,7 +10,6 @@
 
 
 {Syst/commali.i}
-{Func/timestamp.i}
 
 DEF INPUT  PARAMETER idtDate      AS DATE NO-UNDO.
 DEF INPUT  PARAMETER icChannel    AS CHAR NO-UNDO.
@@ -27,13 +26,13 @@ DEF STREAM sWrite.
 OUTPUT STREAM sWrite TO VALUE(icFile).
 
 ASSIGN 
-   ldReportDay[1] = fMake2DT(idtDate,0)
-   ldReportDay[2] = fMake2DT(idtDate,86399).
+   ldReportDay[1] = Func.Common:mMake2DT(idtDate,0)
+   ldReportDay[2] = Func.Common:mMake2DT(idtDate,86399).
 
 
 /* report all gift orders created on given day */
 FOR EACH Order NO-LOCK USE-INDEX Stamp WHERE
-         Order.Brand        = gcBrand        AND
+         Order.Brand        = Syst.Var:gcBrand        AND
          Order.CrStamp     >= ldReportDay[1] AND
          Order.CrStamp     <= ldReportDay[2] AND
          Order.OrderChannel = icChannel      AND

@@ -7,13 +7,12 @@
   Version ......: yoigo
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
-{Func/date.i}
 {Func/log.i}
 {Mnp/mnpcontingency.i}
 
@@ -34,7 +33,7 @@ ASSIGN
    lcSpoolDir = lcRootDir + "/spool/" 
    lcOutDir   = lcRootDir + "/outgoing/" 
    lcLogDir   = fCParam("MNP","MPNLogDir")
-   lcTime = REPLACE(STRING(fMakeTS()),".","").
+   lcTime = REPLACE(STRING(Func.Common:mMakeTS()),".","").
 
 fSetLogFileName(lcLogDir + "contingency_client.log").
 
