@@ -32,8 +32,8 @@ DEF VAR lcSetting AS CHAR NO-UNDO.
 
 {Syst/commpaa.i}
 ASSIGN
-   katun = "IVR_" + ghAuthLog::EndUserId.
-   gcBrand = "1".
+   Syst.Var:katun = "IVR_" + ghAuthLog::EndUserId.
+   Syst.Var:gcBrand = "1".
 
 {Func/fmakemsreq.i}
 
@@ -74,7 +74,7 @@ FIND FIRST SubSer NO-LOCK WHERE
 IF NOT AVAIL SubSer THEN RETURN appl_err("Subscription service not found").
 
 FIND FIRST ServCom NO-LOCK WHERE 
-           ServCom.Brand = gcBrand AND
+           ServCom.Brand = Syst.Var:gcBrand AND
            ServCom.ServCom = SubSer.ServCom NO-ERROR.
 IF NOT AVAIL ServCom THEN RETURN appl_err("Service component not found").
              
@@ -82,7 +82,7 @@ liRequest = fServiceRequest(MobSub.MsSeq,
                             Subser.ServCom,
                             3,
                             lcSetting,
-                            fMakeTS(),
+                            Func.Common:mMakeTS(),
                             "",     /* salesman */
                             FALSE,  /* fees */
                             FALSE,  /* sms */
@@ -114,5 +114,4 @@ END.
 add_boolean(response_toplevel_id,?,TRUE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-katun = "ari".
+Syst.Var:katun = "ari".
 
 def var lccli      as char no-undo.
 def var i          as int  no-undo.

@@ -8,7 +8,6 @@ Version ......: yoigo
 ----------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/forderstamp.i}
 {Func/ftransdir.i}

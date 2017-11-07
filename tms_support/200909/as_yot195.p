@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-katun = "anttis".
-gcBrand = "1".
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 {Func/msreqfunc.i}
 
 /*

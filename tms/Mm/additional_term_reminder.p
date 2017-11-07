@@ -9,9 +9,8 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-ASSIGN gcBrand = "1"
-       katun   = "CRON".
-{Func/timestamp.i}
+ASSIGN Syst.Var:gcBrand = "1"
+       Syst.Var:katun   = "CRON".
 {Func/cparam2.i}
 {Func/fgettxt.i}
 {Func/fmakesms.i}
@@ -34,8 +33,8 @@ DEF BUFFER bMsRequest     FOR MsRequest.
 DEF STREAM Sout.
 
 ASSIGN ldFirstDayOfMonth = DATE(MONTH(TODAY),1,YEAR(TODAY))
-       ldLastDayOfMonth  = fLastDayOfMonth(ldFirstDayOfMonth)
-       ldeFromTS         = fMake2Dt(ldLastDayOfMonth,86399).
+       ldLastDayOfMonth  = Func.Common:mLastDayOfMonth(ldFirstDayOfMonth)
+       ldeFromTS         = Func.Common:mMake2DT(ldLastDayOfMonth,86399).
 
 /* Only Send the SMS 20 or 2 days before of termination date */
 CASE (ldLastDayOfMonth - TODAY):
@@ -56,7 +55,7 @@ OUTPUT STREAM Sout TO VALUE(lcLogFile).
 
 TERM_LOOP:
 FOR EACH MsRequest NO-LOCK WHERE
-         MsRequest.Brand      = gcBrand AND
+         MsRequest.Brand      = Syst.Var:gcBrand AND
          MsRequest.ReqType    = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
          MsRequest.ReqStatus  = {&REQUEST_STATUS_NEW} AND
          MsRequest.ActStamp   = ldeFromTS AND
@@ -66,7 +65,7 @@ FOR EACH MsRequest NO-LOCK WHERE
    FIRST Customer WHERE
          Customer.CustNum = MobSub.CustNum NO-LOCK:
 
-   fSplitTS(MsRequest.ActStamp,OUTPUT ldaTermdate,OUTPUT liTermTime).
+   Func.Common:mSplitTS(MsRequest.ActStamp,OUTPUT ldaTermdate,OUTPUT liTermTime).
 
    /* Only Send the SMS 20 or 2 days before of termination date */
    CASE (ldaTermdate - TODAY):

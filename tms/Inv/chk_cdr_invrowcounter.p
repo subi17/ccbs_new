@@ -1,7 +1,5 @@
 {Syst/commali.i}
 {Syst/funcrunprocess_update.i}
-{Func/timestamp.i}
-{Func/date.i}
 {Func/cparam2.i}
 {Func/istc.i}
 {Inv/chk_cdr_invrowcounter.i &ttReference = "REFERENCE-ONLY"}
@@ -44,7 +42,7 @@ OUTPUT STREAM sLog TO VALUE(lcDir + "/" + Syst.Parameters:Tenant + "_" +
                             STRING(icRunID) + ".log") APPEND.
 
 ldaToDate = idaPeriodEnd.
-IF ldaToDate = ? THEN ldaToDate = fLastDayOfMonth(TODAY).
+IF ldaToDate = ? THEN ldaToDate = Func.Common:mLastDayOfMonth(TODAY).
 
 FOR EACH ttSubs,
    FIRST MsOwner NO-LOCK WHERE

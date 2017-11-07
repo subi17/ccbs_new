@@ -8,10 +8,8 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/finvnum.i}
 {Syst/funcrunprocess_update.i}
-{Func/date.i}
 {Syst/tmsconst.i}
 {Func/ftaxdata.i}
 
@@ -47,13 +45,13 @@ FUNCTION fErrorLog RETURNS LOGIC
    
    DO TRANS:
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
              ErrorLog.ActionID  = "BRANALYSIS"
              ErrorLog.TableName = "BRTestCase"
              ErrorLog.KeyValue  = STRING(iiCustNum)
              ErrorLog.ErrorMsg  = icError
-             ErrorLog.UserCode  = katun.
-             ErrorLog.ActionTS  = fMakeTS().
+             ErrorLog.UserCode  = Syst.Var:katun.
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    
 END FUNCTION.

@@ -10,7 +10,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/email.i}
@@ -47,7 +47,7 @@ ASSIGN
        lcAddrConfDir = lcAddrConfDir + "funcrunpdfcreation.email"
        lcLogFile     = lcLogFile + "funcrun_pdf_" + lcToday + STRING(TIME) + ".log".
 
-katun = "VISTA_" + pcUserName.
+Syst.Var:katun = "VISTA_" + pcUserName.
 
 OUTPUT STREAM strout TO VALUE (lcLogFile).
 
@@ -63,7 +63,3 @@ OUTPUT STREAM strout CLOSE.
    SendMail(lcLogFile,"").
 
 add_boolean(response_toplevel_id,?,TRUE).
-
-FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.

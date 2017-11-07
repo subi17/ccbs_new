@@ -8,12 +8,11 @@ subscription data. Others will be only partially completed.
 
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fexternalapi.i}
 {Mc/orderfusion.i}
 {Func/orderfunc.i}
-{Func/timestamp.i}
 
 DEF VAR lcNotificationID AS CHAR NO-UNDO INIT "1".
 DEF VAR ldeNotificationTime AS DEC NO-UNDO.
@@ -41,8 +40,8 @@ INPUT CLOSE.
 IF LOOKUP(lcHostName,'sadachbia') = 0 THEN LEAVE.
 
 
-ldeNotificationTime = fMakeTS().
-ldeLastDate = fMakeTS().
+ldeNotificationTime = Func.Common:mMakeTS().
+ldeLastDate = Func.Common:mMakeTS().
 
 IF lcOrderId BEGINS "Y" THEN
    lcOrderId = SUBSTRING(lcOrderId,2).
@@ -54,7 +53,7 @@ IF ERROR-STATUS:ERROR THEN DO:
 END.
 
 FIND FIRST Order NO-LOCK WHERE
-           Order.Brand = gcBrand AND
+           Order.Brand = Syst.Var:gcBrand AND
            Order.OrderID = liOrderID NO-ERROR.
 IF NOT AVAIL Order THEN DO:
    MESSAGE "Order not found" VIEW-AS ALERT-BOX.
@@ -62,7 +61,7 @@ IF NOT AVAIL Order THEN DO:
 END.
 
 FIND FIRST OrderFusion EXCLUSIVE-LOCK WHERE
-           OrderFusion.Brand = gcBrand AND
+           OrderFusion.Brand = Syst.Var:gcBrand AND
            OrderFusion.OrderId = liOrderID NO-ERROR.
 IF NOT AVAIL OrderFusion THEN DO:
    MESSAGE "Order type is incorrect" VIEW-AS ALERT-BOX.
@@ -91,7 +90,7 @@ ASSIGN
    FusionMessage.MessageSeq = NEXT-VALUE(FusionMessageSeq)
    FusionMessage.OrderID = liOrderID
    FusionMessage.MsSeq = Order.MsSeq
-   FusionMessage.CreatedTS = fMakeTS()
+   FusionMessage.CreatedTS = Func.Common:mMakeTS()
    FusionMessage.UpdateTS = FusionMessage.CreatedTS
    FusionMessage.MessageID = lcNotificationID
    FusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_UPDATE_STATUS}
@@ -162,8 +161,7 @@ CASE FusionMessage.FixedStatus:
 
          fSetOrderStatus(Order.Orderid, {&ORDER_STATUS_IN_CONTROL}).
 
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                 "Order",
+         Func.Common:mWriteMemo("Order",
                  STRING(Order.OrderID),
                  Order.CustNum,
                  "Order handling stopped",
@@ -187,8 +185,7 @@ CASE FusionMessage.FixedStatus:
 
       /* NOTE: do not change the memo text (checked in ordersender.i) */
       IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "Order",
+         Func.Common:mWriteMemo("Order",
                           STRING(Order.OrderID),
                           Order.CustNum,
                           "Order cancellation failed",
@@ -225,8 +222,7 @@ CASE FusionMessage.FixedStatus:
          RUN Mc/closeorder.p(Order.OrderID, TRUE).
 
          IF RETURN-VALUE NE "" THEN DO:
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "Order",
+            Func.Common:mWriteMemo("Order",
                              STRING(Order.OrderID),
                              Order.CustNum,
                              "Order closing failed",

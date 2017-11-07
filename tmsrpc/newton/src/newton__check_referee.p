@@ -15,7 +15,6 @@ DEF VAR pcMsisdn     AS CHAR NO-UNDO.
 DEF VAR pcCustIdType AS CHAR NO-UNDO.
 DEF VAR pcOrgId      AS CHAR NO-UNDO.
 /* Local variable */
-DEF VAR gcBrand   AS CHAR NO-UNDO INIT "1".
 
 IF validate_request(param_toplevel_id, "string,string,string,string") EQ ? THEN RETURN.
 pcTenant     = get_string(param_toplevel_id, "0").
@@ -28,14 +27,14 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 {newton/src/settenant.i pcTenant}
 
 FIND Mobsub WHERE
-   MobSub.Brand = gcBrand AND
+   MobSub.Brand = Syst.Var:gcBrand AND
    MobSub.CLI   = pcMsisdn NO-LOCK NO-ERROR.
 
 IF NOT AVAIL MobSub THEN 
    RETURN appl_err(SUBST("Subscription &1 was not found", pcMsisdn)).
 
 FIND FIRST Customer WHERE 
-   Customer.Brand   = gcBrand AND
+   Customer.Brand   = Syst.Var:gcBrand AND
    Customer.Custnum = MobSub.Custnum  
 NO-LOCK NO-ERROR.
 

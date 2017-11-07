@@ -58,7 +58,7 @@ CASE pcOperation:
          RETURN "ERROR:Cannot cancel MNPProcess with current status".
             
       FIND Order WHERE
-         Order.Brand = gcBrand AND
+         Order.Brand = Syst.Var:gcBrand AND
          Order.OrderID = MNPProcess.OrderId NO-LOCK.
 
       IF MNPProcess.StatusCode = {&MNP_ST_NEW} THEN DO:
@@ -96,7 +96,7 @@ CASE pcOperation:
          END.
       
          ASSIGN         
-            MNPProcess.UpdateTS = fMakeTS()
+            MNPProcess.UpdateTS = Func.Common:mMakeTS()
             MNPProcess.StatusCode = {&MNP_ST_ACAN}
             MNPProcess.StatusReason = pcParam
             Order.MNPStatus = MNPProcess.StatusCode + 1.
@@ -123,7 +123,7 @@ CASE pcOperation:
             liPeriods = 1.
 
             IF liPeriods > fMNPPeriods(
-               input fMakeTS(),
+               input Func.Common:mMakeTS(),
                input MNPProcess.PortingTime,
                INPUT 0,
                OUTPUT ldaDueDate) THEN
@@ -177,7 +177,7 @@ CASE pcOperation:
          RETURN "ERROR:Only rejected process can be closed".
 
       FIND Order WHERE
-           Order.Brand = gcBrand AND
+           Order.Brand = Syst.Var:gcBrand AND
            Order.OrderID = MNPProcess.OrderId NO-LOCK.
 
       IF Order.StatusCode NE "73" THEN RETURN "ERROR:Order is in wrong status".
@@ -219,7 +219,7 @@ CASE pcOperation:
       liPeriods = 1. /* YDR-115 */
 
       IF liPeriods > fMNPPeriods(
-         input fMakeTS(),
+         input Func.Common:mMakeTS(),
          input MNPProcess.PortingTime,
          INPUT 0,
          OUTPUT ldaDueDate) THEN
