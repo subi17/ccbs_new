@@ -8,11 +8,10 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 
 DEF STREAM sLogFile.
@@ -74,19 +73,19 @@ FUNCTION fCreateCentreFileRow RETURNS CHAR
    DEF VAR liTime AS INT NO-UNDO.
  
    FIND FIRST Order NO-LOCK WHERE
-              Order.Brand EQ gcBrand AND
+              Order.Brand EQ Syst.Var:gcBrand AND
               Order.OrderID EQ fusionMessage.OrderId NO-ERROR.
    IF NOT AVAIL Order THEN
       RETURN "ERROR: Order not available" + STRING(fusionMessage.OrderId).
 
    FIND FIRST OrderFusion NO-LOCK WHERE
-              OrderFusion.Brand EQ gcBrand AND
+              OrderFusion.Brand EQ Syst.Var:gcBrand AND
               OrderFusion.OrderId EQ fusionMessage.OrderId NO-ERROR.
    IF NOT AVAIL OrderFusion THEN
       RETURN "ERROR: OrderFusion not available orderid: " + 
              STRING(fusionMessage.OrderId).
    IF INDEX(Order.OrderChannel,"pos") > 0 THEN DO:
-      fSplitTS(Order.crstamp, ldaDate, liTime).
+      Func.Common:mSplitTS(Order.crstamp, ldaDate, liTime).
       lcdeliverydate = STRING(YEAR(ldaDate),"9999") +
                        STRING(MONTH(ldaDate),"99") +
                        STRING(DAY(ldaDate),"99") +
@@ -94,7 +93,7 @@ FUNCTION fCreateCentreFileRow RETURNS CHAR
    END.                    
    ELSE DO:
        FIND FIRST OrderDelivery WHERE
-                  OrderDelivery.brand EQ gcBrand AND
+                  OrderDelivery.brand EQ Syst.Var:gcBrand AND
                   OrderDelivery.orderid EQ fusionMessage.OrderId NO-ERROR.
        IF AVAIL OrderDelivery THEN           
           lcdeliverydate = STRING(YEAR(OrderDelivery.LOTimeStamp),"9999") +
@@ -157,9 +156,9 @@ END.
 /*Main functionality*/
 OUTPUT STREAM sLogFile TO VALUE(lcLogFile) APPEND.
 
-ldCurrentTime = fMakeTS().
+ldCurrentTime = Func.Common:mMakeTS().
 
-fLogLine("","Centre file creation start " + fTS2HMS(ldCurrentTime)).
+fLogLine("","Centre file creation start " + Func.Common:mTS2HMS(ldCurrentTime)).
 
 FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE 
          FusionMessage.source EQ "MasMovil" AND
@@ -167,18 +166,18 @@ FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE
          FusionMessage.messagetype EQ {&FUSIONMESSAGE_TYPE_LOGISTICS}:
    lcStatus = fCreateCentreFileRow().
    IF lcStatus EQ "" THEN ASSIGN
-      FusionMessage.UpdateTS     = fMakeTS()
+      FusionMessage.UpdateTS     = Func.Common:mMakeTS()
       FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_HANDLED}.
    ELSE DO:
       ASSIGN
-         FusionMessage.UpdateTS     = fMakeTS()
+         FusionMessage.UpdateTS     = Func.Common:mMakeTS()
          FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
       fLogLine("",lcStatus).
    END.
 END.
 
-ldCurrentTime = fMakeTS().
-fLogLine("","Centre file creation end " + fTS2HMS(ldCurrentTime)).
+ldCurrentTime = Func.Common:mMakeTS().
+fLogLine("","Centre file creation end " + Func.Common:mTS2HMS(ldCurrentTime)).
 OUTPUT STREAM sLogFile CLOSE.
 
 fMove2TransDir(lcFile, "", lcOutDir).

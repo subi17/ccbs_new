@@ -8,7 +8,7 @@ FUNCTION fTMRLimit2Customer RETURNS LOGIC
    (iiCustNum AS INT):
    
    FOR EACH TMRule NO-LOCK WHERE 
-            TMRule.Brand     = gcBrand AND
+            TMRule.Brand     = Syst.Var:gcBrand AND
             TMRule.ToDate   >= TODAY   AND
             TMRule.FromDate <= TODAY   AND
             TMRule.LimitSource = 1     AND 
@@ -40,7 +40,7 @@ FUNCTION fTMRLimit2Subscription RETURNS LOGIC
    (iiMsSeq AS INT):
    
    FOR EACH TMRule NO-LOCK WHERE 
-            TMRule.Brand     = gcBrand AND
+            TMRule.Brand     = Syst.Var:gcBrand AND
             TMRule.ToDate   >= TODAY   AND
             TMRule.FromDate <= TODAY   AND
             TMRule.LimitSource = 2     AND 

@@ -21,9 +21,9 @@
 */
 
            EDITING:
-              READKEY. nap = keylabel(LASTKEY).
+              READKEY. Syst.Var:nap = keylabel(LASTKEY).
 
-              if lookup(nap,"F4") > 0 THEN UNDO, LEAVE.
+              if lookup(Syst.Var:nap,"F4") > 0 THEN UNDO, LEAVE.
 
               ELSE IF KEYLABEL(LASTKEY) = "F9" AND 
                    LOOKUP(FRAME-FIELD,"CustIDType,HonTitle,lcCustZipCode") > 0
@@ -54,13 +54,13 @@
                   END. 
 
                   ELSE IF FRAME-FIELD = "lcCustZipCode" THEN DO:
-                     ASSIGN si-recid = ?
+                     ASSIGN Syst.Var:si-recid = ?
                             siirto   = "".
                      RUN Help/h-postcode.p.
                      /* several rows with same zipcode */
-                     IF si-recid NE ? THEN DO:
+                     IF Syst.Var:si-recid NE ? THEN DO:
                         DISPLAY siirto @ lcCustZipCode WITH FRAME lis.
-                        FIND PostCode WHERE RECID(PostCode) = si-recid
+                        FIND PostCode WHERE RECID(PostCode) = Syst.Var:si-recid
                            NO-LOCK NO-ERROR.
                         IF AVAILABLE PostCode THEN DO:
                            DISPLAY PostCode.PostOffice @ lcCustPostOffice
@@ -81,12 +81,12 @@
                      END.      
                   END.
                   
-                  ehto = 9.
+                  Syst.Var:ehto = 9.
                   RUN Syst/ufkey.p.
                   NEXT. 
               END.
 
-              ELSE IF lookup(nap,poisnap) > 0 THEN DO WITH FRAME lis:
+              ELSE IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                  HIDE MESSAGE no-pause.
 
                 
@@ -252,7 +252,7 @@
                  
                  else if frame-field = "Category" THEN DO:
                     FIND FIRST CustCat where 
-                               CustCat.Brand    = gcBrand AND
+                               CustCat.Brand    = Syst.Var:gcBrand AND
                                CustCat.Category = INPUT FRAME lis Customer.Category 
                     no-lock no-error.
                     IF NOT AVAIL CustCat THEN DO:
@@ -302,8 +302,7 @@
                  ELSE IF FRAME-FIELD = "HonTitle" THEN DO:
                  
                     IF INPUT FRAME lis Customer.HonTitle > "" AND 
-                       NOT DYNAMIC-FUNCTION("fTMSCodeChk" IN ghFunc1,
-                                            "Customer",
+                       NOT Func.Common:mTMSCodeChk("Customer",
                                             "Title",
                                             INPUT INPUT FRAME lis
                                                   Customer.HonTitle)
@@ -316,8 +315,7 @@
                  
                  ELSE IF FRAME-FIELD = "CustIDType" THEN DO:
                  
-                    lcIDType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                                "Customer",
+                    lcIDType = Func.Common:mTMSCodeName("Customer",
                                                 "CustIDType",
                                                 INPUT INPUT FRAME lis
                                                       Customer.CustIDType).
@@ -341,7 +339,7 @@
                     END.
                     IF Customer.CustIDType <> INPUT FRAME lis Customer.CustIDType THEN DO:
                        FOR EACH CustCat NO-LOCK WHERE
-                                CustCat.Brand = gcBrand:
+                                CustCat.Brand = Syst.Var:gcBrand:
                            IF LOOKUP(INPUT FRAME lis Customer.CustIDType,
                                  CustCat.CustIDType) > 0 THEN DO:
                           DISPLAY 
@@ -379,7 +377,7 @@
               
               ELSE IF FRAME-FIELD = "DataProtected" THEN DO:
                  FIND FIRST Mobsub WHERE 
-                    Mobsub.Brand   = gcBrand AND
+                    Mobsub.Brand   = Syst.Var:gcBrand AND
                     Mobsub.Custnum = Customer.CustNum NO-LOCK NO-ERROR.
                  IF AVAIL Mobsub THEN DO:
                     MESSAGE "The Function is not allowed." SKIP

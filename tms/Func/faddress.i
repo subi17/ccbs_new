@@ -4,7 +4,6 @@
    correct customer (and msowner) should be in buffer when this is called 
    
    changes:         14.12.05/aam username from customer, not msowner
-                    18.01.06/aam use fPrintCustName()
                     25.01.06/aam type 5 = invoice customer
                     27.01.06/aam lastname and firstname 
                     01.12.06/aam custidtype, custid, bankacc, email
@@ -26,8 +25,7 @@ FUNCTION fTargetAddress RETURNS LOGICAL
               bOwner.CustNum = Customer.InvCust NO-LOCK NO-ERROR.
               
       IF AVAILABLE bOwner THEN 
-      ASSIGN lcEPLRName    = DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1,
-                                              BUFFER bOwner)
+      ASSIGN lcEPLRName    = Func.Common:mPrintCustName(BUFFER bOwner)
              lcEPLRLast    = IF bOwner.FirstName > ""
                              THEN bOwner.CustName + 
                                   (IF bOwner.SurName2 > ""
@@ -73,8 +71,7 @@ FUNCTION fTargetAddress RETURNS LOGICAL
    END.
    
    ELSE DO:
-      ASSIGN lcEPLRName    = DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1,
-                                              BUFFER Customer)
+      ASSIGN lcEPLRName    = Func.Common:mPrintCustName(BUFFER Customer)
              lcEPLRLast    = IF Customer.FirstName > ""
                              THEN Customer.CustName + 
                                   (IF Customer.SurName2 > ""
