@@ -11,7 +11,6 @@
 {Syst/commali.i}
 {Func/cparam2.i}
 {Syst/utumaa.i}
-{Func/timestamp.i}
 {Func/fprevoper.i}
 
 DEF TEMP-TABLE ttMark NO-UNDO
@@ -89,7 +88,7 @@ FUNCTION fCollect RETURNS LOGICAL.
 
    IF CoEvent.Salesman > "" THEN DO:
       FIND Salesman WHERE 
-           Salesman.Brand    = gcBrand AND
+           Salesman.Brand    = Syst.Var:gcBrand AND
            Salesman.Salesman = CoEvent.Salesman 
          NO-LOCK NO-ERROR.
       IF AVAILABLE Salesman THEN 
@@ -105,7 +104,7 @@ FUNCTION fCollect RETURNS LOGICAL.
    
    /* check from rule definition the base of commission */
    FIND CoRule NO-LOCK WHERE
-        CoRule.Brand    = gcBrand AND
+        CoRule.Brand    = Syst.Var:gcBrand AND
         CoRule.CoRuleID = CoEvent.CoRuleID NO-ERROR.
 
    IF AVAILABLE CoRule THEN DO:
@@ -150,7 +149,7 @@ FUNCTION fCollect RETURNS LOGICAL.
          END. 
 
          IF ldActDate > 0 THEN DO:
-            fSplitTs(ldActDate,
+            Func.Common:mSplitTS(ldActDate,
                      OUTPUT ttEvent.ActDate,
                      OUTPUT liTime).
          END.
@@ -163,7 +162,7 @@ FUNCTION fCollect RETURNS LOGICAL.
                    Order.OrderType  < 2:
             ttEvent.OrdChannel = Order.OrderChannel.
                    
-            fSplitTS(Order.CrStamp,
+            Func.Common:mSplitTS(Order.CrStamp,
                      OUTPUT ttEvent.OrdDate,
                      OUTPUT liTime).
          END.
@@ -208,7 +207,7 @@ IF idtPaymDate1 = ? AND idtPaymDate2 NE ? THEN idtPaymDate1 = 01/01/1990.
 
 /* collect events */
 FOR EACH CoEvent NO-LOCK USE-INDEX CalcDate WHERE
-         CoEvent.Brand     = gcBrand       AND
+         CoEvent.Brand     = Syst.Var:gcBrand       AND
          CoEvent.CalcDate >= idtCalcDate1  AND
          CoEvent.CalcDate <= idtCalcDate2  AND
          CoEvent.Salesman >= icSalesman1   AND

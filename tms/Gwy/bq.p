@@ -1,6 +1,5 @@
 {Func/xmlfunction.i}
 {Func/mathfunction.i}
-{Func/timestamp.i}
 
 DEFINE INPUT PARAMETER pcCLI AS CHARACTER NO-UNDO.
 
@@ -181,7 +180,7 @@ PROCEDURE pHeader:
             ttUCIP.ttValue  = STRING(NEXT-VALUE(PrePaidReq),"999999999")
             ttUCIP.ttFormat = "string".
          WHEN 4 THEN ASSIGN
-            ttUCIP.ttValue  = fISO860(fMakeTS())
+            ttUCIP.ttValue  = Func.Common:mISO860(Func.Common:mMakeTS())
             ttUCIP.ttName   = "originTimeStamp"
             ttUCIP.ttFormat = "dateTime.iso8601".
          WHEN 5 THEN ASSIGN

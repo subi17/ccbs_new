@@ -14,7 +14,6 @@
                   16.09.03/aam brand
                   24.01.05/aam allow update of last item's concerns[2]
                   30.12.05 /vk allow update of bill period and period dates
-                  24.01.06 jt DYNAMIC-FUNCTION("fDispCustName"
                   06.03.06 /vk asking password also when user pressed ENTER
                   14.11.07 jt  Layout changes in frame sel
                   14.11.07 jt  display M if ffitem has memo
@@ -66,7 +65,7 @@ DEF BUFFER bFFItem FOR FFItem.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -90,7 +89,7 @@ form
     lcMemoAvail        column-label "M" FORMAT "x(1)"
 WITH
     centered ROW 2 OVERLAY scroll 1 13 DOWN
-    color value(cfc) title color value(ctc) " " +
+    color value(Syst.Var:cfc) title color value(Syst.Var:ctc) " " +
     substr(lcCustName,1,16) + " / " + substr(prod-name,1,16) +
     ": Billable ITEMS, Type = " + string(FixedFee.BillMethod) + ", intvl = " +
     string(FixedFee.Interval) + " "  FRAME sel.
@@ -102,19 +101,19 @@ form
     "Billable Payment:" FFItem.Amt                           SKIP
     "Our Own Cost ...:" FFItem.OwnCost                       SKIP
  WITH  OVERLAY ROW 7 centered
-    COLOR value(cfc) TITLE COLOR value(ctc) fr-header WITH NO-LABEL
+    COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc) fr-header WITH NO-LABEL
     FRAME lis.
 
 form /*  search WITH FIELD CustNum */
     BillPeriod
     help "Give Period YyyyMm"
-    with row 4 col 2 title color value(ctc) " FIND Period "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND Period "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* memo */
 WITH
     OVERLAY ROW 7 centered NO-LABEL
-    color value(cfc) title color value(cfc) " Update memo "
+    color value(Syst.Var:cfc) title color value(Syst.Var:cfc) " Update memo "
     FRAME memo.
 
 FIND FixedFee where FixedFee.FFNum = FFNum no-lock.
@@ -127,8 +126,7 @@ else prod-name = "!! UNKNOWN !!!".
 
 FIND Customer where Customer.CustNum = FixedFee.CustNum no-lock.
 
-lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                              BUFFER Customer).
+lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                                     
 FIND FIRST FFItem
 where FFItem.FFNum = FFNum no-lock no-error.
@@ -144,7 +142,7 @@ ELSE DO:
 END.
 
 ASSIGN lcRight = "".
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 LOOP:
 repeat WITH FRAME sel:
@@ -213,27 +211,27 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 771 ufk[2]= 0  ufk[3]= 927 ufk[4]= 0
-        ufk[5]= 1491   
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
-        ufk[7]= 0   ufk[8]= 8 ufk[9]= 1
-        ehto  = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 771 Syst.Var:ufk[2]= 0  Syst.Var:ufk[3]= 927 Syst.Var:ufk[4]= 0
+        Syst.Var:ufk[5]= 1491   
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
+        Syst.Var:ufk[7]= 0   Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto  = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW FFItem.BillPeriod {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) FFItem.BillPeriod WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) FFItem.BillPeriod WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -258,10 +256,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND FFItem where recid(FFItem) = rtab[1] no-lock.
            IF order = 1 THEN FIND prev FFItem
@@ -301,7 +299,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND FFItem where recid(FFItem) = rtab[FRAME-DOWN] no-lock .
@@ -343,7 +341,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND FFItem where recid(FFItem) = memory no-lock no-error.
         IF order = 1 THEN FIND prev FFItem
@@ -369,7 +367,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* cursor TO the downmost line */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -384,10 +382,10 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+     else if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        BillPeriod = 0.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE BillPeriod WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        IF BillPeriod <> ? THEN DO:
@@ -407,9 +405,9 @@ BROWSE:
      END. /* Haku sar. 1 */
 
 
-     if lookup(nap,"3,f3") > 0 THEN     /* memo */
+     if lookup(Syst.Var:nap,"3,f3") > 0 THEN     /* memo */
      DO TRANS WITH FRAME memo ON ENDKEY UNDO, NEXT LOOP:
-       assign ehto = 9 cfc = "lis" ufkey = TRUE.
+       assign Syst.Var:ehto = 9 Syst.Var:cfc = "lis" ufkey = TRUE.
        RUN Syst/ufkey.p. RUN Syst/ufcolor.p.
        FIND FFItem where recid(FFItem) = rtab[frame-line(sel)]
        exclusive-lock.
@@ -434,7 +432,7 @@ BROWSE:
        PAUSE 0.
      END.
    
-     else if lookup(nap,"4,f4") > 0 THEN DO TRANS ON ENDKEY UNDO, NEXT LOOP: 
+     else if lookup(Syst.Var:nap,"4,f4") > 0 THEN DO TRANS ON ENDKEY UNDO, NEXT LOOP: 
      /* edit */
          /* The program checks, whether this user has an inner password  */
          /* and the variable lcPassword will get it's value.             */
@@ -466,7 +464,7 @@ BROWSE:
           END.
         END.  
         IF llUpdate THEN DO:
-           FIND FFItem where recid(FFItem) = rtab[FRAME-LINE] EXCLUSIVE-LOCK.               ehto = 9. 
+           FIND FFItem where recid(FFItem) = rtab[FRAME-LINE] EXCLUSIVE-LOCK.               Syst.Var:ehto = 9. 
            RUN Syst/ufkey.p. 
            ufkey = TRUE.
            UPDATE
@@ -482,10 +480,10 @@ BROWSE:
         END. /* EDITING */
      END.     
      
-     else if lookup(nap,"5,f5") > 0 THEN DO:  /* view  */
+     else if lookup(Syst.Var:nap,"5,f5") > 0 THEN DO:  /* view  */
         FIND FFItem where recid(FFItem) = rtab[FRAME-LINE] no-lock.
         IF FFItem.InvNum > 0 THEN DO:
-           ehto = 5.
+           Syst.Var:ehto = 5.
            RUN Syst/ufkey.p.
            RUN pInvoiceDetails(FFItem.InvNum,
                                TRUE).
@@ -499,7 +497,7 @@ BROWSE:
         END.
      END.
 
-     else if lookup(nap,"6,f6") > 0 AND lcRight = "RW"
+     else if lookup(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSAction:  /* removal */
        delline = FRAME-LINE.
        FIND FFItem where recid(FFItem) = rtab[FRAME-LINE] no-lock.
@@ -512,7 +510,7 @@ BROWSE:
        END.
 
        /* line TO be deleted is lightened */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.Var:ctc)
           FFItem.BillPeriod
           FFItem.Concerns[1]
           FFItem.Concerns[2]
@@ -543,7 +541,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO REMOVE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.Var:ccc)
           FFItem.BillPeriod
           FFItem.Concerns[1]
           FFItem.Concerns[2]
@@ -571,11 +569,11 @@ BROWSE:
      END. /* removal */
 
  
-     else if lookup(nap,"enter,return") > 0 THEN
+     else if lookup(Syst.Var:nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSACTION ON ENDKEY UNDO, NEXT LOOP:
        /* change */
        
-       assign fr-header = " CHANGE " cfc = "lis".  RUN Syst/ufcolor.p.
+       assign fr-header = " CHANGE " Syst.Var:cfc = "lis".  RUN Syst/ufcolor.p.
 
        run local-find-this(FALSE).
 
@@ -623,7 +621,7 @@ BROWSE:
             
        IF llUpdate THEN DO WITH FRAME lis ON ENDKEY UNDO, NEXT LOOP:
           run local-find-this(TRUE).
-          ehto = 9. 
+          Syst.Var:ehto = 9. 
           RUN Syst/ufkey.p. 
           ufkey = TRUE.
           UPDATE
@@ -641,7 +639,7 @@ BROWSE:
           HIDE FRAME lis NO-PAUSE.
        END. /* EDITING */
        ELSE DO:
-         ehto = 9. 
+         Syst.Var:ehto = 9. 
          RUN Syst/ufkey.p. 
          ufkey = TRUE.
          /* if item is the last one then allow update of end period */  
@@ -665,27 +663,27 @@ BROWSE:
      END.
      
      
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
        IF order = 1 THEN FIND FIRST FFItem
        where FFItem.FFNum = FFNum no-lock no-error.
        ASSIGN memory = recid(FFItem) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
        IF order = 1 THEN FIND LAST FFItem
        where FFItem.FFNum = FFNum no-lock no-error.
        ASSIGN memory = recid(FFItem) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 PROCEDURE local-find-this:
@@ -712,7 +710,7 @@ PROCEDURE local-find-others:
    END.
  
    FIND Invoice NO-LOCK WHERE
-        Invoice.Brand  = gcBrand AND
+        Invoice.Brand  = Syst.Var:gcBrand AND
         Invoice.InvNum = FFItem.InvNum
    NO-ERROR.
    IF AVAIL Invoice THEN lcExtInvNum = Invoice.ExtInvId.

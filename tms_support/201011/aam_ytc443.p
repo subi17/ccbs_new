@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-katun = "ari".
+Syst.Var:katun = "ari".
 
 DEF VAR i         AS I  NO-UNDO.
 DEF VAR lii       AS i  NO-UNDO.

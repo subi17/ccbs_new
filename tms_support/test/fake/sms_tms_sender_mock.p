@@ -1,6 +1,5 @@
 {Syst/commpaa.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 DEF VAR lcHostname AS CHAR NO-UNDO.
 INPUT THROUGH hostname.
 IMPORT lcHostName.
@@ -12,11 +11,11 @@ IF LOOKUP(lcHostName,'angetenar,alpheratz,sadachbia,yanai') = 0 THEN DO:
 END.
 ELSE DO:
    FOR EACH CallAlarm WHERE
-            CallAlarm.brand EQ Syst.Parameters:gcBrand AND
+            CallAlarm.brand EQ Syst.Var:gcBrand AND
             CallAlarm.delistat EQ {&CA_DELISTAT_NEW} AND
             CallAlarm.delitype EQ 1 /* SMS */:
       ASSIGN
-         CallAlarm.delistamp = fmakets()
+         CallAlarm.delistamp = Func.Common:mMakeTS()
          CallAlarm.delistat = {&CA_DELISTAT_SENT}.
    END.         
             

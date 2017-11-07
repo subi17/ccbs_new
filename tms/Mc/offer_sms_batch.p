@@ -9,9 +9,8 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-ASSIGN gcBrand = "1"
-       katun   = "CRON".
-{Func/timestamp.i}
+ASSIGN Syst.Var:gcBrand = "1"
+       Syst.Var:katun   = "CRON".
 {Func/cparam2.i}
 {Func/fmakesms.i}
 {Syst/tmsconst.i}
@@ -48,11 +47,11 @@ IF lcLogDir > "" THEN DO:
 END.
 
 ASSIGN
-   ldePickTo = fOffSet(fMakeTs(),-72)
-   ldeCurrStamp = fMakeTS().
+   ldePickTo = Func.Common:mOffSet(Func.Common:mMakeTS(),-72)
+   ldeCurrStamp = Func.Common:mMakeTS().
 
 FOR EACH Order NO-LOCK WHERE
-         Order.Brand = gcBrand AND
+         Order.Brand = Syst.Var:gcBrand AND
          Order.StatusCode = {&ORDER_STATUS_OFFER_SENT} AND /* shouldn't never get this value because of YDR-2575 */
          Order.Crstamp <= ldePickTo,
    FIRST OrderCustomer NO-LOCK WHERE
@@ -86,20 +85,20 @@ FOR EACH Order NO-LOCK WHERE
       liSMSSent = liSMSSent + 1.
    END.
 
-   IF fOffSet(Order.CrStamp, 10 * 24) < ldeCurrStamp THEN DO:
+   IF Func.Common:mOffSet(Order.CrStamp, 10 * 24) < ldeCurrStamp THEN DO:
 
       RUN Mc/closeorder.p(Order.OrderId, TRUE).
 
       IF RETURN-VALUE BEGINS "ERROR" THEN DO:
          IF lcLogDir > "" THEN
             PUT STREAM Sout UNFORMATTED
-            Order.OrderID ";" lcMobileNumber ";" fts2hms(Order.CrStamp) ";" RETURN-VALUE skip.
+            Order.OrderID ";" lcMobileNumber ";" Func.Common:mTS2HMS(Order.CrStamp) ";" RETURN-VALUE skip.
          NEXT.
       END.
 
       IF lcLogDir > "" THEN
          PUT STREAM Sout UNFORMATTED
-         Order.OrderID ";" lcMobileNumber ";" fts2hms(Order.CrStamp) ";Order closed"  skip.
+         Order.OrderID ";" lcMobileNumber ";" Func.Common:mTS2HMS(Order.CrStamp) ";Order closed"  skip.
 
       lcMessage = fGetSMSTxt(
          (IF Order.OrderType EQ 2
@@ -141,7 +140,7 @@ FOR EACH Order NO-LOCK WHERE
 
    IF lcLogDir > "" THEN
       PUT STREAM Sout UNFORMATTED
-         Order.OrderID ";" lcMobileNumber ";" fts2hms(Order.CrStamp) ";2nd SMS sent" SKIP.
+         Order.OrderID ";" lcMobileNumber ";" Func.Common:mTS2HMS(Order.CrStamp) ";2nd SMS sent" SKIP.
 END.
 
 IF lcLogDir > "" THEN OUTPUT STREAM Sout CLOSE.

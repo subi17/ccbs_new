@@ -31,7 +31,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    {newton/src/settenant.i pcTenant}
 
    FIND DayCampaign NO-LOCK WHERE 
-        DayCampaign.Brand = gcBrand AND 
+        DayCampaign.Brand = Syst.Var:gcBrand AND 
         DayCampaign.DCEvent = pcId NO-ERROR.
 
    IF NOT AVAIL DayCampaign THEN RETURN appl_err("Periodical contract not found: "+ pcId).
@@ -53,7 +53,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
             DayCampaign.TermFeeModel NE '' THEN DO:
 
             FIND FIRST FMItem NO-LOCK  WHERE
-                       FMItem.Brand     = gcBrand AND
+                       FMItem.Brand     = Syst.Var:gcBrand AND
                        FMItem.FeeModel  = DayCampaign.TermFeeModel AND
                        FMItem.FromDate <= TODAY AND
                        FMItem.ToDate   >= TODAY NO-ERROR.
@@ -63,7 +63,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    END.
    WHEN "5" THEN DO:
          FIND FIRST FMItem NO-LOCK  WHERE
-                    FMItem.Brand     = gcBrand AND
+                    FMItem.Brand     = Syst.Var:gcBrand AND
                     FMItem.FeeModel  = DayCampaign.FeeModel AND
                     FMItem.FromDate <= TODAY AND
                     FMItem.ToDate   >= TODAY NO-ERROR.

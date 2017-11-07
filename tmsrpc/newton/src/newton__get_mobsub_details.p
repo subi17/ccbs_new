@@ -111,12 +111,11 @@ IF NOT AVAILABLE MsOwner THEN
    RETURN appl_err(SUBST("MsOwner entry &1 not found", piMsSeq)).
 
 {Syst/commpaa.i}
-katun = "Newton".
-gcBrand = "1".
+Syst.Var:katun = "Newton".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/flimitreq.i}
 {Func/fcustpl.i}
-{Func/timestamp.i}
 {Func/fixedfee.i}
 {Func/fctchange.i}
 {Mnp/mnpoutchk.i}
@@ -164,13 +163,13 @@ IF LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 THEN
                   MServiceLimit.MsSeq = Mobsub.MsSeq AND
                   MServiceLimit.DialType = ServiceLimit.DialType AND
                   MServiceLimit.SLSeq = ServiceLimit.SLSeq AND
-                  MServiceLimit.EndTS >= fMakeTS() NO-LOCK NO-ERROR.
+                  MServiceLimit.EndTS >= Func.Common:mMakeTS() NO-LOCK NO-ERROR.
        IF NOT AVAIL MServiceLimit THEN DO:
           FIND FIRST MServiceLimit WHERE
                      MServiceLimit.MsSeq = Mobsub.MsSeq AND
                      MServiceLimit.DialType = ServiceLimit.DialType AND
                      MServiceLimit.SLSeq = ServiceLimit.SLSeq AND
-                     MServiceLimit.EndTS <= fMakeTS() NO-LOCK NO-ERROR.
+                     MServiceLimit.EndTS <= Func.Common:mMakeTS() NO-LOCK NO-ERROR.
           IF NOT AVAIL MServiceLimit THEN DO:
              FOR EACH MsOwner NO-LOCK WHERE
                       MsOwner.MsSeq = MobSub.MsSeq USE-INDEX MsSeq:
@@ -178,41 +177,41 @@ IF LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 THEN
                 IF MsOwner.CLIType NE MobSub.CLIType THEN LEAVE.
                 ldeActStamp = MsOwner.TSBegin.
              END. /* FOR EACH MsOwner NO-LOCK WHERE */
-             fSplitTS(ldeActStamp, OUTPUT ldaActDate, OUTPUT liActTime).
+             Func.Common:mSplitTS(ldeActStamp, OUTPUT ldaActDate, OUTPUT liActTime).
           END.
           ELSE DO:
              ldeActStamp = MServiceLimit.EndTS.
-             fSplitTS(ldeActStamp, OUTPUT ldaActDate, OUTPUT liActTime).
+             Func.Common:mSplitTS(ldeActStamp, OUTPUT ldaActDate, OUTPUT liActTime).
           END.
        END.
        ELSE DO:
           ldeActStamp = MServiceLimit.FromTS.
-          fSplitTS(ldeActStamp, OUTPUT ldaActDate, OUTPUT liActTime).
+          Func.Common:mSplitTS(ldeActStamp, OUTPUT ldaActDate, OUTPUT liActTime).
           
           IF TODAY EQ ldaActDate THEN
-            ldaRenewalDate = fLastDayOfMonth(TODAY) + 1.
+            ldaRenewalDate = Func.Common:mLastDayOfMonth(TODAY) + 1.
           /* In case of renewal day and if renewal EDR is received,
              show next month renewal date */ 
           ELSE IF (DAY(TODAY) EQ DAY(ldaActDate) OR
                   (DAY(ldaActDate) > DAY(TODAY) AND
-                   fLastDayOfMonth(TODAY) EQ TODAY)) THEN DO:
+                   Func.Common:mLastDayOfMonth(TODAY) EQ TODAY)) THEN DO:
             IF CAN-FIND (FIRST PrepEDR NO-LOCK WHERE
                                PrepEDR.MsSeq = MobSub.Msseq AND
                                PrepEDR.DateST = TODAY AND
                                PrepEDR.SuccessCode EQ 1 AND
                                PrepEDR.CLIType EQ MobSub.CLIType AND
                                PrepEDR.ErrorCode EQ 0) THEN
-            ldaRenewalDate = fLastDayOfMonth(TODAY) + 1.
+            ldaRenewalDate = Func.Common:mLastDayOfMonth(TODAY) + 1.
             ELSE ldaRenewalDate = TODAY.
           END.
           ELSE IF DAY(TODAY) < DAY(ldaActDate) THEN ldaRenewalDate = TODAY.
-          ELSE ldaRenewalDate = fLastDayOfMonth(TODAY) + 1.
+          ELSE ldaRenewalDate = Func.Common:mLastDayOfMonth(TODAY) + 1.
              
-          IF DAY(fLastDayOfMonth(ldaRenewalDate)) >= DAY(ldaActDate) THEN
+          IF DAY(Func.Common:mLastDayOfMonth(ldaRenewalDate)) >= DAY(ldaActDate) THEN
              ldaRenewalDate = DATE(MONTH(ldaRenewalDate),
                                    DAY(ldaActDate),
                                    YEAR(ldaRenewalDate)).
-          ELSE ldaRenewalDate = fLastDayOfMonth(ldaRenewalDate). 
+          ELSE ldaRenewalDate = Func.Common:mLastDayOfMonth(ldaRenewalDate). 
           ldaActDate = ldaRenewalDate.
        END.
 
@@ -336,7 +335,7 @@ IF NOT MobSub.PayType THEN DO:
 
       ldeFinalAmt = 0.
       FOR EACH SingleFee USE-INDEX Custnum WHERE
-               SingleFee.Brand       = gcBrand AND
+               SingleFee.Brand       = Syst.Var:gcBrand AND
                SingleFee.Custnum     = Mobsub.InvCust AND
                SingleFee.HostTable   = "Mobsub" AND
                SingleFee.KeyValue    = STRING(Mobsub.MsSeq) AND
@@ -362,7 +361,7 @@ IF NOT MobSub.PayType THEN DO:
             DCCLI.ValidTo   >= TODAY AND
             DCCLI.CreateFees = TRUE,
       FIRST DayCampaign WHERE
-            DayCampaign.Brand = gcBrand AND
+            DayCampaign.Brand = Syst.Var:gcBrand AND
             DayCampaign.DCEvent = DCCLI.DCEvent AND
             DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND
             DayCampaign.TermFeeModel NE "" AND
@@ -417,7 +416,7 @@ add_int(memo_struct,"service", INT(fMemoCount("service",MobSub.Msseq,True))).
 
 /* satisfaction value */
 FIND FIRST PIndicator  WHERE
-           PIndicator.Brand = gcBrand AND
+           PIndicator.Brand = Syst.Var:gcBrand AND
            PIndicator.HostTable = "MobSub" AND
            PIndicator.KeyValue = STRING(MobSub.MsSeq) AND
            PIndicator.IndicatorType = {&P_INDICATOR_TYPE_SATISFACTION_VALUE}  
@@ -444,7 +443,7 @@ IF MobSub.MultiSIMType > 0 AND
               lbMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} NO-ERROR. 
    
    FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSimID WHERE
-              lbMobSub.Brand        = gcBrand           AND
+              lbMobSub.Brand        = Syst.Var:gcBrand           AND
               lbMobSub.MultiSimID   = MobSub.MultiSimID AND
               lbMobSub.MultiSimType = liMultiSIMType    AND
               lbMobSub.Custnum      = MobSub.Custnum    NO-ERROR.
@@ -500,5 +499,4 @@ IF MobSub.MultiSIMType > 0 AND
 END.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

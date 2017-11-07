@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-katun = "harrim".
-gcBrand = "1".
+Syst.Var:katun = "harrim".
+Syst.Var:gcBrand = "1".
 {Func/msisdn.i}
 
 DEFINE VARIABLE iCLi as int64 no-undo.

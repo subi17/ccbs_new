@@ -1,5 +1,4 @@
 def buffer bsolog for solog.
-{Func/timestamp.i}
 DEFINE VARIABLE ldeActstamp AS DECIMAL NO-UNDO. 
 DEFINE VARIABLE x AS CHARACTER NO-UNDO. 
 
@@ -14,7 +13,7 @@ repeat:
    
    import unformatted lcLine.
 
-   ldeActstamp = fmakets().
+   ldeActstamp = Func.Common:mMakeTS().
    FOR EACH mobsub where
       mobsub.cli = lcLine NO-LOCK: 
       FOR FIRST msrequest where

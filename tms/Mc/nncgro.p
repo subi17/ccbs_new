@@ -27,7 +27,7 @@
 {Func/fecgtask.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -75,9 +75,9 @@ form
     CustGroup.CreDate
     CustGroup.CreUser 
 WITH width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(cfc)
-    title color value(ctc) " " + ynimi +
-       " Customer Groups " + string(pvm,"99-99-99") + " "
+    COLOR value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " " + Syst.Var:ynimi +
+       " Customer Groups " + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form
@@ -92,7 +92,7 @@ form
     CustGroup.CreDate
     CustGroup.CreUser
 WITH  OVERLAY ROW 4 centered
-    COLOR value(cfc) TITLE COLOR value(ctc) lm-ots WITH side-labels 1 columns
+    COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc) lm-ots WITH side-labels 1 columns
     FRAME lis.
 
 {Func/brand.i}
@@ -108,17 +108,17 @@ form /* Customer Group :n haku kentällä CustGroup */
     "Brand:" lcBrand skip
     "Group:" CustGroup
     help "Type Group Code"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND CODE "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* Customer Group :n haku kentällä CGName */
     "Brand:" lcBrand skip
     "Name :" CGName
     help "Type first characters of a name"
-    with row 4 col 2 title color value(ctc) " FIND Name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND Name "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 FIND FIRST CustGroup
@@ -148,14 +148,14 @@ repeat WITH FRAME sel:
     END.
 
    IF lisattava THEN DO:  /* cgroupn lisäys  */
-      assign cfc = "lis" ufkey = true lm-ots = " ADD " lisattava = FALSE.
+      assign Syst.Var:cfc = "lis" ufkey = true lm-ots = " ADD " lisattava = FALSE.
       RUN Syst/ufcolor.p.
 
       lisaa:
       repeat WITH FRAME lis ON ENDKEY UNDO lisaa, LEAVE lisaa.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
            PROMPT-FOR CustGroup.CustGroup
            VALIDATE
@@ -169,7 +169,7 @@ repeat WITH FRAME sel:
            ASSIGN
            CustGroup.Brand       = lcBrand
            CustGroup.CustGroup   = INPUT FRAME lis CustGroup.CustGroup
-           CustGroup.CreUser = katun.
+           CustGroup.CreUser = Syst.Var:katun.
            UPDATE CustGroup.CGName
                   CustGroup.EnterTask CustGroup.LeaveTask
                   CustGroup.CreDate CustGroup.CreUser.
@@ -243,31 +243,31 @@ SELAUS:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35 ufk[2]= 30 ufk[3]= 927 ufk[4]= 510
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
-        ufk[7]= 1760   ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 35 Syst.Var:ufk[2]= 30 Syst.Var:ufk[3]= 927 Syst.Var:ufk[4]= 510
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0) 
+        Syst.Var:ufk[7]= 1760   Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW CustGroup.CustGroup {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) CustGroup.CustGroup WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) CustGroup.CustGroup WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW CustGroup.CGName {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) CustGroup.CGName WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) CustGroup.CGName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > orderlkm THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = orderlkm.
       END.
 
@@ -294,10 +294,10 @@ SELAUS:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* edellinen rivi */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND CustGroup where recid(CustGroup) = rtab[1] no-lock.
            IF order = 1 THEN FIND prev CustGroup
@@ -326,7 +326,7 @@ SELAUS:
       END. /* edellinen rivi */
 
       /* seuraava rivi */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND CustGroup where recid(CustGroup) = rtab[FRAME-DOWN] no-lock .
@@ -356,7 +356,7 @@ SELAUS:
       END. /* seuraava rivi */
 
       /* edellinen sivu */
-      else if lookup(nap,"prev-page,page-up") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up") > 0 THEN DO:
         memory = rtab[1].
         FIND CustGroup where recid(CustGroup) = memory no-lock no-error.
         IF order = 1 THEN FIND prev CustGroup
@@ -386,7 +386,7 @@ SELAUS:
      END. /* edellinen sivu */
 
      /* seuraava sivu */
-     else if lookup(nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down") > 0 THEN DO WITH FRAME sel:
        /* kohdistin alimmalle riville */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -401,12 +401,12 @@ SELAUS:
      END. /* seuraava sivu */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+     else if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        CustGroup = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F1.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.Var:gcAllBrand
               CustGroup WITH FRAME f1.
        HIDE FRAME f1 no-pause.
 
@@ -423,13 +423,13 @@ SELAUS:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        CGName = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        DISPLAY lcBrand WITH FRAME F2.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.Var:gcAllBrand
               CGName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
 
@@ -446,7 +446,7 @@ SELAUS:
        END.
      END. /* Haku sar. 2 */
 
-     else if lookup(nap,"3,f3") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"3,f3") > 0 THEN DO:
 
        FIND CustGroup where recid(CustGroup) = rtab[frame-line(sel)]
        no-lock.
@@ -459,25 +459,25 @@ SELAUS:
 
      END.
 
-     else if lookup(nap,"4,f4") > 0 THEN DO TRANSAction:  /* members */
+     else if lookup(Syst.Var:nap,"4,f4") > 0 THEN DO TRANSAction:  /* members */
         FIND CustGroup where recid(CustGroup) = rtab[FRAME-LINE] no-lock.
         RUN Mc/nncgme1.p(CustGroup.CustGroup).
         ufkey = TRUE.
         NEXT LOOP.
      END.
 
-     if lookup(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
+     if lookup(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
         lisattava = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 AND lcRight = "RW" 
+     else if lookup(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW" 
      THEN DO TRANSAction:  /* poisto */
        privi = FRAME-LINE.
        FIND CustGroup where recid(CustGroup) = rtab[FRAME-LINE] no-lock.
 
        /* valaistaan poistettava rivi */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.Var:ctc)
        CustGroup.CustGroup CustGroup.CGName CustGroup.CreDate CustGroup.CreUser.
 
        IF order = 1 THEN FIND NEXT CustGroup
@@ -506,7 +506,7 @@ SELAUS:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.Var:ccc)
        CustGroup.CustGroup CustGroup.CGName CustGroup.CreDate CustGroup.CreUser.
        IF ok THEN DO:
 
@@ -548,22 +548,22 @@ SELAUS:
        ELSE privi = 0. /* ei poistettukaan */
      END. /* poisto */
 
-     ELSE IF lookup(nap,"7,f7") > 0 THEN DO:
+     ELSE IF lookup(Syst.Var:nap,"7,f7") > 0 THEN DO:
         FIND CustGroup WHERE recid(CustGroup) = rtab[FRAME-line(sel)] NO-LOCK.
         RUN Mc/invotxt.p("CustGroup",CustGroup.CustGroup).
         ASSIGN memory = recid(CustGroup) must-print = TRUE ufkey=true.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"enter,return") > 0 THEN
+     else if lookup(Syst.Var:nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSAction ON ENDKEY UNDO, NEXT LOOP:
        /* muutos */
        {Syst/uright2.i}
        FIND CustGroup where recid(CustGroup) = rtab[frame-line(sel)] 
        exclusive-lock.
 
-       assign lm-ots = " CHANGE " ufkey = TRUE ehto = 9.
-       cfc = "lis". RUN Syst/ufcolor.p.
+       assign lm-ots = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY CustGroup.CustGroup
        CustGroup.EnterTask CustGroup.LeaveTask
        CustGroup.CreUser CustGroup.CreDate
@@ -580,7 +580,7 @@ SELAUS:
                  CustGroup.LeaveTask.
 
           ASSIGN
-             CustGroup.ChgUser = katun
+             CustGroup.ChgUser = Syst.Var:katun
              CustGroup.ChgDate = TODAY.
 
           IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustGroup).
@@ -598,7 +598,7 @@ SELAUS:
        xrecid = recid(CustGroup).
      END.
 
-     else if lookup(nap,"home") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home") > 0 THEN DO:
        IF order = 1 THEN FIND FIRST CustGroup
        WHERE CustGroup.Brand = lcBrand no-lock no-error.
        ELSE IF order = 2 THEN FIND FIRST CustGroup USE-INDEX CGName
@@ -607,7 +607,7 @@ SELAUS:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end") > 0 THEN DO : /* viimeinen tietue */
+     else if lookup(Syst.Var:nap,"end") > 0 THEN DO : /* viimeinen tietue */
        IF order = 1 THEN FIND LAST CustGroup
        WHERE CustGroup.Brand = lcBrand no-lock no-error.
        ELSE IF order = 2 THEN FIND LAST CustGroup USE-INDEX CGName
@@ -616,11 +616,11 @@ SELAUS:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* SELAUS */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 

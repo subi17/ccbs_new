@@ -105,15 +105,13 @@ FUNCTION fCollectInvoice RETURNS LOGIC:
           FIRST OrderCustomer OF Order NO-LOCK WHERE
                 OrderCustomer.RowType = Order.InvCustRole:
                 
-         ttInv.CustName = DYNAMIC-FUNCTION("fPrintOrderName" IN ghFunc1,
-                                           BUFFER OrderCustomer).
+         ttInv.CustName = Func.Common:mPrintOrderName(BUFFER OrderCustomer).
       END.                                     
 
    END.        
           
    IF ttInv.CustName = "" THEN         
-      ttInv.CustName   = DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1,
-                                          BUFFER Customer).
+      ttInv.CustName   = Func.Common:mPrintCustName(BUFFER Customer).
 
    DO liCnt = 1 TO 10:
       IF Invoice.VatPerc[liCnt] > 0 AND Invoice.VatAmount[liCnt] NE 0 THEN DO:
@@ -146,12 +144,12 @@ IF lcSpoolDir = ? OR lcSpoolDir = "" THEN lcSpoolDir = "/tmp".
 /* all invoice customers for chosen id */
 IF icCustID > "" THEN 
 FOR EACH bAgrCust NO-LOCK WHERE
-         bAgrCust.Brand    = gcBrand AND
+         bAgrCust.Brand    = Syst.Var:gcBrand AND
          bAgrCust.OrgID    = icCustID,
     EACH Customer NO-LOCK WHERE
          Customer.AgrCust = bAgrCust.CustNum,
     EACH Invoice NO-LOCK USE-INDEX CustNum WHERE
-         Invoice.Brand    = gcBrand          AND
+         Invoice.Brand    = Syst.Var:gcBrand          AND
          Invoice.CustNum  = Customer.CustNum AND
          Invoice.InvDate >= idtInvDate1      AND
          Invoice.InvDate <= idtInvDate2      AND
@@ -166,7 +164,7 @@ END.
 
 ELSE 
 FOR EACH Invoice NO-LOCK WHERE
-         Invoice.Brand    = gcBrand     AND
+         Invoice.Brand    = Syst.Var:gcBrand     AND
          Invoice.InvDate >= idtInvDate1 AND
          Invoice.InvDate <= idtInvDate2 AND  
          Invoice.InvType >= iiInvType1  AND
@@ -195,7 +193,7 @@ FOR EACH ttTaxZone:
 
    FIND TaxZone WHERE TaxZone.TaxZone = ttTaxZone.TaxZone NO-LOCK NO-ERROR.
    IF AVAILABLE TaxZone THEN DO:
-      lcZone = fTranslationName(gcBrand,
+      lcZone = fTranslationName(Syst.Var:gcBrand,
                                 7,
                                 TaxZone.TaxZone,
                                 1,
@@ -245,8 +243,7 @@ FOR EACH ttTaxZone:
  
       IF LAST-OF(ttInv.InvType) THEN DO:
       
-         lcTypeName = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                       "Invoice",
+         lcTypeName = Func.Common:mTMSCodeName("Invoice",
                                        "InvType",
                                        STRING(ttInv.InvType)).
          
