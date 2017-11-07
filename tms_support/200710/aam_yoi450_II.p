@@ -1,4 +1,3 @@
-{Func/timestamp.i}
 
 def var i       as int  no-undo.
 def var j       as int  no-undo.
@@ -20,7 +19,7 @@ for each prepaidrequest no-lock where
 
     if prepaidrequest.vatamt / prepaidrequest.topupamt < 0 then do:
 
-       fsplitts(prepaidrequest.tsrequest,
+       Func.Common:mSplitTS(prepaidrequest.tsrequest,
                 output ldtdate,
                 output litime).
 

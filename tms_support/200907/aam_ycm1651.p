@@ -1,7 +1,6 @@
 {Syst/testpaa.i}
-katun = "ari".
+Syst.Var:katun = "ari".
 {/home/ari/work/fcreditreq_chk.i}
-{Func/timestamp.i}
 
 def var lcline as char no-undo.
 def var liorderid as int no-undo.
@@ -41,7 +40,7 @@ for each msrequest no-lock use-index custnum where
    ttreq.invnum = msrequest.reqiparam1.
 end.
          
-ldactstamp = fmake2dt(today,time + 600). 
+ldactstamp = Func.Common:mMake2DT(today,time + 600). 
 
 repeat:
    import stream sread unformatted lcline.
@@ -131,13 +130,13 @@ repeat:
    
    k = k + 1.
    if k mod 10000 = 0 then do:
-      ldactstamp = fmake2dt(today,integer(time + (k / 10000) * 3600)).
+      ldactstamp = Func.Common:mMake2DT(today,integer(time + (k / 10000) * 3600)).
       /*
-      message "new batch:" k fts2hms(ldactstamp)
+      message "new batch:" k Func.Common:mTS2HMS(ldactstamp)
       view-as alert-box.
       */
       pause 0.
-      disp fts2hms(ldactstamp) format "x(20)" with 1 down.
+      disp Func.Common:mTS2HMS(ldactstamp) format "x(20)" with 1 down.
    end.
 
    lireq = fFullCreditNoteRequest(invoice.custnum,
@@ -165,7 +164,7 @@ repeat:
           Memo.CreUser   = msrequest.usercode 
           Memo.MemoTitle = "CLOSED ORDER (ACAN)"
           Memo.MemoText  = "Credited by Yoigo, YCM-1649".
-          Memo.CreStamp  = fmakets().
+          Memo.CreStamp  = Func.Common:mMakeTS().
     
    create ttreq.
    ttreq.invnum = invoice.invnum.

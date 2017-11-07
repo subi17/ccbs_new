@@ -1,5 +1,4 @@
 /* nagios monitoring script for dump logs */
-{Func/date.i}
 
 DEFINE VARIABLE ldaStart AS DATE NO-UNDO. 
 DEFINE VARIABLE liStart AS INTEGER NO-UNDO. 
@@ -17,7 +16,7 @@ DEFINE VARIABLE liActiveDelayed AS INTEGER NO-UNDO.
 DEFINE VARIABLE liQueued AS INTEGER NO-UNDO. 
 DEFINE VARIABLE liQueuedDelayed AS INTEGER NO-UNDO. 
 
-ldeCheckFrom = fOffset(fMakeTS(),-24 * 14).
+ldeCheckFrom = Func.Common:mOffSet(Func.Common:mMakeTS(),-24 * 14).
 
 FOR EACH dumplog NO-LOCK where
          dumplog.createstart  > ldeCheckFrom,
@@ -26,10 +25,10 @@ FOR EACH dumplog NO-LOCK where
 
    if dumplog.dumplogstatus eq 0 then do:
 
-      fSplitTs(dumplog.createstart, output ldaStart, output liStart).
+      Func.Common:mSplitTS(dumplog.createstart, output ldaStart, output liStart).
 
       /*if dumplog.createend > 0 then
-         fSplitTs(dumplog.createend, output ldaEnd, output liEnd).
+         Func.Common:mSplitTS(dumplog.createend, output ldaEnd, output liEnd).
       else */ ASSIGN
          ldaEnd = TODAY
          liEnd = TIME.
@@ -63,7 +62,7 @@ FOR EACH dumpfile NO-LOCK where
                       dumplog.dumplogstatus = 0) then next.
 
     liQueued = liQueued + 1.
-    fSplitTs(dftimetable.ongoing, output ldaStart, output liStart).
+    Func.Common:mSplitTS(dftimetable.ongoing, output ldaStart, output liStart).
 
    if (datetime(TODAY,TIME * 1000) -  datetime(ldaStart,liStart * 1000)
       ) > 8 * 3600 * 1000 then 

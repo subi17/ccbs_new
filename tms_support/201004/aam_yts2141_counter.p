@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-katun = "qvantel".
+Syst.Var:katun = "qvantel".
 
 def stream sread.
 input stream sread from /home/ari/work/aam_yts2141.log.

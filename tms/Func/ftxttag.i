@@ -181,7 +181,7 @@ FUNCTION fMsServiceList RETURNS CHARACTER
       FIRST ServiceLimit NO-LOCK WHERE
             ServiceLimit.SLSeq = MServiceLimit.SLSeq,
       FIRST ServiceLimitGroup NO-LOCK WHERE
-            ServiceLimitGroup.Brand     = gcBrand AND
+            ServiceLimitGroup.Brand     = Syst.Var:gcBrand AND
             ServiceLimitGroup.GroupCode = ServiceLimit.GroupCode:
             
       lcServiceList = lcServiceList + 
@@ -197,7 +197,7 @@ FUNCTION fMsServiceList RETURNS CHARACTER
    FOR FIRST bSerMob NO-LOCK WHERE
              bSerMob.MsSeq = iiMsSeq,
         EACH PNPGroup NO-LOCK WHERE
-             PNPGroup.Brand     = gcBrand     AND
+             PNPGroup.Brand     = Syst.Var:gcBrand     AND
              PNPGroup.GroupType = 2           AND
              PNPGroup.PNPGroup  = bSerMob.CLI AND
              PNPGroup.DTo      >= TODAY       AND
@@ -207,7 +207,7 @@ FUNCTION fMsServiceList RETURNS CHARACTER
              liSerCnt      = LENGTH(lcServicePara).
              
       FOR EACH PNPList NO-LOCK WHERE
-               PNPList.Brand     = gcBrand         AND
+               PNPList.Brand     = Syst.Var:gcBrand         AND
                PNPList.PNPSeq    = PNPGroup.PNPSeq AND
                PNPList.ToDate   >= TODAY           AND
                PNPList.FromDate <= TODAY:
@@ -232,7 +232,7 @@ FUNCTION fMsServiceList RETURNS CHARACTER
                                    
       IF liServiceValue > 0 THEN DO:
          FIND ServCom WHERE 
-              ServCom.Brand   = gcBrand AND
+              ServCom.Brand   = Syst.Var:gcBrand AND
               ServCom.ServCom = ENTRY(liSerCnt,lcBarrList) NO-LOCK NO-ERROR.
          IF AVAILABLE ServCom 
          THEN lcServicePara = ServCom.SCLocalName.

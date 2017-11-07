@@ -18,7 +18,7 @@
 DEF VAR exfile      AS CHAR  FORMAT "X(40)"    NO-UNDO.
 DEF VAR lcConfDir   AS CHAR                    NO-UNDO.
 
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 ASSIGN lcConfDir = fCParamC("RepConfDir")
        exfile    = "/tmp/ageanal_" + 
@@ -28,7 +28,7 @@ ASSIGN lcConfDir = fCParamC("RepConfDir")
                    "_" + STRING(TIME) + ".txt".
 
 FIND FIRST Company NO-LOCK.
-ynimi = Company.CompName.
+Syst.Var:ynimi = Company.CompName.
 
 CREATE ttCriter.
 ASSIGN ttCriter.InvGroup = ""

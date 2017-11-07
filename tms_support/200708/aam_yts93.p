@@ -39,7 +39,7 @@ for first order exclusive-lock where
                    0.0).
 
    CREATE Memo.
-   ASSIGN Memo.Brand     = gcBrand
+   ASSIGN Memo.Brand     = Syst.Var:gcBrand
           Memo.HostTable = "Order"
           Memo.KeyValue  = STRING(Order.OrderID)
           Memo.CustNum   = Order.CustNum
@@ -47,6 +47,6 @@ for first order exclusive-lock where
           Memo.CreUser   = "ari" 
           Memo.MemoTitle = "Order cancelled"
           Memo.MemoText  = "Double icc, YTS-93".
-          Memo.CreStamp  = fMakeTS().
+          Memo.CreStamp  = Func.Common:mMakeTS().
    
 end.
