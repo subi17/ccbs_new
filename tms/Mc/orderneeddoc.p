@@ -4,7 +4,6 @@
    
 {Syst/commali.i}
 {Syst/eventval.i}
-{Func/timestamp.i}
 {Func/forderstamp.i}
 {Func/orderfunc.i}
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
@@ -13,7 +12,7 @@ DEF INPUT PARAMETER ilSilent AS LOG NO-UNDO.
 DEF VAR llOk AS LOG NO-UNDO.
 
 FIND FIRST Order WHERE 
-           Order.Brand   = gcBrand AND 
+           Order.Brand   = Syst.Var:gcBrand AND 
            Order.OrderID = iiOrder EXCLUSIVE-LOCK NO-ERROR.
 
 IF not avail order THEN DO:
@@ -37,7 +36,7 @@ IF NOT ilSilent THEN DO:
 END.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    
    {Func/lib/eventlog.i}
       

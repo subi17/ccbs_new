@@ -1,4 +1,3 @@
-{Func/date.i}
 DEFINE VARIABLE lcProcesses AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcProcess AS CHARACTER NO-UNDO. 
 
@@ -12,6 +11,6 @@ do i = 1 to num-entries(lcProcesses) with frame a:
 
     assign
       mnpprocess.statusreason = "CANC_TECNI"
-      mnpprocess.updatets = fMakeTS()
+      mnpprocess.updatets = Func.Common:mMakeTS()
       mnpprocess.statuscode = 7.
 end.  

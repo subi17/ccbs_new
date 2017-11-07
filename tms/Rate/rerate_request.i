@@ -31,7 +31,7 @@ FUNCTION fRerateRequest RETURNS INTEGER
    
    /* set activation time */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMakeTS().
+      idActStamp = Func.Common:mMakeTS().
 
    IF iiMsSeq > 0 THEN DO:
       FIND FIRST bReqSub WHERE bReqSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.

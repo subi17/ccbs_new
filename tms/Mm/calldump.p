@@ -14,10 +14,9 @@
   ------------------------------------------------------ */
 
 {Syst/commali.i}
-katun = "cron".
-gcBrand = "1".
+Syst.Var:katun = "cron".
+Syst.Var:gcBrand = "1".
 
-{Func/date.i}
 {Func/fvatfact.i}
 {Func/excel.i}
 {Func/coinv.i}
@@ -75,7 +74,7 @@ assign
    lcSdir     =  fCParam("dumpspool","calldump.p")
    ldate1     = idaDate
    filename   = CAPS(Syst.Parameters:Tenant) +
-                "_calls" + fDateFmt(ldate1,"yyyymmdd") + "_" + 
+                "_calls" + Func.Common:mDateFmt(ldate1,"yyyymmdd") + "_" + 
                 REPLACE(STRING(TIME,"hh:mm:ss"),":","") + ".dump"
    ldate1     = idaDate - 1
    ldate2     = ldate1
@@ -185,10 +184,10 @@ for each ttCalls NO-LOCK:
      lcCCNName = "".
 
    find ccn where 
-        CCN.Brand = gcBrand AND
+        CCN.Brand = Syst.Var:gcBrand AND
         ccn.ccn = ttcalls.ccn no-lock no-error.
    find billitem where 
-        BillItem.Brand    = gcBrand AND
+        BillItem.Brand    = Syst.Var:gcBrand AND
         billitem.billcode = ttCalls.billcode no-lock no-error.
    assign
      lcBiName  = Billitem.biname when avail billitem
