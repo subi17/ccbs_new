@@ -108,7 +108,7 @@ CLASS HPD.HPDAckHandler:
       CONNECT VALUE(lcPathFieldValue + " -ld " + lcLogicalFieldValue) NO-ERROR.
       &ELSEIF "{&HPD_ENVIRONMENT}" = "Yoigo"
       &THEN
-      CONNECT VALUE(lcPathFieldValue + "/" + lcLogicalFieldValue) NO-ERROR.
+      multitenancy.TenantInformation:mConnectDB(lcPathFieldValue + "/" + lcLogicalFieldValue).
       &ELSE
       RETURN ERROR NEW Progress.Lang.AppError("Unknown HPD environment", 1).
       &ENDIF
@@ -205,48 +205,61 @@ CLASS HPD.HPDAckHandler:
    
    METHOD PUBLIC VOID mProcessWaitingReplog():
 
-      DEFINE VARIABLE llOK     AS LOGICAL     NO-UNDO.
+      DEFINE VARIABLE llOK              AS LOGICAL     NO-UNDO.
+      DEFINE VARIABLE liTransactionSize AS INTEGER INITIAL 5000 NO-UNDO.
+      DEFINE VARIABLE lii               AS INTEGER     NO-UNDO.
 
       llOK = lhRepLogQuery:QUERY-PREPARE(SUBSTITUTE(lcRepLogQuery, ISO-DATE(ADD-INTERVAL(NOW, liRetryMinutes * (-1), "minutes")))).
 
       IF llOK = FALSE
       THEN RETURN ERROR NEW Progress.Lang.AppError("Query prepare failed for replog query", 1).
 
-      DO TRANSACTION ON ERROR UNDO, THROW:
+      ALLTRANSACTIONS:
+      DO WHILE TRUE ON ERROR UNDO, THROW:
 
-         lhRepLogQuery:QUERY-OPEN().
+         lii = 0.
 
-         DO WHILE TRUE ON ERROR UNDO, THROW:
+         TRANSACTIONLOOP:
+         DO TRANSACTION ON ERROR UNDO, THROW:
 
-            llOK = lhRepLogQuery:GET-NEXT(EXCLUSIVE-LOCK, NO-WAIT).
+            lhRepLogQuery:QUERY-OPEN().
 
-            IF llOK = ?
-            THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot process query", 1).
-         
-            /* No more records, or query is not open */
-            IF NOT llOK
-            THEN LEAVE.
+            DO WHILE TRUE ON ERROR UNDO, THROW:
 
-            /* If for some reason RepLog table is locked then skip it */
-            IF lhRepLogTable:LOCKED
-            THEN NEXT.
+               lii = lii + 1.
 
-            IF lhRepLogTable::SendCount >= liMaxSendCount
-            THEN DO:
-               LOG-MANAGER:WRITE-MESSAGE("Max retries reached. ROWID=" + STRING(lhRepLogTable:ROWID), "INFO").
-               mExportReplog("max_retries_reached", "").
-               lhRepLogTable:BUFFER-DELETE().
-               NEXT.
+               IF lii >= liTransactionSize
+               THEN LEAVE TRANSACTIONLOOP.
+
+               llOK = lhRepLogQuery:GET-NEXT(EXCLUSIVE-LOCK, NO-WAIT).
+
+               IF llOK = ?
+               THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot process query", 1).
+
+               /* No more records, or query is not open */
+               IF NOT llOK
+               THEN LEAVE ALLTRANSACTIONS.
+
+               /* If for some reason RepLog table is locked then skip it */
+               IF lhRepLogTable:LOCKED
+               THEN NEXT.
+
+               IF lhRepLogTable::SendCount >= liMaxSendCount
+               THEN DO:
+                  LOG-MANAGER:WRITE-MESSAGE("Max retries reached. ROWID=" + STRING(lhRepLogTable:ROWID), "INFO").
+                  mExportReplog("max_retries_reached", "").
+                  lhRepLogTable:BUFFER-DELETE().
+                  NEXT.
+               END.
+
+               lhRepLogTable::SendTime  = ?.
+
             END.
 
-            lhRepLogTable::SendTime  = ?.
-
+            FINALLY:
+               lhRepLogQuery:QUERY-CLOSE().
+            END FINALLY.
          END.
-
-         FINALLY:
-            lhRepLogQuery:QUERY-CLOSE().
-         END FINALLY.
-
       END.
 
    END METHOD.

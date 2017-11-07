@@ -5,13 +5,12 @@
 &GLOBAL-DEFINE DPMEMBER_I YES
 
 {Syst/commali.i}
-{Func/date.i}
 {Syst/eventval.i}
 {Syst/tmsconst.i}
 {Func/fixedlinefunc.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -29,7 +28,7 @@ FUNCTION fCalcDPMemberValidTo RETURNS DATE
    
    ASSIGN
       ldaValidTo = ADD-INTERVAL(idaValidFrom,iiValidPeriods - 1,"months")
-      ldaValidTo = fLastDayOfMonth(ldaValidTo).
+      ldaValidTo = Func.Common:mLastDayOfMonth(ldaValidTo).
       
    RETURN ldaValidTo.   
     
@@ -57,7 +56,7 @@ FUNCTION fAddDiscountPlanMember RETURNS INTEGER
    END.
 
    FIND FIRST DiscountPlan WHERE
-              DiscountPlan.Brand = gcBrand AND
+              DiscountPlan.Brand = Syst.Var:gcBrand AND
               DiscountPlan.DPRuleID = icDiscountPlan NO-LOCK NO-ERROR.
    IF NOT AVAILABLE DiscountPlan THEN DO:
       ocError = "ERROR: Unknown Discount Plan".
@@ -108,7 +107,7 @@ FUNCTION fCloseDiscount RETURNS LOGICAL
    DEF BUFFER DPMember FOR DPMember.
 
    FOR FIRST DiscountPlan WHERE
-             DiscountPlan.Brand    = gcBrand AND
+             DiscountPlan.Brand    = Syst.Var:gcBrand AND
              DiscountPlan.DPRuleID = icDiscountPlan NO-LOCK,
        EACH  DPMember WHERE
              DPMember.DPId      = DiscountPlan.DPId AND
@@ -139,17 +138,19 @@ END FUNCTION.
 FUNCTION fCreateAddLineDiscount RETURNS CHARACTER
    (iiMsSeq    AS INT,
     icCLIType  AS CHAR,
-    idtDate    AS DATE):
+    idtDate    AS DATE,
+    icDPRuleID AS CHAR):
 
    DEF VAR lcNewAddLineDisc AS CHAR NO-UNDO.
    DEF VAR liRequest        AS INT  NO-UNDO.
    DEF VAR lcResult         AS CHAR NO-UNDO.
 
-   lcNewAddLineDisc = ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}),
-                            {&ADDLINE_DISCOUNTS}).
+   IF icDPRuleID NE "" THEN lcNewAddLineDisc = icDPRuleID. /* reactivation */
+   ELSE lcNewAddLineDisc = ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}),
+                               {&ADDLINE_DISCOUNTS}).
 
    FOR FIRST DiscountPlan NO-LOCK WHERE
-             DiscountPlan.Brand    = gcBrand          AND
+             DiscountPlan.Brand    = Syst.Var:gcBrand          AND
              DiscountPlan.DPRuleID = lcNewAddLineDisc AND
              DiscountPlan.ValidTo >= idtDate,
        FIRST DPRate NO-LOCK WHERE
@@ -185,15 +186,86 @@ FUNCTION fCloseAddLineDiscount RETURNS LOGICAL
    FIND FIRST Customer NO-LOCK WHERE
               Customer.CustNum = iiCustNum NO-ERROR.
 
-   IF NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID) THEN DO:
+   IF NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,icCLIType) THEN
       fCloseDiscount(ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}),
                      iiMsSeq,
                      idtDate,
                      FALSE).
-   END.
+   IF NOT fCheckExisting2PConvergent(Customer.CustIDType,Customer.OrgID,icCLIType) THEN
+      fCloseDiscount(ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_20}),
+                     iiMsSeq,
+                     idtDate,
+                     FALSE).
+
+   /* Additional Line with mobile only ALFMO-5 */
+   IF NOT fCheckExistingMobileOnly(Customer.CustIDType,Customer.OrgID,icCLIType) THEN
+      fCloseDiscount(ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}),
+                     iiMsSeq,
+                     idtDate,
+                     FALSE).
 
    RETURN TRUE.
 
 END FUNCTION.
+
+FUNCTION fCreateExtraLineDiscount RETURNS CHARACTER
+   (INPUT iExtraLineMsSeq AS INT,
+    INPUT lcExtraLineDisc AS CHAR,
+    INPUT idtDate         AS DATE):
+   
+   DEF VAR liRequest        AS INT  NO-UNDO.
+   DEF VAR lcResult         AS CHAR NO-UNDO.
+
+   FOR FIRST DiscountPlan NO-LOCK WHERE
+             DiscountPlan.Brand    = Syst.Var:gcBrand         AND
+             DiscountPlan.DPRuleID = lcExtraLineDisc AND
+             DiscountPlan.ValidTo >= idtDate,
+       FIRST DPRate NO-LOCK WHERE
+             DPRate.DPId       = DiscountPlan.DPId AND
+             DPRate.ValidFrom <= idtDate           AND
+             DPRate.ValidTo   >= idtDate:
+
+      fCloseDiscount(DiscountPlan.DPRuleID,
+                     iExtraLineMsSeq,
+                     idtDate - 1,
+                     FALSE).
+
+      liRequest = fAddDiscountPlanMember(iExtraLineMsSeq,
+                                         DiscountPlan.DPRuleID,
+                                         DPRate.DiscValue,
+                                         idtDate,
+                                         DiscountPlan.ValidPeriods,
+                                         0,
+                                         OUTPUT lcResult).
+
+      IF liRequest NE 0 THEN
+         RETURN "ERROR:Extra Line Discount not created; " + lcResult.
+   END.
+END FUNCTION.    
+
+FUNCTION fCloseExtraLineDiscount RETURNS LOGICAL
+   (INPUT iExtraLineMsSeq AS INT,
+    INPUT lcExtraLineDisc AS CHAR,
+    INPUT idtDate         AS DATE):
+
+  FOR FIRST DiscountPlan NO-LOCK WHERE
+             DiscountPlan.Brand    = Syst.Var:gcBrand         AND
+             DiscountPlan.DPRuleID = lcExtraLineDisc AND
+             DiscountPlan.ValidTo >= idtDate,
+       FIRST DPRate NO-LOCK WHERE
+             DPRate.DPId       = DiscountPlan.DPId AND
+             DPRate.ValidFrom <= idtDate           AND
+             DPRate.ValidTo   >= idtDate:
+
+      fCloseDiscount(DiscountPlan.DPRuleID,
+                     iExtraLineMsSeq,
+                     idtDate - 1,
+                     FALSE).
+
+   END. 
+
+   RETURN TRUE.
+
+END.    
 
 &ENDIF

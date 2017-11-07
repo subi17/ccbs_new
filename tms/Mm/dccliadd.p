@@ -9,7 +9,6 @@
   ------------------------------------------------------ */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fmakemsreq.i}
 {Func/upsellbundle.i}
@@ -56,7 +55,7 @@ FORM
    lcDCEvent COLON 20
       LABEL "Contract"
       HELP "Periodical contract ID (F9)"
-      FORMAT "X(16)"
+      FORMAT "X(20)"
    DayCampaign.DCName
       FORMAT "X(30)"
       NO-LABEL
@@ -88,12 +87,11 @@ END.
 FIND Customer WHERE Customer.CustNum = MobSub.CustNum NO-LOCK.
 
 ASSIGN
-   lcCustName   = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                   BUFFER Customer)
+   lcCustName   = Func.Common:mDispCustName(BUFFER Customer)
    ldtContrDate = TODAY
    llCreateFees = FALSE
    llContrSource = TRUE
-   toimi        = -1.
+   Syst.Var:toimi        = -1.
 
 MakeReq:
 REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
@@ -107,7 +105,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
    END.
    ELSE IF lcDCEvent > "" THEN 
       FIND FIRST DayCampaign WHERE
-                 DayCampaign.Brand = gcBrand AND
+                 DayCampaign.Brand = Syst.Var:gcBrand AND
                  DayCampaign.DCEvent = lcDCEvent NO-LOCK NO-ERROR.
    ELSE DISPLAY "" @ DayCampaign.DCName WITH FRAME fCriter.
                  
@@ -123,26 +121,26 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
            llCreateFees
    WITH FRAME fCriter.
 
-   IF toimi < 0 THEN toimi = 1.
+   IF Syst.Var:toimi < 0 THEN Syst.Var:toimi = 1.
    ELSE DO:
       ASSIGN
-         ufk    = 0  
-         ufk[1] = 7
-         ufk[5] = IF lcDCEvent > "" AND
+         Syst.Var:ufk    = 0  
+         Syst.Var:ufk[1] = 7
+         Syst.Var:ufk[5] = IF lcDCEvent > "" AND
                      ldtContrDate >= MobSub.ActivationDate AND
                      ldtContrDate <= TODAY
                   THEN 1027 
                   ELSE 0 
-         ufk[8] = 8 
-         ehto   = 0.
+         Syst.Var:ufk[8] = 8 
+         Syst.Var:ehto   = 0.
       RUN Syst/ufkey.p.
    END.
    
-   IF toimi = 1 THEN DO:
+   IF Syst.Var:toimi = 1 THEN DO:
    
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
       
-         ehto = 9.
+         Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
          
          UPDATE 
@@ -154,7 +152,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
          
             READKEY.
             
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
                PAUSE 0.
         
                IF FRAME-FIELD = "lcDCEvent" THEN DO:
@@ -162,7 +160,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
                   IF INPUT lcDCEvent = "" THEN LEAVE.
                    
                   FIND FIRST DayCampaign WHERE
-                             DayCampaign.Brand = gcBrand AND
+                             DayCampaign.Brand = Syst.Var:gcBrand AND
                              DayCampaign.DCEvent = INPUT lcDCEvent 
                   NO-LOCK NO-ERROR.
                 
@@ -225,9 +223,9 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
       
    END.
 
-   ELSE IF toimi = 5 THEN DO:
+   ELSE IF Syst.Var:toimi = 5 THEN DO:
 
-      ldActStamp = fMake2Dt(ldtContrDate,
+      ldActStamp = Func.Common:mMake2DT(ldtContrDate,
                             IF ldtContrDate = TODAY
                             THEN TIME
                             ELSE 0).
@@ -254,7 +252,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
          liConCount = 0.
                   
          FOR EACH DCCLI NO-LOCK WHERE
-                  DCCLI.Brand      = gcBrand      AND
+                  DCCLI.Brand      = Syst.Var:gcBrand      AND
                   DCCLI.MsSeq      = MobSub.MsSeq AND
                   DCCLI.ValidTo   >= ldtContrDate AND 
                   DCCLI.DCEvent   BEGINS "PAYTERM":        
@@ -268,7 +266,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
          END.   
       END.       
       ELSE IF CAN-FIND(FIRST DCCLI WHERE
-                             DCCLI.Brand   = gcBrand AND
+                             DCCLI.Brand   = Syst.Var:gcBrand AND
                              DCCLI.DCEvent = lcDCEvent AND
                              DCCLI.MsSeq   = MobSub.MsSeq AND
                              DCCLI.ValidFrom <= ldtContrDate AND
@@ -315,7 +313,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
          END. /* IF fOngoingDSSAct(INPUT MobSub.CustNum) THEN DO: */
          IF NOT fIsDSSAllowed(INPUT  MobSub.CustNum,
                               INPUT  MobSub.MsSeq,
-                              INPUT  fMakeTS(),
+                              INPUT  Func.Common:mMakeTS(),
                               INPUT  {&DSS},
                               INPUT  "",
                               OUTPUT ldeCurrMonthLimit,
@@ -331,7 +329,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
                                  "CREATE",
                                  lcResult,
                                  lcDCEvent,
-                                 fMakeTS(),
+                                 Func.Common:mMakeTS(),
                                  {&REQUEST_SOURCE_MANUAL_TMS},
                                  "",
                                  llCreateFees,
@@ -343,7 +341,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
          fCreateUpsellBundle(MobSub.MsSeq,
                              lcDCEvent,
                              {&REQUEST_SOURCE_MANUAL_TMS},
-                             fMakeTS(),
+                             Func.Common:mMakeTS(),
                              OUTPUT liCreated,
                              OUTPUT lcError).
       ELSE DO:
@@ -366,6 +364,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
                                    "",
                                    0,
                                    0,
+                                   "",
                                    OUTPUT lcError).
       END. /* ELSE DO: */
       IF liCreated > 0 THEN 
@@ -380,7 +379,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO MakeReq, NEXT MakeReq:
       LEAVE.
    END.
    
-   ELSE IF toimi = 8 THEN LEAVE.
+   ELSE IF Syst.Var:toimi = 8 THEN LEAVE.
 
 END. /* MakeReq */
 

@@ -15,6 +15,7 @@
           eligible_renewal          boolean - optional
           any_barring               boolean - optional
           debt                      boolean - optional
+          customer_segment          string  - optional
           pay_type                  boolean 
           usage_type                integer
           order_start_date          date
@@ -25,16 +26,17 @@
   */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
-katun = "Newton".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Newton".
 {Syst/tmsconst.i}
 {Mm/fbundle.i}
 {Mm/active_bundle.i}
 {Func/fdss.i}
-{Func/timestamp.i}
 {Func/orderchk.i}
+{Func/profunc.i}
 
 /* Input parameters */
+DEF VAR pcTenant       AS CHAR NO-UNDO.
 DEF VAR pcCliType      AS CHAR NO-UNDO.
 DEF VAR piSubsLimit    AS INT NO-UNDO.
 DEF VAR piOffset       AS INT NO-UNDO.
@@ -55,6 +57,7 @@ DEF VAR plPayType      AS LOG  NO-UNDO. /* YDA-895 */
 DEF VAR piUsageType    AS INT  NO-UNDO. /* YDA-895 */
 DEF VAR pdtStartDate   AS DATE NO-UNDO. /* YDA-895 */ 
 DEF VAR piPersonIdType AS INT  NO-UNDO. /* YDA-895 */
+DEF VAR pcSegment      AS CHAR NO-UNDO.
 
 /* Local variables */
 DEF VAR lcDataBundles  AS CHAR NO-UNDO.
@@ -87,9 +90,10 @@ IF validate_request(param_toplevel_id, "struct,int,int") EQ ? THEN RETURN.
 
 pcStruct = get_struct(param_toplevel_id, "0").
 lcstruct = validate_struct(pcStruct,
-   "subscription_type,subscription_bundle_id,data_bundle_id,other_bundles,segmentation_code,payterm,term,order_end_date,order_status,order_type,eligible_renewal,language,invoice_group,any_barring,debt,pay_type,usage_type,order_start_date,person_id_type").
+   "brand,subscription_type,subscription_bundle_id,data_bundle_id,other_bundles,segmentation_code,payterm,term,order_end_date,order_status,order_type,eligible_renewal,language,invoice_group,any_barring,debt,pay_type,usage_type,order_start_date,person_id_type,customer_segment").
 
 ASSIGN
+   pcTenant       = get_string(pcStruct, "brand")
    pcCliType      = get_string(pcStruct, "subscription_type")
       WHEN LOOKUP("subscription_type", lcStruct) > 0
    piOffset       = get_int(param_toplevel_id, "1")
@@ -132,10 +136,15 @@ ASSIGN
    pdtStartDate   = get_date(pcStruct, "order_start_date")
       WHEN LOOKUP("order_start_date", lcStruct) > 0
    piPersonIdType = get_int(pcStruct, "person_id_type")
-      WHEN LOOKUP("person_id_type", lcStruct) > 0. 
+      WHEN LOOKUP("person_id_type", lcStruct) > 0 
+   pcSegment      = get_string(pcStruct, "customer_segment")
+      WHEN LOOKUP("customer_segment", lcStruct) > 0.
+
     /* Paytype, usagetype, startdate and personidtype YDA-895 */
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 IF pdtEndDate > TODAY THEN 
    pdtEndDate = ?.
@@ -202,7 +211,7 @@ FUNCTION fCheckEligibleRenewal RETURNS LOGICAL ():
    /* Check barrings */
    IF Mobsub.PayType EQ FALSE THEN DO:
       FOR EACH bMobsub NO-LOCK WHERE
-               bMobsub.Brand = gcBrand AND
+               bMobsub.Brand = Syst.Var:gcBrand AND
                bMobsub.AgrCust = Customer.AgrCust AND
                bMobsub.PayType = FALSE AND
                bMobsub.MsStatus = {&MSSTATUS_BARRED}:
@@ -214,7 +223,7 @@ FUNCTION fCheckEligibleRenewal RETURNS LOGICAL ():
    END.         
    
    IF CAN-FIND( FIRST Invoice NO-LOCK WHERE
-                      Invoice.Brand    = gcBrand            AND
+                      Invoice.Brand    = Syst.Var:gcBrand            AND
                       Invoice.Custnum  = MobSub.Custnum     AND            
                       Invoice.InvDate >= ldtFirstDay        AND
                       Invoice.InvType  = {&INV_TYPE_NORMAL} AND             
@@ -238,7 +247,7 @@ FUNCTION fCheckEligibleRenewal RETURNS LOGICAL ():
       IF Mobsub.PayType AND
          SubsTerminal.OrderID > 0 AND
          CAN-FIND(FIRST Order NO-LOCK WHERE
-                        Order.Brand = gcBrand AND
+                        Order.Brand = Syst.Var:gcBrand AND
                         Order.OrderID = SubsTerminal.OrderId AND
                         Order.OrderType = 2) THEN 
       DO:
@@ -252,7 +261,7 @@ FUNCTION fCheckEligibleRenewal RETURNS LOGICAL ():
          THEN llCancelledPrerenove = TRUE.
       END. /* IF Mobsub.PayType = True AND */   
    
-      fSplitTS(SubsTerminal.PurchaseTS, OUTPUT ldaLastTerminal, OUTPUT liTime).
+      Func.Common:mSplitTS(SubsTerminal.PurchaseTS, OUTPUT ldaLastTerminal, OUTPUT liTime).
    
       IF SubsTerminal.PerContractID > 0 THEN 
       DO:
@@ -300,25 +309,25 @@ FUNCTION fPersonIdCheck RETURNS LOGICAL (INPUT liPersonIdType AS INT):
    DEFINE VAR liPersonId AS LOGICAL NO-UNDO INIT YES.
    IF liPersonIdType = 1 AND 
       NOT CAN-FIND(FIRST Customer WHERE
-                         Customer.Brand   = gcBrand AND
+                         Customer.Brand   = Syst.Var:gcBrand AND
                          Customer.CustNum = MobSub.CustNum AND
                          Customer.CustIdType = "NIF") THEN
       liPersonId = NO.
    ELSE IF liPersonIdType = 2 AND
         NOT CAN-FIND(FIRST Customer WHERE
-                           Customer.Brand   = gcBrand AND
+                           Customer.Brand   = Syst.Var:gcBrand AND
                            Customer.CustNum = MobSub.CustNum AND
                            Customer.CustIdType = "NIE") THEN
       liPersonId = NO.
    ELSE IF liPersonIdType = 3 AND
         NOT CAN-FIND(FIRST Customer WHERE
-                           Customer.Brand   = gcBrand AND
+                           Customer.Brand   = Syst.Var:gcBrand AND
                            Customer.CustNum = MobSub.CustNum AND
                            Customer.CustIdType = "CIF") THEN
       liPersonId = NO.
    ELSE IF liPersonIdType = 4 AND
         NOT CAN-FIND(FIRST Customer WHERE
-                           Customer.Brand   = gcBrand AND
+                           Customer.Brand   = Syst.Var:gcBrand AND
                            Customer.CustNum = MobSub.CustNum AND
                            Customer.CustIdType = "PASSPORT") THEN
       liPersonId = NO.
@@ -328,7 +337,7 @@ END FUNCTION.
 
 EACH_MOBSUB:
 FOR EACH MobSub NO-LOCK WHERE
-         MobSub.Brand   = gcBrand AND 
+         MobSub.Brand   = Syst.Var:gcBrand AND 
          (IF pcCliType NE "" THEN MobSub.CLIType = pcCliType ELSE TRUE):
 
    /* If MobSub loop executes more than 30 seconds 
@@ -356,7 +365,7 @@ FOR EACH MobSub NO-LOCK WHERE
    END. /* pcDataBundleId > "" */
    
    IF plDebt AND NOT CAN-FIND(FIRST Invoice NO-LOCK WHERE
-                                    Invoice.Brand    = gcBrand            AND
+                                    Invoice.Brand    = Syst.Var:gcBrand            AND
                                     Invoice.Custnum  = MobSub.Custnum     AND            
                                     Invoice.InvDate >= ldtFirstDay        AND
                                     Invoice.InvType  = {&INV_TYPE_NORMAL} AND             
@@ -422,7 +431,7 @@ FOR EACH MobSub NO-LOCK WHERE
                   DCCLI.CreateFees = TRUE         BY DCCLI.ValidFrom DESC:
  
             IF CAN-FIND(FIRST DayCampaign NO-LOCK WHERE
-                              DayCampaign.Brand        = gcBrand            AND
+                              DayCampaign.Brand        = Syst.Var:gcBrand            AND
                               DayCampaign.DCEvent      = DCCLI.DCEvent      AND
                               DayCampaign.DCType       = {&DCTYPE_DISCOUNT} AND
                               DayCampaign.TermFeeModel NE ""                AND
@@ -441,7 +450,7 @@ FOR EACH MobSub NO-LOCK WHERE
                   DCCLI.CreateFees = TRUE         BY DCCLI.ValidFrom DESC:
  
             IF CAN-FIND(FIRST DayCampaign NO-LOCK WHERE
-                              DayCampaign.Brand        = gcBrand            AND
+                              DayCampaign.Brand        = Syst.Var:gcBrand            AND
                               DayCampaign.DCEvent      = DCCLI.DCEvent      AND
                               DayCampaign.DCType       = {&DCTYPE_DISCOUNT} AND
                               DayCampaign.TermFeeModel NE ""                AND
@@ -459,7 +468,7 @@ FOR EACH MobSub NO-LOCK WHERE
                   DCCLI.CreateFees = TRUE         BY DCCLI.ValidFrom DESC:
                   
             IF CAN-FIND(FIRST DayCampaign NO-LOCK WHERE
-                              DayCampaign.Brand        = gcBrand            AND
+                              DayCampaign.Brand        = Syst.Var:gcBrand            AND
                               DayCampaign.DCEvent      = DCCLI.DCEvent      AND
                               DayCampaign.DCEvent      = pcterm             AND
                               DayCampaign.DCType       = {&DCTYPE_DISCOUNT} AND
@@ -481,7 +490,7 @@ FOR EACH MobSub NO-LOCK WHERE
  
    IF pcInvGroup > "" AND
       NOT CAN-FIND(FIRST Customer WHERE 
-                         Customer.brand EQ gcBrand AND
+                         Customer.brand EQ Syst.Var:gcBrand AND
                          Customer.custnum EQ MobSub.CustNum AND
                          Customer.invGroup EQ pcInvGroup NO-LOCK) THEN
       NEXT EACH_MOBSUB.
@@ -491,7 +500,7 @@ FOR EACH MobSub NO-LOCK WHERE
 
    /* YDA-895 Voice or Data  */
    IF NOT CAN-FIND(FIRST CliType WHERE 
-                         CliType.Brand     = gcBrand AND
+                         CliType.Brand     = Syst.Var:gcBrand AND
                          CliType.CliType   = MobSub.CliType AND
                          CliType.UsageType = piUsageType NO-LOCK) THEN
       NEXT EACH_MOBSUB.
@@ -512,7 +521,7 @@ FOR EACH MobSub NO-LOCK WHERE
                LOOKUP(Order.StatusCode, {&ORDER_CLOSE_STATUSES}) = 0
            BY Order.CrStamp DESC:
        
-          fSplitTS(Order.CrStamp, 
+          Func.Common:mSplitTS(Order.CrStamp, 
                    OUTPUT ldtOrderDate,
                    OUTPUT liOrderTime).
           
@@ -537,14 +546,14 @@ FOR EACH MobSub NO-LOCK WHERE
       CASE pcOrderType:
          WHEN "sim" THEN DO:
            IF CAN-FIND(FIRST SubsTerminal NO-LOCK WHERE
-                             SubsTerminal.Brand = gcBrand AND
+                             SubsTerminal.Brand = Syst.Var:gcBrand AND
                              SubsTerminal.MsSeq = MobSub.MsSeq AND
                              SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE})
                              THEN NEXT EACH_MOBSUB.
          END.
          WHEN "terminal" THEN DO:
            IF NOT CAN-FIND(FIRST SubsTerminal NO-LOCK WHERE
-                                 SubsTerminal.Brand = gcBrand AND
+                                 SubsTerminal.Brand = Syst.Var:gcBrand AND
                                  SubsTerminal.MsSeq = MobSub.MsSeq AND
                                  SubsTerminal.TerminalType = {&TERMINAL_TYPE_PHONE})
                                  THEN NEXT EACH_MOBSUB.
@@ -552,6 +561,10 @@ FOR EACH MobSub NO-LOCK WHERE
          OTHERWISE NEXT EACH_MOBSUB.
       END CASE.
    END.
+
+   IF pcSegment > "" AND fGetSegment(Mobsub.custnum, 0) NE pcSegment THEN
+      NEXT EACH_MOBSUB.
+ 
 
    /* Subscription type */
    IF LOOKUP(pcCliType,lcBundleCLITypes) > 0 AND
@@ -569,10 +582,10 @@ FOR EACH MobSub NO-LOCK WHERE
       lcOtherBundle = ENTRY(liCount,pcOtherBundles).
       CASE lcOtherBundle:
          WHEN "BONO_VOIP" THEN
-            IF fGetActiveSpecificBundle(Mobsub.MsSeq,fMakeTS(),lcOtherBundle) = ""
+            IF fGetActiveSpecificBundle(Mobsub.MsSeq,Func.Common:mMakeTS(),lcOtherBundle) = ""
             THEN NEXT EACH_MOBSUB.
          WHEN "DSS" THEN
-            IF NOT fIsDSSActive(MobSub.CustNum,fMakeTS()) THEN NEXT EACH_MOBSUB.
+            IF NOT fIsDSSActive(MobSub.CustNum,Func.Common:mMakeTS()) THEN NEXT EACH_MOBSUB.
          OTHERWISE NEXT.
       END. /* CASE lcOtherBundle: */
    END. /* DO liCount = 1 TO liNumberOfBundles: */
@@ -611,6 +624,5 @@ FOR EACH MobSub NO-LOCK WHERE
 END.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.
 

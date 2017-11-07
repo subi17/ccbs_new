@@ -1,19 +1,19 @@
-SimMan1: SimMan
+bulkload: SimMan
   Mancode: "G&D"
   ManName: "G&D"
   Brand: "1"
 
-SimMan2: SimMan
+bulkload: SimMan
   Mancode: "GEMALTO"
   ManName: "Gemalto"
   Brand: "1"
 
-SimMan3: SimMan
+bulkload: SimMan
   Mancode: "MORPHO"
   ManName: "Morpho"
   Brand: "1"
 
-SimMan4: SimMan
+bulkload: SimMan
   Mancode: "OBERHTUR"
   ManName: "Oberhtur"
   Brand: "1"

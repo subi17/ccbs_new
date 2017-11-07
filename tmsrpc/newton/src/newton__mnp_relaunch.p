@@ -18,9 +18,16 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i} 
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
+{Func/orderfunc.i}
+{Func/fcustdata.i}
+{Syst/eventval.i}
+
 /* Input parameters */
-DEF VAR piOrderId     AS INT NO-UNDO.
+DEF VAR pcTenant      AS CHAR NO-UNDO.
+DEF VAR piOrderId     AS INT  NO-UNDO.
 DEF VAR pcOldOperator AS CHAR NO-UNDO.
 DEF VAR pcOldICC      AS CHAR NO-UNDO.
 DEF VAR pcIDType      AS CHAR NO-UNDO.
@@ -43,9 +50,11 @@ DEF VAR pcMemoContent AS CHARACTER NO-UNDO.
 /* Output parameters */
 DEF VAR result AS LOGICAL.
 
-IF validate_request(param_toplevel_id,"struct") = ? THEN RETURN.
+IF validate_request(param_toplevel_id,"string,struct") = ? THEN RETURN.
 
-pcStruct = get_struct(param_toplevel_id,"").
+pcTenant = get_string(param_toplevel_id,"0").
+pcStruct = get_struct(param_toplevel_id,"1").
+
 lcstruct = validate_struct(pcStruct, "order_id!,old_operator!,old_icc!,id_type!,customer_id!,username!,company,first_name,surname1,surname2,memo!").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
@@ -59,13 +68,15 @@ pcCreator     = "VISTA_" + get_string(pcStruct,"username").
 
 IF TRIM(pcCreator) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
+Syst.Var:katun = pcCreator.
+
 IF pcIDType = "CIF" THEN
    pcCompany     = get_string(pcStruct,"company").
-ELSE ASSIGN
-   pcFirstName   = get_string(pcStruct,"first_name")
-   pcSurname1    = get_string(pcStruct,"surname1")
-   pcSurname2    = get_string(pcStruct,"surname2") WHEN
-                   LOOKUP("surname2",lcStruct) > 0.
+ELSE 
+   ASSIGN
+       pcFirstName = get_string(pcStruct,"first_name")
+       pcSurname1  = get_string(pcStruct,"surname1")
+       pcSurname2  = get_string(pcStruct,"surname2") WHEN LOOKUP("surname2",lcStruct) > 0.
 
 pcMemoStruct = get_struct(pcStruct,"memo").
 pcMemoTitle = get_string(pcMemoStruct,"title").
@@ -73,23 +84,29 @@ pcMemoContent = get_string(pcMemoStruct,"content").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-/* validation starts */
-FIND FIRST Order WHERE
-           Order.Brand = "1" AND
-           Order.OrderId = piOrderId EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+{newton/src/settenant.i pcTenant}
 
+/* validation starts */
+FIND FIRST Order WHERE Order.Brand = "1" AND Order.OrderId = piOrderId EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
 IF LOCKED Order THEN 
    RETURN appl_err("Order record is locked!").
 IF NOT AVAIL Order THEN 
    RETURN appl_err(SUBST("Order &1 not found!", piOrderId)). 
 
-FIND OrderCustomer WHERE
-   OrderCustomer.Brand = "1" AND
-   OrderCustomer.OrderID = Order.OrderId AND
-   OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
+FIND OrderCustomer OF Order NO-LOCK WHERE
+   OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER} NO-ERROR.
+
+IF NOT AVAILABLE OrderCustomer
+THEN DO:
+   FIND OrderCustomer WHERE
+      OrderCustomer.Brand = "1" AND
+      OrderCustomer.OrderID = Order.OrderId AND
+      OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-LOCK NO-ERROR.
+END.
 
 IF NOT AVAIL OrderCustomer THEN 
    RETURN appl_err("OrderCustomer not found!").
+
 
 IF Order.StatusCode NE "73" THEN
    RETURN appl_err("Cannot create new MNP process with order status " + 
@@ -108,22 +125,15 @@ IF Order.OldPayType AND pcOldICC EQ "" THEN DO:
    RETURN appl_err("ICC is missing").
 END.
 
-{Syst/commpaa.i}
-katun = pcCreator.
-gcBrand = "1".
-{Func/orderfunc.i}
-{Func/fcustdata.i}
-{Syst/eventval.i}
-
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
 END.
 
 IF Order.CurrOper NE pcOldOperator THEN DO:
    
    FIND FIRST MNPOperator WHERE
-              MNPOperator.Brand = gcBrand AND
+              MNPOperator.Brand = Syst.Var:gcBrand AND
               MNPOperator.OperName = pcOldOperator
    NO-LOCK NO-ERROR.
    IF NOT AVAIL MNPOperator THEN 
@@ -202,7 +212,7 @@ FIND CURRENT Order NO-LOCK.
 CREATE Memo.
 ASSIGN
     Memo.CreStamp  = {&nowTS}
-    Memo.Brand     = gcBrand
+    Memo.Brand     = Syst.Var:gcBrand
     Memo.HostTable = "Order"
     Memo.KeyValue  = STRING(Order.OrderId)
     Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
@@ -216,7 +226,7 @@ IF AVAIL MNPProcess THEN DO:
    CREATE Memo.
    ASSIGN
        Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = gcBrand
+       Memo.Brand     = Syst.Var:gcBrand
        Memo.HostTable = "MNPProcess"
        Memo.KeyValue  = STRING(MNPProcess.MNPSeq)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
@@ -227,9 +237,7 @@ END.
 
 fCleanEventObjects().
       
-
 add_boolean(response_toplevel_id, "", true).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

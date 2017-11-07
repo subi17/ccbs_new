@@ -14,10 +14,9 @@
  * @fixed_line  cdr_datastruct;struct;contains needed CDR information as specified above ruby stub implementation
  */
 {Syst/commpaa.i}
-katun = "Newton RPC".
-gcBrand = "1".
+Syst.Var:katun = "Newton RPC".
+Syst.Var:gcBrand = "1".
 
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fdestcountry.i}
 {Func/callquery.i}
@@ -98,12 +97,7 @@ IF TRIM(pcUsername) EQ "" THEN RETURN appl_err("username is empty").
 IF LOOKUP(pcSearchMode,({&NORMAL} + "," + {&DETAILED})) = 0 
    THEN pcSearchMode = {&NORMAL}.
 
-FIND FIRST mobsub WHERE
-           mobsub.msseq = piMsSeq
-NO-LOCK NO-ERROR.
-
-IF NOT AVAILABLE mobsub THEN
-   RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
+{newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
 
 FIND FIRST CliType WHERE
            CliType.CliType = MobSub.CliType
@@ -130,7 +124,7 @@ END. /* IF pcUserName EQ "miyoigo" THEN DO: */
 lcNonCombinedData = fCParamC("NON_COMBINED_DATA_ROWS").
 
 ASSIGN ldaFirstDay = DATE(MONTH(pdStartDate),1,YEAR(pdStartDate))
-       ldaLastDay  = fLastDayOfMonth(pdEndDate).
+       ldaLastDay  = Func.Common:mLastDayOfMonth(pdEndDate).
 
 fGetMsOwnerTempTable(MobSub.Custnum,ldaFirstDay,ldaLastDay,
                      TRUE,MobSub.PayType).
@@ -240,7 +234,7 @@ FUNCTION fResponseRow RETURNS LOGICAL
 
    /* country name for roaming */
    IF LOOKUP(STRING(ihCDR::SpoCMT),{&ROAMING_CALLCASE}) > 0 THEN
-      lcCCNName = fDestCountryName(gcBrand,
+      lcCCNName = fDestCountryName(Syst.Var:gcBrand,
                                   1,
                                   ihCDR::SpoCMT,
                                   ihCDR::DateSt,
@@ -252,7 +246,7 @@ FUNCTION fResponseRow RETURNS LOGICAL
    /* ServiceName for Premium Number */
    ELSE DO:
       FIND FIRST BillItem WHERE
-                 BillItem.Brand    = gcBrand AND
+                 BillItem.Brand    = Syst.Var:gcBrand AND
                  BillItem.BillCode = ttCall.BillCode NO-LOCK NO-ERROR.
       IF AVAILABLE BillItem AND BillItem.BIGroup = "6" THEN
          lcCCNName = ttCall.ServiceName.
@@ -444,8 +438,8 @@ FUNCTION fCollectCdrs RETURNS LOGICAL
 EMPTY TEMP-TABLE ttCall.
    
 fMobCDRCollect(INPUT TRIM(STRING(MobSub.PayType,"pre/post")),
-               INPUT gcBrand,
-               INPUT katun,
+               INPUT Syst.Var:gcBrand,
+               INPUT Syst.Var:katun,
                INPUT pdStartDate,
                INPUT pdEndDate,
                INPUT 0,
@@ -514,7 +508,7 @@ END.
 /* Create CallScanner record from XML-RPC query */
 CREATE CallScanner.
 ASSIGN
-   CallScanner.TMSTime     = fmakeTS()
+   CallScanner.TMSTime     = Func.Common:mMakeTS()
    CallScanner.UserCode    = pcUserName 
    CallScanner.SystemID    = "XFERA_WEB" 
    CallScanner.EventType   = "CLI"
@@ -537,7 +531,6 @@ FINALLY:
    EMPTY TEMP-TABLE ttCall.
    EMPTY TEMP-TABLE ttData.
    EMPTY TEMP-TABLE ttMsOwner.
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-   IF VALID-HANDLE(tthCDR) THEN DELETE OBJECT tthCDR NO-ERROR.
+      IF VALID-HANDLE(tthCDR) THEN DELETE OBJECT tthCDR NO-ERROR.
 END.
 /* EOF newton_get_cdr_details.p */

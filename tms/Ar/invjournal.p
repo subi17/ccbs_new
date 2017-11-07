@@ -113,6 +113,8 @@ DEF TEMP-TABLE TCGMember NO-UNDO
 FIND FIRST ttCriter NO-ERROR.
 IF NOT AVAILABLE ttCriter THEN RETURN "ERROR:Criteria not defined".
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
 
 form header
    viiva1 at 1 SKIP
@@ -123,7 +125,7 @@ form header
       ttCriter.InvDate2 FORMAT "99-99-9999"
    ttCriter.DenyPrint FORMAT "DENIED/" at 80  
    ttCriter.OnlyUnpaid FORMAT "UNPAID/" at 90
-   STRING(pvm,"99-99-99") at 107 SKIP
+   STRING(TODAY,"99-99-99") at 107 SKIP
    viiva2 at 1 SKIP(1)
 
    "Invoice"     at 1
@@ -155,7 +157,7 @@ form header
       lcInvGroup FORMAT "x(25)"
      ttCriter.InvDate1 at 42 FORMAT "99-99-9999" "-" 
      ttCriter.InvDate2 FORMAT "99-99-9999"
-     STRING(pvm,"99-99-99") at 107 SKIP
+     STRING(TODAY,"99-99-99") at 107 SKIP
    viiva2 at 1 SKIP(1)
    "Account" at 1 "Amt Debit" at 22 "Amt Credit" at 38 SKIP
    viiva3 at 1 SKIP
@@ -240,12 +242,12 @@ IF NOT llExtGrp THEN DO:
 END.
 
 ELSE DO:
-   ASSIGN cgcustno1 = 99999999
+   ASSIGN cgcustno1 = 999999999
           cgcustno2 = 1. 
 
    FOR EACH TCustGroup,
        EACH cgmember NO-LOCK WHERE
-            cgMember.Brand     = gcBrand AND
+            cgMember.Brand     = Syst.Var:gcBrand AND
             cgmember.custgroup = Tcustgroup.custgroup:
 
       FIND FIRST tcgmember WHERE 
@@ -269,7 +271,7 @@ IF ttCriter.CustNum1 NE ttCriter.CustNum2 THEN ASSIGN
 
 IF ttCriter.InvGroup > "" THEN DO:
    FIND InvGroup WHERE 
-        InvGroup.Brand    = gcBrand AND
+        InvGroup.Brand    = Syst.Var:gcBrand AND
         InvGroup.InvGroup = ttCriter.InvGroup NO-LOCK NO-ERROR.
    lcInvGroup = ttCriter.InvGroup + " " +   
                 (IF AVAILABLE InvGroup THEN InvGroup.IGName ELSE "").
@@ -279,7 +281,7 @@ ELSE lcInvGroup = "ALL".
 
 runko:
 FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE             
-         Invoice.Brand      = gcBrand             AND 
+         Invoice.Brand      = Syst.Var:gcBrand             AND 
          Invoice.InvDate   >= ttCriter.InvDate1   AND 
          Invoice.InvDate   <= ttCriter.InvDate2   AND 
          Invoice.ExtInvID  >= ttCriter.ExtInvID1  AND
@@ -364,8 +366,7 @@ BY Invoice.ExtInvID:
               FIRST OrderCustomer OF Order NO-LOCK WHERE
                     OrderCustomer.RowType = Order.InvCustRole:
                 
-             lcCustName = DYNAMIC-FUNCTION("fPrintOrderName" IN ghFunc1,
-                                           BUFFER OrderCustomer).
+             lcCustName = Func.Common:mPrintOrderName(BUFFER OrderCustomer).
           END.                                     
 
        END.        

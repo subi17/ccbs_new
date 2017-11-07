@@ -1,99 +1,99 @@
-DialType1: DialType
+bulkload: DialType
   DTName: "General"
 
-DialType2: DialType
+bulkload: DialType
   DialType: 1
   DTName: "Fixed Voice (N/A)"
 
-DialType3: DialType
+bulkload: DialType
   DialType: 2
   DTName: "SMS (N/A)"
 
-DialType4: DialType
+bulkload: DialType
   DialType: 3
   DTName: "Fixed IP Data (N/A)"
 
-DialType5: DialType
+bulkload: DialType
   DialType: 4
   DTName: "Mobile Voice MO"
 
-DialType6: DialType
+bulkload: DialType
   DialType: 5
   DTName: "SMS MO"
 
-DialType7: DialType
+bulkload: DialType
   DialType: 6
   DTName: "Mobile data (N/A)"
 
-DialType8: DialType
+bulkload: DialType
   DialType: 7
   DTName: "GPRS MO"
 
-DialType9: DialType
+bulkload: DialType
   DialType: 8
   DTName: "Mobile fax (N/A)"
 
-DialType10: DialType
+bulkload: DialType
   DialType: 9
   DTName: "Roaming MT outside EU"
 
-DialType11: DialType
+bulkload: DialType
   DialType: 10
   DTName: "MMS MO"
 
-DialType12: DialType
+bulkload: DialType
   DialType: 11
   DTName: "Mobile HighSpeed Data (N/A)"
 
-DialType13: DialType
+bulkload: DialType
   DialType: 12
   DTName: "Call Forwarding MO"
 
-DialType14: DialType
+bulkload: DialType
   DialType: 13
   DTName: "VAS MO"
 
-DialType15: DialType
+bulkload: DialType
   DialType: 14
   DTName: "VAS MT"
 
-DialType16: DialType
+bulkload: DialType
   DialType: 15
   DTName: "VAS MMS MO"
 
-DialType17: DialType
+bulkload: DialType
   DialType: 16
   DTName: "VAS MMS MT"
 
-DialType18: DialType
+bulkload: DialType
   DialType: 20
   DTName: "Voice short number (type1)"
 
-DialType19: DialType
+bulkload: DialType
   DialType: 21
   DTName: "Voice short number (type2)"
 
-DialType20: DialType
+bulkload: DialType
   DialType: 22
   DTName: "Voice short number (type3)"
 
-DialType21: DialType
+bulkload: DialType
   DialType: 23
   DTName: "Fixed Voice short number (type1)"
 
-DialType22: DialType
+bulkload: DialType
   DialType: 24
   DTName: "Fixed Voice short number (type2)"
 
-DialType23: DialType
+bulkload: DialType
   DialType: 41
   DTName: "Roaming MO inside EU"
 
-DialType24: DialType
+bulkload: DialType
   DialType: 47
   DTName: "Roaming MT inside EU"
 
-DialType25: DialType
+bulkload: DialType
   DialType: 50
   DTName: "Fixed Voice Bdest"
 

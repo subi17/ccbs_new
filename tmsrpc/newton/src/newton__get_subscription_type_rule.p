@@ -22,12 +22,10 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-katun = "Newton".
-gcBrand = "1".
+Syst.Var:katun = "Newton".
+Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
-{Func/date.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fixedfee.i}
 {Mm/fbundle.i}
@@ -86,6 +84,9 @@ DEF VAR lcPostpaidDataBundles  AS CHAR NO-UNDO.
 DEF VAR lcDataBundleCLITypes   AS CHAR NO-UNDO.
 DEF VAR liFeePeriod       AS INT  NO-UNDO.
 DEF VAR liOrderId AS INT NO-UNDO. 
+/* Additional line mobile only ALFMO-53 */
+DEF VAR llAddline50Disc AS LOGICAL NO-UNDO.
+DEF VAR llAddline20Disc AS LOGICAL NO-UNDO.
 
 /* q25refinance_remaining Quota 25 refinance remaining amount */
 DEF VAR ldeQ25RefiRemain AS DECIMAL NO-UNDO.
@@ -101,10 +102,7 @@ pcTariffBundle  = get_string(param_toplevel_id,"2").  /* tariff_bundle */
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST MobSub NO-LOCK WHERE
-           MobSub.MsSeq = piMsSeq NO-ERROR.
-IF NOT AVAILABLE MobSub THEN
-   RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
+{newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
 
 IF pcNewCLIType = "" OR pcNewCLIType = ? THEN
    RETURN appl_err("Invalid New CLIType").
@@ -129,9 +127,9 @@ ELSE pcTariffBundle = "".
 
 ASSIGN
    ldaSTCDates[1] = TODAY + 1
-   ldaSTCDates[2] = fLastDayOfMonth(TODAY) + 1
-   ldeNextMonthTS = fMake2DT(ldaSTCDates[2],0)
-   ldeEndTS       = fMake2DT(fLastDayOfMonth(TODAY),86399).
+   ldaSTCDates[2] = Func.Common:mLastDayOfMonth(TODAY) + 1
+   ldeNextMonthTS = Func.Common:mMake2DT(ldaSTCDates[2],0)
+   ldeEndTS       = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(TODAY),86399).
 
 lliSTCAllowed = fIsiSTCAllowed(INPUT Mobsub.MsSeq).
 
@@ -155,7 +153,7 @@ FUNCTION fAddWarningStruct RETURNS LOGICAL:
    lcBono = fGetCurrentSpecificBundle(Mobsub.MsSeq,"BONO").
 
    IF lcBono > "" THEN DO:
-      IF fMatrixAnalyse(gcBrand,
+      IF fMatrixAnalyse(Syst.Var:gcBrand,
                         "PERCONTR",
                         "PerContract;SubsTypeTo",
                         lcBono + ";" + pcNewCLIType,
@@ -173,6 +171,12 @@ FUNCTION fAddWarningStruct RETURNS LOGICAL:
       add_string(warning_array,"","DSS1_TERMINATION").
    IF llDSS2Term THEN
       add_string(warning_array,"","DSS2_TERMINATION").
+
+   /* ALFMO-53 */
+   IF llAddline50Disc THEN
+      add_string(warning_array,"","STC_HAS_50_PER_ADDLINE").
+   IF llAddline20Disc THEN
+      add_string(warning_array,"","STC_HAS_20_PER_ADDLINE").
 
 END FUNCTION.
 
@@ -242,11 +246,11 @@ FUNCTION fGetReferenceTariff RETURNS CHARACTER
 
    IF pdtExtentDate <> ? THEN
       ASSIGN
-         ldTS        = fHMS2TS(pdtExtentDate,"00:00:00")
+         ldTS        = Func.Common:mHMS2TS(pdtExtentDate,"00:00:00")
          lcReqParam2 = "update".
    ELSE
       ASSIGN
-         ldTS        = fHMS2TS(pdtValidFrom,"00:00:00")
+         ldTS        = Func.Common:mHMS2TS(pdtValidFrom,"00:00:00")
          lcReqParam2 = "act,recreate".
 
    FIND FIRST bufMsRequest WHERE
@@ -311,7 +315,7 @@ FUNCTION fGetQ25RefRemainingAmt RETURNS DECIMAL
                              DAY(idaCountFrom).
 
    FOR EACH FixedFee NO-LOCK USE-INDEX HostTable WHERE
-            FixedFee.Brand     EQ gcBrand        AND 
+            FixedFee.Brand     EQ Syst.Var:gcBrand        AND 
             FixedFee.Custnum   EQ iiCustnum      AND
             FixedFee.HostTable EQ "MobSub"       AND
             FixedFee.KeyValue  EQ STRING(iMsSeq) AND
@@ -389,7 +393,7 @@ IF NOT MobSub.PayType THEN DO:
                               MONTH(ldaSTCDates[liLoop]).
 
          FOR EACH SingleFee USE-INDEX Custnum WHERE
-                  SingleFee.Brand       = gcBrand AND
+                  SingleFee.Brand       = Syst.Var:gcBrand AND
                   SingleFee.Custnum     = Mobsub.InvCust AND
                   SingleFee.HostTable   = "Mobsub" AND
                   SingleFee.KeyValue    = STRING(Mobsub.MsSeq) AND
@@ -413,7 +417,7 @@ IF NOT MobSub.PayType THEN DO:
             DCCLI.ValidTo   >= ldaSTCDates[1] AND
             DCCLI.CreateFees = TRUE,
       FIRST DayCampaign WHERE
-            DayCampaign.Brand = gcBrand AND
+            DayCampaign.Brand = Syst.Var:gcBrand AND
             DayCampaign.DCEvent = DCCLI.DCEvent AND
             DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND
             DayCampaign.TermFeeModel NE "" AND
@@ -428,7 +432,7 @@ IF NOT MobSub.PayType THEN DO:
                                           DayCampaign.TermFeeModel,
                                           TODAY).
          FIND FIRST FMItem NO-LOCK WHERE
-                    FMItem.Brand     = gcBrand       AND
+                    FMItem.Brand     = Syst.Var:gcBrand       AND
                     FMItem.FeeModel  = DayCampaign.TermFeeModel AND
                     FMItem.PriceList = lcPriceList AND
                     FMItem.FromDate <= TODAY     AND
@@ -492,24 +496,86 @@ IF NOT MobSub.PayType THEN DO:
 
    lcPenaltyCode = TRIM(lcPenaltyCode,"+").
 
+   /* Check 50% and 20% additional line discount */
+
+   FIND FIRST Customer WHERE
+              Customer.CustNum = MobSub.AgrCust NO-LOCK NO-ERROR.
+
+   /* Mobile only additional line ALFMO-53 20% */
+   FIND FIRST DiscountPlan WHERE
+              DiscountPlan.Brand = Syst.Var:gcBrand AND
+              DiscountPlan.DPRuleID = ENTRY(LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_20}) NO-LOCK NO-ERROR.
+
+   IF AVAIL DiscountPlan THEN 
+   DO: 
+      IF AVAIL Customer AND 
+      LOOKUP(CLIType.Clitype, {&ADDLINE_CLITYPES}) = 0 AND
+      CAN-FIND(FIRST DPMember WHERE
+                     DPMember.DPId      = DiscountPlan.DPId AND
+                     DPMember.HostTable = "MobSub" AND
+                     DPMember.KeyValue  = STRING(MobSub.MsSeq) AND
+                     DPMember.ValidTo   >= TODAY) THEN
+      ASSIGN llAddline20Disc = TRUE.   
+   END.
+
+   /* Mobile only additional line ALFMO-53 50% */
+
+   FIND FIRST DiscountPlan WHERE
+              DiscountPlan.Brand = Syst.Var:gcBrand AND
+              DiscountPlan.DPRuleID = ENTRY(LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}) NO-LOCK NO-ERROR.
+
+   IF AVAIL DiscountPlan THEN 
+   DO: 
+      IF AVAIL Customer AND
+      CAN-FIND(FIRST DPMember WHERE
+                     DPMember.DPId      = DiscountPlan.DPId AND
+                     DPMember.HostTable = "MobSub" AND
+                     DPMember.KeyValue  = STRING(MobSub.MsSeq) AND
+                     DPMember.ValidTo   >= TODAY) THEN
+      DO:
+         IF LOOKUP(CLIType.Clitype, {&ADDLINE_CLITYPES}) = 0 OR
+            NOT fCheckExistingMobileOnly(Customer.CustIDType,Customer.OrgID,CLIType.CLIType) THEN
+            ASSIGN llAddline50Disc = TRUE.
+      END.
+   END.
+
+   FIND FIRST DiscountPlan WHERE
+              DiscountPlan.Brand = Syst.Var:gcBrand AND
+              DiscountPlan.DPRuleID = ENTRY(LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}) NO-LOCK NO-ERROR.
+
+   IF AVAIL DiscountPlan THEN 
+   DO: 
+      IF AVAIL Customer AND
+      CAN-FIND(FIRST DPMember WHERE
+                     DPMember.DPId      = DiscountPlan.DPId AND
+                     DPMember.HostTable = "MobSub" AND
+                     DPMember.KeyValue  = STRING(MobSub.MsSeq) AND
+                     DPMember.ValidTo   >= TODAY) THEN
+      DO:
+         IF LOOKUP(CLIType.Clitype, {&ADDLINE_CLITYPES}) = 0 OR
+            NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,CLIType.CLIType) THEN
+            ASSIGN llAddline50Disc = TRUE.
+      END.
+   END.
+
    /* Check Additional Line */
    IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                     CLIType.Brand = gcBrand AND
+                     CLIType.Brand = Syst.Var:gcBrand AND
                      CLIType.CLIType = MobSub.TariffBundle AND
                      CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) AND
       NOT CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                         CLIType.Brand = gcBrand AND
+                         CLIType.Brand = Syst.Var:gcBrand AND
                          CLIType.CLIType = pcTariffBundle AND
                          CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) THEN DO:
 
       MOBSUB_LOOP:
       FOR EACH lbMobSub NO-LOCK WHERE
-               lbMobSub.Brand   = gcBrand AND
+               lbMobSub.Brand   = Syst.Var:gcBrand AND
                lbMobSub.InvCust = Mobsub.CustNum AND
                lbMobSub.PayType = FALSE AND
                lbMobSub.MsSeq NE Mobsub.MsSeq,
          FIRST bCLIType NO-LOCK WHERE
-               bCLIType.Brand = gcBrand AND
+               bCLIType.Brand = Syst.Var:gcBrand AND
                bCLIType.CLIType = (IF lbMobsub.TariffBundle > ""
                                   THEN lbMobsub.TariffBundle
                                   ELSE lbMobsub.CLIType) AND
@@ -531,7 +597,7 @@ IF NOT MobSub.PayType THEN DO:
    END.
 
    /* Check DSS availability */
-   lcDSSBundleId = fGetActiveDSSId(MobSub.CustNum,fMakeTS()).
+   lcDSSBundleId = fGetActiveDSSId(MobSub.CustNum,Func.Common:mMakeTS()).
    IF lcDSSBundleId > "" AND
       NOT fOngoingDSSTerm(MobSub.CustNum,ldeEndTS) THEN DO:
       IF lcDSSBundleId = "DSS2" THEN DO:
@@ -561,5 +627,4 @@ END. /* IF NOT MobSub.PayType THEN DO: */
 fAddCLITypeStruct().
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

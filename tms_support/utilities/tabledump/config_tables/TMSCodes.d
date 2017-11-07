@@ -209,16 +209,21 @@
 "CLIType" "LineType" "MobSub" "0" "Entry" "" "" 1
 "CLIType" "LineType" "MobSub" "1" "Main" "" "" 1
 "CLIType" "LineType" "MobSub" "2" "Additional" "" "" 1
+"CLIType" "LineType" "MobSub" "3" "Extra" "" "" 1
 "CLIType" "PayType" "MobSub" "0" "Not defined" "" "" 1
 "CLIType" "PayType" "MobSub" "1" "Postpaid" "" "" 1
 "CLIType" "PayType" "MobSub" "2" "Prepaid" "" "" 1
-"CliType" "ServicePack" "Profile" "11" "Post paid" "" "" 1
-"CliType" "ServicePack" "Profile" "12" "Pre paid" "" "" 1
 "CliType" "ServicePack" "Profile" "3" "Pre paid (no calls yet)" "" "" 1
 "CliType" "ServicePack" "Profile" "4" "Data postpaid" "" "" 1
+"CliType" "ServicePack" "Profile" "41" "Post paid" "" "" 1
+"CliType" "ServicePack" "Profile" "42" "Pre paid" "" "" 1
 "CLIType" "StatusCode" "MobSub" "0" "Inactive" "" "" 1
 "CLIType" "StatusCode" "MobSub" "1" "Active" "" "" 1
 "CLIType" "StatusCode" "MobSub" "2" "Retired" "" "" 1
+"CLIType" "TariffType" "MobSub" "0" "MobileOnly" "" "" 1
+"CLIType" "TariffType" "MobSub" "1" "Convergent" "" "" 1
+"CLIType" "TariffType" "MobSub" "2" "FixedOnly" "" "" 1
+"CLIType" "TariffType" "MobSub" "3" "Fusion" "" "" 1
 "CLIType" "UsageType" "MobSub" "1" "Voice" "" "" 1
 "CLIType" "UsageType" "MobSub" "2" "Data" "" "" 1
 "CLIType" "WebStatusCode" "MobSub" "0" "Inactive" "" "" 1
@@ -398,6 +403,11 @@
 "DumpFile" "FileCategory" "DumpFile" "TAX" "Tax reports" "Files including data and/or reports considering taxes" "" 1
 "DumpFile" "FileCategory" "DumpFile" "TMS" "TMS" "" "" 1
 "DumpFile" "FileCategory" "DumpFile" "TRACK" "Track" "" "" 1
+"DumpHPD" "UnitType" "DumpHPD" "days" "days" "" "" 1
+"DumpHPD" "UnitType" "DumpHPD" "hours" "hours" "" "" 1
+"DumpHPD" "UnitType" "DumpHPD" "months" "months" "" "" 1
+"DumpHPD" "UnitType" "DumpHPD" "weeks" "weeks" "" "" 1
+"DumpHPD" "UnitType" "DumpHPD" "years" "years" "" "" 1
 "EventLog" "EventLogStatus" "Timing" "0" "" "" "" 1
 "EventLog" "EventLogStatus" "Timing" "1" "Pending" "" "" 1
 "EventLog" "EventLogStatus" "Timing" "2" "OK" "" "" 1
@@ -643,6 +653,10 @@
 "invtext" "keyvalue" "EMAIL" "REMINDER" "Reminder" "" "" 1
 "invtext" "keyvalue" "EMAIL" "SendEmailInvoice" "Send Email Invoice" "" "" 1
 "InvText" "KeyValue" "EKIRJE" "SMSC" "SMSC Change" "" "" 1
+"Invtext" "KEYVALUE" "EMAIL" "SVA_Centralita" "" "" "" 0
+"Invtext" "KEYVALUE" "EMAIL" "SVA_FAXTOEMAIL" "" "" "" 0
+"Invtext" "KEYVALUE" "EMAIL" "SVA_IPFIJA" "" "" "" 0
+"Invtext" "KEYVALUE" "EMAIL" "SVA_OFFICE365" "" "" "" 0
 "ITSendLog" "RepType" "Report" "InvSpec" "Invoice's Call Specification" "" "" 1
 "ITSendLog" "RepType" "Report" "IT" "Information Text" "" "" 1
 "Limit" "Billing Permission" "Limit" "0" "Allowed" "" "" 1
@@ -986,9 +1000,13 @@
 "Order" "OldPayType" "Order" "1" "Postpaid" "" "" 1
 "Order" "OldPayType" "Order" "2" "Prepaid" "" "" 1
 "Order" "OrderChannel" "Order" "CC" "Customer care" "" "" 1
+"Order" "OrderChannel" "Order" "CC_PRO" "Customer care PRO" "" "" 1
 "Order" "OrderChannel" "Order" "Fusion_POS" "Fusion POS" "" "" 1
+"Order" "OrderChannel" "Order" "Fusion_POS_PRO" "Fusion POS PRO" "" "" 1
 "Order" "OrderChannel" "Order" "Fusion_Telesales" "Fusion Telesales" "" "" 1
+"Order" "OrderChannel" "Order" "Fusion_Telesales_PRO" "Fusion Telesales PRO" "" "" 1
 "Order" "OrderChannel" "Order" "POS" "Point of sales" "" "" 1
+"Order" "OrderChannel" "Order" "POS_PRO" "Point of sales PRO" "" "" 1
 "Order" "OrderChannel" "Order" "Renewal" "Renewals" "" "" 1
 "Order" "OrderChannel" "Order" "Renewal_CTC" "Renewal CTC" "" "" 1
 "Order" "OrderChannel" "Order" "Renewal_POS" "Renewal through POS" "" "" 1
@@ -997,6 +1015,7 @@
 "Order" "OrderChannel" "Order" "Retention" "Retention" "" "" 1
 "Order" "OrderChannel" "Order" "Self" "Self order" "" "" 1
 "Order" "OrderChannel" "Order" "Telesales" "Telesales" "" "" 1
+"Order" "OrderChannel" "Order" "Telesales_PRO" "Telesales PRO" "" "" 1
 "Order" "OrderType" "Order" "1" "New subscription" "" "" 1
 "Order" "OrderType" "Order" "2" "Renewal" "" "" 1
 "Order" "StatusCode" "Orders" "" "NEW" "" "" 0
@@ -1277,6 +1296,7 @@
 "RepText" "TextType" "Report" "23" "Delivery incident" "" "" 1
 "RepText" "TextType" "Report" "24" "Delivery incident measure" "" "" 1
 "RepText" "TextType" "Report" "25" "Profession" "" "" 1
+"RepText" "TextType" "Report" "26" "Barring" "" "" 1
 "RepText" "TextType" "Report" "3" "CCN" "" "" 1
 "RepText" "TextType" "Report" "31" "Discount plan" "" "" 1
 "RepText" "TextType" "Report" "32" "SMS" "" "" 1
@@ -1342,6 +1362,7 @@
 "requem" "92,0,1,2,3" "SubsLMenu" "1" "Publish invoices to Newton AND HPD" "" "" 1
 "requem" "93,0,1,2,3" "SubsLMenu" "1" "Publish invoices to IFS" "" "" 1
 "requem" "94,0,1,2,3,9" "SubsLMenu" "1" "Push invoice" "" "" 1
+"requem" "95,0,1,2,3,7,8,9" "SubsLMenu" "1" "Pro Migration" "" "" 1
 "RequestAction" "Action" "Request" "1" "Create" "" "" 1
 "RequestAction" "Action" "Request" "11" "Term-PenaltyFee" "" "" 1
 "RequestAction" "Action" "Request" "12" "Init-Terminate" "" "" 1
@@ -1371,7 +1392,9 @@
 "RoamTariff" "Service" "Roaming" "GPRS" "" "" "" 1
 "RoamTariff" "Service" "Roaming" "SMS" "" "" "" 1
 "RoamTariff" "Service" "Roaming" "VOICE" "" "" "" 1
+"Salesman" "SmPrefix" "IFS" "AA" "Advance Analytics" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AB" "B12 CROSS-SELLING" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "AE" "AON CROSS-SELLING OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AF" "AMPLIFFICA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AK" "ATAKAM DISTRIBUCION ONLINE" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AL" "Alcampo" "" "13" 0
@@ -1379,38 +1402,74 @@
 "Salesman" "SmPrefix" "IFS" "AN" "ATAKAM EMISION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AO" "AON CROSS-SELLING" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AP" "Apple" "" "28" 1
+"Salesman" "SmPrefix" "IFS" "AT" "ATAKAM DISTRIBUCION ONLINE" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "AW" "AON WEB" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AX" "Axia" "" "27" 0
+"Salesman" "SmPrefix" "IFS" "BA" "B12 Cross-Selling Outbound" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BE" "BYMOVIL EMISION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BF" "Backoffice Fusion" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BG" "Boulanger" "" "99" 0
 "Salesman" "SmPrefix" "IFS" "BL" "Vista internal users" "" "15" 0
 "Salesman" "SmPrefix" "IFS" "BM" "BYMOVIL RETENCION" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "BN" "B12 OUTBOUND" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "BO" "Backoffice Convergencia" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BR" "BYMOVIL RECEPCION" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "BT" "B12 DISTRIBUCION ONLINE" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "BW" "B12 WEB" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "BY" "ByMovil" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "CA" "Carrefour" "" "12" 0
+"Salesman" "SmPrefix" "IFS" "CE" "CANAL EXCLUSIVO NEGOCIOS" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "CL" "Casturtel Leon" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "CN" "CANCELACIONES MARKTEL" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "CO" "EOS OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "CP" "CASTURTEL PALENCIA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "CR" "" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "CT" "CASTURTEL EMISION" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "CV" "EOS ONLINE" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "CW" "CARRITO WEB" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "D2" "DOOR TO DOOR" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "DX" "Dextra" "" "27" 0
+"Salesman" "SmPrefix" "IFS" "EB" "EMERGIA BACKOFFICE" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "EM" "" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "EO" "CELLCOM EMISION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "EU" "Emision Unisono" "" "15" 0
+"Salesman" "SmPrefix" "IFS" "FR" "FACTORIA INBOUND OF" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "FW" "FACTORIA INBOUND ON" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "GC" "GSS CARTERA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "GE" "GSS EMISION" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "GM" "GSS MADRID OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "GR" "GSS RECEPCION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "GS" "GSS" "" "15" 0
+"Salesman" "SmPrefix" "IFS" "GW" "GSS WEB" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "KC" "KONECTA CARTERA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KH" "K-HABLS" "" "27" 0
+"Salesman" "SmPrefix" "IFS" "KN" "KONECTA OUTBOUND" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "KO" "KONECTA CROSS SELLING OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KR" "KONECTA RECEPCION" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "KW" "KONECTA WEB" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "KX" "KONECTA EMISION OUTBOUND" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "MA" "MADISON OUTBOUND" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "MB" "MARKTEL BO CANCELACIONES" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "MC" "MADISON CARTERA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MD" "Mundo Digital" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "MG" "MGM" "" "14" 0
+"Salesman" "SmPrefix" "IFS" "MI" "MARKTEL INBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MK" "MARKTEL CROSS-SELL" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "ML" "MARKTEL Retencion" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MM" "Media Markt" "" "18" 0
+"Salesman" "SmPrefix" "IFS" "MO" "MARKTEL ONLINE" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "MR" "MARKTEL INBOUND OF" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "MT" "MARKTEL OUTBOUND" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "MW" "MARKTEL INBOUND ON" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "NX" "ANEXA INBOUND" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "PA" "PHONE HOUSE CROSS-SELLING" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "PE" "Phone House Televenta Emision" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "PH" "The Phone House" "" "11" 0
 "Salesman" "SmPrefix" "IFS" "PJ" "PhoneHouse Retencion Jerez" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "PR" "Phone House Televenta Recepcion" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "RB" "Recepción Bilbao" "" "15" 0
 "Salesman" "SmPrefix" "IFS" "RC" "CASTURTEL RECEPCION" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "SE" "SERVINFORM OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "TA" "Tal Digital" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "TC" "Telecor" "" "25" 0
 "Salesman" "SmPrefix" "IFS" "TL" "TelAndCom" "" "26" 0
@@ -1422,6 +1481,7 @@
 "Salesman" "SmPrefix" "IFS" "UR" "Urende" "" "23" 0
 "Salesman" "SmPrefix" "IFS" "WE" "Web" "" "14" 0
 "Salesman" "SmPrefix" "IFS" "WH" "WHISBI" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "XA" "ANEXA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "YC" "YOIGO (Customer Care)" "" "15" 1
 "ServAttr" "APN" "B70" "1" "www.testi.net" "" "" 1
 "ServAttr" "APN" "B70" "2" "www.testi.org" "" "" 1

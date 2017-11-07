@@ -1,124 +1,124 @@
-MSStat1: MSStat
+bulkload: MSStat
   StatusCode: 0
   StatusName: ""
 
-MSStat2: MSStat
+bulkload: MSStat
   StatusCode: 1
   StatusName: "Available"
 
-MSStat3: MSStat
+bulkload: MSStat
   StatusCode: 2
   StatusName: "Reserved"
 
-MSStat4: MSStat
+bulkload: MSStat
   StatusCode: 3
   StatusName: "In use, Assigned to subscription"
 
-MSStat5: MSStat
+bulkload: MSStat
   StatusCode: 4
   StatusName: "Quarantine"
 
-MSStat6: MSStat
+bulkload: MSStat
   StatusCode: 5
   StatusName: "Barred"
 
-MSStat7: MSStat
+bulkload: MSStat
   StatusCode: 6
   StatusName: "MNP outported (own MSISDN range)"
 
-MSStat8: MSStat
+bulkload: MSStat
   StatusCode: 7
   StatusName: "Waiting Rescue"
 
-MSStat9: MSStat
+bulkload: MSStat
   StatusCode: 10
   StatusName: "MNP import cancelled (Other oper.MSISDN)"
 
-MSStat10: MSStat
+bulkload: MSStat
   StatusCode: 11
   StatusName: "Waiting return to original operator"
 
-MSStat11: MSStat
+bulkload: MSStat
   StatusCode: 12
   StatusName: "Returned to original operator"
 
-MSStat12: MSStat
+bulkload: MSStat
   StatusCode: 13
   StatusName: "MNP outported (Other operator's MSISDN)"
 
-MSStat13: MSStat
+bulkload: MSStat
   StatusCode: 14
   StatusName: "Return notice sent"
 
-MSStat14: MSStat
+bulkload: MSStat
   StatusCode: 15
   StatusName: "Returned from other operator"
 
-MSStat15: MSStat
+bulkload: MSStat
   StatusCode: 18
   StatusName: "1861709617121881N12245486C1E9B36renewal_"
 
-MSStat16: MSStat
+bulkload: MSStat
   StatusCode: 19
   StatusName: "1861279622559655N1654136510FD2E76renewal"
 
-MSStat17: MSStat
+bulkload: MSStat
   StatusCode: 21
   StatusName: "Available, not send to Vista"
 
-MSStat18: MSStat
+bulkload: MSStat
   StatusCode: 22
   StatusName: "In Use, Assigned to Order"
 
-MSStat19: MSStat
+bulkload: MSStat
   StatusCode: 24
   StatusName: "Failed MNP"
 
-MSStat20: MSStat
+bulkload: MSStat
   StatusCode: 25
   StatusName: "Waiting Outporting"
 
-MSStat21: MSStat
+bulkload: MSStat
   StatusCode: 26
   StatusName: "Waiting Terminating"
 
-MSStat22: MSStat
+bulkload: MSStat
   StatusCode: 27
   StatusName: "Process ongoing"
 
-MSStat23: MSStat
+bulkload: MSStat
   StatusCode: 29
   StatusName: "1861942647376221N12341629C37A646renewal_"
 
-MSStat24: MSStat
+bulkload: MSStat
   StatusCode: 48
   StatusName: "1862746620666546N33297703177476ccDELIVER"
 
-MSStat25: MSStat
+bulkload: MSStat
   StatusCode: 50
   StatusName: "1862615633528856N33289183173C06ccDELIVER"
 
-MSStat26: MSStat
+bulkload: MSStat
   StatusCode: 52
   StatusName: "1864313654396204N11913566BC8E056fusion_p"
 
-MSStat27: MSStat
+bulkload: MSStat
   StatusCode: 58
   StatusName: "1862413673000474N15826132FFB6DC6renewal_"
 
-MSStat28: MSStat
+bulkload: MSStat
   StatusCode: 70
   StatusName: "1862475622795175N33286173172836selfDELIV"
 
-MSStat29: MSStat
+bulkload: MSStat
   StatusCode: 72
   StatusName: "1862431633528806N33284883171FD6ccDELIVER"
 
-MSStat30: MSStat
+bulkload: MSStat
   StatusCode: 85
   StatusName: "1863780633601007N379392638EEFC6ccDELIVER"
 
-MSStat31: MSStat
+bulkload: MSStat
   StatusCode: 92
   StatusName: "1863381687519739N10329202A2E8076renewal_"
 

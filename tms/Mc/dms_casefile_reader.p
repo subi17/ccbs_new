@@ -10,8 +10,8 @@
 
 {Syst/commpaa.i}
 ASSIGN
-   katun   = "Cron"
-   gcBrand = "1".
+   Syst.Var:katun   = "Cron"
+   Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Syst/eventlog.i}
@@ -32,11 +32,10 @@ DEF VAR ldaFReadDate    AS DATE NO-UNDO.
 DEF VAR lcActionID      AS CHAR NO-UNDO.
 DEF VAR lcTableName     AS CHAR NO-UNDO.
 DEF VAR ldCurrentTimeTS AS DEC  NO-UNDO.
-DEF BUFFER bDMS FOR DMS.
 
 lcTableName = "DMS".
 lcActionID = {&DMS_CASEFILE_READER}.
-ldCurrentTimeTS = fMakeTS().
+ldCurrentTimeTS = Func.Common:mMakeTS().
 
 ASSIGN
    lcIncDir   = fCParam("DMS","TMS_IncDir")
@@ -71,7 +70,7 @@ IF fDMSOnOff() NE TRUE THEN RETURN.
 DO TRANS:
 
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.Var:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName NO-ERROR.
 
@@ -84,11 +83,11 @@ DO TRANS:
       /*First execution stamp*/
       CREATE ActionLog.
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.Var:gcBrand
          ActionLog.TableName    = lcTableName
          ActionLog.ActionID     = lcActionID
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
       RELEASE ActionLog.
       RETURN. /*No reporting in first time.*/
@@ -96,7 +95,7 @@ DO TRANS:
    ELSE DO:
       ASSIGN
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
 
       RELEASE Actionlog.
@@ -155,7 +154,7 @@ INPUT STREAM sFile CLOSE.
 
 DO TRANS:
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.Var:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName    AND
               ActionLog.ActionStatus NE  {&ACTIONLOG_STATUS_SUCCESS}
@@ -227,7 +226,7 @@ PROCEDURE pUpdateDMS:
       lcDocList       = ENTRY(8,pcLine,lcSep).
       
    FIND FIRST Order NO-LOCK WHERE
-              Order.Brand EQ gcBrand AND
+              Order.Brand EQ Syst.Var:gcBrand AND
               Order.OrderID EQ liOrderId NO-ERROR.
    IF NOT AVAIL Order THEN 
       RETURN "ERROR:ORDER NOT AVAILABLE:" + STRING(liOrderId).

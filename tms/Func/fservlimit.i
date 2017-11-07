@@ -707,72 +707,81 @@ FUNCTION fServiceLCounter2Temp RETURNS LOGICAL
    DEF VAR liPeriodFrom AS INT NO-UNDO. 
    DEF VAR liPeriodTo AS INT NO-UNDO. 
    DEF VAR ldeServiceLCounterAmt AS DEC NO-UNDO.
+   DEF VAR liPeriodType AS INT NO-UNDO.
 
-   ASSIGN
-      liPeriodFrom = YEAR(idaFromDate) * 100 + MONTH(idaFromDate)
-      liPeriodTo   = YEAR(idaToDate) * 100 + MONTH(idaToDate).
+   DO liPeriodType = 1 to 2:
 
-   FOR EACH ServiceLCounter NO-LOCK WHERE
-            ServiceLCounter.MsSeq   = iiMsSeq AND 
-            ServiceLCounter.Period >= liPeriodFrom AND 
-            ServiceLcounter.Period <= liPeriodTo:
+      IF liPeriodType = 1 THEN ASSIGN
+         liPeriodFrom = YEAR(idaFromDate) * 100 + MONTH(idaFromDate)
+         liPeriodTo   = YEAR(idaToDate) * 100 + MONTH(idaToDate).
+      ELSE ASSIGN
+         liPeriodFrom = (liPeriodFrom * 100) + 1
+         liPeriodTo   = (liPeriodTo * 100) + 31.
 
-      IF CAN-FIND(FIRST ttServiceLCounter WHERE
-                 ttServiceLCounter.MSSeq   = ServiceLCounter.MSSeq   AND
-                 ttServiceLCounter.SLSeq   = ServiceLCounter.SLSeq   AND
-                 ttServiceLCounter.Period  = ServiceLCounter.Period)
-      THEN NEXT. 
+      FOR EACH ServiceLCounter NO-LOCK WHERE
+               ServiceLCounter.MsSeq   = iiMsSeq AND
+               ServiceLCounter.Period >= liPeriodFrom AND
+               ServiceLcounter.Period <= liPeriodTo:
 
-      CREATE ttServiceLCounter.
-      BUFFER-COPY ServiceLCounter TO ttServiceLCounter.
-      ASSIGN
-      ttServiceLCounter.Amt    = 0
-      ttServiceLCounter.Latest = 0
-      ttServiceLCounter.Limit  = 0.
+         IF CAN-FIND(FIRST ttServiceLCounter WHERE
+                    ttServiceLCounter.MSSeq   = ServiceLCounter.MSSeq   AND
+                    ttServiceLCounter.SLSeq   = ServiceLCounter.SLSeq   AND
+                    ttServiceLCounter.Period  = ServiceLCounter.Period)
+         THEN NEXT.
+
+         CREATE ttServiceLCounter.
+         BUFFER-COPY ServiceLCounter TO ttServiceLCounter.
+         ASSIGN
+         ttServiceLCounter.Amt    = 0
+         ttServiceLCounter.Latest = 0
+         ttServiceLCounter.Limit  = 0.
+
+         FOR EACH SLCounterItem NO-LOCK WHERE
+                  SLCounterItem.MsSeq   = ServiceLCounter.MsSeq AND
+                  SLCounterItem.Period = ServiceLCounter.Period AND
+                  SLCounterItem.SLSeq = ServiceLCounter.SLSeq:
+
+            IF CAN-FIND(FIRST ttSLCounterItem WHERE
+                       ttSLCounterItem.MSSeq   = SLCounterItem.MSSeq   AND
+                       ttSLCounterItem.SLSeq   = SLCounterItem.SLSeq   AND
+                       ttSLCounterItem.Period  = SLCounterItem.Period AND
+                       ttSLCounterItem.SLCItem = SLCounterItem.SLCItem)
+            THEN NEXT.
+
+            CREATE ttSLCounterItem.
+            BUFFER-COPY SLCounterItem TO ttSLCounterItem.
+            ASSIGN
+               ttSLCounterItem.Picked = 0.
+         END.
+      END.
    
-      FOR EACH SLCounterItem NO-LOCK WHERE
-               SLCounterItem.MsSeq   = ServiceLCounter.MsSeq AND 
-               SLCounterItem.Period = ServiceLCounter.Period AND 
-               SLCounterItem.SLSeq = ServiceLCounter.SLSeq:
+      IF liPeriodType EQ 1 THEN
+      FOR EACH ServiceLCounter NO-LOCK WHERE
+               ServiceLCounter.Custnum = iiCustnum AND 
+               ServiceLCounter.Period >= liPeriodFrom AND 
+               ServiceLcounter.Period <= liPeriodTo:
 
-         IF CAN-FIND(FIRST ttSLCounterItem WHERE
-                    ttSLCounterItem.MSSeq   = SLCounterItem.MSSeq   AND
-                    ttSLCounterItem.SLSeq   = SLCounterItem.SLSeq   AND
-                    ttSLCounterItem.Period  = SLCounterItem.Period AND
-                    ttSLCounterItem.SLCItem = SLCounterItem.SLCItem)
+         IF CAN-FIND(FIRST ttServiceLCounter WHERE
+                    ttServiceLCounter.CustNum = ServiceLCounter.CustNum AND 
+                    ttServiceLCounter.SLSeq   = ServiceLCounter.SLSeq   AND
+                    ttServiceLCounter.Period  = ServiceLCounter.Period)
          THEN NEXT. 
 
-         CREATE ttSLCounterItem.
-         BUFFER-COPY SLCounterItem TO ttSLCounterItem.
+         CREATE ttServiceLCounter.
+         BUFFER-COPY ServiceLCounter TO ttServiceLCounter.
+         ASSIGN ttServiceLCounter.Latest =  0
+                ttServiceLCounter.Amt = 0
+                ttServiceLCounter.Limit = 0.
+
+         /* Get other bundle usages */
          ASSIGN
-            ttSLCounterItem.Picked = 0.
+            ldeServiceLCounterAmt = fGetOtherBundleUsages(ServiceLCounter.Custnum,
+                                                          ServiceLCounter.Period)
+            ttServiceLCounter.Amt = (ldeServiceLCounterAmt * 1024 * 1024).
       END.
-   END.
-
-   FOR EACH ServiceLCounter NO-LOCK WHERE
-            ServiceLCounter.Custnum = iiCustnum AND 
-            ServiceLCounter.Period >= liPeriodFrom AND 
-            ServiceLcounter.Period <= liPeriodTo:
-
-      IF CAN-FIND(FIRST ttServiceLCounter WHERE
-                 ttServiceLCounter.CustNum = ServiceLCounter.CustNum AND 
-                 ttServiceLCounter.SLSeq   = ServiceLCounter.SLSeq   AND
-                 ttServiceLCounter.Period  = ServiceLCounter.Period)
-      THEN NEXT. 
-
-      CREATE ttServiceLCounter.
-      BUFFER-COPY ServiceLCounter TO ttServiceLCounter.
-      ASSIGN ttServiceLCounter.Latest =  0
-             ttServiceLCounter.Amt = 0
-             ttServiceLCounter.Limit = 0.
-
-      /* Get other bundle usages */
-      ASSIGN
-         ldeServiceLCounterAmt = fGetOtherBundleUsages(ServiceLCounter.Custnum,
-                                                       ServiceLCounter.Period)
-         ttServiceLCounter.Amt = (ldeServiceLCounterAmt * 1024 * 1024).
-   END.
     
+   END.
+
 END FUNCTION.    
 
 FUNCTION fTemp2ServiceLCounter RETURNS LOGICAL:

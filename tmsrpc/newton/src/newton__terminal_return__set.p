@@ -29,18 +29,17 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-katun = "NewtonRPC".
-gcBrand = "1".
+Syst.Var:katun = "NewtonRPC".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Syst/eventval.i}
-{Func/timestamp.i}
 {Mc/dpmember.i}
 {Func/coinv.i}
 {Func/msreqfunc.i}
 {Func/fcreditreq.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
    DEFINE VARIABLE lhTermReturn AS HANDLE NO-UNDO.
    lhTermReturn = BUFFER TermReturn:HANDLE.
@@ -126,7 +125,7 @@ ASSIGN
    lcQ25ContractId   = get_string(pcQ25Struct,"q25_contract_id") WHEN
                        LOOKUP("q25_contract_id", lcQ25Struct) > 0  
    lcReturnChannel   = get_string(pcQ25Struct,"return_channel")                 
-   ldReturnTS        = fMakeTS().
+   ldReturnTS        = Func.Common:mMakeTS().
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -151,12 +150,8 @@ IF LENGTH(lcIMEI,"CHARACTER") NE 15 THEN
 IF (llDeviceStart  = ? AND llDeviceScreen <> ?) OR
    (llDeviceScreen = ? AND llDeviceStart  <> ?) THEN
    RETURN appl_err("Both should be NULL for Basic screening").
-   
-FIND Order NO-LOCK WHERE
-     Order.Brand   = gcBrand AND
-     Order.OrderId = liOrderId NO-ERROR.
-IF NOT AVAILABLE Order THEN
-   RETURN appl_err("Unknown order").
+
+{newton/src/findtenant.i YES ordercanal Order OrderId liOrderId}
 
 FIND FIRST TermReturn NO-LOCK WHERE
            TermReturn.OrderId = liOrderId USE-INDEX OrderId NO-ERROR.
@@ -188,7 +183,7 @@ IF (llDeviceStart AND llDeviceScreen) OR
       RETURN appl_err("Unknown subscription").
    
    FIND SingleFee USE-INDEX Custnum WHERE
-        SingleFee.Brand       = gcBrand AND
+        SingleFee.Brand       = Syst.Var:gcBrand AND
         SingleFee.Custnum     = MobSub.CustNum AND
         SingleFee.HostTable   = "Mobsub" AND
         SingleFee.KeyValue    = STRING(MobSub.MsSeq) AND
@@ -211,7 +206,7 @@ IF (llDeviceStart AND llDeviceScreen) OR
 
    ldaMonth22 = ADD-INTERVAL(bDCCLI.ValidFrom,22,"months":U).
    ldaMonth22 = DATE(MONTH(ldaMonth22),1,YEAR(ldaMonth22)).
-   ldeMonth22 = fMake2Dt(ldaMonth22,0).
+   ldeMonth22 = Func.Common:mMake2DT(ldaMonth22,0).
 
    IF ldaMonth22 > TODAY THEN
       RETURN appl_err("Installment contract has been active less than 22 months").
@@ -248,12 +243,12 @@ IF (llDeviceStart AND llDeviceScreen) OR
    IF NOT llRenewalOrder THEN DO:
 
       FOR EACH DCCLI NO-LOCK WHERE
-               DCCLI.Brand   EQ gcBrand AND
+               DCCLI.Brand   EQ Syst.Var:gcBrand AND
                DCCLI.DCEvent EQ "RVTERM12" AND
                DCCLI.MsSeq   EQ MobSub.MsSeq AND
                DCCLI.Validto >= TODAY,
           EACH FixedFee NO-LOCK WHERE
-               FixedFee.Brand = gcBrand AND
+               FixedFee.Brand = Syst.Var:gcBrand AND
                FixedFee.Custnum = MobSub.Custnum AND
                FixedFee.HostTable = "MobSub" AND
                Fixedfee.KeyValue = STRING(MobSub.MsSeq) AND
@@ -311,8 +306,7 @@ IF (llDeviceStart AND llDeviceScreen) OR
              lcInvRowDetails = TRIM(lcInvRowDetails,",").
 
       IF lcSubInvNums = "" OR ldeTotalRowAmt < 0 THEN
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                              STRING(MsRequest.MsSeq),
                              MsRequest.Custnum,
                              "CREDIT NOTE CREATION FAILED",
@@ -343,7 +337,7 @@ IF (llDeviceStart AND llDeviceScreen) OR
          RETURN appl_err("ERROR:Discount creation failed; " + lcResult).
 
       FOR EACH DiscountPlan NO-LOCK WHERE
-               DiscountPlan.Brand = gcBrand AND
+               DiscountPlan.Brand = Syst.Var:gcBrand AND
               (DiscountPlan.DPRuleID = "RVTERMDT1DISC" OR
                DiscountPlan.DPRuleID = "RVTERMDT4DISC"),
           EACH DPMember NO-LOCK WHERE
@@ -399,25 +393,23 @@ ELSE DO:
       lcMemoText  = lcResult.
 END.
 
-lcOrigKatun = katun.
-katun =  "VISTA_" + lcSalesman.
+lcOrigkatun = Syst.Var:katun.
+Syst.Var:katun =  "VISTA_" + lcSalesman.
 
 IF llCreateMemo THEN
-   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                    "MobSub",
+   Func.Common:mWriteMemo("MobSub",
                     STRING(Order.MsSeq),
                     Order.CustNum,
                     lcMemoTitle,
                     lcMemoText).
 
-katun = lcOrigKatun.
+Syst.Var:katun = lcOrigKatun.
 
 RELEASE TermReturn.
 
 add_boolean(response_toplevel_id, "", true).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-   fCleanEventObjects().
+      fCleanEventObjects().
 END.
 

@@ -35,7 +35,7 @@ PAUSE 0.
 VIEW FRAME fCLI.
 
 REPEAT WITH FRAME fCLI ON ENDKEY UNDO, LEAVE:
-   ehto = 9.
+   Syst.Var:ehto = 9.
    RUN Syst/ufkey.p.
 
    PAUSE 0.
@@ -72,7 +72,7 @@ RUN Mm/mobguard2.p(INPUT  TRUE,
 
 IF NOT llAccept THEN RETURN.
 
-RUN Mm/mobcallbr.p(INPUT "post,pre",
+RUN Mm/mobcallbr.p(INPUT "post,pre,error",
                 INPUT  ldaFromDate,
                 INPUT  ldaToDate,
                 INPUT  0,

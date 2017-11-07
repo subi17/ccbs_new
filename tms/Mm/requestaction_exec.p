@@ -17,6 +17,7 @@
 {Syst/tmsconst.i}
 {Func/penaltyfee.i}
 {Func/fcustpl.i}
+{Func/fdss.i}
 
 DEF INPUT PARAMETER iiMsRequest  AS INT  NO-UNDO.
 DEF INPUT PARAMETER icCLIType    AS CHAR NO-UNDO.
@@ -56,7 +57,7 @@ IF NOT AVAILABLE bOrigRequest THEN RETURN "ERROR:Unknown request".
 lhRequest = BUFFER bOrigRequest:HANDLE.
 
 FIND FIRST CLIType WHERE
-           CLIType.Brand   = gcBrand AND
+           CLIType.Brand   = Syst.Var:gcBrand AND
            CLIType.CLIType = icCLIType NO-LOCK NO-ERROR.
 IF AVAILABLE CLIType THEN liPayType = CLIType.PayType.
 
@@ -75,16 +76,16 @@ ELSE ASSIGN
    lcMemoTable = "Customer"
    lcMemoKey   = STRING(liCustNum).
 
-IF idActStamp  = 0 THEN idActStamp  = fMakeTS().
+IF idActStamp  = 0 THEN idActStamp  = Func.Common:mMakeTS().
 IF idTermStamp = 0 THEN idTermStamp = idActStamp.
 
-fSplitTS(idActStamp,
+Func.Common:mSplitTS(idActStamp,
          OUTPUT ldaReqDate,
          OUTPUT liReqTime).
 
 IF iiOrderID > 0 THEN DO:
    FIND FIRST Order WHERE
-              Order.Brand   = gcBrand AND
+              Order.Brand   = Syst.Var:gcBrand AND
               Order.OrderID = iiOrderID NO-LOCK NO-ERROR.
    IF NOT AVAILABLE Order THEN RETURN "ERROR:Order not found".
 END.
@@ -140,7 +141,7 @@ PROCEDURE pRequestActions:
          NOT ttAction.ActionKey BEGINS "PAYTERM" THEN DO:
 
          IF CAN-FIND(FIRST OfferItem NO-LOCK WHERE
-                     OfferItem.Brand = gcBrand AND
+                     OfferItem.Brand = Syst.Var:gcBrand AND
                      OfferItem.Offer = Order.Offer AND
                      OfferItem.ItemType = "PerContract" AND
                      OfferItem.ItemKey = ttAction.ActionKey AND
@@ -189,6 +190,7 @@ PROCEDURE pPeriodicalContract:
    DEF VAR lbolSTCExemptPenalty AS LOGICAL NO-UNDO.
    DEF VAR liFFCount AS INT NO-UNDO. 
    DEF VAR ldaMonth22 AS DATE NO-UNDO. 
+   DEF VAR lcBundleId AS CHAR NO-UNDO. 
 
    DEF BUFFER bBundleRequest  FOR MsRequest.
    DEF BUFFER bBundleContract FOR DayCampaign.
@@ -198,7 +200,7 @@ PROCEDURE pPeriodicalContract:
    DEF BUFFER bOrder       FOR Order.
 
    FIND FIRST DayCampaign WHERE
-              DayCampaign.Brand   = gcBrand AND
+              DayCampaign.Brand   = Syst.Var:gcBrand AND
               DayCampaign.DCEvent = ttAction.ActionKey
    NO-LOCK NO-ERROR.
    IF NOT AVAILABLE DayCampaign THEN RETURN "ERROR:Unknown contract".
@@ -211,7 +213,7 @@ PROCEDURE pPeriodicalContract:
         
       IF LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) = 0 AND
          CAN-FIND(FIRST DCCLI WHERE 
-                        DCCLI.Brand   = gcBrand AND
+                        DCCLI.Brand   = Syst.Var:gcBrand AND
                         DCCLI.DCEvent = ttAction.ActionKey AND
                         DCCLI.MsSeq   = liMsSeq AND
                         DCCLI.ValidTo > ldaReqDate)
@@ -237,7 +239,7 @@ PROCEDURE pPeriodicalContract:
       END.
 
       IF iiOrderID > 0 AND Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN DO:
-         IF Order.OrderChannel BEGINS "Retention" THEN ldContrStamp = fMakeTS().
+         IF Order.OrderChannel BEGINS "Retention" THEN ldContrStamp = Func.Common:mMakeTS().
          ELSE ldContrStamp = Order.CrStamp.
       END.
       ELSE ldContrStamp = idActStamp.
@@ -258,7 +260,7 @@ PROCEDURE pPeriodicalContract:
                LOOKUP(STRING(bBundleRequest.ReqStatus),
                   {&REQ_INACTIVE_STATUSES}) = 0,
             FIRST bBundleContract NO-LOCK USE-INDEX DCEvent WHERE
-                  bBundleContract.Brand = gcBrand AND
+                  bBundleContract.Brand = Syst.Var:gcBrand AND
                   bBundleContract.DCEvent = bBundleRequest.ReqCParam3 AND
                   LOOKUP(bBundleContract.DCType,
                          {&PERCONTRACT_RATING_PACKAGE}) > 0:
@@ -266,9 +268,52 @@ PROCEDURE pPeriodicalContract:
             lcWaitFor = ":wait" + STRING(bBundleRequest.MsRequest).
          END.     
       END.
-            
-      liRequest = fPCActionRequest(liMsSeq,
-                                   ttAction.ActionKey,
+
+      lcBundleId = ttAction.ActionKey.
+      FIND MobSub WHERE MobSub.MsSeq = liMsSeq NO-LOCK NO-ERROR.
+      IF AVAIL Mobsub AND lcBundleId MATCHES "FLEX*UPSELL" AND
+         fGetDSSId(mobsub.custnum, Func.Common:mMakeTS()) > "" THEN
+         lcBundleId = fgetFlexUpsellBundle(Mobsub.custnum, Mobsub.msseq,
+                                           fGetDSSId(mobsub.custnum,
+                                           Func.Common:mMakeTS()),
+                                           lcBundleId,
+                                           Func.Common:mMakeTS()). 
+
+      /*Back To School FLP project, temporary change YBU-6042, YPR-6085*/
+      /*TODO remove after FTERM8 campaign period.*/
+      DEF BUFFER bFTERMOrder FOR Order.
+      FIND FIRST bFTERMOrder WHERE 
+                 bFTERMOrder.brand EQ "1" AND
+                 bFTERMOrder.OrderID EQ iiOrderID AND
+                 INDEX(bFTERMOrder.Orderchannel, "pro") EQ 0 NO-LOCK NO-ERROR.
+      /*FTERM12 is coming only from allowed channels. So olnly ActionKey anddate is checked.*/          
+       
+      IF ttAction.ActionKey EQ "FTERM12-100" AND 
+         ((AVAIL bFTERMOrder AND bFTERMOrder.Crstamp < 20171101) OR
+          (NOT AVAIL bFTERMOrder AND idActStamp < 20171101)) AND
+         CAN-FIND(FIRST bFTERMOrder NO-LOCK WHERE 
+                        bFTERMOrder.brand EQ Syst.Var:gcBrand AND
+                        bFTERMOrder.OrderID EQ iiOrderID AND
+                  INDEX(bFTERMOrder.Orderchannel, "pro") EQ 0)
+      THEN lcBundleId = "FTERM8-100".
+      
+      /* CCP-3 override the default fixed line permancy*/
+      IF ttAction.ActionKey BEGINS "FTERM" AND iiOrderID > 0 AND
+         CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                        OrderAction.Brand = Syst.Var:gcBrand AND
+                        OrderAction.OrderID = iiOrderID AND
+                        OrderAction.ItemType = "FixedPermanency") THEN RETURN.
+
+      /*End of FLP temporary change*/
+
+      /* Temporary check due to ongoing orders created before 5.6.2017
+         TODO: REMOVE THE "THEN BLOCK" AFTER THERE ARE NO PENDING VOICE200 RELATED ORDERS */
+      IF ttAction.ActionKey EQ "VOICE200" AND
+         ( (NOT AVAILABLE Order AND Func.Common:mTSToDate(bOrigRequest.CreStamp) < RequestAction.ValidFrom) OR /* normal STC */
+           (AVAILABLE Order AND Func.Common:mTSToDate(Order.CrStamp) < RequestAction.ValidFrom) ) /* New or STC order */
+      THEN liRequest = 1.
+      ELSE liRequest = fPCActionRequest(liMsSeq,
+                                   lcBundleId,
                                    "act" + lcWaitFor,
                                    ldeContrCreStamp,
                                    llCreateFees,
@@ -279,6 +324,7 @@ PROCEDURE pPeriodicalContract:
                                    "",
                                    0,
                                    0,
+                                   "",
                                    OUTPUT lcResult).
    END.
    
@@ -289,12 +335,12 @@ PROCEDURE pPeriodicalContract:
       IF RequestAction.ReqType = 46 AND
          ttAction.ActionKey = "RVTERM12" THEN RETURN.
 
-      fSplitTS(idTermStamp,OUTPUT ldaTermDate,OUTPUT liTermTime).
+      Func.Common:mSplitTS(idTermStamp,OUTPUT ldaTermDate,OUTPUT liTermTime).
       
       IF LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) = 0 THEN DO:
          IF DayCampaign.DCType NE {&DCTYPE_INSTALLMENT} THEN DO:
             FIND FIRST bDCCLI WHERE 
-                       bDCCLI.Brand   = gcBrand AND
+                       bDCCLI.Brand   = Syst.Var:gcBrand AND
                        bDCCLI.DCEvent = ttAction.ActionKey AND
                        bDCCLI.MsSeq   = liMsSeq AND
                        bDCCLI.ValidTo > ldaTermDate NO-LOCK NO-ERROR.
@@ -332,7 +378,7 @@ PROCEDURE pPeriodicalContract:
       IF AVAIL Order AND DayCampaign.DCType = "3" AND
          Order.OrderType = {&ORDER_TYPE_RENEWAL} AND
          CAN-FIND (FIRST OrderAction WHERE
-                         OrderAction.Brand    = gcBrand AND
+                         OrderAction.Brand    = Syst.Var:gcBrand AND
                          OrderAction.OrderId  = Order.OrderId AND
                          OrderAction.ItemType = "ExcludeTermPenalty" NO-LOCK)
       THEN llCreateFees = FALSE.
@@ -354,7 +400,10 @@ PROCEDURE pPeriodicalContract:
            Don't charge penalty when:
            STC is requested on the same day of the renewal order AND
            New type is POSTPAID */
-         IF bOrigRequest.reqcparam2 BEGINS "CONT" /* POSTPAID */ THEN DO:
+         IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                           CLIType.CLIType EQ bOrigRequest.reqcparam2 AND
+                           CLIType.PayType = {&CLITYPE_PAYTYPE_POSTPAID}) 
+            THEN DO:
             ORDER_LOOP:
             FOR EACH bOrder NO-LOCK WHERE
                bOrder.MSSeq EQ bOrigRequest.MsSeq AND
@@ -390,7 +439,7 @@ PROCEDURE pPeriodicalContract:
       IF AVAIL Order AND DayCampaign.DCType = "5" AND
          Order.OrderType = {&ORDER_TYPE_RENEWAL} AND
          CAN-FIND (FIRST OrderAction WHERE
-                         OrderAction.Brand    = gcBrand AND
+                         OrderAction.Brand    = Syst.Var:gcBrand AND
                          OrderAction.OrderId  = Order.OrderId AND
                          OrderAction.ItemType = "KeepInstallment" NO-LOCK)
       THEN RETURN.
@@ -399,7 +448,7 @@ PROCEDURE pPeriodicalContract:
 
          llFound = FALSE.
          FOR EACH bDCCLI WHERE 
-                  bDCCLI.Brand   = gcBrand AND
+                  bDCCLI.Brand   = Syst.Var:gcBrand AND
                   bDCCLI.DCEvent = ttAction.ActionKey AND
                   bDCCLI.MsSeq   = liMsSeq AND
                   bDCCLI.ValidTo > ldaTermDate NO-LOCK:
@@ -419,7 +468,7 @@ PROCEDURE pPeriodicalContract:
                /* assumes that possible installment activation request
                   has not been yet created from the same order */
                FOR EACH DCCLI NO-LOCK WHERE
-                        DCCLI.Brand      = gcBrand         AND
+                        DCCLI.Brand      = Syst.Var:gcBrand         AND
                         DCCLI.MsSeq      = MsRequest.MsSeq AND
                         DCCLI.ValidTo   >= ldaReqDate     AND
                         DCCLI.ValidFrom <= ldaReqDate     AND 
@@ -428,7 +477,7 @@ PROCEDURE pPeriodicalContract:
                END.             
 
                IF CAN-FIND(FIRST OfferItem NO-LOCK WHERE
-                                 OfferItem.Brand = gcBrand AND
+                                 OfferItem.Brand = Syst.Var:gcBrand AND
                                  OfferItem.Offer = Order.Offer AND
                                  OfferItem.ItemType = "PerContract" AND
                                  OfferItem.EndStamp >= Order.CrStamp AND
@@ -453,6 +502,7 @@ PROCEDURE pPeriodicalContract:
                                         "",
                                         0,
                                         bDCCLI.PerContractId,
+                                        "",
                                         OUTPUT lcResult).
          END. /* FOR EACH bDCCLI */
          IF NOT llFound THEN RETURN.
@@ -472,6 +522,7 @@ PROCEDURE pPeriodicalContract:
                                         "",
                                         0,
                                         0,
+                                        "",
                                         OUTPUT lcResult).
    END.
          
@@ -490,6 +541,7 @@ PROCEDURE pPeriodicalContract:
                                    "",
                                    0,
                                    0,
+                                   "",
                                    OUTPUT lcResult).
    END.
    
@@ -507,10 +559,10 @@ PROCEDURE pPeriodicalContract:
                  MobSub.MsSeq = liMsSeq NO-ERROR.
       IF NOT AVAIL MobSub THEN RETURN.
       
-      fSplitTS(idTermStamp,OUTPUT ldaTermDate,OUTPUT liTermTime).
+      Func.Common:mSplitTS(idTermStamp,OUTPUT ldaTermDate,OUTPUT liTermTime).
       
       FIND FIRST bDCCLI WHERE 
-                 bDCCLI.Brand   = gcBrand AND
+                 bDCCLI.Brand   = Syst.Var:gcBrand AND
                  bDCCLI.DCEvent = ttAction.ActionKey AND
                  bDCCLI.MsSeq   = liMsSeq AND
                  bDCCLI.ValidTo > ldaTermDate NO-LOCK NO-ERROR.
@@ -528,7 +580,7 @@ PROCEDURE pPeriodicalContract:
                                           DayCampaign.TermFeeModel,
                                           TODAY).
          FIND FIRST FMItem NO-LOCK WHERE
-                    FMItem.Brand     = gcBrand       AND
+                    FMItem.Brand     = Syst.Var:gcBrand       AND
                     FMItem.FeeModel  = DayCampaign.TermFeeModel AND
                     FMItem.PriceList = lcPriceList AND
                     FMItem.FromDate <= TODAY     AND
@@ -570,14 +622,12 @@ PROCEDURE pPeriodicalContract:
    /* write possible error to a memo */
    IF liRequest = 0 THEN DO:
       
-      lcActionName = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                           "RequestAction",
+      lcActionName = Func.Common:mTMSCodeName("RequestAction",
                            "Action",
                            STRING(RequestAction.Action)).
       IF NOT lcActionName > "" THEN lcActionName = STRING(RequestAction.Action).
                     
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       lcMemoTable,
+      Func.Common:mWriteMemo(lcMemoTable,
                        lcMemoKey,
                        liCustNum,
                        "PERIODICAL CONTRACT " + 
@@ -605,7 +655,7 @@ PROCEDURE pServicePackage:
          lcDCEvent   = "".
         
       FIND FIRST CTServPac WHERE
-                 CTServPac.Brand   = gcBrand AND
+                 CTServPac.Brand   = Syst.Var:gcBrand AND
                  CTServPac.CLIType = icCLIType AND
                  CTServPac.ServPac = lcActionKey AND  
                  CTServPac.ToDate >= ldaReqDate NO-LOCK NO-ERROR.
@@ -649,8 +699,7 @@ PROCEDURE pServicePackage:
          
       IF liRequest = 0 THEN DO:                              
          /* write possible error to a memo */
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          lcMemoTable,
+         Func.Common:mWriteMemo(lcMemoTable,
                           lcMemoKey,
                           liCustNum,
                           "SERVICE PACKAGE ACTIVATION FAILED",
@@ -664,10 +713,10 @@ PROCEDURE pServicePackage:
       /* CTServPac should be used, but where can old clitype be retrieved
          in STC cases? */
       FOR FIRST ServPac NO-LOCK WHERE
-                ServPac.Brand   = gcBrand AND
+                ServPac.Brand   = Syst.Var:gcBrand AND
                 ServPac.ServPac = ttAction.ActionKey,
            EACH ServEl NO-LOCK WHERE
-                ServEl.Brand   = gcBrand AND
+                ServEl.Brand   = Syst.Var:gcBrand AND
                 ServEl.ServPac = ServPac.ServPac,
           FIRST SubSer NO-LOCK WHERE
                 SubSer.MsSeq   = liMsSeq AND
@@ -692,7 +741,7 @@ PROCEDURE pServicePackage:
                                          ELSE SubSer.SSParam),
                                         (IF SubSer.ServCom = "BB" AND
                                          DAY(ldaReqDate) <> 1 THEN
-                                         fSecOffSet(idActStamp,1)
+                                         Func.Common:mSecOffSet(idActStamp,1)
                                          ELSE idActStamp),
                                         "",
                                         FALSE,      /* fees */
@@ -705,8 +754,7 @@ PROCEDURE pServicePackage:
                  
             IF liRequest = 0 THEN DO:                              
                /* write possible error to a memo */
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                lcMemoTable,
+               Func.Common:mWriteMemo(lcMemoTable,
                                 lcMemoKey,
                                 liCustNum,
                                 "SERVICE PACKAGE DEACTIVATION FAILED",
@@ -729,7 +777,7 @@ PROCEDURE pServicePackage:
             ELSE lcParam = "".
          END.
          ELSE IF SubSer.SSStat  = 2 AND SubSer.ServCom = "BB" AND
-                (icCLIType = "TARJ7" OR icCLIType = "TARJ9")
+                LOOKUP(icCLIType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0
                 THEN lcParam = "3".
          ELSE RETURN.
 
@@ -748,8 +796,7 @@ PROCEDURE pServicePackage:
                                      OUTPUT lcResult).
          IF liRequest = 0 THEN
             /* write possible error to a memo */
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             lcMemoTable,
+            Func.Common:mWriteMemo(lcMemoTable,
                              lcMemoKey,
                              liCustNum,
                              "SERVICE PACKAGE UPDATE FAILED",
@@ -802,8 +849,7 @@ PROCEDURE pServiceRequest:
                                OUTPUT lcResult).
    IF liRequest = 0 THEN
       /* write possible error to a memo */
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       lcMemoTable,
+         Func.Common:mWriteMemo(lcMemoTable,
                        lcMemoKey,
                        liCustNum,
                        "SERVICE REQUEST CREATION FAILED",
@@ -831,8 +877,7 @@ PROCEDURE pBarring:
          
       IF liRequest = 0 THEN DO:                              
          /* write possible error to a memo */
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          lcMemoTable,
+         Func.Common:mWriteMemo(lcMemoTable,
                           lcMemoKey,
                           liCustNum,
                           "BARRING FAILED",

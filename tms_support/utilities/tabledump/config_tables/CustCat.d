@@ -1,10 +1,17 @@
-"10" "Consumer NIF" 0 0 0 0 1 "1" 0 "NIF" no 3 5
-"11" "Consumer NIE" 0 0 0 0 1 "1" 0 "NIE" no 3 5
-"12" "Unknown consumer" 0 0 0 0 1 "1" 0 "N/A" no 3 5
-"13" "Consumer Passport" 0 0 0 0 1 "1" 0 "Passport" no 3 5
-"20" "Company CIF" 0 0 0 0 1 "1" 0 "CIF" no 25 35
-"30" "Employees - Internal customer" 0 0 0 0 1 "1" 0 "" no 5 999
-"31" "VIP - Yoigo external customer" 0 0 0 0 1 "1" 0 "" no 5 999
-"40" "Sole trader NIF" 0 0 0 0 1 "1" 0 "NIF" yes 3 5
-"41" "Sole trader NIE" 0 0 0 0 1 "1" 0 "NIE" yes 3 5
-"99" "Default customers" 0 77777777 77777777 77777777 1 "1" 0 "" no 3 5
+"10" "Residential NIF" 0 0 0 0 1 "1" 0 "NIF" no 4 5 no "CONSUMER"
+"11" "Residential NIE" 0 0 0 0 1 "1" 0 "NIE" no 4 5 no "CONSUMER"
+"12" "Unknown consumer" 0 0 0 0 1 "1" 0 "N/A" no 3 5 no "CONSUMER"
+"13" "Consumer Passport" 0 0 0 0 1 "1" 0 "Passport" no 3 5 no "CONSUMER"
+"20" "Company CIF" 0 0 0 0 1 "1" 0 "CIF" no 25 35 no "COMPANY"
+"21" "Big Companies CIF" 0 0 0 0 1 "1" 0 "CIF" no 25 35 no ""
+"22" "PRO SOHO Company CIF" 0 0 0 0 1 "1" 0 "CIF" no 25 35 yes "PRO-SOHO-COMPANY"
+"23" "SOHO Company CIF" 0 0 0 0 1 "1" 0 "CIF" no 25 35 no "SOHO-COMPANY"
+"30" "Employees - Internal customer" 0 0 0 0 1 "1" 0 "" no 5 999 no ""
+"31" "VIP - MM group external customer" 0 0 0 0 1 "1" 0 "" no 5 999 no ""
+"40" "Self Employee NIF" 0 0 0 0 1 "1" 0 "NIF" yes 5 7 no "AUTONOMO"
+"41" "Self Employee NIE" 0 0 0 0 1 "1" 0 "NIE" yes 5 7 no "AUTONOMO"
+"42" "PRO Self-employee NIF" 0 0 0 0 1 "1" 0 "NIF" yes 5 7 yes "PRO-SOHO-AUTONOMO"
+"43" "PRO Self-employee NIE" 0 0 0 0 1 "1" 0 "NIE" yes 5 7 yes "PRO-SOHO-AUTONOMO"
+"44" "SOHO Self-employee NIF" 0 0 0 0 1 "1" 0 "NIF" yes 5 7 no "SOHO-AUTONOMO"
+"45" "SOHO Self-employee NIE" 0 0 0 0 1 "1" 0 "NIE" yes 5 7 no "SOHO-AUTONOMO"
+"99" "Default customers" 0 77777777 77777777 77777777 1 "1" 0 "" no 3 5 no ""

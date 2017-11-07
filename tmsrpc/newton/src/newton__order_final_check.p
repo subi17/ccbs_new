@@ -10,14 +10,14 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-katun = "NewtonRPC".
-gcBrand = "1".
+Syst.Var:katun = "NewtonRPC".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
-{Func/date.i}
 {Func/orderchk.i}
 
 /* Input parameters */
 DEF VAR pcStruct AS CHARACTER NO-UNDO. 
+DEF VAR pcTenant AS CHAR NO-UNDO.
 DEF VAR pcCLI AS CHAR NO-UNDO.
 DEF VAR pcFixedNumber AS CHAR NO-UNDO INIT "".
 DEF VAR pcNumberType AS CHAR NO-UNDO INIT ?.
@@ -33,10 +33,11 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 pcstruct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-lcStruct = validate_request(pcstruct,"msisdn!,fixed_number,number_type!,channel").
+lcStruct = validate_request(pcstruct,"brand!,msisdn!,fixed_number,number_type!,channel").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN
+   pcTenant = get_string(pcStruct, "brand") 
    pcCLI = get_string(pcStruct, "msisdn")
    pcFixedNumber = get_string(pcStruct, "fixed_number") WHEN 
       LOOKUP("fixed_number",lcStruct) > 0
@@ -47,6 +48,8 @@ ASSIGN
 pcChannel = REPLACE(pcChannel,"order","").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 IF LOOKUP(pcNumberType,"new,mnp,renewal,stc") = 0 THEN RETURN
    appl_err(SUBST("Incorrect number type|&1",pcNumberType)).
@@ -59,7 +62,7 @@ IF fOngoingOrders(pcCli, (IF pcChannel BEGINS "retention"
 
 ELSE IF pcNumberType EQ "stc" THEN DO:
    FIND FIRST MobSub NO-LOCK WHERE
-              MobSub.Brand EQ gcBrand AND
+              MobSub.Brand EQ Syst.Var:gcBrand AND
               MobSub.CLI EQ pcCLI NO-ERROR.
    IF NOT AVAIL Mobsub THEN 
       RETURN appl_err("Subscription not found").
@@ -82,7 +85,7 @@ END.
 /* Check Fixed number existence and orders */
 IF pcFixedNumber > "" THEN DO:
    FIND FIRST MobSub WHERE
-              MobSub.Brand EQ gcBrand AND
+              MobSub.Brand EQ Syst.Var:gcBrand AND
               MobSub.FixedNumber EQ pcFixedNumber AND
               MobSub.CLI NE pcCLI NO-LOCK NO-ERROR. 
    IF AVAIL MobSub THEN
@@ -99,7 +102,7 @@ END.
 IF pcNumberType EQ "MNP" OR
    pcNumberType EQ "NEW" THEN DO:
    FIND FIRST MobSub WHERE
-              MobSub.Brand EQ gcBrand AND
+              MobSub.Brand EQ Syst.Var:gcBrand AND
               MobSub.CLI EQ pcCLI NO-LOCK NO-ERROR. 
    IF AVAIL MobSub THEN
       RETURN appl_err("Subscription already exists with number|" + pcCLI).
@@ -108,5 +111,4 @@ END.
 add_boolean(response_toplevel_id, "", llAllow).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

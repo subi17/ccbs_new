@@ -10,7 +10,6 @@
 ------------------------------------------------------------------------ */
    
 {Syst/commali.i}
-{Func/func.p}
 {Func/email.i}
 {Func/cparam2.i}
 {Mm/cdrvar.i}
@@ -18,7 +17,6 @@
 {Rate/chkbal2.i}
 {Rate/mobol_tt.i}
 {Func/fmakeservice.i}
-{Func/timestamp.i}
 {Func/fsubser.i}
 {Func/fservlimit.i}
 {Rate/onlinevar.i}
@@ -189,6 +187,10 @@ WHEN 2226 THEN ASSIGN
    liStream = 17
    lcReader = "MO6:Fixed2".
 
+WHEN 2240 THEN ASSIGN
+   liStream = 99
+   lcreader = "MO4:TAP3".
+
 WHEN 2250 THEN ASSIGN
    liStream = 30
    lcReader = "MO3:VAS-CGY".
@@ -197,9 +199,58 @@ WHEN 2270 THEN ASSIGN
    liStream = 40
    lcReader = "MO5:RoamFraud".
 
-OTHERWISE ASSIGN 
-   liStream = 99
-   lcreader = "MO4:Temporarily_online".
+/* MM-streams */
+WHEN 2310 THEN ASSIGN
+   liStream = 52
+   lcReader = "MOM:Postpaid".
+
+WHEN 2311 THEN ASSIGN
+   liStream = 54
+   lcReader = "MOM:Postpaid2".
+
+WHEN 2315 THEN ASSIGN
+   liStream = 56
+   lcReader = "MOM:Postpaid-Data".
+
+WHEN 2316 THEN ASSIGN
+   liStream = 58
+   lcReader = "MOM:Postpaid-Data2".
+
+WHEN 2320 THEN ASSIGN
+   liStream = 60
+   lcReader = "MOM2:Prepaid".
+
+WHEN 2321 THEN ASSIGN
+   liStream = 62
+   lcReader = "MOM2:Prepaid2".
+
+WHEN 2325 THEN ASSIGN
+   liStream = 64
+   lcReader = "MOM6:Fixed".
+
+WHEN 2340 THEN ASSIGN
+   liStream = 66
+   lcReader = "MOM4:TAP3".
+
+WHEN 2350 THEN ASSIGN
+   liStream = 68
+   lcReader = "MOM3:VAS-CGY".
+
+WHEN 2370 THEN ASSIGN
+   liStream = 70
+   lcReader = "MOM5:RoamFraud".
+
+
+OTHERWISE DO:
+   
+   IF TENANT-NAME(LDBNAME("common")) EQ {&TENANT_MASMOVIL} THEN
+      ASSIGN 
+         liStream = 110 
+         lcreader = "MOM7:Temporarily_online".
+   ELSE ASSIGN 
+      liStream = 100 
+      lcreader = "MO7:Temporarily_online".
+END.
 END CASE.
 
 form
@@ -400,7 +451,7 @@ else do:
 end.      
 
 
-ehto = 3. RUN Syst/ufkey.p.
+Syst.Var:ehto = 3. RUN Syst/ufkey.p.
    
    /* QUIT menutext */
    RUN Syst/ufxkey.p(8,3).
@@ -499,10 +550,8 @@ DO WHILE TRUE  WITH FRAME CLOG:
       end. /* bDispErrors */
    end.
 
-   IF LOOKUP(TRIM(Entry(1,callrec,lcSep)),'"ESPXF') = 0 AND 
-      LOOKUP(TRIM(Entry(1,callrec,lcSep)),'ESPXF') = 0 
-   THEN DO:
-
+   lcCustomerName = REPLACE(TRIM(ENTRY(1,callrec,lcSep)),'"',"").
+   IF LOOKUP(lcCustomerName,"ESPXF,ESPMM") EQ 0 THEN DO:
       /** fNagios(lcreader). **/
        
       DISP
@@ -610,7 +659,7 @@ DO TRANS:
       ASSIGN
          ttCall.ReadDate  = TODAY
          ttCall.ReadTime  = TIME
-         ttCall.ReadInTS  = fMake2Dt(ttCall.ReadDate, ttCall.ReadTime)
+         ttCall.ReadInTS  = Func.Common:mMake2DT(ttCall.ReadDate, ttCall.ReadTime)
          ldtTMSTime       = NOW
          TTCall.custNum   = liunkcust
          amt2 = amt2 + 1
@@ -632,6 +681,14 @@ DO TRANS:
       ttCall.dtlseq = fStreamSequence(INPUT ttCall.datest, liStream).
 
       oiErrorCode = fRawTicketCheck().
+      
+      IF oiErrorCode = 0 THEN DO:
+         IF (TENANT-NAME(LDBNAME(1)) EQ {&TENANT_MASMOVIL} AND
+             lcCustomerName NE "ESPMM") OR
+            (TENANT-NAME(LDBNAME(1)) EQ {&TENANT_YOIGO} AND
+             lcCustomerName NE "ESPXF") THEN 
+         oiErrorCode = {&CDR_ERROR_INCORRECT_BRAND}.
+      END.
 
       IF oiErrorCode = 0 THEN 
          oiErrorCode = fCallCaseCheck(ttCall.SpoCMT,ttCall.DateSt).
@@ -866,7 +923,7 @@ DO TRANS:
            IF ttCall.Spocmt = 66 THEN liTempDialType = 4.
            ELSE liTempDialType = 1.
            FOR FIRST BDest NO-LOCK WHERE
-                     BDest.Brand  = gcBrand AND
+                     BDest.Brand  = Syst.Var:gcBrand AND
                      BDest.Bdest  = ttCall.BDest AND
                      BDest.DestType = ttCall.BType AND
                      BDest.Class  = 2 AND
@@ -954,7 +1011,7 @@ DO TRANS:
 
           /* data, voice and other packages */
          fPackageCalculation().
-                  
+
          IF ttCall.ErrorCode > 0 THEN DO:
             ttCall.InvSeq = 0.
             fBCopy().
@@ -1010,7 +1067,7 @@ DO TRANS:
       /* Update PremiumNumber Operator information only for VOICE */
       IF ttCall.MSCID <> "CCGW" THEN DO:
          FIND FIRST BillItem WHERE
-                    BillItem.Brand    = gcBrand AND
+                    BillItem.Brand    = Syst.Var:gcBrand AND
                     BillItem.BillCode = ttCall.BillCode NO-LOCK NO-ERROR.
          IF AVAILABLE BillItem AND BillItem.BIGroup = "6" THEN
             ttCall.ServiceName = fGetPremiumServiceName(ttCall.GsmBnr,

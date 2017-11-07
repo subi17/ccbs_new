@@ -1,4 +1,4 @@
-IGInvNum1: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 1
@@ -6,7 +6,7 @@ IGInvNum1: IGInvNum
   SeqPrefix: "261D"
   FromDate: 2016-01-01
 
-IGInvNum2: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 1
@@ -14,7 +14,7 @@ IGInvNum2: IGInvNum
   SeqPrefix: "251D"
   FromDate: 2015-01-01
 
-IGInvNum3: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 1
@@ -22,7 +22,7 @@ IGInvNum3: IGInvNum
   SeqPrefix: "241D"
   FromDate: 2014-02-01
 
-IGInvNum4: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 1
@@ -30,7 +30,7 @@ IGInvNum4: IGInvNum
   SeqPrefix: "231D"
   FromDate: 2013-01-01
 
-IGInvNum5: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 1
@@ -38,7 +38,7 @@ IGInvNum5: IGInvNum
   SeqPrefix: "221D"
   FromDate: 2012-01-01
 
-IGInvNum6: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 1
@@ -46,7 +46,7 @@ IGInvNum6: IGInvNum
   SeqPrefix: "211D"
   FromDate: 2011-01-01
 
-IGInvNum7: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 1
@@ -54,7 +54,7 @@ IGInvNum7: IGInvNum
   SeqPrefix: "201D"
   FromDate: 2010-01-01
 
-IGInvNum8: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 1
@@ -62,7 +62,7 @@ IGInvNum8: IGInvNum
   SeqPrefix: "291D"
   FromDate: 2009-01-01
 
-IGInvNum9: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 1
@@ -70,7 +70,7 @@ IGInvNum9: IGInvNum
   SeqPrefix: "281D"
   FromDate: 2008-01-01
 
-IGInvNum10: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 1
@@ -78,7 +78,7 @@ IGInvNum10: IGInvNum
   SeqPrefix: "PODI"
   FromDate: 2006-12-01
 
-IGInvNum11: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 5
@@ -86,7 +86,7 @@ IGInvNum11: IGInvNum
   SeqPrefix: "265C"
   FromDate: 2016-01-01
 
-IGInvNum12: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 5
@@ -94,7 +94,7 @@ IGInvNum12: IGInvNum
   SeqPrefix: "255C"
   FromDate: 2015-01-01
 
-IGInvNum13: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 5
@@ -102,7 +102,7 @@ IGInvNum13: IGInvNum
   SeqPrefix: "245C"
   FromDate: 2014-02-01
 
-IGInvNum14: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 5
@@ -110,7 +110,7 @@ IGInvNum14: IGInvNum
   SeqPrefix: "235C"
   FromDate: 2013-01-01
 
-IGInvNum15: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 5
@@ -118,7 +118,7 @@ IGInvNum15: IGInvNum
   SeqPrefix: "225C"
   FromDate: 2012-01-01
 
-IGInvNum16: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 5
@@ -126,7 +126,7 @@ IGInvNum16: IGInvNum
   SeqPrefix: "215C"
   FromDate: 2011-01-01
 
-IGInvNum17: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 5
@@ -134,7 +134,7 @@ IGInvNum17: IGInvNum
   SeqPrefix: "205C"
   FromDate: 2010-01-01
 
-IGInvNum18: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 5
@@ -142,7 +142,7 @@ IGInvNum18: IGInvNum
   SeqPrefix: "295C"
   FromDate: 2009-01-01
 
-IGInvNum19: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 5
@@ -150,7 +150,7 @@ IGInvNum19: IGInvNum
   SeqPrefix: "285C"
   FromDate: 2008-01-01
 
-IGInvNum20: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 5
@@ -158,7 +158,7 @@ IGInvNum20: IGInvNum
   SeqPrefix: "POCI"
   FromDate: 2006-12-01
 
-IGInvNum21: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 6
@@ -166,7 +166,7 @@ IGInvNum21: IGInvNum
   SeqPrefix: "266D"
   FromDate: 2016-01-01
 
-IGInvNum22: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 6
@@ -174,7 +174,7 @@ IGInvNum22: IGInvNum
   SeqPrefix: "256D"
   FromDate: 2015-01-01
 
-IGInvNum23: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 6
@@ -182,7 +182,7 @@ IGInvNum23: IGInvNum
   SeqPrefix: "246D"
   FromDate: 2014-02-01
 
-IGInvNum24: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 6
@@ -190,7 +190,7 @@ IGInvNum24: IGInvNum
   SeqPrefix: "236D"
   FromDate: 2013-01-01
 
-IGInvNum25: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 6
@@ -198,7 +198,7 @@ IGInvNum25: IGInvNum
   SeqPrefix: "226D"
   FromDate: 2012-01-01
 
-IGInvNum26: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 6
@@ -206,7 +206,7 @@ IGInvNum26: IGInvNum
   SeqPrefix: "216D"
   FromDate: 2011-01-01
 
-IGInvNum27: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 6
@@ -214,7 +214,7 @@ IGInvNum27: IGInvNum
   SeqPrefix: "206D"
   FromDate: 2010-01-01
 
-IGInvNum28: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 6
@@ -222,7 +222,7 @@ IGInvNum28: IGInvNum
   SeqPrefix: "296D"
   FromDate: 2009-01-01
 
-IGInvNum29: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 6
@@ -230,7 +230,7 @@ IGInvNum29: IGInvNum
   SeqPrefix: "286D"
   FromDate: 2008-01-01
 
-IGInvNum30: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 6
@@ -238,7 +238,7 @@ IGInvNum30: IGInvNum
   SeqPrefix: "CDDI"
   FromDate: 2006-11-01
 
-IGInvNum31: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 7
@@ -246,7 +246,7 @@ IGInvNum31: IGInvNum
   SeqPrefix: "267D"
   FromDate: 2016-01-01
 
-IGInvNum32: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 7
@@ -254,7 +254,7 @@ IGInvNum32: IGInvNum
   SeqPrefix: "257D"
   FromDate: 2015-01-01
 
-IGInvNum33: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 7
@@ -262,7 +262,7 @@ IGInvNum33: IGInvNum
   SeqPrefix: "247D"
   FromDate: 2014-02-01
 
-IGInvNum34: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 7
@@ -270,7 +270,7 @@ IGInvNum34: IGInvNum
   SeqPrefix: "237D"
   FromDate: 2013-01-01
 
-IGInvNum35: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 7
@@ -278,7 +278,7 @@ IGInvNum35: IGInvNum
   SeqPrefix: "227D"
   FromDate: 2012-01-01
 
-IGInvNum36: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 7
@@ -286,7 +286,7 @@ IGInvNum36: IGInvNum
   SeqPrefix: "217D"
   FromDate: 2011-01-01
 
-IGInvNum37: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 7
@@ -294,7 +294,7 @@ IGInvNum37: IGInvNum
   SeqPrefix: "207D"
   FromDate: 2010-01-01
 
-IGInvNum38: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 7
@@ -302,7 +302,7 @@ IGInvNum38: IGInvNum
   SeqPrefix: "297D"
   FromDate: 2009-01-01
 
-IGInvNum39: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 7
@@ -310,7 +310,7 @@ IGInvNum39: IGInvNum
   SeqPrefix: "287D"
   FromDate: 2008-01-01
 
-IGInvNum40: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 7
@@ -318,7 +318,7 @@ IGInvNum40: IGInvNum
   SeqPrefix: "CDCI"
   FromDate: 2006-11-01
 
-IGInvNum41: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 8
@@ -326,7 +326,7 @@ IGInvNum41: IGInvNum
   SeqPrefix: "268C"
   FromDate: 2016-01-01
 
-IGInvNum42: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 8
@@ -334,7 +334,7 @@ IGInvNum42: IGInvNum
   SeqPrefix: "258C"
   FromDate: 2015-01-01
 
-IGInvNum43: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 8
@@ -342,7 +342,7 @@ IGInvNum43: IGInvNum
   SeqPrefix: "248C"
   FromDate: 2014-02-01
 
-IGInvNum44: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 8
@@ -350,7 +350,7 @@ IGInvNum44: IGInvNum
   SeqPrefix: "238C"
   FromDate: 2013-01-01
 
-IGInvNum45: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 8
@@ -358,7 +358,7 @@ IGInvNum45: IGInvNum
   SeqPrefix: "228C"
   FromDate: 2012-01-01
 
-IGInvNum46: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 8
@@ -366,7 +366,7 @@ IGInvNum46: IGInvNum
   SeqPrefix: "218C"
   FromDate: 2011-01-01
 
-IGInvNum47: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 8
@@ -374,7 +374,7 @@ IGInvNum47: IGInvNum
   SeqPrefix: "208C"
   FromDate: 2010-01-01
 
-IGInvNum48: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 8
@@ -382,7 +382,7 @@ IGInvNum48: IGInvNum
   SeqPrefix: "298C"
   FromDate: 2009-01-01
 
-IGInvNum49: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 8
@@ -390,7 +390,7 @@ IGInvNum49: IGInvNum
   SeqPrefix: "288C"
   FromDate: 2008-01-01
 
-IGInvNum50: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 8
@@ -398,7 +398,7 @@ IGInvNum50: IGInvNum
   SeqPrefix: "CCDI"
   FromDate: 2006-12-01
 
-IGInvNum51: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 9
@@ -406,7 +406,7 @@ IGInvNum51: IGInvNum
   SeqPrefix: "269C"
   FromDate: 2016-01-01
 
-IGInvNum52: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 9
@@ -414,7 +414,7 @@ IGInvNum52: IGInvNum
   SeqPrefix: "259C"
   FromDate: 2015-01-01
 
-IGInvNum53: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 9
@@ -422,7 +422,7 @@ IGInvNum53: IGInvNum
   SeqPrefix: "249C"
   FromDate: 2014-02-01
 
-IGInvNum54: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 9
@@ -430,7 +430,7 @@ IGInvNum54: IGInvNum
   SeqPrefix: "239C"
   FromDate: 2013-01-01
 
-IGInvNum55: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 9
@@ -438,7 +438,7 @@ IGInvNum55: IGInvNum
   SeqPrefix: "229C"
   FromDate: 2012-01-01
 
-IGInvNum56: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 9
@@ -446,7 +446,7 @@ IGInvNum56: IGInvNum
   SeqPrefix: "219C"
   FromDate: 2011-01-01
 
-IGInvNum57: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 9
@@ -454,7 +454,7 @@ IGInvNum57: IGInvNum
   SeqPrefix: "209C"
   FromDate: 2010-01-01
 
-IGInvNum58: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 9
@@ -462,7 +462,7 @@ IGInvNum58: IGInvNum
   SeqPrefix: "299C"
   FromDate: 2009-01-01
 
-IGInvNum59: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 9
@@ -470,7 +470,7 @@ IGInvNum59: IGInvNum
   SeqPrefix: "289C"
   FromDate: 2008-01-01
 
-IGInvNum60: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 9
@@ -478,21 +478,21 @@ IGInvNum60: IGInvNum
   SeqPrefix: "CCCI"
   FromDate: 2006-12-01
 
-IGInvNum61: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 12
   SeqPrefix: "PEDI"
   FromDate: 2006-12-01
 
-IGInvNum62: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 13
   SeqPrefix: "PECI"
   FromDate: 2006-12-01
 
-IGInvNum63: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IGIC1"
   InvType: 99
@@ -500,7 +500,7 @@ IGInvNum63: IGInvNum
   SeqPrefix: "TIGI"
   FromDate: 2007-01-01
 
-IGInvNum64: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 1
@@ -508,7 +508,7 @@ IGInvNum64: IGInvNum
   SeqPrefix: "361D"
   FromDate: 2016-01-01
 
-IGInvNum65: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 1
@@ -516,7 +516,7 @@ IGInvNum65: IGInvNum
   SeqPrefix: "351D"
   FromDate: 2015-01-01
 
-IGInvNum66: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 1
@@ -524,7 +524,7 @@ IGInvNum66: IGInvNum
   SeqPrefix: "341D"
   FromDate: 2014-02-01
 
-IGInvNum67: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 1
@@ -532,7 +532,7 @@ IGInvNum67: IGInvNum
   SeqPrefix: "331D"
   FromDate: 2013-01-01
 
-IGInvNum68: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 1
@@ -540,7 +540,7 @@ IGInvNum68: IGInvNum
   SeqPrefix: "321D"
   FromDate: 2012-01-01
 
-IGInvNum69: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 1
@@ -548,7 +548,7 @@ IGInvNum69: IGInvNum
   SeqPrefix: "311D"
   FromDate: 2011-01-01
 
-IGInvNum70: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 1
@@ -556,7 +556,7 @@ IGInvNum70: IGInvNum
   SeqPrefix: "301D"
   FromDate: 2010-01-01
 
-IGInvNum71: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 1
@@ -564,7 +564,7 @@ IGInvNum71: IGInvNum
   SeqPrefix: "391D"
   FromDate: 2009-01-01
 
-IGInvNum72: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 1
@@ -572,7 +572,7 @@ IGInvNum72: IGInvNum
   SeqPrefix: "381D"
   FromDate: 2008-01-01
 
-IGInvNum73: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 1
@@ -580,7 +580,7 @@ IGInvNum73: IGInvNum
   SeqPrefix: "PODC"
   FromDate: 2006-12-01
 
-IGInvNum74: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 5
@@ -588,7 +588,7 @@ IGInvNum74: IGInvNum
   SeqPrefix: "365C"
   FromDate: 2016-01-01
 
-IGInvNum75: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 5
@@ -596,7 +596,7 @@ IGInvNum75: IGInvNum
   SeqPrefix: "355C"
   FromDate: 2015-01-01
 
-IGInvNum76: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 5
@@ -604,7 +604,7 @@ IGInvNum76: IGInvNum
   SeqPrefix: "345C"
   FromDate: 2014-02-01
 
-IGInvNum77: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 5
@@ -612,7 +612,7 @@ IGInvNum77: IGInvNum
   SeqPrefix: "335C"
   FromDate: 2013-01-01
 
-IGInvNum78: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 5
@@ -620,7 +620,7 @@ IGInvNum78: IGInvNum
   SeqPrefix: "325C"
   FromDate: 2012-01-01
 
-IGInvNum79: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 5
@@ -628,7 +628,7 @@ IGInvNum79: IGInvNum
   SeqPrefix: "315C"
   FromDate: 2011-01-01
 
-IGInvNum80: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 5
@@ -636,7 +636,7 @@ IGInvNum80: IGInvNum
   SeqPrefix: "305C"
   FromDate: 2010-01-01
 
-IGInvNum81: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 5
@@ -644,7 +644,7 @@ IGInvNum81: IGInvNum
   SeqPrefix: "395C"
   FromDate: 2009-01-01
 
-IGInvNum82: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 5
@@ -652,14 +652,14 @@ IGInvNum82: IGInvNum
   SeqPrefix: "385C"
   FromDate: 2008-01-01
 
-IGInvNum83: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 5
   SeqPrefix: "POCC"
   FromDate: 2006-12-01
 
-IGInvNum84: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 6
@@ -667,7 +667,7 @@ IGInvNum84: IGInvNum
   SeqPrefix: "366D"
   FromDate: 2016-01-01
 
-IGInvNum85: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 6
@@ -675,7 +675,7 @@ IGInvNum85: IGInvNum
   SeqPrefix: "356D"
   FromDate: 2015-01-01
 
-IGInvNum86: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 6
@@ -683,7 +683,7 @@ IGInvNum86: IGInvNum
   SeqPrefix: "346D"
   FromDate: 2014-02-01
 
-IGInvNum87: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 6
@@ -691,7 +691,7 @@ IGInvNum87: IGInvNum
   SeqPrefix: "336D"
   FromDate: 2013-01-01
 
-IGInvNum88: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 6
@@ -699,7 +699,7 @@ IGInvNum88: IGInvNum
   SeqPrefix: "326D"
   FromDate: 2012-01-01
 
-IGInvNum89: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 6
@@ -707,7 +707,7 @@ IGInvNum89: IGInvNum
   SeqPrefix: "316D"
   FromDate: 2011-01-01
 
-IGInvNum90: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 6
@@ -715,7 +715,7 @@ IGInvNum90: IGInvNum
   SeqPrefix: "306D"
   FromDate: 2010-01-01
 
-IGInvNum91: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 6
@@ -723,7 +723,7 @@ IGInvNum91: IGInvNum
   SeqPrefix: "396D"
   FromDate: 2009-01-01
 
-IGInvNum92: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 6
@@ -731,7 +731,7 @@ IGInvNum92: IGInvNum
   SeqPrefix: "386D"
   FromDate: 2008-01-01
 
-IGInvNum93: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 6
@@ -739,7 +739,7 @@ IGInvNum93: IGInvNum
   SeqPrefix: "CDDC"
   FromDate: 2006-12-01
 
-IGInvNum94: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 7
@@ -747,7 +747,7 @@ IGInvNum94: IGInvNum
   SeqPrefix: "367D"
   FromDate: 2016-01-01
 
-IGInvNum95: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 7
@@ -755,7 +755,7 @@ IGInvNum95: IGInvNum
   SeqPrefix: "357D"
   FromDate: 2015-01-01
 
-IGInvNum96: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 7
@@ -763,7 +763,7 @@ IGInvNum96: IGInvNum
   SeqPrefix: "347D"
   FromDate: 2014-02-01
 
-IGInvNum97: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 7
@@ -771,7 +771,7 @@ IGInvNum97: IGInvNum
   SeqPrefix: "337D"
   FromDate: 2013-01-01
 
-IGInvNum98: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 7
@@ -779,7 +779,7 @@ IGInvNum98: IGInvNum
   SeqPrefix: "327D"
   FromDate: 2012-01-01
 
-IGInvNum99: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 7
@@ -787,7 +787,7 @@ IGInvNum99: IGInvNum
   SeqPrefix: "317D"
   FromDate: 2011-01-01
 
-IGInvNum100: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 7
@@ -795,7 +795,7 @@ IGInvNum100: IGInvNum
   SeqPrefix: "307D"
   FromDate: 2010-01-01
 
-IGInvNum101: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 7
@@ -803,7 +803,7 @@ IGInvNum101: IGInvNum
   SeqPrefix: "397D"
   FromDate: 2009-01-01
 
-IGInvNum102: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 7
@@ -811,7 +811,7 @@ IGInvNum102: IGInvNum
   SeqPrefix: "387D"
   FromDate: 2008-01-01
 
-IGInvNum103: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 7
@@ -819,7 +819,7 @@ IGInvNum103: IGInvNum
   SeqPrefix: "CDCC"
   FromDate: 2006-12-01
 
-IGInvNum104: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 8
@@ -827,7 +827,7 @@ IGInvNum104: IGInvNum
   SeqPrefix: "368C"
   FromDate: 2016-01-01
 
-IGInvNum105: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 8
@@ -835,7 +835,7 @@ IGInvNum105: IGInvNum
   SeqPrefix: "358C"
   FromDate: 2015-01-01
 
-IGInvNum106: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 8
@@ -843,7 +843,7 @@ IGInvNum106: IGInvNum
   SeqPrefix: "348C"
   FromDate: 2014-02-01
 
-IGInvNum107: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 8
@@ -851,7 +851,7 @@ IGInvNum107: IGInvNum
   SeqPrefix: "338C"
   FromDate: 2013-01-01
 
-IGInvNum108: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 8
@@ -859,7 +859,7 @@ IGInvNum108: IGInvNum
   SeqPrefix: "328C"
   FromDate: 2012-01-01
 
-IGInvNum109: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 8
@@ -867,7 +867,7 @@ IGInvNum109: IGInvNum
   SeqPrefix: "318C"
   FromDate: 2011-01-01
 
-IGInvNum110: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 8
@@ -875,7 +875,7 @@ IGInvNum110: IGInvNum
   SeqPrefix: "308C"
   FromDate: 2010-01-01
 
-IGInvNum111: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 8
@@ -883,7 +883,7 @@ IGInvNum111: IGInvNum
   SeqPrefix: "398C"
   FromDate: 2009-01-01
 
-IGInvNum112: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 8
@@ -891,7 +891,7 @@ IGInvNum112: IGInvNum
   SeqPrefix: "388C"
   FromDate: 2008-01-01
 
-IGInvNum113: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 8
@@ -899,7 +899,7 @@ IGInvNum113: IGInvNum
   SeqPrefix: "CCDC"
   FromDate: 2006-12-01
 
-IGInvNum114: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 9
@@ -907,7 +907,7 @@ IGInvNum114: IGInvNum
   SeqPrefix: "369C"
   FromDate: 2016-01-01
 
-IGInvNum115: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 9
@@ -915,7 +915,7 @@ IGInvNum115: IGInvNum
   SeqPrefix: "359C"
   FromDate: 2015-01-01
 
-IGInvNum116: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 9
@@ -923,7 +923,7 @@ IGInvNum116: IGInvNum
   SeqPrefix: "349C"
   FromDate: 2014-02-01
 
-IGInvNum117: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 9
@@ -931,7 +931,7 @@ IGInvNum117: IGInvNum
   SeqPrefix: "339C"
   FromDate: 2013-01-01
 
-IGInvNum118: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 9
@@ -939,7 +939,7 @@ IGInvNum118: IGInvNum
   SeqPrefix: "329C"
   FromDate: 2012-01-01
 
-IGInvNum119: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 9
@@ -947,7 +947,7 @@ IGInvNum119: IGInvNum
   SeqPrefix: "319C"
   FromDate: 2011-01-01
 
-IGInvNum120: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 9
@@ -955,7 +955,7 @@ IGInvNum120: IGInvNum
   SeqPrefix: "309C"
   FromDate: 2010-01-01
 
-IGInvNum121: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 9
@@ -963,7 +963,7 @@ IGInvNum121: IGInvNum
   SeqPrefix: "399C"
   FromDate: 2009-01-01
 
-IGInvNum122: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 9
@@ -971,7 +971,7 @@ IGInvNum122: IGInvNum
   SeqPrefix: "389C"
   FromDate: 2008-01-01
 
-IGInvNum123: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 9
@@ -979,21 +979,21 @@ IGInvNum123: IGInvNum
   SeqPrefix: "CCCC"
   FromDate: 2006-12-01
 
-IGInvNum124: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 12
   SeqPrefix: "PEDC"
   FromDate: 2006-12-01
 
-IGInvNum125: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 13
   SeqPrefix: "PECC"
   FromDate: 2006-12-01
 
-IGInvNum126: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIC1"
   InvType: 99
@@ -1001,7 +1001,7 @@ IGInvNum126: IGInvNum
   SeqPrefix: "TIPC"
   FromDate: 2007-01-01
 
-IGInvNum127: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 1
@@ -1009,7 +1009,7 @@ IGInvNum127: IGInvNum
   SeqPrefix: "461D"
   FromDate: 2016-01-01
 
-IGInvNum128: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 1
@@ -1017,7 +1017,7 @@ IGInvNum128: IGInvNum
   SeqPrefix: "451D"
   FromDate: 2015-01-01
 
-IGInvNum129: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 1
@@ -1025,7 +1025,7 @@ IGInvNum129: IGInvNum
   SeqPrefix: "441D"
   FromDate: 2014-02-01
 
-IGInvNum130: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 1
@@ -1033,7 +1033,7 @@ IGInvNum130: IGInvNum
   SeqPrefix: "431D"
   FromDate: 2013-01-01
 
-IGInvNum131: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 1
@@ -1041,7 +1041,7 @@ IGInvNum131: IGInvNum
   SeqPrefix: "421D"
   FromDate: 2012-01-01
 
-IGInvNum132: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 1
@@ -1049,7 +1049,7 @@ IGInvNum132: IGInvNum
   SeqPrefix: "411D"
   FromDate: 2011-01-01
 
-IGInvNum133: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 1
@@ -1057,7 +1057,7 @@ IGInvNum133: IGInvNum
   SeqPrefix: "401D"
   FromDate: 2010-01-01
 
-IGInvNum134: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 1
@@ -1065,7 +1065,7 @@ IGInvNum134: IGInvNum
   SeqPrefix: "491D"
   FromDate: 2009-01-01
 
-IGInvNum135: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 1
@@ -1073,7 +1073,7 @@ IGInvNum135: IGInvNum
   SeqPrefix: "481D"
   FromDate: 2008-01-01
 
-IGInvNum136: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 1
@@ -1081,7 +1081,7 @@ IGInvNum136: IGInvNum
   SeqPrefix: "PODM"
   FromDate: 2006-12-01
 
-IGInvNum137: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 5
@@ -1089,7 +1089,7 @@ IGInvNum137: IGInvNum
   SeqPrefix: "465C"
   FromDate: 2016-01-01
 
-IGInvNum138: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 5
@@ -1097,7 +1097,7 @@ IGInvNum138: IGInvNum
   SeqPrefix: "455C"
   FromDate: 2015-01-01
 
-IGInvNum139: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 5
@@ -1105,7 +1105,7 @@ IGInvNum139: IGInvNum
   SeqPrefix: "445C"
   FromDate: 2014-02-01
 
-IGInvNum140: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 5
@@ -1113,7 +1113,7 @@ IGInvNum140: IGInvNum
   SeqPrefix: "435C"
   FromDate: 2013-01-01
 
-IGInvNum141: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 5
@@ -1121,7 +1121,7 @@ IGInvNum141: IGInvNum
   SeqPrefix: "425C"
   FromDate: 2012-01-01
 
-IGInvNum142: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 5
@@ -1129,7 +1129,7 @@ IGInvNum142: IGInvNum
   SeqPrefix: "415C"
   FromDate: 2011-01-01
 
-IGInvNum143: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 5
@@ -1137,7 +1137,7 @@ IGInvNum143: IGInvNum
   SeqPrefix: "405C"
   FromDate: 2010-01-01
 
-IGInvNum144: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 5
@@ -1145,7 +1145,7 @@ IGInvNum144: IGInvNum
   SeqPrefix: "495C"
   FromDate: 2009-01-01
 
-IGInvNum145: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 5
@@ -1153,7 +1153,7 @@ IGInvNum145: IGInvNum
   SeqPrefix: "485C"
   FromDate: 2008-01-01
 
-IGInvNum146: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 5
@@ -1161,7 +1161,7 @@ IGInvNum146: IGInvNum
   SeqPrefix: "POCM"
   FromDate: 2006-12-01
 
-IGInvNum147: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 6
@@ -1169,7 +1169,7 @@ IGInvNum147: IGInvNum
   SeqPrefix: "466D"
   FromDate: 2016-01-01
 
-IGInvNum148: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 6
@@ -1177,7 +1177,7 @@ IGInvNum148: IGInvNum
   SeqPrefix: "456D"
   FromDate: 2015-01-01
 
-IGInvNum149: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 6
@@ -1185,7 +1185,7 @@ IGInvNum149: IGInvNum
   SeqPrefix: "446D"
   FromDate: 2014-02-01
 
-IGInvNum150: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 6
@@ -1193,7 +1193,7 @@ IGInvNum150: IGInvNum
   SeqPrefix: "436D"
   FromDate: 2013-01-01
 
-IGInvNum151: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 6
@@ -1201,7 +1201,7 @@ IGInvNum151: IGInvNum
   SeqPrefix: "426D"
   FromDate: 2012-01-01
 
-IGInvNum152: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 6
@@ -1209,7 +1209,7 @@ IGInvNum152: IGInvNum
   SeqPrefix: "416D"
   FromDate: 2011-01-01
 
-IGInvNum153: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 6
@@ -1217,7 +1217,7 @@ IGInvNum153: IGInvNum
   SeqPrefix: "406D"
   FromDate: 2010-01-01
 
-IGInvNum154: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 6
@@ -1225,7 +1225,7 @@ IGInvNum154: IGInvNum
   SeqPrefix: "496D"
   FromDate: 2009-01-01
 
-IGInvNum155: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 6
@@ -1233,7 +1233,7 @@ IGInvNum155: IGInvNum
   SeqPrefix: "486D"
   FromDate: 2008-01-01
 
-IGInvNum156: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 6
@@ -1241,7 +1241,7 @@ IGInvNum156: IGInvNum
   SeqPrefix: "CDDM"
   FromDate: 2006-11-01
 
-IGInvNum157: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 7
@@ -1249,7 +1249,7 @@ IGInvNum157: IGInvNum
   SeqPrefix: "467D"
   FromDate: 2016-01-01
 
-IGInvNum158: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 7
@@ -1257,7 +1257,7 @@ IGInvNum158: IGInvNum
   SeqPrefix: "457D"
   FromDate: 2015-01-01
 
-IGInvNum159: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 7
@@ -1265,7 +1265,7 @@ IGInvNum159: IGInvNum
   SeqPrefix: "447D"
   FromDate: 2014-02-01
 
-IGInvNum160: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 7
@@ -1273,7 +1273,7 @@ IGInvNum160: IGInvNum
   SeqPrefix: "437D"
   FromDate: 2013-01-01
 
-IGInvNum161: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 7
@@ -1281,7 +1281,7 @@ IGInvNum161: IGInvNum
   SeqPrefix: "427D"
   FromDate: 2012-01-01
 
-IGInvNum162: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 7
@@ -1289,7 +1289,7 @@ IGInvNum162: IGInvNum
   SeqPrefix: "417D"
   FromDate: 2011-01-01
 
-IGInvNum163: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 7
@@ -1297,7 +1297,7 @@ IGInvNum163: IGInvNum
   SeqPrefix: "407D"
   FromDate: 2010-01-01
 
-IGInvNum164: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 7
@@ -1305,7 +1305,7 @@ IGInvNum164: IGInvNum
   SeqPrefix: "497D"
   FromDate: 2009-01-01
 
-IGInvNum165: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 7
@@ -1313,7 +1313,7 @@ IGInvNum165: IGInvNum
   SeqPrefix: "487D"
   FromDate: 2008-01-01
 
-IGInvNum166: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 7
@@ -1321,7 +1321,7 @@ IGInvNum166: IGInvNum
   SeqPrefix: "CDCM"
   FromDate: 2006-11-01
 
-IGInvNum167: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 8
@@ -1329,7 +1329,7 @@ IGInvNum167: IGInvNum
   SeqPrefix: "468C"
   FromDate: 2016-01-01
 
-IGInvNum168: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 8
@@ -1337,7 +1337,7 @@ IGInvNum168: IGInvNum
   SeqPrefix: "458C"
   FromDate: 2015-01-01
 
-IGInvNum169: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 8
@@ -1345,7 +1345,7 @@ IGInvNum169: IGInvNum
   SeqPrefix: "448C"
   FromDate: 2014-02-01
 
-IGInvNum170: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 8
@@ -1353,7 +1353,7 @@ IGInvNum170: IGInvNum
   SeqPrefix: "438C"
   FromDate: 2013-01-01
 
-IGInvNum171: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 8
@@ -1361,7 +1361,7 @@ IGInvNum171: IGInvNum
   SeqPrefix: "428C"
   FromDate: 2012-01-01
 
-IGInvNum172: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 8
@@ -1369,7 +1369,7 @@ IGInvNum172: IGInvNum
   SeqPrefix: "418C"
   FromDate: 2011-01-01
 
-IGInvNum173: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 8
@@ -1377,7 +1377,7 @@ IGInvNum173: IGInvNum
   SeqPrefix: "408C"
   FromDate: 2010-01-01
 
-IGInvNum174: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 8
@@ -1385,7 +1385,7 @@ IGInvNum174: IGInvNum
   SeqPrefix: "498C"
   FromDate: 2009-01-01
 
-IGInvNum175: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 8
@@ -1393,7 +1393,7 @@ IGInvNum175: IGInvNum
   SeqPrefix: "488C"
   FromDate: 2008-01-01
 
-IGInvNum176: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 8
@@ -1401,7 +1401,7 @@ IGInvNum176: IGInvNum
   SeqPrefix: "CCDM"
   FromDate: 2006-12-01
 
-IGInvNum177: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 9
@@ -1409,7 +1409,7 @@ IGInvNum177: IGInvNum
   SeqPrefix: "469C"
   FromDate: 2016-01-01
 
-IGInvNum178: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 9
@@ -1417,7 +1417,7 @@ IGInvNum178: IGInvNum
   SeqPrefix: "459C"
   FromDate: 2015-01-01
 
-IGInvNum179: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 9
@@ -1425,7 +1425,7 @@ IGInvNum179: IGInvNum
   SeqPrefix: "449C"
   FromDate: 2014-02-01
 
-IGInvNum180: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 9
@@ -1433,7 +1433,7 @@ IGInvNum180: IGInvNum
   SeqPrefix: "439C"
   FromDate: 2013-01-01
 
-IGInvNum181: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 9
@@ -1441,7 +1441,7 @@ IGInvNum181: IGInvNum
   SeqPrefix: "429C"
   FromDate: 2012-01-01
 
-IGInvNum182: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 9
@@ -1449,7 +1449,7 @@ IGInvNum182: IGInvNum
   SeqPrefix: "419C"
   FromDate: 2011-01-01
 
-IGInvNum183: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 9
@@ -1457,7 +1457,7 @@ IGInvNum183: IGInvNum
   SeqPrefix: "409C"
   FromDate: 2010-01-01
 
-IGInvNum184: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 9
@@ -1465,7 +1465,7 @@ IGInvNum184: IGInvNum
   SeqPrefix: "499C"
   FromDate: 2009-01-01
 
-IGInvNum185: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 9
@@ -1473,7 +1473,7 @@ IGInvNum185: IGInvNum
   SeqPrefix: "489C"
   FromDate: 2008-01-01
 
-IGInvNum186: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 9
@@ -1481,21 +1481,21 @@ IGInvNum186: IGInvNum
   SeqPrefix: "CCCM"
   FromDate: 2006-12-01
 
-IGInvNum187: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 12
   SeqPrefix: "PEDM"
   FromDate: 2006-12-01
 
-IGInvNum188: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 13
   SeqPrefix: "PECM"
   FromDate: 2006-12-01
 
-IGInvNum189: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "IPSIM1"
   InvType: 99
@@ -1503,35 +1503,35 @@ IGInvNum189: IGInvNum
   SeqPrefix: "TIPM"
   FromDate: 2007-01-01
 
-IGInvNum190: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "UNKNOWN"
   InvType: 6
   SeqPrefix: "CDDU"
   FromDate: 2006-11-01
 
-IGInvNum191: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "UNKNOWN"
   InvType: 8
   SeqPrefix: "CCDU"
   FromDate: 2006-12-01
 
-IGInvNum192: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "UNKNOWN"
   InvType: 12
   SeqPrefix: "PEDU"
   FromDate: 2006-12-01
 
-IGInvNum193: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "UNKNOWN"
   InvType: 13
   SeqPrefix: "PECU"
   FromDate: 2006-12-01
 
-IGInvNum194: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 1
@@ -1539,7 +1539,7 @@ IGInvNum194: IGInvNum
   SeqPrefix: "161D"
   FromDate: 2016-01-01
 
-IGInvNum195: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 1
@@ -1547,7 +1547,7 @@ IGInvNum195: IGInvNum
   SeqPrefix: "151D"
   FromDate: 2015-01-01
 
-IGInvNum196: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 1
@@ -1555,7 +1555,7 @@ IGInvNum196: IGInvNum
   SeqPrefix: "141D"
   FromDate: 2014-02-01
 
-IGInvNum197: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 1
@@ -1563,7 +1563,7 @@ IGInvNum197: IGInvNum
   SeqPrefix: "131D"
   FromDate: 2013-01-01
 
-IGInvNum198: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 1
@@ -1571,7 +1571,7 @@ IGInvNum198: IGInvNum
   SeqPrefix: "121D"
   FromDate: 2012-01-01
 
-IGInvNum199: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 1
@@ -1579,7 +1579,7 @@ IGInvNum199: IGInvNum
   SeqPrefix: "111D"
   FromDate: 2011-01-01
 
-IGInvNum200: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 1
@@ -1587,7 +1587,7 @@ IGInvNum200: IGInvNum
   SeqPrefix: "101D"
   FromDate: 2010-01-01
 
-IGInvNum201: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 1
@@ -1595,7 +1595,7 @@ IGInvNum201: IGInvNum
   SeqPrefix: "191D"
   FromDate: 2009-01-01
 
-IGInvNum202: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 1
@@ -1603,7 +1603,7 @@ IGInvNum202: IGInvNum
   SeqPrefix: "181D"
   FromDate: 2008-01-01
 
-IGInvNum203: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 1
@@ -1611,7 +1611,7 @@ IGInvNum203: IGInvNum
   SeqPrefix: "PODE"
   FromDate: 2006-12-01
 
-IGInvNum204: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 5
@@ -1619,7 +1619,7 @@ IGInvNum204: IGInvNum
   SeqPrefix: "165C"
   FromDate: 2016-01-01
 
-IGInvNum205: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 5
@@ -1627,7 +1627,7 @@ IGInvNum205: IGInvNum
   SeqPrefix: "155C"
   FromDate: 2015-01-01
 
-IGInvNum206: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 5
@@ -1635,7 +1635,7 @@ IGInvNum206: IGInvNum
   SeqPrefix: "145C"
   FromDate: 2014-02-01
 
-IGInvNum207: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 5
@@ -1643,7 +1643,7 @@ IGInvNum207: IGInvNum
   SeqPrefix: "135C"
   FromDate: 2013-01-01
 
-IGInvNum208: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 5
@@ -1651,7 +1651,7 @@ IGInvNum208: IGInvNum
   SeqPrefix: "125C"
   FromDate: 2012-01-01
 
-IGInvNum209: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 5
@@ -1659,7 +1659,7 @@ IGInvNum209: IGInvNum
   SeqPrefix: "115C"
   FromDate: 2011-01-01
 
-IGInvNum210: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 5
@@ -1667,7 +1667,7 @@ IGInvNum210: IGInvNum
   SeqPrefix: "105C"
   FromDate: 2010-01-01
 
-IGInvNum211: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 5
@@ -1675,7 +1675,7 @@ IGInvNum211: IGInvNum
   SeqPrefix: "195C"
   FromDate: 2009-01-01
 
-IGInvNum212: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 5
@@ -1683,7 +1683,7 @@ IGInvNum212: IGInvNum
   SeqPrefix: "185C"
   FromDate: 2008-01-01
 
-IGInvNum213: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 5
@@ -1691,7 +1691,7 @@ IGInvNum213: IGInvNum
   SeqPrefix: "POCE"
   FromDate: 2006-12-01
 
-IGInvNum214: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 6
@@ -1699,7 +1699,7 @@ IGInvNum214: IGInvNum
   SeqPrefix: "166D"
   FromDate: 2016-01-01
 
-IGInvNum215: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 6
@@ -1707,7 +1707,7 @@ IGInvNum215: IGInvNum
   SeqPrefix: "156D"
   FromDate: 2015-01-01
 
-IGInvNum216: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 6
@@ -1715,7 +1715,7 @@ IGInvNum216: IGInvNum
   SeqPrefix: "146D"
   FromDate: 2014-02-01
 
-IGInvNum217: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 6
@@ -1723,7 +1723,7 @@ IGInvNum217: IGInvNum
   SeqPrefix: "136D"
   FromDate: 2013-01-01
 
-IGInvNum218: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 6
@@ -1731,7 +1731,7 @@ IGInvNum218: IGInvNum
   SeqPrefix: "126D"
   FromDate: 2012-01-01
 
-IGInvNum219: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 6
@@ -1739,7 +1739,7 @@ IGInvNum219: IGInvNum
   SeqPrefix: "116D"
   FromDate: 2011-01-01
 
-IGInvNum220: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 6
@@ -1747,7 +1747,7 @@ IGInvNum220: IGInvNum
   SeqPrefix: "106D"
   FromDate: 2010-01-01
 
-IGInvNum221: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 6
@@ -1755,7 +1755,7 @@ IGInvNum221: IGInvNum
   SeqPrefix: "196D"
   FromDate: 2009-01-01
 
-IGInvNum222: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 6
@@ -1763,7 +1763,7 @@ IGInvNum222: IGInvNum
   SeqPrefix: "186D"
   FromDate: 2008-01-01
 
-IGInvNum223: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 6
@@ -1771,7 +1771,7 @@ IGInvNum223: IGInvNum
   SeqPrefix: "CDDE"
   FromDate: 2006-11-01
 
-IGInvNum224: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 7
@@ -1779,7 +1779,7 @@ IGInvNum224: IGInvNum
   SeqPrefix: "167D"
   FromDate: 2016-01-01
 
-IGInvNum225: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 7
@@ -1787,7 +1787,7 @@ IGInvNum225: IGInvNum
   SeqPrefix: "157D"
   FromDate: 2015-01-01
 
-IGInvNum226: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 7
@@ -1795,7 +1795,7 @@ IGInvNum226: IGInvNum
   SeqPrefix: "147D"
   FromDate: 2014-02-01
 
-IGInvNum227: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 7
@@ -1803,7 +1803,7 @@ IGInvNum227: IGInvNum
   SeqPrefix: "137D"
   FromDate: 2013-01-01
 
-IGInvNum228: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 7
@@ -1811,7 +1811,7 @@ IGInvNum228: IGInvNum
   SeqPrefix: "127D"
   FromDate: 2012-01-01
 
-IGInvNum229: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 7
@@ -1819,7 +1819,7 @@ IGInvNum229: IGInvNum
   SeqPrefix: "117D"
   FromDate: 2011-01-01
 
-IGInvNum230: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 7
@@ -1827,7 +1827,7 @@ IGInvNum230: IGInvNum
   SeqPrefix: "107D"
   FromDate: 2010-01-01
 
-IGInvNum231: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 7
@@ -1835,7 +1835,7 @@ IGInvNum231: IGInvNum
   SeqPrefix: "197D"
   FromDate: 2009-01-01
 
-IGInvNum232: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 7
@@ -1843,7 +1843,7 @@ IGInvNum232: IGInvNum
   SeqPrefix: "187D"
   FromDate: 2008-01-01
 
-IGInvNum233: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 7
@@ -1851,7 +1851,7 @@ IGInvNum233: IGInvNum
   SeqPrefix: "CDCE"
   FromDate: 2006-11-01
 
-IGInvNum234: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 8
@@ -1859,7 +1859,7 @@ IGInvNum234: IGInvNum
   SeqPrefix: "168C"
   FromDate: 2016-01-01
 
-IGInvNum235: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 8
@@ -1867,7 +1867,7 @@ IGInvNum235: IGInvNum
   SeqPrefix: "158C"
   FromDate: 2015-01-01
 
-IGInvNum236: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 8
@@ -1875,7 +1875,7 @@ IGInvNum236: IGInvNum
   SeqPrefix: "148C"
   FromDate: 2014-02-01
 
-IGInvNum237: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 8
@@ -1883,7 +1883,7 @@ IGInvNum237: IGInvNum
   SeqPrefix: "138C"
   FromDate: 2013-01-01
 
-IGInvNum238: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 8
@@ -1891,7 +1891,7 @@ IGInvNum238: IGInvNum
   SeqPrefix: "128C"
   FromDate: 2012-01-01
 
-IGInvNum239: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 8
@@ -1899,7 +1899,7 @@ IGInvNum239: IGInvNum
   SeqPrefix: "118C"
   FromDate: 2011-01-01
 
-IGInvNum240: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 8
@@ -1907,7 +1907,7 @@ IGInvNum240: IGInvNum
   SeqPrefix: "108C"
   FromDate: 2010-01-01
 
-IGInvNum241: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 8
@@ -1915,7 +1915,7 @@ IGInvNum241: IGInvNum
   SeqPrefix: "198C"
   FromDate: 2009-01-01
 
-IGInvNum242: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 8
@@ -1923,7 +1923,7 @@ IGInvNum242: IGInvNum
   SeqPrefix: "188C"
   FromDate: 2008-01-01
 
-IGInvNum243: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 8
@@ -1931,7 +1931,7 @@ IGInvNum243: IGInvNum
   SeqPrefix: "CCDE"
   FromDate: 2006-12-01
 
-IGInvNum244: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 9
@@ -1939,7 +1939,7 @@ IGInvNum244: IGInvNum
   SeqPrefix: "169C"
   FromDate: 2016-01-01
 
-IGInvNum245: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 9
@@ -1947,7 +1947,7 @@ IGInvNum245: IGInvNum
   SeqPrefix: "159C"
   FromDate: 2015-01-01
 
-IGInvNum246: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 9
@@ -1955,7 +1955,7 @@ IGInvNum246: IGInvNum
   SeqPrefix: "149C"
   FromDate: 2014-02-01
 
-IGInvNum247: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 9
@@ -1963,7 +1963,7 @@ IGInvNum247: IGInvNum
   SeqPrefix: "139C"
   FromDate: 2013-01-01
 
-IGInvNum248: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 9
@@ -1971,7 +1971,7 @@ IGInvNum248: IGInvNum
   SeqPrefix: "129C"
   FromDate: 2012-01-01
 
-IGInvNum249: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 9
@@ -1979,7 +1979,7 @@ IGInvNum249: IGInvNum
   SeqPrefix: "119C"
   FromDate: 2011-01-01
 
-IGInvNum250: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 9
@@ -1987,7 +1987,7 @@ IGInvNum250: IGInvNum
   SeqPrefix: "109C"
   FromDate: 2010-01-01
 
-IGInvNum251: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 9
@@ -1995,7 +1995,7 @@ IGInvNum251: IGInvNum
   SeqPrefix: "199C"
   FromDate: 2009-01-01
 
-IGInvNum252: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 9
@@ -2003,7 +2003,7 @@ IGInvNum252: IGInvNum
   SeqPrefix: "189C"
   FromDate: 2008-01-01
 
-IGInvNum253: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 9
@@ -2011,21 +2011,21 @@ IGInvNum253: IGInvNum
   SeqPrefix: "CCCE"
   FromDate: 2006-12-01
 
-IGInvNum254: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 12
   SeqPrefix: "PEDE"
   FromDate: 2006-12-01
 
-IGInvNum255: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 13
   SeqPrefix: "PECE"
   FromDate: 2006-12-01
 
-IGInvNum256: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VAT1"
   InvType: 99
@@ -2033,756 +2033,756 @@ IGInvNum256: IGInvNum
   SeqPrefix: "TIVA"
   FromDate: 2007-01-01
 
-IGInvNum257: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 1
   SeqPrefix: "Y61D"
   FromDate: 2016-01-01
 
-IGInvNum258: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 1
   SeqPrefix: "Y51D"
   FromDate: 2015-01-01
 
-IGInvNum259: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 1
   SeqPrefix: "Y41D"
   FromDate: 2014-02-01
 
-IGInvNum260: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 1
   SeqPrefix: "Y31D"
   FromDate: 2013-01-01
 
-IGInvNum261: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 1
   SeqPrefix: "Y21D"
   FromDate: 2012-01-01
 
-IGInvNum262: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 1
   SeqPrefix: "Y11D"
   FromDate: 2011-01-01
 
-IGInvNum263: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 1
   SeqPrefix: "Y01D"
   FromDate: 2010-01-01
 
-IGInvNum264: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 1
   SeqPrefix: "Y91D"
   FromDate: 2009-01-01
 
-IGInvNum265: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 1
   SeqPrefix: "Y81D"
   FromDate: 2008-01-01
 
-IGInvNum266: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 5
   SeqPrefix: "Y65C"
   FromDate: 2016-01-01
 
-IGInvNum267: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 5
   SeqPrefix: "Y55C"
   FromDate: 2015-01-01
 
-IGInvNum268: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 5
   SeqPrefix: "Y45C"
   FromDate: 2014-02-01
 
-IGInvNum269: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 5
   SeqPrefix: "Y35C"
   FromDate: 2013-01-01
 
-IGInvNum270: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 5
   SeqPrefix: "Y25C"
   FromDate: 2012-01-01
 
-IGInvNum271: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 5
   SeqPrefix: "Y15C"
   FromDate: 2011-01-01
 
-IGInvNum272: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 5
   SeqPrefix: "Y05C"
   FromDate: 2010-01-01
 
-IGInvNum273: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 5
   SeqPrefix: "Y95C"
   FromDate: 2009-01-01
 
-IGInvNum274: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 5
   SeqPrefix: "Y85C"
   FromDate: 2008-01-01
 
-IGInvNum275: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 6
   SeqPrefix: "Y66D"
   FromDate: 2016-01-01
 
-IGInvNum276: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 6
   SeqPrefix: "Y56D"
   FromDate: 2015-01-01
 
-IGInvNum277: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 6
   SeqPrefix: "Y46D"
   FromDate: 2014-02-01
 
-IGInvNum278: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 6
   SeqPrefix: "Y36D"
   FromDate: 2013-01-01
 
-IGInvNum279: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 6
   SeqPrefix: "Y26D"
   FromDate: 2012-01-01
 
-IGInvNum280: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 6
   SeqPrefix: "Y16D"
   FromDate: 2011-01-01
 
-IGInvNum281: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 6
   SeqPrefix: "Y06D"
   FromDate: 2010-01-01
 
-IGInvNum282: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 6
   SeqPrefix: "Y96D"
   FromDate: 2009-01-01
 
-IGInvNum283: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 6
   SeqPrefix: "Y86D"
   FromDate: 2008-01-01
 
-IGInvNum284: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 7
   SeqPrefix: "Y67D"
   FromDate: 2016-01-01
 
-IGInvNum285: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 7
   SeqPrefix: "Y57D"
   FromDate: 2015-01-01
 
-IGInvNum286: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 7
   SeqPrefix: "Y47D"
   FromDate: 2014-02-01
 
-IGInvNum287: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 7
   SeqPrefix: "Y37D"
   FromDate: 2013-01-01
 
-IGInvNum288: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 7
   SeqPrefix: "Y27D"
   FromDate: 2012-01-01
 
-IGInvNum289: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 7
   SeqPrefix: "Y17D"
   FromDate: 2011-01-01
 
-IGInvNum290: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 7
   SeqPrefix: "Y07D"
   FromDate: 2010-01-01
 
-IGInvNum291: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 7
   SeqPrefix: "Y97D"
   FromDate: 2009-01-01
 
-IGInvNum292: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 7
   SeqPrefix: "Y87D"
   FromDate: 2008-01-01
 
-IGInvNum293: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 8
   SeqPrefix: "Y68C"
   FromDate: 2016-01-01
 
-IGInvNum294: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 8
   SeqPrefix: "Y58C"
   FromDate: 2015-01-01
 
-IGInvNum295: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 8
   SeqPrefix: "Y48C"
   FromDate: 2014-02-01
 
-IGInvNum296: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 8
   SeqPrefix: "Y38C"
   FromDate: 2013-01-01
 
-IGInvNum297: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 8
   SeqPrefix: "Y28C"
   FromDate: 2012-01-01
 
-IGInvNum298: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 8
   SeqPrefix: "Y18C"
   FromDate: 2011-01-01
 
-IGInvNum299: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 8
   SeqPrefix: "Y08C"
   FromDate: 2010-01-01
 
-IGInvNum300: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 8
   SeqPrefix: "Y98C"
   FromDate: 2009-01-01
 
-IGInvNum301: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 8
   SeqPrefix: "Y88C"
   FromDate: 2008-01-01
 
-IGInvNum302: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 9
   SeqPrefix: "Y69C"
   FromDate: 2016-01-01
 
-IGInvNum303: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 9
   SeqPrefix: "Y59C"
   FromDate: 2015-01-01
 
-IGInvNum304: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 9
   SeqPrefix: "Y49C"
   FromDate: 2014-02-01
 
-IGInvNum305: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 9
   SeqPrefix: "Y39C"
   FromDate: 2013-01-01
 
-IGInvNum306: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 9
   SeqPrefix: "Y29C"
   FromDate: 2012-01-01
 
-IGInvNum307: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 9
   SeqPrefix: "Y19C"
   FromDate: 2011-01-01
 
-IGInvNum308: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 9
   SeqPrefix: "Y09C"
   FromDate: 2010-01-01
 
-IGInvNum309: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 9
   SeqPrefix: "Y99C"
   FromDate: 2009-01-01
 
-IGInvNum310: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "VIP"
   InvType: 9
   SeqPrefix: "Y89C"
   FromDate: 2008-01-01
 
-IGInvNum311: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 1
   SeqPrefix: "V61D"
   FromDate: 2016-01-01
 
-IGInvNum312: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 1
   SeqPrefix: "V51D"
   FromDate: 2015-01-01
 
-IGInvNum313: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 1
   SeqPrefix: "V41D"
   FromDate: 2014-02-01
 
-IGInvNum314: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 1
   SeqPrefix: "V31D"
   FromDate: 2013-01-01
 
-IGInvNum315: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 1
   SeqPrefix: "V21D"
   FromDate: 2012-01-01
 
-IGInvNum316: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 1
   SeqPrefix: "V11D"
   FromDate: 2011-01-01
 
-IGInvNum317: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 1
   SeqPrefix: "V01D"
   FromDate: 2010-01-01
 
-IGInvNum318: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 1
   SeqPrefix: "V91D"
   FromDate: 2009-01-01
 
-IGInvNum319: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 1
   SeqPrefix: "V81D"
   FromDate: 2008-01-01
 
-IGInvNum320: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 5
   SeqPrefix: "V65C"
   FromDate: 2016-01-01
 
-IGInvNum321: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 5
   SeqPrefix: "V55C"
   FromDate: 2015-01-01
 
-IGInvNum322: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 5
   SeqPrefix: "V45C"
   FromDate: 2014-02-01
 
-IGInvNum323: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 5
   SeqPrefix: "V35C"
   FromDate: 2013-01-01
 
-IGInvNum324: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 5
   SeqPrefix: "V25C"
   FromDate: 2012-01-01
 
-IGInvNum325: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 5
   SeqPrefix: "V15C"
   FromDate: 2011-01-01
 
-IGInvNum326: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 5
   SeqPrefix: "V05C"
   FromDate: 2010-01-01
 
-IGInvNum327: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 5
   SeqPrefix: "V95C"
   FromDate: 2009-01-01
 
-IGInvNum328: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 5
   SeqPrefix: "V85C"
   FromDate: 2008-01-01
 
-IGInvNum329: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 6
   SeqPrefix: "V66D"
   FromDate: 2016-01-01
 
-IGInvNum330: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 6
   SeqPrefix: "V56D"
   FromDate: 2015-01-01
 
-IGInvNum331: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 6
   SeqPrefix: "V46D"
   FromDate: 2014-02-01
 
-IGInvNum332: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 6
   SeqPrefix: "V36D"
   FromDate: 2013-01-01
 
-IGInvNum333: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 6
   SeqPrefix: "V26D"
   FromDate: 2012-01-01
 
-IGInvNum334: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 6
   SeqPrefix: "V16D"
   FromDate: 2011-01-01
 
-IGInvNum335: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 6
   SeqPrefix: "V06D"
   FromDate: 2010-01-01
 
-IGInvNum336: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 6
   SeqPrefix: "V96D"
   FromDate: 2009-01-01
 
-IGInvNum337: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 6
   SeqPrefix: "V86D"
   FromDate: 2008-01-01
 
-IGInvNum338: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 7
   SeqPrefix: "V67D"
   FromDate: 2016-01-01
 
-IGInvNum339: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 7
   SeqPrefix: "V57D"
   FromDate: 2015-01-01
 
-IGInvNum340: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 7
   SeqPrefix: "V47D"
   FromDate: 2014-02-01
 
-IGInvNum341: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 7
   SeqPrefix: "V37D"
   FromDate: 2013-01-01
 
-IGInvNum342: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 7
   SeqPrefix: "V27D"
   FromDate: 2012-01-01
 
-IGInvNum343: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 7
   SeqPrefix: "V17D"
   FromDate: 2011-01-01
 
-IGInvNum344: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 7
   SeqPrefix: "V07D"
   FromDate: 2010-01-01
 
-IGInvNum345: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 7
   SeqPrefix: "V97D"
   FromDate: 2009-01-01
 
-IGInvNum346: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 7
   SeqPrefix: "V87D"
   FromDate: 2008-01-01
 
-IGInvNum347: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 8
   SeqPrefix: "V68C"
   FromDate: 2016-01-01
 
-IGInvNum348: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 8
   SeqPrefix: "V58C"
   FromDate: 2015-01-01
 
-IGInvNum349: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 8
   SeqPrefix: "V48C"
   FromDate: 2014-02-01
 
-IGInvNum350: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 8
   SeqPrefix: "V38C"
   FromDate: 2013-01-01
 
-IGInvNum351: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 8
   SeqPrefix: "V28C"
   FromDate: 2012-01-01
 
-IGInvNum352: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 8
   SeqPrefix: "V18C"
   FromDate: 2011-01-01
 
-IGInvNum353: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 8
   SeqPrefix: "V08C"
   FromDate: 2010-01-01
 
-IGInvNum354: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 8
   SeqPrefix: "V98C"
   FromDate: 2009-01-01
 
-IGInvNum355: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 8
   SeqPrefix: "V88C"
   FromDate: 2008-01-01
 
-IGInvNum356: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 9
   SeqPrefix: "V69C"
   FromDate: 2016-01-01
 
-IGInvNum357: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 9
   SeqPrefix: "V59C"
   FromDate: 2015-01-01
 
-IGInvNum358: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 9
   SeqPrefix: "V49C"
   FromDate: 2014-02-01
 
-IGInvNum359: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 9
   SeqPrefix: "V39C"
   FromDate: 2013-01-01
 
-IGInvNum360: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 9
   SeqPrefix: "V29C"
   FromDate: 2012-01-01
 
-IGInvNum361: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 9
   SeqPrefix: "V19C"
   FromDate: 2011-01-01
 
-IGInvNum362: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 9
   SeqPrefix: "V09C"
   FromDate: 2010-01-01
 
-IGInvNum363: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 9
   SeqPrefix: "V99C"
   FromDate: 2009-01-01
 
-IGInvNum364: IGInvNum
+bulkload: IGInvNum
   Brand: "1"
   InvGroup: "YOIGO"
   InvType: 9

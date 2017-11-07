@@ -1,13 +1,13 @@
 echo "REQUEST HANDLER SCREENS"
 sleep 2
-screen -t Queue1 1 xfear -screen Syst/requestrunner -clientlog /scratch/log/requester/requ1.log -db /db1/mcdr17q1/mcdr17q1 -ld mcdr -db /db1/mcdrdtl17q1/mcdrdtl17q1 -ld mcdrdtl -param 1
-screen -t Queue2 2 xfear -screen Syst/requestrunner -clientlog /scratch/log/requester/requ2.log -db /db1/mcdr17q1/mcdr17q1 -ld mcdr -db /db1/mcdrdtl17q1/mcdrdtl17q1 -ld mcdrdtl -db /db1/prepcdr17q1/prepcdr17q1 -ld prepcdr -param 2
-screen -t Queue3 3 xfear -screen Syst/requestrunner -clientlog /scratch/log/requester/requ3.log -db /db1/mcdr17q1/mcdr17q1 -ld mcdr -db /db1/mcdrdtl17q1/mcdrdtl17q1 -ld mcdrdtl -db /db1/prepcdr17q1/prepcdr17q1 -ld prepcdr -param 3
-screen -t Queue4 4 xfear -screen Syst/requestrunner -clientlog /scratch/log/requester/requ4.log -db /db1/mcdr17q1/mcdr17q1 -ld mcdr -db /db1/mcdrdtl17q1/mcdrdtl17q1 -ld mcdrdtl -db /db1/prepcdr17q1/prepcdr17q1 -ld prepcdr -param 4
-screen -t Queue5 5 xfear -screen Syst/requestrunner -clientlog /scratch/log/requester/requ5.log -db /db1/mcdr17q1/mcdr17q1 -ld mcdr -db /db1/mcdrdtl17q1/mcdrdtl17q1 -ld mcdrdtl -param 5
-screen -t Queue6 6 xfear -screen Syst/requestrunner -clientlog /scratch/log/requester/requ6.log -db /db1/mcdr17q1/mcdr17q1 -ld mcdr -db /db1/mcdrdtl17q1/mcdrdtl17q1 -ld mcdrdtl -db /db1/prepcdr17q1/prepcdr17q1 -ld prepcdr -param 6
-screen -t Queue7 7 xfear -screen Syst/requestrunner -clientlog /scratch/log/requester/requ7.log -db /db1/mcdr17q1/mcdr17q1 -ld mcdr -db /db1/mcdrdtl17q1/mcdrdtl17q1 -ld mcdrdtl -db /db1/prepcdr17q1/prepcdr17q1 -ld prepcdr -param 7
-screen -t Queue8 8 xfear -screen Syst/requestrunner -clientlog /scratch/log/requester/requ8.log -db /db1/mcdr17q1/mcdr17q1 -ld mcdr -db /db1/mcdrdtl17q1/mcdrdtl17q1 -ld mcdrdtl -db /db1/prepcdr17q1/prepcdr17q1 -ld prepcdr -param 8
-screen -t Queue9 9 xfear -screen Syst/requestrunner -clientlog /scratch/log/requester/requ9.log -db /db1/mcdr17q1/mcdr17q1 -ld mcdr -db /db1/mcdrdtl17q1/mcdrdtl17q1 -ld mcdrdtl -db /db1/prepcdr17q1/prepcdr17q1 -ld prepcdr -param 9
-screen -t Queue10 10 xfear -screen Syst/requestrunner -clientlog /scratch/log/requester/requ10.log -db /db1/mcdr17q1/mcdr17q1 -ld mcdr -db /db1/mcdrdtl17q1/mcdrdtl17q1 -ld mcdrdtl -param 10
-screen -t Queue11 11 xfear -screen Syst/requestrunner -clientlog /scratch/log/requester/requ11.log -db /db1/mcdr17q1/mcdr17q1 -ld mcdr -db /db1/mcdrdtl17q1/mcdrdtl17q1 -ld mcdrdtl -db /db1/prepcdr17q1/prepcdr17q1 -ld prepcdr -param 11 
+screen -t Queue1 1 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl -clientlog /scratch/log/requester/requ1.log -param 1 tenant=yoigo umask=0022
+screen -t Queue2 2 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr -clientlog /scratch/log/requester/requ2.log -param 2 tenant=yoigo umask=0022
+screen -t Queue3 3 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr -clientlog /scratch/log/requester/requ3.log -param 3 tenant=yoigo umask=0022
+screen -t Queue4 4 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr -clientlog /scratch/log/requester/requ4.log -param 4 tenant=yoigo umask=0022
+screen -t Queue5 5 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl -clientlog /scratch/log/requester/requ5.log -param 5 tenant=yoigo umask=0022
+screen -t Queue6 6 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr -clientlog /scratch/log/requester/requ6.log -param 6 tenant=yoigo umask=0022
+screen -t Queue7 7 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr -clientlog /scratch/log/requester/requ7.log -param 7 tenant=yoigo umask=0022
+screen -t Queue8 8 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr -clientlog /scratch/log/requester/requ8.log -param 8 tenant=yoigo umask=0022
+screen -t Queue9 9 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr -clientlog /scratch/log/requester/requ9.log -param 9 tenant=yoigo umask=0022
+screen -t Queue10 10 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl -clientlog /scratch/log/requester/requ10.log -param 10 tenant=yoigo umask=0022
+screen -t Queue11 11 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr -clientlog /scratch/log/requester/requ11.log -param 11 tenant=yoigo umask=0022

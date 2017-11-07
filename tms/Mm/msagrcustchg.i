@@ -6,10 +6,53 @@
 {Mnp/mnpoutchk.i}
 {Func/orderchk.i}
 {Func/fixedlinefunc.i}
+{Func/profunc.i}
 
 &SCOPED-DEFINE ACC_OLB_BARRINGS_NOT_ALLOWED "Y_HURG"
    
+FUNCTION fCheckACCCompability RETURNS CHARACTER
+   (INPUT iiCustSRC AS INT,
+    INPUT iiCustDST AS INT):
+
+   DEF BUFFER bCustCatSRC FOR CustCat.
+   DEF BUFFER bCustCatDST FOR CustCat.
+   DEF BUFFER bCustomerSRC FOR Customer.
+   DEF BUFFER bCustomerDST FOR Customer.
+
+   FIND FIRST bCustomerSRC NO-LOCK WHERE
+              bCustomerSRC.Custnum EQ iiCustSRC NO-ERROR.
+   IF NOT AVAIL bCustomerSRC THEN RETURN "Old customer not found".
+
+   FIND FIRST bCustomerDST NO-LOCK WHERE
+              bCustomerDST.Custnum EQ iiCustDST NO-ERROR.
+   IF NOT AVAIL bCustomerDST THEN RETURN "New customer not found".
+
+   FIND FIRST bCustCatSRC NO-LOCK WHERE
+              bCustCatSRC.Brand EQ Syst.Var:gcBrand AND
+              bCustCatSRC.Category EQ bCustomerSRC.Category NO-ERROR.
+   IF NOT AVAIL bCustCatSRC THEN RETURN "Incorrect old customer category".
+
+   FIND FIRST bCustCatDST NO-LOCK WHERE
+              bCustCatDST.Brand EQ Syst.Var:gcBrand AND
+              bCustCatDST.Category EQ bCustomerDST.Category NO-ERROR.
+   IF NOT AVAIL bCustCatSRC THEN RETURN "Incorrect new customer category".
+
+   IF bCustCatSRC.PRO NE bCustCatDST.PRO THEN
+   DO:
+      IF NOT bCustCatSRC.PRO AND bCustCatDST.PRO THEN
+         RETURN "ACC is not allowed between PRO-NON PRO customers".
+      /* Check for any active/ongoing subscriptions. If there is any, no migration possible. */
+      ELSE IF (CAN-FIND(FIRST MobSub WHERE MobSub.Brand   = Syst.Var:gcBrand              AND 
+                                           MobSub.AgrCust = bCustomerDST.CustNum AND 
+                                           MobSub.Cli     > ""                   NO-LOCK)) OR 
+              fCheckOngoingOrders(bCustomerDST.CustIdType, bCustomerDST.OrgId, 0) THEN 
+         RETURN "ACC is not allowed between PRO-NON PRO customers".
+   END.   
    
+   RETURN "".
+
+END FUNCTION.
+
 FUNCTION fPreCheckSubscriptionForACC RETURNS CHARACTER
    (INPUT iiMsSeq AS INT):
    
@@ -25,7 +68,7 @@ FUNCTION fPreCheckSubscriptionForACC RETURNS CHARACTER
       RETURN "ACC is not allowed for multi SIM secondary subscription".
 
    IF CAN-FIND(FIRST CLIType WHERE
-                     CLIType.Brand = gcBrand AND
+                     CLIType.Brand = Syst.Var:gcBrand AND
                      CLIType.CLIType = (IF MobSub.TariffBundle > ""
                                         THEN MobSub.TariffBundle
                                         ELSE MobSub.CLIType) AND
@@ -46,6 +89,7 @@ PROCEDURE pCheckSubscriptionForACC:
    DEF BUFFER MobSub FOR MobSub.
    DEF BUFFER MsOwner FOR MsOwner.
    DEF BUFFER Limit FOR Limit.
+   DEF BUFFER MsRequest FOR MsRequest.
    
    DEF VAR lcBarrStatus AS CHARACTER NO-UNDO. 
    
@@ -134,7 +178,10 @@ PROCEDURE pCheckSubscriptionForACC:
          RETURN "ERROR".
       END.
 
-   FIND FIRST MsOwner WHERE MsOwner.MsSeq = MobSub.MsSeq NO-LOCK NO-ERROR.
+   FIND FIRST MsOwner NO-LOCK WHERE
+              MsOwner.MsSeq = MobSub.MsSeq AND
+              MsOwner.TsEnd > MsOwner.TsBegin
+      USE-INDEX MsSeq NO-ERROR.
    IF NOT AVAILABLE MsOwner    OR 
       MsOwner.TsEnd < 99999999 OR
       MsOwner.CustNum NE MobSub.CustNum OR
@@ -148,6 +195,22 @@ PROCEDURE pCheckSubscriptionForACC:
    IF fIsMNPOutOngoing(mobsub.cli) THEN DO:
       ocMessage = "Ongoing MNP OUT request".
       RETURN "ERROR".
+   END.
+   
+   IF iiCurrentReq > 0 THEN DO:
+      FIND FIRST MsRequest NO-LOCK WHERE
+                 MsRequest.MsRequest = iiCurrentReq AND
+                 MsRequest.ReqType = 10 NO-ERROR.
+      IF NOT AVAIL MsRequest THEN DO:
+         ocMessage = "Unknown request".
+         RETURN "ERROR".
+      END.
+
+      IF MsRequest.ReqIParam1 > 0 THEN DO:
+         ocMessage = fCheckACCCompability(MsRequest.Custnum, 
+                                          MsRequest.ReqIParam1).
+         IF ocMessage > "" THEN RETURN "ERROR".
+      END.
    END.
 
    RETURN "".
@@ -171,7 +234,7 @@ PROCEDURE pCheckTargetCustomerForACC:
    IF iiNewCustnum = 0 THEN RETURN "".
 
    FOR EACH bACCMobsub NO-LOCK WHERE
-            bACCMobsub.Brand = gcBrand AND
+            bACCMobsub.Brand = Syst.Var:gcBrand AND
             bACCMobsub.AgrCust = iiNewCustnum AND
             bACCMobsub.PayType = FALSE:
       lcBarrStatus = fGetActiveBarrings(bACCMobsub.MsSeq).
@@ -189,9 +252,9 @@ PROCEDURE pCheckTargetCustomerForACC:
    IF AVAILABLE bACCNewCust AND
       NOT fSubscriptionLimitCheck(INPUT bACCNewCust.OrgId,
                                   INPUT bACCNewCust.CustIdType,
-                                  INPUT NO,
+                                  INPUT fIsSelfEmpl(bACCNewCust.Category),
+                                  INPUT fIsPro(bACCNewCust.Category),
                                   1,
-                                  OUTPUT ocMessage,
                                   OUTPUT liSubLimit,
                                   OUTPUT liSubs,
                                   OUTPUT liActLimit,

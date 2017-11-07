@@ -82,7 +82,10 @@ ASSIGN
 IF icFile > "" THEN ASSIGN
    lcSesNum               = SESSION:NUMERIC-FORMAT
    SESSION:NUMERIC-FORMAT = "EUROPEAN".
-   
+
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
+
 form header
    viiva1 AT 1 SKIP
    ynimi at 1 FORMAT "x(30)" 
@@ -90,7 +93,7 @@ form header
       "Page" at 102  
       sl FORMAT "ZZZZ9" SKIP
    lcDateHeader AT 40 FORMAT "X(30)"
-      pvm FORMAT "99.99.9999" at 103 SKIP
+      TODAY FORMAT "99.99.9999" at 103 SKIP
    viiva2 at 1 SKIP
    "CalcDate"     AT 5
    "Point"        AT 14
@@ -129,13 +132,13 @@ FUNCTION fCollect RETURNS LOGICAL.
    IF CoEvent.Salesman > "" THEN DO:
       ttEvent.Target = CoEvent.Salesman.
       FIND Salesman WHERE 
-           Salesman.Brand    = gcBrand AND
+           Salesman.Brand    = Syst.Var:gcBrand AND
            Salesman.Salesman = CoEvent.Salesman 
          NO-LOCK NO-ERROR.
       IF AVAILABLE Salesman THEN 
          ttEvent.Reseller = Salesman.Reseller.
    END.         
-   ELSE ttEvent.Target = STRING(CoEvent.CustNum,"99999999").
+   ELSE ttEvent.Target = STRING(CoEvent.CustNum,"999999999").
    
    IF ttEvent.Reseller < icReseller1 OR
       ttEvent.Reseller > icReseller2 
@@ -146,7 +149,7 @@ FUNCTION fCollect RETURNS LOGICAL.
    
    /* check from rule definition the base of commission */
    FIND CoRule NO-LOCK WHERE
-        CoRule.Brand    = gcBrand AND
+        CoRule.Brand    = Syst.Var:gcBrand AND
         CoRule.CoRuleID = CoEvent.CoRuleID NO-ERROR.
 
    IF AVAILABLE CoRule THEN DO:
@@ -169,7 +172,7 @@ FUNCTION fCollect RETURNS LOGICAL.
                        bEvent.CoEventID = INTEGER(CoEvent.HostKey) NO-ERROR.
             IF AVAILABLE CoEvent THEN DO:
                FIND bSman NO-LOCK WHERE 
-                    bSman.Brand    = gcBrand AND
+                    bSman.Brand    = Syst.Var:gcBrand AND
                     bSman.Salesman = bEvent.Salesman NO-ERROR.
                lcText = lcText + IF AVAILABLE bSman
                                  THEN bSman.SmName
@@ -245,7 +248,7 @@ IF idtPaymDate1 = ? AND idtPaymDate2 NE ? THEN idtPaymDate1 = 01/01/1990.
 
 /* collect events */
 FOR EACH CoEvent NO-LOCK USE-INDEX CalcDate WHERE
-         CoEvent.Brand     = gcBrand       AND
+         CoEvent.Brand     = Syst.Var:gcBrand       AND
          CoEvent.CalcDate >= idtCalcDate1  AND
          CoEvent.CalcDate <= idtCalcDate2  AND
          CoEvent.Salesman >= icSalesman1   AND
@@ -312,7 +315,7 @@ BREAK BY ttEvent.Reseller
       fCheckPage(999).
 
       FIND Reseller NO-LOCK WHERE 
-           Reseller.Brand    = gcBrand AND
+           Reseller.Brand    = Syst.Var:gcBrand AND
            Reseller.Reseller = ttEvent.Reseller NO-ERROR.
 
       PUT STREAM tul UNFORMATTED
@@ -348,7 +351,7 @@ BREAK BY ttEvent.Reseller
          fCheckPage(3).
 
          FIND Salesman NO-LOCK WHERE 
-              Salesman.Brand    = gcBrand AND
+              Salesman.Brand    = Syst.Var:gcBrand AND
               Salesman.Salesman = ttEvent.Salesman NO-ERROR.
 
          PUT STREAM tul UNFORMATTED
@@ -390,7 +393,7 @@ BREAK BY ttEvent.Reseller
 
    ELSE DO:
       FIND Reseller WHERE 
-           Reseller.Brand    = gcBrand AND
+           Reseller.Brand    = Syst.Var:gcBrand AND
            Reseller.Reseller = ttEvent.Reseller NO-LOCK NO-ERROR.
       
       PUT STREAM tul UNFORMATTED
@@ -411,7 +414,7 @@ BREAK BY ttEvent.Reseller
       ELSE DO:
       
          FIND Salesman WHERE 
-              Salesman.Brand    = gcBrand AND
+              Salesman.Brand    = Syst.Var:gcBrand AND
               Salesman.Salesman = ttEvent.Salesman 
             NO-LOCK NO-ERROR.
             

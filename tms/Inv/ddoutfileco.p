@@ -10,8 +10,8 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
+{Func/multitenantfunc.i}
 
 DEFINE INPUT  PARAMETER icInvGrp       AS CHAR NO-UNDO.
 DEFINE INPUT  PARAMETER iiCustNum1     AS INT  NO-UNDO.
@@ -86,9 +86,12 @@ FUNCTION fParseDDFileName RETURNS LOGICAL (
 
    DEF VAR lcDueDate AS CHAR NO-UNDO. 
    DEF VAR ldeDueDate AS DEC NO-UNDO. 
+   DEF VAR lcTempName AS CHAR NO-UNDO.
 
+   lcTempname = REPLACE("#TENANT_SDD001_","#TENANT",
+                        CAPS(fgetBrandNamebyTenantId(TENANT-ID("common")))).
    IF NUM-ENTRIES(icFileName, "_") < 4 THEN RETURN FALSE.
-   IF NOT icFileName BEGINS "YOIGO_SDD001_" THEN RETURN FALSE.
+   IF NOT icFileName BEGINS lcTempname THEN RETURN FALSE.
 
    ASSIGN
       ocBankCode = ENTRY(3,icFileName,"_")
@@ -96,7 +99,7 @@ FUNCTION fParseDDFileName RETURNS LOGICAL (
 
    IF ERROR-STATUS:ERROR THEN RETURN FALSE.
 
-   IF NOT fTs2Date(ldeDueDate, OUTPUT odaDueDate) THEN RETURN FALSE. 
+   IF NOT Func.Common:mTS2Date(ldeDueDate, OUTPUT odaDueDate) THEN RETURN FALSE. 
 
    RETURN TRUE.
 END.
@@ -144,7 +147,7 @@ FUNCTION fMakeTemp RETURNS LOGICAL (
        /* Check bank code available in BankAccount data, AND assign
            parent bank code value to Invoice bank code field */
        FIND FIRST BankAccount NO-LOCK WHERE
-                  BankAccount.Brand EQ gcBrand AND
+                  BankAccount.Brand EQ Syst.Var:gcBrand AND
            LOOKUP(ttInvoice.BankCode,BankAccount.BankCodes) > 0 NO-ERROR.
 
        IF AVAIL BankAccount THEN DO:
@@ -208,7 +211,7 @@ IF icInputFileDir > "" THEN DO:
       ELSE RETURN SUBST("ERROR:File not found:&1", lcInputFile).
      
       FOR FIRST BankAccount NO-LOCK WHERE
-                BankAccount.Brand   = gcBrand AND
+                BankAccount.Brand   = Syst.Var:gcBrand AND
                 LOOKUP("DD" + lcBankCode,BankAccount.InvForm) > 0:
          IF LENGTH(BankAccount.BankAccount) < 24 THEN
             RETURN "ERROR:Invalid bank account".
@@ -231,7 +234,7 @@ IF icInputFileDir > "" THEN DO:
          IMPORT STREAM sin UNFORMATTED lcLine.
 
          FOR FIRST Invoice EXCLUSIVE-LOCK WHERE
-                   Invoice.Brand = gcBrand AND
+                   Invoice.Brand = Syst.Var:gcBrand AND
                    Invoice.ExtInvId = TRIM(lcLine),
             FIRST Customer OF Invoice NO-LOCK:
             
@@ -266,7 +269,7 @@ IF icInputFileDir > "" THEN DO:
 END.
 ELSE IF icInvID1 = icInvID2 THEN 
 FOR FIRST Invoice NO-LOCK WHERE
-          Invoice.Brand    = gcBrand AND
+          Invoice.Brand    = Syst.Var:gcBrand AND
           Invoice.ExtInvID = icInvID1,
     FIRST Customer OF Invoice NO-LOCK:
    
@@ -278,7 +281,7 @@ END.
 
 ELSE IF iiInvDate NE ? THEN 
 FOR EACH Invoice NO-LOCK WHERE    
-         Invoice.Brand    = gcBrand    AND
+         Invoice.Brand    = Syst.Var:gcBrand    AND
          Invoice.InvDate  = iiInvDate  AND
          Invoice.ExtInvID >= icInvID1  AND      
          Invoice.ExtInvID <= icInvID2  AND   
@@ -302,7 +305,7 @@ END.
 
 ELSE 
 FOR EACH Invoice NO-LOCK WHERE               
-         Invoice.Brand  = gcBrand      AND
+         Invoice.Brand  = Syst.Var:gcBrand      AND
          Invoice.ExtInvID >= icInvID1  AND      
          Invoice.ExtInvID <= icInvID2  AND   
          Invoice.CustNum >= iiCustNum1 AND
@@ -423,8 +426,7 @@ FOR EACH ttDueDate:
    ELSE lcFile = REPLACE(icFile,"#IGRP","ALL").
    
    /* due date to file name */   
-   lcDate = DYNAMIC-FUNCTION("fDateFmt" IN ghFunc1,
-                             ttDueDate.DueDate,
+   lcDate = Func.Common:mDateFmt(ttDueDate.DueDate,
                              "yyyymmdd").
    ASSIGN 
       lcFileXml = REPLACE(lcFileXml,"#DDATE",lcDate)
@@ -458,18 +460,18 @@ DO TRANS:
 
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = gcBrand   
+      ActionLog.Brand        = Syst.Var:gcBrand   
       ActionLog.TableName    = "Invoice"  
       ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                STRING(MONTH(TODAY),"99") + 
                                STRING(DAY(TODAY),"99")
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.Var:katun
       ActionLog.ActionID     = "DDFILES"
       ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
       ActionLog.ActionChar   = " Files: " + STRING(oiFileCount) + CHR(10) +
                                " Invoices: " + STRING(oiInvCount)
       ActionLog.ActionStatus = 3.
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
 END.
 
 RETURN ocError.
@@ -519,15 +521,15 @@ END PROCEDURE.
 
 PROCEDURE pSplitInvoice:
 
-   IF liSBICount <= liSBIValue THEN
+   IF liSBIPerc > 0 AND liSBICount <= liSBIValue THEN
       ASSIGN 
          ttInvoice.BankCode = {&TF_BANK_SABADELL}
          liSBICount         = liSBICount + 1.
-   ELSE IF liSAICount <= liSAIValue THEN
+   ELSE IF liSAIPerc > 0 AND liSAICount <= liSAIValue THEN
       ASSIGN 
          ttInvoice.BankCode = {&TF_BANK_UNOE}
          liSAICount         = liSAICount + 1.
-   ELSE IF liBBICount <= liBBIValue THEN
+   ELSE IF liBBIPerc > 0 AND liBBICount <= liBBIValue THEN
       ASSIGN 
          ttInvoice.BankCode = {&TF_BANK_BBVA}
          liBBICount         = liBBICount + 1.

@@ -72,11 +72,10 @@
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 
 {Syst/commpaa.i}
-katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
-gcBrand = "1".
+Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 
-{Func/date.i}
 {Func/orderchk.i}
 {Func/order.i}
 {Func/create_eventlog.i}
@@ -129,8 +128,6 @@ DEF VAR lccTemp AS CHARACTER NO-UNDO.
 DEF VAR lcError AS CHARACTER NO-UNDO. 
 
 DEFINE VARIABLE lcIdType AS CHARACTER NO-UNDO.  
-DEFINE VARIABLE lcContactId AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE lcContactIdType AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcId AS CHARACTER NO-UNDO. 
 
 FUNCTION fGetOrderFields RETURNS LOGICAL :
@@ -161,7 +158,7 @@ FUNCTION fCreateMemo RETURNS LOGICAL (INPUT pcTitle AS CHARACTER,
    CREATE Memo.
    ASSIGN
       Memo.CreStamp  = {&nowTS}
-      Memo.Brand     = gcBrand 
+      Memo.Brand     = Syst.Var:gcBrand 
       Memo.HostTable = "Order" 
       Memo.KeyValue  = STRING(Order.OrderId) 
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
@@ -191,6 +188,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    DEFINE VARIABLE data            AS CHAR EXTENT 19 NO-UNDO.
    DEFINE VARIABLE lcIdOrderCustomer AS CHARACTER NO-UNDO. 
    DEFINE VARIABLE lcIdTypeOrderCustomer AS CHARACTER NO-UNDO. 
+   DEFINE VARIABLE lcContactId AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcContactIdType AS CHARACTER NO-UNDO.
 
    lcFError = "".
    
@@ -239,8 +238,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
       lcIdtypeOrderCustomer = data[LOOKUP("id_type", gcCustomerStructStringFields)].
       IF data[LOOKUP("person_id", gcCustomerStructStringFields)] ne "" THEN
           lcIdOrderCustomer = data[LOOKUP("person_id", gcCustomerStructStringFields)].
-      IF data[LOOKUP("company_id", gcCustomerStructStringFields)] ne "" THEN 
-      DO:
+      IF data[LOOKUP("company_id", gcCustomerStructStringFields)] ne ""
+      THEN DO:
           lcContactId = lcIdOrderCustomer.
           lcIdOrderCustomer = data[LOOKUP("company_id", gcCustomerStructStringFields)].
           lcContactIdType = lcIdtypeOrderCustomer.
@@ -255,10 +254,12 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
    DO:
       CREATE OrderCustomer.
       ASSIGN
-         OrderCustomer.Brand           = gcBrand 
+         OrderCustomer.Brand           = Syst.Var:gcBrand 
          OrderCustomer.OrderId         = liOrderId
          OrderCustomer.CustId          = lcIdOrderCustomer 
          OrderCustomer.CustIdType      = lcIdtypeOrderCustomer
+         OrderCustomer.AuthCustId      = lcContactId
+         OrderCustomer.AuthCustIdType  = lcContactIdType
          OrderCustomer.RowType         = piRowType
          OrderCustomer.BankCode        = pcAccount
       .
@@ -330,7 +331,7 @@ FUNCTION fCheckMSISDN RETURNS CHARACTER:
    IF pcNumberType EQ "new" THEN DO:
 
       FIND FIRST MSISDN NO-LOCK
-         WHERE msisdn.brand EQ gcBrand 
+         WHERE msisdn.brand EQ Syst.Var:gcBrand 
          AND MSISDN.ValidTo GE {&nowts}
          AND msisdn.cli EQ pcCLI
          AND msisdn.statuscode EQ 1 
@@ -350,7 +351,7 @@ FUNCTION fCheckSIM RETURNS CHARACTER:
    IF pcIcc NE '' THEN 
    DO:
        FIND FIRST SIM EXCLUSIVE-LOCK
-          WHERE SIM.brand EQ gcBrand 
+          WHERE SIM.brand EQ Syst.Var:gcBrand 
           AND SIM.ICC EQ pcIcc
           AND SIM.simstat EQ 1 
           NO-ERROR.
@@ -374,7 +375,7 @@ END.
 FUNCTION fCreateOrder RETURNS LOGICAL:
    CREATE Order.
    ASSIGN
-      Order.Brand           = gcBrand 
+      Order.Brand           = Syst.Var:gcBrand 
       Order.OrderId         = liOrderId
       Order.Salesman        = pcSalesman
       Order.Source          = "external"
@@ -383,8 +384,6 @@ FUNCTION fCreateOrder RETURNS LOGICAL:
       Order.InvCustRole     = 1
       Order.UserRole        = 1
       Order.StatusCode      = "1"
-      Order.OrdererId       = lcContactId
-      Order.OrdererIDType   = lcContactIdType 
       Order.CLI             = pcCLI
       Order.CLIType         = pcSubType
       Order.mnpstatus       = INT(pcNumberType EQ "mnp")
@@ -407,13 +406,13 @@ FUNCTION fHandleCorporateCustomer RETURNS LOGICAL:
 
    IF lcIdType = "CIF" THEN DO:
       FIND FIRST Customer WHERE
-                 Customer.Brand      = gcBrand  AND
+                 Customer.Brand      = Syst.Var:gcBrand  AND
                  Customer.OrgId      = lcId     AND
                  Customer.CustIdType = lcIdType AND
                  Customer.Roles NE "inactive" NO-LOCK NO-ERROR. 
       IF AVAIL Customer THEN DO:
          FIND FIRST MobSub WHERE
-                    MobSub.Brand   = gcBrand AND
+                    MobSub.Brand   = Syst.Var:gcBrand AND
                     MobSub.AgrCust = Customer.CustNum
               NO-LOCK NO-ERROR.
          IF NOT AVAIL MobSub THEN Order.StatusCode = "20".
@@ -433,7 +432,7 @@ FUNCTION fCreateOrderTopup RETURNS LOGICAL:
       CREATE OrderTopup.
       ASSIGN
          OrderTopup.Amount = pfTopup
-         OrderTopup.Brand = gcBrand 
+         OrderTopup.Brand = Syst.Var:gcBrand 
          OrderTopup.OrderId = Order.OrderId
          /*OrderTopup.VatAmount = */
       .
@@ -453,7 +452,7 @@ FUNCTION fCreateOrderAccessory RETURNS LOGICAL:
    CREATE OrderAccessory.
    ASSIGN
       OrderAccessory.OrderId     = Order.OrderId
-      OrderAccessory.brand       = gcBrand 
+      OrderAccessory.brand       = Syst.Var:gcBrand 
       OrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE}
       OrderAccessory.ProductCode = OfferItem.ItemKey 
       OrderAccessory.Amount      = OfferItem.Amount .
@@ -555,9 +554,12 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 lcOrderStruct = validate_request(pcOrderStruct, gcOrderStructFields).
 IF lcOrderStruct EQ ? THEN RETURN.
 fGetOrderFields().
+
+{viptool/src/findtenant.i YES ordercanal CliType CliType pcSubType}
+
 IF pcOfferId NE "" THEN DO:
    FIND Offer WHERE 
-        Offer.Brand = gcBrand AND 
+        Offer.Brand = Syst.Var:gcBrand AND 
         Offer.Offer = pcOfferId NO-LOCK NO-ERROR.
    IF NOT AVAIL Offer THEN
       RETURN appl_err("Offer " + pcOfferId + " is not defined").
@@ -565,7 +567,7 @@ IF pcOfferId NE "" THEN DO:
    
    /* check CLIType using OfferCriteria */
    FIND FIRST OfferCriteria WHERE
-              OfferCriteria.Brand = gcBrand AND
+              OfferCriteria.Brand = Syst.Var:gcBrand AND
               OfferCriteria.Offer = Offer.Offer AND
               OfferCriteria.EndStamp   >= pdePriceSelTime AND
               OfferCriteria.BeginStamp <= pdePriceSelTime AND
@@ -582,12 +584,6 @@ END.
 lcError = fCheckMSISDN().
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
-
-FIND FIRST CLIType NO-LOCK WHERE
-           CLIType.Brand = gcBrand AND
-           CLIType.CliType = pcSubType NO-ERROR.
-IF NOT AVAIL CLIType THEN
-   RETURN appl_err(SUBST("Unknown CLIType &1", pcSubType)).
 
 ASSIGN lcIPLContracts   = fCParamC("IPL_CONTRACTS")
        lcCONTDContracts = fCParamC("CONTD_CONTRACTS")
@@ -620,12 +616,12 @@ DO:
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
 
-lcError = fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, 1, FALSE). 
+lcError = fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF get_paramcount(pcContactStruct) GT 0 THEN
-   lcError = fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, 5, FALSE).
+   lcError = fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -641,10 +637,10 @@ liOrderId = NEXT-VALUE(OrderId).
 
 fCreateOrder().
 
-fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, 1, TRUE).
+fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}, TRUE).
 pcAccount = "".
 IF get_paramcount(pcContactStruct) GT 0 THEN 
-   fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, 5, TRUE).
+   fCreateOrderCustomer(pcContactStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT}, TRUE).
                                              
 /* mobsub handling */
 IF fOngoingOrders(pcCli,"") THEN DO:
@@ -682,10 +678,9 @@ IF pcMobSubBundleType > "" THEN DO:
 END. /* IF pcMobSubBundleType > "" THEN DO: */
 
 /* YTS-2890 */
-fMakeCreateEvent((BUFFER Order:HANDLE),"",katun,"").
+fMakeCreateEvent((BUFFER Order:HANDLE),"",Syst.Var:katun,"").
 
 add_int(response_toplevel_id, "", liOrderId).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

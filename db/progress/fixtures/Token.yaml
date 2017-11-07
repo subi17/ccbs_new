@@ -1,60 +1,60 @@
-Token1: Token
+bulkload: Token
   tokencode: "AR"
   tokenname: "A/R"
 
-Token2: Token
+bulkload: Token
   tokencode: "BILL"
   tokenname: "Billing"
 
-Token3: Token
+bulkload: Token
   tokencode: "CC"
   tokenname: "Customer care"
 
-Token4: Token
+bulkload: Token
   tokencode: "CCSUPER"
   tokenname: "Customer Care Superuser"
 
-Token5: Token
+bulkload: Token
   tokencode: "COMM"
   tokenname: "Commission"
 
-Token6: Token
+bulkload: Token
   tokencode: "CUSTOMER"
   tokenname: "Customer Maintenance"
 
-Token7: Token
+bulkload: Token
   tokencode: "FIX"
   tokenname: "Fixed data"
 
-Token8: Token
+bulkload: Token
   tokencode: "MAIN"
   tokenname: "Maintenance"
 
-Token9: Token
+bulkload: Token
   tokencode: "MOB"
   tokenname: "Mobile data"
 
-Token10: Token
+bulkload: Token
   tokencode: "MOBMAIN"
   tokenname: "Mobile Maintenance"
 
-Token11: Token
+bulkload: Token
   tokencode: "ORDER"
   tokenname: "Order Maintenance"
 
-Token12: Token
+bulkload: Token
   tokencode: "ROAM_OUT_IP"
   tokenname: "Roaming OUT IP Maintenance"
 
-Token13: Token
+bulkload: Token
   tokencode: "SULKU"
   tokenname: "Sulku"
 
-Token14: Token
+bulkload: Token
   tokencode: "SYST"
   tokenname: "System"
 
-Token15: Token
+bulkload: Token
   tokencode: "VENDOR"
   tokenname: "Vendor Functions"
   AdminToken: TRUE 

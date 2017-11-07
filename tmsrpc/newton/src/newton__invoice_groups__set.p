@@ -14,7 +14,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Mc/invoicetarget.i}
 
 FUNCTION fGetExcludedList RETURNS CHAR 
@@ -68,7 +68,7 @@ lcStruct = validate_request(pcStruct,"default,active,subscriptions,username!,rea
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 pcUserName = "VISTA_" + get_string(pcStruct,"username").
-katun = pcUserName. 
+Syst.Var:katun = pcUserName. 
 IF LOOKUP("reason",lcStruct) > 0 THEN 
 pcReason = get_string(pcStruct,"reason").
 IF LOOKUP("default",lcStruct) > 0 THEN 
@@ -78,6 +78,9 @@ plActive =  get_bool(pcStruct,"active").
 
 pcArrayInvoiceTarget = get_array(pcStruct,"subscriptions").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/findtenant.i NO Common InvoiceTargetGroup ITGroupID piITGroupId}
+
 DO liCount = 0 TO get_paramcount(pcArrayInvoiceTarget) - 1:
    piMsSeq= get_int(pcArrayInvoiceTarget,STRING(liCount)).
    IF gi_xmlrpc_error NE 0 THEN RETURN.
@@ -182,11 +185,11 @@ DO TRANS:
       CREATE Memo.
       ASSIGN
           Memo.CreStamp  = {&nowTS}
-          Memo.Brand     = gcBrand 
+          Memo.Brand     = Syst.Var:gcBrand 
           Memo.HostTable = "Customer" 
           Memo.KeyValue  = STRING(InvoiceTargetGroup.CustNum) 
           Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-          Memo.CreUser   = katun 
+          Memo.CreUser   = Syst.Var:katun 
           Memo.MemoTitle = "Invoice Target Group Updates"
           Memo.MemoText  = pcReason
           Memo.CustNum   = InvoiceTargetGroup.CustNum. 
@@ -197,5 +200,4 @@ END.
 resp_struct = add_struct(response_toplevel_id, "").
 
 FINALLY:
-IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
 END.

@@ -21,6 +21,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 /* Input parameters */
+DEF VAR pcTenant     AS CHAR NO-UNDO.
 DEF VAR pcInput      AS CHAR NO-UNDO.
 /* Output parameters */
 DEF VAR top_struct   AS CHAR NO-UNDO.
@@ -28,7 +29,6 @@ DEF VAR result_array AS CHAR NO-UNDO.
 DEF VAR sub_struct   AS CHAR NO-UNDO.
 
 /* Local variables */
-DEF VAR gcBrand          AS CHAR NO-UNDO INIT "1".
 DEF VAR lcTmp            AS CHAR NO-UNDO.
 DEF VAR lcCallType       AS CHAR NO-UNDO.
 DEF VAR liOwner          AS INT  NO-UNDO.
@@ -39,21 +39,25 @@ DEF VAR llSearchByMobsub AS LOG  NO-UNDO INIT FALSE.
 DEF VAR lii              AS INT  NO-UNDO. 
 DEF VAR pcSearchTypes    AS CHAR NO-UNDO. 
 
-lcCallType = validate_request(param_toplevel_id, "int|string,int,int,string").
+lcCallType = validate_request(param_toplevel_id, "string,int|string,int,int,string").
 IF lcCallType EQ ? THEN RETURN.
 
-IF ENTRY(1,lcCallType) EQ "int" THEN
-    liOwner = get_pos_int(param_toplevel_id, "0").
+pcTenant = get_string(param_toplevel_id, "0").
+
+IF ENTRY(2,lcCallType) EQ "int" THEN
+    liOwner = get_pos_int(param_toplevel_id, "1").
 ELSE DO:
-    pcInput = get_string(param_toplevel_id, "0").
+    pcInput = get_string(param_toplevel_id, "1").
     liOwner = INT(pcInput) NO-ERROR.
 END.
 
-piLimit  = get_pos_int(param_toplevel_id, "1").
-piOffSet = get_int(param_toplevel_id, "2").
-pcSearchTypes = get_string(param_toplevel_id, "3").
+piLimit  = get_pos_int(param_toplevel_id, "2").
+piOffSet = get_int(param_toplevel_id, "3").
+pcSearchTypes = get_string(param_toplevel_id, "4").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 FUNCTION fAddSubStruct RETURNS LOGICAL:
  
@@ -78,12 +82,12 @@ IF LENGTH(pcInput) EQ 9 AND
 
    FIND MobSub NO-LOCK WHERE
         MobSub.CLI = pcInput AND
-        MobSub.Brand = gcBrand NO-ERROR.
+        MobSub.Brand = Syst.Var:gcBrand NO-ERROR.
    IF NOT AVAILABLE MobSub THEN
       RETURN appl_err(SUBST("MobSub entry &1 not found", pcInput)).
    ELSE DO:
       FIND FIRST SIM WHERE
-                 SIM.Brand EQ gcBrand   AND
+                 SIM.Brand EQ Syst.Var:gcBrand   AND
                  SIM.ICC   EQ MobSub.ICC AND
                  SIM.Stock EQ "TESTING" NO-LOCK NO-ERROR.
       IF NOT AVAIL SIM THEN
@@ -97,7 +101,7 @@ END.
 ELSE IF liOwner NE 0 AND LOOKUP("custnum", pcSearchTypes) > 0 THEN DO:
    FIND Customer NO-LOCK WHERE
         Customer.CustNum = liOwner AND
-        Customer.brand = gcBrand NO-ERROR.
+        Customer.brand = Syst.Var:gcBrand NO-ERROR.
    IF NOT AVAILABLE Customer THEN
       RETURN appl_err(SUBST("Customer &1 not found 1", liOwner)).
 END.
@@ -105,7 +109,7 @@ ELSE IF LOOKUP("person_id", pcSearchTypes) > 0 THEN DO:
    
    FOR EACH Customer NO-LOCK WHERE
             Customer.OrgId = pcInput AND
-            Customer.brand = gcBrand AND
+            Customer.brand = Syst.Var:gcBrand AND
             Customer.Roles NE "inactive" 
             lii = 1 TO 2:
       IF lii > 1 THEN DO:
@@ -117,7 +121,7 @@ ELSE IF LOOKUP("person_id", pcSearchTypes) > 0 THEN DO:
     
    FIND FIRST Customer NO-LOCK WHERE
               Customer.OrgId = pcInput AND
-              Customer.brand = gcBrand AND
+              Customer.brand = Syst.Var:gcBrand AND
               Customer.Roles NE "inactive" NO-ERROR.
    IF NOT AVAILABLE Customer THEN
       RETURN appl_err(SUBST("Customer &1 not found 2", pcInput)).
@@ -129,7 +133,7 @@ ELSE liOwner = 0.
 IF NOT AVAILABLE Customer AND liOwner > 0 THEN DO:
     FIND Customer NO-LOCK WHERE
          Customer.CustNum = liOwner AND
-         Customer.brand = gcBrand NO-ERROR.
+         Customer.brand = Syst.Var:gcBrand NO-ERROR.
 END.
 IF NOT AVAILABLE Customer THEN
    RETURN appl_err(SUBST("Customer &1 not found 3", liOwner)).
@@ -145,15 +149,15 @@ END.
 IF llSearchByMobsub AND piOffSet > 0 THEN liSubCount = liSubCount + 1.
 
 FOR EACH Mobsub NO-LOCK WHERE
-         Mobsub.Brand   = gcBrand AND
+         Mobsub.Brand   = Syst.Var:gcBrand AND
          Mobsub.AgrCust = liOwner AND
          Mobsub.CLI <> pcInput,
    FIRST SIM NO-LOCK WHERE
-         SIM.Brand EQ gcBrand    AND
+         SIM.Brand EQ Syst.Var:gcBrand    AND
          SIM.ICC   EQ Mobsub.ICC AND
          SIM.Stock EQ "TESTING",
    FIRST Customer NO-LOCK WHERE
-         Customer.Brand = gcBrand AND
+         Customer.Brand = Syst.Var:gcBrand AND
          Customer.CustNum = Mobsub.CustNum:
      
    liSubCount = liSubCount + 1.

@@ -2,6 +2,7 @@
  * Validate eInvoice PDF Link
  *
  * @input      struct;mandatory;list of parameters
+               string;mandatory;brand
                int;mandatory;period
                string;mandatory;dni
                string;mandatory;msisdn
@@ -11,12 +12,12 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-ASSIGN gcBrand = "1"
-       katun   = "tmsrpc".
+ASSIGN Syst.Var:gcBrand = "1"
+       Syst.Var:katun   = "tmsrpc".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 
+DEF VAR pcTenant       AS CHAR  NO-UNDO.
 DEF VAR pcStruct       AS CHAR  NO-UNDO. 
 DEF VAR lcStruct       AS CHAR  NO-UNDO.
 DEF VAR piPeriod       AS INT   NO-UNDO.
@@ -33,15 +34,20 @@ DEF VAR liInvNum       AS INT    NO-UNDO.
 DEF VAR liBillPeriod   AS INT    NO-UNDO.
 DEF VAR ldeEndStamp    AS DEC    NO-UNDO.
 
-IF validate_request(param_toplevel_id,"struct") EQ ? THEN RETURN.
-pcStruct = get_struct(param_toplevel_id, "0").
+IF validate_request(param_toplevel_id,"string,struct") EQ ? THEN RETURN.
+
+pcTenant = get_string(param_toplevel_id, "0").
+pcStruct = get_struct(param_toplevel_id, "1").
+
 lcStruct = validate_request(pcStruct,"period,dni,msisdn,hash").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 piPeriod  = get_int(pcStruct,"period").
 pcDNI     = get_string(pcStruct,"dni").
 pcMSISDN  = get_string(pcStruct,"msisdn").
 pcHashKey = get_string(pcStruct,"hash").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF pcHashKey = "" OR pcHashKey = ? THEN
@@ -50,6 +56,8 @@ IF pcHashKey = "" OR pcHashKey = ? THEN
 IF piPeriod = 0 OR piPeriod = ? THEN
    RETURN appl_err("Invalid Period").
 
+{newton/src/settenant.i pcTenant}
+
 lcSaltKey = fCParam("EI","SaltKey").
 IF lcSaltKey = "" OR lcSaltKey = ? THEN
    RETURN appl_err("Salt key is missing").
@@ -57,17 +65,17 @@ IF lcSaltKey = "" OR lcSaltKey = ? THEN
 ASSIGN liYear   = INT(SUBSTRING(STRING(piPeriod),1,4))
        liMonth  = INT(SUBSTRING(STRING(piPeriod),5,2))
        ldaDate  = DATE(liMonth,1,liYear)
-       ldeEndStamp = fMake2Dt(ldaDate,0).
+       ldeEndStamp = Func.Common:mMake2DT(ldaDate,0).
 
 FIND FIRST Customer WHERE
-           Customer.Brand = gcBrand AND
+           Customer.Brand = Syst.Var:gcBrand AND
            Customer.OrgId = pcDNI   AND
            Customer.Roles NE "inactive" NO-LOCK NO-ERROR.
 IF NOT AVAIL Customer THEN
    RETURN appl_err("Customer not found").
 
 FIND FIRST MsOwner WHERE
-           MsOwner.Brand   = gcBrand AND
+           MsOwner.Brand   = Syst.Var:gcBrand AND
            MsOwner.CustNum = Customer.CustNum AND
            MsOwner.CLI     = pcMSISDN AND
            MsOwner.TsEnd  >= ldeEndStamp NO-LOCK NO-ERROR.
@@ -75,7 +83,7 @@ IF NOT AVAIL MsOwner THEN
    RETURN appl_err("MobSub not found").
 
 FOR EACH Invoice WHERE
-         Invoice.Brand    = gcBrand AND
+         Invoice.Brand    = Syst.Var:gcBrand AND
          Invoice.CustNum  = Customer.CustNum AND
          Invoice.InvDate >= ldaDate AND
          Invoice.InvType  = 1 NO-LOCK:
@@ -102,5 +110,4 @@ IF NOT AVAIL Invoice THEN
 add_int(response_toplevel_id,?,Invoice.InvNum).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

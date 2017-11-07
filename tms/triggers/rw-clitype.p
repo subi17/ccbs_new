@@ -8,6 +8,8 @@ DEFINE VARIABLE llSameValues AS LOGICAL NO-UNDO.
 
 &IF {&CLITYPE_WRITE_TRIGGER_ACTIVE} &THEN
 
+{triggers/replog_tenantname.i}
+
 CREATE Ordercanal.RepLog.
 ASSIGN
    Ordercanal.RepLog.RowID     = STRING(ROWID(CLIType))
@@ -16,6 +18,7 @@ ASSIGN
                            THEN "CREATE"
                            ELSE "MODIFY")
    Ordercanal.RepLog.EventTime = NOW
+   Ordercanal.RepLog.TenantName = fRepLogTenantName(BUFFER CLIType:HANDLE)
    .
 
 IF NOT NEW(CLIType)
@@ -31,6 +34,7 @@ THEN DO:
          Ordercanal.RepLog.TableName = "CLIType"
          Ordercanal.RepLog.EventType = "DELETE"
          Ordercanal.RepLog.EventTime = NOW
+         Ordercanal.RepLog.TenantName = fRepLogTenantName(BUFFER oldCLIType:HANDLE)
          Ordercanal.RepLog.KeyValue  = SUBSTITUTE("&1",oldCLIType.CLIType)
          .
    END.
@@ -45,12 +49,12 @@ THEN BUFFER-COMPARE CLIType TO oldCLIType SAVE RESULT IN llSameValues.
 IF NOT llSameValues OR NEW(CLIType) THEN
 DO:
    FIND FIRST DumpFile NO-LOCK WHERE
-              DumpFile.Brand     EQ Syst.Parameters:gcBrand AND
+              DumpFile.Brand     EQ Syst.Var:gcBrand AND
               DumpFile.DumpName  EQ {&DUMP_CLITYPE_TRACK}   NO-ERROR.
 
    IF AVAIL DumpFile THEN DO:
       FIND FIRST DFTimeTable EXCLUSIVE-LOCK WHERE
-                 DFTimeTable.Brand       = Syst.Parameters:gcBrand AND 
+                 DFTimeTable.Brand       = Syst.Var:gcBrand AND 
                  DFTimeTable.DumpId      = DumpFile.DumpId         AND 
                  DFTimeTable.DumpTrigger = NO                      NO-ERROR.
 

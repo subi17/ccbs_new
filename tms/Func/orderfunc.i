@@ -14,16 +14,16 @@
 
 &GLOBAL-DEFINE orderfunc YES
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Syst/eventval.i}
 {Func/forderstamp.i}
 {Func/dextra.i}
 {Func/cparam2.i}
 {Func/main_add_lines.i}
+{Func/msisdn.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -44,6 +44,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
    DEF VAR lcResult   AS CHAR    NO-UNDO. 
    DEF VAR llHardBook AS LOGICAL NO-UNDO INIT FALSE.
    DEF VAR llCancelFusion AS LOGICAL NO-UNDO INIT FALSE.
+   DEF VAR liRequest  AS INT NO-UNDO.
 
    DEF BUFFER OrderPayment FOR OrderPayment.
    DEF BUFFER MsRequest FOR MsRequest.
@@ -53,7 +54,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
    ORDER_TRANS:
    DO TRANS:
       FIND bfOrder WHERE
-           bfOrder.Brand = gcBrand AND
+           bfOrder.Brand = Syst.Var:gcBrand AND
            bfOrder.OrderId = iOrderId
          EXCLUSIVE-LOCK NO-ERROR.
       IF AVAILABLE bfOrder THEN DO:  
@@ -70,6 +71,19 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
             when "7" or when "8" or when "9" then do:
                fMarkOrderStamp(bfOrder.OrderID,"Close",0.0).
 
+               /* YDR-2495 creating STC request to fixed only when mobile part is terminated */
+               FIND FIRST MobSub NO-LOCK WHERE
+                          MobSub.MsSeq = bfOrder.MsSeq NO-ERROR.
+               IF AVAILABLE MobSub THEN DO:
+                  IF MobSub.CLIType  EQ bfOrder.CLIType             AND
+                     MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} THEN
+                     liRequest = fConvFixedSTCReq(bfOrder.CLIType,
+                                                  bfOrder.MsSeq,
+                                                  Func.Common:mMake2DT(TODAY + 1,0),
+                                                  {&REQUEST_SOURCE_ORDER_CANCELLATION},
+                                                  0).
+               END.
+
                FIND FIRST OrderAccessory OF bfOrder WHERE
                           OrderAccessory.TerminalType = ({&TERMINAL_TYPE_PHONE}) 
                           NO-LOCK NO-ERROR.
@@ -78,7 +92,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                   llHardBook = TRUE.
 
                FIND FIRST OrderFusion EXCLUSIVE-LOCK WHERE
-                          OrderFusion.Brand = gcBrand AND
+                          OrderFusion.Brand = Syst.Var:gcBrand AND
                           OrderFusion.OrderID = bfOrder.OrderID AND
                    LOOKUP(OrderFusion.FusionStatus,SUBST("&1,&2",
                          {&FUSION_ORDER_STATUS_NEW},
@@ -87,7 +101,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                IF AVAIL OrderFusion THEN DO:
                   ASSIGN
                      OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_CANCELLED}
-                     OrderFusion.UpdateTS = fMakeTS().
+                     OrderFusion.UpdateTS = Func.Common:mMakeTS().
                   RELEASE OrderFusion.
                END.
 
@@ -101,6 +115,22 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                                 MobSub.MsStatus = {&MSSTATUS_MOBILE_PROV_ONG}
                                 NO-ERROR.
                      IF AVAIL MobSub THEN DO:
+
+                        FIND FIRST MSISDN WHERE
+                                   MSISDN.Brand = Syst.Var:gcBrand AND
+                                   MSISDN.CLI   = MobSub.CLI
+                        EXCLUSIVE-LOCK NO-ERROR.
+                        /* No mobile created. Release MSISDN */
+                        IF AVAIL MSISDN AND MSISDN.StatusCode EQ 3 THEN DO:
+                           fMakeMsidnHistory(INPUT RECID(MSISDN)).
+
+                           IF fIsYoigoCLI(MobSub.CLI) EQ TRUE THEN
+                              MSISDN.StatusCode = {&MSISDN_ST_MNP_OUT_YOIGO}.
+                           ELSE MSISDN.StatusCode = {&MSISDN_ST_ASSIGNED_TO_ORDER}.
+                           MSISDN.CustNum = 0.
+                           MSISDN.ValidTo = Func.Common:mMakeTS().
+                        END.
+
                         ASSIGN
                            MobSub.CLI = MobSub.FixedNumber
                            MobSub.ICC = ""
@@ -129,27 +159,26 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
 
                   IF FusionMessage.MessageStatus NE {&FUSIONMESSAGE_STATUS_HANDLED} THEN
                      ASSIGN
-                        FusionMessage.UpdateTS = fMakeTS()
+                        FusionMessage.UpdateTS = Func.Common:mMakeTS()
                         FusionMessage.FixedStatusDesc = "Order closed"
                         FusionMessage.messageStatus = 
                            {&FUSIONMESSAGE_STATUS_CANCELLED}.
                   RELEASE FusionMessage.
                END.
                
-               IF katun NE "Dextra" AND
+               IF Syst.Var:katun NE "Dextra" AND
                  (bfOrder.Logistics > "" OR llHardBook = TRUE OR
                  llCancelFusion = TRUE) THEN DO:
                   fLogisticsRequest(
                      bfOrder.MsSeq,
                      bfOrder.OrderId,
                      "CANCEL",
-                     fMakeTS(),
+                     Func.Common:mMakeTS(),
                      {&REQUEST_SOURCE_ORDER_CANCELLATION},
                      OUTPUT lcResult).
 
                   IF lcResult > "" THEN 
-                     DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                      "Order",
+                     Func.Common:mWriteMemo("Order",
                                       STRING(bfOrder.OrderID),
                                       0,
                                       "Logistics cancel failed",
@@ -160,7 +189,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                IF bfOrder.InvNum = 0 AND
                   bfOrder.OrderChannel BEGINS "retention" THEN
                   FOR FIRST OrderPayment NO-LOCK WHERE
-                            OrderPayment.Brand = gcBrand AND
+                            OrderPayment.Brand = Syst.Var:gcBrand AND
                             OrderPayment.OrderId = bfOrder.OrderId AND
                            (OrderPayment.Method = {&ORDERPAYMENT_M_CREDIT_CARD}
                             OR
@@ -168,9 +197,9 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
 
                      CREATE ActionLog.
                      ASSIGN
-                        ActionLog.Brand     = gcBrand
+                        ActionLog.Brand     = Syst.Var:gcBrand
                         ActionLog.ActionID  = "OrderCancelRetention"
-                        ActionLog.ActionTS  = fMakeTS()
+                        ActionLog.ActionTS  = Func.Common:mMakeTS()
                         ActionLog.TableName = "Order"
                         ActionLog.KeyValue  = STRING(bfOrder.OrderId)
                         ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE}.
@@ -197,7 +226,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                IF bfOrder.MultiSimType = {&MULTISIMTYPE_PRIMARY} THEN DO:
 
                   FOR FIRST bfOrder2 NO-LOCK WHERE
-                            bfOrder2.Brand = gcBrand AND
+                            bfOrder2.Brand = Syst.Var:gcBrand AND
                             bfOrder2.MultiSimID = bfOrder.MultiSimID AND
                             bfOrder2.MultiSimType =
                               {&MULTISIMTYPE_SECONDARY}:
@@ -208,11 +237,11 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
 
                /* release pending secondary line orders, YDR-1089 */
                IF CAN-FIND(FIRST OrderAction WHERE
-                                 OrderAction.Brand = gcBrand AND
+                                 OrderAction.Brand = Syst.Var:gcBrand AND
                                  OrderAction.OrderId = bfOrder.OrderID AND
                                  OrderAction.ItemType = "BundleItem" AND
                                  CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                                                CLIType.Brand = gcBrand AND
+                                                CLIType.Brand = Syst.Var:gcBrand AND
                                                 CLIType.CLIType = OrderAction.ItemKey AND
                                                 CLIType.LineType = {&CLITYPE_LINETYPE_MAIN})) THEN DO:
                
@@ -225,12 +254,12 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                         bfOrderCustomer.CustId,
                         bfOrder.OrderID) THEN
                   FOR EACH bfOrderCustomer2 NO-LOCK WHERE   
-                           bfOrderCustomer2.Brand      EQ gcBrand AND 
+                           bfOrderCustomer2.Brand      EQ Syst.Var:gcBrand AND 
                            bfOrderCustomer2.CustId     EQ bfOrderCustomer.CustID AND
                            bfOrderCustomer2.CustIdType EQ bfOrderCustomer.CustIdType AND
                            bfOrderCustomer2.RowType    EQ 1,
                       EACH bfOrder2 NO-LOCK WHERE
-                           bfOrder2.Brand              EQ gcBrand AND
+                           bfOrder2.Brand              EQ Syst.Var:gcBrand AND
                            bfOrder2.orderid            EQ bfOrderCustomer2.Orderid AND
                            ROWID(bfOrder2) NE ROWID(bfOrder) AND
                            (bfOrder2.statuscode        EQ {&ORDER_STATUS_PENDING_MAIN_LINE} OR
@@ -240,16 +269,17 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                             bfOrder2.statuscode        EQ {&ORDER_STATUS_MORE_DOC_NEEDED} OR
                             bfOrder2.statuscode        EQ {&ORDER_STATUS_MNP_ON_HOLD}),
                       FIRST CLIType NO-LOCK WHERE
-                            CLIType.Brand = gcBrand AND
+                            CLIType.Brand = Syst.Var:gcBrand AND
                             CLIType.CLIType = bfOrder2.CLIType AND
-                            CLIType.LineType > 0:
+                           (CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
+                            CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL}):
 
                      IF CAN-FIND(FIRST OrderAction WHERE
-                                       OrderAction.Brand = gcBrand AND
+                                       OrderAction.Brand = Syst.Var:gcBrand AND
                                        OrderAction.OrderId = bfOrder2.OrderID AND
                                        OrderAction.ItemType = "BundleItem" AND
                               CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                                             CLIType.Brand = gcBrand AND
+                                             CLIType.Brand = Syst.Var:gcBrand AND
                                              CLIType.CLIType = OrderAction.ItemKey AND
                                              CLIType.LineType = {&CLITYPE_LINETYPE_MAIN})) THEN NEXT.
                      RUN Mc/closeorder.p(bfOrder2.OrderId,TRUE).
@@ -280,7 +310,7 @@ FUNCTION fSetOrderRiskCode RETURNS LOGICAL
    ORDER_TRANS:
    DO TRANS:
       FIND bfOrder WHERE
-           bfOrder.Brand = gcBrand AND
+           bfOrder.Brand = Syst.Var:gcBrand AND
            bfOrder.OrderId = iOrderId
          EXCLUSIVE-LOCK NO-ERROR.
       /* another process is handling this */
@@ -333,7 +363,7 @@ FUNCTION fSearchStock RETURNS CHARACTER
    DEF VAR liLoop AS INT NO-UNDO. 
 
    FOR EACH Stock WHERE
-            Stock.Brand   = gcBrand AND
+            Stock.Brand   = Syst.Var:gcBrand AND
             Stock.StoType = icStock NO-LOCK:
       DO liLoop = 1 TO NUM-ENTRIES(Stock.ZipCodeExp,","):
         IF icZipCode MATCHES
@@ -347,58 +377,195 @@ FUNCTION fSearchStock RETURNS CHARACTER
 
 END FUNCTION.
 
+/* Function checks another mainline for Mobile only additional line */
+FUNCTION fCheckMainLineForMobileOnly RETURNS INTEGER
+   (INPUT icCustIDType AS CHAR,
+    INPUT icCustID     AS CHAR):
+   
+   DEFINE BUFFER lbOrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER lbOrder         FOR Order.
+   
+   DEF VAR liCount            AS INT  NO-UNDO. 
+   DEF VAR lcMainLineCLITypes AS CHAR NO-UNDO INITIAL "CONT25,CONT26". 
+
+   REPEAT liCount = 1 TO NUM-ENTRIES(lcMainLineCLITypes):
+
+      FOR EACH lbOrderCustomer NO-LOCK WHERE
+               lbOrderCustomer.Brand      = Syst.Var:gcBrand      AND
+               lbOrderCustomer.CustIDType = icCustIDType AND
+               lbOrderCustomer.CustID     = icCustID     AND
+               lbOrderCustomer.RowType    = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+         FIRST lbOrder NO-LOCK WHERE
+               lbOrder.Brand   = Syst.Var:gcBrand                                 AND
+               lbOrder.OrderID = lbOrderCustomer.OrderID                 AND
+               lbOrder.CLIType = ENTRY(liCount,lcMainLineCLITypes)       AND 
+               LOOKUP(lbOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 BY Order.CrStamp:
+
+         RETURN lbOrder.OrderId.
+
+      END.
+
+   END.
+
+   RETURN 0.
+
+END.    
+
 /* Function releases OR CLOSE Additional lines */
-FUNCTION fReleaseORCloseAdditionalLines RETURN LOGICAL
-   (INPUT icCustIDType  AS CHAR,
-    INPUT icCustID      AS CHAR):
+FUNCTION fActionOnAdditionalLines RETURN LOGICAL
+   (INPUT icCustIDType     AS CHAR,
+    INPUT icCustID         AS CHAR,
+    INPUT icCLIType        AS CHAR,
+    INPUT illgProMigration AS LOG,
+    INPUT icAction         AS CHAR):
 
    DEF BUFFER labOrder         FOR Order.
    DEF BUFFER labOrderCustomer FOR OrderCustomer.
+   DEF BUFFER labOrderAction   FOR OrderAction.
 
-   DEF VAR lcNewOrderStatus AS CHAR NO-UNDO.
+   DEF VAR lcNewOrderStatus AS CHAR NO-UNDO INITIAL "".
+   DEF VAR lcDiscList       AS CHAR NO-UNDO INITIAL "". 
+   DEF VAR llgDeleteAction  AS LOG  NO-UNDO INITIAL FALSE.  
+   DEF VAR liMOOrderId      AS INT  NO-UNDO INITIAL 0.
+   DEF VAR llgMainLineAvail AS LOG  NO-UNDO INITIAL FALSE.   
+   DEF VAR illgConvOrder    AS LOG  NO-UNDO INITIAL FALSE. 
+
+   IF fIsConvergenceTariff(icCLIType) THEN 
+      ASSIGN lcDiscList       = {&ADDLINE_DISCOUNTS_20} + "," + {&ADDLINE_DISCOUNTS}
+             llgMainLineAvail = TRUE
+             illgConvOrder    = TRUE.
+   ELSE IF LOOKUP(icCLIType,"CONT25,CONT26") > 0 THEN DO: 
+      ASSIGN lcDiscList       = {&ADDLINE_DISCOUNTS_HM}
+             llgMainLineAvail = TRUE.
+             
+      IF icAction EQ "CLOSE" THEN        
+         liMOOrderId = fCheckMainLineForMobileOnly(icCustIDType,
+                                                   icCustID). 
+   END.
+
+   IF NOT llgMainLineAvail THEN
+      RETURN FALSE.
 
    FOR EACH labOrderCustomer NO-LOCK WHERE
-            labOrderCustomer.Brand      EQ Syst.Parameters:gcBrand AND
+            labOrderCustomer.Brand      EQ Syst.Var:gcBrand AND
             labOrderCustomer.CustId     EQ icCustID                AND
             labOrderCustomer.CustIdType EQ icCustIDType            AND
             labOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
        EACH labOrder NO-LOCK WHERE
-            labOrder.Brand      EQ Syst.Parameters:gcBrand  AND
-            labOrder.orderid    EQ labOrderCustomer.Orderid AND
-            labOrder.statuscode EQ {&ORDER_STATUS_PENDING_MAIN_LINE}:
+            labOrder.Brand      EQ Syst.Var:gcBrand           AND
+            labOrder.OrderId    EQ labOrderCustomer.OrderId          AND
+            labOrder.Statuscode EQ {&ORDER_STATUS_PENDING_MAIN_LINE} AND
+            LOOKUP(labOrder.CLIType,{&ADDLINE_CLITYPES}) > 0:
 
-      IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                        CLIType.Brand      = Syst.Parameters:gcBrand           AND
-                        CLIType.CLIType    = labOrder.CLIType                  AND
-                        CLIType.LineType   = {&CLITYPE_LINETYPE_NONMAIN}       AND
-                        CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) THEN DO: 
-         
+      IF illgProMigration THEN
+         lcNewOrderStatus = {&ORDER_STATUS_CLOSED}.
+      ELSE DO:
+         /* This record has to be found, to check orderaction has any additional 
+            line related discount available - and - this record is used if action is CLOSE */ 
+         FIND FIRST labOrderAction EXCLUSIVE-LOCK WHERE
+                    labOrderAction.Brand    = Syst.Var:gcBrand           AND
+                    labOrderAction.OrderID  = labOrder.OrderId  AND
+                    labOrderAction.ItemType = "AddLineDiscount" AND
+             LOOKUP(labOrderAction.ItemKey, lcDiscList) > 0     NO-ERROR.
+
+         IF NOT AVAIL labOrderAction THEN NEXT.
+
+         CASE icAction:
+            WHEN "CLOSE" THEN DO:
+
+               IF illgConvOrder                                                         AND
+                  (NOT fCheckOngoingConvergentOrder(labOrderCustomer.CustIdType,
+                                                    labOrderCustomer.CustID,
+                                                    labOrder.CliType)
+                   AND
+                   NOT fCheckFixedLineStatusForMainLine(labOrderCustomer.CustIdType,
+                                                        labOrderCustomer.CustId,
+                                                        labOrder.CLIType)
+                   AND
+                   NOT fCheckExistingConvergent(labOrderCustomer.CustIdType,
+                                                labOrderCustomer.CustID,
+                                                labOrder.CliType)                  
+                   AND                                     
+                   (CAN-FIND(FIRST labOrderAction NO-LOCK WHERE
+                                   labOrderAction.Brand    = Syst.Var:gcBrand           AND
+                                   labOrderAction.OrderID  = labOrder.OrderId  AND
+                                   labOrderAction.ItemType = "AddLineDiscount" AND
+                            LOOKUP(labOrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0)))  OR 
+                  (NOT fCheckOngoing2PConvergentOrder(labOrderCustomer.CustIdType,
+                                                      labOrderCustomer.CustID,
+                                                      labOrder.CliType)
+                   AND                               
+                   NOT fCheckFixedLineStatusForMainLine(labOrderCustomer.CustIdType,
+                                                        labOrderCustomer.CustId,
+                                                        labOrder.CLIType)
+                   AND
+                   NOT fCheckExisting2PConvergent(labOrderCustomer.CustIdType,
+                                                  labOrderCustomer.CustID,
+                                                  labOrder.CliType)
+                   AND
+                   (CAN-FIND(FIRST labOrderAction NO-LOCK WHERE
+                                   labOrderAction.Brand    = Syst.Var:gcBrand           AND
+                                   labOrderAction.OrderID  = labOrder.OrderId  AND
+                                   labOrderAction.ItemType = "AddLineDiscount" AND
+                            LOOKUP(labOrderAction.ItemKey, {&ADDLINE_DISCOUNTS_20}) > 0))) THEN   
+                  llgDeleteAction = TRUE.               
+               ELSE DO: 
+                  /* If Mainline is available then delete its particular additional discount 
+                     orderaction record, if available any other additional orderaction 
+                     records then it will be ignored */
+                  IF labOrder.OrderId = liMOOrderId THEN 
+                     llgDeleteAction = TRUE.   
+                  ELSE IF liMOOrderId EQ 0                                       
+                       AND
+                       NOT fCheckOngoingMobileOnly(labOrderCustomer.CustIdType,
+                                                   labOrderCustomer.CustID,
+                                                   labOrder.CliType)             
+                       AND
+                       NOT fCheckExistingMobileOnly(labOrderCustomer.CustIdType,
+                                                    labOrderCustomer.CustID,
+                                                    labOrder.CliType) 
+                       AND 
+                       (CAN-FIND(FIRST labOrderAction NO-LOCK WHERE
+                                       labOrderAction.Brand    = Syst.Var:gcBrand           AND
+                                       labOrderAction.OrderID  = labOrder.OrderId  AND
+                                       labOrderAction.ItemType = "AddLineDiscount" AND
+                                       LOOKUP(labOrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0)) THEN
+                       llgDeleteAction = TRUE.
+               END.   
+
+               IF llgDeleteAction THEN DO:
+                  DELETE labOrderAction.
+                  Func.Common:mWriteMemo("Order",
+                                   STRING(labOrder.OrderID),
+                                   0,
+                                   "ADDLINE DISCOUNT ORDERACTION REMOVED",
+                                   "Removed AddLineDiscount Item from OrderAction").
+               END.
+
+            END.
+            OTHERWISE .
+         END CASE.
+
          CASE labOrder.OrderType:
-            WHEN {&ORDER_TYPE_NEW} THEN
-                 lcNewOrderStatus = IF labOrderCustomer.CustIdType EQ "CIF" THEN {&ORDER_STATUS_COMPANY_NEW}
-                                    ELSE {&ORDER_STATUS_NEW}.
-            WHEN {&ORDER_TYPE_MNP} THEN
-                 lcNewOrderStatus = IF labOrderCustomer.CustIdType EQ "CIF" THEN {&ORDER_STATUS_COMPANY_MNP}
-                                    ELSE {&ORDER_STATUS_MNP}.
-            WHEN {&ORDER_TYPE_RENEWAL} THEN
-                 lcNewOrderStatus = IF labOrderCustomer.CustIdType EQ "CIF" THEN {&ORDER_STATUS_RENEWAL_STC_COMPANY}
-                                    ELSE {&ORDER_STATUS_RENEWAL_STC}.
+            WHEN {&ORDER_TYPE_NEW} THEN lcNewOrderStatus = {&ORDER_STATUS_NEW}.
+            WHEN {&ORDER_TYPE_MNP} THEN lcNewOrderStatus = {&ORDER_STATUS_MNP}.
             OTHERWISE.
          END CASE.
 
-         IF lcNewOrderStatus > "" THEN DO:
-            IF llDoEvent THEN DO:
-               lhOrderStatusChange = BUFFER labOrder:HANDLE.
-               RUN StarEventInitialize(lhOrderStatusChange).
-               RUN StarEventSetOldBuffer(lhOrderStatusChange).
-            END.
+      END.
 
-            fSetOrderStatus(labOrder.OrderId,lcNewOrderStatus).
+      IF lcNewOrderStatus > "" THEN DO:
+         IF llDoEvent THEN DO:
+            lhOrderStatusChange = BUFFER labOrder:HANDLE.
+            RUN StarEventInitialize(lhOrderStatusChange).
+            RUN StarEventSetOldBuffer(lhOrderStatusChange).
+         END.
 
-            IF llDoEvent THEN DO:
-               RUN StarEventMakeModifyEvent(lhOrderStatusChange).
-               fCleanEventObjects().
-            END.
+         fSetOrderStatus(labOrder.OrderId,lcNewOrderStatus).
+
+         IF llDoEvent THEN DO:
+            RUN StarEventMakeModifyEvent(lhOrderStatusChange).
+            fCleanEventObjects().
          END.
       END.
    END.   
@@ -407,6 +574,242 @@ FUNCTION fReleaseORCloseAdditionalLines RETURN LOGICAL
 
 END FUNCTION.   
 
+FUNCTION fCreateNewTPService RETURNS INTEGER
+ (iiMsSeq       AS INT,
+  icProduct     AS CHAR,
+  icProvider    AS CHAR,
+  icType        AS CHAR,
+  icOperation   AS CHAR,
+  icStatus      AS CHAR,
+  icOffer       AS CHAR,
+  icUser        AS CHAR):
+
+    DEFINE BUFFER bf_TPService_Activation FOR TPService.
+
+    FIND FIRST TPService WHERE TPService.MsSeq       = iiMsSeq           AND 
+                               TPService.Operation   = icOperation       AND  
+                               TPService.ServType    = icType            AND  
+                               TPService.ServStatus <> {&STATUS_HANDLED} AND 
+                               TPService.Product     = icProduct         NO-LOCK NO-ERROR.
+    IF NOT AVAIL TPService THEN 
+    DO:
+        CREATE TPService.
+        ASSIGN
+            TPService.MsSeq      = iiMsSeq
+            TPService.ServSeq    = NEXT-VALUE(TPServiceSeq)
+            TPService.ServType   = icType
+            TPService.Operation  = icOperation
+            TPService.Product    = icProduct
+            TPService.Provider   = icProvider
+            TPService.ServStatus = icStatus
+            TPService.Offer      = icOffer
+            TPService.UserCode   = icUser
+            TPService.CreatedTS  = Func.Common:mMakeTS()
+            TPService.UpdateTS   = TPService.CreatedTS.
+
+        IF icOperation = {&TYPE_DEACTIVATION} THEN 
+        DO:
+            FIND FIRST bf_TPService_Activation WHERE bf_TPService_Activation.MsSeq      = iiMsSeq            AND 
+                                                     bf_TPService_Activation.Operation  = {&TYPE_ACTIVATION} AND 
+                                                     bf_TPService_Activation.ServType   = icType             AND  
+                                                     bf_TPService_Activation.ServStatus > ""                 AND
+                                                     bf_TPService_Activation.Product    = icProduct          NO-LOCK NO-ERROR.
+            IF AVAIL bf_TPService_Activation THEN 
+                ASSIGN TPService.SerialNbr = bf_TPService_Activation.SerialNbr.                                                   
+        END.                                                     
+    END.
+
+    RETURN TPService.ServSeq.   
+
+END FUNCTION.
+
+FUNCTION fCreateTPServiceMessage RETURNS LOGICAL
+ (iiMsSeq       AS INT,
+  iiServSeq     AS INT,
+  icSource      AS CHAR,
+  icStatus      AS CHAR):
+
+    FIND FIRST TPService WHERE TPService.MsSeq = iiMsSeq AND TPService.ServSeq = iiServSeq EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+    IF LOCKED TPService THEN 
+        RETURN FALSE.
+
+    CREATE TPServiceMessage.
+    ASSIGN
+       TPServiceMessage.MsSeq         = iiMsSeq
+       TPServiceMessage.ServSeq       = iiServSeq
+       TPServiceMessage.MessageSeq    = NEXT-VALUE(TPServiceMessageSeq)
+       TPServiceMessage.Source        = icSource
+       TPServiceMessage.MessageStatus = icStatus
+       TPServiceMessage.CreatedTS     = Func.Common:mMakeTS()
+       TPServiceMessage.UpdateTS      = TPServiceMessage.CreatedTS.
+
+    ASSIGN   
+       TPService.ServStatus           = icStatus
+       TPService.UpdateTS             = Func.Common:mMakeTS().
+
+    RETURN TRUE.   
+
+END FUNCTION.
+
+FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
+   (INPUT iiExtraLineOrderId AS INT,
+    INPUT iiMainLineOrderId  AS INT,
+    INPUT icAction           AS CHAR):
+
+   DEFINE BUFFER lbMLOrder       FOR Order.
+   DEFINE BUFFER lbELOrder       FOR Order.
+   DEFINE BUFFER lbELOrderAction FOR OrderAction.
+
+   DEF VAR lcNewOrderStatus     AS CHAR NO-UNDO. 
+   DEF VAR lcExtraLineDiscounts AS CHAR NO-UNDO. 
+
+   lcExtraLineDiscounts = fCParam("DiscountType","ExtraLine_Discounts").
+
+   FIND FIRST lbELOrder NO-LOCK WHERE
+              lbELOrder.Brand        EQ Syst.Var:gcBrand           AND
+              lbELOrder.OrderID      EQ iiExtraLineOrderId                AND 
+              lbELOrder.MultiSimId   EQ iiMainLineOrderId                 AND 
+              lbELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}         AND 
+              lbELOrder.StatusCode   EQ {&ORDER_STATUS_PENDING_MAIN_LINE} NO-ERROR. 
+
+   IF AVAIL lbELOrder THEN DO:
+
+      IF llDoEvent THEN DO:
+         lhOrderStatusChange = BUFFER lbELOrder:HANDLE.
+         RUN StarEventInitialize(lhOrderStatusChange).
+         RUN StarEventSetOldBuffer(lhOrderStatusChange).
+      END.
+     
+      CASE icAction:
+         WHEN "RELEASE" THEN DO:
+         
+            CASE lbELOrder.OrderType:
+               WHEN {&ORDER_TYPE_NEW} THEN lcNewOrderStatus = {&ORDER_STATUS_NEW}.
+               WHEN {&ORDER_TYPE_MNP} THEN lcNewOrderStatus = {&ORDER_STATUS_MNP}.
+               WHEN {&ORDER_TYPE_RENEWAL} THEN lcNewOrderStatus = {&ORDER_STATUS_RENEWAL_STC}.
+               OTHERWISE.
+            END CASE.
+
+            fSetOrderStatus(lbELOrder.OrderId,lcNewOrderStatus).
+
+         END.                      
+         WHEN "CLOSE" THEN DO:
+            /* Check if Main line order is closed, If closed, 
+               then close extraline ongoing order */
+            FIND FIRST lbMLOrder NO-LOCK WHERE 
+                       lbMLOrder.Brand        EQ Syst.Var:gcBrand AND
+                       lbMLOrder.OrderId      EQ iiMainLineOrderId       AND 
+                       lbMLOrder.MultiSimId   EQ iiExtraLineOrderId      AND 
+                       lbMLOrder.MultiSimType EQ {&MULTISIMTYPE_PRIMARY} AND 
+                       lbMLOrder.StatusCode   EQ {&ORDER_STATUS_CLOSED}  NO-ERROR. 
+
+            IF AVAIL lbMLOrder THEN
+               fSetOrderStatus(lbELOrder.OrderId,{&ORDER_STATUS_CLOSED}).
+         
+         END. 
+      END CASE.
+   
+      IF llDoEvent THEN DO:
+         RUN StarEventMakeModifyEvent(lhOrderStatusChange).
+         fCleanEventObjects().
+      END.
+   END.      
+
+   RETURN TRUE.
+
+END FUNCTION.   
+
+FUNCTION fGetRegionDiscountPlan RETURNS CHARACTER
+  (INPUT icRegion AS CHAR):
+
+  DEF VAR lcDiscountPlan AS CHAR NO-UNDO.
+
+  FIND FIRST Region WHERE Region.Region = icRegion NO-LOCK NO-ERROR.
+  IF AVAIL Region THEN 
+  DO:
+      CASE Region.TaxZone:
+          WHEN "1" THEN
+              ASSIGN lcDiscountPlan = fCParam("TVService","Mainland").
+          WHEN "2" THEN 
+              ASSIGN lcDiscountPlan = fCParam("TVService","CanaryIslands").
+          WHEN "3" THEN 
+              ASSIGN lcDiscountPlan = fCParam("TVService","Ceuta").
+          WHEN "4" THEN 
+              ASSIGN lcDiscountPlan = fCParam("TVService","Melilla").
+      END CASE.
+  END.
+
+  RETURN lcDiscountPlan.
+
+END FUNCTION.  
+
+FUNCTION fDeactivateTVService RETURNS LOGICAL
+  (iiMsSeq      AS INTE,
+   icUser       AS CHAR):
+
+  DEFINE VARIABLE liServSeq              AS INTEGER   NO-UNDO.
+  DEFINE VARIABLE liActivationServSeq    AS INTEGER   NO-UNDO.
+  DEFINE VARIABLE lcActivationServStatus AS CHARACTER NO-UNDO.
+
+  FIND FIRST TPService WHERE TPService.MsSeq       = iiMsSeq            AND 
+                             TPService.Operation   = {&TYPE_ACTIVATION} AND 
+                             TPService.ServType    = "Television"       AND 
+                             TPService.ServStatus <> {&STATUS_CANCELED} AND 
+                             TPService.ServStatus <> {&STATUS_ERROR}    NO-LOCK NO-ERROR.
+  IF AVAIL TPService THEN
+  DO:
+      ASSIGN 
+          liActivationServSeq    = TPService.ServSeq
+          lcActivationServStatus = TPService.ServStatus.
+
+      IF LOOKUP(TPService.ServStatus, {&WAITING_FOR_STB_ACTIVATION_CONFIRMATION} + "," + {&STATUS_HANDLED}) > 0 THEN 
+      DO:
+          ASSIGN liServSeq = fCreateNewTPService(iiMsSeq, 
+                                                 TPService.Product, 
+                                                 "Huawei", 
+                                                 "Television", 
+                                                 {&TYPE_DEACTIVATION}, 
+                                                 {&STATUS_NEW}, 
+                                                 "",      /* OfferId */ 
+                                                 icUser). /* UserCode */ 
+
+          IF liServSeq > 0 THEN 
+          DO:
+              fCreateTPServiceMessage(iiMsSeq, liServSeq , {&SOURCE_TMS}, {&STATUS_NEW}).
+
+              fCreateTPServiceMessage(iiMsSeq, liServSeq , {&SOURCE_TMS}, {&WAITING_FOR_STB_DEACTIVATION}).
+
+              /* Cancelling the ongoing activation */  
+              IF lcActivationServStatus = {&WAITING_FOR_STB_ACTIVATION_CONFIRMATION} THEN 
+                  fCreateTPServiceMessage(iiMsSeq, liActivationServSeq, {&SOURCE_TMS}, {&STATUS_CANCELED}).
+          END.    
+      END.
+      ELSE
+      DO: /* NEW, Logistics_initiated, WAITING_FOR_STB_ACTIVATION */
+          ASSIGN liServSeq = fCreateNewTPService(iiMsSeq, 
+                                                 TPService.Product, 
+                                                 "Huawei", 
+                                                 "Television", 
+                                                 {&TYPE_DEACTIVATION}, 
+                                                 {&STATUS_NEW}, 
+                                                 "",       /* OfferId */ 
+                                                 icUser).  /* UserCode */ 
+
+          IF liServSeq > 0 THEN 
+          DO: 
+              fCreateTPServiceMessage(iiMsSeq, liServSeq , {&SOURCE_TMS}, {&STATUS_NEW}).
+
+              fCreateTPServiceMessage(iiMsSeq, liServSeq , {&SOURCE_TMS}, {&STATUS_HANDLED}).
+
+              /* Cancelling the ongoing activation */  
+              fCreateTPServiceMessage(iiMsSeq, liActivationServSeq, {&SOURCE_TMS}, {&STATUS_CANCELED}).
+          END.                                  
+      END.
+  END.
+      
+  RETURN TRUE.
+
+END FUNCTION.  
 &ENDIF.
 
 

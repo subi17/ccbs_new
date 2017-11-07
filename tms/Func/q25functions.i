@@ -8,12 +8,13 @@
   CREATED ......: 19.11.15
   CHANGED ......: 
   ------------------------------------------------------------------------*/
+&IF "{&fQ25FUNCTIONS}" NE "YES"
+&THEN
 
+&GLOBAL-DEFINE fQ25FUNCTIONS YES
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fgettxt.i}
-{Func/date.i}
 {Func/smsmessage.i}
 {Func/aes_encrypt.i}
 {Func/fduedate.i}
@@ -79,9 +80,9 @@ IF lcQ25PushOutDir   = "" OR lcQ25PushOutDir   = ? THEN
    lcQ25PushOutDir   = "/tmp/".
 
 ASSIGN lcQ25DWHLogFile  = lcQ25SpoolDir + "events_" +
-                          (REPLACE(STRING(fMakeTS()),".","_")) + ".csv"
+                          (REPLACE(STRING(Func.Common:mMakeTS()),".","_")) + ".csv"
        lcQ25PushFile    = lcQ25PushSpoolDir + "create_messages_" +
-                          (REPLACE(STRING(fMakeTS()),".","")) + ".csv".
+                          (REPLACE(STRING(Func.Common:mMakeTS()),".","")) + ".csv".
 
 /* Function to check if there is available weekdays for SMS sending after
    specified day.
@@ -118,12 +119,12 @@ FUNCTION fGetStartEndDates RETURNS LOGICAL
       ldaCountDate = ADD-INTERVAL(TODAY, iiMonth, 'months':U).
    /* Start date should not be bigger than 29. 31 day handled todether with
       days 29 and 30 */
-   IF iiStartDay > DAY(fLastDayOfMonth(ldaCountDate)) OR
+   IF iiStartDay > DAY(Func.Common:mLastDayOfMonth(ldaCountDate)) OR
       iiStartDay > 29 THEN
       RETURN FALSE.
-   ELSE IF iiEndDay > DAY(fLastDayOfMonth(ldaCountDate))
-      THEN iiEndDay = DAY(fLastDayOfMonth(ldaCountDate)).
-   ELSE IF iiEndDay = 30 and DAY(fLastDayOfMonth(ldaCountDate)) = 31 THEN
+   ELSE IF iiEndDay > DAY(Func.Common:mLastDayOfMonth(ldaCountDate))
+      THEN iiEndDay = DAY(Func.Common:mLastDayOfMonth(ldaCountDate)).
+   ELSE IF iiEndDay = 30 and DAY(Func.Common:mLastDayOfMonth(ldaCountDate)) = 31 THEN
       iiEndDay = 31. /* Month have 31 days */
    IF iiStartDay > 0 AND iiEndDay > 0 THEN DO:
       ASSIGN
@@ -285,7 +286,7 @@ FUNCTION fQ25LogWriting RETURNS LOGICAL
    END.
    ELSE IF iiExecType EQ {&Q25_EXEC_TYPE_HRLP_UNIV} THEN DO:
       lcHRLPLogFile = lcHRLPSpoolDir + "IFS_Q25HR_UNIVERSE_" + 
-                      (SUBSTRING(STRING(fMakeTS()),1,8)) + ".LOG".
+                      (SUBSTRING(STRING(Func.Common:mMakeTS()),1,8)) + ".LOG".
       OUTPUT STREAM Sout TO VALUE(lcHRLPLogFile) APPEND.
       PUT STREAM Sout UNFORMATTED
          icLogText SKIP.
@@ -294,7 +295,7 @@ FUNCTION fQ25LogWriting RETURNS LOGICAL
    END.
    ELSE IF iiExecType EQ {&Q25_EXEC_TYPE_HRLP_ACT} THEN DO:
       lcHRLPLogFile = lcHRLPSpoolDir + "IFS_Q25HR_ACTIVE_" + 
-                      (SUBSTRING(STRING(fMakeTS()),1,8)) + ".LOG".
+                      (SUBSTRING(STRING(Func.Common:mMakeTS()),1,8)) + ".LOG".
       OUTPUT STREAM Sout TO VALUE(lcHRLPLogFile) APPEND.
       PUT STREAM Sout UNFORMATTED
          icLogText SKIP.
@@ -303,7 +304,7 @@ FUNCTION fQ25LogWriting RETURNS LOGICAL
    END.
    ELSE IF iiExecType EQ {&Q25_EXEC_TYPE_HRLP_REL} THEN DO:
       lcHRLPLogFile = lcHRLPSpoolDir + "IFS_Q25HR_RELEASE_" + 
-                      (SUBSTRING(STRING(fMakeTS()),1,8)) + ".LOG".
+                      (SUBSTRING(STRING(Func.Common:mMakeTS()),1,8)) + ".LOG".
       OUTPUT STREAM Sout TO VALUE(lcHRLPLogFile) APPEND.
       PUT STREAM Sout UNFORMATTED
          icLogText SKIP.
@@ -324,7 +325,7 @@ FUNCTION fQ25LogWriting RETURNS LOGICAL
                      STRING(DAY(TODAY),"99") + ".txt".
          OUTPUT STREAM Sout TO VALUE(lcQ25LogFile) APPEND.
          PUT STREAM Sout UNFORMATTED
-            STRING(fMakeTS()) + "|" + icLogText SKIP.
+            STRING(Func.Common:mMakeTS()) + "|" + icLogText SKIP.
          OUTPUT STREAM Sout CLOSE.
       END.
    END.
@@ -337,8 +338,8 @@ FUNCTION fCalculateMaxPauseValue RETURN INTEGER
    DEF VAR ldEndTime AS DEC NO-UNDO.
    DEF VAR ldTimeLeft AS DEC NO-UNDO.
    ASSIGN
-      ldEndTime = fHMS2TS(TODAY, lcSendingEndTime)
-      ldTimeLeft = (ldEndTime - fMakeTS()) * 100000.
+      ldEndTime = Func.Common:mHMS2TS(TODAY, lcSendingEndTime)
+      ldTimeLeft = (ldEndTime - Func.Common:mMakeTS()) * 100000.
    IF iiToBeSend = 0 THEN RETURN 0. /* no messages left, no pause needed and
                                        do not divide by zero */
    RETURN INT(TRUNC(ldTimeLeft / iiToBeSend,0)). 
@@ -378,7 +379,7 @@ FUNCTION fisQ25ExtensionDone RETURNS LOGICAL
    DEF BUFFER bDCCLI FOR DCCLI.
 
    FIND FIRST bDCCLI NO-LOCK WHERE
-              bDCCLI.Brand   EQ gcBrand AND
+              bDCCLI.Brand   EQ Syst.Var:gcBrand AND
               bDCCLI.DCEvent EQ "RVTERM12" AND
               bDCCLI.MsSeq   EQ iiMsseq AND
               bDCCLI.ValidTo >= TODAY NO-ERROR.
@@ -422,7 +423,7 @@ FUNCTION fisQ25RenewalDone RETURNS LOGICAL
    FOR EACH Order NO-LOCK WHERE
             Order.MsSeq = iiMsseq AND
             Order.OrderType = {&ORDER_TYPE_RENEWAL} AND
-            Order.CrStamp > fHMS2TS(ldaMonth22Date, "00:00:00"):
+            Order.CrStamp > Func.Common:mHMS2TS(ldaMonth22Date, "00:00:00"):
 
        IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
                          MsRequest.MsSeq = Order.MsSeq AND
@@ -526,7 +527,7 @@ FUNCTION fisQ25ExtensionAllowed RETURNS LOGICAL
    END.
    
    IF NOT (DCCLI.ValidTo >= ldaQ25Period - 1 AND
-           DCCLI.ValidTo <= fLastDayOfMonth(ldaQ25Period)) THEN DO:
+           DCCLI.ValidTo <= Func.Common:mLastDayOfMonth(ldaQ25Period)) THEN DO:
       ocLogText = "Q25 billperiod and installment end date differ".
       RETURN FALSE.
    END.
@@ -605,7 +606,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
       idaStartDate = idaStartDate - 1.
 
    FOR EACH SingleFee NO-LOCK USE-INDEX BillCode WHERE
-            SingleFee.Brand       = gcBrand AND
+            SingleFee.Brand       = Syst.Var:gcBrand AND
             SingleFee.Billcode BEGINS "RVTERM" AND
             SingleFee.HostTable   = "Mobsub" AND
             SingleFee.SourceTable = "DCCLI" AND
@@ -616,7 +617,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
       /* Send the SMS only for specific installments end date range */
       FIND FIRST DCCLI USE-INDEX PerContractId NO-LOCK WHERE
                  DCCLI.PerContractId = INT(SingleFee.SourceKey) AND
-                 DCCLI.Brand   = gcBrand AND
+                 DCCLI.Brand   = Syst.Var:gcBrand AND
                  DCCLI.DCEvent BEGINS "PAYTERM" AND
                  DCCLI.MsSeq   = INT(SingleFee.KeyValue) AND
                  DCCLI.ValidTo >= idaStartDate AND
@@ -651,7 +652,7 @@ FUNCTION fGenerateQ25SMSMessages RETURNS INTEGER
 
          FIND FIRST SMSMessage NO-LOCK WHERE 
                     SMSMessage.msseq = MobSub.MsSeq AND
-                    SMSMessage.CreStamp > fDate2TS(TODAY) AND
+                    SMSMessage.CreStamp > Func.Common:mDate2TS(TODAY) AND
                     SMSMessage.SMSType = {&SMS_TYPE_Q25} NO-ERROR.
          
          IF AVAIL SMSMessage AND (lcTestStartDay = "" OR 
@@ -746,7 +747,7 @@ FUNCTION fBankByBillCode RETURNS CHAR
    (icBillCode AS CHAR):
    CASE icBillCode:
       WHEN "RVTERM1EF" THEN RETURN "UNO-E".
-      WHEN "RVTERMBSF" THEN RETURN "Yoigo". /* "Sabadell" - YPR-3565 */
+      WHEN "RVTERMBSF" THEN RETURN "Sabadell".
       WHEN "RVTERMF" THEN RETURN "Yoigo".
       WHEN "RVTERMBCF" THEN RETURN "Cetelem".
    END CASE.
@@ -783,7 +784,7 @@ FUNCTION fGetMonthlyFee RETURNS DECIMAL
    (iiPerContractId AS INT,
     iiMsSeq AS INT):
          FIND FIRST FixedFee WHERE
-                    FixedFee.Brand EQ gcBrand AND
+                    FixedFee.Brand EQ Syst.Var:gcBrand AND
                     FixedFee.HostTable EQ "MobSub" AND
                     FixedFee.KeyValue EQ STRING(iiMsseq) AND
                     FixedFee.SourceTable EQ "DCCLI" AND
@@ -842,11 +843,11 @@ FUNCTION fGenerateQ25List RETURNS INTEGER:
    DEF VAR liLoop AS INT NO-UNDO.
 
    ASSIGN
-      ldaEndDate = fLastDayOfMonth(TODAY)
+      ldaEndDate = Func.Common:mLastDayOfMonth(TODAY)
       liPeriod = YEAR(TODAY) * 100 + MONTH(TODAY).
 
    lcHRLPOutFile = lcHRLPSpoolDir + "IFS_Q25HR_UNIVERSE_" +
-                   REPLACE(STRING(fMakeTS()),".","_") +  ".DAT".
+                   REPLACE(STRING(Func.Common:mMakeTS()),".","_") +  ".DAT".
    IF liHRLPTestLevel EQ {&Q25_HRLP_FULL_TEST} THEN DO:
    /* Testing with non Q25 subscriber. Need to generate list file
       with hardcoded values so it looks like Q25 case */
@@ -863,7 +864,7 @@ FUNCTION fGenerateQ25List RETURNS INTEGER:
          Subscriptions. If testing is ongoing, only listed subscriptions
          will be included to file. */
       FOR EACH SingleFee USE-INDEX BillCode WHERE
-               SingleFee.Brand       = gcBrand AND
+               SingleFee.Brand       = Syst.Var:gcBrand AND
                SingleFee.Billcode BEGINS "RVTERM" AND
                SingleFee.HostTable   = "Mobsub" AND
                SingleFee.SourceTable = "DCCLI" AND
@@ -916,7 +917,7 @@ FUNCTION fMakeProdigyRequest RETURNS LOGICAL
                             "LP",
                             1,
                             icCommand,
-                            fSecOffSet(fMakeTS(),5),
+                            Func.Common:mSecOffSet(Func.Common:mMakeTS(),5),
                             "",                /* SalesMan */
                             FALSE,             /* Set fees */
                             FALSE,             /* SMS */
@@ -941,8 +942,7 @@ FUNCTION fMakeProdigyRequest RETURNS LOGICAL
       ELSE
          lcMemotext = "Unknown redirection command". /* should not ever 
                                                         come here */
-      DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                 "Mobsub",
+      Func.Common:mWriteMemoWithType("Mobsub",
                  STRING(iiMsSeq),
                  iiCustNum,
                  lcMemoTitle,
@@ -952,3 +952,4 @@ FUNCTION fMakeProdigyRequest RETURNS LOGICAL
    END.
    RETURN TRUE.
 END.
+&ENDIF

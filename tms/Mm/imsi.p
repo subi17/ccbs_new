@@ -19,7 +19,6 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'imsi'}
 {Syst/eventval.i} 
-{Func/func.p}
 
 DEF INPUT PARAMETER ICC LIKE SIM.ICC NO-UNDO.
 
@@ -49,7 +48,7 @@ DEF VAR new_imsi     AS LOG                    NO-UNDO INIT FALSE.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -71,8 +70,8 @@ form  /* Note ! FRAME SEL has exceptionally 2 rows / record */
   SKIP
     IMSI.PIN2        AT 70
 WITH centered OVERLAY 3 DOWN ROW 2
-    COLOR VALUE(cfc)
-    title COLOR VALUE(ctc)  " IMSI numbers  on SIM(ICC) " + ICC + " "
+    COLOR VALUE(Syst.Var:cfc)
+    title COLOR VALUE(Syst.Var:ctc)  " IMSI numbers  on SIM(ICC) " + ICC + " "
     FRAME sel.
 
 form
@@ -85,30 +84,30 @@ form
     IMSI.PUK1
     IMSI.PUK2
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc)
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc)
     ac-hdr WITH side-labels 1 columns
     FRAME lis.
 
 form /* seek IMSI number  BY  IMSI */
     IMSI
     help "Enter IMSI No."
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND IMSI No. "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 title COLOR VALUE(Syst.Var:ctc) " FIND IMSI No. "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek IMSI number  BY CustNum */
     CustNum
     help "Enter CustoNo"
-    WITH row 4 col 2 title COLOR VALUE(ctc) " FIND CUST No "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 title COLOR VALUE(Syst.Var:ctc) " FIND CUST No "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 orders = "By IMSI No,By Cust No.,By 3, By 4".
 
 FIND SIM where SIM.ICC = ICC  no-lock.
-FIND Customer of SIM WHERE customer.Brand = gcBrand no-lock no-error.
+FIND Customer of SIM WHERE customer.Brand = Syst.Var:gcBrand no-lock no-error.
 
 FIND FIRST IMSI where IMSI.ICC = ICC 
 NO-LOCK NO-ERROR.
@@ -138,13 +137,13 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a IMSI  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-MESSAGE.
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSACTION:
            MESSAGE 
            "Double SIM card not possible yet"
@@ -215,31 +214,31 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35  ufk[2]= 702 ufk[3]= 238 ufk[4]= 201
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-        ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 35  Syst.Var:ufk[2]= 702 Syst.Var:ufk[3]= 238 Syst.Var:ufk[4]= 201
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW IMSI.IMSI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) IMSI.IMSI WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) IMSI.IMSI WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW IMSI.CustNum {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) IMSI.CustNum WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) IMSI.CustNum WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -263,10 +262,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND IMSI WHERE recid(IMSI) = rtab[FRAME-LINE] NO-LOCK.
            RUN local-find-prev.
@@ -291,7 +290,7 @@ BROWSE:
       END. /* previous ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND IMSI WHERE recid(IMSI) = rtab[FRAME-DOWN] NO-LOCK .
@@ -317,7 +316,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* prev page */
-      ELSE IF LOOKUP(nap,"prev-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND IMSI WHERE recid(IMSI) = Memory NO-LOCK NO-ERROR.
         RUN local-find-prev.
@@ -341,7 +340,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -356,10 +355,10 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        IMSI = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE IMSI WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF IMSI <> "" THEN DO:
@@ -378,11 +377,11 @@ BROWSE:
      END. /* Search-1 */
 
      /* Search BY col 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        CustNum = 0.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE CustNum WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF CustNum <> 0 THEN DO:
@@ -400,7 +399,7 @@ BROWSE:
        END.
      END. /* Search-2 */
 
-     ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO:  /* SUBSCRIBER */
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 THEN DO:  /* SUBSCRIBER */
        FIND IMSI WHERE recid(IMSI) = rtab[FRAME-LINE] NO-LOCK.
        ufkey = TRUE.
 
@@ -415,7 +414,7 @@ BROWSE:
        NEXT LOOP.
      END.  
 
-     ELSE IF LOOKUP(nap,"4,f4") > 0 THEN DO:  /* MSISDN */
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 THEN DO:  /* MSISDN */
        FIND IMSI WHERE recid(IMSI) = rtab[FRAME-LINE] NO-LOCK.
        ufkey = TRUE.
        /* show ALL MSISDN no.s associated TO this IMSI no. */
@@ -423,18 +422,18 @@ BROWSE:
        NEXT LOOP.
      END.  
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW"
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION:  /* DELETE */
        delrow = FRAME-LINE.
        FIND IMSI WHERE recid(IMSI) = rtab[FRAME-LINE] NO-LOCK.
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        IMSI.IMSI IMSI.CustNum /* sd */.
 
        RUN local-find-NEXT.
@@ -457,7 +456,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        IMSI.IMSI IMSI.CustNum /* sd */.
        IF ok THEN DO:
 
@@ -477,14 +476,14 @@ BROWSE:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSACTION:
        /* change */
        FIND IMSI WHERE recid(IMSI) = rtab[FRAME-line(sel)]
        EXCLUSIVE-LOCK.
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9.
        RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY IMSI.IMSI.
 
 
@@ -513,25 +512,25 @@ BROWSE:
        xrecid = recid(IMSI).
      END.
 
-     ELSE IF LOOKUP(nap,"home,h") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,h") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(IMSI) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"end,e") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(IMSI) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -571,8 +570,7 @@ PROCEDURE local-disp-row:
        DISPLAY
        IMSI.IMSI
        IMSI.CustNum
-       DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                        BUFFER Customer) when  AVAIL Customer
+       Func.Common:mDispCustName(BUFFER Customer) when  AVAIL Customer
        "" when NOT AVAIL Customer @ Customer.CustName
        IMSI.PIN1
        IMSI.PIN2
@@ -584,7 +582,7 @@ PROCEDURE local-find-others:
 
 
        FIND FIRST MobSub WHERE 
-                  MobSub.Brand = gcBrand AND 
+                  MobSub.Brand = Syst.Var:gcBrand AND 
                   MobSub.IMSI = IMSI.IMSI  NO-LOCK NO-ERROR.
 
        FIND BillTarg OF Customer WHERE
@@ -599,8 +597,7 @@ PROCEDURE local-UPDATE-record:
        RUN local-find-others.
        DISP
           IMSI.CustNum
-          DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                           BUFFER Customer) WHEN  AVAIL Customer
+          Func.Common:mDispCustName(BUFFER Customer) WHEN  AVAIL Customer
           BillTarg.BillTarget   WHEN  AVAIL BillTarg
           IMSI.PIN1
           IMSI.PIN2
@@ -619,7 +616,7 @@ PROCEDURE local-UPDATE-record:
              IMSI.PUK2
           WITH FRAME lis EDITING:
              READKEY.
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME LIS:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME LIS:
                 PAUSE 0.
                 IF FRAME-FIELD = "CustNum" THEN DO:
                    IF INPUT FRAME lis IMSI.CustNum NE 0 THEN DO:

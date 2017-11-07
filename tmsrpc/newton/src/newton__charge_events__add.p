@@ -22,6 +22,7 @@
 DEFINE VARIABLE pcStruct AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcStruct AS CHARACTER NO-UNDO.  
 DEFINE VARIABLE ocError AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE pcTenant AS CHARACTER NO-UNDO.
 DEFINE VARIABLE pcId AS CHAR NO-UNDO. 
 DEFINE VARIABLE pdAmt AS DECIMAL NO-UNDO.
 DEFINE VARIABLE pcBItem AS CHAR NO-UNDO.
@@ -36,14 +37,13 @@ DEFINE TEMP-TABLE ttFMItem NO-UNDO LIKE FMItem.
 IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
 
 pcStruct = get_struct(param_toplevel_id, "0").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 lcStruct = validate_request(pcStruct, 
    "username!,id!,name,amount!,billing_item_id!,paytype!,valid_from!,valid_to").
  
 IF lcStruct = ? THEN RETURN.
-
-IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 pcId       = get_string(pcStruct,"id").
 pdAmt      = get_double(pcStruct,"amount").
@@ -55,7 +55,6 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF pdAmt = 0 THEN 
 RETURN appl_err("Amount can not be zero").
-
 
 IF LOOKUP("valid_to",lcStruct) > 0 THEN DO:
 
@@ -75,6 +74,15 @@ IF LOOKUP("valid_to",lcStruct) > 0 THEN DO:
    RETURN appl_err("Valid To must be later than Valid From ").
 
 END.
+
+IF NUM-ENTRIES(pcID,"|") > 1 THEN
+   ASSIGN
+       pcTenant = ENTRY(2, pcID, "|")
+       pcID     = ENTRY(1, pcID, "|").
+ELSE
+   RETURN appl_err("Invalid tenant information").
+
+{newton/src/settenant.i pcTenant}
 
 /* check FeeModel */
 IF CAN-FIND (FIRST FeeModel WHERE
@@ -134,17 +142,17 @@ ASSIGN
       ttFMItem.BillType  = "CC".
 
 {Syst/commpaa.i}
-gcBrand = lcBrand.
+Syst.Var:gcBrand = lcBrand.
 {Syst/eventval.i}
-katun = "VISTA_" + get_string(pcStruct, "username").
+Syst.Var:katun = "VISTA_" + get_string(pcStruct, "username").
 
-IF TRIM(katun) EQ "VISTA_" THEN DO:
+IF TRIM(Syst.Var:katun) EQ "VISTA_" THEN DO:
    RETURN appl_err("username is empty").
 END.
 
 /* create FeeModel */
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
    {Func/lib/eventlog.i}
    DEF VAR lhFeeModel AS HANDLE NO-UNDO.
    lhFeeModel = BUFFER FeeModel:HANDLE.
@@ -179,5 +187,4 @@ add_struct(response_toplevel_id, "").
 FINALLY:
    EMPTY TEMP-TABLE ttFeeModel.
    EMPTY TEMP-TABLE ttFMItem.
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

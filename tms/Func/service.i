@@ -81,7 +81,7 @@ PROCEDURE pChangedBBStatus:
    DEF VAR liRequest               AS  INT  NO-UNDO.
    DEF VAR lcError                 AS  CHAR NO-UNDO.
 
-   IF ideActStamp = 0 OR ideActStamp = ? THEN ideActStamp = fMakeTS().
+   IF ideActStamp = 0 OR ideActStamp = ? THEN ideActStamp = Func.Common:mMakeTS().
 
    FOR FIRST SubSer WHERE
              SubSer.ServCom = "BB"    AND
@@ -103,8 +103,7 @@ PROCEDURE pChangedBBStatus:
                                      FALSE,
                                      OUTPUT lcError).
          IF liRequest = 0 THEN
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                            "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                             STRING(bMobSub.MsSeq),
                             bMobSub.CustNum,
                             "BB",
@@ -154,12 +153,12 @@ FUNCTION fProfileExtention RETURNS LOGIC
    DEF VAR liValue   AS INT  NO-UNDO. 
    
    IF idtDate = TODAY 
-   THEN ldActTime = fMakeTS().
-   ELSE ldActTime = fMake2Dt(idtDate,10800).
+   THEN ldActTime = Func.Common:mMakeTS().
+   ELSE ldActTime = Func.Common:mMake2DT(idtDate,10800).
 
    /* go through all clitype level packages which are type 2 */
    FOR EACH CTServPac NO-LOCK WHERE
-            CTServPac.Brand     = gcBrand      AND
+            CTServPac.Brand     = Syst.Var:gcBrand      AND
             CTServPac.CLIType   = icCLIType    AND
             CTServPac.ServType  = 2            AND 
             CTServPac.FromDate <= idtDate      AND
@@ -171,14 +170,14 @@ FUNCTION fProfileExtention RETURNS LOGIC
       IF NOT FIRST-OF(CTServPac.ServPac) THEN NEXT.
       
       FOR EACH CTServEl WHERE
-               CTServEl.Brand     = gcBrand            AND
+               CTServEl.Brand     = Syst.Var:gcBrand            AND
                CTServEl.CLIType   = CTServPac.CLIType  AND
                CTServEl.ServPac   = CTServPac.ServPac  AND
                CTServEl.FromDate >= CTServPac.FromDate AND
                CTServEl.FromDate <= CTServPac.ToDate   AND
                CTServEl.FromDate <= idtDate,
          FIRST ServCom NO-LOCK WHERE
-               ServCom.Brand   = gcBrand AND
+               ServCom.Brand   = Syst.Var:gcBrand AND
                ServCom.ServCom = CTServEl.ServCom
       BREAK BY ServCom.ScPosition  /* order from component */
             BY CTServEl.ServCom
@@ -240,7 +239,7 @@ FUNCTION fIsPackageOn RETURNS LOGIC
    llAlreadyOn = TRUE.
    
    FOR EACH CTServPac NO-LOCK WHERE
-            CTServPac.Brand     = gcBrand   AND
+            CTServPac.Brand     = Syst.Var:gcBrand   AND
             CTServPac.CLIType   = icCLIType AND
             CTServPac.ServPac   = icPackage AND  
             CTServPac.FromDate <= idtDate   AND
@@ -252,7 +251,7 @@ FUNCTION fIsPackageOn RETURNS LOGIC
       
       CheckElements:
       FOR EACH CTServEl WHERE
-               CTServEl.Brand     = gcBrand            AND
+               CTServEl.Brand     = Syst.Var:gcBrand            AND
                CTServEl.CLIType   = CTServPac.CLIType  AND
                CTServEl.ServPac   = CTServPac.ServPac  AND
                CTServEl.FromDate >= CTServPac.FromDate AND
@@ -323,34 +322,41 @@ PROCEDURE pCopyPackage:
    DEF INPUT  PARAMETER ilMandatory   AS LOG  NO-UNDO.
    DEF OUTPUT PARAMETER oiCopied      AS INT  NO-UNDO.
 
-   DEF VAR lcFeeModel AS CHAR NO-UNDO.
-   DEF VAR liSCnt     AS INT  NO-UNDO.
-   DEF VAR lcContract AS CHAR NO-UNDO. 
-   DEF VAR llCompCopy AS LOG  NO-UNDO. 
-   DEF VAR lcResult   AS CHAR NO-UNDO.
-   DEF VAR liReq      AS INT  NO-UNDO.
-   DEF VAR ldeActTime AS DEC  NO-UNDO FORMAT "99999999.99999".
-   DEF VAR ldeEndTime AS DEC  NO-UNDO FORMAT "99999999.99999".
-   DEF VAR llForce    AS LOG  NO-UNDO INIT FALSE.
-   DEF VAR liDefValue AS INT  NO-UNDO.
-   DEF VAR lcDefParam AS CHAR NO-UNDO.
-   DEF VAR liDCPackageID AS INT  NO-UNDO.
-   DEF VAR liDCComponentID AS INT  NO-UNDO.
-   DEF VAR llFound    AS LOG  NO-UNDO.
-   DEF VAR lcServPac  AS CHAR NO-UNDO.
-   DEF VAR liUpsellQuota AS INT64  NO-UNDO.
-   DEF VAR liGraceQuota  AS INT64  NO-UNDO.
-   DEF VAR ldeUpgradeLimit AS DEC  NO-UNDO.
-   DEF VAR lcTemplate      AS CHAR NO-UNDO.
-   DEF VAR lcBONOContracts AS CHAR NO-UNDO.
-   DEF VAR lcServSkipList  AS CHAR NO-UNDO.
-   
-   DEF BUFFER bContSub FOR MobSub.
-   DEF BUFFER bDCPackage FOR DCServicePackage.
-   DEF BUFFER bDCComponent FOR DCServiceComponent.
-   DEF BUFFER bDCAttribute FOR DCServiceAttribute.
-   DEF BUFFER bMsRequest FOR MsRequest.
-    
+   DEF VAR lcFeeModel          AS CHAR  NO-UNDO.
+   DEF VAR liSCnt              AS INT   NO-UNDO.
+   DEF VAR lcContract          AS CHAR  NO-UNDO. 
+   DEF VAR llCompCopy          AS LOG   NO-UNDO. 
+   DEF VAR lcResult            AS CHAR  NO-UNDO.
+   DEF VAR liReq               AS INT   NO-UNDO.
+   DEF VAR ldeActTime          AS DEC   NO-UNDO FORMAT "99999999.99999".
+   DEF VAR ldeEndTime          AS DEC   NO-UNDO FORMAT "99999999.99999".
+   DEF VAR llForce             AS LOG   NO-UNDO INIT FALSE.
+   DEF VAR liDefValue          AS INT   NO-UNDO.
+   DEF VAR lcDefParam          AS CHAR  NO-UNDO.
+   DEF VAR liDCPackageID       AS INT   NO-UNDO.
+   DEF VAR liDCComponentID     AS INT   NO-UNDO.
+   DEF VAR llFound             AS LOG   NO-UNDO.
+   DEF VAR lcServPac           AS CHAR  NO-UNDO.
+   DEF VAR liUpsellQuota       AS INT64 NO-UNDO.
+   DEF VAR liGraceQuota        AS INT64 NO-UNDO.
+   DEF VAR ldeUpgradeLimit     AS DEC   NO-UNDO.
+   DEF VAR lcTemplate          AS CHAR  NO-UNDO.
+   DEF VAR lcBONOContracts     AS CHAR  NO-UNDO.
+   DEF VAR lcServSkipList      AS CHAR  NO-UNDO.
+   DEF VAR liPeriod            AS INTE  NO-UNDO.
+   DEF VAR liRequest           AS INTE  NO-UNDO.
+   DEF VAR ldeConsumption      AS DECI  NO-UNDO.
+   DEF VAR lcAdjustConsProfile AS CHAR  NO-UNDO.  
+
+   DEF BUFFER bContSub           FOR MobSub.
+   DEF BUFFER bDCPackage         FOR DCServicePackage.
+   DEF BUFFER bDCComponent       FOR DCServiceComponent.
+   DEF BUFFER bDCAttribute       FOR DCServiceAttribute.
+   DEF BUFFER bMsRequest         FOR MsRequest.
+   DEF BUFFER bf_ServiceLimit    FOR ServiceLimit.
+   DEF BUFFER bf_mServiceLimit   FOR mServiceLimit.
+   DEF BUFFER bf_ServiceLCounter FOR ServiceLCounter. 
+
    ASSIGN
       oiCopied = 0
       llFound  = FALSE.
@@ -361,11 +367,11 @@ PROCEDURE pCopyPackage:
    
    IF idtDate = TODAY 
    THEN ASSIGN
-      ldeActTime = fMakeTS()
+      ldeActTime = Func.Common:mMakeTS()
       ldeEndTime = ldeActTime.
    ELSE ASSIGN
-      ldeActTime = fMake2Dt(idtDate,0)
-      ldeEndTime = fMake2Dt(idtDate,86399).
+      ldeActTime = Func.Common:mMake2DT(idtDate,0)
+      ldeEndTime = Func.Common:mMake2DT(idtDate,86399).
 
    EMPTY TEMP-TABLE ttServCom.
    EMPTY TEMP-TABLE ttServAttr.
@@ -376,7 +382,7 @@ PROCEDURE pCopyPackage:
    lcServSkipList = fCParamC("ServSkipList").
 
    FOR EACH CTServPac NO-LOCK WHERE
-            CTServPac.Brand     = gcBrand   AND
+            CTServPac.Brand     = Syst.Var:gcBrand   AND
             CTServPac.CLIType   = icCLIType AND
             CTServPac.FromDate <= idtDate   AND
             CTServPac.ToDate   >= idtDate
@@ -398,14 +404,14 @@ PROCEDURE pCopyPackage:
       llFound = TRUE.
         
       FOR EACH CTServEl NO-LOCK WHERE
-               CTServEl.Brand     = gcBrand   AND
+               CTServEl.Brand     = Syst.Var:gcBrand   AND
                CTServEl.CLIType   = CTServPac.CLIType  AND
                CTServEl.ServPac   = CTServPac.ServPac  AND
                CTServEl.FromDate >= CTServPac.FromDate AND
                CTServEl.FromDate <= CTServPac.ToDate   AND
                CTServEl.FromDate <= idtDate,
          FIRST ServCom NO-LOCK WHERE
-               ServCom.Brand    = gcBrand          AND
+               ServCom.Brand    = Syst.Var:gcBrand          AND
                ServCom.ServCom  = CTServEl.ServCom AND
                ServCom.Target   = 0
       BREAK BY ServCom.ScPosition
@@ -481,7 +487,7 @@ PROCEDURE pCopyPackage:
          /* are there default values defined on per.contract */
          IF icDCEvent > "" THEN 
          FOR FIRST bDCPackage NO-LOCK WHERE
-                   bDCPackage.Brand     = gcBrand AND
+                   bDCPackage.Brand     = Syst.Var:gcBrand AND
                    bDCPackage.DCEvent   = icDCEvent AND
                    bDCPackage.ServPac   = ttServCom.ServPac AND
                    bDCPackage.ToDate   >= idtDate AND
@@ -567,7 +573,59 @@ PROCEDURE pCopyPackage:
              lcDefParam = lcDefParam + "_DOUBLE".
             
          /* if solog update needed then create a msrequest from change */
-         IF ilSolog THEN DO:
+         IF ilSolog THEN 
+         DO:
+            /* RELAX BONOs */
+            IF INDEX(lcDefParam,"RELAX") > 0 THEN
+            DO:
+                ASSIGN liPeriod = INT(SUBSTRING(STRING(ldeActTime),1,6)).
+
+                FOR EACH bf_ServiceLimit WHERE bf_ServiceLimit.GroupCode = "MM_DATA600" AND bf_ServiceLimit.ValidTo >= TODAY NO-LOCK,
+                    FIRST bf_mServiceLimit WHERE bf_mServiceLimit.MsSeq    = iiMSSeq                  AND 
+                                                 bf_mServiceLimit.DialType = bf_ServiceLimit.DialType AND
+                                                 bf_mServiceLimit.SLSeq    = bf_ServiceLimit.SLSeq    AND
+                                                 bf_mServiceLimit.EndTS   >= ldeActTime               NO-LOCK,
+                    FIRST bf_ServiceLCounter WHERE bf_ServiceLCounter.MsSeq  = iiMSSeq                AND
+                                                   bf_ServiceLCounter.Period = liPeriod               AND
+                                                   bf_ServiceLCounter.SlSeq  = bf_mServiceLimit.SLSeq AND 
+                                                   bf_ServiceLCounter.MSID   = bf_mServiceLimit.MSID  NO-LOCK:
+                    IF bf_ServiceLCounter.Amt > 0 THEN 
+                    DO:
+                        ASSIGN ldeConsumption = (bf_ServiceLCounter.Amt / 1024 / 1024).
+
+                        IF ldeConsumption > bf_ServiceLimit.InclAmt THEN
+                           ldeConsumption = (bf_ServiceLimit.InclAmt * 1024 * 1024).
+                        ELSE
+                           ldeConsumption = bf_ServiceLCounter.Amt.
+
+                        ASSIGN lcAdjustConsProfile = STRING(-1 * ldeConsumption) + ",GRACE=0" + ",TEMPLATE=HSPA".
+
+                        liRequest = fServiceRequest(iiMSSeq,
+                                                    ttServCom.ServCom,
+                                                    1, /* on */
+                                                    lcAdjustConsProfile,
+                                                    ldeActTime,
+                                                    "", /* salesman */
+                                                    FALSE, /* fees */
+                                                    FALSE, /* sms */
+                                                    "", /* creator */
+                                                    "",
+                                                    iiOrigRequest, /* father request */
+                                                    ilMandatory, /* mandatory for father request */
+                                                    OUTPUT lcResult).
+                        IF liRequest = 0 THEN
+                        DO:
+                          Func.Common:mWriteMemo("MobSub",
+                                           STRING(iiMSSeq),
+                                           bContSub.CustNum,
+                                           "Consumption adjustment failed;",
+                                           lcResult).
+                          ASSIGN lcResult = "".
+                        END.  
+                    END. /* IF bf_ServiceLCounter.Amt > 0 */
+                END.
+            END.
+
             liReq = fServiceRequest (iiMsSeq ,     
                                      ttServCom.ServCom,
                                      liDefValue,
@@ -604,7 +662,7 @@ PROCEDURE pCopyPackage:
          /* list of fee models for fee creation */
          IF ilSetFees AND ttServCom.DefValue  > 0 THEN DO:
             FIND FIRST ServPac WHERE
-                 ServPac.Brand   = gcBrand AND
+                 ServPac.Brand   = Syst.Var:gcBrand AND
                  ServPac.ServPac = ttServCom.ServPac NO-LOCK NO-ERROR.
 
             IF AVAILABLE ServPac AND ServPac.FeeModel > "" THEN DO:
@@ -682,7 +740,7 @@ PROCEDURE pCopyPackage:
    IF ilSetFees THEN DO:
    
       /* contract */
-      lcContract = fFeeContract(gcBrand,
+      lcContract = fFeeContract(Syst.Var:gcBrand,
                                 bContSub.CustNum,
                                 "",  
                                 idtDate,
@@ -746,7 +804,7 @@ PROCEDURE pTerminatePackage:
    /* profile cannot be removed with this */
    IF LOOKUP(icServPac,",*") > 0 THEN RETURN.
    
-   fSplitTS(idEndStamp,
+   Func.Common:mSplitTS(idEndStamp,
             OUTPUT ldaEndDate,
             OUTPUT liEndTime).
             
@@ -754,7 +812,7 @@ PROCEDURE pTerminatePackage:
    EMPTY TEMP-TABLE ttServAttr.
  
    FOR EACH CTServPac NO-LOCK WHERE
-            CTServPac.Brand     = gcBrand      AND
+            CTServPac.Brand     = Syst.Var:gcBrand      AND
             CTServPac.CLIType   = icOldCLIType AND
             CTServPac.ServPac   = icServPac    AND 
             CTServPac.FromDate <= ldaEndDate   AND
@@ -768,14 +826,14 @@ PROCEDURE pTerminatePackage:
       llFound = TRUE.
             
       FOR EACH CTServEl NO-LOCK WHERE
-               CTServEl.Brand     = gcBrand   AND
+               CTServEl.Brand     = Syst.Var:gcBrand   AND
                CTServEl.CLIType   = CTServPac.CLIType  AND
                CTServEl.ServPac   = CTServPac.ServPac  AND
                CTServEl.FromDate >= CTServPac.FromDate AND
                CTServEl.FromDate <= CTServPac.ToDate   AND
                CTServEl.FromDate <= ldaEndDate,
          FIRST ServCom NO-LOCK WHERE
-               ServCom.Brand    = gcBrand          AND
+               ServCom.Brand    = Syst.Var:gcBrand          AND
                ServCom.ServCom  = CTServEl.ServCom AND
                ServCom.Target   = 0
       BREAK BY ServCom.ScPosition
@@ -811,7 +869,7 @@ PROCEDURE pTerminatePackage:
          llCommonComponent = FALSE.
 
          FOR FIRST bDCPackage NO-LOCK WHERE
-                   bDCPackage.Brand     = gcBrand AND
+                   bDCPackage.Brand     = Syst.Var:gcBrand AND
                    bDCPackage.DCEvent   = ENTRY(liCount,icBundleList) AND
                    bDCPackage.ServPac   = ttServCom.ServPac AND
                    bDCPackage.ToDate   >= ldaEndDate + 1 AND
@@ -850,6 +908,7 @@ PROCEDURE pTerminatePackage:
       IF ilSolog THEN DO:
          IF ttServCom.ServCom = "SHAPER" THEN
             lcParam = ttServCom.DefParam.
+         
          ELSE IF AVAIL SubSer THEN lcParam = SubSer.SSParam.
          ELSE lcParam = ttServCom.DefParam.
       
@@ -860,8 +919,12 @@ PROCEDURE pTerminatePackage:
 
          IF ttServCom.ServCom = "SHAPER"   AND 
             icNewCLIType NE icOldCLIType   AND
-            icNewCLIType BEGINS "TARJ"     AND
-            icOldCLIType BEGINS "TARJ"     AND    
+            CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                           CLIType.CLIType EQ icNewCLIType AND
+                           CLIType.PayType EQ {&CLITYPE_PAYTYPE_PREPAID}) AND
+            CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                           CLIType.CLIType EQ icOldCLIType AND
+                           CLIType.PayType EQ {&CLITYPE_PAYTYPE_PREPAID}) AND
             AVAILABLE SubSer               AND 
             icNewCLIType EQ SubSer.SSParam THEN 
             NEXT TERMINATECOMPONENT.
@@ -875,7 +938,7 @@ PROCEDURE pTerminatePackage:
                                      lcParam,
                                      (IF ttServCom.ServCom = "SHAPER" OR
                                          ttServCom.ServCom = "HSDPA" THEN
-                                         fSecOffSet(idEndStamp,1)
+                                         Func.Common:mSecOffSet(idEndStamp,1)
                                       ElSE idEndStamp),
                                      "",                /* SalesMan */ 
                                      ilSetFees,
@@ -919,7 +982,7 @@ PROCEDURE pTerminatePackage:
       /* contract */
       FIND bContSub WHERE bContSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
       IF AVAILABLE bContSub THEN
-      lcContract = fFeeContract(gcBrand,
+      lcContract = fFeeContract(Syst.Var:gcBrand,
                                 bContSub.CustNum,
                                 "",  
                                 ldaEndDate,
@@ -945,7 +1008,7 @@ PROCEDURE pTerminatePackage:
       to avoid creating Data bundle clitypes TARJ7, TARJ9 (Newclitype) service termination request */
 
    IF lcRetainBundle > "" AND 
-      LOOKUP(lcRetainBundle, "TARJ7,TARJ9") = 0 THEN DO:
+      LOOKUP(lcRetainBundle, "TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") = 0 THEN DO:
       /* SHAPER should be created from 1st day of next month */
       RUN pCopyPackage(icNewCLIType,
                        icServPac,
@@ -970,10 +1033,10 @@ PROCEDURE pGetGeneralPackage:
    DEF INPUT  PARAMETER icServPac AS CHAR NO-UNDO. 
 
    FOR EACH ServEl NO-LOCK WHERE
-            ServEl.Brand   = gcBrand AND
+            ServEl.Brand   = Syst.Var:gcBrand AND
             ServEl.ServPac = icServPac,
       FIRST ServCom NO-LOCK WHERE
-            ServCom.Brand   = gcBrand AND
+            ServCom.Brand   = Syst.Var:gcBrand AND
             ServCom.ServCom = ServEl.ServCom AND
             ServCom.Target  = 0:
              
@@ -983,7 +1046,7 @@ PROCEDURE pGetGeneralPackage:
       
       IF ServCom.ServAttr THEN 
       FOR EACH ServAttr NO-LOCK WHERE
-               ServAttr.Brand   = gcBrand AND
+               ServAttr.Brand   = Syst.Var:gcBrand AND
                ServAttr.ServCom = ServCom.ServCom:
          CREATE ttServAttr.
          BUFFER-COPY ServAttr TO ttServAttr.

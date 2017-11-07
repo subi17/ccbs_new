@@ -15,7 +15,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/eventval.i}
 {Syst/tmsconst.i}
 
@@ -24,15 +24,17 @@ DEFINE TEMP-TABLE ttReseller LIKE Reseller
    FIELD BankCodeFrom LIKE ResellerTF.ValidFrom.
 
 DEFINE VARIABLE pcStruct AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE pcTenant AS CHARACTER NO-UNDO.
+DEFINE VARIABLE pcId     AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcStruct AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcRespStruct AS CHARACTER NO-UNDO. 
 
 IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
 
 pcStruct = get_struct(param_toplevel_id, "0").
-IF gi_xmlrpc_error NE 0 THEN DO:
+
+IF gi_xmlrpc_error NE 0 THEN
    RETURN.
-END.
 
 lcStruct = validate_request(pcStruct, 
    "id!,name!,email,entity_code,commission_percentage," +
@@ -40,16 +42,25 @@ lcStruct = validate_request(pcStruct,
  
 IF lcStruct = ? THEN RETURN.
 
-katun = "VISTA_" + get_string(pcStruct, "username").
+Syst.Var:katun = "VISTA_" + get_string(pcStruct, "username").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
+IF TRIM(Syst.Var:katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
+
+pcId = get_string(pcStruct,"id").
+
+IF NUM-ENTRIES(pcId,"|") > 1 THEN
+  ASSIGN
+      pcTenant = ENTRY(2,pcId,"|")
+      pcId     = ENTRY(1,pcId,"|").
+ELSE
+  RETURN appl_err("Invalid tenant information").
 
 CREATE ttReseller.
 ASSIGN
-   ttReseller.Brand      = gcBrand
-   ttReseller.Reseller   = get_string(pcStruct, "id")
+   ttReseller.Brand      = Syst.Var:gcBrand
+   ttReseller.Reseller   = pcId
    ttReseller.RsName     = get_string(pcStruct, "name")
    ttReseller.EntityCode = (IF LOOKUP("entity_code",lcStruct) > 0
                             THEN get_int(pcStruct,"entity_code") ELSE ?)
@@ -63,15 +74,16 @@ ASSIGN
                               WHEN LOOKUP("active",lcStruct) > 0.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/settenant.i pcTenant}
 
 FIND Reseller NO-LOCK WHERE
-     Reseller.Brand = gcBrand AND
+     Reseller.Brand = Syst.Var:gcBrand AND
      Reseller.Reseller = ttReseller.Reseller NO-ERROR.
 IF AVAIL Reseller THEN
    RETURN appl_err(SUBST("Reseller already exists: &1", ttReseller.Reseller)).
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
    {Func/lib/eventlog.i}
    DEF VAR lhReseller AS HANDLE NO-UNDO.
    lhReseller = BUFFER Reseller:HANDLE.
@@ -89,5 +101,4 @@ lcRespStruct = add_struct(response_toplevel_id, "").
 FINALLY:
    IF llDoEvent THEN fCleanEventObjects().
    EMPTY TEMP-TABLE ttReseller.
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

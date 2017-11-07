@@ -18,32 +18,43 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {newton/src/json_key.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
+{Func/cparam2.i}
+
 &SCOPED-DEFINE RESELLERS "PH,TC,TP"
+&SCOPED-DEFINE EXCLUSIVERESELLERS "AX,BY,DX,KH,TA,MD"
 
 /* Input parameters */
-DEF VAR pcMSISDN AS CHAR NO-UNDO. 
-DEF VAR pcDNIType AS CHAR NO-UNDO. 
-DEF VAR pcDNI AS CHAR NO-UNDO. 
+DEF VAR pcTenant   AS CHAR NO-UNDO.
+DEF VAR pcMSISDN   AS CHAR NO-UNDO. 
+DEF VAR pcDNIType  AS CHAR NO-UNDO. 
+DEF VAR pcDNI      AS CHAR NO-UNDO. 
 DEF VAR pcReseller AS CHAR NO-UNDO. 
+DEF VAR pcChannel  AS CHAR NO-UNDO. 
 
 /* Output parameters */
-DEF VAR top_struct AS CHAR NO-UNDO.
+DEF VAR top_struct   AS CHAR NO-UNDO.
 DEF VAR result_array AS CHAR NO-UNDO.
-DEF VAR sub_struct AS CHAR NO-UNDO.
+DEF VAR sub_struct   AS CHAR NO-UNDO.
 /* Local variables */
-DEF VAR lcCallType AS CHAR NO-UNDO.
+DEF VAR lcCallType         AS CHAR NO-UNDO.
+DEF VAR lcIndirectChannels AS CHAR NO-UNDO. 
 
-lcCallType = validate_request(param_toplevel_id, "string,string,string,string").
+lcCallType = validate_request(param_toplevel_id, "string,string,string,string,string").
 IF lcCallType EQ ? THEN RETURN.
 
-pcMSISDN = get_string(param_toplevel_id, "0").
-pcDNIType = get_string(param_toplevel_id, "1").
-pcDNI = get_string(param_toplevel_id, "2").
-pcReseller = get_string(param_toplevel_id, "3"). 
+pcTenant = get_string(param_toplevel_id, "0").
+pcMSISDN = get_string(param_toplevel_id, "1").
+pcDNIType = get_string(param_toplevel_id, "2").
+pcDNI = get_string(param_toplevel_id, "3").
+pcReseller = get_string(param_toplevel_id, "4"). 
+
+lcIndirectChannels = fCParamC("InDirectChannels").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 FUNCTION fAddSubStruct RETURNS LOGICAL:
 
@@ -69,11 +80,11 @@ END FUNCTION.
 IF pcMSISDN BEGINS "8" OR
    pcMSISDN BEGINS "9" THEN   /* Fixed line number */
    FIND mobsub NO-LOCK WHERE
-        mobsub.brand = gcBrand AND
+        mobsub.brand = Syst.Var:gcBrand AND
         mobsub.fixednumber = pcMSISDN NO-ERROR.
 ELSE 
    FIND mobsub NO-LOCK WHERE
-        mobsub.brand = gcBrand AND
+        mobsub.brand = Syst.Var:gcBrand AND
         mobsub.cli = pcMSISDN NO-ERROR.
 
 IF NOT AVAILABLE mobsub THEN
@@ -93,7 +104,7 @@ IF Customer.CustIdType NE pcDNIType THEN
 
 /* there's no salesman record for WEB,MGM,GIFT,YOIGO,VIP */
 FIND Salesman WHERE
-     Salesman.Brand = gcBrand AND
+     Salesman.Brand = Syst.Var:gcBrand AND
      Salesman.Salesman = MobSub.Salesman NO-LOCK NO-ERROR.
 
 /* YDR-149
@@ -101,17 +112,39 @@ FIND Salesman WHERE
   by Phone house
 - Other user can find all other subscriptions, but not those which are sold
   from Phone house 
-- YOT-1851 - added TC, TP to behave like PH */
-IF LOOKUP(pcReseller,{&RESELLERS}) > 0 THEN DO:
+- YOT-1851 - added TC, TP to behave like PH 
+- YOT-5165 - User Exclusive can find Exclusive subscriptions,PH,TP & TC */
+
+IF LOOKUP(pcReseller,{&EXCLUSIVERESELLERS}) > 0 THEN DO:
+
+   /* YOT-5180, User Exclusive could find ANY subscription created from 
+      direct channel without restriction of the reseller that made the activation*/
+   FIND FIRST Order NO-LOCK WHERE 
+              Order.Brand = Syst.Var:gcBrand      AND 
+              Order.MsSeq = MobSub.MsSeq AND 
+              Order.CLI   = MobSub.CLI   NO-ERROR. 
    
+   IF AVAIL Order AND LOOKUP(Order.OrderChannel,lcIndirectChannels) > 0 AND 
+      AVAIL Salesman                                                    THEN
+   DO:
+      IF LOOKUP(SalesMan.Reseller,{&EXCLUSIVERESELLERS}) EQ 0 AND 
+         LOOKUP(SalesMan.Reseller,{&RESELLERS})          EQ 0 THEN 
+      RETURN appl_err("Salesman Reseller not match").
+   END.
+
+END.
+ELSE IF LOOKUP(pcReseller,{&RESELLERS}) > 0 THEN DO:
+
    IF NOT AVAIL SalesMan THEN 
       RETURN appl_err("Salesman not found").
 
    IF SalesMan.Reseller NE pcReseller THEN 
       RETURN appl_err("Reseller not match").
+
 END.
-ELSE IF AVAIL SalesMan AND 
-        LOOKUP(SalesMan.Reseller,{&RESELLERS}) > 0 THEN 
+ELSE IF AVAIL SalesMan AND
+       (LOOKUP(SalesMan.Reseller,{&EXCLUSIVERESELLERS}) > 0  OR
+        LOOKUP(SalesMan.Reseller,{&RESELLERS})         > 0) THEN 
    RETURN appl_err("Reseller not match").
 
 top_struct = add_struct(response_toplevel_id, "").
@@ -128,5 +161,4 @@ fAddSubStruct().
 add_int(top_struct, "sub_count", 1).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

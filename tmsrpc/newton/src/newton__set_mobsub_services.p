@@ -15,13 +15,15 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Mm/subser.i}
 {Func/barrfunc.i}
 {Mm/fbundle.i}
 {Func/service.i}
+{Func/vasfunc.i}
+{Func/profunc.i}
 
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.
@@ -31,6 +33,7 @@ DEF VAR pcInputArray AS CHAR NO-UNDO.
 DEF VAR pcStruct AS CHAR NO-UNDO.
 DEF VAR pcServiceId AS CHAR NO-UNDO.
 DEF VAR pcValue AS CHAR NO-UNDO.
+DEF VAR pcParam2 AS CHAR NO-UNDO.
 DEF VAR pcParam AS CHAR NO-UNDO.
 DEF VAR lcStruct AS CHAR NO-UNDO.
 DEF VAR plSendSMS AS LOGICAL NO-UNDO INITIAL TRUE.
@@ -48,6 +51,7 @@ DEF VAR lcSalesman AS CHAR NO-UNDO.
 DEF VAR lcInfo AS CHAR NO-UNDO.
 DEF VAR lcServCom AS CHAR NO-UNDO.
 DEF VAR ocError AS CHAR NO-UNDO.
+DEF VAR lcErr AS CHAR NO-UNDO.
 DEF VAR liValidate AS INT  NO-UNDO.
 DEF VAR pcSetServiceId AS CHAR NO-UNDO.
 DEF VAR pcUser AS CHAR NO-UNDO.
@@ -62,6 +66,8 @@ DEF VAR lcBarringCode  AS CHAR NO-UNDO.
 DEF VAR orBarring      AS ROWID NO-UNDO.
 DEF VAR lcOnOff        AS CHAR NO-UNDO.
 DEF VAR llOngoing      AS LOG NO-UNDO.
+DEF VAR liParams       AS INT NO-UNDO.
+DEF VAR liSVARequest   AS INT NO-UNDO.
 
 DEF BUFFER bReq  FOR MsRequest.
 DEF BUFFER bSubReq FOR MsRequest.
@@ -75,14 +81,14 @@ FUNCTION fLocalMemo RETURNS LOGIC
 
    CREATE Memo.
    ASSIGN
-      Memo.Brand     = gcBrand
-      Memo.CreStamp  = fMakeTS()
+      Memo.Brand     = Syst.Var:gcBrand
+      Memo.CreStamp  = Func.Common:mMakeTS()
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
       Memo.Custnum   = iiCustNum
       Memo.HostTable = icHostTable
       Memo.KeyValue  = icKey
       Memo.MemoType  = "service"
-      Memo.CreUser   = katun
+      Memo.CreUser   = Syst.Var:katun
       Memo.MemoTitle = icTitle
       Memo.Memotext  = icText.
 END FUNCTION.
@@ -108,16 +114,13 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUser) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-FIND Mobsub NO-LOCK
-WHERE Mobsub.MsSeq = piMsSeq NO-ERROR.
-IF NOT AVAILABLE Mobsub THEN
-    RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
+{newton/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
-katun = pcUser.
+Syst.Var:katun = pcUser.
 IF pcUserLevel EQ "Operator" THEN 
-   cCheckMsBarringKatun = "NewtonAd". 
+   cCheckMsBarringkatun = "NewtonAd". 
 ELSE 
-   cCheckMsBarringKatun = "NewtonCC". 
+   cCheckMsBarringkatun = "NewtonCC". 
 /*YPR-4773*/
 /*Activation is not allowed if fixed line provisioning is pending*/
 IF (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG}    /*16*/ OR 
@@ -128,22 +131,51 @@ IF (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG}    /*16*/ OR
 DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
    pcStruct = get_struct(pcInputArray, STRING(liInputCounter - 1)).
 
-   lcStruct = validate_request(pcStruct,"service_id!,value!,param").
+   lcStruct = validate_request(pcStruct,"service_id!,value!,param,param2").
    IF lcStruct EQ ? THEN RETURN.
 
    pcServiceId = get_string(pcStruct, "service_id").
    pcValue = get_string(pcStruct, "value").
    IF LOOKUP('param', lcStruct) GT 0 THEN
     pcParam = get_string(pcStruct, "param").
+   IF LOOKUP('param2', lcStruct) GT 0 THEN
+    pcParam2 = get_string(pcStruct, "param2").
 
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+   /*YPRO*/
+   /*SVAs*/
+   /*'off', 'on', 'cancel activation', 'cancel deactivation'*/
+   IF fIsSVA(pcServiceId, OUTPUT liParams) THEN DO:
+      IF liParams EQ 2 THEN DO:
+         IF pcParam EQ "" OR pcParam2 EQ "" THEN
+            RETURN appl_err("Missing SVA parameter").
+      END.
+      ELSE IF liParams EQ 1 THEN DO:
+         IF pcParam EQ "" OR pcParam2 EQ "" THEN
+            RETURN appl_err("Missing SVA parameter").
+      END.
+      ELSE IF liParams EQ 0 THEN DO:
+      END.
+      liSVARequest = fMakeProActRequest(MobSub.MsSeq,
+                                        pcServiceId,
+                                        0,
+                                        pcParam,
+                                        pcParam2,
+                                        pcValue,
+                                        lcErr).
+      IF lcErr NE "" THEN appl_err("SVA request failure " + lcErr).
+
+      add_boolean(response_toplevel_id, "", TRUE).
+         
+   END. /*YPRO*/
+   
    /* SERVICES */
    FOR FIRST SubSer NO-LOCK WHERE
      SubSer.MsSeq = Mobsub.MsSeq AND
      SubSer.ServCom = pcServiceId,
    FIRST ServCom NO-LOCK WHERE 
-      ServCom.Brand = gcBrand AND
+      ServCom.Brand = Syst.Var:gcBrand AND
       ServCom.ServCom = pcServiceID:
 
       /* Check ongoing service requests */
@@ -198,7 +230,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
                                     SubSer.ServCom,
                                     liValue).
       IF ldActStamp > 0 THEN DO:
-         fSplitTS(ldActStamp,
+         Func.Common:mSplitTS(ldActStamp,
                   OUTPUT ldtActDate,
                   OUTPUT liReq).
 
@@ -206,13 +238,13 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
             (DAY(ldtActDate) = 1 AND liReq < TIME - 120 AND
              DAY(SubSer.SSDate) NE 1)
          THEN .
-         ELSE ldActStamp = fMakeTS().
+         ELSE ldActStamp = Func.Common:mMakeTS().
       END.
-      ELSE ldActStamp = fMakeTS().
+      ELSE ldActStamp = Func.Common:mMakeTS().
 
       IF ldtActDate = TODAY
-      THEN ldActStamp = fMakeTS().
-      ELSE ldActStamp = fMake2DT(ldtActDate,1).
+      THEN ldActStamp = Func.Common:mMakeTS().
+      ELSE ldActStamp = Func.Common:mMake2DT(ldtActDate,1).
 
       IF pcParam EQ "" AND
          SubSer.ServCom NE "CF" AND /* YBU-2004 */
@@ -297,7 +329,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
    IF LOOKUP(pcServiceID,"BB,LTE") > 0 AND pcValue = "ON" THEN DO:
    
       FIND FIRST ServCom WHERE
-                 ServCom.Brand = gcBrand AND
+                 ServCom.Brand = Syst.Var:gcBrand AND
                  ServCom.ServCom = pcServiceID NO-LOCK NO-ERROR.
       IF NOT AVAILABLE ServCom THEN RETURN appl_err("Invalid Service Id").
 
@@ -341,7 +373,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
                               ServCom.ServCom,
                               1,
                               pcParam,
-                              fMakeTS(),
+                              Func.Common:mMakeTS(),
                               lcSalesman,
                               TRUE,      /* fees */
                               plSendSMS,      /* sms */
@@ -372,8 +404,7 @@ END.
 add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.
 
 
 

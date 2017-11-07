@@ -10,9 +10,8 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-ASSIGN gcBrand = "1"
-       katun   = "Cron".
-{Func/timestamp.i}
+ASSIGN Syst.Var:gcBrand = "1"
+       Syst.Var:katun   = "Cron".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/msreqfunc.i}
@@ -24,7 +23,7 @@ DEF VAR liMsActTime      AS INT  NO-UNDO.
 DEF VAR lhCustomer     AS HANDLE NO-UNDO.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
    lhCustomer = BUFFER Customer:HANDLE.
    RUN StarEventInitialize(lhCustomer).
@@ -34,11 +33,11 @@ liConfDays = fCParamI("WaitingCanceleInvoiceDays").
 IF liConfDays = 0 OR liConfDays = ? THEN liConfDays = 90.
 
 FOR EACH MsRequest NO-LOCK WHERE
-         MsRequest.Brand      = gcBrand AND
+         MsRequest.Brand      = Syst.Var:gcBrand AND
          MsRequest.ReqType    = {&REQTYPE_ACTIVATE_EMAIL_INVOICE} AND
          MsRequest.ReqStatus  = {&REQUEST_STATUS_CONFIRMATION_PENDING}:
 
-    fSplitTS(MsRequest.UpdateStamp,ldMsActDate,liMsActTime).
+    Func.Common:mSplitTS(MsRequest.UpdateStamp,ldMsActDate,liMsActTime).
     IF liConfDays >= (TODAY - ldMsActDate) THEN NEXT.
 
     FIND Customer NO-LOCK WHERE
@@ -48,7 +47,10 @@ FOR EACH MsRequest NO-LOCK WHERE
              Customer.DelType EQ {&INV_DEL_TYPE_EMAIL_PENDING} THEN DO:
       FIND CURRENT Customer EXCLUSIVE-LOCK NO-ERROR.
       IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustomer).
-      Customer.DelType = {&INV_DEL_TYPE_SMS}.
+      IF Syst.Parameters:Tenant EQ "yoigo" THEN
+         Customer.DelType = {&INV_DEL_TYPE_SMS}.
+      ELSE
+         Customer.DelType = {&INV_DEL_TYPE_NO_DELIVERY}.
       IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
       RELEASE Customer.
     END.

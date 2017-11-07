@@ -21,6 +21,13 @@ if not 'tenancies' in globals():
 # Configure database location (on different partitions/remote hosts)
 # for production servers. All databases not found in this dictionary
 # will be assumed/created in the current directory
+#
+# If the value has ':' delimeted list then:
+#   - 1. entry is a host name
+#   - 2. entry is a database name (the actual file name of the database basename without db extension)
+#
+# If the value is not ':' delimeted list then the value is database location with absolute path
+# but without the db extension
 
 db_locations = {
     'alpheratz': {'common': '/db1/common/common',
@@ -31,6 +38,26 @@ db_locations = {
                   'prepedr': '/db1/prepedr/prepedr',
                   'fraudcdr': '/db1/fraudcdr/fraudcdr',
                   'reratelog': '/db1/reratelog/reratelog'},
+    'angetenar': {'common': '/db1/common/common',
+                  'ordercanal': '/db1/ordercanal/ordercanal',
+                  'mobile': '/db1/mobile/mobile',
+                  'counter': '/db1/counter/counter',
+                  'star': '/db1/star/star',
+                  'prepedr': '/db1/prepedr/prepedr',
+                  'fraudcdr': '/db1/fraudcdr/fraudcdr',
+                  'reratelog': '/db1/reratelog/reratelog'},
+    'sadachbia': {'common': '/apps/yoigo/db/progress/store/common',
+                  'ordercanal': '/apps/yoigo/db/progress/store/ordercanal',
+                  'mobile': '/apps/yoigo/db/progress/store/mobile',
+                  'counter': '/apps/yoigo/db/progress/store/counter',
+                  'star': '/apps/yoigo/db/progress/store/star',
+                  'prepedr': '/apps/yoigo/db/progress/store/prepedr',
+                  'fraudcdr': '/apps/yoigo/db/progress/store/fraudcdr',
+                  'reratelog': '/apps/yoigo/db/progress/store/reratelog',
+                  'mcdr': '/apps/yoigo/db/progress/store/mcdr',
+                  'mcdrdtl': '/apps/yoigo/db/progress/store/mcdrdtl',
+                  'prepcdr': '/apps/yoigo/db/progress/store/prepcdr',
+                  'roamcdr': '/apps/yoigo/db/progress/store/roamcdr'},
     'spica': {'common': 'alpheratz.int.asp.qvantel.net:common',
              'ordercanal': 'alpheratz.int.asp.qvantel.net:ordercanal',
              'mobile': 'alpheratz.int.asp.qvantel.net:mobile',
@@ -97,6 +124,28 @@ db_locations = {
              'reratelog': 'pallas.int.asp.qvantel.net:reratelog'}
 }
 
+# Alternative database location (on different partitions/remote hosts)
+# for production servers. There will be alternative pf file only for the databases
+# listed in here. There might be a need for alternative databases for example in monitoring cases
+# and also when replica server needs to connect to the main server
+#
+# If the value has ':' delimeted list then:
+#   - 1. entry is a host name
+#   - 2. entry is a database name (the actual file name of the database basename without db extension)
+#   - 3. entry is the -S parameter value (if available otherwise it is same as 2. entry value)
+#
+# If the value is not ':' delimeted list then the value is database location with absolute path
+# but without the db extension
+
+db_alternative_locations = {
+    'arneb': {'common': 'pallas.int.asp.qvantel.net:common'},
+    'pallas': {'common': 'arneb.int.asp.qvantel.net:common:pcommonrepl',
+               'ordercanal': 'arneb.int.asp.qvantel.net:ordercanal:pordercanalrepl',
+               'mobile': 'arneb.int.asp.qvantel.net:mobile:pmobilerepl',
+               'counter': 'arneb.int.asp.qvantel.net:counter:pcounterrepl',
+               'star': 'arneb.int.asp.qvantel.net:star:pstarrepl'}
+}
+
 db_processes = {'common': ['biw', 'wdog', ('apw', 4)],
                 'ordercanal': ['biw', 'wdog', ('apw', 4)],
                 'mobile': ['biw', 'wdog', ('apw', 4)],
@@ -156,6 +205,19 @@ def db_full_path(db_name, suffix='.db', host=None):
 
     return '{0}{1}'.format(locs.get(db_name, '{0}/{1}'.format(getcwd(), db_name)), suffix)
 
+def db_alternative_full_path(db_name, host=None):
+
+    if environment == 'development':
+        return ''
+
+    host = host or gethostname()
+
+    if host in db_alternative_locations:
+        locs = db_alternative_locations[host]
+        if db_name in locs:
+            return locs[db_name]
+    return ''
+
 @target(initialize_dependencies)
 def initialize(*a): pass
 
@@ -192,7 +254,7 @@ def database_file(match, deps, db_dir, db_name):
                     ['\(6715\)$', '\(6718\)$', '\(451\)$',
                      '0 Percent complete.', '^$',
                      '\(6720\)$', '\(6722\)$', '\(1365\)$', '\(334\)$'])
-            if tenancies:
+            if len(tenancies) > 1:
                 callgrep([dlc + '/bin/proutil', match, '-C', 'enablemultitenancy'], ['Multi'])
             break
     else:
@@ -234,10 +296,6 @@ def write_pf_file(filename, tenant='', logical_names={}):
     if tenant:
         tenant = '_{0}'.format(tenant)
     with open(filename, 'wt') as fd:
-        if cdr_databases:
-             fd.write('-h %d\n' % (len(databases) + len(cdr_databases)))
-        else:
-             fd.write('-h %d\n' % len(databases))
         for db in databases:
             name_map = ' -ld %s' % logical_names[db] if db in logical_names else ''
             fd.write('-pf {0}/{1}{2}.pf{3}\n'.format(getcwd(), db, tenant, name_map))
@@ -288,6 +346,7 @@ def startup_parameter_file(match, deps, db_name):
 def connect_parameter_file(match, deps, db_name):
     '''([_a-zA-Z0-9]+)\.pf'''
     path = db_full_path(db_name, '').split(':')
+    alternativepath = db_alternative_full_path(db_name).split(':')
 
     fd = open(db_name + '.pf', 'wt')
     if len(path) > 1:
@@ -298,10 +357,27 @@ def connect_parameter_file(match, deps, db_name):
         fd.write('-db %s\n' % path[0])
     fd.write('-ld %s\n' % db_name)
     fd.close()
+
     for tenant in tenancies:
         with open('{0}_{1}.pf'.format(db_name, tenant), 'wt') as fd:
             fd.write('-pf {0}/{1}.pf\n'.format(getcwd(), db_name))
             fd.write('-pf {0}/tenant_{1}.pf\n'.format(getcwd(), tenant))
+
+    if alternativepath[0]:
+        fd = open('{0}_alt.pf'.format(db_name), 'wt')
+        if len(alternativepath) > 1:
+            fd.write('-db %s\n' % alternativepath[1])
+            fd.write('-H %s\n' % alternativepath[0])
+            fd.write('-S %s\n' % alternativepath[len(alternativepath) - 1])
+        else:
+            fd.write('-db %s\n' % alternativepath[0])
+        fd.write('-ld %s\n' % db_name)
+        fd.close()
+
+        for tenant in tenancies:
+            with open('{0}_alt_{1}.pf'.format(db_name, tenant), 'wt') as fd:
+                fd.write('-pf {0}/{1}_alt.pf\n'.format(getcwd(), db_name))
+                fd.write('-pf {0}/tenant_{1}.pf\n'.format(getcwd(), tenant))
 
 @target
 @applies_to(['tenant_none'] + [ 'tenant_{0}'.format(x) for x in tenancies ])
@@ -411,7 +487,7 @@ def a2t_from_database(database):
     if os.path.exists('{0}/tools/{1}.r'.format(work_dir, script)):
         os.unlink('{0}/tools/{1}.r'.format(work_dir, script))
     x = Popen(mpro + ['-pf', '{0}.pf'.format(database),
-                 '-b', '-p', script + '.p'], stdout=PIPE)
+                 '-h', '1', '-b', '-p', script + '.p'], stdout=PIPE)
     if x.wait() != 0:
         print(x.stdout.read())
         raise PikeException('Unable to read schema data from '
@@ -426,13 +502,13 @@ def _migrate(migration_file, direction, a2t_data):
     df_file, database = mig2df(migration_file, direction,
                                a2t_data, a2t_from_database, environment)
 
-    pfile = tempfile.NamedTemporaryFile(suffix='.p', mode='rt+')
+    pfile = tempfile.NamedTemporaryFile(suffix='.p', mode='wt+')
     pfile.write('SESSION:SUPPRESS-WARNINGS = TRUE.\n')
     pfile.write('SESSION:NUMERIC-FORMAT = "American".\n')
     pfile.write('RUN prodict/load_df("{0},,").\n'.format(df_file.name))
     pfile.flush()
 
-    callgrep(mpro + ['-pf', database + '.pf', '-b', '-p', pfile.name], [])
+    callgrep(mpro + ['-pf', database + '.pf', '-h', '1', '-b', '-p', pfile.name], [])
 
     error_file = database + '.e'
     if os.path.exists(error_file):
@@ -454,6 +530,9 @@ def migrate(match, deps):
 
     if environment == 'safeproduction':
         raise PikeException('Safe production mode. Migration features are disabled.')
+
+    if environment == 'slavedevelopment':
+        raise PikeException('Slave development mode. Migration features are disabled.')
 
     avail_migrations = sorted((x.group(1), int(x.group(2))) \
                        for x in [re.match(r'^((\d+)_.*)\.py$', y) \
@@ -487,6 +566,9 @@ def status(match, deps):
     if environment == 'safeproduction':
         raise PikeException('Safe production mode. Migration features are disabled.')
 
+    if environment == 'slavedevelopment':
+        raise PikeException('Slave development mode. Migration features are disabled.')
+
     avail_migrations = sorted((x.group(1), int(x.group(2))) \
                        for x in [re.match(r'^((\d+)_.*)\.py$', y) \
                        for y in os.listdir(migrations_dir)] if x)
@@ -506,6 +588,9 @@ def history(match, deps):
 
     if environment == 'safeproduction':
         raise PikeException('Safe production mode. Migration features are disabled.')
+
+    if environment == 'slavedevelopment':
+        raise PikeException('Slave development mode. Migration features are disabled.')
 
     data = []
     for file in os.listdir(migcache_dir):
@@ -532,6 +617,9 @@ def upgrade(match, deps):
     if environment == 'safeproduction':
         raise PikeException('Safe production mode. Migration features are disabled.')
 
+    if environment == 'slavedevelopment':
+        raise PikeException('Slave development mode. Migration features are disabled.')
+
     global parameters
     assert len(parameters) == 1, 'which migration to upgrade?'
     mig = parameters[0]
@@ -547,6 +635,9 @@ def downgrade(match, deps):
 
     if environment == 'safeproduction':
         raise PikeException('Safe production mode. Migration features are disabled.')
+
+    if environment == 'slavedevelopment':
+        raise PikeException('Slave development mode. Migration features are disabled.')
 
     global parameters
     assert len(parameters) == 1, 'which migration to downgrade?'
@@ -567,7 +658,7 @@ def active_cdr_db_pf(tenant):
     else:
         connection_type = "local"
 
-    args = ['-b', '-p', 'Syst/list_active_cdr_databases.p', '-param', connection_type]
+    args = ['-b', '-p', 'Syst/list_active_cdr_databases.p', '-param', connection_type, '-h', '1']
 
     if not tenant == '':
         args.extend(['-pf', 'common_{0}.pf'.format(tenant)])
@@ -575,7 +666,7 @@ def active_cdr_db_pf(tenant):
         args.extend(['-pf', 'common.pf'])
 
     cdr_fetch = Popen(mpro + args, stdout=PIPE)
-    dict = literal_eval(Popen('/bin/cat', stdin=cdr_fetch.stdout, stdout=PIPE).communicate()[0])
+    dict = literal_eval(cdr_fetch.communicate()[0])
 
     if not tenant == '':
         uandp = ['-U', '{0}@{1}'.format(tenancies[tenant]['username'], tenancies[tenant]['domain']), '-P', tenancies[tenant]['password']]
@@ -590,8 +681,12 @@ def fixtures(*a):
     if environment == 'safeproduction':
         raise PikeException('Safe production mode. Fixture loading is not allowed.')
 
+    if environment == 'slavedevelopment':
+        raise PikeException('Slave development mode. Fixture loading is not allowed.')
+
     tenantdict = {}
     tenant = None
+
     for tenant in tenancies:
         if tenancies[tenant]['tenanttype'] != 'Super':
             tenantdict[tenant] = {'tenant': tenant, 'pf': 'all_{0}.pf'.format(tenant)}
@@ -617,11 +712,15 @@ def fixtures(*a):
                 '-param', 'fix_dir={0},bulk=yes'.format(fixturedir)]
 
         cdr_dict = {}
+        dbcount = len(databases)
 
         for pp in cdr_databases:
             if not cdr_dict:
                 cdr_dict = active_cdr_db_pf(tenantdict[tenant]['tenant'])
             args.extend(cdr_dict[pp])
+            dbcount += 1
+
+        args.extend(['-h', str(dbcount)])
 
         load_fixture = Popen(mpro + args, stdout=PIPE)
         call('/bin/cat', stdin=load_fixture.stdout)
@@ -637,10 +736,15 @@ def tenanciescreate(*a):
     if tenancies:
         cdr_dict = {}
         args = ['-pf', 'all.pf', '-b', '-p', 'multitenancy/create_tenant.r']
+        dbcount = len(databases)
+
         for pp in cdr_databases:
             if not cdr_dict:
                 cdr_dict = active_cdr_db_pf()
             args.extend(cdr_dict[pp])
+            dbcount += 1
+
+        args.extend(['-h', str(dbcount)])
 
         multitenancy = Popen(mpro + args, stdout=PIPE)
         call('/bin/cat', stdin=multitenancy.stdout)
@@ -679,5 +783,5 @@ def dumpfixtures(*a):
             pf_entries.update(active_cdr_db_pf(tenantdict[tenant]['tenant']))
 
         for key in sorted(pf_entries):
-            dump_fixture = Popen(mpro + pf_entries[key] + ['-b', '-p', 'gearbox/fixtures/dump_fixtures.p', '-param', '{0}'.format(fixturedir)], stdout=PIPE)
+            dump_fixture = Popen(mpro + pf_entries[key] + ['-h', str(len(databases) + cdr_database_count), '-b', '-p', 'gearbox/fixtures/dump_fixtures.p', '-param', '{0}'.format(fixturedir)], stdout=PIPE)
             call('/bin/cat', stdin=dump_fixture.stdout)

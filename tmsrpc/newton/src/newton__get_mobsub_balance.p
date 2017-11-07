@@ -16,10 +16,9 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Func/callquery.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/upsellbundle.i}
 {Func/tarj6.i}
@@ -126,7 +125,7 @@ FUNCTION fCollectBalance RETURNS LOGIC
              ttCall.BalanceType  = icBalanceType.
 
       FOR FIRST BillItem NO-LOCK WHERE
-                BillItem.Brand = gcBrand AND
+                BillItem.Brand = Syst.Var:gcBrand AND
                 BillItem.BillCode = icBillCode:
          ttCall.BIGroup = BillItem.BIGroup.
       END.
@@ -146,10 +145,7 @@ piMsSeq = get_pos_int(param_toplevel_id, "0").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST MobSub NO-LOCK WHERE
-           MobSub.MsSeq = piMsSeq NO-ERROR.
-IF NOT AVAIL MobSub THEN
-   RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
+{newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
 
 IF NOT MobSub.PayType THEN
    ASSIGN lcIPLContracts   = fCParamC("IPL_CONTRACTS")
@@ -163,11 +159,11 @@ tthCDR = TEMP-TABLE ttCDR:HANDLE.
 
 ASSIGN
    first_of_month = DATE(MONTH(TODAY),1,YEAR(TODAY))
-   ldaLastDay     = fLastDayOfMonth(TODAY)
+   ldaLastDay     = Func.Common:mLastDayOfMonth(TODAY)
    liPeriod       = YEAR(TODAY) * 100 + MONTH(TODAY)
-   ldPeriodFrom   = fMake2Dt(first_of_month,0)
-   ldPeriodTo     = fMake2Dt(ldaLastDay,86399)
-   ldeCurrentTS   = fMakeTS().
+   ldPeriodFrom   = Func.Common:mMake2DT(first_of_month,0)
+   ldPeriodTo     = Func.Common:mMake2DT(ldaLastDay,86399)
+   ldeCurrentTS   = Func.Common:mMakeTS().
 
 main_level_struct = add_struct(response_toplevel_id, "").
    
@@ -185,13 +181,13 @@ IF NOT MobSub.PayType THEN DO:
               MsOwner.CLIEvent BEGINS "iS" NO-LOCK NO-ERROR.
    IF AVAIL MSOwner AND MsOwner.TsBeg >= ldPeriodFrom AND
       MsOwner.TsBeg <= ldPeriodTo THEN DO:
-      fSplitTS(MsOwner.TsBeg,OUTPUT ldaiSTCDate,OUTPUT liiSTCTime).
+      Func.Common:mSplitTS(MsOwner.TsBeg,OUTPUT ldaiSTCDate,OUTPUT liiSTCTime).
       lliSTC = TRUE.
    END.
 END.
 
 fMobCDRCollect(INPUT TRIM(STRING(MobSub.PayType,"pre/post")),
-               INPUT gcBrand,
+               INPUT Syst.Var:gcBrand,
                INPUT "rpc",
                INPUT first_of_month,
                INPUT TODAY,
@@ -210,7 +206,7 @@ fMobCDRCollect(INPUT TRIM(STRING(MobSub.PayType,"pre/post")),
 IF liErrorCodeOut = 0 AND MobSub.FixedNumber > "" AND
    MobSub.CLI <> MobSub.FixedNumber THEN /* Partial terminated */
 fMobCDRCollect(INPUT TRIM(STRING(MobSub.PayType,"pre/post")),
-               INPUT gcBrand,
+               INPUT Syst.Var:gcBrand,
                INPUT "rpc",
                INPUT first_of_month,
                INPUT TODAY,
@@ -235,7 +231,7 @@ FOR EACH ttCDR NO-LOCK WHERE
          ttMsOwner.ToDate   >= ttCDR.DateSt NO-LOCK:
 
    IF ttMsOwner.PayType EQ TRUE THEN DO:
-      ldeCDRts = fMake2Dt(ttCDR.DateSt,ttCDR.TimeStart).
+      ldeCDRts = Func.Common:mMake2DT(ttCDR.DateSt,ttCDR.TimeStart).
 
       IF NOT ttMsOwner.PeriodFrom <= ldeCDRts AND 
              ttMsOwner.PeriodTo   >= ldeCDRts THEN
@@ -273,11 +269,11 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
          FIRST ServiceLimit NO-LOCK WHERE
                ServiceLimit.SlSeq   = MServiceLimit.SlSeq,
          FIRST DayCampaign NO-LOCK WHERE
-               DayCampaign.Brand   = gcBrand AND
+               DayCampaign.Brand   = Syst.Var:gcBrand AND
                DayCampaign.DCEvent = ServiceLimit.GroupCode AND
                LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0,
          FIRST FixedFee NO-LOCK USE-INDEX HostTable WHERE
-               FixedFee.Brand     = gcBrand AND
+               FixedFee.Brand     = Syst.Var:gcBrand AND
                FixedFee.HostTable = "MobSub" AND
                FixedFee.KeyValue  = STRING(ttMsOwner.MsSeq) AND
                FixedFee.FeeModel  = DayCampaign.FeeModel AND
@@ -286,7 +282,7 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
                FixedFee.BegDate  <= ldaLastDay AND
                FixedFee.EndPer   >= liPeriod,
          FIRST FMItem NO-LOCK WHERE
-               FMItem.Brand     = gcBrand AND
+               FMItem.Brand     = Syst.Var:gcBrand AND
                FMItem.FeeModel  = FixedFee.FeeModel AND
                FMItem.FromDate <= FixedFee.BegDate  AND
                FMItem.ToDate   >= FixedFee.BegDate:
@@ -371,7 +367,7 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
 
    /* Rest all fixed fee excluding first month fee */
    FOR EACH FixedFee USE-INDEX HostTable WHERE 
-            FixedFee.Brand      = gcBrand AND 
+            FixedFee.Brand      = Syst.Var:gcBrand AND 
             FixedFee.CustNum    = MobSub.InvCust AND 
             FixedFee.HostTable  = "Mobsub" AND
             FixedFee.KeyValue   = STRING(Mobsub.MsSeq) AND
@@ -399,7 +395,7 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
 
    /* data upsell single fees */
    FOR EACH SingleFee USE-INDEX Custnum WHERE
-            SingleFee.Brand = gcBrand AND
+            SingleFee.Brand = Syst.Var:gcBrand AND
             SingleFee.Custnum = Mobsub.InvCust AND
             SingleFee.HostTable = "Mobsub" AND
             SingleFee.KeyValue = STRING(Mobsub.MsSeq) AND
@@ -414,7 +410,7 @@ IF MobSub.PayType EQ {&MOBSUB_PAYTYPE_POSTPAID} THEN DO:
          SingleFee.CalcObj EQ "RVTERM" AND
          SingleFee.SourceTable = "DCCLI" THEN DO:
          ASSIGN         
-            ldaToDate = fLastDayOfMonth(TODAY)
+            ldaToDate = Func.Common:mLastDayOfMonth(TODAY)
             ldaFromDate = date(month(ldaToDate),1,year(ldaToDate)).
 
          IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
@@ -489,7 +485,7 @@ ELSE DO:
       fCollectBalance(MobSub.CLIType,MobSub.TariffBundle,
                       "PRETARJ6UPSELL",ldeTARJ6UpsellChargeDay,"balance_day").
    END.
-   ELSE IF MobSub.CliType = "TARJ7" OR MobSub.CliType = "TARJ9" THEN DO:
+   ELSE IF LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 THEN DO:
       FOR FIRST ServiceLimit NO-LOCK WHERE
                 ServiceLimit.GroupCode = MobSub.CliType:
          IF CAN-FIND (FIRST MServiceLimit WHERE
@@ -605,8 +601,7 @@ FINALLY:
    EMPTY TEMP-TABLE ttSub.
    EMPTY TEMP-TABLE ttMsOwner.
    IF VALID-HANDLE(tthCDR) THEN DELETE OBJECT tthCDR NO-ERROR.
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.
 
 PROCEDURE pGetBundleFirstMonthFee:
 
@@ -620,10 +615,10 @@ PROCEDURE pGetBundleFirstMonthFee:
    IF AVAILABLE bMServiceLimit THEN DO:
 
       FOR FIRST DayCampaign NO-LOCK WHERE
-                DayCampaign.Brand   = gcBrand AND 
+                DayCampaign.Brand   = Syst.Var:gcBrand AND 
                 DayCampaign.DCEvent = icDcEvent,
           FIRST FixedFee NO-LOCK USE-INDEX HostTable WHERE
-                FixedFee.Brand     = gcBrand AND
+                FixedFee.Brand     = Syst.Var:gcBrand AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue  = STRING(MobSub.MsSeq) AND
                 FixedFee.FeeModel  = DayCampaign.FeeModel AND
@@ -635,7 +630,7 @@ PROCEDURE pGetBundleFirstMonthFee:
           FIRST FFItem OF FixedFee NO-LOCK WHERE
                 FFItem.BillPeriod = liPeriod,
           FIRST FMItem NO-LOCK WHERE
-                FMItem.Brand     = gcBrand AND
+                FMItem.Brand     = Syst.Var:gcBrand AND
                 FMItem.FeeModel  = FixedFee.FeeModel AND
                 FMItem.FromDate <= FixedFee.BegDate  AND
                 FMItem.ToDate   >= FixedFee.BegDate  AND

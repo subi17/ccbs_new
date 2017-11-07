@@ -36,7 +36,11 @@ FUNCTION fCalculateFactor RETURNS DEC
       
       ELSE ldFactor = 1. 
    END.
-      
+   
+   /* penalty factor cannot be greater than 1 
+     (can happen if termination date is before begin date) */
+   IF ldFactor > 1 THEN ldFactor = 1.
+
    RETURN ldFactor.
    
 END FUNCTION.

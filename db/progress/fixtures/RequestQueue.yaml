@@ -1,4 +1,4 @@
-RequestQueue1: RequestQueue
+bulkload: RequestQueue
   Brand: "1"
   Queue: 1
   QName: "AR And Services"
@@ -8,7 +8,7 @@ RequestQueue1: RequestQueue
   LogThreshold: 500000
   MonitorOn: TRUE 
 
-RequestQueue2: RequestQueue
+bulkload: RequestQueue
   Brand: "1"
   Queue: 2
   QName: "Subscription Handling"
@@ -16,7 +16,7 @@ RequestQueue2: RequestQueue
   Monitor: "REQU2:Subscription Requests"
   MonitorOn: TRUE 
 
-RequestQueue3: RequestQueue
+bulkload: RequestQueue
   Brand: "1"
   Queue: 3
   QName: "STC"
@@ -27,7 +27,7 @@ RequestQueue3: RequestQueue
   LogThreshold: 500000
   MonitorOn: TRUE 
 
-RequestQueue4: RequestQueue
+bulkload: RequestQueue
   Brand: "1"
   Queue: 4
   QName: "Contracts"
@@ -38,7 +38,7 @@ RequestQueue4: RequestQueue
   LogThreshold: 500000
   MonitorOn: TRUE 
 
-RequestQueue5: RequestQueue
+bulkload: RequestQueue
   Brand: "1"
   Queue: 5
   QName: "Bank files"
@@ -46,7 +46,7 @@ RequestQueue5: RequestQueue
   Monitor: "REQU5:Bank files"
   MonitorOn: TRUE 
 
-RequestQueue6: RequestQueue
+bulkload: RequestQueue
   Brand: "1"
   Queue: 6
   QName: "ACC and Barrings"
@@ -54,7 +54,7 @@ RequestQueue6: RequestQueue
   Monitor: "REQU6:ACC and Barrings"
   MonitorOn: TRUE 
 
-RequestQueue7: RequestQueue
+bulkload: RequestQueue
   Brand: "1"
   Queue: 7
   QName: "Rerate"
@@ -62,7 +62,7 @@ RequestQueue7: RequestQueue
   Monitor: "REQU7:Rerate"
   MonitorOn: TRUE 
 
-RequestQueue8: RequestQueue
+bulkload: RequestQueue
   Brand: "1"
   Queue: 8
   QName: "Dextra online interface"
@@ -70,7 +70,7 @@ RequestQueue8: RequestQueue
   Monitor: "REQU8:Dextra"
   MonitorOn: TRUE 
 
-RequestQueue9: RequestQueue
+bulkload: RequestQueue
   Brand: "1"
   Queue: 9
   QName: "Contract termination"
@@ -78,7 +78,7 @@ RequestQueue9: RequestQueue
   Monitor: "REQU9:ContractTerm"
   MonitorOn: TRUE 
 
-RequestQueue10: RequestQueue
+bulkload: RequestQueue
   Brand: "1"
   Queue: 10
   QName: "Email invoice"
@@ -86,7 +86,7 @@ RequestQueue10: RequestQueue
   Monitor: "REQU10:Email Invoice"
   MonitorOn: TRUE 
 
-RequestQueue11: RequestQueue
+bulkload: RequestQueue
   Brand: "1"
   Queue: 11
   QName: "BTC"

@@ -27,14 +27,15 @@
               fixed_bundle_usage;double;mandatory;fixed line bundle usage
               fixed_bdest_limit;int;mandatory;fixed line bundle destination limit
               fixed_bdest_usage;int;mandatory;fixed line bundle destination usage
+              flex_500mb_upsell;int;mandatory;Mobile Data Usage Flex Upsell 500mb
+              flex_5gb_upsell;int;mandatory;Mobile Data Usage Flex Upsell 5gb
 
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Func/callquery.i}
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Mm/active_bundle.i}
 {Func/upsellbundle.i}
@@ -48,78 +49,82 @@ DEF VAR piMsSeq AS INT NO-UNDO.
 DEF VAR first_level_struct  AS CHARACTER NO-UNDO.
 
 /* Local variables */
-DEF VAR ldGprsTrafficIn  AS DECIMAL INITIAL 0.0 NO-UNDO.
-DEF VAR ldGprsTrafficOut AS DECIMAL INITIAL 0.0 NO-UNDO.
-DEF VAR ldbalance        AS DECIMAL INITIAL 0.0 NO-UNDO.
-DEF VAR first_of_month   AS DATE NO-UNDO.
-DEF VAR liPeriod         AS INT NO-UNDO.
-DEF VAR liDayPeriod      AS INT NO-UNDO.
-DEF VAR tthCDR           AS HANDLE  NO-UNDO.
-DEF VAR liErrorCodeOut   AS INTEGER NO-UNDO.
-DEF VAR ldPeriodFrom     AS DEC     NO-UNDO.
-DEF VAR ldPeriodTo       AS DEC     NO-UNDO.
-DEF VAR ldaLastDay       AS DATE    NO-UNDO.
-DEF VAR ldeCurrentTS     AS DECIMAL NO-UNDO.
-DEF VAR liUpsellCount    AS INT     NO-UNDO.
-DEF VAR lcError          AS CHAR    NO-UNDO.
-DEF VAR ldeDSSTotalLimit AS DEC     NO-UNDO.
-DEF VAR ldeDSSDataUsed   AS DEC     NO-UNDO.
-DEF VAR llDSSActive      AS LOG     NO-UNDO.
-DEF VAR lcDSSBundleId    AS CHAR    NO-UNDO.
-DEF VAR ldeDataBundleLimit  AS DEC  NO-UNDO.
-DEF VAR ldeDataBundleUsage  AS DEC  NO-UNDO.
-DEF VAR ldeVoiceBundleLimit AS DEC  NO-UNDO.
-DEF VAR ldeVoiceBundleUsage AS DEC  NO-UNDO.
-DEF VAR ldeTotalDataBundleLimit AS DEC  NO-UNDO.
-DEF VAR ldeTotalDataBundleUsage AS DEC  NO-UNDO.
-DEF VAR ldeDSSDataBundleUsage   AS DEC  NO-UNDO.
-DEF VAR ldeRoamBundleUsage AS DEC  NO-UNDO.
-DEF VAR liRoamUpsellCount AS INT     NO-UNDO.
-DEF VAR liDSSUpsellCount        AS INT  NO-UNDO.
-DEF VAR liVoiceBDestLimit       AS INT  NO-UNDO.
-DEF VAR liVoiceBDestUsage       AS INT  NO-UNDO.
-DEF VAR liFixedBdestLimit       AS INT  NO-UNDO.
-DEF VAR liFixedBdestUsage       AS INT  NO-UNDO.
-DEF VAR ldeFixedBundleLimit     AS DEC  NO-UNDO.
-DEF VAR ldeFixedBundleUsage     AS DEC  NO-UNDO.
-DEF VAR ldeIntRoamUsage AS DEC NO-UNDO. 
-DEF VAR liDialTypes AS INT NO-UNDO EXTENT 5.
-DEF VAR liLoop AS INTEGER NO-UNDO. 
-DEF VAR ldaDate AS DATE NO-UNDO. 
-DEF VAR liTime AS INT NO-UNDO. 
-DEF VAR ldePackageFromTS AS DECIMAL NO-UNDO.
-DEF VAR liUpSellCountDay AS INT NO-UNDO.
-DEF VAR liGPRSTMRuleSeq AS INT NO-UNDO.
-DEF VAR ldeTARJ6DailyChargeMonth AS DEC NO-UNDO. 
-DEF VAR ldeTARJ6DailyChargeDay AS DEC NO-UNDO. 
-DEF VAR ldeTARJ6UpsellChargeMonth AS DEC NO-UNDO. 
-DEF VAR ldeTARJ6UpsellChargeDay AS DEC NO-UNDO. 
-DEF VAR ldeTARJ6DataUsageMonthly AS DEC NO-UNDO INIT 0.0. 
-DEF VAR ldeTARJ6DataUsageDaily AS DEC NO-UNDO INIT 0.0.
-DEF VAR lcBONOContracts       AS CHAR NO-UNDO.
-DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
-DEF VAR lcExcludeBundles      AS CHAR NO-UNDO.
-DEF VAR liBonoCount AS INT NO-UNDO. 
-DEF VAR liDSS2BonoCount AS INT NO-UNDO. 
-DEF VAR ldePrepDataUsageMonthly AS DEC NO-UNDO.
-DEF VAR ldePrepVoiceUsageMonthly AS DEC NO-UNDO.
-DEF VAR ldaPrepRenewal AS DATE NO-UNDO. 
-DEF VAR ldePrepDataLimit AS DEC NO-UNDO.
-DEF VAR ldePrepVoiceimit AS DEC NO-UNDO.
-DEF VAR liPrepRenewal AS INT NO-UNDO. 
-DEF VAR ldaActDate AS DATE NO-UNDO. 
-DEF VAR ldaCDRCollectFrom AS DATE NO-UNDO. 
-DEF VAR ldaiSTCDate AS DATE NO-UNDO.
-DEF VAR liiSTCTime  AS INT  NO-UNDO.
-DEF VAR lliSTC      AS LOG  NO-UNDO.
-DEF VAR lcUpSellBundle AS CHAR NO-UNDO.
-DEF VAR liData200Count AS INT NO-UNDO.
-DEF VAR liDSS200Count AS INT NO-UNDO.
-DEF VAR lcData200Bundle AS CHAR NO-UNDO.
-DEF VAR lcUpsellId AS CHAR NO-UNDO. 
-DEF VAR liCount AS INT NO-UNDO.
-DEF VAR liRstTime AS INT NO-UNDO. 
-DEF VAR ldaRstDate AS DATE NO-UNDO. 
+DEF VAR ldGprsTrafficIn            AS DECIMAL INITIAL 0.0 NO-UNDO.
+DEF VAR ldGprsTrafficOut           AS DECIMAL INITIAL 0.0 NO-UNDO.
+DEF VAR ldbalance                  AS DECIMAL INITIAL 0.0 NO-UNDO.
+DEF VAR first_of_month             AS DATE    NO-UNDO.
+DEF VAR liPeriod                   AS INT     NO-UNDO.
+DEF VAR liDayPeriod                AS INT     NO-UNDO.
+DEF VAR tthCDR                     AS HANDLE  NO-UNDO.
+DEF VAR liErrorCodeOut             AS INTEGER NO-UNDO.
+DEF VAR ldPeriodFrom               AS DEC     NO-UNDO.
+DEF VAR ldPeriodTo                 AS DEC     NO-UNDO.
+DEF VAR ldaLastDay                 AS DATE    NO-UNDO.
+DEF VAR ldeCurrentTS               AS DECIMAL NO-UNDO.
+DEF VAR liUpsellCount              AS INT     NO-UNDO.
+DEF VAR lcError                    AS CHAR    NO-UNDO.
+DEF VAR ldeDSSTotalLimit           AS DEC     NO-UNDO.
+DEF VAR ldeDSSDataUsed             AS DEC     NO-UNDO.
+DEF VAR llDSSActive                AS LOG     NO-UNDO.
+DEF VAR lcDSSBundleId              AS CHAR    NO-UNDO.
+DEF VAR ldeDataBundleLimit         AS DEC     NO-UNDO.
+DEF VAR ldeDataBundleUsage         AS DEC     NO-UNDO.
+DEF VAR ldeVoiceBundleLimit        AS DEC     NO-UNDO.
+DEF VAR ldeVoiceBundleUsage        AS DEC     NO-UNDO.
+DEF VAR ldeTotalDataBundleLimit    AS DEC     NO-UNDO.
+DEF VAR ldeTotalDataBundleUsage    AS DEC     NO-UNDO.
+DEF VAR ldeDSSDataBundleUsage      AS DEC     NO-UNDO.
+DEF VAR ldeRoamBundleUsage         AS DEC     NO-UNDO.
+DEF VAR liRoamUpsellCount          AS INT     NO-UNDO.
+DEF VAR liDSSUpsellCount           AS INT     NO-UNDO.
+DEF VAR liVoiceBDestLimit          AS INT     NO-UNDO.
+DEF VAR liVoiceBDestUsage          AS INT     NO-UNDO.
+DEF VAR liFixedBdestLimit          AS INT     NO-UNDO.
+DEF VAR liFixedBdestUsage          AS INT     NO-UNDO.
+DEF VAR ldeFixedBundleLimit        AS DEC     NO-UNDO.
+DEF VAR ldeFixedBundleUsage        AS DEC     NO-UNDO.
+DEF VAR ldeIntRoamUsage            AS DEC     NO-UNDO. 
+DEF VAR liDialTypes                AS INT     NO-UNDO EXTENT 5.
+DEF VAR liLoop                     AS INTEGER NO-UNDO. 
+DEF VAR ldaDate                    AS DATE    NO-UNDO. 
+DEF VAR liTime                     AS INT     NO-UNDO. 
+DEF VAR ldePackageFromTS           AS DECIMAL NO-UNDO.
+DEF VAR liUpSellCountDay           AS INT     NO-UNDO.
+DEF VAR liGPRSTMRuleSeq            AS INT     NO-UNDO.
+DEF VAR ldeTARJ6DailyChargeMonth   AS DEC     NO-UNDO. 
+DEF VAR ldeTARJ6DailyChargeDay     AS DEC     NO-UNDO. 
+DEF VAR ldeTARJ6UpsellChargeMonth  AS DEC     NO-UNDO. 
+DEF VAR ldeTARJ6UpsellChargeDay    AS DEC     NO-UNDO. 
+DEF VAR ldeTARJ6DataUsageMonthly   AS DEC     NO-UNDO INIT 0.0. 
+DEF VAR ldeTARJ6DataUsageDaily     AS DEC     NO-UNDO INIT 0.0.
+DEF VAR lcBONOContracts            AS CHAR    NO-UNDO.
+DEF VAR lcAllowedDSS2SubsType      AS CHAR    NO-UNDO.
+DEF VAR lcExcludeBundles           AS CHAR    NO-UNDO.
+DEF VAR liBonoCount                AS INT     NO-UNDO. 
+DEF VAR liDSS2BonoCount            AS INT     NO-UNDO. 
+DEF VAR ldePrepDataUsageMonthly    AS DEC     NO-UNDO.
+DEF VAR ldePrepVoiceUsageMonthly   AS DEC     NO-UNDO.
+DEF VAR ldaPrepRenewal             AS DATE    NO-UNDO. 
+DEF VAR ldePrepDataLimit           AS DEC     NO-UNDO.
+DEF VAR ldePrepVoiceimit           AS DEC     NO-UNDO.
+DEF VAR liPrepRenewal              AS INT     NO-UNDO. 
+DEF VAR ldaActDate                 AS DATE    NO-UNDO. 
+DEF VAR ldaCDRCollectFrom          AS DATE    NO-UNDO. 
+DEF VAR ldaiSTCDate                AS DATE    NO-UNDO.
+DEF VAR liiSTCTime                 AS INT     NO-UNDO.
+DEF VAR lliSTC                     AS LOG     NO-UNDO.
+DEF VAR lcUpSellBundle             AS CHAR    NO-UNDO.
+DEF VAR liData200Count             AS INT     NO-UNDO.
+DEF VAR liDSS200Count              AS INT     NO-UNDO.
+DEF VAR lcData200Bundle            AS CHAR    NO-UNDO.
+DEF VAR lcUpsellId                 AS CHAR    NO-UNDO. 
+DEF VAR liCount                    AS INT     NO-UNDO.
+DEF VAR liRstTime                  AS INT     NO-UNDO. 
+DEF VAR ldaRstDate                 AS DATE    NO-UNDO.
+DEF VAR lcFlexData500MB            AS CHAR    NO-UNDO. 
+DEF VAR lcFlexData5GB              AS CHAR    NO-UNDO. 
+DEF VAR liFlexData500MB            AS INT     NO-UNDO. 
+DEF VAR liFlexData5GB              AS INT     NO-UNDO. 
 
 DEF BUFFER bServiceLimit FOR ServiceLimit.
 
@@ -131,10 +136,7 @@ piMsSeq = get_pos_int(param_toplevel_id, "0").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST MobSub NO-LOCK WHERE
-           MobSub.MsSeq = piMsSeq NO-ERROR.
-IF NOT AVAIL MobSub THEN
-   RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
+{newton/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
 IF NOT MobSub.PayType THEN
    lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
@@ -146,16 +148,16 @@ tthCDR = TEMP-TABLE ttCDR:HANDLE.
 
 ASSIGN
    first_of_month = DATE(MONTH(TODAY), 1, YEAR(TODAY))
-   ldaLastDay     = fLastDayOfMonth(TODAY)
+   ldaLastDay     = Func.Common:mLastDayOfMonth(TODAY)
    liPeriod       = YEAR(TODAY) * 100 + MONTH(TODAY)
-   ldPeriodFrom   = fMake2Dt(first_of_month,0)
-   ldPeriodTo     = fMake2Dt(ldaLastDay,86399)
-   ldeCurrentTS   = fMakeTS()
+   ldPeriodFrom   = Func.Common:mMake2DT(first_of_month,0)
+   ldPeriodTo     = Func.Common:mMake2DT(ldaLastDay,86399)
+   ldeCurrentTS   = Func.Common:mMakeTS()
    liDayPeriod    = YEAR(TODAY) * 10000 + MONTH(TODAY) * 100 + DAY(TODAY).
 
 first_level_struct = add_struct(response_toplevel_id, "").
-   
-IF MobSub.CliType = "TARJ7" OR MobSub.CliType = "TARJ9" THEN DO:
+
+IF LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 THEN DO:  
    FOR EACH ServiceLimit NO-LOCK WHERE
             ServiceLimit.GroupCode = MobSub.CliType,
        FIRST MServiceLimit WHERE
@@ -164,13 +166,13 @@ IF MobSub.CliType = "TARJ7" OR MobSub.CliType = "TARJ9" THEN DO:
              MServiceLimit.SLSeq = ServiceLimit.SLSeq AND
              MServiceLimit.EndTS >= ldeCurrentTS NO-LOCK:
 
-         fSplitTS(MServiceLimit.FromTS,OUTPUT ldaActDate, OUTPUT liTime).
+         Func.Common:mSplitTS(MServiceLimit.FromTS,OUTPUT ldaActDate, OUTPUT liTime).
                   
          IF ldaActDate >= DATE(MONTH(TODAY),1,YEAR(TODAY)) THEN
             ldaPrepRenewal = ldaActDate.
          ELSE DO:
          
-            IF TODAY EQ fLastDayOfMonth(TODAY) AND
+            IF TODAY EQ Func.Common:mLastDayOfMonth(TODAY) AND
                DAY(ldaActDate) >= DAY(TODAY) THEN ldaPrepRenewal = TODAY.
             ELSE IF DAY(ldaActDate) > DAY(TODAY)THEN DO:
                ldaPrepRenewal = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1.
@@ -183,20 +185,22 @@ IF MobSub.CliType = "TARJ7" OR MobSub.CliType = "TARJ9" THEN DO:
                                        DAY(ldaActDate),
                                        YEAR(TODAY)).
                
-            /* YTS-9086 - TARJ7 does not have voice bundle thus only TARJ9 check. 
+            /* YTS-9086 - TARJ7 does not have voice bundle thus only other prepaid check. 
                TMS Counter reset request used for period start time. */
             RELEASE MsRequest.
-            IF MobSub.CliType = "TARJ9" THEN DO:
+
+            IF LOOKUP(MobSub.CliType,"TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 THEN DO:
+               
                FIND FIRST MsRequest NO-LOCK USE-INDEX MsActStamp WHERE
                           MsRequest.MsSeq = MobSub.MsSeq AND
-                          MsRequest.ActStamp >= fHMS2TS(ldaPrepRenewal,"00:00:00") AND
-                          MsRequest.ActStamp <= fHMS2TS(ldaPrepRenewal,"23:59:59") AND
+                          MsRequest.ActStamp >= Func.Common:mHMS2TS(ldaPrepRenewal,"00:00:00") AND
+                          MsRequest.ActStamp <= Func.Common:mHMS2TS(ldaPrepRenewal,"23:59:59") AND
                           MsRequest.ReqType = {&REQTYPE_SERVICE_CHANGE} AND
                           MsRequest.ReqStatus <= {&REQUEST_STATUS_DONE} AND
                           MsRequest.ReqCParam2 = "LADEL1_PRE_PLUS_RESET"
                           NO-ERROR.
                IF AVAIL MsRequest THEN DO:
-                  fSplitTS(MsRequest.ActStamp,OUTPUT ldaRstDate, OUTPUT liRstTime).
+                  Func.Common:mSplitTS(MsRequest.ActStamp,OUTPUT ldaRstDate, OUTPUT liRstTime).
                   liPrepRenewal = liRstTime.
                END.
             END.
@@ -239,8 +243,7 @@ END. /* ELSE IF MobSub.CliType = "TARJ7" THEN DO: */
 
 EMPTY TEMP-TABLE ttCDR.
 
-ldaCDRCollectFrom = (IF (MobSub.CliType EQ "TARJ7" OR 
-                         MobSub.CliType EQ "TARJ9") AND
+ldaCDRCollectFrom = (IF LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 AND
                          ldaPrepRenewal < first_of_month THEN ldaPrepRenewal
                      ELSE first_of_month).
 
@@ -253,13 +256,13 @@ IF NOT MobSub.PayType THEN DO:
               MsOwner.CLIEvent BEGINS "iS" NO-LOCK NO-ERROR.
    IF AVAIL MSOwner AND MsOwner.TsBeg >= ldPeriodFrom AND
       MsOwner.TsBeg <= ldPeriodTo THEN DO:
-      fSplitTS(MsOwner.TsBeg,OUTPUT ldaiSTCDate,OUTPUT liiSTCTime).
+      Func.Common:mSplitTS(MsOwner.TsBeg,OUTPUT ldaiSTCDate,OUTPUT liiSTCTime).
       lliSTC = TRUE.
    END.
 END.
 
 fMobCDRCollect(INPUT TRIM(STRING(MobSub.PayType,"pre/post")),
-               INPUT gcBrand,
+               INPUT Syst.Var:gcBrand,
                INPUT "rpc",
                INPUT ldaCDRCollectFrom,
                INPUT TODAY,
@@ -279,12 +282,10 @@ FOR EACH ttCDR NO-LOCK USE-INDEX date:
 
    IF ttCDR.ErrorCode NE 0 THEN NEXT.
 
-   /* Only Package data once TARJ7 and TARJ9 is activated */
-   IF MobSub.CLIType EQ "TARJ7" OR
-      MobSub.CLIType EQ "TARJ9" THEN DO:
+   /* Only Package data once TARJ7-13 is activated */
+   IF LOOKUP(MobSub.CliType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 THEN DO:
 
-      IF ((ttCDR.CLIType EQ "TARJ7" AND MobSub.CLIType EQ "TARJ7") OR
-         (ttCDR.CLIType EQ "TARJ9" AND MobSub.CLIType EQ "TARJ9")) AND
+      IF ttCDR.CLIType EQ MobSub.CLIType AND
          ttCDR.DateSt >= ldaPrepRenewal THEN DO:
 
          IF ttCDR.DateST NE ldaPrepRenewal OR
@@ -296,8 +297,8 @@ FOR EACH ttCDR NO-LOCK USE-INDEX date:
                   ldePrepDataUsageMonthly  = ttCDR.Accumulator.
                END.
             END.
-            ELSE IF ttCDR.EventType EQ "CALL" AND 
-                    ttCDR.CLIType EQ "TARJ9" AND
+            ELSE IF ttCDR.EventType EQ "CALL" AND
+                    LOOKUP(ttCDR.CLIType,"TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 AND
                     ttCDR.Accumulator > 0 THEN DO:  
                ldePrepVoiceUsageMonthly = ttCDR.Accumulator.
             END.
@@ -350,7 +351,7 @@ ELSE ASSIGN
 /* yoigo-yoigo counter */
 IF MobSub.CLIType EQ "CONT" THEN DO:
    FIND FIRST DCCli NO-LOCK WHERE
-              DCCli.Brand = gcBrand AND
+              DCCli.Brand = Syst.Var:gcBrand AND
               DCCli.dcevent = "YOIGOYOIGO" AND
               DCCli.msseq = mobsub.msseq AND
               DCCli.validto >= TODAY NO-ERROR.
@@ -422,7 +423,7 @@ IF NOT MobSub.PayType THEN DO:
    /* Check if there is any active DSS upsell */
    IF llDSSActive THEN
    FOR FIRST DayCampaign NO-LOCK WHERE
-             DayCampaign.Brand = gcBrand AND
+             DayCampaign.Brand = Syst.Var:gcBrand AND
              DayCampaign.DCEvent = lcDSSBundleId:
       
       DO liLoop = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell):
@@ -508,7 +509,7 @@ DO liLoop = 1 TO 5:
       FIRST ServiceLimit NO-LOCK WHERE
             ServiceLimit.SLSeq = MServiceLimit.SLSeq,
       FIRST DayCampaign WHERE
-            DayCampaign.Brand = gcBrand AND
+            DayCampaign.Brand = Syst.Var:gcBrand AND
             DayCampaign.DCEvent = ServiceLimit.GroupCode NO-LOCK:
 
       IF LOOKUP(STRING(DayCampaign.DCType),
@@ -548,10 +549,16 @@ DO liLoop = 1 TO 5:
                ldeDataBundleLimit = MserviceLPool.LimitAmt.
                ldeTotalDataBundleLimit = ldeTotalDataBundleLimit +
                                          MserviceLPool.LimitAmt.
-               IF DayCampaign.DCEvent EQ "DATA200_UPSELL" THEN
-                  lcData200Bundle= DayCampaign.DCEvent.
-               ELSE   
-                  lcUpSellBundle = DayCampaign.DCEvent.
+               CASE DayCampaign.DCEvent:
+                  WHEN "DATA200_UPSELL" THEN 
+                     lcData200Bundle= DayCampaign.DCEvent.
+                  WHEN "FLEX_500MB_UPSELL" THEN 
+                     lcFlexData500MB = DayCampaign.DCEvent.
+                  WHEN "FLEX_5GB_UPSELL" THEN 
+                     lcFlexData5GB = DayCampaign.DCEvent.
+                  OTHERWISE 
+                     lcUpSellBundle = DayCampaign.DCEvent.
+               END CASE.
             END.           
          END. /* IF bDayCampaign.DCType = {&DCTYPE_POOL_RATING} THEN DO: */
          ELSE
@@ -646,6 +653,17 @@ IF lcData200Bundle > "" THEN
                                    MobSub.MsSeq,
                                    MobSub.Custnum,
                                    OUTPUT lcError).
+IF lcFlexData500MB > "" THEN
+   liFlexData500MB = fGetUpSellCount(lcFlexData500MB,
+                                     MobSub.MsSeq,
+                                     MobSub.Custnum,
+                                     OUTPUT lcError).
+IF lcFlexData5GB > "" THEN
+   liFlexData5GB = fGetUpSellCount(lcFlexData5GB,
+                                   MobSub.MsSeq,
+                                   MobSub.Custnum,
+                                   OUTPUT lcError).
+
 /*ilkka add 200 countesr*/
 IF MobSub.CliType = "TARJ6" THEN DO:
    FOR FIRST ServiceLimit NO-LOCK WHERE
@@ -692,8 +710,7 @@ IF MobSub.CliType = "TARJ6" THEN DO:
     add_double(first_level_struct,"data_bundle_usage_day",
                ldeTARJ6DataUsageDaily).
 END. /* IF MobSub.CliType = "TARJ6" THEN DO: */
-ELSE IF MobSub.CLIType EQ "TARJ7" OR
-        MobSub.CLIType EQ "TARJ9" THEN
+ELSE IF LOOKUP(MobSub.CLIType,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 THEN
    ASSIGN
       ldeTotalDataBundleUsage = ldePrepDataUsageMonthly / 1024
       ldeTotalDataBundleLimit = ldePrepDataLimit
@@ -729,11 +746,12 @@ add_double(first_level_struct, "fixed_bundle_limit", ldeFixedBundleLimit).
 add_double(first_level_struct, "fixed_bundle_usage", ldeFixedBundleUsage).
 add_int(first_level_struct,    "fixed_bdest_limit", liFixedBdestLimit).
 add_int(first_level_struct,    "fixed_bdest_usage", liFixedBdestUsage).
+add_int(first_level_struct,    "flex_500mb_upsell", liFlexData500MB).
+add_int(first_level_struct,    "flex_5gb_upsell", liFlexData5GB).
 
 FINALLY:
    EMPTY TEMP-TABLE ttCDR.
    EMPTY TEMP-TABLE ttMsOwner.
    IF VALID-HANDLE(tthCDR) THEN DELETE OBJECT tthCDR NO-ERROR.
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.
 

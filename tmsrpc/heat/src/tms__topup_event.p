@@ -28,9 +28,8 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-DEFINE VARIABLE gcBrand AS CHARACTER NO-UNDO INIT "1".
-{Func/date.i}
 {Func/xmlfunction.i}
+{Func/multitenantfunc.i}
 
 DEF VAR pcStruct AS CHAR NO-UNDO.
 DEF VAR lcFields AS CHARACTER NO-UNDO. 
@@ -55,6 +54,9 @@ pcStruct = get_struct(param_toplevel_id, "0").
 lcFields = validate_struct(pcStruct, "type!,received_at!,date!,entity_index!,reference!,num_oper!,local_code!,subscriber_number!,amount_with_tax,amount_without_tax,cancelled_amount_with_tax,cancelled_amount_without_tax,double_message_status,tax_zone,tax_percent,origin_entity!,postal_code!,air_result_code,netplus_result_code!").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+IF NOT fsetEffectiveTenantForAllDB({&TENANT_YOIGO}) THEN RETURN
+   int_err("Tenant change failed").
 
 PROCEDURE pDoubleCheck:
 
@@ -92,7 +94,7 @@ END.
 
 CREATE ttPrepaidRequest.
 ttPrepaidRequest.Request = lcType.
-ttPrepaidRequest.Brand = gcBrand.
+ttPrepaidRequest.Brand = Syst.Var:gcBrand.
 ttPrepaidRequest.CLI = get_string(pcStruct, "subscriber_number").
 ttPrepaidRequest.Reference = get_string(pcStruct, "reference").
 

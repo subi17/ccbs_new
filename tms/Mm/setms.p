@@ -20,7 +20,6 @@
   ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Mm/barrgrp.i}
@@ -106,7 +105,7 @@ DEF TEMP-TABLE ttDone NO-UNDO
    INDEX ServCom ServCom.
 
    
-ldCurrent = fMakeTS().
+ldCurrent = Func.Common:mMakeTS().
 
 rc = -1.
 
@@ -217,7 +216,7 @@ END.
 IF lcServName = "" THEN lcServName = MsRequest.ReqCParam1.
 
 FIND ServCom WHERE
-     ServCom.Brand   = gcBrand AND
+     ServCom.Brand   = Syst.Var:gcBrand AND
      ServCom.ServCom = MsRequest.ReqCParam1 NO-LOCK NO-ERROR.
 
 rc = 0.
@@ -241,12 +240,11 @@ IF ServCom.ActType = 0 THEN DO:
 
      IF AVAILABLE bMsRequest THEN DO:
 
-        fSplitTS(bMsRequest.ActStamp,
+        Func.Common:mSplitTS(bMsRequest.ActStamp,
                  OUTPUT ldaActiveDate,
                  OUTPUT liActiveTime).
 
-        IF (bMsRequest.ReqCparam3 = "TARJ7" OR 
-           bMsRequest.ReqCparam3 = "TARJ9") AND 
+        IF LOOKUP(bMsRequest.ReqCparam3,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0 AND 
            bMsRequest.ReqType = 8 THEN
            lcShaperProfile = lcShaperProfile +
                              ",RESET_DAY=" + STRING(DAY(ldaActiveDate)).
@@ -317,8 +315,8 @@ BY ttSolog.ActStamp:
       Solog.MsSeq        = MobSub.MsSeq      /* Mobile Subscription No.    */
       Solog.CLI          = MobSub.CLI        /* MSISDN                     */
       Solog.Stat         = 0                 /* just created               */
-      Solog.Brand        = gcBrand 
-      Solog.Users        = katun    
+      Solog.Brand        = Syst.Var:gcBrand 
+      Solog.Users        = Syst.Var:katun    
       Solog.MSrequest    = ttSolog.MSrequest.
    
    /* Special handling for Prepaid Bono8 HSDPA, SER-1345  */
@@ -338,8 +336,7 @@ BY ttSolog.ActStamp:
                     bMsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
                     LOOKUP(STRING(bMsRequest.ReqStat),"4,9,99,3") = 0 AND
                     bMsRequest.ActStamp = MsRequest.ActStamp AND
-                   (bMsRequest.ReqCparam2 = "TARJ7" OR
-                    bMsRequest.ReqCparam2 = "TARJ9")
+                    LOOKUP(bMsRequest.ReqCparam2,"TARJ7,TARJ9,TARJ10,TARJ11,TARJ12,TARJ13") > 0
               USE-INDEX MsSeq NO-ERROR.
          IF AVAILABLE bMsRequest THEN
             ASSIGN lcServiceClass = ""
@@ -405,6 +402,26 @@ BY ttSolog.ActStamp:
                lcServiceClass = ",SERVICECLASS=0009".
             ELSE lcServiceClass = "".
          END. /* WHEN "TARJ9" THEN DO: */
+         WHEN "TARJ10" THEN DO:
+            IF MsRequest.ReqIParam1 EQ 1 THEN
+               lcServiceClass = ",SERVICECLASS=0010".
+            ELSE lcServiceClass = "".
+         END. /* WHEN "TARJ10" THEN DO: */
+         WHEN "TARJ11" THEN DO:
+            IF MsRequest.ReqIParam1 EQ 1 THEN
+               lcServiceClass = ",SERVICECLASS=0011".
+            ELSE lcServiceClass = "".
+         END. /* WHEN "TARJ11" THEN DO: */
+         WHEN "TARJ12" THEN DO:
+            IF MsRequest.ReqIParam1 EQ 1 THEN
+               lcServiceClass = ",SERVICECLASS=0012".
+            ELSE lcServiceClass = "".
+         END. /* WHEN "TARJ12" THEN DO: */
+         WHEN "TARJ13" THEN DO:
+            IF MsRequest.ReqIParam1 EQ 1 THEN
+               lcServiceClass = ",SERVICECLASS=0020".
+            ELSE lcServiceClass = "".
+         END. /* WHEN "TARJ13" THEN DO: */
          OTHERWISE
             lcServiceClass = (IF AVAIL ProvCliType AND
                                        ProvCliType.ServiceClass > "" THEN
@@ -475,7 +492,7 @@ BY ttSolog.ActStamp:
       "Service order request #" string(Solog.Solog) 
       "has been saved to the system."                             SKIP(1)
       "This activation request is scheduled and will be sent to "  SKIP
-      "activation server" fTS2HMS(Solog.TimeSlotTMS) "."             
+      "activation server" Func.Common:mTS2HMS(Solog.TimeSlotTMS) "."             
       VIEW-AS ALERT-BOX TITLE "Service Order Request".  
 
 END.

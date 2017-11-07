@@ -16,7 +16,6 @@
 
 /* Input parameters */
 DEF VAR pcCLI            AS CHAR  NO-UNDO.
-DEF VAR gcBrand          AS CHAR  NO-UNDO INIT "1".
 DEF VAR lcResponseStruct AS CHAR  NO-UNDO.
 DEF VAR ldeCreated       AS DEC   NO-UNDO.
 DEF VAR lrMNPProcess     AS ROWID NO-UNDO.
@@ -26,11 +25,7 @@ IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
 pcCLI = get_string(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST Order NO-LOCK WHERE 
-           Order.CLI = pcCli AND
-           Order.Brand = gcBrand USE-INDEX CLI_s NO-ERROR.
-
-IF NOT AVAILABLE Order THEN RETURN appl_err("Order not found").
+{viptool/src/findtenant.i YES ordercanal Order CLI pcCLI}
 
 FOR EACH MNPSub WHERE
          MNPSub.CLI = Order.CLI NO-LOCK:
@@ -76,7 +71,7 @@ IF AVAIL MNPProcess THEN DO:
 END.
 
 FIND FIRST OrderDelivery WHERE
-           OrderDelivery.Brand = gcBrand AND
+           OrderDelivery.Brand = Syst.Var:gcBrand AND
            OrderDelivery.Orderid = Order.OrderId NO-LOCK NO-ERROR.
 IF AVAIL OrderDelivery THEN
    add_int(lcResponseStruct,"logistic_status", OrderDelivery.LOStatusId).

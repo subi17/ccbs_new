@@ -1,7 +1,5 @@
 {Syst/commali.i}
 {Syst/funcrunprocess_update.i}
-{Func/timestamp.i}
-{Func/date.i}
 {Func/cparam2.i}
 {Func/istc.i}
 {Inv/chk_billed_invrowcounter.i &ttReference = "REFERENCE-ONLY"}
@@ -33,7 +31,8 @@ lcDir = fCParamC("ChkBilledIRCounterDir").
 IF lcDir = "" OR lcDir = ? THEN lcDir = "/scratch/log/invrowcounter".
 
 OUTPUT STREAM sLog TO VALUE(lcDir + 
-                            "/chk_cdr_invrowcounter_billed_" + 
+                            "/" + Syst.Parameters:Tenant + 
+                            "_chk_cdr_invrowcounter_billed_" + 
                             STRING(year(today),"9999") + 
                             STRING(month(today),"99") + 
                             STRING(day(today),"99") + "_" +
@@ -71,7 +70,7 @@ BY Invoice.InvNum:
          IF ldaISTCDateOld NE ? AND
             ldaISTCDateOld > MobCDR.DateSt
          THEN ldaToDate = ldaISTCDateOld - 1.
-         ELSE ldaToDate = fLastDayOfMonth(MobCDR.DateSt).
+         ELSE ldaToDate = Func.Common:mLastDayOfMonth(MobCDR.DateSt).
       END.
       
       FIND FIRST ttCounter WHERE 

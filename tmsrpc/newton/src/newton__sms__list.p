@@ -11,7 +11,6 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/tmsconst.i}
 
-DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".
 DEF VAR lcResultStruct AS CHARACTER NO-UNDO. 
 DEF VAR pcStruct AS CHARACTER NO-UNDO. 
 DEF VAR lcStruct AS CHARACTER NO-UNDO. 
@@ -41,11 +40,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 IF LOOKUP(lcType,",normal,premium") = 0 THEN RETURN
    appl_err(SUBST("Unknown type: %1", lcType)).
 
-/* find mobsub */
-FIND MobSub WHERE
-     MobSub.MsSeq = liMsSeq NO-LOCK NO-ERROR. 
-
-IF NOT AVAIL MobSub THEN RETURN appl_err("MobSub not found").
+{newton/src/findtenant.i NO Ordercanal MobSub MsSeq liMsSeq}
 
 lcResultStruct = add_struct(response_toplevel_id, "").
 lcIdStruct = add_array(lcResultStruct, "results").

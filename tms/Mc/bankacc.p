@@ -5,7 +5,7 @@
   AUTHOR .......: aam
   CREATED ......: 06.05.03
   CHANGED ......: 13.10.03/aam tokens, brand
-                  31.03.04/aam gcHelpParam
+                  31.03.04/aam Syst.Var:gcHelpParam
                   18.10.04/aam use fBankAcc2Data for new account
                   12.11.04/aam BankOffice
                   14.08.06/aam use UnitCode for account nbr
@@ -21,7 +21,7 @@
 {Mc/lib/tokenchk.i 'BankAccount'}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -67,9 +67,9 @@ form
     BankAccount.BIC      FORMAT "X(11)"
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
-       " BANK ACCOUNTS "  + string(pvm,"99-99-99") + " "
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
+       " BANK ACCOUNTS "  + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form
@@ -84,9 +84,11 @@ form
        LABEL "Account"
        HELP "Account number"
     BankAccount.CreditorID  FORMAT "X(20)" COLON 15
+    BankAccount.PresenterID  FORMAT "X(20)" COLON 15
+    BankAccount.DDAllocation  FORMAT ">>9" COLON 15
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -96,14 +98,14 @@ form /* seek  BankAccount */
     "Brand ......:" lcBrand SKIP
     "Bank Account:" lcBankAccount
     HELP "Enter bank account "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND BANK ACCOUNT "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND BANK ACCOUNT "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
-IF gcHelpParam > "" THEN ASSIGN 
+IF Syst.Var:gcHelpParam > "" THEN ASSIGN 
    FrmRow  = 4 
    FrmDown = 10.
    
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "  By Bank Account ,  By Name    ,By 3, By 4".
@@ -130,7 +132,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a BankAccount  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
@@ -138,7 +140,7 @@ ADD-ROW:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis ON ENDKEY UNDO, LEAVE:
 
@@ -148,7 +150,8 @@ ADD-ROW:
            IF INPUT FRAME lis BankAccount.BankAccount = "" THEN 
            LEAVE add-row.
 
-           IF CAN-FIND(BankAccount using FRAME lis BankAccount.BankAccount
+           IF CAN-FIND(BankAccount using FRAME lis BankAccount.BankAccount AND
+                                                   BankAccount.unitcode
                        WHERE BankAccount.Brand = lcBrand)
            THEN DO:
               MESSAGE 
@@ -235,16 +238,16 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35  ufk[2]= 0  ufk[3]= 0  ufk[4]= 0
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-        ufk[7]= 0  ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 35  Syst.Var:ufk[2]= 0  Syst.Var:ufk[3]= 0  Syst.Var:ufk[4]= 0
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.Var:ufk[7]= 0  Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
         
         /* used as help */
-        IF gcHelpParam > "" THEN ASSIGN
-           ufk[5] = 11
-           ufk[6] = 0.
+        IF Syst.Var:gcHelpParam > "" THEN ASSIGN
+           Syst.Var:ufk[5] = 11
+           Syst.Var:ufk[6] = 0.
          
         RUN Syst/ufkey.p.
       END.
@@ -253,13 +256,13 @@ BROWSE:
       IF order = 1 THEN DO:
         CHOOSE ROW BankAccount.BankAccount {Syst/uchoose.i} NO-ERROR 
               WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) BankAccount.BankAccount WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) BankAccount.BankAccount WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -268,10 +271,10 @@ BROWSE:
       END.
 
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -289,7 +292,7 @@ BROWSE:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -314,7 +317,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -340,7 +343,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND BankAccount WHERE recid(BankAccount) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -364,7 +367,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -379,12 +382,12 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       UPDATE lcBrand WHEN gcAllBrand
+       UPDATE lcBrand WHEN Syst.Var:gcAllBrand
               lcBankAccount WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
 
@@ -401,9 +404,9 @@ BROWSE:
        END.
      END. /* Search-1 */
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND lcRight = "RW" AND ufk[5] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" AND Syst.Var:ufk[5] > 0
      THEN DO:  /* add */
-        IF gcHelpParam > "" THEN DO:
+        IF Syst.Var:gcHelpParam > "" THEN DO:
            xRecid = rtab[FRAME-LINE].
            LEAVE LOOP.
         END.
@@ -414,14 +417,14 @@ BROWSE:
         END.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND lcRight = "RW"
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSACTION:  /* DELETE */
        {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        BankAccount.BankAccount BankAccount.BankData.
 
        RUN local-find-NEXT.
@@ -443,7 +446,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        BankAccount.BankAccount BankAccount.BankData.
 
        IF ok THEN DO:
@@ -464,7 +467,7 @@ BROWSE:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -473,7 +476,7 @@ BROWSE:
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhBankAccount).
 
        ASSIGN ac-hdr = " CHANGE " ufkey = TRUE. 
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY BankAccount.BankAccount.
 
        RUN local-UPDATE-record.                                  
@@ -490,26 +493,26 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(BankAccount) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(BankAccount) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-ASSIGN si-recid    = xrecid        
-       gcHelpParam = "".
+ASSIGN Syst.Var:si-recid    = xrecid        
+       Syst.Var:gcHelpParam = "".
 
 PROCEDURE local-find-this:
 
@@ -569,13 +572,15 @@ PROCEDURE local-UPDATE-record:
            BankAccount.InvForm
            BankAccount.BarCode
            BankAccount.CreditorID
+           BankAccount.presenterID
            BankAccount.BIC
            BankAccount.UnitCode
+           BankAccount.DDAllocation
       WITH FRAME lis.
 
       IF lcRight = "RW" THEN DO:
       
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          UPDATE
           BankAccount.BankOffice WHEN NOT NEW BankAccount  
           BankAccount.BankData
@@ -584,6 +589,8 @@ PROCEDURE local-UPDATE-record:
           BankAccount.BIC
           BankAccount.UnitCode
           BankAccount.CreditorID
+          BankAccount.PresenterID
+          BankAccount.DDAllocation
          WITH FRAME lis.
       END.
 

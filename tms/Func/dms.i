@@ -4,17 +4,13 @@
 
 {Syst/commali.i}
 {Func/tmsparam4.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/amq.i}
 {Func/jsonlib.i}
 
 ASSIGN
-   gcBrand = "1".
-
-DEF TEMP-TABLE ttDMS    NO-UNDO LIKE DMS.
-DEF TEMP-TABLE ttDMSDoc NO-UNDO LIKE DMSDoc.
+   Syst.Var:gcBrand = "1".
 
 DEF TEMP-TABLE ttDocs NO-UNDO
    FIELD DocTypeID      AS CHAR
@@ -43,8 +39,6 @@ FUNCTION fCparamNotNull RETURNS CHAR
 
 END.
 
-
-
 FUNCTION fUpdateDMS RETURNS CHAR
    (icDmsExternalID  AS CHAR,
     icCaseTypeID     AS CHAR,
@@ -69,11 +63,8 @@ FUNCTION fUpdateDMS RETURNS CHAR
    ELSE IF NOT AVAIL DMS THEN DO:
       CREATE DMS.
       ASSIGN DMS.DMSID    = NEXT-VALUE(DMS)
-             DMS.StatusTS = fMakeTS().
+             DMS.StatusTS = Func.Common:mMakeTS().
    END.
-
-   CREATE ttDMS.
-   BUFFER-COPY DMS TO ttDMS.
 
    ASSIGN DMS.DmsExternalID = icDmsExternalID WHEN icDmsExternalID NE ""
           DMS.CaseTypeID    = icCaseTypeID
@@ -87,19 +78,15 @@ FUNCTION fUpdateDMS RETURNS CHAR
    /* Store current order status */
    IF NEW DMS AND icOrderstatus = "" THEN DO:
       FIND FIRST Order NO-LOCK WHERE
-                 Order.Brand = gcBrand AND
+                 Order.Brand = Syst.Var:gcBrand AND
                  Order.OrderID = iiHostId NO-ERROR.
       IF AVAILABLE Order THEN DMS.OrderStatus = Order.StatusCode.
    END.
    ELSE IF icOrderStatus NE "" THEN DMS.OrderStatus = icOrderstatus.
 
-   IF NOT NEW DMS THEN
-      BUFFER-COMPARE DMS TO ttDMS SAVE RESULT IN llCompare.
-   IF NOT llCompare THEN DMS.StatusTS = fMakeTS().
-
    /*YPR-3077:A0 response must erase SENT doocuments*/
    IF DMS.StatusCode EQ "A0" THEN DO:
-      FOR EACH DMSDoc WHERE
+      FOR EACH DMSDoc EXCLUSIVE-LOCK WHERE
                DMSDoc.DMSID EQ DMS.DMSID AND
                DMSDOC.DocStatusCode EQ {&DMS_INIT_STATUS_SENT}:
          DELETE DMSDoc.         
@@ -117,22 +104,14 @@ FUNCTION fUpdateDMS RETURNS CHAR
       IF NOT AVAIL DMSDoc THEN DO:
          CREATE DMSDoc.
          ASSIGN DMSDoc.DMSID       = DMS.DMSID
-                DMSDoc.DocStatusTS = fMakeTS().
+                DMSDoc.DocStatusTS = Func.Common:mMakeTS().
       END.
-
-      CREATE ttDMSDoc.
-      BUFFER-COPY DMSDoc TO ttDMSDoc.
 
       ASSIGN DMSDoc.DocTypeID     = ENTRY(i,icDocList,icDocListSep)
              DMSDoc.DocTypeDesc   = ENTRY(i + 1,icDocList,icDocListSep)
              DMSDoc.DocStatusCode = ENTRY(i + 2,icDocList,icDocListSep)
              DMSDoc.DocRevComment = ENTRY(i + 3,icDocList,icDocListSep)
              DMSDoc.DMSStatusTS   = idStatusTS.
-
-      IF NOT NEW DMSDoc THEN
-         BUFFER-COMPARE DMSDoc TO ttDMSDoc SAVE RESULT IN llCompare.
-      IF NOT llCompare THEN DMSDoc.DocStatusTS = fMakeTS().
-
    END.
 
    RELEASE DMS.
@@ -170,6 +149,16 @@ FUNCTION fDMSOnOff RETURNS LOGICAL:
    ELSE RETURN FALSE.
 END.
 
+FUNCTION fIsHolder RETURNS LOGICAL
+   (iiOrderId AS INTEGER,
+    iiRowType AS INTEGER):
+
+   RETURN CAN-FIND(FIRST OrderCustomer NO-LOCK WHERE
+                         OrderCustomer.Brand = Syst.Var:gcBrand     AND
+                         OrderCustomer.OrderId = iiOrderId AND
+                         OrderCustomer.RowType = iiRowType).
+
+END FUNCTION.
 
 FUNCTION fNeededDocs RETURNS CHAR
    (BUFFER Order FOR Order):
@@ -180,8 +169,10 @@ FUNCTION fNeededDocs RETURNS CHAR
      /*portability pos-pos*/
       IF Order.OrderType EQ {&ORDER_TYPE_MNP} AND
          Order.PayType EQ FALSE AND
-         Order.OldPayType EQ FALSE  THEN
-         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T1".
+         Order.OldPayType EQ FALSE
+      THEN lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T1" +
+                     IF fIsHolder(Order.OrderId, {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER})
+                     THEN ".1" ELSE "".
       /*new add pos / portability pre-pos.*/
       ELSE IF (Order.OrderType EQ {&ORDER_TYPE_NEW} AND
                Order.PayType EQ FALSE )
@@ -209,7 +200,9 @@ FUNCTION fNeededDocs RETURNS CHAR
       IF Order.OrderType EQ {&ORDER_TYPE_MNP} AND
          Order.PayType EQ FALSE AND
          Order.OldPayType EQ FALSE  THEN
-         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T1".
+         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T1" +
+                   IF fIsHolder(Order.OrderId, {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER})
+                   THEN ".1" ELSE "".
       /*new add pos / portability pre-pos.*/
       ELSE IF (Order.OrderType EQ {&ORDER_TYPE_NEW} AND
                Order.PayType EQ FALSE )
@@ -234,7 +227,9 @@ FUNCTION fNeededDocs RETURNS CHAR
       IF Order.OrderType EQ {&ORDER_TYPE_MNP} AND
          Order.PayType EQ FALSE AND
          Order.OldPayType EQ FALSE  THEN
-         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T1".
+         lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T1" +
+                   IF fIsHolder(Order.OrderId, {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER})
+                   THEN ".1" ELSE "".
       /*new add pos / portability pre-pos.*/
       ELSE IF (Order.OrderType EQ {&ORDER_TYPE_NEW} AND
                Order.PayType EQ FALSE )
@@ -259,7 +254,9 @@ FUNCTION fNeededDocs RETURNS CHAR
          lcParam = "DMS_S" + STRING(Order.StatusCode) + "_T4".
 
    END.
-   RETURN fCParamNotNull("DMS",lcParam). /*NOTE: in this return the doc list is comma separated*/
+   RETURN fCParamNotNull("DMS",lcParam) + /*NOTE: in this return the doc list is comma separated*/
+          IF fIsHolder(Order.OrderId, {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER})
+          THEN ",12,14" ELSE "".
 
 END.
 
@@ -286,7 +283,7 @@ END.
 FUNCTION fGetBankName RETURNS CHAR
    (icCode AS CHAR):
    FIND FIRST Bank WHERE
-              Bank.Brand      = gcBrand AND
+              Bank.Brand      = Syst.Var:gcBrand AND
               Bank.BankID     = SUBSTRING(icCode,5,4) NO-LOCK NO-ERROR.
    IF AVAIL Bank THEN RETURN Bank.Name.
    RETURN "".
@@ -472,12 +469,12 @@ FUNCTION fSendChangeInformation RETURNS CHAR
    DEF VAR lcMQ AS CHAR NO-UNDO.
    /*search data for message*/
    FIND FIRST Order NO-LOCK WHERE
-              Order.Brand EQ gcBrand AND
+              Order.Brand EQ Syst.Var:gcBrand AND
               Order.OrderId EQ icOrderID NO-ERROR.
    IF NOT AVAIL Order THEN RETURN "DMS Notif: No Order available".
 
    FIND FIRST OrderCustomer NO-LOCK WHERE
-              OrderCustomer.Brand EQ gcBrand AND
+              OrderCustomer.Brand EQ Syst.Var:gcBrand AND
               OrderCustomer.OrderId EQ icOrderID AND
               OrderCustomer.RowType EQ 1 NO-ERROR.
    IF NOT AVAIL Order THEN RETURN "DMS Notif: No OrderCustomer available".

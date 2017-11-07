@@ -40,7 +40,7 @@
 {Mc/lib/tokenchk.i 'billitem'}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -95,12 +95,12 @@ IF icUpdateListMode = "update-mode-cc" THEN DO:
 
   llCanDelete = FALSE.
 
-  FIND TMSParam WHERE TMSParam.Brand = gcBrand AND
+  FIND TMSParam WHERE TMSParam.Brand = Syst.Var:gcBrand AND
                       TMSParam.ParamGroup = "CCAdminTool" AND
                       TMSParam.ParamCode = "BillItemAccount" NO-LOCK NO-ERROR.
   IF AVAIL TMSParam THEN liccAcount = TMSParam.IntVal.
  
-  FIND TMSParam WHERE TMSParam.Brand = gcBrand AND
+  FIND TMSParam WHERE TMSParam.Brand = Syst.Var:gcBrand AND
                       TMSParam.ParamGroup = "CCAdminTool" AND
                       TMSParam.ParamCode = "BillItemSAPRId" NO-LOCK NO-ERROR.
   IF AVAIL TMSParam THEN lcCCSAPRId = TMSParam.CharVal.
@@ -117,9 +117,9 @@ form
     BillItem.AccNum     column-label "Acct"   help "Account number"
                         FORMAT ">>>>>>>9"
     BillItem.TaxClass   COLUMN-LABEL "TaxClass"
-WITH width 80 OVERLAY ROW 1 scroll 1 15 DOWN COLOR value(cfc)
-    title color value(ctc) " " + ynimi +
-    " Billing Items " + string(pvm,"99-99-99") + " "
+WITH width 80 OVERLAY ROW 1 scroll 1 15 DOWN COLOR value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " " + Syst.Var:ynimi +
+    " Billing Items " + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form
@@ -164,7 +164,10 @@ form
        HELP "Display MPM on specification (if not then display '----')"
        FORMAT "Yes/No" SKIP
     BillItem.CostCentre LABEL "Cost Centre" SKIP
-WITH  OVERLAY ROW 3 CENTERED COLOR value(cfc) TITLE COLOR value(ctc)
+    BillItem.ItemType  LABEL "Item Type ."
+       HELP "Billing Item Type (0=mobile, 1=covergent)"
+       FORMAT ">>9" SKIP
+WITH  OVERLAY ROW 2 CENTERED COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc)
     fr-header WITH side-labels FRAME lis.
 
 {Func/brand.i}
@@ -173,22 +176,22 @@ form /* produkt :n tunnuksella hakua varten */
     "Brand:" lcBrand skip
     "Code :" haku
     help "Give Code or its first characters"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND CODE "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* produkt :n nimella hakua varten */
     "Brand:" lcBrand skip
     "Name :" haku2
     help "Give Name or its first characters"
-    with row 4 col 2 title color value(ctc) " FIND NAME "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND NAME "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /* BillCode group - haku */
     "Brand:" lcBrand skip
     "Group:" BIGroup
     help "Give GroupCode or its first characters"
-    with row 4 col 2 title color value(ctc) " FIND GROUP "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME haku3.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND GROUP "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME haku3.
 
 form /* cost accounts */
    "   TB1 Account: " BillItem.TB1AccNum SKIP
@@ -198,7 +201,7 @@ WITH
    BillItem.BillCode + " - " + BillItem.BIName OVERLAY FRAME tbacc.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 RUN local-find-first.
@@ -233,14 +236,14 @@ repeat WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* BillItem -ADD  */
-      assign cfc = "lis" ufkey = true fr-header = " ADD" must-add = FALSE.
+      assign Syst.Var:cfc = "lis" ufkey = true fr-header = " ADD" must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          DO TRANSAction:
             DISPLAY lcBrand @ BillItem.Brand.
 
@@ -336,39 +339,39 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 35  ufk[2]= 30
-         ufk[3]= (IF icBGroup = ? THEN 973 ELSE 0 )  
-         ufk[4]= 814
-         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
-         ufk[6]= (IF lcRIght = "RW" AND llCanDelete THEN 4 ELSE 0)
-         ufk[7]= 1760 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.Var:ufk[1]= 35  Syst.Var:ufk[2]= 30
+         Syst.Var:ufk[3]= (IF icBGroup = ? THEN 973 ELSE 0 )  
+         Syst.Var:ufk[4]= 814
+         Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
+         Syst.Var:ufk[6]= (IF lcRIght = "RW" AND llCanDelete THEN 4 ELSE 0)
+         Syst.Var:ufk[7]= 1760 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW BillItem.BillCode {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) BillItem.BillCode WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) BillItem.BillCode WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW BillItem.BIName {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) BillItem.BIName WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) BillItem.BIName WITH FRAME sel.
       END.
       ELSE IF order = 3 THEN DO:
          CHOOSE ROW BillItem.BIGroup {Syst/uchoose.i} no-error WITH FRAME sel.
-         COLOR DISPLAY value(ccc) BillItem.BIGroup WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) BillItem.BIGroup WITH FRAME sel.
       END.
 
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order = 4 THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = 3.
       END.
 
@@ -392,10 +395,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND BillItem where recid(BillItem) = rtab[1] no-lock.
             RUN local-find-prev.
@@ -428,7 +431,7 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND BillItem where recid(BillItem) = rtab[FRAME-DOWN] no-lock .
@@ -458,7 +461,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND BillItem where recid(BillItem) = memory no-lock no-error.
          RUN local-find-prev.
@@ -486,7 +489,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "YOU ARE ON THE LAST PAGE !".
@@ -502,12 +505,12 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+     if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
         haku = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr.
-        UPDATE lcBrand WHEN gcAllBrand 
+        UPDATE lcBrand WHEN Syst.Var:gcAllBrand 
                haku WITH FRAME hayr.
         HIDE FRAME hayr no-pause.
         if haku <> "" THEN DO:
@@ -522,12 +525,12 @@ BROWSE:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+     if lookup(Syst.Var:nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
         haku2 = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr2.
-        UPDATE lcBrand WHEN gcAllBrand 
+        UPDATE lcBrand WHEN Syst.Var:gcAllBrand 
                haku2 WITH FRAME hayr2.
         HIDE FRAME hayr2 no-pause.
         if haku2 <> "" THEN DO:
@@ -542,12 +545,12 @@ BROWSE:
      END. /* Haku sar. 2 */
 
      /* Haku 3 */
-     if lookup(nap,"3,f3") > 0 AND icBGroup  = ? THEN DO:  /* haku sarakk. 3 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+     if lookup(Syst.Var:nap,"3,f3") > 0 AND icBGroup  = ? THEN DO:  /* haku sarakk. 3 */
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
         BIGroup = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME haku3.
-        UPDATE lcBrand WHEN gcAllBrand 
+        UPDATE lcBrand WHEN Syst.Var:gcAllBrand 
                BIGroup WITH FRAME haku3.
 
         HIDE FRAME haku3 no-pause.
@@ -563,7 +566,7 @@ BROWSE:
      END. /* Haku sar. 3 */
 
      /* translations */
-     ELSE IF LOOKUP(nap,"4,f4") > 0 AND ufk[4] > 0 THEN DO:  
+     ELSE IF LOOKUP(Syst.Var:nap,"4,f4") > 0 AND Syst.Var:ufk[4] > 0 THEN DO:  
          FIND BillItem where recid(BillItem) = rtab[FRAME-LINE] NO-LOCK.
          RUN Mc/invlang.p(1,BillItem.BillCode).
          
@@ -571,18 +574,18 @@ BROWSE:
          NEXT LOOP.
      END.
 
-     ELSE if  lookup(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
+     ELSE if  lookup(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
          must-add = TRUE.
          NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 AND lcRight = "RW" AND llCanDelete
+     else if lookup(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW" AND llCanDelete
      THEN DO TRANSAction:  /* removal */
         delline = FRAME-LINE.
         FIND BillItem where recid(BillItem) = rtab[FRAME-LINE] no-lock.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(ctc) 
+        COLOR DISPLAY value(Syst.Var:ctc) 
               BillItem.Brand BillItem.BillCode BillItem.BIName BillItem.AccNum
               BIGName BillItem.TaxClass BillItem.BIGroup.
 
@@ -610,7 +613,7 @@ BROWSE:
         MESSAGE 
         "WARNING: YOU SHOULD NEVER DELETE A BillCode THAT EXISTS ON CALLS/INVOICES !".
         message " DO YOU REALLY WANT TO ERASE (Y/N)? " UPDATE ok.
-        COLOR DISPLAY value(ccc) 
+        COLOR DISPLAY value(Syst.Var:ccc) 
            BillItem.Brand BillItem.BillCode BillItem.BIName BillItem.AccNum
            BIGName BillItem.TaxClass BillItem.BIGroup.
         IF ok THEN DO:
@@ -641,7 +644,7 @@ BROWSE:
         ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     else if lookup(nap,"7,F7") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"7,F7") > 0 THEN DO:
         PAUSE 0.
         DO TRANS:
            FIND BillItem where recid(BillItem) = rtab[FRAME-LINE] no-lock.
@@ -652,7 +655,7 @@ BROWSE:
      END.
 
 
-     else if lookup(nap,"enter,return") > 0 THEN
+     else if lookup(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSAction:
 
         /* change */
@@ -710,9 +713,9 @@ BROWSE:
         FIND TaxClass WHERE
              TaxClass.TaxClass = BillItem.TaxClass NO-LOCK NO-ERROR.
         
-        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
+        assign fr-header = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9.
         RUN Syst/ufkey.p.
-        cfc = "lis". RUN Syst/ufcolor.p.
+        Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
 
         DISPLAY 
         BillItem.Brand
@@ -761,7 +764,7 @@ BROWSE:
         LEAVE.
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
         IF order = 1 THEN FIND FIRST BillItem 
            WHERE BillItem.Brand = lcBrand no-lock no-error.
         ELSE IF order = 2 THEN FIND FIRST BillItem USE-INDEX BIName
@@ -773,7 +776,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 1 THEN FIND LAST BillItem 
            WHERE BillItem.Brand = lcBrand no-lock no-error.
         ELSE IF order = 2 THEN FIND LAST BillItem USE-INDEX BIName
@@ -794,13 +797,13 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 PROCEDURE local-find-first: 
@@ -907,11 +910,12 @@ PROCEDURE update-mode-general:
             BillItem.SAPRid
             BillItem.DispMPM
             BillItem.CostCentre
+            BillItem.ItemType
      WITH FRAME lis EDITING:
             
                READKEY.
                
-               IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+               IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                   HIDE MESSAGE.
                   if frame-field = "BIGroup" THEN DO:
                      FIND BItemGroup where 
@@ -1121,7 +1125,7 @@ PROCEDURE update-mode-cc:
             BillItem.BIGroup
      WITH FRAME lis EDITING:         
                READKEY.
-               IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+               IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                   HIDE MESSAGE.
                   if frame-field = "BIGroup" THEN DO:
                      IF LOOKUP(INPUT FRAME lis BillItem.BIGroup , icBGroup  ) = 0 THEN DO:

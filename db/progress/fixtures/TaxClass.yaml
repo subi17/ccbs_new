@@ -1,12 +1,12 @@
-TaxClass1: TaxClass
+bulkload: TaxClass
   TaxClass: "0"
   TCName: "Duty free"
 
-TaxClass2: TaxClass
+bulkload: TaxClass
   TaxClass: "1"
   TCName: "Usage"
 
-TaxClass3: TaxClass
+bulkload: TaxClass
   TaxClass: "2"
   TCName: "Terminals"
 

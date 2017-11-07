@@ -1,4 +1,4 @@
-ReportConfRow1: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ReportItem"
@@ -6,7 +6,7 @@ ReportConfRow1: ReportConfRow
   IntValue: 1
   DecValue: 1
 
-ReportConfRow2: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ErrorCode"
@@ -16,7 +16,7 @@ ReportConfRow2: ReportConfRow
   ConfRowID: 1
   LogicValue: TRUE 
 
-ReportConfRow3: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ErrorCode"
@@ -26,7 +26,7 @@ ReportConfRow3: ReportConfRow
   ConfRowID: 2
   LogicValue: TRUE 
 
-ReportConfRow4: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ErrorCode"
@@ -36,7 +36,7 @@ ReportConfRow4: ReportConfRow
   ConfRowID: 3
   LogicValue: TRUE 
 
-ReportConfRow5: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ErrorCode"
@@ -46,7 +46,7 @@ ReportConfRow5: ReportConfRow
   ConfRowID: 4
   LogicValue: TRUE 
 
-ReportConfRow6: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ErrorCode"
@@ -56,7 +56,7 @@ ReportConfRow6: ReportConfRow
   ConfRowID: 5
   LogicValue: TRUE 
 
-ReportConfRow7: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ErrorCode"
@@ -66,7 +66,7 @@ ReportConfRow7: ReportConfRow
   ConfRowID: 6
   LogicValue: TRUE 
 
-ReportConfRow8: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ErrorCode"
@@ -76,7 +76,7 @@ ReportConfRow8: ReportConfRow
   ConfRowID: 7
   LogicValue: TRUE 
 
-ReportConfRow9: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ErrorCode"
@@ -86,7 +86,7 @@ ReportConfRow9: ReportConfRow
   ConfRowID: 8
   LogicValue: TRUE 
 
-ReportConfRow10: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ErrorCode"
@@ -96,7 +96,7 @@ ReportConfRow10: ReportConfRow
   ConfRowID: 9
   LogicValue: TRUE 
 
-ReportConfRow11: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ReportItem"
@@ -105,7 +105,7 @@ ReportConfRow11: ReportConfRow
   DecValue: 1
   ConfRowID: 11
 
-ReportConfRow12: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ReportItem"
@@ -114,7 +114,7 @@ ReportConfRow12: ReportConfRow
   ConfRowID: 12
   LogicValue: TRUE 
 
-ReportConfRow13: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ReportItem"
@@ -123,7 +123,7 @@ ReportConfRow13: ReportConfRow
   DecValue: 2
   ConfRowID: 13
 
-ReportConfRow14: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ReportItem"
@@ -133,7 +133,7 @@ ReportConfRow14: ReportConfRow
   ConfRowID: 14
   LogicValue: TRUE 
 
-ReportConfRow15: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ReportItem"
@@ -142,7 +142,7 @@ ReportConfRow15: ReportConfRow
   DecValue: 3
   ConfRowID: 15
 
-ReportConfRow16: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ReportItem"
@@ -152,7 +152,7 @@ ReportConfRow16: ReportConfRow
   ConfRowID: 16
   LogicValue: TRUE 
 
-ReportConfRow17: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ReportItem"
@@ -162,7 +162,7 @@ ReportConfRow17: ReportConfRow
   ConfRowID: 17
   LogicValue: TRUE 
 
-ReportConfRow18: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ReportItem"
@@ -172,7 +172,7 @@ ReportConfRow18: ReportConfRow
   ConfRowID: 18
   LogicValue: TRUE 
 
-ReportConfRow19: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ReportItem"
@@ -181,7 +181,7 @@ ReportConfRow19: ReportConfRow
   DecValue: 4
   ConfRowID: 19
 
-ReportConfRow20: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ReportItem"
@@ -190,7 +190,7 @@ ReportConfRow20: ReportConfRow
   ConfRowID: 20
   LogicValue: TRUE 
 
-ReportConfRow21: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ErrorCode"
@@ -199,7 +199,7 @@ ReportConfRow21: ReportConfRow
   DecValue: 4
   ConfRowID: 21
 
-ReportConfRow22: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ErrorCode"
@@ -209,7 +209,7 @@ ReportConfRow22: ReportConfRow
   ConfRowID: 23
   LogicValue: TRUE 
 
-ReportConfRow23: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "UnbilledSubsQty"
   RowType: "ReportItem"
@@ -218,7 +218,7 @@ ReportConfRow23: ReportConfRow
   DecValue: 2
   ConfRowID: 24
 
-ReportConfRow24: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "UnbilledSubsQty"
   RowType: "ReportItem"
@@ -227,7 +227,7 @@ ReportConfRow24: ReportConfRow
   DecValue: 2
   ConfRowID: 25
 
-ReportConfRow25: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "UnbilledSubsQty"
   RowType: "ReportItem"
@@ -236,7 +236,7 @@ ReportConfRow25: ReportConfRow
   DecValue: 3
   ConfRowID: 26
 
-ReportConfRow26: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "UnbilledSubsQty"
   RowType: "ReportItem"
@@ -245,7 +245,7 @@ ReportConfRow26: ReportConfRow
   DecValue: 3
   ConfRowID: 27
 
-ReportConfRow27: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "UnbilledSubsQty"
   RowType: "ReportItem"
@@ -254,7 +254,7 @@ ReportConfRow27: ReportConfRow
   DecValue: 3
   ConfRowID: 28
 
-ReportConfRow28: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "UnbilledSubsQty"
   RowType: "ReportItem"
@@ -263,7 +263,7 @@ ReportConfRow28: ReportConfRow
   DecValue: 4
   ConfRowID: 29
 
-ReportConfRow29: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "UnbilledSubsQty"
   RowType: "ReportItem"
@@ -273,7 +273,7 @@ ReportConfRow29: ReportConfRow
   ConfRowID: 30
   LogicValue: TRUE 
 
-ReportConfRow30: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ReportItem"
@@ -284,7 +284,7 @@ ReportConfRow30: ReportConfRow
   ToDate: 2049-12-31
   ConfRowID: 31
 
-ReportConfRow31: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "UnbilledSubsQty"
   RowType: "ReportItem"
@@ -293,7 +293,7 @@ ReportConfRow31: ReportConfRow
   DecValue: 2
   ConfRowID: 32
 
-ReportConfRow32: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ReportItem"
@@ -302,7 +302,7 @@ ReportConfRow32: ReportConfRow
   DecValue: 1
   ConfRowID: 33
 
-ReportConfRow33: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ErrorCode"
@@ -311,7 +311,7 @@ ReportConfRow33: ReportConfRow
   DecValue: 2
   ConfRowID: 34
 
-ReportConfRow34: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ReportItem"
@@ -320,7 +320,7 @@ ReportConfRow34: ReportConfRow
   DecValue: 1
   ConfRowID: 35
 
-ReportConfRow35: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ReportItem"
@@ -329,7 +329,7 @@ ReportConfRow35: ReportConfRow
   DecValue: 1
   ConfRowID: 36
 
-ReportConfRow36: ReportConfRow
+bulkload: ReportConfRow
   Brand: "1"
   ReportID: "BillingReport"
   RowType: "ReportItem"

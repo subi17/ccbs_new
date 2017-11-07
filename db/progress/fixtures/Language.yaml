@@ -1,20 +1,20 @@
-Language1: Language
+bulkload: Language
   Language: 1
   LangName: "Spanish"
 
-Language2: Language
+bulkload: Language
   Language: 2
   LangName: "Catalan"
 
-Language3: Language
+bulkload: Language
   Language: 3
   LangName: "Basque (Euskara)"
 
-Language4: Language
+bulkload: Language
   Language: 4
   LangName: "Galician"
 
-Language5: Language
+bulkload: Language
   Language: 5
   LangName: "English"
 

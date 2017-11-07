@@ -11,8 +11,8 @@
 {Func/cparam2.i}
 {Syst/dumpfile_run.i}
 {Func/finvbal.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
+{Func/multitenantfunc.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -116,14 +116,14 @@ FUNCTION fError RETURNS LOGIC
 
    DO TRANS:
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
              ErrorLog.ActionID  = "IFSDUMP"
              ErrorLog.TableName = "Invoice"
              ErrorLog.KeyValue  = STRING(Invoice.InvNum)
              ErrorLog.ErrorChar = Invoice.ExtInvID
              ErrorLog.ErrorMsg  = icMessage
-             ErrorLog.UserCode  = katun.
-             ErrorLog.ActionTS  = fMakeTS().
+             ErrorLog.UserCode  = Syst.Var:katun.
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    
 END FUNCTION.
@@ -166,6 +166,7 @@ FUNCTION fPrintHeader RETURNS LOGIC:
       lcNumberRef                     lcDelimiter  /* 15: number_reference */
       lcOrderId                       lcDelimiter  /* 16: Order Id */
       fDate2String(ldOperationDate)   lcDelimiter  /* 17: Operation Date */
+      fgetCompanyId()                 lcDelimiter  /* 18: Company ID */
       SKIP.
        
 END FUNCTION.
@@ -299,7 +300,7 @@ FUNCTION fGetTaxZone RETURNS CHAR
    IF LOOKUP(icTaxZone,lcTaxZones) > 0 THEN RETURN icTaxZone.
    
    FIND FIRST InvGroup WHERE 
-              InvGroup.Brand    = gcBrand AND
+              InvGroup.Brand    = Syst.Var:gcBrand AND
               InvGroup.InvGroup = icInvGroup NO-LOCK NO-ERROR.
    IF AVAILABLE InvGroup 
    THEN RETURN InvGroup.TaxZone.
@@ -365,7 +366,7 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
 
    InvoiceLoop:
    FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
-            Invoice.Brand   = gcBrand   AND
+            Invoice.Brand   = Syst.Var:gcBrand   AND
             Invoice.InvDate = ldaDate   AND
             Invoice.InvType NE 99       AND
             Invoice.ExtInvID > ""       AND
@@ -425,20 +426,29 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
       lcSalesProd = "037".
  
    /* customer segment */
-   IF Customer.CustIDType = "CIF" THEN lcSegment = "20".
-   ELSE DO:
-      CASE Customer.Category:
-      WHEN "11" OR WHEN "12" OR WHEN "30" OR WHEN "31" THEN 
-         lcSegment = Customer.Category.
-      WHEN "41" THEN lcSegment = "11".   
-      OTHERWISE lcSegment = "10".
-      END CASE.
-   END.
+   CASE Customer.Category:
+      WHEN "10" OR
+      WHEN "40" THEN lcSegment = "10".
+      WHEN "11" OR
+      WHEN "13" OR
+      WHEN "41" THEN lcSegment = "11".
+      WHEN "42" OR
+      WHEN "43" OR
+      WHEN "44" OR
+      WHEN "45" THEN lcSegment = "12".
+      WHEN "20" THEN lcSegment = "20".
+      WHEN "21" THEN lcSegment = "21".
+      WHEN "22" OR
+      WHEN "23" THEN lcSegment = "22".
+      WHEN "30" THEN lcSegment = "30".
+      WHEN "31" THEN lcSegment = "31".
+      OTHERWISE lcSegment = "99".
+   END CASE.
    
    ASSIGN
       lcSalesman   = "XX"
-      ldFromPeriod = fMake2Dt(Invoice.FromDate,0)
-      ldToPeriod   = fMake2Dt(Invoice.ToDate,86399).
+      ldFromPeriod = Func.Common:mMake2DT(Invoice.FromDate,0)
+      ldToPeriod   = Func.Common:mMake2DT(Invoice.ToDate,86399).
   
    EMPTY TEMP-TABLE ttSub.
    
@@ -580,7 +590,7 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
       FOR FIRST Order WHERE
                 Order.InvNum = liInvNum NO-LOCK,
           FIRST OrderPayment WHERE
-                OrderPayment.Brand   = gcBrand AND
+                OrderPayment.Brand   = Syst.Var:gcBrand AND
                 OrderPayment.OrderId = Order.OrderId NO-LOCK:
           ASSIGN lcNCFRef = OrderPayment.BinNumber + OrderPayment.AuthNumber
                  lcNumberRef = OrderPayment.CCReference
@@ -594,7 +604,7 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
              ldOperationDate = EventLog.EventDate.
 
           IF ldOperationDate = ? THEN
-             fSplitTS(Order.CrStamp,
+             Func.Common:mSplitTS(Order.CrStamp,
                       OUTPUT ldOperationDate,
                       OUTPUT ldOperationTime).
 
@@ -634,17 +644,17 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
    FOR FIRST Order NO-LOCK WHERE
              Order.InvNum = liInvNum,
         EACH OfferItem NO-LOCK WHERE
-             OfferItem.Brand = gcBrand AND
+             OfferItem.Brand = Syst.Var:gcBrand AND
              OfferItem.Offer = Order.Offer AND
              OfferItem.BeginStamp <= Order.CrStamp AND
              OfferItem.EndStamp >= Order.CrStamp AND
              OfferItem.ItemType = "PerContract", 
        FIRST DayCampaign NO-LOCK WHERE
-             DayCampaign.Brand = gcBrand AND
+             DayCampaign.Brand = Syst.Var:gcBrand AND
              DayCampaign.DCEvent = OfferItem.ItemKey AND
              DayCampaign.DCType = {&DCTYPE_INSTALLMENT},
        FIRST FMItem NO-LOCK WHERE
-             FMItem.Brand = gcBrand AND
+             FMItem.Brand = Syst.Var:gcBrand AND
              FMItem.FeeModel = DayCampaign.FeeModel:
 
        ASSIGN
@@ -703,7 +713,7 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
          ttRow.Amt = ttRow.AmtExclVat + ttRow.VatAmt.
          
       FIND FIRST BillItem WHERE
-                 BillItem.Brand    = gcBrand AND
+                 BillItem.Brand    = Syst.Var:gcBrand AND
                  BillItem.BillCode = InvRow.BillCode NO-LOCK NO-ERROR.
                  
       IF NOT AVAILABLE BillItem THEN DO:           
@@ -727,7 +737,7 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
       END.
        
       IF NOT CAN-FIND(FIRST Account WHERE
-                            Account.Brand  = gcBrand AND
+                            Account.Brand  = Syst.Var:gcBrand AND
                             Account.AccNum = InvRow.SlsAcc) THEN DO:
          fError(InvRow.BillCode + ": Invalid account").
          NEXT InvoiceLoop.                   
@@ -908,7 +918,7 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
                                           lcbillcodes_to_set3 + "," +
                                           lcbillcodes_to_set4) > 0 THEN DO:
             FIND FIRST BillItem WHERE
-                       BillItem.Brand    = gcBrand AND
+                       BillItem.Brand    = Syst.Var:gcBrand AND
                        BillItem.BillCode = ttRow.BillCode NO-LOCK NO-ERROR.
                        
             IF AVAILABLE BillItem THEN DO:

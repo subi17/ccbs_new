@@ -94,7 +94,7 @@ FUNCTION fTicketCheck RETURN LOG
       WHEN "MSOWNER" THEN DO:
       
          FIND FIRST msowner WHERE
-                    msowner.brand    EQ gcBrand        AND
+                    msowner.brand    EQ Syst.Var:gcBrand        AND
                     msowner.CLI       =  icValue       AND
                     msowner.tsend    >= CallTimeStamp  AND
                     msowner.tsbegin  <= CallTimeStamp NO-LOCK NO-ERROR.
@@ -113,7 +113,7 @@ FUNCTION fTicketCheck RETURN LOG
       WHEN "MSOWNER_FIXED" THEN DO:
 
          FIND FIRST msowner WHERE
-                    msowner.brand       EQ gcBrand        AND
+                    msowner.brand       EQ Syst.Var:gcBrand        AND
                     msowner.FixedNumber EQ icValue        AND
                     msowner.tsend       GE CallTimeStamp  AND
                     msowner.tsbegin     LE CallTimeStamp NO-LOCK NO-ERROR.
@@ -122,7 +122,7 @@ FUNCTION fTicketCheck RETURN LOG
             oiValue = {&CDR_ERROR_MSISDN_NOT_ACTIVE_FIXED}.
 
             FIND FIRST Msowner WHERE
-                       Msowner.brand EQ gcBrand AND
+                       Msowner.brand EQ Syst.Var:gcBrand AND
                        Msowner.fixednumber = icValue NO-LOCK NO-ERROR.
 
             IF NOT AVAIL msowner THEN 
@@ -199,6 +199,17 @@ FUNCTION fFinalBillableCheck RETURNS INTEGER:
       ttCall.CCN = 98 AND
       ttCall.Amount = 0 
    THEN RETURN {&CDR_ERROR_FREE_VOICE_MAIL_CALL_FORWARDING}.
+
+   IF ttCall.DateSt >= 6/15/2017 THEN DO:
+
+      IF ttCall.SpoCMT EQ 7 AND
+         ttCall.BDest EQ "ROAM_EU" THEN 
+         RETURN {&CDR_ERROR_NON_BILLABLE_ROAM_MT_CALL}.
+
+      IF ttCall.SpoCMT EQ 96 THEN
+         RETURN {&CDR_ERROR_NON_BILLABLE_ROAM_MT_MMS}.
+
+   END.
    
    RETURN 0.
    

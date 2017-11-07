@@ -1,0 +1,384 @@
+bulkload: FuncRunQRow
+  FRQueueID: 1
+  FRQRowSeq: 5
+  FRConfigID: 1
+
+bulkload: FuncRunQRow
+  FRQueueID: 1
+  FRQRowSeq: 10
+  FRConfigID: 14
+  WaitForRowSeq: 5
+
+bulkload: FuncRunQRow
+  FRQueueID: 1
+  FRQRowSeq: 15
+  FRConfigID: 2
+  WaitForRowSeq: 10
+  FeedFromRowSeq: 5
+
+bulkload: FuncRunQRow
+  FRQueueID: 1
+  FRQRowSeq: 20
+  FRConfigID: 3
+  WaitForRowSeq: 15
+
+bulkload: FuncRunQRow
+  FRQueueID: 2
+  FRQRowSeq: 10
+  FRConfigID: 1
+
+bulkload: FuncRunQRow
+  FRQueueID: 2
+  FRQRowSeq: 12
+  FRConfigID: 14
+  WaitForRowSeq: 10
+
+bulkload: FuncRunQRow
+  FRQueueID: 2
+  FRQRowSeq: 15
+  FRConfigID: 2
+  MinStartTime: "03:15"
+  WaitForRowSeq: 12
+  FeedFromRowSeq: 10
+
+bulkload: FuncRunQRow
+  FRQueueID: 2
+  FRQRowSeq: 20
+  FRConfigID: 13
+  MinStartTime: "03:20"
+  WaitForRowSeq: 12
+  FeedFromRowSeq: 15
+
+bulkload: FuncRunQRow
+  FRQueueID: 2
+  FRQRowSeq: 25
+  FRConfigID: 3
+  WaitForRowSeq: 15
+
+bulkload: FuncRunQRow
+  FRQueueID: 2
+  FRQRowSeq: 30
+  FRConfigID: 5
+  WaitForRowSeq: 25
+
+bulkload: FuncRunQRow
+  FRQueueID: 2
+  FRQRowSeq: 35
+  FRConfigID: 6
+  WaitForRowSeq: 30
+  FeedFromRowSeq: 30
+
+bulkload: FuncRunQRow
+  FRQueueID: 2
+  FRQRowSeq: 40
+  FRConfigID: 30
+  WaitForRowSeq: 35
+
+bulkload: FuncRunQRow
+  FRQueueID: 2
+  FRQRowSeq: 45
+  FRConfigID: 33
+  WaitForRowSeq: 40
+  FeedFromRowSeq: 40
+
+bulkload: FuncRunQRow
+  FRQueueID: 3
+  FRQRowSeq: 5
+  FRConfigID: 11
+
+bulkload: FuncRunQRow
+  FRQueueID: 3
+  FRQRowSeq: 10
+  FRConfigID: 1
+  WaitForRowSeq: 5
+
+bulkload: FuncRunQRow
+  FRQueueID: 3
+  FRQRowSeq: 12
+  FRConfigID: 14
+  MinStartTime: "12:00"
+  WaitForRowSeq: 10
+
+bulkload: FuncRunQRow
+  FRQueueID: 3
+  FRQRowSeq: 13
+  FRConfigID: 18
+  MinStartTime: "08:00"
+  WaitForRowSeq: 10
+
+bulkload: FuncRunQRow
+  FRQueueID: 3
+  FRQRowSeq: 14
+  FRConfigID: 32
+  MinStartTime: "12:00"
+  WaitForRowSeq: 10
+
+bulkload: FuncRunQRow
+  FRQueueID: 3
+  FRQRowSeq: 15
+  FRConfigID: 2
+  MinStartTime: "12:00"
+  WaitForRowSeq: 12
+  FeedFromRowSeq: 10
+
+bulkload: FuncRunQRow
+  FRQueueID: 3
+  FRQRowSeq: 20
+  FRConfigID: 13
+  MinStartTime: "12:00"
+  WaitForRowSeq: 12
+  FeedFromRowSeq: 15
+
+bulkload: FuncRunQRow
+  FRQueueID: 3
+  FRQRowSeq: 25
+  FRConfigID: 3
+  WaitForRowSeq: 15
+
+bulkload: FuncRunQRow
+  FRQueueID: 3
+  FRQRowSeq: 35
+  FRConfigID: 10
+  WaitForRowSeq: 25
+
+bulkload: FuncRunQRow
+  FRQueueID: 3
+  FRQRowSeq: 40
+  FRConfigID: 5
+  WaitForRowSeq: 25
+
+bulkload: FuncRunQRow
+  FRQueueID: 3
+  FRQRowSeq: 45
+  FRConfigID: 7
+  WaitForRowSeq: 25
+
+bulkload: FuncRunQRow
+  FRQueueID: 3
+  FRQRowSeq: 46
+  FRConfigID: 8
+  WaitForRowSeq: 45
+
+bulkload: FuncRunQRow
+  FRQueueID: 3
+  FRQRowSeq: 65
+  FRConfigID: 6
+  WaitForRowSeq: 40
+  FeedFromRowSeq: 40
+
+bulkload: FuncRunQRow
+  FRQueueID: 3
+  FRQRowSeq: 66
+  FRConfigID: 9
+  WaitForRowSeq: 65
+
+bulkload: FuncRunQRow
+  FRQueueID: 3
+  FRQRowSeq: 67
+  FRConfigID: 34
+  WaitForRowSeq: 65
+
+bulkload: FuncRunQRow
+  FRQueueID: 3
+  FRQRowSeq: 70
+  FRConfigID: 17
+  WaitForRowSeq: 25
+
+bulkload: FuncRunQRow
+  FRQueueID: 3
+  FRQRowSeq: 75
+  FRConfigID: 16
+  WaitForRowSeq: 25
+
+bulkload: FuncRunQRow
+  FRQueueID: 3
+  FRQRowSeq: 80
+  FRConfigID: 30
+  WaitForRowSeq: 65
+
+bulkload: FuncRunQRow
+  FRQueueID: 3
+  FRQRowSeq: 90
+  FRConfigID: 33
+  WaitForRowSeq: 80
+  FeedFromRowSeq: 80
+
+bulkload: FuncRunQRow
+  FRQueueID: 4
+  FRQRowSeq: 5
+  FRConfigID: 29
+
+bulkload: FuncRunQRow
+  FRQueueID: 4
+  FRQRowSeq: 10
+  FRConfigID: 20
+  WaitForRowSeq: 5
+  FeedFromRowSeq: 5
+
+bulkload: FuncRunQRow
+  FRQueueID: 5
+  FRQRowSeq: 1
+  FRConfigID: 5
+
+bulkload: FuncRunQRow
+  FRQueueID: 5
+  FRQRowSeq: 2
+  FRConfigID: 6
+  WaitForRowSeq: 1
+  FeedFromRowSeq: 1
+
+bulkload: FuncRunQRow
+  FRQueueID: 5
+  FRQRowSeq: 5
+  FRConfigID: 30
+  WaitForRowSeq: 2
+
+bulkload: FuncRunQRow
+  FRQueueID: 5
+  FRQRowSeq: 10
+  FRConfigID: 33
+  WaitForRowSeq: 5
+  FeedFromRowSeq: 5
+
+bulkload: FuncRunQRow
+  FRQueueID: 6
+  FRQRowSeq: 5
+  FRConfigID: 19
+
+bulkload: FuncRunQRow
+  FRQueueID: 7
+  FRQRowSeq: 5
+  FRConfigID: 31
+
+bulkload: FuncRunQRow
+  FRQueueID: 7
+  FRQRowSeq: 10
+  FRConfigID: 21
+  WaitForRowSeq: 5
+  FeedFromRowSeq: 5
+
+bulkload: FuncRunQRow
+  FRQueueID: 8
+  FRQRowSeq: 10
+  FRConfigID: 11
+
+bulkload: FuncRunQRow
+  FRQueueID: 8
+  FRQRowSeq: 15
+  FRConfigID: 23
+  WaitForRowSeq: 10
+
+bulkload: FuncRunQRow
+  FRQueueID: 8
+  FRQRowSeq: 35
+  FRConfigID: 5
+  WaitForRowSeq: 15
+
+bulkload: FuncRunQRow
+  FRQueueID: 8
+  FRQRowSeq: 40
+  FRConfigID: 6
+  WaitForRowSeq: 35
+  FeedFromRowSeq: 35
+
+bulkload: FuncRunQRow
+  FRQueueID: 8
+  FRQRowSeq: 45
+  FRConfigID: 30
+  WaitForRowSeq: 40
+
+bulkload: FuncRunQRow
+  FRQueueID: 8
+  FRQRowSeq: 50
+  FRConfigID: 33
+  WaitForRowSeq: 45
+  FeedFromRowSeq: 45
+
+bulkload: FuncRunQRow
+  FRQueueID: 9
+  FRQRowSeq: 5
+  FRConfigID: 1
+
+bulkload: FuncRunQRow
+  FRQueueID: 9
+  FRQRowSeq: 15
+  FRConfigID: 2
+  WaitForRowSeq: 5
+  FeedFromRowSeq: 5
+
+bulkload: FuncRunQRow
+  FRQueueID: 9
+  FRQRowSeq: 25
+  FRConfigID: 3
+  WaitForRowSeq: 15
+
+bulkload: FuncRunQRow
+  FRQueueID: 9
+  FRQRowSeq: 40
+  FRConfigID: 5
+  WaitForRowSeq: 25
+
+bulkload: FuncRunQRow
+  FRQueueID: 9
+  FRQRowSeq: 45
+  FRConfigID: 7
+  WaitForRowSeq: 25
+
+bulkload: FuncRunQRow
+  FRQueueID: 9
+  FRQRowSeq: 65
+  FRConfigID: 6
+  WaitForRowSeq: 40
+  FeedFromRowSeq: 40
+
+bulkload: FuncRunQRow
+  FRQueueID: 9
+  FRQRowSeq: 66
+  FRConfigID: 9
+  WaitForRowSeq: 65
+
+bulkload: FuncRunQRow
+  FRQueueID: 9
+  FRQRowSeq: 67
+  FRConfigID: 34
+  WaitForRowSeq: 65
+
+bulkload: FuncRunQRow
+  FRQueueID: 9
+  FRQRowSeq: 80
+  FRConfigID: 30
+  WaitForRowSeq: 65
+
+bulkload: FuncRunQRow
+  FRQueueID: 9
+  FRQRowSeq: 90
+  FRConfigID: 33
+  WaitForRowSeq: 80
+  FeedFromRowSeq: 80
+
+bulkload: FuncRunQRow
+  FRQueueID: 10
+  FRQRowSeq: 5
+  FRConfigID: 26
+
+bulkload: FuncRunQRow
+  FRQueueID: 10
+  FRQRowSeq: 10
+  FRConfigID: 25
+  WaitForRowSeq: 5
+
+bulkload: FuncRunQRow
+  FRQueueID: 11
+  FRQRowSeq: 5
+  FRConfigID: 11
+
+bulkload: FuncRunQRow
+  FRQueueID: 12
+  FRQRowSeq: 10
+  FRConfigID: 10
+
+bulkload: FuncRunQRow
+  FRQueueID: 13
+  FRQRowSeq: 5
+  FRConfigID: 7
+

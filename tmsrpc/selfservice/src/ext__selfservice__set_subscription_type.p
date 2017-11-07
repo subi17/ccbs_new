@@ -30,13 +30,14 @@
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Func/fbankdata.i}
 {Func/fctchange.i}
 {Func/fmakemsreq.i}
 {Func/fcharge_comp_loaded.i}
 {Syst/tmsconst.i}
 {Func/fexternalapi.i}
+{Func/profunc.i}
 
 /* Input parameters */
 DEF VAR pcMSISDN         AS CHAR NO-UNDO.
@@ -58,6 +59,7 @@ DEF VAR lcStruct         AS CHAR NO-UNDO.
 DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
 DEF VAR ldaActDate       AS DATE NO-UNDO.
 DEF VAR lcApplicationId  AS CHAR NO-UNDO.
+DEF VAR lcProValidation  AS CHAR NO-UNDO.
 DEF VAR lcAppEndUserId   AS CHAR NO-UNDO.
 
 DEF BUFFER NewCliType    FOR CliType.
@@ -83,19 +85,16 @@ ASSIGN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{selfservice/src/findtenant.i NO ordercanal MobSub Cli pcMSISDN}
+
 ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
        lcAppEndUserId  = ghAuthLog::EndUserId.
        
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName,lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
-FIND mobsub NO-LOCK WHERE
-     mobsub.cli = pcMSISDN NO-ERROR.
-IF NOT AVAILABLE mobsub THEN
-   RETURN appl_err("Subscription not found").
-
 FIND FIRST NewCliType WHERE
-           NewCLIType.Brand = gcBrand AND
+           NewCLIType.Brand = Syst.Var:gcBrand AND
            NewCLIType.CLIType = pcCliType NO-LOCK.
 IF NOT AVAIL NewCLIType THEN
    RETURN appl_err("Unknown CLIType specified").
@@ -103,11 +102,11 @@ IF NOT AVAIL NewCLIType THEN
 IF LOOKUP(pcCliType,lcBundleCLITypes) > 0 AND pcDataBundleId = "" THEN
    RETURN appl_err("Subscription based bundle is missing").
 
-fSplitTS(pdActivation,OUTPUT ldaActDate,OUTPUT liActTime).
+Func.Common:mSplitTS(pdActivation,OUTPUT ldaActDate,OUTPUT liActTime).
 
-ASSIGN pdActivation = fMake2Dt(ldaActDate, 0).
+ASSIGN pdActivation = Func.Common:mMake2DT(ldaActDate, 0).
 
-katun = "NewtonAd". /* check correct barring */
+Syst.Var:katun = "NewtonAd". /* check correct barring */
 
 IF fValidateMobTypeCh(
    MobSub.Msseq,
@@ -124,6 +123,15 @@ IF fValidateNewCliType(INPUT pcCliType, INPUT pcDataBundleId,
    RETURN appl_err(lcError).
 END.
 
+/*YPRO*/
+lcProValidation = fValidateProSTC(MobSub.Custnum,
+                                  MobSub.CliType,
+                                  pcCliType).
+IF lcProValidation NE "" THEN
+   RETURN appl_err("Pro customer validatuin error: " + lcProValidation).
+
+
+
 /* Check if credit check is needed */
 IF fServAttrValue(MobSub.CLIType,
                   "TypeChg",
@@ -135,7 +143,7 @@ IF lcError > "" THEN DO:
    RETURN appl_err(lcError).
 END.
 
-katun = fgetAppUserId(INPUT lcApplicationId, 
+Syst.Var:katun = fgetAppUserId(INPUT lcApplicationId, 
                       INPUT lcAppEndUserId).
                       
 liRequest = fCTChangeRequest(MobSub.msseq,
@@ -163,11 +171,11 @@ END.
 CREATE Memo.
 ASSIGN
       Memo.CreStamp  = {&nowTS}
-      Memo.Brand     = gcBrand 
+      Memo.Brand     = Syst.Var:gcBrand 
       Memo.HostTable = "MobSub" 
       Memo.KeyValue  = STRING(MobSub.MsSeq) 
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = katun 
+      Memo.CreUser   = Syst.Var:katun 
       Memo.MemoTitle = "Subscription Type Change"
       Memo.MemoText  = "External API subscription type change " + 
                        MobSub.CLIType + " --> " + pcCliType
@@ -183,5 +191,4 @@ FINALLY:
    /* Store the transaction id */
    ghAuthLog::TransactionId = pcTransId.
 
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

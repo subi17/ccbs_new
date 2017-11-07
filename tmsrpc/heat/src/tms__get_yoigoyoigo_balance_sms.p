@@ -2,7 +2,8 @@
  * Fetch YOIGOYOIGO daycampaign counter value 
  * and return SMS message containing the value
  *
- * @input   MSISDN;String
+ * @input  brand;string 
+           MSISDN;String
  *
  * @output smsMessage;String
  *
@@ -10,26 +11,28 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {Syst/commpaa.i}
-katun = "XMLRPC-Heat".
-gcBrand = "1".
+Syst.Var:katun = "XMLRPC-Heat".
+Syst.Var:gcBrand = "1".
 {Func/fcreatereq.i}
 
 FUNCTION fReqStat RETURNS LOGICAL
 (iiStat AS INTEGER,
  icMsg AS CHAR):
    ASSIGN
-      bCreaReq.donestamp = fMakeTS()
-      bCreaReq.updatestamp = fMakeTS()
+      bCreaReq.donestamp = Func.Common:mMakeTS()
+      bCreaReq.updatestamp = Func.Common:mMakeTS()
       bCreaReq.reqstatus = iiStat
       bCreaReq.memo = icMsg.
 END FUNCTION. 
 
 /* Input */
-DEF VAR pcCLI AS CHAR NO-UNDO.
+DEF VAR pcCLI    AS CHAR NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
 pcCLI = get_string(param_toplevel_id, "0").
 if gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/findtenant.i NO ordercanal MobSub Cli pcCLI}
 
 fCreateRequest(37, /* heat balance query request */
                0 , /* chgstamp */
@@ -134,5 +137,4 @@ add_string(response_toplevel_id, "", lcMsg).
 fReqStat(2, lcMsg).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

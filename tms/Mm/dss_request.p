@@ -8,8 +8,6 @@
 
 {Syst/commali.i}
 {Syst/tmsconst.i}
-{Func/date.i}
-{Func/timestamp.i}
 {Func/fsendsms.i}
 {Func/fcpfat.i}
 {Mm/active_bundle.i}
@@ -76,7 +74,7 @@ PROCEDURE pDSSContract:
    DEF BUFFER bMsRequest      FOR MsRequest.
    
    FIND FIRST DayCampaign WHERE
-              DayCampaign.Brand   = gcBrand AND
+              DayCampaign.Brand   = Syst.Var:gcBrand AND
               DayCampaign.DCEvent = MsRequest.ReqCParam3 AND
               LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0
         NO-LOCK NO-ERROR.
@@ -109,7 +107,7 @@ PROCEDURE pDSSContract:
                   MServiceLimit.Custnum NE MsRequest.Custnum:
 
             FIND FIRST bMsRequest NO-LOCK WHERE
-                       bMsRequest.Brand = gcBrand AND
+                       bMsRequest.Brand = Syst.Var:gcBrand AND
                        bMsRequest.ReqType = 83 AND
                        bMsRequest.Custnum = MServiceLimit.Custnum AND
                        bMsRequest.ReqCParam3 = MsRequest.ReqCParam3 AND
@@ -135,6 +133,7 @@ PROCEDURE pDSSContract:
                                    "",
                                    0,
                                    0,
+                                   "",
                                    OUTPUT lcError).
       IF liRequest = 0 THEN 
          RETURN "ERROR:Bundle activation request creation failed; " + lcError.
@@ -153,6 +152,7 @@ PROCEDURE pDSSContract:
                                    "",
                                    0,
                                    0,
+                                   "",
                                    OUTPUT lcError).
       IF liRequest = 0 THEN 
          RETURN "ERROR:Bundle termination request creation failed; " + lcError.
@@ -210,7 +210,7 @@ PROCEDURE pFinalize:
 
    fReqStatus(2,"").
 
-   ldeCurrentTS = fMakeTS().
+   ldeCurrentTS = Func.Common:mMakeTS().
 
    /* Send the SMS using Request Action Rules for DSS */
    RUN Mm/requestaction_sms.p(INPUT MsRequest.MsRequest,
@@ -227,7 +227,7 @@ PROCEDURE pFinalize:
          lcCLI = SUBSTRING(ENTRY(liCount,lcMSISDNS,";"),3). /*remove 34 prefix*/
 
          FIND FIRST MobSub WHERE
-                    MobSub.Brand = gcBrand AND
+                    MobSub.Brand = Syst.Var:gcBrand AND
                     MobSub.CLI   = lcCLI NO-LOCK NO-ERROR.
          /* Exclude subs. who requested DSS activation */
          IF NOT AVAILABLE MobSub OR MobSub.CLI = MsRequest.CLI THEN NEXT.
@@ -241,9 +241,9 @@ PROCEDURE pFinalize:
       YTS-8140: To extend DELETE request matching also for DSS2 */
    IF MsRequest.ReqCparam3 BEGINS {&DSS} AND
       MsRequest.ReqCparam1 = "DELETE" AND
-      fIsDSS2Allowed(MsRequest.CustNum,0,fMakeTS(),
+      fIsDSS2Allowed(MsRequest.CustNum,0,Func.Common:mMakeTS(),
                      OUTPUT liDSSPriMsSeq,OUTPUT lcResult) AND
-      NOT fIsDSSActive(MsRequest.CustNum,fMakeTS()) AND
+      NOT fIsDSSActive(MsRequest.CustNum,Func.Common:mMakeTS()) AND
       NOT fOngoingDSSAct(MsRequest.CustNum) THEN DO:
 
       FIND FIRST lbMobSub WHERE
@@ -254,7 +254,7 @@ PROCEDURE pFinalize:
                                  "CREATE",
                                  "",
                                  "DSS2",
-                                 fMakeTS(),
+                                 Func.Common:mMakeTS(),
                                  {&REQUEST_SOURCE_DSS},
                                  "",
                                  TRUE, /* create fees */
@@ -263,8 +263,7 @@ PROCEDURE pFinalize:
                                  OUTPUT lcResult).
          IF liRequest = 0 THEN
             /* write possible error to a memo */
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                              STRING(MsRequest.MsSeq),
                              MsRequest.Custnum,
                              "DSS2 activation failed in DSS handling",
@@ -300,7 +299,7 @@ PROCEDURE pFinalize:
                MobSub.Custnum = MsRequest.Custnum AND
                MobSub.MultiSimID > 0,
          FIRST lbMobSub NO-LOCK USE-INDEX MultiSimID WHERE
-               lbMobSub.Brand = gcBrand AND
+               lbMobSub.Brand = Syst.Var:gcBrand AND
                lbMobSub.MultiSImID = Mobsub.MultiSImID AND
                lbMobSub.MultiSimType NE Mobsub.MultiSIMType AND
                lbMobSub.Custnum = Mobsub.Custnum:
@@ -315,7 +314,7 @@ PROCEDURE pFinalize:
                            OUTPUT ldeDSSLimit,
                            OUTPUT lcBundleId) EQ FALSE THEN RETURN "".
       
-      fSplitTS(ldeCurrentTS, OUTPUT ldaDate, OUTPUT liTime).
+      Func.Common:mSplitTS(ldeCurrentTS, OUTPUT ldaDate, OUTPUT liTime).
       liPeriod = YEAR(ldaDate) * 100 + MONTH(ldaDate).
       
       IF NOT fFatExists("DSSCPFREE",
@@ -333,8 +332,7 @@ PROCEDURE pFinalize:
                        999999,
                        OUTPUT lcResult). 
          IF lcResult > "" THEN 
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+            Func.Common:mWriteMemo("MobSub",
                           STRING(liDSSMsSeq),
                           MsRequest.Custnum,
                           "Multi SIM DSS FAT creation failed",
@@ -370,7 +368,7 @@ PROCEDURE pHandleOtherServices:
           ldeStamp = MsRequest.ActStamp.
 
    FOR EACH lbMobSub WHERE
-            lbMobSub.Brand   = gcBrand AND
+            lbMobSub.Brand   = Syst.Var:gcBrand AND
             lbMobSub.InvCust = MsRequest.CustNum AND
             LOOKUP(lbMobSub.CLIType,lcAllowedDSS2SubsType) > 0 AND
             (LOOKUP(lbMobSub.TariffBundle,lcDSS2PrimarySubsType) = 0 AND
@@ -394,6 +392,7 @@ PROCEDURE pHandleOtherServices:
 
    END. /* FOR EACH lbMobSub WHERE */
 
+                       "",
    EMPTY TEMP-TABLE ttAdditionalSIM NO-ERROR.
 
 END PROCEDURE.

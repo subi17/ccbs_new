@@ -1,54 +1,54 @@
-TerminalStock1: TerminalStock
+bulkload: TerminalStock
   BillCode: "P013K6102"
   Amount: 1617
   Description: "Terminal Yoigo Sony Ericsson K610i"
   Colour: "Negro               Negr"
 
-TerminalStock2: TerminalStock
+bulkload: TerminalStock
   BillCode: "P013K61R2"
   Amount: 1486
   Description: "Terminal Yoigo Sony Ericsson K610"
   Colour: "Rojo                Roj"
 
-TerminalStock3: TerminalStock
+bulkload: TerminalStock
   BillCode: "P013K80B2"
   Amount: 96
   Description: "Terminal Yoigo Sony Ericsson K800i"
   Colour: "Bronc              Bronc"
 
-TerminalStock4: TerminalStock
+bulkload: TerminalStock
   BillCode: "P013K80N2"
 
-TerminalStock5: TerminalStock
+bulkload: TerminalStock
   BillCode: "P013K80N2"
   Description: "Terminal Yoigo Sony Ericsson K800i"
   Colour: "negro               Negr"
 
-TerminalStock6: TerminalStock
+bulkload: TerminalStock
   BillCode: "P013Z61A2"
   Amount: 964
   Description: "Terminal Yoigo Sony Ericsson Z610"
   Colour: "Azul                Azu"
 
-TerminalStock7: TerminalStock
+bulkload: TerminalStock
   BillCode: "P013Z61R2"
   Amount: 304
   Description: "Terminal Yoigo Sony Ericsson Z610"
   Colour: "Rosa                Ros"
 
-TerminalStock8: TerminalStock
+bulkload: TerminalStock
   BillCode: "P021V3X02"
   Amount: 231
   Description: "Terminal Yoigo Motorola V3"
   Colour: "Azul                Azu"
 
-TerminalStock9: TerminalStock
+bulkload: TerminalStock
   BillCode: "P023615N2"
   Amount: 1985
   Description: "Terminal Yoigo Nokia 6151"
   Colour: "Negro               Negr"
 
-TerminalStock10: TerminalStock
+bulkload: TerminalStock
   BillCode: "P023615N2"
   Amount: 1985
   Description: "Terminal Yoigo Nokia 6151"

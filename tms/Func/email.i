@@ -12,6 +12,11 @@
             31.05.2007/aam SendMailX,
                            attachments are no longer mandatory with sendatt
 */
+&IF "{&EMAILFUNC}" NE "YES"
+&THEN
+
+&GLOBAL-DEFINE EMAILFUNC YES
+
 {Syst/commali.i}
 {Func/ftransdir.i}
 
@@ -319,8 +324,8 @@ FUNCTION SendMaileInvoice RETURNS LOGIC (iMailTxt AS CHAR,
         /* YTS-7530, this can be removed when TMS is running under user account
         with same group as tmsrpc. Currently using root, planned to be changed
         at begining of 2016. */
-        IF katun EQ "NewtonRPC" THEN DO:
-           lcErrorLog = "/tmp/sendmail_einvoice_error_" + katun + ".log".
+        IF Syst.Var:katun EQ "NewtonRPC" THEN DO:
+           lcErrorLog = "/tmp/sendmail_einvoice_error_" + Syst.Var:katun + ".log".
            OUTPUT TO lcErrorLog.
         END.   
         ELSE
@@ -342,8 +347,8 @@ FUNCTION SendMaileInvoice RETURNS LOGIC (iMailTxt AS CHAR,
     /* YTS-7530, this can be removed when TMS is running under user account  
        with same group as tmsrpc. Currently using root, planned to be changed
        at begining of 2016. */
-    IF katun EQ "NewtonRPC" THEN
-       UNIX SILENT VALUE(xMailComm + " >>/tmp/sendmail_" + katun + ".log 2>&1").
+    IF Syst.Var:katun EQ "NewtonRPC" THEN
+       UNIX SILENT VALUE(xMailComm + " >>/tmp/sendmail_" + Syst.Var:katun + ".log 2>&1").
     ELSE
        UNIX SILENT VALUE(xMailComm + " >> /tmp/sendmail_einvoice.log 2>&1").
 
@@ -395,3 +400,4 @@ FUNCTION fMailNotify RETURN CHARACTER
    ASSIGN xMailSubj = icMailSubj
           xMailFrom = lcMailFrom.
 END FUNCTION.
+&ENDIF

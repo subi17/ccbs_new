@@ -1,5 +1,5 @@
 /**
- * mnp.obtenerNotificacionesAltaPortabilidadMovilComoDonantePendientesConfirmarRechazar
+ * mnp.obtenerSolicitudesAltaPortabilidadMovilComoDonantePendientesConfirmarRechazar
  *
  * 1.4 Notifications of portabilities in donor role to be confirmed/rejected (used with buzon interface only)
  *
@@ -53,16 +53,19 @@ END.
 lcRespStruct = add_struct(response_toplevel_id, "").
 lcRespArray = add_array(lcRespStruct, "codigoReferencia").
 
+/* prevalidation */
+FOR EACH ttInput NO-LOCK:   
+   {mnp/src/mnp_findtenant.i NO common MNPProcess PortRequest ttInput.PortRequest}
+END.
+
 MESSAGE_LOOP:
 FOR EACH ttInput NO-LOCK:   
    
+   {mnp/src/mnp_findtenant.i NO common MNPProcess PortRequest ttInput.PortRequest}
+
    /* create mnpmessage record */
    fCreateMNPObtenerMessage("obtenerSolicitudesAltaPortabilidadMovilComoDonantePendientesConfirmarRechazar").
-   
-   /* check in case of duplicate messages */
-   FIND FIRST MNPProcess NO-LOCK WHERE
-              MNPProcess.PortRequest = ttInput.PortRequest NO-ERROR.
-   
+
    IF NOT AVAIL MNPProcess THEN DO:   
       
       CREATE MNPProcess.
@@ -70,7 +73,7 @@ FOR EACH ttInput NO-LOCK:
          MNPProcess.UpdateTS    = {&nowts} 
          MNPProcess.CreatedTS   = ttInput.CreatedTS
          MNPProcess.MNPUpdateTS = ttInput.StatusTS
-         MNPProcess.Brand       = gcBrand
+         MNPProcess.Brand       = Syst.Var:gcBrand
          MNPProcess.MNPType     = {&MNP_TYPE_OUT} /* mnp out */
          MNPProcess.MNPSeq      = next-value(m2mrequest)
          MNPProcess.PortingTime = ttInput.portingTime
@@ -79,7 +82,7 @@ FOR EACH ttInput NO-LOCK:
          MNPProcess.OperCode    = ttInput.ReceptorCode
          MNPProcess.StatusCode  = {&MNP_ST_ASOL} 
          MNPProcess.StatusReason = ttInput.StatusReason
-         MNPProcess.UserCode    = katun.
+         MNPProcess.UserCode    = Syst.Var:katun.
      
       FOR EACH ttMultipleMSISDN WHERE 
                ttMultipleMSISDN.portrequest = ttInput.portRequest NO-LOCK:
@@ -144,5 +147,4 @@ IF AVAIL MNPBuzon THEN MNPBuzon.StatusCode = 10.
 FINALLY:
    EMPTY TEMP-TABLE ttInput.
    EMPTY TEMP-TABLE ttMultipleMSISDN.
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

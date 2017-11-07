@@ -44,13 +44,12 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-katun = "Newton".
-gcBrand = "1".
+Syst.Var:katun = "Newton".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/flimitreq.i}
 {Mm/fbundle.i}
 {newton/src/get_memos.i}
-{Func/timestamp.i}
 {Func/msisdn_prefix.i}
 
 DEF VAR plAdmin AS LOG NO-UNDO.
@@ -64,11 +63,11 @@ FUNCTION fIsViewableTermMobsub RETURNS LOGICAL
    
    FIND FIRST Msowner WHERE 
               Msowner.msseq EQ iiMsSeq AND
-              Msowner.tsend LT fmakets()
+              Msowner.tsend LT Func.Common:mMakeTS()
    NO-LOCK USE-INDEX MsSeq NO-ERROR.
    IF NOT AVAIL Msowner THEN RETURN FALSE.
    
-   fSplitTS(msowner.tsend, output ldaDate, output liTime).
+   Func.Common:mSplitTS(msowner.tsend, output ldaDate, output liTime).
    IF TODAY - ldaDate > 180 AND NOT plAdmin THEN RETURN FALSE.
 
    RETURN TRUE.
@@ -78,30 +77,33 @@ END FUNCTION.
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.
 /* Output parameters */
-DEF VAR resp_struct AS CHAR NO-UNDO.
-DEF VAR memo_struct AS CHAR NO-UNDO.
-DEF VAR term_array AS  CHAR NO-UNDO.
-DEF VAR laptop_array AS  CHAR NO-UNDO.
-DEF VAR term_struct AS CHAR NO-UNDO.
-DEF VAR order_array AS CHAR NO-UNDO.
-DEF VAR order_struct AS CHAR NO-UNDO.
+DEF VAR resp_struct      AS CHAR NO-UNDO.
+DEF VAR memo_struct      AS CHAR NO-UNDO.
+DEF VAR term_array       AS CHAR NO-UNDO.
+DEF VAR laptop_array     AS CHAR NO-UNDO.
+DEF VAR term_struct      AS CHAR NO-UNDO.
+DEF VAR order_array      AS CHAR NO-UNDO.
+DEF VAR order_struct     AS CHAR NO-UNDO.
 /* Local variables */
-DEF VAR ldaTermDate AS DATE NO-UNDO. 
-DEF VAR liTermTime AS INT NO-UNDO. 
-DEF VAR liMNPOutExists AS INT NO-UNDO.
+DEF VAR ldaTermDate      AS DATE NO-UNDO. 
+DEF VAR liTermTime       AS INT  NO-UNDO. 
+DEF VAR liMNPOutExists   AS INT  NO-UNDO.
 DEF VAR lcDataBundle     AS CHAR NO-UNDO.
 DEF VAR lcSegment        AS CHAR NO-UNDO.
 DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
+DEF VAR llYoigoTenant    AS LOG NO-UNDO INIT FALSE.
+DEF VAR llMasmovilTenant AS LOG NO-UNDO INIT FALSE.
 
 IF validate_request(param_toplevel_id, "int,boolean") EQ ? THEN RETURN.
 piMsSeq = get_int(param_toplevel_id, "0").
 plAdmin = get_bool(param_toplevel_id, "1").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND TermMobSub NO-LOCK WHERE
-     TermMobSub.msseq = piMsSeq NO-ERROR.
-IF NOT AVAILABLE TermMobSub THEN
-   RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
+{newton/src/findtenant.i NO Mobile TermMobSub MsSeq piMsSeq}
+
+ASSIGN
+   llYoigoTenant    = (IF vcTenant = {&TENANT_YOIGO}    THEN TRUE ELSE FALSE)  
+   llMasmovilTenant = (IF vcTenant = {&TENANT_MASMOVIL} THEN TRUE ELSE FALSE).
 
 IF NOT fIsViewableTermMobsub(TermMobSub.MsSeq) THEN
    RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
@@ -144,7 +146,7 @@ IF LOOKUP(TermMobsub.CLIType,lcBundleCLITypes) > 0 THEN DO:
       lcDataBundle = TermMobsub.TariffBundle.
    ELSE
       lcDataBundle = fGetTerminatedSpecificBundle(TermMobsub.MsSeq,
-                                                  fMakeTS(),
+                                                  Func.Common:mMakeTS(),
                                                   TermMobsub.CliType).
 END. /* IF LOOKUP(TermMobsub.CLIType,lcBundleCLITypes) > 0 THEN DO: */
 
@@ -177,15 +179,16 @@ IF AVAIL Order THEN DO:
 END.
 ELSE DO: 
    add_string(resp_struct, "number_type",
-      STRING(fISYoigoCLI(TermMobSub.CLI), "new/mnp")).
+      STRING(((fISYoigoCLI(TermMobSub.CLI) AND llYoigoTenant) OR 
+             (fIsMasmovilCLI(TermMobSub.CLI) AND llMasmovilTenant)), "new/mnp")).
 END.
 
 FIND FIRST Msowner WHERE 
            Msowner.msseq EQ TermMobsub.MSseq AND
-           Msowner.tsend LT fmakets()
+           Msowner.tsend LT Func.Common:mMakeTS()
 NO-LOCK USE-INDEX MsSeq NO-ERROR.
 IF AVAIL msowner THEN DO:
-   fSplitTS(msowner.tsend, OUTPUT ldaTermDate, OUTPUT liTermTime).
+   Func.Common:mSplitTS(msowner.tsend, OUTPUT ldaTermDate, OUTPUT liTermTime).
    add_datetime(resp_struct, "termination_date", ldaTermDate).
 END.
 
@@ -257,7 +260,7 @@ add_int(memo_struct,"service", INT(fMemoCount("service",TermMobSub.Msseq,True)))
 
 /* satisfaction value */
 FIND FIRST PIndicator  WHERE
-           PIndicator.Brand = gcBrand AND
+           PIndicator.Brand = Syst.Var:gcBrand AND
            PIndicator.HostTable = "MobSub" AND
            PIndicator.KeyValue = STRING(TermMobSub.MsSeq) AND
            PIndicator.IndicatorType = {&P_INDICATOR_TYPE_SATISFACTION_VALUE}  
@@ -266,5 +269,4 @@ IF AVAIL PIndicator THEN
     add_string(resp_struct,"satisfaction_value",PIndicator.IndicatorValue) .
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

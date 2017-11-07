@@ -12,7 +12,6 @@
 
 {Syst/tmsconst.i}
 {Syst/commpaa.i}
-{Func/timestamp.i}
 {Func/upsellbundle.i}
 
 /*Logic:*
@@ -27,7 +26,7 @@
    4. Free lock taken in step 1.
 */
 
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 DEF VAR lcTableName AS CHAR NO-UNDO.
 DEF VAR lcActionId AS CHAR NO-UNDO.
@@ -56,7 +55,7 @@ ldCampaignEnd = fCParamDe("March2017PromoToDate"). /*Dates when order must be do
 lcUpsell = "FLEX_UPSELL". /*Upsell that will be aded in the promo*/
 ldaReadDate  = TODAY.
 
-ldCurrentTimeTS = fMakeTS().
+ldCurrentTimeTS = Func.Common:mMakeTS().
 
 
 lcLogDir     = fCParam("March2017Promo","March2017LogDir").
@@ -73,14 +72,15 @@ lcLogFile    = lcLogDir + "March2017Promo_monthly_" +
 OUTPUT STREAM sLogFile TO VALUE(lcLogFile) APPEND.
 
 PUT STREAM sLogFile UNFORMATTED "Azul Upsell Activation starts " +
-                                 fTS2HMS(ldCurrentTimeTS) SKIP.
+                                 Func.Common:mTS2HMS(ldCurrentTimeTS) SKIP.
 IF llgSimulate EQ TRUE THEN
    PUT STREAM sLogFile UNFORMATTED "Simulation mode" SKIP.
 
 /*Temp table for orders of activated mobsubs during the collection period*/
 DEF TEMP-TABLE ttOrderList NO-UNDO
    FIELD OrderID   AS INT
-   FIELD MsSeq     AS INT.
+   FIELD MsSeq     AS INT
+   INDEX OrderID OrderID.
 
 FUNCTION fIsAzul RETURNS LOG
    (icCliType AS CHAR):
@@ -101,7 +101,7 @@ FUNCTION fCollect RETURNS CHAR
    DEF VAR lcErr AS CHAR NO-UNDO.
    DEF BUFFER ORdertimestamp FOR Ordertimestamp.
    FOR EACH Ordertimestamp NO-LOCK WHERE
-            Ordertimestamp.Brand EQ gcBrand AND
+            Ordertimestamp.Brand EQ Syst.Var:gcBrand AND
             OrderTimestamp.RowType EQ {&ORDERTIMESTAMP_DELIVERY} AND
             Ordertimestamp.TimeStamp < idEndTS AND
             Ordertimestamp.TimeStamp >= idStartTS:
@@ -111,7 +111,7 @@ FUNCTION fCollect RETURNS CHAR
       IF AVAIL ttOrderList THEN NEXT. /*Skip duplicates*/
       
       FIND FIRST Order NO-LOCK WHERE
-                 Order.Brand EQ gcBrand AND
+                 Order.Brand EQ Syst.Var:gcBrand AND
                  Order.OrderID EQ OrderTimestamp.OrderId NO-ERROR.
       IF NOT AVAIL Order THEN NEXT. /*This should not happen*/
 
@@ -180,27 +180,50 @@ FUNCTION fMonthStart RETURNS DECIMAL
 
 END.
 
+/*Function counts successful activations*/
+FUNCTION fCountReq RETURNS INT
+   (iiMsSeq AS INT):
+   DEF VAR liC AS INT.
+   DEF Buffer MsRequest FOR MsRequest.
+   FOR EACH MsRequest NO-LOCK where
+            MsRequest.MsSeq EQ iiMsSeq AND
+            MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
+            MsRequest.ReqStatus EQ {&REQUEST_STATUS_DONE} AND
+            MsRequest.ReqCparam3 EQ lcUpsell AND
+            MsRequest.crestamp > ldCampaignStart
+            USE-INDEX MsSeq:
+      liC = liC + 1.
+   END.
+   RETURN liC.
+END.
+
 
 /*Function activates upsell for subscription that is related to given order*/
 FUNCTION fUpsellForAzul RETURNS CHAR
    (iiMsSeq AS INT):
    DEF VAR lcError AS CHAR NO-UNDO.
    DEF VAR liRequest AS INT NO-UNDO.
+   DEF VAR liDoneActivations AS INT NO-UNDO.
    DEF BUFFER MsRequest FOR MsRequest.
 
    FIND FIRST MsRequest NO-LOCK where
               MsRequest.MsSeq EQ iiMsSeq AND
               MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
               MsRequest.ReqCparam3 EQ lcUpsell AND 
-              MsRequest.crestamp > fMonthStart(fmakets()) /*do not care itmes done in eariler months */
+              MsRequest.crestamp > fMonthStart(Func.Common:mMakeTS()) /*do not care itmes done in eariler months */
               NO-ERROR.
+
+   /*Do not allow more than 6 activations.*/
+   liDoneActivations = fCountReq(iiMsSeq).
+   IF liDoneActivations >= 6 THEN RETURN "Activation month count full".
+
    IF AVAIL MsRequest THEN RETURN "Upsell already activated".
    
    IF llgSimulate EQ FALSE THEN DO:
       fCreateUpsellBundle(iiMsSeq,
                            lcUpsell,
                            {&REQUEST_SOURCE_YOIGO_TOOL},
-                           fMakeTS(),
+                           Func.Common:mMakeTS(),
                            OUTPUT liRequest,
                            OUTPUT lcError).
       IF lcError NE "" THEN RETURN lcError.                    
@@ -211,7 +234,7 @@ END.
 DO TRANS:
 
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.Var:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName NO-ERROR.
 
@@ -224,11 +247,11 @@ DO TRANS:
       /*First execution stamp*/
       CREATE ActionLog.
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.Var:gcBrand
          ActionLog.TableName    = lcTableName
          ActionLog.ActionID     = lcActionID
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionTS     = ldCampaignStart.
       RELEASE ActionLog.
       RETURN. /*No reporting in first time.*/
@@ -239,7 +262,7 @@ DO TRANS:
          ldCollPeriodStartTS = ActionLog.ActionTS
 
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
 
       RELEASE Actionlog.
@@ -247,9 +270,9 @@ DO TRANS:
 END.
 
 /*Actual execution:*/
-ldCollPeriodEndTS = fSecOffSet(ldCampaignStart, -60). /*Now - 1 minute*/
-fCollect(ldCampaignStart, (ldCampaignEnd + 15)). /*Select orders that need activation, 
-                                                  additional 15 days is done to be sure
+ldCollPeriodEndTS = Func.Common:mSecOffSet(ldCampaignStart, -60). /*Now - 1 minute*/
+fCollect(ldCampaignStart, (ldCampaignEnd + 60)). /*Select orders that need activation, 
+                                                  additional 60 days is done to be sure
                                                   that also delayed activations are found*/
 
 /*Activate upsells*/
@@ -266,7 +289,7 @@ END.
 /*Release execution lock*/
 DO TRANS:
    FIND FIRST ActionLog WHERE
-              ActionLog.Brand     EQ  gcBrand        AND
+              ActionLog.Brand     EQ  Syst.Var:gcBrand        AND
               ActionLog.ActionID  EQ  lcActionID     AND
               ActionLog.TableName EQ  lcTableName    AND
               ActionLog.ActionStatus NE  {&ACTIONLOG_STATUS_SUCCESS}
@@ -280,6 +303,6 @@ DO TRANS:
 END.
 
 PUT STREAM sLogFile UNFORMATTED "Azul Upsell Activation done " +
-                                 fTS2HMS(fMakeTS()) SKIP.
+                                 Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
 OUTPUT STREAM sLogFile CLOSE.
 

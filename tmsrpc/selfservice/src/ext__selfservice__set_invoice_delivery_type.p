@@ -38,10 +38,9 @@ DEF VAR lcApplicationId AS CHAR NO-UNDO.
 
 {Syst/commpaa.i}
 ASSIGN
-   katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
-   gcBrand = "1".
+   Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId
+   Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Syst/eventval.i}
 {Func/fmakemsreq.i}
 {Func/femailinvoice.i}
@@ -55,23 +54,20 @@ ASSIGN pcTransId = get_string(param_toplevel_id, "0")
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{selfservice/src/findtenant.i NO ordercanal MobSub Cli pcMSISDN}
+
 lcApplicationId = substring(pcTransId,1,3).
 
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName, lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
-katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
+Syst.Var:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun   
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun   
    {Func/lib/eventlog.i}
    lhCustomer = BUFFER Customer:HANDLE.
 END.
-
-FIND FIRST MobSub WHERE 
-           MobSub.Brand = gcBrand AND
-           MobSub.cli   = pcMSISDN NO-LOCK NO-ERROR.
-IF NOT AVAILABLE MobSub THEN RETURN appl_err("Subscription not found").
 
 CASE piDelType:
    WHEN {&INV_DEL_TYPE_PAPER}       THEN .
@@ -99,9 +95,9 @@ IF Customer.DelType NE piDelType THEN DO:
    /* If DelType is Email then set to Email Pending first and send 
       an email to customer to activate the email service */
    IF piDelType = {&INV_DEL_TYPE_EMAIL} THEN DO:
-      liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+      liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                        INPUT TODAY,
-                                       INPUT katun,
+                                       INPUT Syst.Var:katun,
                                        INPUT MobSub.MsSeq,
                                        INPUT MobSub.CLI,
                                        INPUT Mobsub.Custnum,
@@ -138,7 +134,7 @@ IF Customer.DelType NE piDelType THEN DO:
                                        "changed to " + STRING(Customer.DelType)).
       IF piDelType EQ {&INV_DEL_TYPE_NO_DELIVERY} THEN
          FOR EACH MobSub WHERE
-                  MobSub.brand EQ gcbrand AND
+                  MobSub.brand EQ Syst.Var:gcBrand AND
                   Mobsub.custnum EQ Customer.Custnum NO-LOCK:
             fMakeSchedSMS3(Customer.Custnum,MobSub.CLI,9,
                            "InvDelivTypeChanged",Customer.Language,0,
@@ -160,5 +156,4 @@ FINALLY:
    /* Store the transaction id */
    ghAuthLog::TransactionId = pcTransId.
 
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

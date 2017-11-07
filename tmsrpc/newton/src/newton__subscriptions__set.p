@@ -70,12 +70,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-FIND MobSub NO-LOCK WHERE
-   MobSub.MsSeq = piMsSeq NO-ERROR.
-
-IF NOT AVAIL MobSub THEN DO:
-   RETURN appl_err(SUBST("Unknown subscription id &1", piMsSeq)).
-END.
+{newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
 
 IF pcIDCode NE "0000" AND pcIDCode NE "" THEN DO:
    liIDCode = INT(pcIDCode) NO-ERROR.
@@ -85,10 +80,10 @@ END.
 
 {Syst/commpaa.i}
 {Syst/eventval.i}
-katun = pcUserName.
-gcbrand = "1".
+Syst.Var:katun = pcUserName.
+Syst.Var:gcBrand = "1".
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
 END.
 
 {Func/flimitreq.i}
@@ -134,26 +129,26 @@ FUNCTION fSetSMSBundle RETURN CHARACTER
                                   1).
 
     IF ldActStamp > 0 THEN DO:
-         fSplitTS(ldActStamp,
+         Func.Common:mSplitTS(ldActStamp,
                   OUTPUT ldtActDate,
                   OUTPUT liReq).
          IF ldtActDate > SubSer.SSDate OR
                (DAY(ldtActDate) = 1 AND liReq < TIME - 120 AND
                 DAY(SubSer.SSDate) NE 1)
          THEN .
-         ELSE ldActStamp = fMakeTS().
+         ELSE ldActStamp = Func.Common:mMakeTS().
     END.
-    ELSE ldActStamp = fMakeTS().
+    ELSE ldActStamp = Func.Common:mMakeTS().
 
     IF ldtActDate = TODAY
-    THEN ldActStamp = fMakeTS().
-    ELSE ldActStamp = fMake2DT(ldtActDate,1).
+    THEN ldActStamp = Func.Common:mMakeTS().
+    ELSE ldActStamp = Func.Common:mMake2DT(ldtActDate,1).
         
 
     /* pick up monthly amount of SMSBundle given 
        to this mobsub 
     */
-    fMonthlyStamps(TODAY,
+    Func.Common:mMonthlyStamps(TODAY,
                    ldTS1,
                    ldTS2). 
     ldMonthAmt = fGetCounterAmt("MobSub",
@@ -208,10 +203,10 @@ ELSE lcDCEventType = "TERM".
    FOR EACH DCCLI WHERE
       DCCLI.MsSeq = Mobsub.Msseq AND
       DCCLI.ValidTo >= TODAY AND 
-      DCCLI.Brand = gcBrand AND
+      DCCLI.Brand = Syst.Var:gcBrand AND
       DCCLI.DCEvent BEGINS lcDCEventType NO-LOCK,
       FIRST DayCampaign WHERE
-            DayCampaign.Brand = gcBrand AND
+            DayCampaign.Brand = Syst.Var:gcBrand AND
             DayCampaign.DCEvent = DCCLI.DCEvent AND
             DayCampaign.DCType = {&DCTYPE_DISCOUNT} NO-LOCK:
       
@@ -239,7 +234,7 @@ ELSE lcDCEventType = "TERM".
                              STRING(pdaTermContractValidTo), /* field values */
                              FALSE, /* create fees */
                              {&REQUEST_SOURCE_NEWTON} , /* where created */
-                             katun, /* who made the request */
+                             Syst.Var:katun, /* who made the request */
                              lcInfo).
    IF liReq = 0 THEN DO:
         RETURN appl_err("Request to update terminal periodical contract end date: " + lcInfo).
@@ -322,5 +317,4 @@ END.
 add_struct(response_toplevel_id, "").
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

@@ -1,4 +1,4 @@
 echo "IIR_TRIGGERS SCREENS"
 sleep 2
-screen 1 xfear -screen Rate/run_triggerrate -db /db1/mcdr17q1/mcdr17q1 -ld mcdr -db /db1/mcdrdtl17q1/mcdrdtl17q1 -ld mcdrdtl -db /db1/prepcdr17q1/prepcdr17q1 -ld prepcdr
-screen 2 xfear -screen Mm/te_analyses -db /db1/mcdr17q1/mcdr17q1 -ld mcdr -db /db1/mcdrdtl17q1/mcdrdtl17q1 -ld mcdrdtl -db /db1/prepcdr17q1/prepcdr17q1 -ld prepcdr
+screen 1 pike -C /apps/yoigo/tms terminal -- Rate/run_triggerrate common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr tenant=yoigo umask=0022
+screen 2 pike -C /apps/yoigo/tms terminal -- Mm/te_analyses common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr tenant=yoigo umask=0022

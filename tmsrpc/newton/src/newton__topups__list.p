@@ -14,10 +14,11 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
-DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".
 DEF VAR lcResultStruct AS CHARACTER NO-UNDO. 
 DEF VAR pcStruct AS CHARACTER NO-UNDO. 
 DEF VAR lcStruct AS CHARACTER NO-UNDO. 
+DEF VAR piMsSeq  AS INTEGER   NO-UNDO.
+
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 
 pcStruct = get_struct(param_toplevel_id, "0").
@@ -83,14 +84,21 @@ FUNCTION fListQueryInArray RETURNS CHAR
    RETURN "".
 
 END FUNCTION. 
+
 lcStruct = validate_struct(pcStruct, "msseq!,entity,offset,limit").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+piMsSeq = get_int(pcStruct,"msseq").
+
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
+
 DEF VAR lcQuery AS CHARACTER NO-UNDO. 
 
 lcQuery = 'FOR EACH PrepaidRequest NO-LOCK WHERE' + 
-          ' PrepaidRequest.Brand = ' + QUOTER(gcBrand) +
+          ' PrepaidRequest.Brand = ' + QUOTER(Syst.Var:gcBrand) +
           ' AND PrepaidRequest.MsSeq = ' + STRING(get_int(pcStruct,"msseq")) + 
           ' AND  PrepaidRequest.Response NE "First4B" '.
 

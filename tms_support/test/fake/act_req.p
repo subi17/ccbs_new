@@ -1,11 +1,10 @@
-{Func/timestamp.i}
 
 DEF VAR lcHostname AS CHAR NO-UNDO.
 INPUT THROUGH hostname.
 IMPORT lcHostName.
 INPUT CLOSE.
 
-IF LOOKUP(lcHostName,'angetenar,alpheratz,sadachbia,yanai') = 0 THEN DO:
+IF LOOKUP(lcHostName,'angetenar,alpheratz,sadachbia,yanai,yoigodev') = 0 THEN DO:
    MESSAGE 'This script is not allowed to run in'
    lcHostName VIEW-AS ALERT-BOX.
    RETURN.
@@ -23,8 +22,8 @@ IF NOT AVAIL MsRequest THEN MESSAGE "Request " liMsRequest " not found".
 ELSE DO:
 
    IF ldaDate NE TODAY THEN
-     ldeActstamp = fHMS2TS(ldaDate,"00:00:00").
-   ELSE ldeActstamp = fmakets().
+     ldeActstamp = Func.Common:mHMS2TS(ldaDate,"00:00:00").
+   ELSE ldeActstamp = Func.Common:mMakeTS().
 
    ASSIGN MsRequest.ActStamp = ldeActstamp.
 

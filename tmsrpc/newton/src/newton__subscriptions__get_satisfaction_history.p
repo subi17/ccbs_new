@@ -11,7 +11,6 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".
 {Syst/tmsconst.i}
 {newton/src/fpindicator.i}
 
@@ -24,6 +23,8 @@ DEF VAR lcResultArray AS CHARACTER NO-UNDO.
 IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
 piMsSeq = get_int(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
 
 lcResultArray = add_array(response_toplevel_id, "").
 

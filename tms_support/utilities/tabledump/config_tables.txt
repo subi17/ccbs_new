@@ -33,7 +33,6 @@ Currency
 CustCat
 CustClass
 CustGroup
-CustIntEvent
 CustTemp
 DayCampaign
 DCServiceComponent
@@ -47,7 +46,9 @@ DPBasis
 DPConf
 DPSubject
 DPTarget
+DPRate
 #DumpFile
+#DumpHPD
 EventLogConf
 FATConfig
 FATGMember

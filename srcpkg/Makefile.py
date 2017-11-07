@@ -40,6 +40,10 @@ def package(match, deps, name, version):
     os.chdir(extracted_dir)
     os.environ['PREFIX'] = tools_dir
     os.environ['PROPATH'] = "."
+
+    if os.path.isfile('{0}/progress.cfg.edit'.format(dlc)):
+        os.environ['PROCFG'] = '{0}/progress.cfg.edit'.format(dlc)
+
     subprocess.call([sys.executable, './build.py'])
     if not os.path.exists(pkg_dir):
        print('Installing %s failed' % name)

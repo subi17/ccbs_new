@@ -127,9 +127,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-katun = "NewtonRPC".
-gcBrand = "1".
-{Func/timestamp.i}
+Syst.Var:katun = "NewtonRPC".
+Syst.Var:gcBrand = "1".
 {Func/order.i}
 {Syst/tmsconst.i}
 {Mm/fbundle.i}
@@ -172,24 +171,19 @@ IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
 piOrderId = get_int(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-/* Check that necessary records exist. If not throw application error */
-FIND Order WHERE Order.Brand = gcBrand AND
-     Order.OrderId = piOrderId NO-LOCK NO-ERROR.
-
-IF NOT AVAILABLE Order THEN
-  RETURN appl_err(SUBST("Order with OrderId &1 does not exist", piOrderId )).
+{newton/src/findtenant.i YES ordercanal Order OrderId piOrderId}
 
 FIND FIRST DMS NO-LOCK WHERE
            DMS.HostTable EQ {&DMS_HOST_TABLE_ORDER} AND
            DMS.HostId EQ Order.OrderId AND
-           DMS.StatusTS < fMakeTS() NO-ERROR.
+           DMS.StatusTS < Func.Common:mMakeTS() NO-ERROR.
 IF AVAIL DMS THEN DO:
    lcDmsStatusCode = DMS.StatusCode.
    lcDmsStatusDesc = DMS.StatusDesc.
 END.
 
 FIND OrderPayment WHERE 
-     OrderPayment.Brand = gcBrand AND 
+     OrderPayment.Brand = Syst.Var:gcBrand AND 
      OrderPayment.OrderId = piOrderId NO-LOCK NO-ERROR.
 
 IF AVAILABLE OrderPayment AND
@@ -220,7 +214,7 @@ FOR EACH bMsRequest NO-LOCK WHERE
          bMsRequest.ReqStatus    = 0 AND
          bMsRequest.Reqcparam3   = "RVTERM12",
     FIRST SingleFee NO-LOCK USE-INDEX Custnum WHERE
-          SingleFee.Brand        = gcBrand AND
+          SingleFee.Brand        = Syst.Var:gcBrand AND
           SingleFee.Custnum      = Order.CustNum AND
           SingleFee.HostTable    = "Mobsub" AND
           SingleFee.KeyValue     = STRING(Order.MsSeq) AND
@@ -231,7 +225,7 @@ FOR EACH bMsRequest NO-LOCK WHERE
    lcExtensionContracts = lcExtensionContracts + "," + bMsRequest.ReqCparam4.
 END.
 FOR EACH DCCLI NO-LOCK WHERE
-         DCCLI.Brand    = gcBrand AND
+         DCCLI.Brand    = Syst.Var:gcBrand AND
          DCCLI.DCEvent  = "RVTERM12" AND
          DCCLI.MsSeq    = Order.MsSeq AND
          DCCLI.ValidTo >= TODAY,
@@ -239,11 +233,11 @@ FOR EACH DCCLI NO-LOCK WHERE
           bMsRequest.MsSeq       = DCCLI.MsSeq AND
           bMsRequest.ReqType     = {&REQTYPE_CONTRACT_ACTIVATION} AND
           bMsRequest.ReqStat     = 2 AND
-          bMsRequest.ActStamp   >= fMake2Dt(DCCLI.ValidFrom,0) AND
-          bMsRequest.ActStamp   <= fMake2Dt(DCCLI.ValidFrom,86399) AND
+          bMsRequest.ActStamp   >= Func.Common:mMake2DT(DCCLI.ValidFrom,0) AND
+          bMsRequest.ActStamp   <= Func.Common:mMake2DT(DCCLI.ValidFrom,86399) AND
           bMsRequest.Reqcparam3  = "RVTERM12",
     FIRST SingleFee NO-LOCK USE-INDEX Custnum WHERE
-          SingleFee.Brand        = gcBrand AND
+          SingleFee.Brand        = Syst.Var:gcBrand AND
           SingleFee.Custnum      = Order.CustNum AND
           SingleFee.HostTable    = "Mobsub" AND
           SingleFee.KeyValue     = STRING(Order.MsSeq) AND
@@ -258,8 +252,11 @@ IF lcExtensionContracts <> "" THEN
 
 /* add values to the response if no error */
 top_struct = add_struct(response_toplevel_id, "").
+
+add_string(top_struct, "brand"          , BUFFER-TENANT-NAME(Order)).
 add_int(   top_struct, "tms_id"         , piOrderId         ).
 add_int(   top_struct, "order_type"     , Order.OrderType   ).
+add_string(top_struct, "tenant"         , vcTenant          ).
 add_string(top_struct, "status"         , Order.StatusCode  ).
 add_string(top_struct, "dms_status_code" , lcDMSStatusCode).
 add_string(top_struct, "dms_status_desc" , lcDMSStatusDesc).
@@ -400,7 +397,7 @@ IF iTerminalOfferItemId >= 0 THEN DO:
 END.
 
 FIND OrderAccessory NO-LOCK WHERE 
-     OrderAccessory.Brand = gcBrand AND 
+     OrderAccessory.Brand = Syst.Var:gcBrand AND 
      OrderAccessory.OrderId = piOrderId AND
      OrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE} NO-ERROR.
 
@@ -429,7 +426,7 @@ END.
 laptop_array = add_array(top_struct,"order_laptops").
 
 FIND OfferItem WHERE
-     OfferItem.Brand = gcBrand AND
+     OfferItem.Brand = Syst.Var:gcBrand AND
      OfferItem.Offer = Order.Offer AND
      OfferItem.ItemType = "PerContract" AND
      OfferItem.ItemKey BEGINS "PAYTERM" AND
@@ -455,7 +452,7 @@ IF AVAIL OrderAccessory THEN
    add_string(top_struct,"sub_accessory", OrderAccessory.productcode).
 
 FIND OrderCustomer WHERE 
-     OrderCustomer.Brand = gcBrand AND 
+     OrderCustomer.Brand = Syst.Var:gcBrand AND 
      OrderCustomer.OrderId = piOrderId AND 
      OrderCustomer.RowType = 4
      NO-LOCK NO-ERROR.
@@ -478,7 +475,7 @@ IF AVAIL OrderCustomer THEN DO:
 END.
 
 FIND OrderCustomer WHERE 
-     OrderCustomer.Brand = gcBrand AND 
+     OrderCustomer.Brand = Syst.Var:gcBrand AND 
      OrderCustomer.OrderId = piOrderId AND 
      OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS} 
      NO-LOCK NO-ERROR.
@@ -522,7 +519,7 @@ IF Order.OrderChannel BEGINS "fusion" THEN DO:
          (OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_ONGOING})).
 
       FIND FIRST OrderCustomer WHERE 
-                 OrderCustomer.Brand = gcBrand AND 
+                 OrderCustomer.Brand = Syst.Var:gcBrand AND 
                  OrderCustomer.OrderId = piOrderId AND 
                  OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
       NO-LOCK NO-ERROR.
@@ -558,7 +555,7 @@ IF Order.OrderChannel BEGINS "fusion" THEN DO:
       END.
       
       FIND FIRST OrderCustomer WHERE 
-                 OrderCustomer.Brand = gcBrand AND 
+                 OrderCustomer.Brand = Syst.Var:gcBrand AND 
                  OrderCustomer.OrderId = piOrderId AND 
                  OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_FIXED_BILLING}
       NO-LOCK NO-ERROR.
@@ -578,5 +575,4 @@ IF Order.OrderChannel BEGINS "fusion" THEN DO:
 END.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

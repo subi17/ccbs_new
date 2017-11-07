@@ -18,8 +18,7 @@ DEFINE VARIABLE lcCustName AS CHARACTER NO-UNDO.
 
 FIND Customer WHERE 
      customer.custnum = CustNum NO-LOCK NO-ERROR.
-lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                               BUFFER Customer).
+lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                                     
 DEFINE TEMP-TABLE TTservice
 FIELD servcom  LIKE subser.servcom

@@ -14,18 +14,27 @@
 */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 
-DEFINE VARIABLE resp_array AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE lcResultStruct AS CHARACTER NO-UNDO.
+DEFINE VARIABLE resp_array       AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcResultStruct   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcLangItemStruct AS CHARACTER NO-UNDO.  
-DEFINE VARIABLE lclangArray AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lclangArray      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE pcTenant         AS CHARACTER NO-UNDO.
+
+IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
+
+pcTenant = get_string(param_toplevel_id, "0").
+
+IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 resp_array = add_array(response_toplevel_id, "").
 
+{newton/src/settenant.i pcTenant}
+
 FOR EACH InvText NO-LOCK WHERE
-         InvText.Brand     = gcBrand AND
+         InvText.Brand     = Syst.Var:gcBrand AND
          InvText.Target    = "SMS" AND
          InvText.Language  = 1 AND
          InvText.ToDate   >= TODAY AND
@@ -45,7 +54,7 @@ FOR EACH InvText NO-LOCK WHERE
    add_int(lcLangItemStruct, "language", InvText.Language).
    add_string(lcLangItemStruct, "smstext", InvText.InvText).
    FOR EACH RepText NO-LOCK WHERE
-            RepText.Brand     = gcBrand AND
+            RepText.Brand     = Syst.Var:gcBrand AND
             RepText.LinkCode  = STRING(InvText.ITNum) AND
             RepText.TextType  = 32 AND
             RepText.ToDate   >= TODAY AND
@@ -57,6 +66,5 @@ FOR EACH InvText NO-LOCK WHERE
 END.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.
 

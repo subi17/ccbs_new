@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-katun = "anttis".
-gcBrand = "1".
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 
 {Func/orderfunc.i}
 
@@ -29,7 +29,7 @@ do i = 1 to num-entries(lcMNPs, " "):
    assign
       mnpprocess.statuscode = 7
       mnpprocess.statusreason = "CANC_ABONA"
-      mnpprocess.updatets = fMakeTS()
+      mnpprocess.updatets = Func.Common:mMakeTS()
       order.mnpstatus = 8.
 
    fSetOrderStatus(order.orderid, "7").  

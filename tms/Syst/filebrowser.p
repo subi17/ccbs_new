@@ -40,14 +40,14 @@ END.
 FORM
    ttFiles.FileName
 WITH
-   ROW 1 TITLE " Files in " + lcDirectory + " " CENTERED OVERLAY FrmDown DOWN COLOR VALUE(cfc)
+   ROW 1 TITLE " Files in " + lcDirectory + " " CENTERED OVERLAY FrmDown DOWN COLOR VALUE(Syst.Var:cfc)
 FRAME sel.
 
-cfc = "sel".
+Syst.Var:cfc = "sel".
 
 RUN Syst/ufcolor.p.
 
-ccc = cfc.
+Syst.Var:ccc = Syst.Var:cfc.
 
 VIEW FRAME sel.
 
@@ -107,10 +107,10 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-           ufk    = 0
-           ufk[8] = 8 
-           ufk[9] = 1
-           ehto   = 3
+           Syst.Var:ufk    = 0
+           Syst.Var:ufk[8] = 8 
+           Syst.Var:ufk[9] = 1
+           Syst.Var:ehto   = 3
            ufkey  = FALSE.
          
          RUN Syst/ufkey.p.
@@ -122,13 +122,13 @@ REPEAT WITH FRAME sel:
 
         CHOOSE ROW ttFiles.FileName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
       
-        COLOR DISPLAY VALUE(ccc) ttFiles.FileName WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) ttFiles.FileName WITH FRAME sel.
 
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-LINE] = ? THEN DO:
         BELL.
@@ -137,10 +137,10 @@ REPEAT WITH FRAME sel:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN pFindThis.
            RUN pFindPrev.
@@ -165,7 +165,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO WITH FRAME sel:
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN pFindThis.
            RUN pFindNext.
@@ -190,7 +190,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND ttFiles WHERE recid(ttFiles) = Memory NO-LOCK NO-ERROR.
         RUN pFindPrev.
@@ -214,7 +214,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -228,24 +228,24 @@ REPEAT WITH FRAME sel:
        END.
      END. /* NEXT page */
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN pFindFirst.
         ASSIGN Memory = recid(ttFiles) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN pFindLast.
         ASSIGN Memory = recid(ttFiles) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"5,F5,RETURN") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"5,F5,RETURN") > 0 THEN DO:
         RUN pFindThis.
         RETURN ttFiles.FileName.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN 
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN 
         RETURN "".
   END.  /* BROWSE */
 
@@ -253,7 +253,7 @@ END.  /* LOOP */
 
 FINALLY:
    HIDE FRAME sel NO-PAUSE.
-   si-recid = xrecid.
+   Syst.Var:si-recid = xrecid.
 END.
 
 PROCEDURE pFindThis:

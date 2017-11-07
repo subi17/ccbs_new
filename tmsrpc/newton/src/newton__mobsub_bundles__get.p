@@ -18,8 +18,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
-{Func/timestamp.i}
+Syst.Var:gcBrand = "1".
 {Func/cparam2.i}
 {Mm/active_bundle.i}
 {Mm/fbundle.i}
@@ -43,14 +42,16 @@ DEF VAR lcOptionsStruct AS CHAR NO-UNDO.
 DEF VAR llUpComingDataBundle AS LOG NO-UNDO.
 DEF VAR llUpgradeUpsell AS LOG NO-UNDO.
 DEF VAR lcBONOContracts AS CHAR NO-UNDO.
-DEF VAR ldeActivationTS AS DEC NO-UNDO. 
-DEF VAR liActAllowed AS INT NO-UNDO INIT 1.
+DEF VAR lcVoiceBundles  AS CHAR NO-UNDO.
+DEF VAR lcSupplementaryDataBundles  AS CHAR NO-UNDO.
+DEF VAR lcSupplementaryVoiceBundles AS CHAR NO-UNDO.
+DEF VAR ldeActivationTS AS DEC  NO-UNDO. 
+DEF VAR liActAllowed    AS INT  NO-UNDO INIT 1.
 
 DEFINE BUFFER bMsRequest  FOR MsRequest.
 
-ASSIGN ldEndDate  = fLastDayOfMonth(TODAY)
-       ldEndStamp = fMake2Dt(ldEndDate,86399)
-       lcBONOContracts = fCParamC("BONO_CONTRACTS").
+ASSIGN ldEndDate  = Func.Common:mLastDayOfMonth(TODAY)
+       ldEndStamp = Func.Common:mMake2DT(ldEndDate,86399).
 
 IF validate_request(param_toplevel_id, "array") = ? THEN RETURN.
 pcIDArray = get_array(param_toplevel_id, "0").
@@ -68,11 +69,11 @@ FUNCTION fGetMDUBStatus RETURNS INT (
    DEF BUFFER MServiceLimit FOR MServiceLimit.
    liStat= 0. /* desactivated */ 
 
-   llUpComingDataBundle = fBundleWithSTC(Mobsub.MsSeq,fSecOffSet(ldEndStamp,1)).
+   llUpComingDataBundle = fBundleWithSTC(Mobsub.MsSeq,Func.Common:mSecOffSet(ldEndStamp,1)).
     
    /* Activated */
    FOR EACH ServiceLimitGroup NO-LOCK WHERE 
-            ServiceLimitGroup.Brand     = gcBrand AND
+            ServiceLimitGroup.Brand     = Syst.Var:gcBrand AND
             ServiceLimitGroup.GroupCode = pcBundle,
        EACH ServiceLimit NO-LOCK WHERE 
             ServiceLimit.GroupCode  = pcBundle AND 
@@ -119,39 +120,91 @@ FUNCTION fGetMDUBStatus RETURNS INT (
    END. /* IF pcBundle BEGINS {&DSS} THEN DO: */
 
    /* pending request for MDUB/PMDUB termination */
-   ELSE IF CAN-FIND(FIRST MsRequest WHERE
-                     MsRequest.MsSeq      = MobSub.MsSeq  AND
-                     MsRequest.ReqType    = {&REQTYPE_CONTRACT_TERMINATION} AND
-                     MsRequest.ReqCParam3 = pcBundle AND
-                     LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 
-                     USE-INDEX MsSeq) THEN 
-                     liStat = 2. /* cancelled ongoing */
-
+   ELSE IF CAN-FIND(FIRST MsRequest WHERE MsRequest.MsSeq      = MobSub.MsSeq  AND
+                                          MsRequest.ReqType    = {&REQTYPE_CONTRACT_TERMINATION} AND
+                                          MsRequest.ReqCParam3 = pcBundle AND
+                                          LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 
+                                          USE-INDEX MsSeq) THEN 
+      liStat = 2. /* cancelled ongoing */
    /* pending request for bundle activation */
    ELSE IF CAN-FIND(FIRST MsRequest WHERE
                      MsRequest.MsSeq      = MobSub.MsSeq  AND
                      MsRequest.ReqType    = {&REQTYPE_CONTRACT_ACTIVATION} AND
                      MsRequest.ReqCParam3 = pcBundle AND
-                     LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0
+                     LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3") = 0
                      USE-INDEX MsSeq) THEN
                      liStat = 3. /* activation ongoing */
 
    /* ongoing btc change */
-   ELSE IF LOOKUP(pcBundle,lcBONOContracts) > 0 THEN DO:
+   ELSE IF LOOKUP(pcBundle,lcBONOContracts) > 0 THEN 
+   DO:
       FIND FIRST MsRequest WHERE
-                 MsRequest.MsSeq   = MobSub.MsSeq AND
-                 MsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE} AND
-                 LOOKUP(STRING(MsRequest.ReqStatus),
-                        {&REQ_INACTIVE_STATUSES} + ",3") = 0 AND
-                 LOOKUP(MsRequest.ReqCparam1,lcBONOContracts) > 0
-           NO-LOCK NO-ERROR.
-      IF AVAILABLE MsRequest THEN DO:
-         ASSIGN liStat = 4
-                pcBTCBundleId = MsRequest.ReqCparam2.
-         IF MsRequest.ReqCparam5 > "" THEN llUpgradeUpsell = TRUE.
+                 MsRequest.MsSeq   = MobSub.MsSeq                                        AND
+                 MsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE}                            AND
+                 LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3") = 0 AND
+                 LOOKUP(MsRequest.ReqCparam1,lcBONOContracts) > 0                        NO-LOCK NO-ERROR.
+      IF AVAILABLE MsRequest THEN 
+      DO:
+         ASSIGN 
+            liStat = 4
+            pcBTCBundleId = MsRequest.ReqCparam2.
+
+         IF MsRequest.ReqCparam5 > "" THEN 
+            llUpgradeUpsell = TRUE.
       END. /* IF AVAILABLE MsRequest THEN DO: */
    END. /* ELSE IF LOOKUP(pcBundle,lcBONOContracts) > 0 THEN DO: */
-   
+   /* ongoing btc change */
+   ELSE IF LOOKUP(pcBundle,lcVoiceBundles) > 0 THEN 
+   DO:
+      FIND FIRST MsRequest WHERE
+                 MsRequest.MsSeq   = MobSub.MsSeq                                        AND
+                 MsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE}                            AND
+                 LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3") = 0 AND
+                 LOOKUP(MsRequest.ReqCparam1,lcVoiceBundles) > 0                         NO-LOCK NO-ERROR.
+      IF AVAILABLE MsRequest THEN 
+      DO:
+         ASSIGN 
+            liStat = 4
+            pcBTCBundleId = MsRequest.ReqCparam2.
+            
+         IF MsRequest.ReqCparam5 > "" THEN 
+            llUpgradeUpsell = TRUE.
+      END. /* IF AVAILABLE MsRequest THEN DO: */
+   END. /* ELSE IF LOOKUP(pcBundle,lcBONOContracts) > 0 THEN DO: */
+   ELSE IF LOOKUP(pcBundle,lcSupplementaryDataBundles) > 0 THEN 
+   DO:
+      FIND FIRST MsRequest WHERE
+                 MsRequest.MsSeq   = MobSub.MsSeq                                        AND
+                 MsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE}                            AND
+                 LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3") = 0 AND
+                 LOOKUP(MsRequest.ReqCparam1,lcSupplementaryDataBundles) > 0             NO-LOCK NO-ERROR.
+      IF AVAILABLE MsRequest THEN 
+      DO:
+         ASSIGN 
+            liStat = 4
+            pcBTCBundleId = MsRequest.ReqCparam2.
+            
+         IF MsRequest.ReqCparam5 > "" THEN 
+            llUpgradeUpsell = TRUE.
+      END. /* IF AVAILABLE MsRequest THEN DO: */
+   END. /* ELSE IF LOOKUP(pcBundle,lcBONOContracts) > 0 THEN DO: */
+   ELSE IF LOOKUP(pcBundle,lcSupplementaryVoiceBundles) > 0 THEN 
+   DO:
+      FIND FIRST MsRequest WHERE
+                 MsRequest.MsSeq   = MobSub.MsSeq                                        AND
+                 MsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE}                            AND
+                 LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES} + ",3") = 0 AND
+                 LOOKUP(MsRequest.ReqCparam1,lcSupplementaryVoiceBundles) > 0            NO-LOCK NO-ERROR.
+      IF AVAILABLE MsRequest THEN 
+      DO:
+         ASSIGN 
+            liStat = 4
+            pcBTCBundleId = MsRequest.ReqCparam2.
+            
+         IF MsRequest.ReqCparam5 > "" THEN 
+            llUpgradeUpsell = TRUE.
+      END. /* IF AVAILABLE MsRequest THEN DO: */
+   END. /* ELSE IF LOOKUP(pcBundle,lcBONOContracts) > 0 THEN DO: */
    RETURN liStat. 
 
 END FUNCTION.
@@ -165,52 +218,46 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    piMsSeq = INT(ENTRY(2,pcId,"|")).
    pcBundleId = ENTRY(1,pcId,"|").
 
-   FIND MobSub WHERE 
-        MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR. 
-   IF NOT AVAIL MobSub THEN RETURN  appl_err("Mobsub not found").
-  
+   {newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
+   
+   IF lcBONOContracts = "" THEN 
+   DO:
+       ASSIGN 
+          lcBONOContracts             = fCParamC("BONO_CONTRACTS")
+          lcVoiceBundles              = fCParamC("VOICE_BONO_CONTRACTS")
+          lcSupplementaryDataBundles  = fCParamC("SUPPLEMENT_DATA_BONO_CONTRACTS")
+          lcSupplementaryVoiceBundles = fCParamC("SUPPLEMENT_VOICE_BONO_CONTRACTS").
+   END.
+      
    lcResultStruct = add_struct(resp_array, "").
    add_string(lcResultStruct, "id", pcBundleId + "|" + STRING(MobSub.MsSeq)).
 
    FIND FIRST DayCampaign WHERE 
-              DayCampaign.Brand   = gcBrand AND
+              DayCampaign.Brand   = Syst.Var:gcBrand AND
               DayCampaign.DCEvent = pcBundleId NO-LOCK NO-ERROR. 
    IF AVAIL DayCampaign THEN add_string(lcResultStruct, "name", DayCampaign.DCName).
 
-   /* check BONO contracts and customer level bundle status */
-   IF LOOKUP(pcBundleId,lcBONOContracts) > 0 OR
-      LOOKUP(pcBundleId,{&DSS_BUNDLES}) > 0 OR 
-      (MobSub.CLIType = "CONT15" AND pcBundleId = "VOICE100") OR
-      (MobSub.CLIType = "CONT9" AND pcBundleId = "FREE100MINUTES") OR
-      (MobSub.CLIType = "CONT10" AND pcBundleId = "FREE100MINUTES") THEN DO:
+   /* pass number of activations in case of UPSELL */
+   IF DayCampaign.InstanceLimit > 1 THEN 
+   DO:
+       liActivations = fGetUpSellCount(pcBundleId,piMsSeq,MobSub.Custnum,OUTPUT lcError).
+       add_int(lcResultStruct, "activations",liActivations).
+   END.
+   ELSE
+   DO:
        liStatus = fGetMDUBStatus(pcBundleId, OUTPUT ldeActivationTS).
+       
        add_int(lcResultStruct,"value",liStatus).
        add_string(lcResultStruct, "pending_bundle", pcBTCBundleId).
        add_boolean(lcResultStruct, "upgrade_upsell", llUpgradeUpsell).
+
        IF ldeActivationTS > 0 THEN
           add_timestamp(lcResultStruct, "activation_stamp", ldeActivationTS).
 
        lcOptionsStruct = add_struct(lcResultStruct,"options").
        add_boolean(lcOptionsStruct, "upcoming_data_bundle", llUpComingDataBundle).
    END.
-   /* pass number of activations in case of UPSELL */
-   ELSE IF pcBundleId = "HSPA_ROAM_EU" OR
-      pcBundleId MATCHES("*_UPSELL") THEN DO:
-      liActivations = fGetUpSellCount(pcBundleId,
-                                      piMsSeq,
-                                      MobSub.Custnum,
-                                      OUTPUT lcError).
-       add_int(lcResultStruct, "activations",liActivations).
-       /* ydr_1905 addition for web visibility
-       IF pcBundleId MATCHES("*_UPSELL") AND
-          fGetCurrentSpecificBundle(Mobsub.MsSeq,pcBundle) EQ "" THEN
-          liActAllowed = 0.
-       add_int(lcResultStruct, "activation_allowed",liActAllowed).
-       */
-   END.
-   ELSE lcError = "Invalid Bundle Id: " + pcBundleId .
 END.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

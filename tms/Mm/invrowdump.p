@@ -8,7 +8,6 @@
 ---------------------------------------------------------------------- */
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/coinv.i}
 {Syst/dumpfile_run.i}
 
@@ -29,6 +28,7 @@ DEF VAR ldaStart                   AS DATE NO-UNDO.
 DEF VAR ldaEND                     AS DATE NO-UNDO.
 DEF VAR lcCLIType                  AS CHAR NO-UNDO.
 DEF VAR lcBundle                   AS CHAR NO-UNDO.
+DEF VAR liBIType                   AS INT  NO-UNDO.
 
 DEF STREAM sFile.
 
@@ -72,11 +72,11 @@ FUNCTION fGetCLIType RETURNS LOGICAL (INPUT piMsSeq  AS INT):
     DEF VAR liFoundOwner  AS INT NO-UNDO.
 
     ASSIGN
-       ldFromPer   = fMake2Dt(IF Invoice.FirstCall NE ?
+       ldFromPer   = Func.Common:mMake2DT(IF Invoice.FirstCall NE ?
                               THEN Invoice.FirstCall
                               ELSE Invoice.FromDate,0)
-       ldToPer     = fMake2DT(Invoice.ToDate,86399)
-       ldInvoiceFrom = fMake2DT(DATE(MONTH(Invoice.Todate),
+       ldToPer     = Func.Common:mMake2DT(Invoice.ToDate,86399)
+       ldInvoiceFrom = Func.Common:mMake2DT(DATE(MONTH(Invoice.Todate),
                                      1,
                                      YEAR(Invoice.ToDate)),0)
        liFoundOwner = 0.
@@ -92,7 +92,7 @@ FUNCTION fGetCLIType RETURNS LOGICAL (INPUT piMsSeq  AS INT):
                bMsOwner.CLIEvent BEGINS "iS" NO-LOCK NO-ERROR.
     IF AVAIL bMsOwner THEN DO:
 
-       fSplitTS(bMsOwner.TSBeg,OUTPUT ldaDate,OUTPUT liTime).
+       Func.Common:mSplitTS(bMsOwner.TSBeg,OUTPUT ldaDate,OUTPUT liTime).
 
        CREATE ttMsOwner.
        ASSIGN ttMsOwner.MsSeq        = bMsOwner.MsSeq
@@ -179,12 +179,13 @@ PUT STREAM sFile UNFORMATTED
     "Quantity"             lcDelimiter
     "AmountEUR"            lcDelimiter
     "TariffBundle"         lcDelimiter
-    "FixedNumber"          SKIP.
+    "FixedNumber"          lcDelimiter
+    "BillingItemType"      SKIP.
 
 
 Invoices:
 FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
-         Invoice.Brand    = gcBrand   AND
+         Invoice.Brand    = Syst.Var:gcBrand   AND
          Invoice.InvDate >= ldaStart  AND
          Invoice.InvDate <= ldaEnd    AND
          LOOKUP(STRING(Invoice.InvType), lcInvType) > 0,
@@ -232,6 +233,12 @@ FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
          ASSIGN lcCLIType = ""
                 lcBundle  = "".
 
+      ASSIGN liBIType = -1.
+      FOR FIRST BillItem NO-LOCK WHERE
+                BillItem.Brand    = Invoice.Brand AND
+                BillItem.BillCode = InvRowCounter.BillCode:
+         ASSIGN liBIType = BillItem.ItemType. /* Mobile, Fixedline... */
+      END.
       /* Dump Invoice Rows */
       PUT STREAM sFile UNFORMATTED
                  Invoice.FromDate                         lcDelimiter
@@ -252,7 +259,8 @@ FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
                  InvRowCounter.Quantity                   lcDelimiter
                  ROUND(InvRowCounter.Amount,4)            lcDelimiter
                  lcBundle                                 lcDelimiter
-                 SubInvoice.FixedNumber                   SKIP.
+                 SubInvoice.FixedNumber                   lcDelimiter
+                 liBIType                                 SKIP.
 
    END. /* FOR EACH InvRowCounter */
 
@@ -279,6 +287,13 @@ FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
          ASSIGN lcCLIType = ""
                 lcBundle  = "".
 
+      ASSIGN liBIType = -1.
+      FOR FIRST BillItem NO-LOCK WHERE
+                BillItem.Brand    = Invoice.Brand AND
+                BillItem.BillCode = InvRow.BillCode:
+         ASSIGN liBIType = BillItem.ItemType. /* Mobile, Fixedline... */
+      END.
+
          /* Dump Invoice Rows */ 
          PUT STREAM sFile UNFORMATTED
                     Invoice.FromDate                 lcDelimiter
@@ -299,7 +314,8 @@ FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
                     InvRow.Qty                       lcDelimiter
                     ROUND(InvRow.Amt,4)              lcDelimiter
                     lcBundle                         lcDelimiter
-                    SubInvoice.FixedNumber           SKIP.
+                    SubInvoice.FixedNumber           lcDelimiter
+                    liBIType                         SKIP.
 
    END. /* FOR EACH InvRow NO-LOCK WHERE */   
 END. /* for EACH Invoice NO-LOCK USE-INDEX InvDate WHERE */

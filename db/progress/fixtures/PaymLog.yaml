@@ -1,4918 +1,4918 @@
-PaymLog1: PaymLog
+bulkload: PaymLog
   BookDate: 2007-04-26
   UserCode: "ari"
   PaymFile: "DDRETSCH_DEV19_20070228.DAT"
   Brand: "1"
 
-PaymLog2: PaymLog
+bulkload: PaymLog
   BookDate: 2007-04-26
   UserCode: "ari"
   PaymFile: "DDRETSCH_DEV19_20070320.DAT"
   Brand: "1"
 
-PaymLog3: PaymLog
+bulkload: PaymLog
   BookDate: 2007-04-26
   UserCode: "ari"
   PaymFile: "DDRETSCH_DEV19_20070326.DAT"
   Brand: "1"
 
-PaymLog4: PaymLog
+bulkload: PaymLog
   BookDate: 2007-04-26
   UserCode: "ari"
   PaymFile: "DDRETSCH_DEV19_20070327.DAT"
   Brand: "1"
 
-PaymLog5: PaymLog
+bulkload: PaymLog
   BookDate: 2007-04-26
   UserCode: "ari"
   PaymFile: "DDRETSCH_DEV19_20070328.DAT"
   Brand: "1"
 
-PaymLog6: PaymLog
+bulkload: PaymLog
   BookDate: 2007-04-26
   UserCode: "ari"
   PaymFile: "DDRETSCH_DEV19_20070329.DAT"
   Brand: "1"
 
-PaymLog7: PaymLog
+bulkload: PaymLog
   BookDate: 2007-04-26
   UserCode: "ari"
   PaymFile: "DDRETSCH_DEV19_20070330.DAT"
   Brand: "1"
 
-PaymLog8: PaymLog
+bulkload: PaymLog
   BookDate: 2007-04-26
   UserCode: "ari"
   PaymFile: "DDRETSCH_DEV19_20070331.DAT"
   Brand: "1"
 
-PaymLog9: PaymLog
+bulkload: PaymLog
   BookDate: 2007-04-26
   UserCode: "ari"
   PaymFile: "DDRETSCH_DEV19_20070401.DAT"
   Brand: "1"
 
-PaymLog10: PaymLog
+bulkload: PaymLog
   BookDate: 2007-04-26
   UserCode: "ari"
   PaymFile: "DDRETSCH_DEV19_20070402.DAT"
   Brand: "1"
 
-PaymLog11: PaymLog
+bulkload: PaymLog
   BookDate: 2007-04-26
   UserCode: "ari"
   PaymFile: "DDRETSCH_DEV19_20070403.DAT"
   Brand: "1"
 
-PaymLog12: PaymLog
+bulkload: PaymLog
   BookDate: 2007-04-26
   UserCode: "ari"
   PaymFile: "DDRETSCH_DEV19_20070404.DAT"
   Brand: "1"
 
-PaymLog13: PaymLog
+bulkload: PaymLog
   BookDate: 2007-04-26
   UserCode: "ari"
   PaymFile: "DDRETSCH_DEV19_20070405.DAT"
   Brand: "1"
 
-PaymLog14: PaymLog
+bulkload: PaymLog
   BookDate: 2007-04-26
   UserCode: "ari"
   PaymFile: "DDRETSCH_DEV19_20070405.DAT:Rerun47516"
   Brand: "1"
 
-PaymLog15: PaymLog
+bulkload: PaymLog
   BookDate: 2007-04-26
   UserCode: "ari"
   PaymFile: "DDRETSCH_DEV19_20070405.DAT:Rerun47822"
   Brand: "1"
 
-PaymLog16: PaymLog
+bulkload: PaymLog
   BookDate: 2007-04-26
   UserCode: "ari"
   PaymFile: "DDRETSCH_DEV19_20070405.DAT:Rerun49085"
   Brand: "1"
 
-PaymLog17: PaymLog
+bulkload: PaymLog
   BookDate: 2007-04-26
   UserCode: "ari"
   PaymFile: "DDRETSCH_DEV19_20070406.DAT"
   Brand: "1"
 
-PaymLog18: PaymLog
+bulkload: PaymLog
   BookDate: 2007-04-26
   UserCode: "ari"
   PaymFile: "DDRETSCH_DEV19_20070407.DAT"
   Brand: "1"
 
-PaymLog19: PaymLog
+bulkload: PaymLog
   BookDate: 2007-04-26
   UserCode: "ari"
   PaymFile: "DDRETSCH_DEV19_20070408.DAT"
   Brand: "1"
 
-PaymLog20: PaymLog
+bulkload: PaymLog
   BookDate: 2007-04-26
   UserCode: "ari"
   PaymFile: "DDRETSCH_DEV19_20070409.DAT"
   Brand: "1"
 
-PaymLog21: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-03
   UserCode: "ari"
   PaymFile: "DDRETSCH_DEV19_20070228.DAT:Rerun39093"
   Brand: "1"
 
-PaymLog22: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-03
   UserCode: "ari"
   PaymFile: "DDRETSCH_DEV19_20070228.DAT:Rerun39880"
   Brand: "1"
 
-PaymLog23: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-03
   UserCode: "ari"
   PaymFile: "DDRETSCH_DEV19_20070301.DAT"
   Brand: "1"
 
-PaymLog24: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-03
   UserCode: "ari"
   PaymFile: "DDRETSCH_DEV19_20070302.DAT"
   Brand: "1"
 
-PaymLog25: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-03
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070303.DAT"
   Brand: "1"
 
-PaymLog26: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-03
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070305.DAT"
   Brand: "1"
 
-PaymLog27: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-03
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070306.DAT"
   Brand: "1"
 
-PaymLog28: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-03
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070307.DAT"
   Brand: "1"
 
-PaymLog29: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-03
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070308.DAT"
   Brand: "1"
 
-PaymLog30: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-03
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070309.DAT"
   Brand: "1"
 
-PaymLog31: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-03
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070310.DAT"
   Brand: "1"
 
-PaymLog32: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-03
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070312.DAT"
   Brand: "1"
 
-PaymLog33: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-03
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070313.DAT"
   Brand: "1"
 
-PaymLog34: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-03
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070314.DAT"
   Brand: "1"
 
-PaymLog35: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-03
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070315.DAT"
   Brand: "1"
 
-PaymLog36: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-03
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070316.DAT"
   Brand: "1"
 
-PaymLog37: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-03
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070317.DAT"
   Brand: "1"
 
-PaymLog38: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-03
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070319.DAT"
   Brand: "1"
 
-PaymLog39: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-03
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070320.DAT:Rerun41712"
   Brand: "1"
 
-PaymLog40: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-03
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070321.DAT"
   Brand: "1"
 
-PaymLog41: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-03
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070322.DAT"
   Brand: "1"
 
-PaymLog42: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-03
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070323.DAT"
   Brand: "1"
 
-PaymLog43: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-03
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070324.DAT"
   Brand: "1"
 
-PaymLog44: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-03
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070326.DAT:Rerun41723"
   Brand: "1"
 
-PaymLog45: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "ari"
   PaymFile: "DDRETSCH_DEV19_20070228.DAT:Rerun32428"
   Brand: "1"
 
-PaymLog46: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "ari"
   PaymFile: "DDRETSCH_DEV19_20070301.DAT:Rerun32583"
   Brand: "1"
 
-PaymLog47: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070302.DAT:Rerun32910"
   Brand: "1"
 
-PaymLog48: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070303.DAT:Rerun32940"
   Brand: "1"
 
-PaymLog49: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070305.DAT:Rerun32970"
   Brand: "1"
 
-PaymLog50: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070306.DAT:Rerun33000"
   Brand: "1"
 
-PaymLog51: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070307.DAT:Rerun33030"
   Brand: "1"
 
-PaymLog52: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070308.DAT:Rerun33060"
   Brand: "1"
 
-PaymLog53: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070309.DAT:Rerun33090"
   Brand: "1"
 
-PaymLog54: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070310.DAT:Rerun33120"
   Brand: "1"
 
-PaymLog55: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070312.DAT:Rerun33121"
   Brand: "1"
 
-PaymLog56: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070313.DAT:Rerun33121"
   Brand: "1"
 
-PaymLog57: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070314.DAT:Rerun33122"
   Brand: "1"
 
-PaymLog58: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070315.DAT:Rerun33122"
   Brand: "1"
 
-PaymLog59: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070316.DAT:Rerun33123"
   Brand: "1"
 
-PaymLog60: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070317.DAT:Rerun33126"
   Brand: "1"
 
-PaymLog61: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070319.DAT:Rerun33127"
   Brand: "1"
 
-PaymLog62: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070320.DAT:Rerun33127"
   Brand: "1"
 
-PaymLog63: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070321.DAT:Rerun33128"
   Brand: "1"
 
-PaymLog64: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070322.DAT:Rerun33129"
   Brand: "1"
 
-PaymLog65: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070323.DAT:Rerun33129"
   Brand: "1"
 
-PaymLog66: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070324.DAT:Rerun33129"
   Brand: "1"
 
-PaymLog67: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070326.DAT:Rerun33129"
   Brand: "1"
 
-PaymLog68: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070327.DAT:Rerun33131"
   Brand: "1"
 
-PaymLog69: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070328.DAT:Rerun33131"
   Brand: "1"
 
-PaymLog70: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070329.DAT:Rerun33132"
   Brand: "1"
 
-PaymLog71: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070330.DAT:Rerun33132"
   Brand: "1"
 
-PaymLog72: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070331.DAT:Rerun33132"
   Brand: "1"
 
-PaymLog73: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070402.DAT:Rerun33135"
   Brand: "1"
 
-PaymLog74: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070403.DAT:Rerun35527"
   Brand: "1"
 
-PaymLog75: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070404.DAT:Rerun35557"
   Brand: "1"
 
-PaymLog76: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070405.DAT:Rerun35580"
   Brand: "1"
 
-PaymLog77: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070406.DAT:Rerun35610"
   Brand: "1"
 
-PaymLog78: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070407.DAT:Rerun35640"
   Brand: "1"
 
-PaymLog79: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070408.DAT:Rerun35670"
   Brand: "1"
 
-PaymLog80: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070409.DAT:Rerun35700"
   Brand: "1"
 
-PaymLog81: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070410.DAT"
   Brand: "1"
 
-PaymLog82: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070411.DAT"
   Brand: "1"
 
-PaymLog83: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070412.DAT"
   Brand: "1"
 
-PaymLog84: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070413.DAT"
   Brand: "1"
 
-PaymLog85: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070416.DAT"
   Brand: "1"
 
-PaymLog86: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070417.DAT"
   Brand: "1"
 
-PaymLog87: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070418.DAT"
   Brand: "1"
 
-PaymLog88: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070419.DAT"
   Brand: "1"
 
-PaymLog89: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070420.DAT"
   Brand: "1"
 
-PaymLog90: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070423.DAT"
   Brand: "1"
 
-PaymLog91: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070424.DAT"
   Brand: "1"
 
-PaymLog92: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070425.DAT"
   Brand: "1"
 
-PaymLog93: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070426.DAT"
   Brand: "1"
 
-PaymLog94: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070427.DAT"
   Brand: "1"
 
-PaymLog95: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070430.DAT"
   Brand: "1"
 
-PaymLog96: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070502.DAT"
   Brand: "1"
 
-PaymLog97: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-04
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070503.DAT"
   Brand: "1"
 
-PaymLog98: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-11
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070507.DAT"
   Brand: "1"
 
-PaymLog99: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-11
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070508.DAT"
   Brand: "1"
 
-PaymLog100: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-11
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070509.DAT"
   Brand: "1"
 
-PaymLog101: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-11
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070510.DAT"
   Brand: "1"
 
-PaymLog102: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-11
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070511.DAT"
   Brand: "1"
 
-PaymLog103: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-14
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070514.DAT"
   Brand: "1"
 
-PaymLog104: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-15
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070515.DAT"
   Brand: "1"
 
-PaymLog105: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-16
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070516.DAT"
   Brand: "1"
 
-PaymLog106: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-17
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070517.DAT"
   Brand: "1"
 
-PaymLog107: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-18
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070518.DAT"
   Brand: "1"
 
-PaymLog108: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-21
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070521.DAT"
   Brand: "1"
 
-PaymLog109: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-22
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070522.DAT"
   Brand: "1"
 
-PaymLog110: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-23
   UserCode: "cron"
   PaymFile: "DDRETSCH_DEV19_20070523.DAT"
   Brand: "1"
 
-PaymLog111: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-24
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070524.DAT"
   Brand: "1"
 
-PaymLog112: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-25
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070525.DAT"
   Brand: "1"
 
-PaymLog113: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-28
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070528.DAT"
   Brand: "1"
 
-PaymLog114: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-29
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070529.DAT"
   Brand: "1"
 
-PaymLog115: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-30
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070530.DAT"
   Brand: "1"
 
-PaymLog116: PaymLog
+bulkload: PaymLog
   BookDate: 2007-05-31
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070531.DAT"
   Brand: "1"
 
-PaymLog117: PaymLog
+bulkload: PaymLog
   BookDate: 2007-06-01
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070601.DAT"
   Brand: "1"
 
-PaymLog118: PaymLog
+bulkload: PaymLog
   BookDate: 2007-06-04
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070604.DAT"
   Brand: "1"
 
-PaymLog119: PaymLog
+bulkload: PaymLog
   BookDate: 2007-06-05
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070605.DAT"
   Brand: "1"
 
-PaymLog120: PaymLog
+bulkload: PaymLog
   BookDate: 2007-06-06
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070606.DAT"
   Brand: "1"
 
-PaymLog121: PaymLog
+bulkload: PaymLog
   BookDate: 2007-06-07
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070607.DAT"
   Brand: "1"
 
-PaymLog122: PaymLog
+bulkload: PaymLog
   BookDate: 2007-06-08
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070608.DAT"
   Brand: "1"
 
-PaymLog123: PaymLog
+bulkload: PaymLog
   BookDate: 2007-06-11
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070611.DAT"
   Brand: "1"
 
-PaymLog124: PaymLog
+bulkload: PaymLog
   BookDate: 2007-06-12
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070612.DAT"
   Brand: "1"
 
-PaymLog125: PaymLog
+bulkload: PaymLog
   BookDate: 2007-06-13
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070613.DAT"
   Brand: "1"
 
-PaymLog126: PaymLog
+bulkload: PaymLog
   BookDate: 2007-06-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070614.DAT"
   Brand: "1"
 
-PaymLog127: PaymLog
+bulkload: PaymLog
   BookDate: 2007-06-15
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070615.DAT"
   Brand: "1"
 
-PaymLog128: PaymLog
+bulkload: PaymLog
   BookDate: 2007-06-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070618.DAT"
   Brand: "1"
 
-PaymLog129: PaymLog
+bulkload: PaymLog
   BookDate: 2007-06-19
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070619.DAT"
   Brand: "1"
 
-PaymLog130: PaymLog
+bulkload: PaymLog
   BookDate: 2007-06-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070620.DAT"
   Brand: "1"
 
-PaymLog131: PaymLog
+bulkload: PaymLog
   BookDate: 2007-06-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070621.DAT"
   Brand: "1"
 
-PaymLog132: PaymLog
+bulkload: PaymLog
   BookDate: 2007-06-22
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070622.DAT"
   Brand: "1"
 
-PaymLog133: PaymLog
+bulkload: PaymLog
   BookDate: 2007-06-25
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070625.DAT"
   Brand: "1"
 
-PaymLog134: PaymLog
+bulkload: PaymLog
   BookDate: 2007-06-26
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070626.DAT"
   Brand: "1"
 
-PaymLog135: PaymLog
+bulkload: PaymLog
   BookDate: 2007-06-27
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070627.DAT"
   Brand: "1"
 
-PaymLog136: PaymLog
+bulkload: PaymLog
   BookDate: 2007-06-28
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070628.DAT"
   Brand: "1"
 
-PaymLog137: PaymLog
+bulkload: PaymLog
   BookDate: 2007-06-29
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070629.DAT"
   Brand: "1"
 
-PaymLog138: PaymLog
+bulkload: PaymLog
   BookDate: 2007-07-02
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070702.DAT"
   Brand: "1"
 
-PaymLog139: PaymLog
+bulkload: PaymLog
   BookDate: 2007-07-03
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070703.DAT"
   Brand: "1"
 
-PaymLog140: PaymLog
+bulkload: PaymLog
   BookDate: 2007-07-04
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070704.DAT"
   Brand: "1"
 
-PaymLog141: PaymLog
+bulkload: PaymLog
   BookDate: 2007-07-05
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070705.DAT"
   Brand: "1"
 
-PaymLog142: PaymLog
+bulkload: PaymLog
   BookDate: 2007-07-06
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070706.DAT"
   Brand: "1"
 
-PaymLog143: PaymLog
+bulkload: PaymLog
   BookDate: 2007-07-09
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070709.DAT"
   Brand: "1"
 
-PaymLog144: PaymLog
+bulkload: PaymLog
   BookDate: 2007-07-10
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070710.DAT"
   Brand: "1"
 
-PaymLog145: PaymLog
+bulkload: PaymLog
   BookDate: 2007-07-11
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070711.DAT"
   Brand: "1"
 
-PaymLog146: PaymLog
+bulkload: PaymLog
   BookDate: 2007-07-12
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070712.DAT"
   Brand: "1"
 
-PaymLog147: PaymLog
+bulkload: PaymLog
   BookDate: 2007-07-13
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070713.DAT"
   Brand: "1"
 
-PaymLog148: PaymLog
+bulkload: PaymLog
   BookDate: 2007-07-16
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070716.DAT"
   Brand: "1"
 
-PaymLog149: PaymLog
+bulkload: PaymLog
   BookDate: 2007-07-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070717.DAT"
   Brand: "1"
 
-PaymLog150: PaymLog
+bulkload: PaymLog
   BookDate: 2007-07-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070718.DAT"
   Brand: "1"
 
-PaymLog151: PaymLog
+bulkload: PaymLog
   BookDate: 2007-07-19
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070719.DAT"
   Brand: "1"
 
-PaymLog152: PaymLog
+bulkload: PaymLog
   BookDate: 2007-07-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070720.DAT"
   Brand: "1"
 
-PaymLog153: PaymLog
+bulkload: PaymLog
   BookDate: 2007-07-23
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070723.DAT"
   Brand: "1"
 
-PaymLog154: PaymLog
+bulkload: PaymLog
   BookDate: 2007-07-24
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070724.DAT"
   Brand: "1"
 
-PaymLog155: PaymLog
+bulkload: PaymLog
   BookDate: 2007-07-25
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070725.DAT"
   Brand: "1"
 
-PaymLog156: PaymLog
+bulkload: PaymLog
   BookDate: 2007-07-26
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070726.DAT"
   Brand: "1"
 
-PaymLog157: PaymLog
+bulkload: PaymLog
   BookDate: 2007-07-27
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070727.DAT"
   Brand: "1"
 
-PaymLog158: PaymLog
+bulkload: PaymLog
   BookDate: 2007-07-30
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070730.DAT"
   Brand: "1"
 
-PaymLog159: PaymLog
+bulkload: PaymLog
   BookDate: 2007-08-01
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070801.DAT"
   Brand: "1"
 
-PaymLog160: PaymLog
+bulkload: PaymLog
   BookDate: 2007-08-02
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070802.DAT"
   Brand: "1"
 
-PaymLog161: PaymLog
+bulkload: PaymLog
   BookDate: 2007-08-03
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070803.DAT"
   Brand: "1"
 
-PaymLog162: PaymLog
+bulkload: PaymLog
   BookDate: 2007-08-06
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070806.DAT"
   Brand: "1"
 
-PaymLog163: PaymLog
+bulkload: PaymLog
   BookDate: 2007-08-07
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070807.DAT"
   Brand: "1"
 
-PaymLog164: PaymLog
+bulkload: PaymLog
   BookDate: 2007-08-08
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070808.DAT"
   Brand: "1"
 
-PaymLog165: PaymLog
+bulkload: PaymLog
   BookDate: 2007-08-09
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070809.DAT"
   Brand: "1"
 
-PaymLog166: PaymLog
+bulkload: PaymLog
   BookDate: 2007-08-10
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070810.DAT"
   Brand: "1"
 
-PaymLog167: PaymLog
+bulkload: PaymLog
   BookDate: 2007-08-13
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070813.DAT"
   Brand: "1"
 
-PaymLog168: PaymLog
+bulkload: PaymLog
   BookDate: 2007-08-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070814.DAT"
   Brand: "1"
 
-PaymLog169: PaymLog
+bulkload: PaymLog
   BookDate: 2007-08-16
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070816.DAT"
   Brand: "1"
 
-PaymLog170: PaymLog
+bulkload: PaymLog
   BookDate: 2007-08-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070817.DAT"
   Brand: "1"
 
-PaymLog171: PaymLog
+bulkload: PaymLog
   BookDate: 2007-08-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070820.DAT"
   Brand: "1"
 
-PaymLog172: PaymLog
+bulkload: PaymLog
   BookDate: 2007-08-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070821.DAT"
   Brand: "1"
 
-PaymLog173: PaymLog
+bulkload: PaymLog
   BookDate: 2007-08-22
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070822.DAT"
   Brand: "1"
 
-PaymLog174: PaymLog
+bulkload: PaymLog
   BookDate: 2007-08-23
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070823.DAT"
   Brand: "1"
 
-PaymLog175: PaymLog
+bulkload: PaymLog
   BookDate: 2007-08-24
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070824.DAT"
   Brand: "1"
 
-PaymLog176: PaymLog
+bulkload: PaymLog
   BookDate: 2007-08-27
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070827.DAT"
   Brand: "1"
 
-PaymLog177: PaymLog
+bulkload: PaymLog
   BookDate: 2007-08-28
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070828.DAT"
   Brand: "1"
 
-PaymLog178: PaymLog
+bulkload: PaymLog
   BookDate: 2007-08-29
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070829.DAT"
   Brand: "1"
 
-PaymLog179: PaymLog
+bulkload: PaymLog
   BookDate: 2007-08-30
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070830.DAT"
   Brand: "1"
 
-PaymLog180: PaymLog
+bulkload: PaymLog
   BookDate: 2007-08-31
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070831.DAT"
   Brand: "1"
 
-PaymLog181: PaymLog
+bulkload: PaymLog
   BookDate: 2007-09-03
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070903.DAT"
   Brand: "1"
 
-PaymLog182: PaymLog
+bulkload: PaymLog
   BookDate: 2007-09-04
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070904.DAT"
   Brand: "1"
 
-PaymLog183: PaymLog
+bulkload: PaymLog
   BookDate: 2007-09-05
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070905.DAT"
   Brand: "1"
 
-PaymLog184: PaymLog
+bulkload: PaymLog
   BookDate: 2007-09-06
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070906.DAT"
   Brand: "1"
 
-PaymLog185: PaymLog
+bulkload: PaymLog
   BookDate: 2007-09-07
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070907.DAT"
   Brand: "1"
 
-PaymLog186: PaymLog
+bulkload: PaymLog
   BookDate: 2007-09-10
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070910.DAT"
   Brand: "1"
 
-PaymLog187: PaymLog
+bulkload: PaymLog
   BookDate: 2007-09-11
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070911.DAT"
   Brand: "1"
 
-PaymLog188: PaymLog
+bulkload: PaymLog
   BookDate: 2007-09-12
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070912.DAT"
   Brand: "1"
 
-PaymLog189: PaymLog
+bulkload: PaymLog
   BookDate: 2007-09-13
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070913.DAT"
   Brand: "1"
 
-PaymLog190: PaymLog
+bulkload: PaymLog
   BookDate: 2007-09-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070914.DAT"
   Brand: "1"
 
-PaymLog191: PaymLog
+bulkload: PaymLog
   BookDate: 2007-09-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070917.DAT"
   Brand: "1"
 
-PaymLog192: PaymLog
+bulkload: PaymLog
   BookDate: 2007-09-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070918.DAT"
   Brand: "1"
 
-PaymLog193: PaymLog
+bulkload: PaymLog
   BookDate: 2007-09-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070920.DAT"
   Brand: "1"
 
-PaymLog194: PaymLog
+bulkload: PaymLog
   BookDate: 2007-09-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070921.DAT"
   Brand: "1"
 
-PaymLog195: PaymLog
+bulkload: PaymLog
   BookDate: 2007-09-24
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070924.DAT"
   Brand: "1"
 
-PaymLog196: PaymLog
+bulkload: PaymLog
   BookDate: 2007-09-25
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070925.DAT"
   Brand: "1"
 
-PaymLog197: PaymLog
+bulkload: PaymLog
   BookDate: 2007-09-26
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070926.DAT"
   Brand: "1"
 
-PaymLog198: PaymLog
+bulkload: PaymLog
   BookDate: 2007-09-27
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070927.DAT"
   Brand: "1"
 
-PaymLog199: PaymLog
+bulkload: PaymLog
   BookDate: 2007-09-28
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20070928.DAT"
   Brand: "1"
 
-PaymLog200: PaymLog
+bulkload: PaymLog
   BookDate: 2007-10-01
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071001.DAT"
   Brand: "1"
 
-PaymLog201: PaymLog
+bulkload: PaymLog
   BookDate: 2007-10-02
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071002.DAT"
   Brand: "1"
 
-PaymLog202: PaymLog
+bulkload: PaymLog
   BookDate: 2007-10-03
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071003.DAT"
   Brand: "1"
 
-PaymLog203: PaymLog
+bulkload: PaymLog
   BookDate: 2007-10-04
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071004.DAT"
   Brand: "1"
 
-PaymLog204: PaymLog
+bulkload: PaymLog
   BookDate: 2007-10-05
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071005.DAT"
   Brand: "1"
 
-PaymLog205: PaymLog
+bulkload: PaymLog
   BookDate: 2007-10-06
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071006.DAT"
   Brand: "1"
 
-PaymLog206: PaymLog
+bulkload: PaymLog
   BookDate: 2007-10-08
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071008.DAT"
   Brand: "1"
 
-PaymLog207: PaymLog
+bulkload: PaymLog
   BookDate: 2007-10-09
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071009.DAT"
   Brand: "1"
 
-PaymLog208: PaymLog
+bulkload: PaymLog
   BookDate: 2007-10-10
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071010.DAT"
   Brand: "1"
 
-PaymLog209: PaymLog
+bulkload: PaymLog
   BookDate: 2007-10-11
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071011.DAT"
   Brand: "1"
 
-PaymLog210: PaymLog
+bulkload: PaymLog
   BookDate: 2007-10-13
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071013.DAT"
   Brand: "1"
 
-PaymLog211: PaymLog
+bulkload: PaymLog
   BookDate: 2007-10-15
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071015.DAT"
   Brand: "1"
 
-PaymLog212: PaymLog
+bulkload: PaymLog
   BookDate: 2007-10-16
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071016.DAT"
   Brand: "1"
 
-PaymLog213: PaymLog
+bulkload: PaymLog
   BookDate: 2007-10-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071017.DAT"
   Brand: "1"
 
-PaymLog214: PaymLog
+bulkload: PaymLog
   BookDate: 2007-10-19
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071019.DAT"
   Brand: "1"
 
-PaymLog215: PaymLog
+bulkload: PaymLog
   BookDate: 2007-10-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071020.DAT"
   Brand: "1"
 
-PaymLog216: PaymLog
+bulkload: PaymLog
   BookDate: 2007-10-22
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071022.DAT"
   Brand: "1"
 
-PaymLog217: PaymLog
+bulkload: PaymLog
   BookDate: 2007-10-23
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071023.DAT"
   Brand: "1"
 
-PaymLog218: PaymLog
+bulkload: PaymLog
   BookDate: 2007-10-24
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071024.DAT"
   Brand: "1"
 
-PaymLog219: PaymLog
+bulkload: PaymLog
   BookDate: 2007-10-25
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071025.DAT"
   Brand: "1"
 
-PaymLog220: PaymLog
+bulkload: PaymLog
   BookDate: 2007-10-26
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071026.DAT"
   Brand: "1"
 
-PaymLog221: PaymLog
+bulkload: PaymLog
   BookDate: 2007-10-27
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071027.DAT"
   Brand: "1"
 
-PaymLog222: PaymLog
+bulkload: PaymLog
   BookDate: 2007-10-29
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071029.DAT"
   Brand: "1"
 
-PaymLog223: PaymLog
+bulkload: PaymLog
   BookDate: 2007-10-30
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071030.DAT"
   Brand: "1"
 
-PaymLog224: PaymLog
+bulkload: PaymLog
   BookDate: 2007-11-02
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071102.DAT"
   Brand: "1"
 
-PaymLog225: PaymLog
+bulkload: PaymLog
   BookDate: 2007-11-03
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071103.DAT"
   Brand: "1"
 
-PaymLog226: PaymLog
+bulkload: PaymLog
   BookDate: 2007-11-05
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071105.DAT"
   Brand: "1"
 
-PaymLog227: PaymLog
+bulkload: PaymLog
   BookDate: 2007-11-06
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071106.DAT"
   Brand: "1"
 
-PaymLog228: PaymLog
+bulkload: PaymLog
   BookDate: 2007-11-07
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071107.DAT"
   Brand: "1"
 
-PaymLog229: PaymLog
+bulkload: PaymLog
   BookDate: 2007-11-08
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071108.DAT"
   Brand: "1"
 
-PaymLog230: PaymLog
+bulkload: PaymLog
   BookDate: 2007-11-09
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071109.DAT"
   Brand: "1"
 
-PaymLog231: PaymLog
+bulkload: PaymLog
   BookDate: 2007-11-10
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071110.DAT"
   Brand: "1"
 
-PaymLog232: PaymLog
+bulkload: PaymLog
   BookDate: 2007-11-12
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071112.DAT"
   Brand: "1"
 
-PaymLog233: PaymLog
+bulkload: PaymLog
   BookDate: 2007-11-13
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071113.DAT"
   Brand: "1"
 
-PaymLog234: PaymLog
+bulkload: PaymLog
   BookDate: 2007-11-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071114.DAT"
   Brand: "1"
 
-PaymLog235: PaymLog
+bulkload: PaymLog
   BookDate: 2007-11-15
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071115.DAT"
   Brand: "1"
 
-PaymLog236: PaymLog
+bulkload: PaymLog
   BookDate: 2007-11-16
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071116.DAT"
   Brand: "1"
 
-PaymLog237: PaymLog
+bulkload: PaymLog
   BookDate: 2007-11-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071117.DAT"
   Brand: "1"
 
-PaymLog238: PaymLog
+bulkload: PaymLog
   BookDate: 2007-11-19
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071119.DAT"
   Brand: "1"
 
-PaymLog239: PaymLog
+bulkload: PaymLog
   BookDate: 2007-11-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071120.DAT"
   Brand: "1"
 
-PaymLog240: PaymLog
+bulkload: PaymLog
   BookDate: 2007-11-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071121.DAT"
   Brand: "1"
 
-PaymLog241: PaymLog
+bulkload: PaymLog
   BookDate: 2007-11-22
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071122.DAT"
   Brand: "1"
 
-PaymLog242: PaymLog
+bulkload: PaymLog
   BookDate: 2007-11-23
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071123.DAT"
   Brand: "1"
 
-PaymLog243: PaymLog
+bulkload: PaymLog
   BookDate: 2007-11-24
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071124.DAT"
   Brand: "1"
 
-PaymLog244: PaymLog
+bulkload: PaymLog
   BookDate: 2007-11-26
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071126.DAT"
   Brand: "1"
 
-PaymLog245: PaymLog
+bulkload: PaymLog
   BookDate: 2007-11-27
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071127.DAT"
   Brand: "1"
 
-PaymLog246: PaymLog
+bulkload: PaymLog
   BookDate: 2007-11-28
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071128.DAT"
   Brand: "1"
 
-PaymLog247: PaymLog
+bulkload: PaymLog
   BookDate: 2007-11-29
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071129.DAT"
   Brand: "1"
 
-PaymLog248: PaymLog
+bulkload: PaymLog
   BookDate: 2007-11-30
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071130.DAT"
   Brand: "1"
 
-PaymLog249: PaymLog
+bulkload: PaymLog
   BookDate: 2007-12-01
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071201.DAT"
   Brand: "1"
 
-PaymLog250: PaymLog
+bulkload: PaymLog
   BookDate: 2007-12-03
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071203.DAT"
   Brand: "1"
 
-PaymLog251: PaymLog
+bulkload: PaymLog
   BookDate: 2007-12-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2007121718213506.DAT"
   Brand: "1"
 
-PaymLog252: PaymLog
+bulkload: PaymLog
   BookDate: 2007-12-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2007122118504258.DAT"
   Brand: "1"
 
-PaymLog253: PaymLog
+bulkload: PaymLog
   BookDate: 2007-12-22
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2007122215375961.DAT"
   Brand: "1"
 
-PaymLog254: PaymLog
+bulkload: PaymLog
   BookDate: 2007-12-24
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2007122418194895.DAT"
   Brand: "1"
 
-PaymLog255: PaymLog
+bulkload: PaymLog
   BookDate: 2007-12-26
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2007122618201918.DAT"
   Brand: "1"
 
-PaymLog256: PaymLog
+bulkload: PaymLog
   BookDate: 2007-12-27
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2007122718225841.DAT"
   Brand: "1"
 
-PaymLog257: PaymLog
+bulkload: PaymLog
   BookDate: 2007-12-28
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2007122818202048.DAT"
   Brand: "1"
 
-PaymLog258: PaymLog
+bulkload: PaymLog
   BookDate: 2007-12-29
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2007122915402227.DAT"
   Brand: "1"
 
-PaymLog259: PaymLog
+bulkload: PaymLog
   BookDate: 2007-12-31
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2007123118193829.DAT"
   Brand: "1"
 
-PaymLog260: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-02
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008010218194034.DAT"
   Brand: "1"
 
-PaymLog261: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-03
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008010318255315.DAT"
   Brand: "1"
 
-PaymLog262: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-04
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008010418244089.DAT"
   Brand: "1"
 
-PaymLog263: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-05
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008010516244865.DAT"
   Brand: "1"
 
-PaymLog264: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-07
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008010718201774.DAT"
   Brand: "1"
 
-PaymLog265: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-08
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008010818214598.DAT"
   Brand: "1"
 
-PaymLog266: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-09
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008010918235679.DAT"
   Brand: "1"
 
-PaymLog267: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-10
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011018314784.DAT"
   Brand: "1"
 
-PaymLog268: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-11
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011118204497.DAT"
   Brand: "1"
 
-PaymLog269: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011215432538.DAT"
   Brand: "1"
 
-PaymLog270: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011418195957.DAT"
   Brand: "1"
 
-PaymLog271: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-15
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011215432538.DAT:Rerun82802"
   Brand: "1"
 
-PaymLog272: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-15
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011418195957.DAT:Rerun82802"
   Brand: "1"
 
-PaymLog273: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-15
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011518192151.DAT"
   Brand: "1"
 
-PaymLog274: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-16
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011215432538.DAT:Rerun82802"
   Brand: "1"
 
-PaymLog275: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-16
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011418195957.DAT:Rerun82803"
   Brand: "1"
 
-PaymLog276: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-16
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011518192151.DAT:Rerun82803"
   Brand: "1"
 
-PaymLog277: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-16
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011618194153.DAT"
   Brand: "1"
 
-PaymLog278: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011215432538.DAT:Rerun82802"
   Brand: "1"
 
-PaymLog279: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011418195957.DAT:Rerun82802"
   Brand: "1"
 
-PaymLog280: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011518192151.DAT:Rerun82802"
   Brand: "1"
 
-PaymLog281: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011618194153.DAT:Rerun82803"
   Brand: "1"
 
-PaymLog282: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011718202862.DAT"
   Brand: "1"
 
-PaymLog283: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011215432538.DAT:Rerun82802"
   Brand: "1"
 
-PaymLog284: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011418195957.DAT:Rerun82802"
   Brand: "1"
 
-PaymLog285: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011518192151.DAT:Rerun82802"
   Brand: "1"
 
-PaymLog286: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011618194153.DAT:Rerun82802"
   Brand: "1"
 
-PaymLog287: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011718202862.DAT:Rerun82803"
   Brand: "1"
 
-PaymLog288: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011818195022.DAT"
   Brand: "1"
 
-PaymLog289: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-19
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011215432538.DAT:Rerun82801"
   Brand: "1"
 
-PaymLog290: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-19
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011418195957.DAT:Rerun82801"
   Brand: "1"
 
-PaymLog291: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-19
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011518192151.DAT:Rerun82801"
   Brand: "1"
 
-PaymLog292: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-19
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011618194153.DAT:Rerun82802"
   Brand: "1"
 
-PaymLog293: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-19
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011718202862.DAT:Rerun82802"
   Brand: "1"
 
-PaymLog294: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-19
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011818195022.DAT:Rerun82802"
   Brand: "1"
 
-PaymLog295: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-19
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011915402093.DAT"
   Brand: "1"
 
-PaymLog296: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011215432538.DAT:Rerun82802"
   Brand: "1"
 
-PaymLog297: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011418195957.DAT:Rerun82803"
   Brand: "1"
 
-PaymLog298: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011518192151.DAT:Rerun82803"
   Brand: "1"
 
-PaymLog299: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011618194153.DAT:Rerun82804"
   Brand: "1"
 
-PaymLog300: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011718202862.DAT:Rerun82804"
   Brand: "1"
 
-PaymLog301: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011818195022.DAT:Rerun82804"
   Brand: "1"
 
-PaymLog302: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011915402093.DAT:Rerun82808"
   Brand: "1"
 
-PaymLog303: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011215432538.DAT:Rerun82802"
   Brand: "1"
 
-PaymLog304: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011418195957.DAT:Rerun82803"
   Brand: "1"
 
-PaymLog305: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011518192151.DAT:Rerun82803"
   Brand: "1"
 
-PaymLog306: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011618194153.DAT:Rerun82804"
   Brand: "1"
 
-PaymLog307: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011718202862.DAT:Rerun82804"
   Brand: "1"
 
-PaymLog308: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011818195022.DAT:Rerun82805"
   Brand: "1"
 
-PaymLog309: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008011915402093.DAT:Rerun82809"
   Brand: "1"
 
-PaymLog310: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008012118254604.DAT"
   Brand: "1"
 
-PaymLog311: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-22
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008012218205685.DAT"
   Brand: "1"
 
-PaymLog312: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-23
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008012318213286.DAT"
   Brand: "1"
 
-PaymLog313: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-24
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008012418201055.DAT"
   Brand: "1"
 
-PaymLog314: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-25
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008012518193398.DAT"
   Brand: "1"
 
-PaymLog315: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-26
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008012615232570.DAT"
   Brand: "1"
 
-PaymLog316: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-28
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008012818205855.DAT"
   Brand: "1"
 
-PaymLog317: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-29
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008012918211348.DAT"
   Brand: "1"
 
-PaymLog318: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-30
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008013018204368.DAT"
   Brand: "1"
 
-PaymLog319: PaymLog
+bulkload: PaymLog
   BookDate: 2008-01-31
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008013118220434.DAT"
   Brand: "1"
 
-PaymLog320: PaymLog
+bulkload: PaymLog
   BookDate: 2008-02-01
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008020118301966.DAT"
   Brand: "1"
 
-PaymLog321: PaymLog
+bulkload: PaymLog
   BookDate: 2008-02-02
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008020215560150.DAT"
   Brand: "1"
 
-PaymLog322: PaymLog
+bulkload: PaymLog
   BookDate: 2008-02-04
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008020418225766.DAT"
   Brand: "1"
 
-PaymLog323: PaymLog
+bulkload: PaymLog
   BookDate: 2008-02-05
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008020518263725.DAT"
   Brand: "1"
 
-PaymLog324: PaymLog
+bulkload: PaymLog
   BookDate: 2008-02-06
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008020618232332.DAT"
   Brand: "1"
 
-PaymLog325: PaymLog
+bulkload: PaymLog
   BookDate: 2008-02-07
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008020718230299.DAT"
   Brand: "1"
 
-PaymLog326: PaymLog
+bulkload: PaymLog
   BookDate: 2008-02-08
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008020818241596.DAT"
   Brand: "1"
 
-PaymLog327: PaymLog
+bulkload: PaymLog
   BookDate: 2008-02-09
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008020916124484.DAT"
   Brand: "1"
 
-PaymLog328: PaymLog
+bulkload: PaymLog
   BookDate: 2008-02-11
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008021118340166.DAT"
   Brand: "1"
 
-PaymLog329: PaymLog
+bulkload: PaymLog
   BookDate: 2008-02-12
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008021218191383.DAT"
   Brand: "1"
 
-PaymLog330: PaymLog
+bulkload: PaymLog
   BookDate: 2008-02-13
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008021318212014.DAT"
   Brand: "1"
 
-PaymLog331: PaymLog
+bulkload: PaymLog
   BookDate: 2008-02-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008021418211584.DAT"
   Brand: "1"
 
-PaymLog332: PaymLog
+bulkload: PaymLog
   BookDate: 2008-02-15
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008021518185287.DAT"
   Brand: "1"
 
-PaymLog333: PaymLog
+bulkload: PaymLog
   BookDate: 2008-02-16
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008021615405540.DAT"
   Brand: "1"
 
-PaymLog334: PaymLog
+bulkload: PaymLog
   BookDate: 2008-02-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008021818224383.DAT"
   Brand: "1"
 
-PaymLog335: PaymLog
+bulkload: PaymLog
   BookDate: 2008-02-19
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008021918203634.DAT"
   Brand: "1"
 
-PaymLog336: PaymLog
+bulkload: PaymLog
   BookDate: 2008-02-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008022018220410.DAT"
   Brand: "1"
 
-PaymLog337: PaymLog
+bulkload: PaymLog
   BookDate: 2008-02-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008022118193567.DAT"
   Brand: "1"
 
-PaymLog338: PaymLog
+bulkload: PaymLog
   BookDate: 2008-02-22
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008022218192103.DAT"
   Brand: "1"
 
-PaymLog339: PaymLog
+bulkload: PaymLog
   BookDate: 2008-02-23
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008022315183639.DAT"
   Brand: "1"
 
-PaymLog340: PaymLog
+bulkload: PaymLog
   BookDate: 2008-02-25
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008022518220484.DAT"
   Brand: "1"
 
-PaymLog341: PaymLog
+bulkload: PaymLog
   BookDate: 2008-02-26
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008022618190321.DAT"
   Brand: "1"
 
-PaymLog342: PaymLog
+bulkload: PaymLog
   BookDate: 2008-02-27
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008022718222237.DAT"
   Brand: "1"
 
-PaymLog343: PaymLog
+bulkload: PaymLog
   BookDate: 2008-02-28
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008022818201626.DAT"
   Brand: "1"
 
-PaymLog344: PaymLog
+bulkload: PaymLog
   BookDate: 2008-02-29
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008022918183400.DAT"
   Brand: "1"
 
-PaymLog345: PaymLog
+bulkload: PaymLog
   BookDate: 2008-03-01
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008030116080318.DAT"
   Brand: "1"
 
-PaymLog346: PaymLog
+bulkload: PaymLog
   BookDate: 2008-03-03
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008030318294569.DAT"
   Brand: "1"
 
-PaymLog347: PaymLog
+bulkload: PaymLog
   BookDate: 2008-03-04
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008030418243375.DAT"
   Brand: "1"
 
-PaymLog348: PaymLog
+bulkload: PaymLog
   BookDate: 2008-03-05
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008030518245548.DAT"
   Brand: "1"
 
-PaymLog349: PaymLog
+bulkload: PaymLog
   BookDate: 2008-03-06
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008030618240145.DAT"
   Brand: "1"
 
-PaymLog350: PaymLog
+bulkload: PaymLog
   BookDate: 2008-03-07
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008030718215168.DAT"
   Brand: "1"
 
-PaymLog351: PaymLog
+bulkload: PaymLog
   BookDate: 2008-03-08
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008030815514888.DAT"
   Brand: "1"
 
-PaymLog352: PaymLog
+bulkload: PaymLog
   BookDate: 2008-03-10
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008031018230942.DAT"
   Brand: "1"
 
-PaymLog353: PaymLog
+bulkload: PaymLog
   BookDate: 2008-03-11
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008031118225956.DAT"
   Brand: "1"
 
-PaymLog354: PaymLog
+bulkload: PaymLog
   BookDate: 2008-03-12
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008031218231794.DAT"
   Brand: "1"
 
-PaymLog355: PaymLog
+bulkload: PaymLog
   BookDate: 2008-03-13
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008031318212695.DAT"
   Brand: "1"
 
-PaymLog356: PaymLog
+bulkload: PaymLog
   BookDate: 2008-03-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008031418220212.DAT"
   Brand: "1"
 
-PaymLog357: PaymLog
+bulkload: PaymLog
   BookDate: 2008-03-15
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008031515563995.DAT"
   Brand: "1"
 
-PaymLog358: PaymLog
+bulkload: PaymLog
   BookDate: 2008-03-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008031718240064.DAT"
   Brand: "1"
 
-PaymLog359: PaymLog
+bulkload: PaymLog
   BookDate: 2008-03-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008031818205881.DAT"
   Brand: "1"
 
-PaymLog360: PaymLog
+bulkload: PaymLog
   BookDate: 2008-03-19
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008031918193315.DAT"
   Brand: "1"
 
-PaymLog361: PaymLog
+bulkload: PaymLog
   BookDate: 2008-03-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008032018180612.DAT"
   Brand: "1"
 
-PaymLog362: PaymLog
+bulkload: PaymLog
   BookDate: 2008-03-24
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008032418211813.DAT"
   Brand: "1"
 
-PaymLog363: PaymLog
+bulkload: PaymLog
   BookDate: 2008-03-25
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008032518205282.DAT"
   Brand: "1"
 
-PaymLog364: PaymLog
+bulkload: PaymLog
   BookDate: 2008-03-26
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008032618215628.DAT"
   Brand: "1"
 
-PaymLog365: PaymLog
+bulkload: PaymLog
   BookDate: 2008-03-27
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008032718211355.DAT"
   Brand: "1"
 
-PaymLog366: PaymLog
+bulkload: PaymLog
   BookDate: 2008-03-28
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008032818205102.DAT"
   Brand: "1"
 
-PaymLog367: PaymLog
+bulkload: PaymLog
   BookDate: 2008-03-29
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008032915330420.DAT"
   Brand: "1"
 
-PaymLog368: PaymLog
+bulkload: PaymLog
   BookDate: 2008-03-31
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008033118222527.DAT"
   Brand: "1"
 
-PaymLog369: PaymLog
+bulkload: PaymLog
   BookDate: 2008-04-01
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008040118332380.DAT"
   Brand: "1"
 
-PaymLog370: PaymLog
+bulkload: PaymLog
   BookDate: 2008-04-02
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008040218250566.DAT"
   Brand: "1"
 
-PaymLog371: PaymLog
+bulkload: PaymLog
   BookDate: 2008-04-03
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008040318275042.DAT"
   Brand: "1"
 
-PaymLog372: PaymLog
+bulkload: PaymLog
   BookDate: 2008-04-04
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008040418302353.DAT"
   Brand: "1"
 
-PaymLog373: PaymLog
+bulkload: PaymLog
   BookDate: 2008-04-07
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008040718241485.DAT"
   Brand: "1"
 
-PaymLog374: PaymLog
+bulkload: PaymLog
   BookDate: 2008-04-08
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008040818254006.DAT"
   Brand: "1"
 
-PaymLog375: PaymLog
+bulkload: PaymLog
   BookDate: 2008-04-09
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008040918251584.DAT"
   Brand: "1"
 
-PaymLog376: PaymLog
+bulkload: PaymLog
   BookDate: 2008-04-10
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008041018331145.DAT"
   Brand: "1"
 
-PaymLog377: PaymLog
+bulkload: PaymLog
   BookDate: 2008-04-11
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008041118233797.DAT"
   Brand: "1"
 
-PaymLog378: PaymLog
+bulkload: PaymLog
   BookDate: 2008-04-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008041418272990.DAT"
   Brand: "1"
 
-PaymLog379: PaymLog
+bulkload: PaymLog
   BookDate: 2008-04-15
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008041518413797.DAT"
   Brand: "1"
 
-PaymLog380: PaymLog
+bulkload: PaymLog
   BookDate: 2008-04-16
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008041618240055.DAT"
   Brand: "1"
 
-PaymLog381: PaymLog
+bulkload: PaymLog
   BookDate: 2008-04-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008041718250763.DAT"
   Brand: "1"
 
-PaymLog382: PaymLog
+bulkload: PaymLog
   BookDate: 2008-04-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008041818192078.DAT"
   Brand: "1"
 
-PaymLog383: PaymLog
+bulkload: PaymLog
   BookDate: 2008-04-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008042118212014.DAT"
   Brand: "1"
 
-PaymLog384: PaymLog
+bulkload: PaymLog
   BookDate: 2008-04-22
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008042218214310.DAT"
   Brand: "1"
 
-PaymLog385: PaymLog
+bulkload: PaymLog
   BookDate: 2008-04-23
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008042318240656.DAT"
   Brand: "1"
 
-PaymLog386: PaymLog
+bulkload: PaymLog
   BookDate: 2008-04-24
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008042418244037.DAT"
   Brand: "1"
 
-PaymLog387: PaymLog
+bulkload: PaymLog
   BookDate: 2008-04-25
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008042518223476.DAT"
   Brand: "1"
 
-PaymLog388: PaymLog
+bulkload: PaymLog
   BookDate: 2008-04-28
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008042818210748.DAT"
   Brand: "1"
 
-PaymLog389: PaymLog
+bulkload: PaymLog
   BookDate: 2008-04-29
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008042918233993.DAT"
   Brand: "1"
 
-PaymLog390: PaymLog
+bulkload: PaymLog
   BookDate: 2008-04-30
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008043018261172.DAT"
   Brand: "1"
 
-PaymLog391: PaymLog
+bulkload: PaymLog
   BookDate: 2008-05-02
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008050218201276.DAT"
   Brand: "1"
 
-PaymLog392: PaymLog
+bulkload: PaymLog
   BookDate: 2008-05-05
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008050518280502.DAT"
   Brand: "1"
 
-PaymLog393: PaymLog
+bulkload: PaymLog
   BookDate: 2008-05-06
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008050618273309.DAT"
   Brand: "1"
 
-PaymLog394: PaymLog
+bulkload: PaymLog
   BookDate: 2008-05-07
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008050718573683.DAT"
   Brand: "1"
 
-PaymLog395: PaymLog
+bulkload: PaymLog
   BookDate: 2008-05-08
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008050818504193.DAT"
   Brand: "1"
 
-PaymLog396: PaymLog
+bulkload: PaymLog
   BookDate: 2008-05-09
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008050918230733.DAT"
   Brand: "1"
 
-PaymLog397: PaymLog
+bulkload: PaymLog
   BookDate: 2008-05-12
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008051218272559.DAT"
   Brand: "1"
 
-PaymLog398: PaymLog
+bulkload: PaymLog
   BookDate: 2008-05-13
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008051318263370.DAT"
   Brand: "1"
 
-PaymLog399: PaymLog
+bulkload: PaymLog
   BookDate: 2008-05-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008051418425770.DAT"
   Brand: "1"
 
-PaymLog400: PaymLog
+bulkload: PaymLog
   BookDate: 2008-05-15
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008051518195692.DAT"
   Brand: "1"
 
-PaymLog401: PaymLog
+bulkload: PaymLog
   BookDate: 2008-05-16
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008051618211961.DAT"
   Brand: "1"
 
-PaymLog402: PaymLog
+bulkload: PaymLog
   BookDate: 2008-05-19
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008051918253179.DAT"
   Brand: "1"
 
-PaymLog403: PaymLog
+bulkload: PaymLog
   BookDate: 2008-05-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008052018221656.DAT"
   Brand: "1"
 
-PaymLog404: PaymLog
+bulkload: PaymLog
   BookDate: 2008-05-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008052118212579.DAT"
   Brand: "1"
 
-PaymLog405: PaymLog
+bulkload: PaymLog
   BookDate: 2008-05-22
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008052218213664.DAT"
   Brand: "1"
 
-PaymLog406: PaymLog
+bulkload: PaymLog
   BookDate: 2008-05-23
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008052318184680.DAT"
   Brand: "1"
 
-PaymLog407: PaymLog
+bulkload: PaymLog
   BookDate: 2008-05-26
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008052618212109.DAT"
   Brand: "1"
 
-PaymLog408: PaymLog
+bulkload: PaymLog
   BookDate: 2008-05-27
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008052718203397.DAT"
   Brand: "1"
 
-PaymLog409: PaymLog
+bulkload: PaymLog
   BookDate: 2008-05-28
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008052818191989.DAT"
   Brand: "1"
 
-PaymLog410: PaymLog
+bulkload: PaymLog
   BookDate: 2008-05-29
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008052918210620.DAT"
   Brand: "1"
 
-PaymLog411: PaymLog
+bulkload: PaymLog
   BookDate: 2008-05-30
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008053018195885.DAT"
   Brand: "1"
 
-PaymLog412: PaymLog
+bulkload: PaymLog
   BookDate: 2008-06-02
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008060218243411.DAT"
   Brand: "1"
 
-PaymLog413: PaymLog
+bulkload: PaymLog
   BookDate: 2008-06-03
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008060318440764.DAT"
   Brand: "1"
 
-PaymLog414: PaymLog
+bulkload: PaymLog
   BookDate: 2008-06-04
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008060418592726.DAT"
   Brand: "1"
 
-PaymLog415: PaymLog
+bulkload: PaymLog
   BookDate: 2008-06-05
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008060518293886.DAT"
   Brand: "1"
 
-PaymLog416: PaymLog
+bulkload: PaymLog
   BookDate: 2008-06-06
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008060618260442.DAT"
   Brand: "1"
 
-PaymLog417: PaymLog
+bulkload: PaymLog
   BookDate: 2008-06-09
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008060918264832.DAT"
   Brand: "1"
 
-PaymLog418: PaymLog
+bulkload: PaymLog
   BookDate: 2008-06-10
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008061019293231.DAT"
   Brand: "1"
 
-PaymLog419: PaymLog
+bulkload: PaymLog
   BookDate: 2008-06-11
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008061118262919.DAT"
   Brand: "1"
 
-PaymLog420: PaymLog
+bulkload: PaymLog
   BookDate: 2008-06-12
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008061218343554.DAT"
   Brand: "1"
 
-PaymLog421: PaymLog
+bulkload: PaymLog
   BookDate: 2008-06-13
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008061318214356.DAT"
   Brand: "1"
 
-PaymLog422: PaymLog
+bulkload: PaymLog
   BookDate: 2008-06-16
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008061618233292.DAT"
   Brand: "1"
 
-PaymLog423: PaymLog
+bulkload: PaymLog
   BookDate: 2008-06-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008061718225799.DAT"
   Brand: "1"
 
-PaymLog424: PaymLog
+bulkload: PaymLog
   BookDate: 2008-06-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008061818225432.DAT"
   Brand: "1"
 
-PaymLog425: PaymLog
+bulkload: PaymLog
   BookDate: 2008-06-19
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008061918344831.DAT"
   Brand: "1"
 
-PaymLog426: PaymLog
+bulkload: PaymLog
   BookDate: 2008-06-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008062018191701.DAT"
   Brand: "1"
 
-PaymLog427: PaymLog
+bulkload: PaymLog
   BookDate: 2008-06-23
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008062318224096.DAT"
   Brand: "1"
 
-PaymLog428: PaymLog
+bulkload: PaymLog
   BookDate: 2008-06-24
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008062418202761.DAT"
   Brand: "1"
 
-PaymLog429: PaymLog
+bulkload: PaymLog
   BookDate: 2008-06-25
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008062518242813.DAT"
   Brand: "1"
 
-PaymLog430: PaymLog
+bulkload: PaymLog
   BookDate: 2008-06-26
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008062618230124.DAT"
   Brand: "1"
 
-PaymLog431: PaymLog
+bulkload: PaymLog
   BookDate: 2008-06-27
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008062718192281.DAT"
   Brand: "1"
 
-PaymLog432: PaymLog
+bulkload: PaymLog
   BookDate: 2008-06-30
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008063018220461.DAT"
   Brand: "1"
 
-PaymLog433: PaymLog
+bulkload: PaymLog
   BookDate: 2008-07-01
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008070120261852.DAT"
   Brand: "1"
 
-PaymLog434: PaymLog
+bulkload: PaymLog
   BookDate: 2008-07-02
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008070219563576.DAT"
   Brand: "1"
 
-PaymLog435: PaymLog
+bulkload: PaymLog
   BookDate: 2008-07-03
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008070319271001.DAT"
   Brand: "1"
 
-PaymLog436: PaymLog
+bulkload: PaymLog
   BookDate: 2008-07-04
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008070418381060.DAT"
   Brand: "1"
 
-PaymLog437: PaymLog
+bulkload: PaymLog
   BookDate: 2008-07-07
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008070718223969.DAT"
   Brand: "1"
 
-PaymLog438: PaymLog
+bulkload: PaymLog
   BookDate: 2008-07-08
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008070818300064.DAT"
   Brand: "1"
 
-PaymLog439: PaymLog
+bulkload: PaymLog
   BookDate: 2008-07-09
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008070918222511.DAT"
   Brand: "1"
 
-PaymLog440: PaymLog
+bulkload: PaymLog
   BookDate: 2008-07-10
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008071018285434.DAT"
   Brand: "1"
 
-PaymLog441: PaymLog
+bulkload: PaymLog
   BookDate: 2008-07-11
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008071118405963.DAT"
   Brand: "1"
 
-PaymLog442: PaymLog
+bulkload: PaymLog
   BookDate: 2008-07-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008071418223103.DAT"
   Brand: "1"
 
-PaymLog443: PaymLog
+bulkload: PaymLog
   BookDate: 2008-07-15
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008071518211962.DAT"
   Brand: "1"
 
-PaymLog444: PaymLog
+bulkload: PaymLog
   BookDate: 2008-07-16
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008071618200329.DAT"
   Brand: "1"
 
-PaymLog445: PaymLog
+bulkload: PaymLog
   BookDate: 2008-07-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008071718193301.DAT"
   Brand: "1"
 
-PaymLog446: PaymLog
+bulkload: PaymLog
   BookDate: 2008-07-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008071818181625.DAT"
   Brand: "1"
 
-PaymLog447: PaymLog
+bulkload: PaymLog
   BookDate: 2008-07-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008072118191444.DAT"
   Brand: "1"
 
-PaymLog448: PaymLog
+bulkload: PaymLog
   BookDate: 2008-07-22
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008072218193621.DAT"
   Brand: "1"
 
-PaymLog449: PaymLog
+bulkload: PaymLog
   BookDate: 2008-07-23
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008072318170978.DAT"
   Brand: "1"
 
-PaymLog450: PaymLog
+bulkload: PaymLog
   BookDate: 2008-07-24
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008072418180375.DAT"
   Brand: "1"
 
-PaymLog451: PaymLog
+bulkload: PaymLog
   BookDate: 2008-07-25
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008072518172339.DAT"
   Brand: "1"
 
-PaymLog452: PaymLog
+bulkload: PaymLog
   BookDate: 2008-07-28
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008072818182528.DAT"
   Brand: "1"
 
-PaymLog453: PaymLog
+bulkload: PaymLog
   BookDate: 2008-07-29
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008072918182837.DAT"
   Brand: "1"
 
-PaymLog454: PaymLog
+bulkload: PaymLog
   BookDate: 2008-07-30
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008073018194246.DAT"
   Brand: "1"
 
-PaymLog455: PaymLog
+bulkload: PaymLog
   BookDate: 2008-07-31
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008073118205663.DAT"
   Brand: "1"
 
-PaymLog456: PaymLog
+bulkload: PaymLog
   BookDate: 2008-08-01
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008080119500272.DAT"
   Brand: "1"
 
-PaymLog457: PaymLog
+bulkload: PaymLog
   BookDate: 2008-08-04
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008080418234388.DAT"
   Brand: "1"
 
-PaymLog458: PaymLog
+bulkload: PaymLog
   BookDate: 2008-08-05
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008080518225795.DAT"
   Brand: "1"
 
-PaymLog459: PaymLog
+bulkload: PaymLog
   BookDate: 2008-08-06
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008080618263014.DAT"
   Brand: "1"
 
-PaymLog460: PaymLog
+bulkload: PaymLog
   BookDate: 2008-08-07
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008080718230555.DAT"
   Brand: "1"
 
-PaymLog461: PaymLog
+bulkload: PaymLog
   BookDate: 2008-08-08
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008080818234182.DAT"
   Brand: "1"
 
-PaymLog462: PaymLog
+bulkload: PaymLog
   BookDate: 2008-08-11
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008081118215491.DAT"
   Brand: "1"
 
-PaymLog463: PaymLog
+bulkload: PaymLog
   BookDate: 2008-08-12
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008081218203924.DAT"
   Brand: "1"
 
-PaymLog464: PaymLog
+bulkload: PaymLog
   BookDate: 2008-08-13
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008081318211639.DAT"
   Brand: "1"
 
-PaymLog465: PaymLog
+bulkload: PaymLog
   BookDate: 2008-08-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008081418192621.DAT"
   Brand: "1"
 
-PaymLog466: PaymLog
+bulkload: PaymLog
   BookDate: 2008-08-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008081818195033.DAT"
   Brand: "1"
 
-PaymLog467: PaymLog
+bulkload: PaymLog
   BookDate: 2008-08-19
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008081918181477.DAT"
   Brand: "1"
 
-PaymLog468: PaymLog
+bulkload: PaymLog
   BookDate: 2008-08-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008082018172279.DAT"
   Brand: "1"
 
-PaymLog469: PaymLog
+bulkload: PaymLog
   BookDate: 2008-08-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008082118182278.DAT"
   Brand: "1"
 
-PaymLog470: PaymLog
+bulkload: PaymLog
   BookDate: 2008-08-22
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008082218175832.DAT"
   Brand: "1"
 
-PaymLog471: PaymLog
+bulkload: PaymLog
   BookDate: 2008-08-25
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008082518180126.DAT"
   Brand: "1"
 
-PaymLog472: PaymLog
+bulkload: PaymLog
   BookDate: 2008-08-26
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008082618181853.DAT"
   Brand: "1"
 
-PaymLog473: PaymLog
+bulkload: PaymLog
   BookDate: 2008-08-27
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008082718175102.DAT"
   Brand: "1"
 
-PaymLog474: PaymLog
+bulkload: PaymLog
   BookDate: 2008-08-28
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008082818172177.DAT"
   Brand: "1"
 
-PaymLog475: PaymLog
+bulkload: PaymLog
   BookDate: 2008-08-29
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008082918174766.DAT"
   Brand: "1"
 
-PaymLog476: PaymLog
+bulkload: PaymLog
   BookDate: 2008-09-01
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008090118194154.DAT"
   Brand: "1"
 
-PaymLog477: PaymLog
+bulkload: PaymLog
   BookDate: 2008-09-02
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008090218263469.DAT"
   Brand: "1"
 
-PaymLog478: PaymLog
+bulkload: PaymLog
   BookDate: 2008-09-03
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008090318205407.DAT"
   Brand: "1"
 
-PaymLog479: PaymLog
+bulkload: PaymLog
   BookDate: 2008-09-04
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008090418252797.DAT"
   Brand: "1"
 
-PaymLog480: PaymLog
+bulkload: PaymLog
   BookDate: 2008-09-05
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008090518203167.DAT"
   Brand: "1"
 
-PaymLog481: PaymLog
+bulkload: PaymLog
   BookDate: 2008-09-08
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008090818242119.DAT"
   Brand: "1"
 
-PaymLog482: PaymLog
+bulkload: PaymLog
   BookDate: 2008-09-09
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008090918194056.DAT"
   Brand: "1"
 
-PaymLog483: PaymLog
+bulkload: PaymLog
   BookDate: 2008-09-10
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008091018255278.DAT"
   Brand: "1"
 
-PaymLog484: PaymLog
+bulkload: PaymLog
   BookDate: 2008-09-11
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008091118221359.DAT"
   Brand: "1"
 
-PaymLog485: PaymLog
+bulkload: PaymLog
   BookDate: 2008-09-12
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008091218203047.DAT"
   Brand: "1"
 
-PaymLog486: PaymLog
+bulkload: PaymLog
   BookDate: 2008-09-15
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008091518300917.DAT"
   Brand: "1"
 
-PaymLog487: PaymLog
+bulkload: PaymLog
   BookDate: 2008-09-16
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008091618223384.DAT"
   Brand: "1"
 
-PaymLog488: PaymLog
+bulkload: PaymLog
   BookDate: 2008-09-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008091718240863.DAT"
   Brand: "1"
 
-PaymLog489: PaymLog
+bulkload: PaymLog
   BookDate: 2008-09-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008091818204170.DAT"
   Brand: "1"
 
-PaymLog490: PaymLog
+bulkload: PaymLog
   BookDate: 2008-09-19
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008091918204877.DAT"
   Brand: "1"
 
-PaymLog491: PaymLog
+bulkload: PaymLog
   BookDate: 2008-09-22
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008092218202603.DAT"
   Brand: "1"
 
-PaymLog492: PaymLog
+bulkload: PaymLog
   BookDate: 2008-09-23
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008092318213869.DAT"
   Brand: "1"
 
-PaymLog493: PaymLog
+bulkload: PaymLog
   BookDate: 2008-09-24
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008092418215268.DAT"
   Brand: "1"
 
-PaymLog494: PaymLog
+bulkload: PaymLog
   BookDate: 2008-09-25
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008092518194859.DAT"
   Brand: "1"
 
-PaymLog495: PaymLog
+bulkload: PaymLog
   BookDate: 2008-09-26
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008092618191277.DAT"
   Brand: "1"
 
-PaymLog496: PaymLog
+bulkload: PaymLog
   BookDate: 2008-09-29
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008092918212484.DAT"
   Brand: "1"
 
-PaymLog497: PaymLog
+bulkload: PaymLog
   BookDate: 2008-09-30
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008093018241370.DAT"
   Brand: "1"
 
-PaymLog498: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-01
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008100120563918.DAT"
   Brand: "1"
 
-PaymLog499: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-02
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008100220163929.DAT"
   Brand: "1"
 
-PaymLog500: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-03
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008100319462249.DAT"
   Brand: "1"
 
-PaymLog501: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-04
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008100416214429.DAT"
   Brand: "1"
 
-PaymLog502: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-06
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008100618360449.DAT"
   Brand: "1"
 
-PaymLog503: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-07
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008100718262106.DAT"
   Brand: "1"
 
-PaymLog504: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-08
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008100818331051.DAT"
   Brand: "1"
 
-PaymLog505: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-09
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008100918264615.DAT"
   Brand: "1"
 
-PaymLog506: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-10
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008101018233688.DAT"
   Brand: "1"
 
-PaymLog507: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-11
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008101115491531.DAT"
   Brand: "1"
 
-PaymLog508: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-13
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008101318370814.DAT"
   Brand: "1"
 
-PaymLog509: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008101418220046.DAT"
   Brand: "1"
 
-PaymLog510: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-15
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008101518214627.DAT"
   Brand: "1"
 
-PaymLog511: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-16
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008101618282900.DAT"
   Brand: "1"
 
-PaymLog512: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008101718201738.DAT"
   Brand: "1"
 
-PaymLog513: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008101815391703.DAT"
   Brand: "1"
 
-PaymLog514: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008102018244633.DAT"
   Brand: "1"
 
-PaymLog515: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008102118202480.DAT"
   Brand: "1"
 
-PaymLog516: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-22
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008102218190016.DAT"
   Brand: "1"
 
-PaymLog517: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-23
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008102318194889.DAT"
   Brand: "1"
 
-PaymLog518: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-24
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008102418195481.DAT"
   Brand: "1"
 
-PaymLog519: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-25
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008102515170273.DAT"
   Brand: "1"
 
-PaymLog520: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-27
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008102718194323.DAT"
   Brand: "1"
 
-PaymLog521: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-28
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008102818284612.DAT"
   Brand: "1"
 
-PaymLog522: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-29
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008102918213402.DAT"
   Brand: "1"
 
-PaymLog523: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-30
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008103018250083.DAT"
   Brand: "1"
 
-PaymLog524: PaymLog
+bulkload: PaymLog
   BookDate: 2008-10-31
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008103118221918.DAT"
   Brand: "1"
 
-PaymLog525: PaymLog
+bulkload: PaymLog
   BookDate: 2008-11-03
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008110318383861.DAT"
   Brand: "1"
 
-PaymLog526: PaymLog
+bulkload: PaymLog
   BookDate: 2008-11-04
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008110419255832.DAT"
   Brand: "1"
 
-PaymLog527: PaymLog
+bulkload: PaymLog
   BookDate: 2008-11-05
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008110520353916.DAT"
   Brand: "1"
 
-PaymLog528: PaymLog
+bulkload: PaymLog
   BookDate: 2008-11-06
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008110619100833.DAT"
   Brand: "1"
 
-PaymLog529: PaymLog
+bulkload: PaymLog
   BookDate: 2008-11-07
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008110718251949.DAT"
   Brand: "1"
 
-PaymLog530: PaymLog
+bulkload: PaymLog
   BookDate: 2008-11-08
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008110816243846.DAT"
   Brand: "1"
 
-PaymLog531: PaymLog
+bulkload: PaymLog
   BookDate: 2008-11-10
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008111018241866.DAT"
   Brand: "1"
 
-PaymLog532: PaymLog
+bulkload: PaymLog
   BookDate: 2008-11-11
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008111118250568.DAT"
   Brand: "1"
 
-PaymLog533: PaymLog
+bulkload: PaymLog
   BookDate: 2008-11-12
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008111218343880.DAT"
   Brand: "1"
 
-PaymLog534: PaymLog
+bulkload: PaymLog
   BookDate: 2008-11-13
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008111318504119.DAT"
   Brand: "1"
 
-PaymLog535: PaymLog
+bulkload: PaymLog
   BookDate: 2008-11-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008111418280299.DAT"
   Brand: "1"
 
-PaymLog536: PaymLog
+bulkload: PaymLog
   BookDate: 2008-11-15
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008111516172549.DAT"
   Brand: "1"
 
-PaymLog537: PaymLog
+bulkload: PaymLog
   BookDate: 2008-11-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008111718232898.DAT"
   Brand: "1"
 
-PaymLog538: PaymLog
+bulkload: PaymLog
   BookDate: 2008-11-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008111818232035.DAT"
   Brand: "1"
 
-PaymLog539: PaymLog
+bulkload: PaymLog
   BookDate: 2008-11-19
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008111918322827.DAT"
   Brand: "1"
 
-PaymLog540: PaymLog
+bulkload: PaymLog
   BookDate: 2008-11-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008112018260065.DAT"
   Brand: "1"
 
-PaymLog541: PaymLog
+bulkload: PaymLog
   BookDate: 2008-11-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008112118214397.DAT"
   Brand: "1"
 
-PaymLog542: PaymLog
+bulkload: PaymLog
   BookDate: 2008-11-22
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008112215380705.DAT"
   Brand: "1"
 
-PaymLog543: PaymLog
+bulkload: PaymLog
   BookDate: 2008-11-24
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008112418234150.DAT"
   Brand: "1"
 
-PaymLog544: PaymLog
+bulkload: PaymLog
   BookDate: 2008-11-25
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008112518225665.DAT"
   Brand: "1"
 
-PaymLog545: PaymLog
+bulkload: PaymLog
   BookDate: 2008-11-26
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008112618223440.DAT"
   Brand: "1"
 
-PaymLog546: PaymLog
+bulkload: PaymLog
   BookDate: 2008-11-27
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008112718244533.DAT"
   Brand: "1"
 
-PaymLog547: PaymLog
+bulkload: PaymLog
   BookDate: 2008-11-28
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008112818212086.DAT"
   Brand: "1"
 
-PaymLog548: PaymLog
+bulkload: PaymLog
   BookDate: 2008-11-29
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008112915444769.DAT"
   Brand: "1"
 
-PaymLog549: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-01
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008120118240615.DAT"
   Brand: "1"
 
-PaymLog550: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-02
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008120219114760.DAT"
   Brand: "1"
 
-PaymLog551: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-03
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008120318504963.DAT"
   Brand: "1"
 
-PaymLog552: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-04
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008120418275068.DAT"
   Brand: "1"
 
-PaymLog553: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-05
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008120518274951.DAT"
   Brand: "1"
 
-PaymLog554: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-09
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008120918402739.DAT"
   Brand: "1"
 
-PaymLog555: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-10
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008121018311777.DAT"
   Brand: "1"
 
-PaymLog556: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-11
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008121119135700.DAT"
   Brand: "1"
 
-PaymLog557: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-12
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008121218291877.DAT"
   Brand: "1"
 
-PaymLog558: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-13
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008121315494142.DAT"
   Brand: "1"
 
-PaymLog559: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-15
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008121518334326.DAT"
   Brand: "1"
 
-PaymLog560: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-16
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008121618293119.DAT"
   Brand: "1"
 
-PaymLog561: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071130.DAT:Rerun49054"
   Brand: "1"
 
-PaymLog562: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071130.DAT:Rerun49490"
   Brand: "1"
 
-PaymLog563: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071201.DAT:Rerun49534"
   Brand: "1"
 
-PaymLog564: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071203.DAT:Rerun49541"
   Brand: "1"
 
-PaymLog565: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071204.DAT"
   Brand: "1"
 
-PaymLog566: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071205.DAT"
   Brand: "1"
 
-PaymLog567: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071207.DAT"
   Brand: "1"
 
-PaymLog568: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071210.DAT"
   Brand: "1"
 
-PaymLog569: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071211.DAT"
   Brand: "1"
 
-PaymLog570: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008121718273981.DAT"
   Brand: "1"
 
-PaymLog571: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071212.DAT"
   Brand: "1"
 
-PaymLog572: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071213.DAT"
   Brand: "1"
 
-PaymLog573: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071214.DAT"
   Brand: "1"
 
-PaymLog574: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071215.DAT"
   Brand: "1"
 
-PaymLog575: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071217.DAT"
   Brand: "1"
 
-PaymLog576: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071218.DAT"
   Brand: "1"
 
-PaymLog577: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071219.DAT"
   Brand: "1"
 
-PaymLog578: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071220.DAT"
   Brand: "1"
 
-PaymLog579: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071221.DAT"
   Brand: "1"
 
-PaymLog580: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071222.DAT"
   Brand: "1"
 
-PaymLog581: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_20071224.DAT"
   Brand: "1"
 
-PaymLog582: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008121818245206.DAT"
   Brand: "1"
 
-PaymLog583: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-19
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008121918233553.DAT"
   Brand: "1"
 
-PaymLog584: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008122015453367.DAT"
   Brand: "1"
 
-PaymLog585: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-22
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008122218250102.DAT"
   Brand: "1"
 
-PaymLog586: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-23
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008122318224867.DAT"
   Brand: "1"
 
-PaymLog587: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-24
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008122418210196.DAT"
   Brand: "1"
 
-PaymLog588: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-26
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008122618210435.DAT"
   Brand: "1"
 
-PaymLog589: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-27
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008122715423822.DAT"
   Brand: "1"
 
-PaymLog590: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-29
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008122918185363.DAT"
   Brand: "1"
 
-PaymLog591: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-30
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008123018200213.DAT"
   Brand: "1"
 
-PaymLog592: PaymLog
+bulkload: PaymLog
   BookDate: 2008-12-31
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2008123118200488.DAT"
   Brand: "1"
 
-PaymLog593: PaymLog
+bulkload: PaymLog
   BookDate: 2009-01-02
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009010218200752.DAT"
   Brand: "1"
 
-PaymLog594: PaymLog
+bulkload: PaymLog
   BookDate: 2009-01-03
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009010316285409.DAT"
   Brand: "1"
 
-PaymLog595: PaymLog
+bulkload: PaymLog
   BookDate: 2009-01-05
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009010518213695.DAT"
   Brand: "1"
 
-PaymLog596: PaymLog
+bulkload: PaymLog
   BookDate: 2009-01-07
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009010718242708.DAT"
   Brand: "1"
 
-PaymLog597: PaymLog
+bulkload: PaymLog
   BookDate: 2009-01-09
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009010918292637.DAT"
   Brand: "1"
 
-PaymLog598: PaymLog
+bulkload: PaymLog
   BookDate: 2009-01-10
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009011016090383.DAT"
   Brand: "1"
 
-PaymLog599: PaymLog
+bulkload: PaymLog
   BookDate: 2009-01-12
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009011218254938.DAT"
   Brand: "1"
 
-PaymLog600: PaymLog
+bulkload: PaymLog
   BookDate: 2009-01-13
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009011318230284.DAT"
   Brand: "1"
 
-PaymLog601: PaymLog
+bulkload: PaymLog
   BookDate: 2009-01-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009011418330385.DAT"
   Brand: "1"
 
-PaymLog602: PaymLog
+bulkload: PaymLog
   BookDate: 2009-01-15
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009011518320312.DAT"
   Brand: "1"
 
-PaymLog603: PaymLog
+bulkload: PaymLog
   BookDate: 2009-01-16
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009011618264954.DAT"
   Brand: "1"
 
-PaymLog604: PaymLog
+bulkload: PaymLog
   BookDate: 2009-01-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009011716232996.DAT"
   Brand: "1"
 
-PaymLog605: PaymLog
+bulkload: PaymLog
   BookDate: 2009-01-19
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009011918260013.DAT"
   Brand: "1"
 
-PaymLog606: PaymLog
+bulkload: PaymLog
   BookDate: 2009-01-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009012018230255.DAT"
   Brand: "1"
 
-PaymLog607: PaymLog
+bulkload: PaymLog
   BookDate: 2009-01-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009012118221441.DAT"
   Brand: "1"
 
-PaymLog608: PaymLog
+bulkload: PaymLog
   BookDate: 2009-01-22
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009012218225007.DAT"
   Brand: "1"
 
-PaymLog609: PaymLog
+bulkload: PaymLog
   BookDate: 2009-01-23
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009012318200203.DAT"
   Brand: "1"
 
-PaymLog610: PaymLog
+bulkload: PaymLog
   BookDate: 2009-01-24
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009012415322738.DAT"
   Brand: "1"
 
-PaymLog611: PaymLog
+bulkload: PaymLog
   BookDate: 2009-01-26
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009012618225958.DAT"
   Brand: "1"
 
-PaymLog612: PaymLog
+bulkload: PaymLog
   BookDate: 2009-01-27
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009012718204328.DAT"
   Brand: "1"
 
-PaymLog613: PaymLog
+bulkload: PaymLog
   BookDate: 2009-01-28
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009012818333843.DAT"
   Brand: "1"
 
-PaymLog614: PaymLog
+bulkload: PaymLog
   BookDate: 2009-01-29
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009012918320244.DAT"
   Brand: "1"
 
-PaymLog615: PaymLog
+bulkload: PaymLog
   BookDate: 2009-01-30
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009013018215581.DAT"
   Brand: "1"
 
-PaymLog616: PaymLog
+bulkload: PaymLog
   BookDate: 2009-01-31
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009013115562324.DAT"
   Brand: "1"
 
-PaymLog617: PaymLog
+bulkload: PaymLog
   BookDate: 2009-02-02
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009020218251463.DAT"
   Brand: "1"
 
-PaymLog618: PaymLog
+bulkload: PaymLog
   BookDate: 2009-02-03
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009020319474000.DAT"
   Brand: "1"
 
-PaymLog619: PaymLog
+bulkload: PaymLog
   BookDate: 2009-02-04
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009020419220102.DAT"
   Brand: "1"
 
-PaymLog620: PaymLog
+bulkload: PaymLog
   BookDate: 2009-02-05
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009020519355948.DAT"
   Brand: "1"
 
-PaymLog621: PaymLog
+bulkload: PaymLog
   BookDate: 2009-02-06
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009020618554874.DAT"
   Brand: "1"
 
-PaymLog622: PaymLog
+bulkload: PaymLog
   BookDate: 2009-02-07
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009020716114414.DAT"
   Brand: "1"
 
-PaymLog623: PaymLog
+bulkload: PaymLog
   BookDate: 2009-02-09
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009020918341071.DAT"
   Brand: "1"
 
-PaymLog624: PaymLog
+bulkload: PaymLog
   BookDate: 2009-02-10
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009021018303731.DAT"
   Brand: "1"
 
-PaymLog625: PaymLog
+bulkload: PaymLog
   BookDate: 2009-02-11
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009021118362720.DAT"
   Brand: "1"
 
-PaymLog626: PaymLog
+bulkload: PaymLog
   BookDate: 2009-02-12
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009021218402906.DAT"
   Brand: "1"
 
-PaymLog627: PaymLog
+bulkload: PaymLog
   BookDate: 2009-02-13
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009021318505419.DAT"
   Brand: "1"
 
-PaymLog628: PaymLog
+bulkload: PaymLog
   BookDate: 2009-02-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009021416084901.DAT"
   Brand: "1"
 
-PaymLog629: PaymLog
+bulkload: PaymLog
   BookDate: 2009-02-16
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009021618244620.DAT"
   Brand: "1"
 
-PaymLog630: PaymLog
+bulkload: PaymLog
   BookDate: 2009-02-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009021718235227.DAT"
   Brand: "1"
 
-PaymLog631: PaymLog
+bulkload: PaymLog
   BookDate: 2009-02-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009021818520193.DAT"
   Brand: "1"
 
-PaymLog632: PaymLog
+bulkload: PaymLog
   BookDate: 2009-02-19
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009021918454622.DAT"
   Brand: "1"
 
-PaymLog633: PaymLog
+bulkload: PaymLog
   BookDate: 2009-02-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009022018273742.DAT"
   Brand: "1"
 
-PaymLog634: PaymLog
+bulkload: PaymLog
   BookDate: 2009-02-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009022115414361.DAT"
   Brand: "1"
 
-PaymLog635: PaymLog
+bulkload: PaymLog
   BookDate: 2009-02-23
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009022318252885.DAT"
   Brand: "1"
 
-PaymLog636: PaymLog
+bulkload: PaymLog
   BookDate: 2009-02-24
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009022418341134.DAT"
   Brand: "1"
 
-PaymLog637: PaymLog
+bulkload: PaymLog
   BookDate: 2009-02-25
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009022518493279.DAT"
   Brand: "1"
 
-PaymLog638: PaymLog
+bulkload: PaymLog
   BookDate: 2009-02-26
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009022619094134.DAT"
   Brand: "1"
 
-PaymLog639: PaymLog
+bulkload: PaymLog
   BookDate: 2009-02-27
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009022719022115.DAT"
   Brand: "1"
 
-PaymLog640: PaymLog
+bulkload: PaymLog
   BookDate: 2009-02-28
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009022815502710.DAT"
   Brand: "1"
 
-PaymLog641: PaymLog
+bulkload: PaymLog
   BookDate: 2009-03-02
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009030218522464.DAT"
   Brand: "1"
 
-PaymLog642: PaymLog
+bulkload: PaymLog
   BookDate: 2009-03-03
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009030321332885.DAT"
   Brand: "1"
 
-PaymLog643: PaymLog
+bulkload: PaymLog
   BookDate: 2009-03-04
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009030421271674.DAT"
   Brand: "1"
 
-PaymLog644: PaymLog
+bulkload: PaymLog
   BookDate: 2009-03-05
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009030521223625.DAT"
   Brand: "1"
 
-PaymLog645: PaymLog
+bulkload: PaymLog
   BookDate: 2009-03-06
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009030619073046.DAT"
   Brand: "1"
 
-PaymLog646: PaymLog
+bulkload: PaymLog
   BookDate: 2009-03-07
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009030716330790.DAT"
   Brand: "1"
 
-PaymLog647: PaymLog
+bulkload: PaymLog
   BookDate: 2009-03-09
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009030918354424.DAT"
   Brand: "1"
 
-PaymLog648: PaymLog
+bulkload: PaymLog
   BookDate: 2009-03-11
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009031115302760.DAT"
   Brand: "1"
 
-PaymLog649: PaymLog
+bulkload: PaymLog
   BookDate: 2009-03-12
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009031216185594.DAT"
   Brand: "1"
 
-PaymLog650: PaymLog
+bulkload: PaymLog
   BookDate: 2009-03-12
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009031218590433.DAT"
   Brand: "1"
 
-PaymLog651: PaymLog
+bulkload: PaymLog
   BookDate: 2009-03-13
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009031318294253.DAT"
   Brand: "1"
 
-PaymLog652: PaymLog
+bulkload: PaymLog
   BookDate: 2009-03-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009031415515109.DAT"
   Brand: "1"
 
-PaymLog653: PaymLog
+bulkload: PaymLog
   BookDate: 2009-03-16
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009031618242187.DAT"
   Brand: "1"
 
-PaymLog654: PaymLog
+bulkload: PaymLog
   BookDate: 2009-03-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009031718355778.DAT"
   Brand: "1"
 
-PaymLog655: PaymLog
+bulkload: PaymLog
   BookDate: 2009-03-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009031818270733.DAT"
   Brand: "1"
 
-PaymLog656: PaymLog
+bulkload: PaymLog
   BookDate: 2009-03-19
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009031918201043.DAT"
   Brand: "1"
 
-PaymLog657: PaymLog
+bulkload: PaymLog
   BookDate: 2009-03-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009032018201244.DAT"
   Brand: "1"
 
-PaymLog658: PaymLog
+bulkload: PaymLog
   BookDate: 2009-03-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009032115290454.DAT"
   Brand: "1"
 
-PaymLog659: PaymLog
+bulkload: PaymLog
   BookDate: 2009-03-23
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009032318271022.DAT"
   Brand: "1"
 
-PaymLog660: PaymLog
+bulkload: PaymLog
   BookDate: 2009-03-24
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009032418201230.DAT"
   Brand: "1"
 
-PaymLog661: PaymLog
+bulkload: PaymLog
   BookDate: 2009-03-25
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009032518240402.DAT"
   Brand: "1"
 
-PaymLog662: PaymLog
+bulkload: PaymLog
   BookDate: 2009-03-26
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009032618270492.DAT"
   Brand: "1"
 
-PaymLog663: PaymLog
+bulkload: PaymLog
   BookDate: 2009-03-27
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009032718201397.DAT"
   Brand: "1"
 
-PaymLog664: PaymLog
+bulkload: PaymLog
   BookDate: 2009-03-28
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009032815415681.DAT"
   Brand: "1"
 
-PaymLog665: PaymLog
+bulkload: PaymLog
   BookDate: 2009-03-30
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009033018241521.DAT"
   Brand: "1"
 
-PaymLog666: PaymLog
+bulkload: PaymLog
   BookDate: 2009-03-31
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009033120443774.DAT"
   Brand: "1"
 
-PaymLog667: PaymLog
+bulkload: PaymLog
   BookDate: 2009-04-01
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009040120300920.DAT"
   Brand: "1"
 
-PaymLog668: PaymLog
+bulkload: PaymLog
   BookDate: 2009-04-02
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009040218263620.DAT"
   Brand: "1"
 
-PaymLog669: PaymLog
+bulkload: PaymLog
   BookDate: 2009-04-03
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009040318244904.DAT"
   Brand: "1"
 
-PaymLog670: PaymLog
+bulkload: PaymLog
   BookDate: 2009-04-06
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009040618352054.DAT"
   Brand: "1"
 
-PaymLog671: PaymLog
+bulkload: PaymLog
   BookDate: 2009-04-07
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009040718332261.DAT"
   Brand: "1"
 
-PaymLog672: PaymLog
+bulkload: PaymLog
   BookDate: 2009-04-08
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009040818260778.DAT"
   Brand: "1"
 
-PaymLog673: PaymLog
+bulkload: PaymLog
   BookDate: 2009-04-09
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009040918241931.DAT"
   Brand: "1"
 
-PaymLog674: PaymLog
+bulkload: PaymLog
   BookDate: 2009-04-13
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009041318250427.DAT"
   Brand: "1"
 
-PaymLog675: PaymLog
+bulkload: PaymLog
   BookDate: 2009-04-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009041418255370.DAT"
   Brand: "1"
 
-PaymLog676: PaymLog
+bulkload: PaymLog
   BookDate: 2009-04-15
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009041518355432.DAT"
   Brand: "1"
 
-PaymLog677: PaymLog
+bulkload: PaymLog
   BookDate: 2009-04-16
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009041618261499.DAT"
   Brand: "1"
 
-PaymLog678: PaymLog
+bulkload: PaymLog
   BookDate: 2009-04-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009041718240055.DAT"
   Brand: "1"
 
-PaymLog679: PaymLog
+bulkload: PaymLog
   BookDate: 2009-04-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009042018255477.DAT"
   Brand: "1"
 
-PaymLog680: PaymLog
+bulkload: PaymLog
   BookDate: 2009-04-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009042118241999.DAT"
   Brand: "1"
 
-PaymLog681: PaymLog
+bulkload: PaymLog
   BookDate: 2009-04-22
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009042218224096.DAT"
   Brand: "1"
 
-PaymLog682: PaymLog
+bulkload: PaymLog
   BookDate: 2009-04-23
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009042318204182.DAT"
   Brand: "1"
 
-PaymLog683: PaymLog
+bulkload: PaymLog
   BookDate: 2009-04-24
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009042418191853.DAT"
   Brand: "1"
 
-PaymLog684: PaymLog
+bulkload: PaymLog
   BookDate: 2009-04-27
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009042718245856.DAT"
   Brand: "1"
 
-PaymLog685: PaymLog
+bulkload: PaymLog
   BookDate: 2009-04-28
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009042818174415.DAT"
   Brand: "1"
 
-PaymLog686: PaymLog
+bulkload: PaymLog
   BookDate: 2009-04-29
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009042918191707.DAT"
   Brand: "1"
 
-PaymLog687: PaymLog
+bulkload: PaymLog
   BookDate: 2009-04-30
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009043018245642.DAT"
   Brand: "1"
 
-PaymLog688: PaymLog
+bulkload: PaymLog
   BookDate: 2009-05-04
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009050419052078.DAT"
   Brand: "1"
 
-PaymLog689: PaymLog
+bulkload: PaymLog
   BookDate: 2009-05-06
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009050618362029.DAT"
   Brand: "1"
 
-PaymLog690: PaymLog
+bulkload: PaymLog
   BookDate: 2009-05-07
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009050718285326.DAT"
   Brand: "1"
 
-PaymLog691: PaymLog
+bulkload: PaymLog
   BookDate: 2009-05-08
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009050818264851.DAT"
   Brand: "1"
 
-PaymLog692: PaymLog
+bulkload: PaymLog
   BookDate: 2009-05-11
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009051118540987.DAT"
   Brand: "1"
 
-PaymLog693: PaymLog
+bulkload: PaymLog
   BookDate: 2009-05-12
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009051218280690.DAT"
   Brand: "1"
 
-PaymLog694: PaymLog
+bulkload: PaymLog
   BookDate: 2009-05-13
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009051318354738.DAT"
   Brand: "1"
 
-PaymLog695: PaymLog
+bulkload: PaymLog
   BookDate: 2009-05-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009050618362029.DAT:Rerun31692"
   Brand: "1"
 
-PaymLog696: PaymLog
+bulkload: PaymLog
   BookDate: 2009-05-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009050718285326.DAT:Rerun32820"
   Brand: "1"
 
-PaymLog697: PaymLog
+bulkload: PaymLog
   BookDate: 2009-05-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009050818264851.DAT:Rerun33187"
   Brand: "1"
 
-PaymLog698: PaymLog
+bulkload: PaymLog
   BookDate: 2009-05-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009051118540987.DAT:Rerun33944"
   Brand: "1"
 
-PaymLog699: PaymLog
+bulkload: PaymLog
   BookDate: 2009-05-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009051218280690.DAT:Rerun34225"
   Brand: "1"
 
-PaymLog700: PaymLog
+bulkload: PaymLog
   BookDate: 2009-05-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009051418230417.DAT"
   Brand: "1"
 
-PaymLog701: PaymLog
+bulkload: PaymLog
   BookDate: 2009-05-15
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009051518185760.DAT"
   Brand: "1"
 
-PaymLog702: PaymLog
+bulkload: PaymLog
   BookDate: 2009-05-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009051818301809.DAT"
   Brand: "1"
 
-PaymLog703: PaymLog
+bulkload: PaymLog
   BookDate: 2009-05-19
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009051918215099.DAT"
   Brand: "1"
 
-PaymLog704: PaymLog
+bulkload: PaymLog
   BookDate: 2009-05-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009052018213395.DAT"
   Brand: "1"
 
-PaymLog705: PaymLog
+bulkload: PaymLog
   BookDate: 2009-05-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009052118193315.DAT"
   Brand: "1"
 
-PaymLog706: PaymLog
+bulkload: PaymLog
   BookDate: 2009-05-22
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009052218194066.DAT"
   Brand: "1"
 
-PaymLog707: PaymLog
+bulkload: PaymLog
   BookDate: 2009-05-25
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009052518202459.DAT"
   Brand: "1"
 
-PaymLog708: PaymLog
+bulkload: PaymLog
   BookDate: 2009-05-26
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009052618201213.DAT"
   Brand: "1"
 
-PaymLog709: PaymLog
+bulkload: PaymLog
   BookDate: 2009-05-27
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009052718204464.DAT"
   Brand: "1"
 
-PaymLog710: PaymLog
+bulkload: PaymLog
   BookDate: 2009-05-28
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009052818200001.DAT"
   Brand: "1"
 
-PaymLog711: PaymLog
+bulkload: PaymLog
   BookDate: 2009-05-29
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009052918224898.DAT"
   Brand: "1"
 
-PaymLog712: PaymLog
+bulkload: PaymLog
   BookDate: 2009-06-01
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009060118304863.DAT"
   Brand: "1"
 
-PaymLog713: PaymLog
+bulkload: PaymLog
   BookDate: 2009-06-02
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009060218270552.DAT"
   Brand: "1"
 
-PaymLog714: PaymLog
+bulkload: PaymLog
   BookDate: 2009-06-03
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009060318235503.DAT"
   Brand: "1"
 
-PaymLog715: PaymLog
+bulkload: PaymLog
   BookDate: 2009-06-04
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009060418272128.DAT"
   Brand: "1"
 
-PaymLog716: PaymLog
+bulkload: PaymLog
   BookDate: 2009-06-05
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009060518342139.DAT"
   Brand: "1"
 
-PaymLog717: PaymLog
+bulkload: PaymLog
   BookDate: 2009-06-08
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009060818492526.DAT"
   Brand: "1"
 
-PaymLog718: PaymLog
+bulkload: PaymLog
   BookDate: 2009-06-09
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009060918230923.DAT"
   Brand: "1"
 
-PaymLog719: PaymLog
+bulkload: PaymLog
   BookDate: 2009-06-10
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009061018204871.DAT"
   Brand: "1"
 
-PaymLog720: PaymLog
+bulkload: PaymLog
   BookDate: 2009-06-11
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009061118195415.DAT"
   Brand: "1"
 
-PaymLog721: PaymLog
+bulkload: PaymLog
   BookDate: 2009-06-12
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009061218190926.DAT"
   Brand: "1"
 
-PaymLog722: PaymLog
+bulkload: PaymLog
   BookDate: 2009-06-15
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009061518205854.DAT"
   Brand: "1"
 
-PaymLog723: PaymLog
+bulkload: PaymLog
   BookDate: 2009-06-16
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009061618225918.DAT"
   Brand: "1"
 
-PaymLog724: PaymLog
+bulkload: PaymLog
   BookDate: 2009-06-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009061718192107.DAT"
   Brand: "1"
 
-PaymLog725: PaymLog
+bulkload: PaymLog
   BookDate: 2009-06-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009061818222657.DAT"
   Brand: "1"
 
-PaymLog726: PaymLog
+bulkload: PaymLog
   BookDate: 2009-06-19
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009061918170578.DAT"
   Brand: "1"
 
-PaymLog727: PaymLog
+bulkload: PaymLog
   BookDate: 2009-06-22
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009062218211788.DAT"
   Brand: "1"
 
-PaymLog728: PaymLog
+bulkload: PaymLog
   BookDate: 2009-06-23
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009062318200669.DAT"
   Brand: "1"
 
-PaymLog729: PaymLog
+bulkload: PaymLog
   BookDate: 2009-06-24
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009062418203168.DAT"
   Brand: "1"
 
-PaymLog730: PaymLog
+bulkload: PaymLog
   BookDate: 2009-06-25
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009062518255325.DAT"
   Brand: "1"
 
-PaymLog731: PaymLog
+bulkload: PaymLog
   BookDate: 2009-06-26
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009062618173258.DAT"
   Brand: "1"
 
-PaymLog732: PaymLog
+bulkload: PaymLog
   BookDate: 2009-06-29
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009062918185436.DAT"
   Brand: "1"
 
-PaymLog733: PaymLog
+bulkload: PaymLog
   BookDate: 2009-06-30
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009063018220796.DAT"
   Brand: "1"
 
-PaymLog734: PaymLog
+bulkload: PaymLog
   BookDate: 2009-07-01
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009070119070244.DAT"
   Brand: "1"
 
-PaymLog735: PaymLog
+bulkload: PaymLog
   BookDate: 2009-07-02
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009070218314432.DAT"
   Brand: "1"
 
-PaymLog736: PaymLog
+bulkload: PaymLog
   BookDate: 2009-07-03
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009070318224908.DAT"
   Brand: "1"
 
-PaymLog737: PaymLog
+bulkload: PaymLog
   BookDate: 2009-07-06
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009070618295674.DAT"
   Brand: "1"
 
-PaymLog738: PaymLog
+bulkload: PaymLog
   BookDate: 2009-07-07
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009070718245146.DAT"
   Brand: "1"
 
-PaymLog739: PaymLog
+bulkload: PaymLog
   BookDate: 2009-07-08
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009070818244579.DAT"
   Brand: "1"
 
-PaymLog740: PaymLog
+bulkload: PaymLog
   BookDate: 2009-07-09
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009070918225543.DAT"
   Brand: "1"
 
-PaymLog741: PaymLog
+bulkload: PaymLog
   BookDate: 2009-07-10
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009071018224209.DAT"
   Brand: "1"
 
-PaymLog742: PaymLog
+bulkload: PaymLog
   BookDate: 2009-07-13
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009071318262376.DAT"
   Brand: "1"
 
-PaymLog743: PaymLog
+bulkload: PaymLog
   BookDate: 2009-07-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009071418225745.DAT"
   Brand: "1"
 
-PaymLog744: PaymLog
+bulkload: PaymLog
   BookDate: 2009-07-15
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009071518204248.DAT"
   Brand: "1"
 
-PaymLog745: PaymLog
+bulkload: PaymLog
   BookDate: 2009-07-16
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009071618190125.DAT"
   Brand: "1"
 
-PaymLog746: PaymLog
+bulkload: PaymLog
   BookDate: 2009-07-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009071718195189.DAT"
   Brand: "1"
 
-PaymLog747: PaymLog
+bulkload: PaymLog
   BookDate: 2009-07-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009072018221298.DAT"
   Brand: "1"
 
-PaymLog748: PaymLog
+bulkload: PaymLog
   BookDate: 2009-07-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009072118200518.DAT"
   Brand: "1"
 
-PaymLog749: PaymLog
+bulkload: PaymLog
   BookDate: 2009-07-22
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009072218185809.DAT"
   Brand: "1"
 
-PaymLog750: PaymLog
+bulkload: PaymLog
   BookDate: 2009-07-23
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009072318214099.DAT"
   Brand: "1"
 
-PaymLog751: PaymLog
+bulkload: PaymLog
   BookDate: 2009-07-24
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009072418210836.DAT"
   Brand: "1"
 
-PaymLog752: PaymLog
+bulkload: PaymLog
   BookDate: 2009-07-27
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009072718240070.DAT"
   Brand: "1"
 
-PaymLog753: PaymLog
+bulkload: PaymLog
   BookDate: 2009-07-28
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009072818185750.DAT"
   Brand: "1"
 
-PaymLog754: PaymLog
+bulkload: PaymLog
   BookDate: 2009-07-30
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009073018213832.DAT"
   Brand: "1"
 
-PaymLog755: PaymLog
+bulkload: PaymLog
   BookDate: 2009-07-31
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009073118222919.DAT"
   Brand: "1"
 
-PaymLog756: PaymLog
+bulkload: PaymLog
   BookDate: 2009-08-03
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009080318252364.DAT"
   Brand: "1"
 
-PaymLog757: PaymLog
+bulkload: PaymLog
   BookDate: 2009-08-04
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009080418223727.DAT"
   Brand: "1"
 
-PaymLog758: PaymLog
+bulkload: PaymLog
   BookDate: 2009-08-05
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009080518313305.DAT"
   Brand: "1"
 
-PaymLog759: PaymLog
+bulkload: PaymLog
   BookDate: 2009-08-06
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009080618254026.DAT"
   Brand: "1"
 
-PaymLog760: PaymLog
+bulkload: PaymLog
   BookDate: 2009-08-07
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009080718220497.DAT"
   Brand: "1"
 
-PaymLog761: PaymLog
+bulkload: PaymLog
   BookDate: 2009-08-10
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009081018281070.DAT"
   Brand: "1"
 
-PaymLog762: PaymLog
+bulkload: PaymLog
   BookDate: 2009-08-11
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009081118215593.DAT"
   Brand: "1"
 
-PaymLog763: PaymLog
+bulkload: PaymLog
   BookDate: 2009-08-12
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009081218222183.DAT"
   Brand: "1"
 
-PaymLog764: PaymLog
+bulkload: PaymLog
   BookDate: 2009-08-13
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009081318215406.DAT"
   Brand: "1"
 
-PaymLog765: PaymLog
+bulkload: PaymLog
   BookDate: 2009-08-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009081418193375.DAT"
   Brand: "1"
 
-PaymLog766: PaymLog
+bulkload: PaymLog
   BookDate: 2009-08-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009081718195278.DAT"
   Brand: "1"
 
-PaymLog767: PaymLog
+bulkload: PaymLog
   BookDate: 2009-08-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009081818184454.DAT"
   Brand: "1"
 
-PaymLog768: PaymLog
+bulkload: PaymLog
   BookDate: 2009-08-19
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009081918190398.DAT"
   Brand: "1"
 
-PaymLog769: PaymLog
+bulkload: PaymLog
   BookDate: 2009-08-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009082018190156.DAT"
   Brand: "1"
 
-PaymLog770: PaymLog
+bulkload: PaymLog
   BookDate: 2009-08-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009082118180375.DAT"
   Brand: "1"
 
-PaymLog771: PaymLog
+bulkload: PaymLog
   BookDate: 2009-08-24
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009082418182520.DAT"
   Brand: "1"
 
-PaymLog772: PaymLog
+bulkload: PaymLog
   BookDate: 2009-08-25
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009082518181287.DAT"
   Brand: "1"
 
-PaymLog773: PaymLog
+bulkload: PaymLog
   BookDate: 2009-08-26
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009082618171574.DAT"
   Brand: "1"
 
-PaymLog774: PaymLog
+bulkload: PaymLog
   BookDate: 2009-08-27
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009082718193553.DAT"
   Brand: "1"
 
-PaymLog775: PaymLog
+bulkload: PaymLog
   BookDate: 2009-08-28
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009082821194024.DAT"
   Brand: "1"
 
-PaymLog776: PaymLog
+bulkload: PaymLog
   BookDate: 2009-08-31
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009083118201417.DAT"
   Brand: "1"
 
-PaymLog777: PaymLog
+bulkload: PaymLog
   BookDate: 2009-09-01
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009090118390410.DAT"
   Brand: "1"
 
-PaymLog778: PaymLog
+bulkload: PaymLog
   BookDate: 2009-09-02
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009090218205406.DAT"
   Brand: "1"
 
-PaymLog779: PaymLog
+bulkload: PaymLog
   BookDate: 2009-09-03
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009090318222150.DAT"
   Brand: "1"
 
-PaymLog780: PaymLog
+bulkload: PaymLog
   BookDate: 2009-09-04
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009090418262148.DAT"
   Brand: "1"
 
-PaymLog781: PaymLog
+bulkload: PaymLog
   BookDate: 2009-09-07
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009090718274421.DAT"
   Brand: "1"
 
-PaymLog782: PaymLog
+bulkload: PaymLog
   BookDate: 2009-09-08
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009090818240404.DAT"
   Brand: "1"
 
-PaymLog783: PaymLog
+bulkload: PaymLog
   BookDate: 2009-09-09
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009090918233239.DAT"
   Brand: "1"
 
-PaymLog784: PaymLog
+bulkload: PaymLog
   BookDate: 2009-09-10
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009091018242832.DAT"
   Brand: "1"
 
-PaymLog785: PaymLog
+bulkload: PaymLog
   BookDate: 2009-09-11
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009091118222995.DAT"
   Brand: "1"
 
-PaymLog786: PaymLog
+bulkload: PaymLog
   BookDate: 2009-09-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009091418250646.DAT"
   Brand: "1"
 
-PaymLog787: PaymLog
+bulkload: PaymLog
   BookDate: 2009-09-15
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009091518212457.DAT"
   Brand: "1"
 
-PaymLog788: PaymLog
+bulkload: PaymLog
   BookDate: 2009-09-16
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009091618222375.DAT"
   Brand: "1"
 
-PaymLog789: PaymLog
+bulkload: PaymLog
   BookDate: 2009-09-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009091718220871.DAT"
   Brand: "1"
 
-PaymLog790: PaymLog
+bulkload: PaymLog
   BookDate: 2009-09-18
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009091818180671.DAT"
   Brand: "1"
 
-PaymLog791: PaymLog
+bulkload: PaymLog
   BookDate: 2009-09-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009092118220108.DAT"
   Brand: "1"
 
-PaymLog792: PaymLog
+bulkload: PaymLog
   BookDate: 2009-09-22
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009092218231060.DAT"
   Brand: "1"
 
-PaymLog793: PaymLog
+bulkload: PaymLog
   BookDate: 2009-09-23
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009092318190470.DAT"
   Brand: "1"
 
-PaymLog794: PaymLog
+bulkload: PaymLog
   BookDate: 2009-09-24
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009092418192784.DAT"
   Brand: "1"
 
-PaymLog795: PaymLog
+bulkload: PaymLog
   BookDate: 2009-09-25
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009092518205669.DAT"
   Brand: "1"
 
-PaymLog796: PaymLog
+bulkload: PaymLog
   BookDate: 2009-09-28
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009092818234961.DAT"
   Brand: "1"
 
-PaymLog797: PaymLog
+bulkload: PaymLog
   BookDate: 2009-09-29
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009092918202072.DAT"
   Brand: "1"
 
-PaymLog798: PaymLog
+bulkload: PaymLog
   BookDate: 2009-09-30
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009093018240915.DAT"
   Brand: "1"
 
-PaymLog799: PaymLog
+bulkload: PaymLog
   BookDate: 2009-10-01
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009100119471979.DAT"
   Brand: "1"
 
-PaymLog800: PaymLog
+bulkload: PaymLog
   BookDate: 2009-10-02
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009100218313928.DAT"
   Brand: "1"
 
-PaymLog801: PaymLog
+bulkload: PaymLog
   BookDate: 2009-10-03
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009100315525445.DAT"
   Brand: "1"
 
-PaymLog802: PaymLog
+bulkload: PaymLog
   BookDate: 2009-10-05
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009100518362158.DAT"
   Brand: "1"
 
-PaymLog803: PaymLog
+bulkload: PaymLog
   BookDate: 2009-10-06
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009100618274781.DAT"
   Brand: "1"
 
-PaymLog804: PaymLog
+bulkload: PaymLog
   BookDate: 2009-10-07
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009100718282507.DAT"
   Brand: "1"
 
-PaymLog805: PaymLog
+bulkload: PaymLog
   BookDate: 2009-10-08
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009100818281569.DAT"
   Brand: "1"
 
-PaymLog806: PaymLog
+bulkload: PaymLog
   BookDate: 2009-10-09
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009100918231097.DAT"
   Brand: "1"
 
-PaymLog807: PaymLog
+bulkload: PaymLog
   BookDate: 2009-10-10
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009101015355821.DAT"
   Brand: "1"
 
-PaymLog808: PaymLog
+bulkload: PaymLog
   BookDate: 2009-10-13
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009101318252317.DAT"
   Brand: "1"
 
-PaymLog809: PaymLog
+bulkload: PaymLog
   BookDate: 2009-10-14
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009101418212653.DAT"
   Brand: "1"
 
-PaymLog810: PaymLog
+bulkload: PaymLog
   BookDate: 2009-10-15
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009101518221231.DAT"
   Brand: "1"
 
-PaymLog811: PaymLog
+bulkload: PaymLog
   BookDate: 2009-10-16
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009101618193512.DAT"
   Brand: "1"
 
-PaymLog812: PaymLog
+bulkload: PaymLog
   BookDate: 2009-10-17
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009101715284221.DAT"
   Brand: "1"
 
-PaymLog813: PaymLog
+bulkload: PaymLog
   BookDate: 2009-10-19
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009101918253034.DAT"
   Brand: "1"
 
-PaymLog814: PaymLog
+bulkload: PaymLog
   BookDate: 2009-10-20
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009102018205130.DAT"
   Brand: "1"
 
-PaymLog815: PaymLog
+bulkload: PaymLog
   BookDate: 2009-10-21
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009102118213921.DAT"
   Brand: "1"
 
-PaymLog816: PaymLog
+bulkload: PaymLog
   BookDate: 2009-10-22
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009102218230519.DAT"
   Brand: "1"
 
-PaymLog817: PaymLog
+bulkload: PaymLog
   BookDate: 2009-10-23
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009102318193529.DAT"
   Brand: "1"
 
-PaymLog818: PaymLog
+bulkload: PaymLog
   BookDate: 2009-10-24
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009102415364105.DAT"
   Brand: "1"
 
-PaymLog819: PaymLog
+bulkload: PaymLog
   BookDate: 2009-10-26
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009102618212426.DAT"
   Brand: "1"
 
-PaymLog820: PaymLog
+bulkload: PaymLog
   BookDate: 2009-10-27
   UserCode: "RetFile"
   PaymFile: "DDRETSCH_DEV19_2009102718224433.DAT"

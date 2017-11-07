@@ -1,26 +1,26 @@
-TriggerConf1: TriggerConf
+bulkload: TriggerConf
   TriggerConfID: "ALL"
   TCName: "Re-Rate all"
   Prior: 5
   ValidFrom: 2001-01-01
-  ValidTo: 1950-12-31
+  ValidTo: 2050-12-31
   EventRule: 4
 
-TriggerConf2: TriggerConf
+bulkload: TriggerConf
   TriggerConfID: "TARIFF"
   TCName: "Tariff triggers"
   Prior: 10
   ValidFrom: 2001-01-01
   ValidTo: 2049-12-31
 
-TriggerConf3: TriggerConf
+bulkload: TriggerConf
   TriggerConfID: "PLISTCONF"
   TCName: "Plistconf triggers"
   Prior: 11
   ValidFrom: 2001-01-01
   ValidTo: 2049-12-31
 
-TriggerConf4: TriggerConf
+bulkload: TriggerConf
   TriggerConfID: "MSERVICELIMIT"
   TCName: "Packet trigger"
   Prior: 12
@@ -28,14 +28,14 @@ TriggerConf4: TriggerConf
   ValidTo: 2049-12-31
   EventRule: 4
 
-TriggerConf5: TriggerConf
+bulkload: TriggerConf
   TriggerConfID: "BDEST"
   TCName: "B-Destination triggers"
   Prior: 20
   ValidFrom: 2001-01-01
   ValidTo: 2049-12-31
 
-TriggerConf6: TriggerConf
+bulkload: TriggerConf
   TriggerConfID: "MSREQUEST"
   TCName: "Request"
   Prior: 33
@@ -43,7 +43,7 @@ TriggerConf6: TriggerConf
   ValidTo: 2040-12-31
   EventRule: 4
 
-TriggerConf7: TriggerConf
+bulkload: TriggerConf
   TriggerConfID: "MSOWNER"
   TCName: "Subscription event"
   Prior: 40
@@ -51,7 +51,7 @@ TriggerConf7: TriggerConf
   ValidTo: 2049-12-31
   EventRule: 4
 
-TriggerConf8: TriggerConf
+bulkload: TriggerConf
   TriggerConfID: "MOBCDR"
   TCName: "Cdr triggers"
   Prior: 50
@@ -59,7 +59,7 @@ TriggerConf8: TriggerConf
   ValidTo: 2049-12-31
   EventRule: 4
 
-TriggerConf9: TriggerConf
+bulkload: TriggerConf
   TriggerConfID: "SPECIAL_FILE"
   TCName: "Read custnums from file"
   Prior: 87
@@ -67,7 +67,7 @@ TriggerConf9: TriggerConf
   ValidTo: 2030-12-31
   EventRule: 4
 
-TriggerConf10: TriggerConf
+bulkload: TriggerConf
   TriggerConfID: "SPECIAL_LIST"
   TCName: "InvCust,CLI list"
   Prior: 88
@@ -75,10 +75,10 @@ TriggerConf10: TriggerConf
   ValidTo: 2024-12-31
   EventRule: 4
 
-TriggerConf11: TriggerConf
+bulkload: TriggerConf
   TriggerConfID: "SLGANALYSE"
   TCName: "Servicelimit Analyses"
   Prior: 89
   ValidFrom: 2012-03-01
-  ValidTo: 1950-12-31
+  ValidTo: 2050-12-31
 

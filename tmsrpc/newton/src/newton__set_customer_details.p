@@ -64,9 +64,8 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/fbankdata.i}
 
 /* Input parameters */
@@ -111,13 +110,9 @@ scUser = pcSalesman. /* Read from eventlog functions into eventlog.user */
 piCustNum = get_int(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST customer
-WHERE customer.custnum = piCustNum
-  AND customer.brand = "1" NO-ERROR.
-IF NOT AVAILABLE Customer THEN
-    RETURN appl_err(SUBST("Customer for &1 not found", piCustNum)).
+{newton/src/findtenant.i NO Common Customer CustNum piCustNum}
 
-katun = "VISTA_" + scUser.
+Syst.Var:katun = "VISTA_" + scUser.
 
 /* Local variables */
 DEF VAR lcstruct AS CHAR NO-UNDO.
@@ -176,8 +171,7 @@ ASSIGN
     ldBirthDay         = customer.BirthDay
     liChargeType       = customer.ChargeType.
 
-lcCustomerData[23] = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "Invoice",
+lcCustomerData[23] = Func.Common:mTMSCodeName("Invoice",
                                       "DelType",
                                       STRING(Customer.DelType)).
 
@@ -307,7 +301,7 @@ ELSE lcOrgId = lcCustomerData[LOOKUP("person_id", lcDataFields)].
 IF Customer.orgid NE lcOrgId THEN DO:
 
    FIND FIRST bCustomer WHERE
-      bCustomer.Brand = gcBrand AND
+      bCustomer.Brand = Syst.Var:gcBrand AND
       bCustomer.OrgID = lcOrgId
    NO-LOCK NO-ERROR.
 
@@ -323,7 +317,7 @@ IF Customer.CustIdType NE "CIF" THEN DO:
    IF lcCustIdType NE Customer.CustIdType THEN DO:
       
       FIND FIRST bCustomer WHERE
-         bCustomer.Brand = gcBrand AND
+         bCustomer.Brand = Syst.Var:gcBrand AND
          bCustomer.OrgID = lcOrgId AND
          bCustomer.CustIdType = lcCustIdType NO-LOCK NO-ERROR.
       
@@ -355,7 +349,7 @@ IF Customer.CustIdType = "CIF" THEN DO:
    RUN StarEventInitialize(lhCustContact).
    
    FIND FIRST CustContact WHERE
-              CustContact.Brand = gcBrand AND
+              CustContact.Brand = Syst.Var:gcBrand AND
               CustContact.CustNum = piCustNum AND
               CustContact.CustType = 5 EXCLUSIVE-LOCK NO-ERROR.
 
@@ -365,7 +359,7 @@ IF Customer.CustIdType = "CIF" THEN DO:
    ELSE IF get_paramcount(pcCCStruct) > 0 THEN DO:  
       CREATE CustContact.
       ASSIGN
-         CustContact.Brand = gcBrand
+         CustContact.Brand = Syst.Var:gcBrand
          CustContact.Custnum = Customer.Custnum
          CustContact.CustType = 5.
    END.
@@ -500,9 +494,9 @@ IF llCustomerChanged THEN DO:
                                 INPUT Customer.Custnum,
                                 INPUT "Customer email address is changed").
 
-          liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+          liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                            INPUT TODAY,
-                                           INPUT katun,
+                                           INPUT Syst.Var:katun,
                                            INPUT 0, /* msseq */
                                            INPUT "", /* cli */
                                            INPUT Customer.CustNum,
@@ -536,9 +530,9 @@ IF llCustomerChanged THEN DO:
                               INPUT Customer.Custnum,
                               INPUT "Customer email address is changed").
 
-             liRequest = fEmailInvoiceRequest(INPUT fMakeTS(),
+             liRequest = fEmailInvoiceRequest(INPUT Func.Common:mMakeTS(),
                                               INPUT TODAY,
-                                              INPUT katun,
+                                              INPUT Syst.Var:katun,
                                               INPUT 0, /* msseq */
                                               INPUT "", /* cli */
                                               INPUT Customer.CustNum,
@@ -679,11 +673,11 @@ IF pcMemoTitle NE "" OR
    CREATE Memo.
    ASSIGN
        Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = gcBrand
+       Memo.Brand     = Syst.Var:gcBrand
        Memo.HostTable = lcMemoHostTable
        Memo.KeyValue  = STRING(Customer.Custnum)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = katun
+       Memo.CreUser   = Syst.Var:katun
        Memo.CustNum   = Customer.Custnum.
    IF llBankAcctChange THEN
       ASSIGN
@@ -699,7 +693,6 @@ IF pcMemoTitle NE "" OR
 END.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.
 
 

@@ -19,15 +19,15 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-katun = "Newton".
-gcBrand = "1".
+Syst.Var:katun = "Newton".
+Syst.Var:gcBrand = "1".
 {newton/src/json_key.i}
-{Func/timestamp.i}
 {Mm/fbundle.i}
 
 /* Input parameters */
 DEF VAR pcInput AS CHAR NO-UNDO.
 DEF VAR pcStruct AS CHAR NO-UNDO.
+DEF VAR pcTenant AS CHAR NO-UNDO.
 DEF VAR pcSearchType AS CHARACTER NO-UNDO. 
 DEF VAR piOffSet AS INT NO-UNDO.
 DEF VAR piLimit AS INT NO-UNDO.
@@ -51,12 +51,13 @@ INDEX Custnum IS PRIMARY UNIQUE Custnum.
 
 IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 pcStruct = get_struct(param_toplevel_id, "0").
-validate_struct(pcStruct, "search_type!,search_key!,limit!,offset!,admin!").
+validate_struct(pcStruct, "brand!,search_type!,search_key!,limit!,offset!,admin!").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+pcTenant     = get_string(pcStruct, "brand").
 pcSearchType = get_string(pcStruct, "search_type").
-pcInput = get_string(pcStruct, "search_key").
-plAdmin = get_bool(pcStruct, "admin").
+pcInput      = get_string(pcStruct, "search_key").
+plAdmin      = get_bool  (pcStruct, "admin").
 
 IF pcSearchType EQ "custnum" THEN DO:
    liOwner = INT(pcInput) NO-ERROR.
@@ -68,6 +69,8 @@ piLimit  = get_pos_int(pcStruct, "limit").
 piOffSet = get_int(pcStruct, "offset").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
 
@@ -90,7 +93,7 @@ FUNCTION fAddSubStruct RETURNS LOGICAL:
          lcBundle = TermMobsub.TariffBundle.
       ELSE
          lcBundle = fGetTerminatedSpecificBundle(TermMobsub.MsSeq,
-                                                 fMakeTS(),
+                                                 Func.Common:mMakeTS(),
                                                  TermMobsub.CliType).
    END.
 
@@ -115,7 +118,7 @@ FUNCTION fIsViewableTermMobsub RETURNS LOGICAL
    NO-LOCK USE-INDEX MsSeq NO-ERROR.
    IF NOT AVAIL Msowner THEN RETURN FALSE.
    
-   fSplitTS(msowner.tsend, output ldaDate, output liTime).
+   Func.Common:mSplitTS(msowner.tsend, output ldaDate, output liTime).
    IF TODAY - ldaDate > 180 AND NOT plAdmin THEN RETURN FALSE.
 
    RETURN TRUE.
@@ -135,7 +138,7 @@ IF pcSearchType EQ "msisdn" THEN DO:
    RELEASE ttOwner.
    FOR EACH termmobsub NO-LOCK WHERE
       termmobsub.cli = pcInput AND
-      termmobsub.brand = gcBrand,
+      termmobsub.brand = Syst.Var:gcBrand,
       FIRST Customer NO-LOCK WHERE
             Customer.Custnum = TermMobSub.Custnum: 
    
@@ -166,7 +169,7 @@ ELSE IF pcSearchType EQ "fixed_number" THEN DO:
    RELEASE ttOwner.
 
    FOR EACH termmobsub NO-LOCK WHERE
-      termmobsub.brand = gcBrand AND
+      termmobsub.brand = Syst.Var:gcBrand AND
       termmobsub.FixedNumber = pcInput,
       FIRST Customer NO-LOCK WHERE
             Customer.Custnum = TermMobSub.Custnum:
@@ -197,10 +200,10 @@ ELSE IF pcSearchType EQ "imsi" THEN DO:
    
    RELEASE ttOwner.
    FOR EACH TermMobsub NO-LOCK WHERE
-      TermMobSub.Brand = gcBrand AND
+      TermMobSub.Brand = Syst.Var:gcBrand AND
       TermMobSub.IMSI  = pcInput,
       FIRST Customer NO-LOCK WHERE
-            Customer.Brand = gcBrand AND
+            Customer.Brand = Syst.Var:gcBrand AND
             Customer.Custnum = TermMobSub.Custnum: 
    
       IF NOT fIsViewableTermMobsub(TermMobSub.MsSeq) THEN NEXT.
@@ -230,7 +233,7 @@ ELSE IF pcSearchType EQ "custnum" AND liOwner NE 0 THEN DO:
 
    FIND Customer NO-LOCK WHERE
         Customer.CustNum = liOwner AND
-        Customer.brand = gcBrand NO-ERROR.
+        Customer.brand = Syst.Var:gcBrand NO-ERROR.
    IF NOT AVAILABLE Customer THEN
       RETURN appl_err(SUBST("Customer &1 not found 1", liOwner)).
    
@@ -244,7 +247,7 @@ END.
 ELSE IF pcSearchType EQ "person_id" THEN DO:
    
    FIND Customer NO-LOCK WHERE
-        Customer.brand = gcBrand AND
+        Customer.brand = Syst.Var:gcBrand AND
         Customer.OrgId = pcInput AND
         Customer.Roles NE "inactive" USE-INDEX OrgId NO-ERROR.
 
@@ -265,9 +268,9 @@ ELSE RETURN appl_err(SUBST("Unknown search type &1", pcSearchType)).
 FOR EACH ttOwner NO-LOCK,
     EACH TermMobSub NO-LOCK WHERE
          TermMobSub.Custnum = ttOwner.Custnum AND
-         TermMobSub.brand = gcBrand,
+         TermMobSub.brand = Syst.Var:gcBrand,
     FIRST Customer NO-LOCK WHERE
-          Customer.brand = gcBrand AND
+          Customer.brand = Syst.Var:gcBrand AND
           Customer.custnum = TermMobSub.custnum:
      
     IF llSearchByMobsub AND (pcInput EQ TermMobSub.CLI OR
@@ -289,5 +292,4 @@ add_int(top_struct, "sub_count", liSubCount).
 
 FINALLY:
    EMPTY TEMP-TABLE ttOwner.
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

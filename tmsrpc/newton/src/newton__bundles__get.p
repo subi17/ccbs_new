@@ -23,56 +23,83 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
+{Func/cparam2.i}
+{Syst/tmsconst.i}
+{Func/fprepaidfee.i}
+{Func/multitenantfunc.i}
+
 DEF VAR lcResultStruct AS CHAR NO-UNDO. 
 DEF VAR pcId AS CHAR NO-UNDO. 
 DEF VAR pcIdArray AS CHAR NO-UNDO. 
+DEF VAR pcTenant  As CHAR NO-UNDO.
 DEF VAR liCounter AS INTEGER NO-UNDO. 
 DEFINE VARIABLE resp_array AS CHARACTER NO-UNDO.
 DEF VAR lcRegionArray  AS CHAR NO-UNDO.
 DEF VAR lcRegionStruct AS CHAR NO-UNDO.
 
+DEF VAR lcIPLContracts         AS CHAR NO-UNDO.
+DEF VAR lcCONTDContracts       AS CHAR NO-UNDO.
+DEF VAR lcFLATContracts        AS CHAR NO-UNDO.
+DEF VAR lcBONOContracts        AS CHAR NO-UNDO.
+DEF VAR lcCONTSContracts       AS CHAR NO-UNDO.
+DEF VAR lcCONTSFContracts      AS CHAR NO-UNDO.
+DEF VAR lcCLIType              AS CHAR NO-UNDO.
+DEF VAR lcBundleType           AS CHAR NO-UNDO.
+DEF VAR ldeFee                 AS DEC  NO-UNDO.
+DEF VAR liLineType             AS INT  NO-UNDO.
+DEF VAR llDss2Compatible       AS LOG NO-UNDO. 
+DEF VAR liFixedLineType        AS INT  NO-UNDO.
+DEF VAR lcAllowedDSS2SubsType  AS CHAR NO-UNDO.
+DEF VAR lcPromotionBundles     AS CHAR NO-UNDO. 
+DEF VAR lcVoiceBundles         AS CHAR NO-UNDO.
+DEF VAR lcSupplementaryVoiceBundles AS CHAR NO-UNDO.
+DEF VAR lcSupplementaryDataBundles  AS CHAR NO-UNDO.
+DEF VAR lcSupplementBundles         AS CHAR NO-UNDO.
+DEF VAR lcDefaultBundles            AS CHAR NO-UNDO.
+
 IF validate_request(param_toplevel_id, "array") = ? THEN RETURN.
+
 pcIDArray = get_array(param_toplevel_id, "0").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 resp_array = add_array(response_toplevel_id, "").
 
-DEF VAR lcIPLContracts     AS CHAR NO-UNDO.
-DEF VAR lcCONTDContracts   AS CHAR NO-UNDO.
-DEF VAR lcFLATContracts    AS CHAR NO-UNDO.
-DEF VAR lcBONOContracts    AS CHAR NO-UNDO.
-DEF VAR lcCONTSContracts   AS CHAR NO-UNDO.
-DEF VAR lcCONTSFContracts  AS CHAR NO-UNDO.
-DEF VAR lcCLIType          AS CHAR NO-UNDO.
-DEF VAR lcBundleType       AS CHAR NO-UNDO.
-DEF VAR ldeFee             AS DEC  NO-UNDO.
-DEF VAR liLineType         AS INT  NO-UNDO.
-DEF VAR llDss2Compatible   AS LOG NO-UNDO. 
-DEF VAR liFixedLineType    AS INT  NO-UNDO.
-DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
-DEF VAR lcPromotionBundles AS CHAR NO-UNDO. 
-
-{Func/cparam2.i}
-{Syst/tmsconst.i}
-{Func/fprepaidfee.i}
-
-ASSIGN lcIPLContracts   = fCParamC("IPL_CONTRACTS")
-       lcCONTDContracts = fCParamC("CONTD_CONTRACTS")
-       lcFLATContracts  = fCParamC("FLAT_CONTRACTS")
-       lcBONOContracts  = fCParamC("BONO_CONTRACTS")
-       lcCONTSContracts = fCParamC("CONTS_CONTRACTS")
-       lcCONTSFContracts = fCParamC("CONTSF_CONTRACTS")
-       lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
-       lcPromotionBundles    = fCParamC("PROMOTION_BUNDLES").
-
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
    pcID = get_string(pcIDArray, STRING(liCounter)).
+   
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-   FIND FIRST DayCampaign NO-LOCK WHERE
+   IF NUM-ENTRIES(pcID,"|") > 1 THEN
+       ASSIGN
+           pcTenant = ENTRY(2, pcID, "|")
+           pcID     = ENTRY(1, pcID, "|").
+   ELSE
+       RETURN appl_err("Invalid tenant information").
+
+   {newton/src/settenant.i pcTenant}
+
+   IF lcBONOContracts = "" THEN
+   DO:
+       ASSIGN 
+           lcIPLContracts              = fCParamC("IPL_CONTRACTS")
+           lcCONTDContracts            = fCParamC("CONTD_CONTRACTS")
+           lcFLATContracts             = fCParamC("FLAT_CONTRACTS")
+           lcBONOContracts             = fCParamC("BONO_CONTRACTS")
+           lcCONTSContracts            = fCParamC("CONTS_CONTRACTS")
+           lcCONTSFContracts           = fCParamC("CONTSF_CONTRACTS")
+           lcAllowedDSS2SubsType       = fCParamC("DSS2_SUBS_TYPE")
+           lcPromotionBundles          = fCParamC("PROMOTION_BUNDLES")
+           lcVoiceBundles              = fCParamC("VOICE_BONO_CONTRACTS")
+           lcSupplementaryVoiceBundles = fCParamC("SUPPLEMENT_VOICE_BONO_CONTRACTS")
+           lcSupplementaryDataBundles  = fCParamC("SUPPLEMENT_DATA_BONO_CONTRACTS") 
+           lcDefaultBundles            = "MM_DATA600"
+           lcSupplementBundles         = TRIM(lcSupplementaryVoiceBundles + "," + lcSupplementaryDataBundles, ",").
+   END.    
+
+   FIND FIRST DayCampaign NO-LOCK WHERE 
               DayCampaign.Brand   = "1"  AND
               DayCampaign.DCEvent = pcID NO-ERROR.
    IF NOT AVAIL DayCampaign THEN
@@ -87,12 +114,19 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       llDss2Compatible = FALSE.
 
    lcResultStruct = add_struct(resp_array, "").
-   add_string(lcResultStruct, "id", DayCampaign.DCEvent).
+   add_string(lcResultStruct, "id", DayCampaign.DCEvent + "|" + fConvertTenantToBrand(pcTenant)).
+   add_string(lcResultStruct, "brand", fConvertTenantToBrand(pcTenant)).
    add_string(lcResultStruct,"name", DayCampaign.DCName).
    add_int(lcResultStruct,"status", DayCampaign.StatusCode).
-   
+
+   FIND FIRST CCN WHERE CCN.Brand = "1" AND CCN.CCN = DayCampaign.CCN NO-LOCK NO-ERROR.
+   add_string(lcResultStruct,"category", (IF AVAIL CCN THEN (IF INDEX(CCN.CCNName,"Roaming") > 0 THEN "Roaming" 
+                                                             ELSE IF INDEX(CCN.CCNName,"International") > 0 THEN "International" 
+                                                             ELSE "National") 
+                                          ELSE "National")).
+
    FIND FIRST FMItem NO-LOCK WHERE
-              FMItem.Brand     = gcBrand              AND
+              FMItem.Brand     = Syst.Var:gcBrand              AND
               FMItem.FeeModel  = DayCampaign.FeeModel AND
               FMItem.ToDate   >= TODAY                AND 
               FMItem.FromDate <= TODAY                NO-ERROR.
@@ -114,13 +148,27 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
           END.
           ELSE IF ServiceLimit.DialType = {&DIAL_TYPE_VOICE} THEN
              add_double(lcResultStruct,"voice_amount", ServiceLimit.InclAmt).
-
+          ELSE IF ServiceLimit.DialType = {&DIAL_TYPE_FIXED_VOICE} THEN 
+             add_double(lcResultStruct,"fixed2mobile_voice_amount", ServiceLimit.InclAmt).   
+          ELSE IF ServiceLimit.DialType = {&DIAL_TYPE_FIXED_VOICE_BDEST} THEN 
+             add_double(lcResultStruct,"fixed2fixed_voice_amount", ServiceLimit.InclAmt).   
+          ELSE IF ServiceLimit.DialType = {&DIAL_TYPE_SMS} THEN 
+             add_double(lcResultStruct,"sms_amount", ServiceLimit.InclAmt).       
       END. /* FOR EACH ServiceLimit WHERE */
    END. /* IF LOOKUP(DayCampaign.DCType,"1,4,6,8") > 0 THEN DO: */
    
-   IF LOOKUP(DayCampaign.DCEvent,lcBONOContracts) > 0 OR
-      DayCampaign.DCEvent = "HSPA_ROAM_EU" THEN
-      lcBundleType = "bundle".
+   IF (LOOKUP(DayCampaign.DCEvent,lcBONOContracts    ) > 0 OR
+       LOOKUP(DayCampaign.DCEvent,lcSupplementBundles) > 0 OR 
+       LOOKUP(DayCampaign.DCEvent,lcDefaultBundles)    > 0 OR 
+       DayCampaign.DCEvent = "HSPA_ROAM_EU")               THEN
+   DO:
+      IF LOOKUP(DayCampaign.DCEvent,lcSupplementBundles) > 0 THEN   
+         lcBundleType = "supplemental_bundle".
+      ELSE      
+         lcBundleType = "bundle".
+   END.
+   ELSE IF LOOKUP(DayCampaign.DCEvent,lcVoiceBundles) > 0 THEN 
+      lcBundleType = "voice_bundle".
    ELSE IF LOOKUP(DayCampaign.DCEvent,lcIPLContracts) > 0 THEN
       ASSIGN lcBundleType = "subscription"
              lcCLIType = "CONTRD".
@@ -139,9 +187,12 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    ELSE IF LOOKUP(DayCampaign.DCType,"6,8") > 0 THEN
       lcBundleType = "upsell".
    ELSE IF LOOKUP(DayCampaign.DCEvent,lcPromotionBundles) > 0 THEN 
-      lcBundleType = "promotional".
-   ELSE lcBundleType = "service".
-
+      lcBundleType = "promotional".   
+   ELSE IF DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
+      lcBundleType = "tv_service".
+   ELSE 
+      lcBundleType = "service".
+   
    IF lcCLIType > "" THEN DO:
       FIND FIRST CLIType WHERE
                  CLIType.Brand   = "1" AND
@@ -179,5 +230,4 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 END.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

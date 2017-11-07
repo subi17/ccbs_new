@@ -1,0 +1,7 @@
+ADD FIELD "AddressId" OF "OrderCustomer" AS CHARACTER
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "AddressId"
+  COLUMN-LABEL "AddressId"
+  HELP "Address Id"
+  ORDER 1160

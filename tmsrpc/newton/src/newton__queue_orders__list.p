@@ -17,8 +17,9 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-gcBrand = "1".  
- 
+Syst.Var:gcBrand = "1".  
+
+DEFINE VARIABLE pcTenant AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE piStatus AS INTEGER NO-UNDO. 
 DEFINE VARIABLE piOffset AS INTEGER NO-UNDO. 
 DEFINE VARIABLE piLimit  AS INTEGER NO-UNDO INIT 1000000. 
@@ -35,11 +36,12 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 gcParamStruct = get_struct(param_toplevel_id, "").
 
-lcParams = validate_request(gcParamStruct, "status!,offset,limit").
+lcParams = validate_request(gcParamStruct, "brand!,status!,offset,limit").
 IF lcParams EQ ? THEN RETURN.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-piStatus= get_int(gcParamStruct, "status").
+pcTenant = get_string(gcParamStruct, "brand"). 
+piStatus = get_int(gcParamStruct, "status").
 piOffset = get_int(gcParamStruct, "offset").
 
 IF LOOKUP("limit", lcParams) > 0 THEN DO:
@@ -52,19 +54,20 @@ IF LOOKUP("offset", lcParams) > 0 THEN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/settenant.i pcTenant}
+
 FUNCTION fAddOrder RETURN LOGICAL:
   
    add_timestamp(order_struct, "created_at", Order.CrStamp).
    add_string(order_struct,"msisdn", Order.CLI).
 
     FIND OrderCustomer WHERE 
-         OrderCustomer.Brand = gcBrand AND
+         OrderCustomer.Brand = Syst.Var:gcBrand AND
          OrderCustomer.OrderId = Order.OrderId AND
          OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
     IF AVAIL OrderCustomer THEN DO:
        DEFINE VARIABLE lcAgrCustName AS CHARACTER NO-UNDO. 
-       lcAgrCustName = DYNAMIC-FUNCTION("fDispOrderName" IN ghFunc1,
-                                         BUFFER OrderCustomer).
+       lcAgrCustName = Func.Common:mDispOrderName(BUFFER OrderCustomer).
        add_string(order_struct,"name",lcAgrCustName).
        add_string(order_struct,"customer_id",OrderCustomer.CustID).
     END.
@@ -79,7 +82,7 @@ iCount = 0.
 lcOutArray = add_array(response_toplevel_id,"").
 OrderLoop:
 FOR EACH Order WHERE 
-    Order.Brand eq gcBrand AND 
+    Order.Brand eq Syst.Var:gcBrand AND 
     Order.StatusCode eq STRING(piStatus) NO-LOCK USE-INDEX StatusCode:
     IF iCount >= piOffset + piLimit THEN 
        LEAVE OrderLoop.
@@ -98,5 +101,4 @@ END.
 IF lcError NE "" THEN RETURN appl_err(lcError).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

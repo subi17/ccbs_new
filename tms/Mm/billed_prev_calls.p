@@ -11,12 +11,12 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/coinv.i}
 {Func/fvatfact.i}
 {Func/ftransdir.i}
 {Syst/funcrunprocess_update.i}
+{Func/multitenantfunc.i}
 
 DEFINE INPUT  PARAMETER iiInvType          AS INT  NO-UNDO.
 DEFINE INPUT  PARAMETER iiBillPeriod       AS INT  NO-UNDO.
@@ -55,7 +55,9 @@ ASSIGN ldFromDate = fInt2Date(iiBillPeriod,1)
        lcOdir     = fCParamC("CDRTransDir")
        lcSdir     = fCParamC("CDRSpoolDir")
        lcTdir     = fCParamC("BilledTrackDir")
-       lcfilename = "billed_prev_calls_" + STRING(iiBillPeriod) + ".dump"
+       lcfilename = REPLACE("#TENANT_billed_prev_calls_" +
+                            STRING(iiBillPeriod) + ".dump", "#TENANT",
+                            CAPS(Syst.Parameters:Tenant))
        lcNumeric  = SESSION:NUMERIC-FORMAT
        SESSION:NUMERIC-FORMAT = "AMERICAN"
        liInvPeriod    = YEAR(TODAY) * 100 + MONTH(TODAY)
@@ -75,7 +77,7 @@ lcFileName = lcSdir + "/" + lcfilename.
 OUTPUT STREAM sFile TO VALUE(lcfilename).
 
 FOR EACH Invoice WHERE
-         Invoice.Brand    = gcBrand       AND
+         Invoice.Brand    = Syst.Var:gcBrand       AND
          Invoice.InvDate >= ldInvFromDate AND
          Invoice.InvDate <= ldInvToDate   AND
          Invoice.InvType  = iiInvType NO-LOCK,

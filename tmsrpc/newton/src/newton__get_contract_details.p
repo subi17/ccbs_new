@@ -27,11 +27,11 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-katun = "NewtonRPC".
-gcBrand = "1".
-{Func/timestamp.i}
+Syst.Var:katun = "NewtonRPC".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
- 
+
+DEF VAR pcTenant     AS CHAR NO-UNDO. 
 DEF VAR pcMSISDN     AS CHAR NO-UNDO. 
 DEF VAR pcCustIDType AS CHAR NO-UNDO. 
 DEF VAR pcCustID     AS CHAR NO-UNDO. 
@@ -59,23 +59,26 @@ DEFINE TEMP-TABLE ttContractDetails NO-UNDO
 
 DEFINE BUFFER bttContractDetails FOR ttContractDetails.
 
-IF validate_request(param_toplevel_id,"string,string,string,string,datetime") EQ ? THEN
+IF validate_request(param_toplevel_id,"brand,string,string,string,string,datetime") EQ ? THEN
    RETURN.
 
 ASSIGN 
-   pcMSISDN     = get_string(param_toplevel_id,"0")
-   pcCustIDType = get_string(param_toplevel_id,"1")
-   pcCustID     = get_string(param_toplevel_id,"2")   
-   pcSalesID    = get_string(param_toplevel_id,"3")
-   pcDate       = get_date(param_toplevel_id,"4").
+   pcTenant     = get_string(param_toplevel_id,"0")
+   pcMSISDN     = get_string(param_toplevel_id,"1")
+   pcCustIDType = get_string(param_toplevel_id,"2")
+   pcCustID     = get_string(param_toplevel_id,"3")   
+   pcSalesID    = get_string(param_toplevel_id,"4")
+   pcDate       = get_date(param_toplevel_id,"5").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 IF TRIM(pcSalesID) EQ "" THEN  
    RETURN appl_err("Sales ID is empty").
 
 FIND SalesMan NO-LOCK WHERE 
-     SalesMan.Brand    = gcBrand   AND 
+     SalesMan.Brand    = Syst.Var:gcBrand   AND 
      SalesMan.Salesman = pcSalesID NO-ERROR.
 
 IF NOT AVAIL SalesMan THEN 
@@ -87,7 +90,7 @@ IF pcMSISDN NE "" AND
 
 IF pcMSISDN NE "" THEN DO:
    FIND FIRST MobSub NO-LOCK WHERE 
-              MobSub.Brand = gcBrand  AND 
+              MobSub.Brand = Syst.Var:gcBrand  AND 
               MobSub.CLI   = pcMSISDN NO-ERROR.
 
    IF NOT AVAIL MobSub THEN 
@@ -102,7 +105,7 @@ IF (pcCustID     NE ""  AND
 
 IF pcCustID NE "" THEN DO:
    FIND FIRST Customer NO-LOCK WHERE 
-              Customer.Brand      = gcBrand      AND 
+              Customer.Brand      = Syst.Var:gcBrand      AND 
               Customer.OrgID      = pcCustID     AND 
               Customer.CustIDType = pcCustIDType NO-ERROR.
 
@@ -113,8 +116,8 @@ END.
 IF pcDate EQ ? THEN pcDate = TODAY - 30.
 
 ASSIGN 
-   lpcDateStamp  = fHMS2TS(pcDate,"00:00:00")
-   ldtTodayStamp = fHMS2TS(TODAY,"23:59:59").
+   lpcDateStamp  = Func.Common:mHMS2TS(pcDate,"00:00:00")
+   ldtTodayStamp = Func.Common:mHMS2TS(TODAY,"23:59:59").
 
 /* Creating temp-table data WITH Terminal return contracts */
 FOR EACH TermReturn NO-LOCK WHERE 
@@ -127,7 +130,7 @@ FOR EACH TermReturn NO-LOCK WHERE
 
    ASSIGN 
       ldtContractDate = ?
-      llgContractDate = fTS2Date(TermReturn.ReturnTS,
+      llgContractDate = Func.Common:mTS2Date(TermReturn.ReturnTS,
                                  ldtContractDate).
    CREATE ttContractDetails.
    ASSIGN 
@@ -156,7 +159,7 @@ FOR EACH TMSCodes NO-LOCK WHERE
    IF LOOKUP(TMSCodes.CodeValue,"6,7,8,9") > 0 THEN NEXT. 
          
    FOR EACH Order NO-LOCK USE-INDEX Salesman WHERE 
-            Order.Brand      = gcBrand            AND
+            Order.Brand      = Syst.Var:gcBrand            AND
             Order.Salesman   = Salesman.Salesman  AND 
             Order.Statuscode = TMSCodes.CodeValue AND 
             Order.OrderType  = 2                  AND 
@@ -170,7 +173,7 @@ FOR EACH TMSCodes NO-LOCK WHERE
             ELSE TRUE):
 
       FIND FIRST OrderAction NO-LOCK WHERE 
-                 OrderAction.Brand    = gcBrand        AND 
+                 OrderAction.Brand    = Syst.Var:gcBrand        AND 
                  OrderAction.OrderID  = Order.OrderID  AND 
                  OrderAction.ItemType = "Q25Extension" NO-ERROR.
 
@@ -178,7 +181,7 @@ FOR EACH TMSCodes NO-LOCK WHERE
 
       ASSIGN 
          ldtContractDate = ?
-         llgContractDate = fTS2Date(Order.CrStamp,
+         llgContractDate = Func.Common:mTS2Date(Order.CrStamp,
                                     ldtContractDate).
       CREATE ttContractDetails.
       ASSIGN 
@@ -202,7 +205,7 @@ FOR EACH ttContractDetails EXCLUSIVE-LOCK
          ttContractDetails.CLI NE MobSub.CLI THEN NEXT.
       ELSE DO:
          FIND FIRST MobSub NO-LOCK WHERE 
-                    MobSub.Brand = gcBrand               AND 
+                    MobSub.Brand = Syst.Var:gcBrand               AND 
                     MobSub.CLI   = ttContractDetails.CLI NO-ERROR. 
          
          IF NOT AVAIL MobSub THEN NEXT.
@@ -212,7 +215,7 @@ FOR EACH ttContractDetails EXCLUSIVE-LOCK
          MobSub.CustNum NE Customer.CustNum THEN NEXT.
       ELSE DO:
          FIND FIRST Customer NO-LOCK WHERE 
-                    Customer.Brand   = gcBrand        AND 
+                    Customer.Brand   = Syst.Var:gcBrand        AND 
                     Customer.CustNum = MobSub.CustNum NO-ERROR.
 
          IF NOT AVAIL Customer THEN NEXT.           
@@ -220,8 +223,7 @@ FOR EACH ttContractDetails EXCLUSIVE-LOCK
       
       ASSIGN 
          lcCustName = ""  
-         lcCustName = DYNAMIC-FUNCTION("fPrintCustName" IN ghFunc1,
-                                    BUFFER Customer).
+         lcCustName = Func.Common:mPrintCustName(BUFFER Customer).
 
       gcSubscriptionStruct = add_struct(lcTopArray,"").
       add_string(gcSubscriptionStruct,"cli",ttContractDetails.CLI).
@@ -249,7 +251,7 @@ PROCEDURE pQ25ExtensionContracts:
 DEFINE INPUT PARAMETER icUserCode AS CHAR NO-UNDO. 
    
    FOR EACH MsRequest NO-LOCK USE-INDEX UserCode WHERE 
-            MsRequest.Brand      = gcBrand          AND 
+            MsRequest.Brand      = Syst.Var:gcBrand          AND 
             MsRequest.UserCode   = icUserCode       AND 
             MsRequest.ActStamp  >= lpcDateStamp     AND 
             MsRequest.CreStamp  >= lpcDateStamp     AND
@@ -264,7 +266,7 @@ DEFINE INPUT PARAMETER icUserCode AS CHAR NO-UNDO.
             MsRequest.ReqStatus  = 0)               AND 
             MsRequest.ReqCParam3 = "RVTERM12",
       FIRST SingleFee NO-LOCK USE-INDEX HostTable WHERE 
-            SingleFee.Brand       = gcBrand                      AND 
+            SingleFee.Brand       = Syst.Var:gcBrand                      AND 
             SingleFee.HostTable   = "MobSub"                     AND 
             SingleFee.KeyValue    = STRING(MsRequest.MsSeq)      AND 
             SingleFee.SourceTable = "DCCLI"                      AND 
@@ -273,7 +275,7 @@ DEFINE INPUT PARAMETER icUserCode AS CHAR NO-UNDO.
 
       ASSIGN 
          ldtContractDate = ?
-         llgContractDate = fTS2Date(MsRequest.ActStamp,
+         llgContractDate = Func.Common:mTS2Date(MsRequest.ActStamp,
                                     ldtContractDate).
       CREATE ttContractDetails.
       ASSIGN 
@@ -286,6 +288,5 @@ DEFINE INPUT PARAMETER icUserCode AS CHAR NO-UNDO.
 END.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.
 

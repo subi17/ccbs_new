@@ -11,6 +11,7 @@
 {Syst/commpaa.i}
 {Func/fsendsms.i}
 {Syst/tmsconst.i}
+DEF VAR pcTenant     AS CHARACTER NO-UNDO.
 DEF VAR pcCLI        AS CHARACTER NO-UNDO.
 DEF VAR pcSmsContent AS CHARACTER NO-UNDO.
 DEF VAR pcSender     AS CHARACTER NO-UNDO.
@@ -20,7 +21,7 @@ DEF VAR pcStruct     AS CHARACTER NO-UNDO.
 DEF VAR lcReplaceTxt AS CHARACTER NO-UNDO. 
 
 ASSIGN
-   gcBrand      = "1"
+   Syst.Var:gcBrand      = "1"
    lcReplaceTxt = "y@yoigo.es" /* Replace value for #SENDER tag */
    pcSender     = "800622800".
 
@@ -30,22 +31,22 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 /*pcReqList = validate_request(pcStruct,
            "clinmbr!,smscontent!,smsfrom!").*/
-pcReqList = validate_request(pcStruct,
-           "clinmbr!,smscontent!").
+pcReqList = validate_request(pcStruct,"brand!,clinmbr!,smscontent!").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
       
 ASSIGN      
-   pcCLI        = get_string(pcStruct, "clinmbr")
-                  WHEN LOOKUP("clinmbr", pcReqList) > 0
-   pcSmsContent = get_string(pcStruct, "smscontent")
-                  WHEN LOOKUP("smscontent", pcReqList) > 0
+   pcTenant     = get_string(pcStruct, "brand") WHEN LOOKUP("brand", pcReqList) > 0
+   pcCLI        = get_string(pcStruct, "clinmbr") WHEN LOOKUP("clinmbr", pcReqList) > 0
+   pcSmsContent = get_string(pcStruct, "smscontent") WHEN LOOKUP("smscontent", pcReqList) > 0
    /*pcSender     = get_string(pcStruct, "smsfrom")
                   WHEN LOOKUP("smsfrom", pcReqList) > 0*/.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/settenant.i pcTenant}
+
 FIND MobSub NO-LOCK WHERE
-     MobSub.Brand EQ gcBrand AND
+     MobSub.Brand EQ Syst.Var:gcBrand AND
      Mobsub.CLI   EQ pcCLI NO-ERROR.
 IF NOT AVAIL MobSub THEN
    RETURN appl_err("Requested subscriber not found ").
@@ -64,8 +65,7 @@ IF ERROR-STATUS:ERROR THEN
 ELSE add_boolean(response_toplevel_id,?,FALSE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.
 
 /* INTERNAL PROCEDURES */
 PROCEDURE pSendTestSMS:

@@ -1,0 +1,15 @@
+ADD FIELD "PRO" OF "CustCat" AS LOGICAL
+  FORMAT "yes/no"
+  INITIAL "no"
+  LABEL "PRO"
+  COLUMN-LABEL "PRO"
+  HELP "PRO customer"
+  ORDER 140
+
+ADD FIELD "Segment" OF "CustCat" AS CHARACTER
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Segment"
+  COLUMN-LABEL "Segment"
+  HELP "Segment"
+  ORDER 150

@@ -9,13 +9,12 @@
 
 {Syst/commpaa.i}
 ASSIGN 
-   gcBrand = "1"
-   katun   = "Cron".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun   = "Cron".
    
 {Func/cparam2.i}
 {Func/files.i}
 {Func/coinv.i}
-{Func/timestamp.i}
 {Syst/funcrunprocess_run.i}
 {Func/direct_dbconnect.i}
 
@@ -80,6 +79,7 @@ IF lcTransDir = ? THEN lcTransDir = "".
 
 /* format file name here, so that both reports get the same name */
 ASSIGN   
+   lcFile = REPLACE(lcFile,"#TENANT",CAPS(Syst.Parameters:Tenant))
    lcFile = REPLACE(lcFile,"#PERIOD",STRING(liPeriod,"999999"))
    lcFile = REPLACE(lcFile,"#INVDATE",STRING(ldaInvDate,"999999"))
    lcFile = REPLACE(lcFile,"#MODE",STRING(llBillDetails,"d/s") +
@@ -109,7 +109,7 @@ IF llSubReport THEN DO:
    
    /* connect to correct cdr dbs */
    fInitializeConnectTables("MobCDR","").
-   RUN pDirectConnect2Dbs(gcBrand,
+   RUN pDirectConnect2Dbs(Syst.Var:gcBrand,
                           "",  
                           ldaEndPeriod,
                           ldaEndPeriod).

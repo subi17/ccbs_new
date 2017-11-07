@@ -9,7 +9,6 @@
 {Syst/commali.i}
 {Func/cparam2.i}
 {Syst/dumpfile_run.i}
-{Func/date.i}
 {Syst/tmsconst.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
@@ -31,11 +30,13 @@ DEF VAR liErrors              AS INT  NO-UNDO.
 DEF VAR liRetry               AS INT  NO-UNDO. 
 DEF VAR liCount               AS INT  NO-UNDO.
 DEF VAR lcGroupCodes          AS CHAR NO-UNDO.
+DEF VAR liTempSC              AS INT NO-UNDO. 
+DEF VAR liNormalSC            AS INT NO-UNDO. 
 
 DEF STREAM sout.
 
-ASSIGN ldaLastDay   = fLastdayofMonth(today)
-       lcGroupCodes = "TARJ7,TARJ9".
+ASSIGN ldaLastDay   = Func.Common:mLastDayOfMonth(today)
+       lcGroupCodes = "TARJ7,TARJ9,TARJ10,TARJ11,TARJ12".
 
 OUTPUT STREAM sout TO VALUE(icFile) APPEND.
 
@@ -50,7 +51,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcGroupCodes):
              MServiceLimit.DialType = ServiceLimit.DialType AND
              MServiceLimit.EndTS    = 99999999.99999:
 
-      fSplitTS(MServiceLimit.FromTS,OUTPUT ldaFromdate,OUTPUT liTime).
+      Func.Common:mSplitTS(MServiceLimit.FromTS,OUTPUT ldaFromdate,OUTPUT liTime).
 
       IF ldaFromdate >= TODAY THEN NEXT.
 
@@ -59,6 +60,15 @@ DO liCount = 1 TO NUM-ENTRIES(lcGroupCodes):
       FIND FIRST MobSub NO-LOCK WHERE
                  MobSub.MsSeq = MServiceLimit.MsSeq NO-ERROR.
       IF NOT AVAIL MobSub THEN NEXT.
+      
+      CASE Mobsub.CLIType:
+         WHEN "TARJ7" THEN liTempSC = 303.
+         WHEN "TARJ9" THEN liTempSC = 309.
+         WHEN "TARJ10" THEN liTempSC = 310.
+         WHEN "TARJ11" THEN liTempSC = 311.
+         WHEN "TARJ12" THEN liTempSC = 312.
+         OTHERWISE NEXT.
+      END.
 
       IF DAY(ldaFromDate) < DAY(ldaLastDay)
       THEN ldaExpDate = DATE(MONTH(ldaLastDay),DAY(ldaFromDate),YEAR(ldaLastDay)).
@@ -66,7 +76,8 @@ DO liCount = 1 TO NUM-ENTRIES(lcGroupCodes):
 
       ASSIGN
          ldaExpDate = ldaExpDate - 1
-         oiEvents = oiEvents + 1.
+         oiEvents = oiEvents + 1
+         liNormalSC = liTempSC - 300.
 
       IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN DO:
          PAUSE 0.
@@ -83,7 +94,9 @@ DO liCount = 1 TO NUM-ENTRIES(lcGroupCodes):
 
          IF INDEX(lcError,"ERR:Unable to Connect") = 0 AND
             INDEX(lcError,"ERR:Took too long to Connect") = 0 AND
-            INDEX(lcError,"ERR:No response") = 0 THEN LEAVE.
+            INDEX(lcError,"ERR:No response") = 0 AND
+            INDEX(lcError,"ERROR:AIR GetAccountDetails responseCode: 100") = 0 AND
+            INDEX(lcError,"ERROR:AIR GetAccountDetails response:") = 0 THEN LEAVE.
          ELSE IF liRetry < 3 THEN PAUSE 5 NO-MESSAGE.
       END.
 
@@ -101,50 +114,37 @@ DO liCount = 1 TO NUM-ENTRIES(lcGroupCodes):
          NEXT.
       END.
 
-      IF (Mobsub.CliType = "TARJ7" AND liCurrentServiceClass EQ 303) OR
-         (Mobsub.CliType = "TARJ9" AND liCurrentServiceClass EQ 309) THEN DO:
-         PUT STREAM sout UNFORMATTED
-            MobSub.custnum ";"
-            MobSub.MsSeq ";"
-            Mobsub.cli ";"
-            Mobsub.CliType ";"
-            ldaFromDate ";"
-            ldaExpDate ";"
-            liCurrentServiceClass ";"
-            IF Mobsub.CliType = "TARJ7"
-               THEN "SKIPPED:Current SC in AIR is already 303"
-               ELSE "SKIPPED:Current SC in AIR is already 309"
-            SKIP.
-         NEXT.
-      END.
-
-      IF (Mobsub.CliType = "TARJ7" AND liCurrentServiceClass NE 3) OR
-         (Mobsub.CliType = "TARJ9" AND liCurrentServiceClass NE 9) THEN DO:
-         PUT STREAM sout UNFORMATTED
-            MobSub.custnum ";"
-            MobSub.MsSeq ";"
-            Mobsub.cli ";"
-            Mobsub.CliType ";"
-            ldaFromDate ";"
-            ldaExpDate ";"
-            liCurrentServiceClass ";"
-            IF Mobsub.CliType = "TARJ7" 
-               THEN "ERROR:Current SC in AIR is not 3"
-               ELSE "ERROR:Current SC in AIR is not 9"
-            SKIP.
+      IF liCurrentServiceClass EQ liTempSC THEN
+         lcError = SUBST("SKIPPED:Current SC in AIR is already &1",liTempSC).
+      ELSE IF liCurrentServiceClass NE liNormalSC THEN ASSIGN
+         lcError = SUBST("ERROR:Current SC in AIR is not &1",liNormalSC)
          liErrors = liErrors + 1.
+
+      IF lcError > "" THEN DO:
+
+         PUT STREAM sout UNFORMATTED
+            MobSub.custnum ";"
+            MobSub.MsSeq ";"
+            Mobsub.cli ";"
+            Mobsub.CliType ";"
+            ldaFromDate ";"
+            ldaExpDate ";"
+            liCurrentServiceClass ";"
+            lcError
+            SKIP.
          NEXT.
       END.
 
       DO liRetry = 1 TO 3.
          RUN Gwy/air_set_temp_sc.p(MobSub.CLI,
-                               IF Mobsub.CliType = "TARJ7" THEN 303
-                                                           ELSE 309, /* SC temp */
+                               liTempSC,
                                ldaExpDate,
                                OUTPUT lcerror).
          IF INDEX(lcError,"ERR:Unable to Connect") = 0 AND
             INDEX(lcError,"ERR:Took too long to Connect") = 0 AND
-            INDEX(lcError,"ERR:No response") = 0 THEN LEAVE.
+            INDEX(lcError,"ERR:No response") = 0 AND
+            INDEX(lcError,"ERROR:AIR UpdateServiceClass responseCode: 100") = 0 AND
+            INDEX(lcError,"ERROR:AIR UpdateServiceClass response:") = 0 THEN LEAVE.
          ELSE IF liRetry < 3 THEN PAUSE 5 NO-MESSAGE.
       END.
 

@@ -19,9 +19,13 @@
 FUNCTION fCheckSubsLimit RETURNS INT (INPUT iiCustnum      AS INT,
                                       INPUT iiLimitType    AS INT,
                                       INPUT icIdType       AS CHAR,
-                                      INPUT ilSelfEmployed AS LOG):
+                                      INPUT ilSelfEmployed AS LOG,
+                                      INPUT ilpro          AS LOG):
 
    DEF VAR liLimit AS INT NO-UNDO.
+
+   DEF BUFFER Limit FOR Limit.
+   DEF BUFFER CustCat FOR CustCat.
 
    FIND FIRST Limit WHERE 
               Limit.CustNum = iiCustnum     AND
@@ -31,9 +35,10 @@ FUNCTION fCheckSubsLimit RETURNS INT (INPUT iiCustnum      AS INT,
       liLimit = Limit.LimitAmt.
    ELSE DO:
       FIND FIRST CustCat WHERE
-                 CustCat.Brand = gcBrand AND
+                 CustCat.Brand = Syst.Var:gcBrand AND
                  CustCat.CustIdType = icIdType AND
-                 CustCat.SelfEmployed = ilSelfEmployed NO-LOCK NO-ERROR. 
+                 CustCat.SelfEmployed = ilSelfEmployed AND
+                 CustCat.pro EQ ilpro NO-LOCK NO-ERROR. 
       IF AVAIL CustCat THEN DO:
          IF iiLimitType = {&LIMIT_TYPE_SUBQTY} THEN
             liLimit = CustCat.MobSubLimit.
@@ -50,7 +55,7 @@ FUNCTION fCheckRenewalData RETURNS LOGICAL:
    DEF BUFFER bOrderCustomer FOR OrderCustomer.
 
    IF CAN-FIND(FIRST bOrderCustomer NO-LOCK WHERE
-                     bOrderCustomer.Brand = gcBrand AND
+                     bOrderCustomer.Brand = Syst.Var:gcBrand AND
                      bOrderCustomer.OrderId  = OrderCustomer.OrderID AND
                      bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}) 
                      THEN RETURN FALSE.
@@ -79,8 +84,8 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
    (pcPersonId AS CHAR,
     pcIdType AS CHAR,
     plSelfEmployed AS LOG,
+    plpro AS LOG, 
     piOrders AS INT,
-    OUTPUT ocReason AS CHAR,
     OUTPUT oiSubLimit AS INT,
     OUTPUT oiSubCount AS INT,
     OUTPUT oiSubActLimit AS INT,
@@ -99,12 +104,12 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
    DEF BUFFER bMobSub FOR MobSub.
 
    FOR EACH OrderCustomer NO-LOCK WHERE   
-            OrderCustomer.Brand      EQ gcBrand AND 
+            OrderCustomer.Brand      EQ Syst.Var:gcBrand AND 
             OrderCustomer.CustId     EQ pcPersonId AND
             OrderCustomer.CustIdType EQ pcIdType AND
             OrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
       EACH  Order NO-LOCK WHERE
-            Order.Brand              EQ gcBrand AND
+            Order.Brand              EQ Syst.Var:gcBrand AND
             Order.orderid            EQ OrderCustomer.Orderid AND
             Order.OrderType          NE {&ORDER_TYPE_RENEWAL} AND
             Order.OrderType          NE {&ORDER_TYPE_STC} AND
@@ -114,7 +119,7 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
         THEN DO:
            /* YDR-1532 */
            IF Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} THEN DO:
-              fTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
+              Func.Common:mTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
               IF INTERVAL(TODAY, ldaOrderDate, "months") >= 24 THEN NEXT.
            END.
            oiActOrderCount = oiActOrderCount + 1.
@@ -131,19 +136,19 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
       oiActOrderCount = oiActOrderCount + (piOrders - 1).
 
    FOR EACH Customer NO-LOCK
-   WHERE Customer.Brand           EQ gcBrand
+   WHERE Customer.Brand           EQ Syst.Var:gcBrand
      AND Customer.CustIdType      EQ pcIdType
      AND Customer.OrgId           EQ pcPersonId
      AND Customer.Roles           NE "inactive",
    EACH bMobsub NO-LOCK
-   WHERE bMobSub.Brand             EQ gcBrand 
+   WHERE bMobSub.Brand             EQ Syst.Var:gcBrand 
      AND bMobsub.AgrCust           EQ Customer.CustNum
      AND bMobSub.SalesMan NE "GIFT":
       oiSubCount = oiSubCount + 1.
    END.
 
    FIND FIRST Customer
-   WHERE Customer.Brand           EQ gcBrand
+   WHERE Customer.Brand           EQ Syst.Var:gcBrand
      AND Customer.CustIdType      EQ pcIdType
      AND Customer.OrgId           EQ pcPersonId 
      AND Customer.Roles           NE "inactive"
@@ -154,22 +159,19 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
        oiSubLimit    = fCheckSubsLimit(INPUT Customer.Custnum,
                                        INPUT {&LIMIT_TYPE_SUBQTY},
                                        INPUT pcIdType,
-                                       INPUT plSelfEmployed).
+                                       INPUT plSelfEmployed,
+                                       INPUT plpro).
        oiSubActLimit = fCheckSubsLimit(INPUT Customer.Custnum,
 
                                        INPUT {&LIMIT_TYPE_SUBACTQTY},
                                        INPUT pcIdType,
-                                       INPUT plSelfEmployed).
-       /* check barring subscriptions */
-       IF fExistBarredSubForCustomer(Customer.CustNum) THEN DO: 
-          ocReason = "barring".
-          RETURN FALSE.
-       END.
+                                       INPUT plSelfEmployed,
+                                       INPUT plpro).
        /* check subscription limit and subscription activation limit */
    END. /* IF AVAIL Customer THEN DO: */
    ELSE DO:
       FIND FIRST CustCat WHERE
-                 CustCat.Brand = gcBrand AND
+                 CustCat.Brand = Syst.Var:gcBrand AND
                  CustCat.CustIdType = pcIdType AND
                  CustCat.SelfEmployed = plSelfEmployed NO-LOCK NO-ERROR. 
       IF AVAIL CustCat THEN
@@ -177,10 +179,8 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
                 oiSubActLimit = CustCat.ActivationLimit.
    END.
    
-   IF oiSubCount >= oiSubLimit OR oiActOrderCount >= oiSubActLimit THEN DO:
-      ocReason = "subscription limit". 
+   IF oiSubCount >= oiSubLimit OR oiActOrderCount >= oiSubActLimit THEN
       RETURN FALSE.
-   END.
 
    RETURN TRUE.
 END.
@@ -200,15 +200,14 @@ FUNCTION fOngoingOrders RETURNS LOGICAL
    DEF BUFFER lbOtherOrder FOR Order.   
    
    FOR EACH lbOtherOrder NO-LOCK WHERE
-            lbOtherOrder.brand EQ gcBrand AND
+            lbOtherOrder.brand EQ Syst.Var:gcBrand AND
             lbOtherOrder.CLI EQ pcCLI AND
             LOOKUP(lbOtherOrder.statuscode,{&ORDER_INACTIVE_STATUSES}) EQ 0 AND
             lbOtherOrder.OrderType NE liExcludeOrderType:
 
       /* YPR-2105 */
       IF pcNumberType EQ "retention" AND
-         lbOtherOrder.StatusCode = {&ORDER_STATUS_OFFER_SENT} THEN NEXT.
-
+         lbOtherOrder.StatusCode = {&ORDER_STATUS_OFFER_SENT} THEN NEXT. /* shouldn't never happen because of YDR-2575 */
       RETURN TRUE.
    END.
    
@@ -233,7 +232,7 @@ FUNCTION fOngoingFixedOrders RETURNS CHARACTER
    FOR EACH lbOrderFusion NO-LOCK WHERE
             lbOrderFusion.FixedNumber EQ pcFixedNumber,
       EACH  lbOtherOrder NO-LOCK WHERE
-            lbOtherOrder.brand EQ gcBrand AND
+            lbOtherOrder.brand EQ Syst.Var:gcBrand AND
             lbOtherOrder.OrderId EQ lbOrderFusion.OrderId AND
             LOOKUP(lbOtherOrder.statuscode,{&ORDER_INACTIVE_STATUSES}) EQ 0 AND
             lbOtherOrder.OrderType NE liExcludeOrderType:

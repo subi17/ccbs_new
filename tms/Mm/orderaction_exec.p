@@ -4,7 +4,6 @@
 -------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fmakemsreq.i}
 {Func/service.i}
@@ -12,7 +11,7 @@
 {Func/fdss.i}
 {Mc/dpmember.i}
 {Func/q25functions.i}
-
+{Func/orderfunc.i}
 
 DEF INPUT  PARAMETER iiMsSeq       AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiOrderId     AS INT  NO-UNDO.
@@ -29,6 +28,11 @@ DEF VAR lcCONTSFContracts AS CHAR NO-UNDO.
 DEF VAR lcAllPostpaidContracts AS CHAR NO-UNDO.
 DEF VAR lcFHParam AS CHAR NO-UNDO. 
 DEF VAR lcSHParam AS CHAR NO-UNDO. 
+DEF VAR lcBundleId AS CHAR NO-UNDO.
+
+FIND FIRST MSRequest WHERE
+           MSRequest.brand EQ Syst.Var:gcBrand AND
+           MsRequest.msRequest = iiOrigRequest NO-ERROR.
 
 FIND MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
 IF NOT AVAILABLE MobSub THEN RETURN "ERROR:Subscription not available".
@@ -37,7 +41,7 @@ FIND Customer WHERE Customer.Custnum = MobSub.Custnum NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Customer THEN RETURN "ERROR:Customer not available".
 
 FIND Order WHERE 
-     Order.Brand   = gcBrand AND
+     Order.Brand   = Syst.Var:gcBrand AND
      Order.OrderId = iiOrderId NO-LOCK NO-ERROR. 
 IF NOT AVAILABLE Order OR Order.MsSeq NE iiMsSeq THEN 
    RETURN "ERROR:Unknown order".
@@ -50,7 +54,7 @@ IF LOOKUP(Order.OrderChannel,"renewal_pos_stc,retention_stc") > 0 THEN DO:
    FIND FIRST msowner where
               msowner.msseq = MobSub.msseq USE-INDEX MsSeq NO-LOCK NO-ERROR.
    IF AVAIL msowner THEN ideActStamp = msowner.tsbegin.
-   IF ideActStamp <= Order.Crstamp THEN ideActStamp = fMakeTS().
+   IF ideActStamp <= Order.Crstamp THEN ideActStamp = Func.Common:mMakeTS().
 END.
 
 ASSIGN lcIPLContracts   = fCParamC("IPL_CONTRACTS")
@@ -62,15 +66,32 @@ ASSIGN lcIPLContracts   = fCParamC("IPL_CONTRACTS")
 
 ORDERACTION_LOOP:
 FOR EACH OrderAction NO-LOCK WHERE
-         OrderAction.Brand     = gcBrand AND
+         OrderAction.Brand     = Syst.Var:gcBrand AND
          OrderAction.OrderId   = iiOrderId:
+   
+   IF OrderAction.ItemType = "BundleItem" THEN     
+   DO:
+       FIND FIRST DayCampaign WHERE DayCampaign.Brand = Syst.Var:gcBrand AND DayCampaign.DCEvent = OrderAction.ItemKey NO-LOCK NO-ERROR.
+       IF AVAIL DayCampaign THEN 
+       DO:
+           IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} AND 
+              LOOKUP(STRING(Daycampaign.BundleTarget), (STRING({&DC_BUNDLE_TARGET_FIXED}) + "," + STRING({&TELEVISION_BUNDLE}))) = 0 THEN 
+               NEXT ORDERACTION_LOOP.
+           ELSE IF MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_CREATE} AND Daycampaign.BundleTarget NE {&DC_BUNDLE_TARGET_MOBILE} THEN
+               NEXT ORDERACTION_LOOP.
+       END.
+       ELSE 
+           NEXT ORDERACTION_LOOP.
+   END.    
 
    CASE OrderAction.ItemType:
       WHEN "BundleItem" THEN DO:
          /* DSS Order Action will be executed in separate block   */
          /* to ensure that data bundle must be handled before DSS */
          IF OrderAction.ItemKey EQ {&DSS} THEN NEXT.
-
+         /* make flex_upsell / dss_flex_upsell at last */
+         IF OrderAction.ItemKey MATCHES "FLEX*UPSELL" THEN NEXT.
+                  
          /* Don't create bundle request if renewal order */
          /* with IPL/CONTF/GPRS bundles order actions    */
          IF (Order.OrderType EQ 2 OR Order.OrderType EQ 4) AND
@@ -83,18 +104,24 @@ FOR EACH OrderAction NO-LOCK WHERE
 
          RUN pPeriodicalContract.
       END.
-      WHEN "Service" THEN RUN pService.
-      WHEN "Discount" THEN RUN pDiscountPlan. 
-      WHEN "AddLineDiscount" THEN RUN pAddLineDiscountPlan.
-      WHEN "Q25Discount" THEN RUN pQ25Discount.
-      WHEN "Q25Extension" THEN RUN pQ25Extension.
+      WHEN "Service"           THEN RUN pService.
+      WHEN "Discount" OR 
+      WHEN "DiscountPlan"      THEN RUN pDiscountPlan. 
+      WHEN "AddLineDiscount"   THEN RUN pAddLineDiscountPlan.
+      WHEN "ExtraLineDiscount" THEN RUN pExtraLineDiscountPlan.
+      WHEN "Q25Discount"       THEN RUN pQ25Discount.
+      WHEN "Q25Extension"      THEN RUN pQ25Extension.
+      WHEN "FixedPermanency"   THEN DO:
+         IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} OR
+            MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}
+            THEN RUN pPeriodicalContract.
+      END.
       OTHERWISE NEXT ORDERACTION_LOOP.
    END CASE.
 
    /* don't abort if an error occurred */
    IF RETURN-VALUE  BEGINS "ERROR:" THEN DO:
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "MobSub",
+      Func.Common:mWriteMemo("MobSub",
                        STRING(MobSub.MsSeq),
                        MobSub.AgrCust,
                        "OrderAction " + OrderAction.ItemType,
@@ -102,10 +129,13 @@ FOR EACH OrderAction NO-LOCK WHERE
    END.   
 END.
 
+IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} THEN 
+   RETURN "".
+
 /* DSS Order Action will be executed now other */
 /* data bundle request has been created        */
 FOR EACH OrderAction NO-LOCK WHERE
-         OrderAction.Brand     = gcBrand AND
+         OrderAction.Brand     = Syst.Var:gcBrand AND
          OrderAction.OrderId   = iiOrderId AND
          OrderAction.ItemType = "BundleItem" AND
          OrderAction.ItemKey = {&DSS}:
@@ -114,13 +144,38 @@ FOR EACH OrderAction NO-LOCK WHERE
 
    /* don't abort if an error occurred */
    IF RETURN-VALUE  BEGINS "ERROR:" THEN DO:
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "Customer",
+      Func.Common:mWriteMemo("Customer",
                        STRING(MobSub.CustNum),
                        MobSub.AgrCust,
                        "OrderAction " + OrderAction.ItemType,
                        "Creation failed. " + RETURN-VALUE).
    END.   
+END.
+
+/* Create flex_upsell* or dss_flex_upsell* based on dss activity 
+   YPPI-1 EXTRAL-108 */
+FOR EACH OrderAction EXCLUSIVE-LOCK WHERE
+         OrderAction.Brand     = Syst.Var:gcBrand AND
+         OrderAction.OrderId   = iiOrderId AND
+         OrderAction.ItemType = "BundleItem" AND
+         OrderAction.ItemKey MATCHES "FLEX*UPSELL":
+
+   IF fGetDSSId(mobsub.custnum, Func.Common:mMakeTS()) > "" THEN
+      OrderAction.ItemKey = fgetFlexUpsellBundle(Mobsub.custnum, Mobsub.msseq,
+                                                 fGetDSSId(mobsub.custnum, 
+                                                 Func.Common:mMakeTS()),
+                                                 OrderAction.ItemKey, 
+                                                 Func.Common:mMakeTS()).
+   RUN pPeriodicalContract.
+
+   /* don't abort if an error occurred */
+   IF RETURN-VALUE  BEGINS "ERROR:" THEN DO:
+      Func.Common:mWriteMemo("Customer",
+                       STRING(MobSub.CustNum),
+                       MobSub.AgrCust,
+                       "OrderAction " + OrderAction.ItemType,
+                       "Creation failed. " + RETURN-VALUE).
+   END.
 END.
 
 RETURN "".
@@ -141,27 +196,45 @@ PROCEDURE pPeriodicalContract:
    DEF VAR ldaPMDUBPromoStartDate AS DATE NO-UNDO.
    DEF VAR ldePMDUBPromoActStamp  AS DEC  NO-UNDO.
    DEF VAR lcWaitFor AS CHAR NO-UNDO. 
+   DEF VAR liServSeq AS INT  NO-UNDO.
 
    DEF BUFFER MsRequest FOR MsRequest.
    DEF BUFFER bBundleRequest  FOR MsRequest.
    DEF BUFFER bBundleContract FOR DayCampaign.
   
    FIND FIRST DayCampaign WHERE
-              DayCampaign.Brand   = gcBrand AND
+              DayCampaign.Brand   = Syst.Var:gcBrand AND
               DayCampaign.DCEvent = OrderAction.ItemKey
    NO-LOCK NO-ERROR.
    IF NOT AVAILABLE DayCampaign THEN 
       RETURN "ERROR: Unknown periodical contract " + OrderAction.ItemKey.
-      
+   
+   IF DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
+   DO:
+       ASSIGN liServSeq = fCreateNewTPService(iiMsSeq, 
+                                              OrderAction.ItemKey, 
+                                              "Huawei", 
+                                              "Television", 
+                                              {&TYPE_ACTIVATION}, 
+                                              {&STATUS_NEW}, 
+                                              OrderAction.ItemParam, 
+                                              Order.Salesman).
+
+       IF liServSeq > 0 THEN
+           fCreateTPServiceMessage(iiMsSeq, liServSeq , {&SOURCE_TMS}, {&STATUS_NEW}).
+       
+       RETURN "".
+   END.    
    /* override DayCampaign.Feemodel because of possible reactivation */
    IF Order.OrderType = 2 AND
      LOOKUP(DayCampaign.DCType,"3,5") > 0 THEN llCreateFees = TRUE.
    ELSE llCreateFees = (DayCampaign.FeeModel > "").
 
    ldeContractActStamp = 
-                 (IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN fMakeTS()
+                 (IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN Func.Common:mMakeTS()
                   ELSE IF Order.OrderType NE 2 THEN ideActStamp
-                  ELSE IF Order.OrderChannel BEGINS "Retention" THEN fMakeTS()
+                  ELSE IF Order.OrderChannel BEGINS "Retention" THEN Func.Common:mMakeTS()
+                  ELSE IF DayCampaign.DCEvent BEGINS "FTERM" THEN Func.Common:mMakeTS() 
                   ELSE IF DayCampaign.DCType = {&DCTYPE_DISCOUNT} THEN Order.CrStamp
                   ELSE ideActStamp).
 
@@ -169,10 +242,10 @@ PROCEDURE pPeriodicalContract:
    IF OrderAction.ItemKey = {&PMDUB} AND
       icSource = {&REQUEST_SOURCE_SUBSCRIPTION_CREATION} THEN DO:
       ASSIGN ldaPMDUBPromoStartDate = fCParamDa("PMDUB_PROMO_START_DATE")
-             ldePMDUBPromoActStamp  = fMake2Dt(ldaPMDUBPromoStartDate,0).
+             ldePMDUBPromoActStamp  = Func.Common:mMake2DT(ldaPMDUBPromoStartDate,0).
 
       IF ldeContractActStamp >= ldePMDUBPromoActStamp THEN
-         ldeContractActStamp = fSecOffSet(ldeContractActStamp,300).
+         ldeContractActStamp = Func.Common:mSecOffSet(ldeContractActStamp,300).
    END. /* IF OrderAction.ItemKey = {&PMDUB} AND */
    
    IF OrderAction.ItemKey = {&DSS} THEN DO:
@@ -180,7 +253,7 @@ PROCEDURE pPeriodicalContract:
          RETURN "ERROR:DSS activation request is ongoing.".
       ELSE IF NOT fIsDSSAllowed(INPUT  MobSub.CustNum,
                                 INPUT  MobSub.MsSeq,
-                                INPUT  fMakeTS(),
+                                INPUT  Func.Common:mMakeTS(),
                                 INPUT  OrderAction.ItemKey,
                                 INPUT  "",
                                 OUTPUT ldeCurrMonthLimit,
@@ -265,7 +338,7 @@ PROCEDURE pPeriodicalContract:
                LOOKUP(STRING(bBundleRequest.ReqStatus),
                       {&REQ_INACTIVE_STATUSES}) = 0,
             FIRST bBundleContract NO-LOCK WHERE
-                  bBundleContract.Brand = gcBrand AND
+                  bBundleContract.Brand = Syst.Var:gcBrand AND
                   bBundleContract.DCEvent = bBundleRequest.ReqCParam3 AND
                   LOOKUP(bBundleContract.DCType,
                          {&PERCONTRACT_RATING_PACKAGE}) > 0:
@@ -289,6 +362,7 @@ PROCEDURE pPeriodicalContract:
                                 "",
                                 0,
                                 0,
+                                "",
                                 OUTPUT lcResult).
    END.
  
@@ -314,8 +388,8 @@ PROCEDURE pService:
                               SubSer.ServCom,
                               1, /* activate */
                               "", /* params */
-                              fMakeTS(),
-                              katun,
+                              Func.Common:mMakeTS(),
+                              Syst.Var:katun,
                               FALSE, /* fees */
                               TRUE, /* sms */
                               "",
@@ -329,8 +403,8 @@ PROCEDURE pService:
                               OrderAction.ItemKey,
                               1, /* activate */
                               "", /* params */
-                              fMakeTS(),
-                              katun,
+                              Func.Common:mMakeTS(),
+                              Syst.Var:katun,
                               FALSE, /* fees */
                               TRUE, /* sms */
                               "",
@@ -350,9 +424,23 @@ END PROCEDURE.
 PROCEDURE pDiscountPlan:
 
    DEFINE VARIABLE ldate AS DATE NO-UNDO.
+   DEF BUFFER bDiscountPlan FOR DiscountPlan.
 
-   FIND FIRST DiscountPlan NO-LOCK WHERE
-              DiscountPlan.DPId = INT(OrderAction.ItemKey) NO-ERROR.
+   DEF VAR lcResult AS CHAR NO-UNDO. 
+   DEF VAR ldaOrderDate AS DATE NO-UNDO. 
+
+   Func.Common:mts2Date(Order.CrStamp, OUTPUT ldaOrderDate).
+   
+   IF OrderAction.ItemType EQ "DiscountPlan" THEN
+      FIND FIRST DiscountPlan NO-LOCK WHERE
+                 DiscountPlan.Brand = Syst.Var:gcBrand AND
+                 DiscountPlan.DPRuleID = OrderAction.ItemKey AND
+                 DiscountPlan.ValidFrom <= ldaOrderDate AND
+                 DiscountPlan.ValidTo >= ldaOrderDate NO-ERROR.
+   ELSE
+      FIND FIRST DiscountPlan NO-LOCK WHERE
+                 DiscountPlan.DPId = INT(OrderAction.ItemKey) NO-ERROR.
+
    IF NOT AVAIL DiscountPlan THEN 
       RETURN "ERROR:DiscountPlan ID: " + OrderAction.ItemKey + " not found".
    
@@ -365,13 +453,32 @@ PROCEDURE pDiscountPlan:
       RETURN "ERROR:DPRate: " + OrderAction.ItemKey + " not found".
    
    FIND FIRST DPMember NO-LOCK WHERE
-              DPMember.DPId      = INT(OrderAction.ItemKey) AND
+              DPMember.DPId      = DiscountPlan.DpID AND
               DPMember.HostTable = "Mobsub"                 AND
               DPMember.KeyValue  = STRING(Order.MsSeq)      AND
               DPMember.ValidTo  >= TODAY                    NO-ERROR.
    IF AVAIL DPMember THEN 
       RETURN "ERROR:DPMember: " + OrderAction.ItemKey + " for " + 
          STRING(Order.MsSeq) + " already exist".
+   
+   FOR EACH DPMember NO-LOCK WHERE
+            DPMember.Hosttable = "Mobsub" AND
+            DPMember.KeyValue = STRING(Order.MsSeq) AND
+            DPMember.ValidFrom <= TODAY AND
+            DPMember.ValidTo >= TODAY,
+      FIRST bDiscountPlan NO-LOCK WHERE   
+            bDiscountPlan.DPID = DPMember.DPID:
+
+      IF fMatrixAnalyse(Syst.Var:gcBrand,
+                        "DISCOUNT-OVERRIDE",
+                        "Discount;DiscountOld",
+                        DiscountPlan.DPRuleID + ";" + bDiscountPlan.DPRuleID,
+                        OUTPUT lcResult) EQ 0 THEN
+         fCloseDiscount(bDiscountPlan.DPRuleID,
+                        Order.MsSeq,
+                        TODAY - 1,
+                        FALSE).
+   END.
 
    CREATE DPMember.
    ASSIGN DPMember.DPMemberID = NEXT-VALUE(DPMemberID)
@@ -405,7 +512,7 @@ PROCEDURE pDiscountPlan:
       ASSIGN
       ldate              = ADD-INTERVAL(MobSub.TariffActDate,5,"months")
       DPMember.ValidFrom = MobSub.TariffActDate
-      DPMember.ValidTo   = fLastDayOfMonth(lDate)      
+      DPMember.ValidTo   = Func.Common:mLastDayOfMonth(lDate)      
       DPMember.DiscValue = DPRate.DiscValue.
    END.
 
@@ -444,13 +551,13 @@ PROCEDURE pQ25Extension:
       liPeriod = YEAR(ldaPerDate) * 100 + MONTH(ldaPerDate)
       lcTFBank = ""
       liPercontractId = INT(OrderAction.ItemParam).
-      lcOrigKatun = katun.
+      lcOrigkatun = Syst.Var:katun.
 
    IF ERROR-STATUS:ERROR OR liPercontractId EQ 0 THEN
       RETURN "ERROR: incorrect contract id".
 
    FIND SingleFee USE-INDEX Custnum WHERE
-        SingleFee.Brand       = gcBrand AND
+        SingleFee.Brand       = Syst.Var:gcBrand AND
         SingleFee.Custnum     = MobSub.CustNum AND
         SingleFee.HostTable   = "Mobsub" AND
         SingleFee.KeyValue    = STRING(Mobsub.MsSeq) AND
@@ -476,13 +583,13 @@ PROCEDURE pQ25Extension:
    ldaDate = DATE(MONTH(ldaDate),21,YEAR(ldaDate)).
 
    IF TODAY < ldaDate THEN
-      ldeContractActStamp = fMake2dt(ldaDate,0).
+      ldeContractActStamp = Func.Common:mMake2DT(ldaDate,0).
    ELSE ASSIGN
-      ldeContractActStamp = fSecOffset(fMakeTS(),5)
+      ldeContractActStamp = Func.Common:mSecOffSet(Func.Common:mMakeTS(),5)
       ldaDate = TODAY.
 
    IF Order.OrderType = {&ORDER_TYPE_RENEWAL} THEN
-      katun = Order.OrderChannel + "_" + Order.Salesman.
+      Syst.Var:katun = Order.OrderChannel + "_" + Order.Salesman.
 
    liRequest = fPCActionRequest(MobSub.MsSeq,
                              "RVTERM12",
@@ -496,9 +603,10 @@ PROCEDURE pQ25Extension:
                              "",
                              0,
                              liPercontractId,
+                             "",
                              OUTPUT lcResult).
 
-   katun = lcOrigKatun.
+   Syst.Var:katun = lcOrigKatun.
  
    IF liRequest = 0 THEN 
       RETURN "ERROR:Periodical contract not created; " + lcResult.
@@ -517,17 +625,16 @@ PROCEDURE pQ25Extension:
                                   TODAY,
                                   Customer.Language,
                                   OUTPUT ldeSMSStamp).
+         WHEN "RVTERMBSF" THEN
+            lcSMSTxt = fGetSMSTxt("Q25ExtensionSabadell",
+                                  TODAY,
+                                  Customer.Language,
+                                  OUTPUT ldeSMSStamp).
          WHEN "RVTERMBCF" THEN
             lcSMSTxt = fGetSMSTxt("Q25ExtensionCetelem",
                                   TODAY,
                                   Customer.Language,
                                   OUTPUT ldeSMSStamp). 
-         /*YPR-3565*/
-         /* WHEN "RVTERMBSF" THEN
-            lcSMSTxt = fGetSMSTxt("Q25ExtensionSabadell",
-                                  TODAY,
-                                  Customer.Language,
-                                  OUTPUT ldeSMSStamp). */
          OTHERWISE 
             lcSMSTxt = fGetSMSTxt("Q25ExtensionYoigo",
                                   TODAY,
@@ -591,7 +698,7 @@ PROCEDURE pQ25Discount:
       RETURN "ERROR:Q25 discount creation failed (incorrect discount amount)".
 
    FIND SingleFee USE-INDEX Custnum WHERE
-        SingleFee.Brand       = gcBrand AND
+        SingleFee.Brand       = Syst.Var:gcBrand AND
         SingleFee.Custnum     = MobSub.Custnum AND
         SingleFee.HostTable   = "Mobsub" AND
         SingleFee.KeyValue    = STRING(Mobsub.MsSeq) AND
@@ -632,11 +739,27 @@ PROCEDURE pAddLineDiscountPlan:
               DiscountPlan.DPRuleID = OrderAction.ItemKey NO-ERROR.
    IF NOT AVAIL DiscountPlan THEN 
       RETURN "ERROR:Additional Line DiscountPlan ID: " + OrderAction.ItemKey + " not found".
-
+    /* Additional Line with mobile only ALFMO-5 */
    fCreateAddLineDiscount(MobSub.MsSeq,
                           MobSub.CLIType,
-                          TODAY).
+                          TODAY,
+                          OrderAction.ItemKey).
    IF RETURN-VALUE BEGINS "ERROR" THEN
+      RETURN RETURN-VALUE.
+
+END PROCEDURE.
+
+PROCEDURE pExtraLineDiscountPlan:
+
+   FIND FIRST DiscountPlan NO-LOCK WHERE 
+              DiscountPlan.DPRuleID = OrderAction.ItemKey NO-ERROR.
+   IF NOT AVAIL DiscountPlan THEN 
+      RETURN "ERROR: Extra line DiscountPlan id: " + OrderAction.ItemKey + " not found".
+
+   fCreateExtraLineDiscount(MobSub.MsSeq,
+                            DiscountPlan.DPRuleID,
+                            TODAY).
+   IF RETURN-VALUE BEGINS "ERROR" THEN 
       RETURN RETURN-VALUE.
 
 END PROCEDURE.

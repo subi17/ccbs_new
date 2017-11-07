@@ -18,7 +18,7 @@
    fechaEstado;datetime;mandatory;status change time
    codigoReferencia;string;mandatory;mnp process code
    fechaMarcaLectura;datetime;optional;message read time
-   estado;string;mandatory;status (ACON, AREC)
+   estado;string;mandatory;status (ASOL)
    causaEstado;string;optional;status reason
    fechaLimiteCambioEstado;datetime;optional;status change time limit
    fechaSolicitudPorAbonado;datetime;mandatory;mnp start date
@@ -40,22 +40,31 @@
 
 {mnp/src/mnp_obtener.i}
 
+DEF VAR lcTenant           AS CHAR  NO-UNDO.
+
 FOR EACH ttInput NO-LOCK:
    IF ttInput.statusCode NE "ASOL" THEN 
-      RETURN appl_err("Incorrect statuscode (should be AENV): " +
+      RETURN appl_err("Incorrect statuscode (should be ASOL): " +
          ttInput.statusCode).
 END.
 
+FIND FIRST ttInput NO-ERROR.
+IF AVAIL ttInput THEN 
+DO:    
+   ASSIGN lcTenant = 
+      (IF ttInput.DonorCode = "005" THEN {&TENANT_YOIGO} 
+       ELSE IF ttInput.DonorCode = "200" THEN {&TENANT_MASMOVIL}
+       ELSE ""). 
+   {mnp/src/mnp_settenant.i lcTenant}
+END.
+
 MESSAGE_LOOP:
-FOR EACH ttInput NO-LOCK:   
-   
+FOR EACH ttInput NO-LOCK:
+
    /* create mnpmessage record */
    fCreateMNPObtenerMessage("obtenerNotificacionesAltaPortabilidadMovilComoDonantePendientesConfirmarRechazar").
    
-   /* check in case of duplicate messages */
-   FIND FIRST MNPProcess NO-LOCK WHERE
-              MNPProcess.PortRequest = ttInput.PortRequest NO-ERROR.
-   
+   FIND FIRST MNPProcess NO-LOCK WHERE MNPProcess.PortRequest = ttInput.PortRequest NO-ERROR.
    IF NOT AVAIL MNPProcess THEN DO:   
       
       CREATE MNPProcess.
@@ -63,7 +72,7 @@ FOR EACH ttInput NO-LOCK:
          MNPProcess.UpdateTS    = {&nowts} 
          MNPProcess.CreatedTS   = ttInput.CreatedTS
          MNPProcess.MNPUpdateTS = ttInput.StatusTS
-         MNPProcess.Brand       = gcBrand
+         MNPProcess.Brand       = Syst.Var:gcBrand
          MNPProcess.MNPType     = {&MNP_TYPE_OUT} /* mnp out */
          MNPProcess.MNPSeq      = next-value(m2mrequest)
          MNPProcess.PortingTime = ttInput.portingTime
@@ -72,7 +81,7 @@ FOR EACH ttInput NO-LOCK:
          MNPProcess.OperCode    = ttInput.ReceptorCode
          MNPProcess.StatusCode  = {&MNP_ST_ASOL} 
          MNPProcess.StatusReason = ttInput.StatusReason
-         MNPProcess.UserCode    = katun.
+         MNPProcess.UserCode    = Syst.Var:katun.
      
       FOR EACH ttMultipleMSISDN WHERE 
                ttMultipleMSISDN.portrequest = ttInput.portRequest NO-LOCK:
@@ -137,5 +146,4 @@ IF AVAIL MNPBuzon THEN MNPBuzon.StatusCode = 10.
 FINALLY:
    EMPTY TEMP-TABLE ttInput.
    EMPTY TEMP-TABLE ttMultipleMSISDN.
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

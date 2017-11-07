@@ -1,4 +1,4 @@
-DumpFile1: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Customers"
   DumpID: 4
@@ -15,13 +15,14 @@ DumpFile1: DumpFile
   FileCategory: "DWH"
   ModFromEventLog: TRUE 
 
-DumpFile2: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Customer data file including fields which are used and defined by operator. "
   DumpID: 5
   FileName: "#CAT_customer_#MODE_#DATE_#TIME.dump"
   SpoolDir: "/store/riftp/dumpfiles/dbdumb/spool"
   TransDir: "/store/riftp/dumpfiles/dbdumb/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "Customer"
@@ -31,10 +32,10 @@ DumpFile2: DumpFile
   FileCategory: "DWH"
   UseIndex: "Custnum"
   ModFromEventLog: TRUE 
-  AveDurFull: 12629
-  AveDurMod: 1322
+  AveDurFull: 4
+  AveDurMod: 4
 
-DumpFile3: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Transfer customer data to SAP"
   DumpID: 6
@@ -50,7 +51,7 @@ DumpFile3: DumpFile
   LogicModule: "sap_business_partner"
   ModFromEventLog: TRUE 
 
-DumpFile4: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Transfer subscriptions to SAP"
   DumpID: 7
@@ -67,7 +68,7 @@ DumpFile4: DumpFile
   ModFromEventLog: TRUE 
   ModFromField: "ActivationTS"
 
-DumpFile5: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Transfer invoices to SAP"
   DumpID: 8
@@ -84,13 +85,14 @@ DumpFile5: DumpFile
   ModFromEventLog: TRUE 
   ModFromField: "ChgStamp"
 
-DumpFile6: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Requests"
   DumpID: 9
   FileName: "#CAT#RUN_Request_#MODE_#DATE_#TIME.txt"
   SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
   TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
   DumpDelimiter: "":""
   DecimalPoint: "."
   MainTable: "MSRequest"
@@ -98,19 +100,19 @@ DumpFile6: DumpFile
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "DWH"
-  LogicModule: "msrequest_dump"
+  LogicModule: "Mm/msrequest_dump.p"
   ModFromEventLog: TRUE 
   ModFromField: "CreStamp,UpdateStamp"
-  AveDurFull: 9197
-  AveDurMod: 1490
+  AveDurMod: 5
 
-DumpFile7: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Subscription data file including fields which are defined and used by operator"
   DumpID: 10
   FileName: "#CAT_mobsub_#MODE_#DATE_#TIME.txt"
   SpoolDir: "/store/riftp/dumpfiles/dbdumb/spool"
   TransDir: "/store/riftp/dumpfiles/dbdumb/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "MobSub"
@@ -118,13 +120,11 @@ DumpFile7: DumpFile
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "DWH"
-  LogicModule: "subscription_dump"
+  LogicModule: "Mm/subscription_dump.p"
   ModFromEventLog: TRUE 
-  AveDurFull: 1195
-  AveDurMod: 1195
-  AllowReplica: TRUE 
+  AveDurMod: 5
 
-DumpFile8: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Timestamp (MsOwner) file including fields which are defined and used by operator"
   DumpID: 11
@@ -142,33 +142,34 @@ DumpFile8: DumpFile
   ModFromEventLog: TRUE 
   ModFromField: "TSBegin"
 
-DumpFile9: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Order dump used by pentaho and DWH"
   DumpID: 12
   FileName: "Order_#MODE_#DATE_#TIME.txt"
   SpoolDir: "/store/riftp/dumpfiles/dbdumb/spool"
   TransDir: "/store/riftp/dumpfiles/dbdumb/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "Order"
   DumpName: "OrderDumpTXT"
   DumpFormat: "ASCII"
   FileCategory: "DWH"
-  LogicModule: "dump_modified_order"
+  LogicModule: "Mm/dump_modified_order.p"
   ModFromEventLog: TRUE 
   ModFromField: "CrStamp"
-  AveDurFull: 1670
-  AveDurMod: 46
-  AllowReplica: TRUE 
+  AveDurFull: 3
+  AveDurMod: 5
 
-DumpFile10: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Order customer data file including fields which are defined and used by operator"
   DumpID: 13
   FileName: "#CAT_OrderCustomer_#MODE_#DATE_#TIME.txt"
   SpoolDir: "/store/riftp/dumpfiles/dbdumb/spool"
   TransDir: "/store/riftp/dumpfiles/dbdumb/outgoing"
+  Active: FALSE
   DumpDelimiter: "":""
   DecimalPoint: ","
   MainTable: "OrderCustomer"
@@ -177,18 +178,18 @@ DumpFile10: DumpFile
   EmptyFile: TRUE 
   FileCategory: "DWH"
   ModFromEventLog: TRUE 
-  ModCollModule: "ordercust_dump"
-  AveDurFull: 19362
-  AveDurMod: 20
-  AllowReplica: TRUE 
+  ModCollModule: "Mm/ordercust_dump.p"
+  AveDurFull: 3
+  AveDurMod: 5
 
-DumpFile11: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Order payment data file including fields which are defined and used by operator."
   DumpID: 14
   FileName: "#CAT_OrderPayment_#MODE_#DATE_#TIME.txt"
   SpoolDir: "/store/riftp/dumpfiles/dbdumb/spool"
   TransDir: "/store/riftp/dumpfiles/dbdumb/outgoing"
+  Active: FALSE
   DumpDelimiter: "":""
   DecimalPoint: ","
   MainTable: "OrderPayment"
@@ -196,12 +197,11 @@ DumpFile11: DumpFile
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "DWH"
-  ModCollModule: "orderpayment_dump"
-  AveDurFull: 364
-  AveDurMod: 4
-  AllowReplica: TRUE 
+  ModCollModule: "Mm/orderpayment_dump.p"
+  AveDurFull: 3
+  AveDurMod: 5
 
-DumpFile12: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Order accessory data file including fields which are defined and used by operator"
   DumpID: 15
@@ -218,13 +218,14 @@ DumpFile12: DumpFile
   FileCategory: "DWH"
   ModFromEventLog: TRUE 
 
-DumpFile13: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "This dump includes Logistics status information. Status updates has been registered based on data provided by Logistics operator"
   DumpID: 16
   FileName: "#CAT_Logistics_#MODE_#DATE_#TIME.txt"
   SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
   TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: ","
   MainTable: "OrderDelivery"
@@ -234,11 +235,10 @@ DumpFile13: DumpFile
   FileCategory: "DWH"
   ModFromEventLog: TRUE 
   ModFromField: "LOTimeStamp"
-  AveDurFull: 5674
-  AveDurMod: 6708
-  AllowReplica: TRUE 
+  AveDurFull: 3
+  AveDurMod: 5
 
-DumpFile14: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Yoigo's invoices report. NOTE: A/R data is reported directly to SAP with deteiled General ledger information"
   DumpID: 17
@@ -256,13 +256,14 @@ DumpFile14: DumpFile
   ModFromEventLog: TRUE 
   ModFromField: "ChgStamp,ClaimStamp"
 
-DumpFile15: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Subscription billing permissions"
   DumpID: 18
   FileName: "#CAT_BillingPermission_#MODE_#DATE.txt"
   SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
   TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   MainTable: "Limit"
   SideTables: "Customer"
@@ -271,10 +272,10 @@ DumpFile15: DumpFile
   EmptyFile: TRUE 
   FileCategory: "DWH"
   QueryClause: "FOR EACH Limit NO-LOCK WHERE Limit.TMRuleSeq = 0 AND Limit.LimitType = 3 AND Limit.ToDate >= TODAY AND Limit.LimitAmt NE 0, FIRST Customer OF Limit NO-LOCK WHERE Customer.Roles NE "inactive""
-  AveDurFull: 109
-  AveDurMod: 111
+  AveDurFull: 3
+  AveDurMod: 5
 
-DumpFile16: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Dump for creators and amount of credit notes and the MSISDN
 for which they relate to "
@@ -282,6 +283,7 @@ for which they relate to "
   FileName: "#CAT_Credit_notes_#MODE_#DATE.txt"
   SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
   TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "MsRequest"
@@ -290,20 +292,21 @@ for which they relate to "
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "DWH"
-  QueryClause: "FOR EACH MsRequest NO-LOCK WHERE MsRequest.Brand = "1" AND 
+  QueryClause: "FOR EACH MsRequest NO-LOCK WHERE MsRequest.Brand = "1" AND
 MsRequest.ReqType = 22 AND MsRequest.ReqStatus = 2, FIRST Invoice WHERE Invoice.InvNum = MsRequest.ReqIParam3 NO-LOCK"
   ModFromEventLog: TRUE 
   ModFromField: "UpdateStamp"
-  AveDurFull: 1746
-  AveDurMod: 1778
+  AveDurFull: 3
+  AveDurMod: 5
 
-DumpFile17: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Free Air Times"
   DumpID: 20
   FileName: "#CAT#RUN_Free_Air_Time_#MODE_#DATE.txt"
   SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
   TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "FaTime"
@@ -311,12 +314,12 @@ DumpFile17: DumpFile
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "DWH"
-  LogicModule: "fatime_dump"
+  LogicModule: "Mm/fatime_dump.p"
   ModFromEventLog: TRUE 
-  AveDurFull: 18441
-  AveDurMod: 2
+  AveDurFull: 3
+  AveDurMod: 5
 
-DumpFile18: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Detailed postpaid CDR dump
 
@@ -326,24 +329,25 @@ DumpFile18: DumpFile
   FileName: "#CAT#RUN_calls_detail_#DATE_#TIME.dump"
   SpoolDir: "/store/riftp/dumpfiles/calls/spool"
   TransDir: "/store/riftp/dumpfiles/calls/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "MobCDR"
   DumpName: "MobCDR"
   DumpFormat: "ASCII"
   FileCategory: "DWH"
-  LogicModule: "mobcdr_dump_start"
-  AveDurFull: 2368
-  AveDurMod: 2368
-  AllowReplica: TRUE 
+  LogicModule: "Mm/mobcdr_dump_start.p"
+  AveDurFull: 3
+  AveDurMod: 5
 
-DumpFile19: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Roaming Tariff Items"
   DumpID: 23
   FileName: "#CAT#RUN_wholesale_RTItems_#MODE_#DATE.txt"
   SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
   TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "RTItem"
@@ -352,17 +356,17 @@ DumpFile19: DumpFile
   EmptyFile: TRUE 
   FileCategory: "DWH"
   ModFromEventLog: TRUE 
-  AveDurFull: 12
-  AveDurMod: 13
-  AllowReplica: TRUE 
+  AveDurFull: 3
+  AveDurMod: 5
 
-DumpFile20: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Roaming Operators description"
   DumpID: 24
   FileName: "#CAT#RUN_wholesale_RoamOper_#MODE_#DATE.txt"
   SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
   TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "RoamOper"
@@ -371,17 +375,17 @@ DumpFile20: DumpFile
   EmptyFile: TRUE 
   FileCategory: "DWH"
   ModFromEventLog: TRUE 
-  AveDurFull: 1
-  AveDurMod: 1
-  AllowReplica: TRUE 
+  AveDurFull: 3
+  AveDurMod: 5
 
-DumpFile21: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Roaming Tariffs "
   DumpID: 25
   FileName: "#CAT#RUN_wholesale_RoamTariff_#MODE_#DATE.txt"
   SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
   TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "RoamTariff"
@@ -390,11 +394,10 @@ DumpFile21: DumpFile
   EmptyFile: TRUE 
   FileCategory: "DWH"
   ModFromEventLog: TRUE 
-  AveDurFull: 4
-  AveDurMod: 3
-  AllowReplica: TRUE 
+  AveDurFull: 3
+  AveDurMod: 5
 
-DumpFile22: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "CCN names and codes for Calls detail dump"
   DumpID: 26
@@ -411,7 +414,7 @@ DumpFile22: DumpFile
   FileCategory: "DWH"
   ModFromEventLog: TRUE 
 
-DumpFile23: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Billing Item names for calls detail dump"
   DumpID: 27
@@ -428,7 +431,7 @@ DumpFile23: DumpFile
   FileCategory: "DWH"
   ModFromEventLog: TRUE 
 
-DumpFile24: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Statistics of error CDRs (billing report)
 "
@@ -442,15 +445,16 @@ DumpFile24: DumpFile
   DumpName: "ErrorCDRStat"
   DumpFormat: "ASCII"
   FileCategory: "INV"
-  LogicModule: "errorcdr_stat_dump"
+  LogicModule: "Mm/errorcdr_stat_dump.p"
 
-DumpFile25: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "ACC requests"
   DumpID: 29
   FileName: "#CAT#RUN_ACC_Request_#MODE_#DATE.txt"
   SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
   TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
   DumpDelimiter: "":""
   DecimalPoint: "."
   MainTable: "MsRequest"
@@ -458,50 +462,50 @@ DumpFile25: DumpFile
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "DWH"
-  LogicModule: "acc_request_dump"
+  LogicModule: "Mm/acc_request_dump.p"
   ModFromEventLog: TRUE 
-  AveDurFull: 749
-  AveDurMod: 765
-  AllowReplica: TRUE 
+  AveDurFull: 3
+  AveDurMod: 5
 
-DumpFile26: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Customers to IFS"
   DumpID: 30
   FileName: "IFS#RUN_CU_#DATE_#DSEQ.DAT"
   SpoolDir: "/store/riftp/ifs/outgoing/spool"
   TransDir: "/store/riftp/ifs/outgoing/outgoing"
+  Active: FALSE
   MainTable: "Customer"
   DumpName: "IFSCustomer"
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "IFS"
-  LogicModule: "ifs_customer"
+  LogicModule: "Ar/ifs_customer.p"
   ModFromEventLog: TRUE 
-  AveDurFull: 2538
-  AveDurMod: 898
+  AveDurFull: 1
+  AveDurMod: 5
 
-DumpFile27: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Subscriptions to IFS"
   DumpID: 31
   FileName: "IFS#RUN_SU_#DATE_#DSEQ.DAT"
   SpoolDir: "/store/riftp/ifs/outgoing/spool"
   TransDir: "/store/riftp/ifs/outgoing/outgoing"
+  Active: FALSE
   MainTable: "MobSub"
   DumpName: "IFSSubscription"
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "IFS"
-  LogicModule: "ifs_subscription"
+  LogicModule: "Ar/ifs_subscription.p"
   ModFromEventLog: TRUE 
   ModFromField: "ActivationTS"
   EventLogFields: "AgrCust,CLI,InvCust,MsStatus,PayType,CLIType"
-  AveDurFull: 205014
-  AveDurMod: 1890
-  AllowReplica: TRUE 
+  AveDurFull: 1
+  AveDurMod: 5
 
-DumpFile28: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Service invoices (i.e. monthly postpaid invoices) to IFS
 "
@@ -515,20 +519,21 @@ DumpFile28: DumpFile
   EmptyFile: TRUE 
   FileCategory: "IFS"
   QueryClause: "1,5"
-  LogicModule: "ifs_invoice"
+  LogicModule: "Ar/ifs_invoice.p"
   ModFromEventLog: TRUE 
   ModFromField: "ChgStamp"
   ConfigParam: "1,5"
-  AveDurFull: 1691
-  AveDurMod: 238
+  AveDurFull: 2
+  AveDurMod: 2
 
-DumpFile29: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Charge and Compensation request data"
   DumpID: 33
   FileName: "#CAT#RUN_Charge_And_Compensation_#MODE_#DATE.txt"
   SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
   TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "MsRequest"
@@ -537,18 +542,19 @@ DumpFile29: DumpFile
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "DWH"
-  LogicModule: "cctool_dump"
+  LogicModule: "Mm/cctool_dump.p"
   ModFromEventLog: TRUE 
-  AveDurFull: 13401
-  AveDurMod: 32
+  AveDurFull: 1
+  AveDurMod: 5
 
-DumpFile30: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Prepaid topup requests"
   DumpID: 34
   FileName: "#CAT#RUN_Topup_Request_#DATE.txt"
   SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
   TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "PrepaidRequest"
@@ -556,12 +562,12 @@ DumpFile30: DumpFile
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "DWH"
-  LogicModule: "prepaidrequest_dump"
+  LogicModule: "Mm/prepaidrequest_dump.p"
   ModFromField: "TSRequest"
-  AveDurFull: 14584
-  AveDurMod: 6
+  AveDurFull: 1
+  AveDurMod: 5
 
-DumpFile31: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Sales invoices (i.e. cash invoices) to IFS
 "
@@ -576,12 +582,12 @@ DumpFile31: DumpFile
   EmptyFile: TRUE 
   FileCategory: "IFS"
   QueryClause: "6,7,8,9"
-  LogicModule: "ifs_invoice"
+  LogicModule: "Ar/ifs_invoice.p"
   ModFromEventLog: TRUE 
   ModFromField: "ChgStamp"
   ConfigParam: "6,7,8,9"
 
-DumpFile32: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Detailed prepaid CDR dump (YDR-64)
 Matti Ahola - 04/03/10 13:17
@@ -597,9 +603,9 @@ Will not be deployed as agreed by Miguel and Matti. "
   DumpName: "PrepCDR"
   DumpFormat: "ASCII"
   FileCategory: "DWH"
-  LogicModule: "prepcdr_dump_start"
+  LogicModule: "Mm/prepcdr_dump_start.p"
 
-DumpFile33: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Original full invoice table dump (Delta file check is taken in logic module)"
   DumpID: 37
@@ -615,7 +621,7 @@ DumpFile33: DumpFile
   EmptyFile: TRUE 
   FileCategory: "DWH"
 
-DumpFile34: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "New installment contracts daily to IFS
 "
@@ -630,9 +636,9 @@ DumpFile34: DumpFile
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "IFS"
-  LogicModule: "ifs_installment"
+  LogicModule: "Ar/ifs_installment.p"
 
-DumpFile35: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Installment cancellations monthly to IFS"
   DumpID: 39
@@ -646,15 +652,16 @@ DumpFile35: DumpFile
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "IFS"
-  LogicModule: "ifs_installment_cancel"
+  LogicModule: "Ar/ifs_installment_cancel.p"
 
-DumpFile36: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Original MsOwner dump, moved to datadump tool"
   DumpID: 40
-  FileName: "msowner_#MODE_#DATE_#TIME.dump"
-  SpoolDir: "/store/riftp/dumpfiles/dbdumb/spool"
-  TransDir: "/store/riftp/dumpfiles/dbdumb/outgoing"
+  FileName: "msowner#DATE#TIME.dump"
+  SpoolDir: "/tmp"
+  TransDir: "/home/toniv"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "MSOwner"
@@ -662,35 +669,34 @@ DumpFile36: DumpFile
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "DWH"
-  ModFromEventLog: TRUE 
-  AveDurFull: 6643
-  AveDurMod: 3470
+  ModFromField: "TsBegin"
 
-DumpFile37: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Original OrderAccessory dump, used both DWH and pentaho"
   DumpID: 41
   FileName: "OrderAccessory_#MODE_#DATE_#TIME.txt"
   SpoolDir: "/store/riftp/dumpfiles/dbdumb/spool"
   TransDir: "/store/riftp/dumpfiles/dbdumb/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   MainTable: "OrderAccessory"
   DumpName: "OrderAccessory_ORIG"
   DumpFormat: "ASCII"
   FileCategory: "DWH"
   ModFromEventLog: TRUE 
-  ModCollModule: "dump_modified_orderaccessory"
-  AveDurFull: 14584
-  AveDurMod: 4
-  AllowReplica: TRUE 
+  ModCollModule: "Mm/dump_modified_orderaccessory.p"
+  AveDurFull: 1
+  AveDurMod: 5
 
-DumpFile38: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Susbcription Periodical Contracts"
   DumpID: 42
   FileName: "PeriodicalContract_#MODE_#DATE.txt"
   SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
   TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "DCCLI"
@@ -698,35 +704,37 @@ DumpFile38: DumpFile
   DumpName: "PerContrDump"
   DumpFormat: "ASCII"
   FileCategory: "DWH"
-  LogicModule: "percontract_dump"
+  LogicModule: "Mm/percontract_dump.p"
   ModFromEventLog: TRUE 
-  AveDurFull: 108012
-  AveDurMod: 167
+  AveDurFull: 114
+  AveDurMod: 114
 
-DumpFile39: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Orders Periodical Contract"
   DumpID: 43
   FileName: "Order_PeriodicalContract_#MODE_#DATE.txt"
   SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
   TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "Order"
   DumpName: "OrderPerContrDump"
   DumpFormat: "ASCII"
   FileCategory: "DWH"
-  LogicModule: "order_percontract_dump"
-  AveDurFull: 9304
-  AveDurMod: 8
+  LogicModule: "Mm/order_percontract_dump.p"
+  AveDurFull: 4
+  AveDurMod: 5
 
-DumpFile40: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Order cancellation IMEI release (YDR-69)"
   DumpID: 44
   FileName: "#CAT#RUN_IMEI_RELEASE_#MODE_#DATE.txt"
   SpoolDir: "/store/riftp/dumpfiles/imei_release/spool"
   TransDir: "/store/riftp/dumpfiles/imei_release/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "OrderAccessory"
@@ -735,24 +743,24 @@ DumpFile40: DumpFile
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "DWH"
-  QueryClause: "FOR EACH orderaccessory NO-LOCK WHERE          
-         orderaccessory.brand = "1" AND        
-         orderaccessory.imeistatus = 3,        
-   FIRST order NO-LOCK WHERE                   
-         order.brand = orderaccessory.brand AND         
+  QueryClause: "FOR EACH orderaccessory NO-LOCK WHERE
+         orderaccessory.brand = "1" AND
+         orderaccessory.imeistatus = 3,
+   FIRST order NO-LOCK WHERE
+         order.brand = orderaccessory.brand AND
          order.orderid = orderaccessory.orderid"
   ModFromEventLog: TRUE 
-  AveDurFull: 996
-  AveDurMod: 910
-  AllowReplica: TRUE 
+  AveDurFull: 4
+  AveDurMod: 5
 
-DumpFile41: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Active services of subscriptions"
   DumpID: 45
   FileName: "ActiveService_#MODE_#DATE.txt"
   SpoolDir: "/store/riftp/dumpfiles/services/spool"
   TransDir: "/store/riftp/dumpfiles/services/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "SubSer"
@@ -760,52 +768,53 @@ DumpFile41: DumpFile
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "DWH"
-  LogicModule: "active_service_dump"
-  AveDurFull: 169141
-  AveDurMod: 6811
-  AllowReplica: TRUE 
+  LogicModule: "Mm/active_service_dump.p"
+  AveDurFull: 4
+  AveDurMod: 5
 
-DumpFile42: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MSISDNs"
   DumpID: 46
   FileName: "#CAT#RUN_MSISDN_#MODE_#DATE.txt"
   SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
   TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "MSISDN"
   DumpName: "MSISDN"
   DumpFormat: "ASCII"
   FileCategory: "DWH"
-  LogicModule: "msisdn_dump"
-  AveDurFull: 8077
-  AveDurMod: 339
+  LogicModule: "Mm/msisdn_dump.p"
+  AveDurFull: 4
+  AveDurMod: 5
 
-DumpFile43: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MServiceLPool used by Pentaho"
   DumpID: 47
   FileName: "MServiceLPool_#MODE_#DATE.txt"
   SpoolDir: "/mnt/qss/spool"
   TransDir: "/mnt/qss/mservicelpool"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "MServiceLPool"
   DumpName: "MServiceLPoolDump"
   DumpFormat: "ASCII"
   FileCategory: "TRACK"
-  LogicModule: "mservicelpool_dump"
+  LogicModule: "Mm/mservicelpool_dump.p"
   ModFromEventLog: TRUE 
   EventLogFields: "
 
 
 
 "
-  AveDurFull: 125223
-  AveDurMod: 105
+  AveDurFull: 1
+  AveDurMod: 1
 
-DumpFile44: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Prepaid error calls (detailed). YOT-1074
 
@@ -814,18 +823,18 @@ DumpFile44: DumpFile
   FileName: "#CAT_errcalls_prepaid_#DATE_#TIME.dump"
   SpoolDir: "/store/riftp/dumpfiles/errcalls/spool/"
   TransDir: "/store/riftp/dumpfiles/errcalls/outgoing/"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "PrepCDR"
   DumpName: "PrepErrorCDR"
   DumpFormat: "ASCII"
   FileCategory: "DWH"
-  LogicModule: "prepcdr_errordump_start"
-  AveDurFull: 399
-  AveDurMod: 399
-  AllowReplica: TRUE 
+  LogicModule: "Mm/prepcdr_errordump_start.p"
+  AveDurFull: 4
+  AveDurMod: 5
 
-DumpFile45: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "List of Billing Items used by Pentaho
 
@@ -835,6 +844,7 @@ DumpFile45: DumpFile
   FileName: "#CAT_Billing_Items_#MODE_#DATE_#TIME.txt"
   SpoolDir: "/mnt/qss/spool"
   TransDir: "/mnt/qss/billing_item_dim"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "BillItem"
@@ -848,16 +858,17 @@ DumpFile45: DumpFile
   EventLogFields: "
 
 "
-  AveDurFull: 1
-  AveDurMod: 88
+  AveDurFull: 4
+  AveDurMod: 5
 
-DumpFile46: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MNP KPI dump for Track (SER-465)"
   DumpID: 50
-  FileName: "mnpkpi_dump_#DATE_#TIME.txt"
+  FileName: "mnpkpi_dump_#DATE.txt"
   SpoolDir: "/mnt/qss/spool"
   TransDir: "/mnt/qss/mnp_process"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: ","
   MainTable: "MNPProcess"
@@ -865,17 +876,18 @@ DumpFile46: DumpFile
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "TRACK"
-  LogicModule: "mnpkpi_dump"
-  AveDurFull: 1
-  AveDurMod: 2
+  LogicModule: "Mnp/mnpkpi_dump.p"
+  AveDurFull: 4
+  AveDurMod: 5
 
-DumpFile47: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Error Calls Dump. YDR-222"
   DumpID: 51
   FileName: "#CAT_errcalls_#DATE_#TIME.dump"
   SpoolDir: "/store/riftp/dumpfiles/errcalls/spool"
   TransDir: "/store/riftp/dumpfiles/errcalls/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "MobCDR"
@@ -883,18 +895,18 @@ DumpFile47: DumpFile
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "DWH"
-  LogicModule: "errorcdr_dump_start"
-  AveDurFull: 1150
-  AveDurMod: 1150
-  AllowReplica: TRUE 
+  LogicModule: "Mm/errorcdr_dump_start.p"
+  AveDurFull: 4
+  AveDurMod: 5
 
-DumpFile48: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Invoice Details Report"
   DumpID: 52
   FileName: "invoices_detail_#YYMM.txt.gz"
   SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
   TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
   DumpDelimiter: ";"
   DecimalPoint: "."
   MainTable: "Invoice"
@@ -902,45 +914,48 @@ DumpFile48: DumpFile
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "DWH"
-  LogicModule: "invrowdump"
-  AveDurFull: 3682
-  AveDurMod: 3682
+  LogicModule: "Mm/invrowdump.p"
+  AveDurFull: 4
+  AveDurMod: 5
 
-DumpFile49: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Description: Cancellation attachments to DWH. YDR-233"
   DumpID: 53
   FileName: "#CAT_MNP_attachments_#DATE.dump.gz"
   SpoolDir: "/store/riftp/mnp/cancel_attachment/spool"
   TransDir: "/store/riftp/mnp/cancel_attachment/outgoing"
+  Active: FALSE
   MainTable: "MNPProcess"
   DumpName: "MNPAttachment"
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "DWH"
-  LogicModule: "mnp_attachment_dump"
-  AveDurFull: 1
+  LogicModule: "Mnp/mnp_attachment_dump.p"
+  AveDurFull: 4
+  AveDurMod: 5
 
-DumpFile50: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Payment on delivery sales invoices (cash invoices) / credit notes to IFS"
   DumpID: 54
   FileName: "IFS#RUN_SA_2_INV_#DATE_#DSEQ.DAT"
   SpoolDir: "/store/riftp/ifs/outgoing/spool"
   TransDir: "/store/riftp/ifs/outgoing/outgoing"
+  Active: FALSE
   MainTable: "Invoice"
   DumpName: "IFSInvoiceSA2"
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "IFS"
-  LogicModule: "ifs_invoice"
+  LogicModule: "Ar/ifs_invoice.p"
   ModFromEventLog: TRUE 
   ModFromField: "ChgStamp"
   ConfigParam: "6,8"
-  AveDurFull: 14770
-  AveDurMod: 40
+  AveDurFull: 4
+  AveDurMod: 5
 
-DumpFile51: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Credit card sales invoices (cash receipts) / credit notes to IFS
 
@@ -949,25 +964,27 @@ DumpFile51: DumpFile
   FileName: "IFS#RUN_SA_7_INV_#DATE_#DSEQ.DAT"
   SpoolDir: "/store/riftp/ifs/outgoing/spool"
   TransDir: "/store/riftp/ifs/outgoing/outgoing"
+  Active: FALSE
   MainTable: "Invoice"
   DumpName: "IFSInvoiceSA7"
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "IFS"
-  LogicModule: "ifs_invoice"
+  LogicModule: "Ar/ifs_invoice.p"
   ModFromEventLog: TRUE 
   ModFromField: "ChgStamp"
   ConfigParam: "7,9"
-  AveDurFull: 13902
-  AveDurMod: 10
+  AveDurFull: 4
+  AveDurMod: 5
 
-DumpFile52: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Customer address validation values. YDR-180"
   DumpID: 56
   FileName: "#CAT_customerreport_#DATE_#TIME.dump"
   SpoolDir: "/store/riftp/dumpfiles/dbdumb/spool"
   TransDir: "/store/riftp/dumpfiles/dbdumb/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "CustomerReport"
@@ -975,16 +992,17 @@ DumpFile52: DumpFile
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "DWH"
-  AveDurFull: 1379
-  AveDurMod: 1379
+  AveDurFull: 4
+  AveDurMod: 5
 
-DumpFile53: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Invoice Report"
   DumpID: 57
   FileName: "invoices_#MODE_#DATE#TIME.dump.gz"
   SpoolDir: "/store/riftp/dumpfiles/invoices/spool"
   TransDir: "/store/riftp/dumpfiles/invoices/outgoing"
+  Active: FALSE
   DumpDelimiter: "":""
   DecimalPoint: "."
   MainTable: "Invoice"
@@ -992,34 +1010,36 @@ DumpFile53: DumpFile
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "DWH"
-  LogicModule: "invoicedump"
-  AveDurFull: 9235
-  AveDurMod: 564
+  LogicModule: "Inv/invoicedump.p"
+  AveDurFull: 3
+  AveDurMod: 3
 
-DumpFile54: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Bill Run Statistic Report for Track - YOT-1455"
   DumpID: 58
   FileName: "billrunstat_dump_#DATE_#TIME.txt"
   SpoolDir: "/store/riftp/billreport/spool"
   TransDir: "/store/riftp/billreport/processed"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "FuncRunQueue"
   DumpName: "BillRunStat"
   DumpFormat: "ASCII"
   FileCategory: "TMS"
-  LogicModule: "billrunstat_dump"
-  AveDurFull: 6908
-  AveDurMod: 1
+  LogicModule: "Mm/billrunstat_dump.p"
+  AveDurFull: 4
+  AveDurMod: 5
 
-DumpFile55: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Offer dump including fields which are defined and used by operator."
   DumpID: 59
   FileName: "#CAT_offer_#MODE_#DATE_#TIME.txt"
   SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
   TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "Offer"
@@ -1028,17 +1048,17 @@ DumpFile55: DumpFile
   EmptyFile: TRUE 
   FileCategory: "DWH"
   ModFromEventLog: TRUE 
-  AveDurFull: 41
-  AveDurMod: 55
-  AllowReplica: TRUE 
+  AveDurFull: 17
+  AveDurMod: 5
 
-DumpFile56: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "OfferCriteria dump including fields which are defined and used by operator."
   DumpID: 60
   FileName: "#CAT_offercriteria_#MODE_#DATE_#TIME.txt"
   SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
   TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "OfferCriteria"
@@ -1047,17 +1067,17 @@ DumpFile56: DumpFile
   EmptyFile: TRUE 
   FileCategory: "DWH"
   ModFromEventLog: TRUE 
-  AveDurFull: 189
-  AveDurMod: 208
-  AllowReplica: TRUE 
+  AveDurFull: 17
+  AveDurMod: 5
 
-DumpFile57: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "OfferItem dump including fields which are defined and used by operator."
   DumpID: 61
   FileName: "#CAT_offeritem_#MODE_#DATE_#TIME.txt"
   SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
   TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "OfferItem"
@@ -1066,11 +1086,10 @@ DumpFile57: DumpFile
   EmptyFile: TRUE 
   FileCategory: "DWH"
   ModFromEventLog: TRUE 
-  AveDurFull: 299
-  AveDurMod: 299
-  AllowReplica: TRUE 
+  AveDurFull: 17
+  AveDurMod: 5
 
-DumpFile58: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Installment activations and cancellations to IFS. YDR-328
 This is executed from the ifs bank file read process."
@@ -1078,23 +1097,25 @@ This is executed from the ifs bank file read process."
   FileName: "IFS_HIRE_OPERATION_#RUN_#DATE_#DSEQ.DAT"
   SpoolDir: "/store/riftp/ifs/outgoing/spool"
   TransDir: "/store/riftp/ifs/outgoing/outgoing"
+  Active: FALSE
   DumpDelimiter: ";"
   MainTable: "MsRequest"
   DumpName: "IFSInstallmentAction"
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "IFS"
-  LogicModule: "ifs_installment_operation"
-  AveDurFull: 203
-  AveDurMod: 609
+  LogicModule: "Ar/ifs_installment_operation.p"
+  AveDurFull: 17
+  AveDurMod: 1
 
-DumpFile59: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "External API log dump for Track. SER-2700"
   DumpID: 63
   FileName: "extapi_dump_#DATE.txt"
   SpoolDir: "/mnt/qss/spool"
   TransDir: "/mnt/qss/extapi"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: ","
   MainTable: "AuthLog"
@@ -1102,12 +1123,11 @@ DumpFile59: DumpFile
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "TRACK"
-  LogicModule: "extapi_dump"
-  AveDurFull: 3
-  AveDurMod: 3
-  AllowReplica: TRUE 
+  LogicModule: "Syst/extapi_dump.p"
+  AveDurFull: 17
+  AveDurMod: 5
 
-DumpFile60: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "OrderAction dump. YDR-494
 Sent to both Track and DWH"
@@ -1115,40 +1135,42 @@ Sent to both Track and DWH"
   FileName: "OrderAction_#MODE_#DATE_#TIME.txt"
   SpoolDir: "/store/riftp/dumpfiles/dbdumb/spool"
   TransDir: "/store/riftp/dumpfiles/dbdumb/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   MainTable: "OrderAction"
   DumpName: "OrderAction"
   DumpFormat: "ASCII"
   FileCategory: "DWH"
   ModFromEventLog: TRUE 
-  ModCollModule: "orderaction_delta_dump"
-  AveDurFull: 8
-  AveDurMod: 2
-  AllowReplica: TRUE 
+  ModCollModule: "Mc/orderaction_delta_dump.p"
+  AveDurFull: 17
+  AveDurMod: 5
 
-DumpFile61: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "IPRange table dump for DWH. YDR-474"
   DumpID: 65
   FileName: "#CAT_iprange_#MODE_#DATE_#TIME.dump"
   SpoolDir: "/store/riftp/dumpfiles/dbdumb/spool"
   TransDir: "/store/riftp/dumpfiles/dbdumb/outgoing"
+  Active: FALSE
   DumpDelimiter: ";"
   DecimalPoint: "."
   MainTable: "IPRange"
   DumpName: "IPRange"
   DumpFormat: "ASCII"
   FileCategory: "DWH"
-  AveDurFull: 1
-  AveDurMod: 2
+  AveDurFull: 17
+  AveDurMod: 5
 
-DumpFile62: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Discount plan members"
   DumpID: 66
   FileName: "#CAT#RUN_Discount_Plan_Member_#MODE_#DATE.txt"
   SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
   TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "DPMember"
@@ -1158,60 +1180,63 @@ DumpFile62: DumpFile
   FileCategory: "DWH"
   LogicModule: "dpmember_dump.p"
   ModFromEventLog: TRUE 
-  AveDurFull: 339
-  AveDurMod: 1793
+  AveDurFull: 17
+  AveDurMod: 5
 
-DumpFile63: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "XML file with PhoneHouse MNP orders. YOT-1850"
   DumpID: 67
   FileName: "mnp_phonehouse_#DATE.xml"
   SpoolDir: "/store/riftp/mnp/mnp_phonehouse/spool/"
   TransDir: "/store/riftp/mnp/mnp_phonehouse/outgoing/"
+  Active: FALSE
   MainTable: "MNPProcess"
   DumpName: "MNPPhoneHouse"
   DumpFormat: "XML"
   EmptyFile: TRUE 
   FileCategory: "DWH"
-  LogicModule: "mnpdump_phonehouse"
+  LogicModule: "Mnp/mnpdump_phonehouse.p"
   ModFromEventLog: TRUE 
-  AveDurFull: 133
-  AveDurMod: 7
+  AveDurFull: 17
+  AveDurMod: 5
 
-DumpFile64: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MNP porting in cancellations log. YDR-578"
   DumpID: 68
   FileName: "#CAT_mnp_cancellation_log_#DATE.dat"
   SpoolDir: "/store/riftp/mnp/mnp_cancellation_log/spool"
   TransDir: "/store/riftp/mnp/mnp_cancellation_log/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   MainTable: "MNPProcess"
   DumpName: "MNPCancellationLog"
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "DWH"
-  LogicModule: "mnp_cancellation_log"
-  AveDurFull: 5
+  LogicModule: "Mnp/mnp_cancellation_log.p"
+  AveDurFull: 17
   AveDurMod: 5
 
-DumpFile65: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Fees datasmart. YDR-455"
   DumpID: 69
   FileName: "singlefee_events_#DATE.txt"
   SpoolDir: "/mnt/qss/spool"
   TransDir: "/mnt/qss/singlefees"
+  Active: FALSE
   MainTable: "SingleFee"
   DumpName: "SingleFeeEvent"
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "TRACK"
-  LogicModule: "singlefeelogdump"
-  AveDurFull: 11
-  AveDurMod: 11
+  LogicModule: "Mc/singlefeelogdump.p"
+  AveDurFull: 17
+  AveDurMod: 5
 
-DumpFile66: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Billing permission dump for billing permission create/modify events. YOT-1635
 "
@@ -1219,18 +1244,18 @@ DumpFile66: DumpFile
   FileName: "#CAT_BillingPermissionEventLog_#DATE.txt"
   SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
   TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   MainTable: "Limit"
   DumpName: "BillingPermEvents"
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "DWH"
-  LogicModule: "denybilling_event_dump"
-  AveDurFull: 5
+  LogicModule: "Inv/denybilling_event_dump.p"
+  AveDurFull: 17
   AveDurMod: 5
-  AllowReplica: TRUE 
 
-DumpFile67: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Description: YOT-185 Data Protection Law: Access Logs
 "
@@ -1238,23 +1263,24 @@ DumpFile67: DumpFile
   FileName: "#CAT_DPLLog_#DATE.txt"
   SpoolDir: "/store/riftp/dumpfiles/callrep/spool/"
   TransDir: "/store/riftp/dumpfiles/callrep/outgoing/"
+  Active: FALSE
   DumpDelimiter: ";"
   MainTable: "CallScanner"
   DumpName: "DPLLog"
   DumpFormat: "ASCII"
   FileCategory: "DWH"
   LogicModule: "callscannerrep.p"
-  AveDurFull: 2
-  AveDurMod: 2
-  AllowReplica: TRUE 
+  AveDurFull: 17
+  AveDurMod: 5
 
-DumpFile68: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Rerate log dump for TRACK. YOT-2127"
   DumpID: 72
   FileName: "#CAT_rerate_log_dt_#DATE_#TIME.txt"
   SpoolDir: "/mnt/qss/spool"
   TransDir: "/mnt/qss/rerate_log_detailed"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "EDRHistory"
@@ -1262,12 +1288,11 @@ DumpFile68: DumpFile
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "TRACK"
-  LogicModule: "edrhistory_dump_run"
-  AveDurFull: 5
+  LogicModule: "Rate/edrhistory_dump_run.p"
+  AveDurFull: 17
   AveDurMod: 5
-  AllowReplica: TRUE 
 
-DumpFile69: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "IFS file about orders cancelled because ROVE. YDR-560
 "
@@ -1281,18 +1306,19 @@ DumpFile69: DumpFile
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "IFS"
-  LogicModule: "ifs_rove_ko"
+  LogicModule: "Ar/ifs_rove_ko.p"
   ModFromEventLog: TRUE 
-  AveDurFull: 21
-  AveDurMod: 21
+  AveDurFull: 1
+  AveDurMod: 1
 
-DumpFile70: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "TMS users dump file"
   DumpID: 74
   FileName: "tms_users_#DATE.dump"
   SpoolDir: "/store/riftp/dumpfiles/tmsusers/spool"
   TransDir: "/store/riftp/dumpfiles/tmsusers/outgoing"
+  Active: FALSE
   DumpDelimiter: "ASC(009)"
   DecimalPoint: "."
   MainTable: "tmsuser"
@@ -1301,17 +1327,17 @@ DumpFile70: DumpFile
   EmptyFile: TRUE 
   FileCategory: "DWH"
   ModFromEventLog: TRUE 
-  AveDurFull: 1
-  AveDurMod: 1
-  AllowReplica: TRUE 
+  AveDurFull: 17
+  AveDurMod: 5
 
-DumpFile71: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Dumps whole Limit table"
   DumpID: 75
   FileName: "Custidorderlimit_#DATE.dump"
   SpoolDir: "/store/riftp/dumpfiles/limit/spool"
   TransDir: "/store/riftp/dumpfiles/limit/outgoing"
+  Active: FALSE
   DumpDelimiter: ""|""
   DecimalPoint: "."
   MainTable: "Limit"
@@ -1321,16 +1347,17 @@ DumpFile71: DumpFile
   FileCategory: "DWH"
   LogicModule: "limitdump.p"
   ModFromEventLog: TRUE 
-  AveDurFull: 3844
-  AveDurMod: 3844
+  AveDurFull: 5
+  AveDurMod: 5
 
-DumpFile72: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MNP porting IN"
   DumpID: 76
   FileName: "porting_in_#DATE.dat"
   SpoolDir: "/store/riftp/mnp/report/spool"
   TransDir: "/store/riftp/mnp/report/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "MNPProcess"
@@ -1341,16 +1368,17 @@ DumpFile72: DumpFile
   LogicModule: "mnpdumpnc.p"
   ModFromEventLog: TRUE 
   ConfigParam: "1"
-  AveDurFull: 2318
-  AveDurMod: 2318
+  AveDurFull: 5
+  AveDurMod: 5
 
-DumpFile73: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MNP porting OUT"
   DumpID: 77
   FileName: "porting_out_#DATE.dat"
   SpoolDir: "/store/riftp/mnp/report/spool"
   TransDir: "/store/riftp/mnp/report/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "MNPProcess"
@@ -1361,16 +1389,17 @@ DumpFile73: DumpFile
   LogicModule: "mnpdumpnc.p"
   ModFromEventLog: TRUE 
   ConfigParam: "2"
-  AveDurFull: 2015
-  AveDurMod: 2015
+  AveDurFull: 5
+  AveDurMod: 5
 
-DumpFile74: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MNP Termination"
   DumpID: 78
   FileName: "msisdn_termination_#DATE.dat"
   SpoolDir: "/store/riftp/mnp/report/spool"
   TransDir: "/store/riftp/mnp/report/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "MNPProcess"
@@ -1381,16 +1410,17 @@ DumpFile74: DumpFile
   LogicModule: "mnpdumpnc.p"
   ModFromEventLog: TRUE 
   ConfigParam: "3"
-  AveDurFull: 99
-  AveDurMod: 99
+  AveDurFull: 5
+  AveDurMod: 5
 
-DumpFile75: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Report MNP IN/OUT error messages."
   DumpID: 79
   FileName: "porting_errors_#DATE.dat"
   SpoolDir: "/store/riftp/mnp/mnperrordump/spool"
   TransDir: "/store/riftp/mnp/mnperrordump/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "MNPOperation"
@@ -1400,16 +1430,17 @@ DumpFile75: DumpFile
   FileCategory: "DWH"
   LogicModule: "mnperrordump.p"
   ModFromEventLog: TRUE 
-  AveDurFull: 147
-  AveDurMod: 147
+  AveDurFull: 5
+  AveDurMod: 5
 
-DumpFile76: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "All failed MNP activations"
   DumpID: 80
   FileName: "activationError_#DATE.txt"
   SpoolDir: "/store/riftp/dumpfiles/mnprep/spool"
   TransDir: "/store/riftp/dumpfiles/mnprep/outgoing"
+  Active: FALSE
   DumpDelimiter: ","
   DecimalPoint: "."
   MainTable: "MNPProcess"
@@ -1419,16 +1450,17 @@ DumpFile76: DumpFile
   FileCategory: "DWH"
   LogicModule: "mnp_acterr.p"
   ModFromEventLog: TRUE 
-  AveDurFull: 1
-  AveDurMod: 8
+  AveDurFull: 5
+  AveDurMod: 5
 
-DumpFile77: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MNP OUT delayed rejections/confirmations."
   DumpID: 81
   FileName: "delayed_responses_#DATE.dat"
   SpoolDir: "/store/riftp/mnp/mnpdelay/spool"
   TransDir: "/store/riftp/mnp/mnpdelay/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "MNPProcess"
@@ -1438,16 +1470,17 @@ DumpFile77: DumpFile
   FileCategory: "TMS"
   LogicModule: "mnpdelayresp.p"
   ModFromEventLog: TRUE 
-  AveDurFull: 1
-  AveDurMod: 8
+  AveDurFull: 5
+  AveDurMod: 5
 
-DumpFile78: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Dump Salesman records"
   DumpID: 82
   FileName: "salesman_#DATE.dump"
   SpoolDir: "/store/riftp/dumpfiles/salesman/outgoing/spool"
   TransDir: "/store/riftp/dumpfiles/salesman/outgoing/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "Salesman"
@@ -1456,17 +1489,17 @@ DumpFile78: DumpFile
   EmptyFile: TRUE 
   FileCategory: "DWH"
   ModFromEventLog: TRUE 
-  AveDurFull: 20
-  AveDurMod: 20
-  AllowReplica: TRUE 
+  AveDurFull: 5
+  AveDurMod: 5
 
-DumpFile79: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Dump SIM records"
   DumpID: 83
   FileName: "icc_info_#DATE.dump"
   SpoolDir: "/store/riftp/dumpfiles/icc/spool"
   TransDir: "/store/riftp/dumpfiles/icc/outgoing"
+  Active: FALSE
   DumpDelimiter: ":"
   DecimalPoint: "."
   MainTable: "SIM"
@@ -1475,51 +1508,51 @@ DumpFile79: DumpFile
   EmptyFile: TRUE 
   FileCategory: "DWH"
   ModFromEventLog: TRUE 
-  AveDurFull: 2454
-  AveDurMod: 2454
-  AllowReplica: TRUE 
+  AveDurFull: 5
+  AveDurMod: 4
 
-DumpFile80: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "EDR data dump to TRACK and DWH"
   DumpID: 84
   FileName: "edr_#DATE.dat"
   SpoolDir: "/store/riftp/dumpfiles/edr/spool"
   TransDir: "/store/riftp/dumpfiles/edr/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   MainTable: "PrepEDR"
   DumpName: "PrepEDR"
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "DWH"
-  LogicModule: "prepedr_dump_start"
-  AveDurFull: 2
-  AveDurMod: 2
-  AllowReplica: TRUE 
+  LogicModule: "Mm/prepedr_dump_start.p"
+  AveDurFull: 5
+  AveDurMod: 5
 
-DumpFile81: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Terminal financing file for the bank. YDR-945"
   DumpID: 85
   FileName: "terminal_finance_#DATE_#TIME.txt"
   SpoolDir: "/store/riftp/dumpfiles/terminal_finance/spool/"
   TransDir: "/store/riftp/dumpfiles/terminal_finance/outgoing/"
+  Active: FALSE
   MainTable: "Order"
   DumpName: "TerminalFinancing"
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "INV"
   LogicModule: "terminal_financing"
-  AveDurFull: 4
-  AveDurMod: 8
+  AveDurFull: 5
+  AveDurMod: 5
 
-DumpFile82: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Invoice Dump for Cassandra for HPD project."
   DumpID: 86
   FileName: "invoice_#MODE_#DATE#TIME.txt.gz"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/hpd_test_dumps/spool"
+  TransDir: "/mnt/store/riftp/hpd_test_dumps/outgoing"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -1529,10 +1562,10 @@ DumpFile82: DumpFile
   EmptyFile: TRUE 
   FileCategory: "Cassandra"
   LogicModule: "invoicedump_pupu"
-  AveDurFull: 1753
-  AveDurMod: 2290
+  AveDurFull: 1
+  AveDurMod: 1
 
-DumpFile83: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Payment Dump for Cassandra for HPD project."
   DumpID: 87
@@ -1548,10 +1581,10 @@ DumpFile83: DumpFile
   EmptyFile: TRUE 
   FileCategory: "Cassandra"
   LogicModule: "paymentdump_pupu"
-  AveDurFull: 1302
-  AveDurMod: 24
+  AveDurFull: 5
+  AveDurMod: 5
 
-DumpFile84: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "ServiceLCounter Dump for Cassandra for HPD project."
   DumpID: 88
@@ -1567,11 +1600,11 @@ DumpFile84: DumpFile
   EmptyFile: TRUE 
   FileCategory: "Cassandra"
   LogicModule: "servicelcounter_dump_pupu"
-  ConfigParam: "DSS,DSS_UPSELL,DSS_UPSELL_UPGRADE,DSS2,DSS2_UPSELL,DSS200_UPSELL"
-  AveDurFull: 9
-  AveDurMod: 9
+  ConfigParam: "DSS,DSS_UPSELL,DSS_UPSELL_UPGRADE,DSS2,DSS2_UPSELL"
+  AveDurFull: 5
+  AveDurMod: 5
 
-DumpFile85: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "PrepEDR Dump for Cassandra for HPD project."
   DumpID: 89
@@ -1586,17 +1619,18 @@ DumpFile85: DumpFile
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "Cassandra"
-  LogicModule: "prepedr_pupu_dump_start"
-  AveDurMod: 1
-  AllowReplica: TRUE 
+  LogicModule: "Mm/prepedr_pupu_dump_start.p"
+  AveDurFull: 5
+  AveDurMod: 5
 
-DumpFile86: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "OrderFusion dump used for both DWH and pentaho"
   DumpID: 90
   FileName: "OrderFusion_#MODE_#DATE_#TIME.txt"
   SpoolDir: "/store/riftp/dumpfiles/dbdumb/spool"
   TransDir: "/store/riftp/dumpfiles/dbdumb/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "OrderFusion"
@@ -1604,37 +1638,37 @@ DumpFile86: DumpFile
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "DWH"
-  ModCollModule: "dump_modified_orderfusion"
-  AveDurFull: 51
-  AveDurMod: 1
-  AllowReplica: TRUE 
+  ModCollModule: "Mm/dump_modified_orderfusion.p"
+  AveDurFull: 5
+  AveDurMod: 5
 
-DumpFile87: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Fusion invoices to IFS"
   DumpID: 91
   FileName: "IFS#RUN_SE_FU_INV_#DATE_#DSEQ.DAT"
   SpoolDir: "/store/riftp/ifs/outgoing/spool"
   TransDir: "/store/riftp/ifs/outgoing/outgoing"
+  Active: FALSE
   MainTable: "Invoice"
   DumpName: "IFSInvoiceFusion"
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "IFS"
-  LogicModule: "ifs_invoice"
+  LogicModule: "Ar/ifs_invoice.p"
   ModFromEventLog: TRUE 
   ModFromField: "ChgStamp"
   ConfigParam: "1,5;fusion"
-  AveDurFull: 33
-  AveDurMod: 46
+  AveDurFull: 5
+  AveDurMod: 5
 
-DumpFile88: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Check whether customer BIC cannot be found from system"
   DumpID: 92
-  FileName: "incorrect_cust_data_#DATE.dump"
-  SpoolDir: "/store/riftp/starnet/reporting/datascan/spool"
-  TransDir: "/store/riftp/starnet/reporting/datascan/outgoing"
+  FileName: "incorrect_cust_data.dump"
+  SpoolDir: "/scratch/log/bic_missing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "EventLog"
@@ -1643,32 +1677,34 @@ DumpFile88: DumpFile
   FileCategory: "INV"
   LogicModule: "bicdump.p"
   ModFromEventLog: TRUE 
-  AveDurFull: 12979
-  AveDurMod: 12979
+  AveDurFull: 5
+  AveDurMod: 5
 
-DumpFile89: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "TARJ7 renewal date alignment"
   DumpID: 93
   FileName: "tarj7_renewal_aligment_#DATE_#TIME.log"
   SpoolDir: "/scratch/log/tarj7"
+  Active: FALSE
   DumpDelimiter: ";"
   MainTable: "MServiceLimit"
   DumpName: "TARJ7RenewalAlign"
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "TMS"
-  LogicModule: "tarj7_renewal_alignment"
-  AveDurFull: 12624
-  AveDurMod: 12624
+  LogicModule: "Mm/tarj7_renewal_alignment.p"
+  AveDurFull: 5
+  AveDurMod: 5
 
-DumpFile90: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "New IFS dextra order file for NTFM-Direct Channel"
   DumpID: 94
   FileName: "#CAT_DEXTRA_ORDER_CC_#DATE_#DSEQ.DAT"
   SpoolDir: "/store/riftp/ifs/outgoing/spool"
   TransDir: "/store/riftp/ifs/outgoing/outgoing"
+  Active: FALSE
   DumpDelimiter: ";"
   DecimalPoint: "."
   MainTable: "Order"
@@ -1676,33 +1712,34 @@ DumpFile90: DumpFile
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "IFS"
-  LogicModule: "ifs_dextra_orders"
-  AveDurFull: 1
-  AveDurMod: 2618
+  LogicModule: "Ar/ifs_dextra_orders.p"
+  AveDurFull: 5
+  AveDurMod: 5
 
-DumpFile91: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "EventLog Dump"
   DumpID: 95
   FileName: "cc_log_#DATE_#TIME.dump"
   SpoolDir: "/store/riftp/dumpfiles/eventlog/spool"
   TransDir: "/store/riftp/dumpfiles/eventlog/outgoing"
+  Active: FALSE
   MainTable: "EventLog"
   DumpName: "EventLogDump"
   DumpFormat: "ASCII"
   FileCategory: "DWH"
-  LogicModule: "eventlogdump"
-  AveDurFull: 11
-  AveDurMod: 11
-  AllowReplica: TRUE 
+  LogicModule: "Mc/eventlogdump.p"
+  AveDurFull: 5
+  AveDurMod: 5
 
-DumpFile92: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Customers event log information"
   DumpID: 96
   FileName: "#CAT_Customer_EventLog_#DATE.txt"
   SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
   TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "EventLog"
@@ -1710,132 +1747,19 @@ DumpFile92: DumpFile
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "DWH"
-  LogicModule: "cust_eventlog_dump"
+  LogicModule: "Mm/cust_eventlog_dump.p"
   ModFromEventLog: TRUE 
-  AveDurFull: 69785
-  AveDurMod: 149
+  AveDurFull: 5
+  AveDurMod: 5
 
-DumpFile93: DumpFile
-  Brand: "1"
-  Description: "Dump for collecting info about Single Fees and Fixed Fees"
-  DumpID: 97
-  FileName: "DWH_Modified_Single_Fix_Fees_#DATE.txt"
-  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
-  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
-  DumpDelimiter: "|"
-  DecimalPoint: "."
-  MainTable: "FixedFee"
-  SideTables: "SingleFee"
-  DumpName: "SingleFixFeeCollect"
-  DumpFormat: "ASCII"
-  FileCategory: "DWH"
-  LogicModule: "fixedsinglefee_collecdump"
-  ModFromEventLog: TRUE 
-  AveDurFull: 13
-  AveDurMod: 8
-
-DumpFile94: DumpFile
-  Brand: "1"
-  Description: "MsOwner full dump for Track"
-  DumpID: 98
-  FileName: "msowner_#MODE_#DATE_#TIME.dump"
-  SpoolDir: "/mnt/qss/spool"
-  TransDir: "/mnt/qss/msowner"
-  DumpDelimiter: "|"
-  DecimalPoint: "."
-  MainTable: "MsOwner"
-  DumpName: "MsOwnerTrack"
-  DumpFormat: "ASCII"
-  EmptyFile: TRUE 
-  FileCategory: "TRACK"
-  ModFromEventLog: TRUE 
-  AveDurFull: 7931
-  AveDurMod: 7931
-
-DumpFile95: DumpFile
-  Brand: "1"
-  Description: "Offers sent by SMS"
-  DumpID: 99
-  FileName: "SMS_OFFER_#DATE_#TIME.dump"
-  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
-  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
-  DumpDelimiter: "|"
-  DecimalPoint: "."
-  MainTable: "SMSMessage"
-  DumpName: "SMSOffer"
-  DumpFormat: "ASCII"
-  EmptyFile: TRUE 
-  FileCategory: "DWH"
-  LogicModule: "cdl_sent_dump"
-  AveDurFull: 125
-  AveDurMod: 125
-  AllowReplica: TRUE 
-
-DumpFile96: DumpFile
-  Brand: "1"
-  Description: "Offer response SMSes from end-customers"
-  DumpID: 100
-  FileName: "RESPONSE_OFFER_#DATE_#TIME.dump"
-  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
-  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
-  DumpDelimiter: "|"
-  DecimalPoint: "."
-  MainTable: "SMSMessage"
-  DumpName: "SMSOfferResponse"
-  DumpFormat: "ASCII"
-  EmptyFile: TRUE 
-  FileCategory: "DWH"
-  LogicModule: "cdl_received_dump"
-  AveDurFull: 4
-  AveDurMod: 4
-  AllowReplica: TRUE 
-
-DumpFile97: DumpFile
-  Brand: "1"
-  Description: "Subscription barrings"
-  DumpID: 101
-  FileName: "DWH_barrings_#MODE_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
-  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
-  DumpDelimiter: "|"
-  DecimalPoint: "."
-  MainTable: "Barring"
-  DumpName: "Barrings"
-  DumpFormat: "ASCII"
-  EmptyFile: TRUE 
-  FileCategory: "DWH"
-  LogicModule: "barring_dump"
-  ModFromEventLog: TRUE 
-  ModFromField: "EventTS"
-  AveDurFull: 823
-  AveDurMod: 2
-
-DumpFile98: DumpFile
-  Brand: "1"
-  Description: "PayPal sales invoices (cash receipts) / credit notes to IFS"
-  DumpID: 102
-  FileName: "IFS#RUN_SA_6_INV_#DATE_#DSEQ.DAT"
-  SpoolDir: "/store/riftp/ifs/outgoing/spool"
-  TransDir: "/store/riftp/ifs/outgoing/outgoing"
-  MainTable: "Invoice"
-  DumpName: "IFSInvoiceSA6"
-  DumpFormat: "ASCII"
-  EmptyFile: TRUE 
-  FileCategory: "IFS"
-  LogicModule: "ifs_invoice"
-  ModFromEventLog: TRUE 
-  ModFromField: "ChgStamp"
-  ConfigParam: "7,9;paypal"
-  AveDurFull: 13596
-  AveDurMod: 11
-
-DumpFile99: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Collect rows to a dump file for DMS records"
-  DumpID: 103
+  DumpID: 97
   FileName: "#CAT_DMS_#MODE_#DATE_#TIME.txt"
   SpoolDir: "/mnt/store/riftp/dumpfiles/dwh/spool"
   TransDir: "/mnt/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "DMS"
@@ -1843,17 +1767,19 @@ DumpFile99: DumpFile
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "DWH"
-  LogicModule: "dms_delta_dump"
+  LogicModule: "Mc/dms_delta_dump.p"
   ModFromEventLog: TRUE 
-  AveDurMod: 5
+  AveDurFull: 26
+  AveDurMod: 1
 
-DumpFile100: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Collect rows to a dump file for DMSDoc records"
-  DumpID: 104
+  DumpID: 98
   FileName: "#CAT_DMSDoc_#MODE_#DATE_#TIME.txt"
   SpoolDir: "/mnt/store/riftp/dumpfiles/dwh/spool"
   TransDir: "/mnt/store/riftp/dumpfiles/dwh/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "DMSDoc"
@@ -1861,72 +1787,18 @@ DumpFile100: DumpFile
   DumpFormat: "ASCII"
   EmptyFile: TRUE 
   FileCategory: "DWH"
-  LogicModule: "dmsdoc_delta_dump"
+  LogicModule: "Mc/dmsdoc_delta_dump.p"
   ModFromEventLog: TRUE 
-  AveDurMod: 2
+  AveDurFull: 12
+  AveDurMod: 12
 
-DumpFile101: DumpFile
-  Brand: "1"
-  Description: "Collect rows to a dump file for customer contact records"
-  DumpID: 105
-  FileName: "#CAT_custcontact_#MODE_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/dumpfiles/dbdumb/spool"
-  TransDir: "/store/riftp/dumpfiles/dbdumb/outgoing"
-  DumpDelimiter: "|"
-  DecimalPoint: "."
-  MainTable: "CustContact"
-  DumpName: "CustContact"
-  DumpFormat: "ASCII"
-  EmptyFile: TRUE 
-  FileCategory: "DWH"
-  ModFromEventLog: TRUE 
-  ModCollModule: "custcontact_delta_dump"
-  AveDurFull: 43
-  AveDurMod: 2
-
-DumpFile102: DumpFile
-  Brand: "1"
-  Description: "Customer Data History Dump created daily with old customer data"
-  DumpID: 106
-  FileName: "#CAT_customerhistory_#MODE_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/dumpfiles/dbdumb/spool"
-  TransDir: "/store/riftp/dumpfiles/dbdumb/outgoing"
-  DumpDelimiter: "|"
-  DecimalPoint: "."
-  MainTable: "customer"
-  DumpName: "CustHistory"
-  DumpFormat: "ASCII"
-  EmptyFile: TRUE 
-  FileCategory: "DWH"
-  LogicModule: "cust_dch_dump"
-  ModFromEventLog: TRUE 
-  AveDurMod: 4
-
-DumpFile103: DumpFile
-  Brand: "1"
-  Description: "Collect rows to a dump file for TermReturn records"
-  DumpID: 107
-  FileName: "#CAT_TerminalReturn_#MODE_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/dumpfiles/terminal_return/spool"
-  TransDir: "/store/riftp/dumpfiles/terminal_return/outgoing"
-  DumpDelimiter: ";"
-  DecimalPoint: "."
-  MainTable: "TermReturn"
-  DumpName: "TermReturn"
-  DumpFormat: "ASCII"
-  EmptyFile: TRUE 
-  FileCategory: "DWH"
-  LogicModule: "termreturn_dump"
-  ModFromEventLog: TRUE 
-  AveDurMod: 16
-
-DumpFile104: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Barring dump to HPD"
   DumpID: 200
   FileName: "barring_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -1938,15 +1810,14 @@ DumpFile104: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  BatchID: 2
 
-DumpFile105: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "BarringConf dump to HPD"
   DumpID: 201
   FileName: "barringconf_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/test"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -1958,15 +1829,14 @@ DumpFile105: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  BatchID: 2
 
-DumpFile106: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "BillItem dump to HPD"
   DumpID: 202
   FileName: "billitem_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -1978,15 +1848,14 @@ DumpFile106: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  BatchID: 2
 
-DumpFile107: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "BItemGroup dump to HPD"
   DumpID: 203
   FileName: "bitemgroup_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -1998,15 +1867,14 @@ DumpFile107: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  BatchID: 2
 
-DumpFile108: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Customer dump to HPD"
   DumpID: 204
   FileName: "customer_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2018,17 +1886,14 @@ DumpFile108: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  AveDurFull: 1252
-  AveDurMod: 1252
-  BatchID: 7
 
-DumpFile109: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MServiceLimit dump to HPD"
   DumpID: 205
   FileName: "mservicelimit_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2040,15 +1905,14 @@ DumpFile109: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  BatchID: 5
 
-DumpFile110: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MServiceLPool dump to HPD"
   DumpID: 206
   FileName: "mservicelpool_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2060,17 +1924,14 @@ DumpFile110: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  AveDurFull: 753
-  AveDurMod: 753
-  BatchID: 7
 
-DumpFile111: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "DayCampaign dump to HPD"
   DumpID: 207
   FileName: "daycampaign_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2082,15 +1943,14 @@ DumpFile111: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  BatchID: 2
 
-DumpFile112: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "DCCLI dump to HPD"
   DumpID: 208
   FileName: "dccli_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2102,15 +1962,14 @@ DumpFile112: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  BatchID: 8
 
-DumpFile113: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "DiscountPlan dump to HPD"
   DumpID: 209
   FileName: "discountplan_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2122,15 +1981,14 @@ DumpFile113: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  BatchID: 3
 
-DumpFile114: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "DMS dump to HPD"
   DumpID: 210
   FileName: "dms_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2142,15 +2000,14 @@ DumpFile114: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  BatchID: 3
 
-DumpFile115: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "DMSDoc dump to HPD"
   DumpID: 211
   FileName: "dmsdoc_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2162,15 +2019,14 @@ DumpFile115: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  BatchID: 3
 
-DumpFile116: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "DPMember dump to HPD"
   DumpID: 212
   FileName: "dpmember_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2182,15 +2038,14 @@ DumpFile116: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  BatchID: 7
 
-DumpFile117: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "DPTarget dump to HPD"
   DumpID: 213
   FileName: "dptarget_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2202,15 +2057,14 @@ DumpFile117: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  BatchID: 3
 
-DumpFile118: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "FATGroup dump to HPD"
   DumpID: 214
   FileName: "fatgroup_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2222,15 +2076,14 @@ DumpFile118: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  BatchID: 10
 
-DumpFile119: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "FATime dump to HPD"
   DumpID: 215
   FileName: "fatime_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2242,15 +2095,14 @@ DumpFile119: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  BatchID: 10
 
-DumpFile120: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "FixedFee dump to HPD"
   DumpID: 216
   FileName: "fixedfee_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2262,15 +2114,14 @@ DumpFile120: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  BatchID: 5
 
-DumpFile121: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "FMItem dump to HPD"
   DumpID: 217
   FileName: "fmitem_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2282,15 +2133,14 @@ DumpFile121: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  BatchID: 2
 
-DumpFile122: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "IMSI dump to HPD"
   DumpID: 218
   FileName: "imsi_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2302,15 +2152,15 @@ DumpFile122: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  BatchID: 3
 
-DumpFile123: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MobCDR dump to HPD"
   DumpID: 219
   FileName: "mobcdr_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "MobCDR"
@@ -2319,23 +2169,18 @@ DumpFile123: DumpFile
   DumpCharSet: "UTF-8"
   DumpName: "HPD_MobCDR"
   DumpFormat: "ASCII"
-  EmptyFile: TRUE 
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  ModFromEventLog: TRUE 
-  ModCollModule: "16.06.2016 12:29:50"
+  ModCollModule: "14.04.2016 00:00:00"
   FullCollModule: "1"
-  AveDurFull: 77
-  AveDurMod: 77
-  BatchID: 2
 
-DumpFile124: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MobSub dump to HPD"
   DumpID: 220
   FileName: "mobsub_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2348,15 +2193,14 @@ DumpFile124: DumpFile
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
   FullCollModule: "1"
-  BatchID: 6
 
-DumpFile125: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "MsRequest dump to HPD"
   DumpID: 221
   FileName: "msrequest_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2368,17 +2212,17 @@ DumpFile125: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  ModCollModule: "25.04.2016 23:55:01"
+  ModCollModule: "01.04.2016 00:00:00"
   FullCollModule: "30"
-  BatchID: 6
+  BatchID: 2
 
-DumpFile126: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "NatHoliday dump to HPD"
   DumpID: 222
   FileName: "natholiday_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2391,15 +2235,14 @@ DumpFile126: DumpFile
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
   FullCollModule: "1"
-  BatchID: 11
 
-DumpFile127: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Order dump to HPD"
   DumpID: 223
   FileName: "order_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2411,18 +2254,15 @@ DumpFile127: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  ModCollModule: "02.05.2009 00:00:00"
-  FullCollModule: "365"
-  BatchID: 7
+  FullCollModule: "1"
 
-DumpFile128: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "OrderAction dump to HPD"
   DumpID: 224
   FileName: "orderaction_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
-  Active: FALSE
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "OrderAction"
@@ -2434,15 +2274,16 @@ DumpFile128: DumpFile
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
   FullCollModule: "1"
-  BatchID: 12
+  AveDurFull: 3
+  AveDurMod: 3
 
-DumpFile129: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "OrderCustomer dump to HPD"
   DumpID: 225
   FileName: "ordercustomer_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2455,17 +2296,14 @@ DumpFile129: DumpFile
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
   FullCollModule: "1"
-  AveDurFull: 9453
-  AveDurMod: 9453
-  BatchID: 9
 
-DumpFile130: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "OrderDelivery dump to HPD"
   DumpID: 226
   FileName: "orderdelivery_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2478,15 +2316,14 @@ DumpFile130: DumpFile
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
   FullCollModule: "1"
-  BatchID: 13
 
-DumpFile131: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "OrderFusion dump to HPD"
   DumpID: 227
   FileName: "orderfusion_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2499,15 +2336,14 @@ DumpFile131: DumpFile
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
   FullCollModule: "1"
-  BatchID: 6
 
-DumpFile132: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "PrepaidRequest dump to HPD"
   DumpID: 228
   FileName: "prepaidrequest_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2519,17 +2355,18 @@ DumpFile132: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  ModCollModule: "04.10.2015 00:00:00"
+  ModCollModule: "01.04.2016 00:00:00"
   FullCollModule: "30"
-  BatchID: 10
+  BatchID: 2
 
-DumpFile133: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "PrepCDR dump to HPD"
   DumpID: 229
   FileName: "prepcdr_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "PrepCDR"
@@ -2538,23 +2375,19 @@ DumpFile133: DumpFile
   DumpCharSet: "UTF-8"
   DumpName: "HPD_PrepCDR"
   DumpFormat: "ASCII"
-  EmptyFile: TRUE 
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  ModFromEventLog: TRUE 
-  ModCollModule: "16.06.2016 12:34:51"
+  ModCollModule: "14.04.2016 00:00:00"
   FullCollModule: "1"
-  AveDurFull: 6
-  AveDurMod: 6
-  BatchID: 3
 
-DumpFile134: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "PrepEDR dump to HPD"
   DumpID: 230
   FileName: "prepedr_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "PrepEDR"
@@ -2563,22 +2396,18 @@ DumpFile134: DumpFile
   DumpCharSet: "UTF-8"
   DumpName: "HPD_PrepEDR"
   DumpFormat: "ASCII"
-  EmptyFile: TRUE 
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  ModFromEventLog: TRUE 
-  ModCollModule: "16.06.2016 12:29:50"
-  AveDurFull: 1
-  AveDurMod: 1
-  BatchID: 5
+  ModCollModule: "14.04.2016 00:00:00"
+  FullCollModule: "1"
 
-DumpFile135: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "RepText dump to HPD"
   DumpID: 231
   FileName: "reptext_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2591,15 +2420,14 @@ DumpFile135: DumpFile
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
   FullCollModule: "1"
-  BatchID: 2
 
-DumpFile136: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "RequestType dump to HPD"
   DumpID: 232
   FileName: "requesttype_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2612,15 +2440,14 @@ DumpFile136: DumpFile
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
   FullCollModule: "1"
-  BatchID: 10
 
-DumpFile137: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "ServiceLimit dump to HPD"
   DumpID: 233
   FileName: "servicelimit_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2633,15 +2460,14 @@ DumpFile137: DumpFile
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
   FullCollModule: "1"
-  BatchID: 2
 
-DumpFile138: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "ServPac dump to HPD"
   DumpID: 234
   FileName: "servpac_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2654,15 +2480,14 @@ DumpFile138: DumpFile
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
   FullCollModule: "1"
-  BatchID: 2
 
-DumpFile139: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "SingleFee dump to HPD"
   DumpID: 235
   FileName: "singlefee_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2675,15 +2500,14 @@ DumpFile139: DumpFile
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
   FullCollModule: "1"
-  BatchID: 7
 
-DumpFile140: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "SubSer dump to HPD"
   DumpID: 236
   FileName: "subser_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2696,15 +2520,14 @@ DumpFile140: DumpFile
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
   FullCollModule: "1"
-  BatchID: 2
 
-DumpFile141: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "SubsTerminal dump to HPD"
   DumpID: 237
   FileName: "substerminal_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2716,15 +2539,14 @@ DumpFile141: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  BatchID: 11
 
-DumpFile142: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "TermReturn dump to HPD"
   DumpID: 238
   FileName: "termreturn_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2736,15 +2558,14 @@ DumpFile142: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  BatchID: 2
 
-DumpFile143: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "TopupSchemeRow dump to HPD"
   DumpID: 239
   FileName: "topupschemerow_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2757,15 +2578,15 @@ DumpFile143: DumpFile
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
   FullCollModule: "1"
-  BatchID: 6
 
-DumpFile144: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Invoice dump to HPD. InvRow and SubInvoice dumps are executed together with this dump."
   DumpID: 240
   FileName: "invoice_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "Invoice"
@@ -2776,19 +2597,17 @@ DumpFile144: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  ModFromEventLog: TRUE 
-  ModCollModule: "02.06.2016 12:49:39"
-  AveDurFull: 8931
-  AveDurMod: 8931
-  BatchID: 99
+  ModCollModule: "01.03.2016 00:00:00"
+  FullCollModule: "60"
+  BatchID: 3
 
-DumpFile145: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "SubInvoice dump to HPD. Do not activate! Offline dump is done together with invoice dump."
   DumpID: 241
   FileName: "subinvoice_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2800,15 +2619,15 @@ DumpFile145: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  BatchID: 8
+  FullCollModule: "1"
 
-DumpFile146: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "InvRow dump to HPD. Do not activate! Offline dump is done together with invoice dump."
   DumpID: 242
   FileName: "invrow_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2820,15 +2639,16 @@ DumpFile146: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  BatchID: 8
+  FullCollModule: "1"
 
-DumpFile147: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Rerate MobCDR dump to HPD"
   DumpID: 243
-  FileName: "mobcdr_#DATE_#TIME_rerate.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  FileName: "mobcdr_#DATE_#TIME.txt"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "EDRHistory"
@@ -2836,22 +2656,18 @@ DumpFile147: DumpFile
   DumpCharSet: "UTF-8"
   DumpName: "HPD_EDRHistory"
   DumpFormat: "ASCII"
-  EmptyFile: TRUE 
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  ModFromEventLog: TRUE 
-  ModCollModule: "16.06.2016 12:15:00"
-  AveDurFull: 2
-  AveDurMod: 2
-  BatchID: 4
+  ModCollModule: "14.04.2016 00:00:00"
 
-DumpFile148: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Payment dump to HPD"
   DumpID: 244
   FileName: "payment_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "Payment"
@@ -2862,19 +2678,18 @@ DumpFile148: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  ModFromEventLog: TRUE 
-  ModCollModule: "16.06.2016 00:05:01"
-  AveDurFull: 30
-  AveDurMod: 30
-  BatchID: 9
+  ModCollModule: "01.03.2016 00:00:00"
+  FullCollModule: "60"
+  BatchID: 4
 
-DumpFile149: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "ServiceLCounter dump to HPD"
   DumpID: 245
   FileName: "servicelcounter_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
   MainTable: "ServiceLCounter"
@@ -2885,20 +2700,17 @@ DumpFile149: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  ModFromEventLog: TRUE 
-  ModCollModule: "16.06.2016 11:00:01"
+  ModCollModule: "01.03.2016 00:00:00"
   ConfigParam: "DSS,DSS_UPSELL,DSS_UPSELL_UPGRADE,DSS2,DSS2_UPSELL,DSS200_UPSELL"
-  AveDurFull: 20
-  AveDurMod: 20
-  BatchID: 3
+  BatchID: 5
 
-DumpFile150: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "CustContact dump to HPD"
   DumpID: 246
   FileName: "custcontact_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2910,15 +2722,14 @@ DumpFile150: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  BatchID: 6
 
-DumpFile151: DumpFile
+bulkload: DumpFile
   Brand: "1"
   Description: "Limit dump to HPD"
   DumpID: 247
   FileName: "limit_#DATE_#TIME.txt"
-  SpoolDir: "/store/riftp/pupu_dumps/spool"
-  TransDir: "/store/riftp/pupu_dumps/outgoing"
+  SpoolDir: "/mnt/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/pupu_dumps/fulltemp"
   Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
@@ -2930,24 +2741,23 @@ DumpFile151: DumpFile
   DumpFormat: "ASCII"
   FileCategory: "HPD"
   LogicModule: "HPD/hpd_filedump.p"
-  BatchID: 6
 
-DumpFile152: DumpFile
+bulkload: DumpFile
   Brand: "1"
-  Description: "Dump to send AREC resent requests information to DWH"
-  DumpID: 411
-  FileName: "DWH_#MODE_AREC_rejections_#DATE.txt"
-  SpoolDir: "/store/riftp/dumpfiles/dwh/spool"
-  TransDir: "/store/riftp/dumpfiles/dwh/outgoing"
+  Description: "CLIType dump to HPD"
+  DumpID: 504
+  FileName: "clitype_#DATE_#TIME.txt"
+  SpoolDir: "/store/riftp/pupu_dumps/spool"
+  TransDir: "/mnt/store/riftp/hpd_st_dumps/outgoing"
+  Active: FALSE
   DumpDelimiter: "|"
   DecimalPoint: "."
-  MainTable: "eventlog"
-  DumpName: "ARECDWHDump"
+  MainTable: "CLIType"
+  SideTables: "Ordercanal"
+  LinkKey: "HPD.GenericDump"
+  DumpCharSet: "UTF-8"
+  DumpName: "HPD_CLIType"
   DumpFormat: "ASCII"
-  EmptyFile: TRUE 
-  FileCategory: "DWH"
-  LogicModule: "arec_resend_request_dump.p"
-  ModFromEventLog: TRUE 
-  AveDurFull: 445
-  AveDurMod: 2
+  FileCategory: "HPD"
+  LogicModule: "HPD/hpd_filedump.p"
 

@@ -52,12 +52,15 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
+ASSIGN
+   Syst.Var:katun = "Newton"
+      Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Mnp/mnp.i}
 
-ASSIGN
-   katun = "Newton"
-   gcBrand = "1".
+{Syst/tmsconst.i}
+{Mnp/mnp.i}
+{Func/profunc.i}
 
 DEF VAR lcResultStruct AS CHAR NO-UNDO. 
 DEF VAR pcId AS CHAR NO-UNDO. 
@@ -96,18 +99,14 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
    liId = get_int(pcIDArray, STRING(liCounter)).
 
-   FIND MNPProcess NO-LOCK WHERE 
-        MNPProcess.MNPSeq = liId NO-ERROR.
-
-   IF NOT AVAIL MNPProcess THEN
-      RETURN appl_err("MNPProcess not found: "+ pcId).
+   {newton/src/findtenant.i NO Common MNPProcess MNPSeq liId}
    
    lcResultStruct = add_struct(resp_array, "").
       
    add_string(lcResultStruct, "operator_code", MNPProcess.OperCode).
    
    FIND MNPOperator WHERE 
-        MNPOperator.Brand = gcBrand AND
+        MNPOperator.Brand = Syst.Var:gcBrand AND
         MNPOperator.OperCode = MNPProcess.OperCode
    NO-LOCK NO-ERROR.
    
@@ -116,7 +115,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    END.
    ELSE IF AMBIGUOUS(MNPOperator) THEN DO:
       FIND FIRST MNPOperator WHERE 
-                 MNPOperator.Brand = gcBrand AND
+                 MNPOperator.Brand = Syst.Var:gcBrand AND
                  MNPOperator.OperCode = MNPProcess.OperCode
       NO-LOCK NO-ERROR.
       IF AVAIL MNPOperator THEN lcOperName = MNPOperator.OperBrand.
@@ -134,7 +133,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 
       IF MNPProcess.MNPSeq NE {&MNP_PROCESS_DUMMY_IN} THEN DO:
          FIND Order WHERE
-              Order.Brand = gcBrand AND
+              Order.Brand = Syst.Var:gcBrand AND
               Order.Orderid = MNPProcess.Orderid NO-LOCK NO-ERROR.
          IF NOT AVAIL Order THEN
             RETURN appl_err("Order not found: " + STRING(MNPProcess.OrderID)).
@@ -145,6 +144,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
          add_string(lcResultStruct, "contract_id", Order.ContractID).
          add_string(lcResultStruct, "salesman_id", Order.Salesman).
          add_string(lcResultStruct, "order_channel", Order.OrderChannel).
+         add_string(lcResultStruct, "segment", fGetSegment(0,order.orderid)).
       END.
    
       IF MNPProcess.StatusCode = {&MNP_ST_AREC_CLOSED} THEN DO:
@@ -319,9 +319,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    END.
 
    add_boolean(lcResultStruct, "ongoing_messages", llOngoingMessages).
- 
+
 END.
  
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

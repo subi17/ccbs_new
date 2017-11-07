@@ -1,0 +1,43 @@
+bulkload: BankAccount
+  BankAccount: "ES2700491500052610403100"
+  BankData: "ES2700491500052610403100"
+  Brand: "1"
+  InvForm: "DD0049"
+  BankOffice: "Santander"
+  CreditorId: "ES49002A82528548"
+  BIC: "BSCHESMMXXX"
+  BankCodes: "0049,0030"
+  DDAllocation: 41
+
+bulkload: BankAccount
+  BankAccount: "ES5221002931940200451663"
+  BankData: "ES5221002931940200451663"
+  Brand: "1"
+  InvForm: "DD2100"
+  BankOffice: "Caixa"
+  CreditorId: "ES49002A82528548"
+  BIC: "CAIXESBBXXX"
+  BankCodes: "2100"
+
+bulkload: BankAccount
+  BankAccount: "ES6401823994040201521208"
+  BankData: "ES6401823994040201521208"
+  Brand: "1"
+  InvForm: "DD0182"
+  BankOffice: "BBVA"
+  CreditorId: "ES49002A82528548"
+  BIC: "BBVAESMMXXX"
+  BankCodes: "0182,2040,2074,2059,2017"
+  DDAllocation: 41
+
+bulkload: BankAccount
+  BankAccount: "ES7700810300620001847093"
+  BankData: "ES7700810300620001847093"
+  Brand: "1"
+  InvForm: "DD0081"
+  BankOffice: "Sabadell"
+  CreditorId: "ES49002A82528548"
+  BIC: "BSABESBBXXX"
+  BankCodes: "0081"
+  DDAllocation: 18
+

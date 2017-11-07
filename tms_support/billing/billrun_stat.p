@@ -1,4 +1,3 @@
-{Func/timestamp.i}
 
 def var i       as int  no-undo.
 def var j       as int  no-undo.
@@ -83,12 +82,12 @@ end.
 
 ldabshour[1] = ldstart.
 do j = 2 to extent(ldabshour):
-   ldabshour[j] = fSecOffSet(ldabshour[j - 1],3600).
+   ldabshour[j] = Func.Common:mSecOffSet(ldabshour[j - 1],3600).
 end.
 
 do j = 1 to extent(ldabshour):
 
-   fsplitts(ldabshour[j],
+   Func.Common:mSplitTS(ldabshour[j],
             output ldadate,
             output litime).
  
@@ -117,7 +116,7 @@ for each invoice no-lock use-index invdate where
        end.
     end.
       
-    fsplitts(invoice.chgstamp,
+    Func.Common:mSplitTS(invoice.chgstamp,
              output ldadate,
              output litime).
     
@@ -232,8 +231,8 @@ end.
 
 
 assign
-   ldtstart = fTimeStamp2DateTime(ldstart)
-   ldtend   = fTimeStamp2DateTime(ldend)
+   ldtstart = Func.Common:mTimeStamp2DateTime(ldstart)
+   ldtend   = Func.Common:mTimeStamp2DateTime(ldend)
    lidur    = interval(ldtend,ldtstart,"seconds")
    lidays   = truncate(lidur / 86400,0)
    lidur    = lidur mod 86400
@@ -255,7 +254,7 @@ put stream slog unformatted
 for each ttsum:
    disp stream slog 
       ttsum.tthour  column-label "Hour" format ">9"
-      fts2hms(ttsum.startstamp) 
+      Func.Common:mTS2HMS(ttsum.startstamp) 
          column-label "Started"
          format "x(19)"
       ttsum.invqty  column-label "Cumul. Inv.Qty"

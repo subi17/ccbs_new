@@ -1,3 +1,3 @@
 echo "AreaStatus SCREEN"
 sleep 2
-screen 1 xfear -screen Syst/areastatus tms.pf
+screen 1 pike -C /apps/yoigo/tms terminal -- Syst/areastatus all tenant=yoigo umask=0022
