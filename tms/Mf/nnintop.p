@@ -10,7 +10,6 @@
 
 {Syst/commali.i}
 {Func/excel.i}
-{Func/date.i}
 
 DEF TEMP-TABLE Calls
    FIELD CCN        AS i
@@ -99,7 +98,7 @@ ASSIGN
 
 DO FOR TMSUser:
    FIND FIRST TMSUser no-lock where
-              TMSUser.UserCode = katun.
+              TMSUser.UserCode = Syst.Var:katun.
    fname = TMSUser.RepDir + "/intop.txt".
 END.
 
@@ -118,15 +117,15 @@ repeat WITH FRAME frm ON ENDKEY UNDO, RETURN:
 
    HIDE MESSAGE no-pause.
 
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    UPDATE 
       date1     date2
       Operator
       CCN
       fname 
    WITH FRAME frm EDITING.
-      READKEY. nap = keylabel(LASTKEY).
-      IF lookup(nap,poisnap) > 0 THEN DO:
+      READKEY. Syst.Var:nap = keylabel(LASTKEY).
+      IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
          if frame-field = "op-code" THEN DO:
             ASSIGN INPUT Operator.
             if Operator ne "" THEN DO:
@@ -164,12 +163,12 @@ repeat WITH FRAME frm ON ENDKEY UNDO, RETURN:
 
 task:
    repeat WITH FRAME frm ON ENDKEY UNDO, RETURN:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT  CRIT.
-      IF toimi = 8 THEN LEAVE CRIT.
+      IF Syst.Var:toimi = 1 THEN NEXT  CRIT.
+      IF Syst.Var:toimi = 8 THEN LEAVE CRIT.
 
-      IF toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
          ok = FALSE.
          message "Are you SURE you want to start processing (Y/N) ?" UPDATE ok.
          IF ok THEN LEAVE task.
@@ -263,8 +262,8 @@ END.
 OUTPUT STREAM excel TO value(fname).
 
 ASSIGN
-   cday1 = fDateFmt(date1,"yyyy-mm-dd") 
-   cday2 = fDateFmt(date2,"yyyy-mm-dd").
+   cday1 = Func.Common:mDateFmt(date1,"yyyy-mm-dd") 
+   cday2 = Func.Common:mDateFmt(date2,"yyyy-mm-dd").
 
 if Operator ne "" THEN 
    PUT STREAM excel UNFORMATTED 

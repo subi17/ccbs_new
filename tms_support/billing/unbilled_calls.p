@@ -8,8 +8,7 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-gcbrand = "1".
-{Func/timestamp.i}
+Syst.Var:gcBrand = "1".
 {Func/cparam2.i}
 {Func/coinv.i}
 {Func/fvatfact.i}

@@ -19,7 +19,6 @@
 {Syst/commali.i}
 {Func/nncoit2.i}
 {Func/fcustpl.i}
-{Func/timestamp.i}
 {Func/fmakeservlimit.i}
 {Func/setfees.i}
 {Syst/eventval.i}
@@ -89,7 +88,7 @@ IF InterAct THEN DO WITH FRAME info:
    PAUSE 0.
    IF lcFeeModel ne "" THEN 
       FIND FeeModel  WHERE 
-           FeeModel.Brand    = gcBrand AND
+           FeeModel.Brand    = Syst.Var:gcBrand AND
            FeeModel.FeeModel = lcFeeModel NO-LOCK NO-ERROR.
    ELSE ask-data = TRUE.
 
@@ -109,7 +108,7 @@ Action:
    REPEAT WITH FRAME info:
 
       IF ask-data THEN DO ON ENDKEY UNDO, RETRY:
-         EHTO = 9. RUN Syst/ufkey.p. 
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p. 
 
          UPDATE 
            liBillTarget 
@@ -126,12 +125,12 @@ Action:
                   RUN Help/h-billtarg.p (INPUT asnro).
                   IF siirto NE "" AND siirto NE ? THEN 
                      DISPLAY INTEGER(siirto) ;& liBillTarget.
-                  ehto = 9.
+                  Syst.Var:ehto = 9.
                   RUN Syst/ufkey.p.
                   NEXT. 
             END.
 
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME info:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME info:
                PAUSE 0. /* clears lowest line on screen */
 
                IF FRAME-FIELD = "lcFeeModel" THEN DO:
@@ -141,7 +140,7 @@ Action:
                      UNDO, RETURN.
                   END.   
                   FIND FeeModel  WHERE 
-                       FeeModel.Brand    = gcBrand AND
+                       FeeModel.Brand    = Syst.Var:gcBrand AND
                        FeeModel.FeeModel = INPUT FRAME info lcFeeModel 
                        NO-LOCK NO-ERROR.
                   IF NOT AVAIL FeeModel THEN DO:
@@ -189,23 +188,23 @@ Action:
       END.
 
       ASSIGN
-      ufk = 0 ufk[1] = 7 ufk[4] = 294 ufk[5] = 15 ufk[8] = 8 ehto = 0.
-      if lcFeeModel = "" THEN ufk[5] = 0.
+      Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[4] = 294 Syst.Var:ufk[5] = 15 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
+      if lcFeeModel = "" THEN Syst.Var:ufk[5] = 0.
       RUN Syst/ufkey.p.
 
 
-      IF toimi = 1 THEN DO:
+      IF Syst.Var:toimi = 1 THEN DO:
         ask-data = TRUE.
         NEXT Action.
       END.
 
-      IF toimi = 4 THEN DO:
+      IF Syst.Var:toimi = 4 THEN DO:
          /* show items (contents) of this Billing Event */
          RUN Mc/beitempl.p(lcFeeModel,lcPriceList).
          NEXT.
       END.
 
-      ELSE IF TOIMI = 5 THEN DO:
+      ELSE IF Syst.Var:toimi = 5 THEN DO:
 
          find first BillTarget WHERE
                     BillTarget.CustNum    = asnro AND
@@ -236,7 +235,7 @@ Action:
          LEAVE Action. /* i.e. DO the job ... */
       END.   
 
-      ELSE IF TOIMI = 8 THEN DO:
+      ELSE IF Syst.Var:toimi = 8 THEN DO:
          HIDE FRAME info.
          UNDO, RETURN.
       END.
@@ -246,7 +245,7 @@ END.  /* interactive mode */
 
 
 FIND FIRST FMItem WHERE
-           FMItem.Brand     = gcBrand AND 
+           FMItem.Brand     = Syst.Var:gcBrand AND 
            FMItem.FeeModel  = lcFeeModel  AND
            FMItem.PriceList = lcPriceList NO-LOCK NO-ERROR.
 IF AVAIL FMItem THEN DO:
@@ -256,14 +255,14 @@ IF AVAIL FMItem THEN DO:
 
    IF interact THEN DO:
       IF CAN-FIND (FIRST SingleFee where
-                         SingleFee.Brand     = gcBrand                  AND
+                         SingleFee.Brand     = Syst.Var:gcBrand                  AND
                          SingleFee.CustNum   = Customer.CustNum         AND
                          SingleFee.CalcObj   = " "                      AND
                          SingleFee.BillPeriod = begper                  AND
                          SingleFee.BillCode    = FMItem.BillCode        AND
                          SingleFee.Amt   = FMItem.Amount)  OR
          CAN-FIND (FIRST FixedFee WHERE
-                         FixedFee.Brand     = gcBrand                   AND
+                         FixedFee.Brand     = Syst.Var:gcBrand                   AND
                          FixedFee.CustNum   = Customer.CustNum          AND
                          FixedFee.CalcObj   = ""                        AND
                          FixedFee.BillCode = FMItem.BillCode            AND
@@ -281,11 +280,11 @@ IF AVAIL FMItem THEN DO:
    END.
 
    FIND PriceList WHERE
-        PriceList.Brand     = gcBrand AND
+        PriceList.Brand     = Syst.Var:gcBrand AND
         PriceList.PriceList = lcPriceList NO-LOCK.
 
    /* contract */
-   lcContract = fFeeContract(gcBrand,
+   lcContract = fFeeContract(Syst.Var:gcBrand,
                              Customer.CustNum,
                              "",  /* take salesman from user */
                              CoDate,
@@ -301,7 +300,7 @@ IF AVAIL FMItem THEN DO:
                 CoDate,    /* TO FixedFee.BegDate */
                 ?,
                 lcContract,
-                katun,
+                Syst.Var:katun,
                 "",
                 0,
                 "",

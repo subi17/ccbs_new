@@ -10,11 +10,10 @@
   ------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -73,13 +72,13 @@ IF SEARCH(icFile) = ? THEN RETURN "ERROR:File not found".
 INPUT STREAM sRead FROM VALUE(icFile).
 OUTPUT STREAM sLog TO VALUE(icLogFile) APPEND.
 
-ldCurrent = fMakeTS().
+ldCurrent = Func.Common:mMakeTS().
 
 PUT STREAM sLog UNFORMATTED
    "File: " icFile
    SKIP
    "Started: " 
-   fTS2HMS(ldCurrent)
+   Func.Common:mTS2HMS(ldCurrent)
    SKIP.
 
 lcSep = "|".
@@ -137,7 +136,7 @@ REPEAT:
          lcZipCode = SUBSTRING(lcLine,243,8).
         
       FIND FIRST Bank WHERE
-                 Bank.Brand      = gcBrand  AND
+                 Bank.Brand      = Syst.Var:gcBrand  AND
                  Bank.BankId     = lcBankID AND
                  Bank.BankOffice = lcOffice EXCLUSIVE-LOCK NO-ERROR.
                   
@@ -145,7 +144,7 @@ REPEAT:
 
          CREATE Bank.
          ASSIGN 
-            Bank.Brand      = gcBrand
+            Bank.Brand      = Syst.Var:gcBrand
             Bank.BankId     = lcBankID
             Bank.BankOffice = lcOffice
             oiNew           = oiNew + 1.
@@ -199,7 +198,7 @@ END.
 
 /* list all banks that were not in the file */
 FOR EACH Bank NO-LOCK WHERE
-         Bank.Brand = gcBrand AND
+         Bank.Brand = Syst.Var:gcBrand AND
          Bank.FileDate NE ldtFileDate:
 
    IF Bank.FileDate > ldtFileDate THEN NEXT. 

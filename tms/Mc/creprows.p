@@ -19,7 +19,6 @@
 */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/fcurrency.i}
 {Func/cparam2.i}
 {Func/callquery.i}
@@ -94,8 +93,8 @@ FOR EACH SubInvoice OF Invoice NO-LOCK WHERE
    EMPTY TEMP-TABLE ttCall.
 
    fMobCDRCollect(INPUT "post",
-                  INPUT gcBrand,
-                  INPUT katun,
+                  INPUT Syst.Var:gcBrand,
+                  INPUT Syst.Var:katun,
                   INPUT IF Invoice.FirstCall NE ?   
                         THEN Invoice.FirstCall
                         ELSE Invoice.FromDate,

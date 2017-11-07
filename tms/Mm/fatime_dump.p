@@ -63,7 +63,7 @@ BY DFField.OrderNbr:
                   DFField.DFField.
 END.
 
-fSplitTS(idLastDump,
+Func.Common:mSplitTS(idLastDump,
          OUTPUT ldaModified,
          OUTPUT liModified).
 
@@ -97,13 +97,13 @@ IF icDumpMode EQ "modified" THEN DO:
       IF ERROR-STATUS:ERROR THEN NEXT FatimeLoop.
       
       FIND fatime NO-LOCK where
-           fatime.brand = gcBrand and
+           fatime.brand = Syst.Var:gcBrand and
            fatime.fatnum = liFatNum no-error.
       IF NOT AVAIL FAtime OR FAtime.OrigFat NE 0 THEN NEXT FatimeLoop.
    
       ASSIGN
          lcCreator = EventLog.UserCode
-         ldCreated = fHMS2TS(EventLog.EventDate,EventLog.EventTime).
+         ldCreated = Func.Common:mHMS2TS(EventLog.EventDate,EventLog.EventTime).
 
       RUN pDumpFatime.
 
@@ -113,7 +113,7 @@ END.
 ELSE DO:
 FatimeLoop:
 FOR EACH FATime NO-LOCK USE-INDEX CLI WHERE
-         FATime.Brand   = gcBrand AND
+         FATime.Brand   = Syst.Var:gcBrand AND
          FATime.OrigFat = 0
    ON QUIT UNDO, RETRY
    ON STOP UNDO, RETRY:
@@ -135,7 +135,7 @@ FOR EACH FATime NO-LOCK USE-INDEX CLI WHERE
 
       ASSIGN
          lcCreator = EventLog.UserCode
-         ldCreated = fHMS2TS(EventLog.EventDate,EventLog.EventTime).
+         ldCreated = Func.Common:mHMS2TS(EventLog.EventDate,EventLog.EventTime).
    END.
 
    IF ldCreated = 0 THEN NEXT.

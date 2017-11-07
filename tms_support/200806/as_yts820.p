@@ -9,7 +9,6 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 
-{Func/date.i}
 
 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
@@ -39,7 +38,7 @@ FOR EACH mnpprocess NO-LOCK WHERE
       
       CREATE Memo.
          ASSIGN
-            Memo.CreStamp  = fMakeTS() 
+            Memo.CreStamp  = Func.Common:mMakeTS() 
             Memo.Brand     = "1"
             Memo.HostTable = "Order"
             Memo.KeyValue  = STRING(Order.OrderId)

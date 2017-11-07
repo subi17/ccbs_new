@@ -32,13 +32,12 @@
 {Syst/commali.i}
 {Syst/utumaa.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/email.i}
 {Ar/ddtrans.i}
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -104,6 +103,8 @@ DEF TEMP-TABLE SvRapo NO-UNDO
 
 DEF STREAM suoravalt.
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
 
 FORM HEADER
    FILL("=",112) FORMAT "x(112)" SKIP
@@ -142,7 +143,7 @@ END FUNCTION.
 FUNCTION fCopy2Failed RETURNS LOGICAL.
 
    CREATE DDAuth.
-   ASSIGN DDAuth.Brand   = gcBrand
+   ASSIGN DDAuth.Brand   = Syst.Var:gcBrand
           DDAuth.CustNum = 0
           DDAuth.AuthID  = NEXT-VALUE(dpseq).
           
@@ -151,15 +152,15 @@ FUNCTION fCopy2Failed RETURNS LOGICAL.
    IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhDDAuth).
 
    CREATE Memo.
-   ASSIGN Memo.Brand     = gcBrand
+   ASSIGN Memo.Brand     = Syst.Var:gcBrand
           Memo.HostTable = "DDAuth"
           Memo.KeyValue  = STRING(DDAuth.AuthId)
           Memo.CustNum   = 0
           Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-          Memo.CreUser   = katun 
+          Memo.CreUser   = Syst.Var:katun 
           Memo.MemoTitle = "Failed Authorization"
           Memo.MemoText  = HandMsg.
-          Memo.CreStamp  = fMakeTS().
+          Memo.CreStamp  = Func.Common:mMakeTS().
         
 END FUNCTION.
 
@@ -169,8 +170,8 @@ ASSIGN palvtunn   = fCParamC("DDebitServiceCode")
        /* directory for booking list */
        lcRepDir   = fCParamC("RefPrintDir")
        llRejected = FALSE
-       lcCKatun   = katun
-       katun      = "Bank". 
+       lcCKatun   = Syst.Var:katun
+       Syst.Var:katun      = "Bank". 
 
 
 TIEDOSTO:
@@ -311,7 +312,7 @@ REPEAT TRANSACTION:
            IF INDEX(yksilointi,"-") = 0 AND LENGTH(yksilointi) <= 8
            THEN DO:
               FIND Customer NO-LOCK WHERE
-                   Customer.Brand = gcBrand AND
+                   Customer.Brand = Syst.Var:gcBrand AND
                    Customer.CustNum = INTEGER(yksilointi) NO-ERROR.
               IF AVAILABLE Customer THEN liCustNum = Customer.CustNum.
            END.
@@ -326,7 +327,7 @@ REPEAT TRANSACTION:
                      liInvCust = 0.
               
               FOR FIRST MobSub NO-LOCK WHERE
-                        MobSub.Brand = gcBrand AND
+                        MobSub.Brand = Syst.Var:gcBrand AND
                         MobSub.CLI   = lcCLI:
                  ASSIGN liCustNum = MobSub.CustNum
                         liInvCust = MobSub.InvCust.
@@ -335,7 +336,7 @@ REPEAT TRANSACTION:
               /* already killed ? */
               IF liCustNum = 0 THEN 
               FOR FIRST MsOwner NO-LOCK WHERE
-                        MsOwner.Brand = gcBrand AND
+                        MsOwner.Brand = Syst.Var:gcBrand AND
                         MsOwner.CLI   = lcCLI:
                  ASSIGN liCustNum = MsOwner.CustNum
                         liInvCust = MsOwner.InvCust.
@@ -361,7 +362,7 @@ REPEAT TRANSACTION:
 
            IF liCustNum = 0 OR 
               NOT AVAILABLE Customer OR
-              Customer.Brand NE gcBrand
+              Customer.Brand NE Syst.Var:gcBrand
            THEN DO:
               HandMsg = HandMsg + 
                         "Customer could not be identified". 
@@ -433,7 +434,7 @@ REPEAT TRANSACTION:
            ELSE IF KasTun = 2 OR KasTun = 4 THEN DO: 
              
               FIND FIRST DDAuth WHERE 
-              DDAuth.Brand   = gcBrand AND
+              DDAuth.Brand   = Syst.Var:gcBrand AND
               DDAuth.CustNum = Customer.CustNum
               EXCLUSIVE-LOCK NO-ERROR.
 
@@ -594,7 +595,7 @@ tila = FALSE.
 {Syst/utuloste.i}
 
 /* reset normal user */
-katun = lcCKatun.
+Syst.Var:katun = lcCKatun.
 
 /* clean eventlog */
 fCleanEventObjects().
