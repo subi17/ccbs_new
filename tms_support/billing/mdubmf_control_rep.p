@@ -1,7 +1,6 @@
 
 /* MDUB Control Report */
 
-{Func/timestamp.i}
 
 FUNCTION fGetMobSubInfo RETURNS LOGICAL 
          (INPUT piMsSeq AS INT,
@@ -33,7 +32,6 @@ DEFINE VARIABLE ldBeginTS AS DECIMAL NO-UNDO.
 DEFINE VARIABLE ldEndTS AS DECIMAL NO-UNDO.
 DEFINE VARIABLE lcCLI AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE liInvCust AS INTEGER NO-UNDO.  
-DEFINE VARIABLE gcBrand AS CHARACTER NO-UNDO INITIAL "1".
 DEFINE VARIABLE liQty AS INTEGER NO-UNDO. 
 DEFINE VARIABLE llInvoiced AS LOGICAL NO-UNDO. 
 DEFINE VARIABLE liCount AS INTEGER NO-UNDO. 
@@ -86,8 +84,8 @@ IF MONTH(ldaInvDate) = 12 THEN
 ELSE
    ldaInvEnd =  DATE(MONTH(ldaInvDate) + 1 ,1,YEAR(ldaInvDate)) - 1 .
 
-ldBeginTS = fHMS2TS(ldaBegin,"00:00:00").
-ldEndTS   =  fHMS2TS(ldaEnd,"23:59:59").
+ldBeginTS = Func.Common:mHMS2TS(ldaBegin,"00:00:00").
+ldEndTS   =  Func.Common:mHMS2TS(ldaEnd,"23:59:59").
 
 
 OUTPUT STREAM sLogSum TO VALUE(lcSumFile).
@@ -110,7 +108,7 @@ FOR EACH ServiceLimit NO-LOCK WHERE
                         OUTPUT liInvCust).
         liCount = 0 .
         FOR EACH FixedFee NO-LOCK USE-INDEX HostTable WHERE
-                 FixedFee.Brand     = gcBrand   AND 
+                 FixedFee.Brand     = Syst.Var:gcBrand   AND 
                  FixedFee.HostTable = "MobSub"  AND
                  FixedFee.KeyValue  = STRING(MServiceLimit.MsSeq),
             EACH FFItem OF FixedFee NO-LOCK WHERE 
@@ -143,7 +141,7 @@ PUT STREAM sLogSum UNFORMATTED
 
 /* fixed fee - list2 ------------------------------- */
 FOR EACH FixedFee NO-LOCK USE-INDEX BillCode WHERE
-         FixedFee.Brand = gcBrand AND 
+         FixedFee.Brand = Syst.Var:gcBrand AND 
          FixedFee.BillCode = "MDUBMF",
     EACH FFItem OF FixedFee NO-LOCK WHERE
          FFItem.BillPeriod <= (YEAR(ldaBegin) * 100 + MONTH(ldaBegin)):
@@ -157,7 +155,7 @@ FOR EACH FixedFee NO-LOCK USE-INDEX BillCode WHERE
 
     /* check if has been invoiced in given period*/
      FIND Invoice WHERE
-          Invoice.Brand = gcBrand AND 
+          Invoice.Brand = Syst.Var:gcBrand AND 
           Invoice.InvNum = FFItem.InvNum AND 
           Invoice.InvDate >= ldaInvStart AND
           Invoice.InvDate <= ldaInvEnd NO-LOCK NO-ERROR. 

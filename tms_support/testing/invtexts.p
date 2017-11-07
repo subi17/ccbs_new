@@ -137,7 +137,7 @@ FOR EACH invtext where
          END.
          ELSE DO:
             FIND FIRST RepText NO-LOCK WHERE
-                       RepText.Brand      = gcBrand AND
+                       RepText.Brand      = Syst.Var:gcBrand AND
                        RepText.TextType   = 32 AND
                        RepText.LinkCode   = STRING(InvText.ITNum) AND
                        RepText.FromDate  <= TODAY   AND

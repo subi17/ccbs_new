@@ -26,7 +26,7 @@ FUNCTION fGenerateCounters RETURN INTEGER
               NO-LOCK NO-ERROR.
                
    FIND FIRST DayCampaign WHERE 
-              DayCampaign.Brand   = gcBrand  AND
+              DayCampaign.Brand   = Syst.Var:gcBrand  AND
               DayCampaign.dcEvent = icEvent 
    NO-LOCK NO-ERROR.
 
@@ -47,7 +47,7 @@ FUNCTION fGenerateCounters RETURN INTEGER
              BillTarget.CustNum    = bDCSub.CustNum AND
              BillTarget.BillTarget = bDCSub.BillTarget,
         EACH PListConf USE-INDEX RatePlan NO-LOCK WHERE
-             PListConf.Brand    = gcBrand           AND
+             PListConf.Brand    = Syst.Var:gcBrand           AND
              PListConf.RatePlan = BillTarg.RatePlan AND
              PListConf.dFrom   <= ldStartDate       AND
              PListConf.dTo     >= ldStartDate,
@@ -338,7 +338,7 @@ FUNCTION fPrice4Day RETURN LOGICAL
    NO-LOCK NO-ERROR.
 
    FIND FIRST DayCampaign WHERE
-              DayCampaign.Brand   = gcBrand AND
+              DayCampaign.Brand   = Syst.Var:gcBrand AND
               DayCampaign.DCEVENT = icTarget NO-LOCK NO-ERROR.
         
    IF NOT avail DCCounter THEN DO:
@@ -454,7 +454,7 @@ FUNCTION fTempTablePrice4Day RETURN LOGICAL
    IF NOT AVAILABLE ttDCCounter THEN DO:
 
       FIND FIRST DayCampaign WHERE
-                 DayCampaign.Brand   = gcBrand AND
+                 DayCampaign.Brand   = Syst.Var:gcBrand AND
                  DayCampaign.DCEvent = icTarget NO-LOCK NO-ERROR.
       IF NOT AVAILABLE DayCampaign THEN RETURN FALSE.           
 

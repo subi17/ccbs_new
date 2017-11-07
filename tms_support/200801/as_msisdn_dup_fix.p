@@ -1,6 +1,5 @@
-{Func/timestamp.i}
 DEFINE VARIABLE ts AS DECIMAL NO-UNDO. 
-ts = fMakeTS(). 
+ts = Func.Common:mMakeTS(). 
 DEFINE VARIABLE lcCLI AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE ldeValidFrom AS DECIMAL NO-UNDO.
 def buffer msisdn2 for msisdn.
@@ -20,7 +19,7 @@ FOR EACH msisdn NO-LOCK
    
    if msisdn.validto > ts  then do:
       /*
-      fSplitTS(input ldeValidFrom, output oda, output oi).
+      Func.Common:mSplitTS(input ldeValidFrom, output oda, output oi).
       if oi = 0 then MESSAGE msisdn.cli VIEW-AS ALERT-BOX.
       */
       ldeValidFrom = ldeValidFrom - 0.00001.

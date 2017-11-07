@@ -26,7 +26,7 @@ FUNCTION fMasXMLGenerate_test RETURNS CHAR
    IF liPrintXML NE 0 THEN DO:
       xmlrpc_initialize(FALSE).
       OUTPUT STREAM sOut TO VALUE("/tmp/Xmasmovile_xml_" + 
-      REPLACE(STRING(fmakets()), ".", "_") +
+      REPLACE(STRING(Func.Common:mMakeTS()), ".", "_") +
       ".xml") APPEND.
       PUT STREAM sOut UNFORMATTED 
          string(serialize_rpc_call("masmovil." + icMethod)) SKIP. 
@@ -118,14 +118,14 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    DEF BUFFER CLIType FOR CliType.
 
    FIND FIRST Order NO-LOCK where 
-              Order.Brand EQ Syst.Parameters:gcBrand AND
+              Order.Brand EQ Syst.Var:gcBrand AND
               Order.OrderId EQ iiOrderid NO-ERROR.
    IF NOT AVAIL Order THEN 
       RETURN "ERROR: Order not found " + STRING(iiOrderID) .
 
   /*Use delivery customer information if it is avbailable*/
    FIND FIRST OrderCustomer NO-LOCK WHERE 
-              OrderCustomer.Brand EQ Syst.Parameters:gcBrand AND
+              OrderCustomer.Brand EQ Syst.Var:gcBrand AND
               OrderCustomer.OrderId EQ iiOrderid AND 
               OrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
               NO-ERROR.
@@ -133,7 +133,7 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
       RETURN "ERROR: Install address data not found " + STRING(iiOrderID) .
    
    FIND FIRST bOrderCustomer NO-LOCK WHERE 
-              bOrderCustomer.Brand EQ Syst.Parameters:gcBrand AND
+              bOrderCustomer.Brand EQ Syst.Var:gcBrand AND
               bOrderCustomer.OrderId EQ iiOrderid AND 
               bOrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
               NO-ERROR.
@@ -142,13 +142,13 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
       RETURN "ERROR: Customer data not found " + STRING(iiOrderID) .
 
    FIND FIRST bHolderOrderCustomer NO-LOCK WHERE 
-              bHolderOrderCustomer.Brand EQ Syst.Parameters:gcBrand AND
+              bHolderOrderCustomer.Brand EQ Syst.Var:gcBrand AND
               bHolderOrderCustomer.OrderId EQ iiOrderid AND 
               bHolderOrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_POUSER}
               NO-ERROR.
    
    FIND FIRST OrderFusion NO-LOCK WHERE
-              OrderFusion.Brand EQ Syst.Parameters:gcBrand AND
+              OrderFusion.Brand EQ Syst.Var:gcBrand AND
               OrderFusion.OrderID EQ iiOrderID NO-ERROR.
    IF NOT AVAIL OrderFusion THEN
                RETURN "ERROR: Fixed Order data not found " + STRING(iiOrderID) .
@@ -175,10 +175,10 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    END.
    ELSE
       RETURN "ERROR: Not allowed CLITYPE " + Order.CliType.
-   IF fTS2Date(Order.CrStamp, OUTPUT ldaCreDate) EQ FALSE THEN
+   IF Func.Common:mTS2Date(Order.CrStamp, OUTPUT ldaCreDate) EQ FALSE THEN
       RETURN "ERROR: Date reading failed".
 
-   IF fTS2Date(Order.CrStamp, OUTPUT ldaSellDate) EQ FALSE THEN
+   IF Func.Common:mTS2Date(Order.CrStamp, OUTPUT ldaSellDate) EQ FALSE THEN
       RETURN "ERROR: Date reading failed".
 
    lcOutputStruct = add_struct(param_toplevel_id, "").

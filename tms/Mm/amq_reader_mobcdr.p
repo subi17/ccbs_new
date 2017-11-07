@@ -8,9 +8,8 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-gcBrand = "1".
-Katun = "Cron".
-{Func/timestamp.i}
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Cron".
 {Func/cparam2.i}
 {Func/direct_dbconnect.i}
 {Func/replog_reader.i}
@@ -94,30 +93,30 @@ PROCEDURE pAmqCDRReader:
    DEFINE OUTPUT PARAMETER oiHandled AS INTEGER   NO-UNDO.
 
    ASSIGN ldaReadDate  = TODAY
-          ldeReadInTS  = fMake2Dt(ldaReadDate,TIME)
-          ldeCurrStamp = fMakeTS().
+          ldeReadInTS  = Func.Common:mMake2DT(ldaReadDate,TIME)
+          ldeCurrStamp = Func.Common:mMakeTS().
 
    DO TRANS:
       FIND FIRST ActionLog WHERE
-                 ActionLog.Brand     = gcBrand        AND
+                 ActionLog.Brand     = Syst.Var:gcBrand        AND
                  ActionLog.ActionID  = "MobCDR_HPD"   AND
                  ActionLog.TableName = "MobCDR" EXCLUSIVE-LOCK NO-ERROR.
       IF AVAIL ActionLog THEN DO:
          ldeReadInTS = ActionLog.ActionDec.
-         fSplitTS(ldeReadInTS,ldaReadDate,liReadTime).
-         IF llStart THEN ASSIGN ActionLog.ActionTS = fMakeTS()
+         Func.Common:mSplitTS(ldeReadInTS,ldaReadDate,liReadTime).
+         IF llStart THEN ASSIGN ActionLog.ActionTS = Func.Common:mMakeTS()
                                 llStart = FALSE.
       END.
       ELSE DO:
          CREATE ActionLog.
          ASSIGN 
-            ActionLog.Brand        = gcBrand
+            ActionLog.Brand        = Syst.Var:gcBrand
             ActionLog.TableName    = "MobCDR"
             ActionLog.KeyValue     = "HPD"
             ActionLog.ActionID     = "MobCDR_HPD"
             ActionLog.ActionPeriod = YEAR(ldaReadDate) * 100 + MONTH(ldaReadDate)
             ActionLog.ActionStatus = 2
-            ActionLog.UserCode     = katun
+            ActionLog.UserCode     = Syst.Var:katun
             ActionLog.ActionDec    = ldeReadInTS.
       END. /* ELSE DO: */
 
@@ -134,7 +133,7 @@ PROCEDURE pAmqCDRReader:
 
    RUN pStartReader(ldaReadDate,
                     liReadTime,
-                    fTimeStamp2DateTime(ldeCurrStamp),
+                    Func.Common:mTimeStamp2DateTime(ldeCurrStamp),
                     FALSE,
                     OUTPUT oiHandled,
                     INPUT-OUTPUT ldeCDRStamp).
@@ -156,7 +155,7 @@ PROCEDURE pAmqCDRReader:
       IF NOT RETURN-VALUE BEGINS "ERROR" THEN
          RUN pStartReader(ldaReadDate,
                           liReadTime,
-                          fTimeStamp2DateTime(ldeCurrStamp),
+                          Func.Common:mTimeStamp2DateTime(ldeCurrStamp),
                           TRUE,
                           OUTPUT oiHandled,
                           INPUT-OUTPUT ldeCDRStamp).
@@ -164,7 +163,7 @@ PROCEDURE pAmqCDRReader:
 
    DO TRANS:
       FIND FIRST ActionLog WHERE
-                 ActionLog.Brand     = gcBrand AND
+                 ActionLog.Brand     = Syst.Var:gcBrand AND
                  ActionLog.ActionID  = "MobCDR_HPD" AND
                  ActionLog.TableName = "MobCDR" EXCLUSIVE-LOCK NO-ERROR.
       IF AVAIL ActionLog THEN
@@ -181,7 +180,7 @@ PROCEDURE pDBConnect:
    /* connect to correct cdr dbs */
    fInitializeConnectTables("MobCDR,McdrDtl2","").
 
-   RUN pDirectConnect2Dbs(gcBrand,
+   RUN pDirectConnect2Dbs(Syst.Var:gcBrand,
                           "",
                           idaConnectDate,
                           idaConnectDate).
@@ -207,7 +206,7 @@ PROCEDURE pStartReader:
    DEF VAR liLoopReader AS INTEGER NO-UNDO. 
    DEF VAR ldeBufferTS  AS DECIMAL NO-UNDO. 
 
-   ldeBufferTS = fsecOffset(fMakeTs(),-20).
+   ldeBufferTS = Func.Common:mSecOffSet(Func.Common:mMakeTS(),-20).
 
    Reader:
    DO WHILE idaReadDate <= TODAY:
@@ -259,7 +258,7 @@ PROCEDURE pStartReader:
          ELSE DO:
             IF LOG-MANAGER:LOGGING-LEVEL GE 1 THEN
                LOG-MANAGER:WRITE-MESSAGE("Message sending failed","ERROR").
-            odeCDRStamp = fsecOffset(odeCDRStamp,-1).
+            odeCDRStamp = Func.Common:mSecOffSet(odeCDRStamp,-1).
             LEAVE Reader.
          END.
          

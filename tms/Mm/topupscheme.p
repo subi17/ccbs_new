@@ -18,7 +18,7 @@
 DEF BUFFER bItemValue FOR TMRItemValue.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -66,10 +66,10 @@ FORM
     TopupScheme.TopupSource   
     TopupScheme.ToDate       COLUMN-LABEL "Valid To"
 WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN 
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
        "  TOPUP SCHEMES  " + "  " +
-       string(pvm,"99-99-99") + " "
+       string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 {Func/brand.i}
@@ -86,8 +86,8 @@ FORM
     TopupScheme.VatIncl        COLON 20 LABEL "Tax" SKIP(1)
     TopupScheme.Description VIEW-AS EDITOR SIZE 60 BY 3
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     FRAME lis.
 
@@ -95,14 +95,13 @@ FORM
     "Brand :" lcBrand skip
     "Scheme:" lcTopupScheme FORMAT "X(16)" 
     HELP "Enter scheme ID"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND Scheme "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Scheme "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 FUNCTION fPrefixName RETURNS LOGIC
    (icPrefix AS CHAR):
    
-   lcPrefix = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "PrepaidRequest",
+   lcPrefix = Func.Common:mTMSCodeName("PrepaidRequest",
                                "PPReqPrefix",
                                icPrefix).
    DISPLAY lcPrefix WITH FRAME lis.
@@ -112,19 +111,18 @@ END FUNCTION.
 FUNCTION fSourceName RETURNS LOGIC
    (icSource AS CHAR):
    
-   lcSource = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "PrepaidRequest",
+   lcSource = Func.Common:mTMSCodeName("PrepaidRequest",
                                "Source",
                                icSource).
    DISPLAY lcSource WITH FRAME lis.
    
 END FUNCTION.
 
-IF gcHelpParam > "" THEN ASSIGN
+IF Syst.Var:gcHelpParam > "" THEN ASSIGN
    FrmRow  = 3
    FrmDown = 11.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 
@@ -153,7 +151,7 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a TopupScheme  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
@@ -162,7 +160,7 @@ REPEAT WITH FRAME sel:
         PAUSE 0 NO-MESSAGE.
         VIEW FRAME lis. 
         CLEAR FRAME lis NO-PAUSE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
         REPEAT TRANSACTION WITH FRAME lis:
 
@@ -260,20 +258,20 @@ REPEAT WITH FRAME sel:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk    = 0
-        ufk[1] = 816
-        ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)  
-        ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)  
-        ufk[7] = 0  
-        ufk[8] = 8 
-        ehto   = 3 
+        Syst.Var:ufk    = 0
+        Syst.Var:ufk[1] = 816
+        Syst.Var:ufk[5] = (IF lcRight = "RW" THEN 5 ELSE 0)  
+        Syst.Var:ufk[6] = (IF lcRight = "RW" THEN 4 ELSE 0)  
+        Syst.Var:ufk[7] = 0  
+        Syst.Var:ufk[8] = 8 
+        Syst.Var:ehto   = 3 
         ufkey  = FALSE.
         
         /* used as help */
-        IF gcHelpParam > "" THEN ASSIGN
-           ufk[5] = 11
-           ufk[6] = 0
-           ufk[7] = 0.
+        IF Syst.Var:gcHelpParam > "" THEN ASSIGN
+           Syst.Var:ufk[5] = 11
+           Syst.Var:ufk[6] = 0
+           Syst.Var:ufk[7] = 0.
          
         RUN Syst/ufkey.p.
       END.
@@ -282,13 +280,13 @@ REPEAT WITH FRAME sel:
       IF order = 1 THEN DO:
         CHOOSE ROW TopupScheme.TopupScheme {Syst/uchoose.i} NO-ERROR 
            WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) TopupScheme.TopupScheme WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) TopupScheme.TopupScheme WITH FRAME sel.
       END.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
       IF rtab[FRAME-line] = ? THEN DO:
-         IF LOOKUP(nap,"5,f5,8,f8") = 0 THEN DO:
+         IF LOOKUP(Syst.Var:nap,"5,f5,8,f8") = 0 THEN DO:
             BELL.
             MESSAGE "You are on an empty row, move upwards !".
             PAUSE 1 NO-MESSAGE.
@@ -297,10 +295,10 @@ REPEAT WITH FRAME sel:
       END.
 
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -318,7 +316,7 @@ REPEAT WITH FRAME sel:
       END.
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -343,7 +341,7 @@ REPEAT WITH FRAME sel:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -369,7 +367,7 @@ REPEAT WITH FRAME sel:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND TopupScheme WHERE recid(TopupScheme) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -393,7 +391,7 @@ REPEAT WITH FRAME sel:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -408,14 +406,14 @@ REPEAT WITH FRAME sel:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0 THEN 
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 AND Syst.Var:ufk[1] > 0 THEN 
      DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        PAUSE 0.
        CLEAR FRAME f1.
        DISPLAY lcBrand WITH FRAME F1.
-       SET lcBrand WHEN gcAllBrand 
+       SET lcBrand WHEN Syst.Var:gcAllBrand 
            lcTopupScheme WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        
@@ -431,8 +429,8 @@ REPEAT WITH FRAME sel:
        END.
      END. /* Search-1 */
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0 THEN DO:  /* add */
-        IF gcHelpParam > "" THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND Syst.Var:ufk[5] > 0 THEN DO:  /* add */
+        IF Syst.Var:gcHelpParam > "" THEN DO:
            xRecid = rtab[FRAME-LINE].
            RUN local-find-this (FALSE).
            IF AVAILABLE TopupScheme THEN 
@@ -446,13 +444,13 @@ REPEAT WITH FRAME sel:
         END.    
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0  
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND Syst.Var:ufk[6] > 0  
      THEN DO TRANSACTION:  /* DELETE */
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        IF CAN-FIND(FIRST OfferItem WHERE 
-                         OfferItem.Brand    = gcBrand AND
+                         OfferItem.Brand    = Syst.Var:gcBrand AND
                          OfferItem.ItemType = "Topup" AND
                          OfferItem.ItemKey = TopupScheme.TopupScheme)
        THEN DO:
@@ -462,7 +460,7 @@ REPEAT WITH FRAME sel:
        END.
  
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        TopupScheme.TopupScheme TopupScheme.Description
        TopupScheme.PPReqPrefix.
         
@@ -485,7 +483,7 @@ REPEAT WITH FRAME sel:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N)?" UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        TopupScheme.TopupScheme TopupScheme.Description
        TopupScheme.PPReqPrefix.
        
@@ -508,14 +506,14 @@ REPEAT WITH FRAME sel:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis /*  TRANSACTION */
      ON ENDKEY UNDO, LEAVE:
 
        /* change */
        RUN local-find-this(FALSE).
 
-       IF gcHelpParam > "" THEN DO:
+       IF Syst.Var:gcHelpParam > "" THEN DO:
           xRecid = rtab[FRAME-LINE (sel)].
           RUN local-find-this (FALSE).
           IF AVAILABLE TopupScheme THEN 
@@ -525,8 +523,8 @@ REPEAT WITH FRAME sel:
  
        IF llDoEvent THEN RUN StarEventSetOldBuffer(lhTopupScheme).
 
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY TopupScheme.TopupScheme.
 
        RUN local-UPDATE-record.                                  
@@ -543,27 +541,27 @@ REPEAT WITH FRAME sel:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(TopupScheme) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(TopupScheme) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
-ehto = 4.
+Syst.Var:ehto = 4.
 RUN Syst/ufkey.p.
 
 fCleanEventObjects().
@@ -652,25 +650,25 @@ PROCEDURE local-UPDATE-record:
       fPrefixName(TopupScheme.PPReqPrefix).
       fSourceName(TopupScheme.TopupSource).
       
-      IF NEW TopupScheme THEN toimi = 1.
+      IF NEW TopupScheme THEN Syst.Var:toimi = 1.
 
       ELSE DO:
          ASSIGN 
-            ufk    = 0
-            ufk[1] = 7    WHEN lcRight = "RW"
-            ufk[4] = 1728
-            ufk[8] = 8
-            ehto   = 0.
+            Syst.Var:ufk    = 0
+            Syst.Var:ufk[1] = 7    WHEN lcRight = "RW"
+            Syst.Var:ufk[4] = 1728
+            Syst.Var:ufk[8] = 8
+            Syst.Var:ehto   = 0.
          
          RUN Syst/ufkey.p.
       END.
                   
-      IF toimi = 1 THEN 
+      IF Syst.Var:toimi = 1 THEN 
       REPEAT WITH FRAME lis ON ENDKEY UNDO, LEAVE MaintMenu:
 
          FIND CURRENT TopupScheme EXCLUSIVE-LOCK.
       
-         ehto = 9.
+         Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
    
          UPDATE
@@ -705,13 +703,13 @@ PROCEDURE local-UPDATE-record:
                   ELSE DISPLAY lcCode @ TopupScheme.TopupSource.
                END.
  
-               ehto = 9.
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
 
                NEXT. 
             END.
 
-            ELSE IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN 
+            ELSE IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN 
             DO WITH FRAME lis:
                PAUSE 0.
 
@@ -742,10 +740,10 @@ PROCEDURE local-UPDATE-record:
          LEAVE.
       END.
 
-      ELSE IF toimi = 4 THEN 
+      ELSE IF Syst.Var:toimi = 4 THEN 
          RUN Mm/topupschemerow.p(TopupScheme.TopupScheme).
 
-      ELSE IF toimi = 8 THEN LEAVE.  
+      ELSE IF Syst.Var:toimi = 8 THEN LEAVE.  
 
    END.
    

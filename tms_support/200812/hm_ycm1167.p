@@ -1,5 +1,4 @@
 {Syst/testpaa.i}
-{Func/timestamp.i}
 {Func/msisdn.i}
 DEFINE STREAM sLog.
 DEFINE STREAM sELog.

@@ -63,7 +63,7 @@ repeat:
       output liQuarTime
    ).
 
-   fSplitTS(MsRequest.ActStamp, OUTPUT ldaKillDate, OUTPUT liTime).
+   Func.Common:mSplitTS(MsRequest.ActStamp, OUTPUT ldaKillDate, OUTPUT liTime).
      
    find mobsub where
     mobsub.cli  = msisdn.cli NO-LOCK NO-eRROR.

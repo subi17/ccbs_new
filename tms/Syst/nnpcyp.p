@@ -16,7 +16,7 @@
 {Mc/lib/tokenchk.i 'menuclass'}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -55,10 +55,10 @@ form
     MenuClass.MCName    /* COLUMN-LABEL FORMAT */
     MenuClass.Memo[1]    /* column-label */ format "x(30)"
     WITH width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(cfc)
-    title color value(ctc) " " + ynimi +
+    COLOR value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " " + Syst.Var:ynimi +
     " Program Classes "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form
@@ -67,24 +67,24 @@ form
                             "memo:"
     MenuClass.Memo[1 FOR 10] NO-LABEL   AT 7
  WITH  OVERLAY ROW 4 centered
-    COLOR value(cfc)
-    TITLE COLOR value(ctc)
+    COLOR value(Syst.Var:cfc)
+    TITLE COLOR value(Syst.Var:ctc)
     lm-ots WITH side-labels
     FRAME lis.
 
 form /* seek Program Class  BY  MenuClass */
     MenuClass
     help "Enter no. of class"
-    with row 4 col 2 title color value(ctc) " FIND NO. "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND NO. "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek Program Class  BY MCName */
     MCName
     help "Enter Name of class"
-    with row 4 col 2 title color value(ctc) " FIND Name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND Name "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 FIND FIRST MenuClass
@@ -114,13 +114,13 @@ repeat WITH FRAME sel:
     END.
 
    IF lisattava THEN DO:  /* prclassn lisäys  */
-      assign cfc = "lis" ufkey = true lm-ots = " ADD " lisattava = FALSE.
+      assign Syst.Var:cfc = "lis" ufkey = true lm-ots = " ADD " lisattava = FALSE.
       RUN Syst/ufcolor.p.
 ADD-ROW:
       repeat WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 no-message.
         CLEAR FRAME lis no-pause.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         DO TRANSAction:
            PROMPT-FOR MenuClass.MenuClass
            VALIDATE
@@ -204,11 +204,11 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35  ufk[2]= 30 ufk[3]= 0 ufk[4]= 0
-        ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
-        ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-        ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 35  Syst.Var:ufk[2]= 30 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+        Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0) 
+        Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+        Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
 
         RUN Syst/ufkey.p.
       END.
@@ -216,20 +216,20 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF jarj = 1 THEN DO:
         CHOOSE ROW MenuClass.MenuClass {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) MenuClass.MenuClass WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) MenuClass.MenuClass WITH FRAME sel.
       END.
       ELSE IF jarj = 2 THEN DO:
         CHOOSE ROW MenuClass.MCName {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) MenuClass.MCName WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) MenuClass.MCName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         jarj = jarj + 1. IF jarj > jarjlkm THEN jarj = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         jarj = jarj - 1. IF jarj = 0 THEN jarj = jarjlkm.
       END.
 
@@ -256,10 +256,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous ROW */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND MenuClass where recid(MenuClass) = rtab[1] no-lock.
            IF jarj = 1 THEN FIND prev MenuClass
@@ -288,7 +288,7 @@ BROWSE:
       END. /* previous ROW */
 
       /* NEXT ROW */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND MenuClass where recid(MenuClass) = rtab[FRAME-DOWN] no-lock .
@@ -318,7 +318,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* prev page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND MenuClass where recid(MenuClass) = memory no-lock no-error.
         IF jarj = 1 THEN FIND prev MenuClass
@@ -348,7 +348,7 @@ BROWSE:
      END. /* previoius page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* kohdistin alimmalle riville */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -363,10 +363,10 @@ BROWSE:
      END. /* seuraava sivu */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+     else if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        MenuClass = 0.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE MenuClass WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        IF MenuClass <> 0 THEN DO:
@@ -385,11 +385,11 @@ BROWSE:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        MCName = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE MCName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if MCName <> "" THEN DO:
@@ -406,13 +406,13 @@ BROWSE:
        END.
      END. /* Haku sar. 2 */
 
-     if lookup(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
+     if lookup(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* add */
 
         lisattava = TRUE.
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 AND lcRight = "RW"
+     else if lookup(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSAction:  /* DELETE */
 
        privi = FRAME-LINE.
@@ -429,7 +429,7 @@ BROWSE:
 
 
        /* valaistaan poistettava rivi */
-       COLOR DISPLAY value(ctc)
+       COLOR DISPLAY value(Syst.Var:ctc)
        MenuClass.MenuClass MenuClass.MCName MenuClass.Memo[1].
 
        IF jarj = 1 THEN FIND NEXT MenuClass
@@ -458,7 +458,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        message "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY value(ccc)
+       COLOR DISPLAY value(Syst.Var:ccc)
        MenuClass.MenuClass MenuClass.MCName MenuClass.Memo[1].
        IF ok THEN DO:
            IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhMenuClass).
@@ -478,14 +478,14 @@ BROWSE:
        ELSE privi = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     else if lookup(nap,"enter,return") > 0 THEN
+     else if lookup(Syst.Var:nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSAction:
        /* change */
        FIND MenuClass where recid(MenuClass) = rtab[frame-line(sel)]
        exclusive-lock.
-       assign lm-ots = " CHANGE " ufkey = TRUE ehto = 9.
+       assign lm-ots = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9.
        RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
        DISPLAY 
           MenuClass.MenuClass 
           MenuClass.MCName 
@@ -511,7 +511,7 @@ BROWSE:
 
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
        IF jarj = 1 THEN FIND FIRST MenuClass
        /* srule */ no-lock no-error.
        ELSE IF jarj = 2 THEN FIND FIRST MenuClass USE-INDEX MCName
@@ -520,7 +520,7 @@ BROWSE:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
        IF jarj = 1 THEN FIND LAST MenuClass
        /* srule */ no-lock no-error.
        ELSE IF jarj = 2 THEN FIND LAST MenuClass USE-INDEX MCName
@@ -529,11 +529,11 @@ BROWSE:
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
