@@ -29,7 +29,7 @@ FUNCTION fCustPriceList RETURNS CHARACTER
 
    IF AVAILABLE BillTarget THEN
    FOR EACH PListConf USE-INDEX RatePlan NO-LOCK WHERE
-            PListConf.Brand    = gcBrand           AND
+            PListConf.Brand    = Syst.Var:gcBrand           AND
             PListConf.RatePlan = BillTarg.RatePlan AND
             PListConf.dFrom   <= idtDate           AND
             PListConf.dTo     >= idtDate
@@ -70,7 +70,7 @@ FUNCTION fCallPriceList RETURNS CHARACTER
 
    IF lcRatePref = "" THEN DO:
       FIND FIRST RatePref NO-LOCK WHERE                 
-                 RatePref.Brand    = gcBrand  AND
+                 RatePref.Brand    = Syst.Var:gcBrand  AND
                  RatePref.Prefix   = icPrefix AND
                  RatePref.DialType = iiDialType NO-ERROR.
       IF AVAILABLE RatePref THEN lcRatePref = RatePref.RatePref.           
@@ -78,7 +78,7 @@ FUNCTION fCallPriceList RETURNS CHARACTER
 
    IF AVAILABLE BillTarget THEN
    FOR EACH PListConf USE-INDEX RatePlan NO-LOCK WHERE
-            PListConf.Brand    = gcBrand           AND
+            PListConf.Brand    = Syst.Var:gcBrand           AND
             PListConf.RatePlan = BillTarg.RatePlan AND
             PListConf.dFrom   <= idtDate           AND
             PListConf.dTo     >= idtDate,
@@ -121,13 +121,13 @@ FUNCTION fFeeModelPriceList RETURNS CHARACTER
 
    IF AVAILABLE BillTarget THEN
    FOR EACH PListConf USE-INDEX RatePlan NO-LOCK WHERE
-            PListConf.Brand    = gcBrand           AND
+            PListConf.Brand    = Syst.Var:gcBrand           AND
             PListConf.RatePlan = BillTarg.RatePlan AND
             PListConf.dFrom   <= idtDate           AND
             PListConf.dTo     >= idtDate,
       FIRST PriceList OF PListConf NO-LOCK,
       FIRST bFMItem NO-LOCK WHERE
-            bFMItem.Brand     = gcBrand    AND
+            bFMItem.Brand     = Syst.Var:gcBrand    AND
             bFMItem.FeeModel  = icFeeModel AND
             bFMItem.PriceList = PriceList.PriceList AND 
             bFMitem.FromDate  <= idtDate             AND
@@ -158,20 +158,20 @@ FUNCTION fCliTypeFeeModelPriceList RETURNS CHARACTER
    DEF BUFFER bCLIType FOR CLIType.
 
    FIND bCLIType WHERE
-        bCLIType.Brand = gcBrand AND 
+        bCLIType.Brand = Syst.Var:gcBrand AND 
         bCLIType.CLIType = icCliType NO-LOCK NO-ERROR.
    IF NOT AVAIL bCLIType THEN RETURN "".
 
    ASSIGN lcFMPriceList = "".
 
    FOR EACH PListConf USE-INDEX RatePlan NO-LOCK WHERE
-            PListConf.Brand    = gcBrand           AND
+            PListConf.Brand    = Syst.Var:gcBrand           AND
             PListConf.RatePlan = bCLIType.PricePlan AND
             PListConf.dFrom   <= idtDate           AND
             PListConf.dTo     >= idtDate,
       FIRST PriceList OF PListConf NO-LOCK,
       FIRST bFMItem NO-LOCK WHERE
-            bFMItem.Brand     = gcBrand    AND
+            bFMItem.Brand     = Syst.Var:gcBrand    AND
             bFMItem.FeeModel  = icFeeModel AND
             bFMItem.PriceList = PriceList.PriceList AND 
             bFMitem.FromDate  <= idtDate             AND

@@ -8,11 +8,10 @@
 
 {Syst/commpaa.i}
 ASSIGN
-   gcBrand = "1"
-   katun   = "fr_daemon".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun   = "fr_daemon".
    
 {Func/heartbeat.i}
-{Func/timestamp.i}
 {Func/log.i}
 {Func/cparam2.i}
 {Syst/eventlog.i}
@@ -190,7 +189,7 @@ PROCEDURE pWriteLog:
 
       CREATE ActionLog.
       ASSIGN 
-         ActionLog.Brand        = gcBrand   
+         ActionLog.Brand        = Syst.Var:gcBrand   
          ActionLog.TableName    = "FuncRun"  
          ActionLog.KeyValue     = STRING(YEAR(TODAY),"9999") + 
                                   STRING(MONTH(TODAY),"99")  +
@@ -201,8 +200,8 @@ PROCEDURE pWriteLog:
                                    ELSE "")
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
          ActionLog.ActionStatus = 3
-         ActionLog.UserCode     = katun
-         ActionLog.ActionTS     = fMakeTS()
+         ActionLog.UserCode     = Syst.Var:katun
+         ActionLog.ActionTS     = Func.Common:mMakeTS()
          ActionLog.ActionChar   = "Started " + 
                                   SUBSTRING(ISO-DATE(idtStarted),1,19) + 
                                   ", " + STRING(iiLoops) + " loops".

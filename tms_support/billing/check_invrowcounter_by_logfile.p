@@ -1,6 +1,5 @@
 {Syst/commpaa.i}
-gcbrand = "1".
-{Func/date.i}
+Syst.Var:gcBrand = "1".
 {Inv/chk_cdr_invrowcounter.i}
 
 def var i as int no-undo.
@@ -29,7 +28,7 @@ IF lcinputfile = "" THEN DO:
 END. /* IF lcinputfile = "" THEN DO: */
 
 assign 
-  ldatodate = flastdayofmonth(TODAY).
+  ldatodate = Func.Common:mLastDayOfMonth(TODAY).
 
 input stream sin from value(lcinputfile).
 

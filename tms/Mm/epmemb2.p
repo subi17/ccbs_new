@@ -40,8 +40,8 @@ form
     EPMember.EpGroup    /* COLUMN-LABEL FORMAT */
     EPGroup.EpName    
 WITH ROW FrmRow centered OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc)
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc)
     " Memerships of BillCode. " + BillCode + ": " + BillItem.BIName + " "
     FRAME sel.
 
@@ -50,8 +50,8 @@ form
     EPGroup.EpName
 
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS 
     1 columns
     FRAME lis.
@@ -59,23 +59,23 @@ WITH  OVERLAY ROW 4 centered
 form /* seek Billing Event Item  BY BillCode */
     EPGroup
     HELP "Enter Group Code"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND GROUP "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND GROUP "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 
 FIND BillItem WHERE 
-     BillItem.Brand    = gcBrand   AND 
+     BillItem.Brand    = Syst.Var:gcBrand   AND 
      BillItem.BillCode = BillCode NO-LOCK.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "By Price List,By BillCode  ,By 3, By 4".
 
 
 FIND FIRST EPMember WHERE 
-           EPMember.BillCode = BillItem.BillCode AND EPMember.Brand = gcBrand 
+           EPMember.BillCode = BillItem.BillCode AND EPMember.Brand = Syst.Var:gcBrand 
 NO-LOCK NO-ERROR.
 IF AVAILABLE EPMember THEN ASSIGN
    Memory       = recid(EPMember)
@@ -96,19 +96,19 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a EPMember  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
 ADD-ROW:
       REPEAT WITH FRAME lis ON ENDKEY UNDO ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR EPMember.EpGroup
            EDITING:
               READKEY.
-              IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+              IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                  PAUSE 0.
                  IF FRAME-FIELD = "EpGroup" THEN DO:
                     IF INPUT FRAME lis EPMember.EpGroup = "" 
@@ -143,7 +143,7 @@ ADD-ROW:
 
            CREATE EPMember.
            ASSIGN
-           EPMember.Brand     = gcBrand 
+           EPMember.Brand     = Syst.Var:gcBrand 
            EPMember.BillCode  = BillCode
            EPMember.EpGroup   = INPUT FRAME lis EPMember.EpGroup.
 
@@ -164,7 +164,7 @@ ADD-ROW:
       /* is there ANY record ? */
       FIND FIRST EPMember
       WHERE EPMember.BillCode = BillItem.BillCode AND 
-            EPMember.Brand = gcBrand NO-LOCK NO-ERROR.
+            EPMember.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
       IF NOT AVAILABLE EPMember THEN LEAVE LOOP.
       NEXT LOOP.
    END.
@@ -215,9 +215,9 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 973  ufk[2]= 0 ufk[3]= 1131 ufk[4]= 0
-        ufk[5]= 5  ufk[6]= 4 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 973  Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 1131 Syst.Var:ufk[4]= 0
+        Syst.Var:ufk[5]= 5  Syst.Var:ufk[6]= 4 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
         {Syst/uright1.i '"5,6"'}.
         RUN Syst/ufkey.p.
       END.
@@ -226,16 +226,16 @@ BROWSE:
 
       IF order = 1 THEN DO:
         CHOOSE ROW EPMember.EpGroup {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) EPMember.EpGroup WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) EPMember.EpGroup WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -259,10 +259,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -287,7 +287,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -313,7 +313,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND EPMember WHERE recid(EPMember) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -337,7 +337,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -352,10 +352,10 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY col 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F1.
        SET EpGroup WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -377,7 +377,7 @@ BROWSE:
      END. /* Search-1 */
 
      /* Group contains */
-     ELSE IF LOOKUP(nap,"3,f3") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 THEN DO:
         /* get CURRENT record WITH NO-LOCK status */
         RUN local-find-this(FALSE).
 
@@ -391,19 +391,19 @@ BROWSE:
 
 
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:  /* add */
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 THEN DO:  /* add */
         {Syst/uright2.i}.
         must-add = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO TRANSACTION:  /* DELETE */
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 THEN DO TRANSACTION:  /* DELETE */
        {Syst/uright2.i}
        delrow = FRAME-LINE.
        RUN local-find-this (FALSE).
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        EPMember.EpGroup EPGroup.EpName.
 
        RUN local-find-NEXT.
@@ -425,7 +425,7 @@ BROWSE:
 
        ASSIGN ok = FALSE.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        EPMember.EpGroup EPGroup.EpName.
        IF ok THEN DO:
 
@@ -444,7 +444,7 @@ BROWSE:
        ELSE delrow = 0. /* UNDO DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        {Syst/uright2.i}
@@ -459,8 +459,8 @@ VIEW-AS ALERT-BOX INFORMATION.
 
 
        RUN local-find-this(TRUE).
-       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE ehto = 9. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY
           EPMember.EpGroup.
 
@@ -476,25 +476,25 @@ VIEW-AS ALERT-BOX INFORMATION.
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(EPMember) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(EPMember) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -513,35 +513,35 @@ END PROCEDURE.
 PROCEDURE local-find-FIRST:
        IF order = 1 THEN FIND FIRST EPMember USE-INDEX BillCode
        WHERE EPMember.BillCode = BillItem.BillCode AND 
-             EPMember.Brand = gcBrand NO-LOCK NO-ERROR.
+             EPMember.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND FIRST EPMember USE-INDEX BillCode
        WHERE EPMember.BillCode = BillItem.BillCode AND 
-             EPMember.Brand = gcBrand NO-LOCK NO-ERROR.
+             EPMember.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-LAST:
        IF order = 1 THEN FIND LAST EPMember USE-INDEX BillCode
        WHERE EPMember.BillCode = BillItem.BillCode AND 
-             EPMember.Brand = gcBrand NO-LOCK NO-ERROR.
+             EPMember.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND LAST EPMember USE-INDEX BillCode
        WHERE EPMember.BillCode = BillItem.BillCode AND 
-             EPMember.Brand = gcBrand NO-LOCK NO-ERROR.
+             EPMember.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-NEXT:
        IF order = 1 THEN FIND NEXT EPMember USE-INDEX BillCode
        WHERE EPMember.BillCode = BillItem.BillCode AND 
-             EPMember.Brand = gcBrand NO-LOCK NO-ERROR.
+             EPMember.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND NEXT EPMember USE-INDEX BillCode
        WHERE EPMember.BillCode = BillItem.BillCode AND 
-             EPMember.Brand = gcBrand NO-LOCK NO-ERROR.
+             EPMember.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-find-PREV:
        IF order = 1 THEN FIND PREV EPMember USE-INDEX BillCode
-       WHERE EPMember.BillCode = BillItem.BillCode AND EPMember.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE EPMember.BillCode = BillItem.BillCode AND EPMember.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN FIND PREV EPMember USE-INDEX BillCode
-       WHERE EPMember.BillCode = BillItem.BillCode AND EPMember.Brand = gcBrand NO-LOCK NO-ERROR.
+       WHERE EPMember.BillCode = BillItem.BillCode AND EPMember.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 END PROCEDURE.
 
 PROCEDURE local-disp-row:

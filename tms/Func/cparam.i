@@ -7,7 +7,7 @@
 ----------------------------------------------------------------- */
 
 FIND TMSParam WHERE 
-     TMSParam.Brand     = gcBrand AND 
+     TMSParam.Brand     = Syst.Var:gcBrand AND 
      TMSPARAM.ParamCode = "{1}" 
  NO-LOCK NO-ERROR.
 IF NOT AVAIL TMSParam THEN DO:

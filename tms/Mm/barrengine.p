@@ -9,7 +9,6 @@ ocResult:
 
 {Syst/commali.i}
 {Func/barrfunc.i}
-{Func/timestamp.i}
 
 DEFINE INPUT PARAMETER iiMsSeq    AS INTEGER   NO-UNDO.
 DEFINE INPUT PARAMETER icBarringCommands AS CHARACTER NO-UNDO.
@@ -42,7 +41,7 @@ IF MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG} /*16*/ OR
    RETURN.
 END.
 
-fSplitTS(idActStamp,
+Func.Common:mSplitTS(idActStamp,
          OUTPUT ldtAction,
          OUTPUT liTime).
 

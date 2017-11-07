@@ -39,39 +39,39 @@ form
     Reseller.Reseller
     Reseller.RsName       format "x(30)"
     WITH CENTERED OVERLAY scroll 1 ROW 2 12 DOWN
-    COLOR value(cfc)
-    title color value(ctc) " " + ynimi +
-    " Browse resellers (" + gcBrand + ") "
-    + string(pvm,"99-99-99") + " "
+    COLOR value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " " + Syst.Var:ynimi +
+    " Browse resellers (" + Syst.Var:gcBrand + ") "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form /*  search WITH FIELD Reseller */
     Reseller
     help "Give ...."
-    with row 4 col 2 title color value(ctc) " FIND CODE"
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f1.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND CODE"
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /*  search WITH FIELD RsName */
     RsName
     help "Give ..."
-    with row 4 col 2 title color value(ctc) " FIND NAME "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME f2.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND NAME "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
 
 FIND FIRST Reseller
-WHERE Reseller.Brand = gcBrand no-lock no-error.
+WHERE Reseller.Brand = Syst.Var:gcBrand no-lock no-error.
 IF AVAILABLE Reseller THEN ASSIGN
    memory       = recid(Reseller)
    must-print = TRUE
    must-add    = FALSE.
 ELSE DO:
-   MESSAGE "No resellers available for brand" gcBrand
+   MESSAGE "No resellers available for brand" Syst.Var:gcBrand
    VIEW-AS ALERT-BOX 
    ERROR.
    RETURN.
 END.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
 
 LOOP:
@@ -103,9 +103,9 @@ repeat WITH FRAME sel:
 
               rtab[FRAME-LINE] = recid(Reseller).
               IF order = 1 THEN FIND NEXT Reseller
-              WHERE Reseller.Brand = gcBrand no-lock no-error.
+              WHERE Reseller.Brand = Syst.Var:gcBrand no-lock no-error.
               ELSE IF order = 2 THEN FIND NEXT Reseller USE-INDEX RsName
-              WHERE Reseller.Brand = gcBrand no-lock no-error.
+              WHERE Reseller.Brand = Syst.Var:gcBrand no-lock no-error.
            END.
            ELSE DO:
               CLEAR no-pause.
@@ -134,29 +134,29 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 35  ufk[2]= 30 ufk[3]= 885 ufk[4]= 0
-        ufk[5]= 11  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = FALSE.
+        Syst.Var:ufk[1]= 35  Syst.Var:ufk[2]= 30 Syst.Var:ufk[3]= 885 Syst.Var:ufk[4]= 0
+        Syst.Var:ufk[5]= 11  Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = FALSE.
         RUN Syst/ufkey.p.
       END.
 
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
         CHOOSE ROW Reseller.Reseller {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) Reseller.Reseller WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) Reseller.Reseller WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW Reseller.RsName {Syst/uchoose.i} no-error WITH FRAME sel.
-        COLOR DISPLAY value(ccc) Reseller.RsName WITH FRAME sel.
+        COLOR DISPLAY value(Syst.Var:ccc) Reseller.RsName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > ordercount THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = ordercount.
       END.
 
@@ -165,9 +165,9 @@ BROWSE:
         FIND Reseller where recid(Reseller) = memory.
         DO i = 1 TO FRAME-LINE - 1:
            IF order = 1 THEN FIND prev Reseller
-           WHERE Reseller.Brand = gcBrand no-lock no-error.
+           WHERE Reseller.Brand = Syst.Var:gcBrand no-lock no-error.
            ELSE IF order = 2 THEN FIND prev Reseller USE-INDEX RsName
-           WHERE Reseller.Brand = gcBrand no-lock no-error.
+           WHERE Reseller.Brand = Syst.Var:gcBrand no-lock no-error.
            IF AVAILABLE Reseller THEN
               ASSIGN firstline = i memory = recid(Reseller).
            ELSE LEAVE.
@@ -183,16 +183,16 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* previous line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            FIND Reseller where recid(Reseller) = rtab[1] no-lock.
            IF order = 1 THEN FIND prev Reseller
-           WHERE Reseller.Brand = gcBrand no-lock no-error.
+           WHERE Reseller.Brand = Syst.Var:gcBrand no-lock no-error.
            ELSE IF order = 2 THEN FIND prev Reseller USE-INDEX RsName
-           WHERE Reseller.Brand = gcBrand no-lock no-error.
+           WHERE Reseller.Brand = Syst.Var:gcBrand no-lock no-error.
            IF NOT AVAILABLE Reseller THEN DO:
               message "YOU ARE ON THE FIRST ROW !".
               BELL. PAUSE 1 no-message.
@@ -216,14 +216,14 @@ BROWSE:
       END. /* previous line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            FIND Reseller where recid(Reseller) = rtab[FRAME-DOWN] no-lock .
            IF order = 1 THEN FIND NEXT Reseller
-           WHERE Reseller.Brand = gcBrand no-lock no-error.
+           WHERE Reseller.Brand = Syst.Var:gcBrand no-lock no-error.
            ELSE IF order = 2 THEN FIND NEXT Reseller USE-INDEX RsName
-           WHERE Reseller.Brand = gcBrand no-lock no-error.
+           WHERE Reseller.Brand = Syst.Var:gcBrand no-lock no-error.
            IF NOT AVAILABLE Reseller THEN DO:
               message "YOU ARE ON THE LAST ROW !".
               BELL. PAUSE 1 no-message.
@@ -247,22 +247,22 @@ BROWSE:
       END. /* NEXT line */
 
       /* previous page */
-      else if lookup(nap,"prev-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"prev-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND Reseller where recid(Reseller) = memory no-lock no-error.
         IF order = 1 THEN FIND prev Reseller
-        WHERE Reseller.Brand = gcBrand no-lock no-error.
+        WHERE Reseller.Brand = Syst.Var:gcBrand no-lock no-error.
         ELSE IF order = 2 THEN FIND prev Reseller USE-INDEX RsName
-        WHERE Reseller.Brand = gcBrand no-lock no-error.
+        WHERE Reseller.Brand = Syst.Var:gcBrand no-lock no-error.
         IF AVAILABLE Reseller THEN DO:
            memory = recid(Reseller).
 
            /* go back one page */
            DO line = 1 TO (FRAME-DOWN - 1):
               IF order = 1 THEN FIND prev Reseller
-              WHERE Reseller.Brand = gcBrand no-lock no-error.
+              WHERE Reseller.Brand = Syst.Var:gcBrand no-lock no-error.
               ELSE IF order = 2 THEN FIND prev Reseller USE-INDEX RsName
-              WHERE Reseller.Brand = gcBrand no-lock no-error.
+              WHERE Reseller.Brand = Syst.Var:gcBrand no-lock no-error.
               IF AVAILABLE Reseller THEN memory = recid(Reseller).
               ELSE line = FRAME-DOWN.
            END.
@@ -277,7 +277,7 @@ BROWSE:
      END. /* previous page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* cursor TO the downmost line */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            message "YOU ARE ON THE LAST PAGE !".
@@ -292,15 +292,15 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
+     else if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        Reseller = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE Reseller WITH FRAME f1.
        HIDE FRAME f1 no-pause.
        if Reseller <> "" THEN DO:
           FIND FIRST Reseller where 
-                     Reseller.Brand     = gcBrand AND
+                     Reseller.Brand     = Syst.Var:gcBrand AND
                      Reseller.Reseller >= Reseller
           no-lock no-error.
           IF NOT AVAILABLE Reseller THEN DO:
@@ -316,16 +316,16 @@ BROWSE:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     else if lookup(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     else if lookup(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
        RsName = "".
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        UPDATE RsName WITH FRAME f2.
        HIDE FRAME f2 no-pause.
        if RsName <> "" THEN DO:
           FIND FIRST Reseller where 
-                     Reseller.Brand   = gcBrand AND
+                     Reseller.Brand   = Syst.Var:gcBrand AND
                      Reseller.RsName >= RsName
           USE-INDEX RsName no-lock no-error.
           IF NOT AVAILABLE Reseller THEN DO:
@@ -339,7 +339,7 @@ BROWSE:
        END.
      END. /* Haku sar. 2 */
 
-     else if lookup(nap,"enter,return,5,F5") > 0 THEN
+     else if lookup(Syst.Var:nap,"enter,return,5,F5") > 0 THEN
      DO WITH FRAME lis TRANSAction:
        FIND Reseller where recid(Reseller) = rtab[frame-line(sel)]
        no-lock.
@@ -347,31 +347,31 @@ BROWSE:
        LEAVE LOOP.
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
        IF order = 1 THEN FIND FIRST Reseller
-       WHERE Reseller.Brand = gcBrand no-lock no-error.
+       WHERE Reseller.Brand = Syst.Var:gcBrand no-lock no-error.
        ELSE IF order = 2 THEN FIND FIRST Reseller USE-INDEX RsName
-       WHERE Reseller.Brand = gcBrand no-lock no-error.
+       WHERE Reseller.Brand = Syst.Var:gcBrand no-lock no-error.
        ASSIGN memory = recid(Reseller) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
        IF order = 1 THEN FIND LAST Reseller
-       WHERE Reseller.Brand = gcBrand no-lock no-error.
+       WHERE Reseller.Brand = Syst.Var:gcBrand no-lock no-error.
        ELSE IF order = 2 THEN FIND LAST Reseller USE-INDEX RsName
-       WHERE Reseller.Brand = gcBrand no-lock no-error.
+       WHERE Reseller.Brand = Syst.Var:gcBrand no-lock no-error.
        ASSIGN memory = recid(Reseller) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 PROCEDURE local-disp-row:
 
