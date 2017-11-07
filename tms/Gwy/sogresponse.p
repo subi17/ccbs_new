@@ -5,7 +5,7 @@
   CREATED ......: 
   MODIFIED .....: 02.12.2006 kl PING
                   08.02.2007 kl automatic resend
-                  16.02.2007 kl gcBrand = "1", ivr_process.i
+                  16.02.2007 kl Syst.Var:gcBrand = "1", ivr_process.i
                   14.03.2007 kl solog => bufSoLog
                   03.10.2007 kl procedure pUpdateQueue
                   18.03.2010 mk Fix pUpdateQueue handling
@@ -19,7 +19,7 @@
 {Func/log.i}
 {Func/multitenantfunc.i}
 
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 DEFINE VARIABLE lhServer    AS HANDLE    NO-UNDO.
 DEFINE VARIABLE ldaDate     AS DATE      NO-UNDO FORMAT "99.99.9999".
@@ -42,12 +42,12 @@ DEFINE VARIABLE lcURL       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE clsNagios   AS CLASS Class.nagios    NO-UNDO.
 
 ASSIGN
-   lcURL     = fCParamC4(gcBrand,"SOG","URL_Read")
+   lcURL     = fCParamC4(Syst.Var:gcBrand,"SOG","URL_Read")
    lcLogin   = "LOGIN yoigo toro"
    lcStatus  = "YOIGO SOG READER"
    liTimeOut = 30
    lcNagios  = "sres:Activ. Response Sender"
-   gcBrand   = "1".
+   Syst.Var:gcBrand   = "1".
 
 FORM 
    ldaDate
@@ -293,7 +293,7 @@ PROCEDURE pUpdateQueue:
       IF RETURN-VALUE = "OK" THEN DO:
          
          ASSIGN
-            bufQ.TSUpdate = fMakeTS()
+            bufQ.TSUpdate = Func.Common:mMakeTS()
             bufQ.State    = 1.
       
          RELEASE bufQ.
@@ -371,7 +371,7 @@ PROCEDURE pSoLog:
 
          CREATE UpdateQueue.
          ASSIGN
-            UpdateQueue.TSCreate = fMakeTS()
+            UpdateQueue.TSCreate = Func.Common:mMakeTS()
             UpdateQueue.Seq1     = iiSoLog
             UpdateQueue.Value1   = pcResponse.
 
@@ -383,7 +383,7 @@ PROCEDURE pSoLog:
    END.
 
          ASSIGN
-            Solog.CompletedTS = fMakeTS()
+            Solog.CompletedTS = Func.Common:mMakeTS()
             Solog.stat        = 2.
          
          IF lcStatus = "OK" THEN DO:
@@ -407,14 +407,14 @@ PROCEDURE pSoLog:
 
             IF LOOKUP(lcErrorCode,"6110,6310") > 0 THEN DO:
 
-               fSplitTS(SoLog.TimeSlotTMS,ldaDate,liTime).
+               Func.Common:mSplitTS(SoLog.TimeSlotTMS,ldaDate,liTime).
                
                liTime = liTime - 600.
                IF liTime < 0 THEN ASSIGN
                   liTime  = 86400 + liTime
                   ldaDate = ldaDate - 1.
 
-               liNewTS = fMake2Dt(ldaDate,liTime).
+               liNewTS = Func.Common:mMake2DT(ldaDate,liTime).
 
                FIND FIRST bufSoLog WHERE
                           bufSoLog.MsSeq       = SoLog.MsSeq    AND
@@ -425,14 +425,14 @@ PROCEDURE pSoLog:
                
                IF NOT AVAIL bufSoLog THEN DO:
 
-                  fSplitTS(SoLog.CompletedTS,ldaDate,liTime).
+                  Func.Common:mSplitTS(SoLog.CompletedTS,ldaDate,liTime).
                
                   liTime = liTime + 600.
                   IF liTime > 86400 THEN ASSIGN
                      liTime  = 86400 - liTime
                      ldaDate = ldaDate + 1.
 
-                  liNewTS = fMake2Dt(ldaDate,liTime).
+                  liNewTS = Func.Common:mMake2DT(ldaDate,liTime).
 
                   CREATE bufSoLog.
                   ASSIGN

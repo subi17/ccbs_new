@@ -13,7 +13,7 @@ FUNCTION fGetInvTextID RETURNS INTEGER
    liTxtID = 0.
 
    FOR FIRST InvText NO-LOCK WHERE
-             InvText.Brand     = gcBrand     AND
+             InvText.Brand     = Syst.Var:gcBrand     AND
              InvText.Target    = icTarget    AND
              InvText.KeyValue  = icKey       AND
              InvText.Language  = iiLanguage  AND 

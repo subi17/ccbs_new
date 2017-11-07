@@ -6,7 +6,7 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/main_add_lines.i}
@@ -23,16 +23,16 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 {newton/src/findtenant.i NO Ordercanal MobSub MsSeq piMsSeq}
 
 IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                  CLIType.Brand = gcBrand AND
+                  CLIType.Brand = Syst.Var:gcBrand AND
                   CLIType.CLIType = MobSub.TariffBundle AND
                   CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) THEN DO:
    MOBSUB_LOOP:
    FOR EACH lbMobSub NO-LOCK WHERE
-            lbMobSub.Brand   = gcBrand AND
+            lbMobSub.Brand   = Syst.Var:gcBrand AND
             lbMobSub.InvCust = Mobsub.CustNum AND
             lbMobSub.Paytype = FALSE,
       FIRST CLIType NO-LOCK WHERE
-            CLIType.Brand = gcBrand AND
+            CLIType.Brand = Syst.Var:gcBrand AND
             CLIType.CLIType = (IF lbMobSub.TariffBundle > ""
                                THEN lbMobSub.TariffBundle
                                ELSE lbMobSub.CLIType) AND
@@ -60,5 +60,4 @@ ELSE
    add_string(response_toplevel_id, "", "OK").
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

@@ -16,8 +16,8 @@
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 
 {Syst/commpaa.i}
-katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
-gcBrand = "1".
+Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fcustpl.i}
 
@@ -51,11 +51,10 @@ IF LOOKUP("amount", lcStruct) GT 0 THEN
 ELSE DO:
 
   FIND FeeModel WHERE 
-       FeeModel.Brand = gcBrand AND
+       FeeModel.Brand = Syst.Var:gcBrand AND
        FeeModel.FeeModel = lcEventId NO-LOCK NO-ERROR.
   IF NOT AVAIL FeeModel THEN DO:
-      IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-      RETURN appl_err(SUBST("Charge/Comp billing event  &1 not found", lcEventId)).
+            RETURN appl_err(SUBST("Charge/Comp billing event  &1 not found", lcEventId)).
   END.
   /* Fetch default charge */
   lcPriceList = fFeeModelPriceList(MobSub.Custnum,
@@ -64,7 +63,7 @@ ELSE DO:
                                    TODAY).
 
   FIND FIRST FMItem NO-LOCK  WHERE
-             FMItem.Brand     = gcBrand       AND
+             FMItem.Brand     = Syst.Var:gcBrand       AND
              FMItem.FeeModel  = FeeModel.FeeModel AND
              FMItem.PriceList = lcPriceList AND
              FMItem.FromDate <= TODAY     AND
@@ -72,14 +71,12 @@ ELSE DO:
 
   IF AVAIL FMItem THEN ldAmount = FMItem.Amount.
   ELSE DO:
-     IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-     RETURN appl_err(SUBST("Charge/Comp billing event  &1 doesn't contain active item", lcEventId)).
+          RETURN appl_err(SUBST("Charge/Comp billing event  &1 doesn't contain active item", lcEventId)).
   END.
 END.
 
 IF ldAmount = 0 THEN DO:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-   RETURN appl_err("Charge/Comp value can not be zero").
+      RETURN appl_err("Charge/Comp value can not be zero").
 END.
 
 /* by the moment we don't have many details
@@ -93,35 +90,31 @@ ldeLoaded = fMonthLoaded(
                Mobsub.PayType).
 
 IF ABSOLUTE(ldAmount + ldeLoaded) > ldChargeLimit THEN DO:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-   RETURN appl_err("Charge exceeds monthly limit").
+      RETURN appl_err("Charge exceeds monthly limit").
 END.
 /* check balance in prepaid */
 IF Mobsub.PayType AND ldAmount > 0 THEN DO:
    RUN Gwy/balancequery.p(Mobsub.CLI).
    ldeCurrBal = INT(RETURN-VALUE) / 100.
    IF ldeCurrBal < ldAmount THEN DO:
-        IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-        RETURN appl_err("Charge exceeds balance").
+                RETURN appl_err("Charge exceeds balance").
    END.
 END.
 
 RUN Mm/create_charge_comp.p( {&REQUEST_SOURCE_EXTERNAL_API} ,
                        liMsSeq,
-                       (IF MobSub.PayType THEN katun ELSE ""), 
+                       (IF MobSub.PayType THEN Syst.Var:katun ELSE ""), 
                        ldAmount,
                        lcEventId,
                        0,
                        OUTPUT liReqId) NO-ERROR.
 
 IF ERROR-STATUS:ERROR = TRUE THEN DO:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-   RETURN appl_err(RETURN-VALUE).
+      RETURN appl_err(RETURN-VALUE).
 END.
 ELSE
 add_int(response_toplevel_id, "request_id",liReqId).
 
 FINALLY:
-    IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END FINALLY.
+    END FINALLY.
 

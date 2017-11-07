@@ -1,6 +1,6 @@
 {Syst/commpaa.i}
-katun = "Qvantel".
-gcBrand = "1".
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
 
 def stream sout.
 output stream sout to yot_1051_ongoing_orders.txt.
@@ -18,14 +18,14 @@ FOR EACH order where
    if order.ordertype = 2 then next.
    
    IF CAN-FIND(FIRST OfferItem WHERE
-                     OfferItem.Brand = gcBrand AND
+                     OfferItem.Brand = Syst.Var:gcBrand AND
                      OfferItem.Offer = Order.Offer AND
                      OfferItem.ItemType = "BundleItem" AND
                      OfferItem.ItemKey = "MDUB" AND
                      OfferItem.EndStamp >= Order.CrStamp AND
                      OfferItem.BeginStamp <= Order.CrStamp) OR
       CAN-FIND(FIRST OrderAction WHERE
-                     OrderAction.Brand = gcBrand AND
+                     OrderAction.Brand = Syst.Var:gcBrand AND
                      OrderAction.OrderId = Order.OrderID AND
                      OrderAction.ItemType = "BundleItem" AND
                      OrderAction.ItemKey = "MDUB") THEN DO:

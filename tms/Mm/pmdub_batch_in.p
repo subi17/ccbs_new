@@ -8,10 +8,9 @@
   Version ......: xfera
 ----------------------------------------------------------------------- */
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 {Func/cparam2.i}
-{Func/date.i}
 {Func/ftaxdata.i}
 {Func/xmlfunction.i}
 {Func/ftransdir.i}
@@ -42,7 +41,7 @@ ASSIGN
    lcOutProcDir = fCParam("PrepaidBundle","OutProcDir")
    lcIncomingDir = fCParam("PrepaidBundle","InDir")
    lcDoneDir = fCParam("PrepaidBundle","InProcDir")
-   ldThisRun = fMakeTS().
+   ldThisRun = Func.Common:mMakeTS().
 
 IF NOT lcOutProcDir > "" OR
    NOT lcIncomingDir > "" OR
@@ -235,11 +234,11 @@ PROCEDURE pHandleRow:
    IF piErrorCode < 20 THEN RETURN "OK".
    
    FIND FIRST MobSub WHERE
-              MobSub.Brand = gcBrand AND
+              MobSub.Brand = Syst.Var:gcBrand AND
               MobSub.CLI = pcCLI NO-LOCK NO-ERROR.
    IF NOT AVAIL MobSub THEN RETURN "ERROR:Subscription not found".
    
-   ldeNow = fMakeTS().
+   ldeNow = Func.Common:mMakeTS().
    FIND FIRST MServiceLimit WHERE
               MserviceLimit.MsSeq = MobSub.MsSeq AND
               MServiceLimit.DialType = ServiceLimit.DialType AND
@@ -291,7 +290,7 @@ PROCEDURE pCreatePPRequest:
       liRequest = NEXT-VALUE(PrePaidReq).
    
       IF NOT CAN-FIND(FIRST PrePaidRequest WHERE
-                            PrePaidRequest.Brand     = gcBrand AND
+                            PrePaidRequest.Brand     = Syst.Var:gcBrand AND
                             PrepaidRequest.PPRequest = liRequest)
       THEN LEAVE.
    END. /* DO WHILE TRUE: */
@@ -299,9 +298,9 @@ PROCEDURE pCreatePPRequest:
  
    CREATE PrePaidRequest.
    ASSIGN
-      PrePaidRequest.TSRequest   = fMakeTS()
-      PrePaidRequest.UserCode    = katun
-      PrePaidRequest.Brand       = gcBrand
+      PrePaidRequest.TSRequest   = Func.Common:mMakeTS()
+      PrePaidRequest.UserCode    = Syst.Var:katun
+      PrePaidRequest.Brand       = Syst.Var:gcBrand
       PrePaidRequest.MsSeq       = MsOwner.MsSeq
       PrePaidRequest.CLI         = MsOwner.CLI
       PrePaidRequest.PPRequest   = liRequest
@@ -314,7 +313,7 @@ PROCEDURE pCreatePPRequest:
       PrePaidRequest.TaxZone     = lcTaxZone
       PrePaidRequest.Response    = "" 
       PrePaidRequest.RespCode    = 0
-      PrePaidRequest.TSResponse  = fMakeTS()
+      PrePaidRequest.TSResponse  = Func.Common:mMakeTS()
       PrePaidRequest.PPStatus    = 2.
 
    /* payment for adjustment */
@@ -335,7 +334,7 @@ PROCEDURE pMarkStarted:
    
    /* check that there isn't already another run for the same purpose */
    IF CAN-FIND(FIRST ActionLog USE-INDEX ActionID WHERE
-                     ActionLog.Brand        = gcBrand     AND    
+                     ActionLog.Brand        = Syst.Var:gcBrand     AND    
                      ActionLog.TableName    = "Cron"     AND    
                      ActionLog.KeyValue     = lcFileName AND
                      ActionLog.ActionID     = "PMDUB_IN" AND
@@ -346,12 +345,12 @@ PROCEDURE pMarkStarted:
          CREATE ActionLog.
          
          ASSIGN
-            ActionLog.Brand        = gcBrand
+            ActionLog.Brand        = Syst.Var:gcBrand
             ActionLog.ActionID     = "PMDUB_IN"
             ActionLog.ActionTS     = ldThisRun
             ActionLog.TableName    = "Cron"
             ActionLog.KeyValue     = lcFileName
-            ActionLog.UserCode     = katun
+            ActionLog.UserCode     = Syst.Var:katun
             ActionLog.ActionStatus = {&ACTIONLOG_STATUS_LOGGED}
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY) 
             ActionLog.ActionChar   = "Batch not started due to ongoing run".
@@ -365,12 +364,12 @@ PROCEDURE pMarkStarted:
       CREATE ActionLog.
       
       ASSIGN
-         ActionLog.Brand        = gcBrand
+         ActionLog.Brand        = Syst.Var:gcBrand
          ActionLog.ActionID     = "PMDUB_IN"
          ActionLog.ActionTS     = ldThisRun
          ActionLog.TableName    = "Cron"
          ActionLog.KeyValue     = lcFileName
-         ActionLog.UserCode     = katun
+         ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE}
          ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY).
       RELEASE ActionLog.   
@@ -383,7 +382,7 @@ PROCEDURE pMarkFinished:
 
    /* mark this run finished */
    FOR FIRST ActionLog USE-INDEX ActionID WHERE
-             ActionLog.Brand        = gcBrand AND    
+             ActionLog.Brand        = Syst.Var:gcBrand AND    
              ActionLog.ActionID     = "PMDUB_IN" AND
              ActionLog.ActionTS     = ldThisRun AND
              ActionLog.TableName    = "Cron" AND

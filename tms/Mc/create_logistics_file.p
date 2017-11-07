@@ -11,11 +11,10 @@
 &GLOBAL-DEFINE MailTitleSpaces Allow
 
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
-{Func/date.i}
 {Func/fwebuser.i}
 {Func/transname.i}
 {Func/ftaxdata.i}
@@ -93,19 +92,19 @@ END.
 ASSIGN
    lcSpoolDir         = fCParam("Logistics","OutSpoolDir") 
    lcRiftpDir         = fCParam("Logistics","OutDir")
-   liNewDelay         = fCParamI4(gcBrand, "Logistics","NewOrderDelay")
+   liNewDelay         = fCParamI4(Syst.Var:gcBrand, "Logistics","NewOrderDelay")
    lcTARSpoolDir      = fCParam("Logistics","TARSpoolDir")
    lcTAROutDir        = fCParam("Logistics","TAROutDir")
    lcContractsDir     = fCParam("Logistics","ContractsDir")
    lcContractsOutDir  = fCParam("Logistics","ContractsOutDir")
    lcErrorLogDir      = fCParam("Logistics","DextraErrorLogDir")
-   lcFileName         = lcBrand + "_ccbs_" + fDateFMT(TODAY,"ddmmyyyy") + 
+   lcFileName         = lcBrand + "_ccbs_" + Func.Common:mDateFmt(TODAY,"ddmmyyyy") + 
                         REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".txt"
    lcContractTARFile  = lcTARSpoolDir +
-                        lcBrand + "_contracts_ccbs_" + fDateFMT(TODAY,"ddmmyyyy") +
+                        lcBrand + "_contracts_ccbs_" + Func.Common:mDateFmt(TODAY,"ddmmyyyy") +
                         REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".tar"
    lcErrorLogFileName = lcErrorLogDir +
-                        lcBrand + "_error_ccbs_" + fDateFMT(TODAY,"ddmmyyyy") + 
+                        lcBrand + "_error_ccbs_" + Func.Common:mDateFmt(TODAY,"ddmmyyyy") + 
                         REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".log"
    lcBundleCLITypes   = fCParamC("BUNDLE_BASED_CLITYPES")
    ldaCont15PromoFrom = fCParamDa("CONT15PromoFromDate")
@@ -280,16 +279,16 @@ FUNCTION fIsTerminalOrder RETURNS LOG
 
    /* Check Terminal billcode */
    FOR EACH OfferItem NO-LOCK WHERE
-            OfferItem.Brand       = gcBrand            AND
+            OfferItem.Brand = Syst.Var:gcBrand AND
             OfferItem.Offer       = bTermOrder.Offer   AND
             OfferItem.BeginStamp <= bTermOrder.CrStamp AND
             OfferItem.EndStamp   >= bTermOrder.CrStamp AND
             OfferItem.ItemType    = "BillItem",
       FIRST BillItem NO-LOCK WHERE
-            BillItem.Brand    = gcBrand AND
+            BillItem.Brand    = Syst.Var:gcBrand AND
             BillItem.BillCode = OfferItem.ItemKey,
       FIRST BitemGroup NO-LOCK WHERE
-            BitemGroup.Brand   = gcBrand AND
+            BitemGroup.Brand   = Syst.Var:gcBrand AND
             BitemGroup.BIGroup = BillItem.BIGroup AND
             BItemGroup.BIGroup EQ "7":
 
@@ -317,13 +316,13 @@ FUNCTION fIsInstallmentConsumerOrder RETURNS LOG:
 
    /* Check Installment contract */
    FOR EACH OfferItem NO-LOCK WHERE
-            OfferItem.Brand = gcBrand AND
+            OfferItem.Brand = Syst.Var:gcBrand AND
             OfferItem.Offer = Order.Offer AND
             OfferItem.BeginStamp <= Order.CrStamp AND
             OfferItem.EndStamp >= Order.CrStamp AND
             OfferItem.ItemType = "PerContract", 
       FIRST DayCampaign NO-LOCK WHERE
-            DayCampaign.Brand = gcBrand AND
+            DayCampaign.Brand = Syst.Var:gcBrand AND
             DayCampaign.DCEvent = OfferItem.ItemKey AND
             DayCampaign.DCType = {&DCTYPE_INSTALLMENT}:
 
@@ -358,7 +357,7 @@ FUNCTION fVoiceBundle RETURNS CHAR
    lcVoiceBundles = fcParamC("VOICE_BONO_CONTRACTS").
    DEF BUFFER bOrderaction FOR Orderaction.
    FOR EACH bOrderaction NO-LOCK WHERE
-            bOrderaction.Brand EQ gcBrand AND
+            bOrderaction.Brand EQ Syst.Var:gcBrand AND
             bOrderaction.Orderid EQ iiOrderId AND
             LOOKUP(bOrderaction.ItemKey, lcVoiceBundles) > 0:
      IF lcOut NE "" THEN  lcOut = lcOut + ",".
@@ -618,7 +617,7 @@ FUNCTION fDelivSIM RETURNS LOG
       IF AVAIL MNPSub THEN DO:
          IF MNPSub.PortingTime NE 0 THEN DO:
             ASSIGN
-               lcMNPTime = fTS2HMS(MNPSub.PortingTime)
+               lcMNPTime = Func.Common:mTS2HMS(MNPSub.PortingTime)
                lcMNPTime = REPLACE(lcMNPTime," ","")
                lcMNPTime = REPLACE(lcMNPTime,".","")
                lcMNPTime = REPLACE(lcMNPTime,":","")
@@ -629,7 +628,7 @@ FUNCTION fDelivSIM RETURNS LOG
       END.
    END.
 
-   fSplitTS(Order.CrStamp, OUTPUT ldaOrderDate, OUTPUT liTime).
+   Func.Common:mSplitTS(Order.CrStamp, OUTPUT ldaOrderDate, OUTPUT liTime).
    lcOrderDate = STRING(ldaOrderDate,"99999999").
 
    FIND FIRST AgreeCustomer WHERE
@@ -654,8 +653,7 @@ FUNCTION fDelivSIM RETURNS LOG
                        OUTPUT lcError).
 
          IF lcError BEGINS "Error" THEN DO:
-            DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                             "Order",
+            Func.Common:mWriteMemo("Order",
                              STRING(Order.OrderID),
                              0,
                              "CASH INVOICE FAILED",
@@ -683,7 +681,7 @@ FUNCTION fDelivSIM RETURNS LOG
       END.
 
       FIND FIRST OrderPayment NO-LOCK WHERE
-                 OrderPayment.Brand = gcBrand AND
+                 OrderPayment.Brand = Syst.Var:gcBrand AND
                  OrderPayment.OrderId = Order.OrderId NO-ERROR.
       IF AVAIL OrderPayment THEN DO:
          IF OrderPayment.Method EQ {&ORDERPAYMENT_M_CREDIT_CARD} THEN 
@@ -784,7 +782,7 @@ FUNCTION fDelivSIM RETURNS LOG
    
    IF Order.Offer > "" THEN
       FOR FIRST Offer NO-LOCK WHERE
-                Offer.Brand = gcBrand AND
+                Offer.Brand = Syst.Var:gcBrand AND
                 Offer.Offer = Order.Offer:
 
           /* Check Bono in Order Action */
@@ -795,7 +793,7 @@ FUNCTION fDelivSIM RETURNS LOG
                                 OUTPUT lcSMSSender).
         
           IF CAN-FIND(FIRST OfferItem NO-LOCK WHERE
-                            OfferItem.Brand      = gcBrand          AND
+                            OfferItem.Brand      = Syst.Var:gcBrand          AND
                             OfferItem.Offer      = Offer.Offer      AND
                             OfferItem.ItemType   = "ServicePackage" AND
                             OfferItem.ItemKey    = "BB"             AND
@@ -809,13 +807,13 @@ FUNCTION fDelivSIM RETURNS LOG
 
           IF lcAccProd = "" THEN
              FOR EACH OfferItem NO-LOCK WHERE
-                      OfferItem.Brand      = gcBrand        AND
+                      OfferItem.Brand      = Syst.Var:gcBrand        AND
                       OfferItem.Offer      = Offer.Offer    AND
                       OfferItem.ItemType   = "BillItem"     AND
                       OfferItem.EndStamp   >= Order.CrStamp AND
                       OfferItem.BeginStamp <= Order.CrStamp,
                  FIRST BillItem NO-LOCK WHERE
-                       BillItem.Brand = gcBrand AND
+                       BillItem.Brand = Syst.Var:gcBrand AND
                        BillItem.BillCode = OfferItem.ItemKey AND
                        BillItem.BIGroup = "7":
                  CASE BillItem.BillCode: /* YPR-314 */
@@ -873,13 +871,13 @@ FUNCTION fDelivSIM RETURNS LOG
    END.
 
    FOR EACH OfferItem NO-LOCK WHERE
-            OfferItem.Brand = gcBrand AND
+            OfferItem.Brand = Syst.Var:gcBrand AND
             OfferItem.Offer = Order.Offer AND
             OfferItem.BeginStamp <= Order.CrStamp AND
             OfferItem.EndStamp >= Order.CrStamp AND
             OfferItem.ItemType = "PerContract", 
       FIRST DayCampaign NO-LOCK WHERE
-            DayCampaign.Brand = gcBrand AND
+            DayCampaign.Brand = Syst.Var:gcBrand AND
             DayCampaign.DCEvent = OfferItem.ItemKey AND
             DayCampaign.DCType = {&DCTYPE_INSTALLMENT}:
 
@@ -899,7 +897,7 @@ FUNCTION fDelivSIM RETURNS LOG
       END.
 
       FIND FIRST FMItem NO-LOCK WHERE
-                 FMItem.Brand     = gcBrand AND
+                 FMItem.Brand     = Syst.Var:gcBrand AND
                  FMItem.FeeModel  = DayCampaign.FeeModel AND
                  FMItem.ToDate   >= ldaOrderDate AND
                  FMItem.FromDate <= ldaOrderDate NO-ERROR.
@@ -1005,14 +1003,14 @@ FUNCTION fDelivSIM RETURNS LOG
    IF AVAIL Invoice THEN
    FOR EACH InvRow OF Invoice NO-LOCK,
       FIRST BillItem NO-LOCK WHERE
-            BillItem.Brand    = gcBrand AND
+            BillItem.Brand    = Syst.Var:gcBrand AND
             BillItem.BillCode = InvRow.BillCode,
       FIRST BitemGroup NO-LOCK WHERE
             BitemGroup.Brand   = BillItem.Brand   AND
             BitemGroup.BIGroup = BillItem.BIGroup AND
             BItemGroup.BIGroup = "9":
    
-      lcBIName = fTranslationName(gcBrand,
+      lcBIName = fTranslationName(Syst.Var:gcBrand,
                                   1,
                                   InvRow.BillCode,
                                   INT(AgreeCustomer.Language),
@@ -1049,7 +1047,7 @@ FUNCTION fDelivSIM RETURNS LOG
    IF AVAIL Invoice THEN
    FOR EACH InvRow OF Invoice NO-LOCK,
       FIRST BillItem NO-LOCK WHERE
-            BillItem.Brand    = gcBrand AND
+            BillItem.Brand    = Syst.Var:gcBrand AND
             BillItem.BillCode = InvRow.BillCode,
       FIRST BitemGroup NO-LOCK WHERE
             BitemGroup.Brand   = BillItem.Brand   AND
@@ -1059,7 +1057,7 @@ FUNCTION fDelivSIM RETURNS LOG
       /* YDR-868 - Exclude extra initial topup of TARJ6 */
       IF BillItem.BillCode = "TS0000054" THEN NEXT.
 
-      lcBIName = fTranslationName(gcBrand,
+      lcBIName = fTranslationName(Syst.Var:gcBrand,
                                   1,
                                   InvRow.BillCode,
                                   INT(AgreeCustomer.Language),
@@ -1084,7 +1082,7 @@ FUNCTION fDelivSIM RETURNS LOG
                SUBSTRING(bufRow.BillCode,1,3) =
                SUBSTRING(InvRow.BillCode,1,3),
          FIRST bufItem NO-LOCK WHERE        
-               bufItem.Brand    = gcBrand AND
+               bufItem.Brand    = Syst.Var:gcBrand AND
                bufItem.BillCode = bufRow.BillCode,
          FIRST bufGroup NO-LOCK WHERE
                bufGroup.Brand   = bufItem.Brand   AND
@@ -1106,7 +1104,7 @@ FUNCTION fDelivSIM RETURNS LOG
    IF AVAIL Invoice THEN
    FOR EACH InvRow OF Invoice NO-LOCK,
       FIRST BillItem NO-LOCK WHERE
-            BillItem.Brand    = gcBrand AND
+            BillItem.Brand    = Syst.Var:gcBrand AND
             BillItem.BillCode = InvRow.BillCode,
       FIRST BitemGroup NO-LOCK WHERE
             BitemGroup.Brand   = BillItem.Brand AND
@@ -1127,7 +1125,7 @@ FUNCTION fDelivSIM RETURNS LOG
 
          ASSIGN
             liLoop1  = liLoop1 + 1
-            lcBIName = fTranslationName(gcBrand,
+            lcBIName = fTranslationName(Syst.Var:gcBrand,
                                         1,
                                         lcBillCode,
                                         INT(AgreeCustomer.Language),
@@ -1173,13 +1171,13 @@ FUNCTION fDelivSIM RETURNS LOG
       lcTaxZone = fRegionTaxZone(AgreeCustomer.Region).
       /* SIM only */
       FIND FIRST OrderAction WHERE
-                 OrderAction.Brand    = gcBrand AND
+                 OrderAction.Brand    = Syst.Var:gcBrand AND
                  OrderAction.OrderId  = Order.OrderId AND
                  OrderAction.ItemType = "SIMType" NO-LOCK NO-ERROR.
       IF AVAIL OrderAction AND AVAIL SIM THEN DO:
          lcBillCode = fGetSIMBillItem(SIM.SimArt,Order.PayType).
          FOR FIRST BillItem NO-LOCK WHERE
-                   BillItem.Brand    = gcBrand AND
+                   BillItem.Brand    = Syst.Var:gcBrand AND
                    BillItem.BillCode = lcBillCode,
              FIRST BitemGroup NO-LOCK WHERE
                    BitemGroup.Brand   = BillItem.Brand AND
@@ -1187,7 +1185,7 @@ FUNCTION fDelivSIM RETURNS LOG
 
             ASSIGN
                liLoop1  = liLoop1 + 1
-               lcBIName = fTranslationName(gcBrand,
+               lcBIName = fTranslationName(Syst.Var:gcBrand,
                                            1,
                                            lcBillCode,
                                            INT(AgreeCustomer.Language),
@@ -1218,26 +1216,26 @@ FUNCTION fDelivSIM RETURNS LOG
       /* payment on delivery */
       IF lcPaymInfo = "0" AND Order.FeeModel > "" THEN DO:
          FOR FIRST FeeModel WHERE
-                   FeeModel.Brand = gcBrand AND
+                   FeeModel.Brand = Syst.Var:gcBrand AND
                    FeeModel.FeeModel = Order.FeeModel NO-LOCK,
              FIRST FMItem NO-LOCK WHERE
-                   FMItem.Brand     = gcBrand           AND
+                   FMItem.Brand     = Syst.Var:gcBrand           AND
                    FMITem.FeeModel  = FeeModel.FeeModel AND
                    FMItem.FromDate <= ldaOrderDate      AND
                    FMItem.ToDate   >= ldaOrderDate,
              FIRST BillItem NO-LOCK WHERE
-                   BillItem.Brand    = gcBrand AND
+                   BillItem.Brand    = Syst.Var:gcBrand AND
                    BillItem.BillCode = FMItem.BillCode,
              FIRST BitemGroup NO-LOCK WHERE
-                   BitemGroup.Brand   = gcBrand AND
+                   BitemGroup.Brand   = Syst.Var:gcBrand AND
                    BitemGroup.BIGroup = BillItem.BIGroup,
              FIRST PriceList NO-LOCK WHERE
-                   PriceList.Brand     = gcBrand AND
+                   PriceList.Brand     = Syst.Var:gcBrand AND
                    PriceList.PriceList = FMItem.PriceList:
 
              ASSIGN
                liLoop1  = liLoop1 + 1
-               lcBIName = fTranslationName(gcBrand,
+               lcBIName = fTranslationName(Syst.Var:gcBrand,
                                            1,
                                            BillItem.BillCode,
                                            INT(AgreeCustomer.Language),
@@ -1269,16 +1267,16 @@ FUNCTION fDelivSIM RETURNS LOG
 
       /* Terminal row */
       FOR EACH OfferItem NO-LOCK WHERE
-               OfferItem.Brand = gcBrand AND
+               OfferItem.Brand = Syst.Var:gcBrand AND
                OfferItem.Offer = Order.Offer AND
                OfferItem.BeginStamp <= Order.CrStamp AND
                OfferItem.EndStamp >= Order.CrStamp AND
                OfferItem.ItemType = "BillItem",
          FIRST BillItem NO-LOCK WHERE
-               BillItem.Brand    = gcBrand AND
+               BillItem.Brand    = Syst.Var:gcBrand AND
                BillItem.BillCode = OfferItem.ItemKey,
          FIRST BitemGroup NO-LOCK WHERE
-               BitemGroup.Brand   = gcBrand AND
+               BitemGroup.Brand   = Syst.Var:gcBrand AND
                BitemGroup.BIGroup = BillItem.BIGroup:
 
          IF LOOKUP(BItemGroup.BIGroup,"9,12,10") = 0 THEN DO:
@@ -1296,7 +1294,7 @@ FUNCTION fDelivSIM RETURNS LOG
 
             ASSIGN
                liLoop1  = liLoop1 + 1
-               lcBIName = fTranslationName(gcBrand,
+               lcBIName = fTranslationName(Syst.Var:gcBrand,
                                            1,
                                            lcBillCode,
                                            INT(AgreeCustomer.Language),
@@ -1354,7 +1352,7 @@ FUNCTION fDelivSIM RETURNS LOG
                      liLoop1  = liLoop1 + 1
                      lcTermDiscItem = fCParamC("OrderTermDisc").
                
-                  lcBIName = fTranslationName(gcBrand,
+                  lcBIName = fTranslationName(Syst.Var:gcBrand,
                                               1,
                                               lcTermDiscItem,
                                               INT(AgreeCustomer.Language),
@@ -1362,7 +1360,7 @@ FUNCTION fDelivSIM RETURNS LOG
                   IF lcBIName = ? THEN lcBIName = lcTermDiscItem.
                   
                   FIND FIRST bBillItem NO-LOCK WHERE
-                             bBillItem.Brand    = gcBrand AND
+                             bBillItem.Brand    = Syst.Var:gcBrand AND
                              bBillItem.BillCode = lcTermDiscItem NO-ERROR.
             
                   ASSIGN
@@ -1538,7 +1536,7 @@ FUNCTION fDelivDevice RETURNS LOG
    IF NOT AVAIL AgreeCustomer THEN RETURN FALSE.
 
    FIND FIRST DelivCustomer WHERE
-              DelivCustomer.Brand   = gcBrand   AND
+              DelivCustomer.Brand   = Syst.Var:gcBrand   AND
               DelivCustomer.OrderId = Order.OrderId AND
               DelivCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL}
    NO-LOCK NO-ERROR.
@@ -1629,7 +1627,7 @@ FUNCTION fDelivDevice RETURNS LOG
       WHEN "fusion_cc" THEN lcOrderChannel = "04".
       WHEN "fusion_emission" THEN lcOrderChannel = "07".
    END CASE.
-   fSplitTS(Order.CrStamp, OUTPUT ldaOrderDate, OUTPUT liTime).
+   Func.Common:mSplitTS(Order.CrStamp, OUTPUT ldaOrderDate, OUTPUT liTime).
    lcOrderDate = STRING(ldaOrderDate,"99999999").
 
    liRowNum = liRowNum + 1.
@@ -1708,7 +1706,7 @@ DEFINE BUFFER xOrder FOR Order.
 /* ordinary dextra */
 FOR EACH Stock NO-LOCK,
    EACH SIM NO-LOCK WHERE
-         SIM.Brand   = gcBrand AND
+         SIM.Brand   = Syst.Var:gcBrand AND
          SIM.Stock   = Stock.Stock AND
          SIM.SimStat = 20,
       FIRST Order NO-LOCK WHERE
@@ -1723,7 +1721,7 @@ FOR EACH Stock NO-LOCK,
 
    /* YOT-867 */
    IF Order.MNPStatus = 0 AND liNewDelay NE ? AND
-      fOffSet(Order.CrStamp, 24 * liNewDelay) > fMakeTS() THEN NEXT.
+      Func.Common:mOffSet(Order.CrStamp, 24 * liNewDelay) > Func.Common:mMakeTS() THEN NEXT.
 
    IF fDelivSIM( SIM.ICC ) THEN DO:
    
@@ -1739,7 +1737,7 @@ END.
 /* Renewal dextra */
 RENEWAL_LOOP:
 FOR EACH Order NO-LOCK WHERE  
-         Order.Brand = gcBrand AND
+         Order.Brand = Syst.Var:gcBrand AND
          Order.StatusCode = "78" AND 
          Order.OrderType = 2:
          
@@ -1755,13 +1753,13 @@ FOR EACH Order NO-LOCK WHERE
       IF Order.ICC > "" THEN lcICC = Order.ICC.
              
       FIND xOrder WHERE 
-           xOrder.Brand   = gcBrand AND
+           xOrder.Brand   = Syst.Var:gcBrand AND
            xOrder.OrderId = Order.OrderId 
       EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
       IF ERROR-STATUS:ERROR OR LOCKED(xOrder) THEN NEXT RENEWAL_LOOP.
        
       FIND SIM WHERE
-           SIM.Brand = gcBrand AND 
+           SIM.Brand = Syst.Var:gcBrand AND 
            SIM.ICC = lcICC NO-LOCK NO-ERROR.
       IF AVAILABLE SIM THEN DO:
          IF fDelivSIM( SIM.ICC ) THEN DO:
@@ -1769,15 +1767,14 @@ FOR EACH Order NO-LOCK WHERE
             fAfterSalesRequest(
                xOrder.MsSeq,
                xOrder.OrderId,
-               katun,
-               fMakeTS(),
+               Syst.Var:katun,
+               Func.Common:mMakeTS(),
                "7",
                OUTPUT ocResult
                ).
 
             IF ocResult > "" THEN DO:
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                "Order",
+               Func.Common:mWriteMemo("Order",
                                 STRING(xOrder.OrderID),
                                 0,
                                 "After Sales Request creation failed - LO",
@@ -1804,47 +1801,47 @@ FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE
          FusionMessage.messagestatus EQ {&FUSIONMESSAGE_STATUS_NEW} AND
          FusionMessage.messagetype EQ "Logistics":
    FIND FIRST Order WHERE
-              Order.brand EQ gcBrand AND
+              Order.brand EQ Syst.Var:gcBrand AND
               Order.orderId EQ FusionMessage.orderId NO-ERROR.
    IF NOT AVAIL Order OR INDEX(Order.orderchannel, "pos") > 0 THEN DO:
       ASSIGN
-         FusionMessage.UpdateTS = fMakeTS()
+         FusionMessage.UpdateTS = Func.Common:mMakeTS()
          FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
       NEXT.
    END.
 
    IF LOOKUP(order.statuscode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN DO:
       ASSIGN
-         FusionMessage.UpdateTS = fMakeTS()
+         FusionMessage.UpdateTS = Func.Common:mMakeTS()
          FusionMessage.FixedStatusDesc = "Invalid order status"
          FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
       NEXT.
    END.
    
    FIND orderfusion NO-LOCK where
-        orderfusion.brand = gcBrand AND
+        orderfusion.brand = Syst.Var:gcBrand AND
         orderfusion.orderid = order.orderid NO-ERROR.
    IF AVAIL orderfusion AND
       OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_CANCELLED}
       THEN DO:
       ASSIGN
-         FusionMessage.UpdateTS = fMakeTS()
+         FusionMessage.UpdateTS = Func.Common:mMakeTS()
          FusionMessage.FixedStatusDesc = "Pending fixed line cancellation"
          FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
       NEXT.
    END.
 
    FIND FIRST CliType WHERE
-              Clitype.brand EQ gcBrand AND
+              Clitype.brand EQ Syst.Var:gcBrand AND
               Clitype.clitype EQ order.clitype NO-LOCK NO-ERROR.
    IF Clitype.fixedlinetype NE {&FIXED_LINE_TYPE_ADSL} THEN DO:
       ASSIGN
-         FusionMessage.UpdateTS = fMakeTS()
+         FusionMessage.UpdateTS = Func.Common:mMakeTS()
          FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_ERROR}.
       NEXT.   
    END.
    IF fDelivDevice("Router") THEN ASSIGN
-      FusionMessage.UpdateTS = fMakeTS()
+      FusionMessage.UpdateTS = Func.Common:mMakeTS()
       FusionMessage.messagestatus = {&FUSIONMESSAGE_STATUS_SENT}.
 END.
 
@@ -1858,7 +1855,7 @@ FOR EACH TPService WHERE TPService.MsSeq > 0 AND TPService.Operation = {&TYPE_AC
        NEXT.
    END.
 
-   FIND FIRST Order WHERE Order.brand EQ gcBrand AND Order.MsSeq EQ MobSub.MsSeq NO-LOCK NO-ERROR.
+   FIND FIRST Order WHERE Order.brand EQ Syst.Var:gcBrand AND Order.MsSeq EQ MobSub.MsSeq NO-LOCK NO-ERROR.
    IF NOT AVAIL Order THEN 
    DO:
       fTPServiceError(BUFFER TPService,"Failed to identify associated order during logistics initiation").
@@ -1922,7 +1919,7 @@ FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
    oiCustomer = 0.
 
    FIND FIRST Order WHERE
-              Order.Brand   = gcBrand AND
+              Order.Brand   = Syst.Var:gcBrand AND
               Order.OrderID = ttOneDelivery.OrderID AND
               Order.CustNum = 0 NO-LOCK NO-ERROR.
    IF AVAILABLE Order THEN
@@ -1930,13 +1927,13 @@ FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
       RUN Mm/createcustomer.p(INPUT ttOneDelivery.OrderId,1,FALSE,TRUE,OUTPUT oiCustomer).
 
       llCorporate = CAN-FIND(OrderCustomer WHERE
-                             OrderCustomer.Brand      = gcBrand               AND
+                             OrderCustomer.Brand      = Syst.Var:gcBrand               AND
                              OrderCustomer.OrderID    = ttOneDelivery.OrderID AND
                              OrderCustomer.RowType    = 1                     AND
                              OrderCustomer.CustIdType = "CIF").
 
       FOR EACH OrderCustomer NO-LOCK WHERE
-               OrderCustomer.Brand   = gcBrand AND
+               OrderCustomer.Brand   = Syst.Var:gcBrand AND
                OrderCustomer.OrderID = ttOneDelivery.OrderID:
          IF llCorporate AND (OrderCustomer.RowType = 1 OR OrderCustomer.RowType = 5) THEN
          DO:
@@ -1945,8 +1942,7 @@ FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
                                     OrderCustomer.RowType,
                                     OUTPUT lcError).
             IF lcError > "" THEN DO:
-               DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                                "Order",
+               Func.Common:mWriteMemo("Order",
                                 STRING(OrderCustomer.OrderID),
                                 oiCustomer,
                                 "CUSTOMER CONTACT CREATION FAILED",
@@ -2060,7 +2056,7 @@ IF llCreateErrLogFile AND
 
       OUTPUT STREAM sErr TO VALUE(lcErrorLogFileName).
       PUT STREAM sErr UNFORMATTED
-          "Dextra file is finished at " + fTS2HMS(fMakeTS()) SKIP
+          "Dextra file is finished at " + Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP
           "Errors occurred! See the attached log file" SKIP(1).
       OUTPUT STREAM sErr CLOSE.
 

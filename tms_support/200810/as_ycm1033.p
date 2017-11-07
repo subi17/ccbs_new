@@ -1,8 +1,7 @@
 {Syst/commpaa.i}
-katun = "anttis".
-gcBrand = "1".
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 {Func/msisdn.i}
-{Func/date.i}
 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 
@@ -12,7 +11,7 @@ output stream sout to /home/anttis/msisdn_loki.txt.
 FOR EACH msisdn2 NO-LOCK where
    pos = "preactivated" and
    statuscode = 1 and
-   validto > fmakets()  
+   validto > Func.Common:mMakeTS()  
    i = 1 to 15000:
    
    put stream sout unformatted msisdn2.cli "|" msisdn2.pos "|" msisdn2.statuscode "|" msisdn2.validfrom "|" msisdn2.validto skip.
