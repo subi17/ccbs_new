@@ -26,7 +26,7 @@ DEF VAR new_mthcall AS LOG NO-UNDO INIT FALSE.
 
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -58,28 +58,28 @@ form
   "               Invoice group :" InvGroup 
                      help "Selected invoice group (empty for all)"      skip(4)
 WITH
-    color value(cfc) title color value(cfc) " Close all customers "
+    color value(Syst.Var:cfc) title color value(Syst.Var:cfc) " Close all customers "
     centered NO-LABEL
     OVERLAY  width 80
     FRAME frm.
 
-cfc = "kline".  RUN Syst/ufcolor.p.
+Syst.Var:cfc = "kline".  RUN Syst/ufcolor.p.
 
 LOOP:
 repeat WITH FRAME frm:
 
-  ehto = 9. RUN Syst/ufkey.p.
+  Syst.Var:ehto = 9. RUN Syst/ufkey.p.
   DISP liClDays WITH FRAME frm.
   UPDATE Month InvGroup WITH FRAME frm.
 
    toimi:
       repeat WITH FRAME LOOP:
-         ASSIGN ufk = 0 ehto = 0 ufk[1] = 7 ufk[5] = 795 ufk[8] = 8.
+         ASSIGN Syst.Var:ufk = 0 Syst.Var:ehto = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 795 Syst.Var:ufk[8] = 8.
          RUN Syst/ufkey.p.
-         IF toimi = 1 THEN NEXT  toimi.
-         IF toimi = 5 THEN LEAVE toimi.
-         IF toimi = 8 THEN LEAVE LOOP.
-      END.  /* toimi */
+         IF Syst.Var:toimi = 1 THEN NEXT  toimi.
+         IF Syst.Var:toimi = 5 THEN LEAVE toimi.
+         IF Syst.Var:toimi = 8 THEN LEAVE LOOP.
+      END.  /* Syst.Var:toimi */
 
 
   ASSIGN i1 = 0 i2 = 0.
@@ -103,7 +103,7 @@ repeat WITH FRAME frm:
      END.
 
      IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMthCall).
-     ASSIGN MthCall.CloseDate  = pvm
+     ASSIGN MthCall.CloseDate  = TODAY
             MthCall.CloseType = MthCall.CloseType + 1
             i1 = i1 + 1.
      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMthCall).       
@@ -114,7 +114,7 @@ repeat WITH FRAME frm:
   PAUSE 0.
   /* CLOSE ALL who haven't CommPaid their bills in defined time */
   FOR EACH Invoice no-lock where
-           Invoice.DueDate <= pvm - liClDays.
+           Invoice.DueDate <= TODAY - liClDays.
 
      /* IF invoicegroup is selected */
      if InvGroup ne "" THEN DO:
@@ -166,7 +166,7 @@ repeat WITH FRAME frm:
         END.
 
         /* ... IF NOT Printed into wl -file change closing Date */
-        IF MthCall.Printed = FALSE THEN ASSIGN MthCall.CloseDate = pvm.
+        IF MthCall.Printed = FALSE THEN ASSIGN MthCall.CloseDate = TODAY.
 
         /* ... IF NOT already marked AS unpaid invoices */
         IF MthCall.CloseType <= 1 THEN ASSIGN

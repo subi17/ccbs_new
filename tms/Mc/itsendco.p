@@ -33,7 +33,7 @@ EMPTY TEMP-TABLE ttCust.
 /* external group members */
 FOR EACH ttCustGroup,
     EACH CGMember NO-LOCK WHERE
-         CGMember.Brand     = gcBrand AND
+         CGMember.Brand     = Syst.Var:gcBrand AND
          CGMember.custgroup = ttCustGroup.CustGroup:
 
    IF CAN-FIND(FIRST ttCGMember WHERE 
@@ -66,7 +66,7 @@ END.
 
 ELSE IF icInvGrp NE "" THEN
 FOR EACH Customer NO-LOCK WHERE
-         Customer.Brand    = gcBrand    AND
+         Customer.Brand    = Syst.Var:gcBrand    AND
          Customer.InvGroup = icInvGrp   AND
          Customer.CustNum >= iiCustNum1 AND
          Customer.CustNum <= iiCustNum2:
@@ -77,7 +77,7 @@ END.
 
 ELSE 
 FOR EACH Customer NO-LOCK WHERE
-         Customer.Brand    = gcBrand    AND
+         Customer.Brand    = Syst.Var:gcBrand    AND
          Customer.CustNum >= iiCustNum1 AND
          Customer.CustNum <= iiCustNum2:
 

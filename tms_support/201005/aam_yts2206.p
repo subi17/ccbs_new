@@ -1,5 +1,4 @@
 {Syst/testpaa.i}
-{Func/timestamp.i}
 
 
 def var i as int no-undo.
@@ -21,7 +20,7 @@ for each msrequest no-lock where
          
    /*
    disp msrequest.reqcparam1 msrequest.reqcparam2
-        fts2hms(msrequest.donestamp) format "x(19)".
+        Func.Common:mTS2HMS(msrequest.donestamp) format "x(19)".
    */
 
    i = i + 1.  

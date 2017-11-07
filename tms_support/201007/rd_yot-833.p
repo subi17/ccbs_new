@@ -1,8 +1,7 @@
 
 {Syst/commpaa.i}
-katun = "rafaeldv".
-gcBrand  = "1".
-{Func/timestamp.i}
+Syst.Var:katun = "rafaeldv".
+Syst.Var:gcBrand  = "1".
 {Func/msisdn.i}
 
 DEFINE VARIABLE lcPos AS CHARACTER NO-UNDO. 

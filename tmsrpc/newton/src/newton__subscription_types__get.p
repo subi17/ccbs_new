@@ -35,21 +35,6 @@ DEF VAR lcRegionArray          AS CHAR NO-UNDO.
 DEF VAR lcRegionStruct         AS CHAR NO-UNDO.
 DEF VAR lcProFeeContract       AS CHAR NO-UNDO. 
 
-FUNCTION fTMSCodeName RETURNS CHARACTER
-   (iTableName AS CHAR,
-    iFieldName AS CHAR,
-    iCodeValue AS CHAR).
-
-   FIND FIRST TMSCodes NO-LOCK WHERE
-              TMSCodes.TableName = iTableName AND
-              TMSCodes.FieldName = iFieldName AND
-              TMSCodes.CodeValue = iCodeValue NO-ERROR.
-
-   IF AVAILABLE TMSCodes AND TMSCodes.InUse > 0 THEN RETURN TMSCodes.CodeName.
-   ELSE RETURN "".
-
-END FUNCTION.
-
 FUNCTION fGetSLAmount RETURNS DECIMAL 
   (icServiceLimitGroup AS CHARACTER,
    iiDialType          AS INTEGER):
@@ -134,11 +119,11 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
 
    IF lcProFeeContract > "" THEN
       FOR FIRST DayCampaign NO-LOCK WHERE
-                DayCampaign.Brand  = gcBrand AND
+                DayCampaign.Brand  = Syst.Var:gcBrand AND
                 DayCampaign.DCEvent = lcProFeeContract AND
                 DayCampaign.FeeModel > "",
           FIRST FMItem NO-LOCK WHERE
-                FMItem.Brand = gcBrand AND
+                FMItem.Brand = Syst.Var:gcBrand AND
                 FMItem.FeeModel = DayCampaign.FeeModel AND
                 FMItem.PriceList = "PRO_" + CLIType.CLIType AND
                 FMItem.FromDate <= TODAY AND
@@ -151,7 +136,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    ELSE
       add_string(lcResultStruct,"usage_type", "data").
 
-   add_string(lcResultStruct,"tariff_type", fTMSCodeName("CLIType","TariffType",STRING(CliType.TariffType))).
+   add_string(lcResultStruct,"tariff_type", Func.Common:mTMSCodeName("CLIType","TariffType",STRING(CliType.TariffType))).
 
    lcRegionArray = add_array(lcResultStruct, "region").
    FOR EACH VATCode NO-LOCK WHERE

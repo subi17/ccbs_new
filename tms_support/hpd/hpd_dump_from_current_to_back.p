@@ -83,7 +83,7 @@ DEFINE VARIABLE gcLogDir AS CHARACTER INITIAL "/scratch/log/hpd" NO-UNDO.
 */
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 DEFINE VARIABLE gcSessionParam AS CHARACTER NO-UNDO.
 
@@ -189,27 +189,6 @@ FUNCTION fMake2Time RETURNS INTEGER
    
 END FUNCTION.
 
-FUNCTION fMake2DT RETURNS DECIMAL 
-   (INPUT ldaTSDate AS DATE,
-    INPUT liTSTime  AS INTEGER):
-
-   DEFINE VARIABLE liYY   AS INTEGER NO-UNDO.
-   DEFINE VARIABLE liMM   AS INTEGER NO-UNDO.
-   DEFINE VARIABLE liDD   AS INTEGER NO-UNDO.
-   DEFINE VARIABLE ldeRet AS DECIMAL NO-UNDO FORMAT "99999999.99999".
-
-   ASSIGN
-      liYY   = YEAR(ldaTSDate)
-      liMM   = MONTH(ldaTSDate)
-      liDD   = DAY(ldaTSDate)
-      ldeRet = liYY * 10000 + liMM * 100 + liDD.
-      ldeRet = ldeRet + (liTSTime / 100000)         
-      .
-
-   RETURN ldeRet.
-   
-END FUNCTION.
-
 FUNCTION fTS2DateHMS RETURNS CHARACTER
    (INPUT ldeTS AS DECIMAL):
       
@@ -258,7 +237,7 @@ FUNCTION fUpdateDumpFromDate RETURNS LOGICAL
       IF ilLogTime
       THEN fLog("After the run set DumpFile.ModCollModule to value " + DumpFile.ModCollModule).
       
-      DumpFile.ModCollModule = fTS2DateHMS(fMake2DT(idaDate,0)).
+      DumpFile.ModCollModule = fTS2DateHMS(Func.Common:mMake2DT(idaDate,0)).
       
       RELEASE DumpFile.
       

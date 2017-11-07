@@ -11,7 +11,6 @@
 
 /* Input parameters */
 DEF VAR pcCLI AS CHAR NO-UNDO.
-DEF VAR gcBrand AS CHARACTER NO-UNDO INIT "1".
 
 DEF VAR lcResultStruct AS CHAR NO-UNDO. 
 
