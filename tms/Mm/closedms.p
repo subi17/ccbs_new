@@ -39,25 +39,25 @@ DISPLAY
    lDef
 WITH FRAME valinta. 
 ASSIGN ufkey = TRUE
-       nap   = "first". 
+       Syst.Var:nap   = "first". 
 
 toimi:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 132 
-         ufk[2]= 0  ufk[3]= 0 ufk[4]= 0 
-         ufk[5]= 63 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
-         ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.Var:ufk[1]= 132 
+         Syst.Var:ufk[2]= 0  Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0 
+         Syst.Var:ufk[5]= 63 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 
+         Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
          RUN Syst/ufkey.p.
       END.
 
           READKEY.
           ASSIGN
-          nap = keylabel(LASTKEY).
-      if lookup(nap,"1,f1") > 0 THEN DO:
-         ehto = 9. RUN Syst/ufkey.p.
+          Syst.Var:nap = keylabel(LASTKEY).
+      if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          repeat WITH FRAME valinta ON ENDKEY UNDO, LEAVE:
             UPDATE 
                 lDate
@@ -68,13 +68,13 @@ toimi:
          NEXT toimi.
       END.
 
-      else if lookup(nap,"5,f5") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"5,f5") > 0 THEN DO:
          LEAVE toimi.
       END.
-      else if lookup(nap,"8,f8") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"8,f8") > 0 THEN DO:
          RETURN.
       END.
-   END. /* toimi */
+   END. /* Syst.Var:toimi */
 
 ASSIGN tila = TRUE.
 {Syst/utuloste.i "return"}

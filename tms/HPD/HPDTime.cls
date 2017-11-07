@@ -220,6 +220,9 @@ CLASS HPD.HPDTime FINAL:
       (INPUT ideTS    AS DECIMAL,
        INPUT iiOffSet AS INTEGER):
 
+      IF iiOffSet = 0 OR iiOffSet = ?
+      THEN RETURN ideTS.
+
       DEFINE VARIABLE ldaDate AS DATE    NO-UNDO.
       DEFINE VARIABLE liTime  AS INTEGER NO-UNDO.
 

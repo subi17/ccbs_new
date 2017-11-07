@@ -1,7 +1,6 @@
 {Syst/testpaa.i}
-katun = "ari".
+Syst.Var:katun = "ari".
 
-{Func/timestamp.i}
 
 def stream sread.
 
@@ -18,8 +17,8 @@ def var ldClose as dec  no-undo.
 def buffer bowner for msowner.
 
 ASSIGN
-   ldOpen  = fmake2dt(08/01/2007,0)
-   ldClose = fmake2dt(07/31/2007,86399).
+   ldOpen  = Func.Common:mMake2DT(08/01/2007,0)
+   ldClose = Func.Common:mMake2DT(07/31/2007,86399).
 
 FIND FIRST CliType WHERE
            CliType.CliType = "TARJ2"

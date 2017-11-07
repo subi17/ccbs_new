@@ -15,9 +15,8 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-katun = "MNP-ADAPTER".
-gcBrand = "1".
-{Func/date.i}
+Syst.Var:katun = "MNP-ADAPTER".
+Syst.Var:gcBrand = "1".
 {Mnp/mnp.i}
 {Func/xmlfunction.i}
 {Func/msreqfunc.i}

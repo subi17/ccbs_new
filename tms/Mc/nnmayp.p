@@ -34,7 +34,7 @@
 {Mc/lib/tokenchk.i 'ccn'}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -77,9 +77,9 @@ form
     CCN.CCN    /* column-label "LOpnr"          */ FORMAT ">>>9"
     CCN.CCNName   /* column-label "Country's name" */
     WITH width 80 OVERLAY scroll 1 15 DOWN
-    COLOR value(cfc)
-    title color value(ctc) " " + ynimi + " CALL CASE NUMBERS (CCN) "
-    + string(pvm,"99-99-99") + " " FRAME sel.
+    COLOR value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " " + Syst.Var:ynimi + " CALL CASE NUMBERS (CCN) "
+    + string(TODAY,"99-99-99") + " " FRAME sel.
 
 {Func/brand.i}
 
@@ -88,8 +88,8 @@ form
     CCN.CCN      FORMAT ">>>9" COLON 20
     CCN.CCNName  COLON 20
     WITH  OVERLAY ROW 8 col 5
-    COLOR value(cfc)
-    TITLE COLOR value(ctc)
+    COLOR value(Syst.Var:cfc)
+    TITLE COLOR value(Syst.Var:ctc)
     fr-header WITH side-labels 
     FRAME lis.
 
@@ -97,24 +97,24 @@ form /* nnmaan nimi :n tunnuksella hakua varten */
     "Brand:" lcBrand skip
     "CCN .:" haku
     help "Give CCN"
-    with row 4 col 2 title color value(ctc) " FIND CCN"
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND CCN"
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr.
 
 form /* nnmaan nimi :n nimella hakua varten */
     "Brand:" lcBrand skip
     "Name :" haku2
     help "Give CCN's Name or beginning of it"
-    with row 4 col 2 title color value(ctc) " FIND Name "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr2.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND Name "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr2.
 
 form /* report ccn  */
     "Brand :" lcBrand skip
     "RepCCN:" haku3
     help "Give reporting CCN"
-    with row 4 col 2 title color value(ctc) " FIND REPORT CCN "
-    COLOR value(cfc) NO-LABELS OVERLAY FRAME hayr3.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND REPORT CCN "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr3.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 view FRAME sel.
    FIND FIRST CCN WHERE CCN.Brand = lcBrand NO-LOCK NO-ERROR.
    IF AVAILABLE CCN THEN ASSIGN memory = recid(CCN)
@@ -133,14 +133,14 @@ LOOP:
     END.
 
    IF must-add THEN DO:  /* CCN -ADD  */
-      assign cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
+      assign Syst.Var:cfc = "lis" ufkey = true fr-header = " ADD " must-add = FALSE.
       RUN Syst/ufcolor.p.
 
       add-new:
       repeat WITH FRAME lis ON ENDKEY UNDO add-new, LEAVE add-new.
          PAUSE 0 no-message.
          CLEAR FRAME lis no-pause.
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          DO TRANSAction:
 
             DISPLAY lcBrand @ CCN.Brand.
@@ -148,8 +148,8 @@ LOOP:
             PROMPT-FOR ccn.CCN           
             EDITING:
                READKEY.
-               nap = keylabel(LASTKEY).
-               IF lookup(nap,poisnap) > 0 THEN DO:
+               Syst.Var:nap = keylabel(LASTKEY).
+               IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
                   HIDE MESSAGE.
                   if frame-field = "ccn" THEN DO:
                      IF INPUT FRAME lis CCN = 0 THEN LEAVE add-new.
@@ -245,13 +245,13 @@ BROWSE:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk[1]= 35    ufk[2]= 30 
-         ufk[3]= 814
-         ufk[4]= 878
-         ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
-         ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
-         ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-         ehto = 3 ufkey = FALSE.
+         Syst.Var:ufk[1]= 35    Syst.Var:ufk[2]= 30 
+         Syst.Var:ufk[3]= 814
+         Syst.Var:ufk[4]= 878
+         Syst.Var:ufk[5]= (IF lcRight = "RW" THEN 5 ELSE 0)
+         Syst.Var:ufk[6]= (IF lcRight = "RW" THEN 4 ELSE 0)
+         Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 ufkey = FALSE.
 
          RUN Syst/ufkey.p.
       END.
@@ -259,20 +259,20 @@ BROWSE:
       HIDE MESSAGE no-pause.
       IF order = 1 THEN DO:
          CHOOSE ROW CCN.CCN {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) CCN.CCN WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) CCN.CCN WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
          CHOOSE ROW CCN.CCNName {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-         COLOR DISPLAY value(ccc) CCN.CCNName WITH FRAME sel.
+         COLOR DISPLAY value(Syst.Var:ccc) CCN.CCNName WITH FRAME sel.
       END.
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      if lookup(nap,"cursor-right") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-right") > 0 THEN DO:
          order = order + 1. IF order = 3 THEN order = 1.
       END.
-      if lookup(nap,"cursor-left") > 0 THEN DO:
+      if lookup(Syst.Var:nap,"cursor-left") > 0 THEN DO:
          order = order - 1. IF order = 0 THEN order = 2.
       END.
 
@@ -303,10 +303,10 @@ BROWSE:
          NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious line */
-      if lookup(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
          IF FRAME-LINE = 1 THEN DO:
             FIND CCN where recid(CCN) = rtab[1] NO-LOCK.
             IF order = 1 THEN FIND PREV CCN 
@@ -337,7 +337,7 @@ BROWSE:
       END. /* PREVious line */
 
       /* NEXT line */
-      else if lookup(nap,"cursor-down") > 0 THEN DO
+      else if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
          IF FRAME-LINE = FRAME-DOWN THEN DO:
             FIND CCN where recid(CCN) = rtab[FRAME-DOWN] NO-LOCK .
@@ -369,7 +369,7 @@ BROWSE:
       END. /* NEXT line */
 
       /* PREVious page */
-      else if lookup(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      else if lookup(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
          memory = rtab[1].
          FIND CCN where recid(CCN) = memory NO-LOCK NO-ERROR.
          IF order = 1 THEN FIND PREV CCN 
@@ -404,7 +404,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     else if lookup(nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     else if lookup(Syst.Var:nap,"next-page,page-down,+") > 0 THEN DO WITH FRAME sel:
         /* cursor TO the downmost line */
         IF rtab[FRAME-DOWN] = ? THEN DO:
             message "YOU ARE ON THE LAST PAGE !".
@@ -420,12 +420,12 @@ BROWSE:
      END. /* NEXT page */
 
      /* Haku 1 */
-     else if lookup(nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+     else if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:  /* haku sarakk. 1 */
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
         haku = 0.
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr.
-        UPDATE lcBrand WHEN gcAllBrand
+        UPDATE lcBrand WHEN Syst.Var:gcAllBrand
                haku WITH FRAME hayr.
         HIDE FRAME hayr no-pause.
 
@@ -442,12 +442,12 @@ BROWSE:
      END. /* Haku sar. 1 */
 
      /* Haku sarakk. 2 */
-     else if lookup(nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
-        cfc = "puyr". RUN Syst/ufcolor.p.
+     else if lookup(Syst.Var:nap,"2,f2") > 0 THEN DO:  /* haku sar. 2 */
+        Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
         haku2 = "".
-        ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
         DISPLAY lcBrand WITH FRAME hayr2.
-        UPDATE lcBrand WHEN gcAllBrand
+        UPDATE lcBrand WHEN Syst.Var:gcAllBrand
                haku2 WITH FRAME hayr2.
         HIDE FRAME hayr2 no-pause.
 
@@ -465,7 +465,7 @@ BROWSE:
      END. /* Haku sar. 2 */
 
      /* translations */
-     ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0 THEN DO:  
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 AND Syst.Var:ufk[3] > 0 THEN DO:  
          FIND CCN WHERE RECID(CCN) = rtab[FRAME-LINE] NO-LOCK.
          RUN Mc/invlang.p(3,STRING(CCN.CCN)).
          
@@ -473,7 +473,7 @@ BROWSE:
          NEXT LOOP.
      END.
 
-     else if lookup(nap,"4,f4") > 0 THEN DO:  /* tariffs */
+     else if lookup(Syst.Var:nap,"4,f4") > 0 THEN DO:  /* tariffs */
         FIND CCN where recid(CCN) = rtab[FRAME-LINE] NO-LOCK.
 
         RUN Mc/tariff.p(0,CCN.CCN,"",0,"",0). 
@@ -482,20 +482,20 @@ BROWSE:
         NEXT. 
      end. 
 
-     else if lookup(nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
+     else if lookup(Syst.Var:nap,"5,f5") > 0 AND lcRight = "RW" THEN DO:  /* lisays */
 
          must-add = TRUE.
          NEXT LOOP.
      END.
 
-     else if lookup(nap,"6,f6") > 0 AND lcRight = "RW"
+     else if lookup(Syst.Var:nap,"6,f6") > 0 AND lcRight = "RW"
      THEN DO TRANSAction:  /* removal */
 
         delline = FRAME-LINE.
         FIND CCN where recid(CCN) = rtab[FRAME-LINE] NO-LOCK.
 
         /* line TO be deleted is lightened */
-        COLOR DISPLAY value(ctc) CCN.CCN CCN.CCNName.
+        COLOR DISPLAY value(Syst.Var:ctc) CCN.CCN CCN.CCNName.
 
         IF order = 1 THEN FIND NEXT CCN 
            WHERE CCN.Brand = lcBrand NO-LOCK NO-ERROR.
@@ -533,7 +533,7 @@ BROWSE:
                    BDest.BDest
                    ". Deletion is not allowed."
            VIEW-AS ALERT-BOX.
-           COLOR DISPLAY value(ccc) CCN.CCN CCN.CCNName.
+           COLOR DISPLAY value(Syst.Var:ccc) CCN.CCN CCN.CCNName.
            NEXT.
         END.
 
@@ -544,14 +544,14 @@ BROWSE:
                    RateCCN.BDest
                    ". Deletion is not allowed."
            VIEW-AS ALERT-BOX.
-           COLOR DISPLAY value(ccc) CCN.CCN CCN.CCNName.
+           COLOR DISPLAY value(Syst.Var:ccc) CCN.CCN CCN.CCNName.
            NEXT.
         END.
 
         ASSIGN ok = FALSE.
         message " ARE YOU SURE YOU WANT TO REMOVE (Y/N)? " UPDATE ok.
 
-        COLOR DISPLAY value(ccc) CCN.CCN CCN.CCNName.
+        COLOR DISPLAY value(Syst.Var:ccc) CCN.CCN CCN.CCNName.
 
         IF ok THEN DO:
 
@@ -572,14 +572,14 @@ BROWSE:
         ELSE delline = 0. /* wasn't the LAST one */
      END. /* removal */
 
-     else if lookup(nap,"enter,return") > 0 THEN
+     else if lookup(Syst.Var:nap,"enter,return") > 0 THEN
      DO WITH FRAME lis TRANSAction:
         /* change */
         FIND CCN where recid(CCN) = rtab[frame-line(sel)]
         exclusive-lock.
-        assign fr-header = " CHANGE " ufkey = TRUE ehto = 9.
+        assign fr-header = " CHANGE " ufkey = TRUE Syst.Var:ehto = 9.
         RUN Syst/ufkey.p.
-        cfc = "lis". RUN Syst/ufcolor.p.
+        Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
         DISPLAY CCN.Brand CCN.CCN .
 
         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCCN).
@@ -600,7 +600,7 @@ BROWSE:
         xrecid = recid(CCN).
      END.
 
-     else if lookup(nap,"home,h") > 0 THEN DO:
+     else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
         IF order = 1 THEN FIND FIRST CCN
            WHERE CCN.Brand = lcBrand NO-LOCK NO-ERROR.
         ELSE IF order = 2 THEN FIND FIRST CCN USE-INDEX CCNName
@@ -611,7 +611,7 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"end,e") > 0 THEN DO : /* LAST record */
+     else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO : /* LAST record */
         IF order = 1 THEN FIND LAST CCN 
            WHERE CCN.Brand = lcBrand NO-LOCK NO-ERROR.
         ELSE IF order = 2 THEN FIND LAST CCN USE-INDEX CCNName
@@ -632,11 +632,11 @@ BROWSE:
         NEXT LOOP.
      END.
 
-     else if lookup(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     else if lookup(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel no-pause.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 

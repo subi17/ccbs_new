@@ -24,20 +24,20 @@ def var must-add    as logic                no-undo.
 form
       SimArt.SimArt
       SimArt.SAName  format "x(20)"
-    with scroll 1 11 down  row 4 centered color value(cfc)
-    title color value(ctc) " SIM-cards " overlay frame sel.
+    with scroll 1 11 down  row 4 centered color value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " SIM-cards " overlay frame sel.
 
 form /* SEEK Code */
     SimArt
     help "Enter article code of an SIM-card"
-    with row 4 col 2 title color value(ctc) " FIND CODE  "
-    color value(cfc) no-labels overlay frame hayr.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND CODE  "
+    color value(Syst.Var:cfc) no-labels overlay frame hayr.
 
-cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.Var:ccc = Syst.Var:cfc.
 MAIN:
 repeat:
 
-   find first SimArt WHERE SimArt.Brand = gcBrand no-lock no-error.
+   find first SimArt WHERE SimArt.Brand = Syst.Var:gcBrand no-lock no-error.
    if not available SimArt then do:
       must-print = false.
       must-add = true.
@@ -68,7 +68,7 @@ print-line:
             with frame sel.
             rtab[frame-line] = recid(SimArt).
             down with frame sel.
-            find next SimArt WHERE SimArt.Brand = gcBrand 
+            find next SimArt WHERE SimArt.Brand = Syst.Var:gcBrand 
             no-lock no-error.
          end.
          must-print = false.
@@ -77,9 +77,9 @@ print-line:
 
       if ufkey then do:
          assign
-         ufk = 0 ufk[1] = 35 ufk[5] = 11
-         ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
-         siirto = ? ehto = 3 ufkey = false.
+         Syst.Var:ufk = 0 Syst.Var:ufk[1] = 35 Syst.Var:ufk[5] = 11
+         Syst.Var:ufk[6] = 0 Syst.Var:ufk[8] = 8  Syst.Var:ufk[9] = 1
+         siirto = ? Syst.Var:ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
       end.
   end. /* print-line */
@@ -89,18 +89,18 @@ BROWSE:
 
          hide message no-pause.
          choose row SimArt.SimArt {Syst/uchoose.i} no-error with frame sel.
-         color display value(ccc) SimArt.SimArt with frame sel.
+         color display value(Syst.Var:ccc) SimArt.SimArt with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.
-         nap = keylabel(lastkey).
+         Syst.Var:nap = keylabel(lastkey).
 
          /* previous line */
-         if lookup(nap,"cursor-up") > 0 then do
+         if lookup(Syst.Var:nap,"cursor-up") > 0 then do
          with frame sel:
             if frame-line = 1 then do:
                find SimArt where recid(SimArt) = rtab[frame-line] no-lock.
                find prev SimArt WHERE 
-                         SimArt.Brand = gcBrand no-lock no-error.
+                         SimArt.Brand = Syst.Var:gcBrand no-lock no-error.
                if not available SimArt then do:
                   bell.
                   message "You are on 1st row !".              
@@ -122,11 +122,11 @@ BROWSE:
          end. /* previous line */
 
          /* next line */
-         if lookup(nap,"cursor-down") > 0 then do with frame sel:
+         if lookup(Syst.Var:nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                find SimArt where recid(SimArt) = rtab[frame-line] no-lock .
                find next SimArt WHERE 
-                         SimArt.Brand = gcBrand no-lock no-error.
+                         SimArt.Brand = Syst.Var:gcBrand no-lock no-error.
                if not available SimArt then do:
                   bell.
                   message "You are on last row !".
@@ -149,10 +149,10 @@ BROWSE:
          end. /* next line */
 
          /* previous page */
-         else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
+         else if lookup(Syst.Var:nap,"page-up,prev-page") > 0 then do with frame sel:
             find SimArt where recid(SimArt) = memory no-lock no-error.
             find prev SimArt  WHERE
-                      SimArt.Brand = gcBrand no-lock no-error.
+                      SimArt.Brand = Syst.Var:gcBrand no-lock no-error.
             if available SimArt then do:
 
                do i = 1 to (frame-down - 1):
@@ -172,7 +172,7 @@ BROWSE:
         end. /* previous page */
 
         /* next page */
-        else if lookup(nap,"page-down,next-page") > 0 then do with frame sel:
+        else if lookup(Syst.Var:nap,"page-down,next-page") > 0 then do with frame sel:
            if rtab[frame-down] = ? then do:
                bell.
                message "This is the last page !".
@@ -186,14 +186,14 @@ BROWSE:
         end. /* next page */
 
         /* Seek */
-        if lookup(nap,"1,f1") > 0 then do:  /* SimArt */
-           cfc = "puyr". RUN Syst/ufcolor.p.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+        if lookup(Syst.Var:nap,"1,f1") > 0 then do:  /* SimArt */
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            set SimArt with frame hayr.
            hide frame hayr no-pause.
            if SimArt ENTERED then do:
               find first SimArt where 
-                         SimArt.Brand   = gcBrand AND 
+                         SimArt.Brand   = Syst.Var:gcBrand AND 
                          SimArt.SimArt >= SimArt
               no-lock no-error.
               if not available SimArt then do:
@@ -211,30 +211,30 @@ BROWSE:
         end. /* Seek */
 
         /* Choose */
-        else if lookup(nap,"return,enter,5,f5") > 0 then do:
+        else if lookup(Syst.Var:nap,"return,enter,5,f5") > 0 then do:
            find SimArt where recid(SimArt) = rtab[frame-line] no-lock.
            siirto = string(SimArt.SimArt).
            leave MAIN.
         end. /* Choose */
         /* First record */
-        else if lookup(nap,"home,h") > 0 then do:
+        else if lookup(Syst.Var:nap,"home,h") > 0 then do:
            find first SimArt no-lock  WHERE
-                      SimArt.Brand = gcBrand.
+                      SimArt.Brand = Syst.Var:gcBrand.
            memory = recid(SimArt).
            must-print = true.
            next LOOP.
         end. /* First record */
 
         /* last record */
-        else if lookup(nap,"end,e") > 0 then do :
+        else if lookup(Syst.Var:nap,"end,e") > 0 then do :
            find last SimArt no-lock  WHERE
-                     SimArt.Brand = gcBrand.
+                     SimArt.Brand = Syst.Var:gcBrand.
            memory = recid(SimArt).
            must-print = true.
            next LOOP.
         end. /* last record */
 
-        else if nap = "8" or nap = "f8" then leave MAIN. /* Return */
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" then leave MAIN. /* Return */
 
      end.  /* BROWSE */
    end.  /* LOOP */

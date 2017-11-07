@@ -6,7 +6,6 @@
 {Syst/commali.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
-{Func/timestamp.i}
 {Syst/eventval.i}
 {Mc/dpmember.i}
 
@@ -159,7 +158,7 @@ REPEAT TRANS:
    END.
       
    FIND FIRST DiscountPlan WHERE
-              DiscountPlan.Brand = gcBrand AND
+              DiscountPlan.Brand = Syst.Var:gcBrand AND
               DiscountPlan.DPRuleID = lcDiscPlan NO-LOCK NO-ERROR.
    IF NOT AVAILABLE DiscountPlan THEN DO:
       fError("Unknown discount plan").
@@ -260,7 +259,7 @@ fCleanEventObjects().
 DO TRANS:
    CREATE ActionLog.
    ASSIGN 
-      ActionLog.Brand        = gcBrand   
+      ActionLog.Brand        = Syst.Var:gcBrand   
       ActionLog.TableName    = "DPMember"  
       ActionLog.KeyValue     = lcPlainFile
       ActionLog.ActionID     = "DISCUPDATE"
@@ -270,10 +269,10 @@ DO TRANS:
       ActionLog.ActionChar   = STRING(oiDone) + 
                                " discounts were updated"
       ActionLog.ActionStatus = 3
-      ActionLog.UserCode     = katun
+      ActionLog.UserCode     = Syst.Var:katun
       ActionLog.FromDate     = TODAY
       ActionLog.ToDate       = TODAY.
-      ActionLog.ActionTS     = fMakeTS().
+      ActionLog.ActionTS     = Func.Common:mMakeTS().
 END.
 
 IF NOT SESSION:BATCH THEN 

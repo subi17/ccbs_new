@@ -95,15 +95,17 @@ viiva2       = fill("=",lev)
 viiva3       = fill("-",lev)
 lcTypeDenied = fCParamC("InvTypeDenied"). 
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
 
 form header
    viiva1 at 1 skip
-   ynimi  at 1 
+   ynimi at 1 
       "AGE ANALYSIS" at 55 
       "Page" at 125 sl format "ZZ9" skip
    "Inv.Group:" at 2 lcGrpHeader format "x(24)"
       jar at 55 
-      string(pvm,"99-99-99") at 125 skip
+      string(TODAY,"99-99-99") at 125 skip
    viiva2 at 1 skip(1)
 
    "Cust."      to 8
@@ -204,7 +206,7 @@ ELSE DO:
 
    FOR EACH TCustGroup,
        EACH cgmember NO-LOCK WHERE
-            cgMember.Brand     = gcBrand AND
+            cgMember.Brand     = Syst.Var:gcBrand AND
             cgmember.custgroup = Tcustgroup.custgroup:
 
       FIND FIRST tcgmember WHERE 
@@ -239,7 +241,7 @@ IF ttCriter.ToFile = "" THEN ASSIGN
 
 /* preselect inv.groups */
 FOR EACH InvGroup NO-LOCK WHERE
-         InvGroup.Brand = gcBrand AND
+         InvGroup.Brand = Syst.Var:gcBrand AND
          (IF ttCriter.InvGroup = ""
           THEN TRUE
           ELSE InvGroup.InvGroup = ttCriter.InvGroup):
@@ -274,7 +276,7 @@ END.
 
 FOR EACH ttInvGroup,
     each Customer no-lock  where
-         Customer.Brand    = gcBrand             AND
+         Customer.Brand    = Syst.Var:gcBrand             AND
          Customer.InvGroup = ttInvGroup.InvGroup AND
          Customer.CustNum >= cgcustno1           AND
          Customer.CustNum <= cgcustno2           AND    
@@ -306,7 +308,7 @@ BY (if ttCriter.SortBy = 1
    END.
 
    for each Invoice NO-LOCK USE-INDEX CustNum WHERE
-            Invoice.Brand    = gcBrand          AND
+            Invoice.Brand    = Syst.Var:gcBrand          AND
             Invoice.CustNum  = Customer.CustNum AND
             Invoice.InvDate <= ttCriter.RepDate and 
             /* printing not denied */

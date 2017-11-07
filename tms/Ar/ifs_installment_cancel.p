@@ -62,26 +62,26 @@ OUTPUT STREAM sLog TO VALUE(icFile).
 IF icDumpMode = "modified" THEN ASSIGN
    ldaTo   = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
    ldaFrom = DATE(MONTH(ldaTo),1,YEAR(ldaTo))
-   ldFrom  = fMake2Dt(ldaFrom,0)
-   ldTo    = fMake2Dt(ldaTo,86399)
-   ldCheck = fMake2Dt(ldaFrom - 20,0).
+   ldFrom  = Func.Common:mMake2DT(ldaFrom,0)
+   ldTo    = Func.Common:mMake2DT(ldaTo,86399)
+   ldCheck = Func.Common:mMake2DT(ldaFrom - 20,0).
 /* take all */
 ELSE ASSIGN
-   ldFrom  = fMake2Dt(2/1/10,0)
-   ldTo    = fMake2Dt(TODAY - 1,86399)
+   ldFrom  = Func.Common:mMake2DT(2/1/10,0)
+   ldTo    = Func.Common:mMake2DT(TODAY - 1,86399)
    ldCheck = ldFrom.
 
 
 RequestLoop:
 FOR EACH MsRequest NO-LOCK WHERE
-         MsRequest.Brand     = gcBrand AND
+         MsRequest.Brand     = Syst.Var:gcBrand AND
          MsRequest.ReqType   = 9       AND
          MsRequest.ReqStatus = 2       AND
          MsRequest.ActStamp >= ldCheck AND
          MsRequest.DoneStamp >= ldFrom AND
          MsRequest.DoneStamp <= ldTo,
    FIRST DayCampaign NO-LOCK USE-INDEX DCEvent WHERE
-         DayCampaign.Brand = gcBrand AND
+         DayCampaign.Brand = Syst.Var:gcBrand AND
          DayCampaign.DCEvent = MsRequest.ReqCParam3 AND
          DayCampaign.DCType = "5"
    ON QUIT UNDO, RETRY
@@ -92,7 +92,7 @@ FOR EACH MsRequest NO-LOCK WHERE
       LEAVE.
    END.
 
-   fSplitTS(MsRequest.ActStamp,
+   Func.Common:mSplitTS(MsRequest.ActStamp,
             OUTPUT ldaActDate,
             OUTPUT liTime).
 
@@ -106,7 +106,7 @@ FOR EACH MsRequest NO-LOCK WHERE
       termination */
    ldDebt = 0.    
    FIND FIRST SingleFee WHERE
-              SingleFee.Brand     = gcBrand AND
+              SingleFee.Brand     = Syst.Var:gcBrand AND
               SingleFee.HostTable = "MobSub" AND
               SingleFee.KeyValue  = STRING(MsRequest.MsSeq) AND
               SingleFee.CalcObj   = "DC" + STRING(DCCLI.PerContractID)

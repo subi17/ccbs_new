@@ -9,7 +9,6 @@
   Version ......: 
   ---------------------------------------------------------------------- */
 
-{Func/timestamp.i}
 {Syst/commali.i}
 {Func/msreqfunc.i}
 {Syst/tmsconst.i}
@@ -57,7 +56,7 @@ IF lcBillEvent = "" THEN DO:
    RETURN.
 END.
  
-fSplitTS(MsRequest.CreStamp, OUTPUT lDateCr, OUTPUT lTimeCr).
+Func.Common:mSplitTS(MsRequest.CreStamp, OUTPUT lDateCr, OUTPUT lTimeCr).
 
 RUN Mc/creasfee.p(MobSub.CustNum,
               MobSub.MsSeq,
