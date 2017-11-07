@@ -30,31 +30,31 @@ form
    CCN.CCN  /* column-label "Land" */ FORMAT ">>>9"
    CCNName          column-label "Name"
 WITH
-   scroll 1 11 DOWN  ROW 4 centered COLOR value(cfc)
-   title color value(ctc) " LANDCODE " OVERLAY
+   scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.Var:cfc)
+   title color value(Syst.Var:ctc) " LANDCODE " OVERLAY
 FRAME tlse.
 
 form
    liCCN       label "Land" SKIP
    CCNName      label "Name" SKIP(1)
 WITH
-   OVERLAY ROW 8 centered TITLE COLOR value(ctc) tlli-ots
-   COLOR value(cfc) side-labels 1 col
+   OVERLAY ROW 8 centered TITLE COLOR value(Syst.Var:ctc) tlli-ots
+   COLOR value(Syst.Var:cfc) side-labels 1 col
 FRAME tlli.
 
 form /* Maa :n hakua varten */
    haku
       help "Give a country's Name or beginning of it"
-with row 4 col 2 title color value(ctc) " FIND Land  "
-    COLOR value(cfc) NO-LABELS OVERLAY
+with row 4 col 2 title color value(Syst.Var:ctc) " FIND Land  "
+    COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY
 FRAME hayr.
 
-cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "tlse". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 Runko:
 repeat:
 
    FIND FIRST CCN
-   USE-INDEX CCNName WHERE CCN.Brand = gcBrand NO-LOCK NO-ERROR.
+   USE-INDEX CCNName WHERE CCN.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
    IF NOT AVAILABLE CCN THEN DO:
       must-print = FALSE.
       must-add = TRUE.
@@ -69,7 +69,7 @@ LOOP:
 
    IF must-add THEN DO:  /* Maa  lisays  */
       ASSIGN
-      cfc = "tlli"
+      Syst.Var:cfc = "tlli"
       tlli-ots = " ADD ".
       RUN Syst/ufcolor.p.
        add-new:
@@ -82,7 +82,7 @@ LOOP:
                HIDE FRAME tlli no-pause.
                LEAVE add-new.
             END.
-            IF can-find(CCN WHERE CCN.Brand = gcBrand AND CCN.CCN = liCCN )
+            IF can-find(CCN WHERE CCN.Brand = Syst.Var:gcBrand AND CCN.CCN = liCCN )
             THEN DO:
                BELL.
                message "Land  " + string(input liCCN) + " already exists !".
@@ -93,7 +93,7 @@ LOOP:
          CREATE CCN.
          ASSIGN
            ylin = recid(CCN)
-           CCN.Brand = gcBrand
+           CCN.Brand = Syst.Var:gcBrand
            CCN.CCN = liCCN.
          UPDATE CCNName.
          CLEAR FRAME tlli no-pause.
@@ -104,7 +104,7 @@ LOOP:
 
       /* onko yhtaan tietuetta ? */
       FIND FIRST CCN
-      USE-INDEX CCNName WHERE CCN.Brand = gcBrand NO-LOCK NO-ERROR.
+      USE-INDEX CCNName WHERE CCN.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
       IF NOT AVAILABLE CCN THEN LEAVE LOOP.
       NEXT LOOP.
    END.
@@ -122,7 +122,7 @@ print-line:
             DISPLAY CCN.CCN CCNName WITH FRAME tlse.
             rtab[FRAME-LINE] = recid(CCN).
             DOWN WITH FRAME tlse.
-            FIND NEXT CCN USE-INDEX CCNName WHERE CCN.Brand = gcBrand 
+            FIND NEXT CCN USE-INDEX CCNName WHERE CCN.Brand = Syst.Var:gcBrand 
             NO-LOCK NO-ERROR.
          END.
          must-print = FALSE.
@@ -131,9 +131,9 @@ print-line:
 
       IF ufkey THEN DO:
          ASSIGN
-         ufk = 0 ufk[1] = 718 ufk[5] = 11
-         ufk[6] = 5 ufk[8] = 8  ufk[9] = 1
-         siirto = ? ehto = 3 ufkey = FALSE.
+         Syst.Var:ufk = 0 Syst.Var:ufk[1] = 718 Syst.Var:ufk[5] = 11
+         Syst.Var:ufk[6] = 5 Syst.Var:ufk[8] = 8  Syst.Var:ufk[9] = 1
+         siirto = ? Syst.Var:ehto = 3 ufkey = FALSE.
          {Syst/uright1.i '"6"'}
          RUN Syst/ufkey.p.
       END.
@@ -144,18 +144,18 @@ BROWSE:
 
          HIDE MESSAGE no-pause.
          CHOOSE ROW CCN.CCNName {Syst/uchoose.i} no-error WITH FRAME tlse.
-         COLOR DISPLAY value(ccc) CCN.CCNName WITH FRAME tlse.
+         COLOR DISPLAY value(Syst.Var:ccc) CCN.CCNName WITH FRAME tlse.
 
          if frame-value = "" AND rtab[FRAME-LINE] = ? THEN NEXT.
-         nap = keylabel(LASTKEY).
+         Syst.Var:nap = keylabel(LASTKEY).
 
          /* previous line */
-         if lookup(nap,"cursor-up") > 0 THEN DO
+         if lookup(Syst.Var:nap,"cursor-up") > 0 THEN DO
          WITH FRAME tlse:
             IF FRAME-LINE = 1 THEN DO:
                FIND CCN WHERE recid(CCN) = rtab[FRAME-LINE] NO-LOCK.
                FIND prev CCN 
-               USE-INDEX CCNName WHERE CCN.Brand = gcBrand NO-LOCK NO-ERROR.
+               USE-INDEX CCNName WHERE CCN.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
                IF NOT AVAILABLE CCN THEN DO:
                   BELL.
                   message "YOU ARE ON THE FIRST ROW !".
@@ -177,11 +177,11 @@ BROWSE:
          END. /* previous line */
 
          /* NEXT line */
-         if lookup(nap,"cursor-down") > 0 THEN DO WITH FRAME tlse:
+         if lookup(Syst.Var:nap,"cursor-down") > 0 THEN DO WITH FRAME tlse:
             IF FRAME-LINE = FRAME-DOWN THEN DO:
                FIND CCN WHERE recid(CCN) = rtab[FRAME-LINE] NO-LOCK .
                FIND NEXT CCN 
-               USE-INDEX CCNName WHERE CCN.Brand = gcBrand NO-LOCK NO-ERROR.
+               USE-INDEX CCNName WHERE CCN.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
                IF NOT AVAILABLE CCN THEN DO:
                   BELL.
                   message "YOU ARE ON THE LAST ROW".
@@ -204,16 +204,16 @@ BROWSE:
          END. /* NEXT line */
 
          /* previous page */
-         else if lookup(nap,"page-up,prev-page") > 0 THEN DO WITH FRAME tlse:
+         else if lookup(Syst.Var:nap,"page-up,prev-page") > 0 THEN DO WITH FRAME tlse:
             FIND CCN WHERE recid(CCN) = ylin NO-LOCK NO-ERROR.
             FIND prev CCN 
-            USE-INDEX CCNName WHERE CCN.Brand = gcBrand NO-LOCK NO-ERROR.
+            USE-INDEX CCNName WHERE CCN.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
             IF AVAILABLE CCN THEN DO:
                /* mennaan tiedostoa taaksepAin 1 sivun verran */
                DO i = 1 TO (FRAME-DOWN - 1):
                   FIND prev CCN 
                   USE-INDEX CCNName
-                  WHERE CCN.Brand = gcBrand NO-LOCK NO-ERROR.
+                  WHERE CCN.Brand = Syst.Var:gcBrand NO-LOCK NO-ERROR.
                   IF AVAILABLE CCN THEN ylin = recid(CCN).
                   ELSE i = FRAME-DOWN.
                END.
@@ -229,7 +229,7 @@ BROWSE:
         END. /* previous page */
 
         /* NEXT page */
-        else if lookup(nap,"page-down,next-page") > 0 THEN DO WITH FRAME tlse:
+        else if lookup(Syst.Var:nap,"page-down,next-page") > 0 THEN DO WITH FRAME tlse:
            IF rtab[FRAME-DOWN] = ? THEN DO:
                BELL.
                message "YOU ARE ON THE LAST PAGE".
@@ -243,14 +243,14 @@ BROWSE:
         END. /* NEXT page */
 
         /* Haku */
-        if lookup(nap,"1,f1") > 0 THEN DO:  /* haku */
-           cfc = "puyr". RUN Syst/ufcolor.p.
-           haku = "". ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+        if lookup(Syst.Var:nap,"1,f1") > 0 THEN DO:  /* haku */
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           haku = "". Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            UPDATE haku WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
            if haku <> "" THEN DO:
               FIND FIRST CCN WHERE 
-                 CCN.Brand = gcBrand AND
+                 CCN.Brand = Syst.Var:gcBrand AND
                  CCN.CCNName >= haku
               USE-INDEX CCNName NO-LOCK NO-ERROR.
               IF NOT AVAILABLE CCN THEN DO:
@@ -268,38 +268,38 @@ BROWSE:
         END. /* Haku */
 
         /* Valinta */
-        else if lookup(nap,"return,enter,5,f5") > 0 THEN DO:
+        else if lookup(Syst.Var:nap,"return,enter,5,f5") > 0 THEN DO:
            FIND CCN WHERE recid(CCN) = rtab[FRAME-LINE] NO-LOCK.
            siirto = string(CCN.CCN).
            LEAVE runko.
         END. /* Valinta */
 
         /* Lisays */
-        else if lookup(nap,"6,f6") > 0 THEN DO:
+        else if lookup(Syst.Var:nap,"6,f6") > 0 THEN DO:
            {Syst/uright2.i}
            ASSIGN must-add = TRUE.
            NEXT LOOP.
         END. /* Lisays */
 
         /* Ensimmainen tietue */
-        else if lookup(nap,"home,h") > 0 THEN DO:
+        else if lookup(Syst.Var:nap,"home,h") > 0 THEN DO:
            FIND FIRST CCN 
-           USE-INDEX CCNName WHERE CCN.Brand = gcBrand NO-LOCK.
+           USE-INDEX CCNName WHERE CCN.Brand = Syst.Var:gcBrand NO-LOCK.
            ylin = recid(CCN).
            must-print = TRUE.
            NEXT LOOP.
         END. /* Ensimmainen tietue */
 
         /* LAST record */
-        else if lookup(nap,"end,e") > 0 THEN DO :
+        else if lookup(Syst.Var:nap,"end,e") > 0 THEN DO :
            FIND LAST CCN 
-           USE-INDEX CCNName WHERE CCN.Brand = gcBrand NO-LOCK.
+           USE-INDEX CCNName WHERE CCN.Brand = Syst.Var:gcBrand NO-LOCK.
            ylin = recid(CCN).
            must-print = TRUE.
            NEXT LOOP.
         END. /* LAST record */
 
-        else if nap = "8" or nap = "f8" THEN LEAVE runko. /* Paluu */
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" THEN LEAVE runko. /* Paluu */
 
      END.  /* BROWSE */
    END.  /* LOOP */

@@ -25,8 +25,7 @@
 
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-gcBrand = "1".
-{Func/date.i}
+Syst.Var:gcBrand = "1".
 {Mm/fbundle.i}
 {Func/fbtc.i}
 {Func/fexternalapi.i}
@@ -67,11 +66,11 @@ ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName,lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
-katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
+Syst.Var:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
-fSplitTS(pdActivation,OUTPUT ldaActDate,OUTPUT liActTime).
+Func.Common:mSplitTS(pdActivation,OUTPUT ldaActDate,OUTPUT liActTime).
 
-ASSIGN pdActivation            = fMake2Dt(ldaActDate, 0)
+ASSIGN pdActivation            = Func.Common:mMake2DT(ldaActDate, 0)
        lcAllowedBONOContracts  = fCParamC("ALLOWED_BONO_CONTRACTS")
        lcAllowedCONTSContracts = fCParamC("ALLOWED_CONTS_CONTRACTS").
 
@@ -121,8 +120,7 @@ IF lcBundleType = "BONO" THEN
 ELSE
    lcMemoType = "MobSub".
 
-DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                 "MobSub",                             /* HostTable */
+Func.Common:mWriteMemoWithType("MobSub",                             /* HostTable */
                  STRING(Mobsub.MsSeq),                 /* KeyValue  */
                  MobSub.CustNum,                       /* CustNum */
                  "Bono modificado",                    /* MemoTitle */
@@ -139,5 +137,4 @@ add_boolean(top_struct, "result", True).
 FINALLY:
    /* Store the transaction id */
    ghAuthLog::TransactionId = pcTransId.
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

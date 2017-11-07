@@ -8,7 +8,6 @@ def buffer bmnp for mnpprocess.
 
 DEFINE VARIABLE i AS INTEGER NO-UNDO. 
 
-{Func/timestamp.i}
 LOOPPI:
 repeat:
    import unformatted lcLine.
@@ -61,7 +60,7 @@ repeat:
          mnpoperation.errorhandled = 2.
       END. 
        assign
-          mnpprocess.updatets = fmakets()
+          mnpprocess.updatets = Func.Common:mMakeTS()
           mnpprocess.statuscode = 4
           mnpprocess.statusreason = "AREC CUPO1".
 
@@ -94,7 +93,7 @@ repeat:
       END. 
       
       assign
-          mnpprocess.updatets = fmakets()
+          mnpprocess.updatets = Func.Common:mMakeTS()
           mnpprocess.statuscode = 4
           mnpprocess.statusreason = "AREC CUPO1"
           order.mnpstatus = 5

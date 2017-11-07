@@ -78,7 +78,7 @@ ELSE ASSIGN
 
 IF icInvID1 = icInvID2 THEN 
 FOR FIRST Invoice NO-LOCK WHERE
-          Invoice.Brand    = gcBrand AND
+          Invoice.Brand    = Syst.Var:gcBrand AND
           Invoice.ExtInvID = icInvID1,
     FIRST Customer OF Invoice NO-LOCK:
    
@@ -90,7 +90,7 @@ END.
 
 ELSE
 FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE               
-         Invoice.Brand    = gcBrand    AND
+         Invoice.Brand    = Syst.Var:gcBrand    AND
          Invoice.InvDate  >= ldtFrom   AND
          Invoice.InvDate  <= ldtTo     AND
          Invoice.ExtInvID >= icInvID1  AND      

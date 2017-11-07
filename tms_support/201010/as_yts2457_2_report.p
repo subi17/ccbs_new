@@ -3,7 +3,6 @@ input from as_yts2457_2.txt.
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lrRecid AS RECID NO-UNDO. 
 DEFINE VARIABLE ldeStamp AS DECIMAL NO-UNDO. 
-{Func/date.i}
 
 DEFINE TEMP-TABLE ttCli
 FIELD cli AS CHAR format "x(12)" label "GSMBNR"
@@ -19,7 +18,7 @@ repeat:
    find mobcdr where
       recid(mobcdr) = lrRecid NO-LOCK.
 
-   ldeStamp = fhms2ts(mobcdr.datest, string(mobcdr.timestart,"HH:MM:SS")).
+   ldeStamp = Func.Common:mHMS2TS(mobcdr.datest, string(mobcdr.timestart,"HH:MM:SS")).
 
    find first ttCli where
               ttCli.cli = mobcdr.cli and

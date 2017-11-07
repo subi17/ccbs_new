@@ -23,7 +23,7 @@ FUNCTION fVatFactor RETURNS DECIMAL
 
       lcTaxClass = "1".
       FOR FIRST bVatBillItem NO-LOCK WHERE
-                bVatBillItem.Brand    = gcBrand AND
+                bVatBillItem.Brand    = Syst.Var:gcBrand AND
                 bVatBillItem.BillCode = icBillCode:
          lcTaxClass = bVatBillItem.TaxClass.
       END.

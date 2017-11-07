@@ -29,8 +29,8 @@
 
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
-gcBrand = "1".
+Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
+Syst.Var:gcBrand = "1".
 {Func/mdub.i}
 {Syst/tmsconst.i}
 {Func/msreqfunc.i}
@@ -83,7 +83,7 @@ ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName,lcApplicationId) THEN
    RETURN appl_err("Application Id does not match").
 
-katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
+Syst.Var:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.
 
 ldaBonoVoipRemovalDate   = DATE(fCParamC("BonoVoipRemovalDate")).
 
@@ -98,7 +98,7 @@ IF (MobSub.MsStatus EQ {&MSSTATUS_MOBILE_PROV_ONG}    /*16*/ OR
    previous five minutes from external api */
 IF CAN-FIND( FIRST MsRequest NO-LOCK WHERE
                    MsRequest.MsSeq = Mobsub.MsSeq AND
-                   MsRequest.ActStamp > fSecOffSet(fMakeTS(),-300) AND
+                   MsRequest.ActStamp > Func.Common:mSecOffSet(Func.Common:mMakeTS(),-300) AND
                    MsRequest.ReqType = 8 AND
                    MsRequest.ReqCParam3 = pcBundleId AND
                    MsRequest.ReqSource = {&REQUEST_SOURCE_EXTERNAL_API} 
@@ -109,7 +109,7 @@ IF CAN-FIND( FIRST MsRequest NO-LOCK WHERE
 lcBONOContracts = fCParamC("BONO_CONTRACTS").
 
 FIND FIRST DayCampaign NO-LOCK WHERE
-           DayCampaign.Brand = gcBrand AND
+           DayCampaign.Brand = Syst.Var:gcBrand AND
            DayCampaign.DCEvent = pcBundleId NO-ERROR.
 IF NOT AVAIL DayCampaign THEN RETURN appl_err("DayCampaign not defined").
 
@@ -124,7 +124,7 @@ ELSE IF TODAY GE ldaBonoVoipRemovalDate AND
    THEN RETURN appl_err("Incorrect Bundle Id").
 
 /* Check if subscription type is not compatible with bundle */
-IF fMatrixAnalyse(gcBrand,
+IF fMatrixAnalyse(Syst.Var:gcBrand,
                   "PERCONTR",
                   "PerContract;SubsTypeTo",
                   pcBundleId + ";" + MobSub.CLIType,
@@ -137,7 +137,7 @@ ASSIGN lcPostpaidVoiceTariffs = fCParamC("POSTPAID_VOICE_TARIFFS")
        lcAllowedBONOContracts = fCParamC("ALLOWED_BONO_CONTRACTS")
        lcOnlyVoiceContracts   = fCParamC("ONLY_VOICE_CONTRACTS")
        lcDataBundleCLITypes   = fCParamC("DATA_BUNDLE_BASED_CLITYPES")
-       ldeActStamp            = fMakeTS().
+       ldeActStamp            = Func.Common:mMakeTS().
 
 CASE pcActionValue :
    /* termination */
@@ -241,8 +241,8 @@ IF pcBundleId = {&PMDUB} AND liActionValue = 1 THEN DO:
 END. /* IF pcBundleId = {&PMDUB} AND */
 
 IF liActionValue = 0 THEN DO:
-   fSplitTs(ldeActStamp, output ldaActDate, output liTime).
-   ldeActStamp = fMake2Dt(fLastDayOfMonth(ldaActDate),86399).
+   Func.Common:mSplitTS(ldeActStamp, output ldaActDate, output liTime).
+   ldeActStamp = Func.Common:mMake2DT(Func.Common:mLastDayOfMonth(ldaActDate),86399).
 END.
 
 IF pcBundleId = {&DSS} THEN DO:
@@ -326,8 +326,7 @@ top_struct = add_struct(response_toplevel_id, "").
 add_string(top_struct, "transaction_id", pcTransId).
 add_boolean(top_struct, "result", True).
 
-DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                 "MobSub",                             /* HostTable */
+Func.Common:mWriteMemoWithType("MobSub",                             /* HostTable */
                  STRING(Mobsub.MsSeq),                 /* KeyValue  */
                  MobSub.CustNum,                       /* CustNum */
                  DayCampaign.DCName,                   /* MemoTitle */
@@ -340,6 +339,5 @@ FINALLY:
    /* Store the transaction id */
    ghAuthLog::TransactionId = pcTransId.
 
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.
 

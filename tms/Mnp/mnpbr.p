@@ -13,7 +13,6 @@
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'MNPProcess'}
 {Func/fcustdata.i}
-{Func/date.i}
 {Syst/tmsconst.i}
 
 DEFINE INPUT PARAMETER piOrderId AS INTEGER NO-UNDO.
@@ -23,7 +22,7 @@ DEFINE INPUT PARAMETER piMNPType AS INTEGER NO-UNDO.
 {Syst/eventval.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -78,10 +77,10 @@ form
     lcStatus               FORMAT "x(4)"    COLUMN-LABEL "Status"
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
     "  MNP PROCESS LIST  "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 form
@@ -96,23 +95,23 @@ form
     "Order ID...:" MNPProcess.OrderId format ">>>>>>>9" no-label skip
 
 WITH  OVERLAY ROW 4 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr with no-labels side-labels
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr with no-labels side-labels
     FRAME lis.
 
 form /* seek  MNPProcess */
     lcFormRequest
     HELP "Enter form code"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND CODE "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f1.
 
 form /* seek  PortRequest */
     lcPortRequest
     HELP "Enter porting code"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CODE "
-    COLOR VALUE(cfc) NO-LABELS OVERLAY FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND CODE "
+    COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  , By Status , By 4".
@@ -186,17 +185,17 @@ BROWSE:
       IF ufkey THEN DO:
         
         ASSIGN
-           ufk    = 0
-           ufk[1] = 35
-           ufk[2] = 35
-           ufk[3] = 2206 WHEN piOrderId = 0  AND piMNPType < 2
-           ufk[4] = 0 /* 2821 */
-           ufk[5] = 0 /* 2822 */
-           ufk[6] = 2806          
-           ufk[7] = 2823 
-           ufk[8] = 8
-           ufk[9] = 1
-           ehto   = 3
+           Syst.Var:ufk    = 0
+           Syst.Var:ufk[1] = 35
+           Syst.Var:ufk[2] = 35
+           Syst.Var:ufk[3] = 2206 WHEN piOrderId = 0  AND piMNPType < 2
+           Syst.Var:ufk[4] = 0 /* 2821 */
+           Syst.Var:ufk[5] = 0 /* 2822 */
+           Syst.Var:ufk[6] = 2806          
+           Syst.Var:ufk[7] = 2823 
+           Syst.Var:ufk[8] = 8
+           Syst.Var:ufk[9] = 1
+           Syst.Var:ehto   = 3
            ufkey  = FALSE.
       
          RUN Syst/ufkey.p.
@@ -206,26 +205,26 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         CHOOSE ROW MNPProcess.FormRequest {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MNPProcess.FormRequest WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) MNPProcess.FormRequest WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         CHOOSE ROW MNPProcess.PortRequest {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MNPProcess.PortRequest WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) MNPProcess.PortRequest WITH FRAME sel.
       END.
 
       IF order = 3 THEN DO:
         CHOOSE ROW MNPProcess.StatusCode {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) MNPProcess.StatusCode WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) MNPProcess.StatusCode WITH FRAME sel.
       END.
 
       IF rtab[FRAME-LINE] = ? THEN NEXT.
 
-      nap = keylabel(LASTKEY).
+      Syst.Var:nap = keylabel(LASTKEY).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -249,10 +248,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTKEY).
+      ASSIGN Syst.Var:nap = keylabel(LASTKEY).
 
       /* PREVious ROW */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-LINE = 1 THEN DO:
            RUN local-find-this(FALSE).
            RUN local-find-PREV.
@@ -277,7 +276,7 @@ BROWSE:
       END. /* PREVious ROW */
 
       /* NEXT ROW */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-LINE = FRAME-DOWN THEN DO:
            RUN local-find-this(FALSE).
@@ -303,7 +302,7 @@ BROWSE:
       END. /* NEXT ROW */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         Memory = rtab[1].
         FIND MNPProcess WHERE recid(MNPProcess) = Memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -327,7 +326,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* PUT Cursor on downmost ROW */
        IF rtab[FRAME-DOWN] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -342,9 +341,9 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search BY column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME f1.
        SET lcFormRequest WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
@@ -372,10 +371,10 @@ BROWSE:
      END. /* Search-1 */
 
      /* Search BY col 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 THEN DO ON ENDKEY UNDO, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
        CLEAR FRAME F2.
        SET lcPortRequest WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
@@ -404,7 +403,7 @@ BROWSE:
        END.
      END. /* Search-2 */
 
-     ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 AND Syst.Var:ufk[3] > 0 THEN DO:
 
        RUN local-find-this (FALSE).
 
@@ -414,7 +413,7 @@ BROWSE:
 
      END.
 
-     else if lookup(nap,"7,f7") > 0 then do:
+     else if lookup(Syst.Var:nap,"7,f7") > 0 then do:
 
        run local-find-this (false).
        memory = recid(mnpprocess).
@@ -427,7 +426,7 @@ BROWSE:
      
      end. 
      
-     ELSE IF LOOKUP(nap,"6,f6") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 THEN DO:
        RUN local-find-this (FALSE).
 
        memory = recid(mnpprocess).
@@ -442,14 +441,14 @@ BROWSE:
      
      END.
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
        RUN local-find-this(false).
 
-       ASSIGN ac-hdr = " MNP Process " ufkey = TRUE ehto = 5. RUN Syst/ufkey.p.
-       cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+       ASSIGN ac-hdr = " MNP Process " ufkey = TRUE Syst.Var:ehto = 5. RUN Syst/ufkey.p.
+       Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
        DISPLAY MNPProcess.FormRequest.
 
        RUN local-UPDATE-record.                                  
@@ -464,25 +463,25 @@ BROWSE:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN Memory = recid(MNPProcess) must-print = TRUE.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN Memory = recid(MNPProcess) must-print = TRUE.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 fCleanEventObjects().
 
 PROCEDURE local-find-this:
@@ -509,19 +508,19 @@ PROCEDURE local-find-FIRST:
    ELSE DO:
       IF order = 1 THEN 
          FIND FIRST MNPProcess USE-INDEX MNPType WHERE
-                   MNPProcess.Brand = gcBrand AND
+                   MNPProcess.Brand = Syst.Var:gcBrand AND
                    MNPProcess.MNPType = piMNPType AND 
                     MNPProcess.StatusCode = piStatus 
          NO-LOCK NO-ERROR.
       ELSE IF order = 2 THEN 
          FIND FIRST MNPProcess USE-INDEX PortRequest WHERE
-                   MNPProcess.Brand = gcBrand AND
+                   MNPProcess.Brand = Syst.Var:gcBrand AND
                    MNPProcess.MNPType = piMNPType AND 
                     MNPProcess.StatusCode = piStatus 
          NO-LOCK NO-ERROR.
       ELSE IF order = 3 THEN 
          FIND FIRST MNPProcess USE-INDEX StatusCode WHERE 
-                   MNPProcess.Brand = gcBrand AND
+                   MNPProcess.Brand = Syst.Var:gcBrand AND
                    MNPProcess.MNPType = piMNPType AND 
                     MNPProcess.StatusCode = piStatus 
          NO-LOCK NO-ERROR.
@@ -539,19 +538,19 @@ PROCEDURE local-find-LAST:
    ELSE DO:
       IF order = 1 THEN 
          FIND LAST MNPProcess USE-INDEX MNPType WHERE 
-                   MNPProcess.Brand = gcBrand AND
+                   MNPProcess.Brand = Syst.Var:gcBrand AND
                    MNPProcess.MNPType = piMNPType AND 
                    MNPProcess.StatusCode = piStatus 
          NO-LOCK NO-ERROR.
       ELSE IF order = 2 THEN 
          FIND LAST MNPProcess USE-INDEX PortRequest WHERE 
-                   MNPProcess.Brand = gcBrand AND
+                   MNPProcess.Brand = Syst.Var:gcBrand AND
                    MNPProcess.MNPType = piMNPType AND 
                    MNPProcess.StatusCode = piStatus 
          NO-LOCK NO-ERROR.
       ELSE IF order = 3 THEN 
          FIND LAST MNPProcess USE-INDEX StatusCode WHERE 
-                   MNPProcess.Brand = gcBrand AND
+                   MNPProcess.Brand = Syst.Var:gcBrand AND
                    MNPProcess.MNPType = piMNPType AND 
                    MNPProcess.StatusCode = piStatus 
          NO-LOCK NO-ERROR.
@@ -568,19 +567,19 @@ PROCEDURE local-find-NEXT:
    ELSE DO:
       IF order = 1 THEN 
          FIND NEXT MNPProcess USE-INDEX MNPType WHERE 
-                   MNPProcess.Brand = gcBrand AND
+                   MNPProcess.Brand = Syst.Var:gcBrand AND
                    MNPProcess.MNPType = piMNPType AND 
                    MNPProcess.StatusCode = piStatus 
          NO-LOCK NO-ERROR.
       ELSE IF order = 2 THEN 
          FIND NEXT MNPProcess USE-INDEX PortRequest WHERE 
-                   MNPProcess.Brand = gcBrand AND
+                   MNPProcess.Brand = Syst.Var:gcBrand AND
                    MNPProcess.MNPType = piMNPType AND 
                    MNPProcess.StatusCode = piStatus 
          NO-LOCK NO-ERROR.
       ELSE IF order = 3 THEN 
          FIND NEXT MNPProcess USE-INDEX StatusCode WHERE 
-                   MNPProcess.Brand = gcBrand AND
+                   MNPProcess.Brand = Syst.Var:gcBrand AND
                    MNPProcess.MNPType = piMNPType AND 
                    MNPProcess.StatusCode = piStatus 
          NO-LOCK NO-ERROR.
@@ -597,19 +596,19 @@ PROCEDURE local-find-PREV:
    ELSE DO:
       IF order = 1 THEN FIND 
          PREV MNPProcess USE-INDEX MNPType WHERE 
-              MNPProcess.Brand = gcBrand AND
+              MNPProcess.Brand = Syst.Var:gcBrand AND
               MNPProcess.MNPType = piMNPType AND 
               MNPProcess.StatusCode = piStatus 
          NO-LOCK NO-ERROR.
       ELSE IF order = 2 THEN 
          FIND PREV MNPProcess USE-INDEX PortRequest WHERE 
-                   MNPProcess.Brand = gcBrand AND
+                   MNPProcess.Brand = Syst.Var:gcBrand AND
                    MNPProcess.MNPType = piMNPType AND 
                    MNPProcess.StatusCode = piStatus 
          NO-LOCK NO-ERROR.
       ELSE IF order = 3 THEN 
          FIND PREV MNPProcess USE-INDEX StatusCode WHERE 
-                   MNPProcess.Brand = gcBrand AND
+                   MNPProcess.Brand = Syst.Var:gcBrand AND
                    MNPProcess.MNPType = piMNPType AND 
                    MNPProcess.StatusCode = piStatus 
          NO-LOCK NO-ERROR.
@@ -657,8 +656,7 @@ PROCEDURE local-find-others.
       IF AVAIL TMSCodes THEN lcState = TMSCodes.CodeName.
    END.
    
-   lcMNPType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                               "MNPProcess",
+   lcMNPType = Func.Common:mTMSCodeName("MNPProcess",
                                "MNPType",
                              STRING(MNPProcess.MNPType)).
 
@@ -698,8 +696,8 @@ PROCEDURE local-UPDATE-record:
       MNPProcess.FormRequest
       MNPProcess.PortRequest
       MNPProcess.StatusCode
-      fTS2HMS(MNPProcess.CreatedTS) FORMAT "x(20)" @ MNPProcess.CreatedTS
-      fTS2HMS(MNPProcess.UpdateTS) FORMAT "x(20)" @ MNPProcess.UpdateTS
+      Func.Common:mTS2HMS(MNPProcess.CreatedTS) FORMAT "x(20)" @ MNPProcess.CreatedTS
+      Func.Common:mTS2HMS(MNPProcess.UpdateTS) FORMAT "x(20)" @ MNPProcess.UpdateTS
       MNPProcess.MNPSeq
       MNPProcess.MNPType lcMNPType
       lcStatus
@@ -708,7 +706,7 @@ PROCEDURE local-UPDATE-record:
    WITH FRAME lis.
    
    FIND FIRST Order where 
-      Order.Brand = gcBrand and
+      Order.Brand = Syst.Var:gcBrand and
       Order.orderid = mnpprocess.orderid NO-LOCK NO-ERROR. 
 
    IF AVAIL Order AND MNPProcess.StatusCode = 4 AND Order.StatusCode NE "73" THEN DO:
@@ -733,9 +731,9 @@ PROCEDURE local-UPDATE-record:
       DO WHILE TRUE:
 
          ASSIGN
-            ufk    = 0
-            ufk[8] = 8
-            ehto   = 3.
+            Syst.Var:ufk    = 0
+            Syst.Var:ufk[8] = 8
+            Syst.Var:ehto   = 3.
       
          RUN Syst/ufkey.p. 
          
@@ -758,7 +756,7 @@ PROCEDURE local-UPDATE-record:
             WHEN 1 THEN DO:
             
                FIND FIRST Order WHERE
-                          Order.Brand   = gcBrand AND
+                          Order.Brand   = Syst.Var:gcBrand AND
                           Order.OrderId = MNPProcess.OrderId
                NO-LOCK NO-ERROR.
                FIND FIRST OrderCustomer WHERE
@@ -777,7 +775,7 @@ PROCEDURE local-UPDATE-record:
                   lcOldICC     = Order.OldICC
                   lcOpCode     = Order.CurrOper. 
                
-               ehto = 9. RUN Syst/ufkey.p.
+               Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
                MNPDATA:
                REPEAT ON ENDKEY UNDO,LEAVE:
@@ -794,15 +792,15 @@ PROCEDURE local-UPDATE-record:
                   WITH FRAME fUpdMNPData EDITING:
 
                      READKEY.
-                     nap = KEYLABEL(LASTKEY).
+                     Syst.Var:nap = KEYLABEL(LASTKEY).
 
                      
-                     IF nap = "F4" THEN DO:
+                     IF Syst.Var:nap = "F4" THEN DO:
                         HIDE FRAME fUpdMNPData.
                         UNDO MNPDATA, LEAVE MNPDATA.
                      END.
                      
-                     IF nap = "F9" THEN DO:
+                     IF Syst.Var:nap = "F9" THEN DO:
 
                         CASE FRAME-FIELD:
 
@@ -818,7 +816,7 @@ PROCEDURE local-UPDATE-record:
                               IF lcReturn NE "" THEN lcCustIdType = lcReturn.
 
                               DISP lcCustIdType WITH FRAME fUpdMNPData.
-                              ehto = 9. RUN Syst/ufkey.p.
+                              Syst.Var:ehto = 9. RUN Syst/ufkey.p.
                               NEXT.
 
                            END.
@@ -832,7 +830,7 @@ PROCEDURE local-UPDATE-record:
                               END.
 
                               DISP lcOpCode WITH FRAME fUpdMNPData.
-                              ehto = 9. RUN Syst/ufkey.p.
+                              Syst.Var:ehto = 9. RUN Syst/ufkey.p.
                               NEXT.
 
                            END.
@@ -841,7 +839,7 @@ PROCEDURE local-UPDATE-record:
 
                      END.
 
-                     IF LOOKUP(nap,poisnap) > 0 THEN DO:
+                     IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
 
                         IF FRAME-FIELD = "lcCustIdType" THEN DO:
 
@@ -885,7 +883,7 @@ PROCEDURE local-UPDATE-record:
                            ASSIGN lcOpCode.
 
                            FIND FIRST MNPOperator WHERE
-                                      MNPOperator.Brand = gcBrand AND
+                                      MNPOperator.Brand = Syst.Var:gcBrand AND
                                       MNPOperator.OperName = lcOpCode AND
                                       MNPOperator.Active EQ True
                            NO-LOCK NO-ERROR.
@@ -905,7 +903,7 @@ PROCEDURE local-UPDATE-record:
 
                      END.
                      
-                     IF nap = "F1" THEN DO:
+                     IF Syst.Var:nap = "F1" THEN DO:
                         HIDE FRAME fUpdMNPData.
                         LEAVE MNPDATA.         
                      END. 

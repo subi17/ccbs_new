@@ -9,7 +9,6 @@
 {Syst/commali.i}
 {Func/cparam2.i}
 {Syst/dumpfile_run.i}
-{Func/date.i}
 {Syst/tmsconst.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
@@ -36,7 +35,7 @@ DEF VAR liNormalSC            AS INT NO-UNDO.
 
 DEF STREAM sout.
 
-ASSIGN ldaLastDay   = fLastdayofMonth(today)
+ASSIGN ldaLastDay   = Func.Common:mLastDayOfMonth(today)
        lcGroupCodes = "TARJ7,TARJ9,TARJ10,TARJ11,TARJ12".
 
 OUTPUT STREAM sout TO VALUE(icFile) APPEND.
@@ -52,7 +51,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcGroupCodes):
              MServiceLimit.DialType = ServiceLimit.DialType AND
              MServiceLimit.EndTS    = 99999999.99999:
 
-      fSplitTS(MServiceLimit.FromTS,OUTPUT ldaFromdate,OUTPUT liTime).
+      Func.Common:mSplitTS(MServiceLimit.FromTS,OUTPUT ldaFromdate,OUTPUT liTime).
 
       IF ldaFromdate >= TODAY THEN NEXT.
 

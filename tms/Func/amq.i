@@ -10,7 +10,6 @@
   Version ......: Yoigo
 ---------------------------------------------------------------------- */
 {Syst/commali.i}
-{Func/date.i}
 {Func/log.i}
 {Func/ftransdir.i}
 {Syst/tmsconst.i}
@@ -120,7 +119,7 @@ FUNCTION fCreateInitMsg RETURNS CHAR
 
 CREATE AMQMsg.
    ASSIGN AMQMsg.ConfFile = icConfig
-          AMQMsg.InsertTS = fMakeTS()
+          AMQMsg.InsertTS = Func.Common:mMakeTS()
           AMQMsg.MQName = icMQ
           AMQMsg.MsgContent = icMsg
           AMQMsg.StatusCode = icStatus

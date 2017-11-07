@@ -7,7 +7,6 @@ DEFINE VARIABLE liSTCDay AS INTEGER NO-UNDO.
 
 DEFINE VARIABLE ldaDate AS DATE NO-UNDO. 
 DEFINE VARIABLE liTime AS INTEGER NO-UNDO. 
-{Func/date.i}
 
 liSTCDay = YEAR(TODAY) * 10000 + MONTH(TODAY) * 100 + 1.
 /* liSTCDay = 20130901. */
@@ -39,7 +38,7 @@ FOR EACH msrequest NO-LOCK where
 
       j = j + 1.
 
-      fsplitts(msrequest.donestamp, output ldaDate, output liTime).
+      Func.Common:mSplitTS(msrequest.donestamp, output ldaDate, output liTime).
 
       FIND FIRST mobcdr NO-LOCK where
                  mobcdr.cli = msrequest.cli and
@@ -49,7 +48,7 @@ FOR EACH msrequest NO-LOCK where
                  
       disp 
          msrequest.cli
-         fts2hms(msrequest.donestamp) format "x(25)" label "STC done stamp"
+         Func.Common:mTS2HMS(msrequest.donestamp) format "x(25)" label "STC done stamp"
          msrequest.reqcparam1 format "x(10)"
          msrequest.reqcparam2 format "x(10)"
          avail(mobcdr) label "GPRS found"

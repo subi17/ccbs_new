@@ -1,6 +1,5 @@
 /* common functions to counters */
 
-{Func/timestamp.i}
 /* update/create the counter */
 FUNCTION fUpdateCounter RETURN LOGICAL 
          ( INPUT pcHostTable   AS CHAR,
@@ -12,7 +11,7 @@ FUNCTION fUpdateCounter RETURN LOGICAL
 
  DEFINE VARIABLE ldTS AS DEC NO-UNDO.
  FIND FIRST Counter NO-LOCK WHERE 
-            Counter.Brand = gcBrand AND 
+            Counter.Brand = Syst.Var:gcBrand AND 
             Counter.HostTable = pcHostTable AND
             Counter.KeyValue = pcKeyValue AND
             Counter.CounterType = piCounterType AND
@@ -21,10 +20,10 @@ FUNCTION fUpdateCounter RETURN LOGICAL
  IF AVAIL Counter THEN 
     FIND CURRENT Counter EXCLUSIVE-LOCK .
  ELSE DO:
-    ldTS = fMakeTS().
+    ldTS = Func.Common:mMakeTS().
     CREATE Counter. 
     ASSIGN Counter.CounterSeq = NEXT-VALUE(CounterSeq)
-           Counter.Brand = gcBrand
+           Counter.Brand = Syst.Var:gcBrand
            Counter.HostTable = pcHostTable
            Counter.KeyValue = pcKeyValue 
            Counter.CounterType = piCounterType
@@ -46,7 +45,7 @@ FUNCTION fGetCounterAmt RETURN DECIMAL
 
     DEFINE VARIABLE ldAmt AS DECIMAL NO-UNDO INITIAL 0. 
     FOR EACH Counter NO-LOCK WHERE 
-             Counter.Brand = gcBrand AND
+             Counter.Brand = Syst.Var:gcBrand AND
              Counter.HostTable = pcHostTable AND
              Counter.KeyValue = pcKeyValue AND
              Counter.CounterType = piCounterType  AND

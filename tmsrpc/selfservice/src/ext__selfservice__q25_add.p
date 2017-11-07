@@ -10,8 +10,7 @@ external_selfservice__q25_add.p
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-gcBrand = "1".
-{Func/timestamp.i}
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Func/fsendsms.i}
@@ -53,7 +52,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 ASSIGN lcApplicationId = SUBSTRING(pcTransId,1,3)
        lcAppEndUserId  = ghAuthLog::EndUserId.
 
-katun = lcApplicationId + "_" + ghAuthLog::EndUserId.  /* YTS-8221 fixed back */
+Syst.Var:katun = lcApplicationId + "_" + ghAuthLog::EndUserId.  /* YTS-8221 fixed back */
 
 FIND FIRST Customer NO-LOCK WHERE
            Customer.Custnum = MobSub.Custnum NO-ERROR.
@@ -65,11 +64,11 @@ ASSIGN
       month and last day of current month + 2 */
    ldaQ25PeriodStartDate    = DATE(MONTH(TODAY),1, YEAR(TODAY)) - 1
    ldaQ25PeriodEndDate    = ADD-INTERVAL(TODAY, 2, 'months':U)
-   ldaQ25PeriodEndDate    = fLastDayOfMonth(ldaQ25PeriodEndDate).
+   ldaQ25PeriodEndDate    = Func.Common:mLastDayOfMonth(ldaQ25PeriodEndDate).
 
 /* Find original installment contract */   
 FIND DCCLI NO-LOCK WHERE
-     DCCLI.Brand   = gcBrand AND
+     DCCLI.Brand   = Syst.Var:gcBrand AND
      DCCLI.DCEvent BEGINS "PAYTERM" AND
      DCCLI.MsSeq   = MobSub.MsSeq AND 
      DCCLI.ValidTo >= ldaQ25PeriodStartDate AND
@@ -82,7 +81,7 @@ IF DCCLI.TermDate NE ? THEN
    RETURN appl_err("Installment contract terminated").
    
 FIND SingleFee USE-INDEX Custnum WHERE
-     SingleFee.Brand       = gcBrand AND
+     SingleFee.Brand       = Syst.Var:gcBrand AND
      SingleFee.Custnum     = MobSub.CustNum AND
      SingleFee.HostTable   = "Mobsub" AND
      SingleFee.KeyValue    = STRING(Mobsub.MsSeq) AND
@@ -116,13 +115,13 @@ IF TODAY < ldaMonth22Date THEN
 ELSE IF TODAY >= ldaMonth22Date AND
    TODAY < ldaMonth24Date THEN
    /* handle it on 21st day of month 24 at 00:00 */
-   ldContractActivTS = fMake2Dt(ldaMonth24Date,0).
+   ldContractActivTS = Func.Common:mMake2DT(ldaMonth24Date,0).
 ELSE ASSIGN
    ldaMonth24Date = TODAY
-   ldContractActivTS = fSecOffSet(fMakeTS(),5). /* Handle it immediately */
+   ldContractActivTS = Func.Common:mSecOffSet(Func.Common:mMakeTS(),5). /* Handle it immediately */
 
 IF CAN-FIND(FIRST DCCLI NO-LOCK WHERE
-                  DCCLI.Brand   EQ gcBrand AND
+                  DCCLI.Brand   EQ Syst.Var:gcBrand AND
                   DCCLI.DCEvent EQ "RVTERM12" AND
                   DCCLI.MsSeq   EQ MobSub.MsSeq AND
                   DCCLI.ValidTo >= TODAY) THEN
@@ -197,7 +196,7 @@ IF lcSMSTxt > "" THEN DO:
    ldeFeeAmount = SingleFee.Amt.
    
    FOR EACH DiscountPlan NO-LOCK WHERE
-            DiscountPlan.Brand = gcBrand AND
+            DiscountPlan.Brand = Syst.Var:gcBrand AND
            (DiscountPlan.DPRuleID = "RVTERMDT1DISC" OR
             DiscountPlan.DPRuleID = "RVTERMDT4DISC"),
        EACH DPMember NO-LOCK WHERE
@@ -236,5 +235,4 @@ add_boolean(top_struct, "result", True).
 
 FINALLY:
    ghAuthLog::TransactionId = pcTransId.
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.
