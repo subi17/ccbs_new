@@ -8,7 +8,6 @@
   VERSION ......: TF
   ---------------------------------------------------------------------- */
 {Syst/commali.i} 
-{Func/func.p}
 {Func/fgettxt.i}
 
 DEF INPUT  PARAMETER   msseq  AS INT . 
@@ -73,8 +72,7 @@ END.
 
 FIND Customer OF MobSub NO-LOCK NO-ERROR.
 
-lcname = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                        BUFFER Customer).
+lcname = Func.Common:mDispCustName(BUFFER Customer).
 
 FORM
 SKIP(2)
@@ -88,7 +86,7 @@ SKIP(2)
 "  Time ....:" MSISDN.PortingTime            SKIP(1)
 
 WITH
-   CENTERED WIDTH 60 OVERLAY COLOR VALUE(cfc) TITLE COLOR VALUE(ctc)
+   CENTERED WIDTH 60 OVERLAY COLOR VALUE(Syst.Var:cfc) TITLE COLOR VALUE(Syst.Var:ctc)
    " Activate subscription  " + mobsub.cli + " "
    NO-LABELS FRAME lis.
 DEF VAR s AS INT NO-UNDO.
@@ -109,13 +107,13 @@ REPEAT WITH FRAME lis:
    
    action:
    REPEAT WITH FRAME lis:
-      ASSIGN ufk = 0 ufk[1] = 0 ufk[8] = 8 ufk[5] = 1967  ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 0 Syst.Var:ufk[8] = 8 Syst.Var:ufk[5] = 1967  Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN LEAVE action.
-      IF toimi = 8 THEN DO:
+      IF Syst.Var:toimi = 1 THEN LEAVE action.
+      IF Syst.Var:toimi = 8 THEN DO:
          LEAVE loop.
       END.
-      ELSE IF toimi = 5 THEN DO :
+      ELSE IF Syst.Var:toimi = 5 THEN DO :
          
          FIND Mobsub   WHERE
               Mobsub.msseq = msseq NO-ERROR.
@@ -164,7 +162,7 @@ REPEAT WITH FRAME lis:
                MobSub.ActivationDate = msisdn.PortingDate.
             ELSE          
             ASSIGN
-               MobSub.activationts   = fmakets()  
+               MobSub.activationts   = Func.Common:mMakeTS()  
                MobSub.ActivationDate = TODAY. 
 
          END.
@@ -177,7 +175,7 @@ REPEAT WITH FRAME lis:
          WITH FRAME lis EDITING:
             READKEY.
             
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                PAUSE 0.
                IF FRAME-FIELD = "icc" THEN DO:
                   IF INPUT FRAME LIS MobSub.ICC = "" THEN DO:
@@ -308,7 +306,7 @@ REPEAT WITH FRAME lis:
    IF MobSub.ActivationTS NE 0 THEN DO:
 
       PAUSE 0.  MESSAGE "Synchronising System Clocks, wait ...".
-      sogtime = fmakets().
+      sogtime = Func.Common:mMakeTS().
       PAUSE 0.
             
    END.
@@ -328,7 +326,7 @@ REPEAT WITH FRAME lis:
    EXCLUSIVE-LOCK NO-ERROR.
 
    /* Set CURRENT time stamp (usage starts immediately) */
-   ASSIGN MSOwner.TsBegin = fMakeTS()
+   ASSIGN MSOwner.TsBegin = Func.Common:mMakeTS()
           MSOwner.IMSI    = MobSub.IMSI.
 
    /* RUN PROCEDURE which connects sim TO MobSub AND 

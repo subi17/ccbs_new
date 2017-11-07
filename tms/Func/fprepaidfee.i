@@ -13,10 +13,10 @@ FUNCTION fgetPrepaidFeeAmount RETURNS DECIMAL
    DEF BUFFER FMItem FOR FMItem.
 
    FOR FIRST DayCampaign NO-LOCK WHERE
-            DayCampaign.Brand = gcBrand AND
+            DayCampaign.Brand = Syst.Var:gcBrand AND
             DayCampaign.DCEvent = icDCEvent,
       FIRST FMItem NO-LOCK WHERE
-            FMItem.Brand     = gcBrand AND
+            FMItem.Brand     = Syst.Var:gcBrand AND
             FMItem.FeeModel  = DayCampaign.FeeModel  AND
             FMItem.ToDate   >= idDate AND
             FMItem.FromDate <= idDate:

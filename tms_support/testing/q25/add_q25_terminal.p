@@ -2,7 +2,7 @@
 {Syst/commpaa.i}
 {Syst/tmsconst.i}
 {Func/fsubsterminal.i}
-gcbrand = "1".
+Syst.Var:gcBrand = "1".
 
 DEF VAR lcOrders AS CHAR NO-UNDO.
 DEF VAR liLoop AS INT NO-UNDO.

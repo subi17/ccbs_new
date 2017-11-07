@@ -332,7 +332,7 @@ FUNCTION fCoverSheet RETURNS LOGIC
    /* no need to save this into e.g. a temp-table, because cover sheet
       is used only for single printouts (i.e. for one customer at a time) */
    FOR FIRST InvText NO-LOCK WHERE
-             InvText.Brand     = gcBrand     AND
+             InvText.Brand     = Syst.Var:gcBrand     AND
              InvText.Target    = "General"   AND
              InvText.KeyValue  = icCoverType AND
              InvText.FromDate <= TODAY       AND

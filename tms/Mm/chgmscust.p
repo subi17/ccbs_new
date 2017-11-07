@@ -13,7 +13,6 @@
 {Syst/commali.i}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'MobSub'}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fcustchangereq.i}
 {Func/fcustdata.i}
@@ -211,7 +210,7 @@ FORM
       SKIP
          
 WITH ROW 1 OVERLAY SIDE-LABELS CENTERED 
-     TITLE " " + lcMainHeader + " " + STRING(pvm,"99-99-99") + " "
+     TITLE " " + lcMainHeader + " " + STRING(TODAY,"99-99-99") + " "
      FRAME fCriter.
 
 
@@ -245,8 +244,7 @@ FUNCTION fNewCustName2 RETURNS LOGIC:
       FIND bCustName WHERE bCustName.CustNum = liNewCust2 
          NO-LOCK NO-ERROR.
       IF AVAILABLE bCustName THEN 
-         lcNewCustName2 = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,  
-                                           BUFFER bCustName).
+         lcNewCustName2 = Func.Common:mDispCustName(BUFFER bCustName).
    END.
    ELSE lcNewCustName2 = lcNewLast + " " + lcNewFirst.
 
@@ -320,8 +318,7 @@ END.
 FIND bCustName WHERE bCustName.CustNum = Customer.AgrCust 
    NO-LOCK NO-ERROR.
 IF AVAILABLE bCustName THEN 
-   lcAgrCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,  
-                                    BUFFER bCustName).
+   lcAgrCustName = Func.Common:mDispCustName(BUFFER bCustName).
 
 liPrev = -1.                  
 
@@ -386,7 +383,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
     
    IF lcNewCategory > "" THEN DO:
       FIND CustCat WHERE 
-           CustCat.Brand    = gcBrand AND
+           CustCat.Brand    = Syst.Var:gcBrand AND
            CustCat.Category = lcNewCategory NO-LOCK NO-ERROR.
       IF AVAILABLE CustCat THEN lcNewCatName = CustCat.CatName.
    END. 
@@ -398,8 +395,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
    FIND bCustName WHERE bCustName.CustNum = liCustNum2 
       NO-LOCK NO-ERROR.
    IF AVAILABLE bCustName THEN 
-      lcCustName2 = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,  
-                                     BUFFER bCustName).
+      lcCustName2 = Func.Common:mDispCustName(BUFFER bCustName).
 
    fNewCustName2().
   
@@ -453,21 +449,21 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
 
    IF ufkey THEN DO:
       ASSIGN
-         ufk[1]= 7    ufk[2]= 0 ufk[3]= 0 ufk[4]= 0
-         ufk[5]= 1027 ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
-         ufk[9]= 1
-         ehto = 0.
+         Syst.Var:ufk[1]= 7    Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0
+         Syst.Var:ufk[5]= 1027 Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 
+         Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
    END.
 
-   ELSE ASSIGN toimi = 1  
+   ELSE ASSIGN Syst.Var:toimi = 1  
                ufkey = TRUE.
 
-   IF toimi = 1 THEN DO:
+   IF Syst.Var:toimi = 1 THEN DO:
 
       REPEAT WITH FRAME fCriter ON ENDKEY UNDO, LEAVE:
          
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          
          UPDATE ldtChgDate 
                 ldChgTime
@@ -493,12 +489,12 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
                    
                END. 
 
-               ehto = 9.
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT.
             END. 
  
-            IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+            IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
             
                IF FRAME-FIELD = "ldChgTime" THEN DO:
                
@@ -640,16 +636,16 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
                       END.
                    END. 
     
-                   ehto = 9.
+                   Syst.Var:ehto = 9.
                    RUN Syst/ufkey.p.
                    NEXT.
                 END. 
                 
-                IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO:
+                IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
                   
                   IF FRAME-FIELD = "lcNewCategory" THEN DO:
                      FIND CustCat WHERE 
-                          CustCat.Brand    = gcBrand AND
+                          CustCat.Brand    = Syst.Var:gcBrand AND
                           CustCat.Category = INPUT lcNewCategory 
                      NO-LOCK NO-ERROR.
 
@@ -763,7 +759,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
 
    END.
 
-   ELSE IF toimi = 5 THEN DO:
+   ELSE IF Syst.Var:toimi = 5 THEN DO:
 
       IF ldtChgDate = ? OR lcNewLast = "" OR 
          (liNewCust2 = 0 AND liNewCust1 > 0) THEN DO:
@@ -795,7 +791,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
       IF icChgType = "invcust" AND liNewCust2 = MobSub.CustNum THEN DO:
          lcCLIList = "".
          FOR EACH bInvSub NO-LOCK WHERE 
-                  bInvSub.Brand   = gcBrand        AND
+                  bInvSub.Brand   = Syst.Var:gcBrand        AND
                   bInvSub.CustNum = MobSub.CustNum:
             IF bInvSub.CLI NE MobSub.CLI THEN 
                lcCLIList = lcCLIList + (IF lcCLIList > "" THEN ", " ELSE "") +
@@ -877,12 +873,12 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
          IF NOT llOk THEN NEXT.
       END.
       
-      ehto = 5.   
+      Syst.Var:ehto = 5.   
       RUN Syst/ufkey.p.
 
       IF ldtChgDate = ? 
-      THEN ldChgStamp = fMakeTS().
-      ELSE ldChgStamp = fMake2DT(ldtChgDate,
+      THEN ldChgStamp = Func.Common:mMakeTS().
+      ELSE ldChgStamp = Func.Common:mMake2DT(ldtChgDate,
                                  INTEGER(TRUNCATE(ldChgTime,0) * 3600 +
                                          (ldChgTime - TRUNCATE(ldChgTime,0))
                                           * 100 * 60)).
@@ -930,7 +926,7 @@ REPEAT WITH FRAME fCriter ON ENDKEY UNDO ChooseUser, NEXT ChooseUser:
 
    END.
 
-   ELSE IF toimi = 8 THEN DO:
+   ELSE IF Syst.Var:toimi = 8 THEN DO:
       LEAVE ChooseUser.
    END.
 

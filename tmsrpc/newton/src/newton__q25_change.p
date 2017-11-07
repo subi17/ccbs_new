@@ -20,8 +20,7 @@ newton__q25_change.p
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
-{Func/timestamp.i}
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
 {Func/fsendsms.i}
@@ -88,8 +87,8 @@ IF pcmemoStruct > "" THEN DO:
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
 
-katun = "VISTA_" + lcusername.
-IF TRIM(katun) EQ "VISTA_" THEN
+Syst.Var:katun = "VISTA_" + lcusername.
+IF TRIM(Syst.Var:katun) EQ "VISTA_" THEN
    RETURN appl_err("username is empty").
 
 IF pdeQ25NewAmt <= 0 THEN
@@ -98,7 +97,7 @@ IF pdeQ25NewAmt <= 0 THEN
 {newton/src/findtenant.i NO OrderCanal MobSub MsSeq limsseq}
 
 FIND FIRST DayCampaign NO-LOCK WHERE
-           DayCampaign.Brand   = gcBrand AND
+           DayCampaign.Brand   = Syst.Var:gcBrand AND
            DayCampaign.DCEvent = "RVTERM12" AND
            DayCampaign.DCType  = {&DCTYPE_INSTALLMENT} AND
            DayCampaign.ValidFrom <= TODAY AND
@@ -108,7 +107,7 @@ IF NOT AVAIL DayCampaign THEN
 
 /* Find original Q25 contract */   
 FIND FIRST DCCLI NO-LOCK WHERE
-           DCCLI.Brand   EQ gcBrand AND
+           DCCLI.Brand   EQ Syst.Var:gcBrand AND
            DCCLI.DCEvent EQ "RVTERM12" AND
            DCCLI.MsSeq   EQ MobSub.MsSeq AND
            DCCLI.ValidTo GE TODAY AND
@@ -144,11 +143,11 @@ IF lcmemo_title > "" THEN DO:
    CREATE Memo.
    ASSIGN
        Memo.CreStamp  = {&nowTS}
-       Memo.Brand     = gcBrand
+       Memo.Brand     = Syst.Var:gcBrand
        Memo.HostTable = "MobSub"
        Memo.KeyValue  = STRING(MobSub.MsSeq)
        Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-       Memo.CreUser   = katun
+       Memo.CreUser   = Syst.Var:katun
        Memo.MemoTitle = lcmemo_title
        Memo.MemoText  = lcmemo_content
        Memo.CustNum   = MobSub.CustNum.
@@ -157,5 +156,4 @@ END. /* IF lcmemo_title > "" AND lcmemo_content > "" THEN DO: */
 add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

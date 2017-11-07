@@ -1,9 +1,6 @@
-DEF VAR gcBrand AS CHAR NO-UNDO.
-
 DEF BUFFER bTermMsRequest FOR MsRequest.
 
 {Func/matrix.i}
-{Func/timestamp.i}
 
 OUTPUT TO "/store/riftp/pupu_dumps/logs/generate_reac_events.txt".
 
@@ -53,10 +50,10 @@ PROCEDURE pTriggerEvents:
    DEF VAR liCount                    AS INT  NO-UNDO.
    DEF VAR liNumEntries               AS INT  NO-UNDO.
 
-   fSplitTS(ideTermStamp,OUTPUT ldTermDate,OUTPUT liTermTime).
+   Func.Common:mSplitTS(ideTermStamp,OUTPUT ldTermDate,OUTPUT liTermTime).
 
    ASSIGN ldStartDate   = DATE(MONTH(ldTermDate),1,YEAR(ldTermDate))
-          ldeStartStamp = fMake2Dt(ldStartDate,0)
+          ldeStartStamp = Func.Common:mMake2DT(ldStartDate,0)
           ldtTimeStamp  = DATETIME(TODAY,MTIME) + 15000
           lcServList    = "LANG,CALLSPEC,LTE"
           liNumEntries  = NUM-ENTRIES(lcServList)
@@ -78,7 +75,7 @@ PROCEDURE pTriggerEvents:
       FIRST ServiceLimit WHERE
             ServiceLimit.SlSeq = MServiceLimit.SlSeq NO-LOCK:
 
-      IF fMatrixAnalyse(gcBrand,
+      IF fMatrixAnalyse(Syst.Var:gcBrand,
                         "PERCONTR",
                         "PerContract;SubsTypeTo",
                         ServiceLimit.GroupCode + ";" + icCLIType,
@@ -102,7 +99,7 @@ PROCEDURE pTriggerEvents:
       FIRST ServiceLimit WHERE
             ServiceLimit.SlSeq = MServiceLPool.SlSeq NO-LOCK:
 
-      IF fMatrixAnalyse(gcBrand,
+      IF fMatrixAnalyse(Syst.Var:gcBrand,
                         "PERCONTR",
                         "PerContract;SubsTypeTo",
                         ServiceLimit.GroupCode + ";" + icCLIType,

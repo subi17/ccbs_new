@@ -35,12 +35,11 @@ END.
 FIND Customer where 
      Customer.CustNum = lhSub::CustNum no-lock no-error.
 
-IF Avail Customer THEN lcUserName =  DYNAMIC-FUNCTION("fDispCustName" IN
-                                             ghFunc1, BUFFER Customer).
+IF Avail Customer THEN lcUserName = Func.Common:mDispCustName(BUFFER Customer).
 ELSE lcUserName = "".
 
 DO WHILE TRUE:
-   ASSIGN ufk = 0 ufk[8] = 8 ehto = 3. RUN Syst/ufkey.p. 
+   ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 3. RUN Syst/ufkey.p. 
  
  DISPLAY
  "A) Calls Browse                "  @ menuc[1]    SKIP

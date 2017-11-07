@@ -3,7 +3,6 @@
 
 {Syst/commali.i}
 {Func/callquery.i}
-{Func/date.i}
 {Func/istc.i}
 
 DEF INPUT  PARAMETER iiInvSeq  AS INT  NO-UNDO.
@@ -75,8 +74,8 @@ PROCEDURE pCollectCDRs:
 
    /* 
    fMobCDRCollect(INPUT "post",
-                  INPUT gcBrand,
-                  INPUT katun,
+                  INPUT Syst.Var:gcBrand,
+                  INPUT Syst.Var:katun,
                   INPUT InvSeq.FromDate,   
                   INPUT InvSeq.ToDate,
                   INPUT 0,
@@ -117,7 +116,7 @@ PROCEDURE pAccumulateCounters:
       END.
       */
       ASSIGN
-         ldaToDate = fLastDayOfMonth(ttCall.DateSt)
+         ldaToDate = Func.Common:mLastDayOfMonth(ttCall.DateSt)
          ldaFromDate    = DATE(MONTH(ldaToDate),1,
                                YEAR(ldaToDate)).
 

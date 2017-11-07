@@ -1,8 +1,7 @@
 {Syst/commpaa.i}
-katun = "Qvantel".
-gcBrand = "1".
+Syst.Var:katun = "Qvantel".
+Syst.Var:gcBrand = "1".
 
-{Func/timestamp.i}
 {Func/fmakemsreq.i}
 
 DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO. 
@@ -87,14 +86,14 @@ repeat:
                            "SHAPER",
                            1,
                            MobSub.clitype,
-                           fmakets(),
+                           Func.Common:mMakeTS(),
                            "", /* salesman */
                            FALSE,      /* fees */
                            FALSE,      /* sms */
                            "YTS-2472",
                            OUTPUT lcInfo). 
 
-   put stream slog unformatted mobsub.cli "|" mobsub.msseq "|" mobsub.clitype "|" fts2hms(ldeActstamp)  
+   put stream slog unformatted mobsub.cli "|" mobsub.msseq "|" mobsub.clitype "|" Func.Common:mTS2HMS(ldeActstamp)  
      "|FIXED " liReq " : " lcInfo skip.
    end.
 

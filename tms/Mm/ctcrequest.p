@@ -9,7 +9,6 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/msreqfunc.i}
 {Func/fmakemsreq.i}
 {Syst/tmsconst.i}
@@ -77,7 +76,7 @@ IF MsRequest.ReqCParam1 NE MobSub.CLIType THEN DO:
 END. 
 
 FIND FIRST OldCliType WHERE 
-           OldCliType.Brand   = gcBrand AND 
+           OldCliType.Brand   = Syst.Var:gcBrand AND 
            OldCliType.CliType = MSRequest.ReqCParam1 NO-LOCK NO-ERROR.
            
 IF NOT AVAIL OldCliType THEN DO:
@@ -86,7 +85,7 @@ IF NOT AVAIL OldCliType THEN DO:
 END.
 
 FIND FIRST NewCliType WHERE
-           NewCliType.Brand   = gcBrand AND
+           NewCliType.Brand   = Syst.Var:gcBrand AND
            NewCliType.CliType = MSRequest.ReqCParam2 NO-LOCK NO-ERROR.
 
 IF NOT AVAIL NewCliType THEN DO:
@@ -104,7 +103,7 @@ END.
 IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_FUSION_ORDER} AND
    MsRequest.ReqIParam2 > 0 THEN DO:
    FIND OrderFusion NO-LOCK WHERE
-        OrderFusion.Brand = gcBrand AND
+        OrderFusion.Brand = Syst.Var:gcBrand AND
         OrderFusion.OrderId = MsRequest.ReqIParam2 NO-ERROR.
 
    IF NOT AVAIL OrderFusion THEN DO:
@@ -128,7 +127,7 @@ IF lcBankNumber ne "" AND
    OldCliType.PayType = 2 AND
    NewCliType.PayType = 1 AND
    NOT CAN-FIND(FIRST bMobSubCust WHERE
-                      bMobSubCust.Brand     = gcBrand AND
+                      bMobSubCust.Brand     = Syst.Var:gcBrand AND
                       bMobSubCust.MsSeq    <> MobSub.MsSeq AND
                       bMobSubCust.CustNum   = Customer.CustNum AND
                       bMobSubCust.PayType   = FALSE) THEN DO:
@@ -140,7 +139,7 @@ IF lcBankNumber ne "" AND
                    FALSE,               /* Fees */
                    FALSE,               /* SendSMS */ 
                    MSRequest.UserCode,
-                   fMakeTS(),                    
+                   Func.Common:mMakeTS(),                    
                    "BANKNUMBER",
                    lcBankNumber,
                    24,
@@ -150,8 +149,7 @@ IF lcBankNumber ne "" AND
 
    IF liReq EQ 0 THEN
       /* write possible error to an order memo */
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-        "MobSub",
+      Func.Common:mWriteMemo("MobSub",
         STRING(MobSub.MsSeq),
         MobSub.Custnum,
         "BANK ACCOUNT CHANGE REQUEST FAILED",
@@ -173,7 +171,7 @@ IF liCreditCheck EQ 1 AND
            FALSE,               /* Fees */
            FALSE,               /* SendSMS */
            MSRequest.UserCode,
-           fMakeTS(),
+           Func.Common:mMakeTS(),
            "CREDITCHECK",
            "",
            33,
@@ -183,8 +181,7 @@ IF liCreditCheck EQ 1 AND
    
    IF liReq EQ 0 THEN
       /* write possible error to an order memo */
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-        "MobSub",
+      Func.Common:mWriteMemo("MobSub",
         STRING(MobSub.MsSeq),
         MobSub.custnum,
         "CREDIT CHECK REQUEST FAILED",
@@ -193,7 +190,7 @@ END.
 
 FIND MsRequest WHERE
      MsRequest.MsRequest = iiReqId  AND
-     MsRequest.Brand     = gcBrand NO-LOCK NO-ERROR.
+     MsRequest.Brand     = Syst.Var:gcBrand NO-LOCK NO-ERROR.
 
 /* Mark request as handled */
 IF NOT fReqStatus(7,"") THEN DO:
@@ -223,7 +220,7 @@ lcContract = fGetActiveSpecificBundle(MsRequest.MsSeq,ldeActStamp,"BONO").
 IF lcContract > "" THEN DO:
 
    IF LOOKUP(lcContract, fCParamC("ALLOWED_BONO_STC_CONTRACTS")) = 0 OR
-      (fMatrixAnalyse(gcBrand,
+      (fMatrixAnalyse(Syst.Var:gcBrand,
                      "PERCONTR",
                      "PerContract;SubsTypeTo",
                      lcContract + ";" + MsRequest.ReqCparam2,
@@ -302,7 +299,7 @@ END. /* IF llBBActive THEN DO: */
 IF MobSub.MultiSimID > 0 AND
    MobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} THEN DO:
    FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-              lbMobSub.Brand  = gcBrand AND
+              lbMobSub.Brand  = Syst.Var:gcBrand AND
               lbMobSub.MultiSimID = MobSub.MultiSimID AND
               lbMobSub.MultiSimType NE MobSub.MultiSimType AND
               lbMobSub.Custnum = MobSub.Custnum NO-ERROR.
@@ -326,7 +323,7 @@ END.
 
 FIND MsRequest WHERE
      MsRequest.MsRequest = iiReqId  AND
-     MsRequest.Brand     = gcBrand EXCLUSIVE-LOCK NO-ERROR.
+     MsRequest.Brand     = Syst.Var:gcBrand EXCLUSIVE-LOCK NO-ERROR.
 
 /* Set new activation ts for clitype change */     
 IF MSREquest.ReqDParam1 > MSRequest.ActStamp OR 

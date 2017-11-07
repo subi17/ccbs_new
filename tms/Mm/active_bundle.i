@@ -48,7 +48,7 @@ FUNCTION fGetCurrentSpecificBundle RETURNS CHAR
     icContractType AS CHAR):
 
    RETURN fGetActiveSpecificBundle(iiMsSeq,
-                                   fMakeTS(),
+                                   Func.Common:mMakeTS(),
                                    icContractType).
 END FUNCTION.
 

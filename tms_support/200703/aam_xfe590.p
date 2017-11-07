@@ -1,5 +1,5 @@
 {Syst/testpaa.i}
-katun = "snet".
+Syst.Var:katun = "snet".
 
 def var llfound as log no-undo.
 def var lireq   as int no-undo.

@@ -9,7 +9,6 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Func/files.i}
 {Syst/funcrunprocess_update.i}
 {Syst/funcrun_replica.i}
@@ -199,9 +198,9 @@ PROCEDURE pInitialize:
 
    ASSIGN
       liInvCnt   = 0 
-      ldThisRun  = fMakeTS()
-      lcStarted  = fTS2HMS(ldThisRun)
-      ldCheckRun = fOffSet(ldThisRun,-72).
+      ldThisRun  = Func.Common:mMakeTS()
+      lcStarted  = Func.Common:mTS2HMS(ldThisRun)
+      ldCheckRun = Func.Common:mOffSet(ldThisRun,-72).
       
    RETURN "".    
 
@@ -214,7 +213,7 @@ PROCEDURE pGetPrintHouses:
    
    /* selection criteria */
    FOR EACH PrintHouseConf NO-LOCK WHERE
-            PrintHouseConf.Brand     = gcBrand     AND
+            PrintHouseConf.Brand     = Syst.Var:gcBrand     AND
             PrintHouseConf.Report    = "Invoice"   AND
             PrintHouseConf.ToDate   >= TODAY      AND
             PrintHouseConf.FromDate <= TODAY:
@@ -291,7 +290,7 @@ PROCEDURE pMarkStarted:
    IF ilDBWrite THEN DO: 
 
       IF CAN-FIND(FIRST ActionLog USE-INDEX ActionID WHERE
-                        ActionLog.Brand        = gcBrand     AND    
+                        ActionLog.Brand        = Syst.Var:gcBrand     AND    
                         ActionLog.ActionID     = lcActionID  AND
                         ActionLog.ActionTS    >= ldCheckRun  AND
                         ActionLog.ActionStatus = 0           AND
@@ -309,10 +308,10 @@ PROCEDURE pMarkStarted:
    
          ASSIGN
             ActionLog.ActionTS     = ldThisRun
-            ActionLog.Brand        = gcBrand
+            ActionLog.Brand        = Syst.Var:gcBrand
             ActionLog.TableName    = "Invoice"
             ActionLog.KeyValue     = icFileType
-            ActionLog.UserCode     = katun
+            ActionLog.UserCode     = Syst.Var:katun
             ActionLog.ActionID     = lcActionID
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + 
                                      MONTH(TODAY)
@@ -326,7 +325,7 @@ PROCEDURE pMarkStarted:
    ELSE DO:
       PUT STREAM sAction UNFORMATTED
          icFileType "|"
-         katun      "|"
+         Syst.Var:katun      "|"
          lcActionID "|"
          idaInvDate "|"
          "Started"  "|"
@@ -351,14 +350,14 @@ PROCEDURE pWaitForInvoiceRun:
       END.
  
       IF NOT CAN-FIND(FIRST ActionLog USE-INDEX ActionID WHERE
-                            ActionLog.Brand        = gcBrand    AND    
+                            ActionLog.Brand        = Syst.Var:gcBrand    AND    
                             ActionLog.ActionID     = "BillRun"  AND
                             ActionLog.ActionTS    >= ldCheckRun AND
                             ActionLog.TableName    = "Invoice"  AND
                             ActionLog.ActionStatus = 0)
       THEN LEAVE.
 
-      lcCurrent = fTS2HMS(fMakeTS()).
+      lcCurrent = Func.Common:mTS2HMS(Func.Common:mMakeTS()).
      
       IF SESSION:BATCH THEN DO:
          RUN pMarkFinished.
@@ -450,7 +449,7 @@ PROCEDURE pCollectInvoices:
    
    InvoiceSelect:
    FOR EACH Invoice NO-LOCK USE-INDEX InvDate WHERE
-            Invoice.Brand      = gcBrand    AND
+            Invoice.Brand      = Syst.Var:gcBrand    AND
             Invoice.InvDate    = idaInvDate AND
             Invoice.InvType    = liInvType,
       FIRST Customer OF Invoice NO-LOCK:
@@ -689,7 +688,7 @@ PROCEDURE pMarkFinished:
    IF ilDBWrite THEN DO:
       /* mark this run finished */
       FOR FIRST bActionLog USE-INDEX ActionID WHERE
-                bActionLog.Brand        = gcBrand     AND    
+                bActionLog.Brand        = Syst.Var:gcBrand     AND    
                 bActionLog.ActionID     = lcActionID  AND
                 bActionLog.ActionTS     = ldThisRun   AND
                 bActionLog.ActionStatus = 0
@@ -704,7 +703,7 @@ PROCEDURE pMarkFinished:
    ELSE DO:
       PUT STREAM sAction UNFORMATTED
          icFileType "|"
-         katun "|"
+         Syst.Var:katun "|"
          lcActionID "|"
          idaInvDate "|"
          "Finished"  "|"
