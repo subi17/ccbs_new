@@ -1,9 +1,8 @@
 {Syst/commpaa.i}
-gcBrand = "1".
-katun   = "OTANOK".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "OTANOK".
 
 {Syst/tmsconst.i}
-{Func/timestamp.i}
 {Func/msreqfunc.i}
 
 DEF STREAM sIn.
@@ -138,7 +137,7 @@ FUNCTION fSearchStock RETURNS CHARACTER
    DEF VAR liLoop AS INT NO-UNDO. 
 
    FOR EACH Stock WHERE
-            Stock.Brand   = gcBrand AND
+            Stock.Brand   = Syst.Var:gcBrand AND
             Stock.StoType = icStock NO-LOCK:
       DO liLoop = 1 TO NUM-ENTRIES(Stock.ZipCodeExp,","):
         IF icZipCode MATCHES
@@ -201,7 +200,7 @@ FUNCTION fDelivSIM RETURNS LOG
    
    IF AgreeCustomer.CustIDType = "CIF" THEN DO:
       FIND FIRST CustContact NO-LOCK WHERE
-                 CustContact.Brand    = gcBrand                              AND
+                 CustContact.Brand    = Syst.Var:gcBrand                              AND
                  CustContact.CustNum  = AgreeCustomer.CustNum                AND
                  CustContact.CustType = {&ORDERCUSTOMER_ROWTYPE_CIF_CONTACT} NO-ERROR.
       IF AVAIL CustContact THEN
@@ -338,7 +337,7 @@ REPEAT TRANSACTION:
    PUT STREAM sOut UNFORMATTED lcCLI.
    
    IF NOT CAN-FIND (FIRST MSISDN WHERE 
-                          MSISDN.Brand = gcBrand AND
+                          MSISDN.Brand = Syst.Var:gcBrand AND
                           MSISDN.CLI   = lcCLI) THEN DO:
       PUT STREAM sOut UNFORMATTED
          ";MSISDN not found"
@@ -347,7 +346,7 @@ REPEAT TRANSACTION:
    END.
 
    FIND FIRST MobSub NO-LOCK WHERE
-              MobSub.Brand = gcBrand AND
+              MobSub.Brand = Syst.Var:gcBrand AND
               MobSub.CLI   = lcCLI   NO-ERROR.
    IF NOT AVAIL MobSub THEN DO:
       PUT STREAM sOut UNFORMATTED
@@ -378,7 +377,7 @@ REPEAT TRANSACTION:
    IF AVAIL Order AND 
      (Order.ICC > "" OR 
       can-find(FIRST OrderAction WHERE
-                 OrderAction.Brand    = gcBrand AND
+                 OrderAction.Brand    = Syst.Var:gcBrand AND
                  OrderAction.OrderId  = Order.OrderId AND
                  OrderAction.ItemType = "SIMType" AND
                  OrderAction.ItemKey > "")) THEN DO:
@@ -433,7 +432,7 @@ FOR EACH MSREquest NO-LOCK WHERE
               MobSub.MsSeq = MSREquest.msseq NO-ERROR.
    IF AVAIL MobSub THEN DO:
       FIND FIRST SIM NO-LOCK WHERE
-                 SIM.Brand = gcBrand AND
+                 SIM.Brand = Syst.Var:gcBrand AND
                  SIM.ICC   = MSREquest.REqcparam2 aND
                  SIM.simstat = 13 NO-ERROR.
       IF AVAIL SIM THEN
@@ -469,7 +468,7 @@ PROCEDURE pCreateReq:
 
       SearchSIM:
       FOR EACH SIM NO-LOCK USE-INDEX simstat WHERE
-               SIM.Brand = gcBrand AND
+               SIM.Brand = Syst.Var:gcBrand AND
                SIM.Stock = lcStock AND
                SIM.SimStat = {&SIM_SIMSTAT_AVAILABLE} AND
                SIM.SimArt   = "universal":
@@ -479,7 +478,7 @@ PROCEDURE pCreateReq:
                           bOldOrder.MsSeq = SIM.MsSeq
                     NO-LOCK USE-INDEX MsSeq NO-ERROR.
                IF AVAIL bOldOrder AND
-                  fOffSet(bOldOrder.CrStamp, 24 * 7) > fMakeTS()
+                  Func.Common:mOffSet(bOldOrder.CrStamp, 24 * 7) > Func.Common:mMakeTS()
                THEN NEXT.
             END.
 
@@ -501,21 +500,20 @@ PROCEDURE pCreateReq:
    CREATE MsRequest.
    ASSIGN MsRequest.MsRequest  = NEXT-VALUE(MsRequest)
           MsRequest.ReqType    = {&REQTYPE_ICC_CHANGE}
-          MsRequest.Brand      = gcBrand
-          MsRequest.UserCode   = katun
-          MsRequest.ActStamp   = fMakeTS()
+          MsRequest.Brand      = Syst.Var:gcBrand
+          MsRequest.UserCode   = Syst.Var:katun
+          MsRequest.ActStamp   = Func.Common:mMakeTS()
           MsRequest.ReqStatus  = 20
           MsRequest.CLI        = lcCLI
           MsRequest.MsSeq      = liMsSeq
           MsRequest.CustNum    = liCustNum
-          MsRequest.CreStamp   = fMakeTS()
+          MsRequest.CreStamp   = Func.Common:mMakeTS()
           MsRequest.ReqCParam1 = "CHANGEICC"
           MsRequest.ReqCParam2 = lcICC
           MsRequest.ReqSource  = {&REQUEST_SOURCE_SCRIPT}
           .
    
-   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                    "MobSub",
+   Func.Common:mWriteMemo("MobSub",
                     STRING(liMsSeq),
                     liCustNum,
                     "Cambio de número ICC",
@@ -530,7 +528,7 @@ END PROCEDURE.
 
 PROCEDURE pLO:
 
-lcFileName = "/store/riftp/logistics/icc/spool/nrm_" + fDateFMT(TODAY,"ddmmyyyy") + 
+lcFileName = "/store/riftp/logistics/icc/spool/nrm_" + Func.Common:mDateFmt(TODAY,"ddmmyyyy") + 
              REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".txt".
 OUTPUT STREAM sICC TO VALUE(lcFileName).
 iLargestId = 1.

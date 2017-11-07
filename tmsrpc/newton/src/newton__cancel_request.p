@@ -19,7 +19,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Func/msreqfunc.i}
@@ -77,7 +77,7 @@ IF pcReqType EQ "bundle_termination" THEN
 IF NUM-ENTRIES(top_array) >= 5 THEN
    plConfirm = get_bool(param_toplevel_id, "5").
 
-katun   = "VISTA_" + get_string(param_toplevel_id, "2").
+Syst.Var:katun = "VISTA_" + get_string(param_toplevel_id, "2").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -97,7 +97,7 @@ END.
 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -109,7 +109,7 @@ END.
 
 IF liReqType = {&REQTYPE_ICC_CHANGE} THEN DO:
     FOR EACH MsRequest NO-LOCK
-    WHERE MsRequest.Brand     = gcBrand 
+    WHERE MsRequest.Brand     = Syst.Var:gcBrand 
       AND MsRequest.ReqType   = liReqType
       AND MsRequest.msseq     = piReference
       AND (MsRequest.ReqStatus = 0
@@ -134,7 +134,7 @@ IF liReqType = {&REQTYPE_ICC_CHANGE} THEN DO:
     END.
 END.
 ELSE FOR EACH MsRequest NO-LOCK WHERE 
-         MsRequest.Brand = gcBrand AND
+         MsRequest.Brand = Syst.Var:gcBrand AND
          MsRequest.MsSeq = piReference AND
          MsRequest.ReqType = liReqType USE-INDEX MsSeq:
  
@@ -142,7 +142,7 @@ ELSE FOR EACH MsRequest NO-LOCK WHERE
    CASE pcReqType:
       WHEN "subscription_type" THEN
          IF fChkReqStatusChange(4) EQ TRUE AND 
-            MsRequest.ActStamp > fMakeTs() THEN DO:
+            MsRequest.ActStamp > Func.Common:mMakeTS() THEN DO:
             /* cancel possible renewal pos stc order */
             FIND FIRST Order WHERE
                Order.MsSeq = MsRequest.MsSeq AND
@@ -189,13 +189,13 @@ ELSE FOR EACH MsRequest NO-LOCK WHERE
             IF AVAIL MobSub AND MobSub.MultiSIMId > 0 AND
                MobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} THEN DO:
                FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-                          lbMobSub.Brand  = gcBrand AND
+                          lbMobSub.Brand  = Syst.Var:gcBrand AND
                           lbMobSub.MultiSimID = MobSub.MultiSimID AND
                           lbMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
                           lbMobSub.Custnum = MobSub.Custnum NO-ERROR.
                IF NOT AVAIL lbMobSub THEN DO:
                   FIND FIRST TermMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-                             TermMobSub.Brand  = gcBrand AND
+                             TermMobSub.Brand  = Syst.Var:gcBrand AND
                              TermMobSub.MultiSimID = MobSub.MultiSimID AND
                              TermMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
                              TermMobSub.Custnum = MobSub.Custnum NO-ERROR.
@@ -206,7 +206,7 @@ ELSE FOR EACH MsRequest NO-LOCK WHERE
                                 Msowner.MsSeq = TermMobsub.MsSeq
                           NO-LOCK NO-ERROR.
                      IF AVAIL Msowner THEN
-                        fSplitTS(Msowner.TSEnd,OUTPUT ldaSecSIMTermDate,
+                        Func.Common:mSplitTS(Msowner.TSEnd,OUTPUT ldaSecSIMTermDate,
                                  OUTPUT liSecSIMTermTime).
                      ELSE ldaSecSIMTermDate = TODAY.
                   END. /* ELSE DO: */
@@ -298,5 +298,4 @@ add_int(response_toplevel_id, "", liReqCount).
 
 FINALLY:
    IF llDoEvent THEN fCleanEventObjects().
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

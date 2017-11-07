@@ -5,7 +5,7 @@
 
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 {Syst/eventlog.i}
        

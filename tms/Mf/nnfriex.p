@@ -29,7 +29,7 @@ DEF VAR c        AS c NO-UNDO.
 
 /* get default direcory Name FOR OUTPUT */
 DO FOR TMSUser:
-   FIND TMSUser where TMSUser.UserCode = katun no-lock.
+   FIND TMSUser where TMSUser.UserCode = Syst.Var:katun no-lock.
    ASSIGN exdir = TMSUser.RepDir.
 END.
 
@@ -56,18 +56,18 @@ help "Earliest day of call"
 Customer.CustName no-label format "x(20)"
 skip(7)
 WITH
-   width 80 OVERLAY COLOR value(cfc) TITLE COLOR value(ctc)
-   " " + ynimi + " SPECIFICATION OF FREE Calls " +
-   string(pvm,"99-99-99") + " " NO-LABELS FRAME start.
+   width 80 OVERLAY COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc)
+   " " + Syst.Var:ynimi + " SPECIFICATION OF FREE Calls " +
+   string(TODAY,"99-99-99") + " " NO-LABELS FRAME start.
 
 exdate2 = date(month(TODAY),1,year(TODAY)) - 1.
 exdate1 = date(month(exdate2),1,year(exdate2)).
 
-cfc = "sel". RUN Syst/ufcolor.p.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p.
 
 CRIT:
 repeat WITH FRAME start:
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    DISP exName.
    UPDATE
       exname
@@ -76,7 +76,7 @@ repeat WITH FRAME start:
       CustNum
    WITH FRAME start EDITING.
       READKEY.
-      IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO:
+      IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
          PAUSE 0.
          if frame-field = "CustNum" THEN DO:
             FIND Customer where Customer.CustNum = 
@@ -94,19 +94,19 @@ repeat WITH FRAME start:
 
 task:
    repeat WITH FRAME start:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT  CRIT.
-      IF toimi = 8 THEN LEAVE CRIT.
+      IF Syst.Var:toimi = 1 THEN NEXT  CRIT.
+      IF Syst.Var:toimi = 8 THEN LEAVE CRIT.
 
-      IF toimi = 5 THEN LEAVE task.
+      IF Syst.Var:toimi = 5 THEN LEAVE task.
    END.
    message "Sorting and printing ...".
 
 
    OUTPUT STREAM excel TO value(exName).
 
-   PUT STREAM excel UNFORMATTED ynimi.  RUN Syst/uexskip.p(2).
+   PUT STREAM excel UNFORMATTED Syst.Var:ynimi.  RUN Syst/uexskip.p(2).
    PUT STREAM excel UNFORMATTED
    "Free Calls during " string(exdate1,"99.99.9999") " - "
    string(exdate2,"99.99.9999") " owned by customer "

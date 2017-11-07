@@ -21,8 +21,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-ASSIGN gcBrand = "1"
-       katun   = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
+ASSIGN Syst.Var:gcBrand = "1"
+       Syst.Var:katun   = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
 {Func/fexternalapi.i}
 
 /* Input parameters */
@@ -67,5 +67,4 @@ FINALLY:
    /* Store the transaction id */
    ghAuthLog::TransactionId = pcTransId.
 
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

@@ -173,8 +173,8 @@ THEN DO:
 END.
 
 /* set default brand for update modules */
-ASSIGN gcBrand = icTargetBrand
-       ynimi   = Brand.BRName.
+ASSIGN Syst.Var:gcBrand = icTargetBrand
+       Syst.Var:ynimi   = Brand.BRName.
 
 /* do all in one transaction (max. few thousand records to copy) 
    -> possibility to undo all */
@@ -216,7 +216,7 @@ REPEAT TRANSACTION:
             RUN VALUE(ENTRY(liProc,lcRun,"¤")).
          END.
          
-         ehto = 4.
+         Syst.Var:ehto = 4.
          RUN Syst/ufkey.p.
             
       END.
@@ -290,7 +290,7 @@ REPEAT TRANSACTION:
                RUN VALUE(ENTRY(liProc,lcRun,"¤")).
             END.
             
-            ehto = 4.
+            Syst.Var:ehto = 4.
             RUN Syst/ufkey.p.
             
          END.

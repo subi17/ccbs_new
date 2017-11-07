@@ -14,9 +14,7 @@
                   17.03.04 tk assign input parameters in create
                   16.12.05 aam username removed,
                                better find-routines
-                  24.01.06 jt  DYNAMIC-FUNCTION("fDispCustName"
                   30.01.06 jp previous never tested
-                  13.02.06 aam use fTMSCodeName
   VERSION ......: M15
   ---------------------------------------------------------------------- */
 
@@ -27,9 +25,8 @@ DEF  INPUT PARAMETER    icCli     AS CHAR No-UNDO.
 
 {Syst/commali.i}
 {Syst/eventval.i}
-{Func/timestamp.i}
 if llDoEvent THEN DO:
-    &GLOBAL-DEFINE STAR_EVENT_USER katun
+    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
     {Func/lib/eventlog.i}
 
     DEF VAR lhCallAlarm AS HANDLE NO-UNDO.
@@ -87,10 +84,10 @@ form
 
 
 WITH ROW FrmRow width 80 overlay FrmDown  down
-    COLOR VALUE(cfc)   
-    TITLE COLOR VALUE(ctc) " " + ynimi +
+    COLOR VALUE(Syst.Var:cfc)   
+    TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi +
     "  ALARM MENU   "
-    + string(pvm,"99-99-99") + " "
+    + string(TODAY,"99-99-99") + " "
     FRAME sel.
 
 {Func/brand.i}
@@ -116,8 +113,8 @@ form
     "Limit % ......:" CallAlarm.Limit    SKIP
     "CreditType ...:" CallAlarm.CreditType lccreditname format "x(30)" 
 WITH  overlay row 3 centered
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) ac-hdr 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) ac-hdr 
     SIDE-LABELS NO-LABEL
 
     FRAME lis.
@@ -128,8 +125,8 @@ form /* seek  CustNo */
     "Unknown brand")
     "CustomerNo:"  CustNo
     HELP "Enter Customer Number of the Call Limit "
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CUSTOMER "
-    COLOR VALUE(cfc) NO-labels overlay FRAME f1.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND CUSTOMER "
+    COLOR VALUE(Syst.Var:cfc) NO-labels overlay FRAME f1.
 
 form /* seek  CLI */
    "Brand Code:" lcBrand  HELP "Enter Brand"
@@ -137,8 +134,8 @@ form /* seek  CLI */
    "Unknown brand")
    "Msisdn No.:"  lcCLI
     HELP "Enter CLI of the Call Limit"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND CLI "
-    COLOR VALUE(cfc) NO-labels overlay FRAME f2.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND CLI "
+    COLOR VALUE(Syst.Var:cfc) NO-labels overlay FRAME f2.
 
 form /* seek  CLI */
    "Brand Code:" lcBrand  HELP "Enter Brand"
@@ -146,11 +143,11 @@ form /* seek  CLI */
 
    "Time......:"  ActDate ActTime
     HELP "Enter Activated Date and time"
-    WITH row 4 col 2 TITLE COLOR VALUE(ctc) " FIND TIMESTAMP "
-    COLOR VALUE(cfc) NO-labels overlay FRAME f3.
+    WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND TIMESTAMP "
+    COLOR VALUE(Syst.Var:cfc) NO-labels overlay FRAME f3.
 
 
-cfc = "sel". RUN Syst/ufcolor.p. ASSIGN ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
 orders = "  By Code  ,  By Name  ,  By Stamp  , By 4".
@@ -179,13 +176,13 @@ REPEAT WITH FRAME sel:
     END.
 
    IF must-add THEN DO:  /* Add a CallAlarm  */
-      ASSIGN cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
+      ASSIGN Syst.Var:cfc = "lis" ufkey = true ac-hdr = " ADD " must-add = false.
       RUN Syst/ufcolor.p.
 
       ADD-ROW:
       REPEAT WITH FRAME lis on ENDkey undo ADD-ROW, LEAVE ADD-ROW.
         PAUSE 0 NO-MESSAGE.
-        ehto = 9. RUN Syst/ufkey.p.
+        Syst.Var:ehto = 9. RUN Syst/ufkey.p.
         REPEAT TRANSACTION WITH FRAME lis:
            CLEAR FRAME lis NO-PAUSE.
            CREATE CallAlarm.
@@ -193,7 +190,7 @@ REPEAT WITH FRAME sel:
            CallAlarm.CAseq = NEXT-VALUE(CallAlarm)
            CallAlarm.Brand = lcBrand              .
            ASSIGN
-           CallAlarm.ActStamp = fMakeTS().
+           CallAlarm.ActStamp = Func.Common:mMakeTS().
            RUN local-UPDATE-record.
 
            IF LOOKUP(KEYFUNCTION(LASTKEY),"ENDKEY,END-ERROR") > 0 THEN
@@ -264,15 +261,15 @@ BROWSE:
 
       IF ufkey THEN DO:
         ASSIGN
-        ufk[1]= 702  ufk[2]= 653 ufk[3]= 0  ufk[4]= 0
-        ufk[5]= 5  ufk[6]= 4 ufk[7]= 0 ufk[8]= 8 ufk[9]= 1
-        ehto = 3 ufkey = false.
+        Syst.Var:ufk[1]= 702  Syst.Var:ufk[2]= 653 Syst.Var:ufk[3]= 0  Syst.Var:ufk[4]= 0
+        Syst.Var:ufk[5]= 5  Syst.Var:ufk[6]= 4 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 Syst.Var:ufk[9]= 1
+        Syst.Var:ehto = 3 ufkey = false.
         IF icCLI > "" OR iiCustNum > 0 THEN ASSIGN 
-          ufk[1] = 0
-          ufk[2] = 0
-          ufk[3] = 0
-          ufk[5] = 0
-          ufk[6] = 0.
+          Syst.Var:ufk[1] = 0
+          Syst.Var:ufk[2] = 0
+          Syst.Var:ufk[3] = 0
+          Syst.Var:ufk[5] = 0
+          Syst.Var:ufk[6] = 0.
           
          RUN Syst/ufkey.p.
       END.
@@ -280,25 +277,25 @@ BROWSE:
       HIDE MESSAGE NO-PAUSE.
       IF order = 1 THEN DO:
         choose row CallAlarm.CustNO {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CallAlarm.CustNO WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) CallAlarm.CustNO WITH FRAME sel.
       END.
       ELSE IF order = 2 THEN DO:
         choose row CallAlarm.CLI {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CallAlarm.CLI WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) CallAlarm.CLI WITH FRAME sel.
       END.
 
       ELSE IF order = 3 THEN DO:
         choose row CallAlarm.actstamp {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
-        COLOR DISPLAY VALUE(ccc) CallAlarm.actstamp WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) CallAlarm.actstamp WITH FRAME sel.
       END.
       IF rtab[FRAME-line] = ? THEN NEXT.
 
-      nap = keylabel(LASTkey).
+      Syst.Var:nap = keylabel(LASTkey).
 
-      IF LOOKUP(nap,"cursor-right") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
         order = order + 1. IF order > maxOrder THEN order = 1.
       END.
-      IF LOOKUP(nap,"cursor-left") > 0 THEN DO:
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
         order = order - 1. IF order = 0 THEN order = maxOrder.
       END.
 
@@ -322,10 +319,10 @@ BROWSE:
         NEXT.
       END.
 
-      ASSIGN nap = keylabel(LASTkey).
+      ASSIGN Syst.Var:nap = keylabel(LASTkey).
 
       /* PREVious row */
-      IF LOOKUP(nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
         IF FRAME-line = 1 THEN DO:
            RUN local-find-this(false).
            RUN local-find-PREV.
@@ -350,7 +347,7 @@ BROWSE:
       END. /* PREVious row */
 
       /* NEXT row */
-      ELSE IF LOOKUP(nap,"cursor-down") > 0 THEN DO
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
       WITH FRAME sel:
         IF FRAME-line = FRAME-down THEN DO:
            RUN local-find-this(false).
@@ -376,7 +373,7 @@ BROWSE:
       END. /* NEXT row */
 
       /* PREV page */
-      ELSE IF LOOKUP(nap,"PREV-page,page-up,-") > 0 THEN DO:
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
         memory = rtab[1].
         FIND CallAlarm WHERE recid(CallAlarm) = memory NO-LOCK NO-ERROR.
         RUN local-find-PREV.
@@ -400,7 +397,7 @@ BROWSE:
      END. /* PREVious page */
 
      /* NEXT page */
-     ELSE IF LOOKUP(nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
        /* Put Cursor on downmost Row */
        IF rtab[FRAME-down] = ? THEN DO:
            MESSAGE "YOU ARE ON THE LAST PAGE !".
@@ -415,10 +412,10 @@ BROWSE:
      END. /* NEXT page */
 
      /* Search by column 1 */
-     ELSE IF LOOKUP(nap,"1,f1") > 0 AND ufk[1] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"1,f1") > 0 AND Syst.Var:ufk[1] > 0
      THEN DO on ENDkey undo, NEXT LOOP:
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        IF CustNo > 0 THEN DO:
           MESSAGE
           "Customer number search is not allowed with this functionality"
@@ -429,7 +426,7 @@ BROWSE:
        CLEAR FRAME f1.
        DISP lcBrand WITH FRAME F1.
 
-       SET   lcBrand WHEN gcAllBrand TRUE 
+       SET   lcBrand WHEN Syst.Var:gcAllBrand TRUE 
              CustNo WITH FRAME f1.
        HIDE FRAME f1 NO-PAUSE.
        IF CustNo ENTERED THEN DO:
@@ -448,14 +445,14 @@ BROWSE:
      END. /* Search-1 */
 
      /* Search by col 2 */
-     ELSE IF LOOKUP(nap,"2,f2") > 0 AND ufk[2] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"2,f2") > 0 AND Syst.Var:ufk[2] > 0
      THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F2.
        DISP lcBrand WITH FRAME f2.
-       SET lcBrand WHEN gcAllBrand TRUE 
+       SET lcBrand WHEN Syst.Var:gcAllBrand TRUE 
            lcCLI WITH FRAME f2.
        HIDE FRAME f2 NO-PAUSE.
        IF lcCLI ENTERED THEN DO:
@@ -473,11 +470,11 @@ BROWSE:
      END. /* Search-2 */
 
      /* Search by col 3 */
-     ELSE IF LOOKUP(nap,"3,f3") > 0 AND ufk[3] > 0 
+     ELSE IF LOOKUP(Syst.Var:nap,"3,f3") > 0 AND Syst.Var:ufk[3] > 0 
      THEN DO on ENDkey undo, NEXT LOOP:
 
-       cfc = "puyr". RUN Syst/ufcolor.p.
-       ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+       Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+       Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
        CLEAR FRAME F3.
        Actdate = today.
        SET actDate ActTime WITH FRAME f3.
@@ -485,12 +482,12 @@ BROWSE:
        IF actDate  ENTERED THEN DO:
 
           FIND FIRST CallAlarm WHERE 
-              CallAlarm.Brand = gcBrand and
+              CallAlarm.Brand = Syst.Var:gcBrand and
               CallAlarm.actstamp = actstamp
           USE-INDEX actstamp NO-LOCK NO-ERROR.
           IF NOT AVAILABLE CallAlarm THEN 
           FIND LAST CallAlarm WHERE 
-              CallAlarm.Brand = gcBrand and
+              CallAlarm.Brand = Syst.Var:gcBrand and
               CallAlarm.actstamp >= actstamp
           USE-INDEX actstamp NO-LOCK NO-ERROR.
           
@@ -505,14 +502,14 @@ BROWSE:
        END.
      END. /* Search-3 */
 
-     ELSE IF LOOKUP(nap,"5,f5") > 0 AND ufk[5] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 AND Syst.Var:ufk[5] > 0
      THEN DO:  /* add */
         {Syst/uright2.i}
         must-add = true.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"6,f6") > 0 AND ufk[6] > 0
+     ELSE IF LOOKUP(Syst.Var:nap,"6,f6") > 0 AND Syst.Var:ufk[6] > 0
      THEN DO TRANSACTION:  /* DELETE */
        {Syst/uright2.i}
        delrow = FRAME-line.
@@ -527,7 +524,7 @@ BROWSE:
        END.
 
        /* Highlight */
-       COLOR DISPLAY VALUE(ctc)
+       COLOR DISPLAY VALUE(Syst.Var:ctc)
        CallAlarm.CustNO CallAlarm.CLI  CallAlarm.DeliStat
         stname callalarm.actstamp lcdelitype lccreditname.
 
@@ -550,7 +547,7 @@ BROWSE:
 
        ASSIGN ok = false.
        MESSAGE "ARE YOU SURE YOU WANT TO ERASE (Y/N) ? " UPDATE ok.
-       COLOR DISPLAY VALUE(ccc)
+       COLOR DISPLAY VALUE(Syst.Var:ccc)
        CallAlarm.CustNO CallAlarm.CLI lccreditname lcdelitype.
        IF ok THEN DO:
 
@@ -571,7 +568,7 @@ BROWSE:
        ELSE delrow = 0. /* undo DELETE */
      END. /* DELETE */
 
-     ELSE IF LOOKUP(nap,"enter,return") > 0 THEN
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN
      REPEAT WITH FRAME lis TRANSACTION
      ON ENDKEY UNDO, LEAVE:
        /* change */
@@ -581,20 +578,20 @@ BROWSE:
 
 ACTION: repeat with frame lis:
           ASSIGN 
-          ufk = 0 ufk[1] = 7 ufk[2] = 0 ufk[3] = 0 ufk[4] = 0
-          ufk[5] = 0 ufk[8] = 8 ehto = 0 
+          Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[2] = 0 Syst.Var:ufk[3] = 0 Syst.Var:ufk[4] = 0
+          Syst.Var:ufk[5] = 0 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0 
           ufkey = true.
           RUN Syst/ufkey.p.
 
-          if toimi = 8 then do:
+          if Syst.Var:toimi = 8 then do:
              hide frame lis.
              next loop. 
           end.
-          else if toimi = 1 then do: 
+          else if Syst.Var:toimi = 1 then do: 
 
              RUN local-find-this(true).
-             ASSIGN ac-hdr = " CHANGE " ufkey = true ehto = 9. RUN Syst/ufkey.p.
-             cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
+             ASSIGN ac-hdr = " CHANGE " ufkey = true Syst.Var:ehto = 9. RUN Syst/ufkey.p.
+             Syst.Var:cfc = "lis". RUN Syst/ufcolor.p. CLEAR FRAME lis NO-PAUSE.
              DISPLAY CallAlarm.CustNO.
 
              IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCallAlarm).
@@ -615,25 +612,25 @@ ACTION: repeat with frame lis:
        LEAVE.
      END.
 
-     ELSE IF LOOKUP(nap,"home,H") > 0 THEN DO:
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
         RUN local-find-FIRST.
         ASSIGN memory = recid(CallAlarm) must-print = true.
        NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"END,E") > 0 THEN DO : /* LAST record */
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
         RUN local-find-LAST.
         ASSIGN memory = recid(CallAlarm) must-print = true.
         NEXT LOOP.
      END.
 
-     ELSE IF LOOKUP(nap,"8,f8") > 0 THEN LEAVE LOOP.
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
 
   END.  /* BROWSE */
 END.  /* LOOP */
 
 HIDE FRAME sel NO-PAUSE.
-si-recid = xrecid.
+Syst.Var:si-recid = xrecid.
 
 
 
@@ -653,27 +650,27 @@ PROCEDURE local-find-FIRST:
 
    IF icCLi > "" THEN DO:
       FIND FIRST CallAlarm WHERE
-                 CallAlarm.Brand = gcBrand AND
+                 CallAlarm.Brand = Syst.Var:gcBrand AND
                  CallAlarm.CLI   = icCLI 
       USE-INDEX CLI NO-LOCK NO-ERROR.
    END.
    
    ELSE IF iiCustNum > 0 THEN DO:
       FIND FIRST CallAlarm WHERE
-                 CallAlarm.Brand  = gcBrand AND
+                 CallAlarm.Brand  = Syst.Var:gcBrand AND
                  CallAlarm.CustNo = iiCustNum 
       USE-INDEX CustNo NO-LOCK NO-ERROR.
    END. 
   
    ELSE DO:
        IF order = 1 THEN 
-          FIND FIRST CallAlarm WHERE CallAlarm.Brand = gcBrand 
+          FIND FIRST CallAlarm WHERE CallAlarm.Brand = Syst.Var:gcBrand 
           NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN 
-          FIND FIRST CallAlarm WHERE CallAlarm.Brand = gcBrand 
+          FIND FIRST CallAlarm WHERE CallAlarm.Brand = Syst.Var:gcBrand 
           USE-INDEX CLI  NO-LOCK NO-ERROR.
        ELSE IF order = 3 THEN 
-          FIND FIRST CallAlarm WHERE CallAlarm.Brand = gcBrand
+          FIND FIRST CallAlarm WHERE CallAlarm.Brand = Syst.Var:gcBrand
           USE-INDEX Actstamp NO-LOCK NO-ERROR.
    END.
 END PROCEDURE.
@@ -681,27 +678,27 @@ END PROCEDURE.
 PROCEDURE local-find-LAST:
    IF icCLi > "" THEN DO:
       FIND LAST CallAlarm WHERE
-                CallAlarm.Brand = gcBrand AND
+                CallAlarm.Brand = Syst.Var:gcBrand AND
                 CallAlarm.CLI   = icCLI 
       USE-INDEX CLI NO-LOCK NO-ERROR.
    END.
    
    ELSE IF iiCustNum > 0 THEN DO:
       FIND LAST CallAlarm WHERE
-                CallAlarm.Brand  = gcBrand AND
+                CallAlarm.Brand  = Syst.Var:gcBrand AND
                 CallAlarm.CustNo = iiCustNum 
       USE-INDEX CustNo NO-LOCK NO-ERROR.
    END. 
   
    ELSE DO:
        IF order = 1 THEN 
-          FIND LAST CallAlarm WHERE CallAlarm.Brand = gcBrand 
+          FIND LAST CallAlarm WHERE CallAlarm.Brand = Syst.Var:gcBrand 
           NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN 
-          FIND LAST CallAlarm WHERE CallAlarm.Brand = gcBrand 
+          FIND LAST CallAlarm WHERE CallAlarm.Brand = Syst.Var:gcBrand 
           USE-INDEX CLI  NO-LOCK NO-ERROR.
        ELSE IF order = 3 THEN 
-          FIND LAST CallAlarm WHERE CallAlarm.Brand = gcBrand
+          FIND LAST CallAlarm WHERE CallAlarm.Brand = Syst.Var:gcBrand
           USE-INDEX Actstamp NO-LOCK NO-ERROR.
    END.
 END PROCEDURE.
@@ -709,27 +706,27 @@ END PROCEDURE.
 PROCEDURE local-find-NEXT:
    IF icCLi > "" THEN DO:
       FIND NEXT CallAlarm WHERE
-                CallAlarm.Brand = gcBrand AND
+                CallAlarm.Brand = Syst.Var:gcBrand AND
                 CallAlarm.CLI   = icCLI 
       USE-INDEX CLI NO-LOCK NO-ERROR.
    END.
    
    ELSE IF iiCustNum > 0 THEN DO:
       FIND NEXT CallAlarm WHERE
-                CallAlarm.Brand  = gcBrand AND
+                CallAlarm.Brand  = Syst.Var:gcBrand AND
                 CallAlarm.CustNo = iiCustNum 
       USE-INDEX CustNo NO-LOCK NO-ERROR.
    END. 
   
    ELSE DO:
        IF order = 1 THEN 
-          FIND NEXT CallAlarm WHERE CallAlarm.Brand = gcBrand 
+          FIND NEXT CallAlarm WHERE CallAlarm.Brand = Syst.Var:gcBrand 
           NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN 
-          FIND NEXT CallAlarm WHERE CallAlarm.Brand = gcBrand 
+          FIND NEXT CallAlarm WHERE CallAlarm.Brand = Syst.Var:gcBrand 
           USE-INDEX CLI  NO-LOCK NO-ERROR.
        ELSE IF order = 3 THEN 
-          FIND NEXT CallAlarm WHERE CallAlarm.Brand = gcBrand
+          FIND NEXT CallAlarm WHERE CallAlarm.Brand = Syst.Var:gcBrand
           USE-INDEX Actstamp NO-LOCK NO-ERROR.
    END.
 END PROCEDURE.
@@ -737,27 +734,27 @@ END PROCEDURE.
 PROCEDURE local-find-PREV:
    IF icCLi > "" THEN DO:
       FIND PREV CallAlarm WHERE
-                CallAlarm.Brand = gcBrand AND
+                CallAlarm.Brand = Syst.Var:gcBrand AND
                 CallAlarm.CLI   = icCLI 
       USE-INDEX CLI NO-LOCK NO-ERROR.
    END.
    
    ELSE IF iiCustNum > 0 THEN DO:
       FIND PREV CallAlarm WHERE
-                CallAlarm.Brand  = gcBrand AND
+                CallAlarm.Brand  = Syst.Var:gcBrand AND
                 CallAlarm.CustNo = iiCustNum 
       USE-INDEX CustNo NO-LOCK NO-ERROR.
    END. 
   
    ELSE DO:
        IF order = 1 THEN 
-          FIND PREV CallAlarm WHERE CallAlarm.Brand = gcBrand 
+          FIND PREV CallAlarm WHERE CallAlarm.Brand = Syst.Var:gcBrand 
           NO-LOCK NO-ERROR.
        ELSE IF order = 2 THEN 
-          FIND PREV CallAlarm WHERE CallAlarm.Brand = gcBrand 
+          FIND PREV CallAlarm WHERE CallAlarm.Brand = Syst.Var:gcBrand 
           USE-INDEX CLI  NO-LOCK NO-ERROR.
        ELSE IF order = 3 THEN 
-          FIND PREV CallAlarm WHERE CallAlarm.Brand = gcBrand
+          FIND PREV CallAlarm WHERE CallAlarm.Brand = Syst.Var:gcBrand
           USE-INDEX Actstamp NO-LOCK NO-ERROR.
    END.
 END PROCEDURE.
@@ -782,8 +779,7 @@ PROCEDURE local-find-others.
    Find Customer where Customer.CustNum = CallAlarm.CustNO NO-LOCK NO-ERROR.
        
    IF avail Customer then
-      lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1, 
-                                      BUFFER Customer).
+      lcCustName = Func.Common:mDispCustName(BUFFER Customer).
    ELSE lcCustName = "".
 
    Find Mobsub WHERE
@@ -797,13 +793,11 @@ PROCEDURE local-find-others.
    stname = entry(CallAlarm.DeliStat, stnames).
 
 
-   lcDeliType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                 "CallLimit",
+   lcDeliType = Func.Common:mTMSCodeName("CallLimit",
                                  "DeliType",
                                  STRING(CallAlarm.DeliType)).
 
-   lcCreditName = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                   "CallAlarm",
+   lcCreditName = Func.Common:mTMSCodeName("CallAlarm",
                                    "CreditType",
                                    STRING(CallAlarm.CreditType)).
 
@@ -820,8 +814,8 @@ PROCEDURE local-disp-lis:
       lcDeliType
       CallAlarm.DeliStat
       stname
-      fTs2hms(CallAlarm.actstamp) @ realtime
-      fTs2hms(CallAlarm.delistamp) @ deliverytime
+      Func.Common:mTS2HMS(CallAlarm.actstamp) @ realtime
+      Func.Common:mTS2HMS(CallAlarm.delistamp) @ deliverytime
       CallAlarm.Limit      
       lcCustName when avail customer
       lcmsg
@@ -849,8 +843,8 @@ PROCEDURE local-update-record:
       lcDeliType
       CallAlarm.DeliStat
       stname
-      fTs2hms(CallAlarm.actstamp) @ realtime
-      fTs2hms(CallAlarm.delistamp) @ deliverytime
+      Func.Common:mTS2HMS(CallAlarm.actstamp) @ realtime
+      Func.Common:mTS2HMS(CallAlarm.delistamp) @ deliverytime
       CallAlarm.Limit      
       lcCustName
 
@@ -892,11 +886,11 @@ PROCEDURE local-update-record:
              END.
 
 
-             IF LOOKUP(KEYLABEL(LASTKEY),poisnap) > 0 THEN DO WITH FRAME lis:
+             IF LOOKUP(KEYLABEL(LASTKEY),Syst.Var:poisnap) > 0 THEN DO WITH FRAME lis:
                 PAUSE 0.
                 IF FRAME-FIELD = "CustNo" THEN DO:
                    FIND Customer WHERE 
-                        Customer.Brand   = gcBrand AND 
+                        Customer.Brand   = Syst.Var:gcBrand AND 
                         Customer.CustNum =
                    INPUT FRAME lis CallAlarm.CustNO NO-LOCK NO-ERROR.
                    IF NOT AVAIL Customer THEN DO:
@@ -906,7 +900,7 @@ PROCEDURE local-update-record:
                    END.
                    
                    IF Avail Customer THEN 
-                   lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,                                                   BUFFER Customer).
+                   lcCustName = Func.Common:mDispCustName(BUFFER Customer).
                    
                    DISP lcCustName @ lcCustName WITH FRAME lis.
                 END.
@@ -943,8 +937,7 @@ PROCEDURE local-update-record:
                    END.
 
                    lcDeliType = 
-                      DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                       "CallLimit",
+                      Func.Common:mTMSCodeName("CallLimit",
                                        "DeliType",
                                        STRING(INPUT CallAlarm.DeliType)).
                    pause 0.
@@ -963,8 +956,7 @@ PROCEDURE local-update-record:
                    END.
 
                    lcCreditName = 
-                      DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                       "CallAlarm",
+                      Func.Common:mTMSCodeName("CallAlarm",
                                        "CreditType",
                                        STRING(INPUT CallAlarm.CreditType)).
                    pause 0.

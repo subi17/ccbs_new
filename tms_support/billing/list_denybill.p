@@ -1,4 +1,3 @@
-{Func/timestamp.i}
 
 def stream slog.
 
@@ -30,8 +29,8 @@ put stream slog unformatted
    "Valid From"         skip.
 
 assign
-  ldfrom = fmake2dt(ldtdate,0)
-  ldto   = fmake2dt(ldtdate,86399).
+  ldfrom = Func.Common:mMake2DT(ldtdate,0)
+  ldto   = Func.Common:mMake2DT(ldtdate,86399).
 
 for each limit no-lock where
          limit.tmruleseq = 0 and

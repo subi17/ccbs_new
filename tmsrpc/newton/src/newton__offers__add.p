@@ -18,7 +18,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/eventval.i}
 {Syst/tmsconst.i}
 {Mc/offer.i}
@@ -45,14 +45,14 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-katun = pcUserName.
+Syst.Var:katun = pcUserName.
 
 {newton/src/settenant.i pcTenant}
 
 CREATE ttOffer.
 
 ttOffer.offer           = get_string(pcStruct,"id").
-ttOffer.brand           = gcBrand.
+ttOffer.brand           = Syst.Var:gcBrand.
 ttOffer.todate = ( IF LOOKUP("valid_to", lcStruct) > 0
                    THEN get_date(pcStruct,"valid_to")
                    ELSE 12/31/2049 ).
@@ -99,5 +99,4 @@ add_string(lcRespStruct, "id", Offer.Offer).
 RELEASE Offer.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

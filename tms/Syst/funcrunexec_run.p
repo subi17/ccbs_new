@@ -8,7 +8,6 @@
   ------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/log.i}
 {Syst/eventlog.i}
 {Func/multitenantfunc.i}
@@ -49,13 +48,13 @@ FUNCTION fErrorLog RETURNS LOGIC
    
    DO TRANS:
       CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand     = gcBrand
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
              ErrorLog.ActionID  = "FREXEC" + STRING(iiFRExecID)
              ErrorLog.TableName = "FuncRunExec"
              ErrorLog.KeyValue  = STRING(iiFRExecID)
              ErrorLog.ErrorMsg  = icError
-             ErrorLog.UserCode  = katun.
-             ErrorLog.ActionTS  = fMakeTS().
+             ErrorLog.UserCode  = Syst.Var:katun.
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
    
 END FUNCTION.
@@ -160,7 +159,7 @@ PROCEDURE pLaunchProcesses:
       FIND FIRST FuncRunExec WHERE FuncRunExec.FRExecID = iiFRExecID
          EXCLUSIVE-LOCK.
       ASSIGN 
-         FuncRunExec.StartTS  = fMakeTS()
+         FuncRunExec.StartTS  = Func.Common:mMakeTS()
          FuncRunExec.RunState = "Running".
 
       CREATE FuncRunExecLog.
@@ -212,7 +211,7 @@ PROCEDURE pLaunchProcesses:
          FuncRunProcess.RunCommand  = REPLACE(FuncRunProcess.RunCommand,
                                             "#TENANT",
                                              STRING(lcTenant))
-         FuncRunProcess.StartTS     = fMakeTS().
+         FuncRunProcess.StartTS     = Func.Common:mMakeTS().
                        
       /* run here or in another host */
       FOR FIRST FuncRunResult NO-LOCK USE-INDEX FRExecID WHERE
@@ -235,7 +234,7 @@ PROCEDURE pLaunchProcesses:
       FIND FIRST FuncRunExec WHERE FuncRunExec.FRExecID = iiFRExecID
          EXCLUSIVE-LOCK.
       ASSIGN 
-         FuncRunExec.EndTS    = fMakeTS()
+         FuncRunExec.EndTS    = Func.Common:mMakeTS()
          FuncRunExec.RunState = "Finished"
          lcMessage            = "No processes were started".
       
@@ -312,7 +311,7 @@ PROCEDURE pFinalize:
       lcActionKey = STRING(iiFRExecID).
 
       FIND FIRST ActionLog WHERE
-                 ActionLog.Brand     = gcBrand AND
+                 ActionLog.Brand     = Syst.Var:gcBrand AND
                  ActionLog.TableName = "FuncRunExec" AND
                  ActionLog.KeyValue  = lcActionKey AND
                  ActionLog.ActionID  = "FREXEC" + STRING(iiFRExecID) AND
@@ -324,7 +323,7 @@ PROCEDURE pFinalize:
       
       FIND CURRENT FuncRunExec EXCLUSIVE-LOCK.
       ASSIGN 
-         FuncRunExec.EndTS    = fMakeTS()
+         FuncRunExec.EndTS    = Func.Common:mMakeTS()
          FuncRunExec.RunState = IF llCancelled 
                                 THEN "Cancelled" 
                                 ELSE "Finished".

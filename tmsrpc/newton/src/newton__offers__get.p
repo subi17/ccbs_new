@@ -29,7 +29,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    {newton/src/settenant.i pcTenant}
        
    FIND Offer NO-LOCK WHERE 
-      Offer.Brand = gcBrand AND 
+      Offer.Brand = Syst.Var:gcBrand AND 
       Offer.Offer = pcId NO-ERROR.
 
    IF NOT AVAIL Offer THEN RETURN appl_err("Offer not found: "+ pcId).

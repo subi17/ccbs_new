@@ -26,7 +26,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 ASSIGN top_struct = add_struct(response_toplevel_id, "").
 
 FIND FIRST MobSub NO-LOCK WHERE
-           MobSub.Brand EQ Syst.Parameters:gcBrand AND
+           MobSub.Brand EQ Syst.Var:gcBrand AND
            MobSub.CLI   EQ pcCLI                   NO-ERROR.
 IF AVAILABLE MobSub THEN
    ASSIGN lcText        = "Subscription exists for this number"
@@ -35,7 +35,7 @@ IF AVAILABLE MobSub THEN
 
 IF lcText = "" THEN DO:
    FIND FIRST Order NO-LOCK WHERE
-              Order.brand EQ Syst.Parameters:gcBrand AND
+              Order.brand EQ Syst.Var:gcBrand AND
               Order.CLI   EQ pcCLI                   AND
               LOOKUP(STRING(Order.StatusCode),{&ORDER_INACTIVE_STATUSES}) EQ 0 NO-ERROR.
    IF AVAILABLE Order THEN

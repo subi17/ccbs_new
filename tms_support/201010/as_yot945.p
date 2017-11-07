@@ -1,7 +1,6 @@
 {Syst/commpaa.i}
-katun = "anttis".
-gcBrand = "1".
-{Func/date.i}
+Syst.Var:katun = "anttis".
+Syst.Var:gcBrand = "1".
 
 find daycampaign where
      daycampaign.dcevent = "SMSFREEOCT10" no-lock.
@@ -20,7 +19,7 @@ repeat:
 etime(true).
 
 DEFINE VARIABLE ldeBegin AS DECIMAL NO-UNDO. 
-ldeBegin = fMakeTS().
+ldeBegin = Func.Common:mMakeTS().
 
 do trans:
 
@@ -67,7 +66,7 @@ do trans:
       ELSE LEAVE.
    END.
 
-   ASSIGN DCCLI.Brand        = gcBrand
+   ASSIGN DCCLI.Brand        = Syst.Var:gcBrand
           DCCLI.DCEvent      = daycampaign.dcevent
           DCCLI.MsSeq        = mobsub.msseq
           DCCLI.CLI          = mobsub.cli
@@ -87,5 +86,5 @@ end. /* trans */
 end.
 
 DEFINE VARIABLE ldeEnd AS DECIMAL NO-UNDO. 
-ldeEnd = fMakeTS().
+ldeEnd = Func.Common:mMakeTS().
 

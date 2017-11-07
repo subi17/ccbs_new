@@ -11,7 +11,6 @@
 {Func/cparam2.i}
 {Func/fcreatereq.i}
 {Mnp/mnp.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/freacmobsub.i}
 
@@ -37,7 +36,7 @@ FIND FIRST bTermMobSub WHERE
 IF AVAIL bTermMobSub AND bTermMobSub.MultiSIMId > 0 AND
    bTermMobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} THEN DO:
    FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-              lbMobSub.Brand  = gcBrand AND
+              lbMobSub.Brand  = Syst.Var:gcBrand AND
               lbMobSub.MultiSimID = bTermMobSub.MultiSimID AND
               lbMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
               lbMobSub.Custnum = bTermMobSub.Custnum NO-ERROR.
@@ -54,7 +53,7 @@ END. /* IF AVAIL bTermMobSub THEN DO: */
 
 /* Set Reactivation time */
 IF ldActStamp = 0 OR ldActStamp = ? THEN
-   ldActStamp = fMakeTS().
+   ldActStamp = Func.Common:mMakeTS().
 
 /* Create Reactivation Request */
 liMsReq = fReactivationRequest(INPUT iiMsSeq,

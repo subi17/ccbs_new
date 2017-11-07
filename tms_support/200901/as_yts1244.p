@@ -1,7 +1,6 @@
 {Syst/testpaa.i}
-gcbrand = "1".
-katun = "anttis".
-{Func/timestamp.i}
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "anttis".
 {Func/ftopup.i}
 
 session:numeric-format = "european".

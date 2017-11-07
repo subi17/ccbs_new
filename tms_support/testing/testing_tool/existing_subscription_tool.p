@@ -28,7 +28,7 @@ ASSIGN
    xMailSubj         = fCparam("TestingTool","EmailSubject")
    lcLockFile        = fCparam("TestingTool","DaemonLockFile").   
    
-   ldThisRun         = fMakeTS().
+   ldThisRun         = Func.Common:mMakeTS().
 
 /* Main Block */
 

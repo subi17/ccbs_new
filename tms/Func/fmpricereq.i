@@ -58,7 +58,7 @@ FUNCTION fFeeModelPriceRequest RETURNS INTEGER
 
    /* set activation time by default to tomorrow if not given */
    IF idActStamp = 0 OR idActStamp = ? THEN 
-      idActStamp = fMake2Dt(TODAY + 1,1).
+      idActStamp = Func.Common:mMake2DT(TODAY + 1,1).
 
    fCreateRequest(27,
                   idActStamp,
