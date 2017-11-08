@@ -23,7 +23,7 @@
 &GLOBAL-DEFINE BBPROFILE  "1,2"
 &GLOBAL-DEFINE LOGVALUE   "Yes,No"
 &GLOBAL-DEFINE TAXCLASS   "0,1,2"   /* 0: Duty free / 1: Usage / 2: Terminals */
-&GLOBAL-DEFINE TARIFFTYPE "0,1,2,3" /* 0: MobileOnly / 1: Convergent / 2: FixedOnly / 3: Fusion */
+&GLOBAL-DEFINE TARIFFTYPE "MobileOnly,Convergent,FixedOnly,Fusion"
 
 &GLOBAL-DEFINE CT      "CLIType"  
 &GLOBAL-DEFINE TN      "TariffName"
