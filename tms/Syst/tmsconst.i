@@ -1,5 +1,5 @@
 /* TMS Global Constants */
-/* Hint: Use ({&SOME_VARIABLE}) with messages so that compiler notices if constant does not exists  */
+/* Hint: Use ({&SOME_VARIABLE}) with messages so that compiler notices if constant does not exists */
 &IF "{&TMSCONST_I}" NE "YES"
 &THEN
 &GLOBAL-DEFINE TMSCONST_I YES
