@@ -390,7 +390,7 @@ PROCEDURE pCLIType:
          CliType.FixedLineUpload   = ttCliType.FixedLineUpload.
 
       IF ttCliType.CopyServicesFromCliType > "" THEN 
-         RUN pCTServPac(ttCliType.CliType, ttCliType.CopyServicesFromCliType).      
+         RUN pCTServPac(ttCliType.BaseBundle, ttCliType.CliType, ttCliType.CopyServicesFromCliType).
       
       IF ttCliType.AllowedBundles > "" THEN
       DO:
@@ -530,6 +530,8 @@ END PROCEDURE.
 
 
 PROCEDURE pCTServPac:
+
+   DEFINE INPUT PARAMETER icBaseBundle              AS CHARACTER NO-UNDO.
    DEFINE INPUT PARAMETER icCLIType                 AS CHARACTER NO-UNDO.
    DEFINE INPUT PARAMETER icCopyServicesFromCliType AS CHARACTER NO-UNDO.   
    
@@ -556,6 +558,10 @@ PROCEDURE pCTServPac:
             ASSIGN 
                CTServEl.CTServEl = NEXT-VALUE(CTServEl)
                CTServEl.CLIType  = icCLIType.
+
+         IF bf_CTServEl_CopyFrom.ServPac = "TMSSERVICE" AND
+            bf_CTServEl_CopyFrom.ServCom = "SHAPER_STP"
+         THEN CTServEl.DefParam = icBaseBundle.
 
          FIND ServCom WHERE ServCom.Brand = Syst.Var:gcBrand AND ServCom.ServCom = CTServEl.ServCom NO-LOCK NO-ERROR.
          IF AVAILABLE ServCom AND ServCom.ServAttr = TRUE THEN
@@ -1090,11 +1096,11 @@ PROCEDURE pServiceLimit:
          ServiceLimit.GroupCode      = ttServiceLimit.GroupCode
          ServiceLimit.SLCode         = ttServiceLimit.SLCode                                                    
          ServiceLimit.SLSeq          = oiSLSeq 
-         ServiceLimit.SLName         = ttServiceLimit.SLName                             
+         ServiceLimit.SLName         = ttServiceLimit.SLName
          ServiceLimit.DialType       = ttServiceLimit.DialType
          ServiceLimit.InclAmt        = ttServiceLimit.InclAmt                  
          ServiceLimit.InclUnit       = ttServiceLimit.InclUnit
-         ServiceLimit.BDestLimit     = 0
+         ServiceLimit.BDestLimit     = ttServiceLimit.BDestLimit
          ServiceLimit.ValidFrom      = TODAY 
          ServiceLimit.ValidTo        = DATE(12,31,2049)
          ServiceLimit.FirstMonthCalc = ttServiceLimit.FirstMonthCalc

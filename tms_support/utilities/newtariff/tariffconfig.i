@@ -94,6 +94,7 @@ DEFINE TEMP-TABLE ttServiceLimit NO-UNDO
     FIELD InclAmt        AS DECIMAL
     FIELD FirstMonthCalc AS INTEGER
     FIELD LastMonthCalc  AS INTEGER
+    FIELD BDestLimit     AS INTEGER
     INDEX IdxGroupCode IS UNIQUE PRIMARY GroupCode SLCode.
 
 DEFINE TEMP-TABLE ttServiceLimitTarget NO-UNDO

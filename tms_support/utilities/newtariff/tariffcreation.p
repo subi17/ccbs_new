@@ -560,7 +560,9 @@ PROCEDURE pCreateServiceLimit_Voice:
     DEFINE INPUT PARAMETER ideVoiceLimit      AS DECIMAL   NO-UNDO.
     DEFINE INPUT PARAMETER iiVLFirstMonthCalc AS INTEGER   NO-UNDO.
     DEFINE INPUT PARAMETER iiVLLastMonthCalc  AS INTEGER   NO-UNDO.    
-    DEFINE INPUT PARAMETER icMobileFixedLine  AS CHARACTER NO-UNDO.    
+    DEFINE INPUT PARAMETER icMobileFixedLine  AS CHARACTER NO-UNDO.
+    DEFINE INPUT PARAMETER ideBDestLimit      AS DECIMAL   NO-UNDO.
+
 
     DEFINE VARIABLE liCount           AS INTEGER   NO-UNDO.
     DEFINE VARIABLE lcBCList          AS CHARACTER NO-UNDO.
@@ -579,7 +581,8 @@ PROCEDURE pCreateServiceLimit_Voice:
        ttServiceLimit.InclUnit       = 1
        ttServiceLimit.InclAmt        = ideVoiceLimit
        ttServiceLimit.FirstMonthCalc = iiVLFirstMonthCalc
-       ttServiceLimit.LastMonthCalc  = iiVLLastMonthCalc.        
+       ttServiceLimit.LastMonthCalc  = iiVLLastMonthCalc
+       ttServiceLimit.BDestLimit     = INTEGER(ideBDestLimit).
 
      IF ilPostpaid THEN 
      DO: 
@@ -1004,11 +1007,12 @@ PROCEDURE pBundle:
                                          ideVoiceLimit,
                                          iiVLFirstMonthCalc,
                                          iiVLLastMonthCalc,
-                                         icMobileFixedLine).
+                                         icMobileFixedLine,
+                                         ideBDestLimit).
         END.
 
         IF ideBDestLimit > 0 AND 
-           (icMobileFixedLine NE "mobile" OR ideVoiceLimit EQ 0) THEN 
+           ( /*icMobileFixedLine NE "mobile" OR */ ideVoiceLimit EQ 0) THEN
         DO:
            RUN pCreateServiceLimit_BDest(lcCliType,
                                          ttDayCampaign.DCEvent,
