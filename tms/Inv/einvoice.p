@@ -62,7 +62,7 @@ FUNCTION fGenerateEmailTemplate RETURNS CHAR
    DEF VAR llgOK AS LOGICAL NO-UNDO.
    DEF VAR lcPass AS CHAR NO-UNDO.
 
-
+InvTextist.paramtext.keyvalue Jsonparam"MsSeq=#MSSEQ| ..."
    CREATE eInvoiceContent.
    ASSIGN
       eInvoiceContent.MsSeq = STRING(iiMsSeq)
