@@ -8,7 +8,6 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/date.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Syst/tmsconst.i}
@@ -45,13 +44,13 @@ OUTPUT STREAM sdump TO value (icFile).
 
 CHECK_LOOP:
 FOR EACH MNPProcess WHERE
-   MNPProcess.Brand = gcBrand AND
+   MNPProcess.Brand = Syst.Var:gcBrand AND
    MNPProcess.MNPType = {&MNP_TYPE_OUT} AND
    MNPProcess.StatusCode = {&MNP_ST_ASOL} NO-LOCK:
 
    liSlotsAfterCreation = fMNPPeriods(
       input MNPProcess.CreatedTS,
-      input fMakeTS(),
+      input Func.Common:mMakeTS(),
       INPUT 0,
       OUTPUT ldaDueDate).
     
@@ -72,13 +71,13 @@ FOR EACH MNPProcess WHERE
       END.
 
       FIND MNPOperator WHERE 
-           MNPOperator.Brand = gcBrand AND
+           MNPOperator.Brand = Syst.Var:gcBrand AND
            MNPOperator.OperCode = MNPProcess.OperCode
       NO-LOCK NO-ERROR.
       IF AVAIL MNPOperator THEN lcOperName = MNPOperator.OperName.
       ELSE IF AMBIGUOUS(MNPOperator) THEN DO:
          FIND FIRST MNPOperator WHERE 
-                    MNPOperator.Brand = gcBrand AND
+                    MNPOperator.Brand = Syst.Var:gcBrand AND
                     MNPOperator.OperCode = MNPProcess.OperCode
          NO-LOCK.
          IF AVAIL MNPOperator THEN lcOperName = MNPOperator.OperBrand.
@@ -89,8 +88,8 @@ FOR EACH MNPProcess WHERE
       put stream sdump unformatted 
          MNPProcess.PortRequest lcDelimiter
          SUBSTRING(lcmsisdns,1,LENGTH(lcmsisdns) - 1) lcDelimiter
-         fTS2HMS(MNPProcess.CreatedTS) lcDelimiter
-         fTS2HMS(MNPProcess.PortingTime) lcDelimiter
+         Func.Common:mTS2HMS(MNPProcess.CreatedTS) lcDelimiter
+         Func.Common:mTS2HMS(MNPProcess.PortingTime) lcDelimiter
          lcProposal lcDelimiter
          MNPProcess.OperCode lcDelimiter
          lcOperName skip.

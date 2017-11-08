@@ -31,7 +31,6 @@
 
 {Syst/commali.i} 
 {Syst/tmsconst.i}
-{Func/func.p}
 {Mc/lib/tokenlib.i}
 {Mc/lib/tokenchk.i 'OrdStat'}
 {Syst/eventval.i}
@@ -41,7 +40,7 @@
 {Func/barrfunc.i}
 IF llDoEvent THEN DO:
 
-  &GLOBAL-DEFINE STAR_EVENT_USER katun
+  &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    
   {Func/lib/eventlog.i}
       
@@ -120,17 +119,16 @@ ELSE DO:
    ELSE RETURN.
 END.
 
-IF Avail Customer THEN lcUserName =  DYNAMIC-FUNCTION("fDispCustName" IN
-                                     ghFunc1, BUFFER Customer).
+IF Avail Customer THEN lcUserName = Func.Common:mDispCustName(BUFFER Customer).
 ELSE                    lcUserName = "".
 
 
 DO WHILE TRUE:
    ASSIGN 
       noMobile = (not avail mobsub) 
-      ufk = 0 
-      ufk[8] = 8 
-      ehto = 3. 
+      Syst.Var:ufk = 0 
+      Syst.Var:ufk[8] = 8 
+      Syst.Var:ehto = 3. 
    IF AVAIL MobSub AND Mobsub.msStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN DO:
       noMobile = TRUE.
       llPartial = TRUE.
@@ -345,7 +343,7 @@ DO WHILE TRUE:
    ELSE IF FRAME-INDEX = 20 AND (NOT noMobile OR llPartial) THEN DO :
       IF NOT fIsPermittedModule(MobSub.CliType, "dccli") THEN NEXT. 
 
-      lcDSSBundleId = fGetActiveDSSId(INPUT MobSub.CustNum, INPUT fMakeTS()).
+      lcDSSBundleId = fGetActiveDSSId(INPUT MobSub.CustNum, INPUT Func.Common:mMakeTS()).
       IF lcDSSBundleId = "DSS2" THEN
          lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
 
@@ -369,8 +367,8 @@ DO WHILE TRUE:
              EndPeriod   LABEL  "Period To .....:"    SKIP
       
       WITH  OVERLAY ROW 5 centered
-      COLOR VALUE(cfc)
-      TITLE COLOR VALUE(ctc) (IF llDSSActive THEN "RERATE CUSTOMER"
+      COLOR VALUE(Syst.Var:cfc)
+      TITLE COLOR VALUE(Syst.Var:ctc) (IF llDSSActive THEN "RERATE CUSTOMER"
                               ELSE "RERATE SUBSCRIPTION")
       SIDE-LABELS
       FRAME rerate.
@@ -444,7 +442,7 @@ DO WHILE TRUE:
          VIEW-AS ALERT-BOX BUTTONS YES-NO TITLE " CONFIRMATION " UPDATE ok .
          
       IF NOT ok THEN NEXT.
-      RUN Mm/reacmobsub_cui.p(INPUT TermMobsub.Msseq, INPUT katun).
+      RUN Mm/reacmobsub_cui.p(INPUT TermMobsub.Msseq, INPUT Syst.Var:katun).
    END. /* ELSE IF FRAME-INDEX = 27 AND noMobile THEN DO: */
 
    /* call specification */

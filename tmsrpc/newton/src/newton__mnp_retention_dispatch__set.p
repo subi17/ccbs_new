@@ -10,7 +10,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/eventval.i}
 
 DEF VAR resp_array         AS CHARACTER NO-UNDO.
@@ -36,12 +36,12 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-katun = pcUsername.
+Syst.Var:katun = pcUsername.
    
 {newton/src/settenant.i pcTenant}
 
 FOR EACH mnpretplatform NO-LOCK WHERE
-         mnpretplatform.brand EQ gcBrand AND
+         mnpretplatform.brand = Syst.Var:gcBrand AND
          mnpretplatform.Todate >= TODAY AND
          mnpretplatform.FromDate <= TODAY:
    CREATE ttMNPRetPlatform.
@@ -120,7 +120,6 @@ END.
 add_boolean(response_toplevel_id, ?, TRUE).
  
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-   IF llDoEvent THEN fCleanEventObjects().
+      IF llDoEvent THEN fCleanEventObjects().
    EMPTY TEMP-TABLE ttMNPRetPlatform.
 END.

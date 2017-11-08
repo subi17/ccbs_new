@@ -1,10 +1,8 @@
 {Syst/commpaa.i}
-gcBrand = "1".
-katun = "Qvantel".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Qvantel".
 {Syst/tmsconst.i}
 {Mm/fbundle.i}
-{Func/date.i}
-{Func/timestamp.i}
 {Mm/requestaction_exec.i}
 
 DEF VAR lcRequestTypes            AS CHAR NO-UNDO.
@@ -42,10 +40,10 @@ lcRequestTypes = "0,81".
 IF DAY(TODAY) = 1 THEN
    ldaActDate = TODAY.
 ELSE
-   ldaActDate = fLastDayOfMonth(TODAY) + 1.
+   ldaActDate = Func.Common:mLastDayOfMonth(TODAY) + 1.
 
 ASSIGN ldaEndDate  = (ldaActDate - 1)
-       ldeActStamp = fMake2Dt(ldaActDate,0).
+       ldeActStamp = Func.Common:mMake2DT(ldaActDate,0).
 
 lcLogFile = "/apps/yoigo/tms_support/testing/pending_penalty_by_stc_" +
             STRING(YEAR(ldaActDate)) + STRING(MONTH(ldaActDate),"99") +
@@ -64,7 +62,7 @@ DO liCount = 1 TO NUM-ENTRIES(lcRequestTypes):
 
    do liLoop2 = 1 TO NUM-ENTRIES(lcReqStatuses):
    FOR EACH MsRequest NO-LOCK WHERE
-            MsRequest.Brand = gcBrand AND
+            MsRequest.Brand = Syst.Var:gcBrand AND
             MsRequest.ReqType = liRequestType AND
             MsRequest.ReqStatus = int(ENTRY(liLoop2,lcReqStatuses)) AND
             MsRequest.ActStamp = ldeActStamp:
