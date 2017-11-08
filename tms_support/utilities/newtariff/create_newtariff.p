@@ -9,25 +9,17 @@
   ----------------------------------------------------------------------*/
 
 /* ***************************  Definitions  ************************** */
-{Syst/commpaa.i}
-Syst.Var:katun = "Cron".
-Syst.Var:gcBrand = "1".
+
 {Func/cparam2.i}
-{Syst/eventlog.i}
-{Func/ftransdir.i}
-{utilities/newtariff/tariffconfig.i}
-{utilities/newtariff/tariffcons.i}
 
 DEFINE VARIABLE lcLine            AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcLogFile         AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcFileName        AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcFileName        AS CHARACTER EXTENT 3 NO-UNDO.
 DEFINE VARIABLE lcIncDir          AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcInputFile       AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcProcDir         AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcProcessedFile   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcSpoolDir        AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcReportFileOut   AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcOutDir          AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcBillCode        AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcDBillCode       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcCLIType         AS CHARACTER NO-UNDO.
@@ -42,6 +34,8 @@ DEFINE STREAM sLog.
 
 DEFINE TEMP-TABLE ttFiles No-UNDO
    FIELD FName  AS CHARACTER
+   FIELD FBaseName  AS CHARACTER
+   FIELD Program AS CHARACTER
    FIELD FOrder AS INTEGER
    INDEX FOrder AS PRIMARY FOrder.
     
@@ -71,41 +65,55 @@ RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "CTServPac" "/app
 RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "RepText" "/apps/yoigo/tms_support/utilities/newtariff/exportdata".
 RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "CTServEl" "/apps/yoigo/tms_support/utilities/newtariff/exportdata".
 */
+
+FUNCTION fCreatettFiles RETURNS LOGICAL
+   (icBaseName AS CHARACTER,
+    icFileName AS CHARACTER,
+    icProgram  AS CHARACTER,
+    iiOrder    AS INTEGER):
+
+   CREATE ttFiles.
+   ASSIGN
+      ttFiles.FName   = icFileName
+      ttFiles.FBaseName = icBaseName
+      ttFiles.Program = icProgram
+      ttFiles.FOrder  = iiOrder.
+      
+   RETURN FALSE.
+
+END FUNCTION.
+
+ASSIGN
+   lcIncDir   = fCParam("TariffCreation","IncDir")
+   lcSpoolDir = fCParam("TariffCreation","OutSpoolDir").
+
 NEW-TARIFF:
 DO TRANSACTION:
-   ASSIGN
-      lcIncDir   = fCParam("TariffCreation","IncDir")
-      lcProcDir  = fCParam("TariffCreation","IncProcDir")
-      lcSpoolDir = fCParam("TariffCreation","OutSpoolDir")
-      lcOutDir   = fCParam("TariffCreation","OutDir").
    
    /* File reading and parsing */
    INPUT STREAM sFile FROM OS-DIR(lcIncDir).
    REPEAT:   
-      IMPORT STREAM sFile UNFORMATTED lcFileName.
+      IMPORT STREAM sFile lcFileName.
+      
+      IF INDEX(lcFileName[3],"F") EQ 0
+      THEN NEXT.
 
-      IF INDEX(lcFileName,"billingitem") > 0 THEN 
-      DO:
-         CREATE ttFiles.
-         ASSIGN
-            ttFiles.FName  = lcFileName
-            ttFiles.FOrder = 1.
-      END.
-      ELSE IF INDEX(lcFileName,"shaperconf") > 0 THEN 
-      DO:
-         CREATE ttFiles.
-         ASSIGN
-            ttFiles.FName  = lcFileName
-            ttFiles.FOrder = 2.
-      END.      
-      ELSE IF INDEX(lcFileName,"tariffcreation") > 0 THEN 
-      DO:
-         CREATE ttFiles.
-         ASSIGN
-            ttFiles.FName  = lcFileName
-            ttFiles.FOrder = 3.
-      END.  
+      CASE ENTRY(1,lcFileName[1], "."):
+
+         WHEN "billitem"
+         THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/billitemcreation.p", 1).
+         WHEN "billitem_translation"
+         THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/billitemtrans.p", 1).
+         WHEN "bundle"
+         THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/bundlecreation.p", 2). /* DayCampaign */
+         WHEN "shaperconf"
+         THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/shaperconfcreation.p", 3).
+         WHEN "tariff"
+         THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/tariffcreation.p", 4). /* Actually CLIType not Tariff! */
+
+      END CASE.
    END.
+
    INPUT STREAM sFile CLOSE.
 
    FOR EACH ttFiles NO-LOCK:
@@ -115,13 +123,8 @@ DO TRANSACTION:
    FOR EACH ttFiles NO-LOCK 
          BY ttFiles.FOrder:
       
-      IF INDEX(ttFiles.FName,"billingitem") > 0 THEN 
-         RUN utilities/newtariff/billitemcreation.p(lcIncDir,lcSpoolDir) NO-ERROR.
-      ELSE IF INDEX(ttFiles.FName,"shaperconf") > 0 THEN
-         RUN utilities/newtariff/shaperconfcreation.p(lcIncDir, lcSpoolDir) NO-ERROR.      
-      ELSE IF INDEX(ttFiles.FName,"tariffcreation") > 0 THEN 
-        RUN utilities/newtariff/tariffcreation.p(lcIncDir,lcSpoolDir) NO-ERROR.
-
+      RUN VALUE(ttFiles.Program) (ttFiles.FName, lcSpoolDir) NO-ERROR.
+      
       IF ERROR-STATUS:ERROR   OR
          RETURN-VALUE <> "OK" THEN DO:
          MESSAGE RETURN-VALUE error-status:get-message(1) view-as ALERT-BOX.
@@ -129,4 +132,3 @@ DO TRANSACTION:
       END.
    END.
 END. /* do */
-

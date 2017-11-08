@@ -9,14 +9,10 @@
   ----------------------------------------------------------------------*/
   
 /* ***************************  Definitions  ************************** */
-{Syst/commpaa.i}
-Syst.Var:katun = "Cron".
-Syst.Var:gcBrand = "1".
-{Func/cparam2.i}
-{Syst/eventlog.i}
-{Func/ftransdir.i}
-{utilities/newtariff/tariffconfig.i}
-{utilities/newtariff/tariffcons.i}
+
+DEFINE INPUT  PARAMETER icBaseFile AS CHARACTER NO-UNDO. 
+DEFINE INPUT  PARAMETER icFile     AS CHARACTER NO-UNDO. 
+DEFINE INPUT  PARAMETER icSpoolDir AS CHARACTER NO-UNDO.
 
 DEFINE TEMP-TABLE ttBillItem NO-UNDO
    FIELD BillItem   AS CHARACTER 
@@ -27,19 +23,13 @@ DEFINE TEMP-TABLE ttBillItem NO-UNDO
    FIELD IFSCode    AS CHARACTER 
    FIELD ItemType   AS INT
    FIELD CostCenter AS CHARACTER. 
-
-DEFINE INPUT  PARAMETER icIncDir   AS CHARACTER NO-UNDO. 
-DEFINE INPUT  PARAMETER icSpoolDir AS CHARACTER NO-UNDO.
  
 DEFINE VARIABLE lcLine      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcLogFile   AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcInputFile AS CHARACTER NO-UNDO.
-DEFINE VARIABLE liFirstLine AS INTEGER   NO-UNDO INITIAL 1.
+DEFINE VARIABLE llFirst AS LOGICAL INITIAL TRUE NO-UNDO.
 
 DEFINE STREAM BIIn.
-DEFINE STREAM BTIn.
 DEFINE STREAM BILog.
-DEFINE STREAM BTLog.
 /* ********************  Functions  ******************** */
 
 FUNCTION fError RETURNS LOGIC
@@ -56,10 +46,9 @@ END FUNCTION.
 
 /* ***************************  Main Block  *************************** */
 
-ASSIGN lcLogFile   = icSpoolDir + "billingitem.log"
-       lcInputFile = icIncDir + "billingitem.txt".   
+lcLogFile   = icSpoolDir + icBaseFile + ".log".
 
-INPUT STREAM BIIn FROM VALUE(lcInputFile).
+INPUT STREAM BIIn FROM VALUE(icFile).
 OUTPUT STREAM BILog TO VALUE(lcLogFile) APPEND.
                           
 REPEAT:
@@ -67,8 +56,9 @@ REPEAT:
    IMPORT STREAM BIIn UNFORMATTED lcLine.
    
    /* Ignore the first line - (Header) */
-   IF liFirstLine = 1 THEN DO:
-      liFirstLine = liFirstLine + 1.
+   IF llFirst
+   THEN DO:
+      llFirst = FALSE.
       NEXT.
    END.
     
@@ -90,40 +80,6 @@ REPEAT:
    
 END.
 
-ASSIGN 
-   lcLogFile   = icSpoolDir + "billitem_trans.log"
-   lcInputFile = icIncDir + "billitem_trans.txt"
-   liFirstLine = 1.
-
-INPUT STREAM BTIn FROM VALUE(lcInputFile).
-OUTPUT STREAM BTLog TO VALUE(lcLogFile) APPEND.
-                           
-REPEAT:
-
-   IMPORT STREAM BTIn UNFORMATTED lcLine.
-   
-   /* Ignore the first line - (Header) */
-   IF liFirstLine = 1 THEN DO:
-      liFirstLine = liFirstLine + 1.
-      NEXT.
-   END.
-   
-   IF TRIM(lcLine) eq "" THEN NEXT.
-    
-   CREATE ttTrans.
-   ASSIGN 
-      ttTrans.tLangType  = TRIM(ENTRY(1,lcLine,";")) 
-      ttTrans.tLangint   = TRIM(ENTRY(2,lcLine,";"))
-      ttTrans.tLangtext  = TRIM(ENTRY(3,lcLine,";")) 
-      ttTrans.tLangTrans = TRIM(TRIM(ENTRY(4,lcLine,";")),'"') NO-ERROR.
-   
-   IF ERROR-STATUS:ERROR THEN DO:
-      fError("Incorrect input translation data").
-      RETURN "ERROR". 
-   END.
-   
-END.
-
 RUN pValidateFileData.
 
 IF RETURN-VALUE <> "OK" THEN 
@@ -135,9 +91,7 @@ IF RETURN-VALUE <> "OK" THEN
    RETURN RETURN-VALUE.   
 
 OUTPUT STREAM BILog CLOSE.
-OUTPUT STREAM BTLog CLOSE.
 INPUT  STREAM BIIn  CLOSE.
-INPUT  STREAM BTIn  CLOSE.
 
 RETURN "OK".
 
@@ -246,52 +200,7 @@ PROCEDURE pCreateBillingItem:
       END.   
 
    END.    
-   
-   RUN pCreTranslations NO-ERROR.
-     
-   IF RETURN-VALUE <> "OK" THEN
-      RETURN "ERROR".
-      
+
    RETURN "OK".        
-        
-END PROCEDURE.    
-
-PROCEDURE pCreTranslations:
-
-   FOR EACH ttTrans NO-LOCK:    
-      IF CAN-FIND(FIRST BillItem WHERE 
-                        BillItem.Brand    = Syst.Var:gcBrand            AND 
-                        BillItem.BillCode = ttTrans.tLangType) THEN DO:
-         
-         IF CAN-FIND(FIRST RepText WHERE 
-                           RepText.Brand    = Syst.Var:gcBrand                    AND
-                           RepText.TextType = 1 AND
-                           RepText.LinkCode = ttTrans.tLangType          AND
-                           RepText.Language = INTEGER(ttTrans.tLangint)) THEN 
-            NEXT.
-                                                
-         CREATE RepText.
-         ASSIGN 
-            RepText.Brand    = Syst.Var:gcBrand    
-            RepText.TextType = 1               /* Default value */       
-            RepText.LinkCode = ttTrans.tLangType        
-            RepText.Language = INTEGER(ttTrans.tLangint)    
-            RepText.FromDate = TODAY     
-            RepText.ToDate   = 12/31/49       
-            RepText.RepText  = ttTrans.tLangTrans  NO-ERROR.
-            
-         IF ERROR-STATUS:ERROR THEN DO:
-            fError("Creating translations for BillItem").
-            RETURN "ERROR".
-         END.
-            
-      END.
-      ELSE DO:
-         fError("BillItem doesn't exists").
-         RETURN "ERROR".
-      END.
-   END.
-   
-   RETURN "OK".
         
 END PROCEDURE.
