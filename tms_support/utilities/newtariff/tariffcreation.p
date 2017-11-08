@@ -48,6 +48,8 @@ DEFINE VARIABLE lcAllowedBundles                         AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcBundlesForActivateOnSTC                AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcServicesForReCreateOnSTC               AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcCopyServicesFromCliType                AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcTariffType                             AS CHARACTER NO-UNDO.
+
 /* Mobile Base Bundle Attributes */
 DEFINE VARIABLE lcMobile_BaseBundle                      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcMobile_BaseBundleType                  AS CHARACTER NO-UNDO.
@@ -353,7 +355,8 @@ PROCEDURE pProcessTT:
               ttCliType.MobileBaseBundleDataLimit = 0
               ttCliType.BundlesForActivateOnSTC   = ""
               ttCliType.ServicesForReCreateOnSTC  = ""
-              ttCliType.CopyServicesFromCliType   = lcCopyServicesFromCliType.
+              ttCliType.CopyServicesFromCliType   = lcCopyServicesFromCliType
+              ttClitype.TariffType                = INTEGER(fTMSCValue("CLIType","TariffType",lcTariffType)).
        END.
    END.
 
@@ -383,7 +386,8 @@ PROCEDURE pProcessTT:
       ttCliType.MobileBaseBundleDataLimit = DECIMAL(lcMobile_DataLimit) 
       ttCliType.BundlesForActivateOnSTC   = lcBundlesForActivateOnSTC
       ttCliType.ServicesForReCreateOnSTC  = lcServicesForReCreateOnSTC
-      ttCliType.CopyServicesFromCliType   = (IF lcTariffBundle > "" THEN "" ELSE lcCopyServicesFromCliType).
+      ttCliType.CopyServicesFromCliType   = (IF lcTariffBundle > "" THEN "" ELSE lcCopyServicesFromCliType)
+      ttClitype.TariffType                = INTEGER(fTMSCValue("CLIType","TariffType",lcTariffType)). 
 
    
     IF lcMobile_BaseBundle > "" OR lcTariffBundle > "" THEN 
@@ -1053,7 +1057,14 @@ PROCEDURE pValidateData:
                   ASSIGN 
                      llgTrafficBundle = YES
                      lcTariffBundle   = ttTariffCre.FieldValue.          
-            END.            
+            END.      
+            WHEN {&TT} THEN 
+            DO:
+               IF (ttTariffCre.FieldValue EQ "") OR LOOKUP(ttTariffCre.FieldValue,{&TARIFFTYPE}) EQ 0 THEN
+                  UNDO, THROW NEW Progress.Lang.AppError("Wrong TariffType data", 1).                  
+               ELSE 
+                  ASSIGN lcTariffType = ttTariffCre.FieldValue.                   
+            END.     
             WHEN {&WS} THEN 
             DO:
                IF (ttTariffCre.FieldValue EQ "") OR LOOKUP(ttTariffCre.FieldValue,{&WEBSTATUS}) = 0 THEN
@@ -1465,3 +1476,4 @@ PROCEDURE pSaveTranslation:
    RETURN "".
 
 END PROCEDURE.
+

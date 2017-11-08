@@ -56,6 +56,7 @@ DEFINE TEMP-TABLE ttCliType NO-UNDO
     FIELD BundlesForActivateOnSTC   AS CHARACTER
     FIELD ServicesForReCreateOnSTC  AS CHARACTER
     FIELD CopyServicesFromCliType   AS CHARACTER 
+    FIELD TariffType                AS INTEGER
     INDEX IdxCliType IS UNIQUE PRIMARY CliType.  
 
 DEFINE TEMP-TABLE ttDayCampaign NO-UNDO
@@ -121,8 +122,3 @@ DEFINE TEMP-TABLE ttBDest NO-UNDO
     FIELD CCN       AS INTEGER
     INDEX IdxGroupCodeBDest IS UNIQUE PRIMARY GroupCode SLCode BDest.
 
-            
-
-
-
-  
