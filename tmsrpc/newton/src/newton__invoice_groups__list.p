@@ -8,7 +8,6 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
-DEF VAR gcBrand AS CHAR NO-UNDO INIT "1".
 DEF VAR lcResultStruct AS CHAR NO-UNDO. 
 DEF VAR pcStruct AS CHAR NO-UNDO. 
 DEF VAR lcStruct AS CHAR NO-UNDO. 
@@ -88,6 +87,8 @@ DEF VAR liCustNum AS INT NO-UNDO.
 DEF VAR lcQuery AS CHAR NO-UNDO. 
 
 liCustNum = get_int(pcStruct,"customer_id").
+
+{newton/src/findtenant.i NO Common Customer CustNum liCustNum}
 
 lcQuery = 'FOR EACH InvoiceTargetGroup NO-LOCK WHERE ' + 
                    'InvoiceTargetGroup.CustNum = ' + STRING(liCustNum) + 

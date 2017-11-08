@@ -12,18 +12,25 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-katun = "Newton".
-gcBrand = "1".
+Syst.Var:katun = "Newton".
+Syst.Var:gcBrand = "1".
 
-DEF VAR lcResultStruct AS CHAR NO-UNDO. 
-DEF VAR resp_array AS CHARACTER NO-UNDO.
+DEF VAR pcTenant       AS CHAR      NO-UNDO.
+DEF VAR lcResultStruct AS CHAR      NO-UNDO. 
+DEF VAR resp_array     AS CHARACTER NO-UNDO.
 
-IF validate_request(param_toplevel_id, "") = ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string") = ? THEN RETURN.
+
+pcTenant   = get_string(param_toplevel_id, "0").
+
+IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 resp_array = add_array(response_toplevel_id, "").
+
+{newton/src/settenant.i pcTenant}
       
 FOR EACH mnpretplatform NO-LOCK WHERE
-         mnpretplatform.brand = gcBrand AND
+         mnpretplatform.brand = Syst.Var:gcBrand AND
          mnpretplatform.Todate >= TODAY AND
          mnpretplatform.FromDate <= TODAY:
    
@@ -36,5 +43,4 @@ FOR EACH mnpretplatform NO-LOCK WHERE
 END.
  
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

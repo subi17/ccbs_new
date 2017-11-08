@@ -6,7 +6,6 @@
 /* 
 CREATED ...: kl 05.08.98
 MODIFIED ..: kl 31.08.98 - DO FOR buff:
-                07.03.03/aam fSec2C removed (is in func.i)
 */
 
 FUNCTION fOLRefresh RETURNS logical

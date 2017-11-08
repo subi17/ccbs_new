@@ -28,7 +28,7 @@
 
 DEF VAR asno         AS INTEGER   FORMAT "zzzzzzz9"  INIT "0"        NO-UNDO.
 DEF VAR lano1        AS INTEGER   FORMAT "zzzzzzz9"  INIT "1"        NO-UNDO.
-DEF VAR lano2        AS INTEGER   FORMAT "zzzzzzz9"  INIT "99999999" NO-UNDO.
+DEF VAR lano2        AS INTEGER   FORMAT "zzzzzzz9"  INIT "999999999" NO-UNDO.
 DEF VAR Lpvm         AS DATE      FORMAT "99-99-99"  INIT TODAY      NO-UNDO.
 DEF VAR igroup       AS CHAR      FORMAT "x(8)"                      NO-UNDO.
 
@@ -60,7 +60,7 @@ FORM
    " - From specified invoicing date and from specified invoicing group." SKIP
    SKIP (13)
    WITH ROW 1 SIDE-LABELS WIDTH 80
-        TITLE " " + ynimi + " ELETTERS FROM INVOICES " +
+        TITLE " " + Syst.Var:ynimi + " ELETTERS FROM INVOICES " +
         STRING(TODAY,"99-99-99") + " "
         FRAME valinta.
 
@@ -129,7 +129,7 @@ REPEAT:
             LLtila xCredit llPrintService llInvType
             WITH FRAME rajat.
 
-    ehto = 9. RUN Syst/ufkey.p.
+    Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
     UPDATE 
        lano1
@@ -157,7 +157,7 @@ REPEAT:
             ELSE IF FRAME-FIELD = "lano2" THEN DO:
                 IF INPUT lano2 = INPUT lano1 THEN DO:
                     FIND FIRST Invoice NO-LOCK WHERE
-                         Invoice.Brand  = gcBrand AND 
+                         Invoice.Brand  = Syst.Var:gcBrand AND 
                          Invoice.InvNum = INPUT lano2 NO-ERROR.
                     IF AVAILABLE Invoice THEN DISPLAY
                         Invoice.InvDate  ;& Lpvm 
@@ -172,22 +172,22 @@ REPEAT:
 
     task:
     repeat WITH FRAME rajat:
-      ASSIGN ufk = 0 ufk[1] = 7 ufk[5] = 63 ufk[8] = 8 ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 7 Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN NEXT  limits.
-      IF toimi = 8 THEN LEAVE limits.
+      IF Syst.Var:toimi = 1 THEN NEXT  limits.
+      IF Syst.Var:toimi = 8 THEN LEAVE limits.
 
-      IF toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
          IF fEPLStart(lcTestFlag) THEN LEAVE task.
       END.
       
     END.
 
-    IF lano2 = 0 THEN lano2 = 999999.
+    IF lano2 = 0 THEN lano2 = 999999999.
 
     IF asno NE 0 THEN DO:
         FIND FIRST Customer WHERE 
-                   Customer.Brand = gcBrand AND
+                   Customer.Brand = Syst.Var:gcBrand AND
                    Customer.CustNum = asno
         NO-LOCK NO-ERROR.
         IF NOT AVAILABLE Customer THEN DO:
@@ -199,7 +199,7 @@ REPEAT:
 
     IF igroup NE "" THEN DO:
         FIND FIRST invgroup WHERE 
-                   InvGroup.Brand = gcBrand AND
+                   InvGroup.Brand = Syst.Var:gcBrand AND
                    invgroup.InvGroup = igroup 
         NO-LOCK NO-ERROR.
         IF NOT AVAILABLE invgroup THEN DO:

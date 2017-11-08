@@ -13,14 +13,19 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-{Func/tmsparam4.i}
+{Syst/commpaa.i}
+Syst.Var:katun = "Newton".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
+{Mc/provmaint.i}
+{Func/tmsparam4.i}
 
 DEF VAR custcat_struct AS CHAR NO-UNDO. 
 DEF VAR top_array AS CHARACTER NO-UNDO. 
 DEF VAR pcSetting AS CHAR NO-UNDO. 
 
 DEF VAR pcParamStruct AS CHAR NO-UNDO. 
+DEF VAR pcTenant AS CHAR NO-UNDO.
 DEF VAR piValue AS INTEGER NO-UNDO. 
 DEF VAR pcUserStruct AS CHAR NO-UNDO. 
 DEF VAR pcUsername AS CHARACTER NO-UNDO. 
@@ -36,10 +41,13 @@ DEF VAR liMaintB AS INTEGER NO-UNDO.
 DEF VAR liValue  AS INTEGER NO-UNDO. 
 
 /* validate 1st and 2nd parameter */
-IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
-pcSetting = get_string(param_toplevel_id, "0").
-pcParamStruct = get_struct(param_toplevel_id, "1").
+IF validate_request(param_toplevel_id, "string,string,struct") EQ ? THEN RETURN.
+pcTenant = get_string(param_toplevel_id, "0").
+pcSetting = get_string(param_toplevel_id, "1").
+pcParamStruct = get_struct(param_toplevel_id, "2").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 IF LOOKUP(pcSetting,"setFlag") > 0 THEN DO:
    IF validate_struct(pcParamStruct,"flag!,value!") = ? THEN RETURN.
@@ -97,12 +105,7 @@ ELSE DO:
    IF liMaintB = ? THEN RETURN appl_err("Missing system parameter"). 
 
    /* parameter validation ends*/
-   {Syst/commpaa.i}
-   katun = "Newton".
-   gcBrand = "1".
-   {Mc/provmaint.i}
-   {Func/timestamp.i}
-
+   
    IF liValue NE liMaintB THEN DO:
      
       lcEmail  = "Notification of changed system setting:  " +
@@ -117,7 +120,7 @@ ELSE DO:
                    "Phone: " + pcPhone + CHR(10) +
                    "Email: " +  pcEmail.
 
-      fUpdateMaintBreak(fMakeTs(),fMakeTs(),liValue).
+      fUpdateMaintBreak(Func.Common:mMakeTS(),Func.Common:mMakeTS(),liValue).
       RUN pMailMaintBreak(lcEmail).
    END.
 END.
@@ -125,5 +128,4 @@ END.
 add_int(response_toplevel_id, "",  piValue).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

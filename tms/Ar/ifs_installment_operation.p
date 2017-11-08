@@ -10,9 +10,9 @@
 {Syst/commali.i}
 {Syst/dumpfile_run.i}
 {Syst/tmsconst.i}
-{Func/date.i}
 {Func/cparam2.i}
 {Func/coinv.i}
+{Func/multitenantfunc.i}
 
 DEF INPUT PARAMETER iiDumpID      AS INT  NO-UNDO.
 DEF INPUT PARAMETER icFile        AS CHAR NO-UNDO.
@@ -88,7 +88,7 @@ FUNCTION fGetChannel RETURNS CHAR
                  dccli.msseq = int(fixedfee.keyvalue) NO-ERROR.
       IF NOT AVAIL DCCLI THEN RETURN "".
 
-      ldeActTS = fmake2dt(MIN(dccli.contractdate,dccli.validfrom), 86399).
+      ldeActTS = Func.Common:mMake2DT(MIN(dccli.contractdate,dccli.validfrom), 86399).
       
       FIND msrequest NO-LOCK where
            msrequest.msseq = dccli.msseq and
@@ -114,7 +114,7 @@ FUNCTION fGetChannel RETURNS CHAR
    
    IF ibFixedFee.OrderId > 0 THEN DO:
       FIND FIRST Order NO-LOCK WHERE
-                 Order.Brand = gcBrand AND
+                 Order.Brand = Syst.Var:gcBrand AND
                  Order.OrderId = ibFixedFee.OrderId NO-ERROR.
    END.
    ELSE IF FixedFee.BillCode EQ "PAYTERM" THEN DO:
@@ -170,7 +170,7 @@ FIND FIRST DumpFile WHERE DumpFile.DumpID = iiDumpID NO-LOCK NO-ERROR.
 IF AVAIL DumpFile THEN lcDelimiter = DumpFile.DumpDelimiter.
             
 FIND FIRST ActionLog NO-LOCK WHERE
-           ActionLog.Brand    = gcBrand AND
+           ActionLog.Brand    = Syst.Var:gcBrand AND
            ActionLog.ActionID BEGINS "TF_READ_" AND
            ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE} NO-ERROR.
          
@@ -181,7 +181,7 @@ END.
 ELSE DO TRANS:
 
    FIND FIRST bActionLog NO-LOCK WHERE
-              bActionLog.Brand    = gcBrand AND
+              bActionLog.Brand    = Syst.Var:gcBrand AND
               bActionLog.ActionId = ActionLog.ActionID AND
               bActionLog.ActionStatus NE {&ACTIONLOG_STATUS_CANCELLED} AND
               bActionLog.FromDate <= ActionLog.Todate AND
@@ -320,6 +320,7 @@ FOR EACH ttInstallment:
       ttInstallment.ResidualAmount lcDelimiter          /*  11 residual_amount */
       ttInstallment.Channel lcDelimiter                 /*  12 channel */
       ttInstallment.OrderId lcDelimiter                 /*  13 OrderId */
+      fgetCompanyId() lcDelimiter                         /*  14 CompanyId */
       SKIP.
    
    /* mark as transferred only when picking modified ones, full dump 
@@ -328,7 +329,7 @@ FOR EACH ttInstallment:
    IF icDumpMode = "modified" THEN DO:
      
       IF ttInstallment.FFNum NE 0 AND
-         ttInstallment.RowSource EQ "ACTIVATION" THEN DO:
+         ttInstallment.RowSource BEGINS "ACTIVATION" THEN DO:
 
          FIND FixedFee EXCLUSIVE-LOCK WHERE 
               FixedFee.FFNum = ttInstallment.FFNum NO-ERROR.
@@ -355,7 +356,8 @@ FOR EACH ttInstallment:
          ttInstallment.Channel lcDelimiter                 /*  12 channel */
          ttInstallment.OrderId lcDelimiter                 /*  13 OrderId */
          ttInstallment.FFNum lcDelimiter
-         ttInstallment.RowSource lcDelimiter SKIP.
+         ttInstallment.RowSource lcDelimiter 
+         fgetCompanyId() lcDelimiter SKIP.                   /* CompanyId */
       
       IF AVAIL FixedFee THEN RELEASE FixedFee.
    END.
@@ -388,11 +390,15 @@ PROCEDURE pCollectActivations:
    DEF VAR lgMsRequest AS LOG NO-UNDO.
    DEF VAR ldResidual  AS DEC NO-UNDO. 
    DEF VAR ldtOperDate AS DATE NO-UNDO.
-   DEF VAR ldtDueDate  AS DATE NO-UNDO.
+   DEF VAR ldtDueDate  AS DATE NO-UNDO. 
+   DEF VAR lcMemo AS CHAR NO-UNDO. 
+   DEF BUFFER bDCCLI FOR DCCLI.   
    
    FF_LOOP:
    FOR EACH FixedFee NO-LOCK WHERE
             FixedFee.IFSStatus = {&IFS_STATUS_WAITING_SENDING}:
+
+      lcMemo = "".
 
       IF RETRY THEN DO:
          olInterrupted = TRUE.
@@ -402,7 +408,10 @@ PROCEDURE pCollectActivations:
       IF NOT FixedFee.BillCode BEGINS "PAYTERM" AND
          NOT FixedFee.BillCode BEGINS "RVTERM" THEN NEXT.
 
-      IF FixedFee.BegDate >= TODAY THEN NEXT.
+      IF icDumpMode = "modified" THEN DO:
+         IF FixedFee.BegDate > ldaDataTo THEN NEXT.
+      END.
+      ELSE IF FixedFee.BegDate >= TODAY THEN NEXT.
 
       IF FixedFee.FinancedResult EQ {&TF_STATUS_HOLD_SENDING} OR
          FixedFee.FinancedResult EQ {&TF_STATUS_WAITING_SENDING} OR
@@ -414,7 +423,7 @@ PROCEDURE pCollectActivations:
       ldResidual = 0.
       IF NOT FixedFee.BillCode BEGINS "RVTERM" THEN DO:
          FIND FIRST SingleFee NO-LOCK WHERE
-                    SingleFee.Brand = gcBrand AND
+                    SingleFee.Brand = Syst.Var:gcBrand AND
                     SingleFee.Custnum = FixedFee.Custnum AND
                     SingleFee.HostTable = FixedFee.HostTable AND
                     SingleFee.KeyValue = Fixedfee.KeyValue AND
@@ -422,11 +431,25 @@ PROCEDURE pCollectActivations:
                     SingleFee.SourceTable = FixedFee.SourceTable AND
                     SingleFee.CalcObj = "RVTERM" NO-ERROR.
          IF AVAILABLE SingleFee THEN ldResidual = SingleFee.Amt.
+         /* fix for YTS-11246 problems start from here */
+         ELSE IF FixedFee.SourceTable EQ "DCCLI" THEN DO:
+            FIND bDCCLI WHERE
+               bDCCLI.MsSeq         = INT(FixedFee.KeyValue) AND
+               bDCCLI.DCEvent       = FixedFee.CalcObj AND
+               bDCCLI.percontractId = INT(FixedFee.SourceKey) NO-LOCK NO-ERROR.
+
+            IF AVAILABLE bDCCLI AND
+               bDCCLI.Amount NE ? THEN DO:
+               ldResidual = bDCCLI.Amount.
+               lcMemo = " DCCLI.AMOUNT".
+            END.
+         END.
+         /* fix for YTS-11246 problems end here */ 
       END.
       
       liBatches = 0.
       FOR FIRST FeeModel NO-LOCK WHERE 
-                FeeModel.Brand = gcBrand AND
+                FeeModel.Brand = Syst.Var:gcBrand AND
                 FeeModel.FeeModel EQ FixedFee.FeeModel,
          FIRST FMItem OF FeeModel NO-LOCK:
             liBatches = FMItem.FFItemQty.
@@ -467,7 +490,8 @@ PROCEDURE pCollectActivations:
          ttInstallment.Channel = lcChannel
          ttInstallment.FFNum = FixedFee.FFNum
          ttInstallment.OrderId = fGetFixedFeeOrderId(BUFFER FixedFee)
-         ttInstallment.RowSource = "ACTIVATION"
+         ttInstallment.RowSource = "ACTIVATION" + 
+                      (IF lcMemo > "" THEN lcMemo ELSE "").
          oiEvents = oiEvents + 1.
 
       IF NOT SESSION:BATCH AND oiEvents MOD 100 = 0 THEN DO:
@@ -506,22 +530,23 @@ PROCEDURE pCollectACC:
    DEF VAR lcOperCode       AS CHAR NO-UNDO.
    DEF VAR ldtOperDate      AS DATE NO-UNDO.
    DEF VAR ldtDueDate       AS DATE NO-UNDO.
+   DEF VAR lcMemo           AS CHAR NO-UNDO. 
 
    /* check from last 20 days if there are ones that have been completed
       yesterday */
    IF icDumpMode = "modified" THEN ASSIGN
-      ldFrom  = fMake2Dt(ldaDataFrom,0)
-      ldTo    = fMake2Dt(ldaDataTo,86399)
-      ldCheck = fMake2Dt(ldaDataFrom - 20,0).
+      ldFrom  = Func.Common:mMake2DT(ldaDataFrom,0)
+      ldTo    = Func.Common:mMake2DT(ldaDataTo,86399)
+      ldCheck = Func.Common:mMake2DT(ldaDataFrom - 20,0).
    /* take all */
    ELSE ASSIGN
-      ldFrom  = fMake2Dt(2/1/10,0)
-      ldTo    = fMake2Dt(TODAY - 1,86399)
+      ldFrom  = Func.Common:mMake2DT(2/1/10,0)
+      ldTo    = Func.Common:mMake2DT(TODAY - 1,86399)
       ldCheck = ldFrom.
 
    REQUEST_LOOP:
    FOR EACH msrequest NO-LOCK where
-            msrequest.brand = gcBrand and
+            msrequest.brand = Syst.Var:gcBrand and
             msrequest.reqtype = 10 and
             msrequest.reqstatus = 2 and
             MsRequest.ActStamp >= ldCheck AND
@@ -535,9 +560,10 @@ PROCEDURE pCollectACC:
          LEAVE.
       END.
       
-      ldeendtime = fSecOffset(msrequest.actstamp,-1).
+      ldeendtime = Func.Common:mSecOffSet(msrequest.actstamp,-1).
+      lcMemo = "".
 
-      fSplitTs(msrequest.actstamp, output ldaACCDate, output liTime).
+      Func.Common:mSplitTS(msrequest.actstamp, output ldaACCDate, output liTime).
       
       find msowner where
            msowner.msseq = msrequest.msseq and
@@ -609,7 +635,7 @@ PROCEDURE pCollectACC:
             ldResidual = 0.
             IF NOT FixedFee.BillCode BEGINS "RVTERM" THEN DO:
                FIND FIRST SingleFee NO-LOCK WHERE
-                          SingleFee.Brand = gcBrand AND
+                          SingleFee.Brand = Syst.Var:gcBrand AND
                           SingleFee.Custnum = bmsowner.custnum AND
                           SingleFee.HostTable = FixedFee.HostTable AND
                           SingleFee.KeyValue = Fixedfee.KeyValue AND
@@ -625,7 +651,7 @@ PROCEDURE pCollectACC:
                liFFItemQty = 0.
             
             FOR FIRST FeeModel NO-LOCK WHERE 
-                      FeeModel.Brand = gcBrand AND
+                      FeeModel.Brand = Syst.Var:gcBrand AND
                       FeeModel.FeeModel EQ FixedFee.FeeModel,
                FIRST FMItem OF FeeModel NO-LOCK:
             
@@ -652,7 +678,7 @@ PROCEDURE pCollectACC:
               ldFeeEndDate = DATE(FixedFee.EndPeriod MOD 100,
                              1,
                              INT(FixedFee.EndPeriod / 100))
-              ldFeeEndDate = fLastDayOfMonth(ldFeeEndDate)
+              ldFeeEndDate = Func.Common:mLastDayOfMonth(ldFeeEndDate)
               llFinancedByBank = (LOOKUP(FixedFee.FinancedResult,
                                   {&TF_STATUSES_BANK}) > 0).
 
@@ -677,7 +703,8 @@ PROCEDURE pCollectACC:
               ttInstallment.OrderId = (IF FixedFee.BegDate < 11/19/2014 THEN ""
                                        ELSE fGetFixedFeeOrderId(BUFFER FixedFee))
               lcOrderIdVal          = ttInstallment.OrderId
-              ttInstallment.RowSource = "ACC_OLD"
+              ttInstallment.RowSource = "ACC_OLD" + 
+                  (IF lcMemo > "" THEN lcMemo ELSE "")
               ttInstallment.FFNum = FixedFee.FFNum
               oiEvents = oiEvents + 1.
 
@@ -695,7 +722,7 @@ PROCEDURE pCollectACC:
          /* new owner */
          FF_LOOP:
          FOR EACH FixedFee NO-LOCK USE-INDEX Custnum WHERE
-                  FixedFee.Brand     = gcBrand AND
+                  FixedFee.Brand     = Syst.Var:gcBrand AND
                   FIxedFee.Custnum   = bmsowner.custnum AND 
                   FixedFee.HostTable = "MobSub" AND
                   FixedFee.KeyValue  = STRING(bmsowner.MsSeq) AND
@@ -716,7 +743,7 @@ PROCEDURE pCollectACC:
             ldResidual = 0.
             IF NOT FixedFee.BillCode BEGINS "RVTERM" THEN DO:
                FIND FIRST SingleFee NO-LOCK WHERE
-                          SingleFee.Brand = gcBrand AND
+                          SingleFee.Brand = Syst.Var:gcBrand AND
                           SingleFee.Custnum = FixedFee.Custnum AND
                           SingleFee.HostTable = FixedFee.HostTable AND
                           SingleFee.KeyValue = Fixedfee.KeyValue AND
@@ -798,6 +825,7 @@ PROCEDURE pCollectInstallmentContractChanges:
    DEF VAR ldeResidualFee AS DEC NO-UNDO. 
    DEF VAR ldtOperDate AS DATE NO-UNDO.
    DEF VAR ldtDueDate AS DATE NO-UNDO.
+   DEF VAR lcMemo AS CHAR NO-UNDO. 
 
    DEF BUFFER bTermRequest FOR MSRequest.
    DEF BUFFER bActRequest FOR MSRequest.
@@ -805,18 +833,18 @@ PROCEDURE pCollectInstallmentContractChanges:
    DEF BUFFER bTermDCCLI FOR DCCLI.
 
    IF icDumpMode = "modified" THEN ASSIGN
-      ldFrom  = fMake2Dt(ldaDataFrom,0)
-      ldTo    = fMake2Dt(ldaDataTo,86399)
-      ldCheck = fMake2Dt(ldaDataFrom - 20,0).
+      ldFrom  = Func.Common:mMake2DT(ldaDataFrom,0)
+      ldTo    = Func.Common:mMake2DT(ldaDataTo,86399)
+      ldCheck = Func.Common:mMake2DT(ldaDataFrom - 20,0).
    /* take all */
    ELSE ASSIGN
-      ldFrom  = fMake2Dt(2/1/10,0)
-      ldTo    = fMake2Dt(TODAY - 1,86399)
+      ldFrom  = Func.Common:mMake2DT(2/1/10,0)
+      ldTo    = Func.Common:mMake2DT(TODAY - 1,86399)
       ldCheck = ldFrom.
 
    REQUEST_LOOP:
    FOR EACH MsRequest NO-LOCK WHERE
-            MsRequest.Brand     = gcBrand AND
+            MsRequest.Brand     = Syst.Var:gcBrand AND
             MsRequest.ReqType   = {&REQTYPE_INSTALLMENT_CONTRACT_CHANGE} AND
             MsRequest.ReqStatus = 2       AND
             MsRequest.ActStamp >= ldCheck AND
@@ -851,7 +879,7 @@ PROCEDURE pCollectInstallmentContractChanges:
          NEXT.
       END.
       
-      fTS2Date(bTermRequest.ActStamp,
+      Func.Common:mTS2Date(bTermRequest.ActStamp,
                OUTPUT ldaActDate).
 
       FIND bTermDCCLI WHERE
@@ -860,7 +888,7 @@ PROCEDURE pCollectInstallmentContractChanges:
            bTermDCCLI.PerContractID = bTermRequest.ReqIParam3 AND
            bTermDCCLI.TermDate      = ldaActDate NO-LOCK NO-ERROR.
 
-      fTS2Date(bActRequest.ActStamp,
+      Func.Common:mTS2Date(bActRequest.ActStamp,
                OUTPUT ldaActDate).
       
       FIND bActDCCLI WHERE
@@ -890,7 +918,7 @@ PROCEDURE pCollectInstallmentContractChanges:
 
       /* Old fee */
       FOR FIRST FixedFee NO-LOCK WHERE
-                FixedFee.Brand = gcBrand AND
+                FixedFee.Brand = Syst.Var:gcBrand AND
                 FixedFee.Custnum = MsRequest.Custnum AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue = STRING(MsRequest.MsSeq) AND
@@ -899,7 +927,7 @@ PROCEDURE pCollectInstallmentContractChanges:
                 FixedFee.SourceTable = "DCCLI" AND
                 FixedFee.SourceKey = STRING(bTermDCCLI.PerContractID),
           FIRST DayCampaign NO-LOCK USE-INDEX DCEvent WHERE
-                DayCampaign.Brand = gcBrand AND
+                DayCampaign.Brand = Syst.Var:gcBrand AND
                 DayCampaign.DCEvent = bTermDCCLI.DCEvent:
             
          IF FixedFee.TFBank > "" AND FixedFee.TFBank NE lcTFBank THEN NEXT REQUEST_LOOP.
@@ -918,12 +946,13 @@ PROCEDURE pCollectInstallmentContractChanges:
          END.
             
          ASSIGN
+            lcMemo = ""
             liBatches = 0
             ldeAmount = 0
             liFFItemQty = 0.
 
          FOR FIRST FeeModel NO-LOCK WHERE 
-                   FeeModel.Brand = gcBrand AND
+                   FeeModel.Brand = Syst.Var:gcBrand AND
                    FeeModel.FeeModel EQ FixedFee.FeeModel,
             FIRST FMItem OF FeeModel NO-LOCK:
 
@@ -950,17 +979,17 @@ PROCEDURE pCollectInstallmentContractChanges:
             ldFeeEndDate = DATE(FixedFee.EndPeriod MOD 100,
                                 1,
                                 INT(FixedFee.EndPeriod / 100))
-            ldFeeEndDate = fLastDayOfMonth(ldFeeEndDate)
+            ldFeeEndDate = Func.Common:mLastDayOfMonth(ldFeeEndDate)
             llFinancedByBank = (LOOKUP(FixedFee.FinancedResult,
                                 {&TF_STATUSES_BANK}) > 0).
 
         IF FixedFee.BegDate > ldFeeEndDate THEN 
-           fTS2Date(bTermRequest.DoneStamp, OUTPUT ldFeeEndDate).
+           Func.Common:mTS2Date(bTermRequest.DoneStamp, OUTPUT ldFeeEndDate).
          
          IF FixedFee.BillCode EQ "PAYTERM" THEN DO:
 
             FIND FIRST SingleFee NO-LOCK WHERE
-                       SingleFee.Brand = gcBrand AND
+                       SingleFee.Brand = Syst.Var:gcBrand AND
                        SingleFee.Custnum = FixedFee.Custnum AND
                        SingleFee.HostTable = FixedFee.HostTable AND
                        SingleFee.KeyValue = Fixedfee.KeyValue AND
@@ -970,8 +999,10 @@ PROCEDURE pCollectInstallmentContractChanges:
 
             IF AVAIL SingleFee THEN 
                ldeResidualFee = SingleFee.Amt.
-            ELSE IF bTermDCCLI.Amount NE ? THEN
+            ELSE IF bTermDCCLI.Amount NE ? THEN DO:
                ldeResidualFee = bTermDCCLI.Amount.
+               lcMemo = " DCCLI.AMOUNT".
+            END.
             ELSE ldeResidualFee = 0.
          END.
          ELSE ldeResidualFee = 0.
@@ -989,14 +1020,15 @@ PROCEDURE pCollectInstallmentContractChanges:
             ttInstallment.ResidualAmount = ldeResidualFee
             ttInstallment.Channel = ""
             ttInstallment.OrderId = fGetFixedFeeOrderId(BUFFER FixedFee)
-            ttInstallment.RowSource = "INSTALLMENT_CHANGE_OLD"
+            ttInstallment.RowSource = "INSTALLMENT_CHANGE_OLD" + 
+                                      (IF lcMemo > "" THEN lcMemo ELSE "")
             ttInstallment.FFNum = FixedFee.FFNum
             oiEvents = oiEvents + 1.
       END.
 
       /* New fee */
       FOR FIRST FixedFee NO-LOCK WHERE
-                FixedFee.Brand = gcBrand AND
+                FixedFee.Brand = Syst.Var:gcBrand AND
                 FixedFee.Custnum = MsRequest.Custnum AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue = STRING(MsRequest.MsSeq) AND
@@ -1028,7 +1060,7 @@ PROCEDURE pCollectInstallmentContractChanges:
          
          IF FixedFee.BillCode EQ "PAYTERM" THEN 
             FIND FIRST SingleFee NO-LOCK WHERE
-                       SingleFee.Brand = gcBrand AND
+                       SingleFee.Brand = Syst.Var:gcBrand AND
                        SingleFee.Custnum = FixedFee.Custnum AND
                        SingleFee.HostTable = FixedFee.HostTable AND
                        SingleFee.KeyValue = Fixedfee.KeyValue AND
@@ -1105,18 +1137,18 @@ PROCEDURE pCollectReactivations:
 
    /* use action log from/to dates */
    IF icDumpMode = "modified" THEN ASSIGN
-      ldFrom  = fMake2Dt(ldaDataFrom,0)
-      ldTo    = fMake2Dt(ldaDataTo,86399)
-      ldCheck = fMake2Dt(ldaDataFrom - 20,0).
+      ldFrom  = Func.Common:mMake2DT(ldaDataFrom,0)
+      ldTo    = Func.Common:mMake2DT(ldaDataTo,86399)
+      ldCheck = Func.Common:mMake2DT(ldaDataFrom - 20,0).
    /* take all */
    ELSE ASSIGN
-      ldFrom  = fMake2Dt(2/1/10,0)
-      ldTo    = fMake2Dt(TODAY - 1,86399)
+      ldFrom  = Func.Common:mMake2DT(2/1/10,0)
+      ldTo    = Func.Common:mMake2DT(TODAY - 1,86399)
       ldCheck = ldFrom.
 
    REQUEST_LOOP:
    FOR EACH MsRequest NO-LOCK WHERE
-            MsRequest.Brand     = gcBrand AND
+            MsRequest.Brand     = Syst.Var:gcBrand AND
             MsRequest.ReqType   = 8       AND
             MsRequest.ReqStatus = 2       AND
             MsRequest.ActStamp >= ldCheck AND
@@ -1134,7 +1166,7 @@ PROCEDURE pCollectReactivations:
          LEAVE.
       END.
 
-      fSplitTS(MsRequest.ActStamp,
+      Func.Common:mSplitTS(MsRequest.ActStamp,
                OUTPUT ldaReacDate,
                OUTPUT liDoneTime).
 
@@ -1157,7 +1189,7 @@ PROCEDURE pCollectReactivations:
          llTerminationSent = FALSE.
 
       FOR FIRST FixedFee NO-LOCK WHERE
-                FixedFee.Brand = gcBrand AND
+                FixedFee.Brand = Syst.Var:gcBrand AND
                 FixedFee.Custnum = MsRequest.Custnum AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue = STRING(MsRequest.MsSeq) AND
@@ -1183,7 +1215,7 @@ PROCEDURE pCollectReactivations:
          
          /* check if fees are already billed */
          FIND FIRST SingleFee WHERE
-                    SingleFee.Brand     = gcBrand AND
+                    SingleFee.Brand     = Syst.Var:gcBrand AND
                     SingleFee.HostTable = "MobSub" AND
                     SingleFee.KeyValue  = STRING(MsRequest.MsSeq) AND
                     SingleFee.CalcObj   = "DC" + STRING(DCCLI.PerContractID)
@@ -1204,7 +1236,7 @@ PROCEDURE pCollectReactivations:
             ldResidualNB = 0.
          IF NOT FixedFee.BillCode BEGINS "RVTERM" THEN DO:            
             FIND FIRST SingleFee NO-LOCK WHERE
-                       SingleFee.Brand = gcBrand AND
+                       SingleFee.Brand = Syst.Var:gcBrand AND
                        SingleFee.Custnum = FixedFee.Custnum AND
                        SingleFee.HostTable = FixedFee.HostTable AND
                        SingleFee.KeyValue = Fixedfee.KeyValue AND
@@ -1241,7 +1273,7 @@ PROCEDURE pCollectReactivations:
             ldFeeEndDate = DATE(FixedFee.EndPeriod MOD 100,
                                 1,
                                 INT(FixedFee.EndPeriod / 100))
-            ldFeeEndDate = fLastDayOfMonth(ldFeeEndDate)
+            ldFeeEndDate = Func.Common:mLastDayOfMonth(ldFeeEndDate)
             llFinancedByBank = (LOOKUP(FixedFee.FinancedResult,
                                 {&TF_STATUSES_BANK}) > 0).
             
@@ -1283,7 +1315,7 @@ PROCEDURE pCollectReactivations:
                   (IF FixedFee.BegDate < DATE(MONTH(ldaReacDate),
                                               1,
                                               YEAR(ldaReacDate))
-                   THEN fLastDayOfMonth(ADD-INTERVAL(ldaReacDate,-1,"months"))
+                   THEN Func.Common:mLastDayOfMonth(ADD-INTERVAL(ldaReacDate,-1,"months"))
                    ELSE ldaReacDate)
                ttInstallment.BankCode = FixedFee.TFBank WHEN llFinancedByBank
                ttInstallment.ResidualAmount = ldResidual
@@ -1351,24 +1383,25 @@ PROCEDURE pCollectInstallmentCancellations:
    DEF VAR ldeAmount AS DEC NO-UNDO. 
    DEF VAR ldeResidualAmt AS DEC NO-UNDO. 
    DEF VAR lcCancelType AS CHAR NO-UNDO. 
+   DEF VAR lcMemo AS CHAR NO-UNDO. 
 
    DEF BUFFER bTermDCCLI FOR DCCLI.
    DEF BUFFER bMainRequest FOR MSRequest.
    DEF BUFFER bFixedFee FOR FixedFee.
 
    IF icDumpMode = "modified" THEN ASSIGN
-      ldFrom  = fMake2Dt(ldaDataFrom,0)
-      ldTo    = fMake2Dt(ldaDataTo,86399)
-      ldCheck = fMake2Dt(ldaDataFrom - 63,0).
+      ldFrom  = Func.Common:mMake2DT(ldaDataFrom,0)
+      ldTo    = Func.Common:mMake2DT(ldaDataTo,86399)
+      ldCheck = Func.Common:mMake2DT(ldaDataFrom - 63,0).
    /* take all */
    ELSE ASSIGN
-      ldFrom  = fMake2Dt(2/1/10,0)
-      ldTo    = fMake2Dt(TODAY - 1,86399)
+      ldFrom  = Func.Common:mMake2DT(2/1/10,0)
+      ldTo    = Func.Common:mMake2DT(TODAY - 1,86399)
       ldCheck = ldFrom.
 
    REQUEST_LOOP:
    FOR EACH MsRequest NO-LOCK WHERE
-            MsRequest.Brand     = gcBrand AND
+            MsRequest.Brand     = Syst.Var:gcBrand AND
             MsRequest.ReqType   = 9 AND
             MsRequest.ReqStatus = 2       AND
             MsRequest.ActStamp >= ldCheck AND
@@ -1381,6 +1414,8 @@ PROCEDURE pCollectInstallmentCancellations:
             MsRequest.ReqCParam2 = "canc")
       ON QUIT UNDO, RETRY
       ON STOP UNDO, RETRY:
+
+      lcMemo = "".
       
       IF RETRY THEN DO:
          olInterrupted = TRUE.
@@ -1408,7 +1443,7 @@ PROCEDURE pCollectInstallmentCancellations:
                     {&SUBSCRIPTION_TERM_REASON_DIRECT_ORDER_CANCELATION})) > 0)
          THEN NEXT.
       
-      fTS2Date(MsRequest.ActStamp,
+      Func.Common:mTS2Date(MsRequest.ActStamp,
                OUTPUT ldaActDate).
 
       FIND bTermDCCLI WHERE
@@ -1427,7 +1462,7 @@ PROCEDURE pCollectInstallmentCancellations:
       END.
       
       FOR FIRST FixedFee NO-LOCK WHERE
-                FixedFee.Brand = gcBrand AND
+                FixedFee.Brand = Syst.Var:gcBrand AND
                 FixedFee.Custnum = MsRequest.Custnum AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue = STRING(MsRequest.MsSeq) AND
@@ -1436,7 +1471,7 @@ PROCEDURE pCollectInstallmentCancellations:
                 FixedFee.SourceTable = "DCCLI" AND
                 FixedFee.SourceKey = STRING(bTermDCCLI.PerContractID),
           FIRST DayCampaign NO-LOCK USE-INDEX DCEvent WHERE
-                DayCampaign.Brand = gcBrand AND
+                DayCampaign.Brand = Syst.Var:gcBrand AND
                 DayCampaign.DCEvent = bTermDCCLI.DCEvent:
       
          IF FixedFee.TFBank > "" AND FixedFee.TFBank NE lcTFBank THEN NEXT REQUEST_LOOP.
@@ -1460,7 +1495,7 @@ PROCEDURE pCollectInstallmentCancellations:
             liFFItemQty = 0.
 
          FOR FIRST FeeModel NO-LOCK WHERE 
-                   FeeModel.Brand = gcBrand AND
+                   FeeModel.Brand = Syst.Var:gcBrand AND
                    FeeModel.FeeModel EQ FixedFee.FeeModel,
             FIRST FMItem OF FeeModel NO-LOCK:
 
@@ -1476,7 +1511,7 @@ PROCEDURE pCollectInstallmentCancellations:
 
             FIND FIRST bttInstallment WHERE
                        bttInstallment.FFNum = FixedFee.FFNum AND
-                       bttInstallment.RowSource = "ACTIVATION" NO-ERROR.
+                       bttInstallment.RowSource BEGINS "ACTIVATION" NO-ERROR.
             IF AVAIL bttInstallment THEN DO:
 
                IF (bttInstallment.Amount * bttInstallment.Items) EQ ldeAmount THEN DO:
@@ -1502,7 +1537,7 @@ PROCEDURE pCollectInstallmentCancellations:
          ldeResidualAmt = 0.
          IF NOT FixedFee.BillCode BEGINS "RVTERM" THEN DO: 
             FIND FIRST SingleFee NO-LOCK WHERE
-                       SingleFee.Brand = gcBrand AND
+                       SingleFee.Brand = Syst.Var:gcBrand AND
                        SingleFee.Custnum = FixedFee.Custnum AND
                        SingleFee.HostTable = FixedFee.HostTable AND
                        SingleFee.KeyValue = Fixedfee.KeyValue AND
@@ -1510,18 +1545,17 @@ PROCEDURE pCollectInstallmentCancellations:
                        SingleFee.SourceTable = FixedFee.SourceTable AND
                        SingleFee.CalcObj = "RVTERM" NO-ERROR.
             IF AVAIL SingleFee THEN ldeResidualAmt = SingleFee.Amt.
-            ELSE IF bTermDCCLI.Amount > 0 AND 
-               NOT CAN-FIND(ttInstallment WHERE
-                            ttInstallment.FFNum = FixedFee.FFNum AND
-                            ttInstallment.RowSource = "ACTIVATION") THEN
+            ELSE IF bTermDCCLI.Amount > 0 THEN DO:
                ldeResidualAmt = bTermDCCLI.Amount.
+               lcMemo = " DCCLI.AMOUNT".
+            END.
          END.
 
          ASSIGN
             ldFeeEndDate = DATE(FixedFee.EndPeriod MOD 100,
                                 1,
                                 INT(FixedFee.EndPeriod / 100))
-            ldFeeEndDate = fLastDayOfMonth(ldFeeEndDate)
+            ldFeeEndDate = Func.Common:mLastDayOfMonth(ldFeeEndDate)
             llFinancedByBank = (LOOKUP(FixedFee.FinancedResult,
                                 {&TF_STATUSES_BANK}) > 0).
 
@@ -1541,7 +1575,8 @@ PROCEDURE pCollectInstallmentCancellations:
             ttInstallment.ResidualAmount = ldeResidualAmt
             ttInstallment.Channel = ""
             ttInstallment.OrderId = fGetFixedFeeOrderId(BUFFER FixedFee)
-            ttInstallment.RowSource = lcCancelType 
+            ttInstallment.RowSource = lcCancelType + 
+                                     (IF lcMemo > "" THEN lcMemo ELSE "")
             ttInstallment.FFNum = FixedFee.FFNum
             oiEvents = oiEvents + 1.
       END.

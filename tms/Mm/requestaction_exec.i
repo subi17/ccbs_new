@@ -5,11 +5,11 @@
 &GLOBAL-DEFINE frequestaction YES
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Mm/fbundle.i}
 {Mm/active_bundle.i}
+{Func/fixedlinefunc.i}
 
 DEF TEMP-TABLE ttAction NO-UNDO
    FIELD ActionType AS CHAR
@@ -31,7 +31,7 @@ FUNCTION fGetPerContractActivation RETURNS DEC
    DEF BUFFER MobSub FOR MobSub.
 
    FIND FIRST bDCCLI WHERE
-              bDCCLI.Brand   = gcBrand   AND
+              bDCCLI.Brand   = Syst.Var:gcBrand   AND
               bDCCLI.DCEvent = icDCEvent AND
               bDCCLI.MsSeq   = iiMsSeq   AND
               bDCCLI.ValidTo   >= idaEventDate AND
@@ -43,11 +43,11 @@ FUNCTION fGetPerContractActivation RETURNS DEC
       clitype is considered as reference tariff */
    IF bDCCLI.RenewalDate <> ? THEN 
       ASSIGN 
-         ldActivated = fMake2Dt(bDCCLI.RenewalDate,0)
+         ldActivated = Func.Common:mMake2DT(bDCCLI.RenewalDate,0)
          lcReqParam2 = "update".
    ELSE     
       ASSIGN 
-         ldActivated = fMake2Dt(bDCCLI.ValidFrom,0)
+         ldActivated = Func.Common:mMake2DT(bDCCLI.ValidFrom,0)
          lcReqParam2 = "act,recreate".
 
    /* must use request handling time instead of contract begin time, YBU-991 */
@@ -95,7 +95,7 @@ FUNCTION fGetOriginalCLIType RETURNS CHAR
 
    IF AVAIL bOrigOwner THEN DO:
       lcOrigCLIType = bOrigOwner.CLIType.
-      fSplitTS(bOrigOwner.TSBeg,
+      Func.Common:mSplitTS(bOrigOwner.TSBeg,
                OUTPUT ldaActivated,
                OUTPUT liTime).
    END.
@@ -150,7 +150,7 @@ FUNCTION fGetOriginalBundle RETURNS CHAR
    ELSE liOffSet = 3.
 
    /* activated during the first hours after subscription activation */
-   ldActEnd    = fOffSet(ldActivated,liOffSet).
+   ldActEnd    = Func.Common:mOffSet(ldActivated,liOffSet).
       
    /* Note: It should return only IPL or FLAT Tariff Basic Bundle */
    FOR EACH bBundleRequest NO-LOCK WHERE
@@ -165,7 +165,7 @@ FUNCTION fGetOriginalBundle RETURNS CHAR
                lcCONTSContracts + "," +
                lcCONTSFContracts) > 0
       BY bBundleRequest.DoneStamp DESC:
-      fSplitTS(bBundleRequest.DoneStamp,
+      Func.Common:mSplitTS(bBundleRequest.DoneStamp,
                OUTPUT odaActivated,
                OUTPUT liTime).
       RETURN bBundleRequest.ReqCParam3.
@@ -194,7 +194,7 @@ PROCEDURE pCollectRequestActions:
    
    /* clitype level overrides paytype level, so check clitypes first */
    FOR EACH RequestAction NO-LOCK USE-INDEX CLIType WHERE
-            RequestAction.Brand      = gcBrand     AND
+            RequestAction.Brand      = Syst.Var:gcBrand     AND
             RequestAction.CLIType    = icCLIType   AND
             RequestAction.ReqType    = iiReqType   AND
             RequestAction.ValidTo   >= idaReqDate  AND
@@ -228,7 +228,7 @@ PROCEDURE pCollectRequestActions:
 
    /* paytype level */
    FOR EACH RequestAction NO-LOCK USE-INDEX PayType WHERE
-            RequestAction.Brand      = gcBrand     AND
+            RequestAction.Brand      = Syst.Var:gcBrand     AND
             RequestAction.PayType    = iiPayType   AND
             RequestAction.ReqType    = iiReqType   AND
             RequestAction.ValidTo   >= idaReqDate  AND
@@ -263,7 +263,7 @@ PROCEDURE pCollectRequestActions:
 
    /* all */
    FOR EACH RequestAction NO-LOCK USE-INDEX CLIType WHERE
-            RequestAction.Brand      = gcBrand     AND
+            RequestAction.Brand      = Syst.Var:gcBrand     AND
             RequestAction.CLIType    = "*"         AND
             RequestAction.ReqType    = iiReqType   AND
             RequestAction.ValidTo   >= idaReqDate  AND
@@ -301,7 +301,7 @@ PROCEDURE pCollectRequestActions:
 
       CONTRACT_LOOP:
       FOR EACH bContract NO-LOCK WHERE
-               bContract.Brand  = gcBrand AND
+               bContract.Brand  = Syst.Var:gcBrand AND
                bContract.DCType = ttAction.ActionKey:
                /* validfrom/to not checked, subscription may have old
                   contracts active */
@@ -619,7 +619,7 @@ PROCEDURE pCheckInstallmentRule:
    IF icRule EQ "INSTALLMENT" THEN DO:
       
       FOR EACH bContract NO-LOCK WHERE
-               bContract.Brand = gcBrand AND
+               bContract.Brand = Syst.Var:gcBrand AND
                bContract.DCType = "5",
          FIRST bDCCLI NO-LOCK WHERE
                bDCCLI.MsSeq = iiMsSeq AND
@@ -678,7 +678,7 @@ PROCEDURE pFeeComparison:
       IF lcOrigCLIType = "" THEN RETURN. 
                     
       FIND FIRST bCLIType WHERE
-                 bCLIType.Brand = gcBrand AND
+                 bCLIType.Brand = Syst.Var:gcBrand AND
                  bCLIType.CLIType = lcOrigCLIType NO-LOCK NO-ERROR.
       IF NOT AVAILABLE bCLIType THEN RETURN.
 
@@ -689,7 +689,7 @@ PROCEDURE pFeeComparison:
                                             idaReqDate,
                                             OUTPUT ldaActivated).
          FIND FIRST bCLIType WHERE
-                    bCLIType.Brand = gcBrand AND
+                    bCLIType.Brand = Syst.Var:gcBrand AND
                     bCLIType.CLIType = lcOrigCLIType NO-LOCK NO-ERROR.
          IF AVAIL bCLIType THEN ldOriginalFee = bCLIType.CompareFee.
       END. /* ELSE DO: */
@@ -700,18 +700,18 @@ PROCEDURE pFeeComparison:
 
    IF INDEX(icRule + icExclRule,"CURRENT") > 0 THEN DO:
       FIND FIRST bCLIType WHERE 
-                 bCLIType.Brand   = gcBrand AND
+                 bCLIType.Brand   = Syst.Var:gcBrand AND
                  bCLIType.CLIType = ihRequest::ReqCParam1 NO-LOCK NO-ERROR.
       IF AVAIL bCLIType THEN ldNewFee = bCLIType.CompareFee.
    END.
         
    IF INDEX(icRule + icExclRule,"NEW") > 0 THEN DO:
       FIND FIRST bCLIType WHERE 
-                 bCLIType.Brand   = gcBrand AND
+                 bCLIType.Brand   = Syst.Var:gcBrand AND
                  bCLIType.CLIType = ihRequest::ReqCParam2 NO-LOCK NO-ERROR.
       IF NOT AVAILABLE bCLIType OR bCLIType.CompareFee = 0 THEN
          FIND FIRST bCLIType WHERE 
-                    bCLIType.Brand   = gcBrand AND
+                    bCLIType.Brand   = Syst.Var:gcBrand AND
                     bCLIType.CLIType = ihRequest::ReqCParam5 NO-LOCK NO-ERROR.
 
       IF AVAIL bCLIType THEN ASSIGN
@@ -743,6 +743,14 @@ PROCEDURE pFeeComparison:
             LOOKUP(icDCEvent,"TERM18,TERM18-50,TERM24,TERM24-50") > 0
          THEN olMatch = FALSE.
          
+         /* When mobile line is terminated, convergent is automatedly STCed to Fixed only. 
+            When executed STC, request action rule configured for request type = 0 is terminating 
+            all permanancy contracts. Below is to avoid terminating fixedline/tv permanency contract(s) */
+         IF ihRequest::ReqType = 0                 AND 
+            fIsConvergentORFixedOnly(lcNewCLIType) AND 
+            (icDCEvent BEGINS "FTERM" OR icDCEvent BEGINS "TVTERM") THEN
+            olMatch = FALSE.
+
          /* YDR-1137 - Exclude termination/extension if request is originating 
             from Fusion order (STC) fallback */
          IF ihRequest::ReqSource EQ {&REQUEST_SOURCE_FUSION_ORDER_FALLBACK} 

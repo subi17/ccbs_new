@@ -12,16 +12,16 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
 {Syst/eventlog.i}
-{Func/date.i}
 {Func/email.i}
 {Mc/orderfusion.i}
+{Func/orderfunc.i}
 
 DEF VAR lcLine AS CHARACTER NO-UNDO.
 DEF VAR lcSep AS CHARACTER NO-UNDO INIT ";".
@@ -182,7 +182,7 @@ PROCEDURE pUpdateOrderStatus:
 
    /* find order */   
    FIND Order WHERE 
-        Order.Brand = gcBrand AND
+        Order.Brand = Syst.Var:gcBrand AND
         Order.OrderId = iiOrderId NO-LOCK NO-ERROR.
    IF NOT AVAILABLE Order THEN 
       RETURN "ERROR:Invalid Order ID".
@@ -222,8 +222,21 @@ PROCEDURE pUpdateOrderStatus:
          RETURN "ERROR:Secure to POS in allowed only for POS delivery type".
    END.
    
-   IF icOldStatus EQ "76" OR icOldStatus EQ "22" OR 
-      icOldStatus EQ "73" OR icOldStatus EQ "78" THEN DO:
+   IF icOldStatus EQ "76" THEN DO:
+      CASE icNewStatus:
+         WHEN "6" THEN DO:
+            /* Release extra line orders only */
+            IF Order.MultiSimId   NE 0                         AND 
+               Order.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} THEN  
+            fActionOnExtraLineOrders(Order.MsSeq,
+                                     Order.MultiSimId,
+                                     "RELEASE").
+         END.
+         WHEN "7" THEN RUN Mc/closeorder.p(Order.OrderId, TRUE).
+         OTHERWISE RETURN "ERROR:Unsupported new order status value".
+      END.
+   END.
+   ELSE IF LOOKUP(icOldStatus,"22,73,78") > 0 THEN DO:
       CASE icNewStatus:
          WHEN "7" THEN RUN Mc/closeorder.p(Order.OrderId, TRUE).
          OTHERWISE RETURN "ERROR:Unsupported new order status value".
@@ -250,7 +263,7 @@ PROCEDURE pUpdateOrderStatus:
       CASE icNewStatus:
          WHEN "7" THEN DO:
             FIND OrderFusion NO-LOCK WHERE
-                 OrderFusion.Brand = gcBrand AND
+                 OrderFusion.Brand = Syst.Var:gcBrand AND
                  OrderFusion.OrderID = Order.OrderID NO-ERROR.
             IF NOT AVAILABLE OrderFusion THEN
                RETURN "ERROR:Order type is not Fusion".
@@ -303,12 +316,12 @@ PROCEDURE pUpdateOrderStatus:
 
       CREATE Memo.
       ASSIGN
-         Memo.CreStamp  = fMakeTS() 
-         Memo.Brand     = gcBrand 
+         Memo.CreStamp  = Func.Common:mMakeTS() 
+         Memo.Brand     = Syst.Var:gcBrand 
          Memo.HostTable = "Order" 
          Memo.KeyValue  = STRING(Order.OrderId) 
          Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-         Memo.CreUser   = katun 
+         Memo.CreUser   = Syst.Var:katun 
          Memo.MemoTitle = icMemoTitle
          Memo.MemoText  = icMemoText.
    END.

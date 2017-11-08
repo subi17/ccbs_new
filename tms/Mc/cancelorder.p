@@ -17,25 +17,26 @@ hell MODULE .......: cancelorder.p
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF INPUT PARAMETER ilCheckLOStatus AS LOG NO-UNDO.
 
-DEF VAR liTermReason AS INTEGER NO-UNDO.
-DEF VAR ldeTS AS DECIMAL NO-UNDO.
-DEF VAR liReq AS INTEGER NO-UNDO.
-DEF VAR llYoigoCLi AS LOGICAL NO-UNDO.
-DEF VAR liMsisdnStat AS INTEGER NO-UNDO.
-DEF VAR liSimStat AS INTEGER NO-UNDO.
-DEF VAR liQuarTime AS INTEGER NO-UNDO.
-DEF VAR llPenaltyFee AS LOGICAL NO-UNDO.
-DEF VAR lcResult AS CHARACTER NO-UNDO. 
+DEF VAR liTermReason   AS INTEGER   NO-UNDO.
+DEF VAR ldeTS          AS DECIMAL   NO-UNDO.
+DEF VAR liReq          AS INTEGER   NO-UNDO.
+DEF VAR llYoigoCLi     AS LOGICAL   NO-UNDO.
+DEF VAR llMasmovilCLi  AS LOGICAL   NO-UNDO.
+DEF VAR liMsisdnStat   AS INTEGER   NO-UNDO.
+DEF VAR liSimStat      AS INTEGER   NO-UNDO.
+DEF VAR liQuarTime     AS INTEGER   NO-UNDO.
+DEF VAR llPenaltyFee   AS LOGICAL   NO-UNDO.
+DEF VAR lcResult       AS CHARACTER NO-UNDO. 
 DEF VAR lcCreditReason AS CHARACTER NO-UNDO. 
-DEF VAR liCount AS INTEGER NO-UNDO.
-DEF VAR ldtLOTS AS DATETIME NO-UNDO.
-DEF VAR liError AS INT NO-UNDO. 
-DEF VAR lcTermType AS CHARACTER NO-UNDO. 
+DEF VAR liCount        AS INTEGER   NO-UNDO.
+DEF VAR ldtLOTS        AS DATETIME  NO-UNDO.
+DEF VAR liError        AS INT       NO-UNDO. 
+DEF VAR lcTermType     AS CHARACTER NO-UNDO. 
 
 DEFINE BUFFER bOrderDelivery FOR OrderDelivery.
 
 FIND Order NO-LOCK WHERE
-     Order.Brand = gcBrand AND
+     Order.Brand = Syst.Var:gcBrand AND
      Order.OrderID = iiOrder NO-ERROR.
 IF NOT AVAIL Order THEN RETURN "".
 
@@ -48,7 +49,7 @@ IF ilCheckLOStatus THEN DO:
    IF AVAIL OrderDelivery THEN DO:
 
       FOR EACH bOrderDelivery NO-LOCK WHERE
-               bOrderDelivery.Brand   = gcBrand AND
+               bOrderDelivery.Brand   = Syst.Var:gcBrand AND
                bOrderDelivery.OrderId = OrderDelivery.OrderId AND
                bOrderDelivery.LOTimeStamp = OrderDelivery.LOTimeStamp:
          liCount = liCount + 1.
@@ -94,8 +95,7 @@ IF LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 THEN DO:
       lcResult = fCashInvoiceCreditnote(Order.Invnum, lcCreditReason).
       
       IF lcResult > "" THEN 
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                           "Order",
+         Func.Common:mWriteMemo("Order",
                            STRING(Order.OrderId),
                            Order.Custnum,
                            "CREDIT NOTE CREATION FAILED",
@@ -162,8 +162,7 @@ ELSE DO:
       lcResult = fCashInvoiceCreditnote(Order.Invnum, "1010").
 
       IF lcResult > "" THEN
-          DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                            "MobSub",
+          Func.Common:mWriteMemo("MobSub",
                             STRING(MobSub.MsSeq),
                             MobSub.Custnum,
                             "CREDIT NOTE CREATION FAILED",
@@ -183,14 +182,13 @@ ELSE DO:
       liReq = fRevertRenewalOrderRequest(
                   Order.MsSeq,
                   Order.OrderId,
-                  katun,
-                  fMakeTS(),
+                  Syst.Var:katun,
+                  Func.Common:mMakeTS(),
                   {&REQUEST_SOURCE_ORDER_CANCELLATION},
                   OUTPUT lcResult).
 
       IF liReq = 0 THEN DO:
-        DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+        Func.Common:mWriteMemo("MobSub",
                           STRING(MobSub.MsSeq),
                           MobSub.Custnum,
                           "RENEWAL REVERTION FAILED",
@@ -203,16 +201,19 @@ ELSE DO:
 
       ASSIGN
          liTermReason = {&SUBSCRIPTION_TERM_REASON_DIRECT_ORDER_CANCELATION}
-         ldeTS = fSecOffSet(fMakeTS(),5).
+         ldeTS = Func.Common:mSecOffSet(Func.Common:mMakeTS(),5).
       
       liError = fDeleteMsValidation(Order.MsSeq,
                                     liTermReason,
                                     OUTPUT lcResult).
       IF liError EQ 0 THEN DO:
          lcResult = "".
-         llYoigoCLI = fIsYoigoCLI(MobSub.CLI).
-         llPenaltyFee = fIsPenalty(liTermReason,Order.MsSeq).
-         fCheckOrderer(liTermReason, llYoigoCLI, OUTPUT lcResult).
+         ASSIGN 
+            llYoigoCLI    = fIsYoigoCLI(MobSub.CLI) 
+            llMasmovilCLI = fIsMasmovilCLI(MobSub.CLI)
+            llPenaltyFee  = fIsPenalty(liTermReason,Order.MsSeq).
+            
+         fCheckOrderer(liTermReason, llYoigoCLI, llMasmovilCLI, OUTPUT lcResult).
       END.
       IF lcResult EQ "" THEN 
          fCheckKillTS(liTermReason,ldeTS, OUTPUT lcResult). 
@@ -222,6 +223,7 @@ ELSE DO:
          fInitialiseValues(
             INPUT liTermReason,
             INPUT llYoigoCLi,
+            INPUT llMasmovilCLI,
             OUTPUT liMsisdnStat,
             OUTPUT liSimStat,
             OUTPUT liQuarTime).
@@ -253,13 +255,12 @@ ELSE DO:
    
          IF liReq > 0 THEN
             fAdditionalLineSTC(liReq,
-                               fMake2Dt(TODAY + 1, 0),
+                               Func.Common:mMake2DT(TODAY + 1, 0),
                                "DELETE").
       END.
       
       IF lcResult > "" THEN DO:
-        DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+        Func.Common:mWriteMemo("MobSub",
                           STRING(MobSub.MsSeq),
                           MobSub.Custnum,
                           "SUBCRIPTION TERMINATION FAILED",

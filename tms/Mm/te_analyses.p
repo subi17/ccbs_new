@@ -6,10 +6,9 @@
   --------------------------------------------------------------------------- */
 {Syst/commpaa.i}
 ASSIGN
-   gcBrand = "1"
-   katun   = "Cron".
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun   = "Cron".
    
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/heartbeat.i}
 {Syst/tmsconst.i}
@@ -99,7 +98,8 @@ FORM
    ldtOldest NO-LABEL
 
 WITH CENTERED ROW 5 SIDE-LABELS 
-     TITLE " TRIGGEREVENTS FOR TRIGGERITEMS " FRAME fQty.
+     TITLE SUBST(" TRIGGEREVENTS FOR TRIGGERITEMS (&1) ",Syst.Parameters:Tenant)
+     FRAME fQty.
 
 DEF VAR lcTariffFields  AS CHAR NO-UNDO.
 DEF VAR lcBdest         AS CHAR NO-UNDO.
@@ -225,7 +225,7 @@ FUNCTION fAnalyseTriggerEvent RETURN INT
 
       WHEN "ALL" THEN DO:
          FOR EACH MsOwner NO-LOCK WHERE
-                  MsOwner.Brand = gcBrand AND
+                  MsOwner.Brand = Syst.Var:gcBrand AND
                   MsOwner.PayType = FALSE
          BREAK BY MsOwner.MsSeq
                BY MsOwner.InvCust:
@@ -325,7 +325,7 @@ FUNCTION fAnalyseTriggerEvent RETURN INT
                bundle is created. YOB-540 */
             FIND FIRST MsRequest NO-LOCK WHERE
                        MsRequest.MsSeq = Msowner.MsSeq AND
-                       MsRequest.Actstamp = fSecOffSet(Msowner.TSEnd,1) AND
+                       MsRequest.Actstamp = Func.Common:mSecOffSet(Msowner.TSEnd,1) AND
                        MsRequest.Reqtype = 0 NO-ERROR.
             IF AVAIL MsRequest THEN NEXT.
 
@@ -655,7 +655,7 @@ FUNCTION fAnalyseTriggerEvent RETURN INT
 END FUNCTION.
 
 ASSIGN
-   lcStarted  = fTS2HMS(fMakeTS())
+   lcStarted  = Func.Common:mTS2HMS(Func.Common:mMakeTS())
    llMonitor  = FALSE
    lcMonitor  = "ANALYSER:TriggerEvent"  
    lcLogFile  = fCParamC("TMQueueDeleteLog")
@@ -747,7 +747,7 @@ DO WHILE TRUE:
       
    END.
 
-   lcCurrent = fTS2HMS(fMakeTS()).
+   lcCurrent = Func.Common:mTS2HMS(Func.Common:mMakeTS()).
 
    IF lrRecid = ? THEN DO:
 
@@ -937,7 +937,7 @@ DO WHILE TRUE:
    ldDone = ldDone + 1.
     
    IF ldQty MOD 1 = 0 THEN DO:
-      lcCurrent = fTS2HMS(fMakeTS()).
+      lcCurrent = Func.Common:mTS2HMS(Func.Common:mMakeTS()).
         
       PAUSE 0.
       DISP ldQty    
@@ -1020,7 +1020,7 @@ PROCEDURE pLaunchHandlers:
    IF liDelay = ? THEN liDelay = 600.
    
    /* already scheduled or running */
-   ldCheckFrom = fMake2DT(TODAY - 3,0).
+   ldCheckFrom = Func.Common:mMake2DT(TODAY - 3,0).
    IF CAN-FIND(FIRST FuncRunQSchedule WHERE
        FuncRunQSchedule.FRQueueID = liFuncRunQueue AND
        FuncRunQSchedule.StartTS > ldCheckFrom AND
@@ -1038,7 +1038,7 @@ PROCEDURE pLaunchHandlers:
       FuncRunQSchedule.FRQScheduleID = liSeq
       FuncRunQSchedule.RunState      = "Scheduled"
       FuncRunQSchedule.RunMode       = "Production"
-      FuncRunQSchedule.StartTS       = fSecOffSet(fMakeTS(),liDelay + 300).
+      FuncRunQSchedule.StartTS       = Func.Common:mSecOffSet(Func.Common:mMakeTS(),liDelay + 300).
       
    RUN Syst/funcrunqsparam_initialize.p (FuncRunQSchedule.FRQScheduleID).
    

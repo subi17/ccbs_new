@@ -21,8 +21,8 @@ DEF VAR piMaxCount AS INT NO-UNDO.
 
 {Syst/commpaa.i}
 ASSIGN
-   katun = "IVR_" + ghAuthLog::EndUserId.
-   gcBrand = "1".
+   Syst.Var:katun = "IVR_" + ghAuthLog::EndUserId.
+   Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
 
@@ -37,10 +37,7 @@ pcMSISDN = get_string(param_toplevel_id,"0").
 piMaxCount = get_int(param_toplevel_id,"1").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST mobsub NO-LOCK WHERE 
-           mobsub.brand = gcBrand AND
-           mobsub.cli = pcMSISDN NO-ERROR.
-IF NOT AVAILABLE mobsub THEN RETURN appl_err("Subscription not found").
+{viptool/src/findtenant.i NO Ordercanal MobSub CLI pcMSISDN}
 
 IF piMaxCount NE 1 AND piMaxCount NE 3 THEN
    RETURN appl_err("Incorrect type value").
@@ -49,7 +46,7 @@ lcRespArray = add_array(response_toplevel_id,"").
 
 INVOICE_LOOP:
 FOR EACH Invoice WHERE 
-         Invoice.Brand = gcBrand AND
+         Invoice.Brand = Syst.Var:gcBrand AND
          Invoice.Custnum = MobSub.Custnum AND
          Invoice.InvType = 1 NO-LOCK USE-INDEX Custnum:
 
@@ -80,5 +77,4 @@ FOR EACH Invoice WHERE
 END.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

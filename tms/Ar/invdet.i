@@ -21,7 +21,6 @@
 
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/fuserright.i}            
 {Func/finvbal.i}
@@ -59,7 +58,7 @@ ASSIGN
    lcSubLine2 = FILL("=",35).
 
 FORM
-    Invoice.ExtInvID   
+    Invoice.ExtInvID FORMAT "x(14)"
        LABEL "Invoice Number"             
     Invoice.InvType    
        LABEL "Invoice Type " AT 42
@@ -221,50 +220,42 @@ PROCEDURE pInvoiceDetails:
    FIND Customer WHERE 
         Customer.CustNum = Invoice.CustNum NO-LOCK NO-ERROR.
 
-   ASSIGN lcInvType    = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                          "Invoice",
+   ASSIGN lcInvType    = Func.Common:mTMSCodeName("Invoice",
                                           "InvType",
                                           STRING(Invoice.InvType))
                                        
-          lcPrintState = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                          "Invoice",
+          lcPrintState = Func.Common:mTMSCodeName("Invoice",
                                           "PrintState",
                                           STRING(Invoice.PrintState))
           
-          lcIFSState = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                        "Invoice",
+          lcIFSState = Func.Common:mTMSCodeName("Invoice",
                                         "DeliveryState",
                                         STRING(Invoice.DeliveryState))
                  
-          lcClaimDesc = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                          "Invoice",
+          lcClaimDesc = Func.Common:mTMSCodeName("Invoice",
                                           "ClaimStatus",
                                           Invoice.ClaimStatus)
                                           
-          lcPaymState  = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                          "Invoice",
+          lcPaymState  = Func.Common:mTMSCodeName("Invoice",
                                           "PaymState",
                                           STRING(Invoice.PaymState))
           
-          lcCType      = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                          "Invoice",
+          lcCType      = Func.Common:mTMSCodeName("Invoice",
                                           "ChargeType",
                                           STRING(Invoice.ChargeType))
 
-          lcDType      = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                          "Invoice",
+          lcDType      = Func.Common:mTMSCodeName("Invoice",
                                           "DelType",
                                           STRING(Invoice.DelType))
 
-          lcVatUsage   = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                          "Invoice",
+          lcVatUsage   = Func.Common:mTMSCodeName("Invoice",
                                           "VatUsage",
                                           STRING(Invoice.VatUsage))
 
           lcCurrency   = Invoice.Currency
           ldUnPaid     = fInvBal(BUFFER Invoice,TODAY).
 
-   fSplitTS(Invoice.ChgStamp,
+   Func.Common:mSplitTS(Invoice.ChgStamp,
             OUTPUT ldtStampDate,
             OUTPUT liDetCount).
             
@@ -273,8 +264,7 @@ PROCEDURE pInvoiceDetails:
           lcDDState   = IF Invoice.DDBankAcc = ""
                         THEN ""
                         ELSE (string(invoice.ddstate) + " " +
-                             DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                              "Invoice",
+                             Func.Common:mTMSCodeName("Invoice",
                                               "DDState",
                                               STRING(Invoice.DDState)))
           lcCrExtID   = "".
@@ -288,7 +278,7 @@ PROCEDURE pInvoiceDetails:
    liODIRequest = 0.
    /* odi request */
    FOR FIRST MsRequest NO-LOCK WHERE
-             MsRequest.Brand      = gcBrand AND
+             MsRequest.Brand      = Syst.Var:gcBrand AND
              MsRequest.ReqType    = 20      AND
              MsRequest.CustNum    = Invoice.CustNum AND
              MsRequest.ReqCParam1 = Invoice.ExtInvID:
@@ -349,26 +339,26 @@ PROCEDURE pInvoiceUpdate:
    DEF VAR liDueDate  AS INT  NO-UNDO. 
    DEF VAR lcUpdate   AS CHAR NO-UNDO.
 
-   lcUpdate = fTokenRights(katun,"SYST,BILL").
+   lcUpdate = fTokenRights(Syst.Var:katun,"SYST,BILL").
  
    FIND Invoice WHERE Invoice.InvNum = iiInvNum NO-LOCK.
 
    REPEAT ON ENDKEY UNDO, LEAVE:
    
       ASSIGN
-         ufk    = 0
-         ufk[1] = IF lcUpdate = "RW" AND Invoice.PaymState NE 4 THEN 7 ELSE 0
-         ufk[2] = 927
-         ufk[3] = 829
-         ufk[4] = 1170
-         ufk[5] = 790
-         ufk[6] = 1152
-         ufk[7] = 1752
-         ufk[8] = 8
-         ehto   = 0.
+         Syst.Var:ufk    = 0
+         Syst.Var:ufk[1] = IF lcUpdate = "RW" AND Invoice.PaymState NE 4 THEN 7 ELSE 0
+         Syst.Var:ufk[2] = 927
+         Syst.Var:ufk[3] = 829
+         Syst.Var:ufk[4] = 1170
+         Syst.Var:ufk[5] = 790
+         Syst.Var:ufk[6] = 1152
+         Syst.Var:ufk[7] = 1752
+         Syst.Var:ufk[8] = 8
+         Syst.Var:ehto   = 0.
       RUN Syst/ufkey.p.
 
-      IF toimi = 1 THEN DO TRANS:
+      IF Syst.Var:toimi = 1 THEN DO TRANS:
 
          FIND CURRENT Invoice EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
       
@@ -379,7 +369,7 @@ PROCEDURE pInvoiceUpdate:
             RETURN "LOCKED".
          END.
 
-         ehto = 9.
+         Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
 
          ASSIGN 
@@ -395,9 +385,9 @@ PROCEDURE pInvoiceUpdate:
          WITH FRAME fInvDet EDITING:
 
             READKEY.
-            nap = KEYLABEL(LASTKEY).
+            Syst.Var:nap = KEYLABEL(LASTKEY).
 
-            IF nap = "F9" AND 
+            IF Syst.Var:nap = "F9" AND 
                LOOKUP(FRAME-FIELD,"DelType,PrintState,DeliveryState") > 0 
             THEN DO:
 
@@ -417,8 +407,7 @@ PROCEDURE pInvoiceUpdate:
                         VIEW-AS ALERT-BOX ERROR.
                         NEXT.
                      END. /* IF LOOKUP(lcCode,SUBST("&1,&2,&3", */
-                     lcDType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                                "Invoice",
+                     lcDType = Func.Common:mTMSCodeName("Invoice",
                                                 "DelType",
                                                 lcCode).
 
@@ -435,8 +424,7 @@ PROCEDURE pInvoiceUpdate:
                                  OUTPUT lcCode).
 
                   IF lcCode ne "" AND lcCode NE ? THEN DO:
-                     lcPrintState = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                                     "Invoice",
+                     lcPrintState = Func.Common:mTMSCodeName("Invoice",
                                                      "PrintState",
                                                      lcCode).
 
@@ -452,8 +440,7 @@ PROCEDURE pInvoiceUpdate:
                                  OUTPUT lcCode).
 
                   IF lcCode ne "" AND lcCode NE ? THEN DO:
-                     lcIFSState = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                                     "Invoice",
+                     lcIFSState = Func.Common:mTMSCodeName("Invoice",
                                                      "DeliveryState",
                                                      lcCode).
 
@@ -462,17 +449,16 @@ PROCEDURE pInvoiceUpdate:
                   END.
                END.
 
-               ehto = 9.
+               Syst.Var:ehto = 9.
                RUN Syst/ufkey.p.
                NEXT. 
             END.
 
-            ELSE IF LOOKUP(nap,poisnap) > 0 THEN DO WITH FRAME fInvDet:
+            ELSE IF LOOKUP(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO WITH FRAME fInvDet:
 
                IF FRAME-FIELD = "DelType" THEN DO:
                 
-                  lcDType = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                             "Invoice",
+                  lcDType = Func.Common:mTMSCodeName("Invoice",
                                              "DelType",
                                              STRING(INPUT Invoice.DelType)).
                                           
@@ -488,8 +474,7 @@ PROCEDURE pInvoiceUpdate:
                ELSE IF FRAME-FIELD = "PrintState" THEN DO:
 
                   lcPrintState = 
-                     DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "Invoice",
+                     Func.Common:mTMSCodeName("Invoice",
                                       "PrintState",
                                       STRING(INPUT Invoice.PrintState)).
                                           
@@ -505,8 +490,7 @@ PROCEDURE pInvoiceUpdate:
                ELSE IF FRAME-FIELD = "DeliveryState" THEN DO:
 
                   lcIFSState = 
-                     DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "Invoice",
+                     Func.Common:mTMSCodeName("Invoice",
                                       "DeliveryState",
                                       STRING(INPUT Invoice.DeliveryState)).
                                           
@@ -565,7 +549,7 @@ PROCEDURE pInvoiceUpdate:
       END.
 
       /* memo */
-      ELSE IF toimi = 2 THEN DO:
+      ELSE IF Syst.Var:toimi = 2 THEN DO:
          RUN Mc/memo.p(INPUT Invoice.CustNum,
                   INPUT "Invoice",
                   INPUT STRING(Invoice.InvNum),
@@ -573,101 +557,101 @@ PROCEDURE pInvoiceUpdate:
       END.
 
       /* payments */
-      ELSE IF toimi = 3 THEN DO:
+      ELSE IF Syst.Var:toimi = 3 THEN DO:
         RUN Ar/payments.p(0,
                      Invoice.InvNum,
                      "").
       END.
       
       /* subinvoices */
-      ELSE IF toimi = 4 THEN DO:
+      ELSE IF Syst.Var:toimi = 4 THEN DO:
          RUN Ar/subinvoice.p (Invoice.InvNum).
       END.
       
       /* invoice rows */
-      ELSE IF toimi = 5 THEN DO:
+      ELSE IF Syst.Var:toimi = 5 THEN DO:
          RUN Ar/nnlryp.p(Invoice.InvNum,0).
       END.
       
       /* other actions */
-      ELSE IF toimi = 6 THEN DO:
+      ELSE IF Syst.Var:toimi = 6 THEN DO:
       
          otheractions:
          REPEAT ON ENDKEY UNDO, NEXT:
 
-            ASSIGN ufk    = 0
-                   ufk[1] = 0 
-                   ufk[2] = 1650 
-                   ufk[3] = 908
-                   ufk[4] = 1492
-                   ufk[5] = 1561
-                   ufk[6] = 862
-                   ufk[7] = 1796
-                   ufk[8] = 8
-                   ehto   = 0.
+            ASSIGN Syst.Var:ufk    = 0
+                   Syst.Var:ufk[1] = 0 
+                   Syst.Var:ufk[2] = 1650 
+                   Syst.Var:ufk[3] = 908
+                   Syst.Var:ufk[4] = 1492
+                   Syst.Var:ufk[5] = 1561
+                   Syst.Var:ufk[6] = 862
+                   Syst.Var:ufk[7] = 1796
+                   Syst.Var:ufk[8] = 8
+                   Syst.Var:ehto   = 0.
             RUN Syst/ufkey.p.
                
             /* reference nbr  */
-            IF toimi = 1 THEN DO: 
+            IF Syst.Var:toimi = 1 THEN DO: 
                RUN Mc/showpr.p(Invoice.CustNum,
                           Invoice.InvNum).
             END.
   
-            ELSE IF toimi = 2 THEN DO:
+            ELSE IF Syst.Var:toimi = 2 THEN DO:
                PAUSE 0.
                DISP Invoice.BillRun WITH FRAME fBillRunID.
 
                ASSIGN
-                  ufk    = 0
-                  ufk[8] = 8
-                  ehto   = 0.
+                  Syst.Var:ufk    = 0
+                  Syst.Var:ufk[8] = 8
+                  Syst.Var:ehto   = 0.
                RUN Syst/ufkey.p.
             
                HIDE FRAME fBillRunID NO-PAUSE. 
             END.
 
             /* credit invoice */
-            ELSE IF toimi = 3 THEN DO:
-               si-recid2 = RECID(Invoice).
+            ELSE IF Syst.Var:toimi = 3 THEN DO:
+               Syst.Var:si-recid2 = RECID(Invoice).
               
                RUN Ar/nncimu.p.
 
-               si-recid2  = ?.
+               Syst.Var:si-recid2  = ?.
                
                IF Invoice.CrInvNum > 0 THEN RETURN "".
             END. 
 
             /* claiming history */
-            ELSE IF toimi = 4 THEN DO:
+            ELSE IF Syst.Var:toimi = 4 THEN DO:
                RUN Ar/claimhis.p(0,Invoice.InvNum).
             END.
  
             /* invoice row counters */
-            ELSE IF toimi = 5 THEN DO:
+            ELSE IF Syst.Var:toimi = 5 THEN DO:
                RUN Inv/invrowcounter.p(0,0,Invoice.InvNum,""). 
             END. 
            
             /* interest events */ 
-            ELSE IF toimi = 6 THEN DO:
+            ELSE IF Syst.Var:toimi = 6 THEN DO:
                RUN Ar/nnkoyp.p (Invoice.CustNum).
             END.
              
             /* view send log */
-            ELSE IF toimi = 7 THEN DO:
+            ELSE IF Syst.Var:toimi = 7 THEN DO:
                RUN Mc/itsendlo.p(0,
                             Invoice.InvNum,
                             0,
                             0).
             END.
             
-            ELSE IF toimi = 8 THEN LEAVE otheractions.
+            ELSE IF Syst.Var:toimi = 8 THEN LEAVE otheractions.
         
          END.  /* otheractions */
  
       END.
       
       /* show eventlog */
-      ELSE IF toimi = 7 THEN DO:
+      ELSE IF Syst.Var:toimi = 7 THEN DO:
          RUN Mc/eventsel.p ("Invoice",
                        STRING(iiInvNum)).
       END.

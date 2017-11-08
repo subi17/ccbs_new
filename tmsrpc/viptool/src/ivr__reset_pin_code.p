@@ -21,8 +21,8 @@ DEF VAR pcPIN AS CHAR NO-UNDO.
 
 {Syst/commpaa.i}
 ASSIGN
-   katun = "IVR_" + ghAuthLog::EndUserId.
-   gcBrand = "1".
+   Syst.Var:katun = "IVR_" + ghAuthLog::EndUserId.
+   Syst.Var:gcBrand = "1".
 
 {Syst/eventval.i}
 {Func/fsmsreq.i}
@@ -36,7 +36,7 @@ DEF VAR lhMobSub AS HANDLE NO-UNDO.
 DEF VAR ldeSMSStamp AS DEC NO-UNDO. 
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
    {Func/lib/eventlog.i}
 END.
 
@@ -45,11 +45,7 @@ pcCLI = get_string(param_toplevel_id, "0").
 pcPIN = get_string(param_toplevel_id, "1").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND mobsub NO-LOCK WHERE 
-     mobsub.brand = gcBrand AND
-     mobsub.cli = pcCli NO-ERROR.
-
-IF NOT AVAILABLE mobsub THEN RETURN appl_err("Subscription not found").
+{viptool/src/findtenant.i NO Ordercanal MobSub CLI pcCli}
 
 IF LENGTH(pcPIN) NE 4 THEN RETURN appl_err("Incorrect PIN length").
 
@@ -105,5 +101,4 @@ END.
 add_boolean(response_toplevel_id,"",True).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

@@ -37,6 +37,7 @@
             mark_post_3rd;boolean;optional;
             mark_sms_3rd;boolean;optional;
             mark_email_3rd;boolean;optional;
+            mark_dont_share_personal_data;boolean;optional;
             city_code;string;optional;
             street_code;string;optional;
  * @memo    title;string;mandatory
@@ -78,7 +79,6 @@ DEF VAR llProCust AS LOG NO-UNDO.
 DEF VAR llSelfEmployed AS LOG NO-UNDO.
 
 DEF BUFFER bOriginalCustomer FOR Customer.
-DEF BUFFER bDestCustomer FOR Customer.
 
 DEFINE TEMP-TABLE ttCustomer NO-UNDO LIKE Customer
    FIELD cBirthDay AS CHAR
@@ -91,12 +91,12 @@ DEF VAR lcAgrCustIDType AS CHARACTER NO-UNDO.
 
 IF validate_request(param_toplevel_id, "int,string,datetime,struct,double,double,struct,string,string,string") EQ ? THEN RETURN.
 
-pdeChargeLimit = get_double(param_toplevel_id, "5").
-pdeCharge = get_double(param_toplevel_id, "4").
-pcstruct = get_struct(param_toplevel_id, "3").
-pdeChgStamp = get_timestamp(param_toplevel_id, "2").
-pcSalesman = get_string(param_toplevel_id, "1").
 piMsSeq = get_int(param_toplevel_id, "0").
+pcSalesman = get_string(param_toplevel_id, "1").
+pdeChgStamp = get_timestamp(param_toplevel_id, "2").
+pcstruct = get_struct(param_toplevel_id, "3").
+pdeCharge = get_double(param_toplevel_id, "4").
+pdeChargeLimit = get_double(param_toplevel_id, "5").
 pcMemoStruct = get_struct(param_toplevel_id,"6").
 pcMandateId = get_string(param_toplevel_id,"7").
 pcChannel = get_string(param_toplevel_id,"8").
@@ -112,10 +112,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 IF TRIM(pcSalesman) EQ "" THEN RETURN appl_err("username is empty").
 
-FIND MobSub WHERE
-     MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
-IF NOT AVAIL Mobsub THEN
-   RETURN appl_err("Subscription was not found").
+{newton/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
 FIND FIRST bOriginalCustomer WHERE
            bOriginalCustomer.Custnum = Mobsub.Custnum NO-LOCK NO-ERROR.
@@ -127,7 +124,8 @@ lcDataFields = "title,lname!,lname2,fname!,coname,street!,zip!,city!,region!," +
                ",id_type!,company_id,company_name,company_foundationdate," +
                "phone_number,city_code,street_code,municipality_code," +
                "mark_post,mark_sms,mark_email," + 
-               "mark_post_3rd,mark_sms_3rd,mark_email_3rd".
+               "mark_post_3rd,mark_sms_3rd,mark_email_3rd," + 
+               "mark_dont_share_personal_data".
 lcstruct = validate_request(pcstruct, lcDataFields).
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
@@ -195,6 +193,7 @@ ASSIGN
    ttCustomer.DirMarkPost = get_bool(pcStruct, "mark_post") WHEN LOOKUP("mark_post", lcStruct) > 0
    ttCustomer.OutMarkSMS = get_bool(pcStruct, "mark_sms_3rd") WHEN LOOKUP("mark_sms_3rd", lcStruct) > 0
    ttCustomer.OutMarkEmail = get_bool(pcStruct, "mark_email_3rd") WHEN LOOKUP("mark_email_3rd", lcStruct) > 0
+   ttCustomer.DontSharePersData = get_bool(pcStruct, "mark_dont_share_personal_data") WHEN LOOKUP("mark_dont_share_personal_data", lcStruct) > 0
    ttCustomer.OutMarkPost = get_bool(pcStruct, "mark_post_3rd") WHEN LOOKUP("mark_post_3rd", lcStruct) > 0
    ttCustomer.StreetCode = get_string(pcStruct, "street_code") WHEN LOOKUP("street_code", lcStruct) > 0
    ttCustomer.CityCode = get_string(pcStruct, "city_code") WHEN LOOKUP("city_code", lcStruct) > 0
@@ -215,16 +214,17 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {Syst/commpaa.i}
 ASSIGN
-   katun = "VISTA_" + pcSalesMan
-   gcBrand = "1".
+   Syst.Var:katun = "VISTA_" + pcSalesMan
+   Syst.Var:gcBrand = "1".
 {Mm/msagrcustchg.i}
 {Func/fcustchangereq.i}
 {Func/fcharge_comp_loaded.i}
 {Func/orderchk.i}
 
 /*ACC is allowed for PRO-PRO and NON_PRO-NON_PRO*/
-lcError = fCheckACCCompability(bOriginalCustomer.Custnum,
-                               Customer.Custnum).
+IF AVAIL Customer THEN
+   lcError = fCheckACCCompability(bOriginalCustomer.Custnum,
+                                  Customer.Custnum).
 IF lcError > "" THEN RETURN appl_err(lcError).                               
 
 lcError = fPreCheckSubscriptionForACC(MobSub.MsSeq).
@@ -236,45 +236,43 @@ IF pdeCharge > 0 THEN
       Mobsub.PayType,
       pdeCharge,
       pdeChargeLimit).
+IF lcError > "" THEN RETURN appl_err(lcError).
 
 ASSIGN lcReqSource = (IF pcChannel = "newton" THEN {&REQUEST_SOURCE_NEWTON}
                       ELSE IF pcChannel = "retail_newton" THEN {&REQUEST_SOURCE_RETAIL_NEWTON}
                       ELSE {&REQUEST_SOURCE_MANUAL_TMS}).
 
-IF lcError EQ "" THEN 
-   RUN pCheckSubscriptionForACC (
-      MobSub.MsSeq,
-      0,
-      lcReqSource,
-      OUTPUT lcError).
+RUN pCheckSubscriptionForACC (
+   MobSub.MsSeq,
+   0,
+   lcReqSource,
+   OUTPUT lcError).
+IF lcError > "" THEN RETURN appl_err(lcError).
 
-IF lcError EQ "" AND AVAIL Customer THEN 
+IF AVAIL Customer THEN DO:
    RUN pCheckTargetCustomerForACC (
       Customer.Custnum,
       OUTPUT lcError).
-
-IF lcError > "" THEN
-   RETURN appl_err(lcError).
-
-FIND bDestCustomer WHERE 
-     bDestCustomer.brand EQ gcBrand AND
-     bDestCustomer.orgId EQ ttCustomer.OrgId NO-ERROR.
-IF AVAIL bDestCustomer THEN DO:
-   llProCust = fIsPro(bDestCustomer.category).
-   llSelfEmployed = fIsSelfEmpl(bDestCustomer.category).
+   IF lcError > "" THEN
+      RETURN appl_err(lcError).
 END.
+ELSE DO:
 
-IF NOT fSubscriptionLimitCheck(INPUT ttCustomer.OrgId,
-                               INPUT ttCustomer.CustIdType,
-                               llSelfEmployed,
-                               llProCust,
-                               1,
-                               OUTPUT lcError,
-                               OUTPUT liSubLimit,
-                               OUTPUT liSubs,
-                               OUTPUT liActLimit,
-                               OUTPUT liActs) THEN
+   llProCust = fIsPro(bOriginalCustomer.category).
+   IF llProCust THEN 
+      llSelfEmployed = fIsSelfEmpl(bOriginalCustomer.category).
+
+   IF NOT fSubscriptionLimitCheck(INPUT ttCustomer.OrgId,
+                                  INPUT ttCustomer.CustIdType,
+                                  llProCust,
+                                  llSelfEmployed, 
+                                  1,
+                                  OUTPUT liSubLimit,
+                                  OUTPUT liSubs,
+                                  OUTPUT liActLimit,
+                                  OUTPUT liActs) THEN
    RETURN appl_err("Subscription limit exceeded").
+END.
 
 lcCode = fCreateAccDataParam(
           (BUFFER ttCustomer:HANDLE),
@@ -315,8 +313,7 @@ liRequest = fMSCustChangeRequest(
 IF liRequest = 0 THEN
    RETURN appl_err("Request could not be done; " + lcError).
 
-DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                 "customer",
+Func.Common:mWriteMemo("customer",
                  STRING(Mobsub.AgrCust),
                  MobSub.AgrCust,
                  pcMemoTitle,
@@ -326,5 +323,4 @@ add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:
    EMPTY TEMP-TABLE ttCustomer.
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

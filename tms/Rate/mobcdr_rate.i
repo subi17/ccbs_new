@@ -123,20 +123,30 @@ FUNCTION fAnalBsub RETURNS LOGICAL
 
    CASE ttCall.SpoCMT:
    
-      WHEN 2  THEN mod_bsub  = "INTERNATIONAL".
+      WHEN 2 THEN DO:
+         IF TENANT-NAME("common") EQ {&TENANT_YOIGO} THEN
+            mod_bsub  = "INTERNATIONAL".
+      END. 
       WHEN 1002 THEN mod_bsub  = "INTERNATIONAL".
       WHEN 3  THEN ASSIGN Mod_bsub  = "ROAMINT"   b_type = 0.
       WHEN 4  THEN ASSIGN Mod_bsub  = "ROAMLOCAL" b_type = 1.
       WHEN 7  THEN ASSIGN Mod_bsub  = "RT" b_type = 0.
-      WHEN 17 THEN ASSIGN Mod_bsub  = "RT" b_type = 0 .
       WHEN 51 THEN DO:     
-         IF b_type = 1 THEN mod_bsub = "INTERNATIONAL".
+         IF b_type = 1 THEN DO:
+            IF TENANT-NAME("common") EQ {&TENANT_YOIGO} THEN
+               mod_bsub = "INTERNATIONAL".
+         END.
          ELSE IF b_type = 4 THEN b_type = 4.
          ELSE IF b_type = 7 THEN b_type = 7. /* YOT-1684 */
-         ELSE IF b_type = 5 AND ttCall.IMSI2 BEGINS "21404" 
-            THEN Mod_Bsub = "YOIGO". /*YDR-1499*/
-         ELSE IF b_type = 5 AND ttCall.IMSI2 BEGINS "214" 
-            THEN Mod_Bsub = "OTHER". /*YDR-1499*/
+         ELSE IF b_type = 5 AND
+            TENANT-NAME("common") EQ {&TENANT_YOIGO} THEN DO:
+
+            IF ttCall.IMSI2 BEGINS "21404" 
+               THEN Mod_Bsub = "YOIGO". /*YDR-1499*/
+            ELSE IF b_type = 5 AND ttCall.IMSI2 BEGINS "214" 
+               THEN Mod_Bsub = "OTHER". /*YDR-1499*/
+
+         END.
          ELSE b_type = 5.
       END.
       WHEN 53 THEN ASSIGN Mod_bsub  = "ROAMSMS"  b_type = 0.
@@ -174,31 +184,30 @@ FUNCTION fAnalBsub RETURNS LOGICAL
          ELSE IF ttCall.Btype = 1 THEN mod_bsub = ttcall.gsmbnr.
       
       END.      
-      WHEN 94 THEN DO:
-         IF ttCall.Btype = 98 THEN mod_bsub = "EMAIL".
-      END.
 
       WHEN 95 THEN mod_bsub = "ROAMMMSMO_EU".
       WHEN 96 THEN mod_bsub = "ROAMMMSMT_EU".
       WHEN 105 THEN mod_bsub = "ROAMMMSMO".
       WHEN 106 THEN mod_bsub = "ROAMMMSMT".
-
-      WHEN 104 THEN DO:
-         IF ttCall.Gsmbnr ne "-" THEN ttCall.xsub = ttCall.Gsmbnr.
-         ASSIGN
-            ttCall.Gsmbnr = "-"
-            mod_bsub      = "EMAIL".
-      END.
                            
       WHEN 97 THEN DO:
          mod_bsub  = "INTERNATIONAL".
       END. 
    END.
+ 
+   /* YTS-11600 */
+   IF ttCall.SpoCmt EQ 104 OR /* 94+b-type=98=>104 */
+     (ttCall.SpoCmt EQ 95 AND ttCall.Btype EQ 98) OR
+     (ttCall.SpoCmt EQ 105 AND ttCall.Btype EQ 98) THEN DO:
+      IF ttCall.Gsmbnr ne "-" THEN ttCall.xsub = ttCall.Gsmbnr.
+      ASSIGN
+         ttCall.Gsmbnr = "-"
+         mod_bsub      = "EMAIL".
+   END.
    
    IF ttCall.SpoCMT  = 3 OR 
       ttCall.SpoCMT  = 4 OR
-      ttCall.SpoCMT  = 7 OR 
-      ttCall.SPOCMT  = 17 THEN DO:
+      ttCall.SpoCMT  = 7 THEN DO:
 
       lcARoamZone = "".
       
@@ -271,8 +280,11 @@ FUNCTION fAnalBsub RETURNS LOGICAL
                        BDestTrans.FromDate <= ttCall.DateST NO-ERROR.
             IF NOT AVAIL BDestTrans THEN NEXT.
 
-            IF INDEX(BDestTrans.RatingZone,"SHORT") > 0 AND
-               BDestTrans.TranslateNumber NE ttCall.Gsmbnr THEN NEXT.
+            IF BDestTrans.MinLength > 0 AND
+               LENGTH(ttCall.Gsmbnr) < BDestTrans.MinLength THEN NEXT.
+
+            IF BDestTrans.MaxLength > 0 AND
+               LENGTH(ttCall.Gsmbnr) > BDestTrans.MaxLength THEN NEXT.
 
             mod_bsub = BDestTrans.BDest.
             LEAVE.
@@ -287,7 +299,8 @@ FUNCTION fAnalBsub RETURNS LOGICAL
                  BDest.FromDate <= ttCall.DateSt NO-LOCK NO-ERROR.
 
       IF AVAIL Bdest THEN ASSIGN
-         b_dest     = Bdest.Bdest 
+         b_dest     = (IF BDest.RateBDest NE "" THEN Bdest.RateBDest
+                       ELSE Bdest.Bdest)
          r_dest     = Bdest.Bdest
          b_ccn      = Bdest.CCN   
          b_dg-code  = BDest.DiscGroup
@@ -306,7 +319,11 @@ FUNCTION fAnalBsub RETURNS LOGICAL
    * Thus analyse B-sub from right      *
    * TO left; gradually                 *
    *************************************/
-   IF b_type = 1 AND ttCall.SpoCMT NE 51 AND ttCall.SpoCMT NE 54 THEN DO:
+   IF b_type = 1 AND 
+      ttCall.SpoCMT NE 51 AND
+      ttCall.SpoCMT NE 54 AND
+      ttCall.SpoCMT NE 95 AND
+      ttCall.SpoCMT NE 105 THEN DO:
    
       DO b = LENGTH(b_sub) TO 1 BY -1:
          IF CAN-FIND(FIRST BDest WHERE
@@ -331,7 +348,8 @@ FUNCTION fAnalBsub RETURNS LOGICAL
       END.
    END.
 
-   IF ttCall.Spocmt NE 3 AND 
+   IF TENANT-NAME("common") EQ {&TENANT_YOIGO} AND
+      ttCall.Spocmt NE 3 AND 
       ttCall.Spocmt NE 4 AND 
       fIsYoigoCLI(mod_bsub) THEN DO:
 
@@ -462,11 +480,13 @@ FUNCTION fAnalBsub RETURNS LOGICAL
       END.
    
       IF dest_recid NE ? THEN ASSIGN
-         b_dest     = BDest.Bdest   /* Classified B-destination         */
+         b_dest     = (IF BDest.RateBDest NE "" THEN BDest.RateBDest
+                       ELSE BDest.Bdest)   /* Classified B-destination */
          r_dest     = BDest.Bdest
          b_ccn      = BDest.CCN   /* consequtive country number       */
          b_dg-code  = BDest.DiscGroup
          b_foc      = TRUE WHEN BDest.Free = TRUE. /* free of charge ? */
+         
    END. 
 
    IF dest_recid EQ ? THEN  /* unknown destination (!)  */

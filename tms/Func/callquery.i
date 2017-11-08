@@ -1,5 +1,4 @@
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/filltemptable.i}
 {Func/cparam2.i}
 {Syst/host.i}
@@ -201,7 +200,7 @@ FUNCTION fGetArchiveDBs RETURNS LOGIC
    DEFINE VARIABLE lcHost AS CHARACTER NO-UNDO.
 
    FOR EACH DBConfig NO-LOCK WHERE
-            DBConfig.Brand = gcBrand AND
+            DBConfig.Brand = Syst.Var:gcBrand AND
             DBConfig.TableName = icTable AND
             DBConfig.DBState   = 1 AND 
             DBConfig.ToDate   >= idaFromDate AND
@@ -240,7 +239,7 @@ FUNCTION fSetCollectionDBs RETURNS LOGIC
 
    IF idaActive = ? THEN 
    FOR FIRST DBConfig NO-LOCK WHERE
-             DBConfig.Brand = gcBrand AND
+             DBConfig.Brand = Syst.Var:gcBrand AND
              DBConfig.TableName = ttDB.TableName AND
              DBConfig.DBState = 0 AND 
              DBConfig.ToDate >= TODAY AND
@@ -251,7 +250,7 @@ FUNCTION fSetCollectionDBs RETURNS LOGIC
    END.   
    IF idaActive = ? THEN 
    FOR FIRST DBConfig NO-LOCK WHERE
-             DBConfig.Brand = gcBrand AND
+             DBConfig.Brand = Syst.Var:gcBrand AND
              DBConfig.TableName = ttDB.TableName AND
              DBConfig.DBState = 0:
       ASSIGN 
@@ -326,7 +325,7 @@ FUNCTION fGetCDRDtl RETURNS LOGICAL
    
    IF ldaActive = ? THEN DO:
       FOR FIRST DBConfig NO-LOCK WHERE
-                DBConfig.Brand = gcBrand AND
+                DBConfig.Brand = Syst.Var:gcBrand AND
                 DBConfig.TableName = ttDB.TableName AND
                 DBConfig.DBState = 0:
          ASSIGN      
@@ -370,8 +369,8 @@ FUNCTION fGetCDRDtl RETURNS LOGICAL
       
       IF ttDB.Connect THEN DO:
          lcDBName = "dtlQuery".
-         CONNECT VALUE (ttDB.ConnName + " " +
-                        ttDB.ConnParam + " -ld " + lcDBName) NO-ERROR.
+         multitenancy.TenantInformation:mConnectDBSupressError
+               (ttDB.ConnName + " " + ttDB.ConnParam + " -ld " + lcDBName).
       END.
       ELSE lcDBName = ttDB.ConnName NO-ERROR.
       
@@ -516,7 +515,8 @@ FUNCTION fMobCDRCollect RETURNS INTEGER
    END.
    
    /* unbillable error calls */
-   IF lcErrorQuery > "" THEN DO:
+   IF LOOKUP("error",icCDRType) > 0 OR
+      lcErrorQuery > "" THEN DO:
       fSetCollectionDBs("roamcdr",
                         "ErrorCDR",
                         idaFromDate,
@@ -535,8 +535,8 @@ FUNCTION fMobCDRCollect RETURNS INTEGER
         
       IF ttDB.Connect THEN DO:
          lcDBName = "mcdrQuery".
-         CONNECT VALUE (ttDB.ConnName + " " + 
-                        ttDB.ConnParam + " -ld " + lcDBName) NO-ERROR.
+         multitenancy.TenantInformation:mConnectDBSupressError
+                  (ttDB.ConnName + " " + ttDB.ConnParam + " -ld " + lcDBName).
       END.
       ELSE lcDBName = ttDB.ConnName NO-ERROR.
       
@@ -593,7 +593,7 @@ FUNCTION fMobCDRCollect RETURNS INTEGER
       FOR EACH ttCli .
          CREATE CallScanner .
          ASSIGN
-            CallScanner.TMSTime     = fmakeTS()
+            CallScanner.TMSTime     = Func.Common:mMakeTS()
             CallScanner.UserCode    = icUser
             CallScanner.SystemID    = "XFERA_CUI" 
             CallScanner.EventType   = lcQueryCase

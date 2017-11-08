@@ -55,15 +55,27 @@ DEF VAR liRequest          AS INT   NO-UNDO.
 DEF VAR liQuarTime         AS INT   NO-UNDO.
 DEF VAR liSimStat          AS INT   NO-UNDO.
 DEF VAR liMSISDNStat       AS INT   NO-UNDO.
+DEF VAR lcTenant           AS CHAR  NO-UNDO.
+
+FIND FIRST ttInput NO-ERROR.
+IF AVAIL ttInput THEN 
+DO:    
+   ASSIGN lcTenant = 
+      (IF ttInput.donorCode = "005" THEN {&TENANT_YOIGO}
+       ELSE IF ttInput.donorCode = "200" THEN {&TENANT_MASMOVIL}
+       ELSE ""). 
+
+   {mnp/src/mnp_settenant.i lcTenant}
+END.
 
 MESSAGE_LOOP:
 FOR EACH ttInput NO-LOCK:   
-  
-   fCreateMNPObtenerMessage("obtenerNotificacionesAltaPortabilidadMovilComoDonanteCanceladas").
    
-   FIND MNPProcess WHERE
-        MNPProcess.PortRequest = ttInput.PortRequest EXCLUSIVE-LOCK NO-ERROR.
-   IF NOT AVAIL MNPProcess THEN DO:
+   fCreateMNPObtenerMessage("obtenerNotificacionesAltaPortabilidadMovilComoDonanteCanceladas").
+
+   FIND MNPProcess WHERE MNPProcess.PortRequest = ttInput.PortRequest EXCLUSIVE-LOCK NO-ERROR.
+   IF NOT AVAIL MNPProcess THEN 
+   DO:
       lcError = {&MNP_ERROR_UNKNOWN_PROCESS} + " " + ttInput.PortRequest.
       MNPOperation.MNPSeq = {&MNP_PROCESS_DUMMY_OUT}.
       fErrorHandle(lcError).
@@ -120,7 +132,7 @@ FOR EACH ttInput NO-LOCK:
    
       /* Cancel possible SMS messages */
       FOR EACH CallAlarm WHERE
-               CallAlarm.Brand = gcBrand AND
+               CallAlarm.Brand = Syst.Var:gcBrand AND
                CallAlarm.CLI = MNPSub.CLI AND
                CallAlarm.DeliStat = 1 AND
                CallAlarm.CreditType = 12 EXCLUSIVE-LOCK:
@@ -144,7 +156,7 @@ FOR EACH ttInput NO-LOCK:
             bMNPProcess.StatusCode = {&MNP_ST_BDET} EXCLUSIVE-LOCK:
 
          ASSIGN
-            bMNPProcess.UpdateTS = fMakeTS()
+            bMNPProcess.UpdateTS = Func.Common:mMakeTS()
             bMNPProcess.StatusCode = {&MNP_ST_BNOT}.
          RELEASE bMNPProcess.
       END.
@@ -161,13 +173,13 @@ FOR EACH ttInput NO-LOCK:
          IF MobSub.MultiSIMId > 0 AND
             MobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} THEN DO:
             FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-                       lbMobSub.Brand  = gcBrand AND
+                       lbMobSub.Brand  = Syst.Var:gcBrand AND
                        lbMobSub.MultiSimID = MobSub.MultiSimID AND
                        lbMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
                        lbMobSub.Custnum = MobSub.Custnum NO-ERROR.
             IF NOT AVAIL lbMobSub THEN DO:
                FIND FIRST TermMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-                          TermMobSub.Brand  = gcBrand AND
+                          TermMobSub.Brand  = Syst.Var:gcBrand AND
                           TermMobSub.MultiSimID = MobSub.MultiSimID AND
                           TermMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
                           TermMobSub.Custnum = MobSub.Custnum NO-ERROR.
@@ -177,7 +189,7 @@ FOR EACH ttInput NO-LOCK:
                   FIND FIRST Msowner WHERE
                              Msowner.MsSeq = TermMobsub.MsSeq NO-LOCK NO-ERROR.
                   IF AVAIL Msowner THEN
-                     fSplitTS(Msowner.TSEnd,OUTPUT ldaSecSIMTermDate,
+                     Func.Common:mSplitTS(Msowner.TSEnd,OUTPUT ldaSecSIMTermDate,
                               OUTPUT liSecSIMTermTime).
                   ELSE ldaSecSIMTermDate = TODAY.
                END. /* ELSE DO: */
@@ -195,7 +207,7 @@ FOR EACH ttInput NO-LOCK:
          END. /* IF MobSub.MultiSIMId > 0 AND */
          ELSE IF CAN-FIND(
             FIRST CLIType NO-LOCK WHERE
-                  CLIType.Brand = gcBrand AND
+                  CLIType.Brand = Syst.Var:gcBrand AND
                   CLIType.CLIType = (IF MobSub.TariffBundle > ""
                                      THEN MobSub.TariffBundle
                                      ELSE MobSub.CLIType) AND
@@ -262,5 +274,4 @@ IF AVAIL MNPBuzon THEN MNPBuzon.StatusCode = 10.
 FINALLY:
    EMPTY TEMP-TABLE ttInput.
    EMPTY TEMP-TABLE ttMultipleMSISDN.
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

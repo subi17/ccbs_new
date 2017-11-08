@@ -14,7 +14,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Func/fcreditreq.i}
 
 DEF VAR pcStruct          AS CHAR NO-UNDO.
@@ -52,7 +52,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN
    piInvNum = get_int(pcStruct,"main_invoice")
-   katun = "VISTA_" + get_string(pcStruct,"username")
+   Syst.Var:katun = "VISTA_" + get_string(pcStruct,"username")
    pcReasonGrp = get_string(pcStruct,"reason_category")
    pcReason    = get_string(pcStruct,"reason")
    pcRemark    = get_string(pcStruct,"remark").
@@ -62,15 +62,11 @@ IF LOOKUP("sub_invoices",lcStruct) > 0 THEN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
+IF TRIM(Syst.Var:katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 IF pcRemark EQ "" THEN RETURN appl_err("remark is empty").
 
-FIND Invoice WHERE
-     Invoice.Brand = "1" AND
-     Invoice.InvNum = piInvNum NO-LOCK NO-ERROR.
-IF NOT AVAILABLE Invoice THEN
-   RETURN appl_err("Invoice not found: " + STRING(piInvNum)).
+{newton/src/findtenant.i NO Common Invoice InvNum piInvNum}
 
 SUB_INVOICES:
 DO liSubInvCount = 0 TO get_paramcount(pcSubInvoiceArray) - 1:
@@ -168,5 +164,4 @@ add_boolean(response_toplevel_id,?,TRUE).
 
 FINALLY:
    EMPTY TEMP-TABLE ttSubInvoice. 
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END FINALLY.
+   END FINALLY.

@@ -21,8 +21,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-ASSIGN gcBrand = "1"
-       katun   = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
+ASSIGN Syst.Var:gcBrand = "1"
+       Syst.Var:katun   = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
 {Func/fexternalapi.i}
 
 /* Input parameters */
@@ -38,14 +38,10 @@ ASSIGN pcTransID = get_string(param_toplevel_id, "0")
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{selfservice/src/findtenant.i NO ordercanal MobSub Cli pcCLI SpecialMobSubError}
+
 IF NOT fchkTMSCodeValues(ghAuthLog::UserName,substring(pcTransId,1,3)) THEN
    RETURN appl_err("Application Id does not match").
-   
-FIND FIRST Mobsub NO-LOCK WHERE
-           Mobsub.CLI = pcCLI NO-ERROR.
-
-IF NOT AVAILABLE MobSub THEN
-   RETURN appl_err(SUBST("Subscription with msisdn &1 was not found", pcCli)).
   
 FIND FIRST customer NO-LOCK WHERE
            customer.custnum = MobSub.Custnum NO-ERROR.
@@ -71,5 +67,4 @@ FINALLY:
    /* Store the transaction id */
    ghAuthLog::TransactionId = pcTransId.
 
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

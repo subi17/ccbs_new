@@ -18,7 +18,6 @@
 */
 
 {newton/src/header_get.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 
 DEF VAR piId AS INT NO-UNDO.
@@ -42,7 +41,7 @@ FUNCTION fAddHistory RETURNS LOGICAL
        DEF VAR lcHistory AS CHAR NO-UNDO.
        DEF VAR ldTS AS DEC NO-UNDO.
 
-       ldTS =  fHMS2TS(pdEventdate,pcEventTime).
+       ldTS =  Func.Common:mHMS2TS(pdEventdate,pcEventTime).
        lcHistory = add_struct(pcHistoriesArray,"").
        add_timestamp(lcHistory,"time",ldTS).
        add_string(lcHistory,"description",pcDescription).
@@ -55,11 +54,10 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    piId = get_int(pcIDArray, STRING(liCounter)).
    IF gi_xmlrpc_error NE 0 THEN RETURN.
    
-   FIND InvoiceTargetGroup WHERE 
-        InvoiceTargetGroup.ITGroupID = piId NO-LOCK NO-ERROR. 
-
-   IF NOT AVAIL InvoiceTargetGroup THEN RETURN  appl_err("InvoiceTargetGroup not found").
-
+   FIND InvoiceTargetGroup WHERE InvoiceTargetGroup.ITGroupID = piId NO-LOCK NO-ERROR. 
+   IF NOT AVAIL InvoiceTargetGroup THEN 
+       RETURN appl_err("InvoiceTargetGroup not found").
+   
    lcResultStruct = add_struct(resp_array, "").
    add_int(lcResultStruct, "id", InvoiceTargetGroup.ITGroupID). 
    add_boolean(lcResultStruct,"default",InvoiceTargetGroup.DefaultGroup).

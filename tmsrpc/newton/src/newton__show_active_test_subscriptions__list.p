@@ -1,7 +1,8 @@
 /**
  * Return all active subscriptions created by testing tool.
 
- * @input  int;mandatory;limit - how many subscriptions to get at one time
+ * @input  string;mandatory;brand - Tenant to check for test subscriptions
+           int;mandatory;limit - how many subscriptions to get at one time
            int;mandatory;offset - how many subscriptions to skip over
  * @output array with structs 
            cust_idtype;string;mandatory;Customer Id Type
@@ -16,8 +17,9 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
+DEF VAR pcTenant         AS CHAR NO-UNDO.
 DEF VAR piOffSet         AS INT  NO-UNDO.
 DEF VAR piLimit          AS INT  NO-UNDO.
 DEF VAR liSubCount       AS INT  NO-UNDO.
@@ -25,12 +27,15 @@ DEF VAR result_array     AS CHAR NO-UNDO.
 DEF VAR sub_struct       AS CHAR NO-UNDO.
 DEF VAR top_struct       AS CHAR NO-UNDO.
 
-IF validate_request(param_toplevel_id, "int,int") = ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,int,int") = ? THEN RETURN.
 
-piLimit  = get_int(param_toplevel_id, "0").
-piOffSet = get_int(param_toplevel_id, "1").
+pcTenant = get_string(param_toplevel_id, "0"). 
+piLimit  = get_int(param_toplevel_id, "1").
+piOffSet = get_int(param_toplevel_id, "2").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 FUNCTION fAddSubStruct RETURNS LOGICAL:
   
@@ -51,16 +56,16 @@ top_struct = add_struct(response_toplevel_id, "").
 result_array = add_array(top_struct, "subscriptions").
 
 FOR EACH SIM NO-LOCK WHERE
-         SIM.Brand   EQ gcBrand    AND
+         SIM.Brand   EQ Syst.Var:gcBrand    AND
          SIM.Stock   EQ "TESTING"  AND
          SIM.SimStat EQ 4,
     EACH IMSI WHERE
          IMSI.ICC = SIM.ICC NO-LOCK,
     EACH MobSub NO-LOCK WHERE
-         MobSub.Brand = gcBrand AND
+         MobSub.Brand = Syst.Var:gcBrand AND
          MobSub.IMSI  = IMSI.IMSI,
    FIRST Customer NO-LOCK WHERE
-         Customer.Brand = gcBrand AND
+         Customer.Brand = Syst.Var:gcBrand AND
          Customer.CustNum = MobSub.CustNum:
 
    liSubCount = liSubCount + 1.
@@ -73,5 +78,4 @@ END.
 add_int(top_struct, "sub_count", liSubCount).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

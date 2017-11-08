@@ -15,6 +15,7 @@
 DEF VAR liReq AS INTEGER NO-UNDO.
 
 /* Input parameters */
+DEF VAR pcTenant AS CHAR NO-UNDO.
 DEF VAR pcMSISDN AS CHAR NO-UNDO.
 DEF VAR pcSalesman AS CHAR NO-UNDO.
 DEF VAR pcValue AS CHAR NO-UNDO.
@@ -28,19 +29,23 @@ DEF VAR pcContractID AS CHAR NO-UNDO.
 DEF VAR pcChannel AS CHAR NO-UNDO.
 DEF VAR lcOldICC AS CHAR NO-UNDO.
 
-lcc = validate_request(param_toplevel_id, "string,string,string,double,double,string,string,string").
+lcc = validate_request(param_toplevel_id, "string,string,string,string,double,double,string,string,string").
 IF lcc EQ ? THEN RETURN.
-pcMSISDN    = get_string(param_toplevel_id, "0").
-pcSalesman  = get_string(param_toplevel_id, "1").
-pcValue     = get_string(param_toplevel_id, "2").
-pdeCharge   = get_double(param_toplevel_id, "3").
-pdeChargeLimit = get_double(param_toplevel_id, "4").
-pcReason   = get_string(param_toplevel_id, "5").
-pcChannel = get_string(param_toplevel_id, "6").
-pcContractID = get_string(param_toplevel_id, "7").
+
+pcTenant    = get_string(param_toplevel_id, "0").
+pcMSISDN    = get_string(param_toplevel_id, "1").
+pcSalesman  = get_string(param_toplevel_id, "2").
+pcValue     = get_string(param_toplevel_id, "3").
+pdeCharge   = get_double(param_toplevel_id, "4").
+pdeChargeLimit = get_double(param_toplevel_id, "5").
+pcReason   = get_string(param_toplevel_id, "6").
+pcChannel = get_string(param_toplevel_id, "7").
+pcContractID = get_string(param_toplevel_id, "8").
 /*pcChannel 6
 pcContract 7*/
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 FIND mobsub NO-LOCK
 WHERE mobsub.brand = "1" and 
@@ -80,8 +85,8 @@ IF TRIM(pcSalesman) EQ "" THEN RETURN appl_err("username is empty").
 
 {Syst/commpaa.i}
 ASSIGN 
-   gcBrand = "1"
-   katun = "VISTA_" + pcSalesman.
+   Syst.Var:gcBrand = "1"
+   Syst.Var:katun = "VISTA_" + pcSalesman.
 {Func/fmakemsreq.i}
 {Func/fcharge_comp_loaded.i}
 
@@ -132,11 +137,11 @@ IF pcReason NE '' THEN DO:
    CREATE Memo.
    ASSIGN
       Memo.CreStamp  = {&nowTS}
-      Memo.Brand     = gcBrand 
+      Memo.Brand     = Syst.Var:gcBrand 
       Memo.HostTable = "MsRequest" 
       Memo.KeyValue  = STRING(liReq) 
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = katun 
+      Memo.CreUser   = Syst.Var:katun 
       Memo.MemoTitle = "ICC Change Reason"
       Memo.MemoText  = pcReason
       Memo.CustNum   = MsRequest.CustNum .
@@ -153,5 +158,4 @@ RELEASE SIM.
 add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

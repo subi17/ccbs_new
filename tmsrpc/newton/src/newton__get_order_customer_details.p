@@ -86,6 +86,7 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/tmsconst.i}
+{Func/custfunc.i}
 
 DEFINE VARIABLE piOrderId              AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE top_struct            AS CHARACTER NO-UNDO. 
@@ -95,6 +96,8 @@ DEFINE VARIABLE lcError               AS CHARACTER NO-UNDO.
 
 IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
 piOrderId = get_pos_int(param_toplevel_id, "0").
+
+{newton/src/findtenant.i YES OrderCanal Order OrderId piOrderId}
 
 FUNCTION fAddHolderCustomer RETURN LOGICAL
    (INPUT piRowType AS INTEGER):
@@ -139,7 +142,8 @@ FUNCTION fAddOrderCustomer RETURN LOGICAL
    DEFINE VARIABLE liZipCode      AS INTEGER   NO-UNDO. 
    DEFINE VARIABLE lcLanguage     AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lcLanguageList AS CHARACTER NO-UNDO. 
-   DEFINE VARIABLE lcStructName   AS CHARACTER NO-UNDO. 
+   DEFINE VARIABLE lcStructName   AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcCategory     AS CHARACTER NO-UNDO. 
 
    pcError = "".
    
@@ -230,6 +234,14 @@ FUNCTION fAddOrderCustomer RETURN LOGICAL
                    INTEGER(OrderCustomer.OutEmailMarketing )).
       add_int(     lcStruct, "post_3rd"   , 
                    INTEGER(OrderCustomer.OutPostMarketing  )).
+      add_string(  lcStruct, "segment"   ,
+                   fgetCustSegment(ordercustomer.CustIdType,
+                                   ordercustomer.selfemployed,
+                                   ordercustomer.pro,
+                                   OUTPUT lcCategory)).
+
+      add_int(     lcStruct, "mark_dont_share_personal_data", 
+                   INTEGER(OrderCustomer.DontSharePersData  )).                                                                      
    END.
 
    RETURN TRUE.

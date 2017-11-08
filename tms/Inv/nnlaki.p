@@ -72,7 +72,7 @@
                   12.08.03/aam vasrep             
                   22.08.03/aam set ws-disp = true,
                                print dd-texts with smaller font
-                  13.10.03/aam use si-recid2 to get invnum from calling prog.
+                  13.10.03/aam use Syst.Var:si-recid2 to get invnum from calling prog.
                   12.12.03/aam report 4,
                                VatUsage,
                                lcMFont etc. 
@@ -147,8 +147,8 @@ def var i-date1      AS DATE FORMAT "99-99-99"       NO-UNDO.
 def var i-date2      AS DATE FORMAT "99-99-99"       NO-UNDO.
 DEF VAR lano1        AS INT  FORMAT "zzzzzzz9"       NO-UNDO.
 DEF VAR lano2        AS INT  FORMAT "zzzzzzz9"       NO-UNDO.
-DEF VAR asno1        AS INT  FORMAT "zzzzzzz9"       NO-UNDO.
-DEF VAR asno2        AS INT  FORMAT "zzzzzzz9"       NO-UNDO.
+DEF VAR asno1        AS INT  FORMAT "zzzzzzzz9"      NO-UNDO.
+DEF VAR asno2        AS INT  FORMAT "zzzzzzzz9"      NO-UNDO.
 DEF VAR status1      AS INT  FORMAT "9"              NO-UNDO.
 DEF VAR status2      AS INT  FORMAT "9"              NO-UNDO.
 DEF VAR dlayht       AS CHAR FORMAT  "x(13)"         NO-UNDO.
@@ -202,7 +202,7 @@ DEF TEMP-TABLE ttInv  NO-UNDO
    
 IF llDoEvent THEN 
 DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    
    {Func/lib/eventlog.i}
       
@@ -225,9 +225,9 @@ ELSE lcMacros = "".
 
 form
    skip(17)
-   WITH TITLE COLOR value(ctc)
-   " " + ynimi + " INVOICE PRINTOUT " + STRING(pvm,"99-99-99") + " "
-COLOR value(cfc) width 80 OVERLAY FRAME taka.
+   WITH TITLE COLOR value(Syst.Var:ctc)
+   " " + Syst.Var:ynimi + " INVOICE PRINTOUT " + STRING(TODAY,"99-99-99") + " "
+COLOR value(Syst.Var:cfc) width 80 OVERLAY FRAME taka.
 
 form
    lano1 label " Invoice number .........."
@@ -257,8 +257,8 @@ form
    " Specification reports ...:"  rap no-label format "Yes/No"
       help "Print call specification reports for each invoice (Y/N)" SKIP
 
-with title color value(ctc) " INVOICE CRITERIA " side-labels
-COLOR value(cfc) ROW 3 centered OVERLAY FRAME rajat.
+with title color value(Syst.Var:ctc) " INVOICE CRITERIA " side-labels
+COLOR value(Syst.Var:cfc) ROW 3 centered OVERLAY FRAME rajat.
 
 {Inv/invsta.frm}
 
@@ -548,22 +548,22 @@ END FUNCTION.
 
 
 ASSIGN 
-   i-date1  = pvm
-   i-date2  = pvm.
+   i-date1  = TODAY
+   i-date2  = TODAY.
 
-cfc = "sel". RUN Syst/ufcolor.p. ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. Syst.Var:ccc = Syst.Var:cfc.
 view FRAME taka. PAUSE 0 no-message.
 
-ehto = 9. RUN Syst/ufkey.p.
+Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 ASSIGN lano1 = 000000 lano2 = 99999999
-       asno1  = 0 asno2 = 99999999.
+       asno1  = 0 asno2 = 999999999.
 
 view FRAME rajat. view FRAME statu.
 
 disp "NONE" @ CustGroup.CGName WITH FRAME rajat.
 
-IF si-recid2 NE ? AND si-recid2 NE 0 THEN DO:
-   FIND Invoice WHERE RECID(Invoice) = si-recid2 NO-LOCK NO-ERROR.
+IF Syst.Var:si-recid2 NE ? AND Syst.Var:si-recid2 NE 0 THEN DO:
+   FIND Invoice WHERE RECID(Invoice) = Syst.Var:si-recid2 NO-LOCK NO-ERROR.
 
    FIND FIRST Customer no-lock where
               Customer.CustNum = Invoice.CustNum.
@@ -577,7 +577,7 @@ IF si-recid2 NE ? AND si-recid2 NE 0 THEN DO:
       asno2   = Customer.CustNum
       status1 = Invoice.PrintState
       status2 = Invoice.PrintState
-      si-recid2 = ?.
+      Syst.Var:si-recid2 = ?.
 
    DISP 
       lano1   lano2
@@ -594,7 +594,7 @@ PAUSE 0 no-message.
 LOOP:
 repeat:
    /* KysellAAn rajaukset */
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    PAUSE 0 no-message.
    UPDATE
       lano1    lano2
@@ -606,8 +606,8 @@ repeat:
       UpdState
       rap
    WITH FRAME rajat EDITING:
-      READKEY. nap = keylabel(LASTKEY).
-      IF lookup(nap,poisnap) > 0 THEN DO:
+      READKEY. Syst.Var:nap = keylabel(LASTKEY).
+      IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
          PAUSE 0.
          if frame-field = "lano2" THEN DO:
             ASSIGN INPUT lano1 INPUT lano2.
@@ -654,7 +654,7 @@ repeat:
              ASSIGN INPUT InvGroup.
              if InvGroup ne "" AND NOT
                 can-find(invgroup where 
-                         InvGroup.Brand    = gcBrand AND
+                         InvGroup.Brand    = Syst.Var:gcBrand AND
                          invgroup.InvGroup = InvGroup) THEN DO:
                 BELL.
                 message "UNKNOWN INVOICEGROUP !".
@@ -669,7 +669,7 @@ repeat:
              if cg-code = "" then disp "NONE" @ CustGroup.CGName.
              ELSE DO:
                 FIND CustGroup where 
-                     CustGroup.Brand     = gcBrand AND
+                     CustGroup.Brand     = Syst.Var:gcBrand AND
                      CustGroup.custGroup = cg-code 
                 no-lock no-error.
                 IF NOT AVAIL CustGroup THEN DO:
@@ -716,19 +716,19 @@ repeat:
    toimi:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       ASSIGN
-      ufk = 0 ufk[1] = 132 ufk[4] = 0 /* 797*/ ufk[5] = 63 ufk[8] = 8 ehto = 0.
+      Syst.Var:ufk = 0 Syst.Var:ufk[1] = 132 Syst.Var:ufk[4] = 0 /* 797*/ Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
 
-      IF toimi = 1 THEN NEXT LOOP.
+      IF Syst.Var:toimi = 1 THEN NEXT LOOP.
 
-      ELSE IF toimi = 5 THEN DO:
+      ELSE IF Syst.Var:toimi = 5 THEN DO:
          IF INPUT asno2  = 0  THEN lano2 = 99999999.
-         if input asno2   = "" THEN asno2  = 9999999.
+         if input asno2   = "" THEN asno2  = 999999999.
          llok = FALSE.
          /* are Customer in the ext group in correct i-group also ? */
          if cg-code ne "" THEN DO:
             FOR EACH  cgmember no-lock where 
-                      cgMember.Brand     = gcBrand AND
+                      cgMember.Brand     = Syst.Var:gcBrand AND
                       cgmember.custgroup = cg-code,
                 FIRST Customer no-lock where
                       Customer.CustNum  = cgmember.custnum AND
@@ -754,10 +754,10 @@ repeat:
          END.
 
          LEAVE toimi.
-      END. /* toimi = 5 */
+      END. /* Syst.Var:toimi = 5 */
 
-      ELSE IF toimi = 8 THEN LEAVE LOOP.
-   END. /* toimi */
+      ELSE IF Syst.Var:toimi = 8 THEN LEAVE LOOP.
+   END. /* Syst.Var:toimi */
 
 
 tila = TRUE.
@@ -776,7 +776,7 @@ IF oso = "" THEN DO:
 
    IF lcMacroEff > "" THEN DO:
       FIND FIRST PrintCodes NO-LOCK WHERE 
-                 PrintCodes.PrinterId = TMSPrinter AND
+                 PrintCodes.PrinterId = Syst.Var:TMSPrinter AND
                  PrintCodes.Effect    = lcMacroEff NO-ERROR.
 
       IF AVAILABLE PrintCodes THEN las_teh = PrintCodes.EffOn[2].
@@ -797,7 +797,7 @@ repeat:
 
    /* don't check delivery type here, allow printing of all invoices */
    FOR EACH  Invoice  where                 
-             Invoice.Brand       = gcBrand AND
+             Invoice.Brand       = Syst.Var:gcBrand AND
              Invoice.InvNum     >= lano1   AND
              Invoice.InvNum     <= lano2   AND
              Invoice.InvDate    >= i-date1 AND
@@ -825,8 +825,8 @@ repeat:
 
       /* onko kjA pyytAnyt keskeytystA ? */
       READKEY PAUSE 0.
-      nap = keylabel(LASTKEY).
-      if nap = "END" THEN DO:
+      Syst.Var:nap = keylabel(LASTKEY).
+      if Syst.Var:nap = "END" THEN DO:
          message "Are You sure You want to cancel printing (Y/N) ?"
          UPDATE ke.
          IF ke THEN DO:
@@ -1186,7 +1186,7 @@ repeat:
       /* log from print */
       DO FOR ITSendLog:
          CREATE ITSendLog.
-         ASSIGN ITSendLog.Brand      = gcBrand 
+         ASSIGN ITSendLog.Brand      = Syst.Var:gcBrand 
                 ITSendLog.TxtType    = 3
                 ITSendLog.ITNum      = 0
                 ITSendLog.CustNum    = Invoice.CustNum
@@ -1194,8 +1194,8 @@ repeat:
                 ITSendLog.SendMethod = 4
                 ITSendLog.EMail      = ""
                 ITSendLog.RepType    = "Inv"
-                ITSendLog.UserCode   = katun.
-                ITSendLog.SendStamp  = fMakeTS().
+                ITSendLog.UserCode   = Syst.Var:katun.
+                ITSendLog.SendStamp  = Func.Common:mMakeTS().
       END.
  
    END. /* FOR EACH Invoice */

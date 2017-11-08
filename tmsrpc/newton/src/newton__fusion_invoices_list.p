@@ -11,8 +11,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-katun = "NewtonRPC".
-gcBrand = "1".
+Syst.Var:katun = "NewtonRPC".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Inv/fusioninvoice.i}
 
@@ -31,9 +31,7 @@ IF validate_request(param_toplevel_id, "int") EQ ? THEN RETURN.
 piMsSeq = get_int(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST Mobsub NO-LOCK WHERE
-           Mobsub.MsSeq = piMsSeq NO-ERROR.
-IF NOT AVAIL Mobsub THEN RETURN appl_err("Subscription not found").
+{newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
 
 FIND FIRST Customer NO-LOCK WHERE
            Customer.Custnum = Mobsub.Custnum NO-ERROR.
@@ -69,5 +67,4 @@ FOR EACH FusionInvoice NO-LOCK WHERE
 END.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

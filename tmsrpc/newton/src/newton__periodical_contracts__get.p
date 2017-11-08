@@ -15,19 +15,30 @@
 
 {newton/src/header_get.i}
 {Func/fcustpl.i}
+{Func/multitenantfunc.i}
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
    pcID = get_string(pcIDArray, STRING(liCounter)).
 
+   IF NUM-ENTRIES(pcId,"|") > 1 THEN
+      ASSIGN
+          pcTenant = ENTRY(2,pcId,"|")
+          pcId     = ENTRY(1,pcId,"|").
+   ELSE
+      RETURN appl_err("Invalid tenant information").
+
+   {newton/src/settenant.i pcTenant}
+
    FIND DayCampaign NO-LOCK WHERE 
-        DayCampaign.Brand = gcBrand AND 
+        DayCampaign.Brand = Syst.Var:gcBrand AND 
         DayCampaign.DCEvent = pcId NO-ERROR.
 
    IF NOT AVAIL DayCampaign THEN RETURN appl_err("Periodical contract not found: "+ pcId).
       
    lcResultStruct = add_struct(resp_array, "").
-   add_string(lcResultStruct, "id", DayCampaign.DCEvent). 
+   add_string(lcResultStruct, "id", DayCampaign.DCEvent + "|" + fConvertTenantToBrand(pcTenant)).
+   add_string(lcResultStruct, "brand", fConvertTenantToBrand(pcTenant)). 
    add_string(lcResultStruct,"name", DayCampaign.DCName). 
    add_date_or_time(lcResultStruct,"valid_from", DayCampaign.ValidFrom, 0). 
    IF DayCampaign.ValidTo < 1/19/2038 THEN
@@ -42,7 +53,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
             DayCampaign.TermFeeModel NE '' THEN DO:
 
             FIND FIRST FMItem NO-LOCK  WHERE
-                       FMItem.Brand     = gcBrand AND
+                       FMItem.Brand     = Syst.Var:gcBrand AND
                        FMItem.FeeModel  = DayCampaign.TermFeeModel AND
                        FMItem.FromDate <= TODAY AND
                        FMItem.ToDate   >= TODAY NO-ERROR.
@@ -52,7 +63,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    END.
    WHEN "5" THEN DO:
          FIND FIRST FMItem NO-LOCK  WHERE
-                    FMItem.Brand     = gcBrand AND
+                    FMItem.Brand     = Syst.Var:gcBrand AND
                     FMItem.FeeModel  = DayCampaign.FeeModel AND
                     FMItem.FromDate <= TODAY AND
                     FMItem.ToDate   >= TODAY NO-ERROR.

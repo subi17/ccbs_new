@@ -11,7 +11,6 @@
 */
 
 {newton/src/flistrpc.i}
-{Func/timestamp.i}
 
 DEFINE VARIABLE pcUsername AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE pcEvent AS CHARACTER NO-UNDO. 
@@ -19,24 +18,29 @@ DEFINE VARIABLE pdeDateStart AS DECIMAL NO-UNDO.
 DEFINE VARIABLE pdeDateEnd AS DECIMAL NO-UNDO. 
 DEFINE VARIABLE lcQuery AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcParams AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE pcTenant AS CHARACTER NO-UNDO.
 
-lcStruct = validate_struct(pcStruct, "username!,event_type,date_start,date_end").
+lcStruct = validate_struct(pcStruct, "brand!,username!,event_type,date_start,date_end").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN
-   pcUsername = get_string(pcStruct,"username")
+   pcTenant     = get_string(pcStruct,"brand")
+   pcUsername   = get_string(pcStruct,"username")
    pdeDateStart = get_timestamp(pcStruct,"date_start") WHEN LOOKUP("date_start", lcStruct) > 0
-   pdeDateEnd = get_timestamp(pcStruct,"date_end") WHEN LOOKUP("date_end", lcStruct) > 0
-   pcEvent = get_string(pcStruct,"event_type") WHEN LOOKUP("event_type", lcStruct) > 0.
+   pdeDateEnd   = get_timestamp(pcStruct,"date_end") WHEN LOOKUP("date_end", lcStruct) > 0
+   pcEvent      = get_string(pcStruct,"event_type") WHEN LOOKUP("event_type", lcStruct) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/settenant.i pcTenant}
+
 IF TRIM(pcUserName) EQ "" THEN RETURN appl_err("username is empty").
+
 pcUserName = "VISTA_" + pcUserName.
 
 lcQuery = "FOR EACH MSRequest NO-LOCK WHERE MSRequest.Brand = "
-            + QUOTER(gcBrand) + " AND MSRequest.UserCode = " + QUOTER(pcUserName).
+            + QUOTER(Syst.Var:gcBrand) + " AND MSRequest.UserCode = " + QUOTER(pcUserName).
 
 IF pdeDateStart NE 0 THEN lcQuery = lcQuery + " AND MsRequest.ActStamp > " + QUOTER(pdeDateStart).
 IF pdeDateEnd NE 0 THEN lcQuery = lcQuery + " AND MsRequest.ActStamp < " + QUOTER(pdeDateEnd).

@@ -7,6 +7,7 @@
 "1" "CONT25" "Contrato 25" 12/12/16 31/12/49
 "1" "CONT26" "Contrato 26" 01/02/17 31/12/49
 "1" "CONT27" "LA INFINITA 2 GB DTO." 18/04/17 31/12/49
+"1" "CONT28" "Línea móvil extra" 21/08/17 31/12/49
 "1" "CONT9" "Contrato 9" 01/05/14 31/12/49
 "1" "CONTD2" "Contrato Datos 2 continuous per" 01/12/09 31/12/54
 "1" "CONTD2ACT" "Contrato Datos 2 1st period" 01/12/09 31/12/54
@@ -31,6 +32,7 @@
 "1" "CONTF55" "Contrato 55 flat rate" 01/12/11 31/12/49
 "1" "CONTF8" "Contrato Flat 8" 14/04/15 31/12/49
 "1" "CONTFF2" "Fusion 2 Flat service package" 01/10/13 31/12/49
+"1" "CONTFH1000" "La Combinada Azul 1Gbps" 11/10/17 31/12/49
 "1" "CONTFH300" "Contrato FH300" 27/10/16 31/12/49
 "1" "CONTFH50" "Contrato FH50" 27/10/16 31/12/49
 "1" "CONTRATO2" "Contrato2 Flat rates" 01/01/07 31/12/50
@@ -61,6 +63,7 @@
 "1" "DSS2_UPSELL" "DSS 2 Bundle Upsell" 01/09/13 31/12/49
 "1" "DSS_FLEX_500MB_UPSELL" "DSS 500MB Flex Upsell" 05/07/17 31/12/49
 "1" "DSS_FLEX_5GB_UPSELL" "DSS 5GB Flex Upsell" 05/07/17 31/12/49
+"1" "DSS_FLEX_UPSELL" "DSS Mobile Data Usage Flex Ups" 01/11/17 31/12/49
 "1" "DSS_UPSELL" "DSS Bundle Upsel" 23/11/11 31/12/49
 "1" "DSS_UPSELL_UPGRADE" "Upsell Upgrade DSS customer" 23/03/12 31/12/49
 "1" "DUB" "Data Usage Bundle 500 MB" 31/01/11 31/12/49
@@ -106,5 +109,6 @@
 "1" "UPGRADE_UPSELL" "Upgrade Upsell" 23/03/12 31/12/49
 "1" "VOICE100" "Voice 100 Minutes Package" 01/01/15 31/12/49
 "1" "VOICE200" "Voice 200 Minutes Package" 01/06/17 31/12/49
+"1" "VOICE200B" "Voice 200B" 22/08/17 31/12/49
 "1" "VOICE3000" "Contrato voice" 01/12/12 31/12/49
 "1" "VOICE5000" "Voice 5000" 04/07/17 31/12/49

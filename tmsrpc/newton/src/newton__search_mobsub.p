@@ -10,7 +10,8 @@
  * @output_struct name;string;name of the owner
            custnum;int;customer number of owner
            subscriptions;array;containing mobsub-structures OR
- 
+           discount_type;string;Discount information 
+
  * @subscription seq;int;mandatory;subscription ID
                  description;string;mandatory;MSISDN Number
                  fixed_number;string;optional;Fixed Line Number
@@ -22,50 +23,109 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
 {newton/src/json_key.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
+{Func/cparam2.i}
 
 /* Input parameters */
 DEF VAR pcInput AS CHAR NO-UNDO.
 /* Output parameters */
-DEF VAR top_struct AS CHAR NO-UNDO.
+DEF VAR top_struct   AS CHAR NO-UNDO.
 DEF VAR result_array AS CHAR NO-UNDO.
-DEF VAR sub_struct AS CHAR NO-UNDO.
+DEF VAR sub_struct   AS CHAR NO-UNDO.
 /* Local variables */
-DEF VAR lcTmp AS CHAR NO-UNDO.
-DEF VAR lcCallType AS CHAR NO-UNDO.
-DEF VAR liOwner AS INT NO-UNDO.
-DEF VAR piOffSet AS INT NO-UNDO.
-DEF VAR piLimit AS INT NO-UNDO.
-DEF VAR liSubCount AS INT NO-UNDO.
-DEF VAR llPreactivated AS LOGICAL NO-UNDO INITIAL FALSE.
-DEF VAR llSearchByMobsub AS LOGICAL NO-UNDO INITIAL FALSE.
-DEF VAR lii AS INTEGER NO-UNDO. 
-DEF VAR pcSearchTypes AS CHARACTER NO-UNDO. 
-DEF VAR plFewRecords  AS LOGICAL   NO-UNDO INIT FALSE.
+DEF VAR lcTmp             AS CHAR    NO-UNDO.
+DEF VAR lcCallType        AS CHAR    NO-UNDO.
+DEF VAR liOwner           AS INT     NO-UNDO.
+DEF VAR pcTenant AS CHAR NO-UNDO.
+DEF VAR piOffSet          AS INT     NO-UNDO.
+DEF VAR piLimit           AS INT     NO-UNDO.
+DEF VAR liSubCount        AS INT     NO-UNDO.
+DEF VAR llPreactivated    AS LOGICAL NO-UNDO INITIAL FALSE.
+DEF VAR llSearchByMobsub  AS LOGICAL NO-UNDO INITIAL FALSE.
+DEF VAR lii               AS INTEGER NO-UNDO. 
+DEF VAR pcSearchTypes     AS CHAR    NO-UNDO. 
+DEF VAR plFewRecords      AS LOGICAL NO-UNDO INIT FALSE.
+DEF VAR lcSubDiscountType AS CHAR    NO-UNDO.
 
-lcCallType = validate_request(param_toplevel_id, "int|string,int,int,string,[boolean]").
+lcCallType = validate_request(param_toplevel_id, "string,int|string,int,int,string,[boolean]").
 IF lcCallType EQ ? THEN RETURN.
 
-IF ENTRY(1,lcCallType) EQ "int" THEN
-    liOwner = get_pos_int(param_toplevel_id, "0").
-ELSE DO:
-    pcInput = get_string(param_toplevel_id, "0").
+pcTenant = get_string(param_toplevel_id, "0").
+
+IF ENTRY(2,lcCallType) EQ "int" THEN
+    liOwner = get_pos_int(param_toplevel_id, "1").
+ELSE 
+DO:
+    pcInput = get_string(param_toplevel_id, "1").
     liOwner = INT(pcInput) NO-ERROR.
 END.
 
-piLimit  = get_pos_int(param_toplevel_id, "1").
-piOffSet = get_int(param_toplevel_id, "2").
-pcSearchTypes = get_string(param_toplevel_id, "3").
+piLimit  = get_pos_int(param_toplevel_id, "2").
+piOffSet = get_int(param_toplevel_id, "3").
+pcSearchTypes = get_string(param_toplevel_id, "4").
 
-IF NUM-ENTRIES(lcCallType) >= 5 THEN
-   plFewRecords = get_bool(param_toplevel_id, "4").
+IF NUM-ENTRIES(lcCallType) >= 6 THEN
+   plFewRecords = get_bool(param_toplevel_id, "5").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
+
+FUNCTION fGetDiscountType RETURNS CHARACTER
+   (INPUT iiMsSeq   AS INT,
+    INPUT icCLIType AS CHAR):
+
+   DEF VAR lcExtraLineCLITypes  AS CHAR NO-UNDO.
+   DEF VAR lcExtraLineDiscounts AS CHAR NO-UNDO.
+   DEF VAR lcDiscountType       AS CHAR NO-UNDO INITIAL "".
+
+   ASSIGN
+      lcExtraLineCLITypes  = fCParam("DiscountType","ExtraLine_CLITypes")
+      lcExtraLineDiscounts = fCParam("DiscountType","ExtraLine_Discounts").
+
+   /* Get available discount info for subscriptions     */
+   /* Only one additionaline/extraline discount will be
+      available for mobile only tariff                  */
+   FOR FIRST DPMember NO-LOCK WHERE
+             DPMember.HostTable  = "MobSub"        AND
+             DPMember.KeyValue   = STRING(iiMsSeq) AND
+             DPMember.ValidFrom <= TODAY           AND
+             DPMember.ValidTo   >= TODAY           AND
+             DPMember.ValidTo   >= DPMember.ValidFrom,
+       FIRST DiscountPlan NO-LOCK WHERE
+             DiscountPlan.DPId    = DPMember.DPId AND
+             DiscountPlan.Subject = "Contract Target"
+       BY DPMember.ValidTo DESC:
+
+       IF LOOKUP(icCLIType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
+
+          IF LOOKUP(DiscountPlan.DPRuleId,{&ADDLINE_DISCOUNTS_20}) > 0 THEN
+             lcDiscountType = "additional_20".
+          ELSE IF (LOOKUP(DiscountPlan.DPRuleId,{&ADDLINE_DISCOUNTS})    > 0  OR
+                   LOOKUP(DiscountPlan.DPRuleId,{&ADDLINE_DISCOUNTS_HM}) > 0) THEN
+             lcDiscountType = "additional_50".
+
+       END.
+       ELSE IF LOOKUP(icCLIType,lcExtraLineCLITypes) > 0 THEN DO:
+
+          IF LOOKUP(DiscountPlan.DPRuleId,lcExtraLineDiscounts) > 0 THEN
+             lcDiscountType = "extra_100".
+          ELSE
+             lcDiscountType = "extra_0".
+
+       END.
+
+   END.
+
+   RETURN lcDiscountType.
+
+END FUNCTION.
 
 FUNCTION fAddSubStruct RETURNS LOGICAL:
 
    sub_struct = add_json_key_struct(result_array, "").
+   add_string(sub_struct, "brand", fConvertTenantToBrand(BUFFER-TENANT-NAME(MobSub))).
    IF NOT plFewRecords THEN DO:
       add_int(sub_struct   , "seq"        , mobsub.msseq).
    END.
@@ -75,6 +135,10 @@ FUNCTION fAddSubStruct RETURNS LOGICAL:
    add_string(sub_struct, "description", mobsub.cli).
    add_string(sub_struct, "subscription_type_id", mobsub.clitype).
    add_string(sub_struct, "data_bundle_id", MobSub.TariffBundle).
+
+   lcSubDiscountType = fGetDiscountType(MobSub.MsSeq,
+                                        MobSub.CLIType).
+   add_string(sub_struct, "discount_type", lcSubDiscountType).
 
    FIND FIRST MsRequest NO-LOCK WHERE
               MsRequest.MsSeq   = MobSub.MsSeq AND
@@ -95,7 +159,7 @@ IF LENGTH(pcInput) EQ 9 AND
    LOOKUP("msisdn", pcSearchTypes) > 0 THEN DO:
 
     FIND mobsub NO-LOCK WHERE 
-         mobsub.brand = gcBrand AND
+         mobsub.brand = Syst.Var:gcBrand AND
          mobsub.cli = pcInput NO-ERROR.
     IF NOT AVAILABLE mobsub THEN
         RETURN appl_err(SUBST("MobSub entry &1 not found", pcInput)).
@@ -112,7 +176,7 @@ ELSE IF LENGTH(pcInput) EQ 9 AND
    LOOKUP("msisdn", pcSearchTypes) > 0 THEN DO:
    
    FIND mobsub NO-LOCK WHERE
-        mobsub.brand = gcBrand AND
+        mobsub.brand = Syst.Var:gcBrand AND
         mobsub.fixednumber = pcInput NO-ERROR.
     IF NOT AVAILABLE mobsub THEN
         RETURN appl_err(SUBST("MobSub entry &1 not found", pcInput)).
@@ -123,7 +187,7 @@ END.
 ELSE IF LENGTH(pcInput) = 15 AND pcInput BEGINS "21404" AND LOOKUP("imsi", pcSearchTypes) > 0 THEN DO:
    
    FIND FIRST MobSub NO-LOCK WHERE
-      MobSub.Brand = gcBrand AND
+      MobSub.Brand = Syst.Var:gcBrand AND
       MobSub.IMSI  = pcInput NO-ERROR.
    
    IF NOT AVAIL MobSub THEN 
@@ -137,7 +201,7 @@ END.
 ELSE IF liOwner NE 0 AND LOOKUP("custnum", pcSearchTypes) > 0 THEN DO:
     FIND Customer NO-LOCK
     WHERE Customer.CustNum = liOwner
-      AND Customer.brand = gcBrand NO-ERROR.
+      AND Customer.brand = Syst.Var:gcBrand NO-ERROR.
     IF NOT AVAILABLE Customer THEN
         RETURN appl_err(SUBST("Customer &1 not found 1", liOwner)).
 END.
@@ -145,7 +209,7 @@ ELSE IF LOOKUP("person_id", pcSearchTypes) > 0 THEN DO:
    
    FOR EACH Customer NO-LOCK WHERE
             Customer.OrgId = pcInput AND
-            Customer.brand = gcBrand AND
+            Customer.brand = Syst.Var:gcBrand AND
             Customer.Roles NE "inactive" 
             lii = 1 TO 2:
       IF lii > 1 THEN DO:
@@ -157,7 +221,7 @@ ELSE IF LOOKUP("person_id", pcSearchTypes) > 0 THEN DO:
     
     FIND FIRST Customer NO-LOCK
     WHERE Customer.OrgId = pcInput
-      AND Customer.brand = gcBrand
+      AND Customer.brand = Syst.Var:gcBrand
       AND Customer.Roles NE "inactive" NO-ERROR.
     IF NOT AVAILABLE Customer THEN
         RETURN appl_err(SUBST("Customer &1 not found 2", pcInput)).
@@ -169,7 +233,7 @@ ELSE liOwner = 0.
 IF NOT AVAILABLE Customer AND liOwner > 0 THEN DO:
     FIND Customer NO-LOCK
     WHERE Customer.CustNum = liOwner
-      AND Customer.brand = gcBrand NO-ERROR.
+      AND Customer.brand = Syst.Var:gcBrand NO-ERROR.
 END.
 IF NOT AVAILABLE Customer THEN
    RETURN appl_err(SUBST("Customer &1 not found 3", liOwner)).
@@ -188,7 +252,6 @@ add_int(top_struct, "custnum", Customer.CustNum).
 add_string(top_struct, "name", SUBST("&1 &2 &3", Customer.FirstName,
                                               Customer.CustName,
                                               Customer.Surname2)).
-
 result_array = add_array(top_struct, "subscriptions").
 
 IF llPreactivated THEN DO:
@@ -214,7 +277,7 @@ ELSE DO:
 
    /* Add same customers other subscriptions */
    FOR EACH mobsub NO-LOCK
-   WHERE mobsub.brand = gcBrand
+   WHERE mobsub.brand = Syst.Var:gcBrand
      AND mobsub.agrCust = liOwner
      AND Mobsub.CLI <> pcInput
      AND Mobsub.FixedNumber <> pcInput:
@@ -234,5 +297,4 @@ IF sub_struct = '' THEN
     RETURN appl_err(SUBST("No MobSub for &1 found", Customer.CustNum)).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

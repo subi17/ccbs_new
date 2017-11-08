@@ -56,13 +56,15 @@ DEFINE VARIABLE i AS INTEGER NO-UNDO.
 DEFINE VARIABLE delivery_address AS CHAR NO-UNDO. 
 
 DEF VAR lcDeliveryAddress AS CHAR NO-UNDO. 
-DEF VAR lcRegion AS CHAR NO-UNDO. 
-DEF VAR lcStreet AS CHAR NO-UNDO. 
-DEF VAR lcZip AS CHAR NO-UNDO. 
-DEF VAR lcCity AS CHAR NO-UNDO. 
-DEF VAR lcCountry AS CHAR NO-UNDO. 
-DEF VAR lcStreetCode AS CHAR NO-UNDO. 
-DEF VAR lcCityCode AS CHAR NO-UNDO. 
+DEF VAR lcRegion          AS CHAR NO-UNDO. 
+DEF VAR lcStreet          AS CHAR NO-UNDO. 
+DEF VAR lcZip             AS CHAR NO-UNDO. 
+DEF VAR lcCity            AS CHAR NO-UNDO. 
+DEF VAR lcCountry         AS CHAR NO-UNDO. 
+DEF VAR lcStreetCode      AS CHAR NO-UNDO. 
+DEF VAR lcCityCode        AS CHAR NO-UNDO. 
+DEF VAR liDBCount         AS INT  NO-UNDO.
+DEF VAR lcTenant          AS CHAR NO-UNDO.
 
 FUNCTION fCheckIntegrity RETURNS LOGICAL 
    (iiErrCode AS INTEGER):
@@ -172,24 +174,32 @@ END.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {Syst/commpaa.i}
-katun = "Dextra".
-gcBrand = "1".
+Syst.Var:katun = "Dextra".
+Syst.Var:gcBrand = "1".
 {Syst/eventval.i}
 {Syst/tmsconst.i}
 {Func/dextra.i}
 {Syst/eventval.i}
 {Func/create_eventlog.i}
+{Func/orderfunc.i}
 
-FIND Order NO-LOCK WHERE
-     Order.Brand = gcBrand AND
-     Order.OrderId = liOrderId NO-ERROR.
-IF NOT AVAIL Order THEN DO:
+/* Set access to right tenant */
+FOR FIRST Order WHERE Order.Brand = Syst.Var:gcBrand AND Order.OrderId = liOrderId TENANT-WHERE TENANT-ID() > -1 NO-LOCK:
+    ASSIGN lcTenant = BUFFER-TENANT-NAME(Order).                
+END.
+
+IF NOT AVAIL Order OR lcTenant = "" THEN DO:
    add_int(response_toplevel_id, "", 20).
    RETURN.
 END.
+ 
+DO liDBCount = 1 TO NUM-DBS
+   ON ERROR UNDO, THROW:
+    SET-EFFECTIVE-TENANT(lcTenant, LDBNAME(liDBCount)).
+END.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
    {Func/lib/eventlog.i}
 END.
    
@@ -197,7 +207,7 @@ IF lcIMEI NE "" AND lcIMEI NE ? THEN DO:
    /* YPR-4984, Router delivered to customer */
    IF liLOStatusId EQ 99998 THEN DO:
       FIND FIRST OrderFusion WHERE
-                 OrderFusion.Brand EQ gcBrand AND
+                 OrderFusion.Brand EQ Syst.Var:gcBrand AND
                  OrderFusion.orderid EQ Order.OrderId NO-ERROR.
       IF AVAIL OrderFusion THEN DO:
          FIND FIRST FusionMessage WHERE
@@ -211,9 +221,27 @@ IF lcIMEI NE "" AND lcIMEI NE ? THEN DO:
             FusionMessage.messageStatus = {&FUSIONMESSAGE_STATUS_ONGOING}.
       END.
    END.   
+   ELSE IF liLOStatusId EQ 88887 THEN
+   DO:
+      FIND FIRST TPService WHERE TPService.MsSeq      = Order.MsSeq                   AND 
+                                 TPService.Operation  = {&TYPE_ACTIVATION}            AND    
+                                 TPService.ServType   = "Television"                  AND 
+                                 TPService.ServStatus = {&STATUS_LOGISTICS_INITIATED} EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
+      IF AVAIL TPService THEN 
+      DO:
+          ASSIGN TPService.SerialNbr = lcIMEI.
+          
+          fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq, {&SOURCE_LOGISTICS}, {&WAITING_FOR_STB_ACTIVATION}).
+      END.
+      ELSE 
+      DO:
+          add_int(response_toplevel_id, "", 30). 
+          RETURN. 
+      END.                  
+   END.  
    ELSE DO:
       FIND FIRST OrderAccessory WHERE
-         OrderAccessory.Brand = gcBrand AND
+         OrderAccessory.Brand = Syst.Var:gcBrand AND
          OrderAccessory.OrderId = Order.OrderId AND
          OrderAccessory.TerminalType = ({&TERMINAL_TYPE_PHONE}) 
          NO-LOCK NO-ERROR.
@@ -235,7 +263,7 @@ IF lcIMEI NE "" AND lcIMEI NE ? THEN DO:
       END.
 
       FIND FIRST SubsTerminal WHERE
-         SubsTerminal.Brand = gcBrand AND
+         SubsTerminal.Brand = Syst.Var:gcBrand AND
          SubsTerminal.OrderId = Order.OrderId AND
          SubsTerminal.TerminalType = ({&TERMINAL_TYPE_PHONE}) NO-LOCK NO-ERROR.
 
@@ -257,7 +285,7 @@ IF lcIMEI NE "" AND lcIMEI NE ? THEN DO:
       END.
    END.
 END.
-   
+
 IF llDoEvent THEN DO:
    DEFINE VARIABLE lhOrderDelivery AS HANDLE NO-UNDO.
    lhOrderDelivery = BUFFER OrderDelivery:HANDLE.
@@ -266,7 +294,7 @@ END.
 
 CREATE OrderDelivery.
 ASSIGN
-   OrderDelivery.Brand = gcBrand
+   OrderDelivery.Brand = Syst.Var:gcBrand
    OrderDelivery.OrderId = Order.OrderId
    OrderDelivery.LOTimeStamp = ldeLOTimeStamp
    OrderDelivery.CourierId = liCourierId
@@ -276,20 +304,19 @@ ASSIGN
    OrderDelivery.IncidentInfoId = ?
    OrderDelivery.MeasuresInfoId = ?.
 
-
 IF llDoEvent THEN RUN StarEventMakeCreateEvent (lhOrderDelivery).
       
 IF LOOKUP("delivery_address", lcTopStruct) > 0 THEN DO:
 
    FIND FIRST OrderCustomer EXCLUSIVE-LOCK WHERE
-              OrderCustomer.Brand = gcBrand AND
+              OrderCustomer.Brand = Syst.Var:gcBrand AND
               OrderCustomer.OrderId = Order.OrderId AND
               OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS}
    NO-ERROR.
    IF NOT AVAIL OrderCustomer THEN DO:
       CREATE OrderCustomer.
       ASSIGN
-         OrderCustomer.Brand     = gcBrand 
+         OrderCustomer.Brand     = Syst.Var:gcBrand 
          OrderCustomer.OrderId   = Order.OrderId
          OrderCustomer.RowType   = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS}.
    END.
@@ -313,31 +340,34 @@ IF LOOKUP("delivery_address", lcTopStruct) > 0 THEN DO:
       IF NEW OrderCustomer THEN
          fMakeCreateEvent((BUFFER OrderCustomer:HANDLE),
                                   "",
-                                  katun,
+                                  Syst.Var:katun,
                                   "").
       ELSE RUN StarEventMakeModifyEvent(lhOrderCustomer).
    END.
 END.
 
+
 /* Remove router prefix 9999 for SMS sending */
 IF STRING(liLOStatusId) BEGINS {&LO_STATUS_ROUTER_PREFIX} THEN
-   liLOStatusId = INT(SUBSTRING(STRING(liLOStatusId),
-                      LENGTH({&LO_STATUS_ROUTER_PREFIX}) + 1)).
-
+   liLOStatusId = INT(SUBSTRING(STRING(liLOStatusId), LENGTH({&LO_STATUS_ROUTER_PREFIX}) + 1)).
+ELSE IF STRING(liLOStatusId) BEGINS {&LO_STATUS_TV_STB_PREFIX} THEN
+   liLOStatusId = INT(SUBSTRING(STRING(liLOStatusId), LENGTH({&LO_STATUS_TV_STB_PREFIX}) + 1)).
+      
 fSendDextraSMS(Order.OrderID, liLOStatusId, liCourierId).
 
 FIND CURRENT OrderDelivery NO-LOCK.
 
-IF LOOKUP(STRING(OrderDelivery.LOStatusId),
-   {&DEXTRA_CANCELLED_STATUSES}) > 0 THEN DO:
+IF LOOKUP(STRING(OrderDelivery.LOStatusId),{&DEXTRA_CANCELLED_STATUSES}) > 0 THEN 
+DO:
    IF Order.StatusCode = {&ORDER_STATUS_RESIGNATION} THEN
       RUN Mc/closeorder.p(Order.OrderId,TRUE).
-   ELSE RUN Mc/cancelorder.p(Order.OrderId,TRUE).
+   ELSE 
+      RUN Mc/cancelorder.p(Order.OrderId,TRUE).
 END.
 
 add_int(response_toplevel_id, "", liResult).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-   IF llDoEvent THEN fCleanEventObjects().
+   IF llDoEvent THEN 
+      fCleanEventObjects().
 END.

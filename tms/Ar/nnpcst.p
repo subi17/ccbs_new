@@ -17,7 +17,7 @@
 
 IF llDoEvent THEN DO:
 
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhSingleFee AS HANDLE NO-UNDO.
@@ -171,7 +171,7 @@ FOR EACH SingleFee EXCLUSIVE-LOCK where
    IF SingleFee.CalcObj > "" AND SingleFee.CalcObj = Invoice.BillRun THEN DO:
       IF llDoEvent AND Invoice.InvType NE {&INV_TYPE_TEST} THEN
          RUN StarEventMakeDeleteEventWithMemo(lhSingleFee,
-                                              katun,
+                                              Syst.Var:katun,
                                               "InvoiceDeletion").
       DELETE SingleFee.
    END. 
@@ -196,7 +196,7 @@ FOR EACH SingleFee EXCLUSIVE-LOCK where
       IF llDoEvent AND Invoice.InvType NE {&INV_TYPE_TEST} THEN
          RUN StarEventMakeModifyEventWithMemo(
             lhSingleFee,
-            katun,
+            Syst.Var:katun,
             "InvoiceDeletion").
    END.
 
@@ -233,7 +233,7 @@ BY FATime.FATNum DESC:
 
    /* transferred rows */
    FOR EACH bFatime USE-INDEX OrigFat WHERE
-            bFatime.Brand   = gcBrand        AND
+            bFatime.Brand   = Syst.Var:gcBrand        AND
             bFatime.OrigFat = FATime.FatNum  AND
             bFATime.TransQty = 0             AND 
             (bFATime.InvNum = 0 OR
@@ -285,7 +285,7 @@ FOR EACH SubInvoice OF Invoice NO-LOCK:
    END.
  
    FOR FIRST ActionLog EXCLUSIVE-LOCK WHERE
-             ActionLog.Brand        = gcBrand               AND
+             ActionLog.Brand        = Syst.Var:gcBrand               AND
              ActionLog.TableName    = "MobSub"              AND
              ActionLog.KeyValue     = STRING(SubInvoice.MsSeq) AND
              ActionLog.ActionID     = "MINCONS"             AND

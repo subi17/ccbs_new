@@ -8,14 +8,13 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-katun = "Cron".
-gcBrand = "1".
+Syst.Var:katun = "Cron".
+Syst.Var:gcBrand = "1".
 
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
 {Syst/eventlog.i}
-{Func/date.i}
 {Syst/eventval.i}
 {Func/msreqfunc.i}
 {Func/orderfunc.i}
@@ -24,7 +23,7 @@ gcBrand = "1".
 {Func/fsubstermreq.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
    {Func/lib/eventlog.i}
    DEFINE VARIABLE lhOrderFusion AS HANDLE NO-UNDO.
    lhOrderFusion = BUFFER OrderFusion:HANDLE.
@@ -186,18 +185,19 @@ PROCEDURE pUpdateFusionOrder:
    DEF INPUT PARAM pcFixedSubStatus AS CHAR NO-UNDO.
    DEF INPUT PARAM pcExternalTicket AS CHAR NO-UNDO.
    DEF INPUT PARAM pcReleaseMobile AS CHAR NO-UNDO.
-   DEF VAR liTermReason AS INTEGER NO-UNDO.
-   DEF VAR ldeTS AS DECIMAL NO-UNDO.
-   DEF VAR liReq AS INTEGER NO-UNDO.
-   DEF VAR llYoigoCLi AS LOGICAL NO-UNDO.
-   DEF VAR liMsisdnStat AS INTEGER NO-UNDO.
-   DEF VAR liSimStat AS INTEGER NO-UNDO.
-   DEF VAR liQuarTime AS INTEGER NO-UNDO.
-   DEF VAR llPenaltyFee AS LOGICAL NO-UNDO.
-   DEF VAR lcResult AS CHARACTER NO-UNDO.
 
-   DEF VAR liRequest AS INT NO-UNDO. 
-   DEF VAR lcError AS CHAR NO-UNDO.
+   DEF VAR liTermReason  AS INTEGER   NO-UNDO.
+   DEF VAR ldeTS         AS DECIMAL   NO-UNDO.
+   DEF VAR liReq         AS INTEGER   NO-UNDO.
+   DEF VAR llYoigoCLi    AS LOGICAL   NO-UNDO.
+   DEF VAR llMasmovilCLi AS LOGICAL   NO-UNDO.
+   DEF VAR liMsisdnStat  AS INTEGER   NO-UNDO.
+   DEF VAR liSimStat     AS INTEGER   NO-UNDO.
+   DEF VAR liQuarTime    AS INTEGER   NO-UNDO.
+   DEF VAR llPenaltyFee  AS LOGICAL   NO-UNDO.
+   DEF VAR lcResult      AS CHARACTER NO-UNDO.
+   DEF VAR liRequest     AS INT       NO-UNDO. 
+   DEF VAR lcError       AS CHAR      NO-UNDO.
 
    IF pcReleaseMobile > "" AND
       pcReleaseMobile NE "Y" THEN
@@ -205,13 +205,13 @@ PROCEDURE pUpdateFusionOrder:
 
    /* find order */   
    FIND Order NO-LOCK WHERE 
-        Order.Brand = gcBrand AND
+        Order.Brand = Syst.Var:gcBrand AND
         Order.OrderId = piOrderId NO-ERROR.
    IF NOT AVAILABLE Order THEN 
       RETURN "ERROR:Invalid Order ID".
 
    FIND OrderFusion NO-LOCK WHERE
-        OrderFusion.Brand = gcBrand AND 
+        OrderFusion.Brand = Syst.Var:gcBrand AND 
         OrderFusion.OrderID = Order.OrderID NO-ERROR.
    IF NOT AVAILABLE OrderFusion THEN 
       RETURN "ERROR:Order type is not Fusion".
@@ -274,7 +274,7 @@ PROCEDURE pUpdateFusionOrder:
             FIND FIRST MsRequest NO-LOCK WHERE
                        MsRequest.MsSeq = Order.MsSeq AND
                        MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
-                       MsRequest.Actstamp > fMakeTs() AND
+                       MsRequest.Actstamp > Func.Common:mMakeTS() AND
                        MsRequest.ReqIParam2 = Order.OrderID NO-ERROR.
             IF NOT AVAIL MsRequest OR MsRequest.ReqStatus EQ 4
                THEN fSetOrderStatus(Order.OrderID,"7").
@@ -332,18 +332,20 @@ PROCEDURE pUpdateFusionOrder:
               Order.StatusCode EQ {&ORDER_STATUS_PENDING_MOBILE_LINE} THEN DO:
          fSetOrderStatus(Order.OrderID,"7").
          ASSIGN
-            liTermReason = {&SUBSCRIPTION_TERM_REASON_DIRECT_ORDER_CANCELATION}
-            llYoigoCLI = fIsYoigoCLI(order.CLI)
-            llPenaltyFee = fIsPenalty(liTermReason,Order.MsSeq).
+            liTermReason  = {&SUBSCRIPTION_TERM_REASON_DIRECT_ORDER_CANCELATION}
+            llYoigoCLI    = fIsYoigoCLI(order.CLI)
+            llMasmovilCLi = fIsMasmovilCLI(order.CLI)
+            llPenaltyFee  = fIsPenalty(liTermReason,Order.MsSeq).
          fInitialiseValues(
-            INPUT liTermReason,
-            INPUT llYoigoCLi,
+            INPUT  liTermReason,
+            INPUT  llYoigoCLi,
+            INPUT  llMasmovilCLi,
             OUTPUT liMsisdnStat,
             OUTPUT liSimStat,
             OUTPUT liQuarTime).
          liReq = fTerminationRequest(
                         Order.MsSeq,
-                        fSecOffSet(fMakeTS(),5), /* when request handled */
+                        Func.Common:mSecOffSet(Func.Common:mMakeTS(),5), /* when request handled */
                         liMsisdnStat, /* msisdn status code: available */
                         liSimStat, /* sim status code : available */
                         liQuarTime, /* quarantie time */
@@ -373,7 +375,7 @@ PROCEDURE pUpdateFusionOrder:
       OrderFusion.FixedStatus    = UPPER(pcFixedStatus) WHEN pcFixedStatus > ""
       OrderFusion.FixedSubStatus = pcFixedSubStatus WHEN pcFixedSubStatus > ""
       OrderFusion.ExternalTicket = pcExternalTicket WHEN pcExternalTicket > ""
-      OrderFusion.UpdateTS       = fMakeTS().
+      OrderFusion.UpdateTS       = Func.Common:mMakeTS().
 
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhOrderFusion).
 

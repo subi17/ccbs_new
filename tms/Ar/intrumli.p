@@ -70,7 +70,7 @@ skip(1)
 xCustNum1  AT 10 LABEL "Customers .." FORMAT "zzzzzzz9" 
     HELP "Agreement customers"
 "-"
-xCustNum2    NO-LABEL FORMAT "zzzzzzz9" 
+xCustNum2    NO-LABEL FORMAT "zzzzzzzz9" 
     HELP "Agreement customers"
     VALIDATE(INPUT xCustNum2 GE INPUT xCustNum1,
              "Check customer definition") SKIP
@@ -83,17 +83,17 @@ exPaymFile AT 10 LABEL "File Name .."
     help "Name of Output File"
 SKIP(8)
  WITH  OVERLAY ROW 1 WIDTH 80
-    COLOR VALUE(cfc)
-    TITLE COLOR VALUE(ctc) 
-       " " + ynimi + " SEND INVOICES TO COLLECTION " + 
-       STRING(pvm,"99-99-99") + " " 
+    COLOR VALUE(Syst.Var:cfc)
+    TITLE COLOR VALUE(Syst.Var:ctc) 
+       " " + Syst.Var:ynimi + " SEND INVOICES TO COLLECTION " + 
+       STRING(TODAY,"99-99-99") + " " 
     SIDE-LABELS 
     /*1 columns*/
     FRAME main.
 
 ASSIGN xDate2    = DATE(MONTH(TODAY),1,YEAR(TODAY)) - 1
        xDate1    = DATE(MONTH(xDate2),1,YEAR(xDate2) - 1)
-       xCustNum2 = 99999999
+       xCustNum2 = 999999999
        xDue      = liLateDays
        xFromRem  = FALSE
        xClaimed  = liClaimPoint - 1.
@@ -104,7 +104,7 @@ DISPLAY ldMinDebt WITH FRAME main.
 MAIN:
 REPEAT WITH FRAME main:
 
-    ehto = 9. RUN Syst/ufkey.p.
+    Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
     UPDATE
     xCustNum1 xCustNum2
@@ -114,15 +114,15 @@ REPEAT WITH FRAME main:
     Action:
     REPEAT WITH FRAME main:
       ASSIGN
-      ufk = 0 ehto = 0
-      ufk[1] = 7 
-      ufk[5] = (IF exPaymFile ne "" THEN 795 ELSE 0).
-      ufk[8] = 8.
+      Syst.Var:ufk = 0 Syst.Var:ehto = 0
+      Syst.Var:ufk[1] = 7 
+      Syst.Var:ufk[5] = (IF exPaymFile ne "" THEN 795 ELSE 0).
+      Syst.Var:ufk[8] = 8.
       RUN Syst/ufkey.p.
 
-      IF toimi = 1 THEN NEXT  main.
-      IF toimi = 8 THEN LEAVE main.
-      IF TOIMI = 5 THEN DO:
+      IF Syst.Var:toimi = 1 THEN NEXT  main.
+      IF Syst.Var:toimi = 8 THEN LEAVE main.
+      IF Syst.Var:toimi = 5 THEN DO:
 
          ok = FALSE.
          MESSAGE "Do You REALLY want to start (Y/N) ?" UPDATE ok.
@@ -160,7 +160,7 @@ REPEAT WITH FRAME main:
    /* UPDATE Seq nbr */
    IF xBatch = 0 AND xCount NE 0 THEN DO FOR bTMSParam TRANS:
       FIND bTMSParam WHERE 
-           bTMSParam.Brand     = gcBrand AND
+           bTMSParam.Brand     = Syst.Var:gcBrand AND
            bTMSParam.ParamCode = "IntrumFileSeqNbr" NO-ERROR.
       ASSIGN  btmsparam.intVal = yBatch.
       RELEASE bTMSParam.

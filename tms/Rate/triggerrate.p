@@ -174,15 +174,16 @@ FORM
    oiDone         COLON 20 FORMAT ">>>>>>>>>>>9"  LABEL "Items Handled"
 
 WITH CENTERED ROW 10 SIDE-LABELS 
-     TITLE " TRIGGERITEM RATING " FRAME fQty.
+     TITLE SUBST(" TRIGGERITEM RATING (&1) ", Syst.Parameters:Tenant)
+     FRAME fQty.
 
 ASSIGN 
-   lcStarted = fTS2HMS(fMakeTS())
+   lcStarted = Func.Common:mTS2HMS(Func.Common:mMakeTS())
    liWaitSeconds = fCParamI("TriggerRerateDelay").
 IF liWaitSeconds = ? THEN liWaitSeconds = 600.   
 
 /* period for current active cdr db */ 
-liActiveDB = fGetCurrentDB(gcBrand,
+liActiveDB = fGetCurrentDB(Syst.Var:gcBrand,
                            "MobCDR",
                            OUTPUT ldaActiveFrom,
                            OUTPUT ldaActiveTo).
@@ -239,7 +240,7 @@ DO WHILE TRUE:
    END.                          
    
    IF liInterval > 0 THEN DO:
-      lcCurrent = fTS2HMS(fMakeTS()).
+      lcCurrent = Func.Common:mTS2HMS(Func.Common:mMakeTS()).
       latestcli = "". lrrecid = ?.
 
       IF iiFrProcessID = 0 THEN DO:

@@ -1,7 +1,8 @@
 /**
  * Initial search for a subscription for renove orders
  *
- * @input: msisdn;str;mandatory;Subscription msisdn 
+ * @input: brand;string;mandatory;Tenant to check for subscription
+           msisdn;str;mandatory;Subscription msisdn 
            id_type;str;optional;Customer id type (Representative person if company_id is given) 
            person_id;str;optional;Customer id (Representative person if company_id is given)
            company_id;str;optional;Company id
@@ -28,14 +29,12 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-katun = "NewtonRPC".
-gcBrand = "1".
+Syst.Var:katun = "NewtonRPC".
+Syst.Var:gcBrand = "1".
 {Func/penaltyfee.i}
-{Func/timestamp.i}
 {Func/orderchk.i}
 {Func/fcustpl.i}
 {Syst/tmsconst.i}
-{Func/date.i}
 {Mnp/mnpoutchk.i}
 {Func/fixedfee.i}
 
@@ -51,10 +50,10 @@ FUNCTION fMatchOfferCriterias RETURN LOGICAL
 
          DEFINE VARIABLE llAllowed AS LOGICAL NO-UNDO INITIAL FALSE.
          DEF VAR ldeNow AS DEC NO-UNDO. 
-         ldeNow = fMakeTS().
+         ldeNow = Func.Common:mMakeTS().
 
          FIND Offer WHERE 
-              Offer.Brand = gcBrand AND 
+              Offer.Brand = Syst.Var:gcBrand AND 
               Offer.Offer = pcOfferId AND 
               Offer.FromDate <= TODAY AND 
               Offer.ToDate >= TODAY NO-LOCK NO-ERROR. 
@@ -64,7 +63,7 @@ FUNCTION fMatchOfferCriterias RETURN LOGICAL
          END.
 
          FOR EACH OfferCriteria NO-LOCK WHERE
-                  OfferCriteria.Brand = gcBrand AND 
+                  OfferCriteria.Brand = Syst.Var:gcBrand AND 
                   OfferCriteria.Offer = Offer.Offer AND
                   OfferCriteria.BeginStamp <= ldeNow AND 
                   OfferCriteria.EndStamp >= ldeNow AND 
@@ -113,6 +112,7 @@ END FUNCTION.
 
 /* Input parameters */
 DEF VAR pcStruct AS CHARACTER NO-UNDO. 
+DEF VAR pcTenant AS CHAR NO-UNDO.
 DEF VAR pcCLI AS CHAR NO-UNDO.
 DEF VAR pcIdType AS CHAR NO-UNDO INIT ?.
 DEF VAR pcPersonId AS CHAR NO-UNDO INIT ?.
@@ -166,10 +166,11 @@ pcstruct = get_struct(param_toplevel_id, "0").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 lcFields = validate_request(pcstruct,
-   "msisdn!,person_id,id_type,company_id,channel!,offer_id,bypass").
+   "brand!,msisdn!,person_id,id_type,company_id,channel!,offer_id,bypass").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 ASSIGN
+   pcTenant = get_string(pcStruct, "brand") 
    pcCLI = get_string(pcStruct, "msisdn")
    pcIdType = get_string(pcStruct, "id_type") WHEN LOOKUP ("id_type", lcFields) > 0
    pcPersonId = get_string(pcStruct, "person_id") WHEN LOOKUP ("person_id", lcFields) > 0
@@ -180,17 +181,19 @@ ASSIGN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/settenant.i pcTenant} 
+
 ASSIGN lcPostpaidVoiceTariffs           = fCParamC("POSTPAID_VOICE_TARIFFS")
        lcPrepaidVoiceTariffs            = fCParamC("PREPAID_VOICE_TARIFFS").
 
 FIND Mobsub WHERE 
-     Mobsub.Brand = gcBrand AND
+     Mobsub.Brand = Syst.Var:gcBrand AND
      Mobsub.CLI = pcCLI NO-LOCK NO-ERROR.
 
 IF NOT AVAIL Mobsub THEN
    RETURN appl_err("number_not_valid").
 
-FIND FIRST CliType WHERE CliType.Brand = gcBrand AND CliType.CliType = MobSub.CliType NO-LOCK NO-ERROR.
+FIND FIRST CliType WHERE CliType.Brand = Syst.Var:gcBrand AND CliType.CliType = MobSub.CliType NO-LOCK NO-ERROR.
 IF AVAIL CliType AND CliType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN  
     RETURN appl_err("renewal_not_allowed_for_fixed_only").
 
@@ -217,7 +220,7 @@ IF Mobsub.PayType = FALSE AND
    RETURN appl_err("general").
    
 FIND Customer WHERE
-     Customer.Brand   = gcBrand AND
+     Customer.Brand   = Syst.Var:gcBrand AND
      Customer.Custnum = Mobsub.Custnum NO-LOCK NO-ERROR.
 
 IF NOT AVAIL Customer THEN
@@ -276,7 +279,7 @@ IF NOT AVAIL Order THEN
 /* Check barrings */
 IF Mobsub.PayType EQ FALSE AND NOT plBypass THEN DO:
     FOR EACH bMobsub NO-LOCK WHERE
-             bMobsub.Brand = gcBrand AND
+             bMobsub.Brand = Syst.Var:gcBrand AND
              bMobsub.AgrCust = Customer.AgrCust AND
              bMobsub.PayType = FALSE AND
              bMobsub.MsStatus = 8:
@@ -296,7 +299,7 @@ ldtFirstDay = DATE(MONTH(ADD-INTERVAL(TODAY,-12,"months") + 1),
                     YEAR(ADD-INTERVAL(TODAY,-12,"months") + 1)).      
 INVSEARCH_LOOP:
 FOR EACH Invoice NO-LOCK WHERE
-         Invoice.Brand    = gcBrand          AND
+         Invoice.Brand    = Syst.Var:gcBrand          AND
          Invoice.Custnum  = Customer.Custnum AND
          Invoice.InvType  = 1                AND 
          Invoice.InvDate <= TODAY            AND 
@@ -351,7 +354,7 @@ IF AVAIL SubsTerminal THEN DO:
    IF Mobsub.PayType = True AND
       SubsTerminal.OrderID > 0 AND
       CAN-FIND(FIRST Order NO-LOCK WHERE
-                     Order.Brand = gcBrand AND
+                     Order.Brand = Syst.Var:gcBrand AND
                      Order.OrderID = SubsTerminal.OrderId AND
                      Order.OrderType = 2) THEN DO:
       llPrerenove = TRUE.
@@ -365,7 +368,7 @@ IF AVAIL SubsTerminal THEN DO:
       THEN llCancelledPrerenove = TRUE.
    END. /* IF Mobsub.PayType = True AND */
    
-   fSplitTS(SubsTerminal.PurchaseTS, OUTPUT ldaLastTerminal, OUTPUT liTime).
+   Func.Common:mSplitTS(SubsTerminal.PurchaseTS, OUTPUT ldaLastTerminal, OUTPUT liTime).
 
    /* YTS-3465 */
    IF SubsTerminal.PerContractID > 0 THEN DO:
@@ -383,13 +386,13 @@ add_boolean(top_struct, "has_terminal", (AVAIL Substerminal)).
 /* Search active terminal contract with penalty fee */
 CONTRACT_LOOP:
 FOR EACH DCCLI WHERE
-         DCCLI.Brand = gcBrand AND
+         DCCLI.Brand = Syst.Var:gcBrand AND
          DCCLI.MsSeq = Mobsub.Msseq AND
          DCCLI.ValidTo >= TODAY AND
          DCCLI.ValidFrom <= TODAY AND
          DCCLI.CreateFees = TRUE NO-LOCK,
    FIRST DayCampaign WHERE
-         DayCampaign.Brand = gcBrand AND
+         DayCampaign.Brand = Syst.Var:gcBrand AND
          DayCampaign.DCEvent = DCCLI.DCEvent AND
          DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND
          DayCampaign.TermFeeCalc > 0 NO-LOCK:
@@ -404,7 +407,7 @@ FOR EACH DCCLI WHERE
                                        TODAY).
 
       FIND FIRST FMItem NO-LOCK  WHERE
-                 FMItem.Brand     = gcBrand       AND
+                 FMItem.Brand     = Syst.Var:gcBrand       AND
                  FMItem.FeeModel  = DayCampaign.TermFeeModel AND
                  FMItem.PriceList = lcPriceList AND
                  FMItem.FromDate <= TODAY     AND
@@ -498,7 +501,7 @@ IF AVAILABLE Limit THEN DO:
 
    MOBSUB_LOOP:
    FOR EACH bMobSub NO-LOCK WHERE
-            bMobSub.Brand = gcBrand AND
+            bMobSub.Brand = Syst.Var:gcBrand AND
             bMobSub.CustNum = Customer.CustNum,
       EACH DCCLI NO-LOCK WHERE
            DCCLI.MsSeq = bMobSub.MsSeq AND
@@ -507,7 +510,7 @@ IF AVAILABLE Limit THEN DO:
            DCCLI.DCEvent BEGINS "RVTERM"):
 
       FOR FIRST FixedFee NO-LOCK WHERE
-                FixedFee.Brand = gcBrand AND
+                FixedFee.Brand = Syst.Var:gcBrand AND
                 FixedFee.Custnum = Customer.Custnum AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue = STRING(bMobSub.MsSeq) AND
@@ -528,7 +531,7 @@ IF AVAILABLE Limit THEN DO:
 
          IF FixedFee.BillCode BEGINS "PAYTERM" THEN
          FOR FIRST SingleFee NO-LOCK WHERE
-                   SingleFee.Brand       = gcBrand AND
+                   SingleFee.Brand       = Syst.Var:gcBrand AND
                    SingleFee.Custnum     = FixedFee.CustNum AND
                    SingleFee.HostTable   = FixedFee.HostTable AND
                    SingleFee.KeyValue    = FixedFee.KeyValue AND
@@ -545,11 +548,11 @@ IF AVAILABLE Limit THEN DO:
    END.
 
    FOR EACH Order NO-LOCK WHERE
-            Order.Brand = gcBrand AND
+            Order.Brand = Syst.Var:gcBrand AND
             Order.CustNum = Customer.CustNum and
       LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0,
       FIRST OfferItem NO-LOCK WHERE
-            OfferItem.Brand       = gcBrand AND
+            OfferItem.Brand       = Syst.Var:gcBrand AND
             OfferItem.Offer       = Order.Offer AND
             OfferItem.ItemType    = "PerContract" AND
             OfferItem.ItemKey     BEGINS "PAYTERM" AND
@@ -559,7 +562,7 @@ IF AVAILABLE Limit THEN DO:
       ldePendingFees = ldePendingFees + OfferItem.Amount.
 
       FOR FIRST FMItem NO-LOCK WHERE
-                FMItem.Brand     = gcBrand AND
+                FMItem.Brand     = Syst.Var:gcBrand AND
                 FMItem.FeeModel  = OfferItem.ItemKey  AND
                 FMItem.ToDate   >= TODAY AND
                 FMItem.FromDate <= TODAY:
@@ -606,7 +609,7 @@ add_string(top_struct, "subscription_bundle", MobSub.TariffBundle).
    ALFMO12_addline_mobile_only added the mobile only discounts as well*/
 IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
    FOR EACH DiscountPlan NO-LOCK WHERE
-            DiscountPlan.Brand    = gcBrand AND
+            DiscountPlan.Brand    = Syst.Var:gcBrand AND
      LOOKUP(DiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS} + "," + {&ADDLINE_DISCOUNTS_HM}) > 0 AND
             DiscountPlan.ValidTo >= TODAY,
       FIRST DPMember NO-LOCK WHERE
@@ -620,5 +623,4 @@ IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
 END.
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

@@ -14,9 +14,8 @@
 
 DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
-katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId. 
-gcBrand = "1".
-{Func/date.i}
+Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId. 
+Syst.Var:gcBrand = "1".
 {Mm/fbundle.i}
 {Func/fbtc.i}
 {Func/fmakemsreq.i}
@@ -45,9 +44,7 @@ llUpgradeUpsell = get_bool(param_toplevel_id,"2").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST MobSub  WHERE 
-           MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN RETURN appl_err("Subscription not found").
+{viptool/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
 ASSIGN lcAllowedBONOContracts  = fCParamC("ALLOWED_BONO_CONTRACTS")
        lcAllowedCONTSContracts = fCParamC("ALLOWED_CONTS_CONTRACTS").
@@ -67,7 +64,7 @@ ELSE
 IF lcOldBundle = "" OR lcOldBundle = ? THEN
    RETURN appl_err("Bundle not found").
 
-ldaActDate = (fLastDayOfMonth(TODAY) + 1).
+ldaActDate = (Func.Common:mLastDayOfMonth(TODAY) + 1).
 
 IF NOT fValidateBTC (MobSub.MsSeq,
                      lcOldBundle,
@@ -78,7 +75,7 @@ IF NOT fValidateBTC (MobSub.MsSeq,
                      OUTPUT lcError)
 THEN RETURN appl_err(lcError). 
 
-ldActStamp = fMake2Dt(ldaActDate,0).
+ldActStamp = Func.Common:mMake2DT(ldaActDate,0).
 
 liCreated = fBundleChangeRequest(MobSub.MsSeq,
                                  lcOldBundle, 
@@ -106,22 +103,21 @@ IF llUpgradeUpsell THEN DO:
         NO-LOCK NO-ERROR.
    IF NOT AVAILABLE TMSCodes THEN
       /* Write memo */
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "MobSub",
+      Func.Common:mWriteMemo("MobSub",
                        STRING(MobSub.MsSeq),
                        MobSub.CustNum,
                        "Upgrade Upsell Creation Failed",
                        "Upgrade Upsell Limit is not configured in TMS for " +
                        lcOldBundle + "TO" + pcNewBundle).
    ELSE DO:
-      IF fIsDSSActive(INPUT MobSub.CustNum,INPUT fMakeTS()) THEN
+      IF fIsDSSActive(INPUT MobSub.CustNum,INPUT Func.Common:mMakeTS()) THEN
          lcUpgradeUpsell = "DSS_UPSELL_UPGRADE".
       ELSE lcUpgradeUpsell = "UPGRADE_UPSELL".
 
       liUpsellCreated = fPCActionRequest(MobSub.MsSeq,
                                          lcUpgradeUpsell, 
                                          "act",
-                                         fMakeTS(),
+                                         Func.Common:mMakeTS(),
                                          TRUE,   /* create fee */
                                          {&REQUEST_SOURCE_BTC},
                                          "",
@@ -133,8 +129,7 @@ IF llUpgradeUpsell THEN DO:
                                          "",
                                          OUTPUT lcError).
       IF liUpsellCreated = 0 THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(MobSub.MsSeq),
                           MobSub.CustNum,
                           "Upgrade Upsell Creation Failed",
@@ -145,11 +140,11 @@ END. /* IF llUpgradeUpsell THEN DO: */
 CREATE Memo.
 ASSIGN
       Memo.CreStamp  = {&nowTS}
-      Memo.Brand     = gcBrand 
+      Memo.Brand     = Syst.Var:gcBrand 
       Memo.HostTable = "MobSub" 
       Memo.KeyValue  = STRING(MobSub.MsSeq) 
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = katun 
+      Memo.CreUser   = Syst.Var:katun 
       Memo.MemoTitle = "Bundle Type Change"
       Memo.MemoText  = "External API bundle type change " + 
                        lcOldBundle + " --> " + pcNewBundle
@@ -163,5 +158,4 @@ ELSE
 lcResultStruct = add_struct(response_toplevel_id, "").
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

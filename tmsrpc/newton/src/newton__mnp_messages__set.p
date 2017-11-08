@@ -46,10 +46,8 @@ liMNPOperationID = INT(pcId) NO-ERROR.
 IF ERROR-STATUS:ERROR THEN RETURN
    appl_err("Invalid key: " + pcID).
 
-FIND MNPOperation EXCLUSIVE-LOCK WHERE
-     MNPOperation.MNPOperationID = liMNPOperationID NO-ERROR.
-IF NOT AVAIL MNPOperation THEN RETURN
-   appl_err("MNP message not found: " + pcID).
+{newton/src/findtenant.i NO Common MNPOperation MNPOperationID liMNPOperationID}
+FIND CURRENT MNPOperation EXCLUSIVE-LOCK.
 
 IF MNPOperation.ErrorHandled NE ({&MNP_ERRORHANDLED_NO}) THEN
    RETURN appl_err("Operation is allowed only for unhandled error").
@@ -57,8 +55,8 @@ IF MNPOperation.ErrorHandled NE ({&MNP_ERRORHANDLED_NO}) THEN
 IF TRIM(pcUsername) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 {Syst/commpaa.i}
-gcBrand = "1".
-katun = pcUserName.
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = pcUserName.
 {Syst/eventval.i}
 {Syst/tmsconst.i}
 {Mnp/mnpoperation.i}
@@ -77,7 +75,7 @@ END.
 IF MNPOperation.ErrorHandled EQ ({&MNP_ERRORHANDLED_NO}) THEN DO:
 
    IF llDoEvent THEN DO:
-      &GLOBAL-DEFINE STAR_EVENT_USER katun 
+      &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
       {Func/lib/eventlog.i}
       DEF VAR lhMNPOperation AS HANDLE NO-UNDO.
       lhMNPOperation = BUFFER MNPOperation:HANDLE.
@@ -96,7 +94,7 @@ END.
 CREATE Memo.
 ASSIGN
     Memo.CreStamp  = {&nowTS}
-    Memo.Brand     = gcBrand
+    Memo.Brand     = Syst.Var:gcBrand
     Memo.HostTable = "MNPProcess"
     Memo.KeyValue  = STRING(MNPOperation.MNPSeq)
     Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
@@ -108,5 +106,4 @@ RELEASE MNPOperation.
 add_struct(response_toplevel_id, "").
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

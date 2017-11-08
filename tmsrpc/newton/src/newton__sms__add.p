@@ -10,12 +10,12 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-{Func/date.i}
 
 /* Input parameters */
-DEF VAR pcCli AS CHAR NO-UNDO.
-DEF VAR pcMessage AS CHAR NO-UNDO.
-DEF VAR pfWhen AS DECIMAL NO-UNDO.
+DEF VAR pcTenant  AS CHAR    NO-UNDO.
+DEF VAR pcCli     AS CHAR    NO-UNDO.
+DEF VAR pcMessage AS CHAR    NO-UNDO.
+DEF VAR pfWhen    AS DECIMAL NO-UNDO.
 /* Local variables */
 DEF VAR lcReq AS CHAR NO-UNDO.
 DEF VAR pcReq AS CHAR NO-UNDO.
@@ -26,12 +26,13 @@ DEF VAR ldeQuarantine AS DEC NO-UNDO.
 IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
 
 pcReq = get_struct(param_toplevel_id, "0").
-lcReq = validate_request(pcReq, "msisdn!,content!,sender_cli,send_time").
+lcReq = validate_request(pcReq, "brand!,msisdn!,content!,sender_cli,send_time").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 pfWhen = {&nowts}.
 
 ASSIGN
+   pcTenant = get_string(pcReq, "brand") 
    pcCli = get_string(pcReq, "msisdn")
    pcMessage = get_string(pcReq, "content")
    lcOrig = get_string(pcReq,"sender_cli")
@@ -41,11 +42,13 @@ ASSIGN
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+{newton/src/settenant.i pcTenant}
+
 IF pcCLi BEGINS "+" THEN pcCLi = REPLACE(pcCLI, "+","00").
 
 IF lcOrig EQ "sms report" THEN liCreditType = 25 . 
 
-ldeQuarantine = fSecOffSet(fMakeTS(), -10).
+ldeQuarantine = Func.Common:mSecOffSet(Func.Common:mMakeTS(), -10).
 
 FIND FIRST CallAlarm WHERE
            CallAlarm.CLI = pcCLI AND

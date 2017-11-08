@@ -22,20 +22,17 @@
  */
 
 {newton/src/header_get.i}
-DEFINE VARIABLE katun AS CHARACTER NO-UNDO. 
-&SCOPED-DEFINE BrandVarDefined YES
-{Func/func.p}
 DEF VAR liId AS INT NO-UNDO. 
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
    pcID = get_string(pcIDArray, STRING(liCounter)).
    liId = INT(pcID) NO-ERROR.
-
+   
    FIND MsRequest NO-LOCK WHERE MsRequest.MsRequest = liId NO-ERROR.
    IF NOT AVAIL MsRequest THEN 
       RETURN appl_err(SUBST("Request with id &1 was not found", liId)).
-     
+         
    lcResultStruct = add_struct(resp_array, "").
 
    add_int(lcResultStruct, "id", MsRequest.MsRequest).
@@ -45,7 +42,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    FIND Customer WHERE Customer.CustNum = MsRequest.CustNum NO-LOCK NO-ERROR.
    IF AVAIL Customer THEN DO:
       add_int(lcResultStruct, "customer_number", Customer.Custnum). 
-      add_string(lcResultStruct, "name", fDispCustName(BUFFER Customer)). 
+      add_string(lcResultStruct, "name", Func.Common:mDispCustName(BUFFER Customer)). 
    END.
 
    add_timestamp(lcResultStruct, "activated_at", MsRequest.ActStamp).

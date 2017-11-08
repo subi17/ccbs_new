@@ -16,12 +16,7 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
-DEFINE VARIABLE gcBrand AS CHARACTER INIT "1" NO-UNDO. 
-DEFINE VARIABLE katun AS CHARACTER NO-UNDO. 
-
-&SCOPED-DEFINE BrandVarDefined YES
-{Func/func.p}
-
+DEFINE VARIABLE pcTenant AS CHARACTER NO-UNDO.
 DEFINE VARIABLE piType AS INTEGER NO-UNDO. 
 DEFINE VARIABLE piStatus AS INTEGER NO-UNDO. 
 DEFINE VARIABLE piOffset AS INTEGER NO-UNDO. 
@@ -39,10 +34,11 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 gcParamStruct = get_struct(param_toplevel_id, "").
 
-lcParams = validate_request(gcParamStruct, "type!,status!,offset,limit").
+lcParams = validate_request(gcParamStruct, "brand!,type!,status!,offset,limit").
 IF lcParams EQ ? THEN RETURN.
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+pcTenant = get_string(gcParamStruct, "brand").
 piType = get_int(gcParamStruct, "type").
 piStatus= get_int(gcParamStruct, "status").
 
@@ -53,12 +49,14 @@ IF LOOKUP("limit", lcParams) > 0 THEN DO:
 END.
 IF LOOKUP("offset", lcParams) > 0 THEN
    piOffSet = get_int(gcParamStruct, "offset").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 resp_struct = add_struct(response_toplevel_id, "").
 
-FOR
-   EACH MsReqCounter NO-LOCK WHERE
+FOR EACH MsReqCounter NO-LOCK WHERE
       MsReqCounter.ReqType   = piType AND
       MsReqCounter.ReqStatus = piStatus:
    ACCUMULATE MsReqCounter.ReqStatusCount (TOTAL).
@@ -71,7 +69,7 @@ request_array = add_array(resp_struct, "requests").
 FUNCTION fAddCustomerData RETURN LOGICAL:
    FIND Customer WHERE Customer.CustNum = MsRequest.CustNum NO-LOCK NO-ERROR.
    IF AVAIL Customer THEN
-      add_string(request_struct, "name", fDispCustName(BUFFER Customer)). 
+      add_string(request_struct, "name", Func.Common:mDispCustName(BUFFER Customer)). 
    RETURN TRUE.
 END.
 
@@ -91,7 +89,7 @@ END.
 iCount = 0.
 RequestLoop:
 FOR EACH MsRequest USE-INDEX ReqType WHERE 
-    MsRequest.Brand eq gcBrand AND 
+    MsRequest.Brand eq Syst.Var:gcBrand AND 
     MsRequest.ReqType eq piType AND
     MsRequest.ReqStatus eq piStatus NO-LOCK:
     IF iCount >= piOffset + piLimit THEN 

@@ -3,9 +3,8 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 USING Syst.Parameters.
 
-CLASS Gwy.MqPublisher:
+CLASS test.mocks.Gwy.MqPublisher:
 
-   DEFINE PUBLIC VARIABLE gcBrand          AS CHARACTER   NO-UNDO INITIAL "1".
    DEFINE PUBLIC VARIABLE lcHostName       AS CHARACTER   NO-UNDO.
    DEFINE PUBLIC VARIABLE liPort           AS INTEGER     NO-UNDO.
    DEFINE PUBLIC VARIABLE liTimeOut        AS INTEGER     NO-UNDO.
@@ -47,10 +46,10 @@ CLASS Gwy.MqPublisher:
    CONSTRUCTOR PUBLIC MqPublisher ( icConfigurationPrefix AS CHARACTER ):
       
       ASSIGN
-         lcHostName  = Parameters:getc(icConfigurationPrefix + ".ip")
-         liPort      = Parameters:geti(icConfigurationPrefix + ".Port")
-         liTimeOut   = Parameters:geti(icConfigurationPrefix + ".TimeOut")
-         lcQueueName = Parameters:getc(icConfigurationPrefix + ".Name")
+         lcHostName  = Syst.Parameters:getc(icConfigurationPrefix + ".ip")
+         liPort      = Syst.Parameters:geti(icConfigurationPrefix + ".Port")
+         liTimeOut   = Syst.Parameters:geti(icConfigurationPrefix + ".TimeOut")
+         lcQueueName = Syst.Parameters:getc(icConfigurationPrefix + ".Name")
          .
       
       DO ON ERROR UNDO, THROW:
@@ -105,6 +104,7 @@ CLASS Gwy.MqPublisher:
    METHOD PUBLIC LOGICAL send_message
       ( iclMessage AS LONGCHAR ):
 
+      LOG-MANAGER:WRITE-MESSAGE(SUBSTITUTE("Sending message: &1", SUBSTRING(iclMessage,1,30000)), "DEBUG").
       lcMessage = iclMessage.
 
    END METHOD.

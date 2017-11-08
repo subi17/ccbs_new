@@ -19,10 +19,7 @@ piMsSeq = get_int(param_toplevel_id, "0").
 piBillingPermission = get_int(param_toplevel_id, "1").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND mobsub NO-LOCK WHERE 
-     mobsub.msseq = piMsSeq NO-ERROR.
-IF NOT AVAILABLE mobsub THEN
-    RETURN appl_err("Subscription not found").
+{viptool/src/findtenant.i NO ordercanal MobSub MsSeq piMsSeq}
 
 FIND TMSCodes WHERE
      TMSCodes.TableName = "Limit" AND
@@ -32,8 +29,8 @@ IF NOT AVAIL TMSCodes THEN
     RETURN appl_err(SUBST("Unknown status code: &1", piBillingPermission)).
 
 {Syst/commpaa.i}
-katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
-gcBrand = "1".
+Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/flimitreq.i}
 
@@ -71,4 +68,3 @@ fCreateLimitHistory(
 
 add_boolean(response_toplevel_id,"", TRUE).
 
-IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 

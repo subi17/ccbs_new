@@ -15,10 +15,9 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 ASSIGN
-   gcBrand = "1".
+   Syst.Var:gcBrand = "1".
 {Syst/eventval.i}
 {Func/create_eventlog.i}
-{Func/timestamp.i}
 {Func/scheduled_dumps.i}
 
 
@@ -32,21 +31,27 @@ DEF VAR lcWeekDays AS CHAR NO-UNDO.
 DEF VAR lcDay AS CHAR NO-UNDO.
 DEF VAR litime AS INT NO-UNDO.
 DEF VAR ldate AS DATE NO-UNDO.
-
+DEF VAR pcTenant AS CHAR NO-UNDO.
 
 lcWeekDays = "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday".
-IF validate_request(param_toplevel_id, "struct") = ? THEN RETURN.
-pcStruct = get_struct(param_toplevel_id, "0").
-lcStruct = validate_struct(pcStruct,
-   "dumpid").
+
+IF validate_request(param_toplevel_id, "string,struct") = ? THEN RETURN.
+
+pcTenant = get_string(param_toplevel_id, "0").
+pcStruct = get_struct(param_toplevel_id, "1").
+
+lcStruct = validate_struct(pcStruct,"dumpid").
 
 /* READ Dump id */
 liDumpId = get_int(pcStruct, "dumpid").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 resp_array = add_array(response_toplevel_id, "").
 
-fSplitTS(fmakeTS(),ldate,litime).
+Func.Common:mSplitTS(Func.Common:mMakeTS(),ldate,litime).
 /* Search by ID */
 fDumpEventList(TODAY + 62,TODAY, liDumpId).
 FOR EACH ttEvent NO-LOCK:
@@ -54,7 +59,6 @@ FOR EACH ttEvent NO-LOCK:
       ttEvent.EventTime < litime THEN NEXT.
    RUN pAddResultsArray.
 END.
-
 
 /* Struct builder */
 PROCEDURE pAddResultsArray:
@@ -64,7 +68,7 @@ PROCEDURE pAddResultsArray:
    add_string(dump_struct,"mode", ttEvent.DumpMode).
    lcDay = ENTRY(ttEvent.EventDay, lcWeekDays).
    add_string(dump_struct,"day", lcDay).
-   ldeDumpTime = fMake2Dt(ttEvent.EventDate, ttEvent.EventTime).
+   ldeDumpTime = Func.Common:mMake2DT(ttEvent.EventDate, ttEvent.EventTime).
    add_timestamp(dump_struct,"timestamp", ldeDumpTime).
    add_string(dump_struct,"duration", ttEvent.AveDuration).
 END PROCEDURE. /* PROCEDURE pAddResultsArray: */
@@ -73,5 +77,4 @@ FINALLY:
   EMPTY TEMP-TABLE ttDays.
   EMPTY TEMP-TABLE ttTimes.
   EMPTY TEMP-TABLE ttEvent.
-  IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+  END.

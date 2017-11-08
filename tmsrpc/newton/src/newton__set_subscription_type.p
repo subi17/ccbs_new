@@ -22,8 +22,8 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
-katun = "Newton".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "Newton".
 
 {Func/fbankdata.i}
 {Func/fctchange.i}
@@ -33,6 +33,7 @@ katun = "Newton".
 {Func/profunc.i}
 
 /* Input parameters */
+DEF VAR pcTenant             AS CHAR NO-UNDO.
 DEF VAR pcMSISDN             AS CHAR NO-UNDO.
 DEF VAR pcSalesman           AS CHAR NO-UNDO.
 DEF VAR pcCliType            AS CHAR NO-UNDO.
@@ -75,18 +76,21 @@ IF validate_request(param_toplevel_id, "struct") EQ ? THEN RETURN.
 pcStruct = get_struct(param_toplevel_id, "0").
 /* web is passing renewal_stc but we don't actually need it */
 lcstruct = validate_struct(pcStruct, 
-   "msisdn!,username!,subscription_type_id!,activation_stamp!,charge!," +
+   "brand!,msisdn!,username!,subscription_type_id!,activation_stamp!,charge!," +
    "charge_limit!,bank_account,data_bundle_id,renewal_stc,bypass," +
    "extend_term_contract,exclude_term_penalty,memo,contract_id,channel").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+pcTenant    = get_string(pcStruct, "brand").
 pcMSISDN    = get_string(pcStruct, "msisdn").
 pcSalesman  = get_string(pcStruct, "username").
 pcCliType   = get_string(pcStruct, "subscription_type_id").
 pdActivation = get_timestamp(pcStruct, "activation_stamp").
 pdeCharge = get_double(pcStruct, "charge").
 pdeChargeLimit = get_double(pcStruct, "charge_limit").
+
+{newton/src/settenant.i pcTenant}
 
 lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
 
@@ -117,17 +121,17 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 IF plExtendContract AND plExcludeTermPenalty THEN
    RETURN appl_err("Both 'Contract extension' and 'Penalty exemption' requested").
    
-katun = "VISTA_" + pcSalesman.
+Syst.Var:katun = "VISTA_" + pcSalesman.
 
-IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
+IF TRIM(Syst.Var:katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
 FIND mobsub NO-LOCK WHERE
      mobsub.cli = pcMSISDN NO-ERROR.
 IF NOT AVAILABLE mobsub THEN
    RETURN appl_err(SUBST("MobSub entry &1 not found", pcMSISDN)).
 
-/* Set the katun to check correct barring */
-katun = "NewtonAd".
+/* Set the Syst.Var:katun to check correct barring */
+Syst.Var:katun = "NewtonAd".
 
 /* Various validations */
 IF fValidateMobTypeCh(
@@ -140,23 +144,15 @@ IF fValidateMobTypeCh(
    {&REQUEST_SOURCE_NEWTON}, 
    OUTPUT lcError) EQ FALSE THEN RETURN appl_err(lcError).
 
-  /*YPRO*/
-  lcProValidation = fValidateProSTC(MobSub.Custnum,
-                                    MobSub.CliType,
-                                    pcCliType).
-  IF lcProValidation NE "" THEN 
-     RETURN appl_err("Pro customer validation error: " + lcProValidation).
-
-
-/* Set the katun again with original username */
-katun = "VISTA_" + pcSalesman.
+/* Set the Syst.Var:katun again with original username */
+Syst.Var:katun = "VISTA_" + pcSalesman.
 
 IF fValidateNewCliType(INPUT pcCliType, INPUT pcDataBundleId,
                        INPUT plByPass, OUTPUT lcError) NE 0
 THEN RETURN appl_err(lcError).
 
 FIND FIRST NewCliType WHERE
-           NewCLIType.Brand = gcBrand AND
+           NewCLIType.Brand = Syst.Var:gcBrand AND
            NewCLIType.CLIType = pcCliType NO-LOCK.
 IF NOT AVAIL NewCLIType THEN
    RETURN appl_err(SUBST("Unknown CLIType &1", pcCliType)).
@@ -222,11 +218,11 @@ IF pcMemoTitle > "" OR pcMemoContent > "" THEN DO:
    CREATE Memo.
    ASSIGN
       Memo.CreStamp  = {&nowTS}
-      Memo.Brand     = gcBrand
+      Memo.Brand     = Syst.Var:gcBrand
       Memo.HostTable = "MobSub"
       Memo.KeyValue  = STRING(MobSub.MsSeq)
       Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = katun
+      Memo.CreUser   = Syst.Var:katun
       Memo.MemoTitle = pcMemoTitle
       Memo.MemoText  = pcMemoContent
       Memo.CustNum   = MobSub.CustNum
@@ -236,6 +232,5 @@ END. /* IF pcMemoTitle > "" OR pcMemoContent > "" THEN DO: */
 add_boolean(response_toplevel_id, "", TRUE).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.
 

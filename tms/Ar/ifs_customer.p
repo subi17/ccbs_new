@@ -8,11 +8,12 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 
 {Syst/commali.i}
 {Func/cparam2.i}
 {Syst/dumpfile_run.i}
+{Func/multitenantfunc.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
 DEF INPUT  PARAMETER icFile        AS CHAR NO-UNDO.
@@ -96,7 +97,7 @@ ASSIGN /* constant values */
    RLTP1         = "MKK"   /*  BDT: Object part  constant MKK */
    VALDT         = ""      /*  Validity data for changes (direct input)  */
    BU_GROUP      = "0002"  /*  BP grouping  */
-   FIBUKRS       = "X001"  /*  Direct Input Company Code in Initial Screen  */
+   FIBUKRS       = fgetCompanyId() /*  Direct Input Company Code in Initial Screen  */
    BU_SORT2      = ""      /*  Search term 2 for BP  */
    SOURCE        = "0001"  /* Data origin */
    ADEXT_ADDR    = ""      /*  Address number in external system  */
@@ -112,12 +113,12 @@ ASSIGN /* constant values */
    
 OUTPUT STREAM sLog TO VALUE(icFile).
 
-fSplitTS(idLastDump,    
+Func.Common:mSplitTS(idLastDump,    
          OUTPUT ldaModified,
          OUTPUT liCnt).
 
 ASSIGN
-   ldtLastDump = fTimeStamp2DateTime(idLastDump)
+   ldtLastDump = Func.Common:mTimeStamp2DateTime(idLastDump)
    lhTable     = BUFFER CUSTOMER:HANDLE
    /* customers that are not transferred to sap */
    lcCustDenied = fCParamC("AgrCustNoTransfer").
@@ -127,7 +128,7 @@ FIND FIRST DumpFile WHERE DumpFile.DumpID = iiDumpID NO-LOCK NO-ERROR.
 IF AVAILABLE DumpFile THEN lcModFields = DumpFile.EventLogFields.
 
 FOR EACH Customer NO-LOCK WHERE
-         Customer.Brand = gcBrand
+         Customer.Brand = Syst.Var:gcBrand
    ON QUIT UNDO, RETRY
    ON STOP UNDO, RETRY:
 
@@ -496,7 +497,8 @@ FOR EACH Customer NO-LOCK WHERE
    /* 400 */ STRING(ZAZAWE,"X(5)")                            /* 3451 - 3455 */
    /* 401 */ STRING(ZZSLCS,"X(2)")                            /* 3456 - 3457 */
    /* 402 */ FILL(" ",1)                                      /* 3458 - 3458 */           
-   /* 403 */ STRING(TEL_NUMBER2,"X(30)")                      /* 3459 - 3488 */  
+   /* 403 */ STRING(TEL_NUMBER2,"X(30)")                      /* 3459 - 3488 */
+   
    SKIP.
 
 END.

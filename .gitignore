@@ -28,8 +28,11 @@ tmsrpc/dextra/src/version.i
 tmsrpc/heat/src/version.i
 tmsrpc/masmovil/src/version.i
 tmsrpc/mnp/src/version.i
+tmsrpc/mnp_mock/src/version.i
 tmsrpc/newton/src/version.i
-tmsrpc/newton/rpcmethods/
+tmsrpc/newton/rpcmethods/*
+tmsrpc/mnp_mock/rpcmethods/doc*
+tmsrpc/mnp_mock/rpcmethods/*
 tmsrpc/newton/rpcmethods.pl
 tmsrpc/newton/ushak
 tmsrpc/selfservice/src/version.i

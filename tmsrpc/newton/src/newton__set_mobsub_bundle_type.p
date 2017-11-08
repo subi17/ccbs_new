@@ -17,9 +17,8 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
-{Func/date.i}
 {Mm/fbundle.i}
 {Func/fbtc.i}
 {Func/fdss.i}
@@ -46,6 +45,7 @@ DEF VAR llUpgradeUpsell AS LOG     NO-UNDO INIT FALSE.
 DEF VAR lcUpgradeUpsell AS CHAR    NO-UNDO.
 DEF VAR liUpsellCreated AS INT     NO-UNDO.
 DEF VAR lcBONOContracts AS CHAR    NO-UNDO.
+DEF VAR lcVoiceBundles  AS CHAR    NO-UNDO.
 DEF VAR lcMemoType      AS CHAR    NO-UNDO.
 
 DEF VAR pcContractID     AS CHAR NO-UNDO.
@@ -66,7 +66,7 @@ ASSIGN
    pcOldBundle = get_string(pcStruct,"old_bundle")
    pcNewBundle = get_string(pcStruct,"new_bundle")
    pdaActDate = get_date(pcStruct,"date")
-   katun = "VISTA_" + get_string(pcStruct,"username")
+   Syst.Var:katun = "VISTA_" + get_string(pcStruct,"username")
    llUpgradeUpsell = get_bool(pcStruct,"upgrade_upsell")
       WHEN LOOKUP("upgrade_upsell", lcstruct) > 0
    plExtendContract = get_bool(pcStruct,"extend_term_contract")
@@ -77,6 +77,10 @@ ASSIGN
       WHEN LOOKUP("channel", lcstruct) > 0
    plExcludeTermPenalty = get_bool(pcStruct,"exclude_term_penalty")
       WHEN LOOKUP("exclude_term_penalty", lcstruct) > 0.
+
+ASSIGN
+    pcOldBundle = ENTRY(1,pcOldBundle,"|")  
+    pcNewBundle = ENTRY(1,pcNewBundle,"|").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -92,18 +96,18 @@ END. /* IF LOOKUP("memo", lcstruct) > 0 THEN DO: */
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-FIND FIRST MobSub WHERE 
-           MobSub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
-IF NOT AVAIL MobSub THEN RETURN appl_err("Subscription not found").
+{newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
 
 FIND FIRST DayCampaign NO-LOCK WHERE
-           DayCampaign.Brand = gcBrand AND
+           DayCampaign.Brand = Syst.Var:gcBrand AND
            DayCampaign.DCEvent = pcNewBundle NO-ERROR.
 IF NOT AVAIL DayCampaign THEN RETURN appl_err("DayCampaign not defined").
 
-IF TRIM(katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
+IF TRIM(Syst.Var:katun) EQ "VISTA_" THEN RETURN appl_err("username is empty").
 
-lcBONOContracts = fCParamC("BONO_CONTRACTS").
+ASSIGN
+    lcBONOContracts = fCParamC("BONO_CONTRACTS")
+    lcVoiceBundles  = fCParamC("VOICE_BONO_CONTRACTS").
 
 IF NOT fValidateBTC
    (MobSub.MsSeq,
@@ -115,7 +119,7 @@ IF NOT fValidateBTC
     OUTPUT lcError)
    THEN RETURN appl_err(lcError). 
 
-ldActStamp = fMake2Dt(pdaActDate,
+ldActStamp = Func.Common:mMake2DT(pdaActDate,
                       IF pdaActDate = TODAY
                       THEN TIME
                       ELSE 0).
@@ -165,22 +169,21 @@ IF llUpgradeUpsell THEN DO:
         NO-LOCK NO-ERROR.
    IF NOT AVAILABLE TMSCodes THEN
       /* Write memo */
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "MobSub",
+      Func.Common:mWriteMemo("MobSub",
                        STRING(MobSub.MsSeq),
                        MobSub.CustNum,
                        "Upgrade Upsell Creation Failed",
                        "Upgrade Upsell Limit is not configured in TMS for " +
                        pcOldBundle + "TO" + pcNewBundle).
    ELSE DO:
-      IF fIsDSSActive(INPUT MobSub.CustNum,INPUT fMakeTS()) THEN
+      IF fIsDSSActive(INPUT MobSub.CustNum,INPUT Func.Common:mMakeTS()) THEN
          lcUpgradeUpsell = "DSS_UPSELL_UPGRADE".
       ELSE lcUpgradeUpsell = "UPGRADE_UPSELL".
 
       liUpsellCreated = fPCActionRequest(MobSub.MsSeq,
                                          lcUpgradeUpsell, 
                                          "act",
-                                         fMakeTS(),
+                                         Func.Common:mMakeTS(),
                                          TRUE,   /* create fee */
                                          {&REQUEST_SOURCE_BTC},
                                          "",
@@ -192,8 +195,7 @@ IF llUpgradeUpsell THEN DO:
                                          "",
                                          OUTPUT lcError).
       IF liUpsellCreated = 0 THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MobSub",
+         Func.Common:mWriteMemo("MobSub",
                           STRING(MobSub.MsSeq),
                           MobSub.CustNum,
                           "Upgrade Upsell Creation Failed",
@@ -201,23 +203,21 @@ IF llUpgradeUpsell THEN DO:
    END. /* ELSE DO: */
 END. /* IF ilUpgradeUpsell THEN DO: */
 
-IF LOOKUP(pcNewBundle,lcBONOContracts) > 0 THEN
+IF LOOKUP(pcNewBundle,lcBONOContracts) > 0 OR LOOKUP(pcNewBundle,lcVoiceBundles) > 0 THEN
    lcMemoType  = "Service".
 ELSE
    lcMemoType  = "MobSub".
 
-DYNAMIC-FUNCTION("fWriteMemoWithType" IN ghFunc1,
-                 "MobSub",                             /* HostTable */
+Func.Common:mWriteMemoWithType("MobSub",                             /* HostTable */
                  STRING(Mobsub.MsSeq),                 /* KeyValue  */
                  MobSub.CustNum,                       /* CustNum */
                  "Bono modificado",                    /* MemoTitle */
                  pcMemoContent + " " + pcOldBundle + " --> " + pcNewBundle,  /* MemoText */
                  lcMemoType,                           /* MemoType */
-                 katun).
+                 Syst.Var:katun).
 
 
 lcResultStruct = add_struct(response_toplevel_id, "").
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR.
-END.
+   END.

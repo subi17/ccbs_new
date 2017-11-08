@@ -24,20 +24,20 @@ def var must-add    as logic                no-undo.
 form
       invsect.InvSect
       invsect.ISName  format "x(30)"
-    with scroll 1 11 down  row 4 centered color value(cfc)
-    title color value(ctc) " Invoice Sections " overlay frame sel.
+    with scroll 1 11 down  row 4 centered color value(Syst.Var:cfc)
+    title color value(Syst.Var:ctc) " Invoice Sections " overlay frame sel.
 
 form /* SEEK Code */
     InvSect
     help "Enter Code of an Invoice Section"
-    with row 4 col 2 title color value(ctc) " FIND CODE "
-    color value(cfc) no-labels overlay frame hayr.
+    with row 4 col 2 title color value(Syst.Var:ctc) " FIND CODE "
+    color value(Syst.Var:cfc) no-labels overlay frame hayr.
 
-cfc = "sel". RUN Syst/ufcolor.p. assign ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. assign Syst.Var:ccc = Syst.Var:cfc.
 MAIN:
 repeat:
 
-   find first InvSect WHERE InvSect.Brand = gcBrand no-lock no-error.
+   find first InvSect WHERE InvSect.Brand = Syst.Var:gcBrand no-lock no-error.
    if not available InvSect then do:
       must-print = false.
       MESSAGE "No invoice sections available"
@@ -70,7 +70,7 @@ print-line:
             with frame sel.
             rtab[frame-line] = recid(InvSect).
             down with frame sel.
-            find next InvSect  WHERE InvSect.Brand = gcBrand 
+            find next InvSect  WHERE InvSect.Brand = Syst.Var:gcBrand 
             no-lock no-error.
          end.
          must-print = false.
@@ -79,9 +79,9 @@ print-line:
 
       if ufkey then do:
          assign
-         ufk = 0 ufk[1] = 35 ufk[5] = 11
-         ufk[6] = 0 ufk[8] = 8  ufk[9] = 1
-         siirto = ? ehto = 3 ufkey = false.
+         Syst.Var:ufk = 0 Syst.Var:ufk[1] = 35 Syst.Var:ufk[5] = 11
+         Syst.Var:ufk[6] = 0 Syst.Var:ufk[8] = 8  Syst.Var:ufk[9] = 1
+         siirto = ? Syst.Var:ehto = 3 ufkey = false.
          RUN Syst/ufkey.p.
       end.
   end. /* print-line */
@@ -91,17 +91,17 @@ BROWSE:
 
          hide message no-pause.
          choose row invsect.InvSect {Syst/uchoose.i} no-error with frame sel.
-         color display value(ccc) invsect.InvSect with frame sel.
+         color display value(Syst.Var:ccc) invsect.InvSect with frame sel.
 
          if frame-value = "" and rtab[frame-line] = ? then next.
-         nap = keylabel(lastkey).
+         Syst.Var:nap = keylabel(lastkey).
 
          /* previous line */
-         if lookup(nap,"cursor-up") > 0 then do
+         if lookup(Syst.Var:nap,"cursor-up") > 0 then do
          with frame sel:
             if frame-line = 1 then do:
                find InvSect where recid(InvSect) = rtab[frame-line] no-lock.
-               find prev InvSect  WHERE InvSect.Brand = gcBrand
+               find prev InvSect  WHERE InvSect.Brand = Syst.Var:gcBrand
                no-lock no-error.
                if not available InvSect then do:
                   bell.
@@ -124,10 +124,10 @@ BROWSE:
          end. /* previous line */
 
          /* next line */
-         if lookup(nap,"cursor-down") > 0 then do with frame sel:
+         if lookup(Syst.Var:nap,"cursor-down") > 0 then do with frame sel:
             if frame-line = frame-down then do:
                find InvSect where recid(InvSect) = rtab[frame-line] no-lock .
-               find next InvSect  WHERE InvSect.Brand = gcBrand
+               find next InvSect  WHERE InvSect.Brand = Syst.Var:gcBrand
                no-lock no-error.
                if not available InvSect then do:
                   bell.
@@ -151,14 +151,14 @@ BROWSE:
          end. /* next line */
 
          /* previous page */
-         else if lookup(nap,"page-up,prev-page") > 0 then do with frame sel:
+         else if lookup(Syst.Var:nap,"page-up,prev-page") > 0 then do with frame sel:
             find InvSect where recid(InvSect) = memory no-lock no-error.
-            find prev InvSect  WHERE InvSect.Brand = gcBrand
+            find prev InvSect  WHERE InvSect.Brand = Syst.Var:gcBrand
             no-lock no-error.
             if available InvSect then do:
 
                do i = 1 to (frame-down - 1):
-                  find prev InvSect  WHERE InvSect.Brand = gcBrand
+                  find prev InvSect  WHERE InvSect.Brand = Syst.Var:gcBrand
                   no-lock no-error.
                   if available InvSect then memory = recid(InvSect).
                   else i = frame-down.
@@ -175,7 +175,7 @@ BROWSE:
         end. /* previous page */
 
         /* next page */
-        else if lookup(nap,"page-down,next-page") > 0 then do with frame sel:
+        else if lookup(Syst.Var:nap,"page-down,next-page") > 0 then do with frame sel:
            if rtab[frame-down] = ? then do:
                bell.
                message "This is the last page !".
@@ -189,14 +189,14 @@ BROWSE:
         end. /* next page */
 
         /* Seek */
-        if lookup(nap,"1,f1") > 0 then do:  /* InvSect */
-           cfc = "puyr". RUN Syst/ufcolor.p.
-           ehto = 9. RUN Syst/ufkey.p. ufkey = true.
+        if lookup(Syst.Var:nap,"1,f1") > 0 then do:  /* InvSect */
+           Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
+           Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = true.
            update InvSect with frame hayr.
            hide frame hayr no-pause.
            if InvSect ENTERED then do:
               find first InvSect where 
-                         InvSect.Brand    = gcBrand AND 
+                         InvSect.Brand    = Syst.Var:gcBrand AND 
                          invsect.InvSect >= InvSect
               no-lock no-error.
                if not available InvSect then do:
@@ -214,28 +214,28 @@ BROWSE:
         end. /* Seek */
 
         /* Choose */
-        else if lookup(nap,"return,enter,5,f5") > 0 then do:
+        else if lookup(Syst.Var:nap,"return,enter,5,f5") > 0 then do:
            find InvSect where recid(InvSect) = rtab[frame-line] no-lock.
            siirto = string(invsect.InvSect).
            leave MAIN.
         end. /* Choose */
         /* First record */
-        else if lookup(nap,"home,h") > 0 then do:
-           find first InvSect  WHERE InvSect.Brand = gcBrand no-lock.
+        else if lookup(Syst.Var:nap,"home,h") > 0 then do:
+           find first InvSect  WHERE InvSect.Brand = Syst.Var:gcBrand no-lock.
            memory = recid(InvSect).
            must-print = true.
            next LOOP.
         end. /* First record */
 
         /* last record */
-        else if lookup(nap,"end,e") > 0 then do :
-           find last InvSect   WHERE InvSect.Brand = gcBrand no-lock.
+        else if lookup(Syst.Var:nap,"end,e") > 0 then do :
+           find last InvSect   WHERE InvSect.Brand = Syst.Var:gcBrand no-lock.
            memory = recid(InvSect).
            must-print = true.
            next LOOP.
         end. /* last record */
 
-        else if nap = "8" or nap = "f8" then leave MAIN. /* Return */
+        else if Syst.Var:nap = "8" or Syst.Var:nap = "f8" then leave MAIN. /* Return */
 
      end.  /* BROWSE */
    end.  /* LOOP */

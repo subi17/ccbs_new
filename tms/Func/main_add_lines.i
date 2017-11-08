@@ -13,7 +13,6 @@
 {Syst/tmsconst.i}
 {Mnp/mnpoutchk.i}
 {Func/cparam2.i}
-{Func/date.i}
 {Func/fsubstermreq.i}
 {Func/msreqfunc.i}
 {Func/fmakemsreq.i}
@@ -32,17 +31,17 @@ FUNCTION fIsMainLineSubActive RETURNS LOGICAL
    DEF BUFFER Mobsub FOR Mobsub.
 
    FOR FIRST Customer WHERE
-             Customer.Brand = gcBrand AND
+             Customer.Brand = Syst.Var:gcBrand AND
              Customer.OrgId = pcPersonId AND
              Customer.CustidType = pcIdType AND
              Customer.Roles NE "inactive" NO-LOCK,
        EACH  MobSub WHERE
-             MobSub.Brand   = gcBrand AND
+             MobSub.Brand   = Syst.Var:gcBrand AND
              MobSub.InvCust = Customer.CustNum AND
              MobSub.PayType = FALSE NO-LOCK:
 
       IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                        CLIType.Brand = gcBrand AND
+                        CLIType.Brand = Syst.Var:gcBrand AND
                         CLIType.CLIType = MobSub.TariffBundle AND
                         CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) THEN 
          RETURN TRUE.
@@ -64,7 +63,7 @@ FUNCTION fHasPendingSTCToNonMainLine RETURNS LOGICAL
             LOOKUP(STRING(MsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0 AND
             MsRequest.Actstamp <= ideActStamp,
       FIRST CLIType NO-LOCK WHERE
-            CLIType.Brand = gcBrand AND
+            CLIType.Brand = Syst.Var:gcBrand AND
             CLIType.CLIType = (IF MsRequest.ReqCParam5 > ""
                                THEN MsRequest.ReqCParam5
                                ELSE MsRequest.ReqCParam2):
@@ -78,7 +77,7 @@ FUNCTION fHasPendingSTCToNonMainLine RETURNS LOGICAL
             LOOKUP(STRING(MsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0 AND
             MsRequest.Actstamp <= ideActStamp,
       FIRST CLIType NO-LOCK WHERE
-            CLIType.Brand = gcBrand AND
+            CLIType.Brand = Syst.Var:gcBrand AND
             CLIType.CLIType = MsRequest.ReqCParam2:
 
       IF CLIType.LineType NE {&CLITYPE_LINETYPE_MAIN} THEN RETURN TRUE. 
@@ -100,7 +99,7 @@ FUNCTION fHasPendingRequests RETURNS LOGICAL
             MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
             LOOKUP(STRING(MsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0,
       FIRST CLIType NO-LOCK WHERE
-            CLIType.Brand = gcBrand AND
+            CLIType.Brand = Syst.Var:gcBrand AND
             CLIType.CLIType = (IF MsRequest.ReqCParam5 > ""
                                THEN MsRequest.ReqCParam5
                                ELSE MsRequest.ReqCParam2):
@@ -113,7 +112,7 @@ FUNCTION fHasPendingRequests RETURNS LOGICAL
             MsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE} AND
             LOOKUP(STRING(MsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0,
       FIRST CLIType NO-LOCK WHERE
-            CLIType.Brand = gcBrand AND
+            CLIType.Brand = Syst.Var:gcBrand AND
             CLIType.CLIType = MsRequest.ReqCParam2:
 
       IF CLIType.LineType NE iiLineType THEN RETURN TRUE. 
@@ -142,7 +141,7 @@ FUNCTION fHasPendingSTCToMainLine RETURNS LOGICAL
             MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
             LOOKUP(STRING(MsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0,
       FIRST CLIType NO-LOCK WHERE
-            CLIType.Brand = gcBrand AND
+            CLIType.Brand = Syst.Var:gcBrand AND
             CLIType.CLIType = (IF MsRequest.ReqCParam5 > ""
                                THEN MsRequest.ReqCParam5
                                ELSE MsRequest.ReqCParam2):
@@ -154,7 +153,7 @@ FUNCTION fHasPendingSTCToMainLine RETURNS LOGICAL
             MsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE} AND
             LOOKUP(STRING(MsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0,
       FIRST CLIType NO-LOCK WHERE
-            CLIType.Brand = gcBrand AND
+            CLIType.Brand = Syst.Var:gcBrand AND
             CLIType.CLIType = MsRequest.ReqCParam2:
 
       IF CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} THEN RETURN TRUE. 
@@ -175,7 +174,7 @@ FUNCTION fHasPendingSTCToNonAddLine RETURNS LOGICAL
             MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
             LOOKUP(STRING(MsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0,
       FIRST CLIType NO-LOCK WHERE
-            CLIType.Brand = gcBrand AND
+            CLIType.Brand = Syst.Var:gcBrand AND
             CLIType.CLIType = (IF MsRequest.ReqCParam5 > ""
                                THEN MsRequest.ReqCParam5
                                ELSE MsRequest.ReqCParam2):
@@ -188,7 +187,7 @@ FUNCTION fHasPendingSTCToNonAddLine RETURNS LOGICAL
             MsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE} AND
             LOOKUP(STRING(MsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0,
       FIRST CLIType NO-LOCK WHERE
-            CLIType.Brand = gcBrand AND
+            CLIType.Brand = Syst.Var:gcBrand AND
             CLIType.CLIType = MsRequest.ReqCParam2:
 
       IF CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN}    OR 
@@ -210,7 +209,7 @@ FUNCTION fCancelPendingSTCToAddLine RETURNS LOGICAL
              MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
              LOOKUP(STRING(MsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0,
        FIRST CLIType NO-LOCK WHERE
-             CLIType.Brand = gcBrand AND
+             CLIType.Brand = Syst.Var:gcBrand AND
              CLIType.CLIType = (IF MsRequest.ReqCParam5 > ""
                                 THEN MsRequest.ReqCParam5
                                 ELSE MsRequest.ReqCParam2):
@@ -225,7 +224,7 @@ FUNCTION fCancelPendingSTCToAddLine RETURNS LOGICAL
              MsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE} AND
              LOOKUP(STRING(MsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0,
        FIRST CLIType NO-LOCK WHERE
-             CLIType.Brand = gcBrand AND
+             CLIType.Brand = Syst.Var:gcBrand AND
              CLIType.CLIType = MsRequest.ReqCParam2:
       IF CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN 
          fChangeReqStatus(MsRequest.Msrequest,
@@ -248,12 +247,12 @@ FUNCTION fIsMainLineOrderPending RETURNS LOGICAL
    DEF BUFFER CLIType FOR CLIType.
 
    FOR EACH OrderCustomer NO-LOCK WHERE   
-            OrderCustomer.Brand      EQ gcBrand AND 
+            OrderCustomer.Brand      EQ Syst.Var:gcBrand AND 
             OrderCustomer.CustId     EQ pcPersonId AND
             OrderCustomer.CustIdType EQ pcIdType AND
             OrderCustomer.RowType    EQ 1,
       EACH  Order NO-LOCK WHERE
-            Order.Brand              EQ gcBrand AND
+            Order.Brand              EQ Syst.Var:gcBrand AND
             Order.orderid            EQ OrderCustomer.Orderid AND
             Order.OrderType          NE {&ORDER_TYPE_RENEWAL} AND 
             Order.OrderType          NE {&ORDER_TYPE_STC} AND 
@@ -265,7 +264,7 @@ FUNCTION fIsMainLineOrderPending RETURNS LOGICAL
 
       IF iiExcludeOrderID > 0 AND Order.OrderID EQ iiExcludeOrderID THEN NEXT.
       IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                        CLIType.Brand = gcBrand AND
+                        CLIType.Brand = Syst.Var:gcBrand AND
                         CLIType.CLIType = OrderAction.ItemKey AND
                         CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) THEN RETURN TRUE.
    END.
@@ -293,30 +292,31 @@ FUNCTION fTermAdditionalSim RETURNS LOGICAL
 
    IF icSource EQ {&REQUEST_SOURCE_STC} OR 
       icSource EQ {&REQUEST_SOURCE_BTC} THEN DO:
-      lvdaSecSIMTermDate = fLastDayofMonth(idaTermDate).
+      lvdaSecSIMTermDate = Func.Common:mLastDayOfMonth(idaTermDate).
 
       IF DAY(idaTermDate) <> 1 THEN
          ASSIGN lvdaSecSIMTermDate = lvdaSecSIMTermDate + 1
-                lvdaSecSIMTermDate = fLastDayOfMonth(lvdaSecSIMTermDate).
+                lvdaSecSIMTermDate = Func.Common:mLastDayOfMonth(lvdaSecSIMTermDate).
 
-      lvdeSecSIMTermStamp = fMake2Dt(lvdaSecSIMTermDate,86399).          
+      lvdeSecSIMTermStamp = Func.Common:mMake2DT(lvdaSecSIMTermDate,86399).          
    END.
    ELSE IF icSource EQ {&REQUEST_SOURCE_ACC} THEN DO:
       IF DAY(idaTermDate) EQ 1 THEN 
-         lvdaSecSIMTermDate = fLastDayOfMonth(idaTermDate).
+         lvdaSecSIMTermDate = Func.Common:mLastDayOfMonth(idaTermDate).
       ELSE ASSIGN
          lvdaSecSIMTermDate  = ADD-INTERVAL(idaTermDate,1,"months")
-         lvdaSecSIMTermDate  = fLastDayOfMonth(lvdaSecSIMTermDate).
+         lvdaSecSIMTermDate  = Func.Common:mLastDayOfMonth(lvdaSecSIMTermDate).
 
-      lvdeSecSIMTermStamp = fMake2Dt(lvdaSecSIMTermDate,86399).
+      lvdeSecSIMTermStamp = Func.Common:mMake2DT(lvdaSecSIMTermDate,86399).
    END.
    ELSE
       ASSIGN lvdaSecSIMTermDate  = ADD-INTERVAL(idaTermDate,1,"months")
-             lvdaSecSIMTermDate  = fLastDayOfMonth(lvdaSecSIMTermDate)
-             lvdeSecSIMTermStamp = fMake2Dt(lvdaSecSIMTermDate,86399).
+             lvdaSecSIMTermDate  = Func.Common:mLastDayOfMonth(lvdaSecSIMTermDate)
+             lvdeSecSIMTermStamp = Func.Common:mMake2DT(lvdaSecSIMTermDate,86399).
 
    fInitialiseValues(iiTermReason,
                      fIsYoigoCLI(icCLI),
+                     fIsMasmovilCLI(icCLI),
                      OUTPUT lviMsisdnStat,
                      OUTPUT lviSimStat,
                      OUTPUT lviQuarTime).
@@ -331,13 +331,12 @@ FUNCTION fTermAdditionalSim RETURNS LOGICAL
                        "", /* out oper. */
                        STRING(iiTermReason),
                        icSource,
-                       katun,
+                       Syst.Var:katun,
                        iiOrigRequest, /* orig. request */
                        {&TERMINATION_TYPE_FULL},
                        OUTPUT lvcError).
    IF lviRequest EQ 0 THEN
-      DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                       "MobSub",
+      Func.Common:mWriteMemo("MobSub",
                        STRING(iiMsSeq),
                        iiCustNum,
                        "Multi SIM termination failed",
@@ -359,29 +358,30 @@ FUNCTION fAdditionalSimTermination RETURNS LOGICAL
    DEFINE VARIABLE lcError AS CHARACTER NO-UNDO.
    
    FIND FIRST MobSub NO-LOCK WHERE 
-              MobSub.brand = gcBrand AND 
+              MobSub.brand = Syst.Var:gcBrand AND 
               MobSub.MsSeq = iiMsSeq NO-ERROR.
           
    EMPTY TEMP-TABLE tt_AdditionalSIM NO-ERROR.
           
    IF NOT CAN-FIND(
           FIRST CLIType NO-LOCK WHERE
-                CLIType.Brand = gcBrand AND
+                CLIType.Brand = Syst.Var:gcBrand AND
                 CLIType.CLIType = (IF MobSub.TariffBundle > ""
                                       THEN MobSub.TariffBundle
                                    ELSE MobSub.CLIType) AND
                 CLIType.LineType = {&CLITYPE_LINETYPE_ADDITIONAL}) THEN RETURN FALSE.
                        
    FOR EACH lbMobSub NO-LOCK WHERE
-            lbMobSub.Brand   = gcBrand        AND
+            lbMobSub.Brand   = Syst.Var:gcBrand        AND
             lbMobSub.InvCust = Mobsub.CustNum AND
             lbMobSub.PayType = FALSE,
       FIRST CLitype NO-LOCK WHERE
-            CLitype.Brand   = gcBrand                         AND
+            CLitype.Brand   = Syst.Var:gcBrand                         AND
             CLitype.CLIType = (IF lbMobsub.TariffBundle > ""
                                   THEN lbMobsub.TariffBundle
                                ELSE lbMobsub.CLIType)         AND
-            CLIType.LineType > 0:
+            (CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
+             CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL}):
                
       IF CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
          fHasPendingSTCToMainLine(lbMobSub.Msseq)     THEN DO:
@@ -439,13 +439,13 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
    DEFINE BUFFER bCLIType  FOR CLIType.
 
    FIND MsRequest NO-LOCK WHERE 
-        MsRequest.Brand     = gcBrand     AND 
+        MsRequest.Brand     = Syst.Var:gcBrand     AND 
         MsRequest.MsRequest = iiMsRequest NO-ERROR. 
    
    IF NOT AVAILABLE MsRequest THEN RETURN FALSE.
                 
    FIND FIRST MobSub NO-LOCK WHERE 
-              MobSub.brand = gcBrand AND 
+              MobSub.brand = Syst.Var:gcBrand AND 
               MobSub.MsSeq = MsRequest.MsSeq NO-ERROR.
    
    IF NOT AVAIL Mobsub THEN RETURN FALSE.
@@ -455,7 +455,7 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
    /* In case of STC_FINAL, the subs.type is already changed */
    IF icTermReason NE "STC_FINAL" THEN DO:
       FIND FIRST CLIType NO-LOCK WHERE
-                 CLIType.Brand   = gcBrand             AND
+                 CLIType.Brand   = Syst.Var:gcBrand             AND
                  CLIType.CLIType = MobSub.TariffBundle NO-ERROR.
       IF NOT AVAIL CLIType OR
                    CLIType.LineType NE {&CLITYPE_LINETYPE_MAIN}
@@ -464,16 +464,17 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
    
    MOBSUB_LOOP:
    FOR EACH lbMobSub NO-LOCK WHERE
-            lbMobSub.Brand   = gcBrand        AND
+            lbMobSub.Brand   = Syst.Var:gcBrand        AND
             lbMobSub.InvCust = Mobsub.CustNum AND
             lbMobSub.PayType = FALSE          AND
             lbMobSub.MsSeq  NE Mobsub.MsSeq,
       FIRST CLIType NO-LOCK WHERE
-            CLIType.Brand = gcBrand AND
+            CLIType.Brand = Syst.Var:gcBrand AND
             CLIType.CLIType = (IF lbMobSub.TariffBundle > "" 
                                   THEN lbMobSub.TariffBundle
                                ELSE lbMobSub.CLIType) AND
-            CLIType.LineType > 0:
+           (CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
+            CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL}):
       
       /* check main line existence */
       IF CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} THEN DO:
@@ -481,10 +482,10 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
          FOR EACH bMsRequest NO-LOCK WHERE
                   bMsRequest.MsSeq = lbMobSub.msseq AND
                   bMsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
-                  bMsRequest.ActStamp <= fMakeTS() AND
+                  bMsRequest.ActStamp <= Func.Common:mMakeTS() AND
           LOOKUP(STRING(bMsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0,
             FIRST bCLIType NO-LOCK WHERE
-                  bCLIType.Brand = gcBrand AND
+                  bCLIType.Brand = Syst.Var:gcBrand AND
                   bCLIType.CLIType = (IF bMsRequest.ReqCParam5 > ""
                                      THEN bMsRequest.ReqCParam5
                                      ELSE bMsRequest.ReqCParam2):
@@ -495,10 +496,10 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
          FOR EACH bMsRequest NO-LOCK WHERE
                   bMsRequest.MsSeq = lbMobSub.MsSeq AND
                   bMsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE} AND
-                  bMsRequest.ActStamp <= fMakeTS() AND
+                  bMsRequest.ActStamp <= Func.Common:mMakeTS() AND
           LOOKUP(STRING(bMsRequest.ReqStatus), {&REQ_INACTIVE_STATUSES}) = 0,
             FIRST bCLIType NO-LOCK WHERE
-                  bCLIType.Brand = gcBrand AND
+                  bCLIType.Brand = Syst.Var:gcBrand AND
                   bCLIType.CLIType = bMsRequest.ReqCParam2:
             IF bCLIType.LineType NE {&CLITYPE_LINETYPE_MAIN} THEN
                NEXT MOBSUB_LOOP.
@@ -506,7 +507,7 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
 
          IF CAN-FIND (FIRST bMsRequest WHERE
                 bMsRequest.MsSeq = lbMobSub.MsSeq AND
-                bMsRequest.ActStamp <= fMakeTS() AND
+                bMsRequest.ActStamp <= Func.Common:mMakeTS() AND
                 MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
                 LOOKUP(STRING(bMsRequest.ReqStatus),
                        {&REQ_INACTIVE_STATUSES}) = 0) THEN NEXT MOBSUB_LOOP.
@@ -547,7 +548,7 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
                           OUTPUT ldeSMSStamp).
       
    FIND FIRST CLIType NO-LOCK WHERE 
-              CLIType.Brand   = gcBrand AND
+              CLIType.Brand   = Syst.Var:gcBrand AND
               CLIType.CLIType = "CONT9" NO-ERROR.
         
    FOR EACH tt_AdditionalSIM NO-LOCK:
@@ -581,8 +582,7 @@ FUNCTION fAdditionalLineSTC RETURNS LOGICAL
                                    OUTPUT lcError).
 
       IF oiRequest = 0 THEN DO:
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "MsRequest",
+         Func.Common:mWriteMemo("MsRequest",
                           STRING(MsRequest.MsRequest),
                           MsRequest.custnum,
                           "Additional line STC failed",
@@ -634,7 +634,7 @@ FUNCTION fAddLineSTCCancellation RETURN LOGICAL
    DEFINE BUFFER bMsRequest FOR MsRequest.
 
    FOR EACH bMsRequest NO-LOCK WHERE
-            bMsRequest.Brand       = gcBrand                                  AND
+            bMsRequest.Brand       = Syst.Var:gcBrand                                  AND
             bMsRequest.ReqType     = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}      AND
             bMsrequest.Custnum     = iiCustnum                                AND
             bMsRequest.OrigRequest = iiMsRequest                              AND
@@ -662,18 +662,18 @@ FUNCTION fNonAddLineSTCCancellationToAddLineSTC RETURN LOGICAL
    DEF VAR lcError     AS CHAR NO-UNDO.    
 
    FIND FIRST MsRequest NO-LOCK WHERE 
-              MsRequest.Brand     = gcBrand     AND 
+              MsRequest.Brand     = Syst.Var:gcBrand     AND 
               MsRequest.MsRequest = iiMsRequest NO-ERROR.   
    
    FIND FIRST MobSub NO-LOCK WHERE 
-              MobSub.Brand   = gcBrand           AND
+              MobSub.Brand   = Syst.Var:gcBrand           AND
               MobSub.MsSeq   = MsRequest.MsSeq   AND 
               MobSub.InvCust = MsRequest.CustNum AND
               MobSub.PayType = FALSE             NO-ERROR.
   
    IF AVAIL MobSub THEN 
       FIND FIRST CLIType NO-LOCK WHERE
-                 CLIType.Brand    = gcBrand                        AND
+                 CLIType.Brand    = Syst.Var:gcBrand                        AND
                  CLIType.CLIType  = (IF Mobsub.TariffBundle > ""
                                        THEN Mobsub.TariffBundle
                                      ELSE Mobsub.CLIType)          AND
@@ -685,15 +685,16 @@ FUNCTION fNonAddLineSTCCancellationToAddLineSTC RETURN LOGICAL
 
       MAINLINE:
       FOR EACH lbMobSub NO-LOCK WHERE
-               lbMobSub.Brand   = gcBrand           AND
+               lbMobSub.Brand   = Syst.Var:gcBrand           AND
                lbMobSub.InvCust = MsRequest.CustNum AND
                lbMobSub.PayType = FALSE,
          FIRST lbCLIType NO-LOCK WHERE
-               lbCLIType.Brand   = gcBrand                         AND
+               lbCLIType.Brand   = Syst.Var:gcBrand                         AND
                lbCLIType.CLIType = (IF lbMobsub.TariffBundle > ""
                                        THEN lbMobsub.TariffBundle
                                     ELSE lbMobsub.CLIType)         AND
-               lbCLIType.LineType > 0:
+              (lbCLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
+               lbCLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL}):
 
          IF lbCLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} THEN DO:
             llgMainLine = YES.
@@ -702,7 +703,7 @@ FUNCTION fNonAddLineSTCCancellationToAddLineSTC RETURN LOGICAL
       END.
 
       FIND FIRST bCLIType NO-LOCK WHERE
-                 bCLIType.Brand   = gcBrand AND
+                 bCLIType.Brand   = Syst.Var:gcBrand AND
                  bCLIType.CLIType = "CONT9" NO-ERROR.
 
       IF AVAIL bCLIType AND NOT llgMainLine THEN
@@ -710,7 +711,7 @@ FUNCTION fNonAddLineSTCCancellationToAddLineSTC RETURN LOGICAL
                           bCLIType.CLIType,
                           "",   /* lcBundleID */
                           "",   /* lcBankAcc = bank code validation is already done in newton */
-                          fMake2Dt(TODAY + 1,0),
+                          Func.Common:mMake2DT(TODAY + 1,0),
                           0,   /* liCreditcheck 0 = Credit check ok */
                           0, /* extend contract 0=no extend_term_contract */
                           ""    /* pcSalesman */,
@@ -729,5 +730,30 @@ FUNCTION fNonAddLineSTCCancellationToAddLineSTC RETURN LOGICAL
    RETURN TRUE.
 
 END FUNCTION.   
+
+/* Main line termination makes additional line termination request in future.
+   Remove additional line termination when STC done. */
+FUNCTION fRemoveAdditionalLineTerminationReq RETURNS LOGICAL
+   (INPUT iiMsSeq AS INT):
+
+   DEF BUFFER MsRequest FOR MsRequest.
+      
+   FIND FIRST MsRequest WHERE
+              MsRequest.MsSeq      EQ iiMsseq AND
+              MsRequest.ReqType    EQ {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
+              MsRequest.ReqStatus  EQ {&REQUEST_STATUS_NEW} AND
+              MsRequest.ReqCParam3 EQ 
+              STRING({&SUBSCRIPTION_TERM_REASON_ADDITIONALSIM}) 
+              NO-LOCK NO-ERROR.
+   IF AVAIL MsRequest THEN DO:
+      fChangeReqStatus(MsRequest.Msrequest,
+                       4,
+                       "Additional line termination cancelled by STC").
+      RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
 
 &ENDIF

@@ -14,7 +14,6 @@
 &THEN
 &GLOBAL-DEFINE fctchange YES
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/cparam2.i}
 {Func/fctserval.i}
 {Func/matrix.i}
@@ -27,6 +26,7 @@
 {Func/stc_extension.i}
 {Func/istc.i}
 {Func/main_add_lines.i}
+{Func/profunc.i}
 
 /* ount number of requests */
 FUNCTION fCountRequest RETURNS INTEGER
@@ -105,12 +105,12 @@ FUNCTION fChangePerMonth RETURNS INTEGER
    DEF VAR ldFromDate AS DEC  NO-UNDO. 
    
    FOR EACH DayCampaign WHERE
-            DayCampaign.Brand = gcBrand AND
+            DayCampaign.Brand = Syst.Var:gcBrand AND
             DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND
             DayCampaign.TermFeeModel NE "" AND
             DayCampaign.TermFeeCalc > 0 NO-LOCK:
       IF CAN-FIND(FIRST DCCLI WHERE
-                        DCCLI.Brand = gcBrand AND
+                        DCCLI.Brand = Syst.Var:gcBrand AND
                         DCCLI.DCEvent = DayCampaign.DCEvent AND
                         DCCLI.MsSeq = iiMsSeq AND
                         DCCLI.ValidFrom <= idtActDate AND
@@ -157,7 +157,7 @@ FUNCTION fIsSTCAllowed RETURNS LOGIC
              LOOKUP(STRING(bBTC.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0 AND
              bBTC.ReqCparam5 > "":
       IF LOOKUP(bBTC.ReqCparam1,lcIPLContracts) > 0 OR
-         fMatrixAnalyse(gcBrand,
+         fMatrixAnalyse(Syst.Var:gcBrand,
                         "BTC-DENY",
                         "SubsTypeFrom;SubsTypeTo",
                         icOldCLIType + ";" + icNewCLIType,
@@ -193,9 +193,9 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
    DEFINE BUFFER NewCLIType  FOR CLIType.
    DEF BUFFER MNPProcess FOR MNPProcess.
 
-   IF ideSTCtamp EQ ? THEN ideSTCtamp = fMakeTS().
+   IF ideSTCtamp EQ ? THEN ideSTCtamp = Func.Common:mMakeTS().
 
-   fSplitTS(ideSTCtamp, OUTPUT ldaSTCDate, OUTPUT liTime). 
+   Func.Common:mSplitTS(ideSTCtamp, OUTPUT ldaSTCDate, OUTPUT liTime). 
 
    FIND FIRST mobsub NO-LOCK WHERE
               mobsub.msseq = iiMsSeq NO-ERROR.
@@ -203,10 +203,11 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
       ocError = "Subscription not found".
       RETURN FALSE.
    eND.
-   
+   FIND FIRST Customer WHERE
+              Customer.custnum EQ Mobsub.custnum NO-LOCK NO-ERROR.           
    /* 1 */
    FIND FIRST NewCliType WHERE
-              NewCLIType.Brand = gcBrand AND
+              NewCLIType.Brand = Syst.Var:gcBrand AND
               NewCLIType.CLIType = icNewCLIType NO-LOCK NO-ERROR.
    IF NOT AVAIL NewCLIType THEN DO:
       ocError = "Unknown or missing clitype!".
@@ -220,14 +221,24 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
       ocError = "Function not allowed due to business rules!".
       RETURN FALSE.
    END.
-
-   IF fIsConvergenceTariff(NewCLIType.Clitype) AND
-      (fIsConvergenceTariff(MobSub.CLItype) EQ FALSE OR
-       NOT fCheckConvergentSTCCompability(NewCLIType.CLIType,
-                                          MobSub.clitype)) AND
-      piOrderID EQ 0 THEN DO:
-      ocError = "Function not allowed due to business rules!".
-      RETURN FALSE.
+ 
+   IF AVAIL Customer AND fIsPro(Customer.category) THEN DO:
+      IF fValidateProSTC(MobSub.Custnum,
+                         MobSub.CliType,
+                         NewCLIType.Clitype) > "" THEN DO:
+         ocError = "Function not allowed due to business rules!".
+         RETURN FALSE.
+      END. 
+   END.
+   ELSE DO:
+      IF fIsConvergenceTariff(NewCLIType.Clitype) AND
+         (fIsConvergenceTariff(MobSub.CLItype) EQ FALSE OR
+          NOT fCheckConvergentSTCCompability(NewCLIType.CLIType,
+                                             MobSub.clitype)) AND
+         piOrderID EQ 0 THEN DO:
+         ocError = "Function not allowed due to business rules!".
+         RETURN FALSE.
+      END.
    END.
 
    /* partial convergent to mobile */
@@ -269,7 +280,7 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
       IF AVAIL MNPProcess THEN DO:
 
          IF 1 > fMNPPeriods(
-            input fMakeTS(),
+            input Func.Common:mMakeTS(),
             input MNPProcess.PortingTime,
             INPUT 0,
             OUTPUT ldaDueDate) THEN DO: 
@@ -322,12 +333,12 @@ FUNCTION fChkSTCPerContr RETURNS LOGICAL:
           
    IF lcTiePeriod = "1" THEN
       FOR EACH DayCampaign WHERE
-               DayCampaign.Brand = gcBrand AND
+               DayCampaign.Brand = Syst.Var:gcBrand AND
                DayCampaign.DCType = {&DCTYPE_DISCOUNT} AND
                DayCampaign.TermFeeModel NE "" AND
                DayCampaign.TermFeeCalc > 0 NO-LOCK:
          FIND FIRST DCCLI WHERE
-                    DCCLI.Brand = gcBrand AND
+                    DCCLI.Brand = Syst.Var:gcBrand AND
                     DCCLI.DCEvent = DayCampaign.DCEvent AND
                     DCCLI.MsSeq = MobSub.MsSeq AND
                     DCCLI.ValidFrom <= TODAY AND
@@ -358,7 +369,7 @@ FUNCTION fValidateNewCliType RETURNS INT
 
    /* 1 */
    FIND FIRST CLIType WHERE 
-              CliType.Brand   = gcBrand AND 
+              CliType.Brand   = Syst.Var:gcBrand AND 
               CLIType.Clitype = icNewCliType 
    NO-LOCK NO-ERROR.
    IF NOT AVAIL CLIType THEN DO:
@@ -369,7 +380,7 @@ FUNCTION fValidateNewCliType RETURNS INT
    IF icDataBundleId > "" THEN DO:
 
       FIND FIRST bTariffType WHERE
-                 bTariffType.Brand   = gcBrand AND 
+                 bTariffType.Brand   = Syst.Var:gcBrand AND 
                  bTariffType.Clitype = icDataBundleId 
       NO-LOCK NO-ERROR.
       IF NOT AVAIL bTariffType THEN DO:
@@ -389,7 +400,7 @@ FUNCTION fValidateNewCliType RETURNS INT
    /* 3 */
    FIND FIRST bCTAgrCust WHERE 
               bCTAgrCust.CustNum = Mobsub.AgrCust NO-LOCK NO-ERROR.
-   IF fMatrixAnalyse( INPUT gcBrand,
+   IF fMatrixAnalyse( INPUT Syst.Var:gcBrand,
                         "STC-IDType",
                         "ID;SubsTypeFrom;SubsTypeTo",
                         bCTAgrCust.CustIDType + ";" +
@@ -407,12 +418,12 @@ FUNCTION fValidateNewCliType RETURNS INT
       /* If main line is not active, don't allow STC */
       MOBSUB_LOOP:
       FOR EACH lbMobSub NO-LOCK WHERE
-               lbMobSub.Brand   = gcBrand AND
+               lbMobSub.Brand   = Syst.Var:gcBrand AND
                lbMobSub.InvCust = Mobsub.CustNum AND
                lbMobSub.PayType = FALSE AND
                lbMobSub.MsSeq NE Mobsub.MsSeq,
          FIRST bTariffType NO-LOCK WHERE
-               bTariffType.Brand = gcBrand AND
+               bTariffType.Brand = Syst.Var:gcBrand AND
                bTariffType.CLIType = lbMobSub.TariffBundle AND
                bTariffType.LineType = {&CLITYPE_LINETYPE_MAIN}:
 
@@ -445,7 +456,7 @@ FUNCTION fValidateNewCliType RETURNS INT
       ELSE IF icDataBundleId > "" THEN DO:
 
          FIND DayCampaign NO-LOCK WHERE
-              DayCampaign.Brand = gcBrand AND
+              DayCampaign.Brand = Syst.Var:gcBrand AND
               DayCampaign.DcEvent = icDataBundleId NO-ERROR.
          IF NOT AVAIL DayCampaign OR
                       DayCampaign.StatusCode NE {&DAYCAMPAIGN_STATUSCODE_ACTIVE} THEN DO:
@@ -470,7 +481,7 @@ FUNCTION fGetCLITypeAtTermDiscount RETURNS CHAR
 
    DEF BUFFER MsOwner FOR MsOwner.
    
-   ASSIGN ldTS = fHMS2TS(pbDCCLI.ValidFrom,"23:59:59")
+   ASSIGN ldTS = Func.Common:mHMS2TS(pbDCCLI.ValidFrom,"23:59:59")
           lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
    
    FIND FIRST MsOwner WHERE

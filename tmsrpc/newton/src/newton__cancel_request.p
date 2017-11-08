@@ -17,10 +17,18 @@
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
+{Syst/commpaa.i}
+Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
-
+{Func/cparam2.i}
+{Func/msreqfunc.i}
+{Syst/eventval.i}
+{Func/fsendsms.i}
+{Func/fsubstermreq.i}
+{Func/main_add_lines.i}
 
 /* Input parameters */
+DEF VAR pcTenant    AS CHAR NO-UNDO.
 DEF VAR piReference AS INT NO-UNDO.
 DEF VAR pcMemo AS CHAR NO-UNDO.
 DEF VAR pcReqType AS CHAR NO-UNDO.
@@ -41,6 +49,7 @@ DEF VAR ldaSecSIMTermDate  AS DATE  NO-UNDO.
 DEF VAR liSecSIMTermTime   AS INT   NO-UNDO.
 DEF VAR ldeSecSIMTermStamp AS DEC   NO-UNDO.
 DEF VAR lcBONOContracts    AS CHAR  NO-UNDO.
+DEF VAR lcVoiceBundles     AS CHAR  NO-UNDO.
 DEF VAR lcIPLContracts     AS CHAR  NO-UNDO.
 
 DEF BUFFER lbMobSub        FOR Mobsub.
@@ -53,16 +62,25 @@ DEF TEMP-TABLE ttAdditionalSIM NO-UNDO
 /* Output parameters */
 DEF VAR liReqCount AS INT INITIAL 0 NO-UNDO.
 
-top_array = validate_request(param_toplevel_id, "int,string,string,[string],[boolean]").
+top_array = validate_request(param_toplevel_id, "string,int,string,string,[string],[boolean]").
 IF top_array EQ ? THEN RETURN.
-piReference = get_int(param_toplevel_id, "0").
-pcMemo = "Newton user " + get_string(param_toplevel_id, "1") + " canceled".
-pcReqType = get_string(param_toplevel_id, "2").
+
+pcTenant = get_string(param_toplevel_id, "0").
+piReference = get_int(param_toplevel_id, "1").
+pcMemo = "Newton user " + get_string(param_toplevel_id, "2") + " canceled".
+pcReqType = get_string(param_toplevel_id, "3").
+
 IF pcReqType EQ "bundle_termination" THEN
-    pcBundleName = get_string(param_toplevel_id, "3").
+    pcBundleName = get_string(param_toplevel_id, "4").
+
 IF NUM-ENTRIES(top_array) >= 5 THEN
-   plConfirm = get_bool(param_toplevel_id, "4").
+   plConfirm = get_bool(param_toplevel_id, "5").
+
+Syst.Var:katun = "VISTA_" + get_string(param_toplevel_id, "2").
+
 IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 CASE pcReqType:
    WHEN  "subscription_type" THEN liReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE}.
@@ -76,18 +94,9 @@ CASE pcReqType:
    OTHERWISE RETURN appl_err("Unknown request type " + pcReqType).
 END.
 
-{Syst/commpaa.i}
-katun   = "VISTA_" + get_string(param_toplevel_id, "1").
-gcBrand = "1".
-{Func/cparam2.i}
-{Func/msreqfunc.i}
-{Syst/eventval.i}
-{Func/fsendsms.i}
-{Func/fsubstermreq.i}
-{Func/main_add_lines.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
 
    {Func/lib/eventlog.i}
 
@@ -99,7 +108,7 @@ END.
 
 IF liReqType = {&REQTYPE_ICC_CHANGE} THEN DO:
     FOR EACH MsRequest NO-LOCK
-    WHERE MsRequest.Brand     = gcBrand 
+    WHERE MsRequest.Brand     = Syst.Var:gcBrand 
       AND MsRequest.ReqType   = liReqType
       AND MsRequest.msseq     = piReference
       AND (MsRequest.ReqStatus = 0
@@ -124,7 +133,7 @@ IF liReqType = {&REQTYPE_ICC_CHANGE} THEN DO:
     END.
 END.
 ELSE FOR EACH MsRequest NO-LOCK WHERE 
-         MsRequest.Brand = gcBrand AND
+         MsRequest.Brand = Syst.Var:gcBrand AND
          MsRequest.MsSeq = piReference AND
          MsRequest.ReqType = liReqType USE-INDEX MsSeq:
  
@@ -132,7 +141,7 @@ ELSE FOR EACH MsRequest NO-LOCK WHERE
    CASE pcReqType:
       WHEN "subscription_type" THEN
          IF fChkReqStatusChange(4) EQ TRUE AND 
-            MsRequest.ActStamp > fMakeTs() THEN DO:
+            MsRequest.ActStamp > Func.Common:mMakeTS() THEN DO:
             /* cancel possible renewal pos stc order */
             FIND FIRST Order WHERE
                Order.MsSeq = MsRequest.MsSeq AND
@@ -179,13 +188,13 @@ ELSE FOR EACH MsRequest NO-LOCK WHERE
             IF AVAIL MobSub AND MobSub.MultiSIMId > 0 AND
                MobSub.MultiSimType = {&MULTISIMTYPE_SECONDARY} THEN DO:
                FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-                          lbMobSub.Brand  = gcBrand AND
+                          lbMobSub.Brand  = Syst.Var:gcBrand AND
                           lbMobSub.MultiSimID = MobSub.MultiSimID AND
                           lbMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
                           lbMobSub.Custnum = MobSub.Custnum NO-ERROR.
                IF NOT AVAIL lbMobSub THEN DO:
                   FIND FIRST TermMobSub NO-LOCK USE-INDEX MultiSIM WHERE
-                             TermMobSub.Brand  = gcBrand AND
+                             TermMobSub.Brand  = Syst.Var:gcBrand AND
                              TermMobSub.MultiSimID = MobSub.MultiSimID AND
                              TermMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND
                              TermMobSub.Custnum = MobSub.Custnum NO-ERROR.
@@ -196,7 +205,7 @@ ELSE FOR EACH MsRequest NO-LOCK WHERE
                                 Msowner.MsSeq = TermMobsub.MsSeq
                           NO-LOCK NO-ERROR.
                      IF AVAIL Msowner THEN
-                        fSplitTS(Msowner.TSEnd,OUTPUT ldaSecSIMTermDate,
+                        Func.Common:mSplitTS(Msowner.TSEnd,OUTPUT ldaSecSIMTermDate,
                                  OUTPUT liSecSIMTermTime).
                      ELSE ldaSecSIMTermDate = TODAY.
                   END. /* ELSE DO: */
@@ -237,12 +246,16 @@ ELSE FOR EACH MsRequest NO-LOCK WHERE
          IF LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0
          THEN DO:
             ASSIGN lcIPLContracts  = fCParamC("IPL_CONTRACTS")
-                   lcBONOContracts = fCParamC("BONO_CONTRACTS").
+                   lcBONOContracts = fCParamC("BONO_CONTRACTS")
+                   lcVoiceBundles  = fCParamC("VOICE_BONO_CONTRACTS").
 
             /* BTC with Upgrade Upsell cancellation is not allowed */
-            IF MsRequest.ReqCparam5 > "" THEN DO:
+            IF MsRequest.ReqCparam5 > "" THEN 
+            DO:
                IF LOOKUP(MsRequest.ReqCParam1,lcBONOContracts) > 0 THEN
                   RETURN appl_err("BONO Upgrade BTC Cancellation is not allowed").
+               ELSE IF LOOKUP(MsRequest.ReqCParam1,lcVoiceBundles) > 0 THEN   
+                  RETURN appl_err("Voice Bundle Upgrade BTC Cancellation is not allowed").
                ELSE IF LOOKUP(MsRequest.ReqCParam1,lcIPLContracts) > 0 THEN
                   RETURN appl_err("IPL Upgrade BTC Cancellation is not allowed").
             END. /* IF MsRequest.ReqCparam5 > "" THEN DO: */
@@ -250,11 +263,14 @@ ELSE FOR EACH MsRequest NO-LOCK WHERE
             fReqStatus(4,pcMemo).
             liReqCount = liReqCount + 1.
             /* Send a SMS only for Voice BTC Cancellation */
-            IF LOOKUP(MsRequest.ReqCParam1,lcBONOContracts) > 0 AND
-               LOOKUP(MsRequest.ReqCParam2,lcBONOContracts) > 0 THEN
-               RUN pSendSMS(INPUT MsRequest.MsSeq, INPUT MsRequest.MsRequest,
-                            INPUT "BTCDeAct", INPUT 10,
-                            INPUT {&UPSELL_SMS_SENDER}, INPUT "").
+            IF (LOOKUP(MsRequest.ReqCParam1,lcBONOContracts) > 0 AND LOOKUP(MsRequest.ReqCParam2,lcBONOContracts) > 0) OR 
+               (LOOKUP(MsRequest.ReqCParam1,lcVoiceBundles ) > 0 AND LOOKUP(MsRequest.ReqCParam2,lcVoiceBundles ) > 0) THEN
+               RUN pSendSMS(INPUT MsRequest.MsSeq, 
+                            INPUT MsRequest.MsRequest,
+                            INPUT "BTCDeAct", 
+                            INPUT 10,
+                            INPUT {&UPSELL_SMS_SENDER}, 
+                            INPUT "").
 
             /* if additional line to non-additional line pending BTC is cancelled 
                and it doesn't contain any main line then STC request has to be created
@@ -281,5 +297,4 @@ add_int(response_toplevel_id, "", liReqCount).
 
 FINALLY:
    IF llDoEvent THEN fCleanEventObjects().
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

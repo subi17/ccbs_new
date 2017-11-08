@@ -5,7 +5,6 @@
    
 {Syst/commali.i}
 {Syst/eventval.i}
-{Func/timestamp.i}
 {Func/forderstamp.i}
 {Func/orderchk.i}
 {Func/orderfunc.i}
@@ -17,20 +16,21 @@ DEF INPUT PARAMETER iiOrder        AS INT NO-UNDO.
 DEF INPUT PARAMETER iiSecureOption AS INT NO-UNDO.
 DEF INPUT PARAMETER ilSilent       AS LOG NO-UNDO.
 
-DEF VAR llOk            AS LOG  NO-UNDO.
-DEF VAR lcCampaignType  AS CHAR NO-UNDO.
-DEF VAR lcRenoveSMSText AS CHAR NO-UNDO. 
-DEF VAR ldeSMSStamp     AS DEC  NO-UNDO. 
-DEF VAR lcOldStatus     AS CHAR NO-UNDO. 
-DEF VAR lcNewStatus     AS CHAR NO-UNDO. 
-DEF VAR lcError         AS CHAR NO-UNDO.
-DEF VAR llCompanyScoringNeeded AS LOG NO-UNDO. 
-DEF VAR liRequest       AS INT NO-UNDO.
+DEF VAR llOk                    AS LOG  NO-UNDO.
+DEF VAR lcCampaignType          AS CHAR NO-UNDO.
+DEF VAR lcRenoveSMSText         AS CHAR NO-UNDO. 
+DEF VAR ldeSMSStamp             AS DEC  NO-UNDO. 
+DEF VAR lcOldStatus             AS CHAR NO-UNDO. 
+DEF VAR lcNewStatus             AS CHAR NO-UNDO. 
+DEF VAR lcError                 AS CHAR NO-UNDO.
+DEF VAR llCompanyScoringNeeded  AS LOG  NO-UNDO. 
+DEF VAR liRequest               AS INT  NO-UNDO.
+DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
 
 DEF BUFFER lbOrder          FOR Order.
 
 FIND FIRST Order WHERE 
-           Order.Brand   = gcBrand AND 
+           Order.Brand   = Syst.Var:gcBrand AND 
            Order.OrderID = iiOrder NO-LOCK NO-ERROR.
 
 IF not avail order THEN DO:
@@ -87,7 +87,7 @@ END.
 lcOldStatus = Order.StatusCode.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER katun
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    
    {Func/lib/eventlog.i}
       
@@ -97,7 +97,7 @@ IF llDoEvent THEN DO:
 END.               
       
 FIND FIRST OrderCustomer WHERE
-   OrderCustomer.Brand = gcBrand AND
+   OrderCustomer.Brand = Syst.Var:gcBrand AND
    OrderCustomer.OrderId = Order.OrderId AND
    OrderCustomer.RowType = 1 NO-LOCK NO-ERROR.
 
@@ -132,7 +132,7 @@ IF Order.StatusCode EQ {&ORDER_STATUS_OFFER_SENT} THEN DO: /* shouldn't never ge
          Customer.Roles NE "inactive" NO-LOCK NO-ERROR. 
       IF AVAIL Customer THEN DO:
          FIND FIRST MobSub WHERE
-                    MobSub.Brand   = gcBrand AND
+                    MobSub.Brand   = Syst.Var:gcBrand AND
                     MobSub.AgrCust = Customer.CustNum
               NO-LOCK NO-ERROR.
          IF NOT AVAIL MobSub THEN lcNewStatus = "20".
@@ -199,8 +199,7 @@ IF ((Order.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION} AND
                                            OUTPUT lcError).
 
       IF lcError NE "" THEN 
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                          "Order",
+         Func.Common:mWriteMemo("Order",
                           STRING(Order.OrderID),
                           0,
                           "Masmovil message creation failed",
@@ -222,15 +221,14 @@ IF (Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
     Order.StatusCode EQ {&ORDER_STATUS_MORE_DOC_NEEDED} OR
     Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE}) AND
    CAN-FIND(lbOrder NO-LOCK WHERE
-            lbOrder.Brand = gcBrand AND
+            lbOrder.Brand = Syst.Var:gcBrand AND
             lbOrder.CLI = Order.CLI AND
      LOOKUP(lbOrder.statuscode,{&ORDER_INACTIVE_STATUSES}) EQ 0 AND
             lbOrder.OrderID NE Order.Orderid) THEN DO:
 
    fSetOrderStatus(Order.OrderId,"4").
 
-   DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                    "Order",
+   Func.Common:mWriteMemo("Order",
                     STRING(Order.OrderID),
                     0,
                     "Order exists with same MSISDN",
@@ -253,7 +251,7 @@ IF Order.MultiSIMId > 0 AND
    Order.MultiSIMType = {&MULTISIMTYPE_SECONDARY} THEN DO:
 
    FIND FIRST lbOrder NO-LOCK WHERE
-              lbOrder.Brand = gcBrand AND
+              lbOrder.Brand = Syst.Var:gcBrand AND
               lbOrder.MultiSIMId = Order.MultiSIMId AND
               lbOrder.MultiSImType = {&MULTISIMTYPE_PRIMARY} NO-ERROR.
    IF AVAIL lbOrder AND
@@ -265,15 +263,16 @@ ELSE IF Order.Ordertype < 2 AND
    lcOldStatus NE {&ORDER_STATUS_PENDING_MAIN_LINE} AND
    
    CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                  CLIType.Brand       = gcBrand       AND
+                  CLIType.Brand       = Syst.Var:gcBrand       AND
                   CLIType.CLIType     = Order.CLIType AND
-                  CLIType.LineType    > 0)            AND
+                 (CLIType.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
+                  CLIType.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL})) AND
    NOT CAN-FIND(FIRST OrderAction WHERE
-                     OrderAction.Brand = gcBrand AND
+                     OrderAction.Brand = Syst.Var:gcBrand AND
                      OrderAction.OrderId = Order.OrderID AND
                      OrderAction.ItemType = "BundleItem" AND
                 CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                               CLIType.Brand = gcBrand AND
+                               CLIType.Brand = Syst.Var:gcBrand AND
                                CLIType.CLIType = OrderAction.ItemKey AND
                                CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}))
                             THEN DO:
@@ -288,9 +287,9 @@ ELSE IF lcOldStatus EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} AND
    LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 AND
    Order.OrderType NE {&ORDER_TYPE_STC} AND
    Order.ICC EQ "" AND
-   NOT CAN-FIND(FIRST MsRequest NO-LOCK WHERE
-                      MsRequest.MsSeq = Order.MsSeq AND
-                      MsRequest.ReqType = {&REQTYPE_FIXED_LINE_CREATE}) THEN DO:
+   CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                  MsRequest.MsSeq = Order.MsSeq AND
+                  MsRequest.ReqType = {&REQTYPE_FIXED_LINE_CREATE}) THEN DO:
    lcNewStatus = {&ORDER_STATUS_PENDING_MOBILE_LINE}.
 END.
 ELSE IF Order.OrderType = {&ORDER_TYPE_MNP} AND
@@ -327,7 +326,7 @@ IF lcOldStatus NE {&ORDER_STATUS_PENDING_MAIN_LINE} AND
       Customer.Roles NE "inactive" NO-LOCK NO-ERROR. 
    IF AVAIL Customer THEN DO:
       FIND FIRST MobSub WHERE
-                 MobSub.Brand   = gcBrand AND
+                 MobSub.Brand   = Syst.Var:gcBrand AND
                  MobSub.AgrCust = Customer.CustNum
            NO-LOCK NO-ERROR.
       IF NOT AVAIL MobSub THEN lcNewStatus = "20".
@@ -421,30 +420,28 @@ IF llDoEvent THEN DO:
    fCleanEventObjects().
 END.
 
-/* Release pending additional lines orders, in case of pending convergent 
-   main line order is released */
+/* Release pending additional lines (OR) extra line orders, 
+   in case of pending convergent or mobile main line order is released */
 /* YTS-10832 fix, checking correct status of order */
-IF fIsConvergenceTariff(Order.CLIType) THEN DO:
-   IF lcNewStatus = {&ORDER_STATUS_NEW}  OR
-      lcNewStatus = {&ORDER_STATUS_MNP} THEN DO:
-       
-       fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
-                                       OrderCustomer.CustID) . 
-   END.
-END.
+IF lcNewStatus = {&ORDER_STATUS_NEW}                 OR
+   lcNewStatus = {&ORDER_STATUS_MNP}                 OR 
+   lcNewStatus = {&ORDER_STATUS_PENDING_MOBILE_LINE} THEN DO:
+  
+   lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").
 
-/* Additional Line with mobile only ALFMO-5  
-   Release pending additional lines orders, in case of pending 
-   main Moblie only line order is released */
-ELSE IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                 CLIType.Brand      = gcBrand  AND
-                 CLIType.CLIType    = Order.CliType AND
-                 CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) AND 
-                (lcNewStatus = {&ORDER_STATUS_NEW}  OR
-                 lcNewStatus = {&ORDER_STATUS_MNP}) THEN 
-DO:
-   fReleaseORCloseAdditionalLines (OrderCustomer.CustIdType,
-                                   OrderCustomer.CustID). 
+   IF lcExtraMainLineCLITypes                       NE "" AND 
+      LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) GT 0  AND
+      Order.MultiSimId                              NE 0  AND 
+      Order.MultiSimType                            EQ {&MULTISIMTYPE_PRIMARY} THEN  
+      fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
+                               Order.OrderId,    /* Main line Order Id  */
+                               "RELEASE").       /* Action              */
+    
+   fActionOnAdditionalLines (OrderCustomer.CustIdType,
+                             OrderCustomer.CustID,
+                             Order.CLIType,      
+                             FALSE,
+                            "RELEASE"). 
 END.
 
 RETURN "".

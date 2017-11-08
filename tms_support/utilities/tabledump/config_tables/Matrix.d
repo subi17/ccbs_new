@@ -15,38 +15,40 @@
 "1" "Bundle List" "Bundle" 56 1 1
 "1" "Bundle list" "Bundle" 91 1 1
 "1" "Convergent Bundle list" "Bundle" 112 1 2
-"1" "Convergent to Fixed STC" "CONVFIXEDSTC" 146 1 1
-"1" "Convergent to Fixed STC" "CONVFIXEDSTC" 147 1 1
-"1" "Convergent to Fixed STC" "CONVFIXEDSTC" 148 1 1
+"1" "3P to 2P STC (ADSL)" "CONVFIXEDSTC" 146 1 1
+"1" "3P to 2P STC (Fiber 50M)" "CONVFIXEDSTC" 147 1 1
+"1" "3P to 2P STC (Fiber 300M)" "CONVFIXEDSTC" 148 1 1
+"1" "3P to 2P STC (Fiber 1GB)" "CONVFIXEDSTC" 154 1 1
 "1" "denied modules" "DENIED" 18 0 1
-"1" "Per.contract usage" "PERCONTR" 22 1 1
-"1" "Per.contract usage" "PERCONTR" 25 1 3
-"1" "Per.contract usage" "PERCONTR" 46 1 4
-"1" "Per.contract usage" "PERCONTR" 47 1 5
-"1" "Per.contract usage" "PERCONTR" 72 1 6
-"1" "Per.contract usage" "PERCONTR" 27 1 9
-"1" "Per.contract usage" "PERCONTR" 33 1 10
-"1" "Per.contract usage" "PERCONTR" 26 1 11
-"1" "Per.contract usage" "PERCONTR" 31 1 12
-"1" "Per.contract usage" "PERCONTR" 38 1 14
-"1" "Per.contract usage" "PERCONTR" 44 1 15
-"1" "Per.contract usage" "PERCONTR" 49 1 16
-"1" "Per.contract usage" "PERCONTR" 51 1 17
-"1" "Per.contract usage" "PERCONTR" 59 1 18
-"1" "Per.contract usage" "PERCONTR" 61 1 19
-"1" "Per.contract usage" "PERCONTR" 63 1 20
-"1" "Per.contract usage" "PERCONTR" 65 1 21
-"1" "Per.contract usage" "PERCONTR" 75 1 22
-"1" "Per.contract usage" "PERCONTR" 80 1 23
-"1" "Per.contract usage" "PERCONTR" 82 1 24
-"1" "Per.contract usage" "PERCONTR" 84 1 25
-"1" "Per.contract usage" "PERCONTR" 85 1 26
-"1" "Per.contract usage" "PERCONTR" 89 1 27
-"1" "Per.contract usage" "PERCONTR" 93 1 28
-"1" "Per.contract usage" "PERCONTR" 97 1 29
-"1" "Per.contract usage" "PERCONTR" 99 1 30
-"1" "Per.contract usage" "PERCONTR" 101 1 31
-"1" "Per.contract usage" "PERCONTR" 103 1 32
+"1" "Cross-sell discount override" "DISCOUNT-OVERRIDE" 158 0 1
+"1" "CONT6" "PERCONTR" 22 1 1
+"1" "CONT" "PERCONTR" 25 1 3
+"1" "CONT7" "PERCONTR" 46 1 4
+"1" "CONTSx" "PERCONTR" 47 1 5
+"1" "CONT8" "PERCONTR" 72 1 6
+"1" "CONT2" "PERCONTR" 27 1 9
+"1" "GPRS" "PERCONTR" 33 1 10
+"1" "TARJRD1" "PERCONTR" 26 1 11
+"1" "PMDUB and PMDUB_UPSELL" "PERCONTR" 31 1 12
+"1" "CONTRDx" "PERCONTR" 38 1 14
+"1" "CONTFx" "PERCONTR" 44 1 15
+"1" "CONTx" "PERCONTR" 49 1 16
+"1" "HSPA_ROAM_EU" "PERCONTR" 51 1 17
+"1" "MDUBx and DATAx" "PERCONTR" 59 1 18
+"1" "CONTDx" "PERCONTR" 61 1 19
+"1" "TARJ6" "PERCONTR" 63 1 20
+"1" "CONTM" "PERCONTR" 65 1 21
+"1" "CONT8" "PERCONTR" 75 1 22
+"1" "DSS2 and DSS2_UPSELL" "PERCONTR" 80 1 23
+"1" "CONTM2" "PERCONTR" 82 1 24
+"1" "CONTFF" "PERCONTR" 84 1 25
+"1" "CONTSFx" "PERCONTR" 85 1 26
+"1" "TARJ7" "PERCONTR" 89 1 27
+"1" "CONT9" "PERCONTR" 93 1 28
+"1" "CONT15" "PERCONTR" 97 1 29
+"1" "CONT24" "PERCONTR" 99 1 30
+"1" "TARJ9" "PERCONTR" 101 1 31
+"1" "CONT23" "PERCONTR" 103 1 32
 "1" "Convergent 2GB mobile" "PERCONTR" 107 1 33
 "1" "Convergent CONTDSL" "PERCONTR" 108 1 34
 "1" "Convergent CONTFH50" "PERCONTR" 109 1 35
@@ -55,7 +57,7 @@
 "1" "Convergent 20GB mobile" "PERCONTR" 113 1 38
 "1" "Convergent 1.2GB  mobile" "PERCONTR" 114 1 39
 "1" "Convergent 5GB  mobile" "PERCONTR" 115 1 40
-"1" "Per.contract usage" "PERCONTR" 117 1 41
+"1" "CONT25" "PERCONTR" 117 1 41
 "1" "CONT26" "PERCONTR" 119 1 42
 "1" "CONT10" "PERCONTR" 120 1 43
 "1" "CONTDSL59" "PERCONTR" 121 1 44
@@ -75,5 +77,11 @@
 "1" "TARJ11" "PERCONTR" 136 1 58
 "1" "TARJ12" "PERCONTR" 137 1 59
 "1" "TARJ13" "PERCONTR" 145 1 60
+"1" "CONT28" "PERCONTR" 151 1 61
+"1" "CONTFH89_1000" "PERCONTR" 152 1 62
+"1" "CONTFH65_1000" "PERCONTR" 153 1 63
+"1" "CONTFH82_1000" "PERCONTR" 155 1 64
+"1" "CONTFH76_1000" "PERCONTR" 156 1 65
+"1" "CONTFH69_1000" "PERCONTR" 157 1 66
 "1" "ST CHANGE" "STC-IDType" 1 0 1
 "1" "ST CHANGE" "STC-IDType" 3 0 2

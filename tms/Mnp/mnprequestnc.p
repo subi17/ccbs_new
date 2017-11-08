@@ -8,23 +8,23 @@
 ----------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Mnp/mnp.i}
 {Mnp/mnpmessages.i}
 {Syst/tmsconst.i}
-{Func/date.i}
 {Mm/fbundle.i}
+{Func/multitenantfunc.i}
 
 DEFINE INPUT PARAMETER iiOrderId AS INTEGER NO-UNDO.
 
-DEFINE VARIABLE lcXML AS CHAR NO-UNDO.
+DEFINE VARIABLE lcXML         AS CHAR      NO-UNDO.
 DEFINE VARIABLE liSeq         AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcFormRequest AS CHARACTER NO-UNDO.
-DEFINE VARIABLE ldChgDate AS DATE NO-UNDO. 
-DEFINE VARIABLE ldeToday AS DEC NO-UNDO. 
-DEFINE VARIABLE ldeChgStamp AS DECIMAL NO-UNDO.
-DEFINE VARIABLE lcProduct AS CHAR NO-UNDO. 
-DEFINE VARIABLE lcTariffType AS CHAR NO-UNDO.
+DEFINE VARIABLE ldChgDate     AS DATE      NO-UNDO. 
+DEFINE VARIABLE ldeToday      AS DEC       NO-UNDO. 
+DEFINE VARIABLE ldeChgStamp   AS DECIMAL   NO-UNDO.
+DEFINE VARIABLE lcProduct     AS CHAR      NO-UNDO. 
+DEFINE VARIABLE lcTariffType  AS CHAR      NO-UNDO. 
+DEFINE VARIABLE lcTenant      AS CHAR      NO-UNDO.
 DEFINE VARIABLE lcRegion AS CHARACTER NO-UNDO. 
 
 DEFINE BUFFER lbOrderCustomer FOR OrderCustomer.
@@ -32,7 +32,7 @@ DEFINE BUFFER lbOrderCustomer FOR OrderCustomer.
 &SCOPED-DEFINE COMPANY_NAME_LIMIT 64   /* Name length limitation send to Nodo Central */
 
 FIND Order NO-LOCK WHERE
-     Order.Brand   = gcBrand AND
+     Order.Brand   = Syst.Var:gcBrand AND
      Order.OrderId = iiOrderId NO-ERROR.
 
 IF NOT AVAIL Order THEN RETURN ("ERROR: Order not found " + STRING(iiOrderId)).
@@ -55,20 +55,22 @@ IF NOT AVAILABLE OrderCustomer THEN RETURN ("ERROR: OrderCustomer not found " + 
 IF OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
 THEN lcRegion = OrderCustomer.Region.
 
+ASSIGN lcTenant = BUFFER-TENANT-NAME(Order).
+
 FIND FIRST MNPOperator WHERE 
-           MNPOperator.Brand = gcBrand AND
+           MNPOperator.Brand = Syst.Var:gcBrand AND
            MNPOperator.OperName = STRING(order.curroper) AND
            MNPOperator.Active = True
 NO-LOCK NO-ERROR.
 
 IF NOT AVAIL MNPOperator THEN
    FIND FIRST MNPOperator WHERE 
-              MNPOperator.Brand = gcBrand AND
+              MNPOperator.Brand = Syst.Var:gcBrand AND
               MNPOperator.OperName = STRING(order.curroper) AND
               MNPOperator.Active = False
    NO-LOCK NO-ERROR.
 
-ldeToday = fDate2TS(TODAY).
+ldeToday = Func.Common:mDate2TS(TODAY).
 
 IF AVAIL MNPOperator THEN DO:
 
@@ -86,7 +88,11 @@ END.
 
 ASSIGN
    liSeq         = NEXT-VALUE(M2MSeq)
-   lcFormRequest = "005" + STRING(liSeq,"99999999").
+   lcFormRequest = (IF lcTenant = {&TENANT_YOIGO} THEN 
+                      "005" 
+                    ELSE IF lcTenant = {&TENANT_MASMOVIL} THEN 
+                      "200" 
+                    ELSE "") + STRING(liSeq,"99999999").
 
 /* mark old rejected processes as closed */
 FOR EACH MNPProcess WHERE
@@ -94,7 +100,7 @@ FOR EACH MNPProcess WHERE
    MNPProcess.MNPType = {&MNP_TYPE_IN} AND
    MNPProcess.StatusCode = {&MNP_ST_AREC} EXCLUSIVE-LOCK:
    ASSIGN
-      MNPProcess.UpdateTS = fMakeTS()
+      MNPProcess.UpdateTS = Func.Common:mMakeTS()
       MNPProcess.StatusCode = {&MNP_ST_AREC_CLOSED}. /* closed */
 END.
 
@@ -110,13 +116,13 @@ FOR EACH MNPProcess where
               MNPOperation.statuscode = {&MNP_MSG_NC}
    NO-LOCK NO-ERROR.
    IF AVAIL MNPOperation THEN ASSIGN
-      MNPProcess.UpdateTS = fMakeTS()
+      MNPProcess.UpdateTS = Func.Common:mMakeTS()
       MNPProcess.StatusCode = {&MNP_ST_AREC_CLOSED}
       MNPProcess.StatusReason = MNPOperation.ErrorCode.
 END.
    
 FIND FIRST OrderAccessory NO-LOCK WHERE
-           OrderAccessory.Brand = gcBrand AND
+           OrderAccessory.Brand = Syst.Var:gcBrand AND
            OrderAccessory.OrderId = Order.OrderID AND
            OrderAccessory.TerminalType = {&TERMINAL_TYPE_PHONE} NO-ERROR.
 IF AVAIL OrderAccessory THEN
@@ -130,7 +136,7 @@ IF lcTariffType = "" THEN
    lcTariffType = Order.CLIType.
 
 ldChgDate = fMNPChangeWindowDate(   /* Count min porting date */
-            fMakeTS(),
+            Func.Common:mMakeTS(),
             /* todo: can be removed after deplo */
             (IF Order.OrderType = 3 AND
                 Order.OrderChannel NE "inversa"
@@ -144,36 +150,36 @@ ldChgDate = fMNPChangeWindowDate(   /* Count min porting date */
 IF Order.PortingDate <> ? THEN
    IF ldChgDate < Order.PortingDate THEN /* Porting date in the future, use that */
       ldChgDate = Order.PortingDate.
-ldeChgStamp = fMake2Dt(ldChgDate,7200).
+ldeChgStamp = Func.Common:mMake2DT(ldChgDate,7200).
 
 CREATE MNPProcess.
 ASSIGN 
-   MNPProcess.CreatedTS   = fMakeTS()
+   MNPProcess.CreatedTS   = Func.Common:mMakeTS()
    MNPProcess.MNPSeq      = next-value(m2mrequest)
    MNPProcess.OrderId     = Order.OrderId
    MNPProcess.FormRequest = lcFormRequest
    MNPProcess.StatusCode  = {&MNP_ST_NEW}
-   MNPProcess.Brand       = gcBrand
+   MNPProcess.Brand       = Syst.Var:gcBrand
    MNPProcess.MNPType     = {&MNP_TYPE_IN}
-   MNPProcess.UserCode    = katun
+   MNPProcess.UserCode    = Syst.Var:katun
    MNPProcess.UpdateTS    = MNPProcess.CreatedTS
    MNPProcess.OperCode    = MNPOperator.OperCode WHEN AVAIL MNPOperator
    MNPProcess.PortingTime = ldeChgStamp.
 
 CREATE MNPDetails.
 ASSIGN
-   MNPDetails.MNPSeq = MNPProcess.MNPSeq
-   MNPDetails.CustId = OrderCustomer.CustId
-   MNPDetails.CustIdType = OrderCustomer.CustIdType
-   MNPDetails.FirstName = OrderCustomer.FirstName
-   MNPDetails.Surname1 = OrderCustomer.SurName1
-   MNPDetails.Surname2 = OrderCustomer.SurName2
-   MNPDetails.CompanyName = OrderCustomer.Company 
-   MNPDetails.RequestedTS = Order.CrStamp 
-   MNPDetails.ReceptorCode = "005"
-   MNPDetails.ReceptorNRN = "741111" 
-   MNPDetails.DonorCode = MNPOperator.OperCode WHEN AVAIL MNPOperator
-   MNPDetails.Nationality = OrderCustomer.Nationality.
+   MNPDetails.MNPSeq       = MNPProcess.MNPSeq
+   MNPDetails.CustId       = OrderCustomer.CustId
+   MNPDetails.CustIdType   = OrderCustomer.CustIdType
+   MNPDetails.FirstName    = OrderCustomer.FirstName
+   MNPDetails.Surname1     = OrderCustomer.SurName1
+   MNPDetails.Surname2     = OrderCustomer.SurName2
+   MNPDetails.CompanyName  = OrderCustomer.Company 
+   MNPDetails.RequestedTS  = Order.CrStamp 
+   MNPDetails.ReceptorCode = (IF lcTenant = {&TENANT_YOIGO} THEN "005"    ELSE IF lcTenant = {&TENANT_MASMOVIL} THEN "200"    ELSE "")
+   MNPDetails.ReceptorNRN  = (IF lcTenant = {&TENANT_YOIGO} THEN "741111" ELSE IF lcTenant = {&TENANT_MASMOVIL} THEN "745200" ELSE "")  
+   MNPDetails.DonorCode    = MNPOperator.OperCode WHEN AVAIL MNPOperator
+   MNPDetails.Nationality  = OrderCustomer.Nationality.
 
 CREATE MNPSub.
 ASSIGN
@@ -213,14 +219,15 @@ PROCEDURE pCreatePortabilityMessageXML:
    lcReqStruct = add_struct(param_toplevel_id, "").
    add_timestamp(lcReqStruct, "fechaSolicitudPorAbonado", Order.CrStamp).
    add_string(lcReqStruct, "codigoOperadorDonante", lcOper).
-   add_string(lcReqStruct, "codigoOperadorReceptor", "005").
-
+   add_string(lcReqStruct, "codigoOperadorReceptor", (IF lcTenant = {&TENANT_YOIGO} THEN 
+                                                          "005" 
+                                                      ELSE IF lcTenant = {&TENANT_MASMOVIL} THEN 
+                                                          "200" 
+                                                      ELSE "")).
    lcAbonado = add_struct(lcReqStruct,"abonado").
 
    lcDocumentoIdentification = add_struct(lcAbonado, "documentoIdentificacion").
-   add_string(lcDocumentoIdentification, "tipo", 
-      (IF OrderCustomer.CustIdType = "PassPort" THEN "PAS"
-       ELSE OrderCustomer.CustIdType)).
+   add_string(lcDocumentoIdentification, "tipo", (IF OrderCustomer.CustIdType = "PassPort" THEN "PAS" ELSE OrderCustomer.CustIdType)).
    add_string(lcDocumentoIdentification, "documento", CAPS(OrderCustomer.CustId)).
 
    lcDatosPersonales = add_struct(lcAbonado, "datosPersonales").
@@ -241,13 +248,18 @@ PROCEDURE pCreatePortabilityMessageXML:
    END.
 
    add_string(lcReqStruct, "codigoContrato", MNPProcess.FormRequest).
-   add_string(lcReqStruct, "NRNReceptor", "741111").
+   add_string(lcReqStruct, "NRNReceptor", (IF lcTenant = {&TENANT_YOIGO} THEN 
+                                              "741111" 
+                                           ELSE IF lcTenant = {&TENANT_MASMOVIL} THEN 
+                                              "745200" 
+                                           ELSE "")).
    add_timestamp(lcReqStruct, "fechaVentanaCambio", MNPProcess.PortingTime).
   
    IF LENGTH(Order.OldICC) > 6 THEN
       add_string(lcReqStruct, "ICCID", substr(Order.OldICC,1,19)).
    
    add_string(lcReqStruct, "MSISDN", Order.CLI).
+   add_string(lcReqStruct, "sourceApplication", "MNP").
 
    xmlrpc_initialize(FALSE).
    ocRequest = serialize_rpc_call("mnp.crearSolicitudIndividualAltaPortabilidadMovil").

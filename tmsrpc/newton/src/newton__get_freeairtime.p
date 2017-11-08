@@ -26,10 +26,9 @@
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
-katun = "NewtonRPC".
+Syst.Var:gcBrand = "1".
+Syst.Var:katun = "NewtonRPC".
 
-{Func/date.i}
 {Func/fixedfee.i}
 
 /* Input parameters */
@@ -79,9 +78,7 @@ resp_struct = add_struct(response_toplevel_id, "").
 lcFATArray = add_array(resp_struct, "fat").
 lcDiscountArray = add_array(resp_struct, "Discount").
 
-FIND FIRST mobsub WHERE mobsub.msseq = piMsseq NO-LOCK NO-ERROR.
-IF NOT AVAILABLE mobsub THEN
-RETURN appl_err("Mobsub entry for " + STRING(piMsseq) + " not found").
+{newton/src/findtenant.i NO OrderCanal MobSub MsSeq piMsSeq}
 
 liCustNum = MobSub.CustNum.
 
@@ -108,7 +105,7 @@ FOR EACH DPMember NO-LOCK WHERE
    DO liCount = 0 to liNumberOfMonths:
       ASSIGN ldaFromDate = ADD-INTERVAL(DPMember.ValidFrom,liCount,"months")
              ldaFromDate = DATE(MONTH(ldaFromDate),1,YEAR(ldaFromDate))
-             ldaToDate   = fLastDayOfMonth(ldaFromDate).
+             ldaToDate   = Func.Common:mLastDayOfMonth(ldaFromDate).
       RUN pAddStructDiscount(INPUT ldaFromDate,INPUT ldaToDate).
    END. /* DO ind = 0 to liNumberOfMonths: */
 END. /* FOR EACH DPMember NO-LOCK WHERE */
@@ -129,7 +126,7 @@ FOR EACH MobSub WHERE
       DO liCount = 0 to liNumberOfMonths:
          ASSIGN ldaFromDate = ADD-INTERVAL(DPMember.ValidFrom,liCount,"months")
                 ldaFromDate = DATE(MONTH(ldaFromDate),1,YEAR(ldaFromDate))
-                ldaToDate   = fLastDayOfMonth(ldaFromDate).
+                ldaToDate   = Func.Common:mLastDayOfMonth(ldaFromDate).
          RUN pAddStructDiscount(INPUT ldaFromDate,INPUT ldaToDate).
       END. /* DO ind = 0 to liNumberOfMonths: */
    END. /* FOR EACH DPMember NO-LOCK WHERE */
@@ -224,5 +221,4 @@ END PROCEDURE.
 
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

@@ -14,8 +14,8 @@ def var i-date1      AS DATE FORMAT "99-99-99"       NO-UNDO.
 def var i-date2      AS DATE FORMAT "99-99-99"       NO-UNDO.
 DEF VAR InvNum1      AS INT  FORMAT "zzzzzzz9"       NO-UNDO.
 DEF VAR InvNum2      AS INT  FORMAT "zzzzzzz9"       NO-UNDO.
-DEF VAR CustNum1     AS INT  FORMAT "zzzzzzz9"       NO-UNDO.
-DEF VAR CustNum2     AS INT  FORMAT "zzzzzzz9"       NO-UNDO.
+DEF VAR CustNum1     AS INT  FORMAT "zzzzzzzz9"       NO-UNDO.
+DEF VAR CustNum2     AS INT  FORMAT "zzzzzzzz9"       NO-UNDO.
 DEF VAR status1      AS INT  FORMAT "9"              NO-UNDO.
 DEF VAR status2      AS INT  FORMAT "9"              NO-UNDO.
 
@@ -41,7 +41,7 @@ DEF STREAM sRead.
 form
    skip(17)
    WITH 
-   COLOR value(cfc) width 80 OVERLAY FRAME taka.
+   COLOR value(Syst.Var:cfc) width 80 OVERLAY FRAME taka.
 
 form
    InvNum1 label " Invoice number .........."
@@ -82,9 +82,9 @@ form
       HELP "Send PDF to invoicing (C)ustomer or to TMS (U)ser (i.e. You)"
       FORMAT "Customer/User"
 
-WITH TITLE COLOR value(ctc)
-   " " + ynimi + " PDF INVOICE PRINTOUT " + STRING(pvm,"99-99-99") + " "
-side-labels COLOR value(cfc) ROW 1 centered OVERLAY FRAME rajat.
+WITH TITLE COLOR value(Syst.Var:ctc)
+   " " + Syst.Var:ynimi + " PDF INVOICE PRINTOUT " + STRING(TODAY,"99-99-99") + " "
+side-labels COLOR value(Syst.Var:cfc) ROW 1 centered OVERLAY FRAME rajat.
 
 form
     "  0: Not printed, 'new' invoices            " skip
@@ -92,28 +92,28 @@ form
     "  5: PDF-file formed                        " skip
     "  6: PDF sent to customer via eMail         " skip
 with
-   title color value (ctc) " Printing Status For Invoices " color value(cfc)
+   title color value (Syst.Var:ctc) " Printing Status For Invoices " color value(Syst.Var:cfc)
    overlay centered row 14 frame statu.
 
 ASSIGN 
-   i-date1   = pvm
-   i-date2   = pvm
+   i-date1   = TODAY
+   i-date2   = TODAY
    liDelType = 2.
 
-cfc = "sel". RUN Syst/ufcolor.p. ccc = cfc.
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. Syst.Var:ccc = Syst.Var:cfc.
 view FRAME taka. PAUSE 0 no-message.
 
-ehto = 9. RUN Syst/ufkey.p.
+Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 ASSIGN InvNum1 = 000000 InvNum2 = 99999999
-       CustNum1  = 0 CustNum2 = 99999999.
+       CustNum1  = 0 CustNum2 = 999999999.
 
 view FRAME rajat. view FRAME statu.
 
 disp "NONE" @ CustGroup.CGName WITH FRAME rajat.
 
-IF si-recid2 NE ? THEN DO:
+IF Syst.Var:si-recid2 NE ? THEN DO:
 
-   FIND Invoice WHERE RECID(Invoice) = si-recid2 NO-LOCK NO-ERROR.
+   FIND Invoice WHERE RECID(Invoice) = Syst.Var:si-recid2 NO-LOCK NO-ERROR.
 
    IF Invoice.DelType NE 2 THEN DO:
       MESSAGE "Invoice's delivery type is not 2 (PDF via eMail)."
@@ -133,7 +133,7 @@ IF si-recid2 NE ? THEN DO:
       CustNum2 = Customer.CustNum
       status1  = Invoice.PrintState
       status2  = Invoice.PrintState
-      si-recid2 = ?.
+      Syst.Var:si-recid2 = ?.
       
    DISP 
       InvNum1   InvNum2
@@ -149,7 +149,7 @@ LOOP:
 repeat:
 
    /* KysellAAn rajaukset */
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    PAUSE 0 no-message.
    
     UPDATE
@@ -166,9 +166,9 @@ repeat:
       llM2Cust
    WITH FRAME rajat EDITING:
       
-      READKEY. nap = keylabel(LASTKEY).
+      READKEY. Syst.Var:nap = keylabel(LASTKEY).
 
-       IF nap = "F9" AND 
+       IF Syst.Var:nap = "F9" AND 
           FRAME-FIELD = "liDelType"
        THEN DO:
 
@@ -180,12 +180,12 @@ repeat:
          IF lcCode ne "" AND lcCode NE ?
          THEN DISPLAY INTEGER(lcCode) ;& liDelType WITH FRAME rajat.
                   
-         ehto = 9.
+         Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
          NEXT. 
       END.
  
-      IF lookup(nap,poisnap) > 0 THEN DO:
+      IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
          PAUSE 0.
 
          if frame-field = "InvNum2" THEN DO:
@@ -234,7 +234,7 @@ repeat:
              ASSIGN INPUT InvGroup.
              if InvGroup ne "" AND NOT
                 can-find(invgroup where 
-                         InvGroup.Brand    = gcBrand AND 
+                         InvGroup.Brand    = Syst.Var:gcBrand AND 
                          invgroup.InvGroup = InvGroup) THEN DO:
                 BELL.
                 message "UNKNOWN INVOICEGROUP !".
@@ -249,7 +249,7 @@ repeat:
              if CustGroup = "" then disp "NONE" @ CustGroup.CGName.
              ELSE DO:
                 FIND CustGroup where 
-                     CustGroup.Brand     = gcBrand AND
+                     CustGroup.Brand     = Syst.Var:gcBrand AND
                      CustGroup.custGroup = CustGroup 
                    no-lock no-error.
                 IF NOT AVAIL CustGroup THEN DO:
@@ -306,12 +306,12 @@ repeat:
    toimi:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, NEXT toimi:
       ASSIGN
-      ufk = 0 ufk[1] = 132 ufk[4] = 0 /* 797*/ ufk[5] = 63 ufk[8] = 8 ehto = 0.
+      Syst.Var:ufk = 0 Syst.Var:ufk[1] = 132 Syst.Var:ufk[4] = 0 /* 797*/ Syst.Var:ufk[5] = 63 Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
 
-      IF toimi = 1 THEN NEXT LOOP.
+      IF Syst.Var:toimi = 1 THEN NEXT LOOP.
 
-      ELSE IF toimi = 5 THEN DO:
+      ELSE IF Syst.Var:toimi = 5 THEN DO:
 
          IF NOT llFormPDF AND NOT llSendeMail THEN DO:
             MESSAGE "At least one action must be chosen."
@@ -329,14 +329,14 @@ repeat:
          END.
          
          IF INPUT CustNum2  = 0  THEN InvNum2 = 99999999.
-         if input CustNum2   = "" THEN CustNum2  = 9999999.
+         if input CustNum2   = "" THEN CustNum2  = 999999999.
          
          llok = FALSE.
          
          /* are customers in the ext group in correct i-group also ? */
          if CustGroup ne "" THEN DO:
             FOR EACH  cgmember no-lock where 
-                      cgMember.Brand     = gcBrand AND
+                      cgMember.Brand     = Syst.Var:gcBrand AND
                       cgmember.custgroup = CustGroup,
                 FIRST Customer no-lock where
                       Customer.CustNum  = cgmember.custnum AND
@@ -362,11 +362,11 @@ repeat:
          END.
 
          LEAVE toimi.
-      END. /* toimi = 5 */
+      END. /* Syst.Var:toimi = 5 */
 
-      ELSE IF toimi = 8 THEN LEAVE LOOP.
+      ELSE IF Syst.Var:toimi = 8 THEN LEAVE LOOP.
       
-   END. /* toimi */
+   END. /* Syst.Var:toimi */
 
    RUN Inv/pdfinvcl.p (InvNum1, 
                  InvNum2,

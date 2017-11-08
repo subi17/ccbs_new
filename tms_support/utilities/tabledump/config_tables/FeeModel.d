@@ -1,5 +1,6 @@
 "ACC_POSTPAID" "Agreement Customer Change Postpaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "ACC_PREPAID" "Agreement Customer Change Prepaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
+"AGILETVMF" "Agile TV Service" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "BALANCE_PREPAID" "Balance Query Prepaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "BBMF" "BlackBerry Monthly Fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "BONO_VOIPMF" "Mobile data usage bundle VoIP" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
@@ -28,6 +29,7 @@
 "CONT25MF" "Contrato 25 MonthlyFee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT26MF" "Contrato 26" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT27MF" "LA INFINITA 2 GB DTO." "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"CONT28MF" "Línea móvil extra" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT7MF" "Contrato 7 Service package" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT8MF" "La del Uno service package" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT9MF" "Contrato 9 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
@@ -56,6 +58,7 @@
 "CONTF55" "CONTRATOF 55 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTF8MF" "Contrato Flat 8 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTFF2MF" "CONTRATOFF 2 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"CONTFH1000MF" "La Combinada Azul 1Gbps" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTFH300MF" "Convergent FIBER 300MB monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTFH50MF" "Convergent FIBER 50MB monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONTM2MF" "CONTRATOM2 monthly fe" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
@@ -95,6 +98,8 @@
 "FLEX_5GB_UPSELLMF" "5GB Flex Upsell" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FLEX_MFUPS" "Flex upsell monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "FTERMPERIOD" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"FTERMPERIOD177" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"FTERMPERIOD233" "Fixed line contract termination" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "HANDSET" "Terminal" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "ICC_POSTPAID" "Change of ICC Charge Postpaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "ICC_PREPAID" "Change of ICC Charge Prepaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
@@ -668,8 +673,10 @@
 "TOPUPCAMPGIFT" "Initial topup for gift orders" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "TOPUPPREACT" "Re-charge of Pre-activated Prepaid (POS)" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "TOPUPSIM" "Initial topup for only sim orders" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"TVTERMPERIODPF" "TV Permanency Contract" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "UPSELL_PMDUBFee" "PMDUB UPSELL Fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "Uso No Razonable" "Uso No Razonable" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "UsoNoRazonable" "UsoNoRazonable" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
+"VOICE200BMF" "Voice 200 package" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "X9305871W" "X9305871W" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "XMASGIFT" "Gift 2007" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0

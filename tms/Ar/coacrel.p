@@ -24,7 +24,7 @@ DEF VAR lcReseller   AS CHAR  FORMAT "X(10)"    NO-UNDO EXTENT 2.
 DEF VAR lcSalesman   AS CHAR  FORMAT "X(10)"    NO-UNDO EXTENT 2. 
 DEF VAR ldtCalcDate  AS DATE  FORMAT "99-99-99" NO-UNDO EXTENT 2.
 DEF VAR ldtOldPDate  AS DATE  FORMAT "99-99-99" NO-UNDO EXTENT 2.
-DEF VAR liCustNum    AS INT   FORMAT ">>>>>>>9" NO-UNDO EXTENT 2.
+DEF VAR liCustNum    AS INT   FORMAT ">>>>>>>>9" NO-UNDO EXTENT 2.
 DEF VAR llMark       AS LOGIC FORMAT "Yes/No"   NO-UNDO. 
 DEF VAR liCount      AS INT                     NO-UNDO. 
 DEF VAR ldtPaymDate  AS DATE  FORMAT "99-99-99" NO-UNDO. 
@@ -44,7 +44,7 @@ FORM
         HELP "Events of one rule, or all = 0 (empty)"
         VALIDATE(INPUT liCoRuleID = 0 OR 
                  CAN-FIND(CoRule WHERE 
-                          CoRule.Brand    = gcBrand AND
+                          CoRule.Brand    = Syst.Var:gcBrand AND
                           CORule.CoRuleID = INPUT liCoRuleID),
                  "Unknown rule")
         FORMAT ">>>>>>>>"
@@ -114,15 +114,15 @@ FORM
    SKIP(2)
 
    WITH ROW 1 SIDE-LABELS WIDTH 80
-        TITLE " " + ynimi + " COMMISSION REPORT " +
-        STRING(pvm,"99-99-99") + " "
+        TITLE " " + Syst.Var:ynimi + " COMMISSION REPORT " +
+        STRING(TODAY,"99-99-99") + " "
         FRAME valinta.
 
 VIEW FRAME valinta.
 PAUSE 0 NO-MESSAGE.
 
 FOR EACH Reseller NO-LOCK WHERE 
-         Reseller.Brand = gcBrand AND
+         Reseller.Brand = Syst.Var:gcBrand AND
          Reseller.Reseller BEGINS "AC"
 BY Reseller.Reseller:
 
@@ -130,7 +130,7 @@ BY Reseller.Reseller:
     lcReseller[2] = Reseller.Reseller.
     
     FIND FIRST Salesman NO-LOCK WHERE
-               Salesman.Brand    = gcBrand AND
+               Salesman.Brand    = Syst.Var:gcBrand AND
                Salesman.Reseller = Reseller.Reseller AND
                Salesman.RsLevel  = 1 NO-ERROR.
     IF AVAILABLE Salesman THEN DO:
@@ -141,21 +141,21 @@ BY Reseller.Reseller:
     END. 
        
     FIND LAST Salesman NO-LOCK WHERE
-              Salesman.Brand    = gcBrand AND
+              Salesman.Brand    = Syst.Var:gcBrand AND
               Salesman.Reseller = Reseller.Reseller AND
               Salesman.RsLevel  = 1 NO-ERROR.
     IF AVAILABLE Salesman THEN 
     lcSalesman[2] = MAX(lcSalesman[2],Salesman.Salesman).
 END.
          
-ASSIGN liCustNum[2]   = 99999999          
+ASSIGN liCustNum[2]   = 999999999          
        ldtCalcDate[1] = DATE(MONTH(TODAY),1,YEAR(TODAY))
        ldtCalcDate[2] = IF MONTH(TODAY) = 12 
                         THEN DATE(12,31,YEAR(TODAY))
                         ELSE DATE(MONTH(TODAY) + 1,1,YEAR(TODAY)) - 1.
 
 ASSIGN lcUfkey = FALSE
-       nap     = "first". 
+       Syst.Var:nap     = "first". 
 
 toimi:
 REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
@@ -174,25 +174,25 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
    if lcUfkey THEN DO:
 
       ASSIGN
-         ufk[1]= 132 ufk[2]= 0 ufk[3]= 0 ufk[4]= 0 
-         ufk[5]= 63  ufk[6]= 0 ufk[7]= 0 ufk[8]= 8 
-         ufk[9]= 1
-         ehto = 3 
+         Syst.Var:ufk[1]= 132 Syst.Var:ufk[2]= 0 Syst.Var:ufk[3]= 0 Syst.Var:ufk[4]= 0 
+         Syst.Var:ufk[5]= 63  Syst.Var:ufk[6]= 0 Syst.Var:ufk[7]= 0 Syst.Var:ufk[8]= 8 
+         Syst.Var:ufk[9]= 1
+         Syst.Var:ehto = 3 
          lcUfkey = FALSE.
 
       RUN Syst/ufkey.p.
 
    END.
 
-   IF nap NE "first" THEN DO:
+   IF Syst.Var:nap NE "first" THEN DO:
       READKEY.
-      nap = KEYLABEL(LASTKEY).
+      Syst.Var:nap = KEYLABEL(LASTKEY).
    END.
-   ELSE ASSIGN nap = "1". 
+   ELSE ASSIGN Syst.Var:nap = "1". 
 
-   IF LOOKUP(nap,"1,f1") > 0 THEN DO:
+   IF LOOKUP(Syst.Var:nap,"1,f1") > 0 THEN DO:
 
-      ehto = 9. 
+      Syst.Var:ehto = 9. 
       RUN Syst/ufkey.p.
 
       REPEAT WITH FRAME valinta ON ENDKEY UNDO, LEAVE:
@@ -209,7 +209,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
 
             READKEY.
 
-            IF LOOKUP(keylabel(LASTKEY),poisnap) > 0 THEN 
+            IF LOOKUP(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN 
             DO WITH FRAME valinta:
 
                HIDE MESSAGE.
@@ -234,7 +234,7 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
       NEXT toimi.
    END.
 
-   ELSE IF LOOKUP(nap,"5,f5") > 0 THEN DO:
+   ELSE IF LOOKUP(Syst.Var:nap,"5,f5") > 0 THEN DO:
       IF lcFile = "" THEN DO:
          MESSAGE "File name has not been given"
          VIEW-AS ALERT-BOX ERROR.
@@ -244,13 +244,13 @@ REPEAT WITH FRAME valinta on ENDkey undo toimi, NEXT toimi:
       LEAVE toimi.
    END.
 
-   ELSE IF LOOKUP(nap,"8,f8") > 0 THEN DO:
+   ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN DO:
       RETURN.
    END.
 
-END. /* toimi */
+END. /* Syst.Var:toimi */
 
-ehto = 5.
+Syst.Var:ehto = 5.
 RUN Syst/ufkey.p.
 
 IF lcFile = "" THEN DO:

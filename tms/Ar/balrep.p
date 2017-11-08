@@ -75,6 +75,9 @@ ASSIGN
     viiva3                 = fill("-",lev)
     viiva4                 = fill("-",lev).
 
+DEFINE VARIABLE ynimi AS CHARACTER NO-UNDO.
+ynimi = Syst.Var:ynimi.
+
 form header
    viiva1 AT 1 SKIP
    ynimi at 1 format "x(35)" 
@@ -82,7 +85,7 @@ form header
       "Page" AT 103 
       sl format "ZZZZ9" SKIP
    lcDateHeader AT 45 FORMAT "X(40)"
-      pvm format "99.99.9999" AT 103 SKIP
+      TODAY FORMAT "99.99.9999" AT 103 SKIP
    viiva2 AT 1 SKIP
    "Customer"  TO 8
    "Name"      AT 10
@@ -144,7 +147,7 @@ IF icFile > "" THEN DO:
 END.
 
 FOR EACH InvGroup NO-LOCK WHERE
-         InvGroup.Brand     = gcBrand  AND
+         InvGroup.Brand     = Syst.Var:gcBrand  AND
          InvGroup.InvGroup >= icInvGrp1 AND
          InvGroup.InvGroup <= icInvGrp2,
     EACH Customer NO-LOCK WHERE
@@ -171,7 +174,7 @@ BY Customer.CustNum:
     
     /* debt from invoices */
     FOR EACH Invoice NO-LOCK WHERE
-             Invoice.Brand       = gcBrand          AND
+             Invoice.Brand       = Syst.Var:gcBrand          AND
              Invoice.CustNum     = Customer.CustNum AND
              Invoice.ClaimState >= idClaimQty1      AND
              Invoice.ClaimState <= idClaimQty2      AND

@@ -63,7 +63,7 @@ def var i          as int  format "zzzzzzz9"     NO-UNDO.
 
 def var atpvm1        as Date format "99-99-99"   NO-UNDO.
 def var atpvm2        as Date format "99-99-99"   NO-UNDO.
-def var CustNum2      as int  format "zzzzzzz9"   NO-UNDO.
+def var CustNum2      as int  format "zzzzzzzz9"   NO-UNDO.
 DEF VAR mininv        LIKE InvGroup.MinInvAmt     NO-UNDO.
 DEF VAR upmth         LIKE InvGroup.UnbilledLimit NO-UNDO.
 DEF VAR kysy_rajat    AS LOG                      NO-UNDO.
@@ -89,9 +89,9 @@ IF NOT ilSilent THEN DO:
 form
    skip(17)
 WITH
-   OVERLAY TITLE COLOR value(ctc)
-   " " + ynimi + " INVOICING " + string(pvm,"99-99-99") + " "
-   COLOR value(cfc) width 80
+   OVERLAY TITLE COLOR value(Syst.Var:ctc)
+   " " + Syst.Var:ynimi + " INVOICING " + string(TODAY,"99-99-99") + " "
+   COLOR value(Syst.Var:cfc) width 80
    FRAME taka.
 
 form
@@ -119,22 +119,22 @@ form
    mark    label " Approve automatically .."
            help "Approve all invoices automatically (Yes/No) ?" 
                                                 SKIP(1)    
-with title color value(ctc) " CRITERIA FOR CREATING INVOICES " side-labels
-   COLOR value(cfc) ROW 3 centered OVERLAY FRAME rajat.
+with title color value(Syst.Var:ctc) " CRITERIA FOR CREATING INVOICES " side-labels
+   COLOR value(Syst.Var:cfc) ROW 3 centered OVERLAY FRAME rajat.
 
 form
     SKIP(1)
     " Consecutive invoice number: " lcInvNum  NO-LABEL           
     SKIP(1)
 WITH
-   title color value (ctc) " INVOICE GROUP DATA " COLOR value(cfc)
+   title color value (Syst.Var:ctc) " INVOICE GROUP DATA " COLOR value(Syst.Var:cfc)
    OVERLAY centered ROW 14 FRAME lCustNum.
 
-   cfc = "sel". RUN Syst/ufcolor.p. ccc = cfc.
+   Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. Syst.Var:ccc = Syst.Var:cfc.
    view FRAME taka. PAUSE 0 no-message.
 
-   cfc = "lis". RUN Syst/ufcolor.p.
-   ehto = 9. RUN Syst/ufkey.p.
+   Syst.Var:cfc = "lis". RUN Syst/ufcolor.p.
+   Syst.Var:ehto = 9. RUN Syst/ufkey.p.
    
    liPaymTerm = 9. 
 END.
@@ -155,7 +155,7 @@ IF iiInvType = -1 THEN DO:
    ciperiod = 0.
    /* take first partial month and first full one */
    FOR EACH FixedFee NO-LOCK WHERE
-            FixedFee.Brand   = gcBrand  AND
+            FixedFee.Brand   = Syst.Var:gcBrand  AND
             FixedFee.CustNum = CustNum1 AND
             LOOKUP(FixedFee.BillCode,lcItem) > 0:
       
@@ -188,7 +188,7 @@ ciperiod = IF MONTH(TODAY) = 1
 IF CustNum1 = 0 THEN 
 ASSIGN
    CustNum1  = unknown + 1
-   CustNum2  = 99999999.
+   CustNum2  = 999999999.
 
 ELSE DO:
    FIND Customer WHERE Customer.CustNum = CustNum1 NO-LOCK NO-ERROR.
@@ -257,7 +257,7 @@ IF NOT ilSilent THEN DO:
    repeat WITH FRAME valinta ON ENDKEY UNDO toimi, RETURN:
       IF kysy_rajat THEN DO:
          /* We ask the limits */
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
          UPDATE
             InvGroup
             CustNum1 CustNum2   validate(INPUT CustNum2  >= INPUT CustNum1,
@@ -266,8 +266,8 @@ IF NOT ilSilent THEN DO:
          invDte liPaymTerm
          mark
          WITH FRAME rajat EDITING :
-            READKEY. nap = keylabel(LASTKEY).
-            IF lookup(nap,poisnap) > 0 THEN DO:
+            READKEY. Syst.Var:nap = keylabel(LASTKEY).
+            IF lookup(Syst.Var:nap,Syst.Var:poisnap) > 0 THEN DO:
                HIDE MESSAGE no-pause.
 
                if frame-field = "InvGroup" THEN DO:
@@ -280,7 +280,7 @@ IF NOT ilSilent THEN DO:
                   END.
 
                   FIND InvGroup where 
-                       InvGroup.Brand    = gcBrand AND
+                       InvGroup.Brand    = Syst.Var:gcBrand AND
                        InvGroup.InvGroup = InvGroup
                   no-lock no-error.
                   IF NOT AVAIL InvGroup THEN DO:
@@ -341,21 +341,21 @@ IF NOT ilSilent THEN DO:
             APPLY LASTKEY.
          END.
 
-         if input CustNum2  = "" THEN CustNum2  = 9999999.
+         if input CustNum2  = "" THEN CustNum2  = 999999999.
 
          kysy_rajat = FALSE.
       END.
 
-      ASSIGN ufk = 0 ufk[1] = 132 ufk[2] = 0 
-                     ufk[4] = 0 ufk[5] = 795
-                     ufk[8] = 8 ehto = 0.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ufk[1] = 132 Syst.Var:ufk[2] = 0 
+                     Syst.Var:ufk[4] = 0 Syst.Var:ufk[5] = 795
+                     Syst.Var:ufk[8] = 8 Syst.Var:ehto = 0.
       RUN Syst/ufkey.p.
-      IF toimi = 1 THEN DO:
+      IF Syst.Var:toimi = 1 THEN DO:
          kysy_rajat = TRUE.
          NEXT toimi.
       END.
 
-      IF toimi = 5 THEN DO:
+      IF Syst.Var:toimi = 5 THEN DO:
 
          /* check period */
          IF fPeriodLocked(InvDte,TRUE) THEN NEXT toimi.
@@ -377,14 +377,14 @@ IF NOT ilSilent THEN DO:
 
       END.
 
-      IF toimi = 8 THEN DO:
+      IF Syst.Var:toimi = 8 THEN DO:
          HIDE MESSAGE no-pause.
          HIDE FRAME rajat no-pause.
          HIDE FRAME taka no-pause.
          RETURN.
       END.
 
-   END. /* toimi */
+   END. /* Syst.Var:toimi */
 
    HIDE FRAME lCustNum no-pause.
 
@@ -395,7 +395,7 @@ END.
    
 XCUST:
 FOR EACH Customer   no-lock  where
-         Customer.Brand     = gcBrand     AND
+         Customer.Brand     = Syst.Var:gcBrand     AND
          Customer.CustNum  >= CustNum1    AND
          Customer.CustNum  <= CustNum2    AND
          Customer.InvGroup  = InvGroup,

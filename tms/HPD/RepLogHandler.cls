@@ -17,16 +17,20 @@ ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 CLASS HPD.RepLogHandler FINAL:
    
-   DEFINE PRIVATE VARIABLE objMsgPublisher    AS CLASS Gwy.MqPublisher NO-UNDO.   
+   DEFINE PRIVATE VARIABLE objMsgPublisher    AS CLASS Gwy.MqPublisher NO-UNDO.
    DEFINE PRIVATE VARIABLE lhRepLogTable      AS HANDLE                NO-UNDO.
    DEFINE PRIVATE VARIABLE lhRepLogQuery      AS HANDLE                NO-UNDO.
-   
+   DEFINE PRIVATE VARIABLE llMultiTenancy     AS LOGICAL INITIAL FALSE NO-UNDO.
+   DEFINE PRIVATE VARIABLE lcTenant           AS CHARACTER             NO-UNDO.
+
    DEFINE PRIVATE TEMP-TABLE ttDumpHandler NO-UNDO
       FIELD TableName     AS CHARACTER
+      FIELD TenantName    AS CHARACTER
+      FIELD BrandName     AS CHARACTER
       FIELD objHandler    AS CLASS Progress.Lang.Object /*HPD.DumpHandler*/
       FIELD VersionNumber AS CHARACTER
       FIELD QuoteKeyValue AS LOGICAL
-      INDEX TableName IS PRIMARY UNIQUE TableName
+      INDEX TableName IS PRIMARY UNIQUE TableName TenantName
       .   
 
    DEFINE PRIVATE VARIABLE lcQueueName        AS CHARACTER   NO-UNDO.
@@ -43,6 +47,7 @@ CLASS HPD.RepLogHandler FINAL:
       (icDB        AS CHARACTER,
        icQueueName AS CHARACTER):
 
+      llMultiTenancy = multitenancy.TenantInformation:IsMultiTenant.
       mInitialize(icDB + ".RepLog", icQueueName).
 
    END CONSTRUCTOR.
@@ -51,6 +56,7 @@ CLASS HPD.RepLogHandler FINAL:
    CONSTRUCTOR PUBLIC RepLogHandler
       (icDB AS CHARACTER):
 
+      llMultiTenancy = multitenancy.TenantInformation:IsMultiTenant.
       mInitialize(icDB + ".RepLog", icDB).
 
    END CONSTRUCTOR.
@@ -95,7 +101,7 @@ CLASS HPD.RepLogHandler FINAL:
 
          /* Handler code for any error condition. */
          CATCH anyErrorObject AS Progress.Lang.Error:
-            Syst.Parameters:seti("HPD.Queue" + lcQueueName + ".TransactSize", "HPD.Interface", 10000).
+            Syst.Parameters:seti("HPD.Queue" + lcQueueName + ".TransactSize", "HPD.Interface", 5000).
             liTransactionSize = Syst.Parameters:geti("HPD.Queue" + lcQueueName + ".TransactSize", "HPD.Interface").
          END CATCH.
 
@@ -103,8 +109,7 @@ CLASS HPD.RepLogHandler FINAL:
 
       CREATE BUFFER lhRepLogTable FOR TABLE lcRepLogTable.
 
-      IF NOT mPopulateDumpHandlers()
-      THEN RETURN ERROR NEW Progress.Lang.AppError("No tables defined to online HPD interface for database " + lcQueueName, 1).
+      mPopulateDumpHandlers().
 
       objMsgPublisher = NEW Gwy.MqPublisher("HPD.Queue" +
                                             IF llUseSeparateQueue
@@ -116,7 +121,7 @@ CLASS HPD.RepLogHandler FINAL:
 
       IF llUseAck
       THEN lhRepLogQuery:QUERY-PREPARE(SUBSTITUTE("FOR EACH &1 NO-LOCK WHERE SendTime = ? USE-INDEX SendTime MAX-ROWS &2",lcRepLogTable, STRING(liTransactionSize))).
-      
+
       &IF "{&HPD_ENVIRONMENT}" = "Salt"
       &THEN
       ELSE lhRepLogQuery:QUERY-PREPARE(SUBSTITUTE("FOR EACH &1 NO-LOCK USE-INDEX UTCTime MAX-ROWS &2",lcRepLogTable, STRING(liTransactionSize))).
@@ -196,31 +201,98 @@ CLASS HPD.RepLogHandler FINAL:
    END METHOD.
 
 
-   METHOD PRIVATE LOGICAL mPopulateDumpHandlers( ):
+   METHOD PRIVATE VOID mPopulateDumpHandlers
+      ( icTenant AS CHARACTER ):
       
-      DEFINE VARIABLE llFoundHandler AS LOGICAL INITIAL FALSE NO-UNDO.
+      DEFINE VARIABLE llFoundHandler          AS LOGICAL INITIAL FALSE NO-UNDO.
+      DEFINE VARIABLE llCheckTableMultiTenant AS LOGICAL INITIAL FALSE NO-UNDO.
+      DEFINE VARIABLE llTableMultiTenant      AS LOGICAL INITIAL FALSE NO-UNDO.
+      DEFINE VARIABLE lcBrandName             AS CHARACTER             NO-UNDO.
+
+      IF icTenant > ""
+      THEN DO ON ERROR UNDO, THROW:
+         ASSIGN
+            llCheckTableMultiTenant = TRUE
+            lcBrandName = multitenancy.TenantInformation:mConvertTenantToBrand(icTenant).
+
+         /* The default tenant is handling also the shared tables */
+         IF icTenant EQ multitenancy.TenantInformation:DefaultTenant
+         THEN icTenant = "".
+      END.
 
       FOR EACH DumpFile NO-LOCK WHERE
          DumpFile.FileCategory = "HPD" AND
          DumpFile.SideTables = lcQueueName
          ON ERROR UNDO, THROW:
-            
+
+         llFoundHandler = TRUE.
+
+         IF llCheckTableMultiTenant
+         THEN llTableMultiTenant = multitenancy.TenantInformation:mIsTableMultiTenant(DumpFile.MainTable).
+
+         /* When we have other than default tenant and multitenancy is enabled
+           (i.e. icTenant > "") and this is a shared table. Then a handler is not needed
+            => only default tenant will process the shared tables */
+         IF icTenant > "" AND NOT llTableMultiTenant
+         THEN NEXT.
+
          CREATE ttDumpHandler.
          ttDumpHandler.objHandler = DYNAMIC-NEW DumpFile.LinkKey(DumpFile.DumpID).
-         
+
          ASSIGN
             ttDumpHandler.TableName     = DumpFile.MainTable
+            ttDumpHandler.TenantName    = icTenant
+            ttDumpHandler.BrandName     = lcBrandName WHEN llTableMultiTenant
             ttDumpHandler.VersionNumber = mGetVersionNumber(DumpFile.DumpID)
             ttDumpHandler.QuoteKeyValue = mQuoteKeyValue(DumpFile.DumpID)
-            llFoundHandler = TRUE
             .
       END.
 
-      RETURN llFoundHandler.
+      IF NOT llFoundHandler
+      THEN RETURN ERROR NEW Progress.Lang.AppError
+                     ("No tables defined to online HPD interface " +
+                      "for database " + lcQueueName, 1).
 
    END METHOD.     
-   
-      
+
+   METHOD PRIVATE VOID mPopulateDumpHandlers():
+
+      IF NOT llMultiTenancy
+      THEN DO ON ERROR UNDO, THROW:
+         mPopulateDumpHandlers("").
+         RETURN.
+      END.
+
+      DEFINE VARIABLE lii      AS INTEGER   NO-UNDO.
+      DEFINE VARIABLE lcTenant AS CHARACTER NO-UNDO.
+
+      /* Go through every tenant and set the dump handlers */
+      DO lii = 1 TO NUM-ENTRIES(multitenancy.TenantInformation:TenantList)
+         ON ERROR UNDO, THROW:
+         lcTenant = ENTRY(lii,multitenancy.TenantInformation:TenantList).
+         IF lcTenant EQ multitenancy.TenantInformation:SuperTenant
+         THEN NEXT.
+         multitenancy.TenantInformation:mSetEffectiveTenant(lcTenant).
+         mPopulateDumpHandlers(lcTenant).
+      END.
+
+      /* Change effective tenant to default and set lcTenant to correct value */
+      multitenancy.TenantInformation:mSetEffectiveTenant(mTenantNameConversion("")).
+
+/*
+      FOR EACH ttDumpHandler:
+         LOG-MANAGER:WRITE-MESSAGE("Tablename: " + ttDumpHandler.TableName, "DEBUG").
+         LOG-MANAGER:WRITE-MESSAGE("TenantName: " + ttDumpHandler.TenantName, "DEBUG").
+         LOG-MANAGER:WRITE-MESSAGE("BrandName: " + ttDumpHandler.BrandName, "DEBUG").
+         LOG-MANAGER:WRITE-MESSAGE("VersionNumber: " + ttDumpHandler.VersionNumber, "DEBUG").
+         LOG-MANAGER:WRITE-MESSAGE("QuoteKeyValue: " + STRING(ttDumpHandler.QuoteKeyValue), "DEBUG").
+         LOG-MANAGER:WRITE-MESSAGE("Object: " + STRING(ttDumpHandler.objHandler), "DEBUG").
+      END.
+*/
+
+   END METHOD.
+
+
    METHOD PRIVATE VOID mLog
       ( iiLogLevel   AS INTEGER,
         icLogType    AS CHARACTER, /* ERROR, INFO, DEBUG, ... */
@@ -238,7 +310,14 @@ CLASS HPD.RepLogHandler FINAL:
    */
    METHOD PRIVATE INTEGER mSendRepLog2MQ():
 
-      FIND ttDumpHandler WHERE ttDumpHandler.TableName = lhRepLogTable::TableName NO-ERROR.
+      IF llMultiTenancy
+      THEN FIND ttDumpHandler WHERE
+              ttDumpHandler.TableName  = lhRepLogTable::TableName AND
+              ttDumpHandler.TenantName = lhRepLogTable::TenantName
+           NO-ERROR.
+      ELSE FIND ttDumpHandler WHERE
+              ttDumpHandler.TableName  = lhRepLogTable::TableName
+           NO-ERROR.
 
       IF NOT AVAILABLE ttDumpHandler
       THEN RETURN ERROR NEW Progress.Lang.AppError("Queue " + lcQueueName + " cannot handle table " +
@@ -264,6 +343,9 @@ CLASS HPD.RepLogHandler FINAL:
                   &THEN
                      ISO-DATE(lhRepLogTable::EventTime).
                   &ENDIF
+
+      IF llMultiTenancy
+      THEN lcMessage = lcMessage + {&HPDDumpDelimiter} + ttDumpHandler.BrandName.
 
       IF lhRepLogTable::EventType = "DELETE"
       THEN lcMessage = lcMessage + {&HPDDumpDelimiter} +
@@ -300,6 +382,21 @@ CLASS HPD.RepLogHandler FINAL:
 
    END METHOD.
 
+   /* Method keeps the lcTenant attribute in sync and
+      convert the tenant name to the format which
+      replog table uses */
+   METHOD PRIVATE CHARACTER mTenantNameConversion
+      (icTenantname AS CHARACTER):
+
+      lcTenant = icTenantname.
+
+      IF icTenantName = ""
+      THEN RETURN multitenancy.TenantInformation:DefaultTenant.
+
+      RETURN icTenantname.
+
+   END METHOD.
+
 
    METHOD PUBLIC VOID mProcess():
 
@@ -325,6 +422,9 @@ CLASS HPD.RepLogHandler FINAL:
             /* If for some reason RepLog table is locked then we must skip it */
             IF lhRepLogTable:LOCKED
             THEN NEXT.
+
+            IF llMultiTenancy AND lcTenant NE lhRepLogTable::TenantName
+            THEN multitenancy.TenantInformation:mSetEffectiveTenant(mTenantNameConversion(lhRepLogTable::TenantName)).
 
             CASE mSendRepLog2MQ():
 
@@ -373,9 +473,7 @@ CLASS HPD.RepLogHandler FINAL:
    METHOD PUBLIC VOID mReload():
 
       mPurgeDumpHandlers().
-
-      IF NOT mPopulateDumpHandlers()
-      THEN RETURN ERROR NEW Progress.Lang.AppError("No tables defined to online HPD interface for queue " + lcQueueName, 1).
+      mPopulateDumpHandlers().
 
    END METHOD.
 

@@ -1,24 +1,48 @@
 /**
+ * High spender
+
+ * @input  brand;string;mandatory;tenant
+ * @output custnum;int;mandatory
+           personid;string;mandatory
+           name;string
+           address;string 
+           cli;string
+           subscription_type;string
+           active_days;string
+           reason;string
+           user_age_group;string
+           balance;double
+           unbilled;double
+           invoice_count;int
+           average_amount;double
+           period;string
+           barring;string
+           barring_created:datetime
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 
-IF NOT get_paramcount(param_toplevel_id) EQ 0 THEN
-    RETURN param_err("Unexpected parameters").
+{Syst/commpaa.i}
+Syst.Var:katun = "NewtonAd".
+Syst.Var:gcBrand = "1".
+{Func/highusage_report.i}
+{newton/src/json_key.i}
+{Func/barrfunc.i}
 
 DEF VAR lcArray AS CHAR NO-UNDO.
 DEF VAR lcStruct AS CHAR NO-UNDO.
 DEF VAR liPeriod AS INT NO-UNDO.
+DEF VAR pcTenant AS CHAR NO-UNDO.
+
+IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
+
+pcTenant  = get_string(param_toplevel_id, "0"). 
+
+IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+{newton/src/settenant.i pcTenant}
 
 liPeriod = INT(STRING(YEAR(TODAY)) + STRING(MONTH(TODAY),"99")).
 lcArray = add_array(response_toplevel_id, "").
-
-{Syst/commpaa.i}
-katun = "NewtonAd".
-gcBrand = "1".
-{Func/highusage_report.i}
-{Func/timestamp.i}
-{newton/src/json_key.i}
-{Func/barrfunc.i}
 
 FUNCTION process_highspender_row RETURN LOGICAL
       ( BUFFER phInvCust FOR Customer,
@@ -95,5 +119,4 @@ END FUNCTION.
 loop_highspender_table("1", 0.0, 0).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.

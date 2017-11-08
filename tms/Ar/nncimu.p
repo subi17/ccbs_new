@@ -54,7 +54,7 @@
                   16.05.02/aam partial crediting 
                   17.05.02/tk  RUN Mc/memo.p
                   28.05.02/aam userlog removed 
-                  03.06.02/aam katun added to Invoice.Memo
+                  03.06.02/aam Syst.Var:katun added to Invoice.Memo
                   07.06.02/aam use Invoice.OverPaym for overpayment,
                                change the sign also for cinv.VATAmt
                   18.06.02/aam don't update InvNum with F1,
@@ -76,7 +76,7 @@
                                sent to bank -> cancel dd-data from orig.invoice
                   11.06.03/aam message if dd-invoice is credited too late
                   15.09.03/aam brand
-                  13.10.03/aam invoice can be given in si-recid2,
+                  13.10.03/aam invoice can be given in Syst.Var:si-recid2,
                                don't change invoicetype for type 3 
                   04.12.03/aam default due date = invoice date            
                   29.12.03/aam WInvDisp = true for partially credited
@@ -102,7 +102,6 @@
   --------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/timestamp.i}
 {Func/faccper.i}
 {Func/fbankday.i}
 {Ar/nnpcst.i}
@@ -191,8 +190,8 @@ form
                     help "Change the state of credited events into unbilled"
                                    skip
 WITH
-   OVERLAY width 80 ROW 1 side-labels COLOR value(cfc) TITLE COLOR value(ctc)
-   " " + ynimi + "   CREDIT NOTES        " + string(pvm,"99-99-99") + " "
+   OVERLAY width 80 ROW 1 side-labels COLOR value(Syst.Var:cfc) TITLE COLOR value(Syst.Var:ctc)
+   " " + Syst.Var:ynimi + "   CREDIT NOTES        " + string(TODAY,"99-99-99") + " "
    FRAME rajat.
 
 form
@@ -279,8 +278,7 @@ FUNCTION fDispReasonDesc RETURNS LOGIC
    (icReason AS CHAR):
 
    IF icReason > "" THEN 
-      lcReasonDesc = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                      "CreditNote",
+      lcReasonDesc = Func.Common:mTMSCodeName("CreditNote",
                                       "Reason",
                                       icReason).
    ELSE lcReasonDesc = "".
@@ -306,8 +304,7 @@ FUNCTION fDispReasonGrpDesc RETURNS LOGIC
    (icGrp AS CHAR):
 
    IF icGrp > "" THEN 
-      lcReasonGrpDesc = DYNAMIC-FUNCTION("fTMSCodeName" IN ghFunc1,
-                                         "CreditNote",
+      lcReasonGrpDesc = Func.Common:mTMSCodeName("CreditNote",
                                          "ReasonGrp",
                                          icGrp).
    ELSE lcReasonGrpDesc = "".
@@ -316,24 +313,24 @@ FUNCTION fDispReasonGrpDesc RETURNS LOGIC
     
 END FUNCTION.
 
-cfc = "sel".  RUN Syst/ufcolor.p.
+Syst.Var:cfc = "sel".  RUN Syst/ufcolor.p.
 
 /* crediting limit from user */
 FIND FIRST TMSUser NO-LOCK WHERE
-           TMSUser.UserCode = katun NO-ERROR.
+           TMSUser.UserCode = Syst.Var:katun NO-ERROR.
 IF AVAILABLE TMSUser THEN 
       ldCreditLimit =  fUserLimitAmt(TMSUser.UserCode,
                                      {&CREDIT_NOTE_LIMIT_TYPE}) .
  
 /* release right */
-IF SetTMSUser(katun) 
+IF SetTMSUser(Syst.Var:katun) 
 THEN lcCanRelease = getTMSRight("SYST").
 ELSE lcCanRelease = "".
  
 liCalled = 0. 
-IF si-recid2 NE ? THEN DO:
-   FIND Invoice NO-LOCK WHERE RECID(Invoice) = si-recid2 NO-ERROR.
-   si-recid2 = ?.
+IF Syst.Var:si-recid2 NE ? THEN DO:
+   FIND Invoice NO-LOCK WHERE RECID(Invoice) = Syst.Var:si-recid2 NO-ERROR.
+   Syst.Var:si-recid2 = ?.
 
    IF NOT AVAILABLE Invoice THEN DO:
       MESSAGE "Unknown invoice"
@@ -370,18 +367,18 @@ repeat WITH FRAME rajat:
              lcExtInvID  = "".
 
       IF liCalled = 0 THEN DO:
-         ehto = 9. RUN Syst/ufkey.p.
+         Syst.Var:ehto = 9. RUN Syst/ufkey.p.
 
          UPDATE lcExtInvID validate(lcExtInvID = "" OR 
                           can-find(FIRST Invoice where 
-                                         Invoice.Brand  = gcBrand AND
+                                         Invoice.Brand  = Syst.Var:gcBrand AND
                                          Invoice.ExtInvID = input lcExtInvID),
                           "Unknown invoice !").
 
          IF lcExtInvID = "" THEN LEAVE rajat.
 
          FIND Invoice WHERE
-              Invoice.Brand    = gcBrand AND
+              Invoice.Brand    = Syst.Var:gcBrand AND
               Invoice.ExtInvID = lcExtInvID NO-LOCK NO-ERROR.
          IF NOT AVAILABLE Invoice THEN NEXT.
          
@@ -402,7 +399,7 @@ repeat WITH FRAME rajat:
    END.
 
    FIND Invoice where Invoice.InvNum = liInvNum no-lock.
-   IF Invoice.Brand NE gcBrand THEN DO:
+   IF Invoice.Brand NE Syst.Var:gcBrand THEN DO:
       MESSAGE "Invoice belongs to brand" Invoice.Brand
       VIEW-AS ALERT-BOX
       ERROR.
@@ -452,15 +449,14 @@ repeat WITH FRAME rajat:
    END.
 
    FIND Customer of Invoice no-lock.
-   lcCustName = DYNAMIC-FUNCTION("fDispCustName" IN ghFunc1,
-                                  BUFFER Customer).
+   lcCustName = Func.Common:mDispCustName(BUFFER Customer).
    DISP Customer.CustNum lcCustName Customer.InvGroup.
 
    IF Invoice.InvType >= 3 AND Invoice.InvType <= 4 THEN llAllowRel = FALSE.
    
    DO FOR InvGroup:
       FIND FIRST InvGroup WHERE
-                 InvGroup.Brand    = gcBrand AND
+                 InvGroup.Brand    = Syst.Var:gcBrand AND
                  InvGroup.InvGroup = Customer.InvGroup 
       no-lock no-error.
       DISPLAY InvGroup.IGName.  
@@ -516,12 +512,12 @@ repeat WITH FRAME rajat:
             END.   
          END.
                    
-         ehto = 9.
+         Syst.Var:ehto = 9.
          RUN Syst/ufkey.p.
          NEXT. 
       END.
 
-      ELSE IF lookup(keylabel(LASTKEY),poisnap) > 0 THEN DO:
+      ELSE IF lookup(keylabel(LASTKEY),Syst.Var:poisnap) > 0 THEN DO:
 
          IF FRAME-FIELD = "hInvDate" THEN DO:
 
@@ -590,26 +586,26 @@ repeat WITH FRAME rajat:
 
    toimi:
    repeat WITH FRAME rajat:
-      ASSIGN ufk = 0 ehto = 0 
-      ufk[1] = 91  ufk[2] = 927  ufk[3] = 0 ufk[4] = 1807
-      ufk[5] = 908 ufk[7] = 1721 ufk[8] = 8.
+      ASSIGN Syst.Var:ufk = 0 Syst.Var:ehto = 0 
+      Syst.Var:ufk[1] = 91  Syst.Var:ufk[2] = 927  Syst.Var:ufk[3] = 0 Syst.Var:ufk[4] = 1807
+      Syst.Var:ufk[5] = 908 Syst.Var:ufk[7] = 1721 Syst.Var:ufk[8] = 8.
       
       /* no partial crediting for special invoices */
-      IF Invoice.InvType >= 3 AND Invoice.InvType <= 4 THEN ufk[4] = 0.
+      IF Invoice.InvType >= 3 AND Invoice.InvType <= 4 THEN Syst.Var:ufk[4] = 0.
       
       /* yoigo special */
-      ufk[4] = 0.
+      Syst.Var:ufk[4] = 0.
       
       RUN Syst/ufkey.p.
 
-      IF toimi = 8 THEN LEAVE rajat.
+      IF Syst.Var:toimi = 8 THEN LEAVE rajat.
 
-      ELSE IF toimi = 1 THEN DO:
+      ELSE IF Syst.Var:toimi = 1 THEN DO:
          llNewInv = false.
          NEXT  rajat.
       END.
 
-      ELSE IF toimi = 2 THEN DO TRANS: /* memo */
+      ELSE IF Syst.Var:toimi = 2 THEN DO TRANS: /* memo */
          FIND Invoice WHERE Invoice.InvNum = liInvNum
          NO-LOCK NO-ERROR.
          RUN Mc/memo.p(INPUT Invoice.CustNum,
@@ -620,7 +616,7 @@ repeat WITH FRAME rajat:
       END.
 
       /* cancel */
-      else if toimi = 7 then do:
+      else if Syst.Var:toimi = 7 then do:
          liInvNum = 0.
          clear frame rajat no-pause.
          IF liCalled > 0 THEN LEAVE rajat.
@@ -628,13 +624,13 @@ repeat WITH FRAME rajat:
       end. 
 
       /* partial crediting; mark invoice lines TO be credited */
-      ELSE IF toimi = 4 THEN DO:
+      ELSE IF Syst.Var:toimi = 4 THEN DO:
          RUN Ar/partcred.p(liInvNum,
                       input-output table wMarked).
          fCreditAmt(). 
       END.
 
-      ELSE IF toimi = 5 THEN DO:
+      ELSE IF Syst.Var:toimi = 5 THEN DO:
 
          /* credited amount can't be more than invoice amount */
          IF abs(xCrAmt) GT abs(Invoice.InvAmt) THEN DO:
@@ -686,7 +682,7 @@ repeat WITH FRAME rajat:
          IF ok THEN LEAVE toimi.
 
       END.
-   END. /* toimi */
+   END. /* Syst.Var:toimi */
 
    /* Ask FOR unmarking the Billed rows */
    IF NOT State AND llAllowRel AND 
@@ -703,7 +699,7 @@ repeat WITH FRAME rajat:
    IF liActTime < TIME AND hInvDate = TODAY THEN hInvDate = hInvDate + 1.
    
    /* requests will be run in the evening of given date */
-   ldActStamp = fMake2DT(hInvDate,
+   ldActStamp = Func.Common:mMake2DT(hInvDate,
                          liActTime).
 
    /* make a request */
@@ -724,7 +720,7 @@ repeat WITH FRAME rajat:
    IF lii > 0 THEN DO:
       MESSAGE "Request ID for credit note is" lii SKIP
               "It will be activated on" 
-              fTS2Hms(ldActStamp)
+              Func.Common:mTS2HMS(ldActStamp)
       VIEW-AS ALERT-BOX 
       TITLE " REQUEST CREATED ".
    END.

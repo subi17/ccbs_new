@@ -58,6 +58,8 @@ if not os.path.exists(relpath + '/etc/site.py'):
 
     if os.path.exists(relpath + '/.safeproduction'):
         environment = 'safeproduction'
+    elif os.path.exists(relpath + '/.slavedevelopment'):
+        environment = 'slavedevelopment'
     elif os.path.exists(relpath + '/.DeployMakefile.py'):
         environment = 'development'
     else:
@@ -78,7 +80,7 @@ if not os.path.exists(relpath + '/etc/site.py'):
     fd.write("%-14s = '%s'\n" % ('lighttpd_location', lighttpd_location))
     fd.write("ENV%-11s = '%s'\n" % ("['TERM']", 'xterm'))
     fd.write("ENV%-11s = '%s%s'\n" % ("['DBUTIL']", dlc, '/bin/_dbutil'))
-    if environment == 'development' and os.environ.get('PROCFG'):
+    if ( environment == 'development' or environment == 'slavedevelopment' ) and os.environ.get('PROCFG'):
         fd.write("ENV%-11s = '%s'\n" % ("['PROCFG']", os.environ['PROCFG']))
     fd.write("\nexec(open(work_dir + '/etc/config.py').read())\n")
     fd.close()
@@ -90,7 +92,7 @@ os.environ['PROTERMCAP'] = work_dir + '/etc/protermcap'
 
 def modgen():
     for mod in modules:
-        if environment != 'development':
+        if environment != 'development' and environment != 'slavedevelopment':
             yield '{0}/{0}.pl'.format(mod)
         yield mod
     yield 'tms_support'
@@ -109,7 +111,7 @@ cdr_database_count = 0
 if cdr_databases:
     cdr_database_count = len(cdr_databases)
 
-if environment == 'development':
+if environment == 'development' or environment == 'slavedevelopment':
     databases.extend(cdr_databases)
     del cdr_databases[:]
 

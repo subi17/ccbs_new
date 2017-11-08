@@ -1,29 +1,34 @@
 /**
  * Clean test data of given customer person id.
 
- * @input string;mandatory;person id
+ * @input  brand;string;mandatory;tenant
+           person_id;string;mandatory;person id
  * @output boolean;TRUE
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
-gcBrand = "1".
+Syst.Var:gcBrand = "1".
 {Func/msisdn.i}
 
+DEF VAR pcTenant      AS CHAR NO-UNDO.
 DEF VAR lcDNI         AS CHAR NO-UNDO.
 DEF VAR MSISDN_status AS INT  NO-UNDO FORMAT "Z9".
 
-IF validate_request(param_toplevel_id, "string") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "string,string") EQ ? THEN RETURN.
 
-lcDNI = get_string(param_toplevel_id,"0").
+pcTenant = get_string(param_toplevel_id,"0").
+lcDNI    = get_string(param_toplevel_id,"1").
 
 IF lcDNI = "" OR lcDNI = ? THEN
    RETURN appl_err("Customer Person Id is empty").
 
+{newton/src/settenant.i pcTenant}
+
 FUNCTION fReleaseSIM RETURNS LOG (INPUT icICC AS CHAR):
 
    FOR FIRST SIM EXCLUSIVE-LOCK WHERE
-             SIM.Brand EQ gcBrand AND
+             SIM.Brand EQ Syst.Var:gcBrand AND
              SIM.ICC   EQ icICC   AND
             (SIM.Stock EQ "TESTING" OR
              SIM.Stock EQ "EMATESTING") AND
@@ -41,7 +46,7 @@ FUNCTION fReleaseMSISDN RETURNS LOG (INPUT icMSISDN AS CHAR):
    ELSE MSISDN_status = 99.   /* use normal status value */
 
    FOR FIRST MSISDN EXCLUSIVE-LOCK WHERE
-             MSISDN.Brand = gcBrand AND
+             MSISDN.Brand = Syst.Var:gcBrand AND
              MSISDN.CLI   = icMSISDN AND
              MSISDN.StatusCode < 98:
       fMakeMsidnHistory(INPUT RECID(MSISDN)).
@@ -73,11 +78,11 @@ END FUNCTION.
 FUNCTION fDeleteSubscription RETURNS LOG (INPUT iiCustNum AS INT):
 
    FOR EACH MsOwner WHERE
-            MsOwner.Brand   = gcBrand AND
+            MsOwner.Brand   = Syst.Var:gcBrand AND
             MsOwner.CustNum = iiCustNum EXCLUSIVE-LOCK:
 
        FOR EACH FixedFee USE-INDEX Custnum WHERE
-                FixedFee.Brand     = gcBrand AND
+                FixedFee.Brand     = Syst.Var:gcBrand AND
                 FixedFee.Custnum   = MsOwner.CustNum AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue  = STRING(MsOwner.MsSeq) EXCLUSIVE-LOCK:
@@ -88,7 +93,7 @@ FUNCTION fDeleteSubscription RETURNS LOG (INPUT iiCustNum AS INT):
        END. /* FOR EACH FixedFee USE-INDEX HostTable WHERE */
 
        FOR EACH SingleFee USE-INDEX Custnum WHERE
-                SingleFee.Brand     = gcBrand AND
+                SingleFee.Brand     = Syst.Var:gcBrand AND
                 SingleFee.Custnum   = MsOwner.CustNum AND
                 SingleFee.HostTable = "Mobsub" AND
                 SingleFee.KeyValue  = STRING(MsOwner.MsSeq) EXCLUSIVE-LOCK:
@@ -141,13 +146,13 @@ FUNCTION fDeleteSubscription RETURNS LOG (INPUT iiCustNum AS INT):
        END.
 
        FOR EACH MobSub WHERE
-                MobSub.Brand = gcBrand AND
+                MobSub.Brand = Syst.Var:gcBrand AND
                 MobSub.CLI   = MsOwner.CLI EXCLUSIVE-LOCK:
           DELETE MobSub.
        END.
 
        FOR EACH TermMobSub WHERE
-                TermMobSub.Brand = gcBrand AND
+                TermMobSub.Brand = Syst.Var:gcBrand AND
                 TermMobSub.CLI   = MsOwner.CLI EXCLUSIVE-LOCK:
           DELETE TermMobSub.
        END.
@@ -161,14 +166,14 @@ END FUNCTION.
 /* Main Block */
 
 FOR EACH Customer WHERE
-         Customer.Brand = gcBrand AND
+         Customer.Brand = Syst.Var:gcBrand AND
          Customer.OrgId = lcDNI NO-LOCK,
     EACH MobSub WHERE
-         MobSub.Brand   = gcBrand AND
+         MobSub.Brand   = Syst.Var:gcBrand AND
          MobSub.AgrCust = Customer.CustNum NO-LOCK:
 
    FIND FIRST SIM WHERE
-              SIM.Brand EQ gcBrand    AND
+              SIM.Brand EQ Syst.Var:gcBrand    AND
               SIM.ICC   EQ MobSub.ICC AND
              (SIM.Stock EQ "TESTING" OR
               SIM.Stock EQ "EMATESTING") NO-LOCK NO-ERROR.
@@ -177,7 +182,7 @@ FOR EACH Customer WHERE
 END.
 
 FOR EACH Customer WHERE
-         Customer.Brand = gcBrand AND
+         Customer.Brand = Syst.Var:gcBrand AND
          Customer.OrgId = lcDNI EXCLUSIVE-LOCK:
 
    fDeleteOrder(INPUT Customer.CustNum).
@@ -189,5 +194,4 @@ END.
 add_boolean(response_toplevel_id,?,True).
 
 FINALLY:
-   IF VALID-HANDLE(ghFunc1) THEN DELETE OBJECT ghFunc1 NO-ERROR. 
-END.
+   END.
