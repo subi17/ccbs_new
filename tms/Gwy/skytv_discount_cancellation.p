@@ -63,8 +63,3 @@ PROCEDURE pProcessRequests:
 
 END PROCEDURE.
 
-FINALLY:
-   
-END.
-
-

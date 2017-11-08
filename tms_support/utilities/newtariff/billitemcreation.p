@@ -81,7 +81,7 @@ REPEAT:
           ttBillItem.IFSCode    = TRIM(ENTRY(6,lcLine,";"))
           ttBillItem.CostCenter = TRIM(ENTRY(7,lcLine,";"))
           ttBillItem.ItemType   = INT(ENTRY(8,lcLine,";")) 
-          WHEN NUM-ENTRIES(lcLine,";") > 0 NO-ERROR.
+          WHEN NUM-ENTRIES(lcLine,";") > 7 NO-ERROR.
    
    IF ERROR-STATUS:ERROR THEN DO:
       fError("Incorrect input data").

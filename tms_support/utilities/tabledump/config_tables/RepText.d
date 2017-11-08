@@ -1552,6 +1552,18 @@
 1 "" 2 "Descompte promoció" 0 "CONVDISC20_3" "1" 05/07/17 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONVDISC20_3" "1" 05/07/17 31/12/49
 1 "" 5 "Promotional discount" 0 "CONVDISC20_3" "1" 05/07/17 31/12/49
+1 "" 1 "Descuento promoción" 0 "CONVDISC_CS100_6" "1" 07/11/17 31/12/49
+1 "" 2 "Descompte promoció" 0 "CONVDISC_CS100_6" "1" 07/11/17 31/12/49
+1 "" 3 "Promozio-deskontua" 0 "CONVDISC_CS100_6" "1" 07/11/17 31/12/49
+1 "" 5 "Promotional discount" 0 "CONVDISC_CS100_6" "1" 07/11/17 31/12/49
+1 "" 1 "Descuento promoción" 0 "CONVDISC_CS20F12" "1" 07/11/17 31/12/49
+1 "" 2 "Descompte promoció" 0 "CONVDISC_CS20F12" "1" 07/11/17 31/12/49
+1 "" 3 "Promozio-deskontua" 0 "CONVDISC_CS20F12" "1" 07/11/17 31/12/49
+1 "" 5 "Promotional discount" 0 "CONVDISC_CS20F12" "1" 07/11/17 31/12/49
+1 "" 1 "Descuento promoción" 0 "CONVDISC_CS20M12" "1" 07/11/17 31/12/49
+1 "" 2 "Descompte promoció" 0 "CONVDISC_CS20M12" "1" 07/11/17 31/12/49
+1 "" 3 "Promozio-deskontua" 0 "CONVDISC_CS20M12" "1" 07/11/17 31/12/49
+1 "" 5 "Promotional discount" 0 "CONVDISC_CS20M12" "1" 07/11/17 31/12/49
 1 "" 1 "Descuento promocional" 0 "CPDISC20" "1" 01/02/14 31/12/49
 1 "" 2 "Descuento promocional" 0 "CPDISC20" "1" 01/02/14 31/12/49
 1 "" 3 "Descuento promocional" 0 "CPDISC20" "1" 01/02/14 31/12/49
@@ -5090,12 +5102,12 @@
 1 "" 3 "LG K10 2017 Titan" 0 "P030107G2" "1" 27/03/17 31/12/49
 1 "" 4 "LG K10 2017 Titan" 0 "P030107G2" "1" 27/03/17 31/12/49
 1 "" 5 "LG K10 2017 Titan" 0 "P030107G2" "1" 27/03/17 31/12/49
-1 "" 1 "LG K10 2017 Titan" 0 "P030107GC" "1" 17/08/17 31/12/49
+1 "" 1 "LG K10 2017 Titán" 0 "P030107GC" "1" 17/08/17 31/12/49
 1 "" 2 "LG K10 2017 Titan" 0 "P030107GC" "1" 17/08/17 31/12/49
 1 "" 3 "LG K10 2017 Titan" 0 "P030107GC" "1" 17/08/17 31/12/49
 1 "" 4 "LG K10 2017 Titan" 0 "P030107GC" "1" 17/08/17 31/12/49
 1 "" 5 "LG K10 2017 Titan" 0 "P030107GC" "1" 17/08/17 31/12/49
-1 "" 1 "LG K10 2017 Titan con Tablet Wolder Mitab One 10” Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
+1 "" 1 "LG K10 2017 Titán con Tablet Wolder Mitab One 10” Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
 1 "" 2 "LG K10 2017 Titan con Tablet Wolder Mitab One 10” Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
 1 "" 3 "LG K10 2017 Titan con Tablet Wolder Mitab One 10” Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
 1 "" 4 "LG K10 2017 Titan con Tablet Wolder Mitab One 10” Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
@@ -5140,7 +5152,7 @@
 1 "" 3 "LG G5 SE Titán con LG Cam Plus y funda de regalo" 0 "P0305SECP" "1" 28/02/17 31/12/49
 1 "" 4 "LG G5 SE Titán con LG Cam Plus y funda de regalo" 0 "P0305SECP" "1" 28/02/17 31/12/49
 1 "" 5 "LG G5 SE Titán con LG Cam Plus y funda de regalo" 0 "P0305SECP" "1" 28/02/17 31/12/49
-1 "" 1 "LG G5 SE Titan" 0 "P0305SEN2" "1" 24/11/16 31/12/49
+1 "" 1 "LG G5 SE Titán" 0 "P0305SEN2" "1" 24/11/16 31/12/49
 1 "" 2 "LG G5 SE Titan" 0 "P0305SEN2" "1" 24/11/16 31/12/49
 1 "" 3 "LG G5 SE Titan" 0 "P0305SEN2" "1" 24/11/16 31/12/49
 1 "" 4 "LG G5 SE Titan" 0 "P0305SEN2" "1" 24/11/16 31/12/49
@@ -5285,6 +5297,11 @@
 1 "" 3 "LG K10 Negro" 0 "P030K10N2" "1" 10/06/16 31/12/49
 1 "" 4 "LG K10 Negro" 0 "P030K10N2" "1" 10/06/16 31/12/49
 1 "" 5 "LG K10 Black" 0 "P030K10N2" "1" 10/06/16 31/12/49
+1 "" 1 "LG K10 negro" 0 "P030K10NC" "1" 31/10/17 31/12/49
+1 "" 2 "LG K10 negro" 0 "P030K10NC" "1" 31/10/17 31/12/49
+1 "" 3 "LG K10 negro" 0 "P030K10NC" "1" 31/10/17 31/12/49
+1 "" 4 "LG K10 negro" 0 "P030K10NC" "1" 31/10/17 31/12/49
+1 "" 5 "LG K10 black" 0 "P030K10NC" "1" 31/10/17 31/12/49
 1 "" 1 "LG K10 Blanco" 0 "P030K10W2" "1" 10/06/16 31/12/49
 1 "" 2 "LG K10 Blanco" 0 "P030K10W2" "1" 10/06/16 31/12/49
 1 "" 3 "LG K10 Blanco" 0 "P030K10W2" "1" 10/06/16 31/12/49
@@ -6180,7 +6197,7 @@
 1 "" 3 "Samsung Galaxy S8 Azul" 0 "P034GS8AC" "1" 11/08/17 31/12/49
 1 "" 4 "Samsung Galaxy S8 Azul" 0 "P034GS8AC" "1" 11/08/17 31/12/49
 1 "" 5 "Samsung Galaxy S8 Blue" 0 "P034GS8AC" "1" 11/08/17 31/12/49
-1 "" 1 "Samsung Galaxy S8 Gris Orquidea" 0 "P034GS8G2" "1" 27/03/17 31/12/49
+1 "" 1 "Samsung Galaxy S8 Gris orquídea" 0 "P034GS8G2" "1" 27/03/17 31/12/49
 1 "" 2 "Samsung Galaxy S8 Gris Orquidea" 0 "P034GS8G2" "1" 27/03/17 31/12/49
 1 "" 3 "Samsung Galaxy S8 Gris Orquidea" 0 "P034GS8G2" "1" 27/03/17 31/12/49
 1 "" 4 "Samsung Galaxy S8 Gris Orquidea" 0 "P034GS8G2" "1" 27/03/17 31/12/49
@@ -6309,6 +6326,11 @@
 1 "" 3 "Samsung Galaxy J5 2016 Negro" 0 "P034J56N2" "1" 23/05/16 31/12/49
 1 "" 4 "Samsung Galaxy J5 2016 Negro" 0 "P034J56N2" "1" 23/05/16 31/12/49
 1 "" 5 "Samsung Galaxy J5 2016 Black" 0 "P034J56N2" "1" 23/05/16 31/12/49
+1 "" 1 "Samsung Galaxy J5 2016 Negro" 0 "P034J56NC" "1" 31/10/17 31/12/49
+1 "" 2 "Samsung Galaxy J5 2016 Negro" 0 "P034J56NC" "1" 31/10/17 31/12/49
+1 "" 3 "Samsung Galaxy J5 2016 Negro" 0 "P034J56NC" "1" 31/10/17 31/12/49
+1 "" 4 "Samsung Galaxy J5 2016 Negro" 0 "P034J56NC" "1" 31/10/17 31/12/49
+1 "" 5 "Samsung Galaxy J5 2016 Black" 0 "P034J56NC" "1" 31/10/17 31/12/49
 1 "" 1 "Samsung Galaxy J5 2016 Negro con Protector de vidrio transparente" 0 "P034J56NP" "1" 30/06/16 31/12/49
 1 "" 2 "Samsung Galaxy J5 2016 Negro con Protector de vidrio transparente" 0 "P034J56NP" "1" 30/06/16 31/12/49
 1 "" 3 "Samsung Galaxy J5 2016 Negro con Protector de vidrio transparente" 0 "P034J56NP" "1" 30/06/16 31/12/49
@@ -6686,12 +6708,12 @@
 1 "" 3 "Samsung Galaxy S8+ Azul" 0 "P034S8PA2" "1" 30/06/17 31/12/49
 1 "" 4 "Samsung Galaxy S8+ Azul" 0 "P034S8PA2" "1" 30/06/17 31/12/49
 1 "" 5 "Samsung Galaxy S8+ Blue" 0 "P034S8PA2" "1" 30/06/17 31/12/49
-1 "" 1 "Samsung Galaxy S8+ Gris Orquidea" 0 "P034S8PG2" "1" 27/03/17 31/12/49
+1 "" 1 "Samsung Galaxy S8+ Gris orquídea" 0 "P034S8PG2" "1" 27/03/17 31/12/49
 1 "" 2 "Samsung Galaxy S8+ Gris Orquidea" 0 "P034S8PG2" "1" 27/03/17 31/12/49
 1 "" 3 "Samsung Galaxy S8+ Gris Orquidea" 0 "P034S8PG2" "1" 27/03/17 31/12/49
 1 "" 4 "Samsung Galaxy S8+ Gris Orquidea" 0 "P034S8PG2" "1" 27/03/17 31/12/49
 1 "" 5 "Samsung Galaxy S8+ Orchid grey" 0 "P034S8PG2" "1" 27/03/17 31/12/49
-1 "" 1 "Samsung Galaxy S8+ Gris Orquidea" 0 "P034S8PGC" "1" 04/08/17 31/12/49
+1 "" 1 "Samsung Galaxy S8+ Gris orquídea" 0 "P034S8PGC" "1" 04/08/17 31/12/49
 1 "" 2 "Samsung Galaxy S8+ Gris Orquidea" 0 "P034S8PGC" "1" 04/08/17 31/12/49
 1 "" 3 "Samsung Galaxy S8+ Gris Orquidea" 0 "P034S8PGC" "1" 04/08/17 31/12/49
 1 "" 4 "Samsung Galaxy S8+ Gris Orquidea" 0 "P034S8PGC" "1" 04/08/17 31/12/49
@@ -6813,6 +6835,16 @@
 1 "" 3 "Sony Xperia E4G Blanco" 0 "P037E4GW2" "1" 22/04/15 31/12/49
 1 "" 4 "Sony Xperia E4G Blanco" 0 "P037E4GW2" "1" 22/04/15 31/12/49
 1 "" 5 "Sony Xperia E4G White" 0 "P037E4GW2" "1" 22/04/15 31/12/49
+1 "" 1 "Sony Xperia L1 Negro con auriculares de regalo" 0 "P037L1PNC" "1" 31/10/17 31/12/49
+1 "" 2 "Sony Xperia L1 Negro con auriculares de regalo" 0 "P037L1PNC" "1" 31/10/17 31/12/49
+1 "" 3 "Sony Xperia L1 Negro con auriculares de regalo" 0 "P037L1PNC" "1" 31/10/17 31/12/49
+1 "" 4 "Sony Xperia L1 Negro con auriculares de regalo" 0 "P037L1PNC" "1" 31/10/17 31/12/49
+1 "" 5 "Sony Xperia L1 Black with Headphones" 0 "P037L1PNC" "1" 31/10/17 31/12/49
+1 "" 1 "Sony Xperia L1 Blanco con auriculares de regalo" 0 "P037L1PWC" "1" 31/10/17 31/12/49
+1 "" 2 "Sony Xperia L1 Blanco con auriculares de regalo" 0 "P037L1PWC" "1" 31/10/17 31/12/49
+1 "" 3 "Sony Xperia L1 Blanco con auriculares de regalo" 0 "P037L1PWC" "1" 31/10/17 31/12/49
+1 "" 4 "Sony Xperia L1 Blanco con auriculares de regalo" 0 "P037L1PWC" "1" 31/10/17 31/12/49
+1 "" 5 "Sony Xperia L1 White with Headphones" 0 "P037L1PWC" "1" 31/10/17 31/12/49
 1 "" 1 "Sony Xperia M4 Aqua Negro" 0 "P037M4AN2" "1" 27/05/15 31/12/49
 1 "" 2 "Sony Xperia M4 Aqua Negro" 0 "P037M4AN2" "1" 27/05/15 31/12/49
 1 "" 3 "Sony Xperia M4 Aqua Negro" 0 "P037M4AN2" "1" 27/05/15 31/12/49
@@ -7624,7 +7656,7 @@
 1 "" 3 "Huawei P8 Gris" 0 "P043HP8S2" "1" 22/04/15 31/12/49
 1 "" 4 "Huawei P8 Gris" 0 "P043HP8S2" "1" 22/04/15 31/12/49
 1 "" 5 "Huawei P8 Grey" 0 "P043HP8S2" "1" 22/04/15 31/12/49
-1 "" 1 "Huawei P9 Gris Titanio" 0 "P043HP9N2" "1" 19/04/16 31/12/49
+1 "" 1 "Huawei P9 Gris titanio" 0 "P043HP9N2" "1" 19/04/16 31/12/49
 1 "" 2 "Huawei P9 Negro" 0 "P043HP9N2" "1" 19/04/16 31/12/49
 1 "" 3 "Huawei P9 Negro" 0 "P043HP9N2" "1" 19/04/16 31/12/49
 1 "" 4 "Huawei P9 Negro" 0 "P043HP9N2" "1" 19/04/16 31/12/49
@@ -7744,16 +7776,16 @@
 1 "" 3 "Huawei P10 Lite Blanco con funda de regalo" 0 "P043L10WP" "1" 24/03/17 31/12/49
 1 "" 4 "Huawei P10 Lite Blanco con funda de regalo" 0 "P043L10WP" "1" 24/03/17 31/12/49
 1 "" 5 "Huawei P10 Lite White with cover gift" 0 "P043L10WP" "1" 24/03/17 31/12/49
-1 "" 1 "Huawei mate 10 Negro" 0 "P043M10NC" "1" 25/10/17 31/12/49
+1 "" 1 "Huawei Mate 10 Negro" 0 "P043M10NC" "1" 25/10/17 31/12/49
 1 "" 2 "Huawei mate 10 Negro" 0 "P043M10NC" "1" 25/10/17 31/12/49
 1 "" 3 "Huawei mate 10 Negro" 0 "P043M10NC" "1" 25/10/17 31/12/49
 1 "" 4 "Huawei mate 10 Negro" 0 "P043M10NC" "1" 25/10/17 31/12/49
-1 "" 5 "Huawei mate 10 Black" 0 "P043M10NC" "1" 25/10/17 31/12/49
-1 "" 1 "Huawei mate 10 Negro con Tablet de regalo" 0 "P043M1PNC" "1" 26/10/17 31/12/49
+1 "" 5 "Huawei Mate 10 Black" 0 "P043M10NC" "1" 25/10/17 31/12/49
+1 "" 1 "Huawei Mate 10 Negro con Tablet de regalo" 0 "P043M1PNC" "1" 26/10/17 31/12/49
 1 "" 2 "Huawei mate 10 Negro con Tablet de regalo" 0 "P043M1PNC" "1" 26/10/17 31/12/49
 1 "" 3 "Huawei mate 10 Negro con Tablet de regalo" 0 "P043M1PNC" "1" 26/10/17 31/12/49
 1 "" 4 "Huawei mate 10 Negro con Tablet de regalo" 0 "P043M1PNC" "1" 26/10/17 31/12/49
-1 "" 5 "Huawei mate 10 Black with Tablet Gift" 0 "P043M1PNC" "1" 26/10/17 31/12/49
+1 "" 5 "Huawei Mate 10 Black with Tablet Gift" 0 "P043M1PNC" "1" 26/10/17 31/12/49
 1 "" 1 "Huawei Mate 9 Dorado" 0 "P043MT9DC" "1" 17/08/17 31/12/49
 1 "" 2 "Huawei Mate 9 Dorado" 0 "P043MT9DC" "1" 17/08/17 31/12/49
 1 "" 3 "Huawei Mate 9 Dorado" 0 "P043MT9DC" "1" 17/08/17 31/12/49
@@ -7899,6 +7931,11 @@
 1 "" 3 "Huawei P9 Plus Gris" 0 "P043P9PG2" "1" 24/06/16 31/12/49
 1 "" 4 "Huawei P9 Plus Gris" 0 "P043P9PG2" "1" 24/06/16 31/12/49
 1 "" 5 "Huawei P9 Plus Quartz Grey" 0 "P043P9PG2" "1" 24/06/16 31/12/49
+1 "" 1 "Huawei P9 Plus Gris" 0 "P043P9PGC" "1" 31/10/17 31/12/49
+1 "" 2 "Huawei P9 Plus Gris" 0 "P043P9PGC" "1" 31/10/17 31/12/49
+1 "" 3 "Huawei P9 Plus Gris" 0 "P043P9PGC" "1" 31/10/17 31/12/49
+1 "" 4 "Huawei P9 Plus Gris" 0 "P043P9PGC" "1" 31/10/17 31/12/49
+1 "" 5 "Huawei P9 Plus Grey" 0 "P043P9PGC" "1" 31/10/17 31/12/49
 1 "" 1 "Huawei P9 Plus Gris" 0 "P043P9PN2" "1" 10/06/16 31/12/49
 1 "" 2 "Huawei P9 Plus Negro" 0 "P043P9PN2" "1" 10/06/16 31/12/49
 1 "" 3 "Huawei P9 Plus Negro" 0 "P043P9PN2" "1" 10/06/16 31/12/49
@@ -9554,7 +9591,7 @@
 1 "" 3 "iPhone 6s Plus 128 GB Oro Rosa" 0 "P0976S1P2" "1" 25/11/15 31/12/49
 1 "" 4 "iPhone 6s Plus 128 GB Oro Rosa" 0 "P0976S1P2" "1" 25/11/15 31/12/49
 1 "" 5 "SUMIDERO3" 0 "P0976S1P2" "1" 25/11/15 31/12/49
-1 "" 1 "iPhone 6s 128 GB Oro Rosa" 0 "P0976S1R2" "1" 26/11/15 31/12/49
+1 "" 1 "iPhone 6s 128 GB Oro rosa" 0 "P0976S1R2" "1" 26/11/15 31/12/49
 1 "" 2 "iPhone 6s 128 GB Oro Rosa" 0 "P0976S1R2" "1" 26/11/15 31/12/49
 1 "" 3 "iPhone 6s 128 GB Oro Rosa" 0 "P0976S1R2" "1" 26/11/15 31/12/49
 1 "" 4 "iPhone 6s 128 GB Oro Rosa" 0 "P0976S1R2" "1" 26/11/15 31/12/49
@@ -9594,7 +9631,7 @@
 1 "" 3 "iPhone 6s 64 GB Gris" 0 "P0976S6G2" "1" 19/11/15 31/12/49
 1 "" 4 "iPhone 6s 64 GB Gris" 0 "P0976S6G2" "1" 19/11/15 31/12/49
 1 "" 5 "iPhone 6s 64 GB Space Grey" 0 "P0976S6G2" "1" 19/11/15 31/12/49
-1 "" 1 "iPhone 6s 64GB Oro Rosa" 0 "P0976S6R2" "1" 19/11/15 31/12/49
+1 "" 1 "iPhone 6s 64GB Oro rosa" 0 "P0976S6R2" "1" 19/11/15 31/12/49
 1 "" 2 "iPhone 6s 64GB Oro Rosa" 0 "P0976S6R2" "1" 19/11/15 31/12/49
 1 "" 3 "iPhone 6s 64GB Oro Rosa" 0 "P0976S6R2" "1" 19/11/15 31/12/49
 1 "" 4 "iPhone 6s 64GB Oro Rosa" 0 "P0976S6R2" "1" 19/11/15 31/12/49
@@ -10084,7 +10121,7 @@
 1 "" 3 "iPhone 6s Plus 128 GB Gris" 0 "P097SP1G2" "1" 26/11/15 31/12/49
 1 "" 4 "iPhone 6s Plus 128 GB Gris" 0 "P097SP1G2" "1" 26/11/15 31/12/49
 1 "" 5 "iPhone 6s Plus 128 GB Space Grey" 0 "P097SP1G2" "1" 26/11/15 31/12/49
-1 "" 1 "iPhone 6s Plus 128 GB Oro Rosa" 0 "P097SP1R2" "1" 05/01/16 31/12/49
+1 "" 1 "iPhone 6s Plus 128 GB Oro rosa" 0 "P097SP1R2" "1" 05/01/16 31/12/49
 1 "" 2 "iPhone 6s Plus 128 GB Oro Rosa" 0 "P097SP1R2" "1" 05/01/16 31/12/49
 1 "" 3 "iPhone 6s Plus 128 GB Oro Rosa" 0 "P097SP1R2" "1" 05/01/16 31/12/49
 1 "" 4 "iPhone 6s Plus 128 GB Oro Rosa" 0 "P097SP1R2" "1" 05/01/16 31/12/49
@@ -10124,7 +10161,7 @@
 1 "" 3 "iPhone 6s Plus 64 GB Gris" 0 "P097SP6G2" "1" 26/11/15 31/12/49
 1 "" 4 "iPhone 6s Plus 64 GB Gris" 0 "P097SP6G2" "1" 26/11/15 31/12/49
 1 "" 5 "iPhone 6s Plus 64 GB Space Grey" 0 "P097SP6G2" "1" 26/11/15 31/12/49
-1 "" 1 "iPhone 6s Plus 64 GB Oro Rosa" 0 "P097SP6R2" "1" 26/11/15 31/12/49
+1 "" 1 "iPhone 6s Plus 64 GB Oro rosa" 0 "P097SP6R2" "1" 26/11/15 31/12/49
 1 "" 2 "iPhone 6s Plus 64 GB Oro Rosa" 0 "P097SP6R2" "1" 26/11/15 31/12/49
 1 "" 3 "iPhone 6s Plus 64 GB Oro Rosa" 0 "P097SP6R2" "1" 26/11/15 31/12/49
 1 "" 4 "iPhone 6s Plus 64 GB Oro Rosa" 0 "P097SP6R2" "1" 26/11/15 31/12/49
@@ -11042,9 +11079,9 @@
 1 "" 2 "TV Set Box" 0 "TVSTB" "1" 22/08/17 31/12/49
 1 "" 3 "TV Set Box" 0 "TVSTB" "1" 22/08/17 31/12/49
 1 "" 5 "TV Set Box" 0 "TVSTB" "1" 22/08/17 31/12/49
-1 "" 1 "Failure to comply with min. contract on STB" 0 "TVTERMPERIOD" "1" 22/08/17 31/12/49
-1 "" 2 "Failure to comply with min. contract on STB" 0 "TVTERMPERIOD" "1" 22/08/17 31/12/49
-1 "" 3 "Failure to comply with min. contract on STB" 0 "TVTERMPERIOD" "1" 22/08/17 31/12/49
+1 "" 1 "Incumplimiento de Permanencia Deco" 0 "TVTERMPERIOD" "1" 22/08/17 31/12/49
+1 "" 2 "Incompliment de PermanÃ¨ncia Descod." 0 "TVTERMPERIOD" "1" 22/08/17 31/12/49
+1 "" 3 "Deskod. iraunkortasuna ez betetzea" 0 "TVTERMPERIOD" "1" 22/08/17 31/12/49
 1 "" 5 "Failure to comply with min. contract on STB" 0 "TVTERMPERIOD" "1" 22/08/17 31/12/49
 1 "" 1 "Actualización Internet" 0 "UPGRADEDATA" "1" 01/04/12 31/12/49
 1 "" 1 "Datos" 0 "UPGRADEDATA" "1" 01/03/12 31/03/12

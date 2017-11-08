@@ -234,7 +234,7 @@ PROCEDURE pPeriodicalContract:
                  (IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN Func.Common:mMakeTS()
                   ELSE IF Order.OrderType NE 2 THEN ideActStamp
                   ELSE IF Order.OrderChannel BEGINS "Retention" THEN Func.Common:mMakeTS()
-                  ELSE IF DayCampaign.DCEvent BEGINS "FTERM" THEN Func.Common:mMakeTS()
+                  ELSE IF DayCampaign.DCEvent BEGINS "FTERM" THEN Func.Common:mMakeTS() 
                   ELSE IF DayCampaign.DCType = {&DCTYPE_DISCOUNT} THEN Order.CrStamp
                   ELSE ideActStamp).
 

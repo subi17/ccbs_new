@@ -1316,11 +1316,11 @@ PROCEDURE pFinalize:
                        OrderCustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
                        Ordercustomer.pro,
                 FIRST Customer WHERE
-                      Customer.brand EQ Syst.Var:gcBrand AND
+                      Customer.brand EQ Syst.Var:gcbrand AND
                       Customer.orgid EQ Ordercustomer.custid AND
                       customer.category NE Ordercustomer.category,
                 FIRST bMobsub WHERE
-                      bMobsub.brand EQ Syst.Var:gcBrand AND
+                      bMobsub.brand EQ Syst.Var:gcbrand AND
                       bMobsub.custnum EQ customer.custnum AND
                       bMobsub.msseq ne MsRequest.msseq NO-LOCK:
                llmigrationNeeded = TRUE.
