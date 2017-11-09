@@ -74,7 +74,7 @@ DEFINE TEMP-TABLE ttOutputText
 DEFINE VARIABLE lcBrand AS CHARACTER NO-UNDO.
 
 DO ON ERROR UNDO, THROW:
-   lcBrand = CAPS(multitenancy.TenantInformation:mGetEffectiveBrand()).
+/*   lcBrand = CAPS(multitenancy.TenantInformation:mGetEffectiveBrand()). */
 
    /* Handler code for any error condition. */
    CATCH anyErrorObject AS Progress.Lang.Error:
@@ -1707,7 +1707,7 @@ FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
       /* YTS-10537 Update Customer information only when order is finished */
       RUN Mm/createcustomer.p(INPUT ttOneDelivery.OrderId,1,FALSE,FALSE,OUTPUT oiCustomer).
 
-      IF RETURN-VALUE "not updated existing customer" THEN DO:
+      IF RETURN-VALUE = "not updated existing customer" THEN DO:
          Order.CustNum = oiCustomer.
          /* do not call createcustcontact */         
       END.
