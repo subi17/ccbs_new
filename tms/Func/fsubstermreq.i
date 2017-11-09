@@ -83,8 +83,9 @@ FUNCTION fTerminationRequest RETURNS INTEGER
              (bOrder.StatusCode = {&ORDER_STATUS_PENDING_MOBILE_LINE} OR 
               bOrder.StatusCode = {&ORDER_STATUS_MNP} OR
               bOrder.StatusCode = {&ORDER_STATUS_MNP_REJECTED}):          
-
-         fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_CLOSED}).
+         
+         RUN Mc/closeorder.p(bOrder.OrderId, TRUE).
+         
       END.
                     
       /* Do not change the memo text (used by DWH) */
