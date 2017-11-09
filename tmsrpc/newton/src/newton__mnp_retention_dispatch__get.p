@@ -45,5 +45,3 @@ FOR EACH mnpretplatform NO-LOCK WHERE
 
 END.
  
-FINALLY:
-   END.
