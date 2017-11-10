@@ -42,6 +42,12 @@ FUNCTION fIsSVA RETURNS LOGICAL
    ELSE IF icService EQ "Centralita" THEN DO:
       RETURN TRUE.
    END.
+   ELSE IF icService EQ "ANGELTECH" THEN DO:
+      RETURN TRUE.
+   END.
+   ELSE IF icService EQ "MANITAS" THEN DO:
+      RETURN TRUE.
+   END.
 
    RETURN FALSE.
 END.
