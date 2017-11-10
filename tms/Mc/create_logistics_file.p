@@ -1891,8 +1891,7 @@ ELSE
 
 DO liCustLoop = 1 TO 3: 
    /* link Extra/Additional line mainline order to orders if available */
-   FOR EACH bttOneDelivery NO-LOCK WHERE
-            bttOneDelivery.OrderType = {&ORDER_TYPE_NEW}:
+   FOR EACH bttOneDelivery NO-LOCK:
 
       IF liCustLoop = 1 AND bttOneDelivery.NIE EQ "" THEN NEXT.
       IF liCustLoop = 2 AND bttOneDelivery.NIF EQ "" THEN NEXT.
