@@ -212,6 +212,7 @@ DEFINE TEMP-TABLE ttTax NO-UNDO
 
 DEFINE BUFFER bttOneDelivery   FOR ttOneDelivery. 
 DEFINE BUFFER bMLttOneDelivery FOR ttOneDelivery.
+DEFINE BUFFER bMLttExtra       FOR ttExtra.
 
 FUNCTION fRowVat RETURNS DECIMAL
   (INPUT llInvVat   AS LOGICAL,
@@ -266,8 +267,8 @@ FUNCTION fIsTerminalOrder RETURNS LOG
    DEFINE BUFFER bTermOrder FOR Order.
 
    FIND FIRST bTermOrder NO-LOCK WHERE 
-              bTermOrder.Brand   = gcBrand   AND 
-              bTermOrder.OrderId = liOrderId NO-ERROR.
+              bTermOrder.Brand   = Syst.Var:gcBrand AND 
+              bTermOrder.OrderId = liOrderId        NO-ERROR.
 
    IF NOT AVAIL bTermOrder THEN RETURN FALSE.
 
@@ -279,7 +280,7 @@ FUNCTION fIsTerminalOrder RETURNS LOG
 
    /* Check Terminal billcode */
    FOR EACH OfferItem NO-LOCK WHERE
-            OfferItem.Brand = Syst.Var:gcBrand AND
+            OfferItem.Brand       = Syst.Var:gcBrand   AND
             OfferItem.Offer       = bTermOrder.Offer   AND
             OfferItem.BeginStamp <= bTermOrder.CrStamp AND
             OfferItem.EndStamp   >= bTermOrder.CrStamp AND
@@ -393,8 +394,8 @@ FUNCTION fCheckForAdditionalORExtraMainLine RETURNS LOGICAL
           lcExtraLineCLITypes = fCParam("DiscountType","ExtraLine_CLITypes").
    
    FIND FIRST bOrder NO-LOCK WHERE 
-              bOrder.Brand   = gcBrand   AND 
-              bOrder.OrderId = liOrderId NO-ERROR.
+              bOrder.Brand   = Syst.Var:gcBrand AND 
+              bOrder.OrderId = liOrderId        NO-ERROR.
 
    IF NOT AVAIL bOrder THEN 
       RETURN FALSE.
@@ -407,7 +408,8 @@ FUNCTION fCheckForAdditionalORExtraMainLine RETURNS LOGICAL
          /* fetch convergent mobile row, to update despachar value */
          IF lcActionId = "0" THEN DO: 
             
-            IF fIsTerminalOrder(bOrder.OrderId,
+            IF (bOrder.DeliverySecure > 0) OR 
+               fIsTerminalOrder(bOrder.OrderId,
                                 OUTPUT lcTerminalBillCode) THEN 
                llDespachar = FALSE.
             ELSE llDespachar = TRUE.   
@@ -434,12 +436,12 @@ FUNCTION fCheckForAdditionalORExtraMainLine RETURNS LOGICAL
       ELSE IF LOOKUP(bOrder.CliType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
 
          FIND FIRST bOrderCustomer NO-LOCK WHERE
-                    bOrderCustomer.Brand   = gcBrand        AND
-                    bOrderCustomer.OrderId = bOrder.OrderId AND
-                    bOrderCustomer.RowType = 1              NO-ERROR.
+                    bOrderCustomer.Brand   = Syst.Var:gcBrand AND
+                    bOrderCustomer.OrderId = bOrder.OrderId   AND
+                    bOrderCustomer.RowType = 1                NO-ERROR.
          
          FIND FIRST bOrderAction NO-LOCK WHERE
-                    bOrderAction.Brand    = gcBrand            AND
+                    bOrderAction.Brand    = Syst.Var:gcBrand   AND
                     bOrderAction.OrderID  = bOrder.OrderId     AND
                     bOrderAction.ItemType EQ "AddLineDiscount" NO-ERROR.
          
@@ -487,8 +489,19 @@ FUNCTION fCheckForAdditionalORExtraMainLine RETURNS LOGICAL
                         liMainOrderId = INT(bMLttOneDelivery.OrderId).
                END.         
 
-               IF liMainOrderId NE 0 THEN 
+               IF liMainOrderId NE 0 THEN DO:
+                  /* If current additional line is with secure delivery option, then
+                     its minaline associated mobile line should be updated with
+                     false despachar value */
+                  FIND FIRST bMLttExtra EXCLUSIVE-LOCK WHERE
+                             bMLttExtra.RowNum = bMLttOneDelivery.RowNum NO-ERROR.
+                  IF AVAIL bMLttExtra                AND
+                     bOrder.DeliverySecure     > 0   AND
+                     bMLttOneDelivery.ActionID = "0" THEN
+                     bMLttExtra.Despachar = "02".              
+
                   LEAVE MAINORDER.
+               END.
             
             END.
 
@@ -501,7 +514,8 @@ FUNCTION fCheckForAdditionalORExtraMainLine RETURNS LOGICAL
       IF llgExtraLine      OR 
          llgAdditionalLine THEN DO:
          
-         IF LOOKUP(bOrder.StatusCode,{&ORDER_ROI_STATUSES}) > 0 THEN 
+         IF LOOKUP(bOrder.StatusCode,{&ORDER_ROI_STATUSES}) > 0 OR 
+                   bOrder.DeliverySecure > 0                    THEN 
             llDespachar = FALSE.
          ELSE IF fIsTerminalOrder(liMainOrderId,
                                   OUTPUT lcTerminalBillCode) THEN 
@@ -1466,10 +1480,6 @@ FUNCTION fDelivSIM RETURNS LOG
    THEN liDelType = {&ORDER_DELTYPE_POS_SECURE}.
    ELSE IF Order.DeliveryType EQ 0 THEN liDelType = {&ORDER_DELTYPE_COURIER}.
    ELSE liDelType = Order.DeliveryType.
-
-   /* In secure delivery always FALSE */
-   IF Order.DeliverySecure > 0 THEN
-      llDespachar = FALSE. 
 
    /* Create Temp-table for DataService (OR extra fields in future) */
    CREATE ttExtra.
