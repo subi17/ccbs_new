@@ -123,10 +123,6 @@ DO ON ERROR UNDO, THROW:
 
    RUN pSaveTariff.
 
-   RUN pReadTranslation.
-
-   RUN pSaveTranslation.
-
    RETURN "OK".
 
    CATCH e AS Progress.Lang.Error:
