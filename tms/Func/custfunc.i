@@ -18,6 +18,7 @@ FUNCTION fgetCustSegment RETURNS CHAR
    (INPUT icIdType AS CHAR,
     INPUT ilSelfemployed AS LOG,
     INPUT ilProCust AS LOG,
+    INPUT icCustId AS CHARACTER,  /* YDR-2621 */
     OUTPUT ocCategory AS CHAR):
 
    DEF VAR lcSegment AS CHAR NO-UNDO.
@@ -25,19 +26,39 @@ FUNCTION fgetCustSegment RETURNS CHAR
    DEF BUFFER CustCat FOR CustCat.
 
    IF ilProCust THEN DO:
-      FIND FIRST CustCat NO-LOCK WHERE
-                 Custcat.brand EQ Syst.Var:gcBrand AND
-                 Custcat.custidtype EQ icIdType AND
-                 CustCat.selfemployed EQ ilSelfEmployed AND
-                 CustCat.pro EQ ilProCust NO-ERROR.
-      IF AVAIL CustCat THEN DO:
-         lcSegment = CustCat.Segment.
-         ocCategory = CustCat.category.
+      /* YDR-2621 */
+      IF icIDType EQ "CIF" AND
+         icCustID BEGINS "V00" THEN DO:
+
+         FIND FIRST CustCat NO-LOCK WHERE
+                    Custcat.brand EQ Syst.Var:gcBrand AND
+                    Custcat.category EQ "30" NO-ERROR.
+         IF AVAIL CustCat THEN
+            ASSIGN 
+                lcSegment  = CustCat.Segment
+                ocCategory = CustCat.category.
+
+      END.
+      ELSE DO:
+         /* YDR-2621 - Original behaviour*/ 
+         FIND FIRST CustCat NO-LOCK WHERE
+                    Custcat.brand EQ Syst.Var:gcBrand AND
+                    Custcat.custidtype EQ icIdType AND
+                    CustCat.selfemployed EQ ilSelfEmployed AND
+                    CustCat.pro EQ ilProCust NO-ERROR.
+         IF AVAIL CustCat THEN DO:
+            lcSegment = CustCat.Segment.
+            ocCategory = CustCat.category.
+         END.
       END.
    END.
    ELSE DO:
-      IF icIDType EQ "CIF" THEN
-         ocCategory = "23".
+      IF icIDType EQ "CIF" THEN DO:
+         IF icCustID BEGINS "V00" THEN
+            ocCategory = "30".  /* YDR-2621 */
+         ELSE
+            ocCategory = "23".
+      END.
       ELSE IF icIDType EQ "NIF" AND ilSelfEmployed THEN 
          ocCategory = "44".         
       ELSE IF icIDType EQ "NIF" AND NOT ilSelfEmployed THEN

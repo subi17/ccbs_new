@@ -356,7 +356,11 @@ IF AVAIL Customer AND
 ASSIGN
     lcPROChannels    = fCParamC("PRO_CHANNELS").
 
-lcSegment    = fgetCustSegment(pcIdType, plSelfEmployed, llProChannel, OUTPUT lccategory).
+lcSegment    = fgetCustSegment(pcIdType, 
+                               plSelfEmployed, 
+                               llProChannel,
+                               pcPersonId,  /* YDR-2621 */
+                               OUTPUT lccategory).
 
 /* If customer does not have subscriptions it is handled as new */
 
