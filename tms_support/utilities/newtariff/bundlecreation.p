@@ -11,6 +11,8 @@
 /* ***************************  Definitions  ************************** */
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
+{utilities/newtariff/chartointmap.i}
+
 &GLOBAL-DEFINE BTYPE "BundleType"
 &GLOBAL-DEFINE BBTYPE "BaseBundleType"
 &GLOBAL-DEFINE BBNAME "BaseBundleName"
@@ -33,12 +35,10 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 /* 
    The following three preprocess variables are used only for creating
    FMItems. 
-   NOTE! This program only creates FMItems which belogs to "optional" bundles.          
-         The optional bundles have "COMMON" pricelist and thus no link
+   NOTE! This program only creates FMItems which belogs to "optional" bundle.
+         The optional bundle is defined using OptionalBundle field.         
+         The optional bundle FMItems use "COMMON" pricelist and thus no link
          to the CLIType.
-         
-         the CommercialFee defined, if it is
-         not defined then this program won't create FMItem records!
 */
 &GLOBAL-DEFINE COMMFEE "CommercialFee"
 &GLOBAL-DEFINE FMFC "FirstMonthFeeCalc"
@@ -52,46 +52,6 @@ DEFINE TEMP-TABLE ttBundle NO-UNDO
    FIELD ValueList  AS CHARACTER
    FIELD DataType   AS CHARACTER
    .
-   
-DEFINE TEMP-TABLE ttCharToIntMap NO-UNDO 
-   FIELD charval    AS CHARACTER
-   FIELD intval     AS INTEGER
-   FIELD FieldName  AS CHARACTER
-   INDEX FieldName IS PRIMARY UNIQUE FieldName CharVal
-   .
-
-FUNCTION fCreatettCharToIntMap RETURNS LOGICAL
-   ( icFieldName AS CHARACTER,
-     icCharVal   AS CHARACTER,
-     iiIntVal    AS INTEGER):
-        
-   CREATE ttCharToIntMap.
-   ASSIGN
-      ttCharToIntMap.FieldName = icFieldName
-      ttCharToIntMap.charval   = icCharVal
-      ttCharToIntMap.intval    = iiIntVal.
-      
-   RETURN FALSE.
-
-END FUNCTION.
-
-
-FUNCTION fCharToInt RETURNS INTEGER
-   ( icFieldName AS CHARACTER,
-     icCharVal   AS CHARACTER):
-        
-   FIND ttCharToIntMap WHERE
-      ttCharToIntMap.FieldName = icFieldName AND
-      ttCharToIntMap.charval   = icCharVal
-   NO-ERROR.
-   
-   IF NOT AVAILABLE ttCharToIntMap
-   THEN RETURN 0.
-   
-   RETURN ttCharToIntMap.intval.
-
-END FUNCTION. 
-
 
 FUNCTION fCreatettBundle RETURNS LOGICAL
    ( icFieldName AS CHARACTER,
@@ -132,12 +92,7 @@ fCreatettBundle({&FMVL}, "CHARACTER", "FixedLine,Mobile", "Full,Relative", YES).
 fCreatettBundle({&LMVL}, "CHARACTER", "FixedLine,Mobile", "Full,Relative", YES).
 fCreatettBundle({&FMBDL}, "CHARACTER", "FixedLine,Mobile", "Full,Relative", YES).
 fCreatettBundle({&LMBDL}, "CHARACTER", "FixedLine,Mobile", "Full,Relative", YES).
-
-/* Following three used only in FMItems... */
-fCreatettCharToIntMap("FeeCalc","Full",1).
-fCreatettCharToIntMap("FeeCalc","Relative",0).
-fCreatettCharToIntMap("FeeCalc","UsageBased",2).
-
+fCreatettBundle({&OPTIONAL}, "LOGICAL", "Mobile", "Yes,No,True,False", YES).
 
 fCreatettCharToIntMap("Limit","Full",0).
 fCreatettCharToIntMap("Limit","Relative",1).
@@ -608,9 +563,10 @@ PROCEDURE pCreateBDest:
    DEFINE BUFFER bf_BDest FOR BDest.
 
    FIND FIRST BDest NO-LOCK WHERE
-              BDest.Brand = Syst.Var:gcBrand AND
-              BDest.BDest = icBDest          AND
-              BDest.FromDate <= TODAY        AND
+              BDest.Brand    = Syst.Var:gcBrand AND
+              BDest.BDest    = icBDest          AND
+              BDest.DestType = 0                AND
+              BDest.FromDate <= TODAY           AND
               BDest.ToDate   >= TODAY
    NO-ERROR.
  
@@ -648,15 +604,21 @@ PROCEDURE pCreateFMItem:
             having "common" pricelist. The common pricelist
             doesn't have a link to CLIType like normal pricelists
             have. We create the common FMItem for bundles
-            which have commercial fee defined. */
-   IF DECIMAL(fGetFieldValue({&COMMFEE})) > 0
+            which are optional (OptionalBundle is set to positive value). */
+   IF LOGICAL(fGetFieldValue({&OPTIONAL}))
    THEN DO:
       lcBillCode = fGetFieldValue({&MFBILLCODE}).
       
       IF fGetFieldValue({&FMFC}) = "" OR fGetFieldValue({&LMFC}) = ""
       THEN UNDO, THROW NEW Progress.Lang.AppError
-               (SUBSTITUTE("&1 had a value. Then also '&2' and '&3' needs to be defined",
-                {&COMMFEE}, {&FMFC}, {&LMFC}), 1). 
+               (SUBSTITUTE("Optional bundle needs values '&1' and '&2' to be defined",
+                {&FMFC}, {&LMFC}), 1). 
+
+      IF DECIMAL(fGetFieldValue({&COMMFEE})) <= 0
+      THEN UNDO, THROW NEW Progress.Lang.AppError
+               (SUBSTITUTE("&1 has no value or it is invalid. The value is mandatory" +
+                           " for optional bundles",
+                           {&COMMFEE}), 1). 
       
       FIND FIRST FMItem NO-LOCK WHERE
          FMItem.Brand     = Syst.Var:gcBrand AND
@@ -667,7 +629,7 @@ PROCEDURE pCreateFMItem:
          FMItem.ToDate   >= TODAY
       NO-ERROR.
 
-      IF AVAILABLE BDest
+      IF AVAILABLE FMItem
       THEN UNDO, THROW NEW Progress.Lang.AppError
          (SUBSTITUTE("FMItem having FeeModel=&1, PriceList=COMMON, BillCode=&2 " +
                      "is already defined and active",

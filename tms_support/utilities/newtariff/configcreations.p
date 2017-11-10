@@ -7,7 +7,7 @@
   CHANGED ......:
   Version ......: Yoigo
   ----------------------------------------------------------------------*/
-ROUTINE-LEVEL ON ERROR UNDO, THROW.
+BLOCK-LEVEL ON ERROR UNDO, THROW.
 /* ***************************  Definitions  ************************** */
 {Syst/commpaa.i}
 Syst.Var:katun = "Cron".
@@ -883,8 +883,13 @@ PROCEDURE pSLGAnalyse:
 END PROCEDURE.
    
 PROCEDURE pFMItem:   
-   DEFINE PARAMETER BUFFER ttFMItem  FOR ttFMItem.   
-   DEFINE PARAMETER BUFFER ttCliType FOR ttCliType.   
+
+   DEFINE PARAMETER BUFFER ttCliType FOR ttCliType.
+   DEFINE INPUT  PARAMETER icBundle            AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icPriceList         AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER ideAmount           AS DECIMAL   NO-UNDO.
+   DEFINE INPUT  PARAMETER iiFirstMonthFeeCalc AS INTEGER   NO-UNDO.
+   DEFINE INPUT  PARAMETER iiLastMonthFeeCalc  AS INTEGER   NO-UNDO.
    
    DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.   
    
@@ -904,16 +909,35 @@ PROCEDURE pFMItem:
           FIND FIRST PListConf WHERE PListConf.Brand = Syst.Var:gcBrand AND PListConf.RatePlan = RatePlan.RatePlan AND PListConf.PriceList BEGINS "CONTRATO" NO-LOCK NO-ERROR.   
    END.
 
+   DEFINE VARIABLE lcPriceList AS CHARACTER NO-UNDO.
+   
+   lcPriceList = IF icPriceList <> ""
+                 THEN icPriceList 
+                 ELSE IF AVAIL PListConf AND PListConf.PriceList <> ""
+                 THEN PListConf.PriceList 
+                 ELSE "".
+
+   FIND FIRST FMItem NO-LOCK WHERE
+      FMItem.Brand     = Syst.Var:gcBrand AND
+      FMItem.FeeModel  = icBundle         AND
+      FMItem.PriceList = lcPriceList      AND
+      FMItem.BillCode  = icBundle         AND
+      FMItem.FromDate <= TODAY            AND
+      FMItem.ToDate   >= TODAY
+   NO-ERROR.
+
+   IF AVAILABLE FMItem
+   THEN UNDO, THROW NEW Progress.Lang.AppError
+         (SUBSTITUTE("FMItem having FeeModel=&1, PriceList=&2, BillCode=&3 " +
+                     "is already defined and active",
+                     icBundle, lcPriceList, icBundle), 1). 
+
    CREATE FMItem. 
    ASSIGN     
       FMItem.Brand             = Syst.Var:gcBrand
-      FMItem.FeeModel          = ttFMItem.FeeModel
-      FMItem.BillCode          = ttFMItem.BillCode
-      FMItem.PriceList         = (IF ttFMItem.PriceList <> "" THEN 
-                                      ttFMItem.PriceList 
-                                  ELSE IF AVAIL PListConf AND PListConf.PriceList <> "" THEN 
-                                      PListConf.PriceList 
-                                  ELSE "") 
+      FMItem.FeeModel          = icBundle
+      FMItem.BillCode          = icBundle
+      FMItem.PriceList         = lcPriceList
       FMItem.FromDate          = TODAY       
       FMItem.ToDate            = DATE(12,31,2049)
       FMItem.BillType          = "MF"                  
@@ -921,9 +945,9 @@ PROCEDURE pFMItem:
       FMItem.BillCycle         = 2                   
       FMItem.FFItemQty         = 0 
       FMItem.FFEndDate         = ? 
-      FMItem.Amount            = ttFMItem.Amount   
-      FMItem.FirstMonthBR      = ttFMItem.FirstMonthBR
-      FMItem.BrokenRental      = ttFMItem.BrokenRental
+      FMItem.Amount            = ideAmount
+      FMItem.FirstMonthBR      = iiFirstMonthFeeCalc
+      FMItem.BrokenRental      = iiLastMonthFeeCalc
       FMItem.ServiceLimitGroup = "".
 
    RETURN "".
@@ -1317,25 +1341,97 @@ PROCEDURE pMatrix:
 
 END PROCEDURE.
 
-PROCEDURE pTMRItemValue:
-    DEFINE PARAMETER BUFFER ttTMRItemValue FOR ttTMRItemValue.
-    
-    FIND FIRST TMRItemValue WHERE TMRItemValue.TMRuleSeq         = ttTMRItemValue.TMRuleSeq                            AND 
-                                  TMRItemValue.CounterItemValues = ttTMRItemValue.BDest + "," + ttTMRItemValue.CliType AND
-                                  TMRItemValue.ToDate           >= TODAY                                               NO-LOCK NO-ERROR.     
-    IF NOT AVAIL TMRItemValue THEN 
-    DO:                                  
-        CREATE TMRItemValue.
-        ASSIGN 
-            TMRItemValue.TMRuleSeq         = ttTMRItemValue.TMRuleSeq
-            TMRItemValue.CounterItemValues = ttTMRItemValue.BDest + "," + ttTMRItemValue.CliType
-            TMRItemValue.FromDate          = TODAY
-            TMRItemValue.ToDate            = DATE(12,31,2049).        
-    END.
+FUNCTION fBDestAvailable RETURNS LOGICAL
+   (icBDest AS CHARACTER):
 
-    RETURN "".
+   RETURN CAN-FIND(FIRST BDest NO-LOCK WHERE
+                         BDest.Brand    = Syst.Var:gcBrand AND
+                         BDest.BDest    = icBDest          AND
+                         BDest.DestType = 0                AND
+                         BDest.FromDate <= TODAY           AND
+                         BDest.ToDate   >= TODAY).
+     
+END FUNCTION.
+
+FUNCTION fCreateTMRItemValue RETURNS LOGICAL
+   (iiTMRuleSeq AS INTEGER,
+    icCounterItemValues AS CHARACTER):
+
+   FIND FIRST TMRItemValue NO-LOCK WHERE
+              TMRItemValue.TMRuleSeq         = iiTMRuleSeq         AND 
+              TMRItemValue.CounterItemValues = icCounterItemValues AND
+              TMRItemValue.ToDate           >= TODAY
+   NO-ERROR.
+
+   IF AVAILABLE TMRItemValue
+   THEN UNDO, THROW NEW Progress.Lang.AppError
+      (SUBSTITUTE("TMRItemValue where TMRuleSeq=&1 and CounterItemValues=&2" +
+                  "is already defined and active",
+                  iiTMRuleSeq, icCounterItemValues), 1). 
+
+   CREATE TMRItemValue.
+   ASSIGN 
+      TMRItemValue.TMRuleSeq         = iiTMRuleSeq
+      TMRItemValue.CounterItemValues = icCounterItemValues
+      TMRItemValue.FromDate          = TODAY
+      TMRItemValue.ToDate            = DATE(12,31,2049).        
+
+   RETURN FALSE.
+
+END FUNCTION.
+
+
+PROCEDURE pTMRItemValue:
+
+   DEFINE INPUT  PARAMETER icCLIType         AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icMobileBundle    AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icAllowedBundles  AS CHARACTER NO-UNDO.  
+       
+   DEFINE VARIABLE lcCodesToFind     AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcBONOList        AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE llProcessBonoData AS LOGICAL   INITIAL FALSE NO-UNDO.
+   DEFINE VARIABLE lii               AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lcEntry           AS CHARACTER NO-UNDO.
+     
+
+   lcCodesToFind = SUBSTITUTE("&1_DATA_IN|GPRSDATA_&1",icMobileBundle).
+   
+   DO lii = 1 TO NUM-ENTRIES(lcCodesToFind,"|"):
+      lcEntry = ENTRY(lii, lcCodesToFind, "|").
+      IF fBDestAvailable(lcEntry)
+      THEN DO:
+         llProcessBonoData = TRUE.         
+         fCreateTMRItemValue(14, lcEntry + "," + icCLIType).
+      END.
+   END.
+
+   lcCodesToFind = SUBSTITUTE("&1_VOICE_IN",icMobileBundle).
+   
+   DO lii = 1 TO NUM-ENTRIES(lcCodesToFind,"|"):
+      lcEntry = ENTRY(lii, lcCodesToFind, "|").
+      IF fBDestAvailable(lcEntry)
+      THEN DO:        
+         fCreateTMRItemValue(34, lcEntry + "," + icCLIType).
+         fCreateTMRItemValue(42, lcEntry + "," + icCLIType).
+      END.
+   END.
+   
+   IF llProcessBonoData
+   THEN DO:
+      lcBONOList = fCParamC("BONO_CONTRACTS").
+      IF lcBONOList > "" THEN 
+      DO lii = 1 TO NUM-ENTRIES(icAllowedBundles):     
+         IF LOOKUP(ENTRY(lii,icAllowedBundles),lcBONOList) > 0
+         THEN DO:
+            fCreateTMRItemValue(33, "GPRSDATA_DATA*" + "," + icCLIType).
+            LEAVE.
+         END.
+      END.
+   END.
+
 
 END PROCEDURE.
+
 
 
 PROCEDURE pUpdateTMSParam:

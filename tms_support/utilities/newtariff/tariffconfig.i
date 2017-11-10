@@ -59,19 +59,6 @@ DEFINE TEMP-TABLE ttCliType NO-UNDO
     FIELD TariffType                AS INTEGER
     INDEX IdxCliType IS UNIQUE PRIMARY CliType.  
 
-DEFINE TEMP-TABLE ttDayCampaign NO-UNDO
-    FIELD CliType        AS CHARACTER
-    FIELD DCEvent        AS CHARACTER
-    FIELD DCName         AS CHARACTER
-    FIELD DCType         AS CHARACTER
-    FIELD PayType        AS INTEGER
-    FIELD BillCode       AS CHARACTER
-    FIELD UpSell         AS CHARACTER
-    FIELD BonoSupport    AS LOGICAL
-    FIELD SLCreated      AS LOGICAL
-    FIELD DataLimit      AS DECIMAL
-    INDEX IdxDCEvent IS UNIQUE PRIMARY DCEvent. 
-
 DEFINE TEMP-TABLE ttFMItem NO-UNDO
     FIELD FeeModel     AS CHARACTER
     FIELD BillCode     AS CHARACTER        
@@ -80,45 +67,3 @@ DEFINE TEMP-TABLE ttFMItem NO-UNDO
     FIELD FirstMonthBR AS INTEGER
     FIELD BrokenRental AS INTEGER
     INDEX IdxFMItem IS UNIQUE PRIMARY FeeModel.
-
-DEFINE TEMP-TABLE ttServiceLimitGroup NO-UNDO
-    FIELD GroupCode AS CHARACTER
-    FIELD GroupName AS CHARACTER
-    INDEX IdxGroupCode IS UNIQUE PRIMARY GroupCode.
-
-DEFINE TEMP-TABLE ttServiceLimit NO-UNDO
-    FIELD GroupCode      AS CHARACTER
-    FIELD SLCode         AS CHARACTER
-    FIELD SLName         AS CHARACTER
-    FIELD DialType       AS INTEGER
-    FIELD InclUnit       AS INTEGER
-    FIELD InclAmt        AS DECIMAL
-    FIELD FirstMonthCalc AS INTEGER
-    FIELD LastMonthCalc  AS INTEGER
-    FIELD BDestLimit     AS INTEGER
-    INDEX IdxGroupCode IS UNIQUE PRIMARY GroupCode SLCode.
-
-DEFINE TEMP-TABLE ttServiceLimitTarget NO-UNDO
-    FIELD GroupCode      AS CHARACTER
-    FIELD SLCode         AS CHARACTER
-    FIELD ServiceLMember AS CHARACTER
-    FIELD InsideRate     AS CHARACTER
-    FIELD OutSideRate    AS CHARACTER
-    INDEX IdxGroupCodeMember IS UNIQUE PRIMARY GroupCode SLCode ServiceLMember.
-
-DEFINE TEMP-TABLE ttProgLimit NO-UNDO
-    FIELD GroupCode AS CHARACTER
-    FIELD SLCode    AS CHARACTER
-    FIELD BDest     AS CHARACTER
-    FIELD LimitFrom AS DECIMAL
-    FIELD LimitTo   AS DECIMAL
-    INDEX IdxGroupCodeBDest IS UNIQUE PRIMARY GroupCode SLCode BDest.
-
-DEFINE TEMP-TABLE ttBDest NO-UNDO
-    FIELD GroupCode AS CHARACTER
-    FIELD SLCode    AS CHARACTER
-    FIELD BDest     AS CHARACTER
-    FIELD BDName    AS CHARACTER
-    FIELD CCN       AS INTEGER
-    INDEX IdxGroupCodeBDest IS UNIQUE PRIMARY GroupCode SLCode BDest.
-
