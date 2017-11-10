@@ -123,10 +123,6 @@ DO ON ERROR UNDO, THROW:
 
    RUN pSaveTariff.
 
-   RUN pReadTranslation.
-
-   RUN pSaveTranslation.
-
    RETURN "OK".
 
    CATCH e AS Progress.Lang.Error:
@@ -1394,85 +1390,6 @@ PROCEDURE pValidateData:
          llgPostPaid       = NO.
    END.
 
-   RETURN "".
-
-END PROCEDURE.
-
-
-PROCEDURE pReadTranslation:
-   DEFINE VARIABLE lcLine      AS CHARACTER NO-UNDO.
-   DEFINE VARIABLE lcInputFile AS CHARACTER NO-UNDO.   
-   DEFINE VARIABLE liFirstLine AS INTEGER   NO-UNDO INITIAL 1.
-
-   DO ON ERROR UNDO, THROW:
-      
-      ASSIGN lcInputFile = icIncDir + "tariff_trans.txt".      
-
-      INPUT STREAM TTransIn FROM VALUE(lcInputFile).
-
-      REPEAT ON ERROR UNDO, THROW:                               
-        IMPORT STREAM TTransIn UNFORMATTED lcLine.                                
-        
-        IF liFirstLine = 1 THEN 
-        DO:
-           liFirstLine = liFirstLine + 1.
-           NEXT.
-        END.
-                                                                          
-        CREATE ttTrans.
-        ASSIGN            
-           ttTrans.tLangType  = TRIM(ENTRY(1,lcLine,";"))
-           ttTrans.tTextType  = INT(TRIM(ENTRY(2,lcLine,";")))
-           ttTrans.tLangint   = TRIM(ENTRY(3,lcLine,";"))
-           ttTrans.tLangtext  = TRIM(ENTRY(4,lcLine,";"))
-           ttTrans.tLangTrans = TRIM(ENTRY(5,lcLine,";")).
-      END.
-
-      CATCH err AS Progress.Lang.Error:
-         UNDO, THROW NEW Progress.Lang.AppError('Incorrect input translation file (tariff_trans.txt) data' + err:GetMessage(1), 1). 
-      END CATCH.
-
-      FINALLY:
-         INPUT STREAM TTransIn CLOSE.
-      END FINALLY.
-
-   END.
-
-   RETURN "".
-
-END PROCEDURE.
-
-
-PROCEDURE pSaveTranslation:
-
-   FOR EACH ttTrans NO-LOCK
-       ON ERROR UNDO, THROW:
-      
-       FIND FIRST RepText WHERE RepText.Brand    = Syst.Var:gcBrand                   AND 
-                                RepText.TextType = ttTrans.tTextType         AND 
-                                RepText.LinkCode = ttTrans.tLangType         AND 
-                                RepText.Language = INTEGER(ttTrans.tLangint) AND 
-                                RepText.ToDate   >= TODAY                    NO-LOCK NO-ERROR.
-       IF AVAIL RepText THEN 
-       DO:
-           BUFFER RepText:FIND-CURRENT(EXCLUSIVE-LOCK,NO-WAIT).
-           IF AVAIL RepText THEN 
-               ASSIGN RepText.RepText = ttTrans.tLangTrans.
-       END.
-       ELSE 
-       DO:                           
-           CREATE RepText.
-           ASSIGN 
-              RepText.Brand    = Syst.Var:gcBrand    
-              RepText.TextType = ttTrans.tTextType                /* Default value */       
-              RepText.LinkCode = ttTrans.tLangType        
-              RepText.Language = INTEGER(ttTrans.tLangint)    
-              RepText.FromDate = TODAY     
-              RepText.ToDate   = DATE(12,31,2049)
-              RepText.RepText  = ttTrans.tLangTrans.
-       END.   
-   END.
-   
    RETURN "".
 
 END PROCEDURE.
