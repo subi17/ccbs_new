@@ -1,7 +1,7 @@
 DEF VAR lcFolder AS CHAR NO-UNDO FORMAT "x(40)".
 DEF VAR lcInputFile AS CHAR NO-UNDO init "utilities/tabledump/config_tables.txt" FORMAT "x(40)".
 
-lcFolder = "utilities/tabledump/config_20171110/".
+lcFolder = "utilities/tabledump/config_tables/".
 
 UPDATE 
     lcInputFile LABEL "Input file   " SKIP
