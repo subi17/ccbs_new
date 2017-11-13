@@ -17,7 +17,6 @@ Syst.Var:gcBrand = "1".
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Func/ftransdir.i}
-{utilities/newtariff/tariffconfig.i}
 {utilities/newtariff/tariffcons.i}
 {utilities/newtariff/chartointmap.i}
 
@@ -65,6 +64,34 @@ DEFINE VARIABLE lcFixedLine_LastMonthFeeCalc             AS CHARACTER NO-UNDO.
 DEFINE TEMP-TABLE ttTariffCre NO-UNDO 
    FIELD FieldName  AS CHARACTER 
    FIELD FieldValue AS CHARACTER.
+
+DEFINE TEMP-TABLE ttCliType NO-UNDO
+    FIELD CliType                   AS CHARACTER
+    FIELD CliName                   AS CHARACTER
+    FIELD RatePlan                  As CHARACTER
+    FIELD BaseBundle                AS CHARACTER
+    FIELD FixedLineBaseBundle       AS CHARACTER
+    FIELD WebStatusCode             AS INTEGER
+    FIELD StatusCode                AS INTEGER
+    FIELD PayType                   AS INTEGER 
+    FIELD UsageType                 AS INTEGER
+    FIELD LineType                  AS INTEGER
+    FIELD FixedLineType             AS INTEGER
+    FIELD FixedLineDownload         AS CHARACTER
+    FIELD FixedLineUpload           AS CHARACTER
+    FIELD Serviceclass              AS CHARACTER
+    FIELD CommercialFee             AS DECIMAL
+    FIELD CompareFee                AS DECIMAL
+    FIELD BundleType                AS LOGICAL
+    FIELD ParentTariff              AS CHARACTER
+    FIELD TariffBundle              AS CHARACTER    
+    FIELD AllowedBundles            AS CHARACTER
+    FIELD MobileBaseBundleDataLimit AS DECIMAL
+    FIELD BundlesForActivateOnSTC   AS CHARACTER
+    FIELD ServicesForReCreateOnSTC  AS CHARACTER
+    FIELD CopyServicesFromCliType   AS CHARACTER 
+    FIELD TariffType                AS INTEGER
+    INDEX IdxCliType IS UNIQUE PRIMARY CliType. 
    
 DEFINE STREAM TariffIn.
 DEFINE STREAM TariffLog.
@@ -91,9 +118,7 @@ DO ON ERROR UNDO, THROW:
 
    FUNCTION fTMSCValue RETURNS CHARACTER (iTableName AS CHAR, iFieldName AS CHAR,iCodeName AS CHAR) IN h_config.
 
-   RUN pReadTariff. 
-
-   RUN pReadCustomRatesForRateplan.  
+   RUN pReadTariff.  
 
    RUN pValidateData.
 
@@ -143,13 +168,6 @@ PROCEDURE pSaveTariff:
          IF lcPaymentType = "Postpaid" AND lcMobile_BaseBundle > ""
          THEN RUN pTMRItemValue IN h_config(lcCliType, lcMobile_BaseBundle, lcAllowedBundles).
 
-         IF CAN-FIND(FIRST ttTariff) THEN
-         DO: 
-            FOR EACH ttTariff 
-               ON ERROR UNDO, THROW:
-               RUN pCustomRates IN h_config(BUFFER ttTariff).            
-            END.
-         END.
 
       END. /* FOR EACH ttCliType */
       CATCH e AS Progress.Lang.Error:
@@ -196,55 +214,6 @@ PROCEDURE pReadTariff:
 
 END PROCEDURE.
 
-PROCEDURE pReadCustomRatesForRateplan:
-    DEFINE VARIABLE lcLine      AS CHARACTER NO-UNDO.
-    DEFINE VARIABLE lcInputFile AS CHARACTER NO-UNDO.
-    DEFINE VARIABLE liFirstLine AS INTEGER   NO-UNDO INITIAL 1.
-
-    DO ON ERROR UNDO, THROW:
-        ASSIGN lcInputFile = icIncDir + "rptariff_new.txt".
-        
-        FILE-INFO:FILE-NAME = lcInputFile.
-
-        IF FILE-INFO:PATHNAME <> "" THEN   
-        DO ON ERROR UNDO, THROW:
-
-            INPUT STREAM TariffIn FROM VALUE(lcInputFile).
-            
-            REPEAT ON ERROR UNDO, THROW:
-               IMPORT STREAM TariffIn UNFORMATTED lcLine.
-               /* Ignore the first line - (Header) */
-               IF liFirstLine = 1 THEN 
-               DO:
-                   liFirstLine = liFirstLine + 1.
-                   NEXT.
-               END.
-                
-               CREATE ttTariff.
-               ASSIGN    
-                  ttTariff.PriceList = TRIM(ENTRY(1,lcLine,";")) 
-                  ttTariff.CCN       = TRIM(ENTRY(2,lcLine,";")) 
-                  ttTariff.BDest     = TRIM(ENTRY(3,lcLine,";"))
-                  ttTariff.BillItem  = TRIM(ENTRY(4,lcLine,";"))
-                  ttTariff.PriceUnit = TRIM(ENTRY(5,lcLine,";"))
-                  ttTariff.Price     = TRIM(ENTRY(6,lcLine,";"))
-                  ttTariff.SetupFee  = TRIM(ENTRY(7,lcLine,";")).          
-            END.
-
-            CATCH err AS Progress.Lang.Error:
-               UNDO, THROW NEW Progress.Lang.AppError('Incorrect input file (rptariff_new.txt) data' + err:GetMessage(1), 1). 
-            END CATCH.
-
-            FINALLY:
-               INPUT STREAM TariffIn CLOSE.
-               DELETE OBJECT FILE-INFO NO-ERROR.
-            END FINALLY.       
-        END.   
-    END.
-
-    RETURN "".
-
-END PROCEDURE.
 
 PROCEDURE pProcessTT:   
    DEFINE VARIABLE liFirstMonthBR    AS INTEGER NO-UNDO.
