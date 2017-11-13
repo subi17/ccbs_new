@@ -1494,7 +1494,7 @@ FUNCTION fDelivSIM RETURNS LOG
           ttExtra.DeliveryType     = STRING(liDelType)
           ttExtra.KialaCode        = DelivCustomer.KialaCode WHEN Order.DeliveryType = {&ORDER_DELTYPE_POS}
           ttExtra.ContractFileName = lcContractFileName
-          ttExtra.Despachar        = (IF llDespachar THEN "01" ELSE "02")
+          ttExtra.Despachar        = ""
           ttExtra.MainOrderID      = "".
 
    /* update SimStat when all skipping are checked */
