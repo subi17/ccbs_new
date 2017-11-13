@@ -503,12 +503,6 @@ PROCEDURE pValidateData:
       ELSE IF lcRatePlanAction = "UseExisting" AND NOT CAN-FIND(FIRST RatePlan WHERE RatePlan.Brand = Syst.Var:gcBrand AND RatePlan.RatePlan = lcReferenceRatePlan NO-LOCK) THEN 
          UNDO, THROW NEW Progress.Lang.AppError("Reference Rateplan doesn't exists, which is contradicting with Rateplan action", 1).
 
-      FOR EACH ttTariff ON ERROR UNDO, THROW:
-
-          IF ttTariff.CCN EQ "" OR ttTariff.BillItem EQ "" THEN 
-              UNDO, THROW NEW Progress.Lang.AppError("Custom rates for rateplan are missing with BillItem/CCN details", 1).         
-      END.
-
       ASSIGN 
          llgTrafficBundle  = NO
          llgPostPaid       = NO.

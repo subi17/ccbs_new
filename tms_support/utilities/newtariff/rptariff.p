@@ -40,7 +40,7 @@ FUNCTION fError RETURNS LOGIC
 
    icMessage = "ERROR:" + icMessage.
    
-   PUT STREAM RTLog UNFORMATTED
+   PUT STREAM RPLog UNFORMATTED
       TODAY                   " | " 
       STRING(TIME,"HH:MM:SS") " | "
       icMessage SKIP.
@@ -125,12 +125,12 @@ REPEAT:
       ttTariff.PriceUnit = TRIM(ENTRY(5,lcLine,";"))
       ttTariff.Price     = TRIM(ENTRY(6,lcLine,";"))
       ttTariff.SetupFee  = TRIM(ENTRY(7,lcLine,";")) NO-ERROR.          
-   END.
 
    IF ERROR-STATUS:ERROR THEN DO:
       fError("Incorrect input rate plan tariff").
       RETURN "ERROR". 
    END.
+
 END.
    
 RUN pCreTariff.
@@ -141,8 +141,8 @@ IF RETURN-VALUE <> "OK" THEN
 RETURN "OK".
 
 FINALLY: 
-   INPUT STREAM strin  CLOSE.
-   OUTPUT STREAM RTLog CLOSE.
+   INPUT  STREAM strin  CLOSE.
+   OUTPUT STREAM RPLog CLOSE.
 END FINALLY.
 
 /* ************************* Main Block ends  ************************* */
