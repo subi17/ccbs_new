@@ -80,7 +80,7 @@ fCreatettBundle({&BBTYPE}, "CHARACTER", "FixedLine,Mobile", "ServicePackage,Pack
 fCreatettBundle({&UPSELL}, "CHARACTER", "Mobile", "", NO).
 fCreatettBundle({&BONOSUPPORT}, "LOGICAL", "Mobile", "Yes,No,True,False", NO).
 fCreatettBundle({&MFBILLCODE}, "CHARACTER", "FixedLine,Mobile", "", YES).
-fCreatettBundle({&COMMFEE}, "DECIMAL", "FixedLine,Mobile", "", NO). /* If this is given with value NE 0 then FMItem will be created */
+fCreatettBundle({&COMMFEE}, "DECIMAL", "FixedLine,Mobile", "", NO).
 fCreatettBundle({&FMFC}, "CHARACTER", "FixedLine,Mobile", "Full,Relative,UsageBased", NO).
 fCreatettBundle({&LMFC}, "CHARACTER", "FixedLine,Mobile", "Full,Relative,UsageBased", NO).
 fCreatettBundle({&DATALIMIT}, "DECIMAL", "Mobile", "", NO).
