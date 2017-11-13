@@ -1914,8 +1914,6 @@ DO liCustLoop = 1 TO 3:
       IF liMainlineOrderId NE 0 THEN 
          ASSIGN ttExtra.MainOrderID = STRING(liMainlineOrderId)
                 ttExtra.Despachar   = (IF llDespacharValue THEN "01" ELSE "02").
-      ELSE
-         ttExtra.Despachar = (IF llDespacharValue THEN "01" ELSE "02").
    
    END.
 
