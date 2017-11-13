@@ -78,7 +78,7 @@ fCreatettBundle({&BBUNDLE}, "CHARACTER", "FixedLine,Mobile", "", YES).
 fCreatettBundle({&BBNAME}, "CHARACTER", "FixedLine,Mobile", "", YES).
 fCreatettBundle({&BBTYPE}, "CHARACTER", "FixedLine,Mobile", "ServicePackage,PackageWithCounter,PackagewithoutCounter,Upsell", YES).
 fCreatettBundle({&UPSELL}, "CHARACTER", "Mobile", "", NO).
-fCreatettBundle({&BONOSUPPORT}, "LOGICAL", "Mobile", "Yes,No,True,False", YES).
+fCreatettBundle({&BONOSUPPORT}, "LOGICAL", "Mobile", "Yes,No,True,False", NO).
 fCreatettBundle({&MFBILLCODE}, "CHARACTER", "FixedLine,Mobile", "", YES).
 fCreatettBundle({&COMMFEE}, "DECIMAL", "FixedLine,Mobile", "", NO). /* If this is given with value NE 0 then FMItem will be created */
 fCreatettBundle({&FMFC}, "CHARACTER", "FixedLine,Mobile", "Full,Relative,UsageBased", NO).
@@ -113,7 +113,16 @@ FUNCTION fGetFieldValue RETURNS CHARACTER
    NO-ERROR.
    
    IF NOT AVAILABLE ttBundle
-   THEN RETURN "".
+   THEN UNDO, THROW NEW Progress.Lang.AppError
+         (SUBSTITUTE("Internal error. fGetFieldValue was called using icFieldName=&1 " +
+                     "which is not defined to ttBundle",
+                     icFieldName), 1).
+
+   /* When there is no value for non mandatory logical field we return FALSE */
+   IF ttBundle.FieldValue EQ "" AND
+      ttBundle.DataType EQ "LOGICAL" AND
+      ttBundle.Mandatory EQ FALSE
+   THEN RETURN "FALSE".
    
    RETURN ttBundle.FieldValue.
 
