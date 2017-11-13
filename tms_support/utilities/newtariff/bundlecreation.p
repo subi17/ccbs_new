@@ -184,9 +184,6 @@ FUNCTION fValidateBundle RETURNS CHARACTER ():
    
    IF lcBundleType EQ "FixedLine" AND fGetFieldValue({&PAYTYPE}) EQ "Prepaid"
    THEN RETURN "FixedLine bundle cannot have prepaid payment type".
-
-   IF lcBundleType EQ "FixedLine" AND ldeDataLimit > 0
-   THEN RETURN "FixedLine bundle cannot have data limit".
    
    CASE lcBaseBundleType:
       WHEN "ServicePackage" OR WHEN "PackageWithCounter"
