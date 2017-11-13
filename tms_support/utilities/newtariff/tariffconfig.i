@@ -25,12 +25,6 @@ DEFINE TEMP-TABLE ttTariff NO-UNDO
    FIELD Price     AS CHARACTER 
    FIELD SetupFee  AS CHARACTER.
 
-DEFINE TEMP-TABLE ttTMRItemValue NO-UNDO
-   FIELD TMRuleSeq AS INTEGER
-   FIELD CliType   AS CHARACTER
-   FIELD BDest     AS CHARACTER
-   INDEX IdxTMRuleSeq IS UNIQUE PRIMARY TMRuleSeq CliType BDest.
-   
 DEFINE TEMP-TABLE ttCliType NO-UNDO
     FIELD CliType                   AS CHARACTER
     FIELD CliName                   AS CHARACTER
@@ -58,12 +52,3 @@ DEFINE TEMP-TABLE ttCliType NO-UNDO
     FIELD CopyServicesFromCliType   AS CHARACTER 
     FIELD TariffType                AS INTEGER
     INDEX IdxCliType IS UNIQUE PRIMARY CliType.  
-
-DEFINE TEMP-TABLE ttFMItem NO-UNDO
-    FIELD FeeModel     AS CHARACTER
-    FIELD BillCode     AS CHARACTER        
-    FIELD PriceList    AS CHARACTER    
-    FIELD Amount       AS DECIMAL    
-    FIELD FirstMonthBR AS INTEGER
-    FIELD BrokenRental AS INTEGER
-    INDEX IdxFMItem IS UNIQUE PRIMARY FeeModel.
