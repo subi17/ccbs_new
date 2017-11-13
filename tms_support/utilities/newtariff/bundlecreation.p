@@ -11,6 +11,12 @@
 /* ***************************  Definitions  ************************** */
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
+DEFINE INPUT  PARAMETER icBaseFile AS CHARACTER NO-UNDO. 
+DEFINE INPUT  PARAMETER icFile     AS CHARACTER NO-UNDO. 
+DEFINE INPUT  PARAMETER icSpoolDir AS CHARACTER NO-UNDO.
+
+DEFINE STREAM strexport.
+
 {utilities/newtariff/chartointmap.i}
 
 &GLOBAL-DEFINE BTYPE "BundleType"
@@ -102,6 +108,19 @@ fCreatettCharToIntMap({&BBTYPE},"PackageWithCounter",4).
 fCreatettCharToIntMap({&BBTYPE},"Upsell",6).
 fCreatettCharToIntMap({&BBTYPE},"PackagewithoutCounter",7).
 
+FUNCTION fExport RETURNS LOGICAL
+   ( icFileToExport AS CHARACTER,
+     icExportText   AS CHARACTER ):
+
+   OUTPUT STREAM strexport TO VALUE(icFileToExport) APPEND.
+
+   PUT STREAM strexport UNFORMATTED icExportText SKIP.   
+   
+   FINALLY:
+      OUTPUT STREAM strexport CLOSE.
+   END.        
+
+END FUNCTION.
 
 FUNCTION fGetFieldValue RETURNS CHARACTER
    ( icFieldName  AS CHARACTER ):
@@ -223,10 +242,6 @@ FUNCTION fValidateBundle RETURNS CHARACTER ():
    RETURN "".
 
 END FUNCTION.
-
-DEFINE INPUT  PARAMETER icBaseFile AS CHARACTER NO-UNDO. 
-DEFINE INPUT  PARAMETER icFile     AS CHARACTER NO-UNDO. 
-DEFINE INPUT  PARAMETER icSpoolDir AS CHARACTER NO-UNDO.
 
 DEFINE STREAM strin.
 DEFINE STREAM BundleLog.
@@ -431,6 +446,8 @@ PROCEDURE pCreateServiceLimit:
       ServiceLimit.LastMonthCalc  = liLastMonthCalc
       Servicelimit.Web            = 0.
    
+   fExport(icSpoolDir + "servicelimit.d", HPD.HPDCommon:mDynExport(BUFFER ServiceLimit:HANDLE, " ")).
+   
    RETURN "".
       
 END PROCEDURE.
@@ -510,6 +527,8 @@ PROCEDURE pCreateServiceLimitTarget:
          ServiceLimitTarget.InSideRate     = lcInSideRate
          ServiceLimitTarget.OutSideRate    = lcOutSideRate.
 
+      fExport(icSpoolDir + "servicelimittarget.d", HPD.HPDCommon:mDynExport(BUFFER ServiceLimitTarget:HANDLE, " ")).
+
    END.
    
 
@@ -559,6 +578,9 @@ PROCEDURE pCreateProgLimit:
       ProgLimit.LimitTo   = ideLimitTo
       ProgLimit.BDest     = icBDest.
 
+   fExport(icSpoolDir + "proglimit.d", HPD.HPDCommon:mDynExport(BUFFER ProgLimit:HANDLE, " ")).
+
+
 END PROCEDURE.
 
 PROCEDURE pCreateBDest:
@@ -600,7 +622,9 @@ PROCEDURE pCreateBDest:
       BDest.Class    = 1
       BDest.FromDate = TODAY 
       BDest.ToDate   = DATE(12,31,2049).
-   
+
+   fExport(icSpoolDir + "bdest.d", HPD.HPDCommon:mDynExport(BUFFER BDest:HANDLE, " ")).
+
 END PROCEDURE.
 
 PROCEDURE pCreateFMItem:
@@ -661,6 +685,9 @@ PROCEDURE pCreateFMItem:
          FMItem.FirstMonthBR      = fCharToInt("FeeCalc", fGetFieldValue({&FMFC}))
          FMItem.BrokenRental      = fCharToInt("FeeCalc", fGetFieldValue({&LMFC}))
          FMItem.ServiceLimitGroup = "".
+
+      fExport(icSpoolDir + "fmitem.d", HPD.HPDCommon:mDynExport(BUFFER FMItem:HANDLE, " ")).
+
    END.   
 
 END PROCEDURE.
@@ -734,6 +761,8 @@ PROCEDURE pStoreBundle:
       DayCampaign.ModifyFeeModel  = ""                          
       DayCampaign.TermFeeModel    = ""                          
       DayCampaign.TermFeeCalc     = 0.
+
+   fExport(icSpoolDir + "daycampaign.d", HPD.HPDCommon:mDynExport(BUFFER DayCampaign:HANDLE, " ")).
       
    IF ldeDataLimit > 0 THEN   
       RUN pDCServicePackage(lcBaseBundle, "SHAPER", LOGICAL(fGetFieldValue({&BONOSUPPORT}))).
@@ -748,6 +777,8 @@ PROCEDURE pStoreBundle:
       FeeModel.FeeName  = fGetFieldValue({&BBNAME})               
       FeeModel.FMGroup  = 0.
 
+   fExport(icSpoolDir + "feemodel.d", HPD.HPDCommon:mDynExport(BUFFER FeeModel:HANDLE, " ")).
+
    RUN pCreateFMItem.
 
    /* It is earlier checked that the ServiceLimitGroup is not
@@ -759,6 +790,8 @@ PROCEDURE pStoreBundle:
       ServiceLimitGroup.GroupName = fGetFieldValue({&BBNAME})
       ServiceLimitGroup.ValidFrom = TODAY 
       ServiceLimitGroup.ValidTo   = DATE(12,31,2049).
+
+   fExport(icSpoolDir + "servicelimitgroup.d", HPD.HPDCommon:mDynExport(BUFFER ServiceLimitGroup:HANDLE, " ")).
 
    IF lcBaseBundleType EQ "PackageWithCounter" AND
       ldeDataLimit > 0
@@ -842,6 +875,8 @@ PROCEDURE pDCServicePackage:
       DCServicePackage.FromDate           = TODAY 
       DCServicePackage.ToDate             = DATE(12,31,2049).   
 
+   fExport(icSpoolDir + "dcservicepackage.d", HPD.HPDCommon:mDynExport(BUFFER DCServicePackage:HANDLE, " ")).
+
    IF LOOKUP(icServPac, "SHAPER") > 0 THEN 
    DO:
        CREATE DCServiceComponent.
@@ -853,6 +888,9 @@ PROCEDURE pDCServicePackage:
           DCServiceComponent.DefParam             = (IF ilBonoSupport THEN (icDCEvent + "#ADDBUNDLE") ELSE icDCEvent)
           DCServiceComponent.FromDate             = TODAY 
           DCServiceComponent.ToDate               = DATE(12,31,2049).   
+
+      fExport(icSpoolDir + "dcservicecomponent.d", HPD.HPDCommon:mDynExport(BUFFER DCServiceComponent:HANDLE, " ")).
+
     END.
 
     RETURN "".
