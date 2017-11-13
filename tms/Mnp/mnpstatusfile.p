@@ -35,6 +35,7 @@ DEFINE VARIABLE lcCli AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcNCStatus AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcRefCode AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcNCTime AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcPortTime AS CHARACTER NO-UNDO.
 DEFINE VARIABLE ldeNCTime AS DECIMAL NO-UNDO. 
 DEFINE VARIABLE lcDonor AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcRecipient AS CHARACTER NO-UNDO. 
@@ -139,7 +140,7 @@ FUNCTION fErrorMulti RETURNS LOGICAL
     icTime     AS CHAR,
     icNCStatus AS CHAR,
     icDonor    AS CHAR,
-    icNCTime   AS CHAR):
+    icPortTime   AS CHAR):
 
    fLog(lhsLog[1], lcLine + "|" + icMessage).
 
@@ -148,7 +149,7 @@ FUNCTION fErrorMulti RETURNS LOGICAL
    THEN DO:
       IF icTime      = "0800" AND
          icNCStatus  = "APOR" AND
-         fCharToDate(icNCTime) EQ TODAY
+         fCharToDate(icPortTime) EQ TODAY
       THEN fLog(lhsLog[2], lcLine + "|" + icMessage).
 
       ELSE IF LOOKUP(icTime, "0800,1400") > 0 AND
@@ -213,6 +214,7 @@ REPEAT:
          lcRefCode = ENTRY(1,lcLine,lcSep)
          lcNCStatus = ENTRY(2,lcLine,lcSep)
          lcNCTime = ENTRY(3,lcLine,lcSep)
+         lcPortTime = ENTRY(5,lcline,lcSep)
          lcCLI = ENTRY(6,lcLine,lcSep)
          lcDonor = ENTRY(8,lcLine,lcSep)
          lcRecipient = ENTRY(9,lcLine,lcSep) NO-ERROR.
@@ -257,7 +259,7 @@ REPEAT:
             liErrorSkips = liErrorSkips + 1.
          END.
          ELSE DO:
-            fErrorMulti(RETURN-VALUE, lcTimeValue, lcNCStatus, lcDonor, lcNCTime).
+            fErrorMulti(RETURN-VALUE, lcTimeValue, lcNCStatus, lcDonor, lcPortTime).
             liNumErr = liNumErr + 1 .
          END.
       END.
