@@ -30,8 +30,8 @@ DEFINE TEMP-TABLE ttBillItem NO-UNDO
 DEFINE VAR icIncDir   AS CHARACTER NO-UNDO.
 DEFINE VAR icSpoolDir AS CHARACTER NO-UNDO.
 
-icIncDir = "/apps/xfera/ilsavola/ccbs/tms_support/utilities/ypro/". /*TODO update for production later*/
-icSpoolDir = "/apps/xfera/ilsavola/ccbs/tms_support/utilities/ypro/spool/".
+icIncDir = "/apps/xfera/kaaikas/ccbs/tms_support/utilities/ypro/". /*TODO update for production later*/
+icSpoolDir = "/apps/xfera/kaaikas/ccbs/tms_support/utilities/ypro/".
 
 DEFINE VARIABLE lcLine      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcLogFile   AS CHARACTER NO-UNDO.
@@ -73,6 +73,8 @@ REPEAT:
       liFirstLine = liFirstLine + 1.
       NEXT.
    END.
+
+   MESSAGE TRIM(ENTRY(7,lcLine,";")) VIEW-AS ALERT-BOX.
 
    CREATE ttBillItem.
    ASSIGN ttBillItem.BillItem   = TRIM(ENTRY(1,lcLine,";"))

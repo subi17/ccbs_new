@@ -45,8 +45,8 @@ FUNCTION fcreateDaycampaign RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
       ASSIGN
       ttDaycampaign.dctype = icDctype
       ttDaycampaign.dcevent = icevent
-      /*ttDaycampaign.billcode = icevent + "MF"
-      ttDaycampaign.feemodel = icevent + "MF"*/
+      ttDaycampaign.billcode = icevent + "MF"
+      ttDaycampaign.feemodel = icevent + "MF"
       ttDaycampaign.dcname = icName
       ttDaycampaign.bundleupsell = ""
       ttDaycampaign.bundletarget = iiTarget.
