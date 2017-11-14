@@ -42,8 +42,8 @@ DEF VAR ldBRAmt     AS DEC  NO-UNDO.
 DEF VAR ldCredAmt   AS DEC  NO-UNDO.
 DEF VAR liLastCred  AS INT  NO-UNDO.
 DEF VAR liBillTarg  AS INT  NO-UNDO.
+DEF VAR llBilled    AS LOG  NO-UNDO. 
 DEF VAR liBrokenRental AS INT  NO-UNDO.
-DEF VAR ldeOriginalFee AS DEC  NO-UNDO.
 DEF VAR liPeriodLength AS INT  NO-UNDO.
 DEF VAR liMonth        AS INT  NO-UNDO.
 DEF VAR ldaDate        AS DATE NO-UNDO.
@@ -91,10 +91,7 @@ FOR FIRST FMItem NO-LOCK WHERE
           FMItem.BillCode   = bCloseFee.BillCode AND
           FMItem.BillMethod = FALSE:
 
-   ASSIGN ldeOriginalFee = (IF FMItem.Amount NE 0
-                            THEN FMItem.Amount
-                            ELSE bCloseFee.Amt)
-          liBrokenRental = FMItem.BrokenRental.
+   liBrokenRental = FMItem.BrokenRental.
 
    IF FMItem.BrokenRental = 1 AND icGroupCode = "" THEN DO:
       /* move to end of month */
@@ -120,8 +117,17 @@ FOR EACH bCloseItem OF bCloseFee EXCLUSIVE-LOCK:
    IF bCloseItem.Concerns[2] < liEnd THEN NEXT.
       
    /* delete or credit future items */
+   llBilled = bCloseItem.Billed.
+   IF llBilled THEN DO: 
+      FIND FIRST Invoice NO-LOCK WHERE   
+                 Invoice.Brand = Syst.Var:gcBrand AND
+                 Invoice.InvNum = bCloseItem.InvNum AND 
+                 Invoice.InvType = {&INV_TYPE_TEST} NO-ERROR.
+      IF AVAIL Invoice THEN llBilled = FALSE.
+   END.
+ 
    IF bCloseItem.Concerns[1] > liEnd THEN DO:
-      IF bCloseItem.Billed = FALSE THEN DELETE bCloseItem.
+      IF llBilled = FALSE THEN DELETE bCloseItem.
       ELSE ASSIGN odBilled   = odBilled + bCloseItem.Amt
                   liLastCred = MAX(liLastCred,bCloseItem.Concerns[2]).
    END. 
@@ -169,53 +175,49 @@ FOR EACH bCloseItem OF bCloseFee EXCLUSIVE-LOCK:
 
       /* If Broken Rental is full month and calculated amount is less */
       /* than original amount then reverted back to original amount   */
-      IF liBrokenRental = 1 AND ldBRAmt < ldeOriginalFee THEN
-         ldBRAmt = ldeOriginalFee.
+      IF liBrokenRental = 1 AND ldBRAmt < bCloseFee.Amt THEN
+         ldBRAmt = bCloseFee.Amt.
 
       /* If Groupcode is specified then charge is usage based month */
       IF icGroupCode > "" THEN
          ldBRAmt = fCalculateLastMonthFee(Syst.Var:gcBrand,
                                           iiMsSeq,
                                           icGroupCode,
-                                          ldeOriginalFee,
+                                          bCloseFee.Amt,
                                           liShortEnd).
-      ELSE IF liBrokenRental = 2 AND ldBRAmt < ldeOriginalFee THEN
-         ldBRAmt = ldeOriginalFee.
+      ELSE IF liBrokenRental = 2 AND ldBRAmt < bCloseFee.Amt THEN
+         ldBRAmt = bCloseFee.Amt.
       
       /* force to full month fee */
-      IF ilFMFee THEN ldBRAmt = ldeOriginalFee.
+      IF ilFMFee THEN ldBRAmt = bCloseFee.Amt.
 
       /* unbilled item can be changed, billed must be credited */
-      IF bCloseItem.Billed = FALSE THEN ASSIGN 
+      IF llBilled = FALSE THEN ASSIGN 
          bCloseItem.Amt         = ldBRAmt
          bCloseItem.Concerns[2] = liEnd.
+      ELSE ASSIGN 
+         odBilled   = odBilled + (bCloseItem.Amt - ldBRAmt)
+         liLastCred = MAX(liLastCred,bCloseItem.Concerns[2]).
 
-      ELSE DO:
-         /* Billed item can be changed if it is billed by test invoice */
-         IF bCloseItem.Billed = TRUE AND
-            CAN-FIND (FIRST Invoice USE-INDEX InvNum WHERE
-                            Invoice.Brand   = Syst.Var:gcBrand AND
-                            Invoice.InvNum  = bCloseItem.InvNum AND
-                            Invoice.InvType = 99 NO-LOCK) THEN DO:
-            ASSIGN
-               bCloseItem.Amt         = ldBRAmt
-               bCloseItem.Concerns[2] = liEnd.
+      /* Billed item can be changed if it is billed by test invoice */
+      /* TODO: is this needed? */
+      IF bCloseItem.Billed = TRUE AND
+         CAN-FIND (FIRST Invoice USE-INDEX InvNum WHERE
+                         Invoice.Brand   = Syst.Var:gcBrand AND
+                         Invoice.InvNum  = bCloseItem.InvNum AND
+                         Invoice.InvType = 99 NO-LOCK) THEN DO:
 
-            /* Update ServiceLimitGroup identifier if first=last month */
-            IF NOT CAN-FIND(FIRST bFFItem OF bCloseFee WHERE
-                                  bFFItem.BillPeriod < bCloseItem.BillPeriod)
-            THEN DO:
-               IF liBrokenRental = 2 OR icGroupCode > "" THEN
-                  bCloseFee.ServiceLimitGroup = "PMF:" + icGroupCode + ":" +
-                                                STRING(bCloseItem.Amt).
-               ELSE IF liBrokenRental = 1 THEN
-                  bCloseFee.ServiceLimitGroup = "".
-            END. /* IF NOT CAN-FIND(FIRST bFFItem OF bCloseFee WHERE */
-         END. /* IF bCloseItem.Billed = TRUE AND */
-         ELSE
-            ASSIGN odBilled   = odBilled + (bCloseItem.Amt - ldBRAmt)
-                   liLastCred = MAX(liLastCred,bCloseItem.Concerns[2]).
-      END.
+         /* Update ServiceLimitGroup identifier if first=last month */
+         IF NOT CAN-FIND(FIRST bFFItem OF bCloseFee WHERE
+                               bFFItem.BillPeriod < bCloseItem.BillPeriod)
+         THEN DO:
+            IF liBrokenRental = 2 OR icGroupCode > "" THEN
+               bCloseFee.ServiceLimitGroup = "PMF:" + icGroupCode + ":" +
+                                             STRING(bCloseItem.Amt).
+            ELSE IF liBrokenRental = 1 THEN
+               bCloseFee.ServiceLimitGroup = "".
+         END. /* IF NOT CAN-FIND(FIRST bFFItem OF bCloseFee WHERE */
+      END. /* IF bCloseItem.Billed = TRUE AND */
    END. 
 
 END.
