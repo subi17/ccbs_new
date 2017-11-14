@@ -18,9 +18,10 @@ DEFINE TEMP-TABLE ttBillItem NO-UNDO
    FIELD BillItem   AS CHARACTER 
    FIELD BIName     AS CHARACTER 
    FIELD BIGroup    AS CHARACTER 
-   FIELD PostAcct   AS CHARACTER 
+   FIELD AccNum     AS CHARACTER 
+   FIELD InvSect    AS CHARACTER 
    FIELD TaxClass   AS CHARACTER 
-   FIELD IFSCode    AS CHARACTER 
+   FIELD SAPRid     AS CHARACTER 
    FIELD ItemType   AS INT
    FIELD CostCenter AS CHARACTER. 
  
@@ -66,12 +67,13 @@ REPEAT:
    ASSIGN ttBillItem.BillItem   = TRIM(ENTRY(1,lcLine,";"))
           ttBillItem.BIName     = TRIM(ENTRY(2,lcLine,";")) 
           ttBillItem.BIGroup    = TRIM(ENTRY(3,lcLine,";"))
-          ttBillItem.PostAcct   = TRIM(ENTRY(4,lcLine,";"))
-          ttBillItem.TaxClass   = TRIM(ENTRY(5,lcLine,";"))
-          ttBillItem.IFSCode    = TRIM(ENTRY(6,lcLine,";"))
-          ttBillItem.CostCenter = TRIM(ENTRY(7,lcLine,";"))
-          ttBillItem.ItemType   = INT(ENTRY(8,lcLine,";")) 
-          WHEN NUM-ENTRIES(lcLine,";") > 7 NO-ERROR.
+          ttBillItem.AccNum     = TRIM(ENTRY(4,lcLine,";"))
+          ttBillItem.InvSect    = TRIM(ENTRY(5,lcLine,";"))
+          ttBillItem.TaxClass   = TRIM(ENTRY(6,lcLine,";"))
+          ttBillItem.SAPRid     = TRIM(ENTRY(7,lcLine,";"))
+          ttBillItem.CostCenter = TRIM(ENTRY(8,lcLine,";"))
+          ttBillItem.ItemType   = INT(ENTRY(9,lcLine,";")) 
+          WHEN NUM-ENTRIES(lcLine,";") > 8 NO-ERROR.
    
    IF ERROR-STATUS:ERROR THEN DO:
       fError("Incorrect input data").
@@ -117,7 +119,7 @@ PROCEDURE pValidateFileData:
          RETURN "ERROR".
       END.
       
-      IF ttBillItem.PostAcct EQ "" THEN DO:
+      IF ttBillItem.AccNum EQ "" THEN DO:
          fError("No Posting Account data available").
          RETURN "ERROR".
       END. 
@@ -161,7 +163,7 @@ PROCEDURE pCreateBillingItem:
       
       FIND Account WHERE  
            Account.Brand  = Syst.Var:gcBrand AND
-           Account.AccNum = INTEGER(ttBillItem.PostAcct) 
+           Account.AccNum = INTEGER(ttBillItem.AccNum) 
       NO-LOCK NO-ERROR.
                         
       IF NOT AVAILABLE Account THEN DO:
@@ -176,21 +178,34 @@ PROCEDURE pCreateBillingItem:
          fError("Wrong Tax class data available").
          RETURN "ERROR".
       END.      
-      
+
+      IF ttBillItem.InvSect > ""
+      THEN DO:
+         FIND InvSect WHERE 
+            InvSect.Brand   = Syst.Var:gcBrand AND
+            InvSect.InvSect = ttBillItem.InvSect
+         NO-LOCK NO-ERROR.
+         IF NOT AVAIL InvSect THEN DO:
+            fError(SUBSTITUTE("InvSect have invalid value '&1'", ttBillItem.InvSect)).
+            RETURN "ERROR".
+         END.
+      END.
+
       CREATE BillItem.
       ASSIGN BillItem.Brand       = Syst.Var:gcBrand
              BillItem.DispMPM     = FALSE
              BillItem.BillCode    = ttBillItem.BillItem
              Billitem.BIName      = ttBillItem.BIName
              BillItem.BIGroup     = ttBillItem.BIGroup
-             BillItem.AccNum      = INTEGER(ttBillItem.PostAcct) 
-             BillItem.AltAccNum   = INTEGER(ttBillItem.PostAcct)
-             BillItem.VipAccNum   = INTEGER(ttBillItem.PostAcct) 
-             BillItem.EUConAccNum = INTEGER(ttBillItem.PostAcct)
-             BillItem.EUAccNum    = INTEGER(ttBillItem.PostAcct)
-             BillItem.FSAccNum    = INTEGER(ttBillItem.PostAcct)
+             BillItem.AccNum      = INTEGER(ttBillItem.AccNum) 
+             BillItem.AltAccNum   = INTEGER(ttBillItem.AccNum)
+             BillItem.VipAccNum   = INTEGER(ttBillItem.AccNum) 
+             BillItem.EUConAccNum = INTEGER(ttBillItem.AccNum)
+             BillItem.EUAccNum    = INTEGER(ttBillItem.AccNum)
+             BillItem.FSAccNum    = INTEGER(ttBillItem.AccNum)
+             BillItem.InvSect     = ttBillItem.InvSect
              BillItem.TaxClass    = ttBillItem.TaxClass
-             BillItem.SAPRid      = ttBillItem.IFSCode
+             BillItem.SAPRid      = ttBillItem.SAPRid
              BillItem.CostCentre  = ttBillItem.CostCenter
              BillItem.ItemType    = ttBillItem.ItemType NO-ERROR.
              

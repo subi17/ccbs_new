@@ -13,10 +13,8 @@ DEFINE INPUT  PARAMETER icFile     AS CHARACTER NO-UNDO.
 DEFINE INPUT  PARAMETER icSpoolDir AS CHARACTER NO-UNDO.
 
 DEFINE TEMP-TABLE ttTrans NO-UNDO 
-    FIELD tTextType  AS INTEGER
     FIELD tLangType  AS CHARACTER 
     FIELD tLangint   AS INTEGER 
-    FIELD tLangtext  AS CHARACTER
     FIELD tLangTrans AS CHARACTER.
  
 DEFINE VARIABLE lcLine      AS CHARACTER NO-UNDO.
@@ -38,7 +36,6 @@ FUNCTION fError RETURNS LOGIC
       icMessage SKIP.
       
 END FUNCTION.
-
 
 PROCEDURE pCreTranslations:
 
@@ -108,13 +105,22 @@ REPEAT:
    END.
    
    IF TRIM(lcLine) eq "" THEN NEXT.
-    
+   
+   FIND FIRST Language NO-LOCK WHERE
+      Language.Langname BEGINS TRIM(ENTRY(2,lcLine,";"))
+   NO-ERROR.
+   
+   IF NOT AVAILABLE Language   
+   THEN DO:
+      fError(SUBSTITUTE("Invalid language name &1", TRIM(ENTRY(2,lcLine,";")))).
+      RETURN "ERROR".
+   END. 
+
    CREATE ttTrans.
    ASSIGN 
       ttTrans.tLangType  = TRIM(ENTRY(1,lcLine,";")) 
-      ttTrans.tLangint   = INTEGER(TRIM(ENTRY(2,lcLine,";")))
-      ttTrans.tLangtext  = TRIM(ENTRY(3,lcLine,";")) 
-      ttTrans.tLangTrans = TRIM(TRIM(ENTRY(4,lcLine,";")),'"') NO-ERROR.
+      ttTrans.tLangint   = Language.Language
+      ttTrans.tLangTrans = TRIM(TRIM(ENTRY(3,lcLine,";")),'"') NO-ERROR.
    
    IF ERROR-STATUS:ERROR THEN DO:
       fError("Incorrect input translation data").
