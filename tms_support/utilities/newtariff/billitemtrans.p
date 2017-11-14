@@ -66,7 +66,7 @@ PROCEDURE pCreTranslations:
             RepText.FromDate = TODAY     
             RepText.ToDate   = 12/31/49       
             RepText.RepText  = ttTrans.tLangTrans
-            .
+            NO-ERROR.
             
          IF ERROR-STATUS:ERROR THEN DO:
             fError("Creating translations for BillItem").
