@@ -1,23 +1,23 @@
-ANGELTECHMF;1;Spanish;
-ANGELTECHMF;2;Catalan;
-ANGELTECHMF;3;Basque;
-ANGELTECHMF;5;English;
-MANITASMF;1;Spanish;
-MANITASMF;2;Catalan;
-MANITASMF;3;Basque;
-MANITASMF;5;English;
-ANGELTECHDISC;1;Spanish;
-ANGELTECHDISC;2;Catalan;
-ANGELTECHDISC;3;Basque;
-ANGELTECHDISC;5;English;
-ANGELTECHDISCCF;1;Spanish;
-ANGELTECHDISCCF;2;Catalan;
-ANGELTECHDISCCF;3;Basque;
-ANGELTECHDISCCF;5;English;
-MANITASDISC;1;Spanish;
-MANITASDISC;2;Catalan;
-MANITASDISC;3;Basque;
-MANITASDISC;5;English;
+ANGELTECHMF;1;Spanish;Angeltech
+ANGELTECHMF;2;Catalan;Angeltech
+ANGELTECHMF;3;Basque;Angeltech
+ANGELTECHMF;5;English;Angeltech
+MANITASMF;1;Spanish;Manitas
+MANITASMF;2;Catalan;Manitas
+MANITASMF;3;Basque;Manitas
+MANITASMF;5;English;Manitas
+ANGELTECHDISC;1;Spanish;Angeltech discount
+ANGELTECHDISC;2;Catalan;Angeltech discount
+ANGELTECHDISC;3;Basque;Angeltech discount
+ANGELTECHDISC;5;English;Angeltech discount
+ANGELTECHDISCCF;1;Spanish;Angeltech discount
+ANGELTECHDISCCF;2;Catalan;Angeltech discount
+ANGELTECHDISCCF;3;Basque;Angeltech discount
+ANGELTECHDISCCF;5;English;Angeltech discount
+MANITASDISC;1;Spanish;Manitas discount
+MANITASDISC;2;Catalan;Manitas discount
+MANITASDISC;3;Basque;Manitas discount
+MANITASDISC;5;English;Manitas discount
 
 
 
