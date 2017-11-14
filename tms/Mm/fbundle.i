@@ -100,7 +100,7 @@ FUNCTION fIsBundleAllowed RETURNS LOGIC
                      OUTPUT lcResult) NE 1 AND
       ENTRY(1,lcResult,";") NE "?"  
    THEN DO:
-      ocInfo = "Bundle is not allowed for this subscription type".
+      ocInfo = "Bundle is not allowed for this subscription type " + icDCEvent.
       RETURN FALSE.
    END.
    
