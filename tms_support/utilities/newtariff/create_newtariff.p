@@ -126,7 +126,7 @@ DO TRANSACTION:
    FOR EACH ttFiles NO-LOCK 
          BY ttFiles.FOrder:
       
-      RUN VALUE(ttFiles.Program) (ttFiles.FName, lcSpoolDir) NO-ERROR.
+      RUN VALUE(ttFiles.Program) (ttFiles.FBaseName,ttFiles.FName,lcSpoolDir) NO-ERROR.
       
       IF ERROR-STATUS:ERROR   OR
          RETURN-VALUE <> "OK" THEN DO:
