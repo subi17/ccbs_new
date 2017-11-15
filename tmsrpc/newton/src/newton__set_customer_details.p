@@ -21,7 +21,7 @@
             street;string;optional;
             zip;string;optional;
             city;string;optional;
-            language;string;optional;
+            language;string;optional;es_ES,es_CA,es_EU,es_GA,en or 1,2,3,4,5
             nationality;string;optional;
             bankaccount;string;optional;
             country;string;optional;
@@ -83,6 +83,8 @@ DEF VAR scUser AS CHAR NO-UNDO INIT "Newton".
 DEF VAR pcMemoStruct AS CHARACTER NO-UNDO. 
 DEF VAR pcMemoTitle AS CHARACTER NO-UNDO. 
 DEF VAR pcMemoContent AS CHARACTER NO-UNDO. 
+DEF VAR liLanguage AS INT NO-UNDO. 
+DEF VAR liContactLanguage AS INT NO-UNDO. 
 DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
 DEFINE VARIABLE lhCustContact AS HANDLE NO-UNDO.
 
@@ -153,7 +155,7 @@ ASSIGN
     lcCustomerData[7] = customer.zipcode
     lcCustomerData[8] = customer.postoffice
     lcCustomerData[9] = customer.region
-    lcCustomerData[10] = ENTRY(Customer.Language, {&languages}) 
+    liLanguage         = customer.Language
     lcCustomerData[11] = customer.nationality
     lcCustomerData[12] = customer.BankAcct
     lcCustomerData[13] = customer.country
@@ -200,8 +202,22 @@ lcstruct = validate_request(pcstruct,
         TRIM(lcDataFields + ",subscription_limit,subscription_act_limit," +
              lcMarketingFields, ",")).
 
-IF get_paramcount(pcCCStruct) > 0 THEN 
+IF get_paramcount(pcCCStruct) > 0 THEN DO:
+
    lcCustContact = validate_request(pcCCStruct,lcContactCustFields). /* CLI */
+
+   IF LOOKUP("language", lcCustContact) > 0 THEN DO:
+
+      lcc = get_string(pcCCstruct, "language").
+
+      IF LOOKUP(lcc, {&languages}) EQ 0 THEN DO:
+         liContactLanguage = INT(lcc) NO-ERROR.
+         IF ERROR-STATUS:ERROR OR (liContactLanguage < 1 OR liContactLanguage > 5) THEN
+            RETURN appl_err(SUBST("Incorrect custcontact language value: &1", lcc)).
+      END.
+      ELSE liContactLanguage = INT(STRING(LOOKUP(lcc, {&languages}))).
+   END.
+END.
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -247,6 +263,19 @@ DO lii = 1 TO NUM-ENTRIES(lcDataFields):
          IF ldBirthday ne Customer.birthday THEN DO:
             llCustomerChanged = TRUE.
          END.
+      END.
+      ELSE IF lcField EQ "language" THEN DO:
+         
+         lcc = get_string(pcstruct, lcField).
+
+         IF LOOKUP(lcc, {&languages}) EQ 0 THEN DO:
+            liLanguage = INT(lcc) NO-ERROR.
+            IF ERROR-STATUS:ERROR OR (liLanguage < 1 OR liLanguage > 5) THEN
+               RETURN appl_err(SUBST("Incorrect language value: &1", lcc)).
+         END.
+         ELSE liLanguage = INT(STRING(LOOKUP(lcc, {&languages}))).
+            
+         IF Customer.Language NE liLanguage THEN llCustomerChanged = TRUE.
       END.
       ELSE DO:  
         lcc = get_string(pcstruct, ENTRY(lii, lcDataFields)).
@@ -387,9 +416,8 @@ IF Customer.CustIdType = "CIF" THEN DO:
          CustContact.Nationality = get_string(pcCCstruct, "nationality") 
          WHEN LOOKUP("nationality", lcCustContact) > 0 
          
-         CustContact.Language  = LOOKUP(get_string(pcCCstruct, "language"),
-                     {&languages})
-         WHEN LOOKUP("language", lcCustContact) > 0 
+         CustContact.Language  = liContactLanguage
+            WHEN LOOKUP("language", lcCustContact) > 0 
          
          CustContact.SMSNumber = get_string(pcCCstruct, "sms_number") 
          WHEN LOOKUP("sms_number", lcCustContact) > 0 
@@ -434,7 +462,7 @@ IF llCustomerChanged THEN DO:
         customer.SurName2 = lcCustomerData[LOOKUP("lname2", lcDataFields)]
         customer.firstname = lcCustomerData[LOOKUP("fname", lcDataFields)]
         customer.coname = lcCustomerData[LOOKUP("coname", lcDataFields)]
-        customer.language = LOOKUP(lcCustomerData[LOOKUP("language", lcDataFields)], {&languages})
+        customer.language = liLanguage
         customer.nationality = lcCustomerData[LOOKUP("nationality", lcDataFields)]
         customer.SMSNumber = lcCustomerData[LOOKUP("sms_number", lcDataFields)]
         customer.Phone = lcCustomerData[LOOKUP("phone_number", lcDataFields)]
