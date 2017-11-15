@@ -2482,8 +2482,7 @@ CASE pcROIresult:
                   WHEN Order.Ordertype NE {&ORDER_TYPE_STC}.
             fMarkOrderStamp(Order.OrderID,"Close",0.0). 
          END.
-         ELSE IF NOT plSendOffer THEN
-            Order.StatusCode = STRING(40 + INTEGER(pcROIlevel)).
+         ELSE Order.StatusCode = STRING(40 + INTEGER(pcROIlevel)).
             
          IF pcROIruleId NE '' THEN
             fCreateMemo("ROI Risk Rule_Id", 
