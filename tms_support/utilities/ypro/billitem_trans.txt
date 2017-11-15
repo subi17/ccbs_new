@@ -1,3 +1,4 @@
+header
 ANGELTECHMF;1;Spanish;Angeltech
 ANGELTECHMF;2;Catalan;Angeltech
 ANGELTECHMF;3;Basque;Angeltech
@@ -10,17 +11,7 @@ ANGELTECHDISC;1;Spanish;Angeltech discount
 ANGELTECHDISC;2;Catalan;Angeltech discount
 ANGELTECHDISC;3;Basque;Angeltech discount
 ANGELTECHDISC;5;English;Angeltech discount
-ANGELTECHDISCCF;1;Spanish;Angeltech discount
-ANGELTECHDISCCF;2;Catalan;Angeltech discount
-ANGELTECHDISCCF;3;Basque;Angeltech discount
-ANGELTECHDISCCF;5;English;Angeltech discount
 MANITASDISC;1;Spanish;Manitas discount
 MANITASDISC;2;Catalan;Manitas discount
 MANITASDISC;3;Basque;Manitas discount
 MANITASDISC;5;English;Manitas discount
-
-
-
-
-
-

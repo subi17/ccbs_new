@@ -74,8 +74,6 @@ REPEAT:
       NEXT.
    END.
 
-   MESSAGE TRIM(ENTRY(7,lcLine,";")) VIEW-AS ALERT-BOX.
-
    CREATE ttBillItem.
    ASSIGN ttBillItem.BillItem   = TRIM(ENTRY(1,lcLine,";"))
           ttBillItem.BIName     = TRIM(ENTRY(2,lcLine,";"))
