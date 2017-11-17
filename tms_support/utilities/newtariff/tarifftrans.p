@@ -49,11 +49,11 @@ PROCEDURE pCreTranslations:
                         ShaperConf.ShaperConfID = ttTrans.tLangType)
       THEN DO:
          FIND FIRST RepText EXCLUSIVE-LOCK WHERE 
-            RepText.Brand    = Syst.Var:gcBrand AND
-            RepText.TextType = 11 AND
-            RepText.LinkCode = ttTrans.tLangType AND
-            RepText.Language = ttTrans.tLangint
-         NO-ERROR.
+                    RepText.Brand    = Syst.Var:gcBrand AND
+                    RepText.TextType = 11 AND
+                    RepText.LinkCode = ttTrans.tLangType AND
+                    RepText.Language = ttTrans.tLangint
+                    NO-ERROR.
          
          IF NOT AVAILABLE RepText THEN DO:
             CREATE RepText.
@@ -97,15 +97,23 @@ IMPORT STREAM strin UNFORMATTED lcLine. /* Reads first line (Header). Ignore it 
 REPEAT: 
    IMPORT STREAM strin UNFORMATTED lcLine.    
                                                                    
-   IF TRIM(lcLine) EQ "" OR NUM-ENTRIES(lcLine, ";") <> 4 THEN
+   IF TRIM(lcLine) EQ "" OR NUM-ENTRIES(lcLine, ";") <> 3 THEN
       NEXT.
+
+   FIND FIRST Language NO-LOCK WHERE
+              Language.Langname BEGINS TRIM(ENTRY(2,lcLine,";"))
+   NO-ERROR.
+
+   IF NOT AVAILABLE Language THEN DO:
+      fError(SUBSTITUTE("Invalid language name &1", TRIM(ENTRY(2,lcLine,";")))).
+      RETURN "ERROR".
+   END. 
 
    CREATE ttTrans.
    ASSIGN 
       ttTrans.tLangType  = TRIM(ENTRY(1,lcLine,";")) 
-      ttTrans.tLangint   = INTEGER(TRIM(ENTRY(2,lcLine,";")))
-      ttTrans.tLangtext  = TRIM(ENTRY(3,lcLine,";")) 
-      ttTrans.tLangTrans = TRIM(TRIM(ENTRY(4,lcLine,";")),'"') NO-ERROR.
+      ttTrans.tLangint   = Language.Language
+      ttTrans.tLangTrans = TRIM(TRIM(ENTRY(3,lcLine,";")),'"') NO-ERROR.
    
    IF ERROR-STATUS:ERROR THEN DO:
       fError("Incorrect input translation data").

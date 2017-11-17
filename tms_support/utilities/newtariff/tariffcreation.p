@@ -20,8 +20,9 @@ Syst.Var:gcBrand = "1".
 {utilities/newtariff/tariffcons.i}
 {utilities/newtariff/chartointmap.i}
 
-DEFINE INPUT  PARAMETER icIncDir    AS CHARACTER NO-UNDO. 
-DEFINE INPUT  PARAMETER icSpoolDir  AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icBaseFile AS CHARACTER NO-UNDO. 
+DEFINE INPUT  PARAMETER icFile     AS CHARACTER NO-UNDO. 
+DEFINE INPUT  PARAMETER icSpoolDir AS CHARACTER NO-UNDO.
 
 DEFINE VARIABLE lcLogFile           AS CHARACTER NO-UNDO.
 DEFINE VARIABLE h_config            AS HANDLE    NO-UNDO.
@@ -112,7 +113,7 @@ END FUNCTION.
 /* ***************************  Main Block  *************************** */
 DO ON ERROR UNDO, THROW:  
 
-   ASSIGN lcLogFile = icSpoolDir + "tariffcreation.log".       
+   ASSIGN lcLogFile   = icSpoolDir + icBaseFile + ".log".
 
    RUN utilities/newtariff/configcreations.p PERSISTENT SET h_config. 
 
@@ -182,14 +183,11 @@ END PROCEDURE.
 
 PROCEDURE pReadTariff:   
 
-   DEFINE VARIABLE lcLine      AS CHARACTER NO-UNDO.
-   DEFINE VARIABLE lcInputFile AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcLine AS CHARACTER NO-UNDO.
 
    DO ON ERROR UNDO, THROW:   
-      
-      ASSIGN lcInputFile = icIncDir + "tariffcreation.txt".
 
-      INPUT STREAM TariffIn FROM VALUE(lcInputFile).
+      INPUT STREAM TariffIn FROM VALUE(icFile).
 
       REPEAT ON ERROR UNDO, THROW:
          IMPORT STREAM TariffIn UNFORMATTED lcLine.
