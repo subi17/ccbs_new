@@ -31,7 +31,7 @@ DEF VAR lcContConFile           AS CHAR NO-UNDO.
 DEF VAR lcMailContent           AS CHAR NO-UNDO.
 DEF VAR liBillPeriod            AS INT  NO-UNDO.
 DEF VAR lcMonitor AS CHAR NO-UNDO. 
-
+DEF VAR lcPass AS CHAR NO-UNDO.
 DEF VAR liStartTime   AS INT  NO-UNDO. 
 DEF VAR liStopTime    AS INT  NO-UNDO. 
 DEF VAR lEndSeconds   AS INTEGER   NO-UNDO.
@@ -52,35 +52,31 @@ DEF TEMP-TABLE eInvoiceContent NO-UNDO
 
 
 FUNCTION fGenerateEmailTemplate RETURNS CHAR
-   (iiMsSeq AS INT,
+   (icTemplate AS CHAR,
+    iiMsSeq AS INT,
     icMSISDN AS CHAR,
     ideAmount AS DECIMAL,
     icDate AS CHAR, 
     iiInvNum AS INT):
    DEF VAR lcTargetType AS CHAR NO-UNDO.
    DEF VAR llcMessage  AS LONGCHAR NO-UNDO.
+   DEF VAR lcMessagePayload AS CHAR NO-UNDO.
    DEF VAR llgOK AS LOGICAL NO-UNDO.
-   DEF VAR lcPass AS CHAR NO-UNDO.
 
-InvTextist.paramtext.keyvalue Jsonparam"MsSeq=#MSSEQ| ..."
-   CREATE eInvoiceContent.
-   ASSIGN
-      eInvoiceContent.MsSeq = STRING(iiMsSeq)
-      eInvoiceContent.MSISDN = icMSISDN
-      eInvoiceContent.Amount = STRING(ideAmount)
-      eInvoiceContent.InvDate = icDate
-      eInvoiceContent.InvNum = iiInvNum
-      eInvoiceContent.InvNumCrypted = encrypt_data(STRING(iiInvNum),
-                                                   {&ENCRYPTION_METHOD},
-                                                   lcPass).
-   llgOK = TEMP-TABLE eInvoiceContent:WRITE-JSON("LONGCHAR", /*writing type*/
-                                             llcMessage, /*target*/
-                                             TRUE). /*formatted to readabale*/
+/*InvText.paramtext.keyvalue Jsonparam "MsSeq=#MSSEQ| ..."*/
+   lcMessagePayload = icTemplate.
+   lcMessagePayload = REPLACE(lcMessagePayload,"#MSSEQ",STRING(iiMsSeq)).
+   lcMessagePayload = REPLACE(lcMessagePayload,"#MSISDN",icMSISDN).
+   lcMessagePayload = REPLACE(lcMessagePayload,"#AMOUNT",STRING(ideAmount)).
+   lcMessagePayload = REPLACE(lcMessagePayload,"#INVDATE",icDate).
+   lcMessagePayload = REPLACE(lcMessagePayload,"#INVNUM",STRING(iiInvNum)).
+   lcMessagePayload = REPLACE(lcMessagePayload,"#INVNUMCRYPTED",
+                              encrypt_data(STRING(iiInvNum),
+                                          {&ENCRYPTION_METHOD},
+                                          lcPass)).
 
-   EMPTY TEMP-TABLE eInvoiceContent.
-   IF llgOK EQ TRUE THEN RETURN STRING( llcMessage  ).
-
-
+   IF lcMessagePayload NE "" AND lcMessagePayload ne ? THEN 
+   RETURN lcMessagePayload.
 RETURN "".
 END.
 
@@ -99,7 +95,7 @@ lcMonitor = fGetRequestNagiosToken(MsRequest.Reqtype).
 
 /* Email Address Conf File */
 ASSIGN lcAddrConfDir = fCParamC("RepConfDir")
-       lcPassPhrase  = fCParamC("EinvoicePass")
+       lcPass        = fCParamC("EinvoicePass")
        lcContConFile = fCParamC("SMSInvContFile")
        /* ie. "32400-79200" Send between 9:00-22:00 */
        ldaDateFrom   = MsRequest.ReqDtParam1
@@ -109,7 +105,7 @@ ASSIGN lcAddrConfDir = fCParamC("RepConfDir")
 
 INVOICE_LOOP:
 FOR EACH Invoice WHERE
-         Invoice.Brand    = gcBrand AND
+         Invoice.Brand    = "1" AND
          Invoice.InvDate >= ldaDateFrom AND
          Invoice.DelType = {&INV_DEL_TYPE_NO_DELIVERY} AND
          Invoice.InvType  = 1 AND
@@ -144,23 +140,17 @@ FOR EACH Invoice WHERE
                     lEndSeconds).
          llFirstInv = TRUE.
       END.
-      DO TRANS:
-         lcTemplate = fGenerateEmailTemplate(MobSub.MsSeq,
+         /**/
+         lcTemplate = fGenerateEmailTemplate(lcTemplate,
+                                             MobSub.MsSeq,
                                              MobSub.CLI,
                                              Invoice.InvAmt,
                                              STRING(Invoice.InvDate),
                                              Invoice.InvNum
                                             ).
+         Mm.MManMessage:ParamKeyValue = lcTemplate.
+         Mm.MManMessage:mCreateMMLogSMS(MobSub.CLI).
 
-         /* fMakeSchedSMS2(MobSub.CustNum,
-                        MobSub.CLI,
-                        44,
-                        lcSMSReplacedText,
-                        fMakeTS(),
-                        "Fact. Yoigo",
-                        STRING(lIniSeconds) + "-" + STRING(lEndSeconds)). */
-
-      END. /* DO TRANS: */
    END. /* FOR EACH SubInvoice OF Invoice NO-LOCK: */
 END. /* FOR EACH Invoice WHERE */
 
@@ -180,7 +170,7 @@ IF lcAddrConfDir > "" THEN
 
 IF lcContConFile > "" AND SEARCH(lcAddrConfDir) <> ? THEN DO:
    FOR FIRST InvText NO-LOCK WHERE
-             InvText.Brand     = gcBrand            AND
+             InvText.Brand     = "1"            AND
              InvText.Target    = "General"          AND
              InvText.KeyValue  = "EmailConfEInv"  AND
              InvText.Language  = 5                  AND 
