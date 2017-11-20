@@ -1349,6 +1349,13 @@ PROCEDURE pFinalize:
                                    lcResult).
                END.
             END.
+			
+			FIND FIRST OrderCustomer NO-LOCK WHERE
+                    OrderCustomer.Brand EQ Syst.Var:gcBrand AND
+                    Ordercustomer.OrderID EQ MsRequest.ReqIParam2 AND
+                    OrderCustomer.TerritoryOwner NE "".
+				IF Avail OrderCustomer THEN MobSub.TerritoryOwner = OrderCustomer.TerritoryOwner.
+
             fSetOrderStatus(Order.OrderId,"6").  
             fMarkOrderStamp(Order.OrderID,
                             "Delivery",
