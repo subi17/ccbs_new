@@ -1707,20 +1707,16 @@ FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
       /* YTS-10537 Update Customer information only when order is finished */
       RUN Mm/createcustomer.p(INPUT ttOneDelivery.OrderId,1,FALSE,FALSE,OUTPUT oiCustomer).
 
-      IF RETURN-VALUE = "not updated existing customer" THEN DO:
-         Order.CustNum = oiCustomer.
-         /* do not call createcustcontact */         
-      END.
-      ELSE DO:	  
-	  
-		 llCorporate = CAN-FIND(OrderCustomer WHERE
-                                                                OrderCustomer.Brand      = Syst.Var:gcBrand      AND
+      IF RETURN-VALUE NE "not updated existing customer" THEN DO:
+
+		   llCorporate = CAN-FIND(OrderCustomer WHERE
+                        OrderCustomer.Brand      = Syst.Var:gcBrand      AND
 								OrderCustomer.OrderID    = ttOneDelivery.OrderID AND
 								OrderCustomer.RowType    = 1                     AND
 								OrderCustomer.CustIdType = "CIF").
 
-	     FOR EACH OrderCustomer NO-LOCK WHERE
-                                  OrderCustomer.Brand   = Syst.Var:gcBrand AND
+	      FOR EACH OrderCustomer NO-LOCK WHERE
+              OrderCustomer.Brand   = Syst.Var:gcBrand AND
 				  OrderCustomer.OrderID = ttOneDelivery.OrderID:
 			IF llCorporate AND (OrderCustomer.RowType = 1 OR OrderCustomer.RowType = 5) THEN
 			DO:
@@ -1729,7 +1725,7 @@ FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
 										  OrderCustomer.RowType,
 										  OUTPUT lcError).
 			   IF lcError > "" THEN DO:
-                                                 Func.Common:mWriteMemo("Order",
+                           Func.Common:mWriteMemo("Order",
 									STRING(OrderCustomer.OrderID),
 									oiCustomer,
 									"CUSTOMER CONTACT CREATION FAILED",
