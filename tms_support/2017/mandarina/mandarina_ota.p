@@ -12,10 +12,10 @@
 Syst.Var:gcBrand = "1".
 
 /* Folders and labels. */ 
-DEF VAR lcInputFile AS CHAR NO-UNDO INITIAL "/tmp/OTA_KO.csv".           /* ¡¡Remember to check for each run!! */
-DEF VAR lcLogFile   AS CHAR NO-UNDO INITIAL "/tmp/OTA_KO.log".           /* ¡¡Remember to check for each run!! */  
-DEF VAR lcMemoTitle AS CHAR NO-UNDO INITIAL "OTA KO".                    /* ¡¡Remember to check for each run!! */ 
-DEF VAR lcMemoText  AS CHAR NO-UNDO INITIAL "Migración de red - OTA KO". /* ¡¡Remember to check for each run!! */
+DEF VAR lcInputFile AS CHAR NO-UNDO INITIAL "/tmp/OTA_KO.txt".           /* Remember to check for each run!! */
+DEF VAR lcLogFile   AS CHAR NO-UNDO INITIAL "/tmp/OTA_KO.log".           /* Remember to check for each run!! */  
+DEF VAR lcMemoTitle AS CHAR NO-UNDO INITIAL "OTA KO".                    /* Remember to check for each run!! */ 
+DEF VAR lcMemoText  AS CHAR NO-UNDO INITIAL "Migración de red - OTA KO". /* Remember to check for each run!! */
 
 DEF VAR lcMSISDN    AS CHAR NO-UNDO. 
 DEF VAR lcLine      AS CHAR.
@@ -45,7 +45,7 @@ REPEAT:
    END.  
 
    Func.Common:mWriteMemoWithType("Mobsub",
-                     mobsub.MsSeq,
+                     STRING(mobsub.MsSeq),
                      mobsub.CustNum,
                      lcMemoTitle,
                      lcMemoText,
