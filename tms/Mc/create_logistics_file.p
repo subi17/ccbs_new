@@ -62,7 +62,6 @@ DEFINE VARIABLE lcError            AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcCustID           AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE liMainlineOrderId  AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE llDespacharValue   AS LOGICAL   NO-UNDO.
-DEFINE VARIABLE liCustLoop         AS INTEGER   NO-UNDO.
 
 DEFINE BUFFER AgreeCustomer   FOR OrderCustomer.
 DEFINE BUFFER ContactCustomer FOR OrderCustomer.
@@ -377,11 +376,13 @@ FUNCTION fCheckForAdditionalORExtraMainLine RETURNS LOGICAL
    DEFINE BUFFER bMLOrder       FOR Order. 
    DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
    DEFINE BUFFER bOrderAction   FOR OrderAction.
+   DEFINE BUFFER bufOrderAction FOR OrderAction.
    DEFINE BUFFER bufCLIType     FOR CliType. 
    DEFINE BUFFER bOffer         FOR Offer.
    DEFINE BUFFER bOfferItem     FOR OfferItem.
 
    DEF VAR lcConvOrders        AS CHAR NO-UNDO INITIAL "".
+   DEF VAR llgConvergentLine   AS LOG  NO-UNDO INITIAL FALSE.  
    DEF VAR llgExtraLine        AS LOG  NO-UNDO INITIAL FALSE.
    DEF VAR llgAdditionalLine   AS LOG  NO-UNDO INITIAL FALSE. 
    DEF VAR lcExtraLineCLITypes AS CHAR NO-UNDO. 
@@ -399,130 +400,132 @@ FUNCTION fCheckForAdditionalORExtraMainLine RETURNS LOGICAL
 
    IF NOT AVAIL bOrder THEN 
       RETURN FALSE.
-
-   IF bOrder.OrderType = {&ORDER_TYPE_NEW}                  AND
-   LOOKUP(bOrder.StatusCode,{&ORDER_CLOSE_STATUSES}) = 0 THEN DO:
-
-      IF fIsConvergenceTariff(bOrder.CLIType) THEN DO: 
-         
-         /* fetch convergent mobile row, to update despachar value */
-         IF lcActionId = "0" THEN DO: 
-            
-            IF (bOrder.DeliverySecure > 0) OR 
-               fIsTerminalOrder(bOrder.OrderId,
-                                OUTPUT lcTerminalBillCode) THEN 
-               llDespachar = FALSE.
-            ELSE llDespachar = TRUE.   
-
-         END.
-         ELSE llDespachar = TRUE.
+  
+   IF bOrder.OrderType <> {&ORDER_TYPE_NEW} THEN 
+      RETURN FALSE.
+  
+   IF fIsConvergenceTariff(bOrder.CLIType) THEN DO: 
       
-         liMainOrderId = bOrder.OrderId.                  
-      END.    
-      ELSE IF LOOKUP(bOrder.CliType,lcExtraLineCLITypes) > 0                         AND 
-                     bOrder.MultiSimId                  <> 0                         AND 
-                     bOrder.MultiSimType                 = {&MULTISIMTYPE_EXTRALINE} THEN DO:
-        
-         /* Check extraline associated mainline orderid is also included in the 
-            current logistics file */
-         IF CAN-FIND(FIRST bMLttOneDelivery NO-LOCK WHERE 
-                           bMLttOneDelivery.OrderId   = bOrder.MultiSimId  AND 
-                           bMLttOneDelivery.OrderType = {&ORDER_TYPE_NEW}) THEN 
-            liMainOrderId = bOrder.MultiSimId.
+      /* fetch convergent mobile row, to update despachar value */
+      IF lcActionId = "0" THEN  
+         llgConvergentLine = TRUE. 
+      ELSE llDespachar = TRUE.
+   
+      liMainOrderId = bOrder.OrderId.                  
+   END.    
+   ELSE IF LOOKUP(bOrder.CliType,lcExtraLineCLITypes) > 0                         AND 
+                  bOrder.MultiSimId                  <> 0                         AND 
+                  bOrder.MultiSimType                 = {&MULTISIMTYPE_EXTRALINE} THEN DO:
+     
+      /* Check extraline associated mainline orderid is also included in the 
+         current logistics file */
+      IF CAN-FIND(FIRST bMLttOneDelivery NO-LOCK WHERE 
+                        bMLttOneDelivery.OrderId   = bOrder.MultiSimId  AND 
+                        bMLttOneDelivery.OrderType = {&ORDER_TYPE_NEW}) THEN 
+         liMainOrderId = bOrder.MultiSimId.
 
-         llgExtraLine = TRUE.   
+      llgExtraLine = TRUE.   
+   
+   END.
+   ELSE IF LOOKUP(bOrder.CliType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
+
+      FIND FIRST bOrderCustomer NO-LOCK WHERE
+                 bOrderCustomer.Brand   = Syst.Var:gcBrand AND
+                 bOrderCustomer.OrderId = bOrder.OrderId   AND
+                 bOrderCustomer.RowType = 1                NO-ERROR.
+      
+      FIND FIRST bOrderAction NO-LOCK WHERE
+                 bOrderAction.Brand    = Syst.Var:gcBrand   AND
+                 bOrderAction.OrderID  = bOrder.OrderId     AND
+                 bOrderAction.ItemType EQ "AddLineDiscount" NO-ERROR.
+      
+      IF AVAIL bOrderCustomer AND 
+         AVAIL bOrderAction   THEN DO:
+
+         liMainOrderId = 0.
+
+         MAINORDER:
+         FOR EACH bMLttOneDelivery NO-LOCK WHERE 
+                  bMLttOneDelivery.OrderType = {&ORDER_TYPE_NEW}:
+     
+            IF bMLttOneDelivery.OrderId EQ bOrder.OrderId THEN 
+               NEXT MAINORDER.
+
+            CASE bOrderCustomer.CustIdType:
+               WHEN "NIE" THEN 
+                  IF bMLttOneDelivery.NIE NE bOrderCustomer.CustId THEN NEXT.
+               WHEN "NIF" THEN 
+                  IF bMLttOneDelivery.NIF NE bOrderCustomer.CustId THEN NEXT.
+               WHEN "CIF" THEN
+                  IF bMLttOneDelivery.CIF NE bOrderCustomer.CustId THEN NEXT.
+               OTHERWISE NEXT.
+            END.
+            
+            lcMainCLIType = "".
+
+            IF bMLttOneDelivery.SubsType BEGINS "FH" THEN
+               lcMainCLIType = "CONT" + TRIM(bMLttOneDelivery.SubsType).
+            ELSE lcMainCLIType = TRIM(bMLttOneDelivery.SubsType).
+            
+            IF LOOKUP(bOrderAction.ItemKey,{&ADDLINE_DISCOUNTS_20}) > 0 OR 
+               LOOKUP(bOrderAction.ItemKey, {&ADDLINE_DISCOUNTS})   > 0 THEN DO:
+
+               IF NOT fIsConvergenceTariff(lcMainCLIType) THEN 
+                  NEXT MAINORDER.
+
+               IF LOOKUP(bOrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0 THEN DO: 
+                  IF fIsConvergentAddLineOK(lcMainCLIType,bOrder.CLIType) THEN
+                     liMainOrderId = INT(bMLttOneDelivery.OrderId).
+               END.      
+               ELSE 
+                   liMainOrderId = INT(bMLttOneDelivery.OrderId).
+
+            END.
+            ELSE IF LOOKUP(bOrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0 THEN DO:
+               
+               IF CAN-FIND(FIRST bufOrderAction NO-LOCK WHERE
+                                 bufOrderAction.Brand    = Syst.Var:gcBrand              AND
+                                 bufOrderAction.OrderID  = INT(bMLttOneDelivery.OrderId) AND
+                                 bufOrderAction.ItemType = "AddLineDiscount"             AND 
+                          LOOKUP(bufOrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0)   THEN 
+                  NEXT MAINORDER.
+ 
+               IF fIsMobileOnlyAddLineOK(lcMainCLIType,bOrder.CLIType) THEN 
+                  liMainOrderId = INT(bMLttOneDelivery.OrderId).
+            END.         
+
+            IF liMainOrderId NE 0 THEN DO:
+               /* If current additional line is with secure delivery option, then
+                  its minaline associated mobile line should be updated with
+                  false despachar value */
+               FIND FIRST bMLttExtra EXCLUSIVE-LOCK WHERE
+                          bMLttExtra.RowNum = bMLttOneDelivery.RowNum NO-ERROR.
+               IF AVAIL bMLttExtra                AND
+                  bOrder.DeliverySecure     > 0   AND
+                  bMLttOneDelivery.ActionID = "0" THEN
+                  bMLttExtra.Despachar = "02".              
+
+               LEAVE MAINORDER.
+            END.
+         
+         END.
+
+         llgAdditionalLine = TRUE.
       
       END.
-      ELSE IF LOOKUP(bOrder.CliType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
 
-         FIND FIRST bOrderCustomer NO-LOCK WHERE
-                    bOrderCustomer.Brand   = Syst.Var:gcBrand AND
-                    bOrderCustomer.OrderId = bOrder.OrderId   AND
-                    bOrderCustomer.RowType = 1                NO-ERROR.
-         
-         FIND FIRST bOrderAction NO-LOCK WHERE
-                    bOrderAction.Brand    = Syst.Var:gcBrand   AND
-                    bOrderAction.OrderID  = bOrder.OrderId     AND
-                    bOrderAction.ItemType EQ "AddLineDiscount" NO-ERROR.
-         
-         IF AVAIL bOrderCustomer AND 
-            AVAIL bOrderAction   THEN DO:
+   END. /* Additional line */
 
-            liMainOrderId = 0.
-
-            MAINORDER:
-            FOR EACH bMLttOneDelivery NO-LOCK WHERE 
-                     bMLttOneDelivery.OrderType = {&ORDER_TYPE_NEW}:
-         
-               CASE bOrderCustomer.CustIdType:
-                  WHEN "NIE" THEN 
-                     IF bMLttOneDelivery.NIE NE bOrderCustomer.CustId THEN NEXT.
-                  WHEN "NIF" THEN 
-                     IF bMLttOneDelivery.NIF NE bOrderCustomer.CustId THEN NEXT.
-                  WHEN "CIF" THEN
-                     IF bMLttOneDelivery.CIF NE bOrderCustomer.CustId THEN NEXT.
-                  OTHERWISE .
-               END.
-               
-               lcMainCLIType = "".
-
-               IF bMLttOneDelivery.SubsType BEGINS "FH" THEN
-                  lcMainCLIType = "CONT" + TRIM(bMLttOneDelivery.SubsType).
-               ELSE lcMainCLIType = TRIM(bMLttOneDelivery.SubsType).
-               
-               IF LOOKUP(bOrderAction.ItemKey,{&ADDLINE_DISCOUNTS_20}) > 0 OR 
-                  LOOKUP(bOrderAction.ItemKey, {&ADDLINE_DISCOUNTS})   > 0 THEN DO:
-
-                  IF NOT fIsConvergenceTariff(lcMainCLIType) THEN 
-                     NEXT MAINORDER.
-
-                  IF LOOKUP(bOrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0 THEN 
-                     IF fIsConvergentAddLineOK(lcMainCLIType,bOrder.CLIType) THEN
-                        liMainOrderId = INT(bMLttOneDelivery.OrderId).
-                  ELSE 
-                      liMainOrderId = INT(bMLttOneDelivery.OrderId).
-
-               END.
-               ELSE DO:
-                  IF LOOKUP(bOrderAction.ItemKey, {&ADDLINE_DISCOUNTS_HM}) > 0 THEN
-                     IF fIsMobileOnlyAddLineOK(lcMainCLIType,bOrder.CLIType) THEN 
-                        liMainOrderId = INT(bMLttOneDelivery.OrderId).
-               END.         
-
-               IF liMainOrderId NE 0 THEN DO:
-                  /* If current additional line is with secure delivery option, then
-                     its minaline associated mobile line should be updated with
-                     false despachar value */
-                  FIND FIRST bMLttExtra EXCLUSIVE-LOCK WHERE
-                             bMLttExtra.RowNum = bMLttOneDelivery.RowNum NO-ERROR.
-                  IF AVAIL bMLttExtra                AND
-                     bOrder.DeliverySecure     > 0   AND
-                     bMLttOneDelivery.ActionID = "0" THEN
-                     bMLttExtra.Despachar = "02".              
-
-                  LEAVE MAINORDER.
-               END.
-            
-            END.
-
-            llgAdditionalLine = TRUE.
-         
-         END.
-
-      END. /* Additional line */
-
-      IF llgExtraLine      OR 
-         llgAdditionalLine THEN DO:
-         
-         IF LOOKUP(bOrder.StatusCode,{&ORDER_ROI_STATUSES}) > 0 OR 
-                   bOrder.DeliverySecure > 0                    THEN 
-            llDespachar = FALSE.
-         ELSE IF fIsTerminalOrder(liMainOrderId,
-                                  OUTPUT lcTerminalBillCode) THEN 
-            llDespachar = FALSE.
-         ELSE llDespachar = TRUE.
-
-      END.   
+   IF llgConvergentLine OR 
+      llgExtraLine      OR 
+      llgAdditionalLine THEN DO:
+     
+      IF (bOrder.DeliverySecure > 0) OR 
+         fIsTerminalOrder(IF llgConvergentLine THEN bOrder.OrderId
+                          ELSE liMainOrderId,
+                          OUTPUT lcTerminalBillCode) THEN 
+         llDespachar = FALSE.
+      ELSE llDespachar = TRUE.   
 
    END.   
 
@@ -1889,32 +1892,25 @@ END.
 ELSE
   lcLogFile = ?.
 
-DO liCustLoop = 1 TO 3: 
-   /* link Extra/Additional line mainline order to orders if available */
-   FOR EACH bttOneDelivery NO-LOCK:
+/* link Extra/Additional line mainline order to orders if available */
+FOR EACH bttOneDelivery NO-LOCK:
 
-      IF liCustLoop = 1 AND bttOneDelivery.NIE EQ "" THEN NEXT.
-      IF liCustLoop = 2 AND bttOneDelivery.NIF EQ "" THEN NEXT.
-      IF liCustLoop = 3 AND bttOneDelivery.CIF EQ "" THEN NEXT. 
+   ASSIGN liMainlineOrderId = 0
+          llDespacharValue  = FALSE. 
 
-      ASSIGN liMainlineOrderId = 0
-             llDespacharValue  = FALSE. 
+   fCheckForAdditionalORExtraMainLine(bttOneDelivery.OrderID,
+                                      bttOneDelivery.ActionID, 
+                                      OUTPUT liMainlineOrderId,
+                                      OUTPUT llDespacharValue).
 
-      fCheckForAdditionalORExtraMainLine(bttOneDelivery.OrderID,
-                                         bttOneDelivery.ActionID, 
-                                         OUTPUT liMainlineOrderId,
-                                         OUTPUT llDespacharValue).
+   FIND FIRST ttExtra EXCLUSIVE-LOCK WHERE 
+              ttExtra.RowNum = bttOneDelivery.RowNum NO-ERROR.
+  
+   IF NOT AVAIL ttExtra THEN NEXT.
 
-      FIND FIRST ttExtra EXCLUSIVE-LOCK WHERE 
-                 ttExtra.RowNum = bttOneDelivery.RowNum NO-ERROR.
-     
-      IF NOT AVAIL ttExtra THEN NEXT.
-
-      IF liMainlineOrderId NE 0 THEN 
-         ASSIGN ttExtra.MainOrderID = STRING(liMainlineOrderId)
-                ttExtra.Despachar   = (IF llDespacharValue THEN "01" ELSE "02").
-   
-   END.
+   IF liMainlineOrderId NE 0 THEN 
+      ASSIGN ttExtra.MainOrderID = STRING(liMainlineOrderId)
+             ttExtra.Despachar   = (IF llDespacharValue THEN "01" ELSE "02").
 
 END.
 
