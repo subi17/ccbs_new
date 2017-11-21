@@ -23,6 +23,7 @@ DEFINE STREAM strexport.
 &GLOBAL-DEFINE BBTYPE "BaseBundleType"
 &GLOBAL-DEFINE BBNAME "BaseBundleName"
 &GLOBAL-DEFINE BBUNDLE "BaseBundle"
+&GLOBAL-DEFINE PRICELIST "PriceList"
 &GLOBAL-DEFINE DATALIMIT "DataLimit"
 &GLOBAL-DEFINE VOICELIMIT "VoiceLimit"
 &GLOBAL-DEFINE BDESTLIMIT "BDestinationLimit"
@@ -30,22 +31,12 @@ DEFINE STREAM strexport.
 &GLOBAL-DEFINE MFBILLCODE "MonthlyFeeBillCode"
 &GLOBAL-DEFINE UPSELL "Upsell"
 &GLOBAL-DEFINE BONOSUPPORT "BonoSupport"
-&GLOBAL-DEFINE OPTIONAL "OptionalBundle"
 &GLOBAL-DEFINE FMDL "FirstMonthDataLimit"
 &GLOBAL-DEFINE LMDL "LastMonthDataLimit"
 &GLOBAL-DEFINE FMVL "FirstMonthVoiceLimit"
 &GLOBAL-DEFINE LMVL "LastMonthVoiceLimit"
 &GLOBAL-DEFINE FMBDL "FirstMonthBDestLimit"
 &GLOBAL-DEFINE LMBDL "LastMonthBDestLimit"
-
-/* 
-   The following three preprocess variables are used only for creating
-   FMItems. 
-   NOTE! This program only creates FMItems which belogs to "optional" bundle.
-         The optional bundle is defined using OptionalBundle field.         
-         The optional bundle FMItems use "COMMON" pricelist and thus no link
-         to the CLIType.
-*/
 &GLOBAL-DEFINE COMMFEE "CommercialFee"
 &GLOBAL-DEFINE FMFC "FirstMonthFeeCalc"
 &GLOBAL-DEFINE LMFC "LastMonthFeeCalc"
@@ -84,6 +75,7 @@ fCreatettBundle({&BBUNDLE}, "CHARACTER", "FixedLine,Mobile", "", YES).
 fCreatettBundle({&BBNAME}, "CHARACTER", "FixedLine,Mobile", "", YES).
 fCreatettBundle({&BBTYPE}, "CHARACTER", "FixedLine,Mobile", "ServicePackage,PackageWithCounter,PackagewithoutCounter,Upsell", YES).
 fCreatettBundle({&UPSELL}, "CHARACTER", "Mobile", "", NO).
+fCreatettBundle({&PRICELIST}, "CHARACTER", "FixedLine,Mobile", "", NO).
 fCreatettBundle({&BONOSUPPORT}, "LOGICAL", "Mobile", "Yes,No,True,False", NO).
 fCreatettBundle({&MFBILLCODE}, "CHARACTER", "FixedLine,Mobile", "", YES).
 fCreatettBundle({&COMMFEE}, "DECIMAL", "FixedLine,Mobile", "", NO).
@@ -98,7 +90,6 @@ fCreatettBundle({&FMVL}, "CHARACTER", "FixedLine,Mobile", "Full,Relative", YES).
 fCreatettBundle({&LMVL}, "CHARACTER", "FixedLine,Mobile", "Full,Relative", YES).
 fCreatettBundle({&FMBDL}, "CHARACTER", "FixedLine,Mobile", "Full,Relative", YES).
 fCreatettBundle({&LMBDL}, "CHARACTER", "FixedLine,Mobile", "Full,Relative", YES).
-fCreatettBundle({&OPTIONAL}, "LOGICAL", "Mobile", "Yes,No,True,False", YES).
 
 fCreatettCharToIntMap("Limit","Full",0).
 fCreatettCharToIntMap("Limit","Relative",1).
@@ -327,6 +318,10 @@ PROCEDURE pReadBundle:
    
    IF CAN-FIND(FIRST ServiceLimitGroup NO-LOCK WHERE ServiceLimitGroup.Brand = Syst.Var:gcBrand AND ServiceLimitGroup.GroupCode = fGetFieldValue({&BBUNDLE}))
    THEN UNDO, THROW NEW Progress.Lang.AppError(SUBSTITUTE("ServiceLimitGroup having GroupCode '&1' already exists", fGetFieldValue({&BBUNDLE})), 1).
+
+   IF fGetFieldValue({&PRICELIST}) > "" AND
+      CAN-FIND(FIRST PriceList NO-LOCK WHERE PriceList.Brand = Syst.Var:gcBrand AND PriceList.PriceList = fGetFieldValue({&PRICELIST}))
+   THEN UNDO, THROW NEW Progress.Lang.AppError(SUBSTITUTE("PriceList '&1' already exists", fGetFieldValue({&PRICELIST})), 1). 
 
    CATCH err AS Progress.Lang.Error:
       UNDO, THROW NEW Progress.Lang.AppError('Incorrect input file data' + err:GetMessage(1), 1). 
@@ -629,66 +624,57 @@ END PROCEDURE.
 
 PROCEDURE pCreateFMItem:
 
+   DEFINE INPUT  PARAMETER icPriceList AS CHARACTER NO-UNDO.
+
    DEFINE VARIABLE lcBillCode AS CHARACTER NO-UNDO.
 
-   /* NOTE! It is not possible to create normal FMItems here 
-            as the PriceList information is not known at this
-            point. It is however possible to create fmitems
-            having "common" pricelist. The common pricelist
-            doesn't have a link to CLIType like normal pricelists
-            have. We create the common FMItem for bundles
-            which are optional (OptionalBundle is set to positive value). */
-   IF LOGICAL(fGetFieldValue({&OPTIONAL}))
-   THEN DO:
-      lcBillCode = fGetFieldValue({&MFBILLCODE}).
-      
-      IF fGetFieldValue({&FMFC}) = "" OR fGetFieldValue({&LMFC}) = ""
-      THEN UNDO, THROW NEW Progress.Lang.AppError
-               (SUBSTITUTE("Optional bundle needs values '&1' and '&2' to be defined",
-                {&FMFC}, {&LMFC}), 1). 
+   lcBillCode = fGetFieldValue({&MFBILLCODE}).
+   
+   IF fGetFieldValue({&FMFC}) = "" OR fGetFieldValue({&LMFC}) = ""
+   THEN UNDO, THROW NEW Progress.Lang.AppError
+            (SUBSTITUTE("Values '&1' and '&2' to be defined if '&3' have a value",
+             {&FMFC}, {&LMFC}, {&PRICELIST}), 1). 
 
-      IF DECIMAL(fGetFieldValue({&COMMFEE})) <= 0
-      THEN UNDO, THROW NEW Progress.Lang.AppError
-               (SUBSTITUTE("&1 has no value or it is invalid. The value is mandatory" +
-                           " for optional bundles",
-                           {&COMMFEE}), 1). 
-      
-      FIND FIRST FMItem NO-LOCK WHERE
-         FMItem.Brand     = Syst.Var:gcBrand AND
-         FMItem.FeeModel  = lcBillCode       AND
-         FMItem.PriceList = "COMMON"         AND
-         FMItem.BillCode  = lcBillCode       AND
-         FMItem.FromDate <= TODAY            AND
-         FMItem.ToDate   >= TODAY
-      NO-ERROR.
+   IF DECIMAL(fGetFieldValue({&COMMFEE})) <= 0
+   THEN UNDO, THROW NEW Progress.Lang.AppError
+            (SUBSTITUTE("&1 value is mandatory and must have positive value" +
+                        " when '&2' have a value",
+                        {&COMMFEE}, {&PRICELIST}), 1). 
+   
+   FIND FIRST FMItem NO-LOCK WHERE
+      FMItem.Brand     = Syst.Var:gcBrand AND
+      FMItem.FeeModel  = lcBillCode       AND
+      FMItem.PriceList = icPriceList      AND
+      FMItem.BillCode  = lcBillCode       AND
+      FMItem.FromDate <= TODAY            AND
+      FMItem.ToDate   >= TODAY
+   NO-ERROR.
 
-      IF AVAILABLE FMItem
-      THEN UNDO, THROW NEW Progress.Lang.AppError
-         (SUBSTITUTE("FMItem having FeeModel=&1, PriceList=COMMON, BillCode=&2 " +
-                     "is already defined and active",
-                     lcBillCode, lcBillCode), 1).           
+   IF AVAILABLE FMItem
+   THEN UNDO, THROW NEW Progress.Lang.AppError
+      (SUBSTITUTE("FMItem having FeeModel=&1, PriceList=&2, BillCode=&2 " +
+                  "is already defined and active",
+                  lcBillCode, icPriceList, lcBillCode), 1).           
 
-      CREATE FMItem. 
-      ASSIGN     
-         FMItem.Brand             = Syst.Var:gcBrand
-         FMItem.FeeModel          = lcBillCode
-         FMItem.BillCode          = lcBillCode
-         FMItem.PriceList         = "COMMON"
-         FMItem.FromDate          = TODAY       
-         FMItem.ToDate            = DATE(12,31,2049)
-         FMItem.BillType          = "MF"
-         FMItem.Interval          = 1    
-         FMItem.BillCycle         = 2
-         FMItem.FFItemQty         = 0
-         FMItem.FFEndDate         = ?
-         FMItem.Amount            = DECIMAL(fGetFieldValue({&COMMFEE}))
-         FMItem.FirstMonthBR      = fCharToInt("FeeCalc", fGetFieldValue({&FMFC}))
-         FMItem.BrokenRental      = fCharToInt("FeeCalc", fGetFieldValue({&LMFC}))
-         FMItem.ServiceLimitGroup = "".
+   CREATE FMItem. 
+   ASSIGN     
+      FMItem.Brand             = Syst.Var:gcBrand
+      FMItem.FeeModel          = lcBillCode
+      FMItem.BillCode          = lcBillCode
+      FMItem.PriceList         = icPriceList
+      FMItem.FromDate          = TODAY       
+      FMItem.ToDate            = DATE(12,31,2049)
+      FMItem.BillType          = "MF"
+      FMItem.Interval          = 1    
+      FMItem.BillCycle         = 2
+      FMItem.FFItemQty         = 0
+      FMItem.FFEndDate         = ?
+      FMItem.Amount            = DECIMAL(fGetFieldValue({&COMMFEE}))
+      FMItem.FirstMonthBR      = fCharToInt("FeeCalc", fGetFieldValue({&FMFC}))
+      FMItem.BrokenRental      = fCharToInt("FeeCalc", fGetFieldValue({&LMFC}))
+      FMItem.ServiceLimitGroup = "".
 
-      fExport(icSpoolDir + "fmitem.d", HPD.HPDCommon:mDynExport(BUFFER FMItem:HANDLE, " ")).
-
-   END.   
+   fExport(icSpoolDir + "fmitem.d", HPD.HPDCommon:mDynExport(BUFFER FMItem:HANDLE, " ")).
 
 END PROCEDURE.
 
@@ -779,7 +765,17 @@ PROCEDURE pStoreBundle:
 
    fExport(icSpoolDir + "feemodel.d", HPD.HPDCommon:mDynExport(BUFFER FeeModel:HANDLE, " ")).
 
-   RUN pCreateFMItem.
+   /* NOTE! The following FMItem creation will only work if we are using
+            already existing pricelist (we have checked this earlier in
+            the code).
+            
+            TODO: Separate pricelist creation logic from tariff creation
+                  logic and run it before running this code.
+                  This way we could use also a new pricelist here.
+                  (then new pricelist is needed)
+   */
+   IF fGetFieldValue({&PRICELIST}) > ""
+   THEN RUN pCreateFMItem(fGetFieldValue({&PRICELIST})).
 
    /* It is earlier checked that the ServiceLimitGroup is not
       already available */
