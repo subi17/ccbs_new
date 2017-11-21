@@ -88,17 +88,21 @@ END PROCEDURE.
 
 PROCEDURE pCheckAdditionalLineOrders:
 
-DEF VAR lcAdditionalLineCLITypes AS CHAR NO-UNDO. 
+   FIND FIRST OrderCustomer NO-LOCK WHERE
+              OrderCustomer.Brand   = Syst.Var:gcBrand                   AND
+              OrderCustomer.OrderId = Order.OrderId                      AND
+              OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
 
-   lcAdditionalLineCLITypes = {&ADDLINE_CLITYPES}. 
+   IF NOT AVAIL OrderCustomer THEN 
+      RETURN appl_err("OrderCustomer not available").
 
    IF fIsConvergenceTariff(Order.CLIType)            OR 
       LOOKUP(bOrder.CliType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
 
       FOR EACH bOrderCustomer NO-LOCK WHERE
-               bOrderCustomer.Brand      EQ Syst.Var:gcBrand        AND
-               bOrderCustomer.CustId     EQ icCustID                AND
-               bOrderCustomer.CustIdType EQ icCustIDType            AND
+               bOrderCustomer.Brand      EQ Syst.Var:gcBrand         AND
+               bOrderCustomer.CustId     EQ OrderCustomer.CustId     AND
+               bOrderCustomer.CustIdType EQ OrderCustomer.CustIdType AND
                bOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
           EACH bOrder NO-LOCK WHERE
                bOrder.Brand      EQ Syst.Var:gcBrand        AND
@@ -107,22 +111,20 @@ DEF VAR lcAdditionalLineCLITypes AS CHAR NO-UNDO.
          FIRST bCLIType WHERE bCLIType.Brand   EQ Syst.Var:gcBrand AND
                               bCLIType.CliType EQ bOrder.CLIType   NO-LOCK:
 
-         IF LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 THEN NEXT.
+         IF LOOKUP(bOrder.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 THEN NEXT.
 
          IF LOOKUP(bOrder.CliType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
          
-             FIND FIRST bOrderAction NO-LOCK WHERE
-                        bOrderAction.Brand    = Syst.Var:gcBrand  AND
-                        bOrderAction.OrderID  = bOrder.OrderId    AND
-                        bOrderAction.ItemType = "AddLineDiscount" AND 
-                 LOOKUP(bOrderAction.ItemKey,{&ADDLINE_DISCOUNTS_20}) > 0 NO-ERROR. 
+             IF CAN-FIND(FIRST bOrderAction NO-LOCK WHERE
+                               bOrderAction.Brand    = Syst.Var:gcBrand             AND
+                               bOrderAction.OrderID  = bOrder.OrderId               AND
+                               bOrderAction.ItemType = "AddLineDiscount"            AND 
+                       (LOOKUP(bOrderAction.ItemKey,{&ADDLINE_DISCOUNTS_20}) > 0 OR 
+                        LOOKUP(bOrderAction.ItemKey,{&ADDLINE_DISCOUNTS})    > 0 OR 
+                        LOOKUP(bOrderAction.ItemKey,{&ADDLINE_DISCOUNTS_HM}) > 0))  THEN 
+                lcOrderList = lcOrderList + "," + STRING(bOrder.OrderId).
 
          END.
-
-         IF NOT fIsConvergenceTariff(bCLIType.CLIType) THEN NEXT.
-
-         IF fIsConvergentAddLineOK(bOrder.CLIType,icCliType) THEN
-         RETURN TRUE.
 
       END. 
 
