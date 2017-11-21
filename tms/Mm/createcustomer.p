@@ -225,7 +225,8 @@ ELSE DO:
             IF OrderCustomer.RowType = 1 THEN Order.CustNum = oiCustNum.
 
          IF llDoEvent THEN RUN StarEventMakeModifyEvent ( lhOrderCustomer ).
-   END
+      END.
+   END.
 
    IF ilUpdateExisting EQ FALSE THEN RETURN "not updated existing customer".
    
@@ -385,7 +386,6 @@ ELSE DO:
 
          fUpdEmailDelType(Order.OrderId).
 
-      END.
    END.
 
    lcMemo = "Order" + CHR(255) +
