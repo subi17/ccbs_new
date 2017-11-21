@@ -891,11 +891,15 @@ PROCEDURE pFMItem_PRO:
    DEFINE INPUT PARAMETER icPricelist AS CHARACTER NO-UNDO.
    DEFINE INPUT PARAMETER idAmt       AS DECIMAL   NO-UNDO.
 
-   FIND FIRST PriceList NO-LOCK WHERE
-              PriceList.Brand     = Syst.Var:gcBrand AND
-              PriceList.PriceList = icPriceList
-   NO-ERROR.
-   IF NOT AVAILABLE PriceList
+   IF NOT CAN-FIND(BillItem NO-LOCK WHERE
+                  BillItem.Brand    = Syst.Var:gcBrand AND
+                  BillItem.BillCode = icItemName)
+   THEN UNDO, THROW NEW Progress.Lang.AppError
+         (SUBSTITUTE("Unknown billitem '&1'", icItemName), 1).
+
+   IF NOT CAN-FIND(PriceList NO-LOCK WHERE
+                     PriceList.Brand     = Syst.Var:gcBrand AND
+                     PriceList.PriceList = icPriceList)
    THEN UNDO, THROW NEW Progress.Lang.AppError
          (SUBSTITUTE("Unknown pricelist '&1'", icPriceList), 1).
 
