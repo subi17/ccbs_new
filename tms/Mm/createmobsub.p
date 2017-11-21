@@ -81,7 +81,8 @@ DEF VAR ldaActDate AS DATE NO-UNDO.
 DEF VAR lcMobileNumber AS CHAR NO-UNDO. 
 DEF VAR llgExtraLine   AS LOG  NO-UNDO INITIAL NO.
 DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
-DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO. 
+DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO.
+DEF VAR lcExtraLineDiscounts    AS CHAR NO-UNDO.
 
 DEF BUFFER bInvCust        FOR Customer.
 DEF BUFFER bRefCust        FOR Customer.
@@ -452,7 +453,28 @@ IF NOT AVAIL mobsub THEN DO:
                 MobSub.MultiSimType     = Order.MultiSimType       /* Extraline = 3   */
                 lbMLMobSub.MultiSimID   = MobSub.MsSeq             /* Extraline Subid */
                 lbMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY}  /* Primary = 1     */
-                llgExtraLine            = YES. 
+                llgExtraLine            = YES.
+      ELSE DO:
+         ASSIGN MobSub.MultiSimID       = 0
+                MobSub.MultiSimType     = 0
+                llgExtraLine            = YES
+                lcExtraLineDiscounts    = fCParam("DiscountType","ExtraLine_Discounts").
+         
+         FIND FIRST OrderAction EXCLUSIVE-LOCK WHERE
+                    OrderAction.Brand    = Syst.Var:gcBrand        AND
+                    OrderAction.OrderID  = Order.OrderID           AND
+                    OrderAction.ItemType = "ExtraLineDiscount"     AND
+             LOOKUP(OrderAction.ItemKey,lcExtraLineDiscounts) > 0  NO-ERROR.
+
+         IF AVAILABLE OrderAction THEN DO:
+            DELETE OrderAction.
+            Func.Common:mWriteMemo("Order",
+                                    STRING(Order.OrderID),
+                                    0,
+                                    "EXTRA LINE DISCOUNT REMOVED",
+                                    "Removed ExtraLineDiscount Item from OrderAction").
+         END.
+      END.
    END.
  
    IF Avail imsi THEN Mobsub.imsi = IMSI.IMSI.
