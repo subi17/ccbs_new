@@ -3,7 +3,7 @@ DEFINE VARIABLE lcFile        AS CHARACTER NO-UNDO.
 DEFINE VARIABLE llSimul       AS LOGICAL   NO-UNDO INITIAL TRUE.
 
 MESSAGE "YDR-2621 - Change TMS Category for some customers" SKIP(1)
-        "Customers with CIF beginning V00, and category 22 or blank category," SKIP
+        "Customers with CIF beginning V00, and category 20 or blank category," SKIP
         "will get category 30" SKIP(1)
         "Do you want to execute in Simulation mode?" SKIP(1)
         "This mode will generate a file with customers to change" SKIP
