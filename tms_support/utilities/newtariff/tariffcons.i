@@ -51,16 +51,8 @@
 
 
 &GLOBAL-DEFINE M_BB     "MobileBaseBundle"
-&GLOBAL-DEFINE M_CF     "CommercialFeeForMobile"
-&GLOBAL-DEFINE M_FMFC   "FirstMonthFeeCalcForMobile" 
-&GLOBAL-DEFINE M_LMFC   "LastMonthFeeCalcForMobile"
-&GLOBAL-DEFINE M_PL     "PriceListForMobile"
 
 &GLOBAL-DEFINE FL_BB    "FixedLineBaseBundle"
-&GLOBAL-DEFINE FL_CF    "CommercialFeeForFixedLine"
-&GLOBAL-DEFINE FL_FMFC  "FirstMonthFeeCalcForFixedLine" 
-&GLOBAL-DEFINE FL_LMFC  "LastMonthFeeCalcForFixedLine"
-&GLOBAL-DEFINE FL_PL    "PriceListForFixedLine"
 
 &GLOBAL-DEFINE BBP     "BBProfile"
 &GLOBAL-DEFINE DSS2C   "DSS2Compatible"

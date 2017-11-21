@@ -18,7 +18,6 @@ Syst.Var:gcBrand = "1".
 {Syst/eventlog.i}
 {Func/ftransdir.i}
 {utilities/newtariff/tariffcons.i}
-{utilities/newtariff/chartointmap.i}
 
 DEFINE INPUT  PARAMETER icBaseFile AS CHARACTER NO-UNDO. 
 DEFINE INPUT  PARAMETER icFile     AS CHARACTER NO-UNDO. 
@@ -54,17 +53,9 @@ DEFINE VARIABLE lcPROFee                                 AS CHARACTER NO-UNDO.
 
 /* Mobile Base Bundle Attributes */
 DEFINE VARIABLE lcMobile_BaseBundle                      AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcMobile_CommercialFee                   AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcMobile_FirstMonthFeeCalc               AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcMobile_LastMonthFeeCalc                AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcMobile_PriceList                       AS CHARACTER NO-UNDO.
 
 /* FixedLine Base Bundle Attributes */
 DEFINE VARIABLE lcFixedLine_BaseBundle                   AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcFixedLine_CommercialFee                AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcFixedLine_FirstMonthFeeCalc            AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcFixedLine_LastMonthFeeCalc             AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcFixedLine_PriceList                    AS CHARACTER NO-UNDO.
 
 DEFINE TEMP-TABLE ttTariffCre NO-UNDO 
    FIELD FieldName  AS CHARACTER 
@@ -114,24 +105,6 @@ FUNCTION fError RETURNS LOGIC
       
 END FUNCTION.
 
-FUNCTION fPriceListMandatory RETURNS LOGICAL
-   (icBillCode AS CHARACTER):
-
-   FOR FIRST FMItem NO-LOCK WHERE
-      FMItem.Brand     = Syst.Var:gcBrand AND
-      FMItem.FeeModel  = icBillCode       AND
-      FMItem.PriceList = "COMMON"         AND
-      FMItem.BillCode  = icBillCode       AND
-      FMItem.FromDate <= TODAY            AND
-      FMItem.ToDate   >= TODAY:
-
-      RETURN FALSE.
-   END.
-   
-   RETURN TRUE.
-
-END FUNCTION.
-
 /* ***************************  Main Block  *************************** */
 DO ON ERROR UNDO, THROW:  
 
@@ -171,34 +144,19 @@ PROCEDURE pSaveTariff:
           ON ERROR UNDO, THROW:
          
          RUN pCliType IN h_config(BUFFER ttCliType).
-         
-         /* This code must be into bundlecreation */
-         /* -------------------------------------------------------------------
-         RUN pFMItem IN h_config(BUFFER ttCliType,
-                                 fPriceListMandatory(lcMobile_BaseBundle),
-                                 lcMobile_BaseBundle,
-                                 lcMobile_PriceList,
-                                 DECIMAL(lcMobile_CommercialFee),
-                                 fCharToInt("FeeCalc", lcMobile_FirstMonthFeeCalc),
-                                 fCharToInt("FeeCalc", lcMobile_LastMonthFeeCalc)).
 
-         RUN pFMItem IN h_config(BUFFER ttCliType,
-                                 fPriceListMandatory(lcFixedLine_BaseBundle),
-                                 lcFixedLine_BaseBundle,
-                                 lcFixedLine_PriceList,
-                                 DECIMAL(lcFixedLine_CommercialFee),
-                                 fCharToInt("FeeCalc", lcFixedLine_FirstMonthFeeCalc),
-                                 fCharToInt("FeeCalc", lcFixedLine_LastMonthFeeCalc)).
-         ------------------------------------------------------------------- */ 
-
-         IF lcPROFee <> "" THEN DO:
+         IF lcPROFee <> "" AND
+            lcFixedLine_BaseBundle <> "" 
+         THEN DO:
             ldePROFee = DECIMAL(lcProFee).
-            RUN pFMItem_PRO IN h_config(lcMobile_BaseBundle + "PRO",  /* BillItem  */
-                                        lcMobile_BaseBundle + "MF",   /* FeeModel  */ 
-                                        "PRO_" + lcMobile_BaseBundle, /* PriceList */
+
+            RUN pPriceList_PRO IN h_config("PRO_" + ttClitype.CliType).
+            
+            RUN pFMItem_PRO IN h_config(ttClitype.CliType + "PRO",  /* BillItem  */
+                                        lcFixedLine_BaseBundle + "MF",   /* FeeModel  */ 
+                                        "PRO_" + ttClitype.CliType, /* PriceList */
                                         ldePROFee                     /* Amount    */ 
                                        ).
-            RUN pPriceList_PRO IN h_config("PRO_" + lcMobile_BaseBundle).
          END.
 
          IF lcPaymentType = "Postpaid" AND lcMobile_BaseBundle > ""
@@ -479,26 +437,6 @@ PROCEDURE pValidateData:
                ELSE 
                   ASSIGN lcMobile_BaseBundle = ttTariffCre.FieldValue.
             END.
-            WHEN {&M_CF} THEN 
-               lcMobile_CommercialFee = ttTariffCre.FieldValue.                
-            WHEN {&M_FMFC} THEN 
-            DO:
-               IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&FEECALC}) EQ 0 THEN 
-                  UNDO, THROW NEW Progress.Lang.AppError("Wrong First Month Fee calculation data", 1).
-              ELSE 
-                 lcMobile_FirstMonthFeeCalc = ttTariffCre.FieldValue.
-            END.
-            WHEN {&M_LMFC} THEN 
-            DO:
-               IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&FEECALC}) EQ 0 THEN 
-                  UNDO, THROW NEW Progress.Lang.AppError("Wrong Last Month Fee calculation data", 1).                  
-               ELSE 
-                  lcMobile_LastMonthFeeCalc = ttTariffCre.FieldValue.
-            END.
-            WHEN {&M_PL} THEN 
-            DO:
-                  lcMobile_PriceList = ttTariffCre.FieldValue.
-            END. 
             /* FixedLine */
             WHEN {&FL_BB} THEN 
             DO:
@@ -507,26 +445,6 @@ PROCEDURE pValidateData:
                ELSE 
                   ASSIGN lcFixedLine_BaseBundle = ttTariffCre.FieldValue.
             END.
-            WHEN {&FL_CF} THEN 
-               lcFixedLine_CommercialFee = ttTariffCre.FieldValue.                
-            WHEN {&FL_FMFC} THEN 
-            DO:
-               IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&FEECALC}) EQ 0 THEN 
-                  UNDO, THROW NEW Progress.Lang.AppError("Wrong First Month Fee calculation data", 1).
-              ELSE 
-                 lcFixedLine_FirstMonthFeeCalc = ttTariffCre.FieldValue.
-            END.
-            WHEN {&FL_LMFC} THEN 
-            DO:
-               IF (ttTariffCre.FieldValue NE "") AND LOOKUP(ttTariffCre.FieldValue,{&FEECALC}) EQ 0 THEN 
-                  UNDO, THROW NEW Progress.Lang.AppError("Wrong Last Month Fee calculation data", 1).                  
-               ELSE 
-                  lcFixedLine_LastMonthFeeCalc = ttTariffCre.FieldValue.
-            END.
-            WHEN {&FL_PL} THEN 
-            DO:
-                  lcFixedLine_PriceList = ttTariffCre.FieldValue.
-            END. 
          END CASE.             
       END. /* FOR EACH ttSubTypeCr */      
 

@@ -387,7 +387,8 @@ PROCEDURE pCLIType:
          CLIType.LineType          = ttCliType.LineType
          CLIType.FixedLineType     = ttCliType.FixedLineType 
          CliType.FixedLineDownload = ttCliType.FixedLineDownload
-         CliType.FixedLineUpload   = ttCliType.FixedLineUpload.
+         CliType.FixedLineUpload   = ttCliType.FixedLineUpload
+         CliType.TariffType        = ttCliType.TariffType.
 
       IF ttCliType.CopyServicesFromCliType > "" THEN 
          RUN pCTServPac(ttCliType.BaseBundle, ttCliType.CliType, ttCliType.CopyServicesFromCliType).
@@ -881,25 +882,14 @@ PROCEDURE pSLGAnalyse:
     RETURN "".
 
 END PROCEDURE.
-   
-PROCEDURE pFMItem:   
 
-   DEFINE PARAMETER BUFFER ttCliType FOR ttCliType.
-   DEFINE INPUT  PARAMETER ilPriceListMandatory AS LOGICAL NO-UNDO.
-   DEFINE INPUT  PARAMETER icBundle             AS CHARACTER NO-UNDO.
-   DEFINE INPUT  PARAMETER icPriceList          AS CHARACTER NO-UNDO.
-   DEFINE INPUT  PARAMETER ideAmount            AS DECIMAL   NO-UNDO.
-   DEFINE INPUT  PARAMETER iiFirstMonthFeeCalc  AS INTEGER   NO-UNDO.
-   DEFINE INPUT  PARAMETER iiLastMonthFeeCalc   AS INTEGER   NO-UNDO.
-   
-   DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.   
 
-   IF ilPriceListMandatory AND icPriceList EQ ""
-   THEN UNDO, THROW NEW Progress.Lang.AppError
-         ("Defining pricelist is mandatory as there are no common pricelist", 1).
+PROCEDURE pFMItem_PRO:
 
-   IF NOT ilPriceListMandatory AND icPriceList EQ "COMMON"
-   THEN RETURN "".
+   DEFINE INPUT PARAMETER icItemName  AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icFeemodel  AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icPricelist AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER idAmt       AS DECIMAL   NO-UNDO.
 
    FIND FIRST PriceList NO-LOCK WHERE
               PriceList.Brand     = Syst.Var:gcBrand AND
@@ -910,85 +900,52 @@ PROCEDURE pFMItem:
          (SUBSTITUTE("Unknown pricelist '&1'", icPriceList), 1).
 
    FIND FIRST FMItem NO-LOCK WHERE
-      FMItem.Brand     = Syst.Var:gcBrand AND
-      FMItem.FeeModel  = icBundle         AND
-      FMItem.PriceList = icPriceList      AND
-      FMItem.BillCode  = icBundle         AND
-      FMItem.FromDate <= TODAY            AND
-      FMItem.ToDate   >= TODAY
-   NO-ERROR.
+              FMItem.Brand     = Syst.Var:gcBrand AND
+              FMItem.feemodel  = icFeemodel       AND
+              FMItem.billcode  = icItemName       AND
+              FMItem.pricelist = icPricelist      AND
+              FMItem.FromDate <= TODAY            AND
+              FMItem.ToDate   >= TODAY
+              NO-ERROR.
 
    IF AVAILABLE FMItem
    THEN UNDO, THROW NEW Progress.Lang.AppError
          (SUBSTITUTE("FMItem having FeeModel=&1, PriceList=&2, BillCode=&3 " +
                      "is already defined and active",
-                     icBundle, icPriceList, icBundle), 1). 
+                     icFeemodel, icPriceList, icItemName), 1). 
 
-   CREATE FMItem. 
-   ASSIGN     
-      FMItem.Brand             = Syst.Var:gcBrand
-      FMItem.FeeModel          = icBundle
-      FMItem.BillCode          = icBundle
+   CREATE FMItem.
+   ASSIGN
+      FMItem.Amount            = idAmt
+      FMItem.BillCode          = icItemName
+      FMItem.BillCycle         = 2
+      FMItem.BillMethod        = FALSE
+      FMItem.BillType          = "MF"
+      FMItem.Brand             = "1"
+      FMItem.BrokenRental      = 1
+      FMItem.FeeModel          = icFeeModel
+      FMItem.FromDate          = TODAY
+      FMItem.Interval          = 1
       FMItem.PriceList         = icPriceList
-      FMItem.FromDate          = TODAY       
-      FMItem.ToDate            = DATE(12,31,2049)
-      FMItem.BillType          = "MF"                  
-      FMItem.Interval          = 1                   
-      FMItem.BillCycle         = 2                   
-      FMItem.FFItemQty         = 0 
-      FMItem.FFEndDate         = ? 
-      FMItem.Amount            = ideAmount
-      FMItem.FirstMonthBR      = iiFirstMonthFeeCalc
-      FMItem.BrokenRental      = iiLastMonthFeeCalc
-      FMItem.ServiceLimitGroup = "".
+      FMItem.ServiceLimitGroup = ""
+      FMItem.ToDate            = 12/31/49.
 
-   RETURN "".
-   
 END PROCEDURE.
 
+PROCEDURE pPriceList_PRO:
 
-PROCEDURE pFMItem_PRO:
-   DEFINE INPUT PARAMETER icItemName  AS CHARACTER NO-UNDO.
-   DEFINE INPUT PARAMETER icFeemodel  AS CHARACTER NO-UNDO.
-   DEFINE INPUT PARAMETER icPricelist AS CHARACTER NO-UNDO.
-   DEFINE INPUT PARAMETER idAmt       AS DECIMAL   NO-UNDO.
-
-   FIND FIRST FMItem NO-LOCK WHERE
-              FMItem.Brand    = Syst.Var:gcBrand AND
-              FMItem.feemodel = icFeemodel       AND
-              FMItem.billcode = icItemName       AND
-              FMItem.pricelist = icPricelist     AND
-              FMItem.todate >= TODAY
-              NO-ERROR.
-
-   IF NOT AVAILABLE FMItem
-   THEN DO:
-      CREATE FMItem.
-      ASSIGN
-         FMItem.Amount            = idAmt
-         FMItem.BillCode          = icItemName
-         FMItem.BillCycle         = 2
-         FMItem.BillMethod        = FALSE
-         FMItem.BillType          = "MF"
-         FMItem.Brand             = "1"
-         FMItem.BrokenRental      = 1
-         FMItem.FeeModel          = icFeeModel
-         FMItem.FromDate          = TODAY
-         FMItem.Interval          = 1
-         FMItem.PriceList         = icPriceList
-         FMItem.ServiceLimitGroup = ""
-         FMItem.ToDate            = 12/31/49.
-   END.
-END PROCEDURE.
-
-
-PROCEDURE fPriceList_PRO:
    DEFINE INPUT PARAMETER icPriceList AS CHARACTER NO-UNDO.
 
    FIND FIRST PriceList NO-LOCK WHERE
               PriceList.Brand     = Syst.Var:gcBrand AND
               PriceList.PriceList = icPriceList
               NO-ERROR.
+
+   IF AVAILABLE PriceList
+   THEN UNDO, THROW NEW Progress.Lang.AppError
+      (SUBSTITUTE("PriceList where PriceList=&1 " +
+                  "is already defined",
+                  icPriceList), 1). 
 
    IF NOT AVAILABLE PriceList
    THEN DO:
@@ -1006,6 +963,7 @@ PROCEDURE fPriceList_PRO:
          PriceList.PriceList  = icPriceList
          PriceList.Rounding   = 4.
    END.
+
 END PROCEDURE.
 
 
