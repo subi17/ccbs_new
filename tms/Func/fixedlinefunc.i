@@ -65,7 +65,7 @@ FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
    RELEASE bNewMsowner.
    RETURN TRUE.
 
-END.   
+END FUNCTION.
 
 
 /*Function returns True if a tariff can be defined as convergent tariff.
@@ -83,7 +83,7 @@ FUNCTION fIsConvergenceTariff RETURNS LOGICAL
       CliType.FixedLineDownload NE "" THEN RETURN TRUE.
    
    RETURN FALSE.
-END.   
+END FUNCTION.
 
 
 /*Used when there is no clitype available directly.*/
@@ -107,7 +107,7 @@ FUNCTION fHasConvergenceTariff RETURNS LOGICAL
    ELSE lcCLIType = bMobSub.CliType.
 
    RETURN fIsConvergenceTariff(lcCLIType).
-END.   
+END FUNCTION.
 
 FUNCTION fCanTerminateConvergenceTariff RETURNS LOGICAL
    (iiMsSeq AS INT,
@@ -151,7 +151,7 @@ FUNCTION fCanTerminateConvergenceTariff RETURNS LOGICAL
 
    RETURN TRUE.
 
-END.
+END FUNCTION.
 
 /* Check if convergent contract based by subscription name.
    All convergent subscription name starts CONTDSL (ADSL) or 
@@ -174,7 +174,7 @@ FUNCTION fIsConvergentFixedContract RETURNS LOGICAL
       RETURN TRUE.
 
    RETURN FALSE.
-END.
+END FUNCTION.
 
 /* Check if Convergent tariff OR FixedOnly tariff */ 
 FUNCTION fIsConvergentORFixedOnly RETURNS LOGICAL
@@ -191,21 +191,24 @@ FUNCTION fIsConvergentORFixedOnly RETURNS LOGICAL
 
    RETURN FALSE.
 
-END.
+END FUNCTION.
 
-/* Check if FixedOnly 2P tariff */
+/* Function returns True if a tariff can be defined as fixedonly (2P) tariff.
+NOTE: False is returned in real false cases and also in error cases. */
 FUNCTION fIsFixedOnly RETURNS LOGICAL
    (icCLIType AS CHARACTER):
 
    DEFINE BUFFER bCLIType FOR CLIType.
-
+   
    IF CAN-FIND(FIRST bCLIType NO-LOCK WHERE
                      bCLIType.Brand      = Syst.Var:gcBrand           AND
                      bCLIType.CLIType    = icCLIType                         AND
-                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY}) THEN
+                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY}) THEN 
       RETURN TRUE.
+
    RETURN FALSE.
-END.
+
+END FUNCTION.
 
 /* Check if Convergent 3P tariff */
 FUNCTION fIsConvergent3POnly RETURNS LOGICAL
@@ -245,7 +248,7 @@ FUNCTION fIsConvergentAddLineOK RETURNS LOGICAL
 
    RETURN FALSE.
 
-END.   
+END FUNCTION.
 
 
 /* Check convergent STC compability. Special handling that allows convergent
@@ -273,7 +276,7 @@ FUNCTION fCheckConvergentSTCCompability RETURNS LOGICAL
    
    /* otherwise is not compatible */
    RETURN FALSE.
-END.                                         
+END FUNCTION.                                        
 
 /* Function checks for ongoing 3P convergent for a customer  */
 FUNCTION fCheckOngoingConvergentOrder RETURNS LOGICAL
@@ -539,6 +542,7 @@ FUNCTION fCheckExisting2PConvergent RETURNS LOGICAL
 
 END FUNCTION.
 
+
 FUNCTION fIsProSubscription RETURNS LOGICAL
    (INPUT iiMsSeq   AS INT):
 
@@ -561,6 +565,7 @@ FUNCTION fIsProSubscription RETURNS LOGICAL
    RETURN FALSE.
        
 END FUNCTION.
+
 /* Additional Line with mobile only ALFMO-5  */ 
 FUNCTION fIsMobileOnlyAddLineOK RETURNS LOGICAL
    (icCLIType    AS CHARACTER,
@@ -585,7 +590,7 @@ FUNCTION fIsMobileOnlyAddLineOK RETURNS LOGICAL
 
    RETURN FALSE.
 
-END.
+END FUNCTION.
 
 /* Function checks for existing Mobile Only for a customer 
    Additional Line with mobile only ALFMO-5 */
@@ -666,6 +671,55 @@ FUNCTION fCheckOngoingMobileOnly RETURNS LOGICAL
    RETURN FALSE.
 
 END FUNCTION.
+
+/* Return true if tarif belongs to convergent additional line */
+FUNCTION fIsAddLineTariff RETURNS LOGICAL
+   (INPUT icCli AS CHAR):
+   DEFINE BUFFER bMobSub FOR MobSub.
+   DEFINE BUFFER bDiscountPlan FOR DiscountPlan.
+   DEFINE BUFFER bDPMember FOR DPMember.
+
+   FOR FIRST bMobSub NO-LOCK WHERE
+             bMobSub.Brand = Syst.Parameters:gcBrand AND
+             bMobSub.CLI   = icCli AND
+      LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0,
+         EACH bDiscountPlan NO-LOCK WHERE
+              bDiscountPlan.Brand  = Syst.Parameters:gcBrand AND
+       LOOKUP(bDiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS} + ","
+                                   + {&ADDLINE_DISCOUNTS_20} + ","
+                                   + {&ADDLINE_DISCOUNTS_HM}) > 0 AND
+              bDiscountPlan.ValidTo >= TODAY,
+         FIRST bDPMember NO-LOCK WHERE
+               bDPMember.DPID       = bDiscountPlan.DPID AND
+               bDPMember.HostTable  = "MobSub" AND
+               bDPMember.KeyValue   = STRING(bMobSub.MsSeq) AND
+               bDPMember.ValidTo   >= TODAY AND
+               bDPMember.ValidFrom <= bDPMember.ValidTo:
+
+         RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
+/* Return true if order made for convergent additional line */
+FUNCTION fIsAddLineOrder RETURNS LOGICAL
+   (INPUT iiOrderId AS INT):
+   DEFINE BUFFER bOrderAction FOR OrderAction.
+
+   FOR FIRST bOrderAction NO-LOCK WHERE
+             bOrderAction.Brand = Syst.Parameters:gcBrand AND
+             bOrderAction.OrderId   = iiOrderId AND
+             bOrderAction.ItemType = "AddLineDiscount":
+         
+      RETURN TRUE.
+   END.
+   
+   RETURN FALSE.
+
+END FUNCTION.
+
 
 FUNCTION fCheckExistingConvergentAvailForExtraLine RETURNS LOGICAL
    (INPUT icCustIDType       AS CHAR,
