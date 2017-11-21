@@ -56,11 +56,14 @@ DEFINE VARIABLE lcMobile_BaseBundle                      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcMobile_CommercialFee                   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcMobile_FirstMonthFeeCalc               AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcMobile_LastMonthFeeCalc                AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcMobile_PriceList                       AS CHARACTER NO-UNDO.
+
 /* FixedLine Base Bundle Attributes */
 DEFINE VARIABLE lcFixedLine_BaseBundle                   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFixedLine_CommercialFee                AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFixedLine_FirstMonthFeeCalc            AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFixedLine_LastMonthFeeCalc             AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcFixedLine_PriceList                    AS CHARACTER NO-UNDO.
 
 DEFINE TEMP-TABLE ttTariffCre NO-UNDO 
    FIELD FieldName  AS CHARACTER 
@@ -110,6 +113,24 @@ FUNCTION fError RETURNS LOGIC
       
 END FUNCTION.
 
+FUNCTION fPriceListMandatory RETURNS LOGICAL
+   (icBillCode AS CHARACTER):
+
+   FOR FIRST FMItem NO-LOCK WHERE
+      FMItem.Brand     = Syst.Var:gcBrand AND
+      FMItem.FeeModel  = icBillCode       AND
+      FMItem.PriceList = "COMMON"         AND
+      FMItem.BillCode  = icBillCode       AND
+      FMItem.FromDate <= TODAY            AND
+      FMItem.ToDate   >= TODAY:
+
+      RETURN FALSE.
+   END.
+   
+   RETURN TRUE.
+
+END FUNCTION.
+
 /* ***************************  Main Block  *************************** */
 DO ON ERROR UNDO, THROW:  
 
@@ -151,17 +172,17 @@ PROCEDURE pSaveTariff:
          RUN pCliType IN h_config(BUFFER ttCliType).
 
          RUN pFMItem IN h_config(BUFFER ttCliType,
+                                 fPriceListMandatory(lcMobile_BaseBundle),
                                  lcMobile_BaseBundle,
-                                 "",
+                                 lcMobile_PriceList,
                                  DECIMAL(lcMobile_CommercialFee),
                                  fCharToInt("FeeCalc", lcMobile_FirstMonthFeeCalc),
                                  fCharToInt("FeeCalc", lcMobile_LastMonthFeeCalc)).
 
          RUN pFMItem IN h_config(BUFFER ttCliType,
+                                 fPriceListMandatory(lcFixedLine_BaseBundle),
                                  lcFixedLine_BaseBundle,
-                                 IF INDEX(ttCLIType.CLIName, "Casa") = 0
-                                 THEN "CONTRATOFIXED"
-                                 ELSE "CONTRATOFIXEDONLY",
+                                 lcFixedLine_PriceList,
                                  DECIMAL(lcFixedLine_CommercialFee),
                                  fCharToInt("FeeCalc", lcFixedLine_FirstMonthFeeCalc),
                                  fCharToInt("FeeCalc", lcFixedLine_LastMonthFeeCalc)).
@@ -458,6 +479,10 @@ PROCEDURE pValidateData:
                ELSE 
                   lcMobile_LastMonthFeeCalc = ttTariffCre.FieldValue.
             END.
+            WHEN {&M_PL} THEN 
+            DO:
+                  lcMobile_PriceList = ttTariffCre.FieldValue.
+            END. 
             /* FixedLine */
             WHEN {&FL_BB} THEN 
             DO:
@@ -481,6 +506,10 @@ PROCEDURE pValidateData:
                   UNDO, THROW NEW Progress.Lang.AppError("Wrong Last Month Fee calculation data", 1).                  
                ELSE 
                   lcFixedLine_LastMonthFeeCalc = ttTariffCre.FieldValue.
+            END.
+            WHEN {&FL_PL} THEN 
+            DO:
+                  lcFixedLine_PriceList = ttTariffCre.FieldValue.
             END. 
          END CASE.             
       END. /* FOR EACH ttSubTypeCr */      

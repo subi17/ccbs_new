@@ -885,42 +885,34 @@ END PROCEDURE.
 PROCEDURE pFMItem:   
 
    DEFINE PARAMETER BUFFER ttCliType FOR ttCliType.
-   DEFINE INPUT  PARAMETER icBundle            AS CHARACTER NO-UNDO.
-   DEFINE INPUT  PARAMETER icPriceList         AS CHARACTER NO-UNDO.
-   DEFINE INPUT  PARAMETER ideAmount           AS DECIMAL   NO-UNDO.
-   DEFINE INPUT  PARAMETER iiFirstMonthFeeCalc AS INTEGER   NO-UNDO.
-   DEFINE INPUT  PARAMETER iiLastMonthFeeCalc  AS INTEGER   NO-UNDO.
+   DEFINE INPUT  PARAMETER ilPriceListMandatory AS LOGICAL NO-UNDO.
+   DEFINE INPUT  PARAMETER icBundle             AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icPriceList          AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER ideAmount            AS DECIMAL   NO-UNDO.
+   DEFINE INPUT  PARAMETER iiFirstMonthFeeCalc  AS INTEGER   NO-UNDO.
+   DEFINE INPUT  PARAMETER iiLastMonthFeeCalc   AS INTEGER   NO-UNDO.
    
    DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.   
-   
-   IF AVAIL ttCliType THEN 
-   DO:
-       IF ttCliType.TariffBundle NE "" THEN 
-       DO:
-          FIND FIRST CLIType WHERE CLIType.Brand = Syst.Var:gcBrand AND CLIType.CLIType = ttCliType.ParentTariff NO-LOCK NO-ERROR.
-          IF AVAILABLE CLIType THEN
-             ASSIGN lcRatePlan = CLIType.PricePlan.
-       END.
-       
-       ASSIGN lcRatePlan = (IF lcRatePlan NE "" THEN lcRatePlan ELSE REPLACE(ttCliType.CliType,"CONT","CONTRATO")).
 
-       FIND FIRST RatePlan WHERE RatePlan.Brand = Syst.Var:gcBrand AND RatePlan.RatePlan = lcRatePlan NO-LOCK NO-ERROR.           
-       IF AVAIL RatePlan THEN   
-          FIND FIRST PListConf WHERE PListConf.Brand = Syst.Var:gcBrand AND PListConf.RatePlan = RatePlan.RatePlan AND PListConf.PriceList BEGINS "CONTRATO" NO-LOCK NO-ERROR.   
-   END.
+   IF ilPriceListMandatory AND icPriceList EQ ""
+   THEN UNDO, THROW NEW Progress.Lang.AppError
+         ("Defining pricelist is mandatory as there are no common pricelist", 1).
 
-   DEFINE VARIABLE lcPriceList AS CHARACTER NO-UNDO.
-   
-   lcPriceList = IF icPriceList <> ""
-                 THEN icPriceList 
-                 ELSE IF AVAIL PListConf AND PListConf.PriceList <> ""
-                 THEN PListConf.PriceList 
-                 ELSE "".
+   IF NOT ilPriceListMandatory AND icPriceList EQ "COMMON"
+   THEN RETURN "".
+
+   FIND FIRST PriceList NO-LOCK WHERE
+              PriceList.Brand     = Syst.Var:gcBrand AND
+              PriceList.PriceList = icPriceList
+   NO-ERROR.
+   IF NOT AVAILABLE PriceList
+   THEN UNDO, THROW NEW Progress.Lang.AppError
+         (SUBSTITUTE("Unknown pricelist '&1'", icPriceList), 1).
 
    FIND FIRST FMItem NO-LOCK WHERE
       FMItem.Brand     = Syst.Var:gcBrand AND
       FMItem.FeeModel  = icBundle         AND
-      FMItem.PriceList = lcPriceList      AND
+      FMItem.PriceList = icPriceList      AND
       FMItem.BillCode  = icBundle         AND
       FMItem.FromDate <= TODAY            AND
       FMItem.ToDate   >= TODAY
@@ -930,14 +922,14 @@ PROCEDURE pFMItem:
    THEN UNDO, THROW NEW Progress.Lang.AppError
          (SUBSTITUTE("FMItem having FeeModel=&1, PriceList=&2, BillCode=&3 " +
                      "is already defined and active",
-                     icBundle, lcPriceList, icBundle), 1). 
+                     icBundle, icPriceList, icBundle), 1). 
 
    CREATE FMItem. 
    ASSIGN     
       FMItem.Brand             = Syst.Var:gcBrand
       FMItem.FeeModel          = icBundle
       FMItem.BillCode          = icBundle
-      FMItem.PriceList         = lcPriceList
+      FMItem.PriceList         = icPriceList
       FMItem.FromDate          = TODAY       
       FMItem.ToDate            = DATE(12,31,2049)
       FMItem.BillType          = "MF"                  
