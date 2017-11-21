@@ -50,6 +50,7 @@ DEFINE VARIABLE lcBundlesForActivateOnSTC                AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcServicesForReCreateOnSTC               AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcCopyServicesFromCliType                AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcTariffType                             AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcPROFee                                 AS CHARACTER NO-UNDO.
 
 /* Mobile Base Bundle Attributes */
 DEFINE VARIABLE lcMobile_BaseBundle                      AS CHARACTER NO-UNDO.
@@ -163,14 +164,16 @@ DO ON ERROR UNDO, THROW:
 END.
 /* ***************************  Main End  *************************** */ 
 PROCEDURE pSaveTariff:
-
+  DEFINE VARIABLE ldePROFee AS DECIMAL.
   DO ON ERROR UNDO, THROW:
 
       FOR EACH ttCliType
           ON ERROR UNDO, THROW:
          
          RUN pCliType IN h_config(BUFFER ttCliType).
-
+         
+         /* This code must be into bundlecreation */
+         /* -------------------------------------------------------------------
          RUN pFMItem IN h_config(BUFFER ttCliType,
                                  fPriceListMandatory(lcMobile_BaseBundle),
                                  lcMobile_BaseBundle,
@@ -186,10 +189,20 @@ PROCEDURE pSaveTariff:
                                  DECIMAL(lcFixedLine_CommercialFee),
                                  fCharToInt("FeeCalc", lcFixedLine_FirstMonthFeeCalc),
                                  fCharToInt("FeeCalc", lcFixedLine_LastMonthFeeCalc)).
+         ------------------------------------------------------------------- */ 
+
+         IF lcPROFee <> "" THEN DO:
+            ldePROFee = DECIMAL(lcProFee).
+            RUN pFMItem_PRO IN h_config(lcMobile_BaseBundle + "PRO",  /* BillItem  */
+                                        lcMobile_BaseBundle + "MF",   /* FeeModel  */ 
+                                        "PRO_" + lcMobile_BaseBundle, /* PriceList */
+                                        ldePROFee                     /* Amount    */ 
+                                       ).
+            RUN pPriceList_PRO IN h_config("PRO_" + lcMobile_BaseBundle).
+         END.
 
          IF lcPaymentType = "Postpaid" AND lcMobile_BaseBundle > ""
-         THEN RUN pTMRItemValue IN h_config(lcCliType, lcMobile_BaseBundle, lcAllowedBundles).
-
+         THEN RUN pTMRItemValue IN h_config(lcCliType, lcMobile_BaseBundle, lcAllowedBundles).          
 
       END. /* FOR EACH ttCliType */
       CATCH e AS Progress.Lang.Error:
@@ -281,7 +294,7 @@ PROCEDURE pProcessTT:
               ttCliType.BundlesForActivateOnSTC   = ""
               ttCliType.ServicesForReCreateOnSTC  = ""
               ttCliType.CopyServicesFromCliType   = lcCopyServicesFromCliType
-              ttClitype.TariffType                = INTEGER(fTMSCValue("CLIType","TariffType",lcTariffType)).
+              ttCliType.TariffType                = INTEGER(fTMSCValue("CLIType","TariffType",lcTariffType)).
        END.
    END.
 
@@ -350,7 +363,10 @@ PROCEDURE pValidateData:
                   UNDO, THROW NEW Progress.Lang.AppError("Wrong TariffType data", 1).                  
                ELSE 
                   ASSIGN lcTariffType = ttTariffCre.FieldValue.                   
-            END.     
+            END.  
+            WHEN {&PF} THEN DO:
+              ASSIGN lcProFee = ttTariffCre.FieldValue.
+            END.    
             WHEN {&WS} THEN 
             DO:
                IF (ttTariffCre.FieldValue EQ "") OR LOOKUP(ttTariffCre.FieldValue,{&WEBSTATUS}) = 0 THEN

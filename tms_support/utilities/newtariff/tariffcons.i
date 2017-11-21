@@ -43,6 +43,7 @@
 &GLOBAL-DEFINE SC      "ServiceClass"
 &GLOBAL-DEFINE CF      "CommercialFee"
 &GLOBAL-DEFINE CMF     "ComparisonFee"
+&GLOBAL-DEFINE PF      "PROFee"
 &GLOBAL-DEFINE AB      "OptionalBundlesAndBONOs"
 &GLOBAL-DEFINE STC_BT  "BundlesForActivateOnSTC"
 &GLOBAL-DEFINE STC_SR  "ServicesForReCreateOnSTC"
