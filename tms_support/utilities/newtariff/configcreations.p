@@ -946,6 +946,69 @@ PROCEDURE pFMItem:
    
 END PROCEDURE.
 
+
+PROCEDURE pFMItem_PRO:
+   DEFINE INPUT PARAMETER icItemName  AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icFeemodel  AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icPricelist AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER idAmt       AS DECIMAL   NO-UNDO.
+
+   FIND FIRST FMItem NO-LOCK WHERE
+              FMItem.Brand    = Syst.Var:gcBrand AND
+              FMItem.feemodel = icFeemodel       AND
+              FMItem.billcode = icItemName       AND
+              FMItem.pricelist = icPricelist     AND
+              FMItem.todate >= TODAY
+              NO-ERROR.
+
+   IF NOT AVAILABLE FMItem
+   THEN DO:
+      CREATE FMItem.
+      ASSIGN
+         FMItem.Amount            = idAmt
+         FMItem.BillCode          = icItemName
+         FMItem.BillCycle         = 2
+         FMItem.BillMethod        = FALSE
+         FMItem.BillType          = "MF"
+         FMItem.Brand             = "1"
+         FMItem.BrokenRental      = 1
+         FMItem.FeeModel          = icFeeModel
+         FMItem.FromDate          = TODAY
+         FMItem.Interval          = 1
+         FMItem.PriceList         = icPriceList
+         FMItem.ServiceLimitGroup = ""
+         FMItem.ToDate            = 12/31/49.
+   END.
+END PROCEDURE.
+
+
+PROCEDURE fPriceList:
+   DEFINE INPUT PARAMETER icPriceList AS CHARACTER NO-UNDO.
+
+   FIND FIRST PriceList NO-LOCK WHERE
+              PriceList.Brand     = Syst.Var:gcBrand AND
+              PriceList.PriceList = icPriceList
+              NO-ERROR.
+
+   IF NOT AVAILABLE PriceList
+   THEN DO:
+      CREATE PriceList.
+      ASSIGN
+         PriceList.AutoCreate = ""
+         PriceList.Brand      = Syst.Var:gcBrand
+         PriceList.Currency   = "EUR"
+         PriceList.CurrUnit   = TRUE
+         PriceList.DedicList  = FALSE
+         PriceList.InclVAT    = FALSE
+         PriceList.Memo       = "PRO pricelist"
+         PriceList.PLName     = "PRO fee for " + icPriceList
+         PriceList.Prefix     = ""
+         PriceList.PriceList  = icPriceList
+         PriceList.Rounding   = 4.
+   END.
+END PROCEDURE.
+
+
 PROCEDURE pRequestAction:
    DEFINE INPUT PARAMETER icCLIType                  AS CHARACTER NO-UNDO.
    DEFINE INPUT PARAMETER ilPostpaid                 AS LOGICAL   NO-UNDO.
