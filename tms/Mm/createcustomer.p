@@ -222,7 +222,7 @@ ELSE DO:
          ASSIGN
             OrderCustomer.CustNum = oiCustNum
             OrderCustomer.PersonID = "OLD" WHEN OrderCustomer.PersonID EQ "".
-            Order.CustNum = oiCustNum.
+            IF OrderCustomer.RowType = 1 THEN Order.CustNum = oiCustNum.
 
          IF llDoEvent THEN RUN StarEventMakeModifyEvent ( lhOrderCustomer ).
    END
