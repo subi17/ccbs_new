@@ -99,6 +99,7 @@ DEF BUFFER lbMLOrder       FOR Order.
 DEF BUFFER lbMLMobSub      FOR MobSub.
 DEF BUFFER lbMobSubs       FOR MobSub.
 DEF BUFFER lbPriDSSMobSub  FOR MobSub.
+DEF BUFFER lbELOrderAction FOR OrderAction.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
@@ -460,14 +461,14 @@ IF NOT AVAIL mobsub THEN DO:
                 llgExtraLine            = YES
                 lcExtraLineDiscounts    = fCParam("DiscountType","ExtraLine_Discounts").
          
-         FIND FIRST OrderAction EXCLUSIVE-LOCK WHERE
-                    OrderAction.Brand    = Syst.Var:gcBrand        AND
-                    OrderAction.OrderID  = Order.OrderID           AND
-                    OrderAction.ItemType = "ExtraLineDiscount"     AND
-             LOOKUP(OrderAction.ItemKey,lcExtraLineDiscounts) > 0  NO-ERROR.
+         FIND FIRST lbELOrderAction EXCLUSIVE-LOCK WHERE
+                    lbELOrderAction.Brand    = Syst.Var:gcBrand        AND
+                    lbELOrderAction.OrderID  = Order.OrderID           AND
+                    lbELOrderAction.ItemType = "ExtraLineDiscount"     AND
+             LOOKUP(lbELOrderAction.ItemKey,lcExtraLineDiscounts) > 0  NO-ERROR.
 
-         IF AVAILABLE OrderAction THEN DO:
-            DELETE OrderAction.
+         IF AVAILABLE lbELOrderAction THEN DO:
+            DELETE lbELOrderAction.
             Func.Common:mWriteMemo("Order",
                                     STRING(Order.OrderID),
                                     0,
