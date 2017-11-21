@@ -45,6 +45,8 @@ DEF VAR liSubCount AS INT NO-UNDO.
 DEF VAR llSearchByMobsub AS LOGICAL NO-UNDO INITIAL FALSE.
 DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
 
+DEFINE VARIABLE lcTmp AS CHARACTER NO-UNDO. /* YDR-2688 */
+
 DEFINE TEMP-TABLE ttOwner NO-UNDO
    FIELD Custnum AS INT
 INDEX Custnum IS PRIMARY UNIQUE Custnum. 
@@ -69,6 +71,7 @@ IF pcSearchType EQ "custnum" THEN DO:
 END.
 */
 
+lcTmp    = CAPS(SUBSTRING(pcInput, 9, 1)). /* YDR-2688 */
 piLimit  = get_pos_int(pcStruct, "limit").
 piOffSet = get_int(pcStruct, "offset").
 
@@ -265,7 +268,7 @@ DO:
       ttOwner.Custnum = Customer.Custnum.
 END.
 /* Person_id */
-ELSE IF IF LOOKUP("person_id", pcSearchType) > 0 THEN
+ELSE IF LOOKUP("person_id", pcSearchType) > 0 THEN
 DO:
    RELEASE ttOwner.
    
