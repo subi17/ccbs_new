@@ -1896,14 +1896,8 @@ ELSE
 /* link Extra/Additional line mainline order to orders if available */
 FOR EACH bttOneDelivery NO-LOCK:
 
-<<<<<<< HEAD
-      IF liCustLoop = 1 AND bttOneDelivery.NIE EQ "" THEN NEXT.
-      IF liCustLoop = 2 AND bttOneDelivery.NIF EQ "" THEN NEXT.
-      IF liCustLoop = 3 AND bttOneDelivery.CIF EQ "" THEN NEXT.
-=======
    ASSIGN liMainlineOrderId = 0
           llDespacharValue  = FALSE. 
->>>>>>> origin/gap_phase1
 
    fCheckForAdditionalORExtraMainLine(bttOneDelivery.OrderID,
                                       bttOneDelivery.ActionID, 
