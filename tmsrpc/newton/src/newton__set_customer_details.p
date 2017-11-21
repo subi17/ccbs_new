@@ -121,7 +121,10 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {newton/src/findtenant.i NO Common Customer CustNum piCustNum}
 
-Syst.Var:katun = "VISTA_" + scUser.
+IF scUser EQ "selfcare" THEN
+   Syst.Var:katun = scUser.
+ELSE 
+   Syst.Var:katun = "VISTA_" + scUser.
 
 /* Local variables */
 DEF VAR lcstruct AS CHAR NO-UNDO.
@@ -150,7 +153,9 @@ DEF VAR lcError AS CHAR NO-UNDO.
 DEF VAR lcMemoHostTable AS CHAR NO-UNDO INIT "Customer".
 DEF VAR liChargeType AS INT NO-UNDO.
 DEF VAR lcMemo    AS CHAR  NO-UNDO.
-lcMemo = "Agent" + CHR(255) + "VISTA".
+
+lcMemo = "Agent" + CHR(255) + (IF scUser EQ "selfcare" 
+                               THEN scUser ELSE "VISTA").
 
 ASSIGN
     lcCustomerData[1] = customer.HonTitle
