@@ -680,11 +680,11 @@ FUNCTION fIsAddLineTariff RETURNS LOGICAL
    DEFINE BUFFER bDPMember FOR DPMember.
 
    FOR FIRST bMobSub NO-LOCK WHERE
-             bMobSub.Brand = Syst.Parameters:gcBrand AND
+             bMobSub.Brand = Syst.Var:gcBrand AND
              bMobSub.CLI   = icCli AND
       LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0,
          EACH bDiscountPlan NO-LOCK WHERE
-              bDiscountPlan.Brand  = Syst.Parameters:gcBrand AND
+              bDiscountPlan.Brand  = Syst.Var:gcBrand AND
        LOOKUP(bDiscountPlan.DPRuleID, {&ADDLINE_DISCOUNTS} + ","
                                    + {&ADDLINE_DISCOUNTS_20} + ","
                                    + {&ADDLINE_DISCOUNTS_HM}) > 0 AND
@@ -709,7 +709,7 @@ FUNCTION fIsAddLineOrder RETURNS LOGICAL
    DEFINE BUFFER bOrderAction FOR OrderAction.
 
    FOR FIRST bOrderAction NO-LOCK WHERE
-             bOrderAction.Brand = Syst.Parameters:gcBrand AND
+             bOrderAction.Brand = Syst.Var:gcBrand AND
              bOrderAction.OrderId   = iiOrderId AND
              bOrderAction.ItemType = "AddLineDiscount":
          
