@@ -1,5 +1,5 @@
 "AGILESKYTV" 22/08/17 1 31/12/49 "AGILETV" 0 "" "" "Agile TV Service + SKY" 0 0 "1" "7" 1 0 0 0 "AGILETVMF" "" "" 1 1 0 yes 1 0 0 1 "" 0 1 2
-"AGILETV" 22/08/17 1 31/12/49 "AGILETV" 0 "" "" "Agile TV Service" 0 0 "1" "7" 1 0 0 0 "AGILETVMF" "" "" 1 1 0 yes 1 0 0 1 "" 0 1 2
+"AGILETV" 22/08/17 1 31/12/49 "AGILETV" 0 "" "" "Agile TV Service" 0 0 "1" "7" 1 0 0 0 "AGILETVMF" "" "" 1 1 0 yes 1 0 0 2 "" 0 1 2
 "BONO_VOIP" 01/04/12 4 31/12/49 "BONO_VOIP" 0 "" "" "Bono VoIP" 93 0 "1" "4" 4 1 0 0 "BONO_VOIPMF" "" "" 0 1 0 yes 1 0 0 1 "" 0 1 0
 "CENTRALITA" 04/07/17 1 31/12/49 "CentralitaPROMF" 0 "" "" "Centralita PRO" 0 0 "1" "7" 1 4 0 0 "CentralitaPROMF" "" "" 1 1 0 yes 1 0 0 1 "" 0 0 3
 "CONT10" 01/02/17 4 31/12/49 "CONT10MF" 0 "" "" "Contrato 10" 93 0 "1" "4" 4 1 0 0 "CONT10MF" "" "" 0 1 0 yes 1 0 0 1 "DATA200_UPSELL" 0 0 0
