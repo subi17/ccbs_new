@@ -83,6 +83,7 @@ DEF VAR llgExtraLine   AS LOG  NO-UNDO INITIAL NO.
 DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
 DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO.
 DEF VAR lcExtraLineDiscounts    AS CHAR NO-UNDO.
+DEF VAR liOngoingOrderId        AS INT  NO-UNDO.
 
 DEF BUFFER bInvCust        FOR Customer.
 DEF BUFFER bRefCust        FOR Customer.
@@ -100,6 +101,7 @@ DEF BUFFER lbMLMobSub      FOR MobSub.
 DEF BUFFER lbMobSubs       FOR MobSub.
 DEF BUFFER lbPriDSSMobSub  FOR MobSub.
 DEF BUFFER lbELOrderAction FOR OrderAction.
+DEF BUFFER lbOngOrder      FOR Order.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
@@ -455,6 +457,17 @@ IF NOT AVAIL mobsub THEN DO:
                 lbMLMobSub.MultiSimID   = MobSub.MsSeq             /* Extraline Subid */
                 lbMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY}  /* Primary = 1     */
                 llgExtraLine            = YES.
+      ELSE IF fCheckOngoingConvergentAvailForExtraLine(Customer.CustIdType,
+                                                       Customer.OrgId,
+                                                OUTPUT liOngoingOrderId) THEN DO:
+         FIND FIRST lbOngOrder NO-LOCK WHERE
+                    lbOngOrder.Brand   = Syst.Var:gcBrand AND
+                    lbOngOrder.OrderId = liOngoingOrderId NO-ERROR.
+         IF AVAILABLE lbOngOrder THEN
+            ASSIGN MobSub.MultiSimID   = lbOngOrder.MsSeq
+                   MobSub.MultiSimType = lbOngOrder.MultiSimType
+                   llgExtraLine        = YES.
+      END.
       ELSE DO:
          ASSIGN MobSub.MultiSimID       = 0
                 MobSub.MultiSimType     = 0
