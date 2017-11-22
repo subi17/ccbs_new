@@ -236,4 +236,29 @@ FUNCTION fCreateFusionCancelOrderMessage RETURNS LOGICAL
    RETURN TRUE.
 END.
 
+FUNCTION fIsFixedNumberInUse RETURNS LOGICAL
+ (icFixedNumber AS CHAR,
+  iiOrderID AS INT):
+
+  DEF BUFFER OrderFusion FOR OrderFusion.
+  DEF BUFFER Order FOR Order.
+
+  IF icFixedNumber EQ ? OR icFixedNumber EQ "" THEN RETURN FALSE.
+
+  FOR EACH OrderFusion NO-LOCK WHERE
+           OrderFusion.FixedNumber = icFixedNumber AND
+           OrderFusion.OrderID NE iiOrderID,
+      FIRST Order NO-LOCK WHERE
+            Order.Brand = OrderFusion.Brand AND
+            Order.OrderID = OrderFusion.OrderID AND
+     LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0:
+
+     RETURN TRUE.
+  END.
+   
+  RETURN CAN-FIND(FIRST MobSub NO-LOCK WHERE
+                        MobSub.Brand = Syst.Var:gcBrand AND
+                        MobSub.FixedNumber = icFixedNumber).
+END.
+
 &ENDIF
