@@ -106,6 +106,7 @@
 75902000 "Ingresos por servicios diver." "" "" "" "" "" 0 12 "1"
 75902002 "Ingresos reparaciones clientes" "" "" "" "" "" 0 25 "1"
 75902003 "Ingresos devolución factura" "" "" "" "" "" 0 26 "1"
+75902005 "Technician Visit" "" "" "" "" "" 0 12 "1"
 77777777 "Default and cash customers" "" "" "" "" "" 0 2 "1"
 79502004 "Charge any type of discount over Q25" "" "" "" "" "" 0 79 "1"
 99999999 "Account not defined" "" "" "" "" "" 0 1 "1"
