@@ -66,6 +66,11 @@ lcError = fMasGet_FixedNbr(OrderCustomer.ZipCode,
                  OUTPUT lcResultCode,
                  OUTPUT lcResultDesc).
 
+IF lcError EQ "OK" AND 
+   fIsFixedNumberInUse(lcFixedNumber, Order.OrderID) THEN ASSIGN
+   lcError = SUBST("NW_ERROR: FixedNumber is already in use: &1",
+                   lcFixedNumber).
+
 IF lcError EQ "OK" THEN DO:
 
    ASSIGN
