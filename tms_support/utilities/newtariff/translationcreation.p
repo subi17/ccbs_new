@@ -44,7 +44,7 @@ FUNCTION fRecordFound RETURNS LOGICAL
                                  CLIType.Brand    = Syst.Var:gcBrand  AND 
                                  CLIType.CLIType = icKeyValue)
            THEN RETURN FALSE.
-      WHEN 1
+      WHEN 11
       THEN IF NOT CAN-FIND(FIRST ShaperConf NO-LOCK WHERE 
                                  ShaperConf.Brand    = Syst.Var:gcBrand  AND 
                                  ShaperConf.ShaperConfID = icKeyValue)
