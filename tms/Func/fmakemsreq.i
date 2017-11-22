@@ -520,6 +520,7 @@ FUNCTION fAddressRequest RETURNS INTEGER
    DEF VAR liReqCreated AS INT NO-UNDO.
    DEF BUFFER blMobsub FOR Mobsub.
    DEF BUFFER bACC FOR MsRequest.
+   DEF BUFFER Customer FOR Customer.
   
    DEFINE VARIABLE iiZip AS INTEGER NO-UNDO. 
    DEFINE VARIABLE iiRegion AS INTEGER NO-UNDO. 
