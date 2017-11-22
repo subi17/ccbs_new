@@ -27,3 +27,4 @@
 59 "Document Management" "Mc/dms.p"
 60 "Show Convergent data" "Mc/convview.p"
 61 "Cancel fixed line order" "Mc/fusion_order_cancel.p,iiOrderId"
+63 "Release In Control" "Mc/orderinctrl.p,iiOrderId,"
