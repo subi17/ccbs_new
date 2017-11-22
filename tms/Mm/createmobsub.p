@@ -465,7 +465,7 @@ IF NOT AVAIL mobsub THEN DO:
                     lbOngOrder.OrderId = liOngoingOrderId NO-ERROR.
          IF AVAILABLE lbOngOrder THEN
             ASSIGN MobSub.MultiSimID   = lbOngOrder.MsSeq
-                   MobSub.MultiSimType = lbOngOrder.MultiSimType
+                   MobSub.MultiSimType = Order.MultiSimType
                    llgExtraLine        = YES.
       END.
       ELSE DO:
