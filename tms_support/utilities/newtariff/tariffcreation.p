@@ -152,10 +152,20 @@ PROCEDURE pSaveTariff:
 
             RUN pPriceList_PRO IN h_config("PRO_" + ttClitype.CliType).
             
+            FIND DayCampaign NO-LOCK WHERE
+               DayCampaign.Brand   = Syst.Var:gcBrand AND
+               DayCampaign.DCEvent = lcFixedLine_BaseBundle
+            NO-ERROR.
+            
+            IF NOT AVAILABLE DayCampaign
+            THEN UNDO, THROW NEW Progress.Lang.AppError
+                  (SUBSTITUTE("Cannot find DayCampaign for a fixed line " +
+                              "base bundle '&1'", lcFixedLine_BaseBundle), 1).
+            
             RUN pFMItem_PRO IN h_config(ttClitype.CliType + "PRO",  /* BillItem  */
-                                        lcFixedLine_BaseBundle + "MF",   /* FeeModel  */ 
+                                        DayCampaign.BillCode,       /* FeeModel  */ 
                                         "PRO_" + ttClitype.CliType, /* PriceList */
-                                        ldePROFee                     /* Amount    */ 
+                                        ldePROFee                   /* Amount    */ 
                                        ).
          END.
 
