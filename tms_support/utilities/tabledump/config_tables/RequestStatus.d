@@ -7,6 +7,7 @@
 "1" 1 8 "" yes "" "" 0 no no
 "1" 6 0 "" yes "" "" 0 no no
 "1" 8 0 "" yes "" "" 0 no no
+"1" 8 6 "" yes "" "" 0 no no
 "1" 8 8 "" yes "" "" 0 no no
 "1" 9 0 "" yes "" "" 0 no no
 "1" 9 8 "" yes "" "" 0 no no
