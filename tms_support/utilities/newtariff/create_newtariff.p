@@ -64,6 +64,15 @@ RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "CLIType" "/apps/
 RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "CTServPac" "/apps/yoigo/tms_support/utilities/newtariff/exportdata".
 RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "RepText" "/apps/yoigo/tms_support/utilities/newtariff/exportdata".
 RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "CTServEl" "/apps/yoigo/tms_support/utilities/newtariff/exportdata".
+RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "ProgLimit" "/apps/yoigo/tms_support/utilities/newtariff/exportdata".
+RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "Matrix" "/apps/yoigo/tms_support/utilities/newtariff/exportdata".
+RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "MXItem" "/apps/yoigo/tms_support/utilities/newtariff/exportdata".
+RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "RequestAction" "/apps/yoigo/tms_support/utilities/newtariff/exportdata".
+RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "RequestActionRule" "/apps/yoigo/tms_support/utilities/newtariff/exportdata".
+RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "CTServAttr" "/apps/yoigo/tms_support/utilities/newtariff/exportdata".
+RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "SLGAnalyse" "/apps/yoigo/tms_support/utilities/newtariff/exportdata".
+RUN /apps/yoigo/tms_support/utilities/tabledump/export_table.p "TMRItemValue" "/apps/yoigo/tms_support/utilities/newtariff/exportdata".
+
 */
 
 FUNCTION fCreatettFiles RETURNS LOGICAL
