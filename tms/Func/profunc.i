@@ -179,22 +179,6 @@ FUNCTION fIsProOrder RETURNS LOGICAL
    ELSE RETURN FALSE.
    
 END.
-/*Function returns True if a tariff can be defined as 2P tariff.
-NOTE: False is returned in real false cases and also in error cases. */
-FUNCTION fIs2PTariff RETURNS LOGICAL
-   (icCliType AS CHAR):
-
-   DEF BUFFER CLIType FOR CLIType.
-
-   FIND FIRST CLIType NO-LOCK WHERE
-              CLIType.Brand EQ Syst.Var:gcBrand AND
-              CLIType.CliType EQ icCLIType NO-ERROR.
-   IF AVAIL CliType AND
-            CliType.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN 
-      RETURN TRUE.
-
-   RETURN FALSE.
-END.
 
 /*Function returns True if a tariff can be defined as 2P tariff.
 NOTE: False is returned in real false cases and also in error cases. */
