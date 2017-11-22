@@ -34,6 +34,7 @@ FUNCTION fTerminationRequest RETURNS INTEGER
 
    DEF VAR liReqCreated AS INT NO-UNDO.
    DEF BUFFER bMsRequest FOR MsRequest.
+   DEF BUFFER bOrder FOR Order.   
 
    ocResult = fChkRequest(iiMsSeq,
                           18,
@@ -76,6 +77,17 @@ FUNCTION fTerminationRequest RETURNS INTEGER
    IF (fHasConvergenceTariff(iiMsSeq) AND
        icTermType = {&TERMINATION_TYPE_FULL}) THEN DO:
 
+      /* Close mobile part order when termination request is created. */
+      FOR FIRST bOrder NO-LOCK WHERE
+             bOrder.MsSeq = iiMsSeq AND
+             (bOrder.StatusCode = {&ORDER_STATUS_PENDING_MOBILE_LINE} OR 
+              bOrder.StatusCode = {&ORDER_STATUS_MNP} OR
+              bOrder.StatusCode = {&ORDER_STATUS_MNP_REJECTED}):          
+         
+         RUN Mc/closeorder.p(bOrder.OrderId, TRUE).
+         
+      END.
+                    
       /* Do not change the memo text (used by DWH) */
       IF icTermReason EQ STRING({&SUBSCRIPTION_TERM_REASON_MNP}) THEN
          bCreaReq.Memo = "Fixed line need to be terminated by Yoigo BO".
