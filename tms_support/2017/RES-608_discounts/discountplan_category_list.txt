@@ -1,8 +1,8 @@
-BONO6DISC;Bono 1 GB discount;BONO 
-BONO6WEBDISC;Bono 1 GB discount web;BONO 
-BONO7DISC;Bono 3 GB discount;BONO 
-BONO8DISC;Discount of the monthly fee of La;BONO 
-BONO9DISC;Bono 9 discount;BONO 
+BONO6DISC;Bono 1 GB discount;BONO
+BONO6WEBDISC;Bono 1 GB discount web;BONO
+BONO7DISC;Bono 3 GB discount;BONO
+BONO8DISC;Discount of the monthly fee of La;BONO
+BONO9DISC;Bono 9 discount;BONO
 CONT10DISC;Discount MF La del Cero 1.5GB;Tactical
 CONT10RETDISC;Retention Discount MF La del Cero;Retention
 CONT15DISC;Discount MF La del Cero 5GB;Tactical
