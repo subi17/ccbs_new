@@ -163,7 +163,7 @@ PROCEDURE pSaveTariff:
                               "base bundle '&1'", lcFixedLine_BaseBundle), 1).
             
             RUN pFMItem_PRO IN h_config(ttClitype.CliType + "PRO",  /* BillItem  */
-                                        DayCampaign.BillCode,       /* FeeModel  */ 
+                                        DayCampaign.FeeModel,       /* FeeModel  */ 
                                         "PRO_" + ttClitype.CliType, /* PriceList */
                                         ldePROFee                   /* Amount    */ 
                                        ).

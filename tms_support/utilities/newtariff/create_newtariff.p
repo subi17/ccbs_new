@@ -112,17 +112,19 @@ DO TRANSACTION:
          WHEN "billitem"
          THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/billitemcreation.p", 1).
          WHEN "billitem_translation"
-         THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/billitemtrans.p", 2).
+         THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/translationcreation.p", 2).
          WHEN "bundle"
          THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/bundlecreation.p", 3). /* DayCampaign */
          WHEN "shaperconf"
          THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/shaperconfcreation.p", 4).
+         WHEN "shaperconf_translation"
+         THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/translationcreation", 5).
          WHEN "tariff"
-         THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/tariffcreation.p", 5). /* Actually CLIType not Tariff! */
+         THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/tariffcreation.p", 6). /* Actually CLIType not Tariff! */
          WHEN "tariff_translation"
-         THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/tarifftrans.p", 6).
+         THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/translationcreation", 7).
          WHEN "rptariff"
-         THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/rptariff.p", 7).
+         THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/rptariff.p", 8).
       END CASE.
    END.
 
