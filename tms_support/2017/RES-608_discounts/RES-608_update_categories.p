@@ -36,8 +36,8 @@ lcLog = "category_update_"  +
                STRING(MONTH(TODAY),"99") +
                STRING(DAY(TODAY),"99") + ".log".
 message lcInputFile VIEW-AS ALERT-BOX.
-INPUT STREAM sIn FROM "/home/ilsavola/repos/ccbs/tms_support/2017/RES-608_discounts/discountplan_category_list.txt".
-OUTPUT STREAM sLog TO VALUE("/home/ilsavola/repos/ccbs/tms_support/2017/RES-608_discounts/" + lcLog).
+INPUT STREAM sIn FROM "/apps/yoigo/tms_support/2017/RES-608_discounts/RES-608_discounts/discountplan_category_list.txt".
+OUTPUT STREAM sLog TO VALUE("/apps/yoigo/tms_support/2017/RES-608_discounts/" + lcLog).
 
 REPEAT:
    IMPORT STREAM sIn UNFORMATTED lcLine.
