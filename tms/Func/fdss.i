@@ -503,7 +503,6 @@ FUNCTION fCheckExtraLineMatrixSubscription RETURNS LOG
          IF AVAIL lbMLMobSub THEN 
             RETURN TRUE.
       END.
-      OTHERWISE .
 
    END CASE.
 

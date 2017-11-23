@@ -250,6 +250,23 @@ FUNCTION fIsConvergentAddLineOK RETURNS LOGICAL
 
 END FUNCTION.
 
+/* Check if extraline is allowed for the clitype (tariff) */ 
+FUNCTION fExtraLineAllowedForCLIType RETURNS LOGICAL
+   (icCLIType AS CHARACTER):
+
+   FOR EACH  Matrix NO-LOCK WHERE
+             Matrix.Brand  = Syst.Var:gcBrand   AND
+             Matrix.MXKey  = {&EXTRALINEMATRIX},
+       FIRST MXItem NO-LOCK WHERE
+             MXItem.MXSeq   = Matrix.MXSeq AND
+             MXItem.MXName  = "SubsTypeTo" AND
+             MXItem.MXValue = icCLIType:
+      RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
 
 /* Check convergent STC compability. Special handling that allows convergent
    STC between subscription types which have same fixed line part.
@@ -721,18 +738,13 @@ FUNCTION fIsAddLineOrder RETURNS LOGICAL
 END FUNCTION.
 
 
-FUNCTION fCheckExistingConvergentAvailForExtraLine RETURNS LOGICAL
+FUNCTION fCheckExistingConvergentAvailForExtraLine RETURNS INTEGER
    (INPUT icCustIDType       AS CHAR,
-    INPUT icCustID           AS CHAR,
-    OUTPUT liMainLineOrderId AS INT):
+    INPUT icCustID           AS CHAR):
 
    DEFINE BUFFER Customer FOR Customer.
    DEFINE BUFFER MobSub   FOR MobSub.
    DEFINE BUFFER Order    FOR Order.
-
-   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
-
-   lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").
 
    FOR FIRST Customer WHERE
              Customer.Brand      = Syst.Var:gcBrand AND
@@ -744,12 +756,13 @@ FUNCTION fCheckExistingConvergentAvailForExtraLine RETURNS LOGICAL
              MobSub.CustNum  = Customer.CustNum        AND
              MobSub.PayType  = FALSE                   AND
             (MobSub.MsStatus = {&MSSTATUS_ACTIVE} OR
-             MobSub.MsStatus = {&MSSTATUS_BARRED})     BY MobSub.ActivationTS:
+             MobSub.MsStatus = {&MSSTATUS_BARRED})     AND
+            (MobSub.MultiSimID = 0 OR
+             MobSub.MultiSimType <> {&MULTISIMTYPE_PRIMARY})             
+       BY MobSub.ActivationTS:
 
-       IF LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) = 0 THEN NEXT.
-       
-       IF MobSub.MultiSimID  <> 0                       AND 
-          MobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} THEN NEXT.
+       IF NOT fExtraLineAllowedForCLIType(MobSub.CLIType)
+       THEN NEXT.
 
        FIND LAST Order NO-LOCK WHERE 
                  Order.MsSeq      = MobSub.MsSeq              AND 
@@ -764,27 +777,21 @@ FUNCTION fCheckExistingConvergentAvailForExtraLine RETURNS LOGICAL
 
        IF NOT AVAIL Order THEN NEXT.          
 
-       liMainLineOrderId = Order.OrderId. 
+       RETURN Order.OrderId. 
 
-       RETURN TRUE.
    END.
 
-   RETURN FALSE.
+   RETURN 0.
 
 END FUNCTION.
 
-FUNCTION fCheckOngoingConvergentAvailForExtraLine RETURNS LOGICAL
+FUNCTION fCheckOngoingConvergentAvailForExtraLine RETURNS INTEGER
    (INPUT icCustIDType      AS CHAR,
-    INPUT icCustID          AS CHAR,
-    OUTPUT liOngoingOrderId AS INT):
+    INPUT icCustID          AS CHAR):
    
    DEFINE BUFFER OrderCustomer FOR OrderCustomer.
    DEFINE BUFFER Order         FOR Order.
    DEFINE BUFFER OrderFusion   FOR OrderFusion.
-
-   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO.
-
-   lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").
 
    FOR EACH OrderCustomer NO-LOCK WHERE
             OrderCustomer.Brand      EQ Syst.Var:gcBrand AND
@@ -801,17 +808,16 @@ FUNCTION fCheckOngoingConvergentAvailForExtraLine RETURNS LOGICAL
             OrderFusion.Brand   = Syst.Var:gcBrand AND
             OrderFusion.OrderID = Order.OrderID           BY Order.CrStamp:
 
-      IF LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) = 0 THEN NEXT.
+      IF NOT fExtraLineAllowedForCLIType(Order.CLIType)
+      THEN NEXT.
 
       IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN NEXT.
  
-      liOngoingOrderId = Order.OrderId.
-
-      RETURN TRUE.
+      RETURN Order.OrderId.
  
    END.
 
-   RETURN FALSE.
+   RETURN 0.
 
 END FUNCTION.
 
