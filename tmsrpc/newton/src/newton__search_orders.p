@@ -217,32 +217,18 @@ IF LENGTH(pcSearchString) EQ 9 AND
    NOT (ASC(lcTmp) >= 65 AND
    ASC(lcTmp) <= 90) AND
    LOOKUP("msisdn", pcSearchType) > 0 THEN
-DO:
-    FIND mobsub NO-LOCK WHERE 
-         mobsub.brand = Syst.Var:gcBrand AND
-         mobsub.cli   = pcSearchString NO-ERROR.
-    IF NOT AVAILABLE mobsub THEN
-       RETURN appl_err(SUBSTITUTE("MobSub entry &1 not found", pcSearchString)).
-    
-    ASSIGN 
+ 
         lcSearchBy = "msisdn".
-END.
+
 /* Fixed line number search */
 ELSE IF LENGTH(pcSearchString) EQ 9 AND
    (pcSearchString BEGINS "8" OR pcSearchString BEGINS "9" ) AND
    NOT (ASC(lcTmp) >= 65 AND
    ASC(lcTmp) <= 90) AND
    LOOKUP("msisdn", pcSearchType) > 0 THEN
-DO:   
-    FIND mobsub NO-LOCK WHERE
-         mobsub.brand       = Syst.Var:gcBrand AND
-         mobsub.fixednumber = pcSearchString NO-ERROR.
-    IF NOT AVAILABLE mobsub THEN
-        RETURN appl_err(SUBSTITUTE("MobSub entry &1 not found", pcSearchString)).
-    
-    ASSIGN
+   
         lcSearchBy = "fixed_number".
-END.
+
 /* IMSI - It will use the msisdn */
 ELSE IF LENGTH(pcSearchString) = 15 AND 
    pcSearchString BEGINS "21404" AND 
@@ -260,17 +246,9 @@ DO:
 END.
 ELSE IF liOwner NE 0 AND 
    LOOKUP("order_id", pcSearchType) > 0 THEN
-DO:
-    FIND FIRST Order WHERE 
-         Order.Brand = Syst.Var:gcBrand AND 
-         Order.OrderId = liOwner 
-      NO-LOCK NO-ERROR.
-    IF NOT AVAILABLE Order THEN
-        RETURN appl_err(SUBSTITUTE("Order &1 not found", liOwner)).
         
-    ASSIGN 
         lcSearchBy = "order_id".
-END.
+
 ELSE IF LOOKUP("person_id", pcSearchType) > 0 THEN
 DO:   
     FOR EACH Customer NO-LOCK WHERE
@@ -279,7 +257,7 @@ DO:
              Customer.Roles NE "inactive" 
              lii = 1 TO 2:
        IF lii > 1 THEN DO:
-          IF LOOKUP("msisdn",pcSearchType) = 0 THEN
+          IF LOOKUP("msisdn",pcSearchType) > 0 THEN
              RETURN appl_err("Please search with MSISDN").
        END.
     END.
@@ -289,7 +267,7 @@ DO:
                Customer.brand = Syst.Var:gcBrand AND 
                Customer.Roles NE "inactive" NO-ERROR.
     IF NOT AVAILABLE Customer THEN
-       RETURN appl_err(SUBSTITUTE("Customer &1 not found 2", pcSearchString)).
+       RETURN appl_err(SUBSTITUTE("Customer &1 not found", pcSearchString)).
     
     ASSIGN
        pcSearchString = STRING(Customer.CustNum)
