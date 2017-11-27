@@ -19,19 +19,25 @@
 
 DEFINE VARIABLE pcTenant       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE pcSearchString AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE pcSearchType   AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE pcCustIdType   AS CHARACTER NO-UNDO.
+DEFINE VARIABLE pcSearchType   AS CHARACTER NO-UNDO.
+/* DEFINE VARIABLE pcCustIdType   AS CHARACTER NO-UNDO.  YDR-2688 */
 DEFINE VARIABLE piMaxCount     AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE top_array      AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE lcError        AS CHARACTER NO-UNDO. 
 
-IF validate_request(param_toplevel_id, "string,string,string,string,int") EQ ? THEN RETURN.
+DEFINE VARIABLE lcTmp          AS CHARACTER NO-UNDO. /* YDR-2688 */
+DEFINE VARIABLE liOwner        AS INTEGER   NO-UNDO. /* YDR-2688 */
+DEFINE VARIABLE lcSearchBy     AS CHARACTER NO-UNDO. /* YDR-2688 */
+DEFINE VARIABLE lii            AS INTEGER   NO-UNDO. /* YDR-2688 */ 
+
+/* IF validate_request(param_toplevel_id, "string,string,string,string,int") EQ ? THEN RETURN.  YDR-2688 */
+IF validate_request(param_toplevel_id, "string,string,string,int") EQ ? THEN RETURN.
 
 pcTenant       = get_string(param_toplevel_id, "0").
-pcSearchString = get_string(param_toplevel_id, "1").
-pcSearchType   = get_string(param_toplevel_id, "2").
-pcCustIdType   = get_string(param_toplevel_id, "3").
-piMaxCount     = get_int(   param_toplevel_id, "4").
+pcSearchString = get_string(param_toplevel_id, "1"). 
+pcSearchType   = get_string(param_toplevel_id, "2").     /* YDR-2688 - Expecting/valids are: "msisdn,order_id,person_id,imsi" */
+/* pcCustIdType   = get_string(param_toplevel_id, "3").     YDR-2688 */
+piMaxCount     = get_int(   param_toplevel_id, "3").     /* YDR-2688 */
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -56,8 +62,8 @@ END.
 FUNCTION fIsRecordsAvailable RETURN LOGICAL:
    
    FIND FIRST OrderCustomer WHERE 
-        OrderCustomer.Brand = "1"             AND
-        OrderCustomer.OrderId = Order.OrderId AND
+        OrderCustomer.Brand = Syst.Var:gcBrand AND
+        OrderCustomer.OrderId = Order.OrderId  AND
         OrderCustomer.RowType = 1 
         NO-LOCK NO-ERROR.
 
@@ -68,7 +74,7 @@ END.
 FUNCTION fCheckFixedNumber RETURN LOGICAL:
    
    FIND FIRST OrderFusion WHERE 
-              OrderFusion.Brand = "1" AND
+              OrderFusion.Brand = Syst.Var:gcBrand AND
               OrderFusion.OrderId EQ Order.OrderId
               NO-LOCK NO-ERROR.
 
@@ -81,7 +87,7 @@ FUNCTION fAddOrdersBasedOnCLI RETURN CHARACTER:
    iCount = 0.
    OrdersBasedOnCLI:
    FOR EACH Order WHERE 
-      Order.Brand = "1" AND 
+      Order.Brand = Syst.Var:gcBrand AND 
       Order.CLI = pcSearchString NO-LOCK:
       IF NOT fIsRecordsAvailable() THEN 
          NEXT OrdersBasedOnCLI.
@@ -102,7 +108,7 @@ FUNCTION fAddOrdersBasedOnFixed RETURN CHARACTER:
    FOR EACH OrderFusion WHERE 
       OrderFusion.FixedNumber = pcSearchString NO-LOCK:
       FOR EACH Order WHERE
-               Order.Brand = "1" AND
+               Order.Brand = Syst.Var:gcBrand AND
                Order.OrderId = OrderFusion.OrderId NO-LOCK:
          IF NOT fIsRecordsAvailable() THEN 
             NEXT OrdersBasedOnFixed.
@@ -116,7 +122,7 @@ FUNCTION fAddOrdersBasedOnFixed RETURN CHARACTER:
    RETURN "".
 END.
 
-
+/* YDR-2688
 FUNCTION fAddOrdersBasedOnCustId RETURN CHARACTER:
    
    DEFINE VARIABLE iiCount AS INTEGER NO-UNDO INIT 0. 
@@ -130,16 +136,48 @@ FUNCTION fAddOrdersBasedOnCustId RETURN CHARACTER:
       FOR EACH Order WHERE
                Order.Brand = "1" AND
                Order.OrderId = OrderCustomer.OrderId NO-LOCK:
-      fCheckFixedNumber().
-      fAddOrderStruct(iiCount).
-      iiCount = iiCount + 1.
-      IF iiCount = piMaxCount THEN
-         LEAVE OrdersBasedOnCustID.
+                   
+         fCheckFixedNumber().
+         fAddOrderStruct(iiCount).
+         iiCount = iiCount + 1.
+         
+         IF iiCount = piMaxCount THEN
+            LEAVE OrdersBasedOnCustID.
       END.
    END.
    RETURN "".
 END.
+*/
 
+FUNCTION fAddOrdersBasedOnPerson_id RETURN CHARACTER:
+   
+   DEFINE VARIABLE iiCount  AS INTEGER NO-UNDO INIT 0. 
+   DEFINE VARIABLE iCustNum AS INTEGER NO-UNDO. 
+   
+   iCustNum = INTEGER(pcSearchString) NO-ERROR.
+   IF ERROR-STATUS:ERROR THEN
+      RETURN "Search string was not integer as Customer ID should be".
+
+   OrdersBasedOnPerson_Id:
+   FOR EACH OrderCustomer WHERE 
+            OrderCustomer.Brand   = Syst.Var:gcBrand AND
+            OrderCustomer.CustNum = iCustNum
+            NO-LOCK USE-INDEX custnum:
+                
+      FOR EACH Order WHERE
+               Order.Brand = Syst.Var:gcBrand AND
+               Order.OrderId = OrderCustomer.OrderId NO-LOCK:
+                   
+         fCheckFixedNumber().
+         fAddOrderStruct(iiCount).
+         iiCount = iiCount + 1.
+         
+         IF iiCount = piMaxCount THEN
+            LEAVE OrdersBasedOnPerson_Id.
+      END.
+   END.
+   RETURN "".
+END.
 
 FUNCTION fAddOrdersBasedOnOrderId RETURN CHARACTER:
    DEFINE VARIABLE iCount   AS INTEGER NO-UNDO. 
@@ -151,7 +189,7 @@ FUNCTION fAddOrdersBasedOnOrderId RETURN CHARACTER:
    iCount = 0.
    OrdersBasedOnOrderId:
    FOR EACH Order WHERE 
-      Order.Brand = "1"        AND 
+      Order.Brand   = Syst.Var:gcBrand  AND 
       Order.OrderId = iOrderId 
       NO-LOCK:
 
@@ -169,11 +207,80 @@ END.
 
 lcError = "".
 
-CASE pcSearchType:
-   WHEN "tms_id"  THEN lcError = fAddOrdersBasedOnOrderId().
-   WHEN "custid" THEN lcError = fAddOrdersBasedOnCustId().
-   WHEN "msisdn"  THEN lcError = fAddOrdersBasedOnCLI(). 
+/* YDR-2688 - Calculating Convenient Search Mode */
+lcTmp   = CAPS(SUBSTRING(pcSearchString, 9, 1)).
+liOwner = INT(pcSearchString) NO-ERROR.
+
+/* MSISDN search */    
+IF LENGTH(pcSearchString) EQ 9 AND 
+   (pcSearchString BEGINS "6" OR pcSearchString BEGINS "7") AND
+   NOT (ASC(lcTmp) >= 65 AND
+   ASC(lcTmp) <= 90) AND
+   LOOKUP("msisdn", pcSearchType) > 0 THEN
+ 
+        lcSearchBy = "msisdn".
+
+/* Fixed line number search */
+ELSE IF LENGTH(pcSearchString) EQ 9 AND
+   (pcSearchString BEGINS "8" OR pcSearchString BEGINS "9" ) AND
+   NOT (ASC(lcTmp) >= 65 AND
+   ASC(lcTmp) <= 90) AND
+   LOOKUP("msisdn", pcSearchType) > 0 THEN
+   
+        lcSearchBy = "fixed_number".
+
+/* IMSI - It will use the msisdn */
+ELSE IF LENGTH(pcSearchString) = 15 AND 
+   pcSearchString BEGINS "21404" AND 
+   LOOKUP("imsi", pcSearchType) > 0 THEN
+DO:   
+    FIND FIRST MobSub NO-LOCK WHERE
+               MobSub.Brand = Syst.Var:gcBrand AND
+               MobSub.IMSI  = pcSearchString NO-ERROR.
+    IF NOT AVAIL MobSub THEN 
+       RETURN appl_err(SUBSTITUTE("IMSI &1 not found", pcSearchString)).
+
+    ASSIGN 
+        pcSearchString   = MobSub.CLI
+        lcSearchBy       = "msisdn".
+END.
+ELSE IF liOwner NE 0 AND 
+   LOOKUP("order_id", pcSearchType) > 0 THEN
+        
+        lcSearchBy = "order_id".
+
+ELSE IF LOOKUP("person_id", pcSearchType) > 0 THEN
+DO:   
+    FOR EACH Customer NO-LOCK WHERE
+             Customer.OrgId = pcSearchString AND
+             Customer.brand = Syst.Var:gcBrand AND
+             Customer.Roles NE "inactive" 
+             lii = 1 TO 2:
+       IF lii > 1 THEN DO:
+          IF LOOKUP("msisdn",pcSearchType) > 0 THEN
+             RETURN appl_err("Please search with MSISDN").
+       END.
+    END.
+    
+    FIND FIRST Customer NO-LOCK WHERE
+               Customer.OrgId = pcSearchString AND 
+               Customer.brand = Syst.Var:gcBrand AND 
+               Customer.Roles NE "inactive" NO-ERROR.
+    IF NOT AVAILABLE Customer THEN
+       RETURN appl_err(SUBSTITUTE("Customer &1 not found", pcSearchString)).
+    
+    ASSIGN
+       pcSearchString = STRING(Customer.CustNum)
+       lcSearchBy     = "person_id".
+END.
+ELSE liOwner = 0.
+
+
+CASE lcSearchBy:
+   WHEN "msisdn"       THEN lcError = fAddOrdersBasedOnCLI(). 
    WHEN "fixed_number" THEN lcError = fAddOrdersBasedOnFixed().
+   WHEN "person_id"    THEN lcError = fAddOrdersBasedOnPerson_Id().
+   WHEN "order_id"     THEN lcError = fAddOrdersBasedOnOrderId().
    OTHERWISE 
       lcError = "Invalid search_type " + pcSearchType.
 END.
