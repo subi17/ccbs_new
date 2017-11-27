@@ -397,7 +397,8 @@ PROCEDURE pCLIType:
       DO:
           RUN pMatrix(ttCliType.CliType, 
                       ((IF ttCliType.BaseBundle          > "" THEN (ttCliType.BaseBundle          + ",") ELSE "") + 
-                       (IF ttCliType.FixedLineBaseBundle > "" THEN (ttCliType.FixedLineBaseBundle + ",") ELSE "") + ttCliType.AllowedBundles)).
+                       (IF ttCliType.FixedLineBaseBundle > "" THEN (ttCliType.FixedLineBaseBundle + ",") ELSE "") + ttCliType.AllowedBundles),
+                      "PERCONTR").
 
           /* Matrix for additional lines */
           FOR EACH MxItem WHERE MxItem.MxSeq   > 0                                 AND 
@@ -1314,42 +1315,46 @@ END PROCEDURE.
 PROCEDURE pMatrix:
    DEFINE INPUT PARAMETER icCLIType          AS CHARACTER NO-UNDO.    
    DEFINE INPUT PARAMETER icAllowedBundles   AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icType             AS CHARACTER NO-UNDO. /* ("PERCONTR"|"EXTRALINE") */
 
    DEFINE VARIABLE liCount AS INTEGER NO-UNDO.
 
-   FIND FIRST Matrix WHERE Matrix.Brand = Syst.Var:gcBrand AND Matrix.MXKey = "PERCONTR" AND Matrix.MxName = icCLIType NO-LOCK NO-ERROR.
+   FIND FIRST Matrix WHERE Matrix.Brand = Syst.Var:gcBrand AND Matrix.MXKey = icType AND Matrix.MxName = icCLIType NO-LOCK NO-ERROR.
    IF NOT AVAIL Matrix THEN 
    DO:
        CREATE Matrix.
        ASSIGN
           Matrix.Brand  = Syst.Var:gcBrand
           Matrix.MXSeq  = fGetNextMXSeq()
-          Matrix.mxkey  = "PERCONTR"
+          Matrix.mxkey  = icType
           Matrix.mxname = icCLIType
-          Matrix.prior  = fGetNextMatrixPriority("PERCONTR")
+          Matrix.prior  = fGetNextMatrixPriority(icType)
           Matrix.mxres  = 1.
        
        CREATE MXItem.
        ASSIGN
           MXItem.MxSeq   = Matrix.MXSeq
           MXItem.MxValue = icCLIType
-          MXItem.MxName  = "SubsTypeTo".   
+          MXItem.MxName  = (IF icType = "PERCONTR" THEN "SubsTypeTo" ELSE "SubsTypeFrom").   
    END.
       
    DO liCount = 1 TO NUM-ENTRIES(icAllowedBundles)
       ON ERROR UNDO, THROW:
       
-      IF LOOKUP(ENTRY(liCount,icAllowedBundles), "CONTDSL") > 0 THEN 
+      IF icType = "PERCONTR" AND LOOKUP(ENTRY(liCount,icAllowedBundles), "CONTDSL") > 0 THEN 
           NEXT.
       
-      FIND FIRST MxItem WHERE MxItem.MxSeq = Matrix.MXSeq AND MxItem.MxName = "PerContract" AND MxItem.MxValue = ENTRY(liCount,icAllowedBundles) NO-LOCK NO-ERROR.
+      FIND FIRST MxItem WHERE 
+                 MxItem.MxSeq   = Matrix.MXSeq AND 
+                 MxItem.MxName  = (IF icType = "PERCONTR" THEN "PerContract" ELSE "SubsTypeTo") AND 
+                 MxItem.MxValue = ENTRY(liCount,icAllowedBundles) NO-LOCK NO-ERROR.
       IF NOT AVAIL MxItem THEN 
       DO:      
          CREATE MXItem.
          ASSIGN
             MXItem.MxSeq   = Matrix.MXSeq
             MXItem.MxValue = ENTRY(liCount,icAllowedBundles)
-            MXItem.MxName  = "PerContract".   
+            MXItem.MxName  = (IF icType = "PERCONTR" THEN "PerContract" ELSE "SubsTypeTo").   
       END.   
 
    END.
@@ -1472,3 +1477,4 @@ PROCEDURE pUpdateTMSParam:
    RETURN "".
 
 END PROCEDURE.
+

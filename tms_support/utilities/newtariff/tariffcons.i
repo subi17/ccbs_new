@@ -48,10 +48,9 @@
 &GLOBAL-DEFINE STC_BT  "BundlesForActivateOnSTC"
 &GLOBAL-DEFINE STC_SR  "ServicesForReCreateOnSTC"
 &GLOBAL-DEFINE CSF     "CopyServicesFromCliType"
-
+&GLOBAL-DEFINE MLT     "MainLineTariffs"
 
 &GLOBAL-DEFINE M_BB     "MobileBaseBundle"
-
 &GLOBAL-DEFINE FL_BB    "FixedLineBaseBundle"
 
 &GLOBAL-DEFINE BBP     "BBProfile"

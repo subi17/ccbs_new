@@ -50,6 +50,7 @@ DEFINE VARIABLE lcServicesForReCreateOnSTC               AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcCopyServicesFromCliType                AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcTariffType                             AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcPROFee                                 AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcMainLineTariffs                        AS CHARACTER NO-UNDO.
 
 /* Mobile Base Bundle Attributes */
 DEFINE VARIABLE lcMobile_BaseBundle                      AS CHARACTER NO-UNDO.
@@ -86,7 +87,7 @@ DEFINE TEMP-TABLE ttCliType NO-UNDO
     FIELD BundlesForActivateOnSTC   AS CHARACTER
     FIELD ServicesForReCreateOnSTC  AS CHARACTER
     FIELD CopyServicesFromCliType   AS CHARACTER 
-    FIELD TariffType                AS INTEGER
+    FIELD TariffType                AS INTEGER   
     INDEX IdxCliType IS UNIQUE PRIMARY CliType. 
    
 DEFINE STREAM TariffIn.
@@ -137,7 +138,8 @@ DO ON ERROR UNDO, THROW:
 END.
 /* ***************************  Main End  *************************** */ 
 PROCEDURE pSaveTariff:
-  DEFINE VARIABLE ldePROFee AS DECIMAL.
+  DEFINE VARIABLE ldePROFee AS DECIMAL NO-UNDO. 
+
   DO ON ERROR UNDO, THROW:
 
       FOR EACH ttCliType
@@ -170,7 +172,11 @@ PROCEDURE pSaveTariff:
          END.
 
          IF lcPaymentType = "Postpaid" AND lcMobile_BaseBundle > ""
-         THEN RUN pTMRItemValue IN h_config(lcCliType, lcMobile_BaseBundle, lcAllowedBundles).          
+         THEN RUN pTMRItemValue IN h_config(lcCliType, lcMobile_BaseBundle, lcAllowedBundles).   
+      
+         /* Creating Matrix and MXitem for Extra Line */ 
+         IF lcMainLineTariffs <> "" AND lcMobile_BaseBundle > "" 
+         THEN RUN pMatrixExtraLines IN h_config(ttClitype.CliType, 0, lcMainLineTariffs).
 
       END. /* FOR EACH ttCliType */
       CATCH e AS Progress.Lang.Error:
@@ -263,6 +269,7 @@ PROCEDURE pProcessTT:
               ttCliType.ServicesForReCreateOnSTC  = ""
               ttCliType.CopyServicesFromCliType   = lcCopyServicesFromCliType
               ttCliType.TariffType                = INTEGER(fTMSCValue("CLIType","TariffType",lcTariffType)).
+               
        END.
    END.
 
@@ -455,6 +462,11 @@ PROCEDURE pValidateData:
                ELSE 
                   ASSIGN lcFixedLine_BaseBundle = ttTariffCre.FieldValue.
             END.
+            WHEN {&MLT} THEN 
+            DO:
+              ASSIGN lcMainLineTariffs = ttTariffCre.FieldValue.
+            END. 
+             
          END CASE.             
       END. /* FOR EACH ttSubTypeCr */      
 
