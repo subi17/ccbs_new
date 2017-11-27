@@ -176,7 +176,7 @@ PROCEDURE pSaveTariff:
       
          /* Creating Matrix and MXitem for Extra Line */ 
          IF lcMainLineTariffs <> "" AND lcMobile_BaseBundle > "" 
-         THEN RUN pMatrixExtraLines IN h_config(ttClitype.CliType, 0, lcMainLineTariffs).
+         THEN RUN pMatrix IN h_config(ttClitype.CliType, lcMainLineTariffs, "EXTRALINE").
 
       END. /* FOR EACH ttCliType */
       CATCH e AS Progress.Lang.Error:
