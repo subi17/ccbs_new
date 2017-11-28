@@ -142,10 +142,10 @@ ADD-ROW:
            CLEAR FRAME lis NO-PAUSE.
            PROMPT-FOR PLMN.PLMN
            VALIDATE
-              (PLMN.PLMN NOT ENTERED OR
-              NOT CAN-FIND(PLMN using  PLMN.PLMN),
+              (PLMN.PLMN NOT ENTERED /* YOT-5462 OR
+              NOT CAN-FIND(PLMN using  PLMN.PLMN)*/,
               "PLMN Code " + string(INPUT PLMN.PLMN) +
-              " already exists !").
+              " already exists !"). /* text? */
            IF INPUT FRAME lis PLMN.PLMN = "" THEN
            LEAVE add-row.
            CREATE PLMN.
