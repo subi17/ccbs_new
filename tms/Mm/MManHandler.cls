@@ -102,7 +102,7 @@ CLASS Mm.MManHandler FINAL:
          WHEN "PushRecipient" THEN RETURN "pushRecipient".
          WHEN "TemplateId" THEN RETURN "templateId".
          WHEN "Language" THEN RETURN "language".
-         WHEN "MessageBody" THEN RETURN "messageBody".
+         WHEN "MessageBody" THEN RETURN "body".
          WHEN "Category" THEN RETURN "category".
          WHEN "SchedulingPolicy" THEN RETURN "schedulingPolicy".
          WHEN "SchedulingPriority" THEN RETURN "schedulingPriority".
