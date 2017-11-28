@@ -16,6 +16,7 @@
 {Syst/eventval.i}
 {Func/create_eventlog.i}
 {Func/matrix.i}
+{Func/extralinefunc.i}
 
 /* Function makes new MSOwner when subscription is partially
    terminated or mobile part order closed. Calling program must have
@@ -243,24 +244,6 @@ FUNCTION fIsConvergentAddLineOK RETURNS LOGICAL
                         "SubsTypeFrom;SubsTypeTo",
                         icCLITypeConv + ";" + icCLITypeAddLine,
                         OUTPUT lcResult) = 1 THEN
-      RETURN TRUE.
-   END.
-
-   RETURN FALSE.
-
-END FUNCTION.
-
-/* Check if extraline is allowed for the clitype (tariff) */ 
-FUNCTION fExtraLineAllowedForCLIType RETURNS LOGICAL
-   (icCLIType AS CHARACTER):
-
-   FOR EACH  Matrix NO-LOCK WHERE
-             Matrix.Brand  = Syst.Var:gcBrand   AND
-             Matrix.MXKey  = {&EXTRALINEMATRIX},
-       FIRST MXItem NO-LOCK WHERE
-             MXItem.MXSeq   = Matrix.MXSeq AND
-             MXItem.MXName  = "SubsTypeTo" AND
-             MXItem.MXValue = icCLIType:
       RETURN TRUE.
    END.
 
@@ -738,8 +721,9 @@ FUNCTION fIsAddLineOrder RETURNS LOGICAL
 END FUNCTION.
 
 
-FUNCTION fCheckExistingConvergentAvailForExtraLine RETURNS INTEGER
-   (INPUT icCustIDType       AS CHAR,
+FUNCTION fCheckConvergentAvailableForExtraLine RETURNS INTEGER
+   (INPUT icExtraLineCLIType AS CHAR,
+    INPUT icCustIDType       AS CHAR,
     INPUT icCustID           AS CHAR):
 
    DEFINE BUFFER Customer FOR Customer.
@@ -755,14 +739,17 @@ FUNCTION fCheckExistingConvergentAvailForExtraLine RETURNS INTEGER
              MobSub.Brand    = Syst.Var:gcBrand AND
              MobSub.CustNum  = Customer.CustNum        AND
              MobSub.PayType  = FALSE                   AND
+             MobSub.MultiSimID = 0                     AND
+             MobSub.MultiSimType = 0                   AND
             (MobSub.MsStatus = {&MSSTATUS_ACTIVE} OR
-             MobSub.MsStatus = {&MSSTATUS_BARRED})     AND
-            (MobSub.MultiSimID = 0 OR
-             MobSub.MultiSimType <> {&MULTISIMTYPE_PRIMARY})             
+             MobSub.MsStatus = {&MSSTATUS_BARRED})
        BY MobSub.ActivationTS:
 
-       IF NOT fExtraLineAllowedForCLIType(MobSub.CLIType)
-       THEN NEXT.
+       IF icExtraLineCLIType > ""
+       THEN IF NOT fCLITypeAllowedForExtraLine(MobSub.CLIType, icExtraLineCLIType)
+            THEN NEXT.
+       ELSE IF NOT fCLITypeIsMainLine(MobSub.CLIType)
+            THEN NEXT.
 
        FIND LAST Order NO-LOCK WHERE 
                  Order.MsSeq      = MobSub.MsSeq              AND 
@@ -786,8 +773,9 @@ FUNCTION fCheckExistingConvergentAvailForExtraLine RETURNS INTEGER
 END FUNCTION.
 
 FUNCTION fCheckOngoingConvergentAvailForExtraLine RETURNS INTEGER
-   (INPUT icCustIDType      AS CHAR,
-    INPUT icCustID          AS CHAR):
+   (INPUT icExtraLineCLIType AS CHAR,
+    INPUT icCustIDType       AS CHAR,
+    INPUT icCustID           AS CHAR):
    
    DEFINE BUFFER OrderCustomer FOR OrderCustomer.
    DEFINE BUFFER Order         FOR Order.
@@ -808,8 +796,11 @@ FUNCTION fCheckOngoingConvergentAvailForExtraLine RETURNS INTEGER
             OrderFusion.Brand   = Syst.Var:gcBrand AND
             OrderFusion.OrderID = Order.OrderID           BY Order.CrStamp:
 
-      IF NOT fExtraLineAllowedForCLIType(Order.CLIType)
-      THEN NEXT.
+       IF icExtraLineCLIType > ""
+       THEN IF NOT fCLITypeAllowedForExtraLine(Order.CLIType, icExtraLineCLIType)
+            THEN NEXT.
+       ELSE IF NOT fCLITypeIsMainLine(Order.CLIType)
+            THEN NEXT.
 
       IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN NEXT.
  

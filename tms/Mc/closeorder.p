@@ -15,6 +15,7 @@
 {Func/fcreditreq.i}
 {Func/ordercancel.i}
 {Func/msisdn.i}
+{Func/extralinefunc.i}
 
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF INPUT PARAMETER ilSilent AS LOG NO-UNDO.
@@ -252,7 +253,7 @@ DO:
       If ongoing extra line is Closed, and if its associated main line is in 
       ongoing state then reset multisimid and multisimtype values. */
    ASSIGN lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
-          lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
+          lcExtraLineCLITypes     = fExtraLineCLITypes().
    IF lcExtraMainLineCLITypes                       NE "" AND
       LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) GT 0  AND 
       Order.MultiSimId                              NE 0  AND 

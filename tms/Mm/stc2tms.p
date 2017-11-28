@@ -73,8 +73,6 @@ DEF VAR ldeActStamp        AS DEC  NO-UNDO.
 
 DEF VAR ldaNextMonthActDate AS DATE NO-UNDO.
 DEF VAR ldNextMonthActStamp AS DEC  NO-UNDO.
-DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO.
-DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO.
 
 DEF BUFFER bOldType  FOR CLIType.
 DEF BUFFER bNewTariff FOR CLIType.
@@ -242,16 +240,13 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
       RETURN.
    END.
 
-   ASSIGN lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").   
-          lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
-
    RUN pInitialize.
    RUN pFeesAndServices.
    RUN pUpdateSubscription.
 
-   IF MobSub.MultiSIMID    > 0                            AND 
-      LOOKUP(CLIType.CLIType,lcExtraMainLineCLITypes) = 0 AND 
-      LOOKUP(CLIType.CLIType,lcExtraLineCLITypes)     = 0 THEN 
+   IF MobSub.MultiSIMID    > 0                AND 
+      NOT fCLITypeIsMainLine(CLIType.CLIType) AND 
+      NOT fCLITypeIsExtraLine(CLIType.CLIType) THEN 
       RUN pMultiSimSTC (INPUT ldtActDate).
    ELSE IF bOldTariff.LineType EQ {&CLITYPE_LINETYPE_MAIN} OR
            bNewTariff.LineType EQ {&CLITYPE_LINETYPE_ADDITIONAL} THEN
@@ -799,11 +794,10 @@ PROCEDURE pUpdateSubscription:
 
    /* Close extra line subscription discount, if Main line is moved away 
       from available extra lines related main lines */
-   IF lcExtraMainLineCLITypes                          NE "" AND 
-      LOOKUP(bOldType.CliType,lcExtraMainLineCLITypes) GT 0  AND 
-      LOOKUP(CLIType.CLIType,lcExtraMainLineCLITypes)  EQ 0  AND 
-      MobSub.MultiSimId                                NE 0  AND 
-      MobSub.MultiSimType                              EQ {&MULTISIMTYPE_PRIMARY} THEN  
+   IF fCLITypeIsMainLine(bOldType.CliType)    AND 
+      NOT fCLITypeIsMainLine(CLIType.CLIType) AND 
+      MobSub.MultiSimId                       NE 0  AND 
+      MobSub.MultiSimType                     EQ {&MULTISIMTYPE_PRIMARY} THEN  
    DO: 
       FIND FIRST lELMobSub NO-LOCK WHERE 
                  lELMobSub.MsSeq        EQ MobSub.MultiSimId         AND 
@@ -850,10 +844,9 @@ PROCEDURE pUpdateSubscription:
   
    /* Create extra line discount, if STC is done to extra line subscription type */
    /* Discount is created only when associated main line is active               */
-   IF lcExtraLineCLITypes                         NE "" AND 
-      LOOKUP(CLIType.CLIType,lcExtraLineCLITypes) GT 0  AND
-      MobSub.MultiSimId                           NE 0  AND
-      MobSub.MultiSimType                         EQ {&MULTISIMTYPE_EXTRALINE} THEN DO:
+   IF fCLITypeIsExtraLine(CLIType.CLIType) AND
+      MobSub.MultiSimId                    NE 0  AND
+      MobSub.MultiSimType                  EQ {&MULTISIMTYPE_EXTRALINE} THEN DO:
 
       FIND FIRST lMLMobSub EXCLUSIVE-LOCK WHERE 
                  lMLMobSub.MsSeq        EQ MobSub.MultiSimId   AND 
@@ -882,11 +875,10 @@ PROCEDURE pUpdateSubscription:
 
    /* If extra line subscription is moved away, THEN associated main line 
       multisimid AND multisimtype has be updated */
-   IF lcExtraLineCLITypes                          NE "" AND 
-      LOOKUP(bOldType.CliType,lcExtraLineCLITypes) GT 0  AND
-      LOOKUP(CLIType.CLIType,lcExtraLineCLITypes)  EQ 0  AND
-      MobSub.MultiSimId                            NE 0  AND
-      MobSub.MultiSimType                          EQ {&MULTISIMTYPE_EXTRALINE} THEN DO:
+   IF fCLITypeIsExtraLine(bOldType.CliType)    AND
+      NOT fCLITypeIsExtraLine(CLIType.CLIType) AND
+      MobSub.MultiSimId                        NE 0  AND
+      MobSub.MultiSimType                      EQ {&MULTISIMTYPE_EXTRALINE} THEN DO:
 
       FIND FIRST lMLMobSub EXCLUSIVE-LOCK WHERE 
                  lMLMobSub.MsSeq        EQ MobSub.MultiSimId       AND 
@@ -902,8 +894,7 @@ PROCEDURE pUpdateSubscription:
    /* Create extra line discount, if STC is done to main line subscription type */
    /* Discount is created only when associated extra line is active and not 
       associated to other main line                                             */
-   IF lcExtraMainLineCLITypes                         NE "" AND 
-      LOOKUP(CLIType.CLIType,lcExtraMainLineCLITypes) GT 0  THEN DO:
+   IF fCLITypeIsMainLine(CLIType.CLIType) THEN DO:
 
       FIND FIRST lELMobSub EXCLUSIVE-LOCK WHERE 
                  lELMobSub.Brand        EQ Syst.Var:gcBrand                   AND 
@@ -2069,8 +2060,8 @@ PROCEDURE pUpdateDSSAccount:
                IF LOOKUP(bOldType.CLIType,lcAllowedDSS2SubsType) > 0 AND
                   LOOKUP(CLIType.CLIType,lcAllowedDSS2SubsType)  > 0 THEN RETURN.
 
-               IF (LOOKUP(CLIType.CLIType,lcExtraMainLineCLITypes) > 0  OR
-                   LOOKUP(CLIType.CLIType,lcExtraLineCLITypes)     > 0) THEN 
+               IF (fCLITypeIsMainLine(CLIType.CLIType) OR
+                   fCLITypeIsExtraLine(CLIType.CLIType)) THEN 
                   IF NOT fCheckExtraLineMatrixSubscription(MobSub.MsSeq,
                                                            MobSub.MultiSimId,
                                                            MobSub.MultiSimType) THEN RETURN.  

@@ -30,6 +30,7 @@ Syst.Var:gcBrand = "1".
 {Func/email.i}
 {Mc/orderfusion.i}
 {Func/financed_terminal.i}
+{Func/extralinefunc.i}
 
 DEFINE VARIABLE lcLogFile          AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFileName         AS CHARACTER NO-UNDO.
@@ -385,14 +386,12 @@ FUNCTION fCheckForAdditionalORExtraMainLine RETURNS LOGICAL
    DEF VAR llgConvergentLine   AS LOG  NO-UNDO INITIAL FALSE.  
    DEF VAR llgExtraLine        AS LOG  NO-UNDO INITIAL FALSE.
    DEF VAR llgAdditionalLine   AS LOG  NO-UNDO INITIAL FALSE. 
-   DEF VAR lcExtraLineCLITypes AS CHAR NO-UNDO. 
    DEF VAR liOrderLoop         AS INT  NO-UNDO.
    DEF VAR lcTerminalBillCode  AS CHAR NO-UNDO INITIAL "". 
    DEF VAR lcMainCLIType       AS CHAR NO-UNDO INITIAL "".
 
    ASSIGN llDespachar         = FALSE
-          liMainOrderId       = 0
-          lcExtraLineCLITypes = fCParam("DiscountType","ExtraLine_CLITypes").
+          liMainOrderId       = 0.
    
    FIND FIRST bOrder NO-LOCK WHERE 
               bOrder.Brand   = Syst.Var:gcBrand AND 
@@ -413,9 +412,9 @@ FUNCTION fCheckForAdditionalORExtraMainLine RETURNS LOGICAL
    
       liMainOrderId = bOrder.OrderId.                  
    END.    
-   ELSE IF LOOKUP(bOrder.CliType,lcExtraLineCLITypes) > 0                         AND 
-                  bOrder.MultiSimId                  <> 0                         AND 
-                  bOrder.MultiSimType                 = {&MULTISIMTYPE_EXTRALINE} THEN DO:
+   ELSE IF fCLITypeIsExtraLine(bOrder.CliType) AND 
+           bOrder.MultiSimId   <> 0                         AND 
+           bOrder.MultiSimType  = {&MULTISIMTYPE_EXTRALINE} THEN DO:
      
       /* Check extraline associated mainline orderid is also included in the 
          current logistics file */

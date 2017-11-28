@@ -58,7 +58,6 @@ DEF BUFFER bOrdTemp  FOR Order.
 
 /* Extra line */
 DEFINE VARIABLE lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
-DEFINE VARIABLE lcExtraLineCLITypes     AS CHAR NO-UNDO. 
 DEFINE VARIABLE lcExtraLineDiscounts    AS CHAR NO-UNDO.
 DEFINE VARIABLE liExtraLineMsSeq        AS INT  NO-UNDO. 
 
@@ -177,7 +176,6 @@ END.
 
 ASSIGN 
    lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
-   lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes")
    lcExtraLineDiscounts    = fCParam("DiscountType","ExtraLine_Discounts").
 
 RUN pTerminate.
@@ -490,7 +488,7 @@ PROCEDURE pTerminate:
             /* If it is Extraline associated subscription */
             IF lcBundleId = "DSS2"                                  AND
                (LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
-                LOOKUP(MobSub.CLIType,lcExtraLineCLITypes)     > 0) THEN
+                fCLITypeIsExtraLine(MobSub.CLIType)) THEN
                 fUpdateDSSNewtorkForExtraLine(MobSub.MsSeq,
                                               MobSub.MultiSimId,
                                               MobSub.MultiSimType,
@@ -532,7 +530,7 @@ PROCEDURE pTerminate:
             /* If it is Extraline associated subscription */
             IF lcBundleID = "DSS2"                                  AND 
                (LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
-                LOOKUP(MobSub.CLIType,lcExtraLineCLITypes)     > 0) THEN
+                fCLITypeIsExtraLine(MobSub.CLIType)) THEN
                 fUpdateDSSNewtorkForExtraLine(MobSub.MsSeq,
                                               MobSub.MultiSimId,
                                               MobSub.MultiSimType,
@@ -1104,28 +1102,28 @@ PROCEDURE pTerminate:
    /* Close Extra line discount, if associated main line is fully OR partially terminated  */
    /* OR */
    /* Close Extra line discount, if extra line subscription is terminated */
-   IF (CAN-FIND(FIRST bCLIType NO-LOCK WHERE
-                      bCLIType.Brand      = Syst.Var:gcBrand          AND
-                      bCLIType.CLIType    = TermMobSub.CLIType               AND
-                      bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} AND 
-               LOOKUP(bCLIType.CLIType,lcExtraMainLineCLITypes) > 0)) OR
-      (CAN-FIND(FIRST bCLIType NO-LOCK WHERE
-                      bCLIType.Brand      = Syst.Var:gcBrand          AND
-                      bCLIType.CLIType    = TermMobSub.CLIType               AND
-                      bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND 
-                LOOKUP(bCLIType.CLIType,lcExtraLineCLITypes) > 0)) THEN
-   DO:
+   FIND bCLIType NO-LOCK WHERE
+        bCLIType.Brand      = Syst.Var:gcBrand          AND
+        bCLIType.CLIType    = TermMobSub.CLIType
+   NO-ERROR.
+   
+   IF AVAILABLE bCLIType AND
+      ( ( bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} AND
+          fCLITypeIsMainLine(bCLIType.CLIType) ) OR
+        ( bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND
+          fCLITypeIsExtraLine(bCLIType.CLIType) ) )
+   THEN DO:
 
-      IF LOOKUP(TermMobSub.CLIType,lcExtraMainLineCLITypes) > 0 THEN 
+      IF fCLITypeIsMainLine(TermMobSub.CLIType) THEN 
          liExtraLineMsSeq = TermMobSub.MultiSimId.
-      ELSE IF  LOOKUP(TermMobSub.CLIType,lcExtraLineCLITypes) > 0 THEN 
+      ELSE IF fCLITypeIsExtraLine(TermMobSub.CLIType) THEN 
          liExtraLineMsSeq = TermMobSub.MsSeq.
 
       FIND FIRST lELOrder NO-LOCK WHERE 
                  lELOrder.MsSeq        EQ liExtraLineMsSeq          AND           
                  lELOrder.MultiSimId   NE 0                         AND
                  lELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} AND
-          LOOKUP(lELOrder.CLIType,lcExtraLineCLITypes) GT 0         NO-ERROR.
+          fCLITypeIsExtraLine(lELOrder.CLIType)         NO-ERROR.
 
       IF AVAIL lELOrder THEN DO:
          FIND FIRST lELOrderAction NO-LOCK WHERE

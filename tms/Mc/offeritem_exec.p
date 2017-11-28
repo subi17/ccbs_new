@@ -428,8 +428,7 @@ END PROCEDURE.  /* pServicePackage */
 PROCEDURE pDiscountPlanMember:
 
    DEF VAR lcErrorReason           AS CHAR NO-UNDO.
-   DEF VAR lcDiscPlan              AS CHAR NO-UNDO.
-   DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO. 
+   DEF VAR lcDiscPlan              AS CHAR NO-UNDO. 
    DEF VAR lcExtraLineDiscounts    AS CHAR NO-UNDO. 
 
    IF LOOKUP(OfferItem.ItemKey,lcIPhoneDiscountRuleIds) > 0 THEN RETURN "".
@@ -489,13 +488,11 @@ PROCEDURE pDiscountPlanMember:
    END.
 
    /* If Extra line discount is defined in OrderAction, prevent creation of usual discount from Offer */
-   ASSIGN lcExtraLineCLITypes  = fCParam("DiscountType","ExtraLine_CLITypes")
-          lcExtraLineDiscounts = fCParam("DiscountType","ExtraLine_Discounts").
+   ASSIGN lcExtraLineDiscounts = fCParam("DiscountType","ExtraLine_Discounts").
 
-   IF lcExtraLineCLITypes                       NE ""                        AND
-      LOOKUP(Order.CLIType,lcExtraLineCLITypes) GT 0                         AND 
-      Order.MultiSimId                          NE 0                         AND 
-      Order.MultiSimType                        EQ {&MULTISIMTYPE_EXTRALINE} THEN 
+   IF fCLITypeIsExtraLine(Order.CLIType) AND 
+      Order.MultiSimId   NE 0                         AND 
+      Order.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} THEN 
    DO:
       IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
                         OrderAction.Brand    = Syst.Var:gcBrand                 AND

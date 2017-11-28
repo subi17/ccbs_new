@@ -79,9 +79,7 @@ DEF VAR liReqActTime   AS INT  NO-UNDO.
 DEF VAR ldeActivationTS AS DEC  NO-UNDO.
 DEF VAR ldaActDate AS DATE NO-UNDO. 
 DEF VAR lcMobileNumber AS CHAR NO-UNDO. 
-DEF VAR llgExtraLine   AS LOG  NO-UNDO INITIAL NO.
-DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
-DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO. 
+DEF VAR llgExtraLine   AS LOG  NO-UNDO INITIAL NO. 
 
 DEF BUFFER bInvCust        FOR Customer.
 DEF BUFFER bRefCust        FOR Customer.
@@ -249,9 +247,6 @@ ELSE DO:
       END.
    END.
 END.
-
-ASSIGN lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
-       lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
 
 /*YDR-1824
 AC1: Request activation time is used as a beginning of a subscription timestamps if the request handling time is the same day than activation date. 
@@ -692,8 +687,8 @@ ELSE DO:
       Mobsub.Icc        = Order.ICC
       Mobsub.imsi       = IMSI.IMSI WHEN AVAIL IMSI.
 
-      IF LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) > 0 OR 
-         LOOKUP(MobSub.CLIType,lcExtraLineCLITypes)     > 0 THEN 
+      IF fCLITypeIsMainLine(MobSub.CLIType) OR 
+         fCLITypeIsExtraLine(MobSub.CLIType) THEN 
       llgExtraLine      = YES.
 END.
 
@@ -889,7 +884,7 @@ IF NOT MobSub.PayType THEN DO:
       IF lcBundleId = {&DSS} OR 
         (lcBundleId = "DSS2"                                 AND
          LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType)   GT 0 AND 
-         LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) EQ 0) THEN
+         NOT fCLITypeIsMainLine(MobSub.CLIType) ) THEN
          RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
                                INPUT Mobsub.CLI,
                                INPUT MobSub.CustNum,

@@ -912,7 +912,6 @@ PROCEDURE pMsCustMove:
    DEF VAR liManTime    AS INT  NO-UNDO. 
    DEF VAR lcDate       AS CHAR NO-UNDO. 
    DEF VAR liOldAgrCust AS INT  NO-UNDO.
-   DEF VAR lcExtraLineCLITypes AS CHAR NO-UNDO. 
    DEF VAR lcExtraLineDisc     AS CHAR NO-UNDO. 
 
    DEF BUFFER bBillTarget FOR BillTarget.
@@ -1319,12 +1318,9 @@ PROCEDURE pMsCustMove:
 
    /* Extraline discount will be closed WITH last date of previous month 
       if ACC is done on Extraline subscription */
-   ASSIGN lcExtraLineCLITypes = fCParam("DiscountType","ExtraLine_CLITypes").
-
-   IF lcExtraLineCLITypes                        NE "" AND 
-      LOOKUP(MobSub.CliType,lcExtraLineCLITypes) GT 0  AND 
-      MobSub.MultiSimId                          GT 0  AND 
-      MobSub.MultiSimType                        EQ {&MULTISIMTYPE_EXTRALINE} THEN DO:
+   IF fCLITypeIsExtraLine(MobSub.CliType) AND 
+      MobSub.MultiSimId                   GT 0  AND 
+      MobSub.MultiSimType                 EQ {&MULTISIMTYPE_EXTRALINE} THEN DO:
 
       FIND FIRST lbMLMobSub EXCLUSIVE-LOCK WHERE 
                  lbMLMobSub.MsSeq        = MobSub.MultiSimId       AND

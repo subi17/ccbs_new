@@ -2012,10 +2012,10 @@ lcExtraLineCLITypes = fExtraLineCLITypes().
 
 IF LOOKUP(pcSubType,lcExtraLineCLITypes) > 0 THEN DO:
 
-   piMultiSimID = fCheckExistingConvergentAvailForExtraLine(lcIdtype, lcId). /* MainLine order id */
+   piMultiSimID = fCheckExistingConvergentAvailForExtraLine(pcSubType, lcIdtype, lcId). /* MainLine order id */
 
    IF piMultiSimID EQ 0
-   THEN piMultiSimID = fCheckOngoingConvergentAvailForExtraLine(lcIdtype, lcId) /* Ongoing order id */
+   THEN piMultiSimID = fCheckOngoingConvergentAvailForExtraLine(pcSubType, lcIdtype, lcId) /* Ongoing order id */
 
    piMultiSimType = {&MULTISIMTYPE_EXTRALINE}.
 
