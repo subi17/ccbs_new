@@ -57,7 +57,6 @@ DEF BUFFER bOrder    FOR Order.
 DEF BUFFER bOrdTemp  FOR Order.
 
 /* Extra line */
-DEFINE VARIABLE lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
 DEFINE VARIABLE lcExtraLineDiscounts    AS CHAR NO-UNDO.
 DEFINE VARIABLE liExtraLineMsSeq        AS INT  NO-UNDO. 
 
@@ -175,7 +174,6 @@ IF llDoEvent THEN DO:
 END.
 
 ASSIGN 
-   lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
    lcExtraLineDiscounts    = fCParam("DiscountType","ExtraLine_Discounts").
 
 RUN pTerminate.
@@ -487,7 +485,7 @@ PROCEDURE pTerminate:
 
             /* If it is Extraline associated subscription */
             IF lcBundleId = "DSS2"                                  AND
-               (LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
+               (fCLITypeIsMainLine(MobSub.CLIType) OR
                 fCLITypeIsExtraLine(MobSub.CLIType)) THEN
                 fUpdateDSSNewtorkForExtraLine(MobSub.MsSeq,
                                               MobSub.MultiSimId,
@@ -529,7 +527,7 @@ PROCEDURE pTerminate:
 
             /* If it is Extraline associated subscription */
             IF lcBundleID = "DSS2"                                  AND 
-               (LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
+               (fCLITypeIsMainLine(MobSub.CLIType) OR
                 fCLITypeIsExtraLine(MobSub.CLIType)) THEN
                 fUpdateDSSNewtorkForExtraLine(MobSub.MsSeq,
                                               MobSub.MultiSimId,

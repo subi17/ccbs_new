@@ -271,7 +271,6 @@ Syst.Var:katun = "NewtonRPC".
 {Mc/orderfusion.i}
 {Func/fixedlinefunc.i}
 {Func/profunc.i}
-{Func/extralinefunc.i}
 
 {Migration/migrationfunc.i}
 

@@ -30,7 +30,6 @@ Syst.Var:gcBrand = "1".
 {Func/email.i}
 {Mc/orderfusion.i}
 {Func/financed_terminal.i}
-{Func/extralinefunc.i}
 
 DEFINE VARIABLE lcLogFile          AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFileName         AS CHARACTER NO-UNDO.
