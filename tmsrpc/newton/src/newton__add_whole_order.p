@@ -459,8 +459,6 @@ DEF VAR lcItemParam AS CHAR NO-UNDO.
 DEF VAR llCreateDisc AS LOG NO-UNDO.
 
 /* Extra lines */
-DEF VAR lcExtraLineCLITypes    AS CHAR NO-UNDO. 
- 
 DEF BUFFER ExtraLineDiscountPlan FOR DiscountPlan.
 DEF BUFFER ExtraLineMainOrder    FOR Order.
 
@@ -2008,14 +2006,12 @@ END.
 
 /* Extra Lines Validations, 
    updating multisimid & multisimidtype for hard association */
-lcExtraLineCLITypes = fExtraLineCLITypes(). 
+IF fCLITypeIsExtraLine(pcSubType) THEN DO:
 
-IF LOOKUP(pcSubType,lcExtraLineCLITypes) > 0 THEN DO:
-
-   piMultiSimID = fCheckExistingConvergentAvailForExtraLine(pcSubType, lcIdtype, lcId). /* MainLine order id */
+   piMultiSimID = fCheckConvergentAvailableForExtraLine(pcSubType, lcIdtype, lcId). /* MainLine order id */
 
    IF piMultiSimID EQ 0
-   THEN piMultiSimID = fCheckOngoingConvergentAvailForExtraLine(pcSubType, lcIdtype, lcId) /* Ongoing order id */
+   THEN piMultiSimID = fCheckOngoingConvergentAvailForExtraLine(pcSubType, lcIdtype, lcId). /* Ongoing order id */
 
    piMultiSimType = {&MULTISIMTYPE_EXTRALINE}.
 
@@ -2125,7 +2121,7 @@ IF lcFixedLinePermanency > "" THEN DO:
 END.
 
 /* Extra line discount */
-IF LOOKUP(pcSubType,lcExtraLineCLITypes) > 0 THEN DO:
+IF fCLITypeIsExtraLine(pcSubType) THEN DO:
    
     /* Update Mainline multisimid and multisimtype values before 
        extra line discount orderaction record is created */
