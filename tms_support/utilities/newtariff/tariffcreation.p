@@ -18,6 +18,7 @@ Syst.Var:gcBrand = "1".
 {Syst/eventlog.i}
 {Func/ftransdir.i}
 {utilities/newtariff/tariffcons.i}
+{utilities/newtariff/tariffconfig.i}
 
 DEFINE INPUT  PARAMETER icBaseFile AS CHARACTER NO-UNDO. 
 DEFINE INPUT  PARAMETER icFile     AS CHARACTER NO-UNDO. 
@@ -29,7 +30,6 @@ DEFINE VARIABLE h_config            AS HANDLE    NO-UNDO.
 /* General Subscription Type Attributes */
 DEFINE VARIABLE lcCliType                                AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcCliName                                AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcTariffBundle                           AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcRatePlanAction                         AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcRatePlan                               AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcReferenceRatePlan                      AS CHARACTER NO-UNDO.
@@ -62,34 +62,6 @@ DEFINE TEMP-TABLE ttTariffCre NO-UNDO
    FIELD FieldName  AS CHARACTER 
    FIELD FieldValue AS CHARACTER.
 
-DEFINE TEMP-TABLE ttCliType NO-UNDO
-    FIELD CliType                   AS CHARACTER
-    FIELD CliName                   AS CHARACTER
-    FIELD RatePlan                  As CHARACTER
-    FIELD BaseBundle                AS CHARACTER
-    FIELD FixedLineBaseBundle       AS CHARACTER
-    FIELD WebStatusCode             AS INTEGER
-    FIELD StatusCode                AS INTEGER
-    FIELD PayType                   AS INTEGER 
-    FIELD UsageType                 AS INTEGER
-    FIELD LineType                  AS INTEGER
-    FIELD FixedLineType             AS INTEGER
-    FIELD FixedLineDownload         AS CHARACTER
-    FIELD FixedLineUpload           AS CHARACTER
-    FIELD Serviceclass              AS CHARACTER
-    FIELD CommercialFee             AS DECIMAL
-    FIELD CompareFee                AS DECIMAL
-    FIELD BundleType                AS LOGICAL
-    FIELD ParentTariff              AS CHARACTER
-    FIELD TariffBundle              AS CHARACTER    
-    FIELD AllowedBundles            AS CHARACTER
-    FIELD MobileBaseBundleDataLimit AS DECIMAL
-    FIELD BundlesForActivateOnSTC   AS CHARACTER
-    FIELD ServicesForReCreateOnSTC  AS CHARACTER
-    FIELD CopyServicesFromCliType   AS CHARACTER 
-    FIELD TariffType                AS INTEGER   
-    INDEX IdxCliType IS UNIQUE PRIMARY CliType. 
-   
 DEFINE STREAM TariffIn.
 DEFINE STREAM TariffLog.
 DEFINE STREAM TTransIn.
@@ -237,46 +209,9 @@ PROCEDURE pProcessTT:
    IF lcReferenceRatePlan > "" THEN    
        RUN pRatePlan IN h_config(lcRatePlan, lcCliName, lcReferenceRatePlan, lcRatePlanAction).   
 
-   IF lcTariffBundle > "" THEN
-   DO:
-       IF NOT CAN-FIND(FIRST CliType WHERE CliType.Brand = Syst.Var:gcBrand AND CliType.CliType = lcCliType NO-LOCK) THEN 
-       DO:
-           /* Main Tariff */
-           CREATE ttCliType.
-           ASSIGN
-              ttCliType.CliType                   = lcCliType
-              ttCliType.CliName                   = lcCliName
-              ttCliType.RatePlan                  = lcRatePlan              
-              ttCliType.BaseBundle                = ""
-              ttCliType.FixedLineBaseBundle       = ""
-              ttCliType.WebStatusCode             = INTEGER(fTMSCValue("CLIType","WebStatusCode",lcWebStatus)) 
-              ttCliType.StatusCode                = INTEGER(fTMSCValue("CLIType","StatusCode",lcSTCStatus)) 
-              ttCliType.PayType                   = INTEGER(fTMSCValue("CLIType","PayType",lcPaymentType)) 
-              ttCliType.UsageType                 = INTEGER(fTMSCValue("CLIType","UsageType",lcUsageType))  
-              ttCliType.LineType                  = INTEGER(fTMSCValue("CLIType","LineType",lcLineType)) 
-              ttCliType.FixedLineType             = INTEGER(fTMSCValue("CLIType","FixedLineType",lcFixLineType))                
-              ttCliType.FixedLineDownload         = ""
-              ttCliType.FixedLineUpload           = ""
-              ttCliType.BundleType                = True
-              ttCliType.Serviceclass              = lcServiceClass
-              ttCliType.CommercialFee             = DECIMAL(lcCommFee)
-              ttCliType.CompareFee                = DECIMAL(lcComparisonFee)              
-              ttCliType.TariffBundle              = ""        
-              ttCliType.ParentTariff              = ""      
-              ttCliType.AllowedBundles            = lcAllowedBundles
-              ttCliType.MobileBaseBundleDataLimit = 0
-              ttCliType.BundlesForActivateOnSTC   = ""
-              ttCliType.ServicesForReCreateOnSTC  = ""
-              ttCliType.CopyServicesFromCliType   = lcCopyServicesFromCliType
-              ttCliType.TariffType                = INTEGER(fTMSCValue("CLIType","TariffType",lcTariffType)).
-               
-       END.
-   END.
-
-   /* Normal Tariff / Tariff Bundle */
    CREATE ttCliType.
    ASSIGN
-      ttCliType.CliType                   = (IF lcTariffBundle > "" THEN lcTariffBundle ELSE lcCliType)
+      ttCliType.CliType                   = lcCliType
       ttCliType.CliName                   = lcCliName
       ttCliType.RatePlan                  = lcRatePlan
       ttCliType.BaseBundle                = lcMobile_BaseBundle 
@@ -285,20 +220,17 @@ PROCEDURE pProcessTT:
       ttCliType.StatusCode                = INTEGER(fTMSCValue("CLIType","StatusCode",lcSTCStatus)) 
       ttCliType.PayType                   = INTEGER(fTMSCValue("CLIType","PayType",lcPaymentType)) 
       ttCliType.UsageType                 = INTEGER(fTMSCValue("CLIType","UsageType",lcUsageType))  
-      ttCliType.LineType                  = INTEGER(fTMSCValue("CLIType","LineType",(IF lcTariffBundle > "" THEN "Additional" ELSE lcLineType))) 
+      ttCliType.LineType                  = INTEGER(fTMSCValue("CLIType","LineType",lcLineType)) 
       ttCliType.FixedLineType             = INTEGER(fTMSCValue("CLIType","FixedLineType",lcFixLineType))  
       ttCliType.FixedLineDownload         = lcFixedLineDownload
       ttCliType.FixedLineUpload           = lcFixedLineUpload
-      ttCliType.BundleType                = (IF lcTariffBundle > "" THEN True ELSE False)
       ttCliType.Serviceclass              = lcServiceClass
       ttCliType.CommercialFee             = DECIMAL(lcCommFee)
       ttCliType.CompareFee                = DECIMAL(lcComparisonFee)
-      ttCliType.TariffBundle              = (IF lcTariffBundle > "" THEN lcTariffBundle ELSE "")  
-      ttCliType.ParentTariff              = (IF lcTariffBundle > "" THEN lcCliType      ELSE "")  
-      ttCliType.AllowedBundles            = (IF lcTariffBundle > "" THEN ""             ELSE lcAllowedBundles)
+      ttCliType.AllowedBundles            = lcAllowedBundles
       ttCliType.BundlesForActivateOnSTC   = lcBundlesForActivateOnSTC
       ttCliType.ServicesForReCreateOnSTC  = lcServicesForReCreateOnSTC
-      ttCliType.CopyServicesFromCliType   = (IF lcTariffBundle > "" THEN "" ELSE lcCopyServicesFromCliType)
+      ttCliType.CopyServicesFromCliType   = lcCopyServicesFromCliType
       ttClitype.TariffType                = INTEGER(fTMSCValue("CLIType","TariffType",lcTariffType)). 
     
     RETURN "".
@@ -308,7 +240,6 @@ END PROCEDURE.
 PROCEDURE pValidateData:
 
    DEFINE VARIABLE llgPostPaid         AS LOGICAL   NO-UNDO.
-   DEFINE VARIABLE llgTrafficBundle    AS LOGICAL   NO-UNDO.
 
    DO ON ERROR UNDO, THROW:
 
@@ -325,13 +256,6 @@ PROCEDURE pValidateData:
             END.
             WHEN {&TN} THEN 
                ASSIGN lcCliName = ttTariffCre.FieldValue.
-            WHEN {&TB} THEN 
-            DO:
-               IF ttTariffCre.FieldValue NE "" THEN 
-                  ASSIGN 
-                     llgTrafficBundle = YES
-                     lcTariffBundle   = ttTariffCre.FieldValue.          
-            END.      
             WHEN {&TT} THEN 
             DO:
                IF (ttTariffCre.FieldValue EQ "") OR LOOKUP(ttTariffCre.FieldValue,{&TARIFFTYPE}) EQ 0 THEN
@@ -446,22 +370,15 @@ PROCEDURE pValidateData:
                ELSE 
                   ASSIGN lcReferenceRatePlan = ttTariffCre.FieldValue.
             END.
+
             /* Mobile */ 
-            WHEN {&M_BB} THEN 
-            DO:
-               IF ttTariffCre.FieldValue NE "" AND llgTrafficBundle THEN                
-                  UNDO, THROW NEW Progress.Lang.AppError("Wrong BaseBundle data available", 1).
-               ELSE 
-                  ASSIGN lcMobile_BaseBundle = ttTariffCre.FieldValue.
-            END.
+            WHEN {&M_BB}
+            THEN ASSIGN lcMobile_BaseBundle = ttTariffCre.FieldValue.
+
             /* FixedLine */
-            WHEN {&FL_BB} THEN 
-            DO:
-               IF ttTariffCre.FieldValue NE "" AND llgTrafficBundle THEN                
-                  UNDO, THROW NEW Progress.Lang.AppError("Wrong BaseBundle data available", 1).
-               ELSE 
-                  ASSIGN lcFixedLine_BaseBundle = ttTariffCre.FieldValue.
-            END.
+            WHEN {&FL_BB}
+            THEN  ASSIGN lcFixedLine_BaseBundle = ttTariffCre.FieldValue.
+
             WHEN {&MLT} THEN 
             DO:
               ASSIGN lcMainLineTariffs = ttTariffCre.FieldValue.
@@ -487,7 +404,6 @@ PROCEDURE pValidateData:
          UNDO, THROW NEW Progress.Lang.AppError("Reference Rateplan doesn't exists, which is contradicting with Rateplan action", 1).
 
       ASSIGN 
-         llgTrafficBundle  = NO
          llgPostPaid       = NO.
    END.
 

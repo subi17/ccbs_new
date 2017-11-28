@@ -27,7 +27,6 @@
 
 &GLOBAL-DEFINE CT      "CLIType"  
 &GLOBAL-DEFINE TN      "TariffName"
-&GLOBAL-DEFINE TB      "TariffBundle"
 &GLOBAL-DEFINE TT      "TariffType"
 &GLOBAL-DEFINE WS      "WebStatus"
 &GLOBAL-DEFINE STCS    "STCStatus"
