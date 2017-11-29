@@ -19,6 +19,15 @@ Syst.Var:gcBrand = "1".
 {utilities/newtariff/tariffcons.i}
 {Func/fixedlinefunc.i}
 
+DEFINE TEMP-TABLE ttTariff NO-UNDO 
+   FIELD PriceList AS CHARACTER 
+   FIELD CCN       AS CHARACTER 
+   FIELD BDest     AS CHARACTER 
+   FIELD BillItem  AS CHARACTER 
+   FIELD PriceUnit AS CHARACTER
+   FIELD Price     AS CHARACTER 
+   FIELD SetupFee  AS CHARACTER.
+
 /* ********************  Functions  ******************** */
 FUNCTION fTMSCodeValue RETURNS CHARACTER 
              (INPUT lcTableName AS CHARACTER,
@@ -325,13 +334,42 @@ PROCEDURE pCustomRates:
 
 END PROCEDURE.
 
+PROCEDURE pGetBundle:
+   
+   DEFINE INPUT  PARAMETER icCLIType AS CHARACTER NO-UNDO.
+   DEFINE OUTPUT PARAMETER ocMobileBundle AS CHARACTER NO-UNDO.
+   DEFINE OUTPUT PARAMETER ocFixedLineBundle AS CHARACTER NO-UNDO.
+   
+   ASSIGN
+      ocMobileBundle = ""
+      ocFixedLineBundle = "".
+      
+   DEFINE BUFFER CLIType FOR CLIType.
+   
+   FIND CLIType NO-LOCK WHERE
+        CLIType.Brand    = Syst.Var:gcBrand AND
+        CLIType.CLIType = icCLIType
+   NO-ERROR.
+   
+   IF NOT AVAILABLE CLIType
+   THEN UNDO, THROW NEW Progress.Lang.AppError
+         (SUBSTITUTE("Unknown clitype '&1'", icCLIType), 1).
+         
+   ASSIGN
+      ocMobileBundle = CLIType.BaseBundle
+      ocFixedLineBundle = CLIType.FixedBundle.
+   
+END PROCEDURE.
+
 PROCEDURE pCLIType:
    DEFINE PARAMETER BUFFER ttCliType FOR ttCliType.
    
    DEFINE VARIABLE liFinalBT   AS INTEGER   NO-UNDO.
    DEFINE VARIABLE liFinalCR   AS INTEGER   NO-UNDO.
    DEFINE VARIABLE lcRatePlan  AS CHARACTER NO-UNDO.
-   DEFINE VARIABLE lcActionKey AS CHARACTER NO-UNDO.
+   
+   DEFINE VARIABLE lcFixedBundle AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcMobileBundle  AS CHARACTER NO-UNDO.
 
    DEFINE BUFFER bf_RequestAction     FOR RequestAction.
    DEFINE BUFFER bf_RequestActionRule FOR RequestActionRule.
@@ -348,17 +386,6 @@ PROCEDURE pCLIType:
             liFinalCR = CLIType.ContrType.        
       END.
       
-      /* In case of tariff bundle subscription type creation,  
-         main parent tariff billing target value will be assigned directly. 
-         Else, already available value has to be incremented by 1 */
-      IF ttCliType.TariffBundle NE "" THEN 
-      DO:   
-         FIND FIRST CLIType WHERE CLIType.Brand = Syst.Var:gcBrand AND CLIType.CLIType = ttCLIType.ParentTariff NO-LOCK NO-ERROR.                
-         IF AVAILABLE CLIType THEN
-            ASSIGN lcRatePlan = CLIType.PricePlan
-                   liFinalBT  = CLIType.BillTarget.               
-      END.
-       
       CREATE CLIType.
       ASSIGN 
          CLIType.Brand             = Syst.Var:gcBrand
@@ -381,7 +408,7 @@ PROCEDURE pCLIType:
          CLIType.ARAccNum          = (IF CLIType.PayType = 1 THEN 43000000 ELSE IF CLIType.PayType = 2 THEN 43001000 ELSE 0)
          CLIType.CommercialFee     = ttCliType.CommercialFee
          CLIType.CompareFee        = ttCliType.CompareFee
-         CliType.BundleType        = ttCliType.BundleType
+         CliType.BundleType        = FALSE
          CLIType.WebStatusCode     = ttCliType.WebStatusCode
          CLIType.StatusCode        = ttCliType.StatusCode         
          CLIType.LineType          = ttCliType.LineType
@@ -392,100 +419,100 @@ PROCEDURE pCLIType:
 
       IF ttCliType.CopyServicesFromCliType > "" THEN 
          RUN pCTServPac(ttCliType.BaseBundle, ttCliType.CliType, ttCliType.CopyServicesFromCliType).
-      
-      IF ttCliType.AllowedBundles > "" THEN
-      DO:
-          RUN pMatrix(ttCliType.CliType, 
-                      ((IF ttCliType.BaseBundle          > "" THEN (ttCliType.BaseBundle          + ",") ELSE "") + 
-                       (IF ttCliType.FixedLineBaseBundle > "" THEN (ttCliType.FixedLineBaseBundle + ",") ELSE "") + ttCliType.AllowedBundles)).
 
-          /* Matrix for additional lines */
-          FOR EACH MxItem WHERE MxItem.MxSeq   > 0                                 AND 
-                                MxItem.MxName  = "SubsTypeFrom"                    AND 
-                                MxItem.MxValue = ttCliType.CopyServicesFromCliType NO-LOCK:
+      RUN pMatrix(ttCliType.CliType, 
+                  ((IF ttCliType.BaseBundle         > "" THEN (ttCliType.BaseBundle          + ",") ELSE "") + 
+                  (IF ttCliType.FixedLineBaseBundle > "" THEN (ttCliType.FixedLineBaseBundle + ",") ELSE "")),
+                  "PERCONTR").
 
-              IF NOT CAN-FIND(FIRST bf_MxItem WHERE bf_MxItem.MxSeq   = MxItem.MXSeq      AND 
-                                                    bf_MxItem.MxName  = MxItem.MxName     AND 
-                                                    bf_MxItem.MxValue = ttCliType.CliType NO-LOCK) THEN
+      /* Matrix for additional lines */
+      RUN pMatrix(ttCliType.CopyServicesFromCliType,
+                  ttCliType.CliType,
+                  "ADDLINE").
 
-              DO:      
-                 CREATE bf_MXItem.
-                 ASSIGN
-                    bf_MXItem.MxSeq   = MxItem.MXSeq
-                    bf_MXItem.MxValue = ttCliType.CliType
-                    bf_MXItem.MxName  = MxItem.MxName.   
-              END.   
-          END.
-      END.
+      /* Should we also have this additional lines matrix for mobile only (ALFMO-5)?     
+      IF CliType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}
+      THEN RUN pMatrix(ttCliType.CopyServicesFromCliType,
+                       ttCliType.CliType,
+                       "ADDLINEMH").
+      */
 
-      IF ttCliType.TariffBundle = "" THEN    
-         RUN pSLGAnalyse(ttCliType.CliType, 
-                         ttCliType.CopyServicesFromCliType, 
+      IF ttCliType.AllowedBundles > ""
+      THEN RUN pMatrix(ttCliType.CliType, 
+                      ttCliType.AllowedBundles),
+                      "PERCONTR").
+
+      RUN pSLGAnalyse(ttCliType.CliType, 
+                      ttCliType.CopyServicesFromCliType, 
+                      ttCliType.BaseBundle, 
+                      ttCliType.FixedLineBaseBundle, 
+                      ttCliType.AllowedBundles,
+                      (ttCliType.PayType = 2)).         
+
+      RUN pRequestAction(ttCliType.CliType, 
+                         (ttCliType.PayType = 1),
                          ttCliType.BaseBundle, 
                          ttCliType.FixedLineBaseBundle, 
-                         ttCliType.AllowedBundles,
-                         (ttCliType.PayType = 2)).         
+                         ttCliType.BundlesForActivateOnSTC, 
+                         ttCliType.ServicesForReCreateOnSTC). 
 
-      IF ttCliType.BundleType = False THEN
-      DO:
-         RUN pRequestAction(ttCliType.CliType, 
-                            (ttCliType.PayType = 1),
-                            ttCliType.BaseBundle, 
-                            ttCliType.FixedLineBaseBundle, 
-                            ttCliType.BundlesForActivateOnSTC, 
-                            ttCliType.ServicesForReCreateOnSTC). 
+      /* Note! It is not guaranteed as the matrix and requestactions
+               are configure properly as the additional bundle list
+               might have entries which requestaction (copyservices clitype) 
+               doesn't have and vice versa. */
+      RUN pGetBundle(INPUT ttCliType.CopyServicesFromCliType,
+                     OUTPUT lcMobileBundle,
+                     OUTPUT lcFixedBundle).
 
-         /* Copy request action rules */
-         FOR EACH Requestaction NO-LOCK WHERE Requestaction.Clitype = ttCliType.CopyServicesFromCliType:
+      /* Copy request action rules */
+      FOR EACH Requestaction NO-LOCK WHERE Requestaction.Clitype = ttCliType.CopyServicesFromCliType:
+          
+          IF (lcMobileBundle > "" AND Requestaction.ActionKey EQ lcMobileBundle) OR
+             (lcFixedBundle  > "" AND Requestaction.ActionKey EQ lcFixedBundle)
+          THEN NEXT.
 
-             ASSIGN lcActionKey = Requestaction.ActionKey. 
-             IF Requestaction.ActionType = "DayCampaign" AND Requestaction.ActionKey BEGINS "CONTFH" THEN 
-                 ASSIGN lcActionKey = ttCliType.FixedLineBaseBundle.
+          IF NOT CAN-FIND(FIRST bf_RequestAction WHERE bf_RequestAction.Brand      = Syst.Var:gcBrand                  AND
+                                                       bf_RequestAction.CliType    = ttCliType.CliType        AND
+                                                       bf_RequestAction.ReqType    = Requestaction.ReqType    AND
+                                                       bf_RequestAction.ValidTo   >= TODAY                    AND 
+                                                       bf_RequestAction.PayType    = Requestaction.PayType    AND
+                                                       bf_RequestAction.ActionType = Requestaction.ActionType AND
+                                                       bf_RequestAction.ActionKey  = Requestaction.ActionKey   AND
+                                                       bf_RequestAction.Action     = Requestaction.Action     NO-LOCK) THEN
+          DO:
+              CREATE bf_RequestAction.
+              ASSIGN     
+                 bf_RequestAction.Brand           = Syst.Var:gcBrand
+                 bf_RequestAction.RequestActionID = fGetNextRequestActionSequence()
+                 bf_RequestAction.ReqType         = Requestaction.ReqType
+                 bf_RequestAction.CLIType         = ttCliType.CliType
+                 bf_RequestAction.PayType         = Requestaction.PayType
+                 bf_RequestAction.Action          = Requestaction.Action
+                 bf_RequestAction.ActionKey       = Requestaction.ActionKey
+                 bf_RequestAction.ActionType      = Requestaction.ActionType           
+                 bf_RequestAction.ValidFrom       = TODAY
+                 bf_RequestAction.ValidTo         = DATE(12,31,2049). 
 
-             IF NOT CAN-FIND(FIRST bf_RequestAction WHERE bf_RequestAction.Brand      = Syst.Var:gcBrand                  AND
-                                                          bf_RequestAction.CliType    = ttCliType.CliType        AND
-                                                          bf_RequestAction.ReqType    = Requestaction.ReqType    AND
-                                                          bf_RequestAction.ValidTo   >= TODAY                    AND 
-                                                          bf_RequestAction.PayType    = Requestaction.PayType    AND
-                                                          bf_RequestAction.ActionType = Requestaction.ActionType AND
-                                                          bf_RequestAction.ActionKey  = lcActionKey              AND
-                                                          bf_RequestAction.Action     = Requestaction.Action     NO-LOCK) THEN
-             DO:
-                 CREATE bf_RequestAction.
-                 ASSIGN     
-                    bf_RequestAction.Brand           = Syst.Var:gcBrand
-                    bf_RequestAction.RequestActionID = fGetNextRequestActionSequence()
-                    bf_RequestAction.ReqType         = Requestaction.ReqType
-                    bf_RequestAction.CLIType         = ttCliType.CliType
-                    bf_RequestAction.PayType         = Requestaction.PayType
-                    bf_RequestAction.Action          = Requestaction.Action
-                    bf_RequestAction.ActionKey       = lcActionKey
-                    bf_RequestAction.ActionType      = Requestaction.ActionType           
-                    bf_RequestAction.ValidFrom       = TODAY
-                    bf_RequestAction.ValidTo         = DATE(12,31,2049). 
+              FOR EACH RequestActionRule WHERE RequestActionRule.RequestActionID = Requestaction.RequestActionID NO-LOCK:
 
-                 FOR EACH RequestActionRule WHERE RequestActionRule.RequestActionID = Requestaction.RequestActionID NO-LOCK:
-
-                     IF NOT CAN-FIND(FIRST bf_RequestActionRule WHERE 
-                                           bf_RequestActionRule.RequestActionid = RequestActionRule.RequestActionID AND 
-                                           bf_RequestActionRule.ParamField      = RequestActionRule.ParamField      AND 
-                                           bf_RequestActionRule.ToDate          >= TODAY                            NO-LOCK) THEN 
-                     DO:                                                                     
-                         CREATE bf_RequestActionRule.
-                         ASSIGN
-                             bf_RequestActionRule.RequestActionid = RequestActionRule.RequestActionID
-                             bf_RequestActionRule.ParamField      = RequestActionRule.ParamField
-                             bf_RequestActionRule.ParamValue      = RequestActionRule.ParamValue
-                             bf_RequestActionRule.ExclParamValue  = RequestActionRule.ExclParamValue
-                             bf_RequestActionRule.FromDate        = TODAY
-                             bf_RequestActionRule.ToDate          = DATE(12,31,2049).
-                     END.
-                         
-                 END.    
-             END.
-         END.
-
-      END.   
+                  IF NOT CAN-FIND(FIRST bf_RequestActionRule WHERE 
+                                        bf_RequestActionRule.RequestActionid = RequestActionRule.RequestActionID AND 
+                                        bf_RequestActionRule.ParamField      = RequestActionRule.ParamField      AND 
+                                        bf_RequestActionRule.ToDate          >= TODAY                            NO-LOCK) THEN 
+                  DO:                                                                     
+                      CREATE bf_RequestActionRule.
+                      ASSIGN
+                          bf_RequestActionRule.RequestActionid = RequestActionRule.RequestActionID
+                          bf_RequestActionRule.ParamField      = RequestActionRule.ParamField
+                          bf_RequestActionRule.ParamValue      = RequestActionRule.ParamValue
+                          bf_RequestActionRule.ExclParamValue  = RequestActionRule.ExclParamValue
+                          bf_RequestActionRule.FromDate        = TODAY
+                          bf_RequestActionRule.ToDate          = DATE(12,31,2049).
+                  END.
+                      
+              END.    
+          END.
+      END.
 
       IF NOT (CliType.FixedLineDownload > "" OR CliType.FixedLineUpload > "") THEN /* Non-convergent */
       DO:
@@ -1314,19 +1341,20 @@ END PROCEDURE.
 PROCEDURE pMatrix:
    DEFINE INPUT PARAMETER icCLIType          AS CHARACTER NO-UNDO.    
    DEFINE INPUT PARAMETER icAllowedBundles   AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icType             AS CHARACTER NO-UNDO. /* ("PERCONTR"|"EXTRALINE") */
 
    DEFINE VARIABLE liCount AS INTEGER NO-UNDO.
 
-   FIND FIRST Matrix WHERE Matrix.Brand = Syst.Var:gcBrand AND Matrix.MXKey = "PERCONTR" AND Matrix.MxName = icCLIType NO-LOCK NO-ERROR.
+   FIND FIRST Matrix WHERE Matrix.Brand = Syst.Var:gcBrand AND Matrix.MXKey = icType AND Matrix.MxName = icCLIType NO-LOCK NO-ERROR.
    IF NOT AVAIL Matrix THEN 
    DO:
        CREATE Matrix.
        ASSIGN
           Matrix.Brand  = Syst.Var:gcBrand
           Matrix.MXSeq  = fGetNextMXSeq()
-          Matrix.mxkey  = "PERCONTR"
+          Matrix.mxkey  = icType
           Matrix.mxname = icCLIType
-          Matrix.prior  = fGetNextMatrixPriority("PERCONTR")
+          Matrix.prior  = fGetNextMatrixPriority(icType)
           Matrix.mxres  = 1.
        
        CREATE MXItem.
@@ -1339,17 +1367,20 @@ PROCEDURE pMatrix:
    DO liCount = 1 TO NUM-ENTRIES(icAllowedBundles)
       ON ERROR UNDO, THROW:
       
-      IF LOOKUP(ENTRY(liCount,icAllowedBundles), "CONTDSL") > 0 THEN 
+      IF icType = "PERCONTR" AND LOOKUP(ENTRY(liCount,icAllowedBundles), "CONTDSL") > 0 THEN 
           NEXT.
       
-      FIND FIRST MxItem WHERE MxItem.MxSeq = Matrix.MXSeq AND MxItem.MxName = "PerContract" AND MxItem.MxValue = ENTRY(liCount,icAllowedBundles) NO-LOCK NO-ERROR.
+      FIND FIRST MxItem WHERE 
+                 MxItem.MxSeq   = Matrix.MXSeq AND 
+                 MxItem.MxName  = (IF icType = "PERCONTR" THEN "PerContract" ELSE "SubsTypeFrom") AND 
+                 MxItem.MxValue = ENTRY(liCount,icAllowedBundles) NO-LOCK NO-ERROR.
       IF NOT AVAIL MxItem THEN 
       DO:      
          CREATE MXItem.
          ASSIGN
             MXItem.MxSeq   = Matrix.MXSeq
             MXItem.MxValue = ENTRY(liCount,icAllowedBundles)
-            MXItem.MxName  = "PerContract".   
+            MXItem.MxName  = (IF icType = "PERCONTR" THEN "PerContract" ELSE "SubsTypeFrom").   
       END.   
 
    END.
@@ -1472,3 +1503,4 @@ PROCEDURE pUpdateTMSParam:
    RETURN "".
 
 END PROCEDURE.
+
