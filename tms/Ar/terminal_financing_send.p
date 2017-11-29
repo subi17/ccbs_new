@@ -245,7 +245,7 @@ FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
             FixedFee.BillCode NE "RVTERM" THEN NEXT ORDER_LOOP.
       END.
 
-      IF LOOKUP(Order.OrderChannel,"self,renewal") > 0 THEN ASSIGN
+      IF LOOKUP(Order.OrderChannel,"self,renewal,fusion_self") > 0 THEN ASSIGN
          lcFUC[1] = "332577543" 
          lcFUC[2] = "332577576".
       ELSE ASSIGN
