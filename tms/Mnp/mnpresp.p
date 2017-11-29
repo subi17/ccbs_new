@@ -887,7 +887,8 @@ PROCEDURE pHandleQueue:
                   RELEASE SIM.
             END.
             
-            IF Order.OrderChannel EQ "self" THEN
+            IF Order.OrderChannel EQ "self" OR
+               Order.OrderChannel EQ "fusion_self" THEN
                lcSMS = (IF MNPProcess.StatusCode = {&MNP_ST_ACON}
                         THEN "MNPCanAfterConf"
                         ELSE "MNPCanBeforeConf").
