@@ -1336,19 +1336,20 @@ PROCEDURE pFinalize:
                 Order.OrderType EQ {&ORDER_TYPE_STC}:
 
          IF Order.StatusCode EQ {&ORDER_STATUS_ONGOING} THEN DO:
-            FOR FIRST OrderCustomer WHERE
-                       OrderCustomer.brand EQ Syst.Var:gcBrand AND
-                       Ordercustomer.orderid EQ MsRequest.ReqIParam2 AND
-                       OrderCustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
-                       Ordercustomer.pro,
-                FIRST Customer WHERE
+            FOR FIRST OrderCustomer NO-LOCK WHERE
+                      OrderCustomer.brand EQ Syst.Var:gcBrand AND
+                      Ordercustomer.orderid EQ MsRequest.ReqIParam2 AND
+                      OrderCustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
+                      Ordercustomer.pro,
+                FIRST Customer NO-LOCK WHERE
                       Customer.brand EQ Syst.Var:gcbrand AND
                       Customer.orgid EQ Ordercustomer.custid AND
+                      customer.custidtype EQ Ordercustomer.CustIdType AND
                       customer.category NE Ordercustomer.category,
-                FIRST bMobsub WHERE
+                FIRST bMobsub NO-LOCK WHERE
                       bMobsub.brand EQ Syst.Var:gcbrand AND
                       bMobsub.custnum EQ customer.custnum AND
-                      bMobsub.msseq ne MsRequest.msseq NO-LOCK:
+                      bMobsub.msseq ne MsRequest.msseq:
                llmigrationNeeded = TRUE.
             END.         
             /* update customer data */
@@ -1375,11 +1376,21 @@ PROCEDURE pFinalize:
                                    lcResult).
                END.
             END.
+			
+			FIND FIRST OrderCustomer NO-LOCK WHERE
+                    OrderCustomer.Brand EQ Syst.Var:gcBrand AND
+                    Ordercustomer.OrderID EQ MsRequest.ReqIParam2 AND
+                    OrderCustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL} AND
+                    OrderCustomer.TerritoryOwner NE "".
+				IF Avail OrderCustomer THEN DO:
+               FIND CURRENT Mobsub EXCLUSIVE-LOCK NO-ERROR.
+                  ASSIGN MobSub.TerritoryOwner = OrderCustomer.TerritoryOwner.
+               FIND CURRENT Mobsub NO-LOCK NO-ERROR.				
+				END.
             fSetOrderStatus(Order.OrderId,"6").  
             fMarkOrderStamp(Order.OrderID,
                             "Delivery",
                             Func.Common:mMakeTS()).
-
          END.
          ELSE Func.Common:mWriteMemo("MobSub",
               STRING(MobSub.MsSeq),
