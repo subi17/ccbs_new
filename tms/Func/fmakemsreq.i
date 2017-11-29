@@ -518,6 +518,9 @@ FUNCTION fAddressRequest RETURNS INTEGER
     OUTPUT ocResult       AS CHAR):
 
    DEF VAR liReqCreated AS INT NO-UNDO.
+   DEF BUFFER blMobsub FOR Mobsub.
+   DEF BUFFER bACC FOR MsRequest.
+   DEF BUFFER Customer FOR Customer.
   
    DEFINE VARIABLE iiZip AS INTEGER NO-UNDO. 
    DEFINE VARIABLE iiRegion AS INTEGER NO-UNDO. 
@@ -593,6 +596,22 @@ FUNCTION fAddressRequest RETURNS INTEGER
 
    IF AVAIL MsRequest THEN DO:
       ocResult = "Request creation not allowed due to business rules".
+      RETURN 0.
+   END.
+
+   IF icRegion ne "00" AND NOT AVAIL Region THEN DO:
+      ocResult = SUBST("Unknown region &1",icRegion).
+      RETURN 0.
+   END.
+
+   FOR EACH blMobSub NO-LOCK WHERE
+            blMobSub.Brand   = Syst.Var:gcBrand AND
+            blMobSub.AgrCust = iiCustNum,
+      FIRST bACC NO-LOCK WHERE
+            bACC.MsSeq   = blMobSub.MsSeq AND
+            bACC.ReqType = 10           AND
+            LOOKUP(STRING(bACC.ReqStatus),"2,4,9") = 0:
+      ocResult = "Pending ACC on subscription " + STRING(blMobSub.MsSeq).
       RETURN 0.
    END.
 
