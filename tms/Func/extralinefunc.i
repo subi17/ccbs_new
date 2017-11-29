@@ -17,11 +17,11 @@ FUNCTION fCLITypeAllowedForExtraLine RETURNS LOGICAL
              Matrix.MXKey  = {&EXTRALINEMATRIX},
        FIRST MXItemExtra NO-LOCK WHERE
              MXItemExtra.MXSeq   = Matrix.MXSeq   AND
-             MXItemExtra.MXName  = "SubsTypeFrom" AND
+             MXItemExtra.MXName  = "SubsTypeTo" AND
              MXItemExtra.MXValue = icExtraLineCLIType,       
        FIRST MXItem NO-LOCK WHERE
              MXItem.MXSeq   = Matrix.MXSeq AND
-             MXItem.MXName  = "SubsTypeTo" AND
+             MXItem.MXName  = "SubsTypeFrom" AND
              MXItem.MXValue = icCLIType:
       RETURN TRUE.
    END.
@@ -41,7 +41,7 @@ FUNCTION fCLITypeIsExtraLine RETURNS LOGICAL
              Matrix.MXKey  = {&EXTRALINEMATRIX},
        FIRST MXItem NO-LOCK WHERE
              MXItem.MXSeq   = Matrix.MXSeq   AND
-             MXItem.MXName  = "SubsTypeFrom" AND
+             MXItem.MXName  = "SubsTypeTo" AND
              MXItem.MXValue = icExtraLineCLIType:
       RETURN TRUE.
    END.
@@ -60,7 +60,7 @@ FUNCTION fCLITypeIsMainLine RETURNS LOGICAL
              Matrix.MXKey  = {&EXTRALINEMATRIX},
        FIRST MXItem NO-LOCK WHERE
              MXItem.MXSeq   = Matrix.MXSeq AND
-             MXItem.MXName  = "SubsTypeTo" AND
+             MXItem.MXName  = "SubsTypeFrom" AND
              MXItem.MXValue = icCLIType:
       RETURN TRUE.
    END.
