@@ -635,12 +635,6 @@ PROCEDURE pCreateFMItem:
             (SUBSTITUTE("Values '&1' and '&2' to be defined if '&3' have a value",
              {&FMFC}, {&LMFC}, {&PRICELIST}), 1). 
 
-   IF DECIMAL(fGetFieldValue({&COMMFEE})) <= 0
-   THEN UNDO, THROW NEW Progress.Lang.AppError
-            (SUBSTITUTE("&1 value is mandatory and must have positive value" +
-                        " when '&2' have a value",
-                        {&COMMFEE}, {&PRICELIST}), 1). 
-   
    FIND FIRST FMItem NO-LOCK WHERE
       FMItem.Brand     = Syst.Var:gcBrand AND
       FMItem.FeeModel  = lcBillCode       AND
@@ -756,26 +750,29 @@ PROCEDURE pStoreBundle:
    IF DayCampaign.PayType = 2 THEN 
       RUN pDCServicePackage(lcBundle, "HSDPA", NO).
 
-   CREATE FeeModel.
-   ASSIGN 
-      FeeModel.Brand    = Syst.Var:gcBrand
-      FeeModel.FeeModel = fGetFieldValue({&MFBILLCODE})
-      FeeModel.FeeName  = fGetFieldValue({&BNAME})               
-      FeeModel.FMGroup  = 0.
+   IF DECIMAL(fGetFieldValue({&COMMFEE})) > 0
+   THEN DO:
+      CREATE FeeModel.
+      ASSIGN 
+         FeeModel.Brand    = Syst.Var:gcBrand
+         FeeModel.FeeModel = fGetFieldValue({&MFBILLCODE})
+         FeeModel.FeeName  = fGetFieldValue({&BNAME})               
+         FeeModel.FMGroup  = 0.
+   
+      fExport(icSpoolDir + "feemodel.d", HPD.HPDCommon:mDynExport(BUFFER FeeModel:HANDLE, " ")).
 
-   fExport(icSpoolDir + "feemodel.d", HPD.HPDCommon:mDynExport(BUFFER FeeModel:HANDLE, " ")).
-
-   /* NOTE! The following FMItem creation will only work if we are using
-            already existing pricelist (we have checked this earlier in
-            the code).
-            
-            TODO: Separate pricelist creation logic from tariff creation
-                  logic and run it before running this code.
-                  This way we could use also a new pricelist here.
-                  (then new pricelist is needed)
-   */
-   IF fGetFieldValue({&PRICELIST}) > ""
-   THEN RUN pCreateFMItem(fGetFieldValue({&PRICELIST})).
+      /* NOTE! The following FMItem creation will only work if we are using
+               already existing pricelist (we have checked this earlier in
+               the code).
+               
+               TODO: Separate pricelist creation logic from tariff creation
+                     logic and run it before running this code.
+                     This way we could use also a new pricelist here.
+                     (then new pricelist is needed)
+      */
+      IF fGetFieldValue({&PRICELIST}) > ""
+      THEN RUN pCreateFMItem(fGetFieldValue({&PRICELIST})).
+   END.
 
    /* It is earlier checked that the ServiceLimitGroup is not
       already available */
