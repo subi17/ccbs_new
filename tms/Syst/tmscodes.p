@@ -73,8 +73,8 @@ form
     TMSCodes.CodeGroup FORMAT "x(40)" 
     TMSCodes.CodeValue FORMAT "x(40)"
     TMSCodes.CodeName          
-    TMSCodes.ConfigValue 
-       FORMAT "X(60)"
+    TMSCodes.ConfigValue VIEW-AS FILL-IN SIZE 60 BY 1
+       FORMAT "X(100)"
        LABEL "Configuration"
     llUsed             
        FORMAT "Yes/No"   
