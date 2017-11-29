@@ -704,12 +704,27 @@ FIND FIRST OrderCustomer NO-LOCK WHERE
            OrderCustomer.OrderId = Order.OrderId                      AND
            OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
 
-IF AVAIL OrderCustomer THEN
+IF AVAIL OrderCustomer THEN DO:
    fActionOnAdditionalLines (OrderCustomer.CustIdType,
                              OrderCustomer.CustID,
                              Order.CLIType,
                              FALSE,
                              "RELEASE"). 
+
+   /*------------------------------------------------------------- 
+     New rule for extralines (29/12/2017):
+     A subscription type with "La Duo" is released once mobile 
+     part order of the Convergent product has been delivered.
+     https://kethor.qvantel.com/browse/DIAM-76
+   -------------------------------------------------------------*/
+   IF lcExtraMainLineCLITypes                       NE "" AND 
+      LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) GT 0  AND
+      Order.MultiSimId                              NE 0  AND 
+      Order.MultiSimType                            EQ {&MULTISIMTYPE_PRIMARY} THEN  
+      fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
+                               Order.OrderId,    /* Main line Order Id  */
+                               "RELEASE").       /* Action              */
+END.
 
 fSetOrderStatus(Order.OrderId,"6").  
 fMarkOrderStamp(Order.OrderID,
