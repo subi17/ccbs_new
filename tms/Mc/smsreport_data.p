@@ -152,7 +152,7 @@ FOR EACH Order WHERE
       WHEN "cc" OR WHEN "fusion_cc" then liCCSales = liCCSales + 1.
       WHEN "telesales" OR WHEN "fusion_telesales" OR 
           WHEN "telesales_pro" OR WHEN "fusion_telesales_pro" then liTeleSales = liTeleSales + 1.
-      WHEN "self" then liSelfSales = liSelfSales + 1.
+      WHEN "self" OR WHEN "fusion_self" then liSelfSales = liSelfSales + 1.
       WHEN "renewal" then liRenewal = liRenewal + 1.
       WHEN "renewal_telesales" or
       WHEN "renewal_ctc" then liRenewalTelesales = liRenewalTelesales  + 1.
@@ -224,7 +224,7 @@ FOR EACH Order NO-LOCK WHERE
       WHEN "cc" OR WHEN "fusion_cc" then liCCSalesCum = liCCSalesCum + 1.
       WHEN "telesales" OR WHEN "fusion_telesales"
          OR WHEN "telesales_pro" OR WHEN "fusion_telesales_pro" then liTeleSalesCum = liTeleSalesCum + 1.
-      WHEN "self" then liSelfSalesCum = liSelfSalesCum + 1.
+      WHEN "self" OR WHEN "fusion_self" then liSelfSalesCum = liSelfSalesCum + 1.
    END.
    
    IF Order.Referee ne "" THEN
