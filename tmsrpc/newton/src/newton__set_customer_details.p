@@ -19,8 +19,12 @@
             company_name;string;optional;
             coname;string;optional;
             street;string;optional;
-            zip;string;optional;
+            zip;string;optional;format must be numerical
+            region;string;optional;format must be numerical
             city;string;optional;
+            city_code;string;optional;address validation code
+            street_code;string;optional;address validation code
+            municipality_code;string;optional;address validation code
             language;string;optional;es_ES,es_CA,es_EU,es_GA,en or 1,2,3,4,5
             nationality;string;optional;
             bankaccount;string;optional;
@@ -85,8 +89,11 @@ DEF VAR pcMemoTitle AS CHARACTER NO-UNDO.
 DEF VAR pcMemoContent AS CHARACTER NO-UNDO. 
 DEF VAR liLanguage AS INT NO-UNDO. 
 DEF VAR liContactLanguage AS INT NO-UNDO. 
+DEF VAR liReq AS INT NO-UNDO. 
 DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
 DEFINE VARIABLE lhCustContact AS HANDLE NO-UNDO.
+
+DEF TEMP-TABLE ttCustomerReport NO-UNDO LIKE CustomerReport.
 
 IF validate_request(param_toplevel_id, "int,string,boolean,struct,struct,[struct]") EQ ? THEN
     RETURN.
@@ -114,7 +121,10 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 {newton/src/findtenant.i NO Common Customer CustNum piCustNum}
 
-Syst.Var:katun = "VISTA_" + scUser.
+IF scUser EQ "selfcare" THEN
+   Syst.Var:katun = scUser.
+ELSE 
+   Syst.Var:katun = "VISTA_" + scUser.
 
 /* Local variables */
 DEF VAR lcstruct AS CHAR NO-UNDO.
@@ -143,7 +153,9 @@ DEF VAR lcError AS CHAR NO-UNDO.
 DEF VAR lcMemoHostTable AS CHAR NO-UNDO INIT "Customer".
 DEF VAR liChargeType AS INT NO-UNDO.
 DEF VAR lcMemo    AS CHAR  NO-UNDO.
-lcMemo = "Agent" + CHR(255) + "VISTA".
+
+lcMemo = "Agent" + CHR(255) + (IF scUser EQ "selfcare" 
+                               THEN scUser ELSE "VISTA").
 
 ASSIGN
     lcCustomerData[1] = customer.HonTitle
@@ -189,7 +201,11 @@ lcDataFields = "title,lname,lname2,fname,coname,street,zip,city,region," +
                "language,nationality,bankaccount,country," +
                "email,sms_number,phone_number,person_id,city_code,street_code,"+
                "id_type,company_id,company_name," +
-               "birthday,company_foundationdate,new_subscription_grouping,payment_method". /* special list */
+               "birthday,company_foundationdate,new_subscription_grouping,payment_method".
+
+DEF VAR lcAddressValidtionFields AS CHAR NO-UNDO. 
+lcAddressValidtionFields = "street_code,city_code,municipality_code".
+
 lcMarketingFields = "mark_sms,mark_email,mark_post," +
                     "mark_sms_3rd,mark_email_3rd,mark_post_3rd," +
                     "mark_dont_share_personal_data".
@@ -199,7 +215,8 @@ lcContactCustFields = "title,fname,lname,lname2,street,zip,city,region" +
                       ",id_type,person_id,street_code,city_code,municipality_code".
 
 lcstruct = validate_request(pcstruct,
-        TRIM(lcDataFields + ",subscription_limit,subscription_act_limit," +
+        TRIM(lcDataFields + "," + lcAddressValidtionFields +
+              ",subscription_limit,subscription_act_limit," +
              lcMarketingFields, ",")).
 
 IF get_paramcount(pcCCStruct) > 0 THEN DO:
@@ -218,8 +235,6 @@ IF get_paramcount(pcCCStruct) > 0 THEN DO:
       ELSE liContactLanguage = INT(STRING(LOOKUP(lcc, {&languages}))).
    END.
 END.
-
-IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 DO lii = 1 TO NUM-ENTRIES(lcDataFields):
     
@@ -293,8 +308,6 @@ DO lii = 1 TO NUM-ENTRIES(lcDataFields):
     
     END.
 END.
-lcCustomerData[LOOKUP("region", lcDataFields)] =
-    SUBSTRING(lcCustomerData[LOOKUP("zip", lcDataFields)], 1, 2).
 DO lii = 1 TO NUM-ENTRIES(lcMarketingFields):
     IF LOOKUP(ENTRY(lii, lcMarketingFields), lcStruct) GT 0 THEN DO:
         llt = get_bool(pcstruct, ENTRY(lii, lcMarketingFields)).
@@ -322,6 +335,7 @@ DEF VAR litime AS INT NO-UNDO.
 DEF VAR ldePrepStcTs AS DEC NO-UNDO. 
 DEF VAR llBankAcctChange AS LOG NO-UNDO. 
 DEF VAR lcBankAccount AS CHAR NO-UNDO. 
+DEF VAR llEqual AS LOG NO-UNDO. 
 
 IF Customer.CustIdType = "CIF" THEN 
    lcOrgId = lcCustomerData[LOOKUP("company_id", lcDataFields)].
@@ -354,6 +368,10 @@ IF Customer.CustIdType NE "CIF" THEN DO:
          RETURN appl_err("Customer exists with same id").
    END.
 END.
+
+/* UPDATE BEGINS */
+CUST_UPDATE:
+DO TRANS:
 
 IF Customer.CustIdType = "CIF" THEN DO:
    
@@ -455,14 +473,26 @@ IF llCustomerChanged THEN DO:
     lhCustomer = BUFFER Customer:HANDLE.
     RUN StarEventInitialize(lhCustomer).
     RUN StarEventSetOldBuffer(lhCustomer).
+
+    DEF VAR llRegionChanged AS LOG NO-UNDO.
+    DEF VAR llAddressChanged AS LOG NO-UNDO. 
+
+    llRegionChanged = Customer.Region NE lcCustomerData[LOOKUP("region", lcDataFields)].
+    llAddressChanged = 
+       (customer.Address NE lcCustomerData[LOOKUP("street", lcDataFields)] OR
+        customer.PostOffice NE lcCustomerData[LOOKUP("city", lcDataFields)] OR
+        customer.Country NE lcCustomerData[LOOKUP("country", lcDataFields)] OR
+        customer.ZipCode NE lcCustomerData[LOOKUP("zip", lcDataFields)] OR
+        customer.Region NE lcCustomerData[LOOKUP("region", lcDataFields)]).
+
     FIND CURRENT Customer EXCLUSIVE-LOCK.
     ASSIGN
         customer.HonTitle = lcCustomerData[LOOKUP("title", lcDataFields)]
         customer.custname = lcCustomerData[LOOKUP("lname", lcDataFields)]
         customer.SurName2 = lcCustomerData[LOOKUP("lname2", lcDataFields)]
         customer.firstname = lcCustomerData[LOOKUP("fname", lcDataFields)]
-        customer.coname = lcCustomerData[LOOKUP("coname", lcDataFields)]
         customer.language = liLanguage
+        customer.coname = lcCustomerData[LOOKUP("coname", lcDataFields)]
         customer.nationality = lcCustomerData[LOOKUP("nationality", lcDataFields)]
         customer.SMSNumber = lcCustomerData[LOOKUP("sms_number", lcDataFields)]
         customer.Phone = lcCustomerData[LOOKUP("phone_number", lcDataFields)]
@@ -481,6 +511,78 @@ IF llCustomerChanged THEN DO:
         customer.BirthDay = ldBirthDay
         customer.InvoiceTargetRule = liInvoiceTargetRule
         customer.ChargeType = liChargeType.
+          
+   IF llAddressChanged THEN DO:
+       
+      CREATE ttCustomerReport.
+      ASSIGN
+         ttCustomerReport.StreetCode = get_string(pcstruct,"street_code")
+            WHEN LOOKUP("street_code",lcstruct) > 0
+         ttCustomerReport.CityCode = get_string(pcstruct,"city_code")
+            WHEN LOOKUP("city_code",lcstruct) > 0
+         ttCustomerReport.TownCode = get_string(pcstruct,"municipality_code") 
+            WHEN LOOKUP("municipality_code",lcstruct) > 0.
+
+      IF gi_xmlrpc_error NE 0 THEN UNDO CUST_UPDATE, RETURN.
+
+      ASSIGN
+         customer.Address    = lcCustomerData[LOOKUP("street", lcDataFields)]
+         customer.PostOffice = lcCustomerData[LOOKUP("city", lcDataFields)]
+         customer.Country    = lcCustomerData[LOOKUP("country", lcDataFields)]
+         customer.ZipCode    = lcCustomerData[LOOKUP("zip", lcDataFields)]
+         customer.Region     = lcCustomerData[LOOKUP("region", lcDataFields)].
+
+      IF llRegionChanged THEN
+         customer.InvGroup = fDefInvGroup(Customer.Region).
+   
+      liReq = fAddressRequest(
+         Customer.Custnum,
+         0,
+         Customer.Address,
+         Customer.ZipCode,
+         Customer.PostOffice,
+         Customer.Region,
+         Customer.Country,
+         Customer.Coname,
+         ttCustomerReport.StreetCode,
+         ttCustomerReport.CityCode,
+         ttCustomerReport.TownCode,
+         ({&REQUEST_SOURCE_NEWTON}),
+         0,
+         OUTPUT lcError).
+
+      IF liReq EQ 0 OR lcError NE "" THEN
+         UNDO CUST_UPDATE, RETURN appl_err(SUBST("Address change failed: &1", lcError)).
+      ELSE DO:
+         FIND FIRST MsRequest NO-LOCK WHERE
+                    MsRequest.MsRequest = liReq NO-ERROR.
+         IF AVAIL MsRequest THEN fReqStatus(2,"").
+      END.
+
+      FIND FIRST CustomerReport NO-LOCK WHERE
+                 CustomerReport.Custnum = customer.Custnum NO-ERROR.
+      
+      IF AVAIL CustomerReport THEN
+         BUFFER-COMPARE ttCustomerreport TO CustomerReport SAVE llEqual.
+      ELSE llEqual = (ttCustomerreport.TownCode EQ "" AND
+                      ttCustomerreport.CityCode EQ "" AND
+                      ttCustomerreport.StreetCode EQ "").
+
+      IF NOT llEqual THEN DO:
+         IF AVAIL CustomerReport THEN DO:
+            FIND CURRENT CustomerReport EXCLUSIVE-LOCK.
+            IF llDoEvent THEN RUN StarEventSetOldBuffer((BUFFER CustomerReport:HANDLE)). 
+            BUFFER-COPY ttCustomerreport EXCEPT Custnum TO CustomerReport.
+            IF llDoEvent THEN RUN StarEventMakeModifyEvent((BUFFER CustomerReport:HANDLE)). 
+         END. 
+         ELSE DO:
+            CREATE Customerreport.
+            Customerreport.Custnum = Customer.Custnum.
+            BUFFER-COPY ttCustomerreport EXCEPT Custnum TO CustomerReport.
+         END.
+      END.
+
+   END.
         
     /* Added check for BankAccount change, YDR-1811
       It's not allowed if customer has active PostPaid subscription OR
@@ -489,19 +591,21 @@ IF llCustomerChanged THEN DO:
       Also checking of BankAccount lenght. It can be empty (0) length too */
     lcBankAccount = TRIM(lcCustomerData[LOOKUP("bankaccount", lcDataFields)]).
     
-    IF LENGTH(lcBankAccount) = 0 AND 
-       NOT fChkBankAccChange(Customer.CustNum) THEN
-         RETURN appl_err("La cuenta bancaria no puede estar en blanco").
-    ELSE DO:
-      IF LENGTH(lcBankAccount) = 0 OR LENGTH(lcBankAccount) = 24 THEN DO:
-         IF customer.BankAcct = lcBankAccount
-         THEN llBankAcctChange = FALSE.
-         ELSE llBankAcctChange = TRUE.
+    IF Customer.BankAcct <> lcBankAccount THEN DO:
+       IF LENGTH(lcBankAccount) = 0 AND 
+          NOT fChkBankAccChange(Customer.CustNum) THEN
+            UNDO CUST_UPDATE, RETURN appl_err("La cuenta bancaria no puede estar en blanco").
+       ELSE DO:
+         IF LENGTH(lcBankAccount) = 0 OR LENGTH(lcBankAccount) = 24 THEN DO:
+            IF customer.BankAcct = lcBankAccount
+            THEN llBankAcctChange = FALSE.
+            ELSE llBankAcctChange = TRUE.
 
-         customer.BankAcct = lcBankAccount.
-      END.
-      ELSE
-         RETURN appl_err("Incorrect bank account length").
+            customer.BankAcct = lcBankAccount.
+         END.
+         ELSE
+            UNDO CUST_UPDATE, RETURN appl_err("Incorrect bank account length").
+       END.
     END.
     
     /* Electronic Invoice Project */
@@ -512,7 +616,7 @@ IF llCustomerChanged THEN DO:
           Customer.DelType EQ {&INV_DEL_TYPE_EMAIL_PENDING} THEN DO:
 
           IF lcNewEmailAdd = "" THEN
-             RETURN appl_err("Customer email address can not be blank because " +
+             UNDO CUST_UPDATE, RETURN appl_err("Customer email address can not be blank because " +
                              "customer's invoice delivery type is EMAIL").
 
           /* Cancel Ongoing Email Activation Request and create new */
@@ -533,7 +637,7 @@ IF llCustomerChanged THEN DO:
                                            INPUT 0, /* orderid */
                                            OUTPUT lcResult).
           IF liRequest = 0 THEN
-             RETURN appl_err("Customer email address can not be changed: " +
+             UNDO CUST_UPDATE, RETURN appl_err("Customer email address can not be changed: " +
                              lcResult).
 
           /* If Email already validated then mark DelType EMAIL */
@@ -569,7 +673,7 @@ IF llCustomerChanged THEN DO:
                                               INPUT 0, /* msseq */
                                               OUTPUT lcResult).
              IF liRequest = 0 THEN
-                RETURN appl_err("Customer email address can not be changed: " +
+                UNDO CUST_UPDATE, RETURN appl_err("Customer email address can not be changed: " +
                                 lcResult).
           END. /* IF liRequest = 0 THEN DO: */
 
@@ -612,10 +716,10 @@ IF LOOKUP("subscription_limit", lcStruct) > 0 THEN DO:
    ELSE DO:
       
       piMobSubLimit = INT(pcMobsubLimit) NO-ERROR.
-      IF ERROR-STATUS:ERROR THEN RETURN appl_err("Subscription limit must be integer").
+      IF ERROR-STATUS:ERROR THEN UNDO CUST_UPDATE, RETURN appl_err("Subscription limit must be integer").
 
       IF piMobsubLimit < 0 OR piMobsubLimit > 999 THEN 
-         RETURN appl_err(SUBST("Invalid subscription limit value &1", piMobsubLimit)).
+         UNDO CUST_UPDATE, RETURN appl_err(SUBST("Invalid subscription limit value &1", piMobsubLimit)).
       
       fGetLimit (Customer.Custnum, 0, {&LIMIT_TYPE_SUBQTY}, 0, 0, TODAY).
 
@@ -656,10 +760,10 @@ IF LOOKUP("subscription_act_limit", lcStruct) > 0 THEN DO:
       
       piMobSubActLimit = INT(pcMobsubActLimit) NO-ERROR.
       IF ERROR-STATUS:ERROR THEN
-         RETURN appl_err("Subscription activation limit must be integer").
+         UNDO CUST_UPDATE, RETURN appl_err("Subscription activation limit must be integer").
 
       IF piMobsubActLimit < 0 OR piMobsubActLimit > 999 THEN 
-         RETURN appl_err(SUBST("Invalid subscription activation limit value &1",
+         UNDO CUST_UPDATE, RETURN appl_err(SUBST("Invalid subscription activation limit value &1",
                                piMobsubActLimit)).
       
       /* Get original Subs. limit */
@@ -667,7 +771,7 @@ IF LOOKUP("subscription_act_limit", lcStruct) > 0 THEN DO:
                                       INPUT Customer.Category,
                                       OUTPUT llDefaultSubsLimit).
       IF piMobsubActLimit < piMobsubLimit THEN
-         RETURN appl_err("Subscription activation limit can not be less " +
+         UNDO CUST_UPDATE, RETURN appl_err("Subscription activation limit can not be less " +
                          "than subscription limit").
 
       fGetLimit (Customer.Custnum, 0, {&LIMIT_TYPE_SUBACTQTY}, 0, 0, TODAY).
@@ -719,8 +823,9 @@ IF pcMemoTitle NE "" OR
        Memo.MemoTitle = pcMemoTitle
        Memo.MemoText  = pcMemoContent.
 END.
+END.
 
 FINALLY:
-   END.
-
+   EMPTY TEMP-TABLE ttCustomerReport NO-ERROR.
+END.
 
