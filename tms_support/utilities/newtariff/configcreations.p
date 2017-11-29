@@ -367,7 +367,6 @@ PROCEDURE pCLIType:
    DEFINE VARIABLE liFinalBT   AS INTEGER   NO-UNDO.
    DEFINE VARIABLE liFinalCR   AS INTEGER   NO-UNDO.
    DEFINE VARIABLE lcRatePlan  AS CHARACTER NO-UNDO.
-   DEFINE VARIABLE lcActionKey AS CHARACTER NO-UNDO.
    
    DEFINE VARIABLE lcFixedBundle AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lcMobileBundle  AS CHARACTER NO-UNDO.
@@ -457,7 +456,7 @@ PROCEDURE pCLIType:
                          ttCliType.BundlesForActivateOnSTC, 
                          ttCliType.ServicesForReCreateOnSTC). 
 
-      /* Note! It is not guarateed as the matrix and requestactions
+      /* Note! It is not guaranteed as the matrix and requestactions
                are configure properly as the additional bundle list
                might have entries which requestaction (copyservices clitype) 
                doesn't have and vice versa. */
