@@ -427,6 +427,13 @@ IF lcNewStatus = {&ORDER_STATUS_NEW}                 OR
    lcNewStatus = {&ORDER_STATUS_MNP}                 OR 
    lcNewStatus = {&ORDER_STATUS_PENDING_MOBILE_LINE} THEN DO:
   
+   /*-----------------------------------------------------------
+     New rule for extralines (29/12/2017):
+     A subscription type with "La Duo" is released once mobile 
+     part order of the Convergent product has been delivered.
+     https://kethor.qvantel.com/browse/DIAM-76
+     So, this code is moved to Mm/createmobsub.p.  
+   
    lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").
 
    IF lcExtraMainLineCLITypes                       NE "" AND 
@@ -436,7 +443,8 @@ IF lcNewStatus = {&ORDER_STATUS_NEW}                 OR
       fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
                                Order.OrderId,    /* Main line Order Id  */
                                "RELEASE").       /* Action              */
-    
+   -----------------------------------------------------------*/    
+
    fActionOnAdditionalLines (OrderCustomer.CustIdType,
                              OrderCustomer.CustID,
                              Order.CLIType,      
