@@ -420,10 +420,15 @@ PROCEDURE pCLIType:
       IF ttCliType.CopyServicesFromCliType > "" THEN 
          RUN pCTServPac(ttCliType.BaseBundle, ttCliType.CliType, ttCliType.CopyServicesFromCliType).
 
-      RUN pMatrix(ttCliType.CliType, 
-                  ((IF ttCliType.BaseBundle         > "" THEN (ttCliType.BaseBundle          + ",") ELSE "") + 
-                  (IF ttCliType.FixedLineBaseBundle > "" THEN (ttCliType.FixedLineBaseBundle + ",") ELSE "")),
-                  "PERCONTR").
+      IF ttCliType.BaseBundle > ""
+      THEN RUN pMatrix(ttCliType.CliType, 
+                       ttCliType.BaseBundle,
+                       "PERCONTR").
+
+      IF ttCliType.FixedLineBaseBundle > ""
+      THEN RUN pMatrix(ttCliType.CliType, 
+                       ttCliType.FixedLineBaseBundle,
+                       "PERCONTR").
 
       /* Matrix for additional lines */
       RUN pMatrix(ttCliType.CopyServicesFromCliType,
@@ -439,8 +444,8 @@ PROCEDURE pCLIType:
 
       IF ttCliType.AllowedBundles > ""
       THEN RUN pMatrix(ttCliType.CliType, 
-                      ttCliType.AllowedBundles),
-                      "PERCONTR").
+                       ttCliType.AllowedBundles,
+                       "PERCONTR").
 
       RUN pSLGAnalyse(ttCliType.CliType, 
                       ttCliType.CopyServicesFromCliType, 
@@ -518,7 +523,7 @@ PROCEDURE pCLIType:
       DO:
          IF ttCLIType.PayType = 1 THEN 
          DO: 
-             RUN pUpdateTMSParam("ALL_POSTPAID_CONTRACTS",ttCliType.CliType).  
+             RUN pUpdateTMSParam("ALL_POSTPAID_CONTRACTS", ttCliType.CliType).  
              RUN pUpdateTMSParam("POSTPAID_DATA_CONTRACTS", ttCliType.CliType).
          END.
          /*TODO: Parent of Tariff bundle needs to be excluded */
