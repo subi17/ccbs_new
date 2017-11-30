@@ -177,6 +177,8 @@ FUNCTION fMNPCallAlarm RETURNS LOGICAL
    ELSE 
    DO:
       /* New behaviour for YDR-2660: delay rejection SMS manage by Message Manager */
+      IF INDEX(Mm.MManMessage:ParamKeyValue,"#CLI") > 0 THEN
+         Mm.MManMessage:ParamKeyValue = REPLACE(Mm.MManMEssage:ParamKeyValue,"#CLI",pcCli).
       RETURN Mm.MManMessage:mCreateMMLogSMS(pcCLI).
    END.
 
