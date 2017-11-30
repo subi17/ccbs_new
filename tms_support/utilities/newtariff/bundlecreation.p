@@ -25,8 +25,11 @@ DEFINE STREAM strexport.
 &GLOBAL-DEFINE BUNDLE "Bundle"
 &GLOBAL-DEFINE PRICELIST "PriceList"
 &GLOBAL-DEFINE DATALIMIT "DataLimit"
+&GLOBAL-DEFINE DATAMEMBER "DataMember"
 &GLOBAL-DEFINE VOICELIMIT "VoiceLimit"
+&GLOBAL-DEFINE VOICEMEMBER "VoiceMember"
 &GLOBAL-DEFINE BDESTLIMIT "BDestinationLimit"
+&GLOBAL-DEFINE BDESTMEMBER "BDestinationMember"
 &GLOBAL-DEFINE PAYTYPE "PaymentType"
 &GLOBAL-DEFINE MFBILLCODE "MonthlyFeeBillCode"
 &GLOBAL-DEFINE UPSELL "Upsell"
@@ -82,8 +85,11 @@ fCreatettBundle({&COMMFEE}, "DECIMAL", "FixedLine,Mobile", "", NO).
 fCreatettBundle({&FMFC}, "CHARACTER", "FixedLine,Mobile", "Full,Relative,UsageBased", NO).
 fCreatettBundle({&LMFC}, "CHARACTER", "FixedLine,Mobile", "Full,Relative,UsageBased", NO).
 fCreatettBundle({&DATALIMIT}, "DECIMAL", "Mobile", "", NO).
+fCreatettBundle({&DATAMEMBER}, "CHARACTER", "Mobile", "", NO).
 fCreatettBundle({&VOICELIMIT}, "DECIMAL", "FixedLine,Mobile", "", NO).
-fCreatettBundle({&BDESTLIMIT}, "DECIMAL", "FixedLine,Mobile", "", YES).
+fCreatettBundle({&VOICEMEMBER}, "DECIMAL", "FixedLine,Mobile", "", NO).
+fCreatettBundle({&BDESTLIMIT}, "DECIMAL", "FixedLine,Mobile", "", NO).
+fCreatettBundle({&BDESTMEMBER}, "DECIMAL", "FixedLine,Mobile", "", NO).
 fCreatettBundle({&FMDL}, "CHARACTER", "Mobile", "Full,Relative", YES).
 fCreatettBundle({&LMDL}, "CHARACTER", "Mobile", "Full,Relative", YES).
 fCreatettBundle({&FMVL}, "CHARACTER", "FixedLine,Mobile", "Full,Relative", YES). 
@@ -463,7 +469,7 @@ PROCEDURE pCreateServiceLimitTarget:
    CASE icLimitType:
       WHEN "Data"
       THEN ASSIGN
-              lcServiceLMembers = "14100001"
+              lcServiceLMembers = fGetFieldValue({&DATAMEMBER})
               lcInSideRate      = ServiceLimit.GroupCode + "_DATA_IN"
               lcOutSideRate     = ServiceLimit.GroupCode + "_DATA_OUT"
               liCCN             = 93
@@ -472,15 +478,15 @@ PROCEDURE pCreateServiceLimitTarget:
       THEN DO:
          IF fGetFieldValue({&TYPE}) = "FixedLine"
          THEN ASSIGN
-                 lcServiceLMembers = "F10100003"
+                 lcServiceLMembers = fGetFieldValue({&VOICEMEMBER})
                  lcInSideRate      = ServiceLimit.GroupCode + "_MIN_IN"
-                 lcOutSideRate     = ServiceLimit.GroupCode + "_MIN_OUT"
+                 lcOutSideRate     = IF ServiceLimit.InclAmt < 45000 THEN "" ELSE ServiceLimit.GroupCode + "_MIN_OUT"
                  liCCN             = 81
                  .
          ELSE ASSIGN /* Mobile */
-                 lcServiceLMembers = "10100001,10100003,10100005,CFOTHER,CFYOIGO"
+                 lcServiceLMembers = fGetFieldValue({&VOICEMEMBER})
                  lcInSideRate      = ServiceLimit.GroupCode + "_VOICE_IN"
-                 lcOutSideRate     = ServiceLimit.GroupCode + "_VOICE_OUT"
+                 lcOutSideRate     = IF ServiceLimit.InclAmt < 45000 THEN "" ELSE ServiceLimit.GroupCode + "_VOICE_OUT"
                  liCCN             = 81
                  .
       END. 
@@ -488,13 +494,13 @@ PROCEDURE pCreateServiceLimitTarget:
       THEN DO:
          IF fGetFieldValue({&TYPE}) = "FixedLine"
          THEN ASSIGN
-                 lcServiceLMembers = "F10100005"
+                 lcServiceLMembers = fGetFieldValue({&BDESTMEMBER})
                  lcInSideRate      = ServiceLimit.GroupCode + "_QTY_IN"
                  lcOutSideRate     = ServiceLimit.GroupCode + "_QTY_OUT"
                  liCCN             = 81
                  .
          ELSE ASSIGN /* Mobile */
-                 lcServiceLMembers = "10100001,10100003,10100005,CFOTHER,CFYOIGO"
+                 lcServiceLMembers = fGetFieldValue({&BDESTMEMBER})
                  lcInSideRate      = ServiceLimit.GroupCode + "_VOICE_IN"
                  lcOutSideRate     = ServiceLimit.GroupCode + "_VOICE_OUT"
                  liCCN             = 81
@@ -502,7 +508,19 @@ PROCEDURE pCreateServiceLimitTarget:
       END.
    END.
 
+   IF lcServiceLMembers EQ ""
+   THEN UNDO, THROW NEW Progress.Lang.AppError
+      (SUBSTITUTE("Cannot create ServiceLimitTarget for type '&1' as no members " +
+                  " are defined for the type",icLimitType), 1).
+
    DO liCount = 1 TO NUM-ENTRIES(lcServiceLMembers):
+
+      IF NOT CAN-FIND(FIRST BillItem NO-LOCK WHERE
+                            BillItem.Brand   = Syst.Var:gcBrand AND
+                            BillItem.BillCode = ENTRY(liCount,lcServiceLMembers)
+      THEN UNDO, THROW NEW Progress.Lang.AppError
+               (SUBSTITUTE("For ServiceLimitTarget type '&1' member '&2' " +
+                           "is not known billitem",ENTRY(liCount,lcServiceLMembers)), 1).
 
       FIND FIRST ServiceLimitTarget NO-LOCK WHERE
                  ServiceLimitTarget.SLSeq = iiSLSeq AND
@@ -528,9 +546,12 @@ PROCEDURE pCreateServiceLimitTarget:
    
 
    DEFINE VARIABLE lcBDest AS CHARACTER NO-UNDO.
-   lcBDest = ServiceLimitTarget.InSideRate + "|" + ServiceLimitTarget.OutSideRate.
+   lcBDest = lcInSideRate + "|" + lcOutSideRate.
 
    DO liCount = 1 TO 2:
+      IF ENTRY(liCount,lcBDest,"|") EQ ""
+      THEN NEXT.
+
       RUN pCreateBDest(ENTRY(liCount,lcBDest,"|"),
                        SUBSTRING(ENTRY(liCount,lcBDest,"|"),1,LENGTH(ServiceLimit.GroupCode)) +
                        REPLACE(SUBSTRING(ENTRY(liCount,lcBDest,"|"),LENGTH(ServiceLimit.GroupCode) + 1),"_"," "),
