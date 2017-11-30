@@ -118,7 +118,7 @@ DO TRANSACTION:
          WHEN "shaperconf"
          THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/shaperconfcreation.p", 4).
          WHEN "rateplan_translation"
-         THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/translationcreation", 5).
+         THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/translationcreation.p", 5).
          WHEN "tariff"
          THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/tariffcreation.p", 6). /* Actually CLIType not Tariff! */
          WHEN "tariff_translation"
