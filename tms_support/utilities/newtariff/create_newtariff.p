@@ -123,8 +123,8 @@ DO TRANSACTION:
          THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/tariffcreation.p", 6). /* Actually CLIType not Tariff! */
          WHEN "tariff_translation"
          THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/translationcreation", 7).
-         WHEN "rptariff"
-         THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/rptariff.p", 8).
+         WHEN "price"
+         THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/pricecreation.p", 8).
       END CASE.
    END.
 
