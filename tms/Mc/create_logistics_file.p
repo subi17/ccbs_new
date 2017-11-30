@@ -1996,7 +1996,7 @@ DO TRANSACTION:
 
       IF NOT AVAIL bMLOrderCustomer THEN NEXT. 
      
-      IF fIsTerminalOrder(ttOneDelivery.OrderID,
+      IF fIsTerminalOrder(liMLOrderId,
                           OUTPUT lcTerminalBillCode) OR 
          (bMLOrder.DeliverySecure > 0)               THEN
          llDespacharValue = FALSE.
@@ -2043,7 +2043,9 @@ DO TRANSACTION:
              (ENTRY(1,bALOrderGroup.Info,CHR(255)) EQ {&DESPACHAR_TRUE_VALUE} OR 
               ENTRY(1,bALOrderGroup.Info,CHR(255)) EQ {&DESPACHAR_FALSE_VALUE})) THEN NEXT.
 
-         IF bALOrder.DeliverySecure > 0 THEN 
+         IF fIsTerminalOrder(liMLOrderId,
+                             OUTPUT lcTerminalBillCode) OR 
+            (bALOrder.DeliverySecure > 0)               THEN 
             llDespacharValue = FALSE.
          ELSE llDespacharValue = TRUE.
          
