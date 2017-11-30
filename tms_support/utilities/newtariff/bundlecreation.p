@@ -87,9 +87,9 @@ fCreatettBundle({&LMFC}, "CHARACTER", "FixedLine,Mobile", "Full,Relative,UsageBa
 fCreatettBundle({&DATALIMIT}, "DECIMAL", "Mobile", "", NO).
 fCreatettBundle({&DATAMEMBER}, "CHARACTER", "Mobile", "", NO).
 fCreatettBundle({&VOICELIMIT}, "DECIMAL", "FixedLine,Mobile", "", NO).
-fCreatettBundle({&VOICEMEMBER}, "DECIMAL", "FixedLine,Mobile", "", NO).
+fCreatettBundle({&VOICEMEMBER}, "CHARACTER", "FixedLine,Mobile", "", NO).
 fCreatettBundle({&BDESTLIMIT}, "DECIMAL", "FixedLine,Mobile", "", NO).
-fCreatettBundle({&BDESTMEMBER}, "DECIMAL", "FixedLine,Mobile", "", NO).
+fCreatettBundle({&BDESTMEMBER}, "CHARACTER", "FixedLine,Mobile", "", NO).
 fCreatettBundle({&FMDL}, "CHARACTER", "Mobile", "Full,Relative", YES).
 fCreatettBundle({&LMDL}, "CHARACTER", "Mobile", "Full,Relative", YES).
 fCreatettBundle({&FMVL}, "CHARACTER", "FixedLine,Mobile", "Full,Relative", YES). 
