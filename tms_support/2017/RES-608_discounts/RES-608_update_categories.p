@@ -6,7 +6,7 @@ DEF VAR lcInputFile AS CHAR NO-UNDO.
 DEF VAR lcBillCode AS CHAR NO-UNDO.
 DEF VAR lcNewCategory AS CHAR NO-UNDO.
 DEF VAR lcLog AS CHAR NO-UNDO.
-DEF VAR llgSimulate AS LOGICAL NO-UNDO INIT FALSE.
+DEF VAR llgSimulate AS LOGICAL NO-UNDO INIT TRUE.
 DEF VAR lcLine AS CHAR NO-UNDO.
 DEF VAR lcUpdateStatus AS CHAR NO-UNDO.
 
@@ -36,8 +36,8 @@ lcLog = "category_update_"  +
                STRING(MONTH(TODAY),"99") +
                STRING(DAY(TODAY),"99") + ".log".
 message lcInputFile VIEW-AS ALERT-BOX.
-INPUT STREAM sIn FROM "/home/ilsavola/repos/ccbs/tms_support/2017/RES-608_discounts/discountplan_category_list.txt".
-OUTPUT STREAM sLog TO VALUE("/home/ilsavola/repos/ccbs/tms_support/2017/RES-608_discounts/" + lcLog).
+INPUT STREAM sIn FROM "/apps/yoigo/tms_support/2017/RES-608_discounts/RES-608_discounts/discountplan_category_list.txt".
+OUTPUT STREAM sLog TO VALUE("/apps/yoigo/tms_support/2017/RES-608_discounts/" + lcLog).
 
 REPEAT:
    IMPORT STREAM sIn UNFORMATTED lcLine.

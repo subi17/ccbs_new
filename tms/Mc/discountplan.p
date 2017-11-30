@@ -77,6 +77,8 @@ FORM
     DiscountPlan.Brand          COLON 25
     DiscountPlan.DPId           COLON 25 FORMAT ">>>>>>>9"
     DiscountPlan.DPCategory     COLON 42 FORMAT "X(16)" LABEL "Cat"
+       VALIDATE(INPUT DiscountPlan.DPCategory NE "", 
+                "Empty Category value is not allowed")
     DiscountPlan.DPRuleID       COLON 25 FORMAT "X(16)"
     DiscountPlan.DPName         COLON 25 FORMAT "X(50)"
     DiscountPlan.BillCode       COLON 25 FORMAT "X(16)"
