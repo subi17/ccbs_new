@@ -80,7 +80,7 @@ fCreatettBundle({&BTYPE}, "CHARACTER", "FixedLine,Mobile", "ServicePackage,Packa
 fCreatettBundle({&UPSELL}, "CHARACTER", "Mobile", "", NO).
 fCreatettBundle({&PRICELIST}, "CHARACTER", "FixedLine,Mobile", "", NO).
 fCreatettBundle({&BONOSUPPORT}, "LOGICAL", "Mobile", "Yes,No,True,False", NO).
-fCreatettBundle({&MFBILLCODE}, "CHARACTER", "FixedLine,Mobile", "", YES).
+fCreatettBundle({&MFBILLCODE}, "CHARACTER", "FixedLine,Mobile", "", NO).
 fCreatettBundle({&COMMFEE}, "DECIMAL", "FixedLine,Mobile", "", NO).
 fCreatettBundle({&FMFC}, "CHARACTER", "FixedLine,Mobile", "Full,Relative,UsageBased", NO).
 fCreatettBundle({&LMFC}, "CHARACTER", "FixedLine,Mobile", "Full,Relative,UsageBased", NO).
@@ -319,7 +319,7 @@ PROCEDURE pReadBundle:
    IF CAN-FIND(FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand = Syst.Var:gcBrand AND DayCampaign.DCEvent = fGetFieldValue({&BUNDLE}))
    THEN UNDO, THROW NEW Progress.Lang.AppError(SUBSTITUTE("Bundle '&1' already exists", fGetFieldValue({&BUNDLE})), 1). 
 
-   IF CAN-FIND(FIRST FeeModel NO-LOCK WHERE FeeModel.Brand = Syst.Var:gcBrand AND FeeModel.FeeModel = fGetFieldValue({&MFBILLCODE}))    
+   IF fGetFieldValue({&MFBILLCODE}) > "" AND CAN-FIND(FIRST FeeModel NO-LOCK WHERE FeeModel.Brand = Syst.Var:gcBrand AND FeeModel.FeeModel = fGetFieldValue({&MFBILLCODE}))    
    THEN UNDO, THROW NEW Progress.Lang.AppError(SUBSTITUTE("Feemodel '&1' already exists", fGetFieldValue({&MFBILLCODE})), 1).
    
    IF CAN-FIND(FIRST ServiceLimitGroup NO-LOCK WHERE ServiceLimitGroup.Brand = Syst.Var:gcBrand AND ServiceLimitGroup.GroupCode = fGetFieldValue({&BUNDLE}))
@@ -773,6 +773,11 @@ PROCEDURE pStoreBundle:
 
    IF DECIMAL(fGetFieldValue({&COMMFEE})) > 0
    THEN DO:
+
+      IF fGetFieldValue({&MFBILLCODE}) EQ ""
+      THEN UNDO, THROW NEW Progress.Lang.AppError
+               ("If commercial fee is not zero then the monthly fee billcode is mandatory", 1). 
+
       CREATE FeeModel.
       ASSIGN 
          FeeModel.Brand    = Syst.Var:gcBrand
