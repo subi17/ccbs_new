@@ -117,11 +117,11 @@ DO TRANSACTION:
          THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/bundlecreation.p", 3). /* DayCampaign */
          WHEN "shaperconf"
          THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/shaperconfcreation.p", 4).
-         WHEN "rateplan_translation"
-         THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/translationcreation.p", 5).
          WHEN "tariff"
-         THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/tariffcreation.p", 6). /* Actually CLIType not Tariff! */
+         THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/tariffcreation.p", 5). /* Actually CLIType not Tariff! */
          WHEN "tariff_translation"
+         THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/translationcreation.p", 6).
+         WHEN "rateplan_translation"
          THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/translationcreation.p", 7).
          WHEN "price"
          THEN fCreatettFiles(lcFileName[1], lcFileName[2], "utilities/newtariff/pricecreation.p", 8).
