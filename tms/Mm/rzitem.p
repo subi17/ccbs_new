@@ -693,16 +693,17 @@ PROCEDURE local-update-record:
                       MESSAGE "Unknown RoamZone !".
                       NEXT.
                    END.
-                   /* YOT-5462 Check that PlmnCode is NOT used by two roamingzones */
+                   /* YOT-5462 Same PlmnCode can exist if roamingzone is different */
                    ASSIGN iCount =  0.
                    FOR EACH bRZItem NO-LOCK WHERE
-                      bRZItem.PlmnCode EQ RZItem.PlmnCode AND
-                      bRZItem.RoamZone EQ RZItem.RoamZone USE-INDEX RoamZone:
-                      IF AVAIL bRZItem THEN DO:
-                         ASSIGN iCount = iCount + 1.
-                      END.
+                      bRZItem.PlmnCode EQ RZItem.PlmnCode USE-INDEX PLMNCode:
+                      IF AVAIL bRZItem THEN
+                         IF bRZItem.RoamZone EQ RZItem.RoamZone THEN DO:
+                            ASSIGN iCount = iCount + 1.
+                            LEAVE.
+                         END.
                    END.
-                   IF iCount > 1 THEN DO:
+                   IF iCount > 0 THEN DO:
                       BELL.
                       MESSAGE "Duplicate PLMN and RoamZone !".
                       NEXT.

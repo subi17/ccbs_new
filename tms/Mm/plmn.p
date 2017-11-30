@@ -52,6 +52,9 @@ DEF VAR ac-hdr       AS CHAR                   NO-UNDO.
 DEF VAR rtab         AS RECID EXTENT 24        NO-UNDO.
 DEF VAR i            AS INT                    NO-UNDO.
 DEF VAR ok           AS log format "Yes/No"    NO-UNDO.
+DEF VAR iCount       AS INT                    NO-UNDO INIT 0.
+
+DEF BUFFER bPLMN FOR PLMN. /*YOT-5462 */
 
 form
     PLMN.PLMN     /* COLUMN-LABEL FORMAT */
@@ -153,6 +156,9 @@ ADD-ROW:
            PLMN.PLMN = INPUT FRAME lis PLMN.PLMN.
 
            RUN local-UPDATE-record.
+
+           IF iCount > 0 THEN /* YOT-5462 */
+              UNDO add-row, LEAVE add-row.              
 
            IF LOOKUP(KEYFUNCTION(LASTKEY),"ENDKEY,END-ERROR") > 0 THEN
            UNDO add-row, LEAVE add-row.
@@ -481,6 +487,8 @@ BROWSE:
        IF LOOKUP(KEYFUNCTION(LASTKEY),"endkey,end-error") > 0 OR
        KEYLABEL(lastkey) = "F4" THEN UNDO, LEAVE.
 
+       IF iCount > 0 THEN UNDO, LEAVE. /* YOT-5462 */
+
        IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhPLMN).
 
        RUN local-disp-row.
@@ -584,10 +592,28 @@ PROCEDURE local-UPDATE-record:
              PLMN.Country
              PLMN.CountryPrefix
          WITH FRAME lis.
-         
-         FIND FIRST Country WHERE Country.Country = PLMN.Country 
+
+         /* YOT-5462 allow to create a PLMN record with the same PLMN.PLMN 
+            value but with a different country code e.g.
+            PLMN CCode
+            ........ .....
+            GIBGT GI
+            GIBGT UK */
+           
+         ASSIGN iCount =  0.
+         FOR EACH bPLMN NO-LOCK WHERE
+                  bPLMN.PLMN EQ PLMN.PLMN USE-INDEX plmn:
+            IF AVAIL bPLMN THEN
+               IF bPLMN.Country EQ PLMN.Country THEN DO:
+                  ASSIGN iCount = iCount + 1.
+                  LEAVE.
+               END.
+         END.
+         IF iCount = 0 THEN DO:
+            FIND FIRST Country WHERE Country.Country = PLMN.Country 
             NO-LOCK NO-ERROR.
-         IF AVAILABLE Country THEN PLMN.CoName = Country.CoName.
+            IF AVAILABLE Country THEN PLMN.CoName = Country.CoName.
+         END.
       END.
       
       ELSE PAUSE.
