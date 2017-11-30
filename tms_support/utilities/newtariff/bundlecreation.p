@@ -517,7 +517,7 @@ PROCEDURE pCreateServiceLimitTarget:
 
       IF NOT CAN-FIND(FIRST BillItem NO-LOCK WHERE
                             BillItem.Brand   = Syst.Var:gcBrand AND
-                            BillItem.BillCode = ENTRY(liCount,lcServiceLMembers)
+                            BillItem.BillCode = ENTRY(liCount,lcServiceLMembers))
       THEN UNDO, THROW NEW Progress.Lang.AppError
                (SUBSTITUTE("For ServiceLimitTarget type '&1' member '&2' " +
                            "is not known billitem",ENTRY(liCount,lcServiceLMembers)), 1).
