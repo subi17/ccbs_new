@@ -548,7 +548,9 @@ add_boolean(lcReturnStruct, 'order_allowed', llOrderAllowed).
 add_int(lcReturnStruct, 'subscription_limit', liSubLimit).
 IF NOT llOrderAllowed THEN add_string(lcReturnStruct, 'reason',lcReason).
 add_string(lcReturnStruct, 'additional_line_allowed',lcAddLineAllowed).
-add_string(lcReturnStruct, 'extra_line_allowed',lcExtraLineAllowed).
+
+IF lcExtraLineAllowed > ""
+THEN add_string(lcReturnStruct, 'extra_line_allowed',lcExtraLineAllowed).
 
 IF liSubs >= liSubLimit AND NOT plSTCMigrate THEN
    add_boolean(lcReturnStruct,"subscription_limit_reached",TRUE).
