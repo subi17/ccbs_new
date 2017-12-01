@@ -103,12 +103,12 @@ FOR EACH daycampaign NO-LOCK:
    END.
    ELSE IF DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
    DO:
-       FIND FIRST TPService WHERE TPService.MsSeq      = piMsSeq             AND 
-                                  TPService.Operation  = {&TYPE_ACTIVATION}  AND 
-                                  TPService.ServType   = "Television"        AND 
-                                  TPService.ServStatus > ""                  AND 
-                                  TPService.Product    = DayCampaign.DCEvent NO-LOCK
-                                  USE-INDEX MsSeqTypeStatus NO-ERROR.
+       FIND LAST TPService WHERE TPService.MsSeq      = piMsSeq             AND 
+                                 TPService.Operation  = {&TYPE_ACTIVATION}  AND 
+                                 TPService.ServType   = "Television"        AND 
+                                 TPService.ServStatus > ""                  AND 
+                                 TPService.Product    = DayCampaign.DCEvent NO-LOCK
+                                 USE-INDEX MsSeqTypeStatus NO-ERROR.
        IF NOT AVAIL TPService THEN 
            ASSIGN liServStatus = 0. /* Inactive */
        ELSE 
@@ -120,13 +120,13 @@ FOR EACH daycampaign NO-LOCK:
            ELSE     
                ASSIGN liServStatus = 2.  /*Pending activation*/
 
-           FIND FIRST bf_TPService_Deactivation WHERE bf_TPService_Deactivation.MsSeq       = piMsSeq              AND 
-                                                      bf_TPService_Deactivation.Operation   = {&TYPE_DEACTIVATION} AND 
-                                                      bf_TPService_Deactivation.ServType    = "Television"         AND 
-                                                      bf_TPService_Deactivation.ServStatus  > ""                   AND 
-                                                      bf_TPService_Deactivation.CreatedTS   > TPService.CreatedTS  AND 
-                                                      bf_TPService_Deactivation.Product     = DayCampaign.DCEvent  NO-LOCK
-                                                      USE-INDEX MsSeqTypeStatus NO-ERROR.
+           FIND LAST bf_TPService_Deactivation WHERE bf_TPService_Deactivation.MsSeq       = piMsSeq              AND 
+                                                     bf_TPService_Deactivation.Operation   = {&TYPE_DEACTIVATION} AND 
+                                                     bf_TPService_Deactivation.ServType    = "Television"         AND 
+                                                     bf_TPService_Deactivation.ServStatus  > ""                   AND 
+                                                     bf_TPService_Deactivation.CreatedTS   > TPService.CreatedTS  AND 
+                                                     bf_TPService_Deactivation.Product     = DayCampaign.DCEvent  NO-LOCK
+                                                     USE-INDEX MsSeqTypeStatus NO-ERROR.
            IF AVAIL bf_TPService_Deactivation THEN 
            DO:
                IF bf_TPService_Deactivation.ServStatus = {&STATUS_HANDLED} THEN 
