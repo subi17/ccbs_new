@@ -370,6 +370,7 @@ PROCEDURE pCLIType:
    
    DEFINE VARIABLE lcFixedBundle AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lcMobileBundle  AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcActionKey AS CHARACTER NO-UNDO.
 
    DEFINE BUFFER bf_RequestAction     FOR RequestAction.
    DEFINE BUFFER bf_RequestActionRule FOR RequestActionRule.
@@ -470,11 +471,20 @@ PROCEDURE pCLIType:
                      OUTPUT lcFixedBundle).
 
       /* Copy request action rules */
-      FOR EACH Requestaction NO-LOCK WHERE Requestaction.Clitype = ttCliType.CopyServicesFromCliType:
+      FOR EACH Requestaction NO-LOCK WHERE
+               Requestaction.Clitype = ttCliType.CopyServicesFromCliType AND
+               Requestaction.ValidTo >= TODAY:
           
           IF (lcMobileBundle > "" AND Requestaction.ActionKey EQ lcMobileBundle) OR
              (lcFixedBundle  > "" AND Requestaction.ActionKey EQ lcFixedBundle)
           THEN NEXT.
+         
+          lcActionKey = Requestaction.ActionKey.
+          
+          /* This hard coded thing was done because of lack of time */ 
+          IF lcActionKey EQ "INT_VOICE100" AND
+             LOOKUP("INT_VOICE1500",ttCliType.AllowedBundles) > 0
+          THEN lcActionKey = "INT_VOICE1500". 
 
           IF NOT CAN-FIND(FIRST bf_RequestAction WHERE bf_RequestAction.Brand      = Syst.Var:gcBrand                  AND
                                                        bf_RequestAction.CliType    = ttCliType.CliType        AND
@@ -482,7 +492,7 @@ PROCEDURE pCLIType:
                                                        bf_RequestAction.ValidTo   >= TODAY                    AND 
                                                        bf_RequestAction.PayType    = Requestaction.PayType    AND
                                                        bf_RequestAction.ActionType = Requestaction.ActionType AND
-                                                       bf_RequestAction.ActionKey  = Requestaction.ActionKey   AND
+                                                       bf_RequestAction.ActionKey  = lcActionKey              AND
                                                        bf_RequestAction.Action     = Requestaction.Action     NO-LOCK) THEN
           DO:
               CREATE bf_RequestAction.
@@ -493,7 +503,7 @@ PROCEDURE pCLIType:
                  bf_RequestAction.CLIType         = ttCliType.CliType
                  bf_RequestAction.PayType         = Requestaction.PayType
                  bf_RequestAction.Action          = Requestaction.Action
-                 bf_RequestAction.ActionKey       = Requestaction.ActionKey
+                 bf_RequestAction.ActionKey       = lcActionKey
                  bf_RequestAction.ActionType      = Requestaction.ActionType           
                  bf_RequestAction.ValidFrom       = TODAY
                  bf_RequestAction.ValidTo         = DATE(12,31,2049). 
