@@ -503,7 +503,6 @@ FUNCTION fCheckExtraLineMatrixSubscription RETURNS LOG
          IF AVAIL lbMLMobSub THEN 
             RETURN TRUE.
       END.
-      OTHERWISE .
 
    END CASE.
 
@@ -533,8 +532,6 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
    DEF VAR lcAllowedDSS2SubsType  AS CHAR  NO-UNDO.
    DEF VAR lcDSS2PrimarySubsType  AS CHAR  NO-UNDO.
    DEF VAR llDSS2PrimaryAvail     AS LOG   NO-UNDO.
-   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
-   DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO. 
 
    DEF BUFFER bMServiceLimit   FOR MServiceLimit.
    DEF BUFFER bMserviceLPool   FOR MserviceLPool.
@@ -555,9 +552,7 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
 
    IF icBundleId = "DSS2" THEN
       ASSIGN lcAllowedDSS2SubsType   = fCParamC("DSS2_SUBS_TYPE")
-             lcDSS2PrimarySubsType   = fCParamC("DSS2_PRIMARY_SUBS_TYPE")
-             lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
-             lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
+             lcDSS2PrimarySubsType   = fCParamC("DSS2_PRIMARY_SUBS_TYPE").
 
    FOR EACH bMobSub WHERE
             bMobSub.Brand   = Syst.Var:gcBrand   AND
@@ -568,8 +563,8 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
          LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType) = 0 THEN NEXT.
            
       IF icBundleId = "DSS2" AND
-        (LOOKUP(bMobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR 
-         LOOKUP(bMobSub.CLIType,lcExtraLineCLITypes)     > 0) THEN 
+        (fCLITypeIsExtraLine(bMobSub.CLIType) OR 
+         fCLITypeIsMainLine(bMobSub.CLIType)) THEN 
          IF NOT fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
                                                   bMobSub.MultiSimId,
                                                   bMobSub.MultiSimType) THEN NEXT.
@@ -740,11 +735,6 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
    DEF VAR lcAllowedDSS2SubsType   AS CHAR NO-UNDO.
    DEF VAR lcDSS2PrimarySubsType   AS CHAR NO-UNDO.
    DEF VAR llDSS2PrimaryAvail      AS LOG  NO-UNDO.
-   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
-   DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO. 
-   DEF VAR llgExtraLine            AS LOG  NO-UNDO.
-   DEF VAR liExtraLineMsSeq        AS INT  NO-UNDO.
-   DEF VAR liMainLineMsSeq         AS INT  NO-UNDO. 
 
    DEF BUFFER bMServiceLimit   FOR MServiceLimit.
    DEF BUFFER bServiceLimit    FOR ServiceLimit.
@@ -754,9 +744,7 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
 
    ASSIGN lcAllowedDSS2SubsType   = fCParamC("DSS2_SUBS_TYPE")
           lcDSS2PrimarySubsType   = fCParamC("DSS2_PRIMARY_SUBS_TYPE")
-          lcExcludeBundles        = fCParamC("EXCLUDE_BUNDLES")
-          lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
-          lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
+          lcExcludeBundles        = fCParamC("EXCLUDE_BUNDLES").
 
    IF iiMsSeq > 0 THEN DO:
       FIND FIRST bMobSub WHERE
@@ -776,8 +764,8 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
       END. /* IF fMatrixAnalyse(Syst.Var:gcBrand */
 
       IF LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType)   > 0  AND 
-        (LOOKUP(bMobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
-         LOOKUP(bMobSub.CLIType,lcExtraLineCLITypes)     > 0) THEN
+        (fCLITypeIsExtraLine(bMobSub.CLIType) OR
+         fCLITypeIsMainLine(bMobSub.CLIType)) THEN
          IF NOT fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
                                                   bMobSub.MultiSimId,
                                                   bMobSub.MultiSimType) THEN 
@@ -799,8 +787,8 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
          LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType) = 0 THEN NEXT.
 
       /* Extraline hard association subscription check */
-      IF (LOOKUP(bMobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
-          LOOKUP(bMobSub.CLIType,lcExtraLineCLITypes)     > 0) THEN
+      IF (fCLITypeIsExtraLine(bMobSub.CLIType) OR
+          fCLITypeIsMainLine(bMobSub.CLIType)) THEN
           IF NOT fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
                                                    bMobSub.MultiSimId,
                                                    bMobSub.MultiSimType) THEN NEXT. 
@@ -906,14 +894,10 @@ FUNCTION fgetFlexUpsellBundle RETURNS CHAR
    DEF VAR ldeOtherMonthLimit AS DEC NO-UNDO.
    DEF VAR lcResult AS CHAR NO-UNDO.
    DEF VAR lcAllowedDSS2SubsType   AS CHAR NO-UNDO.
-   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO.
-   DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO.
    DEF VAR llDSSneeded             AS LOG  NO-UNDO.
 
    DEF BUFFER Mobsub FOR Mobsub.
-   ASSIGN lcAllowedDSS2SubsType   = fCParamC("DSS2_SUBS_TYPE")
-          lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
-          lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
+   ASSIGN lcAllowedDSS2SubsType   = fCParamC("DSS2_SUBS_TYPE").
    IF icDSSId BEGINS "DSS" THEN
       llDSSNeeded = TRUE.
    IF icDSSId EQ "DSS" THEN DO: 
@@ -931,8 +915,8 @@ FUNCTION fgetFlexUpsellBundle RETURNS CHAR
             llDSSNeeded = FALSE.
          
          ELSE IF LOOKUP(Mobsub.CLIType,lcAllowedDSS2SubsType)   > 0  AND
-           (LOOKUP(Mobsub.CLIType,lcExtraMainLineCLITypes) > 0  OR
-            LOOKUP(Mobsub.CLIType,lcExtraLineCLITypes)     > 0) THEN
+           (fCLITypeIsMainLine(Mobsub.CLIType) OR
+            fCLITypeIsExtraLine(Mobsub.CLIType)) THEN
             IF NOT fCheckExtraLineMatrixSubscription(Mobsub.MsSeq,
                                                      Mobsub.MultiSimId,
                                                      Mobsub.MultiSimType) THEN

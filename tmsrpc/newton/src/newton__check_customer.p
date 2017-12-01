@@ -55,9 +55,6 @@ DEF VAR lcCategory                    AS CHAR NO-UNDO.
 DEF VAR llPROOngoingOrder             AS LOGI NO-UNDO.
 DEF VAR llNonProOngoingOrder          AS LOGI NO-UNDO.
 DEF VAR liMobsubCount                 AS LOGI NO-UNDO.
-DEF VAR lcExtraLineCLITypes           AS CHAR NO-UNDO.
-DEF VAR liMainLineOrderId             AS INT  NO-UNDO. 
-DEF VAR liOngoingOrderId              AS INT  NO-UNDO. 
 DEF VAR lcExtraLineAllowed            AS CHAR NO-UNDO. 
 DEF VAR llNonProToProMigrationOngoing AS LOGI NO-UNDO.
 DEF VAR llProToNonProMigrationOngoing AS LOGI NO-UNDO.
@@ -86,8 +83,6 @@ ELSE IF NUM-ENTRIES(top_array) GT 7 THEN
       pcCliType    = get_string(param_toplevel_id, "5")
       pcChannel    = get_string(param_toplevel_id, "6")
       plSTCMigrate = get_bool(param_toplevel_id, "7").
-
-lcExtraLineCLITypes = fCParam("DiscountType","ExtraLine_CLITypes").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -507,12 +502,9 @@ IF LOOKUP(pcCliType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
 END.
 
 /* Check extra lines discount is allowed for customer */
-lcExtraLineAllowed = "".
-
-IF fCheckExistingConvergentAvailForExtraLine(pcIdType,pcPersonId,OUTPUT liMainLineOrderId) THEN 
-   lcExtraLineAllowed = "OK".
-ELSE IF fCheckOngoingConvergentAvailForExtraLine(pcIdType,pcPersonId,OUTPUT liOngoingOrderId) THEN    
-   lcExtraLineAllowed = "OK".
+IF fCheckExistingConvergentAvailForExtraLine("", pcIdType,pcPersonId) > 0 OR
+   fCheckOngoingConvergentAvailForExtraLine("", pcIdType,pcPersonId) > 0
+THEN lcExtraLineAllowed = "OK".
 ELSE lcExtraLineAllowed = "NO_MAIN_LINE".   
 
 IF lcAddLineAllowed = "" THEN DO:

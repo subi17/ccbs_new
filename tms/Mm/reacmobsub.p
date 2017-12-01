@@ -30,7 +30,6 @@
 DEFINE INPUT PARAMETER iiMSrequest  AS INTEGER   NO-UNDO.
 
 DEFINE VARIABLE ldCurrTS            AS DECIMAL NO-UNDO.
-DEFINE VARIABLE lcExtraLineCLITypes AS CHAR    NO-UNDO. 
 
 DEFINE BUFFER bTermMsRequest FOR MsRequest.
 DEF TEMP-TABLE ttoldmsowner NO-UNDO LIKE msowner.
@@ -46,7 +45,6 @@ DEF TEMP-TABLE ttContract NO-UNDO
    FIELD PerContID AS INT.
 
 ASSIGN 
-  lcExtraLineCLITypes = fCParam("DiscountType","ExtraLine_CLITypes")
   ldCurrTS            = Func.Common:mMakeTS().
 
 IF llDoEvent THEN DO:
@@ -138,7 +136,7 @@ DO TRANSACTION:
    /* Before updating any values, check if it extra line clitype reactivation. 
       If yes, then check associated main line is not associated to any other 
       extra line. If associated then reactivation is not allowed */ 
-   IF LOOKUP(TermMobSub.CLIType,lcExtraLineCLITypes) GT 0  AND
+   IF fCLITypeIsExtraLine(TermMobSub.CLIType) AND
       NOT CAN-FIND(FIRST bMLMobSub NO-LOCK WHERE 
                          bMLMobSub.MsSeq        EQ TermMobSub.MultiSimId AND 
                          bMLMobSub.MultiSimId   EQ 0                     AND 
@@ -746,10 +744,9 @@ DO TRANSACTION:
   
    /* Reactive Extra line discount, if associated Mainline is not 
       assigned to other Extra line */
-   IF lcExtraLineCLITypes                        NE "" AND 
-      LOOKUP(MobSub.CLIType,lcExtraLineCLITypes) GT 0  AND 
-      MobSub.MultiSimId                          NE 0  AND
-      MobSub.MultiSimType                        EQ {&MULTISIMTYPE_EXTRALINE} THEN 
+   IF fCLITypeIsExtraLine(MobSub.CLIType) AND 
+      MobSub.MultiSimId    NE 0  AND
+      MobSub.MultiSimType  EQ {&MULTISIMTYPE_EXTRALINE} THEN 
    RUN pReacExtraLineDiscount(MobSub.MultiSimId, /* Mainline SubId    */ 
                               MobSub.MsSeq,      /* Extaline SubId    */
                               MobSub.CLIType).   /* Extraline clitype */ 

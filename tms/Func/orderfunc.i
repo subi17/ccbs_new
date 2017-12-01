@@ -668,9 +668,6 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
    DEFINE BUFFER lbELOrderAction FOR OrderAction.
 
    DEF VAR lcNewOrderStatus     AS CHAR NO-UNDO. 
-   DEF VAR lcExtraLineDiscounts AS CHAR NO-UNDO. 
-
-   lcExtraLineDiscounts = fCParam("DiscountType","ExtraLine_Discounts").
 
    FIND FIRST lbELOrder NO-LOCK WHERE
               lbELOrder.Brand        EQ Syst.Var:gcBrand           AND
