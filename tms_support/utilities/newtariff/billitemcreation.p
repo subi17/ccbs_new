@@ -147,7 +147,7 @@ PROCEDURE pCreateBillingItem:
       NO-LOCK NO-ERROR.
 
       IF AVAILABLE BillItem THEN DO: 
-         fError("Billing Item already exists").
+         fError(SUBSTITUTE("Billing Item '&1' already exists", ttBillItem.BillItem)).
          RETURN "ERROR". 
       END.
       
@@ -157,7 +157,7 @@ PROCEDURE pCreateBillingItem:
       NO-LOCK NO-ERROR.  
             
       IF NOT AVAILABLE BItemGroup THEN DO:
-         fError("Wrong Billing Item group data").
+         fError(SUBSTITUTE("Unknown billing item group '&1'", ttBillItem.BIGroup)).
          RETURN "ERROR". 
       END.
       
@@ -167,7 +167,7 @@ PROCEDURE pCreateBillingItem:
       NO-LOCK NO-ERROR.
                         
       IF NOT AVAILABLE Account THEN DO:
-         fError("Wrong Account number data").
+         fError(SUBSTITUTE("Unknown account number '&1'",ttBillItem.AccNum)).
          RETURN "ERROR". 
       END.
       
@@ -175,7 +175,7 @@ PROCEDURE pCreateBillingItem:
            TaxClass.TaxClass = ttBillItem.TaxClass NO-LOCK NO-ERROR.
                  
       IF NOT AVAILABLE TaxClass THEN DO:
-         fError("Wrong Tax class data available").
+         fError(SUBSTITUTE("Unknown tax class '&1'",ttBillItem.TaxClass)).
          RETURN "ERROR".
       END.      
 

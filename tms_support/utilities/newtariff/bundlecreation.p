@@ -19,14 +19,17 @@ DEFINE STREAM strexport.
 
 {utilities/newtariff/chartointmap.i}
 
+&GLOBAL-DEFINE TYPE "Type"
 &GLOBAL-DEFINE BTYPE "BundleType"
-&GLOBAL-DEFINE BBTYPE "BaseBundleType"
-&GLOBAL-DEFINE BBNAME "BaseBundleName"
-&GLOBAL-DEFINE BBUNDLE "BaseBundle"
+&GLOBAL-DEFINE BNAME "BundleName"
+&GLOBAL-DEFINE BUNDLE "Bundle"
 &GLOBAL-DEFINE PRICELIST "PriceList"
 &GLOBAL-DEFINE DATALIMIT "DataLimit"
+&GLOBAL-DEFINE DATAMEMBER "DataMember"
 &GLOBAL-DEFINE VOICELIMIT "VoiceLimit"
+&GLOBAL-DEFINE VOICEMEMBER "VoiceMember"
 &GLOBAL-DEFINE BDESTLIMIT "BDestinationLimit"
+&GLOBAL-DEFINE BDESTMEMBER "BDestinationMember"
 &GLOBAL-DEFINE PAYTYPE "PaymentType"
 &GLOBAL-DEFINE MFBILLCODE "MonthlyFeeBillCode"
 &GLOBAL-DEFINE UPSELL "Upsell"
@@ -69,21 +72,24 @@ FUNCTION fCreatettBundle RETURNS LOGICAL
 
 END FUNCTION.
 
-fCreatettBundle({&BTYPE}, "CHARACTER", "FixedLine,Mobile", "FixedLine,Mobile", YES).
+fCreatettBundle({&TYPE}, "CHARACTER", "FixedLine,Mobile", "FixedLine,Mobile", YES).
 fCreatettBundle({&PAYTYPE}, "CHARACTER", "FixedLine,Mobile", "Postpaid,Prepaid", YES).
-fCreatettBundle({&BBUNDLE}, "CHARACTER", "FixedLine,Mobile", "", YES).
-fCreatettBundle({&BBNAME}, "CHARACTER", "FixedLine,Mobile", "", YES).
-fCreatettBundle({&BBTYPE}, "CHARACTER", "FixedLine,Mobile", "ServicePackage,PackageWithCounter,PackagewithoutCounter,Upsell", YES).
+fCreatettBundle({&BUNDLE}, "CHARACTER", "FixedLine,Mobile", "", YES).
+fCreatettBundle({&BNAME}, "CHARACTER", "FixedLine,Mobile", "", YES).
+fCreatettBundle({&BTYPE}, "CHARACTER", "FixedLine,Mobile", "ServicePackage,PackageWithCounter,PackagewithoutCounter,Upsell", YES).
 fCreatettBundle({&UPSELL}, "CHARACTER", "Mobile", "", NO).
 fCreatettBundle({&PRICELIST}, "CHARACTER", "FixedLine,Mobile", "", NO).
 fCreatettBundle({&BONOSUPPORT}, "LOGICAL", "Mobile", "Yes,No,True,False", NO).
-fCreatettBundle({&MFBILLCODE}, "CHARACTER", "FixedLine,Mobile", "", YES).
+fCreatettBundle({&MFBILLCODE}, "CHARACTER", "FixedLine,Mobile", "", NO).
 fCreatettBundle({&COMMFEE}, "DECIMAL", "FixedLine,Mobile", "", NO).
 fCreatettBundle({&FMFC}, "CHARACTER", "FixedLine,Mobile", "Full,Relative,UsageBased", NO).
 fCreatettBundle({&LMFC}, "CHARACTER", "FixedLine,Mobile", "Full,Relative,UsageBased", NO).
 fCreatettBundle({&DATALIMIT}, "DECIMAL", "Mobile", "", NO).
+fCreatettBundle({&DATAMEMBER}, "CHARACTER", "Mobile", "", NO).
 fCreatettBundle({&VOICELIMIT}, "DECIMAL", "FixedLine,Mobile", "", NO).
-fCreatettBundle({&BDESTLIMIT}, "DECIMAL", "FixedLine,Mobile", "", YES).
+fCreatettBundle({&VOICEMEMBER}, "CHARACTER", "FixedLine,Mobile", "", NO).
+fCreatettBundle({&BDESTLIMIT}, "DECIMAL", "FixedLine,Mobile", "", NO).
+fCreatettBundle({&BDESTMEMBER}, "CHARACTER", "FixedLine,Mobile", "", NO).
 fCreatettBundle({&FMDL}, "CHARACTER", "Mobile", "Full,Relative", YES).
 fCreatettBundle({&LMDL}, "CHARACTER", "Mobile", "Full,Relative", YES).
 fCreatettBundle({&FMVL}, "CHARACTER", "FixedLine,Mobile", "Full,Relative", YES). 
@@ -94,10 +100,10 @@ fCreatettBundle({&LMBDL}, "CHARACTER", "FixedLine,Mobile", "Full,Relative", YES)
 fCreatettCharToIntMap("Limit","Full",0).
 fCreatettCharToIntMap("Limit","Relative",1).
 
-fCreatettCharToIntMap({&BBTYPE},"ServicePackage",1).
-fCreatettCharToIntMap({&BBTYPE},"PackageWithCounter",4).
-fCreatettCharToIntMap({&BBTYPE},"Upsell",6).
-fCreatettCharToIntMap({&BBTYPE},"PackagewithoutCounter",7).
+fCreatettCharToIntMap({&BTYPE},"ServicePackage",1).
+fCreatettCharToIntMap({&BTYPE},"PackageWithCounter",4).
+fCreatettCharToIntMap({&BTYPE},"Upsell",6).
+fCreatettCharToIntMap({&BTYPE},"PackagewithoutCounter",7).
 
 FUNCTION fExport RETURNS LOGICAL
    ( icFileToExport AS CHARACTER,
@@ -190,41 +196,41 @@ FUNCTION fValidateBundle RETURNS CHARACTER ():
 
    DEFINE VARIABLE ldeDataLimit     AS DECIMAL NO-UNDO.
    DEFINE VARIABLE ldeVoiceLimit    AS DECIMAL NO-UNDO.
-   DEFINE VARIABLE lcBundleType     AS CHARACTER NO-UNDO.
-   DEFINE VARIABLE lcBaseBundleType AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcType     AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcBundleType AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lcPayType        AS CHARACTER NO-UNDO.
    
    ASSIGN
       ldeDataLimit     = DECIMAL(fGetFieldValue({&DATALIMIT}))
       ldeVoiceLimit    = DECIMAL(fGetFieldValue({&VOICELIMIT}))
-      lcBundleType     = fGetFieldValue({&BTYPE})
-      lcBaseBundleType = fGetFieldValue({&BBTYPE})
+      lcType     = fGetFieldValue({&TYPE})
+      lcBundleType = fGetFieldValue({&BTYPE})
       .
    
-   IF lcBundleType EQ "FixedLine" AND fGetFieldValue({&PAYTYPE}) EQ "Prepaid"
+   IF lcType EQ "FixedLine" AND fGetFieldValue({&PAYTYPE}) EQ "Prepaid"
    THEN RETURN "FixedLine bundle cannot have prepaid payment type".
    
-   CASE lcBaseBundleType:
+   CASE lcBundleType:
       WHEN "ServicePackage" OR WHEN "PackageWithCounter"
       THEN IF ldeDataLimit = 0 AND ldeVoiceLimit = 0
-           THEN RETURN SUBSTITUTE("Wrong &1-contract data with limits provided", lcBaseBundleType).
+           THEN RETURN SUBSTITUTE("Wrong &1-contract data with limits provided", lcBundleType).
       WHEN "PackageWithoutCounter"
       THEN IF ldeDataLimit > 0 OR ldeVoiceLimit > 0
-           THEN RETURN SUBSTITUTE("Wrong &1-contract data with limits provided", lcBaseBundleType).
+           THEN RETURN SUBSTITUTE("Wrong &1-contract data with limits provided", lcBundleType).
    END CASE. 
    
    FOR EACH ttBundle:
 
-      IF LOOKUP(lcBundleType, ttBundle.TypeUse) > 0 AND ttBundle.Mandatory AND ttBundle.FieldValue EQ ""
+      IF LOOKUP(lcType, ttBundle.TypeUse) > 0 AND ttBundle.Mandatory AND ttBundle.FieldValue EQ ""
       THEN RETURN SUBSTITUTE("Field '&1' needs a value.", ttBundle.FieldName).
 
       IF ttBundle.FieldValue > "" AND
-         LOOKUP(lcBundleType,ttBundle.TypeUse) EQ 0
-      THEN RETURN SUBSTITUTE("Field '&1' cannot have a value when bundle type is &2", ttBundle.FieldName, lcBundleType).
+         LOOKUP(lcType,ttBundle.TypeUse) EQ 0
+      THEN RETURN SUBSTITUTE("Field '&1' cannot have a value when bundle type is &2", ttBundle.FieldName, lcType).
 
       IF ttBundle.Mandatory AND
          ttBundle.ValueList > "" AND
-         LOOKUP(lcBundleType, ttBundle.TypeUse) > 0 AND
+         LOOKUP(lcType, ttBundle.TypeUse) > 0 AND
          LOOKUP(ttBundle.FieldValue, ttBundle.ValueList) = 0
       THEN RETURN SUBSTITUTE("Field '&1' needs one of following values '&2'. A value '&3' is invalid.", ttBundle.FieldName, ttBundle.ValueList, ttBundle.FieldValue).
 
@@ -310,14 +316,14 @@ PROCEDURE pReadBundle:
    IF lcError > ""
    THEN UNDO, THROW NEW Progress.Lang.AppError(lcError, 1).
    
-   IF CAN-FIND(FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand = Syst.Var:gcBrand AND DayCampaign.DCEvent = fGetFieldValue({&BBUNDLE}))
-   THEN UNDO, THROW NEW Progress.Lang.AppError(SUBSTITUTE("Bundle '&1' already exists", fGetFieldValue({&BBUNDLE})), 1). 
+   IF CAN-FIND(FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand = Syst.Var:gcBrand AND DayCampaign.DCEvent = fGetFieldValue({&BUNDLE}))
+   THEN UNDO, THROW NEW Progress.Lang.AppError(SUBSTITUTE("Bundle '&1' already exists", fGetFieldValue({&BUNDLE})), 1). 
 
-   IF CAN-FIND(FIRST FeeModel NO-LOCK WHERE FeeModel.Brand = Syst.Var:gcBrand AND FeeModel.FeeModel = fGetFieldValue({&MFBILLCODE}))    
+   IF fGetFieldValue({&MFBILLCODE}) > "" AND CAN-FIND(FIRST FeeModel NO-LOCK WHERE FeeModel.Brand = Syst.Var:gcBrand AND FeeModel.FeeModel = fGetFieldValue({&MFBILLCODE}))    
    THEN UNDO, THROW NEW Progress.Lang.AppError(SUBSTITUTE("Feemodel '&1' already exists", fGetFieldValue({&MFBILLCODE})), 1).
    
-   IF CAN-FIND(FIRST ServiceLimitGroup NO-LOCK WHERE ServiceLimitGroup.Brand = Syst.Var:gcBrand AND ServiceLimitGroup.GroupCode = fGetFieldValue({&BBUNDLE}))
-   THEN UNDO, THROW NEW Progress.Lang.AppError(SUBSTITUTE("ServiceLimitGroup having GroupCode '&1' already exists", fGetFieldValue({&BBUNDLE})), 1).
+   IF CAN-FIND(FIRST ServiceLimitGroup NO-LOCK WHERE ServiceLimitGroup.Brand = Syst.Var:gcBrand AND ServiceLimitGroup.GroupCode = fGetFieldValue({&BUNDLE}))
+   THEN UNDO, THROW NEW Progress.Lang.AppError(SUBSTITUTE("ServiceLimitGroup having GroupCode '&1' already exists", fGetFieldValue({&BUNDLE})), 1).
 
    IF fGetFieldValue({&PRICELIST}) > "" AND
       CAN-FIND(FIRST PriceList NO-LOCK WHERE PriceList.Brand = Syst.Var:gcBrand AND PriceList.PriceList = fGetFieldValue({&PRICELIST}))
@@ -353,7 +359,7 @@ PROCEDURE pCreateServiceLimit:
    DEFINE VARIABLE liFirstMonthCalc AS INTEGER   NO-UNDO.
    DEFINE VARIABLE liLastMonthCalc  AS INTEGER   NO-UNDO.
    
-   lcGroupCode = fGetFieldValue({&BBUNDLE}).
+   lcGroupCode = fGetFieldValue({&BUNDLE}).
    
    CASE icLimitType:
       WHEN "Data"
@@ -370,7 +376,7 @@ PROCEDURE pCreateServiceLimit:
       THEN ASSIGN
               lcSLCode         = lcGroupCode + "_MIN"
               lcSLName         = "National calls"
-              liDialType       = (IF fGetFieldValue({&BTYPE}) EQ "Mobile"
+              liDialType       = (IF fGetFieldValue({&TYPE}) EQ "Mobile"
                                   THEN 4
                                   ELSE 1 ) 
               liInclUnit       = 1
@@ -382,7 +388,7 @@ PROCEDURE pCreateServiceLimit:
       THEN ASSIGN
               lcSLCode         = lcGroupCode + "_QTY"
               lcSLName         = "BDest"
-              liDialType       = (IF fGetFieldValue({&BTYPE}) EQ "Mobile"
+              liDialType       = (IF fGetFieldValue({&TYPE}) EQ "Mobile"
                                   THEN 0
                                   ELSE 50)
               liInclUnit       = 7
@@ -463,38 +469,38 @@ PROCEDURE pCreateServiceLimitTarget:
    CASE icLimitType:
       WHEN "Data"
       THEN ASSIGN
-              lcServiceLMembers = "14100001"
+              lcServiceLMembers = fGetFieldValue({&DATAMEMBER})
               lcInSideRate      = ServiceLimit.GroupCode + "_DATA_IN"
               lcOutSideRate     = ServiceLimit.GroupCode + "_DATA_OUT"
               liCCN             = 93
               . 
       WHEN "Voice"
       THEN DO:
-         IF fGetFieldValue({&BTYPE}) = "FixedLine"
+         IF fGetFieldValue({&TYPE}) = "FixedLine"
          THEN ASSIGN
-                 lcServiceLMembers = "F10100003"
+                 lcServiceLMembers = fGetFieldValue({&VOICEMEMBER})
                  lcInSideRate      = ServiceLimit.GroupCode + "_MIN_IN"
-                 lcOutSideRate     = ServiceLimit.GroupCode + "_MIN_OUT"
+                 lcOutSideRate     = IF ServiceLimit.InclAmt < 45000 THEN "" ELSE ServiceLimit.GroupCode + "_MIN_OUT"
                  liCCN             = 81
                  .
          ELSE ASSIGN /* Mobile */
-                 lcServiceLMembers = "10100001,10100003,10100005,CFOTHER,CFYOIGO"
+                 lcServiceLMembers = fGetFieldValue({&VOICEMEMBER})
                  lcInSideRate      = ServiceLimit.GroupCode + "_VOICE_IN"
-                 lcOutSideRate     = ServiceLimit.GroupCode + "_VOICE_OUT"
+                 lcOutSideRate     = IF ServiceLimit.InclAmt < 45000 THEN "" ELSE ServiceLimit.GroupCode + "_VOICE_OUT"
                  liCCN             = 81
                  .
       END. 
       WHEN "BDest"
       THEN DO:
-         IF fGetFieldValue({&BTYPE}) = "FixedLine"
+         IF fGetFieldValue({&TYPE}) = "FixedLine"
          THEN ASSIGN
-                 lcServiceLMembers = "F10100005"
+                 lcServiceLMembers = fGetFieldValue({&BDESTMEMBER})
                  lcInSideRate      = ServiceLimit.GroupCode + "_QTY_IN"
                  lcOutSideRate     = ServiceLimit.GroupCode + "_QTY_OUT"
                  liCCN             = 81
                  .
          ELSE ASSIGN /* Mobile */
-                 lcServiceLMembers = "10100001,10100003,10100005,CFOTHER,CFYOIGO"
+                 lcServiceLMembers = fGetFieldValue({&BDESTMEMBER})
                  lcInSideRate      = ServiceLimit.GroupCode + "_VOICE_IN"
                  lcOutSideRate     = ServiceLimit.GroupCode + "_VOICE_OUT"
                  liCCN             = 81
@@ -502,7 +508,19 @@ PROCEDURE pCreateServiceLimitTarget:
       END.
    END.
 
+   IF lcServiceLMembers EQ ""
+   THEN UNDO, THROW NEW Progress.Lang.AppError
+      (SUBSTITUTE("Cannot create ServiceLimitTarget for type '&1' as no members " +
+                  " are defined for the type",icLimitType), 1).
+
    DO liCount = 1 TO NUM-ENTRIES(lcServiceLMembers):
+
+      IF NOT CAN-FIND(FIRST BillItem NO-LOCK WHERE
+                            BillItem.Brand   = Syst.Var:gcBrand AND
+                            BillItem.BillCode = ENTRY(liCount,lcServiceLMembers))
+      THEN UNDO, THROW NEW Progress.Lang.AppError
+               (SUBSTITUTE("For ServiceLimitTarget type '&1' member '&2' " +
+                           "is not known billitem",ENTRY(liCount,lcServiceLMembers)), 1).
 
       FIND FIRST ServiceLimitTarget NO-LOCK WHERE
                  ServiceLimitTarget.SLSeq = iiSLSeq AND
@@ -528,9 +546,12 @@ PROCEDURE pCreateServiceLimitTarget:
    
 
    DEFINE VARIABLE lcBDest AS CHARACTER NO-UNDO.
-   lcBDest = ServiceLimitTarget.InSideRate + "|" + ServiceLimitTarget.OutSideRate.
+   lcBDest = lcInSideRate + "|" + lcOutSideRate.
 
    DO liCount = 1 TO 2:
+      IF ENTRY(liCount,lcBDest,"|") EQ ""
+      THEN NEXT.
+
       RUN pCreateBDest(ENTRY(liCount,lcBDest,"|"),
                        SUBSTRING(ENTRY(liCount,lcBDest,"|"),1,LENGTH(ServiceLimit.GroupCode)) +
                        REPLACE(SUBSTRING(ENTRY(liCount,lcBDest,"|"),LENGTH(ServiceLimit.GroupCode) + 1),"_"," "),
@@ -635,12 +656,6 @@ PROCEDURE pCreateFMItem:
             (SUBSTITUTE("Values '&1' and '&2' to be defined if '&3' have a value",
              {&FMFC}, {&LMFC}, {&PRICELIST}), 1). 
 
-   IF DECIMAL(fGetFieldValue({&COMMFEE})) <= 0
-   THEN UNDO, THROW NEW Progress.Lang.AppError
-            (SUBSTITUTE("&1 value is mandatory and must have positive value" +
-                        " when '&2' have a value",
-                        {&COMMFEE}, {&PRICELIST}), 1). 
-   
    FIND FIRST FMItem NO-LOCK WHERE
       FMItem.Brand     = Syst.Var:gcBrand AND
       FMItem.FeeModel  = lcBillCode       AND
@@ -680,8 +695,8 @@ END PROCEDURE.
 
 PROCEDURE pStoreBundle:
 
-   DEFINE VARIABLE lcBaseBundle     AS CHARACTER NO-UNDO.
-   DEFINE VARIABLE lcBaseBundleType AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcBundle     AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcBundleType AS CHARACTER NO-UNDO.
    DEFINE VARIABLE ldeDataLimit     AS DECIMAL   NO-UNDO.
    DEFINE VARIABLE ldeVoiceLimit    AS DECIMAL   NO-UNDO.
    DEFINE VARIABLE ldeBDestLimit    AS DECIMAL   NO-UNDO.
@@ -690,8 +705,8 @@ PROCEDURE pStoreBundle:
    DEFINE VARIABLE liSlSeq          AS INTEGER   NO-UNDO.
       
    ASSIGN
-      lcBaseBundle     = fGetFieldValue({&BBUNDLE})
-      lcBaseBundleType = fGetFieldValue({&BBTYPE})
+      lcBundle     = fGetFieldValue({&BUNDLE})
+      lcBundleType = fGetFieldValue({&BTYPE})
       ldeDataLimit     = DECIMAL(fGetFieldValue({&DATALIMIT}))
       ldeVoiceLimit    = DECIMAL(fGetFieldValue({&VOICELIMIT}))
       ldeBDestLimit    = DECIMAL(fGetFieldValue({&BDESTLIMIT}))
@@ -700,28 +715,28 @@ PROCEDURE pStoreBundle:
    CREATE DayCampaign.
    ASSIGN 
       DayCampaign.Brand           = Syst.Var:gcBrand
-      DayCampaign.DCEvent         = lcBaseBundle 
-      DayCampaign.DCName          = fGetFieldValue({&BBNAME})
+      DayCampaign.DCEvent         = lcBundle 
+      DayCampaign.DCName          = fGetFieldValue({&BNAME})
       DayCampaign.PayType         = INTEGER(fTMSCValue("CLIType","PayType",fGetFieldValue({&PAYTYPE}))) 
       DayCampaign.ValidFrom       = TODAY
       DayCampaign.ValidTo         = DATE(12,31,2049)
       DayCampaign.StatusCode      = 1           /* Default value Active */
-      DayCampaign.DCType          = STRING(fCharToInt({&BBTYPE}, lcBaseBundleType))
-      DayCampaign.CCN             = (IF lcBaseBundleType = "PackageWithCounter" OR
-                                        lcBaseBundleType = "Upsell" OR
+      DayCampaign.DCType          = STRING(fCharToInt({&BTYPE}, lcBundleType))
+      DayCampaign.CCN             = (IF lcBundleType = "PackageWithCounter" OR
+                                        lcBundleType = "Upsell" OR
                                         DayCampaign.PayType = 2
                                      THEN 93
                                      ELSE 0)         
-      DayCampaign.InstanceLimit   = (IF lcBaseBundleType = "Upsell" THEN 100 ELSE 1)
+      DayCampaign.InstanceLimit   = (IF lcBundleType = "Upsell" THEN 100 ELSE 1)
       DayCampaign.BillCode        = fGetFieldValue({&MFBILLCODE})
-      DayCampaign.InclUnit        = (IF lcBaseBundle BEGINS "CONTFH"
+      DayCampaign.InclUnit        = (IF lcBundle BEGINS "CONTFH"
                                      THEN 0
-                                     ELSE IF lcBaseBundleType = "PackageWithCounter" OR
-                                             lcBaseBundleType = "Upsell" OR
+                                     ELSE IF lcBundleType = "PackageWithCounter" OR
+                                             lcBundleType = "Upsell" OR
                                              DayCampaign.PayType = 2
                                      THEN 4
                                      ELSE 1) 
-      DayCampaign.CalcMethod      = (IF lcBaseBundleType = "PackageWithCounter" OR
+      DayCampaign.CalcMethod      = (IF lcBundleType = "PackageWithCounter" OR
                                         DayCampaign.PayType = 2
                                      THEN 4
                                      ELSE 1)  
@@ -736,8 +751,8 @@ PROCEDURE pStoreBundle:
                                      THEN 1
                                      ELSE 4)
       DayCampaign.DurMonth        = 0
-      DayCampaign.DurUnit         = (IF lcBaseBundle BEGINS "CONTFH" OR
-                                        lcBaseBundleType = "PackageWithCounter" OR
+      DayCampaign.DurUnit         = (IF lcBundle BEGINS "CONTFH" OR
+                                        lcBundleType = "PackageWithCounter" OR
                                         DayCampaign.PayType = 2
                                      THEN 0
                                      ELSE 1)
@@ -751,49 +766,57 @@ PROCEDURE pStoreBundle:
    fExport(icSpoolDir + "daycampaign.d", HPD.HPDCommon:mDynExport(BUFFER DayCampaign:HANDLE, " ")).
       
    IF ldeDataLimit > 0 THEN   
-      RUN pDCServicePackage(lcBaseBundle, "SHAPER", LOGICAL(fGetFieldValue({&BONOSUPPORT}))).
+      RUN pDCServicePackage(lcBundle, "SHAPER", LOGICAL(fGetFieldValue({&BONOSUPPORT}))).
 
    IF DayCampaign.PayType = 2 THEN 
-      RUN pDCServicePackage(lcBaseBundle, "HSDPA", NO).
+      RUN pDCServicePackage(lcBundle, "HSDPA", NO).
 
-   CREATE FeeModel.
-   ASSIGN 
-      FeeModel.Brand    = Syst.Var:gcBrand
-      FeeModel.FeeModel = fGetFieldValue({&MFBILLCODE})
-      FeeModel.FeeName  = fGetFieldValue({&BBNAME})               
-      FeeModel.FMGroup  = 0.
+   IF DECIMAL(fGetFieldValue({&COMMFEE})) > 0
+   THEN DO:
 
-   fExport(icSpoolDir + "feemodel.d", HPD.HPDCommon:mDynExport(BUFFER FeeModel:HANDLE, " ")).
+      IF fGetFieldValue({&MFBILLCODE}) EQ ""
+      THEN UNDO, THROW NEW Progress.Lang.AppError
+               ("If commercial fee is not zero then the monthly fee billcode is mandatory", 1). 
 
-   /* NOTE! The following FMItem creation will only work if we are using
-            already existing pricelist (we have checked this earlier in
-            the code).
-            
-            TODO: Separate pricelist creation logic from tariff creation
-                  logic and run it before running this code.
-                  This way we could use also a new pricelist here.
-                  (then new pricelist is needed)
-   */
-   IF fGetFieldValue({&PRICELIST}) > ""
-   THEN RUN pCreateFMItem(fGetFieldValue({&PRICELIST})).
+      CREATE FeeModel.
+      ASSIGN 
+         FeeModel.Brand    = Syst.Var:gcBrand
+         FeeModel.FeeModel = fGetFieldValue({&MFBILLCODE})
+         FeeModel.FeeName  = fGetFieldValue({&BNAME})               
+         FeeModel.FMGroup  = 0.
+   
+      fExport(icSpoolDir + "feemodel.d", HPD.HPDCommon:mDynExport(BUFFER FeeModel:HANDLE, " ")).
+
+      /* NOTE! The following FMItem creation will only work if we are using
+               already existing pricelist (we have checked this earlier in
+               the code).
+               
+               TODO: Separate pricelist creation logic from tariff creation
+                     logic and run it before running this code.
+                     This way we could use also a new pricelist here.
+                     (then new pricelist is needed)
+      */
+      IF fGetFieldValue({&PRICELIST}) > ""
+      THEN RUN pCreateFMItem(fGetFieldValue({&PRICELIST})).
+   END.
 
    /* It is earlier checked that the ServiceLimitGroup is not
       already available */
    CREATE ServiceLimitGroup.
    ASSIGN 
       ServiceLimitGroup.Brand     = Syst.Var:gcBrand
-      ServiceLimitGroup.GroupCode = lcBaseBundle
-      ServiceLimitGroup.GroupName = fGetFieldValue({&BBNAME})
+      ServiceLimitGroup.GroupCode = lcBundle
+      ServiceLimitGroup.GroupName = fGetFieldValue({&BNAME})
       ServiceLimitGroup.ValidFrom = TODAY 
       ServiceLimitGroup.ValidTo   = DATE(12,31,2049).
 
    fExport(icSpoolDir + "servicelimitgroup.d", HPD.HPDCommon:mDynExport(BUFFER ServiceLimitGroup:HANDLE, " ")).
 
-   IF lcBaseBundleType EQ "PackageWithCounter" AND
+   IF lcBundleType EQ "PackageWithCounter" AND
       ldeDataLimit > 0
    THEN lcProcessType = "Progressive".  
    
-   ELSE IF lcBaseBundleType EQ "ServicePackage"
+   ELSE IF lcBundleType EQ "ServicePackage"
    THEN DO:
       IF ldeDataLimit > 0
       THEN lcProcessType = "Data".
@@ -817,17 +840,17 @@ PROCEDURE pStoreBundle:
          THEN RUN pCreateServiceLimitTarget(ENTRY(lii,lcProcessType), liSlSeq).
          ELSE DO:
             RUN pCreateProgLimit(liSlSeq,
-                                 "GPRSDATA_" + lcBaseBundle,
+                                 "GPRSDATA_" + lcBundle,
                                  0,
                                  ldeDataLimit).
-            RUN pCreateBDest("GPRSDATA_" + lcBaseBundle,
+            RUN pCreateBDest("GPRSDATA_" + lcBundle,
                              "GPRS DATA HIGH",
                              93).
             RUN pCreateProgLimit(liSlSeq,
-                                 "GPRSDATA2_" + lcBaseBundle,
+                                 "GPRSDATA2_" + lcBundle,
                                  ldeDataLimit + 0.000001,
                                  999999999.999999).
-            RUN pCreateBDest("GPRSDATA2_" + lcBaseBundle,
+            RUN pCreateBDest("GPRSDATA2_" + lcBundle,
                              "GPRS DATA SLOW",
                              93).
          END.
@@ -835,8 +858,8 @@ PROCEDURE pStoreBundle:
       END.
       
       ELSE IF ENTRY(lii,lcProcessType) = "Data" /* Prepaid */
-      THEN RUN pCreateBDest("GPRSDATA_" + lcBaseBundle,
-                            "GPRS Data " + lcBaseBundle,
+      THEN RUN pCreateBDest("GPRSDATA_" + lcBundle,
+                            "GPRS Data " + lcBundle,
                             93).
    END.
 

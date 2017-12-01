@@ -45,9 +45,9 @@ FUNCTION fRecordFound RETURNS LOGICAL
                                  CLIType.CLIType = icKeyValue)
            THEN RETURN FALSE.
       WHEN 11
-      THEN IF NOT CAN-FIND(FIRST ShaperConf NO-LOCK WHERE 
-                                 ShaperConf.Brand    = Syst.Var:gcBrand  AND 
-                                 ShaperConf.ShaperConfID = icKeyValue)
+      THEN IF NOT CAN-FIND(FIRST RatePlan NO-LOCK WHERE 
+                                 RatePlan.Brand    = Syst.Var:gcBrand  AND 
+                                 RatePlan.RatePlan = icKeyValue)
            THEN RETURN FALSE.
       OTHERWISE RETURN FALSE.      
    END CASE.
@@ -114,7 +114,7 @@ CASE ENTRY(1,icBaseFile, "."):
 
    WHEN "billitem_translation"
    THEN giTextType = 1.
-   WHEN "shaperconf_translation"   
+   WHEN "rateplan_translation"   
    THEN giTextType = 11.
    WHEN "tariff_translation"   
    THEN giTextType = 9.
