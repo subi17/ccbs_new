@@ -423,6 +423,9 @@ FUNCTION fChooseSIMForOrder RETURNS LOGICAL
          bOrder.OrderType = 3 THEN
       SIM.SimStat = 4.
       ELSE SIM.SimStat = 20.
+
+      /* Set additional OrderStamp to avoid infinitive loop */
+      fMarkOrderStamp(bOrder.OrderID,"SimOnly",Func.Common:mMakeTS()).
    END.
    
    IF SIM.SimStat      EQ 20                     AND
