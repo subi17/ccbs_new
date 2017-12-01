@@ -54,7 +54,9 @@ DEF VAR ok           AS log format "Yes/No"    NO-UNDO.
 DEF VAR llEmpty      AS LOGI                   NO-UNDO.  
 DEF VAR liWidth      AS INT                    NO-UNDO.
 DEF VAR lcDialTypeName AS CHAR  FORMAT "X(20)"               NO-UNDO.
+DEF VAR iCount       AS INT                    NO-UNDO INIT 0.
 
+DEF BUFFER bRZItem FOR RZItem. /*YOT-5462 */
 
 IF RZItem-Code ne "" THEN liWidth = 78.
                        ELSE liWidth = 60.
@@ -170,8 +172,8 @@ ADD-ROW:
            PAUSE 0.
            PROMPT-FOR RZItem.PLMNCode
            validate
-              (RZItem.PLMNCode NOT ENTERED or
-              NOT CAN-FIND(RZItem using  RZItem.PLMNCode),
+              (/*RZItem.PLMNCode NOT ENTERED * YOT-5462 or*/
+              CAN-FIND(RZItem using  RZItem.PLMNCode),
               "RZItem Code " + string(INPUT RZItem.PLMNCode) +
               " already exists !").
            IF INPUT FRAME lis RZItem.PLMNCode = "" THEN
@@ -184,7 +186,8 @@ ADD-ROW:
                MESSAGE "The given PLMNCode does not exist in PLMN table."
                    VIEW-AS ALERT-BOX.
                NEXT.
-           END.     
+           END.
+
            create RZItem.
            ASSIGN
            RZItem.PLMNCode = RZItem-code.
@@ -690,6 +693,22 @@ PROCEDURE local-update-record:
                       MESSAGE "Unknown RoamZone !".
                       NEXT.
                    END.
+                   /* YOT-5462 Same PlmnCode can exist if roamingzone is different */
+                   ASSIGN iCount =  0.
+                   FOR EACH bRZItem NO-LOCK WHERE
+                      bRZItem.PlmnCode EQ RZItem.PlmnCode USE-INDEX PLMNCode:
+                      IF AVAIL bRZItem THEN
+                         IF bRZItem.RoamZone EQ INPUT FRAME lis RZItem.ROAMZoNE THEN DO:
+                            ASSIGN iCount = iCount + 1.
+                            LEAVE.
+                         END.
+                   END.
+                   IF iCount > 0 THEN DO:
+                      BELL.
+                      MESSAGE "Duplicate PLMN and RoamZone !".
+                      NEXT.
+                   END.
+                   /* end YOT-5462 */
                    DISP RoamZone.RZName.
                 END.
                 ELSE IF FRAME-FIELD = "CountryPrefix" THEN DO:
