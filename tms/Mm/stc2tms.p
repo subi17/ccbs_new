@@ -73,6 +73,7 @@ DEF VAR ldeActStamp        AS DEC  NO-UNDO.
 
 DEF VAR ldaNextMonthActDate AS DATE NO-UNDO.
 DEF VAR ldNextMonthActStamp AS DEC  NO-UNDO.
+DEF VAR lcExtraLineDiscounts    AS CHAR NO-UNDO. 
 
 DEF BUFFER bOldType  FOR CLIType.
 DEF BUFFER bNewTariff FOR CLIType.
@@ -240,6 +241,7 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
       RETURN.
    END.
 
+   lcExtraLineDiscounts    = fCParam("DiscountType","ExtraLine_Discounts").
    RUN pInitialize.
    RUN pFeesAndServices.
    RUN pUpdateSubscription.
@@ -804,40 +806,42 @@ PROCEDURE pUpdateSubscription:
                  lELMobSub.MultiSimId   EQ MobSub.MsSeq              AND 
                  lELMobSub.MultiSimtype EQ {&MULTISIMTYPE_EXTRALINE} NO-ERROR.
 
+      FIND FIRST lbDiscountPlan NO-LOCK WHERE 
+                 lbDiscountPlan.Brand = Syst.Var:gcBrand            AND 
+          LOOKUP(lbDiscountPlan.DPRuleId, lcExtraLineDiscounts) > 0 AND 
+                 lbDiscountPlan.ValidTo > TODAY                     NO-ERROR.
+      
       FIND FIRST lbDPMember NO-LOCK WHERE 
+                 lbDPMember.DPId      = lbDiscountPlan.DPId       AND 
                  lbDPMember.HostTable = "MobSub"                  AND
                  lbDPMember.KeyValue  = STRING(MobSub.MultiSimId) AND
                  lbDPMember.ValidTo   > TODAY                     AND
-                 lbDPMember.ValidTo  >= lbDPMember.ValidFrom        NO-ERROR.
+                 lbDPMember.ValidTo  >= lbDPMember.ValidFrom      NO-ERROR.
       
-      IF AVAIL lELMobSub AND 
-         AVAIL lbDPMember  THEN DO:
-            
-         FIND FIRST lbDiscountPlan NO-LOCK WHERE 
-                    lbDiscountPlan.Brand = Syst.Var:gcBrand         AND 
-                    lbDiscountPlan.DPId  = lbDPMember.DPId NO-ERROR.
-            
-         IF AVAIL lbDiscountPlan THEN DO:
-            fCloseExtraLineDiscount(lELMobSub.MsSeq,
-                                    lbDiscountPlan.DPRuleID,
-                                    TODAY).
-            Func.Common:mWriteMemo("MobSub",
-                              STRING(lbDPMember.KeyValue),
-                              0,
-                             "ExtraLine Discount is Closed",
-                             "STC done from Extra line associated Main line to other Main line").                        
-            
-            FIND CURRENT Mobsub EXCLUSIVE-LOCK.
-   
-            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).
+      IF AVAIL lELMobSub      AND 
+         AVAIL lbDPMember     AND 
+         AVAIL lbDiscountPlan THEN DO:
 
-            ASSIGN MobSub.MultiSimId   = 0 
-                   MobSub.MultiSimType = 0. 
-            
-            IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
-           
-            FIND CURRENT Mobsub NO-LOCK.
-         END.
+         fCloseExtraLineDiscount(lELMobSub.MsSeq,
+                                 lbDiscountPlan.DPRuleID,
+                                 TODAY).
+         Func.Common:mWriteMemo("MobSub",
+                                STRING(lbDPMember.KeyValue),
+                                0,
+                                "ExtraLine Discount is Closed",
+                                "STC done from Extra line associated Main line to other Main line").                        
+         
+         FIND CURRENT Mobsub EXCLUSIVE-LOCK.
+
+         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).
+
+         ASSIGN MobSub.MultiSimId   = 0 
+                MobSub.MultiSimType = 0. 
+         
+         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
+        
+         FIND CURRENT Mobsub NO-LOCK.
+      
       END.
 
    END.

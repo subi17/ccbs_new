@@ -80,6 +80,8 @@ DEF VAR ldeActivationTS AS DEC  NO-UNDO.
 DEF VAR ldaActDate AS DATE NO-UNDO. 
 DEF VAR lcMobileNumber AS CHAR NO-UNDO. 
 DEF VAR llgExtraLine   AS LOG  NO-UNDO INITIAL NO. 
+DEF VAR lcExtraLineDiscounts    AS CHAR NO-UNDO.
+DEF VAR liOngoingOrderId        AS INT  NO-UNDO.
 
 DEF BUFFER bInvCust        FOR Customer.
 DEF BUFFER bRefCust        FOR Customer.
@@ -96,6 +98,8 @@ DEF BUFFER lbMLOrder       FOR Order.
 DEF BUFFER lbMLMobSub      FOR MobSub.
 DEF BUFFER lbMobSubs       FOR MobSub.
 DEF BUFFER lbPriDSSMobSub  FOR MobSub.
+DEF BUFFER lbELOrderAction FOR OrderAction.
+DEF BUFFER lbOngOrder      FOR Order.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
@@ -447,7 +451,39 @@ IF NOT AVAIL mobsub THEN DO:
                 MobSub.MultiSimType     = Order.MultiSimType       /* Extraline = 3   */
                 lbMLMobSub.MultiSimID   = MobSub.MsSeq             /* Extraline Subid */
                 lbMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY}  /* Primary = 1     */
-                llgExtraLine            = YES. 
+                llgExtraLine            = YES.
+      ELSE IF fCheckOngoingConvergentAvailForExtraLine(Customer.CustIdType,
+                                                       Customer.OrgId,
+                                                OUTPUT liOngoingOrderId) THEN DO:
+         FIND FIRST lbOngOrder NO-LOCK WHERE
+                    lbOngOrder.Brand   = Syst.Var:gcBrand AND
+                    lbOngOrder.OrderId = liOngoingOrderId NO-ERROR.
+         IF AVAILABLE lbOngOrder THEN
+            ASSIGN MobSub.MultiSimID   = lbOngOrder.MsSeq
+                   MobSub.MultiSimType = Order.MultiSimType
+                   llgExtraLine        = YES.
+      END.
+      ELSE DO:
+         ASSIGN MobSub.MultiSimID       = 0
+                MobSub.MultiSimType     = 0
+                llgExtraLine            = YES
+                lcExtraLineDiscounts    = fCParam("DiscountType","ExtraLine_Discounts").
+         
+         FIND FIRST lbELOrderAction EXCLUSIVE-LOCK WHERE
+                    lbELOrderAction.Brand    = Syst.Var:gcBrand        AND
+                    lbELOrderAction.OrderID  = Order.OrderID           AND
+                    lbELOrderAction.ItemType = "ExtraLineDiscount"     AND
+             LOOKUP(lbELOrderAction.ItemKey,lcExtraLineDiscounts) > 0  NO-ERROR.
+
+         IF AVAILABLE lbELOrderAction THEN DO:
+            DELETE lbELOrderAction.
+            Func.Common:mWriteMemo("Order",
+                                    STRING(Order.OrderID),
+                                    0,
+                                    "EXTRA LINE DISCOUNT REMOVED",
+                                    "Removed ExtraLineDiscount Item from OrderAction").
+         END.
+      END.
    END.
  
    IF Avail imsi THEN Mobsub.imsi = IMSI.IMSI.
