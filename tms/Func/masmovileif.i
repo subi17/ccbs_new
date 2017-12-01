@@ -382,17 +382,10 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
                          "").                         /*old value*/
 
 /* YDR-2532 */
-
-      IF NUM-ENTRIES(OrderCustomer.TerritoryOwner,",") > 1 THEN                  
-         fAddCharacteristic(lcCharacteristicsArray,      /*base*/
-                            "TerritoryOwner",             /*param name*/
-                            ENTRY(2,OrderCustomer.TerritoryOwner),  /*param value*/
-                            "").                         /*old value*/               
-      ELSE
-         fAddCharacteristic(lcCharacteristicsArray,      /*base*/
-                            "TerritoryOwner",             /*param name*/
-                            OrderCustomer.TerritoryOwner,  /*param value*/
-                            "").                         /*old value*/ 
+      fAddCharacteristic(lcCharacteristicsArray,      /*base*/
+                         "TerritoryOwner",             /*param name*/
+                         OrderCustomer.TerritoryOwner,  /*param value*/
+                         "").                         /*old value*/ 
                             
       fAddCharacteristic(lcCharacteristicsArray, /*base*/
                          "AddressId",            /*param name*/
