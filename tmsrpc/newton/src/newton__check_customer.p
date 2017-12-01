@@ -497,7 +497,7 @@ IF LOOKUP(pcCliType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
 END.
 
 /* Check extra lines discount is allowed for customer */
-IF fCheckExistingConvergentAvailForExtraLine("", pcIdType,pcPersonId) > 0 OR
+IF fCheckConvergentAvailableForExtraLine("", pcIdType,pcPersonId) > 0 OR
    fCheckOngoingConvergentAvailForExtraLine("", pcIdType,pcPersonId) > 0
 THEN lcExtraLineAllowed = "OK".
 ELSE lcExtraLineAllowed = "NO_MAIN_LINE".   

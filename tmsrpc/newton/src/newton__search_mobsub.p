@@ -26,6 +26,7 @@
 Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
+{Func/extralinefunc.i}
 
 /* Input parameters */
 DEF VAR pcInput AS CHAR NO-UNDO.
