@@ -172,10 +172,10 @@ ADD-ROW:
            PAUSE 0.
            PROMPT-FOR RZItem.PLMNCode
            validate
-              (RZItem.PLMNCode NOT ENTERED /* YOT-5462 or
-              NOT CAN-FIND(RZItem using  RZItem.PLMNCode)*/,
+              (/*RZItem.PLMNCode NOT ENTERED * YOT-5462 or*/
+              CAN-FIND(RZItem using  RZItem.PLMNCode),
               "RZItem Code " + string(INPUT RZItem.PLMNCode) +
-              " already exists !"). /* text? */
+              " already exists !").
            IF INPUT FRAME lis RZItem.PLMNCode = "" THEN
                LEAVE add-row.
            RZItem-code = INPUT FRAME lis RZItem.PLMNCode.
@@ -698,7 +698,7 @@ PROCEDURE local-update-record:
                    FOR EACH bRZItem NO-LOCK WHERE
                       bRZItem.PlmnCode EQ RZItem.PlmnCode USE-INDEX PLMNCode:
                       IF AVAIL bRZItem THEN
-                         IF bRZItem.RoamZone EQ RZItem.RoamZone THEN DO:
+                         IF bRZItem.RoamZone EQ INPUT FRAME lis RZItem.ROAMZoNE THEN DO:
                             ASSIGN iCount = iCount + 1.
                             LEAVE.
                          END.
