@@ -632,9 +632,8 @@ FUNCTION fDelivSIM RETURNS LOG
       IF LOOKUP(STRING(Order.MNPStatus),"5,8") > 0 THEN RETURN FALSE.
 
    IF CAN-FIND(FIRST bOrderGroup NO-LOCK WHERE
-                     bOrderGroup.OrderId   EQ bALOrder.OrderId           AND
-                     bOrderGroup.GroupId   EQ ttOneDelivery.OrderID      AND
-                     bOrderGroup.GroupType EQ {&OG_LOFILE}               AND
+                     bOrderGroup.OrderId   EQ Order.OrderId                     AND
+                     bOrderGroup.GroupType EQ {&OG_LOFILE}                      AND
                ENTRY(1,bALOrderGroup.Info,CHR(255)) EQ {&DESPACHAR_TRUE_VALUE}) THEN 
    RETURN FALSE.
  
@@ -1501,6 +1500,22 @@ FUNCTION fDelivSIM RETURNS LOG
    THEN liDelType = {&ORDER_DELTYPE_POS_SECURE}.
    ELSE IF Order.DeliveryType EQ 0 THEN liDelType = {&ORDER_DELTYPE_COURIER}.
    ELSE liDelType = Order.DeliveryType.
+
+   IF llgSIMStatus        AND
+      lcMainOrderId EQ "" AND 
+      lcDespachar   EQ "" THEN DO:
+
+      FIND FIRST bOrderGroup NO-LOCK WHERE
+                 bOrderGroup.OrderId   EQ ttOneDelivery.OrderId             AND
+                 bOrderGroup.GroupType EQ {&OG_LOFILE}                      AND
+           ENTRY(1,bALOrderGroup.Info,CHR(255)) EQ {&DESPACHAR_FALSE_VALUE} NO-ERROR.
+
+      IF AVAIL bOrderGroup THEN 
+         ASSIGN lcMainOrderId = STRING(bOrderGroup.GroupId)
+                lcDespachar   = "01".
+
+   END.   
+
 
    /* Create Temp-table for DataService (OR extra fields in future) */
    CREATE ttExtra.
