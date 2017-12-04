@@ -328,10 +328,14 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
             ELSE DO:
             
                /* there are other packages available */
-               IF liSLGPacket < NUM-ENTRIES(lcSLGroupList) AND
-                  (lcOutBDest = "" OR (MSOwner.CLIType BEGINS "CONTF" AND NOT MSOwner.CLIType BEGINS "CONTFH")) 
-               THEN DO:
-                  IF lcOutBDest = "" THEN llPackageUsed = FALSE.
+               IF liSLGPacket < NUM-ENTRIES(lcSLGroupList)                                  AND
+                  (lcOutBDest = ""                                                          OR 
+                   (MSOwner.CLIType BEGINS "CONTF" AND NOT MSOwner.CLIType BEGINS "CONTFH") OR 
+                   LOOKUP("FIX_VOICE1000",lcSLGroupList) > 0)                               THEN 
+               DO:
+                  IF lcOutBDest = "" THEN 
+                      llPackageUsed = FALSE.
+                      
                   NEXT PACKET.
                END.
                
