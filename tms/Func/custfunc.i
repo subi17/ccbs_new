@@ -18,6 +18,7 @@ FUNCTION fgetCustSegment RETURNS CHAR
    (INPUT icIdType AS CHAR,
     INPUT ilSelfemployed AS LOG,
     INPUT ilProCust AS LOG,
+    INPUT icCustId AS CHARACTER,  /* YDR-2621 */
     OUTPUT ocCategory AS CHAR):
 
    DEF VAR lcSegment AS CHAR NO-UNDO.
@@ -36,8 +37,12 @@ FUNCTION fgetCustSegment RETURNS CHAR
       END.
    END.
    ELSE DO:
-      IF icIDType EQ "CIF" THEN
-         ocCategory = "23".
+      IF icIDType EQ "CIF" THEN DO:
+         IF icCustID BEGINS "V00" THEN
+            ocCategory = "30".  /* YDR-2621 */
+         ELSE
+            ocCategory = "23".
+      END.
       ELSE IF icIDType EQ "NIF" AND ilSelfEmployed THEN 
          ocCategory = "44".         
       ELSE IF icIDType EQ "NIF" AND NOT ilSelfEmployed THEN

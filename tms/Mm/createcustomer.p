@@ -202,8 +202,34 @@ END.
 ELSE DO:
 
    oiCustnum = liOldCustnum.
-   IF ilUpdateExisting EQ FALSE THEN RETURN "".
+   IF Order.OrderType EQ {&ORDER_TYPE_NEW} OR 
+      Order.OrderType EQ {&ORDER_TYPE_MNP} THEN DO:
 
+      FIND FIRST OrderCustomer EXCLUSIVE-LOCK WHERE
+                 OrderCustomer.Brand   = Syst.Var:gcBrand   AND
+                 OrderCustomer.OrderID = iiOrderID AND
+                 OrderCustomer.RowType = iiRole  NO-ERROR.
+
+      IF AVAILABLE OrderCustomer THEN DO:
+
+         IF llDoEvent THEN DO:
+            DEFINE VARIABLE lhOrderCustomer AS HANDLE NO-UNDO.
+            lhOrderCustomer = BUFFER OrderCustomer:HANDLE.
+            RUN StarEventInitialize(lhOrderCustomer).
+            IF llDoEvent THEN RUN StarEventSetOldBuffer ( lhOrderCustomer ).
+         END.
+
+         ASSIGN
+            OrderCustomer.CustNum = oiCustNum
+            OrderCustomer.PersonID = "OLD" WHEN OrderCustomer.PersonID EQ "".
+            IF OrderCustomer.RowType = 1 THEN Order.CustNum = oiCustNum.
+
+         IF llDoEvent THEN RUN StarEventMakeModifyEvent ( lhOrderCustomer ).
+      END.
+   END.
+
+   IF ilUpdateExisting EQ FALSE THEN RETURN "not updated existing customer".
+   
    IF llDoEvent THEN DO:
       DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
       lhCustomer = BUFFER Customer:HANDLE.
@@ -258,27 +284,6 @@ ELSE DO:
 
    /* DCH NEW/MNP */
    ELSE DO:
-
-      FIND FIRST OrderCustomer EXCLUSIVE-LOCK WHERE
-                 OrderCustomer.Brand   = Syst.Var:gcBrand   AND
-                 OrderCustomer.OrderID = iiOrderID AND
-                 OrderCustomer.RowType = iiRole  NO-ERROR.
-
-      IF AVAILABLE OrderCustomer THEN DO:
-
-         IF llDoEvent THEN DO:
-            DEFINE VARIABLE lhOrderCustomer AS HANDLE NO-UNDO.
-            lhOrderCustomer = BUFFER OrderCustomer:HANDLE.
-            RUN StarEventInitialize(lhOrderCustomer).
-            IF llDoEvent THEN RUN StarEventSetOldBuffer ( lhOrderCustomer ).
-         END.
-
-         ASSIGN
-            OrderCustomer.CustNum = oiCustNum
-            OrderCustomer.PersonID = "OLD" WHEN OrderCustomer.PersonID EQ "".
-
-         IF llDoEvent THEN RUN StarEventMakeModifyEvent ( lhOrderCustomer ).
-
          FIND FIRST MobSub NO-LOCK WHERE
                     MobSub.Brand   = Syst.Var:gcBrand AND
                     MobSub.MsSeq   = Order.MsSeq AND
@@ -381,7 +386,6 @@ ELSE DO:
 
          fUpdEmailDelType(Order.OrderId).
 
-      END.
    END.
 
    lcMemo = "Order" + CHR(255) +
