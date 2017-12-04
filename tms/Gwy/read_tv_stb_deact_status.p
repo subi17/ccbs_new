@@ -149,8 +149,8 @@ PROCEDURE pReadFile:
             ttCustomer.Email       = ENTRY(6,lcData)
             ttCustomer.Product     = ENTRY(7,lcData)
             ttCustomer.SerialNbr   = ENTRY(8,lcData)
-            ttCustomer.StatusCode  = ENTRY(10,lcData)
-            ttCustomer.Description = ENTRY(11,lcData).
+            ttCustomer.StatusCode  = ENTRY(11,lcData)
+            ttCustomer.Description = ENTRY(12,lcData).
 
     END.
     INPUT CLOSE.
