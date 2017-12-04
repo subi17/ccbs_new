@@ -24,13 +24,11 @@ FUNCTION fGetNextMXSeq RETURNS INTEGER ():
 END FUNCTION.
 
 FUNCTION fCreateMatrix RETURNS INTEGER
-    (icName  AS CHARACTER,
-     iiPrior AS INTEGER):
+    (icName  AS CHARACTER):
 
     FIND FIRST Matrix NO-LOCK WHERE
         Matrix.Brand = "1" AND
         Matrix.MXKey = "EXTRALINE" AND
-        Matrix.Prior = iiPrior AND
         Matrix.MXName = icName
     NO-ERROR.
     
@@ -40,9 +38,9 @@ FUNCTION fCreateMatrix RETURNS INTEGER
         ASSIGN
             Matrix.Brand  = "1"
             Matrix.MXName = icName
-            Matrix.MXKey  = fGetNextMatrixPriority("EXTRALINE")
+            Matrix.MXKey  = "EXTRALINE"
             Matrix.MXSeq  = fGetNextMXSeq()
-            Matrix.Prior  = iiPrior
+            Matrix.Prior  = fGetNextMatrixPriority("EXTRALINE")
             Matrix.MXRes  = 1
             .
     END. 
@@ -79,7 +77,7 @@ END FUNCTION.
 
 DEFINE VARIABLE liMXSeq AS INTEGER NO-UNDO.
 
-liMXSeq = fCreateMatrix("CONT28", 0).
+liMXSeq = fCreateMatrix("CONT28").
 
 fCreateMXItem(liMXSeq, "SubsTypeTo", "CONT28").
 fCreateMXItem(liMXSeq, "SubsTypeFrom", "CONTDSL45").
