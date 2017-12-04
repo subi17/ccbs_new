@@ -1377,11 +1377,12 @@ PROCEDURE pFinalize:
                END.
             END.
 			
-			FIND FIRST OrderCustomer NO-LOCK WHERE
-                    OrderCustomer.Brand EQ Syst.Var:gcBrand AND
-                    Ordercustomer.OrderID EQ MsRequest.ReqIParam2 AND
-                    OrderCustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL} AND
-                    OrderCustomer.TerritoryOwner NE "".
+            FIND FIRST OrderCustomer NO-LOCK WHERE
+                       OrderCustomer.Brand EQ Syst.Var:gcBrand AND
+                       Ordercustomer.OrderID EQ Order.OrderID AND
+                       OrderCustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL} AND
+                       OrderCustomer.TerritoryOwner NE "" NO-ERROR.
+
 				IF Avail OrderCustomer THEN DO:
                FIND CURRENT Mobsub EXCLUSIVE-LOCK NO-ERROR.
                   ASSIGN MobSub.TerritoryOwner = OrderCustomer.TerritoryOwner.

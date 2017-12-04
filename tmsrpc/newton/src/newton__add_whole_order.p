@@ -971,8 +971,11 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
                
          END.
          IF piRowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} THEN DO:
-            fgetCustSegment(lcIdtypeOrderCustomer, llSelfEmployed,
-                            llIsProCustomer, OUTPUT lcCategory).
+            fgetCustSegment(lcIdtypeOrderCustomer,
+                            llSelfEmployed,
+                            llIsProCustomer, 
+                            OrderCustomer.CustId,  /* YDR-2621 */
+                            OUTPUT lcCategory).
             OrderCustomer.category = lcCategory.
          END.
    END.
