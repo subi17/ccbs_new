@@ -105,6 +105,11 @@
 
             ASSIGN llOrdStChg = no.
             
+            IF (Order.OrderType EQ {&ORDER_TYPE_MNP} OR
+                Order.OrderType EQ {&ORDER_TYPE_NEW}) AND
+                LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0 AND
+                Order.ICC EQ "" THEN NEXT {1}.
+            
             /* Move Additional line or Extra line discount Mobile only tariff order to 76 queue, 
                if associated customer main line considered order is in ongoing status  */
             IF Order.StatusCode NE {&ORDER_STATUS_ONGOING}                           AND
