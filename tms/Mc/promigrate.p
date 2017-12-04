@@ -56,8 +56,11 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
       fReqStatus(3,lcError).
       RETURN lcError.
    END.
-   fgetCustSegment(Customer.custidtype, fIsSelfEmpl(Customer.category),
-                   TRUE, OUTPUT lcCategory).
+   fgetCustSegment(Customer.custidtype,
+                   fIsSelfEmpl(Customer.category),
+                   TRUE,
+                   Customer.OrgId,  /* YDR-2621 */
+                   OUTPUT lcCategory).
 
    IF NOT fIsPro(lccategory) THEN DO:
       fReqStatus(3,SUBST("New category is not pro &1",lccategory)).
