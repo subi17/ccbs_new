@@ -209,7 +209,7 @@ for each ttcust use-index amt,
 
    put stream slog unformatted
       ttcust.custnum  chr(9)
-      fDispCustName(BUFFER Customer) chr(9)
+      Func.Common:mDispCustName(BUFFER Customer) chr(9)
       ttcust.extinvid chr(9)
       trim(string(ttcust.amt,"->>>>>>>9.99")) skip.
 end.

@@ -669,6 +669,7 @@ PROCEDURE pOwnerChange:
                                (IF bNewCust.CustIDType EQ "CIF" THEN FALSE
                                 ELSE bOldCustCat.SelfEmployed),
                                bOldCustCat.pro,
+                               bNewCust.OrgId,   /* YDR-2621 */
                                OUTPUT lcCategory).
                IF lcCategory > "" THEN bNewCust.Category = lcCategory.
             END.
