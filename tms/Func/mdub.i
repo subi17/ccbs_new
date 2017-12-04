@@ -120,6 +120,9 @@ FUNCTION fAllowMDUBActivation RETURNS LOGICAL
    /* Check ongoing BONO BTC */
    IF fOngoingBTC(MobSub.MsSeq,lcBONOContracts,FALSE) THEN RETURN FALSE.
 
+   /* YOB-1223: mobile line is not active in the NW */
+   IF MobSub.IMSI EQ "" THEN RETURN FALSE.
+
    RETURN TRUE.
 
 END FUNCTION. 
