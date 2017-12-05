@@ -49,6 +49,33 @@ FUNCTION fCLITypeAllowedForExtraLine RETURNS LOGICAL
 
 END FUNCTION.
 
+
+/* Check which extraline clitype a mainline clitype is using.
+   If the given clitype is not mainline clitype the function returns
+   empty string */ 
+FUNCTION fExtraLineForMainLine RETURNS CHARACTER
+   (icMainLineCLIType  AS CHARACTER):
+
+   DEFINE BUFFER MXItemMain FOR MXItem.
+
+   FOR EACH  Matrix NO-LOCK WHERE
+             Matrix.Brand  = Syst.Var:gcBrand   AND
+             Matrix.MXKey  = {&EXTRALINEMATRIX},
+       FIRST MXItemMain NO-LOCK WHERE
+             MXItemMain.MXSeq   = Matrix.MXSeq AND
+             MXItemMain.MXName  = "SubsTypeFrom" AND
+             MXItemMain.MXValue = icMainLineCLIType,
+       FIRST MXItem NO-LOCK WHERE
+             MXItem.MXSeq   = MXItemMain.MXSeq AND
+             MXItem.MXName  = "SubsTypeTo":
+                
+       RETURN MXItem.MXValue.
+   END.
+   
+   RETURN "".
+
+END FUNCTION.
+
 /* Check if the clitype is extraline clitype */
 FUNCTION fCLITypeIsExtraLine RETURNS LOGICAL
    (icExtraLineCLIType AS CHARACTER):
