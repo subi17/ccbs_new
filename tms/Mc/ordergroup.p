@@ -28,7 +28,8 @@ FUNCTION fCollect RETURNS LOGICAL
 
 END FUNCTION.
 
-DEF VAR iiOrderId AS INT NO-UNDO. 
+DEF INPUT PARAMETER iiOrderId AS INT NO-UNDO.
+
 DEF VAR xrecid       AS RECID                           init ?.
 DEF VAR FIRSTrow     AS INT                    NO-UNDO  init 0.
 DEF VAR order        AS INT                    NO-UNDO  init 1.
@@ -42,8 +43,6 @@ DEF VAR must-add     AS LOG                    NO-UNDO.
 DEF VAR ac-hdr       AS CHAR                   NO-UNDO.
 DEF VAR rtab         AS RECID EXTENT 24        NO-UNDO.
 DEF VAR i            AS INT                    NO-UNDO.
-
-iiOrderId = 70138692.
 
 FORM 
    ttOrderGroup.OrderId   COLUMN-LABEL "OrderId"

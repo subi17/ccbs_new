@@ -1334,7 +1334,7 @@ PROCEDURE pOrderView:
            Syst.Var:ufk[3] = 1072
            Syst.Var:ufk[4] = 927           
            Syst.Var:ufk[5] = 2851
-           Syst.Var:ufk[6] = 0
+           Syst.Var:ufk[6] = 9855 
            Syst.Var:ufk[7] = 9019 
            Syst.Var:ufk[8] = 8
            Syst.Var:ehto = 0               
@@ -1375,7 +1375,10 @@ PROCEDURE pOrderView:
               RUN Mm/msrequest.p(?,?,Order.MsSeq,0,liMsRequest,"").
 
            END.
-           
+           ELSE IF Sys.Var:toimi = 6 THEN DO:
+              RUN local-find-this(FALSE).
+              RUN Mc/ordergroup.p(Order.OrderId).
+           END.
            ELSE IF Syst.Var:toimi = 7 THEN DO:
               RUN local-find-this(FALSE).
               RUN Mc/orderdelivery.p(Order.OrderId).
