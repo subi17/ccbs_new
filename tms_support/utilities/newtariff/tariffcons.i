@@ -53,8 +53,6 @@
 &GLOBAL-DEFINE FL_BB    "FixedLineBaseBundle"
 
 &GLOBAL-DEFINE BBP     "BBProfile"
-&GLOBAL-DEFINE DSS2C   "DSS2Compatible"
-&GLOBAL-DEFINE DSS2PL  "DSS2PrimaryLine"
 &GLOBAL-DEFINE NVC     "NativeVoIPCompatible"
 &GLOBAL-DEFINE OV      "OnlyVOICE"
 &GLOBAL-DEFINE VBDES   "VoiceBDest"
