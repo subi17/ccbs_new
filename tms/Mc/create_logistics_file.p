@@ -632,9 +632,9 @@ FUNCTION fDelivSIM RETURNS LOG
       IF LOOKUP(STRING(Order.MNPStatus),"5,8") > 0 THEN RETURN FALSE.
 
    IF CAN-FIND(FIRST bOrderGroup NO-LOCK WHERE
-                     bOrderGroup.OrderId   EQ Order.OrderId                     AND
-                     bOrderGroup.GroupType EQ {&OG_LOFILE}                      AND
-               ENTRY(1,bALOrderGroup.Info,CHR(255)) EQ {&DESPACHAR_TRUE_VALUE}) THEN 
+                     bOrderGroup.OrderId   EQ Order.OrderId                   AND
+                     bOrderGroup.GroupType EQ {&OG_LOFILE}                    AND
+               ENTRY(1,bOrderGroup.Info,CHR(255)) EQ {&DESPACHAR_TRUE_VALUE}) THEN 
    RETURN FALSE.
  
    FIND FIRST MNPProcess WHERE 
@@ -1506,9 +1506,9 @@ FUNCTION fDelivSIM RETURNS LOG
       lcDespachar   EQ "" THEN DO:
 
       FIND FIRST bOrderGroup NO-LOCK WHERE
-                 bOrderGroup.OrderId   EQ ttOneDelivery.OrderId             AND
-                 bOrderGroup.GroupType EQ {&OG_LOFILE}                      AND
-           ENTRY(1,bALOrderGroup.Info,CHR(255)) EQ {&DESPACHAR_FALSE_VALUE} NO-ERROR.
+                 bOrderGroup.OrderId   EQ ttOneDelivery.OrderId           AND
+                 bOrderGroup.GroupType EQ {&OG_LOFILE}                    AND
+           ENTRY(1,bOrderGroup.Info,CHR(255)) EQ {&DESPACHAR_FALSE_VALUE} NO-ERROR.
 
       IF AVAIL bOrderGroup THEN 
          ASSIGN lcMainOrderId = STRING(bOrderGroup.GroupId)
