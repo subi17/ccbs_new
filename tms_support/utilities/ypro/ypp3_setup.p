@@ -45,8 +45,8 @@ FUNCTION fcreateDaycampaign RETURNS LOGICAL ( INPUT icBaseDCEvent AS CHAR,
       ASSIGN
       ttDaycampaign.dctype = icDctype
       ttDaycampaign.dcevent = icevent
-      /*ttDaycampaign.billcode = icevent + "MF"
-      ttDaycampaign.feemodel = icevent + "MF"*/
+      ttDaycampaign.billcode = icevent + "MF"
+      ttDaycampaign.feemodel = icevent + "MF"
       ttDaycampaign.dcname = icName
       ttDaycampaign.bundleupsell = ""
       ttDaycampaign.bundletarget = iiTarget.
@@ -340,8 +340,8 @@ fCreateMXItem(giMXSeq, "PerContract", "ANGELTECH").
 fCreateMXItem(giMXSeq, "PerContract", "MANITAS").
 
 
-fcreateDaycampaign("AGILETV","ANGELTECH","Angel Tecnológico","7",limode,0).
-fcreateDaycampaign("AGILETV","MANITAS","Manitas Oficina","7",limode,0).
+fcreateDaycampaign("AGILETV","ANGELTECH","Angel Tecnológico","7",limode,3).
+fcreateDaycampaign("AGILETV","MANITAS","Manitas Oficina","7",limode,3).
 
 
 llError = fcreateDiscountPlan ("CONT15MF", "ANGELTECHMF", 12/01/17,
