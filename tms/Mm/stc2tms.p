@@ -1349,10 +1349,9 @@ PROCEDURE pFinalize:
 				END.
 
             /* YTS-11912 */
-            IF lcExtraMainLineCLITypes                       NE "" AND
-               LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) GT 0  AND
-               Order.MultiSimId                              NE 0  AND
-               Order.MultiSimType                            EQ {&MULTISIMTYPE_PRIMARY}
+            IF fCLITypeIsMainLine(Order.CLIType) AND
+               Order.MultiSimId NE 0 AND
+               Order.MultiSimType EQ {&MULTISIMTYPE_PRIMARY}
             THEN fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
                                           Order.OrderId,    /* Main line Order Id  */
                                           "RELEASE").       /* Action              */
