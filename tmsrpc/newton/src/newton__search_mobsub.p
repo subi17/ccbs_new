@@ -77,11 +77,7 @@ FUNCTION fGetDiscountType RETURNS CHARACTER
    (INPUT iiMsSeq   AS INT,
     INPUT icCLIType AS CHAR):
 
-   DEF VAR lcExtraLineDiscounts AS CHAR NO-UNDO.
    DEF VAR lcDiscountType       AS CHAR NO-UNDO INITIAL "".
-
-   ASSIGN
-      lcExtraLineDiscounts = fCParam("DiscountType","ExtraLine_Discounts").
 
    /* Get available discount info for subscriptions     */
    /* Only one additionaline/extraline discount will be
@@ -108,7 +104,7 @@ FUNCTION fGetDiscountType RETURNS CHARACTER
        END.
        ELSE IF fCLITypeIsExtraLine(icCLIType) THEN DO:
 
-          IF LOOKUP(DiscountPlan.DPRuleId,lcExtraLineDiscounts) > 0 THEN
+          IF LOOKUP(DiscountPlan.DPRuleId,icCLIType + "DISC") > 0 THEN
              lcDiscountType = "extra_100".
           ELSE
              lcDiscountType = "extra_0".

@@ -551,7 +551,6 @@ PROCEDURE pUpdateSubscription:
    DEF VAR liSecs                  AS INT  NO-UNDO. 
    DEF VAR liNewMSStatus           AS INT  NO-UNDO. 
    DEF VAR ldtCloseDate            AS DATE NO-UNDO.
-   DEF VAR lcExtraLineDiscRuleId   AS CHAR NO-UNDO.
    DEFINE VARIABLE lcExtraLineDiscount AS CHARACTER NO-UNDO.
 
    DEF BUFFER bOwner         FOR MsOwner.
@@ -861,15 +860,10 @@ PROCEDURE pUpdateSubscription:
                 (lMLMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE}  OR
                  lMLMobSub.MsStatus     EQ {&MSSTATUS_BARRED}) NO-ERROR.
 
-      CASE MobSub.CLIType:
-         WHEN "CONT28" THEN lcExtraLineDiscRuleId = "CONT28DISC".
-      END CASE.
-
-      IF AVAIL lMLMobSub             AND
-         lcExtraLineDiscRuleId NE "" THEN DO:
+      IF AVAIL lMLMobSub THEN DO:
             
          fCreateExtraLineDiscount(MobSub.MsSeq,
-                                  lcExtraLineDiscRuleId,
+                                  MobSub.CLIType + "DISC",
                                   TODAY).
       
          ASSIGN lMLMobSub.MultiSimId   = MobSub.MsSeq 
@@ -911,25 +905,19 @@ PROCEDURE pUpdateSubscription:
 
       IF AVAIL lELMobSub THEN DO:
             
-         CASE lELMobSub.CLIType:
-            WHEN "CONT28" THEN lcExtraLineDiscRuleId = "CONT28DISC".
-         END CASE.
-         
-         IF lcExtraLineDiscRuleId NE "" THEN DO:
-            fCreateExtraLineDiscount(lELMobSub.MsSeq,
-                                     lcExtraLineDiscRuleId,
-                                     TODAY).
-            FIND CURRENT Mobsub EXCLUSIVE-LOCK.
-   
-            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).
+         fCreateExtraLineDiscount(lELMobSub.MsSeq,
+                                  lELMobSub.CLIType + "DISC",
+                                  TODAY).
+         FIND CURRENT Mobsub EXCLUSIVE-LOCK.
 
-            ASSIGN MobSub.MultiSimId   = lELMobSub.MsSeq 
-                   MobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY}. 
-            
-            IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
-           
-            FIND CURRENT Mobsub NO-LOCK.
-         END.
+         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).
+
+         ASSIGN MobSub.MultiSimId   = lELMobSub.MsSeq 
+                MobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY}. 
+         
+         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
+        
+         FIND CURRENT Mobsub NO-LOCK.
 
       END.
 

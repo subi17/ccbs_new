@@ -14,7 +14,7 @@
                    subscription_limit;int;mandatory;
                    reason;string;optional;possible fail reason, returned if order_allowed = false
                    additional_line_allowed;string;mandatory;OK,NO_MAIN_LINE,NO_SUBSCRIPTIONS (OK is returned also if there's no active main line but a pending main line order)
-                   extra_line_allowed;string;optional;comma separated list of allowed extra lines
+                   extra_line_allowed;string;mandatory;comma separated list of allowed extra lines
                    segment;string;mandatory;
  */
 
@@ -553,8 +553,10 @@ add_int(lcReturnStruct, 'subscription_limit', liSubLimit).
 IF NOT llOrderAllowed THEN add_string(lcReturnStruct, 'reason',lcReason).
 add_string(lcReturnStruct, 'additional_line_allowed',lcAddLineAllowed).
 
-IF lcExtraLineAllowed > ""
-THEN add_string(lcReturnStruct, 'extra_line_allowed',lcExtraLineAllowed).
+IF lcExtraLineAllowed EQ ""
+THEN lcExtraLineAllowed = "NO_MAIN_LINE".
+
+add_string(lcReturnStruct, 'extra_line_allowed',lcExtraLineAllowed).
 
 IF liSubs >= liSubLimit AND NOT plSTCMigrate THEN
    add_boolean(lcReturnStruct,"subscription_limit_reached",TRUE).

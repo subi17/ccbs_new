@@ -57,7 +57,6 @@ DEF BUFFER bOrder    FOR Order.
 DEF BUFFER bOrdTemp  FOR Order.
 
 /* Extra line */
-DEFINE VARIABLE lcExtraLineDiscounts    AS CHAR NO-UNDO.
 DEFINE VARIABLE liExtraLineMsSeq        AS INT  NO-UNDO. 
 
 DEF BUFFER lELOrder       FOR Order.        
@@ -172,9 +171,6 @@ IF llDoEvent THEN DO:
    RUN StarEventInitialize(lhIMSI).
    RUN StarEventInitialize(lhSingleFee).
 END.
-
-ASSIGN 
-   lcExtraLineDiscounts    = fCParam("DiscountType","ExtraLine_Discounts").
 
 RUN pTerminate.
 
@@ -1120,15 +1116,14 @@ PROCEDURE pTerminate:
       FIND FIRST lELOrder NO-LOCK WHERE 
                  lELOrder.MsSeq        EQ liExtraLineMsSeq          AND           
                  lELOrder.MultiSimId   NE 0                         AND
-                 lELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} AND
-          fCLITypeIsExtraLine(lELOrder.CLIType)         NO-ERROR.
+                 lELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} NO-ERROR.
 
-      IF AVAIL lELOrder THEN DO:
+      IF AVAIL lELOrder AND fCLITypeIsExtraLine(lELOrder.CLIType) THEN DO:
          FIND FIRST lELOrderAction NO-LOCK WHERE
                     lELOrderAction.Brand    = Syst.Var:gcBrand                 AND
                     lELOrderAction.OrderID  = lELOrder.OrderID        AND
                     lELOrderAction.ItemType = "ExtraLineDiscount"     AND
-             LOOKUP(lELOrderAction.ItemKey,lcExtraLineDiscounts) > 0  NO-ERROR.
+                    lELOrderAction.ItemKey  = lELOrder.CLIType + "DISC"  NO-ERROR.
 
         IF AVAIL lELOrderAction THEN     
            fCloseExtraLineDiscount(lELOrder.MsSeq,
