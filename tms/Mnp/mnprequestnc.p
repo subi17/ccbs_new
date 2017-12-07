@@ -259,7 +259,7 @@ PROCEDURE pCreatePortabilityMessageXML:
       add_string(lcReqStruct, "ICCID", substr(Order.OldICC,1,19)).
    
    add_string(lcReqStruct, "MSISDN", Order.CLI).
-   add_string(lcReqStruct, "sourceApplication", "MNP").
+   add_string(lcReqStruct, "sourceApplication", "TMS").
 
    xmlrpc_initialize(FALSE).
    ocRequest = serialize_rpc_call("mnp.crearSolicitudIndividualAltaPortabilidadMovil").
