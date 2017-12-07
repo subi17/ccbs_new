@@ -6,7 +6,7 @@ from show_results import *
 # Definition
 #s = xmlrpclib.ServerProxy(address)
 s = xmlrpclib.ServerProxy(address, transport=p)
-updtime =  datetime.datetime.now() + datetime.timedelta(minutes=1)
+updtime =  datetime.datetime.now() + datetime.timedelta(minutes=5)
 def instruction():
    print "Missing parameters"
    print "Example: python masmovil_Update_Fixed_status.py Y70037915 CERRADA"
