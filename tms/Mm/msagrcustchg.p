@@ -913,7 +913,6 @@ PROCEDURE pMsCustMove:
    DEF VAR liManTime    AS INT  NO-UNDO. 
    DEF VAR lcDate       AS CHAR NO-UNDO. 
    DEF VAR liOldAgrCust AS INT  NO-UNDO.
-   DEF VAR lcExtraLineDisc     AS CHAR NO-UNDO. 
 
    DEF BUFFER bBillTarget FOR BillTarget.
    DEF BUFFER bOwner      FOR MSOwner.
@@ -1330,14 +1329,10 @@ PROCEDURE pMsCustMove:
       
       IF AVAIL lbMLMobSub THEN DO:
          
-         CASE MobSub.CliType:
-            WHEN "CONT28" THEN lcExtraLineDisc = "CONT28DISC". 
-         END CASE.
-
          /* Discount has to be closed with last date of previous month */ 
          /* ACC request will be procesed on 1st day of every month     */
          fCloseExtraLineDiscount(MobSub.MsSeq,
-                                 lcExtraLineDisc,
+                                 MobSub.CliType + "DISC",
                                  TODAY).
          
          /* Hard association is also removed because ACC was done to extraline */

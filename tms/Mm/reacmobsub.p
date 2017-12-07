@@ -1184,29 +1184,22 @@ PROCEDURE pReacExtraLineDiscount:
    DEF INPUT PARAM liExtraLineMsSeq   AS INT  NO-UNDO.    
    DEF INPUT PARAM lcExtraLineCLIType AS CHAR NO-UNDO. 
    
-   DEF VAR lcExtraLineDiscRuleId AS CHAR NO-UNDO. 
-
    DEFINE BUFFER bMLMobSub             FOR MobSub.
    DEFINE BUFFER ExtraLineDiscountPlan FOR DiscountPlan.
-
-   CASE lcExtraLineCLIType:
-      WHEN "CONT28" THEN lcExtraLineDiscRuleId = "CONT28DISC".
-   END CASE.
 
    FIND FIRST bMLMobSub EXCLUSIVE-LOCK WHERE
               bMLMobSub.MsSeq        EQ liMainLineMsSeq AND
               bMLMobSub.MultiSimId   EQ 0               AND
               bMLMobSub.MultiSimType EQ 0               NO-ERROR.
 
-   IF AVAIL bMLMobSub             AND
-      lcExtraLineDiscRuleId NE "" THEN DO:
+   IF AVAIL bMLMobSub THEN DO:
       FIND FIRST ExtraLineDiscountPlan NO-LOCK WHERE
-                 ExtraLineDiscountPlan.Brand      = Syst.Var:gcBrand               AND
-                 ExtraLineDiscountPlan.DPRuleID   = lcExtraLineDiscRuleId AND
+                 ExtraLineDiscountPlan.Brand      = Syst.Var:gcBrand            AND
+                 ExtraLineDiscountPlan.DPRuleID   = lcExtraLineCLIType + "DISC" AND
                  ExtraLineDiscountPlan.ValidFrom <= TODAY                 AND
                  ExtraLineDiscountPlan.ValidTo   >= TODAY                 NO-ERROR.
       IF NOT AVAIL ExtraLineDiscountPlan THEN
-         RETURN SUBST("Incorrect Extra Line Discount Plan ID: &1", lcExtraLineDiscRuleId).
+         RETURN SUBST("Incorrect Extra Line Discount Plan ID: &1", lcExtraLineCLIType + "DISC").
 
       fCreateExtraLineDiscount(liExtraLineMsSeq,
                                ExtraLineDiscountPlan.DPRuleID,

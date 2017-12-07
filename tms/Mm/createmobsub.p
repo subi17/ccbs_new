@@ -80,7 +80,6 @@ DEF VAR ldeActivationTS AS DEC  NO-UNDO.
 DEF VAR ldaActDate AS DATE NO-UNDO. 
 DEF VAR lcMobileNumber AS CHAR NO-UNDO. 
 DEF VAR llgExtraLine   AS LOG  NO-UNDO INITIAL NO. 
-DEF VAR lcExtraLineDiscounts    AS CHAR NO-UNDO.
 DEF VAR liOngoingOrderId        AS INT  NO-UNDO.
 
 DEF BUFFER bInvCust        FOR Customer.
@@ -469,14 +468,13 @@ IF NOT AVAIL mobsub THEN DO:
          ELSE DO:
             ASSIGN MobSub.MultiSimID       = 0
                    MobSub.MultiSimType     = 0
-                   llgExtraLine            = YES
-                   lcExtraLineDiscounts    = fCParam("DiscountType","ExtraLine_Discounts").
+                   llgExtraLine            = YES.
             
             FIND FIRST lbELOrderAction EXCLUSIVE-LOCK WHERE
                        lbELOrderAction.Brand    = Syst.Var:gcBrand        AND
                        lbELOrderAction.OrderID  = Order.OrderID           AND
                        lbELOrderAction.ItemType = "ExtraLineDiscount"     AND
-                LOOKUP(lbELOrderAction.ItemKey,lcExtraLineDiscounts) > 0  NO-ERROR.
+                       lbELOrderAction.ItemKey  = Order.CLIType + "DISC"  NO-ERROR.
    
             IF AVAILABLE lbELOrderAction THEN DO:
                DELETE lbELOrderAction.

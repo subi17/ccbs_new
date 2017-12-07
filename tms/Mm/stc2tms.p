@@ -73,7 +73,6 @@ DEF VAR ldeActStamp        AS DEC  NO-UNDO.
 
 DEF VAR ldaNextMonthActDate AS DATE NO-UNDO.
 DEF VAR ldNextMonthActStamp AS DEC  NO-UNDO.
-DEF VAR lcExtraLineDiscounts    AS CHAR NO-UNDO. 
 
 DEF BUFFER bOldType  FOR CLIType.
 DEF BUFFER bNewTariff FOR CLIType.
@@ -241,7 +240,6 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
       RETURN.
    END.
 
-   lcExtraLineDiscounts    = fCParam("DiscountType","ExtraLine_Discounts").
    RUN pInitialize.
    RUN pFeesAndServices.
    RUN pUpdateSubscription.
@@ -553,7 +551,7 @@ PROCEDURE pUpdateSubscription:
    DEF VAR liSecs                  AS INT  NO-UNDO. 
    DEF VAR liNewMSStatus           AS INT  NO-UNDO. 
    DEF VAR ldtCloseDate            AS DATE NO-UNDO.
-   DEF VAR lcExtraLineDiscRuleId   AS CHAR NO-UNDO. 
+   DEFINE VARIABLE lcExtraLineDiscount AS CHARACTER NO-UNDO.
 
    DEF BUFFER bOwner         FOR MsOwner.
    DEF BUFFER bMobSub        FOR MobSub.
@@ -794,33 +792,36 @@ PROCEDURE pUpdateSubscription:
                             "STC").
       END. /* FOR FIRST SubSer WHERE */
 
-   /* Close extra line subscription discount, if Main line is moved away 
-      from available extra lines related main lines */
+   /* 
+      If mainline clitype having the extraline is changed to other mainline
+      or an independent clitype then:
+         - extraline discount is closed
+         - MultiSimType and MultiSimId of the new independent clitype is set to
+           zero
+           
+      UNCLEAR: Should we also remove the link (MultiSimId) from the extraline? 
+   */
    IF fCLITypeIsMainLine(bOldType.CliType)    AND 
-      NOT fCLITypeIsMainLine(CLIType.CLIType) AND 
+      fExtraLineForMainLine(bOldType.CliType) NE fExtraLineForMainLine(CLIType.CliType) AND 
       MobSub.MultiSimId                       NE 0  AND 
       MobSub.MultiSimType                     EQ {&MULTISIMTYPE_PRIMARY} THEN  
    DO: 
-      FIND FIRST lELMobSub NO-LOCK WHERE 
-                 lELMobSub.MsSeq        EQ MobSub.MultiSimId         AND 
-                 lELMobSub.MultiSimId   EQ MobSub.MsSeq              AND 
-                 lELMobSub.MultiSimtype EQ {&MULTISIMTYPE_EXTRALINE} NO-ERROR.
-
-      FIND FIRST lbDiscountPlan NO-LOCK WHERE 
-                 lbDiscountPlan.Brand = Syst.Var:gcBrand            AND 
-          LOOKUP(lbDiscountPlan.DPRuleId, lcExtraLineDiscounts) > 0 AND 
-                 lbDiscountPlan.ValidTo > TODAY                     NO-ERROR.
+      lcExtraLineDiscount = fExtraLineForMainLine(bOldType.CliType) + "DISC".
       
-      FIND FIRST lbDPMember NO-LOCK WHERE 
-                 lbDPMember.DPId      = lbDiscountPlan.DPId       AND 
-                 lbDPMember.HostTable = "MobSub"                  AND
-                 lbDPMember.KeyValue  = STRING(MobSub.MultiSimId) AND
-                 lbDPMember.ValidTo   > TODAY                     AND
-                 lbDPMember.ValidTo  >= lbDPMember.ValidFrom      NO-ERROR.
-      
-      IF AVAIL lELMobSub      AND 
-         AVAIL lbDPMember     AND 
-         AVAIL lbDiscountPlan THEN DO:
+      FOR FIRST lELMobSub NO-LOCK WHERE 
+                lELMobSub.MsSeq         EQ MobSub.MultiSimId          AND 
+                lELMobSub.MultiSimId    EQ MobSub.MsSeq               AND 
+                lELMobSub.MultiSimtype  EQ {&MULTISIMTYPE_EXTRALINE},
+          FIRST lbDiscountPlan NO-LOCK WHERE 
+                lbDiscountPlan.Brand    EQ Syst.Var:gcBrand           AND 
+                lbDiscountPlan.DPRuleId EQ lcExtraLineDiscount        AND 
+                lbDiscountPlan.ValidTo  > TODAY,
+          FIRST lbDPMember NO-LOCK WHERE 
+                lbDPMember.DPId         EQ lbDiscountPlan.DPId        AND 
+                lbDPMember.HostTable    EQ "MobSub"                   AND
+                lbDPMember.KeyValue     EQ STRING(MobSub.MultiSimId)  AND
+                lbDPMember.ValidTo      > TODAY                       AND
+                lbDPMember.ValidTo      >= lbDPMember.ValidFrom:
 
          fCloseExtraLineDiscount(lELMobSub.MsSeq,
                                  lbDiscountPlan.DPRuleID,
@@ -829,7 +830,7 @@ PROCEDURE pUpdateSubscription:
                                 STRING(lbDPMember.KeyValue),
                                 0,
                                 "ExtraLine Discount is Closed",
-                                "STC done from Extra line associated Main line to other Main line").                        
+                                "STC done from Extra line associated Main line to different mainline or independent clitype").                        
          
          FIND CURRENT Mobsub EXCLUSIVE-LOCK.
 
@@ -859,15 +860,10 @@ PROCEDURE pUpdateSubscription:
                 (lMLMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE}  OR
                  lMLMobSub.MsStatus     EQ {&MSSTATUS_BARRED}) NO-ERROR.
 
-      CASE MobSub.CLIType:
-         WHEN "CONT28" THEN lcExtraLineDiscRuleId = "CONT28DISC".
-      END CASE.
-
-      IF AVAIL lMLMobSub             AND
-         lcExtraLineDiscRuleId NE "" THEN DO:
+      IF AVAIL lMLMobSub THEN DO:
             
          fCreateExtraLineDiscount(MobSub.MsSeq,
-                                  lcExtraLineDiscRuleId,
+                                  MobSub.CLIType + "DISC",
                                   TODAY).
       
          ASSIGN lMLMobSub.MultiSimId   = MobSub.MsSeq 
@@ -909,25 +905,19 @@ PROCEDURE pUpdateSubscription:
 
       IF AVAIL lELMobSub THEN DO:
             
-         CASE lELMobSub.CLIType:
-            WHEN "CONT28" THEN lcExtraLineDiscRuleId = "CONT28DISC".
-         END CASE.
-         
-         IF lcExtraLineDiscRuleId NE "" THEN DO:
-            fCreateExtraLineDiscount(lELMobSub.MsSeq,
-                                     lcExtraLineDiscRuleId,
-                                     TODAY).
-            FIND CURRENT Mobsub EXCLUSIVE-LOCK.
-   
-            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).
+         fCreateExtraLineDiscount(lELMobSub.MsSeq,
+                                  lELMobSub.CLIType + "DISC",
+                                  TODAY).
+         FIND CURRENT Mobsub EXCLUSIVE-LOCK.
 
-            ASSIGN MobSub.MultiSimId   = lELMobSub.MsSeq 
-                   MobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY}. 
-            
-            IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
-           
-            FIND CURRENT Mobsub NO-LOCK.
-         END.
+         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).
+
+         ASSIGN MobSub.MultiSimId   = lELMobSub.MsSeq 
+                MobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY}. 
+         
+         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
+        
+         FIND CURRENT Mobsub NO-LOCK.
 
       END.
 
@@ -1357,6 +1347,15 @@ PROCEDURE pFinalize:
                   ASSIGN MobSub.TerritoryOwner = OrderCustomer.TerritoryOwner.
                FIND CURRENT Mobsub NO-LOCK NO-ERROR.				
 				END.
+
+            /* YTS-11912 */
+            IF fCLITypeIsMainLine(Order.CLIType) AND
+               Order.MultiSimId NE 0 AND
+               Order.MultiSimType EQ {&MULTISIMTYPE_PRIMARY}
+            THEN fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
+                                          Order.OrderId,    /* Main line Order Id  */
+                                          "RELEASE").       /* Action              */
+
             fSetOrderStatus(Order.OrderId,"6").  
             fMarkOrderStamp(Order.OrderID,
                             "Delivery",

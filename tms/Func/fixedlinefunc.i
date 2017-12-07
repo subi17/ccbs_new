@@ -797,6 +797,9 @@ FUNCTION fCheckConvergentAvailableForExtraLine RETURNS INTEGER
     INPUT icCustIDType       AS CHAR,
     INPUT icCustID           AS CHAR):
 
+   IF NOT icExtraLineCLIType > ""
+   THEN RETURN 0.
+
    DEFINE BUFFER Customer FOR Customer.
    DEFINE BUFFER MobSub   FOR MobSub.
    DEFINE BUFFER Order    FOR Order.
@@ -816,11 +819,8 @@ FUNCTION fCheckConvergentAvailableForExtraLine RETURNS INTEGER
              MobSub.MsStatus = {&MSSTATUS_BARRED})
        BY MobSub.ActivationTS:
 
-       IF icExtraLineCLIType > ""
-       THEN IF NOT fCLITypeAllowedForExtraLine(MobSub.CLIType, icExtraLineCLIType)
-            THEN NEXT.
-       ELSE IF NOT fCLITypeIsMainLine(MobSub.CLIType)
-            THEN NEXT.
+       IF NOT fCLITypeAllowedForExtraLine(MobSub.CLIType, icExtraLineCLIType)
+       THEN NEXT.
 
        FIND LAST Order NO-LOCK WHERE 
                  Order.MsSeq      = MobSub.MsSeq              AND 
@@ -848,6 +848,9 @@ FUNCTION fCheckOngoingConvergentAvailForExtraLine RETURNS INTEGER
     INPUT icCustIDType       AS CHAR,
     INPUT icCustID           AS CHAR):
    
+   IF NOT icExtraLineCLIType > ""
+   THEN RETURN 0.
+
    DEFINE BUFFER OrderCustomer FOR OrderCustomer.
    DEFINE BUFFER Order         FOR Order.
    DEFINE BUFFER OrderFusion   FOR OrderFusion.
@@ -867,11 +870,8 @@ FUNCTION fCheckOngoingConvergentAvailForExtraLine RETURNS INTEGER
             OrderFusion.Brand   = Syst.Var:gcBrand AND
             OrderFusion.OrderID = Order.OrderID           BY Order.CrStamp:
 
-       IF icExtraLineCLIType > ""
-       THEN IF NOT fCLITypeAllowedForExtraLine(Order.CLIType, icExtraLineCLIType)
-            THEN NEXT.
-       ELSE IF NOT fCLITypeIsMainLine(Order.CLIType)
-            THEN NEXT.
+       IF NOT fCLITypeAllowedForExtraLine(Order.CLIType, icExtraLineCLIType)
+       THEN NEXT.
 
       IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN NEXT.
  
