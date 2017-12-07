@@ -194,17 +194,6 @@ END PROCEDURE.
 
 
 PROCEDURE pProcessTT:   
-   DEFINE VARIABLE liFirstMonthBR    AS INTEGER NO-UNDO.
-   DEFINE VARIABLE liLastMonthBR     AS INTEGER NO-UNDO.   
-
-   DEFINE VARIABLE liDLFirstMonthBR  AS INTEGER NO-UNDO.
-   DEFINE VARIABLE liDLLastMonthBR   AS INTEGER NO-UNDO.
-
-   DEFINE VARIABLE liVLFirstMonthBR  AS INTEGER NO-UNDO.
-   DEFINE VARIABLE liVLLastMonthBR   AS INTEGER NO-UNDO.
-
-   DEFINE VARIABLE liBDLFirstMonthBR AS INTEGER NO-UNDO.
-   DEFINE VARIABLE liBDLLastMonthBR  AS INTEGER NO-UNDO.  
    
    IF lcReferenceRatePlan > "" THEN    
        RUN pRatePlan IN h_config(lcRatePlan, lcCliName, lcReferenceRatePlan, lcRatePlanAction).   
