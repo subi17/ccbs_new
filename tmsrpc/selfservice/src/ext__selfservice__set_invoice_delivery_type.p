@@ -45,6 +45,7 @@ ASSIGN
 {Func/fmakemsreq.i}
 {Func/femailinvoice.i}
 {Func/fexternalapi.i}
+{Func/fmakesms.i}
 
 IF validate_request(param_toplevel_id, "string,string,int") EQ ? THEN RETURN.
 

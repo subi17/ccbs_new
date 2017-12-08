@@ -13,6 +13,7 @@
 {Func/fsubser.i}
 {Func/fcpfat.i}
 {Func/msopenbatch.i}
+{Func/fmakesms.i}
 
 DEF INPUT PARAMETER iiRequest AS INT NO-UNDO.
 
