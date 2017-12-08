@@ -18,7 +18,7 @@
 {Func/fmakesms.i}
 {Syst/tmsconst.i}
 {Func/transname.i}
-{Mm/fbundle.i}
+{Mm/bundle_type.i}
 
 FUNCTION fReplaceTags RETURNS CHARACTER(INPUT iiMsRequest   AS INTEGER,
                                         INPUT icSMSText     AS CHARACTER,

@@ -21,6 +21,7 @@
 {Func/cparam2.i}
 {Syst/tmsconst.i}
 {Func/profunc.i}
+{Func/transname.i}
 
 &SCOPED-DEFINE ORDERTYPE_MNP_EN "Portability"
 &SCOPED-DEFINE ORDERTYPE_MNP_SP "Portabilidad"
