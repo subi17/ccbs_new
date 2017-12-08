@@ -98,10 +98,36 @@ FIND OrderCustomer OF Order NO-LOCK WHERE
 
 IF NOT AVAILABLE OrderCustomer
 THEN DO:
-   FIND OrderCustomer WHERE
-      OrderCustomer.Brand = "1" AND
-      OrderCustomer.OrderID = Order.OrderId AND
-      OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-LOCK NO-ERROR.
+
+   DEFINE BUFFER lbAgreementOrderCustomer FOR OrderCustomer.
+
+   FIND lbAgreementOrderCustomer NO-LOCK WHERE
+        lbAgreementOrderCustomer.Brand   = Syst.Var:gcBrand AND
+        lbAgreementOrderCustomer.OrderID = Order.OrderId    AND
+        lbAgreementOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}
+   NO-ERROR.
+
+   IF NOT AVAIL OrderCustomer THEN 
+      RETURN appl_err("Argreement OrderCustomer not found!").
+
+   CREATE OrderCustomer.
+   
+   BUFFER-COPY lbAgreementOrderCustomer
+      USING
+         lbAgreementOrderCustomer.Brand
+         lbAgreementOrderCustomer.OrderId
+         lbAgreementOrderCustomer.BankCode
+         lbAgreementOrderCustomer.Pro
+         lbAgreementOrderCustomer.Language
+         lbAgreementOrderCustomer.CustDataRetr
+         lbAgreementOrderCustomer.MSISDNForIdent
+         lbAgreementOrderCustomer.DelType
+      TO
+         OrderCustomer
+      ASSIGN
+         OrderCustomer.DataChecked = ?
+         OrderCustomer.RowType     = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER}
+         .
 END.
 
 IF NOT AVAIL OrderCustomer THEN 
@@ -176,6 +202,17 @@ IF OrderCustomer.Custid NE pcCustomerID OR
       RUN StarEventInitialize(lhOrderCustomer).
       RUN StarEventSetOldBuffer(lhOrderCustomer).
    END.
+/*
+   ASSIGN
+      OrderCustomer.CustId          = /* jos company_id, niin company_id, muutoin person_id */
+      OrderCustomer.CustIdType      = /* jos company_id, niin "CIF", muutoin id_type */
+      OrderCustomer.AuthCustId      = /* jos company_id, niin "", muutoin person_id */
+      OrderCustomer.AuthCustIdType  = /* jos company_id, niin "", muutoin id_type */
+      OrderCustomer.FirstName       = fname
+      OrderCustomer.Surname1        = lname
+      OrderCustomer.Surname2        = lname2
+      OrderCustomer.Company         = site_name
+*/
 
    ASSIGN 
       OrderCustomer.CustId = pcCustomerID
