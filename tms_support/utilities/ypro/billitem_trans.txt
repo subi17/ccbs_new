@@ -1,17 +1,18 @@
-header
-ANGELTECHMF;1;Spanish;Angeltech
-ANGELTECHMF;2;Catalan;Angeltech
-ANGELTECHMF;3;Basque;Angeltech
-ANGELTECHMF;5;English;Angeltech
-MANITASMF;1;Spanish;Manitas
-MANITASMF;2;Catalan;Manitas
-MANITASMF;3;Basque;Manitas
-MANITASMF;5;English;Manitas
-ANGELTECHDISC;1;Spanish;Angeltech discount
-ANGELTECHDISC;2;Catalan;Angeltech discount
-ANGELTECHDISC;3;Basque;Angeltech discount
-ANGELTECHDISC;5;English;Angeltech discount
-MANITASDISC;1;Spanish;Manitas discount
-MANITASDISC;2;Catalan;Manitas discount
-MANITASDISC;3;Basque;Manitas discount
-MANITASDISC;5;English;Manitas discount
+Type;Language Type;Language;Translation Name
+ANGELTECHMF;1;Spanish;Angel Tecnológico prestado por HomeServe
+ANGELTECHMF;2;Catalan;Angel Tecnológico prestat per HomeServe
+ANGELTECHMF;3;Basque;Angel Tecnológico, Homeserve emana
+ANGELTECHMF;5;English;Angel Tecnológico provided by HomeServe
+MANITASMF;1;Spanish;Asistencia Negocios prestado por HomeServe
+MANITASMF;2;Catalan;Asistencia Negocios prestat per HomeServe
+MANITASMF;3;Basque;Asistencia Negocios, Homeserve emana
+MANITASMF;5;English;Asistencia Negocios provided by HomeServe
+ANGELTECHDISC;1;Spanish;Descuento promoción Angel Tecnologico
+ANGELTECHDISC;2;Catalan;Descompte promoció Angel Tecnologico
+ANGELTECHDISC;3;Basque;Promozio-deskontua Angel Tecnologico
+ANGELTECHDISC;5;English;Promotional discount Angel Tecnologico
+MANITASDISC;1;Spanish;Descuento promoción Asistencia Negocios
+MANITASDISC;2;Catalan;Descompte promoció Asistencia Negocios
+MANITASDISC;3;Basque;Promozio-deskontua Asistencia Negocios
+MANITASDISC;5;English;Promotional discount Asistencia Negocios
+
