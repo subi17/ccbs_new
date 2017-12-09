@@ -1,5 +1,5 @@
 Billing item;Billing item name;Billing item group;Posting account;Tax class;IFS product code;Cost Center
-ANGELTECHMF;Angel Tecnológico;54;70525000;1;500;SL
-MANITASMF;Manitas Oficina;54;70525000;1;500;SL
+ANGELTECHMF;Angel Tecnológico;55;70525000;1;500;SL
+MANITASMF;Manitas Oficina;55;70525000;1;500;SL
 ANGELTECHDISC;Angel Tecnológico discount;13;70518110;1;500;SL
 MANITASDISC;Manitas Oficina discount;13;70518110;1;500;SL
