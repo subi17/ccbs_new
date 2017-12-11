@@ -40,14 +40,13 @@
                send_sms;boolean;optional;Send SMS
                referee;str;optional;referee's MSISDN
                offer_id;string;optional;
-               extra_offers;string;optional;optional offer 
                price_selection_time;timestamp;optional;time when user accepted order price in web
                order_inspection_result;string;mandatory;
                order_inspection_description;string;optional;
                order_inspection_level;string;optional;
                order_inspection_rule_id;string;optional;
                order_inspection_risk_code;string;optional;
-               additional_bundle;string;optional;optional bundle 
+               additional_bundle;array of struct;optional;bundle and offer list 
                subscription_bundle;string;optional;mandatory base bundle for bundle based subscription types
                dss;boolean;optional;activate dss
                bono_voip;boolean;optional;activate bono voip
@@ -1334,7 +1333,6 @@ gcOrderStructFields = "brand!," +
                       "send_sms," +
                       "referee," +
                       "offer_id," +
-                      "extra_offers," +
                       "price_selection_time," +
                       "order_inspection_result!," +
                       "order_inspection_description," +
