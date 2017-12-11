@@ -356,6 +356,7 @@ DEF VAR lcPayType AS CHAR NO-UNDO.
 DEF VAR lcOldPayType AS CHAR NO-UNDO. 
 DEF VAR lcOfferOrderChannel  AS CHAR NO-UNDO.
 
+DEF VAR pcBundleStruct          AS CHAR NO-UNDO.
 DEF VAR pcAdditionalBundleList  AS CHAR NO-UNDO. 
 DEF VAR pcAdditionalBundleArray AS CHAR NO-UNDO.
 DEF VAR pcAdditionalOfferList   AS CHAR NO-UNDO.
