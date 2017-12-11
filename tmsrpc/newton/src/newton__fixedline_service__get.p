@@ -24,10 +24,11 @@ DEF VAR top_array       AS CHAR NO-UNDO.
 DEF VAR top_struct      AS CHAR NO-UNDO.
 DEF VAR params_struct   AS CHAR NO-UNDO.
 
-DEF VAR llgSVA        AS LOGICAL NO-UNDO.
-DEF VAR liParams      AS INT     NO-UNDO.
-DEF VAR ldPrice       AS DECIMAL NO-UNDO.
-DEF VAR liServStatus  AS INT     NO-UNDO.
+DEF VAR llgSVA         AS LOGICAL NO-UNDO.
+DEF VAR liParams       AS INT     NO-UNDO.
+DEF VAR ldPrice        AS DECIMAL NO-UNDO.
+DEF VAR liServStatus   AS INT     NO-UNDO.
+DEF VAR lcServCompList AS CHAR    NO-UNDO.
 
 DEFINE BUFFER bf_TPService_Deactivation FOR TPService.
 
@@ -78,12 +79,30 @@ IF NOT AVAILABLE MobSub THEN
 
 top_array = add_array(response_toplevel_id, "").
 
+BUNDLE:
 FOR EACH daycampaign NO-LOCK:
    liParams = 0.
    llgSVA = fIsSVA(daycampaign.dcevent, liParams).
 
    IF llgSVA THEN 
    DO:
+      IF LOOKUP(DayCampaign.DCEvent, Syst.Parameters:getc("SVA_BUNDLE_LIST_WITH_OFFERS","YPRO")) > 0 THEN 
+      DO:
+          FIND FIRST DiscountPlan WHERE DiscountPlan.Brand    = Syst.Var:gcBrand AND 
+                                        DiscountPlan.DPRuleID = DayCampaign.DcEvent + "DISC" NO-LOCK NO-ERROR.
+          IF AVAIL DiscountPlan THEN
+          DO:
+              FOR EACH DPSubject WHERE DPSubject.DPId       = DiscountPlan.DPId AND 
+                                       DPSubject.ValidFrom <= TODAY             AND 
+                                       DPSubject.ValidTo   >= TODAY             NO-LOCK:
+                  ASSIGN lcServCompList = lcServCompList + (IF lcServCompList <> "" THEN "," ELSE "") + DPSubject.DPSubject.                                       
+              END.
+          END.
+
+          IF LOOKUP(MobSub.CliType, lcServCompList) = 0 THEN 
+              NEXT BUNDLE.
+      END.
+
       FIND FIRST FMItem WHERE FMItem.Brand     EQ Syst.Var:gcBrand              AND 
                               FMItem.FeeModel  EQ DayCampaign.FeeModel AND 
                               FMItem.BillCode  <> ""                   AND 
