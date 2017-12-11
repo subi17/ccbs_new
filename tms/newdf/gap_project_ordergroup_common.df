@@ -2,8 +2,6 @@ ADD TABLE "OrderGroup"
   MULTITENANT yes
   AREA "Sta_Data_64"
   DUMP-NAME "ordergroup"
-  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-ordergroup.p" CRC "?"
-  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-ordergroup.p" CRC "?"
 
 ADD FIELD "OrderId" OF "OrderGroup" AS integer
   DESCRIPTION "Extra/Additional Line Order number"

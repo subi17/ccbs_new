@@ -332,6 +332,9 @@ FUNCTION fChooseSIMForOrder RETURNS LOGICAL
       NOT AVAIL bOrderCustomer THEN
       RETURN FALSE.
 
+   IF INDEX(Order.OrderChannel,"pos") > 0 THEN 
+      RETURN FALSE.
+
    SEARCHSIM:
    REPEAT:
       IF bOrder.ICC > "" THEN DO:
@@ -386,29 +389,6 @@ FUNCTION fChooseSIMForOrder RETURNS LOGICAL
    IF NOT AVAILABLE SIM THEN
       RETURN FALSE.
       
-   FIND FIRST MSISDNNUMBER NO-LOCK WHERE
-              MSISDNNumber.CLI = bOrder.CLI NO-ERROR.
-
-   IF NOT AVAIL MSISDNNumber THEN DO:
-      CREATE MSISDNNumber.
-      MSISDNNumber.CLI = bOrder.CLI.
-   END.
-
-   FIND FIRST MSISDN NO-LOCK WHERE
-              MSISDN.Brand = Syst.Var:gcBrand AND
-              MSISDN.CLI   = bOrder.CLI       NO-ERROR.
-
-   IF NOT AVAIL MSISDN THEN DO:
-      CREATE MSISDN.
-      ASSIGN
-         MSISDN.ActionDate = TODAY
-         MSISDN.ValidFrom  = Func.Common:mMakeTS()
-         MSISDN.CLI        = bOrder.CLI
-         MSISDN.StatusCode = 22
-         MSISDN.MSSeq      = bOrder.MSSeq
-         MSISDN.Brand      = Syst.Var:gcBrand.
-   END.
-
    /*MM Migration: Subscription creation will be done after NC response. */
    IF bOrder.Orderchannel BEGINS "migration" THEN
       RETURN FALSE.
@@ -1769,7 +1749,9 @@ FUNCTION fAdditionalValue RETURNS LOGICAL
         SIM.ICC   = lcICC            NO-ERROR.
 
    FIND FIRST Order NO-LOCK WHERE
-              Order.MsSeq = SIM.MsSeq NO-ERROR.
+              Order.Brand   = Syst.Var:gcBrand AND
+              Order.OrderId = liOrderId        AND   
+              Order.MsSeq   = SIM.MsSeq        NO-ERROR.
 
    IF NOT AVAIL SIM   OR 
       NOT AVAIL Order THEN
@@ -1785,7 +1767,8 @@ FUNCTION fAdditionalValue RETURNS LOGICAL
          FIND bufOrder EXCLUSIVE-LOCK WHERE
               ROWID(bufOrder) = ROWID(Order) NO-ERROR NO-WAIT.
 
-         IF ERROR-STATUS:ERROR OR LOCKED(bufOrder) THEN NEXT.
+         IF ERROR-STATUS:ERROR OR LOCKED(bufOrder) THEN
+            RETURN FALSE.
 
          bufOrder.Logistics = lcFileName.
          fMarkOrderStamp(bufOrder.OrderID,"SendToLogistics",0.0). /* Timestamp for Logistics Operator Change Dextra->Netkia */
@@ -1991,96 +1974,93 @@ DEF VAR liMLRowNum  AS INT NO-UNDO.
 DEF VAR liMLOrderId AS INT NO-UNDO. 
 
 /* link Extra/Additional line mainline order to orders if available */
-DO TRANSACTION:
-   ADDITIONAL:
-   FOR EACH ttOneDelivery NO-LOCK WHERE
-            ttOneDelivery.ActionID EQ "1":
+ADDITIONAL:
+FOR EACH ttOneDelivery NO-LOCK WHERE
+         ttOneDelivery.ActionID EQ "1" TRANSACTION:
 
-      FIND FIRST bMLOrder NO-LOCK WHERE   
-                 bMLOrder.Brand   = Syst.Var:gcBrand      AND 
-                 bMLOrder.OrderId = ttOneDelivery.Orderid NO-ERROR.
+   FIND FIRST bMLOrder NO-LOCK WHERE   
+              bMLOrder.Brand   = Syst.Var:gcBrand      AND 
+              bMLOrder.OrderId = ttOneDelivery.Orderid NO-ERROR.
 
-      IF NOT AVAIL bMLOrder THEN NEXT.
+   IF NOT AVAIL bMLOrder THEN NEXT.
 
-      ASSIGN liMLOrderId = 0
-             liMLRowNum  = 0 
-             liMLOrderId = ttOneDelivery.Orderid
-             liMLRowNum  = ttOneDelivery.RowNum.
+   ASSIGN liMLOrderId = 0
+          liMLRowNum  = 0 
+          liMLOrderId = ttOneDelivery.Orderid
+          liMLRowNum  = ttOneDelivery.RowNum.
 
-      FIND FIRST bMLOrderCustomer NO-LOCK WHERE 
-                 bMLOrderCustomer.Brand   = Syst.Var:gcBrand      AND 
-                 bMLOrderCustomer.OrderId = ttOneDelivery.OrderID AND
-                 bMLOrderCustomer.RowType = 1                     NO-ERROR.
+   FIND FIRST bMLOrderCustomer NO-LOCK WHERE 
+              bMLOrderCustomer.Brand   = Syst.Var:gcBrand      AND 
+              bMLOrderCustomer.OrderId = ttOneDelivery.OrderID AND
+              bMLOrderCustomer.RowType = 1                     NO-ERROR.
 
-      IF NOT AVAIL bMLOrderCustomer THEN NEXT. 
-     
+   IF NOT AVAIL bMLOrderCustomer THEN NEXT. 
+  
+   IF fIsTerminalOrder(liMLOrderId,
+                       OUTPUT lcTerminalBillCode) OR 
+      (bMLOrder.DeliverySecure > 0)               THEN
+      llDespacharValue = FALSE.
+   ELSE llDespacharValue = TRUE. 
+
+   /* Mainline Convergent order is with OrderStatus 77, 
+      include mobile part of mainline in logistics file */
+   IF NOT fAdditionalValue(ttOneDelivery.Orderid,
+                           liMLOrderId,
+                           llDespacharValue) THEN 
+      UNDO ADDITIONAL, NEXT.   
+
+   FIND FIRST bMLttExtra EXCLUSIVE-LOCK WHERE
+              bMLttExtra.RowNum = liMLRowNum NO-ERROR.
+
+   IF NOT AVAIL bMLttExtra THEN 
+      UNDO ADDITIONAL, NEXT.
+
+   ASSIGN bMLttExtra.MainOrderID  = STRING(liMLOrderID)
+          bMLttExtra.Despachar    = "01".
+   
+   fCreateOrderGroup(liMLOrderId,
+                     liMLOrderID,
+                     llDespacharValue).
+   
+   /* Reset Despachar Value for Additional/Extra lines orders */
+   llDespacharValue = FALSE.
+
+   FOR EACH bALOrderCustomer NO-LOCK WHERE  
+            bALOrderCustomer.Brand      EQ Syst.Var:gcBrand             AND 
+            bALOrderCustomer.CustId     EQ bMLOrderCustomer.CustId      AND
+            bALOrderCustomer.CustIdType EQ bMLOrderCustomer.CustIdType  AND
+            bALOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+       EACH bALOrder NO-LOCK WHERE
+            bALOrder.Brand      EQ Syst.Var:gcBrand                  AND
+            bALOrder.OrderId    EQ bALOrderCustomer.OrderId          AND
+            bALOrder.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE} AND
+            bALOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}:
+
+      IF CAN-FIND(FIRST bALOrderGroup NO-LOCK WHERE 
+                        bALOrderGroup.OrderId   EQ bALOrder.OrderId           AND 
+                        bALOrderGroup.GroupId   EQ ttOneDelivery.OrderID      AND 
+                        bALOrderGroup.GroupType EQ {&OG_LOFILE}               AND 
+          (ENTRY(1,bALOrderGroup.Info,CHR(255)) EQ {&DESPACHAR_TRUE_VALUE} OR 
+           ENTRY(1,bALOrderGroup.Info,CHR(255)) EQ {&DESPACHAR_FALSE_VALUE})) THEN NEXT.
+
       IF fIsTerminalOrder(liMLOrderId,
                           OUTPUT lcTerminalBillCode) OR 
-         (bMLOrder.DeliverySecure > 0)               THEN
+         (bALOrder.DeliverySecure > 0)               THEN 
          llDespacharValue = FALSE.
-      ELSE llDespacharValue = TRUE. 
-  
-      /* Mainline Convergent order is with OrderStatus 77, 
-         include mobile part of mainline in logistics file */
-      IF NOT fAdditionalValue(ttOneDelivery.Orderid,
+      ELSE llDespacharValue = TRUE.
+      
+      IF NOT fAdditionalValue(bALOrder.OrderId,
                               liMLOrderId,
-                              llDespacharValue) THEN 
-         UNDO ADDITIONAL, NEXT.   
-
-      FIND FIRST bMLttExtra EXCLUSIVE-LOCK WHERE
-                 bMLttExtra.RowNum = liMLRowNum NO-ERROR.
-
-      IF NOT AVAIL bMLttExtra THEN 
+                              llDespacharValue) THEN
          UNDO ADDITIONAL, NEXT.
 
-      ASSIGN bMLttExtra.MainOrderID  = STRING(liMLOrderID)
-             bMLttExtra.Despachar    = "01".
-      
-      fCreateOrderGroup(liMLOrderId,
+      fCreateOrderGroup(bALOrder.OrderId,
                         liMLOrderID,
                         llDespacharValue).
-      
-      /* Reset Despachar Value for Additional/Extra lines orders */
-      llDespacharValue = FALSE.
 
-      FOR EACH bALOrderCustomer NO-LOCK WHERE  
-               bALOrderCustomer.Brand      EQ Syst.Var:gcBrand             AND 
-               bALOrderCustomer.CustId     EQ bMLOrderCustomer.CustId      AND
-               bALOrderCustomer.CustIdType EQ bMLOrderCustomer.CustIdType  AND
-               bALOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
-          EACH bALOrder NO-LOCK WHERE
-               bALOrder.Brand      EQ Syst.Var:gcBrand                  AND
-               bALOrder.OrderId    EQ bALOrderCustomer.OrderId          AND
-               bALOrder.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE} AND
-               bALOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}:
+   END. /* FOR EACH bALOrderCustomer */
 
-         IF CAN-FIND(FIRST bALOrderGroup NO-LOCK WHERE 
-                           bALOrderGroup.OrderId   EQ bALOrder.OrderId           AND 
-                           bALOrderGroup.GroupId   EQ ttOneDelivery.OrderID      AND 
-                           bALOrderGroup.GroupType EQ {&OG_LOFILE}               AND 
-             (ENTRY(1,bALOrderGroup.Info,CHR(255)) EQ {&DESPACHAR_TRUE_VALUE} OR 
-              ENTRY(1,bALOrderGroup.Info,CHR(255)) EQ {&DESPACHAR_FALSE_VALUE})) THEN NEXT.
-
-         IF fIsTerminalOrder(liMLOrderId,
-                             OUTPUT lcTerminalBillCode) OR 
-            (bALOrder.DeliverySecure > 0)               THEN 
-            llDespacharValue = FALSE.
-         ELSE llDespacharValue = TRUE.
-         
-         IF NOT fAdditionalValue(bALOrder.OrderId,
-                                 liMLOrderId,
-                                 llDespacharValue) THEN
-            UNDO ADDITIONAL, NEXT.
-
-         fCreateOrderGroup(bALOrder.OrderId,
-                           liMLOrderID,
-                           llDespacharValue).
-
-      END. /* FOR EACH bALOrderCustomer */
-
-   END. /* FOR EACH ttOneDelivery */
-
-END. /* DO TRANSACTION */
+END. /* FOR EACH ttOneDelivery */
 
 FOR EACH ttOneDelivery NO-LOCK BREAK BY ttOneDelivery.RowNum:
 
