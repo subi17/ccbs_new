@@ -88,8 +88,12 @@ FUNCTION fGetSVAOffer RETURNS CHARACTER
     (icCliType AS CHAR,
      icDCEvent AS CHAR):
 
+    DEF VAR ldeCurrentTS AS DECI NO-UNDO.
+
     DEFINE BUFFER bf_DiscOfferItem FOR OfferItem.
 
+    ASSIGN ldeCurrentTS = Syst.Common:mMakeTS().
+    
     FOR EACH Offer WHERE Offer.Brand       = Syst.Var:gcBrand AND 
                          Offer.Active      = True             AND
                          Offer.ToDate     >= TODAY            AND 
