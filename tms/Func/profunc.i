@@ -332,7 +332,7 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
       lcOutput = REPLACE(lcOutput, "#ORDERID", fFindCOFFOrder(bMsRequest.MsSeq)).
    
    IF INDEX(lcOutput, "#CONTRACTID") > 0 THEN
-      lcOutput = REPLACE(lcOutput, "#CONTRACTID", bMsRequest.FixedNumber).
+      lcOutput = REPLACE(lcOutput, "#CONTRACTID", (IF AVAIL bMobSub THEN bMobSub.FixedNumber ELSE STRING(bMsRequest.MsSeq))).
 
    IF INDEX(lcOutput, "#CUSTTYPE") > 0 THEN
       lcOutput = REPLACE(lcOutput, "#CUSTTYPE", STRING(bCustomer.CustIdType)).
