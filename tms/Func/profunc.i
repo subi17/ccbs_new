@@ -288,15 +288,19 @@ END.
 FUNCTION fSendEmailByRequest RETURNS CHAR
    (iiMsRequest AS INT,
     icTemplate AS CHAR):
-   DEF VAR lcOutput AS CHAR NO-UNDO.
-   DEF VAR lcMailFile AS CHAR NO-UNDO.
+
+   DEF VAR lcOutput     AS CHAR NO-UNDO.
+   DEF VAR lcMailFile   AS CHAR NO-UNDO.
    DEF VAR lcMailHeader AS CHAR NO-UNDO.
-   DEF VAR lcReplace AS CHAR NO-UNDO.
-   DEF VAR lcMailDir AS CHAR NO-UNDO.
-   DEF VAR lcStatus AS CHAR NO-UNDO.
+   DEF VAR lcReplace    AS CHAR NO-UNDO.
+   DEF VAR lcMailDir    AS CHAR NO-UNDO.
+   DEF VAR lcStatus     AS CHAR NO-UNDO.
+
    DEF BUFFER bMsRequest FOR MsRequest.
-   DEF BUFFER bCustomer FOR Customer.
-   
+   DEF BUFFER bCustomer  FOR Customer.
+   DEF BUFFER bMobSub    FOR MobSub.
+   DEF BUFFER bCliType   FOR CliType.
+
    FIND FIRST bMsRequest NO-LOCK WHERE
               bMsRequest.MsRequest EQ iiMsRequest NO-ERROR.
    IF NOT AVAIL bMsRequest THEN RETURN "ERROR: Request not found " +
@@ -305,6 +309,10 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
               bCustomer.CustNum EQ bMsRequest.CustNum.
     IF NOT AVAIL bCustomer THEN
        RETURN "ERROR: Customer of requst not found " + STRING(iiMsRequest).
+
+   FIND FIRST bMobSub WHERE bMobSub.MsSeq = bMsRequest.MsSeq NO-LOCK NO-ERROR.
+   IF AVAIL bMobSub THEN 
+       FIND FIRST bCliType WHERE bCliType.CliType = bMobSub.CliType NO-LOCK NO-ERROR.
 
    lcOutput = fGetEmailText("EMAIL",
                              icTemplate,
@@ -317,45 +325,77 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
              STRING(icTemplate).
 
    /*Seek tags:*/
-   IF INDEX(lcOutput, "#CUSTNAME") > 0 THEN DO:
-      lcOutput = REPLACE(lcOutput, "#CUSTNAME", 
-         (bCustomer.CustName + " " + bCustomer.FirstName + " ")   ).
-   END.
-   IF INDEX(lcOutput, "#ORDERID") > 0 THEN DO:
-      lcOutput = REPLACE(lcOutput, 
-                         "#ORDERID", 
-                         fFindCOFFOrder(bMsRequest.MsSeq)).
-   END.
-   IF INDEX(lcOutput, "#CUSTTYPE") > 0 THEN DO:
+   IF INDEX(lcOutput, "#CUSTNAME") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#CUSTNAME", Func.Common:mDispCustName(BUFFER bCustomer)).
+   
+   IF INDEX(lcOutput, "#ORDERID") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#ORDERID", fFindCOFFOrder(bMsRequest.MsSeq)).
+   
+   IF INDEX(lcOutput, "#CONTRACTID") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#CONTRACTID", bMsRequest.MsSeq).
+
+   IF INDEX(lcOutput, "#CUSTTYPE") > 0 THEN
       lcOutput = REPLACE(lcOutput, "#CUSTTYPE", STRING(bCustomer.CustIdType)).
-   END.
-   IF INDEX(lcOutput, "#CUSTID") > 0 THEN DO:
+   
+   IF INDEX(lcOutput, "#CUSTID") > 0 THEN
       lcOutput = REPLACE(lcOutput, "#CUSTID", STRING(bCustomer.Orgid)).
+
+   IF INDEX(lcOutput, "#PROVINCE") > 0 THEN
+   DO:
+      lcOutput = REPLACE(lcOutput, "#PROVINCE"       , bCustomer.Address).
+      lcOutput = REPLACE(lcOutput, "#CITY"           , bCustomer.PostOffice).
+      lcOutput = REPLACE(lcOutput, "#POSTALCODE"     , bCustomer.ZipCode).
    END.
-   IF INDEX(lcOutput, "#EMAIL") > 0 THEN DO:
+
+   IF INDEX(lcOutput, "#LANGUAGE") > 0 THEN
+   DO:
+       FIND Language WHERE Language.Language = bCustomer.Language NO-LOCK NO-ERROR.
+       lcOutput = REPLACE(lcOutput, "#LANGUAGE", (IF AVAIL Language THEN Language.LangName ELSE "")).
+   END.
+
+   IF INDEX(lcOutput, "#PRODUCT") > 0 THEN
+       lcOutput = REPLACE(lcOutput, "#PRODUCT", (IF AVAIL bCliType THEN bCliType.CliName ELSE "")).
+
+   IF INDEX(lcOutput, "#SFID") > 0 THEN
+       lcOutput = REPLACE(lcOutput, "#SFID", "").
+
+   IF INDEX(lcOutput, "#SECRET") > 0 THEN
+       lcOutput = REPLACE(lcOutput, "#SECRET", bCustomer.RobinsonsLimit).    
+
+   IF INDEX(lcOutput, "#EMAIL") > 0 THEN 
+   DO:
       IF NUM-ENTRIES(bMSRequest.ReqCparam6) GT 2 THEN
          lcReplace = ENTRY(3,bMSRequest.ReqCparam6, "|").
       ELSE IF NUM-ENTRIES(bMSRequest.ReqCparam6) EQ 2 THEN
          lcReplace = ENTRY(2,bMSRequest.ReqCparam6, "|").
+
       lcOutput = REPLACE(lcOutput, "#EMAIL", lcReplace).
    END.
-   IF INDEX(lcOutput, "#NUMBER") > 0 THEN DO:
+
+   IF INDEX(lcOutput, "#NUMBER") > 0 THEN 
+   DO:
       lcReplace = ENTRY(2,bMsRequest.Reqcparam6, "|").
       lcOutput = REPLACE(lcOutput, "#NUMBER", lcReplace).
    END.
 
-   IF INDEX(lcMailHeader, "#STATUS") > 0 THEN DO:
-      IF bmsrequest.reqtype EQ 9 THEN DO:
-         IF bmsrequest.reqstatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
-            lcstatus = "3 - Pending deactivation".
-         ELSE lcStatus = "0 - Inactive".
+   IF INDEX(lcMailHeader, "#STATUS") > 0 THEN 
+   DO:
+      IF bMsRequest.ReqType EQ 9 THEN 
+      DO:
+         IF bMsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
+             lcStatus = "3 - Pending deactivation".
+         ELSE 
+             lcStatus = "0 - Inactive".
       END.
-      IF bmsrequest.reqtype EQ 8 THEN DO:
-         IF bmsrequest.reqstatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
-            lcstatus = "2 - Pending activation".
-         ELSE lcStatus = "1 - Active".
+      ELSE IF bMsRequest.reqtype EQ 8 THEN 
+      DO:
+         IF bMsRequest.reqstatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
+             lcStatus = "2 - Pending activation".
+         ELSE 
+             lcStatus = "1 - Active".
       END.
-      lcMailHeader = REPLACE(lcMailHeader, "#STATUS", lcstatus).
+
+      lcMailHeader = REPLACE(lcMailHeader, "#STATUS", lcStatus).
    END.
 
    /*Set email sending parameters*/

@@ -557,7 +557,9 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
       pcAdditionalOfferArray = get_array(pcOrderStruct,"extra_offers").
 
       DO liOfferCnt = 0 TO get_paramcount(pcAdditionalOfferArray) - 1:
-         ASSIGN pcAdditionalOfferList = pcAdditionalOfferList + (IF pcAdditionalOfferList <> "" THEN "," ELSE "") + get_string(pcAdditionalOfferArray, STRING(liOfferCnt)).
+         ASSIGN pcAdditionalOfferList = pcAdditionalOfferList + 
+                                        (IF pcAdditionalOfferList <> "" THEN "," ELSE "") + 
+                                        get_string(pcAdditionalOfferArray, STRING(liOfferCnt)).
       END.
 
    END.
@@ -2507,8 +2509,9 @@ IF pcAdditionalBundleList > "" THEN
 DO liBundleCnt = 1 TO NUM-ENTRIES(pcAdditionalBundleList):
 
    FIND FIRST DayCampaign WHERE DayCampaign.Brand = Syst.Var:gcBrand AND DayCampaign.DCEvent = ENTRY(liBundleCnt, pcAdditionalBundleList) NO-LOCK NO-ERROR.
-   IF AVAIL DayCampaign AND DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
-       fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList),pcAdditionalOfferList).
+   IF AVAIL DayCampaign AND LOOKUP(DayCampaign.BundleTarget, STRING({&TELEVISION_BUNDLE}) + "," + 
+                                                             STRING({&DC_BUNDLE_TARGET_SVA})) > 0 THEN 
+       fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList), ENTRY(liBundleCnt,pcAdditionalOfferList)).
    ELSE         
        fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList),"").
 END.
