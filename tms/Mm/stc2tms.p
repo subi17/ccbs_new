@@ -75,6 +75,8 @@ DEF VAR ldaNextMonthActDate AS DATE NO-UNDO.
 DEF VAR ldNextMonthActStamp AS DEC  NO-UNDO.
 DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO.
 DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO.
+DEF VAR lcExtraLineCONT28       AS CAHR NO-UNDO.  /* DIAM-80 */
+
 
 DEF BUFFER bOldType  FOR CLIType.
 DEF BUFFER bNewTariff FOR CLIType.
@@ -242,8 +244,9 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
       RETURN.
    END.
 
-   ASSIGN lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").   
-          lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
+   ASSIGN lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")   
+          lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes")
+          lcExtraLineCONT28       = fCParamC("ExtraLine_CLITypes").               /* DIAM-80 */
 
    RUN pInitialize.
    RUN pFeesAndServices.
@@ -564,6 +567,7 @@ PROCEDURE pUpdateSubscription:
    DEF BUFFER lMLMobSub      FOR MobSub.
    DEF BUFFER lbDiscountPlan FOR DiscountPlan.
    DEF BUFFER lbDPMember     FOR DPMember.
+   DEF BUFFER lbMobSubChk    FOR MobSub.   /* DIAM-80 */
 
    /* make sure that customer has a billtarget with correct rateplan */
    liBillTarg = CLIType.BillTarget.
@@ -803,7 +807,7 @@ PROCEDURE pUpdateSubscription:
       LOOKUP(bOldType.CliType,lcExtraMainLineCLITypes) GT 0  AND 
       LOOKUP(CLIType.CLIType,lcExtraMainLineCLITypes)  EQ 0  AND 
       MobSub.MultiSimId                                NE 0  AND 
-      MobSub.MultiSimType                              EQ {&MULTISIMTYPE_PRIMARY} THEN  
+      MobSub.MultiSimType                              EQ {&MULTISIMTYPE_PRIMARY} THEN    
    DO: 
       FIND FIRST lELMobSub NO-LOCK WHERE 
                  lELMobSub.MsSeq        EQ MobSub.MultiSimId         AND 
@@ -814,6 +818,7 @@ PROCEDURE pUpdateSubscription:
                  lbDPMember.HostTable = "MobSub"                  AND
                  lbDPMember.KeyValue  = STRING(MobSub.MultiSimId) AND
                  lbDPMember.ValidTo   > TODAY                     AND
+
                  lbDPMember.ValidTo  >= lbDPMember.ValidFrom        NO-ERROR.
       
       IF AVAIL lELMobSub AND 
@@ -847,6 +852,66 @@ PROCEDURE pUpdateSubscription:
       END.
 
    END.
+   ELSE
+   /* DIAM-80 - STARTING    
+      If customer already have "La combinada Morada" or "Azul" and doesn't have a "Linea movil extra (CONT28)" subscription 
+           -  Allow STC from mobile only to Linea Movil Extra (CONT28) from Vista
+           -> Terminate additional line discount (if any)
+           -  Create CONT28DISC
+   */
+   IF lcExtraLineCONT28                          NE "" AND 
+      LOOKUP(bOldType.CliType,lcExtraLineCONT28) EQ 0  AND
+      LOOKUP(CLIType.CLIType,lcExtraLineCONT28)  GT 0  AND 
+      CAN-FIND(FIRST lbMobSubChk NO-LOCK WHERE
+                     lbMobSubChk.Brand    = Syst.Var:gcBrand AND
+                     lbMobSubChk.InvCust  = Mobsub.CustNum   AND
+                     lbMobSubChk.MsSeq    <> Mobsub.MsSeq    AND
+                    (lbMobSubChk.MsStatus = {& MSSTATUS_ACTIVE} OR lbMobSubChk.MsStatus = {& MSSTATUS_BARRED}) AND 
+                     LOOKUP(lbMobSubChk.clitype, lcExtraMainLineCLITypes) > 0) AND
+      NOT CAN-FIND(FIRST lbMobSubChk NO-LOCK WHERE
+                         lbMobSubChk.Brand    = Syst.Var:gcBrand AND
+                         lbMobSubChk.InvCust  = Mobsub.CustNum   AND
+                         lbMobSubChk.MsSeq    <> Mobsub.MsSeq    AND
+                         (lbMobSubChk.MsStatus = {& MSSTATUS_ACTIVE} OR lbMobSubChk.MsStatus = {& MSSTATUS_BARRED}) AND 
+                         lbMobSubChk.clitype  = lcExtraLineCONT28) THEN 
+   DO: 
+      FIND FIRST lELMobSub NO-LOCK WHERE 
+                 lELMobSub.MsSeq EQ MobSub.MsSeq NO-ERROR.
+
+      FIND FIRST lbDPMember NO-LOCK WHERE 
+                 lbDPMember.HostTable = "MobSub"                  AND
+                 lbDPMember.KeyValue  = /* DIAM-80 - Pending. Add the right value. */ AND  
+                 lbDPMember.ValidTo   > TODAY                     AND
+                 lbDPMember.ValidTo  >= lbDPMember.ValidFrom      NO-ERROR.
+      
+      IF AVAIL lELMobSub AND 
+         AVAIL lbDPMember  THEN DO:
+            
+         FIND FIRST lbDiscountPlan NO-LOCK WHERE 
+                    lbDiscountPlan.Brand = Syst.Var:gcBrand         AND 
+                    lbDiscountPlan.DPId  = lbDPMember.DPId NO-ERROR.
+            
+         IF AVAIL lbDiscountPlan THEN DO:
+            fCloseExtraLineDiscount(lELMobSub.MsSeq,
+                                    lbDiscountPlan.DPRuleID,
+                                    TODAY).
+            Func.Common:mWriteMemo("MobSub",
+                              STRING(lbDPMember.KeyValue),
+                              0,
+                             "Line Discount is Closed",
+                             "STC done from Modile Line to La Duo").                        
+            
+            FIND CURRENT Mobsub EXCLUSIVE-LOCK.
+   
+            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).
+            
+            IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
+           
+            FIND CURRENT Mobsub NO-LOCK.
+         END.
+      END.
+   END.
+   /* DIAM-80 - ENDING */      
   
    /* Create extra line discount, if STC is done to extra line subscription type */
    /* Discount is created only when associated main line is active               */
@@ -1310,20 +1375,19 @@ PROCEDURE pFinalize:
                 Order.OrderType EQ {&ORDER_TYPE_STC}:
 
          IF Order.StatusCode EQ {&ORDER_STATUS_ONGOING} THEN DO:
-            FOR FIRST OrderCustomer NO-LOCK WHERE
-                      OrderCustomer.brand EQ Syst.Var:gcBrand AND
-                      Ordercustomer.orderid EQ MsRequest.ReqIParam2 AND
-                      OrderCustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
-                      Ordercustomer.pro,
-                FIRST Customer NO-LOCK WHERE
+            FOR FIRST OrderCustomer WHERE
+                       OrderCustomer.brand EQ Syst.Var:gcBrand AND
+                       Ordercustomer.orderid EQ MsRequest.ReqIParam2 AND
+                       OrderCustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
+                       Ordercustomer.pro,
+                FIRST Customer WHERE
                       Customer.brand EQ Syst.Var:gcbrand AND
                       Customer.orgid EQ Ordercustomer.custid AND
-                      customer.custidtype EQ Ordercustomer.CustIdType AND
                       customer.category NE Ordercustomer.category,
-                FIRST bMobsub NO-LOCK WHERE
+                FIRST bMobsub WHERE
                       bMobsub.brand EQ Syst.Var:gcbrand AND
                       bMobsub.custnum EQ customer.custnum AND
-                      bMobsub.msseq ne MsRequest.msseq:
+                      bMobsub.msseq ne MsRequest.msseq NO-LOCK:
                llmigrationNeeded = TRUE.
             END.         
             /* update customer data */
@@ -1350,22 +1414,11 @@ PROCEDURE pFinalize:
                                    lcResult).
                END.
             END.
-			
-            FIND FIRST OrderCustomer NO-LOCK WHERE
-                       OrderCustomer.Brand EQ Syst.Var:gcBrand AND
-                       Ordercustomer.OrderID EQ Order.OrderID AND
-                       OrderCustomer.rowtype EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL} AND
-                       OrderCustomer.TerritoryOwner NE "" NO-ERROR.
-
-				IF Avail OrderCustomer THEN DO:
-               FIND CURRENT Mobsub EXCLUSIVE-LOCK NO-ERROR.
-                  ASSIGN MobSub.TerritoryOwner = OrderCustomer.TerritoryOwner.
-               FIND CURRENT Mobsub NO-LOCK NO-ERROR.				
-				END.
             fSetOrderStatus(Order.OrderId,"6").  
             fMarkOrderStamp(Order.OrderID,
                             "Delivery",
                             Func.Common:mMakeTS()).
+
          END.
          ELSE Func.Common:mWriteMemo("MobSub",
               STRING(MobSub.MsSeq),

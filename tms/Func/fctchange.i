@@ -140,14 +140,20 @@ FUNCTION fIsSTCAllowed RETURNS LOGIC
    (iiMsSeq       AS INT,
     icOldCLIType  AS CHAR,
     icNewCLIType  AS CHAR,
+    icReqSource   AS CHARACTER,  /* DIAM-80 */
     OUTPUT ocInfo AS CHAR):
 
    DEF VAR lcResult         AS CHAR NO-UNDO.
    DEF VAR lcIPLContracts   AS CHAR NO-UNDO.
+   DEFINE VARIABLE lcMoradaAzul      AS CHARACTER NO-UNDO.   /* DIAM-80 */
+   DEFINE VARIABLE lcExtraLineCONT28 AS CHARACTER NO-UNDO.   /* DIAM-80 */
 
    DEF BUFFER bBTC FOR MsRequest.
 
-   lcIPLContracts = fCParamC("IPL_CONTRACTS").
+   /* DIAM-80 */
+   ASIGN 
+      lcIPLContracts    = fCParamC("IPL_CONTRACTS")
+      lcExtraLineCONT28 = fCParamC("ExtraLine_CLITypes").
 
    /* 1. STC (Any Voice to Other) request is not allowed if Upgrade BONO BTC */
    /* 2. STC (IPL to Other) request is not allowed if Upgrade IPL BTC */
@@ -167,6 +173,63 @@ FUNCTION fIsSTCAllowed RETURNS LOGIC
          RETURN FALSE.
       END.
    END.
+
+   /* DIAM-80 - STARTING 
+      
+      If customer already have "La combinada Morada" or "Azul" and doesn't have a "Linea movil extra (CONT28)" subscription 
+           -> Allow STC from mobile only to Linea Movil Extra (CONT28) from Vista
+           -  Terminate additional line discount (if any)
+           -  Create CONT28DISC
+   */
+   IF icNewCLIType = lcExtraLineCONT28 then 
+   DO:
+       IF icOldCLIType = icNewCLIType THEN DO:
+          ocInfo = "New clitype cannot be same as the old one!".
+          RETURN FALSE.
+       END.  
+   
+       FIND FIRST mobsub NO-LOCK WHERE
+                  mobsub.msseq = iiMsSeq NO-ERROR.
+       IF NOT AVAIL mobsub THEN DO:
+          ocInfo = "Subscription not found".
+          RETURN FALSE.
+       END.
+       FIND FIRST Customer WHERE
+                  Customer.custnum EQ Mobsub.custnum NO-LOCK NO-ERROR.      
+       IF NOT AVAIL customer THEN DO:
+          ocInfo = "Customer not found".
+          RETURN FALSE.
+       END.
+       
+       lcMoradaAzul = fCParamC("Extra_MainLine_CLITypes").
+   
+       /* Does the customer has a Combinada Morada or Combinada Azul? */
+       IF NOT CAN-FIND(FIRST lbMobSub NO-LOCK WHERE
+                             lbMobSub.Brand    = Syst.Var:gcBrand AND
+                             lbMobSub.InvCust  = Mobsub.CustNum   AND
+                             lbMobSub.MsSeq    <> Mobsub.MsSeq    AND
+                             (lbMobSub.MsStatus = {& MSSTATUS_ACTIVE} OR lbMobSub.MsStatus = {& MSSTATUS_BARRED}) AND 
+                             LOOKUP(lbMobSub.clitype, lcMoradaAzul) > 0 THEN 
+       DO:
+          ocInfo = "Customer does not have any Combinada Morada or Azul".
+          RETURN FALSE.
+       END.
+
+       /* Does the customer has a Linea extra movil (CONT28) yet? */
+       IF CAN-FIND(FIRST lbMobSub NO-LOCK WHERE
+                         lbMobSub.Brand    = Syst.Var:gcBrand AND
+                         lbMobSub.InvCust  = Mobsub.CustNum   AND
+                         lbMobSub.MsSeq    <> Mobsub.MsSeq    AND
+                         (lbMobSub.MsStatus = {& MSSTATUS_ACTIVE} OR lbMobSub.MsStatus = {& MSSTATUS_BARRED}) AND 
+                         lbMobSub.clitype  = lcExtraLineCONT28 THEN
+       DO:
+          ocInfo = "Customer already has a Línea Extra Móvil (CONT28)".
+          RETURN FALSE.
+       END.
+
+   END.
+   /* DIAM-80 - ENDING */
+
 
    RETURN TRUE.
 
@@ -263,6 +326,7 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
    IF NOT fIsSTCAllowed(INPUT Mobsub.MsSeq,
                         INPUT Mobsub.CLIType,
                         INPUT icNewCLIType,
+                        INPUT icReqSource,   /* DIAM-80 */
                         OUTPUT ocError) THEN RETURN FALSE.
 
    /* 3 */
@@ -440,6 +504,7 @@ FUNCTION fValidateNewCliType RETURNS INT
          ocError = "STC is not allowed to additional line because main line is not active".
          RETURN 4.
       END.
+      
    END.
 
    /* 5 - Validate ByPass Flag */
