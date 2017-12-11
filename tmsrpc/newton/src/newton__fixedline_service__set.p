@@ -28,13 +28,14 @@ DEF VAR piMsSeq AS INT NO-UNDO.
 DEF VAR pcUserLevel AS CHAR NO-UNDO.
 DEF VAR pcInputArray AS CHAR NO-UNDO.
 
-DEF VAR pcStruct AS CHAR NO-UNDO.
-DEF VAR pcServiceId AS CHAR NO-UNDO.
-DEF VAR pcValue AS CHAR NO-UNDO.
-DEF VAR pcParam2 AS CHAR NO-UNDO.
-DEF VAR pcParam AS CHAR NO-UNDO.
-DEF VAR lcStruct AS CHAR NO-UNDO.
-DEF VAR plSendSMS AS LOGICAL NO-UNDO INITIAL TRUE.
+DEF VAR pcStruct     AS CHAR NO-UNDO.
+DEF VAR pcServiceId  AS CHAR NO-UNDO.
+DEF VAR pcValue      AS CHAR NO-UNDO.
+DEF VAR pcParam2     AS CHAR NO-UNDO.
+DEF VAR pcParamOffer AS CHAR NO-UNDO.
+DEF VAR pcParam      AS CHAR NO-UNDO.
+DEF VAR lcStruct     AS CHAR NO-UNDO.
+DEF VAR plSendSMS    AS LOGICAL NO-UNDO INITIAL TRUE.
 
 DEF VAR liInputCounter AS INT NO-UNDO.
 DEF VAR lcStatus AS CHAR NO-UNDO.
@@ -62,6 +63,7 @@ DEF VAR llOngoing      AS LOG   NO-UNDO.
 DEF VAR liParams       AS INT   NO-UNDO.
 DEF VAR liSVARequest   AS INT   NO-UNDO.
 DEF VAR lcBundleType   AS CHAR  NO-UNDO.
+DEF VAR ldeCurrentTS   AS DECI  NO-UNDO.
 
 DEF BUFFER bReq  FOR MsRequest.
 DEF BUFFER bSubReq FOR MsRequest.
@@ -81,7 +83,9 @@ FIND FIRST Mobsub WHERE Mobsub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Mobsub THEN
     RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
 
-Syst.Var:katun = "Newton".
+ASSIGN
+    Syst.Var:katun = "Newton"
+    ldeCurrentTS   = Syst.Common:mMakeTS().
 
 DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
    pcStruct = get_struct(pcInputArray, STRING(liInputCounter - 1)).
