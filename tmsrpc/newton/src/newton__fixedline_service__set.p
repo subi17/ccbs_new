@@ -100,55 +100,70 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 
    FIND FIRST DayCampaign WHERE DayCampaign.Brand = Syst.Var:gcBrand AND DayCampaign.DCEvent = pcServiceId NO-LOCK NO-ERROR.
-   IF AVAIL DayCampaign AND DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
+   IF AVAIL DayCampaign THEN 
    DO:
-       ASSIGN lcBundleType = (IF DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN "Television" ELSE "").
+       CASE DayCampaign.BundleTarget:
+           WHEN {&TELEVISION_BUNDLE} THEN
+           DO:
+               ASSIGN lcBundleType = (IF DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN "Television" ELSE "").
 
-       CASE pcValue:
-           WHEN "off" THEN 
-               RUN pDeActivateTVService.
-           WHEN "on" THEN
-               RUN pActivateTVService.
-           OTHERWISE  
-               RETURN appl_err("Invalid parameter 'value': " + pcValue).
+               CASE pcValue:
+                   WHEN "off" THEN 
+                       RUN pDeActivateTVService.
+                   WHEN "on" THEN
+                       RUN pActivateTVService.
+                   OTHERWISE  
+                       RETURN appl_err("Invalid parameter 'value': " + pcValue).
+               END CASE.            
+           END.
+           WHEN {&DC_BUNDLE_TARGET_SVA} THEN
+           DO: /*'off', 'on', 'cancel activation', 'cancel deactivation'*/
+               IF pcValue BEGINS "activate" THEN 
+               DO:
+                   CASE DayCampaign.DCEvent:
+                       WHEN "FAXTOEMAIL" THEN 
+                       DO:
+                           IF pcParam EQ "" OR pcParam2 EQ "" THEN  
+                               RETURN appl_err("Missing SVA parameter"). 
+                       END.
+                       WHEN "OFFICE365" THEN 
+                       DO:
+                           IF pcParam EQ "" THEN  
+                               RETURN appl_err("Missing SVA parameter").  
+                       END.
+                   END CASE.
+               END.
+
+               liSVARequest = fMakeProActRequest(MobSub.MsSeq,
+                                                 pcServiceId,
+                                                 0,
+                                                 pcParam,
+                                                 pcParam2,
+                                                 pcValue,
+                                                 lcErr). 
+               
+               IF lcErr NE "" OR liSVARequest EQ 0 OR liSVARequest EQ ? THEN 
+                   RETURN appl_err("SVA request failure " + lcErr).
+
+               lcErr = fSendEmailByRequest(liSVARequest,"SVA_" + pcServiceId).
+
+               IF lcErr NE "" THEN 
+                   RETURN appl_err("SVA email request failure " + lcErr).
+
+               CREATE Memo.
+               ASSIGN
+                   Memo.CreStamp  = {&nowTS}
+                   Memo.Brand     = Syst.Var:gcBrand
+                   Memo.HostTable = "MobSub"
+                   Memo.KeyValue  = STRING(Mobsub.MsSeq)
+                   Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
+                   Memo.CreUser   = "VISTA"
+                   Memo.MemoTitle = "SVA operation"
+                   Memo.MemoText  = pcValue + " " + pcServiceId
+                   Memo.CustNum   = mobsub.custnum.
+
+           END.
        END CASE.
-   END.
-   ELSE IF fIsSVA(pcServiceId, OUTPUT liParams) THEN    /*SVAs*/ /*'off', 'on', 'cancel activation', 'cancel deactivation'*/
-   DO:
-      IF liParams EQ 2 AND (pcValue BEGINS "activate") THEN DO:
-         IF pcParam EQ "" OR pcParam2 EQ "" THEN
-            RETURN appl_err("Missing SVA parameter").
-      END.
-      ELSE IF liParams EQ 1 AND (pcValue BEGINS "activate") THEN DO:
-         IF pcParam EQ "" THEN
-            RETURN appl_err("Missing SVA parameter").
-      END.
-      ELSE IF liParams EQ 0 THEN DO:
-      END.
-      liSVARequest = fMakeProActRequest(MobSub.MsSeq,
-                                        pcServiceId,
-                                        0,
-                                        pcParam,
-                                        pcParam2,
-                                        pcValue,
-                                        lcErr). 
-      IF lcErr NE "" OR liSVARequest EQ 0 OR 
-         liSVARequest EQ ? THEN RETURN appl_err("SVA request failure " + lcErr).
-      lcErr = fSendEmailByRequest(liSVARequest,
-                                  "SVA_" + pcServiceId).
-      IF lcErr NE "" THEN RETURN appl_err("SVA email request failure " + lcErr).
-
-      CREATE Memo.
-      ASSIGN
-          Memo.CreStamp  = {&nowTS}
-          Memo.Brand     = Syst.Var:gcBrand
-          Memo.HostTable = "MobSub"
-          Memo.KeyValue  = STRING(Mobsub.MsSeq)
-          Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-          Memo.CreUser   = "VISTA"
-          Memo.MemoTitle = "SVA operation"
-          Memo.MemoText  = pcValue + " " + pcServiceId
-          Memo.CustNum   = mobsub.custnum.
    END.
 END.   
 
