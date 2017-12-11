@@ -92,7 +92,7 @@ FUNCTION fGetSVAOffer RETURNS CHARACTER
 
     DEFINE BUFFER bf_DiscOfferItem FOR OfferItem.
 
-    ASSIGN ldeCurrentTS = Syst.Common:mMakeTS().
+    ASSIGN ldeCurrentTS = Func.Common:mMakeTS().
     
     FOR EACH Offer WHERE Offer.Brand       = Syst.Var:gcBrand AND 
                          Offer.Active      = True             AND
