@@ -547,18 +547,6 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
    IF LOOKUP('offer_id', lcOrderStruct) GT 0 THEN 
       pcOfferId = get_string(pcOrderStruct, "offer_id").
 
-   IF LOOKUP("extra_offers",lcOrderStruct) > 0 THEN
-   DO:
-      pcAdditionalOfferArray = get_array(pcOrderStruct,"extra_offers").
-
-      DO liOfferCnt = 0 TO get_paramcount(pcAdditionalOfferArray) - 1:
-         ASSIGN pcAdditionalOfferList = pcAdditionalOfferList + 
-                                        (IF pcAdditionalOfferList <> "" THEN "," ELSE "") + 
-                                        get_string(pcAdditionalOfferArray, STRING(liOfferCnt)).
-      END.
-
-   END.
-
    IF LOOKUP('price_selection_time', lcOrderStruct) GT 0 THEN
        pdePriceSelTime = get_timestamp(pcOrderStruct, "price_selection_time").
    ELSE pdePriceSelTime = {&nowTS}.
@@ -578,10 +566,17 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
    DO:
       pcAdditionalBundleArray = get_array(pcOrderStruct,"additional_bundle").
 
+      IF pcAdditionalBundleArray > "" THEN
       DO liBundleCnt = 0 TO get_paramcount(pcAdditionalBundleArray) - 1:
-         ASSIGN pcAdditionalBundleList = pcAdditionalBundleList + (IF pcAdditionalBundleList <> "" THEN "," ELSE "") + get_string(pcAdditionalBundleArray, STRING(liBundleCnt)).
+         ASSIGN 
+             pcBundleStruct         = get_struct(pcAdditionalBundleArray,STRING(liBundleCnt)) 
+             pcAdditionalBundleList = pcAdditionalBundleList                                + 
+                                      (IF pcAdditionalBundleList <> "" THEN "," ELSE "") + 
+                                      get_string(pcBundleStruct, "bundle_id")
+             pcAdditionalOfferList  = pcAdditionalOfferList                                + 
+                                      (IF pcAdditionalOfferList <> "" THEN "," ELSE "") + 
+                                      get_string(pcBundleStruct, "extra_offer_id").
       END.
-
    END.
 
    IF LOOKUP("subscription_bundle",lcOrderStruct) > 0 THEN

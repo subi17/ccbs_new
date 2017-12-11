@@ -1283,7 +1283,7 @@ PROCEDURE pContractActivation:
                                                                 bf_OfferItem.ItemKey,
                                                                 bf_OfferItem.Amount,
                                                                 TODAY,
-                                                                (bf_OfferItem.Periods + 1),
+                                                                bf_OfferItem.Periods,
                                                                 0,
                                                                 OUTPUT lcErrMsg).
                       IF liDiscReq NE 0 THEN 

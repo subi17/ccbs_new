@@ -84,6 +84,39 @@ FUNCTION fGetSegment RETURNS CHAR
    RETURN "Consumer".
 END.
 
+FUNCTION fGetSVAOffer RETURNS CHARACTER
+    (icCliType AS CHAR,
+     icDCEvent AS CHAR):
+
+    DEFINE BUFFER bf_DiscOfferItem FOR OfferItem.
+
+    FOR EACH Offer WHERE Offer.Brand       = Syst.Var:gcBrand AND 
+                         Offer.Active      = True             AND
+                         Offer.ToDate     >= TODAY            AND 
+                         Offer.Offer_type = "extra_offer"     NO-LOCK,
+        FIRST OfferItem WHERE OfferItem.Brand     = Syst.Var:gcBrand     AND 
+                              OfferItem.Offer     = Offer.Offer          AND 
+                              OfferItem.ItemType  = "OptionalBundleItem" AND
+                              OfferItem.ItemKey   = icDCEvent            AND 
+                              OfferItem.EndStamp >= ldeCurrentTS         NO-LOCK,
+        FIRST OfferCriteria WHERE OfferCriteria.Brand        = Syst.Var:gcBrand      AND 
+                                  OfferCriteria.Offer        = Offer.Offer           AND 
+                                  OfferCriteria.CriteriaType = "CLIType"             AND
+                                  OfferCriteria.BeginStamp  <= ldeCurrentTS          AND 
+                                  LOOKUP(icCliType, OfferCriteria.IncludedValue) > 0 AND 
+                                  OfferCriteria.EndStamp    >= ldeCurrentTS          NO-LOCK:
+
+        FIND FIRST bf_DiscOfferItem WHERE bf_DiscOfferItem.Brand     = Syst.Var:gcBrand AND 
+                                          bf_DiscOfferItem.Offer     = Offer.Offer      AND 
+                                          bf_DiscOfferItem.ItemType  = "DiscountPlan"   AND
+                                          bf_DiscOfferItem.EndStamp >= ldeCurrentTS     NO-LOCK NO-ERROR.
+        IF AVAIL bf_DiscOfferItem AND bf_DiscOfferItem.ItemKey <> "" THEN 
+            RETURN bf_DiscOfferItem.ItemKey.
+    END.
+
+    RETURN "".  
+
+END FUNCTION.
 
 /*'off', 'on', 'cancel activation', 'cancel deactivation'*/
 FUNCTION fMakeProActRequest RETURNS INT(
@@ -94,10 +127,12 @@ FUNCTION fMakeProActRequest RETURNS INT(
    INPUT icParam2 AS CHAR,
    INPUT icAction AS CHAR, 
    OUTPUT ocErr AS CHAR):
-   DEF VAR liRequest AS INT NO-UNDO.
-   DEF VAR liReqType AS INT NO-UNDO.
-   DEF VAR lcError AS CHAR NO-UNDO.
-   DEF VAR lcParams AS CHAR NO-UNDO.
+
+   DEF VAR liRequest AS INT  NO-UNDO.
+   DEF VAR liReqType AS INT  NO-UNDO.
+   DEF VAR lcError   AS CHAR NO-UNDO.
+   DEF VAR lcParams  AS CHAR NO-UNDO.
+   DEF VAR lcOffer   AS CHAR NO-UNDO. 
 
    DEF BUFFER bOwner FOR MSOwner. 
 
@@ -114,6 +149,11 @@ FUNCTION fMakeProActRequest RETURNS INT(
          END.
       END. 
    END.
+
+   ASSIGN 
+       lcOffer  = fGetSVAOffer(bOwner.CliType, icContr)
+       lcParams = FILL("|", (4 - NUM-ENTRIES(lcParams)))
+       lcParams = lcParams + lcOffer.
 
    DO TRANS:
    IF icAction BEGINS "cancel" THEN DO:
@@ -364,10 +404,12 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
 
    IF INDEX(lcOutput, "#EMAIL") > 0 THEN 
    DO:
-      IF NUM-ENTRIES(bMSRequest.ReqCparam6) GT 2 THEN
+      IF NUM-ENTRIES(bMSRequest.ReqCparam6) GT 2 AND ENTRY(3,bMSRequest.ReqCparam6, "|") <> "" THEN
          lcReplace = ENTRY(3,bMSRequest.ReqCparam6, "|").
-      ELSE IF NUM-ENTRIES(bMSRequest.ReqCparam6) EQ 2 THEN
+      ELSE IF NUM-ENTRIES(bMSRequest.ReqCparam6) EQ 2 AND ENTRY(2,bMSRequest.ReqCparam6, "|") <> "" THEN
          lcReplace = ENTRY(2,bMSRequest.ReqCparam6, "|").
+      ELSE 
+         lcReplace = bCustomer.Email.
 
       lcOutput = REPLACE(lcOutput, "#EMAIL", lcReplace).
    END.
