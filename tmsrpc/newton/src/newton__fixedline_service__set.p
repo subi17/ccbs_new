@@ -63,7 +63,6 @@ DEF VAR llOngoing      AS LOG   NO-UNDO.
 DEF VAR liParams       AS INT   NO-UNDO.
 DEF VAR liSVARequest   AS INT   NO-UNDO.
 DEF VAR lcBundleType   AS CHAR  NO-UNDO.
-DEF VAR ldeCurrentTS   AS DECI  NO-UNDO.
 
 DEF BUFFER bReq  FOR MsRequest.
 DEF BUFFER bSubReq FOR MsRequest.
@@ -83,9 +82,7 @@ FIND FIRST Mobsub WHERE Mobsub.MsSeq = piMsSeq NO-LOCK NO-ERROR.
 IF NOT AVAILABLE Mobsub THEN
     RETURN appl_err(SUBST("MobSub entry &1 not found", piMsSeq)).
 
-ASSIGN
-    Syst.Var:katun = "Newton"
-    ldeCurrentTS   = Syst.Common:mMakeTS().
+ASSIGN Syst.Var:katun = "Newton".
 
 DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
    pcStruct = get_struct(pcInputArray, STRING(liInputCounter - 1)).

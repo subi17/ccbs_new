@@ -355,6 +355,7 @@ DEF VAR lcPayType AS CHAR NO-UNDO.
 DEF VAR lcOldPayType AS CHAR NO-UNDO. 
 DEF VAR lcOfferOrderChannel  AS CHAR NO-UNDO.
 
+DEF VAR lcBundleFields          AS CHAR NO-UNDO.
 DEF VAR pcBundleStruct          AS CHAR NO-UNDO.
 DEF VAR pcAdditionalBundleList  AS CHAR NO-UNDO. 
 DEF VAR pcAdditionalBundleArray AS CHAR NO-UNDO.
@@ -568,14 +569,22 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
 
       IF pcAdditionalBundleArray > "" THEN
       DO liBundleCnt = 0 TO get_paramcount(pcAdditionalBundleArray) - 1:
+
          ASSIGN 
-             pcBundleStruct         = get_struct(pcAdditionalBundleArray,STRING(liBundleCnt)) 
-             pcAdditionalBundleList = pcAdditionalBundleList                                + 
-                                      (IF pcAdditionalBundleList <> "" THEN "," ELSE "") + 
-                                      get_string(pcBundleStruct, "bundle_id")
-             pcAdditionalOfferList  = pcAdditionalOfferList                                + 
-                                      (IF pcAdditionalOfferList <> "" THEN "," ELSE "") + 
-                                      get_string(pcBundleStruct, "extra_offer_id").
+             pcBundleStruct = get_struct(pcAdditionalBundleArray,STRING(liBundleCnt))
+             lcBundleFields = validate_request(pcBundleStruct,"bundle_id!,extra_offer_id").
+
+         IF LOOKUP('bundle_id'     , lcBundleFields) GT 0 AND 
+            LOOKUP('extra_offer_id', lcBundleFields) GT 0 THEN 
+         DO:   
+             ASSIGN    
+                 pcAdditionalBundleList = pcAdditionalBundleList                             + 
+                                          (IF pcAdditionalBundleList <> "" THEN "," ELSE "") + 
+                                          get_string(pcBundleStruct, "bundle_id")
+                 pcAdditionalOfferList  = pcAdditionalOfferList                              + 
+                                          (IF pcAdditionalOfferList <> "" THEN "," ELSE "")  + 
+                                          get_string(pcBundleStruct, "extra_offer_id").
+         END.                           
       END.
    END.
 
@@ -2483,7 +2492,7 @@ IF pcAdditionalBundleList > "" THEN
 DO liBundleCnt = 1 TO NUM-ENTRIES(pcAdditionalBundleList):
 
    FIND FIRST DayCampaign WHERE DayCampaign.Brand = Syst.Var:gcBrand AND DayCampaign.DCEvent = ENTRY(liBundleCnt, pcAdditionalBundleList) NO-LOCK NO-ERROR.
-   IF AVAIL DayCampaign AND LOOKUP(DayCampaign.BundleTarget, STRING({&TELEVISION_BUNDLE}) + "," + 
+   IF AVAIL DayCampaign AND LOOKUP(STRING(DayCampaign.BundleTarget), STRING({&TELEVISION_BUNDLE}) + "," + 
                                                              STRING({&DC_BUNDLE_TARGET_SVA})) > 0 THEN 
        fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList), ENTRY(liBundleCnt,pcAdditionalOfferList)).
    ELSE         
