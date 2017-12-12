@@ -551,6 +551,7 @@ PROCEDURE pUpdateSubscription:
    DEF VAR liSecs                  AS INT  NO-UNDO. 
    DEF VAR liNewMSStatus           AS INT  NO-UNDO. 
    DEF VAR ldtCloseDate            AS DATE NO-UNDO.
+   DEF VAR liRequest               AS INT  NO-UNDO.
    DEFINE VARIABLE lcExtraLineDiscount AS CHARACTER NO-UNDO.
 
    DEF BUFFER bOwner         FOR MsOwner.
@@ -859,7 +860,7 @@ PROCEDURE pUpdateSubscription:
                            0,
                            MSRequest.MSRequest,
                            "", /*contract id*/
-                           OUTPUT lcResult).
+                           OUTPUT lcError).
 
             IF liRequest = 0 THEN
                /* write possible error to a memo */
@@ -974,7 +975,7 @@ PROCEDURE pUpdateSubscription:
    IF fCLITypeIsExtraLine(CLIType.CliType)      AND
       NOT fCLITypeIsMainLine(bOldType.CliType)  AND
       NOT fCLITypeIsExtraLine(bOldType.CliType) AND
-      MobSub.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}
+      bOldType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}
    THEN DO:
       /* Find suitable mainline mobsub from the customer */
       FOR FIRST lMLMobSub EXCLUSIVE-LOCK WHERE
