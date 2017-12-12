@@ -156,7 +156,7 @@ FUNCTION fMakeProActRequest RETURNS INT(
 
    ASSIGN 
        lcOffer  = fGetSVAOffer(bOwner.CliType, icContr)
-       lcParams = FILL("|", (4 - NUM-ENTRIES(lcParams)))
+       lcParams = lcParams + FILL("|", (4 - NUM-ENTRIES(lcParams)))
        lcParams = lcParams + lcOffer.
 
    DO TRANS:
