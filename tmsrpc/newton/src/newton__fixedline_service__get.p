@@ -81,8 +81,11 @@ top_array = add_array(response_toplevel_id, "").
 
 BUNDLE:
 FOR EACH daycampaign NO-LOCK:
-   liParams = 0.
-   llgSVA = fIsSVA(daycampaign.dcevent, liParams).
+
+   ASSIGN 
+       liParams       = 0
+       lcServCompList = ""
+       llgSVA         = fIsSVA(daycampaign.dcevent, liParams).
 
    IF llgSVA THEN 
    DO:
