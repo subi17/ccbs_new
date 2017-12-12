@@ -112,7 +112,6 @@ DEFINE  INPUT PARAMETER  iiOrderID AS INT     NO-UNDO.
 {Syst/eventval.i}
 {Func/finvtxt.i}
 {Func/fcustdata.i}
-{Func/fctchange.i}
 {Func/fmakemsreq.i}
 {Func/msisdn.i}
 {Func/forderstamp.i}
