@@ -103,7 +103,6 @@ DEF OUTPUT PARAMETER ocErrFile     AS CHAR NO-UNDO.
 
 DEF VAR lcEPLFile     AS CHAR NO-UNDO.
 DEF VAR liCount       AS INT  NO-UNDO.
-DEF VAR lcRefNum      AS CHAR NO-UNDO.
 DEF VAR lcErrTxt      AS CHAR NO-UNDO.
 DEF VAR llErrors      AS LOG  NO-UNDO.
 DEF VAR lcText        AS CHAR NO-UNDO.
@@ -1637,8 +1636,7 @@ IF NOT llErrors THEN DO:
       END.
    END.
 
-   ASSIGN lcRefNum      = fCustRefNum(iiCustNum)
-          lcDateHead    = fTeksti(136,liLanguage)
+   ASSIGN lcDateHead    = fTeksti(136,liLanguage)
           lcCustHead    = fTeksti(140,liLanguage)
           lcBTHeader[1] = fTeksti(176,liLanguage)
           lcBTHeader[2] = fTeksti(365,liLanguage)
