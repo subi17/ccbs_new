@@ -19,6 +19,7 @@ Syst.Var:gcBrand = "1".
 {Func/upsellbundle.i}
 {Func/fgettxt.i}
 {Func/fprepaidfee.i}
+{Mm/fbundle.i}
 
 DEF VAR pcUpsellId       AS CHAR NO-UNDO.
 DEF VAR piMsSeq          AS INT  NO-UNDO. 
