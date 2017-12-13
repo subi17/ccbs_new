@@ -141,7 +141,7 @@ REPEAT:
                         FusionMessage.orderid EQ INT(lcYoigoOrderId) AND
                         FusionMessage.MessageType EQ 
                            {&FUSIONMESSAGE_TYPE_LOGISTICS} AND 
-                        FusionMessage.Source EQ "MasMovil") THEN DO:
+                        FusionMessage.Source EQ "MasMovil" USE-INDEX OrderID) THEN DO:
          fLogLine("ERROR:Already handled " + lcTempOrderId).
          NEXT.
       END.                  
