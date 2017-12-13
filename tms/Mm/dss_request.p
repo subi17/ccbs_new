@@ -12,6 +12,7 @@
 {Func/fcpfat.i}
 {Mm/active_bundle.i}
 {Func/service.i}
+{Mm/fbundle.i}
 
 
 DEF INPUT PARAMETER iiMsRequest AS INT  NO-UNDO.
