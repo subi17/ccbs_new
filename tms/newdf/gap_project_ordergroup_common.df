@@ -1,0 +1,69 @@
+ADD TABLE "OrderGroup"
+  MULTITENANT yes
+  AREA "Sta_Data_64"
+  DUMP-NAME "ordergroup"
+
+ADD FIELD "OrderId" OF "OrderGroup" AS integer
+  DESCRIPTION "Extra/Additional Line Order number"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "OrderId"
+  POSITION 2
+  MAX-WIDTH 4
+  COLUMN-LABEL "OrderId"
+  HELP "Extra/Additional Line Order Number"
+  ORDER 10
+
+ADD FIELD "GroupId" OF "OrderGroup" AS integer
+  DESCRIPTION "MainLine Order number"
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "GroupId"
+  POSITION 3
+  MAX-WIDTH 4
+  COLUMN-LABEL "GroupId"
+  HELP "Main Line Order Number"
+  ORDER 20
+
+ADD FIELD "GroupType" OF "OrderGroup" AS character
+  DESCRIPTION "Group Type"
+  FORMAT "x(10)"
+  INITIAL ""
+  LABEL "GroupType"
+  POSITION 4
+  MAX-WIDTH 16
+  COLUMN-LABEL "GroupType"
+  HELP "Group Type"
+  ORDER 30 
+
+ADD FIELD "Info" OF "OrderGroup" AS character
+  DESCRIPTION "Info"
+  FORMAT "x(40)"
+  INITIAL ""
+  LABEL "Info"
+  POSITION 5
+  MAX-WIDTH 16
+  COLUMN-LABEL "Info"
+  HELP "Info"
+  ORDER 40  
+
+ADD FIELD "CrStamp" OF "OrderGroup" AS decimal
+  DESCRIPTION "Create timestamp"
+  FORMAT "99999999.99999"
+  INITIAL "0"
+  LABEL "Created"
+  POSITION 6
+  MAX-WIDTH 20
+  COLUMN-LABEL "Created"
+  HELP "When was the order group created"
+  DECIMALS 5
+  ORDER 50
+
+ADD INDEX "OrderId" ON "OrderGroup"
+  AREA "Sta_Index_64"
+  INDEX-FIELD "OrderId" ASCENDING
+
+ADD INDEX "GroupId" ON "OrderGroup"
+  AREA "Sta_Index_64"
+  INDEX-FIELD "GroupId" ASCENDING
+  INDEX-FIELD "GroupType" DESCENDING

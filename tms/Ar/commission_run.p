@@ -17,6 +17,7 @@
 {Func/create_eventlog.i}
 {Func/barrfunc.i}
 {Func/commission.i}
+{Func/fmakesms.i}
 
 DEF OUTPUT PARAMETER oiChecked   AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER oiActivated AS INT  NO-UNDO.
