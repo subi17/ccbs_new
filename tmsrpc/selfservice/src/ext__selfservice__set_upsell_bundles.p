@@ -30,6 +30,7 @@ Syst.Var:gcBrand = "1".
 {Func/fgettxt.i}
 {Func/fexternalapi.i}
 {Func/fprepaidfee.i}
+{Mm/fbundle.i}
 
 DEF VAR pcUpsellId          AS CHAR NO-UNDO.
 DEF VAR pcCLI               AS CHAR NO-UNDO.

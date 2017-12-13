@@ -8,6 +8,7 @@
 
 {Syst/commali.i}
 {Func/msreqfunc.i}
+{Func/fmakesms.i}
 
 DEF INPUT PARAMETER iiMsRequest AS INT  NO-UNDO.
 DEF INPUT PARAMETER iiCustNum   AS INT  NO-UNDO.

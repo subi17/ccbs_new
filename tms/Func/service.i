@@ -21,8 +21,7 @@
 
 {Syst/commali.i}
 {Func/ffeecont.i}
-{Func/fctserval.i}
-{Func/fctchange.i}
+{Func/fdss.i}
 {Func/fmakemsreq.i}
 {Func/cparam2.i}
 {Func/sharperconfid.i}
