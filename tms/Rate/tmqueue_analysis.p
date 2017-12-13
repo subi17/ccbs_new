@@ -24,6 +24,7 @@ ASSIGN
 {Mm/fbundle.i}
 {Rate/tmqueue_analysis.i}
 {Func/istc.i}
+{Func/fmakesms.i}
 
 DEF VAR lhSource      AS HANDLE NO-UNDO.
 DEF VAR lhField       AS HANDLE NO-UNDO.

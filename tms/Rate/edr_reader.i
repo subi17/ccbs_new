@@ -13,6 +13,7 @@
 {Func/msreqfunc.i}
 {Func/fmakemsreq.i}
 {Mm/fbundle.i}
+{Func/fmakesms.i}
 
 &GLOBAL-DEFINE EDR_SUCCESS_CODE_OK 1 
 &GLOBAL-DEFINE EDR_SUCCESS_CODE_ERROR 3 

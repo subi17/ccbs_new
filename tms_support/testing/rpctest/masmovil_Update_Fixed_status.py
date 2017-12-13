@@ -6,6 +6,8 @@ from show_results import *
 # Definition
 #s = xmlrpclib.ServerProxy(address)
 s = xmlrpclib.ServerProxy(address, transport=p)
+#updtime =  datetime.datetime.now() + datetime.timedelta(minutes=5)
+updtime =  datetime.datetime.now()
 def instruction():
    print "Missing parameters"
    print "Example: python masmovil_Update_Fixed_status.py Y70037915 CERRADA"
@@ -21,13 +23,13 @@ else:
    var3 = ""
 q = s.masmovil.Update_Fixed_status({
    "notificationID": "1",
-   "notificationTime": datetime.datetime.now().isoformat(),
+   "notificationTime": updtime.isoformat(),
    "notificationType": "O",
    "orderID":var1,
    "Status": {
          "Status":var2,
          "StatusDescription": "hello",
-         "lastDate": datetime.datetime.now().isoformat(),
+         "lastDate": updtime.isoformat(),
          "additionalInfo": var3
    }
 
