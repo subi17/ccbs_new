@@ -1,0 +1,384 @@
+/* ----------------------------------------------------------------------
+  MODULE .......: OrderGroup
+  TASK .........: OrderGroup Data values
+  APPLICATION ..: 
+  AUTHOR .......: Subhash Sanjeevi
+  CREATED ......: 05-12-2017
+  CHANGED ......: 
+  Version ......: 
+  ---------------------------------------------------------------------- */
+
+{Syst/commali.i}  
+{Syst/eventval.i}
+{Func/cparam2.i}
+
+DEF TEMP-TABLE ttOrderGroup LIKE OrderGroup
+   FIELD cCreatedTS AS CHAR.
+
+FUNCTION fCollect RETURNS LOGICAL
+   (INPUT iiOrderId AS INT).
+   FOR EACH OrderGroup NO-LOCK WHERE
+            OrderGroup.OrderID EQ iiOrderId:
+      CREATE ttOrderGroup.
+      BUFFER-COPY OrderGroup to ttOrderGroup.
+      ttOrderGroup.cCreatedTS = Func.Common:mTS2HMS(OrderGroup.CrStamp).
+   END.
+
+END FUNCTION.
+
+DEF INPUT PARAMETER iiOrderId AS INT NO-UNDO.
+
+DEF VAR xrecid       AS RECID                           init ?.
+DEF VAR FIRSTrow     AS INT                    NO-UNDO  init 0.
+DEF VAR order        AS INT                    NO-UNDO  init 1.
+DEF VAR maxOrder     AS INT                    NO-UNDO  init 1.
+DEF VAR ufkey        AS LOG                    NO-UNDO  init TRUE.
+DEF VAR pr-order     AS INT                    NO-UNDO.
+DEF VAR Memory       AS RECID                  NO-UNDO.
+DEF VAR RowNo        AS INT                    NO-UNDO.
+DEF VAR must-print   AS LOG                    NO-UNDO.
+DEF VAR must-add     AS LOG                    NO-UNDO.
+DEF VAR ac-hdr       AS CHAR                   NO-UNDO.
+DEF VAR rtab         AS RECID EXTENT 24        NO-UNDO.
+DEF VAR i            AS INT                    NO-UNDO.
+
+FORM 
+   ttOrderGroup.OrderId   COLUMN-LABEL "OrderId"
+   ttOrderGroup.GroupId   COLUMN-LABEL "GroupId"
+   ttOrderGroup.GroupType COLUMN-LABEL "GroupType"
+   ttOrderGroup.Info      FORMAT "X(20)" COLUMN-LABEL "Info"
+   ttOrderGroup.CrStamp   FORMAT "99999999.99999"  COLUMN-LABEL "Created TS" 
+
+   WITH ROW 1 CENTERED OVERLAY 15 DOWN 
+   COLOR VALUE(Syst.Var:cfc)
+   TITLE COLOR VALUE(Syst.Var:ctc) " " + Syst.Var:ynimi + 
+   " ORDER GROUP For Order " 
+   + STRING(iiOrderId) + " "
+   FRAME sel.
+
+FORM 
+   "Order ID.........." ttOrderGroup.OrderId
+   SKIP
+   "Group ID.........." ttOrderGroup.GroupId
+   SKIP
+   "Group Type........" ttOrderGroup.GroupType  FORMAT "X(25)"
+   SKIP
+   "Info.............." ttOrderGroup.Info       FORMAT "X(25)"
+   SKIP
+   "Created..........." ttOrderGroup.CrStamp " " ttOrderGroup.cCreatedTS FORMAT "X(40)"
+   SKIP(2)
+
+   WITH OVERLAY ROW 1 WIDTH 80 centered
+   COLOR VALUE(Syst.Var:cfc)
+   TITLE COLOR VALUE(Syst.Var:ctc)
+   " Order Group Contents " NO-LABELS 
+   FRAME fDetails.
+
+Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
+VIEW FRAME sel.
+
+fCollect(iiOrderId).
+
+RUN local-find-first.
+
+IF AVAILABLE ttOrderGroup THEN ASSIGN
+   Memory       = recid(ttOrderGroup)
+   must-print   = TRUE
+   must-add     = FALSE.
+ELSE ASSIGN
+   Memory       = ?
+   must-print   = FALSE
+   must-add     = FALSE.
+
+LOOP:
+REPEAT WITH FRAME sel:
+
+   IF order <> pr-order AND MaxOrder NE 1 THEN DO:
+      pr-order = order.
+   END.
+    
+   PrintPage:
+   DO :
+      IF must-print THEN DO:
+        UP FRAME-LINE - 1.
+        FIND ttOrderGroup WHERE recid(ttOrderGroup) = Memory NO-LOCK NO-ERROR.
+
+        REPEAT WITH FRAME sel:
+           IF AVAILABLE ttOrderGroup THEN DO:
+              RUN local-disp-row.
+              rtab[FRAME-LINE] = recid(ttOrderGroup).
+              RUN local-find-NEXT.
+           END.
+           ELSE DO:
+              CLEAR NO-PAUSE.
+              rtab[FRAME-LINE] = ?.
+           END.
+           IF FRAME-LINE = FRAME-DOWN THEN LEAVE.
+           DOWN.
+        END.
+        up FRAME-LINE - 1.
+        DOWN FIRSTrow.
+        ASSIGN FIRSTrow = 0
+               must-print = FALSE.
+        PAUSE 0 NO-MESSAGE.
+
+        /* Now there is one page DISPLAYed AND the cursor is on the
+        upermost ROW, waiting FOR a 'choose' */
+      END. /* must-print = TRUE */
+   END. /* PrintPage */
+
+   BROWSE:
+   REPEAT WITH FRAME sel ON ENDKEY UNDO, RETURN:
+
+      IF ufkey THEN DO:
+        ASSIGN
+        Syst.Var:ufk    = 0
+        Syst.Var:ufk[4] = 0
+        Syst.Var:ufk[8] = 8 
+        Syst.Var:ehto   = 3 
+        ufkey  = FALSE.
+
+        RUN Syst/ufkey.p.
+        
+      END.
+
+      HIDE MESSAGE NO-PAUSE.
+      IF order = 1 THEN DO:
+        CHOOSE ROW ttOrderGroup.OrderId {Syst/uchoose.i} NO-ERROR WITH FRAME sel.
+        COLOR DISPLAY VALUE(Syst.Var:ccc) ttOrderGroup.OrderId  WITH FRAME sel.
+      END.
+
+      Syst.Var:nap = keylabel(LASTKEY).
+
+      IF rtab[FRAME-line] = ? THEN DO:
+         IF LOOKUP(Syst.Var:nap,"8,f8") = 0 THEN DO:
+            BELL.
+            MESSAGE "You are on an empty row, move upwards !".
+            PAUSE 1 NO-MESSAGE.
+            NEXT.
+         END.
+      END.
+
+      IF LOOKUP(Syst.Var:nap,"cursor-right") > 0 THEN DO:
+        order = order + 1. IF order > maxOrder THEN order = 1.
+      END.
+      IF LOOKUP(Syst.Var:nap,"cursor-left") > 0 THEN DO:
+        order = order - 1. IF order = 0 THEN order = maxOrder.
+      END.
+
+      IF order <> pr-order AND MaxOrder > 1 THEN DO:
+        ASSIGN FIRSTrow = 0 Memory = rtab[FRAME-LINE].
+        FIND ttOrderGroup WHERE recid(ttOrderGroup) = Memory NO-LOCK.
+        DO i = 1 TO FRAME-LINE - 1:
+           RUN local-find-PREV.
+           IF AVAILABLE ttOrderGroup THEN
+              ASSIGN FIRSTrow = i Memory = recid(ttOrderGroup).
+           ELSE LEAVE.
+        END.
+        must-print = TRUE.
+        NEXT LOOP.
+      END.
+
+      /* PREVious ROW */
+      IF LOOKUP(Syst.Var:nap,"cursor-up") > 0 THEN DO WITH FRAME sel:
+        IF FRAME-LINE = 1 THEN DO:
+           RUN local-find-this(FALSE).
+           RUN local-find-PREV.
+           IF NOT AVAILABLE ttOrderGroup THEN DO:
+              MESSAGE "YOU ARE ON THE FIRST ROW !".
+              BELL. PAUSE 1 NO-MESSAGE.
+              NEXT BROWSE.
+           END.
+           ELSE DO:
+              /* PREVious was found */
+              SCROLL DOWN.
+              RUN local-disp-row.
+              DO i = FRAME-DOWN TO 2 BY -1:
+                 rtab[i] = rtab[i - 1].
+              END.
+              ASSIGN
+                rtab[1] = recid(ttOrderGroup)
+                Memory  = rtab[1].
+           END.
+        END.
+        ELSE up 1.
+      END. /* PREVious ROW */
+
+      /* NEXT ROW */
+      ELSE IF LOOKUP(Syst.Var:nap,"cursor-down") > 0 THEN DO
+      WITH FRAME sel:
+        IF FRAME-LINE = FRAME-DOWN THEN DO:
+           RUN local-find-this(FALSE).
+           RUN local-find-NEXT.
+           IF NOT AVAILABLE ttOrderGroup THEN DO:
+              MESSAGE "YOU ARE ON THE LAST ROW !".
+              BELL. PAUSE 1 NO-MESSAGE.
+              NEXT BROWSE.
+           END.
+           ELSE DO:
+              /* NEXT ROW was found */
+              SCROLL UP.
+              RUN local-disp-row.
+              DO i = 1 TO FRAME-DOWN - 1:
+                 rtab[i] = rtab[i + 1].
+              END.
+              rtab[FRAME-DOWN] = recid(ttOrderGroup).
+              /* save RECID of uppermost ROW */
+              Memory = rtab[1].
+           END.
+        END.
+        ELSE DOWN 1 .
+      END. /* NEXT ROW */
+
+      /* PREV page */
+      ELSE IF LOOKUP(Syst.Var:nap,"PREV-page,page-up,-") > 0 THEN DO:
+        Memory = rtab[1].
+        FIND ttOrderGroup WHERE recid(ttOrderGroup) = Memory NO-LOCK NO-ERROR.
+        RUN local-find-PREV.
+        IF AVAILABLE ttOrderGroup THEN DO:
+           Memory = recid(ttOrderGroup).
+
+           /* reverse 1 page */
+           DO RowNo = 1 TO (FRAME-DOWN - 1):
+              RUN local-find-PREV.
+              IF AVAILABLE ttOrderGroup THEN Memory = recid(ttOrderGroup).
+              ELSE RowNo = FRAME-DOWN.
+           END.
+           must-print = TRUE.
+           NEXT LOOP.
+        END.
+        ELSE DO:
+           /* is this the very FIRST record of the table ?  */
+           MESSAGE "YOU ARE ON THE FIRST PAGE !".
+           BELL. PAUSE 1 NO-MESSAGE.
+        END.
+     END. /* PREVious page */
+
+     /* NEXT page */
+     ELSE IF LOOKUP(Syst.Var:nap,"NEXT-page,page-down,+") > 0 THEN DO WITH FRAME sel:
+       /* PUT Cursor on downmost ROW */
+       IF rtab[FRAME-DOWN] = ? THEN DO:
+           MESSAGE "YOU ARE ON THE LAST PAGE !".
+           BELL. PAUSE 1 NO-MESSAGE.
+       END.
+       ELSE DO: /* downmost ROW was NOT empty*/
+           Memory = rtab[FRAME-DOWN].
+           FIND ttOrderGroup WHERE recid(ttOrderGroup) = Memory NO-LOCK.
+           must-print = TRUE.
+           NEXT LOOP.
+       END.
+     END. /* NEXT page */
+
+     ELSE IF LOOKUP(Syst.Var:nap,"home,H") > 0 THEN DO:
+        RUN local-find-FIRST.
+        ASSIGN Memory = recid(ttOrderGroup) must-print = TRUE.
+       NEXT LOOP.
+     END.
+
+     ELSE IF LOOKUP(Syst.Var:nap,"END,E") > 0 THEN DO : /* LAST record */
+        RUN local-find-LAST.
+        ASSIGN Memory = recid(ttOrderGroup) must-print = TRUE.
+        NEXT LOOP.
+     END.
+ 
+     ELSE IF LOOKUP(Syst.Var:nap,"enter,return") > 0 THEN DO:
+        RUN local-find-this(FALSE).
+        PAUSE 0. 
+        DISPLAY  
+           ttOrderGroup.OrderId   
+           ttOrderGroup.GroupId   
+           ttOrderGroup.GroupType 
+           ttOrderGroup.Info     
+           ttOrderGroup.CrStamp
+        WITH FRAME fDetails.
+        
+        RUN local-find-this(TRUE).
+        Syst.Var:cfc = "fDetails". RUN Syst/ufcolor.p. CLEAR FRAME fDetails NO-PAUSE.
+
+        RUN local-update-record.
+        HIDE FRAME fDetails. /* NO-PAUSE.*/
+
+        /* IF  User Wanted TO Cancel this Change TRANSACTION */
+        IF LOOKUP(KEYFUNCTION(LASTKEY),"endkey,end-error") > 0 OR
+        KEYLABEL(lastkey) = "F4" THEN UNDO, LEAVE.
+
+        RUN local-disp-row.
+        xrecid = recid(ttOrderGroup).
+        LEAVE.
+     END.
+
+     ELSE IF LOOKUP(Syst.Var:nap,"8,f8") > 0 THEN LEAVE LOOP.
+
+  END.  /* BROWSE */
+END.  /* LOOP */
+
+HIDE FRAME sel NO-PAUSE.
+Syst.Var:si-recid = xrecid.
+
+PROCEDURE local-find-this:
+
+    DEF INPUT PARAMETER exlock AS lo NO-UNDO.
+
+    IF exlock THEN
+      FIND ttOrderGroup WHERE recid(ttOrderGroup) = rtab[frame-line(sel)] 
+      EXCLUSIVE-LOCK.
+    ELSE
+       FIND ttOrderGroup WHERE recid(ttOrderGroup) = rtab[frame-line(sel)] 
+       NO-LOCK.
+END PROCEDURE.
+
+PROCEDURE local-find-FIRST:
+
+       IF order = 1 THEN FIND FIRST ttOrderGroup NO-LOCK NO-ERROR.
+         
+END PROCEDURE.
+
+PROCEDURE local-find-LAST:
+
+       IF order = 1 THEN FIND LAST ttOrderGroup NO-LOCK NO-ERROR.
+ 
+END PROCEDURE.
+
+PROCEDURE local-find-NEXT:
+
+       IF order = 1 THEN FIND NEXT ttOrderGroup NO-LOCK NO-ERROR.
+          
+END PROCEDURE.
+
+PROCEDURE local-find-PREV:
+ 
+       IF order = 1 THEN FIND PREV ttOrderGroup NO-LOCK NO-ERROR.
+  
+END PROCEDURE.
+
+PROCEDURE local-disp-row:
+
+       CLEAR FRAME sel NO-PAUSE.
+       
+       DISPLAY 
+           ttOrderGroup.OrderId   
+           ttOrderGroup.GroupId   
+           ttOrderGroup.GroupType 
+           ttOrderGroup.Info     
+           ttOrderGroup.CrStamp
+       WITH FRAME sel.
+END PROCEDURE.
+
+PROCEDURE local-update-record:
+
+   REPEAT ON ENDKEY UNDO, LEAVE:
+
+       DISPLAY
+           ttOrderGroup.OrderId   
+           ttOrderGroup.GroupId   
+           ttOrderGroup.GroupType 
+           ttOrderGroup.Info     
+           ttOrderGroup.CrStamp
+      WITH FRAME fDetails.
+
+      PAUSE MESSAGE "Press ENTER".
+
+      LEAVE.
+   END.
+END PROCEDURE.
+
