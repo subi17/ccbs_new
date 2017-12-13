@@ -17,8 +17,7 @@
 {Func/cparam2.i}
 {Func/fmakemsreq.i}
 {Func/fparse.i}
-{Func/fixedfee.i}
-{Func/matrix.i}
+{Func/coinv.i}
 {Syst/eventval.i}
 {Func/create_eventlog.i}
 

@@ -10,6 +10,7 @@
 
 {Func/msreqfunc.i}
 {Func/fwebuser.i}
+{Func/fmakesms.i}
 
 DEF INPUT PARAMETER iiRequest AS INT NO-UNDO.
 
