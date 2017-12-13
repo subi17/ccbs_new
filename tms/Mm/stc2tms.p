@@ -999,9 +999,17 @@ PROCEDURE pUpdateSubscription:
                                   TODAY).
 
          ASSIGN lMLMobSub.MultiSimId   = MobSub.MsSeq
-                lMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY}
-                MobSub.MultiSimId      = lMLMobSub.MsSeq
-                MobSub.MultiSimType    = {&MULTISIMTYPE_EXTRALINE}.
+                lMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY}.
+
+         FIND CURRENT Mobsub EXCLUSIVE-LOCK.
+         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).
+
+         ASSIGN MobSub.MultiSimId   = lMLMobSub.MsSeq
+                MobSub.MultiSimType = {&MULTISIMTYPE_EXTRALINE}.
+
+         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
+
+         FIND CURRENT Mobsub NO-LOCK.
 
          LEAVE.
       END.
