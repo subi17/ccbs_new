@@ -50,6 +50,8 @@ FUNCTION fMarkOrderStamp RETURNS LOGICAL
     icStampType AS CHAR,
     idStamp     AS DEC):
  
+   DEF BUFFER OrderTimeStamp FOR OrderTimeStamp.
+
    DEF VAR liStampType AS INT NO-UNDO.
        
    liStampType = fOrderStampType(icStampType).
