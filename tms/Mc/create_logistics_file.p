@@ -2004,10 +2004,13 @@ FOR EACH ttOneDelivery NO-LOCK WHERE
 
    /* Mainline Convergent order is with OrderStatus 77, 
       include mobile part of mainline in logistics file */
-   IF NOT fAdditionalValue(ttOneDelivery.Orderid,
-                           liMLOrderId,
-                           llDespacharValue) THEN 
-      UNDO ADDITIONAL, NEXT.   
+   IF bMLOrder.OrderType NE {&ORDER_TYPE_STC} THEN DO: 
+   
+      IF NOT fAdditionalValue(ttOneDelivery.Orderid,
+                              liMLOrderId,
+                              llDespacharValue) THEN 
+         UNDO ADDITIONAL, NEXT.   
+   END.
 
    FIND FIRST bMLttExtra EXCLUSIVE-LOCK WHERE
               bMLttExtra.RowNum = liMLRowNum NO-ERROR.
@@ -2017,10 +2020,14 @@ FOR EACH ttOneDelivery NO-LOCK WHERE
 
    ASSIGN bMLttExtra.MainOrderID  = STRING(liMLOrderID)
           bMLttExtra.Despachar    = "01".
-   
-   fCreateOrderGroup(liMLOrderId,
-                     liMLOrderID,
-                     llDespacharValue).
+
+   IF NOT CAN-FIND(FIRST OrderGroup NO-LOCK WHERE
+                         OrderGroup.OrderId        EQ liMLOrderID              AND
+                         OrderGroup.GroupType      EQ {&OG_LOFILE}             AND
+                 ENTRY(1,OrderGroup.Info,CHR(255)) EQ {&DESPACHAR_TRUE_VALUE}) THEN
+      fCreateOrderGroup(liMLOrderId,
+                        liMLOrderID,
+                        llDespacharValue).
    
    /* Reset Despachar Value for Additional/Extra lines orders */
    llDespacharValue = FALSE.
@@ -2054,9 +2061,13 @@ FOR EACH ttOneDelivery NO-LOCK WHERE
                               llDespacharValue) THEN
          UNDO ADDITIONAL, NEXT.
 
-      fCreateOrderGroup(bALOrder.OrderId,
-                        liMLOrderID,
-                        llDespacharValue).
+      IF NOT CAN-FIND(FIRST OrderGroup NO-LOCK WHERE
+                            OrderGroup.OrderId        EQ bALOrder.OrderId         AND
+                            OrderGroup.GroupType      EQ {&OG_LOFILE}             AND
+                    ENTRY(1,OrderGroup.Info,CHR(255)) EQ {&DESPACHAR_TRUE_VALUE}) THEN
+         fCreateOrderGroup(bALOrder.OrderId,
+                           liMLOrderID,
+                           llDespacharValue).
 
    END. /* FOR EACH bALOrderCustomer */
 
