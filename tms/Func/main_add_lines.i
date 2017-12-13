@@ -17,6 +17,7 @@
 {Func/msreqfunc.i}
 {Func/fmakemsreq.i}
 {Func/fgettxt.i}
+{Func/fmakesms.i}
 
 DEF TEMP-TABLE tt_AdditionalSIM NO-UNDO
     FIELD MsSeq    AS INT
