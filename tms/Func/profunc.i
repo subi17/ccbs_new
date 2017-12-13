@@ -115,7 +115,7 @@ FUNCTION fGetSVAOffer RETURNS CHARACTER
                                           bf_DiscOfferItem.ItemType  = "DiscountPlan"   AND
                                           bf_DiscOfferItem.EndStamp >= ldeCurrentTS     NO-LOCK NO-ERROR.
         IF AVAIL bf_DiscOfferItem AND bf_DiscOfferItem.ItemKey <> "" THEN 
-            RETURN bf_DiscOfferItem.ItemKey.
+            RETURN bf_DiscOfferItem.Offer.
     END.
 
     RETURN "".  
