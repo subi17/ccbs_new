@@ -17,6 +17,7 @@
 {Func/ftransdir.i}
 {Func/heartbeat.i}
 {Inv/fusioninvoice.i}
+{Func/fmakesms.i}
 
 DEF INPUT PARAMETER iiMSrequest AS INT  NO-UNDO.
 
