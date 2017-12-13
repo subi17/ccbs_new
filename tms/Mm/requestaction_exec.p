@@ -18,6 +18,7 @@
 {Func/penaltyfee.i}
 {Func/fcustpl.i}
 {Func/fdss.i}
+{Mm/fbundle.i}
 
 DEF INPUT PARAMETER iiMsRequest  AS INT  NO-UNDO.
 DEF INPUT PARAMETER icCLIType    AS CHAR NO-UNDO.

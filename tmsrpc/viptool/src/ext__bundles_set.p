@@ -33,6 +33,7 @@ Syst.Var:gcBrand = "1".
 {Func/fsendsms.i}
 {Func/fdss.i}
 {Func/fprepaidfee.i}
+{Mm/fbundle.i}
 
 DEF VAR pcParamArray  AS CHARACTER NO-UNDO.
 DEF VAR pcParamStruct AS CHARACTER NO-UNDO.

@@ -19,6 +19,7 @@ Syst.Var:gcBrand = "1".
 {Func/service.i}
 {Func/fprepaidfee.i}
 {Mm/active_bundle.i}
+{Mm/fbundle.i}
 
 /* files and dirs */
 DEF VAR lcLine           AS CHAR NO-UNDO.

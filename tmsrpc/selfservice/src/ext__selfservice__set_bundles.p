@@ -38,6 +38,7 @@ Syst.Var:gcBrand = "1".
 {Func/fdss.i}
 {Func/fexternalapi.i}
 {Func/fprepaidfee.i}
+{Mm/fbundle.i}
 
 DEF VAR pcBundleId          AS CHAR NO-UNDO.
 DEF VAR pcCLI               AS CHAR NO-UNDO.
