@@ -29,4 +29,29 @@ FUNCTION fGetBundles RETURNS CHAR (icBundleType AS CHAR):
 
 END FUNCTION.
 
+FUNCTION fConvBundleToBillItem RETURNS CHAR
+   (icDataBundle AS CHAR):
+
+   DEF BUFFER DayCampaign FOR DayCampaign.
+   DEF BUFFER FeeModel FOR FeeModel.
+   DEF BUFFER FMItem FOR FMItem.
+
+   FOR FIRST DayCampaign WHERE
+             DayCampaign.Brand   = Syst.Var:gcBrand AND
+             DayCampaign.DCEvent = icDataBundle NO-LOCK,
+       FIRST FeeModel WHERE
+             FeeModel.Brand    = Syst.Var:gcBrand AND
+             FeeModel.FeeModel = DayCampaign.FeeModel NO-LOCK,
+       FIRST FMItem WHERE
+             FMItem.Brand     = Syst.Var:gcBrand AND
+             FMItem.FeeModel  = FeeModel.FeeModel AND
+             FMItem.FromDate <= TODAY AND
+             FMItem.ToDate   >= TODAY NO-LOCK:
+       RETURN FMItem.BillCode.
+   END.
+   RETURN icDataBundle.
+
+END FUNCTION.
+
 &ENDIF
+
