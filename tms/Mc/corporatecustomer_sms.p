@@ -13,7 +13,8 @@ Syst.Var:gcBrand = "1".
 {Func/fgettxt.i}
 {Func/fmakesms.i}
 {Func/transname.i}
-{Mm/fbundle.i}
+{Func/msreqfunc.i}
+{Mm/bundle_type.i}
 
 DEF VAR lcBundleCLITypes  AS CHAR NO-UNDO.
 DEF VAR lcReplacedTxt     AS CHAR NO-UNDO.
