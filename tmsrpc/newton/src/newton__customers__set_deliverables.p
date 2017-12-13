@@ -21,6 +21,7 @@ Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/femailinvoice.i}
 {Mc/invoicetarget.i}
+{Func/fmakesms.i}
 
 DEF VAR liCount AS INT NO-UNDO.
 DEF VAR pcStruct AS CHAR NO-UNDO. 
