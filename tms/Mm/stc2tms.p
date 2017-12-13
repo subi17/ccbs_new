@@ -903,7 +903,7 @@ PROCEDURE pUpdateSubscription:
                     lMLMobSub.MultiSimId   EQ MobSub.MSSeq            AND
                     lMLMobSub.MultiSimtype EQ {&MULTISIMTYPE_PRIMARY} AND
                    (lMLMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE}  OR
-                    lMLMobSub.MsStatus     EQ {&MSSTATUS_BARRED}))
+                    lMLMobSub.MsStatus     EQ {&MSSTATUS_BARRED})
          NO-ERROR.
 
          IF AVAILABLE lMLMobSub AND
