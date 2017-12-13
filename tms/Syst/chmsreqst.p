@@ -62,6 +62,11 @@ FUNCTION fUpdStatus RETURNS LOGICAL
   
     cRMessage = lcDoneMessage.
 
+    IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                      MsRequest.MsRequest EQ iiMsRequest AND
+                      MsRequest.ReqStatus NE iiFromStatus) THEN
+       cRMessage = "Error occured during update, status changed before update!".
+    ELSE
     /* Update request status with input parameter and MEMO message */
     IF NOT fReqStatus(iTo,cMessage) THEN 
        cRMessage = lcErrorMessage.
@@ -502,57 +507,58 @@ ELSE DO:
    fUpdStatus(iiToStatus,
               lcCancelReason,
               OUTPUT lcMessage).
-
-   IF MsRequest.ReqType = 10 AND LOOKUP(STRING(iiToStatus),"4,9") > 0 THEN DO:
-      /* cancel pending sms */
-      FOR FIRST CallAlarm EXCLUSIVE-LOCK USE-INDEX CLI WHERE
-                CallAlarm.Brand    = Syst.Var:gcBrand       AND
-                CallAlarm.CLI      = MsRequest.CLI AND
-                CallAlarm.DeliStat = 1             AND
-                CallAlarm.DeliPara = "PD":
-         CallAlarm.DeliStat = 4.
+   IF NOT lcMessage BEGINS "Error" THEN DO:
+      IF MsRequest.ReqType = 10 AND LOOKUP(STRING(iiToStatus),"4,9") > 0 THEN DO:
+         /* cancel pending sms */
+         FOR FIRST CallAlarm EXCLUSIVE-LOCK USE-INDEX CLI WHERE
+                   CallAlarm.Brand    = Syst.Var:gcBrand       AND
+                   CallAlarm.CLI      = MsRequest.CLI AND
+                   CallAlarm.DeliStat = 1             AND
+                   CallAlarm.DeliPara = "PD":
+            CallAlarm.DeliStat = 4.
+         END.
       END.
-   END.
-   
-   /* if additional line to non-additional line pending STC is cancellled
-      and if it doesn't contain any main line then STC request has to be created
-      for additional line to CONT9*/
-   IF iiToStatus EQ 4 AND (MsRequest.Reqtype EQ 0 OR MsRequest.ReqType EQ 18) THEN 
-      fNonAddLineSTCCancellationToAddLineSTC(MsRequest.MsRequest).
+      
+      /* if additional line to non-additional line pending STC is cancellled
+         and if it doesn't contain any main line then STC request has to be created
+         for additional line to CONT9*/
+      IF iiToStatus EQ 4 AND (MsRequest.Reqtype EQ 0 OR MsRequest.ReqType EQ 18) THEN 
+         fNonAddLineSTCCancellationToAddLineSTC(MsRequest.MsRequest).
 
-   /* set activation date as the 1st of next month */
-   IF iiToStatus EQ 0 AND
-      iiFromStatus EQ 19 AND
-      MsRequest.ReqType = 10 AND
-      CAN-FIND(FIRST MobSub WHERE
-                     MobSub.MsSeq = MsRequest.MsSeq AND
-              LOOKUP(MobSub.CLIType,{&MOBSUB_CLITYPE_FUSION}) > 0)
-      THEN DO:
+      /* set activation date as the 1st of next month */
+      IF iiToStatus EQ 0 AND
+         iiFromStatus EQ 19 AND
+         MsRequest.ReqType = 10 AND
+         CAN-FIND(FIRST MobSub WHERE
+                        MobSub.MsSeq = MsRequest.MsSeq AND
+                 LOOKUP(MobSub.CLIType,{&MOBSUB_CLITYPE_FUSION}) > 0)
+         THEN DO:
 
-      IF MONTH(TODAY) = 12
-      THEN ldtTdDate = DATE(1,1,YEAR(TODAY) + 1).
-      ELSE ldtTdDate = DATE(MONTH(TODAY) + 1,1,YEAR(TODAY)).
+         IF MONTH(TODAY) = 12
+         THEN ldtTdDate = DATE(1,1,YEAR(TODAY) + 1).
+         ELSE ldtTdDate = DATE(MONTH(TODAY) + 1,1,YEAR(TODAY)).
 
-      ldActStamp = Func.Common:mMake2DT(ldtTdDate,3600).
+         ldActStamp = Func.Common:mMake2DT(ldtTdDate,3600).
 
-      FIND CURRENT MsRequest EXCLUSIVE-LOCK NO-ERROR.
-         IF AVAILABLE MsRequest THEN MsRequest.ActStamp = ldActStamp.
-      FIND CURRENT MsRequest NO-LOCK NO-ERROR.
-   END.
-   
-   IF iiToStatus EQ 8 AND
-      iiFromStatus EQ 19 AND
-      MsRequest.ReqType = 0 THEN DO:
-   
-      IF MsRequest.ReqDParam1 < Func.Common:mMakeTS() THEN
-         ldeActStamp = Func.Common:mMake2DT(TODAY + 1, 0).
-      ELSE ldeActStamp = MSrequest.ReqDParam1.
+         FIND CURRENT MsRequest EXCLUSIVE-LOCK NO-ERROR.
+            IF AVAILABLE MsRequest THEN MsRequest.ActStamp = ldActStamp.
+         FIND CURRENT MsRequest NO-LOCK NO-ERROR.
+      END.
+      
+      IF iiToStatus EQ 8 AND
+         iiFromStatus EQ 19 AND
+         MsRequest.ReqType = 0 THEN DO:
+      
+         IF MsRequest.ReqDParam1 < Func.Common:mMakeTS() THEN
+            ldeActStamp = Func.Common:mMake2DT(TODAY + 1, 0).
+         ELSE ldeActStamp = MSrequest.ReqDParam1.
 
-      FIND CURRENT MsRequest EXCLUSIVE-LOCK NO-ERROR.
-      ASSIGN
-         MsRequest.ReqDParam1 = ldeActStamp
-         MsRequest.ActStamp = ldeActStamp.
-      FIND CURRENT MsRequest NO-LOCK NO-ERROR.
+         FIND CURRENT MsRequest EXCLUSIVE-LOCK NO-ERROR.
+         ASSIGN
+            MsRequest.ReqDParam1 = ldeActStamp
+            MsRequest.ActStamp = ldeActStamp.
+         FIND CURRENT MsRequest NO-LOCK NO-ERROR.
+      END.
    END.
    
 END.
