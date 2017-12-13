@@ -51,6 +51,7 @@ Syst.Var:gcBrand = "1".
 {Func/fcustpl.i}
 {Func/penaltyfee.i}
 {Func/fexternalapi.i}
+{Func/transname.i}
 
 /* Input parameters */
 DEF VAR pcCLI               AS CHAR NO-UNDO.
