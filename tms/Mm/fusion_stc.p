@@ -11,6 +11,7 @@
 {Func/fmakemsreq.i}
 {Func/cparam2.i}
 {Syst/tmsconst.i}
+{Mm/fbundle.i}
 
 DEF INPUT PARAM piOrderID AS INT NO-UNDO. 
 DEF OUTPUT PARAM oiRequest AS INT NO-UNDO. 
