@@ -25,6 +25,7 @@ Syst.Var:gcBrand = "1".
 {Func/fsendsms.i}
 {Func/fdss.i}
 {Func/fprepaidfee.i}
+{Mm/fbundle.i}
 
 DEF VAR liRequest                   AS INT  NO-UNDO.
 DEF VAR lcBONOContracts             AS CHAR NO-UNDO.
