@@ -18,6 +18,7 @@
 {Func/msreqfunc.i}
 {Func/log.i}
 {Func/multitenantfunc.i}
+{Func/fmakesms.i}
 
 Syst.Var:gcBrand = "1".
 
