@@ -1366,6 +1366,16 @@ PROCEDURE pFinalize:
                   ASSIGN MobSub.TerritoryOwner = OrderCustomer.TerritoryOwner.
                FIND CURRENT Mobsub NO-LOCK NO-ERROR.				
 				END.
+
+            /* YTS-11912 */
+            IF lcExtraMainLineCLITypes                       NE "" AND
+               LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) GT 0  AND
+               Order.MultiSimId                              NE 0  AND
+               Order.MultiSimType                            EQ {&MULTISIMTYPE_PRIMARY}
+            THEN fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
+                                          Order.OrderId,    /* Main line Order Id  */
+                                          "RELEASE").       /* Action              */
+
             fSetOrderStatus(Order.OrderId,"6").  
             fMarkOrderStamp(Order.OrderID,
                             "Delivery",
