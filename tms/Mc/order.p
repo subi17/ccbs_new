@@ -1374,7 +1374,7 @@ PROCEDURE pOrderView:
               RUN Mm/msrequest.p(?,?,Order.MsSeq,0,liMsRequest,"").
 
            END.
-           ELSE IF Sys.Var:toimi = 6 THEN DO:
+           ELSE IF Syst.Var:toimi = 6 THEN DO:
               RUN local-find-this(FALSE).
               RUN Mc/ordergroup.p(Order.OrderId).
            END.
