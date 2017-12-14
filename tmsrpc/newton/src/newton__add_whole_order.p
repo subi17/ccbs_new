@@ -1531,10 +1531,6 @@ DO:
         RETURN appl_err("Prepaid subscriptions are not allowed for PRO customer(s)").
 END.
 
-/* Fixed only convergent subscription types */
-IF CliType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN
-   ASSIGN lcdelivery_channel = "Paper".   
-
 IF LOOKUP(pcNumberType,"new,mnp,renewal,stc") = 0 THEN
    RETURN appl_err(SUBST("Unknown number_type &1", pcNumberType)).   
 
