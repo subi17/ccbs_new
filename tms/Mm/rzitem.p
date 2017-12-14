@@ -172,9 +172,9 @@ ADD-ROW:
            PAUSE 0.
            PROMPT-FOR RZItem.PLMNCode
            validate
-              (/*RZItem.PLMNCode NOT ENTERED * YOT-5462 or*/
-              CAN-FIND(RZItem using  RZItem.PLMNCode),
-              "RZItem Code " + string(INPUT RZItem.PLMNCode) +
+              (RZItem.PLMNCode ENTERED /* or
+              CAN-FIND(RZItem using  RZItem.PLMNCode) */ ,
+              "RZItem Code " + string(INPUT RZItem.PLMNCode ) +
               " already exists !").
            IF INPUT FRAME lis RZItem.PLMNCode = "" THEN
                LEAVE add-row.
@@ -693,21 +693,6 @@ PROCEDURE local-update-record:
                       MESSAGE "Unknown RoamZone !".
                       NEXT.
                    END.
-                   /* YOT-5462 Same PlmnCode can exist if roamingzone is different */
-                   ASSIGN iCount =  0.
-                   FOR EACH bRZItem NO-LOCK WHERE
-                      bRZItem.PlmnCode EQ RZItem.PlmnCode USE-INDEX PLMNCode:
-                      IF AVAIL bRZItem THEN
-                         IF bRZItem.RoamZone EQ INPUT FRAME lis RZItem.ROAMZoNE THEN DO:
-                            ASSIGN iCount = iCount + 1.
-                            LEAVE.
-                         END.
-                   END.
-                   IF iCount > 0 THEN DO:
-                      BELL.
-                      MESSAGE "Duplicate PLMN and RoamZone !".
-                      NEXT.
-                   END.
                    /* end YOT-5462 */
                    DISP RoamZone.RZName.
                 END.
@@ -730,6 +715,18 @@ PROCEDURE local-update-record:
                       MESSAGE "Unknown Country Prefix !".
                    END.
                    DISP BDest.BDName WHEN AVAIL bdest.
+                   
+                   /* YOT-5462 Same PlmnCode can exist if roamingzone is different */
+                   FIND FIRST bRZItem NO-LOCK WHERE
+                              bRZItem.PlmnCode EQ RZItem.PlmnCode AND
+                              bRZItem.CountryPrefix EQ INPUT FRAME lis RZItem.CountryPrefix AND
+                              ROWID(bRZItem) NE ROWID(rzItem) NO-ERROR.
+                              
+                   IF AVAIL bRZItem THEN DO:
+                      BELL.
+                      MESSAGE "Duplicate PLMN and CountryPrefix !".
+                      NEXT.
+                   END.
                 END.
 
              END.
