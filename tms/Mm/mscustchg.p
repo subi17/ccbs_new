@@ -13,6 +13,7 @@
 {Syst/eventval.i}
 {Func/fwebuser.i}
 {Func/coinv.i}
+{Func/fmakesms.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
