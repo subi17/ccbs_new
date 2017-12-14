@@ -137,7 +137,7 @@ REPEAT:
          liNumSkipped = liNumSkipped + 1.
       ELSE liNumOK = liNumOK + 1 .
          
-      IF RETURN-VALUE NE "" THEN fError(ENTRY(2,RETURN-VALUE,":")).
+      IF RETURN-VALUE NE "" THEN fLogLine(RETURN-VALUE).
    END.
   
    PUT STREAM sLog UNFORMATTED 
