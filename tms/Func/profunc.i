@@ -137,6 +137,7 @@ FUNCTION fMakeProActRequest RETURNS INT(
    DEF VAR lcError   AS CHAR NO-UNDO.
    DEF VAR lcParams  AS CHAR NO-UNDO.
    DEF VAR lcOffer   AS CHAR NO-UNDO. 
+   DEF VAR lcErr     AS CHAR NO-UNDO.
 
    DEF BUFFER bOwner FOR MSOwner. 
 
@@ -179,7 +180,11 @@ FUNCTION fMakeProActRequest RETURNS INT(
          ocErr = "Cancellation not possible, request not found".
          RETURN 0.
       END.
+
       fReqStatus(4, "SVA Operation Cancellation").
+
+      fSendEmailByRequest(MsRequest.MsRequest,"SVA_" + icContr).
+
       RETURN MsRequest.MsRequest.
         
    END.
