@@ -84,85 +84,43 @@ FUNCTION fGetSegment RETURNS CHAR
    RETURN "Consumer".
 END.
 
+FUNCTION fGetSVAOffer RETURNS CHARACTER
+    (icCliType AS CHAR,
+     icDCEvent AS CHAR):
 
-/*'off', 'on', 'cancel activation', 'cancel deactivation'*/
-FUNCTION fMakeProActRequest RETURNS INT(
-   INPUT iiMsSeq AS INT,
-   INPUT icContr AS CHAR,
-   INPUT idActStamp AS DEC,
-   INPUT icParam1 AS CHAR,
-   INPUT icParam2 AS CHAR,
-   INPUT icAction AS CHAR, 
-   OUTPUT ocErr AS CHAR):
-   DEF VAR liRequest AS INT NO-UNDO.
-   DEF VAR liReqType AS INT NO-UNDO.
-   DEF VAR lcError AS CHAR NO-UNDO.
-   DEF VAR lcParams AS CHAR NO-UNDO.
+    DEF VAR ldeCurrentTS AS DECI NO-UNDO.
 
-   DEF BUFFER bOwner FOR MSOwner. 
+    DEFINE BUFFER bf_DiscOfferItem FOR OfferItem.
 
-   FIND FIRST bOwner WHERE bOwner.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
+    ASSIGN ldeCurrentTS = Func.Common:mMakeTS().
+    
+    FOR EACH Offer WHERE Offer.Brand       = Syst.Var:gcBrand AND 
+                         Offer.Active      = True             AND
+                         Offer.ToDate     >= TODAY            AND 
+                         Offer.Offer_type = "extra_offer"     NO-LOCK,
+        FIRST OfferItem WHERE OfferItem.Brand     = Syst.Var:gcBrand     AND 
+                              OfferItem.Offer     = Offer.Offer          AND 
+                              OfferItem.ItemType  = "OptionalBundleItem" AND
+                              OfferItem.ItemKey   = icDCEvent            AND 
+                              OfferItem.EndStamp >= ldeCurrentTS         NO-LOCK,
+        FIRST OfferCriteria WHERE OfferCriteria.Brand        = Syst.Var:gcBrand      AND 
+                                  OfferCriteria.Offer        = Offer.Offer           AND 
+                                  OfferCriteria.CriteriaType = "CLIType"             AND
+                                  OfferCriteria.BeginStamp  <= ldeCurrentTS          AND 
+                                  LOOKUP(icCliType, OfferCriteria.IncludedValue) > 0 AND 
+                                  OfferCriteria.EndStamp    >= ldeCurrentTS          NO-LOCK:
 
-   IF NOT AVAIL bOwner THEN RETURN 0.
-   lcParams = "SVA". /*To indicate that we are handling SVA request.*/
-   IF icParam1 NE "" THEN DO:
-      IF icParam1 EQ "no" THEN lcParams =  lcParams + "_NO_WAIT".
-      ELSE DO:
-         lcParams =  lcParams + "|" + icParam1.
-         IF icParam2 NE "" THEN DO:
-            lcParams = lcParams + "|" + icParam2. 
-         END.
-      END. 
-   END.
+        FIND FIRST bf_DiscOfferItem WHERE bf_DiscOfferItem.Brand     = Syst.Var:gcBrand AND 
+                                          bf_DiscOfferItem.Offer     = Offer.Offer      AND 
+                                          bf_DiscOfferItem.ItemType  = "DiscountPlan"   AND
+                                          bf_DiscOfferItem.EndStamp >= ldeCurrentTS     NO-LOCK NO-ERROR.
+        IF AVAIL bf_DiscOfferItem AND bf_DiscOfferItem.ItemKey <> "" THEN 
+            RETURN bf_DiscOfferItem.Offer.
+    END.
 
-   DO TRANS:
-   IF icAction BEGINS "cancel" THEN DO:
-      IF icAction EQ "cancel activation" THEN 
-         liReqType = {&REQTYPE_CONTRACT_ACTIVATION}.
-      ELSE IF icAction EQ "cancel deactivation" THEN
-         liReqType = {&REQTYPE_CONTRACT_TERMINATION}.
-      ELSE DO:
-         ocErr = "Incorrect request".
-         RETURN 0.
-      END.
-         
-      FIND FIRST MsRequest WHERE
-                 MsRequest.Brand EQ Syst.Var:gcBrand AND
-                 MsRequest.ReqType EQ liReqType AND
-                 MsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} AND
-                 MsRequest.ReqCParam3 EQ icContr NO-ERROR.
-      IF NOT AVAIL MsRequest THEN DO:
-         ocErr = "Cancellation not possible, request not found".
-         RETURN 0.
-      END.
-      fReqStatus(4, "SVA Operation Cancellation").
-      RETURN MsRequest.MsRequest.
-        
-   END.
-   ELSE IF icAction EQ "on" THEN 
-      icAction = "act".
-   ELSE IF icAction EQ "off" THEN 
-      icAction = "term".
+    RETURN "".  
 
-      liRequest = fPCActionRequest(iiMsSeq,
-                                   icContr,
-                                   icAction,
-                                   idActStamp,
-                                   TRUE, /* fees */
-                                   {&REQUEST_SOURCE_CONTRACT_ACTIVATION},
-                                   "",
-                                   0,
-                                   FALSE,
-                                   "",
-                                   0,
-                                   0,
-                                   lcParams,
-                                   OUTPUT ocErr).
-   END. /*Trans*/  
-   RETURN liRequest. /*bCreaReq.MsRequest.*/
-END.
-
-
+END FUNCTION.
 
 /*Function returns TRUE if the order exsists and it is done from PRO channel.*/
 FUNCTION fIsProOrder RETURNS LOGICAL
@@ -288,15 +246,19 @@ END.
 FUNCTION fSendEmailByRequest RETURNS CHAR
    (iiMsRequest AS INT,
     icTemplate AS CHAR):
-   DEF VAR lcOutput AS CHAR NO-UNDO.
-   DEF VAR lcMailFile AS CHAR NO-UNDO.
+
+   DEF VAR lcOutput     AS CHAR NO-UNDO.
+   DEF VAR lcMailFile   AS CHAR NO-UNDO.
    DEF VAR lcMailHeader AS CHAR NO-UNDO.
-   DEF VAR lcReplace AS CHAR NO-UNDO.
-   DEF VAR lcMailDir AS CHAR NO-UNDO.
-   DEF VAR lcStatus AS CHAR NO-UNDO.
+   DEF VAR lcReplace    AS CHAR NO-UNDO.
+   DEF VAR lcMailDir    AS CHAR NO-UNDO.
+   DEF VAR lcStatus     AS CHAR NO-UNDO.
+
    DEF BUFFER bMsRequest FOR MsRequest.
-   DEF BUFFER bCustomer FOR Customer.
-   
+   DEF BUFFER bCustomer  FOR Customer.
+   DEF BUFFER bMobSub    FOR MobSub.
+   DEF BUFFER bCliType   FOR CliType.
+
    FIND FIRST bMsRequest NO-LOCK WHERE
               bMsRequest.MsRequest EQ iiMsRequest NO-ERROR.
    IF NOT AVAIL bMsRequest THEN RETURN "ERROR: Request not found " +
@@ -305,6 +267,10 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
               bCustomer.CustNum EQ bMsRequest.CustNum.
     IF NOT AVAIL bCustomer THEN
        RETURN "ERROR: Customer of requst not found " + STRING(iiMsRequest).
+
+   FIND FIRST bMobSub WHERE bMobSub.MsSeq = bMsRequest.MsSeq NO-LOCK NO-ERROR.
+   IF AVAIL bMobSub THEN 
+       FIND FIRST bCliType WHERE bCliType.CliType = bMobSub.CliType NO-LOCK NO-ERROR.
 
    lcOutput = fGetEmailText("EMAIL",
                              icTemplate,
@@ -317,45 +283,79 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
              STRING(icTemplate).
 
    /*Seek tags:*/
-   IF INDEX(lcOutput, "#CUSTNAME") > 0 THEN DO:
-      lcOutput = REPLACE(lcOutput, "#CUSTNAME", 
-         (bCustomer.CustName + " " + bCustomer.FirstName + " ")   ).
-   END.
-   IF INDEX(lcOutput, "#ORDERID") > 0 THEN DO:
-      lcOutput = REPLACE(lcOutput, 
-                         "#ORDERID", 
-                         fFindCOFFOrder(bMsRequest.MsSeq)).
-   END.
-   IF INDEX(lcOutput, "#CUSTTYPE") > 0 THEN DO:
+   IF INDEX(lcOutput, "#CUSTNAME") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#CUSTNAME", Func.Common:mDispCustName(BUFFER bCustomer)).
+   
+   IF INDEX(lcOutput, "#ORDERID") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#ORDERID", fFindCOFFOrder(bMsRequest.MsSeq)).
+   
+   IF INDEX(lcOutput, "#CONTRACTID") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#CONTRACTID", (IF AVAIL bMobSub THEN bMobSub.FixedNumber ELSE STRING(bMsRequest.MsSeq))).
+
+   IF INDEX(lcOutput, "#CUSTTYPE") > 0 THEN
       lcOutput = REPLACE(lcOutput, "#CUSTTYPE", STRING(bCustomer.CustIdType)).
-   END.
-   IF INDEX(lcOutput, "#CUSTID") > 0 THEN DO:
+   
+   IF INDEX(lcOutput, "#CUSTID") > 0 THEN
       lcOutput = REPLACE(lcOutput, "#CUSTID", STRING(bCustomer.Orgid)).
+
+   IF INDEX(lcOutput, "#PROVINCE") > 0 THEN
+   DO:
+      lcOutput = REPLACE(lcOutput, "#PROVINCE"       , bCustomer.Address).
+      lcOutput = REPLACE(lcOutput, "#CITY"           , bCustomer.PostOffice).
+      lcOutput = REPLACE(lcOutput, "#POSTALCODE"     , bCustomer.ZipCode).
    END.
-   IF INDEX(lcOutput, "#EMAIL") > 0 THEN DO:
-      IF NUM-ENTRIES(bMSRequest.ReqCparam6) GT 2 THEN
+
+   IF INDEX(lcOutput, "#LANGUAGE") > 0 THEN
+   DO:
+       FIND Language WHERE Language.Language = bCustomer.Language NO-LOCK NO-ERROR.
+       lcOutput = REPLACE(lcOutput, "#LANGUAGE", (IF AVAIL Language THEN Language.LangName ELSE "")).
+   END.
+
+   IF INDEX(lcOutput, "#PRODUCT") > 0 THEN
+       lcOutput = REPLACE(lcOutput, "#PRODUCT", (IF AVAIL bCliType THEN bCliType.CliName ELSE "")).
+
+   IF INDEX(lcOutput, "#SFID") > 0 THEN
+       lcOutput = REPLACE(lcOutput, "#SFID", "").
+
+   IF INDEX(lcOutput, "#SECRET") > 0 THEN
+       lcOutput = REPLACE(lcOutput, "#SECRET", bCustomer.RobinsonsLimit).    
+
+   IF INDEX(lcOutput, "#EMAIL") > 0 THEN 
+   DO:
+      IF NUM-ENTRIES(bMSRequest.ReqCparam6) GT 2 AND ENTRY(3,bMSRequest.ReqCparam6, "|") <> "" THEN
          lcReplace = ENTRY(3,bMSRequest.ReqCparam6, "|").
-      ELSE IF NUM-ENTRIES(bMSRequest.ReqCparam6) EQ 2 THEN
+      ELSE IF NUM-ENTRIES(bMSRequest.ReqCparam6) EQ 2 AND ENTRY(2,bMSRequest.ReqCparam6, "|") <> "" THEN
          lcReplace = ENTRY(2,bMSRequest.ReqCparam6, "|").
+      ELSE 
+         lcReplace = bCustomer.Email.
+
       lcOutput = REPLACE(lcOutput, "#EMAIL", lcReplace).
    END.
-   IF INDEX(lcOutput, "#NUMBER") > 0 THEN DO:
+
+   IF INDEX(lcOutput, "#NUMBER") > 0 THEN 
+   DO:
       lcReplace = ENTRY(2,bMsRequest.Reqcparam6, "|").
       lcOutput = REPLACE(lcOutput, "#NUMBER", lcReplace).
    END.
 
-   IF INDEX(lcMailHeader, "#STATUS") > 0 THEN DO:
-      IF bmsrequest.reqtype EQ 9 THEN DO:
-         IF bmsrequest.reqstatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
-            lcstatus = "3 - Pending deactivation".
-         ELSE lcStatus = "0 - Inactive".
+   IF INDEX(lcMailHeader, "#STATUS") > 0 THEN 
+   DO:
+      IF bMsRequest.ReqType EQ 9 THEN 
+      DO:
+         IF bMsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
+             lcStatus = "3 - Pending deactivation".
+         ELSE 
+             lcStatus = "0 - Inactive".
       END.
-      IF bmsrequest.reqtype EQ 8 THEN DO:
-         IF bmsrequest.reqstatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
-            lcstatus = "2 - Pending activation".
-         ELSE lcStatus = "1 - Active".
+      ELSE IF bMsRequest.reqtype EQ 8 THEN 
+      DO:
+         IF bMsRequest.reqstatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
+             lcStatus = "2 - Pending activation".
+         ELSE 
+             lcStatus = "1 - Active".
       END.
-      lcMailHeader = REPLACE(lcMailHeader, "#STATUS", lcstatus).
+
+      lcMailHeader = REPLACE(lcMailHeader, "#STATUS", lcStatus).
    END.
 
    /*Set email sending parameters*/
@@ -376,7 +376,96 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
 
    RETURN "".
 
-END.
+END FUNCTION.
+
+/*'off', 'on', 'cancel activation', 'cancel deactivation'*/
+FUNCTION fMakeProActRequest RETURNS INT(
+   INPUT iiMsSeq AS INT,
+   INPUT icContr AS CHAR,
+   INPUT idActStamp AS DEC,
+   INPUT icParam1 AS CHAR,
+   INPUT icParam2 AS CHAR,
+   INPUT icAction AS CHAR, 
+   OUTPUT ocErr AS CHAR):
+
+   DEF VAR liRequest AS INT  NO-UNDO.
+   DEF VAR liReqType AS INT  NO-UNDO.
+   DEF VAR lcError   AS CHAR NO-UNDO.
+   DEF VAR lcParams  AS CHAR NO-UNDO.
+   DEF VAR lcOffer   AS CHAR NO-UNDO. 
+   DEF VAR lcErr     AS CHAR NO-UNDO.
+
+   DEF BUFFER bOwner FOR MSOwner. 
+
+   FIND FIRST bOwner WHERE bOwner.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
+
+   IF NOT AVAIL bOwner THEN RETURN 0.
+   lcParams = "SVA". /*To indicate that we are handling SVA request.*/
+   IF icParam1 NE "" THEN DO:
+      IF icParam1 EQ "no" THEN lcParams =  lcParams + "_NO_WAIT".
+      ELSE DO:
+         lcParams =  lcParams + "|" + icParam1.
+         IF icParam2 NE "" THEN DO:
+            lcParams = lcParams + "|" + icParam2. 
+         END.
+      END. 
+   END.
+
+   ASSIGN 
+       lcOffer  = fGetSVAOffer(bOwner.CliType, icContr)
+       lcParams = lcParams + FILL("|", (4 - NUM-ENTRIES(lcParams)))
+       lcParams = lcParams + lcOffer.
+
+   DO TRANS:
+   IF icAction BEGINS "cancel" THEN DO:
+      IF icAction EQ "cancel activation" THEN 
+         liReqType = {&REQTYPE_CONTRACT_ACTIVATION}.
+      ELSE IF icAction EQ "cancel deactivation" THEN
+         liReqType = {&REQTYPE_CONTRACT_TERMINATION}.
+      ELSE DO:
+         ocErr = "Incorrect request".
+         RETURN 0.
+      END.
+         
+      FIND FIRST MsRequest WHERE
+                 MsRequest.Brand EQ Syst.Var:gcBrand AND
+                 MsRequest.ReqType EQ liReqType AND
+                 MsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} AND
+                 MsRequest.ReqCParam3 EQ icContr NO-ERROR.
+      IF NOT AVAIL MsRequest THEN DO:
+         ocErr = "Cancellation not possible, request not found".
+         RETURN 0.
+      END.
+
+      fReqStatus(4, "SVA Operation Cancellation").
+
+      fSendEmailByRequest(MsRequest.MsRequest,"SVA_" + icContr).
+
+      RETURN MsRequest.MsRequest.
+        
+   END.
+   ELSE IF icAction EQ "on" THEN 
+      icAction = "act".
+   ELSE IF icAction EQ "off" THEN 
+      icAction = "term".
+
+      liRequest = fPCActionRequest(iiMsSeq,
+                                   icContr,
+                                   icAction,
+                                   idActStamp,
+                                   TRUE, /* fees */
+                                   {&REQUEST_SOURCE_CONTRACT_ACTIVATION},
+                                   "",
+                                   0,
+                                   FALSE,
+                                   "",
+                                   0,
+                                   0,
+                                   lcParams,
+                                   OUTPUT ocErr).
+   END. /*Trans*/  
+   RETURN liRequest. /*bCreaReq.MsRequest.*/
+END FUNCTION.
 
 FUNCTION fgetActiveReplacement RETURNS CHAR (INPUT icClitype AS CHAR):
    DEF VAR lcSubsMappings AS CHAR NO-UNDO.

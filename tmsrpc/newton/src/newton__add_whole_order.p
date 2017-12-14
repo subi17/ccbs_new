@@ -40,14 +40,13 @@
                send_sms;boolean;optional;Send SMS
                referee;str;optional;referee's MSISDN
                offer_id;string;optional;
-               extra_offers;string;optional;optional offer 
                price_selection_time;timestamp;optional;time when user accepted order price in web
                order_inspection_result;string;mandatory;
                order_inspection_description;string;optional;
                order_inspection_level;string;optional;
                order_inspection_rule_id;string;optional;
                order_inspection_risk_code;string;optional;
-               additional_bundle;string;optional;optional bundle 
+               additional_bundle;array of struct;optional;bundle and offer list 
                subscription_bundle;string;optional;mandatory base bundle for bundle based subscription types
                dss;boolean;optional;activate dss
                bono_voip;boolean;optional;activate bono voip
@@ -356,6 +355,8 @@ DEF VAR lcPayType AS CHAR NO-UNDO.
 DEF VAR lcOldPayType AS CHAR NO-UNDO. 
 DEF VAR lcOfferOrderChannel  AS CHAR NO-UNDO.
 
+DEF VAR lcBundleFields          AS CHAR NO-UNDO.
+DEF VAR pcBundleStruct          AS CHAR NO-UNDO.
 DEF VAR pcAdditionalBundleList  AS CHAR NO-UNDO. 
 DEF VAR pcAdditionalBundleArray AS CHAR NO-UNDO.
 DEF VAR pcAdditionalOfferList   AS CHAR NO-UNDO.
@@ -552,16 +553,6 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
    IF LOOKUP('offer_id', lcOrderStruct) GT 0 THEN 
       pcOfferId = get_string(pcOrderStruct, "offer_id").
 
-   IF LOOKUP("extra_offers",lcOrderStruct) > 0 THEN
-   DO:
-      pcAdditionalOfferArray = get_array(pcOrderStruct,"extra_offers").
-
-      DO liOfferCnt = 0 TO get_paramcount(pcAdditionalOfferArray) - 1:
-         ASSIGN pcAdditionalOfferList = pcAdditionalOfferList + (IF pcAdditionalOfferList <> "" THEN "," ELSE "") + get_string(pcAdditionalOfferArray, STRING(liOfferCnt)).
-      END.
-
-   END.
-
    IF LOOKUP('price_selection_time', lcOrderStruct) GT 0 THEN
        pdePriceSelTime = get_timestamp(pcOrderStruct, "price_selection_time").
    ELSE pdePriceSelTime = {&nowTS}.
@@ -581,10 +572,25 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
    DO:
       pcAdditionalBundleArray = get_array(pcOrderStruct,"additional_bundle").
 
+      IF pcAdditionalBundleArray > "" THEN
       DO liBundleCnt = 0 TO get_paramcount(pcAdditionalBundleArray) - 1:
-         ASSIGN pcAdditionalBundleList = pcAdditionalBundleList + (IF pcAdditionalBundleList <> "" THEN "," ELSE "") + get_string(pcAdditionalBundleArray, STRING(liBundleCnt)).
-      END.
 
+         ASSIGN 
+             pcBundleStruct = get_struct(pcAdditionalBundleArray,STRING(liBundleCnt))
+             lcBundleFields = validate_request(pcBundleStruct,"bundle_id!,extra_offer_id").
+
+         IF LOOKUP('bundle_id'     , lcBundleFields) GT 0 AND 
+            LOOKUP('extra_offer_id', lcBundleFields) GT 0 THEN 
+         DO:   
+             ASSIGN    
+                 pcAdditionalBundleList = pcAdditionalBundleList                             + 
+                                          (IF pcAdditionalBundleList <> "" THEN "," ELSE "") + 
+                                          get_string(pcBundleStruct, "bundle_id")
+                 pcAdditionalOfferList  = pcAdditionalOfferList                              + 
+                                          (IF pcAdditionalOfferList <> "" THEN "," ELSE "")  + 
+                                          get_string(pcBundleStruct, "extra_offer_id").
+         END.                           
+      END.
    END.
 
    IF LOOKUP("subscription_bundle",lcOrderStruct) > 0 THEN
@@ -1341,7 +1347,6 @@ gcOrderStructFields = "brand!," +
                       "send_sms," +
                       "referee," +
                       "offer_id," +
-                      "extra_offers," +
                       "price_selection_time," +
                       "order_inspection_result!," +
                       "order_inspection_description," +
@@ -2507,8 +2512,9 @@ IF pcAdditionalBundleList > "" THEN
 DO liBundleCnt = 1 TO NUM-ENTRIES(pcAdditionalBundleList):
 
    FIND FIRST DayCampaign WHERE DayCampaign.Brand = Syst.Var:gcBrand AND DayCampaign.DCEvent = ENTRY(liBundleCnt, pcAdditionalBundleList) NO-LOCK NO-ERROR.
-   IF AVAIL DayCampaign AND DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
-       fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList),pcAdditionalOfferList).
+   IF AVAIL DayCampaign AND LOOKUP(STRING(DayCampaign.BundleTarget), STRING({&TELEVISION_BUNDLE}) + "," + 
+                                                             STRING({&DC_BUNDLE_TARGET_SVA})) > 0 THEN 
+       fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList), ENTRY(liBundleCnt,pcAdditionalOfferList)).
    ELSE         
        fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList),"").
 END.
