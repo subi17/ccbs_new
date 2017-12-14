@@ -122,6 +122,127 @@ FUNCTION fGetSVAOffer RETURNS CHARACTER
 
 END FUNCTION.
 
+/*Function returns TRUE if the order exsists and it is done from PRO channel.*/
+FUNCTION fIsProOrder RETURNS LOGICAL
+   (iiOrderID AS INT):
+
+   DEF BUFFER Order FOR Order.
+
+   FIND FIRST Order NO-LOCK WHERE
+              Order.Brand EQ  Syst.Var:gcBrand AND
+              Order.OrderID EQ iiOrderID NO-ERROR.
+
+   IF INDEX(Order.orderchannel,"PRO") > 0 THEN
+      RETURN TRUE.
+   ELSE RETURN FALSE.
+   
+END.
+
+/*Function returns True if a tariff can be defined as 2P tariff.
+NOTE: False is returned in real false cases and also in error cases. */
+FUNCTION fIs3PTariff RETURNS LOGICAL
+   (icCliType AS CHAR):
+
+   DEF BUFFER CLIType FOR CLIType.
+
+   FIND FIRST CLIType NO-LOCK WHERE
+              CLIType.Brand EQ Syst.Var:gcBrand AND
+              CLIType.CliType EQ icCLIType NO-ERROR.
+   IF AVAIL CliType AND
+            CliType.TariffType EQ {&CLITYPE_TARIFFTYPE_CONVERGENT}  THEN
+      RETURN TRUE.
+
+   RETURN FALSE.
+END.
+
+
+/*STC is restricted from Prepaid to postpaid and 2P*/
+FUNCTION fValidateProSTC RETURNS CHAR
+   (iiCustomer AS INT,
+    icCurrCLIType AS CHAR,
+    icNewCLIType AS CHAR):
+
+   DEF BUFFER bCurr FOR CLIType.
+   DEF BUFFER bNew FOR CLIType.
+   DEF BUFFER Customer FOR Customer.
+   DEF BUFFER mobsub FOR mobsub.
+
+   DEF VAR ll3PFound AS LOGICAL NO-UNDO.
+   
+   FIND FIRST Customer NO-LOCK WHERE
+              Customer.CustNum EQ iiCustomer NO-ERROR.
+   IF NOT AVAIL Customer THEN RETURN "Customer not found".
+   IF NOT fIsPro(Customer.Category) THEN RETURN "". /*No PRO logic needed*/
+
+   FIND FIRST bCurr NO-LOCK WHERE
+              bCurr.Brand EQ Syst.Var:gcBrand AND
+              bCurr.Clitype EQ icCurrCLIType NO-ERROR.
+   IF NOT AVAIL bCurr THEN RETURN "Incorrect CLIType".
+
+   FIND FIRST bNew NO-LOCK WHERE
+              bNew.Brand EQ Syst.Var:gcBrand AND
+              bNew.Clitype EQ icNewCLIType NO-ERROR.
+   IF NOT AVAIL bNew THEN RETURN "Incorrect CLIType".
+
+   IF bCurr.PayType EQ {&CLITYPE_PAYTYPE_PREPAID} THEN RETURN "". /*No PRO logic for prepaid*/
+
+   IF bNew.Paytype EQ {&CLITYPE_PAYTYPE_PREPAID} THEN 
+      RETURN "STC to Prepaid is not allowed for Pro customer".
+   IF fIsFixedOnly(bNew.Clitype) AND NOT fIs3PTariff(bCurr.Clitype)  THEN DO:
+      ll3PFound = FALSE.
+      FOR EACH Mobsub WHERE
+               Mobsub.brand EQ Syst.Var:gcBrand AND
+               Mobsub.custnum EQ iiCustomer:
+         IF NOT fIs3PTariff(MobSub.clitype) THEN NEXT.
+         ELSE ll3PFound = TRUE.
+      END.
+      IF NOT ll3PFound THEN RETURN "STC to 2P is not allowed for Pro customer".  /* STC to pro allowed from mobile to 2P and if there is still convergent left and YPPI-5 3P to 2P */
+   END.   
+   RETURN "".
+END.
+
+/*tested, ok*/
+/*Function seeks COFF order for given Msrequest.
+If the order is not found the function returns an error code.*/
+FUNCTION fFindCOFFOrder RETURNS CHAR
+   (iiMsSeq AS INT):
+   DEF BUFFER bOrder FOR Order.
+
+   FOR EACH bOrder NO-LOCK WHERE
+            bOrder.MsSeq EQ iiMsSeq BY CrStamp DESC:
+      IF fIsConvergenceTariff(bOrder.CLIType) THEN
+         RETURN STRING(bOrder.OrderId).
+   END.
+
+   RETURN "ERROR: Order not found for mobsub " + STRING(iiMsSeq).
+END.
+
+FUNCTION fGetProFeemodel RETURNS CHAR
+   (INPUT icCliType AS CHAR):
+
+   DEF BUFFER CLIType FOR CLIType.
+   DEF BUFFER DayCampaign FOR DayCampaign.
+
+   FOR FIRST CLIType NO-LOCK WHERE
+             CLIType.Brand = Syst.Var:gcBrand AND
+             CLIType.CLIType = icCliType AND
+             CLIType.FixedBundle > "",
+       FIRST DayCampaign NO-LOCK WHERE
+             DayCampaign.Brand = Syst.Var:gcBrand AND
+             DayCampaign.DCEvent = CLIType.FixedBundle:
+      RETURN DayCampaign.FeeModel.
+   END.
+   FOR FIRST CLIType NO-LOCK WHERE
+             CLIType.Brand = Syst.Var:gcBrand AND
+             CLIType.CLIType = icCliType,
+       FIRST DayCampaign NO-LOCK WHERE
+             DayCampaign.Brand = Syst.Var:gcBrand AND
+             DayCampaign.DCEvent = CLIType.clitype:
+      RETURN DayCampaign.FeeModel.
+   END.
+   RETURN "".
+END.
+
 FUNCTION fSendEmailByRequest RETURNS CHAR
    (iiMsRequest AS INT,
     icTemplate AS CHAR):
@@ -255,63 +376,6 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
 
    RETURN "".
 
-END.
-
-FUNCTION fgetActiveReplacement RETURNS CHAR (INPUT icClitype AS CHAR):
-   DEF VAR lcSubsMappings AS CHAR NO-UNDO.
-   DEF VAR lcMappedSubs AS CHAR NO-UNDO.
-   DEF VAR lcSubsFrom AS CHAR NO-UNDO.
-   DEF VAR lcSubsTo AS CHAR NO-UNDO.
-   DEF VAR liLoop AS INT NO-UNDO.
-
-   lcSubsMappings = fCParamC("ProSubsMigrationMappings").
-
-   DO liloop = 1 TO NUM-ENTRIES(lcSubsMappings,"|"):
-      ASSIGN
-         lcMappedSubs = ENTRY(liloop, lcSubsMappings,"|")
-         lcSubsFrom = ENTRY(1,lcMappedSubs,"=")
-         lcSubsTo = ENTRY(2,lcMappedSubs,"=").
-      IF LOOKUP(icClitype,lcSubsFrom) GE 1 THEN RETURN lcSubsTo.
-   END.
-   RETURN "".
-END.
-
-FUNCTION fProMigrationRequest RETURNS INTEGER
-   (INPUT  iiMsseq        AS INT,        /* msseq                */
-    INPUT  icCreator      AS CHARACTER,  /* who made the request */
-    INPUT  icSource       AS CHARACTER,
-    INPUT  iiOrig         AS INTEGER,
-    OUTPUT ocResult       AS CHARACTER):
-
-   DEF VAR liReqCreated AS INT NO-UNDO.
-   DEF VAR ldActStamp AS DEC NO-UNDO.
-
-   ocResult = fChkRequest(iiMsSeq,
-                          {&REQTYPE_PRO_MIGRATION},
-                          "",
-                          icCreator).
-
-   IF ocResult > "" THEN RETURN 0.
-
-   /* set activation time */
-   ldActStamp = Func.Common:mMakeTS().
-
-   fCreateRequest({&REQTYPE_PRO_MIGRATION},
-                  ldActStamp,
-                  icCreator,
-                  FALSE,    /* create fees */
-                  FALSE).   /* sms */
-
-   ASSIGN
-      bCreaReq.ReqCParam1  = "MIGRATE"
-      bCreaReq.ReqSource   = icSource
-      bCreaReq.origrequest = iiOrig
-      liReqCreated         = bCreaReq.MsRequest.
-
-   RELEASE bCreaReq.
-
-   RETURN liReqCreated.
-
 END FUNCTION.
 
 /*'off', 'on', 'cancel activation', 'cancel deactivation'*/
@@ -401,130 +465,64 @@ FUNCTION fMakeProActRequest RETURNS INT(
                                    OUTPUT ocErr).
    END. /*Trans*/  
    RETURN liRequest. /*bCreaReq.MsRequest.*/
-END.
+END FUNCTION.
 
+FUNCTION fgetActiveReplacement RETURNS CHAR (INPUT icClitype AS CHAR):
+   DEF VAR lcSubsMappings AS CHAR NO-UNDO.
+   DEF VAR lcMappedSubs AS CHAR NO-UNDO.
+   DEF VAR lcSubsFrom AS CHAR NO-UNDO.
+   DEF VAR lcSubsTo AS CHAR NO-UNDO.
+   DEF VAR liLoop AS INT NO-UNDO.
 
+   lcSubsMappings = fCParamC("ProSubsMigrationMappings").
 
-/*Function returns TRUE if the order exsists and it is done from PRO channel.*/
-FUNCTION fIsProOrder RETURNS LOGICAL
-   (iiOrderID AS INT):
-
-   DEF BUFFER Order FOR Order.
-
-   FIND FIRST Order NO-LOCK WHERE
-              Order.Brand EQ  Syst.Var:gcBrand AND
-              Order.OrderID EQ iiOrderID NO-ERROR.
-
-   IF INDEX(Order.orderchannel,"PRO") > 0 THEN
-      RETURN TRUE.
-   ELSE RETURN FALSE.
-   
-END.
-
-/*Function returns True if a tariff can be defined as 2P tariff.
-NOTE: False is returned in real false cases and also in error cases. */
-FUNCTION fIs3PTariff RETURNS LOGICAL
-   (icCliType AS CHAR):
-
-   DEF BUFFER CLIType FOR CLIType.
-
-   FIND FIRST CLIType NO-LOCK WHERE
-              CLIType.Brand EQ Syst.Var:gcBrand AND
-              CLIType.CliType EQ icCLIType NO-ERROR.
-   IF AVAIL CliType AND
-            CliType.TariffType EQ {&CLITYPE_TARIFFTYPE_CONVERGENT}  THEN
-      RETURN TRUE.
-
-   RETURN FALSE.
-END.
-
-
-/*STC is restricted from Prepaid to postpaid and 2P*/
-FUNCTION fValidateProSTC RETURNS CHAR
-   (iiCustomer AS INT,
-    icCurrCLIType AS CHAR,
-    icNewCLIType AS CHAR):
-
-   DEF BUFFER bCurr FOR CLIType.
-   DEF BUFFER bNew FOR CLIType.
-   DEF BUFFER Customer FOR Customer.
-   DEF BUFFER mobsub FOR mobsub.
-
-   DEF VAR ll3PFound AS LOGICAL NO-UNDO.
-   
-   FIND FIRST Customer NO-LOCK WHERE
-              Customer.CustNum EQ iiCustomer NO-ERROR.
-   IF NOT AVAIL Customer THEN RETURN "Customer not found".
-   IF NOT fIsPro(Customer.Category) THEN RETURN "". /*No PRO logic needed*/
-
-   FIND FIRST bCurr NO-LOCK WHERE
-              bCurr.Brand EQ Syst.Var:gcBrand AND
-              bCurr.Clitype EQ icCurrCLIType NO-ERROR.
-   IF NOT AVAIL bCurr THEN RETURN "Incorrect CLIType".
-
-   FIND FIRST bNew NO-LOCK WHERE
-              bNew.Brand EQ Syst.Var:gcBrand AND
-              bNew.Clitype EQ icNewCLIType NO-ERROR.
-   IF NOT AVAIL bNew THEN RETURN "Incorrect CLIType".
-
-   IF bCurr.PayType EQ {&CLITYPE_PAYTYPE_PREPAID} THEN RETURN "". /*No PRO logic for prepaid*/
-
-   IF bNew.Paytype EQ {&CLITYPE_PAYTYPE_PREPAID} THEN 
-      RETURN "STC to Prepaid is not allowed for Pro customer".
-   IF fIsFixedOnly(bNew.Clitype) AND NOT fIs3PTariff(bCurr.Clitype)  THEN DO:
-      ll3PFound = FALSE.
-      FOR EACH Mobsub WHERE
-               Mobsub.brand EQ Syst.Var:gcBrand AND
-               Mobsub.custnum EQ iiCustomer:
-         IF NOT fIs3PTariff(MobSub.clitype) THEN NEXT.
-         ELSE ll3PFound = TRUE.
-      END.
-      IF NOT ll3PFound THEN RETURN "STC to 2P is not allowed for Pro customer".  /* STC to pro allowed from mobile to 2P and if there is still convergent left and YPPI-5 3P to 2P */
-   END.   
-   RETURN "".
-END.
-
-/*tested, ok*/
-/*Function seeks COFF order for given Msrequest.
-If the order is not found the function returns an error code.*/
-FUNCTION fFindCOFFOrder RETURNS CHAR
-   (iiMsSeq AS INT):
-   DEF BUFFER bOrder FOR Order.
-
-   FOR EACH bOrder NO-LOCK WHERE
-            bOrder.MsSeq EQ iiMsSeq BY CrStamp DESC:
-      IF fIsConvergenceTariff(bOrder.CLIType) THEN
-         RETURN STRING(bOrder.OrderId).
-   END.
-
-   RETURN "ERROR: Order not found for mobsub " + STRING(iiMsSeq).
-END.
-
-FUNCTION fGetProFeemodel RETURNS CHAR
-   (INPUT icCliType AS CHAR):
-
-   DEF BUFFER CLIType FOR CLIType.
-   DEF BUFFER DayCampaign FOR DayCampaign.
-
-   FOR FIRST CLIType NO-LOCK WHERE
-             CLIType.Brand = Syst.Var:gcBrand AND
-             CLIType.CLIType = icCliType AND
-             CLIType.FixedBundle > "",
-       FIRST DayCampaign NO-LOCK WHERE
-             DayCampaign.Brand = Syst.Var:gcBrand AND
-             DayCampaign.DCEvent = CLIType.FixedBundle:
-      RETURN DayCampaign.FeeModel.
-   END.
-   FOR FIRST CLIType NO-LOCK WHERE
-             CLIType.Brand = Syst.Var:gcBrand AND
-             CLIType.CLIType = icCliType,
-       FIRST DayCampaign NO-LOCK WHERE
-             DayCampaign.Brand = Syst.Var:gcBrand AND
-             DayCampaign.DCEvent = CLIType.clitype:
-      RETURN DayCampaign.FeeModel.
+   DO liloop = 1 TO NUM-ENTRIES(lcSubsMappings,"|"):
+      ASSIGN
+         lcMappedSubs = ENTRY(liloop, lcSubsMappings,"|")
+         lcSubsFrom = ENTRY(1,lcMappedSubs,"=")
+         lcSubsTo = ENTRY(2,lcMappedSubs,"=").
+      IF LOOKUP(icClitype,lcSubsFrom) GE 1 THEN RETURN lcSubsTo.
    END.
    RETURN "".
 END.
+
+FUNCTION fProMigrationRequest RETURNS INTEGER
+   (INPUT  iiMsseq        AS INT,        /* msseq                */
+    INPUT  icCreator      AS CHARACTER,  /* who made the request */
+    INPUT  icSource       AS CHARACTER,
+    INPUT  iiOrig         AS INTEGER,
+    OUTPUT ocResult       AS CHARACTER):
+
+   DEF VAR liReqCreated AS INT NO-UNDO.
+   DEF VAR ldActStamp AS DEC NO-UNDO.
+
+   ocResult = fChkRequest(iiMsSeq,
+                          {&REQTYPE_PRO_MIGRATION},
+                          "",
+                          icCreator).
+
+   IF ocResult > "" THEN RETURN 0.
+
+   /* set activation time */
+   ldActStamp = Func.Common:mMakeTS().
+
+   fCreateRequest({&REQTYPE_PRO_MIGRATION},
+                  ldActStamp,
+                  icCreator,
+                  FALSE,    /* create fees */
+                  FALSE).   /* sms */
+
+   ASSIGN
+      bCreaReq.ReqCParam1  = "MIGRATE"
+      bCreaReq.ReqSource   = icSource
+      bCreaReq.origrequest = iiOrig
+      liReqCreated         = bCreaReq.MsRequest.
+
+   RELEASE bCreaReq.
+
+   RETURN liReqCreated.
+
+END FUNCTION.
 
 FUNCTION fProMigrateOtherSubs RETURNS CHAR
 (INPUT iiagrcust AS INT,
