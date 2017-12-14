@@ -1,10 +1,10 @@
 ADD FIELD "DPCategory" OF "DiscountPlan" AS character
   FORMAT "x(8)"
   INITIAL ""
-  LABEL "Category"
+  LABEL "DPCategory"
   POSITION 21
   MAX-WIDTH 16
-  COLUMN-LABEL "Category"
+  COLUMN-LABEL "DPCategory"
   HELP "Discount plan category"
   ORDER 200
   

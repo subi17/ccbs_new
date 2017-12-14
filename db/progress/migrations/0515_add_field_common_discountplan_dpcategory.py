@@ -6,7 +6,7 @@ class AddFieldDPCategory(Migration):
 
     def up(self):
         t = self.alter_table('DiscountPlan')
-        t.column('DPCategory', 'character', format="x(8)", initial="", max_width=16, label="Category", column_label="Category", position=21, order=200, help="Discount plan category")
+        t.column('DPCategory', 'character', format="x(8)", initial="", max_width=16, label="DPCategory", column_label="DPCategory", position=21, order=200, help="Discount plan category")
 
     def down(self):
         t = self.alter_table('DiscountPlan')
