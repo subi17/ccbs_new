@@ -122,6 +122,198 @@ FUNCTION fGetSVAOffer RETURNS CHARACTER
 
 END FUNCTION.
 
+FUNCTION fSendEmailByRequest RETURNS CHAR
+   (iiMsRequest AS INT,
+    icTemplate AS CHAR):
+
+   DEF VAR lcOutput     AS CHAR NO-UNDO.
+   DEF VAR lcMailFile   AS CHAR NO-UNDO.
+   DEF VAR lcMailHeader AS CHAR NO-UNDO.
+   DEF VAR lcReplace    AS CHAR NO-UNDO.
+   DEF VAR lcMailDir    AS CHAR NO-UNDO.
+   DEF VAR lcStatus     AS CHAR NO-UNDO.
+
+   DEF BUFFER bMsRequest FOR MsRequest.
+   DEF BUFFER bCustomer  FOR Customer.
+   DEF BUFFER bMobSub    FOR MobSub.
+   DEF BUFFER bCliType   FOR CliType.
+
+   FIND FIRST bMsRequest NO-LOCK WHERE
+              bMsRequest.MsRequest EQ iiMsRequest NO-ERROR.
+   IF NOT AVAIL bMsRequest THEN RETURN "ERROR: Request not found " +
+                                   STRING(iiMsRequest).
+   FIND FIRST bCustomer NO-LOCK WHERE
+              bCustomer.CustNum EQ bMsRequest.CustNum.
+    IF NOT AVAIL bCustomer THEN
+       RETURN "ERROR: Customer of requst not found " + STRING(iiMsRequest).
+
+   FIND FIRST bMobSub WHERE bMobSub.MsSeq = bMsRequest.MsSeq NO-LOCK NO-ERROR.
+   IF AVAIL bMobSub THEN 
+       FIND FIRST bCliType WHERE bCliType.CliType = bMobSub.CliType NO-LOCK NO-ERROR.
+
+   lcOutput = fGetEmailText("EMAIL",
+                             icTemplate,
+                             1,
+                             OUTPUT lcMailHeader).
+   
+   IF lcOutput EQ ""/* OR lcMailHeader EQ ""*/ THEN
+      RETURN "ERROR: Email content fetching error" +
+             STRING(BCustomer.CustID) + " " +
+             STRING(icTemplate).
+
+   /*Seek tags:*/
+   IF INDEX(lcOutput, "#CUSTNAME") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#CUSTNAME", Func.Common:mDispCustName(BUFFER bCustomer)).
+   
+   IF INDEX(lcOutput, "#ORDERID") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#ORDERID", fFindCOFFOrder(bMsRequest.MsSeq)).
+   
+   IF INDEX(lcOutput, "#CONTRACTID") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#CONTRACTID", (IF AVAIL bMobSub THEN bMobSub.FixedNumber ELSE STRING(bMsRequest.MsSeq))).
+
+   IF INDEX(lcOutput, "#CUSTTYPE") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#CUSTTYPE", STRING(bCustomer.CustIdType)).
+   
+   IF INDEX(lcOutput, "#CUSTID") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#CUSTID", STRING(bCustomer.Orgid)).
+
+   IF INDEX(lcOutput, "#PROVINCE") > 0 THEN
+   DO:
+      lcOutput = REPLACE(lcOutput, "#PROVINCE"       , bCustomer.Address).
+      lcOutput = REPLACE(lcOutput, "#CITY"           , bCustomer.PostOffice).
+      lcOutput = REPLACE(lcOutput, "#POSTALCODE"     , bCustomer.ZipCode).
+   END.
+
+   IF INDEX(lcOutput, "#LANGUAGE") > 0 THEN
+   DO:
+       FIND Language WHERE Language.Language = bCustomer.Language NO-LOCK NO-ERROR.
+       lcOutput = REPLACE(lcOutput, "#LANGUAGE", (IF AVAIL Language THEN Language.LangName ELSE "")).
+   END.
+
+   IF INDEX(lcOutput, "#PRODUCT") > 0 THEN
+       lcOutput = REPLACE(lcOutput, "#PRODUCT", (IF AVAIL bCliType THEN bCliType.CliName ELSE "")).
+
+   IF INDEX(lcOutput, "#SFID") > 0 THEN
+       lcOutput = REPLACE(lcOutput, "#SFID", "").
+
+   IF INDEX(lcOutput, "#SECRET") > 0 THEN
+       lcOutput = REPLACE(lcOutput, "#SECRET", bCustomer.RobinsonsLimit).    
+
+   IF INDEX(lcOutput, "#EMAIL") > 0 THEN 
+   DO:
+      IF NUM-ENTRIES(bMSRequest.ReqCparam6) GT 2 AND ENTRY(3,bMSRequest.ReqCparam6, "|") <> "" THEN
+         lcReplace = ENTRY(3,bMSRequest.ReqCparam6, "|").
+      ELSE IF NUM-ENTRIES(bMSRequest.ReqCparam6) EQ 2 AND ENTRY(2,bMSRequest.ReqCparam6, "|") <> "" THEN
+         lcReplace = ENTRY(2,bMSRequest.ReqCparam6, "|").
+      ELSE 
+         lcReplace = bCustomer.Email.
+
+      lcOutput = REPLACE(lcOutput, "#EMAIL", lcReplace).
+   END.
+
+   IF INDEX(lcOutput, "#NUMBER") > 0 THEN 
+   DO:
+      lcReplace = ENTRY(2,bMsRequest.Reqcparam6, "|").
+      lcOutput = REPLACE(lcOutput, "#NUMBER", lcReplace).
+   END.
+
+   IF INDEX(lcMailHeader, "#STATUS") > 0 THEN 
+   DO:
+      IF bMsRequest.ReqType EQ 9 THEN 
+      DO:
+         IF bMsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
+             lcStatus = "3 - Pending deactivation".
+         ELSE 
+             lcStatus = "0 - Inactive".
+      END.
+      ELSE IF bMsRequest.reqtype EQ 8 THEN 
+      DO:
+         IF bMsRequest.reqstatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
+             lcStatus = "2 - Pending activation".
+         ELSE 
+             lcStatus = "1 - Active".
+      END.
+
+      lcMailHeader = REPLACE(lcMailHeader, "#STATUS", lcStatus).
+   END.
+
+   /*Set email sending parameters*/
+   /*lcMailDir = "/tmp/". /*To be sure that we have some place*/
+   lcMailDir = fCParam("YPRO", "YPRO_SVA_email_dir").
+   lcMailFile = lcMailDir + "SVA_email" + STRING(bMsRequest.Msrequest) + ".txt".
+   
+   OUTPUT STREAM soutfile to VALUE(lcMailFile).
+   PUT STREAM soutfile UNFORMATTED lcOutput skip.
+   */
+   ASSIGN
+      xMailFrom = fCParamC("DefEmailSender")
+      xMailAddr = fCParam("YPRO", "SVA_BO_EMAIL_ADDRESS")
+      xMailSubj = lcMailHeader.
+      SendMaileInvoice(lcOutput, "", "").
+
+   /*Used email file removal or saving to logs?*/
+
+   RETURN "".
+
+END.
+
+FUNCTION fgetActiveReplacement RETURNS CHAR (INPUT icClitype AS CHAR):
+   DEF VAR lcSubsMappings AS CHAR NO-UNDO.
+   DEF VAR lcMappedSubs AS CHAR NO-UNDO.
+   DEF VAR lcSubsFrom AS CHAR NO-UNDO.
+   DEF VAR lcSubsTo AS CHAR NO-UNDO.
+   DEF VAR liLoop AS INT NO-UNDO.
+
+   lcSubsMappings = fCParamC("ProSubsMigrationMappings").
+
+   DO liloop = 1 TO NUM-ENTRIES(lcSubsMappings,"|"):
+      ASSIGN
+         lcMappedSubs = ENTRY(liloop, lcSubsMappings,"|")
+         lcSubsFrom = ENTRY(1,lcMappedSubs,"=")
+         lcSubsTo = ENTRY(2,lcMappedSubs,"=").
+      IF LOOKUP(icClitype,lcSubsFrom) GE 1 THEN RETURN lcSubsTo.
+   END.
+   RETURN "".
+END.
+
+FUNCTION fProMigrationRequest RETURNS INTEGER
+   (INPUT  iiMsseq        AS INT,        /* msseq                */
+    INPUT  icCreator      AS CHARACTER,  /* who made the request */
+    INPUT  icSource       AS CHARACTER,
+    INPUT  iiOrig         AS INTEGER,
+    OUTPUT ocResult       AS CHARACTER):
+
+   DEF VAR liReqCreated AS INT NO-UNDO.
+   DEF VAR ldActStamp AS DEC NO-UNDO.
+
+   ocResult = fChkRequest(iiMsSeq,
+                          {&REQTYPE_PRO_MIGRATION},
+                          "",
+                          icCreator).
+
+   IF ocResult > "" THEN RETURN 0.
+
+   /* set activation time */
+   ldActStamp = Func.Common:mMakeTS().
+
+   fCreateRequest({&REQTYPE_PRO_MIGRATION},
+                  ldActStamp,
+                  icCreator,
+                  FALSE,    /* create fees */
+                  FALSE).   /* sms */
+
+   ASSIGN
+      bCreaReq.ReqCParam1  = "MIGRATE"
+      bCreaReq.ReqSource   = icSource
+      bCreaReq.origrequest = iiOrig
+      liReqCreated         = bCreaReq.MsRequest.
+
+   RELEASE bCreaReq.
+
+   RETURN liReqCreated.
+
+END FUNCTION.
+
 /*'off', 'on', 'cancel activation', 'cancel deactivation'*/
 FUNCTION fMakeProActRequest RETURNS INT(
    INPUT iiMsSeq AS INT,
@@ -333,198 +525,6 @@ FUNCTION fGetProFeemodel RETURNS CHAR
    END.
    RETURN "".
 END.
-
-FUNCTION fSendEmailByRequest RETURNS CHAR
-   (iiMsRequest AS INT,
-    icTemplate AS CHAR):
-
-   DEF VAR lcOutput     AS CHAR NO-UNDO.
-   DEF VAR lcMailFile   AS CHAR NO-UNDO.
-   DEF VAR lcMailHeader AS CHAR NO-UNDO.
-   DEF VAR lcReplace    AS CHAR NO-UNDO.
-   DEF VAR lcMailDir    AS CHAR NO-UNDO.
-   DEF VAR lcStatus     AS CHAR NO-UNDO.
-
-   DEF BUFFER bMsRequest FOR MsRequest.
-   DEF BUFFER bCustomer  FOR Customer.
-   DEF BUFFER bMobSub    FOR MobSub.
-   DEF BUFFER bCliType   FOR CliType.
-
-   FIND FIRST bMsRequest NO-LOCK WHERE
-              bMsRequest.MsRequest EQ iiMsRequest NO-ERROR.
-   IF NOT AVAIL bMsRequest THEN RETURN "ERROR: Request not found " +
-                                   STRING(iiMsRequest).
-   FIND FIRST bCustomer NO-LOCK WHERE
-              bCustomer.CustNum EQ bMsRequest.CustNum.
-    IF NOT AVAIL bCustomer THEN
-       RETURN "ERROR: Customer of requst not found " + STRING(iiMsRequest).
-
-   FIND FIRST bMobSub WHERE bMobSub.MsSeq = bMsRequest.MsSeq NO-LOCK NO-ERROR.
-   IF AVAIL bMobSub THEN 
-       FIND FIRST bCliType WHERE bCliType.CliType = bMobSub.CliType NO-LOCK NO-ERROR.
-
-   lcOutput = fGetEmailText("EMAIL",
-                             icTemplate,
-                             1,
-                             OUTPUT lcMailHeader).
-   
-   IF lcOutput EQ ""/* OR lcMailHeader EQ ""*/ THEN
-      RETURN "ERROR: Email content fetching error" +
-             STRING(BCustomer.CustID) + " " +
-             STRING(icTemplate).
-
-   /*Seek tags:*/
-   IF INDEX(lcOutput, "#CUSTNAME") > 0 THEN
-      lcOutput = REPLACE(lcOutput, "#CUSTNAME", Func.Common:mDispCustName(BUFFER bCustomer)).
-   
-   IF INDEX(lcOutput, "#ORDERID") > 0 THEN
-      lcOutput = REPLACE(lcOutput, "#ORDERID", fFindCOFFOrder(bMsRequest.MsSeq)).
-   
-   IF INDEX(lcOutput, "#CONTRACTID") > 0 THEN
-      lcOutput = REPLACE(lcOutput, "#CONTRACTID", (IF AVAIL bMobSub THEN bMobSub.FixedNumber ELSE STRING(bMsRequest.MsSeq))).
-
-   IF INDEX(lcOutput, "#CUSTTYPE") > 0 THEN
-      lcOutput = REPLACE(lcOutput, "#CUSTTYPE", STRING(bCustomer.CustIdType)).
-   
-   IF INDEX(lcOutput, "#CUSTID") > 0 THEN
-      lcOutput = REPLACE(lcOutput, "#CUSTID", STRING(bCustomer.Orgid)).
-
-   IF INDEX(lcOutput, "#PROVINCE") > 0 THEN
-   DO:
-      lcOutput = REPLACE(lcOutput, "#PROVINCE"       , bCustomer.Address).
-      lcOutput = REPLACE(lcOutput, "#CITY"           , bCustomer.PostOffice).
-      lcOutput = REPLACE(lcOutput, "#POSTALCODE"     , bCustomer.ZipCode).
-   END.
-
-   IF INDEX(lcOutput, "#LANGUAGE") > 0 THEN
-   DO:
-       FIND Language WHERE Language.Language = bCustomer.Language NO-LOCK NO-ERROR.
-       lcOutput = REPLACE(lcOutput, "#LANGUAGE", (IF AVAIL Language THEN Language.LangName ELSE "")).
-   END.
-
-   IF INDEX(lcOutput, "#PRODUCT") > 0 THEN
-       lcOutput = REPLACE(lcOutput, "#PRODUCT", (IF AVAIL bCliType THEN bCliType.CliName ELSE "")).
-
-   IF INDEX(lcOutput, "#SFID") > 0 THEN
-       lcOutput = REPLACE(lcOutput, "#SFID", "").
-
-   IF INDEX(lcOutput, "#SECRET") > 0 THEN
-       lcOutput = REPLACE(lcOutput, "#SECRET", bCustomer.RobinsonsLimit).    
-
-   IF INDEX(lcOutput, "#EMAIL") > 0 THEN 
-   DO:
-      IF NUM-ENTRIES(bMSRequest.ReqCparam6) GT 2 AND ENTRY(3,bMSRequest.ReqCparam6, "|") <> "" THEN
-         lcReplace = ENTRY(3,bMSRequest.ReqCparam6, "|").
-      ELSE IF NUM-ENTRIES(bMSRequest.ReqCparam6) EQ 2 AND ENTRY(2,bMSRequest.ReqCparam6, "|") <> "" THEN
-         lcReplace = ENTRY(2,bMSRequest.ReqCparam6, "|").
-      ELSE 
-         lcReplace = bCustomer.Email.
-
-      lcOutput = REPLACE(lcOutput, "#EMAIL", lcReplace).
-   END.
-
-   IF INDEX(lcOutput, "#NUMBER") > 0 THEN 
-   DO:
-      lcReplace = ENTRY(2,bMsRequest.Reqcparam6, "|").
-      lcOutput = REPLACE(lcOutput, "#NUMBER", lcReplace).
-   END.
-
-   IF INDEX(lcMailHeader, "#STATUS") > 0 THEN 
-   DO:
-      IF bMsRequest.ReqType EQ 9 THEN 
-      DO:
-         IF bMsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
-             lcStatus = "3 - Pending deactivation".
-         ELSE 
-             lcStatus = "0 - Inactive".
-      END.
-      ELSE IF bMsRequest.reqtype EQ 8 THEN 
-      DO:
-         IF bMsRequest.reqstatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
-             lcStatus = "2 - Pending activation".
-         ELSE 
-             lcStatus = "1 - Active".
-      END.
-
-      lcMailHeader = REPLACE(lcMailHeader, "#STATUS", lcStatus).
-   END.
-
-   /*Set email sending parameters*/
-   /*lcMailDir = "/tmp/". /*To be sure that we have some place*/
-   lcMailDir = fCParam("YPRO", "YPRO_SVA_email_dir").
-   lcMailFile = lcMailDir + "SVA_email" + STRING(bMsRequest.Msrequest) + ".txt".
-   
-   OUTPUT STREAM soutfile to VALUE(lcMailFile).
-   PUT STREAM soutfile UNFORMATTED lcOutput skip.
-   */
-   ASSIGN
-      xMailFrom = fCParamC("DefEmailSender")
-      xMailAddr = fCParam("YPRO", "SVA_BO_EMAIL_ADDRESS")
-      xMailSubj = lcMailHeader.
-      SendMaileInvoice(lcOutput, "", "").
-
-   /*Used email file removal or saving to logs?*/
-
-   RETURN "".
-
-END.
-
-FUNCTION fgetActiveReplacement RETURNS CHAR (INPUT icClitype AS CHAR):
-   DEF VAR lcSubsMappings AS CHAR NO-UNDO.
-   DEF VAR lcMappedSubs AS CHAR NO-UNDO.
-   DEF VAR lcSubsFrom AS CHAR NO-UNDO.
-   DEF VAR lcSubsTo AS CHAR NO-UNDO.
-   DEF VAR liLoop AS INT NO-UNDO.
-
-   lcSubsMappings = fCParamC("ProSubsMigrationMappings").
-
-   DO liloop = 1 TO NUM-ENTRIES(lcSubsMappings,"|"):
-      ASSIGN
-         lcMappedSubs = ENTRY(liloop, lcSubsMappings,"|")
-         lcSubsFrom = ENTRY(1,lcMappedSubs,"=")
-         lcSubsTo = ENTRY(2,lcMappedSubs,"=").
-      IF LOOKUP(icClitype,lcSubsFrom) GE 1 THEN RETURN lcSubsTo.
-   END.
-   RETURN "".
-END.
-
-FUNCTION fProMigrationRequest RETURNS INTEGER
-   (INPUT  iiMsseq        AS INT,        /* msseq                */
-    INPUT  icCreator      AS CHARACTER,  /* who made the request */
-    INPUT  icSource       AS CHARACTER,
-    INPUT  iiOrig         AS INTEGER,
-    OUTPUT ocResult       AS CHARACTER):
-
-   DEF VAR liReqCreated AS INT NO-UNDO.
-   DEF VAR ldActStamp AS DEC NO-UNDO.
-
-   ocResult = fChkRequest(iiMsSeq,
-                          {&REQTYPE_PRO_MIGRATION},
-                          "",
-                          icCreator).
-
-   IF ocResult > "" THEN RETURN 0.
-
-   /* set activation time */
-   ldActStamp = Func.Common:mMakeTS().
-
-   fCreateRequest({&REQTYPE_PRO_MIGRATION},
-                  ldActStamp,
-                  icCreator,
-                  FALSE,    /* create fees */
-                  FALSE).   /* sms */
-
-   ASSIGN
-      bCreaReq.ReqCParam1  = "MIGRATE"
-      bCreaReq.ReqSource   = icSource
-      bCreaReq.origrequest = iiOrig
-      liReqCreated         = bCreaReq.MsRequest.
-
-   RELEASE bCreaReq.
-
-   RETURN liReqCreated.
-
-END FUNCTION.
 
 FUNCTION fProMigrateOtherSubs RETURNS CHAR
 (INPUT iiagrcust AS INT,
