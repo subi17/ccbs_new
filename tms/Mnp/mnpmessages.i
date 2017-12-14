@@ -128,9 +128,27 @@ FUNCTION fSendConfirmation RETURNS LOGICAL
   (INPUT pcPortReq AS CHARACTER):
    
    DEFINE VARIABLE lcReqStruct AS CHARACTER NO-UNDO. 
+   DEF VAR lcArray AS CHAR NO-UNDO. 
+   DEF BUFFER MNPProcess FOR MNPProcess.
+   DEF BUFFER MNPSub FOR MNPSub.
 
    lcReqStruct = add_struct(param_toplevel_id, "").
    add_string(lcReqStruct, "codigoReferencia", pcPortReq).
+
+   FIND MNPProcess NO-LOCK WHERE
+        MNPProcess.PortRequest = pcPortReq NO-ERROR.
+   IF AVAIL MNPProcess THEN DO:
+      FIND MNPSub NO-LOCK WHERE
+           MNPSub.MNPSeq = MNPSub.MNPSeq NO-ERROR.
+      IF AMBIGUOUS MNPSub THEN DO:
+         lcArray = add_array(lcReqStruct, "confirmedMSISDN").
+         FOR EACH MNPSub NO-LOCK WHERE
+                  MNPSub.MNPSeq = MNPProcess.Mnpseq:
+            IF MNPSub.StatusReason EQ "" THEN
+               add_string(lcArray,"",MNPSub.CLI).
+         END.
+      END.
+   END. 
 
    RETURN fMnpXMLSerialize("confirmarSolicitudAltaPortabilidadMovil", lcReqStruct).
    

@@ -1,0 +1,5 @@
+ADD FIELD "StatusReason" OF "MNPSub" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "StatusReason"
+  ORDER 90

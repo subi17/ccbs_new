@@ -24,8 +24,6 @@ DEFINE VARIABLE liLoop     AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcTime     AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liPause    AS INTEGER   NO-UNDO.
 DEFINE VARIABLE llNagBeat  AS LOG       NO-UNDO INIT TRUE.
-DEFINE VARIABLE liTimeOut  AS INTEGER NO-UNDO. 
-DEFINE VARIABLE lcURL      AS CHARACTER NO-UNDO. 
 DEF VAR liTenant AS INT NO-UNDO. 
 
 FORM
@@ -85,17 +83,14 @@ DO WHILE TRUE
 
 END.
 
-DEF BUFFER bTermMobsub FOR TermMobsub.
-
 PROCEDURE pMNPAnalyse:
 
    DEFINE VARIABLE lcBarring AS CHARACTER NO-UNDO. 
-   DEFINE VARIABLE lcBarrings AS CHARACTER NO-UNDO INIT "Cust_LOST". 
    DEFINE VARIABLE lcRejectReason AS CHARACTER NO-UNDO. 
-   DEFINE VARIABLE lcError AS CHARACTER NO-UNDO. 
    DEFINE VARIABLE ldeCreated AS DECIMAL NO-UNDO. 
    DEFINE VARIABLE liCustnum AS INTEGER NO-UNDO. 
    DEFINE VARIABLE llIsPrepaid AS LOGICAL NO-UNDO. 
+   DEF VAR llMultiple AS LOG NO-UNDO. 
 
    /* just to make sure that MNP NC state is updated after reading in to tms */
    ldeCreated = Func.Common:mSecOffSet(Func.Common:mMakeTS(),-10).
@@ -109,6 +104,10 @@ PROCEDURE pMNPAnalyse:
       MNPProcess.CreatedTS < ldeCreated EXCLUSIVE-LOCK:
 
       lcRejectReason = "".
+      
+      FIND MNPSub NO-LOCK WHERE 
+           MNPSub.MNPSeq = MNPProcess.MNPSeq NO-ERROR.
+      llMultiple = (AMBIGUOUS MNPSub).
 
       SUBS_LOOP:
       FOR EACH MNPSub WHERE MNPSub.MNPSeq = MNPProcess.MNPSeq EXCLUSIVE-LOCK:
@@ -130,7 +129,7 @@ PROCEDURE pMNPAnalyse:
 
             /* no barring or pending barring */
             IF lcBarring = "OK" OR lcBarring = "91" THEN .
-            ELSE IF LOOKUP(lcBarring,lcBarrings) > 0 THEN DO:
+            ELSE IF LOOKUP(lcBarring,"Cust_LOST") > 0 THEN DO:
                lcRejectReason = "RECH_PERDI".
                LEAVE SUBS_LOOP.
             END.
@@ -141,9 +140,15 @@ PROCEDURE pMNPAnalyse:
          END.
          ELSE 
          DO:      
-            FIND FIRST Msisdn WHERE Msisdn.Brand = Syst.Var:gcBrand AND Msisdn.CLI = MNPSub.CLI NO-LOCK USE-INDEX CLI NO-ERROR.
+            FIND FIRST Msisdn WHERE 
+                       Msisdn.Brand = Syst.Var:gcBrand AND 
+                       Msisdn.CLI = MNPSub.CLI NO-LOCK USE-INDEX CLI NO-ERROR.
             IF AVAIL Msisdn AND Msisdn.StatusCode = {&MSISDN_ST_RETURNED} THEN 
             DO:
+               IF llMultiple THEN DO:
+                  MNPSub.StatusReason = "RECH_BNUME".
+                  NEXT SUBS_LOOP.
+               END.
                lcRejectReason = "RECH_BNUME".
                LEAVE SUBS_LOOP.
             END.
@@ -151,18 +156,27 @@ PROCEDURE pMNPAnalyse:
             IF NOT AVAIL Msisdn OR 
                (Msisdn.StatusCode NE {&MSISDN_ST_WAITING_RETURN} AND 
                 Msisdn.StatusCode NE {&MSISDN_ST_RETURN_NOTICE_SENT}) THEN DO:
+               IF llMultiple THEN DO:
+                  MNPSub.StatusReason = "RECH_IDENT".
+                  NEXT SUBS_LOOP.
+               END.
                lcRejectReason = "RECH_IDENT".
                LEAVE SUBS_LOOP.
             END.
 
-            RELEASE TermMobsub.
-            FOR FIRST bTermMobsub WHERE bTermMobsub.CLI = MnpSub.CLI NO-LOCK BY bTermMobsub.ActivationDate DESC:
-               FIND TermMobsub WHERE ROWID(TermMobsub) = ROWID(bTermMobsub) NO-LOCK.
+            FOR EACH TermMobsub NO-LOCK WHERE 
+                     TermMobsub.CLI = MnpSub.CLI 
+                     BY TermMobsub.ActivationDate DESC:
+               LEAVE.
             END.
            
             /* should not happen that TermMobsub is not found */
             IF NOT AVAIL TermMobsub THEN DO:
                fLogError("TermMobsub not found: " + MNPProcess.PortRequest).
+               IF llMultiple THEN DO:
+                  MnpSub.StatusReason = "RECH_IDENT".
+                  NEXT SUBS_LOOP.
+               END.
                lcRejectReason = "RECH_IDENT".
                LEAVE SUBS_LOOP.
             END.
@@ -171,6 +185,10 @@ PROCEDURE pMNPAnalyse:
          
             IF TermMobsub.PayType = True AND TermMobSub.ICC NE MNPSub.ICC THEN 
             DO:
+               IF llMultiple THEN DO:
+                  MNPSub.StatusReason = "RECH_ICCID".
+                  NEXT SUBS_LOOP.
+               END.
                lcRejectReason = "RECH_ICCID".
                LEAVE SUBS_LOOP.
             END.
@@ -208,16 +226,21 @@ PROCEDURE pMNPAnalyse:
          
       /* Set possible number termination processes on hold */
       IF lcRejectReason = "" THEN DO:
-      
+
          FOR EACH MNPSub WHERE MNPSub.MNPSeq = MNPProcess.MNPSeq NO-LOCK:
+   
+            IF MNPSub.StatusReason > "" THEN NEXT.
          
             /* put possible number termination on hold */
-            FIND FIRST Msisdn WHERE Msisdn.Brand = Syst.Var:gcBrand AND Msisdn.CLI = MNPSub.CLI NO-LOCK USE-INDEX CLI NO-ERROR.
+            FIND FIRST Msisdn WHERE 
+                       Msisdn.Brand = Syst.Var:gcBrand AND
+                       Msisdn.CLI = MNPSub.CLI NO-LOCK USE-INDEX CLI NO-ERROR.
             IF AVAIL Msisdn AND Msisdn.StatusCode = {&MSISDN_ST_RETURN_NOTICE_SENT} THEN 
             DO:
-               FIND FIRST bMNPProcess WHERE bMNPProcess.MNPSeq     = MNPSub.MNPSeq           AND 
-               								bMNPProcess.MNPType    = {&MNP_TYPE_TERMINATION} AND 
-               								bMNPProcess.StatusCode = {&MNP_ST_BNOT}          EXCLUSIVE-LOCK NO-ERROR.
+               FIND FIRST bMNPProcess EXCLUSIVE-LOCK WHERE 
+                          bMNPProcess.MNPSeq     = MNPSub.MNPSeq           AND 
+                          bMNPProcess.MNPType    = {&MNP_TYPE_TERMINATION} AND 
+                          bMNPProcess.StatusCode = {&MNP_ST_BNOT} NO-ERROR.
                IF AVAIL bMNPProcess THEN 
                DO:
                   ASSIGN

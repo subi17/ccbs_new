@@ -204,6 +204,7 @@ PROCEDURE pHandleQueue:
    DEFINE VARIABLE lcNewOper    AS CHAR NO-UNDO. 
    DEFINE VARIABLE llgMNPOperName  AS LOG NO-UNDO. 
    DEFINE VARIABLE llgMNPOperBrand AS LOG NO-UNDO. 
+   DEFINE VARIABLE llConfirm AS LOG NO-UNDO. 
    DEFINE VARIABLE lcExtraMainLineCLITypes AS CHAR NO-UNDO.  
    
    lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").
@@ -777,7 +778,33 @@ PROCEDURE pHandleQueue:
       
       /* 1.10 Confirm portability activation request query */
       WHEN "confirmarSolicitudAltaPortabilidadMovil" THEN DO:
-         RUN pHandleFromASOL2ACON.
+
+         /* Multiple MNP out */
+         FIND MNPSub NO-LOCK WHERE
+              MNPSub.MNPSeq = MNPProcess.MNPSeq NO-ERROR.
+
+         /* In case of multiple MNP OUT, additioanal confirmation is required from NC side */
+         IF AMBIGUOUS MNPSub THEN DO:
+            
+            llConfirm = FALSE.
+            
+            FOR EACH MNPSub NO-LOCK WHERE
+                     MNPSub.MNPSeq = MNPProcess.MNPSeq:
+               IF MNPSub.StatusReason = "" THEN DO:
+                  messagebuf.StatusCode = {&MNP_MSG_WAITING_CONFIRM}.
+                  MNPProcess.StateFlag = {&MNP_STATEFLAG_WAITING_CONFIRM}.
+                  RETURN.
+               END.
+               IF MNPSub.StatusReason EQ "CONFIRM" THEN DO:
+                  llConfirm = TRUE.
+                  LEAVE.
+               END.
+            END.
+         END.
+         ELSE llConfirm = TRUE.
+   
+         IF llConfirm THEN RUN pHandleFromASOL2ACON.
+         ELSE RUN pHandleFromASOL2AREC.
       END.
       
       /* 1.11 Reject portability activation request */
@@ -1008,6 +1035,9 @@ PROCEDURE pHandleFromASOL2ACON:
    /* create termination request(s) */
    FOR EACH MNPSub WHERE
       MNPSub.MNPSeq = MNPProcess.MNPSeq NO-LOCK:
+
+      IF MNPSub.StatusReason NE "" AND
+         MNPSub.StatusReason NE "CONFIRM" THEN NEXT.
 
       FIND MobSub WHERE
            MobSub.MsSeq = MNPSub.MsSeq AND

@@ -70,7 +70,6 @@ FOR EACH MNPProcess EXCLUSIVE-LOCK WHERE
    
    IF llOk THEN DO:
       fLogBasic("Handled (" + STRING(MNPProcess.StateFlag) + ") " + MNPProcess.PortRequest).
-      MNPProcess.StateFlag = 0.
       liHandled = liHandled + 1.
    END. 
    ELSE DO:
