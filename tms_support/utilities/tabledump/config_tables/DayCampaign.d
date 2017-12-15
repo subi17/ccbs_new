@@ -36,7 +36,7 @@
 "CONTFF2" 01/10/13 0 31/12/49 "" 0 "" "" "FUSIÓN PLANA A LO YOIGO" 0 0 "1" "1" 1 1 0 0 "CONTFF2MF" "" "" 0 1 0 yes 1 0 0 2 "DATA200_UPSELL" 1 1 0
 "CONTFH1000" 11/10/17 0 31/12/49 "CONTFH1000MF" 0 "" "" "La Combinada Azul 1Gbps" 0 0 "1" "1" 1 1 0 0 "CONTFH1000MF" "" "" 0 1 0 yes 1 0 0 1 "" 0 1 0
 "CONTFH300" 27/10/16 0 31/12/49 "CONTFH300MF" 0 "" "" "La Combinada 300" 0 0 "1" "1" 1 1 0 0 "CONTFH300MF" "" "" 0 1 0 yes 1 0 0 1 "" 0 0 0
-"CONTFH50" 27/10/16 0 31/12/49 "CONTFH50" 0 "" "" "La Combinada 50" 0 0 "1" "1" 1 1 0 0 "CONTFH50MF" "" "" 0 1 0 yes 1 0 0 1 "" 0 0 0
+"CONTFH50" 27/10/16 0 31/12/49 "CONTFH50MF" 0 "" "" "La Combinada 50" 0 0 "1" "1" 1 1 0 0 "CONTFH50MF" "" "" 0 1 0 yes 1 0 0 1 "" 0 0 0
 "CONTM" 01/12/12 0 31/12/49 "CONTMMF" 0 "" "" "Contrato M" 0 0 "1" "7" 4 4 0 0 "CONTMMF" "" "" 0 1 0 yes 1 0 0 1 "" 0 1 0
 "CONTM2" 01/09/13 0 31/12/49 "CONTM2MF" 0 "" "" "Contrato M2" 0 0 "1" "7" 4 4 0 0 "CONTM2MF" "" "" 0 1 0 yes 1 0 0 2 "" 0 1 0
 "CONTRATO2" 01/12/06 0 31/12/49 "" 0 "1" "" "Contrato2 service package" 0 0 "1" "1" 1 1 0 0 "CONTRATO2" "" "" 0 1 0 yes 1 0 0 0 "" 0 1 0
