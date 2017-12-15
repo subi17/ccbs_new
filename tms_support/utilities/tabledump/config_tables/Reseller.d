@@ -1,5 +1,6 @@
 "AA" "Advanced Analytics" "" 0 "" "" "" "gonzalo.garrido.arsuaga@yoigo.com" "1" 99 yes "" ""
 "AB" "B12 CROSS-SELLING" "" 0 "" "" "" "lisandro.racedo@masmovil.com" "1" 99 yes "" ""
+"AC" "AON MOBILE VENTA CARTERA CARRITO" "" 0 "" "" "" "lisandro.racedo@MasMovil.com" "1" 99 yes "" ""
 "AE" "AON CROSS-SELLING OUTBOUND" "" 0 "" "" "" "lisandro.racedo@masmovil.com" "1" 99 yes "" ""
 "AF" "AMPLIFFICA" "" 0 "" "" "" "maria.barreiro.sanisidro@ext.yoigo.com" "1" 99 yes "" ""
 "AK" "ATAKAM DISTRIBUCION ONLINE" "" 0 "" "" "" "teobaldo.gomez@masmovil.com" "1" 99 no "" ""
