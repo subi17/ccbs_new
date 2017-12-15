@@ -16,6 +16,7 @@
 {Syst/eventval.i}
 {Func/create_eventlog.i}
 {Func/matrix.i}
+{Func/extralinefunc.i}
 
 /* Function makes new MSOwner when subscription is partially
    terminated or mobile part order closed. Calling program must have
@@ -249,7 +250,6 @@ FUNCTION fIsConvergentAddLineOK RETURNS LOGICAL
    RETURN FALSE.
 
 END FUNCTION.
-
 
 /* Check convergent STC compability. Special handling that allows convergent
    STC between subscription types which have same fixed line part.
@@ -721,18 +721,17 @@ FUNCTION fIsAddLineOrder RETURNS LOGICAL
 END FUNCTION.
 
 
-FUNCTION fCheckExistingConvergentAvailForExtraLine RETURNS LOGICAL
-   (INPUT icCustIDType       AS CHAR,
-    INPUT icCustID           AS CHAR,
-    OUTPUT liMainLineOrderId AS INT):
+FUNCTION fCheckConvergentAvailableForExtraLine RETURNS INTEGER
+   (INPUT icExtraLineCLIType AS CHAR,
+    INPUT icCustIDType       AS CHAR,
+    INPUT icCustID           AS CHAR):
+
+   IF NOT icExtraLineCLIType > ""
+   THEN RETURN 0.
 
    DEFINE BUFFER Customer FOR Customer.
    DEFINE BUFFER MobSub   FOR MobSub.
    DEFINE BUFFER Order    FOR Order.
-
-   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
-
-   lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").
 
    FOR FIRST Customer WHERE
              Customer.Brand      = Syst.Var:gcBrand AND
@@ -743,13 +742,14 @@ FUNCTION fCheckExistingConvergentAvailForExtraLine RETURNS LOGICAL
              MobSub.Brand    = Syst.Var:gcBrand AND
              MobSub.CustNum  = Customer.CustNum        AND
              MobSub.PayType  = FALSE                   AND
+             MobSub.MultiSimID = 0                     AND
+             MobSub.MultiSimType = 0                   AND
             (MobSub.MsStatus = {&MSSTATUS_ACTIVE} OR
-             MobSub.MsStatus = {&MSSTATUS_BARRED})     BY MobSub.ActivationTS:
+             MobSub.MsStatus = {&MSSTATUS_BARRED})
+       BY MobSub.ActivationTS:
 
-       IF LOOKUP(MobSub.CLIType,lcExtraMainLineCLITypes) = 0 THEN NEXT.
-       
-       IF MobSub.MultiSimID  <> 0                       AND 
-          MobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} THEN NEXT.
+       IF NOT fCLITypeAllowedForExtraLine(MobSub.CLIType, icExtraLineCLIType)
+       THEN NEXT.
 
        FIND LAST Order NO-LOCK WHERE 
                  Order.MsSeq      = MobSub.MsSeq              AND 
@@ -764,27 +764,25 @@ FUNCTION fCheckExistingConvergentAvailForExtraLine RETURNS LOGICAL
 
        IF NOT AVAIL Order THEN NEXT.          
 
-       liMainLineOrderId = Order.OrderId. 
+       RETURN Order.OrderId. 
 
-       RETURN TRUE.
    END.
 
-   RETURN FALSE.
+   RETURN 0.
 
 END FUNCTION.
 
-FUNCTION fCheckOngoingConvergentAvailForExtraLine RETURNS LOGICAL
-   (INPUT icCustIDType      AS CHAR,
-    INPUT icCustID          AS CHAR,
-    OUTPUT liOngoingOrderId AS INT):
+FUNCTION fCheckOngoingConvergentAvailForExtraLine RETURNS INTEGER
+   (INPUT icExtraLineCLIType AS CHAR,
+    INPUT icCustIDType       AS CHAR,
+    INPUT icCustID           AS CHAR):
    
+   IF NOT icExtraLineCLIType > ""
+   THEN RETURN 0.
+
    DEFINE BUFFER OrderCustomer FOR OrderCustomer.
    DEFINE BUFFER Order         FOR Order.
    DEFINE BUFFER OrderFusion   FOR OrderFusion.
-
-   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO.
-
-   lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").
 
    FOR EACH OrderCustomer NO-LOCK WHERE
             OrderCustomer.Brand      EQ Syst.Var:gcBrand AND
@@ -801,17 +799,16 @@ FUNCTION fCheckOngoingConvergentAvailForExtraLine RETURNS LOGICAL
             OrderFusion.Brand   = Syst.Var:gcBrand AND
             OrderFusion.OrderID = Order.OrderID           BY Order.CrStamp:
 
-      IF LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) = 0 THEN NEXT.
+       IF NOT fCLITypeAllowedForExtraLine(Order.CLIType, icExtraLineCLIType)
+       THEN NEXT.
 
       IF LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN NEXT.
  
-      liOngoingOrderId = Order.OrderId.
-
-      RETURN TRUE.
+      RETURN Order.OrderId.
  
    END.
 
-   RETURN FALSE.
+   RETURN 0.
 
 END FUNCTION.
 

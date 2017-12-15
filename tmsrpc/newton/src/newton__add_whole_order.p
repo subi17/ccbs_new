@@ -458,11 +458,6 @@ DEF VAR lcItemParam AS CHAR NO-UNDO.
 DEF VAR llCreateDisc AS LOG NO-UNDO.
 
 /* Extra lines */
-DEF VAR lcExtraLineDiscRuleId  AS CHAR NO-UNDO.
-DEF VAR lcExtraLineCLITypes    AS CHAR NO-UNDO. 
-DEF VAR liMainLineOrderId      AS INT  NO-UNDO. 
-DEF VAR liOngoingOrderId       AS INT  NO-UNDO. 
- 
 DEF BUFFER ExtraLineDiscountPlan FOR DiscountPlan.
 DEF BUFFER ExtraLineMainOrder    FOR Order.
 
@@ -2013,21 +2008,12 @@ END.
 
 /* Extra Lines Validations, 
    updating multisimid & multisimidtype for hard association */
-ASSIGN lcExtraLineCLITypes   = fCParam("DiscountType","ExtraLine_CLITypes")
-       liMainLineOrderId     = 0
-       liOngoingOrderId      = 0
-       lcExtraLineDiscRuleId = "". 
+IF fCLITypeIsExtraLine(pcSubType) THEN DO:
 
-IF LOOKUP(pcSubType,lcExtraLineCLITypes) > 0 THEN DO:
+   piMultiSimID = fCheckConvergentAvailableForExtraLine(pcSubType, lcIdtype, lcId). /* MainLine order id */
 
-   IF fCheckExistingConvergentAvailForExtraLine(lcIdtype,
-                                                lcId,
-                                                OUTPUT liMainLineOrderId) THEN 
-      piMultiSimID = liMainLineOrderId.
-   ELSE IF fCheckOngoingConvergentAvailForExtraLine(lcIdtype,
-                                                    lcId,
-                                                    OUTPUT liOngoingOrderId) THEN
-      piMultiSimID = liOngoingOrderId. 
+   IF piMultiSimID EQ 0
+   THEN piMultiSimID = fCheckOngoingConvergentAvailForExtraLine(pcSubType, lcIdtype, lcId). /* Ongoing order id */
 
    piMultiSimType = {&MULTISIMTYPE_EXTRALINE}.
 
@@ -2043,19 +2029,13 @@ IF LOOKUP(pcSubType,lcExtraLineCLITypes) > 0 THEN DO:
 
    /* Discount rule id input is not necessary from WEB to TMS, 
       As it is extra line we have to give default discount */
-   CASE pcSubType:
-      WHEN "CONT28" THEN lcExtraLineDiscRuleId = "CONT28DISC".
-   END CASE.
-
-   IF lcExtraLineDiscRuleId NE "" THEN DO:
-      FIND FIRST ExtraLineDiscountPlan NO-LOCK WHERE
-                 ExtraLineDiscountPlan.Brand      = Syst.Var:gcBrand               AND
-                 ExtraLineDiscountPlan.DPRuleID   = lcExtraLineDiscRuleId AND
-                 ExtraLineDiscountPlan.ValidFrom <= TODAY                 AND
-                 ExtraLineDiscountPlan.ValidTo   >= TODAY                 NO-ERROR.
-      IF NOT AVAIL ExtraLineDiscountPlan THEN
-         RETURN appl_Err(SUBST("Incorrect Extra Line Discount Plan ID: &1", lcExtraLineDiscRuleId)).      
-   END.
+   FIND FIRST ExtraLineDiscountPlan NO-LOCK WHERE
+              ExtraLineDiscountPlan.Brand      = Syst.Var:gcBrand      AND
+              ExtraLineDiscountPlan.DPRuleID   = pcSubType + "DISC"    AND
+              ExtraLineDiscountPlan.ValidFrom <= TODAY                 AND
+              ExtraLineDiscountPlan.ValidTo   >= TODAY                 NO-ERROR.
+   IF NOT AVAIL ExtraLineDiscountPlan THEN
+      RETURN appl_Err(SUBST("Incorrect Extra Line Discount Plan ID: &1", pcSubType + "DISC")).      
 
 END.
 
@@ -2143,7 +2123,7 @@ IF lcFixedLinePermanency > "" THEN DO:
 END.
 
 /* Extra line discount */
-IF lcExtraLineDiscRuleId NE "" THEN DO:
+IF fCLITypeIsExtraLine(pcSubType) THEN DO:
    
     /* Update Mainline multisimid and multisimtype values before 
        extra line discount orderaction record is created */
