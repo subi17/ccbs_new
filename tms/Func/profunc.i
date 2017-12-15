@@ -344,6 +344,8 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
       DO:
          IF bMsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
              lcStatus = "3 - Pending deactivation".
+         ELSE IF bMsRequest.ReqStatus EQ {&REQUEST_STATUS_CANCELLED} THEN
+             lcStatus = "1 - Active".
          ELSE 
              lcStatus = "0 - Inactive".
       END.
@@ -351,6 +353,8 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
       DO:
          IF bMsRequest.reqstatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
              lcStatus = "2 - Pending activation".
+         ELSE IF bMsRequest.ReqStatus EQ {&REQUEST_STATUS_CANCELLED} THEN
+             lcStatus = "0 - Inactive".    
          ELSE 
              lcStatus = "1 - Active".
       END.
@@ -442,29 +446,30 @@ FUNCTION fMakeProActRequest RETURNS INT(
       fSendEmailByRequest(MsRequest.MsRequest,"SVA_" + icContr).
 
       RETURN MsRequest.MsRequest.
-        
    END.
    ELSE IF icAction EQ "on" THEN 
       icAction = "act".
    ELSE IF icAction EQ "off" THEN 
       icAction = "term".
 
-      liRequest = fPCActionRequest(iiMsSeq,
-                                   icContr,
-                                   icAction,
-                                   idActStamp,
-                                   TRUE, /* fees */
-                                   {&REQUEST_SOURCE_CONTRACT_ACTIVATION},
-                                   "",
-                                   0,
-                                   FALSE,
-                                   "",
-                                   0,
-                                   0,
-                                   lcParams,
-                                   OUTPUT ocErr).
-   END. /*Trans*/  
+   liRequest = fPCActionRequest(iiMsSeq,
+                                icContr,
+                                icAction,
+                                idActStamp,
+                                TRUE, /* fees */
+                                {&REQUEST_SOURCE_CONTRACT_ACTIVATION},
+                                "",
+                                0,
+                                FALSE,
+                                "",
+                                0,
+                                0,
+                                lcParams,
+                                OUTPUT ocErr).
+   END. /*Trans*/
+
    RETURN liRequest. /*bCreaReq.MsRequest.*/
+
 END FUNCTION.
 
 FUNCTION fgetActiveReplacement RETURNS CHAR (INPUT icClitype AS CHAR):
