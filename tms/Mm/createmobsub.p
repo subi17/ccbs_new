@@ -451,41 +451,6 @@ IF NOT AVAIL mobsub THEN DO:
                 lbMLMobSub.MultiSimID   = MobSub.MsSeq             /* Extraline Subid */
                 lbMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY}  /* Primary = 1     */
                 llgExtraLine            = YES.
-      ELSE DO:
-         liOngoingOrderId = fCheckOngoingConvergentAvailForExtraLine(Order.CLIType,
-                                                       Customer.CustIdType,
-                                                       Customer.OrgId).
-         IF liOngoingOrderId > 0
-         THEN DO:
-            FIND FIRST lbOngOrder NO-LOCK WHERE
-                       lbOngOrder.Brand   = Syst.Var:gcBrand AND
-                       lbOngOrder.OrderId = liOngoingOrderId NO-ERROR.
-            IF AVAILABLE lbOngOrder THEN
-               ASSIGN MobSub.MultiSimID   = lbOngOrder.MsSeq
-                      MobSub.MultiSimType = Order.MultiSimType
-                      llgExtraLine        = YES.
-         END.
-         ELSE DO:
-            ASSIGN MobSub.MultiSimID       = 0
-                   MobSub.MultiSimType     = 0
-                   llgExtraLine            = YES.
-            
-            FIND FIRST lbELOrderAction EXCLUSIVE-LOCK WHERE
-                       lbELOrderAction.Brand    = Syst.Var:gcBrand        AND
-                       lbELOrderAction.OrderID  = Order.OrderID           AND
-                       lbELOrderAction.ItemType = "ExtraLineDiscount"     AND
-                       lbELOrderAction.ItemKey  = Order.CLIType + "DISC"  NO-ERROR.
-   
-            IF AVAILABLE lbELOrderAction THEN DO:
-               DELETE lbELOrderAction.
-               Func.Common:mWriteMemo("Order",
-                                       STRING(Order.OrderID),
-                                       0,
-                                       "EXTRA LINE DISCOUNT REMOVED",
-                                       "Removed ExtraLineDiscount Item from OrderAction").
-            END.
-         END.
-      END.
    END.
  
    IF Avail imsi THEN Mobsub.imsi = IMSI.IMSI.
