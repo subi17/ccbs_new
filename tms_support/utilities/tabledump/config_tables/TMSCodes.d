@@ -34,7 +34,7 @@
 "ActionLog" "ActionStatus" "Log" "2" "Ended succesfully" "" "" 1
 "ActionLog" "ActionStatus" "Log" "3" "Logged" "" "" 1
 "ActionLog" "ActionStatus" "Log" "5" "Cancelled" "" "" 1
-"AppIdPrefix" "ApplicationId" "ExternalAPI" "selfService" "Transaction Ids for particular application" "" "601,602,501,502,503,504,505,506,650,507,701,509,510,801" 1
+"AppIdPrefix" "ApplicationId" "ExternalAPI" "selfService" "Transaction Ids for particular application" "" "601,602,501,502,503,504,505,506,650,507,701,509,510,801,551,552" 1
 "Barring" "BarringGroup" "" "ATC" "" "" "20" 0
 "Barring" "BarringGroup" "" "Collections" "" "" "30" 0
 "Barring" "BarringGroup" "" "Customer" "" "" "10" 0
@@ -1394,6 +1394,7 @@
 "RoamTariff" "Service" "Roaming" "VOICE" "" "" "" 1
 "Salesman" "SmPrefix" "IFS" "AA" "Advance Analytics" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AB" "B12 CROSS-SELLING" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "AC" "AON MOBILE VENTA CARTERA CARRITO" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AE" "AON CROSS-SELLING OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AF" "AMPLIFFICA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "AK" "ATAKAM DISTRIBUCION ONLINE" "" "15" 1
