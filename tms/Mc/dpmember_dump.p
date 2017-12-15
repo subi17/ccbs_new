@@ -74,24 +74,27 @@ END FUNCTION. /* FUNCTION fCollectDPMember RETURNS LOGIC */
 FUNCTION fCollectDPM_FromEventLog RETURNS LOGIC
    (INPUT icaction AS CHAR):
 
+      ASSIGN
+         lcDataValues = REPLACE(EventLog.DataValues,CHR(255) + CHR(255),"|")
+         lcItemFour = ENTRY(4,lcDataValues,"|")
+         lcItemFive = ENTRY(5,lcDataValues,"|")
+         lcItemSix = ENTRY(6,lcDataValues,"|")
+         lcItemEight = ENTRY(8,lcDataValues,"|")
+         liDPMemberId = INT(ENTRY(2,lcItemEight,CHR(255)))
+         lcDiscValue = ENTRY(2,lcItemFour,CHR(255))
+         lcValidFrom = ENTRY(2,lcItemFive,CHR(255))
+         lcValidTo = ENTRY(2,lcItemSix,CHR(255))
+         liFD = INT(ENTRY(3,lcValidFrom,"/"))
+         liFM = INT(ENTRY(2,lcValidFrom,"/"))
+         liFY = INT(ENTRY(1,lcValidFrom,"/"))
+         liTD = INT(ENTRY(3,lcValidTo,"/"))
+         liTM = INT(ENTRY(2,lcValidTo,"/"))
+         liTY = INT(ENTRY(1,lcValidTo,"/"))
+         ldaValidFrom = DATE(liFM,liFD,liFY)
+         ldaValidTo = DATE(liTM,liTD,liTY).
+
       IF NOT CAN-FIND( ttDPMember WHERE 
                        ttDPMember.DPMemberId = liDPMemberId) THEN DO:
-      
-         ASSIGN
-            lcItemFour = ENTRY(4,lcDataValues,"|")
-            lcItemFive = ENTRY(5,lcDataValues,"|")
-            lcItemSix = ENTRY(6,lcDataValues,"|")
-            lcDiscValue = ENTRY(2,lcItemFour,CHR(255))
-            lcValidFrom = ENTRY(2,lcItemFive,CHR(255))
-            lcValidTo = ENTRY(2,lcItemSix,CHR(255))
-            liFD = INT(ENTRY(3,lcValidFrom,"/"))
-            liFM = INT(ENTRY(2,lcValidFrom,"/"))
-            liFY = INT(ENTRY(1,lcValidFrom,"/"))
-            liTD = INT(ENTRY(3,lcValidTo,"/"))
-            liTM = INT(ENTRY(2,lcValidTo,"/"))
-            liTY = INT(ENTRY(1,lcValidTo,"/"))
-            ldaValidFrom = DATE(liFM,liFD,liFY)
-            ldaValidTo = DATE(liTM,liTD,liTY).
 
          CREATE ttDPMember.
          ASSIGN
@@ -238,11 +241,8 @@ IF icDumpMode = "modified" THEN DO:
          olInterrupted = TRUE.
          LEAVE.
       END.
-      
+
       ASSIGN
-         lcDataValues = REPLACE(EventLog.DataValues,CHR(255) + CHR(255),"|")
-         lcItemEight = ENTRY(8,lcDataValues,"|")
-         liDPMemberId = INT(ENTRY(2,lcItemEight,CHR(255)))
          liDPId = INT(ENTRY(1,EventLog.Key,CHR(255)))
          lcTable = ENTRY(2,EventLog.Key,CHR(255))
          lcMsSeq = ENTRY(3,EventLog.Key,CHR(255)).
