@@ -65,7 +65,7 @@
 "11832" "11832 de ANCUTATEL (Quality)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 54 ""
 "11833" "11833 de Premium Numbers(Orange Espagne)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 55 ""
 "11834" "11834 de DATA PREMIUM DE VENEZUELA 11,C." 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 56 ""
-"11835" " de Incotel Servicios (Opera)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 57 ""
+"11835" "11835 de TELL SOLUCIONES SLU" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 57 ""
 "11836" " de Información Telefónica 11836" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 58 ""
 "11837" " de Foreign Information Services (Uni2)" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 59 ""
 "11838" "11838 de DELIMAX CONCEPT. S.L.U" 66 1 0 0 "" "" 0 no 11 no "" 0 0 "1" 31/12/49 01/12/06 60 ""
