@@ -38,6 +38,8 @@ DEF VAR lcDataValues AS CHAR     NO-UNDO FORMAT "X(50)".
 DEF VAR lcItemFour AS CHAR NO-UNDO. 
 DEF VAR lcItemFive AS CHAR NO-UNDO. 
 DEF VAR lcItemSix AS CHAR NO-UNDO.
+DEF VAR lcItemEight AS CHAR NO-UNDO.
+DEF VAR liDPMemberId AS INT NO-UNDO. 
 DEF VAR lcDiscValue AS CHAR NO-UNDO. 
 DEF VAR lcValidFrom AS CHAR NO-UNDO. 
 DEF VAR lcValidTo AS CHAR NO-UNDO.  
@@ -59,9 +61,8 @@ DEF TEMP-TABLE ttDPMember NO-UNDO LIKE DPMember
 FUNCTION fCollectDPMember RETURNS LOGIC
    (INPUT icaction AS CHAR):
 
-      IF NOT CAN-FIND( ttDPMember WHERE ttDPMember.DPId = DPMember.DPId AND
-         ttDPMember.HostTable = DPMember.HostTable AND
-         ttDPMember.KeyValue = DPMember.KeyValue) THEN DO:
+      IF NOT CAN-FIND( ttDPMember WHERE 
+                       ttDPMember.DPMemberId = DPMember.DPMemberId) THEN DO:
       
          CREATE ttDPMember.
          BUFFER-COPY DPMember TO ttDPMember.
@@ -73,12 +74,10 @@ END FUNCTION. /* FUNCTION fCollectDPMember RETURNS LOGIC */
 FUNCTION fCollectDPM_FromEventLog RETURNS LOGIC
    (INPUT icaction AS CHAR):
 
-      IF NOT CAN-FIND( ttDPMember WHERE ttDPMember.DPId = liDPId AND
-         ttDPMember.HostTable = lcTable AND
-         ttDPMember.KeyValue = lcMsSeq) THEN DO:
+      IF NOT CAN-FIND( ttDPMember WHERE 
+                       ttDPMember.DPMemberId = liDPMemberId) THEN DO:
       
          ASSIGN
-            lcDataValues = REPLACE(EventLog.DataValues,CHR(255) + CHR(255),"|")
             lcItemFour = ENTRY(4,lcDataValues,"|")
             lcItemFive = ENTRY(5,lcDataValues,"|")
             lcItemSix = ENTRY(6,lcDataValues,"|")
@@ -96,6 +95,7 @@ FUNCTION fCollectDPM_FromEventLog RETURNS LOGIC
 
          CREATE ttDPMember.
          ASSIGN
+            ttDPMember.DPMemberId = liDPMemberId
             ttDPMember.DiscValue = DEC(lcDiscValue)
             ttDPMember.DPId = liDPId
             ttDPMember.HostTable = lcTable
@@ -238,9 +238,14 @@ IF icDumpMode = "modified" THEN DO:
          olInterrupted = TRUE.
          LEAVE.
       END.
-      liDPId = INT(ENTRY(1,EventLog.Key,CHR(255))).
-      lcTable = ENTRY(2,EventLog.Key,CHR(255)).
-      lcMsSeq = ENTRY(3,EventLog.Key,CHR(255)).
+      
+      ASSIGN
+         lcDataValues = REPLACE(EventLog.DataValues,CHR(255) + CHR(255),"|")
+         lcItemEight = ENTRY(8,lcDataValues,"|")
+         liDPMemberId = INT(ENTRY(2,lcItemEight,CHR(255)))
+         liDPId = INT(ENTRY(1,EventLog.Key,CHR(255)))
+         lcTable = ENTRY(2,EventLog.Key,CHR(255))
+         lcMsSeq = ENTRY(3,EventLog.Key,CHR(255)).
 
       IF EventLog.Action = "Modify" THEN DO:
          FOR EACH DPMember NO-LOCK WHERE
