@@ -40,14 +40,13 @@
                send_sms;boolean;optional;Send SMS
                referee;str;optional;referee's MSISDN
                offer_id;string;optional;
-               extra_offers;string;optional;optional offer 
                price_selection_time;timestamp;optional;time when user accepted order price in web
                order_inspection_result;string;mandatory;
                order_inspection_description;string;optional;
                order_inspection_level;string;optional;
                order_inspection_rule_id;string;optional;
                order_inspection_risk_code;string;optional;
-               additional_bundle;string;optional;optional bundle 
+               additional_bundle;array of struct;optional;bundle and offer list 
                subscription_bundle;string;optional;mandatory base bundle for bundle based subscription types
                dss;boolean;optional;activate dss
                bono_voip;boolean;optional;activate bono voip
@@ -356,6 +355,8 @@ DEF VAR lcPayType AS CHAR NO-UNDO.
 DEF VAR lcOldPayType AS CHAR NO-UNDO. 
 DEF VAR lcOfferOrderChannel  AS CHAR NO-UNDO.
 
+DEF VAR lcBundleFields          AS CHAR NO-UNDO.
+DEF VAR pcBundleStruct          AS CHAR NO-UNDO.
 DEF VAR pcAdditionalBundleList  AS CHAR NO-UNDO. 
 DEF VAR pcAdditionalBundleArray AS CHAR NO-UNDO.
 DEF VAR pcAdditionalOfferList   AS CHAR NO-UNDO.
@@ -457,11 +458,6 @@ DEF VAR lcItemParam AS CHAR NO-UNDO.
 DEF VAR llCreateDisc AS LOG NO-UNDO.
 
 /* Extra lines */
-DEF VAR lcExtraLineDiscRuleId  AS CHAR NO-UNDO.
-DEF VAR lcExtraLineCLITypes    AS CHAR NO-UNDO. 
-DEF VAR liMainLineOrderId      AS INT  NO-UNDO. 
-DEF VAR liOngoingOrderId       AS INT  NO-UNDO. 
- 
 DEF BUFFER ExtraLineDiscountPlan FOR DiscountPlan.
 DEF BUFFER ExtraLineMainOrder    FOR Order.
 
@@ -551,16 +547,6 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
    IF LOOKUP('offer_id', lcOrderStruct) GT 0 THEN 
       pcOfferId = get_string(pcOrderStruct, "offer_id").
 
-   IF LOOKUP("extra_offers",lcOrderStruct) > 0 THEN
-   DO:
-      pcAdditionalOfferArray = get_array(pcOrderStruct,"extra_offers").
-
-      DO liOfferCnt = 0 TO get_paramcount(pcAdditionalOfferArray) - 1:
-         ASSIGN pcAdditionalOfferList = pcAdditionalOfferList + (IF pcAdditionalOfferList <> "" THEN "," ELSE "") + get_string(pcAdditionalOfferArray, STRING(liOfferCnt)).
-      END.
-
-   END.
-
    IF LOOKUP('price_selection_time', lcOrderStruct) GT 0 THEN
        pdePriceSelTime = get_timestamp(pcOrderStruct, "price_selection_time").
    ELSE pdePriceSelTime = {&nowTS}.
@@ -580,10 +566,25 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
    DO:
       pcAdditionalBundleArray = get_array(pcOrderStruct,"additional_bundle").
 
+      IF pcAdditionalBundleArray > "" THEN
       DO liBundleCnt = 0 TO get_paramcount(pcAdditionalBundleArray) - 1:
-         ASSIGN pcAdditionalBundleList = pcAdditionalBundleList + (IF pcAdditionalBundleList <> "" THEN "," ELSE "") + get_string(pcAdditionalBundleArray, STRING(liBundleCnt)).
-      END.
 
+         ASSIGN 
+             pcBundleStruct = get_struct(pcAdditionalBundleArray,STRING(liBundleCnt))
+             lcBundleFields = validate_request(pcBundleStruct,"bundle_id!,extra_offer_id").
+
+         IF LOOKUP('bundle_id'     , lcBundleFields) GT 0 AND 
+            LOOKUP('extra_offer_id', lcBundleFields) GT 0 THEN 
+         DO:   
+             ASSIGN    
+                 pcAdditionalBundleList = pcAdditionalBundleList                             + 
+                                          (IF pcAdditionalBundleList <> "" THEN "," ELSE "") + 
+                                          get_string(pcBundleStruct, "bundle_id")
+                 pcAdditionalOfferList  = pcAdditionalOfferList                              + 
+                                          (IF pcAdditionalOfferList <> "" THEN "," ELSE "")  + 
+                                          get_string(pcBundleStruct, "extra_offer_id").
+         END.                           
+      END.
    END.
 
    IF LOOKUP("subscription_bundle",lcOrderStruct) > 0 THEN
@@ -1337,7 +1338,6 @@ gcOrderStructFields = "brand!," +
                       "send_sms," +
                       "referee," +
                       "offer_id," +
-                      "extra_offers," +
                       "price_selection_time," +
                       "order_inspection_result!," +
                       "order_inspection_description," +
@@ -1526,10 +1526,6 @@ DO:
     IF CliType.PayType = {&CLITYPE_PAYTYPE_PREPAID} THEN     
         RETURN appl_err("Prepaid subscriptions are not allowed for PRO customer(s)").
 END.
-
-/* Fixed only convergent subscription types */
-IF CliType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY} THEN
-   ASSIGN lcdelivery_channel = "Paper".   
 
 IF LOOKUP(pcNumberType,"new,mnp,renewal,stc") = 0 THEN
    RETURN appl_err(SUBST("Unknown number_type &1", pcNumberType)).   
@@ -2009,21 +2005,12 @@ END.
 
 /* Extra Lines Validations, 
    updating multisimid & multisimidtype for hard association */
-ASSIGN lcExtraLineCLITypes   = fCParam("DiscountType","ExtraLine_CLITypes")
-       liMainLineOrderId     = 0
-       liOngoingOrderId      = 0
-       lcExtraLineDiscRuleId = "". 
+IF fCLITypeIsExtraLine(pcSubType) THEN DO:
 
-IF LOOKUP(pcSubType,lcExtraLineCLITypes) > 0 THEN DO:
+   piMultiSimID = fCheckConvergentAvailableForExtraLine(pcSubType, lcIdtype, lcId). /* MainLine order id */
 
-   IF fCheckExistingConvergentAvailForExtraLine(lcIdtype,
-                                                lcId,
-                                                OUTPUT liMainLineOrderId) THEN 
-      piMultiSimID = liMainLineOrderId.
-   ELSE IF fCheckOngoingConvergentAvailForExtraLine(lcIdtype,
-                                                    lcId,
-                                                    OUTPUT liOngoingOrderId) THEN
-      piMultiSimID = liOngoingOrderId. 
+   IF piMultiSimID EQ 0
+   THEN piMultiSimID = fCheckOngoingConvergentAvailForExtraLine(pcSubType, lcIdtype, lcId). /* Ongoing order id */
 
    piMultiSimType = {&MULTISIMTYPE_EXTRALINE}.
 
@@ -2039,19 +2026,13 @@ IF LOOKUP(pcSubType,lcExtraLineCLITypes) > 0 THEN DO:
 
    /* Discount rule id input is not necessary from WEB to TMS, 
       As it is extra line we have to give default discount */
-   CASE pcSubType:
-      WHEN "CONT28" THEN lcExtraLineDiscRuleId = "CONT28DISC".
-   END CASE.
-
-   IF lcExtraLineDiscRuleId NE "" THEN DO:
-      FIND FIRST ExtraLineDiscountPlan NO-LOCK WHERE
-                 ExtraLineDiscountPlan.Brand      = Syst.Var:gcBrand               AND
-                 ExtraLineDiscountPlan.DPRuleID   = lcExtraLineDiscRuleId AND
-                 ExtraLineDiscountPlan.ValidFrom <= TODAY                 AND
-                 ExtraLineDiscountPlan.ValidTo   >= TODAY                 NO-ERROR.
-      IF NOT AVAIL ExtraLineDiscountPlan THEN
-         RETURN appl_Err(SUBST("Incorrect Extra Line Discount Plan ID: &1", lcExtraLineDiscRuleId)).      
-   END.
+   FIND FIRST ExtraLineDiscountPlan NO-LOCK WHERE
+              ExtraLineDiscountPlan.Brand      = Syst.Var:gcBrand      AND
+              ExtraLineDiscountPlan.DPRuleID   = pcSubType + "DISC"    AND
+              ExtraLineDiscountPlan.ValidFrom <= TODAY                 AND
+              ExtraLineDiscountPlan.ValidTo   >= TODAY                 NO-ERROR.
+   IF NOT AVAIL ExtraLineDiscountPlan THEN
+      RETURN appl_Err(SUBST("Incorrect Extra Line Discount Plan ID: &1", pcSubType + "DISC")).      
 
 END.
 
@@ -2139,7 +2120,7 @@ IF lcFixedLinePermanency > "" THEN DO:
 END.
 
 /* Extra line discount */
-IF lcExtraLineDiscRuleId NE "" THEN DO:
+IF fCLITypeIsExtraLine(pcSubType) THEN DO:
    
     /* Update Mainline multisimid and multisimtype values before 
        extra line discount orderaction record is created */
@@ -2503,8 +2484,9 @@ IF pcAdditionalBundleList > "" THEN
 DO liBundleCnt = 1 TO NUM-ENTRIES(pcAdditionalBundleList):
 
    FIND FIRST DayCampaign WHERE DayCampaign.Brand = Syst.Var:gcBrand AND DayCampaign.DCEvent = ENTRY(liBundleCnt, pcAdditionalBundleList) NO-LOCK NO-ERROR.
-   IF AVAIL DayCampaign AND DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
-       fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList),pcAdditionalOfferList).
+   IF AVAIL DayCampaign AND LOOKUP(STRING(DayCampaign.BundleTarget), STRING({&TELEVISION_BUNDLE}) + "," + 
+                                                             STRING({&DC_BUNDLE_TARGET_SVA})) > 0 THEN 
+       fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList), ENTRY(liBundleCnt,pcAdditionalOfferList)).
    ELSE         
        fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList),"").
 END.

@@ -72,6 +72,7 @@ FUNCTION fIsBundle RETURNS LOGIC
              bPerContract.DCEvent = icDCEvent AND
              ((LOOKUP(STRING(bPerContract.DCType), {&PERCONTRACT_RATING_PACKAGE}) > 0) OR 
               bPerContract.BundleTarget = {&TELEVISION_BUNDLE} OR
+              bPerContract.BundleTarget = {&DC_BUNDLE_TARGET_SVA} OR
               (LOOKUP(icDCEvent, lcPROFlexUpsellList) > 0)): 
       llBundle = TRUE.              
    END.
@@ -100,7 +101,7 @@ FUNCTION fIsBundleAllowed RETURNS LOGIC
                      OUTPUT lcResult) NE 1 AND
       ENTRY(1,lcResult,";") NE "?"  
    THEN DO:
-      ocInfo = "Bundle is not allowed for this subscription type".
+      ocInfo = "Bundle is not allowed for this subscription type " + icDCEvent + " " + icCLIType.
       RETURN FALSE.
    END.
    
