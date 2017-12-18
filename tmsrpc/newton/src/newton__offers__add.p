@@ -35,7 +35,7 @@ IF validate_request(param_toplevel_id, "string,struct") EQ ? THEN RETURN.
 pcTenant = get_string(param_toplevel_id, "0").
 pcStruct = get_struct(param_toplevel_id, "1").
 
-lcstruct = validate_struct(pcStruct, "id!,description!,display_item_amounts,valid_from!,valid_to,amount,priority!,vat_included,active!,username!").
+lcstruct = validate_struct(pcStruct, "id!,description!,display_item_amounts,valid_from!,valid_to,amount,priority!,vat_included,active!,username!,offer_type").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -67,7 +67,9 @@ ASSIGN
    ttOffer.description     = get_string(pcStruct, "description")
    ttOffer.offeramount     = ( IF LOOKUP("amount", lcStruct) > 0
                                THEN get_double(pcStruct, "amount") ELSE 0)
-   ttOffer.active          = get_bool(pcStruct, "active").
+   ttOffer.active          = get_bool(pcStruct, "active")
+   ttOffer.offer_type      = get_string(pcStruct, "offer_type")
+                             WHEN LOOKUP("offer_type", lcStruct) > 0.
 
 IF gi_xmlrpc_error NE 0 THEN DO:
    RETURN.
