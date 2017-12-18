@@ -6,32 +6,23 @@
   CREATED ......: Mon Feb 09 20:39:04 EET 2015
   Version ......: Yoigo
   ----------------------------------------------------------------------*/
-{Syst/commpaa.i}
-Syst.Var:katun = "Cron".
-Syst.Var:gcBrand = "1".
-{Func/cparam2.i}
-{Syst/eventlog.i}
-{Func/ftransdir.i}
-{utilities/newtariff/tariffconfig.i}
-{utilities/newtariff/tariffcons.i}
 
-DEFINE INPUT PARAMETER icIncDir   AS CHARACTER NO-UNDO.
-DEFINE INPUT PARAMETER icSpoolDir AS CHARACTER NO-UNDO.
+DEFINE INPUT  PARAMETER icBaseFile AS CHARACTER NO-UNDO. 
+DEFINE INPUT  PARAMETER icFile     AS CHARACTER NO-UNDO. 
+DEFINE INPUT  PARAMETER icSpoolDir AS CHARACTER NO-UNDO.
 
 DEFINE VARIABLE lcLine      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcLogFile   AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcInputFile AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liFirstLine AS INTEGER   NO-UNDO INITIAL 1.
 
 DEFINE TEMP-TABLE ttShaperConf NO-UNDO 
    FIELD Template   AS CHARACTER 
    FIELD TariffType AS CHARACTER
    FIELD Tariff     AS CHARACTER 
-   FIELD LUnshaped  AS CHARACTER 
-   FIELD LShaped    AS CHARACTER
+   FIELD LUnshaped  AS DECIMAL 
+   FIELD LShaped    AS DECIMAL
    FIELD SConfId    AS CHARACTER.
     
-DEFINE STREAM SCFile.
 DEFINE STREAM SCIn.
 DEFINE STREAM SCLog.
 
@@ -51,11 +42,9 @@ END FUNCTION.
 
 /* ***************************  Main Block  *************************** */
 
-ASSIGN 
-   lcInputFile = icIncDir + "shaperconf.txt"    
-   lcLogFile   = icSpoolDir + "shaperconf.log". 
+lcLogFile   = icSpoolDir + icBaseFile + ".log". 
    
-INPUT STREAM SCIn FROM VALUE(lcInputFile).
+INPUT STREAM SCIn FROM VALUE(icFile).
 OUTPUT STREAM SCLog TO VALUE(lcLogFile) APPEND.
                           
 REPEAT:
@@ -73,8 +62,8 @@ REPEAT:
       ttShaperConf.Template   = TRIM(ENTRY(2,lcLine,";"))
       ttShaperConf.TariffType = TRIM(ENTRY(3,lcLine,";"))
       ttShaperConf.Tariff     = TRIM(ENTRY(4,lcLine,";"))
-      ttShaperConf.LUnshaped  = TRIM(ENTRY(5,lcLine,";"))
-      ttShaperConf.LShaped    = TRIM(ENTRY(6,lcLine,";")) 
+      ttShaperConf.LUnshaped  = DECIMAL(TRIM(ENTRY(5,lcLine,";")))
+      ttShaperConf.LShaped    = DECIMAL(TRIM(ENTRY(6,lcLine,";"))) 
       NO-ERROR.
       
    IF ERROR-STATUS:ERROR THEN DO:
@@ -116,11 +105,11 @@ PROCEDURE pValidateFileData:
           fError("No Tariff data available").
           RETURN "ERROR".
        END.
-       IF ttShaperConf.LUnshaped EQ "" THEN DO:
+       IF ttShaperConf.LUnshaped EQ 0 THEN DO:
           fError("No Limit unshaped data available").
           RETURN "ERROR".
        END.
-       IF ttShaperConf.LShaped EQ "" THEN DO:
+       IF ttShaperConf.LShaped EQ 0 THEN DO:
           fError("No Limit data available").
           RETURN "ERROR".
        END.
@@ -149,8 +138,8 @@ DEFINE VARIABLE lcShaperConfID AS CHARACTER NO-UNDO.
             ShaperConf.Template      = ttShaperConf.Template
             ShaperConf.TariffType    = ttShaperConf.TariffType
             ShaperConf.Tariff        = ttShaperConf.Tariff
-            ShaperConf.LimitUnshaped = DECIMAL(ttShaperConf.LUnshaped)
-            ShaperConf.LimitShaped   = DECIMAL(ttShaperConf.LShaped) NO-ERROR.
+            ShaperConf.LimitUnshaped = ttShaperConf.LUnshaped
+            ShaperConf.LimitShaped   = ttShaperConf.LShaped NO-ERROR.
       END.     
       ELSE DO:                 
          CREATE ShaperConf.
@@ -160,8 +149,8 @@ DEFINE VARIABLE lcShaperConfID AS CHARACTER NO-UNDO.
             ShaperConf.Template      = ttShaperConf.Template
             ShaperConf.TariffType    = ttShaperConf.TariffType
             ShaperConf.Tariff        = ttShaperConf.Tariff
-            ShaperConf.LimitUnshaped = DECIMAL(ttShaperConf.LUnshaped)
-            ShaperConf.LimitShaped   = DECIMAL(ttShaperConf.LShaped) 
+            ShaperConf.LimitUnshaped = ttShaperConf.LUnshaped
+            ShaperConf.LimitShaped   = ttShaperConf.LShaped 
             ShaperConf.Active        = YES NO-ERROR.
       END.
              
