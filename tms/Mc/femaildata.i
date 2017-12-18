@@ -22,6 +22,7 @@
 {Syst/tmsconst.i}
 {Func/profunc.i}
 {Mc/shipping_cost.i}
+{Func/transname.i}
 
 &SCOPED-DEFINE ORDERTYPE_MNP_EN "Portability"
 &SCOPED-DEFINE ORDERTYPE_MNP_SP "Portabilidad"
@@ -1848,8 +1849,6 @@ PROCEDURE pGetCTNAME:
    DEF VAR liTime                  AS INT  NO-UNDO.
    DEF VAR ldtOrder                AS DATE NO-UNDO.
    DEF VAR lcErr                   AS CHAR NO-UNDO.
-   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
-   DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO INITIAL FALSE. 
    DEF VAR llgExtraLine            AS LOG  NO-UNDO. 
    DEF VAR lcSegment               AS CHAR NO-UNDO.
    DEF VAR lcVAT                   AS CHAR NO-UNDO.
@@ -1866,9 +1865,7 @@ PROCEDURE pGetCTNAME:
       ldtEventDate = TODAY.
 
    ASSIGN 
-      lcBundleCLITypes        = fCParamC("BUNDLE_BASED_CLITYPES")
-      lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
-      lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
+      lcBundleCLITypes        = fCParamC("BUNDLE_BASED_CLITYPES").
 
    Func.Common:mSplitTS(Order.CrStamp,
             OUTPUT ldtOrder,
@@ -2186,9 +2183,9 @@ PROCEDURE pGetCTNAME:
        END.
 
        /* Extra lines text */
-       IF LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) > 0 AND 
-                 Order.MultiSimId                      <> 0 AND
-                 Order.MultiSimType                     = {&MULTISIMTYPE_PRIMARY} THEN DO:
+       IF fCLITypeIsMainLine(Order.CLIType) AND 
+          Order.MultiSimId                      <> 0 AND
+          Order.MultiSimType                     = {&MULTISIMTYPE_PRIMARY} THEN DO:
       
           FIND FIRST lbELOrder NO-LOCK WHERE
                      lbELOrder.Brand        = Syst.Var:gcBrand          AND
@@ -2208,9 +2205,9 @@ PROCEDURE pGetCTNAME:
           END.
 
        END.
-       ELSE IF LOOKUP(Order.CLIType,lcExtraLineCLITypes) > 0 AND 
-                      Order.MultiSimId                  <> 0 AND
-                      Order.MultiSimType                 = {&MULTISIMTYPE_EXTRALINE} THEN DO:
+       ELSE IF fCLITypeIsExtraLine(Order.CLIType) AND 
+               Order.MultiSimId  <> 0 AND
+               Order.MultiSimType = {&MULTISIMTYPE_EXTRALINE} THEN DO:
           
           FIND FIRST lbMLOrder NO-LOCK WHERE
                      lbMLOrder.Brand        = Syst.Var:gcBrand          AND
@@ -2415,8 +2412,6 @@ PROCEDURE pGetEXTRA_LINE_INFO:
    DEF OUTPUT PARAMETER olgErr     AS LOG  NO-UNDO.
    DEF OUTPUT PARAMETER lcResult   AS CHAR NO-UNDO.
 
-   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO.
-   DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO.
    DEF VAR lcList                  AS CHAR NO-UNDO. 
 
    DEFINE BUFFER lbOrder   FOR Order.
@@ -2424,18 +2419,17 @@ PROCEDURE pGetEXTRA_LINE_INFO:
    DEFINE BUFFER lbELOrder FOR Order.
    
    ASSIGN
-      lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
-      lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes")
       lcList                  = "".
 
-   FIND FIRST lbOrder NO-LOCK WHERE
-              lbOrder.Brand   = Syst.Var:gcBrand                     AND
-              lbOrder.OrderId = iiOrderNBR                  AND
-      (LOOKUP(lbOrder.CLIType,lcExtraMainLineCLITypes) > 0  OR
-       LOOKUP(lbOrder.CLIType,lcExtraLineCLITypes)     > 0) NO-ERROR.
+   FIND lbOrder NO-LOCK WHERE
+      lbOrder.Brand   = Syst.Var:gcBrand AND
+      lbOrder.OrderId = iiOrderNBR
+   NO-ERROR.
 
-   IF AVAIL lbOrder                 AND 
-            lbOrder.MultiSimId <> 0 THEN DO: 
+   IF AVAIL lbOrder                       AND 
+      lbOrder.MultiSimId <> 0             AND
+      (fCLITypeIsMainLine(lbOrder.CLIType) OR
+       fCLITypeIsExtraLine(lbOrder.CLIType)) THEN DO: 
       CASE lbOrder.MultiSimType:
          WHEN {&MULTISIMTYPE_PRIMARY} THEN DO:
             FIND FIRST lbELOrder NO-LOCK WHERE

@@ -12,7 +12,6 @@
 {Func/cparam2.i}
 {Func/fcreatereq.i}
 {Func/matrix.i}
-{Func/transname.i}
 {Func/ftaxdata.i}
 {Func/xmlfunction.i}
 {Func/fdss.i}
@@ -72,6 +71,7 @@ FUNCTION fIsBundle RETURNS LOGIC
              bPerContract.DCEvent = icDCEvent AND
              ((LOOKUP(STRING(bPerContract.DCType), {&PERCONTRACT_RATING_PACKAGE}) > 0) OR 
               bPerContract.BundleTarget = {&TELEVISION_BUNDLE} OR
+              bPerContract.BundleTarget = {&DC_BUNDLE_TARGET_SVA} OR
               (LOOKUP(icDCEvent, lcPROFlexUpsellList) > 0)): 
       llBundle = TRUE.              
    END.
@@ -100,7 +100,7 @@ FUNCTION fIsBundleAllowed RETURNS LOGIC
                      OUTPUT lcResult) NE 1 AND
       ENTRY(1,lcResult,";") NE "?"  
    THEN DO:
-      ocInfo = "Bundle is not allowed for this subscription type".
+      ocInfo = "Bundle is not allowed for this subscription type " + icDCEvent + " " + icCLIType.
       RETURN FALSE.
    END.
    
@@ -483,26 +483,6 @@ FUNCTION fConvMFBillCodeToCLIType RETURNS CHAR
         NO-LOCK NO-ERROR.
    IF AVAILABLE TMSCodes THEN RETURN TMSCodes.ConfigValue.
    ELSE RETURN icMFBundleBillCode.
-
-END FUNCTION.
-
-FUNCTION fConvBundleToBillItem RETURNS CHAR
-   (icDataBundle AS CHAR):
-
-   FOR FIRST DayCampaign WHERE
-             DayCampaign.Brand   = Syst.Var:gcBrand AND
-             DayCampaign.DCEvent = icDataBundle NO-LOCK,
-       FIRST FeeModel WHERE
-             FeeModel.Brand    = Syst.Var:gcBrand AND
-             FeeModel.FeeModel = DayCampaign.FeeModel NO-LOCK,
-       FIRST FMItem WHERE
-             FMItem.Brand     = Syst.Var:gcBrand AND
-             FMItem.FeeModel  = FeeModel.FeeModel AND
-             FMItem.FromDate <= TODAY AND
-             FMItem.ToDate   >= TODAY NO-LOCK:
-       RETURN FMItem.BillCode.
-   END.
-   RETURN icDataBundle.
 
 END FUNCTION.
 

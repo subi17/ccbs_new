@@ -669,6 +669,7 @@ PROCEDURE pOwnerChange:
                                (IF bNewCust.CustIDType EQ "CIF" THEN FALSE
                                 ELSE bOldCustCat.SelfEmployed),
                                bOldCustCat.pro,
+                               bNewCust.OrgId,   /* YDR-2621 */
                                OUTPUT lcCategory).
                IF lcCategory > "" THEN bNewCust.Category = lcCategory.
             END.
@@ -912,8 +913,6 @@ PROCEDURE pMsCustMove:
    DEF VAR liManTime    AS INT  NO-UNDO. 
    DEF VAR lcDate       AS CHAR NO-UNDO. 
    DEF VAR liOldAgrCust AS INT  NO-UNDO.
-   DEF VAR lcExtraLineCLITypes AS CHAR NO-UNDO. 
-   DEF VAR lcExtraLineDisc     AS CHAR NO-UNDO. 
 
    DEF BUFFER bBillTarget FOR BillTarget.
    DEF BUFFER bOwner      FOR MSOwner.
@@ -1319,12 +1318,9 @@ PROCEDURE pMsCustMove:
 
    /* Extraline discount will be closed WITH last date of previous month 
       if ACC is done on Extraline subscription */
-   ASSIGN lcExtraLineCLITypes = fCParam("DiscountType","ExtraLine_CLITypes").
-
-   IF lcExtraLineCLITypes                        NE "" AND 
-      LOOKUP(MobSub.CliType,lcExtraLineCLITypes) GT 0  AND 
-      MobSub.MultiSimId                          GT 0  AND 
-      MobSub.MultiSimType                        EQ {&MULTISIMTYPE_EXTRALINE} THEN DO:
+   IF fCLITypeIsExtraLine(MobSub.CliType) AND 
+      MobSub.MultiSimId                   GT 0  AND 
+      MobSub.MultiSimType                 EQ {&MULTISIMTYPE_EXTRALINE} THEN DO:
 
       FIND FIRST lbMLMobSub EXCLUSIVE-LOCK WHERE 
                  lbMLMobSub.MsSeq        = MobSub.MultiSimId       AND
@@ -1333,14 +1329,10 @@ PROCEDURE pMsCustMove:
       
       IF AVAIL lbMLMobSub THEN DO:
          
-         CASE MobSub.CliType:
-            WHEN "CONT28" THEN lcExtraLineDisc = "CONT28DISC". 
-         END CASE.
-
          /* Discount has to be closed with last date of previous month */ 
          /* ACC request will be procesed on 1st day of every month     */
          fCloseExtraLineDiscount(MobSub.MsSeq,
-                                 lcExtraLineDisc,
+                                 MobSub.CliType + "DISC",
                                  TODAY).
          
          /* Hard association is also removed because ACC was done to extraline */

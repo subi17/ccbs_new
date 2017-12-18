@@ -175,8 +175,7 @@ ELSE DO:
                    MsRequest.MsSeq = Order.MsSeq AND
                    MsRequest.ReqType = {&REQTYPE_REVERT_RENEWAL_ORDER} AND
                    MsRequest.ReqStatus NE {&REQUEST_STATUS_CANCELLED} AND
-                   MsRequest.ReqIParam1 = Order.OrderId AND
-                   MsRequest.ReqSource = {&REQUEST_SOURCE_ORDER_CANCELLATION})
+                   MsRequest.ReqIParam1 = Order.OrderId)
          THEN RETURN "".
 
       liReq = fRevertRenewalOrderRequest(

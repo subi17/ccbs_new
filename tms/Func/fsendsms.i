@@ -18,7 +18,7 @@
 {Func/fmakesms.i}
 {Syst/tmsconst.i}
 {Func/transname.i}
-{Mm/fbundle.i}
+{Mm/bundle_type.i}
 
 FUNCTION fReplaceTags RETURNS CHARACTER(INPUT iiMsRequest   AS INTEGER,
                                         INPUT icSMSText     AS CHARACTER,
@@ -179,6 +179,19 @@ PROCEDURE pSendSMS:
 
    FIND FIRST Customer OF bMobSub NO-LOCK NO-ERROR.
    IF NOT AVAILABLE Customer THEN RETURN.
+
+   IF Mm.MManMessage:mGetMessage("SMS",
+                                 icSMSText,
+                                 Customer.Language)
+   THEN DO:
+      IF iiMsRequest > 0
+      THEN Mm.MManMessage:ParamKeyValue = fReplaceTags(INPUT iiMsRequest,
+                                                       INPUT Mm.MManMessage:ParamKeyValue,
+                                                       INPUT icExtraParams,
+                                                       OUTPUT liSMSType).
+      Mm.MManMessage:mCreateMMLogSMS(bMobSub.CLI).
+      RETURN.
+   END.
 
    /* send SMS */
    lcMessage = fGetSMSTxt(icSMSText,

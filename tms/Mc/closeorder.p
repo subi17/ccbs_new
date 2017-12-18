@@ -24,8 +24,6 @@ DEF VAR lcError                 AS CHAR NO-UNDO.
 DEF VAR lcQuestion              AS CHAR NO-UNDO. 
 DEF VAR lcCreditReason          AS CHAR NO-UNDO. 
 DEF VAR lcOldOrderStatus        AS CHAR NO-UNDO. 
-DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
-DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO. 
 
 /* Additional line mobile only ALFMO-5*/
 DEF VAR lcAddlineCliypes           AS CHARACTER NO-UNDO. 
@@ -249,17 +247,13 @@ DO:
                                      (OR)
       If ongoing extra line is Closed, and if its associated main line is in 
       ongoing state then reset multisimid and multisimtype values. */
-   ASSIGN lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
-          lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
-   IF lcExtraMainLineCLITypes                       NE "" AND
-      LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) GT 0  AND 
-      Order.MultiSimId                              NE 0  AND 
-      Order.MultiSimType                            EQ {&MULTISIMTYPE_PRIMARY} THEN 
+   IF fCLITypeIsMainLine(Order.CLIType)       AND 
+      Order.MultiSimId                  NE 0  AND 
+      Order.MultiSimType                EQ {&MULTISIMTYPE_PRIMARY} THEN 
       fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
                                Order.OrderId,    /* Main line Order Id  */ 
                               "CLOSE").          /* Action              */
-   ELSE IF lcExtraLineCLITypes                    NE "" AND 
-        LOOKUP(Order.CLIType,lcExtraLineCLITypes) GT 0  AND
+   ELSE IF fCLITypeIsExtraLine(Order.CLIType) AND
         Order.MultiSimId                          NE 0  AND
         Order.MultiSimType                        EQ {&MULTISIMTYPE_EXTRALINE} THEN
    DO:

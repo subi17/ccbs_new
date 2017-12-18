@@ -390,6 +390,7 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
       fgetCustSegment(OrderCustomer.CustIDType, 
                       OrderCustomer.SelfEmployed,
                       OrderCustomer.pro, 
+                      OrderCustomer.custid, /* YDR-2621 */
                       OUTPUT lcCategory).
 
       IF lcCategory > "" THEN 
