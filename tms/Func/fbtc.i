@@ -186,7 +186,7 @@ FUNCTION fIsBTCBundleAllowed RETURNS LOGIC
                      OUTPUT lcResult) NE 1 AND
       ENTRY(1,lcResult,";") NE "?"  
    THEN DO:
-      ocError = "Bundle is not allowed for this subscription type".
+      ocError = "Bundle is not allowed for this subscription type " + pcNewBundle + " " + pcCLIType.
       RETURN FALSE.
    END.
 
