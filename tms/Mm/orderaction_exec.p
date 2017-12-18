@@ -75,9 +75,12 @@ FOR EACH OrderAction NO-LOCK WHERE
        IF AVAIL DayCampaign THEN 
        DO:
            IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} AND 
-              LOOKUP(STRING(Daycampaign.BundleTarget), (STRING({&DC_BUNDLE_TARGET_FIXED}) + "," + STRING({&TELEVISION_BUNDLE}))) = 0 THEN 
+              LOOKUP(STRING(Daycampaign.BundleTarget), (STRING({&DC_BUNDLE_TARGET_FIXED}) + "," + 
+                                                        STRING({&TELEVISION_BUNDLE})      + "," + 
+                                                        STRING({&DC_BUNDLE_TARGET_SVA}))) = 0 THEN 
                NEXT ORDERACTION_LOOP.
-           ELSE IF MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_CREATE} AND Daycampaign.BundleTarget NE {&DC_BUNDLE_TARGET_MOBILE} THEN
+           ELSE IF MsRequest.ReqType        EQ {&REQTYPE_SUBSCRIPTION_CREATE} AND 
+                   Daycampaign.BundleTarget NE {&DC_BUNDLE_TARGET_MOBILE} THEN
                NEXT ORDERACTION_LOOP.
        END.
        ELSE 
@@ -195,8 +198,9 @@ PROCEDURE pPeriodicalContract:
 
    DEF VAR ldaPMDUBPromoStartDate AS DATE NO-UNDO.
    DEF VAR ldePMDUBPromoActStamp  AS DEC  NO-UNDO.
-   DEF VAR lcWaitFor AS CHAR NO-UNDO. 
-   DEF VAR liServSeq AS INT  NO-UNDO.
+   DEF VAR lcWaitFor              AS CHAR NO-UNDO. 
+   DEF VAR liServSeq              AS INT  NO-UNDO.
+   DEF VAR lcSVAParams            AS CHAR NO-UNDO.
 
    DEF BUFFER MsRequest FOR MsRequest.
    DEF BUFFER bBundleRequest  FOR MsRequest.
@@ -347,6 +351,12 @@ PROCEDURE pPeriodicalContract:
             lcWaitFor = ":wait" + STRING(bBundleRequest.MsRequest).
          END.     
       END.
+
+      ASSIGN lcSVAParams = (IF DayCampaign.BundleTarget = {&DC_BUNDLE_TARGET_SVA} THEN "SVA" ELSE "").
+
+      IF lcSVAParams <> "" THEN
+          lcSVAParams = lcSVAParams + (IF OrderAction.ItemParam <> "" THEN "|||" ELSE "") + OrderAction.ItemParam.
+
       liRequest = fPCActionRequest(MobSub.MsSeq,
                                 OrderAction.ItemKey,
                                 (IF Order.OrderType = 2 AND
@@ -362,7 +372,7 @@ PROCEDURE pPeriodicalContract:
                                 "",
                                 0,
                                 0,
-                                "",
+                                lcSVAParams,
                                 OUTPUT lcResult).
    END.
  
