@@ -14,7 +14,7 @@
                    subscription_limit;int;mandatory;
                    reason;string;optional;possible fail reason, returned if order_allowed = false
                    additional_line_allowed;string;mandatory;OK,NO_MAIN_LINE,NO_SUBSCRIPTIONS (OK is returned also if there's no active main line but a pending main line order)
-                   extra_line_allowed;string;mandatory;OK,NO_MAIN_LINE,NO_SUBSCRIPTIONS
+                   extra_line_allowed;string;mandatory;comma separated list of allowed extra lines
                    segment;string;mandatory;
  */
 
@@ -55,13 +55,12 @@ DEF VAR lcCategory                    AS CHAR NO-UNDO.
 DEF VAR llPROOngoingOrder             AS LOGI NO-UNDO.
 DEF VAR llNonProOngoingOrder          AS LOGI NO-UNDO.
 DEF VAR liMobsubCount                 AS LOGI NO-UNDO.
-DEF VAR lcExtraLineCLITypes           AS CHAR NO-UNDO.
-DEF VAR liMainLineOrderId             AS INT  NO-UNDO. 
-DEF VAR liOngoingOrderId              AS INT  NO-UNDO. 
 DEF VAR lcExtraLineAllowed            AS CHAR NO-UNDO. 
 DEF VAR llNonProToProMigrationOngoing AS LOGI NO-UNDO.
 DEF VAR llProToNonProMigrationOngoing AS LOGI NO-UNDO.
 DEF VAR lcResult                      AS CHAR NO-UNDO.
+DEFINE VARIABLE lii AS INTEGER NO-UNDO.
+DEFINE VARIABLE lcExtraLineCLITypes AS CHARACTER NO-UNDO.
 
 top_array = validate_request(param_toplevel_id, "string,string,string,boolean,int,[string],[string],[boolean]").
 IF top_array EQ ? THEN RETURN.
@@ -85,8 +84,6 @@ ELSE IF NUM-ENTRIES(top_array) GT 7 THEN
       pcCliType    = get_string(param_toplevel_id, "5")
       pcChannel    = get_string(param_toplevel_id, "6")
       plSTCMigrate = get_bool(param_toplevel_id, "7").
-
-lcExtraLineCLITypes = fCParam("DiscountType","ExtraLine_CLITypes").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -505,14 +502,15 @@ IF LOOKUP(pcCliType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
    ELSE lcAddLineAllowed = "NO_MAIN_LINE".
 END.
 
-/* Check extra lines discount is allowed for customer */
-lcExtraLineAllowed = "".
+lcExtraLineCLITypes = fExtraLineCLITypes().
 
-IF fCheckExistingConvergentAvailForExtraLine(pcIdType,pcPersonId,OUTPUT liMainLineOrderId) THEN 
-   lcExtraLineAllowed = "OK".
-ELSE IF fCheckOngoingConvergentAvailForExtraLine(pcIdType,pcPersonId,OUTPUT liOngoingOrderId) THEN    
-   lcExtraLineAllowed = "OK".
-ELSE lcExtraLineAllowed = "NO_MAIN_LINE".   
+DO lii = 1 TO NUM-ENTRIES(lcExtraLineCLITypes):
+   IF fCheckConvergentAvailableForExtraLine(ENTRY(lii,lcExtraLineCLITypes), pcIdType,pcPersonId) > 0 OR
+      fCheckOngoingConvergentAvailForExtraLine(ENTRY(lii,lcExtraLineCLITypes), pcIdType,pcPersonId) > 0
+   THEN lcExtraLineAllowed = lcExtraLineAllowed + "," + ENTRY(lii,lcExtraLineCLITypes).
+END.
+
+lcExtraLineAllowed = LEFT-TRIM(lcExtraLineAllowed, ",").
 
 IF lcAddLineAllowed = "" THEN DO:
       
@@ -549,13 +547,15 @@ END.
 
 IF lcAddLineAllowed EQ "" THEN lcAddLineAllowed = "NO_SUBSCRIPTIONS".
 
-IF lcExtraLineAllowed EQ "" THEN lcExtraLineAllowed = "NO_SUBSCRIPTIONS".
-
 lcReturnStruct = add_struct(response_toplevel_id, "").
 add_boolean(lcReturnStruct, 'order_allowed', llOrderAllowed).
 add_int(lcReturnStruct, 'subscription_limit', liSubLimit).
 IF NOT llOrderAllowed THEN add_string(lcReturnStruct, 'reason',lcReason).
 add_string(lcReturnStruct, 'additional_line_allowed',lcAddLineAllowed).
+
+IF lcExtraLineAllowed EQ ""
+THEN lcExtraLineAllowed = "NO_MAIN_LINE".
+
 add_string(lcReturnStruct, 'extra_line_allowed',lcExtraLineAllowed).
 
 IF liSubs >= liSubLimit AND NOT plSTCMigrate THEN
