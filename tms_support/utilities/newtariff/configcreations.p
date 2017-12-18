@@ -7,7 +7,7 @@
   CHANGED ......:
   Version ......: Yoigo
   ----------------------------------------------------------------------*/
-ROUTINE-LEVEL ON ERROR UNDO, THROW.
+BLOCK-LEVEL ON ERROR UNDO, THROW.
 /* ***************************  Definitions  ************************** */
 {Syst/commpaa.i}
 Syst.Var:katun = "Cron".
@@ -18,6 +18,15 @@ Syst.Var:gcBrand = "1".
 {utilities/newtariff/tariffconfig.i}
 {utilities/newtariff/tariffcons.i}
 {Func/fixedlinefunc.i}
+
+DEFINE TEMP-TABLE ttTariff NO-UNDO 
+   FIELD PriceList AS CHARACTER 
+   FIELD CCN       AS CHARACTER 
+   FIELD BDest     AS CHARACTER 
+   FIELD BillItem  AS CHARACTER 
+   FIELD PriceUnit AS CHARACTER
+   FIELD Price     AS CHARACTER 
+   FIELD SetupFee  AS CHARACTER.
 
 /* ********************  Functions  ******************** */
 FUNCTION fTMSCodeValue RETURNS CHARACTER 
@@ -325,12 +334,42 @@ PROCEDURE pCustomRates:
 
 END PROCEDURE.
 
+PROCEDURE pGetBundle:
+   
+   DEFINE INPUT  PARAMETER icCLIType AS CHARACTER NO-UNDO.
+   DEFINE OUTPUT PARAMETER ocMobileBundle AS CHARACTER NO-UNDO.
+   DEFINE OUTPUT PARAMETER ocFixedLineBundle AS CHARACTER NO-UNDO.
+   
+   ASSIGN
+      ocMobileBundle = ""
+      ocFixedLineBundle = "".
+      
+   DEFINE BUFFER CLIType FOR CLIType.
+   
+   FIND CLIType NO-LOCK WHERE
+        CLIType.Brand    = Syst.Var:gcBrand AND
+        CLIType.CLIType = icCLIType
+   NO-ERROR.
+   
+   IF NOT AVAILABLE CLIType
+   THEN UNDO, THROW NEW Progress.Lang.AppError
+         (SUBSTITUTE("Unknown clitype '&1'", icCLIType), 1).
+         
+   ASSIGN
+      ocMobileBundle = CLIType.BaseBundle
+      ocFixedLineBundle = CLIType.FixedBundle.
+   
+END PROCEDURE.
+
 PROCEDURE pCLIType:
    DEFINE PARAMETER BUFFER ttCliType FOR ttCliType.
    
    DEFINE VARIABLE liFinalBT   AS INTEGER   NO-UNDO.
    DEFINE VARIABLE liFinalCR   AS INTEGER   NO-UNDO.
    DEFINE VARIABLE lcRatePlan  AS CHARACTER NO-UNDO.
+   
+   DEFINE VARIABLE lcFixedBundle AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcMobileBundle  AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lcActionKey AS CHARACTER NO-UNDO.
 
    DEFINE BUFFER bf_RequestAction     FOR RequestAction.
@@ -348,17 +387,6 @@ PROCEDURE pCLIType:
             liFinalCR = CLIType.ContrType.        
       END.
       
-      /* In case of tariff bundle subscription type creation,  
-         main parent tariff billing target value will be assigned directly. 
-         Else, already available value has to be incremented by 1 */
-      IF ttCliType.TariffBundle NE "" THEN 
-      DO:   
-         FIND FIRST CLIType WHERE CLIType.Brand = Syst.Var:gcBrand AND CLIType.CLIType = ttCLIType.ParentTariff NO-LOCK NO-ERROR.                
-         IF AVAILABLE CLIType THEN
-            ASSIGN lcRatePlan = CLIType.PricePlan
-                   liFinalBT  = CLIType.BillTarget.               
-      END.
-       
       CREATE CLIType.
       ASSIGN 
          CLIType.Brand             = Syst.Var:gcBrand
@@ -381,116 +409,131 @@ PROCEDURE pCLIType:
          CLIType.ARAccNum          = (IF CLIType.PayType = 1 THEN 43000000 ELSE IF CLIType.PayType = 2 THEN 43001000 ELSE 0)
          CLIType.CommercialFee     = ttCliType.CommercialFee
          CLIType.CompareFee        = ttCliType.CompareFee
-         CliType.BundleType        = ttCliType.BundleType
+         CliType.BundleType        = FALSE
          CLIType.WebStatusCode     = ttCliType.WebStatusCode
          CLIType.StatusCode        = ttCliType.StatusCode         
          CLIType.LineType          = ttCliType.LineType
          CLIType.FixedLineType     = ttCliType.FixedLineType 
          CliType.FixedLineDownload = ttCliType.FixedLineDownload
-         CliType.FixedLineUpload   = ttCliType.FixedLineUpload.
+         CliType.FixedLineUpload   = ttCliType.FixedLineUpload
+         CliType.TariffType        = ttCliType.TariffType.
 
       IF ttCliType.CopyServicesFromCliType > "" THEN 
-         RUN pCTServPac(ttCliType.CliType, ttCliType.CopyServicesFromCliType).      
-      
-      IF ttCliType.AllowedBundles > "" THEN
-      DO:
-          RUN pMatrix(ttCliType.CliType, 
-                      ((IF ttCliType.BaseBundle          > "" THEN (ttCliType.BaseBundle          + ",") ELSE "") + 
-                       (IF ttCliType.FixedLineBaseBundle > "" THEN (ttCliType.FixedLineBaseBundle + ",") ELSE "") + ttCliType.AllowedBundles)).
+         RUN pCTServPac(ttCliType.BaseBundle, ttCliType.CliType, ttCliType.CopyServicesFromCliType).
 
-          /* Matrix for additional lines */
-          FOR EACH MxItem WHERE MxItem.MxSeq   > 0                                 AND 
-                                MxItem.MxName  = "SubsTypeFrom"                    AND 
-                                MxItem.MxValue = ttCliType.CopyServicesFromCliType NO-LOCK:
+      IF ttCliType.BaseBundle > ""
+      THEN RUN pMatrix(ttCliType.CliType, 
+                       ttCliType.BaseBundle,
+                       "PERCONTR").
 
-              IF NOT CAN-FIND(FIRST bf_MxItem WHERE bf_MxItem.MxSeq   = MxItem.MXSeq      AND 
-                                                    bf_MxItem.MxName  = MxItem.MxName     AND 
-                                                    bf_MxItem.MxValue = ttCliType.CliType NO-LOCK) THEN
+      IF ttCliType.FixedLineBaseBundle > ""
+      THEN RUN pMatrix(ttCliType.CliType, 
+                       ttCliType.FixedLineBaseBundle,
+                       "PERCONTR").
 
-              DO:      
-                 CREATE bf_MXItem.
-                 ASSIGN
-                    bf_MXItem.MxSeq   = MxItem.MXSeq
-                    bf_MXItem.MxValue = ttCliType.CliType
-                    bf_MXItem.MxName  = MxItem.MxName.   
-              END.   
-          END.
-      END.
+      /* Matrix for additional lines */
+      RUN pMatrix(ttCliType.CopyServicesFromCliType,
+                  ttCliType.CliType,
+                  "ADDLINE").
 
-      IF ttCliType.TariffBundle = "" THEN    
-         RUN pSLGAnalyse(ttCliType.CliType, 
-                         ttCliType.CopyServicesFromCliType, 
+      /* Should we also have this additional lines matrix for mobile only (ALFMO-5)?     
+      IF CliType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}
+      THEN RUN pMatrix(ttCliType.CopyServicesFromCliType,
+                       ttCliType.CliType,
+                       "ADDLINEMH").
+      */
+
+      IF ttCliType.AllowedBundles > ""
+      THEN RUN pMatrix(ttCliType.CliType, 
+                       ttCliType.AllowedBundles,
+                       "PERCONTR").
+
+      RUN pSLGAnalyse(ttCliType.CliType, 
+                      ttCliType.CopyServicesFromCliType, 
+                      ttCliType.BaseBundle, 
+                      ttCliType.FixedLineBaseBundle, 
+                      ttCliType.AllowedBundles,
+                      (ttCliType.PayType = 2)).         
+
+      RUN pRequestAction(ttCliType.CliType, 
+                         (ttCliType.PayType = 1),
                          ttCliType.BaseBundle, 
                          ttCliType.FixedLineBaseBundle, 
-                         ttCliType.AllowedBundles,
-                         (ttCliType.PayType = 2)).         
+                         ttCliType.BundlesForActivateOnSTC, 
+                         ttCliType.ServicesForReCreateOnSTC). 
 
-      IF ttCliType.BundleType = False THEN
-      DO:
-         RUN pRequestAction(ttCliType.CliType, 
-                            (ttCliType.PayType = 1),
-                            ttCliType.BaseBundle, 
-                            ttCliType.FixedLineBaseBundle, 
-                            ttCliType.BundlesForActivateOnSTC, 
-                            ttCliType.ServicesForReCreateOnSTC). 
+      /* Note! It is not guaranteed as the matrix and requestactions
+               are configure properly as the additional bundle list
+               might have entries which requestaction (copyservices clitype) 
+               doesn't have and vice versa. */
+      RUN pGetBundle(INPUT ttCliType.CopyServicesFromCliType,
+                     OUTPUT lcMobileBundle,
+                     OUTPUT lcFixedBundle).
 
-         /* Copy request action rules */
-         FOR EACH Requestaction NO-LOCK WHERE Requestaction.Clitype = ttCliType.CopyServicesFromCliType:
+      /* Copy request action rules */
+      FOR EACH Requestaction NO-LOCK WHERE
+               Requestaction.Clitype = ttCliType.CopyServicesFromCliType AND
+               Requestaction.ValidTo >= TODAY:
+          
+          IF (lcMobileBundle > "" AND Requestaction.ActionKey EQ lcMobileBundle) OR
+             (lcFixedBundle  > "" AND Requestaction.ActionKey EQ lcFixedBundle)
+          THEN NEXT.
+         
+          lcActionKey = Requestaction.ActionKey.
+          
+          /* This hard coded thing was done because of lack of time */ 
+          IF lcActionKey EQ "INT_VOICE100" AND
+             LOOKUP("INT_VOICE1500",ttCliType.AllowedBundles) > 0
+          THEN lcActionKey = "INT_VOICE1500". 
 
-             ASSIGN lcActionKey = Requestaction.ActionKey. 
-             IF Requestaction.ActionType = "DayCampaign" AND Requestaction.ActionKey BEGINS "CONTFH" THEN 
-                 ASSIGN lcActionKey = ttCliType.FixedLineBaseBundle.
+          IF NOT CAN-FIND(FIRST bf_RequestAction WHERE bf_RequestAction.Brand      = Syst.Var:gcBrand                  AND
+                                                       bf_RequestAction.CliType    = ttCliType.CliType        AND
+                                                       bf_RequestAction.ReqType    = Requestaction.ReqType    AND
+                                                       bf_RequestAction.ValidTo   >= TODAY                    AND 
+                                                       bf_RequestAction.PayType    = Requestaction.PayType    AND
+                                                       bf_RequestAction.ActionType = Requestaction.ActionType AND
+                                                       bf_RequestAction.ActionKey  = lcActionKey              AND
+                                                       bf_RequestAction.Action     = Requestaction.Action     NO-LOCK) THEN
+          DO:
+              CREATE bf_RequestAction.
+              ASSIGN     
+                 bf_RequestAction.Brand           = Syst.Var:gcBrand
+                 bf_RequestAction.RequestActionID = fGetNextRequestActionSequence()
+                 bf_RequestAction.ReqType         = Requestaction.ReqType
+                 bf_RequestAction.CLIType         = ttCliType.CliType
+                 bf_RequestAction.PayType         = Requestaction.PayType
+                 bf_RequestAction.Action          = Requestaction.Action
+                 bf_RequestAction.ActionKey       = lcActionKey
+                 bf_RequestAction.ActionType      = Requestaction.ActionType           
+                 bf_RequestAction.ValidFrom       = TODAY
+                 bf_RequestAction.ValidTo         = DATE(12,31,2049). 
 
-             IF NOT CAN-FIND(FIRST bf_RequestAction WHERE bf_RequestAction.Brand      = Syst.Var:gcBrand                  AND
-                                                          bf_RequestAction.CliType    = ttCliType.CliType        AND
-                                                          bf_RequestAction.ReqType    = Requestaction.ReqType    AND
-                                                          bf_RequestAction.ValidTo   >= TODAY                    AND 
-                                                          bf_RequestAction.PayType    = Requestaction.PayType    AND
-                                                          bf_RequestAction.ActionType = Requestaction.ActionType AND
-                                                          bf_RequestAction.ActionKey  = lcActionKey              AND
-                                                          bf_RequestAction.Action     = Requestaction.Action     NO-LOCK) THEN
-             DO:
-                 CREATE bf_RequestAction.
-                 ASSIGN     
-                    bf_RequestAction.Brand           = Syst.Var:gcBrand
-                    bf_RequestAction.RequestActionID = fGetNextRequestActionSequence()
-                    bf_RequestAction.ReqType         = Requestaction.ReqType
-                    bf_RequestAction.CLIType         = ttCliType.CliType
-                    bf_RequestAction.PayType         = Requestaction.PayType
-                    bf_RequestAction.Action          = Requestaction.Action
-                    bf_RequestAction.ActionKey       = lcActionKey
-                    bf_RequestAction.ActionType      = Requestaction.ActionType           
-                    bf_RequestAction.ValidFrom       = TODAY
-                    bf_RequestAction.ValidTo         = DATE(12,31,2049). 
+              FOR EACH RequestActionRule WHERE RequestActionRule.RequestActionID = Requestaction.RequestActionID NO-LOCK:
 
-                 FOR EACH RequestActionRule WHERE RequestActionRule.RequestActionID = Requestaction.RequestActionID NO-LOCK:
-
-                     IF NOT CAN-FIND(FIRST bf_RequestActionRule WHERE 
-                                           bf_RequestActionRule.RequestActionid = RequestActionRule.RequestActionID AND 
-                                           bf_RequestActionRule.ParamField      = RequestActionRule.ParamField      AND 
-                                           bf_RequestActionRule.ToDate          >= TODAY                            NO-LOCK) THEN 
-                     DO:                                                                     
-                         CREATE bf_RequestActionRule.
-                         ASSIGN
-                             bf_RequestActionRule.RequestActionid = RequestActionRule.RequestActionID
-                             bf_RequestActionRule.ParamField      = RequestActionRule.ParamField
-                             bf_RequestActionRule.ParamValue      = RequestActionRule.ParamValue
-                             bf_RequestActionRule.ExclParamValue  = RequestActionRule.ExclParamValue
-                             bf_RequestActionRule.FromDate        = TODAY
-                             bf_RequestActionRule.ToDate          = DATE(12,31,2049).
-                     END.
-                         
-                 END.    
-             END.
-         END.
-
-      END.   
+                  IF NOT CAN-FIND(FIRST bf_RequestActionRule WHERE 
+                                        bf_RequestActionRule.RequestActionid = RequestActionRule.RequestActionID AND 
+                                        bf_RequestActionRule.ParamField      = RequestActionRule.ParamField      AND 
+                                        bf_RequestActionRule.ToDate          >= TODAY                            NO-LOCK) THEN 
+                  DO:                                                                     
+                      CREATE bf_RequestActionRule.
+                      ASSIGN
+                          bf_RequestActionRule.RequestActionid = RequestActionRule.RequestActionID
+                          bf_RequestActionRule.ParamField      = RequestActionRule.ParamField
+                          bf_RequestActionRule.ParamValue      = RequestActionRule.ParamValue
+                          bf_RequestActionRule.ExclParamValue  = RequestActionRule.ExclParamValue
+                          bf_RequestActionRule.FromDate        = TODAY
+                          bf_RequestActionRule.ToDate          = DATE(12,31,2049).
+                  END.
+                      
+              END.    
+          END.
+      END.
 
       IF NOT (CliType.FixedLineDownload > "" OR CliType.FixedLineUpload > "") THEN /* Non-convergent */
       DO:
          IF ttCLIType.PayType = 1 THEN 
          DO: 
-             RUN pUpdateTMSParam("ALL_POSTPAID_CONTRACTS",ttCliType.CliType).  
+             RUN pUpdateTMSParam("ALL_POSTPAID_CONTRACTS", ttCliType.CliType).  
              RUN pUpdateTMSParam("POSTPAID_DATA_CONTRACTS", ttCliType.CliType).
          END.
          /*TODO: Parent of Tariff bundle needs to be excluded */
@@ -530,6 +573,8 @@ END PROCEDURE.
 
 
 PROCEDURE pCTServPac:
+
+   DEFINE INPUT PARAMETER icBaseBundle              AS CHARACTER NO-UNDO.
    DEFINE INPUT PARAMETER icCLIType                 AS CHARACTER NO-UNDO.
    DEFINE INPUT PARAMETER icCopyServicesFromCliType AS CHARACTER NO-UNDO.   
    
@@ -556,6 +601,10 @@ PROCEDURE pCTServPac:
             ASSIGN 
                CTServEl.CTServEl = NEXT-VALUE(CTServEl)
                CTServEl.CLIType  = icCLIType.
+
+         IF bf_CTServEl_CopyFrom.ServPac = "TMSSERVICE" AND
+            bf_CTServEl_CopyFrom.ServCom = "SHAPER_STP"
+         THEN CTServEl.DefParam = icBaseBundle.
 
          FIND ServCom WHERE ServCom.Brand = Syst.Var:gcBrand AND ServCom.ServCom = CTServEl.ServCom NO-LOCK NO-ERROR.
          IF AVAILABLE ServCom AND ServCom.ServAttr = TRUE THEN
@@ -877,309 +926,90 @@ PROCEDURE pSLGAnalyse:
 END PROCEDURE.
 
 
-PROCEDURE pDayCampaign:
-   DEFINE PARAMETER BUFFER ttDayCampaign FOR ttDayCampaign.   
-   
-   IF NOT CAN-FIND(FIRST DayCampaign WHERE DayCampaign.Brand = Syst.Var:gcBrand AND DayCampaign.DCEvent = ttDayCampaign.DCEvent) THEN
-   DO:
-      CREATE DayCampaign.
-      ASSIGN 
-         DayCampaign.Brand           = Syst.Var:gcBrand
-         DayCampaign.DCEvent         = ttDayCampaign.DCEvent 
-         DayCampaign.DCName          = ttDayCampaign.DCName
-         DayCampaign.PayType         = ttDayCampaign.PayType
-         DayCampaign.ValidFrom       = TODAY 
-         DayCampaign.ValidTo         = DATE(12,31,2049)
-         DayCampaign.StatusCode      = 1           /* Default value Active */
-         DayCampaign.DCType          = (IF ttDayCampaign.DCType = "ServicePackage" THEN "1" 
-                                        ELSE IF ttDayCampaign.DCType = "PackageWithCounter" THEN "4" 
-                                        ELSE IF ttDayCampaign.DCType = "Upsell" THEN "6" 
-                                        ELSE "7")
-         DayCampaign.CCN             = (IF ttDayCampaign.DCType = "PackageWithCounter" OR ttDayCampaign.DCType = "Upsell" OR ttDayCampaign.PayType = 2 THEN 93 ELSE 0)         
-         DayCampaign.InstanceLimit   = (IF ttDayCampaign.DCType = "Upsell" THEN 100 ELSE 1)
-         DayCampaign.BillCode        = ttDayCampaign.BillCode          
-         DayCampaign.InclUnit        = (IF ttDayCampaign.DCEvent BEGINS "CONTFH" THEN 0 ELSE IF ttDayCampaign.DCType = "PackageWithCounter" OR ttDayCampaign.DCType = "Upsell" OR ttDayCampaign.PayType = 2 THEN 4 ELSE 1) 
-         DayCampaign.CalcMethod      = (IF ttDayCampaign.DCType = "PackageWithCounter" OR ttDayCampaign.PayType = 2 THEN 4 ELSE 1)  
-         DayCampaign.InclStartCharge = YES                          
-         DayCampaign.MaxChargeIncl   = 0                            
-         DayCampaign.MaxChargeExcl   = 0
-         DayCampaign.Effective       = INTEGER(fTMSCodeValue("Daycampaign","Effective","PerContr"))         
-         DayCampaign.DurType         = (IF ttDayCampaign.SLCreated AND NOT ttDayCampaign.PayType = 2 THEN 1 ELSE 4)
-         DayCampaign.DurMonth        = 0
-         DayCampaign.DurUnit         = (IF ttDayCampaign.DCEvent BEGINS "CONTFH" THEN 0 ELSE IF ttDayCampaign.DCType = "PackageWithCounter" OR ttDayCampaign.PayType = 2 THEN 0 ELSE 1)
-         DayCampaign.WeekDay         = ""
-         DayCampaign.BundleUpsell    = ttDayCampaign.UpSell
-         DayCampaign.FeeModel        = ttDayCampaign.BillCode
-         DayCampaign.ModifyFeeModel  = ""                          
-         DayCampaign.TermFeeModel    = ""                          
-         DayCampaign.TermFeeCalc     = 0.
-         
-      IF ttDayCampaign.DataLimit > 0 THEN   
-         RUN pDCServicePackage(ttDayCampaign.DCEvent, "SHAPER", ttDayCampaign.BonoSupport).
+PROCEDURE pFMItem_PRO:
 
-      IF ttDayCampaign.PayType = 2 THEN 
-         RUN pDCServicePackage(ttDayCampaign.DCEvent, "HSDPA", NO).   
+   DEFINE INPUT PARAMETER icItemName  AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icFeemodel  AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icPricelist AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER idAmt       AS DECIMAL   NO-UNDO.
+
+   IF NOT CAN-FIND(BillItem NO-LOCK WHERE
+                  BillItem.Brand    = Syst.Var:gcBrand AND
+                  BillItem.BillCode = icItemName)
+   THEN UNDO, THROW NEW Progress.Lang.AppError
+         (SUBSTITUTE("Unknown billitem '&1'", icItemName), 1).
+
+   IF NOT CAN-FIND(PriceList NO-LOCK WHERE
+                     PriceList.Brand     = Syst.Var:gcBrand AND
+                     PriceList.PriceList = icPriceList)
+   THEN UNDO, THROW NEW Progress.Lang.AppError
+         (SUBSTITUTE("Unknown pricelist '&1'", icPriceList), 1).
+
+   FIND FIRST FMItem NO-LOCK WHERE
+              FMItem.Brand     = Syst.Var:gcBrand AND
+              FMItem.feemodel  = icFeemodel       AND
+              FMItem.billcode  = icItemName       AND
+              FMItem.pricelist = icPricelist      AND
+              FMItem.FromDate <= TODAY            AND
+              FMItem.ToDate   >= TODAY
+              NO-ERROR.
+
+   IF AVAILABLE FMItem
+   THEN UNDO, THROW NEW Progress.Lang.AppError
+         (SUBSTITUTE("FMItem having FeeModel=&1, PriceList=&2, BillCode=&3 " +
+                     "is already defined and active",
+                     icFeemodel, icPriceList, icItemName), 1). 
+
+   CREATE FMItem.
+   ASSIGN
+      FMItem.Amount            = idAmt
+      FMItem.BillCode          = icItemName
+      FMItem.BillCycle         = 2
+      FMItem.BillMethod        = FALSE
+      FMItem.BillType          = "MF"
+      FMItem.Brand             = "1"
+      FMItem.BrokenRental      = 1
+      FMItem.FeeModel          = icFeeModel
+      FMItem.FromDate          = TODAY
+      FMItem.Interval          = 1
+      FMItem.PriceList         = icPriceList
+      FMItem.ServiceLimitGroup = ""
+      FMItem.ToDate            = 12/31/49.
+
+END PROCEDURE.
+
+PROCEDURE pPriceList_PRO:
+
+   DEFINE INPUT PARAMETER icPriceList AS CHARACTER NO-UNDO.
+
+   FIND FIRST PriceList NO-LOCK WHERE
+              PriceList.Brand     = Syst.Var:gcBrand AND
+              PriceList.PriceList = icPriceList
+              NO-ERROR.
+
+   IF AVAILABLE PriceList
+   THEN UNDO, THROW NEW Progress.Lang.AppError
+      (SUBSTITUTE("PriceList where PriceList=&1 " +
+                  "is already defined",
+                  icPriceList), 1). 
+
+   IF NOT AVAILABLE PriceList
+   THEN DO:
+      CREATE PriceList.
+      ASSIGN
+         PriceList.AutoCreate = ""
+         PriceList.Brand      = Syst.Var:gcBrand
+         PriceList.Currency   = "EUR"
+         PriceList.CurrUnit   = TRUE
+         PriceList.DedicList  = FALSE
+         PriceList.InclVAT    = FALSE
+         PriceList.Memo       = "PRO pricelist"
+         PriceList.PLName     = "PRO fee for " + icPriceList
+         PriceList.Prefix     = ""
+         PriceList.PriceList  = icPriceList
+         PriceList.Rounding   = 4.
    END.
 
-   RETURN "".    
-   
-END PROCEDURE.
-
-
-PROCEDURE pDCServicePackage:
-   DEFINE INPUT PARAMETER icDCEvent     AS CHARACTER NO-UNDO. 
-   DEFINE INPUT PARAMETER icServPac     AS CHARACTER NO-UNDO.  
-   DEFINE INPUT PARAMETER ilBonoSupport AS LOGICAL   NO-UNDO.
-
-   DEFINE VARIABLE liPackageID   AS INTEGER NO-UNDO.
-   DEFINE VARIABLE liComponentID AS INTEGER NO-UNDO.    
-    
-   FIND LAST DCServicePackage USE-INDEX DCServicePackageID NO-LOCK NO-ERROR.    
-   IF AVAILABLE DCServicePackage THEN 
-      ASSIGN liPackageID = DCServicePackage.DCServicePackageID + 1.
-   ELSE 
-      ASSIGN liPackageID = 1.
-   
-   FIND LAST DCServiceComponent USE-INDEX DCServiceComponentID NO-LOCK NO-ERROR.
-   IF AVAILABLE DCServiceComponent THEN 
-      liComponentID = DCServiceComponent.DCServiceComponentID + 1.
-   ELSE 
-      liComponentID = 1.    
-
-   CREATE DCServicePackage.
-   ASSIGN                            
-      DCServicePackage.Brand              = Syst.Var:gcBrand 
-      DCServicePackage.DCEvent            = icDCEvent 
-      DCServicePackage.DCServicePackageID = liPackageID
-      DCServicePackage.ServPac            = icServPac                    
-      DCServicePackage.FromDate           = TODAY 
-      DCServicePackage.ToDate             = DATE(12,31,2049).   
-
-   IF LOOKUP(icServPac, "SHAPER") > 0 THEN 
-   DO:
-       CREATE DCServiceComponent.
-       ASSIGN 
-          DCServiceComponent.DCServicePackageID   = DCServicePackage.DCServicePackageID 
-          DCServiceComponent.DCServiceComponentID = liComponentID      
-          DCServiceComponent.ServCom              = DCServicePackage.ServPac
-          DCServiceComponent.DefValue             = 1
-          DCServiceComponent.DefParam             = (IF ilBonoSupport THEN (icDCEvent + "#ADDBUNDLE") ELSE icDCEvent)
-          DCServiceComponent.FromDate             = TODAY 
-          DCServiceComponent.ToDate               = DATE(12,31,2049).   
-    END.
-
-    RETURN "".
-       
-END PROCEDURE.
-
-
-PROCEDURE pFeeModel:
-   DEFINE INPUT  PARAMETER icFeeModel     AS CHARACTER NO-UNDO.
-   DEFINE INPUT  PARAMETER icFeeModelName AS CHARACTER NO-UNDO.   
-   DEFINE OUTPUT PARAMETER olCreated      AS LOGICAL   NO-UNDO.
-
-   FIND FIRST FeeModel WHERE FeeModel.Brand = Syst.Var:gcBrand AND FeeModel.FeeModel = icFeeModel NO-LOCK NO-ERROR.    
-   IF NOT AVAILABLE FeeModel THEN
-   DO:
-      CREATE FeeModel.
-      ASSIGN 
-         FeeModel.Brand    = Syst.Var:gcBrand
-         FeeModel.FeeModel = icFeeModel
-         FeeModel.FeeName  = icFeeModelName               
-         FeeModel.FMGroup  = 0
-         olCreated         = True.
-   END.
-
-   RETURN "".
-                 
-END PROCEDURE. 
-
-   
-PROCEDURE pFMItem:   
-   DEFINE PARAMETER BUFFER ttFMItem  FOR ttFMItem.   
-   DEFINE PARAMETER BUFFER ttCliType FOR ttCliType.   
-   
-   DEFINE VARIABLE lcRatePlan AS CHARACTER NO-UNDO.   
-   
-   IF AVAIL ttCliType THEN 
-   DO:
-       IF ttCliType.TariffBundle NE "" THEN 
-       DO:
-          FIND FIRST CLIType WHERE CLIType.Brand = Syst.Var:gcBrand AND CLIType.CLIType = ttCliType.ParentTariff NO-LOCK NO-ERROR.
-          IF AVAILABLE CLIType THEN
-             ASSIGN lcRatePlan = CLIType.PricePlan.
-       END.
-       
-       ASSIGN lcRatePlan = (IF lcRatePlan NE "" THEN lcRatePlan ELSE REPLACE(ttCliType.CliType,"CONT","CONTRATO")).
-
-       FIND FIRST RatePlan WHERE RatePlan.Brand = Syst.Var:gcBrand AND RatePlan.RatePlan = lcRatePlan NO-LOCK NO-ERROR.           
-       IF AVAIL RatePlan THEN   
-          FIND FIRST PListConf WHERE PListConf.Brand = Syst.Var:gcBrand AND PListConf.RatePlan = RatePlan.RatePlan AND PListConf.PriceList BEGINS "CONTRATO" NO-LOCK NO-ERROR.   
-   END.
-
-   CREATE FMItem. 
-   ASSIGN     
-      FMItem.Brand             = Syst.Var:gcBrand
-      FMItem.FeeModel          = ttFMItem.FeeModel
-      FMItem.BillCode          = ttFMItem.BillCode
-      FMItem.PriceList         = (IF ttFMItem.PriceList <> "" THEN 
-                                      ttFMItem.PriceList 
-                                  ELSE IF AVAIL PListConf AND PListConf.PriceList <> "" THEN 
-                                      PListConf.PriceList 
-                                  ELSE "") 
-      FMItem.FromDate          = TODAY       
-      FMItem.ToDate            = DATE(12,31,2049)
-      FMItem.BillType          = "MF"                  
-      FMItem.Interval          = 1                   
-      FMItem.BillCycle         = 2                   
-      FMItem.FFItemQty         = 0 
-      FMItem.FFEndDate         = ? 
-      FMItem.Amount            = ttFMItem.Amount   
-      FMItem.FirstMonthBR      = ttFMItem.FirstMonthBR
-      FMItem.BrokenRental      = ttFMItem.BrokenRental
-      FMItem.ServiceLimitGroup = "".
-
-   RETURN "".
-   
-END PROCEDURE.    
-
-
-PROCEDURE pServiceLimitGroup:
-   DEFINE PARAMETER BUFFER ttServiceLimitGroup FOR ttServiceLimitGroup.   
-
-   FIND FIRST ServiceLimitGroup WHERE ServiceLimitGroup.Brand = Syst.Var:gcBrand AND ServiceLimitGroup.GroupCode = ttServiceLimitGroup.GroupCode NO-LOCK NO-ERROR.
-   IF NOT AVAILABLE ServiceLimitGroup THEN
-   DO:
-      CREATE ServiceLimitGroup.
-      ASSIGN 
-         ServiceLimitGroup.Brand     = Syst.Var:gcBrand
-         ServiceLimitGroup.GroupCode = ttServiceLimitGroup.GroupCode    
-         ServiceLimitGroup.GroupName = ttServiceLimitGroup.GroupName    
-         ServiceLimitGroup.ValidFrom = TODAY 
-         ServiceLimitGroup.ValidTo   = DATE(12,31,2049).
-   END.  
-
-   RETURN "".
-   
-END PROCEDURE.
- 
-
-PROCEDURE pServiceLimit:
-   DEFINE PARAMETER BUFFER ttServiceLimit FOR ttServiceLimit.      
-   DEFINE OUTPUT PARAMETER oiSLSeq      AS INTEGER   NO-UNDO.
-
-   DEFINE VARIABLE liInclUnit AS INTEGER NO-UNDO.
-   
-   DEFINE BUFFER bf_ServiceLimit FOR ServiceLimit.
-
-   FIND FIRST ServiceLimit WHERE ServiceLimit.GroupCode = ttServiceLimit.GroupCode AND 
-                                 ServiceLimit.SLCode    = ttServiceLimit.SLCode    AND 
-                                 ServiceLimit.DialType  = ttServiceLimit.DialType  AND 
-                                 ServiceLimit.ValidFrom <= TODAY                   AND
-                                 ServiceLimit.ValidTo   >= TODAY                   NO-LOCK NO-ERROR.
-   IF NOT AVAILABLE ServiceLimit THEN 
-   DO:                                  
-      FIND LAST bf_ServiceLimit NO-LOCK USE-INDEX SLSeq NO-ERROR.               
-      IF AVAILABLE bf_ServiceLimit THEN 
-         ASSIGN oiSLSeq = bf_ServiceLimit.SLSeq + 1.          
-      ELSE 
-         ASSIGN oiSLSeq = 1.
-                  
-      CREATE ServiceLimit.
-      ASSIGN 
-         ServiceLimit.GroupCode      = ttServiceLimit.GroupCode
-         ServiceLimit.SLCode         = ttServiceLimit.SLCode                                                    
-         ServiceLimit.SLSeq          = oiSLSeq 
-         ServiceLimit.SLName         = ttServiceLimit.SLName                             
-         ServiceLimit.DialType       = ttServiceLimit.DialType
-         ServiceLimit.InclAmt        = ttServiceLimit.InclAmt                  
-         ServiceLimit.InclUnit       = ttServiceLimit.InclUnit
-         ServiceLimit.BDestLimit     = 0
-         ServiceLimit.ValidFrom      = TODAY 
-         ServiceLimit.ValidTo        = DATE(12,31,2049)
-         ServiceLimit.FirstMonthCalc = ttServiceLimit.FirstMonthCalc
-         ServiceLimit.LastMonthCalc  = ttServiceLimit.LastMonthCalc
-         Servicelimit.Web            = 0.
-   END.
-   
-   RETURN "".
-      
-END PROCEDURE.
-
-
-PROCEDURE pServiceLimitTarget:
-    DEFINE PARAMETER BUFFER ttServiceLimitTarget FOR ttServiceLimitTarget.          
-    DEFINE INPUT PARAMETER iiSLSeq       AS INTEGER   NO-UNDO. 
-    
-    FIND FIRST ServiceLimitTarget WHERE ServiceLimitTarget.SLSeq = iiSLSeq AND ServiceLimitTarget.ServiceLMember = ttServiceLimitTarget.ServiceLMember NO-LOCK NO-ERROR.
-    IF NOT AVAIL ServiceLimitTarget THEN 
-    DO:    
-        CREATE ServiceLimitTarget. 
-        ASSIGN 
-            ServiceLimitTarget.Slseq          = iiSLSeq
-            ServiceLimitTarget.ServiceLMember = ttServiceLimitTarget.ServiceLMember
-            ServiceLimitTarget.InsideRate     = ttServiceLimitTarget.InSideRate    
-            ServiceLimitTarget.outsideRate    = ttServiceLimitTarget.OutSideRate.
-    END.
-
-    RETURN "".
-
-END PROCEDURE.
-
-
-PROCEDURE pProgLimit:
-    DEFINE PARAMETER BUFFER ttProgLimit FOR ttProgLimit.
-    DEFINE INPUT PARAMETER iiSLSeq       AS INTEGER   NO-UNDO. 
-
-    FIND FIRST ProgLimit WHERE ProgLimit.GroupCode = ttProgLimit.GroupCode AND ProgLimit.SLSeq = iiSLSeq AND ProgLimit.BDest = ttProgLimit.BDest NO-LOCK NO-ERROR.
-    IF NOT AVAIL ProgLimit THEN 
-    DO:
-        CREATE ProgLimit.
-        ASSIGN 
-            ProgLimit.GroupCode = ttProgLimit.GroupCode
-            ProgLimit.SLSeq     = iiSLSeq
-            ProgLimit.ValidFrom = TODAY
-            ProgLimit.ValidTo   = DATE(12,31,2049)
-            ProgLimit.LimitFrom = ttProgLimit.LimitFrom
-            ProgLimit.LimitTo   = ttProgLimit.LimitTo
-            ProgLimit.BDest     = ttProgLimit.BDest.
-    END.
-
-    RETURN "".
-
-END PROCEDURE.
-
-
-PROCEDURE pBDestination:
-    DEFINE PARAMETER BUFFER ttBDest FOR ttBDest.       
-
-    DEFINE VARIABLE liBDLValue     AS INTEGER   NO-UNDO.
-    DEFINE BUFFER bf_BDest FOR BDest.
-
-    FIND FIRST BDest WHERE BDest.Brand = Syst.Var:gcBrand AND BDest.BDest = ttBDest.BDest NO-LOCK NO-ERROR. 
-    IF NOT AVAILABLE BDest THEN 
-    DO:    
-        FIND LAST bf_BDest USE-INDEX BDestID NO-LOCK NO-ERROR.    
-        IF AVAILABLE bf_BDest THEN 
-            liBDLValue = bf_BDest.BDestID + 1.
-        ELSE 
-            liBDLValue = 1.
-     
-        CREATE BDest. 
-        ASSIGN 
-            BDest.Brand    = Syst.Var:gcBrand    
-            BDest.BDestID  = liBDLValue
-            BDest.BDest    = ttBDest.BDest
-            BDest.BDName   = ttBDest.BDName
-            BDest.DestType = 0 
-            BDest.CCN      = ttBDest.CCN
-            BDest.Class    = 1
-            BDest.FromDate = TODAY 
-            BDest.ToDate   = DATE(12,31,2049).      
-    END. 
-    
-    RETURN "".
-   
 END PROCEDURE.
 
 
@@ -1526,19 +1356,20 @@ END PROCEDURE.
 PROCEDURE pMatrix:
    DEFINE INPUT PARAMETER icCLIType          AS CHARACTER NO-UNDO.    
    DEFINE INPUT PARAMETER icAllowedBundles   AS CHARACTER NO-UNDO.
+   DEFINE INPUT PARAMETER icType             AS CHARACTER NO-UNDO. /* ("PERCONTR"|"EXTRALINE") */
 
    DEFINE VARIABLE liCount AS INTEGER NO-UNDO.
 
-   FIND FIRST Matrix WHERE Matrix.Brand = Syst.Var:gcBrand AND Matrix.MXKey = "PERCONTR" AND Matrix.MxName = icCLIType NO-LOCK NO-ERROR.
+   FIND FIRST Matrix WHERE Matrix.Brand = Syst.Var:gcBrand AND Matrix.MXKey = icType AND Matrix.MxName = icCLIType NO-LOCK NO-ERROR.
    IF NOT AVAIL Matrix THEN 
    DO:
        CREATE Matrix.
        ASSIGN
           Matrix.Brand  = Syst.Var:gcBrand
           Matrix.MXSeq  = fGetNextMXSeq()
-          Matrix.mxkey  = "PERCONTR"
+          Matrix.mxkey  = icType
           Matrix.mxname = icCLIType
-          Matrix.prior  = fGetNextMatrixPriority("PERCONTR")
+          Matrix.prior  = fGetNextMatrixPriority(icType)
           Matrix.mxres  = 1.
        
        CREATE MXItem.
@@ -1551,17 +1382,20 @@ PROCEDURE pMatrix:
    DO liCount = 1 TO NUM-ENTRIES(icAllowedBundles)
       ON ERROR UNDO, THROW:
       
-      IF LOOKUP(ENTRY(liCount,icAllowedBundles), "CONTDSL") > 0 THEN 
+      IF icType = "PERCONTR" AND LOOKUP(ENTRY(liCount,icAllowedBundles), "CONTDSL") > 0 THEN 
           NEXT.
       
-      FIND FIRST MxItem WHERE MxItem.MxSeq = Matrix.MXSeq AND MxItem.MxName = "PerContract" AND MxItem.MxValue = ENTRY(liCount,icAllowedBundles) NO-LOCK NO-ERROR.
+      FIND FIRST MxItem WHERE 
+                 MxItem.MxSeq   = Matrix.MXSeq AND 
+                 MxItem.MxName  = (IF icType = "PERCONTR" THEN "PerContract" ELSE "SubsTypeFrom") AND 
+                 MxItem.MxValue = ENTRY(liCount,icAllowedBundles) NO-LOCK NO-ERROR.
       IF NOT AVAIL MxItem THEN 
       DO:      
          CREATE MXItem.
          ASSIGN
             MXItem.MxSeq   = Matrix.MXSeq
             MXItem.MxValue = ENTRY(liCount,icAllowedBundles)
-            MXItem.MxName  = "PerContract".   
+            MXItem.MxName  = (IF icType = "PERCONTR" THEN "PerContract" ELSE "SubsTypeFrom").   
       END.   
 
    END.
@@ -1570,25 +1404,97 @@ PROCEDURE pMatrix:
 
 END PROCEDURE.
 
-PROCEDURE pTMRItemValue:
-    DEFINE PARAMETER BUFFER ttTMRItemValue FOR ttTMRItemValue.
-    
-    FIND FIRST TMRItemValue WHERE TMRItemValue.TMRuleSeq         = ttTMRItemValue.TMRuleSeq                            AND 
-                                  TMRItemValue.CounterItemValues = ttTMRItemValue.BDest + "," + ttTMRItemValue.CliType AND
-                                  TMRItemValue.ToDate           >= TODAY                                               NO-LOCK NO-ERROR.     
-    IF NOT AVAIL TMRItemValue THEN 
-    DO:                                  
-        CREATE TMRItemValue.
-        ASSIGN 
-            TMRItemValue.TMRuleSeq         = ttTMRItemValue.TMRuleSeq
-            TMRItemValue.CounterItemValues = ttTMRItemValue.BDest + "," + ttTMRItemValue.CliType
-            TMRItemValue.FromDate          = TODAY
-            TMRItemValue.ToDate            = DATE(12,31,2049).        
-    END.
+FUNCTION fBDestAvailable RETURNS LOGICAL
+   (icBDest AS CHARACTER):
 
-    RETURN "".
+   RETURN CAN-FIND(FIRST BDest NO-LOCK WHERE
+                         BDest.Brand    = Syst.Var:gcBrand AND
+                         BDest.BDest    = icBDest          AND
+                         BDest.DestType = 0                AND
+                         BDest.FromDate <= TODAY           AND
+                         BDest.ToDate   >= TODAY).
+     
+END FUNCTION.
+
+FUNCTION fCreateTMRItemValue RETURNS LOGICAL
+   (iiTMRuleSeq AS INTEGER,
+    icCounterItemValues AS CHARACTER):
+
+   FIND FIRST TMRItemValue NO-LOCK WHERE
+              TMRItemValue.TMRuleSeq         = iiTMRuleSeq         AND 
+              TMRItemValue.CounterItemValues = icCounterItemValues AND
+              TMRItemValue.ToDate           >= TODAY
+   NO-ERROR.
+
+   IF AVAILABLE TMRItemValue
+   THEN UNDO, THROW NEW Progress.Lang.AppError
+      (SUBSTITUTE("TMRItemValue where TMRuleSeq=&1 and CounterItemValues=&2" +
+                  "is already defined and active",
+                  iiTMRuleSeq, icCounterItemValues), 1). 
+
+   CREATE TMRItemValue.
+   ASSIGN 
+      TMRItemValue.TMRuleSeq         = iiTMRuleSeq
+      TMRItemValue.CounterItemValues = icCounterItemValues
+      TMRItemValue.FromDate          = TODAY
+      TMRItemValue.ToDate            = DATE(12,31,2049).        
+
+   RETURN FALSE.
+
+END FUNCTION.
+
+
+PROCEDURE pTMRItemValue:
+
+   DEFINE INPUT  PARAMETER icCLIType         AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icMobileBundle    AS CHARACTER NO-UNDO.
+   DEFINE INPUT  PARAMETER icAllowedBundles  AS CHARACTER NO-UNDO.  
+       
+   DEFINE VARIABLE lcCodesToFind     AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcBONOList        AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE llProcessBonoData AS LOGICAL   INITIAL FALSE NO-UNDO.
+   DEFINE VARIABLE lii               AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lcEntry           AS CHARACTER NO-UNDO.
+     
+
+   lcCodesToFind = SUBSTITUTE("&1_DATA_IN|GPRSDATA_&1",icMobileBundle).
+   
+   DO lii = 1 TO NUM-ENTRIES(lcCodesToFind,"|"):
+      lcEntry = ENTRY(lii, lcCodesToFind, "|").
+      IF fBDestAvailable(lcEntry)
+      THEN DO:
+         llProcessBonoData = TRUE.         
+         fCreateTMRItemValue(14, lcEntry + "," + icCLIType).
+      END.
+   END.
+
+   lcCodesToFind = SUBSTITUTE("&1_VOICE_IN",icMobileBundle).
+   
+   DO lii = 1 TO NUM-ENTRIES(lcCodesToFind,"|"):
+      lcEntry = ENTRY(lii, lcCodesToFind, "|").
+      IF fBDestAvailable(lcEntry)
+      THEN DO:        
+         fCreateTMRItemValue(34, lcEntry + "," + icCLIType).
+         fCreateTMRItemValue(42, lcEntry + "," + icCLIType).
+      END.
+   END.
+   
+   IF llProcessBonoData
+   THEN DO:
+      lcBONOList = fCParamC("BONO_CONTRACTS").
+      IF lcBONOList > "" THEN 
+      DO lii = 1 TO NUM-ENTRIES(icAllowedBundles):     
+         IF LOOKUP(ENTRY(lii,icAllowedBundles),lcBONOList) > 0
+         THEN DO:
+            fCreateTMRItemValue(33, "GPRSDATA_DATA*" + "," + icCLIType).
+            LEAVE.
+         END.
+      END.
+   END.
+
 
 END PROCEDURE.
+
 
 
 PROCEDURE pUpdateTMSParam:
@@ -1612,3 +1518,4 @@ PROCEDURE pUpdateTMSParam:
    RETURN "".
 
 END PROCEDURE.
+

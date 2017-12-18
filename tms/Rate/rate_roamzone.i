@@ -102,11 +102,8 @@ FUNCTION fGetRoamZones_MSRN RETURN LOGICAL
    icMSRN = LEFT-TRIM(icMSRN,"0").
    
    DO liLoop = MIN(4,LENGTH(icMSRN)) TO 1 BY -1:
-      FOR EACH PLMN NO-LOCK USE-INDEX CountryPrefix WHERE
-               PLMN.CountryPrefix = SUBSTRING(icMSRN,1,liLoop) AND
-               PLMN.PLMN > "",
-         FIRST RZItem NO-LOCK WHERE
-               RZItem.PLMNCode = PLMN.PLMN:
+      FOR FIRST RZItem NO-LOCK WHERE
+                RZItem.CountryPrefix = SUBSTRING(icMSRN,1,liLoop):
          ocARoamZone = RZItem.RoamZone.
          LEAVE.
       END.

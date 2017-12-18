@@ -116,7 +116,8 @@ lcBDName = fMobCDRBDestName(ttCall.SpoCMT,
                             ttCall.BDest,
                             ttCall.BType,
                             ttCall.DateSt).
-                         
+lcBDName = ttCall.BDest + " " + lcBDName.
+
 FIND BillItem WHERE
      BillItem.Brand          = Syst.Var:gcBrand      AND 
      BillItem.BillCode       = ttCall.BillCode        NO-LOCK NO-ERROR.
@@ -163,8 +164,7 @@ FORM
  ttCall.DateSt       LABEL "Date........"       AT 51 format "99-99-9999"
   wd format "X(3)" NO-LABEL                                             SKIP
    
- "B-sub Operator :" ttCall.BDest NO-LABEL FORMAT "X(12)" 
- lcBDName NO-LABEL   FORMAT "x(14)"  
+ "B-sub Operator :" lcBDName NO-LABEL FORMAT "X(32)"
  Time-S          LABEL "Started ...." AT 51                             SKIP
  
  ttCall.ccn  FORMAT ">>>9"  label "Reporting CCN ." bCCN.CCNName No-label
@@ -268,7 +268,6 @@ DISP
           ttCall.bpref,
           true) @ ttCall.GsmBnr 
 
- ttCall.BDest   
  ttCall.rateCCN CCN.CCNName        WHEN     AVAIL ccn 
  ttCall.CCN bCCN.CCNName        WHEN     AVAIL bccn 
  lcBDName
