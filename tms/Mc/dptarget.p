@@ -57,7 +57,7 @@ DEF VAR lcName   AS CHAR NO-UNDO.
 
 FORM
     DPTarget.TargetTable FORMAT "X(12)"
-    DPTarget.TargetKey  
+    DPTarget.TargetKey FORMAT "X(17)"
     lcName FORMAT "X(20)" COLUMN-LABEL "Name"
     DPTarget.ValidTo    FORMAT "99-99-99"
     DPTarget.Included   COLUMN-LABEL "Incl."
@@ -73,7 +73,7 @@ FORM
        DiscountPlan.DPName NO-LABEL FORMAT "X(35)" SKIP
     DPTarget.TargetTable   COLON 18
          FORMAT "X(16)"
-    DPTarget.TargetKey     COLON 18      
+    DPTarget.TargetKey     COLON 18 FORMAT "X(17)"
        lcName NO-LABEL FORMAT "X(30)" SKIP
     DPTarget.Included   COLON 18   
     DPTarget.ValidFrom  COLON 18 

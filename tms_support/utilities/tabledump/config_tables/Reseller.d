@@ -1,5 +1,6 @@
 "AA" "Advanced Analytics" "" 0 "" "" "" "gonzalo.garrido.arsuaga@yoigo.com" "1" 99 yes "" ""
 "AB" "B12 CROSS-SELLING" "" 0 "" "" "" "lisandro.racedo@masmovil.com" "1" 99 yes "" ""
+"AC" "AON MOBILE VENTA CARTERA CARRITO" "" 0 "" "" "" "lisandro.racedo@MasMovil.com" "1" 99 yes "" ""
 "AE" "AON CROSS-SELLING OUTBOUND" "" 0 "" "" "" "lisandro.racedo@masmovil.com" "1" 99 yes "" ""
 "AF" "AMPLIFFICA" "" 0 "" "" "" "maria.barreiro.sanisidro@ext.yoigo.com" "1" 99 yes "" ""
 "AK" "ATAKAM DISTRIBUCION ONLINE" "" 0 "" "" "" "teobaldo.gomez@masmovil.com" "1" 99 no "" ""
@@ -90,5 +91,5 @@
 "UR" "URENDE" "" 0 "" "" "" "Luis.Leyva.Ruano@yoigo.com" "1" 99 no "" ""
 "VD" "B2B ULTRATACTICA" "" 0 "" "" "" "sergio.garde@masmovil.com" "1" 99 yes "" ""
 "WH" "WHISBI" "" 0 "" "" "" "maria.barreiro.sanisidro@yoigo.com" "1" 99 no "" ""
-"XA" "Anexa" "" 0 "" "" "" "antonio.guijarro@masmovil.com" "1" 99 yes "" ""
+"XA" "ANEXA CROSS-SELLING" "" 0 "" "" "" "antonio.guijarro@masmovil.com" "1" 99 yes "" ""
 "YC" "YOIGO (Customer Care)" "" 0 "" "" "" "clientes@yoigo.com" "1" 99 yes "" ""

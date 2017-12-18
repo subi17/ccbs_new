@@ -42,6 +42,7 @@
 {Func/fcreditreq.i}
 {Func/fsendsms.i}
 {Func/profunc.i}
+{Func/fixedfee.i}
 
 DEF VAR lcEmailErr AS CHAR NO-UNDO.
 
@@ -178,22 +179,25 @@ IF MsRequest.ReqSource EQ {&REQUEST_SOURCE_EXTERNAL_API} THEN DO:
 END.
 
 /* is there another request that should be completed first */
-IF MsRequest.ReqStat = 0 THEN DO:
-
+IF MsRequest.ReqStat = 0 THEN 
+DO:
    /*YPRO SVA special handling for PRO customers*/
-   IF MsRequest.ReqCParam6 BEGINS "SVA_NO_WAIT" THEN DO:
-      lcEmailErr = fSendEmailByRequest(MsRequest.MsRequest,
-                                       "SVA_" + MsRequest.ReqCparam3).
-      IF lcEmailErr NE "" THEN RETURN "ERROR: " + lcEmailErr.      
+   IF MsRequest.ReqCParam6 BEGINS "SVA_NO_WAIT" THEN 
+   DO:
+      lcEmailErr = fSendEmailByRequest(MsRequest.MsRequest, "SVA_" + MsRequest.ReqCparam3).
+      IF lcEmailErr NE "" THEN 
+          RETURN "ERROR: " + lcEmailErr.      
    END.
-   ELSE IF MsRequest.ReqCParam6 BEGINS "SVA" THEN DO:
+   ELSE IF MsRequest.ReqCParam6 BEGINS "SVA" THEN 
+   DO:
       /*YPRO-84: go to waitinf for bob tool in state 19.*/
       fReqStatus({&REQUEST_STATUS_CONFIRMATION_PENDING},""). /*19*/
-      lcEmailErr = fSendEmailByRequest(MsRequest.MsRequest, 
-                                       "SVA_" + MsRequest.ReqCparam3).
-      IF lcEmailErr NE "" THEN RETURN "ERROR: " + lcEmailErr.                                 
-      RETURN.
+      lcEmailErr = fSendEmailByRequest(MsRequest.MsRequest, "SVA_" + MsRequest.ReqCparam3).
 
+      IF lcEmailErr NE "" THEN 
+          RETURN "ERROR: " + lcEmailErr.
+
+      RETURN.
    END.
    
    IF MsRequest.ReqIParam2 > 0 THEN DO:
@@ -418,8 +422,6 @@ PROCEDURE pContractActivation:
    DEF VAR lcReqSource       AS CHAR NO-UNDO.
    DEF VAR lcBundleId        AS CHAR NO-UNDO.
    DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
-   DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO.
-   DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO.
    DEF VAR lcALLPostpaidUPSELLBundles AS CHAR NO-UNDO.
    DEF VAR ldtPrepActDate             AS DATE NO-UNDO.
    DEF VAR liPrepActTime              AS INT  NO-UNDO.
@@ -433,13 +435,18 @@ PROCEDURE pContractActivation:
    DEF VAR lcInvRowDetails            AS CHAR NO-UNDO.
    DEF VAR ldeTotalRowAmt             AS DEC  NO-UNDO.
    DEF VAR liCount                    AS CHAR NO-UNDO.
-   
+   DEF VAR lcExtraOfferId             AS CHAR NO-UNDO.
+   DEF VAR liDiscReq                  AS INTE NO-UNDO.
+   DEF VAR lcErrMsg                   AS CHAR NO-UNDO.
+
    /* DSS related variables */
    DEF VAR lcResult      AS CHAR NO-UNDO.
    
-   DEF BUFFER bOrigReq   FOR MsRequest.
+   DEF BUFFER bOrigReq      FOR MsRequest.
    DEF BUFFER bQ25SingleFee FOR SingleFee.
-   DEF BUFFER bMobSub    FOR Mobsub.
+   DEF BUFFER bMobSub       FOR Mobsub.
+   DEF BUFFER bf_Offer      FOR Offer.
+   DEF BUFFER bf_OfferItem  FOR OfferItem.
 
    /* request is under work */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
@@ -646,15 +653,13 @@ PROCEDURE pContractActivation:
       END.
       ELSE IF lcBundleId EQ "DSS2" THEN DO:
          ASSIGN
-         lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
-         lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
-         lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
+         lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
          FIND FIRST bMobsub WHERE bMobsub.msseq EQ MsRequest.msseq 
          NO-LOCK NO-ERROR.
          IF AVAIL bMobSub AND LOOKUP(bMobSub.CLIType,lcAllowedDSS2SubsType) > 0
          THEN DO:
-            IF (LOOKUP(bMobSub.CLIType,lcExtraMainLineCLITypes) > 0  OR
-                LOOKUP(bMobSub.CLIType,lcExtraLineCLITypes)     > 0) THEN DO:
+            IF (fCLITypeIsMainLine(bMobSub.CLIType) OR
+                fCLITypeIsExtraLine(bMobSub.CLIType)) THEN DO:
                IF fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
                                                     bMobSub.MultiSimId,
                                                     bMobSub.MultiSimType) 
@@ -1255,6 +1260,38 @@ PROCEDURE pContractActivation:
                              "RVTERMDT2 discount creation failed",
                              lcError).
       END.
+      
+      IF DayCampaign.BundleTarget EQ {&DC_BUNDLE_TARGET_SVA} THEN 
+      DO:
+          ASSIGN lcExtraOfferId = ENTRY(4, MsRequest.ReqCParam6, "|") NO-ERROR.
+
+          IF lcExtraOfferId > "" THEN
+          DO:
+              FIND FIRST bf_Offer WHERE bf_Offer.Brand = Syst.Var:gcBrand AND
+                                        bf_Offer.Offer = lcExtraOfferId   NO-LOCK NO-ERROR.
+              IF AVAIL bf_Offer THEN 
+              DO:
+                  FIND FIRST bf_OfferItem WHERE bf_OfferItem.Brand       = bf_Offer.Brand        AND 
+                                                bf_OfferItem.Offer       = bf_Offer.Offer        AND 
+                                                bf_OfferItem.ItemType    = "DiscountPlan"     AND  
+                                                bf_OfferItem.ItemKey     > ""                 AND 
+                                                bf_OfferItem.BeginStamp <= MsRequest.ActStamp AND 
+                                                bf_OfferItem.EndStamp   >= MsRequest.ActStamp NO-LOCK NO-ERROR.
+                  IF AVAIL bf_OfferItem AND bf_OfferItem.Amount > 0 THEN
+                  DO:
+                      ASSIGN liDiscReq = fAddDiscountPlanMember(MsRequest.MsSeq,
+                                                                bf_OfferItem.ItemKey,
+                                                                bf_OfferItem.Amount,
+                                                                TODAY,
+                                                                bf_OfferItem.Periods,
+                                                                0,
+                                                                OUTPUT lcErrMsg).
+                      IF liDiscReq NE 0 THEN 
+                          fReqLog("Failed to add discount for (" + DayCampaign.DCEvent + "). Error: '" + lcErrMsg + "'").
+                  END.  /* IF AVAIL OfferItem THEN */
+              END.                       
+          END.                    
+      END. /* IF DayCampaign.BundleTarget EQ {&DC_BUNDLE_TARGET_SVA} THEN  */
       
    END.
    
@@ -2431,6 +2468,17 @@ PROCEDURE pContractTermination:
          IF llDoEvent THEN RUN StarEventMakeDeleteEvent(lhFatime).
 
          DELETE FATime.      
+      END.
+
+      IF DayCampaign.BundleTarget EQ {&DC_BUNDLE_TARGET_SVA} THEN
+      DO: 
+          FIND FIRST DiscountPlan WHERE DiscountPlan.Brand    = Syst.Var:gcBrand AND 
+                                        DiscountPlan.DPRuleID = DayCampaign.DcEvent + "DISC" NO-LOCK NO-ERROR.
+          IF AVAIL DiscountPlan THEN                                    
+              fCloseDiscount(DiscountPlan.DPRuleID,
+                             MsRequest.MsSeq,
+                             ldtActDate,
+                             FALSE). /* clean event logs */
       END.
 
       /* Close iphone discounts */

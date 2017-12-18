@@ -204,7 +204,7 @@ PROCEDURE pHandleQueue:
    DEFINE VARIABLE lcNewOper    AS CHAR NO-UNDO. 
    DEFINE VARIABLE llgMNPOperName  AS LOG NO-UNDO. 
    DEFINE VARIABLE llgMNPOperBrand AS LOG NO-UNDO. 
-
+   
    FIND MessageBuf WHERE RECID(MessageBuf) = pRecId EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
    IF ERROR-STATUS:ERROR OR LOCKED(MessageBuf) THEN 
       RETURN.
@@ -860,7 +860,28 @@ PROCEDURE pHandleQueue:
          END.
                   
          llOrderClosed = fSetOrderStatus(Order.OrderId,"7").
-         if llOrderClosed then fMarkOrderStamp(Order.OrderID,"Close",0.0).
+         
+         IF llOrderClosed THEN DO:
+            fMarkOrderStamp(Order.OrderID,"Close",0.0).
+
+            /* If mainline MNP order is cancelled then release associated 
+               additional lines and extra lines if avilable */
+
+            fActionOnAdditionalLines (OrderCustomer.CustIdType,
+                                      OrderCustomer.CustID,
+                                      Order.CLIType,
+                                      FALSE,
+                                      "RELEASE"). 
+
+            IF fCLITypeIsMainLine(Order.CLIType)       AND
+               Order.MultiSimId                  NE 0  AND
+               Order.MultiSimType                EQ {&MULTISIMTYPE_PRIMARY} THEN
+               fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
+                                        Order.OrderId,    /* Main line Order Id  */
+                                        "RELEASE").       /* Action              */
+
+         END.
+
          IF NOT llOrderClosed THEN fLogError("Order closing failed: " + STRING(Order.OrderId)).
          
          /* YDR-16 */
@@ -887,7 +908,8 @@ PROCEDURE pHandleQueue:
                   RELEASE SIM.
             END.
             
-            IF Order.OrderChannel EQ "self" THEN
+            IF Order.OrderChannel EQ "self" OR
+               Order.OrderChannel EQ "fusion_self" THEN
                lcSMS = (IF MNPProcess.StatusCode = {&MNP_ST_ACON}
                         THEN "MNPCanAfterConf"
                         ELSE "MNPCanBeforeConf").

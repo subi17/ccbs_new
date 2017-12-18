@@ -1753,6 +1753,10 @@
 1 "" 2 "Descompte promoció Fibra 300" 0 "DISCFH300PDWN" "1" 02/05/17 31/12/49
 1 "" 3 "Promozio-deskontua Fibra 300" 0 "DISCFH300PDWN" "1" 02/05/17 31/12/49
 1 "" 5 "Promotional discount Fiber 300" 0 "DISCFH300PDWN" "1" 02/05/17 31/12/49
+1 "" 1 "Descuento promoción Fibra 300" 0 "DISCFH300P_PRO" "1" 30/10/17 31/12/49
+1 "" 2 "Descompte promoció Fibra 300" 0 "DISCFH300P_PRO" "1" 30/10/17 31/12/49
+1 "" 3 "Promozio-deskontua Fibra 300" 0 "DISCFH300P_PRO" "1" 30/10/17 31/12/49
+1 "" 5 "Promotional discount Fiber 300" 0 "DISCFH300P_PRO" "1" 30/10/17 31/12/49
 1 "" 1 "Descuento promoción Fijo" 0 "DISCFHDSL" "1" 27/10/16 31/12/49
 1 "" 2 "Descompte promoció Fix" 0 "DISCFHDSL" "1" 27/10/16 31/12/49
 1 "" 3 "Finkoaren promozioagatiko deskontua" 0 "DISCFHDSL" "1" 27/10/16 31/12/49
@@ -3861,6 +3865,31 @@
 1 "" 3 "Huawei mate 10" 0 "G0000370" "1" 25/10/17 31/12/49
 1 "" 4 "Huawei mate 10" 0 "G0000370" "1" 25/10/17 31/12/49
 1 "" 5 "Huawei mate 10" 0 "G0000370" "1" 25/10/17 31/12/49
+1 "" 1 "LG K8 2017" 0 "G0000371" "1" 27/11/17 31/12/49
+1 "" 2 "LG K8 2017" 0 "G0000371" "1" 27/11/17 31/12/49
+1 "" 3 "LG K8 2017" 0 "G0000371" "1" 27/11/17 31/12/49
+1 "" 4 "LG K8 2017" 0 "G0000371" "1" 27/11/17 31/12/49
+1 "" 5 "LG K8 2017" 0 "G0000371" "1" 27/11/17 31/12/49
+1 "" 1 "LG V30" 0 "G0000372" "1" 27/11/17 31/12/49
+1 "" 2 "LG V30" 0 "G0000372" "1" 27/11/17 31/12/49
+1 "" 3 "LG V30" 0 "G0000372" "1" 27/11/17 31/12/49
+1 "" 4 "LG V30" 0 "G0000372" "1" 27/11/17 31/12/49
+1 "" 5 "LG V30" 0 "G0000372" "1" 27/11/17 31/12/49
+1 "" 1 "Wiko Wim Lite" 0 "G0000373" "1" 27/11/17 31/12/49
+1 "" 2 "Wiko Wim Lite" 0 "G0000373" "1" 27/11/17 31/12/49
+1 "" 3 "Wiko Wim Lite" 0 "G0000373" "1" 27/11/17 31/12/49
+1 "" 4 "Wiko Wim Lite" 0 "G0000373" "1" 27/11/17 31/12/49
+1 "" 5 "Wiko Wim Lite" 0 "G0000373" "1" 27/11/17 31/12/49
+1 "" 1 "Huawei Mate 10 Lite" 0 "G0000374" "1" 30/11/17 31/12/49
+1 "" 2 "Huawei Mate 10 Lite" 0 "G0000374" "1" 30/11/17 31/12/49
+1 "" 3 "Huawei Mate 10 Lite" 0 "G0000374" "1" 30/11/17 31/12/49
+1 "" 4 "Huawei Mate 10 Lite" 0 "G0000374" "1" 30/11/17 31/12/49
+1 "" 5 "Huawei Mate 10 Lite" 0 "G0000374" "1" 30/11/17 31/12/49
+1 "" 1 "Pingonaut Kidswatch Panda" 0 "G0000375" "1" 13/12/17 31/12/49
+1 "" 2 "Pingonaut Kidswatch Panda" 0 "G0000375" "1" 13/12/17 31/12/49
+1 "" 3 "Pingonaut Kidswatch Panda" 0 "G0000375" "1" 13/12/17 31/12/49
+1 "" 4 "Pingonaut Kidswatch Panda" 0 "G0000375" "1" 13/12/17 31/12/49
+1 "" 5 "Pingonaut Kidswatch Panda" 0 "G0000375" "1" 13/12/17 31/12/49
 1 "" 1 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 2 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 3 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
@@ -4247,6 +4276,16 @@
 1 "" 3 "Wiko Sunny Blanco" 0 "P012WSUW2" "1" 22/02/17 31/12/49
 1 "" 4 "Wiko Sunny Blanco" 0 "P012WSUW2" "1" 22/02/17 31/12/49
 1 "" 5 "Wiko Sunny White" 0 "P012WSUW2" "1" 22/02/17 31/12/49
+1 "" 1 "Wiko Wim Lite Azul" 0 "P012WWLAC" "1" 27/11/17 31/12/49
+1 "" 2 "Wiko Wim Lite Azul" 0 "P012WWLAC" "1" 27/11/17 31/12/49
+1 "" 3 "Wiko Wim Lite Azul" 0 "P012WWLAC" "1" 27/11/17 31/12/49
+1 "" 4 "Wiko Wim Lite Azul" 0 "P012WWLAC" "1" 27/11/17 31/12/49
+1 "" 5 "Wiko Wim Lite Blue" 0 "P012WWLAC" "1" 27/11/17 31/12/49
+1 "" 1 "Wiko Wim Lite Dorado" 0 "P012WWLDC" "1" 27/11/17 31/12/49
+1 "" 2 "Wiko Wim Lite Dorado" 0 "P012WWLDC" "1" 27/11/17 31/12/49
+1 "" 3 "Wiko Wim Lite Dorado" 0 "P012WWLDC" "1" 27/11/17 31/12/49
+1 "" 4 "Wiko Wim Lite Dorado" 0 "P012WWLDC" "1" 27/11/17 31/12/49
+1 "" 5 "Wiko Wim Lite Gold" 0 "P012WWLDC" "1" 27/11/17 31/12/49
 1 "" 1 "Sony Ericsson C702 Negro y plata" 0 "P013C70N2" "1" 15/09/08 31/12/54
 1 "" 5 "Sony Ericsson C702 Black and silver" 0 "P013C70N2" "1" 15/09/08 31/12/54
 1 "" 1 "Sony-Ericsson C702" 0 "P013C70N3" "1" 01/12/08 31/12/54
@@ -4569,6 +4608,16 @@
 1 "" 3 "BlackBerry Z30 Negro" 0 "P018Z30N2" "1" 28/10/13 31/12/49
 1 "" 4 "BlackBerry Z30 Negro" 0 "P018Z30N2" "1" 28/10/13 31/12/49
 1 "" 5 "BlackBerry Z30 Black" 0 "P018Z30N2" "1" 28/10/13 31/12/49
+1 "" 1 "Pingonaut Reloj Teléfono GPS Panda Azul" 0 "P020PANA2" "1" 12/12/17 31/12/49
+1 "" 2 "Pingonaut Reloj Teléfono GPS Panda Azul" 0 "P020PANA2" "1" 12/12/17 31/12/49
+1 "" 3 "Pingonaut Reloj Teléfono GPS Panda Azul" 0 "P020PANA2" "1" 12/12/17 31/12/49
+1 "" 4 "Pingonaut Reloj Teléfono GPS Panda Azul" 0 "P020PANA2" "1" 12/12/17 31/12/49
+1 "" 5 "Pingonaut Kidswatch Panda Blue" 0 "P020PANA2" "1" 12/12/17 31/12/49
+1 "" 1 "Pingonaut Reloj Teléfono GPS Panda Rosa" 0 "P020PANP2" "1" 12/12/17 31/12/49
+1 "" 2 "Pingonaut Reloj Teléfono GPS Panda Rosa" 0 "P020PANP2" "1" 12/12/17 31/12/49
+1 "" 3 "Pingonaut Reloj Teléfono GPS Panda Rosa" 0 "P020PANP2" "1" 12/12/17 31/12/49
+1 "" 4 "Pingonaut Reloj Teléfono GPS Panda Rosa" 0 "P020PANP2" "1" 12/12/17 31/12/49
+1 "" 5 "Pingonaut Kidswatch Panda Pink" 0 "P020PANP2" "1" 12/12/17 31/12/49
 1 "" 1 "Moto G 4G Negro con carcasa" 0 "P0214GCN2" "1" 11/08/14 31/12/49
 1 "" 2 "Moto G 4G Negro con carcasa" 0 "P0214GCN2" "1" 11/08/14 31/12/49
 1 "" 3 "Moto G 4G Negro con carcasa" 0 "P0214GCN2" "1" 11/08/14 31/12/49
@@ -5312,6 +5361,11 @@
 1 "" 3 "LG K10 Blanco" 0 "P030K10WC" "1" 08/08/17 31/12/49
 1 "" 4 "LG K10 Blanco" 0 "P030K10WC" "1" 08/08/17 31/12/49
 1 "" 5 "LG K10 White" 0 "P030K10WC" "1" 08/08/17 31/12/49
+1 "" 1 "LG K8 2017 Titán" 0 "P030K8TGC" "1" 27/11/17 31/12/49
+1 "" 2 "LG K8 2017 Titan" 0 "P030K8TGC" "1" 27/11/17 31/12/49
+1 "" 3 "LG K8 2017 Titan" 0 "P030K8TGC" "1" 27/11/17 31/12/49
+1 "" 4 "LG K8 2017 Titan" 0 "P030K8TGC" "1" 27/11/17 31/12/49
+1 "" 5 "LG K8 2017 Titan" 0 "P030K8TGC" "1" 27/11/17 31/12/49
 1 "" 1 "LG KF310 Negro" 0 "P030KF3N2" "1" 27/10/08 31/12/54
 1 "" 5 "LG KF310 Black" 0 "P030KF3N2" "1" 27/10/08 31/12/54
 1 "" 1 "LG KF701 Virgo" 0 "P030KF702" "1" 24/09/09 31/12/49
@@ -5460,11 +5514,11 @@
 1 "" 3 "LG G6 Plata" 0 "P030LG6G2" "1" 27/03/17 31/12/49
 1 "" 4 "LG G6 Plata" 0 "P030LG6G2" "1" 27/03/17 31/12/49
 1 "" 5 "LG G6 Ice-Platinum" 0 "P030LG6G2" "1" 27/03/17 31/12/49
-1 "" 1 "LG G6 Platino" 0 "P030LG6GC" "1" 25/08/17 31/12/49
+1 "" 1 "LG G6 Plata" 0 "P030LG6GC" "1" 25/08/17 31/12/49
 1 "" 2 "LG G6 Platino" 0 "P030LG6GC" "1" 25/08/17 31/12/49
 1 "" 3 "LG G6 Platino" 0 "P030LG6GC" "1" 25/08/17 31/12/49
 1 "" 4 "LG G6 Platino" 0 "P030LG6GC" "1" 25/08/17 31/12/49
-1 "" 5 "LG G6 Silver" 0 "P030LG6GC" "1" 25/08/17 31/12/49
+1 "" 5 "LG G6 Ice-Platinum" 0 "P030LG6GC" "1" 25/08/17 31/12/49
 1 "" 1 "LG G6 Negro" 0 "P030LG6N2" "1" 19/04/17 31/12/49
 1 "" 2 "LG G6 Negro" 0 "P030LG6N2" "1" 19/04/17 31/12/49
 1 "" 3 "LG G6 Negro" 0 "P030LG6N2" "1" 19/04/17 31/12/49
@@ -5590,6 +5644,11 @@
 1 "" 3 "Módem USB - Teléfono Mobit U11" 0 "P030U11I2" "1" 30/11/09 31/12/49
 1 "" 4 "Módem USB - Teléfono Mobit U11" 0 "P030U11I2" "1" 30/11/09 31/12/49
 1 "" 5 "Módem USB - Teléfono Mobit U11" 0 "P030U11I2" "1" 30/11/09 31/12/49
+1 "" 1 "LG V30 Azul" 0 "P030V30AC" "1" 27/11/17 31/12/49
+1 "" 2 "LG V30 Azul" 0 "P030V30AC" "1" 27/11/17 31/12/49
+1 "" 3 "LG V30 Azul" 0 "P030V30AC" "1" 27/11/17 31/12/49
+1 "" 4 "LG V30 Azul" 0 "P030V30AC" "1" 27/11/17 31/12/49
+1 "" 5 "LG V30 Blue" 0 "P030V30AC" "1" 27/11/17 31/12/49
 1 "" 1 "LG Wine Smart Azul" 0 "P030WISA2" "1" 25/09/15 31/12/49
 1 "" 2 "LG Wine Smart Azul" 0 "P030WISA2" "1" 25/09/15 31/12/49
 1 "" 3 "LG Wine Smart Azul" 0 "P030WISA2" "1" 25/09/15 31/12/49
@@ -6032,6 +6091,11 @@
 1 "" 3 "Samsung Galaxy J3 Dorado" 0 "P034GJ3D2" "1" 22/02/16 31/12/49
 1 "" 4 "Samsung Galaxy J3 Dorado" 0 "P034GJ3D2" "1" 22/02/16 31/12/49
 1 "" 5 "Samsung Galaxy J3 Gold" 0 "P034GJ3D2" "1" 22/02/16 31/12/49
+1 "" 1 "Samsung Galaxy J3 Dorado" 0 "P034GJ3DC" "1" 01/12/17 31/12/49
+1 "" 2 "Samsung Galaxy J3 Dorado" 0 "P034GJ3DC" "1" 01/12/17 31/12/49
+1 "" 3 "Samsung Galaxy J3 Dorado" 0 "P034GJ3DC" "1" 01/12/17 31/12/49
+1 "" 4 "Samsung Galaxy J3 Dorado" 0 "P034GJ3DC" "1" 01/12/17 31/12/49
+1 "" 5 "Samsung Galaxy J3 Gold" 0 "P034GJ3DC" "1" 01/12/17 31/12/49
 1 "" 1 "Samsung Galaxy J3 Dorado con regalo Protector de vidrio transparente" 0 "P034GJ3DP" "1" 30/06/16 31/12/49
 1 "" 2 "Samsung Galaxy J3 Dorado con Protector de vidrio transparente" 0 "P034GJ3DP" "1" 30/06/16 31/12/49
 1 "" 3 "Samsung Galaxy J3 Dorado con Protector de vidrio transparente" 0 "P034GJ3DP" "1" 30/06/16 31/12/49
@@ -6042,6 +6106,11 @@
 1 "" 3 "Samsung Galaxy J3 Negro" 0 "P034GJ3N2" "1" 22/02/16 31/12/49
 1 "" 4 "Samsung Galaxy J3 Negro" 0 "P034GJ3N2" "1" 22/02/16 31/12/49
 1 "" 5 "Samsung Galaxy J3 Black" 0 "P034GJ3N2" "1" 22/02/16 31/12/49
+1 "" 1 "Samsung Galaxy J3 Negro" 0 "P034GJ3NC" "1" 01/12/17 31/12/49
+1 "" 2 "Samsung Galaxy J3 Negro" 0 "P034GJ3NC" "1" 01/12/17 31/12/49
+1 "" 3 "Samsung Galaxy J3 Negro" 0 "P034GJ3NC" "1" 01/12/17 31/12/49
+1 "" 4 "Samsung Galaxy J3 Negro" 0 "P034GJ3NC" "1" 01/12/17 31/12/49
+1 "" 5 "Samsung Galaxy J3 Black" 0 "P034GJ3NC" "1" 01/12/17 31/12/49
 1 "" 1 "Samsung Galaxy J3 Negro con regalo Protector de vidrio transparente" 0 "P034GJ3NP" "1" 30/06/16 31/12/49
 1 "" 2 "Samsung Galaxy J3 Negro con Protector de vidrio transparente" 0 "P034GJ3NP" "1" 30/06/16 31/12/49
 1 "" 3 "Samsung Galaxy J3 Negro con Protector de vidrio transparente" 0 "P034GJ3NP" "1" 30/06/16 31/12/49
@@ -7295,6 +7364,16 @@
 1 "" 1 "Toshiba Portégé G810" 0 "P040G81N4" "1" 11/03/09 31/12/49
 1 "" 5 "Toshiba Portégé G810" 0 "P040G81N4" "1" 11/03/09 31/12/49
 1 "" 5 "Toshiba TS705 Black" 0 "P040T75G2" "1" 01/01/06 31/12/49
+1 "" 1 "Huawei Mate 10 Lite Oro" 0 "P04310LDC" "1" 30/11/17 31/12/49
+1 "" 2 "Huawei Mate 10 Lite Oro" 0 "P04310LDC" "1" 30/11/17 31/12/49
+1 "" 3 "Huawei Mate 10 Lite Oro" 0 "P04310LDC" "1" 30/11/17 31/12/49
+1 "" 4 "Huawei Mate 10 Lite Oro" 0 "P04310LDC" "1" 30/11/17 31/12/49
+1 "" 5 "Huawei Mate 10 Lite Gold" 0 "P04310LDC" "1" 30/11/17 31/12/49
+1 "" 1 "Huawei Mate 10 Lite Plata" 0 "P04310LSC" "1" 30/11/17 31/12/49
+1 "" 2 "Huawei Mate 10 Lite Plata" 0 "P04310LSC" "1" 30/11/17 31/12/49
+1 "" 3 "Huawei Mate 10 Lite Plata" 0 "P04310LSC" "1" 30/11/17 31/12/49
+1 "" 4 "Huawei Mate 10 Lite Plata" 0 "P04310LSC" "1" 30/11/17 31/12/49
+1 "" 5 "Huawei Mate 10 Lite Silver" 0 "P04310LSC" "1" 30/11/17 31/12/49
 1 "" 1 "Huawei P10 Plus Dorado" 0 "P04310PD2" "1" 06/04/17 31/12/49
 1 "" 2 "Huawei P10 Plus Dorado" 0 "P04310PD2" "1" 06/04/17 31/12/49
 1 "" 3 "Huawei P10 Plus Dorado" 0 "P04310PD2" "1" 06/04/17 31/12/49
@@ -7776,6 +7855,11 @@
 1 "" 3 "Huawei P10 Lite Blanco con funda de regalo" 0 "P043L10WP" "1" 24/03/17 31/12/49
 1 "" 4 "Huawei P10 Lite Blanco con funda de regalo" 0 "P043L10WP" "1" 24/03/17 31/12/49
 1 "" 5 "Huawei P10 Lite White with cover gift" 0 "P043L10WP" "1" 24/03/17 31/12/49
+1 "" 1 "Huawei Mate 10 Dorado" 0 "P043M10DC" "1" 14/11/17 31/12/49
+1 "" 2 "Huawei Mate 10 Dorado" 0 "P043M10DC" "1" 14/11/17 31/12/49
+1 "" 3 "Huawei Mate 10 Dorado" 0 "P043M10DC" "1" 14/11/17 31/12/49
+1 "" 4 "Huawei Mate 10 Dorado" 0 "P043M10DC" "1" 14/11/17 31/12/49
+1 "" 5 "Huawei Mate 10 Gold" 0 "P043M10DC" "1" 14/11/17 31/12/49
 1 "" 1 "Huawei Mate 10 Negro" 0 "P043M10NC" "1" 25/10/17 31/12/49
 1 "" 2 "Huawei mate 10 Negro" 0 "P043M10NC" "1" 25/10/17 31/12/49
 1 "" 3 "Huawei mate 10 Negro" 0 "P043M10NC" "1" 25/10/17 31/12/49
@@ -8716,6 +8800,16 @@
 1 "" 3 "ZTE Blade A460 Blanco" 0 "P075A46W2" "1" 25/09/15 31/12/49
 1 "" 4 "ZTE Blade A460 Blanco" 0 "P075A46W2" "1" 25/09/15 31/12/49
 1 "" 5 "ZTE Blade A460 White" 0 "P075A46W2" "1" 25/09/15 31/12/49
+1 "" 1 "ZTE Blade A602 Negro" 0 "P075A60NC" "1" 05/12/17 31/12/49
+1 "" 2 "ZTE Blade A602 Negro" 0 "P075A60NC" "1" 05/12/17 31/12/49
+1 "" 3 "ZTE Blade A602 Negro" 0 "P075A60NC" "1" 05/12/17 31/12/49
+1 "" 4 "ZTE Blade A602 Negro" 0 "P075A60NC" "1" 05/12/17 31/12/49
+1 "" 5 "ZTE Blade A602 Black" 0 "P075A60NC" "1" 05/12/17 31/12/49
+1 "" 1 "ZTE Blade A602 Plata" 0 "P075A60SC" "1" 05/12/17 31/12/49
+1 "" 2 "ZTE Blade A602 Plata" 0 "P075A60SC" "1" 05/12/17 31/12/49
+1 "" 3 "ZTE Blade A602 Plata" 0 "P075A60SC" "1" 05/12/17 31/12/49
+1 "" 4 "ZTE Blade A602 Plata" 0 "P075A60SC" "1" 05/12/17 31/12/49
+1 "" 5 "ZTE Blade A602 Silver" 0 "P075A60SC" "1" 05/12/17 31/12/49
 1 "" 1 "ZTE Axon 7 Mini Oro" 0 "P075A7MD2" "1" 24/11/16 31/12/49
 1 "" 2 "ZTE Axon 7 Mini Oro" 0 "P075A7MD2" "1" 24/11/16 31/12/49
 1 "" 3 "ZTE Axon 7 Mini Oro" 0 "P075A7MD2" "1" 24/11/16 31/12/49
@@ -8826,11 +8920,21 @@
 1 "" 3 "ZTE Blade V8 Gris" 0 "P075BV8G2" "1" 28/04/17 31/12/49
 1 "" 4 "ZTE Blade V8 Gris" 0 "P075BV8G2" "1" 28/04/17 31/12/49
 1 "" 5 "ZTE Blade V8 Grey" 0 "P075BV8G2" "1" 28/04/17 31/12/49
+1 "" 1 "ZTE Blade V8 Gris" 0 "P075BV8GC" "1" 24/11/17 31/12/49
+1 "" 2 "ZTE Blade V8 Gris" 0 "P075BV8GC" "1" 24/11/17 31/12/49
+1 "" 3 "ZTE Blade V8 Gris" 0 "P075BV8GC" "1" 24/11/17 31/12/49
+1 "" 4 "ZTE Blade V8 Gris" 0 "P075BV8GC" "1" 24/11/17 31/12/49
+1 "" 5 "ZTE Blade V8 Grey" 0 "P075BV8GC" "1" 24/11/17 31/12/49
 1 "" 1 "ZTE Blade V8 Rosa" 0 "P075BV8P2" "1" 28/04/17 31/12/49
 1 "" 2 "ZTE Blade V8 Rosa" 0 "P075BV8P2" "1" 28/04/17 31/12/49
 1 "" 3 "ZTE Blade V8 Rosa" 0 "P075BV8P2" "1" 28/04/17 31/12/49
 1 "" 4 "ZTE Blade V8 Rosa" 0 "P075BV8P2" "1" 28/04/17 31/12/49
 1 "" 5 "ZTE Blade V8 Rosa" 0 "P075BV8P2" "1" 28/04/17 31/12/49
+1 "" 1 "ZTE Blade V8 Rosa" 0 "P075BV8PC" "1" 24/11/17 31/12/49
+1 "" 2 "ZTE Blade V8 Rosa" 0 "P075BV8PC" "1" 24/11/17 31/12/49
+1 "" 3 "ZTE Blade V8 Rosa" 0 "P075BV8PC" "1" 24/11/17 31/12/49
+1 "" 4 "ZTE Blade V8 Rosa" 0 "P075BV8PC" "1" 24/11/17 31/12/49
+1 "" 5 "ZTE Blade V8 Pink" 0 "P075BV8PC" "1" 24/11/17 31/12/49
 1 "" 1 "ZTE Blade Vec 4G Negro" 0 "P075BVYN1" "1" 14/10/14 31/12/49
 1 "" 2 "ZTE Blade Vec 4G Negro" 0 "P075BVYN1" "1" 14/10/14 31/12/49
 1 "" 3 "ZTE Blade Vec 4G Negro" 0 "P075BVYN1" "1" 14/10/14 31/12/49
@@ -10186,6 +10290,11 @@
 1 "" 3 "iPhone X 64GB Gris" 0 "P097X64GC" "1" 25/10/17 31/12/49
 1 "" 4 "iPhone X 64GB Gris" 0 "P097X64GC" "1" 25/10/17 31/12/49
 1 "" 5 "iPhone X 64 GB Grey" 0 "P097X64GC" "1" 25/10/17 31/12/49
+1 "" 1 "IPHONE X 64GB negro" 0 "P097X64NC" "1" 30/11/17 31/12/49
+1 "" 2 "IPHONE X 64GB negro" 0 "P097X64NC" "1" 30/11/17 31/12/49
+1 "" 3 "IPHONE X 64GB negro" 0 "P097X64NC" "1" 30/11/17 31/12/49
+1 "" 4 "IPHONE X 64GB negro" 0 "P097X64NC" "1" 30/11/17 31/12/49
+1 "" 5 "IPHONE X 64GB black" 0 "P097X64NC" "1" 30/11/17 31/12/49
 1 "" 1 "iPhone X 64 GB Plata" 0 "P097X64SC" "1" 25/10/17 31/12/49
 1 "" 2 "iPhone X 64GB Plata" 0 "P097X64SC" "1" 25/10/17 31/12/49
 1 "" 3 "iPhone X 64GB Plata" 0 "P097X64SC" "1" 25/10/17 31/12/49
@@ -10983,6 +11092,10 @@
 1 "" 3 "Huawei P8 Lite" 0 "SUMIDRO2" "1" 25/11/15 31/12/49
 1 "" 4 "Huawei P8 Lite" 0 "SUMIDRO2" "1" 25/11/15 31/12/49
 1 "" 5 "Telefono pruebas 2" 0 "SUMIDRO2" "1" 25/11/15 31/12/49
+1 "" 1 "VISITA INSTALADOR" 0 "TECHINST" "1" 20/11/17 31/12/49
+1 "" 2 "VISITA INSTAL-LADOR" 0 "TECHINST" "1" 20/11/17 31/12/49
+1 "" 3 "INSTALATZAILEAREN BISITALDIA" 0 "TECHINST" "1" 20/11/17 31/12/49
+1 "" 5 "INSTALLATION VISIT" 0 "TECHINST" "1" 20/11/17 31/12/49
 1 "" 1 "Incumplimiento de Permanencia" 0 "TERMPERIOD" "1" 01/04/12 31/12/49
 1 "" 1 "Penalización" 0 "TERMPERIOD" "1" 01/01/06 31/03/12
 1 "" 2 "Incompliment de Permanència" 0 "TERMPERIOD" "1" 01/04/12 31/12/49

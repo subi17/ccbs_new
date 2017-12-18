@@ -238,6 +238,7 @@ FUNCTION fAddOrderCustomer RETURN LOGICAL
                    fgetCustSegment(ordercustomer.CustIdType,
                                    ordercustomer.selfemployed,
                                    ordercustomer.pro,
+                                   ordercustomer.custid,  /* YDR-2621 */
                                    OUTPUT lcCategory)).
 
       add_int(     lcStruct, "mark_dont_share_personal_data", 
