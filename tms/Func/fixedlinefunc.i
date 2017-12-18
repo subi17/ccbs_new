@@ -809,7 +809,7 @@ FUNCTION fCheckConvergentAvailableForExtraLine RETURNS INTEGER
              Customer.OrgId      = icCustID                AND
              Customer.CustidType = icCustIDType            AND
              Customer.Roles     NE "inactive"              NO-LOCK,
-       EACH  MobSub NO-LOCK WHERE
+       EACH  MobSub NO-LOCK USE-INDEX CustNum WHERE
              MobSub.Brand    = Syst.Var:gcBrand AND
              MobSub.CustNum  = Customer.CustNum        AND
              MobSub.PayType  = FALSE                   AND
