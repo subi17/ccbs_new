@@ -546,7 +546,7 @@ FUNCTION fCheckSTCBundle RETURNS LOG
      (icCLIType EQ "CONTSF" AND LOOKUP(icBundle,lcCONTSFContracts) = 0) OR
      LOOKUP(icCLIType,lcBundleCLITypes) = 0
   THEN DO:
-     ocError = "Bundle is not allowed for this subscription type".
+     ocError = "Bundle is not allowed for this subscription type " + icBundle.
      RETURN FALSE.
   END.
 
