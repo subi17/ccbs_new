@@ -307,8 +307,8 @@ FUNCTION fDocListByOrder RETURNS CHAR
    FOR EACH bDMSDOC NO-LOCK WHERE
             bDMSDOC.DMSID EQ bDMS.DMSID BY bDMSDOC.DocTypeId:
       IF icNotifCaseID EQ {&DMS_INITIAL_NOTIF_CASE} /*1*/ THEN DO:
-         IF lcDocList NE "" THEN lcDocList = lcDocList + {&DMS_DOCLIST_SEP}.
          IF bDMSDOC.DocStatusCode EQ {&DMS_INIT_STATUS_SENT} THEN DO:
+            IF lcDocList NE "" THEN lcDocList = lcDocList + {&DMS_DOCLIST_SEP}.
             lcDocList = lcDocList + bDmsDoc.DocTypeId + {&DMS_DOCLIST_SEP}  +
                                     /*empty*/           {&DMS_DOCLIST_SEP} +
                                     bDmsDoc.DocTypeDesc.
