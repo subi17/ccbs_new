@@ -148,25 +148,39 @@ FUNCTION fMNPCallAlarm RETURNS LOGICAL
       END.
    END.
    
-   CREATE CallAlarm.
-   ASSIGN
-      CallAlarm.ActStamp   = ldeActStamp
-      CallAlarm.CLSeq      = 0
-      CallAlarm.CASeq      = NEXT-VALUE(CallAlarm)
-      CallAlarm.CustNo     = piCustNum
-      CallAlarm.CLI        = pcCLI
-      CallAlarm.DeliStat   = 1
-      CallAlarm.Delitype   = 1
-      CallAlarm.DeliPara   = "1"
-      CallAlarm.DeliMsg    = lcAlarmMess
-      CallAlarm.Limit      = 0
-      CallAlarm.CreditType = 12
-      CallAlarm.Orig       = pcSender
-      CallAlarm.Brand      = Syst.Var:gcBrand.
+   /* YDR-2660 Note for Codes:
+        pAction: "MNPIdentDirect" for "RECH_IDENT"
+        pAction: "MNPIccIdPOS" for "RECH_ICCID" */
+   IF Mm.MManMessage:mGetMessage("SMS", pcAction, pilang) = FALSE THEN
+   DO:
+      /* Existing behaviour. Message not enable for using Message Manager */
+      CREATE CallAlarm.
+      ASSIGN
+         CallAlarm.ActStamp   = ldeActStamp
+         CallAlarm.CLSeq      = 0
+         CallAlarm.CASeq      = NEXT-VALUE(CallAlarm)
+         CallAlarm.CustNo     = piCustNum
+         CallAlarm.CLI        = pcCLI
+         CallAlarm.DeliStat   = 1
+         CallAlarm.Delitype   = 1
+         CallAlarm.DeliPara   = "1"
+         CallAlarm.DeliMsg    = lcAlarmMess
+         CallAlarm.Limit      = 0
+         CallAlarm.CreditType = 12
+         CallAlarm.Orig       = pcSender
+         CallAlarm.Brand      = Syst.Var:gcBrand.
       
-   RELEASE CallAlarm.
+      RELEASE CallAlarm.
 
-   RETURN TRUE.
+      RETURN TRUE.
+   END.
+   ELSE 
+   DO:
+      /* New behaviour for YDR-2660: delay rejection SMS manage by Message Manager */
+      IF INDEX(Mm.MManMessage:ParamKeyValue,"#CLI") > 0 THEN
+         Mm.MManMessage:ParamKeyValue = REPLACE(Mm.MManMEssage:ParamKeyValue,"#CLI",pcCli).
+      RETURN Mm.MManMessage:mCreateMMLogSMS(pcCLI).
+   END.
 
 END FUNCTION.
 
