@@ -1,0 +1,7 @@
+ADD FIELD "Offer_type" OF "Offer" AS character
+  FORMAT "X(12)"
+  INITIAL "offer"
+  LABEL "Offer type"
+  COLUMN-LABEL "Offer type"
+  HELP "Offer type"
+  ORDER 170
