@@ -76,6 +76,9 @@ WITH ROW FrmRow width 80 OVERLAY FrmDown DOWN
 FORM
     DiscountPlan.Brand          COLON 25
     DiscountPlan.DPId           COLON 25 FORMAT ">>>>>>>9"
+    DiscountPlan.DPCategory     COLON 42 FORMAT "X(16)" LABEL "Cat"
+       VALIDATE(INPUT DiscountPlan.DPCategory NE "", 
+                "Empty Category value is not allowed")
     DiscountPlan.DPRuleID       COLON 25 FORMAT "X(16)"
     DiscountPlan.DPName         COLON 25 FORMAT "X(50)"
     DiscountPlan.BillCode       COLON 25 FORMAT "X(16)"
@@ -235,6 +238,7 @@ REPEAT WITH FRAME sel:
            ASSIGN 
               DiscountPlan.Brand    = lcBrand
               DiscountPlan.DPId     = i
+              DiscountPlan.DPCategory = INPUT FRAME lis DiscountPlan.DPCategory
               DiscountPlan.DPRuleID = INPUT FRAME lis DiscountPlan.DPRuleID
               DiscountPlan.Subject = "Contract Target"
               DiscountPlan.DPUnit     = "Percentage"
@@ -760,6 +764,7 @@ PROCEDURE local-UPDATE-record:
       DISP 
          DiscountPlan.Brand          
          DiscountPlan.DPId        
+         DiscountPlan.DPCategory
          DiscountPlan.DPRuleID
          DiscountPlan.DPName   
          DiscountPlan.Priority           
@@ -803,7 +808,8 @@ PROCEDURE local-UPDATE-record:
          RUN Syst/ufkey.p.
    
          UPDATE
-            DiscountPlan.DPName   
+            DiscountPlan.DPName  
+            DiscountPlan.DPCategory
             DiscountPlan.BillCode    WHEN NEW DiscountPlan
             DiscountPlan.ValidFrom
             DiscountPlan.ValidTo          
