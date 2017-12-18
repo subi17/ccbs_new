@@ -26,6 +26,7 @@
 Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
+{Func/extralinefunc.i}
 
 /* Input parameters */
 DEF VAR pcInput AS CHAR NO-UNDO.
@@ -76,13 +77,7 @@ FUNCTION fGetDiscountType RETURNS CHARACTER
    (INPUT iiMsSeq   AS INT,
     INPUT icCLIType AS CHAR):
 
-   DEF VAR lcExtraLineCLITypes  AS CHAR NO-UNDO.
-   DEF VAR lcExtraLineDiscounts AS CHAR NO-UNDO.
    DEF VAR lcDiscountType       AS CHAR NO-UNDO INITIAL "".
-
-   ASSIGN
-      lcExtraLineCLITypes  = fCParam("DiscountType","ExtraLine_CLITypes")
-      lcExtraLineDiscounts = fCParam("DiscountType","ExtraLine_Discounts").
 
    /* Get available discount info for subscriptions     */
    /* Only one additionaline/extraline discount will be
@@ -107,9 +102,9 @@ FUNCTION fGetDiscountType RETURNS CHARACTER
              lcDiscountType = "additional_50".
 
        END.
-       ELSE IF LOOKUP(icCLIType,lcExtraLineCLITypes) > 0 THEN DO:
+       ELSE IF fCLITypeIsExtraLine(icCLIType) THEN DO:
 
-          IF LOOKUP(DiscountPlan.DPRuleId,lcExtraLineDiscounts) > 0 THEN
+          IF LOOKUP(DiscountPlan.DPRuleId,icCLIType + "DISC") > 0 THEN
              lcDiscountType = "extra_100".
           ELSE
              lcDiscountType = "extra_0".
