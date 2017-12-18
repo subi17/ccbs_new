@@ -23,10 +23,11 @@
 &GLOBAL-DEFINE BBPROFILE  "1,2"
 &GLOBAL-DEFINE LOGVALUE   "Yes,No"
 &GLOBAL-DEFINE TAXCLASS   "0,1,2"   /* 0: Duty free / 1: Usage / 2: Terminals */
+&GLOBAL-DEFINE TARIFFTYPE "MobileOnly,Convergent,FixedOnly,Fusion"
 
 &GLOBAL-DEFINE CT      "CLIType"  
 &GLOBAL-DEFINE TN      "TariffName"
-&GLOBAL-DEFINE TB      "TariffBundle"
+&GLOBAL-DEFINE TT      "TariffType"
 &GLOBAL-DEFINE WS      "WebStatus"
 &GLOBAL-DEFINE STCS    "STCStatus"
 &GLOBAL-DEFINE PT      "PaymentType"
@@ -41,52 +42,17 @@
 &GLOBAL-DEFINE SC      "ServiceClass"
 &GLOBAL-DEFINE CF      "CommercialFee"
 &GLOBAL-DEFINE CMF     "ComparisonFee"
+&GLOBAL-DEFINE PF      "PROFee"
 &GLOBAL-DEFINE AB      "OptionalBundlesAndBONOs"
 &GLOBAL-DEFINE STC_BT  "BundlesForActivateOnSTC"
 &GLOBAL-DEFINE STC_SR  "ServicesForReCreateOnSTC"
 &GLOBAL-DEFINE CSF     "CopyServicesFromCliType"
-
+&GLOBAL-DEFINE MLT     "MainLineTariffs"
 
 &GLOBAL-DEFINE M_BB     "MobileBaseBundle"
-&GLOBAL-DEFINE M_BBN    "MobileBaseBundleName"
-&GLOBAL-DEFINE M_BBT    "MobileBaseBundleType"
-&GLOBAL-DEFINE M_BBPT   "MobileBaseBundlePayType"
-&GLOBAL-DEFINE M_UPSL   "UpsellForMobile"
-&GLOBAL-DEFINE M_BONO   "BonoSupportForMobile"
-&GLOBAL-DEFINE M_MFBC   "MonthlyFeeBillCodeForMobile"
-&GLOBAL-DEFINE M_CF     "CommercialFeeForMobile"
-&GLOBAL-DEFINE M_FMFC   "FirstMonthFeeCalcForMobile" 
-&GLOBAL-DEFINE M_LMFC   "LastMonthFeeCalcForMobile"
-&GLOBAL-DEFINE M_DL     "DataLimitForMobile"
-&GLOBAL-DEFINE M_VL     "VoiceLimitForMobile" 
-&GLOBAL-DEFINE M_BDL    "BDestinationLimitForMobile" 
-&GLOBAL-DEFINE M_FMDL   "FirstMonthDataLimitForMobile" 
-&GLOBAL-DEFINE M_LMDL   "LastMonthDataLimitForMobile"
-&GLOBAL-DEFINE M_FMVL   "FirstMonthVoiceLimitForMobile"
-&GLOBAL-DEFINE M_LMVL   "LastMonthVoiceLimitForMobile" 
-&GLOBAL-DEFINE M_FMBDL  "FirstMonthBDestLimitForMobile" 
-&GLOBAL-DEFINE M_LMBDL  "LastMonthBDestLimitForMobile"
-
-
 &GLOBAL-DEFINE FL_BB    "FixedLineBaseBundle"
-&GLOBAL-DEFINE FL_BBN   "FixedLineBaseBundleName"
-&GLOBAL-DEFINE FL_BBT   "FixedLineBaseBundleType"
-&GLOBAL-DEFINE FL_UPSL  "UpsellForFixedLine"
-&GLOBAL-DEFINE FL_BONO  "BonoSupportForFixedLine"
-&GLOBAL-DEFINE FL_MFBC  "MonthlyFeeBillCodeForFixedLine"
-&GLOBAL-DEFINE FL_CF    "CommercialFeeForFixedLine"
-&GLOBAL-DEFINE FL_FMFC  "FirstMonthFeeCalcForFixedLine" 
-&GLOBAL-DEFINE FL_LMFC  "LastMonthFeeCalcForFixedLine"
-&GLOBAL-DEFINE FL_VL    "VoiceLimitForFixedLine" 
-&GLOBAL-DEFINE FL_BDL   "BDestinationLimitForFixedLine" 
-&GLOBAL-DEFINE FL_FMVL  "FirstMonthVoiceLimitForFixedLine"
-&GLOBAL-DEFINE FL_LMVL  "LastMonthVoiceLimitForFixedLine" 
-&GLOBAL-DEFINE FL_FMBDL "FirstMonthBDestLimitForFixedLine" 
-&GLOBAL-DEFINE FL_LMBDL "LastMonthBDestLimitForFixedLine"
 
 &GLOBAL-DEFINE BBP     "BBProfile"
-&GLOBAL-DEFINE DSS2C   "DSS2Compatible"
-&GLOBAL-DEFINE DSS2PL  "DSS2PrimaryLine"
 &GLOBAL-DEFINE NVC     "NativeVoIPCompatible"
 &GLOBAL-DEFINE OV      "OnlyVOICE"
 &GLOBAL-DEFINE VBDES   "VoiceBDest"
@@ -96,6 +62,4 @@
 &GLOBAL-DEFINE MOF     "MonthlyFee"
 
 /*convergence project*/
-
-
 
