@@ -176,46 +176,43 @@ PROCEDURE pReadFileData:
       liReqStatus = {&REQUEST_STATUS_CONFIRMATION_PENDING}.
 
       FIND FIRST MsRequest WHERE
-                 MsRequest.Brand EQ Syst.Var:gcBrand AND
-                 MsRequest.ReqType EQ liReqType AND
-                 MsRequest.ReqStatus EQ liReqStatus AND
-                 MsRequest.ReqCParam3 EQ lcServicecode.
-      IF NOT AVAIL MsRequest THEN DO:
-         lcErrText = lcLine + ";" + "Action not allowed: Requested " + 
-                     lcSetStatus.
+                 MsRequest.Brand      EQ Syst.Var:gcBrand AND
+                 MsRequest.ReqType    EQ liReqType        AND
+                 MsRequest.ReqStatus  EQ liReqStatus      AND
+                 MsRequest.ReqCParam3 EQ lcServiceCode    NO-LOCK NO-ERROR.
+      IF NOT AVAIL MsRequest THEN 
+      DO:
+         lcErrText = lcLine + ";" + "Action not allowed: Requested " + lcSetStatus.
          OUTPUT STREAM sErr TO VALUE(lcErrorLog) append.
          PUT STREAM sErr UNFORMATTED lcErrText SKIP.
          OUTPUT STREAM sErr CLOSE.
          OUTPUT STREAM sLog TO VALUE(lcLog) append.
          PUT STREAM sLog UNFORMATTED lcErrText SKIP.
          OUTPUT STREAM sLog CLOSE.
-
                      
          NEXT.
       END.
       /*Make actual status change for the request and create / remove fee*/
 
-      IF lcSetStatus begins "cancel" THEN DO:
-         lcEmailErr = fSendEmailByRequest(MsRequest.MsRequest,
-                      "SVA_" + MsRequest.ReqCparam3).
-         IF lcEmailErr NE "" THEN MESSAGE "ERROR: " + lcEmailErr 
-            VIEW-AS ALERT-BOX.
+      IF lcSetStatus begins "cancel" THEN 
+      DO:
+         lcEmailErr = fSendEmailByRequest(MsRequest.MsRequest, "SVA_" + MsRequest.ReqCparam3).
+         IF lcEmailErr NE "" THEN 
+            MESSAGE "ERROR: " + lcEmailErr VIEW-AS ALERT-BOX.
          fReqStatus(4, "SVA operation cancelled ").
-
       END.
       ELSE DO:
          fReqStatus(6, "Execute SVA operation ").
-         /* in case of incativation inactivate also latest activation 
-            request */
-         IF lcSetStatus EQ "Inactive" THEN DO:
+         /* in case of incativation, inactivate its activation request */
+         IF lcSetStatus EQ "Inactive" THEN 
+         DO:
            FIND FIRST MsRequest WHERE
-                      MsRequest.Brand EQ Syst.Var:gcBrand AND
-                      MsRequest.ReqType EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
-                      MsRequest.ReqStatus EQ {&REQUEST_STATUS_DONE} AND
-                      MsRequest.ReqCParam3 EQ lcServicecode.
+                      MsRequest.Brand      EQ Syst.Var:gcBrand               AND
+                      MsRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
+                      MsRequest.ReqStatus  EQ {&REQUEST_STATUS_DONE}         AND
+                      MsRequest.ReqCParam3 EQ lcServiceCode                  NO-LOCK NO-ERROR.
            IF AVAIL MsRequest THEN
               fReqStatus(9, "SVA operation, inactivated").
-
          END.
       END.
       OUTPUT STREAM sLog TO VALUE(lcLog) append.

@@ -24,24 +24,16 @@ Later in YPRO project we will consider if it is reason to make
 FUNCTION fIsSVA RETURNS LOGICAL
    (INPUT icService AS CHAR,
     OUTPUT oiParams AS INT):
-   oiParams = 0. 
-   IF icService EQ "FAXTOEMAIL" THEN DO:
-      oiParams = 2.
-      RETURN TRUE.
-   END.
-   ELSE IF icService EQ "OFFICE365" THEN DO:
-      oiParams = 1.
-      RETURN TRUE.
-   END.
-   ELSE IF icService EQ "SAGEONE" THEN DO:
-      RETURN TRUE.
-   END.
-   ELSE IF icService EQ "IPFIJA" THEN DO:
-      RETURN TRUE.
-   END.
-   ELSE IF icService EQ "Centralita" THEN DO:
-      RETURN TRUE.
-   END.
+
+   DEFINE BUFFER bf_DayCampaign FOR DayCampaign.
+
+   ASSIGN oiParams = (IF icService EQ "FAXTOEMAIL" THEN 2 
+                      ELSE IF icService EQ "OFFICE365" THEN 1
+                      ELSE 0).
+   FIND FIRST bf_DayCampaign WHERE bf_DayCampaign.Brand   = Syst.Var:gcBrand AND 
+                                   bf_DayCampaign.DCEvent = TRIM(icService)  NO-LOCK NO-ERROR.
+   IF AVAIL bf_DayCampaign AND bf_DayCampaign.BundleTarget = {&DC_BUNDLE_TARGET_SVA} THEN 
+       RETURN TRUE.
 
    RETURN FALSE.
 END.
