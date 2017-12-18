@@ -44,5 +44,6 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    add_double(lcResultStruct, "amount", Offer.OfferAmount). 
    add_int(lcResultStruct, "priority", Offer.Priority). 
    add_boolean(lcResultStruct, "vat_included", Offer.VatIncl). 
-   add_boolean(lcResultStruct, "active", Offer.Active). 
+   add_boolean(lcResultStruct, "active", Offer.Active).
+   add_string(lcResultStruct, "offer_type", Offer.offer_type).
 END.
