@@ -43,7 +43,7 @@
 "URL" "urlATMa" "C" 0 0 "atm" ? "" "" "" "" "" "" "" "" "" "" "ATM URL a" no "1"
 "URL" "urlATMb" "C" 0 0 "atm" ? "" "" "" "" "" "" "" "" "" "" "ATM URL b" no "1"
 "URL" "urlATMc" "C" 0 0 "atm" ? "" "" "" "" "" "" "" "" "" "" "ATM URL c" no "1"
-"URL" "urlCreditCheck" "C" 0 0 "creditcheck" ? "" "" "" "" "" "" "" "" "" "" "Credit Scoring URL" yes "1"
+"URL" "urlCreditCheck" "C" 0 0 "creditcheck.p" ? "" "" "" "" "" "" "" "" "" "" "Credit Scoring URL" yes "1"
 "URL" "urlDextra" "C" 0 0 "http://217.168.2.239:8080/order-status/xmlrpc" ? "" "" "" "" "" "" "" "" "" "" "Dextra online interface" no "1"
 "URL" "urlMasmovil" "C" 0 0 "http://217.168.2.239:8080/masmovil/xmlrpc" ? "" "" "" "" "" "" "" "" "" "" "Masmovil Adapter" no "1"
 "URL" "urlMNP" "C" 0 0 "mnpsend" ? "" "" "" "" "" "" "" "" "" "" "MNP send URL" no "1"
