@@ -1,0 +1,7 @@
+DROP INDEX "PLMNCode" ON "RZItem"
+
+ADD INDEX "PLMNCode" ON "RZItem" 
+  AREA "Sta_Index_2"
+  PRIMARY
+  INDEX-FIELD "PlmnCode" ASCENDING
+
