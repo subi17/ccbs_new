@@ -204,10 +204,7 @@ PROCEDURE pHandleQueue:
    DEFINE VARIABLE lcNewOper    AS CHAR NO-UNDO. 
    DEFINE VARIABLE llgMNPOperName  AS LOG NO-UNDO. 
    DEFINE VARIABLE llgMNPOperBrand AS LOG NO-UNDO. 
-   DEFINE VARIABLE lcExtraMainLineCLITypes AS CHAR NO-UNDO.  
    
-   lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes").
-
    FIND MessageBuf WHERE RECID(MessageBuf) = pRecId EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
    IF ERROR-STATUS:ERROR OR LOCKED(MessageBuf) THEN 
       RETURN.
@@ -876,10 +873,9 @@ PROCEDURE pHandleQueue:
                                       FALSE,
                                       "RELEASE"). 
 
-            IF lcExtraMainLineCLITypes                       NE "" AND
-               LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) GT 0  AND
-               Order.MultiSimId                              NE 0  AND
-               Order.MultiSimType                            EQ {&MULTISIMTYPE_PRIMARY} THEN
+            IF fCLITypeIsMainLine(Order.CLIType)       AND
+               Order.MultiSimId                  NE 0  AND
+               Order.MultiSimType                EQ {&MULTISIMTYPE_PRIMARY} THEN
                fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
                                         Order.OrderId,    /* Main line Order Id  */
                                         "RELEASE").       /* Action              */
