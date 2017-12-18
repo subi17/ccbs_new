@@ -197,6 +197,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       lcBundleType = "promotional".   
    ELSE IF DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
       lcBundleType = "tv_service".
+   ELSE IF DayCampaign.BundleTarget EQ {&DC_BUNDLE_TARGET_SVA} THEN
+      lcBundleType = "value_added_service".
    ELSE 
       lcBundleType = "service".
    

@@ -12,6 +12,7 @@
             vat_included;optional;boolean;
             active;optional;boolean;
             username;mandatory;newton username
+            offer_type;optional;char;
  * @output  result;struct;contains changed parameter values
  */
 
@@ -37,7 +38,7 @@ pcTenant = get_string(param_toplevel_id, "0").
 pcId     = get_string(param_toplevel_id, "1").
 pcStruct = get_struct(param_toplevel_id, "2").
 
-lcstruct = validate_struct(pcStruct, "description,display_item_amounts,valid_from,valid_to,amount,priority,vat_included,active,username!").
+lcstruct = validate_struct(pcStruct, "description,display_item_amounts,valid_from,valid_to,amount,priority,vat_included,active,username!,offer_type").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -75,7 +76,10 @@ ASSIGN
                              WHEN LOOKUP("description", lcStruct) > 0 
    
    ttOffer.offeramount     = get_double(pcStruct, "amount")
-                             WHEN LOOKUP("amount", lcStruct) > 0.
+                             WHEN LOOKUP("amount", lcStruct) > 0
+
+   ttOffer.offer_type      = get_string(pcStruct, "offer_type")
+                             WHEN LOOKUP("offer_type", lcStruct) > 0.
    
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
