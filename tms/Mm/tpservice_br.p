@@ -26,6 +26,7 @@ DEF VAR rtab            AS RECID EXTENT 24        NO-UNDO.
 DEF VAR i               AS INT                    NO-UNDO.
 DEF VAR lcCreatedTS     AS CHAR                   NO-UNDO.
 DEF VAR lcUpdatedTS     AS CHAR                   NO-UNDO.
+DEF VAR lcVoucherActDtTS AS CHAR                   NO-UNDO.
 DEF VAR lcVoucherStatus AS CHAR                   NO-UNDO.
 
 FORM
@@ -54,7 +55,11 @@ FORM
     SKIP
     "Serial Number .....:" TPService.SerialNbr
     SKIP
-    "Sky TV Voucher ....:" TPService.SkyTvVoucher lcVoucherStatus FORMAT "X(15)" AT 38 
+    "Mac Address .......:" TPService.MacAddress
+    SKIP
+    "Sky TV Voucher ....:" TPService.SkyTvVoucher 
+    lcVoucherStatus  FORMAT "X(15)" AT 38 
+    lcVoucherActDtTS FORMAT "X(24)" AT 50
     SKIP
     "External Id .......:" TPService.MessageId
     SKIP
@@ -67,7 +72,7 @@ FORM
     "Updated Date ......:" lcUpdatedTS FORMAT "X(24)" 
     SKIP
     "Cancellation Reason:" TPService.TermReason
-    SKIP(1)
+    SKIP
 WITH OVERLAY ROW 1 WIDTH 80 centered
     COLOR VALUE(Syst.Var:cfc) TITLE COLOR VALUE(Syst.Var:ctc) "Third party service data" NO-LABELS FRAME fDetails.
 
@@ -270,9 +275,10 @@ REPEAT WITH FRAME sel:
         PAUSE 0. 
         
         ASSIGN
-            lcCreatedTS     = Func.Common:mTS2HMS(TPService.CreatedTS)  
-            lcUpdatedTS     = Func.Common:mTS2HMS(TPService.UpdateTS)
-            lcVoucherStatus = (IF TPService.VoucherStatus <> "" THEN TPService.VoucherStatus ELSE "Unlocked").
+            lcCreatedTS      = Func.Common:mTS2HMS(TPService.CreatedTS)  
+            lcUpdatedTS      = Func.Common:mTS2HMS(TPService.UpdateTS)
+            lcVoucherActDtTS = Func.Common:mTS2HMS(TPService.VoucherActiveDt).
+            lcVoucherStatus  = (IF TPService.VoucherStatus <> "" THEN TPService.VoucherStatus ELSE "Unlocked").
 
         DISP TPService.MsSeq
              TPService.ServSeq
@@ -282,6 +288,7 @@ REPEAT WITH FRAME sel:
              TPService.Product
              TPService.Offer
              TPService.SerialNbr
+             TPService.MacAddress
              TPService.SkyTvVoucher
              lcVoucherStatus
              TPService.MessageId
@@ -290,6 +297,7 @@ REPEAT WITH FRAME sel:
              TPService.TermReason
              lcCreatedTS
              lcUpdatedTS
+             lcVoucherActDtTS
              WITH FRAME fDetails.
 
         TPSERVICEBROWSE:
