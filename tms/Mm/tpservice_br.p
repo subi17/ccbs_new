@@ -277,7 +277,7 @@ REPEAT WITH FRAME sel:
         ASSIGN
             lcCreatedTS      = Func.Common:mTS2HMS(TPService.CreatedTS)  
             lcUpdatedTS      = Func.Common:mTS2HMS(TPService.UpdateTS)
-            lcVoucherActDtTS = Func.Common:mTS2HMS(TPService.VoucherActiveDt).
+            lcVoucherActDtTS = Func.Common:mTS2HMS(TPService.VoucherActiveDt)
             lcVoucherStatus  = (IF TPService.VoucherStatus <> "" THEN TPService.VoucherStatus ELSE "Unlocked").
 
         DISP TPService.MsSeq
