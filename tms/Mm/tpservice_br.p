@@ -72,7 +72,7 @@ FORM
     "Updated Date ......:" lcUpdatedTS FORMAT "X(24)" 
     SKIP
     "Cancellation Reason:" TPService.TermReason
-    SKIP
+    SKIP(1)
 WITH OVERLAY ROW 1 WIDTH 80 centered
     COLOR VALUE(Syst.Var:cfc) TITLE COLOR VALUE(Syst.Var:ctc) "Third party service data" NO-LABELS FRAME fDetails.
 
