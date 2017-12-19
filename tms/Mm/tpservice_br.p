@@ -59,7 +59,7 @@ FORM
     SKIP
     "Sky TV Voucher ....:" TPService.SkyTvVoucher 
     lcVoucherStatus  FORMAT "X(15)" AT 38 
-    lcVoucherActDt   FORMAT "X(24)" AT 50
+    lcVoucherActDt   FORMAT "X(10)" AT 50
     SKIP
     "External Id .......:" TPService.MessageId
     SKIP
