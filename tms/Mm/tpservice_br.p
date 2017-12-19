@@ -297,7 +297,7 @@ REPEAT WITH FRAME sel:
              TPService.TermReason
              lcCreatedTS
              lcUpdatedTS
-             lcVoucherActDtTS
+             lcVoucherActDt
              WITH FRAME fDetails.
 
         TPSERVICEBROWSE:
