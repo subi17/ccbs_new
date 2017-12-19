@@ -58,8 +58,8 @@ FORM
     "Mac Address .......:" TPService.MacAddress
     SKIP
     "Sky TV Voucher ....:" TPService.SkyTvVoucher 
-    lcVoucherStatus  FORMAT "X(15)" AT 38 
-    lcVoucherActDt   FORMAT "X(10)" AT 50
+    lcVoucherStatus  FORMAT "X(12)" AT 38 
+    lcVoucherActDt   FORMAT "X(10)" AT 52
     SKIP
     "External Id .......:" TPService.MessageId
     SKIP
