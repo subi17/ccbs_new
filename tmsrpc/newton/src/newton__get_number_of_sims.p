@@ -24,7 +24,6 @@ DEF VAR pcTenant           AS CHAR NO-UNDO.
 DEF VAR piOrderId          AS INT  NO-UNDO.
 DEF VAR lcError            AS CHAR NO-UNDO.
 DEF VAR lcResultStruct     AS CHAR NO-UNDO. 
-DEF VAR resp_array         AS CHAR NO-UNDO.
 DEF VAR lcOrderList        AS CHAR NO-UNDO. 
 DEF VAR liNoOfSims         AS INT  NO-UNDO. 
 DEF VAR liNoOfDevices      AS INT  NO-UNDO. 
@@ -132,7 +131,7 @@ PROCEDURE pCheckAdditionalLineOrders:
 
 END PROCEDURE. 
 
-lcResultStruct = add_struct(resp_array, "").
+lcResultStruct = add_struct(response_toplevel_id, "").
 
 add_string(lcResultStruct,"OrderId",STRING(Order.OrderId)).
 add_int(lcResultStruct,"NoOfSims",liNoOfSims).
