@@ -400,18 +400,18 @@ DO:
       pcBundleId EQ "DSS_UPSELL" OR
       pcBundleId EQ "DSS2_UPSELL" THEN
        ASSIGN 
-           lcMemoText = IF INDEX(Daycampaign.DCName,"Ampliaci?n") > 0 THEN 
+           lcMemoText = IF INDEX(Daycampaign.DCName,"Ampliaci�n") > 0 THEN 
                             DayCampaign.DCName  + " - " + lcOnOff
                         ELSE
-                            "Ampliaci?n " + DayCampaign.DCName + " - " + lcOnOff
+                            "Ampliaci�n " + DayCampaign.DCName + " - " + lcOnOff
            lcMemoTitle = DayCampaign.DCName.
    ELSE 
        ASSIGN 
            lcMemoText = pcReason + " " + 
-                        IF INDEX(Daycampaign.DCName,"Ampliaci?n") > 0 THEN
+                        IF INDEX(Daycampaign.DCName,"Ampliaci�n") > 0 THEN
                            DayCampaign.DCName + " - " + lcOnOff
                         ELSE
-                           "Ampliaci?n " + DayCampaign.DCName + " - " + lcOnOff
+                           "Ampliaci�n " + DayCampaign.DCName + " - " + lcOnOff
            lcMemoTitle = DayCampaign.DCName.
 END.
 ELSE 
