@@ -16,15 +16,24 @@
 Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
+{Func/orderfunc.i}
+{Func/fixedlinefunc.i}
+{Func/extralinefunc.i}
 
-DEF VAR pcTenant    AS CHAR NO-UNDO.
-DEF VAR piOrderId   AS INT  NO-UNDO.
-DEF VAR lcError     AS CHAR NO-UNDO.
-DEF VAR lcOrderList AS CHAR NO-UNDO. 
+DEF VAR pcTenant           AS CHAR NO-UNDO.
+DEF VAR piOrderId          AS INT  NO-UNDO.
+DEF VAR lcError            AS CHAR NO-UNDO.
+DEF VAR lcResultStruct     AS CHAR NO-UNDO. 
+DEF VAR resp_array         AS CHAR NO-UNDO.
+DEF VAR lcOrderList        AS CHAR NO-UNDO. 
+DEF VAR liNoOfSims         AS INT  NO-UNDO. 
+DEF VAR liNoOfDevices      AS INT  NO-UNDO. 
+DEF VAR lcTerminalBillCode AS CHAR NO-UNDO. 
 
 DEFINE BUFFER bOrder         FOR Order.
 DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
-
+DEFINE BUFFER bCLIType       FOR CLIType.
+DEFINE BUFFER bOrderAction   FOR OrderAction.
 
 IF validate_request(param_toplevel_id, "string,int") EQ ? THEN RETURN.
 
@@ -47,7 +56,24 @@ IF NOT AVAIL Order THEN
 IF LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 THEN 
    RETURN appl_err("Order is already closed or cancelled").
 
+IF NOT fIsConvergenceTariff(Order.CLIType) THEN
+   RETURN appl_err("OrderId provided is not mainline order").
+
+FIND FIRST OrderCustomer NO-LOCK WHERE
+           OrderCustomer.Brand   = Syst.Var:gcBrand                   AND
+           OrderCustomer.OrderId = Order.OrderId                      AND
+           OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
+
+IF NOT AVAIL OrderCustomer THEN 
+   RETURN appl_err("OrderCustomer not available").
+
 lcOrderList = STRING(piOrderId).
+
+IF fIsTerminalOrder(Order.OrderId,
+                    OUTPUT lcTerminalBillCode) THEN 
+   liNoOfDevices = liNoOfDevices + 1.
+ELSE 
+   liNoOfSims = liNoOfSims + 1.   
 
 RUN pCheckExtraLineOrders.
 
@@ -55,86 +81,63 @@ RUN pCheckAdditionalLineOrders.
 
 PROCEDURE pCheckExtraLineOrders:
 
-DEF VAR lcExtraMainLineCLITypes AS CHAR NO-UNDO. 
-DEF VAR lcExtraLineCLITypes     AS CHAR NO-UNDO. 
-DEF VAR liMultiSimTypeValue     AS INT  NO-UNDO INITIAL 0. 
+   IF fCLITypeIsMainLine(Order.CLIType)                        AND 
+      Order.MultiSimId               <> 0                      AND 
+      Order.MultiSimType             = {&MULTISIMTYPE_PRIMARY} THEN 
+   DO:
+      FIND FIRST bOrder NO-LOCK WHERE 
+                 bOrder.Brand        EQ Syst.Var:gcBrand                  AND 
+                 bOrder.OrderId      EQ Order.MultiSimId                  AND 
+                 bOrder.MultiSimId   EQ Order.OrderId                     AND
+                 bOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}         AND 
+                 bOrder.StatusCode   EQ {&ORDER_STATUS_PENDING_MAIN_LINE} AND 
+                 bOrder.OrderType    NE {&ORDER_TYPE_RENEWAL}             NO-ERROR.
 
-   ASSIGN lcExtraMainLineCLITypes = fCParam("DiscountType","Extra_MainLine_CLITypes")
-          lcExtraLineCLITypes     = fCParam("DiscountType","ExtraLine_CLITypes").
-
-   IF LOOKUP(Order.CLIType,lcExtraMainLineCLITypes) > 0 AND 
-      Order.MultiSimId                             <> 0 AND 
-      Order.MultiSimType                            = {&MULTISIMTYPE_PRIMARY} THEN 
-      liMultiSimTypeValue = {&MULTISIMTYPE_EXTRALINE}.
-   ELSE IF LOOKUP(Order.CLIType,lcExtraLineCLITypes) > 0 AND
-      Order.MultiSimId                              <> 0 AND
-      Order.MultiSimType                             = {&MULTISIMTYPE_EXTRALINE} THEN
-      liMultiSimTypeValue = {&MULTISIMTYPE_PRIMARY}.      
-
-   IF liMultiSimTypeValue EQ 0 THEN LEAVE.
-
-   FIND FIRST bOrder NO-LOCK WHERE 
-              bOrder.Brand        = Syst.Var:gcBrand    AND 
-              bOrder.OrderId      = Order.MultiSimId    AND 
-              bOrder.MultiSimId   = Order.OrderId       AND
-              bOrder.MultiSimType = liMultiSimTypeValue NO-ERROR.
-
-   IF NOT AVAIL bOrder THEN 
-      RETURN appl_err("Extraline associated linked order is not available").
-
-   lcOrderList = lcOrderList + "," + STRING(bOrder.OrderId).
+      IF AVAIL bOrder THEN  
+         ASSIGN lcOrderList = lcOrderList + "," + STRING(bOrder.OrderId)
+                liNoOfSims  = liNoOfSims + 1.
+   END. 
 
 END PROCEDURE.
 
 PROCEDURE pCheckAdditionalLineOrders:
 
-   FIND FIRST OrderCustomer NO-LOCK WHERE
-              OrderCustomer.Brand   = Syst.Var:gcBrand                   AND
-              OrderCustomer.OrderId = Order.OrderId                      AND
-              OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
+   FOR EACH bOrderCustomer NO-LOCK WHERE
+            bOrderCustomer.Brand      EQ Syst.Var:gcBrand         AND
+            bOrderCustomer.CustId     EQ OrderCustomer.CustId     AND
+            bOrderCustomer.CustIdType EQ OrderCustomer.CustIdType AND
+            bOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+       EACH bOrder NO-LOCK WHERE
+            bOrder.Brand      EQ Syst.Var:gcBrand                  AND
+            bOrder.OrderId    EQ bOrderCustomer.OrderId            AND
+            bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE} AND 
+            bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL},
+      FIRST bCLIType WHERE bCLIType.Brand   EQ Syst.Var:gcBrand AND
+                           bCLIType.CliType EQ bOrder.CLIType   NO-LOCK:
 
-   IF NOT AVAIL OrderCustomer THEN 
-      RETURN appl_err("OrderCustomer not available").
+      IF LOOKUP(bOrder.CliType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
+      
+          IF CAN-FIND(FIRST bOrderAction NO-LOCK WHERE
+                            bOrderAction.Brand    = Syst.Var:gcBrand             AND
+                            bOrderAction.OrderID  = bOrder.OrderId               AND
+                            bOrderAction.ItemType = "AddLineDiscount"            AND 
+                    (LOOKUP(bOrderAction.ItemKey,{&ADDLINE_DISCOUNTS_20}) > 0 OR 
+                     LOOKUP(bOrderAction.ItemKey,{&ADDLINE_DISCOUNTS})    > 0 )) THEN 
+             ASSIGN lcOrderList = lcOrderList + "," + STRING(bOrder.OrderId)
+                    liNoOfSims  =  liNoOfSims + 1. 
 
-   IF fIsConvergenceTariff(Order.CLIType)            OR 
-      LOOKUP(bOrder.CliType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
-
-      FOR EACH bOrderCustomer NO-LOCK WHERE
-               bOrderCustomer.Brand      EQ Syst.Var:gcBrand         AND
-               bOrderCustomer.CustId     EQ OrderCustomer.CustId     AND
-               bOrderCustomer.CustIdType EQ OrderCustomer.CustIdType AND
-               bOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
-          EACH bOrder NO-LOCK WHERE
-               bOrder.Brand      EQ Syst.Var:gcBrand        AND
-               bOrder.OrderId    EQ bOrderCustomer.OrderId  AND
-               bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL},
-         FIRST bCLIType WHERE bCLIType.Brand   EQ Syst.Var:gcBrand AND
-                              bCLIType.CliType EQ bOrder.CLIType   NO-LOCK:
-
-         IF LOOKUP(bOrder.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 THEN NEXT.
-
-         IF LOOKUP(bOrder.CliType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
-         
-             IF CAN-FIND(FIRST bOrderAction NO-LOCK WHERE
-                               bOrderAction.Brand    = Syst.Var:gcBrand             AND
-                               bOrderAction.OrderID  = bOrder.OrderId               AND
-                               bOrderAction.ItemType = "AddLineDiscount"            AND 
-                       (LOOKUP(bOrderAction.ItemKey,{&ADDLINE_DISCOUNTS_20}) > 0 OR 
-                        LOOKUP(bOrderAction.ItemKey,{&ADDLINE_DISCOUNTS})    > 0 OR 
-                        LOOKUP(bOrderAction.ItemKey,{&ADDLINE_DISCOUNTS_HM}) > 0))  THEN 
-                lcOrderList = lcOrderList + "," + STRING(bOrder.OrderId).
-
-         END.
-
-      END. 
+      END.
 
    END. 
 
-END PROCEDURE.
+END PROCEDURE. 
 
-/* IF liRequestID = 0 THEN DO:
-   RETURN appl_err(lcError).
-END. */
+lcResultStruct = add_struct(resp_array, "").
+
+add_string(lcResultStruct,"OrderId",STRING(Order.OrderId)).
+add_int(lcResultStruct,"NoOfSims",liNoOfSims).
+add_int(lcResultStruct,"NoOfDevices",liNoOfDevices).
+add_string(lcResultStruct,"OrderList",lcOrderList).
 
 add_boolean(response_toplevel_id,?,TRUE).
 
