@@ -148,7 +148,7 @@ def param_gen(a):
    for item in a:
        yield item.partition(':')
 
-def daemon_gen(simple, a):
+def daemon_gen(outputmode, a):
     daemondict = {}
     for item in [param for param in param_gen(a)]:
         if item[0] in daemondict:
@@ -163,9 +163,11 @@ def daemon_gen(simple, a):
                 if not daemondict or daemonnick in daemondict:
                     for instance in jsondata[daemon][daemonnick]:
                         if not daemondict or '' in daemondict[daemonnick] or instance.lower() in daemondict[daemonnick]:
-                            if simple:
+                            if outputmode == 'just_name':
                                 yield 'd-{0}{1}'.format(daemon, instance)
-                            else:
+                            elif outputmode == 'print':
+                                yield ('d-{0}{1}'.format(daemon, instance),) + (format(daemonnick, '<15') + '| ' + format(instance.lower(), '<15') + '| ' + format('d-{0}{1}'.format(daemon, instance), '<36') +  '| ',)
+                            elif outputmode == 'detail':
                                 if not 'databases' in jsondata[daemon][daemonnick][instance]:
                                     databases = default_databases
                                 else:
@@ -179,7 +181,7 @@ def start(*a):
     '''start|run|rundaemons'''
     
     os.chdir('..')
-    for daemonitem in daemon_gen(False, parameters):
+    for daemonitem in daemon_gen('detail', parameters):
 
         pid_file = state_base + daemonitem[0] + '.pid'
         if os.path.exists(pid_file):
@@ -256,7 +258,7 @@ class myThread (threading.Thread):
 def stop(*a):
     '''stop|stopdaemons'''
     daemonsavailable = False
-    for daemonitem in daemon_gen(True, parameters):
+    for daemonitem in daemon_gen('just_name', parameters):
         pidfile = state_base + daemonitem + '.pid'
         if os.path.exists(pidfile):
             daemonsavailable = True
@@ -283,18 +285,29 @@ def stop(*a):
 @target
 def status(*a):
     '''default|status|daemonsstatus|daemonstatus'''
-    for daemonitem in daemon_gen(True, parameters):
-        pidfile = state_base + daemonitem + '.pid'
-        if not os.path.exists(pidfile):
-            print('Daemon ' + daemonitem + ' is not running')
-            continue
+    problemlist = []
+    header = True
+    for daemonitem in daemon_gen('print', parameters):
+        pid = "No"
+        pidfile = state_base + daemonitem[0] + '.pid'
+        if os.path.exists(pidfile):
+            fd = open(pidfile, 'rt')
+            pid = fd.read().strip()
+            fd.close()
 
-        fd = open(pidfile, 'rt')
-        pid = int(fd.read().strip())
-        fd.close()
+            if not pid_exists(int(pid)):
+                pid = "No"
+                problemlist.append(pidfile)
 
-        if not pid_exists(pid):
-            print("Daemon process marked to pid file {0} doesn't exists! Deleted the pid file.".format(pidfile))
-            os.unlink(pidfile)
-        else:
-            print('Daemon {0} is running with pid {1}'.format(daemonitem, pid))
+        if header:
+            print('Category       | Instance       | Daemon name                         | Running')
+            print('-------------------------------------------------------------------------------')
+            header = False
+
+        print(daemonitem[1] + pid)
+
+    print
+
+    for pidfile in problemlist:
+        print("Daemon process marked to pid file {0} doesn't exists! Deleted the pid file.".format(pidfile))
+        os.unlink(pidfile)
