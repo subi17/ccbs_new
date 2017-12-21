@@ -1,6 +1,8 @@
 "ACC_POSTPAID" "Agreement Customer Change Postpaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "ACC_PREPAID" "Agreement Customer Change Prepaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "AGILETVMF" "Agile TV Service" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"ANGELTECHMF" "Angel Tecnologico" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"ASISTMF" "Asistencia Negocios" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "BALANCE_PREPAID" "Balance Query Prepaid" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "BBMF" "BlackBerry Monthly Fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "BONO_VOIPMF" "Mobile data usage bundle VoIP" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
@@ -30,6 +32,9 @@
 "CONT26MF" "Contrato 26" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT27MF" "LA INFINITA 2 GB DTO." "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT28MF" "Línea móvil extra" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"CONT29MF" "La Dúo extra" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"CONT30MF" "Contrato 30" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"CONT31MF" "La Tarifa Tic Tac" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT7MF" "Contrato 7 Service package" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT8MF" "La del Uno service package" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT9MF" "Contrato 9 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
