@@ -44,7 +44,7 @@
 "51" "Calls Fixed" "" "" "" "" "" "1" 1 "," 20
 "53" "Premium Services Fixed" "" "" "" "" "" "1" 1 "," 30
 "54" "PRO Services" "" "" "" "" "" "1" 1 "," 15
-"55" "TV Services" "" "" "" "" "" "1" 1 "," 87
+"55" "Other Services" "" "" "" "" "" "1" 1 "," 87
 "56" "TV Setup Box" "" "" "" "" "" "1" 1 "," 122
 "6" "Premium Services" "" "" "" "" "" "1" 0 "1002,6" 80
 "7" "Terminals" "" "" "" "" "" "1" 0 "," 120

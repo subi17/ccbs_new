@@ -402,6 +402,22 @@
 1 "" 2 "Agile TV prestat per OTT Networks Ibérica" 0 "AGILETV" "1" 22/08/17 31/12/49
 1 "" 3 "Agile TV, OTT Networks Ibéricak emana" 0 "AGILETV" "1" 22/08/17 31/12/49
 1 "" 5 "Agile TV provided by OTT Networks Ibérica" 0 "AGILETV" "1" 22/08/17 31/12/49
+1 "" 1 "Descuento promoción  Angel Tecnologico" 0 "ANGELTECHDISC" "1" 18/12/17 31/12/49
+1 "" 2 "Descompte promoció  Angel Tecnologico" 0 "ANGELTECHDISC" "1" 18/12/17 31/12/49
+1 "" 3 "Promozio-deskontua Angel Tecnologico" 0 "ANGELTECHDISC" "1" 18/12/17 31/12/49
+1 "" 5 "Promotional discount Angel Tecnologico" 0 "ANGELTECHDISC" "1" 18/12/17 31/12/49
+1 "" 1 "Angel Tecnológico prestado por HomeServe" 0 "ANGELTECHMF" "1" 18/12/17 31/12/49
+1 "" 2 "Angel Tecnológico prestat per HomeServe" 0 "ANGELTECHMF" "1" 18/12/17 31/12/49
+1 "" 3 "Angel Tecnológico, Homeserve emana" 0 "ANGELTECHMF" "1" 18/12/17 31/12/49
+1 "" 5 "Angel Tecnológico provided by HomeServe" 0 "ANGELTECHMF" "1" 18/12/17 31/12/49
+1 "" 1 "Descuento promoción Asistencia Negocios" 0 "ASISTDISC" "1" 18/12/17 31/12/49
+1 "" 2 "Descompte promoció Asistencia Negocios" 0 "ASISTDISC" "1" 18/12/17 31/12/49
+1 "" 3 "Promozio-deskontua Asistencia Negocios" 0 "ASISTDISC" "1" 18/12/17 31/12/49
+1 "" 5 "Promotional discount Asistencia Negocios" 0 "ASISTDISC" "1" 18/12/17 31/12/49
+1 "" 1 "Asistencia Negocios prestado por HomeServe" 0 "ASISTMF" "1" 18/12/17 31/12/49
+1 "" 2 "Asistencia Negocios prestat per HomeServe" 0 "ASISTMF" "1" 18/12/17 31/12/49
+1 "" 3 "Asistencia Negocios, Homeserve emana" 0 "ASISTMF" "1" 18/12/17 31/12/49
+1 "" 5 "Asistencia Negocios provided by HomeServe" 0 "ASISTMF" "1" 18/12/17 31/12/49
 1 "" 1 "BlackBerry Curve 8520 Blanca" 0 "B018852B1" "1" 21/06/11 31/12/49
 1 "" 2 "BlackBerry Curve 8520 Blanca" 0 "B018852B1" "1" 21/06/11 31/12/49
 1 "" 3 "BlackBerry Curve 8520 Blanca" 0 "B018852B1" "1" 21/06/11 31/12/49
@@ -811,6 +827,78 @@
 1 "" 2 "Nacionals" 0 "CONT28VOICE_B" "1" 21/08/17 31/12/49
 1 "" 3 "Nazionalak" 0 "CONT28VOICE_B" "1" 21/08/17 31/12/49
 1 "" 5 "National" 0 "CONT28VOICE_B" "1" 21/08/17 31/12/49
+1 "" 1 "Desvío de Llamadas" 0 "CONT29CF_A" "1" 18/12/17 31/12/49
+1 "" 2 "Desviament de Trucades" 0 "CONT29CF_A" "1" 18/12/17 31/12/49
+1 "" 3 "Dei-desbideraketa" 0 "CONT29CF_A" "1" 18/12/17 31/12/49
+1 "" 5 "Call forwarding" 0 "CONT29CF_A" "1" 18/12/17 31/12/49
+1 "" 1 "Desví­o de Llamadas" 0 "CONT29CF_B" "1" 18/12/17 31/12/49
+1 "" 2 "Desviament de Trucades" 0 "CONT29CF_B" "1" 18/12/17 31/12/49
+1 "" 3 "Dei-desbideraketa" 0 "CONT29CF_B" "1" 18/12/17 31/12/49
+1 "" 5 "Call forwarding" 0 "CONT29CF_B" "1" 18/12/17 31/12/49
+1 "" 1 "Descuento La Dúo Interminable" 0 "CONT29DISC" "1" 18/12/17 31/12/49
+1 "" 2 "Descompte La Dúo Interminable" 0 "CONT29DISC" "1" 18/12/17 31/12/49
+1 "" 3 "Deskontua La Dúo Interminable" 0 "CONT29DISC" "1" 18/12/17 31/12/49
+1 "" 5 "La Dúo Interminable discount" 0 "CONT29DISC" "1" 18/12/17 31/12/49
+1 "" 1 "La Dúo Interminable" 0 "CONT29MF" "1" 18/12/17 31/12/49
+1 "" 2 "La Dúo Interminable" 0 "CONT29MF" "1" 18/12/17 31/12/49
+1 "" 3 "La Dúo Interminable" 0 "CONT29MF" "1" 18/12/17 31/12/49
+1 "" 5 "La Dúo Interminable" 0 "CONT29MF" "1" 18/12/17 31/12/49
+1 "" 1 "Nacionales" 0 "CONT29VOICE_A" "1" 18/12/17 31/12/49
+1 "" 2 "Nacionals" 0 "CONT29VOICE_A" "1" 18/12/17 31/12/49
+1 "" 3 "Nazionalak" 0 "CONT29VOICE_A" "1" 18/12/17 31/12/49
+1 "" 5 "National" 0 "CONT29VOICE_A" "1" 18/12/17 31/12/49
+1 "" 1 "Nacionales" 0 "CONT29VOICE_B" "1" 18/12/17 31/12/49
+1 "" 2 "Nacionals" 0 "CONT29VOICE_B" "1" 18/12/17 31/12/49
+1 "" 3 "Nazionalak" 0 "CONT29VOICE_B" "1" 18/12/17 31/12/49
+1 "" 5 "National" 0 "CONT29VOICE_B" "1" 18/12/17 31/12/49
+1 "" 1 "Desví­o de Llamadas" 0 "CONT30CF_A" "1" 18/12/17 31/12/49
+1 "" 2 "Desviament de Trucades" 0 "CONT30CF_A" "1" 18/12/17 31/12/49
+1 "" 3 "Dei-desbideraketa" 0 "CONT30CF_A" "1" 18/12/17 31/12/49
+1 "" 5 "Call forwarding" 0 "CONT30CF_A" "1" 18/12/17 31/12/49
+1 "" 1 "Desví­o de Llamadas" 0 "CONT30CF_B" "1" 18/12/17 31/12/49
+1 "" 2 "Desviament de Trucades" 0 "CONT30CF_B" "1" 18/12/17 31/12/49
+1 "" 3 "Dei-desbideraketa" 0 "CONT30CF_B" "1" 18/12/17 31/12/49
+1 "" 5 "Call forwarding" 0 "CONT30CF_B" "1" 18/12/17 31/12/49
+1 "" 1 "Descuento promoción" 0 "CONT30DISC" "1" 18/12/17 31/12/49
+1 "" 2 "Descompte promoció" 0 "CONT30DISC" "1" 18/12/17 31/12/49
+1 "" 3 "Promozio-deskontua" 0 "CONT30DISC" "1" 18/12/17 31/12/49
+1 "" 5 "Promotional discount" 0 "CONT30DISC" "1" 18/12/17 31/12/49
+1 "" 1 "La Interminable" 0 "CONT30MF" "1" 18/12/17 31/12/49
+1 "" 2 "La Interminable" 0 "CONT30MF" "1" 18/12/17 31/12/49
+1 "" 3 "La Interminable" 0 "CONT30MF" "1" 18/12/17 31/12/49
+1 "" 5 "La Interminable" 0 "CONT30MF" "1" 18/12/17 31/12/49
+1 "" 1 "Nacionales" 0 "CONT30VOICE_A" "1" 18/12/17 31/12/49
+1 "" 2 "Nacionals" 0 "CONT30VOICE_A" "1" 18/12/17 31/12/49
+1 "" 3 "Nazionalak" 0 "CONT30VOICE_A" "1" 18/12/17 31/12/49
+1 "" 5 "National" 0 "CONT30VOICE_A" "1" 18/12/17 31/12/49
+1 "" 1 "Nacionales" 0 "CONT30VOICE_B" "1" 18/12/17 31/12/49
+1 "" 2 "Nacionals" 0 "CONT30VOICE_B" "1" 18/12/17 31/12/49
+1 "" 3 "Nazionalak" 0 "CONT30VOICE_B" "1" 18/12/17 31/12/49
+1 "" 5 "National" 0 "CONT30VOICE_B" "1" 18/12/17 31/12/49
+1 "" 1 "Desvío de llamadas" 0 "CONT31CF_A" "1" 18/12/17 31/12/49
+1 "" 2 "Desviament de Trucades" 0 "CONT31CF_A" "1" 18/12/17 31/12/49
+1 "" 3 "Dei-desbideraketa" 0 "CONT31CF_A" "1" 18/12/17 31/12/49
+1 "" 5 "Call forwarding" 0 "CONT31CF_A" "1" 18/12/17 31/12/49
+1 "" 1 "Desvío de llamadas" 0 "CONT31CF_B" "1" 18/12/17 31/12/49
+1 "" 2 "Desviament de Trucades" 0 "CONT31CF_B" "1" 18/12/17 31/12/49
+1 "" 3 "Dei-desbideraketa" 0 "CONT31CF_B" "1" 18/12/17 31/12/49
+1 "" 5 "Call forwarding" 0 "CONT31CF_B" "1" 18/12/17 31/12/49
+1 "" 1 "Descuento promoción" 0 "CONT31DISC" "1" 18/12/17 31/12/49
+1 "" 2 "Descompte promoció" 0 "CONT31DISC" "1" 18/12/17 31/12/49
+1 "" 3 "Promozio-deskontua" 0 "CONT31DISC" "1" 18/12/17 31/12/49
+1 "" 5 "Promotional discount" 0 "CONT31DISC" "1" 18/12/17 31/12/49
+1 "" 1 "La Tarifa Tic Tac" 0 "CONT31MF" "1" 18/12/17 31/12/49
+1 "" 2 "La Tarifa Tic Tac" 0 "CONT31MF" "1" 18/12/17 31/12/49
+1 "" 3 "La Tarifa Tic Tac" 0 "CONT31MF" "1" 18/12/17 31/12/49
+1 "" 5 "La Tarifa Tic Tac" 0 "CONT31MF" "1" 18/12/17 31/12/49
+1 "" 1 "Nacionales" 0 "CONT31VOICE_A" "1" 18/12/17 31/12/49
+1 "" 2 "Nacionals" 0 "CONT31VOICE_A" "1" 18/12/17 31/12/49
+1 "" 3 "Nazionalak" 0 "CONT31VOICE_A" "1" 18/12/17 31/12/49
+1 "" 5 "National" 0 "CONT31VOICE_A" "1" 18/12/17 31/12/49
+1 "" 1 "Nacionales" 0 "CONT31VOICE_B" "1" 18/12/17 31/12/49
+1 "" 2 "Nacionals" 0 "CONT31VOICE_B" "1" 18/12/17 31/12/49
+1 "" 3 "Nazionalak" 0 "CONT31VOICE_B" "1" 18/12/17 31/12/49
+1 "" 5 "National" 0 "CONT31VOICE_B" "1" 18/12/17 31/12/49
 1 "" 1 "Descuento promoción" 0 "CONT8DISC" "1" 01/12/12 31/12/49
 1 "" 2 "Descompte promoció" 0 "CONT8DISC" "1" 01/12/12 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONT8DISC" "1" 01/12/12 31/12/49
@@ -966,6 +1054,14 @@
 1 "" 3 "Datuak" 0 "CONTDATA3" "1" 01/01/10 31/03/12
 1 "" 5 "Internet para Llevar 8" 0 "CONTDATA3" "1" 01/04/12 31/12/49
 1 "" 5 "Data" 0 "CONTDATA3" "1" 01/01/10 31/03/12
+1 "" 1 "Internet" 0 "CONTDATA30" "1" 18/12/17 31/12/49
+1 "" 2 "Internet" 0 "CONTDATA30" "1" 18/12/17 31/12/49
+1 "" 3 "Internet" 0 "CONTDATA30" "1" 18/12/17 31/12/49
+1 "" 5 "Internet" 0 "CONTDATA30" "1" 18/12/17 31/12/49
+1 "" 1 "Internet" 0 "CONTDATA31" "1" 18/12/17 31/12/49
+1 "" 2 "Internet" 0 "CONTDATA31" "1" 18/12/17 31/12/49
+1 "" 3 "Internet" 0 "CONTDATA31" "1" 18/12/17 31/12/49
+1 "" 5 "Internet" 0 "CONTDATA31" "1" 18/12/17 31/12/49
 1 "" 1 "Internet para Llevar 15" 0 "CONTDATA4" "1" 01/04/12 31/12/49
 1 "" 1 "Datos" 0 "CONTDATA4" "1" 23/11/11 31/03/12
 1 "" 2 "Internet para Llevar 15" 0 "CONTDATA4" "1" 01/04/12 31/12/49
@@ -1028,6 +1124,10 @@
 1 "" 2 "Avantatges PRO" 0 "CONTDSL59PRO" "1" 04/07/17 31/12/49
 1 "" 3 "Abantaila PRO" 0 "CONTDSL59PRO" "1" 04/07/17 31/12/49
 1 "" 5 "PRO benefits" 0 "CONTDSL59PRO" "1" 04/07/17 31/12/49
+1 "" 1 "Ventajas PRO" 0 "CONTDSL99PRO" "1" 18/12/17 31/12/49
+1 "" 2 "Avantatges PRO" 0 "CONTDSL99PRO" "1" 18/12/17 31/12/49
+1 "" 3 "Abantaila PRO" 0 "CONTDSL99PRO" "1" 18/12/17 31/12/49
+1 "" 5 "PRO benefits" 0 "CONTDSL99PRO" "1" 18/12/17 31/12/49
 1 "" 1 "FIJO + INTERNET" 0 "CONTDSLMF" "1" 27/10/16 31/12/49
 1 "" 2 "Fix + Internet" 0 "CONTDSLMF" "1" 27/10/16 31/12/49
 1 "" 3 "Finkoa + Internet" 0 "CONTDSLMF" "1" 27/10/16 31/12/49
@@ -1072,6 +1172,14 @@
 1 "" 2 "Nacionals" 0 "CONTFH1000_QTY_IN" "1" 11/10/17 31/12/49
 1 "" 3 "Nazionalak" 0 "CONTFH1000_QTY_IN" "1" 11/10/17 31/12/49
 1 "" 5 "National" 0 "CONTFH1000_QTY_IN" "1" 11/10/17 31/12/49
+1 "" 1 "Ventajas PRO" 0 "CONTFH109_300PRO" "1" 18/12/17 31/12/49
+1 "" 2 "Avantatges PRO" 0 "CONTFH109_300PRO" "1" 18/12/17 31/12/49
+1 "" 3 "Abantaila PRO" 0 "CONTFH109_300PRO" "1" 18/12/17 31/12/49
+1 "" 5 "PRO benefits" 0 "CONTFH109_300PRO" "1" 18/12/17 31/12/49
+1 "" 1 "Ventajas PRO" 0 "CONTFH129_1000PRO" "1" 18/12/17 31/12/49
+1 "" 2 "Avantatges PRO" 0 "CONTFH129_1000PRO" "1" 18/12/17 31/12/49
+1 "" 3 "Abantaila PRO" 0 "CONTFH129_1000PRO" "1" 18/12/17 31/12/49
+1 "" 5 "PRO benefits" 0 "CONTFH129_1000PRO" "1" 18/12/17 31/12/49
 1 "" 1 "FIJO + INTERNET" 0 "CONTFH300MF" "1" 27/10/16 31/12/49
 1 "" 2 "Fix + Internet" 0 "CONTFH300MF" "1" 27/10/16 31/12/49
 1 "" 3 "Finkoa + Internet" 0 "CONTFH300MF" "1" 27/10/16 31/12/49
@@ -1156,6 +1264,10 @@
 1 "" 2 "Avantatges PRO" 0 "CONTFH89_1000PRO" "1" 11/10/17 31/12/49
 1 "" 3 "Abantaila PRO" 0 "CONTFH89_1000PRO" "1" 11/10/17 31/12/49
 1 "" 5 "PRO benefits" 0 "CONTFH89_1000PRO" "1" 11/10/17 31/12/49
+1 "" 1 "Ventajas PRO" 0 "CONTFH99_50PRO" "1" 18/12/17 31/12/49
+1 "" 2 "Avantatges PRO" 0 "CONTFH99_50PRO" "1" 18/12/17 31/12/49
+1 "" 3 "Abantaila PRO" 0 "CONTFH99_50PRO" "1" 18/12/17 31/12/49
+1 "" 5 "PRO benefits" 0 "CONTFH99_50PRO" "1" 18/12/17 31/12/49
 1 "" 1 "Descuento promoción" 0 "CONTM2DISC" "1" 01/04/14 31/12/49
 1 "" 2 "Descompte promoció" 0 "CONTM2DISC" "1" 01/04/14 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONTM2DISC" "1" 01/04/14 31/12/49
@@ -3977,6 +4089,10 @@
 1 "" 2 "Bono Internacional 100 minuts" 0 "INT_VOICE100" "1" 04/07/17 31/12/49
 1 "" 3 "Nazioarteko Bond 100 minutu" 0 "INT_VOICE100" "1" 04/07/17 31/12/49
 1 "" 5 "International 100 minute bonus" 0 "INT_VOICE100" "1" 04/07/17 31/12/49
+1 "" 1 "Bono Internacional 1500 min" 0 "INT_VOICE1500" "1" 18/12/17 31/12/49
+1 "" 2 "Bono Internacional 1500 minuts" 0 "INT_VOICE1500" "1" 18/12/17 31/12/49
+1 "" 3 "Nazioarteko Bond 1500 minutu" 0 "INT_VOICE1500" "1" 18/12/17 31/12/49
+1 "" 5 "International 1500 minute bonus" 0 "INT_VOICE1500" "1" 18/12/17 31/12/49
 1 "" 1 "IP FIJA" 0 "IPFIJA" "1" 04/07/17 31/12/49
 1 "" 2 "IP FIJA" 0 "IPFIJA" "1" 04/07/17 31/12/49
 1 "" 3 "IP FIJA" 0 "IPFIJA" "1" 04/07/17 31/12/49
@@ -6777,6 +6893,11 @@
 1 "" 3 "Samsung Galaxy S8+ Azul" 0 "P034S8PA2" "1" 30/06/17 31/12/49
 1 "" 4 "Samsung Galaxy S8+ Azul" 0 "P034S8PA2" "1" 30/06/17 31/12/49
 1 "" 5 "Samsung Galaxy S8+ Blue" 0 "P034S8PA2" "1" 30/06/17 31/12/49
+1 "" 1 "Samsung Galaxy 8 + Azul" 0 "P034S8PAC" "1" 18/12/17 31/12/49
+1 "" 2 "Samsung Galaxy 8 + Azul" 0 "P034S8PAC" "1" 18/12/17 31/12/49
+1 "" 3 "Samsung Galaxy 8 + Azul" 0 "P034S8PAC" "1" 18/12/17 31/12/49
+1 "" 4 "Samsung Galaxy 8 + Azul" 0 "P034S8PAC" "1" 18/12/17 31/12/49
+1 "" 5 "Samsung Galaxy 8 + Blue" 0 "P034S8PAC" "1" 18/12/17 31/12/49
 1 "" 1 "Samsung Galaxy S8+ Gris orquídea" 0 "P034S8PG2" "1" 27/03/17 31/12/49
 1 "" 2 "Samsung Galaxy S8+ Gris Orquidea" 0 "P034S8PG2" "1" 27/03/17 31/12/49
 1 "" 3 "Samsung Galaxy S8+ Gris Orquidea" 0 "P034S8PG2" "1" 27/03/17 31/12/49
@@ -7369,6 +7490,11 @@
 1 "" 3 "Huawei Mate 10 Lite Oro" 0 "P04310LDC" "1" 30/11/17 31/12/49
 1 "" 4 "Huawei Mate 10 Lite Oro" 0 "P04310LDC" "1" 30/11/17 31/12/49
 1 "" 5 "Huawei Mate 10 Lite Gold" 0 "P04310LDC" "1" 30/11/17 31/12/49
+1 "" 1 "Huawei Mate 10 Lite Negro" 0 "P04310LNC" "1" 15/12/17 31/12/49
+1 "" 2 "Huawei Mate 10 Lite Negro" 0 "P04310LNC" "1" 15/12/17 31/12/49
+1 "" 3 "Huawei Mate 10 Lite Negro" 0 "P04310LNC" "1" 15/12/17 31/12/49
+1 "" 4 "Huawei Mate 10 Lite Negro" 0 "P04310LNC" "1" 15/12/17 31/12/49
+1 "" 5 "Huawei Mate 10 Lite Black" 0 "P04310LNC" "1" 15/12/17 31/12/49
 1 "" 1 "Huawei Mate 10 Lite Plata" 0 "P04310LSC" "1" 30/11/17 31/12/49
 1 "" 2 "Huawei Mate 10 Lite Plata" 0 "P04310LSC" "1" 30/11/17 31/12/49
 1 "" 3 "Huawei Mate 10 Lite Plata" 0 "P04310LSC" "1" 30/11/17 31/12/49
@@ -8915,6 +9041,11 @@
 1 "" 3 "ZTE Blade V8 Oro" 0 "P075BV8D2" "1" 28/04/17 31/12/49
 1 "" 4 "ZTE Blade V8 Oro" 0 "P075BV8D2" "1" 28/04/17 31/12/49
 1 "" 5 "ZTE Blade V8 Gold" 0 "P075BV8D2" "1" 28/04/17 31/12/49
+1 "" 1 "ZTE Blade V8 Oro" 0 "P075BV8DC" "1" 20/12/17 31/12/49
+1 "" 2 "ZTE Blade V8 Oro" 0 "P075BV8DC" "1" 20/12/17 31/12/49
+1 "" 3 "ZTE Blade V8 Oro" 0 "P075BV8DC" "1" 20/12/17 31/12/49
+1 "" 4 "ZTE Blade V8 Oro" 0 "P075BV8DC" "1" 20/12/17 31/12/49
+1 "" 5 "ZTE Blade V8 Gold" 0 "P075BV8DC" "1" 20/12/17 31/12/49
 1 "" 1 "ZTE Blade V8 Gris" 0 "P075BV8G2" "1" 28/04/17 31/12/49
 1 "" 2 "ZTE Blade V8 Gris" 0 "P075BV8G2" "1" 28/04/17 31/12/49
 1 "" 3 "ZTE Blade V8 Gris" 0 "P075BV8G2" "1" 28/04/17 31/12/49
@@ -9995,6 +10126,11 @@
 1 "" 3 "iPhone 7 Plus 256 GB Plata" 0 "P0977P2S2" "1" 13/09/16 31/12/49
 1 "" 4 "iPhone 7 Plus 256 GB Plata" 0 "P0977P2S2" "1" 13/09/16 31/12/49
 1 "" 5 "iPhone 7 Plus 256 GB Silver" 0 "P0977P2S2" "1" 13/09/16 31/12/49
+1 "" 1 "Iphone 7+  256 GB Plata" 0 "P0977P2SC" "1" 20/12/17 31/12/49
+1 "" 2 "Iphone 7+  256 GB Plata" 0 "P0977P2SC" "1" 20/12/17 31/12/49
+1 "" 3 "Iphone 7+  256 GB Plata" 0 "P0977P2SC" "1" 20/12/17 31/12/49
+1 "" 4 "Iphone 7+  256 GB Plata" 0 "P0977P2SC" "1" 20/12/17 31/12/49
+1 "" 5 "Iphone 7+  256 GB Silver" 0 "P0977P2SC" "1" 20/12/17 31/12/49
 1 "" 1 "iPhone 7 Plus 32 GB Oro" 0 "P0977P3D2" "1" 13/09/16 31/12/49
 1 "" 2 "iPhone 7 Plus 32 GB Oro" 0 "P0977P3D2" "1" 13/09/16 31/12/49
 1 "" 3 "iPhone 7 Plus 32 GB Oro" 0 "P0977P3D2" "1" 13/09/16 31/12/49
@@ -13404,6 +13540,14 @@
 9 "" 2 "Línea móvil extra" 0 "CONT28" "1" 21/08/17 31/12/49
 9 "" 3 "Línea móvil extra" 0 "CONT28" "1" 21/08/17 31/12/49
 9 "" 5 "Línea móvil extra" 0 "CONT28" "1" 21/08/17 31/12/49
+9 "" 1 "La Dúo Interminable" 0 "CONT29" "1" 18/12/17 31/12/49
+9 "" 2 "La Dúo Interminable" 0 "CONT29" "1" 18/12/17 31/12/49
+9 "" 3 "La Dúo Interminable" 0 "CONT29" "1" 18/12/17 31/12/49
+9 "" 5 "La Dúo Interminable" 0 "CONT29" "1" 18/12/17 31/12/49
+9 "" 1 "La Tarifa Tic Tac" 0 "CONT31" "1" 18/12/17 31/12/49
+9 "" 2 "La Tarifa Tic Tac" 0 "CONT31" "1" 18/12/17 31/12/49
+9 "" 3 "La Tarifa Tic Tac" 0 "CONT31" "1" 18/12/17 31/12/49
+9 "" 5 "La Tarifa Tic Tac" 0 "CONT31" "1" 18/12/17 31/12/49
 9 "" 1 "LA DEL OCHO" 0 "CONT4" "1" 01/09/08 31/12/54
 9 "" 2 "LA DEL OCHO" 0 "CONT4" "1" 01/09/08 31/12/54
 9 "" 3 "LA DEL OCHO" 0 "CONT4" "1" 01/09/08 31/12/54
@@ -13877,6 +14021,10 @@
 11 "" 2 "Línea móvil extra" 0 "CONTRATO28" "1" 21/08/17 31/12/49
 11 "" 3 "Línea móvil extra" 0 "CONTRATO28" "1" 21/08/17 31/12/49
 11 "" 5 "Línea móvil extra" 0 "CONTRATO28" "1" 21/08/17 31/12/49
+11 "" 1 "La Dúo Interminable" 0 "CONTRATO29" "1" 18/12/17 31/12/49
+11 "" 2 "La Dúo Interminable" 0 "CONTRATO29" "1" 18/12/17 31/12/49
+11 "" 3 "La Dúo Interminable" 0 "CONTRATO29" "1" 18/12/17 31/12/49
+11 "" 5 "La Dúo Interminable" 0 "CONTRATO29" "1" 18/12/17 31/12/49
 11 "" 1 "LA DEL OCHO" 0 "CONTRATO4" "1" 01/09/08 31/12/54
 11 "" 2 "LA DEL OCHO" 0 "CONTRATO4" "1" 01/09/08 31/12/54
 11 "" 3 "LA DEL OCHO" 0 "CONTRATO4" "1" 01/09/08 31/12/54
