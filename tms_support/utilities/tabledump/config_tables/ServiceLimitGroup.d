@@ -8,6 +8,9 @@
 "1" "CONT26" "Contrato 26" 01/02/17 31/12/49
 "1" "CONT27" "LA INFINITA 2 GB DTO." 18/04/17 31/12/49
 "1" "CONT28" "Línea móvil extra" 21/08/17 31/12/49
+"1" "CONT29" "La Dúo extra" 18/12/17 31/12/49
+"1" "CONT30" "Contrato 30" 18/12/17 31/12/49
+"1" "CONT31" "La Tarifa Tic Tac" 18/12/17 31/12/49
 "1" "CONT9" "Contrato 9" 01/05/14 31/12/49
 "1" "CONTD2" "Contrato Datos 2 continuous per" 01/12/09 31/12/54
 "1" "CONTD2ACT" "Contrato Datos 2 1st period" 01/12/09 31/12/54
@@ -78,6 +81,7 @@
 "1" "HSPA_ROAM_EU" "HSPA Roaming EU" 10/10/12 31/12/49
 "1" "INT_FIX_VOICE1000" "International fixed Voice 1000" 05/07/17 31/12/49
 "1" "INT_VOICE100" "International Voice 100" 05/07/17 31/12/49
+"1" "INT_VOICE1500" "International voice 1500 min." 18/12/17 31/12/49
 "1" "IPFIJA" "IP FIJA" 04/07/17 31/12/49
 "1" "MDUB" "Mobile Data Usage Bundle conti" 01/03/10 31/12/49
 "1" "MDUB2" "Mobile Data Usage Bundle 2" 01/02/11 31/12/49
