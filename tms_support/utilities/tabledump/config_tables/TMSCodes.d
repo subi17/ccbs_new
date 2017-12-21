@@ -653,6 +653,8 @@
 "invtext" "keyvalue" "EMAIL" "REMINDER" "Reminder" "" "" 1
 "invtext" "keyvalue" "EMAIL" "SendEmailInvoice" "Send Email Invoice" "" "" 1
 "InvText" "KeyValue" "EKIRJE" "SMSC" "SMSC Change" "" "" 1
+"Invtext" "KEYVALUE" "EMAIL" "SVA_ANGELTECH" "" "" "" 0
+"Invtext" "KEYVALUE" "EMAIL" "SVA_ASIST" "" "" "" 0
 "Invtext" "KEYVALUE" "EMAIL" "SVA_Centralita" "" "" "" 0
 "Invtext" "KEYVALUE" "EMAIL" "SVA_FAXTOEMAIL" "" "" "" 0
 "Invtext" "KEYVALUE" "EMAIL" "SVA_IPFIJA" "" "" "" 0
@@ -1003,6 +1005,7 @@
 "Order" "OrderChannel" "Order" "CC_PRO" "Customer care PRO" "" "" 1
 "Order" "OrderChannel" "Order" "Fusion_POS" "Fusion POS" "" "" 1
 "Order" "OrderChannel" "Order" "Fusion_POS_PRO" "Fusion POS PRO" "" "" 1
+"Order" "OrderChannel" "Order" "Fusion_Self" "Fusion Self" "" "" 1
 "Order" "OrderChannel" "Order" "Fusion_Telesales" "Fusion Telesales" "" "" 1
 "Order" "OrderChannel" "Order" "Fusion_Telesales_PRO" "Fusion Telesales PRO" "" "" 1
 "Order" "OrderChannel" "Order" "POS" "Point of sales" "" "" 1
