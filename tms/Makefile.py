@@ -9,6 +9,7 @@ import glob
 import errno
 import resource
 import fnmatch
+import threading
 
 relpath = '..'
 exec(open(relpath + '/etc/make_site.py').read())
@@ -182,6 +183,21 @@ def compile(match, *a):
 
     _compile(compilecommand.format(compiledir), compiledir)
 
+class myThread (threading.Thread):
+   def __init__(self, compfile, args):
+      threading.Thread.__init__(self)
+      self.compfile = compfile
+      self.args = args
+   def run(self):
+      worker(self.compfile, self.args)
+
+def worker(compfile, args):
+    """thread worker function"""
+    comp = Popen(mpro + args + ['-b', '-inp', '200000', '-tok', '20000', '-p', compfile], stdout=PIPE)
+    call('/bin/cat', stdin=comp.stdout)
+    comp.wait()
+    os.unlink(compfile)
+
 def _compile(compilecommand, compiledir):
     source_files = []
 
@@ -224,17 +240,15 @@ def _compile(compilecommand, compiledir):
 
     args.extend(['-h', str(dbcount)])
 
-    processes = []
+    threads = []
     for file in compile_p:
-        comp = Popen(mpro + args + ['-b', '-inp', '200000', '-tok', '20000', '-p', file], stdout=PIPE)
-        processes.append(comp)
+        thread = myThread(file, args)
+        thread.start()
+        threads.append(thread)
 
-    for comp in processes:
-        call('/bin/cat', stdin=comp.stdout)
-        comp.wait()
-
-    for file in compile_p:
-        os.unlink(file)
+    # Wait for all threads to complete
+    for t in threads:
+        t.join()
 
     print('')
 

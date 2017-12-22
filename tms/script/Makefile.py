@@ -30,8 +30,6 @@ configfile = os.path.abspath(configfile)
 
 default_databases = ('common', 'ordercanal', 'mobile', 'star', 'counter', 'reratelog')
 
-threads = []
-
 def pid_exists(pid):
     """Check whether pid exists in the current process table.
     UNIX only.
@@ -179,7 +177,7 @@ def daemon_gen(outputmode, a):
 @target
 def start(*a):
     '''start|run|rundaemons'''
-    
+    daemonlist = []
     os.chdir('..')
     for daemonitem in daemon_gen('detail', parameters):
 
@@ -219,15 +217,22 @@ def start(*a):
         if os.path.exists(daemonpf):
             args.extend(pftolist(['-pf', daemonpf]))
 
+        open(pid_file, 'a').close()
         pid = Popen(args).pid
 
-        file = open(pid_file, 'w')
-        file.write(str(pid))
-        file.close()
-        
-        if not pid_exists(pid):
+        if os.path.exists(pid_file):
+            with open(pid_file, 'w') as file:
+                file.write(str(pid))
+                file.close()
+            daemonlist.append(tuple((pid_file, daemonitem[0])))
+        else:
             print('FAILED to start daemon ' + daemonitem[0])
 
+    time.sleep(3)
+
+    for pid_file, daemon in daemonlist:
+        if not os.path.exists(pid_file):
+            print('FAILED to start daemon ' + daemon)
 
 def worker(pid, daemonname):
     """thread worker function"""
@@ -258,6 +263,8 @@ class myThread (threading.Thread):
 def stop(*a):
     '''stop|stopdaemons'''
     daemonsavailable = False
+    threads = []
+
     for daemonitem in daemon_gen('just_name', parameters):
         pidfile = state_base + daemonitem + '.pid'
         if os.path.exists(pidfile):

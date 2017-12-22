@@ -7,6 +7,7 @@ import fnmatch
 import errno
 import getpass
 import xmlrpclib
+import threading
 from ast import literal_eval
 from subprocess import call, Popen, PIPE
 from socket import gethostname, error
@@ -207,7 +208,58 @@ def compile(match, *a):
             recursive_overwrite(systemrpc_compiledir, '{0}/tmsrpc/{1}/rpcmethods'.format(work_dir, rpc))
         shutil.rmtree(systemrpc_compiledir)
 
+class myThread (threading.Thread):
+   def __init__(self, compfile, files, args, compdir):
+      threading.Thread.__init__(self)
+      self.compfile = compfile
+      self.files = files
+      self.args = args
+      self.compdir = compdir
+   def run(self):
+      worker(self.compfile, self.files, self.args, self.compdir)
+
+def worker(compfile, files, args, compdir):
+    """thread worker function"""
+    comp = Popen(mpro + args + ['-b', '-inp', '200000', '-tok', '20000', '-p', compfile], stdout=PIPE)
+    call('/bin/cat', stdin=comp.stdout)
+    comp.wait()
+    os.unlink(compfile)
+
+    if compdir:
+        helper_dir = work_dir + '/tools/fcgi_agent/xmlrpc/'
+        for rpc, reldir, sourcefile in files:
+            if rpc:
+                file = '{0}/pp{1}/{2}'.format(rpc,reldir,sourcefile)
+            else:
+                file = '{0}/pp{1}/{2}'.format(compdir,reldir,sourcefile)
+            sigandhelpfile = '{0}/doc{1}/{2}'.format(rpc + '/rpcmethods' if rpc else compdir, reldir, sourcefile)
+            if not sourcefile == 'system__multicall.p':
+                fd = open(sigandhelpfile.replace('.p','.sig'), 'wb')
+                call([sys.executable, helper_dir + 'signature.py', file], stdout=fd)
+                fd.close()
+
+            helpobj = DocFile(file)
+            with open(sigandhelpfile.replace('.p', '.help'), 'wb') as fd:
+                fd.write(helpobj.to_helpfile())
+
+            with open(sigandhelpfile.replace('.p', '.confluence'), 'wb') as fd:
+                fd.write(helpobj.to_confluence())
+
 def _compile(compile_type, source_dir='', compile_dir='', rpclist=None):
+
+    if not 'multi' in globals():
+        global multi
+        multi = 1
+    else:
+        try:
+           multi = int(multi)
+        except ValueError as verr:
+          raise PikeException('multi must be integer from 1 to 16')
+        except Exception as ex:
+          raise PikeException('multi must be integer from 1 to 16')
+
+        if int(multi) > 16 or int(multi) < 1:
+            raise PikeException('multi must be integer from 1 to 16')
 
     source_files = []
 
@@ -264,8 +316,6 @@ def _compile(compile_type, source_dir='', compile_dir='', rpclist=None):
             args.extend(cdr_dict[cdr_database])
             dbcount += 1
 
-    compile_p = make_compiler(compilecommand, source_files, show='name' if show_file else '.')
-
     if environment == 'safeproduction':
         os.environ['PROPATH'] = os.environ['PROPATH'].split(',', 1)[1]
 
@@ -274,42 +324,21 @@ def _compile(compile_type, source_dir='', compile_dir='', rpclist=None):
 
     args.extend(['-h', str(dbcount)])
 
-    processes = []
-    for file in compile_p:
-        comp = Popen(mpro + args + ['-b', '-inp', '200000', '-tok', '20000', '-p', file], stdout=PIPE)
-        processes.append(comp)
+    threads = []
+    for subfiles in chunks(source_files, (len(source_files) + multi - 1) // multi):
+        compile_p = make_compiler(compilecommand, subfiles, show='name' if show_file else '.')
+        thread = myThread(compile_p, subfiles, args, compile_dir if compile_type == 'compile' else '')
+        thread.start()
+        threads.append(thread)
 
-    for comp in processes:
-        call('/bin/cat', stdin=comp.stdout)
-        comp.wait()
+    # Wait for all threads to complete
+    for t in threads:
+        t.join()
 
-    for file in compile_p:
-        os.unlink(file)
+    if compile_type == 'compile' and rpclist[0] == '':
+        shutil.rmtree('{0}/pp'.format(compile_dir))
 
     print('')
-
-    if compile_type == 'compile':
-        helper_dir = work_dir + '/tools/fcgi_agent/xmlrpc/'
-        for rpc, reldir, sourcefile in source_files:
-            if rpc:
-                file = '{0}/pp{1}/{2}'.format(rpc,reldir,sourcefile)
-            else:
-                file = '{0}/pp{1}/{2}'.format(compile_dir,reldir,sourcefile)
-            sigandhelpfile = '{0}/doc{1}/{2}'.format(rpc + '/rpcmethods' if rpc else compile_dir, reldir, sourcefile)
-            if not sourcefile == 'system__multicall.p':
-                fd = open(sigandhelpfile.replace('.p','.sig'), 'wb')
-                call([sys.executable, helper_dir + 'signature.py', file], stdout=fd)
-                fd.close()
-
-            helpobj = DocFile(file)
-            with open(sigandhelpfile.replace('.p', '.help'), 'wb') as fd:
-                fd.write(helpobj.to_helpfile())
-
-            with open(sigandhelpfile.replace('.p', '.confluence'), 'wb') as fd:
-                fd.write(helpobj.to_confluence())
-
-        if rpclist[0] == '':
-            shutil.rmtree('{0}/pp'.format(compile_dir))
 
 def chunks(l, n):
     """Yield successive n-sized chunks from l."""
@@ -317,48 +346,31 @@ def chunks(l, n):
         yield l[i:i + n]
 
 def make_compiler(cline, files, show='.'):
-    if not 'multi' in globals():
-        global multi
-        multi = 1
-    else:
-        try:
-           multi = int(multi)
-        except ValueError as verr:
-          raise PikeException('multi must be integer from 1 to 16')
-        except Exception as ex:
-          raise PikeException('multi must be integer from 1 to 16')
+    compiler = tempfile.NamedTemporaryFile(suffix='.p', mode='wt+', delete=False)
+    compiler.write('ROUTINE-LEVEL ON ERROR UNDO, THROW.\n\n')
+    compiler.write('FUNCTION fCheckError RETURNS LOGICAL ():\n')
+    compiler.write('   IF ERROR-STATUS:ERROR = NO\n')
+    compiler.write('   THEN RETURN FALSE.\n\n')
+    compiler.write('   DEFINE VARIABLE liError AS INTEGER   NO-UNDO.\n')
+    compiler.write('   PUT UNFORMATTED SKIP.\n')
+    compiler.write('   DO liError = 1 TO ERROR-STATUS:NUM-MESSAGES:\n')
+    compiler.write('      PUT UNFORMATTED (IF COMPILER:WARNING THEN "Warning: " ELSE "ERROR: ") +\n')
+    compiler.write('         ERROR-STATUS:GET-MESSAGE(liError) SKIP.\n')
+    compiler.write('   END.\n\n')
+    compiler.write('   RETURN TRUE.\n\n')
+    compiler.write('END FUNCTION.\n')
 
-        if int(multi) > 16 or int(multi) < 1:
-            raise PikeException('multi must be integer from 1 to 16')
+    for rpc, reldir, sourcefile in files:
+        if show == '.':
+            compiler.write('PUT UNFORMATTED \'.\'.\n')
+        elif show == 'name':
+            compiler.write('PUT UNFORMATTED \'{0}~n\'.\n'.format(cline.format(rpc,reldir,sourcefile)))
+        compiler.write(cline.format(rpc,reldir,sourcefile) + '\n')
+        compiler.write('fCheckError().\n')
 
-    compiler_p_list = []
-    for subfiles in chunks(files, (len(files) + multi - 1) // multi):
-        compiler = tempfile.NamedTemporaryFile(suffix='.p', mode='wt+', delete=False)
-        compiler.write('ROUTINE-LEVEL ON ERROR UNDO, THROW.\n\n')
-        compiler.write('FUNCTION fCheckError RETURNS LOGICAL ():\n')
-        compiler.write('   IF ERROR-STATUS:ERROR = NO\n')
-        compiler.write('   THEN RETURN FALSE.\n\n')
-        compiler.write('   DEFINE VARIABLE liError AS INTEGER   NO-UNDO.\n')
-        compiler.write('   PUT UNFORMATTED SKIP.\n')
-        compiler.write('   DO liError = 1 TO ERROR-STATUS:NUM-MESSAGES:\n')
-        compiler.write('      PUT UNFORMATTED (IF COMPILER:WARNING THEN "Warning: " ELSE "ERROR: ") +\n')
-        compiler.write('         ERROR-STATUS:GET-MESSAGE(liError) SKIP.\n')
-        compiler.write('   END.\n\n')
-        compiler.write('   RETURN TRUE.\n\n')
-        compiler.write('END FUNCTION.\n')
+    compiler.flush()
 
-        for rpc, reldir, sourcefile in subfiles:
-            if show == '.':
-                compiler.write('PUT UNFORMATTED \'.\'.\n')
-            elif show == 'name':
-                compiler.write('PUT UNFORMATTED \'{0}~n\'.\n'.format(cline.format(rpc,reldir,sourcefile)))
-            compiler.write(cline.format(rpc,reldir,sourcefile) + '\n')
-            compiler.write('fCheckError().\n')
-
-        compiler.flush()
-        compiler_p_list.append(compiler.name)
-
-    return compiler_p_list
+    return compiler.name
 
 @target
 def start(*a):
