@@ -278,6 +278,9 @@ def _compile(compile_type, source_dir='', compile_dir='', rpclist=None):
             compilecommand = 'COMPILE {0}/src{1}/{2} PREPROCESS {0}/pp{1}/{2} NO-ERROR.\nCOMPILE {3}/tmsrpc/{0}/pp{1}/{2} SAVE INTO {0}/rpcmethods{1} NO-ERROR.'.format('{0}','{1}','{2}',work_dir)
         else:
             compilecommand = 'COMPILE {3}{0}{1}/{2} PREPROCESS {4}/pp{1}/{2} NO-ERROR.\nCOMPILE {4}/pp{1}/{2} SAVE INTO {4}{1} NO-ERROR.'.format('{0}','{1}','{2}',source_dir,compile_dir)
+    elif compile_type == 'compilec':
+        compile_dir = ''
+        compilecommand = 'COMPILE {0}/src{1}/{2} NO-ERROR.'
     elif compile_type == 'preprocess':
         compile_dir = '{0}/pp'
         compilecommand = 'COMPILE {0}/src{1}/{2} PREPROCESS {0}/pp{1}/{2} NO-ERROR.'
@@ -287,7 +290,7 @@ def _compile(compile_type, source_dir='', compile_dir='', rpclist=None):
 
     for rpc in rpclist:
         source_dir_to_use = source_dir.format(rpc)
-        compile_dir_to_use = compile_dir.format(rpc)
+        compile_dir_to_use = compile_dir.format(rpc) if compile_dir else ''
         seen = []
         for root, dirs, files in os.walk(source_dir_to_use):
             for filename in fnmatch.filter(files, '*.p') + fnmatch.filter(files, '*.cls'):
