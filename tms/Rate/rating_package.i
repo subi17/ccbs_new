@@ -184,6 +184,28 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
          lcSLGroupList  = lcNewGroupList
          lcSLGATypeList = lcNewTypeList.
    END.
+   ELSE IF llVoice_Data_subs_DSS AND NUM-ENTRIES(lcSLGroupList) > 1 THEN 
+   DO:
+      DO liSLGPacket = 1 TO NUM-ENTRIES(lcSLGroupList):
+         FOR EACH  ttServiceLimit NO-LOCK WHERE
+                   ttServiceLimit.GroupCode = ENTRY(liSLGPacket,lcSLGroupList),
+             FIRST MServiceLimit NO-LOCK WHERE
+                   MServiceLimit.MsSeq    = MSOwner.MsSeq        AND
+                   MServiceLimit.DialType = liDialType           AND
+                   MServiceLimit.SlSeq    = ttServiceLimit.SlSeq AND
+                   MServiceLimit.FromTS  <= CallTimeStamp        AND
+                   MServiceLimit.EndTS   >= CallTimeStamp:
+        
+            ASSIGN 
+               lcNewGroupList = lcNewGroupList + (IF lcNewGroupList > "" THEN "," ELSE "") + ttServiceLimit.GroupCode 
+               lcNewTypeList  = lcNewTypeList  + (IF lcNewTypeList  > "" THEN "," ELSE "") + ENTRY(liSLGPacket,lcSLGATypeList).
+         END.
+      END.
+
+      ASSIGN
+         lcSLGroupList  = lcNewGroupList
+         lcSLGATypeList = lcNewTypeList.
+   END.
 
    ASSIGN
       lcSLGroupList = TRIM(lcSLGroupList,",")
