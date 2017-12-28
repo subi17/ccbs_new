@@ -29,6 +29,8 @@ DEFINE VARIABLE lcTmp          AS CHARACTER NO-UNDO. /* YDR-2688 */
 DEFINE VARIABLE liOwner        AS INTEGER   NO-UNDO. /* YDR-2688 */
 DEFINE VARIABLE lcSearchBy     AS CHARACTER NO-UNDO. /* YDR-2688 */
 DEFINE VARIABLE lii            AS INTEGER   NO-UNDO. /* YDR-2688 */ 
+DEFINE VARIABLE lcDocTypes     AS CHARACTER NO-UNDO INITIAL "NIF,CIF,Passport,NIE". /* YDR-2688 */
+DEFINE VARIABLE lcCustIdType   AS CHARACTER NO-UNDO.  /* YDR-2688 */
 
 /* IF validate_request(param_toplevel_id, "string,string,string,string,int") EQ ? THEN RETURN.  YDR-2688 */
 IF validate_request(param_toplevel_id, "string,string,string,int") EQ ? THEN RETURN.
@@ -122,15 +124,13 @@ FUNCTION fAddOrdersBasedOnFixed RETURN CHARACTER:
    RETURN "".
 END.
 
-/* YDR-2688
 FUNCTION fAddOrdersBasedOnCustId RETURN CHARACTER:
-   
-   DEFINE VARIABLE iiCount AS INTEGER NO-UNDO INIT 0. 
+   DEFINE VARIABLE iCount AS INTEGER NO-UNDO INIT 0. 
    
    OrdersBasedOnCustID:
    FOR EACH OrderCustomer WHERE 
             OrderCustomer.Brand = "1" AND
-            OrderCustomer.CustIdType = pcCustIdType AND
+            OrderCustomer.CustIdType = lcCustIdType AND
             OrderCustomer.CustId = pcSearchString AND
             OrderCustomer.Rowtype = 1 NO-LOCK:
       FOR EACH Order WHERE
@@ -138,20 +138,19 @@ FUNCTION fAddOrdersBasedOnCustId RETURN CHARACTER:
                Order.OrderId = OrderCustomer.OrderId NO-LOCK:
                    
          fCheckFixedNumber().
-         fAddOrderStruct(iiCount).
-         iiCount = iiCount + 1.
+         fAddOrderStruct(iCount).
+         iCount = iCount + 1.
          
-         IF iiCount = piMaxCount THEN
+         IF iCount = piMaxCount THEN
             LEAVE OrdersBasedOnCustID.
       END.
    END.
    RETURN "".
 END.
-*/
 
 FUNCTION fAddOrdersBasedOnPerson_id RETURN CHARACTER:
    
-   DEFINE VARIABLE iiCount  AS INTEGER NO-UNDO INIT 0. 
+   DEFINE VARIABLE iCount   AS INTEGER NO-UNDO INIT 0. 
    DEFINE VARIABLE iCustNum AS INTEGER NO-UNDO. 
    
    iCustNum = INTEGER(pcSearchString) NO-ERROR.
@@ -169,10 +168,10 @@ FUNCTION fAddOrdersBasedOnPerson_id RETURN CHARACTER:
                Order.OrderId = OrderCustomer.OrderId NO-LOCK:
                    
          fCheckFixedNumber().
-         fAddOrderStruct(iiCount).
-         iiCount = iiCount + 1.
+         fAddOrderStruct(iCount).
+         iCount = iCount + 1.
          
-         IF iiCount = piMaxCount THEN
+         IF iCount = piMaxCount THEN
             LEAVE OrdersBasedOnPerson_Id.
       END.
    END.
@@ -267,11 +266,45 @@ DO:
                Customer.brand = Syst.Var:gcBrand AND 
                Customer.Roles NE "inactive" NO-ERROR.
     IF NOT AVAILABLE Customer THEN
-       RETURN appl_err(SUBSTITUTE("Customer &1 not found", pcSearchString)).
-    
-    ASSIGN
-       pcSearchString = STRING(Customer.CustNum)
-       lcSearchBy     = "person_id".
+    DO:
+       /* Trying an alternate way in case there is "future" customers that have one order but no subscriptions and customer id has not been created yet */
+       DocTypes_blk:
+       DO lii = 1 TO NUM-ENTRIES(lcDocTypes):
+          FOR EACH OrderCustomer WHERE 
+                   OrderCustomer.Brand = "1" AND
+                   OrderCustomer.CustIdType = ENTRY(lii,lcDocTypes) AND
+                   OrderCustomer.CustId = pcSearchString AND
+                   OrderCustomer.Rowtype = 1 NO-LOCK:
+             IF CAN-FIND(FIRST Order WHERE
+                               Order.Brand = "1" AND
+                               Order.OrderId = OrderCustomer.OrderId NO-LOCK) THEN 
+             DO:
+                IF NUM-ENTRIES(lcCustIdType) > 0 THEN 
+                    lcCustIdType = lcCustIdType + "," + ENTRY(lii,lcDocTypes).
+                ELSE 
+                    lcCustIdType = ENTRY(lii,lcDocTypes).
+                    
+                NEXT DocTypes_blk.
+             END.
+          END.
+       END.
+       
+       IF NUM-ENTRIES(lcCustIdType) = 0 THEN
+          RETURN appl_err(SUBSTITUTE("Customer &1 not found", pcSearchString)). 
+       ELSE
+       DO:
+          IF NUM-ENTRIES(lcCustIdType) > 1 THEN /* Unlikely situation where the search criteria can be found for more than one document type, i.e. NIF: 01234567A and Passport: 01234567A, 
+                                                   so we cannot determine internally here the document type. */
+             RETURN appl_err("Search criteria found for Doc Types: " + lcCustIdType + ". Please search using another criteria.").
+          ELSE 
+             ASSIGN
+                lcSearchBy = "cust_id".
+       END.
+    END.
+    ELSE
+       ASSIGN
+          pcSearchString = STRING(Customer.CustNum)
+          lcSearchBy     = "person_id".
 END.
 ELSE liOwner = 0.
 
@@ -281,6 +314,7 @@ CASE lcSearchBy:
    WHEN "fixed_number" THEN lcError = fAddOrdersBasedOnFixed().
    WHEN "person_id"    THEN lcError = fAddOrdersBasedOnPerson_Id().
    WHEN "order_id"     THEN lcError = fAddOrdersBasedOnOrderId().
+   WHEN "cust_id"      then lcError = fAddOrdersBasedOnCustId().   
    OTHERWISE 
       lcError = "Invalid search_type " + pcSearchType.
 END.
