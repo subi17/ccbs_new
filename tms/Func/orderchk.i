@@ -14,6 +14,8 @@
   CREATED ......: 20.08.08
   CHANGED ......:
   Version ......: xfera
+  27/12/17  ashok  YDR-2665 ExtraLine should not be counted for 
+                            Subscription and Activation limits
 ----------------------------------------------------------------------- */
 
 FUNCTION fCheckSubsLimit RETURNS INT (INPUT iiCustnum      AS INT,
@@ -102,6 +104,12 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
    DEF BUFFER Limit FOR Limit.
    DEF BUFFER CustCat FOR CustCat.
    DEF BUFFER bMobSub FOR MobSub.
+ 
+   DEFINE VARIABLE lcExtraLineCLITypes AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcExtraDiscounts    AS CHARACTER NO-UNDO.
+
+   lcExtraLineCLITypes = fCParam("DiscountType","ExtraLine_CLITypes").
+   lcExtraDiscounts    = fCParam("DiscountType","ExtraLine_Discounts").
 
    FOR EACH OrderCustomer NO-LOCK WHERE   
             OrderCustomer.Brand      EQ Syst.Var:gcBrand AND 
@@ -114,7 +122,15 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
             Order.OrderType          NE {&ORDER_TYPE_RENEWAL} AND
             Order.OrderType          NE {&ORDER_TYPE_STC} AND
             Order.SalesMan NE "GIFT":
-        
+        /* YDR-2665 */
+        IF LOOKUP(Order.CLitype , lcExtraLineCLITypes ) > 0 THEN DO:
+            IF CAN-FIND (FIRST OrderAction NO-LOCK WHERE
+                   OrderAction.Brand    = Syst.Var:gcBrand AND
+                   OrderAction.OrderID  = Order.OrderID   AND
+                   OrderAction.ItemType = "ExtraLineDiscount" AND
+                   LOOKUP(OrderAction.ItemKey,  lcExtraDiscounts ) > 0 ) THEN NEXT.
+        END.
+       
         IF LOOKUP(STRING(Order.statuscode),{&ORDER_CLOSE_STATUSES}) EQ 0
         THEN DO:
            /* YDR-1532 */
@@ -134,7 +150,8 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
    /* used with multisim orders */
    IF piOrders > 1 THEN
       oiActOrderCount = oiActOrderCount + (piOrders - 1).
-
+   
+   subs_count:
    FOR EACH Customer NO-LOCK
    WHERE Customer.Brand           EQ Syst.Var:gcBrand
      AND Customer.CustIdType      EQ pcIdType
@@ -144,6 +161,21 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
    WHERE bMobSub.Brand             EQ Syst.Var:gcBrand 
      AND bMobsub.AgrCust           EQ Customer.CustNum
      AND bMobSub.SalesMan NE "GIFT":
+      /* YDR-2665 */
+      IF LOOKUP(bMobsub.CLitype , lcExtraLineCLITypes ) > 0 THEN DO:
+         FOR EACH DiscountPlan NO-LOCK 
+            WHERE DiscountPlan.brand EQ Customer.Brand 
+              AND LOOKUP(DiscountPlan.DPRuleID , lcExtraDiscounts ) > 0 
+              AND DiscountPlan.ValidTo >= TODAY,
+             FIRST DPMember NO-LOCK WHERE
+               DPMember.DPID       = DiscountPlan.DPID AND
+               DPMember.HostTable  = "MobSub" AND
+               DPMember.KeyValue   = STRING(bMobSub.MsSeq) AND
+               DPMember.ValidTo   >= TODAY AND
+               DPMember.ValidFrom <= DPMember.ValidTo:
+             NEXT subs_count.
+         END. 
+      END.
       oiSubCount = oiSubCount + 1.
    END.
 
