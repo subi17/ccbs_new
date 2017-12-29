@@ -79,6 +79,9 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
    DEF VAR ldeEndTs              AS DEC NO-UNDO. 
    DEF VAR lcCliTypeList         AS CHAR NO-UNDO.
 
+   DEFINE BUFFER bf_Customer FOR Customer.
+   DEFINE BUFFER bf_CustCat  FOR CustCat.
+
    ASSIGN	
       ttCall.BillCode = bsub-prod
       lcOrigBillCode  = bsub-prod
@@ -184,23 +187,28 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
          lcSLGroupList  = lcNewGroupList
          lcSLGATypeList = lcNewTypeList.
    END.
-   ELSE IF llVoice_Data_subs_DSS AND NUM-ENTRIES(lcSLGroupList) > 1 THEN 
+   ELSE IF llVoice_Data_subs_DSS         AND 
+           NUM-ENTRIES(lcSLGroupList) > 1 AND 
+           LOOKUP("FIX_VOICE1000", lcSLGroupList) > 0 THEN 
    DO:
+      FIND FIRST bf_Customer WHERE bf_Customer.CustNum = MSOwner.CustNum NO-LOCK NO-ERROR.
+      IF AVAIL bf_Customer THEN 
+         FIND FIRST bf_CustCat WHERE bf_CustCat.Brand EQ Syst.Var:gcBrand AND CustCat.Category EQ bf_Customer.Category NO-LOCK NO-ERROR.
+
+      IF NOT (AVAIL bf_CustCat AND bf_CustCat.Pro) THEN 
       DO liSLGPacket = 1 TO NUM-ENTRIES(lcSLGroupList):
-         FOR EACH  ttServiceLimit NO-LOCK WHERE
-                   ttServiceLimit.GroupCode = ENTRY(liSLGPacket,lcSLGroupList),
-             FIRST MServiceLimit NO-LOCK WHERE
-                   MServiceLimit.MsSeq    = MSOwner.MsSeq        AND
-                   MServiceLimit.DialType = liDialType           AND
-                   MServiceLimit.SlSeq    = ttServiceLimit.SlSeq AND
-                   MServiceLimit.FromTS  <= CallTimeStamp        AND
-                   MServiceLimit.EndTS   >= CallTimeStamp:
-        
-            ASSIGN 
-               lcNewGroupList = lcNewGroupList + (IF lcNewGroupList > "" THEN "," ELSE "") + ttServiceLimit.GroupCode 
-               lcNewTypeList  = lcNewTypeList  + (IF lcNewTypeList  > "" THEN "," ELSE "") + ENTRY(liSLGPacket,lcSLGATypeList).
-         END.
+
+         IF LOOKUP(ENTRY(liSLGPacket,lcSLGroupList), "FIX_VOICE1000") > 0 THEN 
+             NEXT.
+
+         ASSIGN 
+             lcNewGroupList = lcNewGroupList + (IF lcNewGroupList > "" THEN "," ELSE "") + ENTRY(liSLGPacket,lcSLGroupList) 
+             lcNewTypeList  = lcNewTypeList  + (IF lcNewTypeList  > "" THEN "," ELSE "") + ENTRY(liSLGPacket,lcSLGATypeList).
       END.
+      ELSE
+         ASSIGN 
+             lcNewGroupList = lcSLGroupList
+             lcNewTypeList  = lcSLGATypeList.
 
       ASSIGN
          lcSLGroupList  = lcNewGroupList
