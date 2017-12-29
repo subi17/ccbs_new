@@ -193,7 +193,7 @@ FUNCTION fPackageCalculation RETURNS LOGIC:
    DO:
       FIND FIRST bf_Customer WHERE bf_Customer.CustNum = MSOwner.CustNum NO-LOCK NO-ERROR.
       IF AVAIL bf_Customer THEN 
-         FIND FIRST bf_CustCat WHERE bf_CustCat.Brand EQ Syst.Var:gcBrand AND CustCat.Category EQ bf_Customer.Category NO-LOCK NO-ERROR.
+         FIND FIRST bf_CustCat WHERE bf_CustCat.Brand EQ Syst.Var:gcBrand AND bf_CustCat.Category EQ bf_Customer.Category NO-LOCK NO-ERROR.
 
       IF NOT (AVAIL bf_CustCat AND bf_CustCat.Pro) THEN 
       DO liSLGPacket = 1 TO NUM-ENTRIES(lcSLGroupList):
