@@ -105,11 +105,6 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
    DEF BUFFER CustCat FOR CustCat.
    DEF BUFFER bMobSub FOR MobSub.
  
-   DEFINE VARIABLE lcExtraLineCLITypes AS CHARACTER NO-UNDO.
-   DEFINE VARIABLE lcExtraDiscounts    AS CHARACTER NO-UNDO.
-
-   lcExtraLineCLITypes = fCParam("DiscountType","ExtraLine_CLITypes").
-   lcExtraDiscounts    = fCParam("DiscountType","ExtraLine_Discounts").
 
    FOR EACH OrderCustomer NO-LOCK WHERE   
             OrderCustomer.Brand      EQ Syst.Var:gcBrand AND 
@@ -123,12 +118,15 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
             Order.OrderType          NE {&ORDER_TYPE_STC} AND
             Order.SalesMan NE "GIFT":
         /* YDR-2665 */
-        IF LOOKUP(Order.CLitype , lcExtraLineCLITypes ) > 0 THEN DO:
-            IF CAN-FIND (FIRST OrderAction NO-LOCK WHERE
-                   OrderAction.Brand    = Syst.Var:gcBrand AND
-                   OrderAction.OrderID  = Order.OrderID   AND
-                   OrderAction.ItemType = "ExtraLineDiscount" AND
-                   LOOKUP(OrderAction.ItemKey,  lcExtraDiscounts ) > 0 ) THEN NEXT.
+        IF fCLITypeIsExtraLine(Order.CLIType)              AND 
+           Order.MultiSimId   NE 0                         AND 
+           Order.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} THEN 
+        DO:
+            IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
+                        OrderAction.Brand    = Syst.Var:gcBrand        AND
+                        OrderAction.OrderID  = Order.OrderID           AND
+                        OrderAction.ItemType = "ExtraLineDiscount"     AND
+                        OrderAction.ItemKey  = Order.CLIType + "DISC") THEN NEXT.
         END.
        
         IF LOOKUP(STRING(Order.statuscode),{&ORDER_CLOSE_STATUSES}) EQ 0
@@ -162,10 +160,12 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
      AND bMobsub.AgrCust           EQ Customer.CustNum
      AND bMobSub.SalesMan NE "GIFT":
       /* YDR-2665 */
-      IF LOOKUP(bMobsub.CLitype , lcExtraLineCLITypes ) > 0 THEN DO:
+      IF fCLITypeIsExtraLine(bMobsub.CliType)       AND 
+         bMobsub.MultiSimId                   GT 0  AND 
+         bMobsub.MultiSimType                 EQ {&MULTISIMTYPE_EXTRALINE} THEN DO: 
          FOR EACH DiscountPlan NO-LOCK 
             WHERE DiscountPlan.brand EQ Customer.Brand 
-              AND LOOKUP(DiscountPlan.DPRuleID , lcExtraDiscounts ) > 0 
+              AND DiscountPlan.DPRuleID = (bMobsub.CLIType + "DISC")  
               AND DiscountPlan.ValidTo >= TODAY,
              FIRST DPMember NO-LOCK WHERE
                DPMember.DPID       = DiscountPlan.DPID AND
