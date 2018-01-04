@@ -15,7 +15,8 @@
 
     objTMSRelation = NEW Syst.objTMSRelation("DiscountPlan", "Compability").
 
-    objTMSRelation:mSetSerializeNames("old_value",
+    objTMSRelation:mSetSerializeNames("id",
+                                      "old_value",
                                       "new_value",
                                       "role",
                                       "validfrom",
@@ -36,8 +37,13 @@
     /* To populate data where ParentValue = PARENTDISC and ChildValue = CHILDDISC */  
     objTMSRelation:mPopulateData("PARENTDISC", "CHILDDISC").
 
+    /* Serialize whole data */
     objObject = objTMSRelation:mSerialize().
     
+    /* Serialize only one id */
+    objObject = objTMSRelation:mSerialize(/* TMSRelationID number */).
+
+
     FINALLY:
        IF VALID-OBJECT(objObject)
        THEN DELETE OBJECT objObject.
@@ -49,6 +55,7 @@
 
 USING Progress.Lang.*.
 USING Progress.Json.ObjectModel.JsonArray.
+USING Progress.Json.ObjectModel.JsonObject.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
@@ -64,14 +71,16 @@ CLASS Syst.TMSRelation:
    DEFINE PRIVATE VARIABLE atzToTime        AS DATETIME-TZ NO-UNDO.   
 
    DEFINE PRIVATE TEMP-TABLE ttTMSRelation NO-UNDO SERIALIZE-NAME ""
-      FIELD ParentValue  LIKE TMSRelation.ParentValue
-      FIELD ChildValue   LIKE TMSRelation.ChildValue
-      FIELD RelationType LIKE TMSRelation.RelationType
-      FIELD ToTime       LIKE TMSRelation.ToTime
-      FIELD FromTime     LIKE TMSRelation.FromTime
-      FIELD ToDate       AS DATE
-      FIELD FromDate     AS DATE
+      FIELD TMSRelationID LIKE TMSRelation.TMSRelationID
+      FIELD ParentValue   LIKE TMSRelation.ParentValue
+      FIELD ChildValue    LIKE TMSRelation.ChildValue
+      FIELD RelationType  LIKE TMSRelation.RelationType
+      FIELD ToTime        LIKE TMSRelation.ToTime
+      FIELD FromTime      LIKE TMSRelation.FromTime
+      FIELD ToDate        AS DATE
+      FIELD FromDate      AS DATE
       INDEX ParentValue IS PRIMARY UNIQUE ParentValue ChildValue ToTime DESCENDING
+      INDEX TMSRelationID IS UNIQUE TMSRelationID
       INDEX ChildValue ChildValue ParentValue ToTime DESCENDING.
 
    CONSTRUCTOR PUBLIC TMSRelation
@@ -120,8 +129,9 @@ CLASS Syst.TMSRelation:
    END METHOD.
 
    METHOD PUBLIC VOID mSetSerializeNames
-      (icParentValueName     AS CHARACTER,
-       icChildValueName     AS CHARACTER,
+      (icTMSRelationIDName AS CHARACTER,
+       icParentValueName   AS CHARACTER,
+       icChildValueName    AS CHARACTER,
        icRelationTypeName  AS CHARACTER,
        icFromTimeName      AS CHARACTER,
        icToTimeName        AS CHARACTER,
@@ -144,6 +154,7 @@ CLASS Syst.TMSRelation:
               lhBufferHandle:BUFFER-FIELD("ToDate"):SERIALIZE-NAME = icToTimeName.
 
       ASSIGN
+         lhBufferHandle:BUFFER-FIELD("TMSRelationID"):SERIALIZE-NAME = icTMSRelationIDName
          lhBufferHandle:BUFFER-FIELD("ParentValue"):SERIALIZE-NAME = icParentValueName
          lhBufferHandle:BUFFER-FIELD("ChildValue"):SERIALIZE-NAME = icParentValueName
          lhBufferHandle:BUFFER-FIELD("RelationType"):SERIALIZE-NAME = icRelationTypeName.
@@ -221,24 +232,23 @@ CLASS Syst.TMSRelation:
       THEN RETURN FALSE.
                
       CREATE ttTMSRelation.
-      ASSIGN
-         ttTMSRelation.ParentValue  = TMSRelation.ParentValue
-         ttTMSRelation.ChildValue   = TMSRelation.ChildValue
-         ttTMSRelation.RelationType = IF TMSRelation.RelationType = "ParentValue"
-                                      THEN TMSRelation.ParentValue
-                                      ELSE IF TMSRelation.RelationType = "ChildValue"
-                                      THEN TMSRelation.ChildValue
-                                      ELSE TMSRelation.RelationType
-         ttTMSRelation.FromDate     = DATE(TMSRelation.FromTime)
-         ttTMSRelation.ToDate       = DATE(TMSRelation.ToTime)
-         ttTMSRelation.FromTime     = TMSRelation.FromTime
-         ttTMSRelation.ToTime       = TMSRelation.ToTime
-         .
+
+      BUFFER-COPY TMSRelation
+         USING ParentValue ChildValue FromTime ToTime TMSRelationID
+         TO ttTMSRelation
+         ASSIGN
+            ttTMSRelation.RelationType = IF TMSRelation.RelationType = "ParentValue"
+                                         THEN TMSRelation.ParentValue
+                                         ELSE IF TMSRelation.RelationType = "ChildValue"
+                                         THEN TMSRelation.ChildValue
+                                         ELSE TMSRelation.RelationType
+            ttTMSRelation.FromDate     = DATE(TMSRelation.FromTime)
+            ttTMSRelation.ToDate       = DATE(TMSRelation.ToTime)
+            .
 
       RETURN TRUE.
    
    END METHOD.
-
 
    METHOD PUBLIC CLASS JsonArray mSerialize():
 
@@ -248,6 +258,23 @@ CLASS Syst.TMSRelation:
       objJsonArray:Read(TEMP-TABLE ttTMSRelation:HANDLE).
 
       RETURN objJsonArray.
+
+   END METHOD.
+
+   METHOD PUBLIC CLASS JsonObject mSerialize
+      (iiTMSRelationID AS INT64):
+
+      FIND TMSRelation NO-LOCK WHERE TMSRelation.TMSRelationID = iiTMSRelationID NO-ERROR.
+      IF NOT AVAILABLE TMSRelation
+      THEN RETURN ERROR NEW Progress.Lang.AppError
+               (SUBSTITUTE("Cannot find TMSRelationID &1",TMSRelation.TMSRelationID), 1).
+
+      DEFINE VARIABLE objJsonObject AS CLASS JsonObject NO-UNDO.
+
+      objJsonObject = NEW JsonObject().
+      objJsonObject:Read(BUFFER TMSRelation:HANDLE).
+
+      RETURN objJsonObject.
 
    END METHOD.
 
