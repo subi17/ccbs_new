@@ -5,7 +5,7 @@ class AddTableTMSRelation(Migration):
     database = "common"
 
     def up(self):
-        t = self.table('TMSRelation', area="Sta_Data_128", multitenant="yes", label="Report Texts", dump_name="tmsrel", desc="General purpose relation table")
+        t = self.table('TMSRelation', area="Sta_Data_128", multitenant="yes", table_trigger=[{'crc': '?', 'procedure': 'triggers/c-tmsrelation.p', 'override_proc': True, 'event': 'CREATE'}], label="TMSRelation", dump_name="tmsrel", desc="General purpose relation table")
         t.column('TMSRelationID', 'int64', format=">>>>>>>>>9", initial="0", max_width=8, label="Relation ID", column_label="ID", position=2, order=10, help="Unique relation id number")
         t.column('TableName', 'character', format="x(25)", initial="", max_width=50, label="Table name", column_label="TableName", position=3, order=20)
         t.column('KeyType', 'character', format="x(30)", initial="", max_width=60, label="Key type", column_label="KeyType", position=4, order=30)

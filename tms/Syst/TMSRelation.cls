@@ -43,7 +43,6 @@
     /* Serialize only one id */
     objObject = objTMSRelation:mSerialize(/* TMSRelationID number */).
 
-
     FINALLY:
        IF VALID-OBJECT(objObject)
        THEN DELETE OBJECT objObject.
