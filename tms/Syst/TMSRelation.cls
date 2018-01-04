@@ -22,6 +22,11 @@
                                       "validto",
                                       NO).
 
+
+     /* Set time range where recods can must be active. By default it is
+        the current moment */
+     objTMSRelation:mSetTimeRange(TODAY - 7, TODAY).
+
     /* To populate everything for "DiscountPlan" and "Compability" */  
     objTMSRelation:mPopulateData().
 
@@ -31,7 +36,7 @@
     /* To populate data where ParentValue = PARENTDISC and ChildValue = CHILDDISC */  
     objTMSRelation:mPopulateData("PARENTDISC", "CHILDDISC").
 
-    objObject = objTMSRelation:mSerializeToJsonObject().
+    objObject = objTMSRelation:mSerialize().
     
     FINALLY:
        IF VALID-OBJECT(objObject)
@@ -43,6 +48,7 @@
   ----------------------------------------------------------------------*/
 
 USING Progress.Lang.*.
+USING Progress.Json.ObjectModel.JsonArray.
 
 BLOCK-LEVEL ON ERROR UNDO, THROW.
 
@@ -72,29 +78,46 @@ CLASS Syst.TMSRelation:
       (icTableName           AS CHARACTER,
        icKeyType             AS CHARACTER):
 
-      THIS-OBJECT(icTableName, icKeyType, NOW, NOW).   
-      alUseCurrentTime = TRUE.
-
-   END CONSTRUCTOR.
-
-   CONSTRUCTOR PUBLIC TMSRelation
-      (icTableName AS CHARACTER,
-       icKeyType   AS CHARACTER,
-       itzFromTime AS DATETIME-TZ,
-       itzToTime   AS DATETIME-TZ):
-
       ASSIGN
-         acTableName           = icTableName
-         acKeyType             = icKeyType
-         atzFromTime           = itzFromTime
-         atzToTime             = itzToTime
-         .
+         acTableName = icTableName
+         acKeyType   = icKeyType.
+
+      mSetTimeRange(NOW, NOW).
+      alUseCurrentTime = TRUE.
 
    END CONSTRUCTOR.
 
    DESTRUCTOR TMSRelation():
       EMPTY TEMP-TABLE ttTMSRelation.
    END DESTRUCTOR.
+
+   METHOD PUBLIC VOID mSetTimeRange
+      (itzFromTime AS DATETIME-TZ,
+       itzToTime   AS DATETIME-TZ):
+
+      IF itzFromTime > itzToTime
+      THEN RETURN ERROR NEW Progress.Lang.AppError("FromTime cannot be greater than ToTime", 1).
+
+      ASSIGN
+         atzFromTime = itzFromTime
+         atzToTime   = itzToTime
+         .
+
+   END METHOD.
+
+   METHOD PUBLIC VOID mSetTimeRange
+      (idaFromDate AS DATE,
+       idaToDate   AS DATE):
+
+      IF idaFromDate > idaToDate
+      THEN RETURN ERROR NEW Progress.Lang.AppError("FromDate cannot be greater than ToDate", 1).
+
+      ASSIGN
+         atzFromTime = DATETIME-TZ(idaFromDate)
+         atzToTime   = DATETIME-TZ(idaToDate)
+         .
+
+   END METHOD.
 
    METHOD PUBLIC VOID mSetSerializeNames
       (icParentValueName     AS CHARACTER,
@@ -137,15 +160,6 @@ CLASS Syst.TMSRelation:
       (icParentValue AS CHARACTER):
          
       mPopulateData(icParentValue, ?).
-
-   END METHOD.
-
-
-   METHOD PUBLIC VOID mPopulateData
-      (icParentValue AS CHARACTER,
-       icChildValue  AS CHARACTER):
-         
-      mPopulateData(icParentValue, icChildValue).
 
    END METHOD.
 
@@ -225,13 +239,15 @@ CLASS Syst.TMSRelation:
    
    END METHOD.
 
-   METHOD PUBLIC JsonObject mSerializeToJsonObject():
 
-      DEFINE VARIABLE objJsonObject AS CLASS JsonObject NO-UNDO.
-      objJsonObject = NEW JsonObject().
-      objJsonObject:Read(TABLE-HANDLE ttTMSRelation).
+   METHOD PUBLIC CLASS JsonArray mSerialize():
 
-      RETURN objJsonObject.
+      DEFINE VARIABLE objJsonArray AS CLASS JsonArray NO-UNDO.
+
+      objJsonArray = NEW JsonArray().
+      objJsonArray:Read(TEMP-TABLE ttTMSRelation:HANDLE).
+
+      RETURN objJsonArray.
 
    END METHOD.
 
