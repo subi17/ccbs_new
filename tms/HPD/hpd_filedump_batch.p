@@ -88,7 +88,9 @@ FUNCTION fProcess RETURNS LOGICAL
 
    LOG-MANAGER:WRITE-MESSAGE("Completed the dump. " + STRING(HandlerObj:liEvents) + " rows was dumped.", "INFO").
    
-   RETURN FALSE.
+   IF LOOKUP(DumpFile.DumpName, gcTimeBasedDumps) > 0
+   THEN RETURN FALSE.
+   ELSE RETURN TRUE.
 
    CATCH apperrorobj AS Progress.Lang.AppError:
    
