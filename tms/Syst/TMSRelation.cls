@@ -13,7 +13,7 @@
     DEFINE VARIABLE objTMSRelation AS CLASS Syst.TMSRelation NO-UNDO.
     DEFINE VARIABLE objObject      AS CLASS Progress.Lang.Object NO-UNDO.
 
-    objTMSRelation = NEW Syst.objTMSRelation("DiscountPlan", "Compability").
+    objTMSRelation = NEW Syst.TMSRelation("DiscountPlan", "Compatibility").
 
     objTMSRelation:mSetSerializeNames("id",
                                       "old_value",
@@ -28,7 +28,8 @@
         the current moment */
      objTMSRelation:mSetTimeRange(TODAY - 7, TODAY).
 
-    /* To populate everything for "DiscountPlan" and "Compability" */  
+    /* To populate everything for "DiscountPlan" and "Compatibility" within the
+       given time range */
     objTMSRelation:mPopulateData().
 
     /* To populate data where ParentValue = PARENTDISC*/  
@@ -60,11 +61,12 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 CLASS Syst.TMSRelation:
 
-   DEFINE PRIVATE VARIABLE acTableName      AS CHARACTER   NO-UNDO.   
-   DEFINE PRIVATE VARIABLE acKeyType        AS CHARACTER   NO-UNDO.
-   DEFINE PRIVATE VARIABLE acParentValue    AS CHARACTER   NO-UNDO.   
-   DEFINE PRIVATE VARIABLE acChildValue     AS CHARACTER   NO-UNDO.
-   DEFINE PRIVATE VARIABLE alUseCurrentTime AS LOGICAL INITIAL FALSE NO-UNDO.
+   DEFINE PRIVATE VARIABLE alThereWereMarking AS LOGICAL     NO-UNDO.
+   DEFINE PRIVATE VARIABLE acTableName        AS CHARACTER   NO-UNDO.
+   DEFINE PRIVATE VARIABLE acKeyType          AS CHARACTER   NO-UNDO.
+   DEFINE PRIVATE VARIABLE acParentValue      AS CHARACTER   NO-UNDO.
+   DEFINE PRIVATE VARIABLE acChildValue       AS CHARACTER   NO-UNDO.
+   DEFINE PRIVATE VARIABLE alUseCurrentTime   AS LOGICAL INITIAL FALSE NO-UNDO.
 
    DEFINE PRIVATE VARIABLE atzFromTime      AS DATETIME-TZ NO-UNDO.   
    DEFINE PRIVATE VARIABLE atzToTime        AS DATETIME-TZ NO-UNDO.   
@@ -78,8 +80,10 @@ CLASS Syst.TMSRelation:
       FIELD FromTime      LIKE TMSRelation.FromTime
       FIELD ToDate        AS DATE
       FIELD FromDate      AS DATE
+      FIELD Marked        AS LOGICAL
       INDEX ParentValue IS PRIMARY UNIQUE ParentValue ChildValue ToTime DESCENDING
       INDEX TMSRelationID IS UNIQUE TMSRelationID
+      INDEX Marked Marked
       INDEX ChildValue ChildValue ParentValue ToTime DESCENDING.
 
    DEFINE PUBLIC PROPERTY RecordCount AS INTEGER NO-UNDO
@@ -257,6 +261,11 @@ CLASS Syst.TMSRelation:
 
    METHOD PUBLIC CLASS JsonArray mSerialize():
 
+      IF alThereWereMarking
+      THEN FOR EACH ttTMSRelation WHERE ttTMSRelation.Marked = FALSE:
+              DELETE ttTMSRelation.
+           END.
+
       DEFINE VARIABLE objJsonArray AS CLASS JsonArray NO-UNDO.
 
       objJsonArray = NEW JsonArray().
@@ -280,6 +289,147 @@ CLASS Syst.TMSRelation:
       objJsonObject:Read(BUFFER TMSRelation:HANDLE).
 
       RETURN objJsonObject.
+
+   END METHOD.
+
+   METHOD PUBLIC VOID mAddKeyType
+      (icTableName AS CHARACTER,
+       icKeyType   AS CHARACTER):
+
+      DEFINE VARIABLE ltzFromTime AS DATETIME-TZ NO-UNDO.
+
+      FOR EACH TMSRelation NO-LOCK WHERE
+               TMSRelation.TableName   = "TMSRelation" AND
+               TMSRelation.KeyType     = "KeyType"     AND
+               TMSRelation.ChildValue  = icKeyType     AND
+               TMSRelation.ParentValue = icTableName
+               BY TMSRelation.ToTime DESCENDING:
+         IF TMSRelation.ToTime = ? OR TMSRelation.ToTime >= NOW
+         THEN RETURN.
+
+         ltzFromTime = ADD-INTERVAL(TMSRelation.ToTime, 1, 'milliseconds').
+         LEAVE.
+      END.
+
+      CREATE TMSRelation.
+      ASSIGN
+         TMSRelation.TableName    = "TMSRelation"
+         TMSRelation.KeyType      = "KeyType"
+         TMSRelation.ChildValue   = icKeyType
+         TMSRelation.ParentValue  = icTableName
+         TMSRelation.FromTime     = ltzFromTime
+         .
+
+   END METHOD.
+
+   /* Adds relation if it doesn't exists already */
+   METHOD PUBLIC VOID mAddRelation
+      (icTableName    AS CHARACTER,
+       icKeyType      AS CHARACTER,
+       icParentValue  AS CHARACTER,
+       icChildValue   AS CHARACTER):
+
+      mAddUpdateRelation(YES, icTableName, icKeyType, icParentValue, icChildValue, "").
+
+   END METHOD.
+
+   /* Adds relation if it doesn't exists already */
+   METHOD PUBLIC VOID mAddRelation
+      (icTableName    AS CHARACTER,
+       icKeyType      AS CHARACTER,
+       icParentValue  AS CHARACTER,
+       icChildValue   AS CHARACTER,
+       icRelationType AS CHARACTER):
+
+      mAddUpdateRelation(YES, icTableName, icKeyType, icParentValue, icChildValue, icRelationType).
+
+   END METHOD.
+
+   /* Finish the old relation and starts the new relation. If the relation
+      doesn't exists then just adds the relation. */
+   METHOD PUBLIC VOID mUpdateRelation
+      (icTableName    AS CHARACTER,
+       icKeyType      AS CHARACTER,
+       icParentValue  AS CHARACTER,
+       icChildValue   AS CHARACTER):
+
+      mAddUpdateRelation(NO, icTableName, icKeyType, icParentValue, icChildValue, "").
+
+   END METHOD.
+
+   /* Finish the old relation and starts the new relation. If the relation
+      doesn't exists then just adds the relation. */
+   METHOD PUBLIC VOID mUpdateRelation
+      (icTableName    AS CHARACTER,
+       icKeyType      AS CHARACTER,
+       icParentValue  AS CHARACTER,
+       icChildValue   AS CHARACTER,
+       icRelationType AS CHARACTER):
+
+      mAddUpdateRelation(NO, icTableName, icKeyType, icParentValue, icChildValue, icRelationType).
+
+   END METHOD.
+
+   METHOD PRIVATE VOID mAddUpdateRelation
+      (ilAdd          AS LOGICAL,
+       icTableName    AS CHARACTER,
+       icKeyType      AS CHARACTER,
+       icParentValue  AS CHARACTER,
+       icChildValue   AS CHARACTER,
+       icRelationType AS CHARACTER):
+
+      DEFINE VARIABLE ltzFromTime    AS DATETIME-TZ NO-UNDO.
+      DEFINE VARIABLE liRelationID   AS INT64       NO-UNDO.
+
+      ltzFromTime = NOW.
+
+      FOR EACH TMSRelation NO-LOCK WHERE
+               TMSRelation.TableName   = icTableName AND
+               TMSRelation.KeyType     = icKeyType   AND
+               TMSRelation.ChildValue  = icKeyType   AND
+               TMSRelation.ParentValue = icTableName
+               BY TMSRelation.ToTime DESCENDING:
+         IF TMSRelation.ToTime = ? OR TMSRelation.ToTime >= ltzFromTime
+         THEN DO:
+            IF ilAdd
+            THEN RETURN.
+            ELSE liRelationID = TMSRelation.TMSRelationID.
+         END.
+
+         LEAVE.
+      END.
+
+      IF liRelationID > 0
+      THEN DO:
+         FIND TMSRelation EXCLUSIVE-LOCK WHERE
+              TMSRelation.TMSRelationID = liRelationID.
+         TMSRelation.ToTime = ADD-INTERVAL(ltzFromTime, -1, 'milliseconds').
+      END.
+
+      CREATE TMSRelation.
+      ASSIGN
+         TMSRelation.TableName    = "TMSRelation"
+         TMSRelation.KeyType      = "KeyType"
+         TMSRelation.ChildValue   = icChildValue
+         TMSRelation.ParentValue  = icParentValue
+         TMSRelation.RelationType = icRelationType
+         TMSRelation.FromTime     = ltzFromTime
+         .
+
+   END METHOD.
+
+   METHOD PUBLIC VOID mMark
+      ( iiTMSRelationID AS INT64 ):
+
+      FIND ttTMSRelation WHERE ttTMSRelation.TMSRelationID = iiTMSRelationID NO-ERROR.
+
+      IF NOT AVAILABLE ttTMSRelation
+      THEN RETURN ERROR NEW Progress.Lang.AppError
+               (SUBSTITUTE("Cannot mark TMSRelationID &1",TMSRelation.TMSRelationID), 1).
+
+      ASSIGN
+         ttTMSRelation.Marked = TRUE
+         alThereWereMarking   = TRUE.
 
    END METHOD.
 

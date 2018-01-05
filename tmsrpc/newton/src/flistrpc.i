@@ -13,10 +13,11 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 lcResultStruct = add_array(response_toplevel_id, "").
 
-FUNCTION fListQuery RETURNS CHAR 
-(icTables AS CHAR,
- icQuery AS CHAR,
- icIdField AS CHAR):
+FUNCTION fMakeListUsingQuery RETURNS CHAR 
+   ( ilIncludeBrand AS LOGICAL,
+     icTables       AS CHARACTER,
+     icQuery        AS CHARACTER,
+     icIdField      AS CHARACTER ):
    
    DEF VAR lhQuery AS HANDLE NO-UNDO. 
    DEF VAR lhTable AS HANDLE NO-UNDO. 
@@ -61,9 +62,21 @@ FUNCTION fListQuery RETURNS CHAR
       IF lhQuery:QUERY-OFF-END OR liCount > liLimit + liOffSet THEN LEAVE.
       
       IF icidField NE ? THEN 
-         add_string(lcResultStruct, "", (lhQuery:GET-BUFFER-HANDLE(1):BUFFER-FIELD(icIdField):BUFFER-VALUE + "|" + multitenancy.TenantInformation:mGetBrandForRecord(lhTable))).
+         add_string(lcResultStruct,
+                    "",
+                    lhQuery:GET-BUFFER-HANDLE(1):BUFFER-FIELD(icIdField):BUFFER-VALUE + 
+                    ( IF ilIncludeBrand
+                      THEN "|" + multitenancy.TenantInformation:mGetBrandForRecord(lhTable)
+                      ELSE "" )
+                   ).
       ELSE
-         add_string(lcResultStruct, "", (STRING(lhQuery:GET-BUFFER-HANDLE(1):ROWID) + "|" + multitenancy.TenantInformation:mGetBrandForRecord(lhTable))).
+         add_string(lcResultStruct,
+                    "",
+                    STRING(lhQuery:GET-BUFFER-HANDLE(1):ROWID) +
+                    ( IF ilIncludeBrand
+                      THEN "|" + multitenancy.TenantInformation:mGetBrandForRecord(lhTable)
+                      ELSE "" )
+                   ).
 
    END.
 
@@ -74,6 +87,16 @@ FUNCTION fListQuery RETURNS CHAR
    RETURN "".
 
 END FUNCTION. 
+
+FUNCTION fListQuery RETURNS CHARACTER 
+   ( icTables  AS CHARACTER,
+     icQuery   AS CHARACTER,
+     icIdField AS CHARACTER ):
+
+   RETURN fMakeListUsingQuery(YES, icTables,icQuery, icIdField).
+
+END FUNCTION.
+
 
 FUNCTION fListBundleQuery RETURNS CHAR 
 (INPUT icBrand        AS CHAR,
