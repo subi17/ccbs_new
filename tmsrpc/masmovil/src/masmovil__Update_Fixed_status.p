@@ -253,13 +253,19 @@ CASE FusionMessage.FixedStatus:
 
    END.
    WHEN "CITADA" THEN DO:
-      ASSIGN OrderFusion.AppointmentDate = lcCita.
+      ASSIGN 
+         OrderFusion.AppointmentDate = lcCita
+         OrderFusion.portStat        = lcPortStat
+         OrderFusion.portDate        = lcPortDate.
    END.
    /* installation done */
    WHEN "CERRADA" THEN DO:
        
-      ASSIGN OrderFusion.FixedInstallationTS = ldeLastDate.
-             OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_FINALIZED}.
+      ASSIGN 
+         OrderFusion.FixedInstallationTS = ldeLastDate
+         OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_FINALIZED}
+         OrderFusion.portStat        = lcPortStat
+         OrderFusion.portDate        = lcPortDate.
       
       /* NOTE: do not change the memo text (checked in ordersender.i) */
       IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} THEN
