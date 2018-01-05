@@ -437,7 +437,7 @@ CLASS Syst.TMSRelation:
 
    END METHOD.
 
-   METHOD PRIVATE STATIC VOID mEndRelation
+   METHOD PUBLIC STATIC VOID mEndRelation
       (icTableName    AS CHARACTER,
        icKeyType      AS CHARACTER,
        icParentValue  AS CHARACTER,
