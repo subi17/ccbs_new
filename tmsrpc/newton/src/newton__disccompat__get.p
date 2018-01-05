@@ -1,7 +1,8 @@
 /**
  * Get bundle details.
  *
- * @input  id;array of string;mandatory; tmsrelation ids
+ * @input  brand;string;mandatory;
+           id;array of numbers;mandatory; tmsrelation ids
  * @output compat;array of struct;discount compatibility data
  * @compat        id;string;bundle id
                   old_value;string;existing discountplan id value

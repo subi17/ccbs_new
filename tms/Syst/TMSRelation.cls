@@ -292,11 +292,28 @@ CLASS Syst.TMSRelation:
 
    END METHOD.
 
-   METHOD PUBLIC VOID mAddKeyType
+   METHOD PUBLIC VOID mMark
+      ( iiTMSRelationID AS INT64 ):
+
+      FIND ttTMSRelation WHERE ttTMSRelation.TMSRelationID = iiTMSRelationID NO-ERROR.
+
+      IF NOT AVAILABLE ttTMSRelation
+      THEN RETURN ERROR NEW Progress.Lang.AppError
+               (SUBSTITUTE("Cannot mark TMSRelationID &1",TMSRelation.TMSRelationID), 1).
+
+      ASSIGN
+         ttTMSRelation.Marked = TRUE
+         alThereWereMarking   = TRUE.
+
+   END METHOD.
+
+   METHOD PUBLIC STATIC VOID mAddKeyType
       (icTableName AS CHARACTER,
        icKeyType   AS CHARACTER):
 
       DEFINE VARIABLE ltzFromTime AS DATETIME-TZ NO-UNDO.
+
+      DEFINE BUFFER TMSRelation FOR TMSRelation.
 
       FOR EACH TMSRelation NO-LOCK WHERE
                TMSRelation.TableName   = "TMSRelation" AND
@@ -323,7 +340,7 @@ CLASS Syst.TMSRelation:
    END METHOD.
 
    /* Adds relation if it doesn't exists already */
-   METHOD PUBLIC VOID mAddRelation
+   METHOD PUBLIC STATIC VOID mAddRelation
       (icTableName    AS CHARACTER,
        icKeyType      AS CHARACTER,
        icParentValue  AS CHARACTER,
@@ -334,7 +351,7 @@ CLASS Syst.TMSRelation:
    END METHOD.
 
    /* Adds relation if it doesn't exists already */
-   METHOD PUBLIC VOID mAddRelation
+   METHOD PUBLIC STATIC VOID mAddRelation
       (icTableName    AS CHARACTER,
        icKeyType      AS CHARACTER,
        icParentValue  AS CHARACTER,
@@ -347,7 +364,7 @@ CLASS Syst.TMSRelation:
 
    /* Finish the old relation and starts the new relation. If the relation
       doesn't exists then just adds the relation. */
-   METHOD PUBLIC VOID mUpdateRelation
+   METHOD PUBLIC STATIC VOID mUpdateRelation
       (icTableName    AS CHARACTER,
        icKeyType      AS CHARACTER,
        icParentValue  AS CHARACTER,
@@ -359,7 +376,7 @@ CLASS Syst.TMSRelation:
 
    /* Finish the old relation and starts the new relation. If the relation
       doesn't exists then just adds the relation. */
-   METHOD PUBLIC VOID mUpdateRelation
+   METHOD PUBLIC STATIC VOID mUpdateRelation
       (icTableName    AS CHARACTER,
        icKeyType      AS CHARACTER,
        icParentValue  AS CHARACTER,
@@ -370,7 +387,7 @@ CLASS Syst.TMSRelation:
 
    END METHOD.
 
-   METHOD PRIVATE VOID mAddUpdateRelation
+   METHOD PRIVATE STATIC VOID mAddUpdateRelation
       (ilAdd          AS LOGICAL,
        icTableName    AS CHARACTER,
        icKeyType      AS CHARACTER,
@@ -380,6 +397,8 @@ CLASS Syst.TMSRelation:
 
       DEFINE VARIABLE ltzFromTime    AS DATETIME-TZ NO-UNDO.
       DEFINE VARIABLE liRelationID   AS INT64       NO-UNDO.
+
+      DEFINE BUFFER TMSRelation FOR TMSRelation.
 
       ltzFromTime = NOW.
 
@@ -418,18 +437,28 @@ CLASS Syst.TMSRelation:
 
    END METHOD.
 
-   METHOD PUBLIC VOID mMark
-      ( iiTMSRelationID AS INT64 ):
+   METHOD PRIVATE STATIC VOID mEndRelation
+      (icTableName    AS CHARACTER,
+       icKeyType      AS CHARACTER,
+       icParentValue  AS CHARACTER,
+       icChildValue   AS CHARACTER):
 
-      FIND ttTMSRelation WHERE ttTMSRelation.TMSRelationID = iiTMSRelationID NO-ERROR.
+      DEFINE BUFFER TMSRelation   FOR TMSRelation.
+      DEFINE BUFFER lbTMSRelation FOR TMSRelation.
 
-      IF NOT AVAILABLE ttTMSRelation
-      THEN RETURN ERROR NEW Progress.Lang.AppError
-               (SUBSTITUTE("Cannot mark TMSRelationID &1",TMSRelation.TMSRelationID), 1).
-
-      ASSIGN
-         ttTMSRelation.Marked = TRUE
-         alThereWereMarking   = TRUE.
+      FOR EACH TMSRelation NO-LOCK WHERE
+                TMSRelation.TableName   = icTableName AND
+                TMSRelation.KeyType     = icKeyType   AND
+                TMSRelation.ChildValue  = icKeyType   AND
+                TMSRelation.ParentValue = icTableName
+                BY TMSRelation.ToTime DESCENDING:
+         IF TMSRelation.ToTime = ? OR TMSRelation.ToTime >= NOW
+         THEN DO TRANSACTION:
+            FIND lbTMSRelation EXCLUSIVE-LOCK WHERE ROWID(lbTMSRelation) = ROWID(TMSRelation).
+            lbTMSRelation.ToTime = NOW.
+         END.
+         LEAVE.
+      END.
 
    END METHOD.
 
