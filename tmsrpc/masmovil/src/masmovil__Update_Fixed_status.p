@@ -325,7 +325,8 @@ END CASE.
 IF FusionMessage.FixedStatus = "CERRADA"         OR
    FusionMessage.FixedStatus = "CERRADA PARCIAL" OR
    FusionMessage.FixedStatus = "CITADA"          OR 
-   FusionMessage.FixedStatus = "INCIDENCIA RED"
+   FusionMessage.FixedStatus = "INCIDENCIA RED"  OR
+   FusionMessage.FixedStatus = "INCIDENCIA TECNICO EN CASA"
 THEN
    FusionMessage.AdditionalInfo = lcCita.
 
