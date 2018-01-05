@@ -169,7 +169,7 @@ ASSIGN
    FusionMessage.FixedStatusDesc = lcStatusDescription
    FusionMessage.FixedStatusTS = ldeNotificationTime
    FusionMessage.OrderType = lcOrderType
-   FusionMessage.AdditionalInfo = lcCita.
+.
 
 /* handle only work order statuses */
 IF lcNotificationType NE "O" THEN DO:
@@ -321,6 +321,19 @@ CASE FusionMessage.FixedStatus:
    END.
 
 END CASE.
+
+IF FusionMessage.FixedStatus = "CERRADA"         OR
+   FusionMessage.FixedStatus = "CERRADA PARCIAL" OR
+   FusionMessage.FixedStatus = "CITADA"          OR 
+   FusionMessage.FixedStatus = "INCIDENCIA RED"
+THEN
+   FusionMessage.AdditionalInfo = lcCita.
+
+IF FusionMessage.FixedStatus = "CANCELADA" OR            
+   FusionMessage.FixedStatus = "CANCELACION EN PROCESO" 
+THEN
+   FusionMessage.AdditionalInfo = lcCanDS.
+
 
 RELEASE OrderFusion.
 RELEASE FusionMessage.
