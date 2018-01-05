@@ -1,6 +1,5 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Func/matrix.i}
-{Func/multitenantfunc.i}
 
 DEF VAR lcResultStruct AS CHARACTER NO-UNDO. 
 DEF VAR pcStruct AS CHARACTER NO-UNDO. 
@@ -62,9 +61,9 @@ FUNCTION fListQuery RETURNS CHAR
       IF lhQuery:QUERY-OFF-END OR liCount > liLimit + liOffSet THEN LEAVE.
       
       IF icidField NE ? THEN 
-         add_string(lcResultStruct, "", (lhQuery:GET-BUFFER-HANDLE(1):BUFFER-FIELD(icIdField):BUFFER-VALUE + "|" + fConvertTenantToBrand(lhTable:BUFFER-TENANT-NAME))). 
+         add_string(lcResultStruct, "", (lhQuery:GET-BUFFER-HANDLE(1):BUFFER-FIELD(icIdField):BUFFER-VALUE + "|" + multitenancy.TenantInformation:mGetBrandForRecord(lhTable))).
       ELSE
-         add_string(lcResultStruct, "", (STRING(lhQuery:GET-BUFFER-HANDLE(1):ROWID) + "|" + fConvertTenantToBrand(lhTable:BUFFER-TENANT-NAME))).
+         add_string(lcResultStruct, "", (STRING(lhQuery:GET-BUFFER-HANDLE(1):ROWID) + "|" + multitenancy.TenantInformation:mGetBrandForRecord(lhTable))).
 
    END.
 
@@ -99,7 +98,7 @@ FUNCTION fListBundleQuery RETURNS CHAR
  DO liCount = 1 TO liNumEntries:
     lcBundle = ENTRY(liCount,lcResult).
     IF lcBundle = "" OR lcBundle = ? THEN NEXT.
-    add_string(lcResultStruct, "", lcBundle + "|" + fConvertTenantToBrand(BUFFER-TENANT-NAME(CliType))).
+    add_string(lcResultStruct, "", lcBundle + "|" + multitenancy.TenantInformation:mGetEffectiveBrand()).
  END. /* DO liCount = 1 TO liNumEntries: */
 
 END FUNCTION. /* FUNCTION fListBundleQuery RETURNS CHAR */

@@ -82,6 +82,10 @@ CLASS Syst.TMSRelation:
       INDEX TMSRelationID IS UNIQUE TMSRelationID
       INDEX ChildValue ChildValue ParentValue ToTime DESCENDING.
 
+   DEFINE PUBLIC PROPERTY RecordCount AS INTEGER NO-UNDO
+      GET.
+      PRIVATE SET.
+
    CONSTRUCTOR PUBLIC TMSRelation
       (icTableName           AS CHARACTER,
        icKeyType             AS CHARACTER):
@@ -185,8 +189,9 @@ CLASS Syst.TMSRelation:
              atzToTime   = NOW.
              
       ASSIGN
+          RecordCount   = 0
           acParentValue = icParentValue
-          acChildValue = icChildValue.
+          acChildValue  = icChildValue.
 
       IF icParentValue = ? AND icChildValue = ?     
       THEN FOR EACH TMSRelation NO-LOCK USE-INDEX ToTime WHERE
@@ -243,6 +248,7 @@ CLASS Syst.TMSRelation:
                                          ELSE TMSRelation.RelationType
             ttTMSRelation.FromDate     = DATE(TMSRelation.FromTime)
             ttTMSRelation.ToDate       = DATE(TMSRelation.ToTime)
+            RecordCount                = RecordCount + 1
             .
 
       RETURN TRUE.
