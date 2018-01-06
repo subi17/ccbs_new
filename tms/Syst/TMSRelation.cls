@@ -80,7 +80,7 @@ CLASS Syst.TMSRelation:
       FIELD FromTime      LIKE TMSRelation.FromTime
       FIELD ToDate        AS DATE
       FIELD FromDate      AS DATE
-      FIELD Marked        AS LOGICAL
+      FIELD Marked        AS LOGICAL SERIALIZE-HIDDEN
       INDEX ParentValue IS PRIMARY UNIQUE ParentValue ChildValue ToTime DESCENDING
       INDEX TMSRelationID IS UNIQUE TMSRelationID
       INDEX Marked Marked
@@ -163,7 +163,7 @@ CLASS Syst.TMSRelation:
       ASSIGN
          lhBufferHandle:BUFFER-FIELD("TMSRelationID"):SERIALIZE-NAME = icTMSRelationIDName
          lhBufferHandle:BUFFER-FIELD("ParentValue"):SERIALIZE-NAME = icParentValueName
-         lhBufferHandle:BUFFER-FIELD("ChildValue"):SERIALIZE-NAME = icParentValueName
+         lhBufferHandle:BUFFER-FIELD("ChildValue"):SERIALIZE-NAME = icChildValueName
          lhBufferHandle:BUFFER-FIELD("RelationType"):SERIALIZE-NAME = icRelationTypeName.
 
    END METHOD.
