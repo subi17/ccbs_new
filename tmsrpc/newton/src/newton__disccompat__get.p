@@ -20,12 +20,11 @@ Syst.Var:gcBrand = "1".
 DEF VAR lcResultStruct AS CHAR NO-UNDO. 
 DEF VAR pcId AS CHAR NO-UNDO. 
 DEF VAR pcIdArray AS CHAR NO-UNDO. 
-DEF VAR liCounter AS INTEGER NO-UNDO. 
+DEF VAR liCounter AS INTEGER NO-UNDO.
 
 DEFINE VARIABLE liParamCount   AS INTEGER   NO-UNDO.
 DEFINE VARIABLE pcBrand        AS CHARACTER NO-UNDO.
 DEFINE VARIABLE objTMSRelation AS CLASS Syst.TMSRelation     NO-UNDO.
-DEFINE VARIABLE objObject      AS CLASS Progress.Lang.Object NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string,array") = ? THEN RETURN.
 
@@ -90,14 +89,11 @@ END.
    but in this case this should be the case as there should be always
    the same list here what newton__disccompat_list sent earlier. */
 
-/* Serialize the data available */
-objObject = objTMSRelation:mSerialize().
-add_json_as_object(response_toplevel_id, "", objObject).
+/* Serialize the data available. Note: The fcgi_library will take care
+   the deletion of the object which mSerialize creates */
+add_json_as_object(response_toplevel_id, "", objTMSRelation:mSerialize()).
 
 FINALLY:
-   IF VALID-OBJECT(objObject)
-   THEN DELETE OBJECT objObject.
-    
    IF VALID-OBJECT(objTMSRelation)
    THEN DELETE OBJECT objTMSRelation.
 END FINALLY.
