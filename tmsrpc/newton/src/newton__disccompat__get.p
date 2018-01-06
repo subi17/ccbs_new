@@ -16,15 +16,11 @@
 
 {Syst/commpaa.i}
 Syst.Var:gcBrand = "1".
-{Func/cparam2.i}
-{Syst/tmsconst.i}
-{Func/fprepaidfee.i}
 
 DEF VAR lcResultStruct AS CHAR NO-UNDO. 
 DEF VAR pcId AS CHAR NO-UNDO. 
 DEF VAR pcIdArray AS CHAR NO-UNDO. 
 DEF VAR liCounter AS INTEGER NO-UNDO. 
-DEFINE VARIABLE resp_array AS CHARACTER NO-UNDO.
 
 DEFINE VARIABLE liParamCount   AS INTEGER   NO-UNDO.
 DEFINE VARIABLE pcBrand        AS CHARACTER NO-UNDO.
@@ -46,8 +42,6 @@ DO ON ERROR UNDO, THROW:
       RETURN appl_err(errorobj:GetMessage(1)).
    END.
 END.
-
-resp_array = add_array(response_toplevel_id, "").
 
 liParamCount = get_paramcount(pcIDArray).
 
@@ -98,8 +92,7 @@ END.
 
 /* Serialize the data available */
 objObject = objTMSRelation:mSerialize().
-
-add_json_as_object(resp_array, "", objObject).
+add_json_as_object(response_toplevel_id, "", objObject).
 
 FINALLY:
    IF VALID-OBJECT(objObject)
