@@ -29,14 +29,6 @@ DEF VAR lcQuery AS CHARACTER NO-UNDO.
 lcQuery = SUBSTITUTE('FOR EACH &1 NO-LOCK WHERE ' +
                               '&1.TableName = "DiscountPlan"  AND ' +
                               '&1.KeyType   = "Compatibility" AND ' +
-                              '&1.ToTime    = ?',
-                     'TMSRelation').
-
-fMakeListUsingQuery(NO, "TMSRelation",lcQuery,"TMSRelationID").
-
-lcQuery = SUBSTITUTE('FOR EACH &1 NO-LOCK WHERE ' +
-                              '&1.TableName = "DiscountPlan"  AND ' +
-                              '&1.KeyType   = "Compatibility" AND ' +
                               '&1.ToTime   >= "&2"',
                      'TMSRelation',
                      NOW).
