@@ -427,8 +427,8 @@ CLASS Syst.TMSRelation:
 
       CREATE TMSRelation.
       ASSIGN
-         TMSRelation.TableName    = "TMSRelation"
-         TMSRelation.KeyType      = "KeyType"
+         TMSRelation.TableName    = icTableName
+         TMSRelation.KeyType      = icKeyType
          TMSRelation.ChildValue   = icChildValue
          TMSRelation.ParentValue  = icParentValue
          TMSRelation.RelationType = icRelationType
