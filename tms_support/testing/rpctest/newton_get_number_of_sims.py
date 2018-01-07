@@ -13,7 +13,7 @@ def instruction():
 
 if len(sys.argv) < 2: instruction()
 else:
-   var1 = sys.argv[1]
+   var1 = int(sys.argv[1])
 
 p=s.newton.get_number_of_sims('yoigo',var1)
 print_results(p)
