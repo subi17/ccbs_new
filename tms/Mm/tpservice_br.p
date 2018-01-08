@@ -26,6 +26,7 @@ DEF VAR rtab            AS RECID EXTENT 24        NO-UNDO.
 DEF VAR i               AS INT                    NO-UNDO.
 DEF VAR lcCreatedTS     AS CHAR                   NO-UNDO.
 DEF VAR lcUpdatedTS     AS CHAR                   NO-UNDO.
+DEF VAR lcVoucherActDt  AS CHAR                   NO-UNDO.
 DEF VAR lcVoucherStatus AS CHAR                   NO-UNDO.
 
 FORM
@@ -54,7 +55,11 @@ FORM
     SKIP
     "Serial Number .....:" TPService.SerialNbr
     SKIP
-    "Sky TV Voucher ....:" TPService.SkyTvVoucher lcVoucherStatus FORMAT "X(15)" AT 38 
+/*    "Mac Address .......:" TPService.MacAddress
+    SKIP */
+    "Sky TV Voucher ....:" TPService.SkyTvVoucher 
+    lcVoucherStatus  FORMAT "X(12)" AT 38 
+    lcVoucherActDt   FORMAT "X(10)" AT 52
     SKIP
     "External Id .......:" TPService.MessageId
     SKIP
@@ -270,9 +275,10 @@ REPEAT WITH FRAME sel:
         PAUSE 0. 
         
         ASSIGN
-            lcCreatedTS = Func.Common:mTS2HMS(TPService.CreatedTS)  
-            lcUpdatedTS = Func.Common:mTS2HMS(TPService.UpdateTS).
-            lcVoucherStatus = (IF TPService.VoucherStatus <> "" THEN TPService.VoucherStatus ELSE "Unlocked").
+            lcCreatedTS      = Func.Common:mTS2HMS(TPService.CreatedTS)  
+            lcUpdatedTS      = Func.Common:mTS2HMS(TPService.UpdateTS)
+            lcVoucherActDt   = STRING(TPService.VoucherActiveDt,"99-99-9999")
+            lcVoucherStatus  = (IF TPService.VoucherStatus <> "" THEN TPService.VoucherStatus ELSE "Unlocked").
 
         DISP TPService.MsSeq
              TPService.ServSeq
@@ -282,6 +288,7 @@ REPEAT WITH FRAME sel:
              TPService.Product
              TPService.Offer
              TPService.SerialNbr
+/*             TPService.MacAddress */
              TPService.SkyTvVoucher
              lcVoucherStatus
              TPService.MessageId
@@ -290,6 +297,7 @@ REPEAT WITH FRAME sel:
              TPService.TermReason
              lcCreatedTS
              lcUpdatedTS
+             lcVoucherActDt
              WITH FRAME fDetails.
 
         TPSERVICEBROWSE:
