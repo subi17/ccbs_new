@@ -1,6 +1,6 @@
 ADD TABLE "OrderGroup"
   MULTITENANT yes
-  AREA "Sta_Data_64"
+  AREA "Sta_Data_128"
   DUMP-NAME "ordergroup"
 
 ADD FIELD "OrderId" OF "OrderGroup" AS integer
@@ -60,10 +60,10 @@ ADD FIELD "CrStamp" OF "OrderGroup" AS decimal
   ORDER 50
 
 ADD INDEX "OrderId" ON "OrderGroup"
-  AREA "Sta_Index_64"
+  AREA "Sta_Index_3"
   INDEX-FIELD "OrderId" ASCENDING
 
 ADD INDEX "GroupId" ON "OrderGroup"
-  AREA "Sta_Index_64"
+  AREA "Sta_Index_3"
   INDEX-FIELD "GroupId" ASCENDING
   INDEX-FIELD "GroupType" DESCENDING
