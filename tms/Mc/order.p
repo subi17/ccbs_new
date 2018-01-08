@@ -2341,7 +2341,7 @@ PROCEDURE local-update-customer:
         
          END.   
 
-         IF NOT fCheckCustomerData(BUFFER OrderCustomer) THEN NEXT.
+         IF NOT fCheckCustomerData(BUFFER OrderCustomer) THEN UNDO Action, NEXT.
          
          LEAVE.
       END.   
