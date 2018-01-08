@@ -1,0 +1,7 @@
+ADD FIELD "MacAddress" OF "TPService" AS character
+  FORMAT "X(25)"
+  INITIAL ""
+  LABEL "Mac Address"
+  COLUMN-LABEL "Mac Address"
+  HELP "Mac Address"
+  ORDER 250
