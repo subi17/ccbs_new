@@ -55,8 +55,8 @@ FORM
     SKIP
     "Serial Number .....:" TPService.SerialNbr
     SKIP
-    "Mac Address .......:" TPService.MacAddress
-    SKIP
+/*    "Mac Address .......:" TPService.MacAddress
+    SKIP */
     "Sky TV Voucher ....:" TPService.SkyTvVoucher 
     lcVoucherStatus  FORMAT "X(12)" AT 38 
     lcVoucherActDt   FORMAT "X(10)" AT 52
@@ -288,7 +288,7 @@ REPEAT WITH FRAME sel:
              TPService.Product
              TPService.Offer
              TPService.SerialNbr
-             TPService.MacAddress
+/*             TPService.MacAddress */
              TPService.SkyTvVoucher
              lcVoucherStatus
              TPService.MessageId
