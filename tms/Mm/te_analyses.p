@@ -958,14 +958,13 @@ PROCEDURE RemoveOldItem.
    FOR EACH triggerconf NO-LOCK.
    
       FOR EACH Triggerevent WHERE
-               TriggerEvent.TriggerConf = TriggerConf.TriggerConf  AND
+               TriggerEvent.TriggerConfID = TriggerConf.TriggerConfID  AND
                TriggerEvent.Statuscode  = 6                        AND 
                TriggerEvent.Created  < Datetime(today - 30, mtime) NO-LOCK.
 
-         FOR EACH TriggerItem WHERE
-                  TriggerItem.TriggerConf    = TriggerConf.TriggerConf AND
-                  TriggerItem.TriggerEventID = TriggerEvent.TriggerEventID AND
-                  TriggerItem.TriggerConfID  = TriggerConf.TriggerconfID NO-LOCK.
+         FOR EACH TriggerItem NO-LOCK WHERE
+                  TriggerItem.TriggerConfID  = TriggerEvent.TriggerConfID AND
+                  TriggerItem.TriggerEventID = TriggerEvent.TriggerEventID:
             
             DO TRANS:
 
@@ -985,10 +984,10 @@ PROCEDURE RemoveOldItem.
             END.
                                          
          END.
-                                                
+                                              
          FIND FIRST TriggerItem WHERE
-                    TriggerItem.TriggerConf   = TriggerConf.TriggerConf AND
-                    TriggerItem.TriggerConfID = TriggerConf.TriggerconfID NO-LOCK NO-ERROR.
+                    TriggerItem.TriggerConfID = TriggerEvent.TriggerConfID AND
+                    TriggerItem.TriggerEventID = TriggerEvent.TriggerEventID NO-LOCK NO-ERROR.
                   
          IF NOT AVAIL TriggerItem THEN DO TRANS:
                          
