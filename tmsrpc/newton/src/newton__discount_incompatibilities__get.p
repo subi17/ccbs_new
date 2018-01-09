@@ -36,10 +36,9 @@ DEFINE VARIABLE pcBrand        AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liOrder        AS INTEGER   NO-UNDO.
 DEFINE VARIABLE objTMSRelation AS CLASS Syst.TMSRelation     NO-UNDO.
 
-IF validate_request(param_toplevel_id, "string,array") = ? THEN RETURN.
+IF validate_request(param_toplevel_id, "array") = ? THEN RETURN.
 
-pcBrand   = get_string(param_toplevel_id, "0").
-pcIDArray = get_array(param_toplevel_id, "1").
+pcIDArray = get_array(param_toplevel_id, "0").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
