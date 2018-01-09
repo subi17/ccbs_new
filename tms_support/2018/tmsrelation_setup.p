@@ -18,13 +18,13 @@ Syst.TMSRelation:mAddRelation("DiscountPlan",
                               "CONVDISC_CS100_6",
                               "CONVDISC_CS20F12",
                               "ChildValue").
-/*
+
 Syst.TMSRelation:mAddRelation("DiscountPlan",
                               "Compatibility",
                               "CONVDISC_CS100_6",
-                              /* [Rete] 50% dto 12 meses */,
+                              "LRDISC2",
                               "ChildValue").
-*/
+
 
 Syst.TMSRelation:mAddRelation("DiscountPlan",
                               "Compatibility",
@@ -57,13 +57,12 @@ Syst.TMSRelation:mAddRelation("DiscountPlan",
                               "CONVDISC_CS20F12",
                               "CONVDISC_CS20F12",
                               "ChildValue").
-/*
+
 Syst.TMSRelation:mAddRelation("DiscountPlan",
                               "Compatibility",
                               "CONVDISC_CS20F12",
-                              /* [Rete] 50% dto 12 meses */,
+                              "LRDISC2",
                               "ChildValue").
-*/
 
 Syst.TMSRelation:mAddRelation("DiscountPlan",
                               "Compatibility",
@@ -72,31 +71,29 @@ Syst.TMSRelation:mAddRelation("DiscountPlan",
                               "ParentValue").
 
 /* ROW4 */
-/*
 Syst.TMSRelation:mAddRelation("DiscountPlan",
                               "Compatibility",
-                              /* [Rete] 50% dto 12 meses */,
+                              "LRDISC2",
                               "CONVDISC_CS100_6",
                               "ChildValue").
 
 Syst.TMSRelation:mAddRelation("DiscountPlan",
                               "Compatibility",
-                              /* [Rete] 50% dto 12 meses */,
+                              "LRDISC2",
                               "CONVDISC_CS20F12",
                               "ChildValue").
 
 Syst.TMSRelation:mAddRelation("DiscountPlan",
                               "Compatibility",
-                              /* [Rete] 50% dto 12 meses */,
-                              /* [Rete] 50% dto 12 meses */,
+                              "LRDISC2",
+                              "LRDISC2",
                               "ChildValue").
 
 Syst.TMSRelation:mAddRelation("DiscountPlan",
                               "Compatibility",
-                              /* [Rete] 50% dto 12 meses */,
+                              "LRDISC2",
                               "CONVDISC20_3",
                               "ChildValue").
-*/
 
 /*ROW5*/
 Syst.TMSRelation:mAddRelation("DiscountPlan",
@@ -110,13 +107,12 @@ Syst.TMSRelation:mAddRelation("DiscountPlan",
                               "CONVDISC20_3",
                               "CONVDISC_CS20F12",
                               "ChildValue").
-/*
+
 Syst.TMSRelation:mAddRelation("DiscountPlan",
                               "Compatibility",
                               "CONVDISC20_3",
-                              /* [Rete] 50% dto 12 meses */,
+                              "LRDISC2",
                               "ChildValue").
-*/
 
 Syst.TMSRelation:mAddRelation("DiscountPlan",
                               "Compatibility",
