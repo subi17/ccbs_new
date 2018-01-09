@@ -19,6 +19,6 @@ else:
 
 l=s.newton.discount_incompatibilities.list({"brand": var1})
 
-g=s.newton.discount_incompatibilities.get(var1, l)
+g=s.newton.discount_incompatibilities.get(l)
 
 print_results(g)
