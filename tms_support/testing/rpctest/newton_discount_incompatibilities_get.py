@@ -17,8 +17,8 @@ if len(sys.argv) < 2:
 else:
    var1 = sys.argv[1]
 
-l=s.newton.disccompat.list({"brand": var1})
+l=s.newton.discount_incompatibilities.list({"brand": var1})
 
-g=s.newton.disccompat.get(var1, l)
+g=s.newton.discount_incompatibilities.get(var1, l)
 
 print_results(g)
