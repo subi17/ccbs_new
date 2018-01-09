@@ -16,6 +16,12 @@ Syst.TMSRelation:mAddRelation("DiscountPlan",
 Syst.TMSRelation:mAddRelation("DiscountPlan",
                               "Compatibility",
                               "CONVDISC_CS100_6",
+                              "DISCFH300P_PRO",
+                              "ParentValue").
+
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "CONVDISC_CS100_6",
                               "CONVDISC_CS20F12",
                               "ChildValue").
 
@@ -43,6 +49,18 @@ Syst.TMSRelation:mAddRelation("DiscountPlan",
                               "Compatibility",
                               "DISCFH300P",
                               "DISCFH300P",
+                              "ChildValue").
+
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCFH300P_PRO",
+                              "CONVDISC_CS100_6",
+                              "ChildValue").
+
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "DISCFH300P_PRO",
+                              "DISCFH300P_PRO",
                               "ChildValue").
 
 /* ROW3 */
