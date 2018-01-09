@@ -49,7 +49,7 @@ objTMSRelation = NEW Syst.TMSRelation("DiscountPlan", "Compatibility").
 objTMSRelation:mSetSerializeNames("id",
                                   "old_value",
                                   "new_value",
-                                  "role",
+                                  "rule",
                                   "validfrom",
                                   "validto",
                                   NO).
