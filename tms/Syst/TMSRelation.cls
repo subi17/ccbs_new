@@ -61,17 +61,19 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 
 CLASS Syst.TMSRelation:
 
-   DEFINE PRIVATE VARIABLE alThereWereMarking AS LOGICAL     NO-UNDO.
-   DEFINE PRIVATE VARIABLE acTableName        AS CHARACTER   NO-UNDO.
-   DEFINE PRIVATE VARIABLE acKeyType          AS CHARACTER   NO-UNDO.
-   DEFINE PRIVATE VARIABLE acParentValue      AS CHARACTER   NO-UNDO.
-   DEFINE PRIVATE VARIABLE acChildValue       AS CHARACTER   NO-UNDO.
-   DEFINE PRIVATE VARIABLE alUseCurrentTime   AS LOGICAL INITIAL FALSE NO-UNDO.
+   DEFINE PRIVATE VARIABLE alThereWereOrdering AS LOGICAL     NO-UNDO.
+   DEFINE PRIVATE VARIABLE alIncludeBrand      AS LOGICAL     NO-UNDO.
+   DEFINE PRIVATE VARIABLE acTableName         AS CHARACTER   NO-UNDO.
+   DEFINE PRIVATE VARIABLE acKeyType           AS CHARACTER   NO-UNDO.
+   DEFINE PRIVATE VARIABLE acParentValue       AS CHARACTER   NO-UNDO.
+   DEFINE PRIVATE VARIABLE acChildValue        AS CHARACTER   NO-UNDO.
+   DEFINE PRIVATE VARIABLE alUseCurrentTime    AS LOGICAL INITIAL FALSE NO-UNDO.
 
    DEFINE PRIVATE VARIABLE atzFromTime      AS DATETIME-TZ NO-UNDO.   
    DEFINE PRIVATE VARIABLE atzToTime        AS DATETIME-TZ NO-UNDO.   
 
    DEFINE PRIVATE TEMP-TABLE ttTMSRelation NO-UNDO SERIALIZE-NAME ""
+      FIELD IDBrand       AS   CHARACTER INITIAL '&1|&2'
       FIELD TMSRelationID LIKE TMSRelation.TMSRelationID
       FIELD ParentValue   LIKE TMSRelation.ParentValue
       FIELD ChildValue    LIKE TMSRelation.ChildValue
@@ -80,10 +82,10 @@ CLASS Syst.TMSRelation:
       FIELD FromTime      LIKE TMSRelation.FromTime
       FIELD ToDate        AS DATE
       FIELD FromDate      AS DATE
-      FIELD Marked        AS LOGICAL SERIALIZE-HIDDEN
-      INDEX ParentValue IS PRIMARY UNIQUE ParentValue ChildValue ToTime DESCENDING
+      FIELD OrderNbr      AS INTEGER INITIAL ? SERIALIZE-HIDDEN
+      INDEX OrderNbr IS PRIMARY OrderNbr TMSRelationID
+      INDEX ParentValue IS UNIQUE ParentValue ChildValue ToTime DESCENDING
       INDEX TMSRelationID IS UNIQUE TMSRelationID
-      INDEX Marked Marked
       INDEX ChildValue ChildValue ParentValue ToTime DESCENDING.
 
    DEFINE PUBLIC PROPERTY RecordCount AS INTEGER NO-UNDO
@@ -104,8 +106,24 @@ CLASS Syst.TMSRelation:
    END CONSTRUCTOR.
 
    DESTRUCTOR TMSRelation():
-      EMPTY TEMP-TABLE ttTMSRelation.
+
+      mEraseData().
+
    END DESTRUCTOR.
+
+   METHOD PUBLIC VOID mEraseData():
+
+      EMPTY TEMP-TABLE ttTMSRelation.
+
+   END METHOD.
+
+   METHOD PUBLIC VOID mDeleteNotMarked():
+
+      FOR EACH ttTMSRelation WHERE ttTMSRelation.OrderNbr EQ ?:
+         DELETE ttTMSRelation.
+      END.
+
+   END METHOD.
 
    METHOD PUBLIC VOID mSetTimeRange
       (itzFromTime AS DATETIME-TZ,
@@ -142,7 +160,8 @@ CLASS Syst.TMSRelation:
        icRelationTypeName  AS CHARACTER,
        icFromTimeName      AS CHARACTER,
        icToTimeName        AS CHARACTER,
-       ilUseDateTimeTz     AS LOGICAL):
+       ilUseDateTimeTz     AS LOGICAL,
+       ilIncludeBrand      AS LOGICAL):
 
       DEFINE VARIABLE lhBufferHandle AS HANDLE NO-UNDO.
       
@@ -160,7 +179,16 @@ CLASS Syst.TMSRelation:
               lhBufferHandle:BUFFER-FIELD("FromDate"):SERIALIZE-NAME = icFromTimeName
               lhBufferHandle:BUFFER-FIELD("ToDate"):SERIALIZE-NAME = icToTimeName.
 
+      IF ilIncludeBrand
+      THEN ASSIGN
+              lhBufferHandle:BUFFER-FIELD("TMSRelationID"):SERIALIZE-HIDDEN = TRUE
+              lhBufferHandle:BUFFER-FIELD("IDBrand"):SERIALIZE-NAME = icTMSRelationIDName.
+      ELSE ASSIGN
+              lhBufferHandle:BUFFER-FIELD("IDBrand"):SERIALIZE-HIDDEN = TRUE
+              lhBufferHandle:BUFFER-FIELD("TMSRelationID"):SERIALIZE-NAME = icTMSRelationIDName.
+
       ASSIGN
+         alIncludeBrand = ilIncludeBrand
          lhBufferHandle:BUFFER-FIELD("TMSRelationID"):SERIALIZE-NAME = icTMSRelationIDName
          lhBufferHandle:BUFFER-FIELD("ParentValue"):SERIALIZE-NAME = icParentValueName
          lhBufferHandle:BUFFER-FIELD("ChildValue"):SERIALIZE-NAME = icChildValueName
@@ -168,16 +196,40 @@ CLASS Syst.TMSRelation:
 
    END METHOD.
 
-   METHOD PUBLIC VOID mPopulateData():
+   METHOD PUBLIC VOID mPopulateBrand
+      (icBrand AS CHARACTER):
 
-      mPopulateData(?, ?).
+      mPopulateData(?, ?, icBrand).
 
    END METHOD.
-   
+
+   METHOD PUBLIC VOID mPopulateBrand
+      (icBrand       AS CHARACTER,
+       icParentValue AS CHARACTER):
+
+      mPopulateData(icParentValue, ?, icBrand).
+
+   END METHOD.
+
+   METHOD PUBLIC VOID mPopulateBrand
+      (icBrand       AS CHARACTER,
+       icParentValue AS CHARACTER,
+       icChildValue  AS CHARACTER):
+
+      mPopulateData(icParentValue, icChildValue, icBrand).
+
+   END METHOD.
+
+   METHOD PUBLIC VOID mPopulateData():
+
+      mPopulateData(?, ?, ?).
+
+   END METHOD.
+
    METHOD PUBLIC VOID mPopulateData
       (icParentValue AS CHARACTER):
-         
-      mPopulateData(icParentValue, ?).
+
+      mPopulateData(icParentValue, ?, ?).
 
    END METHOD.
 
@@ -185,7 +237,17 @@ CLASS Syst.TMSRelation:
       (icParentValue         AS CHARACTER,
        icChildValue          AS CHARACTER):
 
-      EMPTY TEMP-TABLE ttTMSRelation.
+      mPopulateData(icParentValue, icChildValue, ?).
+
+   END METHOD.
+
+   METHOD PUBLIC VOID mPopulateData
+      (icParentValue         AS CHARACTER,
+       icChildValue          AS CHARACTER,
+       icBrand               AS CHARACTER):
+
+      IF icBrand EQ ?
+      THEN EMPTY TEMP-TABLE ttTMSRelation.
 
       IF alUseCurrentTime
       THEN ASSIGN
@@ -202,7 +264,7 @@ CLASS Syst.TMSRelation:
                TMSRelation.TableName = acTableName AND
                TMSRelation.KeyType   = acKeyType:
          
-               IF NOT mCreateTT()
+               IF NOT mCreateTT(icBrand)
                THEN LEAVE.
            END.
       ELSE FOR EACH TMSRelation NO-LOCK USE-INDEX ParentValue WHERE
@@ -213,13 +275,14 @@ CLASS Syst.TMSRelation:
                IF acChildValue NE ? AND TMSRelation.ChildValue NE acChildValue
                THEN NEXT.
                
-               IF NOT mCreateTT()
+               IF NOT mCreateTT(icBrand)
                THEN LEAVE.
            END.
 
    END METHOD.
 
-   METHOD PRIVATE LOGICAL mCreateTT():
+   METHOD PRIVATE LOGICAL mCreateTT
+      (icBrand AS CHARACTER):
 
       IF TMSRelation.ToTime NE ? AND
          atzToTime        NE ? AND
@@ -245,6 +308,7 @@ CLASS Syst.TMSRelation:
          USING ParentValue ChildValue FromTime ToTime TMSRelationID
          TO ttTMSRelation
          ASSIGN
+            ttTMSRelation.IDBrand      = SUBSTITUTE(ttTMSRelation.IDBrand, TMSRelation.TMSRelationID, icBrand) WHEN icBrand > ""
             ttTMSRelation.RelationType = IF TMSRelation.RelationType = "ParentValue"
                                          THEN TMSRelation.ParentValue
                                          ELSE IF TMSRelation.RelationType = "ChildValue"
@@ -261,10 +325,8 @@ CLASS Syst.TMSRelation:
 
    METHOD PUBLIC CLASS JsonArray mSerialize():
 
-      IF alThereWereMarking
-      THEN FOR EACH ttTMSRelation WHERE ttTMSRelation.Marked = FALSE:
-              DELETE ttTMSRelation.
-           END.
+      IF alThereWereOrdering
+      THEN mDeleteNotMarked().
 
       DEFINE VARIABLE objJsonArray AS CLASS JsonArray NO-UNDO.
 
@@ -293,7 +355,8 @@ CLASS Syst.TMSRelation:
    END METHOD.
 
    METHOD PUBLIC VOID mMark
-      ( iiTMSRelationID AS INT64 ):
+      ( iiTMSRelationID AS INT64,
+        iiOrderNbr      AS INTEGER ):
 
       FIND ttTMSRelation WHERE ttTMSRelation.TMSRelationID = iiTMSRelationID NO-ERROR.
 
@@ -302,8 +365,8 @@ CLASS Syst.TMSRelation:
                (SUBSTITUTE("Cannot mark TMSRelationID &1",TMSRelation.TMSRelationID), 1).
 
       ASSIGN
-         ttTMSRelation.Marked = TRUE
-         alThereWereMarking   = TRUE.
+         ttTMSRelation.OrderNbr = iiOrderNbr
+         alThereWereOrdering    = TRUE.
 
    END METHOD.
 

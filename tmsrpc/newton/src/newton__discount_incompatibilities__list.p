@@ -33,4 +33,4 @@ lcQuery = SUBSTITUTE('FOR EACH &1 NO-LOCK WHERE ' +
                      'TMSRelation',
                      NOW).
 
-fMakeListUsingQuery(NO, "TMSRelation",lcQuery,"TMSRelationID").
+fMakeListUsingQuery(YES, "TMSRelation",lcQuery,"TMSRelationID").
