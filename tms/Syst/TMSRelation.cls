@@ -403,10 +403,10 @@ CLASS Syst.TMSRelation:
       ltzFromTime = NOW.
 
       FOR EACH TMSRelation NO-LOCK WHERE
-               TMSRelation.TableName   = icTableName AND
-               TMSRelation.KeyType     = icKeyType   AND
-               TMSRelation.ChildValue  = icKeyType   AND
-               TMSRelation.ParentValue = icTableName
+               TMSRelation.TableName   = icTableName   AND
+               TMSRelation.KeyType     = icKeyType     AND
+               TMSRelation.ChildValue  = icChildValue  AND
+               TMSRelation.ParentValue = icParentValue
                BY TMSRelation.ToTime DESCENDING:
          IF TMSRelation.ToTime = ? OR TMSRelation.ToTime >= ltzFromTime
          THEN DO:
@@ -447,10 +447,10 @@ CLASS Syst.TMSRelation:
       DEFINE BUFFER lbTMSRelation FOR TMSRelation.
 
       FOR EACH TMSRelation NO-LOCK WHERE
-                TMSRelation.TableName   = icTableName AND
-                TMSRelation.KeyType     = icKeyType   AND
-                TMSRelation.ChildValue  = icKeyType   AND
-                TMSRelation.ParentValue = icTableName
+                TMSRelation.TableName   = icTableName   AND
+                TMSRelation.KeyType     = icKeyType     AND
+                TMSRelation.ChildValue  = icChildValue  AND
+                TMSRelation.ParentValue = icParentValue
                 BY TMSRelation.ToTime DESCENDING:
          IF TMSRelation.ToTime = ? OR TMSRelation.ToTime >= NOW
          THEN DO TRANSACTION:
