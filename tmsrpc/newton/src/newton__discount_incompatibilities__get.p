@@ -50,8 +50,8 @@ objTMSRelation:mSetSerializeNames("id",
                                   "old_value",
                                   "new_value",
                                   "rule",
-                                  "validfrom",
-                                  "validto",
+                                  "valid_from",
+                                  "valid_to",
                                   NO).
 
 /* We could call 
