@@ -12,7 +12,6 @@ DISABLE TRIGGERS FOR DUMP OF FFItem.
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/timestamp.i}
 {Syst/tmsconst.i}
 {Func/finvnum.i}
 {Mm/fbundle.i}
@@ -120,15 +119,15 @@ ASSIGN ldaFromDate     = DATE(MONTH(TODAY), 1, YEAR(TODAY))
 
 ASSIGN
    /* set 1 second after midnight to skip STC contract activations */
-   ldPeriodFrom        = fMake2Dt(ldaFromDate,1)   
-   ldPeriodFromSTC     = fMake2Dt(ldaFromDate,0)   
-   ldPeriodTo          = fMake2Dt(ldaToDate,86399)     
+   ldPeriodFrom        = Func.Common:mMake2Dt(ldaFromDate,1)   
+   ldPeriodFromSTC     = Func.Common:mMake2Dt(ldaFromDate,0)   
+   ldPeriodTo          = Func.Common:mMake2Dt(ldaToDate,86399)     
    lcIPLContracts      = fCParamC("IPL_CONTRACTS")
    lcBONOContracts     = fCParamC("BONO_CONTRACTS")
    lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
    lcFirstMonthUsageBasedBundles = fCParamC("FIRST_MONTH_USAGE_BASED_BUNDLES")
    lcExcludeBundles    = fCParamC("EXCLUDE_BUNDLES")
-   ldeStart            = fMakeTS()
+   ldeStart            = Func.Common:mMakeTS()
    liPeriod            = YEAR(ldaToDate) * 100 + MONTH(ldaToDate)
    liPrevPeriod        = YEAR(ldaPrevFromDate) * 100 + MONTH(ldaPrevFromDate)
    liDayOfMonth        = DAY(TODAY).
@@ -137,7 +136,7 @@ ASSIGN
 RUN p_bundle_first_month.
 
 ASSIGN
-   ldPeriodFrom     = fMake2Dt(ldaFromDate,0).
+   ldPeriodFrom     = Func.Common:mMake2Dt(ldaFromDate,0).
        
 RUN p_dss_bundle_first_month. 
 
@@ -193,7 +192,7 @@ FOR EACH ttData NO-LOCK:
        ttData.createdate SKIP.   
 END.
 
-ASSIGN ldeEnd   = fMakeTs().
+ASSIGN ldeEnd   = Func.Common:mMakeTs().
 
 OUTPUT STREAM sout CLOSE.
 OUTPUT STREAM fixfeeitem CLOSE.
@@ -273,13 +272,13 @@ PROCEDURE pGetAllSubscriptions:
       liReqStatus = INT(ENTRY(liCount, lcReqStatuses)).
 
       FOR EACH MsRequest NO-LOCK WHERE
-               MsRequest.Brand = gcBrand AND
+               MsRequest.Brand = Syst.Var:gcBrand AND
                MsRequest.ReqType = 8     AND
                MsRequest.ReqStat = liReqStatus    AND
                MsRequest.ActStamp >= ldPeriodFrom AND
                MsRequest.ActStamp <= ldPeriodTo,
          FIRST DayCampaign NO-LOCK WHERE
-               DayCampaign.Brand = gcBrand AND
+               DayCampaign.Brand = Syst.Var:gcBrand AND
                DayCampaign.DCEvent = MsRequest.ReqCParam3 AND
                LOOKUP(DayCampaign.DCType,{&PERCONTRACT_RATING_PACKAGE}) > 0,
          FIRST MsOwner WHERE 
@@ -287,11 +286,11 @@ PROCEDURE pGetAllSubscriptions:
                MsOwner.TSEnd   >= ldPeriodFrom AND
                MsOwner.TsBegin <= ldPeriodTo NO-LOCK:
        
-         fTS2Date(INPUT  MsRequest.ActStamp,
+         Func.Common:mTS2Date(INPUT  MsRequest.ActStamp,
                   OUTPUT ldaMsReqDate).
 
          FIND FIRST FMItem NO-LOCK WHERE
-                    FMItem.Brand        = gcBrand              AND
+                    FMItem.Brand        = Syst.Var:gcBrand              AND
                     FMItem.FeeModel     = DayCampaign.FeeModel AND
                     FMItem.FromDate    <= ldaMsReqDate         AND
                     FMItem.ToDate      >= ldaMsReqDate         AND
@@ -388,10 +387,10 @@ PROCEDURE pCalculateFees:
 
    FOR EACH ttSubscription,
       FIRST DayCampaign NO-LOCK WHERE
-            DayCampaign.Brand   = gcBrand AND
+            DayCampaign.Brand   = Syst.Var:gcBrand AND
             DayCampaign.DCEvent = ttSubscription.ServiceLimit,
       FIRST FixedFee NO-LOCK USE-INDEX HostTable WHERE
-            FixedFee.Brand     = gcBrand AND
+            FixedFee.Brand     = Syst.Var:gcBrand AND
             FixedFee.HostTable = "MobSub" AND
             FixedFee.KeyValue  = STRING(ttSubscription.MsSeq) AND
             FixedFee.FeeModel  = DayCampaign.FeeModel AND
@@ -401,7 +400,7 @@ PROCEDURE pCalculateFees:
             FixedFee.BegDate  <= ldaToDate AND
             FixedFee.EndPer   >= liPeriod,
       FIRST FMItem NO-LOCK WHERE
-            FMItem.Brand     = gcBrand AND
+            FMItem.Brand     = Syst.Var:gcBrand AND
             FMItem.FeeModel  = FixedFee.FeeModel AND
             FMItem.FromDate <= FixedFee.BegDate AND
             FMItem.ToDate   >= FixedFee.BegDate AND
@@ -416,7 +415,7 @@ PROCEDURE pCalculateFees:
       IF NOT CAN-FIND(FIRST ttData WHERE
                             ttData.FFItemNum  = FFItem.FFItemNum) THEN
       DO:           
-         ldFeeAmount = fCalculateFirstMonthFee(gcBrand,
+         ldFeeAmount = fCalculateFirstMonthFee(Syst.Var:gcBrand,
                                                ttSubscription.MsSeq,
                                                ttSubscription.ServiceLimit,
                                                FixedFee.Amt,
@@ -489,7 +488,7 @@ PROCEDURE pGetCustomerSubscriptions:
          FIRST bServiceLimit NO-LOCK USE-INDEX SlSeq WHERE
                bServiceLimit.SLSeq = bMServiceLimit.SLSeq,
          FIRST bDayCampaign NO-LOCK WHERE
-               bDayCampaign.Brand = gcBrand AND
+               bDayCampaign.Brand = Syst.Var:gcBrand AND
                bDayCampaign.DCEvent = bServiceLimit.GroupCode AND
                LOOKUP(bDayCampaign.DCType,
                      {&PERCONTRACT_RATING_PACKAGE}) > 0:
@@ -645,10 +644,10 @@ PROCEDURE pGetCustomerSubscriptions:
       ldFeeAmount = 0.
 
       FOR FIRST DayCampaign NO-LOCK WHERE
-                DayCampaign.Brand   = gcBrand AND
+                DayCampaign.Brand   = Syst.Var:gcBrand AND
                 DayCampaign.DCEvent = ttSub.BundleId,
           FIRST FixedFee NO-LOCK USE-INDEX HostTable WHERE
-                FixedFee.Brand     = gcBrand AND
+                FixedFee.Brand     = Syst.Var:gcBrand AND
                 FixedFee.HostTable = "MobSub" AND
                 FixedFee.KeyValue  = STRING(ttSub.MsSeq) AND
                 FixedFee.FeeModel  = DayCampaign.FeeModel AND
@@ -657,7 +656,7 @@ PROCEDURE pGetCustomerSubscriptions:
                 FixedFee.BegDate  <= ldaToDate AND
                 FixedFee.EndPer   >= liPeriod,
           FIRST FMItem NO-LOCK WHERE
-                FMItem.Brand     = gcBrand AND
+                FMItem.Brand     = Syst.Var:gcBrand AND
                 FMItem.FeeModel  = FixedFee.FeeModel AND
                 FMItem.FromDate <= FixedFee.BegDate AND
                 FMItem.ToDate   >= FixedFee.BegDate AND
