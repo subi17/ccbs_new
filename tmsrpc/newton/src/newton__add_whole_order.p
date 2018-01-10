@@ -1700,7 +1700,8 @@ IF pcOfferId NE "" THEN DO:
                   (IF LOOKUP(pcChannel,"telesales,emission") > 0 THEN "cc"
                    ELSE IF LOOKUP(pcChannel,"telesales_PRO,emission_PRO") > 0 
                       THEN "cc_PRO"
-                   ELSE IF LOOKUP(pcChannel,"fusion_telesales,fusion_emission,fusion_cc,fusion_self") > 0
+                   ELSE IF LOOKUP(pcChannel,"fusion_self") > 0 THEN "self"
+                   ELSE IF LOOKUP(pcChannel,"fusion_telesales,fusion_emission,fusion_cc") > 0
                    THEN "fusion_telesales" 
                    ELSE IF LOOKUP(pcChannel,"fusion_telesales_pro,fusion_emission_pro,fusion_cc_pro") > 0
                    THEN "fusion_telesales_pro" ELSE pcChannel).
