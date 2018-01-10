@@ -160,6 +160,7 @@ IF (Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1}  OR
     Order.OrderType  EQ {&ORDER_TYPE_STC}           AND
     fIsMNPOutOngoing(INPUT Order.CLI) EQ TRUE THEN DO:
 
+   IF iiSecureOption > 0 THEN Order.DeliverySecure = iiSecureOption.
    fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_MNP_RETENTION}).
 
    IF llDoEvent THEN DO:
@@ -184,6 +185,7 @@ IF ((Order.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION} AND
      Order.OrderType NE 2 AND
      NOT llCompanyScoringNeeded THEN DO:
 
+   IF iiSecureOption > 0 THEN Order.DeliverySecure = iiSecureOption.
    fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_FIXED_LINE}).
 
    FIND FIRST OrderFusion NO-LOCK WHERE
@@ -226,6 +228,7 @@ IF (Order.StatusCode EQ {&ORDER_STATUS_ROI_LEVEL_1} OR
      LOOKUP(lbOrder.statuscode,{&ORDER_INACTIVE_STATUSES}) EQ 0 AND
             lbOrder.OrderID NE Order.Orderid) THEN DO:
 
+   IF iiSecureOption > 0 THEN Order.DeliverySecure = iiSecureOption.
    fSetOrderStatus(Order.OrderId,"4").
 
    Func.Common:mWriteMemo("Order",
