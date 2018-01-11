@@ -323,6 +323,17 @@ CLASS Syst.TMSRelation:
    
    END METHOD.
 
+   METHOD PUBLIC VOID mSerialize
+      ( icLevel     AS CHARACTER,
+        objTTXMLRPC AS CLASS Syst.TempTableXMLRPC ):
+
+      IF alThereWereOrdering
+      THEN mDeleteNotMarked().
+
+      objTTXMLRPC:mSerialize(icLevel, BUFFER ttTMSRelation:HANDLE).
+
+   END METHOD.
+
    METHOD PUBLIC CLASS JsonArray mSerialize():
 
       IF alThereWereOrdering

@@ -109,11 +109,32 @@ FOR EACH ttBrandId
    END.
 END.
 
+/* add_json_as_object produces json formatted text and is lot faster than the
+   xml version. However it was not allowed to use this yet.
+
+   The best solution would be to create rpc which
+   gets all records for one branch. Then no marking is needed either
+   (after mSetSerializeNames we would only need
+    "add_json_as_object(response_toplevel_id, "", objTMSRelation:mSerialize())."
+    line and the finally block)
 /* Serialize the data available. Note: The fcgi_library will take care
    the deletion of the object which mSerialize creates */
 add_json_as_object(response_toplevel_id, "", objTMSRelation:mSerialize()).
+*/
+
+/* For getting the data in the old way we use helper class called TempTableXMLRPC */
+DEFINE VARIABLE objTTXMLRPC AS CLASS Syst.TempTableXMLRPC NO-UNDO.
+
+objTTXMLRPC = NEW Syst.TempTableXMLRPC(BUFFER tt_param:HANDLE,
+                                       BUFFER tt_lastpos:HANDLE,
+                                       add_to_tt).
+
+objTMSRelation:mSerialize(response_toplevel_id, objTTXMLRPC).
 
 FINALLY:
+   IF VALID-OBJECT(objTTXMLRPC)
+   THEN DELETE OBJECT objTTXMLRPC.
+
    EMPTY TEMP-TABLE ttBrandId.
    IF VALID-OBJECT(objTMSRelation)
    THEN DELETE OBJECT objTMSRelation.
