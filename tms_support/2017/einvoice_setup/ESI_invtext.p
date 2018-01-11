@@ -39,17 +39,17 @@ FUNCTION fUpdateInvText RETURNS LOGICAL
 END FUNCTION.
 
 fUpdateInvText("SMS", "EmailConfEInv", 1, "EinvoiceTemplate", 
-"MsSeq=#MSSEQ, MSISDN=#MSISDN, Amt=#AMOUNT, InvoiceDate=#INVDATE, InvoiceNumber=#INVNUM, InvoiceNumberCrypted=#INVNUMCRYPTED").
+"Link=#LINK, MsSeq=#MSSEQ, MSISDN=#MSISDN, Amt=#AMOUNT, InvoiceDate=#INVDATE, InvoiceNumber=#INVNUM, InvoiceNumberCrypted=#INVNUMCRYPTED").
 
 fUpdateInvText("SMS", "EmailConfEInv", 2, "EinvoiceTemplate", 
-"MsSeq=#MSSEQ, MSISDN=#MSISDN, Amt=#AMOUNT, InvoiceDate=#INVDATE, InvoiceNumber=#INVNUM, InvoiceNumberCrypted=#INVNUMCRYPTED").
+"Link=#LINK, MsSeq=#MSSEQ, MSISDN=#MSISDN, Amt=#AMOUNT, InvoiceDate=#INVDATE, InvoiceNumber=#INVNUM, InvoiceNumberCrypted=#INVNUMCRYPTED").
 
 fUpdateInvText("SMS", "EmailConfEInv", 3, "EinvoiceTemplate", 
-"MsSeq=#MSSEQ, MSISDN=#MSISDN, Amt=#AMOUNT, InvoiceDate=#INVDATE, InvoiceNumber=#INVNUM, InvoiceNumberCrypted=#INVNUMCRYPTED").
+"Link=#LINK, MsSeq=#MSSEQ, MSISDN=#MSISDN, Amt=#AMOUNT, InvoiceDate=#INVDATE, InvoiceNumber=#INVNUM, InvoiceNumberCrypted=#INVNUMCRYPTED").
 
 fUpdateInvText("SMS", "EmailConfEInv", 4, "EinvoiceTemplate", 
-"MsSeq=#MSSEQ, MSISDN=#MSISDN, Amt=#AMOUNT, InvoiceDate=#INVDATE, InvoiceNumber=#INVNUM, InvoiceNumberCrypted=#INVNUMCRYPTED").
+"Link=#LINK, MsSeq=#MSSEQ, MSISDN=#MSISDN, Amt=#AMOUNT, InvoiceDate=#INVDATE, InvoiceNumber=#INVNUM, InvoiceNumberCrypted=#INVNUMCRYPTED").
 
 fUpdateInvText("SMS", "EmailConfEInv", 5, "EinvoiceTemplate", 
-"MsSeq=#MSSEQ, MSISDN=#MSISDN, Amt=#AMOUNT, InvoiceDate=#INVDATE, InvoiceNumber=#INVNUM, InvoiceNumberCrypted=#INVNUMCRYPTED").
+"Link=#LINK, MsSeq=#MSSEQ, MSISDN=#MSISDN, Amt=#AMOUNT, InvoiceDate=#INVDATE, InvoiceNumber=#INVNUM, InvoiceNumberCrypted=#INVNUMCRYPTED").
 
