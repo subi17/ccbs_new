@@ -1,6 +1,4 @@
-import re
 import sys
-import os
 from newton_init import *
 from show_results import *
 
@@ -17,7 +15,10 @@ if len(sys.argv) < 2:
 else:
    var1 = sys.argv[1]
 
-l=s.newton.discount_incompatibilities.list({"brand": var1})
+if len(sys.argv) < 3:
+   l=s.newton.discount_incompatibilities.list({"brand": var1})
+else:
+   l = sys.argv[2].strip('[]').replace("'","").split(',')
 
 g=s.newton.discount_incompatibilities.get(l)
 
