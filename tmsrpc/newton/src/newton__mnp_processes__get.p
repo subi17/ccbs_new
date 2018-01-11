@@ -7,7 +7,7 @@
       mnp_type;int;1=incoming,2=outgoing
       tms_request_id;string;internal mnp process id
       mnp_request_id;string;external mnp process id
-      status_code;string;NEW,AENV,ASOL,AREC,ACON,APOR,ACAN,AREC_CLOSED
+      status_code;string;NEW,AENV,ASOL,AREC,ACON,APOR,ACAN,AREC_CLOSED,ASOL_WAITING
       status_reason;string;reason code of mnp process in status AREC,AREC_CLOSED,ACAN or with proposed AREC
       status_proposed;string;proposition for the next proces status (AREC_PROPOSED, ACON_PROPOSED, AREC, ACON)
       creation_time;datetime;mnp process creation time in tms
@@ -292,6 +292,10 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    NO-LOCK NO-ERROR.
    IF AVAIL TMSCodes THEN lcMNPStatus = TMSCodes.CodeName.
    ELSE lcMNPStatus = STRING(MNPProcess.StatusCode).
+   
+   IF lcMNPStatus EQ "ASOL" AND
+      MNPProcess.StateFlag EQ {&MNP_STATEFLAG_WAITING_CONFIRM} THEN
+      lcMNPStatus = "ASOL_WAITING".
    add_string(lcResultStruct, "status_code", lcMNPStatus).
    
    lcArrayMnpMessages = add_array(lcResultStruct, "mnp_messages").

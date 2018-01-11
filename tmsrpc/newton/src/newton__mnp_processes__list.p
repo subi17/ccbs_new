@@ -11,7 +11,7 @@
                status_reason;char;optional;status reason of AREC/AREC_CLOSED
                error_handled;int;1=handled,2=not handled
                dni;string;optional;
-               status_code;string;optional;NEW,ASOL,AREC,ACON,APOR,ACAN,AREC_CLOSED,ERR
+               status_code;string;optional;NEW,ASOL,AREC,ACON,APOR,ACAN,AREC_CLOSED,ERR,ASOL_WAITING
                creation_time_start;datetime;optional;
                creation_time_end;datetime;optional;
                porting_time_start;datetime;optional;
@@ -213,7 +213,6 @@ ELSE IF lcStatusCode EQ "ERR" THEN DO:
    
    lcTables = "MNPOperation,MNPProcess".
 END.
-
 /* 3 */
 ELSE IF LOOKUP("dni",lcStruct) > 0 THEN DO:
    
@@ -245,11 +244,18 @@ IF LOOKUP("operator_code",lcStruct) > 0 THEN DO:
    lcQuery = lcQuery + ' AND MNPProcess.OperCode = ' + QUOTER(get_string(pcStruct,"operator_code")).
 END.
 
-IF LOOKUP(lcStatusCode,"NEW,ASOL,AREC,ACON,APOR,ACAN,AREC_CLOSED") > 0 THEN DO:
-  
-   liStatusCode = LOOKUP(lcStatusCode,"NEW,,ASOL,,AREC,ACON,APOR,ACAN,AREC_CLOSED") - 1.
+IF LOOKUP(lcStatusCode,"NEW,ASOL,AREC,ACON,APOR,ACAN,AREC_CLOSED,ASOL_WAITING") > 0 THEN DO:
+
+   IF lcStatusCode EQ "ASOL_WAITING" THEN liStatusCode = 2.
+   ELSE liStatusCode = LOOKUP(lcStatusCode,"NEW,,ASOL,,AREC,ACON,APOR,ACAN,AREC_CLOSED") - 1.
    
    lcQuery = lcQuery + " AND MNPProcess.StatusCode = " + QUOTER(liStatusCode).
+
+   IF lcStatusCode EQ "ASOL_WAITING" THEN
+      lcQuery = lcQuery + " AND MNPProcess.StateFlag = " + QUOTER({&MNP_STATEFLAG_WAITING_CONFIRM}).
+   ELSE IF lcStatusCode EQ "ASOL" THEN
+      lcQuery = lcQuery + " AND MNPProcess.StateFlag NE " + QUOTER({&MNP_STATEFLAG_WAITING_CONFIRM}).
+
    IF LOOKUP("status_reason", lcStruct) > 0
       THEN lcQuery = lcQuery + " AND MNPProcess.StatusReason = " + QUOTER(get_string(pcStruct, "status_reason")).
    
