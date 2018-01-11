@@ -57,6 +57,7 @@ FUNCTION fGenerateEmailTemplate RETURNS CHAR
     icMSISDN AS CHAR,
     ideAmount AS DECIMAL,
     icDate AS CHAR, 
+    icLink AS CHAR,
     iiInvNum AS INT):
    DEF VAR lcTargetType AS CHAR NO-UNDO.
    DEF VAR llcMessage  AS LONGCHAR NO-UNDO.
@@ -65,6 +66,8 @@ FUNCTION fGenerateEmailTemplate RETURNS CHAR
 
 /*InvText.paramtext.keyvalue Jsonparam "MsSeq=#MSSEQ| ..."*/
    lcMessagePayload = icTemplate.
+   lcMessagePayload = REPLACE(lcMessagePayload,"#LINK",icLink).
+
    lcMessagePayload = REPLACE(lcMessagePayload,"#MSSEQ",STRING(iiMsSeq)).
    lcMessagePayload = REPLACE(lcMessagePayload,"#MSISDN",icMSISDN).
    lcMessagePayload = REPLACE(lcMessagePayload,"#AMOUNT",STRING(ideAmount)).
