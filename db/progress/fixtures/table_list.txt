@@ -15,10 +15,7 @@ EventLogConf
 FuncRunConfig
 FuncRunParam
 IFiSpx
-IGInvNum
-IGVoucher
 IMEIRegister
-InvGroup
 InvSect
 Language
 MenuClass
@@ -40,6 +37,7 @@ PLMN
 PostCode
 PrintCodes
 RatePref
+Region
 ReportConf
 ReportConfRow
 RequestParam
@@ -63,4 +61,3 @@ Token
 TriggerConf
 TriggerField
 UserGrp
-VATCode
