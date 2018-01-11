@@ -6,6 +6,8 @@
   AUTHOR .......: ilsavola
   CREATED ......: 08/2017
   Version ......: yoigo
+----------------------------------------------------------------------
+10/01/2018 ashok YDR-2754 Inactivate Barring after ICC Change
 ---------------------------------------------------------------------- */
 
 /*----------------------------------------------------------------------
@@ -153,6 +155,29 @@ FOR EACH MsRequest NO-LOCK WHERE
          END.
       END.  
       /* end YDR-2668 */
+      /* Begin YDR-2754. IF Cust_lost barring active because of Mandarina, then remove. */
+      IF LOOKUP("Cust_LOST", lcBarrings) <> 0 AND
+         fGetBarringRequestSource(MsRequest.MsSeq , "Cust_LOST" , "ACTIVE") EQ {&REQUEST_SOURCE_YOIGO_TOOL}
+      THEN DO:
+         RUN pRemoveVoiceInternetBarring.
+         IF RETURN-VALUE = "OK" THEN DO:
+            PUT STREAM sICCLog UNFORMATTED 
+               STRING(TIME,"hh:mm:ss") + ";" +  
+               STRING(MsRequest.MsSeq) + ";" +
+               STRING(MsRequest.CustNum) + ";" + 
+               "Cust_Lost_barring_deactivate"
+               SKIP.
+         END.  
+         ELSE DO:
+            PUT STREAM sICCLog UNFORMATTED 
+               STRING(TIME,"hh:mm:ss") + ";" +  
+               STRING(MsRequest.MsSeq) + ";" +
+               STRING(MsRequest.CustNum) + ";" +
+               RETURN-VALUE
+               SKIP.        
+         END.
+      END.  
+      /* End YDR-2754 */      
 
       IF (bLP_MsRequest.ReqCparam2 EQ "REDIRECTION_OTFAILED1" OR
           bLP_MsRequest.ReqCparam2 EQ "REDIRECTION_OTFAILED2") THEN DO:
@@ -225,6 +250,42 @@ PROCEDURE pRemoveInternetBarring:
                        "Sistema",           /* creator  */
                        Func.Common:mMakeTS(),           /* activate */
                        "",                  /* SMS      */
+                       OUTPUT lcResult).
+
+   liRequest = INTEGER(lcResult) NO-ERROR.                             
+   IF liRequest > 0 THEN DO:   
+      Func.Common:mWriteMemoWithType("Mobsub",
+                       STRING(mobsub.MsSeq),
+                       mobsub.CustNum,
+                       "OTA Barring desactivado",          /* memo title */
+                       "Redirection removed, reason: ICC", /* memo text  */
+                       "Service",                          /* memo type  */   
+                       "Sistema").                         /* memo creator    */
+      RETURN "OK". 
+   END.
+   ELSE 
+      RETURN "ERROR:" + lcResult.
+END PROCEDURE.
+
+PROCEDURE pRemoveVoiceInternetBarring:
+
+   DEF VAR liRequest AS INT  NO-UNDO.
+   DEF VAR lcResult  AS CHAR NO-UNDO.   
+
+   FIND FIRST MobSub WHERE
+              MobSub.Brand EQ Syst.Var:gcBrand AND
+              Mobsub.CLI EQ MsRequest.CLI
+        USE-INDEX CLI NO-LOCK NO-ERROR.
+
+   IF NOT AVAILABLE MobSub THEN
+      RETURN "ERROR:MSISDN_not_found".
+
+   RUN Mm/barrengine.p(mobsub.MsSeq,
+                       "Cust_LOST=0",                  /* Barring   */
+                       {&REQUEST_SOURCE_YOIGO_TOOL},   /* source    */
+                       "Sistema",                      /* creator   */
+                       Func.Common:mMakeTS(),          /* TimeStamp */
+                       "",                             /* SMSText   */
                        OUTPUT lcResult).
 
    liRequest = INTEGER(lcResult) NO-ERROR.                             
