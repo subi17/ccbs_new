@@ -115,6 +115,7 @@ CLASS Syst.TempTableXMLRPC:
       DEFINE VARIABLE lcType          AS CHARACTER NO-UNDO.
       DEFINE VARIABLE lhQuery         AS HANDLE    NO-UNDO.
       DEFINE VARIABLE llOK            AS LOGICAL   NO-UNDO.
+      DEFINE VARIABLE ldtDateTime     AS DATETIME  NO-UNDO.
       
       IF NOT VALID-HANDLE(ihTempTableBuffer)
       THEN RETURN ERROR NEW Progress.Lang.AppError
@@ -183,10 +184,19 @@ CLASS Syst.TempTableXMLRPC:
                END.
                WHEN "date" OR WHEN "datetime" OR WHEN "datetime-tz"
                THEN DO:
-                   ASSIGN
-                       lcValue = ENTRY(1, ISO-DATE(ihTempTableBuffer:BUFFER-FIELD(lii):BUFFER-VALUE()), ".")
-                       lcType = "dateTime.iso8601".
-                   ENTRY(1, lcValue, "T") = REPLACE(ENTRY(1, lcValue, "T"), "-", "").
+                  CASE ihTempTableBuffer:BUFFER-FIELD(lii):DATA-TYPE:
+                     WHEN "date"
+                     THEN ldtDateTime = DATETIME(ihTempTableBuffer:BUFFER-FIELD(lii):BUFFER-VALUE(), 0).
+                     WHEN "datetime"
+                     THEN ldtDateTime = ihTempTableBuffer:BUFFER-FIELD(lii):BUFFER-VALUE().
+                     WHEN "datetime-tz"
+                     THEN ldtDateTime = DATETIME(DATE(ihTempTableBuffer:BUFFER-FIELD(lii):BUFFER-VALUE()),
+                                                 MTIME(ihTempTableBuffer:BUFFER-FIELD(lii):BUFFER-VALUE())).
+                  END CASE.
+                  ASSIGN
+                     lcValue = ENTRY(1, ISO-DATE(ldtDateTime), ".")
+                     lcType  = "dateTime.iso8601".
+                  ENTRY(1, lcValue, "T") = REPLACE(ENTRY(1, lcValue, "T"), "-", "").
                END.
                OTHERWISE NEXT.
             END.
