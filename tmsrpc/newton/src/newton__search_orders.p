@@ -148,36 +148,6 @@ FUNCTION fAddOrdersBasedOnCustId RETURN CHARACTER:
    RETURN "".
 END.
 
-FUNCTION fAddOrdersBasedOnPerson_id RETURN CHARACTER:
-   
-   DEFINE VARIABLE iCount   AS INTEGER NO-UNDO INIT 0. 
-   DEFINE VARIABLE iCustNum AS INTEGER NO-UNDO. 
-   
-   iCustNum = INTEGER(pcSearchString) NO-ERROR.
-   IF ERROR-STATUS:ERROR THEN
-      RETURN "Search string was not integer as Customer ID should be".
-
-   OrdersBasedOnPerson_Id:
-   FOR EACH OrderCustomer WHERE 
-            OrderCustomer.Brand   = Syst.Var:gcBrand AND
-            OrderCustomer.CustNum = iCustNum
-            NO-LOCK USE-INDEX custnum:
-                
-      FOR EACH Order WHERE
-               Order.Brand = Syst.Var:gcBrand AND
-               Order.OrderId = OrderCustomer.OrderId NO-LOCK:
-                   
-         fCheckFixedNumber().
-         fAddOrderStruct(iCount).
-         iCount = iCount + 1.
-         
-         IF iCount = piMaxCount THEN
-            LEAVE OrdersBasedOnPerson_Id.
-      END.
-   END.
-   RETURN "".
-END.
-
 FUNCTION fAddOrdersBasedOnOrderId RETURN CHARACTER:
    DEFINE VARIABLE iCount   AS INTEGER NO-UNDO. 
    DEFINE VARIABLE iOrderId AS INTEGER NO-UNDO. 
@@ -303,8 +273,8 @@ DO:
     END.
     ELSE
        ASSIGN
-          pcSearchString = STRING(Customer.CustNum)
-          lcSearchBy     = "person_id".
+          lcCustIdType = customer.custidtype
+          lcSearchBy   = "cust_id".
 END.
 ELSE liOwner = 0.
 
@@ -312,7 +282,6 @@ ELSE liOwner = 0.
 CASE lcSearchBy:
    WHEN "msisdn"       THEN lcError = fAddOrdersBasedOnCLI(). 
    WHEN "fixed_number" THEN lcError = fAddOrdersBasedOnFixed().
-   WHEN "person_id"    THEN lcError = fAddOrdersBasedOnPerson_Id().
    WHEN "order_id"     THEN lcError = fAddOrdersBasedOnOrderId().
    WHEN "cust_id"      then lcError = fAddOrdersBasedOnCustId().   
    OTHERWISE 
