@@ -157,7 +157,9 @@ DO:
             FIND FIRST FixedFee WHERE 
                        FixedFee.FFnum = FFItem.FFNum NO-LOCK NO-ERROR.
 
-            IF AVAIL FixedFee THEN
+            IF AVAIL FixedFee AND
+                     FFItem.BillPeriod >= liPrevPeriod AND
+                     FFItem.BillPeriod <= liPeriod THEN
             DO:           
                RUN pCreateTempData(FFItem.FFItemNum, 
                                    FixedFee.FFNum,   
