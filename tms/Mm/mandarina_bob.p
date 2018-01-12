@@ -203,10 +203,10 @@ REPEAT:
       END. 
 
       /* Checking values */
-      IF LOOKUP( lcLP , "Mandarina1,Mandarina2,InternetBarring,VoiceInternetBarring") = 0 THEN DO:
+      IF LOOKUP( lcLP , "Mandarina1,Mandarina2,InternetBarring,Cust_LOST") = 0 THEN DO:
          PUT STREAM sCurrentLog UNFORMATTED
             lcLine + ";" + STRING(TIME,"hh:mm:ss") 
-                   + ";ERROR:incorrect_command(Mandarina1/Mandarina2/InternetBarring/VoiceInternetBarring)" SKIP.
+                   + ";ERROR:incorrect_command(Mandarina1/Mandarina2/InternetBarring/Cust_LOST)" SKIP.
          NEXT.
       END.
       IF (lcAction <> "on" AND lcAction <> "off") THEN DO:
@@ -238,14 +238,14 @@ REPEAT:
          END.
          /* end YDR-2668 */
          /* Begin YDR-2754 */
-         ELSE IF lcLP EQ "VoiceInternetBarring" THEN DO:
+         ELSE IF lcLP EQ "Cust_LOST" THEN DO:
             IF LOOKUP("Cust_LOST", lcBarrings) <> 0 THEN DO:
                PUT STREAM sCurrentLog UNFORMATTED
                   lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";WARNING:Previous_Cust_LOST_barring_active" SKIP.
                   NEXT.
             END.
             ELSE DO:     
-                RUN pSetVoiceInternetBarring("ON").
+                RUN pSetCust_LOST("ON").
                 IF RETURN-VALUE <> "OK" THEN DO:
                    PUT STREAM sCurrentLog UNFORMATTED
                       lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";" + RETURN-VALUE SKIP.
@@ -300,7 +300,7 @@ REPEAT:
          END.
          /* end YDR-2668 */
          /* Begin YDR-2754 */
-         ELSE IF lcLP EQ "VoiceInternetBarring" THEN DO:
+         ELSE IF lcLP EQ "Cust_LOST" THEN DO:
             IF LOOKUP("Cust_LOST", lcBarrings) = 0 OR 
                fGetBarringRequestSource(MobSub.MsSeq , "Cust_LOST" , "ACTIVE") NE {&REQUEST_SOURCE_YOIGO_TOOL}  THEN DO:
                PUT STREAM sCurrentLog UNFORMATTED
@@ -308,7 +308,7 @@ REPEAT:
                   NEXT.
             END.
             ELSE DO:
-                RUN pSetVoiceInternetBarring("OFF").
+                RUN pSetCust_LOST("OFF").
                 IF RETURN-VALUE <> "OK" THEN DO:
                    PUT STREAM sCurrentLog UNFORMATTED
                       lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";" + RETURN-VALUE SKIP.
@@ -416,7 +416,7 @@ PROCEDURE pSetInternetBarring:
 
 END PROCEDURE.
 
-PROCEDURE pSetVoiceInternetBarring:
+PROCEDURE pSetCust_LOST:
 
    DEF INPUT PARAMETER lcMode AS CHAR NO-UNDO. /* "ON" to active barring ; "OFF" to remove barring. */
 
@@ -439,10 +439,10 @@ PROCEDURE pSetVoiceInternetBarring:
    Func.Common:mWriteMemoWithType("Mobsub",
                      STRING(mobsub.MsSeq),
                      mobsub.CustNum,
-                     (IF lcMode EQ "ON" THEN "OTA Barring activado" 
-                                        ELSE "OTA Barring desactivado"),                       /* memo title */
-                     (IF lcMode EQ "ON" THEN "OTA Voz y Datos Barring Activado" 
-                                        ELSE "OTA Voz y Datos Barring Desactivado"),           /* memo text  */
+                     (IF lcMode EQ "ON" THEN "Bloqueo modificado por proceso de migración (OTA KO - MANDARINA)" 
+                                        ELSE "Bloqueo modificado por proceso de migración (OTA KO - MANDARINA)"),               /* memo title */
+                     (IF lcMode EQ "ON" THEN "Cambio automático por proceso de migración -  Cliente_Robo/Pérdida - Activar" 
+                                        ELSE "Cambio automático por proceso de migración -  Cliente_Robo/Pérdida - Desactivar"),/* memo text  */
                      "Service",                                                                /* memo type  */   
                      "Sistema").                                                               /* memo creator    */        
       RETURN "OK".
