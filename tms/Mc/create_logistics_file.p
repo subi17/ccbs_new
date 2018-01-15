@@ -345,10 +345,13 @@ FUNCTION fCreateOrderGroup RETURNS LOGICAL
                                  ELSE "02" + CHR(255) + lcFileName
           OrderGroup.CrStamp   = Func.Common:mMakeTS().
 
+   RETURN TRUE.
+
 END FUNCTION.
 
 FUNCTION fDelivSIM RETURNS LOG
-   (INPUT llgDespacharStatus AS LOG,
+   (INPUT liOrderId          AS INT,
+    INPUT llgDespacharStatus AS LOG,
     INPUT lcMainOrderId      AS CHAR,
     INPUT lcDespachar        AS CHAR):
    
@@ -423,6 +426,11 @@ FUNCTION fDelivSIM RETURNS LOG
 
    RELEASE Invoice.
 
+   FIND FIRST Order NO-LOCK WHERE 
+              Order.Brand   = Syst.Var:gcBrand AND 
+              Order.OrderId = liOrderId        NO-ERROR.
+
+   IF NOT AVAIL Order THEN RETURN FALSE.            
 
    /* skip those in control or already closed */
    IF Order.StatusCode = "4" OR
@@ -829,7 +837,7 @@ FUNCTION fDelivSIM RETURNS LOG
          ttOneDelivery.FixConNum = ContactCustomer.Mobile.
 
       /* If ICC change not requested with Renewal Order */
-      IF SIM.ICC = MobSub.ICC THEN ttOneDelivery.ICCNum = "".
+      IF AVAIL SIM AND SIM.ICC = MobSub.ICC THEN ttOneDelivery.ICCNum = "".
 
       /* Channel information */
       IF LOOKUP(Order.OrderChannel,"renewal_telesales,retention,renewal_ctc") > 0 THEN
@@ -1604,7 +1612,8 @@ FOR EACH Order NO-LOCK WHERE
       liNewDelay      NE ? AND
       Func.Common:mOffSet(Order.CrStamp, 24 * liNewDelay) > Func.Common:mMakeTS() THEN NEXT.
 
-   IF fDelivSIM(TRUE,
+   IF fDelivSIM(Order.OrderId,
+                TRUE,
                 "",
                 "") THEN DO: 
       fUpdateOrderLogisticsValue(Order.OrderId).
@@ -1647,7 +1656,8 @@ FOR EACH OrderGroup NO-LOCK WHERE
               Order.Logistics EQ ""                 NO-ERROR.
 
    IF AVAIL Order THEN DO: 
-      IF fDelivSIM(TRUE,
+      IF fDelivSIM(Order.OrderId,
+                   TRUE,
                    "",
                    "") THEN 
          fUpdateOrderLogisticsValue(Order.OrderId).
@@ -1661,7 +1671,7 @@ FOR EACH Order NO-LOCK WHERE
          Order.Brand = Syst.Var:gcBrand AND
          Order.StatusCode = "78" AND 
          Order.OrderType = 2:
-         
+
    IF Order.OrderChannel BEGINS "renewal_pos" THEN NEXT RENEWAL_LOOP. 
     
    ocResult = "".
@@ -1683,7 +1693,9 @@ FOR EACH Order NO-LOCK WHERE
            SIM.Brand = Syst.Var:gcBrand AND 
            SIM.ICC = lcICC NO-LOCK NO-ERROR.
       IF AVAILABLE SIM THEN DO:
-         IF fDelivSIM(TRUE,
+         
+         IF fDelivSIM(xOrder.OrderId,
+                      TRUE,
                       "",
                       "") THEN DO:
 
@@ -1838,7 +1850,8 @@ FOR EACH ttOneDelivery NO-LOCK WHERE
       include mobile part of mainline in logistics file */
    IF bMLOrder.OrderType NE {&ORDER_TYPE_STC} THEN DO: 
   
-      IF NOT fDelivSIM(llDespacharValue,
+      IF NOT fDelivSIM(ttOneDelivery.OrderId,
+                       llDespacharValue,
                        STRING(liMLOrderID),
                        IF llDespacharValue THEN "01"
                        ELSE "02") THEN 
@@ -1891,12 +1904,13 @@ FOR EACH ttOneDelivery NO-LOCK WHERE
          (bALOrder.DeliverySecure > 0)               THEN 
          llDespacharValue = FALSE.
       ELSE llDespacharValue = TRUE.
-      
-      IF NOT fDelivSIM(llDespacharValue,
+     
+      IF NOT fDelivSIM(bALOrder.OrderId,
+                       llDespacharValue,
                        STRING(liMLOrderID),
                        IF llDespacharValue THEN "01"
                        ELSE "02") THEN 
-         UNDO ADDITIONAL, NEXT.   
+         UNDO ADDITIONAL, NEXT.    
 
       IF llDespacharValue THEN
          fUpdateOrderLogisticsValue(bALOrder.OrderId).

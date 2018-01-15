@@ -143,13 +143,15 @@ IF LOOKUP("IMEI_COL", lcTopStruct) GT 0 THEN DO:
       IF gi_xmlrpc_error NE 0 THEN RETURN.
 
       lcIMEIFields = validate_struct(lcIMEIStruct, "MSDN,IMEI,ICC").
+      
       IF gi_xmlrpc_error NE 0 THEN RETURN.
       
       IF LOOKUP("IMEI",lcIMEIFields) > 0 THEN DO:
          lcIMEI = get_string(lcIMEIStruct,"IMEI").
          IF NOT fCheckIntegrity(10) THEN RETURN.
       END.
-      ELSE IF LOOKUP("ICC",lcIMEIFields) > 0 THEN DO:
+      
+      IF LOOKUP("ICC",lcIMEIFields) > 0 THEN DO:
          lcICC = get_string(lcIMEIStruct,"ICC").
          IF NOT fCheckIntegrity(12) THEN RETURN.
       END.
@@ -296,13 +298,14 @@ IF lcIMEI NE "" AND lcIMEI NE ? THEN DO:
    END.
 END.
 
+
 IF lcICC NE "" AND lcICC NE ? THEN DO:
 
    FIND FIRST SIM EXCLUSIVE-LOCK WHERE 
-              SIM.Brand  EQ Syst.Var:gcBrand       AND
-              SIM.Stock  EQ {&ICC_STOCK_INSTALLER} AND 
-              SIM.ICC    EQ lcICC                  AND 
-              SIM.SimArt EQ "universal"            NO-ERROR.
+              SIM.Brand  EQ Syst.Var:gcBrand AND
+              SIM.Stock  EQ {&ICC_STOCK_LO}  AND  
+              SIM.ICC    EQ lcICC            AND 
+              SIM.SimArt EQ "universal"      NO-ERROR.
 
    IF NOT AVAIL SIM THEN DO:
       add_int(response_toplevel_id, "", 41).
@@ -343,8 +346,11 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
    ELSE DO:
       
       IF Order.ICC        EQ ""                                    AND
-         Order.StatusCode EQ {&ORDER_STATUS_PENDING_ICC_FROM_LO}   AND 
-         LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) EQ 0 THEN DO:
+         Order.OrderType  NE {&ORDER_TYPE_STC}                     AND
+        (Order.StatusCode EQ {&ORDER_STATUS_PENDING_ICC_FROM_LO} OR
+         Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE}  OR
+         Order.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE})    AND 
+         LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) EQ 0 THEN DO: 
 
          FIND bOrder EXCLUSIVE-LOCK WHERE 
               ROWID(bOrder) = ROWID(Order) NO-ERROR NO-WAIT.
@@ -352,7 +358,8 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
          IF ERROR-STATUS:ERROR OR LOCKED(bOrder) THEN RETURN.
 
          ASSIGN bOrder.ICC  = lcICC
-                SIM.SimStat = 21. 
+                SIM.SimStat = 21
+                SIM.MsSeq   = bOrder.MsSeq. 
          
          Func.Common:mWriteMemo("Order",
                                 STRING(bOrder.OrderID),
@@ -366,7 +373,14 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
             RUN StarEventSetOldBuffer(lhOrder).
          END.
 
-         fSetOrderStatus(bOrder.OrderId,"12").      
+         /* order status with 76 is not needed to be released, at it will 
+            be released when associated main line fixed line is installed */
+         IF bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_ICC_FROM_LO} THEN DO:
+            CASE bOrder.OrderType:
+               WHEN {&ORDER_TYPE_NEW} THEN fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_NEW}).
+               WHEN {&ORDER_TYPE_MNP} THEN fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_MNP}).
+            END CASE.
+         END.
 
          IF llDoEvent THEN DO:
             RUN StarEventMakeModifyEvent(lhOrder).
