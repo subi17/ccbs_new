@@ -23,7 +23,7 @@
 &SCOPED-DEFINE MIDNIGHT-SECONDS 86400
 
 DEF INPUT PARAMETER iiMSrequest AS INT  NO-UNDO.
-
+DEF VAR ldeActStamp             AS DECIMAL NO-UNDO.
 DEF VAR ldaDateFrom             AS DATE NO-UNDO. 
 DEF VAR liMonth                 AS INT  NO-UNDO. 
 DEF VAR lcAddrConfDir           AS CHAR NO-UNDO.
@@ -39,8 +39,8 @@ DEF VAR lIniSeconds   AS INTEGER   NO-UNDO.
 DEF VAR llFirstInv    AS LOGICAL   NO-UNDO.
 DEF VAR lcTemplate    AS CHAR      NO-UNDO.
 DEF VAR lcTestCustomers AS CHAR NO-UNDO.
-DEF VAR li
-
+DEF VAR lcLink        AS CHAR NO-UNDO.
+DEF VAR liTestFilter AS INT NO-UNDO.
 DEF STREAM sEmail.
 
 /*Temp table for sending NC response info to WEB.*/
@@ -66,23 +66,29 @@ FUNCTION fGenerateEmailTemplate RETURNS CHAR
    DEF VAR lcMessagePayload AS CHAR NO-UNDO.
    DEF VAR llgOK AS LOGICAL NO-UNDO.
    DEF VAR lcLocalLink AS CHAR NO-UNDO.
-   DEF VAR lcLocalCrypted AS CHAR NO-UNDO.
+   DEF VAR lcInvNumCrypted AS CHAR NO-UNDO.
 
-   lcLocalCrypted = 
+   ASSIGN
+      lcInvNumCrypted =  encrypt_data(icMSISDN,
+                                      {&ENCRYPTION_METHOD}, 
+                                  lcPassPhrase) 
+      /* convert some special characters to url encoding (at least '+' char
+         could cause problems at later phases. */
+      lcInvNumCrypted = fUrlEncode(lcInvNumCrypted, "query").
+      
 
 /*InvText.paramtext.keyvalue Jsonparam "MsSeq=#MSSEQ| ..."*/
 /*TODO: obviously we need to build link in this function*/
-   lcMessagePayload = icTemplate.
-   lcMessagePayload = REPLACE(lcMessagePayload,"#LINK",icLink).
-   lcMessagePayload = REPLACE(lcMessagePayload,"#MSSEQ",STRING(iiMsSeq)).
-   lcMessagePayload = REPLACE(lcMessagePayload,"#MSISDN",icMSISDN).
-   lcMessagePayload = REPLACE(lcMessagePayload,"#AMOUNT",STRING(ideAmount)).
-   lcMessagePayload = REPLACE(lcMessagePayload,"#INVDATE",icDate).
-   lcMessagePayload = REPLACE(lcMessagePayload,"#INVNUM",STRING(iiInvNum)).
-   lcMessagePayload = REPLACE(lcMessagePayload,"#INVNUMCRYPTED",
-                              encrypt_data(STRING(iiInvNum),
-                                          {&ENCRYPTION_METHOD},
-                                          lcPass)).
+   ASSIGN
+      lcMessagePayload = icTemplate
+      lcMessagePayload = REPLACE(lcMessagePayload,"#LINK",icLink)
+      lcMessagePayload = REPLACE(lcMessagePayload,"#MSSEQ",STRING(iiMsSeq))
+      lcMessagePayload = REPLACE(lcMessagePayload,"#MSISDN",icMSISDN)
+      lcMessagePayload = REPLACE(lcMessagePayload,"#AMOUNT",STRING(ideAmount))
+      lcMessagePayload = REPLACE(lcMessagePayload,"#INVDATE",icDate)
+      lcMessagePayload = REPLACE(lcMessagePayload,"#INVNUM",STRING(iiInvNum))
+      lcMessagePayload = REPLACE(lcMessagePayload,"#INVNUMCRYPTED", 
+                                 lcInvNumCrypted).
 
    IF lcMessagePayload NE "" AND lcMessagePayload ne ? THEN 
    RETURN lcMessagePayload.
@@ -134,7 +140,8 @@ FOR EACH Invoice WHERE
    IF NOT AVAIL Customer THEN NEXT INVOICE_LOOP.
 
    /*For testing: if test switch is on, allow only customers from test list*/
-   IF liTestFilter NE 0 AND LOOKUP(Customer.CustNum, lcTestCustomres) EQ 0 
+   IF liTestFilter NE 0 AND 
+      LOOKUP(STRING(Customer.CustNum), lcTestCustomers) EQ 0 
       THEN NEXT INVOICE_LOOP.
 
    /* Sending SMS Invoice to customers */
@@ -167,6 +174,7 @@ FOR EACH Invoice WHERE
                                              MobSub.CLI,
                                              Invoice.InvAmt,
                                              STRING(Invoice.InvDate),
+                                             lcLink,
                                              Invoice.InvNum
                                             ).
          Mm.MManMessage:ParamKeyValue = lcTemplate.
@@ -178,13 +186,14 @@ END. /* FOR EACH Invoice WHERE */
 
 /*Einvoice project: inherit following from SMSinvoicing.*/
 /*Notification for the Last Invoice will be sent to a specific people as part of YOT-4037 along with the own customer*/
-/*Ilkka TODO this also to MQ*/
+/* TODO this also to MQ*/
+/*
 fSMSNotify("Last",
            "Last Eincoice Sent",
            lcAddrConfDir,
            lIniSeconds,
            lEndSeconds).
-
+*/
 /* Send an email to configure list*/
 /*TODO: this must be removed because TMS is not aware when last sms is sent.*/
 IF lcAddrConfDir > "" THEN
