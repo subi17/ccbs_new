@@ -36,10 +36,10 @@ END FUNCTION.
 
 /*  */
 /*List of test customers*/
-fCreateTMSParam("ESI_setting","TestCustomers","C","789,123,456").
+fCreateTMSParam("ESI_setting","ESI_TestCustomers","C","789,123,456").
 
 /*Normal functionality = 0, Only for test customres = 1*/
-fCreateTMSParam("ESI_setting","TestFilter","I","0"). /*0 OFF, 1 ON*/
+fCreateTMSParam("ESI_setting","ESI_TestFilter","I","0"). /*0 OFF, 1 ON*/
 
 /*Link that is used as base in building of ESI page link.*/
 fCreateTMSParam("ESI_setting","ESILinkBase","C","www.qvantel.com/").

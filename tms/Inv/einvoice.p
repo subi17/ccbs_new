@@ -38,6 +38,8 @@ DEF VAR lEndSeconds   AS INTEGER   NO-UNDO.
 DEF VAR lIniSeconds   AS INTEGER   NO-UNDO.
 DEF VAR llFirstInv    AS LOGICAL   NO-UNDO.
 DEF VAR lcTemplate    AS CHAR      NO-UNDO.
+DEF VAR lcTestCustomers AS CHAR NO-UNDO.
+DEF VAR li
 
 DEF STREAM sEmail.
 
@@ -63,11 +65,15 @@ FUNCTION fGenerateEmailTemplate RETURNS CHAR
    DEF VAR llcMessage  AS LONGCHAR NO-UNDO.
    DEF VAR lcMessagePayload AS CHAR NO-UNDO.
    DEF VAR llgOK AS LOGICAL NO-UNDO.
+   DEF VAR lcLocalLink AS CHAR NO-UNDO.
+   DEF VAR lcLocalCrypted AS CHAR NO-UNDO.
+
+   lcLocalCrypted = 
 
 /*InvText.paramtext.keyvalue Jsonparam "MsSeq=#MSSEQ| ..."*/
+/*TODO: obviously we need to build link in this function*/
    lcMessagePayload = icTemplate.
    lcMessagePayload = REPLACE(lcMessagePayload,"#LINK",icLink).
-
    lcMessagePayload = REPLACE(lcMessagePayload,"#MSSEQ",STRING(iiMsSeq)).
    lcMessagePayload = REPLACE(lcMessagePayload,"#MSISDN",icMSISDN).
    lcMessagePayload = REPLACE(lcMessagePayload,"#AMOUNT",STRING(ideAmount)).
@@ -104,13 +110,16 @@ ASSIGN lcAddrConfDir = fCParamC("RepConfDir")
        ldaDateFrom   = MsRequest.ReqDtParam1
        liMonth       = MONTH(ldaDateFrom)
        liStartTime   = TIME
-       llFirstInv    = FALSE.
+       llFirstInv    = FALSE
+       lcLink        = fCParamC("ESI_LinkBase")
+       liTestFilter  = fCparamI("ESI_TestFilter")
+       lcTestCustomers = fCparamC("ESI_TestCustomers").
 
 INVOICE_LOOP:
 FOR EACH Invoice WHERE
          Invoice.Brand    = "1" AND
          Invoice.InvDate >= ldaDateFrom AND
-         Invoice.DelType = {&INV_DEL_TYPE_NO_DELIVERY} AND
+         Invoice.DelType = {&INV_DEL_TYPE_ESI} AND
          Invoice.InvType  = 1 AND
          Invoice.InvAmt  >= 0 NO-LOCK:
 
@@ -123,6 +132,10 @@ FOR EACH Invoice WHERE
    FIND FIRST Customer WHERE
               Customer.Custnum = Invoice.CustNum NO-LOCK NO-ERROR.
    IF NOT AVAIL Customer THEN NEXT INVOICE_LOOP.
+
+   /*For testing: if test switch is on, allow only customers from test list*/
+   IF liTestFilter NE 0 AND LOOKUP(Customer.CustNum, lcTestCustomres) EQ 0 
+      THEN NEXT INVOICE_LOOP.
 
    /* Sending SMS Invoice to customers */
    SUBINVOICE_LOOP:
@@ -144,6 +157,11 @@ FOR EACH Invoice WHERE
          llFirstInv = TRUE.
       END.
          /**/
+         lcTemplate = fGetSMSTxt("EInvMessage",
+                                 TODAY,
+                                 5,
+                                 OUTPUT ldeActStamp).
+         
          lcTemplate = fGenerateEmailTemplate(lcTemplate,
                                              MobSub.MsSeq,
                                              MobSub.CLI,
@@ -168,6 +186,7 @@ fSMSNotify("Last",
            lEndSeconds).
 
 /* Send an email to configure list*/
+/*TODO: this must be removed because TMS is not aware when last sms is sent.*/
 IF lcAddrConfDir > "" THEN
    lcAddrConfDir = lcAddrConfDir + "einvoice.email".
 
