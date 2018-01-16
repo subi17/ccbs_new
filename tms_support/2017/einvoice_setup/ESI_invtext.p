@@ -4,7 +4,7 @@ FUNCTION fUpdateInvText RETURNS LOGICAL
     iiLanguage   AS INTEGER,
     icTemplateID AS CHARACTER, /*EinvoiceTemplate*/
     icParamKey   AS CHARACTER ): /*Actual text*/
-
+   DEF BUFFER bInvText FOR InvText.
    DO WHILE TRUE:
 
       FIND LAST InvText NO-LOCK WHERE
@@ -24,6 +24,22 @@ FUNCTION fUpdateInvText RETURNS LOGICAL
 
    IF NOT AVAILABLE InvText
    THEN DO:
+      FIND FIRST bInvtext NO-LOCK WHERE 
+                 bInvtext.target EQ "sms" AND
+                 bInvText.KeyValue EQ "SMSInvoice" AND
+                 bInvText.FromDate <= TODAY     AND
+                 bInvText.ToDate   >= TODAY     AND
+                 bInvText.Language EQ 1.
+      IF AVAIL bInvText THEN DO:
+         CREATE InvText.
+         BUFFER-COPY bInvText TO InvText.
+         ASSIGN
+            InvText.TemplateID = icTemplateId
+            InvText.UseMMan       = TRUE
+            InvText.ParamKeyValue = icParamKey.
+      END.
+
+      message "Created new" VIEW-AS ALERT-BOX.        
       RETURN FALSE.
    END.
 
@@ -37,19 +53,26 @@ FUNCTION fUpdateInvText RETURNS LOGICAL
    RETURN TRUE.
 
 END FUNCTION.
+/*First and last message*/
+fUpdateInvText("SMS", "EInvMessageStarted", 1, "Invoice/ElectronicStarted", "").
+fUpdateInvText("SMS", "EInvMessageDone", 1, "Invoice/ElectronicDone", "").
+fUpdateInvText("SMS", "EInvMessageStarted", 2, "Invoice/ElectronicStarted", "").
+fUpdateInvText("SMS", "EInvMessageDone", 2, "Invoice/ElectronicDone", "").
+fUpdateInvText("SMS", "EInvMessageStarted", 3, "Invoice/ElectronicStarted", "").
+fUpdateInvText("SMS", "EInvMessageDone", 3, "Invoice/ElectronicDone", "").
+fUpdateInvText("SMS", "EInvMessageStarted", 5, "Invoice/ElectronicStarted", "").
+fUpdateInvText("SMS", "EInvMessageDone", 5, "Invoice/ElectronicDone", "").
 
-fUpdateInvText("SMS", "EInvMessage", 1, "EinvoiceTemplate", 
-"Link=#LINK, MsSeq=#MSSEQ, MSISDN=#MSISDN, Amt=#AMOUNT, InvoiceDate=#INVDATE, InvoiceNumber=#INVNUM, InvoiceNumberCrypted=#INVNUMCRYPTED").
+fUpdateInvText("SMS", "EInvMessage", 1, "Invoice/Electronic", 
+"Link=#LINK, MSISDN=#MSISDN, Amt=#AMOUNT, InvoiceDate=#INVDATE, InvoiceNumber=#INVNUM").
 
-fUpdateInvText("SMS", "EinvMessage", 2, "EinvoiceTemplate", 
-"Link=#LINK, MsSeq=#MSSEQ, MSISDN=#MSISDN, Amt=#AMOUNT, InvoiceDate=#INVDATE, InvoiceNumber=#INVNUM, InvoiceNumberCrypted=#INVNUMCRYPTED").
+fUpdateInvText("SMS", "EinvMessage", 2, "Invoice/Electronic", 
+"Link=#LINK, MSISDN=#MSISDN, Amt=#AMOUNT, InvoiceDate=#INVDATE, InvoiceNumber=#INVNUM").
 
-fUpdateInvText("SMS", "EInvMessage", 3, "EinvoiceTemplate", 
-"Link=#LINK, MsSeq=#MSSEQ, MSISDN=#MSISDN, Amt=#AMOUNT, InvoiceDate=#INVDATE, InvoiceNumber=#INVNUM, InvoiceNumberCrypted=#INVNUMCRYPTED").
+fUpdateInvText("SMS", "EInvMessage", 3, "Invoice/Electronic", 
+"Link=#LINK, MSISDN=#MSISDN, Amt=#AMOUNT, InvoiceDate=#INVDATE, InvoiceNumber=#INVNUM").
 
-fUpdateInvText("SMS", "EInvMessage", 4, "EinvoiceTemplate", 
-"Link=#LINK, MsSeq=#MSSEQ, MSISDN=#MSISDN, Amt=#AMOUNT, InvoiceDate=#INVDATE, InvoiceNumber=#INVNUM, InvoiceNumberCrypted=#INVNUMCRYPTED").
+fUpdateInvText("SMS", "EInvMessage", 5, "Invoice/Electronic", 
+"Link=#LINK, MSISDN=#MSISDN, Amt=#AMOUNT, InvoiceDate=#INVDATE, InvoiceNumber=#INVNUM").
 
-fUpdateInvText("SMS", "EInvMessage", 5, "EinvoiceTemplate", 
-"Link=#LINK, MsSeq=#MSSEQ, MSISDN=#MSISDN, Amt=#AMOUNT, InvoiceDate=#INVDATE, InvoiceNumber=#INVNUM, InvoiceNumberCrypted=#INVNUMCRYPTED").
 

@@ -75,20 +75,18 @@ FUNCTION fGenerateEmailTemplate RETURNS CHAR
       /* convert some special characters to url encoding (at least '+' char
          could cause problems at later phases. */
       lcInvNumCrypted = fUrlEncode(lcInvNumCrypted, "query").
-      
-
+mgetmessage pÃ¤Ã¤ttÃ¤Ã¤ templaten.     
+ linkbase + crypted
 /*InvText.paramtext.keyvalue Jsonparam "MsSeq=#MSSEQ| ..."*/
 /*TODO: obviously we need to build link in this function*/
    ASSIGN
       lcMessagePayload = icTemplate
-      lcMessagePayload = REPLACE(lcMessagePayload,"#LINK",icLink)
-      lcMessagePayload = REPLACE(lcMessagePayload,"#MSSEQ",STRING(iiMsSeq))
-      lcMessagePayload = REPLACE(lcMessagePayload,"#MSISDN",icMSISDN)
+      lcMessagePayload = REPLACE(lcMessagePayload,"#LINK",icLink + "/" + 
+                                 lcInvNumCrypted)
+      lcMessagePayload = REPLACE(lcMessagePayload,"#MSISDN",icMSISDN) 
       lcMessagePayload = REPLACE(lcMessagePayload,"#AMOUNT",STRING(ideAmount))
       lcMessagePayload = REPLACE(lcMessagePayload,"#INVDATE",icDate)
-      lcMessagePayload = REPLACE(lcMessagePayload,"#INVNUM",STRING(iiInvNum))
-      lcMessagePayload = REPLACE(lcMessagePayload,"#INVNUMCRYPTED", 
-                                 lcInvNumCrypted).
+      lcMessagePayload = REPLACE(lcMessagePayload,"#INVNUM",STRING(iiInvNum)).
 
    IF lcMessagePayload NE "" AND lcMessagePayload ne ? THEN 
    RETURN lcMessagePayload.
@@ -156,14 +154,15 @@ FOR EACH Invoice WHERE
       /*Notification for the First Invoice will be sent to a specific people as part of YOT-4037 along with the own customer*/
       IF llFirstInv = FALSE THEN DO:
          /*TODO: this also to MQ*/
-         fSMSNotify("First",
+/*         fSMSNotify("First",
                     "Einvoicing starts",
                     lcAddrConfDir,
                     lIniSeconds,
                     lEndSeconds).
-         llFirstInv = TRUE.
+         llFirstInv = TRUE.*/
       END.
          /**/
+      IF Mm.MManMessage:mGetMessage("SMS", "EInvMessage", 1) EQ TRUE THEN DO: 
          lcTemplate = fGetSMSTxt("EInvMessage",
                                  TODAY,
                                  5,
@@ -175,11 +174,10 @@ FOR EACH Invoice WHERE
                                              Invoice.InvAmt,
                                              STRING(Invoice.InvDate),
                                              lcLink,
-                                             Invoice.InvNum
-                                            ).
+                                             Invoice.InvNum).
          Mm.MManMessage:ParamKeyValue = lcTemplate.
          Mm.MManMessage:mCreateMMLogSMS(MobSub.CLI).
-
+      END.
    END. /* FOR EACH SubInvoice OF Invoice NO-LOCK: */
 END. /* FOR EACH Invoice WHERE */
 
