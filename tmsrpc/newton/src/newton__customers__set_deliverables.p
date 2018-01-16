@@ -74,8 +74,10 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 CASE pcDeliveryChannel:
    WHEN "PAPER"   THEN liDelType = {&INV_DEL_TYPE_PAPER}.
    WHEN "EMAIL"   THEN liDelType = {&INV_DEL_TYPE_EMAIL}.
-   WHEN "SMS"     THEN liDelType = {&INV_DEL_TYPE_SMS}.
+   WHEN "Electronic Summary Invoice"  THEN liDelType = {&INV_DEL_TYPE_ESI}.
+   
    WHEN "No Delivery" THEN liDelType = {&INV_DEL_TYPE_NO_DELIVERY}.
+   
    WHEN "" OR WHEN "Email - Waiting for Activation" THEN .
    OTHERWISE RETURN appl_err("Invalid Invoice Delivery Type").
 END CASE. /* CASE pcDeliveryChannel: */
