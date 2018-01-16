@@ -168,12 +168,12 @@ PROCEDURE pStart:
          LEAVE.
       END.
 
+      IF fProcess(giDumpID)
+      THEN LEAVE.
+
       /* If there is no final time then we have dumped everything
          to the current time */
       IF DumpHPD.FinalTime EQ ""
-      THEN LEAVE.
-
-      IF fProcess(giDumpID)
       THEN LEAVE.
 
       /* Loops maximum 1000 times just to be sure that no eternal loop happens */
