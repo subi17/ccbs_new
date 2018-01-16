@@ -40,22 +40,10 @@
 
 {mnp/src/mnp_obtener.i}
 
-DEF VAR lcTenant           AS CHAR  NO-UNDO.
-
 FOR EACH ttInput NO-LOCK:
    IF ttInput.statusCode NE "ASOL" THEN 
       RETURN appl_err("Incorrect statuscode (should be ASOL): " +
          ttInput.statusCode).
-END.
-
-FIND FIRST ttInput NO-ERROR.
-IF AVAIL ttInput THEN 
-DO:    
-   ASSIGN lcTenant = 
-      (IF ttInput.DonorCode = "005" THEN {&TENANT_YOIGO} 
-       ELSE IF ttInput.DonorCode = "200" THEN {&TENANT_MASMOVIL}
-       ELSE ""). 
-   {mnp/src/mnp_settenant.i lcTenant}
 END.
 
 MESSAGE_LOOP:
@@ -146,4 +134,4 @@ IF AVAIL MNPBuzon THEN MNPBuzon.StatusCode = 10.
 FINALLY:
    EMPTY TEMP-TABLE ttInput.
    EMPTY TEMP-TABLE ttMultipleMSISDN.
-   END.
+END.
