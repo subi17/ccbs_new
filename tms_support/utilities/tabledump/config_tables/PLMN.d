@@ -224,6 +224,7 @@
 "FRAF2" "SFR" "France" "FR" "" "33"
 "FRAF3" "Bouygues Telecom" "France" "FR" "" "33"
 "FRAF4" "Digicel" "FRENCH GUIANA" "GF" "" "594"
+"FRAF4" "Digicel" "GUADELOUPE" "GP" "" "590"
 "FRAF4" "" "Martinique" "MQ" "" "596"
 "FRAFM" "Free Mobile" "FRANCE" "FR" "" "33"
 "FRARE" "SRR" "Reunion Island" "RE" "" "262"
