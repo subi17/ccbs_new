@@ -148,6 +148,7 @@ DEF TEMP-TABLE ttSub NO-UNDO
    INDEX CLI CLI.
    
 DEF TEMP-TABLE ttCLIType NO-UNDO
+   FIELD BaseBundle AS CHAR
    FIELD CLI      AS CHAR
    FIELD CLIType  AS CHAR
    FIELD CTName   AS CHAR
@@ -869,6 +870,8 @@ PROCEDURE pGetSubInvoiceHeaderData:
    DEFINE VARIABLE llPostPreDetected        AS LOGICAL NO-UNDO.
    DEFINE VARIABLE ldeActStamp              AS DECIMAL NO-UNDO.
    DEFINE VARIABLE lliSTR                   AS LOGICAL NO-UNDO.
+   DEFINE VARIABLE liLoop                   AS INTEGER NO-UNDO.
+   DEFINE VARIABLE lcBundleName             AS CHARACTER NO-UNDO.
 
    DEF BUFFER UserCustomer    FOR Customer.
    DEF BUFFER bServiceLimit   FOR ServiceLimit.
@@ -1005,6 +1008,7 @@ PROCEDURE pGetSubInvoiceHeaderData:
                        CLIType.Brand   = Syst.Var:gcBrand AND
                        CLIType.CLIType = ttCLIType.CLIType NO-LOCK NO-ERROR.
             IF AVAILABLE CLIType THEN DO:
+               ttCLIType.BaseBundle = CLIType.BaseBundle.
 
                /* Common Rate Plan for all FLAT tariffs CONTF */
                IF CLIType.CLIType BEGINS "CONTF" AND
@@ -1017,15 +1021,17 @@ PROCEDURE pGetSubInvoiceHeaderData:
                                                       Invoice.ToDate).
             END.
 
+            lcBundleName = "".
             IF (ttCLIType.CLIType BEGINS "CONTF" AND
-                NOT CLIType.CLIType BEGINS "CONTFH") OR 
-               ttCLIType.CLIType = "CONT15" THEN DO:
+                NOT ttCLIType.CLIType BEGINS "CONTFH") OR 
+               ttCLIType.BaseBundle = "CONT15" THEN DO:
 
                lcGroupCode = ttCLIType.CLIType.
                IF ttCLIType.CLIType = "CONTFF" THEN
                   lcGroupCode = "CONTFF2".
                ELSE IF ttCLIType.CLIType = "CONT15" THEN
                   lcGroupCode = "VOICE100".
+               ELSE lcGroupCode = "VOICE100,VOICE200". /* BaseBundle = "CONT15" = Verde */
 
                RELEASE ttRow.
 
@@ -1041,26 +1047,29 @@ PROCEDURE pGetSubInvoiceHeaderData:
                                 ttRow.RowBillCode = FMItem.BillCode NO-ERROR.   
                   END.
 
-               FOR EACH bServiceLimit NO-LOCK WHERE
-                        bServiceLimit.GroupCode = lcGroupCode,
-                   EACH bMServiceLimit NO-LOCK WHERE
-                        bMServiceLimit.MsSeq = SubInvoice.MsSeq  AND
-                        bMServiceLimit.DialType = bServiceLimit.DialType AND
-                        bMServiceLimit.SlSeq   = bServiceLimit.SlSeq AND
-                        bMServiceLimit.FromTS <= ldPeriodTo          AND
-                        bMServiceLimit.EndTS  >= ldPeriodFrom:
-                                                
-                  IF AVAIL ttRow THEN DO:
-                     IF bMServiceLimit.DialType = {&DIAL_TYPE_VOICE} THEN
-                        ttRow.VoiceLimit = bMServiceLimit.InclAmt.
-                     ELSE IF bMServiceLimit.DialType = {&DIAL_TYPE_GPRS} THEN
-                        ttRow.DataLimit = bMServiceLimit.InclAmt.
-                  END.
+               DO liLoop = 1 TO NUM-ENTRIES(lcGroupCode):
+                  FOR EACH bServiceLimit NO-LOCK WHERE
+                           bServiceLimit.GroupCode = ENTRY(liLoop, lcGroupCode),
+                      EACH bMServiceLimit NO-LOCK WHERE
+                           bMServiceLimit.MsSeq = SubInvoice.MsSeq  AND
+                           bMServiceLimit.DialType = bServiceLimit.DialType AND
+                           bMServiceLimit.SlSeq   = bServiceLimit.SlSeq AND
+                           bMServiceLimit.FromTS <= ldPeriodTo          AND
+                           bMServiceLimit.EndTS  >= ldPeriodFrom:
+                                                   
+                     IF AVAIL ttRow THEN DO:
+                        IF bMServiceLimit.DialType = {&DIAL_TYPE_VOICE} THEN
+                           ttRow.VoiceLimit = bMServiceLimit.InclAmt.
+                        ELSE IF bMServiceLimit.DialType = {&DIAL_TYPE_GPRS} THEN
+                           ttRow.DataLimit = bMServiceLimit.InclAmt.
+                     END.
 
-                  IF bServiceLimit.GroupCode = "VOICE100" THEN
-                     ttCLIType.CLIType = ttCLIType.CLIType + "V100".
+                     IF LOOKUP(bServiceLimit.GroupCode,"VOICE100,VOICE200") > 0 THEN
+                        lcBundleName = REPLACE(bServiceLimit.GroupCode,"OICE",""). /* V100 or V200 */
+                  END.
                END.
             END.
+            IF lcBundleName NE "" THEN ttCLIType.CLIType = ttCLIType.CLIType + lcBundleName.
 
             /* latest type is stored -> same type as was used in
                billing run for min. consumption */
