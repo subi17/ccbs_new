@@ -186,10 +186,8 @@
 69 11/10/17 31/12/49 "BillItem" "CONTFH1000MF" yes
 69 01/09/17 31/12/49 "BillItem" "CONTFH300MF" yes
 69 01/09/17 31/12/49 "BillItem" "CONTFH50MF" yes
-70 01/09/17 31/12/49 "BillItem" "CONTDSLMF" yes
-70 11/10/17 31/12/49 "BillItem" "CONTFH1000MF" yes
-70 01/09/17 31/12/49 "BillItem" "CONTFH300MF" yes
-70 01/09/17 31/12/49 "BillItem" "CONTFH50MF" yes
+70 01/12/17 31/12/49 "BillItem" "*" yes
+70 01/12/17 31/12/49 "BillItem" "TERMPERIOD" no
 71 19/10/17 31/12/49 "BItemGroup" "46" yes
 72 19/10/17 31/12/49 "BItemGroup" "46" yes
 73 19/10/17 31/12/49 "BillItem" "CONT10MF" yes
@@ -207,3 +205,4 @@
 76 18/12/17 31/12/49 "BillItem" "ASISTMF" yes
 77 18/12/17 31/12/49 "BillItem" "CONT31MF" yes
 78 18/12/17 31/12/49 "BillItem" "CONT29MF" yes
+79 08/01/18 31/12/49 "BillItem" "AGILETV" yes
