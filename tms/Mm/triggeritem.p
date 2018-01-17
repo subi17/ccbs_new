@@ -108,17 +108,6 @@ form /* seek  TriggerItem */
     WITH row 4 col 2 TITLE COLOR VALUE(Syst.Var:ctc) " FIND Name "
     COLOR VALUE(Syst.Var:cfc) NO-LABELS OVERLAY FRAME f2.
 
-FUNCTION fZoneName RETURNS LOGIC
-   (icTaxZone AS CHAR):
-   
-   /*ZoneName = "".
-   
-   FIND TaxZone WHERE TaxZone.TaxZone = icTaxZone NO-LOCK NO-ERROR.
-   IF AVAILABLE TaxZone THEN lcZoneName = TaxZone.TZName. 
-     */
-END FUNCTION.
-
-
 Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
