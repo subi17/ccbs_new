@@ -33,6 +33,12 @@ FUNCTION freacprecheck RETURNS CHARACTER
 
    DEFINE VARIABLE llPrimaryActive         AS LOGICAL   NO-UNDO.
    DEFINE VARIABLE liReactMsseq            AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE llBypassCheck           AS LOGICAL   NO-UNDO.
+
+   ASSIGN liReactMsseq = fCParamI("ReactMsseq"). /* Bypass checks for this MsSeg */
+   IF liReactMsseq > 0 AND iiMsSeq EQ liReactMsseq 
+      THEN llBypassCheck = TRUE.
+   ELSE llBypassCheck = FALSE.
 
    IF icUserName = "" OR icUserName = ? THEN
       RETURN "Username is empty".
@@ -56,15 +62,16 @@ FUNCTION freacprecheck RETURNS CHARACTER
   /*COFF Partial termination, allowing also for partial terminated 
     If partial terminated fixed number should be "" in convergent tariffs */
 
-   IF fIsConvergenceTariff(bTermMobSub.CLIType) AND
-      bTermMobSub.fixednumber NE "" THEN
-      RETURN "Not allowed for fixed line tariffs".
-   ELSE IF fIsConvergenceTariff(bTermMobSub.CLIType) AND 
-        NOT CAN-FIND(FIRST MobSub WHERE
-                           MobSub.MsSeq = iiMsSeq AND
-                           Mobsub.cli EQ Mobsub.fixednumber) THEN
-      RETURN "Not allowed when fixed line terminated".
-   
+   IF NOT llBypassCheck THEN DO:
+      IF fIsConvergenceTariff(bTermMobSub.CLIType) AND
+         bTermMobSub.fixednumber NE "" THEN
+         RETURN "Not allowed for fixed line tariffs".
+      ELSE IF fIsConvergenceTariff(bTermMobSub.CLIType) AND 
+           NOT CAN-FIND(FIRST MobSub WHERE
+                              MobSub.MsSeq = iiMsSeq AND
+                              Mobsub.cli EQ Mobsub.fixednumber) THEN
+         RETURN "Not allowed when fixed line terminated".
+   END.
 
    /* Check that no other reactivation requests is under work */
    FIND FIRST bMsReacReq WHERE
@@ -86,24 +93,10 @@ FUNCTION freacprecheck RETURNS CHARACTER
       RETURN "MsOwner record not found".
 
    Func.Common:mSplitTS(INPUT bMsowner.tsend, OUTPUT ldTermDate, OUTPUT liTermTime).
-   IF today > (ldTermDate + liReacDays) AND NOT ilSkipCheck THEN DO:
-      /* YOT-4715, reactivation over 30 days was not possible */
-      ASSIGN liReactMsseq = fCParamI("ReactMsseq").
-      IF btermmobsub.msseq EQ liReactMsseq THEN DO: 
-         /* Bypass this one MsSeq only once and remove value from Cparam */
-         FIND FIRST TMSParam EXCLUSIVE-LOCK WHERE
-                    TMSParam.Brand     = Syst.Var:gcBrand AND
-                    TMSParam.ParamCode = "ReactMsseq" NO-ERROR.
-         IF AVAILABLE TMSParam THEN DO:
-            ASSIGN TMSParam.IntVal = -1.
-            RELEASE TMSParam.
-         END.
-      END.
-      ELSE DO: /* In normal case, return error */
+   IF today > (ldTermDate + liReacDays) AND NOT ilSkipCheck AND
+      NOT llBypassCheck THEN /* In normal case, return error */
             RETURN "Subscription reactivation is not allowed after " +
                    STRING(liReacDays) + " days of termination".
-      END.
-   END.
    
    IF CAN-FIND (FIRST mobsub where mobsub.cli = bTermMobSub.cli) THEN
       RETURN "Subscription is already active with same MSISDN".
@@ -153,22 +146,19 @@ FUNCTION freacprecheck RETURNS CHARACTER
          llPrimaryActive = TRUE.
          LEAVE.
       END. /* FOR EACH bMobSub WHERE */
-      IF NOT llPrimaryActive THEN DO:
-         ASSIGN liReactMsseq = fCParamI("ReactMsseq").
-         IF btermmobsub.msseq EQ liReactMsseq THEN DO:
-         /* Bypass this one MsSeq only once and remove value from Cparam */
-            FIND FIRST TMSParam EXCLUSIVE-LOCK WHERE
-                       TMSParam.Brand     = Syst.Var:gcBrand AND
-                       TMSParam.ParamCode = "ReactMsseq" NO-ERROR.
-            IF AVAILABLE TMSParam THEN DO:
-               ASSIGN TMSParam.IntVal = -1.
-               RELEASE TMSParam.
-            END.
-         END.
-         ELSE DO: /* In normal case return error */
+      IF NOT llPrimaryActive AND /* In normal case return error */
+         NOT llBypassCheck THEN 
             RETURN "Additional line reactivation is not allowed " +
                    "since main line is not active".
-         END.
+   END.
+   IF llBypassCheck THEN DO: 
+      /* Bypass this one MsSeq only once and remove value from Cparam */
+      FIND FIRST TMSParam EXCLUSIVE-LOCK WHERE
+                 TMSParam.Brand     = Syst.Var:gcBrand AND
+                 TMSParam.ParamCode = "ReactMsseq" NO-ERROR.
+      IF AVAILABLE TMSParam THEN DO:
+         ASSIGN TMSParam.IntVal = -1.
+         RELEASE TMSParam.
       END.
    END.
 
