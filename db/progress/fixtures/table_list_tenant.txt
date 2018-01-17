@@ -45,6 +45,9 @@ FuncRunQueue
 HdrText
 HiUsageKat
 HiUsageLimit
+IGInvNum
+IGVoucher
+InvGroup
 InvText
 IPRange
 Matrix
@@ -67,7 +70,6 @@ PrintHouseConf
 ProgLimit
 RateCCN
 RatePlan
-Region
 RepText
 RequestAction
 RequestActionRule
@@ -99,3 +101,4 @@ TMSUser
 TopupScheme
 TopupSchemeRow
 UserLimit
+VATCode
