@@ -67,7 +67,6 @@ CLASS Syst.TMSRelation:
    DEFINE PRIVATE VARIABLE acKeyType           AS CHARACTER   NO-UNDO.
    DEFINE PRIVATE VARIABLE acParentValue       AS CHARACTER   NO-UNDO.
    DEFINE PRIVATE VARIABLE acChildValue        AS CHARACTER   NO-UNDO.
-   DEFINE PRIVATE VARIABLE alUseCurrentTime    AS LOGICAL INITIAL FALSE NO-UNDO.
 
    DEFINE PRIVATE VARIABLE atzFromTime      AS DATETIME-TZ NO-UNDO.   
    DEFINE PRIVATE VARIABLE atzToTime        AS DATETIME-TZ NO-UNDO.   
@@ -101,7 +100,6 @@ CLASS Syst.TMSRelation:
          acKeyType   = icKeyType.
 
       mSetTimeRange(NOW, NOW).
-      alUseCurrentTime = TRUE.
 
    END CONSTRUCTOR.
 
@@ -249,11 +247,6 @@ CLASS Syst.TMSRelation:
       IF icBrand EQ ?
       THEN EMPTY TEMP-TABLE ttTMSRelation.
 
-      IF alUseCurrentTime
-      THEN ASSIGN
-             atzFromTime = NOW
-             atzToTime   = NOW.
-             
       ASSIGN
           RecordCount   = 0
           acParentValue = icParentValue
@@ -418,9 +411,10 @@ CLASS Syst.TMSRelation:
       (icTableName    AS CHARACTER,
        icKeyType      AS CHARACTER,
        icParentValue  AS CHARACTER,
-       icChildValue   AS CHARACTER):
+       icChildValue   AS CHARACTER,
+       ilUseDate      AS LOGICAL):
 
-      mAddUpdateRelation(YES, icTableName, icKeyType, icParentValue, icChildValue, "").
+      mAddUpdateRelation(YES, icTableName, icKeyType, icParentValue, icChildValue, "", ilUseDate).
 
    END METHOD.
 
@@ -430,21 +424,10 @@ CLASS Syst.TMSRelation:
        icKeyType      AS CHARACTER,
        icParentValue  AS CHARACTER,
        icChildValue   AS CHARACTER,
-       icRelationType AS CHARACTER):
+       icRelationType AS CHARACTER,
+       ilUseDate      AS LOGICAL):
 
-      mAddUpdateRelation(YES, icTableName, icKeyType, icParentValue, icChildValue, icRelationType).
-
-   END METHOD.
-
-   /* Finish the old relation and starts the new relation. If the relation
-      doesn't exists then just adds the relation. */
-   METHOD PUBLIC STATIC VOID mUpdateRelation
-      (icTableName    AS CHARACTER,
-       icKeyType      AS CHARACTER,
-       icParentValue  AS CHARACTER,
-       icChildValue   AS CHARACTER):
-
-      mAddUpdateRelation(NO, icTableName, icKeyType, icParentValue, icChildValue, "").
+      mAddUpdateRelation(YES, icTableName, icKeyType, icParentValue, icChildValue, icRelationType, ilUseDate).
 
    END METHOD.
 
@@ -455,9 +438,23 @@ CLASS Syst.TMSRelation:
        icKeyType      AS CHARACTER,
        icParentValue  AS CHARACTER,
        icChildValue   AS CHARACTER,
-       icRelationType AS CHARACTER):
+       ilUseDate      AS LOGICAL):
 
-      mAddUpdateRelation(NO, icTableName, icKeyType, icParentValue, icChildValue, icRelationType).
+      mAddUpdateRelation(NO, icTableName, icKeyType, icParentValue, icChildValue, "", ilUseDate).
+
+   END METHOD.
+
+   /* Finish the old relation and starts the new relation. If the relation
+      doesn't exists then just adds the relation. */
+   METHOD PUBLIC STATIC VOID mUpdateRelation
+      (icTableName    AS CHARACTER,
+       icKeyType      AS CHARACTER,
+       icParentValue  AS CHARACTER,
+       icChildValue   AS CHARACTER,
+       icRelationType AS CHARACTER,
+       ilUseDate      AS LOGICAL):
+
+      mAddUpdateRelation(NO, icTableName, icKeyType, icParentValue, icChildValue, icRelationType, ilUseDate).
 
    END METHOD.
 
@@ -467,14 +464,17 @@ CLASS Syst.TMSRelation:
        icKeyType      AS CHARACTER,
        icParentValue  AS CHARACTER,
        icChildValue   AS CHARACTER,
-       icRelationType AS CHARACTER):
+       icRelationType AS CHARACTER,
+       ilUseDate      AS LOGICAL):
 
       DEFINE VARIABLE ltzFromTime    AS DATETIME-TZ NO-UNDO.
       DEFINE VARIABLE liRelationID   AS INT64       NO-UNDO.
 
       DEFINE BUFFER TMSRelation FOR TMSRelation.
 
-      ltzFromTime = NOW.
+      IF ilUseDate
+      THEN ltzFromTime = DATETIME-TZ(TODAY, 0).
+      ELSE ltzFromTime = NOW.
 
       FOR EACH TMSRelation NO-LOCK WHERE
                TMSRelation.TableName   = icTableName   AND
@@ -515,10 +515,17 @@ CLASS Syst.TMSRelation:
       (icTableName    AS CHARACTER,
        icKeyType      AS CHARACTER,
        icParentValue  AS CHARACTER,
-       icChildValue   AS CHARACTER):
+       icChildValue   AS CHARACTER,
+       ilUseDate      AS LOGICAL):
 
       DEFINE BUFFER TMSRelation   FOR TMSRelation.
       DEFINE BUFFER lbTMSRelation FOR TMSRelation.
+
+      DEFINE VARIABLE ltzToTime AS DATETIME-TZ NO-UNDO.
+
+      IF ilUseDate
+      THEN ltzToTime = DATETIME-TZ(TODAY, 0).
+      ELSE ltzToTime = NOW.
 
       FOR EACH TMSRelation NO-LOCK WHERE
                 TMSRelation.TableName   = icTableName   AND
@@ -526,10 +533,10 @@ CLASS Syst.TMSRelation:
                 TMSRelation.ChildValue  = icChildValue  AND
                 TMSRelation.ParentValue = icParentValue
                 BY TMSRelation.ToTime DESCENDING:
-         IF TMSRelation.ToTime = ? OR TMSRelation.ToTime >= NOW
+         IF TMSRelation.ToTime = ? OR TMSRelation.ToTime >= ltzToTime
          THEN DO TRANSACTION:
             FIND lbTMSRelation EXCLUSIVE-LOCK WHERE ROWID(lbTMSRelation) = ROWID(TMSRelation).
-            lbTMSRelation.ToTime = NOW.
+            lbTMSRelation.ToTime = ADD-INTERVAL(ltzToTime, -1, 'milliseconds').
          END.
          LEAVE.
       END.
