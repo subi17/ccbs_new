@@ -83,9 +83,9 @@
 |common|HighUsage|292|T|Subscription|
 |common|HiUsageKat|64|T|General|
 |common|HiUsageLimit|64|T|General|
-|common|IGInvNum|400|S|Billing|
-|common|IGVoucher|698|S|Billing|
-|common|InvGroup|7|S|Billing|
+|common|IGInvNum|400|T|Billing|
+|common|IGVoucher|698|T|Billing|
+|common|InvGroup|7|T|Billing|
 |common|Invoice|4001|T|Subscription|
 |common|InvoiceTarget|4001|T|Subscription|
 |common|InvoiceTargetGroup|4001|T|Subscription|
@@ -136,7 +136,7 @@
 |common|RateCCN|3087|T|Rating|
 |common|RatePlan|30|T|Rating|
 |common|RatePref|29|S|Rating|
-|common|Region|52|T|Rating|
+|common|Region|52|S|Rating|
 |common|RepLog|4|S|System|
 |common|ReportConf|2|S|Billing|
 |common|ReportConfRow|36|S|Billing|
@@ -174,7 +174,7 @@
 |common|Token|15|S|System|
 |common|UserGrp|9|S|System|
 |common|UserLimit|1355|T|System|
-|common|VATCode|16|S|Rating|
+|common|VATCode|16|T|Rating|
 |ordercanal|Barring|4001|T|Subscription|
 |ordercanal|BarringConf|31|S|Product|
 |ordercanal|CallAlarm|4001|T|Subscription|
