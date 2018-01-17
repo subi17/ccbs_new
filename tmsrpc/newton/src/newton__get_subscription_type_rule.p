@@ -178,6 +178,16 @@ FUNCTION fAddWarningStruct RETURNS LOGICAL:
    IF llAddline20Disc THEN
       add_string(warning_array,"","STC_HAS_20_PER_ADDLINE").
 
+   FOR EACH TMSRelation NO-LOCK WHERE
+            TMSRelation.TableName   = "CLIType"           AND
+            TMSRelation.KeyType     = "STCWarningMessage" AND
+            TMSRelation.ChildValue  = pcNewCLIType        AND
+            TMSRelation.ParentValue = MobSub.CLIType      AND
+            TMSRelation.ToTime     >= NOW                 AND
+            TMSRelation.FromTime    < NOW:
+      add_string(warning_array,"",TMSRelation.RelationType).
+   END.
+
 END FUNCTION.
 
 FUNCTION fAddCLITypeStruct RETURNS LOGICAL:
