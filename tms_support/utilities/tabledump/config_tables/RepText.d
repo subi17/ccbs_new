@@ -1781,6 +1781,10 @@
 1 "" 3 "Pago de terminal" 0 "DESCONTADO" "1" 27/11/12 31/12/49
 1 "" 4 "Pago de terminal" 0 "DESCONTADO" "1" 27/11/12 31/12/49
 1 "" 5 "Handset payment" 0 "DESCONTADO" "1" 27/11/12 31/12/49
+1 "" 1 "Descuento Promocional" 0 "DISCAGILETV" "1" 01/01/18 31/12/49
+1 "" 2 "Descompte Promocional" 0 "DISCAGILETV" "1" 01/01/18 31/12/49
+1 "" 3 "Promozio Deskontua" 0 "DISCAGILETV" "1" 01/01/18 31/12/49
+1 "" 5 "Promotional Discount" 0 "DISCAGILETV" "1" 01/01/18 31/12/49
 1 "" 1 "Descuento Promocional" 0 "DISCAGILETVIGIC" "1" 22/08/17 31/12/49
 1 "" 2 "Descompte Promocional" 0 "DISCAGILETVIGIC" "1" 22/08/17 31/12/49
 1 "" 3 "Promozio Deskontua" 0 "DISCAGILETVIGIC" "1" 22/08/17 31/12/49
@@ -4002,6 +4006,16 @@
 1 "" 3 "Pingonaut Kidswatch Panda" 0 "G0000375" "1" 13/12/17 31/12/49
 1 "" 4 "Pingonaut Kidswatch Panda" 0 "G0000375" "1" 13/12/17 31/12/49
 1 "" 5 "Pingonaut Kidswatch Panda" 0 "G0000375" "1" 13/12/17 31/12/49
+1 "" 1 "ZTE Blade A330" 0 "G0000376" "1" 02/01/18 31/12/49
+1 "" 2 "ZTE Blade A330" 0 "G0000376" "1" 02/01/18 31/12/49
+1 "" 3 "ZTE Blade A330" 0 "G0000376" "1" 02/01/18 31/12/49
+1 "" 4 "ZTE Blade A330" 0 "G0000376" "1" 02/01/18 31/12/49
+1 "" 5 "ZTE Blade A330" 0 "G0000376" "1" 02/01/18 31/12/49
+1 "" 1 "ZTE Blade A602" 0 "G0000377" "1" 04/01/18 31/12/49
+1 "" 2 "ZTE Blade A602" 0 "G0000377" "1" 04/01/18 31/12/49
+1 "" 3 "ZTE Blade A602" 0 "G0000377" "1" 04/01/18 31/12/49
+1 "" 4 "ZTE Blade A602" 0 "G0000377" "1" 04/01/18 31/12/49
+1 "" 5 "ZTE Blade A602" 0 "G0000377" "1" 04/01/18 31/12/49
 1 "" 1 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 2 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 3 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
@@ -8916,6 +8930,11 @@
 1 "" 3 "ZTE F950 táctil" 0 "P07595002" "1" 26/11/09 31/12/49
 1 "" 4 "ZTE F950 táctil" 0 "P07595002" "1" 26/11/09 31/12/49
 1 "" 5 "ZTE F950 touch screen Black" 0 "P07595002" "1" 26/11/09 31/12/49
+1 "" 1 "ZTE Blade A330 Negro" 0 "P075A33GC" "1" 28/12/17 31/12/49
+1 "" 2 "ZTE Blade A330 Negro" 0 "P075A33GC" "1" 28/12/17 31/12/49
+1 "" 3 "ZTE Blade A330 Negro" 0 "P075A33GC" "1" 28/12/17 31/12/49
+1 "" 4 "ZTE Blade A330 Negro" 0 "P075A33GC" "1" 28/12/17 31/12/49
+1 "" 5 "ZTE Blade A330 Black" 0 "P075A33GC" "1" 28/12/17 31/12/49
 1 "" 1 "ZTE Blade A460 Negro" 0 "P075A46N2" "1" 25/09/15 31/12/49
 1 "" 2 "ZTE Blade A460 Negro" 0 "P075A46N2" "1" 25/09/15 31/12/49
 1 "" 3 "ZTE Blade A460 Negro" 0 "P075A46N2" "1" 25/09/15 31/12/49
@@ -10301,6 +10320,11 @@
 1 "" 3 "iPhone SE 32 GB Oro" 0 "P097SE3D2" "1" 29/03/17 31/12/49
 1 "" 4 "iPhone SE 32 GB Oro" 0 "P097SE3D2" "1" 29/03/17 31/12/49
 1 "" 5 "iPhone SE 32 GB Gold" 0 "P097SE3D2" "1" 29/03/17 31/12/49
+1 "" 1 "Iphone SE 32 GB Oro" 0 "P097SE3DC" "1" 02/01/18 31/12/49
+1 "" 2 "Iphone SE 32 GB Oro" 0 "P097SE3DC" "1" 02/01/18 31/12/49
+1 "" 3 "Iphone SE 32 GB Oro" 0 "P097SE3DC" "1" 02/01/18 31/12/49
+1 "" 4 "Iphone SE 32 GB Oro" 0 "P097SE3DC" "1" 02/01/18 31/12/49
+1 "" 5 "Iphone SE 32 GB Gold" 0 "P097SE3DC" "1" 02/01/18 31/12/49
 1 "" 1 "iPhone SE 32 GB Gris" 0 "P097SE3G2" "1" 29/03/17 31/12/49
 1 "" 2 "iPhone SE 32 GB Gris" 0 "P097SE3G2" "1" 29/03/17 31/12/49
 1 "" 3 "iPhone SE 32 GB Gris" 0 "P097SE3G2" "1" 29/03/17 31/12/49
