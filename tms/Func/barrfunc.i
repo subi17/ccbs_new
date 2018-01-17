@@ -6,6 +6,9 @@
   CREATED ......: 28.01.08
   CHANGED ......: 15.05.08 Case for manual acceptance  
   Version ......: xfera
+-----------------------------------------------------------------------
+10/01/2018 ashok YDR-2754 Added new function fGetBarringRequestSource to 
+                          find request source of latest barring request
 ----------------------------------------------------------------------- */
 
 &IF "{&barrfunc}" NE "YES"
@@ -239,6 +242,26 @@ FUNCTION fGetBarringStatus RETURNS CHAR
    IF AVAIL Barring THEN RETURN Barring.BarringStatus.
    ELSE RETURN {&BARR_STATUS_INACTIVE}.
 END.
+
+/* YDR-2754 return RequestSource of a Barring Request per MobSub */
+FUNCTION fGetBarringRequestSource RETURNS CHARACTER 
+    (INPUT iiMsseq         AS INTEGER   ,
+     INPUT icBarringCode   AS CHARACTER ,
+     INPUT icBarringStatus AS CHARACTER ):
+    DEFINE BUFFER Barring   FOR Barring.
+    DEFINE BUFFER Msrequest FOR MsRequest.
+    
+    FIND FIRST Barring NO-LOCK 
+         WHERE Barring.MsSeq         = iiMsseq        AND
+               Barring.BarringCode   = icBarringCode  AND
+               Barring.BarringStatus BEGINS icBarringStatus NO-ERROR.
+    IF NOT AVAILABLE Barring THEN RETURN "".
+    FIND MsRequest NO-LOCK WHERE MsRequest.MsRequest = Barring.MsRequest NO-ERROR.
+    IF NOT AVAILABLE MsRequest THEN RETURN "".
+    RETURN MsRequest.ReqSource.
+             
+END FUNCTION.
+
 
 /*Function checks that are requested barrings already on/off*/ 
 FUNCTION fIsReasonableSet RETURNS LOG
