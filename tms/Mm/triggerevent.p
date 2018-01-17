@@ -162,19 +162,6 @@ FUNCTION fGenerateSpecialTrigger RETURN INT
 
 END FUNCTION.
 
-
-
-FUNCTION fZoneName RETURNS LOGIC
-   (icTaxZone AS CHAR):
-   
-   /*ZoneName = "".
-   
-   FIND TaxZone WHERE TaxZone.TaxZone = icTaxZone NO-LOCK NO-ERROR.
-   IF AVAILABLE TaxZone THEN lcZoneName = TaxZone.TZName. 
-     */
-END FUNCTION.
-
-
 Syst.Var:cfc = "sel". RUN Syst/ufcolor.p. ASSIGN Syst.Var:ccc = Syst.Var:cfc.
 VIEW FRAME sel.
 
