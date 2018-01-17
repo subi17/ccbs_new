@@ -1,0 +1,39 @@
+DROP TABLE "Region"
+
+ADD TABLE "Region"
+  AREA "Sta_Data_128"
+  LABEL "Region"
+  DESCRIPTION "Customer region"
+  DUMP-NAME "region"
+
+ADD FIELD "Region" OF "Region" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Region"
+  HELP "Region code"
+  ORDER 10
+
+ADD FIELD "RgName" OF "Region" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Name"
+  HELP "Region name"
+  ORDER 20
+
+ADD FIELD "TaxZone" OF "Region" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Tax Zone"
+  COLUMN-LABEL "Zone"
+  HELP "Tax Zone"
+  ORDER 50
+
+ADD INDEX "Region" ON "Region" 
+  AREA "Sta_Index_3"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "Region" ASCENDING 
+
+ADD INDEX "RgName" ON "Region" 
+  AREA "Sta_Index_3"
+  INDEX-FIELD "RgName" ASCENDING 
