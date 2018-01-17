@@ -360,7 +360,13 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
          ASSIGN bOrder.ICC  = lcICC
                 SIM.SimStat = 4
                 SIM.MsSeq   = bOrder.MsSeq. 
-         
+      
+         CREATE SimDeliveryhist.
+         ASSIGN SimDeliveryHist.OrderID    = bOrder.OrderID
+                SimDeliveryHist.MSSeq      = bOrder.MSSeq 
+                SimDeliveryHist.StatusCode = 2.
+                SimDeliveryHist.TimeStamp  = Func.Common:mMakeTS().
+   
          Func.Common:mWriteMemo("Order",
                                 STRING(bOrder.OrderID),
                                 bOrder.CustNum,
