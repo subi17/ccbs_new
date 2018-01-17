@@ -39,8 +39,9 @@ DEF VAR pcSurname2    AS CHAR NO-UNDO.
 DEF VAR pcCreator     AS CHAR NO-UNDO.
 DEF VAR pcStruct      AS CHAR NO-UNDO.
 DEF VAR lcStruct      AS CHAR NO-UNDO.
-DEFINE VARIABLE llMobileHolder AS LOGICAL NO-UNDO.
-DEFINE VARIABLE lhOrderCustomer AS HANDLE NO-UNDO.
+DEFINE VARIABLE llMobileHolder  AS LOGICAL NO-UNDO.
+DEFINE VARIABLE lhOrderCustomer AS HANDLE  NO-UNDO.
+DEFINE VARIABLE llDataUpdated   AS LOGICAL NO-UNDO.
 
 DEF VAR pcTermStruct AS CHAR NO-UNDO.
 DEF VAR lcTermStruct AS CHAR NO-UNDO.
@@ -197,6 +198,8 @@ THEN DO:
            lbMobileHolder.Surname2  = pcSurname2 WHEN LOOKUP("surname2",lcStruct) > 0.
            .
     IF llDoEvent THEN RUN StarEventMakeCreateEvent (lhOrderCustomer).
+
+    llDataUpdated = TRUE.
 END.
 ELSE IF OrderCustomer.Custid     NE pcCustomerID OR
         OrderCustomer.CustidType NE pcIDType     OR
@@ -228,6 +231,9 @@ THEN DO:
 
    IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhOrderCustomer).
    RELEASE OrderCustomer.
+
+   llDataUpdated = TRUE.
+
 END.
 
 IF llDoEvent THEN DO:
@@ -255,7 +261,10 @@ ASSIGN
     Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
     Memo.CreUser   = pcCreator
     Memo.MemoTitle = pcMemoTitle
-    Memo.MemoText  = pcMemoContent
+    Memo.MemoText  = pcMemoContent +
+                     ( IF llDataUpdated
+                       THEN CHR(10) + "Relanzamiento de portabilidad debido a datos incorrectos del cliente"
+                       ELSE "" )
     Memo.CustNum   = Order.Custnum.
 
 IF AVAIL MNPProcess THEN DO:
