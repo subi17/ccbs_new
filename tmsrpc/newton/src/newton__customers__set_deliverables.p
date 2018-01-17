@@ -74,7 +74,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 CASE pcDeliveryChannel:
    WHEN "PAPER"   THEN liDelType = {&INV_DEL_TYPE_PAPER}.
    WHEN "EMAIL"   THEN liDelType = {&INV_DEL_TYPE_EMAIL}.
-   WHEN "Electronic Summary Invoice"  THEN liDelType = {&INV_DEL_TYPE_ESI}.
+   WHEN "Electronic summary Invoice"  THEN liDelType = {&INV_DEL_TYPE_ESI}.
    
    WHEN "No Delivery" THEN liDelType = {&INV_DEL_TYPE_NO_DELIVERY}.
    
