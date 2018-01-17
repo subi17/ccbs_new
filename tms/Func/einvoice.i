@@ -25,7 +25,7 @@ function fEInvoiceValidate returns logical
    DEFINE VARIABLE ldeNextMonth AS DECIMAL NO-UNDO. 
    
    IF NOT CAN-FIND(FIRST ActionLog WHERE
-              ActionLog.Brand = gcBrand AND
+              ActionLog.Brand = Syst.Var:gcBrand  AND
               ActionLog.ActionID = "DDFILES" AND
               ActionLog.ActionPeriod = YEAR(idaPeriod) * 100 + MONTH(idaPeriod)
               NO-LOCK) THEN DO:
@@ -45,7 +45,7 @@ function fEInvoiceValidate returns logical
       ldeNextMonth = liYear * 10000 + liMonth * 100 + 1.
 
       FIND FIRST MsRequest WHERE
-           MsRequest.Brand = gcBrand AND
+           MsRequest.Brand = Syst.Var:gcBrand  AND
            MsRequest.ReqType = ({&REQTYPE_E_INVOICE}) AND
            MsRequest.ActStamp > ldeCurrentMonth AND
            MsRequest.ActStamp < ldeNextMonth AND
@@ -73,13 +73,6 @@ DEF VAR lButtonDate   AS DATE      NO-UNDO.
 DEF VAR lEndSeconds   AS INTEGER   NO-UNDO.
 DEF VAR lIniSeconds   AS INTEGER   NO-UNDO.
 DEF VAR lcSMSSchedule AS CHARACTER NO-UNDO.
-
-   /* Time of request */
-   fSplitTS(idactstamp, lButtonDate, lButtonSeconds).
-
-   if not fEInvoiceValidate(
-      idaPeriod,
-      output ocresult) then return 0. 
 
    fcreaterequest(({&REQTYPE_E_INVOICE}),
                   idactstamp,
