@@ -1,0 +1,27 @@
+bulkload: InvGroup
+  InvGroup: "IGIC2"
+  IGName: "Canary Islands MasMovil"
+  InvForm: "IGIC2"
+  Brand: "1"
+  TaxZone: "2"
+
+bulkload: InvGroup
+  InvGroup: "IPSIC2"
+  IGName: "Ceuta MasMovil"
+  InvForm: "IPSIC2"
+  Brand: "1"
+  TaxZone: "3"
+
+bulkload: InvGroup
+  InvGroup: "IPSIM2"
+  IGName: "Melilla MasMovil"
+  InvForm: "IPSIM2"
+  Brand: "1"
+  TaxZone: "4"
+
+bulkload: InvGroup
+  InvGroup: "VAT2"
+  IGName: "Mainland MasMovil"
+  InvForm: "VAT2"
+  Brand: "1"
+  TaxZone: "1"

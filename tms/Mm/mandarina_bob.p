@@ -6,6 +6,8 @@
   AUTHOR .......: jotorres & ilsavola
   CREATED ......: 08/2017
   Version ......: yoigo
+----------------------------------------------------------------------
+10/01/2018 ashok YDR-2754 activate/deactivate Cust_Lost barring
 ---------------------------------------------------------------------- */
 
 /*---------------------------------------------------------------------- 
@@ -201,9 +203,10 @@ REPEAT:
       END. 
 
       /* Checking values */
-      IF (lcLP <> "Mandarina1" AND lcLP <> "Mandarina2" AND lcLP <> "InternetBarring") THEN DO:
+      IF LOOKUP( lcLP , "Mandarina1,Mandarina2,InternetBarring,Cust_LOST") = 0 THEN DO:
          PUT STREAM sCurrentLog UNFORMATTED
-            lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";ERROR:incorrect_command(Mandarina1/Mandarina2/InternetBarring)" SKIP.
+            lcLine + ";" + STRING(TIME,"hh:mm:ss") 
+                   + ";ERROR:incorrect_command(Mandarina1/Mandarina2/InternetBarring/Cust_LOST)" SKIP.
          NEXT.
       END.
       IF (lcAction <> "on" AND lcAction <> "off") THEN DO:
@@ -234,6 +237,23 @@ REPEAT:
             END.
          END.
          /* end YDR-2668 */
+         /* Begin YDR-2754 */
+         ELSE IF lcLP EQ "Cust_LOST" THEN DO:
+            IF LOOKUP("Cust_LOST", lcBarrings) <> 0 THEN DO:
+               PUT STREAM sCurrentLog UNFORMATTED
+                  lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";WARNING:Previous_Cust_LOST_barring_active" SKIP.
+                  NEXT.
+            END.
+            ELSE DO:     
+                RUN pSetCust_LOST("ON").
+                IF RETURN-VALUE <> "OK" THEN DO:
+                   PUT STREAM sCurrentLog UNFORMATTED
+                      lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";" + RETURN-VALUE SKIP.
+                   NEXT.
+                END.
+            END.
+         END.
+         /* End YDR-2754 */
          ELSE DO:
             llSuccess = fMakeLPCommandRequest (INPUT mobsub.MsSeq,                            /*Subscription identifier*/
                                                INPUT (IF LcLP EQ "Mandarina1"                  /*LP command to network*/
@@ -278,7 +298,25 @@ REPEAT:
                NEXT.
             END.    
          END.
-         /* end YDR-2668 */         
+         /* end YDR-2668 */
+         /* Begin YDR-2754 */
+         ELSE IF lcLP EQ "Cust_LOST" THEN DO:
+            IF LOOKUP("Cust_LOST", lcBarrings) = 0 OR 
+               fGetBarringRequestSource(MobSub.MsSeq , "Cust_LOST" , "ACTIVE") NE {&REQUEST_SOURCE_YOIGO_TOOL}  THEN DO:
+               PUT STREAM sCurrentLog UNFORMATTED
+                  lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";WARNING:No_Previous_Cust_LOST_barring_by_Mandarina" SKIP.
+                  NEXT.
+            END.
+            ELSE DO:
+                RUN pSetCust_LOST("OFF").
+                IF RETURN-VALUE <> "OK" THEN DO:
+                   PUT STREAM sCurrentLog UNFORMATTED
+                      lcLine + ";" + STRING(TIME,"hh:mm:ss") + ";" + RETURN-VALUE SKIP.
+                   NEXT.
+                END.
+            END.
+         END.
+         /* End YDR-2754 */
          ELSE DO:
             llSuccess = fMakeLPCommandRequest (INPUT mobsub.MsSeq,                                /*Subscription identifier*/
                                                INPUT "remove",         
@@ -378,4 +416,38 @@ PROCEDURE pSetInternetBarring:
 
 END PROCEDURE.
 
+PROCEDURE pSetCust_LOST:
+
+   DEF INPUT PARAMETER lcMode AS CHAR NO-UNDO. /* "ON" to active barring ; "OFF" to remove barring. */
+
+   DEF VAR liRequest AS INT  NO-UNDO.
+   DEF VAR lcResult  AS CHAR NO-UNDO.   
+
+   RUN Mm/barrengine.p(mobsub.MsSeq,
+                       (IF lcMode EQ "ON" THEN "Cust_LOST=1" 
+                                          ELSE "Cust_LOST=0"), /* Barring   */
+                       {&REQUEST_SOURCE_YOIGO_TOOL} ,          /* source    */
+                       "Sistema",                              /* creator   */
+                       Func.Common:mMakeTS(),                  /* TimeStamp */
+                       "",                                     /* SMSText    */
+                       OUTPUT lcResult).
+
+   liRequest = INTEGER(lcResult) NO-ERROR. 
+                               
+   IF liRequest > 0 THEN DO:     
+
+   Func.Common:mWriteMemoWithType("Mobsub",
+                     STRING(mobsub.MsSeq),
+                     mobsub.CustNum,
+                     (IF lcMode EQ "ON" THEN "Bloqueo modificado por proceso de migración (OTA KO - MANDARINA)" 
+                                        ELSE "Bloqueo modificado por proceso de migración (OTA KO - MANDARINA)"),               /* memo title */
+                     (IF lcMode EQ "ON" THEN "Cambio automático por proceso de migración -  Cliente_Robo/Pérdida - Activar" 
+                                        ELSE "Cambio automático por proceso de migración -  Cliente_Robo/Pérdida - Desactivar"),/* memo text  */
+                     "Service",                                                                /* memo type  */   
+                     "Sistema").                                                               /* memo creator    */        
+      RETURN "OK".
+   END.                      
+   ELSE RETURN "ERROR:" + lcResult.
+
+END PROCEDURE.
 
