@@ -123,7 +123,8 @@ else if
      IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.
 
-else if index(frame-field,"Category") > 0 THEN DO:
+else if index(frame-field,"Category") > 0 AND
+        frame-field <> "DPCategory"   THEN DO:
      RUN Mc/nnakse.p.
      IF siirto NE ? THEN ASSIGN frame-value = siirto.
 END.

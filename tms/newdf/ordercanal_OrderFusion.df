@@ -1,0 +1,17 @@
+ADD FIELD "portStat" OF "OrderFusion" AS CHARACTER
+  FORMAT "X(15)"
+  INITIAL ""
+  LABEL "portStat"
+  MAX-WIDTH 30
+  COLUMN-LABEL "portStat"
+  HELP "Portability Status"
+  ORDER 280
+
+ADD FIELD "portDate" OF "OrderFusion" AS CHARACTER
+  FORMAT "X(20)"
+  INITIAL ""
+  LABEL "portDate"
+  MAX-WIDTH 40
+  COLUMN-LABEL "portDate"
+  HELP "Portability Date"
+  ORDER 290

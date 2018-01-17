@@ -1,0 +1,17 @@
+{
+    "Gwy.MasmovilSender":
+        {
+            "mms":
+                {
+                    "1": { "-logginglevel": "4" }
+                }
+        },
+
+    "Gwy.ThirdPartyServiceDaemon":
+        {
+            "tpservice":
+                {
+                    "": { "-logginglevel": "4" }
+                }
+        }        
+}

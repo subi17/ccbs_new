@@ -59,6 +59,7 @@ DEF VAR lcExtraLineAllowed            AS CHAR NO-UNDO.
 DEF VAR llNonProToProMigrationOngoing AS LOGI NO-UNDO.
 DEF VAR llProToNonProMigrationOngoing AS LOGI NO-UNDO.
 DEF VAR lcResult                      AS CHAR NO-UNDO.
+DEF VAR lcConvOrders                  AS CHAR NO-UNDO INIT "".
 DEFINE VARIABLE lii AS INTEGER NO-UNDO.
 DEFINE VARIABLE lcExtraLineCLITypes AS CHARACTER NO-UNDO.
 
@@ -226,7 +227,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                       llOnlyActiveFound = TRUE.
                       LEAVE.
                    END.
-                END.
+                END.   
                 IF llOnlyActiveFound THEN DO:
                    ASSIGN
                       llOrderAllowed = FALSE
@@ -493,11 +494,11 @@ END.
 IF LOOKUP(pcCliType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
    IF fCheckExistingConvergent(pcIdType,pcPersonId,pcCliType) THEN 
       lcAddLineAllowed = "OK".
-   ELSE IF fCheckOngoingConvergentOrder(pcIdType,pcPersonId,pcCliType) THEN 
+   ELSE IF fCheckOngoingConvergentOrder(pcIdType,pcPersonId,pcCliType,{&ONGOING_ORDER_AVAIL},OUTPUT lcConvOrders) THEN 
       lcAddLineAllowed = "OK".
    ELSE IF fCheckExistingMobileOnly(pcIdType,pcPersonId,pcCliType) THEN 
       lcAddLineAllowed = "MOBILE_ONLY". /* Additional Line with mobile only ALFMO-5 */
-   ELSE IF fCheckOngoingMobileOnly(pcIdType,pcPersonId,pcCliType) THEN 
+   ELSE IF fCheckOngoingMobileOnly(pcIdType,pcPersonId,pcCliType,{&ONGOING_ORDER_AVAIL},OUTPUT lcConvOrders) THEN 
       lcAddLineAllowed = "MOBILE_ONLY". /* Additional Line with mobile only ALFMO-5 */
    ELSE lcAddLineAllowed = "NO_MAIN_LINE".
 END.
