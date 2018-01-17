@@ -358,7 +358,7 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
          IF ERROR-STATUS:ERROR OR LOCKED(bOrder) THEN RETURN.
 
          ASSIGN bOrder.ICC  = lcICC
-                SIM.SimStat = 21
+                SIM.SimStat = 4
                 SIM.MsSeq   = bOrder.MsSeq. 
          
          Func.Common:mWriteMemo("Order",
