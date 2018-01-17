@@ -42,5 +42,5 @@ fCreateTMSParam("ESI_setting","ESI_TestCustomers","C","789,123,456").
 fCreateTMSParam("ESI_setting","ESI_TestFilter","I","0"). /*0 OFF, 1 ON*/
 
 /*Link that is used as base in building of ESI page link.*/
-fCreateTMSParam("ESI_setting","ESILinkBase","C","www.qvantel.com/").
+fCreateTMSParam("ESI_setting","ESILinkBase","C","https://resumen-consumo.yoigo.com/resumen/").
 
