@@ -75,8 +75,6 @@ FUNCTION fGenerateEmailTemplate RETURNS CHAR
       /* convert some special characters to url encoding (at least '+' char
          could cause problems at later phases. */
       lcInvNumCrypted = fUrlEncode(lcInvNumCrypted, "query").
-mgetmessage pÃ¤Ã¤ttÃ¤Ã¤ templaten.     
- linkbase + crypted
 /*InvText.paramtext.keyvalue Jsonparam "MsSeq=#MSSEQ| ..."*/
 /*TODO: obviously we need to build link in this function*/
    ASSIGN
