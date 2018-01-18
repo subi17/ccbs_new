@@ -216,7 +216,7 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
       /* allow upsell to any data contract by bob tool */
       ELSE IF (LOOKUP(icDCEvent,lcALLPostpaidUPSELLBundles) > 0 AND
                icSource NE {&REQUEST_SOURCE_YOIGO_TOOL}) THEN
-         ocError = "Incorrect upsell type".
+         ocError = "Incorrect upsell type - " + icDCEvent.
       
       IF ocError <> "" THEN
          RETURN FALSE.
