@@ -1,6 +1,6 @@
 /* ----------------------------------------------------------------------
-  MODULE .......: smsinvoice.p 
-  TASK .........: Handles sms invoice request (type 79), YDR-104 
+  MODULE .......: einvoice.p 
+  TASK .........: Handles electronic invoice request
   APPLICATION ..: TMS
   AUTHOR .......: ilsavola
   CREATED ......: 11/2017 
@@ -42,15 +42,6 @@ DEF VAR lcTestCustomers AS CHAR NO-UNDO.
 DEF VAR lcLink        AS CHAR NO-UNDO.
 DEF VAR liTestFilter AS INT NO-UNDO.
 DEF STREAM sEmail.
-
-/*Temp table for sending NC response info to WEB.*/
-DEF TEMP-TABLE eInvoiceContent NO-UNDO
-   FIELD MsSeq           AS CHAR
-   FIELD MSISDN          AS CHAR
-   FIELD Amount          AS CHAR
-   FIELD InvDate         AS CHAR
-   FIELD InvNum          AS INT
-   FIELD InvNumCrypted   AS CHAR.
 
 
 FUNCTION fGenerateEmailTemplate RETURNS CHAR
@@ -121,7 +112,7 @@ INVOICE_LOOP:
 FOR EACH Invoice WHERE
          Invoice.Brand    = "1" AND
          Invoice.InvDate >= ldaDateFrom AND
-         Invoice.DelType = {&INV_DEL_TYPE_ESI} AND
+         Invoice.DelType = 4 /*{&INV_DEL_TYPE_ESI}!!!*/ AND
          Invoice.InvType  = 1 AND
          Invoice.InvAmt  >= 0 NO-LOCK:
 
@@ -143,29 +134,27 @@ FOR EACH Invoice WHERE
    /* Sending SMS Invoice to customers */
    SUBINVOICE_LOOP:
    FOR EACH SubInvoice OF Invoice NO-LOCK:
-   
+
       FIND FIRST MobSub WHERE
                  MobSub.MsSeq = SubInvoice.MsSeq NO-LOCK NO-ERROR.
-      IF NOT AVAIL MobSub OR 
+      IF NOT AVAIL MobSub OR
          MobSub.CustNum NE Invoice.CustNum THEN NEXT SUBINVOICE_LOOP.
-      
-      /*Notification for the First Invoice will be sent to a specific people as part of YOT-4037 along with the own customer*/
+
       IF llFirstInv = FALSE THEN DO:
-         /*TODO: this also to MQ*/
-/*         fSMSNotify("First",
-                    "Einvoicing starts",
-                    lcAddrConfDir,
-                    lIniSeconds,
-                    lEndSeconds).
-         llFirstInv = TRUE.*/
+         IF Mm.MManMessage:mGetMessage("SMS", "EInvMessageStarted", 1)
+         EQ TRUE THEN DO:
+            Mm.MManMessage:mCreateMMLogSMS("+358504031880").
+         END.
+         llFirstInv = TRUE.
       END.
+
          /**/
-      IF Mm.MManMessage:mGetMessage("SMS", "EInvMessage", 1) EQ TRUE THEN DO: 
+      IF Mm.MManMessage:mGetMessage("SMS", "EInvMessage", 1) EQ TRUE THEN DO:
          lcTemplate = fGetSMSTxt("EInvMessage",
                                  TODAY,
                                  5,
                                  OUTPUT ldeActStamp).
-         
+
          lcTemplate = fGenerateEmailTemplate(lcTemplate,
                                              MobSub.MsSeq,
                                              MobSub.CLI,
@@ -173,10 +162,13 @@ FOR EACH Invoice WHERE
                                              STRING(Invoice.InvDate),
                                              lcLink,
                                              Invoice.InvNum).
-         Mm.MManMessage:ParamKeyValue = lcTemplate.
-         Mm.MManMessage:mCreateMMLogSMS(MobSub.CLI).
+
+         Mm.MManMessage:ParamKeyValue = lcTemplate.                                      Mm.MManMessage:mCreateMMLogSMS(MobSub.CLI).
+      END.
+      ELSE DO:
       END.
    END. /* FOR EACH SubInvoice OF Invoice NO-LOCK: */
+
 END. /* FOR EACH Invoice WHERE */
 
 
@@ -190,8 +182,14 @@ fSMSNotify("Last",
            lIniSeconds,
            lEndSeconds).
 */
+/*notify the last message.*/
+IF Mm.MManMessage:mGetMessage("SMS", "EInvMessageDone", 1) EQ TRUE THEN DO:
+   Mm.MManMessage:mCreateMMLogSMS("358504031880").
+END.
+
 /* Send an email to configure list*/
 /*TODO: this must be removed because TMS is not aware when last sms is sent.*/
+/*
 IF lcAddrConfDir > "" THEN
    lcAddrConfDir = lcAddrConfDir + "einvoice.email".
 
@@ -215,5 +213,5 @@ IF lcContConFile > "" AND SEARCH(lcAddrConfDir) <> ? THEN DO:
    /* Send via mail */
    SendMail(lcContConFile,"").
 END. /* IF SEARCH(lcAddrConfDir) <> ? THEN DO: */
-
+*/
 fReqStatus(2,""). /* request handled succesfully */
