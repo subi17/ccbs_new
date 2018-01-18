@@ -214,7 +214,8 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
           ocError = icDCEvent + " is not allowed because DSS " +
                     "is active for this customer".
       /* allow upsell to any data contract by bob tool */
-      ELSE IF icSource NE {&REQUEST_SOURCE_YOIGO_TOOL} THEN
+      ELSE IF (LOOKUP(icDCEvent,lcALLPostpaidUPSELLBundles) > 0 AND
+               icSource NE {&REQUEST_SOURCE_YOIGO_TOOL}) THEN
          ocError = "Incorrect upsell type".
       
       IF ocError <> "" THEN
