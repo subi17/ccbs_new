@@ -471,13 +471,13 @@ PROCEDURE pCreateRenewalCreditNote:
       IF Order.Custnum NE liCustnum THEN DO:
 
          CREATE ErrorLog.
-         ASSIGN ErrorLog.Brand     = gcBrand
+         ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
                 ErrorLog.ActionID  = "ORDERCANCEL"
                 ErrorLog.TableName = "Order"
                 ErrorLog.KeyValue  = STRING(Order.OrderId) 
                 ErrorLog.ErrorMsg  = "Credit note not created due to ACC"
-                ErrorLog.UserCode  = katun
-                ErrorLog.ActionTS  = fMakeTS().
+                ErrorLog.UserCode  = Syst.Var:katun
+                ErrorLog.ActionTS  = Func.Common:mMakeTS().
       END.
    END.
 

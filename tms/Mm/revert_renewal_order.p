@@ -77,19 +77,19 @@ FUNCTION fRemoveOrderFees RETURNS LOGICAL (
    iiOrderID AS INT):
 
    FIND Order WHERE 
-        Order.Brand   EQ gcBrand AND 
+        Order.Brand   EQ Syst.Var:gcBrand AND 
         Order.OrderID EQ iiOrderID NO-LOCK NO-ERROR.
    IF NOT AVAIL Order THEN RETURN FALSE.
 
    FIND Orderdelivery WHERE 
-        Orderdelivery.brand EQ gcBrand AND
+        Orderdelivery.brand EQ Syst.Var:gcBrand AND
         Orderdelivery.OrderId EQ Order.OrderId AND
         Orderdelivery.LoStatusId EQ 12 NO-LOCK NO-ERROR.
    IF NOT AVAIL Orderdelivery THEN RETURN FALSE.
 
    /* Remove singlefees created in termination */
    FOR EACH SingleFee EXCLUSIVE-LOCK WHERE
-            SingleFee.Brand EQ gcBrand AND
+            SingleFee.Brand EQ Syst.Var:gcBrand AND
             SingleFee.Custnum EQ MsRequest.CustNum AND
             SingleFee.HostTable EQ "Mobsub" AND
             SingleFee.KeyValue EQ STRING(MsRequest.MsSeq) AND
@@ -120,7 +120,7 @@ FUNCTION fRemoveOrderFees RETURNS LOGICAL (
 
    /* Change status of fixedfees so that it is not handled again in terminal_financing_logistics.p */
    FOR EACH FixedFee EXCLUSIVE-LOCK WHERE
-            FixedFee.Brand EQ gcBrand AND
+            FixedFee.Brand EQ Syst.Var:gcBrand AND
             FixedFee.Custnum EQ MsRequest.CustNum AND
             FixedFee.HostTable EQ "Mobsub" AND
             FixedFee.KeyValue EQ STRING(MsRequest.MsSeq) AND

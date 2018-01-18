@@ -17,7 +17,7 @@ FUNCTION fCashRevertOrder RETURNS CHARACTER
    DEFINE BUFFER Order FOR Order.
    
    FIND Order NO-LOCK WHERE
-      Order.Brand   = gcBrand   AND
+      Order.Brand   = Syst.Var:gcBrand   AND
       Order.OrderID = iiOrderID
    NO-ERROR.
    
@@ -30,8 +30,7 @@ FUNCTION fCashRevertOrder RETURNS CHARACTER
       THEN lcResult = fCashInvoiceCreditnote(Order.Invnum, "1010").
 
       IF lcResult > "" THEN
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                           "Order",
+         Func.Common:mWriteMemo("Order",
                            STRING(Order.OrderId),
                            Order.Custnum,
                            "CREDIT NOTE CREATION FAILED",
@@ -50,15 +49,14 @@ FUNCTION fCashRevertOrder RETURNS CHARACTER
 
       liReq = fRevertRenewalOrderRequest(Order.MsSeq,
                                          Order.OrderId,
-                                         katun,
-                                         fMakeTS(),
+                                         Syst.Var:katun,
+                                         Func.Common:mMakeTS(),
                                          {&REQUEST_SOURCE_ORDER_CANCELLATION},
                                          OUTPUT lcResult).
 
       IF liReq = 0
       THEN DO:
-         DYNAMIC-FUNCTION("fWriteMemo" IN ghFunc1,
-                           "Order",
+         Func.Common:mWriteMemo("Order",
                            STRING(Order.OrderId),
                            Order.Custnum,
                            "RENEWAL REVERTION FAILED",
