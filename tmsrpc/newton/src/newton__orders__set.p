@@ -168,7 +168,8 @@ IF NUM-ENTRIES(lcOrderFields) > 0 THEN DO:
       IF NOT AVAILABLE SIM THEN
          RETURN appl_err(SUBST("SIM with ICC &1 not found or not free", pcIcc)).
 
-      IF Order.CLIType BEGINS "CONTFH" THEN DO:
+      IF Order.CLIType BEGINS "CONTFH" AND 
+         Order.ICC EQ ""               THEN DO:
          
          IF CAN-FIND(FIRST bOrderFusion NO-LOCK WHERE
                            bOrderFusion.Brand        EQ Syst.Var:gcBrand AND
