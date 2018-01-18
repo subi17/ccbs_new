@@ -51,7 +51,7 @@ IF ilCheckLOStatus THEN DO:
    ldtLOTS = OrderDelivery.LOTimeStamp.
 
    FOR EACH OrderDelivery NO-LOCK WHERE
-            OrderDelivery.Brand   = gcBrand AND
+            OrderDelivery.Brand   = Syst.Var:gcBrand AND
             OrderDelivery.OrderId = Order.OrderId AND
             OrderDelivery.LOTimeStamp = ldtLOTS:
       IF LOOKUP(STRING(OrderDelivery.LOStatusId),{&DEXTRA_CANCELLED_STATUSES}) = 0
