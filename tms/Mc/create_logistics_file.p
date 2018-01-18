@@ -30,6 +30,7 @@ Syst.Var:gcBrand = "1".
 {Func/email.i}
 {Mc/orderfusion.i}
 {Func/financed_terminal.i}
+{Func/fixedlinefunc.i}
 
 DEFINE VARIABLE lcLogFile          AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcFileName         AS CHARACTER NO-UNDO.
@@ -63,6 +64,7 @@ DEFINE VARIABLE lcCustID           AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liMainlineOrderId  AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE llDespacharValue   AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE lcTerminalBillCode AS CHAR      NO-UNDO.  
+DEFINE VARIABLE lhOrder            AS HANDLE    NO-UNDO.
 
 DEFINE BUFFER AgreeCustomer   FOR OrderCustomer.
 DEFINE BUFFER ContactCustomer FOR OrderCustomer.
@@ -264,181 +266,6 @@ FUNCTION fTaxAmount RETURNS LOG
 
 END FUNCTION.
 
-FUNCTION fIsTerminalOrder RETURNS LOG 
-   (INPUT liOrderId       AS INT,
-    OUTPUT ocTerminalCode AS CHAR):
-
-   DEFINE BUFFER bTermOrder FOR Order.
-
-   FIND FIRST bTermOrder NO-LOCK WHERE 
-              bTermOrder.Brand   = Syst.Var:gcBrand AND 
-              bTermOrder.OrderId = liOrderId        NO-ERROR.
-
-   IF NOT AVAIL bTermOrder THEN RETURN FALSE.
-
-   /* Prepaid Order */
-   IF bTermOrder.PayType = TRUE THEN RETURN FALSE.
-
-   /* Terminal Financing in direct channel deployment on 09.07.2014 8:00 CET */
-   IF bTermOrder.CrStamp < 20140709.28800 THEN RETURN FALSE.
-
-   /* Check Terminal billcode */
-   FOR EACH OfferItem NO-LOCK WHERE
-            OfferItem.Brand       = Syst.Var:gcBrand   AND
-            OfferItem.Offer       = bTermOrder.Offer   AND
-            OfferItem.BeginStamp <= bTermOrder.CrStamp AND
-            OfferItem.EndStamp   >= bTermOrder.CrStamp AND
-            OfferItem.ItemType    = "BillItem",
-      FIRST BillItem NO-LOCK WHERE
-            BillItem.Brand    = Syst.Var:gcBrand AND
-            BillItem.BillCode = OfferItem.ItemKey,
-      FIRST BitemGroup NO-LOCK WHERE
-            BitemGroup.Brand   = Syst.Var:gcBrand AND
-            BitemGroup.BIGroup = BillItem.BIGroup AND
-            BItemGroup.BIGroup EQ "7":
-
-      /* Exclude discount billing item on terminal */
-      IF BillItem.BillCode BEGINS "CPDISC" THEN NEXT.
-
-      ocTerminalCode = BillItem.BillCode.
-      RETURN TRUE.
-   END.
-
-   RETURN FALSE.
-END FUNCTION.
-
-FUNCTION fChooseSIMForOrder RETURNS LOGICAL
-   (INPUT liOrderId AS INTEGER,
-    OUTPUT lcICC    AS CHAR):
-
-   DEFINE BUFFER bOrder         FOR Order.
-   DEFINE BUFFER bOrderCustomer FOR OrderCustomer.
-   DEFINE BUFFER bufSIM         FOR SIM.
-   DEFINE BUFFER bufOldOrder    FOR Order.
-
-   DEFINE VARIABLE lcStock AS CHARACTER NO-UNDO.
-
-   FIND FIRST bOrder EXCLUSIVE-LOCK WHERE
-              bOrder.Brand   = Syst.Var:gcBrand                 AND
-              bOrder.OrderId = liOrderId                        AND
-       LOOKUP(bOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 NO-ERROR.
-
-   FIND FIRST bOrderCustomer NO-LOCK WHERE
-              bOrderCustomer.Brand   = Syst.Var:gcBrand                   AND
-              bOrderCustomer.OrderId = bOrder.OrderId                     AND
-              bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
-
-   IF NOT AVAIL bOrder         OR
-      NOT AVAIL bOrderCustomer THEN
-      RETURN FALSE.
-
-   IF INDEX(Order.OrderChannel,"pos") > 0 THEN 
-      RETURN FALSE.
-
-   SEARCHSIM:
-   REPEAT:
-      IF bOrder.ICC > "" THEN DO:
-         FIND SIM EXCLUSIVE-LOCK WHERE
-              SIM.ICC = bOrder.ICC NO-ERROR NO-WAIT.
-      END.
-      ELSE DO:
-         /* determine correct ICC stock */
-         lcStock = (IF bOrder.MnpStatus > 0 THEN "MNP" ELSE "NEW").
-
-         lcStock = fSearchStock(lcStock,bOrderCustomer.ZipCode).
-
-         RELEASE SIM.
-
-         FOR EACH bufSIM NO-LOCK USE-INDEX simstat WHERE
-                  bufSIM.Brand   = Syst.Var:gcBrand AND
-                  bufSIM.Stock   = lcStock          AND
-                  bufSIM.simstat = 1                AND
-                  bufSIM.SimArt  = "universal":
-
-            /* one week ICC quarantine time check, YOT-924 */
-            IF bufSIM.MsSeq > 0 THEN DO:
-
-               FIND FIRST bufOldOrder NO-LOCK USE-INDEX MsSeq WHERE
-                          bufOldOrder.MsSeq     EQ bufSIM.MsSeq AND
-                          bufOldOrder.OrderType NE 2            NO-ERROR.
-
-               IF AVAIL bufOldOrder AND
-               Func.Common:mOffSet(bufOldOrder.CrStamp, 24 * 7) > Func.Common:mMakeTS() THEN
-                  NEXT.
-            END.
-
-            FIND SIM EXCLUSIVE-LOCK WHERE ROWID(SIM) = ROWID(bufSIM) NO-ERROR NO-WAIT.
-
-            LEAVE.
-
-         END.
-      END.
-
-      IF LOCKED(SIM) THEN DO:
-         PAUSE 5.
-         NEXT.
-      END.
-      ELSE IF NOT LOCKED(SIM) AND AVAIL SIM THEN
-         LEAVE SEARCHSIM.
-      ELSE IF NOT AVAILABLE SIM THEN
-         LEAVE SEARCHSIM.
-
-   END. /* REPEAT */
-
-   /* free sim was not available */
-   IF NOT AVAILABLE SIM THEN
-      RETURN FALSE.
-      
-   /*MM Migration: Subscription creation will be done after NC response. */
-   IF bOrder.Orderchannel BEGINS "migration" THEN
-      RETURN FALSE.
-
-   IF NOT CAN-FIND(LAST OrderTimeStamp NO-LOCK WHERE
-                        OrderTimeStamp.Brand   = Syst.Var:gcBrand           AND
-                        OrderTimeStamp.OrderID = bOrder.OrderID             AND
-                        OrderTimeStamp.RowType = {&ORDERTIMESTAMP_SIMONLY}) THEN DO:
-      IF (LOOKUP(bOrder.OrderChannel,
-                 "pos,cc,pre-act,vip,fusion_pos,fusion_cc,pos_pro,fusion_pos_pro") > 0 AND
-                 bOrder.ICC > "") OR
-         bOrder.OrderType = 3 THEN
-      SIM.SimStat = 4.
-      ELSE SIM.SimStat = 20.
-
-      /* Set additional OrderStamp to avoid infinitive loop */
-      fMarkOrderStamp(bOrder.OrderID,"SimOnly",Func.Common:mMakeTS()).
-   END.
-   
-   IF SIM.SimStat      EQ 20                     AND
-      bOrder.MNPStatus EQ 6                      AND
-      bOrder.SalesMan  EQ "order_correction_mnp" AND
-      LOOKUP(bOrder.OrderChannel,
-             "telesales,fusion_telesales,pos,fusion_pos,"  +
-             "telesales_pro,fusion_telesales_pro,pos_pro," +
-             "fusion_pos_pro") > 0 THEN
-      SIM.SimStat = 21.
-
-   IF bOrder.ICC = "" THEN
-      ASSIGN bOrder.ICC = SIM.ICC
-             lcICC      = SIM.ICC.
-
-   SIM.MsSeq = bOrder.MsSeq.
-
-   IF LOOKUP(bOrder.OrderChannel,"pos,cc,vip,fusion_pos,fusion_cc," +
-                                 "pos_pro,fusion_pos_pro") = 0 AND
-      bOrder.OrderType <> 3 THEN DO:
-
-      CREATE SimDeliveryhist.
-      ASSIGN
-         SimDeliveryHist.OrderID    = bOrder.OrderID
-         SimDeliveryHist.MSSeq      = bOrder.MSSeq
-         SimDeliveryHist.StatusCode = 2.
-         SimDeliveryHist.TimeStamp  = Func.Common:mMakeTS().
-   END.
-
-   RETURN TRUE.
-
-END FUNCTION.
-
 FUNCTION fIsInstallmentConsumerOrder RETURNS LOG:
 
    /* Prepaid Order */
@@ -518,13 +345,15 @@ FUNCTION fCreateOrderGroup RETURNS LOGICAL
                                  ELSE "02" + CHR(255) + lcFileName
           OrderGroup.CrStamp   = Func.Common:mMakeTS().
 
+   RETURN TRUE.
+
 END FUNCTION.
 
 FUNCTION fDelivSIM RETURNS LOG
-   (INPUT pcICC         AS CHAR,
-    INPUT llgSIMStatus  AS LOG,
-    INPUT lcMainOrderId AS CHAR,
-    INPUT lcDespachar   AS CHAR):
+   (INPUT liOrderId          AS INT,
+    INPUT llgDespacharStatus AS LOG,
+    INPUT lcMainOrderId      AS CHAR,
+    INPUT lcDespachar        AS CHAR):
    
    DEFINE VARIABLE lcVatInfo1      AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lcVatInfo2      AS CHARACTER NO-UNDO.
@@ -597,18 +426,17 @@ FUNCTION fDelivSIM RETURNS LOG
 
    RELEASE Invoice.
 
-   /* try to update SIM status first */
-   FIND FIRST bufSIM WHERE
-        RECID(bufSIM) = RECID(SIM)
-   EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+   FIND FIRST Order NO-LOCK WHERE 
+              Order.Brand   = Syst.Var:gcBrand AND 
+              Order.OrderId = liOrderId        NO-ERROR.
 
-   IF ERROR-STATUS:ERROR OR LOCKED(bufSIM) THEN RETURN FALSE.
+   IF NOT AVAIL Order THEN RETURN FALSE.            
 
    /* skip those in control or already closed */
    IF Order.StatusCode = "4" OR
       LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 THEN RETURN FALSE.
 
-   IF llgSIMStatus THEN 
+   IF llgDespacharStatus THEN 
       IF LOOKUP(STRING(Order.MNPStatus),"5,8") > 0 THEN RETURN FALSE.
 
    IF CAN-FIND(FIRST bOrderGroup NO-LOCK WHERE
@@ -710,7 +538,7 @@ FUNCTION fDelivSIM RETURNS LOG
 
       /* Send PDF contract to Dextra */
       IF llConsumerWithInstallment AND 
-         llgSIMStatus              THEN DO:
+         llgDespacharStatus        THEN DO:
 
          ASSIGN
             lcContractFileName = STRING(Order.OrderId) + ".pdf"
@@ -926,6 +754,13 @@ FUNCTION fDelivSIM RETURNS LOG
       LEAVE.
    END.
 
+   /* try to update SIM status, these are for the orders which are created 
+      before deployment is done - GAP phase 2*/
+   FIND FIRST SIM EXCLUSIVE-LOCK WHERE
+              SIM.Brand   EQ Syst.Var:gcBrand AND 
+              SIM.ICC     EQ Order.ICC        AND 
+              SIM.SimStat EQ {&SIM_SIMSTAT_CHOSEN_TO_ORDER} NO-ERROR NO-WAIT.
+
    CREATE ttOneDelivery.
    ASSIGN
       ttOneDelivery.RowNum        = liRowNum
@@ -934,7 +769,7 @@ FUNCTION fDelivSIM RETURNS LOG
       ttOneDelivery.RequestID     = IF Order.CrStamp > 20080910.21600
                                     THEN STRING(Order.OrderID)
                                     ELSE STRING(Order.MsSeq)
-      ttOneDelivery.ActionID      = STRING(SIM.DealerStat)
+      ttOneDelivery.ActionID      = "0" 
       ttOneDelivery.ProductID     = lcAccProd
       ttOneDelivery.ContractID    = STRING(Order.ContractID)
       ttOneDelivery.NIE           = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "NIE"
@@ -942,7 +777,7 @@ FUNCTION fDelivSIM RETURNS LOG
       ttOneDelivery.CIF           = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "CIF"
       ttOneDelivery.PassPort      = AgreeCustomer.CustId WHEN AgreeCustomer.CustIdType = "PassPort"
       ttOneDelivery.SubsType      = IF lcCLIType BEGINS "CONTFH" THEN SUBSTRING(lcClitype,5) ELSE lcCLIType
-      ttOneDelivery.ICCNum        = SUBSTR(SIM.ICC,7)
+      ttOneDelivery.ICCNum        = IF AVAIL SIM THEN SUBSTR(SIM.ICC,7) ELSE SUBSTR(Order.ICC,7)
       ttOneDelivery.MSISDN        = Order.CLI
       ttOneDelivery.TmpMSISDN     = fVoiceBundle(Order.OrderID) /*YPR-6059*/
       ttOneDelivery.MNPState      = STRING(Order.MNPStatus = 0,"0/1")
@@ -1002,7 +837,7 @@ FUNCTION fDelivSIM RETURNS LOG
          ttOneDelivery.FixConNum = ContactCustomer.Mobile.
 
       /* If ICC change not requested with Renewal Order */
-      IF SIM.ICC = MobSub.ICC THEN ttOneDelivery.ICCNum = "".
+      IF AVAIL SIM AND SIM.ICC = MobSub.ICC THEN ttOneDelivery.ICCNum = "".
 
       /* Channel information */
       IF LOOKUP(Order.OrderChannel,"renewal_telesales,retention,renewal_ctc") > 0 THEN
@@ -1481,7 +1316,7 @@ FUNCTION fDelivSIM RETURNS LOG
    ELSE IF Order.DeliveryType EQ 0 THEN liDelType = {&ORDER_DELTYPE_COURIER}.
    ELSE liDelType = Order.DeliveryType.
 
-   IF llgSIMStatus        AND
+   IF llgDespacharStatus  AND
       lcMainOrderId EQ "" AND 
       lcDespachar   EQ "" THEN DO:
 
@@ -1495,7 +1330,6 @@ FUNCTION fDelivSIM RETURNS LOG
                 lcDespachar   = "01".
 
    END.   
-
 
    /* Create Temp-table for DataService (OR extra fields in future) */
    CREATE ttExtra.
@@ -1514,8 +1348,10 @@ FUNCTION fDelivSIM RETURNS LOG
 
    /* update SimStat when all skipping are checked */
    IF NOT (Order.OrderType eq 2) AND 
-      llgSIMStatus               THEN DO:
-      bufSIM.SimStat = 21.
+      llgDespacharStatus         THEN DO:
+      
+      IF AVAIL SIM THEN 
+         SIM.SimStat = 21.
       
       /* Ordergroup record is used to trace the logistics 
          delivery status with despachar and file values */
@@ -1733,94 +1569,101 @@ FUNCTION fDelivDevice RETURNS LOG
 
 END FUNCTION.
 
-FUNCTION fAdditionalValue RETURNS LOGICAL
-   (INPUT liOrderId        AS INT,
-    INPUT liMLOrderId      AS INT,
-    INPUT llDespacharValue AS LOG):
+FUNCTION fUpdateOrderLogisticsValue RETURNS LOGICAL
+   (INPUT liOrderId AS INT):
 
-   DEFINE BUFFER bufOrder FOR Order.
+   DEFINE BUFFER bufOrder FOR Order. 
 
-   IF NOT fChooseSIMForOrder(liOrderId,
-                             OUTPUT lcICC) THEN
+   FIND FIRST bufOrder EXCLUSIVE-LOCK WHERE
+              bufOrder.Brand   EQ Syst.Var:gcBrand AND 
+              bufOrder.OrderId EQ liOrderId        NO-ERROR NO-WAIT.
+
+   IF ERROR-STATUS:ERROR OR LOCKED(bufOrder) THEN
       RETURN FALSE.
 
-   FIND SIM NO-LOCK WHERE
-        SIM.Brand = Syst.Var:gcBrand AND
-        SIM.ICC   = lcICC            NO-ERROR.
+   bufOrder.Logistics = lcFileName.
+   fMarkOrderStamp(bufOrder.OrderID,"SendToLogistics",0.0). /* Timestamp for Logistics Operator Change Dextra->Netkia */
+   RELEASE bufOrder.
 
-   FIND FIRST Order NO-LOCK WHERE
-              Order.Brand   = Syst.Var:gcBrand AND
-              Order.OrderId = liOrderId        AND   
-              Order.MsSeq   = SIM.MsSeq        NO-ERROR.
+   RETURN TRUE.
 
-   IF NOT AVAIL SIM   OR 
-      NOT AVAIL Order THEN
-      RETURN FALSE.
-
-   IF fDelivSIM(SIM.ICC,
-                llDespacharValue,
-                STRING(liMLOrderID),
-                IF llDespacharValue THEN "01"
-                ELSE "02") THEN DO:
-     
-      IF llDespacharValue THEN DO: 
-         FIND bufOrder EXCLUSIVE-LOCK WHERE
-              ROWID(bufOrder) = ROWID(Order) NO-ERROR NO-WAIT.
-
-         IF ERROR-STATUS:ERROR OR LOCKED(bufOrder) THEN
-            RETURN FALSE.
-
-         bufOrder.Logistics = lcFileName.
-         fMarkOrderStamp(bufOrder.OrderID,"SendToLogistics",0.0). /* Timestamp for Logistics Operator Change Dextra->Netkia */
-         RELEASE bufOrder.
-      END.
- 
-      RETURN TRUE.
-
-   END.   
-   ELSE RETURN FALSE.
-
-END FUNCTION.
-
+END FUNCTION. 
 
 fBatchLog("START",lcSpoolDir + lcFileName).
 
 OUTPUT STREAM sICC TO VALUE(lcSpoolDir + lcFileName).
 
 DEFINE BUFFER xOrder FOR Order.
+
 /* ordinary dextra */
-FOR EACH Stock NO-LOCK,
-   EACH SIM NO-LOCK WHERE
-         SIM.Brand   = Syst.Var:gcBrand AND
-         SIM.Stock   = Stock.Stock AND
-         SIM.SimStat = 20,
-      FIRST Order NO-LOCK WHERE
-            Order.MsSeq = SIM.MsSeq:
+FOR EACH Order NO-LOCK WHERE 
+         Order.Brand      EQ Syst.Var:gcBrand          AND 
+         Order.StatusCode EQ {&ORDER_STATUS_SENDING_TO_LO}:
 
    /* handle only NEW or MNP orders */
-   IF Order.Ordertype NE 0 AND
-      Order.Ordertype NE 1 THEN NEXT.
+   IF Order.OrderType NE 0 AND
+      Order.OrderType NE 1 THEN NEXT.
    
    /* Do not create LO file in migration */
    IF Order.Orderchannel BEGINS "migration" THEN NEXT.
 
    /* YOT-867 */
-   IF Order.MNPStatus = 0 AND liNewDelay NE ? AND
+   IF Order.MNPStatus EQ 0 AND 
+      liNewDelay      NE ? AND
       Func.Common:mOffSet(Order.CrStamp, 24 * liNewDelay) > Func.Common:mMakeTS() THEN NEXT.
 
-   IF fDelivSIM(SIM.ICC, 
+   IF fDelivSIM(Order.OrderId,
                 TRUE,
                 "",
-                "") THEN DO:
+                "") THEN DO: 
+      fUpdateOrderLogisticsValue(Order.OrderId).
+
+      IF llDoEvent THEN DO:
+         lhOrder = BUFFER Order:HANDLE.
+         RUN StarEventInitialize(lhOrder).
+         RUN StarEventSetOldBuffer(lhOrder).
+      END.
+
+      fSetOrderStatus(Order.OrderId,"16").
+      
+      IF llDoEvent THEN DO:
+         RUN StarEventMakeModifyEvent(lhOrder).
+         fCleanEventObjects().
+      END.
    
-      FIND xOrder EXCLUSIVE-LOCK WHERE
-           ROWID(xOrder) = ROWID(Order) NO-ERROR NO-WAIT.
-      IF ERROR-STATUS:ERROR OR LOCKED(xOrder) THEN NEXT.
-      xOrder.Logistics = lcFileName.
-      fMarkOrderStamp(xOrder.OrderID,"SendToLogistics",0.0). /* Timestamp for Logistics Operator Change Dextra->Netkia */
-      RELEASE xOrder.
    END.
+
 END.
+
+DEFINE BUFFER bufOrderGroup FOR OrderGroup.
+
+/* Order has to be second time when order was already sent with
+   despachar value "02" - Previously order was sent twice when 
+   sim status is "20" */ 
+FOR EACH OrderGroup NO-LOCK WHERE 
+         OrderGroup.GroupType      EQ {&OG_LOFILE}         AND
+ ENTRY(1,OrderGroup.Info,CHR(255)) EQ {&DESPACHAR_FALSE_VALUE}:
+
+   IF CAN-FIND(FIRST bufOrderGroup NO-LOCK WHERE
+                     bufOrderGroup.OrderId   EQ OrderGroup.OrderId  AND
+                     bufOrderGroup.GroupId   EQ OrderGroup.GroupId  AND
+                     bufOrderGroup.GroupType EQ {&OG_LOFILE}        AND
+             ENTRY(1,bufOrderGroup.Info,CHR(255)) EQ {&DESPACHAR_TRUE_VALUE}) THEN NEXT. 
+
+   FIND FIRST Order NO-LOCK WHERE 
+              Order.Brand     EQ Syst.Var:gcBrand   AND 
+              Order.OrderId   EQ OrderGroup.OrderId AND 
+              Order.Logistics EQ ""                 NO-ERROR.
+
+   IF AVAIL Order THEN DO: 
+      IF fDelivSIM(Order.OrderId,
+                   TRUE,
+                   "",
+                   "") THEN 
+         fUpdateOrderLogisticsValue(Order.OrderId).
+   END.    
+
+END.  
 
 /* Renewal dextra */
 RENEWAL_LOOP:
@@ -1828,7 +1671,7 @@ FOR EACH Order NO-LOCK WHERE
          Order.Brand = Syst.Var:gcBrand AND
          Order.StatusCode = "78" AND 
          Order.OrderType = 2:
-         
+
    IF Order.OrderChannel BEGINS "renewal_pos" THEN NEXT RENEWAL_LOOP. 
     
    ocResult = "".
@@ -1850,7 +1693,8 @@ FOR EACH Order NO-LOCK WHERE
            SIM.Brand = Syst.Var:gcBrand AND 
            SIM.ICC = lcICC NO-LOCK NO-ERROR.
       IF AVAILABLE SIM THEN DO:
-         IF fDelivSIM(SIM.ICC,
+         
+         IF fDelivSIM(xOrder.OrderId,
                       TRUE,
                       "",
                       "") THEN DO:
@@ -2005,11 +1849,16 @@ FOR EACH ttOneDelivery NO-LOCK WHERE
    /* Mainline Convergent order is with OrderStatus 77, 
       include mobile part of mainline in logistics file */
    IF bMLOrder.OrderType NE {&ORDER_TYPE_STC} THEN DO: 
-   
-      IF NOT fAdditionalValue(ttOneDelivery.Orderid,
-                              liMLOrderId,
-                              llDespacharValue) THEN 
-         UNDO ADDITIONAL, NEXT.   
+  
+      IF NOT fDelivSIM(ttOneDelivery.OrderId,
+                       llDespacharValue,
+                       STRING(liMLOrderID),
+                       IF llDespacharValue THEN "01"
+                       ELSE "02") THEN 
+         UNDO ADDITIONAL, NEXT. 
+
+      IF llDespacharValue THEN 
+         fUpdateOrderLogisticsValue(liMLOrderId).
    END.
 
    FIND FIRST bMLttExtra EXCLUSIVE-LOCK WHERE
@@ -2055,12 +1904,17 @@ FOR EACH ttOneDelivery NO-LOCK WHERE
          (bALOrder.DeliverySecure > 0)               THEN 
          llDespacharValue = FALSE.
       ELSE llDespacharValue = TRUE.
-      
-      IF NOT fAdditionalValue(bALOrder.OrderId,
-                              liMLOrderId,
-                              llDespacharValue) THEN
-         UNDO ADDITIONAL, NEXT.
+     
+      IF NOT fDelivSIM(bALOrder.OrderId,
+                       llDespacharValue,
+                       STRING(liMLOrderID),
+                       IF llDespacharValue THEN "01"
+                       ELSE "02") THEN 
+         UNDO ADDITIONAL, NEXT.    
 
+      IF llDespacharValue THEN
+         fUpdateOrderLogisticsValue(bALOrder.OrderId).
+      
       IF NOT CAN-FIND(FIRST OrderGroup NO-LOCK WHERE
                             OrderGroup.OrderId        EQ bALOrder.OrderId         AND
                             OrderGroup.GroupType      EQ {&OG_LOFILE}             AND

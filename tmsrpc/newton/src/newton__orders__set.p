@@ -39,7 +39,13 @@ DEF VAR pcTitle AS CHARACTER NO-UNDO.
 DEF VAR pcReason AS CHARACTER NO-UNDO.
 DEF VAR pcContent AS CHARACTER NO-UNDO. 
 
+DEF VAR ldeCurrentTS AS DEC      NO-UNDO.
+DEF VAR ldtCerradaDT AS DATETIME NO-UNDO.
+DEF VAR ldtCurrentDT AS DATETIME NO-UNDO.
+
 DEF VAR piAdditionalDoc AS INT NO-UNDO INIT ?. 
+
+DEFINE BUFFER bOrderFusion FOR OrderFusion.
 
 IF validate_request(param_toplevel_id, "int,string,struct,struct,struct") EQ ? THEN RETURN.
 ASSIGN
@@ -56,6 +62,32 @@ Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
 {Func/lib/eventlog.i}
+
+FUNCTION mTS2DateTime RETURNS DATETIME
+   (ideTS AS DECIMAL):
+
+   DEFINE VARIABLE liYY    AS INTEGER  NO-UNDO.
+   DEFINE VARIABLE liMM    AS INTEGER  NO-UNDO.
+   DEFINE VARIABLE liDD    AS INTEGER  NO-UNDO.
+   DEFINE VARIABLE ldaDate AS DATE     NO-UNDO.
+   DEFINE VARIABLE liTime  AS INTEGER  NO-UNDO.
+
+   ASSIGN
+      liYY    = TRUNCATE(ideTS,0)
+      liTime  = (ideTS - liYY) * 100000000
+      liMM    = liYY MOD 10000
+      liDD    = liMM MOD 100
+      liYY    = (liYY - liMM) / 10000
+      liMM    = (liMM - liDD) / 100
+      ldaDate = DATE(liMM,liDD,liYY)
+   NO-ERROR.
+
+   IF ERROR-STATUS:ERROR
+   THEN RETURN ?.
+
+   RETURN DATETIME(ldaDate, liTime).
+
+END FUNCTION.
 
 /* validate order struct */
 lcOrderFields = validate_request(pcOrderStruct,"risk_code,imei,icc").
@@ -135,6 +167,29 @@ IF NUM-ENTRIES(lcOrderFields) > 0 THEN DO:
                  SIM.simstat EQ 1 NO-ERROR.
       IF NOT AVAILABLE SIM THEN
          RETURN appl_err(SUBST("SIM with ICC &1 not found or not free", pcIcc)).
+
+      IF Order.CLIType BEGINS "CONTFH" THEN DO:
+         
+         IF CAN-FIND(FIRST bOrderFusion NO-LOCK WHERE
+                           bOrderFusion.Brand        EQ Syst.Var:gcBrand AND
+                           bOrderFusion.OrderID      EQ Order.OrderID    AND
+                           bOrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED}) THEN DO:
+         
+            FIND FIRST FusionMessage NO-LOCK WHERE
+                       FusionMessage.OrderId     EQ Order.OrderId AND
+                       FusionMessage.FixedStatus EQ "CERRADA"     NO-ERROR.         
+
+            IF AVAIL FusionMessage THEN DO:
+               ASSIGN ldtCerradaDT = ADD-INTERVAL(mTS2DateTime(FusionMessage.FixedStatusTS),12,"hours")
+                      ldtCurrentDT = mTS2DateTime(ldeCurrentTS).
+
+               IF ldtCerradaDT < ldtCurrentDT THEN 
+                  RETURN appl_err(SUBST("SIM can't be registered with ICC &1 after 12 hours of fixedline installation", pcIcc)).
+            END.
+
+         END.
+
+      END.      
 
       FIND orderaction NO-LOCK where
            orderaction.brand = order.brand and

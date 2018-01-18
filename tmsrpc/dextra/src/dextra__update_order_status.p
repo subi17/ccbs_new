@@ -12,7 +12,7 @@
    Courier_ID;integer;mandatory;
    Courier_Description;string;optional;
    Courier_Shipping_ID;string;optional;
-   IMEI_COL;array;optional;Array of structs (includes IMEI and MSDN fields)
+   IMEI_COL;array;optional;Array of structs (includes IMEI, MSDN & ICC fields)
  
  * @output returncode;integer
  
@@ -28,32 +28,36 @@
    9;Integrity Integrity errors on courier shipping ID
    10;Integrity errors on IMEI information
    11;Integrity errors on delivery_address information
- 
+   12;Integrity errors on ICC information 
 */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
-DEF VAR top_struct AS CHAR NO-UNDO.
-DEF VAR lcTopStruct AS CHAR NO-UNDO.
-DEF VAR liResult AS INT INITIAL 0 NO-UNDO.
+DEF VAR top_struct  AS CHAR          NO-UNDO.
+DEF VAR lcTopStruct AS CHAR          NO-UNDO.
+DEF VAR liResult    AS INT INITIAL 0 NO-UNDO.
 
-DEFINE VARIABLE liCourierId AS INTEGER NO-UNDO.         
+DEFINE VARIABLE liCourierId         AS INTEGER   NO-UNDO.         
 DEFINE VARIABLE lcCourierShippingId AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE liLOId AS INTEGER NO-UNDO.             
-DEFINE VARIABLE liLOStatusId AS INTEGER NO-UNDO.        
-DEFINE VARIABLE ldeLOTimeStamp AS DATETIME NO-UNDO.      
-DEFINE VARIABLE liOrderId AS INTEGER NO-UNDO.         
-DEFINE VARIABLE lcOrderId AS CHAR NO-UNDO.         
-DEFINE VARIABLE lcLOStatusName AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE lcLOName AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE lcCourierName AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE liLOId              AS INTEGER   NO-UNDO.             
+DEFINE VARIABLE liLOStatusId        AS INTEGER   NO-UNDO.        
+DEFINE VARIABLE ldeLOTimeStamp      AS DATETIME  NO-UNDO.      
+DEFINE VARIABLE liOrderId           AS INTEGER   NO-UNDO.         
+DEFINE VARIABLE lcOrderId           AS CHARACTER NO-UNDO.         
+DEFINE VARIABLE lcLOStatusName      AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcLOName            AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcCourierName       AS CHARACTER NO-UNDO. 
 
-DEFINE VARIABLE lcIMEIArray AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcIMEIStruct AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcIMEI AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcIMEIFields AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE liImeis AS INTEGER NO-UNDO. 
-DEFINE VARIABLE i AS INTEGER NO-UNDO. 
-DEFINE VARIABLE delivery_address AS CHAR NO-UNDO. 
+DEFINE VARIABLE lcIMEIArray      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcIMEIStruct     AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcIMEI           AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcICC            AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcIMEIFields     AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE liImeis          AS INTEGER   NO-UNDO. 
+DEFINE VARIABLE i                AS INTEGER   NO-UNDO. 
+DEFINE VARIABLE delivery_address AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lhOrder          AS HANDLE    NO-UNDO.
+DEFINE VARIABLE liRequest        AS INTEGER   NO-UNDO.
+DEFINE VARIABLE lcError          AS CHARACTER NO-UNDO.
 
 DEF VAR lcDeliveryAddress AS CHAR NO-UNDO. 
 DEF VAR lcRegion          AS CHAR NO-UNDO. 
@@ -65,6 +69,8 @@ DEF VAR lcStreetCode      AS CHAR NO-UNDO.
 DEF VAR lcCityCode        AS CHAR NO-UNDO. 
 DEF VAR liDBCount         AS INT  NO-UNDO.
 DEF VAR lcTenant          AS CHAR NO-UNDO.
+
+DEFINE BUFFER bOrder FOR Order.
 
 FUNCTION fCheckIntegrity RETURNS LOGICAL 
    (iiErrCode AS INTEGER):
@@ -136,14 +142,20 @@ IF LOOKUP("IMEI_COL", lcTopStruct) GT 0 THEN DO:
       lcIMEIStruct = get_struct(lcIMEIArray,string(i - 1)).
       IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-      lcIMEIFields = validate_struct(lcIMEIStruct, "MSDN,IMEI").
+      lcIMEIFields = validate_struct(lcIMEIStruct, "MSDN,IMEI,ICC").
+      
       IF gi_xmlrpc_error NE 0 THEN RETURN.
       
       IF LOOKUP("IMEI",lcIMEIFields) > 0 THEN DO:
          lcIMEI = get_string(lcIMEIStruct,"IMEI").
          IF NOT fCheckIntegrity(10) THEN RETURN.
-         IF lcIMEI NE "" AND lcIMEI NE ? THEN LEAVE IMEI_LOOP.
       END.
+      
+      IF LOOKUP("ICC",lcIMEIFields) > 0 THEN DO:
+         lcICC = get_string(lcIMEIStruct,"ICC").
+         IF NOT fCheckIntegrity(12) THEN RETURN.
+      END.
+
    END.
 END.
 
@@ -202,7 +214,7 @@ IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
    {Func/lib/eventlog.i}
 END.
-   
+
 IF lcIMEI NE "" AND lcIMEI NE ? THEN DO:
    /* YPR-4984, Router delivered to customer */
    IF liLOStatusId EQ 99998 THEN DO:
@@ -284,6 +296,107 @@ IF lcIMEI NE "" AND lcIMEI NE ? THEN DO:
       
       END.
    END.
+END.
+
+
+IF lcICC NE "" AND lcICC NE ? THEN DO:
+
+   FIND FIRST SIM EXCLUSIVE-LOCK WHERE 
+              SIM.Brand  EQ Syst.Var:gcBrand AND
+              SIM.Stock  EQ {&ICC_STOCK_LO}  AND  
+              SIM.ICC    EQ lcICC            AND 
+              SIM.SimArt EQ "universal"      NO-ERROR.
+
+   IF NOT AVAIL SIM THEN DO:
+      add_int(response_toplevel_id, "", 41).
+      RETURN.
+   END.
+   ELSE IF (SIM.MsSeq   NE 0  OR 
+            SIM.SimStat NE 1) THEN DO:
+      add_int(response_toplevel_id, "", 42).
+      RETURN.
+   END.   
+
+   /* If already subscription is available then create 
+      ICC change request */
+   FIND FIRST MobSub NO-LOCK WHERE 
+              MobSub.MsSeq = Order.MsSeq NO-ERROR.
+
+   IF AVAIL MobSub THEN DO:
+      liRequest = fSubscriptionRequest(Mobsub.MsSeq,
+                                       Mobsub.Cli,
+                                       Mobsub.CustNum,
+                                       1,                        /*tarifftype*/
+                                       "",                       /*creator*/
+                                       Func.Common:mMakeTS(),    /*ActStamp*/
+                                       "CHANGEICC",              /*ReqParam*/
+                                       lcICC,                    /*ReqParam2*/
+                                       "",                       /*old SIM*/
+                                       "",                       /*Reason*/
+                                       "",                       /*ContractID*/
+                                       FALSE,                    /*CreateFees*/
+                                       0,                        /*Charge*/
+                                       {&SOURCE_LOGISTICS},      /*Request source*/
+                                       OUTPUT lcError).          /*result*/
+      IF liRequest EQ 0 THEN DO:
+         add_int(response_toplevel_id, "", 43).
+         RETURN.
+      END.
+   END.
+   ELSE DO:
+      
+      IF Order.ICC        EQ ""                                    AND
+         Order.OrderType  NE {&ORDER_TYPE_STC}                     AND
+        (Order.StatusCode EQ {&ORDER_STATUS_PENDING_ICC_FROM_LO} OR
+         Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE}  OR
+         Order.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE})    AND 
+         LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) EQ 0 THEN DO: 
+
+         FIND bOrder EXCLUSIVE-LOCK WHERE 
+              ROWID(bOrder) = ROWID(Order) NO-ERROR NO-WAIT.
+
+         IF ERROR-STATUS:ERROR OR LOCKED(bOrder) THEN RETURN.
+
+         ASSIGN bOrder.ICC  = lcICC
+                SIM.SimStat = 4
+                SIM.MsSeq   = bOrder.MsSeq. 
+      
+         CREATE SimDeliveryhist.
+         ASSIGN SimDeliveryHist.OrderID    = bOrder.OrderID
+                SimDeliveryHist.MSSeq      = bOrder.MSSeq 
+                SimDeliveryHist.StatusCode = 2.
+                SimDeliveryHist.TimeStamp  = Func.Common:mMakeTS().
+   
+         Func.Common:mWriteMemo("Order",
+                                STRING(bOrder.OrderID),
+                                bOrder.CustNum,
+                                "ICC value updated by LO",
+                                "").
+         
+         IF llDoEvent THEN DO:
+            lhOrder = BUFFER bOrder:HANDLE.
+            RUN StarEventInitialize(lhOrder).
+            RUN StarEventSetOldBuffer(lhOrder).
+         END.
+
+         /* order status with 76 is not needed to be released, at it will 
+            be released when associated main line fixed line is installed */
+         IF bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_ICC_FROM_LO} THEN DO:
+            CASE bOrder.OrderType:
+               WHEN {&ORDER_TYPE_NEW} THEN fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_NEW}).
+               WHEN {&ORDER_TYPE_MNP} THEN fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_MNP}).
+            END CASE.
+         END.
+
+         IF llDoEvent THEN DO:
+            RUN StarEventMakeModifyEvent(lhOrder).
+            fCleanEventObjects().
+         END.
+
+      END.
+
+   END.
+
 END.
 
 IF llDoEvent THEN DO:

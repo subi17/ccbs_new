@@ -429,6 +429,7 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
    DEF VAR liMOOrderId      AS INT  NO-UNDO INITIAL 0.
    DEF VAR llgMainLineAvail AS LOG  NO-UNDO INITIAL FALSE.   
    DEF VAR illgConvOrder    AS LOG  NO-UNDO INITIAL FALSE. 
+   DEF VAR lcConvOrders     AS CHAR NO-UNDO.
 
    IF fIsConvergenceTariff(icCLIType) THEN 
       ASSIGN lcDiscList       = {&ADDLINE_DISCOUNTS_20} + "," + {&ADDLINE_DISCOUNTS}
@@ -476,7 +477,9 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
                IF illgConvOrder                                                         AND
                   (NOT fCheckOngoingConvergentOrder(labOrderCustomer.CustIdType,
                                                     labOrderCustomer.CustID,
-                                                    labOrder.CliType)
+                                                    labOrder.CliType,
+                                                    {&ONGOING_ORDER_AVAIL},
+                                                    OUTPUT lcConvOrders)
                    AND
                    NOT fCheckFixedLineStatusForMainLine(labOrderCustomer.CustIdType,
                                                         labOrderCustomer.CustId,
@@ -493,7 +496,9 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
                             LOOKUP(labOrderAction.ItemKey, {&ADDLINE_DISCOUNTS}) > 0)))  OR 
                   (NOT fCheckOngoing2PConvergentOrder(labOrderCustomer.CustIdType,
                                                       labOrderCustomer.CustID,
-                                                      labOrder.CliType)
+                                                      labOrder.CliType,
+                                                      {&ONGOING_ORDER_AVAIL},
+                                                      OUTPUT lcConvOrders)
                    AND                               
                    NOT fCheckFixedLineStatusForMainLine(labOrderCustomer.CustIdType,
                                                         labOrderCustomer.CustId,
@@ -519,7 +524,9 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
                        AND
                        NOT fCheckOngoingMobileOnly(labOrderCustomer.CustIdType,
                                                    labOrderCustomer.CustID,
-                                                   labOrder.CliType)             
+                                                   labOrder.CliType,
+                                                   {&ONGOING_ORDER_AVAIL},
+                                                   OUTPUT lcConvOrders)             
                        AND
                        NOT fCheckExistingMobileOnly(labOrderCustomer.CustIdType,
                                                     labOrderCustomer.CustID,
@@ -807,6 +814,50 @@ FUNCTION fDeactivateTVService RETURNS LOGICAL
   RETURN TRUE.
 
 END FUNCTION.  
+
+FUNCTION fIsTerminalOrder RETURNS LOG
+   (INPUT liOrderId       AS INT,
+    OUTPUT ocTerminalCode AS CHAR):
+
+   DEFINE BUFFER bTermOrder FOR Order.
+
+   FIND FIRST bTermOrder NO-LOCK WHERE
+              bTermOrder.Brand   = Syst.Var:gcBrand AND
+              bTermOrder.OrderId = liOrderId        NO-ERROR.
+
+   IF NOT AVAIL bTermOrder THEN RETURN FALSE.
+
+   /* Prepaid Order */
+   IF bTermOrder.PayType = TRUE THEN RETURN FALSE.
+
+   /* Terminal Financing in direct channel deployment on 09.07.2014 8:00 CET */
+   IF bTermOrder.CrStamp < 20140709.28800 THEN RETURN FALSE.
+
+   /* Check Terminal billcode */
+   FOR EACH OfferItem NO-LOCK WHERE
+            OfferItem.Brand       = Syst.Var:gcBrand   AND
+            OfferItem.Offer       = bTermOrder.Offer   AND
+            OfferItem.BeginStamp <= bTermOrder.CrStamp AND
+            OfferItem.EndStamp   >= bTermOrder.CrStamp AND
+            OfferItem.ItemType    = "BillItem",
+      FIRST BillItem NO-LOCK WHERE
+            BillItem.Brand    = Syst.Var:gcBrand AND
+            BillItem.BillCode = OfferItem.ItemKey,
+      FIRST BitemGroup NO-LOCK WHERE
+            BitemGroup.Brand   = Syst.Var:gcBrand AND
+            BitemGroup.BIGroup = BillItem.BIGroup AND
+            BItemGroup.BIGroup EQ "7":
+
+      /* Exclude discount billing item on terminal */
+      IF BillItem.BillCode BEGINS "CPDISC" THEN NEXT.
+
+      ocTerminalCode = BillItem.BillCode.
+      RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+END FUNCTION.
+
 &ENDIF.
 
 
