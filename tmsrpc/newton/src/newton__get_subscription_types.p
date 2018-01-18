@@ -42,11 +42,14 @@ lcInputFields = validate_request(pcInputStruct,"cli_type,bundle_id").
 
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
+/* USHA: Expect MsSeq also in input struct */
 ASSIGN
    pcCliType  = get_string(pcInputStruct, "cli_type")  WHEN LOOKUP("cli_type",lcInputFields) > 0
    pcBundleId = get_string(pcInputStruct, "bundle_id") WHEN LOOKUP("bundle_id",lcInputFields) > 0.
 
 {newton/src/settenant.i pcTenant}
+
+/* USHA: Find MobSub, check teritoryowner validation, fixedlinetype validation i..e, FTTH and Call Gescon API for this subscription and retrive speedprofile list */
 
 top_struct = add_struct(response_toplevel_id, "").
 
@@ -91,12 +94,19 @@ FOR EACH CLIType NO-LOCK WHERE
       END. /* FOR EACH bCLIType WHERE */
    ELSE DO:
       lcStatusCode = CLIType.StatusCode.
-      /* Mobile subscrition should be allowed to do STC in convergent
-         tariffs, but fixed part should remain same */
-      IF fIsConvergenceTariff(CliType.Clitype) AND
-         (fIsConvergenceTariff(pcClitype) EQ FALSE OR
-          NOT fCheckConvergentSTCCompability(pcClitype,Clitype.clitype)) THEN
+      /* Mobile subscrition should be allowed to do STC in convergent tariffs, but fixed part should remain same */
+      /* USHA: Remove OR condition here, as we are supporting different speeds now */
+      IF fIsConvergenceTariff(CliType.Clitype) AND (fIsConvergenceTariff(pcClitype) EQ FALSE OR NOT fCheckConvergentSTCCompability(pcClitype,Clitype.clitype)) THEN 
             lcStatusCode = 0.
+      /* USHA: 1. Mark StatusCode to 0 if fixedlinetype is different between tariffs.
+               2. For Fiber convergent tariffs, compare allowed speed profiles returned by gescon api with new clitype profile and 
+                  mark StatusCode to 0 for all new clitypes with speed profile missing missing in gescon speed profile list. */      
+      ELSE fIsConvergenceTariff(pcClitype) AND fIsConvergenceTariff(CliType.Clitype) THEN 
+      DO:
+          
+
+      END.
+            
       fAddCLITypeStruct(CLIType.CLIType,"",lcStatusCode).
    END.
 END. /* FOR EACH CLIType WHERE */
