@@ -6,7 +6,7 @@ Syst.TMSRelation:mAddRelation("CLIType",
                               "CONT28",
                               "CONT29",
                               "CONT28_TO_CONT29",
-                              NO).
+                              YES).
 
 /* CASE 2 */
 Syst.TMSRelation:mAddRelation("CLIType",
@@ -14,7 +14,7 @@ Syst.TMSRelation:mAddRelation("CLIType",
                               "CONT29",
                               "CONT28",
                               "CONT29_TO_CONT28",
-                              NO).
+                              YES).
 
 /* CASE 3 */
 Syst.TMSRelation:mAddRelation("CLIType",
