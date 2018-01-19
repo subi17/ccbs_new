@@ -286,7 +286,6 @@ FUNCTION fTaxCode RETURNS CHAR
    WHEN "4" THEN DO:
       CASE idPercent:
       WHEN 0.0 THEN RETURN "MC".
-      WHEN 3.0 THEN RETURN "RA".
       WHEN 4.0 THEN RETURN "MR".
       WHEN 8.0 THEN RETURN "MU".
       END CASE.
