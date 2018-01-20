@@ -39,9 +39,9 @@ DEF VAR pcTitle AS CHARACTER NO-UNDO.
 DEF VAR pcReason AS CHARACTER NO-UNDO.
 DEF VAR pcContent AS CHARACTER NO-UNDO. 
 
-DEF VAR ldeCurrentTS AS DEC      NO-UNDO.
-DEF VAR ldtCerradaDT AS DATETIME NO-UNDO.
-DEF VAR ldtCurrentDT AS DATETIME NO-UNDO.
+DEF VAR ldeCurrentTS AS DEC NO-UNDO.
+DEF VAR ldeCerrada   AS DEC NO-UNDO.
+DEF VAR ldeCurrent   AS DEC NO-UNDO.
 
 DEF VAR piAdditionalDoc AS INT NO-UNDO INIT ?. 
 
@@ -155,7 +155,8 @@ IF NUM-ENTRIES(lcOrderFields) > 0 THEN DO:
       IF NOT AVAIL OrderFusion THEN
          RETURN appl_err("ICC set is only allowed for fusion orders").
       
-      IF Order.StatusCode NE {&ORDER_STATUS_PENDING_MOBILE_LINE} THEN RETURN
+      IF Order.StatusCode NE {&ORDER_STATUS_PENDING_MOBILE_LINE} AND 
+         LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) EQ 0 THEN RETURN
          appl_err("Order is in wrong status, cannot update ICC").
 
       IF OrderFusion.FusionStatus NE {&FUSION_ORDER_STATUS_FINALIZED} THEN
@@ -168,8 +169,9 @@ IF NUM-ENTRIES(lcOrderFields) > 0 THEN DO:
       IF NOT AVAILABLE SIM THEN
          RETURN appl_err(SUBST("SIM with ICC &1 not found or not free", pcIcc)).
 
-      IF Order.CLIType BEGINS "CONTFH" AND 
-         Order.ICC EQ ""               THEN DO:
+      IF Order.CLIType BEGINS "CONTFH"                           AND 
+         Order.ICC EQ ""                                         AND 
+         LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) GT 0 THEN DO:
          
          IF CAN-FIND(FIRST bOrderFusion NO-LOCK WHERE
                            bOrderFusion.Brand        EQ Syst.Var:gcBrand AND
@@ -181,10 +183,10 @@ IF NUM-ENTRIES(lcOrderFields) > 0 THEN DO:
                        FusionMessage.FixedStatus EQ "CERRADA"     NO-ERROR.         
 
             IF AVAIL FusionMessage THEN DO:
-               ASSIGN ldtCerradaDT = ADD-INTERVAL(mTS2DateTime(FusionMessage.FixedStatusTS),12,"hours")
-                      ldtCurrentDT = mTS2DateTime(ldeCurrentTS).
+               ASSIGN ldeCerrada = Func.Common:mOffSet(FusionMessage.FixedStatusTS,12)
+                      ldeCurrent = Func.Common:mOffSet(ldeCurrentTS,0).
 
-               IF ldtCerradaDT < ldtCurrentDT THEN 
+               IF ldeCerrada < ldeCurrent THEN 
                   RETURN appl_err(SUBST("SIM can't be registered with ICC &1 after 12 hours of fixedline installation", pcIcc)).
             END.
 
