@@ -448,6 +448,18 @@ IF lcNewStatus = {&ORDER_STATUS_NEW}                 OR
                                "RELEASE").       /* Action              */
    -----------------------------------------------------------*/    
 
+   IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) GT 0 AND
+      Order.CLIType BEGINS "CONTFH"                           AND 
+      Order.ICC     EQ     ""                                 THEN DO:
+
+      fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_ICC_FROM_INSTALLER}).
+
+      IF llDoEvent THEN DO:
+         RUN StarEventMakeModifyEvent(lhOrder).
+         fCleanEventObjects().
+      END.
+   END.   
+
    fActionOnAdditionalLines (OrderCustomer.CustIdType,
                              OrderCustomer.CustID,
                              Order.CLIType,      

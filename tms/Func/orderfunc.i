@@ -552,6 +552,12 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
             OTHERWISE.
          END CASE.
 
+         IF icAction     EQ     "RELEASE"                              AND 
+            labOrder.ICC EQ     ""                                     AND  
+            icCLIType    BEGINS "CONTFH"                               AND
+            LOOKUP(labOrder.OrderChannel,{&ORDER_CHANNEL_DIRECT}) GT 0 THEN 
+         lcNewOrderStatus = {&ORDER_STATUS_PENDING_ICC_FROM_INSTALLER}. 
+
       END.
 
       IF lcNewOrderStatus > "" THEN DO:
@@ -651,7 +657,7 @@ FUNCTION fCreateTPServiceMessage RETURNS LOGICAL
 
 END FUNCTION.
 
-FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
+FUNCTION fActionOnExtraLineOrder  RETURN LOGICAL
    (INPUT iiExtraLineOrderId AS INT,
     INPUT iiMainLineOrderId  AS INT,
     INPUT icAction           AS CHAR):
@@ -663,7 +669,7 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
    DEF VAR lcNewOrderStatus     AS CHAR NO-UNDO. 
 
    FIND FIRST lbELOrder NO-LOCK WHERE
-              lbELOrder.Brand        EQ Syst.Var:gcBrand           AND
+              lbELOrder.Brand        EQ Syst.Var:gcBrand                  AND
               lbELOrder.OrderID      EQ iiExtraLineOrderId                AND 
               lbELOrder.MultiSimId   EQ iiMainLineOrderId                 AND 
               lbELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}         AND 
@@ -680,6 +686,13 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
       CASE icAction:
          WHEN "RELEASE" THEN DO:
          
+            FIND FIRST lbMLOrder NO-LOCK WHERE 
+                       lbMLOrder.Brand        EQ Syst.Var:gcBrand         AND
+                       lbMLOrder.OrderId      EQ iiMainLineOrderId        AND 
+                       lbMLOrder.MultiSimId   EQ iiExtraLineOrderId       AND 
+                       lbMLOrder.MultiSimType EQ {&MULTISIMTYPE_PRIMARY}  AND 
+                LOOKUP(lbMLOrder.StatusCode,{&ORDER_CLOSE_STATUSES}) EQ 0 NO-ERROR. 
+
             CASE lbELOrder.OrderType:
                WHEN {&ORDER_TYPE_NEW} THEN lcNewOrderStatus = {&ORDER_STATUS_NEW}.
                WHEN {&ORDER_TYPE_MNP} THEN lcNewOrderStatus = {&ORDER_STATUS_MNP}.
@@ -687,6 +700,12 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
                OTHERWISE.
             END CASE.
 
+            IF AVAIL lbMLOrder                                            AND 
+                     lbMLOrder.CLIType BEGINS "CONTFH"                    AND
+                     lbELOrder.ICC     EQ     ""                          AND 
+              LOOKUP(lbELOrder.OrderChannel,{&ORDER_CHANNEL_DIRECT}) GT 0 THEN
+            lcNewOrderStatus = {&ORDER_STATUS_PENDING_ICC_FROM_INSTALLER}. 
+            
             fSetOrderStatus(lbELOrder.OrderId,lcNewOrderStatus).
 
          END.                      
@@ -694,7 +713,7 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
             /* Check if Main line order is closed, If closed, 
                then close extraline ongoing order */
             FIND FIRST lbMLOrder NO-LOCK WHERE 
-                       lbMLOrder.Brand        EQ Syst.Var:gcBrand AND
+                       lbMLOrder.Brand        EQ Syst.Var:gcBrand        AND
                        lbMLOrder.OrderId      EQ iiMainLineOrderId       AND 
                        lbMLOrder.MultiSimId   EQ iiExtraLineOrderId      AND 
                        lbMLOrder.MultiSimType EQ {&MULTISIMTYPE_PRIMARY} AND 
