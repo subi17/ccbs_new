@@ -1576,7 +1576,7 @@ FUNCTION fUpdateOrderLogisticsValue RETURNS LOGICAL
 
    FIND FIRST bufOrder EXCLUSIVE-LOCK WHERE
               bufOrder.Brand   EQ Syst.Var:gcBrand AND 
-              bufOrder.OrderId EQ liOrderId        NO-ERROR NO-WAIT.
+              bufOrder.OrderId EQ liOrderId        NO-ERROR.
 
    IF ERROR-STATUS:ERROR OR LOCKED(bufOrder) THEN
       RETURN FALSE.
@@ -1624,7 +1624,7 @@ FOR EACH Order NO-LOCK WHERE
          RUN StarEventSetOldBuffer(lhOrder).
       END.
 
-      fSetOrderStatus(Order.OrderId,"16").
+      fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_ICC_FROM_LO}).
       
       IF llDoEvent THEN DO:
          RUN StarEventMakeModifyEvent(lhOrder).
@@ -1658,8 +1658,8 @@ FOR EACH OrderGroup NO-LOCK WHERE
    IF AVAIL Order THEN DO: 
       IF fDelivSIM(Order.OrderId,
                    TRUE,
-                   "",
-                   "") THEN 
+                   STRING(OrderGroup.GroupId),
+                   "01") THEN 
          fUpdateOrderLogisticsValue(Order.OrderId).
    END.    
 

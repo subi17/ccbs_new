@@ -54,18 +54,13 @@ FIND FIRST OrderCustomer NO-LOCK WHERE
 IF NOT AVAIL OrderCustomer THEN 
    RETURN appl_err("OrderCustomer not available").
 
-FIND Customer WHERE Customer.CustNum = Order.CustNum NO-LOCK.
-
-IF NOT AVAIL Customer THEN 
-   RETURN appl_err("Customer is not available"). 
-
-lcCustName = Func.Common:mDispCustName(BUFFER Customer).
+lcCustName = TRIM(OrderCustomer.SurName1 + " " + OrderCustomer.SurName2). 
 
 lcResultStruct = add_struct(response_toplevel_id, "").
 
 add_string(lcResultStruct,"OrderId",STRING(Order.OrderId)).
-add_string(lcResultStruct,"Email",Customer.Email).
-add_int(lcResultStruct,"Phone",INT(Customer.SMSNumber)).
+add_string(lcResultStruct,"Email",OrderCustomer.Email).
+add_int(lcResultStruct,"Phone",INT(OrderCustomer.MobileNumber)).
 add_string(lcResultStruct,"Person",lcCustName).
 
 lcCliArray = add_array(lcResultStruct, "MSISDN").

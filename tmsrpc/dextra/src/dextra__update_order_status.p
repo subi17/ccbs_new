@@ -311,8 +311,7 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
       add_int(response_toplevel_id, "", 41).
       RETURN.
    END.
-   ELSE IF (SIM.MsSeq   NE 0  OR 
-            SIM.SimStat NE 1) THEN DO:
+   ELSE IF SIM.SimStat NE 1 THEN DO:
       add_int(response_toplevel_id, "", 42).
       RETURN.
    END.   
@@ -340,6 +339,11 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
                                        OUTPUT lcError).          /*result*/
       IF liRequest EQ 0 THEN DO:
          add_int(response_toplevel_id, "", 43).
+         Func.Common:mWriteMemo("MobSub",
+                                STRING(MobSub.MsSeq),
+                                MobSub.CustNum,
+                                "ICC In Use",
+                                lcICC + "is already in use").
          RETURN.
       END.
    END.
@@ -353,7 +357,7 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
          LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) EQ 0 THEN DO: 
 
          FIND bOrder EXCLUSIVE-LOCK WHERE 
-              ROWID(bOrder) = ROWID(Order) NO-ERROR NO-WAIT.
+              ROWID(bOrder) = ROWID(Order) NO-ERROR.
 
          IF ERROR-STATUS:ERROR OR LOCKED(bOrder) THEN RETURN.
 
@@ -393,6 +397,16 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
             fCleanEventObjects().
          END.
 
+      END.
+      ELSE DO:
+         CREATE ErrorLog.
+         ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
+                ErrorLog.ActionID  = "ORDERICC"
+                ErrorLog.TableName = "Order"
+                ErrorLog.KeyValue  = STRING(Order.OrderId) 
+                ErrorLog.ErrorMsg  = "ICC not assigned due to wrong order status"
+                ErrorLog.UserCode  = Syst.Var:katun
+                ErrorLog.ActionTS  = Func.Common:mMakeTS().
       END.
 
    END.
