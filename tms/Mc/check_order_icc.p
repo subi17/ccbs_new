@@ -15,41 +15,16 @@ Syst.Var:gcBrand = "1".
 {Func/orderfunc.i}
 {Func/fixedlinefunc.i}
 
-DEF VAR lcToday      AS CHAR     NO-UNDO. 
-DEF VAR lcLogFile    AS CHAR     NO-UNDO. 
-DEF VAR lcOutDir     AS CHAR     NO-UNDO.
-DEF VAR ldeCurrentTS AS DEC      NO-UNDO.
-DEF VAR ldtCerradaDT AS DATETIME NO-UNDO.
-DEF VAR ldtCurrentDT AS DATETIME NO-UNDO.
-DEF VAR lhOrder      AS HANDLE   NO-UNDO.
+DEF VAR lcToday      AS CHAR   NO-UNDO. 
+DEF VAR lcLogFile    AS CHAR   NO-UNDO. 
+DEF VAR lcOutDir     AS CHAR   NO-UNDO.
+DEF VAR ldeCurrentTS AS DEC    NO-UNDO.
+DEF VAR ldeCerrada   AS DEC    NO-UNDO.
+DEF VAR ldeCurrent   AS DEC    NO-UNDO.
+DEF VAR lhOrder      AS HANDLE NO-UNDO.
+DEF VAR ldeCerradaTS AS DEC    NO-UNDO.
 
 DEF STREAM strout. 
-
-FUNCTION mTS2DateTime RETURNS DATETIME
-   (ideTS AS DECIMAL):
-
-   DEFINE VARIABLE liYY    AS INTEGER  NO-UNDO.
-   DEFINE VARIABLE liMM    AS INTEGER  NO-UNDO.
-   DEFINE VARIABLE liDD    AS INTEGER  NO-UNDO.
-   DEFINE VARIABLE ldaDate AS DATE     NO-UNDO.
-   DEFINE VARIABLE liTime  AS INTEGER  NO-UNDO.
-
-   ASSIGN
-      liYY    = TRUNCATE(ideTS,0)
-      liTime  = (ideTS - liYY) * 100000000
-      liMM    = liYY MOD 10000
-      liDD    = liMM MOD 100
-      liYY    = (liYY - liMM) / 10000
-      liMM    = (liMM - liDD) / 100 
-      ldaDate = DATE(liMM,liDD,liYY)
-   NO-ERROR.
-
-   IF ERROR-STATUS:ERROR
-   THEN RETURN ?.
-
-   RETURN DATETIME(ldaDate, liTime).
-
-END FUNCTION.   
 
 ASSIGN ldeCurrentTS = Func.Common:mMakeTS()
        lcOutDir     = fCParam("Order","OrderICCValueFolder")
@@ -64,53 +39,53 @@ OUTPUT STREAM strout TO lcLogFile.
 PUT STREAM strout UNFORMATTED 
    "OrderId;CERRADA Status TimeStamp" SKIP.
 
-FOR EACH Order NO-LOCK WHERE  
-         Order.Brand EQ Syst.Var:gcBrand AND 
-         Order.ICC   EQ "":
-   
-   IF NOT Order.CLIType BEGINS "CONTFH" THEN NEXT.
+FOR EACH Order NO-LOCK WHERE 
+         Order.Brand      EQ Syst.Var:gcBrand                              AND 
+  LOOKUP(Order.StatusCode,{&ORDER_STATUS_PENDING_ICC_FROM_INSTALLER}) EQ 0 AND  
+         Order.ICC        EQ "":               
 
-   IF NOT fIsConvergenceTariff(Order.CLIType) THEN NEXT. 
+   FIND FIRST EventLog NO-LOCK WHERE
+              EventLog.TableName            EQ "Order"                                    AND
+              EventLog.Key                  EQ "1" + CHR(255) + STRING(Order.OrderId)     AND
+              EventLog.Action               EQ "Modify"                                   AND 
+      ENTRY(3,EventLog.Datavalues,CHR(255)) EQ {&ORDER_STATUS_PENDING_ICC_FROM_INSTALLER} NO-ERROR.
 
-   IF LOOKUP(Order.StatusCode,{&ORDER_LOGISTICS_STATUSES}) > 0 OR 
-      LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES})  > 0 THEN NEXT.
+   IF NOT AVAIL EventLog THEN DO:
+      CREATE ErrorLog.
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
+             ErrorLog.ActionID  = "CERRADASTATUS"
+             ErrorLog.TableName = "Order"
+             ErrorLog.KeyValue  = STRING(Order.OrderId) 
+             ErrorLog.ErrorMsg  = "Cerrada status eventlog is not available"
+             ErrorLog.UserCode  = Syst.Var:katun
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
+      NEXT.
+   END.
 
-   IF CAN-FIND(FIRST OrderFusion NO-LOCK WHERE
-                     OrderFusion.Brand        EQ Syst.Var:gcBrand AND
-                     OrderFusion.OrderID      EQ Order.OrderID    AND 
-                     OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED}) THEN DO:
-      
-      FIND FIRST FusionMessage NO-LOCK WHERE 
-                 FusionMessage.OrderId     EQ Order.OrderId AND 
-                 FusionMessage.FixedStatus EQ "CERRADA"     NO-ERROR.
+   ldeCerradaTS = Func.Common:mHMS2TS(EventLog.EventDate,EventLog.EventTime).
 
-      IF NOT AVAIL FusionMessage THEN NEXT. 
-               
-      ASSIGN ldtCerradaDT = ADD-INTERVAL(mTS2DateTime(FusionMessage.FixedStatusTS),12,"hours")      
-             ldtCurrentDT = mTS2DateTime(ldeCurrentTS).
+   ASSIGN ldeCerrada = Func.Common:mOffSet(ldeCerradaTS,12)
+          ldeCurrent = Func.Common:mOffSet(ldeCurrentTS,0).
 
-      IF ldtCerradaDT < ldtCurrentDT THEN DO:
-         IF llDoEvent THEN DO:
-            lhOrder = BUFFER Order:HANDLE.
-            RUN StarEventInitialize(lhOrder).
-            RUN StarEventSetOldBuffer(lhOrder).
-         END.
-      
-         fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_SENDING_TO_LO}).
-
-         IF llDoEvent THEN DO:
-            RUN StarEventMakeModifyEvent(lhOrder).
-            fCleanEventObjects().
-         END.
-         
-         PUT STREAM strout UNFORMATTED 
-            FusionMessage.OrderId       ";"
-            FusionMessage.FixedStatusTS SKIP.
-   
+   IF ldeCerrada < ldeCurrent THEN DO:
+      IF llDoEvent THEN DO:
+         lhOrder = BUFFER Order:HANDLE.
+         RUN StarEventInitialize(lhOrder).
+         RUN StarEventSetOldBuffer(lhOrder).
       END.
-         
-   END.                  
+   
+      fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_SENDING_TO_LO}).
 
-END.
+      IF llDoEvent THEN DO:
+         RUN StarEventMakeModifyEvent(lhOrder).
+         fCleanEventObjects().
+      END.
+      
+      PUT STREAM strout UNFORMATTED 
+         Order.OrderId ";"
+         ldeCerradaTS  SKIP.
+   END.
+
+END.      
 
 OUTPUT STREAM strout CLOSE.
