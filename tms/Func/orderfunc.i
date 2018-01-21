@@ -657,7 +657,7 @@ FUNCTION fCreateTPServiceMessage RETURNS LOGICAL
 
 END FUNCTION.
 
-FUNCTION fActionOnExtraLineOrder  RETURN LOGICAL
+FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
    (INPUT iiExtraLineOrderId AS INT,
     INPUT iiMainLineOrderId  AS INT,
     INPUT icAction           AS CHAR):
