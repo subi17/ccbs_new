@@ -31,7 +31,6 @@ DEF VAR lcContConFile           AS CHAR NO-UNDO.
 DEF VAR lcMailContent           AS CHAR NO-UNDO.
 DEF VAR liBillPeriod            AS INT  NO-UNDO.
 DEF VAR lcMonitor AS CHAR NO-UNDO. 
-DEF VAR lcPass AS CHAR NO-UNDO.
 DEF VAR liStartTime   AS INT  NO-UNDO. 
 DEF VAR liStopTime    AS INT  NO-UNDO. 
 DEF VAR lEndSeconds   AS INTEGER   NO-UNDO.
@@ -62,7 +61,7 @@ FUNCTION fGenerateEmailTemplate RETURNS CHAR
    ASSIGN
       lcInvNumCrypted =  encrypt_data(icMSISDN,
                                       {&ENCRYPTION_METHOD}, 
-                                  lcPassPhrase) 
+                                      {&ESI_PASSPHRASE}) 
       /* convert some special characters to url encoding (at least '+' char
          could cause problems at later phases. */
       lcInvNumCrypted = fUrlEncode(lcInvNumCrypted, "query").
@@ -97,7 +96,6 @@ lcMonitor = fGetRequestNagiosToken(MsRequest.Reqtype).
 
 /* Email Address Conf File */
 ASSIGN lcAddrConfDir = fCParamC("RepConfDir")
-       lcPass        = fCParamC("EinvoicePass")
        lcContConFile = fCParamC("SMSInvContFile")
        /* ie. "32400-79200" Send between 9:00-22:00 */
        ldaDateFrom   = MsRequest.ReqDtParam1
