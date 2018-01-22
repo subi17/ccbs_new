@@ -31,16 +31,13 @@ DEF VAR lcContConFile           AS CHAR NO-UNDO.
 DEF VAR lcMailContent           AS CHAR NO-UNDO.
 DEF VAR liBillPeriod            AS INT  NO-UNDO.
 DEF VAR lcMonitor AS CHAR NO-UNDO. 
-DEF VAR liStartTime   AS INT  NO-UNDO. 
 DEF VAR liStopTime    AS INT  NO-UNDO. 
-DEF VAR lEndSeconds   AS INTEGER   NO-UNDO.
-DEF VAR lIniSeconds   AS INTEGER   NO-UNDO.
-DEF VAR llFirstInv    AS LOGICAL   NO-UNDO.
 DEF VAR lcTemplate    AS CHAR      NO-UNDO.
 DEF VAR lcTestCustomers AS CHAR NO-UNDO.
 DEF VAR lcLink        AS CHAR NO-UNDO.
 DEF VAR liTestFilter AS INT NO-UNDO.
-DEF STREAM sEmail.
+
+DEF STREAM sIn. /*1st/Last notification recipients*/
 
 
 FUNCTION fGenerateEmailTemplate RETURNS CHAR
@@ -100,11 +97,21 @@ ASSIGN lcAddrConfDir = fCParamC("RepConfDir")
        /* ie. "32400-79200" Send between 9:00-22:00 */
        ldaDateFrom   = MsRequest.ReqDtParam1
        liMonth       = MONTH(ldaDateFrom)
-       liStartTime   = TIME
-       llFirstInv    = FALSE
        lcLink        = fCParamC("ESI_LinkBase")
        liTestFilter  = fCparamI("ESI_TestFilter")
        lcTestCustomers = fCparamC("ESI_TestCustomers").
+
+IF lcAddrConfDir + "/smsinvoice.sms" NE ? THEN DO:
+   IF Mm.MManMessage:mGetMessage("SMS", "EInvMessageStarted", 1)EQ TRUE THEN DO:
+      IMPORT STREAM sIn FROM VALUE lcAddrConfDir + "/smsinvoice.sms".
+      REPEAT:
+         IMPORT STREAM sIn UNFORMATTED lcRecipient.
+         Mm.MManMessage:mCreateMMLogSMS(lcRecipient).
+      END.
+   END.
+END.
+
+ 
 
 INVOICE_LOOP:
 FOR EACH Invoice WHERE
@@ -138,15 +145,6 @@ FOR EACH Invoice WHERE
       IF NOT AVAIL MobSub OR
          MobSub.CustNum NE Invoice.CustNum THEN NEXT SUBINVOICE_LOOP.
 
-      IF llFirstInv = FALSE THEN DO:
-         IF Mm.MManMessage:mGetMessage("SMS", "EInvMessageStarted", 1)
-         EQ TRUE THEN DO:
-            Mm.MManMessage:mCreateMMLogSMS("+358504031880").
-         END.
-         llFirstInv = TRUE.
-      END.
-
-         /**/
       IF Mm.MManMessage:mGetMessage("SMS", "EInvMessage", 1) EQ TRUE THEN DO:
          lcTemplate = fGetSMSTxt("EInvMessage",
                                  TODAY,
@@ -169,21 +167,17 @@ FOR EACH Invoice WHERE
 
 END. /* FOR EACH Invoice WHERE */
 
-
-/*Einvoice project: inherit following from SMSinvoicing.*/
-/*Notification for the Last Invoice will be sent to a specific people as part of YOT-4037 along with the own customer*/
-/* TODO this also to MQ*/
-/*
-fSMSNotify("Last",
-           "Last Eincoice Sent",
-           lcAddrConfDir,
-           lIniSeconds,
-           lEndSeconds).
-*/
 /*notify the last message.*/
-IF Mm.MManMessage:mGetMessage("SMS", "EInvMessageDone", 1) EQ TRUE THEN DO:
-   Mm.MManMessage:mCreateMMLogSMS("358504031880").
+IF lcAddrConfDir + "/smsinvoice.sms" NE ? THEN DO:
+   IF Mm.MManMessage:mGetMessage("SMS", "EInvMessageDone", 1)EQ TRUE THEN DO:
+      IMPORT STREAM sIn FROM VALUE lcAddrConfDir + "/smsinvoice.sms".
+      REPEAT:
+         IMPORT STREAM sIn UNFORMATTED lcRecipient.
+         Mm.MManMessage:mCreateMMLogSMS(lcRecipient).
+      END.
+   END.
 END.
+
 
 /* Send an email to configure list*/
 /*TODO: this must be removed because TMS is not aware when last sms is sent.*/
