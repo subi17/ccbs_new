@@ -34,6 +34,15 @@ DEFINE VARIABLE lcAddress   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liTenant    AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcTenant    AS CHARACTER NO-UNDO.
 
+lcUrl = fCParam("MNP","MNPSendHost").
+lcAddress = fCParam("MNP","MNPSendURL").
+lcHost = entry(2,lcUrl," ") + ":" + entry(4, lcUrl, " ").
+
+IF NOT (lcUrl > "" AND lcAddress > "") THEN DO:
+   MESSAGE "Missing MNPSendHost or MNPSendURL TMSParam" VIEW-AS ALERT-BOX.
+   RETURN.
+END.
+
 FORM
    SKIP(1)
    " Total Sent: " liSent FORMAT ">>>>>>9" SKIP
@@ -70,15 +79,6 @@ DO WHILE TRUE
 
       IF lcTenant = "" OR (NOT fsetEffectiveTenantForAllDB(lcTenant)) THEN
           UNDO, THROW NEW Progress.Lang.AppError("Unable to change tenant. Abort!",1). 
-
-      lcUrl     = fCParam("MNP","MNPSendHost").
-      lcAddress = fCParam("MNP","MNPSendURL").
-      lcHost    = ENTRY(2,lcUrl," ") + ":" + ENTRY(4, lcUrl, " ").
-
-      IF NOT (lcUrl > "" AND lcAddress > "") THEN DO:
-         MESSAGE "Missing MNPSendHost or MNPSendURL TMSParam on tenant '" + lcTenant + "'" VIEW-AS ALERT-BOX.
-         UNDO, THROW NEW Progress.Lang.AppError("Missing MNPSendHost or MNPSendURL TMSParam on tenant '" + lcTenant + "'",1).
-      END.
 
       /* new requests */
       FOR EACH MNPOperation NO-LOCK WHERE MNPOperation.Sender = 1 AND MNPOperation.StatusCode = {&MNP_MSG_WAITING_SEND} 

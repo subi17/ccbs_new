@@ -88,10 +88,9 @@ END.
 
 ASSIGN
    liSeq         = NEXT-VALUE(M2MSeq)
-   lcFormRequest = (IF lcTenant = {&TENANT_YOIGO} THEN 
-                      "005" 
-                    ELSE IF lcTenant = {&TENANT_MASMOVIL} THEN 
-                      "200" 
+   lcFormRequest = (IF lcTenant = {&TENANT_YOIGO} OR
+                       lcTenant = {&TENANT_MASMOVIL}
+                    THEN "005" 
                     ELSE "") + STRING(liSeq,"99999999").
 
 /* mark old rejected processes as closed */
@@ -176,8 +175,10 @@ ASSIGN
    MNPDetails.Surname2     = OrderCustomer.SurName2
    MNPDetails.CompanyName  = OrderCustomer.Company 
    MNPDetails.RequestedTS  = Order.CrStamp 
-   MNPDetails.ReceptorCode = (IF lcTenant = {&TENANT_YOIGO} THEN "005"    ELSE IF lcTenant = {&TENANT_MASMOVIL} THEN "200"    ELSE "")
-   MNPDetails.ReceptorNRN  = (IF lcTenant = {&TENANT_YOIGO} THEN "741111" ELSE IF lcTenant = {&TENANT_MASMOVIL} THEN "745200" ELSE "")  
+   MNPDetails.ReceptorCode = (IF lcTenant = {&TENANT_YOIGO} OR 
+                                 lcTenant = {&TENANT_MASMOVIL} THEN "005" ELSE "")
+   MNPDetails.ReceptorNRN  = (IF lcTenant = {&TENANT_YOIGO} OR 
+                                 lcTenant = {&TENANT_MASMOVIL} THEN "741111" ELSE "")
    MNPDetails.DonorCode    = MNPOperator.OperCode WHEN AVAIL MNPOperator
    MNPDetails.Nationality  = OrderCustomer.Nationality.
 
@@ -219,10 +220,9 @@ PROCEDURE pCreatePortabilityMessageXML:
    lcReqStruct = add_struct(param_toplevel_id, "").
    add_timestamp(lcReqStruct, "fechaSolicitudPorAbonado", Order.CrStamp).
    add_string(lcReqStruct, "codigoOperadorDonante", lcOper).
-   add_string(lcReqStruct, "codigoOperadorReceptor", (IF lcTenant = {&TENANT_YOIGO} THEN 
-                                                          "005" 
-                                                      ELSE IF lcTenant = {&TENANT_MASMOVIL} THEN 
-                                                          "200" 
+   add_string(lcReqStruct, "codigoOperadorReceptor", (IF lcTenant = {&TENANT_YOIGO} OR 
+                                                         lcTenant = {&TENANT_MASMOVIL}
+                                                      THEN "005" 
                                                       ELSE "")).
    lcAbonado = add_struct(lcReqStruct,"abonado").
 
@@ -248,10 +248,9 @@ PROCEDURE pCreatePortabilityMessageXML:
    END.
 
    add_string(lcReqStruct, "codigoContrato", MNPProcess.FormRequest).
-   add_string(lcReqStruct, "NRNReceptor", (IF lcTenant = {&TENANT_YOIGO} THEN 
+   add_string(lcReqStruct, "NRNReceptor", (IF lcTenant = {&TENANT_YOIGO} OR
+                                              lcTenant = {&TENANT_MASMOVIL} THEN 
                                               "741111" 
-                                           ELSE IF lcTenant = {&TENANT_MASMOVIL} THEN 
-                                              "745200" 
                                            ELSE "")).
    add_timestamp(lcReqStruct, "fechaVentanaCambio", MNPProcess.PortingTime).
   

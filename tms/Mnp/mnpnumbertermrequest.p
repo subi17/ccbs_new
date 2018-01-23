@@ -54,7 +54,8 @@ END.
 
 ASSIGN
    liSeq         = NEXT-VALUE(M2MSeq)
-   lcFormRequest = (IF lcTenant = {&TENANT_MASMOVIL} THEN "200" ELSE "005") + STRING(liSeq,"99999999"). 
+   lcFormRequest = (IF lcTenant = {&TENANT_MASMOVIL} OR
+                       lcTenant = {&TENANT_YOIGO} THEN "005" ELSE "") + STRING(liSeq,"99999999"). 
 
 DO TRANS:
 
