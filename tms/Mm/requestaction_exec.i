@@ -174,6 +174,75 @@ FUNCTION fGetOriginalBundle RETURNS CHAR
       
 END FUNCTION.
 
+FUNCTION fCLITypeFollowsTheRule RETURNS LOGICAL
+   ( icCLIType AS CHARACTER,
+     icRule    AS CHARACTER,
+     iiMSSeq   AS INTEGER,
+     ilVerifyExists AS LOGICAL ):
+
+   /* If there is no rule then CLIType follows the rule */
+   IF icRule EQ ""
+   THEN RETURN TRUE.
+
+   FIND CLIType NO-LOCK WHERE
+        CLIType.Brand   = Syst.Var:gcBrand AND
+        CLIType.CLIType = icCLIType
+   NO-ERROR.
+
+   IF NOT AVAILABLE CLIType
+   THEN RETURN FALSE.
+
+   DEFINE VARIABLE lii         AS INTEGER   NO-UNDO.
+   DEFINE VARIABLE lcExtraLine AS CHARACTER NO-UNDO.
+   DEFINE BUFFER CLIType   FOR CLIType.
+   DEFINE BUFFER MobSub    FOR MobSub.
+   DEFINE BUFFER lElMobSub FOR MobSub.
+
+   /* If any of the rules apply we return true */
+   DO lii = 1 TO NUM-ENTRIES(icRule):
+      CASE CLIType.TariffType:
+         WHEN {&CLITYPE_TARIFFTYPE_MOBILEONLY}
+         THEN IF icRule EQ "MOBILEONLY"
+              THEN RETURN TRUE.
+         WHEN {&CLITYPE_TARIFFTYPE_CONVERGENT}
+         THEN DO:
+            IF icRule EQ "CONVERGENT"
+            THEN RETURN TRUE.
+
+            lcExtraLine = fExtraLineForMainLine(CLIType.CLIType).
+
+            IF lcExtraLine EQ "" AND icRule EQ "CONVERGENT_NO_MAINLINE"
+            THEN RETURN TRUE.
+
+            IF lcExtraLine > "" AND icRule EQ "CONVERGENT_MAINLINE"
+            THEN RETURN TRUE.
+
+            IF lcExtraLine EQ icRule
+            THEN DO:
+               IF NOT ilVerifyExists
+               THEN RETURN TRUE.
+
+               FIND MobSub NO-LOCK WHERE MobSub.MSSeq = iiMSSeq NO-ERROR.
+               IF NOT AVAILABLE MobSub
+               THEN RETURN FALSE.
+
+               IF CAN-FIND(FIRST lELMobSub NO-LOCK USE-INDEX MSSeq WHERE
+                                 lELMobSub.MsSeq         EQ MobSub.MultiSimId          AND
+                                 lELMobSub.MultiSimId    EQ MobSub.MsSeq               AND
+                                 lELMobSub.MultiSimtype  EQ {&MULTISIMTYPE_EXTRALINE}  AND
+                                 lELMobSub.CLIType       EQ lcExtraLine                AND
+                                 (lELMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE} OR
+                                  lELMobSub.MsStatus     EQ {&MSSTATUS_BARRED}))
+               THEN RETURN TRUE.
+            END.
+         END.
+      END CASE.
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
 PROCEDURE pCollectRequestActions:
 
    DEF INPUT PARAMETER iiMsSeq      AS INT  NO-UNDO.
@@ -406,6 +475,30 @@ PROCEDURE pDoRulesAllow:
                END.
             END.
          END.
+         WHEN "#STCFROMTO" THEN DO:
+            /* ReqCParam1 = "Old CLIType"
+               ReqCParam2 = "New CLIType" */
+            IF NUM-ENTRIES(RequestActionRule.ParamValue,"|") NE 2
+            THEN DO:
+               olMatch = FALSE.
+               RETURN.
+            END.
+
+            IF RequestActionRule.ParamValue BEGINS "+," THEN
+               lcParamValue = SUBSTRING(RequestActionRule.ParamValue,3).
+            ELSE lcParamValue = RequestActionRule.ParamValue.
+
+            IF fCLITypeFollowsTheRule(ihRequest::ReqCParam1, /* Old CLIType */
+                                      ENTRY(1,lcParamValue,"|"), /* From rule */
+                                      iiMsSeq,
+                                      YES) AND
+               fCLITypeFollowsTheRule(ihRequest::ReqCParam2, /* New CLIType */
+                                      ENTRY(2,lcParamValue,"|"), /* To rule */
+                                      iiMsSeq,
+                                      NO)
+            THEN olMatch = TRUE.
+         END.
+
          END CASE. 
          
          IF olMatch = FALSE AND
