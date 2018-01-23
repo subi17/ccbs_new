@@ -286,7 +286,7 @@ FOR EACH CLIType NO-LOCK WHERE
                       liDestDowspeconversion = fSpeedConversion(CliType.FixedLineDownload)
                       liDestUpSpeConversion  = fSpeedConversion(clitype.FixedLineUpload).
  
-                  IF ttSpeed.Download <= liDestDowspeconversion AND ttSpeed.Upload <= liDestUpSpeConversion THEN
+                  IF ttSpeed.Download >= liDestDowspeconversion AND ttSpeed.Upload >= liDestUpSpeConversion THEN
                       ASSIGN lcStatusCode = 1.   
                   ELSE 
                       ASSIGN lcStatusCode = 0.    
