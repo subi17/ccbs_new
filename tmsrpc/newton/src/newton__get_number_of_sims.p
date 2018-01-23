@@ -92,7 +92,8 @@ PROCEDURE pCheckExtraLineOrders:
                  bOrder.StatusCode   EQ {&ORDER_STATUS_PENDING_MAIN_LINE} AND 
                  bOrder.OrderType    NE {&ORDER_TYPE_RENEWAL}             NO-ERROR.
 
-      IF AVAIL bOrder THEN  
+      IF AVAIL bOrder AND 
+               bOrder.DeliverySecure EQ 0 THEN  
          ASSIGN lcOrderList = lcOrderList + "," + STRING(bOrder.OrderId)
                 liNoOfSims  = liNoOfSims + 1.
    END. 
@@ -113,6 +114,8 @@ PROCEDURE pCheckAdditionalLineOrders:
             bOrder.OrderType  NE {&ORDER_TYPE_RENEWAL},
       FIRST bCLIType WHERE bCLIType.Brand   EQ Syst.Var:gcBrand AND
                            bCLIType.CliType EQ bOrder.CLIType   NO-LOCK:
+
+      IF bOrder.DeliverySecure > 0 THEN NEXT.
 
       IF LOOKUP(bOrder.CliType,{&ADDLINE_CLITYPES}) > 0 THEN DO:
       

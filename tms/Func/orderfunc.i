@@ -555,8 +555,13 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
          IF icAction     EQ     "RELEASE"                              AND 
             labOrder.ICC EQ     ""                                     AND  
             icCLIType    BEGINS "CONTFH"                               AND
-            LOOKUP(labOrder.OrderChannel,{&ORDER_CHANNEL_DIRECT}) GT 0 THEN 
-         lcNewOrderStatus = {&ORDER_STATUS_PENDING_ICC_FROM_INSTALLER}. 
+            LOOKUP(labOrder.OrderChannel,{&ORDER_CHANNEL_DIRECT}) GT 0 THEN DO:
+
+            IF labOrder.DeliverySecure > 0 THEN 
+               lcNewOrderStatus = {&ORDER_STATUS_SENDING_TO_LO}.
+            ELSE lcNewOrderStatus = {&ORDER_STATUS_PENDING_ICC_FROM_INSTALLER}. 
+
+         END.
 
       END.
 
@@ -703,8 +708,13 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
             IF AVAIL lbMLOrder                                            AND 
                      lbMLOrder.CLIType BEGINS "CONTFH"                    AND
                      lbELOrder.ICC     EQ     ""                          AND 
-              LOOKUP(lbELOrder.OrderChannel,{&ORDER_CHANNEL_DIRECT}) GT 0 THEN
-            lcNewOrderStatus = {&ORDER_STATUS_PENDING_ICC_FROM_INSTALLER}. 
+              LOOKUP(lbELOrder.OrderChannel,{&ORDER_CHANNEL_DIRECT}) GT 0 THEN DO:
+            
+               IF lbELOrder.DeliverySecure > 0 THEN 
+                  lcNewOrderStatus = {&ORDER_STATUS_SENDING_TO_LO}.
+               ELSE lcNewOrderStatus = {&ORDER_STATUS_PENDING_ICC_FROM_INSTALLER}. 
+
+            END.
             
             fSetOrderStatus(lbELOrder.OrderId,lcNewOrderStatus).
 
