@@ -104,7 +104,7 @@ ASSIGN lcAddrConfDir = fCParamC("RepConfDir")
 
 IF lcAddrConfDir + "/smsinvoice.sms" NE ? THEN DO:
    IF Mm.MManMessage:mGetMessage("SMS", "EInvMessageStarted", 1)EQ TRUE THEN DO:
-      IMPORT STREAM sIn FROM VALUE lcAddrConfDir + "/smsinvoice.sms".
+      INPUT STREAM sIn FROM VALUE(lcAddrConfDir + "/smsinvoice.sms").
       REPEAT:
          IMPORT STREAM sIn UNFORMATTED lcRecipient.
          Mm.MManMessage:mCreateMMLogSMS(lcRecipient).
@@ -171,7 +171,7 @@ END. /* FOR EACH Invoice WHERE */
 /*notify the last message.*/
 IF lcAddrConfDir + "/smsinvoice.sms" NE ? THEN DO:
    IF Mm.MManMessage:mGetMessage("SMS", "EInvMessageDone", 1)EQ TRUE THEN DO:
-      IMPORT STREAM sIn FROM VALUE lcAddrConfDir + "/smsinvoice.sms".
+      INPUT STREAM sIn FROM VALUE(lcAddrConfDir + "/smsinvoice.sms").
       REPEAT:
          IMPORT STREAM sIn UNFORMATTED lcRecipient.
          Mm.MManMessage:mCreateMMLogSMS(lcRecipient).
