@@ -36,6 +36,7 @@ DEF VAR lcTemplate    AS CHAR      NO-UNDO.
 DEF VAR lcTestCustomers AS CHAR NO-UNDO.
 DEF VAR lcLink        AS CHAR NO-UNDO.
 DEF VAR liTestFilter AS INT NO-UNDO.
+DEF VAR lcRecipient AS CHAR NO-UNDO.
 
 DEF STREAM sIn. /*1st/Last notification recipients*/
 
