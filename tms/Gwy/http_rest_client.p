@@ -27,7 +27,7 @@ define variable oUri as URI no-undo.
 define variable oReq as IHttpRequest no-undo.
 define variable oResp as IHttpResponse no-undo.
 define variable oCreds as Credentials no-undo.
-define variable oJson as JsonObject no-undo.
+define variable lcUserId as character no-undo.
 
 oClient = ClientBuilder:Build():Client.
 
