@@ -319,7 +319,8 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
    /* If already subscription is available then create 
       ICC change request */
    FIND FIRST MobSub NO-LOCK WHERE 
-              MobSub.MsSeq = Order.MsSeq NO-ERROR.
+              MobSub.MsSeq EQ Order.MsSeq AND 
+              MobSub.ICC   NE ""          NO-ERROR.
 
    IF AVAIL MobSub THEN DO:
       liRequest = fSubscriptionRequest(Mobsub.MsSeq,

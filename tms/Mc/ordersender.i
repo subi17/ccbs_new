@@ -228,7 +228,7 @@
             END.    
             
             /* New change in SIM reservation logic, when order is placed from telesalses
-               or web then order will be moved to order queue 15. When order sent to LO,
+               or web then order will be moved to order queue 15 0r 16. When order sent to LO,
                LO will pick and reserve the SIM through external API (dextra_update_order_status) */
             IF (Order.OrderType EQ {&ORDER_TYPE_NEW} OR
                 Order.OrderType EQ {&ORDER_TYPE_MNP})           AND
@@ -241,7 +241,12 @@
                   RUN StarEventSetOldBuffer(lh15Order).
                END.
 
-               fSetOrderStatus(Order.OrderID,{&ORDER_STATUS_SENDING_TO_LO}).
+               IF CAN-FIND(FIRST OrderGroup NO-LOCK WHERE
+                                 OrderGroup.OrderId        EQ Order.OrderId            AND
+                                 OrderGroup.GroupType      EQ {&OG_LOFILE}             AND
+                         ENTRY(1,OrderGroup.Info,CHR(255)) EQ {&DESPACHAR_TRUE_VALUE}) THEN
+                  fSetOrderStatus(Order.OrderID,{&ORDER_STATUS_PENDING_ICC_FROM_LO}).
+               ELSE fSetOrderStatus(Order.OrderID,{&ORDER_STATUS_SENDING_TO_LO}).
 
                IF llDoEvent THEN DO:
                   RUN StarEventMakeModifyEvent(lh15Order).
