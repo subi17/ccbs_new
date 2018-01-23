@@ -7,6 +7,10 @@
   ----------------------------------------------------------------------*/
 block-level on error undo, throw.
 
+using OpenEdge.Net.HTTP.*.
+using OpenEdge.Net.URI.
+using Progress.Json.ObjectModel.JsonObject.
+
 define input  parameter icAction      as character  no-undo.
 define input  parameter icHost        as character  no-undo.
 define input  parameter iiport        as integer    no-undo.
@@ -16,10 +20,6 @@ define input  parameter icUriPath     as character  no-undo.
 define input  parameter icUriQuery    as character  no-undo.
 define input  parameter icUriQueryVal as character  no-undo.
 define output parameter oJson         as JsonObject no-undo.
-
-using OpenEdge.Net.HTTP.*.
-using OpenEdge.Net.URI.
-using Progress.Json.ObjectModel.JsonObject.
 
 /* ***************************  Main Block  *************************** */
 define variable oClient as IHttpClient no-undo.
