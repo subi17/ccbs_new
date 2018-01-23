@@ -71,8 +71,10 @@ lcOrderList = STRING(piOrderId).
 IF fIsTerminalOrder(Order.OrderId,
                     OUTPUT lcTerminalBillCode) THEN 
    liNoOfDevices = liNoOfDevices + 1.
-ELSE 
-   liNoOfSims = liNoOfSims + 1.   
+ELSE DO: 
+   IF Order.DeliverySecure EQ 0 THEN 
+      liNoOfSims = liNoOfSims + 1.   
+END.
 
 RUN pCheckExtraLineOrders.
 

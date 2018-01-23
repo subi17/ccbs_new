@@ -452,7 +452,9 @@ IF lcNewStatus = {&ORDER_STATUS_NEW}                 OR
       Order.CLIType BEGINS "CONTFH"                           AND 
       Order.ICC     EQ     ""                                 THEN DO:
 
-      fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_ICC_FROM_INSTALLER}).
+      IF Order.DeliverySecure > 0 THEN 
+         fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_SENDING_TO_LO}).
+      ELSE fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_ICC_FROM_INSTALLER}).
 
       IF llDoEvent THEN DO:
          RUN StarEventMakeModifyEvent(lhOrder).
