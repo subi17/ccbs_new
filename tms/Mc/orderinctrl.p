@@ -91,7 +91,9 @@ IF llDoEvent THEN DO:
    
    {Func/lib/eventlog.i}
       
-   DEFINE VARIABLE lhOrder AS HANDLE NO-UNDO.
+   DEFINE VARIABLE lhOrder   AS HANDLE NO-UNDO.
+   DEFINE VARIABLE lh17Order AS HANDLE NO-UNDO.
+
    lhOrder = BUFFER Order:HANDLE.
    RUN StarEventInitialize(lhOrder).
 END.               
@@ -452,12 +454,18 @@ IF lcNewStatus = {&ORDER_STATUS_NEW}                 OR
       Order.CLIType BEGINS "CONTFH"                           AND 
       Order.ICC     EQ     ""                                 THEN DO:
 
+      IF llDoEvent THEN DO:
+         lh17Order = BUFFER Order:HANDLE.
+         RUN StarEventInitialize(lh17Order).
+         RUN StarEventSetOldBuffer(lh17Order).
+      END.
+
       IF Order.DeliverySecure > 0 THEN 
          fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_SENDING_TO_LO}).
       ELSE fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_ICC_FROM_INSTALLER}).
 
       IF llDoEvent THEN DO:
-         RUN StarEventMakeModifyEvent(lhOrder).
+         RUN StarEventMakeModifyEvent(lh17Order).
          fCleanEventObjects().
       END.
    END.   

@@ -41,7 +41,7 @@ PUT STREAM strout UNFORMATTED
 
 FOR EACH Order NO-LOCK WHERE 
          Order.Brand      EQ Syst.Var:gcBrand                              AND 
-  LOOKUP(Order.StatusCode,{&ORDER_STATUS_PENDING_ICC_FROM_INSTALLER}) EQ 0 AND  
+  LOOKUP(Order.StatusCode,{&ORDER_STATUS_PENDING_ICC_FROM_INSTALLER}) GT 0 AND  
          Order.ICC        EQ "":               
 
    FIND FIRST EventLog NO-LOCK WHERE
