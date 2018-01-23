@@ -11,7 +11,8 @@
                 &GLOBAL-DEFINE localvar YES
                 DEF VAR llOrdStChg            AS LOG  NO-UNDO. 
                 DEF VAR llReserveSimAndMsisdn AS LOG  NO-UNDO.
-   
+                DEF VAR llgMNPSimOnly         AS LOG  NO-UNDO INITIAL NO.  
+
                 DEF VAR lh99Order AS HANDLE NO-UNDO.
                 DEF VAR lh76Order AS HANDLE NO-UNDO.
                 DEF VAR lh15Order AS HANDLE NO-UNDO.
@@ -227,11 +228,26 @@
                END.
             END.    
             
+            /* Check if order is MNP SimOnly */
+            llgMNPSimOnly = lcSIMonlyMNP    EQ "true"                              AND
+                            Order.OrderType EQ 1                                   AND
+                            Order.CrStamp   >= 20150616.40200                      AND
+                            Order.MNPStatus EQ 1                                   AND
+                     LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) > 0        AND
+               NOT CAN-FIND(FIRST OrderAccessory NO-LOCK WHERE
+                                  OrderAccessory.Brand   EQ Syst.Var:gcBrand AND
+                                  OrderAccessory.OrderId EQ Order.OrderID)         AND
+               NOT CAN-FIND(LAST OrderTimeStamp NO-LOCK WHERE
+                                 OrderTimeStamp.Brand   EQ Syst.Var:gcBrand   AND
+                                 OrderTimeStamp.OrderID EQ Order.OrderID      AND
+                                 OrderTimeStamp.RowType EQ {&ORDERTIMESTAMP_SIMONLY}).
+
             /* New change in SIM reservation logic, when order is placed from telesalses
                or web then order will be moved to order queue 15 0r 16. When order sent to LO,
                LO will pick and reserve the SIM through external API (dextra_update_order_status) */
             IF (Order.OrderType EQ {&ORDER_TYPE_NEW} OR
-                Order.OrderType EQ {&ORDER_TYPE_MNP})           AND
+               (Order.OrderType EQ {&ORDER_TYPE_MNP} AND 
+                  (Order.StatusCode EQ {&ORDER_STATUS_ONGOING} OR llgMNPSimOnly))) AND
          LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) > 0 AND
                 Order.ICC EQ ""                                 THEN DO:
 
@@ -259,19 +275,7 @@
 
             /* YDR-1825 MNP SIM ONLY Orders
               Additional ordertimestamp is to prevent infinitive loop */
-            IF lcSIMonlyMNP EQ "true" AND
-               Order.OrderType = 1 AND
-               Order.CrStamp >= 20150616.40200 AND
-               Order.MNPStatus = 1 AND
-               LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) > 0 AND
-               NOT CAN-FIND(FIRST OrderAccessory NO-LOCK WHERE
-                             OrderAccessory.Brand = Syst.Var:gcBrand AND
-                             OrderAccessory.OrderId = Order.OrderID) AND
-               NOT CAN-FIND(LAST OrderTimeStamp NO-LOCK WHERE
-                             OrderTimeStamp.Brand   = Syst.Var:gcBrand   AND
-                             OrderTimeStamp.OrderID = Order.OrderID AND
-                             OrderTimeStamp.RowType = {&ORDERTIMESTAMP_SIMONLY})
-               THEN DO:
+            IF llgMNPSimOnly THEN DO:
                   
                   /* Event logging of 99 status setups */ 
                   IF llDoEvent THEN DO:
