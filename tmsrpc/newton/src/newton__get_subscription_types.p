@@ -144,7 +144,7 @@ FUNCTION fGetSpeedProfile RETURNS CHARACTER
               OrderCustomer.OrderId = Order.OrderId AND
               OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL} NO-LOCK:
 
-        IF OrderCustomer.GesCal <> "" THEN
+        IF OrderCustomer.GesCal EQ "" THEN
             NEXT.
 
         ASSIGN lcGescal = OrderCustomer.GesCal.
