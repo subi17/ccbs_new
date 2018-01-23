@@ -142,7 +142,8 @@ DO TRANSACTION:
                         (bMLMobSub.MultiSimId   EQ 0                     AND 
                          bMLMobSub.MultiSimType EQ 0)                    OR
                         (bMLMobSub.MultiSimId   EQ TermMobSub.MsSeq      AND
-                         bMLMobSub.MultiSimType EQ 1)) THEN DO:
+                         bMLMobSub.MultiSimType EQ {&MULTISIMTYPE_PRIMARY})) 
+                         THEN DO:
       fReqError("Mainline is already associated to other extra line").
       RETURN.
    END.                      
