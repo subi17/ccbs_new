@@ -243,7 +243,7 @@ DO ON ERROR UNDO , LEAVE:
                OrderCustomer.Address = OrderCustomer.Address + " " +
                                         OrderCustomer.BuildingNum.         
             RELEASE OrderCustomer.
-            
+            llCreateSTC = FALSE. /* remove this - Once we get confirmation that STC Tech Change can be allowed from Bob tool */ 
             IF llCreateSTC  THEN DO:
                 ldActivationTS = Func.Common:mMake2DT( TODAY + 1 , 0 ).
                 llReqExist4Month = FALSE.
