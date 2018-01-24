@@ -257,7 +257,7 @@ DO ON ERROR UNDO , LEAVE:
                     FIND CliType2 WHERE CliType2.CliType = MsRequest.ReqCParam2 NO-LOCK NO-ERROR.
                     IF NOT AVAILABLE CliType1 OR  NOT AVAILABLE CLiType2 THEN NEXT.
                     /* same tech then NEXT  */
-                    IF CliType1.fixedlinetype EQ CliType2.fixedlinetype NEXT .
+                    IF CliType1.fixedlinetype EQ CliType2.fixedlinetype THEN NEXT .
                     llReqExist4Month = TRUE .
                     LEAVE.
                 END.
