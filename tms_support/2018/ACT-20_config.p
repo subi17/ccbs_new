@@ -111,19 +111,19 @@ fCreateRequestActionRule(giRequestActionID, "ReqStatus", "+,0").
 fCreateRequestActionRule(giRequestActionID, "#STCFROMTO", "+,CONT29|CONT28").
 
 /* Case 3 */
-fCreateRequestAction("", 0, 13, "STC_DONE_28_to_NonCvg", 1).
+fCreateRequestAction("", 0, 13, "STC_DONE_28_to_NoMainline", 1).
 fCreateRequestActionRule(giRequestActionID, "ReqStatus", "+,2").
 fCreateRequestActionRule(giRequestActionID, "#STCFROMTO", "+,CONT28|CONVERGENT_NO_MAINLINE,MOBILEONLY").
 
-fCreateRequestAction("", 0, 13, "STC_Requested_28_to_NonCvg", 1).
+fCreateRequestAction("", 0, 13, "STC_Requested_28_to_NoMainline", 1).
 fCreateRequestActionRule(giRequestActionID, "ReqStatus", "+,0").
 fCreateRequestActionRule(giRequestActionID, "#STCFROMTO", "+,CONT28|CONVERGENT_NO_MAINLINE,MOBILEONLY").
 
 /* Case 4 */
-fCreateRequestAction("", 0, 13, "STC_DONE_29_to_NonCvg", 1).
+fCreateRequestAction("", 0, 13, "STC_DONE_29_to_NoMainline", 1).
 fCreateRequestActionRule(giRequestActionID, "ReqStatus", "+,2").
 fCreateRequestActionRule(giRequestActionID, "#STCFROMTO", "+,CONT29|CONVERGENT_NO_MAINLINE,MOBILEONLY").
 
-fCreateRequestAction("", 0, 13, "STC_Requested_29_to_NonCvg", 1).
+fCreateRequestAction("", 0, 13, "STC_Requested_29_to_NoMainline", 1).
 fCreateRequestActionRule(giRequestActionID, "ReqStatus", "+,0").
 fCreateRequestActionRule(giRequestActionID, "#STCFROMTO", "+,CONT29|CONVERGENT_NO_MAINLINE,MOBILEONLY").
