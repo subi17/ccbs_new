@@ -40,7 +40,7 @@ FUNCTION fCreateRequestAction RETURNS LOGICAL
          RequestAction.Brand  = "1"
          RequestAction.CLIType    = icCLIType
          RequestAction.ReqType = iiReqType
-         RequestAction.ValidFrom = DATE(6,5,2017)
+         RequestAction.ValidFrom = DATE(1,1,2018)
          RequestAction.ValidTo  = DATE(12,31,2049)
          RequestAction.ActionType = "SMS"
          RequestAction.ActionKey = icActionKey
@@ -101,7 +101,6 @@ fCreateRequestAction("", 0, 13, "STC_Requested_28_to_29", 1).
 fCreateRequestActionRule(giRequestActionID, "ReqStatus", "+,0").
 fCreateRequestActionRule(giRequestActionID, "#STCFROMTO", "+,CONT28|CONT29").
 
-
 /* Case 2 */
 fCreateRequestAction("", 0, 13, "STC_DONE_29_to_28", 1).
 fCreateRequestActionRule(giRequestActionID, "ReqStatus", "+,2").
@@ -110,17 +109,6 @@ fCreateRequestActionRule(giRequestActionID, "#STCFROMTO", "+,CONT29|CONT28").
 fCreateRequestAction("", 0, 13, "STC_Requested_29_to_28", 1).
 fCreateRequestActionRule(giRequestActionID, "ReqStatus", "+,0").
 fCreateRequestActionRule(giRequestActionID, "#STCFROMTO", "+,CONT29|CONT28").
-
-/*
-/* Case 3 */
-fCreateRequestAction("", 0, 13, "STC_DONE_From_Convergent", 1).
-fCreateRequestActionRule(giRequestActionID, "ReqStatus", "+,2").
-fCreateRequestActionRule(giRequestActionID, "#STCFROMTO", "+,CONVERGENT_MAINLINE|CONVERGENT_NO_MAINLINE,MOBILEONLY").
-
-fCreateRequestAction("", 0, 13, "STC_Requested_From_Convergent", 1).
-fCreateRequestActionRule(giRequestActionID, "ReqStatus", "+,0").
-fCreateRequestActionRule(giRequestActionID, "#STCFROMTO", "+,CONVERGENT_MAINLINE|CONVERGENT_NO_MAINLINE,MOBILEONLY").
-*/
 
 /* Case 3 */
 fCreateRequestAction("", 0, 13, "STC_DONE_28_to_NonCvg", 1).
