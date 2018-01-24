@@ -42,19 +42,19 @@ fUpdateInvText("SMS", "STC_DONE", 2, "stc/done", "cliType=#CLITYPE").
 fUpdateInvText("SMS", "STC_DONE", 3, "stc/done", "cliType=#CLITYPE").
 fUpdateInvText("SMS", "STC_DONE", 4, "stc/done", "cliType=#CLITYPE").
 fUpdateInvText("SMS", "STC_DONE", 5, "stc/done", "cliType=#CLITYPE").
-fUpdateInvText("SMS", "STC_Requested", 1, "stc/req", "cliType=#CLITYPE|actDate=#DATE").
-fUpdateInvText("SMS", "STC_Requested", 2, "stc/req", "cliType=#CLITYPE|actDate=#DATE").
-fUpdateInvText("SMS", "STC_Requested", 3, "stc/req", "cliType=#CLITYPE|actDate=#DATE").
-fUpdateInvText("SMS", "STC_Requested", 4, "stc/req", "cliType=#CLITYPE|actDate=#DATE").
-fUpdateInvText("SMS", "STC_Requested", 5, "stc/req", "cliType=#CLITYPE|actDate=#DATE").
+fUpdateInvText("SMS", "STC_Requested", 1, "stc/requested", "cliType=#CLITYPE|date=#DATE").
+fUpdateInvText("SMS", "STC_Requested", 2, "stc/requested", "cliType=#CLITYPE|date=#DATE").
+fUpdateInvText("SMS", "STC_Requested", 3, "stc/requested", "cliType=#CLITYPE|date=#DATE").
+fUpdateInvText("SMS", "STC_Requested", 4, "stc/requested", "cliType=#CLITYPE|date=#DATE").
+fUpdateInvText("SMS", "STC_Requested", 5, "stc/requested", "cliType=#CLITYPE|date=#DATE").
 */
-fUpdateInvText("SMS", "STC_Requested_Any_to_Cvg", 1, "stc/reqtocvg", "cliType=#CLITYPE").
-fUpdateInvText("SMS", "STC_DONE_28_to_29", 1, "stc/done2829", "monthlyCost=9|msisdn=#MSISDN").
-fUpdateInvText("SMS", "STC_Requested_28_to_29", 1, "stc/req2829", "monthlyCost=9|msisdn=#MSISDN").
-fUpdateInvText("SMS", "STC_DONE_29_to_28", 1, "stc/done2928", "monthlyCost=0|msisdn=#MSISDN").
-fUpdateInvText("SMS", "STC_Requested_29_to_28", 1, "stc/req2928", "monthlyCost=0|msisdn=#MSISDN").
-fUpdateInvText("SMS", "STC_DONE_28_to_NonCvg", 1, "stc/done28noncvg", "monthlyCost=14|msisdn=#MSISDN").
-fUpdateInvText("SMS", "STC_Requested_28_to_NonCvg", 1, "stc/req28noncvg", "monthlyCost=14|msisdn=#MSISDN").
-fUpdateInvText("SMS", "STC_DONE_29_to_NonCvg", 1, "stc/done29noncvg", "monthlyCost=14|msisdn=#MSISDN").
-fUpdateInvText("SMS", "STC_Requested_29_to_NonCvg", 1, "stc/req29noncvg", "monthlyCost=14|msisdn=#MSISDN").
+fUpdateInvText("SMS", "STC_Requested_Any_to_Cvg", 1, "stc/req-to-cvg", "cliType=#CLITYPE").
+fUpdateInvText("SMS", "STC_DONE_28_to_29", 1, "stc/done-28-29", "monthlyCost=9|msisdn=#MSISDN").
+fUpdateInvText("SMS", "STC_Requested_28_to_29", 1, "stc/req-28-29", "monthlyCost=9|msisdn=#MSISDN").
+fUpdateInvText("SMS", "STC_DONE_29_to_28", 1, "stc/done-29-28", "monthlyCost=0|msisdn=#MSISDN").
+fUpdateInvText("SMS", "STC_Requested_29_to_28", 1, "stc/req-29-28", "monthlyCost=0|msisdn=#MSISDN").
+fUpdateInvText("SMS", "STC_DONE_28_to_NoMainline", 1, "stc/done-28-no-mainline", "monthlyCost=14|msisdn=#MSISDN").
+fUpdateInvText("SMS", "STC_Requested_28_to_NoMainline", 1, "stc/req-28-no-mainline", "monthlyCost=14|msisdn=#MSISDN").
+fUpdateInvText("SMS", "STC_DONE_29_to_NoMainline", 1, "stc/done-29-no-mainline", "monthlyCost=14|msisdn=#MSISDN").
+fUpdateInvText("SMS", "STC_Requested_29_to_NoMainline", 1, "stc/req-29-no-mainline", "monthlyCost=14|msisdn=#MSISDN").
 
