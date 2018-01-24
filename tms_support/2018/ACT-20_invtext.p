@@ -36,20 +36,25 @@ FUNCTION fUpdateInvText RETURNS LOGICAL
    RETURN TRUE.
 
 END FUNCTION.
-
-fUpdateInvText("SMS", "STC_Requested_To_Convergent", 1, "stc/reqtocvg", "cliType=#CLITYPE").
-fUpdateInvText("SMS", "STC_DONE_28_29", 1, "stc/done2829", "monthlyCost=#MONTHLYCOST|msisdn=#MSISDN").
-fUpdateInvText("SMS", "STC_Requested_28_29", 1, "stc/req2829", "monthlyCost=#MONTHLYCOST|msisdn=#MSISDN").
-fUpdateInvText("SMS", "STC_DONE_29_28", 1, "stc/done2928", "monthlyCost=#MONTHLYCOST|msisdn=#MSISDN").
-fUpdateInvText("SMS", "STC_Requested_29_28", 1, "stc/req2928", "monthlyCost=#MONTHLYCOST|msisdn=#MSISDN").
-fUpdateInvText("SMS", "STC_DONE_From_Convergent", 1, "stc/donefromcvg", "monthlyCost=#MONTHLYCOST|msisdn=#MSISDN").
-fUpdateInvText("SMS", "STC_Requested_From_Convergent", 1, "stc/reqfromcvg", "monthlyCost=#MONTHLYCOST|msisdn=#MSISDN").
-
-
-fUpdateInvText("SMS", "STC_DONE", 5, "stc/done", "cliType=#CLITYPE").
-
-
-
+/*
+fUpdateInvText("SMS", "STC_DONE", 1, "stc/done", "cliType=#CLITYPE").
+fUpdateInvText("SMS", "STC_DONE", 2, "stc/done", "cliType=#CLITYPE").
 fUpdateInvText("SMS", "STC_DONE", 3, "stc/done", "cliType=#CLITYPE").
 fUpdateInvText("SMS", "STC_DONE", 4, "stc/done", "cliType=#CLITYPE").
 fUpdateInvText("SMS", "STC_DONE", 5, "stc/done", "cliType=#CLITYPE").
+fUpdateInvText("SMS", "STC_Requested", 1, "stc/req", "cliType=#CLITYPE|actDate=#DATE").
+fUpdateInvText("SMS", "STC_Requested", 2, "stc/req", "cliType=#CLITYPE|actDate=#DATE").
+fUpdateInvText("SMS", "STC_Requested", 3, "stc/req", "cliType=#CLITYPE|actDate=#DATE").
+fUpdateInvText("SMS", "STC_Requested", 4, "stc/req", "cliType=#CLITYPE|actDate=#DATE").
+fUpdateInvText("SMS", "STC_Requested", 5, "stc/req", "cliType=#CLITYPE|actDate=#DATE").
+*/
+fUpdateInvText("SMS", "STC_Requested_Any_to_Cvg", 1, "stc/reqtocvg", "cliType=#CLITYPE").
+fUpdateInvText("SMS", "STC_DONE_28_to_29", 1, "stc/done2829", "monthlyCost=9|msisdn=#MSISDN").
+fUpdateInvText("SMS", "STC_Requested_28_to_29", 1, "stc/req2829", "monthlyCost=9|msisdn=#MSISDN").
+fUpdateInvText("SMS", "STC_DONE_29_to_28", 1, "stc/done2928", "monthlyCost=0|msisdn=#MSISDN").
+fUpdateInvText("SMS", "STC_Requested_29_to_28", 1, "stc/req2928", "monthlyCost=0|msisdn=#MSISDN").
+fUpdateInvText("SMS", "STC_DONE_28_to_NonCvg", 1, "stc/done28noncvg", "monthlyCost=14|msisdn=#MSISDN").
+fUpdateInvText("SMS", "STC_Requested_28_to_NonCvg", 1, "stc/req28noncvg", "monthlyCost=14|msisdn=#MSISDN").
+fUpdateInvText("SMS", "STC_DONE_29_to_NonCvg", 1, "stc/done29noncvg", "monthlyCost=14|msisdn=#MSISDN").
+fUpdateInvText("SMS", "STC_Requested_29_to_NonCvg", 1, "stc/req29noncvg", "monthlyCost=14|msisdn=#MSISDN").
+
