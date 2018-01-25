@@ -37,7 +37,8 @@ FORM
    "Floor............:" OrderCustomer.Floor SKIP
    "Hand.............:" OrderCustomer.Hand SKIP
    "Km...............:" OrderCustomer.Km SKIP
-   "Zip..............:" OrderCustomer.ZipCode FORMAT "X(50)" SKIP(2)
+   "Zip..............:" OrderCustomer.ZipCode FORMAT "X(50)" SKIP
+   "Gescal...........:" OrderCustomer.Gescal SKIP
 WITH OVERLAY ROW 1 WIDTH 80 centered
     COLOR VALUE(Syst.Var:cfc)
     TITLE COLOR VALUE(Syst.Var:ctc) " Installation Address "
@@ -66,7 +67,8 @@ REPEAT WITH FRAME fAddr ON ENDKEY UNDO LOOP, NEXT LOOP:
       OrderCustomer.Floor 
       OrderCustomer.Hand 
       OrderCustomer.Km 
-      OrderCustomer.ZipCode WITH FRAME fAddr.
+      OrderCustomer.ZipCode
+      OrderCustomer.Gescal WITH FRAME fAddr.
 
    PAUSE 0.
    ASSIGN
