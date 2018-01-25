@@ -9,6 +9,7 @@ import glob
 import errno
 import resource
 import fnmatch
+import threading
 
 relpath = '..'
 exec(open(relpath + '/etc/make_site.py').read())
@@ -115,56 +116,6 @@ def active_cdr_db_pf():
 def test(*a): pass
 
 @target
-def daemon(*a):
-    if len(parameters) < 1:
-        raise PikeException('Expected daemon name and instance as parameter')
-    daemon = parameters[0]
-    instance = parameters[1]
-    cdr_dict = {}
-
-    if instance == "__NO__":
-        instance = ""
-    pid_file = '../var/run/d-' + daemon + instance + '.pid'
-
-    if os.path.exists(pid_file):
-        print("The " + daemon + instance + " is already running")
-        return
-
-    print("Starting " + daemon + instance + "... ")
-    args = mpro + ['-b', '-p', 'gearbox/daemons/run_daemon.p',
-            '-clientlog', '../var/log/d-' + daemon + instance + '.log',
-            '-logthreshold', '209715200', '-numlogfiles', '0',
-            '-param', daemon + ',' + instance + ',../var/run']
-
-    dbcount = 0
-    for pp in parameters[2:]:
-        if pp in databases:
-            args.extend(['-pf', getpf('../db/progress/store/{0}'.format(pp))])
-            dbcount += 1
-        elif pp in cdr_databases:
-            if not cdr_dict:
-                cdr_dict = active_cdr_db_pf()
-            if pp in cdr_dict:
-                args.extend(cdr_dict[pp])
-                dbcount += 1
-        else:
-            args.append(pp)
-
-    if dbcount != 0:
-        args.extend(['-h', str(dbcount + cdr_database_count * 2)])
-
-    daemonpf = '../etc/pf/' + daemon + '.pf'
-    if os.path.exists(daemonpf):
-        args.extend(pftolist(['-pf', daemonpf]))
-    file = open(pid_file, 'w')
-    file.write(str(os.getpid()))
-    file.close()
-    os.execlp(args[0], *args)
-
-@target
-def rundaemons(*a): pass
-
-@target
 def build(match, *a):
     '''build|buildextapi'''
     if len(parameters) != 1:
@@ -232,6 +183,21 @@ def compile(match, *a):
 
     _compile(compilecommand.format(compiledir), compiledir)
 
+class myThread (threading.Thread):
+   def __init__(self, compfile, args):
+      threading.Thread.__init__(self)
+      self.compfile = compfile
+      self.args = args
+   def run(self):
+      worker(self.compfile, self.args)
+
+def worker(compfile, args):
+    """thread worker function"""
+    comp = Popen(mpro + args + ['-b', '-inp', '200000', '-tok', '20000', '-p', compfile], stdout=PIPE)
+    call('/bin/cat', stdin=comp.stdout)
+    comp.wait()
+    os.unlink(compfile)
+
 def _compile(compilecommand, compiledir):
     source_files = []
 
@@ -274,17 +240,15 @@ def _compile(compilecommand, compiledir):
 
     args.extend(['-h', str(dbcount)])
 
-    processes = []
+    threads = []
     for file in compile_p:
-        comp = Popen(mpro + args + ['-b', '-inp', '200000', '-tok', '20000', '-p', file], stdout=PIPE)
-        processes.append(comp)
+        thread = myThread(file, args)
+        thread.start()
+        threads.append(thread)
 
-    for comp in processes:
-        call('/bin/cat', stdin=comp.stdout)
-        comp.wait()
-
-    for file in compile_p:
-        os.unlink(file)
+    # Wait for all threads to complete
+    for t in threads:
+        t.join()
 
     print('')
 
