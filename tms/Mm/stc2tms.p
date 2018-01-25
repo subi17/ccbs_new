@@ -242,17 +242,17 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
    
    IF MobSub.TerritoryOwner <> "FIBMM02" THEN
    DO:
-       IF (bOldType.FixedLinType EQ {&FIXED_LINE_TYPE_FIBER} AND CLIType.FixedLineType EQ {&FIXED_LINE_TYPE_FIBER})AND
-          (bOldType.FixedLineDownload <> CLIType.FixedLineDownload OR 
-           bOldType.FixedLineUpload <> CLIType.FixedLineUpload) THEN
-       DO:
-          RUN Gwy/masmovil_speed_change.p(MSRequest.MSrequest).
-          IF RETURN-VALUE NE "" THEN
-          DO:
-              fReqError("Error from Masmovil provising platform for speed change").
-              RETURN.
-          END.
-       END.                   
+       IF bOldType.FixedLinType EQ {&FIXED_LINE_TYPE_FIBER} AND 
+          CLIType.FixedLineType EQ {&FIXED_LINE_TYPE_FIBER} AND
+          (bOldType.FixedLineDownload <> CLIType.FixedLineDownload OR bOldType.FixedLineUpload <> CLIType.FixedLineUpload) THEN
+       DO:   
+           RUN pSpeedChangeRequestForProvisioning NO-ERROR.
+           IF ERROR-STATUS:ERROR THEN
+           DO:
+               fReqError(ERROR-STATUS:GetMessage(1)).
+               RETURN.
+           END. 
+       END.    
    END.
 
    RUN pInitialize.
@@ -315,6 +315,31 @@ PROCEDURE pInitialize:
    
 END PROCEDURE.
 
+PROCEDURE pSpeedChangeRequestForProvisioning:
+    DEF VAR liOrderId          AS INTE NO-UNDO.
+
+    FOR EACH  Order WHERE Order.MsSeq = Mobsub.MsSeq NO-LOCK,
+        FIRST FusionMessage NO-LOCK WHERE FusionMessage.OrderId = Order.OrderId USE-INDEX OrderId:
+
+        IF (FusionMessage.MessageType <> {&FUSIONMESSAGE_TYPE_CREATE_ORDER} AND 
+            (FusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_CREATE_ORDER} AND FusionMessage.MessageStatus <> {&FUSION_ORDER_STATUS_FINALIZED})) THEN
+            NEXT.
+
+        ASSIGN liOrderId = Order.OrderId.
+
+        LEAVE.
+    END.
+
+    IF liOrderId > 0 THEN
+    DO:
+        RUN Gwy/masmovil_speed_change.p(Order.OrderId, CLIType.FixedLineDownload, CLIType.FixedLineUpload).
+        IF RETURN-VALUE NE "" THEN
+            RETURN ERROR "Fixed line fiber speed change request failed with " + RETURN-VALUE.
+    END.
+
+    RETURN "".    
+
+END PROCEDURE.
 
 PROCEDURE pFeesAndServices:
 

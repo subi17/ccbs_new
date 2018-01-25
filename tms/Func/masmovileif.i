@@ -634,20 +634,19 @@ FUNCTION fSetSpeed_Masmovil RETURNS CHAR
       ocResultDesc = gc_xmlrpc_error.
       RETURN SUBST("ERROR: &1", gc_xmlrpc_error).
    END.
-   
+
    lcXMLStruct = get_struct(response_toplevel_id,"0").
-   lcResponse = validate_struct(lcXMLStruct,"idNumero,fechaAsignacionCmt,fechaUltimoCambio,numero!,_links").
+   lcResponse = validate_struct(lcXMLStruct,"resultCode!,resultDescription").
+   ocResultCode = get_string(lcXMLSTruct, "resultCode").
+   IF LOOKUP('resultDescription', lcXMLSTruct) GT 0 THEN
+      ocResultDesc = get_string(lcXMLStruct, "resultDescription").
+
    IF gi_xmlrpc_error NE 0 THEN
       RETURN SUBST("ERROR: Response parsing failed: &1", gc_xmlrpc_error).
 
-   ocNum = get_string(lcXMLStruct,"numero").
-   
-   IF gi_xmlrpc_error NE 0 THEN
-      RETURN SUBST("ERROR: Response parsing failed: &1", gc_xmlrpc_error).
-
-   IF NOT ocNum > "" THEN
-      RETURN "ERROR: Number not returned. Area: " + icPostalCode.
+   IF ocResultCode NE "00" THEN 
+      RETURN SUBST("ERROR: Result code &1", ocResultCode).
 
    RETURN "OK".
 
-END.
+END FUNCTION.

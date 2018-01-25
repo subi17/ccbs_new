@@ -124,6 +124,7 @@ FUNCTION fGetSpeedProfile RETURNS CHARACTER
     DEF VAR lcUriPath      AS CHAR       NO-UNDO.
     DEF VAR lcUriQuery     AS CHAR       NO-UNDO.
     DEF VAR lcUriQueryVal  AS CHAR       NO-UNDO.
+    DEF VAR loRequestJson  AS JsonObject NO-UNDO.
     DEF VAR loJson         AS JsonObject NO-UNDO.
 
     DEFINE VARIABLE loJsonArray  AS JsonArray         NO-UNDO.
@@ -132,11 +133,11 @@ FUNCTION fGetSpeedProfile RETURNS CHARACTER
     DEFINE VARIABLE lcJsonArray  AS JsonArray         NO-UNDO.
 
     ASSIGN
-        lcHost        = fCParamC("Host")   
-        liPort        = fCParamI("Port")     
-        lcUriPath     = fCParamC("UriPath")   
-        lcUriQuery    = fCParamC("UriQuery")  
-        lcUriQueryVal = fCParamC("UriQueryValue").
+        lcHost        = fCParam("GESCON", "Host")   
+        liPort        = fIParam("GESCON", "Port")     
+        lcUriPath     = fCParam("GESCON", "UriPath")   
+        lcUriQuery    = fCParam("GESCON", "UriQuery")  
+        lcUriQueryVal = fCParam("GESCON", "UriQueryValue").
         
     FOR EACH  Order WHERE Order.MsSeq = piMsSeq NO-LOCK,
         FIRST OrderCustomer WHERE 
@@ -162,7 +163,8 @@ FUNCTION fGetSpeedProfile RETURNS CHARACTER
                                    ""        ,
                                    lcUriPath ,
                                    lcUriQuery,
-                                   lcUriQueryVal ,
+                                   lcUriQueryVal,
+                                   loRequestJson,
                                    OUTPUT loJson).
 
         ASSIGN lcJsonArray = loJson:GetJsonArray('feasibilities').

@@ -19,7 +19,8 @@ define input  parameter icpassword    as character  no-undo.
 define input  parameter icUriPath     as character  no-undo.
 define input  parameter icUriQuery    as character  no-undo.
 define input  parameter icUriQueryVal as character  no-undo.
-define output parameter oJson         as JsonObject no-undo.
+define input  parameter ioRequestJson as character  no-undo.
+define input output parameter ioJson  as JsonObject no-undo.
 
 /* ***************************  Main Block  *************************** */
 define variable oClient as IHttpClient no-undo.
@@ -35,7 +36,7 @@ if icUserId <> "" then
     oCreds = new Credentials('', icUserId, icpassword).
 
 oUri = new URI('http', icHost, iiport).
-oUri:Path = icUriPath. /* 'api/gescon/1/feasibility' */
+oUri:Path = icUriPath. 
 if icUriQuery <> "" then 
     oUri:AddQuery(icUriQuery, icUriQueryVal).
 
@@ -56,7 +57,31 @@ case icAction:
             when 200 then 
             do:
                 if type-of(oResp:Entity, JsonObject) then
-                    assign oJson = cast(oResp:Entity, JsonObject).
+                    assign ioJson = cast(oResp:Entity, JsonObject).
+            end.
+            otherwise
+                undo, throw new Progress.Lang.AppError(oResp:StatusReason, 1).
+        end case.
+    end.
+    when 'post' then 
+    do:
+        if lcUserId <> "" then 
+            oReq = RequestBuilder:Post(oUri, ioRequestJson)
+                    :UsingCredentials(oCreds)
+                    :ContentType('application/json')
+                    :AcceptJson()
+                    :Request.    
+        else      
+            oReq = RequestBuilder:Post(oUri, ioRequestJson)
+                        :Request.    
+
+        oResp = oClient:Execute(oReq).
+
+        case oResp:StatusCode:
+            when 200 then 
+            do:
+                if type-of(oResp:Entity, JsonObject) then
+                    assign ioJson = cast(oResp:Entity, JsonObject).
             end.
             otherwise
                 undo, throw new Progress.Lang.AppError(oResp:StatusReason, 1).
