@@ -37,6 +37,7 @@ DEF VAR lcTestCustomers AS CHAR NO-UNDO.
 DEF VAR lcLink        AS CHAR NO-UNDO.
 DEF VAR liTestFilter AS INT NO-UNDO.
 DEF VAR lcRecipient AS CHAR NO-UNDO.
+DEF VAR liPeriod AS INT NO-UNDO.
 
 DEF STREAM sIn. /*1st/Last notification recipients*/
 
@@ -48,27 +49,34 @@ FUNCTION fGenerateEmailTemplate RETURNS CHAR
     ideAmount AS DECIMAL,
     icDate AS CHAR, 
     icLink AS CHAR,
-    iiInvNum AS INT):
+    iiInvNum AS INT,
+    iiPeriod AS INT):
    DEF VAR lcTargetType AS CHAR NO-UNDO.
    DEF VAR llcMessage  AS LONGCHAR NO-UNDO.
    DEF VAR lcMessagePayload AS CHAR NO-UNDO.
    DEF VAR llgOK AS LOGICAL NO-UNDO.
    DEF VAR lcLocalLink AS CHAR NO-UNDO.
-   DEF VAR lcInvNumCrypted AS CHAR NO-UNDO.
+   DEF VAR lcCrypted AS CHAR NO-UNDO.
+   DEF VAR liPeriod AS INT NO-UNDO.
+
 
    ASSIGN
-      lcInvNumCrypted =  encrypt_data(icMSISDN,
+      liPeriod      = IF MONTH(TODAY) = 1
+                      THEN (YEAR(TODAY) - 1) * 100 + 12
+                      ELSE YEAR(TODAY) * 100 + (MONTH(TODAY) - 1)
+
+      lcCrypted =  encrypt_data(icMSISDN + STRING(iiPeriod),
                                       {&ENCRYPTION_METHOD}, 
                                       {&ESI_PASSPHRASE}) 
       /* convert some special characters to url encoding (at least '+' char
          could cause problems at later phases. */
-      lcInvNumCrypted = fUrlEncode(lcInvNumCrypted, "query").
+      lcCrypted = fUrlEncode(lcCrypted, "query").
 /*InvText.paramtext.keyvalue Jsonparam "MsSeq=#MSSEQ| ..."*/
 /*TODO: obviously we need to build link in this function*/
    ASSIGN
       lcMessagePayload = icTemplate
       lcMessagePayload = REPLACE(lcMessagePayload,"#LINK",icLink + "/" + 
-                                 lcInvNumCrypted)
+                                 lcCrypted)
       lcMessagePayload = REPLACE(lcMessagePayload,"#MSISDN",icMSISDN) 
       lcMessagePayload = REPLACE(lcMessagePayload,"#AMOUNT",STRING(ideAmount))
       lcMessagePayload = REPLACE(lcMessagePayload,"#INVDATE",icDate)
@@ -100,7 +108,11 @@ ASSIGN lcAddrConfDir = fCParamC("RepConfDir")
        liMonth       = MONTH(ldaDateFrom)
        lcLink        = fCParamC("ESI_LinkBase")
        liTestFilter  = fCparamI("ESI_TestFilter")
-       lcTestCustomers = fCparamC("ESI_TestCustomers").
+       lcTestCustomers = fCparamC("ESI_TestCustomers")
+       liPeriod      = IF MONTH(TODAY) = 1
+                       THEN (YEAR(TODAY) - 1) * 100 + 12
+                       ELSE YEAR(TODAY) * 100 + (MONTH(TODAY) - 1).
+
 
 IF lcAddrConfDir + "/smsinvoice.sms" NE ? THEN DO:
    IF Mm.MManMessage:mGetMessage("SMS", "EInvMessageStarted", 1)EQ TRUE THEN DO:
@@ -158,7 +170,8 @@ FOR EACH Invoice WHERE
                                              Invoice.InvAmt,
                                              STRING(Invoice.InvDate),
                                              lcLink,
-                                             Invoice.InvNum).
+                                             Invoice.InvNum,
+                                             liPeriod).
 
          Mm.MManMessage:ParamKeyValue = lcTemplate.                                      Mm.MManMessage:mCreateMMLogSMS(MobSub.CLI).
       END.
