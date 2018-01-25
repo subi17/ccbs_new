@@ -239,6 +239,21 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
       fReqError("Unknown old CLIType").
       RETURN.
    END.
+   
+   IF MobSub.TerritoryOwner <> "FIBMM02" THEN
+   DO:
+       IF (bOldType.FixedLinType EQ {&FIXED_LINE_TYPE_FIBER} AND CLIType.FixedLineType EQ {&FIXED_LINE_TYPE_FIBER})AND
+          (bOldType.FixedLineDownload <> CLIType.FixedLineDownload OR 
+           bOldType.FixedLineUpload <> CLIType.FixedLineUpload) THEN
+       DO:
+          RUN Gwy/masmovil_speed_change.p(MSRequest.MSrequest).
+          IF RETURN-VALUE NE "" THEN
+          DO:
+              fReqError("Error from Masmovil provising platform for speed change").
+              RETURN.
+          END.
+       END.                   
+   END.
 
    RUN pInitialize.
    RUN pFeesAndServices.
