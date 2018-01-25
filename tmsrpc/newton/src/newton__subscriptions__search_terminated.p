@@ -45,6 +45,8 @@ DEF VAR liSubCount AS INT NO-UNDO.
 DEF VAR llSearchByMobsub AS LOGICAL NO-UNDO INITIAL FALSE.
 DEF VAR lcBundleCLITypes AS CHAR NO-UNDO.
 
+DEFINE VARIABLE lcTmp AS CHARACTER NO-UNDO. /* YDR-2688 */
+
 DEFINE TEMP-TABLE ttOwner NO-UNDO
    FIELD Custnum AS INT
 INDEX Custnum IS PRIMARY UNIQUE Custnum. 
@@ -59,12 +61,17 @@ pcSearchType = get_string(pcStruct, "search_type").
 pcInput      = get_string(pcStruct, "search_key").
 plAdmin      = get_bool  (pcStruct, "admin").
 
+/* YDR-2688 
 IF pcSearchType EQ "custnum" THEN DO:
+*/
    liOwner = INT(pcInput) NO-ERROR.
+/*
    IF ERROR-STATUS:ERROR OR liOwner <= 0 THEN RETURN
       appl_err("incorrect search_key").
 END.
+*/
 
+lcTmp    = CAPS(SUBSTRING(pcInput, 9, 1)). /* YDR-2688 */
 piLimit  = get_pos_int(pcStruct, "limit").
 piOffSet = get_int(pcStruct, "offset").
 
@@ -128,14 +135,16 @@ END FUNCTION.
 top_struct = add_struct(response_toplevel_id, "").
 result_array = add_array(top_struct, "subscriptions").
 
-/* Check if search is for MSISDN (default) or Fixed (Number begins 8 or 9) */
-IF pcSearchType EQ "msisdn" AND 
-  (pcInput BEGINS "8" OR
-   pcInput BEGINS "9") THEN pcSearchType = "fixed_number".
-
-IF pcSearchType EQ "msisdn" THEN DO:
-   
+/* YDR-2688 - Start of changes */
+/* Mobile line */
+IF LENGTH(pcInput) EQ 9 AND 
+   (pcInput BEGINS "6" OR pcInput BEGINS "7") AND
+   NOT (ASC(lcTmp) >= 65 AND
+   ASC(lcTmp) <= 90) AND
+   LOOKUP("msisdn", pcSearchType) > 0 THEN
+DO:    
    RELEASE ttOwner.
+   
    FOR EACH termmobsub NO-LOCK WHERE
       termmobsub.cli = pcInput AND
       termmobsub.brand = Syst.Var:gcBrand,
@@ -163,9 +172,16 @@ IF pcSearchType EQ "msisdn" THEN DO:
        RETURN appl_err(SUBST("MobSub entry &1 not found", pcInput)).
    
    llSearchByMobsub = TRUE.
-END. 
-ELSE IF pcSearchType EQ "fixed_number" THEN DO:
-
+END.
+/* Fixed line number search. Fixed (Number begins 8 or 9) */
+ELSE IF LENGTH(pcInput) EQ 9 AND
+   (pcInput BEGINS "8" OR pcInput BEGINS "9" ) AND
+   NOT (ASC(lcTmp) >= 65 AND
+   ASC(lcTmp) <= 90) AND
+   LOOKUP("msisdn", pcSearchType) > 0 THEN
+DO:   
+   pcSearchType = "fixed_number".
+   
    RELEASE ttOwner.
 
    FOR EACH termmobsub NO-LOCK WHERE
@@ -196,9 +212,13 @@ ELSE IF pcSearchType EQ "fixed_number" THEN DO:
 
    llSearchByMobsub = TRUE.
 END.
-ELSE IF pcSearchType EQ "imsi" THEN DO:
-   
+/* IMSI */
+ELSE IF LENGTH(pcInput) = 15 AND 
+   pcInput BEGINS "21404" AND
+   LOOKUP("imsi", pcSearchType) > 0 THEN
+DO:
    RELEASE ttOwner.
+   
    FOR EACH TermMobsub NO-LOCK WHERE
       TermMobSub.Brand = Syst.Var:gcBrand AND
       TermMobSub.IMSI  = pcInput,
@@ -227,9 +247,12 @@ ELSE IF pcSearchType EQ "imsi" THEN DO:
       RETURN appl_err(SUBST("IMSI &1 not found", pcInput)).
 
    llSearchByMobsub = TRUE.
-
 END.
-ELSE IF pcSearchType EQ "custnum" AND liOwner NE 0 THEN DO:
+/* Custnum */
+ELSE IF liOwner NE 0 AND 
+   LOOKUP("custnum", pcSearchType) > 0 THEN
+DO:
+   RELEASE ttOwner.
 
    FIND Customer NO-LOCK WHERE
         Customer.CustNum = liOwner AND
@@ -244,7 +267,10 @@ ELSE IF pcSearchType EQ "custnum" AND liOwner NE 0 THEN DO:
    ASSIGN
       ttOwner.Custnum = Customer.Custnum.
 END.
-ELSE IF pcSearchType EQ "person_id" THEN DO:
+/* Person_id */
+ELSE IF LOOKUP("person_id", pcSearchType) > 0 THEN
+DO:
+   RELEASE ttOwner.
    
    FIND Customer NO-LOCK WHERE
         Customer.brand = Syst.Var:gcBrand AND
@@ -263,7 +289,12 @@ ELSE IF pcSearchType EQ "person_id" THEN DO:
    ASSIGN
       ttOwner.Custnum = Customer.CustNum.
 END.
+/* YDR-2688
 ELSE RETURN appl_err(SUBST("Unknown search type &1", pcSearchType)).
+*/
+
+/* YDR-2688 - end of changes */
+
 
 FOR EACH ttOwner NO-LOCK,
     EACH TermMobSub NO-LOCK WHERE
@@ -292,4 +323,4 @@ add_int(top_struct, "sub_count", liSubCount).
 
 FINALLY:
    EMPTY TEMP-TABLE ttOwner.
-   END.
+END.
