@@ -1,0 +1,121 @@
+ADD TABLE "TMSRelation"
+  MULTITENANT yes
+  AREA "Sta_Data_128"
+  LABEL "TMSRelation"
+  DESCRIPTION "General purpose relation table"
+  DUMP-NAME "tmsrel"
+  TABLE-TRIGGER "CREATE" OVERRIDE PROCEDURE "triggers/c-tmsrelation.p" CRC "?" 
+
+ADD FIELD "TMSRelationID" OF "TMSRelation" AS int64 
+  FORMAT ">>>>>>>>>9"
+  INITIAL "0"
+  LABEL "Relation ID"
+  POSITION 2
+  MAX-WIDTH 8
+  COLUMN-LABEL "ID"
+  HELP "Unique relation id number"
+  ORDER 10
+
+ADD FIELD "TableName" OF "TMSRelation" AS character 
+  FORMAT "x(25)"
+  INITIAL ""
+  LABEL "Table name"
+  POSITION 3
+  MAX-WIDTH 50
+  COLUMN-LABEL "TableName"
+  ORDER 20
+
+ADD FIELD "KeyType" OF "TMSRelation" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Key type"
+  POSITION 4
+  MAX-WIDTH 60
+  COLUMN-LABEL "KeyType"
+  ORDER 30
+
+ADD FIELD "ParentValue" OF "TMSRelation" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Parent value"
+  POSITION 5
+  MAX-WIDTH 60
+  COLUMN-LABEL "ParentValue"
+  ORDER 40
+
+ADD FIELD "ChildValue" OF "TMSRelation" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "Child value"
+  POSITION 6
+  MAX-WIDTH 60
+  COLUMN-LABEL "ChildValue"
+  ORDER 50
+
+ADD FIELD "FromTime" OF "TMSRelation" AS datetime-tz 
+  FORMAT "99-99-9999 HH:MM:SS.SSS+HH:MM"
+  INITIAL "?"
+  LABEL "From time"
+  POSITION 7
+  MAX-WIDTH 12
+  COLUMN-LABEL "FromTime"
+  ORDER 60
+
+ADD FIELD "ToTime" OF "TMSRelation" AS datetime-tz 
+  FORMAT "99-99-9999 HH:MM:SS.SSS+HH:MM"
+  INITIAL "?"
+  LABEL "To time"
+  POSITION 8
+  MAX-WIDTH 12
+  COLUMN-LABEL "ToTime"
+  ORDER 70
+
+ADD FIELD "RelationType" OF "TMSRelation" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "RelationType"
+  POSITION 9
+  MAX-WIDTH 40
+  COLUMN-LABEL "RelationType"
+  HELP "Type of the relation"
+  ORDER 80
+
+ADD INDEX "ParentValue" ON "TMSRelation" 
+  AREA "Sta_Index_3"
+  PRIMARY
+  INDEX-FIELD "TableName" ASCENDING 
+  INDEX-FIELD "KeyType" ASCENDING 
+  INDEX-FIELD "ParentValue" ASCENDING 
+  INDEX-FIELD "ToTime" DESCENDING 
+
+ADD INDEX "ChildValue" ON "TMSRelation" 
+  AREA "Sta_Index_3"
+  UNIQUE
+  INDEX-FIELD "TableName" ASCENDING 
+  INDEX-FIELD "KeyType" ASCENDING 
+  INDEX-FIELD "ChildValue" ASCENDING 
+  INDEX-FIELD "ParentValue" ASCENDING 
+  INDEX-FIELD "ToTime" DESCENDING 
+
+ADD INDEX "TMSRelationID" ON "TMSRelation" 
+  AREA "Sta_Index_3"
+  UNIQUE
+  INDEX-FIELD "TMSRelationID" ASCENDING 
+
+ADD INDEX "ToTime" ON "TMSRelation" 
+  AREA "Sta_Index_3"
+  INDEX-FIELD "TableName" ASCENDING 
+  INDEX-FIELD "KeyType" ASCENDING 
+  INDEX-FIELD "ToTime" DESCENDING 
+
+ADD SEQUENCE "TMSRelationID"
+  INITIAL 1
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 1
+
+.
+PSC
+cpstream=1252
+.
+0000002489
