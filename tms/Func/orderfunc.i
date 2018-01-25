@@ -552,6 +552,17 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
             OTHERWISE.
          END CASE.
 
+         IF icAction     EQ     "RELEASE"                              AND 
+            labOrder.ICC EQ     ""                                     AND  
+            icCLIType    BEGINS "CONTFH"                               AND
+            LOOKUP(labOrder.OrderChannel,{&ORDER_CHANNEL_DIRECT}) GT 0 THEN DO:
+
+            IF labOrder.DeliverySecure > 0 THEN 
+               lcNewOrderStatus = {&ORDER_STATUS_SENDING_TO_LO}.
+            ELSE lcNewOrderStatus = {&ORDER_STATUS_PENDING_ICC_FROM_INSTALLER}. 
+
+         END.
+
       END.
 
       IF lcNewOrderStatus > "" THEN DO:
@@ -663,7 +674,7 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
    DEF VAR lcNewOrderStatus     AS CHAR NO-UNDO. 
 
    FIND FIRST lbELOrder NO-LOCK WHERE
-              lbELOrder.Brand        EQ Syst.Var:gcBrand           AND
+              lbELOrder.Brand        EQ Syst.Var:gcBrand                  AND
               lbELOrder.OrderID      EQ iiExtraLineOrderId                AND 
               lbELOrder.MultiSimId   EQ iiMainLineOrderId                 AND 
               lbELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}         AND 
@@ -680,6 +691,13 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
       CASE icAction:
          WHEN "RELEASE" THEN DO:
          
+            FIND FIRST lbMLOrder NO-LOCK WHERE 
+                       lbMLOrder.Brand        EQ Syst.Var:gcBrand         AND
+                       lbMLOrder.OrderId      EQ iiMainLineOrderId        AND 
+                       lbMLOrder.MultiSimId   EQ iiExtraLineOrderId       AND 
+                       lbMLOrder.MultiSimType EQ {&MULTISIMTYPE_PRIMARY}  AND 
+                LOOKUP(lbMLOrder.StatusCode,{&ORDER_CLOSE_STATUSES}) EQ 0 NO-ERROR. 
+
             CASE lbELOrder.OrderType:
                WHEN {&ORDER_TYPE_NEW} THEN lcNewOrderStatus = {&ORDER_STATUS_NEW}.
                WHEN {&ORDER_TYPE_MNP} THEN lcNewOrderStatus = {&ORDER_STATUS_MNP}.
@@ -687,6 +705,17 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
                OTHERWISE.
             END CASE.
 
+            IF AVAIL lbMLOrder                                            AND 
+                     lbMLOrder.CLIType BEGINS "CONTFH"                    AND
+                     lbELOrder.ICC     EQ     ""                          AND 
+              LOOKUP(lbELOrder.OrderChannel,{&ORDER_CHANNEL_DIRECT}) GT 0 THEN DO:
+            
+               IF lbELOrder.DeliverySecure > 0 THEN 
+                  lcNewOrderStatus = {&ORDER_STATUS_SENDING_TO_LO}.
+               ELSE lcNewOrderStatus = {&ORDER_STATUS_PENDING_ICC_FROM_INSTALLER}. 
+
+            END.
+            
             fSetOrderStatus(lbELOrder.OrderId,lcNewOrderStatus).
 
          END.                      
@@ -694,7 +723,7 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
             /* Check if Main line order is closed, If closed, 
                then close extraline ongoing order */
             FIND FIRST lbMLOrder NO-LOCK WHERE 
-                       lbMLOrder.Brand        EQ Syst.Var:gcBrand AND
+                       lbMLOrder.Brand        EQ Syst.Var:gcBrand        AND
                        lbMLOrder.OrderId      EQ iiMainLineOrderId       AND 
                        lbMLOrder.MultiSimId   EQ iiExtraLineOrderId      AND 
                        lbMLOrder.MultiSimType EQ {&MULTISIMTYPE_PRIMARY} AND 
@@ -807,6 +836,50 @@ FUNCTION fDeactivateTVService RETURNS LOGICAL
   RETURN TRUE.
 
 END FUNCTION.  
+
+FUNCTION fIsTerminalOrder RETURNS LOG
+   (INPUT liOrderId       AS INT,
+    OUTPUT ocTerminalCode AS CHAR):
+
+   DEFINE BUFFER bTermOrder FOR Order.
+
+   FIND FIRST bTermOrder NO-LOCK WHERE
+              bTermOrder.Brand   = Syst.Var:gcBrand AND
+              bTermOrder.OrderId = liOrderId        NO-ERROR.
+
+   IF NOT AVAIL bTermOrder THEN RETURN FALSE.
+
+   /* Prepaid Order */
+   IF bTermOrder.PayType = TRUE THEN RETURN FALSE.
+
+   /* Terminal Financing in direct channel deployment on 09.07.2014 8:00 CET */
+   IF bTermOrder.CrStamp < 20140709.28800 THEN RETURN FALSE.
+
+   /* Check Terminal billcode */
+   FOR EACH OfferItem NO-LOCK WHERE
+            OfferItem.Brand       = Syst.Var:gcBrand   AND
+            OfferItem.Offer       = bTermOrder.Offer   AND
+            OfferItem.BeginStamp <= bTermOrder.CrStamp AND
+            OfferItem.EndStamp   >= bTermOrder.CrStamp AND
+            OfferItem.ItemType    = "BillItem",
+      FIRST BillItem NO-LOCK WHERE
+            BillItem.Brand    = Syst.Var:gcBrand AND
+            BillItem.BillCode = OfferItem.ItemKey,
+      FIRST BitemGroup NO-LOCK WHERE
+            BitemGroup.Brand   = Syst.Var:gcBrand AND
+            BitemGroup.BIGroup = BillItem.BIGroup AND
+            BItemGroup.BIGroup EQ "7":
+
+      /* Exclude discount billing item on terminal */
+      IF BillItem.BillCode BEGINS "CPDISC" THEN NEXT.
+
+      ocTerminalCode = BillItem.BillCode.
+      RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+END FUNCTION.
+
 &ENDIF.
 
 
