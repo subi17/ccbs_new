@@ -187,7 +187,7 @@ FUNCTION fChkRequest RETURNS CHARACTER
 
             /* YTS-2473, YBU-1194 SHAPER/HSDPA request must be allowed 
              even if there's active SHAPER/HSDPA request */
-            IF iiReqType EQ 1 AND LOOKUP(icParam,"SHAPER,HSDPA,BB") > 0
+            IF iiReqType EQ 1 AND LOOKUP(icParam,"SHAPER,HSDPA,BB,TEMPLATE") > 0
             THEN llExist = FALSE.
             ELSE DO:
                CHECK_LOOP2:
