@@ -44,7 +44,7 @@ FUNCTION fGetRequestJson RETURNS JsonObject
 
     lCharacteristicDataObject2 = new jsonobject().
     lCharacteristicDataObject2:Add('name', 'UploadSpeed').
-    ldataarrayobj1:Add('value', icUploadSpeed).
+    lCharacteristicDataObject2:Add('value', icUploadSpeed).
 
     lobjCharacteristicArray:add(lCharacteristicDataObject1).
     lobjCharacteristicArray:add(lCharacteristicDataObject2).
