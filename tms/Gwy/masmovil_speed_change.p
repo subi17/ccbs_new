@@ -24,8 +24,10 @@ DEF VAR lcUriQueryVal  AS CHAR       NO-UNDO.
 DEF VAR loRequestJson  AS JsonObject NO-UNDO.
 DEF VAR loJson         AS JsonObject NO-UNDO.
 
-FUNCTION fGetRequestJson AS JsonObject
-    ():
+FUNCTION fGetRequestJson RETURNS JsonObject
+    (iiOrderId       AS INTEGER,
+     icDownloadSpeed AS CHAR,
+     icUploadSpeed   AS CHAR):
     
     DEF VAR lobjServiceArray           AS JsonArray  NO-UNDO.
     DEF VAR lobjCharacteristicArray    AS JsonArray  NO-UNDO.
@@ -34,17 +36,15 @@ FUNCTION fGetRequestJson AS JsonObject
     DEF VAR lCharacteristicDataObject2 AS JsonObject NO-UNDO.
     DEF VAR lOutputJsonObject          AS JsonObject NO-UNDO.
 
-    DEF VAR loJson         AS JsonObject NO-UNDO.
-
     lobjCharacteristicArray = new jsonarray().
  
     lCharacteristicDataObject1 = new jsonobject().
     lCharacteristicDataObject1:Add('name', 'DownloadSpeed').
-    lCharacteristicDataObject1:Add('value', pcDownloadSpeed).
+    lCharacteristicDataObject1:Add('value', icDownloadSpeed).
 
     lCharacteristicDataObject2 = new jsonobject().
     lCharacteristicDataObject2:Add('name', 'UploadSpeed').
-    ldataarrayobj1:Add('value', pcUploadSpeed).
+    ldataarrayobj1:Add('value', icUploadSpeed).
 
     lobjCharacteristicArray:add(lCharacteristicDataObject1).
     lobjCharacteristicArray:add(lCharacteristicDataObject2).
@@ -57,7 +57,7 @@ FUNCTION fGetRequestJson AS JsonObject
     lobjServiceArray:add(lServiceObject).
 
     lOutputJsonObject = NEW jsonobject().
-    lOutputJsonObject:ADD("orderID", "Y" + STRING(piOrderId)).
+    lOutputJsonObject:ADD("orderID", "Y" + STRING(iiOrderId)).
     lOutputJsonObject:ADD("Services" , lobjServiceArray).
     
     RETURN lOutputJsonObject.
@@ -71,7 +71,7 @@ ASSIGN
     lcUriQuery    = fCParam("Masmovil", "UriQuery")  
     lcUriQueryVal = fCParam("Masmovil", "UriQueryValue").
 
-loRequestJson = fGetRequestJson().
+loRequestJson = fGetRequestJson(piOrderId, pcDownloadSpeed, pcUploadSpeed).
 
 RUN Gwy/http_rest_client("post"    ,
                          lcHost    ,

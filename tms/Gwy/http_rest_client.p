@@ -66,13 +66,15 @@ case icAction:
     when 'post' then 
     do:
         if lcUserId <> "" then 
-            oReq = RequestBuilder:Put(oUri, ioRequestJson)
+            oReq = RequestBuilder:Post(oUri, ioRequestJson)
                     :UsingCredentials(oCreds)
                     :ContentType('application/json')
                     :AcceptJson()
                     :Request.    
         else      
             oReq = RequestBuilder:Post(oUri, ioRequestJson)
+                        :ContentType('application/json')
+                        :AcceptJson()
                         :Request.    
 
         oResp = oClient:Execute(oReq).
