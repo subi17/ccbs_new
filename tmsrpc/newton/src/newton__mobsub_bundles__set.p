@@ -148,7 +148,8 @@ FUNCTION fSetMDUB RETURNS INT
          IF pcBundleID EQ "VOICE200B" THEN DO:
             IF NOT fIsBundleAllowed(Mobsub.CLIType,
                                 "VOICE200B",
-                                OUTPUT lcError) THEN
+                                OUTPUT lcError) OR
+               NOT fAllowMDUBActivation("VOICE_") THEN
                ocError = pcBundleID + " Actiavtion not allowed".
          END.
 
