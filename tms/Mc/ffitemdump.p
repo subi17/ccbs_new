@@ -26,9 +26,8 @@ DEF INPUT PARAMETER icEventFields  AS CHAR NO-UNDO.
 DEF OUTPUT PARAMETER oiEvents      AS INT  NO-UNDO.
 DEF OUTPUT PARAMETER olInterrupted AS LOG  NO-UNDO.
 
-DEF VAR lcFixfeeItemFile   AS CHAR NO-UNDO.
-DEF VAR lcSpoolDir         AS CHAR NO-UNDO.
-DEF VAR lcTransDir         AS CHAR NO-UNDO. 
+DEF VAR lcNumeric          AS CHAR NO-UNDO.
+DEF VAR lcDelimiter        AS CHAR NO-UNDO.
 DEF VAR ldaFromDate        AS DATE NO-UNDO.
 DEF VAR ldaToDate          AS DATE NO-UNDO.
 DEF VAR ldaPrevFromDate    AS DATE NO-UNDO.
@@ -67,49 +66,29 @@ DEF TEMP-TABLE ttData
     FIELD createdate LIKE FixedFee.BegDate
     INDEX idx1 IS PRIMARY ffitemnum.
 
-FIND FIRST Dumpfile NO-LOCK WHERE Dumpfile.DumpId = icDumpID NO-ERROR.
-IF AVAIL DumpFile THEN 
-   ASSIGN
-      lcSpoolDir = DumpFile.SpoolDir + "/"
-      lcTransDir = Dumpfile.TransDir.
-
-/* STREAM sout is for eventlog file */
-DEF STREAM sout.
-OUTPUT STREAM sout TO VALUE(icFile).
-/* STREAM fixfeeitem is for ffitem file */
-DEF STREAM fixfeeitem.
-
-ASSIGN
-   lcFixfeeItemFile = "fixfeeitem_#MODE_#DATE_#TIME.csv"
-   lcFixfeeItemFile = REPLACE(lcFixfeeItemFile,"#DATE",STRING(YEAR(TODAY),"9999") +
-                                               STRING(MONTH(TODAY),"99") +
-                                               STRING(DAY(TODAY),"99"))
-   lcFixfeeItemFile = REPLACE(lcFixfeeItemFile,"#TIME",
-                  REPLACE(STRING(TIME,"hh:mm:ss"),":",""))
-   lcFixfeeItemFile = REPLACE(lcFixfeeItemFile,"#MODE",icDumpMode).
-
-OUTPUT STREAM fixfeeitem TO VALUE(lcSpoolDir + lcFixfeeItemFile).
-
-/* Eventlog search is done every day */
-FOR EACH eventlog NO-LOCK WHERE
-         eventlog.eventdate = TODAY - 1 AND
-         eventlog.tablename = "FFItem" USE-INDEX EventDate:
-
-   liKey = INT(ENTRY(3,eventlog.key,CHR(255))) NO-ERROR.
-   IF ERROR-STATUS:ERROR THEN NEXT.
-
-   PUT STREAM sout UNFORMATTED
-      eventlog.action "|"
-      eventlog.eventdate " " eventlog.eventtime "|"
-      eventlog.memo "|"
-      eventlog.usercode "|"
-      liKey "|".   
-
-   oiEvents = oiEvents + 1.   
+lcNumeric = SESSION:NUMERIC-FORMAT.
+ 
+FIND FIRST DumpFile WHERE DumpFile.DumpID = icDumpID NO-LOCK NO-ERROR.
+IF AVAILABLE DumpFile THEN DO:
+   ASSIGN lcDelimiter  = fInitDelimiter(DumpFile.DumpDelimiter).
+   
+   IF DumpFile.DecimalPoint = "." 
+   THEN SESSION:NUMERIC-FORMAT = "AMERICAN".
+   ELSE SESSION:NUMERIC-FORMAT = "EUROPEAN".
+END.
+ELSE DO:
+   ASSIGN 
+      lcDelimiter = CHR(9)
+      SESSION:NUMERIC-FORMAT = "AMERICAN".
 END.
 
+/* STREAM fixfeeitem is for ffitem file */
+DEF STREAM fixfeeitem.
+OUTPUT STREAM fixfeeitem TO VALUE(icFile).
+
 PUT STREAM fixfeeitem UNFORMATTED
-    "FIXEDFEEITEMNUM,FIXEDFEENUM,CUSTNUM,BILLPERIOD,BILLCODE,CALCMETHOD,MSSEQ,MSISDN,BILLED,FEEAMT,CREATEDATE" SKIP.
+    "FIXEDFEEITEMNUM" lcDelimiter "FIXEDFEENUM" lcDelimiter "CUSTNUM" lcDelimiter "BILLPERIOD" lcDelimiter "BILLCODE" lcDelimiter 
+     "CALCMETHOD" lcDelimiter "MSSEQ" lcDelimiter "MSISDN" lcDelimiter "BILLED" lcDelimiter "FEEAMT" lcDelimiter "CREATEDATE" SKIP.
 
 {Mm/dss_bundle_first_month_fee.i}
 
@@ -181,23 +160,25 @@ END.
 
 FOR EACH ttData NO-LOCK:
    PUT STREAM fixfeeitem UNFORMATTED 
-       ttData.FFItemNum  "," 
-       ttData.FFNum      "," 
-       ttData.custnum    "," 
-       ttData.billper    "," 
-       ttData.billcode   "," 
-       ttData.calcmethod "," 
-       ttData.msseq      "," 
-       ttData.cli        "," 
-       ttData.billed     "," 
-       ttData.feeamt     "," 
-       ttData.createdate SKIP.   
+       ttData.FFItemNum  lcDelimiter 
+       ttData.FFNum      lcDelimiter 
+       ttData.custnum    lcDelimiter 
+       ttData.billper    lcDelimiter 
+       ttData.billcode   lcDelimiter 
+       ttData.calcmethod lcDelimiter 
+       ttData.msseq      lcDelimiter 
+       ttData.cli        lcDelimiter 
+       ttData.billed     lcDelimiter 
+       ttData.feeamt     lcDelimiter 
+       ttData.createdate SKIP.
+   oiEvents = oiEvents + 1.
 END.
 
 ASSIGN ldeEnd   = Func.Common:mMakeTs().
 
-OUTPUT STREAM sout CLOSE.
 OUTPUT STREAM fixfeeitem CLOSE.
+SESSION:NUMERIC-FORMAT = lcNumeric.
+
 
 PROCEDURE p_bundle_first_month:          
 
@@ -732,8 +713,7 @@ PROCEDURE pCreateTempData:
           ttData.cli          = cCli
           ttData.billed       = lBilled
           ttData.feeamt       = dFeeAmt
-          ttData.createdate   = dtBegDate
-          oiEvents            = oiEvents + 1.
+          ttData.createdate   = dtBegDate.
 
 END PROCEDURE.
 
