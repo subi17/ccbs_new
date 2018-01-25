@@ -117,8 +117,9 @@ DO liCount = 1 TO NUM-ENTRIES(lcGroupCodes):
       IF liCurrentServiceClass EQ liTempSC THEN
          lcError = SUBST("SKIPPED:Current SC in AIR is already &1",liTempSC).
       ELSE IF liCurrentServiceClass NE liNormalSC THEN ASSIGN
-         lcError = SUBST("ERROR:Current SC in AIR is not &1",liNormalSC)
-         liErrors = liErrors + 1.
+         lcError = SUBST("SKIPPED:Current SC &1 in AIR is not &2",
+                          liCurrentServiceClass,
+                          liNormalSC).
 
       IF lcError > "" THEN DO:
 
