@@ -2027,12 +2027,7 @@ PROCEDURE local-update-customer:
    END CASE.
 
    IF Order.StatusCode = "73" AND
-      (iiRole = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER} OR
-       ( iiRole = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} AND
-         NOT CAN-FIND(FIRST OrderCustomer NO-LOCK WHERE
-                OrderCustomer.Brand   = Syst.Var:gcBrand       AND
-                OrderCustomer.OrderID = Order.OrderID AND
-                OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER})))
+      iiRole = {&ORDERCUSTOMER_ROWTYPE_MOBILE_POUSER}
    THEN llCustIDUpdateOK = TRUE.
 
    FIND FIRST OrderCustomer NO-LOCK WHERE
