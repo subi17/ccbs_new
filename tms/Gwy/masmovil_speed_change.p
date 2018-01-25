@@ -1,4 +1,6 @@
 
+USING Progress.Json.ObjectModel.*.
+
 {Syst/tmsconst.i}
 {Func/log.i}
 {Func/memo.i}

@@ -66,7 +66,7 @@ case icAction:
     when 'post' then 
     do:
         if lcUserId <> "" then 
-            oReq = RequestBuilder:Post(oUri, ioRequestJson)
+            oReq = RequestBuilder:Put(oUri, ioRequestJson)
                     :UsingCredentials(oCreds)
                     :ContentType('application/json')
                     :AcceptJson()

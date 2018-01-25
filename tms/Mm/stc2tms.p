@@ -249,7 +249,7 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
            RUN pSpeedChangeRequestForProvisioning NO-ERROR.
            IF ERROR-STATUS:ERROR THEN
            DO:
-               fReqError(ERROR-STATUS:GetMessage(1)).
+               fReqError(ERROR-STATUS:Get-Message(1)).
                RETURN.
            END. 
        END.    
