@@ -32,6 +32,8 @@ lcSimType = (IF SIM.SimArt = "Plug_IN" THEN "Regular" ELSE Sim.SimArt).
 
 /* Adding the details into Main struct */
 top_struct = add_struct(response_toplevel_id, "").
+
+add_string(top_struct, "icc", SIM.ICC). 
 add_string(top_struct, "sim_type", lcSimType).
 add_int(top_struct, "sim_status", SIM.SimStat).
 
