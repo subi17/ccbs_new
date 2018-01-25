@@ -242,8 +242,8 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
    
    IF MobSub.TerritoryOwner <> "FIBMM02" THEN
    DO:
-       IF bOldType.FixedLinType EQ {&FIXED_LINE_TYPE_FIBER} AND 
-          CLIType.FixedLineType EQ {&FIXED_LINE_TYPE_FIBER} AND
+       IF bOldType.FixedLineType EQ {&FIXED_LINE_TYPE_FIBER} AND 
+          CLIType.FixedLineType  EQ {&FIXED_LINE_TYPE_FIBER} AND
           (bOldType.FixedLineDownload <> CLIType.FixedLineDownload OR bOldType.FixedLineUpload <> CLIType.FixedLineUpload) THEN
        DO:   
            RUN pSpeedChangeRequestForProvisioning NO-ERROR.

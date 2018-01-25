@@ -20,7 +20,7 @@ define input  parameter icUriPath     as character  no-undo.
 define input  parameter icUriQuery    as character  no-undo.
 define input  parameter icUriQueryVal as character  no-undo.
 define input  parameter ioRequestJson as character  no-undo.
-define input output parameter ioJson  as JsonObject no-undo.
+define output parameter ioJson        as JsonObject no-undo.
 
 /* ***************************  Main Block  *************************** */
 define variable oClient as IHttpClient no-undo.
