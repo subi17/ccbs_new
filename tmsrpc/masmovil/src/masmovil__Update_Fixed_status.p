@@ -254,19 +254,14 @@ CASE FusionMessage.FixedStatus:
    END.
    WHEN "CITADA" THEN DO:
       ASSIGN 
-         OrderFusion.AppointmentDate = lcCita       WHEN lcCita       <> ""
-         OrderFusion.portStat        = lcPortStat   WHEN lcPortStat   <> ""
-         OrderFusion.portDate        = lcPortDate   WHEN lcPortDate   <> ""
-         OrderFusion.routerStat      = lcRouterStat WHEN lcRouterStat <> "".
+         OrderFusion.AppointmentDate = lcCita       WHEN lcCita       <> "".
    END.
    /* installation done */
    WHEN "CERRADA" THEN DO:
        
       ASSIGN 
          OrderFusion.FixedInstallationTS = ldeLastDate
-         OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_FINALIZED}
-         OrderFusion.portStat        = lcPortStat
-         OrderFusion.portDate        = lcPortDate.
+         OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_FINALIZED}.
       
       /* NOTE: do not change the memo text (checked in ordersender.i) */
       IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} THEN
@@ -330,6 +325,11 @@ THEN
 IF LOOKUP(FusionMessage.FixedStatus,"CANCELADA,CANCELACION EN PROCESO") <> 0
 THEN
    ASSIGN FusionMessage.AdditionalInfo = lcCanDS WHEN lcCanDS <> "".
+
+ASSIGN
+   OrderFusion.portStat   = lcPortStat   WHEN lcPortStat   <> ""
+   OrderFusion.portDate   = lcPortDate   WHEN lcPortDate   <> ""
+   OrderFusion.routerStat = lcRouterStat WHEN lcRouterStat <> "".
 
 RELEASE OrderFusion.
 RELEASE FusionMessage.
