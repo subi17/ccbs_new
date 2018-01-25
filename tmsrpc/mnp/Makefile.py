@@ -19,12 +19,12 @@ def run_agent(*a):
     if len(parameters) != 1:
         raise PikeException('Expected fcgi agent name as parameter')
 
-    agent_name = parameters[0]
+    param = '{0},,YES'.format('True' if environment == 'development' or environment == 'slavedevelopment' else 'False')
     
     os.environ['PROPATH'] += ',rpcmethods.pl'
     args = ['-pf', getpf('../../db/progress/store/all'),
             '-h', str(len(databases)),
             '-clientlog', '../../var/log/%s_agent.%d.log' % \
-            	          (agent_name, os.getpid())]
-    args = mpro + args + extraargs + ['-b', '-p', 'fcgi_agent/nq_xmlrpc.p', '-param', ",YES"]
+            	          (parameters[0], os.getpid())]
+    args = mpro + args + extraargs + ['-b', '-p', 'fcgi_agent/nq_xmlrpc.p', '-param', param]
     os.execlp(args[0], *args)
