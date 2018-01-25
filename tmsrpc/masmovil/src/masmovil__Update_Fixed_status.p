@@ -254,9 +254,10 @@ CASE FusionMessage.FixedStatus:
    END.
    WHEN "CITADA" THEN DO:
       ASSIGN 
-         OrderFusion.AppointmentDate = lcCita
-         OrderFusion.portStat        = lcPortStat
-         OrderFusion.portDate        = lcPortDate.
+         OrderFusion.AppointmentDate = lcCita       WHEN lcCita       <> ""
+         OrderFusion.portStat        = lcPortStat   WHEN lcPortStat   <> ""
+         OrderFusion.portDate        = lcPortDate   WHEN lcPortDate   <> ""
+         OrderFusion.routerStat      = lcRouterStat WHEN lcRouterStat <> "".
    END.
    /* installation done */
    WHEN "CERRADA" THEN DO:
@@ -322,19 +323,13 @@ CASE FusionMessage.FixedStatus:
 
 END CASE.
 
-IF FusionMessage.FixedStatus = "CERRADA"         OR
-   FusionMessage.FixedStatus = "CERRADA PARCIAL" OR
-   FusionMessage.FixedStatus = "CITADA"          OR 
-   FusionMessage.FixedStatus = "INCIDENCIA RED"  OR
-   FusionMessage.FixedStatus = "INCIDENCIA TECNICO EN CASA"
+IF LOOKUP(FusionMessage.FixedStatus,"CERRADA,CERRADA PARCIAL,CITADA,INCIDENCIA RED,INCIDENCIA TECNICO EN CASA") <> 0
 THEN
-   FusionMessage.AdditionalInfo = lcCita.
+   ASSIGN FusionMessage.AdditionalInfo = lcCita WHEN lcCita <> "".
 
-IF FusionMessage.FixedStatus = "CANCELADA" OR            
-   FusionMessage.FixedStatus = "CANCELACION EN PROCESO" 
+IF LOOKUP(FusionMessage.FixedStatus,"CANCELADA,CANCELACION EN PROCESO") <> 0
 THEN
-   FusionMessage.AdditionalInfo = lcCanDS.
-
+   ASSIGN FusionMessage.AdditionalInfo = lcCanDS WHEN lcCanDS <> "".
 
 RELEASE OrderFusion.
 RELEASE FusionMessage.

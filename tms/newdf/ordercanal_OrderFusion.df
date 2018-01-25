@@ -15,3 +15,12 @@ ADD FIELD "portDate" OF "OrderFusion" AS CHARACTER
   COLUMN-LABEL "portDate"
   HELP "Portability Date"
   ORDER 290
+
+ADD FIELD "routerStat" OF "OrderFusion" AS CHARACTER
+  FORMAT "X(10)"
+  INITIAL ""
+  LABEL "routerStat"
+  MAX-WIDTH 20
+  COLUMN-LABEL "routerStat"
+  HELP "Router Status"
+  ORDER 300
