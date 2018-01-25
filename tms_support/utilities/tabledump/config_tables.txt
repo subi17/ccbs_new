@@ -37,7 +37,7 @@ CustTemp
 DayCampaign
 DCServiceComponent
 DCServicePackage
-#DFField
+DFField
 #DFTimeTable
 DialType
 DiscountPlan
@@ -47,7 +47,7 @@ DPConf
 DPSubject
 DPTarget
 DPRate
-#DumpFile
+DumpFile
 #DumpHPD
 EventLogConf
 FATConfig
