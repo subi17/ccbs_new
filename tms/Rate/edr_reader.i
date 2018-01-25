@@ -392,6 +392,35 @@ PROCEDURE pHandleEDR:
                                       lcResult).
                END.
 
+               /* YDR-2625 - Reset Data Package during renewal */
+               IF ((ttEDR.CLIType EQ "TARJ7"  AND ttEDR.ServiceFeeType = "SC3" ) OR
+                   (ttEDR.CLIType EQ "TARJ9"  AND ttEDR.ServiceFeeType = "SC9" ) OR
+                   (ttEDR.CLIType EQ "TARJ10" AND ttEDR.ServiceFeeType = "SC10") OR
+                   (ttEDR.CLIType EQ "TARJ11" AND ttEDR.ServiceFeeType = "SC11") OR
+                   (ttEDR.CLIType EQ "TARJ12" AND ttEDR.ServiceFeeType = "SC12")) THEN
+               DO:
+                  liRequest = fServiceRequest(MobSub.MsSeq,
+                                              "TEMPLATE",
+                                              1,
+                                              "DATA_RESET",
+                                              ldeNow,
+                                              "",
+                                              FALSE, /* fees */
+                                              FALSE, /* sms */
+                                              "",
+                                              {&REQUEST_SOURCE_SCRIPT},
+                                              0, /* father request */
+                                              FALSE,
+                                              OUTPUT lcResult).
+                  IF liRequest = 0 THEN
+                     Func.Common:mWriteMemo("MobSub",
+                                      STRING(MobSub.MsSeq),
+                                      MobSub.CustNum,
+                                      "PREP_DATA",
+                                      "PREPAID DATA reset request failed; " +
+                                      lcResult).
+               END.
+
                IF llActivatePromo THEN DO:
 
                   FIND FIRST bOrigrequest NO-LOCK where
