@@ -6,5 +6,5 @@
 "SOG" "URL_Post" "C" 0 0 "-H yanhua.int.asp.qvantel.net -S 14400" ? "" "" "" "" "" "" "" "" "" "" "Sog Post URL" no "1"
 "SOG" "URL_Read" "C" 0 0 "-H yanhua.int.asp.qvantel.net -S 14401" ? "" "" "" "" "" "" "" "" "" "" "Sog Read URL" no "1"
 "URL" "urlDextra" "C" 0 0 "http://yenisei:8080/order-status/xmlrpc" ? "" "" "" "" "" "" "" "" "" "" "Dextra online interface" no "1"
-"URL" "urlMasmovil" "C" 0 0 "http://yenisei:8080/masmovil/xmlrpc" ? "" "" "" "" "" "" "" "" "" "" "Masmovil Adapter" no "1"
+"URL" "urlMasmovil" "C" 0 0 "http://217.168.2.239:8080/masmovil/xmlrpc" ? "" "" "" "" "" "" "" "" "" "" "Masmovil Adapter" no "1"
 "URL" "urlROI" "C" 0 0 "http://yenisei:7001/com-yoigo-roi-webapp/xmlrpc" ? "" "" "" "" "" "" "" "" "" "" "ROI History URL" no "1"   
