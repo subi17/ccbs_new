@@ -13,8 +13,8 @@ def instruction():
 
 if len(sys.argv) < 2: instruction()
 else:
-   var1 = sys.argv[1]
-   var2 = 'CONTS15'
+   var1 = 'CONTF10|yoigo'
+   var2 = 'CONTF8|yoigo'
 
 p=s.newton.optional_bundle_items__get([var1,var2])
 print_results(p)

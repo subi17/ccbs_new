@@ -66,7 +66,7 @@ def default(*a):
             deplist = []
 
             try:
-                with tarfile.open('{0}-{1}.tar'.format(package,version)) as tf:
+                with closing(tarfile.open('{0}-{1}.tar'.format(package,version))) as tf:
                     dependencyfile = next((x for x in tf.getnames() if x in ['{0}/.dependencies'.format(package), '{0}-{1}/.dependencies'.format(package, version)]))
                     with closing(tf.extractfile(dependencyfile)) as f:
                         for line in f:
