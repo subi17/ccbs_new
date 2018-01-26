@@ -65,7 +65,7 @@ FUNCTION fGenerateEmailTemplate RETURNS CHAR
                       THEN (YEAR(TODAY) - 1) * 100 + 12
                       ELSE YEAR(TODAY) * 100 + (MONTH(TODAY) - 1)
 
-      lcCrypted =  encrypt_data(icMSISDN + STRING(iiPeriod),
+      lcCrypted =  encrypt_data(icMSISDN + "|" + STRING(iiPeriod),
                                       {&ENCRYPTION_METHOD}, 
                                       {&ESI_PASSPHRASE}) 
       /* convert some special characters to url encoding (at least '+' char
