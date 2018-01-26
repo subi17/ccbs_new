@@ -37,7 +37,6 @@ DEF VAR lcTestCustomers AS CHAR NO-UNDO.
 DEF VAR lcLink        AS CHAR NO-UNDO.
 DEF VAR liTestFilter AS INT NO-UNDO.
 DEF VAR lcRecipient AS CHAR NO-UNDO.
-DEF VAR liPeriod AS INT NO-UNDO.
 
 DEF STREAM sIn. /*1st/Last notification recipients*/
 
@@ -57,14 +56,9 @@ FUNCTION fGenerateEmailTemplate RETURNS CHAR
    DEF VAR llgOK AS LOGICAL NO-UNDO.
    DEF VAR lcLocalLink AS CHAR NO-UNDO.
    DEF VAR lcCrypted AS CHAR NO-UNDO.
-   DEF VAR liPeriod AS INT NO-UNDO.
 
 
    ASSIGN
-      liPeriod      = IF MONTH(TODAY) = 1
-                      THEN (YEAR(TODAY) - 1) * 100 + 12
-                      ELSE YEAR(TODAY) * 100 + (MONTH(TODAY) - 1)
-
       lcCrypted =  encrypt_data(icMSISDN + "|" + STRING(iiPeriod),
                                       {&ENCRYPTION_METHOD}, 
                                       {&ESI_PASSPHRASE}) 
@@ -108,11 +102,7 @@ ASSIGN lcAddrConfDir = fCParamC("RepConfDir")
        liMonth       = MONTH(ldaDateFrom)
        lcLink        = fCParamC("ESI_LinkBase")
        liTestFilter  = fCparamI("ESI_TestFilter")
-       lcTestCustomers = fCparamC("ESI_TestCustomers")
-       liPeriod      = IF MONTH(TODAY) = 1
-                       THEN (YEAR(TODAY) - 1) * 100 + 12
-                       ELSE YEAR(TODAY) * 100 + (MONTH(TODAY) - 1).
-
+       lcTestCustomers = fCparamC("ESI_TestCustomers").
 
 IF lcAddrConfDir + "/smsinvoice.sms" NE ? THEN DO:
    IF Mm.MManMessage:mGetMessage("SMS", "EInvMessageStarted", 1)EQ TRUE THEN DO:
@@ -171,7 +161,7 @@ FOR EACH Invoice WHERE
                                              STRING(Invoice.InvDate),
                                              lcLink,
                                              Invoice.InvNum,
-                                             liPeriod).
+                                             liBillPeriod).
 
          Mm.MManMessage:ParamKeyValue = lcTemplate.                                      Mm.MManMessage:mCreateMMLogSMS(MobSub.CLI).
       END.
