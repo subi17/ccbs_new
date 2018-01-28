@@ -19,7 +19,7 @@ define input  parameter icpassword    as character  no-undo.
 define input  parameter icUriPath     as character  no-undo.
 define input  parameter icUriQuery    as character  no-undo.
 define input  parameter icUriQueryVal as character  no-undo.
-define input  parameter ioRequestJson as character  no-undo.
+define input  parameter ioRequestJson as JsonObject no-undo.
 define output parameter ioJson        as JsonObject no-undo.
 
 /* ***************************  Main Block  *************************** */
