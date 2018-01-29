@@ -94,7 +94,7 @@ ELSE
    RETURN SUBST("ErrorCode: &1 ", (IF lcResultDesc > "" THEN lcResultDesc ELSE '')).
 
 CATCH e AS Progress.Lang.Error:
-    ASSIGN lcResultDesc = eAnyError:GetMessage(1). 
+    ASSIGN lcResultDesc = e:GetMessage(1). 
     RETURN SUBST("ErrorCode: &1 ", (IF lcResultDesc > "" THEN lcResultDesc ELSE '')).
 END CATCH.
 
