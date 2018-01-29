@@ -140,6 +140,12 @@ FUNCTION fCreateOrderCustomer RETURNS LOGICAL:
       OrderCustomer.Street      = Customer.Address.
 
    BUFFER-COPY Customer EXCEPT Language TO OrderCustomer.
+   
+   FIND FIRST CustCat WHERE CustCat.Brand = Syst.Var:gcBrand AND CustCat.Category = Customer.Category NO-LOCK NO-ERROR.
+   IF AVAIL CustCat THEN
+       ASSIGN 
+           OrderCustomer.Pro          = CustCat.Pro
+           OrderCustomer.SelfEmployed = CustCat.SelfEmployed.
 
    RETURN TRUE.
 END.
