@@ -37,7 +37,6 @@ DEF VAR lcTestCustomers AS CHAR NO-UNDO.
 DEF VAR lcLink        AS CHAR NO-UNDO.
 DEF VAR liTestFilter AS INT NO-UNDO.
 DEF VAR lcRecipient AS CHAR NO-UNDO.
-DEF VAR liLang AS INT NO-UNDO.
 
 DEF STREAM sIn. /*1st/Last notification recipients*/
 
@@ -58,7 +57,7 @@ FUNCTION fGenerateEmailTemplate RETURNS CHAR
    DEF VAR llgOK AS LOGICAL NO-UNDO.
    DEF VAR lcLocalLink AS CHAR NO-UNDO.
    DEF VAR lcCrypted AS CHAR NO-UNDO.
-
+   DEF VAR lcLang AS CHAR NO-UNDO.
 
    ASSIGN
       lcCrypted =  encrypt_data(icMSISDN + "|" + STRING(iiPeriod),
@@ -67,9 +66,10 @@ FUNCTION fGenerateEmailTemplate RETURNS CHAR
       /* convert some special characters to url encoding (at least '+' char
          could cause problems at later phases. */
       lcCrypted = fUrlEncode(lcCrypted, "query").
-   IF liLang EQ THEN lcLang = ""
-   ELSE IF liLang EQ THEN lcLAng = ""
-   ELSE IF liLang EQ 
+   IF iiLang EQ 1 THEN lcLAng = "es". 
+   ELSE IF iiLang EQ 2 THEN lcLang = "ca".
+   ELSE IF iiLang EQ 3 THEN lcLang = "eu".
+   ELSE lcLang = "en".
    ASSIGN
       lcMessagePayload = icTemplate
       lcMessagePayload = REPLACE(lcMessagePayload,"#LANG",lcLang)
@@ -166,7 +166,7 @@ FOR EACH Invoice WHERE
                                              lcLink,
                                              Invoice.InvNum,
                                              liBillPeriod,
-                                             liLang ).
+                                             Customer.Language).
 
          Mm.MManMessage:ParamKeyValue = lcTemplate.                                      Mm.MManMessage:mCreateMMLogSMS(MobSub.CLI).
       END.
