@@ -1023,8 +1023,8 @@ FUNCTION fDelivSIM RETURNS LOG
                  OrderAction.Brand    = Syst.Var:gcBrand AND
                  OrderAction.OrderId  = Order.OrderId AND
                  OrderAction.ItemType = "SIMType" NO-LOCK NO-ERROR.
-      IF AVAIL OrderAction AND AVAIL SIM THEN DO:
-         lcBillCode = fGetSIMBillItem(SIM.SimArt,Order.PayType).
+      IF AVAIL OrderAction THEN DO:
+         lcBillCode = fGetSIMBillItem(OrderAction.ItemKey,Order.PayType).
          FOR FIRST BillItem NO-LOCK WHERE
                    BillItem.Brand    = Syst.Var:gcBrand AND
                    BillItem.BillCode = lcBillCode,
