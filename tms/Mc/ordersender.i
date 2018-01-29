@@ -541,7 +541,7 @@
                 ELSE IF Order.Orderchannel BEGINS "migration" THEN DO:
                    Order.StatusCode = {&ORDER_STATUS_MIGRATION_PENDING}. /*60*/
                 END.
-                ELSE DO:
+                ELSE IF Order.MNPStatus NE 6 THEN DO: /* Confirmed MNP */
                    /* YBP-621 */
                    RUN Mnp/mnprequestnc.p(order.orderid).
                    /* YBP-622 */
