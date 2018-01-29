@@ -37,6 +37,7 @@ DEF VAR lcTestCustomers AS CHAR NO-UNDO.
 DEF VAR lcLink        AS CHAR NO-UNDO.
 DEF VAR liTestFilter AS INT NO-UNDO.
 DEF VAR lcRecipient AS CHAR NO-UNDO.
+DEF VAR liLang AS INT NO-UNDO.
 
 DEF STREAM sIn. /*1st/Last notification recipients*/
 
@@ -49,7 +50,8 @@ FUNCTION fGenerateEmailTemplate RETURNS CHAR
     icDate AS CHAR, 
     icLink AS CHAR,
     iiInvNum AS INT,
-    iiPeriod AS INT):
+    iiPeriod AS INT, 
+    iiLang AS INT):
    DEF VAR lcTargetType AS CHAR NO-UNDO.
    DEF VAR llcMessage  AS LONGCHAR NO-UNDO.
    DEF VAR lcMessagePayload AS CHAR NO-UNDO.
@@ -65,10 +67,12 @@ FUNCTION fGenerateEmailTemplate RETURNS CHAR
       /* convert some special characters to url encoding (at least '+' char
          could cause problems at later phases. */
       lcCrypted = fUrlEncode(lcCrypted, "query").
-/*InvText.paramtext.keyvalue Jsonparam "MsSeq=#MSSEQ| ..."*/
-/*TODO: obviously we need to build link in this function*/
+   IF liLang EQ THEN lcLang = ""
+   ELSE IF liLang EQ THEN lcLAng = ""
+   ELSE IF liLang EQ 
    ASSIGN
       lcMessagePayload = icTemplate
+      lcMessagePayload = REPLACE(lcMessagePayload,"#LANG",lcLang)
       lcMessagePayload = REPLACE(lcMessagePayload,"#LINK",icLink + "/" + 
                                  lcCrypted)
       lcMessagePayload = REPLACE(lcMessagePayload,"#MSISDN",icMSISDN) 
@@ -161,7 +165,8 @@ FOR EACH Invoice WHERE
                                              STRING(Invoice.InvDate),
                                              lcLink,
                                              Invoice.InvNum,
-                                             liBillPeriod).
+                                             liBillPeriod,
+                                             liLang ).
 
          Mm.MManMessage:ParamKeyValue = lcTemplate.                                      Mm.MManMessage:mCreateMMLogSMS(MobSub.CLI).
       END.
