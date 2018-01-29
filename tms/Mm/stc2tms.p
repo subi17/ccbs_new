@@ -332,8 +332,8 @@ PROCEDURE pSpeedChangeRequestForProvisioning:
 
     IF liOrderId > 0 THEN
     DO:
-        RUN Gwy/masmovil_speed_change.p(Order.OrderId, CLIType.FixedLineDownload, CLIType.FixedLineUpload).
-        IF RETURN-VALUE NE "" THEN
+        RUN Gwy/masmovil_speed_change.p(Order.OrderId, CLIType.FixedLineDownload, CLIType.FixedLineUpload) NO-ERROR.
+        IF ERROR-STATUS:ERROR OR RETURN-VALUE NE "" THEN
             RETURN ERROR "Fixed line fiber speed change request failed with " + RETURN-VALUE.
     END.
 

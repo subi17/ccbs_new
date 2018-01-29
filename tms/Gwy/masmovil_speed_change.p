@@ -1,3 +1,4 @@
+ROUTINE-LEVEL ON ERROR UNDO, THROW.
 
 USING Progress.Json.ObjectModel.*.
 
@@ -91,6 +92,11 @@ IF lcResultCode EQ "FTTH0000" THEN
    RETURN "".
 ELSE 
    RETURN SUBST("ErrorCode: &1 ", (IF lcResultDesc > "" THEN lcResultDesc ELSE '')).
+
+CATCH e AS Progress.Lang.Error:
+    ASSIGN lcResultDesc = eAnyError:GetMessage(1). 
+    RETURN SUBST("ErrorCode: &1 ", (IF lcResultDesc > "" THEN lcResultDesc ELSE '')).
+END CATCH.
 
 FINALLY:
 
