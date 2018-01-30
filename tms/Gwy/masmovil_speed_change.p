@@ -94,7 +94,7 @@ ASSIGN
     lcUriPath     = fCParam("Masmovil", "UriPath")   
     lcUriQuery    = fCParam("Masmovil", "UriQuery")  
     lcUriQueryVal = fCParam("Masmovil", "UriQueryValue")
-    liLogRequest  = fCParam("Masmovil", "LogRequest")
+    liLogRequest  = fIParam("Masmovil", "LogRequest")
     llLogRequest  = LOGICAL(liLogRequest).
 
 loRequestJson = fGetRequestJson(piOrderId, pcDownloadSpeed, pcUploadSpeed).
