@@ -396,6 +396,7 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
       END.
    END.
    ELSE IF AVAIL MobSub AND
+      MobSub.ICC NE lcICC AND
       Order.OrderType NE {&ORDER_TYPE_RENEWAL} THEN DO:
       liRequest = fSubscriptionRequest(Mobsub.MsSeq,
                                        Mobsub.Cli,
