@@ -84,9 +84,11 @@ RUN Gwy/http_rest_client("post"    ,
                          lcUriQueryVal,
                          loRequestJson,
                          OUTPUT loJson).
-ASSIGN  
-    lcResultCode = loJson:GetCharacter("codigo")
-    lcResultDesc = loJson:GetCharacter("descripcion").
+
+IF VALID-OBJECT(loJson) THEN
+    ASSIGN  
+        lcResultCode = loJson:GetCharacter("codigo")
+        lcResultDesc = loJson:GetCharacter("descripcion").
 
 IF lcResultCode EQ "FTTH0000" THEN
    RETURN "".
