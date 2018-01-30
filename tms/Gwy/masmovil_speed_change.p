@@ -15,6 +15,7 @@ DEF VAR lcFixedNumber AS CHAR NO-UNDO.
 DEF VAR lcError AS CHAR NO-UNDO. 
 DEF VAR lcResultCode AS CHAR NO-UNDO. 
 DEF VAR lcResultDesc AS CHAR NO-UNDO. 
+
 DEF VAR lcHost         AS CHAR       NO-UNDO.
 DEF VAR liPort         AS INT        NO-UNDO.
 DEF VAR lcUserId       AS CHAR       NO-UNDO.
@@ -22,8 +23,29 @@ DEF VAR lcpassword     AS CHAR       NO-UNDO.
 DEF VAR lcUriPath      AS CHAR       NO-UNDO.
 DEF VAR lcUriQuery     AS CHAR       NO-UNDO.
 DEF VAR lcUriQueryVal  AS CHAR       NO-UNDO.
+DEF VAR llLogRequest   AS LOGICAL    NO-UNDO INIT TRUE.
 DEF VAR loRequestJson  AS JsonObject NO-UNDO.
 DEF VAR loJson         AS JsonObject NO-UNDO.
+
+DEF STREAM sOut.
+
+FUNCTION fLogRequest RETURNS CHAR
+   (iiOrderId AS INT,
+    ioJson    AS JsonObject):
+
+   DEF VAR llcJson AS LONGCHAR NO-UNDO.
+
+   IF llLogRequest AND VALID-OBJECT(ioJson) THEN 
+   DO:
+      ioJson:WRITE( llcJson,TRUE).  
+      OUTPUT STREAM sOut TO VALUE("/tmp/Xmasmovile_" + string(iiOrderId) + "_speed_change_" + REPLACE(STRING(Func.Common:mMakeTS()), ".", "_") + ".json") APPEND.
+      PUT STREAM sOut UNFORMATTED string(llcJson) SKIP.   
+      OUTPUT STREAM sOut CLOSE.
+   END.   
+
+   RETURN "".
+
+END FUNCTION. 
 
 FUNCTION fGetRequestJson RETURNS JsonObject
     (iiOrderId       AS INTEGER,
