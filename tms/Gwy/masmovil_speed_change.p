@@ -23,6 +23,7 @@ DEF VAR lcpassword     AS CHAR       NO-UNDO.
 DEF VAR lcUriPath      AS CHAR       NO-UNDO.
 DEF VAR lcUriQuery     AS CHAR       NO-UNDO.
 DEF VAR lcUriQueryVal  AS CHAR       NO-UNDO.
+DEF VAR liLogRequest   AS INTE       NO-UNDO.
 DEF VAR llLogRequest   AS LOGICAL    NO-UNDO INIT TRUE.
 DEF VAR loRequestJson  AS JsonObject NO-UNDO.
 DEF VAR loJson         AS JsonObject NO-UNDO.
@@ -92,7 +93,9 @@ ASSIGN
     liPort        = fIParam("Masmovil", "Port")     
     lcUriPath     = fCParam("Masmovil", "UriPath")   
     lcUriQuery    = fCParam("Masmovil", "UriQuery")  
-    lcUriQueryVal = fCParam("Masmovil", "UriQueryValue").
+    lcUriQueryVal = fCParam("Masmovil", "UriQueryValue")
+    liLogRequest  = fCParam("Masmovil", "LogRequest")
+    llLogRequest  = LOGICAL(liLogRequest).
 
 loRequestJson = fGetRequestJson(piOrderId, pcDownloadSpeed, pcUploadSpeed).
 
