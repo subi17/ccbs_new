@@ -1604,9 +1604,9 @@ ELSE IF LOOKUP(pcSubType,lcBundleCLITypes) > 0 AND
 IF pcAdditionalBundleList > "" THEN
 DO:
    DO liBundleCnt = 1 TO NUM-ENTRIES(pcAdditionalBundleList):
-                                           
-      IF NOT fIsBundleAllowed(pcSubType,ENTRY(liBundleCnt,pcAdditionalBundleList),OUTPUT lcError) THEN
-          RETURN appl_err(lcError).
+      IF NOT fIsBundleAllowed(pcSubType,ENTRY(liBundleCnt,pcAdditionalBundleList),OUTPUT lcError) OR
+         (ENTRY(liBundleCnt,pcAdditionalBundleList) EQ "VOICE200B" AND NOT fAllowMDUBActivation("VOICE_")) THEN
+         RETURN appl_err(lcError).
    END.
 END.
 
