@@ -23,12 +23,11 @@
 {Func/servcomfee.i}
 {Func/fsubstermreq.i}
 {Mnp/mnpoutchk.i}
-{Mc/dpmember.i}
+{Func/addline_discount.i}
 {Func/main_add_lines.i}
 {Func/fbankdata.i}
 {Func/create_eventlog.i}
 {Func/barrfunc.i}
-{Func/fixedlinefunc.i}
 {Func/fsendsms.i}
 {Func/vasfunc.i}
 

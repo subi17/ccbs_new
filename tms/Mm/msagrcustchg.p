@@ -30,9 +30,9 @@
 {Func/main_add_lines.i}
 {Func/fbankdata.i}
 {Mm/fbundle.i}
-{Mc/dpmember.i}
 {Func/orderfunc.i}
 {Func/custfunc.i}
+{Func/addline_discount.i}
 
 SESSION:SYSTEM-ALERT-BOXES = TRUE.
 

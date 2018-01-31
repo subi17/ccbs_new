@@ -24,9 +24,8 @@
 {Func/ordercancel.i}
 {Func/dextra.i}
 {Func/main_add_lines.i}
-{Func/fixedlinefunc.i}
+{Func/addline_discount.i}
 {Func/orderfunc.i}
-{Mc/dpmember.i}
 {Func/multitenantfunc.i}
 {Func/vasfunc.i}
 
