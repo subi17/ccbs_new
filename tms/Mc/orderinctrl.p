@@ -451,8 +451,9 @@ IF lcNewStatus = {&ORDER_STATUS_NEW}                 OR
    -----------------------------------------------------------*/    
 
    IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) GT 0 AND
-      Order.CLIType BEGINS "CONTFH"                           AND 
-      Order.ICC     EQ     ""                                 THEN DO:
+      Order.CLIType   BEGINS "CONTFH"                         AND 
+      Order.ICC       EQ     ""                               AND 
+      Order.OrderType NE     {&ORDER_TYPE_STC}                THEN DO:
 
       IF llDoEvent THEN DO:
          lh17Order = BUFFER Order:HANDLE.
