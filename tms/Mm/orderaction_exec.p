@@ -494,7 +494,7 @@ PROCEDURE pDiscountPlan:
    END.
 
    
-   IF OrderAction.ItemParam > "" AND
+   IF OrderAction.ItemParam > ""
    THEN DO:
       IF NUM-ENTRIES(ENTRY(1,OrderAction.ItemParam,"|"),"=") > 1
       THEN ldeDiscAmt = DECIMAL(ENTRY(2,ENTRY(1,OrderAction.ItemParam,"|"),"=")) NO-ERROR.
