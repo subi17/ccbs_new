@@ -79,15 +79,13 @@ case icAction:
 
         oResp = oClient:Execute(oReq).
 
-        case oResp:StatusCode:
-            when 200 then 
-            do:
-                if type-of(oResp:Entity, JsonObject) then
-                    assign ioJson = cast(oResp:Entity, JsonObject).
-            end.
-            otherwise
-                undo, throw new Progress.Lang.AppError(oResp:StatusReason, 1).
-        end case.
+        IF VALID-OBJECT(oResp) THEN 
+        DO:
+            if type-of(oResp:Entity, JsonObject) then
+                assign ioJson = cast(oResp:Entity, JsonObject).
+        END.
+        ELSE 
+            undo, throw new Progress.Lang.AppError("API Call Status Code '" + STRING(oResp:StatusCode) + "'", 1).
     end.
     otherwise
         undo, throw new Progress.Lang.AppError('Action not supported', 1).

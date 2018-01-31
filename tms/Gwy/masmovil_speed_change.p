@@ -101,21 +101,21 @@ loRequestJson = fGetRequestJson(piOrderId, pcDownloadSpeed, pcUploadSpeed).
 
 fLogRequest(piOrderId, loRequestJson).
 
-RUN Gwy/http_rest_client("post"    ,
-                         lcHost    ,
-                         liPort    ,     
-                         ""        ,
-                         ""        ,
-                         lcUriPath ,
-                         lcUriQuery,
-                         lcUriQueryVal,
-                         loRequestJson,
-                         OUTPUT loJson).
+RUN Gwy/http_rest_client.p("post"    ,
+                           lcHost    ,
+                           liPort    ,     
+                           ""        ,
+                           ""        ,
+                           lcUriPath ,
+                           lcUriQuery,
+                           lcUriQueryVal,
+                           loRequestJson,
+                           OUTPUT loJson).
 
 IF VALID-OBJECT(loJson) THEN
     ASSIGN  
-        lcResultCode = loJson:GetCharacter("codigo")
-        lcResultDesc = loJson:GetCharacter("descripcion").
+        lcResultCode = loJson:GetCharacter("resultCode")
+        lcResultDesc = loJson:GetCharacter("resultDescription").
 
 IF lcResultCode EQ "FTTH0000" THEN
    RETURN "".

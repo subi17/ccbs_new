@@ -38,6 +38,7 @@ DEFINE VARIABLE liUpSpeed              AS INTE  NO-UNDO.
 DEFINE VARIABLE lcSpeedProfileList     AS CHAR  NO-UNDO.
 DEFINE VARIABLE liDestDowspeconversion AS INT64 NO-UNDO.
 DEFINE VARIABLE liDestupspeconversion  AS INT64 NO-UNDO.
+DEFINE VARIABLE lcHostname             AS CHAR  NO-UNDO.
 
 DEFINE TEMP-TABLE ttSpeed
           FIELD Download      AS INT64
@@ -224,6 +225,10 @@ ASSIGN
    pcBundleId = get_string(pcInputStruct, "bundle_id") WHEN LOOKUP("bundle_id",lcInputFields) > 0
    piMsSeq    = get_int(pcInputStruct, "MsSeq") WHEN LOOKUP("MsSeq",lcInputFields) > 0.  
 
+INPUT THROUGH hostname.
+IMPORT lcHostName.
+INPUT CLOSE.
+
 {newton/src/settenant.i pcTenant}
 
 top_struct = add_struct(response_toplevel_id, "").
@@ -232,20 +237,23 @@ result_array = add_array(top_struct, "clitypes").
 
 ldaCont15PromoEnd  = fCParamDa("CONT15PromoEndDate").
 
-FIND FIRST MobSub NO-LOCK WHERE
-           MobSub.Brand = Syst.Var:gcBrand AND
-           MobSub.MsSeq = piMsSeq          NO-ERROR. 
-IF AVAILABLE MobSub THEN
+IF LOOKUP(lcHostName, "sadachbia") = 0 THEN 
 DO:
-     FIND FIRST oldCLIType WHERE oldCLIType.Brand   = Syst.Var:gcBrand  AND
-                                 oldCLIType.cliType = pcCliType NO-LOCK NO-ERROR.
-     IF AVAIL oldCliType AND oldCliType.FixedLineType EQ {&FIXED_LINE_TYPE_FIBER} THEN
-     DO:
-         lcSpeedProfileList = fGetSpeedProfile(piMsSeq).
+    FIND FIRST MobSub NO-LOCK WHERE
+               MobSub.Brand = Syst.Var:gcBrand AND
+               MobSub.MsSeq = piMsSeq          NO-ERROR. 
+    IF AVAILABLE MobSub THEN
+    DO:
+         FIND FIRST oldCLIType WHERE oldCLIType.Brand   = Syst.Var:gcBrand  AND
+                                     oldCLIType.cliType = pcCliType NO-LOCK NO-ERROR.
+         IF AVAIL oldCliType AND oldCliType.FixedLineType EQ {&FIXED_LINE_TYPE_FIBER} THEN
+         DO:
+             lcSpeedProfileList = fGetSpeedProfile(piMsSeq).
 
-         IF lcSpeedProfileList <> "" THEN 
-             fParseSpeedProfile(lcSpeedProfileList).
-     END.
+             IF lcSpeedProfileList <> "" THEN 
+                 fParseSpeedProfile(lcSpeedProfileList).
+         END.
+    END.
 END.
 
 FOR EACH CLIType NO-LOCK WHERE
@@ -273,8 +281,13 @@ FOR EACH CLIType NO-LOCK WHERE
       IF fIsConvergenceTariff(CliType.Clitype) AND fIsConvergenceTariff(pcClitype) EQ FALSE THEN 
           ASSIGN lcStatusCode = 0.
       ELSE IF CLIType.FixedLineType EQ {&FIXED_LINE_TYPE_FIBER} THEN
-      DO:   
-          IF MobSub.TerritoryOwner EQ "FIBMM02" THEN
+      DO: 
+          IF LOOKUP(lcHostName, "sadachbia") > 0 THEN 
+          DO:
+              IF fIsConvergenceTariff(CliType.Clitype) AND fIsConvergenceTariff(pcClitype) EQ FALSE  THEN
+                  ASSIGN lcStatusCode = 0.
+          END.  
+          ELSE IF MobSub.TerritoryOwner EQ "FIBMM02" THEN
           DO:
               IF fIsConvergenceTariff(CliType.Clitype) AND (fIsConvergenceTariff(pcClitype) EQ FALSE OR NOT fCheckConvergentSTCCompability(pcClitype,Clitype.clitype)) THEN
                   ASSIGN lcStatusCode = 0.
