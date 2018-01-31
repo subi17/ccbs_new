@@ -7,6 +7,7 @@ Syst.Var:gcBrand = "1".
 {Func/cparam2.i}
 {Mc/orderfusion.i}
 {Func/orderfunc.i}
+{Mc/dpmember.i}
 
 DEF VAR liLoop      AS INTE NO-UNDO.
 
@@ -39,19 +40,11 @@ PROCEDURE pProcessRequests:
                 ASSIGN lcDiscPlan = fGetRegionDiscountPlan(Customer.Region).    
         END.
 
-        IF lcDiscPlan > "" THEN 
-        DO:
-            FIND FIRST DiscountPlan WHERE DiscountPlan.Brand = Syst.Var:gcBrand AND DiscountPlan.DPRuleID = lcDiscPlan NO-LOCK NO-ERROR.
-            IF AVAIL DiscountPlan THEN 
-            DO:
-                FIND FIRST DPMember WHERE DPMember.DPId      = DiscountPlan.DPId       AND 
-                                          DPMember.HostTable = "MobSub"                AND
-                                          DPMember.KeyValue  = STRING(TPService.MsSeq) AND
-                                          DPMember.ValidTo  >= TODAY                   EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
-                IF AVAIL DPMember THEN 
-                    ASSIGN DPMember.ValidTo = TODAY.
-            END.
-        END.
+        IF lcDiscPlan > ""
+        THEN fCloseDiscount(lcDiscPlan,
+                            TPService.MsSeq,
+                            TODAY,
+                            NO).
 
         ASSIGN 
             TPService.VoucherStatus   = "Cancelled"
@@ -60,6 +53,11 @@ PROCEDURE pProcessRequests:
     END.
 
     RETURN "".
+
+    FINALLY:
+       IF llDoEvent
+       THEN fCleanEventObjects().
+    END FINALLY.
 
 END PROCEDURE.
 

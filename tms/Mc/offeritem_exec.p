@@ -340,15 +340,15 @@ PROCEDURE pPeriodicalContract:
 
          ldaDiscountStartDate = DATE(MONTH(ldaDiscountEndDate),1,
                                      YEAR(ldaDiscountEndDate)).
-         liRequest = fAddDiscountPlanMember(MobSub.MsSeq,
-                                            bOfferItem.ItemKey,
-                                            bOfferItem.Amount,
-                                            ldaDiscountStartDate,
-                                            bOfferItem.Periods,
-                                            0, /* OrderId */
-                                            OUTPUT lcResult).
+         lcResult = fAddDiscountPlanMember(MobSub.MsSeq,
+                                           bOfferItem.ItemKey,
+                                           bOfferItem.Amount,
+                                           ldaDiscountStartDate,
+                                           ?,
+                                           bOfferItem.Periods,
+                                           0). /* OrderId */
 
-         IF liRequest NE 0 THEN 
+         IF lcResult > "" THEN
             RETURN "ERROR:Discount not created; " + lcResult.
       END.
    END. /* IF OfferItem.ItemKey BEGINS "PAYTERM" THEN DO: */
@@ -427,7 +427,6 @@ END PROCEDURE.  /* pServicePackage */
 
 PROCEDURE pDiscountPlanMember:
 
-   DEF VAR lcErrorReason           AS CHAR NO-UNDO.
    DEF VAR lcDiscPlan              AS CHAR NO-UNDO. 
 
    IF LOOKUP(OfferItem.ItemKey,lcIPhoneDiscountRuleIds) > 0 THEN RETURN "".
@@ -498,17 +497,12 @@ PROCEDURE pDiscountPlanMember:
                         OrderAction.ItemKey  = Order.CLIType + "DISC") THEN RETURN "".
    END.   
 
-   liRequest = fAddDiscountPlanMember(MobSub.MsSeq,
-                                      lcDiscPlan, /* OfferItem.ItemKey */
-                                      OfferItem.Amount,
-                                      TODAY,
-                                      OfferItem.Periods,
-                                      0, /* OrderId */
-                                      OUTPUT lcErrorReason).
-
-   IF liRequest NE 0 THEN 
-      RETURN lcErrorReason.
-
-   RETURN "".
+   RETURN fAddDiscountPlanMember(MobSub.MsSeq,
+                                 lcDiscPlan, /* OfferItem.ItemKey */
+                                 OfferItem.Amount,
+                                 TODAY,
+                                 ?,
+                                 OfferItem.Periods,
+                                 0). /* OrderId */
 
 END PROCEDURE. /* pDiscountPlanMember */

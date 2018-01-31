@@ -33,14 +33,14 @@ FUNCTION fCalcDPMemberValidTo RETURNS DATE
     
 END FUNCTION.
 
-FUNCTION fAddDiscountPlanMember RETURNS INTEGER
+FUNCTION fAddDiscountPlanMember RETURNS CHARACTER
    (INPUT iiMsSeq           AS INT,
     INPUT icDiscountPlan    AS CHAR,
     INPUT idDiscountAmt     AS DEC,
     INPUT idaFromDate       AS DATE,
+    INPUT idaToDate         AS DATE,
     INPUT iiDiscountPeriods AS INT,
-    INPUT iiOrderId         AS INT,
-    OUTPUT ocError          AS CHAR):
+    INPUT iiOrderId         AS INT):
 
    DEF VAR ldValidTo AS DATE NO-UNDO.
 
@@ -49,20 +49,18 @@ FUNCTION fAddDiscountPlanMember RETURNS INTEGER
    DEF BUFFER DPMember FOR DPMember.
 
    FIND FIRST MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
-   IF NOT AVAILABLE MobSub THEN DO:
-      ocError = "ERROR: Subscription not available".
-      RETURN 1.
-   END.
+   IF NOT AVAILABLE MobSub
+   THEN RETURN "ERROR: Subscription not available".
 
    FIND FIRST DiscountPlan WHERE
               DiscountPlan.Brand = Syst.Var:gcBrand AND
               DiscountPlan.DPRuleID = icDiscountPlan NO-LOCK NO-ERROR.
-   IF NOT AVAILABLE DiscountPlan THEN DO:
-      ocError = "ERROR: Unknown Discount Plan".
-      RETURN 1.
-   END.
+   IF NOT AVAILABLE DiscountPlan
+   THEN RETURN "ERROR: Unknown Discount Plan".
 
-   ldValidTo = fCalcDPMemberValidTo(idaFromDate,iiDiscountPeriods).
+   IF idaToDate NE ?
+   THEN ldValidTo = idaToDate.
+   ELSE ldValidTo = fCalcDPMemberValidTo(idaFromDate,iiDiscountPeriods).
 
    FIND FIRST DPMember WHERE
               DPMember.DPId = DiscountPlan.DPId AND
@@ -70,10 +68,8 @@ FUNCTION fAddDiscountPlanMember RETURNS INTEGER
               DPMember.KeyValue  = STRING(iiMsSeq) AND
               DPMember.ValidTo >= idaFromDate AND
               DPMember.ValidFrom <= idaFromDate NO-LOCK NO-ERROR.
-   IF AVAILABLE DPMember THEN DO:
-      ocError = "ERROR: Discount Plan Member already exists".
-      RETURN 1.
-   END.
+   IF AVAILABLE DPMember
+   THEN RETURN "ERROR: Discount Plan Member already exists".
 
    IF idDiscountAmt > 0 THEN DO:
       
@@ -92,7 +88,8 @@ FUNCTION fAddDiscountPlanMember RETURNS INTEGER
          DPMember.OrderId   = iiOrderId.
    END. /* IF idDiscountAmt > 0 THEN DO: */
 
-   RETURN 0.
+   RETURN "".
+
 END FUNCTION. /* fAddDiscountPlanMember */
 
 
@@ -141,7 +138,6 @@ FUNCTION fCreateAddLineDiscount RETURNS CHARACTER
     icDPRuleID AS CHAR):
 
    DEF VAR lcNewAddLineDisc AS CHAR NO-UNDO.
-   DEF VAR liRequest        AS INT  NO-UNDO.
    DEF VAR lcResult         AS CHAR NO-UNDO.
 
    IF icDPRuleID NE "" THEN lcNewAddLineDisc = icDPRuleID. /* reactivation */
@@ -162,16 +158,16 @@ FUNCTION fCreateAddLineDiscount RETURNS CHARACTER
                      idtDate - 1,
                      FALSE).
 
-      liRequest = fAddDiscountPlanMember(iiMsSeq,
+      lcResult = fAddDiscountPlanMember(iiMsSeq,
                                          DiscountPlan.DPRuleID,
                                          DPRate.DiscValue,
                                          idtDate,
+                                         ?,
                                          DiscountPlan.ValidPeriods,
-                                         0,
-                                         OUTPUT lcResult).
+                                         0).
 
-      IF liRequest NE 0 THEN
-         RETURN "ERROR:Additional Line Discount not created; " + lcResult.
+      IF lcResult > ""
+      THEN RETURN "ERROR:Additional Line Discount not created; " + lcResult.
    END.
 
 END FUNCTION.
@@ -181,7 +177,6 @@ FUNCTION fCreateExtraLineDiscount RETURNS CHARACTER
     INPUT lcExtraLineDisc AS CHAR,
     INPUT idtDate         AS DATE):
    
-   DEF VAR liRequest        AS INT  NO-UNDO.
    DEF VAR lcResult         AS CHAR NO-UNDO.
 
    FOR FIRST DiscountPlan NO-LOCK WHERE
@@ -198,16 +193,16 @@ FUNCTION fCreateExtraLineDiscount RETURNS CHARACTER
                      idtDate - 1,
                      FALSE).
 
-      liRequest = fAddDiscountPlanMember(iExtraLineMsSeq,
+      lcResult = fAddDiscountPlanMember(iExtraLineMsSeq,
                                          DiscountPlan.DPRuleID,
                                          DPRate.DiscValue,
                                          idtDate,
+                                         ?,
                                          DiscountPlan.ValidPeriods,
-                                         0,
-                                         OUTPUT lcResult).
+                                         0).
 
-      IF liRequest NE 0 THEN
-         RETURN "ERROR:Extra Line Discount not created; " + lcResult.
+      IF lcResult > ""
+      THEN RETURN "ERROR:Extra Line Discount not created; " + lcResult.
    END.
 END FUNCTION.    
 

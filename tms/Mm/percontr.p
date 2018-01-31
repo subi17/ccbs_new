@@ -1245,13 +1245,13 @@ PROCEDURE pContractActivation:
       ELSE IF lcDCEvent EQ "RVTERM12" AND
          ldeResidualFeeDisc > 0 THEN DO:
 
-         fAddDiscountPlanMember(MsOwner.MsSeq,
-                               "RVTERMDT2DISC", 
-                               ldeResidualFeeDisc,
-                               ldaResidualFee,
-                               1,
-                               bQ25SingleFee.OrderId, /* Q25 OrderId */
-                               OUTPUT lcError).
+         lcError = fAddDiscountPlanMember(MsOwner.MsSeq,
+                                          "RVTERMDT2DISC",
+                                          ldeResidualFeeDisc,
+                                          ldaResidualFee,
+                                          ?,
+                                          1,
+                                          bQ25SingleFee.OrderId). /* Q25 OrderId */
          /* write possible error to an order memo */
          IF lcError > "" THEN
             Func.Common:mWriteMemo("MobSub",
@@ -1279,14 +1279,14 @@ PROCEDURE pContractActivation:
                                                 bf_OfferItem.EndStamp   >= MsRequest.ActStamp NO-LOCK NO-ERROR.
                   IF AVAIL bf_OfferItem AND bf_OfferItem.Amount > 0 THEN
                   DO:
-                      ASSIGN liDiscReq = fAddDiscountPlanMember(MsRequest.MsSeq,
-                                                                bf_OfferItem.ItemKey,
-                                                                bf_OfferItem.Amount,
-                                                                TODAY,
-                                                                bf_OfferItem.Periods,
-                                                                0,
-                                                                OUTPUT lcErrMsg).
-                      IF liDiscReq NE 0 THEN 
+                      lcErrMsg = fAddDiscountPlanMember(MsRequest.MsSeq,
+                                                        bf_OfferItem.ItemKey,
+                                                        bf_OfferItem.Amount,
+                                                        TODAY,
+                                                        ?,
+                                                        bf_OfferItem.Periods,
+                                                        0).
+                      IF lcErrMsg > "" THEN
                           fReqLog("Failed to add discount for (" + DayCampaign.DCEvent + "). Error: '" + lcErrMsg + "'").
                   END.  /* IF AVAIL OfferItem THEN */
               END.                       

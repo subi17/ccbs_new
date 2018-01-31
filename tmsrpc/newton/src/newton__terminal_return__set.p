@@ -325,15 +325,15 @@ IF (llDeviceStart AND llDeviceScreen) OR
       END.
    END.
    ELSE DO:
-      liRequest = fAddDiscountPlanMember(MobSub.MsSeq,
+      lcResult = fAddDiscountPlanMember(MobSub.MsSeq,
                                         "RVTERMDT3DISC",
                                         SingleFee.Amt,
                                         fPer2Date(SingleFee.BillPeriod,0),
+                                        ?,
                                         1,
-                                        SingleFee.OrderId, /* Q25 OrderId */
-                                        OUTPUT lcResult).
+                                        SingleFee.OrderId). /* Q25 OrderId */
 
-      IF liRequest NE 0 THEN
+      IF lcResult > "" THEN
          RETURN appl_err("ERROR:Discount creation failed; " + lcResult).
 
       FOR EACH DiscountPlan NO-LOCK WHERE

@@ -215,16 +215,18 @@ REPEAT TRANS:
    END.
    
    IF ldDiscount NE 0 THEN DO:
-      CREATE DPMember.
-      ASSIGN 
-         DPMember.DPId      = DiscountPlan.DPId 
-         DPMember.HostTable = "MobSub" 
-         DPMember.KeyValue  = STRING(liMsSeq) 
-         DPMember.ValidFrom = ldaValidFrom
-         DPMember.ValidTo   = ldaValidTo          
-         DPMember.DiscValue = ldDiscount
-         DPMember.DPMemberID = NEXT-VALUE(DPMemberID)
-         .
+      lcError = fAddDiscountPlanMember(liMsSeq,
+                                       DiscountPlan.DPRuleID,
+                                       ldDiscount,
+                                       ldaValidFrom,
+                                       ldaValidTo,
+                                       ?,
+                                       0).
+       IF lcError > ""
+       THEN DO:
+         fError(lcError).
+         NEXT.
+       END.
    
       /* dpmember creations not logged anymore YDR-1078 */
       /*

@@ -45,7 +45,6 @@ PROCEDURE pUpdateStatus:
     DEF VAR lcMsgType   AS CHAR NO-UNDO.
     DEF VAR lcError     AS CHAR NO-UNDO.
     DEF VAR liRequest   AS INTE NO-UNDO.
-    DEF VAR liDiscReq   AS INTE NO-UNDO.
     DEF VAR ldeActStamp AS DECI NO-UNDO.
     DEF VAR lcDiscPlan  AS CHAR NO-UNDO.
     DEF VAR ldeDiscAmt  AS DECI NO-UNDO.
@@ -105,16 +104,17 @@ PROCEDURE pUpdateStatus:
                                 ASSIGN ldeDiscAmt = DPRate.DiscValue.
                         END.
                         
+                        lcErrMsg = "".
                         IF ldeDiscAmt > 0 THEN     
-                            ASSIGN liDiscReq = fAddDiscountPlanMember(TPService.MsSeq,
+                            lcErrMsg = fAddDiscountPlanMember(TPService.MsSeq,
                                                                       lcDiscPlan,
                                                                       ldeDiscAmt,
                                                                       TODAY,
+                                                                      ?,
                                                                       {&SKYTV-DISCOUNT-PERIOD},
-                                                                      0,
-                                                                      OUTPUT lcErrMsg).
+                                                                      0).
 
-                        IF liDiscReq NE 0 THEN 
+                        IF lcErrMsg > "" THEN
                             PUT UNFORMATTED "Customer: '" + ttCustomer.CustomerId + "' with serial number: '" + 
                                                     ttCustomer.SerialNbr + "' failed to activate service: '" + 
                                                     TPService.Product + "' Error: '" + lcErrMsg + "'" SKIP.
