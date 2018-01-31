@@ -1,8 +1,8 @@
 /**
  * Updates Order delivery status and IMEI
- * 
+ *
  * @input orderdelivery;struct;mandatory;
- *  
+ *
  * @orderdelivery Order_Id;string;mandatory;
    timestamp;datetime;mandatory;logistic handling time
    LO_Status_ID;integer;mandatory;
@@ -13,9 +13,9 @@
    Courier_Description;string;optional;
    Courier_Shipping_ID;string;optional;
    IMEI_COL;array;optional;Array of structs (includes IMEI, MSDN & ICC fields)
- 
+
  * @output returncode;integer
- 
+
  * @returncode 0;Order status update successful
    1;Integrity errors on order ID
    2;Integrity errors on timestamp
@@ -28,7 +28,7 @@
    9;Integrity Integrity errors on courier shipping ID
    10;Integrity errors on IMEI information
    11;Integrity errors on delivery_address information
-   12;Integrity errors on ICC information 
+   12;Integrity errors on ICC information
 */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
@@ -36,43 +36,43 @@ DEF VAR top_struct  AS CHAR          NO-UNDO.
 DEF VAR lcTopStruct AS CHAR          NO-UNDO.
 DEF VAR liResult    AS INT INITIAL 0 NO-UNDO.
 
-DEFINE VARIABLE liCourierId         AS INTEGER   NO-UNDO.         
-DEFINE VARIABLE lcCourierShippingId AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE liLOId              AS INTEGER   NO-UNDO.             
-DEFINE VARIABLE liLOStatusId        AS INTEGER   NO-UNDO.        
-DEFINE VARIABLE ldeLOTimeStamp      AS DATETIME  NO-UNDO.      
-DEFINE VARIABLE liOrderId           AS INTEGER   NO-UNDO.         
-DEFINE VARIABLE lcOrderId           AS CHARACTER NO-UNDO.         
-DEFINE VARIABLE lcLOStatusName      AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE lcLOName            AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE lcCourierName       AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE liCourierId         AS INTEGER   NO-UNDO.
+DEFINE VARIABLE lcCourierShippingId AS CHARACTER NO-UNDO.
+DEFINE VARIABLE liLOId              AS INTEGER   NO-UNDO.
+DEFINE VARIABLE liLOStatusId        AS INTEGER   NO-UNDO.
+DEFINE VARIABLE ldeLOTimeStamp      AS DATETIME  NO-UNDO.
+DEFINE VARIABLE liOrderId           AS INTEGER   NO-UNDO.
+DEFINE VARIABLE lcOrderId           AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcLOStatusName      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcLOName            AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcCourierName       AS CHARACTER NO-UNDO.
 
 DEFINE VARIABLE lcIMEIArray      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcIMEIStruct     AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcIMEI           AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcICC            AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE lcIMEIFields     AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE liImeis          AS INTEGER   NO-UNDO. 
-DEFINE VARIABLE i                AS INTEGER   NO-UNDO. 
-DEFINE VARIABLE delivery_address AS CHARACTER NO-UNDO. 
+DEFINE VARIABLE lcICC            AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcIMEIFields     AS CHARACTER NO-UNDO.
+DEFINE VARIABLE liImeis          AS INTEGER   NO-UNDO.
+DEFINE VARIABLE i                AS INTEGER   NO-UNDO.
+DEFINE VARIABLE delivery_address AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lhOrder          AS HANDLE    NO-UNDO.
 DEFINE VARIABLE liRequest        AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcError          AS CHARACTER NO-UNDO.
 
-DEF VAR lcDeliveryAddress AS CHAR NO-UNDO. 
-DEF VAR lcRegion          AS CHAR NO-UNDO. 
-DEF VAR lcStreet          AS CHAR NO-UNDO. 
-DEF VAR lcZip             AS CHAR NO-UNDO. 
-DEF VAR lcCity            AS CHAR NO-UNDO. 
-DEF VAR lcCountry         AS CHAR NO-UNDO. 
-DEF VAR lcStreetCode      AS CHAR NO-UNDO. 
-DEF VAR lcCityCode        AS CHAR NO-UNDO. 
+DEF VAR lcDeliveryAddress AS CHAR NO-UNDO.
+DEF VAR lcRegion          AS CHAR NO-UNDO.
+DEF VAR lcStreet          AS CHAR NO-UNDO.
+DEF VAR lcZip             AS CHAR NO-UNDO.
+DEF VAR lcCity            AS CHAR NO-UNDO.
+DEF VAR lcCountry         AS CHAR NO-UNDO.
+DEF VAR lcStreetCode      AS CHAR NO-UNDO.
+DEF VAR lcCityCode        AS CHAR NO-UNDO.
 DEF VAR liDBCount         AS INT  NO-UNDO.
 DEF VAR lcTenant          AS CHAR NO-UNDO.
 
 DEFINE BUFFER bOrder FOR Order.
 
-FUNCTION fCheckIntegrity RETURNS LOGICAL 
+FUNCTION fCheckIntegrity RETURNS LOGICAL
    (iiErrCode AS INTEGER):
    IF gi_xmlrpc_error = {&INVALID_METHOD_PARAMS} THEN DO:
       gi_xmlrpc_error = 0.
@@ -81,7 +81,7 @@ FUNCTION fCheckIntegrity RETURNS LOGICAL
       RETURN FALSE.
    END.
    RETURN TRUE.
-END FUNCTION. 
+END FUNCTION.
 
 top_struct = get_struct(param_toplevel_id, "0").
 
@@ -130,27 +130,27 @@ IF LOOKUP("Courier_Shipping_ID", lcTopStruct) GT 0 THEN DO:
 END.
 
 IF LOOKUP("IMEI_COL", lcTopStruct) GT 0 THEN DO:
-   
+
    lcIMEIArray = get_array(top_struct,"IMEI_COL").
-   
+
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 
    liImeis = get_paramcount(lcIMEIArray).
    IMEI_LOOP:
-   do i = 1 to liIMEIs: 
-      
+   do i = 1 to liIMEIs:
+
       lcIMEIStruct = get_struct(lcIMEIArray,string(i - 1)).
       IF gi_xmlrpc_error NE 0 THEN RETURN.
 
       lcIMEIFields = validate_struct(lcIMEIStruct, "MSDN,IMEI,ICC").
-      
+
       IF gi_xmlrpc_error NE 0 THEN RETURN.
-      
+
       IF LOOKUP("IMEI",lcIMEIFields) > 0 THEN DO:
          lcIMEI = get_string(lcIMEIStruct,"IMEI").
          IF NOT fCheckIntegrity(10) THEN RETURN.
       END.
-      
+
       IF LOOKUP("ICC",lcIMEIFields) > 0 THEN DO:
          lcICC = get_string(lcIMEIStruct,"ICC").
          IF NOT fCheckIntegrity(12) THEN RETURN.
@@ -160,7 +160,7 @@ IF LOOKUP("IMEI_COL", lcTopStruct) GT 0 THEN DO:
 END.
 
 IF LOOKUP("delivery_address", lcTopStruct) > 0 THEN DO:
-   
+
    delivery_address = get_struct(top_struct, "delivery_address").
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 
@@ -197,21 +197,21 @@ Syst.Var:gcBrand = "1".
 
 /* Set access to right tenant */
 FOR FIRST Order WHERE Order.Brand = Syst.Var:gcBrand AND Order.OrderId = liOrderId TENANT-WHERE TENANT-ID() > -1 NO-LOCK:
-    ASSIGN lcTenant = BUFFER-TENANT-NAME(Order).                
+    ASSIGN lcTenant = BUFFER-TENANT-NAME(Order).
 END.
 
 IF NOT AVAIL Order OR lcTenant = "" THEN DO:
    add_int(response_toplevel_id, "", 20).
    RETURN.
 END.
- 
+
 DO liDBCount = 1 TO NUM-DBS
    ON ERROR UNDO, THROW:
     SET-EFFECTIVE-TENANT(lcTenant, LDBNAME(liDBCount)).
 END.
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
 END.
 
@@ -232,30 +232,30 @@ IF lcIMEI NE "" AND lcIMEI NE ? THEN DO:
          IF AVAIL FusionMessage THEN
             FusionMessage.messageStatus = {&FUSIONMESSAGE_STATUS_ONGOING}.
       END.
-   END.   
+   END.
    ELSE IF liLOStatusId EQ 88887 THEN
    DO:
-      FIND FIRST TPService WHERE TPService.MsSeq      = Order.MsSeq                   AND 
-                                 TPService.Operation  = {&TYPE_ACTIVATION}            AND    
-                                 TPService.ServType   = "Television"                  AND 
+      FIND FIRST TPService WHERE TPService.MsSeq      = Order.MsSeq                   AND
+                                 TPService.Operation  = {&TYPE_ACTIVATION}            AND
+                                 TPService.ServType   = "Television"                  AND
                                  TPService.ServStatus = {&STATUS_LOGISTICS_INITIATED} EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
-      IF AVAIL TPService THEN 
+      IF AVAIL TPService THEN
       DO:
           ASSIGN TPService.SerialNbr = lcIMEI.
-          
+
           fCreateTPServiceMessage(TPService.MsSeq, TPService.ServSeq, {&SOURCE_LOGISTICS}, {&WAITING_FOR_STB_ACTIVATION}).
       END.
-      ELSE 
+      ELSE
       DO:
-          add_int(response_toplevel_id, "", 30). 
-          RETURN. 
-      END.                  
-   END.  
+          add_int(response_toplevel_id, "", 30).
+          RETURN.
+      END.
+   END.
    ELSE DO:
       FIND FIRST OrderAccessory WHERE
          OrderAccessory.Brand = Syst.Var:gcBrand AND
          OrderAccessory.OrderId = Order.OrderId AND
-         OrderAccessory.TerminalType = ({&TERMINAL_TYPE_PHONE}) 
+         OrderAccessory.TerminalType = ({&TERMINAL_TYPE_PHONE})
          NO-LOCK NO-ERROR.
 
       IF AVAIL OrderAccessory AND OrderAccessory.IMEI NE lcIMEI THEN DO:
@@ -280,20 +280,20 @@ IF lcIMEI NE "" AND lcIMEI NE ? THEN DO:
          SubsTerminal.TerminalType = ({&TERMINAL_TYPE_PHONE}) NO-LOCK NO-ERROR.
 
       IF AVAIL SubsTerminal AND SubsTerminal.IMEI NE lcIMEI THEN DO:
-         
+
          FIND CURRENT SubsTerminal EXCLUSIVE-LOCK.
-         
+
          IF llDoEvent THEN DO:
             DEFINE VARIABLE lhSubsTerminal AS HANDLE NO-UNDO.
             lhSubsTerminal = BUFFER SubsTerminal:HANDLE.
             RUN StarEventInitialize(lhSubsTerminal).
             RUN StarEventSetOldBuffer(lhSubsTerminal).
          END.
-         
+
          ASSIGN SubsTerminal.IMEI = lcIMEI.
-      
+
          IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhSubsTerminal).
-      
+
       END.
    END.
 END.
@@ -301,10 +301,10 @@ END.
 
 IF lcICC NE "" AND lcICC NE ? THEN DO:
 
-   FIND FIRST SIM EXCLUSIVE-LOCK WHERE 
+   FIND FIRST SIM EXCLUSIVE-LOCK WHERE
               SIM.Brand  EQ Syst.Var:gcBrand AND
-              SIM.Stock  EQ {&ICC_STOCK_LO}  AND  
-              SIM.ICC    EQ lcICC            AND 
+              SIM.Stock  EQ {&ICC_STOCK_LO}  AND
+              SIM.ICC    EQ lcICC            AND
               SIM.SimArt EQ "universal"      NO-ERROR.
 
    IF NOT AVAIL SIM THEN DO:
@@ -314,15 +314,90 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
    ELSE IF SIM.SimStat NE 1 THEN DO:
       add_int(response_toplevel_id, "", 42).
       RETURN.
-   END.   
+   END.
 
-   /* If already subscription is available then create 
+   /* If already subscription is available then create
       ICC change request */
-   FIND FIRST MobSub NO-LOCK WHERE 
-              MobSub.MsSeq EQ Order.MsSeq AND 
+   FIND FIRST MobSub NO-LOCK WHERE
+              MobSub.MsSeq EQ Order.MsSeq AND
               MobSub.ICC   NE ""          NO-ERROR.
 
-   IF AVAIL MobSub THEN DO:
+   IF Order.ICC  EQ "" AND
+      Order.OrderType EQ {&ORDER_TYPE_RENEWAL} AND
+      LOOKUP(Order.StatusCode, {&ORDER_CLOSE_STATUSES}) = 0 THEN DO:
+
+      FIND bOrder EXCLUSIVE-LOCK WHERE
+           ROWID(bOrder) = ROWID(Order) NO-ERROR.
+
+      IF Order.StatusCode NE {&ORDER_STATUS_DELIVERED} THEN DO:
+
+         ASSIGN bOrder.ICC  = lcICC
+                SIM.SimStat = 13
+                SIM.MsSeq   = bOrder.MsSeq.
+
+         Func.Common:mWriteMemo("Order",
+                                STRING(bOrder.OrderID),
+                                bOrder.CustNum,
+                                "ICC value updated by LO",
+                                "").
+      END.
+      ELSE DO:
+
+         IF Order.SalesMan > "" THEN
+            Syst.Var:katun = Order.SalesMan.
+
+         liRequest = fSubscriptionRequest
+                         (INPUT  Order.MSSeq,
+                          INPUT  Order.CLI,
+                          INPUT  Order.CustNum,
+                          INPUT  1,
+                          INPUT  "",
+                          INPUT  Func.Common:mMakeTS(),
+                          INPUT  "CHANGEICC",
+                          INPUT  lcICC,
+                          INPUT  "", /*for old SIM*/
+                          INPUT  "", /*for Reason info*/
+                          INPUT  "", /*for ContractID*/
+                          INPUT  FALSE,
+                          INPUT  0.0,
+                          INPUT  {&SOURCE_LOGISTICS},
+                          OUTPUT lcError).
+
+         IF Order.SalesMan > "" THEN
+            Syst.Var:katun = "Dextra".
+
+         IF liRequest = 0 THEN DO:
+            add_int(response_toplevel_id, "", 43).
+            Func.Common:mWriteMemo("Order",
+                             STRING(Order.OrderID),
+                             Order.CustNum,
+                             "ICC In Use",
+                             lcICC + "is already in use").
+            RETURN.
+         END.
+         ELSE DO:
+
+            ASSIGN bOrder.ICC  = lcICC
+                   SIM.SimStat = 13
+                   SIM.MsSeq   = bOrder.MsSeq.
+
+            FIND MsRequest WHERE
+                 MsRequest.MsRequest = liRequest EXCLUSIVE-LOCK NO-ERROR.
+            MsRequest.ReqSource = {&REQUEST_SOURCE_ICC_CHANGE_AUTO}.
+            fReqStatus(19,"").
+
+            Func.Common:mWriteMemo("MsRequest",
+                             STRING(liRequest),
+                             Order.CustNum,
+                             "ICC TYPE CHANGE AUTO",
+                             Order.OrderChannel).
+         END. /* ELSE DO: */
+
+      END.
+   END.
+   ELSE IF AVAIL MobSub AND
+      MobSub.ICC NE lcICC AND
+      Order.OrderType NE {&ORDER_TYPE_RENEWAL} THEN DO:
       liRequest = fSubscriptionRequest(Mobsub.MsSeq,
                                        Mobsub.Cli,
                                        Mobsub.CustNum,
@@ -348,68 +423,68 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
          RETURN.
       END.
    END.
+   ELSE IF Order.ICC  EQ "" AND
+      Order.OrderType  NE {&ORDER_TYPE_STC}     AND
+      Order.OrderType  NE {&ORDER_TYPE_RENEWAL} AND
+     (Order.StatusCode EQ {&ORDER_STATUS_PENDING_ICC_FROM_LO} OR
+      Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE}  OR
+      Order.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE})    AND
+      LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) EQ 0 THEN DO:
+
+      FIND bOrder EXCLUSIVE-LOCK WHERE
+           ROWID(bOrder) = ROWID(Order) NO-ERROR.
+
+      IF ERROR-STATUS:ERROR OR LOCKED(bOrder) THEN RETURN.
+
+      ASSIGN bOrder.ICC  = lcICC
+             SIM.SimStat = 4
+             SIM.MsSeq   = bOrder.MsSeq.
+
+      CREATE SimDeliveryhist.
+      ASSIGN SimDeliveryHist.OrderID    = bOrder.OrderID
+             SimDeliveryHist.MSSeq      = bOrder.MSSeq
+             SimDeliveryHist.StatusCode = 2.
+             SimDeliveryHist.TimeStamp  = Func.Common:mMakeTS().
+
+      Func.Common:mWriteMemo("Order",
+                             STRING(bOrder.OrderID),
+                             bOrder.CustNum,
+                             "ICC value updated by LO",
+                             "").
+
+      IF llDoEvent THEN DO:
+         lhOrder = BUFFER bOrder:HANDLE.
+         RUN StarEventInitialize(lhOrder).
+         RUN StarEventSetOldBuffer(lhOrder).
+      END.
+
+      /* order status with 76 is not needed to be released, at it will
+         be released when associated main line fixed line is installed */
+      IF bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_ICC_FROM_LO} THEN DO:
+         CASE bOrder.OrderType:
+            WHEN {&ORDER_TYPE_NEW} THEN fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_NEW}).
+            WHEN {&ORDER_TYPE_MNP} THEN fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_MNP}).
+         END CASE.
+      END.
+
+      IF llDoEvent THEN DO:
+         RUN StarEventMakeModifyEvent(lhOrder).
+         fCleanEventObjects().
+      END.
+
+   END.
    ELSE DO:
-      
-      IF Order.ICC        EQ ""                                    AND
-         Order.OrderType  NE {&ORDER_TYPE_STC}                     AND
-        (Order.StatusCode EQ {&ORDER_STATUS_PENDING_ICC_FROM_LO} OR
-         Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE}  OR
-         Order.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE})    AND 
-         LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) EQ 0 THEN DO: 
-
-         FIND bOrder EXCLUSIVE-LOCK WHERE 
-              ROWID(bOrder) = ROWID(Order) NO-ERROR.
-
-         IF ERROR-STATUS:ERROR OR LOCKED(bOrder) THEN RETURN.
-
-         ASSIGN bOrder.ICC  = lcICC
-                SIM.SimStat = 4
-                SIM.MsSeq   = bOrder.MsSeq. 
-      
-         CREATE SimDeliveryhist.
-         ASSIGN SimDeliveryHist.OrderID    = bOrder.OrderID
-                SimDeliveryHist.MSSeq      = bOrder.MSSeq 
-                SimDeliveryHist.StatusCode = 2.
-                SimDeliveryHist.TimeStamp  = Func.Common:mMakeTS().
-   
-         Func.Common:mWriteMemo("Order",
-                                STRING(bOrder.OrderID),
-                                bOrder.CustNum,
-                                "ICC value updated by LO",
-                                "").
-         
-         IF llDoEvent THEN DO:
-            lhOrder = BUFFER bOrder:HANDLE.
-            RUN StarEventInitialize(lhOrder).
-            RUN StarEventSetOldBuffer(lhOrder).
-         END.
-
-         /* order status with 76 is not needed to be released, at it will 
-            be released when associated main line fixed line is installed */
-         IF bOrder.StatusCode EQ {&ORDER_STATUS_PENDING_ICC_FROM_LO} THEN DO:
-            CASE bOrder.OrderType:
-               WHEN {&ORDER_TYPE_NEW} THEN fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_NEW}).
-               WHEN {&ORDER_TYPE_MNP} THEN fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_MNP}).
-            END CASE.
-         END.
-
-         IF llDoEvent THEN DO:
-            RUN StarEventMakeModifyEvent(lhOrder).
-            fCleanEventObjects().
-         END.
-
-      END.
-      ELSE DO:
-         CREATE ErrorLog.
-         ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
-                ErrorLog.ActionID  = "ORDERICC"
-                ErrorLog.TableName = "Order"
-                ErrorLog.KeyValue  = STRING(Order.OrderId) 
-                ErrorLog.ErrorMsg  = "ICC not assigned due to wrong order status"
-                ErrorLog.UserCode  = Syst.Var:katun
-                ErrorLog.ActionTS  = Func.Common:mMakeTS().
-      END.
-
+      CREATE ErrorLog.
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
+             ErrorLog.ActionID  = "ORDERICC"
+             ErrorLog.TableName = "Order"
+             ErrorLog.KeyValue  = STRING(Order.OrderId)
+             ErrorLog.ErrorMsg  = SUBST(
+               "ICC &1 not assigned due to wrong order status &2",
+               lcICC,
+               Order.StatusCode)
+             ErrorLog.UserCode  = Syst.Var:katun
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.
 
 END.
@@ -433,7 +508,7 @@ ASSIGN
    OrderDelivery.MeasuresInfoId = ?.
 
 IF llDoEvent THEN RUN StarEventMakeCreateEvent (lhOrderDelivery).
-      
+
 IF LOOKUP("delivery_address", lcTopStruct) > 0 THEN DO:
 
    FIND FIRST OrderCustomer EXCLUSIVE-LOCK WHERE
@@ -444,7 +519,7 @@ IF LOOKUP("delivery_address", lcTopStruct) > 0 THEN DO:
    IF NOT AVAIL OrderCustomer THEN DO:
       CREATE OrderCustomer.
       ASSIGN
-         OrderCustomer.Brand     = Syst.Var:gcBrand 
+         OrderCustomer.Brand     = Syst.Var:gcBrand
          OrderCustomer.OrderId   = Order.OrderId
          OrderCustomer.RowType   = {&ORDERCUSTOMER_ROWTYPE_LOGISTICS}.
    END.
@@ -463,7 +538,7 @@ IF LOOKUP("delivery_address", lcTopStruct) > 0 THEN DO:
       OrderCustomer.Country      = lcCountry
       OrderCustomer.AddressCodC  = lcStreetCode
       OrderCustomer.AddressCodP  = lcCityCode.
-   
+
    IF llDoEvent THEN DO:
       IF NEW OrderCustomer THEN
          fMakeCreateEvent((BUFFER OrderCustomer:HANDLE),
@@ -480,22 +555,22 @@ IF STRING(liLOStatusId) BEGINS {&LO_STATUS_ROUTER_PREFIX} THEN
    liLOStatusId = INT(SUBSTRING(STRING(liLOStatusId), LENGTH({&LO_STATUS_ROUTER_PREFIX}) + 1)).
 ELSE IF STRING(liLOStatusId) BEGINS {&LO_STATUS_TV_STB_PREFIX} THEN
    liLOStatusId = INT(SUBSTRING(STRING(liLOStatusId), LENGTH({&LO_STATUS_TV_STB_PREFIX}) + 1)).
-      
+
 fSendDextraSMS(Order.OrderID, liLOStatusId, liCourierId).
 
 FIND CURRENT OrderDelivery NO-LOCK.
 
-IF LOOKUP(STRING(OrderDelivery.LOStatusId),{&DEXTRA_CANCELLED_STATUSES}) > 0 THEN 
+IF LOOKUP(STRING(OrderDelivery.LOStatusId),{&DEXTRA_CANCELLED_STATUSES}) > 0 THEN
 DO:
    IF Order.StatusCode = {&ORDER_STATUS_RESIGNATION} THEN
       RUN Mc/closeorder.p(Order.OrderId,TRUE).
-   ELSE 
+   ELSE
       RUN Mc/cancelorder.p(Order.OrderId,TRUE).
 END.
 
 add_int(response_toplevel_id, "", liResult).
 
 FINALLY:
-   IF llDoEvent THEN 
+   IF llDoEvent THEN
       fCleanEventObjects().
 END.
