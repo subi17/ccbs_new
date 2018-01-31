@@ -334,10 +334,12 @@ PROCEDURE pSpeedChangeRequestForProvisioning:
     DO:
         RUN Gwy/masmovil_speed_change.p(Order.OrderId, CLIType.FixedLineDownload, CLIType.FixedLineUpload).
         IF RETURN-VALUE NE "" THEN
-            RETURN ERROR "Fixed line fiber speed change request failed with " + RETURN-VALUE.
+            RETURN "Fixed line fiber speed change request failed with " + RETURN-VALUE.
+        ELSE 
+            RETURN "".    
     END.
 
-    RETURN "".    
+    RETURN "Fixed line order failed to identify.".    
 
 END PROCEDURE.
 
