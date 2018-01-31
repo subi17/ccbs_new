@@ -246,10 +246,10 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
           CLIType.FixedLineType  EQ {&FIXED_LINE_TYPE_FIBER} AND
           (bOldType.FixedLineDownload <> CLIType.FixedLineDownload OR bOldType.FixedLineUpload <> CLIType.FixedLineUpload) THEN
        DO:   
-           RUN pSpeedChangeRequestForProvisioning NO-ERROR.
-           IF ERROR-STATUS:ERROR THEN
+           RUN pSpeedChangeRequestForProvisioning.
+           IF RETURN-VALUE NE "" THEN
            DO:
-               fReqError(ERROR-STATUS:Get-Message(1)).
+               fReqError(RETURN-VALUE).
                RETURN.
            END. 
        END.    
@@ -332,8 +332,8 @@ PROCEDURE pSpeedChangeRequestForProvisioning:
 
     IF liOrderId > 0 THEN
     DO:
-        RUN Gwy/masmovil_speed_change.p(Order.OrderId, CLIType.FixedLineDownload, CLIType.FixedLineUpload) NO-ERROR.
-        IF ERROR-STATUS:ERROR OR RETURN-VALUE NE "" THEN
+        RUN Gwy/masmovil_speed_change.p(Order.OrderId, CLIType.FixedLineDownload, CLIType.FixedLineUpload).
+        IF RETURN-VALUE NE "" THEN
             RETURN ERROR "Fixed line fiber speed change request failed with " + RETURN-VALUE.
     END.
 
