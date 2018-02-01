@@ -1606,11 +1606,6 @@ DO:
    DO liBundleCnt = 1 TO NUM-ENTRIES(pcAdditionalBundleList):
       IF NOT fIsBundleAllowed(pcSubType,ENTRY(liBundleCnt,pcAdditionalBundleList),OUTPUT lcError) THEN
          RETURN appl_err(lcError).
-      ELSE IF (ENTRY(liBundleCnt,pcAdditionalBundleList) EQ "VOICE200B" AND NOT fAllowMDUBActivation("VOICE_")) THEN DO:
-         lcError = "Bundle is not allowed for this subscription type " + 
-                   ENTRY(liBundleCnt,pcAdditionalBundleList) + " " + pcSubType.
-         RETURN appl_err(lcError).
-      END.   
    END.
 END.
 

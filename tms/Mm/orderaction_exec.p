@@ -12,6 +12,7 @@
 {Mc/dpmember.i}
 {Func/q25functions.i}
 {Func/orderfunc.i}
+{Func/mdub.i}
 
 DEF INPUT  PARAMETER iiMsSeq       AS INT  NO-UNDO.
 DEF INPUT  PARAMETER iiOrderId     AS INT  NO-UNDO.
@@ -104,6 +105,11 @@ FOR EACH OrderAction NO-LOCK WHERE
              LOOKUP(OrderAction.ItemKey,lcIPLContracts) > 0 OR
              LOOKUP(OrderAction.ItemKey,lcCONTSFContracts) > 0 OR
              OrderAction.ItemKey = "GPRS") THEN NEXT.
+
+         IF OrderAction.ItemKey EQ "VOICE200B" THEN DO:
+            /* should not exist any MDUB valid to the future */
+            IF fGetActiveMDUB("VOICE_", INPUT Func.Common:mMakeTS()) > "" THEN NEXT.
+         END.
 
          RUN pPeriodicalContract.
       END.
