@@ -131,6 +131,36 @@ FUNCTION fCloseDiscount RETURNS LOGICAL
 
 END FUNCTION.
 
+FUNCTION fCloseDPMember RETURNS LOGICAL
+   (iiDPMemberID   AS INTEGER,
+    idaEndDate     AS DATE,
+    ilCleanEventObjects AS LOG):
+
+   DEF BUFFER DPMember FOR DPMember.
+
+   FIND DPMember EXCLUSIVE-LOCK WHERE DPMember.DPMemberId = iiDPMemberID NO-ERROR.
+   
+   IF AVAILABLE DPMember
+   THEN DO:
+      /* Log DPMember modification */
+      IF llDoEvent THEN DO:
+         lhDPMember = BUFFER DPMember:HANDLE.
+         RUN StarEventInitialize(lhDPMember).
+         RUN StarEventSetOldBuffer(lhDPMember).
+      END.
+      DPMember.ValidTo = idaEndDate.
+      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhDPMember).      
+
+      IF llDoEvent AND
+         ilCleanEventObjects THEN
+         fCleanEventObjects().
+   END.
+   ELSE RETURN FALSE.
+
+   RETURN TRUE.
+
+END FUNCTION.
+
 FUNCTION fCreateAddLineDiscount RETURNS CHARACTER
    (iiMsSeq    AS INT,
     icCLIType  AS CHAR,

@@ -12,18 +12,7 @@
 Syst.Var:gcBrand = "1".
 Syst.Var:katun = "CRON".
 {Func/cparam2.i}
-
-{Syst/eventval.i}
-
-IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
-
-   {Func/lib/eventlog.i}
-
-   DEFINE VARIABLE lhDPMember AS HANDLE NO-UNDO.
-   lhDPMember = BUFFER DPMember:HANDLE.
-   RUN StarEventInitialize(lhDPMember).
-END.
+{Mc/dpmember.i}
 
 DEF VAR lcIPhoneDiscountRuleIds AS CHAR NO-UNDO.
 DEF VAR lcIPhoneDiscountRuleId  AS CHAR NO-UNDO.
@@ -104,39 +93,26 @@ DO liCount = 1 to NUM-ENTRIES(lcIPhoneDiscountRuleIds):
 
          /* Close Discount if invoice is unpaid */
          IF Invoice.PaymState <> 2 THEN DO:
-            FIND FIRST bDPMember WHERE
-                       ROWID(bDPMember) = ROWID(DPMember)
-                 EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
-            IF NOT AVAIL bDPMember THEN DO:
-               PUT STREAM sout UNFORMATTED
-                   MobSub.CLI              lcDelim
-                   STRING(Invoice.CustNum) lcDelim
-                   Invoice.ExtInvID        lcDelim
-                   STRING(Invoice.InvDate) lcDelim
-                   STRING(Invoice.InvAmt)  lcDelim
-                   "ERROR:Discount " + DiscountPlan.DPRuleID +
-                   " not found." SKIP.
-            END. /* IF NOT AVAIL bDPMember THEN DO: */
-            ELSE DO:
-               /* Log dpmember modification */
-               IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDPMember).
-               bDPMember.ValidTo = bDPMember.ValidFrom - 1.
-               IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhDPMember).
+            fCloseDPMember(DPMember.DPMemberID,
+                           DPMember.ValidFrom - 1,
+                           NO).
 
-               PUT STREAM sout UNFORMATTED
-                   MobSub.CLI              lcDelim
-                   STRING(Invoice.CustNum) lcDelim
-                   Invoice.ExtInvID        lcDelim
-                   STRING(Invoice.InvDate) lcDelim
-                   STRING(Invoice.InvAmt)  lcDelim
-                   "Discount " + DiscountPlan.DPRuleID + " closed due to " +
-                   "unpaid invoice." SKIP.
-            END. /* ELSE DO: */
+            PUT STREAM sout UNFORMATTED
+                MobSub.CLI              lcDelim
+                STRING(Invoice.CustNum) lcDelim
+                Invoice.ExtInvID        lcDelim
+                STRING(Invoice.InvDate) lcDelim
+                STRING(Invoice.InvAmt)  lcDelim
+                "Discount " + DiscountPlan.DPRuleID + " closed due to " +
+                "unpaid invoice." SKIP.
             NEXT EACH_DPMember.
          END. /* IF Invoice.PaymState <> 2 THEN DO: */
       END. /* FOR EACH Invoice WHERE */
    END. /* FOR EACH DPMember WHERE */
 END. /* DO liCount = 1 to NUM-ENTRIES(lcIPhoneDiscountRuleIds): */
 
-OUTPUT STREAM sout CLOSE.
-
+FINALLY:
+   OUTPUT STREAM sout CLOSE.
+   IF llDoEvent THEN
+      fCleanEventObjects().
+END FINALLY.

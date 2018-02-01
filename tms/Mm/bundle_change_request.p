@@ -314,16 +314,9 @@ PROCEDURE pFinalize:
                                DPSubject.ValidFrom <= ldaActivationDate AND
                                DPSubject.ValidTo   >= ldaActivationDate)
          THEN DO TRANS:
-            /* Log dpmember modification */
-            IF llDoEvent THEN DO:
-               lhDPMember = BUFFER DPMember:HANDLE.
-               RUN StarEventInitialize(lhDPMember).
-               RUN StarEventSetOldBuffer(lhDPMember).
-            END.
-            FIND FIRST bDPMember WHERE RECID(bDPMember) = RECID(DPMember)
-                 EXCLUSIVE-LOCK.
-            bDPMember.ValidTo = ldaActivationDate - 1.
-            IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhDPMember).
+            fCloseDPMember(DPMember.DPMemberID,
+                           ldaActivationDate - 1,
+                           NO).
          END.
       END.
 

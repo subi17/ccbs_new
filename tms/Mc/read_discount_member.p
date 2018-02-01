@@ -207,11 +207,10 @@ REPEAT TRANS:
             fLogLine("No changes").
             NEXT.
       END.
-         
-      FIND CURRENT DPMember EXCLUSIVE-LOCK.
-      IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDPMember).
-      DPMember.ValidTo = ldaValidFrom - 1.
-      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhDPMember).
+
+      fCloseDPMember(DPMember.DPMemberID,
+                     ldaValidFrom - 1,
+                     NO).
    END.
    
    IF ldDiscount NE 0 THEN DO:

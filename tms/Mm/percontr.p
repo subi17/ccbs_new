@@ -2500,17 +2500,14 @@ PROCEDURE pContractTermination:
                       DPMember.HostTable  = "MobSub" AND
                       DPMember.KeyValue   = STRING(MsRequest.MsSeq) AND
                       DPMember.ValidTo   >= ldtActDate AND
-                      DPMember.ValidTo   >= DPMember.ValidFrom EXCLUSIVE-LOCK:
+                      DPMember.ValidTo   >= DPMember.ValidFrom NO-LOCK:
 
                 IF DPMember.ValidTo >= ldContractEndDate AND
                    ldContractEndDate <= ldtActDate THEN NEXT.
 
-                /* Log dpmember modification */
-                lhDPMember = BUFFER DPMember:HANDLE.
-                RUN StarEventInitialize(lhDPMember).
-                IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDPMember).
-                DPMember.ValidTo = DPMember.ValidFrom - 1.
-                IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhDPMember).
+                fCloseDPMember(DPMember.DPMemberID,
+                               DPMember.ValidFrom - 1,
+                               NO).
 
             END. /* FOR FIRST DiscountPlan WHERE */
          END. /* DO i = 1 to NUM-ENTRIES(lcIPhoneDiscountRuleIds): */
