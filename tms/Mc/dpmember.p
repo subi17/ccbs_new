@@ -52,6 +52,7 @@ DEF VAR ac-hdr       AS CHAR                   NO-UNDO.
 DEF VAR rtab         AS RECID EXTENT 24        NO-UNDO.
 DEF VAR i            AS INT                    NO-UNDO.
 DEF VAR ok           AS log format "Yes/No"    NO-UNDO.
+DEFINE VARIABLE lcError AS CHARACTER NO-UNDO.
 
 DEF VAR lcStatus       AS CHAR NO-UNDO.
 DEF VAR lcField        AS CHAR NO-UNDO. 
@@ -166,31 +167,70 @@ REPEAT WITH FRAME sel:
 
         REPEAT TRANSACTION WITH FRAME lis:
 
-           CREATE DPMember.
-           ASSIGN 
-              DPMember.DPMemberID = NEXT-VALUE(DPMemberID)
-              DPMember.DPID       = iiDPID
-              DPMember.HostTable  = icHostTable
-              DPMember.KeyValue   = icKeyValue
-              DPMember.ValidFrom  = TODAY
-              DPMember.ValidTo    = 12/31/2049.
+           IF iiDPID EQ 0
+           THEN UNDO add-row, LEAVE add-row.
 
-           IF iiDPId > 0 THEN DO:
-              FOR FIRST DPRate NO-LOCK WHERE
-                        DPRate.DPId = iiDPId AND
-                        DPRate.ValidTo >= TODAY AND
-                        DPRate.ValidFrom <= TODAY:
-                DpMember.DiscValue = DPRate.DiscValue.
-              END.
+           FIND FIRST DiscountPlan WHERE DiscountPlan.DPID = iiDPID NO-LOCK NO-ERROR.
+           IF NOT AVAILABLE DiscountPlan
+           THEN UNDO add-row, LEAVE add-row.
 
-              FIND FIRST DiscountPlan WHERE DiscountPlan.DPID = iiDPID 
-                 NO-LOCK.
-              IF DiscountPlan.ValidPeriods > 0 THEN 
-                 DPMember.ValidTo = 
-                    fCalcDPMemberValidTo(DPMember.ValidFrom,
-                                         DiscountPlan.ValidPeriods).
+           FIND FIRST DPRate NO-LOCK WHERE
+                      DPRate.DPId = iiDPId AND
+                      DPRate.ValidTo >= TODAY AND
+                      DPRate.ValidFrom <= TODAY
+           NO-ERROR.
+
+           IF NOT AVAILABLE DPRate
+           THEN UNDO add-row, LEAVE add-row.
+
+           IF icHostTable EQ "MobSub"
+           THEN DO:
+               lcError = fAddDiscountPlanMember(INTEGER(icKeyValue),
+                                                DiscountPlan.DPRuleID,
+                                                DPRate.DiscValue,
+                                                TODAY,
+                                                ?,
+                                                DiscountPlan.ValidPeriods,
+                                                0).
+               IF lcError > ""
+               THEN UNDO add-row, LEAVE add-row.
+
+               FIND FIRST DPMember EXCLUSIVE-LOCK WHERE
+                          DPMember.DPID      = iiDPID     AND
+                          DPMember.HostTable = "MobSub"   AND
+                          DPMember.KeyValue  = icKeyValue AND
+                          DPMember.ValidFrom = TODAY
+               NO-ERROR.
+               IF NOT AVAILABLE DPMember
+               THEN UNDO add-row, LEAVE add-row.
            END.
-             
+           ELSE DO:
+               CREATE DPMember.
+               ASSIGN
+                  DPMember.DPMemberID = NEXT-VALUE(DPMemberID)
+                  DPMember.DPID       = iiDPID
+                  DPMember.HostTable  = icHostTable
+                  DPMember.KeyValue   = icKeyValue
+                  DPMember.ValidFrom  = TODAY
+                  DPMember.ValidTo    = 12/31/2049.
+
+               IF iiDPId > 0 THEN DO:
+                  FOR FIRST DPRate NO-LOCK WHERE
+                            DPRate.DPId = iiDPId AND
+                            DPRate.ValidTo >= TODAY AND
+                            DPRate.ValidFrom <= TODAY:
+                    DpMember.DiscValue = DPRate.DiscValue.
+                  END.
+
+                  FIND FIRST DiscountPlan WHERE DiscountPlan.DPID = iiDPID
+                     NO-LOCK.
+                  IF DiscountPlan.ValidPeriods > 0 THEN
+                     DPMember.ValidTo =
+                        fCalcDPMemberValidTo(DPMember.ValidFrom,
+                                             DiscountPlan.ValidPeriods).
+               END.
+           END.
+
            RUN local-UPDATE-record.
 
            IF LOOKUP(KEYFUNCTION(LASTKEY),"ENDKEY,END-ERROR") > 0 OR
@@ -200,7 +240,6 @@ REPEAT WITH FRAME sel:
            /* Previous - dpmember creations not logged anymore YDR-1078 */
            /* Current  - Uncommented event logging logic YTS-10992 */
            IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhDPMember).
-           
 
            ASSIGN
            Memory = recid(DPMember)

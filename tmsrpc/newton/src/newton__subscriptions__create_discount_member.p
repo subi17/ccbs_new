@@ -295,15 +295,16 @@ END.
 IF ( ldeMonthAmt + ldeMaxAmount) > ldeMonthlyLimit THEN
        RETURN appl_err("Change exceeds the monthly limit ").
 
-CREATE DPMember.
-ASSIGN 
-   DPMember.DPMemberID = NEXT-VALUE(DPMemberID)
-   DPMember.DPId      = DiscountPlan.DPId
-   DPMember.HostTable = "MobSub" 
-   DPMember.KeyValue  = STRING(MobSub.MsSeq) 
-   DPMember.ValidFrom = ldaValidFrom
-   DPMember.ValidTo   = ldaValidTo
-   DPMember.DiscValue = ldeAmount.
+lcError = fAddDiscountPlanMember(MobSub.MsSeq,
+                                 DiscountPlan.DPRuleID,
+                                 ldeAmount,
+                                 ldaValidFrom,
+                                 ldaValidTo,
+                                 ?,
+                                 0). /* OrderId */
+
+IF lcError > ""
+THEN RETURN appl_err(lcError).
 
 /* ALFMO-14 For creating web memo */
 IF LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS_HM}) > 0 OR

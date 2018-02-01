@@ -492,7 +492,6 @@ PROCEDURE pDiscountPlan:
                         TODAY - 1,
                         FALSE).
    END.
-
    
    IF OrderAction.ItemParam > ""
    THEN DO:
