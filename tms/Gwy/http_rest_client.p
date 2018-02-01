@@ -63,6 +63,30 @@ case icAction:
                 undo, throw new Progress.Lang.AppError(oResp:StatusReason, 1).
         end case.
     end.
+    when 'put' then 
+    do:
+        if lcUserId <> "" then 
+            oReq = RequestBuilder:Put(oUri, ioRequestJson)
+                    :UsingCredentials(oCreds)
+                    :ContentType('application/json;charset=UTF-8')
+                    :AcceptJson()
+                    :Request.    
+        else      
+            oReq = RequestBuilder:Put(oUri, ioRequestJson)
+                        :ContentType('application/json;charset=UTF-8')
+                        :AcceptJson()
+                        :Request.    
+
+        oResp = oClient:Execute(oReq).
+
+        IF VALID-OBJECT(oResp) THEN 
+        DO:
+            if type-of(oResp:Entity, JsonObject) then
+                assign ioJson = cast(oResp:Entity, JsonObject).
+        END.
+        ELSE 
+            undo, throw new Progress.Lang.AppError("API Call Status Code '" + STRING(oResp:StatusCode) + "'", 1).
+    end.
     when 'post' then 
     do:
         if lcUserId <> "" then 
