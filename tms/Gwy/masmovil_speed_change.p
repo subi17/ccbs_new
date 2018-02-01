@@ -101,7 +101,7 @@ loRequestJson = fGetRequestJson(piOrderId, pcDownloadSpeed, pcUploadSpeed).
 
 fLogRequest(piOrderId, loRequestJson).
 
-RUN Gwy/http_rest_client.p("post"    ,
+RUN Gwy/http_rest_client.p("put"     ,
                            lcHost    ,
                            liPort    ,     
                            ""        ,
