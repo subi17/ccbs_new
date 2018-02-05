@@ -809,6 +809,7 @@
 "Msisdn" "MsisdnType" "Msisdn" "3" "VoiceMail" "" "" 1
 "MSISDN" "POS" "Reservation Position" "CC" "Customer Care channel" "" "" 1
 "MSISDN" "POS" "Reservation Position" "CORE" "CORE" "" "" 1
+"MSISDN" "POS" "Reservation Position" "CORE2" "CORE2" "" "" 1
 "MSISDN" "POS" "Reservation Position" "GIFT" "GIFT" "" "" 1
 "MSISDN" "POS" "Reservation Position" "MVNO" "MVNO" "" "" 1
 "MSISDN" "POS" "Reservation Position" "NOTPUBLIC" "MSISDN's ready to assign to different stock" "" "" 1
@@ -1025,6 +1026,9 @@
 "Order" "StatusCode" "Orders" "1" "NEW NUMBER" "" "" 1
 "Order" "StatusCode" "Orders" "10" "CREDIT HOLD (Future use)" "" "" 0
 "Order" "StatusCode" "Orders" "12" "ONGOING" "" "" 1
+"Order" "StatusCode" "Orders" "15" "SENDING ORDER TO LO" "" "" 1
+"Order" "StatusCode" "Orders" "16" "PENDING ICC FROM LO" "" "" 1
+"Order" "StatusCode" "Orders" "17" "PENDING ICC FROM INSTALLER" "" "" 1
 "Order" "StatusCode" "Orders" "2" "ERROR ORDER" "" "" 1
 "Order" "StatusCode" "Orders" "20" "COMPANY NEW ON HOLD" "" "" 1
 "Order" "StatusCode" "Orders" "21" "COMPANY EXISTS ON HOLD" "" "" 1
@@ -1471,6 +1475,7 @@
 "Salesman" "SmPrefix" "IFS" "PH" "The Phone House" "" "11" 0
 "Salesman" "SmPrefix" "IFS" "PJ" "PhoneHouse Retencion Jerez" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "PR" "Phone House Televenta Recepcion" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "PS" "Power Sales Call" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "RB" "Recepción Bilbao" "" "15" 0
 "Salesman" "SmPrefix" "IFS" "RC" "CASTURTEL RECEPCION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "SE" "SERVINFORM OUTBOUND" "" "15" 1
@@ -1483,6 +1488,8 @@
 "Salesman" "SmPrefix" "IFS" "TU" "Tu Y Tu" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "UN" "Unisono" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "UR" "Urende" "" "23" 0
+"Salesman" "SmPrefix" "IFS" "VK" "Grupo Viatek" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "VW" "VENTAS WEB" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "WE" "Web" "" "14" 0
 "Salesman" "SmPrefix" "IFS" "WH" "WHISBI" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "XA" "ANEXA" "" "15" 1
