@@ -1,6 +1,8 @@
 "CC" "Customer Care" "" "" "" "/tmp/iccfilename.txt" "/tmp/subsdatafile.txt" "/tmp/simdisrfile.txt" 0 "1" "CC" ""
 "CC_CAN_ISL" "CC Canary Islands" "" "" "" "" "" "" 0 "1" "CC" "35*,38*"
 "GIFT" "Gift" "" "" "" "" "" "" 0 "1" "" ""
+"INSTALLER" "Installer" "" "" "" "/tmp/iccfilename.txt" "/tmp/subsdatafile.txt" "/tmp/simdisrfile.txt" 0 "1" "" ""
+"LO" "Logistics" "" "" "" "/tmp/iccfilename.txt" "/tmp/subsdatafile.txt" "/tmp/simdisrfile.txt" 0 "1" "" ""
 "MNP" "MNP Number" "" "" "" "/tmp/iccfilename.txt" "/tmp/subsdatafile.txt" "/tmp/simdisrfile.txt" 0 "1" "MNP" ""
 "MNP_CAN_ISL" "MNP Canary Islands" "" "" "" "" "" "" 0 "1" "MNP" "35*,38*"
 "NEW" "New Number" "" "" "" "/tmp/iccfilename.txt" "/tmp/subsdatafile.txt" "/tmp/simdisrfile.txt" 0 "1" "NEW" ""
