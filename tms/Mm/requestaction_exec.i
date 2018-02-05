@@ -174,6 +174,8 @@ FUNCTION fGetOriginalBundle RETURNS CHAR
       
 END FUNCTION.
 
+/* Check whether of not the CLIType follows a special STC rule (#STCFROMTO)
+   which is specified to requestactionrule table */
 FUNCTION fCLITypeFollowsTheRule RETURNS LOGICAL
    ( icCLIType AS CHARACTER,
      icRule    AS CHARACTER,
@@ -183,6 +185,8 @@ FUNCTION fCLITypeFollowsTheRule RETURNS LOGICAL
    /* If there is no rule then CLIType follows the rule */
    IF icRule EQ ""
    THEN RETURN TRUE.
+
+   DEFINE BUFFER CLIType   FOR CLIType.
 
    FIND CLIType NO-LOCK WHERE
         CLIType.Brand   = Syst.Var:gcBrand AND
@@ -194,7 +198,6 @@ FUNCTION fCLITypeFollowsTheRule RETURNS LOGICAL
 
    DEFINE VARIABLE lii         AS INTEGER   NO-UNDO.
    DEFINE VARIABLE lcExtraLine AS CHARACTER NO-UNDO.
-   DEFINE BUFFER CLIType   FOR CLIType.
    DEFINE BUFFER MobSub    FOR MobSub.
    DEFINE BUFFER lElMobSub FOR MobSub.
 

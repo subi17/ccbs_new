@@ -226,7 +226,7 @@ FUNCTION fAddWarningStruct RETURNS LOGICAL:
 
          IF TMSRelation.FromTime NE ? AND
             TMSRelation.FromTime > NOW
-         THEN LEAVE.
+         THEN NEXT.
 
          add_string(warning_array,"",TMSRelation.RelationType).
       END.
