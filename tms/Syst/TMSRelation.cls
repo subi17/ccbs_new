@@ -293,7 +293,7 @@ CLASS Syst.TMSRelation:
       IF TMSRelation.FromTime NE ? AND
          atzFromTime        NE ? AND
          TMSRelation.FromTime > atzFromTime
-      THEN RETURN FALSE.
+      THEN RETURN TRUE.
                
       CREATE ttTMSRelation.
 
