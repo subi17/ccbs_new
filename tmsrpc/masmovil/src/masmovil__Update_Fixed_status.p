@@ -254,7 +254,7 @@ CASE FusionMessage.FixedStatus:
    END.
    WHEN "CITADA" THEN DO:
       ASSIGN 
-         OrderFusion.AppointmentDate = lcCita       WHEN lcCita       <> "".
+         OrderFusion.AppointmentDate = lcCita WHEN lcCita <> "".
    END.
    /* installation done */
    WHEN "CERRADA" THEN DO:
