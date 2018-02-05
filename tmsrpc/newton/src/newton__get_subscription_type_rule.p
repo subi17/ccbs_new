@@ -214,7 +214,7 @@ FUNCTION fAddWarningStruct RETURNS LOGICAL:
                              CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY})
       THEN lcChildValue = "MOBILEONLY".
 
-      FOR EACH TMSRelation NO-LOCK WHERE
+      FOR EACH TMSRelation NO-LOCK USE-INDEX ChildValue WHERE
                TMSRelation.TableName   = "CLIType"           AND
                TMSRelation.KeyType     = "STCWarningMessage" AND
                TMSRelation.ChildValue  = lcChildValue        AND
