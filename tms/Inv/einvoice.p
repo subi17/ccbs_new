@@ -12,13 +12,8 @@
 
 {Syst/commali.i}
 {Syst/tmsconst.i}
-{Func/fmakemsreq.i}
-{Func/cparam2.i}
 {Func/femailinvoice.i}
-{Func/email.i}
-{Func/smsnotify.i}
 {Func/heartbeat.i}
-{Func/aes_encrypt.i}
 
 &SCOPED-DEFINE MIDNIGHT-SECONDS 86400
 
@@ -31,7 +26,6 @@ DEF VAR lcContConFile           AS CHAR NO-UNDO.
 DEF VAR lcMailContent           AS CHAR NO-UNDO.
 DEF VAR liBillPeriod            AS INT  NO-UNDO.
 DEF VAR lcMonitor AS CHAR NO-UNDO. 
-DEF VAR liStopTime    AS INT  NO-UNDO. 
 DEF VAR lcTemplate    AS CHAR      NO-UNDO.
 DEF VAR lcTestCustomers AS CHAR NO-UNDO.
 DEF VAR lcLink        AS CHAR NO-UNDO.
@@ -112,8 +106,9 @@ IF lcAddrConfDir + "/smsinvoice.sms" NE ? THEN DO:
       INPUT STREAM sIn FROM VALUE(lcAddrConfDir + "/smsinvoice.sms").
       REPEAT:
          IMPORT STREAM sIn UNFORMATTED lcRecipient.
-         Mm.MManMessage:mCreateMMLogSMS(lcRecipient).
+         Mm.MManMessage:mCreateMMLogSMS(lcRecipient, FALSE).
       END.
+      Mm.MManMessage:mClearData().
    END.
 END.
 
@@ -181,8 +176,9 @@ IF lcAddrConfDir + "/smsinvoice.sms" NE ? THEN DO:
       INPUT STREAM sIn FROM VALUE(lcAddrConfDir + "/smsinvoice.sms").
       REPEAT:
          IMPORT STREAM sIn UNFORMATTED lcRecipient.
-         Mm.MManMessage:mCreateMMLogSMS(lcRecipient).
+         Mm.MManMessage:mCreateMMLogSMS(lcRecipient, FALSE).
       END.
+      Mm.MManMessage:mClearData().
    END.
 END.
 

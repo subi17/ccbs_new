@@ -47,7 +47,7 @@ function fEInvoiceValidate returns logical
       FIND FIRST MsRequest WHERE
            MsRequest.Brand = Syst.Var:gcBrand  AND
            MsRequest.ReqType = ({&REQTYPE_E_INVOICE}) AND
-           MsRequest.ActStamp > ldeCurrentMonth AND
+           MsRequest.ActStamp >= ldeCurrentMonth AND
            MsRequest.ActStamp < ldeNextMonth AND
            LOOKUP(STRING(MsRequest.ReqStatus),"0,1,2,3") > 0 NO-LOCK NO-ERROR.
 
@@ -68,11 +68,6 @@ function fEinvoicerequest returns integer
     output ocresult      as char).
 
 def var lireqcreated as int  no-undo.
-DEF VAR lButtonSeconds     AS DECIMAL   NO-UNDO.
-DEF VAR lButtonDate   AS DATE      NO-UNDO.
-DEF VAR lEndSeconds   AS INTEGER   NO-UNDO.
-DEF VAR lIniSeconds   AS INTEGER   NO-UNDO.
-DEF VAR lcSMSSchedule AS CHARACTER NO-UNDO.
 
    fcreaterequest(({&REQTYPE_E_INVOICE}),
                   idactstamp,

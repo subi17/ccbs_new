@@ -15,5 +15,5 @@ if len(sys.argv) < 2: instruction()
 else:
    var1 = sys.argv[1]
 
-p=s.newton.invoices__send_e_invoice(var1)
+p=s.newton.invoices__send_e_invoice('yoigo', var1)
 print_results(p)
