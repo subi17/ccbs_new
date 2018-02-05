@@ -36,6 +36,33 @@ Syst.Var:gcBrand = "1".
 {Func/fdss.i}
 {Func/fixedlinefunc.i}
 
+FUNCTION fSTCPossible RETURNS LOGICAL
+   (iiCustNum    AS INTEGER,
+    icNewCLIType AS CHARACTER):
+
+   IF NOT fCLITypeIsExtraLine(icNewCLIType)
+   THEN RETURN TRUE.
+
+   DEFINE BUFFER MobSub FOR MobSub.
+
+   /* Find suitable mainline mobsub from the customer */
+   FOR EACH MobSub NO-LOCK WHERE
+            MobSub.CustNum      EQ iiCustNum      AND
+            MobSub.MultiSimId   EQ 0                   AND
+            MobSub.MultiSimtype EQ 0                   AND
+            (MobSub.MsStatus    EQ {&MSSTATUS_ACTIVE}  OR
+             MobSub.MsStatus    EQ {&MSSTATUS_BARRED}):
+
+      IF NOT fCLITypeAllowedForExtraLine(MobSub.CLIType, icNewCLIType)
+      THEN NEXT.
+
+      RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
 /* Input parameters */
 DEF VAR piMsSeq            AS INT     NO-UNDO.
 DEF VAR pcNewCLIType       AS CHAR    NO-UNDO.
@@ -111,6 +138,9 @@ FIND FIRST CLIType WHERE
            CLIType.CLIType = pcNewCLIType NO-LOCK NO-ERROR.
 IF NOT AVAILABLE CLIType THEN
    RETURN appl_err(SUBST("New CLIType entry &1 not found", pcNewCLIType)).
+
+IF NOT fSTCPossible(MobSub.CustNum, CLIType.CLIType)
+THEN RETURN appl_err("Mainline not available for the La Duo").
 
 lcBundleCLITypes = fCParamC("BUNDLE_BASED_CLITYPES").
 
