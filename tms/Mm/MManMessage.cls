@@ -145,7 +145,19 @@ CLASS Mm.MManMessage FINAL:
 
    END METHOD.
 
+   /*Default method that clears data after execution*/
+   METHOD PUBLIC STATIC LOGICAL mCreateMMLog
+      ( icSMSRecipient   AS CHARACTER,
+        icEmailRecipient AS CHARACTER,
+        icPushRecipient  AS CHARACTER):
+      
+      RETURN mCreateMMLog(icSMSRecipient,
+                          icEmailRecipient,
+                          icPushRecipient,
+                          TRUE).
+   END METHOD.
 
+   /*Remember to clear data after using this method.*/
    METHOD PUBLIC STATIC LOGICAL mCreateMMLog
       ( icSMSRecipient   AS CHARACTER,
         icEmailRecipient AS CHARACTER,
