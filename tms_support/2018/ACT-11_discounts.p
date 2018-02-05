@@ -1,3 +1,5 @@
+DEFINE VARIABLE giDPId AS INTEGER NO-UNDO.
+
 FUNCTION fGetDiscountPlan RETURNS INTEGER
    (icDPRuleID AS CHARACTER ):
 
@@ -34,7 +36,7 @@ FUNCTION fCreateDPSubject RETURNS LOGICAL
 
 END FUNCTION.
 
-FUNCTION fCreateDPSubject RETURNS LOGICAL
+FUNCTION fCreateDPTarget RETURNS LOGICAL
    ( iiDPId AS INTEGER,
      icTargetKey AS CHARACTER ):
 
@@ -60,9 +62,7 @@ FUNCTION fCreateDPSubject RETURNS LOGICAL
 
 END FUNCTION.
 
-DEFINE VARIABLE giDPId AS INTEGER NO-UNDO.
-
-giDPId = fGetDiscountPlan("ASISTDISC")
+giDPId = fGetDiscountPlan("ASISTDISC").
 IF giDPId NE 0
 THEN DO:
    fCreateDPSubject(giDPId, "CONTDSL3G").
@@ -71,19 +71,19 @@ THEN DO:
    fCreateDPSubject(giDPId, "CONTFH3G_1000").
 END.
 
-giDPId = fGetDiscountPlan("DISCFH300")
+giDPId = fGetDiscountPlan("DISCFH300").
 IF giDPId NE 0
 THEN DO:
    fCreateDPSubject(giDPId, "CONTFH3G_300").
 END.
 
-giDPId = fGetDiscountPlan("DISCFH300P")
+giDPId = fGetDiscountPlan("DISCFH300P").
 IF giDPId NE 0
 THEN DO:
    fCreateDPSubject(giDPId, "CONTFH3G_300").
 END.
 
-giDPId = fGetDiscountPlan("DISCWINBACK")
+giDPId = fGetDiscountPlan("DISCWINBACK").
 IF giDPId NE 0
 THEN DO:
    fCreateDPSubject(giDPId, "CONTDSL3G").
@@ -93,7 +93,7 @@ END.
    CONTDSL3G and CONTFH3G_1000 which were not included to the specification
    page. */
 
-giDPId = fGetDiscountPlan("FIDETVDISC")
+giDPId = fGetDiscountPlan("FIDETVDISC").
 IF giDPId NE 0
 THEN DO:
    fCreateDPSubject(giDPId, "CONTFH3G_50").
@@ -103,7 +103,7 @@ THEN DO:
 END.
 
 
-giDPId = fGetDiscountPlan("CONVDISC")
+giDPId = fGetDiscountPlan("CONVDISC").
 IF giDPId NE 0
 THEN DO:
    fCreateDPSubject(giDPId, "CONTDSL3G"). /* NOT VERIFIED IF THIS IS NEEDED */
@@ -112,7 +112,7 @@ THEN DO:
    fCreateDPSubject(giDPId, "CONTFH3G_1000"). /* NOT VERIFIED IF THIS IS NEEDED */
 END.
 
-giDPId = fGetDiscountPlan("GMMDISC")
+giDPId = fGetDiscountPlan("GMMDISC").
 IF giDPId NE 0
 THEN DO:
    fCreateDPSubject(giDPId, "CONTDSL3G").
@@ -121,7 +121,7 @@ THEN DO:
    fCreateDPSubject(giDPId, "CONTFH3G_1000"). /* NOT VERIFIED IF THIS IS NEEDED */
 END.
 
-giDPId = fGetDiscountPlan("CONVDISC_CS100_6")
+giDPId = fGetDiscountPlan("CONVDISC_CS100_6").
 IF giDPId NE 0
 THEN DO:
    fCreateDPSubject(giDPId, "CONTDSL3G").
@@ -130,7 +130,7 @@ THEN DO:
    fCreateDPSubject(giDPId, "CONTFH3G_1000").
 END.
 
-giDPId = fGetDiscountPlan("CONVDISC_CS20F12")
+giDPId = fGetDiscountPlan("CONVDISC_CS20F12").
 IF giDPId NE 0
 THEN DO:
    fCreateDPSubject(giDPId, "CONTDSL3G").
@@ -139,7 +139,7 @@ THEN DO:
    fCreateDPSubject(giDPId, "CONTFH3G_1000").
 END.
 
-giDPId = fGetDiscountPlan("CONVDISC_CS20M12")
+giDPId = fGetDiscountPlan("CONVDISC_CS20M12").
 IF giDPId NE 0
 THEN DO:
    fCreateDPSubject(giDPId, "CONTDSL3G").
@@ -148,14 +148,14 @@ THEN DO:
    fCreateDPSubject(giDPId, "CONTFH3G_1000").
 END.
 
-giDPId = fGetDiscountPlan("DISCFH300P_PRO")
+giDPId = fGetDiscountPlan("DISCFH300P_PRO").
 IF giDPId NE 0
 THEN DO:
    /* As the tariff is not pro related, this is not enabled */
    /*fCreateDPSubject(giDPId, "CONTFH3G_300").*/
 END.
 
-giDPId = fGetDiscountPlan("DISCFH300PDWN")
+giDPId = fGetDiscountPlan("DISCFH300PDWN").
 IF giDPId NE 0
 THEN DO:
    fCreateDPSubject(giDPId, "CONTFH3G_300"). /* NOT VERIFIED IF THIS IS NEEDED */
