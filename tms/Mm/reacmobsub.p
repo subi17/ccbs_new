@@ -139,8 +139,11 @@ DO TRANSACTION:
    IF fCLITypeIsExtraLine(TermMobSub.CLIType) AND
       NOT CAN-FIND(FIRST bMLMobSub NO-LOCK WHERE 
                          bMLMobSub.MsSeq        EQ TermMobSub.MultiSimId AND 
-                         bMLMobSub.MultiSimId   EQ 0                     AND 
-                         bMLMobSub.MultiSimType EQ 0)                    THEN DO:
+                        (bMLMobSub.MultiSimId   EQ 0                     AND 
+                         bMLMobSub.MultiSimType EQ 0)                    OR
+                        (bMLMobSub.MultiSimId   EQ TermMobSub.MsSeq      AND
+                         bMLMobSub.MultiSimType EQ {&MULTISIMTYPE_PRIMARY})) 
+                         THEN DO:
       fReqError("Mainline is already associated to other extra line").
       RETURN.
    END.                      
