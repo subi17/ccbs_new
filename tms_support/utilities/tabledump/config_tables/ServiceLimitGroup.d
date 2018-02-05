@@ -11,6 +11,7 @@
 "1" "CONT29" "La Dúo extra" 18/12/17 31/12/49
 "1" "CONT30" "Contrato 30" 18/12/17 31/12/49
 "1" "CONT31" "La Tarifa Tic Tac" 18/12/17 31/12/49
+"1" "CONT32" "La Sinfín 3 GB" 23/01/18 31/12/49
 "1" "CONT9" "Contrato 9" 01/05/14 31/12/49
 "1" "CONTD2" "Contrato Datos 2 continuous per" 01/12/09 31/12/54
 "1" "CONTD2ACT" "Contrato Datos 2 1st period" 01/12/09 31/12/54
