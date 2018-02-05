@@ -1930,7 +1930,7 @@ PROCEDURE pGetCTNAME:
 
    /*YPRO-21*/
    IF fIsProOrder(iiOrderNBR) EQ TRUE THEN DO:
-      lcTagCTName = lcTagCTName + " PRO".
+      lcTagCTName = lcTagCTName + " BENEFICIOS PRO".
       lcProFeemodel = fgetPROFeemodel(lcClitype).
       FIND FIRST FMItem no-lock WHERE
                  FMItem.brand EQ "1" AND
