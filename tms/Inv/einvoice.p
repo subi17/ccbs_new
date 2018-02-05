@@ -73,8 +73,7 @@ FUNCTION fGenerateEmailTemplate RETURNS CHAR
    ASSIGN
       lcMessagePayload = icTemplate
       lcMessagePayload = REPLACE(lcMessagePayload,"#LANG",lcLang)
-      lcMessagePayload = REPLACE(lcMessagePayload,"#LINK",icLink + "/" + 
-                                 lcCrypted)
+      lcMessagePayload = REPLACE(lcMessagePayload,"#LINK",icLink + lcCrypted)
       lcMessagePayload = REPLACE(lcMessagePayload,"#MSISDN",icMSISDN) 
       lcMessagePayload = REPLACE(lcMessagePayload,"#AMOUNT",STRING(ideAmount))
       lcMessagePayload = REPLACE(lcMessagePayload,"#INVDATE",icDate)
