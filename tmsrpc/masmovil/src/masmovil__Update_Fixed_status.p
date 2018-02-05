@@ -252,6 +252,7 @@ CASE FusionMessage.FixedStatus:
       END.
 
    END.
+   /* Updated */
    WHEN "CITADA" THEN DO:
       ASSIGN 
          OrderFusion.AppointmentDate = lcCita WHEN lcCita <> "".
