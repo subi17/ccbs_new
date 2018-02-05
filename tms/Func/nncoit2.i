@@ -18,6 +18,8 @@
                                with billing method 1 
                   09.12.05 aam test if 'concern' in fMakeContractMore is
                                only 6 digits long
+                  05.02.18 Ashok YDR-2750 Last month fee to be based on 
+                                 active number of days.
   --------------------------------------------------------------------- */
 
 &IF "{&NNCOIT2_I}" NE "YES"
@@ -61,6 +63,29 @@ FUNCTION fNextP RETURNS INTEGER
    RETURN (yy * 100 + mm).
 END.   
 
+FUNCTION fCheckBundleFMItem RETURNS LOGICAL 
+    ( INPUT icBrand     AS CHARACTER  ,
+      INPUT icFeeModel  AS CHARACTER  ,
+      INPUT icBillCode  AS CHARACTER  ,
+      INPUT icBundle    AS CHARACTER ) :
+    DEFINE BUFFER DayCampaign FOR DayCampaign.
+    DEFINE BUFFER Feemodel    FOR FeeModel.
+    DEFINE BUFFER FMItem      FOR FMItem.
+    
+    FOR FIRST DayCampaign NO-LOCK WHERE
+              DayCampaign.Brand   = icBrand  AND
+              DayCampaign.DCEvent = icBundle ,
+        FIRST FeeModel NO-LOCK WHERE
+              FeeModel.Brand    = icBrand AND
+              FeeModel.FeeModel = DayCampaign.FeeModel,
+        FIRST FMItem NO-LOCK WHERE
+              FMItem.Brand    = icBrand    AND
+              FMItem.FeeModel = icFeeModel AND 
+              FMItem.BillCode = icBillCode :
+        RETURN TRUE.                 
+    END.    
+    RETURN FALSE.
+END FUNCTION. 
 
 FUNCTION fMakeContract RETURN INT 
    (INPUT FFNum     AS INT,
@@ -80,7 +105,11 @@ FUNCTION fMakeContract RETURN INT
   DEF VAR debug    AS LO NO-UNDO.
   DEF VAR monthdates  AS I NO-UNDO.
   DEF VAR billedDATES AS I NO-UNDO.
-
+  
+  DEFINE VARIABLE liLastActiveDays AS INTEGER NO-UNDO.
+  DEFINE VARIABLE liLastActiveAmt  AS DECIMAL NO-UNDO.
+  DEFINE VARIABLE liLastMonthDays  AS INTEGER NO-UNDO.
+  DEFINE VARIABLE lisMainBundleMF  AS LOGICAL NO-UNDO.
   DEF VAR liBrokenRental AS INT  NO-UNDO. 
 
   DEF BUFFER xFFItem FOR FFItem.
@@ -258,8 +287,28 @@ FUNCTION fMakeContract RETURN INT
       FixedFee.CalcAmt = BrokenItem.Amt.
       FIND CURRENT FixedFee NO-LOCK.
    END.
+   
+   /* YDR-2750 Last Month Fee to be based on Active Number of days */
+   FIND MobSub WHERE MobSub.MsSeq = INTEGER(FixedFee.KeyValue) NO-LOCK NO-ERROR.
+   FIND CLIType WHERE CLIType.Clitype = MobSub.CliType NO-LOCK NO-ERROR.
+   IF NOT AVAILABLE CLIType THEN RETURN rc.
+   lisMainBundleMF  = fCheckBundleFMItem (FixedFee.Brand , FixedFee.FeeModel ,FixedFee.BillCode , CLIType.Clitype ) .
+   IF NOT lisMainBundleMF AND CLIType.BaseBundle NE "" THEN 
+        lisMainBundleMF  = fCheckBundleFMItem (FixedFee.Brand , FixedFee.FeeModel ,FixedFee.BillCode,  CLIType.BaseBundle ) .
+   IF NOT lisMainBundleMF AND CLIType.FixedBundle NE "" THEN 
+        lisMainBundleMF  = fCheckBundleFMItem (FixedFee.Brand , FixedFee.FeeModel ,FixedFee.BillCode , CLIType.FixedBundle) .
+   IF DAY(FixedFee.BegDate) NE 1 AND lisMainBundleMF THEN DO TRANS: 
+       FIND LAST FFItem OF FixedFee EXCLUSIVE-LOCK NO-ERROR.
+       IF NOT AVAILABLE FFItem THEN RETURN rc.
+       ASSIGN
+            liLastActiveDays   = DAY(FixedFee.BegDate) - 1 
+            liLastMonthDays    = FFItem.Concerns[2] MOD 100
+            FFItem.Concerns[2] = (( INTEGER( FFItem.Concerns[2] / 100 ) ) * 100 ) + liLastActiveDays
+            liLastActiveAmt    = ( FixedFee.Amt / liLastMonthDays ) * liLastActiveDays 
+            FFItem.Amt         = liLastActiveAmt.
+   END.
 
-  RETURN rc.
+   RETURN rc.
 END.
 
 FUNCTION fMakeContractMore RETURN INT 
