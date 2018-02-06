@@ -36,7 +36,9 @@ END FUNCTION.
 FUNCTION fCloseIncompatibleDiscounts RETURNS LOGICAL
    ( iiMSSeq        AS INTEGER,
      icDiscountPlan AS CHARACTER ):
-      
+
+   DEFINE BUFFER TMSRelation FOR TMSRelation.
+
    FOR EACH TMSRelation NO-LOCK USE-INDEX ParentValue WHERE
             TMSRelation.TableName   = "DiscountPlan"   AND
             TMSRelation.KeyType     = "Compatibility"  AND
@@ -69,6 +71,10 @@ FUNCTION fDiscountAllowed RETURNS LOGICAL
    ( iiMSSeq        AS INTEGER,
      icDiscountPlan AS CHARACTER,
      idaDate        AS DATE ):
+
+   DEFINE BUFFER TMSRelation FOR TMSRelation.
+   DEFINE BUFFER DiscountPlan FOR DiscountPlan.
+   DEFINE BUFFER DPMember FOR DPMember.
 
    FOR
       EACH TMSRelation NO-LOCK USE-INDEX ParentValue WHERE
