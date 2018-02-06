@@ -36,7 +36,7 @@ FUNCTION fUpdateInvText RETURNS LOGICAL
    RETURN TRUE.
 
 END FUNCTION.
-/*
+
 fUpdateInvText("SMS", "STC_DONE", 1, "stc/done", "cliType=#CLITYPE").
 fUpdateInvText("SMS", "STC_DONE", 2, "stc/done", "cliType=#CLITYPE").
 fUpdateInvText("SMS", "STC_DONE", 3, "stc/done", "cliType=#CLITYPE").
@@ -47,7 +47,6 @@ fUpdateInvText("SMS", "STC_Requested", 2, "stc/requested", "cliType=#CLITYPE|dat
 fUpdateInvText("SMS", "STC_Requested", 3, "stc/requested", "cliType=#CLITYPE|date=#DATE").
 fUpdateInvText("SMS", "STC_Requested", 4, "stc/requested", "cliType=#CLITYPE|date=#DATE").
 fUpdateInvText("SMS", "STC_Requested", 5, "stc/requested", "cliType=#CLITYPE|date=#DATE").
-*/
 fUpdateInvText("SMS", "STC_Requested_Any_to_Cvg", 1, "stc/req-to-cvg", "cliType=#CLITYPE").
 fUpdateInvText("SMS", "STC_DONE_28_to_29", 1, "stc/done-28-29", "monthlyCost=9|msisdn=#MSISDN").
 fUpdateInvText("SMS", "STC_Requested_28_to_29", 1, "stc/req-28-29", "monthlyCost=9|msisdn=#MSISDN").
