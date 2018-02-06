@@ -53,21 +53,24 @@ FUNCTION fGenerateEmailTemplate RETURNS CHAR
    DEF VAR lcCrypted AS CHAR NO-UNDO.
    DEF VAR lcLang AS CHAR NO-UNDO.
 
-   ASSIGN
-      lcCrypted =  encrypt_data(icMSISDN + "|" + STRING(iiPeriod),
-                                      {&ENCRYPTION_METHOD}, 
-                                      {&ESI_PASSPHRASE}) 
-      /* convert some special characters to url encoding (at least '+' char
-         could cause problems at later phases. */
-      lcCrypted = fUrlEncode(lcCrypted, "query").
    IF iiLang EQ 1 THEN lcLAng = "es". 
    ELSE IF iiLang EQ 2 THEN lcLang = "ca".
    ELSE IF iiLang EQ 3 THEN lcLang = "eu".
    ELSE lcLang = "en".
+ 
+   ASSIGN
+      lcCrypted =  encrypt_data(icMSISDN + "|" + 
+                                STRING(iiPeriod),
+                                {&ENCRYPTION_METHOD}, 
+                                {&ESI_PASSPHRASE}) 
+      /* convert some special characters to url encoding (at least '+' char
+         could cause problems at later phases. */
+      lcCrypted = fUrlEncode(lcCrypted, "query").
    ASSIGN
       lcMessagePayload = icTemplate
       lcMessagePayload = REPLACE(lcMessagePayload,"#LANG",lcLang)
-      lcMessagePayload = REPLACE(lcMessagePayload,"#LINK",icLink + lcCrypted)
+      lcMessagePayload = REPLACE(lcMessagePayload,"#LINK",icLink + 
+                                 lcCrypted + "&lang=" + lcLang)
       lcMessagePayload = REPLACE(lcMessagePayload,"#MSISDN",icMSISDN) 
       lcMessagePayload = REPLACE(lcMessagePayload,"#AMOUNT",STRING(ideAmount))
       lcMessagePayload = REPLACE(lcMessagePayload,"#INVDATE",icDate)
@@ -177,6 +180,17 @@ IF lcAddrConfDir + "/smsinvoice.sms" NE ? THEN DO:
       REPEAT:
          IMPORT STREAM sIn UNFORMATTED lcRecipient.
          Mm.MManMessage:mCreateMMLogSMS(lcRecipient, FALSE).
+      END.
+      Mm.MManMessage:mClearData().
+   END.
+END.
+
+IF lcAddrConfDir + "/smsinvoice.email" NE ? THEN DO:
+   IF Mm.MManMessage:mGetMessage("EMAIL", "EInvMessageDone", 5)EQ TRUE THEN DO:
+      INPUT STREAM sIn FROM VALUE(lcAddrConfDir + "/smsinvoice.email").
+      REPEAT:
+         IMPORT STREAM sIn UNFORMATTED lcRecipient.
+         Mm.MManMessage:mCreateMMLogEmail(lcRecipient, FALSE).
       END.
       Mm.MManMessage:mClearData().
    END.

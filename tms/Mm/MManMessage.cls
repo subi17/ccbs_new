@@ -199,7 +199,7 @@ CLASS Mm.MManMessage FINAL:
    END METHOD.        
 
    /*Use this method if you will use the same message contents several
-     times. Remembe rto clear content by using mClearData() after the last
+     times. Remembr to clear content by using mClearData() after the last
      methood call.*/
    METHOD PUBLIC STATIC LOGICAL mCreateMMLogSMS
       ( icSMSRecipient   AS CHARACTER,
@@ -221,6 +221,16 @@ CLASS Mm.MManMessage FINAL:
                           TRUE).
    END METHOD.
 
+   METHOD PUBLIC STATIC LOGICAL mCreateMMLogEmail
+      ( icEmailRecipient AS CHARACTER,
+        ilgClearMsg      AS LOGICAL  ):
+
+      RETURN mCreateMMLog("",
+                          icEmailRecipient,
+                          "",
+                          ilgClearMsg).
+   END METHOD.
+
 
    METHOD PUBLIC STATIC LOGICAL mCreateMMLogEmail
       ( icEmailRecipient AS CHARACTER ):
@@ -229,6 +239,16 @@ CLASS Mm.MManMessage FINAL:
                           icEmailRecipient,
                           "",
                           TRUE).
+   END METHOD.
+
+   METHOD PUBLIC STATIC LOGICAL mCreateMMLogPush
+      ( icPushRecipient  AS CHARACTER,
+        ilgClearMsg      AS LOGICAL  ):
+
+      RETURN mCreateMMLog("",
+                          "",
+                          icPushRecipient,
+                          ilgClearMsg).
    END METHOD.
 
 
