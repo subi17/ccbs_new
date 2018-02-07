@@ -35,7 +35,7 @@ FUNCTION fCheckACCCompability RETURNS CHARACTER
    FIND FIRST bCustCatDST NO-LOCK WHERE
               bCustCatDST.Brand EQ Syst.Var:gcBrand AND
               bCustCatDST.Category EQ bCustomerDST.Category NO-ERROR.
-   IF NOT AVAIL bCustCatSRC THEN RETURN "Incorrect new customer category".
+   IF NOT AVAIL bCustCatDST THEN RETURN "Incorrect new customer category".
 
    IF bCustCatSRC.PRO NE bCustCatDST.PRO THEN
    DO:
