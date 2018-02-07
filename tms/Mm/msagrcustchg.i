@@ -92,6 +92,21 @@ PROCEDURE pCheckSubscriptionForACC:
    DEF BUFFER MsRequest FOR MsRequest.
    
    DEF VAR lcBarrStatus AS CHARACTER NO-UNDO. 
+   DEF VAR liACCMsseq     AS CHARACTER NO-UNDO.
+   DEF VAR llBypassCheck  AS LOGICAL   NO-UNDO.
+   DEF VAR lcCParamLine   AS CHARACTER NO-UNDO.
+   DEF VAR liIndex        AS INTEGER   NO-UNDO.
+
+
+   ASSIGN lcCParamLine = fCParamC("PassConvergentACC"). /* Bypass checks for this MsSeg */
+   DO liIndex = 1 TO NUM-ENTRIES(lcCParamLine):
+      liACCMsseq = ENTRY(liIndex,lcCParamLine).
+      IF INT(liACCMsseq) > 0 AND iiMsSeq EQ INT(liACCMsseq) THEN DO:
+         llBypassCheck = TRUE.
+         LEAVE.
+      END.
+      ELSE llBypassCheck = FALSE.
+   END.
    
    FIND MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
    
@@ -99,13 +114,15 @@ PROCEDURE pCheckSubscriptionForACC:
       ocMessage = "Unknown subscription".
       RETURN "ERROR".
    END.
-   /*YPR-4772*/
-   /*acc is not allowed for convergent tariffs.*/
-   IF fIsConvergenceTariff(MobSub.CLIType) THEN DO:       
-       ocMessage = "Not allowed for fixed line tariffs".
-       RETURN "ERROR".
-   END.
 
+   IF NOT llBypassCheck THEN DO:
+      /*YPR-4772*/
+      /*acc is not allowed for convergent tariffs.*/
+      IF fIsConvergenceTariff(MobSub.CLIType) THEN DO:       
+         ocMessage = "Not allowed for fixed line tariffs".
+         RETURN "ERROR".
+      END.
+   END.
 
    IF TODAY - MobSub.ActivationDate < 30 THEN DO:
       ocMessage = "Subscription has not been active long enough".
