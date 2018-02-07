@@ -73,24 +73,27 @@ ASSIGN
    lcLastDate = get_string(lcNotificationStatus, "lastDate").
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-lcAdditionalInfo = get_struct(lcNotificationStatus,"additionalInfo").
-IF gi_xmlrpc_error NE 0 THEN RETURN.
-lcAdditionalInfoFields = validate_struct(lcAdditionalInfo,"cita,canDS,portStat,portDate,routerStat").   
+ASSIGN lcAdditionalInfo = get_struct(lcNotificationStatus, "additionalInfo")
+   WHEN LOOKUP("additionalInfo", lcStatusFields) > 0 .
 IF gi_xmlrpc_error NE 0 THEN RETURN.
 
-ASSIGN
-  lcCita = get_string(lcAdditionalInfo, "cita")
-     WHEN LOOKUP("cita", lcAdditionalInfoFields) > 0 
-  lcCanDS = get_string(lcAdditionalInfo, "canDS")
-     WHEN LOOKUP("canDS", lcAdditionalInfoFields) > 0 
-  lcPortStat = get_string(lcAdditionalInfo, "portStat")
-     WHEN LOOKUP("portStat", lcAdditionalInfoFields) > 0 
-  lcPortDate = get_string(lcAdditionalInfo, "portDate")
-     WHEN LOOKUP("portDate", lcAdditionalInfoFields) > 0 
-  lcRouterStat = get_string(lcAdditionalInfo, "routerStat")
-     WHEN LOOKUP("routerStat", lcAdditionalInfoFields) > 0. 
- 
-IF gi_xmlrpc_error NE 0 THEN RETURN.
+IF LOOKUP("additionalInfo", lcStatusFields) > 0 THEN DO:
+   lcAdditionalInfoFields = validate_struct(lcAdditionalInfo,"cita,canDS,portStat,portDate,routerStat").   
+   IF gi_xmlrpc_error NE 0 THEN RETURN.
+
+   ASSIGN
+     lcCita = get_string(lcAdditionalInfo, "cita")
+        WHEN LOOKUP("cita", lcAdditionalInfoFields) > 0 
+     lcCanDS = get_string(lcAdditionalInfo, "canDS")
+        WHEN LOOKUP("canDS", lcAdditionalInfoFields) > 0 
+     lcPortStat = get_string(lcAdditionalInfo, "portStat")
+        WHEN LOOKUP("portStat", lcAdditionalInfoFields) > 0 
+     lcPortDate = get_string(lcAdditionalInfo, "portDate")
+        WHEN LOOKUP("portDate", lcAdditionalInfoFields) > 0 
+     lcRouterStat = get_string(lcAdditionalInfo, "routerStat")
+        WHEN LOOKUP("routerStat", lcAdditionalInfoFields) > 0. 
+   IF gi_xmlrpc_error NE 0 THEN RETURN.
+END.
 
 lcresultStruct = add_struct(response_toplevel_id,"").
 
@@ -283,7 +286,7 @@ CASE FusionMessage.FixedStatus:
    WHEN "CANCELACION EN PROCESO" THEN DO:
       
       ASSIGN 
-         OrderFusion.CancellationReason = lcCanDS.
+         OrderFusion.CancellationReason = lcCanDS WHEN lcCanDS <> "".
          OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_PENDING_CANCELLED}.
 
       IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL} THEN .
@@ -296,7 +299,7 @@ CASE FusionMessage.FixedStatus:
    /* installation cancelled */ 
    WHEN "CANCELADA" THEN DO:
 
-      ASSIGN OrderFusion.CancellationReason = lcCanDS 
+      ASSIGN OrderFusion.CancellationReason = lcCanDS WHEN lcCanDS <> "".
              OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_CANCELLED}.
          
       IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} OR
