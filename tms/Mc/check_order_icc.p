@@ -34,14 +34,14 @@ ASSIGN ldeCurrentTS = Func.Common:mMakeTS()
                       REPLACE(STRING(TIME,"HH:MM:SS"),":","")
        lcLogFile    = lcOutDir + "check_conv_order_icc_" + lcToday + ".log".
 
-OUTPUT STREAM strout TO lcLogFile.
+OUTPUT STREAM strout TO VALUE(lcLogFile).
 
 PUT STREAM strout UNFORMATTED 
    "OrderId;CERRADA Status TimeStamp" SKIP.
 
 FOR EACH Order NO-LOCK WHERE 
-         Order.Brand      EQ Syst.Var:gcBrand                              AND 
-  LOOKUP(Order.StatusCode,{&ORDER_STATUS_PENDING_ICC_FROM_INSTALLER}) GT 0 AND  
+         Order.Brand      EQ Syst.Var:gcBrand                           AND 
+         Order.StatusCode EQ {&ORDER_STATUS_PENDING_ICC_FROM_INSTALLER} AND
          Order.ICC        EQ "":               
 
    FIND FIRST EventLog NO-LOCK WHERE
@@ -59,6 +59,9 @@ FOR EACH Order NO-LOCK WHERE
              ErrorLog.ErrorMsg  = "Cerrada status eventlog is not available"
              ErrorLog.UserCode  = Syst.Var:katun
              ErrorLog.ActionTS  = Func.Common:mMakeTS().
+      PUT STREAM strout UNFORMATTED 
+         Order.OrderId ";"
+         "Eventlog is not available"  SKIP.
       NEXT.
    END.
 
