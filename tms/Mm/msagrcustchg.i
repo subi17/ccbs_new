@@ -91,22 +91,17 @@ PROCEDURE pCheckSubscriptionForACC:
    DEF BUFFER Limit FOR Limit.
    DEF BUFFER MsRequest FOR MsRequest.
    
-   DEF VAR lcBarrStatus AS CHARACTER NO-UNDO. 
-   DEF VAR liACCMsseq     AS CHARACTER NO-UNDO.
+   DEF VAR lcBarrStatus   AS CHARACTER NO-UNDO. 
    DEF VAR llBypassCheck  AS LOGICAL   NO-UNDO.
    DEF VAR lcCParamLine   AS CHARACTER NO-UNDO.
-   DEF VAR liIndex        AS INTEGER   NO-UNDO.
-
 
    ASSIGN lcCParamLine = fCParamC("PassConvergentACC"). /* Bypass checks for this MsSeg */
-   DO liIndex = 1 TO NUM-ENTRIES(lcCParamLine):
-      liACCMsseq = ENTRY(liIndex,lcCParamLine).
-      IF INT(liACCMsseq) > 0 AND iiMsSeq EQ INT(liACCMsseq) THEN DO:
-         llBypassCheck = TRUE.
-         LEAVE.
-      END.
-      ELSE llBypassCheck = FALSE.
+
+   IF LOOKUP(STRING(iiMsSeq), lcCParamLine) > 0 THEN DO:
+      llBypassCheck = TRUE.   
+      LEAVE.
    END.
+      ELSE llBypassCheck = FALSE.
    
    FIND MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
    
