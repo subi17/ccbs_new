@@ -148,9 +148,19 @@ ASSIGN
 
 FUNCTION fAddWarningStruct RETURNS LOGICAL:
 
+   DEFINE VARIABLE lcParentValue AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcChildValue  AS CHARACTER NO-UNDO.
+   DEFINE BUFFER lELMobSub FOR MobSub.
+
    warning_array = add_array(sub_struct,"warnings").
 
    lcBono = fGetCurrentSpecificBundle(Mobsub.MsSeq,"BONO").
+
+   IF NOT fSTCPossible(MobSub.CustNum, pcNewCLIType)
+   THEN DO:
+      add_string(warning_array,"","STC_EXTRALINE_ERROR").
+      RETURN FALSE.
+   END.
 
    IF lcBono > "" THEN DO:
       IF fMatrixAnalyse(Syst.Var:gcBrand,
@@ -177,6 +187,56 @@ FUNCTION fAddWarningStruct RETURNS LOGICAL:
       add_string(warning_array,"","STC_HAS_50_PER_ADDLINE").
    IF llAddline20Disc THEN
       add_string(warning_array,"","STC_HAS_20_PER_ADDLINE").
+
+   IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                     CLIType.CLIType = MobSub.CLIType AND
+                     CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT})
+   THEN DO:
+      lcParentValue = "CONVERGENT".
+      /* If the old CLIType can have extraline and the extraline actually exists */
+      IF fCLITypeIsMainLine(MobSub.CLIType) AND
+         CAN-FIND(FIRST lELMobSub NO-LOCK WHERE
+                        lELMobSub.MsSeq         EQ MobSub.MultiSimId          AND
+                        lELMobSub.MultiSimId    EQ MobSub.MsSeq               AND
+                        lELMobSub.MultiSimtype  EQ {&MULTISIMTYPE_EXTRALINE}  AND
+                       (lELMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE} OR
+                        lELMobSub.MsStatus     EQ {&MSSTATUS_BARRED}))
+      THEN lcParentValue = fExtraLineForMainLine(MobSub.CLIType).
+
+      IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                        CLIType.CLIType = pcNewCLIType AND
+                        CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT})
+      THEN DO:
+         lcChildValue = "CONVERGENT".
+
+         /* The new CLIType can have extraline. In this case we don't check
+            the activity status of the extraline as the old CLIType extraline will
+            be used (if available) */
+         IF fCLITypeIsMainLine(pcNewCLIType)
+         THEN lcChildValue = fExtraLineForMainLine(pcNewCLIType).
+      END.
+      ELSE IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                             CLIType.CLIType = pcNewCLIType AND
+                             CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY})
+      THEN lcChildValue = "MOBILEONLY".
+
+      FOR EACH TMSRelation NO-LOCK USE-INDEX ChildValue WHERE
+               TMSRelation.TableName   = "CLIType"           AND
+               TMSRelation.KeyType     = "STCWarningMessage" AND
+               TMSRelation.ChildValue  = lcChildValue        AND
+               TMSRelation.ParentValue = lcParentValue:
+
+         IF TMSRelation.ToTime NE ? AND
+            TMSRelation.ToTime < NOW
+         THEN LEAVE.
+
+         IF TMSRelation.FromTime NE ? AND
+            TMSRelation.FromTime > NOW
+         THEN NEXT.
+
+         add_string(warning_array,"",TMSRelation.RelationType).
+      END.
+   END.
 
 END FUNCTION.
 

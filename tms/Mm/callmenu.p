@@ -10,7 +10,7 @@
 {Syst/commali.i}
 {Syst/tmsconst.i}
 
-DEF INPUT  PARAMETER msseq  AS INT .
+DEF INPUT  PARAMETER iiMsSeq AS INT .
 
 DEF VAR menuc      AS CHAR EXTENT 10 NO-UNDO.
 DEF VAR lcUserName AS CHAR NO-UNDO FORMAT "X(30)".
@@ -19,12 +19,12 @@ DEF VAR lhSub AS HANDLE NO-UNDO.
 PAUSE 0.
 
 FIND MobSub  WHERE 
-     MobSub.Msseq = msseq NO-LOCK NO-ERROR.
+     MobSub.Msseq = iiMsSeq NO-LOCK NO-ERROR.
 
 IF AVAIL MobSub THEN lhSub = BUFFER MobSub:HANDLE.
 ELSE DO: 
    FIND TermMobSub WHERE 
-        TermMobSub.Msseq = msseq NO-LOCK NO-ERROR.
+        TermMobSub.Msseq = iiMsSeq NO-LOCK NO-ERROR.
    IF NOT AVAIL TermMobSub THEN RETURN.
    lhSub = BUFFER TermMobSub:HANDLE.
 END.
@@ -47,9 +47,9 @@ DO WHILE TRUE:
  "F) Minimum Consumption         "                    @ menuc[6] SKIP
  "G) EDR Browse                  "                    @ menuc[7] SKIP
  "H) NRTRDE Browse               "                    @ menuc[8] SKIP
- "I) Fixed Calls Browse          "  WHEN MobSub.FixedNumber > "" 
+ "I) Fixed Calls Browse          "  WHEN lhSub::FixedNumber > "" 
                                                       @ menuc[9] SKIP
- "J) Fixed Calls Value           "  WHEN MobSub.FixedNumber > "" 
+ "J) Fixed Calls Value           "  WHEN lhSub::FixedNumber > "" 
                                                       @ menuc[10] SKIP
 
 
@@ -75,7 +75,7 @@ DO WHILE TRUE:
    END.
    
    ELSE IF FRAME-INDEX = 4 THEN DO:
-      RUN Mc/limit.p(lhSub::InvCust, Msseq, {&LIMIT_TYPE_BILLPERM}, 0).
+      RUN Mc/limit.p(lhSub::InvCust, iiMsseq, {&LIMIT_TYPE_BILLPERM}, 0).
    END.
    
    ELSE IF FRAME-INDEX = 5 THEN DO:
