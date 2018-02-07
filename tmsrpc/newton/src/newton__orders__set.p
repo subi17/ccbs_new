@@ -149,18 +149,21 @@ IF NUM-ENTRIES(lcOrderFields) > 0 THEN DO:
 
    IF pcICC > "" THEN DO:
 
-      FIND FIRST OrderFusion NO-LOCK WHERE
-                 OrderFusion.Brand = Order.Brand AND
-                 OrderFusion.OrderID = Order.OrderID NO-ERROR.
-      IF NOT AVAIL OrderFusion THEN
-         RETURN appl_err("ICC set is only allowed for fusion orders").
-      
-      IF Order.StatusCode NE {&ORDER_STATUS_PENDING_MOBILE_LINE} AND 
-         LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) EQ 0 THEN RETURN
-         appl_err("Order is in wrong status, cannot update ICC").
+      IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) EQ 0 THEN DO:
 
-      IF OrderFusion.FusionStatus NE {&FUSION_ORDER_STATUS_FINALIZED} THEN
-         RETURN appl_err("Wrong fusion order status, cannot update ICC").
+         FIND FIRST OrderFusion NO-LOCK WHERE
+                    OrderFusion.Brand = Order.Brand AND
+                    OrderFusion.OrderID = Order.OrderID NO-ERROR.
+         IF NOT AVAIL OrderFusion THEN 
+            RETURN appl_err("ICC set is only allowed for fusion orders").
+         
+         IF Order.StatusCode NE {&ORDER_STATUS_PENDING_MOBILE_LINE} THEN 
+            RETURN appl_err("Order is in wrong status, cannot update ICC").
+
+         IF OrderFusion.FusionStatus NE {&FUSION_ORDER_STATUS_FINALIZED} THEN 
+            RETURN appl_err("Wrong fusion order status, cannot update ICC").
+
+      END.
 
       FIND FIRST SIM EXCLUSIVE-LOCK WHERE
                  SIM.brand EQ Syst.Var:gcBrand AND
@@ -264,9 +267,14 @@ IF pcRiskCode NE ? OR
    FIND CURRENT Order NO-LOCK.
 END.
 
-IF pcICC > "" THEN DO:
-
-   RUN Mc/orderinctrl.p(Order.OrderId, 0, TRUE).
+/* Don't release the order if ICC is assigned and order is 
+   still waiting for fixed line installation */
+IF pcICC > "" AND
+   LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) EQ 0 AND 
+   (Order.StatusCode NE {&ORDER_STATUS_PENDING_FIXED_LINE} OR 
+    Order.StatusCode NE {&ORDER_STATUS_PENDING_MAIN_LINE}) THEN DO:
+   
+    RUN Mc/orderinctrl.p(Order.OrderId, 0, TRUE).
 
    IF RETURN-VALUE > "" THEN 
       UNDO, RETURN appl_err("Mobile order release failed").
