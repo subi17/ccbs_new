@@ -64,29 +64,6 @@ FUNCTION fLogLine RETURNS LOG(icMessage AS CHAR):
 
 END FUNCTION.
 
-
-FUNCTION fLocalMemo RETURNS LOG(icHostTable AS CHAR,
-                                icKey       AS CHAR,
-                                icTitle     AS CHAR,
-                                icText      AS CHAR,
-                                icMemoType  AS CHAR,
-                                icUserId    AS CHAR):
-   CREATE Memo.
-   ASSIGN
-      Memo.Brand     = Syst.Var:gcBrand
-      Memo.CreStamp  = Func.Common:mMakeTS()
-      Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.Custnum   = (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0)
-      Memo.HostTable = icHostTable
-      Memo.KeyValue  = icKey
-      Memo.CreUser   = icUserId
-      Memo.MemoTitle = icTitle
-      Memo.Memotext  = icText
-      Memo.MemoType  = icMemoType.
-      
-END FUNCTION.
-
-
 FUNCTION fSetInvDelType RETURNS CHAR(INPUT icDelType AS CHAR,
                                      INPUT icAction  AS CHAR,
                                      INPUT icEmail   AS CHAR):
@@ -407,15 +384,17 @@ PROCEDURE pInvoiceDeliverables:
                     "activado") + " la factura " + lcDeliverable.
 
    IF LOOKUP(lcDeliverable,"Detail") > 0 THEN
-      fLocalMemo("MobSub",
+      Func.Common:mWriteMemoWithType("MobSub",
                  STRING(MobSub.MsSeq),
+                 (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0),
                  lcMemoContent,
                  lcMemoContent,
                  "Service",
                  (IF lcChannel > "" THEN lcChannel ELSE Syst.Var:katun)).
    ELSE
-      fLocalMemo("Invoice",
+      Func.Common:mWriteMemoWithType("Invoice",
                  STRING(Customer.CustNum),
+                 (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0),
                  lcMemoContent,
                  lcMemoContent,
                  "",

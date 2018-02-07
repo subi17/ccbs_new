@@ -30,7 +30,9 @@ DEF VAR ldaValidTo   AS DATE NO-UNDO.
 DEF VAR lcSep        AS CHAR NO-UNDO. 
 DEF VAR liMsSeq      AS INT  NO-UNDO. 
 DEF VAR ldaLimitedTo AS DATE NO-UNDO.
-DEF VAR liLinesRead  AS INT NO-UNDO. 
+DEF VAR liLinesRead  AS INT  NO-UNDO.
+DEF VAR lcError      AS CHAR NO-UNDO.
+
 
 DEF BUFFER bUpdMember FOR DPMember.
 

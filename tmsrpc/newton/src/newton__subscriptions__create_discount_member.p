@@ -38,6 +38,7 @@ DEFINE VARIABLE ldeMonthlyLimit  AS DECIMAL   NO-UNDO.
 DEFINE VARIABLE ldeMonthAmt      AS DECIMAL   NO-UNDO. 
 DEFINE VARIABLE ldeMonthFrom     AS DECIMAL   NO-UNDO. 
 DEFINE VARIABLE ldeMonthTo       AS DECIMAL   NO-UNDO.
+DEFINE VARIABLE lcError          AS CHARACTER NO-UNDO.
 /* ALFMO-14 for web memo creation */
 DEFINE VARIABLE lcMainLine    AS CHARACTER NO-UNDO.
 
@@ -45,26 +46,6 @@ DEFINE BUFFER bDiscountPlan FOR DiscountPlan.
 
 lcStructType = validate_request(param_toplevel_id, "int,string,struct,[boolean]").
 IF lcStructType EQ ? THEN RETURN.
-
-FUNCTION fLocalMemo RETURNS LOGIC
-   (icHostTable AS CHAR,
-    icKey       AS CHAR,
-    icTitle     AS CHAR,
-    icText      AS CHAR):
-
-   CREATE Memo.
-   ASSIGN
-      Memo.Brand     = Syst.Var:gcBrand
-      Memo.CreStamp  = Func.Common:mMakeTS()
-      Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.Custnum   = (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0)
-      Memo.HostTable = icHostTable
-      Memo.KeyValue  = icKey
-      Memo.CreUser   = Syst.Var:katun
-      Memo.MemoTitle = icTitle
-      Memo.Memotext  = icText.
-      
-END FUNCTION.
 
 /* ALFMO-14 Procedure returns the convergent main line MSISDN 
    For web memo creation */
@@ -310,8 +291,9 @@ THEN RETURN appl_err(lcError).
 IF LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS_HM}) > 0 OR
    LOOKUP(lcDPRuleID, {&ADDLINE_DISCOUNTS}) > 0 THEN
 DO:
-   fLocalMemo("Invoice",
+   Func.Common:mWriteMemo("Invoice",
               STRING(MobSub.MsSeq),
+              (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0),
               "Descuento 50% línea adicional",
               "Línea principal " + lcMainLine).
 END.
@@ -319,8 +301,9 @@ END.
 /* YTS-10992 - Adding logging for dpmember creation 
    (Using already available Memo creation function instead of 
     including event creation logic) */
-fLocalMemo("MobSub",
+Func.Common:mWriteMemo("MobSub",
            STRING(MobSub.MsSeq),
+           (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0),
            "DiscountCreation",
            "Added from Vista").
 

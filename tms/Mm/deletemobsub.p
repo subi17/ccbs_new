@@ -70,26 +70,6 @@ DEF TEMP-TABLE ttContract NO-UNDO
    FIELD CreateFee AS LOG
    FIELD ActTS     AS DEC.
 
-FUNCTION fLocalMemo RETURNS LOGIC
-   (icHostTable AS CHAR,
-    icKey       AS CHAR,
-    icTitle     AS CHAR,
-    icText      AS CHAR):
-
-   CREATE Memo.
-   ASSIGN
-      Memo.Brand     = Syst.Var:gcBrand
-      Memo.CreStamp  = ldCurrTS
-      Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.Custnum   = (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0)
-      Memo.HostTable = icHostTable
-      Memo.KeyValue  = icKey
-      Memo.CreUser   = Syst.Var:katun
-      Memo.MemoTitle = icTitle
-      Memo.Memotext  = icText.
-      
-END FUNCTION.
-
 FUNCTION fUpdateDSSNewtorkForExtraLine RETURNS LOGICAL
    (INPUT iiMsSeq        AS INT,
     INPUT iiMultiSimId   AS INT,
@@ -327,8 +307,9 @@ PROCEDURE pTerminate:
 
    IF llOutport THEN DO:
 
-      fLocalMemo("Customer",
+      Func.Common:mWriteMemo("Customer",
                  STRING(Mobsub.CustNum),
+                 (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0),
                  "OUTPORTED to " + lcOutoper,
                  "Number:" + MobSub.CLI).
    END.
@@ -439,16 +420,18 @@ PROCEDURE pTerminate:
                             OUTPUT lcError) THEN DO:
                llDSSTransferred = TRUE.
 
-               fLocalMemo("Customer",
+               Func.Common:mWriteMemo("Customer",
                           STRING(Mobsub.CustNum),
+                          (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0)m
                           "DSS Bundle/UPSELL",
                           "DSS Bundle/UPSELL is transferred from Subs.Id " +
                           STRING(MobSub.MsSeq) + " to Subs. Id " +
                           STRING(liDSSMsSeq)).
             END. /* IF fTransferDSS(INPUT MobSub.MsSeq,INPUT liDSSMsSeq, */
             ELSE
-               fLocalMemo("Customer",
+               Func.Common:mWriteMemo("Customer",
                           STRING(Mobsub.CustNum),
+                          (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0),
                           "DSS Bundle/UPSELL Transfer Failed",
                           "DSS Bundle/UPSELL was not transferred from Subs.Id " +
                           STRING(MobSub.MsSeq) + " to Subs. Id " +
@@ -643,8 +626,9 @@ PROCEDURE pTerminate:
                  DayCampaign.ValidTo   >= Today NO-LOCK NO-ERROR.
               
       IF NOT AVAIL DayCampaign THEN DO:
-         fLocalMemo("Customer",
+         Func.Common:mWriteMemo("Customer",
                     STRING(Mobsub.CustNum),
+                    (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0),
                     "Periodical Contract",
                     ttContract.DCEvent +
                     ": Periodical contract information is missing!"). 
@@ -676,9 +660,10 @@ PROCEDURE pTerminate:
                           "",
                           OUTPUT lcError).
 
-      fLocalMemo("Customer",
+      Func.Common:mWriteMemo("Customer",
                  STRING(Mobsub.CustNum),
                  "Periodical Contract",
+                 (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0),
                  ttContract.DCEvent +
                  ": Terminated along with the subscription" +
                  (IF lcError > ""
@@ -847,8 +832,9 @@ PROCEDURE pTerminate:
             RUN Mnp/mnpnumbertermrequest.p(MobSub.CLI,MobSub.MsSeq).
           
          IF RETURN-VALUE BEGINS "ERROR" THEN
-             fLocalMemo("TermMobsub",
+             Func.Common:mWriteMemo("TermMobsub",
                         STRING(MobSub.MsSeq),
+                        (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0),
                         "BAJA",
                         RETURN-VALUE). 
       END. 
@@ -1519,8 +1505,9 @@ PROCEDURE pMultiSIMTermination:
                           OUTPUT lcError). 
                
       IF lcError > "" THEN 
-         fLocalMemo("TermMobsub",
+         Func.Common:mWriteMemo("TermMobsub",
                     STRING(lbMobSub.MsSeq),
+                    (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0),
                     "Multi SIM termination failed",
                     lcError).
       /* MNP Outporting */

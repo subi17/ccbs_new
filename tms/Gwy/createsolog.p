@@ -148,27 +148,6 @@ END CASE.
 
 RETURN RETURN-VALUE.
 
-FUNCTION fLocalMemo RETURNS LOGIC
-   (icHostTable AS CHAR,
-    icKey       AS CHAR,
-    iiCustnum   AS INT,
-    icTitle     AS CHAR,
-    icText      AS CHAR):
-
-   CREATE Memo.
-   ASSIGN
-      Memo.Brand     = Syst.Var:gcBrand
-      Memo.CreStamp  = Func.Common:mMakeTS()
-      Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.Custnum   = iiCustNum
-      Memo.HostTable = icHostTable
-      Memo.KeyValue  = icKey
-      Memo.CreUser   = Syst.Var:katun
-      Memo.MemoTitle = icTitle
-      Memo.Memotext  = icText.
-      
-END FUNCTION.
-
 PROCEDURE pSolog:
 
    DEFINE VARIABLE lcCli AS CHARACTER NO-UNDO.
@@ -262,7 +241,7 @@ PROCEDURE pSolog:
                   RETURN.
                END.
                ELSE
-                  fLocalMemo("Customer",
+                  Func.Common:mWriteMemo("Customer",
                           STRING(MsRequest.CustNum),
                           MsRequest.Custnum,
                           "BB Service",
@@ -276,14 +255,14 @@ PROCEDURE pSolog:
             RUN Gwy/balancequery.p(bufMobSub.CLI).
             ldCurrBal = DEC(RETURN-VALUE) / 100 NO-ERROR.
             IF ldCurrBal > 0 THEN
-               fLocalMemo("Mobsub",
+               Func.Common:mWriteMemo("Mobsub",
                           STRING(bufMobSub.MsSeq),
                           bufMobSub.Custnum,
                           "Prepaid Balance",
                           "Prepaid balance " + STRING(ldCurrBal) + 
                           " euro on CLI " + bufMobSub.CLI).
             ELSE IF RETURN-VALUE BEGINS "ERROR" THEN
-               fLocalMemo("Mobsub",
+               Func.Common:mWriteMemo("Mobsub",
                           STRING(bufMobSub.MsSeq),
                           bufMobSub.Custnum,
                           "Prepaid Balance",
