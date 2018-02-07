@@ -4,7 +4,6 @@ USING Progress.Json.ObjectModel.*.
 
 {Syst/tmsconst.i}
 {Func/log.i}
-{Func/memo.i}
 {Func/cparam2.i}
 
 DEF INPUT PARAM piOrderId       AS INT  NO-UNDO.
