@@ -15,6 +15,7 @@
 
                 DEF VAR lh99Order AS HANDLE NO-UNDO.
                 DEF VAR lh76Order AS HANDLE NO-UNDO.
+                DEF VAR lh17Order AS HANDLE NO-UNDO.
                 DEF VAR lh15Order AS HANDLE NO-UNDO.
             &ENDIF
 
@@ -93,6 +94,29 @@
                                   {&ORDER_STATUS_PENDING_MOBILE_LINE}).
                   NEXT {1}.
                END.
+               
+               IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) GT 0 AND
+                  Order.CLIType   BEGINS "CONTFH"                         AND 
+                  Order.ICC       EQ     ""                               AND 
+                  Order.OrderType NE     {&ORDER_TYPE_STC}                THEN DO:
+
+                  IF llDoEvent THEN DO:
+                     lh17Order = BUFFER Order:HANDLE.
+                     RUN StarEventInitialize(lh17Order).
+                     RUN StarEventSetOldBuffer(lh17Order).
+                  END.
+
+                  IF Order.DeliverySecure > 0 THEN 
+                     fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_SENDING_TO_LO}).
+                  ELSE fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_ICC_FROM_INSTALLER}).
+
+                  IF llDoEvent THEN DO:
+                     RUN StarEventMakeModifyEvent(lh17Order).
+                     fCleanEventObjects().
+                  END.
+
+                  NEXT {1}.
+               END.   
                
                /* NOTE: this check is also in orderinctrl.p */
                IF Order.OrderType EQ {&ORDER_TYPE_MNP} AND
