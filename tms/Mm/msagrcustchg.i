@@ -92,17 +92,7 @@ PROCEDURE pCheckSubscriptionForACC:
    DEF BUFFER MsRequest FOR MsRequest.
    
    DEF VAR lcBarrStatus   AS CHARACTER NO-UNDO. 
-   DEF VAR llBypassCheck  AS LOGICAL   NO-UNDO.
-   DEF VAR lcCParamLine   AS CHARACTER NO-UNDO.
-
-   ASSIGN lcCParamLine = fCParamC("PassConvergentACC"). /* Bypass checks for this MsSeg */
-
-   IF LOOKUP(STRING(iiMsSeq), lcCParamLine) > 0 THEN DO:
-      llBypassCheck = TRUE.   
-      LEAVE.
-   END.
-      ELSE llBypassCheck = FALSE.
-   
+  
    FIND MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
    
    IF NOT AVAILABLE MobSub THEN DO:
@@ -110,10 +100,11 @@ PROCEDURE pCheckSubscriptionForACC:
       RETURN "ERROR".
    END.
 
-   IF NOT llBypassCheck THEN DO:
+   /* Bypass check if MsSeg set to cparam */
+   IF LOOKUP(STRING(iiMsSeq), fCParamC("PassConvergentACC")) = 0 THEN DO:
       /*YPR-4772*/
       /*acc is not allowed for convergent tariffs.*/
-      IF fIsConvergenceTariff(MobSub.CLIType) THEN DO:       
+      IF fIsConvergenceTariff(MobSub.CLIType) THEN DO:
          ocMessage = "Not allowed for fixed line tariffs".
          RETURN "ERROR".
       END.
