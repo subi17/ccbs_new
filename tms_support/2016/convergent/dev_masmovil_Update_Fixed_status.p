@@ -175,7 +175,8 @@ CASE FusionMessage.FixedStatus:
       ASSIGN OrderFusion.CancellationReason = lcAdditionalInfo.
    END.
    WHEN "CITADA" THEN DO:
-      ASSIGN OrderFusion.AppointmentDate = lcAdditionalInfo.
+      IF lcAdditionalInfo = "null" THEN OrderFusion.AppointmentDate = "".
+      ELSE OrderFusion.AppointmentDate = lcAdditionalInfo.
    END.
    /* installation done */
    WHEN "CERRADA" THEN DO:
