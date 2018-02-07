@@ -115,4 +115,34 @@ FUNCTION fCLITypeIsMainLine RETURNS LOGICAL
 
 END FUNCTION.
 
+/* Function checks if STC is possible when the new clitype is
+   extraline. It is possible when the customer has a free
+   mainline and the mainline is suitable for the extraline */
+FUNCTION fSTCPossible RETURNS LOGICAL
+   (iiCustNum    AS INTEGER,
+    icNewCLIType AS CHARACTER):
+
+   IF NOT fCLITypeIsExtraLine(icNewCLIType)
+   THEN RETURN TRUE.
+
+   DEFINE BUFFER MobSub FOR MobSub.
+
+   /* Find suitable mainline mobsub from the customer */
+   FOR EACH MobSub NO-LOCK WHERE
+            MobSub.CustNum      EQ iiCustNum      AND
+            MobSub.MultiSimId   EQ 0                   AND
+            MobSub.MultiSimtype EQ 0                   AND
+            (MobSub.MsStatus    EQ {&MSSTATUS_ACTIVE}  OR
+             MobSub.MsStatus    EQ {&MSSTATUS_BARRED}):
+
+      IF NOT fCLITypeAllowedForExtraLine(MobSub.CLIType, icNewCLIType)
+      THEN NEXT.
+
+      RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
 &ENDIF
