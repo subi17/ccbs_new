@@ -31,6 +31,7 @@ Syst.Var:katun = "Newton".
 {Func/fcharge_comp_loaded.i}
 {Syst/tmsconst.i}
 {Func/profunc.i}
+{Func/extralinefunc.i}
 
 /* Input parameters */
 DEF VAR pcTenant             AS CHAR NO-UNDO.
@@ -132,6 +133,9 @@ IF NOT AVAILABLE mobsub THEN
 
 /* Set the Syst.Var:katun to check correct barring */
 Syst.Var:katun = "NewtonAd".
+
+IF NOT fSTCPossible(MobSub.CustNum, pcCliType)
+THEN RETURN appl_err("Mainline not available for the La Duo").
 
 /* Various validations */
 IF fValidateMobTypeCh(
