@@ -33,142 +33,6 @@ FUNCTION fCalcDPMemberValidTo RETURNS DATE
     
 END FUNCTION.
 
-FUNCTION fCloseIncompatibleDiscounts RETURNS LOGICAL
-   ( iiMSSeq        AS INTEGER,
-     icDiscountPlan AS CHARACTER ):
-
-   DEFINE BUFFER TMSRelation FOR TMSRelation.
-
-   FOR EACH TMSRelation NO-LOCK USE-INDEX ParentValue WHERE
-            TMSRelation.TableName   = "DiscountPlan"   AND
-            TMSRelation.KeyType     = "Compatibility"  AND
-            TMSRelation.ParentValue = icDiscountPlan:
-
-      /* We need to close every discount for the MobSub
-         which are not allowed to exists the same time
-         as the new discount */
-      IF TMSRelation.RelationType EQ "ParentValue"
-      THEN DO:
-         IF fCloseDiscount(TMSRelation.ChildValue, /* The dpruleid to close */
-                           iiMsSeq,
-                           /* last day of the previous month */)
-         THEN /* do some memo etc. */
-      END.
-   END.
-   
-   FINALLY:
-      IF llDoEvent
-      THEN fCleanEventObjects().
-   END FINALLY.
-
-END FUNCTION.
-
-/* Function checks is the discount allowed for the mobsub.
-   It might not be if it is not compatible with the existing
-   discounts */
-FUNCTION fDiscountAllowed RETURNS LOGICAL
-   ( iiMSSeq        AS INTEGER,
-     icDiscountPlan AS CHARACTER,
-     idaDate        AS DATE ):
-
-   DEFINE BUFFER TMSRelation FOR TMSRelation.
-   DEFINE BUFFER DiscountPlan FOR DiscountPlan.
-   DEFINE BUFFER DPMember FOR DPMember.
-
-   FOR
-      EACH TMSRelation NO-LOCK USE-INDEX ParentValue WHERE
-         TMSRelation.TableName    = "DiscountPlan"   AND
-         TMSRelation.KeyType      = "Compatibility"  AND
-         TMSRelation.ParentValue  = icDiscountPlan   AND
-         TMSRelation.RelationType = "ChildValue",
-      FIRST DiscountPlan NO-LOCK WHERE
-         DiscountPlan.Brand = Syst.Var:gcBrand AND
-         DiscountPlan.DPRuleID = TMSRelation.ChildValue,
-      FIRST DPMember WHERE
-         DPMember.DPId = DiscountPlan.DPId    AND
-         DPMember.HostTable = "MobSub"        AND
-         DPMember.KeyValue  = STRING(iiMsSeq) AND
-         DPMember.ValidTo  >= idaDate         AND
-         DPMember.ValidFrom <= idaDate:
-            
-      RETURN FALSE.
-   END.
-   
-   RETURN TRUE.
-
-END FUNCTION.
-
-FUNCTION fAddDiscountPlanMember RETURNS CHARACTER
-   (INPUT iiMsSeq           AS INT,
-    INPUT icDiscountPlan    AS CHAR,
-    INPUT idDiscountAmt     AS DEC,
-    INPUT idaFromDate       AS DATE,
-    INPUT idaToDate         AS DATE,
-    INPUT iiDiscountPeriods AS INT,
-    INPUT iiOrderId         AS INT):
-
-   DEF VAR ldValidTo AS DATE NO-UNDO.
-
-   DEF BUFFER MobSub FOR MobSub.
-   DEF BUFFER DiscountPlan FOR DiscountPlan.
-   DEF BUFFER DPMember FOR DPMember.
-
-   FIND FIRST MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
-   IF NOT AVAILABLE MobSub
-   THEN RETURN "ERROR: Subscription not available".
-
-   FIND FIRST DiscountPlan WHERE
-              DiscountPlan.Brand = Syst.Var:gcBrand AND
-              DiscountPlan.DPRuleID = icDiscountPlan NO-LOCK NO-ERROR.
-   IF NOT AVAILABLE DiscountPlan
-   THEN RETURN "ERROR: Unknown Discount Plan".
-
-   IF idaToDate NE ?
-   THEN ldValidTo = idaToDate.
-   ELSE ldValidTo = fCalcDPMemberValidTo(idaFromDate,iiDiscountPeriods).
-
-   FIND FIRST DPMember WHERE
-              DPMember.DPId = DiscountPlan.DPId AND
-              DPMember.HostTable = "MobSub" AND
-              DPMember.KeyValue  = STRING(iiMsSeq) AND
-              DPMember.ValidTo >= idaFromDate AND
-              DPMember.ValidFrom <= idaFromDate NO-LOCK NO-ERROR.
-   IF AVAILABLE DPMember
-   THEN DO:
-      IF fCloseDiscount(DiscountPlan.DPRuleID, /* The dpruleid to close */
-                        iiMsSeq,
-                        DATE(MONTH(idaFromDate), 1, YEAR(idaFromDate)) - 1) /* last day of the previous month */
-      THEN Func.Common:mWriteMemo("MobSub",
-                                  STRING(MobSub.MsSeq),
-                                  Order.CustNum,
-                    lcMemoTitle,
-                    lcMemoText).      
-      RETURN "ERROR: Discount Plan Member already exists".
-   END.
-   
-
-   IF idDiscountAmt > 0 THEN DO:
-      
-      IF ldValidTo EQ ? THEN 
-         ldValidTo = 12/31/49.
-      
-      CREATE DPMember.
-      ASSIGN 
-         DPMember.DPMemberID = NEXT-VALUE(DPMemberID)
-         DPMember.DPId      = DiscountPlan.DPId
-         DPMember.HostTable = "MobSub" 
-         DPMember.KeyValue  = STRING(MobSub.MsSeq) 
-         DPMember.ValidFrom = idaFromDate
-         DPMember.ValidTo   = ldValidTo
-         DPMember.DiscValue = idDiscountAmt
-         DPMember.OrderId   = iiOrderId.
-   END. /* IF idDiscountAmt > 0 THEN DO: */
-
-   RETURN "".
-
-END FUNCTION. /* fAddDiscountPlanMember */
-
-
 FUNCTION fCloseDiscount RETURNS LOGICAL
    (icDiscountPlan AS CHAR,
     iiMsSeq        AS INT,
@@ -241,6 +105,156 @@ FUNCTION fCloseDPMember RETURNS LOGICAL
    END FINALLY.
 
 END FUNCTION.
+
+FUNCTION fCloseIncompatibleDiscounts RETURNS LOGICAL
+   ( iiMSSeq        AS INTEGER,
+     icDiscountPlan AS CHARACTER,
+     idaDate        AS DATE ):
+
+   DEFINE BUFFER TMSRelation FOR TMSRelation.
+
+   FOR EACH TMSRelation NO-LOCK USE-INDEX ParentValue WHERE
+            TMSRelation.TableName   = "DiscountPlan"   AND
+            TMSRelation.KeyType     = "Compatibility"  AND
+            TMSRelation.ParentValue = icDiscountPlan:
+
+      /* We need to close every discount for the MobSub
+         which are not allowed to exists the same time
+         as the new discount */
+      IF TMSRelation.RelationType EQ "ParentValue"
+      THEN DO:
+         IF fCloseDiscount(TMSRelation.ChildValue, /* The dpruleid to close */
+                           iiMsSeq,
+                           idaDate)
+         THEN Func.Common:mWriteMemo("MobSub",
+                                     STRING(MobSub.MsSeq),
+                                     MobSub.CustNum,
+                                     "Automatic discount plan member closing",
+                                     SUBSTITUTE("Closing the existing discount plan member &1 to date &2 as it is not compatible with &3",
+                                                TMSRelation.ChildValue,
+                                                idaDate,
+                                                icDiscountPlan)).
+      END.
+   END.
+   
+   FINALLY:
+      IF llDoEvent
+      THEN fCleanEventObjects().
+   END FINALLY.
+
+END FUNCTION.
+
+/* Function checks is the discount allowed for the mobsub.
+   It might not be if it is not compatible with the existing
+   discounts */
+FUNCTION fDiscountAllowed RETURNS LOGICAL
+   ( iiMSSeq        AS INTEGER,
+     icDiscountPlan AS CHARACTER,
+     idaDate        AS DATE ):
+
+   DEFINE BUFFER TMSRelation FOR TMSRelation.
+   DEFINE BUFFER DiscountPlan FOR DiscountPlan.
+   DEFINE BUFFER DPMember FOR DPMember.
+
+   FOR
+      EACH TMSRelation NO-LOCK USE-INDEX ParentValue WHERE
+         TMSRelation.TableName    = "DiscountPlan"   AND
+         TMSRelation.KeyType      = "Compatibility"  AND
+         TMSRelation.ParentValue  = icDiscountPlan   AND
+         TMSRelation.RelationType = "ChildValue",
+      FIRST DiscountPlan NO-LOCK WHERE
+         DiscountPlan.Brand = Syst.Var:gcBrand AND
+         DiscountPlan.DPRuleID = TMSRelation.ChildValue,
+      FIRST DPMember WHERE
+         DPMember.DPId = DiscountPlan.DPId    AND
+         DPMember.HostTable = "MobSub"        AND
+         DPMember.KeyValue  = STRING(iiMsSeq) AND
+         DPMember.ValidTo  >= idaDate         AND
+         DPMember.ValidFrom <= idaDate:
+            
+      RETURN FALSE.
+   END.
+   
+   RETURN TRUE.
+
+END FUNCTION.
+
+FUNCTION fAddDiscountPlanMember RETURNS CHARACTER
+   (INPUT iiMsSeq           AS INT,
+    INPUT icDiscountPlan    AS CHAR,
+    INPUT idDiscountAmt     AS DEC,
+    INPUT idaFromDate       AS DATE,
+    INPUT idaToDate         AS DATE,
+    INPUT iiDiscountPeriods AS INT,
+    INPUT iiOrderId         AS INT):
+
+   DEF VAR ldValidTo AS DATE NO-UNDO.
+
+   IF NOT idDiscountAmt > 0
+   THEN RETURN "ERROR: Discount member value must be greater than zero".
+
+   DEF BUFFER MobSub FOR MobSub.
+   DEF BUFFER DiscountPlan FOR DiscountPlan.
+   DEF BUFFER DPMember FOR DPMember.
+
+   FIND FIRST MobSub WHERE MobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR.
+   IF NOT AVAILABLE MobSub
+   THEN RETURN "ERROR: Subscription not available".
+
+   FIND FIRST DiscountPlan WHERE
+              DiscountPlan.Brand = Syst.Var:gcBrand AND
+              DiscountPlan.DPRuleID = icDiscountPlan NO-LOCK NO-ERROR.
+   IF NOT AVAILABLE DiscountPlan
+   THEN RETURN "ERROR: Unknown Discount Plan".
+
+   IF idaToDate NE ?
+   THEN ldValidTo = idaToDate.
+   ELSE ldValidTo = fCalcDPMemberValidTo(idaFromDate,iiDiscountPeriods).
+
+   FIND FIRST DPMember WHERE
+              DPMember.DPId = DiscountPlan.DPId AND
+              DPMember.HostTable = "MobSub" AND
+              DPMember.KeyValue  = STRING(iiMsSeq) AND
+              DPMember.ValidTo >= idaFromDate AND
+              DPMember.ValidFrom <= idaFromDate NO-LOCK NO-ERROR.
+   IF AVAILABLE DPMember
+   THEN DO:
+      IF fCloseDPMember(DPMember.DPMember,
+                        DATE(MONTH(idaFromDate), 1, YEAR(idaFromDate)) - 1) /* last day of the previous month */
+      THEN Func.Common:mWriteMemo("MobSub",
+                                  STRING(MobSub.MsSeq),
+                                  MobSub.CustNum,
+                                  "Discount plan member reset",
+                                  SUBSTITUTE("Resetting the discount plan member &1 to start from date &2.",
+                                             icDiscountPlan,
+                                             idaFromDate)).
+   END.
+   ELSE DO:
+      IF NOT fDiscountAllowed(MobSub.MsSeq, icDiscountPlan, idaFromDate)
+      THEN RETURN SUBSTITUTE("ERROR: Discount &1 is not allowed due to incompatibility rules", icDiscountPlan).
+      fCloseIncompatibleDiscounts(MobSub.MsSeq, icDiscountPlan, DATE(MONTH(idaFromDate), 1, YEAR(idaFromDate)) - 1).
+   END.
+
+   IF idDiscountAmt > 0 THEN DO:
+      
+      IF ldValidTo EQ ? THEN 
+         ldValidTo = 12/31/49.
+      
+      CREATE DPMember.
+      ASSIGN 
+         DPMember.DPMemberID = NEXT-VALUE(DPMemberID)
+         DPMember.DPId      = DiscountPlan.DPId
+         DPMember.HostTable = "MobSub" 
+         DPMember.KeyValue  = STRING(MobSub.MsSeq) 
+         DPMember.ValidFrom = idaFromDate
+         DPMember.ValidTo   = ldValidTo
+         DPMember.DiscValue = idDiscountAmt
+         DPMember.OrderId   = iiOrderId.
+   END. /* IF idDiscountAmt > 0 THEN DO: */
+
+   RETURN "".
+
+END FUNCTION. /* fAddDiscountPlanMember */
 
 FUNCTION fCreateAddLineDiscount RETURNS CHARACTER
    (iiMsSeq    AS INT,
