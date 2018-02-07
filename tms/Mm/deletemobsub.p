@@ -422,7 +422,7 @@ PROCEDURE pTerminate:
 
                Func.Common:mWriteMemo("Customer",
                           STRING(Mobsub.CustNum),
-                          (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0)m
+                          (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0),
                           "DSS Bundle/UPSELL",
                           "DSS Bundle/UPSELL is transferred from Subs.Id " +
                           STRING(MobSub.MsSeq) + " to Subs. Id " +
@@ -662,8 +662,8 @@ PROCEDURE pTerminate:
 
       Func.Common:mWriteMemo("Customer",
                  STRING(Mobsub.CustNum),
-                 "Periodical Contract",
                  (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0),
+                 "Periodical Contract",
                  ttContract.DCEvent +
                  ": Terminated along with the subscription" +
                  (IF lcError > ""
