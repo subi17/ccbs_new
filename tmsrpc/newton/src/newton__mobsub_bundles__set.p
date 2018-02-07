@@ -400,18 +400,18 @@ DO:
       pcBundleId EQ "DSS_UPSELL" OR
       pcBundleId EQ "DSS2_UPSELL" THEN
        ASSIGN 
-           lcMemoText = IF INDEX(Daycampaign.DCName,"Ampliación") > 0 THEN 
+           lcMemoText = IF INDEX(Daycampaign.DCName,"Ampliaciï¿½n") > 0 THEN 
                             DayCampaign.DCName  + " - " + lcOnOff
                         ELSE
-                            "Ampliación " + DayCampaign.DCName + " - " + lcOnOff
+                            "Ampliaciï¿½n " + DayCampaign.DCName + " - " + lcOnOff
            lcMemoTitle = DayCampaign.DCName.
    ELSE 
        ASSIGN 
            lcMemoText = pcReason + " " + 
-                        IF INDEX(Daycampaign.DCName,"Ampliación") > 0 THEN
+                        IF INDEX(Daycampaign.DCName,"Ampliaciï¿½n") > 0 THEN
                            DayCampaign.DCName + " - " + lcOnOff
                         ELSE
-                           "Ampliación " + DayCampaign.DCName + " - " + lcOnOff
+                           "Ampliaciï¿½n " + DayCampaign.DCName + " - " + lcOnOff
            lcMemoTitle = DayCampaign.DCName.
 END.
 ELSE 
@@ -427,13 +427,18 @@ DO:
    lcReturnValue = "activations".
 END.
 
-Func.Common:mWriteMemoWithType("MobSub",                             /* HostTable */
-                 STRING(Mobsub.MsSeq),                 /* KeyValue  */
-                 MobSub.CustNum,                       /* CustNum   */
-                 lcMemoTitle,                          /* MemoTitle */
-                 lcMemoText,                           /* MemoText  */
-                 "Service",                            /* MemoType  */
-                 Syst.Var:katun).
+IF NOT (LOOKUP(MobSub.CliType,"CONTFH129_1000,CONTDSL99,CONTFH99_50,CONTFH109_300") > 0 AND
+        pcBundleId = "FLEX_UPSELL") THEN DO:
+
+   Func.Common:mWriteMemoWithType("MobSub",             /* HostTable */
+                  STRING(Mobsub.MsSeq),                 /* KeyValue  */
+                  MobSub.CustNum,                       /* CustNum   */
+                  lcMemoTitle,                          /* MemoTitle */
+                  lcMemoText,                           /* MemoText  */
+                  "Service",                            /* MemoType  */
+                  Syst.Var:katun).
+
+END.
 
 lcResultStruct = add_struct(response_toplevel_id, "").
 add_int(lcResultStruct,lcReturnValue,liReturnValue).
