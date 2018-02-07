@@ -33,13 +33,15 @@ FUNCTION fCheckBundleFMItem RETURNS LOGICAL
     RETURN FALSE.
 END FUNCTION. 
 
-FOR EACH MobSub NO-LOCK WHERE MobSub.MsStatus = 4 :
+FOR EACH MobSub NO-LOCK WHERE MobSub.Brand = "1" :
+    IF NOT ( MobSub.MsStatus = 4 OR MobSub.MsStatus = 8 OR MobSub.MsStatus = 16) THEN NEXT.
     FIND cliType WHERE clitype.clitype = MobSub.CliType NO-LOCK NO-ERROR.
     IF NOT AVAILABLE CLIType THEN NEXT.
     FOR EACH Fixedfee WHERE 
              Fixedfee.brand     = MobSub.Brand AND 
              Fixedfee.hosttable = "mobsub"     AND 
-             Fixedfee.keyvalue  = STRING(MobSub.MsSeq) NO-LOCK:
+             Fixedfee.keyvalue  = STRING(MobSub.MsSeq) AND 
+             FixedFee.EndPeriod >= INTEGER( STRING(YEAR(TODAY) ,"9999") + STRING(MONTH(TODAY),"99") )NO-LOCK:
        lisMainBundleMF = fCheckBundleFMItem (FixedFee.Brand , FixedFee.FeeModel ,FixedFee.BillCode , CLIType.Clitype ) .
        IF NOT lisMainBundleMF AND CLIType.BaseBundle NE "" THEN 
             lisMainBundleMF = fCheckBundleFMItem (FixedFee.Brand , FixedFee.FeeModel ,FixedFee.BillCode , CLIType.BaseBundle ) .
