@@ -30,7 +30,8 @@ q = s.masmovil.Update_Fixed_status({
          "Status":var2,
          "StatusDescription": "hello",
          "lastDate": updtime.isoformat(),
-         "additionalInfo": var3
+         "additionalInfo": {  "canDS":var3
+         }
    }
 
 })
