@@ -51,8 +51,7 @@ FUNCTION fCloseIncompatibleDiscounts RETURNS LOGICAL
       THEN DO:
          IF fCloseDiscount(TMSRelation.ChildValue, /* The dpruleid to close */
                            iiMsSeq,
-                           /* last day of the previous month */,
-                           NO)
+                           /* last day of the previous month */)
          THEN /* do some memo etc. */
       END.
    END.
@@ -135,7 +134,18 @@ FUNCTION fAddDiscountPlanMember RETURNS CHARACTER
               DPMember.ValidTo >= idaFromDate AND
               DPMember.ValidFrom <= idaFromDate NO-LOCK NO-ERROR.
    IF AVAILABLE DPMember
-   THEN RETURN "ERROR: Discount Plan Member already exists".
+   THEN DO:
+      IF fCloseDiscount(DiscountPlan.DPRuleID, /* The dpruleid to close */
+                        iiMsSeq,
+                        DATE(MONTH(idaFromDate), 1, YEAR(idaFromDate)) - 1) /* last day of the previous month */
+      THEN Func.Common:mWriteMemo("MobSub",
+                                  STRING(MobSub.MsSeq),
+                                  Order.CustNum,
+                    lcMemoTitle,
+                    lcMemoText).      
+      RETURN "ERROR: Discount Plan Member already exists".
+   END.
+   
 
    IF idDiscountAmt > 0 THEN DO:
       
@@ -162,12 +172,17 @@ END FUNCTION. /* fAddDiscountPlanMember */
 FUNCTION fCloseDiscount RETURNS LOGICAL
    (icDiscountPlan AS CHAR,
     iiMsSeq        AS INT,
-    idaEndDate     AS DATE,
-    ilCleanEventObjects AS LOG):
+    idaEndDate     AS DATE):
 
    DEFINE VARIABLE llDiscountClosed AS LOGICAL INITIAL FALSE NO-UNDO.
    DEF BUFFER DiscountPlan FOR DiscountPlan.
    DEF BUFFER DPMember FOR DPMember.
+
+   IF llDoEvent THEN DO:
+      lhDPMember = BUFFER DPMember:HANDLE.
+      /* This also calls StarEventInitialize */
+      RUN StarEventSetOldBuffer(lhDPMember).
+   END.
 
    FOR FIRST DiscountPlan WHERE
              DiscountPlan.Brand    = Syst.Var:gcBrand AND
@@ -180,28 +195,26 @@ FUNCTION fCloseDiscount RETURNS LOGICAL
              DPMember.ValidTo  >= DPMember.ValidFrom EXCLUSIVE-LOCK:
       
       /* Log DPMember modification */
-      IF llDoEvent THEN DO:
-         lhDPMember = BUFFER DPMember:HANDLE.
-         RUN StarEventInitialize(lhDPMember).
-         RUN StarEventSetOldBuffer(lhDPMember).
-      END.
       DPMember.ValidTo = idaEndDate.
-      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhDPMember).
+
+      IF llDoEvent
+      THEN RUN StarEventMakeModifyEvent(lhDPMember).
+
       llDiscountClosed = TRUE.
    END. /* FOR FIRST DiscountPlan WHERE */
 
-   IF llDoEvent AND
-      ilCleanEventObjects THEN
-      fCleanEventObjects().
-
    RETURN llDiscountClosed.
+
+   FINALLY:
+      IF llDoEvent 
+      THEN fCleanEventObject(lhDPMember).
+   END FINALLY.
 
 END FUNCTION.
 
 FUNCTION fCloseDPMember RETURNS LOGICAL
    (iiDPMemberID   AS INTEGER,
-    idaEndDate     AS DATE,
-    ilCleanEventObjects AS LOG):
+    idaEndDate     AS DATE):
 
    DEF BUFFER DPMember FOR DPMember.
 
@@ -212,19 +225,20 @@ FUNCTION fCloseDPMember RETURNS LOGICAL
       /* Log DPMember modification */
       IF llDoEvent THEN DO:
          lhDPMember = BUFFER DPMember:HANDLE.
-         RUN StarEventInitialize(lhDPMember).
+         /* This also calls StarEventInitialize */
          RUN StarEventSetOldBuffer(lhDPMember).
       END.
       DPMember.ValidTo = idaEndDate.
-      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhDPMember).      
-
-      IF llDoEvent AND
-         ilCleanEventObjects THEN
-         fCleanEventObjects().
+      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhDPMember).
    END.
    ELSE RETURN FALSE.
 
    RETURN TRUE.
+
+   FINALLY:
+      IF llDoEvent
+      THEN fCleanEventObject(lhDPMember).
+   END FINALLY.
 
 END FUNCTION.
 
@@ -252,8 +266,7 @@ FUNCTION fCreateAddLineDiscount RETURNS CHARACTER
 
       fCloseDiscount(DiscountPlan.DPRuleID,
                      iiMsSeq,
-                     idtDate - 1,
-                     FALSE).
+                     idtDate - 1).
 
       lcResult = fAddDiscountPlanMember(iiMsSeq,
                                          DiscountPlan.DPRuleID,
@@ -287,8 +300,7 @@ FUNCTION fCreateExtraLineDiscount RETURNS CHARACTER
 
       fCloseDiscount(DiscountPlan.DPRuleID,
                      iExtraLineMsSeq,
-                     idtDate - 1,
-                     FALSE).
+                     idtDate - 1).
 
       lcResult = fAddDiscountPlanMember(iExtraLineMsSeq,
                                          DiscountPlan.DPRuleID,
@@ -319,8 +331,7 @@ FUNCTION fCloseExtraLineDiscount RETURNS LOGICAL
 
       fCloseDiscount(DiscountPlan.DPRuleID,
                      iExtraLineMsSeq,
-                     idtDate - 1,
-                     FALSE).
+                     idtDate - 1).
 
    END. 
 

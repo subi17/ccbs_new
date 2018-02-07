@@ -315,8 +315,7 @@ PROCEDURE pFinalize:
                                DPSubject.ValidTo   >= ldaActivationDate)
          THEN DO TRANS:
             fCloseDPMember(DPMember.DPMemberID,
-                           ldaActivationDate - 1,
-                           NO).
+                           ldaActivationDate - 1).
          END.
       END.
 

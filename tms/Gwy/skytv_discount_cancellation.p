@@ -3,7 +3,6 @@ Syst.Var:katun = "Cron".
 Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/log.i}
-{Func/memo.i}
 {Func/cparam2.i}
 {Mc/orderfusion.i}
 {Func/orderfunc.i}
@@ -43,8 +42,7 @@ PROCEDURE pProcessRequests:
         IF lcDiscPlan > ""
         THEN fCloseDiscount(lcDiscPlan,
                             TPService.MsSeq,
-                            TODAY,
-                            NO).
+                            TODAY).
 
         ASSIGN 
             TPService.VoucherStatus   = "Cancelled"

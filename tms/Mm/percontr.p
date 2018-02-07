@@ -2477,8 +2477,7 @@ PROCEDURE pContractTermination:
           IF AVAIL DiscountPlan THEN                                    
               fCloseDiscount(DiscountPlan.DPRuleID,
                              MsRequest.MsSeq,
-                             ldtActDate,
-                             FALSE). /* clean event logs */
+                             ldtActDate).
       END.
 
       /* Close iphone discounts */
@@ -2506,8 +2505,7 @@ PROCEDURE pContractTermination:
                    ldContractEndDate <= ldtActDate THEN NEXT.
 
                 fCloseDPMember(DPMember.DPMemberID,
-                               DPMember.ValidFrom - 1,
-                               NO).
+                               DPMember.ValidFrom - 1).
 
             END. /* FOR FIRST DiscountPlan WHERE */
          END. /* DO i = 1 to NUM-ENTRIES(lcIPhoneDiscountRuleIds): */
@@ -2814,8 +2812,7 @@ PROCEDURE pContractTermination:
       WHEN "CONTS30" THEN DO:
          fCloseDiscount("CONTS30DISC",
                         MsRequest.MsSeq,
-                        ldtActDate,
-                        FALSE). /* clean event logs */
+                        ldtActDate).
       END.
    END CASE. /* CASE lcDCEvent: */
 
@@ -2847,8 +2844,7 @@ PROCEDURE pContractTermination:
             IF AVAILABLE DiscountPlan THEN 
                llgResult = fCloseDiscount(DiscountPlan.DPRuleId,
                                           MsRequest.MsSeq,
-                                          ldtActDate,
-                                          FALSE).            
+                                          ldtActDate).
          END.
       END.
           

@@ -94,8 +94,7 @@ DO liCount = 1 to NUM-ENTRIES(lcIPhoneDiscountRuleIds):
          /* Close Discount if invoice is unpaid */
          IF Invoice.PaymState <> 2 THEN DO:
             fCloseDPMember(DPMember.DPMemberID,
-                           DPMember.ValidFrom - 1,
-                           NO).
+                           DPMember.ValidFrom - 1).
 
             PUT STREAM sout UNFORMATTED
                 MobSub.CLI              lcDelim

@@ -3,7 +3,6 @@ Syst.Var:katun = "Cron".
 Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/log.i}
-{Func/memo.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Func/fmakemsreq.i}
@@ -64,8 +63,7 @@ PROCEDURE pUpdateStatus:
         IF lcDiscPlan > ""
         THEN fCloseDiscount(lcDiscPlan,
                             TPService.MsSeq,
-                            TPService.VoucherCancelDt,
-                            NO).
+                            TPService.VoucherCancelDt).
     END.
 
     RETURN "".

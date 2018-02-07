@@ -209,8 +209,7 @@ REPEAT TRANS:
       END.
 
       fCloseDPMember(DPMember.DPMemberID,
-                     ldaValidFrom - 1,
-                     NO).
+                     ldaValidFrom - 1).
    END.
    
    IF ldDiscount NE 0 THEN DO:

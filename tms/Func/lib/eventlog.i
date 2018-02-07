@@ -694,8 +694,22 @@ FUNCTION fCleanEventObjects RETURNS LOGIC:
    
 END FUNCTION.
 
+/* Cleans out a dynamic temp-table if it is stored */
+FUNCTION fCleanEventObject RETURNS LOGICAL
+   ( ihBuffer AS HANDLE ):
+
+   DEF VAR lii AS INT NO-UNDO.
+
+   lii = LOOKUP(ihBuffer:TABLE,gcEventTableNames).
+
+   IF lii EQ 0
+   THEN RETURN TRUE.
+
+   IF VALID-HANDLE(ghEventSource[lii])
+   THEN DELETE OBJECT ghEventSource[lii].
+
+   RETURN FALSE.
+
+END FUNCTION.
+
 &ENDIF
-
-   
-
-

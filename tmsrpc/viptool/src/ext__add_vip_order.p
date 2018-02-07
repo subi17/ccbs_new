@@ -151,23 +151,6 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
    RETURN TRUE.
 END.
 
-
-FUNCTION fCreateMemo RETURNS LOGICAL (INPUT pcTitle AS CHARACTER,
-   INPUT pcText  AS CHAR, INPUT pcCreUser AS CHAR):
-
-   CREATE Memo.
-   ASSIGN
-      Memo.CreStamp  = {&nowTS}
-      Memo.Brand     = Syst.Var:gcBrand 
-      Memo.HostTable = "Order" 
-      Memo.KeyValue  = STRING(Order.OrderId) 
-      Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = pcCreUser 
-      Memo.MemoTitle = pcTitle
-      Memo.MemoText  = pcText.
-END.
-
-
 FUNCTION fCreateOrderCustomer RETURNS CHARACTER 
      (INPUT pcStructId AS CHARACTER,
       INPUT pcStructFields AS CHARACTER,
@@ -645,9 +628,13 @@ IF get_paramcount(pcContactStruct) GT 0 THEN
 /* mobsub handling */
 IF fOngoingOrders(pcCli,"") THEN DO:
    Order.statuscode = "4".
-   fCreateMemo("Order exists with same MSISDN", 
-               SUBST("Orderid: &1", Order.orderid),
-               "External RPC").
+   Func.Common:mWriteMemoWithType("Order",
+                                  STRING(Order.OrderId),
+                                  0,
+                                  "Order exists with same MSISDN",
+                                  SUBST("Orderid: &1", Order.orderid),
+                                  "",
+                                  "External RPC").
 END.
 
 IF pcNumberType EQ "new" THEN 
