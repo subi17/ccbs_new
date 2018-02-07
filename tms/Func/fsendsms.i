@@ -135,6 +135,9 @@ FUNCTION fReplaceTags RETURNS CHARACTER(INPUT iiMsRequest   AS INTEGER,
              IF INDEX(icSMSText,"#DATE") > 0 THEN
                 icSMSText = REPLACE(icSMSText,"#DATE",STRING(ldaActDate,"99/99/9999")).
 
+             IF INDEX(icSMSText,"#MSISDN") > 0 THEN
+                icSMSText = REPLACE(icSMSText,"#MSISDN",MsRequest.CLI).
+
           END. /* WHEN {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} THEN DO: */
           WHEN {&REQTYPE_CONTRACT_ACTIVATION} OR
           WHEN {&REQTYPE_CONTRACT_TERMINATION} OR 
