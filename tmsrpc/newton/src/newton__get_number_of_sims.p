@@ -66,6 +66,9 @@ FIND FIRST OrderCustomer NO-LOCK WHERE
 IF NOT AVAIL OrderCustomer THEN 
    RETURN appl_err("OrderCustomer not available").
 
+IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) EQ 0 THEN
+   RETURN appl_err("Requested OrderId is not Direct channel order").
+
 lcOrderList = STRING(piOrderId).
 
 IF fIsTerminalOrder(Order.OrderId,
