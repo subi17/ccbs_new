@@ -46,7 +46,7 @@
         {
             "tpservice":
                 {
-                    "": { "-logginglevel": "4" }
+                    "1": { "-logginglevel": "4" }
                 }
         }        
 }
