@@ -94,7 +94,7 @@ form
       HELP "0=Inactive,1=Active,2=Retired,3=Hidden"
       lcStatus NO-LABEL FORMAT "X(15)" 
    DayCampaign.BundleType  
-      HELP "0=Data,1=Voice,2=Base Bundle,3=Others" 
+      HELP "0=undefined, 1=Tariff bundle, 2=Additional bundle (voice or data)" 
       lcBundleType NO-LABEL  FORMAT "X(15)" SKIP
    DayCampaign.DCType        FORMAT "X(1)" COLON 23    
       lcTypeName    NO-LABEL SKIP

@@ -2679,7 +2679,9 @@ PROCEDURE pContractTermination:
       /* YDR-1818 */
       llFMFee = FALSE.
       IF MsRequest.ReqSource  = {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION} AND
-         ( DayCampaign.BundleType NE {&DC_BUNDLE_TYPE_BASE_BUNDLE} )  THEN DO:
+         ( DayCampaign.DCType = {&DCTYPE_SERVICE_PACKAGE} OR
+           DayCampaign.DCType = {&DCTYPE_BUNDLE})                          AND 
+         ( DayCampaign.BundleType NE {&DC_BUNDLE_TYPE_TARIFF} )           THEN DO:
       
          FIND FIRST MobSub NO-LOCK WHERE
                     MobSub.MsSeq = MsRequest.MsSeq NO-ERROR.

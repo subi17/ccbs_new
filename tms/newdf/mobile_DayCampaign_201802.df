@@ -1,0 +1,11 @@
+
+ADD FIELD "BundleType" OF "DayCampaign" AS integer
+  FORMAT ">9"
+  INITIAL "0"
+  LABEL "Bundle Type"
+  MAX-WIDTH 4
+  COLUMN-LABEL "Bundle Type"
+  HELP "Bundle Type"
+  ORDER 400
+
+
