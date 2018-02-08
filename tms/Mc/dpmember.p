@@ -831,9 +831,9 @@ PROCEDURE local-UPDATE-record:
          IF INPUT DPMember.HostTable EQ "MobSub" AND
             AVAILABLE DiscountPlan
          THEN DO:
-            lcResult = fDiscountAllowed(INTEGER(INPUT DPMember.KeyValue),
+            lcResult = fDiscountAllowed(INTEGER(INPUT FRAME lis DPMember.KeyValue),
                                         DiscountPlan.DPRuleID,
-                                        INPUT DPMember.ValidFrom).
+                                        INPUT FRAME lis DPMember.ValidFrom).
             IF lcResult > ""
             THEN DO:
                MESSAGE SUBSTITUTE("The discount is not compatible with &1", lcResult)
@@ -841,11 +841,11 @@ PROCEDURE local-UPDATE-record:
                UNDO, NEXT UpdateMember.
             END.
 
-            lcResult = fCloseIncompatibleDiscounts(INTEGER(INPUT DPMember.KeyValue),
+            lcResult = fCloseIncompatibleDiscounts(INTEGER(INPUT FRAME lis DPMember.KeyValue),
                                                    DiscountPlan.DPRuleID,
-                                                   DATE(MONTH(INPUT DPMember.ValidFrom),
+                                                   DATE(MONTH(INPUT FRAME lis DPMember.ValidFrom),
                                                         1,
-                                                        YEAR(INPUT DPMember.ValidFrom)) - 1,
+                                                        YEAR(INPUT FRAME lis DPMember.ValidFrom)) - 1,
                                                    YES).
             IF lcResult > ""
             THEN DO:
