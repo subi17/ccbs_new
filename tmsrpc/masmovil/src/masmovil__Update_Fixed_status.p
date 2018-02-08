@@ -76,6 +76,7 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 ASSIGN lcAdditionalInfo = get_struct(lcNotificationStatus, "additionalInfo")
    WHEN LOOKUP("additionalInfo", lcStatusFields) > 0 .
 IF gi_xmlrpc_error NE 0 THEN DO:
+   gi_xmlrpc_error = 0.
    ASSIGN lcAdditionalInfo = get_string(lcNotificationStatus, "additionalInfo")
       WHEN LOOKUP("additionalInfo", lcStatusFields) > 0. 
    IF gi_xmlrpc_error NE 0 THEN 
