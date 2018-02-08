@@ -130,9 +130,11 @@ FUNCTION fCloseIncompatibleDiscounts RETURNS CHARACTER
             TMSRelation.TableName    = "DiscountPlan"   AND
             TMSRelation.KeyType      = "Compatibility"  AND
             TMSRelation.ChildValue   = icDiscountPlan   AND
-            TMSRelation.RelationType = "ChildValue"     AND
-            TMSRelation.ToTime      >= NOW              AND
-            TMSRelation.FromTime    <= NOW:
+            TMSRelation.RelationType = "ChildValue":
+
+      IF TMSRelation.ToTime   < NOW OR
+         TMSRelation.FromTime > NOW
+      THEN NEXT.
 
       IF fCloseDiscount(TMSRelation.ParentValue, /* The dpruleid to close */
                         iiMsSeq,
@@ -176,20 +178,25 @@ FUNCTION fDiscountAllowed RETURNS CHARACTER
          TMSRelation.TableName    = "DiscountPlan"   AND
          TMSRelation.KeyType      = "Compatibility"  AND
          TMSRelation.ChildValue   = icDiscountPlan   AND
-         TMSRelation.RelationType = "ParentValue"    AND
-         TMSRelation.ToTime      >= NOW              AND
-         TMSRelation.FromTime    <= NOW,
-      FIRST DiscountPlan NO-LOCK WHERE
-         DiscountPlan.Brand    = Syst.Var:gcBrand AND
-         DiscountPlan.DPRuleID = TMSRelation.ParentValue,
-      FIRST DPMember WHERE
-         DPMember.DPId = DiscountPlan.DPId    AND
-         DPMember.HostTable = "MobSub"        AND
-         DPMember.KeyValue  = STRING(iiMsSeq) AND
-         DPMember.ValidTo  >= idaDate         AND
-         DPMember.ValidFrom <= idaDate:
-            
-      RETURN DiscountPlan.DPRuleID.
+         TMSRelation.RelationType = "ParentValue":
+
+      IF TMSRelation.ToTime   < NOW OR
+         TMSRelation.FromTime > NOW
+      THEN NEXT.
+
+      FOR
+         FIRST DiscountPlan NO-LOCK WHERE
+            DiscountPlan.Brand    = Syst.Var:gcBrand AND
+            DiscountPlan.DPRuleID = TMSRelation.ParentValue,
+         FIRST DPMember NO-LOCK WHERE
+            DPMember.DPId = DiscountPlan.DPId    AND
+            DPMember.HostTable = "MobSub"        AND
+            DPMember.KeyValue  = STRING(iiMsSeq) AND
+            DPMember.ValidTo  >= idaDate         AND
+            DPMember.ValidFrom <= idaDate:
+                  
+         RETURN DiscountPlan.DPRuleID.
+      END.
    END.
    
    RETURN "".
