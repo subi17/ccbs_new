@@ -123,33 +123,33 @@ FUNCTION fCloseIncompatibleDiscounts RETURNS CHARACTER
    DEFINE BUFFER TMSRelation FOR TMSRelation.
    DEFINE VARIABLE lcReturnValue AS CHARACTER NO-UNDO.
 
-   FOR EACH TMSRelation NO-LOCK USE-INDEX ParentValue WHERE
-            TMSRelation.TableName   = "DiscountPlan"   AND
-            TMSRelation.KeyType     = "Compatibility"  AND
-            TMSRelation.ParentValue = icDiscountPlan:
+   /* We need to close every discount for the MobSub
+      which are not allowed to exists the same time
+      as the new discount */
+   FOR EACH TMSRelation NO-LOCK WHERE
+            TMSRelation.TableName    = "DiscountPlan"   AND
+            TMSRelation.KeyType      = "Compatibility"  AND
+            TMSRelation.ChildValue   = icDiscountPlan   AND
+            TMSRelation.RelationType = "ChildValue"     AND
+            TMSRelation.ToTime      >= NOW              AND
+            TMSRelation.FromTime    <= NOW:
 
-      /* We need to close every discount for the MobSub
-         which are not allowed to exists the same time
-         as the new discount */
-      IF TMSRelation.RelationType EQ "ParentValue"
+      IF fCloseDiscount(TMSRelation.ParentValue, /* The dpruleid to close */
+                        iiMsSeq,
+                        idaDate,
+                        ilJustCheck)
       THEN DO:
-         IF fCloseDiscount(TMSRelation.ChildValue, /* The dpruleid to close */
-                           iiMsSeq,
-                           idaDate,
-                           ilJustCheck)
-         THEN DO:
-            lcReturnValue = lcReturnValue + ", " + TMSRelation.ChildValue.
+         lcReturnValue = lcReturnValue + ", " + TMSRelation.ParentValue.
 
-            IF NOT ilJustCheck
-            THEN Func.Common:mWriteMemo("MobSub",
-                                        STRING(MobSub.MsSeq),
-                                        MobSub.CustNum,
-                                        "Automatic discount plan member closing",
-                                        SUBSTITUTE("Closing the existing discount plan member &1 to date &2 as it is not compatible with &3",
-                                                   TMSRelation.ChildValue,
-                                                   idaDate,
-                                                   icDiscountPlan)).
-         END.
+         IF NOT ilJustCheck
+         THEN Func.Common:mWriteMemo("MobSub",
+                                     STRING(MobSub.MsSeq),
+                                     MobSub.CustNum,
+                                     "Automatic discount plan member closing",
+                                     SUBSTITUTE("Closing the existing discount plan member &1 to date &2 as it is not compatible with &3",
+                                                TMSRelation.ParentValue,
+                                                idaDate,
+                                                icDiscountPlan)).
       END.
    END.
    
@@ -175,11 +175,13 @@ FUNCTION fDiscountAllowed RETURNS CHARACTER
       EACH TMSRelation NO-LOCK USE-INDEX ParentValue WHERE
          TMSRelation.TableName    = "DiscountPlan"   AND
          TMSRelation.KeyType      = "Compatibility"  AND
-         TMSRelation.ParentValue  = icDiscountPlan   AND
-         TMSRelation.RelationType = "ChildValue",
+         TMSRelation.ChildValue   = icDiscountPlan   AND
+         TMSRelation.RelationType = "ParentValue"    AND
+         TMSRelation.ToTime      >= NOW              AND
+         TMSRelation.FromTime    <= NOW,
       FIRST DiscountPlan NO-LOCK WHERE
-         DiscountPlan.Brand = Syst.Var:gcBrand AND
-         DiscountPlan.DPRuleID = TMSRelation.ChildValue,
+         DiscountPlan.Brand    = Syst.Var:gcBrand AND
+         DiscountPlan.DPRuleID = TMSRelation.ParentValue,
       FIRST DPMember WHERE
          DPMember.DPId = DiscountPlan.DPId    AND
          DPMember.HostTable = "MobSub"        AND
