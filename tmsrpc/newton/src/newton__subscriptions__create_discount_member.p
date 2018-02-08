@@ -245,16 +245,6 @@ FOR EACH bDiscountPlan NO-LOCK WHERE
    RETURN appl_err("Discount Plan already exists").
 END.
 
-FIND FIRST DPMember WHERE
-           DPMember.DPId = DiscountPlan.DPId AND
-           DPMember.HostTable = "MobSub" AND
-           DPMember.KeyValue  = STRING(MobSub.MsSeq) AND
-           DPMember.ValidTo >= ldaValidFrom AND
-           DPMember.ValidFrom <= ldaValidTo NO-LOCK NO-ERROR.
-
-IF AVAILABLE DPMember THEN
-   RETURN appl_err("Discount Plan already exists").
-
 IF DiscountPlan.DPUnit = "Percentage" THEN
    ldeMaxAmount = DiscountPlan.MaxAmount.
 ELSE ldeMaxAmount = ldeAmount.
