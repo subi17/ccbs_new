@@ -7,7 +7,7 @@ from show_results import *
 # Definition
 s = xmlrpclib.ServerProxy(address)
 def instruction():
-   print "Missing parameter: MSISDN"
+   print "Missing parameter: USER"
    print "Example: python newton_invoices__send_e_invoice.py jannetou"
    sys.exit()
 
