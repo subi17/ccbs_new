@@ -1022,10 +1022,12 @@ PROCEDURE pTerminate:
    IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
       fCloseDiscount(ENTRY(LOOKUP(MobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}),
                      MobSub.MsSeq,
-                     Func.Common:mLastDayOfMonth(TODAY)).
+                     Func.Common:mLastDayOfMonth(TODAY),
+                     NO).
       fCloseDiscount(ENTRY(LOOKUP(MobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_20}),
                      MobSub.MsSeq,
-                     Func.Common:mLastDayOfMonth(TODAY)).
+                     Func.Common:mLastDayOfMonth(TODAY),
+                     NO).
       
       /* Additional Line with mobile only ALFMO-5 */
       IF MONTH(MobSub.ActivationDate) = MONTH(TODAY) AND 
@@ -1037,9 +1039,8 @@ PROCEDURE pTerminate:
 
       fCloseDiscount(ENTRY(LOOKUP(MobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}),
                      MobSub.MsSeq,
-                     ldtCloseDate).
-
-
+                     ldtCloseDate,
+                     NO).
    END.
 
    /* COFF Partial termination */

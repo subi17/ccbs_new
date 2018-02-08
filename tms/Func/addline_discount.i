@@ -16,17 +16,20 @@ FUNCTION fCloseAddLineDiscount RETURNS LOGICAL
    IF NOT fCheckExistingConvergent(Customer.CustIDType,Customer.OrgID,icCLIType) THEN
       fCloseDiscount(ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}),
                      iiMsSeq,
-                     idtDate).
+                     idtDate,
+                     NO).
    IF NOT fCheckExisting2PConvergent(Customer.CustIDType,Customer.OrgID,icCLIType) THEN
       fCloseDiscount(ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_20}),
                      iiMsSeq,
-                     idtDate).
+                     idtDate,
+                     NO).
 
    /* Additional Line with mobile only ALFMO-5 */
    IF NOT fCheckExistingMobileOnly(Customer.CustIDType,Customer.OrgID,icCLIType) THEN
       fCloseDiscount(ENTRY(LOOKUP(icCLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}),
                      iiMsSeq,
-                     idtDate).
+                     idtDate,
+                     NO).
 
    RETURN TRUE.
 

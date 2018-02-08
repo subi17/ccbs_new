@@ -167,68 +167,29 @@ REPEAT WITH FRAME sel:
 
         REPEAT TRANSACTION WITH FRAME lis:
 
-           IF iiDPID EQ 0
-           THEN UNDO add-row, LEAVE add-row.
+           CREATE DPMember.
+           ASSIGN 
+              DPMember.DPMemberID = NEXT-VALUE(DPMemberID)
+              DPMember.DPID       = iiDPID
+              DPMember.HostTable  = icHostTable
+              DPMember.KeyValue   = icKeyValue
+              DPMember.ValidFrom  = TODAY
+              DPMember.ValidTo    = 12/31/2049.
 
-           FIND FIRST DiscountPlan WHERE DiscountPlan.DPID = iiDPID NO-LOCK NO-ERROR.
-           IF NOT AVAILABLE DiscountPlan
-           THEN UNDO add-row, LEAVE add-row.
+           IF iiDPId > 0 THEN DO:
+              FOR FIRST DPRate NO-LOCK WHERE
+                        DPRate.DPId = iiDPId AND
+                        DPRate.ValidTo >= TODAY AND
+                        DPRate.ValidFrom <= TODAY:
+                DpMember.DiscValue = DPRate.DiscValue.
+              END.
 
-           FIND FIRST DPRate NO-LOCK WHERE
-                      DPRate.DPId = iiDPId AND
-                      DPRate.ValidTo >= TODAY AND
-                      DPRate.ValidFrom <= TODAY
-           NO-ERROR.
-
-           IF NOT AVAILABLE DPRate
-           THEN UNDO add-row, LEAVE add-row.
-
-           IF icHostTable EQ "MobSub"
-           THEN DO:
-               lcError = fAddDiscountPlanMember(INTEGER(icKeyValue),
-                                                DiscountPlan.DPRuleID,
-                                                DPRate.DiscValue,
-                                                TODAY,
-                                                ?,
-                                                DiscountPlan.ValidPeriods,
-                                                0).
-               IF lcError > ""
-               THEN UNDO add-row, LEAVE add-row.
-
-               FIND FIRST DPMember EXCLUSIVE-LOCK WHERE
-                          DPMember.DPID      = iiDPID     AND
-                          DPMember.HostTable = "MobSub"   AND
-                          DPMember.KeyValue  = icKeyValue AND
-                          DPMember.ValidFrom = TODAY
-               NO-ERROR.
-               IF NOT AVAILABLE DPMember
-               THEN UNDO add-row, LEAVE add-row.
-           END.
-           ELSE DO:
-               CREATE DPMember.
-               ASSIGN
-                  DPMember.DPMemberID = NEXT-VALUE(DPMemberID)
-                  DPMember.DPID       = iiDPID
-                  DPMember.HostTable  = icHostTable
-                  DPMember.KeyValue   = icKeyValue
-                  DPMember.ValidFrom  = TODAY
-                  DPMember.ValidTo    = 12/31/2049.
-
-               IF iiDPId > 0 THEN DO:
-                  FOR FIRST DPRate NO-LOCK WHERE
-                            DPRate.DPId = iiDPId AND
-                            DPRate.ValidTo >= TODAY AND
-                            DPRate.ValidFrom <= TODAY:
-                    DpMember.DiscValue = DPRate.DiscValue.
-                  END.
-
-                  FIND FIRST DiscountPlan WHERE DiscountPlan.DPID = iiDPID
-                     NO-LOCK.
-                  IF DiscountPlan.ValidPeriods > 0 THEN
-                     DPMember.ValidTo =
-                        fCalcDPMemberValidTo(DPMember.ValidFrom,
-                                             DiscountPlan.ValidPeriods).
-               END.
+              FIND FIRST DiscountPlan WHERE DiscountPlan.DPID = iiDPID 
+                 NO-LOCK.
+              IF DiscountPlan.ValidPeriods > 0 THEN 
+                 DPMember.ValidTo = 
+                    fCalcDPMemberValidTo(DPMember.ValidFrom,
+                                         DiscountPlan.ValidPeriods).
            END.
 
            RUN local-UPDATE-record.
@@ -247,7 +208,7 @@ REPEAT WITH FRAME sel:
            LEAVE.
         END.
       END.  /* ADD-ROW */
-      
+
       HIDE FRAME lis NO-PAUSE.
 
       ASSIGN must-print = TRUE.
@@ -729,7 +690,8 @@ PROCEDURE local-UPDATE-record:
    DEF BUFFER bMember FOR DPMember.
    
    DEF VAR ldaValidTo AS DATE NO-UNDO.
-   DEF VAR lcCLIType  AS CHAR NO-UNDO. 
+   DEF VAR lcCLIType  AS CHAR NO-UNDO.
+   DEFINE VARIABLE lcResult AS CHARACTER NO-UNDO.
 
    REPEAT ON ENDKEY UNDO, LEAVE:
 
@@ -866,6 +828,33 @@ PROCEDURE local-UPDATE-record:
             END.
          END.
        
+         IF INPUT DPMember.HostTable EQ "MobSub" AND
+            AVAILABLE DiscountPlan
+         THEN DO:
+            lcResult = fDiscountAllowed(INTEGER(INPUT DPMember.KeyValue),
+                                        DiscountPlan.DPRuleID,
+                                        INPUT DPMember.ValidFrom).
+            IF lcResult > ""
+            THEN DO:
+               MESSAGE SUBSTITUTE("The discount is not compatible with &1", lcResult)
+               VIEW-AS ALERT-BOX ERROR.
+               UNDO, NEXT UpdateMember.
+            END.
+
+            lcResult = fCloseIncompatibleDiscounts(INTEGER(INPUT DPMember.KeyValue),
+                                                   DiscountPlan.DPRuleID,
+                                                   DATE(MONTH(INPUT DPMember.ValidFrom),
+                                                        1,
+                                                        YEAR(INPUT DPMember.ValidFrom)) - 1,
+                                                   YES).
+            IF lcResult > ""
+            THEN DO:
+               MESSAGE SUBSTITUTE("The discount would close discounts &1. Please do this yourself.", lcResult)
+               VIEW-AS ALERT-BOX ERROR.
+               UNDO, NEXT UpdateMember.
+            END.
+         END.
+
          IF CAN-FIND(FIRST bMember WHERE
                            bMember.DPId = INPUT DPMember.DPId AND
                            bMember.HostTable  = INPUT DPMember.HostTable  AND

@@ -349,7 +349,8 @@ IF (llDeviceStart AND llDeviceScreen) OR
 
          fCloseDiscount(DiscountPlan.DPRuleId,
                         MobSub.MsSeq,
-                        DPMember.ValidFrom - 1).
+                        DPMember.ValidFrom - 1,
+                        NO).
       END.
    END.
 

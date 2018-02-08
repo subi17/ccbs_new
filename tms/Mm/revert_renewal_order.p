@@ -621,7 +621,8 @@ PROCEDURE pCloseQ25Discount:
 
    fCloseDiscount(DiscountPlan.DPRuleID,
      MobSub.MsSeq,
-     dpmember.ValidFrom - 1).
+     dpmember.ValidFrom - 1,
+     NO).
       
    RETURN "". 
 

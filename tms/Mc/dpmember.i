@@ -36,13 +36,14 @@ END FUNCTION.
 FUNCTION fCloseDiscount RETURNS LOGICAL
    (icDiscountPlan AS CHAR,
     iiMsSeq        AS INT,
-    idaEndDate     AS DATE):
+    idaEndDate     AS DATE,
+    ilJustCheck    AS LOGICAL):
 
    DEFINE VARIABLE llDiscountClosed AS LOGICAL INITIAL FALSE NO-UNDO.
    DEF BUFFER DiscountPlan FOR DiscountPlan.
    DEF BUFFER DPMember FOR DPMember.
 
-   IF llDoEvent THEN DO:
+   IF llDoEvent AND NOT ilJustCheck THEN DO:
       lhDPMember = BUFFER DPMember:HANDLE.
       /* This also calls StarEventInitialize */
       RUN StarEventSetOldBuffer(lhDPMember).
@@ -56,13 +57,20 @@ FUNCTION fCloseDiscount RETURNS LOGICAL
              DPMember.HostTable = "MobSub"          AND
              DPMember.KeyValue  = STRING(iiMsSeq)   AND
              DPMember.ValidTo   > idaEndDate        AND
-             DPMember.ValidTo  >= DPMember.ValidFrom EXCLUSIVE-LOCK:
+             DPMember.ValidTo  >= DPMember.ValidFrom NO-LOCK:
       
-      /* Log DPMember modification */
-      DPMember.ValidTo = idaEndDate.
+      IF NOT ilJustCheck
+      THEN DO TRANSACTION:
+         BUFFER DPMember:FIND-CURRENT(EXCLUSIVE-LOCK).
 
-      IF llDoEvent
-      THEN RUN StarEventMakeModifyEvent(lhDPMember).
+         /* Log DPMember modification */
+         DPMember.ValidTo = idaEndDate.
+
+         IF llDoEvent
+         THEN RUN StarEventMakeModifyEvent(lhDPMember).
+
+         RELEASE DPMember.
+      END.
 
       llDiscountClosed = TRUE.
    END. /* FOR FIRST DiscountPlan WHERE */
@@ -70,7 +78,7 @@ FUNCTION fCloseDiscount RETURNS LOGICAL
    RETURN llDiscountClosed.
 
    FINALLY:
-      IF llDoEvent 
+      IF llDoEvent AND NOT ilJustCheck
       THEN fCleanEventObject(lhDPMember).
    END FINALLY.
 
@@ -106,12 +114,14 @@ FUNCTION fCloseDPMember RETURNS LOGICAL
 
 END FUNCTION.
 
-FUNCTION fCloseIncompatibleDiscounts RETURNS LOGICAL
+FUNCTION fCloseIncompatibleDiscounts RETURNS CHARACTER
    ( iiMSSeq        AS INTEGER,
      icDiscountPlan AS CHARACTER,
-     idaDate        AS DATE ):
+     idaDate        AS DATE,
+     ilJustCheck    AS LOGICAL ):
 
    DEFINE BUFFER TMSRelation FOR TMSRelation.
+   DEFINE VARIABLE lcReturnValue AS CHARACTER NO-UNDO.
 
    FOR EACH TMSRelation NO-LOCK USE-INDEX ParentValue WHERE
             TMSRelation.TableName   = "DiscountPlan"   AND
@@ -125,29 +135,34 @@ FUNCTION fCloseIncompatibleDiscounts RETURNS LOGICAL
       THEN DO:
          IF fCloseDiscount(TMSRelation.ChildValue, /* The dpruleid to close */
                            iiMsSeq,
-                           idaDate)
-         THEN Func.Common:mWriteMemo("MobSub",
-                                     STRING(MobSub.MsSeq),
-                                     MobSub.CustNum,
-                                     "Automatic discount plan member closing",
-                                     SUBSTITUTE("Closing the existing discount plan member &1 to date &2 as it is not compatible with &3",
-                                                TMSRelation.ChildValue,
-                                                idaDate,
-                                                icDiscountPlan)).
+                           idaDate,
+                           ilJustCheck)
+         THEN DO:
+            lcReturnValue = lcReturnValue + ", " + TMSRelation.ChildValue.
+
+            IF NOT ilJustCheck
+            THEN Func.Common:mWriteMemo("MobSub",
+                                        STRING(MobSub.MsSeq),
+                                        MobSub.CustNum,
+                                        "Automatic discount plan member closing",
+                                        SUBSTITUTE("Closing the existing discount plan member &1 to date &2 as it is not compatible with &3",
+                                                   TMSRelation.ChildValue,
+                                                   idaDate,
+                                                   icDiscountPlan)).
+         END.
       END.
    END.
    
-   FINALLY:
-      IF llDoEvent
-      THEN fCleanEventObjects().
-   END FINALLY.
+   RETURN SUBSTRING(lcReturnValue,3).
 
 END FUNCTION.
 
 /* Function checks is the discount allowed for the mobsub.
    It might not be if it is not compatible with the existing
-   discounts */
-FUNCTION fDiscountAllowed RETURNS LOGICAL
+   discounts.
+   The return value is the DPRuleID of the incompatible
+   discount or empty if the discount is allowed */
+FUNCTION fDiscountAllowed RETURNS CHARACTER
    ( iiMSSeq        AS INTEGER,
      icDiscountPlan AS CHARACTER,
      idaDate        AS DATE ):
@@ -172,10 +187,10 @@ FUNCTION fDiscountAllowed RETURNS LOGICAL
          DPMember.ValidTo  >= idaDate         AND
          DPMember.ValidFrom <= idaDate:
             
-      RETURN FALSE.
+      RETURN DiscountPlan.DPRuleID.
    END.
    
-   RETURN TRUE.
+   RETURN "".
 
 END FUNCTION.
 
@@ -188,7 +203,8 @@ FUNCTION fAddDiscountPlanMember RETURNS CHARACTER
     INPUT iiDiscountPeriods AS INT,
     INPUT iiOrderId         AS INT):
 
-   DEF VAR ldValidTo AS DATE NO-UNDO.
+   DEFINE VARIABLE ldValidTo AS DATE      NO-UNDO.
+   DEFINE VARIABLE lcResult  AS CHARACTER NO-UNDO.
 
    IF NOT idDiscountAmt > 0
    THEN RETURN "ERROR: Discount member value must be greater than zero".
@@ -230,9 +246,10 @@ FUNCTION fAddDiscountPlanMember RETURNS CHARACTER
                                              idaFromDate)).
    END.
    ELSE DO:
-      IF NOT fDiscountAllowed(MobSub.MsSeq, icDiscountPlan, idaFromDate)
-      THEN RETURN SUBSTITUTE("ERROR: Discount &1 is not allowed due to incompatibility rules", icDiscountPlan).
-      fCloseIncompatibleDiscounts(MobSub.MsSeq, icDiscountPlan, DATE(MONTH(idaFromDate), 1, YEAR(idaFromDate)) - 1).
+      lcResult = fDiscountAllowed(MobSub.MsSeq, icDiscountPlan, idaFromDate).
+      IF lcResult > ""
+      THEN RETURN SUBSTITUTE("ERROR: Discount &1 is not allowed as it is not compatible with &2", icDiscountPlan, lcResult).
+      fCloseIncompatibleDiscounts(MobSub.MsSeq, icDiscountPlan, DATE(MONTH(idaFromDate), 1, YEAR(idaFromDate)) - 1, NO).
    END.
 
    IF idDiscountAmt > 0 THEN DO:
@@ -280,7 +297,8 @@ FUNCTION fCreateAddLineDiscount RETURNS CHARACTER
 
       fCloseDiscount(DiscountPlan.DPRuleID,
                      iiMsSeq,
-                     idtDate - 1).
+                     idtDate - 1,
+                     NO).
 
       lcResult = fAddDiscountPlanMember(iiMsSeq,
                                          DiscountPlan.DPRuleID,
@@ -314,7 +332,8 @@ FUNCTION fCreateExtraLineDiscount RETURNS CHARACTER
 
       fCloseDiscount(DiscountPlan.DPRuleID,
                      iExtraLineMsSeq,
-                     idtDate - 1).
+                     idtDate - 1,
+                     NO).
 
       lcResult = fAddDiscountPlanMember(iExtraLineMsSeq,
                                          DiscountPlan.DPRuleID,
@@ -345,7 +364,8 @@ FUNCTION fCloseExtraLineDiscount RETURNS LOGICAL
 
       fCloseDiscount(DiscountPlan.DPRuleID,
                      iExtraLineMsSeq,
-                     idtDate - 1).
+                     idtDate - 1,
+                     NO).
 
    END. 
 

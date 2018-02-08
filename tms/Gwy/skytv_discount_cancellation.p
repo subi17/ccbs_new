@@ -42,7 +42,8 @@ PROCEDURE pProcessRequests:
         IF lcDiscPlan > ""
         THEN fCloseDiscount(lcDiscPlan,
                             TPService.MsSeq,
-                            TODAY).
+                            TODAY,
+                            NO).
 
         ASSIGN 
             TPService.VoucherStatus   = "Cancelled"

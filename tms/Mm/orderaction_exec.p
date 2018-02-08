@@ -489,7 +489,8 @@ PROCEDURE pDiscountPlan:
                         OUTPUT lcResult) EQ 0 THEN
          fCloseDiscount(bDiscountPlan.DPRuleID,
                         Order.MsSeq,
-                        TODAY - 1).
+                        TODAY - 1,
+                        NO).
    END.
    
    IF OrderAction.ItemParam > ""

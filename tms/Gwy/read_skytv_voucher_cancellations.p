@@ -63,7 +63,8 @@ PROCEDURE pUpdateStatus:
         IF lcDiscPlan > ""
         THEN fCloseDiscount(lcDiscPlan,
                             TPService.MsSeq,
-                            TPService.VoucherCancelDt).
+                            TPService.VoucherCancelDt,
+                            NO).
     END.
 
     RETURN "".
