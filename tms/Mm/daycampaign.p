@@ -62,6 +62,7 @@ DEF VAR lcEffective   AS CHAR NO-UNDO.
 DEF VAR lcTermFeeCalc AS CHAR NO-UNDO.
 DEF VAR llFirstMonthCalc AS LOG  NO-UNDO.
 DEF VAR lcStatus      AS CHAR NO-UNDO.
+DEF VAR lcBundleType  AS CHAR NO-UNDO.
 
 DEF BUFFER xxDayCampaign FOR DayCampaign.
 DEF BUFFER bBillItem       FOR BillItem.
@@ -91,7 +92,10 @@ form
       DayCampaign.ValidTo  format 99-99-9999 NO-LABEL SKIP
    DayCampaign.StatusCode    COLON 23
       HELP "0=Inactive,1=Active,2=Retired,3=Hidden"
-      lcStatus NO-LABEL FORMAT "X(15)" SKIP
+      lcStatus NO-LABEL FORMAT "X(15)" 
+   DayCampaign.BundleType  
+      HELP "0=Data,1=Voice,2=Base Bundle,3=Others" 
+      lcBundleType NO-LABEL  FORMAT "X(15)" SKIP
    DayCampaign.DCType        FORMAT "X(1)" COLON 23    
       lcTypeName    NO-LABEL SKIP
    DayCampaign.InstanceLimit COLON 23 
@@ -229,6 +233,17 @@ FUNCTION fStatusName RETURNS LOGIC
                                STRING(iiStatusCode)).
 
    DISP lcStatus WITH FRAME lis.
+END FUNCTION.
+
+
+FUNCTION fBundleTypeName RETURNS LOGIC
+   (iiBundleType AS INT):
+
+   lcBundleType = Func.Common:mTMSCodeName("DayCampaign",
+                               "BundleType",
+                               STRING(iiBundleType)).
+
+   DISP lcBundleType WITH FRAME lis.
 END FUNCTION.
 
 
@@ -779,6 +794,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
          DayCampaign.PayType
          DayCampaign.DCName 
          DayCampaign.StatusCode
+         DayCampaign.BundleType
          DayCampaign.DCType
          DayCampaign.InstanceLimit
          DayCampaign.BillCode 
@@ -809,6 +825,7 @@ PROCEDURE LOCAL-UPDATE-RECORD.
       fDurType(DayCampaign.DurType).
       fEffective(DayCampaign.Effective).
       fStatusName(DayCampaign.StatusCode).
+      fBundleTypeName(DayCampaign.BundleType).
 
       IF ilNew THEN Syst.Var:toimi = 1.
       
@@ -865,6 +882,7 @@ PROCEDURE pUpdate:
          DayCampaign.ValidFrom
          DayCampaign.ValidTo
          DayCampaign.StatusCode
+         DayCampaign.BundleType
          DayCampaign.DCType
          DayCampaign.InstanceLimit
          DayCampaign.BillCode 
@@ -1093,6 +1111,16 @@ PROCEDURE pUpdate:
                   NEXT.
                END.
             END.
+            ELSE IF FRAME-FIELD = "BundleType" THEN DO:
+               fBundleTypeName(INPUT INPUT DayCampaign.BundleType).
+               IF lcBundleType = "" THEN DO:
+                  BELL.
+                  MESSAGE "Unknown Bundle Type"
+                  VIEW-AS ALERT-BOX ERROR.
+                  NEXT.
+               END.
+            END.
+            
 
             ELSE IF FRAME-FIELD = "validfrom" THEN DO:
                if input frame lis DayCampaign.ValidFrom  = ? THEN DO:
