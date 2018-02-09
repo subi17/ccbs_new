@@ -31,6 +31,65 @@ IF llDoEvent THEN DO:
    DEFINE VARIABLE lhOrderStatusChange AS HANDLE NO-UNDO.
 END.
 
+/*
+   Function for Digital Signature checks order status and ActionLog. Creates 
+   new ActionLog row with ActionTS = 0. ActionLog will be searched by cron and 
+   ActionTS is set to time value when signature request or signature cancel request
+   has been sent to Adapter (Signature API).
+*/
+FUNCTION fHandleSignature RETURNS CHAR
+   (iiOrderId AS INT /* ,
+    ideOrderDate AS DEC*/):
+   DEF VAR lcStatus AS CHAR NO-UNDO INIT "".
+   DEF VAR lcActionID AS CHAR NO-UNDO INIT "".
+   DEF BUFFER bOrder FOR Order.
+   DEF BUFFER bActionLog FOR ActionLog.
+
+   /* Log() start... */
+
+   FIND FIRST bOrder NO-LOCK WHERE
+              bOrder.Brand EQ Syst.Var:gcBrand AND
+              bOrder.OrderId EQ iiOrderId NO-ERROR.
+   IF NOT AVAIL bOrder THEN
+      RETURN "Error fHandleSignature not found Order, OrderId:" + STRING(iiOrderID).
+
+   IF bOrder.statusCode EQ {&ORDER_STATUS_DELIVERED} THEN
+      lcActionID = "ContractStatusSent".
+   ELSE IF LOOKUP(bOrder.StatusCode, {&ORDER_CLOSE_STATUSES}) > 0 THEN /* 7,8,9 */
+      lcActionID = "ContractStatusCancelled".
+   ELSE
+      /* Log() wrong status */   
+
+   /* Log bActionLog... */
+   FIND FIRST bActionLog NO-LOCK WHERE
+              bActionLog.Brand     = Syst.Var:gcBrand AND
+              bActionLog.TableName = "Order" AND
+              bActionLog.KeyValue  = STRING(bOrder.OrderId) AND
+              bActionLog.ActionID  = lcActionID /* AND
+              bActionLog.ActionTS  = DEC(0)*/ USE-INDEX TableName NO-ERROR.
+   IF NOT AVAIL bActionLog THEN DO:
+      CREATE ActionLog.
+         ASSIGN
+            ActionLog.Brand     = Syst.Var:gcBrand
+            ActionLog.ActionID  = lcActionID
+            ActionLog.ActionTS  = 0
+            ActionLog.TableName = "Order"
+            ActionLog.KeyValue  = STRING(bOrder.OrderId)
+            ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE}.
+
+      /* log() ActionLog... contractId */
+      lcStatus = "".
+   END.
+   ELSE DO:
+      /* Log() error order, contractId ActionLog */
+      lcStatus =  "Error Signature ActionLog already exists, OrderId:" + STRING(bOrder.OrderId).
+   END.
+
+   RETURN lcStatus.
+
+END FUNCTION.
+
+
 /* set status of order */
 FUNCTION fSetOrderStatus RETURNS LOGICAL
    (iOrderId AS INT,
@@ -79,6 +138,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
 
                /* RES-538 Digital Signature for Tienda and Telesales only */
                IF bfOrder.Logistics NE "" AND
+                  bfOrder.ContractID NE "" AND
                   LOOKUP(bfOrder.OrderChannel,
                          "Self,TeleSales") > 0 THEN DO:
                   /* Financed orders cannot be digitally signed */
@@ -88,7 +148,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                                               OUTPUT liMonths,
                                               OUTPUT ldeFinalFee).
                   IF liMonths EQ 0 THEN DO:
-                     /* lcSignatureStatus = fHandleSignature(liOrderId, ldeOrderDate).*/
+                     lcSignatureStatus = fHandleSignature(bfOrder.OrderId /*,ldeOrderDate*/).
                      IF lcSignatureStatus NE "" THEN /* Error */
                         /* fLogLine("", lcStatus + " " + Func.Common:mTS2HMS(ldCurrentTime)).*/
                   END.
