@@ -255,6 +255,7 @@ FUNCTION fAddDiscountPlanMember RETURNS CHARACTER
                                   MobSub.CustNum,
                                   "Discount plan member reset",
                                   lcResult).
+      END.
    END.
    ELSE DO:
       lcResult = fDiscountAllowed(MobSub.MsSeq, icDiscountPlan, idaFromDate).
