@@ -35,7 +35,7 @@ DEF VAR lcRecipient AS CHAR NO-UNDO.
 DEF STREAM sIn. /*1st/Last notification recipients*/
 
 
-FUNCTION fGenerateEmailTemplate RETURNS CHAR
+FUNCTION fGenerateEinvoiceTemplate RETURNS CHAR
    (icTemplate AS CHAR,
     iiMsSeq AS INT,
     icMSISDN AS CHAR,
@@ -94,7 +94,7 @@ IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 
 lcMonitor = fGetRequestNagiosToken(MsRequest.Reqtype).
 
-/* Email Address Conf File */
+/* Address Conf File */
 ASSIGN lcAddrConfDir = fCParamC("RepConfDir")
        lcContConFile = fCParamC("SMSInvContFile")
        /* ie. "32400-79200" Send between 9:00-22:00 */
@@ -155,7 +155,7 @@ FOR EACH Invoice WHERE
                                  5,
                                  OUTPUT ldeActStamp).
 
-         lcTemplate = fGenerateEmailTemplate(lcTemplate,
+         lcTemplate = fGenerateEinvoiceTemplate(lcTemplate,
                                              MobSub.MsSeq,
                                              MobSub.CLI,
                                              Invoice.InvAmt,
@@ -184,7 +184,7 @@ IF lcAddrConfDir + "/smsinvoice.sms" NE ? THEN DO:
       Mm.MManMessage:mClearData().
    END.
 END.
-
+/*
 IF lcAddrConfDir + "/smsinvoice.email" NE ? THEN DO:
    IF Mm.MManMessage:mGetMessage("EMAIL", "EInvMessageDone", 5)EQ TRUE THEN DO:
       INPUT STREAM sIn FROM VALUE(lcAddrConfDir + "/smsinvoice.email").
@@ -195,7 +195,7 @@ IF lcAddrConfDir + "/smsinvoice.email" NE ? THEN DO:
       Mm.MManMessage:mClearData().
    END.
 END.
-
+*/
 
 /* Send an email to configure list*/
 /*TODO: this must be removed because TMS is not aware when last sms is sent.*/
