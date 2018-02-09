@@ -1253,7 +1253,7 @@ PROCEDURE pContractActivation:
                                           1,
                                           bQ25SingleFee.OrderId). /* Q25 OrderId */
          /* write possible error to an order memo */
-         IF lcError > "" THEN
+         IF lcError BEGINS "ERROR" THEN
             Func.Common:mWriteMemo("MobSub",
                              STRING(MsOwner.MsSeq),
                              MsOwner.CustNum,
@@ -1286,7 +1286,7 @@ PROCEDURE pContractActivation:
                                                         ?,
                                                         bf_OfferItem.Periods,
                                                         0).
-                      IF lcErrMsg > "" THEN
+                      IF lcErrMsg BEGINS "ERROR" THEN
                           fReqLog("Failed to add discount for (" + DayCampaign.DCEvent + "). Error: '" + lcErrMsg + "'").
                   END.  /* IF AVAIL OfferItem THEN */
               END.                       

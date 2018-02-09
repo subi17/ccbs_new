@@ -113,7 +113,7 @@ PROCEDURE pUpdateStatus:
                                                                       {&SKYTV-DISCOUNT-PERIOD},
                                                                       0).
 
-                        IF lcErrMsg > "" THEN
+                        IF lcErrMsg BEGINS "ERROR" THEN
                             PUT UNFORMATTED "Customer: '" + ttCustomer.CustomerId + "' with serial number: '" + 
                                                     ttCustomer.SerialNbr + "' failed to activate service: '" + 
                                                     TPService.Product + "' Error: '" + lcErrMsg + "'" SKIP.

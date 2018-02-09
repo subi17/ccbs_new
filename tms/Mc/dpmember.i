@@ -246,19 +246,27 @@ FUNCTION fAddDiscountPlanMember RETURNS CHARACTER
    THEN DO:
       IF fCloseDPMember(DPMember.DPMember,
                         DATE(MONTH(idaFromDate), 1, YEAR(idaFromDate)) - 1) /* last day of the previous month */
-      THEN Func.Common:mWriteMemo("MobSub",
+      THEN DO:
+         lcResult = SUBSTITUTE("Resetting the discount plan member &1 to start from date &2.",
+                               icDiscountPlan,
+                               idaFromDate).
+         Func.Common:mWriteMemo("MobSub",
                                   STRING(MobSub.MsSeq),
                                   MobSub.CustNum,
                                   "Discount plan member reset",
-                                  SUBSTITUTE("Resetting the discount plan member &1 to start from date &2.",
-                                             icDiscountPlan,
-                                             idaFromDate)).
+                                  lcResult).
    END.
    ELSE DO:
       lcResult = fDiscountAllowed(MobSub.MsSeq, icDiscountPlan, idaFromDate).
       IF lcResult > ""
       THEN RETURN SUBSTITUTE("ERROR: Discount &1 is not allowed as it is not compatible with &2", icDiscountPlan, lcResult).
-      fCloseIncompatibleDiscounts(MobSub.MsSeq, icDiscountPlan, DATE(MONTH(idaFromDate), 1, YEAR(idaFromDate)) - 1, NO).
+      lcResult = fCloseIncompatibleDiscounts(MobSub.MsSeq, icDiscountPlan, DATE(MONTH(idaFromDate), 1, YEAR(idaFromDate)) - 1, NO).
+
+      IF lcResult > ""
+      THEN lcResult = SUBSTITUTE("Closed the existing discount plan members &1 to date &2 as they are not compatible with &3",
+                                 lcResult,
+                                 idaFromDate,
+                                 icDiscountPlan).
    END.
 
    IF idDiscountAmt > 0 THEN DO:
@@ -278,7 +286,7 @@ FUNCTION fAddDiscountPlanMember RETURNS CHARACTER
          DPMember.OrderId   = iiOrderId.
    END. /* IF idDiscountAmt > 0 THEN DO: */
 
-   RETURN "".
+   RETURN lcResult.
 
 END FUNCTION. /* fAddDiscountPlanMember */
 
@@ -317,7 +325,7 @@ FUNCTION fCreateAddLineDiscount RETURNS CHARACTER
                                          DiscountPlan.ValidPeriods,
                                          0).
 
-      IF lcResult > ""
+      IF lcResult BEGINS "ERROR"
       THEN RETURN "ERROR:Additional Line Discount not created; " + lcResult.
    END.
 
@@ -352,7 +360,7 @@ FUNCTION fCreateExtraLineDiscount RETURNS CHARACTER
                                          DiscountPlan.ValidPeriods,
                                          0).
 
-      IF lcResult > ""
+      IF lcResult BEGINS "ERROR"
       THEN RETURN "ERROR:Extra Line Discount not created; " + lcResult.
    END.
 END FUNCTION.    

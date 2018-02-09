@@ -274,7 +274,7 @@ lcError = fAddDiscountPlanMember(MobSub.MsSeq,
                                  ?,
                                  0). /* OrderId */
 
-IF lcError > ""
+IF lcError BEGINS "ERROR"
 THEN RETURN appl_err(lcError).
 
 /* ALFMO-14 For creating web memo */

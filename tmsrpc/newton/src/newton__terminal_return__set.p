@@ -333,7 +333,7 @@ IF (llDeviceStart AND llDeviceScreen) OR
                                         1,
                                         SingleFee.OrderId). /* Q25 OrderId */
 
-      IF lcResult > "" THEN
+      IF lcResult BEGINS "ERROR" THEN
          RETURN appl_err("ERROR:Discount creation failed; " + lcResult).
 
       FOR EACH DiscountPlan NO-LOCK WHERE

@@ -348,7 +348,7 @@ PROCEDURE pPeriodicalContract:
                                            bOfferItem.Periods,
                                            0). /* OrderId */
 
-         IF lcResult > "" THEN
+         IF lcResult BEGINS "ERROR" THEN
             RETURN "ERROR:Discount not created; " + lcResult.
       END.
    END. /* IF OfferItem.ItemKey BEGINS "PAYTERM" THEN DO: */

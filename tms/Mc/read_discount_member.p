@@ -210,8 +210,10 @@ REPEAT TRANS:
             NEXT.
       END.
 
-      fCloseDPMember(DPMember.DPMemberID,
-                     ldaValidFrom - 1).
+      IF NOT ldDiscount > 0
+      THEN fCloseDPMember(DPMember.DPMemberID,
+                          ldaValidFrom - 1).
+
    END.
    
    IF ldDiscount NE 0 THEN DO:
@@ -222,11 +224,13 @@ REPEAT TRANS:
                                        ldaValidTo,
                                        ?,
                                        0).
-       IF lcError > ""
+       IF lcError BEGINS "ERROR"
        THEN DO:
          fError(lcError).
          NEXT.
        END.
+       ELSE IF lcError > ""
+       THEN fLogLine("NOTE: " + lcError).
    
       /* dpmember creations not logged anymore YDR-1078 */
       /*
