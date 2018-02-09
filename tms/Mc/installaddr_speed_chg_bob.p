@@ -3,9 +3,10 @@
     Purpose     : Bob Tool to change Intallation address and/or speed change 
     Author(s)   : Ashok
     Created     : Thu Jan 18 10:03:09 IST 2018
-    Notes       : Input file Line should have entries > 26
-                  if second and third entries are "" then only address change
-                  otherwise STC change too. 
+    Notes       : Input file Line should have 25 entries 
+                  if second entry is not "", then STC change too.
+                  creates one generic log file per day - Log dir
+                  creates one log file for each input file - Outgoing dir  
   ----------------------------------------------------------------------*/
 
 {Syst/commpaa.i}
@@ -154,7 +155,7 @@ DO TRANSACTION:
 END.
 
 DO ON ERROR UNDO , LEAVE:
-    /* Processing files in incoming directory */
+    /* Collect files from incoming directory */
     INPUT STREAM sFilesInDir FROM OS-DIR(lcInComingDirectory).
     REPEAT:
         IMPORT STREAM sFilesInDir lcFile lcFileName lcFileFlags.
@@ -165,12 +166,14 @@ DO ON ERROR UNDO , LEAVE:
     INPUT STREAM sFilesInDir CLOSE.
     
     IF CAN-FIND(FIRST tt_file) THEN DO:
+        /* Process file by file */
         FOR EACH tt_file:
-            lcOutLogFile    = lcLogsDirectory + "/" +  SUBSTRING(tt_file.base_filename,1, R-INDEX(tt_file.base_filename,".") - 1 ) +  "_" + lcToday  +  "_" +  ".log".
+            /* logfile for each input file */
+            lcOutLogFile    = lcLogsDirectory + "/" +  SUBSTRING(tt_file.base_filename,1, R-INDEX(tt_file.base_filename,".") - 1 ) +  "_" + lcToday  +  ".log".
             OUTPUT STREAM sOutgoingLog TO VALUE(lcOutLogFile) APPEND.
             PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) + ";install_address_change started."  SKIP.
             PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) + ";install_address_change started."  SKIP.
-
+            /* Read line by line  */
             INPUT STREAM sCurrentFile FROM VALUE(tt_file.file_name).
             REPEAT TRANSACTION:
                 IMPORT STREAM sCurrentFile UNFORMATTED lcLine.
