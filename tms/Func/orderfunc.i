@@ -21,6 +21,7 @@
 {Func/cparam2.i}
 {Func/main_add_lines.i}
 {Func/msisdn.i}
+{Mc/offer.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
@@ -46,6 +47,12 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
    DEF VAR llCancelFusion AS LOGICAL NO-UNDO INIT FALSE.
    DEF VAR liRequest  AS INT NO-UNDO.
 
+   DEF VAR ldeInstallment AS DECIMAL NO-UNDO.
+   DEF VAR ldeMonthlyFee  AS DECIMAL NO-UNDO.
+   DEF VAR liMonths AS INT NO-UNDO INIT 0.
+   DEF VAR ldeFinalFee AS DECIMAL NO-UNDO.
+   DEF VAR lcSignatureStatus AS CHAR NO-UNDO INIT "".
+
    DEF BUFFER OrderPayment FOR OrderPayment.
    DEF BUFFER MsRequest FOR MsRequest.
    DEF BUFFER CLIType FOR CLIType.
@@ -67,7 +74,26 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
 
          /* Mark time stamp, if order statuscode is changed */
          case icStatus:
-            when "6" then fMarkOrderStamp(bfOrder.OrderID,"Delivery",0.0).
+            when "6" then do:
+               fMarkOrderStamp(bfOrder.OrderID,"Delivery",0.0).
+
+               /* RES-538 Digital Signature for Tienda and Telesales only */
+               IF bfOrder.Logistics NE "" AND
+                  LOOKUP(bfOrder.OrderChannel,
+                         "Self,TeleSales") > 0 THEN DO:
+                  /* Financed orders cannot be digitally signed */
+                  ldeInstallment = fGetOfferDeferredPayment(bfOrder.Offer,
+                                              bfOrder.CrStamp,
+                                              OUTPUT ldeMonthlyFee,
+                                              OUTPUT liMonths,
+                                              OUTPUT ldeFinalFee).
+                  IF liMonths EQ 0 THEN DO:
+                     /* lcSignatureStatus = fHandleSignature(liOrderId, ldeOrderDate).*/
+                     IF lcSignatureStatus NE "" THEN /* Error */
+                        /* fLogLine("", lcStatus + " " + Func.Common:mTS2HMS(ldCurrentTime)).*/
+                  END.
+               END.
+            end.
             when "7" or when "8" or when "9" then do:
                fMarkOrderStamp(bfOrder.OrderID,"Close",0.0).
 
