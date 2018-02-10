@@ -22,6 +22,7 @@
 {Func/main_add_lines.i}
 {Func/msisdn.i}
 {Mc/offer.i}
+{Func/log.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
@@ -29,6 +30,7 @@ IF llDoEvent THEN DO:
    {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhOrderStatusChange AS HANDLE NO-UNDO.
+   fSetLogFileName("/scratch/log/digitalsignature/digital_signature_send.log").
 END.
 
 /*
@@ -45,7 +47,7 @@ FUNCTION fHandleSignature RETURNS CHAR
    DEF BUFFER bOrder FOR Order.
    DEF BUFFER bActionLog FOR ActionLog.
 
-   /* Log() start... */
+   fLog( "Digital signature, START handling: OrderId: " + STRING(iiOrderId),"DEBUG").
 
    FIND FIRST bOrder NO-LOCK WHERE
               bOrder.Brand EQ Syst.Var:gcBrand AND
@@ -58,9 +60,8 @@ FUNCTION fHandleSignature RETURNS CHAR
    ELSE IF LOOKUP(bOrder.StatusCode, {&ORDER_CLOSE_STATUSES}) > 0 THEN /* 7,8,9 */
       lcActionID = "ContractStatusCancelled".
    ELSE
-      /* Log() wrong status */   
+      fLog( "Digital signature, ERROR wrong Order status: OrderId: " + STRING(iiOrderId) + " Status: " + STRING(bOrder.statusCode), "ERROR").
 
-   /* Log bActionLog... */
    FIND FIRST bActionLog NO-LOCK WHERE
               bActionLog.Brand     = Syst.Var:gcBrand AND
               bActionLog.TableName = "Order" AND
@@ -77,11 +78,11 @@ FUNCTION fHandleSignature RETURNS CHAR
             ActionLog.KeyValue  = STRING(bOrder.OrderId)
             ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE}.
 
-      /* log() ActionLog... contractId */
+      fLog( "Digital signature, DEBUG Create ActionLog: OrderId: " + STRING(iiOrderId) + " ActionID: " + STRING(lcActionID), "DEBUG").
       lcStatus = "".
    END.
    ELSE DO:
-      /* Log() error order, contractId ActionLog */
+      fLog( "Digital signature, ERROR ActionLog already exists: OrderId: " + STRING(iiOrderId) + " ActionID: " + STRING(lcActionID), "ERROR").
       lcStatus =  "Error Signature ActionLog already exists, OrderId:" + STRING(bOrder.OrderId).
    END.
 
@@ -141,6 +142,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                   bfOrder.ContractID NE "" AND
                   LOOKUP(bfOrder.OrderChannel,
                          "Self,TeleSales") > 0 THEN DO:
+                  fLog( "Digital signature, DEBUG Orderchannel: " + STRING(bfOrder.OrderChannel) + " Order status: " + STRING(icStatus) , "DEBUG").
                   /* Financed orders cannot be digitally signed */
                   ldeInstallment = fGetOfferDeferredPayment(bfOrder.Offer,
                                               bfOrder.CrStamp,
