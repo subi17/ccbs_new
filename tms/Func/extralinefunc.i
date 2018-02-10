@@ -145,4 +145,132 @@ FUNCTION fSTCPossible RETURNS LOGICAL
 
 END FUNCTION.
 
+FUNCTION fCheckExistingMainLineAvailForExtraLine RETURNS INTEGER
+   (INPUT icExtraLineCLIType AS CHAR,
+    INPUT icCustIDType       AS CHAR,
+    INPUT icCustID           AS CHAR):
+
+   DEF VAR liELCount AS INT NO-UNDO. 
+   DEF VAR liCount   AS INT NO-UNDO. 
+
+   IF NOT icExtraLineCLIType > "" THEN RETURN 0.
+
+   DEFINE BUFFER Customer FOR Customer.
+   DEFINE BUFFER MobSub   FOR MobSub.
+   DEFINE BUFFER ELMobSub FOR MobSub.
+   DEFINE BUFFER Order    FOR Order.
+
+   CASE icExtraLineCLIType:
+      WHEN {&AZULMORADAEL}   THEN liELCount = {&AZULMORDADAEXTRALINE}.
+      WHEN {&INTERMINABLEEL} THEN liELCount = {&INTERMINABLEEXTRALINE}.  
+   END CASE.
+
+   FOR FIRST Customer NO-LOCK WHERE
+             Customer.Brand      EQ Syst.Var:gcBrand AND
+             Customer.OrgId      EQ icCustID         AND
+             Customer.CustidType EQ icCustIDType     AND
+             Customer.Roles      NE "inactive":
+
+      FOR EACH MobSub NO-LOCK USE-INDEX CustNum WHERE
+               MobSub.Brand    EQ Syst.Var:gcBrand      AND
+               MobSub.CustNum  EQ Customer.CustNum      AND
+               MobSub.PayType  EQ FALSE                 AND
+              (MobSub.MsStatus EQ {&MSSTATUS_ACTIVE} OR
+               MobSub.MsStatus EQ {&MSSTATUS_BARRED})   BY MobSub.ActivationTS:
+
+          IF (NOT fCLITypeIsMainLine(MobSub.CLIType)                               OR  
+              NOT fCLITypeAllowedForExtraLine(MobSub.CLIType, icExtraLineCLIType)) THEN 
+             NEXT.
+         
+          FIND LAST Order NO-LOCK WHERE
+                    Order.MsSeq      = MobSub.MsSeq              AND
+                    Order.StatusCode = {&ORDER_STATUS_DELIVERED} AND
+             LOOKUP(STRING(Order.OrderType),"0,1,4") > 0         NO-ERROR.
+
+          IF NOT AVAIL Order THEN NEXT.
+
+          liCount = 0.
+
+          FOR EACH ELMobSub NO-LOCK WHERE 
+                   ELMobSub.Brand        EQ Syst.Var:gcBrand   AND 
+                   ELMobSub.CLIType      EQ icExtraLineCLIType AND 
+                   ELMobSub.CustNum      EQ MobSub.CustNum     AND 
+                   ELMobSub.PayType      EQ FALSE              AND 
+                   ELMobSub.MultiSimId   EQ MobSub.MsSeq       AND 
+                   ELMobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}:  
+             liCount = liCount + 1.   
+          END.
+
+          IF liCount < liELCount THEN
+             RETURN MobSub.MsSeq.  
+
+      END.
+
+   END.
+
+   RETURN 0.
+
+END FUNCTION.
+
+FUNCTION fCheckOngoingMainLineAvailForExtraLine RETURNS INTEGER
+   (INPUT icExtraLineCLIType AS CHAR,
+    INPUT icCustIDType       AS CHAR,
+    INPUT icCustID           AS CHAR):
+
+   IF NOT icExtraLineCLIType > "" THEN RETURN 0.
+
+   DEF VAR liELCount AS INT NO-UNDO. 
+   DEF VAR liCount   AS INT NO-UNDO. 
+   
+   DEFINE BUFFER OrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER Order         FOR Order.
+   DEFINE BUFFER OrderFusion   FOR OrderFusion.
+   DEFINE BUFFER ELOrder       FOR Order.
+
+   CASE icExtraLineCLIType:
+      WHEN {&AZULMORADAEL}   THEN liELCount = {&AZULMORDADAEXTRALINE}.
+      WHEN {&INTERMINABLEEL} THEN liELCount = {&INTERMINABLEEXTRALINE}.  
+   END CASE.
+
+   FOR EACH OrderCustomer NO-LOCK WHERE
+            OrderCustomer.Brand      EQ Syst.Var:gcBrand AND
+            OrderCustomer.CustId     EQ icCustID                AND
+            OrderCustomer.CustIdType EQ icCustIDType            AND
+            OrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+       EACH Order NO-LOCK WHERE
+            Order.Brand        EQ Syst.Var:gcBrand      AND
+            Order.orderid      EQ OrderCustomer.Orderid AND
+            Order.OrderType    NE {&ORDER_TYPE_RENEWAL},
+      FIRST OrderFusion NO-LOCK WHERE
+            OrderFusion.Brand   = Syst.Var:gcBrand AND
+            OrderFusion.OrderID = Order.OrderID           BY Order.CrStamp:
+
+      IF (LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0       OR 
+         Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL}) THEN 
+         NEXT.  
+
+      IF (NOT fCLITypeIsMainLine(MobSub.CLIType)                              OR
+          NOT fCLITypeAllowedForExtraLine(Order.CLIType, icExtraLineCLIType)) THEN 
+         NEXT.
+
+      liCount = 0.
+
+      FOR EACH ELOrder NO-LOCK WHERE 
+               ELOrder.Brand      EQ Syst.Var:gcBrand                  AND 
+               ELOrder.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE} AND 
+               ELOrder.CustNum    EQ Order.CustNum                     AND
+               ELOrder.CLIType    EQ icExtraLineCLIType                AND 
+               ELOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}:
+         liCount = liCount + 1.
+      END.
+
+      IF liCount < liELCount THEN
+         RETURN Order.OrderId.
+
+   END.
+
+   RETURN 0.
+
+END FUNCTION.
+
 &ENDIF
