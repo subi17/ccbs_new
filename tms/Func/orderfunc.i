@@ -663,8 +663,7 @@ FUNCTION fCreateTPServiceMessage RETURNS LOGICAL
 END FUNCTION.
 
 FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
-   (INPUT iiExtraLineOrderId AS INT,
-    INPUT iiMainLineOrderId  AS INT,
+   (INPUT iiMainLineOrderId  AS INT,
     INPUT icAction           AS CHAR):
 
    DEFINE BUFFER lbMLOrder       FOR Order.
@@ -673,14 +672,11 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
 
    DEF VAR lcNewOrderStatus     AS CHAR NO-UNDO. 
 
-   FIND FIRST lbELOrder NO-LOCK WHERE
-              lbELOrder.Brand        EQ Syst.Var:gcBrand                  AND
-              lbELOrder.OrderID      EQ iiExtraLineOrderId                AND 
-              lbELOrder.MultiSimId   EQ iiMainLineOrderId                 AND 
-              lbELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}         AND 
-              lbELOrder.StatusCode   EQ {&ORDER_STATUS_PENDING_MAIN_LINE} NO-ERROR. 
-
-   IF AVAIL lbELOrder THEN DO:
+   FOR EACH lbELOrder NO-LOCK WHERE
+            lbELOrder.Brand        EQ Syst.Var:gcBrand                  AND
+            lbELOrder.StatusCode   EQ {&ORDER_STATUS_PENDING_MAIN_LINE} AND 
+            lbELOrder.MultiSimId   EQ iiMainLineOrderId                 AND 
+            lbELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}: 
 
       IF llDoEvent THEN DO:
          lhOrderStatusChange = BUFFER lbELOrder:HANDLE.
@@ -694,8 +690,6 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
             FIND FIRST lbMLOrder NO-LOCK WHERE 
                        lbMLOrder.Brand        EQ Syst.Var:gcBrand         AND
                        lbMLOrder.OrderId      EQ iiMainLineOrderId        AND 
-                       lbMLOrder.MultiSimId   EQ iiExtraLineOrderId       AND 
-                       lbMLOrder.MultiSimType EQ {&MULTISIMTYPE_PRIMARY}  AND 
                 LOOKUP(lbMLOrder.StatusCode,{&ORDER_CLOSE_STATUSES}) EQ 0 NO-ERROR. 
 
             CASE lbELOrder.OrderType:
@@ -725,8 +719,6 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
             FIND FIRST lbMLOrder NO-LOCK WHERE 
                        lbMLOrder.Brand        EQ Syst.Var:gcBrand        AND
                        lbMLOrder.OrderId      EQ iiMainLineOrderId       AND 
-                       lbMLOrder.MultiSimId   EQ iiExtraLineOrderId      AND 
-                       lbMLOrder.MultiSimType EQ {&MULTISIMTYPE_PRIMARY} AND 
                        lbMLOrder.StatusCode   EQ {&ORDER_STATUS_CLOSED}  NO-ERROR. 
 
             IF AVAIL lbMLOrder THEN

@@ -221,15 +221,15 @@
                   IF Order.MultiSimId     <> 0                                 AND 
                      Order.MultiSimType   = {&MULTISIMTYPE_EXTRALINE}          AND 
                      CAN-FIND(FIRST OrderAction NO-LOCK WHERE 
-                                    OrderAction.Brand    = Syst.Var:gcBrand             AND 
+                                    OrderAction.Brand    = Syst.Var:gcBrand    AND 
                                     OrderAction.OrderID  = Order.OrderID       AND
                                     OrderAction.ItemType = "ExtraLineDiscount" AND  
                                     OrderAction.ItemKey  = Order.CLIType + "DISC") THEN 
                   DO:
                      
                      /* Check Mainline Convergent fixedline is installed OR it is still ongoing */
-                     IF fCheckFixedLineInstalledForMainLine(Order.MultiSimId,   /* Mainline Order Id  */
-                                                            Order.OrderId) THEN /* Extraline Order Id */
+                     IF NOT fCheckFixedLineInstalledForMainLine(Order.MultiSimId,   /* Mainline Order Id  */
+                                                                Order.OrderId) THEN /* Extraline Order Id */
                      DO:
                         IF llDoEvent THEN DO:
                            lh76Order = BUFFER Order:HANDLE.

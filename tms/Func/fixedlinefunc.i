@@ -819,11 +819,9 @@ FUNCTION fCheckFixedLineInstalledForMainLine RETURNS LOGICAL
    DEFINE BUFFER Order FOR Order. 
 
    FIND FIRST Order NO-LOCK WHERE
-              Order.Brand        EQ Syst.Var:gcBrand    AND
+              Order.Brand        EQ Syst.Var:gcBrand           AND
               Order.OrderId      EQ liMainLineOrderId          AND
        LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 AND
-              Order.MultiSimId   EQ liExtraLineOrderId         AND
-              Order.MultiSimType EQ {&MULTISIMTYPE_PRIMARY}    AND 
               Order.OrderType    NE {&ORDER_TYPE_RENEWAL}      NO-ERROR.
 
    IF AVAIL Order THEN DO: 
@@ -831,18 +829,18 @@ FUNCTION fCheckFixedLineInstalledForMainLine RETURNS LOGICAL
       /* If Fixed line is installed for Main line Convergent Order 
          THEN dont move extra line order to 76 */
       FIND FIRST OrderFusion NO-LOCK WHERE
-                 OrderFusion.Brand        = Syst.Var:gcBrand          AND
+                 OrderFusion.Brand        = Syst.Var:gcBrand                 AND
                  OrderFusion.OrderID      = Order.OrderID                    AND 
                  OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_FINALIZED} NO-ERROR.
                  
       IF AVAIL OrderFusion THEN 
-         RETURN FALSE.
+         RETURN TRUE.
 
-      RETURN TRUE.
+      RETURN FALSE.
 
    END.   
 
-   RETURN FALSE.
+   RETURN TRUE.
 
 END FUNCTION.
 

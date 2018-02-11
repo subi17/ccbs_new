@@ -445,8 +445,6 @@ IF NOT AVAIL mobsub THEN DO:
       IF AVAIL lbMLMobSub THEN 
          ASSIGN MobSub.MultiSimID       = lbMLMobSub.MsSeq         /* Mainline Subid  */
                 MobSub.MultiSimType     = Order.MultiSimType       /* Extraline = 3   */
-                lbMLMobSub.MultiSimID   = MobSub.MsSeq             /* Extraline Subid */
-                lbMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY}  /* Primary = 1     */
                 llgExtraLine            = YES.
    END.
  
@@ -706,18 +704,21 @@ IF AVAIL OrderCustomer THEN DO:
                              FALSE,
                              "RELEASE"). 
 
-   /*------------------------------------------------------------- 
-     New rule for extralines (29/12/2017):
-     A subscription type with "La Duo" is released once mobile 
-     part order of the Convergent product has been delivered.
-     https://kethor.qvantel.com/browse/DIAM-76
-   -------------------------------------------------------------*/
-   IF fCLITypeIsMainLine(Order.CLIType)                   AND
-      Order.MultiSimId                              NE 0  AND 
-      Order.MultiSimType                            EQ {&MULTISIMTYPE_PRIMARY} THEN  
-      fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
-                               Order.OrderId,    /* Main line Order Id  */
+   /* Mainline Associated extraline has to be released when 
+      mainline is (Fixed + Mobile line) is delivered */
+   IF fCLITypeIsMainLine(Order.CLIType) THEN DO:
+      fActionOnExtraLineOrders(Order.OrderId,    /* Main line Order Id  */
                                "RELEASE").       /* Action              */
+
+      /* Check for orphan extraline for customer, if available 
+         then assign to the mainline */ 
+      fCheckAndAssignOrphanExtraline(Order.OrderId,
+                                     MobSub.MsSeq,   
+                                     MobSub.CustNum,
+                                     MobSub.CLIType).
+                               
+   END.                            
+
 END.
 
 fSetOrderStatus(Order.OrderId,"6").  

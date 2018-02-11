@@ -181,11 +181,17 @@ FUNCTION fCheckExistingMainLineAvailForExtraLine RETURNS INTEGER
           IF (NOT fCLITypeIsMainLine(MobSub.CLIType)                               OR  
               NOT fCLITypeAllowedForExtraLine(MobSub.CLIType, icExtraLineCLIType)) THEN 
              NEXT.
-         
+   
           FIND LAST Order NO-LOCK WHERE
                     Order.MsSeq      = MobSub.MsSeq              AND
+                    Order.CLIType    = MobSub.CLIType            AND
                     Order.StatusCode = {&ORDER_STATUS_DELIVERED} AND
              LOOKUP(STRING(Order.OrderType),"0,1,4") > 0         NO-ERROR.
+          IF NOT AVAIL Order THEN 
+             FIND LAST Order NO-LOCK WHERE
+                       Order.MsSeq      = MobSub.MsSeq              AND
+                       Order.StatusCode = {&ORDER_STATUS_DELIVERED} AND
+                LOOKUP(STRING(Order.OrderType),"0,1,4") > 0         NO-ERROR.
 
           IF NOT AVAIL Order THEN NEXT.
 
@@ -202,7 +208,7 @@ FUNCTION fCheckExistingMainLineAvailForExtraLine RETURNS INTEGER
           END.
 
           IF liCount < liELCount THEN
-             RETURN MobSub.MsSeq.  
+             RETURN Order.OrderId.  
 
       END.
 
@@ -234,8 +240,8 @@ FUNCTION fCheckOngoingMainLineAvailForExtraLine RETURNS INTEGER
 
    FOR EACH OrderCustomer NO-LOCK WHERE
             OrderCustomer.Brand      EQ Syst.Var:gcBrand AND
-            OrderCustomer.CustId     EQ icCustID                AND
-            OrderCustomer.CustIdType EQ icCustIDType            AND
+            OrderCustomer.CustId     EQ icCustID         AND
+            OrderCustomer.CustIdType EQ icCustIDType     AND
             OrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
        EACH Order NO-LOCK WHERE
             Order.Brand        EQ Syst.Var:gcBrand      AND
@@ -243,7 +249,7 @@ FUNCTION fCheckOngoingMainLineAvailForExtraLine RETURNS INTEGER
             Order.OrderType    NE {&ORDER_TYPE_RENEWAL},
       FIRST OrderFusion NO-LOCK WHERE
             OrderFusion.Brand   = Syst.Var:gcBrand AND
-            OrderFusion.OrderID = Order.OrderID           BY Order.CrStamp:
+            OrderFusion.OrderID = Order.OrderID    BY Order.CrStamp:
 
       IF (LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0       OR 
          Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL}) THEN 
@@ -256,11 +262,13 @@ FUNCTION fCheckOngoingMainLineAvailForExtraLine RETURNS INTEGER
       liCount = 0.
 
       FOR EACH ELOrder NO-LOCK WHERE 
-               ELOrder.Brand      EQ Syst.Var:gcBrand                  AND 
-               ELOrder.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE} AND 
-               ELOrder.CustNum    EQ Order.CustNum                     AND
-               ELOrder.CLIType    EQ icExtraLineCLIType                AND 
-               ELOrder.OrderType  NE {&ORDER_TYPE_RENEWAL}:
+               ELOrder.Brand        EQ Syst.Var:gcBrand                  AND 
+               ELOrder.StatusCode   EQ {&ORDER_STATUS_PENDING_MAIN_LINE} AND 
+               ELOrder.CustNum      EQ Order.CustNum                     AND
+               ELOrder.CLIType      EQ icExtraLineCLIType                AND 
+               ELOrder.OrderType    NE {&ORDER_TYPE_RENEWAL}             AND 
+               ELOrder.MultiSimId   NE 0                                 AND 
+               ELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}:
          liCount = liCount + 1.
       END.
 
@@ -272,5 +280,80 @@ FUNCTION fCheckOngoingMainLineAvailForExtraLine RETURNS INTEGER
    RETURN 0.
 
 END FUNCTION.
+
+FUNCTION fCheckAndAssignOrphanExtraline RETURNS LOGICAL
+   (INPUT iiMainLineOrderId AS INT, 
+    INPUT iiMLMsSeq         AS INT, 
+    INPUT liMLCustNum       AS INT,
+    INPUT icMLCLIType       AS CHAR):
+
+   DEFINE BUFFER lbELMobSub FOR MobSub. 
+   DEFINE BUFFER lbELOrder  FOR Order.
+
+   DEF VAR lcExtraLineCLIType AS CHAR NO-UNDO. 
+   DEF VAR liCount            AS INT  NO-UNDO. 
+   DEF VAR liELCount          AS INT  NO-UNDO. 
+
+   ASSIGN lcExtraLineCLIType = fExtraLineForMainLine(icMLCLIType)
+          liCount            = 0
+          liELCount          = 0.
+
+   CASE cExtraLineCLIType:
+      WHEN {&AZULMORADAEL}   THEN liELCount = {&AZULMORDADAEXTRALINE}.
+      WHEN {&INTERMINABLEEL} THEN liELCount = {&INTERMINABLEEXTRALINE}.
+   END CASE.
+
+   /* Check existing subscription for mainline */
+   FOR EACH lbELMobSub NO-LOCK WHERE 
+            lbELMobSub.Brand        EQ Syst.Var:gcBrand   AND 
+            lbELMobSub.CLIType      EQ lcExtraLineCLIType AND 
+            lbELMobSub.CustNum      EQ liMLCustNum        AND 
+            lbELMobSub.PayType      EQ FALSE              AND 
+            lbELMobSub.MultiSimId   EQ iiMLMsSeq          AND 
+            lbELMobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}:  
+       liCount = liCount + 1.   
+   END.
+
+   /* Check ongoing order for mainline */
+   FOR EACH lbELOrder NO-LOCK WHERE
+            lbELOrder.Brand        EQ Syst.Var:gcBrand          AND
+            lbELOrder.MultiSimId   EQ iiMainLineOrderId         AND
+            lbELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} AND 
+            lbELOrder.CustNum      EQ liMLCustNum:           
+
+      IF LOOKUP(lbELOrder.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 THEN NEXT.
+
+      liCount = liCount + 1.
+
+   END.
+
+   IF liCount < liELCount THEN DO:
+      
+      FOR EACH lbELMobSub NO-LOCK WHERE 
+               lbELMobSub.Brand        EQ Syst.Var:gcBrand   AND
+               lbELMobSub.CLIType      EQ lcExtraLineCLIType AND
+               lbELMobSub.CustNum      EQ liMLCustNum        AND
+               lbELMobSub.PayType      EQ FALSE              AND
+               lbELMobSub.MultiSimId   EQ 0                  AND
+               lbELMobSub.MultiSimType EQ 0:
+
+         ASSIGN lbELMobSub.MultiSimId   = iiMLMsSeq 
+                lbELMobSub.MultiSimType = {&MULTISIMTYPE_EXTRALINE}.
+
+         fCreateExtraLineDiscount(lbELMobSub.MsSeq,
+                                  lbELMobSub.CLIType + "DISC",
+                                  TODAY).
+
+         liCount = liCount + 1.
+
+         IF liCount = liELCount THEN LEAVE.
+
+      END.
+
+   END.
+
+   RETURN TRUE.
+
+END FUNCTION.   
 
 &ENDIF
