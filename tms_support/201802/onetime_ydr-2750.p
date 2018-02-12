@@ -2,7 +2,7 @@
 
 
 
-REATE TMSCodes.
+CREATE TMSCodes.
 ASSIGN
    TMSCodes.TableName = "DayCampaign"
    TMSCodes.FieldName = "BundleType"
@@ -37,13 +37,14 @@ ASSIGN
  
  FOR EACH Daycampaign EXCLUSIVE-LOCK:
      
-     Daycampign.BundleType = 0.
+     Daycampaign.BundleType = 0.
      
      IF (DayCampaign.DCEvent  BEGINS  "CON" OR DayCampaign.DCEvent BEGINS "DUB") AND
         (DayCampaign.DCType EQ  "1" OR 
          DayCampaign.DCType EQ  "4" OR 
          DayCampaign.DCType EQ  "7"   ) THEN 
-         Daycampign.BundleType = 1.
+         Daycampaign.BundleType = 1.
+
      
  END.
  
