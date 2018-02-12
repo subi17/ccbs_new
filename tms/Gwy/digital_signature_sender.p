@@ -13,23 +13,16 @@ ASSIGN
    Syst.Var:katun   = "Cron".
   /* Syst.Var:gcBrand = "1".*/
 {Syst/tmsconst.i}
+{Func/profunc.i}
 {Func/cparam2.i}
 {fcgi_agent/xmlrpc/xmlrpc_client.i}
 
 DEF VAR lcLogDir        AS CHAR NO-UNDO.
 DEF VAR lcLog           AS CHAR NO-UNDO.
-DEF VAR ldaFReadDate    AS DATE NO-UNDO.
-DEF VAR lcActionID      AS CHAR NO-UNDO INIT "".
 DEF VAR lcTableName     AS CHAR NO-UNDO.
 DEF VAR ldCurrentTimeTS AS DEC  NO-UNDO.
 
 DEF VAR iTimeOut        AS INT  NO-UNDO.
-DEF VAR lcHost          AS CHAR NO-UNDO.
-DEF VAR liPort          AS INT  NO-UNDO.
-DEF VAR lcUserIdDS      AS CHAR NO-UNDO.
-DEF VAR lcpasswordDS    AS CHAR NO-UNDO.
-DEF VAR lcUriPath       AS CHAR NO-UNDO.
-DEF VAR lcUriPathCancel AS CHAR NO-UNDO.
 DEF VAR liLogRequest    AS INT  NO-UNDO.
 DEF VAR llLogRequest    AS LOG  NO-UNDO INIT TRUE.
 DEF VAR lcUrlAdapter    AS CHAR NO-UNDO.
@@ -47,18 +40,31 @@ END FUNCTION.
 /* IF fDMSOnOff() NE TRUE THEN RETURN.*/
 
 /*
+   Function constructs data for Adapter.
+*/
+FUNCTION fFillCancelStruct RETURNS LOGICAL
+   (iiOrderId      AS INT,
+    INPUT pcStruct AS CHAR):
+
+   RETURN TRUE.
+
+END FUNCTION.
+
+
+/*
    Function sends cancel request to
    Adapter (Signature API)
 */
 FUNCTION fSendCancelMessage RETURNS CHAR
-   (iiOrderId   AS INT
-    /*icBrand AS CHAR*/):
+   (iiOrderId   AS INT,
+    icBrand     AS CHAR):
 
-   DEF VAR lcOrderStruct AS CHAR NO-UNDO. /* example...*/
+   DEF VAR lcOrderStruct AS CHAR NO-UNDO.
 
-   fLogMsg("Construct cancel message, Order: " + STRING(iiOrderId)).
+   IF llLogRequest THEN fLogMsg("Construct cancel message, OrderId: " + STRING(iiOrderId)).
    xmlrpc_cleanup().
    lcOrderStruct = add_struct(param_toplevel_id,"").
+   fFillCancelStruct(iiOrderId, lcOrderStruct). 
 
    IF gi_xmlrpc_error NE 0 THEN DO:
       fLogMsg("ERROR Creating message: " + gc_xmlrpc_error). 
@@ -80,22 +86,125 @@ END FUNCTION.
 
 
 /*
+   Function constructs data for Adapter.
+*/
+FUNCTION fFillOrderStruct RETURNS LOGICAL
+   (iiOrderId      AS INT,
+    INPUT pcStruct AS CHAR):
+
+   DEF BUFFER bOrder FOR Order.
+   DEF BUFFER bOrderCustomer FOR OrderCustomer.
+
+   FOR EACH bOrder NO-LOCk WHERE
+            bOrder.Brand EQ Syst.Var:gcBrand AND
+            bOrder.OrderId EQ iiOrderId:
+      FIND FIRST bOrderCustomer NO-LOCK WHERE
+                 bOrderCustomer.Brand EQ Syst.Var:gcBrand AND
+                 bOrderCustomer.OrderId EQ iiOrderId.
+
+      IF NOT AVAIL bOrderCustomer THEN RETURN FALSE.
+
+      add_string(pcStruct,"customerId",bOrderCustomer.CustId).
+
+      add_string(pcStruct,"accountId",bOrder.ContractID).
+
+      /* not mandatory */
+      add_string(pcStruct,"subscriptionId",bOrder.CLI).
+
+      add_string(pcStruct,"clientName",bOrderCustomer.FirstName).
+    
+      add_string(pcStruct,"clientLastName1",bOrderCustomer.SurName1).
+
+      /* not mandatory */
+      add_string(pcStruct,"clientLastName2",bOrderCustomer.SurName2).
+    
+      add_string(pcStruct,"clientEmail",bOrderCustomer.email).
+
+      add_string(pcStruct,"clientPhone",bOrderCustomer.ContactNum).
+
+      add_string(pcStruct,"clientMobile",bOrderCustomer.MobileNumber).
+
+      /* not mandatory */
+      add_string(pcStruct,"clientFax",""). /* Customer.fax if needed */
+
+      add_string(pcStruct,"legalIdentityType",bOrderCustomer.CustIdType). /* NIF etc.??*/
+
+      add_string(pcStruct,"legalIdentityCountry",bOrderCustomer.Country). /*??*/
+
+      add_string(pcStruct,"legalIdentityNumber",bOrderCustomer.CustId). /*??*/
+
+      add_string(pcStruct,"SellType", "SIM"). /*?????*/
+
+      add_string(pcStruct,"crmId",bOrder.OrderChannel).
+
+      add_string(pcStruct,"dealerId",bOrder.reseller).
+
+      add_string(pcStruct,"contractId",bOrder.ContractID).
+
+      add_string(pcStruct,"orderId",STRING(bOrderCustomer.OrderId)).
+
+      add_string(pcStruct,"sfId",bOrder.Salesman).
+
+      FIND FIRST OrderTimeStamp NO-LOCK WHERE
+                 OrderTimeStamp.Brand EQ Syst.Var:gcBrand AND
+                 OrderTimeStamp.OrderID EQ bOrder.OrderId NO-ERROR.
+      IF AVAIL OrderTimeStamp THEN
+         add_string(pcStruct,"orderDate",STRING(OrderTimeStamp.TimeStamp)).
+      ELSE
+         add_string(pcStruct,"orderDate",STRING(0)).
+         
+      IF llLogRequest THEN fLogMsg("Signing xml: " + STRING(pcStruct)).
+   END.
+
+   RETURN TRUE.
+
+END FUNCTION.
+
+/*
+   Function constructs data for Adapter.
+*/
+FUNCTION fFillbrandStruct RETURNS LOGICAL
+   (iiOrderId      AS INT,
+    icBrand        AS CHAR,
+    INPUT pcStruct AS CHAR):
+
+   IF fConvertBrandToTenant(icBrand) EQ {&TENANT_YOIGO} THEN
+      add_string(pcStruct,"brand","yoigo").
+   ELSE IF fConvertBrandToTenant(icBrand) EQ {&TENANT_MASMOVIL} THEN
+      add_string(pcStruct,"brand","masmovil").
+   ELSE DO:
+      fLogMsg("Error: tenant not found (Yoigo or Masmovil).").
+      RETURN FALSE.
+   END.
+   IF llLogRequest THEN fLogMsg("Signing xml, Brand: " + STRING(pcStruct)).
+
+   RETURN TRUE.
+
+END FUNCTION.
+
+
+/*
    Function sends signing request to
    Adapter (Signature API)
 */
 FUNCTION fSendSigningMessage RETURNS CHAR
-   (iiOrderId   AS INT
-    /*icBrand AS CHAR*/):
+   (iiOrderId   AS INT,
+    icBrand     AS CHAR):
 
-   DEF VAR lcOrderStruct AS CHAR NO-UNDO. /* example...*/
+   DEF VAR lcOrderStruct AS CHAR NO-UNDO.
+   DEF VAR lcBrandStruct AS CHAR NO-UNDO.
    DEF VAR lcRespStruct  AS CHAR NO-UNDO. 
    DEF VAR lcResp        AS CHAR NO-UNDO. 
    DEF VAR lcResult      AS CHAR NO-UNDO. 
    DEF VAR lcDescription AS CHAR NO-UNDO.
 
-   fLogMsg("Construct signing message, Order: " + STRING(iiOrderId)).
+   IF llLogRequest THEN fLogMsg("Start construct signing message, OrderId: " + STRING(iiOrderId)).
    xmlrpc_cleanup().
+   lcBrandStruct = add_struct(param_toplevel_id,"").
+   fFillBrandStruct(iiOrderId, icBrand, lcBrandStruct). 
+
    lcOrderStruct = add_struct(param_toplevel_id,"").
+   fFillOrderStruct(iiOrderId, lcOrderStruct). 
 
    IF gi_xmlrpc_error NE 0 THEN DO:
       fLogMsg("ERROR Creating message: " + gc_xmlrpc_error). 
@@ -103,6 +212,7 @@ FUNCTION fSendSigningMessage RETURNS CHAR
       RETURN "Error".
    END.
 
+   fLogMsg("Call RPC Method (Adapter), OrderId: " + STRING(iiOrderId)).
    /* RUN pRPCMethodCall("ROIHistoryInterface.store_order", TRUE).*/ 
 
    IF gi_xmlrpc_error NE 0 THEN DO:
@@ -112,6 +222,7 @@ FUNCTION fSendSigningMessage RETURNS CHAR
    END.
 
    lcRespStruct = get_struct(response_toplevel_id, "0").
+   IF llLogRequest THEN fLogMsg("Response from Adapter: " + lcrespStruct).
 
    IF gi_xmlrpc_error EQ 0 THEN
       lcResp = validate_request(lcRespStruct,"result!,description").
@@ -130,9 +241,9 @@ FUNCTION fSendSigningMessage RETURNS CHAR
 
    IF lcResult EQ "Ok" THEN DO:
       /* set message as sent */
-      fLogMsg("Message for Order " + STRING(iiOrderID) + " sent successfully!").
+      IF llLogRequest THEN fLogMsg("Message to Adapter (OrderId " + STRING(iiOrderID) + ") sent successfully!").
    END.
-   ELSE DO:
+   ELSE DO: /* anything to do? */
       /* save the exception in the ErrorLog */
       /* ldTS = Func.Common:mMakeTS().
       CREATE ErrorLog.
@@ -184,15 +295,15 @@ DO TRANS:
          END.
 
          IF AVAIL bOrder THEN DO:
-            fLogMsg("Found OrderId: " + STRING(bOrder.OrderId) + 
+            IF llLogRequest THEN fLogMsg("Found OrderId: " + STRING(bOrder.OrderId) + 
                     ", OrderStatusCode: " + STRING(bOrder.StatusCode) + 
                     ", ActionLog.ActionID: " + STRING(ActionLog.ActionID)).
             IF bOrder.statusCode EQ {&ORDER_STATUS_DELIVERED} THEN
                /* Send for signing */
-               lcStatus = fSendSigningMessage(bOrder.OrderId).
+               lcStatus = fSendSigningMessage(bOrder.OrderId, bOrder.Brand).
             ELSE IF LOOKUP(bOrder.StatusCode, {&ORDER_CLOSE_STATUSES}) > 0 THEN /* 7,8,9 */
                /* Send cancel */
-               lcStatus = fSendCancelMessage(bOrder.OrderId).
+               lcStatus = fSendCancelMessage(bOrder.OrderId, bOrder.Brand).
             ELSE
                fLogMsg("ERROR wrong Order status, OrderId: " + STRING(bOrder.OrderId) + 
                        ", status: " + STRING(bOrder.StatusCode)).
@@ -200,10 +311,9 @@ DO TRANS:
             IF lcStatus EQ "" THEN DO:
                ASSIGN
                   ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS} /* ?? */
-                  ActionLog.UserCode     = Syst.Var:katun /* aseta orderfunc.i ?? */
                   ActionLog.ActionTS     = ldCurrentTimeTS.
                RELEASE ActionLog.
-            END. /* ELSE? Leave untouched and try again next cron job?? */
+            END. /* ELSE? Leave untouched and try again in next cron job */
          END.
       END.
 
@@ -219,43 +329,28 @@ DO TRANS:
 END.
 END PROCEDURE.
 
+
 /* MAIN START */
 
 lcTableName = "Order".
 ldCurrentTimeTS = Func.Common:mMakeTS().
 
 ASSIGN
-    /* lcHost        = fCParam("SignatureApi", "Host")
-    liPort        = fIParam("SignatureApi", "Port")
-    lcUriPath     = "/masmovil-test-staging-environment/api/v1/digitalSignature/yoigo/registerSignProcess" /* "/digitalSignature/1/registerSignProcess"*/
-    /* lcUriPath       = fCParam("SignatureApi", "UriPath")*/
-    lcUriPathCancel = fCParam("SignatureApi", "UriPathCancel")
-    liLogRequest  = fIParam("SignatureApi", "LogRequest")*/
-    llLogRequest  = LOGICAL(liLogRequest)
-    /* lcLogdir        = fCParam("SignatureApi", "LogDir")*/
-    lcLogDir   = "/scratch/log/digitalsignature/".
-    /* lcUrlAdapter  = fCParam("SignatureApi", "UrlAdapter")*/
-    /* e.g. http://217.168.2.239:7001/com-yoigo-roi-webapp/xmlrpc */
+   /*liLogRequest  = fIParam("SignatureApi", "LogRequest")*/
+   llLogRequest  = LOGICAL(liLogRequest)
+   /* lcLogdir        = fCParam("SignatureApi", "LogDir")*/
+   lcLogDir   = "/scratch/log/digitalsignature/"
+   /* lcUrlAdapter  = fCParam("SignatureApi", "UrlAdapter")*/
+   /* e.g. http://217.168.2.239:7001/com-yoigo-roi-webapp/xmlrpc */.
 
-ldaFReadDate = TODAY.
 lcLog = lcLogDir + 
         "digital_signature_request" +
-        STRING(YEAR(ldaFReadDate)) +
-        STRING(MONTH(ldaFReadDate),"99") +
-        STRING(DAY(ldaFReadDate),"99") + ".log".
+        STRING(YEAR(TODAY)) +
+        STRING(MONTH(TODAY),"99") +
+        STRING(DAY(TODAY),"99") + ".log".
 OUTPUT STREAM sLog TO VALUE(lcLog) APPEND.
 
-fLogMsg("Started by Cron at " + Func.Common:mTS2HMS(ldCurrentTimeTS)).
-
-IF lcUriPath = ? OR lcUriPath = "" OR 
-   lcUriPathCancel = ? OR lcUriPathCancel = "" THEN DO:
-   fLogMsg("ERROR Digital Signature URI not defined, check cparam. QUIT."). 
-   QUIT.
-END.
-IF lcUrlAdapter = ? OR lcUrlAdapter = "" THEN DO:
-   fLogMsg("ERROR Digital Signature URL not defined, check cparam. QUIT."). 
-   QUIT.
-END.
+IF llLogRequest THEN fLogMsg("Started by Cron at " + Func.Common:mTS2HMS(ldCurrentTimeTS)).
 
 iTimeOut = 10.
 initialize(lcUrlAdapter, iTimeOut).
