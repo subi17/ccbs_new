@@ -137,13 +137,10 @@ DO TRANSACTION:
          ActionLog.Brand        = Syst.Var:gcBrand
          ActionLog.TableName    = lcTableName
          ActionLog.ActionID     = lcActionID
-         ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS}
+         ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
          ActionLog.UserCode     = Syst.Var:katun
          ActionLog.ActionTS     = ldCurrentTimeTS.
-      RELEASE ActionLog.
-      llUpdateAL = FALSE.
       PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";install_address_change_processor_first_run" SKIP.
-      RETURN.
    END.
    ELSE DO:
       ASSIGN
