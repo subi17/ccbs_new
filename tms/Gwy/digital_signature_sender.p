@@ -39,6 +39,30 @@ END FUNCTION.
 /*Is feature active:*/
 /* IF fDMSOnOff() NE TRUE THEN RETURN.*/
 
+
+/*
+   Function constructs brand data for Adapter.
+*/
+FUNCTION fFillbrandStruct RETURNS LOGICAL
+   (iiOrderId      AS INT,
+    icBrand        AS CHAR,
+    INPUT pcStruct AS CHAR):
+
+   IF fConvertBrandToTenant(icBrand) EQ {&TENANT_YOIGO} THEN
+      add_string(pcStruct,"brand","yoigo").
+   ELSE IF fConvertBrandToTenant(icBrand) EQ {&TENANT_MASMOVIL} THEN
+      add_string(pcStruct,"brand","masmovil").
+   ELSE DO:
+      fLogMsg("Error: tenant not found (Yoigo or Masmovil).").
+      RETURN FALSE.
+   END.
+   IF llLogRequest THEN fLogMsg("Signature xml, Brand: " + STRING(pcStruct)).
+
+   RETURN TRUE.
+
+END FUNCTION.
+
+
 /*
    Function constructs data for Adapter.
 */
@@ -60,24 +84,69 @@ FUNCTION fSendCancelMessage RETURNS CHAR
     icBrand     AS CHAR):
 
    DEF VAR lcOrderStruct AS CHAR NO-UNDO.
+   DEF VAR lcBrandStruct AS CHAR NO-UNDO.
+   DEF VAR lcRespStruct  AS CHAR NO-UNDO. 
+   DEF VAR lcResp        AS CHAR NO-UNDO. 
+   DEF VAR lcResult      AS CHAR NO-UNDO. 
+   DEF VAR lcDescription AS CHAR NO-UNDO.
 
-   IF llLogRequest THEN fLogMsg("Construct cancel message, OrderId: " + STRING(iiOrderId)).
+   IF llLogRequest THEN fLogMsg("Start construct cancel message, OrderId: " + STRING(iiOrderId)).
    xmlrpc_cleanup().
+   lcBrandStruct = add_struct(param_toplevel_id,"").
+   fFillBrandStruct(iiOrderId, icBrand, lcBrandStruct).
+
    lcOrderStruct = add_struct(param_toplevel_id,"").
    fFillCancelStruct(iiOrderId, lcOrderStruct). 
 
    IF gi_xmlrpc_error NE 0 THEN DO:
-      fLogMsg("ERROR Creating message: " + gc_xmlrpc_error). 
+      fLogMsg("ERROR Creating cancel message: " + gc_xmlrpc_error). 
       xmlrpc_cleanup().
       RETURN "Error".
    END.
 
-   /* RUN pRPCMethodCall("ROIHistoryInterface.store_order", TRUE).*/ 
+   fLogMsg("Call RPC Method (Adapter), OrderId: " + STRING(iiOrderId)).
+   RUN pRPCMethodCall("digitalSignature.updateProcess", TRUE).
 
    IF gi_xmlrpc_error NE 0 THEN DO:
-      fLogMsg("ERROR Sending Message, OrderId: " + STRING(iiOrderId)). 
+      fLogMsg("ERROR Sending cancel Message, OrderId: " + STRING(iiOrderId)). 
       xmlrpc_cleanup().
       RETURN "Error".
+   END.
+
+   lcRespStruct = get_struct(response_toplevel_id, "0").
+   IF llLogRequest THEN fLogMsg("Response to cancel from Adapter: " + lcrespStruct).
+
+   IF gi_xmlrpc_error EQ 0 THEN
+      lcResp = validate_request(lcRespStruct,"result!,description").
+
+   IF gi_xmlrpc_error EQ 0 THEN DO:
+      lcResult = get_string(lcRespStruct,"result").
+      IF LOOKUP("description",lcResp) GT 0 THEN
+         lcDescription = get_string(lcRespStruct,"description").
+   END.
+
+   IF gi_xmlrpc_error NE 0 THEN DO:
+      fLogMsg("ERROR in cancel Response: " + gc_xmlrpc_error). 
+      xmlrpc_cleanup().
+      RETURN "Error".
+   END.
+
+   IF lcResult EQ "Ok" THEN DO:
+      /* set message as sent */
+      IF llLogRequest THEN fLogMsg("Cancel message to Adapter (OrderId " + STRING(iiOrderID) + ") sent successfully!").
+   END.
+   ELSE DO: /* anything to do? */
+      /* save the exception in the ErrorLog */
+      /* ldTS = Func.Common:mMakeTS().
+      CREATE ErrorLog.
+      ASSIGN ErrorLog.Brand = Syst.Var:gcBrand
+             ErrorLog.TableName = "Order"
+             ErrorLog.KeyValue = STRING(Order.OrderId)
+             ErrorLog.ActionID = "ROIHistory"
+             ErrorLog.ActionTS = ldTS
+             ErrorLog.ErrorMsg = "ROI Response: " + lcDescription
+             liStatus = 3.
+      RELEASE ErrorLog.*/
    END.
 
    RETURN "".
@@ -160,28 +229,6 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
 
 END FUNCTION.
 
-/*
-   Function constructs data for Adapter.
-*/
-FUNCTION fFillbrandStruct RETURNS LOGICAL
-   (iiOrderId      AS INT,
-    icBrand        AS CHAR,
-    INPUT pcStruct AS CHAR):
-
-   IF fConvertBrandToTenant(icBrand) EQ {&TENANT_YOIGO} THEN
-      add_string(pcStruct,"brand","yoigo").
-   ELSE IF fConvertBrandToTenant(icBrand) EQ {&TENANT_MASMOVIL} THEN
-      add_string(pcStruct,"brand","masmovil").
-   ELSE DO:
-      fLogMsg("Error: tenant not found (Yoigo or Masmovil).").
-      RETURN FALSE.
-   END.
-   IF llLogRequest THEN fLogMsg("Signing xml, Brand: " + STRING(pcStruct)).
-
-   RETURN TRUE.
-
-END FUNCTION.
-
 
 /*
    Function sends signing request to
@@ -213,7 +260,7 @@ FUNCTION fSendSigningMessage RETURNS CHAR
    END.
 
    fLogMsg("Call RPC Method (Adapter), OrderId: " + STRING(iiOrderId)).
-   /* RUN pRPCMethodCall("ROIHistoryInterface.store_order", TRUE).*/ 
+   RUN pRPCMethodCall("digitalSignature.registerSignProcess", TRUE).
 
    IF gi_xmlrpc_error NE 0 THEN DO:
       fLogMsg("ERROR Sending Message, OrderId: " + STRING(iiOrderId)). 

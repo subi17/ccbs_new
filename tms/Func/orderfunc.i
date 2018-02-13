@@ -52,7 +52,7 @@ FUNCTION fHandleSignature RETURNS CHAR
               bOrder.Brand EQ Syst.Var:gcBrand AND
               bOrder.OrderId EQ iiOrderId NO-ERROR.
    IF NOT AVAIL bOrder THEN
-      RETURN "Error fHandleSignature not found Order, OrderId:" + STRING(iiOrderID).
+      RETURN "Error".
 
    IF bOrder.statusCode EQ {&ORDER_STATUS_DELIVERED} THEN
       lcActionID = "ContractStatusSent".
@@ -159,12 +159,33 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                   IF liMonths EQ 0 THEN DO:
                      lcSignatureStatus = fHandleSignature(bfOrder.OrderId).
                      IF lcSignatureStatus NE "" THEN /* Error */
-                        /* fLogLine("", lcStatus + " " + Func.Common:mTS2HMS(ldCurrentTime)).*/
+                        /* Nothing, already logged */
                   END.
                END.
             end.
             when "7" or when "8" or when "9" then do:
                fMarkOrderStamp(bfOrder.OrderID,"Close",0.0).
+
+                /* RES-538 Digital Signature for Tienda and Telesales only */
+               IF bfOrder.Logistics NE "" AND
+                  bfOrder.ContractID NE "" AND
+                  LOOKUP(bfOrder.OrderChannel,
+                         "Self,TeleSales") > 0 THEN DO:
+                  fLog( "Digital signature, Orderchannel: " + STRING(bfOrder.OrderChannel)
+                    + " ,CANCEL OrderId: " + STRING(iOrderId)
+                    + " ,Order status: " + STRING(icStatus) , "DEBUG").
+                  /* Financed orders cannot be digitally signed */
+                  ldeInstallment = fGetOfferDeferredPayment(bfOrder.Offer,
+                                              bfOrder.CrStamp,
+                                              OUTPUT ldeMonthlyFee,
+                                              OUTPUT liMonths,
+                                              OUTPUT ldeFinalFee).
+                  IF liMonths EQ 0 THEN DO:
+                     lcSignatureStatus = fHandleSignature(bfOrder.OrderId).
+                     IF lcSignatureStatus NE "" THEN /* Error */
+                        /* Nothing, already logged */
+                  END.
+               END.
 
                /* YDR-2495 creating STC request to fixed only when mobile part is terminated */
                FIND FIRST MobSub NO-LOCK WHERE
