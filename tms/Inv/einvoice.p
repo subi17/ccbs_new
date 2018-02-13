@@ -121,7 +121,7 @@ INVOICE_LOOP:
 FOR EACH Invoice WHERE
          Invoice.Brand    = "1" AND
          Invoice.InvDate >= ldaDateFrom AND
-         Invoice.DelType = 4 /*{&INV_DEL_TYPE_ESI}!!!*/ AND
+         Invoice.DelType =  {&INV_DEL_TYPE_ESI} AND /* 4 in testing phase */
          Invoice.InvType  = 1 AND
          Invoice.InvAmt  >= 0 NO-LOCK:
 
