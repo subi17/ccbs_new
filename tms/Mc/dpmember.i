@@ -212,8 +212,9 @@ FUNCTION fAddDiscountPlanMember RETURNS CHARACTER
     INPUT iiDiscountPeriods AS INT,
     INPUT iiOrderId         AS INT):
 
-   DEFINE VARIABLE ldValidTo AS DATE      NO-UNDO.
-   DEFINE VARIABLE lcResult  AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE ldValidTo     AS DATE      NO-UNDO.
+   DEFINE VARIABLE lcResult      AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcReturnValue AS CHARACTER NO-UNDO.
 
    IF NOT idDiscountAmt > 0
    THEN RETURN "ERROR: Discount member value must be greater than zero".
@@ -236,58 +237,68 @@ FUNCTION fAddDiscountPlanMember RETURNS CHARACTER
    THEN ldValidTo = idaToDate.
    ELSE ldValidTo = fCalcDPMemberValidTo(idaFromDate,iiDiscountPeriods).
 
-   FIND FIRST DPMember WHERE
-              DPMember.DPId = DiscountPlan.DPId AND
-              DPMember.HostTable = "MobSub" AND
-              DPMember.KeyValue  = STRING(iiMsSeq) AND
-              DPMember.ValidTo >= idaFromDate AND
-              DPMember.ValidFrom <= idaFromDate NO-LOCK NO-ERROR.
-   IF AVAILABLE DPMember
-   THEN DO:
-      IF fCloseDPMember(DPMember.DPMember,
-                        DATE(MONTH(idaFromDate), 1, YEAR(idaFromDate)) - 1) /* last day of the previous month */
+   lcResult = fDiscountAllowed(MobSub.MsSeq, icDiscountPlan, idaFromDate).
+   IF lcResult > ""
+   THEN RETURN SUBSTITUTE("ERROR: Discount &1 is not allowed as it is not compatible with &2", icDiscountPlan, lcResult).
+
+   lcResult = fCloseIncompatibleDiscounts(MobSub.MsSeq, icDiscountPlan, DATE(MONTH(idaFromDate), 1, YEAR(idaFromDate)) - 1, NO).
+
+   IF lcResult > ""
+   THEN lcReturnValue = SUBSTITUTE("Closed the existing discount plan members &1 to date &2 as they are not compatible with &3",
+                                   lcResult,
+                                   idaFromDate,
+                                   icDiscountPlan).
+   FOR
+      EACH DPMember NO-LOCK WHERE
+         DPMember.DPId = DiscountPlan.DPId    AND
+         DPMember.HostTable = "MobSub"        AND
+         DPMember.KeyValue  = STRING(iiMsSeq)
+      BY DPMember.ValidTo DESCENDING:
+
+      IF DPMember.ValidTo >= idaFromDate
       THEN DO:
-         lcResult = SUBSTITUTE("Resetting the discount plan member &1 to start from date &2.",
-                               icDiscountPlan,
-                               idaFromDate).
-         Func.Common:mWriteMemo("MobSub",
-                                  STRING(MobSub.MsSeq),
-                                  MobSub.CustNum,
-                                  "Discount plan member reset",
-                                  lcResult).
+         IF DPMember.ValidFrom <= DPMember.ValidTo AND
+            DPMember.ValidFrom <= idaFromDate
+         THEN DO:
+            IF fCloseDPMember(DPMember.DPMember,
+                              DATE(MONTH(idaFromDate), 1, YEAR(idaFromDate)) - 1) /* last day of the previous month */
+            THEN DO:
+               ASSIGN
+                  lcResult = SUBSTITUTE("Resetting the discount plan member &1 to start from date &2.",
+                                        icDiscountPlan,
+                                        idaFromDate)
+                  lcReturnValue = lcReturnValue +
+                                  (IF lcReturnValue <> "" THEN ". " ELSE "") +
+                                  lcResult.
+
+               Func.Common:mWriteMemo("MobSub",
+                                      STRING(MobSub.MsSeq),
+                                      MobSub.CustNum,
+                                      "Discount plan member reset",
+                                      lcResult).
+            END.
+         END.
       END.
-   END.
-   ELSE DO:
-      lcResult = fDiscountAllowed(MobSub.MsSeq, icDiscountPlan, idaFromDate).
-      IF lcResult > ""
-      THEN RETURN SUBSTITUTE("ERROR: Discount &1 is not allowed as it is not compatible with &2", icDiscountPlan, lcResult).
-      lcResult = fCloseIncompatibleDiscounts(MobSub.MsSeq, icDiscountPlan, DATE(MONTH(idaFromDate), 1, YEAR(idaFromDate)) - 1, NO).
 
-      IF lcResult > ""
-      THEN lcResult = SUBSTITUTE("Closed the existing discount plan members &1 to date &2 as they are not compatible with &3",
-                                 lcResult,
-                                 idaFromDate,
-                                 icDiscountPlan).
+      ELSE LEAVE.
+         
    END.
 
-   IF idDiscountAmt > 0 THEN DO:
-      
-      IF ldValidTo EQ ? THEN 
-         ldValidTo = 12/31/49.
-      
-      CREATE DPMember.
-      ASSIGN 
-         DPMember.DPMemberID = NEXT-VALUE(DPMemberID)
-         DPMember.DPId      = DiscountPlan.DPId
-         DPMember.HostTable = "MobSub" 
-         DPMember.KeyValue  = STRING(MobSub.MsSeq) 
-         DPMember.ValidFrom = idaFromDate
-         DPMember.ValidTo   = ldValidTo
-         DPMember.DiscValue = idDiscountAmt
-         DPMember.OrderId   = iiOrderId.
-   END. /* IF idDiscountAmt > 0 THEN DO: */
+   IF ldValidTo EQ ? THEN 
+      ldValidTo = 12/31/49.
+   
+   CREATE DPMember.
+   ASSIGN 
+      DPMember.DPMemberID = NEXT-VALUE(DPMemberID)
+      DPMember.DPId      = DiscountPlan.DPId
+      DPMember.HostTable = "MobSub" 
+      DPMember.KeyValue  = STRING(MobSub.MsSeq) 
+      DPMember.ValidFrom = idaFromDate
+      DPMember.ValidTo   = ldValidTo
+      DPMember.DiscValue = idDiscountAmt
+      DPMember.OrderId   = iiOrderId.
 
-   RETURN lcResult.
+   RETURN lcReturnValue.
 
 END FUNCTION. /* fAddDiscountPlanMember */
 
