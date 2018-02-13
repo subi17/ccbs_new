@@ -336,12 +336,17 @@ lcTableName = "Order".
 ldCurrentTimeTS = Func.Common:mMakeTS().
 
 ASSIGN
-   /*liLogRequest  = fIParam("SignatureApi", "LogRequest")*/
+   liLogRequest  = fIParam("SignatureApi", "LogRequest")
    llLogRequest  = LOGICAL(liLogRequest)
-   /* lcLogdir        = fCParam("SignatureApi", "LogDir")*/
-   lcLogDir   = "/scratch/log/digitalsignature/"
-   /* lcUrlAdapter  = fCParam("SignatureApi", "UrlAdapter")*/
-   /* e.g. http://217.168.2.239:7001/com-yoigo-roi-webapp/xmlrpc */.
+   lcLogdir      = fCParam("SignatureApi", "LogDir")
+   /* lcLogDir   = "/scratch/log/digitalsignature/"*/
+   lcUrlAdapter  = fCParam("SignatureApi", "UrlAdapter").
+   /* e.g. http://217.168.2.239:7001/com-yoigo-roi-webapp/xmlrpc */
+
+IF lcUrlAdapter = ? OR lcUrlAdapter = "" THEN DO:
+   fLogMsg("Adapter URL not defined (TMS->Adapter). QUIT program. " + Func.Common:mTS2HMS(ldCurrentTimeTS)).
+   QUIT.
+END.
 
 lcLog = lcLogDir + 
         "digital_signature_request" +
