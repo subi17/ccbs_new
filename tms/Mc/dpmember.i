@@ -148,7 +148,7 @@ FUNCTION fCloseIncompatibleDiscounts RETURNS CHARACTER
                                      STRING(MobSub.MsSeq),
                                      MobSub.CustNum,
                                      "Automatic discount plan member closing",
-                                     SUBSTITUTE("Closing the existing discount plan member &1 to date &2 as it is not compatible with &3",
+                                     SUBSTITUTE("Closed the existing discount plan member &1 to date &2 as it is not compatible with &3",
                                                 TMSRelation.ParentValue,
                                                 idaDate,
                                                 icDiscountPlan)).
@@ -246,7 +246,7 @@ FUNCTION fAddDiscountPlanMember RETURNS CHARACTER
    IF lcResult > ""
    THEN lcReturnValue = SUBSTITUTE("Closed the existing discount plan members &1 to date &2 as they are not compatible with &3",
                                    lcResult,
-                                   idaFromDate,
+                                   DATE(MONTH(idaFromDate), 1, YEAR(idaFromDate)) - 1,
                                    icDiscountPlan).
    FOR
       EACH DPMember NO-LOCK WHERE

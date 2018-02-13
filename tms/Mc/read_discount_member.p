@@ -99,7 +99,6 @@ IF NOT SESSION:BATCH THEN DO:
    VIEW FRAME fQty.
 END.
 
-
 REPEAT TRANS:
 
    lcReadLine = "".
@@ -193,66 +192,32 @@ REPEAT TRANS:
               NEXT.
       END.
    END.
-  
-   FIND FIRST DPMember WHERE
-              DPMember.DPId = DiscountPlan.DPId AND
-              DPMember.HostTable = "MobSub" AND
-              DPMember.KeyValue  = STRING(liMsSeq) AND
-              DPMember.ValidTo >= ldaValidFrom AND
-              DPMember.ValidFrom <= ldaValidTo NO-LOCK NO-ERROR.
 
-   /* end the current one */
-   IF AVAILABLE DPMember THEN DO:
-      IF DPMember.DiscValue = ldDiscount AND 
-         DPMember.ValidFrom = ldaValidFrom AND
-         DPMember.ValidTo = ldaValidTo THEN DO:
-            fLogLine("No changes").
-            NEXT.
-      END.
-
-      IF NOT ldDiscount > 0
-      THEN fCloseDPMember(DPMember.DPMemberID,
-                          ldaValidFrom - 1).
-
+   IF NOT ldDiscount > 0
+   THEN DO:
+      fError("The discount amount must be greater than zero").
+      NEXT.
    END.
    
-   IF ldDiscount NE 0 THEN DO:
-      lcError = fAddDiscountPlanMember(liMsSeq,
-                                       DiscountPlan.DPRuleID,
-                                       ldDiscount,
-                                       ldaValidFrom,
-                                       ldaValidTo,
-                                       ?,
-                                       0).
-       IF lcError BEGINS "ERROR"
-       THEN DO:
-         fError(lcError).
-         NEXT.
-       END.
-       ELSE IF lcError > ""
-       THEN fLogLine("NOTE: " + lcError).
-   
-      /* dpmember creations not logged anymore YDR-1078 */
-      /*
-      IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhDPMember).
-      */
-   
-      fLogLine("OK"). 
-
-      oiDone = oiDone + 1.
+   lcError = fAddDiscountPlanMember(liMsSeq,
+                                    DiscountPlan.DPRuleID,
+                                    ldDiscount,
+                                    ldaValidFrom,
+                                    ldaValidTo,
+                                    ?,
+                                    0).
+   IF lcError BEGINS "ERROR"
+   THEN DO:
+      fError(lcError).
+      NEXT.
    END.
-   ELSE DO:
-      IF NOT AVAILABLE DPMember THEN DO:
-         fError("Discount does not exist").
-         NEXT.
-      END.
-      ELSE DO:
-         fLogLine("OK"). 
+   ELSE IF lcError > ""
+   THEN fLogLine("NOTE: " + lcError).
 
-         oiDone = oiDone + 1.
-      END.
-   END.
-   
+   fLogLine("OK").
+
+   oiDone = oiDone + 1.
+
    IF NOT SESSION:BATCH AND 
       (oiDone < 100 OR oiDone MOD 100 = 0) THEN DO:
       PAUSE 0.
