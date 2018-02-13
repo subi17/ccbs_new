@@ -22,7 +22,7 @@
 {Func/main_add_lines.i}
 {Func/msisdn.i}
 {Mc/offer.i}
-{Func/log.i}
+{Func/digital_signature.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
@@ -30,71 +30,7 @@ IF llDoEvent THEN DO:
    {Func/lib/eventlog.i}
 
    DEFINE VARIABLE lhOrderStatusChange AS HANDLE NO-UNDO.
-   fSetLogFileName("/scratch/log/digitalsignature/digital_signature_send.log").
 END.
-
-/*
-   Function for Digital Signature checks order status and ActionLog. Creates 
-   new ActionLog row with ActionTS = 0. ActionLog will be searched by cron and 
-   ActionTS is set to time value when signature request or signature cancel request
-   has been sent to Adapter (Signature API).
-*/
-FUNCTION fHandleSignature RETURNS CHAR
-   (iiOrderId AS INT):
-   DEF VAR lcStatus AS CHAR NO-UNDO INIT "".
-   DEF VAR lcActionID AS CHAR NO-UNDO INIT "".
-   DEF BUFFER bOrder FOR Order.
-   DEF BUFFER bActionLog FOR ActionLog.
-
-   fLog( "Digital signature, START handling: OrderId: " + STRING(iiOrderId),"DEBUG").
-
-   FIND FIRST bOrder NO-LOCK WHERE
-              bOrder.Brand EQ Syst.Var:gcBrand AND
-              bOrder.OrderId EQ iiOrderId NO-ERROR.
-   IF NOT AVAIL bOrder THEN
-      RETURN "Error".
-
-   IF bOrder.statusCode EQ {&ORDER_STATUS_DELIVERED} THEN
-      lcActionID = "ContractStatusSent".
-   ELSE IF LOOKUP(bOrder.StatusCode, {&ORDER_CLOSE_STATUSES}) > 0 THEN /* 7,8,9 */
-      lcActionID = "ContractStatusCancelled".
-   ELSE DO:
-      fLog( "Digital signature, Wrong Order status: OrderId: " + STRING(iiOrderId) 
-         + " Status: " + STRING(bOrder.statusCode), "ERROR").
-      RETURN "Error".
-   END.
-
-   FIND FIRST bActionLog NO-LOCK WHERE
-              bActionLog.Brand     = Syst.Var:gcBrand AND
-              bActionLog.TableName = "Order" AND
-              bActionLog.KeyValue  = STRING(bOrder.OrderId) AND
-              bActionLog.ActionID  = lcActionID AND
-              bActionLog.ActionTS  = DEC(0) USE-INDEX TableName NO-ERROR.
-   IF NOT AVAIL bActionLog THEN DO:
-      CREATE ActionLog.
-         ASSIGN
-            ActionLog.Brand     = Syst.Var:gcBrand
-            ActionLog.ActionID  = lcActionID
-            ActionLog.ActionTS  = 0
-            ActionLog.TableName = "Order"
-            ActionLog.KeyValue  = STRING(bOrder.OrderId)
-            ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE}
-            ActionLog.UserCode     = Syst.Var:katun.
-
-      fLog( "Digital signature, Create ActionLog: OrderId: " + STRING(iiOrderId) 
-          + " ActionID: " + STRING(lcActionID), "DEBUG").
-      lcStatus = "".
-   END.
-   ELSE DO:
-      fLog( "Digital signature, ActionLog (ActionTS=0) already exists: OrderId: " + STRING(iiOrderId) 
-          + " ActionID: " + STRING(lcActionID), "ERROR").
-      lcStatus =  "Error".
-   END.
-
-   RETURN lcStatus.
-
-END FUNCTION.
-
 
 /* set status of order */
 FUNCTION fSetOrderStatus RETURNS LOGICAL
@@ -143,49 +79,13 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                fMarkOrderStamp(bfOrder.OrderID,"Delivery",0.0).
 
                /* RES-538 Digital Signature for Tienda and Telesales only */
-               IF bfOrder.Logistics NE "" AND
-                  bfOrder.ContractID NE "" AND
-                  LOOKUP(bfOrder.OrderChannel,
-                         "Self,TeleSales") > 0 THEN DO:
-                  fLog( "Digital signature, Orderchannel: " + STRING(bfOrder.OrderChannel) 
-                    + " ,OrderId: " + STRING(iOrderId)
-                    + " ,Order status: " + STRING(icStatus) , "DEBUG").
-                  /* Financed orders cannot be digitally signed */
-                  ldeInstallment = fGetOfferDeferredPayment(bfOrder.Offer,
-                                              bfOrder.CrStamp,
-                                              OUTPUT ldeMonthlyFee,
-                                              OUTPUT liMonths,
-                                              OUTPUT ldeFinalFee).
-                  IF liMonths EQ 0 THEN DO:
-                     lcSignatureStatus = fHandleSignature(bfOrder.OrderId).
-                     IF lcSignatureStatus NE "" THEN /* Error */
-                        /* Nothing, already logged */
-                  END.
-               END.
+               lcSignatureStatus = fHandleSignature(bfOrder.OrderId, icStatus).
             end.
             when "7" or when "8" or when "9" then do:
                fMarkOrderStamp(bfOrder.OrderID,"Close",0.0).
 
                 /* RES-538 Digital Signature for Tienda and Telesales only */
-               IF bfOrder.Logistics NE "" AND
-                  bfOrder.ContractID NE "" AND
-                  LOOKUP(bfOrder.OrderChannel,
-                         "Self,TeleSales") > 0 THEN DO:
-                  fLog( "Digital signature, Orderchannel: " + STRING(bfOrder.OrderChannel)
-                    + " ,CANCEL OrderId: " + STRING(iOrderId)
-                    + " ,Order status: " + STRING(icStatus) , "DEBUG").
-                  /* Financed orders cannot be digitally signed */
-                  ldeInstallment = fGetOfferDeferredPayment(bfOrder.Offer,
-                                              bfOrder.CrStamp,
-                                              OUTPUT ldeMonthlyFee,
-                                              OUTPUT liMonths,
-                                              OUTPUT ldeFinalFee).
-                  IF liMonths EQ 0 THEN DO:
-                     lcSignatureStatus = fHandleSignature(bfOrder.OrderId).
-                     IF lcSignatureStatus NE "" THEN /* Error */
-                        /* Nothing, already logged */
-                  END.
-               END.
+               lcSignatureStatus = fHandleSignature(bfOrder.OrderId, icStatus).
 
                /* YDR-2495 creating STC request to fixed only when mobile part is terminated */
                FIND FIRST MobSub NO-LOCK WHERE

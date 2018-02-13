@@ -23,7 +23,6 @@ DEF VAR lcTableName     AS CHAR NO-UNDO.
 DEF VAR ldCurrentTimeTS AS DEC  NO-UNDO.
 
 DEF VAR iTimeOut        AS INT  NO-UNDO.
-DEF VAR liLogRequest    AS INT  NO-UNDO.
 DEF VAR llLogRequest    AS LOG  NO-UNDO INIT TRUE.
 DEF VAR lcUrlAdapter    AS CHAR NO-UNDO.
 
@@ -35,9 +34,6 @@ FUNCTION fLogMsg RETURNS LOGICAL
    PUT STREAM sLog UNFORMATTED
       icMessage SKIP.
 END FUNCTION.
-
-/*Is feature active:*/
-/* IF fDMSOnOff() NE TRUE THEN RETURN.*/
 
 
 /*
@@ -53,10 +49,10 @@ FUNCTION fFillbrandStruct RETURNS LOGICAL
    ELSE IF fConvertBrandToTenant(icBrand) EQ {&TENANT_MASMOVIL} THEN
       add_string(pcStruct,"brand","masmovil").
    ELSE DO:
-      fLogMsg("Error: tenant not found (Yoigo or Masmovil).").
+      fLogMsg(STRING(iiOrderID) + " Error: tenant not found (Yoigo or Masmovil).").
       RETURN FALSE.
    END.
-   IF llLogRequest THEN fLogMsg("Signature xml, Brand: " + STRING(pcStruct)).
+   IF llLogRequest THEN fLogMsg(STRING(iiOrderID) + " Signature xml, Brand: " + STRING(pcStruct)).
 
    RETURN TRUE.
 
@@ -90,7 +86,7 @@ FUNCTION fSendCancelMessage RETURNS CHAR
    DEF VAR lcResult      AS CHAR NO-UNDO. 
    DEF VAR lcDescription AS CHAR NO-UNDO.
 
-   IF llLogRequest THEN fLogMsg("Start construct cancel message, OrderId: " + STRING(iiOrderId)).
+   IF llLogRequest THEN fLogMsg(STRING(iiOrderID) + " Start construct cancel message").
    xmlrpc_cleanup().
    lcBrandStruct = add_struct(param_toplevel_id,"").
    fFillBrandStruct(iiOrderId, icBrand, lcBrandStruct).
@@ -108,7 +104,7 @@ FUNCTION fSendCancelMessage RETURNS CHAR
    RUN pRPCMethodCall("digitalSignature.updateProcess", TRUE).
 
    IF gi_xmlrpc_error NE 0 THEN DO:
-      fLogMsg("ERROR Sending cancel Message, OrderId: " + STRING(iiOrderId)). 
+      fLogMsg(STRING(iiOrderID) + " ERROR Sending cancel Message"). 
       xmlrpc_cleanup().
       RETURN "Error".
    END.
@@ -133,20 +129,10 @@ FUNCTION fSendCancelMessage RETURNS CHAR
 
    IF lcResult EQ "Ok" THEN DO:
       /* set message as sent */
-      IF llLogRequest THEN fLogMsg("Cancel message to Adapter (OrderId " + STRING(iiOrderID) + ") sent successfully!").
+      IF llLogRequest THEN fLogMsg(STRING(iiOrderID) + " Cancel message to Adapter sent successfully!").
    END.
-   ELSE DO: /* anything to do? */
-      /* save the exception in the ErrorLog */
-      /* ldTS = Func.Common:mMakeTS().
-      CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand = Syst.Var:gcBrand
-             ErrorLog.TableName = "Order"
-             ErrorLog.KeyValue = STRING(Order.OrderId)
-             ErrorLog.ActionID = "ROIHistory"
-             ErrorLog.ActionTS = ldTS
-             ErrorLog.ErrorMsg = "ROI Response: " + lcDescription
-             liStatus = 3.
-      RELEASE ErrorLog.*/
+   ELSE DO: 
+      /* anything to do? */   
    END.
 
    RETURN "".
@@ -164,9 +150,10 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
    DEF BUFFER bOrder FOR Order.
    DEF BUFFER bOrderCustomer FOR OrderCustomer.
 
-   FOR EACH bOrder NO-LOCk WHERE
+   FIND FIRST bOrder NO-LOCK WHERE
             bOrder.Brand EQ Syst.Var:gcBrand AND
-            bOrder.OrderId EQ iiOrderId:
+            bOrder.OrderId EQ iiOrderId.
+   IF AVAIL bOrder THEN DO:
       FIND FIRST bOrderCustomer NO-LOCK WHERE
                  bOrderCustomer.Brand EQ Syst.Var:gcBrand AND
                  bOrderCustomer.OrderId EQ iiOrderId.
@@ -216,7 +203,8 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
 
       FIND FIRST OrderTimeStamp NO-LOCK WHERE
                  OrderTimeStamp.Brand EQ Syst.Var:gcBrand AND
-                 OrderTimeStamp.OrderID EQ bOrder.OrderId NO-ERROR.
+                 OrderTimeStamp.RowType EQ bOrderCustomer.RowType AND
+                 OrderTimeStamp.OrderID EQ bOrderCustomer.OrderId USE-INDEX RowType.
       IF AVAIL OrderTimeStamp THEN
          add_string(pcStruct,"orderDate",STRING(OrderTimeStamp.TimeStamp)).
       ELSE
@@ -245,7 +233,7 @@ FUNCTION fSendSigningMessage RETURNS CHAR
    DEF VAR lcResult      AS CHAR NO-UNDO. 
    DEF VAR lcDescription AS CHAR NO-UNDO.
 
-   IF llLogRequest THEN fLogMsg("Start construct signing message, OrderId: " + STRING(iiOrderId)).
+   IF llLogRequest THEN fLogMsg(STRING(iiOrderId) + " Start construct signing message").
    xmlrpc_cleanup().
    lcBrandStruct = add_struct(param_toplevel_id,"").
    fFillBrandStruct(iiOrderId, icBrand, lcBrandStruct). 
@@ -263,7 +251,7 @@ FUNCTION fSendSigningMessage RETURNS CHAR
    RUN pRPCMethodCall("digitalSignature.registerSignProcess", TRUE).
 
    IF gi_xmlrpc_error NE 0 THEN DO:
-      fLogMsg("ERROR Sending Message, OrderId: " + STRING(iiOrderId)). 
+      fLogMsg(STRING(iiOrderId) + " ERROR Sending Message"). 
       xmlrpc_cleanup().
       RETURN "Error".
    END.
@@ -279,6 +267,7 @@ FUNCTION fSendSigningMessage RETURNS CHAR
       IF LOOKUP("description",lcResp) GT 0 THEN
          lcDescription = get_string(lcRespStruct,"description").
    END.
+   IF llLogRequest THEN fLogMsg("Result from Adapter: " + lcResult).
 
    IF gi_xmlrpc_error NE 0 THEN DO:
       fLogMsg("ERROR in Response: " + gc_xmlrpc_error). 
@@ -288,20 +277,10 @@ FUNCTION fSendSigningMessage RETURNS CHAR
 
    IF lcResult EQ "Ok" THEN DO:
       /* set message as sent */
-      IF llLogRequest THEN fLogMsg("Message to Adapter (OrderId " + STRING(iiOrderID) + ") sent successfully!").
+      IF llLogRequest THEN fLogMsg(STRING(iiOrderID) + " Message to Adapter sent successfully!").
    END.
-   ELSE DO: /* anything to do? */
-      /* save the exception in the ErrorLog */
-      /* ldTS = Func.Common:mMakeTS().
-      CREATE ErrorLog.
-      ASSIGN ErrorLog.Brand = Syst.Var:gcBrand
-             ErrorLog.TableName = "Order"
-             ErrorLog.KeyValue = STRING(Order.OrderId)
-             ErrorLog.ActionID = "ROIHistory"
-             ErrorLog.ActionTS = ldTS
-             ErrorLog.ErrorMsg = "ROI Response: " + lcDescription
-             liStatus = 3.
-      RELEASE ErrorLog.*/
+   ELSE DO: 
+      /* anything to do? */
    END.
 
    RETURN "".
@@ -316,17 +295,15 @@ PROCEDURE pCheckActionLog:
 
    DEF VAR lcStatus AS CHAR NO-UNDO INIT "".
 
-DO TRANS:
-
-   FOR EACH ActionLog WHERE
+   FOR EACH ActionLog EXCLUSIVE-LOCK WHERE
             ActionLog.Brand     EQ Syst.Var:gcBrand AND
             ActionLog.TableName EQ lcTableName      AND
             ActionLog.ActionTS  =  DEC(0) USE-INDEX Tablename:
 
       IF AVAIL ActionLog THEN
          IF ActionLog.ActionStatus EQ {&ACTIONLOG_STATUS_PROCESSING} THEN
-         QUIT. /* ?? */
-  
+            QUIT. /* ?? */
+   DO TRANS:
       IF AVAIL ActionLog THEN DO:
           IF ActionLog.ActionID NE "ContractStatusSent" OR
              ActionLog.ActionID NE "ContractStatusCancelled" THEN
@@ -334,15 +311,15 @@ DO TRANS:
       END.
       ELSE DO:
          FIND FIRST bOrder NO-LOCK WHERE
-                    bOrder.Brand EQ "1" /* Syst.Var:gcBrand*/ AND
+                    bOrder.Brand EQ Syst.Var:gcBrand AND
                     STRING(bOrder.OrderId) EQ ActionLog.KeyValue NO-ERROR.
          IF NOT AVAIL bOrder THEN DO:
-            fLogMsg("ERROR not found Order, OrderId: " + STRING(bOrder.OrderId)).
+            fLogMsg(STRING(ActionLog.KeyValue) + " ERROR not found Order").
             NEXT.
          END.
 
          IF AVAIL bOrder THEN DO:
-            IF llLogRequest THEN fLogMsg("Found OrderId: " + STRING(bOrder.OrderId) + 
+            IF llLogRequest THEN fLogMsg(STRING(bOrder.OrderId) + " Found OrderId " + 
                     ", OrderStatusCode: " + STRING(bOrder.StatusCode) + 
                     ", ActionLog.ActionID: " + STRING(ActionLog.ActionID)).
             IF bOrder.statusCode EQ {&ORDER_STATUS_DELIVERED} THEN
@@ -352,8 +329,7 @@ DO TRANS:
                /* Send cancel */
                lcStatus = fSendCancelMessage(bOrder.OrderId, bOrder.Brand).
             ELSE
-               fLogMsg("ERROR wrong Order status, OrderId: " + STRING(bOrder.OrderId) + 
-                       ", status: " + STRING(bOrder.StatusCode)).
+               fLogMsg(STRING(bOrder.OrderId) + " ERROR wrong Order status: " + STRING(bOrder.StatusCode)).
 
             IF lcStatus EQ "" THEN DO:
                ASSIGN
@@ -363,17 +339,9 @@ DO TRANS:
             END. /* ELSE? Leave untouched and try again in next cron job */
          END.
       END.
+   END. /* DO TRANS */
+   END. /* FOR EACH */
 
-      /* ELSE DO:
-         ASSIGN
-            ActionLog.ActionStatus = {&ACTIONLOG_STATUS_PROCESSING}
-            ActionLog.UserCode     = Syst.Var:katun
-            ActionLog.ActionTS     = ldCurrentTimeTS.
-
-         RELEASE Actionlog.
-      END.*/
-   END.
-END.
 END PROCEDURE.
 
 
@@ -383,8 +351,8 @@ lcTableName = "Order".
 ldCurrentTimeTS = Func.Common:mMakeTS().
 
 ASSIGN
-   liLogRequest  = fIParam("SignatureApi", "LogRequest")
-   llLogRequest  = LOGICAL(liLogRequest)
+   IF(fIParam("SignatureApi", "LogRequest")) EQ 0 THEN
+      llLogRequest  = FALSE.
    lcLogdir      = fCParam("SignatureApi", "LogDir")
    /* lcLogDir   = "/scratch/log/digitalsignature/"*/
    lcUrlAdapter  = fCParam("SignatureApi", "UrlAdapter").
