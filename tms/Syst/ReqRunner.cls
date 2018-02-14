@@ -69,10 +69,13 @@ CLASS Syst.ReqRunner INHERITS gearbox.daemons.Daemon:
        
       objReqHandler = NEW Syst.ReqHandler(liQueue).
       ASSIGN
-         liInterval   = RequestQueue.Interval
-         liWaitTime   = 0
-         liPauseTotal = 0
-         llWait       = FALSE.     
+         liInterval       = RequestQueue.Interval
+         liWaitTime       = 0
+         liPauseTotal     = 0
+         ldaLastCheckDate = TODAY
+         llWait           = FALSE.
+
+      objReqHandler:mUpdateProcess().
       mSetNewReportTime().
 
    END METHOD.
@@ -95,16 +98,15 @@ CLASS Syst.ReqRunner INHERITS gearbox.daemons.Daemon:
 
    METHOD PUBLIC OVERRIDE LOGICAL processOne():
 
-      IF ldaLastCheckDate NE TODAY
-      THEN DO:
-         objReqHandler:mUpdateProcess().
-         ldaLastCheckDate = TODAY.
-      END.
-
       IF NOW > ldttzNextReportTime
       THEN DO:
-         LOG-MANAGER:WRITE-MESSAGE(objReqHandler:mGetStatistic()).
+         objReqHandler:mLogStatistic().
          mSetNewReportTime().
+         IF ldaLastCheckDate NE TODAY
+         THEN DO:
+            objReqHandler:mUpdateProcess().
+            ldaLastCheckDate = TODAY.
+         END.
       END.
 
       IF llWait

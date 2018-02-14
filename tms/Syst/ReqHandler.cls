@@ -157,23 +157,18 @@ CLASS Syst.ReqHandler:
 
    END METHOD.
 
-   METHOD PUBLIC CHARACTER mGetStatistic():
-
-      DEFINE VARIABLE lcReturnValue AS CHARACTER NO-UNDO.
+   METHOD PUBLIC VOID mLogStatistic():
 
       FOR EACH ttStatistic:
-         lcReturnValue = lcReturnValue + CHR(10) +
-                SUBSTITUTE("ReqType=&1, ReqStatus=&2: Processed=&3, Failed=&4",
-                           ttStatistic.ReqType,
-                           ttStatistic.ReqStatus,
-                           ttStatistic.ProcessAmt,
-                           ttStatistic.FailedAmt).
+         LOG-MANAGER:WRITE-MESSAGE
+            (SUBSTITUTE("ReqType=&1, ReqStatus=&2: Processed=&3, Failed=&4",
+                        ttStatistic.ReqType,
+                        ttStatistic.ReqStatus,
+                        ttStatistic.ProcessAmt,
+                        ttStatistic.FailedAmt), "STATUS").
       END.
       
-      RETURN LEFT-TRIM(lcReturnValue, CHR(10)).
-      
-   END METHOD. 
-
+   END METHOD.
 
    METHOD PUBLIC LOGICAL mProcess():
 
