@@ -118,7 +118,7 @@ REPEAT:
       FIND FIRST Order WHERE
                  Order.brand EQ Syst.Var:gcBrand AND
                  Order.orderid EQ INT(lcYoigoOrderId) AND
-                 LOOKUP(order.statuscode,{&ORDER_INACTIVE_STATUSES}) = 0 
+                 LOOKUP(order.statuscode,{&ORDER_CLOSE_STATUSES}) = 0 
                  NO-LOCK NO-ERROR.
       IF NOT AVAIL Order THEN DO:
          fLogLine("ERROR:Order " + lcTempOrderId + " not found or " +
