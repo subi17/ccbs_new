@@ -152,6 +152,7 @@ CLASS Syst.ReqHandler:
       DEFINE VARIABLE liResult       AS INTEGER   NO-UNDO.
       DEFINE VARIABLE lcProgram      AS CHARACTER NO-UNDO.
       DEFINE VARIABLE lii            AS INTEGER   NO-UNDO.
+      DEFINE VARIABLE liMTIME        AS INTEGER   NO-UNDO.
       
       liStartTime = MTIME.
       
@@ -218,8 +219,14 @@ CLASS Syst.ReqHandler:
                                         INTEGER(MsRequest.ReqStatus > 1),
                                         INTEGER(MsRequest.ReqStatus = 3)).
                END.
-   
-               IF liCount > aiMaxAmount OR liStartTime >= ABSOLUTE(MTIME - aiMaxTime)
+
+               liMTIME = MTIME.
+
+               IF liCount > aiMaxAmount OR
+                    /* Check if day is changed */
+                  ( IF liStartTime > liMTIME
+                    THEN liStartTime < 86400000 + liMTIME - aiMaxTime
+                    ELSE liStartTime < liMTIME - aiMaxTime )
                THEN RETURN FALSE.
             END.
          END.
