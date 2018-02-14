@@ -22,7 +22,6 @@
 {Func/main_add_lines.i}
 {Func/msisdn.i}
 {Mc/offer.i}
-{Func/log.i}
 
 /*
    Function for Digital Signature checks order status and ActionLog. Creates 
@@ -66,7 +65,7 @@ FUNCTION fHandleSignature RETURNS CHAR
                                                 OUTPUT liMonths,
                                                 OUTPUT ldeFinalFee).
       IF liMonths NE 0 THEN DO:
-         RETURN "Error". /* financed */
+         RETURN "Financed". /* financed, not error */
       END.
    END.
 
@@ -80,29 +79,34 @@ FUNCTION fHandleSignature RETURNS CHAR
       RETURN "Error".
    END.
 
-   FIND FIRST bActionLog NO-LOCK WHERE
+   /* Check if already sent. No need to resend */
+   FIND FIRST bActionLog EXCLUSIVE-LOCK WHERE
               bActionLog.Brand     = Syst.Var:gcBrand AND
               bActionLog.TableName = "Order" AND
               bActionLog.KeyValue  = STRING(bOrder.OrderId) AND
-              bActionLog.ActionID  = lcActionID AND
-              bActionLog.ActionTS  = DEC(0) AND
+              bActionLog.ActionID  = lcActionID /* AND
+              bActionLog.ActionTS  = DEC(0)*/ AND
               bActionLog.CustNum   = bOrder.CustNum USE-INDEX TableName NO-ERROR.
    IF NOT AVAIL bActionLog THEN DO:
       CREATE ActionLog.
          ASSIGN
-            ActionLog.Brand     = Syst.Var:gcBrand
-            ActionLog.ActionID  = lcActionID
-            ActionLog.ActionTS  = 0
-            ActionLog.TableName = "Order"
-            ActionLog.KeyValue  = STRING(bOrder.OrderId)
+            ActionLog.Brand        = Syst.Var:gcBrand
+            ActionLog.ActionID     = lcActionID
+            ActionLog.ActionTS     = 0
+            ActionLog.TableName    = "Order"
+            ActionLog.KeyValue     = STRING(bOrder.OrderId)
             ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE}
-            ActionLog.UserCode     = Syst.Var:katun.
+            ActionLog.UserCode     = Syst.Var:katun
+            ActionLog.CustNum      = bOrder.CustNum
+            ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
+            ActionLog.toDate       = TODAY.
 
       lcStatus = "".
    END.
    ELSE DO:
-      lcStatus =  "Error".
+      lcStatus = "Already sent". /* not error */
    END.
+   RELEASE bActionLog.
 
    RETURN lcStatus.
 

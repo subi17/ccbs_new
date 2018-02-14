@@ -49,9 +49,6 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
    DEF VAR liRequest  AS INT NO-UNDO.
 
    DEF VAR ldeInstallment AS DECIMAL NO-UNDO.
-   DEF VAR ldeMonthlyFee  AS DECIMAL NO-UNDO.
-   DEF VAR liMonths AS INT NO-UNDO INIT 0.
-   DEF VAR ldeFinalFee AS DECIMAL NO-UNDO.
    DEF VAR lcSignatureStatus AS CHAR NO-UNDO INIT "".
 
    DEF BUFFER OrderPayment FOR OrderPayment.
