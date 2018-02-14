@@ -24,8 +24,15 @@ CLASS Syst.ReqHandler:
       FIELD FailedAmt  AS INT64
       INDEX ReqType IS PRIMARY UNIQUE ReqType ReqStatus.
 
+   DEFINE PRIVATE TEMP-TABLE ttProcess NO-UNDO
+      FIELD ReqType    AS INTEGER
+      FIELD ReqStatus  AS INTEGER
+      FIELD TenantName AS CHARACTER
+      FIELD Program    AS CHARACTER
+      FIELD LastProcessed AS DATETIME-TZ
+      INDEX TenantName IS PRIMARY TenantName LastProcessed ReqType ReqStatus.
+
    DEFINE PRIVATE VARIABLE aiQueue       AS INTEGER   NO-UNDO.
-   DEFINE PRIVATE VARIABLE aiMaxAmount   AS INTEGER   NO-UNDO.
    DEFINE PRIVATE VARIABLE aiMaxTime     AS INTEGER   NO-UNDO.
    DEFINE PRIVATE VARIABLE acTenants     AS CHARACTER NO-UNDO.
    DEFINE PRIVATE VARIABLE aiTenantCount AS INTEGER   NO-UNDO.
@@ -57,18 +64,6 @@ CLASS Syst.ReqHandler:
 
       DO ON ERROR UNDO, THROW:
 
-         aiMaxAmount = Syst.Parameters:geti("ReqHandler.MaxAmount", "ReqHandler").
-
-         /* Handler code for any error condition. */
-         CATCH anyErrorObject AS Progress.Lang.Error:
-            /* If no parameter set then assume max amount is 500 */
-            aiMaxAmount = 500.
-         END CATCH.
-
-      END.
-
-      DO ON ERROR UNDO, THROW:
-
          aiMaxTime = Syst.Parameters:geti("ReqHandler.MaxTime", "ReqHandler").
 
          /* Handler code for any error condition. */
@@ -84,6 +79,7 @@ CLASS Syst.ReqHandler:
 
    DESTRUCTOR PUBLIC ReqHandler( ):
 
+      EMPTY TEMP-TABLE ttProcess.
       EMPTY TEMP-TABLE ttStatistic.
             
    END DESTRUCTOR.
@@ -125,6 +121,41 @@ CLASS Syst.ReqHandler:
          
    END METHOD.
 
+   METHOD PUBLIC VOID mUpdateProcess():
+
+      EMPTY TEMP-TABLE ttProcess.
+
+      DEFINE VARIABLE lii AS INTEGER NO-UNDO.
+
+      FOR
+         EACH RequestType NO-LOCK WHERE
+              RequestType.Brand = "1"      AND
+              RequestType.Queue = aiQueue  AND
+              RequestType.InUse = TRUE     AND
+              RequestType.Mode NE "BATCH",
+         EACH RequestStatus NO-LOCK WHERE
+              RequestStatus.Brand   = "1"                 AND
+              RequestStatus.ReqType = RequestType.ReqType AND
+              RequestStatus.InUse   = TRUE:
+
+         DO lii = 1 TO aiTenantCount:
+            CREATE ttProcess.
+            ASSIGN
+               ttProcess.ReqType       = RequestType.ReqType
+               ttProcess.ReqStatus     = RequestStatus.ReqStatus
+               ttProcess.Tenant        = ENTRY(lii,acTenants)
+               ttProcess.Program       = IF RequestStatus.Program > ""
+                                         THEN RequestStatus.Program
+                                         ELSE RequestType.Program
+               ttProcess.LastProcessed = NOW.
+         END.
+
+         IF SEARCH(ttProcess.Program) = ?
+         THEN RETURN ERROR NEW Progress.Lang.AppError
+                  (SUBSTITUTE("Module &1 not found", ttProcess.Program), 1).
+      END.
+
+   END METHOD.
 
    METHOD PUBLIC CHARACTER mGetStatistic():
 
@@ -148,91 +179,70 @@ CLASS Syst.ReqHandler:
 
       DEFINE VARIABLE ldeActTime     AS DECIMAL   NO-UNDO.
       DEFINE VARIABLE liStartTime    AS INTEGER   NO-UNDO.
-      DEFINE VARIABLE liCount        AS INTEGER   NO-UNDO.
       DEFINE VARIABLE liResult       AS INTEGER   NO-UNDO.
-      DEFINE VARIABLE lcProgram      AS CHARACTER NO-UNDO.
-      DEFINE VARIABLE lii            AS INTEGER   NO-UNDO.
       DEFINE VARIABLE liMTIME        AS INTEGER   NO-UNDO.
       
-      liStartTime = MTIME.
-      
-      FOR
-         EACH RequestType NO-LOCK WHERE
-              RequestType.Brand = "1"      AND
-              RequestType.Queue = aiQueue  AND
-              RequestType.InUse = TRUE     AND
-              RequestType.Mode NE "BATCH",
-         EACH RequestStatus NO-LOCK WHERE
-              RequestStatus.Brand = "1" AND
-              RequestStatus.ReqType = RequestType.ReqType
-         BREAK BY RequestStatus.ReqType:
+      ASSIGN
+         liStartTime = MTIME.
+
+      FOR EACH ttProcess
+         BREAK BY ttProcess.TenantName:
+
+         IF FIRST-OF(ttProcess.TenantName)
+         THEN multitenancy.TenantInformation:mSetEffectiveTenant(ttProcess.TenantName).
+
+         ASSIGN
+            ldeActTime              = mMake2DT(TODAY,TIME)
+            ttProcess.LastProcessed = NOW.
             
-         IF FIRST-OF(RequestStatus.ReqType)
-         THEN DO:
-            ldeActTime = mMake2DT(TODAY,TIME).
-         END.
+         FOR
+            EACH MsRequest NO-LOCK WHERE
+                 MsRequest.Brand     = "1"                 AND
+                 MsRequest.ReqType   = ttProcess.ReqType   AND
+                 MsRequest.ReqStatus = ttProcess.ReqStatus AND
+                 MsRequest.ActStamp <= ldeActTime /* scheduled or immediate */
+            BY MsRequest.ActStamp
+            BY MsRequest.MsRequest:
 
-         lcProgram = IF RequestStatus.Program > ""
-                     THEN RequestStatus.Program
-                     ELSE RequestType.Program.
+            /* there is a possibility that another process has just started
+               handling this same request */
+            IF MsRequest.ReqStatus NE ttProcess.ReqStatus THEN NEXT.
 
-         IF SEARCH(lcProgram) = ?
-         THEN RETURN ERROR NEW Progress.Lang.AppError
-                  (SUBSTITUTE("Module &1 not found", lcProgram), 1).
+            RUN VALUE(ttProcess.Program) (MsRequest.MsRequest).
 
-         DO lii = 1 TO aiTenantCount:
-            
-            multitenancy.TenantInformation:mSetEffectiveTenant(ENTRY(lii,acTenants)).
-            
-            FOR
-               EACH MsRequest NO-LOCK WHERE
-                    MsRequest.Brand     = "1"                     AND
-                    MsRequest.ReqType   = RequestStatus.ReqType   AND     
-                    MsRequest.ReqStatus = RequestStatus.ReqStatus AND   
-                    MsRequest.ActStamp <= ldeActTime /* scheduled or immediate */
-               BY MsRequest.ActStamp
-               BY MsRequest.MsRequest:
-   
-               /* there is a possibility that another process has just started
-                  handling this same request */
-               IF MsRequest.ReqStatus NE RequestStatus.ReqStatus THEN NEXT.
-   
-               liCount = liCount + 1.
-   
-               RUN VALUE(IF RequestStatus.Program > ""
-                         THEN RequestStatus.Program
-                         ELSE RequestType.Program) (MsRequest.MsRequest).
-   
-               IF MsRequest.ReqType = {&REQTYPE_RERATE}
-               THEN DO:
-                  liResult = INTEGER(RETURN-VALUE) NO-ERROR.
-                  IF NOT ERROR-STATUS:ERROR
-                  THEN mUpdateStatistic(RequestStatus.ReqType,
-                                        RequestStatus.ReqStatus,
-                                        liResult,
-                                        0).
-               END.
-               ELSE DO:
-                  IF NOT RETURN-VALUE BEGINS "ERROR"
-                  THEN mUpdateStatistic(RequestStatus.ReqType,
-                                        RequestStatus.ReqStatus,
-                                        INTEGER(MsRequest.ReqStatus > 1),
-                                        INTEGER(MsRequest.ReqStatus = 3)).
-               END.
-
-               liMTIME = MTIME.
-
-               IF liCount > aiMaxAmount OR
-                    /* Check if day is changed */
-                  ( IF liStartTime > liMTIME
-                    THEN liStartTime < 86400000 + liMTIME - aiMaxTime
-                    ELSE liStartTime < liMTIME - aiMaxTime )
-               THEN RETURN FALSE.
+            IF MsRequest.ReqType = {&REQTYPE_RERATE}
+            THEN DO:
+               liResult = INTEGER(RETURN-VALUE) NO-ERROR.
+               IF NOT ERROR-STATUS:ERROR
+               THEN mUpdateStatistic(ttProcess.ReqType,
+                                     ttProcess.ReqStatus,
+                                     liResult,
+                                     0).
             END.
+            ELSE DO:
+               IF NOT RETURN-VALUE BEGINS "ERROR"
+               THEN mUpdateStatistic(ttProcess.ReqType,
+                                     ttProcess.ReqStatus,
+                                     INTEGER(MsRequest.ReqStatus > 1),
+                                     INTEGER(MsRequest.ReqStatus = 3)).
+            END.
+
+            liMTIME = MTIME.
+
+            /* Maximum processing time per one round is aiMaxTime.
+               No separate wait in the calling side is needed when
+               the maximum time is reached.
+               In order to handle situation when day is changed
+               two possible scenarios must be handled */
+            IF ( liStartTime > liMTIME AND
+                 liStartTime < 86400000 + liMTIME - aiMaxTime ) OR
+               ( liStartTime <= liMTIME AND
+                 liStartTime < liMTIME - aiMaxTime )
+            THEN RETURN FALSE.
          END.
       END.
       
-      /* We will go there only when there are no request or we got every
+      /* We will be there only when there are no request or we got every
          request handled */
       RETURN TRUE.
    

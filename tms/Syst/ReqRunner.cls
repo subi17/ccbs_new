@@ -26,6 +26,7 @@ CLASS Syst.ReqRunner INHERITS gearbox.daemons.Daemon:
    DEFINE PRIVATE VARIABLE liPauseTotal        AS INTEGER                NO-UNDO.
    DEFINE PRIVATE VARIABLE liWaitTime          AS INTEGER                NO-UNDO.
    DEFINE PRIVATE VARIABLE llWait              AS LOGICAL INITIAL FALSE  NO-UNDO.
+   DEFINE PRIVATE VARIABLE ldaLastCheckDate    AS DATE                   NO-UNDO.
       
 	CONSTRUCTOR PUBLIC ReqRunner (  ):
 
@@ -93,6 +94,12 @@ CLASS Syst.ReqRunner INHERITS gearbox.daemons.Daemon:
 
 
    METHOD PUBLIC OVERRIDE LOGICAL processOne():
+
+      IF ldaLastCheckDate NE TODAY
+      THEN DO:
+         objReqHandler:mUpdateProcess().
+         ldaLastCheckDate = TODAY.
+      END.
 
       IF NOW > ldttzNextReportTime
       THEN DO:
