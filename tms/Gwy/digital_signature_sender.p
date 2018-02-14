@@ -373,9 +373,11 @@ END PROCEDURE.
 lcTableName = "Order".
 ldCurrentTimeTS = Func.Common:mMakeTS().
 
-ASSIGN
-   IF(fIParam("SignatureApi", "LogRequest")) EQ 0 THEN
+IF(fIParam("SignatureApi", "LogRequest")) EQ 0 THEN
+   ASSIGN
       llLogRequest  = FALSE.
+
+ASSIGN
    lcLogdir      = fCParam("SignatureApi", "LogDir")
    /* lcLogDir   = "/scratch/log/digitalsignature/"*/
    lcUrlAdapter  = fCParam("SignatureApi", "UrlAdapter").
