@@ -170,10 +170,11 @@ PROCEDURE pBobCheckUpsell:
    IF NUM-ENTRIES(pcLine,lcSep) <> 2 THEN
       RETURN "ERROR:Wrong file format".
 
+   /* YCO-3 - Adding 1gb and 5gb upsells to the list */
    ASSIGN
       lcCLI          = TRIM(ENTRY(1,pcLine,lcSep))
       lcUpsell       = TRIM(ENTRY(2,pcLine,lcSep))
-      lcUpSellList   = "DATA6_UPSELL,DSS_UPSELL,DSS2_UPSELL,DSS200_UPSELL,DATA200_UPSELL,FLEX_UPSELL,FLEX_500MB_UPSELL,FLEX_5GB_UPSELL,DSS_FLEX_500MB_UPSELL,DSS_FLEX_5GB_UPSELL".
+      lcUpSellList   = "DATA5G_UPSELL,DATA1G_UPSELL,DATA6_UPSELL,DSS_UPSELL,DSS2_UPSELL,DSS200_UPSELL,DATA200_UPSELL,FLEX_UPSELL,FLEX_500MB_UPSELL,FLEX_5GB_UPSELL,DSS_FLEX_500MB_UPSELL,DSS_FLEX_5GB_UPSELL".
 
    IF lcUpsell = ? OR 
       LOOKUP(lcUpsell,lcUpSellList) = 0 THEN
@@ -193,7 +194,9 @@ PROCEDURE pBobCheckUpsell:
    IF lcDssID EQ "" AND 
       lcUpsell BEGINS "DSS" THEN 
    RETURN "ERROR: DSS is not active for this subscription".
-
+   
+   /* YCO-3 1g and 5g upsell are daycampaign.dctype = 6 so ServiceLimitGroup.GroupCode = DCCampaign.DCEvent and the DCEvent codes are "DATA5G_UPSELL" and "DATA1G_UPSELL" so there is no need to adapt the code below */
+   
    IF lcDssId EQ "DSS" THEN 
    DO:
       IF lcUpsell EQ "DATA6_UPSELL" OR lcUpsell EQ "FLEX_UPSELL" THEN
@@ -234,6 +237,10 @@ PROCEDURE pBobCheckUpsell:
          RETURN "ERROR:Subscription is not DSS2 compatible".
    END.
 
+   /* YCO-1 1Gb and 5Gb upsell are not compatible with 1.5Gb tariff CONT10 */
+   IF MobSub.clitype = "CONT10" THEN 
+       RETURN "ERROR:Upsell is not compatible with 1.5Gb tariff".
+
    fCreateUpsellBundle(MobSub.MsSeq,
                        lcUpsell,
                        {&REQUEST_SOURCE_YOIGO_TOOL},
@@ -254,6 +261,12 @@ PROCEDURE pBobCheckUpsell:
          lcMemoTitle = "Data Sharing 2 Service Upsell".
       WHEN "DSS200_UPSELL" THEN
          lcMemoTitle = "DSS 200 MB upsell".
+      /* YCO-3 Adding memos */
+      WHEN "DATA1G_UPSELL" THEN
+         lcMemoTitle = "Ampliación 1 GB".
+      WHEN "DATA5G_UPSELL" THEN
+         lcMemoTitle = "Ampliación 5 GB".
+      /* YCO-3 end */
       WHEN "DATA6_UPSELL" THEN 
          lcMemoTitle = "Ampliación 1,5 GB".
       WHEN "DATA200_UPSELL" THEN 
