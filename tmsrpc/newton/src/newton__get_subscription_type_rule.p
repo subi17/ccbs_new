@@ -521,9 +521,9 @@ IF NOT MobSub.PayType THEN DO:
                     AND CLIType.CLIType EQ "CONT8")
                THEN NEXT.
          END.
-         ELSE IF DCCLI.DCEvent BEGINS "FTERM" AND
-            fIsConvergenceTariff(CLIType.CLIType) AND
-            OldCLIType.CompareFee <= CLIType.CompareFee THEN NEXT.
+         /* When STCed between convergent tariffs we exclude FTERM and TVTERM from termination */
+         ELSE IF (DCCLI.DCEvent BEGINS "FTERM" OR DCCLI.DCEvent BEGINS "TVTERM") AND
+                 fIsConvergentORFixedOnly(CLIType.CLIType) THEN NEXT.
       END.
          
       ldtTo = DATETIME(DCCLI.ValidTo,0).
