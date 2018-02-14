@@ -91,7 +91,9 @@ IF llDoEvent THEN DO:
    
    {Func/lib/eventlog.i}
       
-   DEFINE VARIABLE lhOrder AS HANDLE NO-UNDO.
+   DEFINE VARIABLE lhOrder   AS HANDLE NO-UNDO.
+   DEFINE VARIABLE lh17Order AS HANDLE NO-UNDO.
+
    lhOrder = BUFFER Order:HANDLE.
    RUN StarEventInitialize(lhOrder).
 END.               

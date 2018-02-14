@@ -6,8 +6,9 @@
 6 "Mainland Terminals" 21 47700000 "1" "2" 01/09/12 31/12/49
 10 "Canary Islands Usage" 0 47720000 "2" "1" 01/01/06 30/06/12
 11 "Canary Islands Terminals" 5 47720000 "2" "2" 01/01/06 30/06/12
-12 "Canary Islands Usage" 7 47720000 "2" "1" 01/07/12 31/12/49
+12 "Canary Islands Usage" 7 47720000 "2" "1" 01/07/12 31/01/18
 13 "Canary Islands Terminals" 7 47720000 "2" "2" 01/07/12 31/12/49
+14 "Canary Islands Usage" 3 47720000 "2" "1" 01/02/18 31/12/49
 20 "Ceuta Usage" 8 47730000 "3" "1" 01/01/06 31/10/12
 21 "Ceuta Terminals" 0 47730000 "3" "2" 01/01/06 31/12/49
 22 "Ceuta Usage" 10 47730000 "3" "1" 01/11/12 31/12/49

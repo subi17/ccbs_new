@@ -153,10 +153,13 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
    DEF VAR ldeDSSLimit             AS DEC  NO-UNDO.
    DEF VAR lcDSSBundleId           AS CHAR NO-UNDO.
    DEF VAR lcSMSText               AS CHAR NO-UNDO.
+   DEF VAR lcALLPostpaidUPSELLBundles AS CHAR NO-UNDO.
 
    DEF BUFFER lbMobSub             FOR MobSub. 
    DEF BUFFER bDSSMobSub           FOR MobSub.
    DEF BUFFER DayCampaign          FOR DayCampaign.
+
+   lcALLPostpaidUPSELLBundles = fCParamC("POSTPAID_DATA_UPSELLS").
 
    FIND FIRST lbMobSub WHERE 
               lbMobSub.MsSeq = iiMsSeq NO-LOCK NO-ERROR. 
@@ -204,13 +207,16 @@ FUNCTION fCreateUpSellBundle RETURN LOGICAL
    END.
 
    /* Should not allow to create other data upsell once DSS1/2 is active */
+   /* Allow DSS_FLEX_UPSELL - 25 GB */
    IF LOOKUP(icDCEvent, DayCampaign.BundleUpsell) EQ 0 THEN DO : 
-      IF LOOKUP(DayCampaign.DCEvent,{&DSS_BUNDLES}) > 0 THEN
+      IF (LOOKUP(DayCampaign.DCEvent,{&DSS_BUNDLES}) > 0 AND
+          LOOKUP(icDCEvent,lcALLPostpaidUPSELLBundles) > 0) THEN
           ocError = icDCEvent + " is not allowed because DSS " +
                     "is active for this customer".
       /* allow upsell to any data contract by bob tool */
-      ELSE IF icSource NE {&REQUEST_SOURCE_YOIGO_TOOL} THEN
-         ocError = "Incorrect upsell type".
+      ELSE IF (LOOKUP(icDCEvent,lcALLPostpaidUPSELLBundles) > 0 AND
+               icSource NE {&REQUEST_SOURCE_YOIGO_TOOL}) THEN
+         ocError = "Incorrect upsell type - " + icDCEvent.
       
       IF ocError <> "" THEN
          RETURN FALSE.
