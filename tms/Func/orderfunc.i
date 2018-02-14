@@ -21,7 +21,6 @@
 {Func/cparam2.i}
 {Func/main_add_lines.i}
 {Func/msisdn.i}
-{Mc/offer.i}
 {Func/digital_signature.i}
 
 IF llDoEvent THEN DO:

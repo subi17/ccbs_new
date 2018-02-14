@@ -47,9 +47,6 @@ FUNCTION fHandleSignature RETURNS CHAR
               bOrder.Brand EQ Syst.Var:gcBrand AND
               bOrder.OrderId EQ iiOrderId NO-ERROR.
 
-   IF AVAIL bOrder THEN 
-         bOrder.StatusCode = icStatus.
-
    IF NOT AVAIL bOrder THEN
       RETURN "Error".
 

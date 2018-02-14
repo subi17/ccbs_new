@@ -233,15 +233,8 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
 
       add_string(pcStruct,"sfId",bOrder.Salesman).
 
-      FIND FIRST OrderTimeStamp NO-LOCK WHERE
-                 OrderTimeStamp.Brand EQ Syst.Var:gcBrand AND
-                 OrderTimeStamp.RowType EQ bOrderCustomer.RowType AND
-                 OrderTimeStamp.OrderID EQ bOrderCustomer.OrderId USE-INDEX RowType.
-      IF AVAIL OrderTimeStamp THEN
-         add_string(pcStruct,"orderDate",STRING(Func.Common:mTSToDate(bOrder.CrStamp ))).
-      ELSE
-         add_string(pcStruct,"orderDate",STRING(0)).
-         
+      add_string(pcStruct,"orderDate",STRING(Func.Common:mTSToDate(bOrder.CrStamp ))).
+ 
       IF llLogRequest THEN fLogMsg(STRING(iiOrderID) + "; Signing send xml: " + STRING(pcStruct)).
    END.
 
@@ -331,7 +324,6 @@ PROCEDURE pCheckActionLog:
 
    FOR EACH ActionLog EXCLUSIVE-LOCK WHERE
             ActionLog.Brand     EQ Syst.Var:gcBrand AND
-            ActionLog.TableName EQ lcTableName      AND
             ActionLog.ActionID  EQ pcActionID       AND
             ActionLog.ActionTS  =  DEC(0) USE-INDEX ActionID:
 
@@ -339,12 +331,8 @@ PROCEDURE pCheckActionLog:
          IF ActionLog.ActionStatus EQ {&ACTIONLOG_STATUS_PROCESSING} THEN
             NEXT.
    DO TRANS:
-      IF AVAIL ActionLog THEN DO:
-          IF ActionLog.ActionID NE "ContractStatusSent" OR
-             ActionLog.ActionID NE "ContractStatusCancelled" THEN
-             NEXT.
-      END.
-      ELSE DO:
+      IF NOT AVAIL ActionLog THEN DO:
+      
          FIND FIRST bOrder NO-LOCK WHERE
                     bOrder.Brand EQ Syst.Var:gcBrand AND
                     STRING(bOrder.OrderId) EQ ActionLog.KeyValue NO-ERROR.
@@ -357,10 +345,10 @@ PROCEDURE pCheckActionLog:
             IF llLogRequest THEN fLogMsg(STRING(bOrder.OrderId) + "; Found OrderId " + 
                     ", OrderStatusCode: " + STRING(bOrder.StatusCode) + 
                     ", ActionLog.ActionID: " + STRING(ActionLog.ActionID)).
-            IF bOrder.statusCode EQ {&ORDER_STATUS_DELIVERED} THEN
+            IF ActionLog.ActionID EQ "ContractStatusSent" THEN
                /* Send for signing */
                lcStatus = fSendSigningMessage(bOrder.OrderId, bOrder.Brand).
-            ELSE IF LOOKUP(bOrder.StatusCode, {&ORDER_CLOSE_STATUSES}) > 0 THEN /* 7,8,9 */
+            ELSE IF ActionLog.ActionID EQ "ContractStatusCancelled" THEN
                /* Send cancel */
                lcStatus = fSendCancelMessage(bOrder.OrderId, bOrder.Brand).
             ELSE
