@@ -78,7 +78,7 @@ CLASS Mm.MManMessage FINAL:
    END METHOD.
 
 
-   METHOD PRIVATE STATIC VOID mClearData():
+   METHOD PUBLIC STATIC VOID mClearData():
 
       ASSIGN
          acBrandName          = ""
@@ -145,11 +145,24 @@ CLASS Mm.MManMessage FINAL:
 
    END METHOD.
 
-
+   /*Default method that clears data after execution*/
    METHOD PUBLIC STATIC LOGICAL mCreateMMLog
       ( icSMSRecipient   AS CHARACTER,
         icEmailRecipient AS CHARACTER,
-        icPushRecipient  AS CHARACTER ):
+        icPushRecipient  AS CHARACTER):
+      
+      RETURN mCreateMMLog(icSMSRecipient,
+                          icEmailRecipient,
+                          icPushRecipient,
+                          TRUE).
+   END METHOD.
+
+   /*Remember to clear data after using this method.*/
+   METHOD PUBLIC STATIC LOGICAL mCreateMMLog
+      ( icSMSRecipient   AS CHARACTER,
+        icEmailRecipient AS CHARACTER,
+        icPushRecipient  AS CHARACTER,
+        ilgClearData     AS LOGICAL ):
 
       IF acBrandName EQ ""
       THEN DO:
@@ -179,19 +192,43 @@ CLASS Mm.MManMessage FINAL:
          MMLog.RequestTime        = NOW
          .
 
-      mClearData().
+      if ilgClearData EQ TRUE THEN mClearData().
 
       RETURN TRUE.
 
    END METHOD.        
 
+   /*Use this method if you will use the same message contents several
+     times. Remembr to clear content by using mClearData() after the last
+     methood call.*/
+   METHOD PUBLIC STATIC LOGICAL mCreateMMLogSMS
+      ( icSMSRecipient   AS CHARACTER,
+        ilgClearMsg      AS LOGICAL ):
 
+      RETURN mCreateMMLog(icSMSRecipient,
+                          "",
+                          "",
+                          ilgClearMsg).
+   END METHOD.
+
+   /*this variant of  method clears data automatically.*/
    METHOD PUBLIC STATIC LOGICAL mCreateMMLogSMS
       ( icSMSRecipient   AS CHARACTER ):
 
       RETURN mCreateMMLog(icSMSRecipient,
                           "",
-                          "").
+                          "",
+                          TRUE).
+   END METHOD.
+
+   METHOD PUBLIC STATIC LOGICAL mCreateMMLogEmail
+      ( icEmailRecipient AS CHARACTER,
+        ilgClearMsg      AS LOGICAL  ):
+
+      RETURN mCreateMMLog("",
+                          icEmailRecipient,
+                          "",
+                          ilgClearMsg).
    END METHOD.
 
 
@@ -200,7 +237,18 @@ CLASS Mm.MManMessage FINAL:
 
       RETURN mCreateMMLog("",
                           icEmailRecipient,
-                          "").
+                          "",
+                          TRUE).
+   END METHOD.
+
+   METHOD PUBLIC STATIC LOGICAL mCreateMMLogPush
+      ( icPushRecipient  AS CHARACTER,
+        ilgClearMsg      AS LOGICAL  ):
+
+      RETURN mCreateMMLog("",
+                          "",
+                          icPushRecipient,
+                          ilgClearMsg).
    END METHOD.
 
 
@@ -209,7 +257,8 @@ CLASS Mm.MManMessage FINAL:
 
       RETURN mCreateMMLog("",
                           "",
-                          icPushRecipient).
+                          icPushRecipient,
+                          TRUE).
    END METHOD.
 
 END CLASS.

@@ -1745,7 +1745,7 @@ FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE
       NEXT.
    END.
 
-   IF LOOKUP(order.statuscode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN DO:
+   IF LOOKUP(order.statuscode,{&ORDER_CLOSE_STATUSES}) > 0 THEN DO:
       ASSIGN
          FusionMessage.UpdateTS = Func.Common:mMakeTS()
          FusionMessage.FixedStatusDesc = "Invalid order status"
