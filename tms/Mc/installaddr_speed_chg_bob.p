@@ -115,7 +115,7 @@ ASSIGN
     
 
 OUTPUT STREAM sCurrentLog  TO VALUE(lcLogFile) APPEND.
-PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";address_change_processing_started" SKIP.
+PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") + ";install_address_change_processing_started" SKIP.
 
 DO TRANSACTION:
    FIND FIRST ActionLog WHERE
