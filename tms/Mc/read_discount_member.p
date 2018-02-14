@@ -208,7 +208,8 @@ REPEAT TRANS:
                                     0).
    IF lcError BEGINS "ERROR"
    THEN DO:
-      fError(lcError).
+      fLogLine(lcError).
+      oiErrors = oiErrors + 1.
       NEXT.
    END.
    ELSE IF lcError > ""
