@@ -122,7 +122,7 @@ CLASS Syst.ReqHandler:
       
       ASSIGN
          ttStatistic.ProcessAmt = ttStatistic.ProcessAmt + iiProcessed
-         ttStatistic.FailedAmt  = ttStatistic.FailedAmt + iiProcessed.
+         ttStatistic.FailedAmt  = ttStatistic.FailedAmt + iiFailed.
          
    END METHOD.
 
