@@ -80,6 +80,7 @@ DEF VAR ldeActivationTS AS DEC  NO-UNDO.
 DEF VAR ldaActDate AS DATE NO-UNDO. 
 DEF VAR lcMobileNumber AS CHAR NO-UNDO. 
 DEF VAR llgExtraLine   AS LOG  NO-UNDO INITIAL NO. 
+DEF VAR liMLMsSeq      AS INT  NO-UNDO INITIAL 0. 
 
 DEF BUFFER bInvCust        FOR Customer.
 DEF BUFFER bRefCust        FOR Customer.
@@ -435,7 +436,7 @@ IF NOT AVAIL mobsub THEN DO:
       following fields has to be updated */
    IF Order.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} THEN DO:
       FIND FIRST lbMLOrder NO-LOCK WHERE 
-                 lbMLOrder.Brand      = Syst.Var:gcBrand          AND 
+                 lbMLOrder.Brand      = Syst.Var:gcBrand AND 
                  lbMLOrder.OrderId    = Order.MultiSimID NO-ERROR. /* Mainline Orderid */
 
       IF AVAIL lbMLOrder THEN 
@@ -443,9 +444,19 @@ IF NOT AVAIL mobsub THEN DO:
                     lbMLMobSub.MsSeq = lbMLOrder.MsSeq NO-ERROR.
 
       IF AVAIL lbMLMobSub THEN 
-         ASSIGN MobSub.MultiSimID       = lbMLMobSub.MsSeq         /* Mainline Subid  */
-                MobSub.MultiSimType     = Order.MultiSimType       /* Extraline = 3   */
-                llgExtraLine            = YES.
+         ASSIGN MobSub.MultiSimID    = lbMLMobSub.MsSeq         /* Mainline Subid  */
+                MobSub.MultiSimType  = Order.MultiSimType       /* Extraline = 3   */
+                llgExtraLine         = YES.
+      ELSE DO:
+         fCheckExistingMainLineAvailForExtraLine(MobSub.CLIType,
+                                                 OrderCustomer.CustIdType,
+                                                 OrderCustomer.CustID,
+                                                 OUTPUT liMLMsSeq).
+         IF liMLMsSeq > 0 THEN
+            ASSIGN MobSub.MultiSimID   = liMLMsSeq           /* Mainline Subid  */
+                   MobSub.MultiSimType = Order.MultiSimType  /* Extraline = 3   */
+                   llgExtraLine        = YES.
+      END.
    END.
  
    IF Avail imsi THEN Mobsub.imsi = IMSI.IMSI.
@@ -704,9 +715,10 @@ IF AVAIL OrderCustomer THEN DO:
                              FALSE,
                              "RELEASE"). 
 
-   /* Mainline Associated extraline has to be released when 
-      mainline is (Fixed + Mobile line) is delivered */
    IF fCLITypeIsMainLine(Order.CLIType) THEN DO:
+      
+      /* Mainline Associated extraline has to be released when 
+         mainline is (Fixed + Mobile line) is delivered */
       fActionOnExtraLineOrders(Order.OrderId,    /* Main line Order Id  */
                                "RELEASE").       /* Action              */
 
@@ -874,10 +886,10 @@ RUN Mm/requestaction_exec.p (MsRequest.MsRequest,
 
 /* per.contract and service package created with the order */
 RUN Mm/orderaction_exec.p (MobSub.MsSeq,
-                      Order.OrderID,
-                      ldeActivationTS,
-                      MsRequest.MsRequest,
-                      {&REQUEST_SOURCE_SUBSCRIPTION_CREATION}).
+                           Order.OrderID,
+                           ldeActivationTS,
+                           MsRequest.MsRequest,
+                           {&REQUEST_SOURCE_SUBSCRIPTION_CREATION}).
 
 /* Add postpaid subs. to DSS group if DSS group is active or ongoing DSS */
 IF NOT MobSub.PayType THEN DO:

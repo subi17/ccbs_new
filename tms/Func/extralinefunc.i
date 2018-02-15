@@ -148,7 +148,8 @@ END FUNCTION.
 FUNCTION fCheckExistingMainLineAvailForExtraLine RETURNS INTEGER
    (INPUT icExtraLineCLIType AS CHAR,
     INPUT icCustIDType       AS CHAR,
-    INPUT icCustID           AS CHAR):
+    INPUT icCustID           AS CHAR,
+    OUTPUT liMLMsSeq         AS INT):
 
    DEF VAR liELCount AS INT NO-UNDO. 
    DEF VAR liCount   AS INT NO-UNDO. 
@@ -207,8 +208,10 @@ FUNCTION fCheckExistingMainLineAvailForExtraLine RETURNS INTEGER
              liCount = liCount + 1.   
           END.
 
-          IF liCount < liELCount THEN
+          IF liCount < liELCount THEN DO:
+             liMLMsSeq = MobSub.MsSeq.
              RETURN Order.OrderId.  
+          END.   
 
       END.
 
@@ -298,7 +301,7 @@ FUNCTION fCheckAndAssignOrphanExtraline RETURNS LOGICAL
           liCount            = 0
           liELCount          = 0.
 
-   CASE cExtraLineCLIType:
+   CASE lcExtraLineCLIType:
       WHEN {&AZULMORADAEL}   THEN liELCount = {&AZULMORDADAEXTRALINE}.
       WHEN {&INTERMINABLEEL} THEN liELCount = {&INTERMINABLEEXTRALINE}.
    END CASE.
@@ -342,7 +345,7 @@ FUNCTION fCheckAndAssignOrphanExtraline RETURNS LOGICAL
 
          fCreateExtraLineDiscount(lbELMobSub.MsSeq,
                                   lbELMobSub.CLIType + "DISC",
-                                  TODAY).
+                                  TODAY). 
 
          liCount = liCount + 1.
 

@@ -505,7 +505,10 @@ END.
 lcExtraLineCLITypes = fExtraLineCLITypes().
 
 DO lii = 1 TO NUM-ENTRIES(lcExtraLineCLITypes):
-   IF fCheckExistingMainLineAvailForExtraLine(ENTRY(lii,lcExtraLineCLITypes), pcIdType,pcPersonId) > 0 OR
+   IF fCheckExistingMainLineAvailForExtraLine(ENTRY(lii,lcExtraLineCLITypes), 
+                                              pcIdType,
+                                              pcPersonId, 
+                                              OUTPUT liMLMsSeq) > 0                               OR
       fCheckOngoingMainLineAvailForExtraLine(ENTRY(lii,lcExtraLineCLITypes), pcIdType,pcPersonId) > 0
    THEN lcExtraLineAllowed = lcExtraLineAllowed + "," + ENTRY(lii,lcExtraLineCLITypes).
 END.
