@@ -65,8 +65,8 @@ DO TRANSACTION ON ERROR UNDO blk-upsell, LEAVE blk-upsell
   lsuccess = FALSE.
 
   /* Check if the program has already being executed */
-  FIND FIRST daycampaign WHERE daycampaign.Brand = Syst.Var:gcBrand
-                           AND daycampaign.DCEVent = "DATA5G_UPSELL"
+  FIND FIRST daycampaign WHERE daycampaign.Brand   = Syst.Var:gcBrand
+                           AND daycampaign.DCEVent = "SAN1GB_001"
                          NO-LOCK NO-ERROR. 
   IF AVAILABLE daycampaign THEN
   DO:
@@ -79,8 +79,8 @@ DO TRANSACTION ON ERROR UNDO blk-upsell, LEAVE blk-upsell
   CREATE daycampaign.
   ASSIGN 
      daycampaign.Brand           = Syst.Var:gcBrand  /* Brand                           */
-     daycampaign.DCEvent         = "DATA5G_UPSELL"   /* Periodical Term                 */
-     daycampaign.DCName          = "Ampliación 5 Gb" /* Name                            */
+     daycampaign.DCEvent         = "SAN5GB_002"   /* Periodical Term                 */
+     daycampaign.DCName          = "Santander 5Gb for free" /* Name                            */
      daycampaign.PayType         = 1                 /* PaymentType                     */
      daycampaign.ValidFrom       = dfrom             /* Valid From                      */
      daycampaign.ValidTo         = dto               /* Valid To                        */
@@ -105,7 +105,7 @@ DO TRANSACTION ON ERROR UNDO blk-upsell, LEAVE blk-upsell
      daycampaign.BundleTarget    = 0                 /* Bundle Target                   */   
      daycampaign.BundleUpsell    = ""                /* Bundle Upsell                   */  
      daycampaign.StatusCode      = 1                 /* Status: 1 (Active)              */
-     daycampaign.FeeModel        = "DATA5GMFUPS"     /* Fee Model: DATA5MfUPS, DATA6MFUPS, DATA9MFUPS, ..." */
+     daycampaign.FeeModel        = "SAN5GBMFUPS"     /* Fee Model: DATA5MfUPS, DATA6MFUPS, DATA9MFUPS, ..." */
      daycampaign.ModifyFeeModel  = ""                /* Modification Fee Model          */
      daycampaign.TermFeeModel    = ""                /* Termination Fee Model           */
      daycampaign.TermFeeCalc     = 0                 /* Term. Fee Calculation           */
@@ -152,7 +152,7 @@ DO TRANSACTION ON ERROR UNDO blk-upsell, LEAVE blk-upsell
   ASSIGN
      Feemodel.brand    = daycampaign.Brand            /* Brand           */
      Feemodel.feemodel = daycampaign.FeeModel         /* Billing Event   */  
-     Feemodel.feename  = "DATA5G upsell monthly fee"  /* Name            */
+     Feemodel.feename  = "SAN5GB_002 upsell monthly fee"  /* Name            */
      Feemodel.fmgroup  = 0.                           /* Fee Model Group */
 
   /* Add Fee Item 
@@ -307,8 +307,8 @@ DO TRANSACTION ON ERROR UNDO blk-upsell, LEAVE blk-upsell
   CREATE daycampaign.
   ASSIGN 
      daycampaign.Brand           = Syst.Var:gcBrand  /* Brand                           */
-     daycampaign.DCEvent         = "DATA1G_UPSELL"   /* Periodical Term                 */
-     daycampaign.DCName          = "Ampliación 1 Gb" /* Name                            */
+     daycampaign.DCEvent         = "SAN1GB_001"      /* Periodical Term                 */
+     daycampaign.DCName          = "Santander 1Gb for free" /* Name                            */
      daycampaign.PayType         = 1                 /* PaymentType                     */
      daycampaign.ValidFrom       = dfrom             /* Valid From                      */
      daycampaign.ValidTo         = dto               /* Valid To                        */
@@ -333,7 +333,7 @@ DO TRANSACTION ON ERROR UNDO blk-upsell, LEAVE blk-upsell
      daycampaign.BundleTarget    = 0                 /* Bundle Target                   */   
      daycampaign.BundleUpsell    = ""                /* Bundle Upsell                   */  
      daycampaign.StatusCode      = 1                 /* Status: 1 (Active)              */
-     daycampaign.FeeModel        = "DATA1GMFUPS"     /* Fee Model: DATA5MfUPS, DATA6MFUPS, DATA9MFUPS, ..." */
+     daycampaign.FeeModel        = "SAN1GBMFUPS"     /* Fee Model: DATA5MfUPS, DATA6MFUPS, DATA9MFUPS, ..." */
      daycampaign.ModifyFeeModel  = ""                /* Modification Fee Model          */
      daycampaign.TermFeeModel    = ""                /* Termination Fee Model           */
      daycampaign.TermFeeCalc     = 0                 /* Term. Fee Calculation           */
@@ -380,7 +380,7 @@ DO TRANSACTION ON ERROR UNDO blk-upsell, LEAVE blk-upsell
   ASSIGN
      Feemodel.brand    = daycampaign.Brand            /* Brand           */
      Feemodel.feemodel = daycampaign.FeeModel         /* Billing Event   */  
-     Feemodel.feename  = "DATA1G upsell monthly fee"  /* Name            */
+     Feemodel.feename  = "SAN1GB_001 upsell monthly fee"  /* Name            */
      Feemodel.fmgroup  = 0.                           /* Fee Model Group */
 
   /* Add Fee Item 
@@ -531,9 +531,9 @@ DO TRANSACTION ON ERROR UNDO blk-upsell, LEAVE blk-upsell
           )
      EXCLUSIVE-LOCK :
      IF daycampaign.bundleupsell <> "" THEN
-        daycampaign.bundleupsell = "DATA5G_UPSELL,DATA1G_UPSELL," + daycampaign.bundleupsell.
+        daycampaign.bundleupsell = "SAN1GB_001,SAN5GB_002," + daycampaign.bundleupsell.
      ELSE
-        daycampaign.bundleupsell = "DATA5G_UPSELL,DATA1G_UPSELL".
+        daycampaign.bundleupsell = "SAN1GB_001,SAN5GB_002".
   END.
 
   /* Process OK */
