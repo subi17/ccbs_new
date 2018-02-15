@@ -293,7 +293,7 @@ PROCEDURE pBobCheckUpsell:
    IF lcUpSell = "SAN1GB_001" or lcUpsell = "SAN5GB_002" THEN
       RUN pSendSMS(INPUT MobSub.MsSeq,
                    INPUT 0,
-                   INPUT (IF lcUpsell = "SAN1G_001" THEN
+                   INPUT (IF lcUpsell = "SAN1GB_001" THEN
                           "Ya puede disfrutar del bono datos gratis de 1GB al mes durante 12 meses" 
                           ELSE
                           "Ya puede disfrutar del bono datos gratis de 5GB al mes durante 12 meses"),
