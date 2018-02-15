@@ -249,7 +249,11 @@ PROCEDURE pBobCheckUpsell:
 
    fCreateUpsellBundle(MobSub.MsSeq,
                        lcUpsell,
-                       {&REQUEST_SOURCE_YOIGO_TOOL},
+                       (IF (lcUpsell = "SAN1GB_001" OR lcUpsell = "SAN5GB_002") THEN
+                           /* Request Source assigned for SAN1GB_001 and SAN5GB_002 to avoid SMS sending. Email sending done here a few lines below. */
+                           "5"  
+                        ELSE
+                           {&REQUEST_SOURCE_YOIGO_TOOL}),
                        Func.Common:mMakeTS(),
                        OUTPUT liRequest,
                        OUTPUT lcError). 
