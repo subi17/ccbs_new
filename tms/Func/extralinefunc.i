@@ -345,7 +345,7 @@ FUNCTION fCheckAndAssignOrphanExtraline RETURNS LOGICAL
 
          fCreateExtraLineDiscount(lbELMobSub.MsSeq,
                                   lbELMobSub.CLIType + "DISC",
-                                  TODAY). 
+                                  TODAY).  
 
          liCount = liCount + 1.
 

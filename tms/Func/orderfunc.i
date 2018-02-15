@@ -377,6 +377,20 @@ FUNCTION fSearchStock RETURNS CHARACTER
 
 END FUNCTION.
 
+FUNCTION fGetReleaseStatus RETURNS CHARACTER 
+   (INPUT icOrderType AS INT):
+
+   CASE icOrderType:
+      WHEN {&ORDER_TYPE_NEW}     THEN RETURN {&ORDER_STATUS_NEW}.
+      WHEN {&ORDER_TYPE_MNP}     THEN RETURN {&ORDER_STATUS_MNP}.
+      WHEN {&ORDER_TYPE_RENEWAL} THEN RETURN {&ORDER_STATUS_RENEWAL_STC}.
+      OTHERWISE.
+   END CASE.
+
+   RETURN "".
+
+END.   
+
 /* Function checks another mainline for Mobile only additional line */
 FUNCTION fCheckMainLineForMobileOnly RETURNS INTEGER
    (INPUT icCustIDType AS CHAR,
@@ -666,11 +680,15 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
    (INPUT iiMainLineOrderId  AS INT,
     INPUT icAction           AS CHAR):
 
-   DEFINE BUFFER lbMLOrder       FOR Order.
-   DEFINE BUFFER lbELOrder       FOR Order.
-   DEFINE BUFFER lbELOrderAction FOR OrderAction.
+   DEFINE BUFFER lbMLOrder         FOR Order.
+   DEFINE BUFFER lbELOrder         FOR Order.
+   DEFINE BUFFER lbEMLOrder        FOR Order.
+   DEFINE BUFFER lbELOrderAction   FOR OrderAction.
+   DEFINE BUFFER lbMLOrderCustomer FOR OrderCustomer.
 
-   DEF VAR lcNewOrderStatus     AS CHAR NO-UNDO. 
+   DEF VAR lcNewOrderStatus AS CHAR NO-UNDO. 
+   DEF VAR liMLMsSeq        AS INT  NO-UNDO INITIAL 0. 
+   DEF VAR liMLOrderId      AS INT  NO-UNDO.  
 
    FOR EACH lbELOrder NO-LOCK WHERE
             lbELOrder.Brand        EQ Syst.Var:gcBrand                  AND
@@ -692,12 +710,7 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
                        lbMLOrder.OrderId      EQ iiMainLineOrderId        AND 
                 LOOKUP(lbMLOrder.StatusCode,{&ORDER_CLOSE_STATUSES}) EQ 0 NO-ERROR. 
 
-            CASE lbELOrder.OrderType:
-               WHEN {&ORDER_TYPE_NEW} THEN lcNewOrderStatus = {&ORDER_STATUS_NEW}.
-               WHEN {&ORDER_TYPE_MNP} THEN lcNewOrderStatus = {&ORDER_STATUS_MNP}.
-               WHEN {&ORDER_TYPE_RENEWAL} THEN lcNewOrderStatus = {&ORDER_STATUS_RENEWAL_STC}.
-               OTHERWISE.
-            END CASE.
+            lcNewOrderStatus = fGetReleaseStatus(lbELOrder.OrderType).
 
             IF AVAIL lbMLOrder                                            AND 
                      lbMLOrder.CLIType BEGINS "CONTFH"                    AND
@@ -714,16 +727,49 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
 
          END.                      
          WHEN "CLOSE" THEN DO:
-            /* Check if Main line order is closed, If closed, 
-               then close extraline ongoing order */
+            /* if Main line order is closed, check for existing/ongoing mainline 
+               available for same customer.  
+               1. if available then reassign the order and release it 
+               2. else close associated extraline ongoing order */
             FIND FIRST lbMLOrder NO-LOCK WHERE 
                        lbMLOrder.Brand        EQ Syst.Var:gcBrand        AND
                        lbMLOrder.OrderId      EQ iiMainLineOrderId       AND 
                        lbMLOrder.StatusCode   EQ {&ORDER_STATUS_CLOSED}  NO-ERROR. 
 
-            IF AVAIL lbMLOrder THEN
-               fSetOrderStatus(lbELOrder.OrderId,{&ORDER_STATUS_CLOSED}).
+            IF AVAIL lbMLOrder THEN DO:
+              
+               lcNewOrderStatus = "".
+
+               FIND FIRST lbMLOrderCustomer NO-LOCK WHERE
+                          lbMLOrderCustomer.Brand   EQ Syst.Var:gcBrand                   AND
+                          lbMLOrderCustomer.OrderId EQ lbMLOrder.OrderId                  AND
+                          lbMLOrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
+ 
+               IF AVAIL lbMLOrderCustomer THEN DO:
+                  liMLOrderId = fCheckExistingMainLineAvailForExtraLine(lbELOrder.CLIType,
+                                                                        lbMLOrderCustomer.CustIdType,
+                                                                        lbMLOrderCustomer.CustID,
+                                                                        OUTPUT liMLMsSeq).
+                  IF liMLOrderID > 0 THEN 
+                     ASSIGN lbELOrder.MultiSimId = liMLOrderId
+                            lcNewOrderStatus     = fGetReleaseStatus(lbELOrder.OrderType). 
+                  ELSE DO:
+                     liMLOrderId = fCheckOngoingMainLineAvailForExtraLine(lbELOrder.CLIType,
+                                                                          lbMLOrderCustomer.CustIdType,
+                                                                          lbMLOrderCustomer.CustID).
+                     IF liMLOrderID > 0 THEN 
+                        ASSIGN lbELOrder.MultiSimId = liMLOrderId
+                               lcNewOrderStatus     = fGetReleaseStatus(lbELOrder.OrderType). 
+                  END.
+               END.   
+               
+               IF liMLOrderID       >  0 AND 
+                  lcNewOrderStatus <> "" THEN 
+                  fSetOrderStatus(lbELOrder.OrderId,lcNewOrderStatus).
+               ELSE fSetOrderStatus(lbELOrder.OrderId,{&ORDER_STATUS_CLOSED}).
          
+            END.
+
          END. 
       END CASE.
    
