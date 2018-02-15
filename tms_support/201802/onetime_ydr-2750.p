@@ -51,7 +51,12 @@ ASSIGN
 
  FOR EACH DayCampaign NO-LOCK:
      IF NOT (DayCampaign.DCEvent  BEGINS  "CON" OR DayCampaign.DCEvent BEGINS "DUB") THEN NEXT.
+     IF NOT (DayCampaign.DCType EQ  "1" OR  
+             DayCampaign.DCType EQ  "4" OR 
+             DayCampaign.DCType EQ  "7" )  THEN NEXT.
      FOR EACH FeeModel WHERE FeeModel.FeeModel = DayCampaign.FeeModel NO-LOCK :
+         IF NOT ( CAN-FIND(FIRST FMItem OF FeeModel WHERE FMItem.BrokenRental EQ 1 ) OR 
+                  CAN-FIND(FIRST FMItem OF FeeModel WHERE FMItem.FirstMonthBR EQ 1 ) ) THEN NEXT.       
          FOR EACH FMItem OF FeeModel EXCLUSIVE-LOCK :
             IF FMItem.ToDate < TODAY THEN NEXT. /* Already closed */
             IF FMItem.BrokenRental EQ 1 OR FMItem.FirstMonthBR EQ 1 THEN DO: /* LMF or FMF = 1 */
