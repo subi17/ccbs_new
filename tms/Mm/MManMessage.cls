@@ -61,9 +61,11 @@ CLASS Mm.MManMessage FINAL:
 
       DO lii = 1 TO NUM-ENTRIES(icParamKeyValue, "|"):
          lcEntry = ENTRY(lii,icParamKeyValue,"|").
-         IF NUM-ENTRIES(lcEntry,"=") NE 2
+
+         IF INDEX(lcEntry,"=") EQ 0
          THEN RETURN ERROR NEW Progress.Lang.AppError("Invalid param key value " + lcEntry, 1).
-         objJsonObject:Add(ENTRY(1,lcEntry,"="),ENTRY(2,lcEntry,"=")).
+
+         objJsonObject:Add(ENTRY(1,lcEntry,"="),SUBSTRING(lcEntry,INDEX(lcEntry,"=") + 1)).
       END.
 
       objJsonObject:Write(OUTPUT lcJson).
