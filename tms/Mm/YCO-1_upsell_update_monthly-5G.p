@@ -45,10 +45,10 @@ DEF STREAM sLogFile.
 
 ASSIGN 
    llgSimulation   = FALSE                            /* TRUE -> only log writing, FALSE -> make real updates */
-   lcActionId      = "UpsellFor5G"                    /* For execution lock   */
-   lcTableName     = "YCO-1-Promo-5Gb"                /* For execution lock   */
+   lcActionId      = "SAN5GB_002"                     /* For execution lock   */
+   lcTableName     = "SAN5GB_002-Promo-5Gb"           /* For execution lock   */
    ldCurrentTimeTS = Func.Common:mMakeTS()
-   lcUpsell        = "DATA5G_UPSELL"                  /* Upsells that will be aded in the promo */
+   lcUpsell        = "SAN5G_002"                      /* Upsells that will be aded in the promo */
    ldCampaignStart = fCParamDe("YCO-1-5G-FromDate")   /* Promotion start date */
    ldCampaignEnd   = fCParamDe("YCO-1-5G-ToDate").    /* Promotion start date */
 
@@ -58,7 +58,7 @@ ASSIGN
 IF lcLogDir EQ "" OR lcLogDir EQ ? THEN lcLogDir = "/tmp/".
 
 ASSIGN 
-   lcLogFile    = lcLogDir + "YCO-1_upsell_5Gb_update_" +
+   lcLogFile    = lcLogDir + "SAN5GB_002_upsell_5Gb_update_" +
                              STRING(YEAR(ldaReadDate)) +
                              STRING(MONTH(ldaReadDate),"99") +
                              STRING(DAY(ldaReadDate),"99") +
@@ -68,9 +68,10 @@ ASSIGN
 FUNCTION fIsValid RETURNS LOG
    (icCliType AS CHAR):
  
-   IF icCliType EQ "CONT15" OR
-      icCliType EQ "CONT25" OR
-      icCliType EQ "CONT26" THEN
+   DEF VAR cValidList AS CHAR INITIAL
+   "CONT6,CONT7,CONT8,CONT9,CONT15,CONTF11,CONTF20D,CONTF30,CONTF40,CONTF55,CONTF8,CONTM,CONTM2,CONT23,CONT24,CONT25,CONT26,CONTS12,CONTS15,CONTS16,CONTS20,CONTS21,CONTS25,CONTS26,CONTS30,CONTS32,CONT28,CONT27,CONT31,CONTRD1,CONTRD2,CONTRD3,CONTRD4,CONTRD9".
+
+   IF LOOKUP(icCliType,cValidList) > 0 THEN
       RETURN TRUE.
  
    RETURN FALSE.
@@ -200,7 +201,7 @@ END.
 /* **************************** MAIN BLOCK *************************** */
 OUTPUT STREAM sLogFile TO VALUE(lcLogFile) APPEND.
 
-PUT STREAM sLogFile UNFORMATTED "YCO-1 5Gb Activation starts " +
+PUT STREAM sLogFile UNFORMATTED "SAN5GB_002 5Gb Activation starts " +
                                  Func.Common:mTS2HMS(ldCurrentTimeTS) SKIP.
 IF llgSimulation EQ TRUE THEN
    PUT STREAM sLogFile UNFORMATTED "Simulation mode" SKIP.
@@ -280,7 +281,7 @@ DO TRANS:
    RELEASE ActionLog.
 END.
 
-PUT STREAM sLogFile UNFORMATTED "YCO-1 5Gb Activation done " +
+PUT STREAM sLogFile UNFORMATTED "SAN5GB_002 5Gb Activation done " +
                                  Func.Common:mTS2HMS(Func.Common:mMakeTS()) SKIP.
 OUTPUT STREAM sLogFile CLOSE.
 
