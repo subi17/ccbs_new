@@ -113,7 +113,12 @@ CLASS Syst.ReqHandler:
       NO-ERROR.
       
       IF NOT AVAILABLE ttStatistic
-      THEN CREATE ttStatistic.
+      THEN DO:
+         CREATE ttStatistic.
+         ASSIGN
+            ttStatistic.ReqType   = iiReqType
+            ttStatistic.ReqStatus = iiReqStatus.
+      END.
       
       ASSIGN
          ttStatistic.ProcessAmt = ttStatistic.ProcessAmt + iiProcessed
