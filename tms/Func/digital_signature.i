@@ -13,14 +13,6 @@
 &THEN
 
 &GLOBAL-DEFINE digital_signature YES
-{Syst/commali.i}
-{Syst/tmsconst.i}
-{Syst/eventval.i}
-{Func/forderstamp.i}
-{Func/dextra.i}
-{Func/cparam2.i}
-{Func/main_add_lines.i}
-{Func/msisdn.i}
 {Mc/offer.i}
 
 /*
@@ -82,8 +74,7 @@ FUNCTION fHandleSignature RETURNS CHAR
               bActionLog.TableName = "Order" AND
               bActionLog.KeyValue  = STRING(bOrder.OrderId) AND
               bActionLog.ActionID  = lcActionID /* AND
-              bActionLog.ActionTS  = DEC(0)*/ AND
-              bActionLog.CustNum   = bOrder.CustNum USE-INDEX TableName NO-ERROR.
+              bActionLog.ActionTS  = DEC(0)*/ USE-INDEX TableName NO-ERROR.
    IF NOT AVAIL bActionLog THEN DO:
       CREATE ActionLog.
          ASSIGN
@@ -94,7 +85,6 @@ FUNCTION fHandleSignature RETURNS CHAR
             ActionLog.KeyValue     = STRING(bOrder.OrderId)
             ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE}
             ActionLog.UserCode     = Syst.Var:katun
-            ActionLog.CustNum      = bOrder.CustNum
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
             ActionLog.toDate       = TODAY.
 

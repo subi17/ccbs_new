@@ -48,7 +48,7 @@ FUNCTION fUpdateTMSParamC RETURNS LOGICAL
 
 END FUNCTION.
 
-fUpdateTMSParamC("UrlAdapter", "Adapter URL Path", "").
+fUpdateTMSParamC("UrlAdapter", "Adapter URL Path", "http://217.168.2.239:8080/digital-signature/").
 fUpdateTMSParamC("LogDir", "Logging directory", "/scratch/log/digitalsignature/").
 fUpdateTMSParamI("LogRequest", "Log Request", 1).
 

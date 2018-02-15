@@ -47,9 +47,6 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
    DEF VAR llCancelFusion AS LOGICAL NO-UNDO INIT FALSE.
    DEF VAR liRequest  AS INT NO-UNDO.
 
-   DEF VAR ldeInstallment AS DECIMAL NO-UNDO.
-   DEF VAR lcSignatureStatus AS CHAR NO-UNDO INIT "".
-
    DEF BUFFER OrderPayment FOR OrderPayment.
    DEF BUFFER MsRequest FOR MsRequest.
    DEF BUFFER CLIType FOR CLIType.
@@ -75,13 +72,13 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
                fMarkOrderStamp(bfOrder.OrderID,"Delivery",0.0).
 
                /* RES-538 Digital Signature for Tienda and Telesales only */
-               lcSignatureStatus = fHandleSignature(bfOrder.OrderId, icStatus).
+               fHandleSignature(bfOrder.OrderId, icStatus).
             end.
             when "7" or when "8" or when "9" then do:
                fMarkOrderStamp(bfOrder.OrderID,"Close",0.0).
 
-                /* RES-538 Digital Signature for Tienda and Telesales only */
-               lcSignatureStatus = fHandleSignature(bfOrder.OrderId, icStatus).
+               /* RES-538 Digital Signature for Tienda and Telesales only */
+               fHandleSignature(bfOrder.OrderId, icStatus).
 
                /* YDR-2495 creating STC request to fixed only when mobile part is terminated */
                FIND FIRST MobSub NO-LOCK WHERE

@@ -75,19 +75,16 @@ FUNCTION fFillCancelStruct RETURNS LOGICAL
    IF AVAIL bOrder THEN DO:
       FIND FIRST bOrderCustomer NO-LOCK WHERE
                  bOrderCustomer.Brand EQ Syst.Var:gcBrand AND
-                 bOrderCustomer.OrderId EQ iiOrderId.
+                 bOrderCustomer.OrderId EQ iiOrderId AND
+                 bOrderCustomer.RowType = 1.
 
       IF NOT AVAIL bOrderCustomer THEN RETURN FALSE.
 
       add_string(pcStruct,"id","12341"). /* TODO: get with process id query to Adapter */
-      
       add_string(pcStruct,"customerId",bOrderCustomer.CustId).
-
       add_string(pcStruct,"accountId",bOrder.ContractID).
-
       /* not mandatory */
       add_string(pcStruct,"subscriptionId",bOrder.CLI).
-
       add_string(pcStruct,"cancelReason","cancelled").
       
       IF llLogRequest THEN fLogMsg(STRING(bOrder.OrderId) +  "; Cancel send xml: " + STRING(pcStruct)).
@@ -116,10 +113,14 @@ FUNCTION fSendCancelMessage RETURNS CHAR
    IF llLogRequest THEN fLogMsg(STRING(iiOrderID) + "; Start construct cancel message").
    xmlrpc_cleanup().
    lcBrandStruct = add_struct(param_toplevel_id,"").
-   fFillBrandStruct(iiOrderId, icBrand, lcBrandStruct).
+   IF NOT fFillBrandStruct(iiOrderId, icBrand, lcBrandStruct) THEN
+      RETURN "Error".
 
    lcOrderStruct = add_struct(param_toplevel_id,"").
-   fFillCancelStruct(iiOrderId, lcOrderStruct). 
+   IF NOT fFillCancelStruct(iiOrderId, lcOrderStruct) THEn DO:
+      fLogMsg(STRING(iiOrderID) + "; ERROR Constructing cancel struct.").
+      RETURN "Error".
+   END.
 
    IF gi_xmlrpc_error NE 0 THEN DO:
       fLogMsg(STRING(iiOrderID) + "; ERROR Creating cancel message: " + gc_xmlrpc_error). 
@@ -128,7 +129,7 @@ FUNCTION fSendCancelMessage RETURNS CHAR
    END.
 
    fLogMsg(STRING(iiOrderId) + "; Call RPC Method (Adapter)").
-   RUN pRPCMethodCall("digitalSignature.updateProcess", TRUE).
+   RUN pRPCMethodCall("sign.updateProcess", TRUE).
 
    IF gi_xmlrpc_error NE 0 THEN DO:
       fLogMsg(STRING(iiOrderID) + "; ERROR Sending cancel Message"). 
@@ -183,37 +184,26 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
    IF AVAIL bOrder THEN DO:
       FIND FIRST bOrderCustomer NO-LOCK WHERE
                  bOrderCustomer.Brand EQ Syst.Var:gcBrand AND
-                 bOrderCustomer.OrderId EQ iiOrderId.
+                 bOrderCustomer.OrderId EQ iiOrderId AND
+                 bOrderCustomer.RowType = 1.
 
       IF NOT AVAIL bOrderCustomer THEN RETURN FALSE.
 
       add_string(pcStruct,"customerId",bOrderCustomer.CustId).
-
       add_string(pcStruct,"accountId",bOrder.ContractID).
-
       /* not mandatory */
       add_string(pcStruct,"subscriptionId",bOrder.CLI).
-
       add_string(pcStruct,"clientName",bOrderCustomer.FirstName).
-    
       add_string(pcStruct,"clientLastName1",bOrderCustomer.SurName1).
-
       /* not mandatory */
       add_string(pcStruct,"clientLastName2",bOrderCustomer.SurName2).
-    
       add_string(pcStruct,"clientEmail",bOrderCustomer.email).
-
       add_string(pcStruct,"clientPhone",bOrderCustomer.ContactNum).
-
       add_string(pcStruct,"clientMobile",bOrderCustomer.MobileNumber).
-
       /* not mandatory */
       add_string(pcStruct,"clientFax",""). /* Customer.fax if needed */
-
       add_string(pcStruct,"legalIdentityType",bOrderCustomer.CustIdType).
-
       add_string(pcStruct,"legalIdentityCountry",bOrderCustomer.Country).
-
       add_string(pcStruct,"legalIdentityNumber",bOrderCustomer.CustId).
 
       IF fIsConvergent3POnly(bOrder.CLIType) THEN
@@ -224,15 +214,10 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
          add_string(pcStruct,"sellType","SIM_ONLY").
 
       add_string(pcStruct,"crmId",bOrder.OrderChannel).
-
       add_string(pcStruct,"dealerId",bOrder.Salesman).
-
       add_string(pcStruct,"contractId",bOrder.ContractID).
-
       add_string(pcStruct,"orderId",STRING(bOrderCustomer.OrderId)).
-
       add_string(pcStruct,"sfId",bOrder.Salesman).
-
       add_string(pcStruct,"orderDate",STRING(Func.Common:mTSToDate(bOrder.CrStamp ))).
  
       IF llLogRequest THEN fLogMsg(STRING(iiOrderID) + "; Signing send xml: " + STRING(pcStruct)).
@@ -261,10 +246,14 @@ FUNCTION fSendSigningMessage RETURNS CHAR
    IF llLogRequest THEN fLogMsg(STRING(iiOrderId) + "; Start construct signing message").
    xmlrpc_cleanup().
    lcBrandStruct = add_struct(param_toplevel_id,"").
-   fFillBrandStruct(iiOrderId, icBrand, lcBrandStruct). 
+   IF NOT fFillBrandStruct(iiOrderId, icBrand, lcBrandStruct) THEN
+      RETURN "Error".
 
    lcOrderStruct = add_struct(param_toplevel_id,"").
-   fFillOrderStruct(iiOrderId, lcOrderStruct). 
+   IF NOT fFillOrderStruct(iiOrderId, lcOrderStruct) THEN DO:
+      fLogMsg(STRING(iiOrderID) + "; ERROR Constructing order struct.").
+      RETURN "Error".
+   END.
 
    IF gi_xmlrpc_error NE 0 THEN DO:
       fLogMsg(STRING(iiOrderID) + "; ERROR Creating message: " + gc_xmlrpc_error). 
@@ -273,7 +262,7 @@ FUNCTION fSendSigningMessage RETURNS CHAR
    END.
 
    fLogMsg(STRING(iiOrderId) + "; Call RPC Method (Adapter), OrderId: ").
-   RUN pRPCMethodCall("digitalSignature.registerSignProcess", TRUE).
+   RUN pRPCMethodCall("sign.registerSignProcess", TRUE).
 
    IF gi_xmlrpc_error NE 0 THEN DO:
       fLogMsg(STRING(iiOrderId) + "; ERROR Sending Message"). 
@@ -322,29 +311,29 @@ PROCEDURE pCheckActionLog:
 
    DEF VAR lcStatus AS CHAR NO-UNDO INIT "".
 
+   IF llLogRequest THEN fLogMsg("Start searching ActionLog, ActionID: " + pcActionID).
+
    FOR EACH ActionLog EXCLUSIVE-LOCK WHERE
             ActionLog.Brand     EQ Syst.Var:gcBrand AND
             ActionLog.ActionID  EQ pcActionID       AND
             ActionLog.ActionTS  =  DEC(0) USE-INDEX ActionID:
 
-      IF AVAIL ActionLog THEN
-         IF ActionLog.ActionStatus EQ {&ACTIONLOG_STATUS_PROCESSING} THEN
-            NEXT.
-   DO TRANS:
-      IF NOT AVAIL ActionLog THEN DO:
-      
+      IF ActionLog.ActionStatus EQ {&ACTIONLOG_STATUS_PROCESSING} THEN
+         NEXT.
+
+      DO TRANS:      
          FIND FIRST bOrder NO-LOCK WHERE
                     bOrder.Brand EQ Syst.Var:gcBrand AND
-                    STRING(bOrder.OrderId) EQ ActionLog.KeyValue NO-ERROR.
+                    bOrder.OrderId EQ INT(ActionLog.KeyValue) NO-ERROR.
          IF NOT AVAIL bOrder THEN DO:
-            fLogMsg(STRING(ActionLog.KeyValue) + "; ERROR not found Order").
+            fLogMsg(ActionLog.KeyValue + "; ERROR not found Order").
             NEXT.
          END.
 
          IF AVAIL bOrder THEN DO:
             IF llLogRequest THEN fLogMsg(STRING(bOrder.OrderId) + "; Found OrderId " + 
                     ", OrderStatusCode: " + STRING(bOrder.StatusCode) + 
-                    ", ActionLog.ActionID: " + STRING(ActionLog.ActionID)).
+                    ", ActionLog.ActionID: " + ActionLog.ActionID).
             IF ActionLog.ActionID EQ "ContractStatusSent" THEN
                /* Send for signing */
                lcStatus = fSendSigningMessage(bOrder.OrderId, bOrder.Brand).
@@ -361,8 +350,7 @@ PROCEDURE pCheckActionLog:
                RELEASE ActionLog.
             END. /* ELSE? Leave untouched and try again in next cron job */
          END.
-      END.
-   END. /* DO TRANS */
+      END. /* DO TRANS */
    END. /* FOR EACH */
 
 END PROCEDURE.
