@@ -2663,8 +2663,9 @@ PROCEDURE pContractTermination:
       IF MsRequest.ActStamp < ldeLastDayofMonthStamp AND
          llPostpaidBundleTerm = FALSE AND
          LOOKUP(lcDCEvent,lcPostpaidDataBundles) > 0 THEN DO:
-         llChargeUsageBased = FALSE.    
-         IF MsRequest.OrigRequest > 0 THEN DO:
+         IF FMItem.BrokenRental = 0 THEN llChargeUsageBased = FALSE.
+         ELSE IF FMItem.BrokenRental = 2 THEN llChargeUsageBased = TRUE.
+         ELSE IF MsRequest.OrigRequest > 0 THEN DO:
             FIND FIRST bMsRequest WHERE
                        bMsRequest.MsRequest = MsRequest.OrigRequest
                  NO-LOCK NO-ERROR.
