@@ -7,6 +7,8 @@ DEF VAR liPrior       AS INTEGER NO-UNDO.
 DEF VAR lSuccess      AS LOGICAL NO-UNDO.
 DEF VAR dfrom         AS DATE FORMAT "99/99/99" NO-UNDO.
 DEF VAR dto           AS DATE FORMAT "99/99/99" NO-UNDO.
+DEF VAR cValidList AS CHAR INITIAL
+   "CONT6,CONT7,CONT8,CONT9,CONT15,CONTF11,CONTF20D,CONTF30,CONTF40,CONTF55,CONTF8,CONTM,CONTM2,CONT23,CONT24,CONT25,CONT26,CONTS12,CONTS15,CONTS16,CONTS20,CONTS21,CONTS25,CONTS26,CONTS30,CONTS32,CONT28,CONT27,CONT31,CONTRD1,CONTRD2,CONTRD3,CONTRD4,CONTRD9".
 
 {Syst/commpaa.i}
 Syst.Var:gcBrand = "1".
@@ -38,6 +40,7 @@ ASSIGN
 
 FORM
    SKIP "This program will create upsells for YCO-2: 1Gb and 5Gb" SKIP
+   "with codes SAN1GB_001 and SAN5GB_002" SKIP
    "The below dates will be used as the valid from and to dates" skip
    "for all records created as part of these upsells." 
    SKIP(2)
@@ -525,10 +528,7 @@ DO TRANSACTION ON ERROR UNDO blk-upsell, LEAVE blk-upsell
   /* Adding the new upsells to the periodical contracts */
   FOR EACH daycampaign
      WHERE daycampaign.brand = Syst.Var:gcBrand AND
-          (   daycampaign.dcevent = "CONT15" /* La ciento 5G (antes La del cero 5Gb) */
-           OR daycampaign.dcevent = "CONT25" /* La Sinfin */
-           OR daycampaign.dcevent = "CONT26" /* La Infinita 5Gb */
-          )
+           LOOKUP(daycampaign.dcevent,cValidList) > 0 
      EXCLUSIVE-LOCK :
      IF daycampaign.bundleupsell <> "" THEN
         daycampaign.bundleupsell = "SAN1GB_001,SAN5GB_002," + daycampaign.bundleupsell.
