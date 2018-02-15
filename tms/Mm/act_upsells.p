@@ -165,6 +165,9 @@ PROCEDURE pBobCheckUpsell:
    /* local variables */
    DEF VAR lcCLI              AS CHAR NO-UNDO.
    DEF VAR lcUpsell           AS CHAR NO-UNDO.
+   DEF VAR lcSMS              AS CHAR NO-UNDO.
+   DEF VAR llSMS              AS LOG  NO-UNDO.
+   DEF VAR lcSMS_Text         AS CHAR NO-UNDO.
    DEF VAR lcError            AS CHAR NO-UNDO.
    DEF VAR lcDssId            AS CHAR NO-UNDO. 
    DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO. 
@@ -178,11 +181,16 @@ PROCEDURE pBobCheckUpsell:
    ASSIGN
       lcCLI          = TRIM(ENTRY(1,pcLine,lcSep))
       lcUpsell       = TRIM(ENTRY(2,pcLine,lcSep))
+      lcSMS          = TRIM(ENTRY(3,pcLine,lcSep))
       lcUpSellList   = "SAN1GB_001,SAN5GB_002,DATA6_UPSELL,DSS_UPSELL,DSS2_UPSELL,DSS200_UPSELL,DATA200_UPSELL,FLEX_UPSELL,FLEX_500MB_UPSELL,FLEX_5GB_UPSELL,DSS_FLEX_500MB_UPSELL,DSS_FLEX_5GB_UPSELL".
 
    IF lcUpsell = ? OR 
       LOOKUP(lcUpsell,lcUpSellList) = 0 THEN
       RETURN "ERROR: invalid or missing upsell".
+
+   llSMS = LOGICAL(lcSMS) NO-ERROR.
+   IF ERROR-STATUS:ERROR THEN 
+      RETURN "ERROR: invalid SMS value".
 
    lcUpsell = UPPER(lcUpsell).
 
@@ -241,19 +249,15 @@ PROCEDURE pBobCheckUpsell:
          RETURN "ERROR:Subscription is not DSS2 compatible".
    END.
 
-   /* YCO-1 1Gb and 5Gb upsell are not compatible with 1.5Gb tariff CONT10.
+   /* YCO-1 "1Gb and 5Gb upsell are not compatible with 1.5Gb tariff CONT10."
       In fact, the upsell is not available to all tariffs. 
-      As part of Phase I  this is the list of avaialble Tariffs. */
+      As part of Phase I this is the list of avaialble Tariffs. */
    IF LOOKUP(MobSub.clitype,cValidList) = 0 THEN
        RETURN "ERROR:Upsell is not compatible with " + MobSub.clitype + " tariff".
 
    fCreateUpsellBundle(MobSub.MsSeq,
                        lcUpsell,
-                       (IF (lcUpsell = "SAN1GB_001" OR lcUpsell = "SAN5GB_002") THEN
-                           /* Request Source assigned for SAN1GB_001 and SAN5GB_002 to avoid SMS sending. Email sending done here a few lines below. */
-                           "5"  
-                        ELSE
-                           {&REQUEST_SOURCE_YOIGO_TOOL}),
+                       "5", /* Script value, to avoid SMS sending by any Request management */
                        Func.Common:mMakeTS(),
                        OUTPUT liRequest,
                        OUTPUT lcError). 
@@ -289,18 +293,22 @@ PROCEDURE pBobCheckUpsell:
          lcMemoTitle = "FLEX 5GB upsell".    
    END CASE.
       
-   /* YCO-4 Send SMS for SAN1GB_001 and SAN5G_002 activation */
-   IF lcUpSell = "SAN1GB_001" or lcUpsell = "SAN5GB_002" THEN
+   /* YCO-4 - Send SMS for SAN1GB_001 and SAN5G_002 activation */
+   lcSMS_Text = "".
+
+   IF llSMS THEN DO:
+      CASE lcUpsell:
+         WHEN "SAN1GB_001" THEN lcSMS_Text = "Ya puede disfrutar del bono datos gratis de 1GB al mes durante 12 meses".
+         WHEN "SAN5GB_002" THEN lcSMS_Text = "Ya puede disfrutar del bono datos gratis de 5GB al mes durante 12 meses".
+      END.
+
       RUN pSendSMS(INPUT MobSub.MsSeq,
                    INPUT 0,
-                   INPUT (IF lcUpsell = "SAN1GB_001" THEN
-                          "Ya puede disfrutar del bono datos gratis de 1GB al mes durante 12 meses" 
-                          ELSE
-                          "Ya puede disfrutar del bono datos gratis de 5GB al mes durante 12 meses"),
+                   INPUT lcSMS_Text,
                    INPUT 10,
                    INPUT {&UPSELL_SMS_SENDER},
                    INPUT "").
-
+   END.
 
    lcMemoText = "Ampliación " +  lcUpsell + " - Activar".
    Func.Common:mWriteMemoWithType("MobSub",                             /* HostTable */
