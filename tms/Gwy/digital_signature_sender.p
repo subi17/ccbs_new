@@ -11,7 +11,7 @@
 {Syst/commpaa.i}
 ASSIGN
    Syst.Var:katun   = "Cron".
-  /* Syst.Var:gcBrand = "1".*/
+
 {Syst/tmsconst.i}
 {Func/profunc.i}
 {Func/cparam2.i}
@@ -44,14 +44,15 @@ FUNCTION fFillbrandStruct RETURNS LOGICAL
     icBrand        AS CHAR,
     INPUT pcStruct AS CHAR):
 
-   IF fConvertBrandToTenant(icBrand) EQ {&TENANT_YOIGO} THEN
-      add_string(pcStruct,"brand","yoigo").
-   ELSE IF fConvertBrandToTenant(icBrand) EQ {&TENANT_MASMOVIL} THEN
-      add_string(pcStruct,"brand","masmovil").
-   ELSE DO:
-      fLogMsg(STRING(iiOrderID) + "; Error: tenant not found (Yoigo or Masmovil).").
-      RETURN FALSE.
+   DO ON ERROR UNDO, THROW:
+
+   add_string(pcStruct,"brand",LC(multitenancy.TenantInformation:mGetEffectiveBrand())).
+       CATCH errorobj AS Progress.Lang.AppError:
+          fLogMsg(STRING(iiOrderID) + "; Error: " + errorobj:GetMessage(1)).
+          RETURN FALSE.
+      END.
    END.
+
    IF llLogRequest THEN fLogMsg(STRING(iiOrderID) + "; Signature xml, Brand: " + STRING(pcStruct)).
 
    RETURN TRUE.
@@ -71,16 +72,16 @@ FUNCTION fFillCancelStruct RETURNS LOGICAL
 
    FIND FIRST bOrder NO-LOCK WHERE
               bOrder.Brand EQ Syst.Var:gcBrand AND
-              bOrder.OrderId EQ iiOrderId.
+              bOrder.OrderId EQ iiOrderId NO-ERROR.
    IF AVAIL bOrder THEN DO:
       FIND FIRST bOrderCustomer NO-LOCK WHERE
                  bOrderCustomer.Brand EQ Syst.Var:gcBrand AND
                  bOrderCustomer.OrderId EQ iiOrderId AND
-                 bOrderCustomer.RowType = 1.
+                 bOrderCustomer.RowType = 1 NO-ERROR.
 
       IF NOT AVAIL bOrderCustomer THEN RETURN FALSE.
 
-      add_string(pcStruct,"id","12341"). /* TODO: get with process id query to Adapter */
+      add_string(pcStruct,"id",""). /* TODO: get with process id query to Adapter */
       add_string(pcStruct,"customerId",bOrderCustomer.CustId).
       add_string(pcStruct,"accountId",bOrder.ContractID).
       /* not mandatory */
@@ -180,12 +181,12 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
 
    FIND FIRST bOrder NO-LOCK WHERE
             bOrder.Brand EQ Syst.Var:gcBrand AND
-            bOrder.OrderId EQ iiOrderId.
+            bOrder.OrderId EQ iiOrderId NO-ERROR.
    IF AVAIL bOrder THEN DO:
       FIND FIRST bOrderCustomer NO-LOCK WHERE
                  bOrderCustomer.Brand EQ Syst.Var:gcBrand AND
                  bOrderCustomer.OrderId EQ iiOrderId AND
-                 bOrderCustomer.RowType = 1.
+                 bOrderCustomer.RowType = 1 NO-ERROR.
 
       IF NOT AVAIL bOrderCustomer THEN RETURN FALSE.
 
@@ -334,10 +335,10 @@ PROCEDURE pCheckActionLog:
             IF llLogRequest THEN fLogMsg(STRING(bOrder.OrderId) + "; Found OrderId " + 
                     ", OrderStatusCode: " + STRING(bOrder.StatusCode) + 
                     ", ActionLog.ActionID: " + ActionLog.ActionID).
-            IF ActionLog.ActionID EQ "ContractStatusSent" THEN
+            IF ActionLog.ActionID EQ "dssent" THEN
                /* Send for signing */
                lcStatus = fSendSigningMessage(bOrder.OrderId, bOrder.Brand).
-            ELSE IF ActionLog.ActionID EQ "ContractStatusCancelled" THEN
+            ELSE IF ActionLog.ActionID EQ "dscancel" THEN
                /* Send cancel */
                lcStatus = fSendCancelMessage(bOrder.OrderId, bOrder.Brand).
             ELSE
@@ -388,8 +389,8 @@ IF llLogRequest THEN fLogMsg("Started by Cron at " + Func.Common:mTS2HMS(ldCurre
 iTimeOut = 10.
 initialize(lcUrlAdapter, iTimeOut).
 
-RUN pCheckActionLog("ContractStatusSent").
-RUN pCheckActionLog("ContractStatusCancelled").
+RUN pCheckActionLog("dssent").
+RUN pCheckActionLog("dscancel").
 
 xmlrpc_finalize().
 OUTPUT STREAM sLog CLOSE.

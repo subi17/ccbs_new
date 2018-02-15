@@ -61,9 +61,9 @@ FUNCTION fHandleSignature RETURNS CHAR
    /* Process ActionLog */
 
    IF bOrder.statusCode EQ {&ORDER_STATUS_DELIVERED} THEN
-      lcActionID = "ContractStatusSent".
+      lcActionID = "dssent".
    ELSE IF LOOKUP(bOrder.StatusCode, {&ORDER_CLOSE_STATUSES}) > 0 THEN /* 7,8,9 */
-      lcActionID = "ContractStatusCancelled".
+      lcActionID = "dscancel".
    ELSE DO:
       RETURN "Error".
    END.
