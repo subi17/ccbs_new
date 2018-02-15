@@ -43,11 +43,8 @@ FUNCTION fCloseDiscount RETURNS LOGICAL
    DEF BUFFER DiscountPlan FOR DiscountPlan.
    DEF BUFFER DPMember FOR DPMember.
 
-   IF llDoEvent AND NOT ilJustCheck THEN DO:
-      lhDPMember = BUFFER DPMember:HANDLE.
-      /* This also calls StarEventInitialize */
-      RUN StarEventSetOldBuffer(lhDPMember).
-   END.
+   IF llDoEvent AND NOT ilJustCheck
+   THEN lhDPMember = BUFFER DPMember:HANDLE.
 
    FOR FIRST DiscountPlan WHERE
              DiscountPlan.Brand    = Syst.Var:gcBrand AND
@@ -61,6 +58,10 @@ FUNCTION fCloseDiscount RETURNS LOGICAL
       
       IF NOT ilJustCheck
       THEN DO TRANSACTION:
+         /* This also calls StarEventInitialize */
+         IF llDoEvent
+         THEN RUN StarEventSetOldBuffer(lhDPMember).
+
          BUFFER DPMember:FIND-CURRENT(EXCLUSIVE-LOCK).
 
          /* Log DPMember modification */
