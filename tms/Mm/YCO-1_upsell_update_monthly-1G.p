@@ -91,9 +91,9 @@ FUNCTION fCollect RETURNS CHAR
             MsRequest.Brand      EQ Syst.Var:gcBrand               AND  
             MsRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
             MsRequest.ReqStatus  EQ {&REQUEST_STATUS_DONE}         AND
-            MsRequest.ReqSource  EQ {&REQUEST_SOURCE_YOIGO_TOOL}   AND /* Created by BobTool */
-            MsRequest.ReqCparam3 EQ lcUpsell                       AND
-            MsRequest.crestamp > ldCampaignStart                   AND
+            MsRequest.ReqSource  EQ "5"             AND /* Request Source assigned by act_upsells.p for SAN1GB_001 and SAN5GB_002 to avoid SMS sending */
+            MsRequest.ReqCparam3 EQ lcUpsell        AND
+            MsRequest.crestamp > ldCampaignStart    AND
             MsRequest.crestamp < ldCampaignEnd:
    
       lcErr = "".
@@ -148,10 +148,11 @@ FUNCTION fCountReq RETURNS INT
    DEF BUFFER MsRequest FOR MsRequest.
    
    FOR EACH MsRequest NO-LOCK WHERE
+            MsRequest.Brand      EQ Syst.Var:gcBrand               AND    
             MsRequest.MsSeq      EQ iiMsSeq                        AND
             MsRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
             MsRequest.ReqStatus  EQ {&REQUEST_STATUS_DONE}         AND
-            MsRequest.ReqSource  EQ {&REQUEST_SOURCE_YOIGO_TOOL}   AND /* Created by BobTool */
+            MsRequest.ReqSource  EQ "5"                            AND /* Request Source assigned by act_upsells.p for SAN1GB_001 and SAN5GB_002 to avoid SMS sending */
             MsRequest.ReqCparam3 EQ lcUpsell                       AND
             MsRequest.crestamp > ldCampaignStart
             USE-INDEX MsSeq:
@@ -172,9 +173,11 @@ FUNCTION fUpsellForYCO-1 RETURNS CHAR
    DEF BUFFER MsRequest FOR MsRequest.
 
    FIND FIRST MsRequest NO-LOCK WHERE
+              MsRequest.Brand      EQ Syst.Var:gcBrand               AND 
               MsRequest.MsSeq      EQ iiMsSeq                        AND
               MsRequest.ReqType    EQ {&REQTYPE_CONTRACT_ACTIVATION} AND
               MsRequest.ReqCparam3 EQ lcUpsell                       AND 
+              MsRequest.ReqSource  EQ "5"                            AND /* Request Source assigned by act_upsells.p for SAN1GB_001 and SAN5GB_002 to avoid SMS sending */
               MsRequest.crestamp > fMonthStart(Func.Common:mMakeTS()) /* do not care times done in eariler months */
               NO-ERROR.
 
@@ -187,7 +190,7 @@ FUNCTION fUpsellForYCO-1 RETURNS CHAR
    IF llgSimulation EQ FALSE THEN DO:
       fCreateUpsellBundle(iiMsSeq,
                           lcUpsell,
-                          {&REQUEST_SOURCE_YOIGO_TOOL},
+                          "5",  /* Request Source assigned by act_upsells.p for SAN1GB_001 and SAN5GB_002 to avoid SMS sending */
                           Func.Common:mMakeTS(),
                           OUTPUT liRequest,
                           OUTPUT lcError).

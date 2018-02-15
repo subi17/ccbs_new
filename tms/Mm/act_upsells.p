@@ -46,7 +46,7 @@ DEF VAR liErrors         AS INT NO-UNDO.
 DEF VAR liRequest        AS INT  NO-UNDO.
 DEF VAR lcMemoText       AS CHAR NO-UNDO.
 
-/* YCO-1^List of compatible tariffs */ 
+/* YCO-1 List of compatible tariffs */ 
 DEF VAR cValidList AS CHAR INITIAL
    "CONT6,CONT7,CONT8,CONT9,CONT15,CONTF11,CONTF20D,CONTF30,CONTF40,CONTF55,CONTF8,CONTM,CONTM2,CONT23,CONT24,CONT25,CONT26,CONTS12,CONTS15,CONTS16,CONTS20,CONTS21,CONTS25,CONTS26,CONTS30,CONTS32,CONT28,CONT27,CONT31,CONTRD1,CONTRD2,CONTRD3,CONTRD4,CONTRD9".
 
@@ -249,7 +249,11 @@ PROCEDURE pBobCheckUpsell:
 
    fCreateUpsellBundle(MobSub.MsSeq,
                        lcUpsell,
-                       {&REQUEST_SOURCE_YOIGO_TOOL},
+                       (IF (lcUpsell = "SAN1GB_001" OR lcUpsell = "SAN5GB_002") THEN
+                           /* Request Source assigned for SAN1GB_001 and SAN5GB_002 to avoid SMS sending. Email sending done here a few lines below. */
+                           "5"  
+                        ELSE
+                           {&REQUEST_SOURCE_YOIGO_TOOL}),
                        Func.Common:mMakeTS(),
                        OUTPUT liRequest,
                        OUTPUT lcError). 
@@ -285,6 +289,19 @@ PROCEDURE pBobCheckUpsell:
          lcMemoTitle = "FLEX 5GB upsell".    
    END CASE.
       
+   /* YCO-4 Send SMS for SAN1GB_001 and SAN5G_002 activation */
+   IF lcUpSell = "SAN1GB_001" or lcUpsell = "SAN5GB_002" THEN
+      RUN pSendSMS(INPUT MobSub.MsSeq,
+                   INPUT 0,
+                   INPUT (IF lcUpsell = "SAN1GB_001" THEN
+                          "Ya puede disfrutar del bono datos gratis de 1GB al mes durante 12 meses" 
+                          ELSE
+                          "Ya puede disfrutar del bono datos gratis de 5GB al mes durante 12 meses"),
+                   INPUT 10,
+                   INPUT {&UPSELL_SMS_SENDER},
+                   INPUT "").
+
+
    lcMemoText = "Ampliación " +  lcUpsell + " - Activar".
    Func.Common:mWriteMemoWithType("MobSub",                             /* HostTable */
                     STRING(Mobsub.MsSeq),                 /* KeyValue  */
