@@ -46,6 +46,10 @@ DEF VAR liErrors         AS INT NO-UNDO.
 DEF VAR liRequest        AS INT  NO-UNDO.
 DEF VAR lcMemoText       AS CHAR NO-UNDO.
 
+/* YCO-1 List of compatible tariffs */ 
+DEF VAR cValidList AS CHAR INITIAL
+   "CONT6,CONT7,CONT8,CONT9,CONT15,CONTF11,CONTF20D,CONTF30,CONTF40,CONTF55,CONTF8,CONTM,CONTM2,CONT23,CONT24,CONT25,CONT26,CONTS12,CONTS15,CONTS16,CONTS20,CONTS21,CONTS25,CONTS26,CONTS30,CONTS32,CONT28,CONT27,CONT31,CONTRD1,CONTRD2,CONTRD3,CONTRD4,CONTRD9".
+
 DEF STREAM sin.
 DEF STREAM sFile.
 DEF STREAM sLog.
@@ -170,10 +174,11 @@ PROCEDURE pBobCheckUpsell:
    IF NUM-ENTRIES(pcLine,lcSep) <> 2 THEN
       RETURN "ERROR:Wrong file format".
 
+   /* YCO-3 - Adding 1gb and 5gb upsells to the list */
    ASSIGN
       lcCLI          = TRIM(ENTRY(1,pcLine,lcSep))
       lcUpsell       = TRIM(ENTRY(2,pcLine,lcSep))
-      lcUpSellList   = "DATA6_UPSELL,DSS_UPSELL,DSS2_UPSELL,DSS200_UPSELL,DATA200_UPSELL,FLEX_UPSELL,FLEX_500MB_UPSELL,FLEX_5GB_UPSELL,DSS_FLEX_500MB_UPSELL,DSS_FLEX_5GB_UPSELL".
+      lcUpSellList   = "SAN1GB_001,SAN5GB_002,DATA6_UPSELL,DSS_UPSELL,DSS2_UPSELL,DSS200_UPSELL,DATA200_UPSELL,FLEX_UPSELL,FLEX_500MB_UPSELL,FLEX_5GB_UPSELL,DSS_FLEX_500MB_UPSELL,DSS_FLEX_5GB_UPSELL".
 
    IF lcUpsell = ? OR 
       LOOKUP(lcUpsell,lcUpSellList) = 0 THEN
@@ -193,7 +198,9 @@ PROCEDURE pBobCheckUpsell:
    IF lcDssID EQ "" AND 
       lcUpsell BEGINS "DSS" THEN 
    RETURN "ERROR: DSS is not active for this subscription".
-
+   
+   /* YCO-3 1g and 5g upsell are daycampaign.dctype = 6 so ServiceLimitGroup.GroupCode = DCCampaign.DCEvent and the DCEvent codes are "SAN1GB_001" and "SAN5GB_002" so there is no need to adapt the code below */
+   
    IF lcDssId EQ "DSS" THEN 
    DO:
       IF lcUpsell EQ "DATA6_UPSELL" OR lcUpsell EQ "FLEX_UPSELL" THEN
@@ -234,6 +241,12 @@ PROCEDURE pBobCheckUpsell:
          RETURN "ERROR:Subscription is not DSS2 compatible".
    END.
 
+   /* YCO-1 1Gb and 5Gb upsell are not compatible with 1.5Gb tariff CONT10.
+      In fact, the upsell is not available to all tariffs. 
+      As part of Phase I  this is the list of avaialble Tariffs. */
+   IF LOOKUP(MobSub.clitype,cValidList) = 0 THEN
+       RETURN "ERROR:Upsell is not compatible with " + MobSub.clitype + " tariff".
+
    fCreateUpsellBundle(MobSub.MsSeq,
                        lcUpsell,
                        {&REQUEST_SOURCE_YOIGO_TOOL},
@@ -254,6 +267,12 @@ PROCEDURE pBobCheckUpsell:
          lcMemoTitle = "Data Sharing 2 Service Upsell".
       WHEN "DSS200_UPSELL" THEN
          lcMemoTitle = "DSS 200 MB upsell".
+      /* YCO-3 Adding memos */
+      WHEN "SAN1GB_001" THEN
+         lcMemoTitle = "Ampliación 1 GB".
+      WHEN "SAN5GB_002" THEN
+         lcMemoTitle = "Ampliación 5 GB".
+      /* YCO-3 end */
       WHEN "DATA6_UPSELL" THEN 
          lcMemoTitle = "Ampliación 1,5 GB".
       WHEN "DATA200_UPSELL" THEN 
@@ -265,7 +284,20 @@ PROCEDURE pBobCheckUpsell:
       WHEN "FLEX_5GB_UPSELL" THEN
          lcMemoTitle = "FLEX 5GB upsell".    
    END CASE.
-      
+
+   /* YCO-4 Send SMS for SAN1GB_001 and SAN5G_002 activation */
+   IF lcUpSell = "SAN1GB_001" or lcUpsell = "SAN5GB_002" THEN
+      RUN pSendSMS(INPUT MobSub.MsSeq,
+                   INPUT 0,
+                   INPUT (IF lcUpsell = "SAN1G_001" THEN
+                          "Ya puede disfrutar del bono datos gratis de 1GB al mes durante 12 meses" 
+                          ELSE
+                          "Ya puede disfrutar del bono datos gratis de 5GB al mes durante 12 meses"),
+                   INPUT 10,
+                   INPUT {&UPSELL_SMS_SENDER},
+                   INPUT "").
+
+
    lcMemoText = "Ampliación " +  lcUpsell + " - Activar".
    Func.Common:mWriteMemoWithType("MobSub",                             /* HostTable */
                     STRING(Mobsub.MsSeq),                 /* KeyValue  */
