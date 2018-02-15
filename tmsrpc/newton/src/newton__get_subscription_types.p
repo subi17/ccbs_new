@@ -277,9 +277,22 @@ FOR EACH CLIType NO-LOCK WHERE
    ELSE 
    DO:
       lcStatusCode = CLIType.StatusCode.
-      /* Mobile subscrition should be allowed to do STC between only convergent tariffs, but fixed part should remain same */
-      IF fIsConvergenceTariff(CliType.Clitype) AND fIsConvergenceTariff(pcClitype) EQ FALSE THEN 
+
+      FIND FIRST oldCLIType WHERE oldCLIType.Brand   = Syst.Var:gcBrand  AND
+                                  oldCLIType.cliType = pcCliType         NO-LOCK NO-ERROR.
+      /* 3p to 2p STC is restricted */
+      IF fIsConvergenceTariff(pcClitype) AND AVAIL oldCLIType AND 
+         ((oldCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} AND CliType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY}) OR 
+          (oldCLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY}  AND CliType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT})) THEN 
           ASSIGN lcStatusCode = 0.
+      /* Internet technology change is restricted */    
+      ELSE IF fIsConvergenceTariff(pcClitype) AND AVAIL oldCLIType AND 
+         ((oldCLIType.FixedLineType = {&FIXED_LINE_TYPE_FIBER} AND CliType.FixedLineType = {&FIXED_LINE_TYPE_ADSL}) OR 
+          (oldCLIType.FixedLineType = {&FIXED_LINE_TYPE_ADSL}  AND CliType.FixedLineType = {&FIXED_LINE_TYPE_FIBER})) THEN 
+          ASSIGN lcStatusCode = 0.    
+      /* Mobile subscrition should be allowed to do STC between only convergent tariffs, but fixed part should remain same */
+      ELSE IF fIsConvergenceTariff(CliType.Clitype) AND fIsConvergenceTariff(pcClitype) EQ FALSE THEN 
+          ASSIGN lcStatusCode = 0.    
       ELSE IF CLIType.FixedLineType EQ {&FIXED_LINE_TYPE_FIBER} THEN
       DO: 
           IF LOOKUP(lcHostName, "sadachbia") > 0 THEN 
