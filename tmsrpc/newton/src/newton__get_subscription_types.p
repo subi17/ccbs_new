@@ -39,6 +39,7 @@ DEFINE VARIABLE lcSpeedProfileList     AS CHAR  NO-UNDO.
 DEFINE VARIABLE liDestDowspeconversion AS INT64 NO-UNDO.
 DEFINE VARIABLE liDestupspeconversion  AS INT64 NO-UNDO.
 DEFINE VARIABLE lcHostname             AS CHAR  NO-UNDO.
+DEFINE VARIABLE llUseApi               AS LOGI  NO-UNDO INIT TRUE.
 
 DEFINE TEMP-TABLE ttSpeed
           FIELD Download      AS INT64
@@ -235,9 +236,14 @@ top_struct = add_struct(response_toplevel_id, "").
 
 result_array = add_array(top_struct, "clitypes").
 
-ldaCont15PromoEnd  = fCParamDa("CONT15PromoEndDate").
+ASSIGN 
+    ldaCont15PromoEnd  = fCParamDa("CONT15PromoEndDate")
+    llUseApi           = LOGICAL(fIParam("GESCON", "UseApi")).
 
-IF LOOKUP(lcHostName, "sadachbia") = 0 THEN 
+IF llUseApi = ? THEN 
+    ASSIGN llUseApi = TRUE.
+    
+IF LOOKUP(lcHostName, "sadachbia") = 0 AND llUseApi THEN 
 DO:
     FIND FIRST MobSub NO-LOCK WHERE
                MobSub.Brand = Syst.Var:gcBrand AND
@@ -301,7 +307,7 @@ FOR EACH CLIType NO-LOCK WHERE
               IF fIsConvergenceTariff(CliType.Clitype) AND fIsConvergenceTariff(pcClitype) EQ FALSE  THEN
                   ASSIGN lcStatusCode = 0.
           END.  
-          ELSE IF MobSub.TerritoryOwner EQ "FIBMM02" THEN
+          ELSE IF MobSub.TerritoryOwner EQ "FIBMM02" OR llUseApi = FALSE THEN
           DO:
               IF fIsConvergenceTariff(CliType.Clitype) AND (fIsConvergenceTariff(pcClitype) EQ FALSE OR NOT fCheckConvergentSTCCompability(pcClitype,Clitype.clitype)) THEN
                   ASSIGN lcStatusCode = 0.
