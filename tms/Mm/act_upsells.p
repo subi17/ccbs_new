@@ -257,7 +257,7 @@ PROCEDURE pBobCheckUpsell:
 
    fCreateUpsellBundle(MobSub.MsSeq,
                        lcUpsell,
-                       "5", /* Script value, to avoid SMS sending by any Request management */
+                       {&REQUEST_SOURCE_SCRIPT}, /* "5" - Script value, to avoid SMS sending by Request management due to ACTION RULES FOR 432 */
                        Func.Common:mMakeTS(),
                        OUTPUT liRequest,
                        OUTPUT lcError). 
@@ -298,17 +298,18 @@ PROCEDURE pBobCheckUpsell:
 
    IF llSMS THEN DO:
       CASE lcUpsell:
-         WHEN "SAN1GB_001" THEN lcSMS_Text = "Ya puede disfrutar del bono datos gratis de 1GB al mes durante 12 meses".
-         WHEN "SAN5GB_002" THEN lcSMS_Text = "Ya puede disfrutar del bono datos gratis de 5GB al mes durante 12 meses".
-         OTHERWISE lcSMS_Text = lcMemoTitle + " - Activar".
+         WHEN "SAN1GB_001" THEN lcSMS_Text = lcUpsell.
+         WHEN "SAN5GB_002" THEN lcSMS_Text = lcUpsell.
+         OTHERWISE lcSMS_Text = "".
       END.
 
-      RUN pSendSMS(INPUT MobSub.MsSeq,
-                   INPUT 0,
-                   INPUT lcSMS_Text,
-                   INPUT 10,
-                   INPUT {&UPSELL_SMS_SENDER},
-                   INPUT "").
+      IF lcSMS_Text <> "" THEN
+          RUN pSendSMS(INPUT MobSub.MsSeq,
+                       INPUT 0,
+                       INPUT lcSMS_Text,
+                       INPUT 10,
+                       INPUT {&UPSELL_SMS_SENDER},
+                       INPUT "").
    END.
 
    lcMemoText = "Ampliación " +  lcUpsell + " - Activar".
