@@ -281,9 +281,10 @@ FOR EACH CLIType NO-LOCK WHERE
       FIND FIRST oldCLIType WHERE oldCLIType.Brand   = Syst.Var:gcBrand  AND
                                   oldCLIType.cliType = pcCliType         NO-LOCK NO-ERROR.
       /* 3p to 2p STC is restricted */
-      IF fIsConvergenceTariff(pcClitype) AND AVAIL oldCLIType AND 
-         ((oldCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} AND CliType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY}) OR 
-          (oldCLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY}  AND CliType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT})) THEN 
+      IF fIsConvergenceTariff(pcClitype) AND 
+         AVAIL oldCLIType AND 
+         oldCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} AND 
+         CliType.TariffType    = {&CLITYPE_TARIFFTYPE_FIXEDONLY}  THEN 
           ASSIGN lcStatusCode = 0.
       /* Internet technology change is restricted */    
       ELSE IF fIsConvergenceTariff(pcClitype) AND AVAIL oldCLIType AND 
