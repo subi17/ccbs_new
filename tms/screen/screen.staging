@@ -2,7 +2,7 @@ echo "-- Staging Screens --"
 echo $REQRUNDATE
 sleep 1
 
-#screen 1 pike -C /apps/yoigo/tms terminal -- Gwy/orderrun common ordercanal mobile counter star reratelog mcdr -clientlog /scratch/log/requester/orderrun.log -logthreshold 1048576 -logginglevel 1 tenant=super
+screen 1 pike -C /apps/yoigo/tms terminal -- Gwy/orderrun common ordercanal mobile counter star reratelog mcdr -clientlog /scratch/log/requester/orderrun.log -logthreshold 1048576 -logginglevel 1 tenant=super
 #screen 2 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl -clientlog /scratch/log/requester/requ5.log -logthreshold 1048576 -logginglevel 1 -param 5,$REQRUNDATE tenant=yoigo
 #screen 2 pike -C /apps/yoigo/tms terminal -- Syst/requestrunner common ordercanal mobile counter star reratelog mcdr mcdrdtl -clientlog /scratch/log/requester/requ1.log -logthreshold 1048576 -logginglevel 1 -param 1,$REQRUNDATE tenant=yoigo
 # -logentrytypes DB.Connects,4GLTrace:2
