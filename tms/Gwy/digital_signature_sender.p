@@ -392,7 +392,7 @@ initialize(lcUrlAdapter, iTimeOut).
 RUN pCheckActionLog("dssent").
 RUN pCheckActionLog("dscancel").
 
-FINALLY:
+/* FINALLY:*/
 xmlrpc_finalize().
 OUTPUT STREAM sLog CLOSE.
 
