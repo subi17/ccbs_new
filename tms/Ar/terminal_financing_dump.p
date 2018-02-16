@@ -88,9 +88,19 @@ DO ON ERROR UNDO , LEAVE :
     Func.Common:mSplitTS(idLastDump, OUTPUT ldaModified, OUTPUT liTimeMod).
     
     OUTPUT STREAM sFile TO VALUE(icFile).
-        RUN pFetchAndWriteData.
+        file_blk:
+        DO ON ERROR UNDO , LEAVE 
+           ON QUIT UNDO, RETRY
+           ON STOP UNDO, RETRY:
+            IF RETRY THEN DO:
+                olInterrupted = TRUE.
+                LEAVE file_blk.
+            END.
+            RUN pFetchAndWriteData.
+        END. 
     OUTPUT STREAM sFile CLOSE.
     
+        
 END.    
 
 PROCEDURE pFetchAndWriteData:
@@ -349,7 +359,7 @@ PROCEDURE pFetchAndWriteData:
             ELSE 
                 liExtension = liExtension + 1.
         END.
-        
+        oiEvents = oiEvents + 1 .
         RUN pWriteDump.
         
         ASSIGN 
