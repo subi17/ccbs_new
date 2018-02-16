@@ -18,7 +18,7 @@ IF AVAILABLE DumpFile
       DumpFile.TransDir        = "/tmp/transferDir"
       DumpFile.DumpDelimiter   = ","
       DumpFile.DecimalPoint    = ","
-      DumpFile.LogicModule     = "Ar/terminal_financial_dump.p"
+      DumpFile.LogicModule     = "Ar/terminal_financing_dump.p"
       DumpFile.MainTable       = "FixedFee"
       DumpFile.DumpFormat      = "ASCII"
       DumpFile.FileCategory    = "TRACK"
