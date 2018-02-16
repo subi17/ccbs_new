@@ -91,6 +91,9 @@ DEF VAR llAddline20Disc AS LOGICAL NO-UNDO.
 /* q25refinance_remaining Quota 25 refinance remaining amount */
 DEF VAR ldeQ25RefiRemain AS DECIMAL NO-UNDO.
 
+DEF VAR ldOriginalFee AS DECIMAL NO-UNDO.
+DEF VAR ldNewFee      AS DECIMAL NO-UNDO.
+
 DEF BUFFER bCLIType        FOR CLIType.
 DEF BUFFER OldCLIType      FOR CLIType.
 DEF BUFFER lbMobSub        FOR MobSub.
@@ -360,9 +363,6 @@ FUNCTION fGetQ25RefRemainingAmt RETURNS DECIMAL
    DEF VAR liPeriodFrom  AS INTEGER NO-UNDO.
    DEF VAR liPeriod      AS INTEGER NO-UNDO. 
    DEF VAR ldaDate       AS DATE    NO-UNDO.
-
-   DEF VAR ldOriginalFee AS DECIMAL NO-UNDO.
-   DEF VAR ldNewFee      AS DECIMAL NO-UNDO.
 
    DEF BUFFER FixedFee  FOR FixedFee.
    DEF BUFFER FFItem    FOR FFItem.
