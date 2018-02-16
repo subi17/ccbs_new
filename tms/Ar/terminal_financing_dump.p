@@ -378,7 +378,11 @@ PROCEDURE pWriteDump:
         DO:
             CASE lcField:
                 WHEN "#BANKCODE"   THEN lcValue =  lcTFBank.
-                WHEN "#BANKNAME"   THEN lcValue =  lcTFBank.
+                WHEN "#BANKNAME"   THEN DO:
+                         IF lcTFBank =  "0049" THEN "Uno-E".
+                    ELSE IF lcTFBank =  "0225" THEN "Cetelem".
+                    ELSE IF lcTFBank =  "0081" THEN "Sabadell".
+                END.
                 WHEN "#RUNDATE"    THEN lcValue =  STRING(TODAY,"99/99/9999").
                 WHEN "#PAYTERMQTY" THEN lcValue =  STRING(liPayterm).
                 WHEN "#Q25QTY"     THEN lcValue =  STRING(liQ25).
