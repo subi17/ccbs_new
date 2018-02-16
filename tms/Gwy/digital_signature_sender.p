@@ -81,7 +81,7 @@ FUNCTION fFillCancelStruct RETURNS LOGICAL
 
       IF NOT AVAIL bOrderCustomer THEN RETURN FALSE.
 
-      add_string(pcStruct,"id",""). /* TODO: get with process id query to Adapter */
+      add_string(pcStruct,"id","").
       add_string(pcStruct,"customerId",bOrderCustomer.CustId).
       add_string(pcStruct,"accountId",bOrder.ContractID).
       /* not mandatory */
@@ -219,7 +219,7 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
       add_string(pcStruct,"contractId",bOrder.ContractID).
       add_string(pcStruct,"orderId",STRING(bOrderCustomer.OrderId)).
       add_string(pcStruct,"sfId",bOrder.Salesman).
-      add_string(pcStruct,"orderDate",STRING(Func.Common:mTSToDate(bOrder.CrStamp ))).
+      add_string(pcStruct,"orderDate",STRING(Func.Common:mUTCTime(bOrder.CrStamp ))).
  
       IF llLogRequest THEN fLogMsg(STRING(iiOrderID) + "; Signing send xml: " + STRING(pcStruct)).
    END.
@@ -392,6 +392,7 @@ initialize(lcUrlAdapter, iTimeOut).
 RUN pCheckActionLog("dssent").
 RUN pCheckActionLog("dscancel").
 
+FINALLY:
 xmlrpc_finalize().
 OUTPUT STREAM sLog CLOSE.
 
