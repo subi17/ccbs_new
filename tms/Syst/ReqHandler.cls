@@ -18,10 +18,11 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 CLASS Syst.ReqHandler: 
 
    DEFINE PRIVATE TEMP-TABLE ttStatistic NO-UNDO
-      FIELD ReqType    AS INTEGER
-      FIELD ReqStatus  AS INTEGER
-      FIELD ProcessAmt AS INT64
-      FIELD FailedAmt  AS INT64
+      FIELD ReqType     AS INTEGER
+      FIELD ReqStatus   AS INTEGER
+      FIELD ProcessAmt  AS INT64
+      FIELD FailedAmt   AS INT64
+      FIELD LastUpdated AS DATETIME-TZ
       INDEX ReqType IS PRIMARY UNIQUE ReqType ReqStatus.
 
    DEFINE PRIVATE TEMP-TABLE ttProcess NO-UNDO
@@ -121,8 +122,9 @@ CLASS Syst.ReqHandler:
       END.
       
       ASSIGN
-         ttStatistic.ProcessAmt = ttStatistic.ProcessAmt + iiProcessed
-         ttStatistic.FailedAmt  = ttStatistic.FailedAmt + iiFailed.
+         ttStatistic.ProcessAmt  = ttStatistic.ProcessAmt + iiProcessed
+         ttStatistic.FailedAmt   = ttStatistic.FailedAmt + iiFailed
+         ttStatistic.LastUpdated = NOW.
          
    END METHOD.
 
@@ -162,17 +164,32 @@ CLASS Syst.ReqHandler:
 
    END METHOD.
 
-   METHOD PUBLIC VOID mLogStatistic():
+   METHOD PUBLIC VOID mLogStatistic
+      (idttzLastCheck AS DATETIME-TZ):
+
+      DEFINE VARIABLE lcc AS CHARACTER NO-UNDO.
 
       FOR EACH ttStatistic:
-         LOG-MANAGER:WRITE-MESSAGE
-            (SUBSTITUTE("ReqType=&1, ReqStatus=&2: Processed=&3, Failed=&4",
-                        ttStatistic.ReqType,
-                        ttStatistic.ReqStatus,
-                        ttStatistic.ProcessAmt,
-                        ttStatistic.FailedAmt), "STATUS").
+
+         IF ttStatistic.LastUpdated < idttzLastCheck
+         THEN NEXT.
+
+         lcc = lcc + ", " + SUBSTITUTE("1/&2: P&3, F&4",
+                                       ttStatistic.ReqType,
+                                       ttStatistic.ReqStatus,
+                                       ttStatistic.ProcessAmt,
+                                       ttStatistic.FailedAmt).
+
+         IF LENGTH(lcc) > 130
+         THEN DO:
+            LOG-MANAGER:WRITE-MESSAGE(SUBSTRING(lcc, 3), "STATUS").
+            lcc = "".
+         END.
       END.
-      
+
+      IF lcc > ""
+      THEN LOG-MANAGER:WRITE-MESSAGE(SUBSTRING(lcc, 3), "STATUS").
+
    END METHOD.
 
    METHOD PUBLIC LOGICAL mProcess():

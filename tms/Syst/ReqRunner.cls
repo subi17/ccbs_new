@@ -100,7 +100,7 @@ CLASS Syst.ReqRunner INHERITS gearbox.daemons.Daemon:
 
       IF NOW > ldttzNextReportTime
       THEN DO:
-         objReqHandler:mLogStatistic().
+         objReqHandler:mLogStatistic(ldttzNextReportTime).
          mSetNewReportTime().
          IF ldaLastCheckDate NE TODAY
          THEN DO:
