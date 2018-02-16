@@ -21,6 +21,7 @@ DEF VAR lcLogDir        AS CHAR NO-UNDO.
 DEF VAR lcLog           AS CHAR NO-UNDO.
 DEF VAR lcTableName     AS CHAR NO-UNDO.
 DEF VAR ldCurrentTimeTS AS DEC  NO-UNDO.
+DEF VAR lcXmlLog        AS CHAR NO-UNDO.
 
 DEF VAR iTimeOut        AS INT  NO-UNDO.
 DEF VAR llLogRequest    AS LOG  NO-UNDO INIT TRUE.
@@ -28,6 +29,31 @@ DEF VAR lcUrlAdapter    AS CHAR NO-UNDO.
 
 DEF BUFFER bOrder FOR Order.
 DEF STREAM sLog.
+DEF STREAM sOut.
+
+/*
+   Function prints XML to file.
+*/
+FUNCTION fXMLGenerateTest RETURNS CHAR
+   (icMethod AS CHAR):
+   IF llLogRequest THEN DO:
+      xmlrpc_initialize(FALSE).
+
+      lcXmlLog = lcLogDir +
+         "digital_signature_xml_" +
+         STRING(YEAR(TODAY)) +
+         STRING(MONTH(TODAY),"99") +
+         STRING(DAY(TODAY),"99") + ".xml".
+
+      OUTPUT STREAM sOut TO VALUE(lcXmlLog) APPEND.
+      PUT STREAM sOut UNFORMATTED 
+         string(serialize_rpc_call(icMethod)) SKIP. 
+      PUT STREAM sOut "" SKIP.   
+      OUTPUT STREAM sOut CLOSE.
+      xmlrpc_initialize(FALSE).
+   END.   
+END. 
+
 
 FUNCTION fLogMsg RETURNS LOGICAL
    (icMessage AS CHAR):
@@ -88,7 +114,11 @@ FUNCTION fFillCancelStruct RETURNS LOGICAL
       add_string(pcStruct,"subscriptionId",bOrder.CLI).
       add_string(pcStruct,"cancelReason","cancelled").
       
-      IF llLogRequest THEN fLogMsg(STRING(bOrder.OrderId) +  "; Cancel send xml: " + STRING(pcStruct)).
+      IF llLogRequest THEN DO:
+         fLogMsg(STRING(bOrder.OrderId) +  "; Cancel send xml: " + STRING(pcStruct)).
+         fLogMsg(STRING(bOrder.OrderId) +  "; Print xml to file").
+         fXMLGenerateTest("sign.updateProcess").
+      END.
    END.
 
    RETURN TRUE.
@@ -110,6 +140,8 @@ FUNCTION fSendCancelMessage RETURNS CHAR
    DEF VAR lcResp        AS CHAR NO-UNDO. 
    DEF VAR lcResult      AS CHAR NO-UNDO. 
    DEF VAR lcDescription AS CHAR NO-UNDO.
+   DEF VAR lcResultCode  AS CHAR NO-UNDO.
+   DEF VAR lcResultDesc  AS CHAR NO-UNDO.
 
    IF llLogRequest THEN fLogMsg(STRING(iiOrderID) + "; Start construct cancel message").
    xmlrpc_cleanup().
@@ -129,11 +161,14 @@ FUNCTION fSendCancelMessage RETURNS CHAR
       RETURN "Error".
    END.
 
+   /* SEND message */
    fLogMsg(STRING(iiOrderId) + "; Call RPC Method (Adapter)").
    RUN pRPCMethodCall("sign.updateProcess", TRUE).
 
    IF gi_xmlrpc_error NE 0 THEN DO:
-      fLogMsg(STRING(iiOrderID) + "; ERROR Sending cancel Message"). 
+      lcResultCode = STRING(gi_xmlrpc_error).
+      lcResultDesc = gc_xmlrpc_error.
+      fLogMsg(STRING(iiOrderId) + "; ERROR Sending cancel Message: ResultCode: " + lcResultCode + ", ResultDesc: " + lcResultDesc + ", " + STRING(gi_xmlrpc_error)). 
       xmlrpc_cleanup().
       RETURN "Error".
    END.
@@ -219,9 +254,13 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
       add_string(pcStruct,"contractId",bOrder.ContractID).
       add_string(pcStruct,"orderId",STRING(bOrderCustomer.OrderId)).
       add_string(pcStruct,"sfId",bOrder.Salesman).
-      add_string(pcStruct,"orderDate",STRING(Func.Common:mUTCTime(bOrder.CrStamp ))).
+      add_string(pcStruct,"orderDate",Func.Common:mUTCTime(bOrder.CrStamp)).
  
-      IF llLogRequest THEN fLogMsg(STRING(iiOrderID) + "; Signing send xml: " + STRING(pcStruct)).
+      IF llLogRequest THEN DO:
+         fLogMsg(STRING(iiOrderID) + "; Signing send xml: " + STRING(pcStruct)).
+         fLogMsg(STRING(bOrder.OrderId) +  "; Print xml to file").
+         fXMLGenerateTest("sign.registerSignProcess").
+      END.
    END.
 
    RETURN TRUE.
@@ -243,6 +282,8 @@ FUNCTION fSendSigningMessage RETURNS CHAR
    DEF VAR lcResp        AS CHAR NO-UNDO. 
    DEF VAR lcResult      AS CHAR NO-UNDO. 
    DEF VAR lcDescription AS CHAR NO-UNDO.
+   DEF VAR lcResultCode  AS CHAR NO-UNDO.
+   DEF VAR lcResultDesc  AS CHAR NO-UNDO.
 
    IF llLogRequest THEN fLogMsg(STRING(iiOrderId) + "; Start construct signing message").
    xmlrpc_cleanup().
@@ -262,11 +303,14 @@ FUNCTION fSendSigningMessage RETURNS CHAR
       RETURN "Error".
    END.
 
-   fLogMsg(STRING(iiOrderId) + "; Call RPC Method (Adapter), OrderId: ").
+   /* SEND message */
+   fLogMsg(STRING(iiOrderId) + "; Call RPC Method (Adapter)").
    RUN pRPCMethodCall("sign.registerSignProcess", TRUE).
 
    IF gi_xmlrpc_error NE 0 THEN DO:
-      fLogMsg(STRING(iiOrderId) + "; ERROR Sending Message"). 
+      lcResultCode = STRING(gi_xmlrpc_error).
+      lcResultDesc = gc_xmlrpc_error.
+      fLogMsg(STRING(iiOrderId) + "; ERROR Sending Message: ResultCode: " + lcResultCode + ", ResultDesc: " + lcResultDesc + ", " + STRING(gi_xmlrpc_error)). 
       xmlrpc_cleanup().
       RETURN "Error".
    END.
