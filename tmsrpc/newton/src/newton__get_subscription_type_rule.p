@@ -361,6 +361,9 @@ FUNCTION fGetQ25RefRemainingAmt RETURNS DECIMAL
    DEF VAR liPeriod      AS INTEGER NO-UNDO. 
    DEF VAR ldaDate       AS DATE    NO-UNDO.
 
+   DEF VAR ldOriginalFee AS DECIMAL NO-UNDO.
+   DEF VAR ldNewFee      AS DECIMAL NO-UNDO.
+
    DEF BUFFER FixedFee  FOR FixedFee.
    DEF BUFFER FFItem    FOR FFItem.
 
@@ -483,7 +486,7 @@ IF NOT MobSub.PayType THEN DO:
             DayCampaign.TermFeeModel NE "" AND
             DayCampaign.TermFeeCalc > 0 NO-LOCK BY DCCLI.ValidFrom DESC:
 
-      ldePeriodFee = 0.
+      ASSIGN ldNewFee = 0 ldOriginalFee = 0 ldePeriodFee = 0.
    
       IF DCCLI.Amount NE ? THEN ldePeriodFee = DCCLI.Amount.
       ELSE DO:
@@ -515,11 +518,24 @@ IF NOT MobSub.PayType THEN DO:
             RETURN appl_err(SUBST("Current CLIType entry &1 not found",
                                   lcOrigCLIType)).
 
-         IF DCCLI.DCEvent BEGINS "TERM" THEN DO:
-            IF OldCLIType.CompareFee <= CLIType.CompareFee AND
-               NOT (LOOKUP(OldCLIType.CliType,"CONT7,CONTD9") > 0 
-                    AND CLIType.CLIType EQ "CONT8")
-               THEN NEXT.
+         IF DCCLI.DCEvent BEGINS "TERM" THEN 
+         DO:
+            IF fIsConvergentORFixedOnly(CLIType.CLIType) THEN 
+            DO:
+                ASSIGN 
+                    ldOriginalFee = fGetMobileLineCompareFee(MobSub.MsSeq, OldCLIType.BaseBundle, DCCLI.ValidFrom)
+                    ldNewFee      = fGetMobileLineCompareFee(MobSub.MsSeq, CLIType.BaseBundle   , TODAY).
+
+                IF ldOriginalFee <= ldNewFee THEN
+                    NEXT.
+            END.
+            ELSE
+            DO:
+                IF OldCLIType.CompareFee <= CLIType.CompareFee AND
+                   NOT (LOOKUP(OldCLIType.CliType,"CONT7,CONTD9") > 0 
+                        AND CLIType.CLIType EQ "CONT8")
+                   THEN NEXT.
+            END.   
          END.
          /* When STCed between convergent tariffs we exclude FTERM and TVTERM from termination */
          ELSE IF (DCCLI.DCEvent BEGINS "FTERM" OR DCCLI.DCEvent BEGINS "TVTERM") AND
