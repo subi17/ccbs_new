@@ -62,6 +62,7 @@ END.
 DO ON ERROR UNDO , LEAVE :
     
     lcNumeric = SESSION:NUMERIC-FORMAT.
+    liCurrentPeriod  = YEAR(TODAY) * 100 + MONTH(TODAY).
 
     FIND FIRST DumpFile WHERE DumpFile.DumpID = icDumpID NO-LOCK NO-ERROR.
     IF AVAILABLE DumpFile THEN DO:
