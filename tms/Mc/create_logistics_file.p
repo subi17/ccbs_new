@@ -65,6 +65,7 @@ DEFINE VARIABLE liMainlineOrderId  AS INTEGER   NO-UNDO.
 DEFINE VARIABLE llDespacharValue   AS LOGICAL   NO-UNDO.
 DEFINE VARIABLE lcTerminalBillCode AS CHAR      NO-UNDO.  
 DEFINE VARIABLE lhOrder            AS HANDLE    NO-UNDO.
+DEFINE VARIABLE ocTerminalCode     AS CHAR      NO-UNDO.
 
 DEFINE BUFFER AgreeCustomer   FOR OrderCustomer.
 DEFINE BUFFER ContactCustomer FOR OrderCustomer.
@@ -1023,7 +1024,7 @@ FUNCTION fDelivSIM RETURNS LOG
                  OrderAction.Brand    = Syst.Var:gcBrand AND
                  OrderAction.OrderId  = Order.OrderId AND
                  OrderAction.ItemType = "SIMType" NO-LOCK NO-ERROR.
-      IF AVAIL OrderAction THEN DO:
+      IF AVAIL OrderAction AND Order.ICC EQ "" THEN DO:
          lcBillCode = fGetSIMBillItem(OrderAction.ItemKey,Order.PayType).
          FOR FIRST BillItem NO-LOCK WHERE
                    BillItem.Brand    = Syst.Var:gcBrand AND
@@ -1637,6 +1638,59 @@ END.
 
 DEFINE BUFFER bufOrderGroup FOR OrderGroup.
 
+/* Order Terminal info sent to LO in case of Fiber 
+   convergent orders where SIM will be assigned by INSTALLER */
+FOR EACH Order NO-LOCK WHERE
+         Order.Brand    = Syst.Var:gcBrand AND
+         Order.CrStamp >= 20171201         AND
+         Order.CLIType BEGINS "CONTFH"     AND
+         Order.ICC      <> "":
+
+   IF Order.OrderType EQ 2 THEN NEXT.
+
+   IF LOOKUP(Order.StatusCode,"7,8,9") > 0 THEN NEXT.
+
+   IF LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_DIRECT}) EQ 0 THEN NEXT.
+
+   IF CAN-FIND(FIRST bufOrderGroup NO-LOCK WHERE
+                     bufOrderGroup.OrderId   EQ Order.OrderId  AND
+                     bufOrderGroup.GroupType EQ {&OG_LOFILE}   AND
+             ENTRY(1,bufOrderGroup.Info,CHR(255)) EQ {&DESPACHAR_TRUE_VALUE}) THEN NEXT.
+
+   IF Order.Logistics NE "" THEN NEXT.
+
+   IF Order.OrderType EQ {&ORDER_TYPE_MNP} AND
+     NOT (Order.MNPStatus EQ 6 OR
+          Order.MNPStatus EQ 7)            THEN NEXT.
+      
+   IF fIsTerminalOrder(Order.OrderId,ocTerminalCode) THEN DO:
+
+      IF fDelivSIM(Order.OrderId,
+                   TRUE,
+                   "",
+                   "") THEN DO: 
+         fUpdateOrderLogisticsValue(Order.OrderId).
+
+         IF llDoEvent THEN DO:
+            lhOrder = BUFFER Order:HANDLE.
+            RUN StarEventInitialize(lhOrder).
+            RUN StarEventSetOldBuffer(lhOrder).
+         END.
+
+         fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_ICC_FROM_LO}).
+         
+         IF llDoEvent THEN DO:
+            RUN StarEventMakeModifyEvent(lhOrder).
+            fCleanEventObjects().
+         END.
+      
+      END.
+   
+   END.
+
+END.
+
+
 /* Order has to be second time when order was already sent with
    despachar value "02" - Previously order was sent twice when 
    sim status is "20" */ 
@@ -1656,6 +1710,11 @@ FOR EACH OrderGroup NO-LOCK WHERE
               Order.Logistics EQ ""                 NO-ERROR.
 
    IF AVAIL Order THEN DO: 
+      
+      IF Order.OrderType EQ {&ORDER_TYPE_MNP} AND
+        NOT (Order.MNPStatus EQ 6 OR
+             Order.MNPStatus EQ 7)            THEN NEXT.
+
       IF fDelivSIM(Order.OrderId,
                    TRUE,
                    STRING(OrderGroup.GroupId),
