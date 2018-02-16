@@ -30,6 +30,8 @@ FUNCTION fPendingRequest RETURNS LOGICAL
 
    DEF VAR liPendReq AS INT NO-UNDO.
    
+   DEF BUFFER bf_MsRequest FOR MsRequest.
+
    /* a specific type of request */
    IF iiReqType NE ? THEN DO:
    
@@ -42,11 +44,27 @@ FUNCTION fPendingRequest RETURNS LOGICAL
                                  MsRequest.ReqType   = iiReqType AND
                                  MsRequest.CustNum   = iiTarget  AND
                                  MsRequest.ReqStatus = 0).
-      ELSE RETURN 
-         CAN-FIND(FIRST MsRequest WHERE
-                        MsRequest.MsSeq     = iiTarget  AND
-                        MsRequest.ReqType   = iiReqType AND
-                        LOOKUP(STRING(MsRequest.ReqStatus),"2,4,9,99") = 0).
+      ELSE 
+      DO:
+          IF iiReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} THEN 
+          DO:
+              FOR EACH bf_MsRequest WHERE
+                       bf_MsRequest.MsSeq   = iiTarget  AND
+                       bf_MsRequest.ReqType = iiReqType AND
+                       LOOKUP(STRING(MsRequest.ReqStatus),"2,4,9,99") NO-LOCK:
+
+                  IF bf_MsRequest.ReqStatus = {&REQUEST_STATUS_REJECTED} AND bf_MsRequest.Memo BEGINS "Fixed line fiber speed change request failed" THEN
+                      NEXT.
+
+                  RETURN TRUE.    
+              END.         
+          END.
+          ELSE            
+              RETURN CAN-FIND(FIRST MsRequest WHERE
+                                    MsRequest.MsSeq     = iiTarget  AND
+                                    MsRequest.ReqType   = iiReqType AND
+                                    LOOKUP(STRING(MsRequest.ReqStatus),"2,4,9,99") = 0).
+      END.
    END.
                             
    /* any request */                             
