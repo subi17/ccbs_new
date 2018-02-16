@@ -8,20 +8,16 @@
 {Syst/tmsconst.i}
 {Func/multitenantfunc.i}
 
-DEF BUFFER provSolog     FOR Solog.
-DEF BUFFER provMobsub    FOR Mobsub.
-DEF BUFFER provMSREquest FOR MSRequest.
-DEF BUFFER provCliType   FOR CLIType.
-DEF BUFFER provIMSI      FOR IMSI.
-DEF BUFFER provSIM       FOR SIM.
-DEF BUFFER provTermMobsub FOR TermMobsub.
-
-DEF VAR oiValue      AS INT NO-UNDO.
-
 function fMakeCommLine returns CHAR
 (INPUT iiSolog     AS INT,
  INPUT icValue     AS CHAR).
                       
+   DEF BUFFER provSolog     FOR Solog.
+   DEF BUFFER provMobsub    FOR Mobsub.
+   DEF BUFFER provMSREquest FOR MSRequest.
+   DEF BUFFER provCliType   FOR CLIType.
+   DEF BUFFER provTermMobsub FOR TermMobsub.
+
    DEF VAR lcAdkey    AS CHAR NO-UNDO.
    DEF VAR lcReturn   AS CHAR NO-UNDO.
    DEF VAR lcPayTypes AS CHAR NO-UNDO INIT "UNKNOWN,POSTPAID,PREPAID".
@@ -208,6 +204,14 @@ function fMakeCommLine2 returns CHAR
 (INPUT iiSolog     AS INT,
  INPUT iiMSRequest AS INT,
  INPUT ilSTCResend AS LOG).
+
+   DEF BUFFER provSolog     FOR Solog.
+   DEF BUFFER provMobsub    FOR Mobsub.
+   DEF BUFFER provMSREquest FOR MSRequest.
+   DEF BUFFER provCliType   FOR CLIType.
+   DEF BUFFER provTermMobsub FOR TermMobsub.
+   DEF BUFFER provIMSI      FOR IMSI.
+   DEF BUFFER provSIM       FOR SIM.
 
    DEF VAR lcAdkey    AS CHAR NO-UNDO.
    DEF VAR lcReturn   AS CHAR NO-UNDO.
