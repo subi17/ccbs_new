@@ -51,7 +51,7 @@ FUNCTION fPendingRequest RETURNS LOGICAL
               FOR EACH bf_MsRequest WHERE
                        bf_MsRequest.MsSeq   = iiTarget  AND
                        bf_MsRequest.ReqType = iiReqType AND
-                       LOOKUP(STRING(bf_MsRequest.ReqStatus),"2,4,9,99") NO-LOCK:
+                       LOOKUP(STRING(bf_MsRequest.ReqStatus),"2,4,9,99") = 0 NO-LOCK:
 
                   IF bf_MsRequest.ReqStatus = {&REQUEST_STATUS_REJECTED} AND bf_MsRequest.Memo BEGINS "Fixed line fiber speed change request failed" THEN
                       NEXT.
