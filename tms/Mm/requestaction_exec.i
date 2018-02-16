@@ -244,7 +244,7 @@ FUNCTION fCLITypeFollowsTheRule RETURNS LOGICAL
 
    RETURN FALSE.
 
-END FUNCTION.
+END FUNCTION. 
 
 PROCEDURE pCollectRequestActions:
 
@@ -747,8 +747,9 @@ PROCEDURE pFeeComparison:
    DEF VAR lcBONOContracts           AS CHAR NO-UNDO.
    DEF VAR lcNewCLIType              AS CHAR NO-UNDO. 
 
-   DEF BUFFER bCLIType FOR CLIType.
-   DEF BUFFER bMobSub  FOR MobSub.
+   DEF BUFFER bCLIType       FOR CLIType.
+   DEF BUFFER bMobSub        FOR MobSub.
+   
     
    ASSIGN olMatch = FALSE
           lcBONOContracts = fCParamC("BONO_CONTRACTS").
@@ -777,17 +778,24 @@ PROCEDURE pFeeComparison:
                  bCLIType.CLIType = lcOrigCLIType NO-LOCK NO-ERROR.
       IF NOT AVAILABLE bCLIType THEN RETURN.
 
-      IF bCLIType.CompareFee > 0 THEN ldOriginalFee = bCLIType.CompareFee.
-      ELSE DO:
-         lcOrigCLIType = fGetOriginalBundle(iiMsSeq,
-                                            icDCEvent,
-                                            idaReqDate,
-                                            OUTPUT ldaActivated).
-         FIND FIRST bCLIType WHERE
-                    bCLIType.Brand = Syst.Var:gcBrand AND
-                    bCLIType.CLIType = lcOrigCLIType NO-LOCK NO-ERROR.
-         IF AVAIL bCLIType THEN ldOriginalFee = bCLIType.CompareFee.
-      END. /* ELSE DO: */
+      IF fIsConvergentORFixedOnly(bCLIType.CLIType) THEN 
+          ASSIGN ldOriginalFee = fGetMobileLineCompareFee(iiMsSeq, bCLIType.BaseBundle, ldaActivated).
+      ELSE 
+      DO:
+          IF bCLIType.CompareFee > 0 THEN 
+              ldOriginalFee = bCLIType.CompareFee.
+          ELSE 
+          DO:
+              lcOrigCLIType = fGetOriginalBundle(iiMsSeq,
+                                                icDCEvent,
+                                                idaReqDate,
+                                                OUTPUT ldaActivated).
+              FIND FIRST bCLIType WHERE
+                         bCLIType.Brand = Syst.Var:gcBrand AND
+                         bCLIType.CLIType = lcOrigCLIType NO-LOCK NO-ERROR.
+              IF AVAIL bCLIType THEN ldOriginalFee = bCLIType.CompareFee.
+          END. /* ELSE DO: */
+      END.
 
       IF ldOriginalFee = 0 THEN RETURN.
 
@@ -810,7 +818,7 @@ PROCEDURE pFeeComparison:
                     bCLIType.CLIType = ihRequest::ReqCParam5 NO-LOCK NO-ERROR.
 
       IF AVAIL bCLIType THEN ASSIGN
-         ldNewFee = bCLIType.CompareFee
+         ldNewFee     = fGetMobileLineCompareFee(iiMsSeq, bCLIType.BaseBundle, ldaActivated)
          lcNewCLIType = bCLIType.CLIType.
    END. /* IF INDEX(icRule + icExclRule,"NEW") > 0 THEN DO: */
           
