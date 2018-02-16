@@ -174,7 +174,7 @@ CLASS Syst.ReqHandler:
          IF ttStatistic.LastUpdated < idttzLastCheck
          THEN NEXT.
 
-         lcc = lcc + ", " + SUBSTITUTE("1/&2: P&3, F&4",
+         lcc = lcc + ", " + SUBSTITUTE("&1/&2: P&3, F&4",
                                        ttStatistic.ReqType,
                                        ttStatistic.ReqStatus,
                                        ttStatistic.ProcessAmt,
