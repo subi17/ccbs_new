@@ -300,6 +300,7 @@ PROCEDURE pBobCheckUpsell:
       CASE lcUpsell:
          WHEN "SAN1GB_001" THEN lcSMS_Text = "Ya puede disfrutar del bono datos gratis de 1GB al mes durante 12 meses".
          WHEN "SAN5GB_002" THEN lcSMS_Text = "Ya puede disfrutar del bono datos gratis de 5GB al mes durante 12 meses".
+         OTHERWISE lcSMS_Text = lcMemoTitle + " - Activar".
       END.
 
       RUN pSendSMS(INPUT MobSub.MsSeq,
