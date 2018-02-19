@@ -885,4 +885,22 @@ FUNCTION fCheckFixedLineStatusForMainLine RETURNS LOGICAL
 
 END FUNCTION.
 
+
+FUNCTION fGetCLITypeList RETURNS LOGICAL
+   (iiCustNum AS INT,
+   OUTPUT ocCTList AS CHAR):
+
+   FOR EACH MobSub NO-LOCK WHERE MobSub.Brand = Syst.Var:gcBrand AND
+                                 MobSub.CustNum = iiCustNum:
+
+      IF fCLITypeIsMainLine(MobSub.CLIType) THEN DO:
+         ocCTList = ocCTList + "," + MobSub.CLIType.
+      END.
+   END.
+
+   RETURN TRUE.
+
+END FUNCTION.
+
+
 &ENDIF
