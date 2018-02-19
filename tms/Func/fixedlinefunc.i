@@ -959,4 +959,22 @@ FUNCTION fGetCLITypeList RETURNS LOGICAL
    RETURN TRUE.
 
 END FUNCTION.
+
+
+FUNCTION fGetCLITypeListOfOrder RETURNS LOGICAL
+   (iiCustNum AS INT,
+   OUTPUT ocCTList AS CHAR):
+
+   FOR EACH Order NO-LOCK WHERE Order.Brand = Syst.Var:gcBrand AND
+                                Order.CustNum = iiCustNum AND 
+                                Order.Statuscode = {&ORDER_STATUS_ONGOING}:
+      IF fCLITypeIsMainLine(Order.CLIType) THEN DO:
+         ocCTList = ocCTList + "," + Order.CLIType.
+      END.
+   END.
+
+   RETURN TRUE.
+
+END FUNCTION.
+
 &ENDIF

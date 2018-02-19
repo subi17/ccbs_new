@@ -554,11 +554,20 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
                   IF INDEX(lcCTList,"TFH") > 0 THEN
                      llTFH_type = TRUE.
                END.
+               ELSE IF fGetCLITypeListOfOrder(MsOwner.CustNum, OUTPUT lcCTList) THEN DO:
+                  IF INDEX(lcCTList,"DSL") > 0 THEN DO:
+                     llDSL_type = TRUE.
+                  END.
+                  IF INDEX(lcCTList,"TFH") > 0 THEN DO:
+                     llTFH_type = TRUE.
+                  END.
+               END.
                IF (llDSL_type AND llTFH_type) THEN
                   lcPayType = "68".
                ELSE IF llDSL_type THEN
                   lcPayType = "66".
-               ELSE lcPayType = "67".                  
+               ELSE IF llTFH_type THEN
+                  lcPayType = "67".                  
             END.
          END.
 
