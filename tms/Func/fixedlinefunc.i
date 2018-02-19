@@ -886,6 +886,29 @@ FUNCTION fCheckFixedLineStatusForMainLine RETURNS LOGICAL
 END FUNCTION.
 
 
+FUNCTION fGetMobileLineCompareFee RETURNS DECIMAL
+    (iiMsSeq      AS INTEGER,
+     icBaseBundle AS CHARACTER,
+     idaActivated AS DATE ):
+
+    DEF BUFFER bMobileLine    FOR CliType.
+    DEF BUFFER bDayCampaign   FOR DayCampaign.
+    DEF BUFFER bFMItem        FOR FMItem.
+    DEF BUFFER bMsOwner       FOR MsOwner.
+
+            IF AVAIL bFMItem THEN 
+                ASSIGN ldeFee = bFMItem.Amount.  
+        END.
+        ELSE 
+            ASSIGN ldeFee = 0.  
+    END.
+
+    RETURN ldeFee.
+
+END FUNCTION. 
+
+
+
 FUNCTION fGetCLITypeList RETURNS LOGICAL
    (iiCustNum AS INT,
    OUTPUT ocCTList AS CHAR):
