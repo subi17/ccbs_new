@@ -249,6 +249,10 @@ PROCEDURE pTerminate:
       RETURN.
    ENd.
 
+   /* YOT-5580 If in mobile tariff change termination to full */
+   IF NOT fIsConvergentORFixedOnly(Mobsub.CliType) THEN 
+      lcTerminationType = {&TERMINATION_TYPE_FULL}.
+
    /* COFF if partial termination cli = fixednumber (no actions needed) */
    IF NOT(MobSub.cli BEGINS "8" OR MobSub.cli BEGINS "9") THEN DO:
       FIND FIRST MSISDN WHERE
