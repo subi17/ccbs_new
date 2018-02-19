@@ -554,10 +554,7 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
                   IF INDEX(lcCTList,"TFH") > 0 THEN
                      llTFH_type = TRUE.
                END.
-               IF (llDSL_type AND llTFH_type) OR
-                  (NOT llDSL_type AND NOT llTFH_type) THEN
-                  lcPayType = "68".
-               ELSE IF llDSL_type THEN
+               IF llDSL_type THEN
                   lcPayType = "66".
                ELSE lcPayType = "67".                  
             END.
