@@ -341,7 +341,7 @@ FUNCTION fSendSigningMessage RETURNS CHAR
    ELSE DO: 
       /* anything to do? */
    END.
-
+   
    RETURN "".
 
 END FUNCTION.
@@ -436,7 +436,9 @@ initialize(lcUrlAdapter, iTimeOut).
 RUN pCheckActionLog("dssent").
 RUN pCheckActionLog("dscancel").
 
-/* FINALLY:*/
-xmlrpc_finalize().
 OUTPUT STREAM sLog CLOSE.
+
+FINALLY:
+   xmlrpc_finalize().
+END FINALLY.
 

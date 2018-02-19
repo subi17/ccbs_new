@@ -31,6 +31,7 @@ FUNCTION fHandleSignature RETURNS CHAR
    DEF VAR liMonths AS INT NO-UNDO INIT 0.
    DEF VAR ldeFinalFee AS DECIMAL NO-UNDO.
    DEF VAR lcSignatureStatus AS CHAR NO-UNDO INIT "".
+   DEF VAR lcNewStatuses AS CHAR NO-UNDO.
 
    DEF BUFFER bOrder FOR Order.
    DEF BUFFER bActionLog FOR ActionLog.
@@ -59,7 +60,11 @@ FUNCTION fHandleSignature RETURNS CHAR
    END.
 
    /* Process ActionLog */
+/*
+   ASSIGN
+      lcNewStatuses = fCParam("SignatureApi", "NewStatuses").
 
+   IF LOOKUP(bOrder.StatusCode, lcNewStatuses) > 0 THEN*/
    IF bOrder.statusCode EQ {&ORDER_STATUS_DELIVERED} THEN
       lcActionID = "dssent".
    ELSE IF LOOKUP(bOrder.StatusCode, {&ORDER_CLOSE_STATUSES}) > 0 THEN /* 7,8,9 */
