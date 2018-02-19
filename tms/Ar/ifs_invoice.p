@@ -111,10 +111,7 @@ DEF BUFFER bttRow FOR ttRow.
    
 DEFINE STREAM sLog.
 
-
 DEF VAR lcCTList         AS CHAR NO-UNDO.
-DEF VAR liCount          AS INT  NO-UNDO.
-DEF VAR lcCLITypeItem    AS CHAR NO-UNDO.
 DEF VAR llDSL_type       AS LOGICAL NO-UNDO.
 DEF VAR llTFH_type       AS LOGICAL NO-UNDO.
 
@@ -552,20 +549,10 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
                lcPayType = "68". /* Additional Postpaid Mobile line */
    
                IF fGetCLITypeList(MsOwner.CustNum, OUTPUT lcCTList) THEN DO:
-                  DO liCount = 1 TO NUM-ENTRIES(lcCTList):
-                     lcCLITypeItem = ENTRY(liCount,lcCTList).
-                        
-                     IF INDEX(lcCLITypeItem,"DSL") > 0 THEN DO:
-                        MESSAGE "DSL " MobSub.CLI.
-                        MESSAGE lcCLITypeItem.
-                        llDSL_type = TRUE.
-                     END.
-                     IF INDEX(lcCLITypeItem,"TFH") > 0 THEN DO:
-                        MESSAGE "TFH " MobSub.CLI.
-                        MESSAGE lcCLITypeItem.
-                        llTFH_type = TRUE.
-                     END.                        
-                  END.                                            
+                  IF INDEX(lcCTList,"DSL") > 0 THEN
+                     llDSL_type = TRUE.
+                  IF INDEX(lcCTList,"TFH") > 0 THEN
+                     llTFH_type = TRUE.
                END.
                IF (llDSL_type AND llTFH_type) OR
                   (NOT llDSL_type AND NOT llTFH_type) THEN

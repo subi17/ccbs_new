@@ -17,6 +17,7 @@
 {Func/create_eventlog.i}
 {Func/matrix.i}
 {Func/extralinefunc.i}
+{Func/fcustpl.i}
 
 /* Function makes new MSOwner when subscription is partially
    terminated or mobile part order closed. Calling program must have
@@ -896,6 +897,41 @@ FUNCTION fGetMobileLineCompareFee RETURNS DECIMAL
     DEF BUFFER bFMItem        FOR FMItem.
     DEF BUFFER bMsOwner       FOR MsOwner.
 
+    DEF VAR lcFMPriceList             AS CHAR NO-UNDO.
+    DEF VAR ldeActivatedTS            AS DECI NO-UNDO.
+    DEF VAR ldeFee                    AS DECI NO-UNDO.
+
+    FIND FIRST bMobileLine WHERE
+               bMobileLine.Brand   = Syst.Var:gcBrand AND
+               bMobileLine.CLIType = icBaseBundle     NO-LOCK NO-ERROR.
+    IF AVAIL bMobileLine THEN 
+        ASSIGN ldeFee = bMobileLine.CompareFee.
+    ELSE
+    DO:
+        FIND FIRST bDayCampaign WHERE bDayCampaign.Brand   = Syst.Var:gcBrand AND 
+                                      bDayCampaign.DCEvent = icBaseBundle     NO-LOCK NO-ERROR.
+        IF AVAIL bDayCampaign AND bDayCampaign.FeeModel <> "" THEN 
+        DO:
+            ASSIGN ldeActivatedTS = Func.Common:mDate2TS(idaActivated).
+
+            FIND FIRST bMsOwner WHERE bMsOwner.MsSeq = iiMsSeq AND bMsOwner.TSBegin <= ldeActivatedTS NO-LOCK NO-ERROR.
+            IF NOT AVAILABLE bMsOwner THEN
+                FIND LAST bMsOwner WHERE bMsOwner.MsSeq = iiMsSeq AND bMsOwner.TSBegin > ldeActivatedTS NO-LOCK NO-ERROR.
+
+            IF AVAIL MsOwner THEN 
+                ASSIGN lcFMPriceList = fFeeModelPriceList(bMsOwner.AgrCust,
+                                                          bMobileLine.BillTarget,
+                                                          bDayCampaign.FeeModel,
+                                                          idaActivated).    
+            ELSE 
+                ASSIGN lcFMPriceList = "COMMON".
+
+            FIND FIRST bFMItem WHERE
+                       bFMItem.Brand     = Syst.Var:gcBrand        AND
+                       bFMItem.FeeModel  = bDayCampaign.FeeModel   AND
+                       bFMItem.PriceList = lcFMPriceList           AND
+                       bFMItem.FromDate <= idaActivated            AND
+                       bFMItem.ToDate   >= idaActivated            NO-LOCK NO-ERROR.
             IF AVAIL bFMItem THEN 
                 ASSIGN ldeFee = bFMItem.Amount.  
         END.
@@ -906,7 +942,6 @@ FUNCTION fGetMobileLineCompareFee RETURNS DECIMAL
     RETURN ldeFee.
 
 END FUNCTION. 
-
 
 
 FUNCTION fGetCLITypeList RETURNS LOGICAL
@@ -924,6 +959,4 @@ FUNCTION fGetCLITypeList RETURNS LOGICAL
    RETURN TRUE.
 
 END FUNCTION.
-
-
 &ENDIF
