@@ -18,8 +18,6 @@
 {Syst/commali.i}
 {Func/cparam2.i}
 
-DEF BUFFER bRequest  FOR MsRequest.
-
 DEF STREAM sReqLog.
 
 DEF VAR lcEventDir   AS CHAR NO-UNDO.
@@ -54,6 +52,8 @@ END FUNCTION.
 FUNCTION fChkSubRequest RETURN LOGICAL
 (INPUT  iiOrigRequest AS INT).
 
+   DEF BUFFER bRequest  FOR MsRequest.
+
    FOR EACH bRequest WHERE
             bRequest.OrigRequest = iiOrigRequest NO-LOCK.
                      
@@ -68,6 +68,8 @@ END.
 
 FUNCTION fGetSubRequestState RETURNS INTEGER
    (INPUT iiOrigRequest AS INT):
+
+   DEF BUFFER bRequest  FOR MsRequest.
 
    DEF VAR liStatus AS INT  NO-UNDO.
 
@@ -93,6 +95,7 @@ FUNCTION fReqStatus RETURNS LOGICAL
     icMemo   AS CHAR).
 
    DEF VAR liMainStatus AS INT  NO-UNDO.
+   DEF BUFFER bRequest  FOR MsRequest.
    
    MSREQUEST:
    DO TRANS:
@@ -170,23 +173,23 @@ FUNCTION fChangeReqStatus RETURNS LOGICAL
     icMemo      AS CHAR).
 
    DEF VAR liMainStatus AS INT  NO-UNDO.
-   DEF BUFFER MsRequest FOR MsRequest.
-
-   FIND MsRequest NO-LOCK where
-        MsRequest.MsRequest = iiMsRequest NO-ERROR.
-   IF NOT AVAIL MsRequest THEN RETURN FALSE.
+   DEF BUFFER bRequest  FOR MsRequest.
+   DEFINE VARIABLE liOrigRequest AS INTEGER NO-UNDO.
+   DEFINE VARIABLE liReqType     AS INTEGER NO-UNDO.
 
    MSREQUEST:
    DO TRANS:
-      FIND bRequest WHERE ROWID(bRequest) = ROWID(MsRequest)
+      FIND bRequest WHERE bRequest.MsRequest = iiMsRequest
          EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
 
       /* another process is handling this */
-      IF LOCKED(bRequest) THEN RETURN FALSE.
-
+      IF NOT AVAILABLE bRequest OR LOCKED(bRequest) THEN RETURN FALSE.
 
       ASSIGN bRequest.UpdateStamp = Func.Common:mMakeTS()
-             bRequest.ReqStatus   = iiStatus.
+             bRequest.ReqStatus   = iiStatus
+             liOrigRequest        = bRequest.OrigRequest
+             liReqType            = bRequest.ReqType
+             .
 
       IF bRequest.ReqStatus >= 2 AND bRequest.ReqStatus <= 4 THEN
          bRequest.DoneStamp = Func.Common:mMakeTS().
@@ -197,22 +200,22 @@ FUNCTION fChangeReqStatus RETURNS LOGICAL
                        THEN ", "
                        ELSE "") + icMemo.
 
-      IF MsRequest.OrigRequest > 0 AND MsRequest.Mandatory > 0 THEN DO:
+      IF bRequest.OrigRequest > 0 AND bRequest.Mandatory > 0 THEN DO:
 
           liMainStatus = ?.
 
           /* all subrequests have been succesfully handled */
-          IF MsRequest.ReqStatus = 2 AND
-             fChkSubRequest(MsRequest.OrigRequest)
+          IF bRequest.ReqStatus = 2 AND
+             fChkSubRequest(bRequest.OrigRequest)
           THEN liMainStatus = 8.
 
           /* mark main status to error if subrequest failed or was cancelled */
-          ELSE IF MsRequest.ReqStatus = 3 OR MsRequest.ReqStatus = 4
+          ELSE IF bRequest.ReqStatus = 3 OR bRequest.ReqStatus = 4
           THEN liMainStatus = 3.
 
           IF liMainStatus NE ? THEN DO:
              FIND bRequest WHERE
-                  bRequest.MSRequest  = MSRequest.OrigRequest
+                  bRequest.MSRequest  = liOrigRequest
              EXCLUSIVE-LOCK NO-ERROR.
 
              IF AVAILABLE bRequest THEN DO:
@@ -233,7 +236,7 @@ FUNCTION fChangeReqStatus RETURNS LOGICAL
                                        THEN ", "
                                        ELSE "") +
                                       "Subrequest " +
-                                      STRING(MsRequest.ReqType) + " failed".
+                                      STRING(liReqType) + " failed".
                  END.
              END.
           END.
