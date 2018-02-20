@@ -7,13 +7,11 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Syst/tmsconst.i}
-{Func/fsendsms.i}
 {Func/fcpfat.i}
 {Mm/active_bundle.i}
-{Func/service.i}
 {Mm/fbundle.i}
-
+{Func/dss_matrix.i}
+{Func/dss_request.i}
 
 DEF INPUT PARAMETER iiMsRequest AS INT  NO-UNDO.
 
