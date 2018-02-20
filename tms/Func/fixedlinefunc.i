@@ -967,7 +967,7 @@ FUNCTION fGetCLITypeListOfOrder RETURNS LOGICAL
 
    FOR EACH Order NO-LOCK WHERE Order.Brand = Syst.Var:gcBrand AND
                                 Order.CustNum = iiCustNum AND 
-                                Order.Statuscode = {&ORDER_STATUS_ONGOING}:
+                                LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0:
       IF fCLITypeIsMainLine(Order.CLIType) THEN DO:
          ocCTList = ocCTList + "," + Order.CLIType.
       END.

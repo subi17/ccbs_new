@@ -547,6 +547,8 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
             ELSE IF fIsAddLineTariff(SubInvoice.CLI) AND
                     NOT MsOwner.PayType THEN DO:
                lcPayType = "68". /* Additional Postpaid Mobile line */
+               
+               /* YOT-5618 Handle correctly Way of payment for 66 and 67 */
                llDSL_type = FALSE.
                llTFH_type = FALSE.
                   
