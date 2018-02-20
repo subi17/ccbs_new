@@ -58,6 +58,8 @@ FUNCTION fHandleSignature RETURNS CHAR
          RETURN "Financed". /* financed, not error */
       END.
    END.
+   ELSE
+      RETURN "Not Telesales". /* not error */
 
    /* Process ActionLog */
 /*

@@ -138,8 +138,9 @@ FUNCTION fSendCancelMessage RETURNS CHAR
    DEF VAR lcBrandStruct AS CHAR NO-UNDO.
    DEF VAR lcRespStruct  AS CHAR NO-UNDO. 
    DEF VAR lcResp        AS CHAR NO-UNDO. 
-   DEF VAR lcResult      AS CHAR NO-UNDO. 
-   DEF VAR lcDescription AS CHAR NO-UNDO.
+   DEF VAR lcResult      AS CHAR NO-UNDO. /* httpCode */ 
+   DEF VAR lcDescription AS CHAR NO-UNDO. /* info */
+   DEF VAR lcCode        AS CHAR NO-UNDO. /* code */
    DEF VAR lcResultCode  AS CHAR NO-UNDO.
    DEF VAR lcResultDesc  AS CHAR NO-UNDO.
 
@@ -174,16 +175,18 @@ FUNCTION fSendCancelMessage RETURNS CHAR
    END.
 
    lcRespStruct = get_struct(response_toplevel_id, "0").
-   IF llLogRequest THEN fLogMsg(STRING(iiOrderID) + "; Response to cancel from Adapter: " + lcrespStruct).
 
    IF gi_xmlrpc_error EQ 0 THEN
-      lcResp = validate_request(lcRespStruct,"result!,description").
+      lcResp = validate_request(lcRespStruct,"info,code,httpCode").
 
    IF gi_xmlrpc_error EQ 0 THEN DO:
-      lcResult = get_string(lcRespStruct,"result").
-      IF LOOKUP("description",lcResp) GT 0 THEN
-         lcDescription = get_string(lcRespStruct,"description").
+      lcResult = get_string(lcRespStruct,"httpCode").
+      IF LOOKUP("info",lcResp) GT 0 THEN
+         lcDescription = get_string(lcRespStruct,"info").
+      IF LOOKUP("code",lcResp) GT 0 THEN
+         lcCode = get_string(lcRespStruct,"code").
    END.
+   IF llLogRequest THEN fLogMsg(STRING(iiOrderID) + "; Cancel Result from Adapter, httpCode: " + lcResult + ", info: " + lcDescription + ", code: " + lcCode ).
 
    IF gi_xmlrpc_error NE 0 THEN DO:
       fLogMsg(STRING(iiOrderID) + "; ERROR in cancel Response: " + gc_xmlrpc_error). 
@@ -191,7 +194,7 @@ FUNCTION fSendCancelMessage RETURNS CHAR
       RETURN "Error".
    END.
 
-   IF lcResult EQ "Ok" THEN DO:
+   IF lcResult EQ "200" THEN DO:
       /* set message as sent */
       IF llLogRequest THEN fLogMsg(STRING(iiOrderID) + "; Cancel message to Adapter sent successfully!").
    END.
@@ -280,8 +283,9 @@ FUNCTION fSendSigningMessage RETURNS CHAR
    DEF VAR lcBrandStruct AS CHAR NO-UNDO.
    DEF VAR lcRespStruct  AS CHAR NO-UNDO. 
    DEF VAR lcResp        AS CHAR NO-UNDO. 
-   DEF VAR lcResult      AS CHAR NO-UNDO. 
-   DEF VAR lcDescription AS CHAR NO-UNDO.
+   DEF VAR lcResult      AS CHAR NO-UNDO. /* httpCode */
+   DEF VAR lcDescription AS CHAR NO-UNDO. /* info */
+   DEF VAR lcCode        AS CHAR NO-UNDO. /* code */
    DEF VAR lcResultCode  AS CHAR NO-UNDO.
    DEF VAR lcResultDesc  AS CHAR NO-UNDO.
 
@@ -307,41 +311,34 @@ FUNCTION fSendSigningMessage RETURNS CHAR
    fLogMsg(STRING(iiOrderId) + "; Call RPC Method (Adapter)").
    RUN pRPCMethodCall("sign.registerSignProcess", TRUE).
 
-   IF gi_xmlrpc_error NE 0 THEN DO:
-      lcResultCode = STRING(gi_xmlrpc_error).
-      lcResultDesc = gc_xmlrpc_error.
-      fLogMsg(STRING(iiOrderId) + "; ERROR Sending Message: ResultCode: " + lcResultCode + ", ResultDesc: " + lcResultDesc + ", " + STRING(gi_xmlrpc_error)). 
-      xmlrpc_cleanup().
-      RETURN "Error".
-   END.
-
-   lcRespStruct = get_struct(response_toplevel_id, "0").
-   IF llLogRequest THEN fLogMsg(STRING(iiOrderID) + "; Response from Adapter: " + lcrespStruct).
-
+    lcRespStruct = get_struct(response_toplevel_id, "0").
+ 
    IF gi_xmlrpc_error EQ 0 THEN
-      lcResp = validate_request(lcRespStruct,"result!,description").
+      lcResp = validate_request(lcRespStruct,"info,code,httpCode").
 
    IF gi_xmlrpc_error EQ 0 THEN DO:
-      lcResult = get_string(lcRespStruct,"result").
-      IF LOOKUP("description",lcResp) GT 0 THEN
-         lcDescription = get_string(lcRespStruct,"description").
+      lcResult = get_string(lcRespStruct,"httpCode").
+      IF LOOKUP("info",lcResp) GT 0 THEN
+         lcDescription = get_string(lcRespStruct,"info").
+     IF LOOKUP("code",lcResp) GT 0 THEN
+         lcCode = get_string(lcRespStruct,"code").
    END.
-   IF llLogRequest THEN fLogMsg(STRING(iiOrderID) + "; Result from Adapter: " + lcResult).
+   IF llLogRequest THEN fLogMsg(STRING(iiOrderID) + "; Result from Adapter, httpCode: " + lcResult + ", info: " + lcDescription + ", code: " + lcCode ).
 
    IF gi_xmlrpc_error NE 0 THEN DO:
-      fLogMsg(STRING(iiOrderID) + "; ERROR in Response: " + gc_xmlrpc_error). 
+      fLogMsg(STRING(iiOrderID) + "; ERROR in Response: " + gc_xmlrpc_error).
       xmlrpc_cleanup().
       RETURN "Error".
    END.
 
-   IF lcResult EQ "Ok" THEN DO:
+   IF lcResult EQ "204" THEN DO:
       /* set message as sent */
       IF llLogRequest THEN fLogMsg(STRING(iiOrderID) + "; Message to Adapter sent successfully!").
    END.
-   ELSE DO: 
+   ELSE DO:
       /* anything to do? */
    END.
-   
+
    RETURN "".
 
 END FUNCTION.
