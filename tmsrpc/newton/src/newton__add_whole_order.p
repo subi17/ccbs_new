@@ -250,7 +250,8 @@
 Syst.Var:gcBrand = "1".
 Syst.Var:katun = "NewtonRPC".
 {Func/orderchk.i}
-{Func/order.i}
+{Func/custfunc.i}
+{Func/terminaloffer.i}
 {Syst/tmsconst.i}
 {Mm/fbundle.i}
 {Mnp/mnpoutchk.i}
@@ -270,6 +271,7 @@ Syst.Var:katun = "NewtonRPC".
 {Mc/orderfusion.i}
 {Func/fixedlinefunc.i}
 {Func/profunc.i}
+{Func/barrfunc.i}
 
 {Migration/migrationfunc.i}
 
