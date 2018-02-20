@@ -29,6 +29,7 @@
 {Func/contract_end_date.i}
 {Func/fcpfat.i}
 {Rate/rerate_request.i}
+{Rate/tmqueue_analysis.i}
 {Mc/dpmember.i}
 {Func/terminal_financing.i}
 {Func/fprepaidfee.i}
