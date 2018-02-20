@@ -33,7 +33,7 @@ Syst.Var:gcBrand = "1".
 {Func/penaltyfee.i}
 {Func/fctchange.i}
 {Func/main_add_lines.i}
-{Func/fdss.i}
+{Func/dss_matrix.i}
 {Func/fixedlinefunc.i}
 
 /* Input parameters */

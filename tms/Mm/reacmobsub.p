@@ -17,7 +17,8 @@
 {Func/freacmobsub.i}
 {Func/contract_end_date.i}
 {Func/service.i}
-{Func/fdss.i}
+{Func/dss_request.i}
+{Func/dss_matrix.i}
 {Func/forderstamp.i}
 {Func/orderfunc.i}
 {Func/ftopup.i}

@@ -10,9 +10,10 @@
 
 {Syst/commali.i}
 {Func/cparam2.i}
-{Func/fmakemsreq.i}
+/*{Func/fmakemsreq.i}*/
 {Func/upsellbundle.i}
-{Func/fdss.i}
+{Func/dss_request.i}
+{Func/dss_matrix.i}
 
 DEF INPUT PARAMETER iiMsSeq AS INT NO-UNDO. 
 

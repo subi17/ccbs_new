@@ -18,7 +18,7 @@
 {Rate/rerate_request.i}
 {Syst/tmsconst.i}
 {Mm/bundle_first_month_fee.i}
-{Func/fdss.i}
+{Func/dss_request.i}
 {Func/fcpfat.i}
 {Func/servcomfee.i}
 {Func/fsubstermreq.i}

@@ -35,7 +35,8 @@
 {Func/orderfunc.i}
 {Func/fsubsterminal.i}
 {Mc/invoicetarget.i}
-{Func/fdss.i}
+{Func/dss_request.i}
+{Func/dss_matrix.i}
 {Func/orderchk.i}
 {Func/fmakesms.i}
 {Func/transname.i}
