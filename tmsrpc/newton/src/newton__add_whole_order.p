@@ -2090,6 +2090,7 @@ END.
    April promo (OR) Convergent New Adds Promotion */
 IF pcNumberType EQ "stc" AND fIsConvergenceTariff(pcSubType) THEN DO:
 
+/* YCO-172. Don't apply CONVDISC anymore  
    llCreateDisc = TRUE.
    FOR EACH ttDiscount:
        IF fMatrixAnalyse(Syst.Var:gcBrand,
@@ -2107,6 +2108,7 @@ IF pcNumberType EQ "stc" AND fIsConvergenceTariff(pcSubType) THEN DO:
                          "DiscountPlan",
                          "CONVDISC",
                          "").
+YCO-172 */
 END.
 
 /* ADDLINE-20 Additional Line */
