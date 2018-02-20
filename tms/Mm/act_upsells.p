@@ -174,7 +174,7 @@ PROCEDURE pBobCheckUpsell:
    DEF VAR lcUpSellList          AS CHAR NO-UNDO. 
    DEF VAR lcMemoTitle           AS CHAR NO-UNDO. 
 
-   IF NUM-ENTRIES(pcLine,lcSep) <> 2 THEN
+   IF NUM-ENTRIES(pcLine,lcSep) <> 3 THEN /* YCO-3 - Now we have 3 parameters (previously it was 2) */
       RETURN "ERROR:Wrong file format".
 
    /* YCO-3 - Adding 1gb and 5gb upsells to the list */
