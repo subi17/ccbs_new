@@ -12,6 +12,7 @@
 {Mc/invoicetarget.i}
 {Func/dss_matrix.i}
 {Func/dss_request.i}
+{Mc/dpmember.i}
 
 DEF INPUT  PARAMETER iiMSrequest AS INT  NO-UNDO.
 
