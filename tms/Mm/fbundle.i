@@ -566,53 +566,6 @@ FUNCTION fBundleWithSTC RETURNS LOG
 
 END FUNCTION.
 
-FUNCTION fBundleWithSTCCustomer RETURNS LOG
-   (iiCustnum    AS INT,
-    ideActStamp  AS DEC):
-
-   DEF BUFFER MsRequest FOR MsRequest.
-
-   DEF VAR ldaReqDate    AS DATE NO-UNDO.
-   DEF VAR liReqTime     AS INT  NO-UNDO.
-
-   DEF VAR lcPostpaidDataBundles  AS CHAR NO-UNDO.
-   DEF VAR lcDataBundleCLITypes   AS CHAR NO-UNDO.
-
-   Func.Common:mSplitTS(ideActStamp,OUTPUT ldaReqDate,OUTPUT liReqTime).
-
-   IF liReqTime > 0 THEN
-      ideActStamp = Func.Common:mMake2DT(ldaReqDate + 1,0).
-
-   ASSIGN lcPostpaidDataBundles = fCParamC("POSTPAID_DATA_CONTRACTS")
-          lcDataBundleCLITypes  = fCParamC("DATA_BUNDLE_BASED_CLITYPES").
-
-   /* Check STC Request with data bundle */
-   FIND FIRST MsRequest NO-LOCK WHERE
-              MsRequest.Brand = Syst.Var:gcBrand AND
-              MsRequest.Custnum = iiCustnum AND
-              MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
-              LOOKUP(STRING(MsRequest.ReqStat),"4,9,99,3") = 0 AND
-              MsRequest.ActStamp = ideActStamp USE-INDEX Custnum NO-ERROR.
-   IF AVAIL MsRequest AND
-      (LOOKUP(MsRequest.ReqCparam2,lcDataBundleCLITypes) > 0 OR
-       LOOKUP(MsRequest.ReqCparam5,lcPostpaidDataBundles) > 0)
-   THEN RETURN TRUE.
-
-   /* Check BTC Request with data bundle */
-   FIND FIRST MsRequest NO-LOCK WHERE
-              MsRequest.Brand = Syst.Var:gcBrand AND
-              MsRequest.Custnum = iiCustnum AND
-              MsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE} AND
-              LOOKUP(STRING(MsRequest.ReqStat),"4,9,99,3") = 0 AND
-              MsRequest.ActStamp = ideActStamp USE-INDEX Custnum NO-ERROR.
-   IF AVAIL MsRequest AND
-      LOOKUP(MsRequest.ReqCparam2,lcPostpaidDataBundles) > 0
-   THEN RETURN TRUE.
-
-   RETURN FALSE. 
-
-END FUNCTION.
-
 PROCEDURE pAdjustBal:
 
    DEFINE INPUT PARAMETER icBundle     AS CHARACTER NO-UNDO.
