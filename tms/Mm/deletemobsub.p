@@ -17,6 +17,7 @@
 {Func/msreqfunc.i}
 {Func/fcreditreq.i}
 {Func/flimitreq.i}
+{Func/dss_request.i}
 {Func/dss_matrix.i}
 {Func/msisdn_prefix.i}
 {Func/fsubstermreq.i}

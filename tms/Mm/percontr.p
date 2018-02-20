@@ -24,6 +24,7 @@
 {Func/penaltyfee.i}
 {Func/fmakeservlimit.i}
 {Mm/fbundle.i}
+{Func/dss_matrix.i}
 {Func/dss_request.i}
 {Func/nncoit2.i}
 {Func/contract_end_date.i}
