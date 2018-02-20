@@ -50,7 +50,8 @@ FIND FIRST MNPOperation EXCLUSIVE-LOCK WHERE
      MNPOperation.MNPSeq = MNPProcess.MNPSeq AND
      MNPOperation.MessageType = "confirmarSolicitudAltaPortabilidadMovil" AND
     (MNPOperation.StatusCode EQ {&MNP_MSG_WAITING_CONFIRM} OR
-     MNPOperation.StatusCode EQ {&MNP_MSG_WAITING_RESPONSE_HANDLE}) NO-ERROR.
+     MNPOperation.StatusCode EQ {&MNP_MSG_WAITING_RESPONSE_HANDLE} OR
+     MNPOperation.StatusCode EQ {&MNP_MSG_HANDLED}) NO-ERROR.
 IF NOT AVAIL MNPOperation THEN
    RETURN appl_err(SUBST("Confirmation message not found: &1", lcPortRequest)).
    
@@ -61,8 +62,9 @@ FOR EACH MNPSub EXCLUSIVE-LOCK WHERE
 END.
 
 ASSIGN
-  MNPProcess.StateFlag = {&MNP_STATEFLAG_CONFIRM}
-  MNPOperation.StatusCode = {&MNP_MSG_WAITING_RESPONSE_HANDLE}.
+   MNPProcess.StateFlag = {&MNP_STATEFLAG_CONFIRM}
+   MNPOperation.StatusCode = {&MNP_MSG_WAITING_RESPONSE_HANDLE} WHEN
+      MNPOperation.StatusCode EQ {&MNP_MSG_WAITING_CONFIRM}.
       
 CREATE MNPOperation.
 ASSIGN MNPOperation.MNPOperationID = NEXT-VALUE(MNPOperSeq)
@@ -71,9 +73,7 @@ ASSIGN MNPOperation.MNPOperationID = NEXT-VALUE(MNPOperSeq)
        MNPOperation.Sender = 2
        MNPOperation.SentTS = {&nowts} /* tms receive time */
        MNPOperation.MessageType = "ackSolicitudAltaPortabilidadMovil"
-       MNPOperation.StatusCode = {&MNP_MSG_HANDLING}
-       MNPOperation.ErrorHandled = {&MNP_ERRORHANDLED_NO}
-       MNPOperation.ErrorCode = {&MNP_ERRORCODE_HANDLE}. 
+       MNPOperation.StatusCode = {&MNP_MSG_HANDLED}.
 COPY-LOB FROM icrequest to MNPOperation.XMLRequest.
 
 add_boolean(response_toplevel_id,"",TRUE).
