@@ -7,7 +7,9 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
+{Func/service.i}
 {Rate/rerate_request.i}
+{Func/fsendsms.i}
 {Func/fbtc.i}
 {Mc/invoicetarget.i}
 {Func/dss_matrix.i}

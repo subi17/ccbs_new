@@ -7,8 +7,10 @@
 ---------------------------------------------------------------------- */
 
 {Syst/commali.i}
+{Func/fsendsms.i}
 {Func/fcpfat.i}
 {Mm/active_bundle.i}
+{Func/service.i}
 {Mm/fbundle.i}
 {Func/dss_matrix.i}
 {Func/dss_request.i}

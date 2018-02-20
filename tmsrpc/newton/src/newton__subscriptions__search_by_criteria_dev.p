@@ -28,7 +28,6 @@
 Syst.Var:gcBrand = "1".
 Syst.Var:katun = "Newton".
 {Syst/tmsconst.i}
-/*{Mm/fbundle.i}*/
 {Func/barrfunc.i}
 {Mm/active_bundle.i}
 {Func/fdss.i}

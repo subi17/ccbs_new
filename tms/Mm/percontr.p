@@ -23,6 +23,7 @@
 {Rate/daycampaign.i}
 {Func/penaltyfee.i}
 {Func/fmakeservlimit.i}
+{Func/service.i}
 {Mm/fbundle.i}
 {Func/dss_matrix.i}
 {Func/dss_request.i}
@@ -33,8 +34,10 @@
 {Rate/tmqueue_analysis.i}
 {Mc/dpmember.i}
 {Func/terminal_financing.i}
+{Func/ordercancel.i}
 {Func/fprepaidfee.i}
 {Func/fcreditreq.i}
+{Func/fsendsms.i}
 {Func/profunc.i}
 {Func/fixedfee.i}
 
