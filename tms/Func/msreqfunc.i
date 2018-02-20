@@ -99,7 +99,7 @@ FUNCTION fReqStatus RETURNS LOGICAL
    
    MSREQUEST:
    DO TRANS:
-      FIND bRequest WHERE RECID(bRequest) = RECID(MsRequest) 
+      FIND bRequest WHERE ROWID(bRequest) = ROWID(MsRequest)
          EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
 
       /* another process is handling this */
