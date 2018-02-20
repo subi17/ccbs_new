@@ -300,7 +300,7 @@ PROCEDURE pBobCheckUpsell:
       CASE lcUpsell:
          WHEN "SAN1GB_001" THEN lcSMS_Text = lcUpsell.
          WHEN "SAN5GB_002" THEN lcSMS_Text = lcUpsell.
-         OTHERWISE lcSMS_Text = "".
+         OTHERWISE lcSMS_Text = "BundleActivation".
       END.
 
       IF lcSMS_Text <> "" THEN
