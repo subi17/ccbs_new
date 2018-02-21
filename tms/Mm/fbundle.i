@@ -7,10 +7,7 @@
 
 &GLOBAL-DEFINE fbundle YES
    
-{Syst/commali.i}
 {Syst/tmsconst.i}
-{Func/cparam2.i}
-{Func/fcreatereq.i}
 {Func/matrix.i}
 {Func/ftaxdata.i}
 {Func/xmlfunction.i}

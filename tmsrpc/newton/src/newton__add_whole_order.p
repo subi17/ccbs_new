@@ -270,7 +270,6 @@ Syst.Var:katun = "NewtonRPC".
 {Func/smsmessage.i}
 {Mc/orderfusion.i}
 {Func/fixedlinefunc.i}
-{Func/profunc.i}
 {Func/barrfunc.i}
 
 {Migration/migrationfunc.i}

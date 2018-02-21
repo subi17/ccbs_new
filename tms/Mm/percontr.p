@@ -38,7 +38,7 @@
 {Func/fprepaidfee.i}
 {Func/fcreditreq.i}
 {Func/fsendsms.i}
-{Func/profunc.i}
+{Func/profunc_request.i}
 {Func/fixedfee.i}
 
 DEF VAR lcEmailErr AS CHAR NO-UNDO.

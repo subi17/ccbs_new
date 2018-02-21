@@ -25,11 +25,10 @@
 {Func/ordercancel.i}
 {Func/dextra.i}
 {Func/main_add_lines.i}
-{Func/fixedlinefunc.i}
 {Func/orderfunc.i}
 {Mc/dpmember.i}
 {Func/multitenantfunc.i}
-{Func/vasfunc.i}
+{Func/profunc_request.i}
 
 DEFINE INPUT  PARAMETER iiMSrequest AS INT  NO-UNDO.
 

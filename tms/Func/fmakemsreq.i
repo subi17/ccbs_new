@@ -42,12 +42,11 @@
 
 &GLOBAL-DEFINE fmakemsreq YES
 
-{Func/msreqfunc.i}
 {Func/fcreatereq.i}
 {Func/fctserval.i}
 {Func/fcustdata.i}
-{Syst/tmsconst.i}
 {Func/fixedlinefunc.i}
+{Func/cparam2.i}
 
 DEF BUFFER bReqOwner FOR MsOwner.
 DEF BUFFER bReqComp  FOR ServCom.

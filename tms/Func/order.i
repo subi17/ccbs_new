@@ -9,7 +9,6 @@
 
 &GLOBAL-DEFINE order_i YES
 
-{Syst/commali.i}   
 {Func/fwebuser.i}
 {Func/fcustdata.i}
 {Func/ftmrlimit.i}

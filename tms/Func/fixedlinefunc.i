@@ -11,63 +11,9 @@
 &IF "{&FIXEDLINEFUNC_I}" NE "YES"
 &THEN
 &GLOBAL-DEFINE FIXEDLINEFUNC_I YES
-{Func/cparam2.i}
-{Syst/tmsconst.i}
-{Syst/eventval.i}
-{Func/create_eventlog.i}
+
 {Func/matrix.i}
 {Func/extralinefunc.i}
-
-/* Function makes new MSOwner when subscription is partially
-   terminated or mobile part order closed. Calling program must have
-   commali.i, Syst.Var:katun defined and call fCleanEventObjects after this function */
-FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
-   (iiMsSeq AS INT,
-    icFixedNumber AS CHAR):
-   DEF VAR ldUpdateTS AS DEC NO-UNDO.
-   DEF BUFFER MsOwner FOR MsOwner.
-   DEF BUFFER bNewMsowner FOR Msowner.
-
-   ldUpdateTS = Func.Common:mMakeTS().
-   FIND FIRST MSOwner WHERE 
-              MSOwner.MsSeq  = iiMsSeq AND
-              MSOwner.TsEnd >= ldUpdateTS
-   EXCLUSIVE-LOCK NO-ERROR.
-   IF NOT AVAIL MSOwner THEN RETURN FALSE.
-
-   IF llDoEvent THEN DO:
-      DEFINE VARIABLE lhMsOwner AS HANDLE NO-UNDO.
-      lhMsOwner = BUFFER MSOwner:HANDLE.
-      RUN StarEventInitialize(lhMsOwner).
-      RUN StarEventSetOldBuffer (lhMsOwner).
-   END.
-
-   MSOwner.TsEnd = ldUpdateTS.
-
-   IF llDoEvent THEN DO:
-      RUN StarEventMakeModifyEvent (lhMsOwner).
-   END.
-
-   CREATE bNewMsowner.
-   BUFFER-COPY MSOwner EXCEPT TsEnd tsbegin TO bNewMsowner.
-   ASSIGN
-      bNewMsowner.CLI = icFixedNumber
-      bNewMsowner.imsi = ""
-      bNewMsowner.CliEvent = "F"
-      bNewMsowner.tsbegin = Func.Common:mSecOffSet(ldUpdateTS,1)
-      bNewMsowner.TsEnd = 99999999.99999.
-
-   IF llDoEvent THEN DO:
-      lhMsOwner = BUFFER bNewMsowner:HANDLE.
-      fMakeCreateEvent (lhMsOwner, "", "", "").
-   END.
-
-   RELEASE MSOwner.
-   RELEASE bNewMsowner.
-   RETURN TRUE.
-
-END FUNCTION.
-
 
 /*Function returns True if a tariff can be defined as convergent tariff.
 NOTE: False is returned in real false cases and also in error cases. */
