@@ -18,6 +18,8 @@ DEF VAR llOk AS LOG NO-UNDO.
 DEF VAR lcMessage AS CHAR NO-UNDO.
 DEF VAR lcError   AS CHAR NO-UNDO.
 
+DEFINE BUFFER lbMLOrder FOR Order.
+
 FIND Order WHERE 
      Order.Brand   = Syst.Var:gcBrand AND 
      Order.OrderID = iiOrder EXCLUSIVE-LOCK NO-ERROR.
@@ -125,7 +127,34 @@ fSetOrderStatus(Order.OrderId,icOrderStatus).
 fMarkOrderStamp(Order.OrderID,
                 "Close",
                 0.0).
-   
+  
+/* If Main Line onging order is Closed, and if its associated extra line 
+   ongoing order is available then close extra line ongoing order. 
+                                  (OR)
+   If ongoing extra line is Closed, and if its associated main line is in 
+   ongoing state then reset multisimid and multisimtype values. */
+IF fCLITypeIsMainLine(Order.CLIType)       AND 
+   Order.MultiSimId                  NE 0  AND 
+   Order.MultiSimType                EQ {&MULTISIMTYPE_PRIMARY} THEN 
+   fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
+                            Order.OrderId,    /* Main line Order Id  */ 
+                           "CLOSE").          /* Action              */
+ELSE IF fCLITypeIsExtraLine(Order.CLIType) AND
+        Order.MultiSimId             NE 0  AND
+        Order.MultiSimType           EQ {&MULTISIMTYPE_EXTRALINE} THEN
+DO:
+   FIND FIRST lbMLOrder EXCLUSIVE-LOCK WHERE
+              lbMLOrder.Brand        EQ Syst.Var:gcBrand           AND
+              lbMLOrder.OrderId      EQ Order.MultiSimId           AND
+              lbMLOrder.MultiSimId   EQ Order.OrderId              AND
+              lbMLOrder.MultiSimType EQ {&MULTISIMTYPE_PRIMARY}    AND
+       LOOKUP(lbMLOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 NO-ERROR.
+
+   IF AVAIL lbMLOrder THEN 
+      ASSIGN lbMLOrder.MultiSimId   = 0 
+             lbMLOrder.MultiSimType = 0.
+END.
+
 /* YDR-70  and YOT-680 */
 IF (LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0
     OR Order.OrderChannel = "Renewal_POS")
