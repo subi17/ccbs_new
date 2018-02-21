@@ -2086,31 +2086,6 @@ FOR EACH ttDiscount,
                       lcItemParam).
 END.
 
-/* Apply CONVDISC discount to convergent tariff with STC order - 
-   April promo (OR) Convergent New Adds Promotion */
-IF pcNumberType EQ "stc" AND fIsConvergenceTariff(pcSubType) THEN DO:
-
-/* YCO-172. Don't apply CONVDISC anymore  
-   llCreateDisc = TRUE.
-   FOR EACH ttDiscount:
-       IF fMatrixAnalyse(Syst.Var:gcBrand,
-                     "DISCOUNT-OVERRIDE",
-                     "Discount;DiscountOld",
-                     ttDiscount.DPRuleID + ";" + "CONVDISC",
-                     OUTPUT lcError) EQ 0 THEN DO:
-         llCreateDisc = FALSE.
-         LEAVE.
-      END.
-   END.
-
-   IF llCreateDisc THEN
-      fCreateOrderAction(Order.Orderid,
-                         "DiscountPlan",
-                         "CONVDISC",
-                         "").
-YCO-172 */
-END.
-
 /* ADDLINE-20 Additional Line */
 IF AVAIL AddLineDiscountPlan THEN DO:
    fCreateOrderAction(Order.Orderid,
