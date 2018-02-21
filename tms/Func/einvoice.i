@@ -67,7 +67,11 @@ function fEinvoicerequest returns integer
     input  icsource      as char,
     output ocresult      as char).
 
-def var lireqcreated as int  no-undo.
+   def var lireqcreated as int  no-undo.
+   
+   if not fEInvoiceValidate(idaPeriod, output ocresult) then 
+      return 0.
+
 
    fcreaterequest(({&REQTYPE_E_INVOICE}),
                   idactstamp,
