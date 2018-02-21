@@ -85,6 +85,26 @@ FUNCTION fCParamDa RETURNS Date
 
 END.
 
+FUNCTION fIParam RETURNS INT 
+  (INPUT icGroup AS CHAR,
+   INPUT inp     AS CHAR).
+
+   DEF VAR ret AS i NO-UNDO init ?.
+
+   FIND FIRST TMSParam where
+              TMSParam.Brand      = Syst.Var:gcBrand AND 
+              TMSParam.ParamGroup = icGroup          AND
+              TMSParam.ParamCode  = inp
+   no-lock no-error.
+
+   IF AVAIL TMSParam THEN DO:
+      ret = TMSParam.IntVal.
+      release TMSParam.
+   END.
+
+   RETURN ret.
+
+END.
 
 FUNCTION fCParam RETURNS CHAR 
   (INPUT icGroup AS CHAR,
