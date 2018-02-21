@@ -496,6 +496,10 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
                ELSE IF fIsAddLineOrder(Order.OrderID) AND
                   NOT Order.PayType THEN DO:
                   lcPayType = "68". /* Additional Postpaid Mobile line */
+
+                  /* YOT-5618 Handle correctly Way of payment for 66 and 67 */
+                  lcPayType = fGetPayType(Order.CustNum).
+
                END.
                ELSE IF Order.PayType THEN lcPayType = "10".
                ELSE lcPayType = "20".
@@ -549,29 +553,7 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
                lcPayType = "68". /* Additional Postpaid Mobile line */
                
                /* YOT-5618 Handle correctly Way of payment for 66 and 67 */
-               llDSL_type = FALSE.
-               llTFH_type = FALSE.
-                  
-               IF fGetCLITypeList(MsOwner.CustNum, OUTPUT lcCTList) THEN DO:
-                  IF INDEX(lcCTList,"DSL") > 0 THEN
-                     llDSL_type = TRUE.
-                  IF INDEX(lcCTList,"TFH") > 0 THEN
-                     llTFH_type = TRUE.
-               END.
-               ELSE IF fGetCLITypeListOfOrder(MsOwner.CustNum, OUTPUT lcCTList) THEN DO:
-                  IF INDEX(lcCTList,"DSL") > 0 THEN DO:
-                     llDSL_type = TRUE.
-                  END.
-                  IF INDEX(lcCTList,"TFH") > 0 THEN DO:
-                     llTFH_type = TRUE.
-                  END.
-               END.
-               IF (llDSL_type AND llTFH_type) THEN
-                  lcPayType = "68".
-               ELSE IF llDSL_type THEN
-                  lcPayType = "66".
-               ELSE IF llTFH_type THEN
-                  lcPayType = "67".                  
+               lcPayType = fGetPayType(MsOwner.CustNum).
             END.
          END.
 

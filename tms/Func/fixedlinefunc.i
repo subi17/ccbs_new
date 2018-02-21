@@ -950,7 +950,7 @@ FUNCTION fGetCLITypeList RETURNS LOGICAL
 
    FOR EACH MobSub NO-LOCK WHERE MobSub.Brand = Syst.Var:gcBrand AND
                                  MobSub.CustNum = iiCustNum:
-
+      
       IF fCLITypeIsMainLine(MobSub.CLIType) THEN DO:
          ocCTList = ocCTList + "," + MobSub.CLIType.
       END.
@@ -977,6 +977,76 @@ FUNCTION fGetCLITypeListOfOrder RETURNS LOGICAL
    IF ocCTList <> "" THEN RETURN TRUE.
    ELSE RETURN FALSE.
 
+END FUNCTION.
+
+
+FUNCTION fGetOldestCLITypeOfMobSub RETURNS CHAR
+   (iiCustNum AS INT):
+
+DEF VAR lcOldestCLIType  AS CHAR   NO-UNDO.
+DEF VAR lcCreDate        AS DATE   NO-UNDO.
+
+   lcCreDate = TODAY.
+
+   FOR EACH MobSub NO-LOCK WHERE MobSub.Brand = Syst.Var:gcBrand AND
+                                 MobSub.CustNum = iiCustNum:
+
+      IF fCLITypeIsMainLine(MobSub.CLIType) THEN DO:
+         IF MobSub.CreationDate < lcCreDate THEN DO: 
+            lcCreDate = MobSub.CreationDate.    
+            lcOldestCLIType = MobSub.CLIType.
+         END.  
+      END.
+   END.
+
+   RETURN lcOldestCLIType.
+
+END FUNCTION.
+
+
+FUNCTION fGetOldestCLITypeOfOrder RETURNS CHAR
+   (iiCustNum AS INT):
+
+DEF VAR lcOldestCLIType  AS CHAR  NO-UNDO.
+DEF VAR lcCrStamp        AS DEC   NO-UNDO.
+
+   lcCrStamp = 99999999.99999.
+
+   FOR EACH Order NO-LOCK WHERE Order.Brand = Syst.Var:gcBrand AND
+                      Order.CustNum = iiCustNum AND
+                      LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0:
+      IF fCLITypeIsMainLine(Order.CLIType) THEN DO:
+         IF Order.CrStamp < lcCrStamp THEN DO: 
+            lcCrStamp = Order.CrStamp.    
+            lcOldestCLIType = Order.CLIType.
+         END.
+      END.
+   END.
+
+   RETURN lcOldestCLIType.
+   
+END FUNCTION.
+
+
+FUNCTION fGetPayType RETURNS CHAR
+   (iiCustNum AS INT):
+
+DEF VAR lcPayType        AS CHAR NO-UNDO.
+DEF VAR lcCLIType        AS CHAR NO-UNDO.
+
+   /* YOT-5618 Handle correctly Way of payment for 66 and 67 */
+   lcCLIType = fGetOldestCLITypeOfMobSub(iiCustNum).
+   IF lcCLIType EQ "" THEN
+      lcCLIType = fGetOldestCLITypeOfOrder(iiCustNum).
+
+   IF INDEX(lcCLIType,"DSL") > 0 THEN
+      lcPayType = "66".
+   ELSE IF INDEX(lcCLIType,"TFH") > 0 THEN
+      lcPayType = "67".
+   ELSE lcPayType = "68".
+    
+   RETURN lcPayType.    
+      
 END FUNCTION.
 
 &ENDIF
