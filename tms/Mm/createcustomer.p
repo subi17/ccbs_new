@@ -271,14 +271,19 @@ ELSE DO:
 
       /* Update Email and Delivery type for all type of renewal orders */
       IF AVAIL OrderCustomer THEN
+      DO:
          fUpdEmailDelType(Order.OrderId).
+
+         IF Order.PayType = FALSE AND Customer.Category <> OrderCustomer.Category THEN 
+             ASSIGN Customer.Category = OrderCustomer.Category.
+      END.   
    END.
    ELSE IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN DO:
       /* bank account is changed with a separate request from stc process */
       ASSIGN Customer.SMSNumber   = OrderCustomer.MobileNumber.
       fUpdateEmail(Order.OrderId).
       /* YPRO migrate YPRO-92 category */
-      IF ordercustomer.pro AND ordercustomer.category NE customer.category THEN
+      IF Ordercustomer.category NE Customer.Category THEN
          Customer.category = ordercustomer.category.
    END.
 
