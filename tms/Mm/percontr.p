@@ -16,6 +16,8 @@
                                create penalty fee for termination
                   10.09.07 vk  Added a coefficient to penalty fee              
                   18.03.08/aam pMaintainContract 
+                  05.-2.18 Ashok YDR-2750 Date need not be checked 
+                                          for last month fee and service pkgs.
   Version ......: M15
   -------------------------------------------------------------------------- */
 
@@ -2646,9 +2648,8 @@ PROCEDURE pContractTermination:
             FIND FIRST bMsRequest WHERE
                        bMsRequest.MsRequest = MsRequest.OrigRequest
                  NO-LOCK NO-ERROR.
-            IF AVAIL bMsRequest AND
-               (bMsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR
-                bMsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE}) THEN
+            IF AVAIL bMsRequest AND               
+                bMsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE} THEN
                llChargeUsageBased = TRUE.
          END.
       END.
@@ -2656,8 +2657,9 @@ PROCEDURE pContractTermination:
       /* YDR-1818 */
       llFMFee = FALSE.
       IF MsRequest.ReqSource  = {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION} AND
-         (DayCampaign.DCType = {&DCTYPE_SERVICE_PACKAGE} OR
-          DayCampaign.DCType = {&DCTYPE_BUNDLE}) THEN DO:
+         ( DayCampaign.DCType = {&DCTYPE_SERVICE_PACKAGE} OR
+           DayCampaign.DCType = {&DCTYPE_BUNDLE})                          AND 
+         ( DayCampaign.BundleType NE {&DC_BUNDLE_TYPE_TARIFF} )           THEN DO:
       
          FIND FIRST MobSub NO-LOCK WHERE
                     MobSub.MsSeq = MsRequest.MsSeq NO-ERROR.
