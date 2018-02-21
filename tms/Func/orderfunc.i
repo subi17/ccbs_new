@@ -67,7 +67,7 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
             bfOrder.SendToROI  = {&ROI_HISTORY_TO_SEND}.
 
          /* RES-538 Digital Signature for Tienda and Telesales only */
-         fHandleSignature(bfOrder.OrderId).
+         fHandleSignature(bfOrder.OrderId,icStatus).
 
          /* Mark time stamp, if order statuscode is changed */
          case icStatus:

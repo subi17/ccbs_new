@@ -22,7 +22,8 @@
    has been sent to Adapter (Signature API).
 */
 FUNCTION fHandleSignature RETURNS CHAR
-   (iiOrderId AS INT):
+   (iiOrderId AS INT,
+    icStatus  AS CHAR):
 
    DEF VAR lcStatus AS CHAR NO-UNDO INIT "".
    DEF VAR lcActionID AS CHAR NO-UNDO INIT "".
@@ -66,7 +67,7 @@ FUNCTION fHandleSignature RETURNS CHAR
    ASSIGN
       lcNewStatuses = fCParam("SignatureApi", "NewStatuses").
 
-   IF LOOKUP(bOrder.StatusCode, lcNewStatuses) > 0 THEN
+   IF LOOKUP(icStatus, lcNewStatuses) > 0 THEN
       lcActionID = "dssent".
    ELSE IF LOOKUP(bOrder.StatusCode, {&ORDER_CLOSE_STATUSES}) > 0 THEN /* 7,8,9 */
       lcActionID = "dscancel".
