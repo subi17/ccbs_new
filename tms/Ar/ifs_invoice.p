@@ -111,10 +111,6 @@ DEF BUFFER bttRow FOR ttRow.
    
 DEFINE STREAM sLog.
 
-DEF VAR lcCTList         AS CHAR NO-UNDO.
-DEF VAR llDSL_type       AS LOGICAL NO-UNDO.
-DEF VAR llTFH_type       AS LOGICAL NO-UNDO.
-
 
 FUNCTION fError RETURNS LOGIC
    (icMessage AS CHAR):
