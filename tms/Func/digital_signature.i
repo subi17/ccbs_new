@@ -69,7 +69,7 @@ FUNCTION fHandleSignature RETURNS CHAR
 
    IF LOOKUP(icStatus, lcNewStatuses) > 0 THEN
       lcActionID = "dssent".
-   ELSE IF LOOKUP(bOrder.StatusCode, {&ORDER_CLOSE_STATUSES}) > 0 THEN /* 7,8,9 */
+   ELSE IF LOOKUP(icStatus, {&ORDER_CLOSE_STATUSES}) > 0 THEN /* 7,8,9 */
       lcActionID = "dscancel".
    ELSE DO:
       RETURN "Error".
