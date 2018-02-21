@@ -919,7 +919,7 @@ FUNCTION fGetMobileLineCompareFee RETURNS DECIMAL
 
             IF AVAIL MsOwner THEN 
                 ASSIGN lcFMPriceList = fFeeModelPriceList(bMsOwner.AgrCust,
-                                                          bMobileLine.BillTarget,
+                                                          bMsOwner.BillTarget,
                                                           bDayCampaign.FeeModel,
                                                           idaActivated).    
             ELSE 
