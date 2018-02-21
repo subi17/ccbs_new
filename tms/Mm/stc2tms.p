@@ -230,6 +230,21 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
       fReqError("Unknown old CLIType").
       RETURN.
    END.
+   
+   IF MobSub.TerritoryOwner <> "FIBMM02" THEN
+   DO:
+       IF bOldType.FixedLineType EQ {&FIXED_LINE_TYPE_FIBER} AND 
+          CLIType.FixedLineType  EQ {&FIXED_LINE_TYPE_FIBER} AND
+          (bOldType.FixedLineDownload <> CLIType.FixedLineDownload OR bOldType.FixedLineUpload <> CLIType.FixedLineUpload) THEN
+       DO:   
+           RUN pSpeedChangeRequestForProvisioning.
+           IF RETURN-VALUE NE "" THEN
+           DO:
+               fReqError(RETURN-VALUE).
+               RETURN.
+           END. 
+       END.    
+   END.
 
    RUN pInitialize.
    RUN pFeesAndServices.
@@ -291,6 +306,33 @@ PROCEDURE pInitialize:
    
 END PROCEDURE.
 
+PROCEDURE pSpeedChangeRequestForProvisioning:
+    DEF VAR liOrderId          AS INTE NO-UNDO.
+
+    FOR EACH  Order WHERE Order.MsSeq = Mobsub.MsSeq NO-LOCK,
+        FIRST FusionMessage NO-LOCK WHERE FusionMessage.OrderId = Order.OrderId USE-INDEX OrderId:
+
+        IF (FusionMessage.MessageType <> {&FUSIONMESSAGE_TYPE_CREATE_ORDER} AND 
+            (FusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_CREATE_ORDER} AND FusionMessage.MessageStatus <> {&FUSION_ORDER_STATUS_FINALIZED})) THEN
+            NEXT.
+
+        ASSIGN liOrderId = Order.OrderId.
+
+        LEAVE.
+    END.
+
+    IF liOrderId > 0 THEN
+    DO:
+        RUN Gwy/masmovil_speed_change.p(Order.OrderId, CLIType.FixedLineDownload, CLIType.FixedLineUpload).
+        IF RETURN-VALUE NE "" THEN
+            RETURN "Fixed line fiber speed change request failed with " + RETURN-VALUE.
+        ELSE 
+            RETURN "".    
+    END.
+
+    RETURN "Fixed line order failed to identify.".    
+
+END PROCEDURE.
 
 PROCEDURE pFeesAndServices:
 
