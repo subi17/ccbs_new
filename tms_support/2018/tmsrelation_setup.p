@@ -117,3 +117,49 @@ Syst.TMSRelation:mAddRelation("DiscountPlan",
                               "LRDISC2",
                               "ChildValue",
                               YES).
+
+/* CONVDISC_CS20M12 */
+
+/* Have */
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "CONVDISC_CS20M12",
+                              "CONVDISC_CS100_6",
+                              "ChildValue",
+                              YES).
+
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "CONVDISC_CS20M12",
+                              "LRDISC2",
+                              "ChildValue",
+                              YES).
+
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "CONVDISC_CS20M12",
+                              "CONVDISC20_3",
+                              "ParentValue",
+                              YES).
+
+/* Get */
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "CONVDISC_CS100_6",
+                              "CONVDISC_CS20M12",
+                              "ChildValue",
+                              YES).
+
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "LRDISC2",
+                              "CONVDISC_CS20M12",
+                              "ChildValue",
+                              YES).
+
+Syst.TMSRelation:mAddRelation("DiscountPlan",
+                              "Compatibility",
+                              "CONVDISC20_3",
+                              "CONVDISC_CS20M12",
+                              "ChildValue",
+                              YES).
