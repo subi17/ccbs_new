@@ -172,7 +172,7 @@ FORM
        LABEL "Credited ....."  FORMAT "z,zzz,zz9.99+"
     lcCrExtID 
        LABEL "Credit Note ." AT 42 
-       FORMAT "X(12)" 
+       FORMAT "X(14)"
        SKIP
 
     ldDetCLoss         
