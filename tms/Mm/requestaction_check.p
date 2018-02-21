@@ -41,33 +41,35 @@ FUNCTION fRequestCheck RETURNS LOGICAL:
          IF LOOKUP(STRING(MSRequest.ReqType),RequestAction.ActionKey) > 0
          AND LOOKUP(STRING(MSrequest.reqstatus),{&REQ_INACTIVE_STATUSES}) = 0
          THEN DO:
-            /* Allow STC/BTC request even ongoing Termination request
-               for additional lines, because of YTS-6053 */
-            IF (LOOKUP(bfMobSub.CLIType,lcBundleBsdClitypes) = 0 AND
-               CLIType.LineType = 2) OR
-               (LOOKUP(bfMobSub.CLIType,lcBundleBsdClitypes) > 0 AND
+
+            /* Allow STC/BTC request even ongoing Termination request for additional lines, because of YTS-6053 */
+            IF (LOOKUP(bfMobSub.CLIType,lcBundleBsdClitypes) = 0 AND CLIType.LineType = 2) OR (LOOKUP(bfMobSub.CLIType,lcBundleBsdClitypes) > 0 AND
                CAN-FIND( FIRST bCLIType NO-LOCK WHERE 
                                bCLIType.Brand = Syst.Var:gcBrand AND
                                bCLIType.CLIType = bfMobSub.TariffBundle AND
-                               bCLIType.LineType = 2)) THEN DO:
-                  IF (MsRequest.ReqCParam3 EQ STRING({&SUBSCRIPTION_TERM_REASON_MULTISIM}) OR
-                   MsRequest.ReqCParam3 EQ STRING({&SUBSCRIPTION_TERM_REASON_ADDITIONALSIM}) ) AND
-                  MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
-                 (iiReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR
-                  iiReqType = {&REQTYPE_BUNDLE_CHANGE}) THEN NEXT.
+                               bCLIType.LineType = 2)) THEN 
+            DO:
+                  IF (MsRequest.ReqCParam3 EQ STRING({&SUBSCRIPTION_TERM_REASON_MULTISIM}) OR 
+                      MsRequest.ReqCParam3 EQ STRING({&SUBSCRIPTION_TERM_REASON_ADDITIONALSIM})) AND
+                     MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
+                     (iiReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR iiReqType = {&REQTYPE_BUNDLE_CHANGE}) THEN 
+                     NEXT.
             END.
-            /* YDR-2036 
-            Allow STC/BTC when there is an ongoing 
-            MNP out request with ACON status            
-            */
-             IF (iiReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR
-                 iiReqType = {&REQTYPE_BUNDLE_CHANGE}) AND            
-               MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
-               MsRequest.ReqCParam3 EQ STRING({&SUBSCRIPTION_TERM_REASON_MNP}) AND
-               (icReqSource EQ {&REQUEST_SOURCE_MANUAL_TMS} OR 
-                icReqSource EQ {&REQUEST_SOURCE_NEWTON})
-               THEN NEXT.
-                
+
+            /* YDR-2036 Allow STC/BTC when there is an ongoing MNP out request with ACON status */
+            IF (iiReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} OR iiReqType = {&REQTYPE_BUNDLE_CHANGE}) AND            
+                MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
+                MsRequest.ReqCParam3 EQ STRING({&SUBSCRIPTION_TERM_REASON_MNP}) AND
+                (icReqSource EQ {&REQUEST_SOURCE_MANUAL_TMS} OR icReqSource EQ {&REQUEST_SOURCE_NEWTON}) THEN 
+                NEXT.
+            
+            IF iiReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND 
+               MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
+               MsRequest.ReqStatus = {&REQUEST_STATUS_REJECTED} AND 
+               MsRequest.Memo BEGINS "Fixed line fiber speed change request failed" AND 
+               (icReqSource EQ {&REQUEST_SOURCE_MANUAL_TMS} OR icReqSource EQ {&REQUEST_SOURCE_NEWTON}) THEN 
+                NEXT.   
+
             ocError = {&MSG_ONG_REQUEST}.
             RETURN FALSE.
          END.
