@@ -1,6 +1,4 @@
 etc/site.py
-tms/core*
-tms/protrace*
 db/progress/store/*.db
 db/progress/store/*.lk
 db/progress/store/*.lic
