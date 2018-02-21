@@ -107,6 +107,8 @@ else:
 os.environ['PROPATH'] += ','.join(['%s/%s' % (work_dir, x) \
                           for x in modgen()]) + ',.'
 
+os.environ['PROPATH'] += ',{0}{1},'.format(dlc,'/tty/netlib/OpenEdge.Net.pl')
+
 cdr_database_count = 0
 if cdr_databases:
     cdr_database_count = len(cdr_databases)
