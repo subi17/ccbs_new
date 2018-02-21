@@ -1,9 +1,8 @@
 {Syst/commali.i}
-{Func/cparam2.i}
 {Gwy/provision.i}
 {Func/fmakemsreq.i}
-{Syst/tmsconst.i}
 {Func/dss_matrix.i}
+{Func/msreqfunc.i}
 
 DEF INPUT PARAMETER iiRequest AS INTEGER NO-UNDO.
 

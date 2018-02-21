@@ -14,6 +14,7 @@
 {Mm/fbundle.i}
 {Func/dss_matrix.i}
 {Func/dss_request.i}
+{Func/msreqfunc.i}
 
 DEF INPUT PARAMETER iiMsRequest AS INT  NO-UNDO.
 

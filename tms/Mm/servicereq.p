@@ -19,6 +19,7 @@
 {Func/msopenbatch.i}
 {Func/remfees.i}
 {Func/barrfunc.i}
+{Func/fmakesms.i}
 
 DEF INPUT PARAMETER iiRequest AS INT NO-UNDO.
 
