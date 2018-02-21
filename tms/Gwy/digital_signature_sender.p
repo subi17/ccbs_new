@@ -107,7 +107,6 @@ FUNCTION fFillCancelStruct RETURNS LOGICAL
 
       IF NOT AVAIL bOrderCustomer THEN RETURN FALSE.
 
-      add_string(pcStruct,"id","").
       add_string(pcStruct,"customerId",bOrderCustomer.CustId).
       add_string(pcStruct,"accountId",bOrder.ContractID).
       /* not mandatory */
@@ -214,6 +213,9 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
    (iiOrderId      AS INT,
     INPUT pcStruct AS CHAR):
 
+   DEF VAR lcContactMediumStruct AS CHAR NO-UNDO.
+   DEF VAR lcMediumStruct        AS CHAR NO-UNDO.
+
    DEF BUFFER bOrder FOR Order.
    DEF BUFFER bOrderCustomer FOR OrderCustomer.
 
@@ -228,6 +230,47 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
 
       IF NOT AVAIL bOrderCustomer THEN RETURN FALSE.
 
+      add_string(pcStruct,"firstName",bOrderCustomer.FirstName).
+      add_string(pcStruct,"midName","").
+      add_string(pcStruct,"lastName",bOrderCustomer.SurName1).
+
+      /* contactMedium */
+      add_string(pcStruct,"contactMedium.preferred","true").
+      add_string(pcStruct,"contactMedium.type","Email").
+      add_string(pcStruct,"medium.city",bOrderCustomer.PostOffice).
+      add_string(pcStruct,"medium.country",bOrderCustomer.Country).
+      add_string(pcStruct,"medium.emailAddress",bOrderCustomer.email).
+      add_string(pcStruct,"medium.type","").
+      add_string(pcStruct,"medium.number",bOrderCustomer.ContactNum).
+      add_string(pcStruct,"medium.postCode",bOrderCustomer.ZipCode).
+      add_string(pcStruct,"medium.stateOrProvidence",bOrderCustomer.Region).
+      add_string(pcStruct,"medium.streetOne",bOrderCustomer.Street).
+      add_string(pcStruct,"medium.streetTwo",bOrderCustomer.StreetType). /* ?? */
+
+      /* individualIdentification */
+      add_string(pcStruct,"individualIdentification.type",bOrderCustomer.CustIdType).
+      add_string(pcStruct,"individualIdentification.identificationId",bOrderCustomer.CustId).
+      add_string(pcStruct,"individualIdentification.country",bOrderCustomer.Country).
+
+      /* processData */
+      add_string(pcStruct,"accountId",bOrder.ContractID).
+      add_string(pcStruct,"subscriptionId",bOrder.CLI).
+
+      IF fIsConvergent3POnly(bOrder.CLIType) THEN
+         add_string(pcStruct,"sellType","CONVERGENTE").
+      ELSE IF fIsFixedOnly(bOrder.CLIType) THEN
+         add_string(pcStruct,"sellType","FIXED_ONLY").
+      ELSE
+         add_string(pcStruct,"sellType","SIM_ONLY").
+
+      add_string(pcStruct,"crmId",bOrder.OrderChannel).
+      add_string(pcStruct,"dealerId",bOrder.Salesman).
+      add_string(pcStruct,"contractId",bOrder.ContractID).
+      add_string(pcStruct,"orderId",STRING(bOrderCustomer.OrderId)).
+      add_string(pcStruct,"sfId",bOrder.Salesman).
+      add_string(pcStruct,"orderDate",Func.Common:mUTCTime(bOrder.CrStamp)).
+ 
+/* Old specs version:
       add_string(pcStruct,"customerId",bOrderCustomer.CustId).
       add_string(pcStruct,"accountId",bOrder.ContractID).
       /* not mandatory */
@@ -258,7 +301,7 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
       add_string(pcStruct,"orderId",STRING(bOrderCustomer.OrderId)).
       add_string(pcStruct,"sfId",bOrder.Salesman).
       add_string(pcStruct,"orderDate",Func.Common:mUTCTime(bOrder.CrStamp)).
- 
+*/ 
       IF llLogRequest THEN DO:
          fLogMsg(STRING(iiOrderID) + "; Signing send xml: " + STRING(pcStruct)).
          fLogMsg(STRING(bOrder.OrderId) +  "; Print xml to file").

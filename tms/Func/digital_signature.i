@@ -22,8 +22,8 @@
    has been sent to Adapter (Signature API).
 */
 FUNCTION fHandleSignature RETURNS CHAR
-   (iiOrderId AS INT,
-    icStatus  AS CHAR):
+   (iiOrderId AS INT):
+
    DEF VAR lcStatus AS CHAR NO-UNDO INIT "".
    DEF VAR lcActionID AS CHAR NO-UNDO INIT "".
    DEF VAR ldeInstallment AS DECIMAL NO-UNDO.
@@ -62,12 +62,11 @@ FUNCTION fHandleSignature RETURNS CHAR
       RETURN "Not Telesales". /* not error */
 
    /* Process ActionLog */
-/*
+
    ASSIGN
       lcNewStatuses = fCParam("SignatureApi", "NewStatuses").
 
-   IF LOOKUP(bOrder.StatusCode, lcNewStatuses) > 0 THEN*/
-   IF bOrder.statusCode EQ {&ORDER_STATUS_DELIVERED} THEN
+   IF LOOKUP(bOrder.StatusCode, lcNewStatuses) > 0 THEN
       lcActionID = "dssent".
    ELSE IF LOOKUP(bOrder.StatusCode, {&ORDER_CLOSE_STATUSES}) > 0 THEN /* 7,8,9 */
       lcActionID = "dscancel".

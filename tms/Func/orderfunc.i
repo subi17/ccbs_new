@@ -66,19 +66,16 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
             bfOrder.Ordertype NE {&ORDER_TYPE_STC} THEN 
             bfOrder.SendToROI  = {&ROI_HISTORY_TO_SEND}.
 
+         /* RES-538 Digital Signature for Tienda and Telesales only */
+         fHandleSignature(bfOrder.OrderId).
+
          /* Mark time stamp, if order statuscode is changed */
          case icStatus:
             when "6" then do:
                fMarkOrderStamp(bfOrder.OrderID,"Delivery",0.0).
-
-               /* RES-538 Digital Signature for Tienda and Telesales only */
-               fHandleSignature(bfOrder.OrderId, icStatus).
             end.
             when "7" or when "8" or when "9" then do:
                fMarkOrderStamp(bfOrder.OrderID,"Close",0.0).
-
-               /* RES-538 Digital Signature for Tienda and Telesales only */
-               fHandleSignature(bfOrder.OrderId, icStatus).
 
                /* YDR-2495 creating STC request to fixed only when mobile part is terminated */
                FIND FIRST MobSub NO-LOCK WHERE
