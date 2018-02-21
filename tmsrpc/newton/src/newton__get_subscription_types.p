@@ -265,7 +265,7 @@ END.
 FOR EACH CLIType NO-LOCK WHERE
          CLIType.Brand = Syst.Var:gcBrand AND
          CLIType.WebStatusCode > 0:
-
+    
    /* Combine bundle based clitypes with base tariff */
    IF CLIType.BundleType = TRUE THEN
    DO:
@@ -284,50 +284,51 @@ FOR EACH CLIType NO-LOCK WHERE
    DO:
       lcStatusCode = CLIType.StatusCode.
 
-      FIND FIRST oldCLIType WHERE oldCLIType.Brand   = Syst.Var:gcBrand  AND
-                                  oldCLIType.cliType = pcCliType         NO-LOCK NO-ERROR.
-      /* 3p to 2p STC is restricted */
-      IF fIsConvergenceTariff(pcClitype) AND 
-         AVAIL oldCLIType AND 
-         oldCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} AND 
-         CliType.TariffType    = {&CLITYPE_TARIFFTYPE_FIXEDONLY}  THEN 
-          ASSIGN lcStatusCode = 0.
-      /* Internet technology change is restricted */    
-      ELSE IF fIsConvergenceTariff(pcClitype) AND AVAIL oldCLIType AND 
-         ((oldCLIType.FixedLineType = {&FIXED_LINE_TYPE_FIBER} AND CliType.FixedLineType = {&FIXED_LINE_TYPE_ADSL}) OR 
-          (oldCLIType.FixedLineType = {&FIXED_LINE_TYPE_ADSL}  AND CliType.FixedLineType = {&FIXED_LINE_TYPE_FIBER})) THEN 
-          ASSIGN lcStatusCode = 0.    
-      /* Mobile subscrition should be allowed to do STC between only convergent tariffs, but fixed part should remain same */
-      ELSE IF fIsConvergenceTariff(CliType.Clitype) AND fIsConvergenceTariff(pcClitype) EQ FALSE THEN 
-          ASSIGN lcStatusCode = 0.    
-      ELSE IF CLIType.FixedLineType EQ {&FIXED_LINE_TYPE_FIBER} THEN
-      DO: 
-          IF LOOKUP(lcHostName, "sadachbia") > 0 THEN 
-          DO:
-              IF fIsConvergenceTariff(CliType.Clitype) AND fIsConvergenceTariff(pcClitype) EQ FALSE  THEN
-                  ASSIGN lcStatusCode = 0.
-          END.  
-          ELSE IF MobSub.TerritoryOwner EQ "FIBMM02" OR llUseApi = FALSE THEN
-          DO:
-              IF fIsConvergenceTariff(CliType.Clitype) AND (fIsConvergenceTariff(pcClitype) EQ FALSE OR NOT fCheckConvergentSTCCompability(pcClitype,Clitype.clitype)) THEN
-                  ASSIGN lcStatusCode = 0.
-          END.
-          ELSE 
-          DO:
-              FIND LAST ttSpeed NO-ERROR.
-              IF AVAIL ttSpeed THEN
+      IF lcStatusCode > 0 THEN
+      DO:
+          FIND FIRST oldCLIType WHERE oldCLIType.Brand   = Syst.Var:gcBrand  AND
+                                      oldCLIType.cliType = pcCliType         NO-LOCK NO-ERROR.
+          /* 3p to 2p STC is restricted */
+          IF fIsConvergenceTariff(pcClitype) AND 
+             AVAIL oldCLIType AND 
+             oldCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} AND 
+             CliType.TariffType    = {&CLITYPE_TARIFFTYPE_FIXEDONLY}  THEN 
+              ASSIGN lcStatusCode = 0.
+          /* Internet technology change is restricted */    
+          ELSE IF fIsConvergenceTariff(pcClitype) AND AVAIL oldCLIType AND 
+             ((oldCLIType.FixedLineType = {&FIXED_LINE_TYPE_FIBER} AND CliType.FixedLineType = {&FIXED_LINE_TYPE_ADSL}) OR 
+              (oldCLIType.FixedLineType = {&FIXED_LINE_TYPE_ADSL}  AND CliType.FixedLineType = {&FIXED_LINE_TYPE_FIBER})) THEN 
+              ASSIGN lcStatusCode = 0.    
+          /* Mobile subscrition should be allowed to do STC between only convergent tariffs, but fixed part should remain same */
+          ELSE IF fIsConvergenceTariff(CliType.Clitype) AND fIsConvergenceTariff(pcClitype) EQ FALSE THEN 
+              ASSIGN lcStatusCode = 0.    
+          ELSE IF CLIType.FixedLineType EQ {&FIXED_LINE_TYPE_FIBER} THEN
+          DO: 
+              IF LOOKUP(lcHostName, "sadachbia") > 0 THEN 
               DO:
-                  ASSIGN 
-                      liDestDowspeconversion = fSpeedConversion(CliType.FixedLineDownload)
-                      liDestUpSpeConversion  = fSpeedConversion(clitype.FixedLineUpload).
- 
-                  IF ttSpeed.Download >= liDestDowspeconversion AND ttSpeed.Upload >= liDestUpSpeConversion THEN
-                      ASSIGN lcStatusCode = 1.   
-                  ELSE 
-                      ASSIGN lcStatusCode = 0.    
+                  IF fIsConvergenceTariff(CliType.Clitype) AND fIsConvergenceTariff(pcClitype) EQ FALSE  THEN
+                      ASSIGN lcStatusCode = 0.
+              END.  
+              ELSE IF MobSub.TerritoryOwner EQ "FIBMM02" OR llUseApi = FALSE THEN
+              DO:
+                  IF fIsConvergenceTariff(CliType.Clitype) AND (fIsConvergenceTariff(pcClitype) EQ FALSE OR NOT fCheckConvergentSTCCompability(pcClitype,Clitype.clitype)) THEN
+                      ASSIGN lcStatusCode = 0.
+              END.
+              ELSE 
+              DO:
+                  FIND LAST ttSpeed NO-ERROR.
+                  IF AVAIL ttSpeed THEN
+                  DO:
+                      ASSIGN 
+                          liDestDowspeconversion = fSpeedConversion(CliType.FixedLineDownload)
+                          liDestUpSpeConversion  = fSpeedConversion(clitype.FixedLineUpload).
+     
+                      IF NOT (ttSpeed.Download >= liDestDowspeconversion AND ttSpeed.Upload >= liDestUpSpeConversion) THEN
+                          ASSIGN lcStatusCode = 0.    
+                  END.
               END.
           END.
-      END.
+      END.    
 
       fAddCLITypeStruct(CLIType.CLIType,"",lcStatusCode).
    END. /*END ELSE DO*/
