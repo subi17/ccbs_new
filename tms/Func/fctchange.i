@@ -231,10 +231,7 @@ FUNCTION fValidateMobTypeCh RETURNS LOGICAL
       END. 
    END.
    ELSE DO:
-      IF fIsConvergenceTariff(NewCLIType.Clitype) AND
-         (fIsConvergenceTariff(MobSub.CLItype) EQ FALSE OR
-          NOT fCheckConvergentSTCCompability(NewCLIType.CLIType,
-                                             MobSub.clitype)) AND
+      IF fIsConvergenceTariff(NewCLIType.Clitype) AND fIsConvergenceTariff(MobSub.CLItype) EQ FALSE AND
          piOrderID EQ 0 THEN DO:
          ocError = "Function not allowed due to business rules!".
          RETURN FALSE.
