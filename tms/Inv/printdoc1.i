@@ -1078,6 +1078,14 @@ PROCEDURE pGetSubInvoiceHeaderData:
                       ttSub.CTName   = ttCLIType.CTName
                       ttSub.CliEvent = ttMSOwner.CLIEvent.
 
+            /* YCO-24. Renamed tariffs. When VOICE100 bundle, this tariffs' names have to show old name. */
+            CASE ttSub.CLIType:
+               WHEN "CONTDSL48V100"     THEN ttSub.CTName = "La Combinada Verde 20".
+               WHEN "CONTFH48_50V100"   THEN ttSub.CTName = "La Combinada Verde 50".
+               WHEN "CONTFH58_300V100"  THEN ttSub.CTName = "La Combinada Verde 300".
+               WHEN "CONTFH76_1000V100" THEN ttSub.CTName = "La Combinada Verde 1Gbps".
+            END.              
+
             /* Mobile provisioned during month. Used for convergent */
             IF ttMSOwner.CliEvent NE "F" THEN ttSub.PrintCLI = TRUE.
 
