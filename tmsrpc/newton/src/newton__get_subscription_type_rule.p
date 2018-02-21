@@ -520,7 +520,7 @@ IF NOT MobSub.PayType THEN DO:
 
          IF DCCLI.DCEvent BEGINS "TERM" THEN 
          DO:
-            IF fIsConvergentORFixedOnly(CLIType.CLIType) THEN 
+            IF fIsConvergentORFixedOnly(CLIType.CLIType) OR fIsConvergentORFixedOnly(OldCLIType.CLIType) THEN 
             DO:
                 ASSIGN 
                     ldOriginalFee = fGetMobileLineCompareFee(MobSub.MsSeq, OldCLIType.BaseBundle, DCCLI.ValidFrom)

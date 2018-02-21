@@ -778,7 +778,7 @@ PROCEDURE pFeeComparison:
                  bCLIType.CLIType = lcOrigCLIType NO-LOCK NO-ERROR.
       IF NOT AVAILABLE bCLIType THEN RETURN.
 
-      IF fIsConvergentORFixedOnly(bCLIType.CLIType) THEN 
+      IF fIsConvergentORFixedOnly(bCLIType.CLIType) AND NOT (icDCEvent BEGINS "FTERM" OR icDCEvent BEGINS "TVTERM") THEN 
           ASSIGN ldOriginalFee = fGetMobileLineCompareFee(iiMsSeq, bCLIType.BaseBundle, ldaActivated).
       ELSE 
       DO:
@@ -817,9 +817,15 @@ PROCEDURE pFeeComparison:
                     bCLIType.Brand   = Syst.Var:gcBrand AND
                     bCLIType.CLIType = ihRequest::ReqCParam5 NO-LOCK NO-ERROR.
 
-      IF AVAIL bCLIType THEN ASSIGN
-         ldNewFee     = fGetMobileLineCompareFee(iiMsSeq, bCLIType.BaseBundle, ldaActivated)
-         lcNewCLIType = bCLIType.CLIType.
+      IF AVAIL bCLIType THEN 
+      DO:
+          IF fIsConvergentORFixedOnly(bCLIType.CLIType) AND NOT (icDCEvent BEGINS "FTERM" OR icDCEvent BEGINS "TVTERM") THEN 
+              ASSIGN ldNewFee = fGetMobileLineCompareFee(iiMsSeq, bCLIType.BaseBundle, ldaActivated).
+          ELSE
+              ASSIGN ldNewFee = bCLIType.CompareFee.
+
+          ASSIGN lcNewCLIType = bCLIType.CLIType.
+      END.        
    END. /* IF INDEX(icRule + icExclRule,"NEW") > 0 THEN DO: */
           
    IF icRule > "" THEN DO:
