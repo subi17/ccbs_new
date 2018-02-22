@@ -48,10 +48,6 @@
 {Func/fixedlinefunc.i}
 {Func/cparam2.i}
 
-DEF BUFFER bReqOwner FOR MsOwner.
-DEF BUFFER bReqComp  FOR ServCom.
-DEF BUFFER bReqSer   FOR SubSer.
-
 DEF VAR liReqCreated AS INT  NO-UNDO.
 
 FUNCTION fActivateTARJ7Promo RETURN LOGICAL
@@ -269,7 +265,10 @@ FUNCTION fServiceActStamp RETURNS DECIMAL
    DEF VAR ldChgStamp  AS DEC  NO-UNDO. 
    DEF VAR liCReqTime  AS INT  NO-UNDO.
    DEF VAR ldtCReqDate AS DATE NO-UNDO.
-   
+
+   DEF BUFFER bReqComp  FOR ServCom.
+   DEF BUFFER bReqSer   FOR SubSer.
+
    /* default is current time */
    ASSIGN ldtCReqDate = TODAY
           liCReqTime  = TIME
@@ -828,6 +827,7 @@ FUNCTION fPCActionRequest RETURNS INTEGER
    
    DEF BUFFER bMsRequest FOR MsRequest.
    DEF BUFFER ServiceLimit FOR ServiceLimit.
+   DEF BUFFER bReqOwner FOR MsOwner.
 
    lcBONOContracts = fCParamC("BONO_CONTRACTS").
    

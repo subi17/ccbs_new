@@ -28,7 +28,7 @@ Syst.Var:katun = "MNP".
 {Func/ordercancel.i}
 {Func/msisdn_prefix.i}
 {Func/orderchk.i}
-{Func/main_add_lines.i}
+{Func/add_lines_request.i}
 {Func/fgettxt.i}
 {Func/fixedlinefunc.i}
 {Func/multitenantfunc.i}

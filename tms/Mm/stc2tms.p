@@ -17,7 +17,7 @@
 {Func/fbankdata.i}
 {Func/barrfunc.i}
 {Func/profunc_request.i}
-{Func/fsendsms.i}
+{Func/add_lines_request.i}
 
 /* 21.2.2018 Migration is not used, commented the include file
 {Migration/migrationfunc.i}*/

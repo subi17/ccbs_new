@@ -24,7 +24,7 @@
 {Mnp/mnpoutchk.i}
 {Func/ordercancel.i}
 {Func/dextra.i}
-{Func/main_add_lines.i}
+{Func/add_lines_request.i}
 {Func/orderfunc.i}
 {Mc/dpmember.i}
 {Func/multitenantfunc.i}

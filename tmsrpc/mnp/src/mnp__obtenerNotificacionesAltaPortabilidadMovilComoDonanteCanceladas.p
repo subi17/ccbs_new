@@ -39,7 +39,7 @@
 {Func/orderchk.i}
 {Func/orderfunc.i}
 {Func/fsubstermreq.i}
-{Func/main_add_lines.i}
+{Func/add_lines_request.i}
 
 DEF BUFFER bMNPProcess FOR MNPProcess.
 DEF BUFFER bMNPSub FOR MNPSub.
