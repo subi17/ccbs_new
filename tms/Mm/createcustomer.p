@@ -274,7 +274,7 @@ ELSE DO:
       DO:
          fUpdEmailDelType(Order.OrderId).
 
-         IF Order.PayType = FALSE AND Customer.Category <> OrderCustomer.Category THEN 
+         IF Customer.Category <> OrderCustomer.Category THEN 
              ASSIGN Customer.Category = OrderCustomer.Category.
       END.   
    END.
@@ -283,8 +283,8 @@ ELSE DO:
       ASSIGN Customer.SMSNumber   = OrderCustomer.MobileNumber.
       fUpdateEmail(Order.OrderId).
       /* YPRO migrate YPRO-92 category */
-      IF Ordercustomer.category NE Customer.Category THEN
-         Customer.category = ordercustomer.category.
+      IF Ordercustomer.Category NE Customer.Category THEN
+         Customer.Category = Ordercustomer.Category.
    END.
 
    /* DCH NEW/MNP */
@@ -307,6 +307,8 @@ ELSE DO:
                 ELSE 
                     ASSIGN llUpdateCust = TRUE.
             END.
+            ELSE IF Customer.Category <> OrderCustomer.Category THEN 
+                ASSIGN Customer.Category = OrderCustomer.Category.
          END.
          ELSE DO:
             IF Order.PayType = FALSE THEN 
@@ -320,6 +322,8 @@ ELSE DO:
                 ELSE 
                     ASSIGN llUpdateCust = TRUE.
             END.
+            ELSE IF Customer.Category <> OrderCustomer.Category THEN 
+                ASSIGN Customer.Category = OrderCustomer.Category.
          END.
 
          IF llUpdateCust THEN DO:
