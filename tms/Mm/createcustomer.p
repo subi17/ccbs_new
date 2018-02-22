@@ -271,15 +271,20 @@ ELSE DO:
 
       /* Update Email and Delivery type for all type of renewal orders */
       IF AVAIL OrderCustomer THEN
+      DO:
          fUpdEmailDelType(Order.OrderId).
+
+         IF Customer.Category <> OrderCustomer.Category THEN 
+             ASSIGN Customer.Category = OrderCustomer.Category.
+      END.   
    END.
    ELSE IF Order.OrderType EQ {&ORDER_TYPE_STC} THEN DO:
       /* bank account is changed with a separate request from stc process */
       ASSIGN Customer.SMSNumber   = OrderCustomer.MobileNumber.
       fUpdateEmail(Order.OrderId).
       /* YPRO migrate YPRO-92 category */
-      IF ordercustomer.pro AND ordercustomer.category NE customer.category THEN
-         Customer.category = ordercustomer.category.
+      IF Ordercustomer.Category NE Customer.Category THEN
+         Customer.Category = Ordercustomer.Category.
    END.
 
    /* DCH NEW/MNP */
@@ -302,6 +307,8 @@ ELSE DO:
                 ELSE 
                     ASSIGN llUpdateCust = TRUE.
             END.
+            ELSE IF Customer.Category <> OrderCustomer.Category THEN 
+                ASSIGN Customer.Category = OrderCustomer.Category.
          END.
          ELSE DO:
             IF Order.PayType = FALSE THEN 
@@ -315,6 +322,8 @@ ELSE DO:
                 ELSE 
                     ASSIGN llUpdateCust = TRUE.
             END.
+            ELSE IF Customer.Category <> OrderCustomer.Category THEN 
+                ASSIGN Customer.Category = OrderCustomer.Category.
          END.
 
          IF llUpdateCust THEN DO:
