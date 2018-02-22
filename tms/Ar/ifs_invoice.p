@@ -491,8 +491,6 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
                END.
                ELSE IF fIsAddLineOrder(Order.OrderID) AND
                   NOT Order.PayType THEN DO:
-                  lcPayType = "68". /* Additional Postpaid Mobile line */
-
                   /* YOT-5618 Handle correctly Way of payment for 66 and 67 */
                   lcPayType = fGetPayType(Order.CustNum).
 
@@ -545,9 +543,7 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
                ELSE lcPayType = "61".  /* Convergent CONTTFH */
             END.
             ELSE IF fIsAddLineTariff(SubInvoice.CLI) AND
-                    NOT MsOwner.PayType THEN DO:
-               lcPayType = "68". /* Additional Postpaid Mobile line */
-               
+                    NOT MsOwner.PayType THEN DO:            
                /* YOT-5618 Handle correctly Way of payment for 66 and 67 */
                lcPayType = fGetPayType(MsOwner.CustNum).
             END.
