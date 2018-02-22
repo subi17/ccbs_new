@@ -52,7 +52,9 @@ FOR EACH ttInput NO-LOCK:
    /* create mnpmessage record */
    fCreateMNPObtenerMessage("obtenerNotificacionesAltaPortabilidadMovilComoDonantePendientesConfirmarRechazar").
    
-   FIND FIRST MNPProcess NO-LOCK WHERE MNPProcess.PortRequest = ttInput.PortRequest NO-ERROR.
+   FIND FIRST MNPProcess NO-LOCK WHERE 
+              MNPProcess.PortRequest = ttInput.PortRequest NO-ERROR.
+
    IF NOT AVAIL MNPProcess THEN DO:   
       
       CREATE MNPProcess.
@@ -115,9 +117,19 @@ FOR EACH ttInput NO-LOCK:
    MNPOperation.MNPSeq = MNPProcess.MNPSeq.
 
    IF NOT NEW MNPProcess THEN DO:
-      lcError = "MNP process already exists".
-      fErrorHandle(lcError).
-      fLogError(lcError + ":" + ttInput.portRequest).
+
+      IF ttInput.PortRequest BEGINS "A05" AND
+         MNPProcess.MNPType = 1 THEN
+         ASSIGN
+            MNPOperation.Sender = {&MNP_SENDER_ADAPTER}
+            MNPOperation.StatusCode = {&MNP_MSG_WAITING_RESPONSE_HANDLE}
+            MNPOperation.ErrorCode = ""
+            MNPOperation.ErrorHandled = 0.
+      ELSE DO:
+         lcError = "MNP process already exists".
+         fErrorHandle(lcError).
+         fLogError(lcError + ":" + ttInput.portRequest).
+      END.
    END.
    ELSE DO:
       MNPOperation.StatusCode = {&MNP_MSG_HANDLED}.

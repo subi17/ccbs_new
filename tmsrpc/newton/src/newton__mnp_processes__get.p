@@ -303,6 +303,11 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    llOngoingMessages = FALSE.
    FOR EACH MNPOperation NO-LOCK WHERE
             MNPOperation.MNPSeq = MnpProcess.MnpSeq:
+      
+      /* Filter out duplicate internal MNP IN process messages */
+      IF MnpProcess.MNPType EQ {&MNP_TYPE_IN} AND
+        (MNPOperation.MessageType EQ "obtenerNotificacionesAltaPortabilidadMovilComoDonantePendientesConfirmarRechazar" OR
+         MNPOperation.MessageType EQ "rechazarSolicitudAltaPortabilidadMovil") THEN NEXT.
 
       lcStructMnpMessage = add_struct(lcArrayMnpMessages, ""). 
       

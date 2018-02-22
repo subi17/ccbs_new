@@ -79,6 +79,21 @@ FOR EACH MNPProcess EXCLUSIVE-LOCK WHERE
    END.
 
 END.
+   
+/* Automatic rejection for duplicate internal porting processes */
+FOR EACH MNPOperation EXCLUSIVE-LOCK WHERE
+         MNPOperation.Sender = {&MNP_SENDER_ADAPTER} AND
+         MNPOperation.StatusCode = {&MNP_MSG_WAITING_RESPONSE_HANDLE},
+   FIRST MNPProcess NO-LOCK WHERE
+         MNPProcess.MNPSeq = MNPOperation.MNPSeq:
+      
+   llOk = fSendRejection(
+         MNPProcess.PortRequest,
+         "RECH_IDENT",
+         OUTPUT lcError).
+   
+   IF llOk THEN MNPOperation.StatusCode = {&MNP_MSG_HANDLED}.
+END.
 
 fLogBasic("Total handled: " + STRING(liHandled) + 
           ", skipped: " + STRING(liSkipped) + 

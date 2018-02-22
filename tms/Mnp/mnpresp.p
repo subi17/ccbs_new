@@ -81,7 +81,10 @@ DO WHILE TRUE
    PUT SCREEN ROW 22 COL 1
       "Processing messages ...                                       ".
    
-   FOR EACH MNPOperation NO-LOCK WHERE MNPOperation.Sender = 1 AND MNPOperation.StatusCode = 5 TENANT-WHERE TENANT-ID() >= 0 
+   FOR EACH MNPOperation NO-LOCK WHERE 
+            MNPOperation.Sender = 1 AND
+            MNPOperation.StatusCode = {&MNP_MSG_WAITING_RESPONSE_HANDLE}
+          TENANT-WHERE TENANT-ID() >= 0 
        liNumMsgs = 1 to 1000 ON ERROR UNDO, THROW:
 
       PUT SCREEN ROW 2 COL 2 STRING(RECID(MNPOperation)).
@@ -1110,6 +1113,9 @@ PROCEDURE pHandleFromASOL2AREC:
 
    DEF BUFFER bMNPSub FOR MNPSub.
    DEF BUFFER bMNPProcess FOR MNPProcess.
+   
+   /* Do not process duplicate internal MNP IN rejections */
+   IF MNPProcess.MNPType EQ 1 THEN RETURN.
 
    FOR EACH MNPSub WHERE
             MNPSub.MNPSeq = MNPProcess.MNPSeq NO-LOCK:
