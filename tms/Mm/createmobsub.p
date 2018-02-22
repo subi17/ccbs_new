@@ -45,6 +45,7 @@
 {Func/create_eventlog.i}
 {Func/fixedlinefunc.i}
 {Func/msisdn_prefix.i}
+{Func/add_lines_request.i}
 
 DEF INPUT  PARAMETER iiMSRequest AS INT  NO-UNDO.
 
