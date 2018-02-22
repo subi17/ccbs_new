@@ -234,12 +234,18 @@ FUNCTION fAddOrderCustomer RETURN LOGICAL
                    INTEGER(OrderCustomer.OutEmailMarketing )).
       add_int(     lcStruct, "post_3rd"   , 
                    INTEGER(OrderCustomer.OutPostMarketing  )).
-      add_string(  lcStruct, "segment"   ,
-                   fgetCustSegment(ordercustomer.CustIdType,
-                                   ordercustomer.selfemployed,
-                                   ordercustomer.pro,
-                                   ordercustomer.custid,  /* YDR-2621 */
-                                   OUTPUT lcCategory)).
+
+      FIND FIRST CustCat NO-LOCK WHERE 
+                 CustCat.brand    EQ Syst.Var:gcBrand       AND
+                 CustCat.category EQ OrderCustomer.Category NO-ERROR.
+      IF AVAIL CustCat AND CustCat.Segment > "" THEN   
+          add_string(lcStruct, "segment", CustCat.Segment).
+      ELSE       
+          add_string(lcStruct, "segment",fgetCustSegment(ordercustomer.CustIdType,
+                                                         ordercustomer.selfemployed,
+                                                         ordercustomer.pro,
+                                                         ordercustomer.custid,  /* YDR-2621 */
+                                                         OUTPUT lcCategory)).
 
       add_int(     lcStruct, "mark_dont_share_personal_data", 
                    INTEGER(OrderCustomer.DontSharePersData  )).                                                                      
