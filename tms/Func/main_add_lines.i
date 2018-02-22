@@ -9,14 +9,10 @@
   CREATED ......: 28.08.13
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
-{Syst/commali.i}
-{Syst/tmsconst.i}
-{Mnp/mnpoutchk.i}
-{Func/cparam2.i}
 {Func/fsubstermreq.i}
+{Func/msisdn_prefix.i}
 {Func/msreqfunc.i}
 {Func/fmakemsreq.i}
-{Func/fgettxt.i}
 {Func/fmakesms.i}
 
 DEF TEMP-TABLE tt_AdditionalSIM NO-UNDO
@@ -236,43 +232,6 @@ FUNCTION fCancelPendingSTCToAddLine RETURNS LOGICAL
    RETURN FALSE.
 
 END.
- 
-FUNCTION fIsMainLineOrderPending RETURNS LOGICAL
-   (INPUT pcIdType AS CHAR,
-    INPUT pcPersonId AS CHAR,
-    INPUT iiExcludeOrderID AS INT):
-
-   DEF BUFFER OrderCustomer FOR OrderCustomer.
-   DEF BUFFER Order FOR Order.
-   DEF BUFFER OrderAction FOR OrderAction.
-   DEF BUFFER CLIType FOR CLIType.
-
-   FOR EACH OrderCustomer NO-LOCK WHERE   
-            OrderCustomer.Brand      EQ Syst.Var:gcBrand AND 
-            OrderCustomer.CustId     EQ pcPersonId AND
-            OrderCustomer.CustIdType EQ pcIdType AND
-            OrderCustomer.RowType    EQ 1,
-      EACH  Order NO-LOCK WHERE
-            Order.Brand              EQ Syst.Var:gcBrand AND
-            Order.orderid            EQ OrderCustomer.Orderid AND
-            Order.OrderType          NE {&ORDER_TYPE_RENEWAL} AND 
-            Order.OrderType          NE {&ORDER_TYPE_STC} AND 
-            LOOKUP(STRING(Order.statuscode),{&ORDER_INACTIVE_STATUSES}) EQ 0,
-       EACH OrderAction NO-LOCK WHERE 
-            OrderAction.Brand = Order.Brand AND
-            OrderAction.OrderId = Order.OrderID AND
-            OrderAction.ItemType = "BundleItem":
-
-      IF iiExcludeOrderID > 0 AND Order.OrderID EQ iiExcludeOrderID THEN NEXT.
-      IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
-                        CLIType.Brand = Syst.Var:gcBrand AND
-                        CLIType.CLIType = OrderAction.ItemKey AND
-                        CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) THEN RETURN TRUE.
-   END.
-
-   RETURN FALSE.
-
-END FUNCTION.
 
 FUNCTION fTermAdditionalSim RETURNS LOGICAL
     (INPUT iiMsSeq       AS INT,

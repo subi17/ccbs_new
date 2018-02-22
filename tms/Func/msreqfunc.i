@@ -15,7 +15,6 @@
 &THEN
 
 &GLOBAL-DEFINE msreqfunc YES
-{Syst/commali.i}
 {Func/cparam2.i}
 
 DEF BUFFER bRequest  FOR MsRequest.
