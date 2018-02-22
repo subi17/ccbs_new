@@ -252,11 +252,17 @@ FUNCTION fAddOrderCustomer RETURN LOGICAL
       ELSE
       DO:
           /* i.e., Old orders */
-          FIND FIRST CustCat NO-LOCK WHERE 
-                     CustCat.brand    EQ Syst.Var:gcBrand       AND
-                     CustCat.category EQ Customer.Category NO-ERROR.
-          IF AVAIL CustCat THEN   
-              add_string(lcStruct, "segment", CustCat.Segment).
+          FIND FIRST Customer WHERE Customer.Brand      = Syst.Var:gcBrand         AND 
+                                    Customer.OrgId      = OrderCustomer.CustId     AND
+                                    Customer.CustidType = OrderCustomer.CustIdType NO-LOCK NO-ERROR.
+          IF AVAIL Customer THEN                                     
+          DO:
+              FIND FIRST CustCat NO-LOCK WHERE 
+                         CustCat.brand    EQ Syst.Var:gcBrand       AND
+                         CustCat.category EQ Customer.Category NO-ERROR.
+              IF AVAIL CustCat THEN   
+                  add_string(lcStruct, "segment", CustCat.Segment).
+          END.
       END.
 
       add_int(     lcStruct, "mark_dont_share_personal_data", 
