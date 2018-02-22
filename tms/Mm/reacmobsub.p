@@ -27,6 +27,7 @@
 {Func/fbankdata.i}
 {Func/fbtc.i}
 {Mc/dpmember.i}
+{Func/add_lines_request.i}
 
 DEFINE INPUT PARAMETER iiMSrequest  AS INTEGER   NO-UNDO.
 

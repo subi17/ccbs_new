@@ -15,6 +15,7 @@
 {Func/dss_matrix.i}
 {Func/dss_request.i}
 {Mc/dpmember.i}
+{Func/add_lines_request.i}
 
 DEF INPUT  PARAMETER iiMSrequest AS INT  NO-UNDO.
 
