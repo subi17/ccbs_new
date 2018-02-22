@@ -46,9 +46,10 @@ FUNCTION fHandleSignature RETURNS CHAR
 
    /* Check that we are handling Tienda or Telesales order */
    
-   IF bOrder.Logistics NE "" AND
+   IF /* bOrder.Logistics NE "" AND*/
       bOrder.ContractID NE "" AND
-      LOOKUP(bOrder.OrderChannel, "Self,TeleSales") > 0 THEN DO:
+      (LOOKUP(bOrder.OrderChannel, {&ORDER_CHANNEL_DIRECT}) > 0 OR
+       LOOKUP(bOrder.OrderChannel, {&ORDER_CHANNEL_DIRECT_RENEWAL}) > 0) THEN DO:
       /* Financed orders cannot be digitally signed */
       ldeInstallment = fGetOfferDeferredPayment(bOrder.Offer,
                                                 bOrder.CrStamp,
