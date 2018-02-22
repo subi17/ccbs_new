@@ -31,7 +31,7 @@
 {Func/fixedlinefunc.i}
 {Func/fsendsms.i}
 {Func/vasfunc.i}
-
+{Func/custfunc.i}
 {Migration/migrationfunc.i}
 
 DEFINE INPUT PARAMETER iiMSRequest AS INTEGER NO-UNDO.
