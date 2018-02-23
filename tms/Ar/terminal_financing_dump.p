@@ -108,7 +108,7 @@ END.
 PROCEDURE pFetchAndWriteData:
 
     DO liCounter = 1 TO NUM-ENTRIES({&TF_BANK_CODES}):
-        EMPTY TEMP-TABLE ttOrderCustomer.
+
         lcTFBank = ENTRY(liCounter,{&TF_BANK_CODES}).
         
         ORDER_LOOP:
@@ -126,6 +126,8 @@ PROCEDURE pFetchAndWriteData:
                   OrderCustomer.OrderId   = Order.OrderId    AND
                   OrderCustomer.RowType   = 1 BY OrderTimeStamp.TimeStamp:
         
+            EMPTY TEMP-TABLE ttOrderCustomer NO-ERROR.
+            
             Func.Common:mTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
             
             IF FixedFee.BillCode EQ "RVTERM" THEN 
