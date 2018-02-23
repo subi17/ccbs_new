@@ -284,79 +284,32 @@ FUNCTION fCheckOngoingMainLineAvailForExtraLine RETURNS INTEGER
 
 END FUNCTION.
 
-FUNCTION fCheckAndAssignOrphanExtraline RETURNS LOGICAL
-   (INPUT iiMainLineOrderId AS INT, 
-    INPUT iiMLMsSeq         AS INT, 
-    INPUT liMLCustNum       AS INT,
-    INPUT icMLCLIType       AS CHAR):
-
-   DEFINE BUFFER lbELMobSub FOR MobSub. 
-   DEFINE BUFFER lbELOrder  FOR Order.
-
-   DEF VAR lcExtraLineCLIType AS CHAR NO-UNDO. 
-   DEF VAR liCount            AS INT  NO-UNDO. 
-   DEF VAR liELCount          AS INT  NO-UNDO. 
-
-   ASSIGN lcExtraLineCLIType = fExtraLineForMainLine(icMLCLIType)
-          liCount            = 0
-          liELCount          = 0.
-
-   CASE lcExtraLineCLIType:
-      WHEN {&AZULMORADAEL}   THEN liELCount = {&AZULMORDADAEXTRALINE}.
-      WHEN {&INTERMINABLEEL} THEN liELCount = {&INTERMINABLEEXTRALINE}.
-   END CASE.
-
-   /* Check existing subscription for mainline */
-   FOR EACH lbELMobSub NO-LOCK WHERE 
-            lbELMobSub.Brand        EQ Syst.Var:gcBrand   AND 
-            lbELMobSub.CLIType      EQ lcExtraLineCLIType AND 
-            lbELMobSub.CustNum      EQ liMLCustNum        AND 
-            lbELMobSub.PayType      EQ FALSE              AND 
-            lbELMobSub.MultiSimId   EQ iiMLMsSeq          AND 
-            lbELMobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}:  
-       liCount = liCount + 1.   
-   END.
-
-   /* Check ongoing order for mainline */
-   FOR EACH lbELOrder NO-LOCK WHERE
-            lbELOrder.Brand        EQ Syst.Var:gcBrand          AND
-            lbELOrder.MultiSimId   EQ iiMainLineOrderId         AND
-            lbELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} AND 
-            lbELOrder.CustNum      EQ liMLCustNum:           
-
-      IF LOOKUP(lbELOrder.StatusCode,{&ORDER_CLOSE_STATUSES}) > 0 THEN NEXT.
-
-      liCount = liCount + 1.
-
-   END.
-
-   IF liCount < liELCount THEN DO:
-      
-      FOR EACH lbELMobSub NO-LOCK WHERE 
-               lbELMobSub.Brand        EQ Syst.Var:gcBrand   AND
-               lbELMobSub.CLIType      EQ lcExtraLineCLIType AND
-               lbELMobSub.CustNum      EQ liMLCustNum        AND
-               lbELMobSub.PayType      EQ FALSE              AND
-               lbELMobSub.MultiSimId   EQ 0                  AND
-               lbELMobSub.MultiSimType EQ 0:
-
-         ASSIGN lbELMobSub.MultiSimId   = iiMLMsSeq 
-                lbELMobSub.MultiSimType = {&MULTISIMTYPE_EXTRALINE}.
-
-         fCreateExtraLineDiscount(lbELMobSub.MsSeq,
-                                  lbELMobSub.CLIType + "DISC",
-                                  TODAY).  
-
-         liCount = liCount + 1.
-
-         IF liCount = liELCount THEN LEAVE.
-
-      END.
-
-   END.
-
-   RETURN TRUE.
-
-END FUNCTION.   
+FUNCTION fExtraLineCountForMainLine RETURN INTEGER 
+    ( INPUT iiMultiSimID AS INT ) :
+        
+    /*This function can be used for Main and Extra Lines Both.    
+      In Case of Main Lines pass the mobsub.msseq as parameter.
+      In Case of Extral Lines pass the mobsub.multisimid as parameter.  
+      Then this function will return the Number of Extra Lines attached to the main line    
+      */                               
+                
+    DEFINE BUFFER bfELMobSub FOR MobSub.
+    DEFINE VARIABLE iiELCount  AS INTEGER NO-UNDO .
+       
+    FOR EACH bfELMobSub NO-LOCK WHERE 
+             bfELMobSub.Brand        =  Syst.Var:gcBrand          AND                 
+             bfELMobSub.multiSimID   =  iiMultiSimID              AND
+             bfELMobsub.multiSimType =  {&MULTISIMTYPE_EXTRALINE} AND 
+             bfELMobSub.paytype      =  NO                        AND 
+             (bfELMobSub.MsStatus    =  {&MSSTATUS_ACTIVE} OR
+              bfELMobSub.MsStatus    =  {&MSSTATUS_BARRED}):                
+                     
+        ASSIGN iiELCount = iiELCount + 1 .           
+                                          
+    END.
+    
+    RETURN iiELCount.
+                                           
+END FUNCTION.                                           
 
 &ENDIF

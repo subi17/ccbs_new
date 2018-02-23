@@ -42,8 +42,8 @@
 {Mm/fbundle.i}
 {Func/fbankdata.i}
 {Func/create_eventlog.i}
-{Func/fixedlinefunc.i}
 {Func/msisdn_prefix.i}
+{Mc/dpmember.i}
 
 DEF INPUT  PARAMETER iiMSRequest AS INT  NO-UNDO.
 
@@ -97,6 +97,7 @@ DEF BUFFER lbMLOrder       FOR Order.
 DEF BUFFER lbMLMobSub      FOR MobSub.
 DEF BUFFER lbMobSubs       FOR MobSub.
 DEF BUFFER lbPriDSSMobSub  FOR MobSub.
+DEF BUFFER bMSCustomer     FOR customer.
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
@@ -448,16 +449,25 @@ IF NOT AVAIL mobsub THEN DO:
                 MobSub.MultiSimType  = Order.MultiSimType       /* Extraline = 3   */
                 llgExtraLine         = YES.
       ELSE DO:
-         fCheckExistingMainLineAvailForExtraLine(MobSub.CLIType,
-                                                 OrderCustomer.CustIdType,
-                                                 OrderCustomer.CustID,
-                                                 OUTPUT liMLMsSeq).
-         IF liMLMsSeq > 0 THEN
-            ASSIGN MobSub.MultiSimID   = liMLMsSeq           /* Mainline Subid  */
-                   MobSub.MultiSimType = Order.MultiSimType  /* Extraline = 3   */
-                   llgExtraLine        = YES.
-      END.
-   END.
+         
+          FIND FIRST bMSCustomer NO-LOCK WHERE 
+                     bMSCustomer.custnum = mobsub.custnum NO-ERROR.
+                     
+          IF AVAILABLE bMSCustomer THEN 
+          DO:                      
+          
+              fCheckExistingMainLineAvailForExtraLine(MobSub.CLIType,
+                                                      bMSCustomer.CustIdType,
+                                                      bMSCustomer.CustID,
+                                                      OUTPUT liMLMsSeq).
+              IF liMLMsSeq > 0 THEN
+              ASSIGN MobSub.MultiSimID   = liMLMsSeq           /* Mainline Subid  */
+                     MobSub.MultiSimType = Order.MultiSimType  /* Extraline = 3   */
+                     llgExtraLine        = YES.
+                   
+          END. /* IF AVAILABLE bMSCustomer */
+       END. /*  ELSE DO: */
+   END. /*  IF Order.MultiSimType */
  
    IF Avail imsi THEN Mobsub.imsi = IMSI.IMSI.
 

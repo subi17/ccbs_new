@@ -32,6 +32,7 @@ DEFINE INPUT PARAMETER iiMSrequest  AS INTEGER   NO-UNDO.
 DEFINE VARIABLE ldCurrTS            AS DECIMAL NO-UNDO.
 
 DEFINE BUFFER bTermMsRequest FOR MsRequest.
+DEFINE BUFFER bCustomer      FOR Customer.
 DEF TEMP-TABLE ttoldmsowner NO-UNDO LIKE msowner.
 
 FIND FIRST MSRequest WHERE
@@ -105,12 +106,14 @@ DEFINE VARIABLE lcAllowedDSS2SubsType  AS CHAR    NO-UNDO.
 DEFINE VARIABLE lcBundleId             AS CHAR    NO-UNDO.
 DEFINE VARIABLE lcBankAccount          AS CHAR    NO-UNDO.
 DEFINE VARIABLE llCallProc             AS LOGICAL NO-UNDO.
+DEFINE VARIABLE iMLMsSeq               AS INTEGER NO-UNDO. 
 
 DEFINE BUFFER bSubMsRequest  FOR MsRequest.
 DEFINE BUFFER bOrder         FOR Order.
 DEFINE BUFFER lbMobSub       FOR MobSub.
 DEFINE BUFFER bMobSub        FOR MobSub.
 DEFINE BUFFER bMLMobSub      FOR MobSub.
+
 
 IF MsRequest.ReqStatus <> 6 THEN RETURN.
 
@@ -133,21 +136,33 @@ DO TRANSACTION:
       RETURN.
    END. /* IF NOT AVAILABLE termMobSub THEN DO: */
 
-   /* Before updating any values, check if it extra line clitype reactivation. 
-      If yes, then check associated main line is not associated to any other 
-      extra line. If associated then reactivation is not allowed */ 
-   IF fCLITypeIsExtraLine(TermMobSub.CLIType) AND
-      NOT CAN-FIND(FIRST bMLMobSub NO-LOCK WHERE 
-                         bMLMobSub.MsSeq        EQ TermMobSub.MultiSimId AND 
-                        (bMLMobSub.MultiSimId   EQ 0                     AND 
-                         bMLMobSub.MultiSimType EQ 0)                    OR
-                        (bMLMobSub.MultiSimId   EQ TermMobSub.MsSeq      AND
-                         bMLMobSub.MultiSimType EQ {&MULTISIMTYPE_PRIMARY})) 
-                         THEN DO:
-      fReqError("Mainline is already associated to other extra line").
-      RETURN.
-   END.                      
-
+   
+   IF fCLITypeIsExtraLine(Termmobsub.CLIType) AND 
+      fExtraLineCountForMainLine(TermMobSub.MultiSimId) > 2 THEN 
+   DO: 
+       
+       FIND FIRST bCustomer NO-LOCK WHERE 
+                  bCustomer.custnum = Termmobsub.custnum NO-ERROR.
+                  
+       IF NOT AVAILABLE bCustomer THEN
+       DO:
+          fReqError("Customer is not available."). 
+          RETURN.
+       END.      
+       
+       fCheckExistingMainLineAvailForExtraLine(INPUT  Termmobsub.CLITYPE ,
+                                               INPUT  bcustomer.CustidType ,
+                                               INPUT  bCustomer.OrgId ,
+                                               OUTPUT iMLMsSeq ) .                                               
+       IF iMLMsSeq = 0 THEN 
+       DO:
+           
+          fReqError("MainLine is already associated to another extra line"). 
+          RETURN.
+           
+       END.                                    
+   END.
+    
    FIND FIRST MSISDN WHERE
               MSISDN.Brand    = Syst.Var:gcBrand        AND
               MSISDN.CLI      = termMobSub.CLI EXCLUSIVE-LOCK NO-ERROR.
