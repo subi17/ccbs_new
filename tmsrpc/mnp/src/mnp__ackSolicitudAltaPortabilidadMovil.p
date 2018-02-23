@@ -42,10 +42,6 @@ IF MNPProcess.MNPType NE {&MNP_TYPE_OUT} THEN
    RETURN appl_err(SUBST("Incorrect MNP type: &1",
                          MNPProcess.MNPType)).
 
-IF MNPProcess.StatusCode NE {&MNP_ST_ASOL} THEN
-   RETURN appl_err(SUBST("Incorrect current MNP status: &1",
-                          MNPProcess.StatusCode)).
-
 FIND FIRST MNPOperation EXCLUSIVE-LOCK WHERE
      MNPOperation.MNPSeq = MNPProcess.MNPSeq AND
      MNPOperation.MessageType = "confirmarSolicitudAltaPortabilidadMovil" AND
@@ -54,6 +50,12 @@ FIND FIRST MNPOperation EXCLUSIVE-LOCK WHERE
      MNPOperation.StatusCode EQ {&MNP_MSG_HANDLED}) NO-ERROR.
 IF NOT AVAIL MNPOperation THEN
    RETURN appl_err(SUBST("Confirmation message not found: &1", lcPortRequest)).
+
+IF MNPOperation.StatusCode EQ {&MNP_MSG_WAITING_CONFIRM} AND
+   MNPProcess.StatusCode NE {&MNP_ST_ASOL} THEN
+   RETURN appl_err(SUBST("&1: Incorrect current MNP process status: &2",
+                          MNPProcess.PortRequest,
+                          MNPProcess.StatusCode)).
    
 FOR EACH MNPSub EXCLUSIVE-LOCK WHERE
          MNPSub.MNPSeq = MNPProcess.MNPSeq AND
