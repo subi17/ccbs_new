@@ -55,6 +55,7 @@ DEFINE VARIABLE lcResellers       AS CHARACTER NO-UNDO.
 
 DEFINE STREAM sFile.
 DEFINE BUFFER bMsRequest FOR MSRequest.
+DEFINE TEMP-TABLE ttOrderCustomer NO-UNDO LIKE OrderCustomer.
 
 FUNCTION fErrorLog RETURN LOGICAL( iiOrderId AS INTEGER, icErrorText AS CHARACTER):
 END.
@@ -107,20 +108,23 @@ END.
 PROCEDURE pFetchAndWriteData:
 
     DO liCounter = 1 TO NUM-ENTRIES({&TF_BANK_CODES}):
-    
+        EMPTY TEMP-TABLE ttOrderCustomer.
         lcTFBank = ENTRY(liCounter,{&TF_BANK_CODES}).
         
         ORDER_LOOP:
         FOR EACH FixedFee NO-LOCK WHERE
-            FixedFee.FinancedResult = {&TF_STATUS_WAITING_SENDING} AND
-            FixedFee.TFBank         = lcTFBank,
+                 FixedFee.FinancedResult  = {&TF_STATUS_WAITING_SENDING},
             FIRST OrderTimeStamp NO-LOCK WHERE
-            OrderTimeStamp.Brand    = Syst.Var:gcBrand AND
-            OrderTimeStamp.OrderId  = FixedFee.OrderID AND
-            OrderTimeStamp.RowType  = {&ORDERTIMESTAMP_DELIVERY} ,
+                  OrderTimeStamp.Brand    = Syst.Var:gcBrand AND
+                  OrderTimeStamp.OrderId  = FixedFee.OrderID AND
+                  OrderTimeStamp.RowType  = {&ORDERTIMESTAMP_DELIVERY},
             FIRST Order NO-LOCK WHERE
-            Order.Brand   = Syst.Var:gcBrand AND
-            Order.OrderId = FixedFee.OrderId :
+                  Order.Brand             = Syst.Var:gcBrand AND
+                  Order.OrderId           = FixedFee.OrderId ,
+            FIRST OrderCustomer NO-LOCK WHERE
+                  OrderCustomer.Brand     = Syst.Var:gcBrand AND
+                  OrderCustomer.OrderId   = Order.OrderId    AND
+                  OrderCustomer.RowType   = 1 BY OrderTimeStamp.TimeStamp:
         
             Func.Common:mTS2Date(Order.CrStamp, OUTPUT ldaOrderDate).
             
@@ -140,16 +144,9 @@ PROCEDURE pFetchAndWriteData:
                     NEXT ORDER_LOOP. 
                 END.
                 CASE SingleFee.BillCode:
-                    WHEN "RVTERM1EF" THEN 
-                        DO:
-                            IF lcTFBank NE "0049" THEN NEXT ORDER_LOOP.
-                        END.
-                    WHEN "RVTERMBSF" THEN 
-                        IF lcTFBank NE "0081" THEN NEXT ORDER_LOOP.
-                    WHEN "RVTERMBCF" THEN 
-                        DO:
-                            IF lcTFBank NE "0225" THEN NEXT ORDER_LOOP.
-                        END.
+                    WHEN "RVTERM1EF" THEN IF lcTFBank NE "0049" THEN NEXT ORDER_LOOP.
+                    WHEN "RVTERMBSF" THEN IF lcTFBank NE "0081" THEN NEXT ORDER_LOOP.
+                    WHEN "RVTERMBCF" THEN IF lcTFBank NE "0225" THEN NEXT ORDER_LOOP.
                     OTHERWISE 
                     DO:
                         fErrorLog(Order.OrderID,"ERROR:Q25 fee financed by Yoigo").
@@ -177,60 +174,73 @@ PROCEDURE pFetchAndWriteData:
                     IF lcTFBank NE {&TF_BANK_UNOE} AND
                         FixedFee.BillCode NE "RVTERM" THEN NEXT ORDER_LOOP.
                 END.
-        
             END.
             /* YTS-8634 */
-            ELSE IF Order.Reseller EQ "" AND 
-                    FixedFee.BillCode EQ "RVTERM" THEN 
-                DO:
-                END.
+            ELSE IF Order.Reseller EQ "" AND  
+                 FixedFee.BillCode EQ "RVTERM" THEN 
+            DO:
+            END.
                 /* indirect channels */
-                ELSE IF LOOKUP(Order.Reseller,lcResellers) > 0 THEN 
-                    DO:
+            ELSE IF LOOKUP(Order.Reseller,lcResellers) > 0 THEN 
+            DO:
+                FIND Reseller NO-LOCK WHERE
+                     Reseller.Brand    = Syst.Var:gcBrand AND
+                     Reseller.Reseller = Order.Reseller NO-ERROR.
         
-                        FIND Reseller NO-LOCK WHERE
-                            Reseller.Brand = Syst.Var:gcBrand AND
-                            Reseller.Reseller = Order.Reseller NO-ERROR.
-        
-                        IF NOT AVAILABLE Reseller THEN 
-                        DO:
-                            fErrorLog(Order.OrderID,
-                                SUBST("ERROR:Unknown reseller: &1", Order.reseller)).
-                            NEXT ORDER_LOOP.
-                        END.
+                IF NOT AVAILABLE Reseller THEN 
+                DO:
+                    fErrorLog(Order.OrderID,
+                        SUBST("ERROR:Unknown reseller: &1", Order.reseller)).
+                    NEXT ORDER_LOOP.
+                END.
               
-                        IF FixedFee.BillCode NE "RVTERM" THEN 
-                        DO: 
-                            FIND FIRST ResellerTF NO-LOCK USE-INDEX ResellerTF WHERE
-                                ResellerTF.Brand = Reseller.Brand AND
-                                ResellerTF.Reseller = Reseller.Reseller AND
-                                ResellerTF.ValidFrom <= ldaOrderDate NO-ERROR.
-                            IF NOT AVAILABLE ResellerTF THEN 
-                            DO:
-                                fErrorLog(Order.OrderID,SUBST("ERROR:Missing ResellerTF: &1",
-                                    Reseller.Reseller)).
-                                NEXT ORDER_LOOP. 
-                            END.
-        
-                            IF ResellerTF.TFBank NE lcTFBank THEN 
-                            DO:
-                                NEXT ORDER_LOOP.
-                            END.
-                        END.
-        
-                    END.
-                    ELSE 
+                IF FixedFee.BillCode NE "RVTERM" THEN 
+                DO: 
+                    FIND FIRST ResellerTF NO-LOCK USE-INDEX ResellerTF WHERE
+                               ResellerTF.Brand      = Reseller.Brand AND
+                               ResellerTF.Reseller   = Reseller.Reseller AND
+                               ResellerTF.ValidFrom <= ldaOrderDate NO-ERROR.
+                    IF NOT AVAILABLE ResellerTF THEN 
                     DO:
-                        fErrorLog(Order.OrderID,SUBST("WARNING:Unsupported reseller: &1",
-                            Order.Reseller)).
+                        fErrorLog(Order.OrderID,SUBST("ERROR:Missing ResellerTF: &1",
+                            Reseller.Reseller)).
                         NEXT ORDER_LOOP. 
                     END.
+                    IF ResellerTF.TFBank NE lcTFBank THEN 
+                        NEXT ORDER_LOOP.
+                END.
+            END.
+            ELSE 
+            DO:
+                fErrorLog(Order.OrderID,SUBST("WARNING:Unsupported reseller: &1",
+                    Order.Reseller)).
+                NEXT ORDER_LOOP. 
+            END.
     
             FIND Mobsub NO-LOCK WHERE
-                Mobsub.MsSeq = Order.MsSeq NO-ERROR.
+                 Mobsub.MsSeq = Order.MsSeq NO-ERROR.
             IF NOT AVAILABLE Mobsub THEN 
             DO:
                 NEXT ORDER_LOOP.
+            END.
+            IF FixedFee.BillCode EQ "RVTERM" THEN DO:
+                FIND FIRST Customer NO-LOCK WHERE
+                     Customer.Custnum = Mobsub.Custnum NO-ERROR.
+                IF NOT AVAIL Customer THEN NEXT.
+                BUFFER-COPY Customer EXCEPT Language TO ttOrderCustomer.
+            END.
+            ELSE 
+                BUFFER-COPY OrderCustomer TO ttOrderCustomer.
+        
+            CASE ttOrderCustomer.CustIdType:
+                WHEN "NIF" THEN .
+                WHEN "NIE" THEN .
+                OTHERWISE DO: 
+                    fErrorLog(Order.OrderID,
+                           SUBST("ERROR:Unsupported customer ID type: &1",
+                                 ttOrderCustomer.CustIdType)).
+                    NEXT ORDER_LOOP.
+                END.
             END.
            
             IF FixedFee.BillCode EQ "RVTERM" THEN
@@ -265,29 +275,21 @@ PROCEDURE pFetchAndWriteData:
             END.
     
             IF CAN-FIND(FIRST bMsRequest WHERE
-                bMsRequest.MsSeq = Order.MsSeq AND
-                bMsRequest.ReqType = 10 AND
-                LOOKUP(STRING(bMsRequest.ReqStat),
-                {&REQ_INACTIVE_STATUSES}) = 0) THEN 
-            DO:
-                NEXT ORDER_LOOP.
-            END.
+                              bMsRequest.MsSeq   = Order.MsSeq AND
+                              bMsRequest.ReqType = 10 AND
+                LOOKUP(STRING(bMsRequest.ReqStat), {&REQ_INACTIVE_STATUSES}) = 0) THEN NEXT ORDER_LOOP.
+            
+            IF Mobsub.Custnum NE OrderCustomer.Custnum THEN NEXT ORDER_LOOP.
     
             /* check if ACC is already done during order creation and 
                delivery time */  
             IF CAN-FIND(FIRST bMsRequest WHERE
-                bMsRequest.MsSeq = Order.MsSeq AND
-                bMsRequest.ReqType = 10 AND
-                bMsRequest.ActStamp >= Order.CrStamp AND
-                bMsRequest.ReqStatus NE 4) THEN 
-            DO:
-                NEXT ORDER_LOOP.
-            END.
+                              bMsRequest.MsSeq     = Order.MsSeq   AND
+                              bMsRequest.ReqType   = 10            AND
+                              bMsRequest.ActStamp >= Order.CrStamp AND
+                              bMsRequest.ReqStatus NE 4)           THEN NEXT ORDER_LOOP.
     
-            IF FixedFee.EndPeriod <= liCurrentPeriod THEN 
-            DO:
-                NEXT ORDER_LOOP.
-            END.
+            IF FixedFee.EndPeriod <= liCurrentPeriod THEN NEXT ORDER_LOOP.
         
             ASSIGN
                 liFFItemCount   = 0
