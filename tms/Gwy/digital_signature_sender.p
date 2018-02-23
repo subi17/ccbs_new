@@ -243,7 +243,7 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
       add_string(pcStruct,"medium.type","").
       add_string(pcStruct,"medium.number",bOrderCustomer.ContactNum).
       add_string(pcStruct,"medium.postCode",bOrderCustomer.ZipCode).
-      add_string(pcStruct,"medium.stateOrProvidence",bOrderCustomer.Region).
+      add_string(pcStruct,"medium.stateOrProvince",bOrderCustomer.Region).
       add_string(pcStruct,"medium.streetOne",bOrderCustomer.Street).
       add_string(pcStruct,"medium.streetTwo",bOrderCustomer.StreetType). /* ?? */
 
@@ -264,7 +264,7 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
          add_string(pcStruct,"sellType","SIM_ONLY").
 
       add_string(pcStruct,"crmId",bOrder.OrderChannel).
-      add_string(pcStruct,"dealerId",bOrder.Salesman).
+      add_string(pcStruct,"dealerId",bOrder.Reseller).
       add_string(pcStruct,"contractId",bOrder.ContractID).
       add_string(pcStruct,"orderId",STRING(bOrderCustomer.OrderId)).
       add_string(pcStruct,"sfId",bOrder.Salesman).

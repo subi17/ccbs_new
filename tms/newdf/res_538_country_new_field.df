@@ -1,0 +1,12 @@
+ADD FIELD "CountryISO3" OF "Country" AS CHARACTER
+  FORMAT "x(3)"
+  INITIAL ""
+  LABEL "Country ISO-3"
+  COLUMN-LABEL "Country ISO-3"
+  HELP "ISO-3 country code"
+  ORDER 40
+
+ADD INDEX "CountryISO" ON "Country"
+  AREA "Sta_Index_2"
+  INDEX-FIELD "CountryISO3" ASCENDING
+
