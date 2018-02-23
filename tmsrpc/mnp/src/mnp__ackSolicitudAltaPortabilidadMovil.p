@@ -72,7 +72,7 @@ CREATE MNPOperation.
 ASSIGN MNPOperation.MNPOperationID = NEXT-VALUE(MNPOperSeq)
        MNPOperation.MNPSeq = MNPProcess.MNPSeq
        MNPOperation.CreatedTS = {&nowts} /*ttInput.statusTS */
-       MNPOperation.Sender = 2
+       MNPOperation.Sender = {&MNP_SENDER_ADAPTER}
        MNPOperation.SentTS = {&nowts} /* tms receive time */
        MNPOperation.MessageType = "ackSolicitudAltaPortabilidadMovil"
        MNPOperation.StatusCode = {&MNP_MSG_HANDLED}.

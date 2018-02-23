@@ -52,8 +52,15 @@ FOR EACH ttInput NO-LOCK:
    /* create mnpmessage record */
    fCreateMNPObtenerMessage("obtenerNotificacionesAltaPortabilidadMovilComoDonantePendientesConfirmarRechazar").
    
-   FIND FIRST MNPProcess NO-LOCK WHERE 
-              MNPProcess.PortRequest = ttInput.PortRequest NO-ERROR.
+   /* Recognize duplicate MNP OUT request for internal MNP IN request */
+   IF ttInput.PortRequest BEGINS "A05" AND
+      ttInput.FormRequest > "" THEN
+      FIND FIRST MNPProcess NO-LOCK WHERE 
+                 MNPProcess.FormRequest = ttInput.FormRequest NO-ERROR.
+
+   IF NOT AVAIL MNPProcess THEN
+      FIND FIRST MNPProcess NO-LOCK WHERE 
+                 MNPProcess.PortRequest = ttInput.PortRequest NO-ERROR.
 
    IF NOT AVAIL MNPProcess THEN DO:   
       
