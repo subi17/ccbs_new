@@ -887,14 +887,14 @@ FUNCTION fCheckFixedLineStatusForMainLine RETURNS LOGICAL
 END FUNCTION.
 
 FUNCTION fGetMobileLineCompareFee RETURNS DECIMAL
-    (iiMsSeq      AS INTEGER,
+    (icCLIType    AS INTEGER,
      icBaseBundle AS CHARACTER,
      idaActivated AS DATE ):
 
     DEF BUFFER bMobileLine    FOR CliType.
     DEF BUFFER bDayCampaign   FOR DayCampaign.
     DEF BUFFER bFMItem        FOR FMItem.
-    DEF BUFFER bMsOwner       FOR MsOwner.
+    DEF BUFFER bCliType       FOR CliType.
 
     DEF VAR lcFMPriceList             AS CHAR NO-UNDO.
     DEF VAR ldeActivatedTS            AS DECI NO-UNDO.
@@ -913,16 +913,30 @@ FUNCTION fGetMobileLineCompareFee RETURNS DECIMAL
         DO:
             ASSIGN ldeActivatedTS = Func.Common:mDate2TS(idaActivated).
 
-            FIND FIRST bMsOwner WHERE bMsOwner.MsSeq = iiMsSeq AND bMsOwner.TSBegin <= ldeActivatedTS NO-LOCK NO-ERROR.
-            IF NOT AVAILABLE bMsOwner THEN
-                FIND LAST bMsOwner WHERE bMsOwner.MsSeq = iiMsSeq AND bMsOwner.TSBegin > ldeActivatedTS NO-LOCK NO-ERROR.
+            FIND FIRST bCliType WHERE
+                       bCliType.Brand   = Syst.Var:gcBrand AND
+                       bCliType.CLIType = icCliType        NO-LOCK NO-ERROR.
+            IF AVAIL bCliType THEN
+            DO:
+                FOR EACH PListConf USE-INDEX RatePlan NO-LOCK WHERE
+                         PListConf.Brand    = Syst.Var:gcBrand   AND
+                         PListConf.RatePlan = bCliType.PricePlan AND
+                         PListConf.dFrom   <= idaActivated       AND
+                         PListConf.dTo     >= idaActivated,
+                   FIRST PriceList OF PListConf NO-LOCK,
+                   FIRST bFMItem NO-LOCK WHERE
+                         bFMItem.Brand     = Syst.Var:gcBrand      AND
+                         bFMItem.FeeModel  = bDayCampaign.FeeModel AND
+                         bFMItem.PriceList = PriceList.PriceList   AND 
+                         bFMitem.FromDate  <= idaActivated         AND
+                         bFMitem.ToDate    >= idaActivated                  
+                   BY PListConf.Prior:
+                   lcFMPriceList = PListConf.PriceList.
+                   LEAVE.
+                END.
+            END.
 
-            IF AVAIL bMsOwner THEN 
-                ASSIGN lcFMPriceList = fFeeModelPriceList(bMsOwner.AgrCust,
-                                                          bMsOwner.BillTarget,
-                                                          bDayCampaign.FeeModel,
-                                                          idaActivated).    
-            ELSE 
+            IF lcFMPriceList = "" THEN 
                 ASSIGN lcFMPriceList = "COMMON".
 
             FIND FIRST bFMItem WHERE
