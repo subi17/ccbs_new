@@ -917,7 +917,7 @@ FUNCTION fGetMobileLineCompareFee RETURNS DECIMAL
             IF NOT AVAILABLE bMsOwner THEN
                 FIND LAST bMsOwner WHERE bMsOwner.MsSeq = iiMsSeq AND bMsOwner.TSBegin > ldeActivatedTS NO-LOCK NO-ERROR.
 
-            IF AVAIL MsOwner THEN 
+            IF AVAIL bMsOwner THEN 
                 ASSIGN lcFMPriceList = fFeeModelPriceList(bMsOwner.AgrCust,
                                                           bMsOwner.BillTarget,
                                                           bDayCampaign.FeeModel,
