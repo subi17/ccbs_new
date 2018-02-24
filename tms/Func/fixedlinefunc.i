@@ -887,7 +887,7 @@ FUNCTION fCheckFixedLineStatusForMainLine RETURNS LOGICAL
 END FUNCTION.
 
 FUNCTION fGetMobileLineCompareFee RETURNS DECIMAL
-    (icCLIType    AS INTEGER,
+    (icCLIType    AS CHARACTER,
      icBaseBundle AS CHARACTER,
      idaActivated AS DATE ):
 
