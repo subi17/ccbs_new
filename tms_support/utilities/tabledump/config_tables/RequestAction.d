@@ -1130,3 +1130,12 @@
 "1" 95 "CONTDSL3G" 23/01/18 31/12/49 "DayCampaign" "FLEX_5GB_UPSELL" 1 0 1210
 "1" 0 "CONTDSL3G" 23/01/18 31/12/49 "DayCampaign" "INT_VOICE100" 1 0 1211
 "1" 0 "CONTDSL3G" 23/01/18 31/12/49 "DayCampaign" "SMS5000" 1 0 1212
+"1" 0 "" 01/01/18 31/12/49 "SMS" "STC_Requested_Any_to_Cvg" 13 1 1213
+"1" 0 "" 01/01/18 31/12/49 "SMS" "STC_DONE_28_to_29" 13 1 1214
+"1" 0 "" 01/01/18 31/12/49 "SMS" "STC_Requested_28_to_29" 13 1 1215
+"1" 0 "" 01/01/18 31/12/49 "SMS" "STC_DONE_29_to_28" 13 1 1216
+"1" 0 "" 01/01/18 31/12/49 "SMS" "STC_Requested_29_to_28" 13 1 1217
+"1" 0 "" 01/01/18 31/12/49 "SMS" "STC_DONE_28_to_NoMainline" 13 1 1218
+"1" 0 "" 01/01/18 31/12/49 "SMS" "STC_Requested_28_to_NoMainline" 13 1 1219
+"1" 0 "" 01/01/18 31/12/49 "SMS" "STC_DONE_29_to_NoMainline" 13 1 1220
+"1" 0 "" 01/01/18 31/12/49 "SMS" "STC_Requested_29_to_NoMainline" 13 1 1221
