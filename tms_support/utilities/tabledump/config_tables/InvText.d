@@ -1807,7 +1807,16 @@ nuevo telefono. Llamanos lo antes posible al 622 para confirmar tus datos, la ll
 113 29/09/08 20/11/12 "SMS" "STC_DONE" 1 "STC Done" "Your subscription change has been done. You now have #CLITYPE. More information in yoigo.com or call 622" 5 5 "" "" "I" "1" 0 0 0 "" no "" "" "R2" "" "STC" yes "" "" 0 "" "" no
 114 29/09/08 04/02/14 "SMS" "STC_DONE" 1 "STC Done" "Ya esta hecho el cambio de suscripcion que pediste, tienes #CLITYPE. Mas info sobre tu tarifa en www.yoigo.com o llamando al 622." 1 5 "" "" "I" "1" 0 0 0 "" no "" "" "R2" "" "STC" yes "" "" 0 "" "" no
 473 05/02/14 31/12/49 "SMS" "STC_DONE" 1 "STC Done" "Ya esta hecho el cambio de tarifa que pediste, ahora tienes #CLITYPE. Tienes toda la info sobre tu tarifa en www.yoigo.com" 1 5 "" "" "I" "1" 0 0 0 "" no "" "" "R2" "" "" yes "" "" 0 "" "" no
+566 07/02/18 31/12/49 "SMS" "STC_DONE_28_to_29" 1 "" "" 1 0 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes "stc/done-28-29" "" 0 "" "monthlyCost=9|msisdn=#MSISDN" yes
+570 07/02/18 31/12/49 "SMS" "STC_DONE_28_to_NoMainline" 1 "" "" 1 0 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes "stc/done-28-no-mainline" "" 0 "" "monthlyCost=14|msisdn=#MSISDN" yes
+568 07/02/18 31/12/49 "SMS" "STC_DONE_29_to_28" 1 "" "" 1 0 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes "stc/done-29-28" "" 0 "" "monthlyCost=0|msisdn=#MSISDN" yes
+572 07/02/18 31/12/49 "SMS" "STC_DONE_29_to_NoMainline" 1 "" "" 1 0 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes "stc/done-29-no-mainline" "" 0 "" "monthlyCost=14|msisdn=#MSISDN" yes
 474 05/02/14 31/12/49 "SMS" "STC_Requested" 1 "STC Requested SMS" "Tu cambio a la tarifa #CLITYPE se hara el #DATE. Si no lo pediste llama al 622. +info en www.yoigo.com" 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R1" "" "" yes "" "" 0 "" "" no
+567 07/02/18 31/12/49 "SMS" "STC_Requested_28_to_29" 1 "" "" 1 0 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes "stc/req-28-29" "" 0 "" "monthlyCost=9|msisdn=#MSISDN" yes
+571 07/02/18 31/12/49 "SMS" "STC_Requested_28_to_NoMainline" 1 "" "" 1 0 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes "stc/req-28-no-mainline" "" 0 "" "monthlyCost=14|msisdn=#MSISDN" yes
+569 07/02/18 31/12/49 "SMS" "STC_Requested_29_to_28" 1 "" "" 1 0 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes "stc/req-29-28" "" 0 "" "monthlyCost=0|msisdn=#MSISDN" yes
+573 07/02/18 31/12/49 "SMS" "STC_Requested_29_to_NoMainline" 1 "" "" 1 0 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes "stc/req-29-no-mainline" "" 0 "" "monthlyCost=14|msisdn=#MSISDN" yes
+565 07/02/18 31/12/49 "SMS" "STC_Requested_Any_to_Cvg" 1 "" "" 1 0 "" "" "" "1" 0 0 0 "" no "" "" "" "" "" yes "stc/req-to-cvg" "" 0 "" "cliType=#CLITYPE" yes
 535 29/05/17 31/12/49 "SMS" "TARJ10Act" 1 "Yoigo info:Welcome SMS  - New adds LA PREPAGO 1GB + 20min" "Yoigo info: Bienvenido a La Prepago de 1 GB: 1GB a alta veloc hasta 4G y 20 min gratis por 8,5 Eur/mes. Despues llamar 3 cent/min + 20 cent establec. IVA incl." 1 5 "" "" "" "1" 0 0 0 "" no "" "" "R2" "" "Data_Bundle" yes "" "" 0 "" "" no
 536 29/05/17 31/12/49 "SMS" "TARJ10DeAct" 1 "Warning SMS - Not activation or renewal because not enough balance" "Yoigo info: Necesitas un saldo minimo de 7,03 Eur para renovar el GB y los
 minutos de tu tarifa. Recarga ahora o navega a baja veloc. a 3,63 cent/MB
