@@ -91,6 +91,9 @@ DEF VAR llAddline20Disc AS LOGICAL NO-UNDO.
 /* q25refinance_remaining Quota 25 refinance remaining amount */
 DEF VAR ldeQ25RefiRemain AS DECIMAL NO-UNDO.
 
+DEF VAR ldOriginalFee AS DECIMAL NO-UNDO.
+DEF VAR ldNewFee      AS DECIMAL NO-UNDO.
+
 DEF BUFFER bCLIType        FOR CLIType.
 DEF BUFFER OldCLIType      FOR CLIType.
 DEF BUFFER lbMobSub        FOR MobSub.
@@ -483,7 +486,7 @@ IF NOT MobSub.PayType THEN DO:
             DayCampaign.TermFeeModel NE "" AND
             DayCampaign.TermFeeCalc > 0 NO-LOCK BY DCCLI.ValidFrom DESC:
 
-      ldePeriodFee = 0.
+      ASSIGN ldNewFee = 0 ldOriginalFee = 0 ldePeriodFee = 0.
    
       IF DCCLI.Amount NE ? THEN ldePeriodFee = DCCLI.Amount.
       ELSE DO:
@@ -515,15 +518,28 @@ IF NOT MobSub.PayType THEN DO:
             RETURN appl_err(SUBST("Current CLIType entry &1 not found",
                                   lcOrigCLIType)).
 
-         IF DCCLI.DCEvent BEGINS "TERM" THEN DO:
-            IF OldCLIType.CompareFee <= CLIType.CompareFee AND
-               NOT (LOOKUP(OldCLIType.CliType,"CONT7,CONTD9") > 0 
-                    AND CLIType.CLIType EQ "CONT8")
-               THEN NEXT.
+         IF DCCLI.DCEvent BEGINS "TERM" THEN 
+         DO:
+            IF fIsConvergentORFixedOnly(CLIType.CLIType) OR fIsConvergentORFixedOnly(OldCLIType.CLIType) THEN 
+            DO:
+                ASSIGN 
+                    ldOriginalFee = fGetMobileLineCompareFee(OldCLIType.CLIType, OldCLIType.BaseBundle, DCCLI.ValidFrom)
+                    ldNewFee      = fGetMobileLineCompareFee(CLIType.CLIType   , CLIType.BaseBundle   , TODAY).
+
+                IF ldOriginalFee <= ldNewFee THEN
+                    NEXT.
+            END.
+            ELSE
+            DO:
+                IF OldCLIType.CompareFee <= CLIType.CompareFee AND
+                   NOT (LOOKUP(OldCLIType.CliType,"CONT7,CONTD9") > 0 
+                        AND CLIType.CLIType EQ "CONT8")
+                   THEN NEXT.
+            END.   
          END.
-         ELSE IF DCCLI.DCEvent BEGINS "FTERM" AND
-            fIsConvergenceTariff(CLIType.CLIType) AND
-            OldCLIType.CompareFee <= CLIType.CompareFee THEN NEXT.
+         /* When STCed between convergent tariffs we exclude FTERM and TVTERM from termination */
+         ELSE IF (DCCLI.DCEvent BEGINS "FTERM" OR DCCLI.DCEvent BEGINS "TVTERM") AND
+                 fIsConvergentORFixedOnly(CLIType.CLIType) THEN NEXT.
       END.
          
       ldtTo = DATETIME(DCCLI.ValidTo,0).

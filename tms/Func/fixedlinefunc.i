@@ -17,6 +17,7 @@
 {Func/create_eventlog.i}
 {Func/matrix.i}
 {Func/extralinefunc.i}
+{Func/fcustpl.i}
 
 /* Function makes new MSOwner when subscription is partially
    terminated or mobile part order closed. Calling program must have
@@ -884,5 +885,75 @@ FUNCTION fCheckFixedLineStatusForMainLine RETURNS LOGICAL
    RETURN FALSE.
 
 END FUNCTION.
+
+FUNCTION fGetMobileLineCompareFee RETURNS DECIMAL
+    (icCLIType    AS CHARACTER,
+     icBaseBundle AS CHARACTER,
+     idaActivated AS DATE ):
+
+    DEF BUFFER bMobileLine    FOR CliType.
+    DEF BUFFER bDayCampaign   FOR DayCampaign.
+    DEF BUFFER bFMItem        FOR FMItem.
+    DEF BUFFER bCliType       FOR CliType.
+
+    DEF VAR lcFMPriceList             AS CHAR NO-UNDO.
+    DEF VAR ldeActivatedTS            AS DECI NO-UNDO.
+    DEF VAR ldeFee                    AS DECI NO-UNDO.
+
+    FIND FIRST bMobileLine WHERE
+               bMobileLine.Brand   = Syst.Var:gcBrand AND
+               bMobileLine.CLIType = icBaseBundle     NO-LOCK NO-ERROR.
+    IF AVAIL bMobileLine THEN 
+        ASSIGN ldeFee = bMobileLine.CompareFee.
+    ELSE
+    DO:
+        FIND FIRST bDayCampaign WHERE bDayCampaign.Brand   = Syst.Var:gcBrand AND 
+                                      bDayCampaign.DCEvent = icBaseBundle     NO-LOCK NO-ERROR.
+        IF AVAIL bDayCampaign AND bDayCampaign.FeeModel <> "" THEN 
+        DO:
+            ASSIGN ldeActivatedTS = Func.Common:mDate2TS(idaActivated).
+
+            FIND FIRST bCliType WHERE
+                       bCliType.Brand   = Syst.Var:gcBrand AND
+                       bCliType.CLIType = icCliType        NO-LOCK NO-ERROR.
+            IF AVAIL bCliType THEN
+            DO:
+                FOR EACH PListConf USE-INDEX RatePlan NO-LOCK WHERE
+                         PListConf.Brand    = Syst.Var:gcBrand   AND
+                         PListConf.RatePlan = bCliType.PricePlan AND
+                         PListConf.dFrom   <= idaActivated       AND
+                         PListConf.dTo     >= idaActivated,
+                   FIRST PriceList OF PListConf NO-LOCK,
+                   FIRST bFMItem NO-LOCK WHERE
+                         bFMItem.Brand     = Syst.Var:gcBrand      AND
+                         bFMItem.FeeModel  = bDayCampaign.FeeModel AND
+                         bFMItem.PriceList = PriceList.PriceList   AND 
+                         bFMitem.FromDate  <= idaActivated         AND
+                         bFMitem.ToDate    >= idaActivated                  
+                   BY PListConf.Prior:
+                   lcFMPriceList = PListConf.PriceList.
+                   LEAVE.
+                END.
+            END.
+
+            IF lcFMPriceList = "" THEN 
+                ASSIGN lcFMPriceList = "COMMON".
+
+            FIND FIRST bFMItem WHERE
+                       bFMItem.Brand     = Syst.Var:gcBrand        AND
+                       bFMItem.FeeModel  = bDayCampaign.FeeModel   AND
+                       bFMItem.PriceList = lcFMPriceList           AND
+                       bFMItem.FromDate <= idaActivated            AND
+                       bFMItem.ToDate   >= idaActivated            NO-LOCK NO-ERROR.
+            IF AVAIL bFMItem THEN 
+                ASSIGN ldeFee = bFMItem.Amount.  
+        END.
+        ELSE 
+            ASSIGN ldeFee = 0.  
+    END.
+
+    RETURN ldeFee.
+
+END FUNCTION. 
 
 &ENDIF

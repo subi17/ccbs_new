@@ -31,7 +31,7 @@
 {Func/fixedlinefunc.i}
 {Func/fsendsms.i}
 {Func/vasfunc.i}
-
+{Func/custfunc.i}
 {Migration/migrationfunc.i}
 
 DEFINE INPUT PARAMETER iiMSRequest AS INTEGER NO-UNDO.
@@ -239,6 +239,21 @@ IF MsRequest.ReqCParam4 = "" THEN DO:
       fReqError("Unknown old CLIType").
       RETURN.
    END.
+   
+   IF MobSub.TerritoryOwner <> "FIBMM02" THEN
+   DO:
+       IF bOldType.FixedLineType EQ {&FIXED_LINE_TYPE_FIBER} AND 
+          CLIType.FixedLineType  EQ {&FIXED_LINE_TYPE_FIBER} AND
+          (bOldType.FixedLineDownload <> CLIType.FixedLineDownload OR bOldType.FixedLineUpload <> CLIType.FixedLineUpload) THEN
+       DO:   
+           RUN pSpeedChangeRequestForProvisioning.
+           IF RETURN-VALUE NE "" THEN
+           DO:
+               fReqError(RETURN-VALUE).
+               RETURN.
+           END. 
+       END.    
+   END.
 
    RUN pInitialize.
    RUN pFeesAndServices.
@@ -300,6 +315,33 @@ PROCEDURE pInitialize:
    
 END PROCEDURE.
 
+PROCEDURE pSpeedChangeRequestForProvisioning:
+    DEF VAR liOrderId          AS INTE NO-UNDO.
+
+    FOR EACH  Order WHERE Order.MsSeq = Mobsub.MsSeq NO-LOCK,
+        FIRST FusionMessage NO-LOCK WHERE FusionMessage.OrderId = Order.OrderId USE-INDEX OrderId:
+
+        IF (FusionMessage.MessageType <> {&FUSIONMESSAGE_TYPE_CREATE_ORDER} AND 
+            (FusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_CREATE_ORDER} AND FusionMessage.MessageStatus <> {&FUSION_ORDER_STATUS_FINALIZED})) THEN
+            NEXT.
+
+        ASSIGN liOrderId = Order.OrderId.
+
+        LEAVE.
+    END.
+
+    IF liOrderId > 0 THEN
+    DO:
+        RUN Gwy/masmovil_speed_change.p(Order.OrderId, CLIType.FixedLineDownload, CLIType.FixedLineUpload).
+        IF RETURN-VALUE NE "" THEN
+            RETURN "Fixed line fiber speed change request failed with " + RETURN-VALUE.
+        ELSE 
+            RETURN "".    
+    END.
+
+    RETURN "Fixed line order failed to identify.".    
+
+END PROCEDURE.
 
 PROCEDURE pFeesAndServices:
 
@@ -1542,7 +1584,10 @@ PROCEDURE pFinalize:
 END PROCEDURE.
 
 PROCEDURE pUpdateCustomer:
+    DEF VAR lcCategory AS CHAR NO-UNDO.
+
     DEF BUFFER bMobsub FOR Mobsub.    
+
     IF (bNewTariff.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} OR Mobsub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) AND
       Customer.DelType NE {&INV_DEL_TYPE_NO_DELIVERY}                                                                 AND
       NOT CAN-FIND(FIRST bMobSub NO-LOCK WHERE
@@ -1553,15 +1598,29 @@ PROCEDURE pUpdateCustomer:
                          bMobSub.MsStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE}) THEN 
         RUN pUpdateCustomerDelType.
 
-    IF AVAIL Order AND Order.OrderType = {&ORDER_TYPE_STC}                                                AND 
-       (bOldType.Paytype = {&CLITYPE_PAYTYPE_PREPAID}  AND CLIType.PayType = {&CLITYPE_PAYTYPE_POSTPAID}) OR 
-       (bOldType.Paytype = {&CLITYPE_PAYTYPE_POSTPAID} AND CLIType.PayType = {&CLITYPE_PAYTYPE_POSTPAID}) THEN 
+    IF AVAIL Order AND Order.OrderType = {&ORDER_TYPE_STC} THEN 
     DO:
         FIND FIRST OrderCustomer WHERE OrderCustomer.Brand   = Syst.Var:gcBrand                            AND
                                        OrderCustomer.OrderID = Order.OrderId                      AND
                                        OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-LOCK NO-ERROR.
         IF AVAIL OrderCustomer AND OrderCustomer.Category > "" THEN                                        
             RUN pUpdateCustomerCategory(INPUT OrderCustomer.Category).
+    END.
+    ELSE
+    DO:
+        FIND FIRST CustCat WHERE
+                   Custcat.Brand    EQ Syst.Var:gcBrand  AND
+                   Custcat.category EQ Customer.Category NO-LOCK NO-ERROR.
+        IF AVAIL CustCat THEN
+        DO:           
+            fgetCustSegment(Customer.CustIdType,
+                            CustCat.SelfEmployed,
+                            CustCat.Pro, 
+                            Customer.OrgId,
+                            OUTPUT lcCategory).
+            IF Customer.Category <> lcCategory THEN 
+                RUN pUpdateCustomerCategory(INPUT lcCategory).
+        END.
     END.
 
     FIND CURRENT Customer NO-LOCK.
