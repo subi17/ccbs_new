@@ -779,7 +779,7 @@ PROCEDURE pFeeComparison:
       IF NOT AVAILABLE bCLIType THEN RETURN.
 
       IF fIsConvergentORFixedOnly(bCLIType.CLIType) AND NOT (icDCEvent BEGINS "FTERM" OR icDCEvent BEGINS "TVTERM") THEN 
-          ASSIGN ldOriginalFee = fGetMobileLineCompareFee(iiMsSeq, bCLIType.BaseBundle, ldaActivated).
+          ASSIGN ldOriginalFee = fGetMobileLineCompareFee(bCLIType.CliType, bCLIType.BaseBundle, ldaActivated).
       ELSE 
       DO:
           IF bCLIType.CompareFee > 0 THEN 
@@ -820,7 +820,7 @@ PROCEDURE pFeeComparison:
       IF AVAIL bCLIType THEN 
       DO:
           IF fIsConvergentORFixedOnly(bCLIType.CLIType) AND NOT (icDCEvent BEGINS "FTERM" OR icDCEvent BEGINS "TVTERM") THEN 
-              ASSIGN ldNewFee = fGetMobileLineCompareFee(iiMsSeq, bCLIType.BaseBundle, ldaActivated).
+              ASSIGN ldNewFee = fGetMobileLineCompareFee(bCLIType.CliType, bCLIType.BaseBundle, idaReqDate).
           ELSE
               ASSIGN ldNewFee = bCLIType.CompareFee.
 
