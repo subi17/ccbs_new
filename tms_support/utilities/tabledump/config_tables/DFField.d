@@ -1175,6 +1175,9 @@
 "" 227 "OrderFusion" "AppointmentDate" "AppointmentDate" 13 16/11/16 31/12/49
 "" 227 "OrderFusion" "CancellationReason" "CancellationReason" 14 16/11/16 31/12/49
 "" 227 "OrderFusion" "ADSLLinkState" "ADSLLinkState" 15 16/11/16 31/12/49
+"" 227 "OrderFusion" "portStat" "portStat" 16 07/02/18 31/12/49
+"" 227 "OrderFusion" "portDate" "portDate" 17 07/02/18 31/12/49
+"" 227 "OrderFusion" "routerStat" "routerStat" 18 07/02/18 31/12/49
 "" 228 "PrepaidRequest" "PPrequest" "PPrequest" 1 01/01/14 31/12/49
 "" 228 "PrepaidRequest" "@Version" "1" 2 01/01/14 31/12/49
 "" 228 "PrepaidRequest" "PPrequest" "PPrequest" 3 01/01/14 31/12/49
