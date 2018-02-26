@@ -254,8 +254,16 @@ PROCEDURE pReadEvents:
                  Invoice.Brand    = Syst.Var:gcBrand AND
                  Invoice.ExtInvID = lcInvID NO-LOCK NO-ERROR.
       IF NOT AVAILABLE Invoice THEN DO:
-         fError("Unknown invoice").
-         NEXT.
+
+         lcInvID = "0" + lcInvID.
+
+         FIND FIRST Invoice WHERE
+                    Invoice.Brand    = Syst.Var:gcBrand AND
+                    Invoice.ExtInvID = lcInvID NO-LOCK NO-ERROR.
+         IF NOT AVAIL Invoice THEN DO:
+            fError("Unknown invoice").
+            NEXT.
+         END.
       END.
     
       IF liMsSeq > 0 THEN DO:
