@@ -1,13 +1,13 @@
 "1" "BONO_VOIP" "Mobile data usage bundle VoIP" 01/04/12 31/12/49
 "1" "CentralitaPRO" "Centralita PRO" 04/07/17 31/12/49
 "1" "CONT10" "Contrato 10" 01/02/17 31/12/49
-"1" "CONT15" "Contrato 15" 01/10/14 31/12/49
+"1" "CONT15" "La Ciento 5 GB" 01/10/14 31/12/49
 "1" "CONT23" "Contrato 23" 12/08/15 31/12/49
 "1" "CONT24" "Contrato 24" 04/03/15 31/12/49
-"1" "CONT25" "Contrato 25" 12/12/16 31/12/49
-"1" "CONT26" "Contrato 26" 01/02/17 31/12/49
+"1" "CONT25" "La Sinfín 25 GB" 12/12/16 31/12/49
+"1" "CONT26" "La Sinfín 5 GB" 01/02/17 31/12/49
 "1" "CONT27" "LA INFINITA 2 GB DTO." 18/04/17 31/12/49
-"1" "CONT28" "Línea móvil extra" 21/08/17 31/12/49
+"1" "CONT28" "La Dúo" 21/08/17 31/12/49
 "1" "CONT29" "La Dúo extra" 18/12/17 31/12/49
 "1" "CONT30" "Contrato 30" 18/12/17 31/12/49
 "1" "CONT31" "La Tarifa Tic Tac" 18/12/17 31/12/49
