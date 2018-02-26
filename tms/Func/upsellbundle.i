@@ -98,6 +98,8 @@ FUNCTION fGetUpSellBasicContract RETURNS CHAR
                   DayCampaign.Brand = Syst.Var:gcBrand AND
                   DayCampaign.DCEvent = bServiceLimit.GroupCode AND
                   DayCampaign.BundleUpsell NE "DATA200_UPSELL" AND
+                  DayCampaign.BundleUpsell NE "SAN1GB_001,SAN5GB_002,DATA200_UPSELL" AND
+                  DayCampaign.BundleUpsell NE "SAN1GB_001,SAN5GB_002" AND
                   DayCampaign.BundleUpsell > "":
             IF {Func/dss_search.i "DayCampaign.DCEvent"} THEN NEXT.
             RETURN bServiceLimit.GroupCode.
