@@ -664,10 +664,10 @@
 1 "" 2 "Descompte promoció" 0 "CONT15DISC" "1" 01/03/15 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONT15DISC" "1" 01/03/15 31/12/49
 1 "" 5 "Promotional discount" 0 "CONT15DISC" "1" 01/03/15 31/12/49
-1 "" 1 "La del Cero 5 GB" 0 "CONT15MF" "1" 01/10/14 31/12/49
-1 "" 2 "La del Cero 5 GB" 0 "CONT15MF" "1" 01/10/14 31/12/49
-1 "" 3 "La del Cero 5 GB" 0 "CONT15MF" "1" 01/10/14 31/12/49
-1 "" 5 "La del Cero 5 GB" 0 "CONT15MF" "1" 01/10/14 31/12/49
+1 "" 1 "La Ciento 5 GB" 0 "CONT15MF" "1" 01/10/14 31/12/49
+1 "" 2 "La Ciento 5 GB" 0 "CONT15MF" "1" 01/10/14 31/12/49
+1 "" 3 "La Ciento 5 GB" 0 "CONT15MF" "1" 01/10/14 31/12/49
+1 "" 5 "La Ciento 5 GB" 0 "CONT15MF" "1" 01/10/14 31/12/49
 1 "" 1 "Ventajas PRO" 0 "CONT15PRO" "1" 04/07/17 31/12/49
 1 "" 2 "Avantatges PRO" 0 "CONT15PRO" "1" 04/07/17 31/12/49
 1 "" 3 "Abantaila PRO" 0 "CONT15PRO" "1" 04/07/17 31/12/49
@@ -740,10 +740,10 @@
 1 "" 2 "Descompte promoció" 0 "CONT25DISC" "1" 12/12/16 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONT25DISC" "1" 12/12/16 31/12/49
 1 "" 5 "Promotional discount" 0 "CONT25DISC" "1" 12/12/16 31/12/49
-1 "" 1 "La Sinfín" 0 "CONT25MF" "1" 12/12/16 31/12/49
-1 "" 2 "La Sinfín" 0 "CONT25MF" "1" 12/12/16 31/12/49
-1 "" 3 "La Sinfín" 0 "CONT25MF" "1" 12/12/16 31/12/49
-1 "" 5 "La Sinfín" 0 "CONT25MF" "1" 12/12/16 31/12/49
+1 "" 1 "La Sinfín 25 GB" 0 "CONT25MF" "1" 12/12/16 31/12/49
+1 "" 2 "La Sinfín 25 GB" 0 "CONT25MF" "1" 12/12/16 31/12/49
+1 "" 3 "La Sinfín 25 GB" 0 "CONT25MF" "1" 12/12/16 31/12/49
+1 "" 5 "La Sinfín 25 GB" 0 "CONT25MF" "1" 12/12/16 31/12/49
 1 "" 1 "Ventajas PRO" 0 "CONT25PRO" "1" 04/07/17 31/12/49
 1 "" 2 "Avantatges PRO" 0 "CONT25PRO" "1" 04/07/17 31/12/49
 1 "" 3 "Abantaila PRO" 0 "CONT25PRO" "1" 04/07/17 31/12/49
@@ -768,10 +768,10 @@
 1 "" 2 "Descompte promoció" 0 "CONT26DISC" "1" 01/02/17 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONT26DISC" "1" 01/02/17 31/12/49
 1 "" 5 "Promotional discount" 0 "CONT26DISC" "1" 01/02/17 31/12/49
-1 "" 1 "La Infinita 5 GB" 0 "CONT26MF" "1" 01/02/17 31/12/49
-1 "" 2 "La Infinita 5 GB" 0 "CONT26MF" "1" 01/02/17 31/12/49
-1 "" 3 "La Infinita 5 GB" 0 "CONT26MF" "1" 01/02/17 31/12/49
-1 "" 5 "La Infinita 5 GB" 0 "CONT26MF" "1" 01/02/17 31/12/49
+1 "" 1 "La Sinfín 5 GB" 0 "CONT26MF" "1" 01/02/17 31/12/49
+1 "" 2 "La Sinfín 5 GB" 0 "CONT26MF" "1" 01/02/17 31/12/49
+1 "" 3 "La Sinfín 5 GB" 0 "CONT26MF" "1" 01/02/17 31/12/49
+1 "" 5 "La Sinfín 5 GB" 0 "CONT26MF" "1" 01/02/17 31/12/49
 1 "" 1 "Ventajas PRO" 0 "CONT26PRO" "1" 04/07/17 31/12/49
 1 "" 2 "Avantatges PRO" 0 "CONT26PRO" "1" 04/07/17 31/12/49
 1 "" 3 "Abantaila PRO" 0 "CONT26PRO" "1" 04/07/17 31/12/49
@@ -820,10 +820,10 @@
 1 "" 2 "Descompte promocio" 0 "CONT28DISC" "1" 21/08/17 31/12/49
 1 "" 3 "Promozio-deskontua" 0 "CONT28DISC" "1" 21/08/17 31/12/49
 1 "" 5 "Promotional discount" 0 "CONT28DISC" "1" 21/08/17 31/12/49
-1 "" 1 "Línea móvil extra" 0 "CONT28MF" "1" 21/08/17 31/12/49
-1 "" 2 "Línea móvil extra" 0 "CONT28MF" "1" 21/08/17 31/12/49
-1 "" 3 "Línea móvil extra" 0 "CONT28MF" "1" 21/08/17 31/12/49
-1 "" 5 "Línea móvil extra" 0 "CONT28MF" "1" 21/08/17 31/12/49
+1 "" 1 "La Dúo" 0 "CONT28MF" "1" 21/08/17 31/12/49
+1 "" 2 "La Dúo" 0 "CONT28MF" "1" 21/08/17 31/12/49
+1 "" 3 "La Dúo" 0 "CONT28MF" "1" 21/08/17 31/12/49
+1 "" 5 "La Dúo" 0 "CONT28MF" "1" 21/08/17 31/12/49
 1 "" 1 "Nacionales" 0 "CONT28VOICE_A" "1" 21/08/17 31/12/49
 1 "" 2 "Nacionals" 0 "CONT28VOICE_A" "1" 21/08/17 31/12/49
 1 "" 3 "Nazionalak" 0 "CONT28VOICE_A" "1" 21/08/17 31/12/49
@@ -5354,11 +5354,11 @@
 1 "" 3 "LG K10 2017 Titan" 0 "P030107GC" "1" 17/08/17 31/12/49
 1 "" 4 "LG K10 2017 Titan" 0 "P030107GC" "1" 17/08/17 31/12/49
 1 "" 5 "LG K10 2017 Titan" 0 "P030107GC" "1" 17/08/17 31/12/49
-1 "" 1 "LG K10 2017 Titán con Tablet Wolder Mitab One 10ö Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
-1 "" 2 "LG K10 2017 Titan con Tablet Wolder Mitab One 10ö Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
-1 "" 3 "LG K10 2017 Titan con Tablet Wolder Mitab One 10ö Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
-1 "" 4 "LG K10 2017 Titan con Tablet Wolder Mitab One 10ö Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
-1 "" 5 "LG K10 2017 Titan with Tablet Wolder Mitab One 10ö Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
+1 "" 1 "LG K10 2017 Titán con Tablet Wolder Mitab One 10” Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
+1 "" 2 "LG K10 2017 Titan con Tablet Wolder Mitab One 10” Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
+1 "" 3 "LG K10 2017 Titan con Tablet Wolder Mitab One 10” Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
+1 "" 4 "LG K10 2017 Titan con Tablet Wolder Mitab One 10” Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
+1 "" 5 "LG K10 2017 Titan with Tablet Wolder Mitab One 10” Plus" 0 "P030107GP" "1" 29/03/17 31/12/49
 1 "" 1 "LG G2 Negro+ LGL3 II negro" 0 "P0302N3N2" "1" 21/01/14 31/12/49
 1 "" 2 "LG G2 Negro+ LGL3 II negro" 0 "P0302N3N2" "1" 21/01/14 31/12/49
 1 "" 3 "LG G2 Negro+ LGL3 II negro" 0 "P0302N3N2" "1" 21/01/14 31/12/49
@@ -7353,34 +7353,34 @@
 1 "" 4 "Sony Xperia Z Ultra Blanco" 0 "P037XPUW2" "1" 26/09/13 31/12/49
 1 "" 5 "Sony Xperia Z Ultra White" 0 "P037XPUW2" "1" 26/09/13 31/12/49
 1 "" 1 "Sony Xperia V Fucsia" 0 "P037XPVF1" "1" 26/06/13 31/12/49
-1 "" 2 "Sony XperiaÖ V Fucsia" 0 "P037XPVF1" "1" 26/06/13 31/12/49
-1 "" 3 "Sony XperiaÖ V Fucsia" 0 "P037XPVF1" "1" 26/06/13 31/12/49
-1 "" 4 "Sony XperiaÖ V Fucsia" 0 "P037XPVF1" "1" 26/06/13 31/12/49
+1 "" 2 "Sony Xperia™ V Fucsia" 0 "P037XPVF1" "1" 26/06/13 31/12/49
+1 "" 3 "Sony Xperia™ V Fucsia" 0 "P037XPVF1" "1" 26/06/13 31/12/49
+1 "" 4 "Sony Xperia™ V Fucsia" 0 "P037XPVF1" "1" 26/06/13 31/12/49
 1 "" 5 "Sony Xperia V Pink" 0 "P037XPVF1" "1" 26/06/13 31/12/49
 1 "" 1 "Sony Xperia V Fucsia" 0 "P037XPVF2" "1" 26/06/13 31/12/49
-1 "" 2 "Sony XperiaÖ V Fucsia" 0 "P037XPVF2" "1" 26/06/13 31/12/49
-1 "" 3 "Sony XperiaÖ V Fucsia" 0 "P037XPVF2" "1" 26/06/13 31/12/49
-1 "" 4 "Sony XperiaÖ V Fucsia" 0 "P037XPVF2" "1" 26/06/13 31/12/49
+1 "" 2 "Sony Xperia™ V Fucsia" 0 "P037XPVF2" "1" 26/06/13 31/12/49
+1 "" 3 "Sony Xperia™ V Fucsia" 0 "P037XPVF2" "1" 26/06/13 31/12/49
+1 "" 4 "Sony Xperia™ V Fucsia" 0 "P037XPVF2" "1" 26/06/13 31/12/49
 1 "" 5 "Sony Xperia V Pink" 0 "P037XPVF2" "1" 26/06/13 31/12/49
 1 "" 1 "Sony Xperia V Negro" 0 "P037XPVN1" "1" 26/06/13 31/12/49
-1 "" 2 "Sony XperiaÖ V Negro" 0 "P037XPVN1" "1" 26/06/13 31/12/49
-1 "" 3 "Sony XperiaÖ V Negro" 0 "P037XPVN1" "1" 26/06/13 31/12/49
-1 "" 4 "Sony XperiaÖ V Negro" 0 "P037XPVN1" "1" 26/06/13 31/12/49
+1 "" 2 "Sony Xperia™ V Negro" 0 "P037XPVN1" "1" 26/06/13 31/12/49
+1 "" 3 "Sony Xperia™ V Negro" 0 "P037XPVN1" "1" 26/06/13 31/12/49
+1 "" 4 "Sony Xperia™ V Negro" 0 "P037XPVN1" "1" 26/06/13 31/12/49
 1 "" 5 "Sony Xperia V Black" 0 "P037XPVN1" "1" 26/06/13 31/12/49
 1 "" 1 "Sony Xperia V Negro" 0 "P037XPVN2" "1" 26/06/13 31/12/49
-1 "" 2 "Sony XperiaÖ V Negro" 0 "P037XPVN2" "1" 26/06/13 31/12/49
-1 "" 3 "Sony XperiaÖ V Negro" 0 "P037XPVN2" "1" 26/06/13 31/12/49
-1 "" 4 "Sony XperiaÖ V Negro" 0 "P037XPVN2" "1" 26/06/13 31/12/49
+1 "" 2 "Sony Xperia™ V Negro" 0 "P037XPVN2" "1" 26/06/13 31/12/49
+1 "" 3 "Sony Xperia™ V Negro" 0 "P037XPVN2" "1" 26/06/13 31/12/49
+1 "" 4 "Sony Xperia™ V Negro" 0 "P037XPVN2" "1" 26/06/13 31/12/49
 1 "" 5 "Sony Xperia V Black" 0 "P037XPVN2" "1" 26/06/13 31/12/49
 1 "" 1 "Sony Xperia V Blanco" 0 "P037XPVW1" "1" 26/06/13 31/12/49
-1 "" 2 "Sony XperiaÖ V Blanco" 0 "P037XPVW1" "1" 26/06/13 31/12/49
-1 "" 3 "Sony XperiaÖ V Blanco" 0 "P037XPVW1" "1" 26/06/13 31/12/49
+1 "" 2 "Sony Xperia™ V Blanco" 0 "P037XPVW1" "1" 26/06/13 31/12/49
+1 "" 3 "Sony Xperia™ V Blanco" 0 "P037XPVW1" "1" 26/06/13 31/12/49
 1 "" 4 " Sony XperiaÖ V Blanco" 0 "P037XPVW1" "1" 26/06/13 31/12/49
 1 "" 5 "Sony Xperia V White" 0 "P037XPVW1" "1" 26/06/13 31/12/49
 1 "" 1 "Sony Xperia V Blanco" 0 "P037XPVW2" "1" 26/06/13 31/12/49
-1 "" 2 "Sony XperiaÖ V Blanco" 0 "P037XPVW2" "1" 26/06/13 31/12/49
-1 "" 3 "Sony XperiaÖ V Blanco" 0 "P037XPVW2" "1" 26/06/13 31/12/49
-1 "" 4 "Sony XperiaÖ V Blanco" 0 "P037XPVW2" "1" 26/06/13 31/12/49
+1 "" 2 "Sony Xperia™ V Blanco" 0 "P037XPVW2" "1" 26/06/13 31/12/49
+1 "" 3 "Sony Xperia™ V Blanco" 0 "P037XPVW2" "1" 26/06/13 31/12/49
+1 "" 4 "Sony Xperia™ V Blanco" 0 "P037XPVW2" "1" 26/06/13 31/12/49
 1 "" 5 "Sony Xperia V White" 0 "P037XPVW2" "1" 26/06/13 31/12/49
 1 "" 1 "Sony Xperia Z1 Morado" 0 "P037XPYM2" "1" 12/12/13 31/12/49
 1 "" 2 "Sony Xperia Z1 Morado" 0 "P037XPYM2" "1" 12/12/13 31/12/49
@@ -7413,9 +7413,9 @@
 1 "" 4 "Sony Xperia T" 0 "P037XTTN2" "1" 28/11/12 31/12/49
 1 "" 5 "Sony Xperia T" 0 "P037XTTN2" "1" 28/11/12 31/12/49
 1 "" 1 "Sony Xperia Tablet Z Negra" 0 "P037XTZN2" "1" 26/06/13 31/12/49
-1 "" 2 "Sony XperiaÖ Tablet Z Negra" 0 "P037XTZN2" "1" 26/06/13 31/12/49
-1 "" 3 "Sony XperiaÖ Tablet Z Negra" 0 "P037XTZN2" "1" 26/06/13 31/12/49
-1 "" 4 "Sony XperiaÖ Tablet Z Negra" 0 "P037XTZN2" "1" 26/06/13 31/12/49
+1 "" 2 "Sony Xperia™ Tablet Z Negra" 0 "P037XTZN2" "1" 26/06/13 31/12/49
+1 "" 3 "Sony Xperia™ Tablet Z Negra" 0 "P037XTZN2" "1" 26/06/13 31/12/49
+1 "" 4 "Sony Xperia™ Tablet Z Negra" 0 "P037XTZN2" "1" 26/06/13 31/12/49
 1 "" 5 "Sony Xperia Tablet Z Black" 0 "P037XTZN2" "1" 26/06/13 31/12/49
 1 "" 1 "Sony Xperia XA Negro" 0 "P037XXAN2" "1" 24/06/16 31/12/49
 1 "" 2 "Sony Xperia XA Negro" 0 "P037XXAN2" "1" 24/06/16 31/12/49
@@ -8873,31 +8873,31 @@
 1 "" 3 "Wolder Wiam 23 Negro" 0 "P047W23N2" "1" 10/06/16 31/12/49
 1 "" 4 "Wolder Wiam 23 Negro" 0 "P047W23N2" "1" 10/06/16 31/12/49
 1 "" 5 "Wolder Wiam 23 Black" 0 "P047W23N2" "1" 10/06/16 31/12/49
-1 "" 1 "Wolder Wiam 23 Negro con Tablet Wolder Mitab One 10ö Plus" 0 "P047W23NP" "1" 29/03/17 31/12/49
-1 "" 2 "Wolder Wiam 23 Negro con Tablet Wolder Mitab One 10ö Plus" 0 "P047W23NP" "1" 29/03/17 31/12/49
-1 "" 3 "Wolder Wiam 23 Negro con Tablet Wolder Mitab One 10ö Plus" 0 "P047W23NP" "1" 29/03/17 31/12/49
-1 "" 4 "Wolder Wiam 23 Negro con Tablet Wolder Mitab One 10ö Plus" 0 "P047W23NP" "1" 29/03/17 31/12/49
-1 "" 5 "Wolder Wiam 23 Black with Tablet Wolder Mitab One 10ö Plus" 0 "P047W23NP" "1" 29/03/17 31/12/49
+1 "" 1 "Wolder Wiam 23 Negro con Tablet Wolder Mitab One 10” Plus" 0 "P047W23NP" "1" 29/03/17 31/12/49
+1 "" 2 "Wolder Wiam 23 Negro con Tablet Wolder Mitab One 10” Plus" 0 "P047W23NP" "1" 29/03/17 31/12/49
+1 "" 3 "Wolder Wiam 23 Negro con Tablet Wolder Mitab One 10” Plus" 0 "P047W23NP" "1" 29/03/17 31/12/49
+1 "" 4 "Wolder Wiam 23 Negro con Tablet Wolder Mitab One 10” Plus" 0 "P047W23NP" "1" 29/03/17 31/12/49
+1 "" 5 "Wolder Wiam 23 Black with Tablet Wolder Mitab One 10” Plus" 0 "P047W23NP" "1" 29/03/17 31/12/49
 1 "" 1 "Wolder Wiam 23 Blanco" 0 "P047W23W2" "1" 03/10/16 31/12/49
 1 "" 2 "Wolder Wiam 23 Blanco" 0 "P047W23W2" "1" 03/10/16 31/12/49
 1 "" 3 "Wolder Wiam 23 Blanco" 0 "P047W23W2" "1" 03/10/16 31/12/49
 1 "" 4 "Wolder Wiam 23 Blanco" 0 "P047W23W2" "1" 03/10/16 31/12/49
 1 "" 5 "Wolder Wiam 23 White" 0 "P047W23W2" "1" 03/10/16 31/12/49
-1 "" 1 "Wolder Wiam 23 Blanco con Tablet Wolder Mitab One 10ö Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
-1 "" 2 "Wolder Wiam 23 Blanco con Tablet Wolder Mitab One 10ö Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
-1 "" 3 "Wolder Wiam 23 Blanco con Tablet Wolder Mitab One 10ö Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
-1 "" 4 "Wolder Wiam 23 Blanco con Tablet Wolder Mitab One 10ö Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
-1 "" 5 "Wolder Wiam 23 White with Tablet Wolder Mitab One 10ö Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
+1 "" 1 "Wolder Wiam 23 Blanco con Tablet Wolder Mitab One 10” Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
+1 "" 2 "Wolder Wiam 23 Blanco con Tablet Wolder Mitab One 10” Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
+1 "" 3 "Wolder Wiam 23 Blanco con Tablet Wolder Mitab One 10” Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
+1 "" 4 "Wolder Wiam 23 Blanco con Tablet Wolder Mitab One 10” Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
+1 "" 5 "Wolder Wiam 23 White with Tablet Wolder Mitab One 10” Plus" 0 "P047W23WP" "1" 29/03/17 31/12/49
 1 "" 1 "Wolder Wiam 27 Negro" 0 "P047W27N2" "1" 24/05/17 31/12/49
 1 "" 2 "Wolder Wiam 27 Negro" 0 "P047W27N2" "1" 24/05/17 31/12/49
 1 "" 3 "Wolder Wiam 27 Negro" 0 "P047W27N2" "1" 24/05/17 31/12/49
 1 "" 4 "Wolder Wiam 27 Negro" 0 "P047W27N2" "1" 24/05/17 31/12/49
 1 "" 5 "Wolder Wiam 27 Black" 0 "P047W27N2" "1" 24/05/17 31/12/49
-1 "" 1 "Tablet Wolder Mitab One 10ö Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
-1 "" 2 "Tablet Wolder Mitab One 10ö Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
-1 "" 3 "Tablet Wolder Mitab One 10ö Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
-1 "" 4 "Tablet Wolder Mitab One 10ö Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
-1 "" 5 "Tablet Wolder Mitab One 10ö Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
+1 "" 1 "Tablet Wolder Mitab One 10” Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
+1 "" 2 "Tablet Wolder Mitab One 10” Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
+1 "" 3 "Tablet Wolder Mitab One 10” Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
+1 "" 4 "Tablet Wolder Mitab One 10” Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
+1 "" 5 "Tablet Wolder Mitab One 10” Plus" 0 "P047WMTN2" "1" 29/03/17 31/12/49
 1 "" 1 "Wileyfox Swift 2 Dorado" 0 "P048WS2D2" "1" 24/05/17 31/12/49
 1 "" 2 "Wileyfox Swift 2 Dorado" 0 "P048WS2D2" "1" 24/05/17 31/12/49
 1 "" 3 "Wileyfox Swift 2 Dorado" 0 "P048WS2D2" "1" 24/05/17 31/12/49
@@ -13647,10 +13647,10 @@
 9 "" 2 "La del Cero 1,5 GB" 0 "CONT10" "1" 01/02/17 31/12/49
 9 "" 3 "La del Cero 1,5 GB" 0 "CONT10" "1" 01/02/17 31/12/49
 9 "" 5 "La del Cero 1,5 GB" 0 "CONT10" "1" 01/02/17 31/12/49
-9 "" 1 "La del Cero 5 GB" 0 "CONT15" "1" 01/10/14 31/12/49
-9 "" 2 "La del Cero 5 GB" 0 "CONT15" "1" 01/10/14 31/12/49
-9 "" 3 "La del Cero 5 GB" 0 "CONT15" "1" 01/10/14 31/12/49
-9 "" 5 "La del Cero 5 GB" 0 "CONT15" "1" 01/10/14 31/12/49
+9 "" 1 "La Ciento 5 GB" 0 "CONT15" "1" 01/10/14 31/12/49
+9 "" 2 "La Ciento 5 GB" 0 "CONT15" "1" 01/10/14 31/12/49
+9 "" 3 "La Ciento 5 GB" 0 "CONT15" "1" 01/10/14 31/12/49
+9 "" 5 "La Ciento 5 GB" 0 "CONT15" "1" 01/10/14 31/12/49
 9 "" 1 "Contrato 2" 0 "CONT2" "1" 01/01/06 31/12/49
 9 "" 2 "Contrato 2" 0 "CONT2" "1" 01/09/08 31/12/54
 9 "" 2 "Contracte 2" 0 "CONT2" "1" 01/01/06 31/08/08
@@ -13666,22 +13666,22 @@
 9 "" 2 "La Sinfín 20 GB" 0 "CONT24" "1" 04/03/15 31/12/49
 9 "" 3 "La Sinfín 20 GB" 0 "CONT24" "1" 04/03/15 31/12/49
 9 "" 5 "La Sinfín 20 GB" 0 "CONT24" "1" 04/03/15 31/12/49
-9 "" 1 "La Sinfín" 0 "CONT25" "1" 12/12/16 31/12/49
-9 "" 2 "La Sinfín" 0 "CONT25" "1" 12/12/16 31/12/49
-9 "" 3 "La Sinfín" 0 "CONT25" "1" 12/12/16 31/12/49
-9 "" 5 "La Sinfín" 0 "CONT25" "1" 12/12/16 31/12/49
-9 "" 1 "La Infinita 5 GB" 0 "CONT26" "1" 01/02/17 31/12/49
-9 "" 2 "La Infinita 5 GB" 0 "CONT26" "1" 01/02/17 31/12/49
-9 "" 3 "La Infinita 5 GB" 0 "CONT26" "1" 01/02/17 31/12/49
-9 "" 5 "La Infinita 5 GB" 0 "CONT26" "1" 01/02/17 31/12/49
+9 "" 1 "La Sinfín 25 GB" 0 "CONT25" "1" 12/12/16 31/12/49
+9 "" 2 "La Sinfín 25 GB" 0 "CONT25" "1" 12/12/16 31/12/49
+9 "" 3 "La Sinfín 25 GB" 0 "CONT25" "1" 12/12/16 31/12/49
+9 "" 5 "La Sinfín 25 GB" 0 "CONT25" "1" 12/12/16 31/12/49
+9 "" 1 "La Sinfín 5 GB" 0 "CONT26" "1" 01/02/17 31/12/49
+9 "" 2 "La Sinfín 5 GB" 0 "CONT26" "1" 01/02/17 31/12/49
+9 "" 3 "La Sinfín 5 GB" 0 "CONT26" "1" 01/02/17 31/12/49
+9 "" 5 "La Sinfín 5 GB" 0 "CONT26" "1" 01/02/17 31/12/49
 9 "" 1 "La Infinita 2 GB DTO." 0 "CONT27" "1" 18/04/17 31/12/49
 9 "" 2 "La Infinita 2 GB DTO." 0 "CONT27" "1" 18/04/17 31/12/49
 9 "" 3 "La Infinita 2 GB DTO." 0 "CONT27" "1" 18/04/17 31/12/49
 9 "" 5 "La Infinita 2 GB DTO." 0 "CONT27" "1" 18/04/17 31/12/49
-9 "" 1 "Línea móvil extra" 0 "CONT28" "1" 21/08/17 31/12/49
-9 "" 2 "Línea móvil extra" 0 "CONT28" "1" 21/08/17 31/12/49
-9 "" 3 "Línea móvil extra" 0 "CONT28" "1" 21/08/17 31/12/49
-9 "" 5 "Línea móvil extra" 0 "CONT28" "1" 21/08/17 31/12/49
+9 "" 1 "La Dúo" 0 "CONT28" "1" 21/08/17 31/12/49
+9 "" 2 "La Dúo" 0 "CONT28" "1" 21/08/17 31/12/49
+9 "" 3 "La Dúo" 0 "CONT28" "1" 21/08/17 31/12/49
+9 "" 5 "La Dúo" 0 "CONT28" "1" 21/08/17 31/12/49
 9 "" 1 "La Dúo Interminable" 0 "CONT29" "1" 18/12/17 31/12/49
 9 "" 2 "La Dúo Interminable" 0 "CONT29" "1" 18/12/17 31/12/49
 9 "" 3 "La Dúo Interminable" 0 "CONT29" "1" 18/12/17 31/12/49
@@ -13748,10 +13748,10 @@
 9 "" 2 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
 9 "" 3 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
 9 "" 5 "INTERNET PARA LLEVAR 25" 0 "CONTDATA" "1" 01/02/14 31/12/49
-9 "" 1 "La De Casa 20" 0 "CONTDSL35" "1" 07/03/17 31/12/49
-9 "" 2 "La De Casa 20" 0 "CONTDSL35" "1" 07/03/17 31/12/49
-9 "" 3 "La De Casa 20" 0 "CONTDSL35" "1" 07/03/17 31/12/49
-9 "" 5 "La De Casa 20" 0 "CONTDSL35" "1" 07/03/17 31/12/49
+9 "" 1 "El ADSL 20 Mb" 0 "CONTDSL35" "1" 07/03/17 31/12/49
+9 "" 2 "El ADSL 20 Mb" 0 "CONTDSL35" "1" 07/03/17 31/12/49
+9 "" 3 "El ADSL 20 Mb" 0 "CONTDSL35" "1" 07/03/17 31/12/49
+9 "" 5 "El ADSL 20 Mb" 0 "CONTDSL35" "1" 07/03/17 31/12/49
 9 "" 1 "La Combinada Naranja 20" 0 "CONTDSL39" "1" 20/02/17 31/12/49
 9 "" 2 "La Combinada Naranja 20" 0 "CONTDSL39" "1" 20/02/17 31/12/49
 9 "" 3 "La Combinada Naranja 20" 0 "CONTDSL39" "1" 20/02/17 31/12/49
@@ -13772,18 +13772,18 @@
 9 "" 2 "La Combinada Verde 20" 0 "CONTDSL48" "1" 23/11/16 31/12/49
 9 "" 3 "La Combinada Verde 20" 0 "CONTDSL48" "1" 23/11/16 31/12/49
 9 "" 5 "La Combinada Verde 20" 0 "CONTDSL48" "1" 23/11/16 31/12/49
-9 "" 1 "La Combinada Morada 20" 0 "CONTDSL52" "1" 20/02/17 31/12/49
-9 "" 2 "La Combinada Morada 20" 0 "CONTDSL52" "1" 20/02/17 31/12/49
-9 "" 3 "La Combinada Morada 20" 0 "CONTDSL52" "1" 20/02/17 31/12/49
-9 "" 5 "La Combinada Morada 20" 0 "CONTDSL52" "1" 20/02/17 31/12/49
+9 "" 1 "ADSL + La Sinfín 5 GB" 0 "CONTDSL52" "1" 20/02/17 31/12/49
+9 "" 2 "ADSL + La Sinfín 5 GB" 0 "CONTDSL52" "1" 20/02/17 31/12/49
+9 "" 3 "ADSL + La Sinfín 5 GB" 0 "CONTDSL52" "1" 20/02/17 31/12/49
+9 "" 5 "ADSL + La Sinfín 5 GB" 0 "CONTDSL52" "1" 20/02/17 31/12/49
 9 "" 1 "La Combinada Azul 20 con 20 GB" 0 "CONTDSL58" "1" 01/11/16 31/12/49
 9 "" 2 "La Combinada Azul 20 con 20 GB" 0 "CONTDSL58" "1" 01/11/16 31/12/49
 9 "" 3 "La Combinada Azul 20 con 20 GB" 0 "CONTDSL58" "1" 01/11/16 31/12/49
 9 "" 5 "La Combinada Azul 20 con 20 GB" 0 "CONTDSL58" "1" 01/11/16 31/12/49
-9 "" 1 "La Combinada Azul 20" 0 "CONTDSL59" "1" 01/02/17 31/12/49
-9 "" 2 "La Combinada Azul 20" 0 "CONTDSL59" "1" 01/02/17 31/12/49
-9 "" 3 "La Combinada Azul 20" 0 "CONTDSL59" "1" 01/02/17 31/12/49
-9 "" 5 "La Combinada Azul 20" 0 "CONTDSL59" "1" 01/02/17 31/12/49
+9 "" 1 "ADSL + La Sinfín 25 GB" 0 "CONTDSL59" "1" 01/02/17 31/12/49
+9 "" 2 "ADSL + La Sinfín 25 GB" 0 "CONTDSL59" "1" 01/02/17 31/12/49
+9 "" 3 "ADSL + La Sinfín 25 GB" 0 "CONTDSL59" "1" 01/02/17 31/12/49
+9 "" 5 "ADSL + La Sinfín 25 GB" 0 "CONTDSL59" "1" 01/02/17 31/12/49
 9 "" 1 "La Plana" 0 "CONTF" "1" 01/12/11 31/12/54
 9 "" 2 "La Plana" 0 "CONTF" "1" 01/12/11 31/12/54
 9 "" 3 "La Plana" 0 "CONTF" "1" 01/12/11 31/12/54
@@ -13839,10 +13839,10 @@
 9 "" 4 "Móvil Fusión Plana" 0 "CONTFF" "1" 01/10/13 15/06/15
 9 "" 5 "Fusión Plana a lo Yoigo" 0 "CONTFF" "1" 16/06/15 31/12/54
 9 "" 5 "Móvil Fusión Plana" 0 "CONTFF" "1" 01/10/13 15/06/15
-9 "" 1 "La De Casa 50" 0 "CONTFH35_50" "1" 07/03/17 31/12/49
-9 "" 2 "La De Casa 50" 0 "CONTFH35_50" "1" 07/03/17 31/12/49
-9 "" 3 "La De Casa 50" 0 "CONTFH35_50" "1" 07/03/17 31/12/49
-9 "" 5 "La De Casa 50" 0 "CONTFH35_50" "1" 07/03/17 31/12/49
+9 "" 1 "La Fibra 50 Mb" 0 "CONTFH35_50" "1" 07/03/17 31/12/49
+9 "" 2 "La Fibra 50 Mb" 0 "CONTFH35_50" "1" 07/03/17 31/12/49
+9 "" 3 "La Fibra 50 Mb" 0 "CONTFH35_50" "1" 07/03/17 31/12/49
+9 "" 5 "La Fibra 50 Mb" 0 "CONTFH35_50" "1" 07/03/17 31/12/49
 9 "" 1 "La Combinada Naranja 50" 0 "CONTFH39_50" "1" 20/02/17 31/12/49
 9 "" 2 "La Combinada Naranja 50" 0 "CONTFH39_50" "1" 20/02/17 31/12/49
 9 "" 3 "La Combinada Naranja 50" 0 "CONTFH39_50" "1" 20/02/17 31/12/49
@@ -13863,10 +13863,10 @@
 9 "" 2 "La Combinada Naranja 50" 0 "CONTFH40_50" "1" 23/11/16 31/12/49
 9 "" 3 "La Combinada Naranja 50" 0 "CONTFH40_50" "1" 23/11/16 31/12/49
 9 "" 5 "La Combinada Naranja 50" 0 "CONTFH40_50" "1" 23/11/16 31/12/49
-9 "" 1 "La De Casa 300" 0 "CONTFH45_300" "1" 07/03/17 31/12/49
-9 "" 2 "La De Casa 300" 0 "CONTFH45_300" "1" 07/03/17 31/12/49
-9 "" 3 "La De Casa 300" 0 "CONTFH45_300" "1" 07/03/17 31/12/49
-9 "" 5 "La De Casa 300" 0 "CONTFH45_300" "1" 07/03/17 31/12/49
+9 "" 1 "La Fibra 300 Mb" 0 "CONTFH45_300" "1" 07/03/17 31/12/49
+9 "" 2 "La Fibra 300 Mb" 0 "CONTFH45_300" "1" 07/03/17 31/12/49
+9 "" 3 "La Fibra 300 Mb" 0 "CONTFH45_300" "1" 07/03/17 31/12/49
+9 "" 5 "La Fibra 300 Mb" 0 "CONTFH45_300" "1" 07/03/17 31/12/49
 9 "" 1 "La Combinada Morada 50 con 2 GB" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
 9 "" 2 "La Combinada Morada 50 con 2 GB" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
 9 "" 3 "La Combinada Morada 50 con 2 GB" 0 "CONTFH45_50" "1" 27/10/16 31/12/49
@@ -13883,10 +13883,10 @@
 9 "" 2 "La Combinada Naranja 300" 0 "CONTFH50_300" "1" 23/11/16 31/12/49
 9 "" 3 "La Combinada Naranja 300" 0 "CONTFH50_300" "1" 23/11/16 31/12/49
 9 "" 5 "La Combinada Naranja 300" 0 "CONTFH50_300" "1" 23/11/16 31/12/49
-9 "" 1 "La Combinada Morada 50" 0 "CONTFH52_50" "1" 20/02/17 31/12/49
-9 "" 2 "La Combinada Morada 50" 0 "CONTFH52_50" "1" 20/02/17 31/12/49
-9 "" 3 "La Combinada Morada 50" 0 "CONTFH52_50" "1" 20/02/17 31/12/49
-9 "" 5 "La Combinada Morada 50" 0 "CONTFH52_50" "1" 20/02/17 31/12/49
+9 "" 1 "Fibra 50 Mb + La Sinfín 5 GB" 0 "CONTFH52_50" "1" 20/02/17 31/12/49
+9 "" 2 "Fibra 50 Mb + La Sinfín 5 GB" 0 "CONTFH52_50" "1" 20/02/17 31/12/49
+9 "" 3 "Fibra 50 Mb + La Sinfín 5 GB" 0 "CONTFH52_50" "1" 20/02/17 31/12/49
+9 "" 5 "Fibra 50 Mb + La Sinfín 5 GB" 0 "CONTFH52_50" "1" 20/02/17 31/12/49
 9 "" 1 "La Combinada Morada 300 con 2 GB" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
 9 "" 2 "La Combinada Morada 300 con 2 GB" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
 9 "" 3 "La Combinada Morada 300 con 2 GB" 0 "CONTFH55_300" "1" 27/10/16 31/12/49
@@ -13899,18 +13899,18 @@
 9 "" 2 "La Combinada Azul 50 con 20 GB" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
 9 "" 3 "La Combinada Azul 50 con 20 GB" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
 9 "" 5 "La Combinada Azul 50 con 20 GB" 0 "CONTFH58_50" "1" 01/11/16 31/12/49
-9 "" 1 "La Combinada Azul 50" 0 "CONTFH59_50" "1" 01/02/17 31/12/49
-9 "" 2 "La Combinada Azul 50" 0 "CONTFH59_50" "1" 01/02/17 31/12/49
-9 "" 3 "La Combinada Azul 50" 0 "CONTFH59_50" "1" 01/02/17 31/12/49
-9 "" 5 "La Combinada Azul 50" 0 "CONTFH59_50" "1" 01/02/17 31/12/49
-9 "" 1 "La Combinada Morada 300" 0 "CONTFH62_300" "1" 20/02/17 31/12/49
-9 "" 2 "La Combinada Morada 300" 0 "CONTFH62_300" "1" 20/02/17 31/12/49
-9 "" 3 "La Combinada Morada 300" 0 "CONTFH62_300" "1" 20/02/17 31/12/49
-9 "" 5 "La Combinada Morada 300" 0 "CONTFH62_300" "1" 20/02/17 31/12/49
-9 "" 1 "La de Casa 1Gbps" 0 "CONTFH65_1000" "1" 11/10/17 31/12/49
-9 "" 2 "La de Casa 1Gbps" 0 "CONTFH65_1000" "1" 11/10/17 31/12/49
-9 "" 3 "La de Casa 1Gbps" 0 "CONTFH65_1000" "1" 11/10/17 31/12/49
-9 "" 5 "La de Casa 1Gbps" 0 "CONTFH65_1000" "1" 11/10/17 31/12/49
+9 "" 1 "Fibra 50 Mb + La Sinfín 25 GB" 0 "CONTFH59_50" "1" 01/02/17 31/12/49
+9 "" 2 "Fibra 50 Mb + La Sinfín 25 GB" 0 "CONTFH59_50" "1" 01/02/17 31/12/49
+9 "" 3 "Fibra 50 Mb + La Sinfín 25 GB" 0 "CONTFH59_50" "1" 01/02/17 31/12/49
+9 "" 5 "Fibra 50 Mb + La Sinfín 25 GB" 0 "CONTFH59_50" "1" 01/02/17 31/12/49
+9 "" 1 "Fibra 300 Mb + La Sinfín 5 GB" 0 "CONTFH62_300" "1" 20/02/17 31/12/49
+9 "" 2 "Fibra 300 Mb + La Sinfín 5 GB" 0 "CONTFH62_300" "1" 20/02/17 31/12/49
+9 "" 3 "Fibra 300 Mb + La Sinfín 5 GB" 0 "CONTFH62_300" "1" 20/02/17 31/12/49
+9 "" 5 "Fibra 300 Mb + La Sinfín 5 GB" 0 "CONTFH62_300" "1" 20/02/17 31/12/49
+9 "" 1 "La Fibra 1 Gb" 0 "CONTFH65_1000" "1" 11/10/17 31/12/49
+9 "" 2 "La Fibra 1 Gb" 0 "CONTFH65_1000" "1" 11/10/17 31/12/49
+9 "" 3 "La Fibra 1 Gb" 0 "CONTFH65_1000" "1" 11/10/17 31/12/49
+9 "" 5 "La Fibra 1 Gb" 0 "CONTFH65_1000" "1" 11/10/17 31/12/49
 9 "" 1 "La Combinada Azul 300 con 20 GB" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
 9 "" 2 "La Combinada Azul 300 con 20 GB" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
 9 "" 3 "La Combinada Azul 300 con 20 GB" 0 "CONTFH68_300" "1" 01/11/16 31/12/49
@@ -13919,22 +13919,22 @@
 9 "" 2 "La Combinada Naranja 1Gbps" 0 "CONTFH69_1000" "1" 26/10/17 31/12/49
 9 "" 3 "La Combinada Naranja 1Gbps" 0 "CONTFH69_1000" "1" 26/10/17 31/12/49
 9 "" 5 "La Combinada Naranja 1Gbps" 0 "CONTFH69_1000" "1" 26/10/17 31/12/49
-9 "" 1 "La Combinada Azul 300" 0 "CONTFH69_300" "1" 01/02/17 31/12/49
-9 "" 2 "La Combinada Azul 300" 0 "CONTFH69_300" "1" 01/02/17 31/12/49
-9 "" 3 "La Combinada Azul 300" 0 "CONTFH69_300" "1" 01/02/17 31/12/49
-9 "" 5 "La Combinada Azul 300" 0 "CONTFH69_300" "1" 01/02/17 31/12/49
+9 "" 1 "Fibra 300 Mb + La Sinfín 25 GB" 0 "CONTFH69_300" "1" 01/02/17 31/12/49
+9 "" 2 "Fibra 300 Mb + La Sinfín 25 GB" 0 "CONTFH69_300" "1" 01/02/17 31/12/49
+9 "" 3 "Fibra 300 Mb + La Sinfín 25 GB" 0 "CONTFH69_300" "1" 01/02/17 31/12/49
+9 "" 5 "Fibra 300 Mb + La Sinfín 25 GB" 0 "CONTFH69_300" "1" 01/02/17 31/12/49
 9 "" 1 "La Combinada Verde 1Gbps" 0 "CONTFH76_1000" "1" 26/10/17 31/12/49
 9 "" 2 "La Combinada Verde 1Gbps" 0 "CONTFH76_1000" "1" 26/10/17 31/12/49
 9 "" 3 "La Combinada Verde 1Gbps" 0 "CONTFH76_1000" "1" 26/10/17 31/12/49
 9 "" 5 "La Combinada Verde 1Gbps" 0 "CONTFH76_1000" "1" 26/10/17 31/12/49
-9 "" 1 "La Combinada Morada 1Gbps" 0 "CONTFH82_1000" "1" 26/10/17 31/12/49
-9 "" 2 "La Combinada Morada 1Gbps" 0 "CONTFH82_1000" "1" 26/10/17 31/12/49
-9 "" 3 "La Combinada Morada 1Gbps" 0 "CONTFH82_1000" "1" 26/10/17 31/12/49
-9 "" 5 "La Combinada Morada 1Gbps" 0 "CONTFH82_1000" "1" 26/10/17 31/12/49
-9 "" 1 "La Combinada Azul 1Gbps" 0 "CONTFH89_1000" "1" 11/10/17 31/12/49
-9 "" 2 "La Combinada Azul 1Gbps" 0 "CONTFH89_1000" "1" 11/10/17 31/12/49
-9 "" 3 "La Combinada Azul 1Gbps" 0 "CONTFH89_1000" "1" 11/10/17 31/12/49
-9 "" 5 "La Combinada Azul 1Gbps" 0 "CONTFH89_1000" "1" 11/10/17 31/12/49
+9 "" 1 "Fibra 1 Gb + La Sinfín 5 GB" 0 "CONTFH82_1000" "1" 26/10/17 31/12/49
+9 "" 2 "Fibra 1 Gb + La Sinfín 5 GB" 0 "CONTFH82_1000" "1" 26/10/17 31/12/49
+9 "" 3 "Fibra 1 Gb + La Sinfín 5 GB" 0 "CONTFH82_1000" "1" 26/10/17 31/12/49
+9 "" 5 "Fibra 1 Gb + La Sinfín 5 GB" 0 "CONTFH82_1000" "1" 26/10/17 31/12/49
+9 "" 1 "Fibra 1 Gb + La Sinfín 25 GB" 0 "CONTFH89_1000" "1" 11/10/17 31/12/49
+9 "" 2 "Fibra 1 Gb + La Sinfín 25 GB" 0 "CONTFH89_1000" "1" 11/10/17 31/12/49
+9 "" 3 "Fibra 1 Gb + La Sinfín 25 GB" 0 "CONTFH89_1000" "1" 11/10/17 31/12/49
+9 "" 5 "Fibra 1 Gb + La Sinfín 25 GB" 0 "CONTFH89_1000" "1" 11/10/17 31/12/49
 9 "" 1 "Tu Segunda SIM" 0 "CONTM" "1" 01/12/12 31/12/54
 9 "" 2 "Tu Segunda SIM" 0 "CONTM" "1" 01/12/12 31/12/54
 9 "" 3 "Tu Segunda SIM" 0 "CONTM" "1" 01/12/12 31/12/54
