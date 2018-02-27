@@ -489,9 +489,10 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
                   IF Order.CliType BEGINS "CONTDSL" THEN lcPayType = "60".
                   ELSE lcPayType = "61". /* Convergent CONTTFH */
                END.
-               ELSE IF fIsAddLineOrder(Order.OrderID) AND
+               ELSE IF (fIsAddLineOrder(Order.OrderID) OR fCLITypeIsExtraLine(Order.CLIType)) AND
                   NOT Order.PayType THEN DO:
-                  lcPayType = "68". /* Additional Postpaid Mobile line */
+                  /* YOT-5618 Handle correctly Way of payment for 66 and 67 */
+                  lcPayType = fGetPayType(Order.CustNum).
                END.
                ELSE IF Order.PayType THEN lcPayType = "10".
                ELSE lcPayType = "20".
@@ -540,9 +541,10 @@ DO ldaDate = TODAY TO ldaFrom BY -1:
                IF MsOwner.CLIType BEGINS "CONTDSL" THEN lcPayType = "60".
                ELSE lcPayType = "61".  /* Convergent CONTTFH */
             END.
-            ELSE IF fIsAddLineTariff(SubInvoice.CLI) AND
-               NOT MsOwner.PayType THEN DO:
-               lcPayType = "68". /* Additional Postpaid Mobile line */
+            ELSE IF (fIsAddLineTariff(SubInvoice.CLI) OR fCLITypeIsExtraLine(MsOwner.CLIType)) AND
+                    NOT MsOwner.PayType THEN DO:            
+               /* YOT-5618 Handle correctly Way of payment for 66 and 67 */
+               lcPayType = fGetPayType(MsOwner.CustNum).
             END.
 
          END.      
