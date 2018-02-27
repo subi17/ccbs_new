@@ -142,6 +142,9 @@ FUNCTION fSendCancelMessage RETURNS CHAR
    DEF VAR lcCode        AS CHAR NO-UNDO. /* code */
    DEF VAR lcResultCode  AS CHAR NO-UNDO.
    DEF VAR lcResultDesc  AS CHAR NO-UNDO.
+   DEF VAR ldCurrentTS   AS DEC  NO-UNDO.
+
+   ldCurrentTS = Func.Common:mMakeTS().
 
    IF llLogRequest THEN fLogMsg(STRING(iiOrderID) + "; Start construct cancel message").
    xmlrpc_cleanup().
@@ -162,7 +165,7 @@ FUNCTION fSendCancelMessage RETURNS CHAR
    END.
 
    /* SEND message */
-   fLogMsg(STRING(iiOrderId) + "; Call RPC Method (Adapter)").
+   fLogMsg(STRING(iiOrderId) + "; Call RPC Method (Adapter) at " + Func.Common:mTS2HMS(ldCurrentTS)).
    RUN pRPCMethodCall("sign.updateProcess", TRUE).
 
    IF gi_xmlrpc_error NE 0 THEN DO:
@@ -215,6 +218,7 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
 
    DEF VAR lcContactMediumStruct AS CHAR NO-UNDO.
    DEF VAR lcMediumStruct        AS CHAR NO-UNDO.
+   DEF VAR lcCountryIso3         AS CHAR NO-UNDO.
 
    DEF BUFFER bOrder FOR Order.
    DEF BUFFER bOrderCustomer FOR OrderCustomer.
@@ -230,9 +234,16 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
 
       IF NOT AVAIL bOrderCustomer THEN RETURN FALSE.
 
+      FIND FIRST Country NO-LOCk WHERE
+         Country.CoName EQ bOrderCustomer.Country NO-ERROR.
+      IF AVAIL Country THEN
+         lcCountryIso3 = Country.CountryISO3.
+      ELSE
+         lcCountryIso3 = "SDT". /* Sin determinal - not determined */
+
       add_string(pcStruct,"firstName",bOrderCustomer.FirstName).
-      add_string(pcStruct,"midName","").
-      add_string(pcStruct,"lastName",bOrderCustomer.SurName1).
+      add_string(pcStruct,"midName",bOrderCustomer.SurName1).
+      add_string(pcStruct,"lastName",bOrderCustomer.SurName2).
 
       /* contactMedium */
       add_string(pcStruct,"contactMedium.preferred","true").
@@ -250,7 +261,7 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
       /* individualIdentification */
       add_string(pcStruct,"individualIdentification.type",bOrderCustomer.CustIdType).
       add_string(pcStruct,"individualIdentification.identificationId",bOrderCustomer.CustId).
-      add_string(pcStruct,"individualIdentification.country",bOrderCustomer.Country).
+      add_string(pcStruct,"individualIdentification.country",lcCountryIso3).
 
       /* processData */
       add_string(pcStruct,"accountId",bOrder.ContractID).
@@ -331,6 +342,9 @@ FUNCTION fSendSigningMessage RETURNS CHAR
    DEF VAR lcCode        AS CHAR NO-UNDO. /* code */
    DEF VAR lcResultCode  AS CHAR NO-UNDO.
    DEF VAR lcResultDesc  AS CHAR NO-UNDO.
+   DEF VAR ldCurrentTS   AS DEC  NO-UNDO.
+
+   ldCurrentTS = Func.Common:mMakeTS().
 
    IF llLogRequest THEN fLogMsg(STRING(iiOrderId) + "; Start construct signing message").
    xmlrpc_cleanup().
@@ -351,7 +365,7 @@ FUNCTION fSendSigningMessage RETURNS CHAR
    END.
 
    /* SEND message */
-   fLogMsg(STRING(iiOrderId) + "; Call RPC Method (Adapter)").
+   fLogMsg(STRING(iiOrderId) + "; Call RPC Method (Adapter) at " + Func.Common:mTS2HMS(ldCurrentTS)).
    RUN pRPCMethodCall("sign.registerSignProcess", TRUE).
 
     lcRespStruct = get_struct(response_toplevel_id, "0").
@@ -417,7 +431,7 @@ PROCEDURE pCheckActionLog:
 
          IF AVAIL bOrder THEN DO:
             IF llLogRequest THEN fLogMsg(STRING(bOrder.OrderId) + "; Found OrderId " + 
-                    ", OrderStatusCode: " + STRING(bOrder.StatusCode) + 
+                    ", Create StatusCode: " + ActionLog.ActionChar + 
                     ", ActionLog.ActionID: " + ActionLog.ActionID).
             IF ActionLog.ActionID EQ "dssent" THEN
                /* Send for signing */

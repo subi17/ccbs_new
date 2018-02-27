@@ -95,7 +95,8 @@ FUNCTION fHandleSignature RETURNS CHAR
             ActionLog.UserCode     = Syst.Var:katun
             ActionLog.CustNum      = bOrder.CustNum
             ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
-            ActionLog.toDate       = TODAY.
+            ActionLog.toDate       = TODAY
+            ActionLog.ActionChar   = icStatus.
 
       lcStatus = "".
    END.
