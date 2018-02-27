@@ -956,4 +956,65 @@ FUNCTION fGetMobileLineCompareFee RETURNS DECIMAL
 
 END FUNCTION. 
 
+
+FUNCTION fGetOldestCLITypeOfMobSub RETURNS CHAR
+   (iiCustNum AS INT):
+
+DEF VAR lcOldestCLIType  AS CHAR   NO-UNDO.
+
+   FOR EACH MobSub NO-LOCK WHERE MobSub.Brand = Syst.Var:gcBrand AND
+                                 MobSub.CustNum = iiCustNum 
+                                 BY CreationDate:
+      IF fCLITypeIsMainLine(MobSub.CLIType) THEN DO:
+         lcOldestCLIType = MobSub.CLIType.
+         LEAVE.
+      END.
+   END.
+
+   RETURN lcOldestCLIType.
+
+END FUNCTION.
+
+
+FUNCTION fGetOldestCLITypeOfOrder RETURNS CHAR
+   (iiCustNum AS INT):
+
+DEF VAR lcOldestCLIType  AS CHAR  NO-UNDO.
+
+   FOR EACH Order NO-LOCK WHERE Order.Brand = Syst.Var:gcBrand AND
+                      Order.CustNum = iiCustNum AND
+                      LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0
+                      BY CrStamp:                      
+      IF fCLITypeIsMainLine(Order.CLIType) THEN DO:
+         lcOldestCLIType = Order.CLIType.
+         LEAVE.            
+      END.
+   END.
+
+   RETURN lcOldestCLIType.
+   
+END FUNCTION.
+
+
+FUNCTION fGetPayType RETURNS CHAR
+   (iiCustNum AS INT):
+
+DEF VAR lcPayType        AS CHAR NO-UNDO.
+DEF VAR lcCLIType        AS CHAR NO-UNDO.
+
+   /* YOT-5618 Handle correctly Way of payment for 66 and 67 */
+   lcCLIType = fGetOldestCLITypeOfMobSub(iiCustNum).
+   IF lcCLIType EQ "" THEN
+      lcCLIType = fGetOldestCLITypeOfOrder(iiCustNum).
+
+   IF INDEX(lcCLIType,"DSL") > 0 THEN
+      lcPayType = "66".
+   ELSE IF INDEX(lcCLIType,"TFH") > 0 THEN
+      lcPayType = "67".
+   ELSE lcPayType = "68".
+    
+   RETURN lcPayType.    
+      
+END FUNCTION.
+
 &ENDIF
