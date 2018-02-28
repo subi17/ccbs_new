@@ -25,6 +25,7 @@ DEF VAR lcError AS CHAR NO-UNDO.
 DEF VAR liOrigStatus AS INT NO-UNDO.
 DEF VAR liMsreq AS INT NO-UNDO.
 DEF VAR lcResult AS CHAR NO-UNDO.
+DEF VAR lcBaseBundle AS CHAR NO-UNDO.
 
 FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
 
@@ -78,6 +79,17 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
          RUN StarEventMakeModifyEvent(lhCustomer).
       END.
 
+      IF AVAIL CLIType THEN 
+      DO:
+          IF CLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY} THEN 
+              ASSIGN lcBaseBundle = CLIType.BaseBundle.
+          ELSE IF CLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} OR 
+                  CLIType.TariffType = {&CLITYPE_TARIFFTYPE_FIXEDONLY}  THEN     
+              ASSIGN lcBaseBundle = CLIType.FixedBundle.
+          ELSE 
+              ASSIGN lcBaseBundle = CLIType.CliType.    
+      END.
+      
       RUN Mc/creasfee.p (Mobsub.CustNum,
                     Mobsub.MsSeq,
                     Today,
@@ -85,7 +97,7 @@ IF liOrigStatus EQ {&REQUEST_STATUS_NEW} THEN DO:
                     fGetProFeemodel(Mobsub.clitype),
                     9,
                     ?,
-                    "Pro Migrate",    /* memo   */
+                    "¤" + lcBaseBundle,    /* memo   */
                     FALSE,           /* no messages to screen */
                     Syst.Var:katun,
                     "ProMigrate",
