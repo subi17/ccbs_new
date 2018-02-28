@@ -17,11 +17,7 @@ DEF VAR lcDSSResult AS CHAR NO-UNDO.
 DEF VAR lcALLPostpaidBundles       AS CHAR NO-UNDO.
 DEF VAR lcALLPostpaidUPSELLBundles AS CHAR NO-UNDO.
 
-DEF BUFFER bufOrder  FOR Order.
-DEF BUFFER bufMobsub FOR Mobsub.
-DEF BUFFER bufTermMobsub FOR TermMobsub.
 DEF BUFFER bbMsRequest FOR MSRequest.
-DEF BUFFER bPendRequest FOR MsRequest.
 
 FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
 
@@ -53,10 +49,10 @@ IF (MSRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} OR
     MSRequest.ReqType = {&REQTYPE_ICC_CHANGE}) AND
     MSRequest.ReqIParam5 > 0 THEN DO:
    
-  FIND FIRST bPendRequest NO-LOCK WHERE
-             bPendRequest.MsRequest = MsRequest.ReqIParam5 NO-ERROR.
-  IF AVAILABLE bPendRequest AND
-     LOOKUP(STRING(bPendRequest.ReqStatus),
+  FIND FIRST bbMsRequest NO-LOCK WHERE
+             bbMsRequest.MsRequest = MsRequest.ReqIParam5 NO-ERROR.
+  IF AVAILABLE bbMsRequest AND
+     LOOKUP(STRING(bbMsRequest.ReqStatus),
             {&REQ_INACTIVE_STATUSES} + ",3") = 0 THEN
      RETURN "ERROR:Another request that this depends on has not been " +
             "completed".
@@ -67,10 +63,10 @@ IF MsRequest.ReqType = {&REQTYPE_DSS} AND
    MsRequest.ReqCParam1 = "CREATE" THEN DO:
 
    IF MsRequest.ReqIParam2 > 0 THEN DO:
-      FIND FIRST bPendRequest NO-LOCK WHERE 
-                 bPendRequest.MsRequest = MsRequest.ReqIParam2 NO-ERROR.
-      IF AVAILABLE bPendRequest AND 
-         LOOKUP(STRING(bPendRequest.ReqStatus),
+      FIND FIRST bbMsRequest NO-LOCK WHERE 
+                 bbMsRequest.MsRequest = MsRequest.ReqIParam2 NO-ERROR.
+      IF AVAILABLE bbMsRequest AND 
+         LOOKUP(STRING(bbMsRequest.ReqStatus),
                 {&REQ_INACTIVE_STATUSES} + ",3") = 0 THEN 
          RETURN "ERROR:Another request that this depends on has not been " +
                 "completed".
@@ -167,6 +163,10 @@ FUNCTION fLocalMemo RETURNS LOGIC
 END FUNCTION.
 
 PROCEDURE pSolog:
+
+   DEF BUFFER bufOrder  FOR Order.
+   DEF BUFFER bufMobsub FOR Mobsub.
+   DEF BUFFER bufTermMobsub FOR TermMobsub.
 
    DEFINE VARIABLE lcCli AS CHARACTER NO-UNDO.
    DEF VAR ldCurrBal AS DECIMAL NO-UNDO. 
