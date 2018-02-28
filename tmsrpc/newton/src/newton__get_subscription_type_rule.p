@@ -523,8 +523,8 @@ IF NOT MobSub.PayType THEN DO:
             IF fIsConvergentORFixedOnly(CLIType.CLIType) OR fIsConvergentORFixedOnly(OldCLIType.CLIType) THEN 
             DO:
                 ASSIGN 
-                    ldOriginalFee = fGetMobileLineCompareFee(MobSub.MsSeq, OldCLIType.BaseBundle, DCCLI.ValidFrom)
-                    ldNewFee      = fGetMobileLineCompareFee(MobSub.MsSeq, CLIType.BaseBundle   , TODAY).
+                    ldOriginalFee = fGetMobileLineCompareFee(OldCLIType.CLIType, OldCLIType.BaseBundle, DCCLI.ValidFrom)
+                    ldNewFee      = fGetMobileLineCompareFee(CLIType.CLIType   , CLIType.BaseBundle   , TODAY).
 
                 IF ldOriginalFee <= ldNewFee THEN
                     NEXT.

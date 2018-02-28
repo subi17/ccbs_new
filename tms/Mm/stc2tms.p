@@ -18,7 +18,7 @@
 {Func/barrfunc.i}
 {Func/profunc_request.i}
 {Func/add_lines_request.i}
-
+{Func/custfunc.i}
 /* 21.2.2018 Migration is not used, commented the include file
 {Migration/migrationfunc.i}*/
 
@@ -1575,7 +1575,10 @@ PROCEDURE pFinalize:
 END PROCEDURE.
 
 PROCEDURE pUpdateCustomer:
+    DEF VAR lcCategory AS CHAR NO-UNDO.
+
     DEF BUFFER bMobsub FOR Mobsub.    
+
     IF (bNewTariff.TariffType EQ {&CLITYPE_TARIFFTYPE_FIXEDONLY} OR Mobsub.MsStatus EQ {&MSSTATUS_MOBILE_NOT_ACTIVE}) AND
       Customer.DelType NE {&INV_DEL_TYPE_NO_DELIVERY}                                                                 AND
       NOT CAN-FIND(FIRST bMobSub NO-LOCK WHERE
@@ -1586,15 +1589,29 @@ PROCEDURE pUpdateCustomer:
                          bMobSub.MsStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE}) THEN 
         RUN pUpdateCustomerDelType.
 
-    IF AVAIL Order AND Order.OrderType = {&ORDER_TYPE_STC}                                                AND 
-       (bOldType.Paytype = {&CLITYPE_PAYTYPE_PREPAID}  AND CLIType.PayType = {&CLITYPE_PAYTYPE_POSTPAID}) OR 
-       (bOldType.Paytype = {&CLITYPE_PAYTYPE_POSTPAID} AND CLIType.PayType = {&CLITYPE_PAYTYPE_POSTPAID}) THEN 
+    IF AVAIL Order AND Order.OrderType = {&ORDER_TYPE_STC} THEN 
     DO:
         FIND FIRST OrderCustomer WHERE OrderCustomer.Brand   = Syst.Var:gcBrand                            AND
                                        OrderCustomer.OrderID = Order.OrderId                      AND
                                        OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-LOCK NO-ERROR.
         IF AVAIL OrderCustomer AND OrderCustomer.Category > "" THEN                                        
             RUN pUpdateCustomerCategory(INPUT OrderCustomer.Category).
+    END.
+    ELSE
+    DO:
+        FIND FIRST CustCat WHERE
+                   Custcat.Brand    EQ Syst.Var:gcBrand  AND
+                   Custcat.category EQ Customer.Category NO-LOCK NO-ERROR.
+        IF AVAIL CustCat THEN
+        DO:           
+            fgetCustSegment(Customer.CustIdType,
+                            CustCat.SelfEmployed,
+                            CustCat.Pro, 
+                            Customer.OrgId,
+                            OUTPUT lcCategory).
+            IF Customer.Category <> lcCategory THEN 
+                RUN pUpdateCustomerCategory(INPUT lcCategory).
+        END.
     END.
 
     FIND CURRENT Customer NO-LOCK.

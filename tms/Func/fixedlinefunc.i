@@ -833,14 +833,14 @@ FUNCTION fCheckFixedLineStatusForMainLine RETURNS LOGICAL
 END FUNCTION.
 
 FUNCTION fGetMobileLineCompareFee RETURNS DECIMAL
-    (iiMsSeq      AS INTEGER,
+    (icCLIType    AS CHARACTER,
      icBaseBundle AS CHARACTER,
      idaActivated AS DATE ):
 
     DEF BUFFER bMobileLine    FOR CliType.
     DEF BUFFER bDayCampaign   FOR DayCampaign.
     DEF BUFFER bFMItem        FOR FMItem.
-    DEF BUFFER bMsOwner       FOR MsOwner.
+    DEF BUFFER bCliType       FOR CliType.
 
     DEF VAR lcFMPriceList             AS CHAR NO-UNDO.
     DEF VAR ldeActivatedTS            AS DECI NO-UNDO.
@@ -859,16 +859,30 @@ FUNCTION fGetMobileLineCompareFee RETURNS DECIMAL
         DO:
             ASSIGN ldeActivatedTS = Func.Common:mDate2TS(idaActivated).
 
-            FIND FIRST bMsOwner WHERE bMsOwner.MsSeq = iiMsSeq AND bMsOwner.TSBegin <= ldeActivatedTS NO-LOCK NO-ERROR.
-            IF NOT AVAILABLE bMsOwner THEN
-                FIND LAST bMsOwner WHERE bMsOwner.MsSeq = iiMsSeq AND bMsOwner.TSBegin > ldeActivatedTS NO-LOCK NO-ERROR.
+            FIND FIRST bCliType WHERE
+                       bCliType.Brand   = Syst.Var:gcBrand AND
+                       bCliType.CLIType = icCliType        NO-LOCK NO-ERROR.
+            IF AVAIL bCliType THEN
+            DO:
+                FOR EACH PListConf USE-INDEX RatePlan NO-LOCK WHERE
+                         PListConf.Brand    = Syst.Var:gcBrand   AND
+                         PListConf.RatePlan = bCliType.PricePlan AND
+                         PListConf.dFrom   <= idaActivated       AND
+                         PListConf.dTo     >= idaActivated,
+                   FIRST PriceList OF PListConf NO-LOCK,
+                   FIRST bFMItem NO-LOCK WHERE
+                         bFMItem.Brand     = Syst.Var:gcBrand      AND
+                         bFMItem.FeeModel  = bDayCampaign.FeeModel AND
+                         bFMItem.PriceList = PriceList.PriceList   AND 
+                         bFMitem.FromDate  <= idaActivated         AND
+                         bFMitem.ToDate    >= idaActivated                  
+                   BY PListConf.Prior:
+                   lcFMPriceList = PListConf.PriceList.
+                   LEAVE.
+                END.
+            END.
 
-            IF AVAIL MsOwner THEN 
-                ASSIGN lcFMPriceList = fFeeModelPriceList(bMsOwner.AgrCust,
-                                                          bMsOwner.BillTarget,
-                                                          bDayCampaign.FeeModel,
-                                                          idaActivated).    
-            ELSE 
+            IF lcFMPriceList = "" THEN 
                 ASSIGN lcFMPriceList = "COMMON".
 
             FIND FIRST bFMItem WHERE
@@ -887,5 +901,66 @@ FUNCTION fGetMobileLineCompareFee RETURNS DECIMAL
     RETURN ldeFee.
 
 END FUNCTION. 
+
+
+FUNCTION fGetOldestCLITypeOfMobSub RETURNS CHAR
+   (iiCustNum AS INT):
+
+DEF VAR lcOldestCLIType  AS CHAR   NO-UNDO.
+
+   FOR EACH MobSub NO-LOCK WHERE MobSub.Brand = Syst.Var:gcBrand AND
+                                 MobSub.CustNum = iiCustNum 
+                                 BY CreationDate:
+      IF fCLITypeIsMainLine(MobSub.CLIType) THEN DO:
+         lcOldestCLIType = MobSub.CLIType.
+         LEAVE.
+      END.
+   END.
+
+   RETURN lcOldestCLIType.
+
+END FUNCTION.
+
+
+FUNCTION fGetOldestCLITypeOfOrder RETURNS CHAR
+   (iiCustNum AS INT):
+
+DEF VAR lcOldestCLIType  AS CHAR  NO-UNDO.
+
+   FOR EACH Order NO-LOCK WHERE Order.Brand = Syst.Var:gcBrand AND
+                      Order.CustNum = iiCustNum AND
+                      LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0
+                      BY CrStamp:                      
+      IF fCLITypeIsMainLine(Order.CLIType) THEN DO:
+         lcOldestCLIType = Order.CLIType.
+         LEAVE.            
+      END.
+   END.
+
+   RETURN lcOldestCLIType.
+   
+END FUNCTION.
+
+
+FUNCTION fGetPayType RETURNS CHAR
+   (iiCustNum AS INT):
+
+DEF VAR lcPayType        AS CHAR NO-UNDO.
+DEF VAR lcCLIType        AS CHAR NO-UNDO.
+
+   /* YOT-5618 Handle correctly Way of payment for 66 and 67 */
+   lcCLIType = fGetOldestCLITypeOfMobSub(iiCustNum).
+   IF lcCLIType EQ "" THEN
+      lcCLIType = fGetOldestCLITypeOfOrder(iiCustNum).
+
+   IF INDEX(lcCLIType,"DSL") > 0 THEN
+      lcPayType = "66".
+   ELSE IF INDEX(lcCLIType,"TFH") > 0 THEN
+      lcPayType = "67".
+   ELSE lcPayType = "68".
+    
+   RETURN lcPayType.    
+      
+END FUNCTION.
 
 &ENDIF
