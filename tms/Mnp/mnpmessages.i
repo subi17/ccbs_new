@@ -92,6 +92,8 @@ FUNCTION fMNPOperation RETURNS LOGICAL
 
    DEFINE VARIABLE lcLongXML AS LONGCHAR NO-UNDO. 
    lcLongXML = pcXML.
+      
+   DEF BUFFER MNPOperation FOR MNPOperation.
 
    DO TRANS:
       CREATE MNPOperation.
