@@ -123,7 +123,7 @@ IF MsRequest.ReqType = {&REQTYPE_DSS} AND
          fReqError(lcDSSResult).
       RETURN.
    END. /* IF NOT fIsDSSAllowed(INPUT  MsRequest.CustNum */
-   ELSE DO:
+   ELSE DO TRANSACTION:
       FIND CURRENT MsRequest EXCLUSIVE-LOCK NO-ERROR.
       IF AVAILABLE MsRequest THEN
          MsRequest.ReqCParam2 = lcDSSResult.
