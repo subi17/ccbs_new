@@ -257,7 +257,7 @@ PROCEDURE pBobCheckUpsell:
 
    fCreateUpsellBundle(MobSub.MsSeq,
                        lcUpsell,
-                       {&REQUEST_SOURCE_SCRIPT}, /* "5" - Script value, to avoid SMS sending by Request management due to ACTION RULES FOR 432 */
+                       {&REQUEST_SOURCE_YOIGO_TOOL}, 
                        Func.Common:mMakeTS(),
                        OUTPUT liRequest,
                        OUTPUT lcError). 
@@ -300,7 +300,7 @@ PROCEDURE pBobCheckUpsell:
       CASE lcUpsell:
          WHEN "SAN1GB_001" THEN lcSMS_Text = lcUpsell.
          WHEN "SAN5GB_002" THEN lcSMS_Text = lcUpsell.
-         OTHERWISE lcSMS_Text = "BundleActivation".
+         OTHERWISE lcSMS_Text = "".
       END.
 
       IF lcSMS_Text <> "" THEN
