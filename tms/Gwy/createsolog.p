@@ -254,7 +254,7 @@ PROCEDURE pSolog:
                                               ELSE MsRequest.MsRequest),
                                        INPUT FALSE,   /* Mandatory Request */
                                        OUTPUT lcError).
-               IF liReq > 0 THEN DO:
+               IF liReq > 0 THEN DO TRANSACTION:
                   FIND CURRENT MsRequest EXCLUSIVE-LOCK.
                   ASSIGN MsRequest.ReqIParam5 = liReq.
                   fReqStatus(0,"").
@@ -298,40 +298,41 @@ PROCEDURE pSolog:
    ldActStamp = MSRequest.ActStamp.
    IF liOffSet NE 0 THEN 
       ldActStamp = Func.Common:mSecOffSet(ldActStamp,liOffSet).
-      
-   CREATE Solog.
-   ASSIGN
-      Solog.Solog = NEXT-VALUE(Solog).
- 
-   ASSIGN
-      Solog.CreatedTS    = Func.Common:mMakeTS()
-      Solog.MsSeq        = MsreQuest.MsSeq    /* Mobile Subscription No.    */
-      Solog.CLI          = lcCLI              /* MSISDN                     */
-      Solog.Stat         = 0                  /* just created               */
-      Solog.Brand        = MSRequest.Brand
-      Solog.Users        = MSREquest.UserCode
-      Solog.TimeSlotTMS  = ldActStamp
-      Solog.ActivationTS = ldActStamp
-      Solog.MSrequest    = MSRequest.MSRequest.
-      
-   IF MsRequest.ReqCParam1 = "CHANGEICC"      OR
-      MSrequest.ReqCparam1 = "CHANGEMSISDN"   OR
-      MSrequest.ReqType    = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} THEN 
-      Solog.CommLine = fMakeCommLine2(Solog.Solog,MsRequest.MSrequest,False).
-   ELSE IF MSrequest.ReqType = {&REQTYPE_DSS} THEN
-      Solog.CommLine = fMakeDSSCommLine(Solog.Solog,MsRequest.MSrequest).
-   ELSE      
-      Solog.CommLine = fMakeCommLine(Solog.Solog,MsRequest.ReqCParam1).
+   DO TRANSACTION:
+      CREATE Solog.
+      ASSIGN
+         Solog.Solog = NEXT-VALUE(Solog).
 
-   ASSIGN
-      SoLog.CommLine = TRIM(REPLACE(SoLog.CommLine,",,",","),",").
+      ASSIGN
+         Solog.CreatedTS    = Func.Common:mMakeTS()
+         Solog.MsSeq        = MsreQuest.MsSeq    /* Mobile Subscription No.    */
+         Solog.CLI          = lcCLI              /* MSISDN                     */
+         Solog.Stat         = 0                  /* just created               */
+         Solog.Brand        = MSRequest.Brand
+         Solog.Users        = MSREquest.UserCode
+         Solog.TimeSlotTMS  = ldActStamp
+         Solog.ActivationTS = ldActStamp
+         Solog.MSrequest    = MSRequest.MSRequest.
 
-   FIND CURRENT MsRequest EXCLUSIVE-LOCK.
+      IF MsRequest.ReqCParam1 = "CHANGEICC"      OR
+         MSrequest.ReqCparam1 = "CHANGEMSISDN"   OR
+         MSrequest.ReqType    = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} THEN
+         Solog.CommLine = fMakeCommLine2(Solog.Solog,MsRequest.MSrequest,False).
+      ELSE IF MSrequest.ReqType = {&REQTYPE_DSS} THEN
+         Solog.CommLine = fMakeDSSCommLine(Solog.Solog,MsRequest.MSrequest).
+      ELSE
+         Solog.CommLine = fMakeCommLine(Solog.Solog,MsRequest.ReqCParam1).
 
-   MsRequest.Solog = Solog.Solog.
+      ASSIGN
+         SoLog.CommLine = TRIM(REPLACE(SoLog.CommLine,",,",","),",").
 
-   fReqStatus(5,"").
-         
+      FIND CURRENT MsRequest EXCLUSIVE-LOCK.
+
+      MsRequest.Solog = Solog.Solog.
+
+      fReqStatus(5,"").
+   END.
+
 END PROCEDURE.
 
 
