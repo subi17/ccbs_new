@@ -147,7 +147,8 @@ PROCEDURE pAdd_DSS:
     DEF VAR lcMatrixAnalyseResult AS CHAR NO-UNDO.
     DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
     DEF VAR llProSubscription     AS LOGI NO-UNDO.
-    
+    DEF VAR lcUpsell              AS CHAR NO-UNDO.
+
     ASSIGN 
         llProSubscription     = fIsProSubscription(piMsSeq)
         lcPRODSSUpsellList    = fCParamC("PRO_DSS_FLEX_UPSELL_LIST")
@@ -168,17 +169,20 @@ PROCEDURE pAdd_DSS:
         DO:
             DO liUpsellCount = 1 TO NUM-ENTRIES(DayCampaign.BundleUpsell):
 
-                IF llProSubscription THEN
-                DO:
-                    IF NOT fIsBundleAllowed(Mobsub.CLIType,
-                                            ENTRY(liUpsellCount,DayCampaign.BundleUpsell),
-                                            OUTPUT lcMatrixAnalyseResult) THEN 
-                        NEXT.
-                END.
-                ELSE IF LOOKUP(ENTRY(liUpsellCount,DayCampaign.BundleUpsell),lcPRODSSUpsellList) > 0 THEN 
-                    NEXT.
-                
-                add_string(lcResultArray,"",ENTRY(liUpsellCount, DayCampaign.BundleUpsell) + "|" + STRING(Mobsub.MsSeq)).
+               lcUpsell = ENTRY(liUpsellCount,DayCampaign.BundleUpsell).
+
+               IF LOOKUP(lcUpsell, lcPRODSSUpsellList) > 0 THEN DO:
+                  IF llProSubscription THEN
+                  DO:
+                      IF NOT fIsBundleAllowed(Mobsub.CLIType,
+                                              lcUpsell,
+                                              OUTPUT lcMatrixAnalyseResult) THEN
+                         NEXT.
+                  END.
+                  ELSE NEXT.
+               END.
+
+               add_string(lcResultArray,"", lcUpsell + "|" + STRING(Mobsub.MsSeq)).
             END.
         END.
     END.    
