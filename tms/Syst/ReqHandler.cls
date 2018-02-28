@@ -33,10 +33,12 @@ CLASS Syst.ReqHandler:
       FIELD LastProcessed AS DATETIME-TZ
       INDEX TenantName IS PRIMARY TenantName LastProcessed ReqType ReqStatus.
 
-   DEFINE PRIVATE VARIABLE aiQueue       AS INTEGER   NO-UNDO.
-   DEFINE PRIVATE VARIABLE aiMaxTime     AS INTEGER   NO-UNDO.
-   DEFINE PRIVATE VARIABLE acTenants     AS CHARACTER NO-UNDO.
-   DEFINE PRIVATE VARIABLE aiTenantCount AS INTEGER   NO-UNDO.
+   DEFINE PRIVATE VARIABLE aiQueue         AS INTEGER   NO-UNDO.
+   DEFINE PRIVATE VARIABLE aiMaxTime       AS INTEGER   NO-UNDO.
+   DEFINE PRIVATE VARIABLE acTenants       AS CHARACTER NO-UNDO.
+   DEFINE PRIVATE VARIABLE aiTenantCount   AS INTEGER   NO-UNDO.
+   DEFINE PRIVATE VARIABLE acCurrentTenant AS CHARACTER NO-UNDO.
+   DEFINE PRIVATE VARIABLE ahQuery         AS HANDLE    NO-UNDO.
 
    CONSTRUCTOR PUBLIC ReqHandler
       (iiQueue AS INTEGER):
@@ -75,10 +77,23 @@ CLASS Syst.ReqHandler:
 
       END.
 
+      CREATE QUERY ahQuery.
+
+      ahQuery:SET-BUFFERS(BUFFER ttProcess:HANDLE).
+      /* Preselect is needed as we are updating the field which is part
+         of the index */
+      ahQuery:QUERY-PREPARE('PRESELECT EACH ttProcess NO-LOCK BREAK BY ttProcess.TenantName').
+
    END CONSTRUCTOR.
 
 
    DESTRUCTOR PUBLIC ReqHandler( ):
+
+      IF VALID-HANDLE(ahQuery)
+      THEN DO:
+         ahQuery:QUERY-CLOSE().
+         DELETE OBJECT ahQuery.
+      END.
 
       EMPTY TEMP-TABLE ttProcess.
       EMPTY TEMP-TABLE ttStatistic.
@@ -198,20 +213,34 @@ CLASS Syst.ReqHandler:
       DEFINE VARIABLE liStartTime    AS INTEGER   NO-UNDO.
       DEFINE VARIABLE liResult       AS INTEGER   NO-UNDO.
       DEFINE VARIABLE liMTIME        AS INTEGER   NO-UNDO.
+      DEFINE VARIABLE llOK           AS LOGICAL   NO-UNDO.
       
       ASSIGN
          liStartTime = MTIME.
 
-      FOR EACH ttProcess
-         BREAK BY ttProcess.TenantName:
+      ahQuery:QUERY-OPEN().
 
-         IF FIRST-OF(ttProcess.TenantName)
-         THEN multitenancy.TenantInformation:mSetEffectiveTenant(ttProcess.TenantName).
+      DO WHILE TRUE ON ERROR UNDO, THROW:
+
+         llOK = ahQuery:GET-NEXT(NO-LOCK).
+
+         IF llOK = ?
+         THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot process query", 1).
+
+         /* No more records, or query is not open */
+         IF NOT llOK
+         THEN LEAVE.
+
+         IF ahQuery:FIRST-OF(1) AND ttProcess.TenantName NE acCurrentTenant
+         THEN DO:
+            multitenancy.TenantInformation:mSetEffectiveTenant(ttProcess.TenantName).
+            acCurrentTenant = ttProcess.TenantName.
+         END.
 
          ASSIGN
             ldeActTime              = mMake2DT(TODAY,TIME)
             ttProcess.LastProcessed = NOW.
-            
+
          FOR
             EACH MsRequest NO-LOCK WHERE
                  MsRequest.Brand     = "1"                 AND
@@ -258,10 +287,14 @@ CLASS Syst.ReqHandler:
             THEN RETURN FALSE.
          END.
       END.
-      
+
       /* We will be there only when there are no request or we got every
          request handled */
       RETURN TRUE.
+
+      FINALLY:
+         ahQuery:QUERY-CLOSE().
+      END FINALLY.
    
    END METHOD.
 
