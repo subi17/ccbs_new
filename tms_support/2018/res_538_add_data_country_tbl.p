@@ -7,9 +7,9 @@
 */
 
 DEF STREAM sin.
-INPUT STREAM sin FROM "res_538_country_codes.input".
+INPUT STREAM sin FROM "/apps/yoigo/tms_support/2018/res_538_country_codes.input".
 DEF STREAM sout.
-OUTPUT STREAM sout TO "res_538_country_codes.log".
+OUTPUT STREAM sout TO "/apps/yoigo/tms_support/2018/res_538_country_codes.log".
 
 DEF VAR lcline AS CHAR NO-UNDO. 
 DEF VAR lcCountryName AS CHAR NO-UNDO. 
