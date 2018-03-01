@@ -32,8 +32,8 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 top_array = add_array(response_toplevel_id, "").
 
-DEFINE VARIABLE OnOffAlias AS CHARACTER NO-UNDO INIT "VMS,LANG,CF,IRDCUTOFF,BB,LTE".
-DEFINE VARIABLE OnOffTms   AS CHARACTER NO-UNDO INIT "VMS,LANG,CF,IRDCUTOFF,BB,LTE".
+DEFINE VARIABLE OnOffAlias AS CHARACTER NO-UNDO INIT "VMS,LANG,CF,IRDCUTOFF,BB,LTE,NW".
+DEFINE VARIABLE OnOffTms   AS CHARACTER NO-UNDO INIT "VMS,LANG,CF,IRDCUTOFF,BB,LTE,NW".
 DEFINE VARIABLE lcService  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcServiceAlias  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcValue AS CHARACTER NO-UNDO. 
@@ -62,6 +62,20 @@ DO lii = 1 TO NUM-ENTRIES(OnOffTms):
         lcValue = "off".
       ELSE
         lcValue =  TRIM(STRING(SubSer.SSStat EQ 0, "off/on")).
+
+      /* RES-885 NRTR */
+      IF SubSer.ServCom = "NW" THEN DO:
+         lcValue = "".
+         /* Maybe supported later
+         IF SubSer.SSStat EQ 1 THEN
+            lcValue = "Solo Yoigo".*/
+         IF SubSer.SSStat = 2 THEN
+            lcValue = "Yoigo + Orange".
+         ELSE IF SubSer.SSStat = 3 THEN
+            lcValue = "Yoigo + Orange + Movistar".
+         ELSE
+            lcValue = "Yoigo + Orange". /* else needed?? */ 
+      END.
       
       add_string(top_struct, "value", lcValue).
 

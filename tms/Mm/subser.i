@@ -114,4 +114,54 @@ OUTPUT ocError AS CHARACTER):
 
    RETURN 0. /* ok */
 
-END FUNCTION. 
+END FUNCTION.
+
+
+/* RES-885 NRTR */
+FUNCTION fSubSerValidateNW RETURNS INT
+   (INPUT iiMsseq AS INT,
+    INPUT icServCom AS CHAR,
+    INPUT icNewSSStat AS CHAR,
+    OUTPUT ocError AS CHAR):
+
+    DEF VAR liDefValue AS INT NO-UNDO.
+    DEF VAR ok AS LOGICAL NO-UNDO.
+
+    FIND FIRST MobSub WHERE MobSub.MsSeq = iiMsseq NO-LOCK NO-ERROR.
+
+    FIND FIRST SubSer NO-LOCK WHERE
+       SubSer.MsSeq = iiMsSeq AND
+       SubSer.ServCom = icServCom NO-ERROR.
+
+    /* 1 */
+    IF LOOKUP(icNewSSStat,"Yoigo + Orange,Yoigo + Orange + Movistar",",") = 0 THEN DO:
+       ocError = "Illegal network profile.".
+       RETURN 4.
+    END.
+
+    /* 2 */
+    /* can service be changed from here */
+    liDefValue = fServComValue(MobSub.CLIType,
+                               icServCom,
+                               OUTPUT ok).
+    IF liDefValue = ? OR
+      (liDefValue = 0 AND NOT ok) THEN DO:
+       RETURN 2.
+    END.
+
+    /* 3 */
+    /* Check ongoing service requests */
+    IF CAN-FIND(FIRST MsRequest WHERE
+                      MsRequest.MsSeq      = iiMsSeq AND
+                      MsRequest.ReqType    = 1       AND
+                      MsRequest.ReqCParam1 = SubSer.ServCom AND
+                      LOOKUP(STRING(MsRequest.ReqStat),"2,4,9") = 0) THEN DO:
+       ocError = "There is an active change request for service." + CHR(10) +
+                 "Change is not allowed before request is handled.".
+       RETURN 3.
+    END.
+
+    RETURN 0. /* ok */
+
+END FUNCTION.
+

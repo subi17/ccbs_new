@@ -198,26 +198,40 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
          END.
       END.
  
-      liValidate = fSubSerValidate(
-         INPUT MobSub.MsSeq,
-         INPUT Subser.ServCom,
-         INPUT liValue,
-         OUTPUT ocError).
+      /* RES-885 NRTR */
+      IF SubSer.ServCom EQ "NW" THEN
+         liValidate = fSubSerValidateNW(
+            INPUT MobSub.MsSeq,
+            INPUT Subser.ServCom,
+            INPUT pcValue,
+            OUTPUT ocError).
+      ELSE
+         liValidate = fSubSerValidate(
+            INPUT MobSub.MsSeq,
+            INPUT Subser.ServCom,
+            INPUT liValue,
+            OUTPUT ocError).
 
       IF liValidate NE 0 THEN 
       CASE liValidate:
          WHEN 3 THEN RETURN appl_err("Ongoing network command").
+         WHEN 4 THEN RETURN appl_err(ocError). /* RES-885 error */
          OTHERWISE appl_err("Service change is not allowed").
       END.
-
-      liValidate = fSubSerSSStat(
-         INPUT MobSub.MsSeq,
-         INPUT Subser.ServCom,
-         INPUT liValue,
-         OUTPUT ocError).
+ 
+      IF SubSer.ServCom EQ "NW" THEN DO:
+         /* Check if new value is different to old value */
+      END.
+      ELSE DO:
+         liValidate = fSubSerSSStat(
+            INPUT MobSub.MsSeq,
+            INPUT Subser.ServCom,
+            INPUT liValue,
+            OUTPUT ocError).
      
-      IF liValidate NE 0 THEN
-         RETURN appl_err(SUBST("Unknown service value: &1", pcValue)).
+         IF liValidate NE 0 THEN
+            RETURN appl_err(SUBST("Unknown service value: &1", pcValue)).
+      END.
 
       /* Return error if new value is same as existing value */ 
       IF SubSer.ServCom = "BB" AND
