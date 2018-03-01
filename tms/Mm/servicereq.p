@@ -275,6 +275,7 @@ PROCEDURE pServCompUpdate:
    DEF BUFFER bOrder          FOR Order.
    DEF BUFFER bOrderAccessory FOR OrderAccessory.
    DEF BUFFER bSubSer         FOR SubSer.
+   DEF BUFFER bRequest        FOR MsRequest.
 
    /* request is under work */
    IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
