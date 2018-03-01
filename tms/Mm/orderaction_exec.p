@@ -501,7 +501,7 @@ PROCEDURE pDiscountPlan:
       THEN llError = TRUE.
       IF NUM-ENTRIES(OrderAction.ItemParam,"|") > 1 AND 
          NUM-ENTRIES(ENTRY(2,OrderAction.ItemParam,"|"),"=") > 1
-      THEN liDiscPeriods = INTEGER(ENTRY(2,ENTRY(1,OrderAction.ItemParam,"|"),"=")) NO-ERROR.
+      THEN liDiscPeriods = INTEGER(ENTRY(2,ENTRY(2,OrderAction.ItemParam,"|"),"=")) NO-ERROR.
       IF ERROR-STATUS:ERROR = TRUE
       THEN llError = TRUE.
    END.
