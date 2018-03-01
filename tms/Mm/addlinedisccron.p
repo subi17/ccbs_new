@@ -10,26 +10,32 @@
 {Syst/commali.i}
 {Syst/eventval.i}
 {Syst/tmsconst.i}
-{Func/fdss.i} 
+{Func/dss_matrix.i} 
+{Func/dss_request.i}
 {Mc/dpmember.i}
+{Func/extralinefunc.i}
 {Func/ftransdir.i}
 {Syst/eventlog.i}
+{Mm/addlinedisccron.i}
 
 DEFINE STREAM strout1.
 DEFINE STREAM strout2.
 
-DEFINE BUFFER bConvDiscountPlan FOR DiscountPlan.
-DEFINE BUFFER bMODiscountPlan   FOR DiscountPlan.
-DEFINE BUFFER bELDiscountPlan   FOR DiscountPlan.
-DEFINE BUFFER bConvDPMember     FOR DPMember.
-DEFINE BUFFER bMODPMember       FOR DPMember.
-DEFINE BUFFER bELDPMember       FOR DPMember.
-DEFINE BUFFER bALMobSub         FOR MobSub.
-DEFINE BUFFER bELMobSub         FOR MobSub.
-DEFINE BUFFER bAvELMobSub       FOR MobSub.
-DEFINE BUFFER bMLMobSub         FOR MobSub.
+DEFINE BUFFER bConvDiscountPlan20 FOR DiscountPlan.
+DEFINE BUFFER bConvDiscountPlan50 FOR DiscountPlan.
+DEFINE BUFFER bMODiscountPlan     FOR DiscountPlan.
+DEFINE BUFFER bELDiscountPlan     FOR DiscountPlan.
+DEFINE BUFFER bConvDPMember20     FOR DPMember.
+DEFINE BUFFER bConvDPMember50     FOR DPMember.
+DEFINE BUFFER bMODPMember         FOR DPMember.
+DEFINE BUFFER bELDPMember         FOR DPMember.
+DEFINE BUFFER bALMobSub           FOR MobSub.
+DEFINE BUFFER bELMobSub           FOR MobSub.
+DEFINE BUFFER bAvELMobSub         FOR MobSub.
+DEFINE BUFFER bMLMobSub           FOR MobSub.
 
-DEF VAR lcConvDiscPlan     AS CHAR NO-UNDO. 
+DEF VAR lcConvDiscPlan20   AS CHAR NO-UNDO. 
+DEF VAR lcConvDiscPlan50   AS CHAR NO-UNDO. 
 DEF VAR lcMODiscPlan       AS CHAR NO-UNDO. 
 DEF VAR lcDiscError        AS CHAR NO-UNDO. 
 DEF VAR lcOutputLine       AS CHAR NO-UNDO.
@@ -40,12 +46,13 @@ DEF VAR liRequest          AS INT  NO-UNDO.
 DEF VAR lcBundleId         AS CHAR NO-UNDO. 
 DEF VAR lcAddLineLogFile   AS CHAR NO-UNDO. 
 DEF VAR lcExtraLineLogFile AS CHAR NO-UNDO. 
+DEF VAR llgAvail           AS LOG  NO-UNDO. 
 DEF VAR lcSpoolDir         AS CHAR NO-UNDO.
 DEF VAR lcOutDir           AS CHAR NO-UNDO.
 
 ASSIGN lcSpoolDir         = fCParam("AddLineCron","OutSpoolDir")
        lcOutDir           = fCParam("AddLineCron","OutDir")
-       lcAddLineLogFile   = "addlinedisc "           + "_" + 
+       lcAddLineLogFile   = "addlinedisc"            + "_" + 
                             STRING(TODAY,"99999999") + "_" + 
                             REPLACE(STRING(TIME,"HH:MM:SS"),":","") + ".log"
        lcExtraLineLogFile = "extrainedisc"           + "_" + 
@@ -232,7 +239,7 @@ END.
 
 OUTPUT STREAM strout1 CLOSE.
 
-fMove2TransDir(lcExtraLineLogFile, "", lcOutDir).
+fMove2TransDir(lcSpoolDir + lcExtraLineLogFile, "", lcOutDir).
 
 fBatchLog("FINISH",lcOutDir + lcExtraLineLogFile).
 
@@ -243,31 +250,47 @@ FOR EACH bALMobSub NO-LOCK WHERE
          bALMobSub.Brand EQ Syst.Var:gcBrand  AND 
   LOOKUP(bALMobSub.CLIType,{&ADDLINE_CLITYPES}) > 0: 
 
-   ASSIGN lcConvDiscPlan = "DISC" + bALMobSub.CLIType
-          lcMODiscPlan   = "DISC" + bALMobSub.CLIType + "HM".  
+   ASSIGN lcConvDiscPlan20 = "DISC" + bALMobSub.CLIType
+          lcConvDiscPlan50 = "DISC" + bALMobSub.CLIType + "H"
+          lcMODiscPlan     = "DISC" + bALMobSub.CLIType + "HM"
+          llgAvail         = FALSE
+          lcDiscError      = "".  
 
-   FIND FIRST bConvDiscountPlan NO-LOCK WHERE
-              bConvDiscountPlan.Brand    EQ Syst.Var:gcBrand AND
-              bConvDiscountPlan.DPRuleID EQ lcConvDiscPlan   NO-ERROR.
+   FIND FIRST bConvDiscountPlan20 NO-LOCK WHERE
+              bConvDiscountPlan20.Brand    EQ Syst.Var:gcBrand AND
+              bConvDiscountPlan20.DPRuleID EQ lcConvDiscPlan20 NO-ERROR.
+   
+   FIND FIRST bConvDiscountPlan50 NO-LOCK WHERE
+              bConvDiscountPlan50.Brand    EQ Syst.Var:gcBrand AND
+              bConvDiscountPlan50.DPRuleID EQ lcConvDiscPlan50 NO-ERROR.
 
    FIND FIRST bMODiscountPlan NO-LOCK WHERE  
               bMODiscountPlan.Brand    EQ Syst.Var:gcBrand AND 
               bMODiscountPlan.DPRuleID EQ lcMODiscPlan     NO-ERROR.
 
-   IF NOT AVAIL bConvDiscountPlan OR 
-      NOT AVAIL bMODiscountPlan   THEN DO:
+   IF NOT AVAIL bConvDiscountPlan20 OR
+      NOT AVAIL bConvDiscountPlan50 OR
+      NOT AVAIL bMODiscountPlan     THEN DO:
       PUT STREAM strout2 UNFORMATTED 
          "Additional line Convergent or MobileOnly DiscountPlan is not available" SKIP.
       LEAVE.   
    END.
 
-   IF AVAIL bConvDiscountPlan THEN 
-      FIND FIRST bConvDPMember NO-LOCK WHERE
-                 bConvDPMember.DPId       EQ bConvDiscountPlan.DPId  AND
-                 bConvDPMember.HostTable  EQ "MobSub"                AND
-                 bConvDPMember.KeyValue   EQ STRING(bALMobSub.MsSeq) AND
-                 bConvDPMember.ValidTo    >= TODAY                   AND
-                 bConvDPMember.ValidFrom  <= bConvDPMember.ValidTo   NO-ERROR.
+   IF AVAIL bConvDiscountPlan20 THEN 
+      FIND FIRST bConvDPMember20 NO-LOCK WHERE
+                 bConvDPMember20.DPId       EQ bConvDiscountPlan20.DPId AND
+                 bConvDPMember20.HostTable  EQ "MobSub"                 AND
+                 bConvDPMember20.KeyValue   EQ STRING(bALMobSub.MsSeq)  AND
+                 bConvDPMember20.ValidTo    >= TODAY                    AND
+                 bConvDPMember20.ValidFrom  <= bConvDPMember20.ValidTo  NO-ERROR.
+   
+   IF AVAIL bConvDiscountPlan50 THEN 
+      FIND FIRST bConvDPMember50 NO-LOCK WHERE
+                 bConvDPMember50.DPId       EQ bConvDiscountPlan50.DPId AND
+                 bConvDPMember50.HostTable  EQ "MobSub"                 AND
+                 bConvDPMember50.KeyValue   EQ STRING(bALMobSub.MsSeq)  AND
+                 bConvDPMember50.ValidTo    >= TODAY                    AND
+                 bConvDPMember50.ValidFrom  <= bConvDPMember50.ValidTo  NO-ERROR.
 
    IF AVAIL bMODiscountPlan THEN 
       FIND FIRST bMODPMember NO-LOCK WHERE
@@ -277,8 +300,9 @@ FOR EACH bALMobSub NO-LOCK WHERE
                  bMODPMember.ValidTo    >= TODAY                   AND
                  bMODPMember.ValidFrom  <= bMODPMember.ValidTo     NO-ERROR.
    
-   IF AVAIL bConvDPMember OR 
-      AVAIL bMODPMember   THEN NEXT.
+   IF AVAIL bConvDPMember20 OR
+      AVAIL bConvDPMember50 OR 
+      AVAIL bMODPMember     THEN NEXT.
 
    FIND FIRST Customer NO-LOCK WHERE 
               Customer.Brand   EQ Syst.Var:gcBrand  AND
@@ -294,23 +318,33 @@ FOR EACH bALMobSub NO-LOCK WHERE
    END.
 
    /* Check for Existing 3P Convergent subscription for a customer */ 
-   IF fCheckExistingConvergent(Customer.CustidType,
-                               Customer.OrgId,
-                               bALMobSub.CLIType) THEN 
-      lcDiscError = fCreateAddLineDiscount(bALMobSub.MsSeq,
+   IF fCheckExistingConvergentSubscription(Customer.CustidType,
+                                           Customer.OrgId,
                                            bALMobSub.CLIType,
-                                           TODAY,
-                                           bConvDiscountPlan.DPRuleID).
+                                           bALMoBSub.MsSeq) THEN 
+      ASSIGN llgAvail    = TRUE
+             lcDiscError = fCreateAddLineDiscount(bALMobSub.MsSeq,
+                                                  bALMobSub.CLIType,
+                                                  TODAY,
+                                                  bConvDiscountPlan50.DPRuleID).
    /* Check for Exisiting Mobile subscription for a customer */
-   ELSE IF fCheckExistingMobileOnly(Customer.CustidType,
-                                    Customer.OrgId,
-                                    bALMobSub.CLIType) THEN
-      lcDiscError = fCreateAddLineDiscount(bALMobSub.MsSeq,
-                                           bALMobSub.CLIType,
-                                           TODAY,
-                                           bMODiscountPlan.DPRuleID).
-                                           
-   IF lcDiscError NE "" THEN DO:                                     
+   ELSE IF fCheckExistingMobileOnlySubscription(Customer.CustidType,
+                                                Customer.OrgId,
+                                                bALMobSub.CLIType,
+                                                bALMobSub.MsSeq) THEN
+      ASSIGN llgAvail    = TRUE
+             lcDiscError = fCreateAddLineDiscount(bALMobSub.MsSeq,
+                                                  bALMobSub.CLIType,
+                                                  TODAY,
+                                                  bMODiscountPlan.DPRuleID).
+
+   IF NOT llgAvail THEN NEXT. 
+
+   /* MESSAGE bALMobSub.CLI SKIP 
+           bALMobSub.CLIType SKIP lcDiscError VIEW-AS ALERT-BOX.
+    */
+   IF lcDiscError NE "" AND 
+      lcDiscError NE ?  THEN DO:                                     
       PUT STREAM strout2 UNFORMATTED 
          bALMobSub.CLI          ";"
          bALMobSub.CLIType      ";"
@@ -328,6 +362,8 @@ END.
 
 OUTPUT STREAM strout2 CLOSE.
 
-fMove2TransDir(lcAddLineLogFile, "", lcOutDir).
+fMove2TransDir(lcSpoolDir + lcAddLineLogFile, "", lcOutDir).
 
 fBatchLog("FINISH",lcOutDir + lcAddLineLogFile).
+
+
