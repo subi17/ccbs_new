@@ -201,7 +201,8 @@ FUNCTION fSendCancelMessage RETURNS CHAR
       IF llLogRequest THEN fLogMsg(STRING(iiOrderID) + "; Cancel message to Adapter sent successfully!").
    END.
    ELSE DO: 
-      /* anything to do? */   
+      /* Seems that httpCode 500 falls here */
+      RETURN "Error".
    END.
 
    RETURN "".
@@ -408,7 +409,8 @@ FUNCTION fSendSigningMessage RETURNS CHAR
       IF llLogRequest THEN fLogMsg(STRING(iiOrderID) + "; Message to Adapter sent successfully!").
    END.
    ELSE DO:
-      /* anything to do? */
+      /* Seems that httpCode 500 falls here */
+      RETURN "Error".
    END.
 
    RETURN "".
