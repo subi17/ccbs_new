@@ -484,7 +484,7 @@ DO TRANSACTION:
       IF AVAIL Customer AND
                Customer.DelType EQ {&INV_DEL_TYPE_EMAIL_PENDING} THEN DO:
          FIND CURRENT Customer EXCLUSIVE-LOCK.
-         Customer.DelType = {&INV_DEL_TYPE_SMS}.
+         Customer.DelType = {&INV_DEL_TYPE_ESI}.
          RELEASE Customer.
       END.
    END.
