@@ -55,18 +55,6 @@ DEF VAR liRequest          AS INT   NO-UNDO.
 DEF VAR liQuarTime         AS INT   NO-UNDO.
 DEF VAR liSimStat          AS INT   NO-UNDO.
 DEF VAR liMSISDNStat       AS INT   NO-UNDO.
-DEF VAR lcTenant           AS CHAR  NO-UNDO.
-
-FIND FIRST ttInput NO-ERROR.
-IF AVAIL ttInput THEN 
-DO:    
-   ASSIGN lcTenant = 
-      (IF ttInput.donorCode = "005" THEN {&TENANT_YOIGO}
-       ELSE IF ttInput.donorCode = "200" THEN {&TENANT_MASMOVIL}
-       ELSE ""). 
-
-   {mnp/src/mnp_settenant.i lcTenant}
-END.
 
 MESSAGE_LOOP:
 FOR EACH ttInput NO-LOCK:   
@@ -274,4 +262,4 @@ IF AVAIL MNPBuzon THEN MNPBuzon.StatusCode = 10.
 FINALLY:
    EMPTY TEMP-TABLE ttInput.
    EMPTY TEMP-TABLE ttMultipleMSISDN.
-   END.
+END.
