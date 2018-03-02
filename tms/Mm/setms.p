@@ -388,7 +388,7 @@ BY ttSolog.ActStamp:
        LOOKUP(Mobsub.CLIType,lcPrepaidVoiceTariffs) > 0) THEN DO:
 
       FIND FIRST bCliType WHERE
-                 bCliType.CliType = Mobsub.CliType 
+                 bCliType.CliType = Mobsub.CliType
       NO-LOCK NO-ERROR.
 
       IF MsRequest.ReqCParam1 = "HSDPA" AND

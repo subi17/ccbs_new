@@ -11,7 +11,7 @@
 function fMakeCommLine returns CHAR
 (INPUT iiSolog     AS INT,
  INPUT icValue     AS CHAR).
-                      
+
    DEF BUFFER provSolog     FOR Solog.
    DEF BUFFER provMobsub    FOR Mobsub.
    DEF BUFFER provMSREquest FOR MSRequest.

@@ -12,9 +12,7 @@
 &THEN
 &GLOBAL-DEFINE REMFEES_I YES
 
-{Syst/commali.i}
-{Syst/eventval.i}
-{Func/fixedfee.i}
+{Func/coinv.i}
 {Func/create_eventlog.i}
 
 DEF TEMP-TABLE ttFeeHandle NO-UNDO

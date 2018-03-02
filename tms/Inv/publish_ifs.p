@@ -13,6 +13,7 @@
 {Func/fmakemsreq.i}
 {Func/email.i}
 {Func/multitenantfunc.i}
+{Func/msreqfunc.i}
 
 DEFINE INPUT PARAMETER iiMsRequest AS INT NO-UNDO.
 

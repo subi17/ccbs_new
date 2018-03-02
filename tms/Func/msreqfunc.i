@@ -15,7 +15,6 @@
 &THEN
 
 &GLOBAL-DEFINE msreqfunc YES
-{Syst/commali.i}
 {Func/cparam2.i}
 
 DEF STREAM sReqLog.
@@ -96,7 +95,7 @@ FUNCTION fReqStatus RETURNS LOGICAL
 
    DEF VAR liMainStatus AS INT  NO-UNDO.
    DEF BUFFER bRequest  FOR MsRequest.
-   
+
    MSREQUEST:
    DO TRANS:
       FIND bRequest WHERE ROWID(bRequest) = ROWID(MsRequest)
