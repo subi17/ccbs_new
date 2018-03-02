@@ -12,6 +12,7 @@ DEF VAR lcText        AS CHAR NO-UNDO.
 DEF VAR top_struct    AS CHAR NO-UNDO.
 DEF VAR lcOrderStatus AS CHAR NO-UNDO.
 DEF VAR llResult      AS LOG  NO-UNDO INIT TRUE.
+DEF VAR liSkipCLI     AS INT  NO-UNDO. 
 
 IF validate_request(param_toplevel_id, "string,string") EQ ? THEN RETURN.
 pcTenant = get_string(param_toplevel_id, "0").
@@ -29,6 +30,23 @@ IF AVAILABLE MobSub THEN
    ASSIGN lcText        = "Subscription exists for this number"
           lcOrderStatus = "6"
           llResult      = FALSE.
+
+/* YTC-2800 */
+liSkipCLI = INT(pcCli) NO-ERROR.
+
+IF lcText EQ "" AND
+   (liSkipCLI >= 722620000 AND liSkipCLI <= 722629999) THEN DO:
+
+   FIND FIRST msisdn NO-LOCK where
+              msisdn.brand = Syst.Var:gcBrand and
+              msisdn.cli = pcCLI USE-INDEX CLI no-error.
+
+   IF NOT AVAIL msisdn OR 
+      (msisdn.statuscode NE 6 AND msisdn.statuscode NE 13) THEN
+   ASSIGN lcText        = "Subscription exists for this number"
+          lcOrderStatus = "6"
+          llResult      = FALSE.
+END.
 
 IF lcText = "" THEN DO:
    FIND FIRST Order NO-LOCK WHERE
