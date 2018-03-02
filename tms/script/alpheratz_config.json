@@ -48,5 +48,33 @@
                 {
                     "": { "-logginglevel": "4" }
                 }
+        },
+    "Syst.ReqRunner":
+        {
+            "request":
+                {
+                    "1":  { "databases": "common ordercanal mobile counter star reratelog mcdr mcdrdtl",
+                            "-logginglevel": "4" },
+                    "2":  { "databases": "common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr",
+                            "-logginglevel": "4" },
+                    "3":  { "databases": "common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr",
+                            "-logginglevel": "4" },
+                    "4":  { "databases": "common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr",
+                            "-logginglevel": "4" },
+                    "5":  { "databases": "common ordercanal mobile counter star reratelog mcdr mcdrdtl",
+                            "-logginglevel": "4" },
+                    "6":  { "databases": "common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr",
+                            "-logginglevel": "4" },
+                    "7":  { "databases": "common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr",
+                            "-logginglevel": "4" },
+                    "8":  { "databases": "common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr",
+                            "-logginglevel": "4" },
+                    "9":  { "databases": "common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr",
+                            "-logginglevel": "4" },
+                    "10": { "databases": "common ordercanal mobile counter star reratelog mcdr mcdrdtl",
+                            "-logginglevel": "4" },
+                    "11": { "databases": "common ordercanal mobile counter star reratelog mcdr mcdrdtl prepcdr",
+                            "-logginglevel": "4" }
+                }
         }        
 }
