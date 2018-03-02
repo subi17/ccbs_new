@@ -1019,6 +1019,7 @@ PROCEDURE pTerminate:
       CAN-FIND(FIRST Customer NO-LOCK WHERE
                      Customer.CustNum = MobSub.CustNum        AND
                     (Customer.DelType = {&INV_DEL_TYPE_EMAIL} OR
+                     Customer.DelType = {&INV_DEL_TYPE_ESI} OR
                      Customer.DelTYpe = {&INV_DEL_TYPE_SMS})) THEN
    DO:
       llCallProc = TRUE.
