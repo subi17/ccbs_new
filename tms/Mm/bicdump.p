@@ -129,6 +129,7 @@ FOR EACH Customer WHERE
    ELSE IF Customer.DelType NE {&INV_DEL_TYPE_PAPER} AND
            Customer.DelType NE {&INV_DEL_TYPE_EMAIL} AND
            Customer.DelType NE {&INV_DEL_TYPE_SMS}   AND
+           Customer.DelType NE {&INV_DEL_TYPE_ESI}   AND
            Customer.DelType NE {&INV_DEL_TYPE_EMAIL_PENDING} AND
            Customer.DelType NE {&INV_DEL_TYPE_NO_DELIVERY} THEN DO:
       lcReason = "Invoice Delivery Type is not allowed".
