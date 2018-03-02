@@ -279,6 +279,7 @@ PROCEDURE pInitialize:
                       ELSE fCParamC("PentahoBillingReport")
       lcNotPrinted = STRING({&INV_DEL_TYPE_EMAIL}) + "," +
                      STRING({&INV_DEL_TYPE_SMS}) + "," +
+                     STRING({&INV_DEL_TYPE_ESI}) + "," +
                      STRING({&INV_DEL_TYPE_NO_DELIVERY}) + "," +
                      STRING({&INV_DEL_TYPE_EMAIL_PENDING}) + "," + 
                      STRING({&INV_DEL_TYPE_NO_TRAFFIC}) + "," + 
