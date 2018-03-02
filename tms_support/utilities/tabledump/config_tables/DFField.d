@@ -1542,3 +1542,12 @@
 "" 551 "TPService" "VoucherActiveDt" "VoucherActiveDt" 22 08/01/18 31/12/49
 "" 551 "TPService" "VoucherExpiryDt" "VoucherExpiryDt" 23 08/01/18 31/12/49
 "" 551 "TPService" "VoucherCancelDt" "VoucherCancelDt" 24 08/01/18 31/12/49
+"1" 552 "" "#BANKCODE" "Bank Code" 1 21/02/18 31/12/49
+"1" 552 "" "#BANKNAME" "Bank Code Name" 2 21/02/18 31/12/49
+"1" 552 "" "#RUNDATE" "Run Date" 3 21/02/18 31/12/49
+"1" 552 "" "#PAYTERMQTY" "PayTerm Qty" 4 21/02/18 31/12/49
+"1" 552 "" "#Q25QTY" "Q25 Qty" 5 21/02/18 31/12/49
+"1" 552 "" "#TOTALAMT" "Total Amount" 6 21/02/18 31/12/49
+"1" 552 "" "#PAYTERMAMT" "PayTerm Amount" 7 21/02/18 31/12/49
+"1" 552 "" "#Q25AMT" "Q25 Amount" 8 21/02/18 31/12/49
+"1" 552 "" "#Q25EXTNAMT" "Q25 Extension Amount" 9 21/02/18 31/12/49
