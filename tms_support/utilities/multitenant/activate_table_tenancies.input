@@ -170,6 +170,7 @@
 |common|TMSCodes|1529|T|System|
 |common|TMSPass|4001|T|System|
 |common|TMSPrinter|4|S|System|
+|common|TMSRelation|4|T|System|
 |common|TMSUser|2077|T|System|
 |common|Token|15|S|System|
 |common|UserGrp|9|S|System|
@@ -207,6 +208,7 @@
 |ordercanal|TMSParam|1720|T|System|
 |ordercanal|TopupScheme|15|T|Sales|
 |ordercanal|TopupSchemeRow|19|T|Sales|
+|ordercanal|TPService|1|T|System|
 |mobile|BillType|11|S|Billing|
 |mobile|CallScanner|4001|T|System|
 |mobile|CSVHeader|14|S|Rating|

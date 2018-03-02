@@ -646,6 +646,8 @@
 "Reparacion" "Reparacion" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "RVTERM" "Terminal Residual Amount" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "RVTERM12" "Q25 extension periodical contract" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"SAN1GBMFUPS" "SAN1GB_001 upsell monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"SAN5GBMFUPS" "SAN5GB_002 upsell monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "SIMLOCK" "Codigo desbloqueo" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "SIMLOCK1" "Prueba" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 1
 "SPOTIFYMF" "Spotify Monthly Fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
