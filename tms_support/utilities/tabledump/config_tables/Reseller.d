@@ -45,6 +45,7 @@
 "FM" "FILMAMADRID" "" 0 "" "" "" "marta.delarosa@yoigo.es" "1" ? no "" ""
 "FR" "FACTORIA INBOUND OF" "" 0 "" "" "" "cristina.munoz@masmovil.com" "1" 99 yes "" ""
 "FW" "FACTORIA INBOUND ON" "" 0 "" "" "" "cristina.munoz@masmovil.com" "1" 99 yes "" ""
+"GB" "GSS Backlog Negocios" "" 0 "" "" "" "david.rivas@masmovil.com" "1" 99 yes "" ""
 "GC" "GSS CARTERA" "" 0 "" "" "" "jose.encinas@masmovil.com" "1" 99 yes "" ""
 "GE" "GSS EMISION" "" 0 "" "" "" "maria.barreiro.sanisidro@ext.yoigo.com" "1" 99 yes "" ""
 "GM" "GSS MADRID OUTBOUND" "" 0 "" "" "" "jose.encinas@masmovil.com" "1" 99 yes "" ""
