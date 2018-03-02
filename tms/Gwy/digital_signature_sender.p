@@ -280,6 +280,21 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
       add_string(pcStruct,"orderId",STRING(bOrderCustomer.OrderId)).
       add_string(pcStruct,"sfId",bOrder.Salesman).
       add_string(pcStruct,"orderDate",Func.Common:mUTCTime(bOrder.CrStamp)).
+
+      IF bOrder.PayType THEN
+         add_string(pcStruct,"paymentMethod","2"). /* prepaid */
+      ELSE
+         add_string(pcStruct,"paymentMethod","1"). /* postpaid */
+
+      IF bOrderCustomer.CustIdType EQ "NIF" THEN
+         add_string(pcStruct,"customerType","1").
+      ELSE IF bOrderCustomer.CustIdType EQ "CIF" THEN
+         add_string(pcStruct,"customerType","2").
+      ELSE IF bOrderCustomer.CustIdType EQ "PASSPORT" THEN /* ?? */
+         add_string(pcStruct,"customerType","3").
+
+      add_string(pcStruct,"contractType","1"). /* ??? */
+      add_boolean(pcStruct,"financed",FALSE).
  
 /* Old specs version:
       add_string(pcStruct,"customerId",bOrderCustomer.CustId).
