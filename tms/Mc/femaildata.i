@@ -999,7 +999,8 @@ PROCEDURE pGetDeltype:
       END.   
       ELSE IF OrderCustomer.DelType EQ {&INV_DEL_TYPE_EMAIL} OR
               OrderCustomer.DelType EQ {&INV_DEL_TYPE_FUSION_EMAIL} OR
-              OrderCustomer.DelType EQ {&INV_DEL_TYPE_SMS} THEN DO:
+              OrderCustomer.DelType EQ {&INV_DEL_TYPE_SMS} OR
+              OrderCustomer.DelType EQ {&INV_DEL_TYPE_ESI} THEN DO:
          IF liLang = 5 THEN lcResult = "electronic".
          ELSE lcResult =  "electrónica".
       END.
