@@ -54,3 +54,4 @@
 "1" 93 "Publish IFS file" "Inv/publish_ifs.p" "Cron" yes 0 "DB.Connects,4GLTrace:1" "/scratch/log/requester/reqtype93.log" 1048576 yes no "Batch"
 "1" 94 "Push invoice" "Inv/pushinvoice.p" "Cron" yes 0 "DB.Connects,4GLTrace:1" "/scratch/log/requester/reqtype94.log" 1048576 yes no "Batch"
 "1" 95 "Pro migration" "" "ProMig" yes 2 "" "" 0 no no ""
+"1" 96 "E invoice" "Inv/einvoice.p" "Cron" yes 0 "DB.Connects,4GLTrace:1" "/scratch/log/requester/reqtype96.log" 1048576 yes no "Batch"
