@@ -191,6 +191,7 @@ REPEAT WITH FRAME fCrit ON ENDKEY UNDO CritLoop, NEXT CritLoop:
 
    IF liDelType = {&INV_DEL_TYPE_EMAIL} OR
       liDelType = {&INV_DEL_TYPE_SMS} OR
+      liDelType = {&INV_DEL_TYPE_ESI} OR
       liDelType = {&INV_DEL_TYPE_NO_DELIVERY} OR
       liDelType = {&INV_DEL_TYPE_EMAIL_PENDING} OR
       liDelType = {&INV_DEL_TYPE_NO_TRAFFIC} THEN
