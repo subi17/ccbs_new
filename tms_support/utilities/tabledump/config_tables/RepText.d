@@ -5847,6 +5847,11 @@
 1 "" 3 "LG V30 Azul" 0 "P030V30AC" "1" 27/11/17 31/12/49
 1 "" 4 "LG V30 Azul" 0 "P030V30AC" "1" 27/11/17 31/12/49
 1 "" 5 "LG V30 Blue" 0 "P030V30AC" "1" 27/11/17 31/12/49
+1 "" 1 "LG V30 Rosa" 0 "P030V30PC" "1" 16/02/18 31/12/49
+1 "" 2 "LG V30 Rosa" 0 "P030V30PC" "1" 16/02/18 31/12/49
+1 "" 3 "LG V30 Rosa" 0 "P030V30PC" "1" 16/02/18 31/12/49
+1 "" 4 "LG V30 Rosa" 0 "P030V30PC" "1" 16/02/18 31/12/49
+1 "" 5 "LG V30 Pink" 0 "P030V30PC" "1" 16/02/18 31/12/49
 1 "" 1 "LG Wine Smart Azul" 0 "P030WISA2" "1" 25/09/15 31/12/49
 1 "" 2 "LG Wine Smart Azul" 0 "P030WISA2" "1" 25/09/15 31/12/49
 1 "" 3 "LG Wine Smart Azul" 0 "P030WISA2" "1" 25/09/15 31/12/49
@@ -6584,11 +6589,11 @@
 1 "" 3 "Samsung Galaxy J3 2017 Negro" 0 "P034J37NC" "1" 27/07/17 31/12/49
 1 "" 4 "Samsung Galaxy J3 2017 Negro" 0 "P034J37NC" "1" 27/07/17 31/12/49
 1 "" 5 "Samsung Galaxy J3 2017 Black" 0 "P034J37NC" "1" 27/07/17 31/12/49
-1 "" 1 "Samsung Galaxy J3 2017 Plata" 0 "P034J37SC" "1" 14/08/17 31/12/49
+1 "" 1 "Samsung Galaxy J3 2017" 0 "P034J37SC" "1" 14/08/17 31/12/49
 1 "" 2 "Samsung Galaxy J3 2017 Plata" 0 "P034J37SC" "1" 14/08/17 31/12/49
 1 "" 3 "Samsung Galaxy J3 2017 Plata" 0 "P034J37SC" "1" 14/08/17 31/12/49
 1 "" 4 "Samsung Galaxy J3 2017 Plata" 0 "P034J37SC" "1" 14/08/17 31/12/49
-1 "" 5 "Samsung Galaxy J3 2017 Silver" 0 "P034J37SC" "1" 14/08/17 31/12/49
+1 "" 5 "Samsung Galaxy J3 2017" 0 "P034J37SC" "1" 14/08/17 31/12/49
 1 "" 1 "Samsung J400 Azul" 0 "P034J40A2" "1" 25/02/09 31/12/49
 1 "" 5 "Samsung J400 Blue" 0 "P034J40A2" "1" 25/02/09 31/12/49
 1 "" 1 "Samsung J400 Azul" 0 "P034J40A3" "1" 25/02/09 31/12/49
@@ -8692,6 +8697,11 @@
 1 "" 3 "Alcatel U5 Negro" 0 "P045AU5NC" "1" 27/07/17 31/12/49
 1 "" 4 "Alcatel U5 Negro" 0 "P045AU5NC" "1" 27/07/17 31/12/49
 1 "" 5 "Alcatel U5 Black" 0 "P045AU5NC" "1" 27/07/17 31/12/49
+1 "" 1 "Alcatel U5 Blanco" 0 "P045AU5WC" "1" 20/02/18 31/12/49
+1 "" 2 "Alcatel U5 Blanco" 0 "P045AU5WC" "1" 20/02/18 31/12/49
+1 "" 3 "Alcatel U5 Blanco" 0 "P045AU5WC" "1" 20/02/18 31/12/49
+1 "" 4 "Alcatel U5 Blanco" 0 "P045AU5WC" "1" 20/02/18 31/12/49
+1 "" 5 "Alcatel U5 White" 0 "P045AU5WC" "1" 20/02/18 31/12/49
 1 "" 1 "Alcatel POP C3 Rosa con carcasa" 0 "P045C3FP2" "1" 07/01/15 31/12/49
 1 "" 2 "Alcatel ONETOUCH POP C3 Rosa" 0 "P045C3FP2" "1" 07/01/15 31/12/49
 1 "" 3 "Alcatel ONETOUCH POP C3 Rosa" 0 "P045C3FP2" "1" 07/01/15 31/12/49
@@ -10042,7 +10052,7 @@
 1 "" 2 "iPhone 7 128 GB Negro brillante" 0 "P097712BC" "1" 06/09/17 31/12/49
 1 "" 3 "iPhone 7 128 GB Negro brillante" 0 "P097712BC" "1" 06/09/17 31/12/49
 1 "" 4 "iPhone 7 128 GB Negro brillante" 0 "P097712BC" "1" 06/09/17 31/12/49
-1 "" 5 "iPhone 7 128 GB Black mate" 0 "P097712BC" "1" 06/09/17 31/12/49
+1 "" 5 "iPhone 7 128 GB Jet Black" 0 "P097712BC" "1" 06/09/17 31/12/49
 1 "" 1 "iPhone 7 128 GB Oro" 0 "P097712D2" "1" 13/09/16 31/12/49
 1 "" 2 "iPhone 7 128 GB Oro" 0 "P097712D2" "1" 13/09/16 31/12/49
 1 "" 3 "iPhone 7 128 GB Oro" 0 "P097712D2" "1" 13/09/16 31/12/49
@@ -10092,7 +10102,7 @@
 1 "" 2 "iPhone 7 256 GB Negro Billante" 0 "P097725BC" "1" 06/09/17 31/12/49
 1 "" 3 "iPhone 7 256 GB Negro Billante" 0 "P097725BC" "1" 06/09/17 31/12/49
 1 "" 4 "iPhone 7 256 GB Negro Billante" 0 "P097725BC" "1" 06/09/17 31/12/49
-1 "" 5 "iPhone 7 256 GB Black mate" 0 "P097725BC" "1" 06/09/17 31/12/49
+1 "" 5 "iPhone 7 256 GB Jet Black" 0 "P097725BC" "1" 06/09/17 31/12/49
 1 "" 1 "iPhone 7 256 GB Oro" 0 "P097725D2" "1" 13/09/16 31/12/49
 1 "" 2 "iPhone 7 256 GB Oro" 0 "P097725D2" "1" 13/09/16 31/12/49
 1 "" 3 "iPhone 7 256 GB Oro" 0 "P097725D2" "1" 13/09/16 31/12/49
@@ -10217,7 +10227,7 @@
 1 "" 2 "iPhone 7 Plus 128 GB Oro rosa" 0 "P0977P1RC" "1" 06/09/17 31/12/49
 1 "" 3 "iPhone 7 Plus 128 GB Oro rosa" 0 "P0977P1RC" "1" 06/09/17 31/12/49
 1 "" 4 "iPhone 7 Plus 128 GB Oro rosa" 0 "P0977P1RC" "1" 06/09/17 31/12/49
-1 "" 5 "iPhone 7 Plus 128 GB Pink Gold" 0 "P0977P1RC" "1" 06/09/17 31/12/49
+1 "" 5 "iPhone 7 Plus 128 GB Rose Gold" 0 "P0977P1RC" "1" 06/09/17 31/12/49
 1 "" 1 "iPhone 7 Plus 128 GB Plata" 0 "P0977P1S2" "1" 13/09/16 31/12/49
 1 "" 2 "iPhone 7 Plus 128 GB Plata" 0 "P0977P1S2" "1" 13/09/16 31/12/49
 1 "" 3 "iPhone 7 Plus 128 GB Plata" 0 "P0977P1S2" "1" 13/09/16 31/12/49
@@ -10237,7 +10247,7 @@
 1 "" 2 "iPhone 7 Plus 256 GB Negro Brillante" 0 "P0977P2BC" "1" 06/09/17 31/12/49
 1 "" 3 "iPhone 7 Plus 256 GB Negro Brillante" 0 "P0977P2BC" "1" 06/09/17 31/12/49
 1 "" 4 "iPhone 7 Plus 256 GB Negro Brillante" 0 "P0977P2BC" "1" 06/09/17 31/12/49
-1 "" 5 "iPhone 7 Plus 256 GB Black mate" 0 "P0977P2BC" "1" 06/09/17 31/12/49
+1 "" 5 "iPhone 7 Plus 256 GB Jet Black" 0 "P0977P2BC" "1" 06/09/17 31/12/49
 1 "" 1 "iPhone 7 Plus 256 GB Oro" 0 "P0977P2D2" "1" 13/09/16 31/12/49
 1 "" 2 "iPhone 7 Plus 256 GB Oro" 0 "P0977P2D2" "1" 13/09/16 31/12/49
 1 "" 3 "iPhone 7 Plus 256 GB Oro" 0 "P0977P2D2" "1" 13/09/16 31/12/49
@@ -11185,6 +11195,10 @@
 1 "" 3 "Deskontua oparitan" 0 "RETFAT" "1" 01/06/11 31/03/12
 1 "" 5 "Promo discount" 0 "RETFAT" "1" 01/04/12 31/12/49
 1 "" 5 "Gift discount" 0 "RETFAT" "1" 01/06/11 31/03/12
+1 "" 1 "Penalización Router" 0 "ROUTER" "1" 12/02/18 31/12/49
+1 "" 2 "Penalització Router" 0 "ROUTER" "1" 12/02/18 31/12/49
+1 "" 3 "Router zehapena" 0 "ROUTER" "1" 12/02/18 31/12/49
+1 "" 5 "Router Penalty" 0 "ROUTER" "1" 12/02/18 31/12/49
 1 "" 1 "Cuota Pago a Plazos del Pago Final" 0 "RVTERM" "1" 01/11/15 31/12/49
 1 "" 2 "Quota Pagament a Terminis del Pagament Final" 0 "RVTERM" "1" 01/11/15 31/12/49
 1 "" 3 "Azken ordainketako epekako ordainketako kuota" 0 "RVTERM" "1" 01/11/15 31/12/49
