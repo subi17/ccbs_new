@@ -80,7 +80,7 @@ for each ttInvSeq no-lock:
             invseq.MsSeq  = ttInvSeq.MsSeq and
             invseq.billed = false:
 
-      RUN conv_invrowcounter.p(InvSeq.InvSeq,
+      RUN ../tms_support/billing/conv_invrowcounter.p(InvSeq.InvSeq,
                                OUTPUT liCount).
       k = k + liCount.
    end.
