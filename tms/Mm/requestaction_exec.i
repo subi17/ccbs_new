@@ -198,29 +198,31 @@ FUNCTION fCLITypeFollowsTheRule RETURNS LOGICAL
 
    DEFINE VARIABLE lii         AS INTEGER   NO-UNDO.
    DEFINE VARIABLE lcExtraLine AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcRule      AS CHARACTER NO-UNDO.
    DEFINE BUFFER MobSub    FOR MobSub.
    DEFINE BUFFER lElMobSub FOR MobSub.
 
    /* If any of the rules apply we return true */
    DO lii = 1 TO NUM-ENTRIES(icRule):
+      lcRule = ENTRY(lii,icRule).
       CASE CLIType.TariffType:
          WHEN {&CLITYPE_TARIFFTYPE_MOBILEONLY}
-         THEN IF icRule EQ "MOBILEONLY"
+         THEN IF lcRule EQ "MOBILEONLY"
               THEN RETURN TRUE.
          WHEN {&CLITYPE_TARIFFTYPE_CONVERGENT}
          THEN DO:
-            IF icRule EQ "CONVERGENT"
+            IF lcRule EQ "CONVERGENT"
             THEN RETURN TRUE.
 
             lcExtraLine = fExtraLineForMainLine(CLIType.CLIType).
 
-            IF lcExtraLine EQ "" AND icRule EQ "CONVERGENT_NO_MAINLINE"
+            IF lcExtraLine EQ "" AND lcRule EQ "CONVERGENT_NO_MAINLINE"
             THEN RETURN TRUE.
 
-            IF lcExtraLine > "" AND icRule EQ "CONVERGENT_MAINLINE"
+            IF lcExtraLine > "" AND lcRule EQ "CONVERGENT_MAINLINE"
             THEN RETURN TRUE.
 
-            IF lcExtraLine EQ icRule
+            IF lcExtraLine EQ lcRule
             THEN DO:
                IF NOT ilVerifyExists
                THEN RETURN TRUE.
