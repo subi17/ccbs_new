@@ -323,6 +323,9 @@
 "Customer" "Title" "CustCare" "Mrs" "English title for females" "" "" 1
 "Customer" "Title" "CustCare" "Sr." "Spanish title for males" "" "" 1
 "Customer" "Title" "CustCare" "Sra." "Spanish Title for females" "" "" 1
+"DayCampaign" "BundleType" "MobSub" "0" "undefined" "" "" 1
+"DayCampaign" "BundleType" "MobSub" "1" "Tariff bundle" "" "" 1
+"DayCampaign" "BundleType" "MobSub" "2" "Additional Bundle(Voice or Data)" "" "" 1
 "DayCampaign" "CalcMethod" "DCCounter" "0" "Indeterminate calculation method" "Value used for Per.Contract without any calculation method" "" 0
 "Daycampaign" "CalcMethod" "DCCounter" "1" "Special charge before limit" "" "" 1
 "Daycampaign" "CalcMethod" "DCCounter" "2" "Special charge after limit" "" "" 1
@@ -583,6 +586,7 @@
 "Invoice" "DelType" "Billing" "11" "Email - Waiting for Activation" "1,2,3,5,6" "" 1
 "Invoice" "DelType" "Billing" "12" "No delivery (no traffic)" "" "" 1
 "Invoice" "DelType" "Billing" "13" "Fusion Email - Waiting" "" "" 1
+"Invoice" "Deltype" "Billing" "14" "Electronic summary invoice" "" "" 1
 "Invoice" "DelType" "Billing" "2" "Email" "1,2,3,5,6" "" 1
 "Invoice" "DelType" "Billing" "3" "Fusion Email" "1,5,6" "" 1
 "Invoice" "DelType" "Billing" "4" "SMS" "1,2,3,4,5,6" "" 1
@@ -1443,6 +1447,7 @@
 "Salesman" "SmPrefix" "IFS" "EU" "Emision Unisono" "" "15" 0
 "Salesman" "SmPrefix" "IFS" "FR" "FACTORIA INBOUND OF" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "FW" "FACTORIA INBOUND ON" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "GB" "GSS Backlog Negocios" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "GC" "GSS CARTERA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "GE" "GSS EMISION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "GM" "GSS MADRID OUTBOUND" "" "15" 1
