@@ -50,12 +50,12 @@ DO lii = 1 TO NUM-ENTRIES(OnOffTms):
    add_string(top_struct, "service_id", lcServiceAlias).
 
    FOR FIRST SubSer NO-LOCK WHERE
-             SubSer.MsSeq = MobSub.MsSeq AND
+             SubSer.MsSeq =  MobSub.MsSeq AND
              SubSer.ServCom = lcService,
        FIRST ServCom NO-LOCK WHERE
              ServCom.Brand = Syst.Var:gcBrand AND
              ServCom.ServCom = SubSer.ServCom:
-
+      
       /* Easy On-Off services */
       IF SubSer.ServCom = "BB" AND
          SubSer.SSStat EQ 2 THEN /* BB reset status */ 
@@ -64,7 +64,7 @@ DO lii = 1 TO NUM-ENTRIES(OnOffTms):
         lcValue =  TRIM(STRING(SubSer.SSStat EQ 0, "off/on")).
 
       /* RES-885 NRTR */
-      IF SubSer.ServCom = "NW" THEN DO:
+      IF SubSer.ServCom EQ "NW" THEN DO:
          lcValue = "".
          /* Maybe supported later
          IF SubSer.SSStat EQ 1 THEN
