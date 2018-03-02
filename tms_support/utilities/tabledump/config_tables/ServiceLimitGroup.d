@@ -100,6 +100,8 @@
 "1" "OFFICE365" "OFFICE 365 Essentials" 04/07/17 31/12/49
 "1" "PMDUB" "Prepaid MDUB" 01/05/11 31/12/49
 "1" "PMDUB_UPSELL" "Pre Mobile Data Usage Bundle" 01/06/11 31/12/49
+"1" "SAN1GB_001" "Mobile Data Usage Upsell 1G" 21/02/18 31/12/49
+"1" "SAN5GB_002" "Mobile Data Usage Upsell 5G" 21/02/18 31/12/49
 "1" "SMS5000" "SMS 5000" 05/07/17 31/12/49
 "1" "TARJ10" "La prepago de 1 GB" 29/05/17 31/12/49
 "1" "TARJ11" "La prepago de 2 GB" 29/05/17 31/12/49
