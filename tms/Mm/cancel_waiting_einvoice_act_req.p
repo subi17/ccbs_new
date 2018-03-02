@@ -48,7 +48,7 @@ FOR EACH MsRequest NO-LOCK WHERE
       FIND CURRENT Customer EXCLUSIVE-LOCK NO-ERROR.
       IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustomer).
       IF Syst.Parameters:Tenant EQ "yoigo" THEN
-         Customer.DelType = {&INV_DEL_TYPE_SMS}.
+         Customer.DelType = {&INV_DEL_TYPE_ESI}.
       ELSE
          Customer.DelType = {&INV_DEL_TYPE_NO_DELIVERY}.
       IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
