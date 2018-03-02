@@ -1,7 +1,7 @@
 {Syst/commpaa.i}
 Syst.Var:gcBrand = "1".
 Syst.Var:katun = "qvantel".
-{edrhistory_changes.i}
+{../tms_support/billing/edrhistory_changes.i}
 
 DEF VAR i           AS INT  NO-UNDO.
 DEF VAR ldaFromDate AS DATE NO-UNDO.
@@ -374,10 +374,6 @@ END.
 
 OUTPUT STREAM sLog CLOSE.
 
-
-FINALLY:
-   IF lcSesNum > "" THEN 
-      SESSION:NUMERIC-FORMAT = lcSesNum.
-END.
-
+IF lcSesNum > "" THEN 
+   SESSION:NUMERIC-FORMAT = lcSesNum.
                             
