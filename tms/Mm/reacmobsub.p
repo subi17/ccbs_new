@@ -1138,6 +1138,8 @@ PROCEDURE pChangeDelType:
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustomer).
 
          Customer.DelType = INT(ENTRY(2,EventLog.Datavalues,CHR(255))).
+         IF Customer.DelType EQ {&INV_DEL_TYPE_SMS} THEN
+            Customer.DelType = {&INV_DEL_TYPE_ESI}.
 
          IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
 
