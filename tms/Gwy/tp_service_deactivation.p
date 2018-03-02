@@ -124,7 +124,7 @@ PROCEDURE pWriteFile:
         lcLogFileName    = REPLACE(lcLogFileName   ,"#DATETIME",lcDateTime)
         lcOutputFileName = REPLACE(lcOutputFileName,"#DATETIME",lcDateTime).
 
-    OUTPUT TO VALUE(lcOutputFileName).
+    OUTPUT TO VALUE(lcOutputFileName) CONVERT TARGET "UTF-8".
     CUSTOMERLOOP:
     FOR EACH ttCustomer:
 
