@@ -70,10 +70,13 @@ IF llDoEvent THEN DO:
    lhCustomer = BUFFER Customer:HANDLE.
 END.
 
+IF piDelType EQ {&INV_DEL_TYPE_SMS} THEN
+   piDelType = {&INV_DEL_TYPE_ESI}.
+
 CASE piDelType:
    WHEN {&INV_DEL_TYPE_PAPER}       THEN .
    WHEN {&INV_DEL_TYPE_EMAIL}       THEN .
-   WHEN {&INV_DEL_TYPE_SMS}         THEN .
+   WHEN {&INV_DEL_TYPE_ESI}         THEN .
    WHEN {&INV_DEL_TYPE_NO_DELIVERY} THEN .
    OTHERWISE RETURN appl_err("Unknown invoice delivery status").
 END. /* CASE piDelType: */
