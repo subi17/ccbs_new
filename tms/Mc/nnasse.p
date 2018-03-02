@@ -2433,7 +2433,8 @@ PROCEDURE local-update-fin:
                      Customer.DelType = {&INV_DEL_TYPE_EMAIL_PENDING}
                      llUpdateDelType = FALSE.
                END. /* IF INPUT Customer.DelType = {&INV_DEL_TYPE_EMAIL} */
-               ELSE IF INPUT Customer.DelType = {&INV_DEL_TYPE_SMS} AND
+               ELSE IF (INPUT Customer.DelType = {&INV_DEL_TYPE_SMS} OR
+                        INPUT Customer.DelType = {&INV_DEL_TYPE_ESI}) AND
                     BUFFER-TENANT-NAME(Customer) EQ {&TENANT_MASMOVIL} THEN DO:
                   MESSAGE "SMS Invoice not allowed for MasMovil"
                   VIEW-AS ALERT-BOX ERROR.
