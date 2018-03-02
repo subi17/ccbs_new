@@ -104,7 +104,8 @@ FUNCTION fSetInvDelType RETURNS CHAR(INPUT icDelType AS CHAR,
 
       WHEN "SMS" THEN DO:
          IF icAction = "0" THEN DO:
-            IF Customer.DelType <> {&INV_DEL_TYPE_SMS} THEN
+            IF Customer.DelType <> {&INV_DEL_TYPE_SMS} AND
+               Customer.DelType <> {&INV_DEL_TYPE_ESI} THEN
                RETURN "SMS invoice is already turned off".
          END. /* IF icAction = "0" THEN DO: */
          ELSE IF icAction = "1" THEN DO:
@@ -190,7 +191,7 @@ FUNCTION fSetInvDelType RETURNS CHAR(INPUT icDelType AS CHAR,
          ELSE DO:
             CASE icDelType:
                WHEN "Paper" THEN Customer.DelType = {&INV_DEL_TYPE_PAPER}.
-               WHEN "SMS"   THEN Customer.DelType = {&INV_DEL_TYPE_SMS}.
+               WHEN "SMS"   THEN Customer.DelType = {&INV_DEL_TYPE_ESI}.
                WHEN "No Delivery" THEN Customer.DelType = {&INV_DEL_TYPE_NO_DELIVERY}.
             END CASE. /* CASE icDelType: */
             
