@@ -141,7 +141,7 @@ FUNCTION fSendConfirmation RETURNS LOGICAL
         MNPProcess.PortRequest = pcPortReq NO-ERROR.
    IF AVAIL MNPProcess THEN DO:
       FIND MNPSub NO-LOCK WHERE
-           MNPSub.MNPSeq = MNPSub.MNPSeq NO-ERROR.
+           MNPSub.MNPSeq = MNPProcess.MNPSeq NO-ERROR.
       IF AMBIGUOUS MNPSub THEN DO:
          lcArray = add_array(lcReqStruct, "confirmedMSISDN").
          FOR EACH MNPSub NO-LOCK WHERE
