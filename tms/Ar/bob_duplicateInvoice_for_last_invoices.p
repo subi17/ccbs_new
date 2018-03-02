@@ -78,7 +78,7 @@ FOR EACH EventLog NO-LOCK WHERE
       liOldDelType = INT(ENTRY(2,EventLog.Datavalues,CHR(255)))
       liNewDelType = INT(ENTRY(3,EventLog.Datavalues,CHR(255))).
       
-   IF (liOldDelType = 2 OR liOldDelType = 4) AND
+   IF (liOldDelType = 2 OR liOldDelType = 4 OR liOldDelType = 14) AND
       liNewDelType = 1 THEN
    DO:
 
