@@ -12,11 +12,8 @@
 &THEN
 
 &GLOBAL-DEFINE fQ25FUNCTIONS YES
-{Syst/commali.i}
-{Func/cparam2.i}
-{Func/fgettxt.i}
+{Func/femailinvoice.i}
 {Func/smsmessage.i}
-{Func/aes_encrypt.i}
 {Func/fduedate.i}
 {Func/ftransdir.i}
 {Func/fmakemsreq.i}
@@ -134,65 +131,6 @@ FUNCTION fGetStartEndDates RETURNS LOGICAL
    END.
    RETURN TRUE.
 END.
-
-/* Make URL encoding, because it was not supported yeat in 10.2b version */
-FUNCTION fUrlEncode RETURNS CHARACTER
-  (INPUT icValue AS CHARACTER,
-   INPUT icEnctype AS CHARACTER) :
-/****************************************************************************
-Description: Encodes unsafe characters in a URL as per RFC 1738 section 2.2.
-  <URL:http://ds.internic.net/rfc/rfc1738.txt>, 2.2
-Input Parameters: Character string to encode, Encoding option where "query",
-  "cookie", "default" or any specified string of characters are valid.
-  In addition, all characters specified in the global variable lcUnSafe
-  plus ASCII values 0 <= x <= 31 and 127 <= x <= 255 are considered unsafe.
-Returns: Encoded string  (unkown value is returned as blank)
-Variables: lcUnSafe, lcReserved
-****************************************************************************/
-  DEFINE VARIABLE hx          AS CHARACTER NO-UNDO INITIAL "0123456789ABCDEF":U.
-  DEFINE VARIABLE encode-list AS CHARACTER NO-UNDO.
-  DEFINE VARIABLE i           AS INTEGER   NO-UNDO.
-  DEFINE VARIABLE c           AS INTEGER   NO-UNDO.
-  DEFINE VARIABLE lcUnSafe AS CHAR NO-UNDO INIT "/,=".
-  DEFINE VARIABLE lcReserved AS CHAR NO-UNDO.
-
-
-  /* Dont bother with blank or unknown  */
-  IF LENGTH(icValue) = 0 OR icValue = ? THEN
-    RETURN "".
-
-  /* What kind of encoding should be used? */
-  CASE icEnctype:
-    WHEN "query":U THEN              /* QUERY_STRING name=value parts */
-      encode-list = lcUnSafe + lcReserved + "+":U.
-    WHEN "cookie":U THEN             /* Persistent Cookies */
-      encode-list = lcUnSafe + " ,~;":U.
-    WHEN "default":U OR WHEN "" THEN /* Standard URL encoding */
-      encode-list = lcUnSafe.
-    OTHERWISE
-      encode-list = lcUnSafe + icEnctype.   /* user specified ... */
-  END CASE.
-
-  /* Loop through entire input string */
-  ASSIGN i = 0.
-  DO WHILE TRUE:
-    ASSIGN
-      i = i + 1
-      /* ASCII value of character using single byte codepage */
-      c = ASC(SUBSTRING(icValue, i, 1, "RAW":U), "1252":U, "1252":U).
-    IF c <= 31 OR c >= 127 OR INDEX(encode-list, CHR(c)) > 0 THEN DO:
-      /* Replace character with %hh hexidecimal triplet */
-      SUBSTRING(icValue, i, 1, "RAW":U) =
-        "%":U +
-        SUBSTRING(hx, INTEGER(TRUNCATE(c / 16, 0)) + 1, 1, "RAW":U) + /* high */
-        SUBSTRING(hx, c MODULO 16 + 1, 1, "RAW":U).             /* low digit */
-      ASSIGN i = i + 2.   /* skip over hex triplet just inserted */
-    END.
-    IF i = LENGTH(icValue,"RAW":U) THEN LEAVE.
-  END.
-
-  RETURN icValue.
-END FUNCTION.  /* furl-encode */
 
 /* Calculate count of normal week day (no weekend ot national holiday) from
    given day (sms sending start date) until specified date. This is used for
