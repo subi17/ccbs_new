@@ -13,6 +13,7 @@
 {Func/cparam2.i}
 {Mm/requestaction_exec.i}
 {Func/fsendsms.i}
+{Func/msreqfunc.i}
 
 DEF INPUT PARAMETER iiMsRequest  AS INT  NO-UNDO.
 

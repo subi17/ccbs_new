@@ -29,9 +29,8 @@ Syst.Var:gcBrand = "1".
 {Func/mdub.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
-{Func/msreqfunc.i}
 {Func/fsendsms.i}
-{Func/fdss.i}
+{Func/dss_request.i}
 {Func/fprepaidfee.i}
 {Mm/fbundle.i}
 
