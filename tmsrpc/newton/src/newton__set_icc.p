@@ -11,6 +11,7 @@
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Mnp/mnpoutchk.i}
+{Func/msreqfunc.i}
 
 DEF VAR liReq AS INTEGER NO-UNDO.
 

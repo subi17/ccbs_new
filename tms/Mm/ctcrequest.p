@@ -15,7 +15,7 @@
 {Func/fmakesms.i}
 {Mm/fbundle.i}
 {Mm/active_bundle.i}
-{Func/main_add_lines.i}
+{Func/add_lines_request.i}
 
 DEFINE INPUT PARAMETER iiReqId AS INTEGER   NO-UNDO.
 DEF BUFFER OldCliType FOR CliType.
