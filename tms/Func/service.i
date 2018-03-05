@@ -16,14 +16,11 @@
 &IF "{&service_i}" NE "YES"
 &THEN
 
-
 &GLOBAL-DEFINE service_i YES
 
-{Syst/commali.i}
 {Func/ffeecont.i}
 {Func/fdss.i}
 {Func/fmakemsreq.i}
-{Func/cparam2.i}
 {Func/sharperconfid.i}
 {Mm/ongoing_bundle.i}
 
@@ -40,9 +37,6 @@ DEF TEMP-TABLE ttServAttr NO-UNDO
    FIELD DefValue AS CHAR
    FIELD ChgAllowed AS LOG
    INDEX ServCom ServCom ServAttr.
-   
-DEF BUFFER bServCust  FOR OrderCustomer.
-DEF BUFFER bServOrder FOR Order.
 
 FUNCTION fIsBBAllowed RETURNS LOGIC
    (iiMsSeq AS INT,
@@ -149,7 +143,10 @@ FUNCTION fProfileExtention RETURNS LOGIC
    
    DEF VAR lcResult  AS CHAR NO-UNDO.
    DEF VAR ldActTime AS DEC  NO-UNDO.
-   DEF VAR liValue   AS INT  NO-UNDO. 
+   DEF VAR liValue   AS INT  NO-UNDO.
+
+   DEF BUFFER bServCust  FOR OrderCustomer.
+   DEF BUFFER bServOrder FOR Order.
    
    IF idtDate = TODAY 
    THEN ldActTime = Func.Common:mMakeTS().
