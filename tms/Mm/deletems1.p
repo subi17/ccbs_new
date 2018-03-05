@@ -37,7 +37,7 @@ DEFINE INPUT PARAMETER piMsSeq LIKE MobSub.MsSeq.
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Mnp/mnpoutchk.i}
-{Func/main_add_lines.i}
+{Func/add_lines_request.i}
 
 IF lcRight NE "RW" THEN DO:
    MESSAGE
