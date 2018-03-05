@@ -28,7 +28,7 @@ Syst.Var:katun = "MNP".
 {Func/ordercancel.i}
 {Func/msisdn_prefix.i}
 {Func/orderchk.i}
-{Func/main_add_lines.i}
+{Func/add_lines_request.i}
 {Func/fgettxt.i}
 {Func/fixedlinefunc.i}
 {Func/multitenantfunc.i}
@@ -81,7 +81,10 @@ DO WHILE TRUE
    PUT SCREEN ROW 22 COL 1
       "Processing messages ...                                       ".
    
-   FOR EACH MNPOperation NO-LOCK WHERE MNPOperation.Sender = 1 AND MNPOperation.StatusCode = 5 TENANT-WHERE TENANT-ID() >= 0 
+   FOR EACH MNPOperation NO-LOCK WHERE 
+            MNPOperation.Sender = 1 AND
+            MNPOperation.StatusCode = {&MNP_MSG_WAITING_RESPONSE_HANDLE}
+          TENANT-WHERE TENANT-ID() >= 0 
        liNumMsgs = 1 to 1000 ON ERROR UNDO, THROW:
 
       PUT SCREEN ROW 2 COL 2 STRING(RECID(MNPOperation)).
@@ -164,15 +167,13 @@ FUNCTION fArecExistCheck RETURNS LOGICAL
    liTextPos = index(icResponseDesc, "contrato ").
    IF liTextPos = 0 THEN RETURN FALSE.
    lcContrato = substring(icResponseDesc, liTextPos + 9, 11).
-   IF NOT lcContrato BEGINS "005" AND 
-      NOT lcContrato BEGINS "200" THEN RETURN FALSE.
+   IF NOT lcContrato BEGINS "005" THEN RETURN FALSE.
    IF ibMNPProcess.FormRequest NE lcContrato THEN RETURN FALSE.
    
    liTextPos = index(icResponseDesc, "referencia ").
    IF liTextPos = 0 THEN RETURN FALSE. 
    lcRefCode = substring(icResponseDesc, liTextPos + 11, 23).
-   IF NOT lcRefCode BEGINS "005" AND
-      NOT lcRefCode BEGINS "200" THEN RETURN FALSE.
+   IF NOT lcRefCode BEGINS "005" THEN RETURN FALSE.
    IF ibMNPProcess.PortRequest NE lcRefCode AND
       CAN-FIND(FIRST MNPProcess WHERE
                      MNPProcess.PortRequest = lcRefCode) THEN RETURN FALSE.
@@ -204,6 +205,7 @@ PROCEDURE pHandleQueue:
    DEFINE VARIABLE lcNewOper    AS CHAR NO-UNDO. 
    DEFINE VARIABLE llgMNPOperName  AS LOG NO-UNDO. 
    DEFINE VARIABLE llgMNPOperBrand AS LOG NO-UNDO. 
+   DEFINE VARIABLE llConfirm AS LOG NO-UNDO. 
    
    FIND MessageBuf WHERE RECID(MessageBuf) = pRecId EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
    IF ERROR-STATUS:ERROR OR LOCKED(MessageBuf) THEN 
@@ -774,7 +776,33 @@ PROCEDURE pHandleQueue:
       
       /* 1.10 Confirm portability activation request query */
       WHEN "confirmarSolicitudAltaPortabilidadMovil" THEN DO:
-         RUN pHandleFromASOL2ACON.
+
+         /* Multiple MNP out */
+         FIND MNPSub NO-LOCK WHERE
+              MNPSub.MNPSeq = MNPProcess.MNPSeq NO-ERROR.
+
+         /* In case of multiple MNP OUT, additioanal confirmation is required from NC side */
+         IF AMBIGUOUS MNPSub THEN DO:
+            
+            llConfirm = FALSE.
+            
+            FOR EACH MNPSub NO-LOCK WHERE
+                     MNPSub.MNPSeq = MNPProcess.MNPSeq:
+               IF MNPSub.StatusReason = "" THEN DO:
+                  messagebuf.StatusCode = {&MNP_MSG_WAITING_CONFIRM}.
+                  MNPProcess.StateFlag = {&MNP_STATEFLAG_WAITING_CONFIRM}.
+                  RETURN.
+               END.
+               IF MNPSub.StatusReason EQ "CONFIRM" THEN DO:
+                  llConfirm = TRUE.
+                  LEAVE.
+               END.
+            END.
+         END.
+         ELSE llConfirm = TRUE.
+   
+         IF llConfirm THEN RUN pHandleFromASOL2ACON.
+         ELSE RUN pHandleFromASOL2AREC.
       END.
       
       /* 1.11 Reject portability activation request */
@@ -1005,6 +1033,9 @@ PROCEDURE pHandleFromASOL2ACON:
    FOR EACH MNPSub WHERE
       MNPSub.MNPSeq = MNPProcess.MNPSeq NO-LOCK:
 
+      IF MNPSub.StatusReason NE "" AND
+         MNPSub.StatusReason NE "CONFIRM" THEN NEXT.
+
       FIND MobSub WHERE
            MobSub.MsSeq = MNPSub.MsSeq AND
            MobSub.CLI = MNPSub.CLI NO-LOCK NO-ERROR.
@@ -1082,6 +1113,9 @@ PROCEDURE pHandleFromASOL2AREC:
 
    DEF BUFFER bMNPSub FOR MNPSub.
    DEF BUFFER bMNPProcess FOR MNPProcess.
+   
+   /* Do not process duplicate internal MNP IN rejections */
+   IF MNPProcess.MNPType EQ 1 THEN RETURN.
 
    FOR EACH MNPSub WHERE
             MNPSub.MNPSeq = MNPProcess.MNPSeq NO-LOCK:

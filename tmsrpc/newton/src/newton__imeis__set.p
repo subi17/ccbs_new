@@ -69,7 +69,7 @@ Syst.Var:gcBrand = "1".
 &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
 {Syst/eventval.i}
 {Func/lib/eventlog.i}
-{Func/order.i}
+{Func/terminaloffer.i}
 {Func/fmakemsreq.i}
 {Func/msreqfunc.i}
 {Func/fpcmaintreq.i}
