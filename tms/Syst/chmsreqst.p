@@ -16,9 +16,9 @@
 {Func/fmakemsreq.i}
 {Func/fmakesms.i}
 {Func/fsendsms.i}
-{Func/fdss.i}
+{Func/dss_matrix.i}
 {Func/fsubstermreq.i}
-{Func/main_add_lines.i}
+{Func/add_lines_request.i}
 {Func/fixedlinefunc.i}
 
 DEFINE INPUT PARAMETER iiMsRequest  AS INTEGER NO-UNDO.
