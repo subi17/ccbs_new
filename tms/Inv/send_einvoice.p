@@ -18,6 +18,7 @@
 {Inv/edefine.i NEW}
 {Func/heartbeat.i}
 {Func/refcode.i}
+{Func/msreqfunc.i}
 
 DEF INPUT PARAMETER iiMSrequest AS INT  NO-UNDO.
 

@@ -10,7 +10,6 @@
 ------------------------------------------------------------------------ */
    
 {Syst/commali.i}
-{Func/email.i}
 {Func/cparam2.i}
 {Mm/cdrvar.i}
 {Func/fcustcnt.i}  
@@ -33,6 +32,8 @@
 {Rate/premiumnumber.i}
 {Func/create_eventlog.i}
 {Rate/cdr_online.i}
+{Syst/eventval.i}
+
 
 def INPUT PARAMETER    pvmlog      as lo   no-undo FORMAT "Yes/No" init true.
 def INPUT PARAMETER    ticfile     as char FORMAT "x(30)" no-undo.
