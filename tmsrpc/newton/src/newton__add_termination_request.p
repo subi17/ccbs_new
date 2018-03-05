@@ -22,7 +22,7 @@ Syst.Var:gcBrand = "1".
 {Func/fsubstermreq.i}
 {Mm/fbundle.i}
 {Func/msisdn_prefix.i}
-{Func/main_add_lines.i}
+{Func/add_lines_request.i}
 
 /* Input parameters */
 DEF VAR piMsSeq    AS INT  NO-UNDO.

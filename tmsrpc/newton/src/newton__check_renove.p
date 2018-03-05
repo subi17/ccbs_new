@@ -34,9 +34,10 @@ Syst.Var:gcBrand = "1".
 {Func/penaltyfee.i}
 {Func/orderchk.i}
 {Func/fcustpl.i}
-{Syst/tmsconst.i}
 {Mnp/mnpoutchk.i}
 {Func/fixedfee.i}
+{Func/cparam2.i}
+{Func/barrfunc.i}
 
 DEF VAR lcPostpaidVoiceTariffs AS CHAR NO-UNDO.
 DEF VAR lcPrepaidVoiceTariffs  AS CHAR NO-UNDO.
