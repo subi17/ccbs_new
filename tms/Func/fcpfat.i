@@ -11,7 +11,6 @@
                   27.04.06/aam fCreateFatRow()
                   21.09.06/aam new input parameter idPerc to fCreateFatRow      
 */
-{Syst/commali.i}
 {Func/create_eventlog.i}
 
 DEF BUFFER bCPFatime   FOR Fatime.
