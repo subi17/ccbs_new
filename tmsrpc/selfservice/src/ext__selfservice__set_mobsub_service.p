@@ -61,6 +61,7 @@ DEF VAR lcInfo          AS CHAR NO-UNDO.
 DEF VAR lcParam         AS CHAR NO-UNDO.
 DEF VAR lcAppId         AS CHAR NO-UNDO. 
 DEF VAR lcOnOff         AS CHAR NO-UNDO.
+DEFINE VARIABLE ldtActDate AS DATE NO-UNDO.
 
 FUNCTION fCheckBBFraudBarring RETURN CHAR
    (iiMsSeq AS INT):

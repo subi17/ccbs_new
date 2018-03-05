@@ -8,12 +8,8 @@
 
 &GLOBAL-DEFINE FSUBSTERMREQ_I YES
    
-{Syst/commali.i}
-{Func/fcreatereq.i}
 {Func/flimitreq.i}
-{Syst/tmsconst.i}
 {Mnp/mnpoutchk.i}
-{Func/msisdn_prefix.i}
 {Func/fixedlinefunc.i}
 {Func/multitenantfunc.i}
 

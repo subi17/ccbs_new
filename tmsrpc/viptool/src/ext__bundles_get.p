@@ -17,9 +17,6 @@ DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
 Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId. 
 Syst.Var:gcBrand = "1".
-{Syst/tmsconst.i}
-{Func/cparam2.i}
-{Func/matrix.i}
 {Mm/fbundle.i}
 {Mm/active_bundle.i}
 
@@ -27,6 +24,7 @@ DEFINE VARIABLE piMsSeq     AS INTEGER   NO-UNDO.
 DEFINE VARIABLE pcBundleId  AS CHARACTER NO-UNDO. 
 DEFINE VARIABLE liStatus    AS INTEGER   NO-UNDO. 
 DEFINE VARIABLE ldEndStamp  AS DECIMAL   NO-UNDO.
+DEFINE VARIABLE lcReqChar   AS CHARACTER NO-UNDO.
 
 DEFINE VARIABLE lcBONOContracts AS CHARACTER NO-UNDO.
 
