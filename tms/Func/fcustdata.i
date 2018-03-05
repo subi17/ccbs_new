@@ -11,7 +11,6 @@
 
 &GLOBAL-DEFINE CustDataDef YES
 
-
 /* customer's roles */
 FUNCTION fCustRoles RETURNS CHARACTER
    (BUFFER ibRoleCust FOR Customer). 

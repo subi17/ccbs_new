@@ -2,9 +2,6 @@
 &THEN
 &GLOBAL-DEFINE EVENTLOG_I YES
 
-&ANALYZE-SUSPEND _VERSION-NUMBER UIB_v9r12
-&ANALYZE-RESUME
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _DEFINITIONS Include 
 /*------------------------------------------------------------------------
     File        : lib/eventlog.i
     Purpose     : Make event's to log each change of buffer
@@ -85,77 +82,52 @@ ASSIGN gcCaseTables = "Customer¤{&EventCaseTable}"
 
 &GLOBAL-DEFINE STAR-DELIMITER CHR(255)
 
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
 
 
-&ANALYZE-SUSPEND _UIB-PREPROCESSOR-BLOCK 
 
 /* ********************  Preprocessor Definitions  ******************** */
 
 
 
-/* _UIB-PREPROCESSOR-BLOCK-END */
-&ANALYZE-RESUME
 
 
 /* ************************  Function Prototypes ********************** */
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD getStarEventField Include 
 FUNCTION getStarEventField RETURNS CHARACTER
   ( ihField  AS HANDLE,
     iiExtent AS INTEGER 
   )  FORWARD.
 
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION-FORWARD getStarEventKey Include 
 FUNCTION getStarEventKey RETURNS CHARACTER
   ( ihBuffer AS HANDLE )  FORWARD.
 
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
 
 
 /* *********************** Procedure Settings ************************ */
 
-&ANALYZE-SUSPEND _PROCEDURE-SETTINGS
-/* Settings for THIS-PROCEDURE
-   Type: Include
-   Allow: 
-   Frames: 0
-   Add Fields to: Neither
-   Other Settings: INCLUDE-ONLY
- */
-&ANALYZE-RESUME _END-PROCEDURE-SETTINGS
+
 
 /* *************************  Create Window  ************************** */
 
-&ANALYZE-SUSPEND _CREATE-WINDOW
 /* DESIGN Window definition (used by the UIB) 
   CREATE WINDOW Include ASSIGN
          HEIGHT             = 15
          WIDTH              = 60.
 /* END WINDOW DEFINITION */
                                                                         */
-&ANALYZE-RESUME
 
  
 
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _CUSTOM _MAIN-BLOCK Include 
 
 
 /* ***************************  Main Block  *************************** */
 
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
 
 
 /* **********************  Internal Procedures  *********************** */
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE StarEventInitialize Include 
 PROCEDURE StarEventInitialize :
 /*------------------------------------------------------------------------------
   Purpose:     Initialize dynamic temp-table to buffer
@@ -193,10 +165,7 @@ PROCEDURE StarEventInitialize :
 
 END PROCEDURE.
 
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE StarEventMakeCreateEvent Include 
 PROCEDURE StarEventMakeCreateEvent :
 /*------------------------------------------------------------------------------
   Purpose:     Make create event
@@ -210,8 +179,6 @@ PROCEDURE StarEventMakeCreateEvent :
 
 END PROCEDURE.
 
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
 
 PROCEDURE StarEventMakeCreateEventWithMemo :
 /*------------------------------------------------------------------------------
@@ -260,7 +227,6 @@ PROCEDURE StarEventMakeCreateEventWithMemo :
 
 END PROCEDURE.
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE StarEventMakeDeleteEvent Include 
 PROCEDURE StarEventMakeDeleteEvent :
 /*------------------------------------------------------------------------------
   Purpose:     Make delete event
@@ -274,8 +240,6 @@ PROCEDURE StarEventMakeDeleteEvent :
                                                                               
 END PROCEDURE.
 
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
 
 PROCEDURE StarEventMakeDeleteEventWithMemo :
 /*------------------------------------------------------------------------------
@@ -390,7 +354,6 @@ PROCEDURE StarEventMakeDeleteEventWithMemo :
                                                                               
 END PROCEDURE.
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE StarEventMakeModifyEvent Include 
 PROCEDURE StarEventMakeModifyEvent :
 /*------------------------------------------------------------------------------
   Purpose:     Make modify event
@@ -404,8 +367,6 @@ PROCEDURE StarEventMakeModifyEvent :
 
 END PROCEDURE.
 
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
 
 PROCEDURE StarEventMakeModifyEventWithMemo :
 /*------------------------------------------------------------------------------
@@ -543,7 +504,6 @@ PROCEDURE StarEventMakeModifyEventWithMemo :
               
 END PROCEDURE.
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _PROCEDURE StarEventSetOldBuffer Include 
 PROCEDURE StarEventSetOldBuffer :
 /*------------------------------------------------------------------------------
   Purpose:     Save old values to temp-table 
@@ -570,12 +530,9 @@ PROCEDURE StarEventSetOldBuffer :
 
 END PROCEDURE.
 
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
 
 /* ************************  Function Implementations ***************** */
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION getStarEventField Include 
 FUNCTION getStarEventField RETURNS CHARACTER
   ( ihField  AS HANDLE,
     iiExtent AS INTEGER 
@@ -612,10 +569,7 @@ FUNCTION getStarEventField RETURNS CHARACTER
 
 END FUNCTION.
 
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
 
-&ANALYZE-SUSPEND _UIB-CODE-BLOCK _FUNCTION getStarEventKey Include 
 FUNCTION getStarEventKey RETURNS CHARACTER
   ( ihBuffer AS HANDLE ) :
 /*------------------------------------------------------------------------------
@@ -677,8 +631,6 @@ FUNCTION getStarEventKey RETURNS CHARACTER
 
 END FUNCTION.
 
-/* _UIB-CODE-BLOCK-END */
-&ANALYZE-RESUME
 
 /* dynamic temp-table needs to be cleaned out, otherwise session ultimately 
    crashes */
