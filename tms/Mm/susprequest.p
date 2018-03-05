@@ -16,7 +16,7 @@
 {Syst/eventval.i}
 {Syst/tmsconst.i}
 {Func/service.i}
-{Func/main_add_lines.i}
+{Func/add_lines_request.i}
 {Func/barrfunc.i}
 
 DEFINE INPUT PARAMETER iiRequest AS INTEGER   NO-UNDO.

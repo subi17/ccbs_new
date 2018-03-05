@@ -9,8 +9,6 @@
 &THEN
 &GLOBAL-DEFINE MSISDN_I YES
 
-{Syst/commali.i}
-
 DEF VAR m_pref  AS C NO-UNDO FORMAT "x(3)".
 
 DEF VAR lcGSVoice   AS   CHAR NO-UNDO INIT "0468". 

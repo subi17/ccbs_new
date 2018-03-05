@@ -12,8 +12,6 @@
 
 &GLOBAL-DEFINE dss_bundle_first_month_fee YES
 
-{Syst/commali.i}
-{Syst/tmsconst.i}
 {Func/fdss.i}
 {Mm/bundle_first_month_fee.i}
 {Func/istc.i}

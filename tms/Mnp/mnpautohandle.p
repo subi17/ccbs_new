@@ -70,7 +70,6 @@ FOR EACH MNPProcess EXCLUSIVE-LOCK WHERE
    
    IF llOk THEN DO:
       fLogBasic("Handled (" + STRING(MNPProcess.StateFlag) + ") " + MNPProcess.PortRequest).
-      MNPProcess.StateFlag = 0.
       liHandled = liHandled + 1.
    END. 
    ELSE DO:
@@ -79,6 +78,21 @@ FOR EACH MNPProcess EXCLUSIVE-LOCK WHERE
       liFailed = liFailed + 1.
    END.
 
+END.
+   
+/* Automatic rejection for duplicate internal porting processes */
+FOR EACH MNPOperation EXCLUSIVE-LOCK WHERE
+         MNPOperation.Sender = {&MNP_SENDER_ADAPTER} AND
+         MNPOperation.StatusCode = {&MNP_MSG_WAITING_RESPONSE_HANDLE},
+   FIRST MNPProcess NO-LOCK WHERE
+         MNPProcess.MNPSeq = MNPOperation.MNPSeq:
+      
+   llOk = fSendRejection(
+         MNPProcess.PortRequest,
+         "RECH_IDENT",
+         OUTPUT lcError).
+   
+   IF llOk THEN MNPOperation.StatusCode = {&MNP_MSG_HANDLED}.
 END.
 
 fLogBasic("Total handled: " + STRING(liHandled) + 
