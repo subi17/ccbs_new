@@ -35,7 +35,7 @@ Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/msreqfunc.i}
 {Func/fsendsms.i}
-{Func/fdss.i}
+{Func/dss_request.i}
 {Func/fexternalapi.i}
 {Func/fprepaidfee.i}
 {Mm/fbundle.i}
