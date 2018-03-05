@@ -14,9 +14,7 @@
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
 {Syst/commpaa.i}
 Syst.Var:gcBrand = "1".
-{Func/cparam2.i}
-{Syst/tmsconst.i}
-{Func/profunc.i}
+{Func/profunc_request.i}
 
 DEFINE VARIABLE piMsseq           AS INTEGER     NO-UNDO.
 DEFINE VARIABLE liMsreq           AS INTEGER     NO-UNDO.
