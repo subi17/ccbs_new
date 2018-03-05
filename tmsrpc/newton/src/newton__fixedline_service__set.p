@@ -14,13 +14,11 @@
 {Syst/commpaa.i}
 Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
-{Func/fmakemsreq.i}
 {Mm/subser.i}
 {Func/barrfunc.i}
 {Mm/fbundle.i}
 {Func/service.i}
-{Func/vasfunc.i}
-{Func/profunc.i}
+{Func/profunc_request.i}
 {Func/orderfunc.i}
 
 /* Input parameters */

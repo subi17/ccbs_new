@@ -47,6 +47,7 @@ DEF VAR lcAppEndUserId      AS CHAR NO-UNDO.
 DEF VAR secondsFromPrevious AS INT  NO-UNDO.
 DEF VAR lcMemoText          AS CHAR NO-UNDO.
 DEF VAR lcMemoTitle         AS CHAR NO-UNDO.
+DEFINE VARIABLE lcSMSText AS CHARACTER NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string,string,string") EQ ? THEN RETURN.
 

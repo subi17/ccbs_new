@@ -12,10 +12,9 @@ Syst.Var:gcBrand = "1".
 {Func/q25functions.i}
 {Func/ftransdir.i}
 {Syst/eventlog.i}
-{Func/fmakemsreq.i}
 {Func/barrfunc.i}
 {Func/msreqfunc.i}
-{Func/profunc.i}
+{Func/profunc_request.i}
 
 DEF VAR lcInDir AS CHAR NO-UNDO.
 DEF VAR lcFileName AS CHAR NO-UNDO.
