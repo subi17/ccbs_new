@@ -28,6 +28,7 @@ DEF VAR liRequest        AS INT  NO-UNDO.
 DEF VAR ldeSMSStamp      AS DEC  NO-UNDO. 
 DEF VAR llResult         AS LOG  NO-UNDO.
 DEF VAR ldeBundleFee     AS DEC  NO-UNDO.
+DEFINE VARIABLE lcSMSText AS CHARACTER NO-UNDO.
 
 IF validate_request(param_toplevel_id, "int,string") EQ ? THEN RETURN.
 piMsSeq = get_int(param_toplevel_id,"0").
