@@ -13,6 +13,7 @@
 {Func/fmakemsreq.i}
 {Func/cparam2.i}
 {Func/log.i}
+{Func/msreqfunc.i}
 
 DEF INPUT PARAMETER iiMSRequest AS INT  NO-UNDO.
 
