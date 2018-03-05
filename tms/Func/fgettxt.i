@@ -2,7 +2,7 @@
 &THEN
 
 &GLOBAL-DEFINE fGetTxt YES
-{Syst/commali.i}
+
 {Syst/tmsconst.i}
 
 FUNCTION fGetSmsTS RETURNS DECIMAL.

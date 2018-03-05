@@ -11,6 +11,7 @@
 {Mnp/mnpoutchk.i}
 {Mc/orderfusion.i}
 {Func/profunc.i}
+{Func/main_add_lines.i}
 
 DEF INPUT PARAMETER iiOrder        AS INT NO-UNDO.
 DEF INPUT PARAMETER iiSecureOption AS INT NO-UNDO.

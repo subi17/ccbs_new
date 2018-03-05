@@ -2,8 +2,7 @@
    subser validations   2008/as
 */
 
-{Syst/commali.i}
-{Func/fmakemsreq.i}
+{Func/fctserval.i}
 
 FUNCTION fSubSerSSStat RETURNS INT
 (INPUT iiMsseq AS INTEGER,
@@ -41,34 +40,6 @@ OUTPUT ocError AS CHARACTER):
    RETURN 0.
 
 END.
-
-FUNCTION fSubSerSSDate RETURNS DATE
-(INPUT iiMsseq AS INTEGER,
-INPUT icServCom AS CHAR,
-INPUT iiSSStat AS INTEGER,
-INPUT idaSSDate AS DATE):
-
-   DEFINE VARIABLE ldeActStamp AS DEC NO-UNDO. 
-   DEFINE VARIABLE ldaActDate  AS DATE NO-UNDO. 
-   DEFINE VARIABLE liActSec   AS DEC NO-UNDO. 
-   
-   ldeActStamp = fServiceActStamp(iiMsSeq,
-                                 icServCom,
-                                 iiSSStat).
-   IF ldeActStamp > 0 THEN DO:
-      Func.Common:mSplitTS(ldeActStamp,
-               OUTPUT ldtActDate,
-               OUTPUT liActSec).
-
-      IF ldtActDate > idaSSDate OR
-         (DAY(ldtActDate) = 1 AND liActSec < TIME - 120 AND
-          DAY(idaSSDate) NE 1) 
-      THEN RETURN ldaActDate.
-      ldtActDate = ?.
-      RETURN ldtActDate.
-   END.
-
-END FUNCTION. 
 
 FUNCTION fSubSerValidate RETURNS INT
 (INPUT iiMsseq AS INTEGER,
