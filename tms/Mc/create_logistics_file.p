@@ -71,8 +71,6 @@ DEFINE BUFFER AgreeCustomer   FOR OrderCustomer.
 DEFINE BUFFER ContactCustomer FOR OrderCustomer.
 DEFINE BUFFER DelivCustomer   FOR OrderCustomer.
 DEFINE BUFFER bBillItem       FOR BillItem.
-DEFINE BUFFER lbMobSub        FOR MobSub.
-DEFINE BUFFER bOrder          FOR Order.
 
 DEFINE TEMP-TABLE ttOutputText 
    FIELD cText AS CHARACTER

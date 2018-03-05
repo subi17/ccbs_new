@@ -1483,7 +1483,9 @@ PROCEDURE pErrorFile:
 
    DEF INPUT PARAMETER ilDBWrite  AS LOG  NO-UNDO.
    DEF INPUT PARAMETER icActionID AS CHAR NO-UNDO.
-   
+
+   DEFINE VARIABLE ldCurrStamp AS DECIMAL NO-UNDO.
+
    lcErrFile = fCParamC("Doc1ErrorFile").
    IF lcErrFile = "" OR lcErrFile = ? THEN lcErrFile = "/tmp/doc1err".
     
