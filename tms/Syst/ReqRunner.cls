@@ -26,6 +26,7 @@ CLASS Syst.ReqRunner INHERITS gearbox.daemons.Daemon:
    DEFINE PRIVATE VARIABLE liPauseTotal        AS INTEGER                NO-UNDO.
    DEFINE PRIVATE VARIABLE liWaitTime          AS INTEGER                NO-UNDO.
    DEFINE PRIVATE VARIABLE llWait              AS LOGICAL INITIAL FALSE  NO-UNDO.
+   DEFINE PRIVATE VARIABLE ldaLastCheckDate    AS DATE                   NO-UNDO.
       
 	CONSTRUCTOR PUBLIC ReqRunner (  ):
 
@@ -68,10 +69,13 @@ CLASS Syst.ReqRunner INHERITS gearbox.daemons.Daemon:
        
       objReqHandler = NEW Syst.ReqHandler(liQueue).
       ASSIGN
-         liInterval   = RequestQueue.Interval
-         liWaitTime   = 0
-         liPauseTotal = 0
-         llWait       = FALSE.     
+         liInterval       = RequestQueue.Interval
+         liWaitTime       = 0
+         liPauseTotal     = 0
+         ldaLastCheckDate = TODAY
+         llWait           = FALSE.
+
+      objReqHandler:mUpdateProcess().
       mSetNewReportTime().
 
    END METHOD.
@@ -96,8 +100,13 @@ CLASS Syst.ReqRunner INHERITS gearbox.daemons.Daemon:
 
       IF NOW > ldttzNextReportTime
       THEN DO:
-         LOG-MANAGER:WRITE-MESSAGE(objReqHandler:mGetStatistic()).
+         objReqHandler:mLogStatistic(ldttzNextReportTime).
          mSetNewReportTime().
+         IF ldaLastCheckDate NE TODAY
+         THEN DO:
+            objReqHandler:mUpdateProcess().
+            ldaLastCheckDate = TODAY.
+         END.
       END.
 
       IF llWait

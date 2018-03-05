@@ -23,7 +23,8 @@
 Syst.Var:gcBrand = "1".
 Syst.Var:katun = "NewtonRPC".
 {Func/orderchk.i}
-{Func/order.i}
+{Func/barrfunc.i}
+{Func/fixedlinefunc.i}
 {Syst/tmsconst.i}
 {Func/create_eventlog.i}
 {Mm/fbundle.i}

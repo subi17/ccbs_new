@@ -16,6 +16,7 @@
 {Rate/cdr_rerate.i}
 {Rate/reratelog.i}
 {Func/create_eventlog.i}
+{Syst/eventval.i}
 
 DEF VAR totalchanges       AS DEC NO-UNDO.
 DEF VAR CLI  LIKE MobCDR.CLI NO-UNDO.
