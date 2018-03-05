@@ -2,7 +2,6 @@
 &THEN
 &GLOBAL-DEFINE SHARPERCONFID_I YES
 
-{Syst/commali.i}
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 
