@@ -3,7 +3,6 @@
 &GLOBAL-DEFINE BUNDLE_TYPE YES
 
 {Syst/tmsconst.i}
-{Syst/commali.i}
 {Func/cparam2.i}
 
 FUNCTION fGetBundles RETURNS CHAR (icBundleType AS CHAR):

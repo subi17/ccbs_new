@@ -3,8 +3,8 @@
 &GLOBAL-DEFINE orderchk YES
 
 {Syst/commali.i}
-{Func/barrfunc.i}
 {Syst/tmsconst.i}
+{Func/extralinefunc.i}
 
 /* ----------------------------------------------------------------------
   MODULE .......: orderchk.i 
