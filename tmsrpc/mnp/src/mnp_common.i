@@ -105,7 +105,7 @@ FUNCTION fCreateBuzonMessage RETURNS LOGICAL
       MNPBuzon.MNPOperationID = NEXT-VALUE(MNPOperSeq)
       MNPBuzon.CreatedTS = {&nowts}
       MNPBuzon.MessageType = icMessageType
-      MNPBuzon.Sender = 3.
+      MNPBuzon.Sender = {&MNP_SENDER_BUZON}.
    
    llBuzonCreated = TRUE.
 
