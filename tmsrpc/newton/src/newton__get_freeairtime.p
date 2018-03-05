@@ -95,6 +95,8 @@ WHERE fatime.custnum EQ mobsub.custnum:
    RUN pAddStructFAT.
 END.
 
+DEF VAR ldaSearchLimit AS DATE NO-UNDO. 
+ldaSearchLimit = ADD-INTERVAL(TODAY,12,"months").
 /* For Discounts with certain CLI */
 FOR EACH DPMember NO-LOCK WHERE
          DPMember.HostTable = "MobSub" AND
@@ -106,6 +108,7 @@ FOR EACH DPMember NO-LOCK WHERE
       ASSIGN ldaFromDate = ADD-INTERVAL(DPMember.ValidFrom,liCount,"months")
              ldaFromDate = DATE(MONTH(ldaFromDate),1,YEAR(ldaFromDate))
              ldaToDate   = Func.Common:mLastDayOfMonth(ldaFromDate).
+      IF ldaToDate >= ldaSearchLimit THEN NEXT.
       RUN pAddStructDiscount(INPUT ldaFromDate,INPUT ldaToDate).
    END. /* DO ind = 0 to liNumberOfMonths: */
 END. /* FOR EACH DPMember NO-LOCK WHERE */
@@ -127,6 +130,7 @@ FOR EACH MobSub WHERE
          ASSIGN ldaFromDate = ADD-INTERVAL(DPMember.ValidFrom,liCount,"months")
                 ldaFromDate = DATE(MONTH(ldaFromDate),1,YEAR(ldaFromDate))
                 ldaToDate   = Func.Common:mLastDayOfMonth(ldaFromDate).
+         IF ldaToDate >= ldaSearchLimit THEN NEXT.
          RUN pAddStructDiscount(INPUT ldaFromDate,INPUT ldaToDate).
       END. /* DO ind = 0 to liNumberOfMonths: */
    END. /* FOR EACH DPMember NO-LOCK WHERE */
@@ -200,7 +204,7 @@ PROCEDURE pAddStructDiscount:
                Invoice.InvType = 1                    AND
                Invoice.FromDate <= idaValidTo   AND
                Invoice.ToDate   >= idaValidFrom,
-          EACH SubInvoice NO-LOCK WHERE
+          EACH SubInvoice NO-LOCK USE-INDEX InvNum WHERE
                SubInvoice.InvNum = Invoice.InvNum AND
                SubInvoice.MsSeq  = MobSub.MsSeq,
           EACH InvRow NO-LOCK WHERE

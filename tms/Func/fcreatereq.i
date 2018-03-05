@@ -12,7 +12,6 @@
 
 &GLOBAL-DEFINE fcreatereq YES
 
-{Syst/commali.i}
 {Syst/tmsconst.i}
 
 DEF BUFFER bReqSub   FOR MobSub.

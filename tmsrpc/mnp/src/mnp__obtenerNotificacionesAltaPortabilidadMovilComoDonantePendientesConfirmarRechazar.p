@@ -40,22 +40,10 @@
 
 {mnp/src/mnp_obtener.i}
 
-DEF VAR lcTenant           AS CHAR  NO-UNDO.
-
 FOR EACH ttInput NO-LOCK:
    IF ttInput.statusCode NE "ASOL" THEN 
       RETURN appl_err("Incorrect statuscode (should be ASOL): " +
          ttInput.statusCode).
-END.
-
-FIND FIRST ttInput NO-ERROR.
-IF AVAIL ttInput THEN 
-DO:    
-   ASSIGN lcTenant = 
-      (IF ttInput.DonorCode = "005" THEN {&TENANT_YOIGO} 
-       ELSE IF ttInput.DonorCode = "200" THEN {&TENANT_MASMOVIL}
-       ELSE ""). 
-   {mnp/src/mnp_settenant.i lcTenant}
 END.
 
 MESSAGE_LOOP:
@@ -64,7 +52,16 @@ FOR EACH ttInput NO-LOCK:
    /* create mnpmessage record */
    fCreateMNPObtenerMessage("obtenerNotificacionesAltaPortabilidadMovilComoDonantePendientesConfirmarRechazar").
    
-   FIND FIRST MNPProcess NO-LOCK WHERE MNPProcess.PortRequest = ttInput.PortRequest NO-ERROR.
+   /* Recognize duplicate MNP OUT request for internal MNP IN request */
+   IF ttInput.PortRequest BEGINS "A05" AND
+      ttInput.FormRequest > "" THEN
+      FIND FIRST MNPProcess NO-LOCK WHERE 
+                 MNPProcess.FormRequest = ttInput.FormRequest NO-ERROR.
+
+   IF NOT AVAIL MNPProcess THEN
+      FIND FIRST MNPProcess NO-LOCK WHERE 
+                 MNPProcess.PortRequest = ttInput.PortRequest NO-ERROR.
+
    IF NOT AVAIL MNPProcess THEN DO:   
       
       CREATE MNPProcess.
@@ -127,9 +124,19 @@ FOR EACH ttInput NO-LOCK:
    MNPOperation.MNPSeq = MNPProcess.MNPSeq.
 
    IF NOT NEW MNPProcess THEN DO:
-      lcError = "MNP process already exists".
-      fErrorHandle(lcError).
-      fLogError(lcError + ":" + ttInput.portRequest).
+
+      IF ttInput.PortRequest BEGINS "A05" AND
+         MNPProcess.MNPType = 1 THEN
+         ASSIGN
+            MNPOperation.Sender = {&MNP_SENDER_ADAPTER}
+            MNPOperation.StatusCode = {&MNP_MSG_WAITING_RESPONSE_HANDLE}
+            MNPOperation.ErrorCode = ""
+            MNPOperation.ErrorHandled = 0.
+      ELSE DO:
+         lcError = "MNP process already exists".
+         fErrorHandle(lcError).
+         fLogError(lcError + ":" + ttInput.portRequest).
+      END.
    END.
    ELSE DO:
       MNPOperation.StatusCode = {&MNP_MSG_HANDLED}.
@@ -146,4 +153,4 @@ IF AVAIL MNPBuzon THEN MNPBuzon.StatusCode = 10.
 FINALLY:
    EMPTY TEMP-TABLE ttInput.
    EMPTY TEMP-TABLE ttMultipleMSISDN.
-   END.
+END.
