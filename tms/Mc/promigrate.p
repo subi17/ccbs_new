@@ -1,10 +1,9 @@
 /* Pro migration request handler */
 
 {Syst/commali.i}
-{Func/msreqfunc.i}
 {Syst/tmsconst.i}
 {Func/custfunc.i}
-{Func/profunc.i}
+{Func/profunc_request.i}
 {Syst/eventval.i}
 {Func/ffeecont.i}
 {Func/setfees.i}
