@@ -14,6 +14,7 @@
 {Syst/tmsconst.i}
 {Func/femailinvoice.i}
 {Func/heartbeat.i}
+{Func/msreqfunc.i}
 
 &SCOPED-DEFINE MIDNIGHT-SECONDS 86400
 
