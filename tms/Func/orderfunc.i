@@ -13,14 +13,14 @@
 &THEN
 
 &GLOBAL-DEFINE orderfunc YES
-{Syst/commali.i}
 {Syst/tmsconst.i}
-{Syst/eventval.i}
 {Func/forderstamp.i}
 {Func/dextra.i}
-{Func/cparam2.i}
-{Func/main_add_lines.i}
+{Syst/eventval.i}
+{Func/fmakemsreq.i}
+{Func/msreqfunc.i}
 {Func/msisdn.i}
+{Func/create_eventlog.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
@@ -29,6 +29,93 @@ IF llDoEvent THEN DO:
 
    DEFINE VARIABLE lhOrderStatusChange AS HANDLE NO-UNDO.
 END.
+
+FUNCTION fIsMainLineOrderPending RETURNS LOGICAL
+   (INPUT pcIdType AS CHAR,
+    INPUT pcPersonId AS CHAR,
+    INPUT iiExcludeOrderID AS INT):
+
+   DEF BUFFER OrderCustomer FOR OrderCustomer.
+   DEF BUFFER Order FOR Order.
+   DEF BUFFER OrderAction FOR OrderAction.
+   DEF BUFFER CLIType FOR CLIType.
+
+   FOR EACH OrderCustomer NO-LOCK WHERE   
+            OrderCustomer.Brand      EQ Syst.Var:gcBrand AND 
+            OrderCustomer.CustId     EQ pcPersonId AND
+            OrderCustomer.CustIdType EQ pcIdType AND
+            OrderCustomer.RowType    EQ 1,
+      EACH  Order NO-LOCK WHERE
+            Order.Brand              EQ Syst.Var:gcBrand AND
+            Order.orderid            EQ OrderCustomer.Orderid AND
+            Order.OrderType          NE {&ORDER_TYPE_RENEWAL} AND 
+            Order.OrderType          NE {&ORDER_TYPE_STC} AND 
+            LOOKUP(STRING(Order.statuscode),{&ORDER_INACTIVE_STATUSES}) EQ 0,
+       EACH OrderAction NO-LOCK WHERE 
+            OrderAction.Brand = Order.Brand AND
+            OrderAction.OrderId = Order.OrderID AND
+            OrderAction.ItemType = "BundleItem":
+
+      IF iiExcludeOrderID > 0 AND Order.OrderID EQ iiExcludeOrderID THEN NEXT.
+      IF CAN-FIND(FIRST CLIType NO-LOCK WHERE
+                        CLIType.Brand = Syst.Var:gcBrand AND
+                        CLIType.CLIType = OrderAction.ItemKey AND
+                        CLIType.LineType = {&CLITYPE_LINETYPE_MAIN}) THEN RETURN TRUE.
+   END.
+
+   RETURN FALSE.
+
+END FUNCTION.
+
+/* Function makes new MSOwner when subscription is partially
+   terminated or mobile part order closed. Calling program must have
+   commali.i, Syst.Var:katun defined and call fCleanEventObjects after this function */
+FUNCTION fUpdatePartialMSOwner RETURNS LOGICAL
+   (iiMsSeq AS INT,
+    icFixedNumber AS CHAR):
+   DEF VAR ldUpdateTS AS DEC NO-UNDO.
+   DEF BUFFER MsOwner FOR MsOwner.
+   DEF BUFFER bNewMsowner FOR Msowner.
+
+   ldUpdateTS = Func.Common:mMakeTS().
+   FIND FIRST MSOwner WHERE 
+              MSOwner.MsSeq  = iiMsSeq AND
+              MSOwner.TsEnd >= ldUpdateTS
+   EXCLUSIVE-LOCK NO-ERROR.
+   IF NOT AVAIL MSOwner THEN RETURN FALSE.
+
+   IF llDoEvent THEN DO:
+      DEFINE VARIABLE lhMsOwner AS HANDLE NO-UNDO.
+      lhMsOwner = BUFFER MSOwner:HANDLE.
+      RUN StarEventInitialize(lhMsOwner).
+      RUN StarEventSetOldBuffer (lhMsOwner).
+   END.
+
+   MSOwner.TsEnd = ldUpdateTS.
+
+   IF llDoEvent THEN DO:
+      RUN StarEventMakeModifyEvent (lhMsOwner).
+   END.
+
+   CREATE bNewMsowner.
+   BUFFER-COPY MSOwner EXCEPT TsEnd tsbegin TO bNewMsowner.
+   ASSIGN
+      bNewMsowner.CLI = icFixedNumber
+      bNewMsowner.imsi = ""
+      bNewMsowner.CliEvent = "F"
+      bNewMsowner.tsbegin = Func.Common:mSecOffSet(ldUpdateTS,1)
+      bNewMsowner.TsEnd = 99999999.99999.
+
+   IF llDoEvent THEN DO:
+      lhMsOwner = BUFFER bNewMsowner:HANDLE.
+      fMakeCreateEvent (lhMsOwner, "", "", "").
+   END.
+
+   RELEASE MSOwner.
+   RELEASE bNewMsowner.
+   RETURN TRUE.
+
+END FUNCTION.
 
 /* set status of order */
 FUNCTION fSetOrderStatus RETURNS LOGICAL
