@@ -39,12 +39,9 @@
 
 &GLOBAL-DEFINE SETFEES_I YES
 
-{Syst/commali.i}
 {Func/fmakeservlimit.i}
-{Func/create_eventlog.i}
 {Func/nncoit2.i}
 {Func/fcustpl.i}
-{Syst/eventval.i}
 {Func/financed_terminal.i}
 {Func/profunc.i}
 

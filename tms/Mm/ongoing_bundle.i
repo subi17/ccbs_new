@@ -3,7 +3,6 @@
 &GLOBAL-DEFINE ONGOING_BUNDLE YES
 
 {Syst/tmsconst.i}
-{Syst/commali.i}
 {Func/cparam2.i}
 
 FUNCTION fGetActOngoingDataBundles RETURNS CHAR
