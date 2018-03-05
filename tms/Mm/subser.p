@@ -835,6 +835,8 @@ END PROCEDURE.
 
 PROCEDURE local-UPDATE-record:
 
+   DEFINE VARIABLE ldtActDate AS DATE NO-UNDO.
+
    REPEAT ON ENDKEY UNDO, LEAVE:
 
       RUN local-find-others.
