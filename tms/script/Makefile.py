@@ -8,7 +8,8 @@ import errno
 import time
 import threading
 from socket import gethostname, error
-from subprocess import Popen
+from subprocess import Popen, PIPE
+from ast import literal_eval
 
 relpath = '../..'
 exec(open(relpath + '/etc/make_site.py').read())
@@ -121,7 +122,7 @@ def getpf(pf):
         return '{0}.pf'.format(pf)
 
 def active_cdr_db_pf():
-    if '-S' in open('{0}/db/progress/store/common.pf'.format(relpath)).read():
+    if '-S' in open('{0}/db/progress/store/common.pf'.format(relpath[:-3])).read():
         connection_type = "tcp"
     else:
         connection_type = "local"
