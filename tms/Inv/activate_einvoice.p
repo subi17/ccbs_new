@@ -13,6 +13,7 @@
 {Func/femailinvoice.i}
 {Func/ftransdir.i}
 {Inv/edefine.i NEW}
+{Func/msreqfunc.i}
 
 DEF INPUT PARAMETER iiMsRequest AS INT  NO-UNDO.
 
