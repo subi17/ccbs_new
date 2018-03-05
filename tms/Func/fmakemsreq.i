@@ -42,16 +42,11 @@
 
 &GLOBAL-DEFINE fmakemsreq YES
 
-{Func/msreqfunc.i}
 {Func/fcreatereq.i}
 {Func/fctserval.i}
 {Func/fcustdata.i}
-{Syst/tmsconst.i}
 {Func/fixedlinefunc.i}
-
-DEF BUFFER bReqOwner FOR MsOwner.
-DEF BUFFER bReqComp  FOR ServCom.
-DEF BUFFER bReqSer   FOR SubSer.
+{Func/cparam2.i}
 
 DEF VAR liReqCreated AS INT  NO-UNDO.
 
@@ -270,7 +265,10 @@ FUNCTION fServiceActStamp RETURNS DECIMAL
    DEF VAR ldChgStamp  AS DEC  NO-UNDO. 
    DEF VAR liCReqTime  AS INT  NO-UNDO.
    DEF VAR ldtCReqDate AS DATE NO-UNDO.
-   
+
+   DEF BUFFER bReqComp  FOR ServCom.
+   DEF BUFFER bReqSer   FOR SubSer.
+
    /* default is current time */
    ASSIGN ldtCReqDate = TODAY
           liCReqTime  = TIME
@@ -829,6 +827,7 @@ FUNCTION fPCActionRequest RETURNS INTEGER
    
    DEF BUFFER bMsRequest FOR MsRequest.
    DEF BUFFER ServiceLimit FOR ServiceLimit.
+   DEF BUFFER bReqOwner FOR MsOwner.
 
    lcBONOContracts = fCParamC("BONO_CONTRACTS").
    

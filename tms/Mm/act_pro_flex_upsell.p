@@ -8,10 +8,9 @@
   Version ......: yoigo
 ---------------------------------------------------------------------- */
 /*YPRO-88*/
-{Syst/tmsconst.i}
 {Syst/commpaa.i}
 {Func/upsellbundle.i}
-{Func/matrix.i}
+{Func/dss_matrix.i}
 
 Syst.Var:gcBrand =  Syst.Var:gcBrand.
 Syst.Var:katun = "Cron".
