@@ -12,11 +12,7 @@
 
 &GLOBAL-DEFINE fsendsms YES
 
-{Syst/commali.i}
-{Func/fgettxt.i}
-{Func/cparam2.i}
 {Func/fmakesms.i}
-{Syst/tmsconst.i}
 {Func/transname.i}
 {Mm/bundle_type.i}
 

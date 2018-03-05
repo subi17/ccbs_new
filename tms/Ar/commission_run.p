@@ -533,7 +533,8 @@ PROCEDURE pSendSMS:
    DEF BUFFER bPromotedCust FOR Customer.
    
    DEF VAR lcCommAmount AS CHAR NO-UNDO.
-   DEF VAR ldeActStamp AS DEC NO-UNDO. 
+   DEF VAR ldeActStamp  AS DEC NO-UNDO.
+   DEFINE VARIABLE lcSMSText AS CHARACTER NO-UNDO.
 
    IF CoRule.ActivationSMS = "" THEN RETURN.
    
