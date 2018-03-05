@@ -12,7 +12,7 @@
 Syst.Var:katun = "NewtonAd".
 Syst.Var:gcBrand  = "1".
 {Syst/tmsconst.i}
-{Func/vasfunc.i}
+{Func/profunc.i}
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.
 
