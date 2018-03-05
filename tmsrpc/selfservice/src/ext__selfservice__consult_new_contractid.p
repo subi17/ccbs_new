@@ -60,6 +60,7 @@ DEF VAR lcApplicationId AS CHAR NO-UNDO.
 DEFINE VARIABLE liCustNum               AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liMsSeq                 AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liOrderId               AS INTEGER   NO-UNDO.
+DEFINE VARIABLE lcSMSText               AS CHARACTER NO-UNDO.
 
 
 pcReqList = validate_request(param_toplevel_id, "string,string,string,[string]").

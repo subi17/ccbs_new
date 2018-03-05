@@ -553,7 +553,8 @@ PROCEDURE local-find-others.
 
    ASSIGN
       lcReqType   = "TMS" WHEN MNPOperation.Sender = 1
-      lcReqType   = "MNP-ADAPT" WHEN MNPOperation.Sender = 2.
+      lcReqType   = "MNP-NC" WHEN MNPOperation.Sender = 2 
+      lcReqType   = "MNP-ADAPT" WHEN MNPOperation.Sender = 4.
    
    lcMNPStatus = Func.Common:mTMSCodeName("MNPMessage",
                                "StatusCode",

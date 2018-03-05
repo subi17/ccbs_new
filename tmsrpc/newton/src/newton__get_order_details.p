@@ -129,7 +129,7 @@
 {Syst/commpaa.i}
 Syst.Var:katun = "NewtonRPC".
 Syst.Var:gcBrand = "1".
-{Func/order.i}
+{Func/terminaloffer.i}
 {Syst/tmsconst.i}
 {Mm/fbundle.i}
 
