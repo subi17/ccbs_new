@@ -13,7 +13,6 @@
 &IF "{&fctchange}" NE "YES"
 &THEN
 &GLOBAL-DEFINE fctchange YES
-{Syst/commali.i}
 {Func/cparam2.i}
 {Func/fctserval.i}
 {Func/matrix.i}

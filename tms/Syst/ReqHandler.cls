@@ -18,17 +18,27 @@ BLOCK-LEVEL ON ERROR UNDO, THROW.
 CLASS Syst.ReqHandler: 
 
    DEFINE PRIVATE TEMP-TABLE ttStatistic NO-UNDO
-      FIELD ReqType    AS INTEGER
-      FIELD ReqStatus  AS INTEGER
-      FIELD ProcessAmt AS INT64
-      FIELD FailedAmt  AS INT64
+      FIELD ReqType     AS INTEGER
+      FIELD ReqStatus   AS INTEGER
+      FIELD ProcessAmt  AS INT64
+      FIELD FailedAmt   AS INT64
+      FIELD LastUpdated AS DATETIME-TZ
       INDEX ReqType IS PRIMARY UNIQUE ReqType ReqStatus.
 
-   DEFINE PRIVATE VARIABLE aiQueue       AS INTEGER   NO-UNDO.
-   DEFINE PRIVATE VARIABLE aiMaxAmount   AS INTEGER   NO-UNDO.
-   DEFINE PRIVATE VARIABLE aiMaxTime     AS INTEGER   NO-UNDO.
-   DEFINE PRIVATE VARIABLE acTenants     AS CHARACTER NO-UNDO.
-   DEFINE PRIVATE VARIABLE aiTenantCount AS INTEGER   NO-UNDO.
+   DEFINE PRIVATE TEMP-TABLE ttProcess NO-UNDO
+      FIELD ReqType    AS INTEGER
+      FIELD ReqStatus  AS INTEGER
+      FIELD TenantName AS CHARACTER
+      FIELD Program    AS CHARACTER
+      FIELD LastProcessed AS DATETIME-TZ
+      INDEX TenantName IS PRIMARY TenantName LastProcessed ReqType ReqStatus.
+
+   DEFINE PRIVATE VARIABLE aiQueue         AS INTEGER   NO-UNDO.
+   DEFINE PRIVATE VARIABLE aiMaxTime       AS INTEGER   NO-UNDO.
+   DEFINE PRIVATE VARIABLE acTenants       AS CHARACTER NO-UNDO.
+   DEFINE PRIVATE VARIABLE aiTenantCount   AS INTEGER   NO-UNDO.
+   DEFINE PRIVATE VARIABLE acCurrentTenant AS CHARACTER NO-UNDO.
+   DEFINE PRIVATE VARIABLE ahQuery         AS HANDLE    NO-UNDO.
 
    CONSTRUCTOR PUBLIC ReqHandler
       (iiQueue AS INTEGER):
@@ -57,18 +67,6 @@ CLASS Syst.ReqHandler:
 
       DO ON ERROR UNDO, THROW:
 
-         aiMaxAmount = Syst.Parameters:geti("ReqHandler.MaxAmount", "ReqHandler").
-
-         /* Handler code for any error condition. */
-         CATCH anyErrorObject AS Progress.Lang.Error:
-            /* If no parameter set then assume max amount is 500 */
-            aiMaxAmount = 500.
-         END CATCH.
-
-      END.
-
-      DO ON ERROR UNDO, THROW:
-
          aiMaxTime = Syst.Parameters:geti("ReqHandler.MaxTime", "ReqHandler").
 
          /* Handler code for any error condition. */
@@ -79,11 +77,25 @@ CLASS Syst.ReqHandler:
 
       END.
 
+      CREATE QUERY ahQuery.
+
+      ahQuery:SET-BUFFERS(BUFFER ttProcess:HANDLE).
+      /* Preselect is needed as we are updating the field which is part
+         of the index */
+      ahQuery:QUERY-PREPARE('PRESELECT EACH ttProcess NO-LOCK BREAK BY ttProcess.TenantName').
+
    END CONSTRUCTOR.
 
 
    DESTRUCTOR PUBLIC ReqHandler( ):
 
+      IF VALID-HANDLE(ahQuery)
+      THEN DO:
+         ahQuery:QUERY-CLOSE().
+         DELETE OBJECT ahQuery.
+      END.
+
+      EMPTY TEMP-TABLE ttProcess.
       EMPTY TEMP-TABLE ttStatistic.
             
    END DESTRUCTOR.
@@ -117,44 +129,26 @@ CLASS Syst.ReqHandler:
       NO-ERROR.
       
       IF NOT AVAILABLE ttStatistic
-      THEN CREATE ttStatistic.
+      THEN DO:
+         CREATE ttStatistic.
+         ASSIGN
+            ttStatistic.ReqType   = iiReqType
+            ttStatistic.ReqStatus = iiReqStatus.
+      END.
       
       ASSIGN
-         ttStatistic.ProcessAmt = ttStatistic.ProcessAmt + iiProcessed
-         ttStatistic.FailedAmt  = ttStatistic.FailedAmt + iiProcessed.
+         ttStatistic.ProcessAmt  = ttStatistic.ProcessAmt + iiProcessed
+         ttStatistic.FailedAmt   = ttStatistic.FailedAmt + iiFailed
+         ttStatistic.LastUpdated = NOW.
          
    END METHOD.
 
+   METHOD PUBLIC VOID mUpdateProcess():
 
-   METHOD PUBLIC CHARACTER mGetStatistic():
+      EMPTY TEMP-TABLE ttProcess.
 
-      DEFINE VARIABLE lcReturnValue AS CHARACTER NO-UNDO.
+      DEFINE VARIABLE lii AS INTEGER NO-UNDO.
 
-      FOR EACH ttStatistic:
-         lcReturnValue = lcReturnValue + CHR(10) +
-                SUBSTITUTE("ReqType=&1, ReqStatus=&2: Processed=&3, Failed=&4",
-                           ttStatistic.ReqType,
-                           ttStatistic.ReqStatus,
-                           ttStatistic.ProcessAmt,
-                           ttStatistic.FailedAmt).
-      END.
-      
-      RETURN LEFT-TRIM(lcReturnValue, CHR(10)).
-      
-   END METHOD. 
-
-
-   METHOD PUBLIC LOGICAL mProcess():
-
-      DEFINE VARIABLE ldeActTime     AS DECIMAL   NO-UNDO.
-      DEFINE VARIABLE liStartTime    AS INTEGER   NO-UNDO.
-      DEFINE VARIABLE liCount        AS INTEGER   NO-UNDO.
-      DEFINE VARIABLE liResult       AS INTEGER   NO-UNDO.
-      DEFINE VARIABLE lcProgram      AS CHARACTER NO-UNDO.
-      DEFINE VARIABLE lii            AS INTEGER   NO-UNDO.
-      
-      liStartTime = MTIME.
-      
       FOR
          EACH RequestType NO-LOCK WHERE
               RequestType.Brand = "1"      AND
@@ -162,72 +156,145 @@ CLASS Syst.ReqHandler:
               RequestType.InUse = TRUE     AND
               RequestType.Mode NE "BATCH",
          EACH RequestStatus NO-LOCK WHERE
-              RequestStatus.Brand = "1" AND
-              RequestStatus.ReqType = RequestType.ReqType
-         BREAK BY RequestStatus.ReqType:
-            
-         IF FIRST-OF(RequestStatus.ReqType)
-         THEN DO:
-            ldeActTime = mMake2DT(TODAY,TIME).
-         END.
-
-         lcProgram = IF RequestStatus.Program > ""
-                     THEN RequestStatus.Program
-                     ELSE RequestType.Program.
-
-         IF SEARCH(lcProgram) = ?
-         THEN RETURN ERROR NEW Progress.Lang.AppError
-                  (SUBSTITUTE("Module &1 not found", lcProgram), 1).
+              RequestStatus.Brand   = "1"                 AND
+              RequestStatus.ReqType = RequestType.ReqType AND
+              RequestStatus.InUse   = TRUE:
 
          DO lii = 1 TO aiTenantCount:
-            
-            multitenancy.TenantInformation:mSetEffectiveTenant(ENTRY(lii,acTenants)).
-            
-            FOR
-               EACH MsRequest NO-LOCK WHERE
-                    MsRequest.Brand     = "1"                     AND
-                    MsRequest.ReqType   = RequestStatus.ReqType   AND     
-                    MsRequest.ReqStatus = RequestStatus.ReqStatus AND   
-                    MsRequest.ActStamp <= ldeActTime /* scheduled or immediate */
-               BY MsRequest.ActStamp
-               BY MsRequest.MsRequest:
-   
-               /* there is a possibility that another process has just started
-                  handling this same request */
-               IF MsRequest.ReqStatus NE RequestStatus.ReqStatus THEN NEXT.
-   
-               liCount = liCount + 1.
-   
-               RUN VALUE(IF RequestStatus.Program > ""
-                         THEN RequestStatus.Program
-                         ELSE RequestType.Program) (MsRequest.MsRequest).
-   
-               IF MsRequest.ReqType = {&REQTYPE_RERATE}
-               THEN DO:
-                  liResult = INTEGER(RETURN-VALUE) NO-ERROR.
-                  IF NOT ERROR-STATUS:ERROR
-                  THEN mUpdateStatistic(RequestStatus.ReqType,
-                                        RequestStatus.ReqStatus,
-                                        liResult,
-                                        0).
-               END.
-               ELSE DO:
-                  IF NOT RETURN-VALUE BEGINS "ERROR"
-                  THEN mUpdateStatistic(RequestStatus.ReqType,
-                                        RequestStatus.ReqStatus,
-                                        INTEGER(MsRequest.ReqStatus > 1),
-                                        INTEGER(MsRequest.ReqStatus = 3)).
-               END.
-   
-               IF liCount > aiMaxAmount OR liStartTime >= ABSOLUTE(MTIME - aiMaxTime)
-               THEN RETURN FALSE.
-            END.
+            CREATE ttProcess.
+            ASSIGN
+               ttProcess.ReqType       = RequestType.ReqType
+               ttProcess.ReqStatus     = RequestStatus.ReqStatus
+               ttProcess.Tenant        = ENTRY(lii,acTenants)
+               ttProcess.Program       = IF RequestStatus.Program > ""
+                                         THEN RequestStatus.Program
+                                         ELSE RequestType.Program
+               ttProcess.LastProcessed = NOW.
+         END.
+
+         IF SEARCH(ttProcess.Program) = ?
+         THEN RETURN ERROR NEW Progress.Lang.AppError
+                  (SUBSTITUTE("Module &1 not found", ttProcess.Program), 1).
+      END.
+
+   END METHOD.
+
+   METHOD PUBLIC VOID mLogStatistic
+      (idttzLastCheck AS DATETIME-TZ):
+
+      DEFINE VARIABLE lcc AS CHARACTER NO-UNDO.
+
+      FOR EACH ttStatistic:
+
+         IF ttStatistic.LastUpdated < idttzLastCheck
+         THEN NEXT.
+
+         lcc = lcc + ", " + SUBSTITUTE("&1/&2: P&3, F&4",
+                                       ttStatistic.ReqType,
+                                       ttStatistic.ReqStatus,
+                                       ttStatistic.ProcessAmt,
+                                       ttStatistic.FailedAmt).
+
+         IF LENGTH(lcc) > 130
+         THEN DO:
+            LOG-MANAGER:WRITE-MESSAGE(SUBSTRING(lcc, 3), "STATUS").
+            lcc = "".
          END.
       END.
+
+      IF lcc > ""
+      THEN LOG-MANAGER:WRITE-MESSAGE(SUBSTRING(lcc, 3), "STATUS").
+
+   END METHOD.
+
+   METHOD PUBLIC LOGICAL mProcess():
+
+      DEFINE VARIABLE ldeActTime     AS DECIMAL   NO-UNDO.
+      DEFINE VARIABLE liStartTime    AS INTEGER   NO-UNDO.
+      DEFINE VARIABLE liResult       AS INTEGER   NO-UNDO.
+      DEFINE VARIABLE liMTIME        AS INTEGER   NO-UNDO.
+      DEFINE VARIABLE llOK           AS LOGICAL   NO-UNDO.
       
-      /* We will go there only when there are no request or we got every
+      ASSIGN
+         liStartTime = MTIME.
+
+      ahQuery:QUERY-OPEN().
+
+      DO WHILE TRUE ON ERROR UNDO, THROW:
+
+         llOK = ahQuery:GET-NEXT(NO-LOCK).
+
+         IF llOK = ?
+         THEN RETURN ERROR NEW Progress.Lang.AppError("Cannot process query", 1).
+
+         /* No more records, or query is not open */
+         IF NOT llOK
+         THEN LEAVE.
+
+         IF ahQuery:FIRST-OF(1) AND ttProcess.TenantName NE acCurrentTenant
+         THEN DO:
+            multitenancy.TenantInformation:mSetEffectiveTenant(ttProcess.TenantName).
+            acCurrentTenant = ttProcess.TenantName.
+         END.
+
+         ASSIGN
+            ldeActTime              = mMake2DT(TODAY,TIME)
+            ttProcess.LastProcessed = NOW.
+
+         FOR
+            EACH MsRequest NO-LOCK WHERE
+                 MsRequest.Brand     = "1"                 AND
+                 MsRequest.ReqType   = ttProcess.ReqType   AND
+                 MsRequest.ReqStatus = ttProcess.ReqStatus AND
+                 MsRequest.ActStamp <= ldeActTime /* scheduled or immediate */
+            BY MsRequest.ActStamp
+            BY MsRequest.MsRequest:
+
+            /* there is a possibility that another process has just started
+               handling this same request */
+            IF MsRequest.ReqStatus NE ttProcess.ReqStatus THEN NEXT.
+
+            RUN VALUE(ttProcess.Program) (MsRequest.MsRequest).
+
+            IF MsRequest.ReqType = {&REQTYPE_RERATE}
+            THEN DO:
+               liResult = INTEGER(RETURN-VALUE) NO-ERROR.
+               IF NOT ERROR-STATUS:ERROR
+               THEN mUpdateStatistic(ttProcess.ReqType,
+                                     ttProcess.ReqStatus,
+                                     liResult,
+                                     0).
+            END.
+            ELSE DO:
+               IF NOT RETURN-VALUE BEGINS "ERROR"
+               THEN mUpdateStatistic(ttProcess.ReqType,
+                                     ttProcess.ReqStatus,
+                                     INTEGER(MsRequest.ReqStatus > 1),
+                                     INTEGER(MsRequest.ReqStatus = 3)).
+            END.
+
+            liMTIME = MTIME.
+
+            /* Maximum processing time per one round is aiMaxTime.
+               No separate wait in the calling side is needed when
+               the maximum time is reached.
+               In order to handle situation when day is changed
+               two possible scenarios must be handled */
+            IF ( liStartTime > liMTIME AND
+                 liStartTime < 86400000 + liMTIME - aiMaxTime ) OR
+               ( liStartTime <= liMTIME AND
+                 liStartTime < liMTIME - aiMaxTime )
+            THEN RETURN FALSE.
+         END.
+      END.
+
+      /* We will be there only when there are no request or we got every
          request handled */
       RETURN TRUE.
+
+      FINALLY:
+         ahQuery:QUERY-CLOSE().
+      END FINALLY.
    
    END METHOD.
 
