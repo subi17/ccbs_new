@@ -219,25 +219,25 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
          OTHERWISE appl_err("Service change is not allowed").
       END.
  
-      IF SubSer.ServCom EQ "NW" THEN DO:
-         /* Check if new value is different to old value */
-      END.
-      ELSE DO:
-         liValidate = fSubSerSSStat(
-            INPUT MobSub.MsSeq,
-            INPUT Subser.ServCom,
-            INPUT liValue,
-            OUTPUT ocError).
+      liValidate = fSubSerSSStat(
+         INPUT MobSub.MsSeq,
+         INPUT Subser.ServCom,
+         INPUT liValue,
+         OUTPUT ocError).
      
-         IF liValidate NE 0 THEN
-            RETURN appl_err(SUBST("Unknown service value: &1", pcValue)).
-      END.
+      IF liValidate NE 0 THEN
+         RETURN appl_err(SUBST("Unknown service value: &1", pcValue)).
 
       /* Return error if new value is same as existing value */ 
       IF SubSer.ServCom = "BB" AND
          (liValue = SubSer.SSStat OR (SubSer.SSStat = 2 AND liValue = 0)) THEN
          RETURN appl_err("Service is already " +
                          (IF liValue = 1 THEN "active" ELSE "suspended")).
+
+      /* Return error if new NW value is same as existing value */
+      IF SubSer.ServCom = "NW" AND
+         liValue = SubSer.SSStat THEN
+         RETURN appl_err("Service is already active").
 
       /* check the validity of change date */
       ldActStamp = fServiceActStamp(SubSer.MsSeq,

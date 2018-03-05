@@ -14,30 +14,43 @@ OUTPUT ocError AS CHARACTER):
    FIND FIRST ServCom where 
       ServCom.Brand   = Syst.Var:gcBrand    AND 
       ServCom.ServCom = icServCom NO-LOCK NO-ERROR.
-   
-   /* 1 */
-   IF iiNewSSStat < ServCom.SCValueRange[1]  OR
-      iiNewSSStat > ServCom.SCValueRange[2] THEN DO:
-
-      ocError = "The value must be within range " 
-                + STRING(ServCom.ScValueRange[1]) 
-                +  " - " 
-                + STRING(ServCom.ScValueRange[2] )
-                + " !".
-
-      RETURN 1.
-   END.
-   
-   /* 2 */
-   IF INDEX(icServcom,"DELAY") > 0 THEN  DO:
-
-      IF LOOKUP(STRING(iiNewSSStat),"5,10,15,20,25,30") = 0
-      THEN DO:
-         ocError = "You can only choose from 5,10,15,20,25 and 30.".
-         RETURN 2.   
+  
+   IF ServCom.ServCom EQ "NW" THEN DO: /* RES-885 */
+      IF iiNewSSStat < 2 OR
+         iiNewSSStat > 3 THEN DO:
+         ocError = "The value must be within range "
+                   + "2"
+                   +  " - "
+                   + "3"
+                   + " !".
+         RETURN 1.
       END.
    END.
+   ELSE DO: 
+      /* 1 */
+      IF iiNewSSStat < ServCom.SCValueRange[1]  OR
+         iiNewSSStat > ServCom.SCValueRange[2] THEN DO:
+
+         ocError = "The value must be within range " 
+                   + STRING(ServCom.ScValueRange[1]) 
+                   +  " - " 
+                   + STRING(ServCom.ScValueRange[2] )
+                   + " !".
+
+         RETURN 1.
+      END.
    
+      /* 2 */
+      IF INDEX(icServcom,"DELAY") > 0 THEN  DO:
+
+         IF LOOKUP(STRING(iiNewSSStat),"5,10,15,20,25,30") = 0
+         THEN DO:
+            ocError = "You can only choose from 5,10,15,20,25 and 30.".
+            RETURN 2.   
+         END.
+      END.
+   END.   
+
    RETURN 0.
 
 END.
@@ -119,10 +132,10 @@ END FUNCTION.
 
 /* RES-885 NRTR */
 FUNCTION fSubSerValidateNW RETURNS INT
-   (INPUT iiMsseq AS INT,
-    INPUT icServCom AS CHAR,
+   (INPUT iiMsseq     AS INT,
+    INPUT icServCom   AS CHAR,
     INPUT icNewSSStat AS CHAR,
-    OUTPUT ocError AS CHAR):
+    OUTPUT ocError    AS CHAR):
 
     DEF VAR liDefValue AS INT NO-UNDO.
     DEF VAR ok AS LOGICAL NO-UNDO.
@@ -134,7 +147,8 @@ FUNCTION fSubSerValidateNW RETURNS INT
        SubSer.ServCom = icServCom NO-ERROR.
 
     /* 1 */
-    IF LOOKUP(icNewSSStat,"Yoigo + Orange,Yoigo + Orange + Movistar",",") = 0 THEN DO:
+    /* "Yoigo + Orange" OR "Yoigo + Orange + Movistar" */
+    IF LOOKUP(icNewSSStat,"2,3",",") = 0 THEN DO:
        ocError = "Illegal network profile.".
        RETURN 4.
     END.
