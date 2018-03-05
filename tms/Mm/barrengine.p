@@ -8,6 +8,7 @@ ocResult:
 */
 
 {Syst/commali.i}
+{Func/barr_request.i}
 {Func/barrfunc.i}
 
 DEFINE INPUT PARAMETER iiMsSeq    AS INTEGER   NO-UNDO.

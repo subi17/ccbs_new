@@ -75,9 +75,8 @@ DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId.
 Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
-
 {Func/orderchk.i}
-{Func/order.i}
+{Func/terminaloffer.i}
 {Func/create_eventlog.i}
 {Mm/fbundle.i}
 

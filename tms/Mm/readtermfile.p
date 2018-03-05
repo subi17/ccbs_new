@@ -7,7 +7,7 @@
 {Func/cparam2.i}
 {Func/fsubstermreq.i}
 {Func/msisdn_prefix.i}
-{Func/main_add_lines.i}
+{Func/add_lines_request.i}
 
 DEF INPUT  PARAMETER icFile      AS CHAR NO-UNDO.
 DEF INPUT  PARAMETER icLogFile   AS CHAR NO-UNDO.
