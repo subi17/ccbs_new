@@ -16,9 +16,7 @@ DEFINE SHARED VARIABLE ghAuthLog AS HANDLE NO-UNDO.
 {Syst/commpaa.i}
 Syst.Var:katun = ghAuthLog::UserName + "_" + ghAuthLog::EndUserId. 
 Syst.Var:gcBrand = "1".
-{Mm/fbundle.i}
 {Func/fbtc.i}
-{Func/fmakemsreq.i}
 {Func/fdss.i}
 
 DEF VAR piMsSeq            AS INT  NO-UNDO. 
