@@ -12,7 +12,7 @@ hell MODULE .......: cancelorder.p
 {Func/fsubstermreq.i}
 {Func/ordercancel.i}
 {Func/fmakemsreq.i}
-{Func/main_add_lines.i}
+{Func/add_lines_request.i}
 
 DEF INPUT PARAMETER iiOrder AS INT NO-UNDO.
 DEF INPUT PARAMETER ilCheckLOStatus AS LOG NO-UNDO.

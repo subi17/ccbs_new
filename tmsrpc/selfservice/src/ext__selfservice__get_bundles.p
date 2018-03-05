@@ -35,6 +35,7 @@ DEFINE VARIABLE top_struct      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liStatus        AS INTEGER   NO-UNDO.
 DEFINE VARIABLE ldEndStamp      AS DECIMAL   NO-UNDO.
 DEFINE VARIABLE lcBONOContracts AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcReqChar       AS CHARACTER NO-UNDO.
 
 IF validate_request(param_toplevel_id, "string,string,string") = ? THEN RETURN.
 
