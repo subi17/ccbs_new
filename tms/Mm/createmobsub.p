@@ -35,7 +35,8 @@
 {Func/orderfunc.i}
 {Func/fsubsterminal.i}
 {Mc/invoicetarget.i}
-{Func/fdss.i}
+{Func/dss_request.i}
+{Func/dss_matrix.i}
 {Func/orderchk.i}
 {Func/fmakesms.i}
 {Func/transname.i}
@@ -44,6 +45,7 @@
 {Func/create_eventlog.i}
 {Func/fixedlinefunc.i}
 {Func/msisdn_prefix.i}
+{Func/add_lines_request.i}
 
 DEF INPUT  PARAMETER iiMSRequest AS INT  NO-UNDO.
 

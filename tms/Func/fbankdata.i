@@ -6,7 +6,6 @@
                     16.11.06/aam fCheckBankAcc for Spain
    
 */
-{Syst/commali.i}
 {Syst/tmsconst.i}
 
 /* convert into data form */

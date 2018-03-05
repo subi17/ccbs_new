@@ -1,4 +1,3 @@
-{Syst/tmsconst.i}
 {Func/fdss.i}
 
 DEF TEMP-TABLE ttServiceLCounter NO-UNDO
