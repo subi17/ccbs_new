@@ -21,6 +21,7 @@
 {Func/email.i}
 {Func/smsnotify.i}
 {Func/heartbeat.i}
+{Func/msreqfunc.i}
 
 &SCOPED-DEFINE MIDNIGHT-SECONDS 86400
 
