@@ -23,7 +23,7 @@ Syst.Var:gcBrand = "1".
 {Func/upsellbundle.i}
 {Func/msreqfunc.i}
 {Func/fsendsms.i}
-{Func/fdss.i}
+{Func/dss_request.i}
 {Func/fprepaidfee.i}
 {Mm/fbundle.i}
 
