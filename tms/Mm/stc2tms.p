@@ -309,13 +309,19 @@ END PROCEDURE.
 PROCEDURE pSpeedChangeRequestForProvisioning:
     DEF VAR liOrderId          AS INTE NO-UNDO.
 
-    FOR EACH  Order WHERE Order.MsSeq = Mobsub.MsSeq NO-LOCK,
-        FIRST FusionMessage NO-LOCK WHERE FusionMessage.OrderId = Order.OrderId USE-INDEX OrderId:
+    FOR EACH Order WHERE Order.MsSeq = Mobsub.MSSeq NO-LOCK 
+        BY Order.CrStamp DESC:
 
-        IF (FusionMessage.MessageType <> {&FUSIONMESSAGE_TYPE_CREATE_ORDER} AND 
-            (FusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_CREATE_ORDER} AND FusionMessage.MessageStatus <> {&FUSION_ORDER_STATUS_FINALIZED})) THEN
+        IF Order.StatusCode = {&ORDER_STATUS_DELIVERED} THEN 
             NEXT.
 
+        FIND FIRST FusionMessage NO-LOCK WHERE 
+                   FusionMessage.OrderId        = Order.OrderId                      AND 
+                   FusionMessage.MessageType    = {&FUSIONMESSAGE_TYPE_CREATE_ORDER} AND 
+                   FusionMessage.MessageStatus  = {&FUSIONMESSAGE_STATUS_HANDLED}    NO-ERROR.
+        IF NOT AVAIL FusionMessage THEN 
+            NEXT.
+                       
         ASSIGN liOrderId = Order.OrderId.
 
         LEAVE.
