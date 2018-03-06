@@ -163,3 +163,20 @@ Syst.TMSRelation:mAddRelation("DiscountPlan",
                               "CONVDISC_CS20M12",
                               "ChildValue",
                               YES).
+
+DEFINE VARIABLE gcMXItemToRemove AS CHARACTER NO-UNDO.
+DEFINE VARIABLE gii AS INTEGER NO-UNDO.
+
+gcMXItemToRemove = "LRDISC2,CONVDISC20_3".
+
+DO TRANSACTION gii = 1 TO NUM-ENTRIES(gcMXItemToRemove):
+
+   FIND FIRST MXItem EXCLUSIVE-LOCK WHERE
+      MXItem.MXSeq = 158 AND
+      MXItem.MXValue = ENTRY(gii,gcMXItemToRemove)
+   NO-ERROR.
+
+   IF AVAILABLE MXItem
+   THEN DELETE MXItem.
+
+END.
