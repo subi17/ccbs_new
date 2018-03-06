@@ -4,34 +4,23 @@
        termination/ MNP out porting, STC (postpaid to prepaid)
 */
 {Syst/commali.i}
-{Func/msreqfunc.i}
-{Syst/eventval.i}
-{Func/fmakemsreq.i}
-{Func/fctchange.i}
-{Func/matrix.i}
 {Func/service.i}
 {Mm/fbundle.i}
-{Func/transname.i}
 {Func/ftmrlimit.i}
-{Func/orderfunc.i}
 {Mc/invoicetarget.i}
 {Rate/rerate_request.i}
-{Syst/tmsconst.i}
-{Mm/bundle_first_month_fee.i}
-{Func/fdss.i}
+{Func/dss_matrix.i}
+{Func/dss_request.i}
 {Func/fcpfat.i}
 {Func/servcomfee.i}
-{Func/fsubstermreq.i}
-{Mnp/mnpoutchk.i}
 {Func/addline_discount.i}
-{Func/main_add_lines.i}
 {Func/fbankdata.i}
-{Func/create_eventlog.i}
 {Func/barrfunc.i}
-{Func/fsendsms.i}
-{Func/vasfunc.i}
+{Func/profunc_request.i}
+{Func/add_lines_request.i}
 {Func/custfunc.i}
-{Migration/migrationfunc.i}
+/* 21.2.2018 Migration is not used, commented the include file
+{Migration/migrationfunc.i}*/
 
 DEFINE INPUT PARAMETER iiMSRequest AS INTEGER NO-UNDO.
 
@@ -113,10 +102,13 @@ IF liOrigStatus = 8 AND MsRequest.ReqIParam2 > 0 THEN DO:
       fReqError(SUBST("Order not found: &1", MsRequest.ReqIParam2)).
       RETURN.
    END.
+/* 21.2.2018 Migration is not used, commented the code
+   and also the include file
    ELSE IF fIsNumberInMigration(Order.CLI) EQ TRUE THEN DO:
       fReqError(SUBST("Order is in migration phase: &1", MsRequest.ReqIParam2)).
       RETURN.
-   END.   
+   END.
+*/
    ELSE IF LOOKUP(Order.OrderChannel,"renewal_pos_stc,retention_stc") > 0 THEN DO:
       IF Order.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION}     OR
          Order.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE} THEN DO: /* ADDLINE-19 Additional Line Renewal case handling */

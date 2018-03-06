@@ -8,7 +8,8 @@
 {Func/fmakemsreq.i}
 {Func/service.i}
 {Syst/tmsconst.i}
-{Func/fdss.i}
+{Func/dss_request.i}
+{Func/dss_matrix.i}
 {Mc/dpmember.i}
 {Func/q25functions.i}
 {Func/orderfunc.i}

@@ -17,17 +17,18 @@
 {Func/msreqfunc.i}
 {Func/fcreditreq.i}
 {Func/flimitreq.i}
-{Func/fdss.i}
+{Func/dss_request.i}
+{Func/dss_matrix.i}
 {Func/msisdn_prefix.i}
 {Func/fsubstermreq.i}
 {Mnp/mnpoutchk.i}
 {Func/ordercancel.i}
 {Func/dextra.i}
-{Func/main_add_lines.i}
+{Func/add_lines_request.i}
 {Func/addline_discount.i}
 {Func/orderfunc.i}
 {Func/multitenantfunc.i}
-{Func/vasfunc.i}
+{Func/profunc_request.i}
 
 DEFINE INPUT  PARAMETER iiMSrequest AS INT  NO-UNDO.
 

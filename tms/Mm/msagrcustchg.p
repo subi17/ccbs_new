@@ -23,13 +23,13 @@
 {Func/fuserright.i}
 {Syst/tmsconst.i}
 {Mc/invoicetarget.i}
-{Func/fdss.i}
 {Func/femailinvoice.i}
 {Func/fcustchangereq.i}
 {Func/fsubstermreq.i}
-{Func/main_add_lines.i}
+{Func/add_lines_request.i}
 {Func/fbankdata.i}
-{Mm/fbundle.i}
+{Func/dss_request.i}
+{Func/dss_matrix.i}
 {Func/orderfunc.i}
 {Func/custfunc.i}
 {Func/addline_discount.i}

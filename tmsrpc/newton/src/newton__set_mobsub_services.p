@@ -22,8 +22,7 @@ Syst.Var:gcBrand = "1".
 {Func/barrfunc.i}
 {Mm/fbundle.i}
 {Func/service.i}
-{Func/vasfunc.i}
-{Func/profunc.i}
+{Func/profunc_request.i}
 
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.
