@@ -31,7 +31,6 @@ DEFINE BUFFER bMODPMember         FOR DPMember.
 DEFINE BUFFER bELDPMember         FOR DPMember.
 DEFINE BUFFER bALMobSub           FOR MobSub.
 DEFINE BUFFER bELMobSub           FOR MobSub.
-DEFINE BUFFER bAvELMobSub         FOR MobSub.
 DEFINE BUFFER bMLMobSub           FOR MobSub.
 
 DEF VAR lcConvDiscPlan20   AS CHAR NO-UNDO. 
@@ -49,6 +48,10 @@ DEF VAR lcExtraLineLogFile AS CHAR NO-UNDO.
 DEF VAR llgAvail           AS LOG  NO-UNDO. 
 DEF VAR lcSpoolDir         AS CHAR NO-UNDO.
 DEF VAR lcOutDir           AS CHAR NO-UNDO.
+DEF VAR liCount            AS INT NO-UNDO. 
+DEF VAR liDiscPlanId20     AS INT NO-UNDO. 
+DEF VAR liDiscPlanId50     AS INT NO-UNDO. 
+DEF VAR liDiscPlanIdMO     AS INT NO-UNDO. 
 
 ASSIGN lcSpoolDir         = fCParam("AddLineCron","OutSpoolDir")
        lcOutDir           = fCParam("AddLineCron","OutDir")
@@ -68,9 +71,10 @@ FUNCTION fExecuteMainLineOperations RETURNS LOGICAL
 
    DEF VAR llgLinkAvailable AS LOG NO-UNDO. 
 
-   DEFINE BUFFER lMLMobSub  FOR MobSub.
-   DEFINE BUFFER bfELMobSub FOR MobSub.
-
+   DEFINE BUFFER lMLMobSub   FOR MobSub.
+   DEFINE BUFFER bfELMobSub  FOR MobSub.
+   DEFINE BUFFER bAvELMobSub FOR MobSub.
+   
    FIND FIRST bfELMobSub EXCLUSIVE-LOCK WHERE 
               bfELMobSub.MsSeq EQ iiELMsSeq NO-ERROR.           
 
@@ -245,14 +249,11 @@ fBatchLog("FINISH",lcOutDir + lcExtraLineLogFile).
 
 fBatchLog("START",lcSpoolDir + lcAddLineLogFile).
 
-/* Additional lines */
-FOR EACH bALMobSub NO-LOCK WHERE 
-         bALMobSub.Brand EQ Syst.Var:gcBrand  AND 
-  LOOKUP(bALMobSub.CLIType,{&ADDLINE_CLITYPES}) > 0: 
+DO liCount = 1 TO NUM-ENTRIES({&ADDLINE_CLITYPES}):
 
-   ASSIGN lcConvDiscPlan20 = "DISC" + bALMobSub.CLIType
-          lcConvDiscPlan50 = "DISC" + bALMobSub.CLIType + "H"
-          lcMODiscPlan     = "DISC" + bALMobSub.CLIType + "HM"
+   ASSIGN lcConvDiscPlan20 = "DISC" + ENTRY(liCount,{&ADDLINE_CLITYPES})
+          lcConvDiscPlan50 = "DISC" + ENTRY(liCount,{&ADDLINE_CLITYPES}) + "H"
+          lcMODiscPlan     = "DISC" + ENTRY(liCount,{&ADDLINE_CLITYPES}) + "HM"
           llgAvail         = FALSE
           lcDiscError      = "".  
 
@@ -276,87 +277,95 @@ FOR EACH bALMobSub NO-LOCK WHERE
       LEAVE.   
    END.
 
-   IF AVAIL bConvDiscountPlan20 THEN 
+   ASSIGN liDiscPlanId20 = bConvDiscountPlan20.DPId.
+          liDiscPlanId50 = bConvDiscountPlan50.DPId.
+          liDiscPlanIdMO = bMODiscountPlan.DPId. 
+
+   /* Additional lines */ 
+   FOR EACH bALMobSub NO-LOCK WHERE 
+            bALMobSub.Brand   EQ Syst.Var:gcBrand  AND 
+            bALMobSub.CLIType EQ ENTRY(liCount,{&ADDLINE_CLITYPES}): 
+
       FIND FIRST bConvDPMember20 NO-LOCK WHERE
-                 bConvDPMember20.DPId       EQ bConvDiscountPlan20.DPId AND
-                 bConvDPMember20.HostTable  EQ "MobSub"                 AND
-                 bConvDPMember20.KeyValue   EQ STRING(bALMobSub.MsSeq)  AND
-                 bConvDPMember20.ValidTo    >= TODAY                    AND
-                 bConvDPMember20.ValidFrom  <= bConvDPMember20.ValidTo  NO-ERROR.
-   
-   IF AVAIL bConvDiscountPlan50 THEN 
-      FIND FIRST bConvDPMember50 NO-LOCK WHERE
-                 bConvDPMember50.DPId       EQ bConvDiscountPlan50.DPId AND
-                 bConvDPMember50.HostTable  EQ "MobSub"                 AND
-                 bConvDPMember50.KeyValue   EQ STRING(bALMobSub.MsSeq)  AND
-                 bConvDPMember50.ValidTo    >= TODAY                    AND
-                 bConvDPMember50.ValidFrom  <= bConvDPMember50.ValidTo  NO-ERROR.
+                 bConvDPMember20.DPId       EQ liDiscPlanId20          AND
+                 bConvDPMember20.HostTable  EQ "MobSub"                AND
+                 bConvDPMember20.KeyValue   EQ STRING(bALMobSub.MsSeq) AND
+                 bConvDPMember20.ValidTo    >= TODAY                   AND
+                 bConvDPMember20.ValidFrom  <= bConvDPMember20.ValidTo NO-ERROR.
+      
+      IF NOT AVAIL bConvDPMember20 THEN 
+         FIND FIRST bConvDPMember50 NO-LOCK WHERE
+                    bConvDPMember50.DPId       EQ liDiscPlanId50          AND
+                    bConvDPMember50.HostTable  EQ "MobSub"                AND
+                    bConvDPMember50.KeyValue   EQ STRING(bALMobSub.MsSeq) AND
+                    bConvDPMember50.ValidTo    >= TODAY                   AND
+                    bConvDPMember50.ValidFrom  <= bConvDPMember50.ValidTo NO-ERROR.
 
-   IF AVAIL bMODiscountPlan THEN 
-      FIND FIRST bMODPMember NO-LOCK WHERE
-                 bMODPMember.DPId       EQ bMODiscountPlan.DPId    AND
-                 bMODPMember.HostTable  EQ "MobSub"                AND
-                 bMODPMember.KeyValue   EQ STRING(bALMobSub.MsSeq) AND
-                 bMODPMember.ValidTo    >= TODAY                   AND
-                 bMODPMember.ValidFrom  <= bMODPMember.ValidTo     NO-ERROR.
-   
-   IF AVAIL bConvDPMember20 OR
-      AVAIL bConvDPMember50 OR 
-      AVAIL bMODPMember     THEN NEXT.
+      IF NOT AVAIL bConvDPMember20 AND 
+         NOT AVAIL bConvDPMember50 THEN 
+         FIND FIRST bMODPMember NO-LOCK WHERE
+                    bMODPMember.DPId       EQ liDiscPlanIdMO          AND
+                    bMODPMember.HostTable  EQ "MobSub"                AND
+                    bMODPMember.KeyValue   EQ STRING(bALMobSub.MsSeq) AND
+                    bMODPMember.ValidTo    >= TODAY                   AND
+                    bMODPMember.ValidFrom  <= bMODPMember.ValidTo     NO-ERROR.
+      
+      IF AVAIL bConvDPMember20 OR
+         AVAIL bConvDPMember50 OR 
+         AVAIL bMODPMember     THEN NEXT.
 
-   FIND FIRST Customer NO-LOCK WHERE 
-              Customer.Brand   EQ Syst.Var:gcBrand  AND
-              Customer.CustNum EQ bALMobSub.CustNum NO-ERROR.
+      FIND FIRST Customer NO-LOCK WHERE 
+                 Customer.Brand   EQ Syst.Var:gcBrand  AND
+                 Customer.CustNum EQ bALMobSub.CustNum NO-ERROR.
 
-   IF NOT AVAIL Customer THEN DO:
-      PUT STREAM strout2 UNFORMATTED
-         bALMobSub.CLI     ";"
-         bALMobSub.CLIType ";"
-         bALMobSub.CustNum ";"
-         "Additional line Customer not available" SKIP.
-      NEXT.
+      IF NOT AVAIL Customer THEN DO:
+         PUT STREAM strout2 UNFORMATTED
+            bALMobSub.CLI     ";"
+            bALMobSub.CLIType ";"
+            bALMobSub.CustNum ";"
+            "Additional line Customer not available" SKIP.
+         NEXT.
+      END.
+
+      /* Check for Existing 3P Convergent subscription for a customer */ 
+      IF fCheckExistingConvergentSubscription(Customer.CustidType,
+                                              Customer.OrgId,
+                                              bALMobSub.CLIType,
+                                              bALMoBSub.MsSeq) THEN 
+         ASSIGN llgAvail    = TRUE
+                lcDiscError = fCreateAddLineDiscount(bALMobSub.MsSeq,
+                                                     bALMobSub.CLIType,
+                                                     TODAY,
+                                                     bConvDiscountPlan50.DPRuleID).
+      /* Check for Exisiting Mobile subscription for a customer */
+      ELSE IF fCheckExistingMobileOnlySubscription(Customer.CustidType,
+                                                   Customer.OrgId,
+                                                   bALMobSub.CLIType,
+                                                   bALMobSub.MsSeq) THEN
+         ASSIGN llgAvail    = TRUE
+                lcDiscError = fCreateAddLineDiscount(bALMobSub.MsSeq,
+                                                     bALMobSub.CLIType,
+                                                     TODAY,
+                                                     bMODiscountPlan.DPRuleID).
+
+      IF NOT llgAvail THEN NEXT. 
+
+      IF lcDiscError NE "" AND 
+         lcDiscError NE ?  THEN DO:                                     
+         PUT STREAM strout2 UNFORMATTED 
+            bALMobSub.CLI          ";"
+            bALMobSub.CLIType      ";"
+            bALMobSub.ActivationTS ";"
+            lcDiscError            SKIP.
+      END.
+      ELSE 
+         PUT STREAM strout2 UNFORMATTED
+            bALMobSub.CLI          ";"
+            bALMobSub.CLIType      ";"
+            bALMobSub.ActivationTS ";"
+            "Additional Line Discount Created" SKIP.
+
    END.
-
-   /* Check for Existing 3P Convergent subscription for a customer */ 
-   IF fCheckExistingConvergentSubscription(Customer.CustidType,
-                                           Customer.OrgId,
-                                           bALMobSub.CLIType,
-                                           bALMoBSub.MsSeq) THEN 
-      ASSIGN llgAvail    = TRUE
-             lcDiscError = fCreateAddLineDiscount(bALMobSub.MsSeq,
-                                                  bALMobSub.CLIType,
-                                                  TODAY,
-                                                  bConvDiscountPlan50.DPRuleID).
-   /* Check for Exisiting Mobile subscription for a customer */
-   ELSE IF fCheckExistingMobileOnlySubscription(Customer.CustidType,
-                                                Customer.OrgId,
-                                                bALMobSub.CLIType,
-                                                bALMobSub.MsSeq) THEN
-      ASSIGN llgAvail    = TRUE
-             lcDiscError = fCreateAddLineDiscount(bALMobSub.MsSeq,
-                                                  bALMobSub.CLIType,
-                                                  TODAY,
-                                                  bMODiscountPlan.DPRuleID).
-
-   IF NOT llgAvail THEN NEXT. 
-
-   /* MESSAGE bALMobSub.CLI SKIP 
-           bALMobSub.CLIType SKIP lcDiscError VIEW-AS ALERT-BOX.
-    */
-   IF lcDiscError NE "" AND 
-      lcDiscError NE ?  THEN DO:                                     
-      PUT STREAM strout2 UNFORMATTED 
-         bALMobSub.CLI          ";"
-         bALMobSub.CLIType      ";"
-         bALMobSub.ActivationTS ";"
-         lcDiscError            SKIP.
-   END.
-   ELSE 
-      PUT STREAM strout2 UNFORMATTED
-         bALMobSub.CLI          ";"
-         bALMobSub.CLIType      ";"
-         bALMobSub.ActivationTS ";"
-         "Additional Line Discount Created" SKIP.
 
 END.
 
