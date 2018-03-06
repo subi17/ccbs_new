@@ -124,6 +124,23 @@ FUNCTION fSubSerValidateNW RETURNS INT
        RETURN 4.
     END.
 
+    /* Profile 3 - only if customer level profile is "Yoigo + Orange + Telefonica" */
+    FIND FIRST MobSub WHERE MobSub.MsSeq = iiMsseq NO-LOCK NO-ERROR.
+    IF NOT AVAIL MobSub THEN DO:
+       ocError = "MobSub not found for profile.".
+       RETURN 4.
+    END.
+       
+    FIND FIRST Customer NO-LOCk WHERE
+       Customer.CustNum = MobSub.CustNum.
+    IF AVAIL Customer THEN DO:
+       /* IF Customer.NWProfile NE "3" THEN DO:
+          ocError = "Network profile not allowed.".
+          RETURN 4.
+       END.*/
+    END.
+    /* end profile 3 */
+
     /* 2 */
     /* can service be changed from here */
     liDefValue = fServComValue(MobSub.CLIType,

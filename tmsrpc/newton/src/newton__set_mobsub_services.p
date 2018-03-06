@@ -198,12 +198,14 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
       END.
  
       /* RES-885 NRTR */
-      IF SubSer.ServCom EQ "NW" THEN
+      IF SubSer.ServCom EQ "NW" THEN DO:
          liValidate = fSubSerValidateNW(
             INPUT MobSub.MsSeq,
             INPUT Subser.ServCom,
             INPUT pcValue,
             OUTPUT ocError).
+         liValue = INT(pcValue).
+      END.
       ELSE
          liValidate = fSubSerValidate(
             INPUT MobSub.MsSeq,
@@ -213,8 +215,9 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
 
       IF liValidate NE 0 THEN 
       CASE liValidate:
+         WHEN 0 THEN RETURN appl_err("Service change succeeded").
          WHEN 3 THEN RETURN appl_err("Ongoing network command").
-         WHEN 4 THEN RETURN appl_err(ocError). /* RES-885 error */
+         WHEN 4 THEN RETURN appl_err("Illegal network profile"). /* RES-885 error */
          OTHERWISE appl_err("Service change is not allowed").
       END.
  
@@ -314,6 +317,10 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
       IF liReq = 0 THEN DO:
           RETURN appl_err("Change request was not accepted for service"
               + SubSer.ServCom + "; " + lcInfo).
+      END.
+      ELSE DO: /* RES-885 */
+         /* Save new NWProfile to SubSer table??? */
+
       END.
 
       /* Create Memo */
