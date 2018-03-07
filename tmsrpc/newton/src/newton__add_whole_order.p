@@ -674,23 +674,6 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
    RETURN TRUE.
 END.
 
-
-FUNCTION fCreateMemo RETURNS LOGICAL (INPUT pcTitle AS CHARACTER,
-   INPUT pcText  AS CHAR, INPUT pcCreUser AS CHAR):
-
-   CREATE Memo.
-   ASSIGN
-      Memo.CreStamp  = {&nowTS}
-      Memo.Brand     = Syst.Var:gcBrand 
-      Memo.HostTable = "Order" 
-      Memo.KeyValue  = STRING(Order.OrderId) 
-      Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.CreUser   = pcCreUser 
-      Memo.MemoTitle = pcTitle
-      Memo.MemoText  = pcText.
-END.
-
-
 /* YBP-531 */
 FUNCTION fCreateOrderCustomer RETURNS CHARACTER 
      (INPUT pcStructId AS CHARACTER,
@@ -1605,9 +1588,8 @@ ELSE IF LOOKUP(pcSubType,lcBundleCLITypes) > 0 AND
 IF pcAdditionalBundleList > "" THEN
 DO:
    DO liBundleCnt = 1 TO NUM-ENTRIES(pcAdditionalBundleList):
-                                           
       IF NOT fIsBundleAllowed(pcSubType,ENTRY(liBundleCnt,pcAdditionalBundleList),OUTPUT lcError) THEN
-          RETURN appl_err(lcError).
+         RETURN appl_err(lcError).
    END.
 END.
 
@@ -2117,15 +2099,25 @@ IF fCLITypeIsExtraLine(pcSubType) THEN DO:
 END.
 
 /* YBP-548 */
-IF pcMemo NE "" THEN 
-   fCreateMemo("Info", pcMemo, pcSalesMan).
+IF pcMemo NE ""
+THEN Func.Common:mWriteMemoWithType("Order",
+                                    STRING(Order.OrderId),
+                                    0,
+                                    "Info",
+                                    pcMemo,
+                                    "",
+                                    pcSalesMan).
 
 /* YBP-549 */
-IF plCheck THEN 
-   fCreateMemo("ORDER CHANNEL in Standalone model", 
-               "When order made channel was in standalone mode," 
-                + " please notice this.",
-               pcSalesMan).
+IF plCheck
+THEN Func.Common:mWriteMemoWithType("Order",
+                                    STRING(Order.OrderId),
+                                    0,
+                                    "ORDER CHANNEL in Standalone model",
+                                    "When order made channel was in standalone mode," +
+                                    " please notice this.",
+                                    "",
+                                    pcSalesMan).
 
 /* YBP-550 */
 fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}, TRUE).
@@ -2180,12 +2172,16 @@ IF Order.OrderChannel BEGINS "retention" THEN
 
       RUN Mc/closeorder.p(lbOrder.OrderId, TRUE).
 
-      IF RETURN-VALUE > "" THEN 
-         fCreateMemo("Automatic order closing failed", 
-                     SUBST("Failed to close pending order. " + 
-                           "Order ID: &1, Error: &2", 
-                           lbOrder.orderid, RETURN-VALUE),
-                     "Newton RPC").
+      IF RETURN-VALUE > ""
+      THEN Func.Common:mWriteMemoWithType("Order",
+                                          STRING(Order.OrderId),
+                                          0,
+                                          "Automatic order closing failed",
+                                          SUBST("Failed to close pending order. " + 
+                                                "Order ID: &1, Error: &2", 
+                                                lbOrder.orderid, RETURN-VALUE),
+                                          "",
+                                          "Newton RPC").
    END.
 
 
@@ -2194,10 +2190,14 @@ IF Order.OrderChannel BEGINS "retention" THEN
 IF fOngoingOrders(pcCli,pcNumberType) THEN DO:
 
    Order.statuscode = "4".
-   fCreateMemo("Order exists with same MSISDN", 
-               SUBST("Orderid: &1", Order.orderid),
-               "Newton RPC").
 
+   Func.Common:mWriteMemoWithType("Order",
+                                  STRING(Order.OrderId),
+                                  0,
+                                  "Order exists with same MSISDN",
+                                  SUBST("Orderid: &1", Order.orderid),
+                                  "",
+                                  "Newton RPC").
 END.
 
 /* YBP-557 */
@@ -2234,9 +2234,13 @@ ELSE IF Order.statuscode NE "4" AND(
          MsRequest.ReqIParam2 = Order.OrderId.
       ELSE DO:
          Order.StatusCode = {&ORDER_STATUS_IN_CONTROL}.
-         fCreateMemo("STC request was not found", 
-                     "", 
-                     "Newton RPC").
+         Func.Common:mWriteMemoWithType("Order",
+                                        STRING(Order.OrderId),
+                                        0,
+                                        "STC request was not found",
+                                        "",
+                                        "",
+                                        "Newton RPC").
       END. /* ELSE DO: */
    END. /* IF Order.OrderChannel = "retention_stc" THEN DO: */
 END. /* IF Order.statuscode NE "4" AND */
@@ -2313,9 +2317,13 @@ ELSE IF Order.statuscode NE "4" THEN DO:
             END.
             ELSE DO:
                Order.StatusCode = {&ORDER_STATUS_IN_CONTROL}.
-               fCreateMemo("STC request was not found", 
-                  "", 
-                  "Newton RPC").
+               Func.Common:mWriteMemoWithType("Order",
+                                              STRING(Order.OrderId),
+                                              0,
+                                              "STC request was not found",
+                                              "",
+                                              "",
+                                              "Newton RPC").
             END.
          END.
       END.
@@ -2430,34 +2438,51 @@ CASE pcROIresult:
          END.
          ELSE Order.StatusCode = STRING(40 + INTEGER(pcROIlevel)).
             
-         IF pcROIruleId NE '' THEN
-            fCreateMemo("ROI Risk Rule_Id", 
-                      pcROIruleId,
-                      "Newton RPC ROI").
-         IF pcROIdescription NE '' THEN
-             fCreateMemo("ROI Description", 
-                         pcROIdescription,
-                         "Newton RPC ROI").
+         IF pcROIruleId NE ''
+         THEN Func.Common:mWriteMemoWithType("Order",
+                                             STRING(Order.OrderId),
+                                             0,
+                                             "ROI Risk Rule_Id",
+                                             pcROIruleId,
+                                             "",
+                                             "Newton RPC ROI").
+         IF pcROIdescription NE ''
+         THEN Func.Common:mWriteMemoWithType("Order",
+                                             STRING(Order.OrderId),
+                                             0,
+                                             "ROI Description",
+                                             pcROIdescription,
+                                             "",
+                                             "Newton RPC ROI").
 
      END.
-     WHEN "exception" THEN DO:
-         fCreateMemo("ROI Description", 
-                   pcROIdescription,
-                   "Newton RPC ROI").
-     END.
-     WHEN "unexpected response" THEN DO:
-         fCreateMemo("ROI Unexpected Response", 
-                   pcROIdescription,
-                   "Newton RPC ROI").
-     END.
+     WHEN "exception"
+     THEN Func.Common:mWriteMemoWithType("Order",
+                                         STRING(Order.OrderId),
+                                         0,
+                                         "ROI Description",
+                                         pcROIdescription,
+                                         "",
+                                         "Newton RPC ROI").
+     WHEN "unexpected response"
+     THEN Func.Common:mWriteMemoWithType("Order",
+                                         STRING(Order.OrderId),
+                                         0,
+                                         "ROI Unexpected Response",
+                                         pcROIdescription,
+                                         "",
+                                         "Newton RPC ROI").
      WHEN "busy" OR WHEN "concern" OR
      WHEN "ParamsException" OR WHEN "inspectionException" THEN DO:
          Order.StatusCode = "43".
-         IF pcROIdescription NE '' THEN
-             fCreateMemo("ROI Description",
-                         pcROIdescription,
-                         "Newton RPC ROI").
-
+         IF pcROIdescription NE ''
+         THEN Func.Common:mWriteMemoWithType("Order",
+                                             STRING(Order.OrderId),
+                                             0,
+                                             "ROI Description",
+                                             pcROIdescription,
+                                             "",
+                                             "Newton RPC ROI").
      END.
 END.
 
@@ -2565,10 +2590,15 @@ IF Order.OrderChannel BEGINS "Renewal_POS" AND Order.ICC > "" AND
                     INPUT  0.0,
                     INPUT {&REQUEST_SOURCE_ICC_CHANGE_AUTO},
                     OUTPUT lcError).
-   IF liRequest = 0 THEN
-      fCreateMemo("ICC change request creation failed", 
-                  SUBST("Orderid: &1", Order.orderid),
-                  "Newton RPC").
+   IF liRequest = 0
+   THEN Func.Common:mWriteMemoWithType("Order",
+                                       STRING(Order.OrderId),
+                                       0,
+                                       "ICC change request creation failed",
+                                       SUBST("Orderid: &1", Order.orderid),
+                                       "",
+                                       "Newton RPC").
+
    /* YBP-584 */ 
    /* Update SIM status to reserve for ICC change */
    ELSE DO:

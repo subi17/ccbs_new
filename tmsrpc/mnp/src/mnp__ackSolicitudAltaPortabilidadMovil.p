@@ -42,31 +42,38 @@ IF MNPProcess.MNPType NE {&MNP_TYPE_OUT} THEN
    RETURN appl_err(SUBST("Incorrect MNP type: &1",
                          MNPProcess.MNPType)).
 
-FIND FIRST MNPOperation EXCLUSIVE-LOCK WHERE
-     MNPOperation.MNPSeq = MNPProcess.MNPSeq AND
-     MNPOperation.MessageType = "confirmarSolicitudAltaPortabilidadMovil" AND
-    (MNPOperation.StatusCode EQ {&MNP_MSG_WAITING_CONFIRM} OR
-     MNPOperation.StatusCode EQ {&MNP_MSG_WAITING_RESPONSE_HANDLE} OR
-     MNPOperation.StatusCode EQ {&MNP_MSG_HANDLED}) NO-ERROR.
-IF NOT AVAIL MNPOperation THEN
-   RETURN appl_err(SUBST("Confirmation message not found: &1", lcPortRequest)).
-
-IF MNPOperation.StatusCode EQ {&MNP_MSG_WAITING_CONFIRM} AND
-   MNPProcess.StatusCode NE {&MNP_ST_ASOL} THEN
-   RETURN appl_err(SUBST("&1: Incorrect current MNP process status: &2",
-                          MNPProcess.PortRequest,
-                          MNPProcess.StatusCode)).
-   
-FOR EACH MNPSub EXCLUSIVE-LOCK WHERE
-         MNPSub.MNPSeq = MNPProcess.MNPSeq AND
-         MNPSub.StatusReason = "":
-   MNPSub.StatusReason = UPPER(lcAction).
+IF lcAction EQ "CANCEL" AND
+  (MNPProcess.StatusCode EQ {&MNP_ST_AREC} OR 
+   MNPProcess.StatusCode EQ {&MNP_ST_AREC_CLOSED}) THEN DO:
+   /* nothing */
 END.
+ELSE DO:
+   FIND FIRST MNPOperation EXCLUSIVE-LOCK WHERE
+        MNPOperation.MNPSeq = MNPProcess.MNPSeq AND
+        MNPOperation.MessageType = "confirmarSolicitudAltaPortabilidadMovil" AND
+       (MNPOperation.StatusCode EQ {&MNP_MSG_WAITING_CONFIRM} OR
+        MNPOperation.StatusCode EQ {&MNP_MSG_WAITING_RESPONSE_HANDLE} OR
+        MNPOperation.StatusCode EQ {&MNP_MSG_HANDLED}) NO-ERROR.
+   IF NOT AVAIL MNPOperation THEN
+      RETURN appl_err(SUBST("Confirmation message not found: &1", lcPortRequest)).
 
-ASSIGN
-   MNPProcess.StateFlag = {&MNP_STATEFLAG_CONFIRM}
-   MNPOperation.StatusCode = {&MNP_MSG_WAITING_RESPONSE_HANDLE} WHEN
-      MNPOperation.StatusCode EQ {&MNP_MSG_WAITING_CONFIRM}.
+   IF MNPOperation.StatusCode EQ {&MNP_MSG_WAITING_CONFIRM} AND
+      MNPProcess.StatusCode NE {&MNP_ST_ASOL} THEN
+      RETURN appl_err(SUBST("&1: Incorrect current MNP process status: &2",
+                             MNPProcess.PortRequest,
+                             MNPProcess.StatusCode)).
+      
+   FOR EACH MNPSub EXCLUSIVE-LOCK WHERE
+            MNPSub.MNPSeq = MNPProcess.MNPSeq AND
+            MNPSub.StatusReason = "":
+      MNPSub.StatusReason = UPPER(lcAction).
+   END.
+
+   ASSIGN
+      MNPProcess.StateFlag = {&MNP_STATEFLAG_CONFIRM}
+      MNPOperation.StatusCode = {&MNP_MSG_WAITING_RESPONSE_HANDLE} WHEN
+         MNPOperation.StatusCode EQ {&MNP_MSG_WAITING_CONFIRM}.
+END.
       
 CREATE MNPOperation.
 ASSIGN MNPOperation.MNPOperationID = NEXT-VALUE(MNPOperSeq)
