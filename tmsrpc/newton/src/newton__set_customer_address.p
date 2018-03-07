@@ -27,6 +27,8 @@
             mark_post_3rd;boolean;optional
             mark_sms_3rd;boolean;optional
             mark_email_3rd;boolean;optional
+            mark_dont_share_personal_data;boolean;optional;
+            mark_bank_3rd;boolena;optional
  * @output success;boolean
  */
 {fcgi_agent/xmlrpc/xmlrpc_access.i &NOTIMEINCLUDES=1}
@@ -101,7 +103,8 @@ lcDataFields = "title,lname,lname2,fname,coname,street,zip,city,region," +
                "email,sms_number,phone_number,person_id," +
                "city_code,street_code,municipality_code".
 lcMarketingFields = "mark_sms,mark_email,mark_post," +
-                    "mark_sms_3rd,mark_email_3rd,mark_post_3rd".
+                    "mark_sms_3rd,mark_email_3rd,mark_post_3rd" +
+                    "mark_dont_share_personal_data,mark_bank_3rd". /*APIBSS-86*/
 
 ASSIGN
     lcCustomerData[1] = customer.coname

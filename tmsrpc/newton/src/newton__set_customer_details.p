@@ -39,6 +39,7 @@
             mark_sms_3rd;boolean;optional;
             mark_email_3rd;boolean;optional;
             mark_dont_share_personal_data;boolean;optional;
+            mark_bank_3rd;boolean;optional
             birthday;date;optional;
             company_foundationdate;date;optional;
             new_subscription_grouping;int;optional;1=Use default invoice group,2=Use new invoice group
@@ -134,7 +135,7 @@ DEF VAR llt AS LOGICAL NO-UNDO.
 DEF VAR llCustomerChanged AS LOGICAL INITIAL FALSE NO-UNDO.
 
 DEF VAR lcCustomerData AS CHAR EXTENT 23 NO-UNDO.
-DEF VAR llMarketingData AS LOGICAL EXTENT 7 NO-UNDO.
+DEF VAR llMarketingData AS LOGICAL EXTENT 8 NO-UNDO. /* APIBSS-86 */
 DEF VAR lcDataFields AS CHAR NO-UNDO.
 DEF VAR lcMarketingFields AS CHAR NO-UNDO.
 DEF VAR lcContactCustFields AS CHAR NO-UNDO.
@@ -196,7 +197,8 @@ ASSIGN
     llMarketingData[4] = customer.OutMarkSMS
     llMarketingData[5] = customer.OutMarkEmail
     llMarketingData[6] = customer.OutMarkPost
-    llMarketingData[7] = customer.DontSharePersData.
+    llMarketingData[7] = customer.DontSharePersData
+    llMarketingData[8] = customer.OutMarkBank. /* APIBSS-86 */
 lcDataFields = "title,lname,lname2,fname,coname,street,zip,city,region," +
                "language,nationality,bankaccount,country," +
                "email,sms_number,phone_number,person_id,city_code,street_code,"+
@@ -208,7 +210,8 @@ lcAddressValidtionFields = "street_code,city_code,municipality_code".
 
 lcMarketingFields = "mark_sms,mark_email,mark_post," +
                     "mark_sms_3rd,mark_email_3rd,mark_post_3rd," +
-                    "mark_dont_share_personal_data".
+                    "mark_dont_share_personal_data" + 
+                    "mark_bank_3rd". /* APIBSS-86 */
 
 lcContactCustFields = "title,fname,lname,lname2,street,zip,city,region" +
                       ",language,nationality,email,sms_number" +
@@ -506,6 +509,7 @@ IF llCustomerChanged THEN DO:
         customer.OutMarkEmail = llMarketingData[5]
         customer.OutMarkPost = llMarketingData[6]
         customer.DontSharePersData = llMarketingData[7]
+        customer.OutMarkBank = llMarketingData[8]  /* APIBSS-86 */
         customer.orgid = lcCustomerData[LOOKUP("company_id", lcDataFields)] WHEN customer.custidtype = "CIF"
         customer.foundationDate = ldFoundationDate 
         customer.BirthDay = ldBirthDay
@@ -519,7 +523,7 @@ IF llCustomerChanged THEN DO:
          ttCustomerReport.StreetCode = get_string(pcstruct,"street_code")
             WHEN LOOKUP("street_code",lcstruct) > 0
          ttCustomerReport.CityCode = get_string(pcstruct,"city_code")
-            WHEN LOOKUP("city_code",lcstruct) > 0
+            WHEN LOOKUP("city_cod",lcstruct) > 0
          ttCustomerReport.TownCode = get_string(pcstruct,"municipality_code") 
             WHEN LOOKUP("municipality_code",lcstruct) > 0.
 
