@@ -52,6 +52,8 @@ FOR EACH ttInput NO-LOCK:
    /* create mnpmessage record */
    fCreateMNPObtenerMessage("obtenerNotificacionesAltaPortabilidadMovilComoDonantePendientesConfirmarRechazar").
    
+   RELEASE MNPProcess.
+
    /* Recognize duplicate MNP OUT request for internal MNP IN request */
    IF ttInput.PortRequest BEGINS "A05" AND
       ttInput.FormRequest > "" THEN

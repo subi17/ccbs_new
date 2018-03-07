@@ -30,9 +30,9 @@
 {Func/fbankdata.i}
 {Func/dss_request.i}
 {Func/dss_matrix.i}
-{Mc/dpmember.i}
 {Func/orderfunc.i}
 {Func/custfunc.i}
+{Func/addline_discount.i}
 
 SESSION:SYSTEM-ALERT-BOXES = TRUE.
 
