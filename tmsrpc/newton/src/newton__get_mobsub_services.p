@@ -63,18 +63,18 @@ DO lii = 1 TO NUM-ENTRIES(OnOffTms):
       ELSE
         lcValue =  TRIM(STRING(SubSer.SSStat EQ 0, "off/on")).
 
-      /* RES-885 NRTR */
+      /* RES-885 National rouming traffic restrictions
+         Return active profile as long name. */
       IF SubSer.ServCom EQ "NW" THEN DO:
          lcValue = "".
-         /* Maybe supported later
-         IF SubSer.SSStat EQ 1 THEN
-            lcValue = "Solo Yoigo".*/
-         IF SubSer.SSStat = 2 THEN
-            lcValue = "Yoigo + Orange".
-         ELSE IF SubSer.SSStat = 3 THEN
-            lcValue = "Yoigo + Orange + Movistar".
-         ELSE
-            lcValue = "Yoigo + Orange". /* else needed?? */ 
+         FIND FIRST TMSCodes NO-LOCK WHERE
+               TMSCodes.TableName = "Customer" AND
+               TMSCodes.FieldName = "NWProfiles" AND
+               TMSCodes.CodeGroup = "NWProfile" AND
+               TMSCodes.inUse = 1 AND
+               TMSCodes.CodeValue EQ STRING(SubSer.SSStat) NO-ERROR.
+         IF AVAIL TMSCodes THEN
+            lcValue = TMSCodes.CodeName.
       END.
       
       add_string(top_struct, "value", lcValue).

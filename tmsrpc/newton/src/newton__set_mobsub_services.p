@@ -215,7 +215,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
 
       IF liValidate NE 0 THEN 
       CASE liValidate:
-         WHEN 0 THEN RETURN appl_err("Service change succeeded").
+         WHEN 0 THEN appl_err("Service change succeeded").
          WHEN 3 THEN RETURN appl_err("Ongoing network command").
          WHEN 4 THEN RETURN appl_err("Illegal network profile"). /* RES-885 error */
          OTHERWISE appl_err("Service change is not allowed").
@@ -233,13 +233,13 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
       /* Return error if new value is same as existing value */ 
       IF SubSer.ServCom = "BB" AND
          (liValue = SubSer.SSStat OR (SubSer.SSStat = 2 AND liValue = 0)) THEN
-         RETURN appl_err("Service is already " +
+         RETURN appl_err("Selected service is already " +
                          (IF liValue = 1 THEN "active" ELSE "suspended")).
 
       /* Return error if new NW value is same as existing value */
       IF SubSer.ServCom = "NW" AND
          liValue = SubSer.SSStat THEN
-         RETURN appl_err("Service is already active").
+         RETURN appl_err("Selected service is already active").
 
       /* check the validity of change date */
       ldActStamp = fServiceActStamp(SubSer.MsSeq,
@@ -317,10 +317,6 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
       IF liReq = 0 THEN DO:
           RETURN appl_err("Change request was not accepted for service"
               + SubSer.ServCom + "; " + lcInfo).
-      END.
-      ELSE DO: /* RES-885 */
-         /* Save new NWProfile to SubSer table??? */
-
       END.
 
       /* Create Memo */

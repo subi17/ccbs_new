@@ -6,8 +6,3 @@ ADD FIELD "NWProfile" OF "Customer" AS INTEGER
   HELP "Network profile"
   ORDER 1600
 
-ADD INDEX "NWProfile" ON "Customer"
-  AREA "Sta_Index_1"
-  INDEX-FIELD "Brand" ASCENDING
-  INDEX-FIELD "NWProfile" ASCENDING
-

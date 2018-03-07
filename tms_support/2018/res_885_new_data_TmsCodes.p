@@ -1,5 +1,6 @@
 /*
-   RES-885 - Add new values to TMSCodes table.
+   RES-885 - Add new values for National roaming traffic
+   restriction to TMSCodes table.
 
 */
 
@@ -8,7 +9,6 @@ FIND FIRST TMSCodes NO-LOCk WHERE
    TMSCodes.FieldName EQ "NWProfiles" NO-ERROR.
 
 IF NOT AVAIL TMSCodes THEN DO:
-/* For future use
    CREATE TMSCodes.
    ASSIGN 
       TMSCodes.TableName = "Customer"
@@ -16,8 +16,8 @@ IF NOT AVAIL TMSCodes THEN DO:
       TMSCodes.CodeGroup = "NWProfile"
       TMSCodes.CodeValue = "1"
       TMSCodes.CodeName  = "Solo Yoigo"
-      TMSCodes.InUse     = 1.
-*/
+      TMSCodes.InUse     = 0.
+
    CREATE TMSCodes.
    ASSIGN 
       TMSCodes.TableName = "Customer"
