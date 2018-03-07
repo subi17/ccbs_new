@@ -293,7 +293,7 @@ IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
    fCloseDiscount(ENTRY(LOOKUP(MobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}),
                   MobSub.MsSeq,
                   Func.Common:mLastDayOfMonth(TODAY),
-                  FALSE).
+                  NO).
 END.
 
 /* skip dextra handling */
