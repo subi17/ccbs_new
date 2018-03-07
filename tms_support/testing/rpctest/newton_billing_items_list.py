@@ -15,6 +15,6 @@ if len(sys.argv) < 2: instruction()
 else:
    var1 = sys.argv[1]
 
-p=s.newton.billing_items.list({'billing_group':var1})
+p=s.newton.billing_items.list({'brand': 'yoigo', 'billing_group':var1})
 
 print_results(p)
