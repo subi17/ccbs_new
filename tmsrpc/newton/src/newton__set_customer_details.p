@@ -524,7 +524,7 @@ IF llCustomerChanged THEN DO:
          ttCustomerReport.StreetCode = get_string(pcstruct,"street_code")
             WHEN LOOKUP("street_code",lcstruct) > 0
          ttCustomerReport.CityCode = get_string(pcstruct,"city_code")
-            WHEN LOOKUP("city_cod",lcstruct) > 0
+            WHEN LOOKUP("city_code",lcstruct) > 0
          ttCustomerReport.TownCode = get_string(pcstruct,"municipality_code") 
             WHEN LOOKUP("municipality_code",lcstruct) > 0.
 
