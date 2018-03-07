@@ -357,26 +357,6 @@ FUNCTION fCreateOpLog RETURNS LOGICAL
     OPLog.Amt       = iAmt.
 
 END FUNCTION.
-
-FUNCTION fCreateMemo RETURNS LOGICAL
-   (icHostTable AS CHAR,
-    icKeyValue  AS CHAR,
-    iiCustNum   AS INT,
-    icTitle     AS CHAR,
-    icMessage   AS CHAR):
-
-   CREATE Memo.
-   ASSIGN Memo.Brand     = Syst.Var:gcBrand
-          Memo.HostTable = icHostTable
-          Memo.KeyValue  = icKeyValue
-          Memo.CustNum   = iiCustNum
-          Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-          Memo.CreUser   = Syst.Var:katun 
-          Memo.MemoTitle = icTitle
-          Memo.MemoText  = icMessage.
-          Memo.CreStamp  = Func.Common:mMakeTS().
-
-END FUNCTION.
    
 FUNCTION fOldUnpaid RETURNS LOGICAL
    (idAmount AS DEC).
@@ -1371,14 +1351,14 @@ BY ttPayment.POrder:
       ELSE ASSIGN 
          lcTableName = "Customer"
          lcKeyValue  = STRING(Customer.CustNum).
-         
-      fCreateMemo(lcTableName,
-                  lcKeyValue,
-                  Customer.CustNum,
-                  "Failed Direct Debit",
-                  ttPayment.DDError + CHR(10) +
-                     "Invoice: " + ttPayment.ExtInvID + CHR(10) +
-                     "Amount: " + STRING(ttPayment.AmtPaid)).
+
+      Func.Common:mWriteMemo(lcTableName,
+                             lcKeyValue,
+                             Customer.CustNum,
+                             "Failed Direct Debit",
+                             ttPayment.DDError + CHR(10) +
+                             "Invoice: " + ttPayment.ExtInvID + CHR(10) +
+                             "Amount: " + STRING(ttPayment.AmtPaid)).
 
       IF ttPayment.Inv > 0 AND AVAILABLE Invoice THEN DO:
          FIND CURRENT Invoice EXCLUSIVE-LOCK.
