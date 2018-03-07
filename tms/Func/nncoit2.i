@@ -24,8 +24,6 @@
 &THEN
 &GLOBAL-DEFINE NNCOIT2_I YES
 
-{Syst/commali.i}
-
 FUNCTION fCheck-pl RETURNS LOGICAL
    (icFeeModel AS CHAR,
     icPriceList AS CHAR).

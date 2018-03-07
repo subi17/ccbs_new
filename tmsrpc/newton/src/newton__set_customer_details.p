@@ -72,6 +72,7 @@
 Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fbankdata.i}
+{Func/msreqfunc.i}
 
 /* Input parameters */
 DEF VAR piCustNum AS INT NO-UNDO.
