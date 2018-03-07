@@ -3,11 +3,11 @@ Syst.Var:katun = "Cron".
 Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/log.i}
-{Func/memo.i}
 {Func/cparam2.i}
 {Func/ftransdir.i}
 {Func/fmakemsreq.i}
 {Func/orderfunc.i}
+{Mc/dpmember.i}
 
 DEFINE TEMP-TABLE ttCancellation
     FIELD Voucher    AS CHAR
@@ -60,26 +60,22 @@ PROCEDURE pUpdateStatus:
                 ASSIGN lcDiscPlan = fGetRegionDiscountPlan(Customer.Region).    
         END.
 
-        IF lcDiscPlan > "" THEN 
-        DO:
-            FIND FIRST DiscountPlan WHERE DiscountPlan.Brand = Syst.Var:gcBrand AND DiscountPlan.DPRuleID = lcDiscPlan NO-LOCK NO-ERROR.
-            IF AVAIL DiscountPlan THEN 
-            DO:
-                FIND FIRST DPMember WHERE DPMember.DPId      = DiscountPlan.DPId       AND 
-                                          DPMember.HostTable = "MobSub"                AND
-                                          DPMember.KeyValue  = STRING(TPService.MsSeq) AND
-                                          DPMember.ValidTo  >= TODAY                   EXCLUSIVE-LOCK NO-WAIT NO-ERROR.
-                IF AVAIL DPMember THEN 
-                    ASSIGN DPMember.ValidTo = TPService.VoucherCancelDt.
-            END.
-        END.    
-    
+        IF lcDiscPlan > ""
+        THEN fCloseDiscount(lcDiscPlan,
+                            TPService.MsSeq,
+                            TPService.VoucherCancelDt,
+                            NO).
     END.
-    OUTPUT CLOSE.
-    RELEASE TPService.
-    RELEASE DPMember.
 
     RETURN "".
+
+    FINALLY:
+       OUTPUT CLOSE.
+       RELEASE TPService.
+       RELEASE DPMember.
+       IF llDoEvent
+       THEN fCleanEventObjects().
+    END FINALLY.
 
 END PROCEDURE.
 
