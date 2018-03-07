@@ -51,5 +51,8 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       add_double(lcResultStruct,"amount",DPRate.DiscValue).
    ELSE
       add_double(lcResultStruct,"amount",0.0).
+
+   add_int(lcResultStruct,"priority",DiscountPlan.Priority).
+
 END.
 
