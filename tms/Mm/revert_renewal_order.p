@@ -623,7 +623,7 @@ PROCEDURE pCloseQ25Discount:
    fCloseDiscount(DiscountPlan.DPRuleID,
      MobSub.MsSeq,
      dpmember.ValidFrom - 1,
-     FALSE). /* clean event logs */
+     NO).
       
    RETURN "". 
 
