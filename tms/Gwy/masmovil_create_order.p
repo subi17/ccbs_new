@@ -2,7 +2,6 @@
 {Func/log.i}
 {Func/masmovileif.i}
 {Mc/orderfusion.i}
-{Func/memo.i}
 
 DEF INPUT PARAM piMessageSeq AS INT NO-UNDO.
 
@@ -92,15 +91,15 @@ ELSE DO:
       OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_ERROR}
       OrderFusion.FusionStatusDesc = "Create order failed".
 
-   fCreateMemo("Order",
-               STRING(Order.OrderId),
-               0,
-               "Masmovil order creation failed",
-     	         SUBST("ErrorCode: &1", (IF lcResultDesc > ""
-                                       THEN lcResultDesc 
-                                       ELSE lcError)),
-               "",
-               "TMS").
+   Func.Common:mWriteMemoWithType("Order",
+                                  STRING(Order.OrderId),
+                                  0,
+                                  "Masmovil order creation failed",
+                                  SUBST("ErrorCode: &1", (IF lcResultDesc > ""
+                                                          THEN lcResultDesc 
+                                                          ELSE lcError)),
+                                  "",
+                                  "TMS").
 
    RETURN SUBST("&1, &2, &3", lcError, lcResultCode, lcResultDesc).
 END.
