@@ -312,7 +312,7 @@ PROCEDURE pSpeedChangeRequestForProvisioning:
     FOR EACH Order WHERE Order.MsSeq = Mobsub.MSSeq NO-LOCK 
         BY Order.CrStamp DESC:
 
-        IF Order.StatusCode = {&ORDER_STATUS_DELIVERED} THEN 
+        IF Order.StatusCode <> {&ORDER_STATUS_DELIVERED} THEN 
             NEXT.
 
         FIND FIRST FusionMessage NO-LOCK WHERE 
