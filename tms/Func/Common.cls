@@ -1020,7 +1020,7 @@ CLASS Func.Common FINAL:
       DEFINE BUFFER Memo FOR Memo.
 
       CREATE Memo.
-      ASSIGN Memo.Brand     = "1"
+      ASSIGN Memo.Brand     = Syst.Var:gcBrand
              Memo.HostTable = icHostTable
              Memo.KeyValue  = icKeyValue
              Memo.CustNum   = iiCustNum
@@ -1028,7 +1028,7 @@ CLASS Func.Common FINAL:
              Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
              Memo.CreUser   = icCreUser 
              Memo.MemoTitle = icTitle
-             Memo.MemoText  = icText.
+             Memo.MemoText  = icText
              Memo.CreStamp  = Func.Common:mMakeTS().
    
       RELEASE Memo.
