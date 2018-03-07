@@ -3,7 +3,6 @@ Syst.Var:katun = "Cron".
 Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/log.i}
-{Func/memo.i}
 {Func/cparam2.i}
 {Mc/orderfusion.i}
 {Func/orderfunc.i}
@@ -99,7 +98,7 @@ PROCEDURE pWriteFile:
         lcLogFileName    = REPLACE(lcLogFileName   ,"#DATETIME",lcDateTime) 
         lcOutputFileName = REPLACE(lcOutputFileName,"#DATETIME",lcDateTime).
  
-    OUTPUT TO VALUE(lcOutputFileName).
+    OUTPUT TO VALUE(lcOutputFileName) CONVERT TARGET "UTF-8".
     CUSTOMERLOOP:
     FOR EACH ttCustomer:
 
