@@ -3,7 +3,6 @@ Syst.Var:katun = "Cron".
 Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/log.i}
-{Func/memo.i}
 {Func/cparam2.i}
 {Func/orderfunc.i}
 {Mc/orderfusion.i}
