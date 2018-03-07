@@ -12,6 +12,6 @@ def instruction():
 
 if len(sys.argv) > 1: instruction()
 
-p=s.newton.discount_plans.list({})
+p=s.newton.discount_plans.list({'brand': 'yoigo'})
                               
 print_results(p)

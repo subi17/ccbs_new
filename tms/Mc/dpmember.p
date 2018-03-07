@@ -52,6 +52,7 @@ DEF VAR ac-hdr       AS CHAR                   NO-UNDO.
 DEF VAR rtab         AS RECID EXTENT 24        NO-UNDO.
 DEF VAR i            AS INT                    NO-UNDO.
 DEF VAR ok           AS log format "Yes/No"    NO-UNDO.
+DEFINE VARIABLE lcError AS CHARACTER NO-UNDO.
 
 DEF VAR lcStatus       AS CHAR NO-UNDO.
 DEF VAR lcField        AS CHAR NO-UNDO. 
@@ -190,7 +191,7 @@ REPEAT WITH FRAME sel:
                     fCalcDPMemberValidTo(DPMember.ValidFrom,
                                          DiscountPlan.ValidPeriods).
            END.
-             
+
            RUN local-UPDATE-record.
 
            IF LOOKUP(KEYFUNCTION(LASTKEY),"ENDKEY,END-ERROR") > 0 OR
@@ -200,7 +201,6 @@ REPEAT WITH FRAME sel:
            /* Previous - dpmember creations not logged anymore YDR-1078 */
            /* Current  - Uncommented event logging logic YTS-10992 */
            IF llDoEvent THEN RUN StarEventMakeCreateEvent(lhDPMember).
-           
 
            ASSIGN
            Memory = recid(DPMember)
@@ -208,7 +208,7 @@ REPEAT WITH FRAME sel:
            LEAVE.
         END.
       END.  /* ADD-ROW */
-      
+
       HIDE FRAME lis NO-PAUSE.
 
       ASSIGN must-print = TRUE.
@@ -690,7 +690,8 @@ PROCEDURE local-UPDATE-record:
    DEF BUFFER bMember FOR DPMember.
    
    DEF VAR ldaValidTo AS DATE NO-UNDO.
-   DEF VAR lcCLIType  AS CHAR NO-UNDO. 
+   DEF VAR lcCLIType  AS CHAR NO-UNDO.
+   DEFINE VARIABLE lcResult AS CHARACTER NO-UNDO.
 
    REPEAT ON ENDKEY UNDO, LEAVE:
 
@@ -827,6 +828,33 @@ PROCEDURE local-UPDATE-record:
             END.
          END.
        
+         IF INPUT DPMember.HostTable EQ "MobSub" AND
+            AVAILABLE DiscountPlan
+         THEN DO:
+            lcResult = fDiscountAllowed(INTEGER(INPUT FRAME lis DPMember.KeyValue),
+                                        DiscountPlan.DPRuleID,
+                                        INPUT FRAME lis DPMember.ValidFrom).
+            IF lcResult > ""
+            THEN DO:
+               MESSAGE SUBSTITUTE("The discount is not compatible with &1", lcResult)
+               VIEW-AS ALERT-BOX ERROR.
+               UNDO, NEXT UpdateMember.
+            END.
+
+            lcResult = fCloseIncompatibleDiscounts(INTEGER(INPUT FRAME lis DPMember.KeyValue),
+                                                   DiscountPlan.DPRuleID,
+                                                   DATE(MONTH(INPUT FRAME lis DPMember.ValidFrom),
+                                                        1,
+                                                        YEAR(INPUT FRAME lis DPMember.ValidFrom)) - 1,
+                                                   YES).
+            IF lcResult > ""
+            THEN DO:
+               MESSAGE SUBSTITUTE("The discount would close discounts &1. Please do this yourself.", lcResult)
+               VIEW-AS ALERT-BOX ERROR.
+               UNDO, NEXT UpdateMember.
+            END.
+         END.
+
          IF CAN-FIND(FIRST bMember WHERE
                            bMember.DPId = INPUT DPMember.DPId AND
                            bMember.HostTable  = INPUT DPMember.HostTable  AND
