@@ -25,8 +25,8 @@
 {Func/ordercancel.i}
 {Func/dextra.i}
 {Func/add_lines_request.i}
+{Func/addline_discount.i}
 {Func/orderfunc.i}
-{Mc/dpmember.i}
 {Func/multitenantfunc.i}
 {Func/profunc_request.i}
 
@@ -70,26 +70,6 @@ DEF TEMP-TABLE ttContract NO-UNDO
    FIELD PerContID AS INT
    FIELD CreateFee AS LOG
    FIELD ActTS     AS DEC.
-
-FUNCTION fLocalMemo RETURNS LOGIC
-   (icHostTable AS CHAR,
-    icKey       AS CHAR,
-    icTitle     AS CHAR,
-    icText      AS CHAR):
-
-   CREATE Memo.
-   ASSIGN
-      Memo.Brand     = Syst.Var:gcBrand
-      Memo.CreStamp  = ldCurrTS
-      Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.Custnum   = (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0)
-      Memo.HostTable = icHostTable
-      Memo.KeyValue  = icKey
-      Memo.CreUser   = Syst.Var:katun
-      Memo.MemoTitle = icTitle
-      Memo.Memotext  = icText.
-      
-END FUNCTION.
 
 FUNCTION fUpdateDSSNewtorkForExtraLine RETURNS LOGICAL
    (INPUT iiMsSeq        AS INT,
@@ -249,6 +229,10 @@ PROCEDURE pTerminate:
       RETURN.
    ENd.
 
+   /* YOT-5580 If in mobile tariff change termination to full */
+   IF NOT fIsConvergentORFixedOnly(Mobsub.CliType) THEN 
+      lcTerminationType = {&TERMINATION_TYPE_FULL}.
+
    /* COFF if partial termination cli = fixednumber (no actions needed) */
    IF NOT(MobSub.cli BEGINS "8" OR MobSub.cli BEGINS "9") THEN DO:
       FIND FIRST MSISDN WHERE
@@ -328,8 +312,9 @@ PROCEDURE pTerminate:
 
    IF llOutport THEN DO:
 
-      fLocalMemo("Customer",
+      Func.Common:mWriteMemo("Customer",
                  STRING(Mobsub.CustNum),
+                 (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0),
                  "OUTPORTED to " + lcOutoper,
                  "Number:" + MobSub.CLI).
    END.
@@ -440,16 +425,18 @@ PROCEDURE pTerminate:
                             OUTPUT lcError) THEN DO:
                llDSSTransferred = TRUE.
 
-               fLocalMemo("Customer",
+               Func.Common:mWriteMemo("Customer",
                           STRING(Mobsub.CustNum),
+                          (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0),
                           "DSS Bundle/UPSELL",
                           "DSS Bundle/UPSELL is transferred from Subs.Id " +
                           STRING(MobSub.MsSeq) + " to Subs. Id " +
                           STRING(liDSSMsSeq)).
             END. /* IF fTransferDSS(INPUT MobSub.MsSeq,INPUT liDSSMsSeq, */
             ELSE
-               fLocalMemo("Customer",
+               Func.Common:mWriteMemo("Customer",
                           STRING(Mobsub.CustNum),
+                          (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0),
                           "DSS Bundle/UPSELL Transfer Failed",
                           "DSS Bundle/UPSELL was not transferred from Subs.Id " +
                           STRING(MobSub.MsSeq) + " to Subs. Id " +
@@ -644,8 +631,9 @@ PROCEDURE pTerminate:
                  DayCampaign.ValidTo   >= Today NO-LOCK NO-ERROR.
               
       IF NOT AVAIL DayCampaign THEN DO:
-         fLocalMemo("Customer",
+         Func.Common:mWriteMemo("Customer",
                     STRING(Mobsub.CustNum),
+                    (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0),
                     "Periodical Contract",
                     ttContract.DCEvent +
                     ": Periodical contract information is missing!"). 
@@ -677,8 +665,9 @@ PROCEDURE pTerminate:
                           "",
                           OUTPUT lcError).
 
-      fLocalMemo("Customer",
+      Func.Common:mWriteMemo("Customer",
                  STRING(Mobsub.CustNum),
+                 (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0),
                  "Periodical Contract",
                  ttContract.DCEvent +
                  ": Terminated along with the subscription" +
@@ -848,8 +837,9 @@ PROCEDURE pTerminate:
             RUN Mnp/mnpnumbertermrequest.p(MobSub.CLI,MobSub.MsSeq).
           
          IF RETURN-VALUE BEGINS "ERROR" THEN
-             fLocalMemo("TermMobsub",
+             Func.Common:mWriteMemo("TermMobsub",
                         STRING(MobSub.MsSeq),
+                        (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0),
                         "BAJA",
                         RETURN-VALUE). 
       END. 
@@ -1039,11 +1029,11 @@ PROCEDURE pTerminate:
       fCloseDiscount(ENTRY(LOOKUP(MobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS}),
                      MobSub.MsSeq,
                      Func.Common:mLastDayOfMonth(TODAY),
-                     FALSE).
+                     NO).
       fCloseDiscount(ENTRY(LOOKUP(MobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_20}),
                      MobSub.MsSeq,
                      Func.Common:mLastDayOfMonth(TODAY),
-                     FALSE).
+                     NO).
       
       /* Additional Line with mobile only ALFMO-5 */
       IF MONTH(MobSub.ActivationDate) = MONTH(TODAY) AND 
@@ -1056,9 +1046,7 @@ PROCEDURE pTerminate:
       fCloseDiscount(ENTRY(LOOKUP(MobSub.CLIType, {&ADDLINE_CLITYPES}), {&ADDLINE_DISCOUNTS_HM}),
                      MobSub.MsSeq,
                      ldtCloseDate,
-                     FALSE).
-
-
+                     NO).
    END.
 
    /* COFF Partial termination */
@@ -1524,8 +1512,9 @@ PROCEDURE pMultiSIMTermination:
                           OUTPUT lcError). 
                
       IF lcError > "" THEN 
-         fLocalMemo("TermMobsub",
+         Func.Common:mWriteMemo("TermMobsub",
                     STRING(lbMobSub.MsSeq),
+                    (IF AVAILABLE MobSub THEN MobSub.CustNum ELSE 0),
                     "Multi SIM termination failed",
                     lcError).
       /* MNP Outporting */
