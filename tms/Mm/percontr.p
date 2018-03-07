@@ -1291,15 +1291,15 @@ PROCEDURE pContractActivation:
       ELSE IF lcDCEvent EQ "RVTERM12" AND
          ldeResidualFeeDisc > 0 THEN DO:
 
-         fAddDiscountPlanMember(MsOwner.MsSeq,
-                               "RVTERMDT2DISC", 
-                               ldeResidualFeeDisc,
-                               ldaResidualFee,
-                               1,
-                               bQ25SingleFee.OrderId, /* Q25 OrderId */
-                               OUTPUT lcError).
+         lcError = fAddDiscountPlanMember(MsOwner.MsSeq,
+                                          "RVTERMDT2DISC",
+                                          ldeResidualFeeDisc,
+                                          ldaResidualFee,
+                                          ?,
+                                          1,
+                                          bQ25SingleFee.OrderId). /* Q25 OrderId */
          /* write possible error to an order memo */
-         IF lcError > "" THEN
+         IF lcError BEGINS "ERROR" THEN
             Func.Common:mWriteMemo("MobSub",
                              STRING(MsOwner.MsSeq),
                              MsOwner.CustNum,
@@ -1325,14 +1325,14 @@ PROCEDURE pContractActivation:
                                                 bf_OfferItem.EndStamp   >= MsRequest.ActStamp NO-LOCK NO-ERROR.
                   IF AVAIL bf_OfferItem AND bf_OfferItem.Amount > 0 THEN
                   DO:
-                      ASSIGN liDiscReq = fAddDiscountPlanMember(MsRequest.MsSeq,
-                                                                bf_OfferItem.ItemKey,
-                                                                bf_OfferItem.Amount,
-                                                                TODAY,
-                                                                bf_OfferItem.Periods,
-                                                                0,
-                                                                OUTPUT lcErrMsg).
-                      IF liDiscReq NE 0 THEN 
+                      lcErrMsg = fAddDiscountPlanMember(MsRequest.MsSeq,
+                                                        bf_OfferItem.ItemKey,
+                                                        bf_OfferItem.Amount,
+                                                        TODAY,
+                                                        ?,
+                                                        bf_OfferItem.Periods,
+                                                        0).
+                      IF lcErrMsg BEGINS "ERROR" THEN
                           fReqLog("Failed to add discount for (" + DayCampaign.DCEvent + "). Error: '" + lcErrMsg + "'").
                   END.  /* IF AVAIL OfferItem THEN */
               END.                       
@@ -2524,7 +2524,7 @@ PROCEDURE pContractTermination:
               fCloseDiscount(DiscountPlan.DPRuleID,
                              MsRequest.MsSeq,
                              ldtActDate,
-                             FALSE). /* clean event logs */
+                             NO).
       END.
 
       /* Close iphone discounts */
@@ -2546,17 +2546,13 @@ PROCEDURE pContractTermination:
                       DPMember.HostTable  = "MobSub" AND
                       DPMember.KeyValue   = STRING(MsRequest.MsSeq) AND
                       DPMember.ValidTo   >= ldtActDate AND
-                      DPMember.ValidTo   >= DPMember.ValidFrom EXCLUSIVE-LOCK:
+                      DPMember.ValidTo   >= DPMember.ValidFrom NO-LOCK:
 
                 IF DPMember.ValidTo >= ldContractEndDate AND
                    ldContractEndDate <= ldtActDate THEN NEXT.
 
-                /* Log dpmember modification */
-                lhDPMember = BUFFER DPMember:HANDLE.
-                RUN StarEventInitialize(lhDPMember).
-                IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDPMember).
-                DPMember.ValidTo = DPMember.ValidFrom - 1.
-                IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhDPMember).
+                fCloseDPMember(DPMember.DPMemberID,
+                               DPMember.ValidFrom - 1).
 
             END. /* FOR FIRST DiscountPlan WHERE */
          END. /* DO i = 1 to NUM-ENTRIES(lcIPhoneDiscountRuleIds): */
@@ -2864,7 +2860,7 @@ PROCEDURE pContractTermination:
          fCloseDiscount("CONTS30DISC",
                         MsRequest.MsSeq,
                         ldtActDate,
-                        FALSE). /* clean event logs */
+                        NO).
       END.
    END CASE. /* CASE lcDCEvent: */
 
@@ -2897,7 +2893,7 @@ PROCEDURE pContractTermination:
                llgResult = fCloseDiscount(DiscountPlan.DPRuleId,
                                           MsRequest.MsSeq,
                                           ldtActDate,
-                                          FALSE).            
+                                          NO).
          END.
       END.
           
