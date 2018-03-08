@@ -247,17 +247,11 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
       add_string(pcStruct,"lastName",bOrderCustomer.SurName2).
 
       /* contactMedium */
-      add_string(pcStruct,"contactMedium.preferred","true").
-      add_string(pcStruct,"contactMedium.type","Email").
-      add_string(pcStruct,"medium.city",bOrderCustomer.PostOffice).
-      add_string(pcStruct,"medium.country",bOrderCustomer.Country).
       add_string(pcStruct,"medium.emailAddress",bOrderCustomer.email).
-      add_string(pcStruct,"medium.type","").
-      add_string(pcStruct,"medium.number",bOrderCustomer.ContactNum).
-      add_string(pcStruct,"medium.postCode",bOrderCustomer.ZipCode).
-      add_string(pcStruct,"medium.stateOrProvince",bOrderCustomer.Region).
-      add_string(pcStruct,"medium.streetOne",bOrderCustomer.Street).
-      add_string(pcStruct,"medium.streetTwo",bOrderCustomer.StreetType). /* ?? */
+      add_string(pcStruct,"medium.fixedNumber",bOrderCustomer.FixedNumber).
+      add_string(pcStruct,"medium.mobileNumber",bOrderCustomer.MobileNumber).
+      /* fax not mandatory */
+      add_string(pcStruct,"medium.faxNumber","").
 
       /* individualIdentification */
       add_string(pcStruct,"individualIdentification.type",bOrderCustomer.CustIdType).
@@ -281,54 +275,28 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
       add_string(pcStruct,"orderId",STRING(bOrderCustomer.OrderId)).
       add_string(pcStruct,"sfId",bOrder.Salesman).
       add_string(pcStruct,"orderDate",Func.Common:mUTCTime(bOrder.CrStamp)).
+      add_string(pcStruct,"paymentMethod","1"). /* postpaid */
 
-      IF bOrder.PayType THEN
-         add_string(pcStruct,"paymentMethod","2"). /* prepaid */
-      ELSE
-         add_string(pcStruct,"paymentMethod","1"). /* postpaid */
-
-      IF bOrderCustomer.CustIdType EQ "NIF" THEN
-         add_string(pcStruct,"customerType","1").
-      ELSE IF bOrderCustomer.CustIdType EQ "CIF" THEN
-         add_string(pcStruct,"customerType","2").
-      ELSE IF bOrderCustomer.CustIdType EQ "PASSPORT" THEN /* ?? */
+      IF bOrderCustomer.SelfEmployed THEN DO:
          add_string(pcStruct,"customerType","3").
+      END.
+      ELSE DO:
+         IF bOrderCustomer.CustIdType EQ "NIF" THEN
+            add_string(pcStruct,"customerType","1").
+         ELSE IF bOrderCustomer.CustIdType EQ "CIF" THEN
+            add_string(pcStruct,"customerType","2").         
+      END.
 
-      add_string(pcStruct,"contractType","1"). /* ??? */
+      IF bOrder.OrderType = {&ORDER_TYPE_NEW} THEN
+         add_string(pcStruct,"contractType","1").
+      ELSE IF bOrder.OrderType = {&ORDER_TYPE_MNP} THEN
+         add_string(pcStruct,"contractType","2").
+      ELSE IF bOrder.OrderType = {&ORDER_TYPE_RENEWAL} THEN
+         add_string(pcStruct,"contractType","3").
+      /* TMS has not definition for contractType=4 (Migration) in specs */
+
       add_boolean(pcStruct,"financed",FALSE).
  
-/* Old specs version:
-      add_string(pcStruct,"customerId",bOrderCustomer.CustId).
-      add_string(pcStruct,"accountId",bOrder.ContractID).
-      /* not mandatory */
-      add_string(pcStruct,"subscriptionId",bOrder.CLI).
-      add_string(pcStruct,"clientName",bOrderCustomer.FirstName).
-      add_string(pcStruct,"clientLastName1",bOrderCustomer.SurName1).
-      /* not mandatory */
-      add_string(pcStruct,"clientLastName2",bOrderCustomer.SurName2).
-      add_string(pcStruct,"clientEmail",bOrderCustomer.email).
-      add_string(pcStruct,"clientPhone",bOrderCustomer.ContactNum).
-      add_string(pcStruct,"clientMobile",bOrderCustomer.MobileNumber).
-      /* not mandatory */
-      add_string(pcStruct,"clientFax",""). /* Customer.fax if needed */
-      add_string(pcStruct,"legalIdentityType",bOrderCustomer.CustIdType).
-      add_string(pcStruct,"legalIdentityCountry",bOrderCustomer.Country).
-      add_string(pcStruct,"legalIdentityNumber",bOrderCustomer.CustId).
-
-      IF fIsConvergent3POnly(bOrder.CLIType) THEN
-         add_string(pcStruct,"sellType","CONVERGENTE").
-      ELSE IF fIsFixedOnly(bOrder.CLIType) THEN
-         add_string(pcStruct,"sellType","FIXED_ONLY").
-      ELSE
-         add_string(pcStruct,"sellType","SIM_ONLY").
-
-      add_string(pcStruct,"crmId",bOrder.OrderChannel).
-      add_string(pcStruct,"dealerId",bOrder.Salesman).
-      add_string(pcStruct,"contractId",bOrder.ContractID).
-      add_string(pcStruct,"orderId",STRING(bOrderCustomer.OrderId)).
-      add_string(pcStruct,"sfId",bOrder.Salesman).
-      add_string(pcStruct,"orderDate",Func.Common:mUTCTime(bOrder.CrStamp)).
-*/ 
       IF llLogRequest THEN DO:
          fLogMsg(STRING(iiOrderID) + "; Signing send xml: " + STRING(pcStruct)).
          fLogMsg(STRING(bOrder.OrderId) +  "; Print xml to file").
