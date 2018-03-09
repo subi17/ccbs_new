@@ -297,7 +297,7 @@ PROCEDURE pTerminate:
    END.
 /* COFF check */
    FIND FIRST MSOwner WHERE 
-              MSOwner.CLI    = MobSub.CLI AND
+              MSOwner.MsSeq = MobSub.MsSeq AND
               MSOwner.TsEnd >= Func.Common:mHMS2TS(TODAY,STRING(time,"hh:mm:ss"))
    EXCLUSIVE-LOCK NO-ERROR.
 
