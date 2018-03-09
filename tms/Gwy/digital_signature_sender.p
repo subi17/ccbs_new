@@ -270,7 +270,12 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
          add_string(pcStruct,"sellType","SIM_ONLY").
 
       add_string(pcStruct,"crmId",bOrder.OrderChannel).
-      add_string(pcStruct,"dealerId",bOrder.Reseller).
+
+      IF bOrder.Reseller NE "" THEN      
+         add_string(pcStruct,"dealerId",bOrder.Reseller).
+      ELSE
+         add_string(pcStruct,"dealerId","NOT_AVAILABLE").
+
       add_string(pcStruct,"contractId",bOrder.ContractID).
       add_string(pcStruct,"orderId",STRING(bOrderCustomer.OrderId)).
       add_string(pcStruct,"sfId",bOrder.Salesman).
