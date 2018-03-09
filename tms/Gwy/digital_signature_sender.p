@@ -382,7 +382,7 @@ FUNCTION fSendSigningMessage RETURNS CHAR
       RETURN "Error".
    END.
 
-   IF lcResult EQ "204" THEN DO:
+   IF lcResult EQ "200" THEN DO:
       /* set message as sent */
       IF llLogRequest THEN fLogMsg(STRING(iiOrderID) + "; Message to Adapter sent successfully!").
    END.
