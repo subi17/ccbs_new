@@ -248,7 +248,12 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
 
       /* contactMedium */
       add_string(pcStruct,"medium.emailAddress",bOrderCustomer.email).
-      add_string(pcStruct,"medium.fixedNumber",bOrderCustomer.FixedNumber).
+
+      IF bOrderCustomer.FixedNumber NE "" THEN
+         add_string(pcStruct,"medium.fixedNumber",bOrderCustomer.FixedNumber).
+      ELSE
+         add_string(pcStruct,"medium.fixedNumber",bOrderCustomer.MobileNumber).
+
       add_string(pcStruct,"medium.mobileNumber",bOrderCustomer.MobileNumber).
       /* fax not mandatory */
       add_string(pcStruct,"medium.faxNumber","").
