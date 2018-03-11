@@ -26,22 +26,21 @@ END FUNCTION.
 
 /* Check if a mainline clitype is allowed for an extraline clitype  */ 
 FUNCTION fCLITypeAllowedForExtraLine RETURNS LOGICAL
-   (icCLIType          AS CHARACTER,
-    icExtraLineCLIType AS CHARACTER):
+   (icMainLineCLIType  AS CHARACTER,
+    icExtraLineCLIType AS CHARACTER,
+    OUTPUT oiExtraLineCount AS INT):
 
-   DEFINE BUFFER MXItemExtra FOR MXItem.
+   DEFINE BUFFER TMSRelation FOR TMSRelation.
 
-   FOR EACH  Matrix NO-LOCK WHERE
-             Matrix.Brand  = Syst.Var:gcBrand   AND
-             Matrix.MXKey  = {&EXTRALINEMATRIX},
-       FIRST MXItemExtra NO-LOCK WHERE
-             MXItemExtra.MXSeq   = Matrix.MXSeq   AND
-             MXItemExtra.MXName  = "SubsTypeTo" AND
-             MXItemExtra.MXValue = icExtraLineCLIType,       
-       FIRST MXItem NO-LOCK WHERE
-             MXItem.MXSeq   = Matrix.MXSeq AND
-             MXItem.MXName  = "SubsTypeFrom" AND
-             MXItem.MXValue = icCLIType:
+   FIND FIRST TMSRelation NO-LOCK WHERE 
+              TMSRelation.TableName     EQ {&ELTABLENAME}     AND 
+              TMSRelation.KeyType       EQ {&ELKEYTYPE}       AND 
+              TMSRelation.ChildValue    EQ icExtraLineCLIType AND 
+              TMSRelation.ParentValue   EQ icMainLineCLIType  AND 
+          INT(TMSRelation.RelationType) GT 0                  NO-ERROR. 
+
+   IF AVAIL TMSRelation THEN DO:
+      oiExtraLineCount = INT(TMSRelation.RelationType).
       RETURN TRUE.
    END.
 
@@ -101,16 +100,17 @@ END FUNCTION.
 FUNCTION fCLITypeIsMainLine RETURNS LOGICAL
    (icCLIType  AS CHARACTER):
 
-   FOR EACH  Matrix NO-LOCK WHERE
-             Matrix.Brand  = Syst.Var:gcBrand   AND
-             Matrix.MXKey  = {&EXTRALINEMATRIX},
-       FIRST MXItem NO-LOCK WHERE
-             MXItem.MXSeq   = Matrix.MXSeq AND
-             MXItem.MXName  = "SubsTypeFrom" AND
-             MXItem.MXValue = icCLIType:
-      RETURN TRUE.
-   END.
+   DEFINE BUFFER TMSRelation FOR TMSRelation.
 
+   FIND FIRST TMSRelation NO-LOCK WHERE 
+              TMSRelation.TableName     EQ {&ELTABLENAME} AND 
+              TMSRelation.KeyType       EQ {&ELKEYTYPE}   AND 
+              TMSRelation.ParentValue   EQ icCLIType      AND 
+          INT(TMSRelation.RelationType) GT 0              NO-ERROR.
+
+   IF AVAIL TMSRelation THEN 
+      RETURN TRUE.
+   
    RETURN FALSE.
 
 END FUNCTION.
@@ -121,6 +121,8 @@ END FUNCTION.
 FUNCTION fSTCPossible RETURNS LOGICAL
    (iiCustNum    AS INTEGER,
     icNewCLIType AS CHARACTER):
+
+   DEF VAR liELCount AS INT NO-UNDO. 
 
    IF NOT fCLITypeIsExtraLine(icNewCLIType)
    THEN RETURN TRUE.
@@ -135,7 +137,8 @@ FUNCTION fSTCPossible RETURNS LOGICAL
             (MobSub.MsStatus    EQ {&MSSTATUS_ACTIVE}  OR
              MobSub.MsStatus    EQ {&MSSTATUS_BARRED}):
 
-      IF NOT fCLITypeAllowedForExtraLine(MobSub.CLIType, icNewCLIType)
+      IF NOT fCLITypeAllowedForExtraLine(MobSub.CLIType, icNewCLIType,
+                                         OUTPUT liELCount)
       THEN NEXT.
 
       RETURN TRUE.
@@ -144,6 +147,58 @@ FUNCTION fSTCPossible RETURNS LOGICAL
    RETURN FALSE.
 
 END FUNCTION.
+
+FUNCTION fCheckForMandatoryExtraLine RETURNS LOGICAL
+   (INPUT iiMultiSimId  AS INT,
+    INPUT iiCustNum     AS INT,
+    INPUT icMainCLIType AS CHAR,
+    INPUT icELCLIType   AS CHAR,
+    INPUT llgExisting   AS LOG):
+
+   DEFINE BUFFER TMSRelation FOR TMSRelation.
+   DEFINE BUFFER MobSub      FOR MobSub.
+   DEFINE BUFFER Order       FOR Order.
+
+   FIND FIRST TMSRelation NO-LOCK WHERE 
+              TMSRelation.TableName       EQ {&ELTABLENAME} AND 
+              TMSRelation.KeyType         EQ {&ELKEYTYPE}   AND 
+              TMSRelation.ParentValue     EQ icMainCLIType  AND 
+              TMSRelation.RelationType    EQ {&ELMANDATORY} NO-ERROR.
+   
+   IF AVAIL TMSRelation AND
+      ENTRY(3,TMSRelation.ChildValue,"_") EQ icELCLIType THEN DO:
+      
+      IF llgExisting THEN DO: 
+         IF CAN-FIND(MobSub NO-LOCK USE-INDEX CustNum WHERE
+                     MobSub.Brand        EQ Syst.Var:gcBrand                    AND
+                     MobSub.CLIType      EQ ENTRY(1,TMSRelation.ChildValue,"_") AND
+                     MobSub.CustNum      EQ iiCustNum                           AND
+                     MobSub.PayType      EQ FALSE                               AND
+                     MobSub.MultiSimId   EQ iiMultiSimId                        AND 
+                     MobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE})          THEN 
+            RETURN TRUE.
+         ELSE 
+            RETURN FALSE.
+      END.      
+      ELSE DO:
+         IF CAN-FIND(Order NO-LOCK WHERE 
+                     Order.Brand        EQ Syst.Var:gcBrand                    AND 
+                     Order.StatusCode   EQ {&ORDER_STATUS_PENDING_MAIN_LINE}   AND 
+                     Order.CustNum      EQ iiCustNum                           AND
+                     Order.CLIType      EQ ENTRY(1,TMSRelation.ChildValue,"_") AND 
+                     Order.OrderType    NE {&ORDER_TYPE_RENEWAL}               AND 
+                     Order.MultiSimId   EQ iiMultiSimId                        AND 
+                     Order.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE})          THEN
+            RETURN TRUE.
+         ELSE 
+            RETURN FALSE.
+      END. 
+
+   END. 
+
+   RETURN TRUE.
+
+END FUNCTION.    
 
 FUNCTION fCheckExistingMainLineAvailForExtraLine RETURNS INTEGER
    (INPUT icExtraLineCLIType AS CHAR,
@@ -154,17 +209,10 @@ FUNCTION fCheckExistingMainLineAvailForExtraLine RETURNS INTEGER
    DEF VAR liELCount AS INT NO-UNDO. 
    DEF VAR liCount   AS INT NO-UNDO. 
 
-   IF NOT icExtraLineCLIType > "" THEN RETURN 0.
+   IF icExtraLineCLIType EQ "" THEN RETURN 0.
 
-   DEFINE BUFFER Customer FOR Customer.
-   DEFINE BUFFER MobSub   FOR MobSub.
    DEFINE BUFFER ELMobSub FOR MobSub.
    DEFINE BUFFER Order    FOR Order.
-
-   CASE icExtraLineCLIType:
-      WHEN {&AZULMORADAEL}   THEN liELCount = {&AZULMORDADAEXTRALINE}.
-      WHEN {&INTERMINABLEEL} THEN liELCount = {&INTERMINABLEEXTRALINE}.  
-   END CASE.
 
    FOR FIRST Customer NO-LOCK WHERE
              Customer.Brand      EQ Syst.Var:gcBrand AND
@@ -179,19 +227,20 @@ FUNCTION fCheckExistingMainLineAvailForExtraLine RETURNS INTEGER
               (MobSub.MsStatus EQ {&MSSTATUS_ACTIVE} OR
                MobSub.MsStatus EQ {&MSSTATUS_BARRED})   BY MobSub.ActivationTS:
 
-          IF (NOT fCLITypeIsMainLine(MobSub.CLIType)                               OR  
-              NOT fCLITypeAllowedForExtraLine(MobSub.CLIType, icExtraLineCLIType)) THEN 
+          IF (NOT fCLITypeIsMainLine(MobSub.CLIType)             OR  
+              NOT fCLITypeAllowedForExtraLine(MobSub.CLIType, icExtraLineCLIType,
+                                              OUTPUT liELCount)) THEN 
              NEXT.
    
           FIND LAST Order NO-LOCK WHERE
-                    Order.MsSeq      = MobSub.MsSeq              AND
-                    Order.CLIType    = MobSub.CLIType            AND
-                    Order.StatusCode = {&ORDER_STATUS_DELIVERED} AND
-             LOOKUP(STRING(Order.OrderType),"0,1,4") > 0         NO-ERROR.
+                    Order.MsSeq      EQ MobSub.MsSeq              AND
+                    Order.CLIType    EQ MobSub.CLIType            AND
+                    Order.StatusCode Eq {&ORDER_STATUS_DELIVERED} AND
+             LOOKUP(STRING(Order.OrderType),"0,1,4") > 0          NO-ERROR.
           IF NOT AVAIL Order THEN 
              FIND LAST Order NO-LOCK WHERE
-                       Order.MsSeq      = MobSub.MsSeq              AND
-                       Order.StatusCode = {&ORDER_STATUS_DELIVERED} AND
+                       Order.MsSeq      EQ MobSub.MsSeq              AND
+                       Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} AND
                 LOOKUP(STRING(Order.OrderType),"0,1,4") > 0         NO-ERROR.
 
           IF NOT AVAIL Order THEN NEXT.
@@ -207,6 +256,15 @@ FUNCTION fCheckExistingMainLineAvailForExtraLine RETURNS INTEGER
                    ELMobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}:  
              liCount = liCount + 1.   
           END.
+          
+          IF liCount EQ 0 THEN DO:
+             IF NOT fCheckForMandatoryExtraLine(MobSub.MsSeq,
+                                                Customer.CustNum,
+                                                MobSub.CLIType,
+                                                icExtraLineCLIType,
+                                                TRUE) THEN 
+                NEXT.  
+          END.      
 
           IF liCount < liELCount THEN DO:
              liMLMsSeq = MobSub.MsSeq.
@@ -226,8 +284,6 @@ FUNCTION fCheckOngoingMainLineAvailForExtraLine RETURNS INTEGER
     INPUT icCustIDType       AS CHAR,
     INPUT icCustID           AS CHAR):
 
-   IF NOT icExtraLineCLIType > "" THEN RETURN 0.
-
    DEF VAR liELCount AS INT NO-UNDO. 
    DEF VAR liCount   AS INT NO-UNDO. 
    
@@ -236,11 +292,8 @@ FUNCTION fCheckOngoingMainLineAvailForExtraLine RETURNS INTEGER
    DEFINE BUFFER OrderFusion   FOR OrderFusion.
    DEFINE BUFFER ELOrder       FOR Order.
 
-   CASE icExtraLineCLIType:
-      WHEN {&AZULMORADAEL}   THEN liELCount = {&AZULMORDADAEXTRALINE}.
-      WHEN {&INTERMINABLEEL} THEN liELCount = {&INTERMINABLEEXTRALINE}.  
-   END CASE.
-
+   IF NOT icExtraLineCLIType > "" THEN RETURN 0.
+   
    FOR EACH OrderCustomer NO-LOCK WHERE
             OrderCustomer.Brand      EQ Syst.Var:gcBrand AND
             OrderCustomer.CustId     EQ icCustID         AND
@@ -258,8 +311,9 @@ FUNCTION fCheckOngoingMainLineAvailForExtraLine RETURNS INTEGER
          Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL}) THEN 
          NEXT.  
 
-      IF (NOT fCLITypeIsMainLine(MobSub.CLIType)                              OR
-          NOT fCLITypeAllowedForExtraLine(Order.CLIType, icExtraLineCLIType)) THEN 
+      IF (NOT fCLITypeIsMainLine(Order.CLIType)              OR
+          NOT fCLITypeAllowedForExtraLine(Order.CLIType, icExtraLineCLIType,
+                                          OUTPUT liELCount)) THEN 
          NEXT.
 
       liCount = 0.
@@ -275,6 +329,15 @@ FUNCTION fCheckOngoingMainLineAvailForExtraLine RETURNS INTEGER
          liCount = liCount + 1.
       END.
 
+      IF liCount EQ 0 THEN DO:
+         IF NOT fCheckForMandatoryExtraLine(Order.OrderId,
+                                            Order.CustNum,
+                                            Order.CLIType,
+                                            icExtraLineCLIType,
+                                            FALSE) THEN 
+          NEXT.  
+      END.      
+      
       IF liCount < liELCount THEN
          RETURN Order.OrderId.
 
@@ -283,34 +346,6 @@ FUNCTION fCheckOngoingMainLineAvailForExtraLine RETURNS INTEGER
    RETURN 0.
 
 END FUNCTION.
-
-FUNCTION fExtraLineCountForMainLine RETURN INTEGER 
-    ( INPUT iiMultiSimID AS INT ) :
-        
-    /*This function can be used for Main and Extra Lines Both.    
-      In Case of Main Lines pass the mobsub.msseq as parameter.
-      In Case of Extral Lines pass the mobsub.multisimid as parameter.  
-      Then this function will return the Number of Extra Lines attached to the main line    
-      */                               
-                
-    DEFINE BUFFER bfELMobSub FOR MobSub.
-    DEFINE VARIABLE iiELCount  AS INTEGER NO-UNDO .
-       
-    FOR EACH bfELMobSub NO-LOCK WHERE 
-             bfELMobSub.Brand        =  Syst.Var:gcBrand          AND                 
-             bfELMobSub.multiSimID   =  iiMultiSimID              AND
-             bfELMobsub.multiSimType =  {&MULTISIMTYPE_EXTRALINE} AND 
-             bfELMobSub.paytype      =  NO                        AND 
-             (bfELMobSub.MsStatus    =  {&MSSTATUS_ACTIVE} OR
-              bfELMobSub.MsStatus    =  {&MSSTATUS_BARRED}):                
-                     
-        ASSIGN iiELCount = iiELCount + 1 .           
-                                          
-    END.
-    
-    RETURN iiELCount.
-                                           
-END FUNCTION.                                           
 
 FUNCTION fCheckExtraLineMatrixSubscription RETURNS LOG
    (INPUT iiMsSeq        AS INT,
