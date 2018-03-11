@@ -268,7 +268,8 @@ PROCEDURE pServCompUpdate:
    DEF VAR lcBarring AS CHAR NO-UNDO. 
    DEF VAR lrBarring AS ROWID no-undo.
    DEF VAR llOngoing AS LOG NO-UNDO. 
-      
+   /* RES-885 National roaming traffic restriction */
+   DEF VAR liMarkStatus AS INT NO-UNDO.
 
    DEF BUFFER bOrigRequest    FOR MsRequest.
    DEF BUFFER bMobsub         FOR MobSub.
@@ -389,6 +390,12 @@ PROCEDURE pServCompUpdate:
 
    ldCurrStamp = Func.Common:mMakeTS().
 
+   /* RES-885 National roaming traffic restriction */
+   IF SubSer.ServCom = "NW" THEN DO:
+      /* create solog */
+      RUN pServCompSolog.
+   END.
+   
    /* Note: Consider 2 (suspend status) as Close status for BB service */
    IF SubSer.ServCom = "BB" THEN DO:
       IF liNewValue = 2 THEN liNewValue = 0.
