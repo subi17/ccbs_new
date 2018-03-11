@@ -17,7 +17,8 @@
 {Func/freacmobsub.i}
 {Func/contract_end_date.i}
 {Func/service.i}
-{Func/fdss.i}
+{Func/dss_request.i}
+{Func/dss_matrix.i}
 {Func/forderstamp.i}
 {Func/orderfunc.i}
 {Func/ftopup.i}
@@ -26,6 +27,7 @@
 {Func/fbankdata.i}
 {Func/fbtc.i}
 {Mc/dpmember.i}
+{Func/add_lines_request.i}
 
 DEFINE INPUT PARAMETER iiMSrequest  AS INTEGER   NO-UNDO.
 

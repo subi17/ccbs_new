@@ -22,16 +22,13 @@
   -------------------------------------------------------------------------- */
 
 {Syst/commali.i}
-{Func/msreqfunc.i}
-{Func/fmakemsreq.i}
 {Rate/daycampaign.i}
-{Syst/eventval.i}
 {Func/penaltyfee.i}
 {Func/fmakeservlimit.i}
-{Syst/tmsconst.i}
-{Func/matrix.i}
 {Func/service.i}
 {Mm/fbundle.i}
+{Func/dss_matrix.i}
+{Func/dss_request.i}
 {Func/nncoit2.i}
 {Func/contract_end_date.i}
 {Func/fcpfat.i}
@@ -43,10 +40,57 @@
 {Func/fprepaidfee.i}
 {Func/fcreditreq.i}
 {Func/fsendsms.i}
-{Func/profunc.i}
+{Func/profunc_request.i}
 {Func/fixedfee.i}
 
 DEF VAR lcEmailErr AS CHAR NO-UNDO.
+
+FUNCTION fBundleWithSTCCustomer RETURNS LOG
+   (iiCustnum    AS INT,
+    ideActStamp  AS DEC):
+
+   DEF BUFFER MsRequest FOR MsRequest.
+
+   DEF VAR ldaReqDate    AS DATE NO-UNDO.
+   DEF VAR liReqTime     AS INT  NO-UNDO.
+
+   DEF VAR lcPostpaidDataBundles  AS CHAR NO-UNDO.
+   DEF VAR lcDataBundleCLITypes   AS CHAR NO-UNDO.
+
+   Func.Common:mSplitTS(ideActStamp,OUTPUT ldaReqDate,OUTPUT liReqTime).
+
+   IF liReqTime > 0 THEN
+      ideActStamp = Func.Common:mMake2DT(ldaReqDate + 1,0).
+
+   ASSIGN lcPostpaidDataBundles = fCParamC("POSTPAID_DATA_CONTRACTS")
+          lcDataBundleCLITypes  = fCParamC("DATA_BUNDLE_BASED_CLITYPES").
+
+   /* Check STC Request with data bundle */
+   FIND FIRST MsRequest NO-LOCK WHERE
+              MsRequest.Brand = Syst.Var:gcBrand AND
+              MsRequest.Custnum = iiCustnum AND
+              MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
+              LOOKUP(STRING(MsRequest.ReqStat),"4,9,99,3") = 0 AND
+              MsRequest.ActStamp = ideActStamp USE-INDEX Custnum NO-ERROR.
+   IF AVAIL MsRequest AND
+      (LOOKUP(MsRequest.ReqCparam2,lcDataBundleCLITypes) > 0 OR
+       LOOKUP(MsRequest.ReqCparam5,lcPostpaidDataBundles) > 0)
+   THEN RETURN TRUE.
+
+   /* Check BTC Request with data bundle */
+   FIND FIRST MsRequest NO-LOCK WHERE
+              MsRequest.Brand = Syst.Var:gcBrand AND
+              MsRequest.Custnum = iiCustnum AND
+              MsRequest.ReqType = {&REQTYPE_BUNDLE_CHANGE} AND
+              LOOKUP(STRING(MsRequest.ReqStat),"4,9,99,3") = 0 AND
+              MsRequest.ActStamp = ideActStamp USE-INDEX Custnum NO-ERROR.
+   IF AVAIL MsRequest AND
+      LOOKUP(MsRequest.ReqCparam2,lcPostpaidDataBundles) > 0
+   THEN RETURN TRUE.
+
+   RETURN FALSE. 
+
+END FUNCTION.
 
 FUNCTION fUpdateServicelCounterMSID RETURNS LOGICAL
    ( iiCustNum AS INTEGER,
@@ -1247,15 +1291,15 @@ PROCEDURE pContractActivation:
       ELSE IF lcDCEvent EQ "RVTERM12" AND
          ldeResidualFeeDisc > 0 THEN DO:
 
-         fAddDiscountPlanMember(MsOwner.MsSeq,
-                               "RVTERMDT2DISC", 
-                               ldeResidualFeeDisc,
-                               ldaResidualFee,
-                               1,
-                               bQ25SingleFee.OrderId, /* Q25 OrderId */
-                               OUTPUT lcError).
+         lcError = fAddDiscountPlanMember(MsOwner.MsSeq,
+                                          "RVTERMDT2DISC",
+                                          ldeResidualFeeDisc,
+                                          ldaResidualFee,
+                                          ?,
+                                          1,
+                                          bQ25SingleFee.OrderId). /* Q25 OrderId */
          /* write possible error to an order memo */
-         IF lcError > "" THEN
+         IF lcError BEGINS "ERROR" THEN
             Func.Common:mWriteMemo("MobSub",
                              STRING(MsOwner.MsSeq),
                              MsOwner.CustNum,
@@ -1281,14 +1325,14 @@ PROCEDURE pContractActivation:
                                                 bf_OfferItem.EndStamp   >= MsRequest.ActStamp NO-LOCK NO-ERROR.
                   IF AVAIL bf_OfferItem AND bf_OfferItem.Amount > 0 THEN
                   DO:
-                      ASSIGN liDiscReq = fAddDiscountPlanMember(MsRequest.MsSeq,
-                                                                bf_OfferItem.ItemKey,
-                                                                bf_OfferItem.Amount,
-                                                                TODAY,
-                                                                bf_OfferItem.Periods,
-                                                                0,
-                                                                OUTPUT lcErrMsg).
-                      IF liDiscReq NE 0 THEN 
+                      lcErrMsg = fAddDiscountPlanMember(MsRequest.MsSeq,
+                                                        bf_OfferItem.ItemKey,
+                                                        bf_OfferItem.Amount,
+                                                        TODAY,
+                                                        ?,
+                                                        bf_OfferItem.Periods,
+                                                        0).
+                      IF lcErrMsg BEGINS "ERROR" THEN
                           fReqLog("Failed to add discount for (" + DayCampaign.DCEvent + "). Error: '" + lcErrMsg + "'").
                   END.  /* IF AVAIL OfferItem THEN */
               END.                       
@@ -2480,7 +2524,7 @@ PROCEDURE pContractTermination:
               fCloseDiscount(DiscountPlan.DPRuleID,
                              MsRequest.MsSeq,
                              ldtActDate,
-                             FALSE). /* clean event logs */
+                             NO).
       END.
 
       /* Close iphone discounts */
@@ -2502,17 +2546,13 @@ PROCEDURE pContractTermination:
                       DPMember.HostTable  = "MobSub" AND
                       DPMember.KeyValue   = STRING(MsRequest.MsSeq) AND
                       DPMember.ValidTo   >= ldtActDate AND
-                      DPMember.ValidTo   >= DPMember.ValidFrom EXCLUSIVE-LOCK:
+                      DPMember.ValidTo   >= DPMember.ValidFrom NO-LOCK:
 
                 IF DPMember.ValidTo >= ldContractEndDate AND
                    ldContractEndDate <= ldtActDate THEN NEXT.
 
-                /* Log dpmember modification */
-                lhDPMember = BUFFER DPMember:HANDLE.
-                RUN StarEventInitialize(lhDPMember).
-                IF llDoEvent THEN RUN StarEventSetOldBuffer(lhDPMember).
-                DPMember.ValidTo = DPMember.ValidFrom - 1.
-                IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhDPMember).
+                fCloseDPMember(DPMember.DPMemberID,
+                               DPMember.ValidFrom - 1).
 
             END. /* FOR FIRST DiscountPlan WHERE */
          END. /* DO i = 1 to NUM-ENTRIES(lcIPhoneDiscountRuleIds): */
@@ -2820,7 +2860,7 @@ PROCEDURE pContractTermination:
          fCloseDiscount("CONTS30DISC",
                         MsRequest.MsSeq,
                         ldtActDate,
-                        FALSE). /* clean event logs */
+                        NO).
       END.
    END CASE. /* CASE lcDCEvent: */
 
@@ -2853,7 +2893,7 @@ PROCEDURE pContractTermination:
                llgResult = fCloseDiscount(DiscountPlan.DPRuleId,
                                           MsRequest.MsSeq,
                                           ldtActDate,
-                                          FALSE).            
+                                          NO).
          END.
       END.
           

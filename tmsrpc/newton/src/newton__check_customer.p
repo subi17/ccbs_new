@@ -26,6 +26,7 @@ Syst.Var:gcBrand = "1".
 {Func/orderchk.i}
 {Func/custfunc.i}
 {Func/profunc.i}
+{Func/barrfunc.i}
 
 /* Input parameters */
 DEF VAR pcTenant         AS CHAR NO-UNDO.

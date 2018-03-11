@@ -1,11 +1,8 @@
 {Syst/commali.i}
-{Func/cparam2.i}
-{Func/msreqfunc.i}
 {Gwy/provision.i}
 {Func/fmakemsreq.i}
-{Syst/tmsconst.i}
-{Func/fdss.i}
-{Func/fixedlinefunc.i}
+{Func/dss_matrix.i}
+{Func/msreqfunc.i}
 
 DEF INPUT PARAMETER iiRequest AS INTEGER NO-UNDO.
 
@@ -20,11 +17,7 @@ DEF VAR lcDSSResult AS CHAR NO-UNDO.
 DEF VAR lcALLPostpaidBundles       AS CHAR NO-UNDO.
 DEF VAR lcALLPostpaidUPSELLBundles AS CHAR NO-UNDO.
 
-DEF BUFFER bufOrder  FOR Order.
-DEF BUFFER bufMobsub FOR Mobsub.
-DEF BUFFER bufTermMobsub FOR TermMobsub.
 DEF BUFFER bbMsRequest FOR MSRequest.
-DEF BUFFER bPendRequest FOR MsRequest.
 
 FIND MsRequest WHERE MsRequest.MsRequest = iiRequest NO-LOCK NO-ERROR.
 
@@ -56,10 +49,10 @@ IF (MSRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} OR
     MSRequest.ReqType = {&REQTYPE_ICC_CHANGE}) AND
     MSRequest.ReqIParam5 > 0 THEN DO:
    
-  FIND FIRST bPendRequest NO-LOCK WHERE
-             bPendRequest.MsRequest = MsRequest.ReqIParam5 NO-ERROR.
-  IF AVAILABLE bPendRequest AND
-     LOOKUP(STRING(bPendRequest.ReqStatus),
+  FIND FIRST bbMsRequest NO-LOCK WHERE
+             bbMsRequest.MsRequest = MsRequest.ReqIParam5 NO-ERROR.
+  IF AVAILABLE bbMsRequest AND
+     LOOKUP(STRING(bbMsRequest.ReqStatus),
             {&REQ_INACTIVE_STATUSES} + ",3") = 0 THEN
      RETURN "ERROR:Another request that this depends on has not been " +
             "completed".
@@ -70,10 +63,10 @@ IF MsRequest.ReqType = {&REQTYPE_DSS} AND
    MsRequest.ReqCParam1 = "CREATE" THEN DO:
 
    IF MsRequest.ReqIParam2 > 0 THEN DO:
-      FIND FIRST bPendRequest NO-LOCK WHERE 
-                 bPendRequest.MsRequest = MsRequest.ReqIParam2 NO-ERROR.
-      IF AVAILABLE bPendRequest AND 
-         LOOKUP(STRING(bPendRequest.ReqStatus),
+      FIND FIRST bbMsRequest NO-LOCK WHERE 
+                 bbMsRequest.MsRequest = MsRequest.ReqIParam2 NO-ERROR.
+      IF AVAILABLE bbMsRequest AND 
+         LOOKUP(STRING(bbMsRequest.ReqStatus),
                 {&REQ_INACTIVE_STATUSES} + ",3") = 0 THEN 
          RETURN "ERROR:Another request that this depends on has not been " +
                 "completed".
@@ -123,7 +116,7 @@ IF MsRequest.ReqType = {&REQTYPE_DSS} AND
          fReqError(lcDSSResult).
       RETURN.
    END. /* IF NOT fIsDSSAllowed(INPUT  MsRequest.CustNum */
-   ELSE DO:
+   ELSE DO TRANSACTION:
       FIND CURRENT MsRequest EXCLUSIVE-LOCK NO-ERROR.
       IF AVAILABLE MsRequest THEN
          MsRequest.ReqCParam2 = lcDSSResult.
@@ -148,28 +141,11 @@ END CASE.
 
 RETURN RETURN-VALUE.
 
-FUNCTION fLocalMemo RETURNS LOGIC
-   (icHostTable AS CHAR,
-    icKey       AS CHAR,
-    iiCustnum   AS INT,
-    icTitle     AS CHAR,
-    icText      AS CHAR):
-
-   CREATE Memo.
-   ASSIGN
-      Memo.Brand     = Syst.Var:gcBrand
-      Memo.CreStamp  = Func.Common:mMakeTS()
-      Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.Custnum   = iiCustNum
-      Memo.HostTable = icHostTable
-      Memo.KeyValue  = icKey
-      Memo.CreUser   = Syst.Var:katun
-      Memo.MemoTitle = icTitle
-      Memo.Memotext  = icText.
-      
-END FUNCTION.
-
 PROCEDURE pSolog:
+
+   DEF BUFFER bufOrder  FOR Order.
+   DEF BUFFER bufMobsub FOR Mobsub.
+   DEF BUFFER bufTermMobsub FOR TermMobsub.
 
    DEFINE VARIABLE lcCli AS CHARACTER NO-UNDO.
    DEF VAR ldCurrBal AS DECIMAL NO-UNDO. 
@@ -254,7 +230,7 @@ PROCEDURE pSolog:
                                               ELSE MsRequest.MsRequest),
                                        INPUT FALSE,   /* Mandatory Request */
                                        OUTPUT lcError).
-               IF liReq > 0 THEN DO:
+               IF liReq > 0 THEN DO TRANSACTION:
                   FIND CURRENT MsRequest EXCLUSIVE-LOCK.
                   ASSIGN MsRequest.ReqIParam5 = liReq.
                   fReqStatus(0,"").
@@ -262,7 +238,7 @@ PROCEDURE pSolog:
                   RETURN.
                END.
                ELSE
-                  fLocalMemo("Customer",
+                  Func.Common:mWriteMemo("Customer",
                           STRING(MsRequest.CustNum),
                           MsRequest.Custnum,
                           "BB Service",
@@ -276,14 +252,14 @@ PROCEDURE pSolog:
             RUN Gwy/balancequery.p(bufMobSub.CLI).
             ldCurrBal = DEC(RETURN-VALUE) / 100 NO-ERROR.
             IF ldCurrBal > 0 THEN
-               fLocalMemo("Mobsub",
+               Func.Common:mWriteMemo("Mobsub",
                           STRING(bufMobSub.MsSeq),
                           bufMobSub.Custnum,
                           "Prepaid Balance",
                           "Prepaid balance " + STRING(ldCurrBal) + 
                           " euro on CLI " + bufMobSub.CLI).
             ELSE IF RETURN-VALUE BEGINS "ERROR" THEN
-               fLocalMemo("Mobsub",
+               Func.Common:mWriteMemo("Mobsub",
                           STRING(bufMobSub.MsSeq),
                           bufMobSub.Custnum,
                           "Prepaid Balance",
@@ -298,40 +274,41 @@ PROCEDURE pSolog:
    ldActStamp = MSRequest.ActStamp.
    IF liOffSet NE 0 THEN 
       ldActStamp = Func.Common:mSecOffSet(ldActStamp,liOffSet).
-      
-   CREATE Solog.
-   ASSIGN
-      Solog.Solog = NEXT-VALUE(Solog).
- 
-   ASSIGN
-      Solog.CreatedTS    = Func.Common:mMakeTS()
-      Solog.MsSeq        = MsreQuest.MsSeq    /* Mobile Subscription No.    */
-      Solog.CLI          = lcCLI              /* MSISDN                     */
-      Solog.Stat         = 0                  /* just created               */
-      Solog.Brand        = MSRequest.Brand
-      Solog.Users        = MSREquest.UserCode
-      Solog.TimeSlotTMS  = ldActStamp
-      Solog.ActivationTS = ldActStamp
-      Solog.MSrequest    = MSRequest.MSRequest.
-      
-   IF MsRequest.ReqCParam1 = "CHANGEICC"      OR
-      MSrequest.ReqCparam1 = "CHANGEMSISDN"   OR
-      MSrequest.ReqType    = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} THEN 
-      Solog.CommLine = fMakeCommLine2(Solog.Solog,MsRequest.MSrequest,False).
-   ELSE IF MSrequest.ReqType = {&REQTYPE_DSS} THEN
-      Solog.CommLine = fMakeDSSCommLine(Solog.Solog,MsRequest.MSrequest).
-   ELSE      
-      Solog.CommLine = fMakeCommLine(Solog.Solog,MsRequest.ReqCParam1).
+   DO TRANSACTION:
+      CREATE Solog.
+      ASSIGN
+         Solog.Solog = NEXT-VALUE(Solog).
 
-   ASSIGN
-      SoLog.CommLine = TRIM(REPLACE(SoLog.CommLine,",,",","),",").
+      ASSIGN
+         Solog.CreatedTS    = Func.Common:mMakeTS()
+         Solog.MsSeq        = MsreQuest.MsSeq    /* Mobile Subscription No.    */
+         Solog.CLI          = lcCLI              /* MSISDN                     */
+         Solog.Stat         = 0                  /* just created               */
+         Solog.Brand        = MSRequest.Brand
+         Solog.Users        = MSREquest.UserCode
+         Solog.TimeSlotTMS  = ldActStamp
+         Solog.ActivationTS = ldActStamp
+         Solog.MSrequest    = MSRequest.MSRequest.
 
-   FIND CURRENT MsRequest EXCLUSIVE-LOCK.
+      IF MsRequest.ReqCParam1 = "CHANGEICC"      OR
+         MSrequest.ReqCparam1 = "CHANGEMSISDN"   OR
+         MSrequest.ReqType    = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} THEN
+         Solog.CommLine = fMakeCommLine2(Solog.Solog,MsRequest.MSrequest,False).
+      ELSE IF MSrequest.ReqType = {&REQTYPE_DSS} THEN
+         Solog.CommLine = fMakeDSSCommLine(Solog.Solog,MsRequest.MSrequest).
+      ELSE
+         Solog.CommLine = fMakeCommLine(Solog.Solog,MsRequest.ReqCParam1).
 
-   MsRequest.Solog = Solog.Solog.
+      ASSIGN
+         SoLog.CommLine = TRIM(REPLACE(SoLog.CommLine,",,",","),",").
 
-   fReqStatus(5,"").
-         
+      FIND CURRENT MsRequest EXCLUSIVE-LOCK.
+
+      MsRequest.Solog = Solog.Solog.
+
+      fReqStatus(5,"").
+   END.
+
 END PROCEDURE.
 
 

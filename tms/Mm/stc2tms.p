@@ -4,35 +4,23 @@
        termination/ MNP out porting, STC (postpaid to prepaid)
 */
 {Syst/commali.i}
-{Func/msreqfunc.i}
-{Syst/eventval.i}
-{Func/fmakemsreq.i}
-{Func/fctchange.i}
-{Func/matrix.i}
 {Func/service.i}
 {Mm/fbundle.i}
-{Func/transname.i}
 {Func/ftmrlimit.i}
-{Func/orderfunc.i}
 {Mc/invoicetarget.i}
 {Rate/rerate_request.i}
-{Syst/tmsconst.i}
-{Mm/bundle_first_month_fee.i}
-{Func/fdss.i}
+{Func/dss_matrix.i}
+{Func/dss_request.i}
 {Func/fcpfat.i}
 {Func/servcomfee.i}
-{Func/fsubstermreq.i}
-{Mnp/mnpoutchk.i}
-{Mc/dpmember.i}
-{Func/main_add_lines.i}
+{Func/addline_discount.i}
 {Func/fbankdata.i}
-{Func/create_eventlog.i}
 {Func/barrfunc.i}
-{Func/fixedlinefunc.i}
-{Func/fsendsms.i}
-{Func/vasfunc.i}
+{Func/profunc_request.i}
+{Func/add_lines_request.i}
 {Func/custfunc.i}
-{Migration/migrationfunc.i}
+/* 21.2.2018 Migration is not used, commented the include file
+{Migration/migrationfunc.i}*/
 
 DEFINE INPUT PARAMETER iiMSRequest AS INTEGER NO-UNDO.
 
@@ -114,10 +102,13 @@ IF liOrigStatus = 8 AND MsRequest.ReqIParam2 > 0 THEN DO:
       fReqError(SUBST("Order not found: &1", MsRequest.ReqIParam2)).
       RETURN.
    END.
+/* 21.2.2018 Migration is not used, commented the code
+   and also the include file
    ELSE IF fIsNumberInMigration(Order.CLI) EQ TRUE THEN DO:
       fReqError(SUBST("Order is in migration phase: &1", MsRequest.ReqIParam2)).
       RETURN.
-   END.   
+   END.
+*/
    ELSE IF LOOKUP(Order.OrderChannel,"renewal_pos_stc,retention_stc") > 0 THEN DO:
       IF Order.StatusCode EQ {&ORDER_STATUS_MNP_RETENTION}     OR
          Order.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE} THEN DO: /* ADDLINE-19 Additional Line Renewal case handling */
@@ -318,13 +309,19 @@ END PROCEDURE.
 PROCEDURE pSpeedChangeRequestForProvisioning:
     DEF VAR liOrderId          AS INTE NO-UNDO.
 
-    FOR EACH  Order WHERE Order.MsSeq = Mobsub.MsSeq NO-LOCK,
-        FIRST FusionMessage NO-LOCK WHERE FusionMessage.OrderId = Order.OrderId USE-INDEX OrderId:
+    FOR EACH Order WHERE Order.MsSeq = Mobsub.MSSeq NO-LOCK 
+        BY Order.CrStamp DESC:
 
-        IF (FusionMessage.MessageType <> {&FUSIONMESSAGE_TYPE_CREATE_ORDER} AND 
-            (FusionMessage.MessageType = {&FUSIONMESSAGE_TYPE_CREATE_ORDER} AND FusionMessage.MessageStatus <> {&FUSION_ORDER_STATUS_FINALIZED})) THEN
+        IF Order.StatusCode <> {&ORDER_STATUS_DELIVERED} THEN 
             NEXT.
 
+        FIND FIRST FusionMessage NO-LOCK WHERE 
+                   FusionMessage.OrderId        = Order.OrderId                      AND 
+                   FusionMessage.MessageType    = {&FUSIONMESSAGE_TYPE_CREATE_ORDER} AND 
+                   FusionMessage.MessageStatus  = {&FUSIONMESSAGE_STATUS_HANDLED}    NO-ERROR.
+        IF NOT AVAIL FusionMessage THEN 
+            NEXT.
+                       
         ASSIGN liOrderId = Order.OrderId.
 
         LEAVE.

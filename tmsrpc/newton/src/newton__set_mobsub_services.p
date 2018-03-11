@@ -22,8 +22,7 @@ Syst.Var:gcBrand = "1".
 {Func/barrfunc.i}
 {Mm/fbundle.i}
 {Func/service.i}
-{Func/vasfunc.i}
-{Func/profunc.i}
+{Func/profunc_request.i}
 
 /* Input parameters */
 DEF VAR piMsSeq AS INT NO-UNDO.
@@ -71,28 +70,6 @@ DEF VAR liSVARequest   AS INT NO-UNDO.
 
 DEF BUFFER bReq  FOR MsRequest.
 DEF BUFFER bSubReq FOR MsRequest.
-
-FUNCTION fLocalMemo RETURNS LOGIC
-   (icHostTable AS CHAR,
-    icKey       AS CHAR,
-    iiCustNum   AS INT,
-    icTitle     AS CHAR,
-    icText      AS CHAR):
-
-   CREATE Memo.
-   ASSIGN
-      Memo.Brand     = Syst.Var:gcBrand
-      Memo.CreStamp  = Func.Common:mMakeTS()
-      Memo.MemoSeq   = NEXT-VALUE(MemoSeq)
-      Memo.Custnum   = iiCustNum
-      Memo.HostTable = icHostTable
-      Memo.KeyValue  = icKey
-      Memo.MemoType  = "service"
-      Memo.CreUser   = Syst.Var:katun
-      Memo.MemoTitle = icTitle
-      Memo.Memotext  = icText.
-END FUNCTION.
-
 
 pcReqList = validate_request(param_toplevel_id, "int,string,string,array,[struct]").
 IF pcReqList EQ ? THEN RETURN.
@@ -313,13 +290,15 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
          ELSE IF liValue = 1 THEN lcToStat = "active".
          ELSE IF liValue = 2 THEN lcToStat = "suspended".
  
-         fLocalMemo(INPUT "MobSub",
+         Func.Common:mWriteMemoWithType(INPUT "MobSub",
                     INPUT STRING(MobSub.MsSeq),
                     INPUT MobSub.CustNum,
                     INPUT lcMemoTitle,
                     INPUT lcMemoContent + ". " + UPPER(pcServiceID) +
                           " service status is changed from " + lcFromStat +
-                          " to " + lcToStat).
+                          " to " + lcToStat,
+                    "service",
+                    Syst.Var:katun).
       END. /* IF lcMemoTitle > "" THEN DO: */
       add_boolean(response_toplevel_id, "", TRUE).
       RETURN.
@@ -387,12 +366,14 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
                          SubSer.ServCom + "; " + lcInfo).
 
       IF lcMemoTitle > "" THEN
-         fLocalMemo(INPUT "MobSub",
+         Func.Common:mWriteMemoWithType(INPUT "MobSub",
                     INPUT STRING(MobSub.MsSeq),
                     INPUT MobSub.CustNum,
                     INPUT lcMemoTitle,
                     INPUT lcMemoContent + ". " + UPPER(pcServiceID) +
-                          " service status is changed to active.").
+                          " service status is changed to active.",
+                    "service",
+                    Syst.Var:katun).
 
       add_boolean(response_toplevel_id, "", TRUE).
       RETURN.
