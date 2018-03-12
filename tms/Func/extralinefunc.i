@@ -9,16 +9,28 @@
 /* Returns comma delimited character list of extraline clitypes (tariffs) */ 
 FUNCTION fExtraLineCLITypes RETURNS CHARACTER:
 
-   DEFINE VARIABLE lcReturnValue  AS CHARACTER NO-UNDO.
+   DEF VAR lcReturnValue AS CHAR NO-UNDO.
+   DEF VAR liCount       AS INT  NO-UNDO. 
 
-   FOR EACH  Matrix NO-LOCK WHERE
-             Matrix.Brand  = Syst.Var:gcBrand   AND
-             Matrix.MXKey  = {&EXTRALINEMATRIX},
-       FIRST MXItem NO-LOCK WHERE
-             MXItem.MXSeq   = Matrix.MXSeq AND
-             MXItem.MXName  = "SubsTypeTo":
+   FOR EACH TMSRelation NO-LOCK WHERE 
+            TMSRelation.TableName     EQ {&ELTABLENAME} AND 
+            TMSRelation.KeyType       EQ {&ELKEYTYPE}   BREAK BY TMSRelation.ChildValue: 
+   
+      IF LAST-OF(TMSRelation.ChildValue) THEN DO:
+         
+         liCount = INT(TMSRelation.RelationType) NO-ERROR.
 
-      lcReturnValue = lcReturnValue + "," + MXItem.MXValue.
+         IF liCount EQ 0 THEN NEXT.
+         
+         IF lcReturnValue EQ "" THEN 
+            lcReturnValue = TMSRelation.ChildValue.
+         ELSE    
+            lcReturnValue = lcReturnValue + "," + TMSRelation.ChildValue.
+
+         liCount = 0.
+
+      END.
+
    END.
 
    RETURN LEFT-TRIM(lcReturnValue, ",").

@@ -60,8 +60,9 @@ DEF VAR lcExtraLineAllowed            AS CHAR NO-UNDO.
 DEF VAR llNonProToProMigrationOngoing AS LOGI NO-UNDO.
 DEF VAR llProToNonProMigrationOngoing AS LOGI NO-UNDO.
 DEF VAR lcResult                      AS CHAR NO-UNDO.
-DEFINE VARIABLE lii AS INTEGER NO-UNDO.
-DEFINE VARIABLE lcExtraLineCLITypes AS CHARACTER NO-UNDO.
+DEF VAR lii                           AS INT  NO-UNDO.
+DEF VAR lcExtraLineCLITypes           AS CHAR NO-UNDO.
+DEF VAR liMLMsSeq                     AS INT  NO-UNDO. 
 
 top_array = validate_request(param_toplevel_id, "string,string,string,boolean,int,[string],[string],[boolean]").
 IF top_array EQ ? THEN RETURN.
