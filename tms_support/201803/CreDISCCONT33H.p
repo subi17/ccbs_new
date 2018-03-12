@@ -14,11 +14,11 @@ CREATE DiscountPlan.
    DiscountPlan.Priority       = 1
    DiscountPlan.ProcessStopper = no
    DiscountPlan.DPCurrency     = ""         
-   DiscountPlan.BillCode       = "CONT33DISC"
-   DiscountPlan.ValidFrom      = 03/01/2018
+   DiscountPlan.BillCode       = "DISCCONT33H"
+   DiscountPlan.ValidFrom      = 03/07/2018
    DiscountPlan.ValidTo        = 12/31/2049
    DiscountPlan.DPRuleId       = "DISCCONT33H"
-   DiscountPlan.DPName         = "Additional Line CONT33 50%"
+   DiscountPlan.DPName         = "Convergent - Additional Line CONT33 50%"
    DiscountPlan.DPMemo         = "" 
    DiscountPlan.SubjectType    = "List"
    DiscountPlan.MaxAmount      = 0 
@@ -30,20 +30,20 @@ CREATE DPRate.
 ASSIGN
    DPRate.DPId      = DiscountPlan.DPId 
    DPRate.DiscValue = 50
-   DPRate.ValidFrom = 03/01/2018 
+   DPRate.ValidFrom = 03/07/2018 
    DPRate.ValidTo   = 12/31/2049.
 
 CREATE DPSubject.
 ASSIGN
    DPSubject.DPId       = DiscountPlan.DPId                 
    DPSubject.DPSubject  = "CONT33"                 
-   DPSubject.ValidFrom  = 03/01/2018                  
+   DPSubject.ValidFrom  = 03/07/2018                  
    DPSubject.ValidTo    = 12/31/2049.                   
 
 CREATE DPTarget.
 ASSIGN
    DPTarget.DPId        = DiscountPlan.DPId
-   DPTarget.ValidFrom   = 03/01/2018
+   DPTarget.ValidFrom   = 03/07/2018
    DPTarget.ValidTo     = 12/31/2049
    DPTarget.TargetTable = "BillItem"
    DPTarget.TargetKey   = "CONT33MF"
