@@ -591,7 +591,8 @@ PROCEDURE pUpdateSubscription:
    DEF VAR liNewMSStatus           AS INT  NO-UNDO. 
    DEF VAR ldtCloseDate            AS DATE NO-UNDO.
    DEF VAR liRequest               AS INT  NO-UNDO.
-   DEFINE VARIABLE lcExtraLineDiscount AS CHARACTER NO-UNDO.
+   DEF VAR lcExtraLineDiscount     AS CHAR NO-UNDO.
+   DEF VAR liELCount               AS INT NO-UNDO. 
 
    DEF BUFFER bOwner         FOR MsOwner.
    DEF BUFFER bMobSub        FOR MobSub.
@@ -946,7 +947,7 @@ PROCEDURE pUpdateSubscription:
          NO-ERROR.
 
          IF AVAILABLE lMLMobSub AND
-            fCLITypeAllowedForExtraLine(lMLMobSub.CliType, CLIType.CLIType)
+            fCLITypeAllowedForExtraLine(lMLMobSub.CliType, CLIType.CLIType, OUTPUT liELCount)
          THEN fCreateExtraLineDiscount(MobSub.MsSeq,
                                        MobSub.CLIType + "DISC",
                                        TODAY).
@@ -963,7 +964,7 @@ PROCEDURE pUpdateSubscription:
                      (lMLMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE} OR
                       lMLMobSub.MsStatus     EQ {&MSSTATUS_BARRED}):
 
-               IF NOT fCLITypeAllowedForExtraLine(lMLMobSub.CliType, CLIType.CLIType)
+               IF NOT fCLITypeAllowedForExtraLine(lMLMobSub.CliType, CLIType.CLIType, OUTPUT liELCount)
                THEN LEAVE.
 
                fCreateExtraLineDiscount(MobSub.MsSeq,
@@ -1030,7 +1031,7 @@ PROCEDURE pUpdateSubscription:
                (lMLMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE}  OR
                 lMLMobSub.MsStatus     EQ {&MSSTATUS_BARRED}):
 
-         IF NOT fCLITypeAllowedForExtraLine(lMLMobSub.CliType, CLIType.CliType)
+         IF NOT fCLITypeAllowedForExtraLine(lMLMobSub.CliType, CLIType.CliType, liELCount)
          THEN NEXT.
 
          fCreateExtraLineDiscount(MobSub.MsSeq,
@@ -1485,8 +1486,7 @@ PROCEDURE pFinalize:
             IF fCLITypeIsMainLine(Order.CLIType) AND
                Order.MultiSimId NE 0 AND
                Order.MultiSimType EQ {&MULTISIMTYPE_PRIMARY}
-            THEN fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
-                                          Order.OrderId,    /* Main line Order Id  */
+            THEN fActionOnExtraLineOrders(Order.OrderId,    /* Main line Order Id  */
                                           "RELEASE").       /* Action              */
 
             fSetOrderStatus(Order.OrderId,"6").  
