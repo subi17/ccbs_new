@@ -2,12 +2,29 @@
  * Get Discount Plan.
  *
  * @input  ids;array of string;mandatory;discount plan rule ids
- * @output billitem;array of struct;discount plan information
-
+ * @output discountplan;array of struct;discount plan information
+ * @discountplan  plan_id;int;dpid of discountplan
+                  id;string;dpruleid and brand pipe separated
+                  brand;string;Brand
+                  name;string;DPName
+                  unit;string;DPUnit
+                  valid_periods;int;Valid periods
+                  cc_display;int;CC display
+                  valid_from;date;Valid from date
+                  valid_to;date;Valid to date
+                  amount;double;Amount
+                  priority;int;priority
+                  category;string;DPCategory
+                  commercial_names;array of struct;commercial name information
+   @commercial_names  language;string;ISO 639-1 code for the language
+                      name;string;commerical name
  */
 
 {newton/src/header_get.i}
 {Func/multitenantfunc.i}
+
+DEFINE VARIABLE lcCommercialNamesArray AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcCommercialNameStruct AS CHARACTER NO-UNDO.
 
 DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
    
@@ -53,6 +70,27 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       add_double(lcResultStruct,"amount",0.0).
 
    add_int(lcResultStruct,"priority",DiscountPlan.Priority).
+   add_string(lcResultStruct,"category",DiscountPlan.DPCategory).
 
+   IF CAN-FIND(FIRST RepText NO-LOCK WHERE
+                  RepText.Brand     = Syst.Var:gcBrand        AND
+                  RepText.LinkCode  = DiscountPlan.DPRuleId   AND
+                  RepText.TextType  = {&REPTEXT_DISCOUNTPLAN} AND
+                  RepText.ToDate   >= TODAY                   AND
+                  RepText.FromDate <= TODAY)
+   THEN DO:
+      lcCommercialNamesArray = add_array(lcResultStruct, "commercial_names").
+      FOR EACH RepText NO-LOCK WHERE
+            RepText.Brand     = Syst.Var:gcBrand        AND
+            RepText.LinkCode  = DiscountPlan.DPRuleId   AND
+            RepText.TextType  = {&REPTEXT_DISCOUNTPLAN} AND
+            RepText.ToDate   >= TODAY                   AND
+            RepText.FromDate <= TODAY,
+          Language NO-LOCK WHERE Language.Language = RepText.Language:
+         lcCommercialNameStruct = add_struct(lcCommercialNamesArray, "").
+         add_string(lcCommercialNameStruct, "language", Language.LanguageCode).
+         add_string(lcCommercialNameStruct, "name", RepText.RepText).
+      END.
+   END.
 END.
 
