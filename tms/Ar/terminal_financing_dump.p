@@ -401,10 +401,10 @@ PROCEDURE pWriteDump:
                 WHEN "#RUNDATE"    THEN lcValue =  STRING(TODAY,"99-99-9999").
                 WHEN "#PAYTERMQTY" THEN lcValue =  STRING(liPayterm).
                 WHEN "#Q25QTY"     THEN lcValue =  STRING(liQ25).
-                WHEN "#TOTALAMT"   THEN lcValue =  STRING(ldeTotal,">>>,>>>,>>>,>>9.99").
-                WHEN "#PAYTERMAMT" THEN lcValue =  STRING(ldePayterms,">>>,>>>,>>>,>>9.99").
-                WHEN "#Q25AMT"     THEN lcValue =  STRING(ldeQ25,">>>,>>>,>>>,>>9.99").
-                WHEN "#Q25EXTNAMT" THEN lcValue =  STRING(ldeExtensions,">>>,>>>,>>>,>>9.99").
+                WHEN "#TOTALAMT"   THEN lcValue =  STRING(ldeTotal,"9.99").
+                WHEN "#PAYTERMAMT" THEN lcValue =  STRING(ldePayterms,"9.99").
+                WHEN "#Q25AMT"     THEN lcValue =  STRING(ldeQ25,"9.99").
+                WHEN "#Q25EXTNAMT" THEN lcValue =  STRING(ldeExtensions,"9.99").
                 OTHERWISE lcValue = "".
             END CASE.
         END.
