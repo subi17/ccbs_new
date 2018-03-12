@@ -332,7 +332,8 @@ DEF VAR pcOfferId  AS CHAR NO-UNDO.
 DEF VAR pdePriceSelTime AS DEC NO-UNDO.
 DEF VAR liTermOfferItemID AS INTEGER NO-UNDO.
 DEF VAR piMultiSimID AS INT NO-UNDO. 
-DEF VAR piMultiSimType AS INT NO-UNDO. 
+DEF VAR piMultiSimType AS INT NO-UNDO.
+DEF VAR liMLMsSeq      AS INT NO-UNDO. 
 DEF VAR plExcTermPenalty AS LOG NO-UNDO.
 DEF VAR plExtendTermContract AS LOG NO-UNDO.
 DEF VAR pcMandateId AS CHAR NO-UNDO. 
@@ -1995,10 +1996,10 @@ END.
    updating multisimid & multisimidtype for hard association */
 IF fCLITypeIsExtraLine(pcSubType) THEN DO:
 
-   piMultiSimID = fCheckExistingMainLineAvailForExtraLine(pcSubType, lcIdtype, lcId). /* MainLine SubId */
+   piMultiSimID = fCheckExistingMainLineAvailForExtraLine(pcSubType, lcIdtype, lcId, OUTPUT liMLMsSeq). /* MainLine SubId */
 
    IF piMultiSimID EQ 0 THEN 
-      piMultiSimID = fCheckOngoingConvergentAvailForExtraLine(pcSubType, lcIdtype, lcId). /* Ongoing order id */
+      piMultiSimID = fCheckOngoingMainLineAvailForExtraLine(pcSubType, lcIdtype, lcId). /* Ongoing order id */
 
    piMultiSimType = {&MULTISIMTYPE_EXTRALINE}.
 
@@ -2084,10 +2085,6 @@ IF fCLITypeIsExtraLine(pcSubType) THEN
                        ExtraLineDiscountPlan.DPRuleId,
                        "").
 
-<<<<<<< HEAD
-IF pcMemo NE "" THEN 
-   fCreateMemo("Info", pcMemo, pcSalesMan).
-=======
 /* YBP-548 */
 IF pcMemo NE ""
 THEN Func.Common:mWriteMemoWithType("Order",
@@ -2097,7 +2094,6 @@ THEN Func.Common:mWriteMemoWithType("Order",
                                     pcMemo,
                                     "",
                                     pcSalesMan).
->>>>>>> origin/master
 
 /* YBP-549 */
 IF plCheck

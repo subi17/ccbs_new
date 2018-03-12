@@ -4,6 +4,7 @@
 &GLOBAL-DEFINE EXTRALINEFUNC_I YES
 
 {Syst/tmsconst.i}
+{Mc/dpmember.i}
 
 /* Returns comma delimited character list of extraline clitypes (tariffs) */ 
 FUNCTION fExtraLineCLITypes RETURNS CHARACTER:
@@ -393,6 +394,163 @@ FUNCTION fCheckExtraLineMatrixSubscription RETURNS LOG
 
    RETURN FALSE.
 
+END FUNCTION.
+
+FUNCTION fCheckFixedLineInstalledForMainLine RETURNS LOGICAL
+   (INPUT liMainLineOrderId  AS INT):
+
+   DEFINE BUFFER Order FOR Order. 
+
+   FIND FIRST Order NO-LOCK WHERE
+              Order.Brand        EQ Syst.Var:gcBrand         AND
+              Order.OrderId      EQ liMainLineOrderId        AND
+       LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) EQ 0 AND
+              Order.OrderType    NE {&ORDER_TYPE_RENEWAL}    NO-ERROR.
+
+   IF AVAIL Order THEN DO: 
+     
+      /* If Fixed line is installed for Main line Convergent Order 
+         THEN dont move extra line order to 76 */
+      FIND FIRST OrderFusion NO-LOCK WHERE
+                 OrderFusion.Brand        = Syst.Var:gcBrand                 AND
+                 OrderFusion.OrderID      = Order.OrderID                    AND 
+                 OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_FINALIZED} NO-ERROR.
+                 
+      IF AVAIL OrderFusion THEN 
+         RETURN TRUE.
+
+   END.   
+
+   RETURN FALSE.
+
+END FUNCTION.
+
+FUNCTION fCheckAndAssignOrphanExtraline RETURNS LOGICAL 
+   (INPUT iiMLMsSeq   AS INT,
+    INPUT iiMLCustNum AS INT,
+    INPUT icMLCLIType AS CHAR):
+
+   DEFINE BUFFER bELMobSub FOR MobSub.
+
+   DEF VAR liELCount AS INT NO-UNDO. 
+   DEF VAR liCount   AS INT NO-UNDO. 
+
+   FOR EACH MobSub NO-LOCK USE-INDEX CustNum WHERE
+            MobSub.Brand    EQ Syst.Var:gcBrand      AND
+            MobSub.CustNum  EQ Customer.CustNum      AND
+            MobSub.PayType  EQ FALSE                 AND
+           (MobSub.MsStatus EQ {&MSSTATUS_ACTIVE} OR
+            MobSub.MsStatus EQ {&MSSTATUS_BARRED})   BY MobSub.ActivationTS: 
+
+      IF NOT CAN-FIND(FIRST CLIType NO-LOCK WHERE 
+                            CLIType.Brand    EQ Syst.Var:gcBrand AND 
+                            CLIType.CLIType  EQ MobSub.CLIType   AND 
+                            CLIType.LineType EQ {&CLITYPE_LINETYPE_EXTRA}) THEN 
+         NEXT.                      
+
+      IF MobSub.MultiSimId   NE 0 AND 
+         MobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} THEN NEXT.
+
+      IF NOT fCLITypeAllowedForExtraLine(icMLCLIType, MobSub.CLIType, 
+                                         OUTPUT liELCount) THEN
+         NEXT.
+
+      FOR EACH bELMobSub NO-LOCK WHERE 
+               bELMobSub.Brand        EQ Syst.Var:gcBrand AND 
+               bELMobSub.CustNum      EQ MobSub.CustNum   AND 
+               bELMobSub.PayType      EQ FALSE            AND 
+               bELMobSub.MultiSimId   EQ iiMLMsSeq        AND 
+               bELMobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}:  
+         liCount = liCount + 1.   
+      END.
+       
+      IF liCount EQ 0 THEN DO:
+         IF NOT fCheckForMandatoryExtraLine(iiMLMsSeq,
+                                            MobSub.CustNum,
+                                            icMLCLIType,
+                                            MobSub.CLIType,
+                                            TRUE) THEN 
+            NEXT.  
+       END.      
+       
+       IF liCount < liELCount THEN DO:
+          
+          ASSIGN MobSub.MultiSimId   = iiMLMsSeq
+                 MobSub.MultiSimType = {&MULTISIMTYPE_EXTRALINE}.
+
+          fCreateExtraLineDiscount(MobSub.MsSeq,
+                                   MobSub.CLIType + "DISC",
+                                   TODAY).  
+          
+          liCount = liCount + 1.
+
+          IF liCount = liELCount THEN 
+             LEAVE.
+       
+       END.
+
+   END.
+
+   RETURN TRUE.
+
+END FUNCTION.
+
+FUNCTION fGetOldestCLITypeOfMobSub RETURNS CHAR
+   (iiCustNum AS INT):
+
+DEF VAR lcOldestCLIType  AS CHAR   NO-UNDO.
+
+   FOR EACH MobSub NO-LOCK WHERE MobSub.Brand = Syst.Var:gcBrand AND
+                                 MobSub.CustNum = iiCustNum 
+                                 BY CreationDate:
+      IF fCLITypeIsMainLine(MobSub.CLIType) THEN DO:
+         lcOldestCLIType = MobSub.CLIType.
+         LEAVE.
+      END.
+   END.
+
+   RETURN lcOldestCLIType.
+
+END FUNCTION.
+
+FUNCTION fGetOldestCLITypeOfOrder RETURNS CHAR
+   (iiCustNum AS INT):
+
+DEF VAR lcOldestCLIType  AS CHAR  NO-UNDO.
+
+   FOR EACH Order NO-LOCK WHERE Order.Brand = Syst.Var:gcBrand AND
+                      Order.CustNum = iiCustNum AND
+                      LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0
+                      BY CrStamp:                      
+      IF fCLITypeIsMainLine(Order.CLIType) THEN DO:
+         lcOldestCLIType = Order.CLIType.
+         LEAVE.            
+      END.
+   END.
+
+   RETURN lcOldestCLIType.
+   
+END FUNCTION.
+
+FUNCTION fGetPayType RETURNS CHAR
+   (iiCustNum AS INT):
+
+DEF VAR lcPayType        AS CHAR NO-UNDO.
+DEF VAR lcCLIType        AS CHAR NO-UNDO.
+
+   /* YOT-5618 Handle correctly Way of payment for 66 and 67 */
+   lcCLIType = fGetOldestCLITypeOfMobSub(iiCustNum).
+   IF lcCLIType EQ "" THEN
+      lcCLIType = fGetOldestCLITypeOfOrder(iiCustNum).
+
+   IF INDEX(lcCLIType,"DSL") > 0 THEN
+      lcPayType = "66".
+   ELSE IF INDEX(lcCLIType,"TFH") > 0 THEN
+      lcPayType = "67".
+   ELSE lcPayType = "68".
+    
+   RETURN lcPayType.    
+      
 END FUNCTION.
 
 &ENDIF

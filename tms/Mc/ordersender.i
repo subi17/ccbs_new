@@ -228,8 +228,7 @@
                   DO:
                      
                      /* Check Mainline Convergent fixedline is installed OR it is still ongoing */
-                     IF NOT fCheckFixedLineInstalledForMainLine(Order.MultiSimId,   /* Mainline Order Id  */
-                                                                Order.OrderId) THEN /* Extraline Order Id */
+                     IF NOT fCheckFixedLineInstalledForMainLine(Order.MultiSimId) THEN   /* Mainline Order Id */
                      DO:
                         IF llDoEvent THEN DO:
                            lh76Order = BUFFER Order:HANDLE.

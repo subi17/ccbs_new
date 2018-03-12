@@ -81,7 +81,9 @@ DEF VAR ldeActivationTS AS DEC  NO-UNDO.
 DEF VAR ldaActDate AS DATE NO-UNDO. 
 DEF VAR lcMobileNumber AS CHAR NO-UNDO. 
 DEF VAR llgExtraLine   AS LOG  NO-UNDO INITIAL NO. 
-DEF VAR liOngoingOrderId        AS INT  NO-UNDO.
+DEF VAR liOngoingOrderId    AS INT NO-UNDO.
+DEF VAR liExistingOrderId   AS INT NO-UNDO. 
+DEF VAR liMLMsSeq           AS INT NO-UNDO. 
 
 DEF BUFFER bInvCust        FOR Customer.
 DEF BUFFER bRefCust        FOR Customer.
@@ -439,53 +441,69 @@ IF NOT AVAIL mobsub THEN DO:
       following fields has to be updated */
    IF Order.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} THEN DO:
       FIND FIRST lbMLOrder NO-LOCK WHERE 
-                 lbMLOrder.Brand      = Syst.Var:gcBrand AND 
-                 lbMLOrder.OrderId    = Order.MultiSimID NO-ERROR. /* Mainline Orderid */
+                 lbMLOrder.Brand      EQ Syst.Var:gcBrand AND 
+                 lbMLOrder.OrderId    EQ Order.MultiSimID AND 
+          LOOKUP(lbMLOrder.StatusCode,{&ORDER_CLOSE_STATUSES}) = 0 NO-ERROR. /* Mainline Orderid */
 
       IF AVAIL lbMLOrder THEN 
          FIND FIRST lbMLMobSub EXCLUSIVE-LOCK WHERE 
-                    lbMLMobSub.MsSeq = lbMLOrder.MsSeq NO-ERROR.
+                    lbMLMobSub.MsSeq EQ lbMLOrder.MsSeq NO-ERROR.
 
       IF AVAIL lbMLMobSub THEN 
-         ASSIGN MobSub.MultiSimID       = lbMLMobSub.MsSeq         /* Mainline Subid  */
-                MobSub.MultiSimType     = Order.MultiSimType       /* Extraline = 3   */
-                lbMLMobSub.MultiSimID   = MobSub.MsSeq             /* Extraline Subid */
-                lbMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY}  /* Primary = 1     */
-                llgExtraLine            = YES.
+         ASSIGN MobSub.MultiSimID   = lbMLMobSub.MsSeq         /* Mainline Subid  */
+                MobSub.MultiSimType = Order.MultiSimType       /* Extraline = 3   */
+                llgExtraLine        = YES.
       ELSE DO:
-         liOngoingOrderId = fCheckOngoingConvergentAvailForExtraLine(Order.CLIType,
-                                                       Customer.CustIdType,
-                                                       Customer.OrgId).
-         IF liOngoingOrderId > 0
-         THEN DO:
-            FIND FIRST lbOngOrder NO-LOCK WHERE
-                       lbOngOrder.Brand   = Syst.Var:gcBrand AND
-                       lbOngOrder.OrderId = liOngoingOrderId NO-ERROR.
-            IF AVAILABLE lbOngOrder THEN
-               ASSIGN MobSub.MultiSimID   = lbOngOrder.MsSeq
-                      MobSub.MultiSimType = Order.MultiSimType
-                      llgExtraLine        = YES.
-         END.
+         
+         liExistingOrderId = fCheckExistingMainLineAvailForExtraLine(Order.CLIType,
+                                                                     Customer.CustIdType,
+                                                                     Customer.OrgId,
+                                                                     OUTPUT liMLMsSeq).
+         IF liExistingOrderId > 0 THEN 
+            FIND FIRST lbMLMobSub EXCLUSIVE-LOCK WHERE
+                       lbMLMobSub.MsSeq EQ liMLMsSeq NO-ERROR.
+
+         IF AVAIL lbMLMobSub THEN 
+            ASSIGN MobSub.MultiSimID   = lbMLMobSub.MsSeq         /* Mainline Subid  */
+                   MobSub.MultiSimType = Order.MultiSimType       /* Extraline = 3   */
+                   llgExtraLine        = YES.
          ELSE DO:
-            ASSIGN MobSub.MultiSimID       = 0
-                   MobSub.MultiSimType     = 0
-                   llgExtraLine            = YES.
-            
-            FIND FIRST lbELOrderAction EXCLUSIVE-LOCK WHERE
-                       lbELOrderAction.Brand    = Syst.Var:gcBrand        AND
-                       lbELOrderAction.OrderID  = Order.OrderID           AND
-                       lbELOrderAction.ItemType = "ExtraLineDiscount"     AND
-                       lbELOrderAction.ItemKey  = Order.CLIType + "DISC"  NO-ERROR.
-   
-            IF AVAILABLE lbELOrderAction THEN DO:
-               DELETE lbELOrderAction.
-               Func.Common:mWriteMemo("Order",
-                                       STRING(Order.OrderID),
-                                       0,
-                                       "EXTRA LINE DISCOUNT REMOVED",
-                                       "Removed ExtraLineDiscount Item from OrderAction").
+
+            liOngoingOrderId = fCheckOngoingMainLineAvailForExtraLine(Order.CLIType,
+                                                                      Customer.CustIdType,
+                                                                      Customer.OrgId).
+            IF liOngoingOrderId > 0 THEN 
+            DO:
+               FIND FIRST lbOngOrder NO-LOCK WHERE
+                          lbOngOrder.Brand   EQ Syst.Var:gcBrand AND
+                          lbOngOrder.OrderId EQ liOngoingOrderId NO-ERROR.
+               IF AVAILABLE lbOngOrder THEN
+                  ASSIGN MobSub.MultiSimID   = lbOngOrder.MsSeq
+                         MobSub.MultiSimType = Order.MultiSimType
+                         llgExtraLine        = YES.
+            END.
+            ELSE DO:
+               ASSIGN MobSub.MultiSimID       = 0
+                      MobSub.MultiSimType     = 0
+                      llgExtraLine            = YES.
+               
+               FIND FIRST lbELOrderAction EXCLUSIVE-LOCK WHERE
+                          lbELOrderAction.Brand    EQ Syst.Var:gcBrand       AND
+                          lbELOrderAction.OrderID  EQ Order.OrderID          AND
+                          lbELOrderAction.ItemType EQ "ExtraLineDiscount"    AND
+                          lbELOrderAction.ItemKey  EQ Order.CLIType + "DISC" NO-ERROR.
+      
+               IF AVAILABLE lbELOrderAction THEN DO:
+                  DELETE lbELOrderAction.
+                  Func.Common:mWriteMemo("Order",
+                                          STRING(Order.OrderID),
+                                          0,
+                                          "EXTRA LINE DISCOUNT REMOVED",
+                                          "Removed ExtraLineDiscount Item from OrderAction").
+               END.
             END.
          END.
+
       END.
    END.
  
@@ -734,7 +752,7 @@ END.
 
 /* If pending additional line orders are available then release them */  
 FIND FIRST OrderCustomer NO-LOCK WHERE
-           OrderCustomer.Brand   = Syst.Var:gcBrand                            AND
+           OrderCustomer.Brand   = Syst.Var:gcBrand                   AND
            OrderCustomer.OrderId = Order.OrderId                      AND
            OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
 
@@ -754,10 +772,9 @@ IF AVAIL OrderCustomer THEN DO:
 
       /* Check for orphan extraline for customer, if available 
          then assign to the mainline */ 
-      /* fCheckAndAssignOrphanExtraline(Order.OrderId,
-                                     MobSub.MsSeq,   
+      fCheckAndAssignOrphanExtraline(MobSub.MsSeq,   
                                      MobSub.CustNum,
-                                     MobSub.CLIType). */
+                                     MobSub.CLIType). 
                                
    END.                            
 

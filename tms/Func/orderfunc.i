@@ -21,6 +21,7 @@
 {Func/msreqfunc.i}
 {Func/msisdn.i}
 {Func/create_eventlog.i}
+{Func/extralinefunc.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
