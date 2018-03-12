@@ -173,14 +173,20 @@ FUNCTION fSubSerValidateNW RETURNS INT
 
     /* 3 */
     /* Check ongoing service requests */
-    IF CAN-FIND(FIRST MsRequest WHERE
-                      MsRequest.MsSeq      = iiMsSeq AND
-                      MsRequest.ReqType    = 1       AND
-                      MsRequest.ReqCParam1 = SubSer.ServCom AND
-                      LOOKUP(STRING(MsRequest.ReqStat),{&REQ_INACTIVE_STATUSES}) = 0) THEN DO:
-       ocError = "There is an active change request for service." + CHR(10) +
-                 "Change is not allowed before request is handled.".
-       RETURN 3.
+    IF AVAIL SubSer THEN DO:
+       IF CAN-FIND(FIRST MsRequest WHERE
+                         MsRequest.MsSeq      = iiMsSeq AND
+                         MsRequest.ReqType    = {&REQTYPE_SERVICE_CHANGE} AND
+                         MsRequest.ReqCParam1 = SubSer.ServCom AND
+                         LOOKUP(STRING(MsRequest.ReqStat),{&REQ_INACTIVE_STATUSES}) = 0) THEN DO:
+          ocError = "There is an active change request for service." + CHR(10) +
+                    "Change is not allowed before request is handled.".
+          RETURN 3.
+       END.
+    END.
+    ELSE DO:
+       ocError = "Service not found.".
+       RETURN 4.
     END.
 
     RETURN 0. /* ok */

@@ -25,6 +25,7 @@ FOR EACH CLIType WHERE
    FOR EACH CTServPac WHERE 
             CTServPac.Brand   = Syst.Var:gcBrand         AND 
             CTServPac.CLIType = CLIType.CLIType NO-LOCK:
+
       CREATE bCTServPac.
       BUFFER-COPY CTServPac EXCEPT CTServPac.CLIType 
                                    CTServPac.FromDate
@@ -59,7 +60,7 @@ FOR EACH CLIType WHERE
          FIND ServCom WHERE
               ServCom.Brand   = Syst.Var:gcBrand AND
               ServCom.ServCom = CTServEl.ServCom NO-LOCK NO-ERROR.
-            
+
          IF AVAILABLE ServCom AND ServCom.ServAttr = TRUE THEN    
             FOR EACH CTServAttr WHERE 
                      CTServAttr.CTServEl = CTServEl.CTServEl NO-LOCK:
