@@ -1,0 +1,95 @@
+ADD TABLE "Address"
+  MULTITENANT yes
+  AREA "Sta_Data_32"
+  LABEL "Address"
+  DESCRIPTION "Address"
+  DUMP-NAME "address1"
+  TABLE-TRIGGER "REPLICATION-DELETE" OVERRIDE PROCEDURE "triggers/rd-address.p" CRC "?" 
+  TABLE-TRIGGER "REPLICATION-WRITE" OVERRIDE PROCEDURE "triggers/rw-address.p" CRC "?" 
+
+ADD FIELD "AddressID" OF "Address" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "AddressID"
+  COLUMN-LABEL "AddressID"
+  HELP "Internal TMS ID"
+  ORDER 10
+  MANDATORY
+
+ADD FIELD "HostTable" OF "Address" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "HostTable"
+  COLUMN-LABEL "HostTable"
+  HELP "Host table name"
+  ORDER 20  
+  
+ADD FIELD "KeyValue" OF "Address" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "KeyValue"
+  COLUMN-LABEL "KeyValue"
+  HELP "Host table key"
+  ORDER 30    
+ 
+ADD FIELD "AddressType" OF "Address" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "AddressType"
+  COLUMN-LABEL "AddressType"
+  HELP "Address type"
+  ORDER 40
+
+ADD FIELD "ZipCode" OF "Address" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "ZipCode"
+  COLUMN-LABEL "ZipCode"
+  HELP "Postal code"
+  ORDER 60
+
+ADD FIELD "Region" OF "Address" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "Region"
+  COLUMN-LABEL "Region"  
+  HELP "Region"
+  ORDER 70
+  
+ADD FIELD "Country" OF "Address" AS character 
+  FORMAT "x(3)"
+  INITIAL ""
+  LABEL "Country"
+  COLUMN-LABEL "Country"
+  HELP "Country (according to ISO Standard)"
+  ORDER 80
+
+ADD FIELD "StreetCode" OF "Address" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "StreetCode"
+  COLUMN-LABEL "StreetCode"
+  HELP "Address validation street code (CodC)"
+  ORDER 90
+
+ADD FIELD "CityCode" OF "Address" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "CityCode"
+  COLUMN-LABEL "CityCode"
+  HELP "Address validation city code (CodP)"
+  ORDER 100
+
+ADD FIELD "TownCode" OF "Address" AS character 
+  FORMAT "x(8)"
+  INITIAL ""
+  LABEL "TownCode"
+  COLUMN-LABEL "TownCode"
+  HELP "Address validation town code (CodM)"
+  ORDER 110
+
+ADD INDEX "AddressID" ON "Address" 
+  AREA "Sta_Index_1"
+  UNIQUE
+  PRIMARY
+  INDEX-FIELD "AddressID" ASCENDING
