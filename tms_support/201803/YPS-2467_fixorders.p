@@ -17,7 +17,7 @@ DEF VAR llUpdatedCancel AS LOGICAL NO-UNDO.
 
 DEF BUFFER bFusionMessage FOR FusionMessage. 
 
-INPUT FROM VALUE("/tmp/YPS-2467.txt").
+INPUT FROM VALUE("/tmp/YPS-2467_1.txt").
 OUTPUT TO VALUE("/tmp/YPS-2467.log").
 
 REPEAT:
@@ -27,8 +27,10 @@ REPEAT:
    FIND FIRST Order WHERE
               Order.Brand = "1" AND
               Order.OrderId = INTEGER(lcLine) NO-LOCK NO-ERROR.
-   IF NOT AVAILABLE order THEN
-     NEXT.     
+   IF NOT AVAILABLE order THEN DO:
+     PUT UNFORMATTED "Order not found" SKIP.   
+     NEXT. 
+   END.    
    FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE
             FusionMessage.orderid = order.orderid USE-INDEX OrderId BY updateTS DESC:
               
@@ -120,6 +122,9 @@ REPEAT:
                          OrderFusion.routerStat "|"
                          SKIP.             
  
+      END.
+      ELSE DO:
+         PUT UNFORMATTED "Not incorrect format|" FusionMessage.AdditionalInfo SKIP.
       END. 
    END.
 END. 
