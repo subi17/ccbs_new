@@ -54,6 +54,19 @@ REPEAT:
          IF NOT AVAILABLE OrderFusion THEN 
             NEXT.
 
+         /* Writing a log with original values */  
+         PUT UNFORMATTED "BEFORE|"
+                         FusionMessage.FixedStatus
+                         FusionMessage.MessageSeq "|" 
+                         FusionMessage.OrderId "|" 
+                         FusionMessage.AdditionalInfo "|" 
+                         OrderFusion.AppointmentDate "|"
+                         OrderFusion.CancellationReason "|"
+                         OrderFusion.portStat "|"
+                         OrderFusion.portDate "|"
+                         OrderFusion.routerStat "|"
+                         SKIP.
+
          ASSIGN 
             lcCita      = ""
             lcCanDS     = ""
@@ -71,19 +84,7 @@ REPEAT:
             lcFieldValue = REPLACE(lcFieldValue, "~}", "").
             lcFieldValue = REPLACE(lcFieldValue, '"', "").
             IF lcFieldValue = "" THEN 
-              NEXT.                    
-              
-            /* Writing a log with original values */  
-            PUT UNFORMATTED "BEFORE|"
-                            FusionMessage.MessageSeq "|" 
-                            FusionMessage.OrderId "|" 
-                            FusionMessage.AdditionalInfo "|" 
-                            OrderFusion.AppointmentDate "|"
-                            OrderFusion.CancellationReason "|"
-                            OrderFusion.portStat "|"
-                            OrderFusion.portDate "|"
-                            OrderFusion.routerStat "|"
-                            SKIP.  
+              NEXT.                                    
                              
             CASE lcFieldName:
                WHEN "cita" THEN
@@ -108,6 +109,7 @@ REPEAT:
 
          /* Writing a log with original values */  
          PUT UNFORMATTED "AFTER|"
+                         FusionMessage.FixedStatus "|"
                          FusionMessage.MessageSeq "|" 
                          FusionMessage.OrderId "|" 
                          FusionMessage.AdditionalInfo "|" 
