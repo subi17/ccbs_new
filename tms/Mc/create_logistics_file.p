@@ -1703,15 +1703,30 @@ FOR EACH OrderGroup NO-LOCK WHERE
              ENTRY(1,bufOrderGroup.Info,CHR(255)) EQ {&DESPACHAR_TRUE_VALUE}) THEN NEXT. 
 
    FIND FIRST Order NO-LOCK WHERE 
-              Order.Brand     EQ Syst.Var:gcBrand   AND 
-              Order.OrderId   EQ OrderGroup.OrderId AND 
-              Order.Logistics EQ ""                 NO-ERROR.
+              Order.Brand     EQ Syst.Var:gcBrand            AND 
+              Order.OrderId   EQ OrderGroup.OrderId          AND 
+              Order.Logistics EQ ""                          AND 
+       LOOKUP(Order.StatusCode,{&ORDER_CLOSE_STATUSES}) EQ 0 NO-ERROR.
 
    IF AVAIL Order THEN DO: 
       
       IF Order.OrderType EQ {&ORDER_TYPE_MNP} AND
         NOT (Order.MNPStatus EQ 6 OR
              Order.MNPStatus EQ 7)            THEN NEXT.
+
+      /* For convergent + terminal order, LO info should not be sent
+         if fixed line is not yet installed */
+      IF fIsConvergenceTariff(Order.CLIType)         AND
+         fIsTerminalOrder(Order.OrderId,
+                          OUTPUT lcTerminalBillCode) THEN DO:
+
+         IF NOT CAN-FIND(FIRST OrderFusion NO-LOCK WHERE
+                               OrderFusion.Brand        EQ Syst.Var:gcBrand AND
+                               OrderFusion.OrderId      EQ Order.OrderId    AND
+                               OrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED}) THEN
+            NEXT.
+
+      END.
 
       IF fDelivSIM(Order.OrderId,
                    TRUE,
