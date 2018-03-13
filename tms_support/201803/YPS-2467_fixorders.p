@@ -96,7 +96,7 @@ REPEAT:
                WHEN "portStat" THEN 
                  ASSIGN OrderFusion.portStat = lcFieldValue WHEN OrderFusion.portStat = "".
                WHEN "portDate" THEN 
-                 ASSIGN OrderFusion.portDate = lcFieldValue OrderFusion.portDate = "".
+                 ASSIGN OrderFusion.portDate = lcFieldValue WHEN OrderFusion.portDate = "".
                WHEN "routerStat" THEN
                   ASSIGN OrderFusion.routerStat = lcFieldValue WHEN OrderFusion.routerStat = "".       
             END.
