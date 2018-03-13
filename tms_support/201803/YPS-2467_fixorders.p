@@ -17,8 +17,8 @@ DEF VAR llUpdatedCancel AS LOGICAL NO-UNDO.
 
 DEF BUFFER bFusionMessage FOR FusionMessage. 
 
-INPUT FROM VALUE("/tmp/YPS-2467_1.txt").
-OUTPUT TO VALUE("/tmp/YPS-2467.log").
+INPUT FROM VALUE("/tmp/YPS-2467_4.txt").
+OUTPUT TO VALUE("/tmp/YPS-2467_4.log").
 
 REPEAT:
    IMPORT UNFORMATTED lcLine.
@@ -28,7 +28,7 @@ REPEAT:
               Order.Brand = "1" AND
               Order.OrderId = INTEGER(lcLine) NO-LOCK NO-ERROR.
    IF NOT AVAILABLE order THEN DO:
-     PUT UNFORMATTED "Order not found" SKIP.   
+     PUT UNFORMATTED INTEGER(lcLine) "|Order not found" SKIP.   
      NEXT. 
    END.    
    FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE
@@ -57,10 +57,10 @@ REPEAT:
             NEXT.
 
          /* Writing a log with original values */  
-         PUT UNFORMATTED "BEFORE|"
-                         FusionMessage.FixedStatus
+         PUT UNFORMATTED "BEFORE|"                        
                          FusionMessage.MessageSeq "|" 
-                         FusionMessage.OrderId "|" 
+                         FusionMessage.OrderId "|"
+                         FusionMessage.FixedStatus "|" 
                          FusionMessage.AdditionalInfo "|" 
                          OrderFusion.AppointmentDate "|"
                          OrderFusion.CancellationReason "|"
@@ -111,9 +111,9 @@ REPEAT:
 
          /* Writing a log with original values */  
          PUT UNFORMATTED "AFTER|"
-                         FusionMessage.FixedStatus "|"
                          FusionMessage.MessageSeq "|" 
-                         FusionMessage.OrderId "|" 
+                         FusionMessage.OrderId "|"
+                         FusionMessage.FixedStatus "|"
                          FusionMessage.AdditionalInfo "|" 
                          OrderFusion.AppointmentDate "|"
                          OrderFusion.CancellationReason "|"
@@ -124,7 +124,8 @@ REPEAT:
  
       END.
       ELSE DO:
-         PUT UNFORMATTED "Not incorrect format|" FusionMessage.AdditionalInfo SKIP.
+         PUT UNFORMATTED FusionMessage.MessageSeq "|" 
+                         FusionMessage.OrderId "|" "Not incorrect format|" FusionMessage.AdditionalInfo SKIP.
       END. 
    END.
 END. 
