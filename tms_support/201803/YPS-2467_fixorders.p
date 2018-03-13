@@ -74,7 +74,8 @@ REPEAT:
               NEXT.                    
               
             /* Writing a log with original values */  
-            PUT UNFORMATTED FusionMessage.MessageSeq "|" 
+            PUT UNFORMATTED "BEFORE|"
+                            FusionMessage.MessageSeq "|" 
                             FusionMessage.OrderId "|" 
                             FusionMessage.AdditionalInfo "|" 
                             OrderFusion.AppointmentDate "|"
@@ -102,6 +103,20 @@ REPEAT:
             ASSIGN FusionMessage.AdditionalInfo = OrderFusion.AppointmentDate WHEN OrderFusion.AppointmentDate <> "".
          IF LOOKUP(FusionMessage.FixedStatus,"CANCELADA,CANCELACION EN PROCESO") <> 0 THEN
             ASSIGN FusionMessage.AdditionalInfo = OrderFusion.CancellationReason WHEN OrderFusion.CancellationReason <> "".
+         IF FusionMessage.AdditionalInfo BEGINS "~{" THEN 
+            ASSIGN FusionMessage.AdditionalInfo = "".   
+
+         /* Writing a log with original values */  
+         PUT UNFORMATTED "AFTER|"
+                         FusionMessage.MessageSeq "|" 
+                         FusionMessage.OrderId "|" 
+                         FusionMessage.AdditionalInfo "|" 
+                         OrderFusion.AppointmentDate "|"
+                         OrderFusion.CancellationReason "|"
+                         OrderFusion.portStat "|"
+                         OrderFusion.portDate "|"
+                         OrderFusion.routerStat "|"
+                         SKIP.             
  
       END. 
    END.
