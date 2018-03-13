@@ -426,7 +426,8 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
    ELSE IF Order.ICC  EQ "" AND
       Order.OrderType  NE {&ORDER_TYPE_STC}     AND
       Order.OrderType  NE {&ORDER_TYPE_RENEWAL} AND
-     (Order.StatusCode EQ {&ORDER_STATUS_PENDING_ICC_FROM_LO} OR
+     (Order.StatusCode EQ {&ORDER_STATUS_SENDING_TO_LO}       OR
+      Order.StatusCode EQ {&ORDER_STATUS_PENDING_ICC_FROM_LO} OR
       Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE}  OR
       Order.StatusCode EQ {&ORDER_STATUS_PENDING_MAIN_LINE}   OR
       Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE_CANCEL}) AND

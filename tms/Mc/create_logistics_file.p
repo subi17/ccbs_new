@@ -1623,7 +1623,13 @@ FOR EACH Order NO-LOCK WHERE
          RUN StarEventSetOldBuffer(lhOrder).
       END.
 
-      fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_ICC_FROM_LO}).
+      IF Order.ICC NE "" THEN DO:
+         CASE Order.OrderType:
+               WHEN {&ORDER_TYPE_NEW} THEN fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_NEW}).
+               WHEN {&ORDER_TYPE_MNP} THEN fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_MNP}).
+         END CASE.
+      END.
+      ELSE fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_ICC_FROM_LO}).
       
       IF llDoEvent THEN DO:
          RUN StarEventMakeModifyEvent(lhOrder).
@@ -1661,32 +1667,39 @@ FOR EACH Order NO-LOCK WHERE
      NOT (Order.MNPStatus EQ 6 OR
           Order.MNPStatus EQ 7)            THEN NEXT.
       
-   IF fIsTerminalOrder(Order.OrderId,ocTerminalCode) THEN DO:
+   IF NOT fIsTerminalOrder(Order.OrderId,ocTerminalCode) THEN NEXT.
 
-      IF fDelivSIM(Order.OrderId,
-                   TRUE,
-                   "",
-                   "") THEN DO: 
-         fUpdateOrderLogisticsValue(Order.OrderId).
+   IF fDelivSIM(Order.OrderId,
+                TRUE,
+                "",
+                "") THEN DO: 
+      fUpdateOrderLogisticsValue(Order.OrderId).
 
+      IF (Order.StatusCode EQ {&ORDER_STATUS_SENDING_TO_LO}       OR 
+          Order.StatusCode EQ {&ORDER_STATUS_PENDING_ICC_FROM_LO} OR
+          Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE}) THEN DO:
+         
          IF llDoEvent THEN DO:
             lhOrder = BUFFER Order:HANDLE.
             RUN StarEventInitialize(lhOrder).
             RUN StarEventSetOldBuffer(lhOrder).
          END.
-
-         fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_ICC_FROM_LO}).
+         
+         CASE Order.OrderType:
+               WHEN {&ORDER_TYPE_NEW} THEN fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_NEW}).
+               WHEN {&ORDER_TYPE_MNP} THEN fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_MNP}).
+            END CASE.
+         END.
          
          IF llDoEvent THEN DO:
             RUN StarEventMakeModifyEvent(lhOrder).
             fCleanEventObjects().
-         END.
-      
       END.
-   
-   END.
+
+   END.  
 
 END.
+
 
 
 /* Order has to be second time when order was already sent with
