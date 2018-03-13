@@ -29,7 +29,7 @@ REPEAT:
               Order.OrderId = INTEGER(lcLine) NO-LOCK NO-ERROR.
    IF NOT AVAILABLE order THEN
      NEXT.     
-   FOR EACH FusionMessage WHERE
+   FOR EACH FusionMessage EXCLUSIVE-LOCK WHERE
             FusionMessage.orderid = order.orderid USE-INDEX OrderId BY updateTS DESC:
               
       lcAdditionalInfo = FusionMessage.additionalInfo.
@@ -48,7 +48,7 @@ REPEAT:
                                           USE-INDEX OrderId).                                          
                          
          
-         FIND FIRST OrderFusion WHERE
+         FIND FIRST OrderFusion EXCLUSIVE-LOCK WHERE
                     OrderFusion.Brand = "1" AND
                     OrderFusion.OrderId = FusionMessage.orderid NO-ERROR.
          IF NOT AVAILABLE OrderFusion THEN 
