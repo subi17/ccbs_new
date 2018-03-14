@@ -1623,13 +1623,7 @@ FOR EACH Order NO-LOCK WHERE
          RUN StarEventSetOldBuffer(lhOrder).
       END.
 
-      IF Order.ICC NE "" THEN DO:
-         CASE Order.OrderType:
-               WHEN {&ORDER_TYPE_NEW} THEN fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_NEW}).
-               WHEN {&ORDER_TYPE_MNP} THEN fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_MNP}).
-         END CASE.
-      END.
-      ELSE fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_ICC_FROM_LO}).
+      fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_ICC_FROM_LO}).
       
       IF llDoEvent THEN DO:
          RUN StarEventMakeModifyEvent(lhOrder).
@@ -1672,35 +1666,10 @@ FOR EACH Order NO-LOCK WHERE
    IF fDelivSIM(Order.OrderId,
                 TRUE,
                 "",
-                "") THEN DO: 
+                "") THEN  
       fUpdateOrderLogisticsValue(Order.OrderId).
 
-      IF (Order.StatusCode EQ {&ORDER_STATUS_SENDING_TO_LO}       OR 
-          Order.StatusCode EQ {&ORDER_STATUS_PENDING_ICC_FROM_LO} OR
-          Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE}) THEN DO:
-         
-         IF llDoEvent THEN DO:
-            lhOrder = BUFFER Order:HANDLE.
-            RUN StarEventInitialize(lhOrder).
-            RUN StarEventSetOldBuffer(lhOrder).
-         END.
-         
-         CASE Order.OrderType:
-               WHEN {&ORDER_TYPE_NEW} THEN fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_NEW}).
-               WHEN {&ORDER_TYPE_MNP} THEN fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_MNP}).
-            END CASE.
-         END.
-         
-         IF llDoEvent THEN DO:
-            RUN StarEventMakeModifyEvent(lhOrder).
-            fCleanEventObjects().
-      END.
-
-   END.  
-
 END.
-
-
 
 /* Order has to be second time when order was already sent with
    despachar value "02" - Previously order was sent twice when 
@@ -1729,8 +1698,25 @@ FOR EACH OrderGroup NO-LOCK WHERE
       IF fDelivSIM(Order.OrderId,
                    TRUE,
                    STRING(OrderGroup.GroupId),
-                   "01") THEN 
+                   "01") THEN DO:
+
          fUpdateOrderLogisticsValue(Order.OrderId).
+
+         IF llDoEvent THEN DO:
+            lhOrder = BUFFER Order:HANDLE.
+            RUN StarEventInitialize(lhOrder).
+            RUN StarEventSetOldBuffer(lhOrder).
+         END.
+
+         fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_ICC_FROM_LO}).
+         
+         IF llDoEvent THEN DO:
+            RUN StarEventMakeModifyEvent(lhOrder).
+            fCleanEventObjects().
+         END.
+
+      END.
+
    END.    
 
 END.  
