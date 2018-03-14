@@ -167,8 +167,12 @@ FOR EACH TMSCodes NO-LOCK WHERE
    END.
 
    CREATE ttProfession.
-   ASSIGN
-      ttProfession.Profession = TMSCodes.CodeValue
+   IF lcTFBank = {&TF_BANK_UNOE} THEN ASSIGN
+      ttProfession.Profession   = TMSCodes.CodeValue
+      ttProfession.contractType = ENTRY(3,TMSCodes.ConfigValue)
+      ttProfession.activityCode = ENTRY(4,TMSCodes.ConfigValue).
+   ELSE ASSIGN
+      ttProfession.Profession   = TMSCodes.CodeValue
       ttProfession.contractType = ENTRY(1,TMSCodes.ConfigValue)
       ttProfession.activityCode = ENTRY(2,TMSCodes.ConfigValue).
 END.
