@@ -40,13 +40,29 @@ ADD FIELD "AddressType" OF "Address" AS character
   HELP "Address type"
   ORDER 40
 
+ADD FIELD "Address" OF "Address" AS character 
+  FORMAT "x(20)"
+  INITIAL ""
+  LABEL "Street"
+  COLUMN-LABEL "Street"
+  HELP "Street address"
+  ORDER 50
+
+ADD FIELD "City" OF "Address" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "City"
+  COLUMN-LABEL "City"
+  HELP "Location city"
+  ORDER 60
+
 ADD FIELD "ZipCode" OF "Address" AS character 
   FORMAT "x(8)"
   INITIAL ""
   LABEL "ZipCode"
   COLUMN-LABEL "ZipCode"
   HELP "Postal code"
-  ORDER 60
+  ORDER 70
 
 ADD FIELD "Region" OF "Address" AS character 
   FORMAT "x(8)"
@@ -54,7 +70,7 @@ ADD FIELD "Region" OF "Address" AS character
   LABEL "Region"
   COLUMN-LABEL "Region"  
   HELP "Region"
-  ORDER 70
+  ORDER 80
   
 ADD FIELD "Country" OF "Address" AS character 
   FORMAT "x(3)"
@@ -62,7 +78,7 @@ ADD FIELD "Country" OF "Address" AS character
   LABEL "Country"
   COLUMN-LABEL "Country"
   HELP "Country (according to ISO Standard)"
-  ORDER 80
+  ORDER 90
 
 ADD FIELD "StreetCode" OF "Address" AS character 
   FORMAT "x(8)"
@@ -70,7 +86,7 @@ ADD FIELD "StreetCode" OF "Address" AS character
   LABEL "StreetCode"
   COLUMN-LABEL "StreetCode"
   HELP "Address validation street code (CodC)"
-  ORDER 90
+  ORDER 100
 
 ADD FIELD "CityCode" OF "Address" AS character 
   FORMAT "x(8)"
@@ -78,7 +94,7 @@ ADD FIELD "CityCode" OF "Address" AS character
   LABEL "CityCode"
   COLUMN-LABEL "CityCode"
   HELP "Address validation city code (CodP)"
-  ORDER 100
+  ORDER 110
 
 ADD FIELD "TownCode" OF "Address" AS character 
   FORMAT "x(8)"
@@ -86,7 +102,7 @@ ADD FIELD "TownCode" OF "Address" AS character
   LABEL "TownCode"
   COLUMN-LABEL "TownCode"
   HELP "Address validation town code (CodM)"
-  ORDER 110
+  ORDER 120
 
 ADD INDEX "AddressID" ON "Address" 
   AREA "Sta_Index_1"
