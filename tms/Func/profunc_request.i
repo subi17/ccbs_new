@@ -86,9 +86,9 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
 
    IF INDEX(lcOutput, "#EMAIL") > 0 THEN 
    DO:
-      IF NUM-ENTRIES(bMSRequest.ReqCparam6) GT 2 AND ENTRY(3,bMSRequest.ReqCparam6, "|") <> "" THEN
+      IF NUM-ENTRIES(bMSRequest.ReqCparam6,"|") GT 2 AND ENTRY(3,bMSRequest.ReqCparam6, "|") <> "" THEN
          lcReplace = ENTRY(3,bMSRequest.ReqCparam6, "|").
-      ELSE IF NUM-ENTRIES(bMSRequest.ReqCparam6) EQ 2 AND ENTRY(2,bMSRequest.ReqCparam6, "|") <> "" THEN
+      ELSE IF NUM-ENTRIES(bMSRequest.ReqCparam6,"|") EQ 2 AND ENTRY(2,bMSRequest.ReqCparam6, "|") <> "" THEN
          lcReplace = ENTRY(2,bMSRequest.ReqCparam6, "|").
       ELSE 
          lcReplace = bCustomer.Email.

@@ -473,6 +473,14 @@ DEF TEMP-TABLE ttDiscount NO-UNDO
    FIELD discount_valid_periods AS INT
 INDEX discount_valid_periods IS PRIMARY discount_valid_periods. 
 
+DEFINE VARIABLE bundleExtraDataStruct  AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcExtraDataStruct      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE office365Struct        AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcoffice365Struct      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE cData                  AS CHARACTER NO-UNDO.
+DEFINE VARIABLE faxtoEmailStruct       AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcfaxtoEmailStruct     AS CHARACTER NO-UNDO.
+
 /* YBP-514 */
 FUNCTION fGetOrderFields RETURNS LOGICAL :
    
@@ -588,6 +596,32 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
          END.                           
       END.
    END.
+
+    IF LOOKUP("bundle_extra_data",lcOrderStruct) > 0 THEN 
+    DO:
+        bundleExtraDataStruct = get_struct(pcOrderStruct , "bundle_extra_data").
+        lcExtraDataStruct     = validate_request(bundleExtraDataStruct, pcAdditionalBundleList).
+    
+        IF LOOKUP('OFFICE365' , lcExtraDataStruct) GT 0 THEN DO:
+            office365Struct    = get_struct(bundleExtraDataStruct , "OFFICE365").
+            lcoffice365Struct  = validate_request(office365Struct, 'email!').    
+            cData = "".
+            cData = "|" + get_string(office365Struct, "email").
+            cData = cData + FILL("|", (3 - NUM-ENTRIES(cData,"|")))
+            ENTRY( LOOKUP('OFFICE365',pcAdditionalBundleList)  
+            ,pcAdditionalOfferList ) = cData NO-ERROR.                     
+        END.
+        IF LOOKUP('FAXTOEMAIL', lcExtraDataStruct) GT 0 THEN DO:
+            faxtoEmailStruct    = get_struct(bundleExtraDataStruct , "FAXTOEMAIL").
+            lcfaxtoEmailStruct  = validate_request(faxtoEmail, 'email!,fixed_number!').    
+            cData = "".
+            cData = get_string(faxtoEmailStruct, "fixed_number").
+            cData = cData + "|" + get_string(faxtoEmailStruct, "email").
+            cData = cData + FILL("|", (3 - NUM-ENTRIES(cData,"|")))
+            ENTRY( LOOKUP('FAXTOEMAIL',pcAdditionalBundleList)  
+            ,pcAdditionalOfferList ) = cData NO-ERROR.                     
+        END.
+    END.
 
    IF LOOKUP("subscription_bundle",lcOrderStruct) > 0 THEN
       pcMobsubBundleType = get_string(pcOrderStruct,"subscription_bundle").
@@ -1333,6 +1367,7 @@ gcOrderStructFields = "brand!," +
                       "order_inspection_rule_id," +
                       "order_inspection_risk_code," + 
                       "additional_bundle," +
+                      "bundle_extra_data," + /* Ashok */ 
                       "subscription_bundle," +
                       "dss," +
                       "bono_voip," +

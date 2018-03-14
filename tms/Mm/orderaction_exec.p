@@ -360,9 +360,16 @@ PROCEDURE pPeriodicalContract:
       END.
 
       ASSIGN lcSVAParams = (IF DayCampaign.BundleTarget = {&DC_BUNDLE_TARGET_SVA} THEN "SVA" ELSE "").
-
-      IF lcSVAParams <> "" THEN
-          lcSVAParams = lcSVAParams + (IF OrderAction.ItemParam <> "" THEN "|||" ELSE "") + OrderAction.ItemParam.
+      
+      IF lcSVAParams <> "" THEN DO:
+          CASE DayCampaign.DCEvent :
+              WHEN "OFFICE365" OR 
+              WHEN "FAXTOEMAIL" THEN DO:
+                  lcSVAParams = lcSVAParams + "|" + OrderAction.ItemParam.
+              END.
+              OTHERWISE lcSVAParams = lcSVAParams + (IF OrderAction.ItemParam <> "" THEN "|||" ELSE "") + OrderAction.ItemParam. 
+          END CASE.
+      END.
 
       liRequest = fPCActionRequest(MobSub.MsSeq,
                                 OrderAction.ItemKey,
