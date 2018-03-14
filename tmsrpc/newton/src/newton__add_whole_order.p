@@ -607,17 +607,17 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
             lcoffice365Struct  = validate_request(office365Struct, 'email!').    
             cData = "".
             cData = "|" + get_string(office365Struct, "email").
-            cData = cData + FILL("|", (3 - NUM-ENTRIES(cData,"|")))
+            cData = cData + FILL("|", (3 - NUM-ENTRIES(cData,"|"))).
             ENTRY( LOOKUP('OFFICE365',pcAdditionalBundleList)  
             ,pcAdditionalOfferList ) = cData NO-ERROR.                     
         END.
         IF LOOKUP('FAXTOEMAIL', lcExtraDataStruct) GT 0 THEN DO:
             faxtoEmailStruct    = get_struct(bundleExtraDataStruct , "FAXTOEMAIL").
-            lcfaxtoEmailStruct  = validate_request(faxtoEmail, 'email!,fixed_number!').    
+            lcfaxtoEmailStruct  = validate_request(faxtoEmailStruct, 'email!,fixed_number!').    
             cData = "".
             cData = get_string(faxtoEmailStruct, "fixed_number").
             cData = cData + "|" + get_string(faxtoEmailStruct, "email").
-            cData = cData + FILL("|", (3 - NUM-ENTRIES(cData,"|")))
+            cData = cData + FILL("|", (3 - NUM-ENTRIES(cData,"|"))).
             ENTRY( LOOKUP('FAXTOEMAIL',pcAdditionalBundleList)  
             ,pcAdditionalOfferList ) = cData NO-ERROR.                     
         END.
