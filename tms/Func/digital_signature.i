@@ -70,8 +70,16 @@ FUNCTION fHandleSignature RETURNS CHAR
 
    IF LOOKUP(icStatus, lcNewStatuses) > 0 THEN
       lcActionID = "dssent".
-   ELSE IF LOOKUP(icStatus, {&ORDER_CLOSE_STATUSES}) > 0 THEN /* 7,8,9 */
-      lcActionID = "dscancel".
+   ELSE IF LOOKUP(icStatus, {&ORDER_CLOSE_STATUSES}) > 0 THEN DO: /* 7,8,9 */
+      /* send cancel only if dssent sent */
+      IF NOT CAN-FIND (FIRST bActionLog NO-LOCK WHERE
+                             bActionLog.Brand     = Syst.Var:gcBrand AND
+                             bActionLog.TableName = "Order" AND
+                             bActionLog.KeyValue  = STRING(bOrder.OrderId) AND
+                             bActionLog.ActionID  = "dssent") THEN 
+         RETURN "No need to send".
+         lcActionID = "dscancel".
+   END.
    ELSE DO:
       RETURN "Error".
    END.

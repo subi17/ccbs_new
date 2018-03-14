@@ -279,7 +279,7 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
       IF bOrder.Reseller NE "" THEN      
          add_string(pcStruct,"dealerId",bOrder.Reseller).
       ELSE
-         add_string(pcStruct,"dealerId","NOT_AVAILABLE").
+         add_string(pcStruct,"dealerId","web").
 
       add_string(pcStruct,"contractId",bOrder.ContractID).
       add_string(pcStruct,"orderId",STRING(bOrderCustomer.OrderId)).
@@ -291,10 +291,13 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
          add_string(pcStruct,"customerType","3").
       END.
       ELSE DO:
-         IF bOrderCustomer.CustIdType EQ "NIF" THEN
+         IF bOrderCustomer.CustIdType EQ "NIF" OR
+            bOrderCustomer.CustIdType EQ "NIE" THEN
             add_string(pcStruct,"customerType","1").
          ELSE IF bOrderCustomer.CustIdType EQ "CIF" THEN
-            add_string(pcStruct,"customerType","2").         
+            add_string(pcStruct,"customerType","2").
+         ELSE
+            add_string(pcStruct,"customerType","0"). /* not found value */
       END.
 
       IF bOrder.OrderType = {&ORDER_TYPE_NEW} THEN
@@ -303,6 +306,8 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
          add_string(pcStruct,"contractType","2").
       ELSE IF bOrder.OrderType = {&ORDER_TYPE_RENEWAL} THEN
          add_string(pcStruct,"contractType","3").
+      ELSE
+         add_string(pcStruct,"contractType","NOT_AVAILABLE").
       /* TMS has not definition for contractType=4 (Migration) in specs */
 
       add_boolean(pcStruct,"financed",FALSE).
