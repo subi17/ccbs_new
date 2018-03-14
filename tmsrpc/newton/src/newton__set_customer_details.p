@@ -211,7 +211,7 @@ lcAddressValidtionFields = "street_code,city_code,municipality_code".
 
 lcMarketingFields = "mark_sms,mark_email,mark_post," +
                     "mark_sms_3rd,mark_email_3rd,mark_post_3rd," +
-                    "mark_dont_share_personal_data" + 
+                    "mark_dont_share_personal_data," + 
                     "mark_bank_3rd". /* APIBSS-86 */
 
 lcContactCustFields = "title,fname,lname,lname2,street,zip,city,region" +
