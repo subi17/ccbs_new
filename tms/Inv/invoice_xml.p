@@ -727,7 +727,7 @@ PROCEDURE pSubInvoice2XML:
          lhXML:WRITE-DATA-ELEMENT("ContractID",SubInvoice.CLI).
       lhXML:START-ELEMENT("ContractType").      
       IF fIsPro(Customer.Category) THEN
-         lhXML:INSERT-ATTRIBUTE("Name",ttSub.CTName + " + BENEFICIOS PRO"). /* YCO-27 */ 
+         lhXML:INSERT-ATTRIBUTE("Name",ttSub.CTName + " PRO"). /* YCO-27 */ 
       ELSE
          lhXML:INSERT-ATTRIBUTE("Name",ttSub.CTName). /* No PRO logic needed */               
       lhXML:WRITE-CHARACTERS(ttSub.CLIType).      
@@ -736,7 +736,7 @@ PROCEDURE pSubInvoice2XML:
       IF ttSub.OldCLIType > "" THEN DO:
          lhXML:START-ELEMENT("OldContractType").
          IF fIsPro(Customer.Category) THEN
-            lhXML:WRITE-DATA-ELEMENT("TariffName",ttSub.OldCTName + " + BENEFICIOS PRO").  /* YCO-27 */
+            lhXML:WRITE-DATA-ELEMENT("TariffName",ttSub.OldCTName + " PRO").  /* YCO-27 */
          ELSE
             lhXML:WRITE-DATA-ELEMENT("TariffName",ttSub.OldCTName). /* No PRO logic needed */
          
