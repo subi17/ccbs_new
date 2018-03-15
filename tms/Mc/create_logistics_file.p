@@ -1661,33 +1661,15 @@ FOR EACH Order NO-LOCK WHERE
      NOT (Order.MNPStatus EQ 6 OR
           Order.MNPStatus EQ 7)            THEN NEXT.
       
-   IF fIsTerminalOrder(Order.OrderId,ocTerminalCode) THEN DO:
+   IF NOT fIsTerminalOrder(Order.OrderId,ocTerminalCode) THEN NEXT.
 
-      IF fDelivSIM(Order.OrderId,
-                   TRUE,
-                   "",
-                   "") THEN DO: 
-         fUpdateOrderLogisticsValue(Order.OrderId).
-
-         IF llDoEvent THEN DO:
-            lhOrder = BUFFER Order:HANDLE.
-            RUN StarEventInitialize(lhOrder).
-            RUN StarEventSetOldBuffer(lhOrder).
-         END.
-
-         fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_ICC_FROM_LO}).
-         
-         IF llDoEvent THEN DO:
-            RUN StarEventMakeModifyEvent(lhOrder).
-            fCleanEventObjects().
-         END.
-      
-      END.
-   
-   END.
+   IF fDelivSIM(Order.OrderId,
+                TRUE,
+                "",
+                "") THEN  
+      fUpdateOrderLogisticsValue(Order.OrderId).
 
 END.
-
 
 /* Order has to be second time when order was already sent with
    despachar value "02" - Previously order was sent twice when 
@@ -1731,8 +1713,25 @@ FOR EACH OrderGroup NO-LOCK WHERE
       IF fDelivSIM(Order.OrderId,
                    TRUE,
                    STRING(OrderGroup.GroupId),
-                   "01") THEN 
+                   "01") THEN DO:
+
          fUpdateOrderLogisticsValue(Order.OrderId).
+
+         IF llDoEvent THEN DO:
+            lhOrder = BUFFER Order:HANDLE.
+            RUN StarEventInitialize(lhOrder).
+            RUN StarEventSetOldBuffer(lhOrder).
+         END.
+
+         fSetOrderStatus(Order.OrderId,{&ORDER_STATUS_PENDING_ICC_FROM_LO}).
+         
+         IF llDoEvent THEN DO:
+            RUN StarEventMakeModifyEvent(lhOrder).
+            fCleanEventObjects().
+         END.
+
+      END.
+
    END.    
 
 END.  
