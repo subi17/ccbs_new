@@ -1,3 +1,9 @@
+ADD SEQUENCE "AccountID"
+  INITIAL 1
+  INCREMENT 1
+  CYCLE-ON-LIMIT no
+  MIN-VAL 1
+
 ADD TABLE "CustomerAccount"
   MULTITENANT yes
   AREA "Sta_Data_32"
