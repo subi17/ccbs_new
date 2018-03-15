@@ -586,7 +586,7 @@
 "Invoice" "DelType" "Billing" "11" "Email - Waiting for Activation" "1,2,3,5,6" "" 1
 "Invoice" "DelType" "Billing" "12" "No delivery (no traffic)" "" "" 1
 "Invoice" "DelType" "Billing" "13" "Fusion Email - Waiting" "" "" 1
-"Invoice" "Deltype" "Billing" "14" "Electronic summary invoice" "" "" 1
+"Invoice" "Deltype" "Billing" "14" "Electronic summary invoice" "1,2,3,4,5,6" "" 1
 "Invoice" "DelType" "Billing" "2" "Email" "1,2,3,5,6" "" 1
 "Invoice" "DelType" "Billing" "3" "Fusion Email" "1,5,6" "" 1
 "Invoice" "DelType" "Billing" "4" "SMS" "1,2,3,4,5,6" "" 1
@@ -1374,6 +1374,7 @@
 "requem" "93,0,1,2,3" "SubsLMenu" "1" "Publish invoices to IFS" "" "" 1
 "requem" "94,0,1,2,3,9" "SubsLMenu" "1" "Push invoice" "" "" 1
 "requem" "95,0,1,2,3,7,8,9" "SubsLMenu" "1" "Pro Migration" "" "" 1
+"requem" "96,0,1,2,3,4,9" "SubsLMenu" "1" "ESI Invoice" "" "" 1
 "RequestAction" "Action" "Request" "1" "Create" "" "" 1
 "RequestAction" "Action" "Request" "11" "Term-PenaltyFee" "" "" 1
 "RequestAction" "Action" "Request" "12" "Init-Terminate" "" "" 1
@@ -1459,6 +1460,7 @@
 "Salesman" "SmPrefix" "IFS" "KN" "KONECTA OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KO" "KONECTA CROSS SELLING OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KR" "KONECTA RECEPCION" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "KT" "KONECTA RETENCION" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KW" "KONECTA WEB" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "KX" "KONECTA EMISION OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "MA" "MADISON OUTBOUND" "" "15" 1
