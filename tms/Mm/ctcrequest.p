@@ -48,7 +48,14 @@ IF NOT AVAILABLE MsRequest OR MsRequest.ReqType NE 0 THEN
    RETURN "ERROR:Invalid request ID".
 
 IF MsRequest.ReqStatus NE 0 THEN RETURN.
-   
+
+/* Check if there is ongoing reactivation request */
+IF CAN-FIND (FIRST MsRequest NO-LOCK WHERE
+                   MsRequest.MsSeq EQ MsRequest.MsSeq AND
+                   MsRequest.ReqType EQ {&REQTYPE_SUBSCRIPTION_REACTIVATION} AND
+                   LOOKUP(STRING(MsRequest.ReqStatus),{&REQ_INACTIVE_STATUSES}) = 0)
+   THEN RETURN.
+
 /* request is under work */
 IF NOT fReqStatus(1,"") THEN RETURN "ERROR".
 
