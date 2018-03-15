@@ -148,14 +148,21 @@ END FUNCTION.
 
 
 FUNCTION fProMigrationRequest RETURNS INTEGER
-   (INPUT  iiMsseq        AS INT,        /* msseq                */
+   (INPUT  iiMsseq        AS INTEGER  ,  /* msseq                */
     INPUT  icCreator      AS CHARACTER,  /* who made the request */
     INPUT  icSource       AS CHARACTER,
-    INPUT  iiOrig         AS INTEGER,
+    INPUT  iiOrig         AS INTEGER  ,
+    INPUT  ilValidate     AS LOGICAL  , 
     OUTPUT ocResult       AS CHARACTER):
 
    DEF VAR liReqCreated AS INT NO-UNDO.
    DEF VAR ldActStamp AS DEC NO-UNDO.
+   DEFINE BUFFER bCustomer  FOR Customer.
+   DEFINE BUFFER bMobSub    FOR MobSub.
+   DEFINE BUFFER bCustCat   FOR Custcat.
+   DEFINE BUFFER bOrder     FOR Order.
+   DEFINE BUFFER bClitype   FOR CLIType.
+   DEFINE VARIABLE llHasLegacyTariff AS LOGICAL NO-UNDO.
 
    ocResult = fChkRequest(iiMsSeq,
                           {&REQTYPE_PRO_MIGRATION},
@@ -163,6 +170,59 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
                           icCreator).
 
    IF ocResult > "" THEN RETURN 0.
+   
+   IF ilValidate THEN DO:
+       FIND bMobsub WHERE bMobsub.brand EQ Syst.Var:gcBrand AND bMobsub.MsSeq = iiMsseq NO-LOCK NO-ERROR.
+       FIND bCustomer WHERE bCustomer.Brand EQ Syst.Var:gcBrand AND bCustomer.CustNum = bMobSub.CustNum NO-LOCK NO-ERROR.
+       FIND bCustCat WHERE bCustcat.Category = bCustomer.Category NO-LOCK NO-ERROR.
+       /* Is category available */
+       IF NOT AVAILABLE bCustCat THEN DO:
+           ocResult = "101".
+           RETURN 0. 
+       END.
+       /* Is Customer among the required segment */
+       IF LOOKUP(bCustCat.Segment,"AUTONOMO,COMPANY,SOHO-AUTONOMO,SOHO-COMPANY") EQ 0  THEN DO:
+           ocResult = "102".
+           RETURN 0.
+       END.
+       /* Does customer have legacy tariffs */
+       FOR EACH bMobSub 
+          WHERE bMobSub.Brand = Syst.Var:gcBrand 
+            AND bMobSub.CustNum = bCustomer.CustNum 
+            AND bMobSub.MsStatus = {&MSSTATUS_ACTIVE} NO-LOCK:
+           IF bMobSub.Clitype EQ "CONT23" OR 
+              bMobSub.Clitype EQ "CONT24" OR 
+              bMobSub.Clitype EQ "CONT9" THEN 
+              llHasLegacyTariff = TRUE.
+       END.
+       IF NOT llHasLegacyTariff THEN DO:
+            ocResult = "103".
+            RETURN 0.
+       END.
+       /* Convergent in ONGOING status */
+       FOR EACH bOrder
+          WHERE bOrder.Brand = Syst.Var:gcBrand 
+            AND bOrder.CustNum = bCustomer.CustNum 
+            AND bOrder.StatusCode = {&ORDER_STATUS_ONGOING} NO-LOCK:
+            FIND bClitype WHERE bClitype.CliType = bOrder.CliType NO-LOCK NO-ERROR.
+            IF AVAILABLE bCliType AND 
+               (bCliType.FixedLineType = {&CLITYPE_TARIFFTYPE_CONVERGENT} OR 
+                bCliType.FixedLineType = {&CLITYPE_TARIFFTYPE_FIXEDONLY}  )  THEN DO:
+                ocResult = "104".
+                RETURN 0.
+            END.  
+       END.         
+       /* Customer having a active prepaid subscription */
+       FOR EACH bMobSub 
+          WHERE bMobSub.Brand = Syst.Var:gcBrand
+            AND bMobSub.CustNum = bCustomer.CustNum 
+            AND bMobSub.MsStatus = {&MSSTATUS_ACTIVE} NO-LOCK:
+           IF bMobSub.Clitype BEGINS "TAR" THEN DO:
+               ocResult = "105".
+               RETURN 0.
+           END.
+       END.
+   END.
 
    /* set activation time */
    ldActStamp = Func.Common:mMakeTS().
@@ -208,6 +268,7 @@ FUNCTION fProMigrateOtherSubs RETURNS CHAR
                                         INPUT icsalesman,
                                         INPUT {&REQUEST_SOURCE_MIGRATION},
                                         INPUT iimsrequest,
+                                        INPUT FALSE , /* Validations not required here */
                                         OUTPUT lcResult).
       END.
       ELSE IF AVAIL Clitype AND
