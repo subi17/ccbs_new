@@ -92,22 +92,14 @@ END FUNCTION.
 FUNCTION fCLITypeIsExtraLine RETURNS LOGICAL
    (icExtraLineCLIType AS CHARACTER):
 
-   DEFINE VARIABLE lcReturnValue  AS CHARACTER NO-UNDO.
+   RETURN CAN-FIND(FIRST TMSRelation NO-LOCK WHERE 
+                         TMSRelation.TableName     EQ {&ELTABLENAME}          AND 
+                         TMSRelation.KeyType       EQ {&ELKEYTYPE}            AND                    
+                         TMSRelation.ChildValue    EQ icExtraLineCLIType      AND 
+                     INT(TMSRelation.RelationType) GT 0 ).
 
-   FOR EACH  Matrix NO-LOCK WHERE
-             Matrix.Brand  = Syst.Var:gcBrand   AND
-             Matrix.MXKey  = {&EXTRALINEMATRIX},
-       FIRST MXItem NO-LOCK WHERE
-             MXItem.MXSeq   = Matrix.MXSeq   AND
-             MXItem.MXName  = "SubsTypeTo" AND
-             MXItem.MXValue = icExtraLineCLIType:
-      RETURN TRUE.
-   END.
 
-   RETURN FALSE.
-
-END FUNCTION.
-
+END.
 /* Check if the clitype is mainline clitype
    (i.e. it is part of any of extraline clitype mainline list) */ 
 FUNCTION fCLITypeIsMainLine RETURNS LOGICAL
@@ -564,5 +556,35 @@ DEF VAR lcCLIType        AS CHAR NO-UNDO.
    RETURN lcPayType.    
       
 END FUNCTION.
+
+FUNCTION fExtraLineCountForMainLine RETURN INTEGER 
+    ( INPUT iiMultiSimID AS INT ) :
+        
+    /*This function can be used for Main and Extra Lines Both.    
+      In Case of Main Lines pass the mobsub.msseq as parameter.
+      In Case of Extral Lines pass the mobsub.multisimid as parameter.  
+      Then this function will return the Number of Extra Lines attached to the main line  currently. 
+      
+      */                               
+                
+    DEFINE BUFFER bfELMobSub FOR MobSub.
+    DEFINE VARIABLE iiELCount  AS INTEGER NO-UNDO .
+       
+    FOR EACH bfELMobSub NO-LOCK WHERE 
+             bfELMobSub.Brand        =  Syst.Var:gcBrand          AND                 
+             bfELMobSub.multiSimID   =  iiMultiSimID              AND
+             bfELMobsub.multiSimType =  {&MULTISIMTYPE_EXTRALINE} AND 
+             bfELMobSub.paytype      =  NO                        AND 
+             (bfELMobSub.MsStatus    =  {&MSSTATUS_ACTIVE} OR
+              bfELMobSub.MsStatus    =  {&MSSTATUS_BARRED}):                
+                     
+        ASSIGN iiELCount = iiELCount + 1 .           
+                                          
+    END.
+    
+    RETURN iiELCount.
+                                           
+END FUNCTION.        
+
 
 &ENDIF

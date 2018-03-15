@@ -109,6 +109,8 @@ DEFINE VARIABLE lcBundleId             AS CHAR    NO-UNDO.
 DEFINE VARIABLE lcBankAccount          AS CHAR    NO-UNDO.
 DEFINE VARIABLE llCallProc             AS LOGICAL NO-UNDO.
 DEFINE VARIABLE iMLMsSeq               AS INTEGER NO-UNDO. 
+DEFINE VARIABLE lELCount               AS INTEGER NO-UNDO.
+DEFINE VARIABLE lAllowedELCount        AS INTEGER NO-UNDO.
 
 DEFINE BUFFER bSubMsRequest  FOR MsRequest.
 DEFINE BUFFER bOrder         FOR Order.
@@ -139,10 +141,44 @@ DO TRANSACTION:
    END. /* IF NOT AVAILABLE termMobSub THEN DO: */
 
    
-   IF fCLITypeIsExtraLine(Termmobsub.CLIType) AND 
-      fExtraLineCountForMainLine(TermMobSub.MultiSimId) > 2 THEN 
-   DO: 
+   IF fCLITypeIsExtraLine(Termmobsub.CLIType)  
+   THEN DO: 
+      
+      FIND FIRST bMLMobSub NO-LOCK WHERE
+           bMLMobSub.brand          EQ  Syst.Var:gcBrand        AND
+           bMLMobsub.msseq          EQ  TermMobSub.MultiSimId   AND 
+           bMLMobsub.multiSIMType   EQ  {&MULTISIMTYPE_PRIMARY} AND
+           bMLMobsub.paytype        EQ  FALSE                   AND
+           (bMLMobsub.MsStatus      EQ  {&MSSTATUS_ACTIVE} OR
+            bMLMobsub.MsStatus      EQ  {&MSSTATUS_BARRED}) NO-ERROR.
+                   
+       IF NOT AVAIL bMLMobSub             
+       THEN DO:
+           fReqError("Main Line is not available."). 
+           RETURN.
+       END.
        
+       IF NOT fCLITypeAllowedForExtraLine ( INPUT bMLMobSub.CLIType ,
+                                            INPUT Termmobsub.CLIType ,
+                                            OUTPUT lAllowedELCount )  
+       THEN DO:
+        
+           fReqError("Extra Line is not allowed to associate with the Main Line.").
+           RETURN.
+        
+       END.
+        
+       /* Get currently how many extra lines are attached*/
+       lELCount =  fExtraLineCountForMainLine(TermMobSub.MultiSimId). 
+        
+       IF lELCount >= lAllowedELCount 
+       THEN DO:
+        
+           fReqError("MainLine is already associated to other extra line(s). Cannot exceed the Limit.").   
+           RETURN.
+        
+       END.            
+ 
        FIND FIRST bCustomer NO-LOCK WHERE 
                   bCustomer.custnum = Termmobsub.custnum NO-ERROR.
                   
@@ -151,18 +187,6 @@ DO TRANSACTION:
           fReqError("Customer is not available."). 
           RETURN.
        END.      
-       
-       fCheckExistingMainLineAvailForExtraLine(INPUT  Termmobsub.CLITYPE ,
-                                               INPUT  bcustomer.CustidType ,
-                                               INPUT  bCustomer.OrgId ,
-                                               OUTPUT iMLMsSeq ) .                                               
-       IF iMLMsSeq = 0 THEN 
-       DO:
-           
-          fReqError("MainLine is already associated to another extra line"). 
-          RETURN.
-           
-       END.                                    
    END.
     
    FIND FIRST MSISDN WHERE
@@ -264,7 +288,7 @@ DO TRANSACTION:
    END. 
 
    /* COFF */
-   FIND FIRST MobSub WHERE
+   FIND FIRST MobSub EXCLUSIVE-LOCK WHERE
               Mobsub.msseq EQ MSRequest.MSSeq /* COFF Partial terminated */
               NO-ERROR.
    IF AVAIL Mobsub THEN DO:

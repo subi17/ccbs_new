@@ -7,7 +7,8 @@
                         11.03.08/jp  removed hardcoded "begins tarj"        
       22.sep.2015 hugo.lujan - YPR-2521 - [Q25] - TMS - Subscription 
        termination/ MNP out porting, STC (postpaid to prepaid)
-                        20.02.18/koundinya Added the functionality to terminate multiple extralines 
+      14/4/18  - DIAMANTEE PHASE 3 - Added the ability to atttach current extra lines to other main line 
+                                      for same customer if the main line got terminated
 */
    
 {Syst/commali.i}
@@ -47,6 +48,10 @@ DEFINE VARIABLE liQuarTime  AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liMsisdnStat AS INTEGER NO-UNDO.
 DEFINE VARIABLE liSimStat   AS INTEGER NO-UNDO.
 DEFINE VARIABLE lcTermReason AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcELCount   AS INTEGER  NO-UNDO.
+DEFINE VARIABLE lOtherMLSeq AS INTEGER  NO-UNDO.
+DEFINE VARIABLE lAllowedELCount AS INTEGER NO-UNDO.
+DEFINE VARIABLE lisELAttached   AS LOGICAL NO-UNDO.
 
 DEF BUFFER bMNPSub FOR MNPSub.
 DEF BUFFER bMobsub FOR MobSub.
@@ -62,9 +67,8 @@ DEFINE VARIABLE liExtraLineMsSeq        AS INT  NO-UNDO.
 
 DEF BUFFER lELOrder       FOR Order.        
 DEF BUFFER lMLMobSub      FOR MobSub.
-DEF BUFFER lbELMobSub     FOR MobSub.
-DEF BUFFER lbMLMobSub     FOR MobSub.
-DEF BUFFER lELTermmobsub  FOR Mobsub.
+DEF BUFFER lELMobSub      FOR MobSub.
+DEF BUFFER lELMobSub2     FOR MobSub.
 DEF BUFFER lELOrderAction FOR OrderAction.
 
 DEF TEMP-TABLE ttContract NO-UNDO
@@ -95,46 +99,21 @@ FUNCTION fUpdateDSSNewtorkForExtraLine RETURNS LOGICAL
       WHEN {&MULTISIMTYPE_EXTRALINE} THEN liELMultiSimType = {&MULTISIMTYPE_PRIMARY}.
    END CASE.
    
-   IF iiMultiSimId <> 0 THEN  /* Extra Lines is having multisimid <> 0*/
-   DO:
-       
-       FIND FIRST lbMobSub NO-LOCK WHERE 
-           lbMobSub.MsSeq        = iiMultiSimId     AND 
-           lbMobSub.MultiSimId   = iiMsSeq          AND 
-           lbMobSub.MultiSimType = liELMultiSimType NO-ERROR.
+   FIND FIRST lbMobSub NO-LOCK WHERE 
+              lbMobSub.MsSeq        = iiMultiSimId     AND 
+              lbMobSub.MultiSimId   = iiMsSeq          AND 
+              lbMobSub.MultiSimType = liELMultiSimType NO-ERROR.
 
-       IF AVAIL lbMobSub THEN 
-           RUN pUpdateDSSNetwork(INPUT lbMobsub.MsSeq,
-               INPUT lbMobsub.CLI,
-               INPUT lbMobsub.CustNum,
-               INPUT "REMOVE",
-               INPUT "",        /* Optional param list */
-               INPUT iiMsRequest,
-               INPUT ideActStamp,
-               INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
-               INPUT lcBundleId).       
-       
-   END.
-   ELSE DO:  /* Main Line is having mutlisimid = 0 . Then Updation needs to be for all extra lines*/
-       
-       FOR EACH lELTermmobsub NO-LOCK WHERE
-           lELTermmobsub.multisimid    =   iiMsSeq AND
-           lELTermmobsub.MultiSimType  =   liELMultiSimType :
-               
-           RUN pUpdateDSSNetwork(INPUT lELTermmobsub.MsSeq,
-               INPUT lELTermmobsub.CLI,
-               INPUT lELTermmobsub.CustNum,
-               INPUT "REMOVE",
-               INPUT "",        /* Optional param list */
-               INPUT iiMsRequest,
-               INPUT ideActStamp,
-               INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
-               INPUT lcBundleId).            
-               
-       END.        
-       
-   END.
-   
+   IF AVAIL lbMobSub THEN 
+      RUN pUpdateDSSNetwork(INPUT lbMobsub.MsSeq,
+                            INPUT lbMobsub.CLI,
+                            INPUT lbMobsub.CustNum,
+                            INPUT "REMOVE",
+                            INPUT "",        /* Optional param list */
+                            INPUT iiMsRequest,
+                            INPUT ideActStamp,
+                            INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
+                            INPUT lcBundleId).   
    
    RETURN TRUE. 
 
@@ -1126,87 +1105,134 @@ PROCEDURE pTerminate:
         ( bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY} AND
           fCLITypeIsExtraLine(bCLIType.CLIType) ) )
    THEN DO:
-
-      IF fCLITypeIsMainLine(TermMobSub.CLIType) THEN 
-         liExtraLineMsSeq = TermMobSub.MultiSimId.
-      ELSE IF fCLITypeIsExtraLine(TermMobSub.CLIType) THEN 
-         liExtraLineMsSeq = TermMobSub.MsSeq.
-         
+   
+      ASSIGN liExtraLineMsSeq = TermMobSub.MsSeq.
+      
       IF fCLITypeIsMainLine(TermMobSub.CLIType) THEN
       DO:
-          
-          /* We can have  more than one extra line now for the Main Line
-             Get all the MOBSUB or the main lines and then get those corresponding extraline orders
-             then terminate the extra line discount. */
-          
-          FOR EACH lELTermmobsub NO-LOCK WHERE
-                   lELTermmobsub.MultiSimId     =   TermMobSub.MsSeq  AND
-                   lELTermmobsub.MultiSimType   =   {&MULTISIMTYPE_EXTRALINE} :
-                       
-                       
-              FIND FIRST lELOrder NO-LOCK WHERE 
-                  lELOrder.MsSeq        EQ lELTermmobsub.MsSeq          AND           
-                  lELOrder.MultiSimId   NE 0                         AND
-                  lELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} NO-ERROR.
+          /* Get the total extra lines for the current terminated main line*/
+          lcELCount = fExtraLineCountForMainLine(liExtraLineMsSeq).
+           
+          FIND FIRST bCustomer NO-LOCK WHERE 
+                     bCustomer.custnum = Termmobsub.custnum NO-ERROR.
 
-              IF AVAIL lELOrder AND fCLITypeIsExtraLine(lELOrder.CLIType) THEN 
-              DO:
-                  FIND FIRST lELOrderAction NO-LOCK WHERE
-                      lELOrderAction.Brand    = Syst.Var:gcBrand                 AND
-                      lELOrderAction.OrderID  = lELOrder.OrderID        AND
-                      lELOrderAction.ItemType = "ExtraLineDiscount"     AND
-                      lELOrderAction.ItemKey  = lELOrder.CLIType + "DISC"  NO-ERROR.
+          IF lcELCount > 0 AND   /* Do not do anything if our main line does not have any extra lines*/
+          AVAIL bCustomer
+          THEN DO:
 
-                  IF AVAIL lELOrderAction THEN     
-                      fCloseExtraLineDiscount(lELOrder.MsSeq,
-                          lELOrderAction.ItemKey,
-                          TODAY). 
-              END.  /*   IF AVAIL lELOrder */
-                                           
-          END. /*  FOR EACH IELTermmbosub  */                    
-          
-      END.  /* IF fCLITypeIsMainLine  */   
-      ELSE IF fCLITypeIsExtraLine(TermMobSub.CLIType) THEN DO:
-          
-          FIND FIRST lELOrder NO-LOCK WHERE 
-              lELOrder.MsSeq        EQ liExtraLineMsSeq          AND           
-              lELOrder.MultiSimId   NE 0                         AND
-              lELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} NO-ERROR.
+              FOR EACH lELMobsub NO-LOCK WHERE
+                       lELMobsub.brand             EQ    Syst.Var:gcBrand            AND
+                       lELMobsub.MultiSimId        EQ    liExtraLineMsSeq            AND
+                       lELMobsub.multisimType      EQ    {&MULTISIMTYPE_EXTRALINE}   AND
+                       lELMobsub.paytype           EQ    FALSE                       AND
+                       (lELMobsub.MsStatus         EQ    {&MSSTATUS_ACTIVE} OR
+                        lELMobsub.MsStatus         EQ    {&MSSTATUS_BARRED}) : 
 
-          IF AVAIL lELOrder AND fCLITypeIsExtraLine(lELOrder.CLIType) THEN 
-          DO:
+                  ASSIGN lisELAttached = FALSE. /* initialize the logical variable in loop*/
               
-              FIND FIRST lELOrderAction NO-LOCK WHERE
-                  lELOrderAction.Brand    = Syst.Var:gcBrand                 AND
-                  lELOrderAction.OrderID  = lELOrder.OrderID        AND
-                  lELOrderAction.ItemType = "ExtraLineDiscount"     AND
-                  lELOrderAction.ItemKey  = lELOrder.CLIType + "DISC"  NO-ERROR.
-
-              IF AVAIL lELOrderAction THEN     
-                  fCloseExtraLineDiscount(lELOrder.MsSeq,
-                      lELOrderAction.ItemKey,
-                      TODAY). 
-           END. /* IF AVAIL lELOrder   */
-                   
-      END. /* IF fCLITypeIsExtraLine  */
-
-        /*
-        WE NO LONGER NEED THIS CODE BECUASE WE ARE NOT STORING ANYTHING IN
-        THE MAIN LINE MOBSUB.MUTLIXXX fields at the time of mobsub creation
-        /* Main line hard associated it removed,
-           while extra line hard assocition remains same, because it helps 
-           while reactivating extra line subscription */
-        FIND FIRST lMLMobSub EXCLUSIVE-LOCK WHERE 
-                   lMLMobSub.MsSeq        EQ TermMobSub.MultiSimId   AND
-                   lMLMobSub.MultiSimId   EQ TermMobSub.MsSeq        AND 
-                   lMLMobSub.MultiSimType EQ {&MULTISIMTYPE_PRIMARY} NO-ERROR.
- 
-        IF AVAIL lMLMobSub THEN 
-           ASSIGN lMLMobSub.MultiSimId   = 0
-                  lMLMobSub.MultiSimType = 0.
+                   /* Get any other main line available for customer*/
+                  fCheckExistingMainLineAvailForExtraLine(INPUT lELMobsub.clitype ,
+                                                          INPUT bcustomer.custidtype , 
+                                                          INPUT bcustomer.orgID,
+                                                          OUTPUT lOtherMLSeq ) . 
                   
-         */            
+                  IF lOtherMLSeq <> 0 THEN 
+                  DO:
+             
+                       /*  Check how many extra lines exist for other main line*/
+                      lcELCount = fExtraLineCountForMainLine(lOtherMLSeq). 
+            
+                     
+                      FIND FIRST lMLMobSub NO-LOCK WHERE 
+                                 lMLMobSub.brand         EQ   Syst.Var:gcBrand     AND
+                                 lMLMobSub.MsSeq         EQ   lOtherMLSeq          AND
+                                 lMLMobsub.paytype       EQ   FALSE                AND
+                                 (lMLMobsub.MsStatus     EQ   {&MSSTATUS_ACTIVE} OR
+                                  lMLMobsub.MsStatus     EQ   {&MSSTATUS_BARRED})  AND
+                                 lMLMobSub.MultiSimType  EQ   {&MULTISIMTYPE_PRIMARY} NO-ERROR. 
+                   
+                      IF fCLITypeAllowedForExtraLine ( INPUT lMLMobsub.clitype , 
+                                                       INPUT lELMobsub.clitype ,
+                                                       OUTPUT lAllowedELCount ) 
+                      AND fCheckForMandatoryExtraLine ( INPUT lMLMobSub.MsSeq , 
+                                                        INPUT bCustomer.custnum ,
+                                                        INPUT lMLMobSub.clitype ,
+                                                        INPUT lELMobsub.clitype ,
+                                                        TRUE )  
+                                 /* For the CONT29 attachment , already CONT28 should exist. It is mandatory*/
+                      THEN DO:
+             
+                          IF lcELCount < lAllowedELCount 
+                          THEN DO:
+                 
+                              FIND FIRST lELMobsub2 EXCLUSIVE-LOCK WHERE
+                                         ROWID(lELMobsub2)  EQ ROWID(lELMobsub) NO-ERROR.
+                
+                              IF NOT AVAIL(lELMobsub2) OR LOCKED(lELMobsub2) THEN NEXT.
+                
+                              ASSIGN lELMobsub2.multisimid    =   lOtherMLSeq
+                                     lELMobsub2.MultiSimType  =   lELMobsub.MultiSimType
+                                     lisELAttached            =   TRUE.
+                                   .
+                 
+                              FIND CURRENT lELMobsub2 NO-LOCK NO-ERROR.
 
+                          END. /*  IF lcELCount < lAllowedELCount */
+                           
+                      END. /* IF fCLITypeAllowedForExtraLine */
+                      
+                  END. /*  IF lOtherMLSeq <> 0 THEN  */
+
+                  IF lisELAttached = NO
+                  THEN DO:
+             
+                      FIND FIRST lELOrder NO-LOCK WHERE 
+                                 lELOrder.brand        EQ Syst.Var:gcBrand          AND
+                                 lELOrder.MsSeq        EQ lELMobsub.msseq           AND           
+                                 lELOrder.MultiSimId   NE 0                         AND
+                                 lELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} NO-ERROR.
+                   
+                      IF AVAIL lELOrder AND fCLITypeIsExtraLine(lELOrder.CLIType) 
+                      THEN DO:
+                          FIND FIRST lELOrderAction NO-LOCK WHERE
+                                     lELOrderAction.Brand    = Syst.Var:gcBrand        AND
+                                     lELOrderAction.OrderID  = lELOrder.OrderID        AND
+                                     lELOrderAction.ItemType = "ExtraLineDiscount"     AND
+                                     lELOrderAction.ItemKey  = lELOrder.CLIType + "DISC"  NO-ERROR.
+                   
+                         IF AVAIL lELOrderAction THEN     
+                            fCloseExtraLineDiscount(lELOrder.MsSeq,
+                                                    lELOrderAction.ItemKey,
+                                                    TODAY).
+                      END. /* IF AVAIL lELOrder */
+                  END. /* IF lisELAttached = NO */
+              END. /* FOR EACH lELMobsub*/
+          END. /*   IF lcELCount > 0 AND */
+      END. /* IF fCLITypeIsMainLine */      
+      ELSE IF fCLITypeIsExtraLine(TermMobSub.CLIType) 
+      THEN DO:
+
+           FIND FIRST lELOrder NO-LOCK WHERE 
+                      lELOrder.brand        EQ Syst.Var:gcBrand          AND
+                      lELOrder.MsSeq        EQ liExtraLineMsSeq          AND           
+                      lELOrder.MultiSimId   NE 0                         AND
+                      lELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} NO-ERROR.
+
+           IF AVAIL lELOrder AND fCLITypeIsExtraLine(lELOrder.CLIType) 
+           THEN DO:
+               FIND FIRST lELOrderAction NO-LOCK WHERE
+                          lELOrderAction.Brand    = Syst.Var:gcBrand        AND
+                          lELOrderAction.OrderID  = lELOrder.OrderID        AND
+                          lELOrderAction.ItemType = "ExtraLineDiscount"     AND
+                          lELOrderAction.ItemKey  = lELOrder.CLIType + "DISC"  NO-ERROR.
+
+               IF AVAIL lELOrderAction THEN     
+                   fCloseExtraLineDiscount(lELOrder.MsSeq,
+                                          lELOrderAction.ItemKey,
+                                          TODAY).
+
+           END. /* IF AVAIL lELOrder */
+       END. /*  ELSE IF fCLITypeIsExtraLine */ 
    END. /* IF AVAILABLE bCLIType */
 
    /* ADDLine-20 Additional Line 
