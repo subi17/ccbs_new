@@ -394,17 +394,17 @@ PROCEDURE pWriteDump:
             CASE lcField:
                 WHEN "#BANKCODE"   THEN lcValue =  lcTFBank.
                 WHEN "#BANKNAME"   THEN DO:
-                         IF lcTFBank =  "0049" THEN "Uno-E".
-                    ELSE IF lcTFBank =  "0225" THEN "Cetelem".
-                    ELSE IF lcTFBank =  "0081" THEN "Sabadell".
+                         IF lcTFBank =  "0049" THEN lcValue = "Uno-E".
+                    ELSE IF lcTFBank =  "0225" THEN lcValue = "Cetelem".
+                    ELSE IF lcTFBank =  "0081" THEN lcValue = "Sabadell".
                 END.
-                WHEN "#RUNDATE"    THEN lcValue =  STRING(TODAY,"99/99/9999").
+                WHEN "#RUNDATE"    THEN lcValue =  STRING(TODAY,"99-99-9999").
                 WHEN "#PAYTERMQTY" THEN lcValue =  STRING(liPayterm).
                 WHEN "#Q25QTY"     THEN lcValue =  STRING(liQ25).
-                WHEN "#TOTALAMT"   THEN lcValue =  STRING(ldeTotal,">>>,>>>,>>>,>>9.99").
-                WHEN "#PAYTERMAMT" THEN lcValue =  STRING(ldePayterms,">>>,>>>,>>>,>>9.99").
-                WHEN "#Q25AMT"     THEN lcValue =  STRING(ldeQ25,">>>,>>>,>>>,>>9.99").
-                WHEN "#Q25EXTNAMT" THEN lcValue =  STRING(ldeExtensions,">>>,>>>,>>>,>>9.99").
+                WHEN "#TOTALAMT"   THEN lcValue =  TRIM(STRING(ldeTotal,">>>>>>>>>>>9.99")).
+                WHEN "#PAYTERMAMT" THEN lcValue =  TRIM(STRING(ldePayterms,">>>>>>>>>>>9.99")).
+                WHEN "#Q25AMT"     THEN lcValue =  TRIM(STRING(ldeQ25,">>>>>>>>>>>9.99")).
+                WHEN "#Q25EXTNAMT" THEN lcValue =  TRIM(STRING(ldeExtensions,">>>>>>>>>>>9.99")).
                 OTHERWISE lcValue = "".
             END CASE.
         END.
