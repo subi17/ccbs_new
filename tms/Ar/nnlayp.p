@@ -121,6 +121,7 @@ DEF VAR ldtChkDate AS DATE              NO-UNDO.
 DEF VAR liPaymState AS INT              NO-UNDO.
 DEF VAR lcCustName  AS CHAR             NO-UNDO.
 DEF VAR lcExtInvID  AS CHAR             NO-UNDO.
+DEF VAR liInvNum    AS INT              NO-UNDO.
 
 ASSIGN defcurr   = fCParamC("DefCurrency")
        liDueDate = fCParamI("DueDateTrans").
@@ -159,7 +160,9 @@ WITH
 form /* Invoicen numerohakua varten */
     "Brand .:" lcBrand skip
     "Invoice:" lcExtInvID  FORMAT "X(14)" 
-    help "Give Invoice No."    
+    help "Give Invoice External No." SKIP
+    "InvNum.:" liInvNum  FORMAT ">>>>>>>>9" 
+    help "Give Invoice Internal No."    
     with row 4 col 2 title color value(Syst.Var:ctc) " FIND INVOICE No."
     COLOR value(Syst.Var:cfc) NO-LABELS OVERLAY FRAME hayr.
 
@@ -477,24 +480,46 @@ repeat WITH FRAME sel:
         /* Haku 1 */
         IF Syst.Var:toimi = 1 THEN DO:  /* haku sarakk. 1 */
            Syst.Var:cfc = "puyr". RUN Syst/ufcolor.p.
-           lcExtInvID = "".
+           ASSIGN
+              lcExtInvID = ""
+              liInvNum = 0.
            Syst.Var:ehto = 9. RUN Syst/ufkey.p. ufkey = TRUE.
            DISPLAY lcBrand WITH FRAME hayr.
            UPDATE lcBrand WHEN Syst.Var:gcAllBrand
-                  lcExtInvID WITH FRAME hayr.
+                  lcExtInvID
+                  liInvNum
+                  WITH FRAME hayr.
            HIDE FRAME hayr no-pause.
 
-           IF lcExtInvID <> "" THEN DO:
-              IF lcBrand = "*" THEN 
+           IF lcExtInvID <> "" AND
+               liInvNum <> 0 THEN DO:
+
               FIND FIRST Invoice where 
-                 Invoice.Brand = lcBrand AND
-                 Invoice.ExtInvID >= INPUT lcExtInvID
+                 Invoice.Brand   = lcBrand AND
+                 Invoice.InvNum = INPUT liInvNum AND
+                 Invoice.ExtInvID = INPUT lcExtInvID
               no-lock no-error.
 
-              ELSE
+              IF NOT fRecFound(1) THEN NEXT BROWSE.
+
+              NEXT LOOP.
+           END.
+           ELSE IF lcExtInvID <> "" THEN DO:
+
               FIND FIRST Invoice where 
                  Invoice.Brand   = lcBrand AND
                  Invoice.ExtInvID >= INPUT lcExtInvID
+              no-lock no-error.
+
+              IF NOT fRecFound(1) THEN NEXT BROWSE.
+
+              NEXT LOOP.
+           END.
+           ELSE IF liInvNum <> 0 THEN DO:
+
+              FIND FIRST Invoice where 
+                 Invoice.Brand   = lcBrand AND
+                 Invoice.InvNum = INPUT liInvNum
               no-lock no-error.
 
               IF NOT fRecFound(1) THEN NEXT BROWSE.
