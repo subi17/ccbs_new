@@ -57,6 +57,7 @@
 "KN" "KONECTA OUTBOUND" "" 0 "" "" "" "jose.encinas@masmovil.com" "1" 99 yes "" ""
 "KO" "KONECTA CROSS SELLING OUTBOUND" "" 0 "" "" "" "antonio.guijarro@masmovil.com" "1" 99 yes "" ""
 "KR" "KONECTA RECEPCION" "" 0 "" "" "" "cristina.munoz@masmovil.com" "1" 99 yes "" ""
+"KT" "KONECTA RETENCION" "" 0 "" "" "" "emilio.ruiz@masmovil.com" "1" 99 yes "" ""
 "KW" "KONECTA WEB" "" 0 "" "" "" "cristina.munoz@masmovil.com" "1" 99 yes "" ""
 "KX" "KONECTA EMISION OUTBOUND" "" 0 "" "" "" "luis.estrada@MasMovil.com" "1" 99 yes "" ""
 "MA" "MADISON OUTBOUND" "" 0 "" "" "" "jose.encinas@masmovil.com" "1" 99 yes "" ""
