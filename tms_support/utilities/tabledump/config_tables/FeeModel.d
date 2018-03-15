@@ -36,6 +36,8 @@
 "CONT30MF" "Contrato 30" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT31MF" "La Tarifa Tic Tac" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT32MF" "La Sinfín 3 GB" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"CONT33MF" "La Sinfín 7 GB" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
+"CONT34MF" "La Ciento 2 GB" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT7MF" "Contrato 7 Service package" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT8MF" "La del Uno service package" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
 "CONT9MF" "Contrato 9 monthly fee" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "" "1" 0
