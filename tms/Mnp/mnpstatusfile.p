@@ -354,7 +354,8 @@ PROCEDURE pMNPStatusCheck:
                MNPSub.MNPSeq = MNPProcess.MNPSeq NO-LOCK:
          FIND MobSub WHERE
               MobSub.MsSeq = MNPSub.MsSeq NO-LOCK NO-ERROR.
-         IF AVAIL MobSub THEN RETURN
+         IF AVAIL MobSub AND 
+                  MobSub.MsStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE} THEN RETURN
             "ERROR: subscription exists: " + STRING(MNPSub.MsSeq).
       END.
          
