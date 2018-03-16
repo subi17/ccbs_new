@@ -1,0 +1,131 @@
+ADD FIELD "AccountID" OF "SingleFee" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "AccountID"
+  POSITION 34
+  MAX-WIDTH 4
+  COLUMN-LABEL "AccountID"
+  HELP "Internal TMS ID"
+  ORDER 300
+  
+ADD FIELD "AccountID" OF "FixedFee" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "AccountID"
+  POSITION 36
+  MAX-WIDTH 4
+  COLUMN-LABEL "AccountID"
+  HELP "Internal TMS ID"
+  ORDER 320
+
+ADD FIELD "AccountID" OF "Invoice" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "AccountID"
+  POSITION 101
+  MAX-WIDTH 4
+  COLUMN-LABEL "AccountID"
+  HELP "Internal TMS ID"
+  ORDER 1470
+  
+ADD FIELD "AccountID" OF "InvoiceTargetGroup" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "AccountID"
+  POSITION 10
+  MAX-WIDTH 4
+  COLUMN-LABEL "AccountID"
+  HELP "Internal TMS ID"
+  ORDER 90
+
+ADD FIELD "CustAccName" OF "InvoiceTargetGroup" AS character 
+  FORMAT "x(30)"
+  INITIAL ""
+  LABEL "CustAccName"
+  POSITION 11
+  MAX-WIDTH 60
+  COLUMN-LABEL "CustAccName"
+  HELP "Customer account nickname"
+  ORDER 100
+
+ADD FIELD "Currency" OF "InvoiceTargetGroup" AS character 
+  FORMAT "x(5)"
+  INITIAL ""
+  LABEL "Currency"
+  POSITION 12
+  MAX-WIDTH 10
+  COLUMN-LABEL "Currency"
+  HELP "Currency code"
+  ORDER 110
+
+ADD FIELD "BankAccount" OF "InvoiceTargetGroup" AS character 
+  FORMAT "x(16)"
+  INITIAL ""
+  LABEL "BankAccount"
+  POSITION 13
+  MAX-WIDTH 32
+  COLUMN-LABEL "BankAccount"
+  HELP "Bank  Account No"
+  ORDER 120
+
+ADD FIELD "BankName" OF "InvoiceTargetGroup" AS character 
+  FORMAT "x(60)"
+  INITIAL ""
+  LABEL "BankName"
+  POSITION 14
+  MAX-WIDTH 120
+  COLUMN-LABEL "BankName"
+  HELP "Bank Name"
+  ORDER 130
+
+ADD FIELD "PaymentMethod" OF "InvoiceTargetGroup" AS integer 
+  FORMAT "->>>9"
+  INITIAL "0"
+  LABEL "PaymentMethod"
+  POSITION 15
+  MAX-WIDTH 4
+  COLUMN-LABEL "PaymentMethod"
+  HELP "Payment method (days +/- dueday"
+  ORDER 140
+
+ADD FIELD "MandateId" OF "InvoiceTargetGroup" AS character 
+  FORMAT "x(35)"
+  INITIAL ""
+  LABEL "MandateId"
+  POSITION 16
+  MAX-WIDTH 70
+  COLUMN-LABEL "MandateId"
+  HELP "Mandate ID"
+  ORDER 150
+
+ADD FIELD "MandateDate" OF "InvoiceTargetGroup" AS date 
+  FORMAT "99-99-99"
+  INITIAL ?
+  LABEL "MandateDate"
+  POSITION 17
+  MAX-WIDTH 4
+  COLUMN-LABEL "MandateDate"
+  HELP "Mandate date"
+  ORDER 160  
+  
+  
+ADD FIELD "AccountID" OF "MobSub" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "AccountID"
+  POSITION 39
+  MAX-WIDTH 4
+  COLUMN-LABEL "AccountID"
+  HELP "Internal TMS ID"
+  ORDER 910  
+
+ADD FIELD "AccountID" OF "MSOwner" AS integer 
+  FORMAT ">>>>>>>>9"
+  INITIAL "0"
+  LABEL "AccountID"
+  POSITION 23
+  MAX-WIDTH 4
+  COLUMN-LABEL "AccountID"
+  HELP "Internal TMS ID"
+  ORDER 370
+  
