@@ -72,32 +72,23 @@ DEFINE VARIABLE liTime             AS INTEGER   NO-UNDO.
    ASSIGN
       CustomerAccount.AccountID = NEXT-VALUE(AccountID)
       CustomerAccount.CustNum = OrderCustomer.CustNum 
-      CustomerAccount.DefaultAcc = TRUE.
+      CustomerAccount.DefaultAcc = TRUE
+      CustomerAccount.BillCycle = 1
+      CustomerAccount.InvInterval = 1
+      CustomerAccount.DelType = OrderCustomer.DelType
+      CustomerAccount.FromDate = TODAY 
+      CustomerAccount.ToDate = 12/31/2049.
 /*
-      CustomerAccount.AccountName =    
-      CustomerAccount.ShippingAddressID =      
-      CustomerAccount.InvoiceGroup = 
+      CustomerAccount.AccountName = 
+      CustomerAccount.ShippingAddressID =       
       CustomerAccount.DueDateOffset = 
 */
-/*
-   FIND FIRST InvoiceTargetGroup WHERE
-              InvoiceTargetGroup.CustNum = CustomerAccount.CustNum.      
-   IF AVAIL InvoiceTargetGroup THEN
-   ASSIGN        
-      CustomerAccount.DeliveryMethod = InvoiceTargetGroup.DelType
-      CustomerAccount.ValidFrom = InvoiceTargetGroup.FromDate.
-      CustomerAccount.ValidTo = InvoiceTargetGroup.ToDate.      
-      
-   FIND FIRST FMItem NO-LOCK WHERE
-              FMItem.Brand     = Syst.Var:gcBrand AND
-              FMItem.FeeModel  = DayCampaign.FeeModel AND
-              FMItem.ToDate   >= ldaOrderDate AND
-              FMItem.FromDate <= ldaOrderDate NO-ERROR.
-   IF AVAIL FMItem THEN
-      ASSIGN      
-      CustomerAccount.BillingCycle = FMItem.BillCycle
-      CustomerAccount.BillingInterval = FMItem.Interval.
-*/
+   FIND FIRST Customer NO-LOCK WHERE Customer.CustNum = CustomerAccount.CustNum NO-ERROR.
+   IF AVAIL Customer THEN DO:
+      FIND FIRST InvGroup OF Customer NO-LOCK.
+      CustomerAccount.InvoiceGroup = InvGroup.InvGroup.
+   END.
+
    RETURN TRUE.
 END.
 /* CDS-5 */

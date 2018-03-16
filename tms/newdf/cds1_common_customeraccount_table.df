@@ -56,28 +56,28 @@ ADD FIELD "ShippingAddressID" OF "CustomerAccount" AS integer
   ORDER 50
   MANDATORY
 
-ADD FIELD "BillingCycle" OF "CustomerAccount" AS integer 
+ADD FIELD "BillCycle" OF "CustomerAccount" AS integer 
   FORMAT ">>9"
   INITIAL "0"
-  LABEL "BillingCycle"
-  COLUMN-LABEL "BillingCycle"
+  LABEL "BillCycle"
+  COLUMN-LABEL "BillCycle"
   HELP "Billing cycle (day of the month)"
   ORDER 60
 
-ADD FIELD "BillingInterval" OF "CustomerAccount" AS integer 
+ADD FIELD "InvInterval" OF "CustomerAccount" AS integer 
   FORMAT ">>9"
   INITIAL "0"
-  LABEL "BillingInterval"
-  COLUMN-LABEL "BillingInterval"
+  LABEL "InvInterval"
+  COLUMN-LABEL "InvInterval"
   HELP "Billing interval (in months) calculated from FirstInvMonth"
   ORDER 70
   
-ADD FIELD "DeliveryMethod" OF "CustomerAccount" AS integer 
+ADD FIELD "DelType" OF "CustomerAccount" AS integer 
   FORMAT ">>>>>>>>9"
   INITIAL "0"
-  LABEL "DeliveryMethod"
-  COLUMN-LABEL "DeliveryMethod"
-  HELP "Invoice delivery method"
+  LABEL "DelType"
+  COLUMN-LABEL "DelType"
+  HELP "Invoice's delivery type"
   ORDER 80
  
 ADD FIELD "InvoiceGroup" OF "CustomerAccount" AS character 
@@ -96,19 +96,19 @@ ADD FIELD "DueDateOffset" OF "CustomerAccount" AS integer
   HELP "DueDate Offset"
   ORDER 100
 
-ADD FIELD "ValidFrom" OF "CustomerAccount" AS date 
+ADD FIELD "FromDate" OF "CustomerAccount" AS date 
   FORMAT "99-99-99"
   INITIAL ?
-  LABEL "ValidFrom"
-  COLUMN-LABEL "ValidFrom"
+  LABEL "FromDate"
+  COLUMN-LABEL "FromDate"
   HELP "Date and time when Customer Account has created"
   ORDER 110  
   
-ADD FIELD "ValidTo" OF "CustomerAccount" AS date
+ADD FIELD "ToDate" OF "CustomerAccount" AS date
   FORMAT "99-99-99"
   INITIAL ?
-  LABEL "ValidTo"
-  COLUMN-LABEL "ValidTo"
+  LABEL "ToDate"
+  COLUMN-LABEL "ToDate"
   HELP "Date and time when Customer Account will expire"
   ORDER 120  
   
