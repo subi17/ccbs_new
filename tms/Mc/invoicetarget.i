@@ -55,7 +55,31 @@ FUNCTION fAddInvoiceTargetGroup RETURNS INT
           bInvoiceTargetGroup.CustNum = bCustomer.CustNum 
           bInvoiceTargetGroup.FromDate = TODAY 
           bInvoiceTargetGroup.ToDate = 12/31/2049
-          bInvoiceTargetGroup.DelType = iiDelType.
+          bInvoiceTargetGroup.DelType = iiDelType
+
+/* CDS-5 */
+          bInvoiceTargetGroup.Currency = bCustomer.Currency
+          bInvoiceTargetGroup.BankAccount = bCustomer.BankAcct
+          bInvoiceTargetGroup.PaymentMethod = bCustomer.PaymMethod.
+
+   FIND FIRST CustomerAccount NO-LOCK WHERE CustomerAccount.CustNum = bInvoiceTargetGroup.CustNum.
+      IF AVAIL CustomerAccount THEN 
+         ASSIGN bInvoiceTargetGroup.AccountID = CustomerAccount.AccountID        
+                bInvoiceTargetGroup.CustAccName = CustomerAccount.AccountName.
+
+   FIND FIRST BankAccount NO-LOCK WHERE BankAccount.Brand = Syst.Var:gcBrand AND
+                                        BankAccount.BankAccount = bCustomer.BankAcct.
+   IF AVAIL BankAccount THEN DO:
+      FIND FIRST BankIdCode NO-LOCK WHERE BankIdCode.BIC = BankAccount.BIC.
+      IF AVAIL BankIDCode THEN bInvoiceTargetGroup.BankName = BankIdCode.BankName.
+   END.
+
+   FIND FIRST MsOwner NO-LOCK WHERE MsOwner.Brand   = Syst.Var:gcBrand AND
+                                    MsOwner.CustNum = bCustomer.CustNum NO-ERROR.
+   IF AVAIL MsOwner THEN 
+      ASSIGN bInvoiceTargetGroup.MandateId = MsOwner.MandateId
+             bInvoiceTargetGroup.MandateDate = MsOwner.MandateDate. 
+/*CDS-5 ends */
       
    IF llDoEvent THEN fMakeCreateEvent((BUFFER bInvoiceTargetGroup:HANDLE),
                                       "",

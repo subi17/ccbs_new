@@ -46,6 +46,63 @@ DEF VAR lcMemo       AS CHAR NO-UNDO.
 DEF BUFFER bOrderCustomer FOR OrderCustomer.
 DEF BUFFER bMobSub FOR MobSub.
 
+/* CDS-5 */
+FUNCTION fCreateCustomerAccount RETURNS LOGICAL
+  (INPUT iiOrder   AS INT,
+   INPUT iiTarget  AS INT):
+
+DEFINE VARIABLE ldaOrderDate       AS DATE      NO-UNDO. 
+DEFINE VARIABLE liTime             AS INTEGER   NO-UNDO.
+
+   FIND FIRST Order NO-LOCK WHERE
+              Order.Brand   = Syst.Var:gcBrand AND
+              Order.OrderId = iiOrder
+              NO-ERROR.
+   IF NOT AVAILABLE Order THEN RETURN FALSE. 
+
+   Func.Common:mSplitTS(Order.CrStamp, OUTPUT ldaOrderDate, OUTPUT liTime).
+
+   FIND FIRST OrderCustomer EXCLUSIVE-LOCK WHERE
+              OrderCustomer.Brand   = Syst.Var:gcBrand AND
+              OrderCustomer.OrderID = iiOrder AND
+              OrderCustomer.RowType = iiTarget NO-ERROR.
+   IF NOT AVAILABLE OrderCustomer THEN RETURN FALSE. 
+
+   CREATE CustomerAccount.
+   ASSIGN
+      CustomerAccount.AccountID = NEXT-VALUE(AccountID)
+      CustomerAccount.CustNum = OrderCustomer.CustNum 
+      CustomerAccount.DefaultAcc = TRUE.
+/*
+      CustomerAccount.AccountName =    
+      CustomerAccount.ShippingAddressID =      
+      CustomerAccount.InvoiceGroup = 
+      CustomerAccount.DueDateOffset = 
+*/
+/*
+   FIND FIRST InvoiceTargetGroup WHERE
+              InvoiceTargetGroup.CustNum = CustomerAccount.CustNum.      
+   IF AVAIL InvoiceTargetGroup THEN
+   ASSIGN        
+      CustomerAccount.DeliveryMethod = InvoiceTargetGroup.DelType
+      CustomerAccount.ValidFrom = InvoiceTargetGroup.FromDate.
+      CustomerAccount.ValidTo = InvoiceTargetGroup.ToDate.      
+      
+   FIND FIRST FMItem NO-LOCK WHERE
+              FMItem.Brand     = Syst.Var:gcBrand AND
+              FMItem.FeeModel  = DayCampaign.FeeModel AND
+              FMItem.ToDate   >= ldaOrderDate AND
+              FMItem.FromDate <= ldaOrderDate NO-ERROR.
+   IF AVAIL FMItem THEN
+      ASSIGN      
+      CustomerAccount.BillingCycle = FMItem.BillCycle
+      CustomerAccount.BillingInterval = FMItem.Interval.
+*/
+   RETURN TRUE.
+END.
+/* CDS-5 */
+
+
 FIND FIRST Order WHERE
            Order.Brand   = Syst.Var:gcBrand AND
            Order.OrderId = iiOrderId 
@@ -194,6 +251,10 @@ IF liOldCustnum = 0 THEN DO:
       RELEASE Limit.
 
    END.
+
+/* CDS-5 */
+   fCreateCustomerAccount(iiOrderID, iiRole).
+/* CDS-5 */
 
    ASSIGN OICustNum = new-custnum.
 
