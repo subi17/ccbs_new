@@ -236,7 +236,7 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
       IF NOT AVAIL bOrderCustomer THEN RETURN FALSE.
 
       FIND FIRST Country NO-LOCk WHERE
-         Country.CoName EQ bOrderCustomer.Country NO-ERROR.
+         Country.Country EQ bOrderCustomer.Country NO-ERROR.
       IF AVAIL Country THEN
          lcCountryIso3 = Country.CountryISO3.
       ELSE
