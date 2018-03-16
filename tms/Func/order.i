@@ -446,46 +446,76 @@ END.
 
 /*
    Function updates latest  convergent/fixed order install address
-   to Customer table.
+   to Customer table. 
+   Project: FIAD-1 Batch to update billing address in TMS.
 */
 FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
-  (INPUT iiOrder   AS INT,
-   INPUT iiTarget  AS INT,
-   INPUT iiCustNum AS INT,
-   INPUT ilCleanLogs AS LOG):
+   (INPUT iiOrder AS INT):
 
    DEF BUFFER bCustomer       FOR Customer.
    DEF BUFFER bOrder          FOR Order.
-   DEF BUFFER bOrderCustomer  FOR Customer.
-   DEF BUFFER bMobSub         FOR MobSub.
+   DEF BUFFER bOrderComp      FOR Order.
+   DEF BUFFER bOrderCustomer  FOR OrderCustomer.
+   DEF BUFFER bOrderFusion    FOR OrderFusion.
 
-   DEFINE VARIABLE i AS INT NO-UNDO.
+   /* DEFINE VARIABLE llFound AS LOG NO-UNDO INIT FALSE.*/
+   DEFINE VARIABLE liOrderNewer AS INT NO-UNDO INIT 0.
 
-  /* FIND FIRST bOrder NO-LOCK WHERE
+   FIND FIRST bOrder NO-LOCK WHERE
       bOrder.OrderId EQ iiOrder.
-   IF NOT AVAIL Order THEN RETURN FALSE.*/
+   IF NOT AVAIL bOrder THEN RETURN FALSE.
 
    FIND FIRST bCustomer NO-LOCK WHERE
-      bCustomer.CustNum EQ iiOrder.
+      bCustomer.CustNum EQ bOrder.CustNum.
    IF NOT AVAIL bCustomer THEN RETURN FALSE.
 
    IF bCustomer.DelType EQ 1 THEN RETURN FALSE. /* Type Paper */
 
-   FOR EACH bMobSub NO-LOCK WHERE
-            bMobSub.CustNum EQ bCustomer.CustNum:
-      IF fIsConvergentORFixedOnly(bMobSub.CliType) THEN
-         i = i + 1.
-   END.
-   IF i > 6 THEN DO: /* Has several active convergent subs */
-      FOR EACH bOrder NO-LOCK WHERE
-               bOrder.CustNum EQ Customer.CustNum AND
-               bOrder.StatusCode EQ "6": /* Delivered */
-         IF NOT fIsConvergentORFixedOnly(bOrder.CliType) THEN NEXT.
+   FOR EACH bOrderComp NO-LOCK WHERE
+            bOrderComp.CustNum EQ bCustomer.CustNum:
+      IF bOrderComp.OrderId NE bOrder.OrderId AND
+         bOrderComp.CrStamp > bOrder.CrStamp THEN DO:
+         IF NOT fIsConvergentORFixedOnly(bOrderComp.CliType) THEN NEXT.
 
-
+         FIND FIRST bOrderFusion NO-LOCK WHERE
+            bOrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED}.
+         IF AVAIL bOrderFusion THEN DO:
+            RETURN FALSE.
+         END.
+         ELSE DO:
+            liOrderNewer = bOrderComp.OrderId.
+            LEAVE.
+         END.
       END.
    END.
 
+  /* IF NOT llFound THEN RETURN FALSE.*/
+      
+   FIND FIRST bOrderCustomer NO-LOCK WHERE
+              bOrderCustomer.Brand EQ "1" AND
+              bOrderCustomer.OrderId EQ (IF liOrderNewer EQ 0 THEN iiOrder ELSE liOrderNewer) AND
+              bOrderCustomer.RowType EQ 6 NO-ERROR.
+
+   IF llDoEvent THEN DO:
+      DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
+      lhCustomer = BUFFER Customer:HANDLE.
+      RUN StarEventInitialize(lhCustomer).
+      RUN StarEventSetOldBuffer ( lhCustomer ).
+   END.
+
+   /* Update Customer */
+   ASSIGN
+      bCustomer.Address = bOrderCustomer.Address WHEN bCustomer.Address NE bOrderCustomer.Address
+      bCustomer.ZipCode = bOrderCustomer.ZipCode WHEn bCustomer.ZipCode NE bOrderCustomer.ZipCode
+      bCustomer.PostOffice = bOrderCustomer.PostOffice WHEN bCustomer.PostOffice NE bOrderCustomer.PostOffice
+      bCustomer.Region = bOrderCustomer.Region WHEN bCustomer.Region NE bOrderCustomer.Region.
+
+   IF llDoEvent THEN DO:
+      RUN StarEventMakeModifyEvent ( lhCustomer ).
+      fCleanEventObjects().
+   END.
+
+   RETURN TRUE.
 
 END.
 
