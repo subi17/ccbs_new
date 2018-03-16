@@ -444,4 +444,49 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
 
 END.
 
+/*
+   Function updates latest  convergent/fixed order install address
+   to Customer table.
+*/
+FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
+  (INPUT iiOrder   AS INT,
+   INPUT iiTarget  AS INT,
+   INPUT iiCustNum AS INT,
+   INPUT ilCleanLogs AS LOG):
+
+   DEF BUFFER bCustomer       FOR Customer.
+   DEF BUFFER bOrder          FOR Order.
+   DEF BUFFER bOrderCustomer  FOR Customer.
+   DEF BUFFER bMobSub         FOR MobSub.
+
+   DEFINE VARIABLE i AS INT NO-UNDO.
+
+  /* FIND FIRST bOrder NO-LOCK WHERE
+      bOrder.OrderId EQ iiOrder.
+   IF NOT AVAIL Order THEN RETURN FALSE.*/
+
+   FIND FIRST bCustomer NO-LOCK WHERE
+      bCustomer.CustNum EQ iiOrder.
+   IF NOT AVAIL bCustomer THEN RETURN FALSE.
+
+   IF bCustomer.DelType EQ 1 THEN RETURN FALSE. /* Type Paper */
+
+   FOR EACH bMobSub NO-LOCK WHERE
+            bMobSub.CustNum EQ bCustomer.CustNum:
+      IF fIsConvergentORFixedOnly(bMobSub.CliType) THEN
+         i = i + 1.
+   END.
+   IF i > 6 THEN DO: /* Has several active convergent subs */
+      FOR EACH bOrder NO-LOCK WHERE
+               bOrder.CustNum EQ Customer.CustNum AND
+               bOrder.StatusCode EQ "6": /* Delivered */
+         IF NOT fIsConvergentORFixedOnly(bOrder.CliType) THEN NEXT.
+
+
+      END.
+   END.
+
+
+END.
+
 &ENDIF
