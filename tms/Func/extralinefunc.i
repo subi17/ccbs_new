@@ -205,6 +205,39 @@ FUNCTION fCheckForMandatoryExtraLine RETURNS LOGICAL
 
 END FUNCTION.    
 
+FUNCTION fGetOngoingExtralineCount RETURNS LOGICAL
+   (INPUT icExtraLineCLIType AS CHAR,
+    INPUT icCustIDType       AS CHAR,
+    INPUT icCustID           AS CHAR,
+    OUTPUT oiELCount         AS INT):
+
+   DEFINE BUFFER bELOrderCustomer FOR OrderCustomer.
+   DEFINE BUFFER bELOrder         FOR Order.
+
+   FOR EACH bELOrderCustomer NO-LOCK WHERE
+            bELOrderCustomer.Brand      EQ Syst.Var:gcBrand AND
+            bELOrderCustomer.CustId     EQ icCustID         AND
+            bELOrderCustomer.CustIdType EQ icCustIDType     AND
+            bELOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+       EACH bELOrder NO-LOCK WHERE
+            bELOrder.Brand        EQ Syst.Var:gcBrand                  AND
+            bELOrder.OrderId      EQ bELOrderCustomer.OrderId          AND
+            bELOrder.StatusCode   EQ {&ORDER_STATUS_PENDING_MAIN_LINE} AND
+            bELOrder.CLIType      EQ icExtraLineCLIType                AND
+            bELOrder.OrderType    NE {&ORDER_TYPE_RENEWAL}             AND
+            bELOrder.MultiSimId   NE 0                                 AND
+            bELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}:
+
+         IF LOOKUP(bELOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN
+            NEXT.
+
+         oiELCount = oiELCount + 1.
+   END.
+
+   RETURN TRUE.
+
+END FUNCTION.
+
 FUNCTION fCheckExistingMainLineAvailForExtraLine RETURNS INTEGER
    (INPUT icExtraLineCLIType AS CHAR,
     INPUT icCustIDType       AS CHAR,
@@ -323,16 +356,10 @@ FUNCTION fCheckOngoingMainLineAvailForExtraLine RETURNS INTEGER
 
       liCount = 0.
 
-      FOR EACH ELOrder NO-LOCK WHERE 
-               ELOrder.Brand        EQ Syst.Var:gcBrand                  AND 
-               ELOrder.StatusCode   EQ {&ORDER_STATUS_PENDING_MAIN_LINE} AND 
-               ELOrder.CustNum      EQ Order.CustNum                     AND
-               ELOrder.CLIType      EQ icExtraLineCLIType                AND 
-               ELOrder.OrderType    NE {&ORDER_TYPE_RENEWAL}             AND 
-               ELOrder.MultiSimId   NE 0                                 AND 
-               ELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}:
-         liCount = liCount + 1.
-      END.
+      fGetOngoingExtralineCount(icExtraLineCLIType,
+                                icCustIDType,
+                                icCustID,
+                                OUTPUT liCount).
 
       IF liCount EQ 0 THEN DO:
          IF NOT fCheckForMandatoryExtraLine(Order.OrderId,
