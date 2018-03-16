@@ -307,7 +307,7 @@ FUNCTION fFillOrderStruct RETURNS LOGICAL
       ELSE IF bOrder.OrderType = {&ORDER_TYPE_RENEWAL} THEN
          add_string(pcStruct,"contractType","3").
       ELSE
-         add_string(pcStruct,"contractType","NOT_AVAILABLE").
+         add_string(pcStruct,"contractType","4"). /* STC, ... */
       /* TMS has not definition for contractType=4 (Migration) in specs */
 
       add_boolean(pcStruct,"financed",FALSE).
