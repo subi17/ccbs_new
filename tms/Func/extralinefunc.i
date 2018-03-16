@@ -462,6 +462,7 @@ FUNCTION fCheckAndAssignOrphanExtraline RETURNS LOGICAL
     INPUT icMLCLIType AS CHAR):
 
    DEFINE BUFFER bELMobSub FOR MobSub.
+   DEFINE BUFFER MobSub    FOR MobSub.
 
    DEF VAR liELCount AS INT NO-UNDO. 
    DEF VAR liCount   AS INT NO-UNDO. 
