@@ -161,7 +161,7 @@ FOR EACH TMSCodes NO-LOCK WHERE
          TMSCodes.TableName = "OrderCustomer" AND
          TMSCodes.FieldName = "Profession":
 
-   IF NUM-ENTRIES(TMSCodes.ConfigValue) NE 2 THEN DO:
+   IF NUM-ENTRIES(TMSCodes.ConfigValue) NE 4 THEN DO:
       fReqStatus(3,"SYSTEM_ERROR: Incorrect profession configurations").
       RETURN.
    END.
