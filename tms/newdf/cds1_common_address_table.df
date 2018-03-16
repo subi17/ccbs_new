@@ -109,3 +109,8 @@ ADD INDEX "AddressID" ON "Address"
   UNIQUE
   PRIMARY
   INDEX-FIELD "AddressID" ASCENDING
+  
+ADD INDEX "HostTable" ON "Address" 
+  AREA "Sta_Index_4"
+  INDEX-FIELD "HostTable" ASCENDING 
+  INDEX-FIELD "KeyValue" ASCENDING    
