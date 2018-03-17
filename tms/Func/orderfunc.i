@@ -778,7 +778,7 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
    DEF VAR liMLMsSeq        AS INT  NO-UNDO INITIAL 0. 
    DEF VAR liMLOrderId      AS INT  NO-UNDO.  
 
-   FOR EACH lbELOrder NO-LOCK WHERE
+   FOR EACH lbELOrder EXCLUSIVE-LOCK  WHERE
             lbELOrder.Brand        EQ Syst.Var:gcBrand                  AND
             lbELOrder.StatusCode   EQ {&ORDER_STATUS_PENDING_MAIN_LINE} AND 
             lbELOrder.MultiSimId   EQ iiMainLineOrderId                 AND 
@@ -826,7 +826,7 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
 
             IF AVAIL lbMLOrder THEN DO:
               
-               lcNewOrderStatus = "".
+               liMLOrderId = 0.
 
                FIND FIRST lbMLOrderCustomer NO-LOCK WHERE
                           lbMLOrderCustomer.Brand   EQ Syst.Var:gcBrand                   AND
@@ -839,23 +839,33 @@ FUNCTION fActionOnExtraLineOrders RETURN LOGICAL
                                                                         lbMLOrderCustomer.CustID,
                                                                         OUTPUT liMLMsSeq).
                   IF liMLOrderID > 0 THEN 
-                     ASSIGN lbELOrder.MultiSimId = liMLOrderId
-                            lcNewOrderStatus     = fGetReleaseStatus(lbELOrder.OrderType). 
+                     lbELOrder.MultiSimId = liMLOrderId.
                   ELSE DO:
                      liMLOrderId = fCheckOngoingMainLineAvailForExtraLine(lbELOrder.CLIType,
                                                                           lbMLOrderCustomer.CustIdType,
                                                                           lbMLOrderCustomer.CustID).
                      IF liMLOrderID > 0 THEN 
-                        ASSIGN lbELOrder.MultiSimId = liMLOrderId
-                               lcNewOrderStatus     = fGetReleaseStatus(lbELOrder.OrderType). 
+                        lbELOrder.MultiSimId = liMLOrderId.
                   END.
                END.   
                
-               IF liMLOrderID       >  0 AND 
-                  lcNewOrderStatus <> "" THEN 
-                  fSetOrderStatus(lbELOrder.OrderId,lcNewOrderStatus).
-               ELSE fSetOrderStatus(lbELOrder.OrderId,{&ORDER_STATUS_CLOSED}).
-         
+               IF liMLOrderID EQ 0 THEN DO:
+                  FIND FIRST lbELOrderAction EXCLUSIVE-LOCK WHERE
+                             lbELOrderAction.Brand    EQ Syst.Var:gcBrand           AND
+                             lbELOrderAction.OrderID  EQ lbELOrder.OrderID          AND
+                             lbELOrderAction.ItemType EQ "ExtraLineDiscount"        AND
+                             lbELOrderAction.ItemKey  EQ lbELOrder.CLIType + "DISC" NO-ERROR.
+
+                  IF AVAIL lbELOrderAction THEN DO:
+                     DELETE lbELOrderAction.
+                     Func.Common:mWriteMemo("Order",
+                                            STRING(lbELOrder.OrderID),
+                                            0,
+                                            "EXTRALINE DISCOUNT ORDERACTION REMOVED",
+                                            "Removed ExtraLineDiscount Item from OrderAction").
+                  END.
+               END.
+
             END.
 
          END. 

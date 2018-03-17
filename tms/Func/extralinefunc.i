@@ -209,6 +209,7 @@ FUNCTION fGetOngoingExtralineCount RETURNS LOGICAL
    (INPUT icExtraLineCLIType AS CHAR,
     INPUT icCustIDType       AS CHAR,
     INPUT icCustID           AS CHAR,
+    INPUT liMLOrderId        AS INT,
     OUTPUT oiELCount         AS INT):
 
    DEFINE BUFFER bELOrderCustomer FOR OrderCustomer.
@@ -359,6 +360,7 @@ FUNCTION fCheckOngoingMainLineAvailForExtraLine RETURNS INTEGER
       fGetOngoingExtralineCount(icExtraLineCLIType,
                                 icCustIDType,
                                 icCustID,
+                                Order.OrderId, /* Mainline OrderId */
                                 OUTPUT liCount).
 
       IF liCount EQ 0 THEN DO:
