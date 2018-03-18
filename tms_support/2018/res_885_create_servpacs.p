@@ -1,81 +1,60 @@
 /*
-   RES-885 National roaming traffic restrictions.
-   Script for creating default service package.
+   RES-885 NRTR National roaming traffic restrictions.
+   Script for creating default service packages.
 
 */
 
+DEF VAR lcLine AS CHAR NO-UNDO.
 
-{Syst/commpaa.i}
-Syst.Var:gcBrand = "1".
-{Func/cparam2.i}
-{Syst/eventlog.i}
-{Func/ftransdir.i}
+find servpac NO-LOCK where
+     servpac.brand = "1" and
+     servpac.servpac = "NW".
+find servel NO-LOCK where
+     servel.brand = "1" and
+     servel.servcom = "NW" and
+     servel.servpac = servpac.servpac.
 
-DEF VAR liCTServEl AS INT NO-UNDO.
+/* Create with res_885_create_servpacs_input.p */
+input from active_CONT_clitypes.txt.
 
-DEFINE BUFFER bCTServPac  FOR CTServPac.
-DEFINE BUFFER bCTServEl   FOR CTServEl.
-DEFINE BUFFER bCTServAttr FOR CTServAttr.
-
-
-FOR EACH CLIType WHERE 
-         CLIType.Brand = Syst.Var:gcBrand  AND 
-         CLIType.CLIType BEGINS "CONT"  NO-LOCK:
-   
-   FOR EACH CTServPac WHERE 
-            CTServPac.Brand   = Syst.Var:gcBrand         AND 
-            CTServPac.CLIType = CLIType.CLIType NO-LOCK:
-
-      CREATE bCTServPac.
-      BUFFER-COPY CTServPac EXCEPT CTServPac.CLIType 
-                                   CTServPac.FromDate
-                                   TO bCTServPac.
-      ASSIGN bCTServPac.CLIType  = CLIType.CLIType
-             bCTServPac.FromDate = TODAY NO-ERROR.
-                
-      IF ERROR-STATUS:ERROR THEN DO:
-         MESSAGE "ERROR: Creating CTServPac" VIEW-AS ALERT-BOX.
-         RETURN "ERROR: Creating CTServPac".
-      END.
-
-      FOR EACH CTServEl WHERE
-               CTServEl.Brand   = Syst.Var:gcBrand  AND 
-               CTServEl.CLIType = CTServPac.CLIType AND 
-               CTServEl.ServPac = CTServPac.ServPac NO-LOCK:
-         CREATE bCTServEl.
-         BUFFER-COPY CTServEl EXCEPT CTServEl.CTServEl
-                                     CTServEl.CLIType
-                                     CTServEl.FromDate
-                                     TO bCTServEl.
-         ASSIGN bCTServEl.CTServEl = NEXT-VALUE(CTServEl)
-                bCTServEl.CLIType  = CLIType.CliType
-                bCTServEl.FromDate = TODAY 
-                liCTServEl         = bCTServEl.CTServEl NO-ERROR.                                   
-
-         IF ERROR-STATUS:ERROR THEN DO: 
-            MESSAGE "ERROR: Creating CTServEl" VIEW-AS ALERT-BOX.
-            RETURN "ERROR: Creating CTServEl".
-         END.
-               
-         FIND ServCom WHERE
-              ServCom.Brand   = Syst.Var:gcBrand AND
-              ServCom.ServCom = CTServEl.ServCom NO-LOCK NO-ERROR.
-
-         IF AVAILABLE ServCom AND ServCom.ServAttr = TRUE THEN    
-            FOR EACH CTServAttr WHERE 
-                     CTServAttr.CTServEl = CTServEl.CTServEl NO-LOCK:
-               CREATE bCTServAttr.
-               BUFFER-COPY CTServAttr EXCEPT CTServAttr.CTServEl
-                                             CTServAttr.FromDate
-                                             TO bCTServAttr.
-               ASSIGN bCTServAttr.CTServEl = liCTServEl
-                      bCTServAttr.FromDate = TODAY NO-ERROR. 
-                  
-               IF ERROR-STATUS:ERROR THEN DO: 
-                  MESSAGE "ERROR: Creating CTServAttr" VIEW-AS ALERT-BOX.
-                  RETURN "ERROR: Creating CTServAttr".
-               END.
-            END.            
-      END.                     
-   END.
+repeat trans:
+   import unformatted lcLine.
+   lcLine = trim(lcLine).
+   FIND FIRST clitype NO-LOCK where
+              clitype.brand = "1" and
+              clitype.clitype = lcLine no-error.
+   IF NOT AVAIL clitype then do:
+      MESSAGE "Not available CliType " lcLine VIEW-AS ALERT-BOX.
+      next.
+   end.
+   FIND FIRST ctservpac NO-LOCK where
+              ctservpac.clitype = clitype.clitype and
+              ctservpac.servpac = "NW" no-error.
+   disp clitype.clitype avail(ctservpac).
+   if avail ctservpac then next.
+/* Not needed...
+   create ctservpac.
+   assign
+      ctservpac.brand = "1"
+      ctservpac.CLIType = clitype.clitype
+      ctservpac.FromDate = 9/1/2014
+      ctservpac.ServiceLimit = ""
+      ctservpac.ServPac  = ServPac.ServPac
+      ctservpac.ServType = 3
+      ctservpac.ToDate = 12/31/2049.
+*/
+   /* display "create ctservel " ctservpac.clitype.*/
+   create ctservel.
+   assign
+      ctservel.Brand = "1"
+      ctservel.ChgAllowed   = TRUE
+      ctservel.CLIType  = ctservpac.clitype
+      ctservel.CTServEl = next-value(CTServEl)
+      ctservel.DefParam = ""
+      ctservel.DefValue = 1
+      ctservel.FromDate = ctservpac.fromdate
+      ctservel.ServCom  = "NW"
+      ctservel.ServPac  = ctservpac.ServPac
+      ctservel.ServType = 1.
 END.
+

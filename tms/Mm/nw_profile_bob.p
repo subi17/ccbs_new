@@ -62,9 +62,9 @@ ASSIGN
 IF NOT lcRootDir > "" THEN RETURN.
 
 ASSIGN
-/*   lcIncDir  = lcRootDir + "incoming/incoming/" 
+/* lcIncDir  = lcRootDir + "incoming/incoming/" 
    lcProcDir = lcRootDir + "incoming/processed/"
- lcSpoolDir = lcRootDir + "outgoing/spool/"
+   lcSpoolDir = lcRootDir + "outgoing/spool/"
    lcOutDir   = lcRootDir + "outgoing/outgoing/".*/
    lcIncDir  = "incoming/incoming" 
    lcProcDir = "incoming/processed"
