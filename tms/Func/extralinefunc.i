@@ -92,12 +92,14 @@ END FUNCTION.
 FUNCTION fCLITypeIsExtraLine RETURNS LOGICAL
    (icExtraLineCLIType AS CHARACTER):
 
-   RETURN CAN-FIND(FIRST TMSRelation NO-LOCK WHERE 
-                         TMSRelation.TableName     EQ {&ELTABLENAME}          AND 
-                         TMSRelation.KeyType       EQ {&ELKEYTYPE}            AND                    
-                         TMSRelation.ChildValue    EQ icExtraLineCLIType      AND 
-                     INT(TMSRelation.RelationType) GT 0 ).
-
+   IF CAN-FIND(FIRST TMSRelation NO-LOCK WHERE 
+                     TMSRelation.TableName     EQ {&ELTABLENAME}     AND 
+                     TMSRelation.KeyType       EQ {&ELKEYTYPE}       AND                    
+                     TMSRelation.ChildValue    EQ icExtraLineCLIType AND 
+                 INT(TMSRelation.RelationType) GT 0)                 THEN 
+      RETURN TRUE.
+   ELSE 
+      RETURN FALSE.
 
 END.
 /* Check if the clitype is mainline clitype
@@ -107,16 +109,14 @@ FUNCTION fCLITypeIsMainLine RETURNS LOGICAL
 
    DEFINE BUFFER TMSRelation FOR TMSRelation.
 
-   FIND FIRST TMSRelation NO-LOCK WHERE 
-              TMSRelation.TableName     EQ {&ELTABLENAME} AND 
-              TMSRelation.KeyType       EQ {&ELKEYTYPE}   AND 
-              TMSRelation.ParentValue   EQ icCLIType      AND 
-          INT(TMSRelation.RelationType) GT 0              NO-ERROR.
-
-   IF AVAIL TMSRelation THEN 
+   IF CAN-FIND(FIRST TMSRelation NO-LOCK WHERE 
+                     TMSRelation.TableName     EQ {&ELTABLENAME} AND 
+                     TMSRelation.KeyType       EQ {&ELKEYTYPE}   AND 
+                     TMSRelation.ParentValue   EQ icCLIType      AND 
+                 INT(TMSRelation.RelationType) GT 0)             THEN 
       RETURN TRUE.
-   
-   RETURN FALSE.
+  ELSE  
+      RETURN FALSE.
 
 END FUNCTION.
 
@@ -469,9 +469,9 @@ FUNCTION fCheckAndAssignOrphanExtraline RETURNS LOGICAL
    DEF VAR liELCount AS INT NO-UNDO. 
    DEF VAR liCount   AS INT NO-UNDO. 
 
-   FOR EACH MobSub NO-LOCK USE-INDEX CustNum WHERE
+   FOR EACH MobSub EXCLUSIVE-LOCK USE-INDEX CustNum WHERE
             MobSub.Brand    EQ Syst.Var:gcBrand      AND
-            MobSub.CustNum  EQ Customer.CustNum      AND
+            MobSub.CustNum  EQ iiMLCustNum           AND
             MobSub.PayType  EQ FALSE                 AND
            (MobSub.MsStatus EQ {&MSSTATUS_ACTIVE} OR
             MobSub.MsStatus EQ {&MSSTATUS_BARRED})   BY MobSub.ActivationTS: 
@@ -484,6 +484,7 @@ FUNCTION fCheckAndAssignOrphanExtraline RETURNS LOGICAL
 
       IF MobSub.MultiSimId   NE 0 AND 
          MobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} THEN NEXT.
+
 
       IF NOT fCLITypeAllowedForExtraLine(icMLCLIType, MobSub.CLIType, 
                                          OUTPUT liELCount) THEN
