@@ -445,8 +445,11 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
 END.
 
 /*
-   Function updates latest  convergent/fixed order install address
+   Function updates latest convergent/fixed order install address
    to Customer table. 
+   Preconditions: Invoice delivery method is other than Paper and 
+   Fixed line has been successfully installed. Company customers 
+   Contact person address is not updated.
    Project: FIAD-1 Batch to update billing address in TMS.
 */
 FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
@@ -458,7 +461,6 @@ FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
    DEF BUFFER bOrderCustomer  FOR OrderCustomer.
    DEF BUFFER bOrderFusion    FOR OrderFusion.
 
-   /* DEFINE VARIABLE llFound AS LOG NO-UNDO INIT FALSE.*/
    DEFINE VARIABLE liOrderNewer AS INT NO-UNDO INIT 0.
 
    FIND FIRST bOrder NO-LOCK WHERE
@@ -473,11 +475,14 @@ FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
 
    FOR EACH bOrderComp NO-LOCK WHERE
             bOrderComp.CustNum EQ bCustomer.CustNum:
+      /* Update adress from newest order if several convergent orders */
       IF bOrderComp.OrderId NE bOrder.OrderId AND
          bOrderComp.CrStamp > bOrder.CrStamp THEN DO:
          IF NOT fIsConvergentORFixedOnly(bOrderComp.CliType) THEN NEXT.
 
          FIND FIRST bOrderFusion NO-LOCK WHERE
+            borderfusion.Brand EQ "1" AND
+            borderfusion.orderid = bOrderComp.Orderid AND
             bOrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED}.
          IF AVAIL bOrderFusion THEN DO:
             RETURN FALSE.
@@ -488,8 +493,6 @@ FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
          END.
       END.
    END.
-
-  /* IF NOT llFound THEN RETURN FALSE.*/
       
    FIND FIRST bOrderCustomer NO-LOCK WHERE
               bOrderCustomer.Brand EQ "1" AND
@@ -506,7 +509,7 @@ FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
    /* Update Customer */
    ASSIGN
       bCustomer.Address = bOrderCustomer.Address WHEN bCustomer.Address NE bOrderCustomer.Address
-      bCustomer.ZipCode = bOrderCustomer.ZipCode WHEn bCustomer.ZipCode NE bOrderCustomer.ZipCode
+      bCustomer.ZipCode = bOrderCustomer.ZipCode WHEN bCustomer.ZipCode NE bOrderCustomer.ZipCode
       bCustomer.PostOffice = bOrderCustomer.PostOffice WHEN bCustomer.PostOffice NE bOrderCustomer.PostOffice
       bCustomer.Region = bOrderCustomer.Region WHEN bCustomer.Region NE bOrderCustomer.Region.
 
