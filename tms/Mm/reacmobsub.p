@@ -140,55 +140,6 @@ DO TRANSACTION:
       RETURN.
    END. /* IF NOT AVAILABLE termMobSub THEN DO: */
 
-   
-   IF fCLITypeIsExtraLine(Termmobsub.CLIType)  
-   THEN DO: 
-      
-      FIND FIRST bMLMobSub NO-LOCK WHERE
-           bMLMobSub.brand          EQ  Syst.Var:gcBrand        AND
-           bMLMobsub.msseq          EQ  TermMobSub.MultiSimId   AND 
-           bMLMobsub.multiSIMType   EQ  {&MULTISIMTYPE_PRIMARY} AND
-           bMLMobsub.paytype        EQ  FALSE                   AND
-           (bMLMobsub.MsStatus      EQ  {&MSSTATUS_ACTIVE} OR
-            bMLMobsub.MsStatus      EQ  {&MSSTATUS_BARRED}) NO-ERROR.
-                   
-       IF NOT AVAIL bMLMobSub             
-       THEN DO:
-           fReqError("Main Line is not available."). 
-           RETURN.
-       END.
-       
-       IF NOT fCLITypeAllowedForExtraLine ( INPUT bMLMobSub.CLIType ,
-                                            INPUT Termmobsub.CLIType ,
-                                            OUTPUT lAllowedELCount )  
-       THEN DO:
-        
-           fReqError("Extra Line is not allowed to associate with the Main Line.").
-           RETURN.
-        
-       END.
-        
-       /* Get currently how many extra lines are attached*/
-       lELCount =  fExtraLineCountForMainLine(TermMobSub.MultiSimId). 
-        
-       IF lELCount >= lAllowedELCount 
-       THEN DO:
-        
-           fReqError("MainLine is already associated to other extra line(s). Cannot exceed the Limit.").   
-           RETURN.
-        
-       END.            
- 
-       FIND FIRST bCustomer NO-LOCK WHERE 
-                  bCustomer.custnum = Termmobsub.custnum NO-ERROR.
-                  
-       IF NOT AVAILABLE bCustomer THEN
-       DO:
-          fReqError("Customer is not available."). 
-          RETURN.
-       END.      
-   END.
-    
    FIND FIRST MSISDN WHERE
               MSISDN.Brand    = Syst.Var:gcBrand        AND
               MSISDN.CLI      = termMobSub.CLI EXCLUSIVE-LOCK NO-ERROR.
@@ -788,12 +739,9 @@ DO TRANSACTION:
   
    /* Reactive Extra line discount, if associated Mainline is not 
       assigned to other Extra line */
-   IF fCLITypeIsExtraLine(MobSub.CLIType) AND 
-      MobSub.MultiSimId    NE 0  AND
-      MobSub.MultiSimType  EQ {&MULTISIMTYPE_EXTRALINE} THEN 
-   RUN pReacExtraLineDiscount(MobSub.MultiSimId, /* Mainline SubId    */ 
-                              MobSub.MsSeq,      /* Extaline SubId    */
-                              MobSub.CLIType).   /* Extraline clitype */ 
+   IF fCLITypeIsExtraLine(MobSub.CLIType) THEN 
+      RUN pReacExtraLineDiscount(MobSub.MsSeq,      /* Extaline SubId    */
+                                 MobSub.CLIType).   /* Extraline clitype */ 
 
    /* ADDLINE-20 Additional Line 
       IF the Customer reactivates the below additional line tariff's then,
@@ -1225,36 +1173,48 @@ PROCEDURE pReacAddLineDisc:
 END PROCEDURE.
 
 PROCEDURE pReacExtraLineDiscount:
+    DEF INPUT PARAM liExtraLineMsSeq   AS INT  NO-UNDO.
+    DEF INPUT PARAM lcExtraLineCLIType AS CHAR NO-UNDO.
 
-   DEF INPUT PARAM liMainLineMsSeq    AS INT  NO-UNDO.
-   DEF INPUT PARAM liExtraLineMsSeq   AS INT  NO-UNDO.    
-   DEF INPUT PARAM lcExtraLineCLIType AS CHAR NO-UNDO. 
-   
-   DEFINE BUFFER bMLMobSub             FOR MobSub.
-   DEFINE BUFFER ExtraLineDiscountPlan FOR DiscountPlan.
+    DEFINE BUFFER bELMobSub             FOR MobSub.
+    DEFINE BUFFER ExtraLineDiscountPlan FOR DiscountPlan.
+    DEFINE BUFFER bCustomer             FOR Customer.
 
-   FIND FIRST bMLMobSub EXCLUSIVE-LOCK WHERE
-              bMLMobSub.MsSeq        EQ liMainLineMsSeq AND
-              bMLMobSub.MultiSimId   EQ 0               AND
-              bMLMobSub.MultiSimType EQ 0               NO-ERROR.
+    DEF VAR liMLMsSeq AS INT NO-UNDO.
+ 
+    FIND FIRST bELMobSub EXCLUSIVE-LOCK WHERE
+               bELMobSub.MsSeq EQ liExtraLineMsSeq NO-ERROR.
 
-   IF AVAIL bMLMobSub THEN DO:
-      FIND FIRST ExtraLineDiscountPlan NO-LOCK WHERE
-                 ExtraLineDiscountPlan.Brand      = Syst.Var:gcBrand            AND
-                 ExtraLineDiscountPlan.DPRuleID   = lcExtraLineCLIType + "DISC" AND
-                 ExtraLineDiscountPlan.ValidFrom <= TODAY                 AND
-                 ExtraLineDiscountPlan.ValidTo   >= TODAY                 NO-ERROR.
-      IF NOT AVAIL ExtraLineDiscountPlan THEN
-         RETURN SUBST("Incorrect Extra Line Discount Plan ID: &1", lcExtraLineCLIType + "DISC").
+    IF NOT AVAIL bELMobSub THEN LEAVE.
 
-      fCreateExtraLineDiscount(liExtraLineMsSeq,
-                               ExtraLineDiscountPlan.DPRuleID,
-                               TODAY).
-      IF RETURN-VALUE BEGINS "ERROR" THEN
-         RETURN RETURN-VALUE.
+    FIND FIRST bCustomer NO-LOCK WHERE
+               bCustomer.custnum EQ bELMobSub.CustNum NO-ERROR.
 
-      ASSIGN bMLMobSub.MultiSimId   = liExtraLineMsSeq
-             bMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY}.
-   END.   
+    IF NOT AVAIL bCustomer THEN LEAVE.
+
+    fCheckExistingMainLineAvailForExtraLine(INPUT lcExtraLineCLIType,
+                                            INPUT bCustomer.CustIdType ,
+                                            INPUT bCustomer.OrgID,
+                                            OUTPUT liMLMsSeq).
+
+    IF liMLMsSeq EQ 0 THEN LEAVE.
+
+    FIND FIRST ExtraLineDiscountPlan NO-LOCK WHERE
+               ExtraLineDiscountPlan.Brand      = Syst.Var:gcBrand           AND
+               ExtraLineDiscountPlan.DPRuleID   = bELMobSub.CLIType + "DISC" AND
+               ExtraLineDiscountPlan.ValidFrom <= TODAY                      AND
+               ExtraLineDiscountPlan.ValidTo   >= TODAY                      NO-ERROR.
+    IF NOT AVAIL ExtraLineDiscountPlan THEN
+       RETURN SUBST("Incorrect Extra Line Discount Plan ID: &1", lcExtraLineCLIType + "DISC").
+ 
+    fCreateExtraLineDiscount(liExtraLineMsSeq,
+                             ExtraLineDiscountPlan.DPRuleID,
+                             TODAY).
+
+    IF RETURN-VALUE BEGINS "ERROR" THEN
+       RETURN RETURN-VALUE.
+
+    ASSIGN bELMobSub.MultiSimId   = liMLMsSeq
+           bELMobSub.MultiSimType = {&MULTISIMTYPE_EXTRALINE}.
 
 END.

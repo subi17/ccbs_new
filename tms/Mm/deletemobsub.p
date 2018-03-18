@@ -1105,10 +1105,15 @@ PROCEDURE pTerminate:
         fCLITypeIsExtraLine(bCLIType.CLIType)))
    THEN DO:
 
-      IF fCLITypeIsExtraLine(TermMobSub.CLIType) THEN
+      IF fCLITypeIsExtraLine(TermMobSub.CLIType) THEN 
+      DO:
+         ASSIGN TermMobSub.MultiSimId   = 0
+                TermMobSub.MultiSimType = 0.
+         
          fCloseExtraLineDiscount(TermMobSub.MsSeq,
                                  TermMobSub.CLIType + "DISC",
                                  TODAY).
+      END.
       ELSE IF fCLITypeIsMainLine(TermMobSub.CLIType) THEN
       DO:
          FIND FIRST bCustomer NO-LOCK WHERE
