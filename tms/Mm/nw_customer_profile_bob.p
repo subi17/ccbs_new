@@ -24,6 +24,7 @@ Syst.Var:gcBrand = "1".
 {Mc/orderfusion.i}
 {Func/fixedlinefunc.i}
 {Func/fsubstermreq.i}
+{Mm/subser.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
@@ -56,8 +57,8 @@ DEF VAR lcDNI AS CHAR NO-UNDO.
 DEF VAR lcNwProfile AS CHAR NO-UNDO. 
 
 ASSIGN
-   lcRootDir = "/store/riftp/nwcustomerprofile/".
- /*  lcRootDir = fCParam("OrderFusionBob","RootDir").*/
+   lcRootDir = "/store/riftp/profile/subscription".
+ /*  lcRootDir = fCParam("CustomerProfileBob","RootDir").*/
 
 IF NOT lcRootDir > "" THEN RETURN.
 
@@ -122,7 +123,7 @@ REPEAT:
 
       ASSIGN 
          liEntries   = NUM-ENTRIES(lcLine,lcSep)
-         lcDNI       = ENTRY(1,lcLine,lcSep)
+         lcDNI       = ENTRY(1,lcLine,lcSep) /* --> Customer.OrgID */
          lcNwProfile = ENTRY(2,lcLine,lcSep) NO-ERROR.
 
       IF ERROR-STATUS:ERROR OR liEntries NE 2 THEN DO:
@@ -166,140 +167,29 @@ IF llDoEvent THEN fCleanEventObjects().
 */
 PROCEDURE pUpdateProfile:
 
-   DEF INPUT PARAM pcMsisdn AS CHAR NO-UNDO. 
+   DEF INPUT PARAM pcDNI AS CHAR NO-UNDO. 
    DEF INPUT PARAM pcNewProfile AS CHAR NO-UNDO.
 
-   DEF VAR cAllProfValues AS CHAR NO-UNDO.
-   DEF VAR iReqCnt    AS INT NO-UNDO.
-   DEF VAR ldtActDate AS DATE NO-UNDO.
-   DEF VAR liActTime  AS INT NO-UNDO.
-   DEF VAR liOldValue AS INT  NO-UNDO. 
-   DEF VAR liNewValue AS INT  NO-UNDO.
-   DEF VAR lcOldParam AS CHAR NO-UNDO.
-   DEF VAR lcSMSTxt   AS CHAR NO-UNDO.
+   DEF VAR lcError   AS CHAR NO-UNDO.
 
-/* Kayta funkkaria tsekkiin? */
-   /* Gather all profile values from TMSCodes to cAllProfValues
-      comma separated list */
-   cAllProfValues = "".
-   FOR EACH TMSCodes WHERE 
-            TMSCodes.TableName = "Customer" AND 
-            TMSCodes.FieldName = "NWProfiles" AND
-            TMSCodes.CodeGroup = "NWProfile" AND
-            TMSCodes.inUse = 1 NO-LOCK:
-     IF cAllProfValues = "" THEN
-        cAllProfValues = TMSCodes.CodeValue.
-     ELSE
-        cAllProfValues = cAllProfValues + "," + TMSCodes.CodeValue.
-   END.
+   FIND FIRST Customer NO-LOCK WHERE
+      Customer.OrgId EQ pcDNI.
+   IF NOT AVAIL Customer THEN
+      RETURN "ERROR:Customer not found".
 
-   IF LOOKUP(pcNewProfile,cAllProfValues,",") = 0 THEN
-      RETURN "ERROR:Incorrect profile value parameter".
+   IF fSubSerSSStat(0,"NW",INTEGER(pcNewProfile),lcError) NE 0 THEN
+      RETURN "ERROR:Illegal profile value".
 
-   /* request is under work */
-   /* IF NOT fReqStatus(1,"") THEN RETURN "ERROR:Request already ongoing".*/ 
-
-   FIND MobSub WHERE MobSub.CLI EQ pcMsisdn NO-LOCK NO-ERROR.
-      
-   IF NOT AVAILABLE MobSub THEN
-      RETURN "ERROR:MobSub not found".
-
-   Func.Common:mSplitTS(MsRequest.ActStamp,
-                        OUTPUT ldtActDate,
-                        OUTPUT liActTime).
-
-   FIND MsRequest WHERE MsRequest.MsSeq = MobSub.MsSeq NO-LOCK NO-ERROR.
-      IF NOT AVAILABLE MsRequest OR MsRequest.ReqType NE 1 OR
-                       MsRequest.ReqCparam1 EQ "" THEN 
-         RETURN "ERROR:Request not found".
-
-   /* Find "NW" */
-   FIND ServCom NO-LOCK WHERE
-        ServCom.Brand   = Syst.Var:gcBrand AND
-        ServCom.ServCom = MsRequest.ReqCParam1 NO-ERROR.
-   IF NOT AVAILABLE ServCom THEN
-      RETURN ("ERROR:Unknown service " + MsRequest.ReqCParam1).
-   
-   /* is component / change allowed for clitype */
-   liReqCnt = fServComValue(MobSub.CLIType,
-                            MsRequest.ReqCParam1,
-                            OUTPUT llAllowed).
-   IF liReqCnt = ? AND MsRequest.ReqIParam1 > 0 THEN
-      RETURN ("ERROR:Service is not allowed for " + MobSub.CLIType).
-
-   /* UPDATE or CREATE */
-   FIND FIRST SubSer NO-LOCK WHERE
-              SubSer.MsSeq   = MobSub.MsSeq         AND
-              SubSer.ServCom = MsRequest.ReqCParam1 NO-ERROR.
-   IF AVAILABLE SubSer THEN DO:         
-      IF Subser.SSStat  = MsRequest.ReqIParam1 AND
-         SubSer.SSParam = MsRequest.ReqCParam2 
-      THEN DO:
-         /* accept request as done, but mark that TMS was not updated */
-         fReqStatus(2,"Nothing to do").
-         RETURN "ERROR:Done nothing to do". /* is it error? */ 
-      END.
-      /* new request is further in the past than latest one */
-      IF SubSer.SSDate > ldtActDate THEN
-         RETURN "ERROR:A newer setting exists for service".
-      ASSIGN liOldValue = SubSer.SSStat
-             lcOldParam = SubSer.SSParam.
-   END.
-
-   IF AVAILABLE SubSer AND SubSer.SSDate = ldtActDate THEN DO:
-      FIND CURRENT SubSer EXCLUSIVE-LOCK.
-   END.
-   ELSE DO:
-      CREATE SubSer.
-      ASSIGN SubSer.MsSeq   = MobSub.MsSeq
-             SubSer.ServCom = MsRequest.ReqCParam1
-             SubSer.SSDate  = ldtActDate
-             Subser.ssParam = MSrequest.ReqCParam2.
-   END.
-    
-   ASSIGN SubSer.SSStat  = INTEGER(pcNewProfile) /* MsRequest.ReqIParam1*/
-          liNewValue     = SubSer.SSStat
-          SubSer.SSParam = MsRequest.ReqCParam2
-          SubSer.ServPac = ""
-          llReRate       = FALSE
-          lcSMSTxt       = "".
+  /* IF Customer.NWProfile EQ pcNewProfile THEN
+      RETURN "ERROR:Customer already has same profile".
 
    ldCurrStamp = Func.Common:mMakeTS().
-
-   /* Needed ??? */
-   /* check links to other components */
-   RUN pCheckServiceLinks (MobSub.MsSeq,
-                           SubSer.ServCom,
-                           liOldValue,
-                           SubSer.SSStat,
-                           MsRequest.ActStamp,
-                           MsRequest.Salesman,
-                           "",
-                           MsRequest.ReqSource,
-                           MsRequest.MsRequest,
-                           FALSE,
-                           OUTPUT lcReqChar).
- 
-   /* mark the list of created subrequests */
-   IF lcReqChar > "" THEN DO:
-      FIND CURRENT MsRequest EXCLUSIVE-LOCK.
-      MsRequest.ReqCParam4 = lcReqChar.
-   END.
-
-   RELEASE SubSer.
-
-   /* SMS ??*/
-   /* text assigned to request itself has always priority 1 */
-   /* IF MsRequest.SMSText > "" THEN lcSMSTxt = MsRequest.SMSText.*/
-
-   /* send SMS if needed */
-
-   RELEASE MobSub.
-
-   /* Create memo ?? */
-
-   /* request handled succesfully */   
-   fReqStatus(2,"").
+   
+   ASSIGN
+      Customer.NWProfile = pcNewProfile. 
+   */   
+   /* write log ...? */
+   /* Send message to ...? */
 
 END.
 
