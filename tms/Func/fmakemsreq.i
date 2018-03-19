@@ -1605,5 +1605,41 @@ FUNCTION fConvFixedSTCReq RETURNS INTEGER
 
 END FUNCTION.
 
+FUNCTION fCustomerCategoryChangeRequest RETURNS INTEGER
+   (INPUT idActStamp      AS DECIMAL   ,    /* when request should be handled */
+    INPUT icUserCode      AS CHARACTER ,   /* user code */
+    INPUT iiCustnum       AS INTEGER   ,
+    INPUT icNewCategory   AS CHARACTER ,     
+    INPUT icContractID    AS CHARACTER ,
+    INPUT icCLI           AS CHARACTER ,   /* mobsub CLI */
+    INPUT icSource        AS CHARACTER ,
+    OUTPUT ocResult       AS CHARACTER ):
+
+   DEF VAR liReqCreated AS INT NO-UNDO.
+
+   /* set activation time */
+   IF idActStamp = 0 OR idActStamp = ? THEN
+      idActStamp = Func.Common:mMakeTS().
+
+   fCreateRequest({&REQTYPE_CATEGORY_CHG},
+                  idActStamp,
+                  icUserCode,
+                  FALSE,    /* create fees */
+                  FALSE).   /* sms         */
+
+   ASSIGN
+      bCreaReq.CLI        = icCLI
+      bCreaReq.Custnum    = iiCustnum
+      bCreaReq.ReqCparam1 = icNewCategory
+      bCreaReq.ReqCparam4 = icContractID
+      bCreaReq.ReqSource  = icSource
+      liReqCreated        = bCreaReq.MsRequest.
+
+   RELEASE bCreaReq.
+
+   RETURN liReqCreated.
+
+END FUNCTION. /* FUNCTION fCustomerCategoryChangeRequest*/
+
 &ENDIF            
  

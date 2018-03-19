@@ -3,6 +3,7 @@
   Task .........: Customer Category Change
   Application ..: RPCMETHOD
   Input ........:   Int;mandatory;CustNum
+                    String;mandatory;Cli
                     String;mandatory;TargetCategory
   Output .......:   success;boolean
   ---------------------------------------------------------------------- */
@@ -13,16 +14,21 @@
 Syst.Var:gcBrand = "1".
 Syst.Var:katun   = "NewtonRPC".
 {Syst/tmsconst.i}
+{Func/fmakemsreq.i}
 
-IF validate_request(param_toplevel_id, "int,string") EQ ? THEN RETURN.
+IF validate_request(param_toplevel_id, "int,string,string") EQ ? THEN RETURN.
 
 DEFINE VARIABLE liCustNum    AS INTEGER   NO-UNDO.
+DEFINE VARIABLE lcMSISDN     AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcCategory   AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcError      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE liRequest    AS INTEGER   NO-UNDO.
 
 liCustNum   = get_int(param_toplevel_id, "0").
-lcCategory  = get_string(param_toplevel_id, "1").
+lcMSISDN    = get_string(param_toplevel_id, "1").
+lcCategory  = get_string(param_toplevel_id, "2").
 
-FIND Customer WHERE Customer.Custnum = liCustNum NO-LOCK NO-ERROR.
+FIND Customer WHERE Customer.Brand = Syst.Var:gcBrand AND Customer.Custnum = liCustNum NO-LOCK NO-ERROR.
 IF NOT AVAILABLE customer THEN 
     RETURN appl_err(SUBST("Customer &1 not found", STRING(liCustNum))).
 
@@ -32,7 +38,13 @@ IF lcCategory = customer.category THEN
 FIND CustCat WHERE CustCat.Category = lcCategory NO-LOCK NO-ERROR.
 IF NOT AVAILABLE CustCat THEN     
     RETURN appl_err(SUBST("Invalid Category")).
-    
+FIND MobSub WHERE 
+     Mobsub.Brand = Syst.Var:gcBrand AND 
+     MobSub.Cli = lcMSISDN AND 
+     MobSub.CustNum = Customer.CustNum NO-LOCK NO-ERROR.
+IF NOT AVAILABLE MobSub THEN     
+    RETURN appl_err(SUBST("Subscription not found")).
+     
 CASE CustCat.Segment:
     WHEN "CONSUMER" THEN DO TRANSACTION:
         FIND customer WHERE customer.Custnum = liCustNum EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
@@ -58,10 +70,23 @@ CASE CustCat.Segment:
         RELEASE customer.
     END. 
     OTHERWISE DO: /* to SELF EMPLOYED */
-        
+    
+        liRequest = fCustomerCategoryChangeRequest ( ? ,
+            Syst.Var:katun   ,
+            Customer.CustNum ,
+            "SELF EMPLOYED"  ,
+            ""               ,
+            lcMSISDN         ,
+            {&REQUEST_SOURCE_NEWTON} ,
+            OUTPUT lcError  
+            ).
+            
+        IF liRequest = 0 OR liRequest = ? OR lcError NE "" THEN 
+            RETURN appl_err(SUBST("Category request failed. &1" , lcError)).
     END.
+    
 END CASE.
 
-add_boolean(response_toplevel_id, "", true).
+add_boolean(response_toplevel_id, "", TRUE).
 
  

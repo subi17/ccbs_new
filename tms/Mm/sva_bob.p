@@ -205,9 +205,9 @@ PROCEDURE pReadFileData:
          /* in case of incativation, inactivate its activation request */
          IF lcSetStatus EQ "Active"   AND 
             ( lcServiceCode EQ "FAXTOEMAIL" OR lcServiceCode EQ "OFFICE365" ) THEN DO:
-            IF Mm.MManMessage:mGetMessage("SMS", "SVA_ActMessage", 1) EQ TRUE THEN DO:
+            IF Mm.MManMessage:mGetMessage("SMS", "SVA_ActEmail", 1) EQ TRUE THEN DO:
                 Mm.MManMessage:ParamKeyValue = "".
-                Mm.MManMessage:mCreateMMLogSMS(MobSub.Cli).
+                Mm.MManMessage:mCreateMMLogEmail("", TRUE).
                 Mm.MManMessage:mClearData().
             END.
          END.
