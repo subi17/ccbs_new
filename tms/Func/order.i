@@ -496,9 +496,9 @@ FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
               borderfusion.Brand EQ Syst.Var:gcBrand AND
               borderfusion.orderid = bOrder.Orderid AND
               bOrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED} NO-ERROR.
-  IF AVAIL bOrderFusion THEN RETURN FALSE.
+  IF NOT AVAIL bOrderFusion THEN RETURN FALSE.
 
-
+   FIND CURRENT bCustomer EXCLUSIVE-LOCK NO-ERROR.
    IF llDoEvent THEN DO:
       DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
       lhCustomer = BUFFER bCustomer:HANDLE.
@@ -520,6 +520,6 @@ FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
 
    RETURN TRUE.
 
-END.
+END FUNCTION.
 
 &ENDIF
