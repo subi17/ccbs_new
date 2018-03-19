@@ -56,8 +56,7 @@ FOR EACH MobSub NO-LOCK WHERE
       SubSer.ServPac = CTServEl.ServPac
       SubSer.ServCom = CTServEl.ServCom
       SubSer.SSDate  = TODAY
-      SubSer.SSStat  = (IF iDate < 20180401 THEN 3 else CTServEl.DefValue)
-      SubSer.ssparam = (IF iDate < 20180401 then "YOIGO_ORANGE_TELEFONICA" else CTServEl.defparam).
+      SubSer.SSStat  = (IF iDate < 20180401 THEN 3 else CTServEl.DefValue).
 
    PUT STREAM sout UNFORMATTED MobSub.CLI "|" MobSub.msseq "|" recid(subser) SKIP.
 

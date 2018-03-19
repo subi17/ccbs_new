@@ -30,7 +30,7 @@ FOR EACH clitype NO-LOCK where
       ctservel.ChgAllowed  = TRUE
       ctservel.CLIType  = ctservpac.clitype
       ctservel.CTServEl = next-value(CTServEl)
-      ctservel.DefParam = "YOIGO_ORANGE"
+      ctservel.DefParam = ""
       ctservel.DefValue = 2
       ctservel.FromDate = today
       ctservel.ServCom  = "NW"
