@@ -32,8 +32,8 @@ DEF VAR new-CustNum  AS I    NO-UNDO.
 DEF VAR lcCustName   AS CH   NO-UNDO.            
 DEF VAR liAgrCust    AS I    NO-UNDO.
 DEF VAR liInvCust    AS I    NO-UNDO.
-DEF VAR llOldCust    AS log  NO-UNDO.
-def var liOldCustNum AS I    NO-UNDO.
+DEF VAR llOldCust    AS LOG  NO-UNDO.
+DEF VAR liOldCustNum AS I    NO-UNDO.
 DEF VAR llCreateCust AS L    NO-UNDO.
 DEF VAR ocOrdCust    AS CHAR NO-UNDO.
 DEF VAR liTarget     AS INT  NO-UNDO.

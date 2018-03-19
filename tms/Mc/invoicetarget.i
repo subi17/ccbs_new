@@ -67,13 +67,6 @@ FUNCTION fAddInvoiceTargetGroup RETURNS INT
          ASSIGN bInvoiceTargetGroup.AccountID = CustomerAccount.AccountID        
                 bInvoiceTargetGroup.CustAccName = CustomerAccount.AccountName.
 
-   FIND FIRST BankAccount NO-LOCK WHERE BankAccount.Brand = Syst.Var:gcBrand AND
-                                        BankAccount.BankAccount = bCustomer.BankAcct.
-   IF AVAIL BankAccount THEN DO:
-      FIND FIRST BankIdCode NO-LOCK WHERE BankIdCode.BIC = BankAccount.BIC.
-      IF AVAIL BankIDCode THEN bInvoiceTargetGroup.BankName = BankIdCode.BankName.
-   END.
-
    FIND FIRST MsOwner NO-LOCK WHERE MsOwner.Brand   = Syst.Var:gcBrand AND
                                     MsOwner.CustNum = bCustomer.CustNum NO-ERROR.
    IF AVAIL MsOwner THEN 

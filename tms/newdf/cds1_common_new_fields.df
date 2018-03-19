@@ -54,21 +54,13 @@ ADD FIELD "BankAccount" OF "InvoiceTargetGroup" AS character
   HELP "Bank  Account No"
   ORDER 120
 
-ADD FIELD "BankName" OF "InvoiceTargetGroup" AS character 
-  FORMAT "x(60)"
-  INITIAL ""
-  LABEL "BankName"
-  COLUMN-LABEL "BankName"
-  HELP "Bank Name"
-  ORDER 130
-
 ADD FIELD "PaymentMethod" OF "InvoiceTargetGroup" AS integer 
   FORMAT "->>>9"
   INITIAL "0"
   LABEL "PaymentMethod"
   COLUMN-LABEL "PaymentMethod"
   HELP "Payment method (days +/- dueday"
-  ORDER 140
+  ORDER 130
 
 ADD FIELD "MandateId" OF "InvoiceTargetGroup" AS character 
   FORMAT "x(35)"
@@ -76,7 +68,7 @@ ADD FIELD "MandateId" OF "InvoiceTargetGroup" AS character
   LABEL "MandateId"
   COLUMN-LABEL "MandateId"
   HELP "Mandate ID"
-  ORDER 150
+  ORDER 140
 
 ADD FIELD "MandateDate" OF "InvoiceTargetGroup" AS date 
   FORMAT "99-99-99"
@@ -84,7 +76,7 @@ ADD FIELD "MandateDate" OF "InvoiceTargetGroup" AS date
   LABEL "MandateDate"
   COLUMN-LABEL "MandateDate"
   HELP "Mandate date"
-  ORDER 160  
+  ORDER 150  
   
   
 ADD FIELD "AccountID" OF "MobSub" AS integer 
