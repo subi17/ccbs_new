@@ -461,49 +461,49 @@ FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
    DEF BUFFER bOrderCustomer  FOR OrderCustomer.
    DEF BUFFER bOrderFusion    FOR OrderFusion.
 
-   DEFINE VARIABLE liOrderNewer AS INT NO-UNDO INIT 0.
-
    FIND FIRST bOrder NO-LOCK WHERE
-      bOrder.OrderId EQ iiOrder.
+              bOrder.OrderId EQ iiOrder NO-ERROR.
    IF NOT AVAIL bOrder THEN RETURN FALSE.
 
    FIND FIRST bCustomer NO-LOCK WHERE
-      bCustomer.CustNum EQ bOrder.CustNum.
+              bCustomer.CustNum EQ bOrder.CustNum NO-ERROR.
    IF NOT AVAIL bCustomer THEN RETURN FALSE.
 
    IF bCustomer.DelType EQ 1 THEN RETURN FALSE. /* Type Paper */
 
-   FOR EACH bOrderComp NO-LOCK WHERE
-            bOrderComp.CustNum EQ bCustomer.CustNum:
-      /* Update adress from newest order if several convergent orders */
-      IF bOrderComp.OrderId NE bOrder.OrderId AND
-         bOrderComp.CrStamp > bOrder.CrStamp THEN DO:
-         IF NOT fIsConvergentORFixedOnly(bOrderComp.CliType) THEN NEXT.
+   /* Update adress if this is latest order if several convergent orders */
+   FOR EACH bOrderComp NO-LOCK USE-INDEX CustNum WHERE
+            bOrderComp.Brand EQ Syst.Var:gcBrand AND
+            bOrderComp.CustNum EQ bCustomer.CustNum AND
+            bOrderComp.CrStamp > bOrder.CrStamp AND
+            bOrderComp.OrderId NE bOrder.OrderId:
+      IF NOT fIsConvergentORFixedOnly(bOrderComp.CliType) THEN NEXT.
 
-         FIND FIRST bOrderFusion NO-LOCK WHERE
-            borderfusion.Brand EQ "1" AND
+      FIND FIRST bOrderFusion NO-LOCK WHERE
+            borderfusion.Brand EQ Syst.Var:gcBrand AND
             borderfusion.orderid = bOrderComp.Orderid AND
-            bOrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED}.
-         IF AVAIL bOrderFusion THEN DO:
-            RETURN FALSE.
-         END.
-         ELSE DO:
-            liOrderNewer = bOrderComp.OrderId.
-            LEAVE.
-         END.
-      END.
+            bOrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED} NO-ERROR.
+      IF AVAIL bOrderFusion THEN RETURN FALSE.
    END.
-      
+   /* Update billing address from installation address */
    FIND FIRST bOrderCustomer NO-LOCK WHERE
-              bOrderCustomer.Brand EQ "1" AND
-              bOrderCustomer.OrderId EQ (IF liOrderNewer EQ 0 THEN iiOrder ELSE liOrderNewer) AND
-              bOrderCustomer.RowType EQ 6 NO-ERROR.
+              bOrderCustomer.Brand   EQ Syst.Var:gcBrand AND
+              bOrderCustomer.OrderId EQ bOrder.OrderId AND
+              bOrderCustomer.RowType EQ {&ORDERCUSTOMER_ROWTYPE_FIXED_INSTALL} NO-ERROR.
+   IF NOT AVAIL bOrderCustomer THEN RETURN FALSE.
+
+   FIND FIRST bOrderFusion NO-LOCK WHERE
+              borderfusion.Brand EQ Syst.Var:gcBrand AND
+              borderfusion.orderid = bOrder.Orderid AND
+              bOrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED} NO-ERROR.
+  IF AVAIL bOrderFusion THEN RETURN FALSE.
+
 
    IF llDoEvent THEN DO:
       DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
-      lhCustomer = BUFFER Customer:HANDLE.
+      lhCustomer = BUFFER bCustomer:HANDLE.
       RUN StarEventInitialize(lhCustomer).
-      RUN StarEventSetOldBuffer ( lhCustomer ).
+      RUN StarEventSetOldBuffer(lhCustomer).
    END.
 
    /* Update Customer */
@@ -514,7 +514,7 @@ FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
       bCustomer.Region = bOrderCustomer.Region WHEN bCustomer.Region NE bOrderCustomer.Region.
 
    IF llDoEvent THEN DO:
-      RUN StarEventMakeModifyEvent ( lhCustomer ).
+      RUN StarEventMakeModifyEvent(lhCustomer).
       fCleanEventObjects().
    END.
 
