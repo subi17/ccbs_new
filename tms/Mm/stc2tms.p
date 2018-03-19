@@ -592,7 +592,16 @@ PROCEDURE pUpdateSubscription:
    DEF VAR ldtCloseDate            AS DATE NO-UNDO.
    DEF VAR liRequest               AS INT  NO-UNDO.
    DEF VAR lcExtraLineDiscount     AS CHAR NO-UNDO.
-   DEF VAR liELCount               AS INT NO-UNDO. 
+   DEF VAR liELCount               AS INT  NO-UNDO.
+   DEF VAR liMLMsSeq               AS INT  NO-UNDO.
+   DEF VAR lcExtralineCLITypes     AS CHAR NO-UNDO.
+   DEF VAR liELCLITypeCount        AS INT  NO-UNDO.
+   DEF VAR llgConfigExtraLineCount AS LOG  NO-UNDO.
+   DEF VAR liConfigExtraLineCount  AS INT  NO-UNDO.
+   DEF VAR lcMandatoryExtraLines   AS CHAR NO-UNDO.
+   DEF VAR liManELCount            AS INT  NO-UNDO.
+   DEF VAR liAvailExtraLineCount   AS INT  NO-UNDO.
+   DEF VAR llgMandatoryExtraLine   AS LOG  NO-UNDO.
 
    DEF BUFFER bOwner         FOR MsOwner.
    DEF BUFFER bMobSub        FOR MobSub.
@@ -833,226 +842,163 @@ PROCEDURE pUpdateSubscription:
                             "STC").
       END. /* FOR FIRST SubSer WHERE */
 
-   /* 
-      If mainline mobsub is changed to other mainline or an independent mobsub
-      then:
-         - extraline discount is closed
-         - If the new mobusb is independent then MultiSimType and MultiSimId
-           of the mobsub is set to zero
-         - If the new mobsub is mainline and different mainline than
-           the earlier, create a STC request for the extraline mobsub
-           to change it to the correct extraline CliType
-           
-      UNCLEAR: Should we also remove the link (MultiSimId) from the extraline
-               when the new clitype is independent?
-   */
-   IF fCLITypeIsMainLine(bOldType.CliType)          AND
-      NOT fCLITypeIsExtraLine(CLIType.CliType)      AND
-      fExtraLineForMainLine(bOldType.CliType) NE fExtraLineForMainLine(CLIType.CliType) AND
-      MobSub.MultiSimId                       NE 0  AND 
-      MobSub.MultiSimType                     EQ {&MULTISIMTYPE_PRIMARY}
-   THEN DO:
-      /* Remove extraline discounts */
-      lcExtraLineDiscount = fExtraLineForMainLine(bOldType.CliType) + "DISC".
-      FOR FIRST lELMobSub NO-LOCK WHERE 
-                lELMobSub.MsSeq         EQ MobSub.MultiSimId          AND 
-                lELMobSub.MultiSimId    EQ MobSub.MsSeq               AND 
-                lELMobSub.MultiSimtype  EQ {&MULTISIMTYPE_EXTRALINE}  AND
-                (lELMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE} OR
-                 lELMobSub.MsStatus     EQ {&MSSTATUS_BARRED}),
-          FIRST lbDiscountPlan NO-LOCK WHERE 
-                lbDiscountPlan.Brand    EQ Syst.Var:gcBrand           AND 
-                lbDiscountPlan.DPRuleId EQ lcExtraLineDiscount        AND 
-                lbDiscountPlan.ValidTo  > TODAY,
-          FIRST lbDPMember NO-LOCK WHERE 
-                lbDPMember.DPId         EQ lbDiscountPlan.DPId        AND 
-                lbDPMember.HostTable    EQ "MobSub"                   AND
-                lbDPMember.KeyValue     EQ STRING(MobSub.MultiSimId)  AND
-                lbDPMember.ValidTo      > TODAY                       AND
-                lbDPMember.ValidTo      >= lbDPMember.ValidFrom:
+   /* if STC is done to Extraline */
+   IF fCLITypeIsExtraLine(CLIType.CliType) THEN DO:
 
-         fCloseExtraLineDiscount(lELMobSub.MsSeq,
-                                 lbDiscountPlan.DPRuleID,
-                                 TODAY).
-         Func.Common:mWriteMemo("MobSub",
-                                STRING(lbDPMember.KeyValue),
-                                0,
-                                "ExtraLine Discount is Closed",
-                                "STC done from Extra line associated Main line to different mainline or independent clitype").
+      fCheckExistingMainLineAvailForExtraLine(INPUT MobSub.CLIType,
+                                              INPUT Customer.CustIdType,
+                                              INPUT Customer.OrgID,
+                                              OUTPUT liMLMsSeq).
+      IF liMLMsSeq > 0 THEN DO:
 
-         /* CREATE STC for the extraline */
-         IF fCLITypeIsMainLine(CLIType.CliType)
-         THEN DO:
-            liRequest = fCTChangeRequest(
-                           MobSub.MultiSimId, /* The MSSeq of the subscription to where the STC is made */
-                           fExtraLineForMainLine(CLIType.CliType), /* The CLIType of where to do the STC */
-                           "", /* lcBundleID */
-                           "", /*bank code validation is already done */
-                           Func.Common:mMakeTS(),
-                           0,  /* 0 = Credit check ok */
-                           0, /* extend contract */
-                           "" /* pcSalesman */,
-                           FALSE, /* charge */
-                           TRUE, /* send sms */
-                           "",
-                           0,
-                           {&REQUEST_SOURCE_STC},
-                           0,
-                           MSRequest.MSRequest,
-                           "", /*contract id*/
-                           OUTPUT lcError).
+         FIND FIRST lbDiscountPlan NO-LOCK WHERE
+                    lbDiscountPlan.Brand     EQ Syst.Var:gcBrand        AND
+                    lbDiscountPlan.DPRuleId  EQ MobSub.CLIType + "DISC" AND
+                    lbDiscountPlan.ValidFrom <= TODAY                   AND
+                    lbDiscountPlan.ValidTo   >= TODAY                   NO-ERROR.
 
-            IF liRequest = 0 THEN
-               /* write possible error to a memo */
-               Func.Common:mWriteMemo("MobSub",
-                                STRING(MobSub.MultiSimId),
-                                MobSub.Custnum,
-                                "Extraline STC request creation failed",
-                                lcError).
+         IF AVAIL lbDiscountPlan THEN DO:
+            fCreateExtraLineDiscount(MobSub.MsSeq,
+                                     lbDiscountPlan.DPRuleID,
+                                     TODAY).
+
+            FIND CURRENT Mobsub EXCLUSIVE-LOCK.
+            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).
+
+            ASSIGN MobSub.MultiSimId   = liMLMsSeq
+                   MobSub.MultiSimType = {&MULTISIMTYPE_EXTRALINE}.
+
+            IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
+            FIND CURRENT Mobsub NO-LOCK.
          END.
+
       END.
 
-      IF NOT fCLITypeIsMainLine(CLIType.CliType)
-      THEN DO:
-         FIND CURRENT Mobsub EXCLUSIVE-LOCK.
-         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).
-
-         ASSIGN MobSub.MultiSimId   = 0 
-                MobSub.MultiSimType = 0. 
-         
-         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
-         FIND CURRENT Mobsub NO-LOCK.
-      END.
    END.
+   ELSE IF fCLITypeIsMainLine(CLIType.CliType)  AND
+           fCLITypeIsMainLine(bOldType.CliType) THEN DO:
 
-   /*
-      If extraline mobsub is having STC to extraline or non extraline mobsub
-   */
-   IF fCLITypeIsExtraLine(bOldType.CLIType) AND
-      MobSub.MultiSimId                    NE 0  AND
-      MobSub.MultiSimType                  EQ {&MULTISIMTYPE_EXTRALINE}
-   THEN DO:
-      /* Extraline is changed to another extraline */
-      IF fCLITypeIsExtraLine(CLIType.CLIType)
-      THEN DO:
-         /* There is a mainline mobsub for the extraline mobsub
-            => We need to create discount for the new extraline */
+      ASSIGN lcExtralineCLITypes   = fExtraLineCLITypes()
+             llgMandatoryExtraLine = FALSE.
 
-         FIND FIRST lMLMobSub NO-LOCK WHERE
-                    lMLMobSub.MsSeq        EQ MobSub.MultiSimId       AND
-                    lMLMobSub.MultiSimId   EQ MobSub.MSSeq            AND
-                    lMLMobSub.MultiSimtype EQ {&MULTISIMTYPE_PRIMARY} AND
-                   (lMLMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE}  OR
-                    lMLMobSub.MsStatus     EQ {&MSSTATUS_BARRED})
-         NO-ERROR.
+      DO liELCLITypeCount = 1 TO NUM-ENTRIES(lcExtralineCLITypes):
 
-         IF AVAILABLE lMLMobSub AND
-            fCLITypeAllowedForExtraLine(lMLMobSub.CliType, CLIType.CLIType, OUTPUT liELCount)
-         THEN fCreateExtraLineDiscount(MobSub.MsSeq,
-                                       MobSub.CLIType + "DISC",
-                                       TODAY).
-         /* There isn't direct mainline mobsub for the extraline mobsub.
-            Lets check if there is one free available having
-            corrent mainline clitype. If there is we need to
-            => create discount for the new extraline
-            => assign the multisimid and multisimtype for the found mainline mobsub */
-         ELSE DO:
-            FOR FIRST lMLMobSub EXCLUSIVE-LOCK WHERE
-                      lMLMobSub.MsSeq        EQ MobSub.MultiSimId   AND
-                      lMLMobSub.MultiSimId   EQ 0                   AND
-                      lMLMobSub.MultiSimtype EQ 0                   AND
-                     (lMLMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE} OR
-                      lMLMobSub.MsStatus     EQ {&MSSTATUS_BARRED}):
+         ASSIGN llgConfigExtraLineCount = fCLITypeAllowedForExtraLine(CLIType.CLIType,
+                                                                      ENTRY(liELCLITypeCount,lcExtralineCLITypes),
+                                                                      liConfigExtraLineCount)
+                lcMandatoryExtraLines   = fGetMandatoryExtraLineForMainLine(CLIType.CliType).
 
-               IF NOT fCLITypeAllowedForExtraLine(lMLMobSub.CliType, CLIType.CLIType, OUTPUT liELCount)
-               THEN LEAVE.
+         IF NOT llgMandatoryExtraLine THEN
+         DO liManELCount = 1 TO NUM-ENTRIES(lcMandatoryExtraLines):
 
-               fCreateExtraLineDiscount(MobSub.MsSeq,
-                                        MobSub.CLIType + "DISC",
-                                        TODAY).
+            /* Check for mandatory extraline subscription is already available */
+            /* if available then skip creating STC request                     */
+            IF CAN-FIND(FIRST lELMobSub NO-LOCK WHERE
+                              lELMobSub.Brand        EQ Syst.Var:gcBrand          AND
+                              lELMobSub.CustNum      EQ MobSub.CustNum            AND
+                              lELMobSub.MultiSimId   EQ MobSub.MsSeq              AND
+                              lELMobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} AND
+                              lELMobSub.CLIType      EQ ENTRY(liManELCount,lcExtraLineCLITypes)) THEN
+               ASSIGN llgMandatoryExtraLine = TRUE
+                      liAvailExtraLineCount = liAvailExtraLineCount + 1.
+            ELSE DO:
 
-               ASSIGN lMLMobSub.MultiSimId   = MobSub.MsSeq
-                      lMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY}.
+               FIND FIRST lELMobSub NO-LOCK WHERE
+                          lELMobSub.Brand        EQ Syst.Var:gcBrand          AND
+                          lELMobSub.CustNum      EQ MobSub.CustNum            AND
+                          lELMobSub.MultiSimId   EQ MobSub.MsSeq              AND
+                          lELMobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} AND
+                   LOOKUP(lELMobSub.CLIType,lcMandatoryExtraLines) EQ 0       NO-ERROR.
+
+               liRequest = fCTChangeRequest(lELMobSub.MsSeq,                          /* The MSSeq of the subscription to where the STC is made */
+                                            ENTRY(liManELCount,lcExtraLineCLITypes),  /* The CLIType of where to do the STC */
+                                            "",                                       /* lcBundleID */
+                                            "",                                       /* bank code validation is already done */
+                                            Func.Common:mMakeTS(),
+                                            0,                                        /* 0 = Credit check ok */
+                                            0,                                        /* extend contract */
+                                            ""                                        /* pcSalesman */,
+                                            FALSE,                                    /* charge */
+                                            TRUE,                                     /* send sms */
+                                            "",
+                                            0,
+                                            {&REQUEST_SOURCE_STC},
+                                            0,
+                                            MSRequest.MSRequest,
+                                            "",                                       /* contract id */
+                                            OUTPUT lcError).
+
+               IF liRequest = 0 THEN
+                  Func.Common:mWriteMemo("MobSub",
+                                         STRING(MobSub.MsSeq),
+                                         MobSub.Custnum,
+                                         "Extraline STC request creation failed",
+                                         lcError).
+               ELSE
+                  ASSIGN llgMandatoryExtraLine = TRUE
+                         liAvailExtraLineCount = liAvailExtraLineCount + 1.
             END.
+
          END.
+
+         IF liAvailExtraLineCount >= liConfigExtraLineCount THEN NEXT.
+         
+         FOR EACH lELMobSub EXCLUSIVE-LOCK WHERE
+                  lELMobSub.Brand        EQ Syst.Var:gcBrand          AND
+                  lELMobSub.CustNum      EQ MobSub.CustNum            AND
+                  lELMobSub.MultiSimId   EQ MobSub.MsSeq              AND
+                  lELMobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} AND
+                  lELMobSub.CLIType      EQ ENTRY(liELCLITypeCount,lcExtralineCLITypes):
+
+            IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                              MsRequest.MsSeq      EQ lELMobSub.MsSeq AND
+                              MsRequest.ReqType    EQ 0               AND
+                              MsRequest.ReqStatus  EQ 0               AND
+                              MsRequest.ReqCParam1 EQ lELMobSub.CLIType AND
+                       LOOKUP(MsRequest.ReqCParam2,lcMandatoryExtraLines) GT 0) THEN NEXT.
+
+            IF LOOKUP(lELMobSub.CLIType,lcMandatoryExtraLines) > 0 THEN NEXT.
+
+            liAvailExtraLineCount = liAvailExtraLineCount + 1.
+
+            IF liAvailExtraLineCount <= liConfigExtraLineCount THEN NEXT.
+            ELSE DO:
+               FIND FIRST lbDiscountPlan NO-LOCK WHERE
+                          lbDiscountPlan.Brand     EQ Syst.Var:gcBrand           AND
+                          lbDiscountPlan.DPRuleId  EQ lELMobSub.CLIType + "DISC" AND
+                          lbDiscountPlan.ValidFrom <= TODAY                      AND
+                          lbDiscountPlan.ValidTo   >= TODAY                      NO-ERROR.
+
+               IF AVAIL lbDiscountPlan THEN DO:
+
+                  fCloseExtraLineDiscount(lELMobSub.MsSeq,
+                                          lbDiscountPlan.DPRuleID,
+                                          TODAY).
+
+                  Func.Common:mWriteMemo("MobSub",
+                                         STRING(lELMobSub.MsSeq),
+                                         0,
+                                         "ExtraLine Discount is Closed",
+                                         "STC done from Extra line associated Main line to different mainline or independent clitype").
+
+                  ASSIGN lELMobSub.MultiSimId   = 0
+                         lELMobSub.MultiSimType = 0.
+
+               END.
+
+            END.
+
+         END.
+
       END.
 
-      /* Extraline is changed to independent or mainline mobsub.
-         => we need to convert the mainline mobsub linked to the extraline
-             to independent mobsub (zero the multisimid and multisimidtype)
-         => The discount from the extraline needs to be closed
-      */
-      ELSE DO:
-         FOR FIRST
-               lMLMobSub EXCLUSIVE-LOCK WHERE
-               lMLMobSub.MsSeq        EQ MobSub.MultiSimId       AND
-               lMLMobSub.MultiSimId   EQ MobSub.MSSeq            AND
-               lMLMobSub.MultiSimtype EQ {&MULTISIMTYPE_PRIMARY} AND
-              (lMLMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE}  OR
-               lMLMobSub.MsStatus     EQ {&MSSTATUS_BARRED}):
-            ASSIGN
-               lMLMobSub.MultiSimId   = 0
-               lMLMobSub.MultiSimType = 0.
-         END.
-
-         lcExtraLineDiscount = bOldType.CliType + "DISC".
-
-         FOR FIRST lbDiscountPlan NO-LOCK WHERE
-                   lbDiscountPlan.Brand    EQ Syst.Var:gcBrand           AND
-                   lbDiscountPlan.DPRuleId EQ lcExtraLineDiscount        AND
-                   lbDiscountPlan.ValidTo  > TODAY,
-             FIRST lbDPMember NO-LOCK WHERE
-                   lbDPMember.DPId         EQ lbDiscountPlan.DPId        AND
-                   lbDPMember.HostTable    EQ "MobSub"                   AND
-                   lbDPMember.KeyValue     EQ STRING(MobSub.MSSeq)       AND
-                   lbDPMember.ValidTo      > TODAY                       AND
-                   lbDPMember.ValidTo      >= lbDPMember.ValidFrom:
-
-            fCloseExtraLineDiscount(MobSub.MsSeq,
-                                    lbDiscountPlan.DPRuleID,
-                                    TODAY).
-         END.
-      END.
    END.
+   ELSE IF fCLITypeIsMainLine(CLIType.CliType)  AND
+       NOT fCLITypeIsMainLine(bOldType.CliType) THEN DO:
 
-   /* Customer can do STC from mobile only mobsub to
-      extraline if the customer also have a free suitable mainline mobsub
-      available */
-   IF fCLITypeIsExtraLine(CLIType.CliType)      AND
-      NOT fCLITypeIsMainLine(bOldType.CliType)  AND
-      NOT fCLITypeIsExtraLine(bOldType.CliType) AND
-      bOldType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}
-   THEN DO:
-      /* Find suitable mainline mobsub from the customer */
-      FOR EACH lMLMobSub EXCLUSIVE-LOCK WHERE
-               lMLMobSub.CustNum      EQ MobSub.CustNum      AND
-               lMLMobSub.MultiSimId   EQ 0                   AND
-               lMLMobSub.MultiSimtype EQ 0                   AND
-               (lMLMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE}  OR
-                lMLMobSub.MsStatus     EQ {&MSSTATUS_BARRED}):
-
-         IF NOT fCLITypeAllowedForExtraLine(lMLMobSub.CliType, CLIType.CliType, liELCount)
-         THEN NEXT.
-
-         fCreateExtraLineDiscount(MobSub.MsSeq,
-                                  MobSub.CLIType + "DISC",
-                                  TODAY).
-
-         ASSIGN lMLMobSub.MultiSimId   = MobSub.MsSeq
-                lMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY}.
-
-         FIND CURRENT Mobsub EXCLUSIVE-LOCK.
-         IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMobsub).
-
-         ASSIGN MobSub.MultiSimId   = lMLMobSub.MsSeq
-                MobSub.MultiSimType = {&MULTISIMTYPE_EXTRALINE}.
-
-         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhMobsub).
-
-         FIND CURRENT Mobsub NO-LOCK.
-
-         LEAVE.
-      END.
+      fCheckAndAssignOrphanExtraline(MobSub.MsSeq,
+                                     MobSub.CustNum,
+                                     MobSub.CLIType).
 
    END.
 

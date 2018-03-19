@@ -205,6 +205,30 @@ FUNCTION fCheckForMandatoryExtraLine RETURNS LOGICAL
 
 END FUNCTION.    
 
+FUNCTION fGetMandatoryExtraLineForMainLine RETURNS CHARACTER
+   (INPUT icMainCLIType AS CHAR):
+
+   DEFINE BUFFER TMSRelation FOR TMSRelation.
+
+   DEF VAR lcMandatoryCLITypes AS CHAR NO-UNDO.
+
+   FOR EACH TMSRelation NO-LOCK WHERE
+            TMSRelation.TableName    EQ {&ELTABLENAME} AND
+            TMSRelation.KeyType      EQ {&ELKEYTYPE}   AND
+            TMSRelation.ParentValue  EQ icMainCLIType  AND
+            TMSRelation.RelationType EQ {&ELMANDATORY}:
+
+      IF lcMandatoryCLITypes EQ "" THEN
+         lcMandatoryCLITypes = ENTRY(1,TMSRelation.ChildValue,"_").
+      ELSE
+         lcMandatoryCLITypes = lcMandatoryCLITypes + "," + ENTRY(1,TMSRelation.ChildValue,"_").
+
+   END.
+
+   RETURN lcMandatoryCLITypes.
+
+END FUNCTION.
+
 FUNCTION fGetOngoingExtralineCount RETURNS LOGICAL
    (INPUT icExtraLineCLIType AS CHAR,
     INPUT icCustIDType       AS CHAR,
@@ -252,6 +276,8 @@ FUNCTION fCheckExistingMainLineAvailForExtraLine RETURNS INTEGER
 
    DEFINE BUFFER ELMobSub FOR MobSub.
    DEFINE BUFFER Order    FOR Order.
+   DEFINE BUFFER MobSub   FOR MobSub.
+   DEFINE BUFFER Customer FOR Customer.
 
    FOR FIRST Customer NO-LOCK WHERE
              Customer.Brand      EQ Syst.Var:gcBrand AND
@@ -432,7 +458,8 @@ END FUNCTION.
 FUNCTION fCheckFixedLineInstalledForMainLine RETURNS LOGICAL
    (INPUT liMainLineOrderId  AS INT):
 
-   DEFINE BUFFER Order FOR Order. 
+   DEFINE BUFFER Order       FOR Order. 
+   DEFINE BUFFER OrderFusion FOR OrderFusion.
 
    FIND FIRST Order NO-LOCK WHERE
               Order.Brand        EQ Syst.Var:gcBrand         AND
@@ -533,7 +560,9 @@ END FUNCTION.
 FUNCTION fGetOldestCLITypeOfMobSub RETURNS CHAR
    (iiCustNum AS INT):
 
-DEF VAR lcOldestCLIType  AS CHAR   NO-UNDO.
+   DEFINE BUFFER MobSub FOR MobSub.
+
+   DEF VAR lcOldestCLIType AS CHAR NO-UNDO.
 
    FOR EACH MobSub NO-LOCK WHERE MobSub.Brand = Syst.Var:gcBrand AND
                                  MobSub.CustNum = iiCustNum 
@@ -551,7 +580,9 @@ END FUNCTION.
 FUNCTION fGetOldestCLITypeOfOrder RETURNS CHAR
    (iiCustNum AS INT):
 
-DEF VAR lcOldestCLIType  AS CHAR  NO-UNDO.
+   DEFINE BUFFER Order FOR Order.
+
+   DEF VAR lcOldestCLIType AS CHAR NO-UNDO.
 
    FOR EACH Order NO-LOCK WHERE Order.Brand = Syst.Var:gcBrand AND
                       Order.CustNum = iiCustNum AND
@@ -570,8 +601,8 @@ END FUNCTION.
 FUNCTION fGetPayType RETURNS CHAR
    (iiCustNum AS INT):
 
-DEF VAR lcPayType        AS CHAR NO-UNDO.
-DEF VAR lcCLIType        AS CHAR NO-UNDO.
+   DEF VAR lcPayType AS CHAR NO-UNDO.
+   DEF VAR lcCLIType AS CHAR NO-UNDO.
 
    /* YOT-5618 Handle correctly Way of payment for 66 and 67 */
    lcCLIType = fGetOldestCLITypeOfMobSub(iiCustNum).
@@ -588,34 +619,25 @@ DEF VAR lcCLIType        AS CHAR NO-UNDO.
       
 END FUNCTION.
 
-FUNCTION fExtraLineCountForMainLine RETURN INTEGER 
-    ( INPUT iiMultiSimID AS INT ) :
-        
-    /*This function can be used for Main and Extra Lines Both.    
-      In Case of Main Lines pass the mobsub.msseq as parameter.
-      In Case of Extral Lines pass the mobsub.multisimid as parameter.  
-      Then this function will return the Number of Extra Lines attached to the main line  currently. 
-      
-      */                               
-                
-    DEFINE BUFFER bfELMobSub FOR MobSub.
-    DEFINE VARIABLE iiELCount  AS INTEGER NO-UNDO .
-       
-    FOR EACH bfELMobSub NO-LOCK WHERE 
-             bfELMobSub.Brand        =  Syst.Var:gcBrand          AND                 
-             bfELMobSub.multiSimID   =  iiMultiSimID              AND
-             bfELMobsub.multiSimType =  {&MULTISIMTYPE_EXTRALINE} AND 
-             bfELMobSub.paytype      =  NO                        AND 
-             (bfELMobSub.MsStatus    =  {&MSSTATUS_ACTIVE} OR
-              bfELMobSub.MsStatus    =  {&MSSTATUS_BARRED}):                
-                     
-        ASSIGN iiELCount = iiELCount + 1 .           
-                                          
-    END.
-    
-    RETURN iiELCount.
-                                           
-END FUNCTION.        
+FUNCTION fExtraLineCountForMainLine RETURN INTEGER
+    (INPUT iiMLMsSeq AS INT,
+     INPUT iiCustNum AS INT) :
 
+    DEFINE BUFFER bfELMobSub FOR MobSub.
+    DEFINE VARIABLE iiELCount  AS INTEGER NO-UNDO.
+
+    FOR EACH bfELMobSub NO-LOCK WHERE
+             bfELMobSub.Brand        EQ Syst.Var:gcBrand      AND
+             bFELMobSub.CustNum      EQ iiCustNum             AND
+             bfELMobSub.MultiSimID   EQ iiMLMsSeq             AND
+             bfELMobsub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}:
+
+        ASSIGN iiELCount = iiELCount + 1 .
+
+    END.
+
+    RETURN iiELCount.
+
+END FUNCTION.
 
 &ENDIF

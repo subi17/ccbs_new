@@ -446,7 +446,7 @@ IF NOT AVAIL mobsub THEN DO:
           LOOKUP(lbMLOrder.StatusCode,{&ORDER_CLOSE_STATUSES}) = 0 NO-ERROR. /* Mainline Orderid */
 
       IF AVAIL lbMLOrder THEN 
-         FIND FIRST lbMLMobSub EXCLUSIVE-LOCK WHERE 
+         FIND FIRST lbMLMobSub NO-LOCK WHERE 
                     lbMLMobSub.MsSeq EQ lbMLOrder.MsSeq NO-ERROR.
 
       IF AVAIL lbMLMobSub THEN 
@@ -460,7 +460,7 @@ IF NOT AVAIL mobsub THEN DO:
                                                                      Customer.OrgId,
                                                                      OUTPUT liMLMsSeq).
          IF liExistingOrderId > 0 THEN 
-            FIND FIRST lbMLMobSub EXCLUSIVE-LOCK WHERE
+            FIND FIRST lbMLMobSub NO-LOCK WHERE
                        lbMLMobSub.MsSeq EQ liMLMsSeq NO-ERROR.
 
          IF AVAIL lbMLMobSub THEN 
