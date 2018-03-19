@@ -3,7 +3,6 @@
    Script for creating default service packages.
 */
 
-/* Create with res_885_create_servpacs_input.p */
 
 DEF VAR lcServpack AS CHAR NO-UNDO. 
 
