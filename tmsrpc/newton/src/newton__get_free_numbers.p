@@ -105,7 +105,7 @@ FUNCTION fBuildCLI RETURNS LOGICAL ():
       liMIN = INTEGER(MSISDN.CLI).
    END.
 
-   IF liMIN EQ 0
+   IF liMIN EQ 0 OR liMin EQ liMax
    THEN RETURN FALSE.
 
    lcCLI = STRING(RANDOM(liMin,liMax)).
