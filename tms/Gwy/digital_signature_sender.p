@@ -412,7 +412,7 @@ PROCEDURE pCheckActionLog:
 
    IF llLogRequest THEN fLogMsg("Start searching ActionLog, ActionID: " + pcActionID).
 
-   FOR EACH ActionLog EXCLUSIVE-LOCK WHERE
+   FOR EACH ActionLog NO-LOCK WHERE
             ActionLog.Brand     EQ Syst.Var:gcBrand AND
             ActionLog.ActionID  EQ pcActionID       AND
             ActionLog.ActionTS  =  DEC(0) USE-INDEX ActionID:
@@ -443,6 +443,7 @@ PROCEDURE pCheckActionLog:
                fLogMsg(STRING(bOrder.OrderId) + "; ERROR wrong Order status: " + STRING(bOrder.StatusCode)).
 
             IF lcStatus EQ "" THEN DO:
+               FIND CURRENT ActionLog EXCLUSIVE-LOCK NO-ERROR.
                ASSIGN
                   ActionLog.ActionStatus = {&ACTIONLOG_STATUS_SUCCESS} /* ?? */
                   ActionLog.ActionTS     = ldCurrentTimeTS.
