@@ -676,6 +676,9 @@ DO TRANSACTION:
                              INPUT {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION},
                                INPUT lcBundleId).
    END. /* IF NOT MobSub.PayType THEN DO: */
+      
+   FIND FIRST Customer WHERE
+              Customer.CustNum = MobSub.CustNum NO-LOCK NO-ERROR.
 
    /* Create Topup for prepaid subscriptions */
    IF MobSub.PayType THEN DO:
@@ -694,10 +697,7 @@ DO TRANSACTION:
 
       IF ldeTopupAmount <= 0 THEN ldeTopupAmount = 0.01.
 
-      FIND FIRST Customer WHERE
-                 Customer.CustNum = MobSub.CustNum NO-LOCK NO-ERROR.
-      IF AVAIL Customer THEN
-         lcTaxZone = fRegionTaxZone(Customer.Region).
+      lcTaxZone = fRegionTaxZone(Customer.Region).
 
       fCreateTopUpRequest(MobSub.MsSeq,
                           MobSub.CLI,
@@ -715,11 +715,8 @@ DO TRANSACTION:
    /* Request handled succesfully */
    FIND FIRST MsRequest WHERE
               MsRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.
-
-   FIND Customer NO-LOCK WHERE
-        Customer.Custnum = MobSub.Custnum NO-ERROR.
    
-   IF AVAIL Customer AND Customer.Language NE 1 THEN DO:
+   IF Customer.Language NE 1 THEN DO:
 
       liRequest = fServiceRequest(
                      MobSub.MsSeq,
@@ -742,6 +739,34 @@ DO TRANSACTION:
                           STRING(MobSub.MsSeq),
                           MobSub.Custnum,
                           "Voicemail language change failed",
+                          lcError).
+   END.
+   
+   /* Override default national roaming profile */
+   IF Customer.NWProfile > 0 AND
+      Customer.NWProfile NE {&CUSTOMER_NW_PROFILE_YG_OR} THEN DO:
+
+      liRequest = fServiceRequest(
+                     MobSub.MsSeq,
+                     "NW",
+                     Customer.NWProfile,
+                     "", /* param */
+                     ldCurrTS,
+                     "", /* salesman */
+                     TRUE,      /* fees */
+                     FALSE,      /* sms */
+                     "", /* usercode */
+                     {&REQUEST_SOURCE_SUBSCRIPTION_REACTIVATION},
+                     msrequest.msrequest, /* father request */
+                     false, /* mandatory for father request */
+                     OUTPUT lcerror).
+      
+      IF liRequest = 0 THEN                               
+         /* write possible error to a memo */
+         Func.Common:mWriteMemo("MobSub",
+                          STRING(MobSub.MsSeq),
+                          MobSub.Custnum,
+                          "NW profile change failed",
                           lcError).
    END.
 
