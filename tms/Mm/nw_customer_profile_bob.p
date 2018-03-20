@@ -1,4 +1,3 @@
-
 /* ----------------------------------------------------------------------
   MODULE .......: nw_customer_profile_bob.p
   TASK .........: Back door tools: Automate network profile changes.
@@ -9,29 +8,20 @@
   CREATED ......: 19.03.18
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
-
-{Syst/commpaa.i}
 Syst.Var:katun = "Cron".
 Syst.Var:gcBrand = "1".
-
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Syst/eventval.i}
-{Func/msreqfunc.i}
-{Func/orderfunc.i}
-{Mc/orderfusion.i}
-{Func/fixedlinefunc.i}
-{Func/fsubstermreq.i}
-{Mm/subser.i}
 
 IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
    {Func/lib/eventlog.i}
-   DEF VAR lhOrderFusion AS HANDLE NO-UNDO.
-   lhOrderFusion = BUFFER OrderFusion:HANDLE.
-   RUN StarEventInitialize(lhOrderFusion).
+   DEF VAR lhCustomer AS HANDLE NO-UNDO.
+   lhCustomer = BUFFER Customer:HANDLE.
+   RUN StarEventInitialize(lhCustomer).
 END.
 
 DEF VAR lcLine AS CHAR NO-UNDO.
@@ -47,30 +37,25 @@ DEF VAR lcInputFile AS CHAR NO-UNDO.
 DEF VAR lcProcDir AS CHAR NO-UNDO. 
 DEF VAR lcProcessedFile AS CHAR NO-UNDO. 
 DEF VAR lcSpoolDir AS CHAR NO-UNDO. 
-DEF VAR lcReportFileOut AS CHAR NO-UNDO. 
 DEF VAR lcOutDir AS CHAR NO-UNDO. 
 DEF VAR lcRootDir AS CHAR NO-UNDO. 
 DEF VAR liEntries AS INT NO-UNDO. 
 
 /* field variables */
 DEF VAR lcDNI AS CHAR NO-UNDO. 
-DEF VAR lcNwProfile AS CHAR NO-UNDO. 
+DEF VAR liNWProfile AS INT NO-UNDO. 
 
 ASSIGN
-   lcRootDir = "/store/riftp/profile/subscription".
+   lcRootDir = "/store/riftp/profile/customer".
  /*  lcRootDir = fCParam("CustomerProfileBob","RootDir").*/
 
 IF NOT lcRootDir > "" THEN RETURN.
 
 ASSIGN
-/* lcIncDir  = lcRootDir + "incoming/incoming/" 
-   lcProcDir = lcRootDir + "incoming/processed/"
-   lcSpoolDir = lcRootDir + "outgoing/spool/"
-   lcOutDir   = lcRootDir + "outgoing/outgoing/".*/
-   lcIncDir  = "incoming/incoming" 
-   lcProcDir = "incoming/processed"
-   lcSpoolDir = "outgoing/spool" /* record of the wrong files */
-   lcOutDir   = "outgoing/outgoing".
+   lcIncDir  = lcRootDir + "incoming/" 
+   lcProcDir = lcRootDir + "processed/"
+   lcSpoolDir = lcRootDir + "spool/"
+   lcOutDir   = lcRootDir + "outgoing/".
 
 DEF STREAM sin.
 DEF STREAM sFile.
@@ -123,8 +108,8 @@ REPEAT:
 
       ASSIGN 
          liEntries   = NUM-ENTRIES(lcLine,lcSep)
-         lcDNI       = ENTRY(1,lcLine,lcSep) /* --> Customer.OrgID */
-         lcNwProfile = ENTRY(2,lcLine,lcSep) NO-ERROR.
+         lcDNI       = TRIM(ENTRY(1,lcLine,lcSep)) /* --> Customer.OrgID */
+         liNWProfile = INT(ENTRY(2,lcLine,lcSep)) NO-ERROR.
 
       IF ERROR-STATUS:ERROR OR liEntries NE 2 THEN DO:
          fError("Incorrect input data format").
@@ -133,7 +118,7 @@ REPEAT:
       END.
 
       RUN pUpdateProfile(lcDNI,
-                         lcNwProfile).
+                         liNwProfile).
 
       IF RETURN-VALUE BEGINS "ERROR" THEN DO:
          fError(ENTRY(2,RETURN-VALUE,":")).
@@ -150,7 +135,7 @@ REPEAT:
    INPUT STREAM sin CLOSE.
    OUTPUT STREAM sLog CLOSE.
 
-   lcReportFileOut = fMove2TransDir(lcLogFile, "", lcOutDir).
+   fMove2TransDir(lcLogFile, "", lcOutDir).
    lcProcessedFile = fMove2TransDir(lcInputFile, "", lcProcDir).  
    IF lcProcessedFile NE "" THEN fBatchLog("FINISH", lcProcessedFile).
 
@@ -160,36 +145,34 @@ INPUT STREAM sFile CLOSE.
 
 IF llDoEvent THEN fCleanEventObjects().
 
-
 /*
    Procedure updates customer level profile.
-
 */
 PROCEDURE pUpdateProfile:
 
    DEF INPUT PARAM pcDNI AS CHAR NO-UNDO. 
-   DEF INPUT PARAM pcNewProfile AS CHAR NO-UNDO.
+   DEF INPUT PARAM piNewProfile AS INT NO-UNDO.
 
    DEF VAR lcError   AS CHAR NO-UNDO.
+   
+   IF NOT Func.Common:mTMSCodeChk("Customer","NWProfiles",STRING(piNewProfile)) THEN
+      RETURN "ERROR:Illegal profile value".
 
-   FIND FIRST Customer NO-LOCK WHERE
-      Customer.OrgId EQ pcDNI.
+   FIND Customer NO-LOCK WHERE
+        Customer.OrgId EQ pcDNI AND
+        Customer.Roles NE "inactive" NO-ERROR.
    IF NOT AVAIL Customer THEN
       RETURN "ERROR:Customer not found".
 
-   IF fSubSerSSStat(0,"NW",INTEGER(pcNewProfile),lcError) NE 0 THEN
-      RETURN "ERROR:Illegal profile value".
+   IF Customer.NWProfile EQ piNewProfile THEN RETURN "OK". 
 
-  /* IF Customer.NWProfile EQ pcNewProfile THEN
-      RETURN "ERROR:Customer already has same profile".
+   FIND CURRENT Customer EXCLUSIVE-LOCK.
 
-   ldCurrStamp = Func.Common:mMakeTS().
-   
+   IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustomer).
    ASSIGN
-      Customer.NWProfile = pcNewProfile. 
-   */   
-   /* write log ...? */
-   /* Send message to ...? */
+      Customer.NWProfile = piNewProfile.  
+   IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
 
+   RETURN "OK".
 END.
 
