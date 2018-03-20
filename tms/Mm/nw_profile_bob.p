@@ -101,8 +101,8 @@ REPEAT:
 
       ASSIGN 
          liEntries   = NUM-ENTRIES(lcLine,lcSep)
-         lcMsisdn    = ENTRY(1,lcLine,lcSep)
-         lcNwProfile = ENTRY(2,lcLine,lcSep) NO-ERROR.
+         lcMsisdn    = TRIM(ENTRY(1,lcLine,lcSep))
+         lcNwProfile = TRIM(ENTRY(2,lcLine,lcSep)) NO-ERROR.
 
       IF ERROR-STATUS:ERROR OR liEntries NE 2 THEN DO:
          fError("Incorrect input data format").
@@ -145,27 +145,12 @@ PROCEDURE pUpdateProfile:
    DEF INPUT PARAM pcMsisdn AS CHAR NO-UNDO. 
    DEF INPUT PARAM pcNewProfile AS CHAR NO-UNDO.
 
-   DEF VAR cAllProfValues AS CHAR NO-UNDO.
    DEF VAR ldtActDate AS DATE NO-UNDO.
    DEF VAR liActTime  AS INT NO-UNDO.
    DEF VAR lcError    AS CHAR NO-UNDO.
    DEF VAR liReq      AS INT  NO-UNDO.
 
-   /* Gather all profile values from TMSCodes to cAllProfValues
-      comma separated list */
-   cAllProfValues = "".
-   FOR EACH TMSCodes WHERE 
-            TMSCodes.TableName = "Customer" AND 
-            TMSCodes.FieldName = "NWProfiles" AND
-            TMSCodes.CodeGroup = "NWProfile" AND
-            TMSCodes.inUse = 1 NO-LOCK:
-     IF cAllProfValues = "" THEN
-        cAllProfValues = TMSCodes.CodeValue.
-     ELSE
-        cAllProfValues = cAllProfValues + "," + TMSCodes.CodeValue.
-   END.
-
-   IF LOOKUP(pcNewProfile,cAllProfValues,",") = 0 THEN
+   IF NOT Func.Common:mTMSCodeChk("Customer","NWProfiles",pcNewProfile) THEN
       RETURN "ERROR:Incorrect subscription profile value parameter".
 
    /* request is under work */
