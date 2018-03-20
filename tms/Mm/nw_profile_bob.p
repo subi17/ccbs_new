@@ -1,4 +1,3 @@
-
 /* ----------------------------------------------------------------------
   MODULE .......: nw_profile_bob.p
   TASK .........: Back door tools: Automate network profile changes.
@@ -9,30 +8,14 @@
   CREATED ......: 08.03.18
   Version ......: Yoigo
 ----------------------------------------------------------------------- */
-
-{Syst/commpaa.i}
 Syst.Var:katun = "Cron".
 Syst.Var:gcBrand = "1".
-
 {Syst/tmsconst.i}
 {Func/ftransdir.i}
 {Func/cparam2.i}
 {Syst/eventlog.i}
 {Syst/eventval.i}
-{Func/msreqfunc.i}
-{Func/orderfunc.i}
-{Mc/orderfusion.i}
-{Func/fixedlinefunc.i}
-{Func/fsubstermreq.i}
-/* {Func/fmakemsreq.i}*/
-
-IF llDoEvent THEN DO:
-   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun 
-   {Func/lib/eventlog.i}
-   DEF VAR lhOrderFusion AS HANDLE NO-UNDO.
-   lhOrderFusion = BUFFER OrderFusion:HANDLE.
-   RUN StarEventInitialize(lhOrderFusion).
-END.
+{Func/fmakemsreq.i}
 
 DEF VAR lcLine AS CHAR NO-UNDO.
 DEF VAR lcSep AS CHAR NO-UNDO INIT ";".
@@ -47,7 +30,6 @@ DEF VAR lcInputFile AS CHAR NO-UNDO.
 DEF VAR lcProcDir AS CHAR NO-UNDO. 
 DEF VAR lcProcessedFile AS CHAR NO-UNDO. 
 DEF VAR lcSpoolDir AS CHAR NO-UNDO. 
-DEF VAR lcReportFileOut AS CHAR NO-UNDO. 
 DEF VAR lcOutDir AS CHAR NO-UNDO. 
 DEF VAR lcRootDir AS CHAR NO-UNDO. 
 DEF VAR liEntries AS INT NO-UNDO. 
@@ -57,20 +39,16 @@ DEF VAR lcMsisdn AS CHAR NO-UNDO.
 DEF VAR lcNwProfile AS CHAR NO-UNDO. 
 
 ASSIGN
-   lcRootDir = "/store/riftp/profile/subscription".
+   lcRootDir = "/store/riftp/profile/subscription/".
  /*  lcRootDir = fCParam("SubscriptionProfileBob","RootDir").*/
 
 IF NOT lcRootDir > "" THEN RETURN.
 
 ASSIGN
-/* lcIncDir  = lcRootDir + "incoming/incoming/" 
-   lcProcDir = lcRootDir + "incoming/processed/"
-   lcSpoolDir = lcRootDir + "outgoing/spool/"
-   lcOutDir   = lcRootDir + "outgoing/outgoing/".*/
-   lcIncDir  = "incoming/incoming" 
-   lcProcDir = "incoming/processed"
-   lcSpoolDir = "outgoing/spool" /* record of the wrong files */
-   lcOutDir   = "outgoing/outgoing".
+   lcIncDir  = lcRootDir + "incoming/" 
+   lcProcDir = lcRootDir + "processed/"
+   lcSpoolDir = lcRootDir + "spool/"
+   lcOutDir   = lcRootDir + "outgoing/".
 
 DEF STREAM sin.
 DEF STREAM sFile.
@@ -150,16 +128,13 @@ REPEAT:
    INPUT STREAM sin CLOSE.
    OUTPUT STREAM sLog CLOSE.
 
-   lcReportFileOut = fMove2TransDir(lcLogFile, "", lcOutDir).
+   fMove2TransDir(lcLogFile, "", lcOutDir).
    lcProcessedFile = fMove2TransDir(lcInputFile, "", lcProcDir).  
    IF lcProcessedFile NE "" THEN fBatchLog("FINISH", lcProcessedFile).
 
 END.
 
 INPUT STREAM sFile CLOSE.
-
-IF llDoEvent THEN fCleanEventObjects().
-
 
 /*
    Procedure updates subscription level profile.
@@ -206,12 +181,11 @@ PROCEDURE pUpdateProfile:
                         OUTPUT liActTime).
 
    /* CREATE SubSer */
-   ldCurrStamp = Func.Common:mMakeTS().
    liReq = fServiceRequest(MobSub.MsSeq,
                            "NW", /* Service */
                            INTEGER(pcNewProfile), /* profile */
                            "",
-                           ldCurrStamp,
+                           Func.Common:mMakeTS(),
                            "",
                            TRUE,       /* fees */
                            FALSE,      /* sms */
@@ -222,7 +196,7 @@ PROCEDURE pUpdateProfile:
                            OUTPUT lcError).
 
    IF liReq = 0 THEN
-      RETURN "ERROR:Service (NW) request not created: " + lcError.
+      RETURN SUBST("ERROR:Service (NW) request not created: &1", lcError).
 
    RETURN "OK".
 END.
