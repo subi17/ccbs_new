@@ -14,6 +14,6 @@ if len(sys.argv) < 2: instruction()
 else:
    var1 = sys.argv[1]
 
-p=s.newton.get_free_numbers("yoigo","7226")
+p=s.newton.get_free_numbers("yoigo", var1)
                               
 print_results(p)
