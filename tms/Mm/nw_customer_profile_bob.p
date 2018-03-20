@@ -46,8 +46,7 @@ DEF VAR lcDNI AS CHAR NO-UNDO.
 DEF VAR liNWProfile AS INT NO-UNDO. 
 
 ASSIGN
-   lcRootDir = "/store/riftp/profile/customer".
- /*  lcRootDir = fCParam("CustomerProfileBob","RootDir").*/
+   lcRootDir = "/store/riftp/profile/customer/".
 
 IF NOT lcRootDir > "" THEN RETURN.
 
