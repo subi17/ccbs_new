@@ -212,7 +212,7 @@ REPEAT TRANS:
    END.
    ELSE fCloseDiscount(DiscountPlan.DPRuleID,
                        liMsSeq,
-                       ldaValidTo - 1,
+                       TODAY - 1,
                        NO).
 
    fLogLine("OK").
