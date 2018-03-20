@@ -1112,7 +1112,9 @@ IF Order.MNPStatus > 0 THEN DO:
    END.
 END.
 
-IF Customer.NWProfile NE 0 THEN DO:
+/* Override default national roaming profile */
+IF Customer.NWProfile > 0 AND
+   Customer.NWProfile NE {&CUSTOMER_NW_PROFILE_YG_OR} THEN DO:
 
    liRequest = fServiceRequest(
                   MobSub.MsSeq,
