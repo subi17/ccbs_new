@@ -55,12 +55,51 @@ END FUNCTION. /* FUNCTION fCheckSubsLimit */
 FUNCTION fCheckRenewalData RETURNS LOGICAL:
 
    DEF BUFFER bOrderCustomer FOR OrderCustomer.
+   FIND FIRST bOrderCustomer NO-LOCK WHERE
+              bOrderCustomer.Brand = Syst.Var:gcBrand AND
+              bOrderCustomer.OrderId  = OrderCustomer.OrderID AND
+              bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}.
 
-   IF CAN-FIND(FIRST bOrderCustomer NO-LOCK WHERE
-                     bOrderCustomer.Brand = Syst.Var:gcBrand AND
-                     bOrderCustomer.OrderId  = OrderCustomer.OrderID AND
-                     bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}) 
-                     THEN RETURN FALSE.
+   /*YDR-2834*/
+   /*Delivery address is different than customer address
+     and
+     delivery type is "Officac de Correos, Puntos UPS, Tiendas Yoigo"
+     then skip status 31 (means this func returns TRUE)
+     
+     Channels impacted:
+        Retention 
+        Renewal telesales 
+        Renewal web 
+        CTC "click to call" 
+   */
+
+   IF Order.Deliverytype EQ {&ORDER_DELTYPE_POS}  OR
+      Order.Deliverytype EQ {&ORDER_DELTYPE_KIALA} OR
+      Order.Deliverytype EQ {&ORDER_DELTYPE_POS} THEN DO:
+
+      IF NOT AVAIL bOrderCustomer THEN RETURN FALSE.
+     
+      IF (Order.OrderChannel EQ "renewal" OR
+          Order.OrderChannel EQ "renewal_telesales" OR
+          Order.OrderChannel EQ "retention" OR
+          Order.OrderChannel EQ "renewal_ctc") AND
+         (NOT (Ordercustomer.Address EQ bOrdercustomer.Address AND
+              OrderCustomer.PostOffice EQ bOrderCustomer.PostOffice AND
+              OrderCustomer.Region EQ bOrderCustomer.Region AND
+              OrderCustomer.Country EQ bOrderCustomer.Country AND
+              OrderCustomer.ZipCode EQ bOrderCustomer.ZipCode )
+         OR
+         NOT (Ordercustomer.Address EQ Customer.Address AND
+              OrderCustomer.PostOffice EQ Customer.PostOffice AND
+              OrderCustomer.Region EQ Customer.Region AND
+              OrderCustomer.Country EQ Customer.Country AND
+              OrderCustomer.ZipCode EQ Customer.ZipCode) 
+         ) THEN RETURN TRUE.
+ 
+   END. /*YDR-2834*/
+
+   /*functionality before YDR-2834 remains*/
+   IF AVAIL bOrderCustomer THEN RETURN FALSE.
    
    IF 
       OrderCustomer.Firstname NE Customer.Firstname OR
@@ -77,7 +116,8 @@ FUNCTION fCheckRenewalData RETURNS LOGICAL:
       
       OrderCustomer.BankCode NE Customer.BankAcct  
    THEN RETURN FALSE.
-   ELSE RETURN TRUE.
+   
+   RETURN TRUE.
 
 END FUNCTION. 
 
