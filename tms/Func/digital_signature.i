@@ -92,19 +92,19 @@ FUNCTION fHandleSignature RETURNS CHAR
               bActionLog.ActionID  = lcActionID /* AND
               bActionLog.ActionTS  = DEC(0)*/ USE-INDEX TableName NO-ERROR.
    IF NOT AVAIL bActionLog THEN DO:
-      CREATE ActionLog.
-         ASSIGN
-            ActionLog.Brand        = Syst.Var:gcBrand
-            ActionLog.ActionID     = lcActionID
-            ActionLog.ActionTS     = 0
-            ActionLog.TableName    = "Order"
-            ActionLog.KeyValue     = STRING(bOrder.OrderId)
-            ActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE}
-            ActionLog.UserCode     = Syst.Var:katun
-            ActionLog.CustNum      = bOrder.CustNum
-            ActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
-            ActionLog.toDate       = TODAY
-            ActionLog.ActionChar   = icStatus.
+      CREATE bActionLog.
+      ASSIGN
+         bActionLog.Brand        = Syst.Var:gcBrand
+         bActionLog.ActionID     = lcActionID
+         bActionLog.ActionTS     = 0
+         bActionLog.TableName    = "Order"
+         bActionLog.KeyValue     = STRING(bOrder.OrderId)
+         bActionLog.ActionStatus = {&ACTIONLOG_STATUS_ACTIVE}
+         bActionLog.UserCode     = Syst.Var:katun
+         bActionLog.CustNum      = bOrder.CustNum
+         bActionLog.ActionPeriod = YEAR(TODAY) * 100 + MONTH(TODAY)
+         bActionLog.toDate       = TODAY
+         bActionLog.ActionChar   = icStatus.
 
       lcStatus = "".
    END.
