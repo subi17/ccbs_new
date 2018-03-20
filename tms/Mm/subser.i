@@ -11,65 +11,33 @@ FUNCTION fSubSerSSStat RETURNS INT
  INPUT iiNewSSStat AS INTEGER,
  OUTPUT ocError AS CHARACTER):
   
-   DEF VAR iValueCount    AS INT NO-UNDO.
-   DEF VAR cAllProfValues AS CHAR NO-UNDO.
-
    FIND FIRST ServCom where 
       ServCom.Brand   = Syst.Var:gcBrand    AND 
       ServCom.ServCom = icServCom NO-LOCK NO-ERROR.
+   
+   /* 1 */
+   IF iiNewSSStat < ServCom.SCValueRange[1]  OR
+      iiNewSSStat > ServCom.SCValueRange[2] THEN DO:
 
-   /* RES-885 National rouming traffic restrictions */
-   IF ServCom.ServCom EQ "NW" THEN DO:
-      /* Gather all profile values from TMSCodes to cAllProfValues
-         comma separated list */
-      iValueCount = 0.
-      cAllProfValues = "".
-      FOR EACH TMSCodes WHERE
-               TMSCodes.TableName = "Customer" AND
-               TMSCodes.FieldName = "NWProfiles" AND
-               TMSCodes.CodeGroup = "NWProfile" AND
-               TMSCodes.inUse = 1 NO-LOCK:
-         IF cAllProfValues = "" THEN
-            cAllProfValues = TMSCodes.CodeValue.
-         ELSE
-            cAllProfValues = cAllProfValues + "," + TMSCodes.CodeValue.
-         iValueCount = iValueCount + 1.
-      END.
+      ocError = "The value must be within range " 
+                + STRING(ServCom.ScValueRange[1]) 
+                +  " - " 
+                + STRING(ServCom.ScValueRange[2] )
+                + " !".
 
-      IF LOOKUP(STRING(iiNewSSStat),cAllProfValues,",") = 0 THEN DO:
-         ocError = "The value must be within range "
-                   + ENTRY(0,cAllProfValues)
-                   +  " - "
-                   + ENTRY(iValueCount,cAllProfValues)
-                   + " !".
-         RETURN 1.
+      RETURN 1.
+   END.
+   
+   /* 2 */
+   IF INDEX(icServcom,"DELAY") > 0 THEN  DO:
+
+      IF LOOKUP(STRING(iiNewSSStat),"5,10,15,20,25,30") = 0
+      THEN DO:
+         ocError = "You can only choose from 5,10,15,20,25 and 30.".
+         RETURN 2.   
       END.
    END.
-   ELSE DO: 
-      /* 1 */
-      IF iiNewSSStat < ServCom.SCValueRange[1]  OR
-         iiNewSSStat > ServCom.SCValueRange[2] THEN DO:
-
-         ocError = "The value must be within range " 
-                   + STRING(ServCom.ScValueRange[1]) 
-                   +  " - " 
-                   + STRING(ServCom.ScValueRange[2] )
-                   + " !".
-
-         RETURN 1.
-      END.
    
-      /* 2 */
-      IF INDEX(icServcom,"DELAY") > 0 THEN  DO:
-
-         IF LOOKUP(STRING(iiNewSSStat),"5,10,15,20,25,30") = 0
-         THEN DO:
-            ocError = "You can only choose from 5,10,15,20,25 and 30.".
-            RETURN 2.   
-         END.
-      END.
-   END.   
-
    RETURN 0.
 
 END.
