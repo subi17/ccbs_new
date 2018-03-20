@@ -1,8 +1,8 @@
 ADD FIELD "NWProfile" OF "Customer" AS INTEGER
-  FORMAT "x(1)"
-  INITIAL ""
+  FORMAT ">9"
+  INITIAL "0"
   LABEL "Network profile"
-  COLUMN-LABEL "Network profile"
+  COLUMN-LABEL "NWProfile"
   HELP "Network profile"
   ORDER 1600
 
