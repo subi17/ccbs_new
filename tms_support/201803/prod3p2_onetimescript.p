@@ -152,6 +152,7 @@ DO :
     CREATE InvText.
     ASSIGN 
         InvText.Brand     = Syst.Var:gcBrand   
+        InvText.ITNum     = NEXT-VALUE(it-seq)
         InvText.Target    = "SMS"            
         InvText.KeyValue  = "CategoryChangeSMS"   
         InvText.FromDate  = TODAY - 1  
@@ -166,7 +167,8 @@ DO :
 
     CREATE InvText.
     ASSIGN 
-        InvText.Brand     = Syst.Var:gcBrand   
+        InvText.Brand     = Syst.Var:gcBrand
+        InvText.ITNum     = NEXT-VALUE(it-seq)   
         InvText.Target    = "EMAIL"            
         InvText.KeyValue  = "SVA_ActEmail"   
         InvText.FromDate  = TODAY - 1  
