@@ -61,16 +61,11 @@ CASE CustCat.Segment:
                 Memo.CustNum   = Customer.Custnum
                 Memo.MemoTitle = "Category Change"
                 Memo.MemoText  = "Cambio de categoría – De RESIDENCIAL AUTÓNOMO a PARTICULAR. Solicitado por el cliente".
-            IF Mm.MManMessage:mGetMessage("SMS", "SVA_ActMessage", 1) EQ TRUE THEN DO:
-                Mm.MManMessage:ParamKeyValue = "".
-                Mm.MManMessage:mCreateMMLogSMS('').
-                Mm.MManMessage:mClearData().
-            END.
         END.
         RELEASE customer.
     END. 
     OTHERWISE DO: /* to SELF EMPLOYED */
-    
+
         liRequest = fCustomerCategoryChangeRequest ( ? ,
             Syst.Var:katun   ,
             Customer.CustNum ,
@@ -83,6 +78,13 @@ CASE CustCat.Segment:
             
         IF liRequest = 0 OR liRequest = ? OR lcError NE "" THEN 
             RETURN appl_err(SUBST("Category request failed. &1" , lcError)).
+            
+        IF Mm.MManMessage:mGetMessage("SMS", "CategoryChangeSMS", 1) EQ TRUE THEN DO:
+            Mm.MManMessage:ParamKeyValue = "".
+            Mm.MManMessage:mCreateMMLogSMS('').
+            Mm.MManMessage:mClearData().
+        END.
+        
     END.
     
 END CASE.

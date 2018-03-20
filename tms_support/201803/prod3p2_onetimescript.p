@@ -132,17 +132,53 @@ IF AVAILABLE BillItem THEN DO:
         RUN StarEventMakeModifyEvent(lhRepText).
     END.
 END.
-   
-   
-   FOR EACH InvText EXCLUSIVE-LOCK WHERE
-            InvText.Brand     = Syst.Var:gcBrand   AND
-            InvText.Target    = "EMAIL"            AND
-            InvText.KeyValue  BEGINS "SVA_ASIST"   AND
-            InvText.FromDate <= TODAY              AND
-            InvText.ToDate   >= TODAY              AND
-            InvText.Language  = 1:
-        RUN StarEventSetOldBuffer(lhInvText).
-        ASSIGN invtext.TxtTitle = "SVA_ Soluciona Negocios #STATUS".
-        RUN StarEventMakeModifyEvent(lhInvText).
-  END.
+
+/* Subject change for SVA_ASIST */   
+FOR EACH InvText EXCLUSIVE-LOCK WHERE
+         InvText.Brand     = Syst.Var:gcBrand   AND
+         InvText.Target    = "EMAIL"            AND
+         InvText.KeyValue  BEGINS "SVA_ASIST"   AND
+         InvText.FromDate <= TODAY              AND
+         InvText.ToDate   >= TODAY              AND
+         InvText.Language  = 1:
+     RUN StarEventSetOldBuffer(lhInvText).
+     ASSIGN invtext.TxtTitle = "SVA_ Soluciona Negocios #STATUS".
+     RUN StarEventMakeModifyEvent(lhInvText).
+END.
+  
+/* Create SMS InvText */
+
+DO :
+    CREATE InvText.
+    ASSIGN 
+        InvText.Brand     = Syst.Var:gcBrand   
+        InvText.Target    = "SMS"            
+        InvText.KeyValue  = "CategoryChangeSMS"   
+        InvText.FromDate  = TODAY - 1  
+        InvText.Todate    = 12/31/49               
+        InvText.Language  = 1
+        InvText.TemplateID  = ""
+        InvText.ParamKeyValue = ""
+        InvText.InvText   = "Yoigo info: ¡Que bien! ya tenemos tu solicitud para ser de Yoigo con Oferta Negocios. Necesitamos que nos envíes a Soporte.negocios@yoigo.com la documentación - recibo de autónomos- para seguir con el proceso."
+        InvText.UseMMan   = TRUE 
+        INvText.category  = "CustomerCategoryChange"
+        InvText.TxtTitle  = "Customer Category Change". 
+
+    CREATE InvText.
+    ASSIGN 
+        InvText.Brand     = Syst.Var:gcBrand   
+        InvText.Target    = "EMAIL"            
+        InvText.KeyValue  = "SVA_ActEmail"   
+        InvText.FromDate  = TODAY - 1  
+        InvText.Todate    = 12/31/49               
+        InvText.Language  = 1
+        InvText.TemplateID  = "SVA_ActEmail_MM"
+        InvText.InvText   = ""
+        InvText.UseMMan   = TRUE 
+        INvText.category  = "SVA Activation"
+        InvText.TxtTitle  = "Servicio de valor añadido X activado". 
+        
+END.
+
+  
 
