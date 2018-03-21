@@ -475,15 +475,22 @@ IF lcICC NE "" AND lcICC NE ? THEN DO:
 
    END.
    ELSE DO:
+      /* Reasons for creating Errorlog */
+      /* 1. ICC assigning is not successfull due to wrong order status */   
+      /* 2. By chance trying to assign ICC to an order for which ICC is 
+            already available and whose subscription it not yet active */ 
       CREATE ErrorLog.
       ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
              ErrorLog.ActionID  = "ORDERICC"
              ErrorLog.TableName = "Order"
              ErrorLog.KeyValue  = STRING(Order.OrderId)
-             ErrorLog.ErrorMsg  = SUBST(
-               "ICC &1 not assigned due to wrong order status &2",
-               lcICC,
-               Order.StatusCode)
+             ErrorLog.ErrorMsg  = IF Order.ICC NE "" THEN
+                                     SUBST("ICC for &1 is already assinged with ICC value &2",
+                                           STRING(Order.OrderId),
+                                           Order.ICC)
+                                  ELSE SUBST("ICC &1 not assigned due to wrong order status &2",
+                                       lcICC,
+                                       Order.StatusCode)
              ErrorLog.UserCode  = Syst.Var:katun
              ErrorLog.ActionTS  = Func.Common:mMakeTS().
    END.

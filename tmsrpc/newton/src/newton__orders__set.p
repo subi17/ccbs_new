@@ -186,8 +186,9 @@ IF NUM-ENTRIES(lcOrderFields) > 0 THEN DO:
                        FusionMessage.FixedStatus EQ "CERRADA"     NO-ERROR.         
 
             IF AVAIL FusionMessage THEN DO:
-               ASSIGN ldeCerrada = Func.Common:mOffSet(FusionMessage.FixedStatusTS,12)
-                      ldeCurrent = Func.Common:mOffSet(ldeCurrentTS,0).
+               ASSIGN ldeCurrentTS = Func.Common:mMakeTS()
+                      ldeCerrada   = Func.Common:mOffSet(FusionMessage.FixedStatusTS,12)
+                      ldeCurrent   = Func.Common:mOffSet(ldeCurrentTS,0).
 
                IF ldeCerrada < ldeCurrent THEN 
                   RETURN appl_err(SUBST("SIM can't be registered with ICC &1 after 12 hours of fixedline installation", pcIcc)).
