@@ -139,7 +139,9 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
            oiActOrderCount = oiActOrderCount + 1.
 
         END.
-        
+
+        IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN NEXT.
+
         IF LOOKUP(STRING(Order.statuscode),{&ORDER_INACTIVE_STATUSES}) EQ 0 THEN
             oiSubCount = oiSubCount + 1.
       
