@@ -1,0 +1,8 @@
+ADD FIELD "CountryISO3" OF "Country" AS CHARACTER
+  FORMAT "x(3)"
+  INITIAL ""
+  LABEL "Country ISO-3"
+  COLUMN-LABEL "Country ISO-3"
+  HELP "ISO-3 country code"
+  ORDER 40
+
