@@ -273,6 +273,7 @@ Syst.Var:katun = "NewtonRPC".
 {Func/barrfunc.i}
 
 {Migration/migrationfunc.i}
+{Func/digital_signature.i}
 
 DEF VAR top_struct       AS CHAR NO-UNDO.
 DEF VAR top_struct_fields AS CHAR NO-UNDO.
@@ -2736,6 +2737,9 @@ IF INDEX(Order.OrderChannel, "pos") EQ 0  AND
       RUN Mc/sendorderreq.p(liOrderId, OrderCustomer.email, OUTPUT lcError). 
    END.
 END.
+
+/* RES-538 Digital Signature for Tienda and Telesales only */
+fHandleSignature(liOrderId,Order.statusCode).
 
 add_int(response_toplevel_id, "", liOrderId).
 
