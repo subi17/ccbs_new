@@ -2,6 +2,8 @@
 "1" "Additional line CONT15" "ADDLINE" 140 1 1
 "1" "Additional line CONT26" "ADDLINE" 142 1 1
 "1" "Additional line CONT25" "ADDLINE" 144 1 1
+"1" "Additional line CONT33" "ADDLINE" 195 1 1
+"1" "Additional line CONT34" "ADDLINE" 196 1 1
 "1" "CONTFH69_300" "ADDLINE" 161 1 2
 "1" "CONTDSL39" "ADDLINE" 163 1 3
 "1" "CONT28" "ADDLINE" 165 1 4
@@ -16,6 +18,10 @@
 "1" "CONTDSL3G" "ADDLINE" 189 1 13
 "1" "Additional line CONT26" "ADDLINEHM" 149 1 1
 "1" "Additional line CONT25" "ADDLINEHM" 150 1 1
+"1" "Additional line CONT10" "ADDLINEHM" 197 1 1
+"1" "Additional line CONT15" "ADDLINEHM" 198 1 1
+"1" "Additional line CONT33" "ADDLINEHM" 199 1 1
+"1" "Additional line CONT34" "ADDLINEHM" 200 1 1
 "1" "Data bundle change" "BTC-DENY" 21 0 1
 "1" "Bundle List" "Bundle" 87 1 1
 "1" "Bundle List" "Bundle" 42 1 1
