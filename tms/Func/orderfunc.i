@@ -21,6 +21,7 @@
 {Func/msreqfunc.i}
 {Func/msisdn.i}
 {Func/create_eventlog.i}
+{Func/digital_signature.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
@@ -152,9 +153,14 @@ FUNCTION fSetOrderStatus RETURNS LOGICAL
             bfOrder.Ordertype NE {&ORDER_TYPE_STC} THEN 
             bfOrder.SendToROI  = {&ROI_HISTORY_TO_SEND}.
 
+         /* RES-538 Digital Signature for Tienda and Telesales only */
+         fHandleSignature(bfOrder.OrderId,icStatus).
+
          /* Mark time stamp, if order statuscode is changed */
          case icStatus:
-            when "6" then fMarkOrderStamp(bfOrder.OrderID,"Delivery",0.0).
+            when "6" then do:
+               fMarkOrderStamp(bfOrder.OrderID,"Delivery",0.0).
+            end.
             when "7" or when "8" or when "9" then do:
                fMarkOrderStamp(bfOrder.OrderID,"Close",0.0).
 
