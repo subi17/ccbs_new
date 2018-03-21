@@ -286,6 +286,7 @@ FUNCTION fCheckExistingMainLineAvailForExtraLine RETURNS INTEGER
              Customer.Roles      NE "inactive":
 
       FOR EACH MobSub NO-LOCK USE-INDEX CustNum WHERE
+               MobSub.Brand    EQ Syst.Var:gcBrand      AND
                MobSub.CustNum  EQ Customer.CustNum      AND
                MobSub.PayType  EQ FALSE                 AND
               (MobSub.MsStatus EQ {&MSSTATUS_ACTIVE} OR
