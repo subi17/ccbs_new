@@ -203,14 +203,6 @@ PROCEDURE pReadFileData:
       ELSE DO:
          fReqStatus(6, "Execute SVA operation ").
          /* in case of incativation, inactivate its activation request */
-         IF lcSetStatus EQ "Active"   AND 
-            ( lcServiceCode EQ "FAXTOEMAIL" OR lcServiceCode EQ "OFFICE365" ) THEN DO:
-            IF Mm.MManMessage:mGetMessage("SMS", "SVA_ActEmail", 1) EQ TRUE THEN DO:
-                Mm.MManMessage:ParamKeyValue = "".
-                Mm.MManMessage:mCreateMMLogEmail("", TRUE).
-                Mm.MManMessage:mClearData().
-            END.
-         END.
          IF lcSetStatus EQ "Inactive" THEN 
          DO:
            FIND FIRST MsRequest WHERE

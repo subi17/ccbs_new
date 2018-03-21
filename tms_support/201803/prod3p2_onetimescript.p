@@ -9,14 +9,16 @@ Syst.Var:gcBrand = "1".
    DEFINE VARIABLE lhBillItem AS HANDLE NO-UNDO.
    DEFINE VARIABLE lhRepText  AS HANDLE NO-UNDO.
    DEFINE VARIABLE lhInvText  AS HANDLE NO-UNDO.
+   DEFINE VARIABLE lhDiscountplan  AS HANDLE NO-UNDO.
    
    lhBillItem = BUFFER BillItem:HANDLE.
    lhRepText  = BUFFER Reptext:HANDLE.
    lhInvText  = BUFFER InvText:HANDLE.
+   lhDiscountplan = BUFFER Discountplan:HANDLE.
    RUN StarEventInitialize(lhBillItem).
    RUN StarEventInitialize(lhRepText ).
    RUN StarEventInitialize(lhInvText ).
-
+   RUN StarEventInitialize(lhDiscountplan).
 
 /* ANGELTECHMF */
 FIND BillItem WHERE BillItem.Brand   =  "1" AND BillItem.Billcode = "ANGELTECHMF" EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
@@ -131,6 +133,67 @@ IF AVAILABLE BillItem THEN DO:
         END CASE.
         RUN StarEventMakeModifyEvent(lhRepText).
     END.
+END.
+
+/* Discounts */
+
+FIND DiscountPlan WHERE DiscountPlan.Brand = Syst.var:gcBrand AND DiscountPlan.DPRuleId = "ANGELTECHDISC" AND 
+     DiscountPlan.BillCode = "ANGELTECHDISC" EXCLUSIVE-LOCK NO-ERROR.
+IF LOCKED discountplan THEN DO:
+    MESSAGE "DiscountPlan 'ANGELTECHDISC' is locked. Unable to update Config" 
+    VIEW-AS ALERT-BOX.
+END. 
+IF AVAILABLE discountplan THEN DO:
+    RUN StarEventSetOldBuffer(lhDiscountplan).
+    ASSIGN 
+        DiscountPlan.ValidFrom = 12/01/2017
+        DiscountPlan.ValidTo   = 12/31/2049
+        DiscountPlan.DPName    = "Angel technology SVA discount"
+        DiscountPlan.Priority  = 1
+        DiscountPlan.SubjectType = "LIST"
+        DiscountPlan.DPUnit    = "Percentage".
+    FIND FIRST DPTarget WHERE DPTarget.DPId = DiscountPlan.DPId AND DPTarget.TargetKey = "ANGELTECHMF" NO-LOCK NO-ERROR.
+    IF NOT AVAILABLE DPTarget THEN DO:
+        CREATE DPTarget .
+        ASSIGN 
+            DPTarget.DPId = DiscountPlan.DPId
+            DPTarget.Included = YES 
+            DPTarget.TargetKey = "ANGELTECHMF" 
+            DPTarget.TargetTable = "BillItem"
+            DPTarget.ValidFrom = DiscountPlan.ValidFrom
+            DPTarget.ValidTo   = DiscountPlan.ValidTo   .
+    END. 
+    RUN StarEventMakeModifyEvent(lhDiscountplan).
+END.
+
+
+FIND DiscountPlan WHERE DiscountPlan.Brand = Syst.var:gcBrand AND DiscountPlan.DPRuleId = "ASISTDISC" AND 
+     DiscountPlan.BillCode = "ASISTDISC" EXCLUSIVE-LOCK NO-ERROR.
+IF LOCKED discountplan THEN DO:
+    MESSAGE "DiscountPlan 'ASISTDISC' is locked. Unable to update Config" 
+    VIEW-AS ALERT-BOX.
+END. 
+IF AVAILABLE discountplan THEN DO:
+    RUN StarEventSetOldBuffer(lhDiscountplan).
+    ASSIGN 
+        DiscountPlan.ValidFrom = 12/01/2017
+        DiscountPlan.ValidTo   = 12/31/2049
+        DiscountPlan.DPName    = "Soluciona Negocios SVA discount"
+        DiscountPlan.Priority  = 1
+        DiscountPlan.SubjectType = "LIST"
+        DiscountPlan.DPUnit    = "Percentage".
+    RUN StarEventMakeModifyEvent(lhDiscountplan).
+    FIND FIRST DPTarget WHERE DPTarget.DPId = DiscountPlan.DPId AND DPTarget.TargetKey = "ASISTMF" NO-LOCK NO-ERROR.
+    IF NOT AVAILABLE DPTarget THEN DO:
+        CREATE DPTarget .
+        ASSIGN 
+            DPTarget.DPId = DiscountPlan.DPId
+            DPTarget.Included = YES 
+            DPTarget.TargetKey = "ASISTMF" 
+            DPTarget.TargetTable = "BillItem"
+            DPTarget.ValidFrom = DiscountPlan.ValidFrom
+            DPTarget.ValidTo   = DiscountPlan.ValidTo   .
+    END. 
 END.
 
 /* Subject change for SVA_ASIST */   

@@ -147,6 +147,46 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
 END FUNCTION.
 
 
+
+FUNCTION fGetEmailKeyValuePairs RETURNS CHAR
+   (iiMsRequest   AS INT,
+    icKeyValueSrc AS CHAR):
+
+   DEF BUFFER bMsRequest FOR MsRequest.
+   DEF BUFFER bCustomer  FOR Customer.
+   DEF BUFFER bMobSub    FOR MobSub.
+   DEF BUFFER bCliType   FOR CliType.
+   DEF BUFFER bOrder     FOR Order.
+   
+   DEFINE VARIABLE lcOutput AS CHARACTER NO-UNDO.
+   
+   FIND FIRST bMsRequest NO-LOCK WHERE
+              bMsRequest.MsRequest EQ iiMsRequest NO-ERROR.
+   IF NOT AVAIL bMsRequest THEN RETURN "ERROR: Request not found " +
+                                   STRING(iiMsRequest).
+   FIND FIRST bCustomer NO-LOCK WHERE
+              bCustomer.CustNum EQ bMsRequest.CustNum.
+    IF NOT AVAIL bCustomer THEN
+       RETURN "ERROR: Customer of requst not found " + STRING(iiMsRequest).
+
+   FIND FIRST bMobSub WHERE bMobSub.MsSeq = bMsRequest.MsSeq NO-LOCK NO-ERROR.
+   IF AVAIL bMobSub THEN 
+       FIND FIRST bCliType WHERE bCliType.CliType = bMobSub.CliType NO-LOCK NO-ERROR.
+       
+   FIND bOrder WHERE bOrder.MsSeq = bMobSub.MsSeq NO-LOCK NO-ERROR.
+      
+   lcOutput = icKeyValueSrc.
+
+   IF INDEX(lcOutput, "#OrderContractID") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#OrderContractID", STRING(Order.ContractID)).
+   
+   IF INDEX(lcOutput, "OrderCreationDate") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "OrderCreationDate", STRING(Order.CrStamp)).
+   
+    
+             
+END FUNCTION.
+
 FUNCTION fProMigrationRequest RETURNS INTEGER
    (INPUT  iiMsseq        AS INTEGER  ,  /* msseq                */
     INPUT  icCreator      AS CHARACTER,  /* who made the request */

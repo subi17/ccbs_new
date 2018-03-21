@@ -69,13 +69,14 @@ CASE CustCat.Segment:
         liRequest = fCustomerCategoryChangeRequest ( ? ,
             Syst.Var:katun   ,
             Customer.CustNum ,
-            "SELF EMPLOYED"  ,
-            ""               ,
+            MobSub.Msseq     ,
+            lcCategory       ,
+            Customer.category,
             lcMSISDN         ,
             {&REQUEST_SOURCE_NEWTON} ,
             OUTPUT lcError  
             ).
-            
+         
         IF liRequest = 0 OR liRequest = ? OR lcError NE "" THEN 
             RETURN appl_err(SUBST("Category request failed. &1" , lcError)).
             

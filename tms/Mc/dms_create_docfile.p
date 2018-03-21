@@ -1616,53 +1616,44 @@ FUNCTION fCreateDocumentCase10 RETURNS CHAR
 END.
 
 /*Customer category change*/
-FUNCTION fCreateDocumentCase11 RETURNS CHAR
+FUNCTION fCreateDocumentCase15 RETURNS CHAR
    (idStartTS AS DECIMAL,
     idEndTS AS DECIMAL):
    DEF VAR lcCaseTypeId     AS CHAR NO-UNDO.
    DEF VAR lcCasefileRow    AS CHAR NO-UNDO.
    DEF VAR lcStatuses AS CHAR NO-UNDO.
 
-   DEFINE VARIABLE i AS INTEGER NO-UNDO.
-   DEFINE VARIABLE liStat AS INTEGER NO-UNDO.
+    FOR EACH MsRequest EXCLUSIVE-LOCK WHERE
+        MsRequest.Brand EQ Syst.Var:gcBrand AND
+        MsRequest.ReqType EQ {&REQTYPE_CATEGORY_CHG} AND
+        MsRequest.ReqStatus EQ {&REQUEST_STATUS_NEW} AND
+        MsRequest.ActStamp >= idStartTS AND
+        MsRequest.CreStamp >= idStartTS AND
+        MsRequest.CreStamp < idEndTS :
+     /*Document type,DocStatusCode,RevisionComment*/
+        FIND Customer WHERE Customer.Brand = Syst.Var:gcBrand  AND Customer.CustNum = MSRequest.CustNum NO-LOCK NO-ERROR.
+      
+        ASSIGN
+            lcCaseTypeID   = '15'
+            lcCaseFileRow  =
+                           lcCaseTypeID                    + lcDelim +   /* Case ID */
+                           fPrintDate(MsRequest.CreStamp)  + lcDelim +   /* Request create date */
+                           Customer.CustIdType             + lcDelim +   /* Customer ID Type */
+                           MSRequest.ReqCParam2 + " - " + MSRequest.ReqCParam1  + lcDelim +  /* From - To */
+                           fCutChannel(MsRequest.UserCode) + lcDelim +   /* SFID */
+                           MSRequest.CLI                   + lcDelim +   /* MSISDN */
+                           STRING(MSRequest.MsRequest).                  /* Request number */
 
-   lcStatuses = {&REQ_ONGOING_STATUSES} + ",2".
-   do i = 1 to NUM-ENTRIES(lcStatuses):
-      liStat = INT(ENTRY(i,lcStatuses)).
-      FOR EACH MsRequest NO-LOCK WHERE
-            MsRequest.Brand EQ Syst.Var:gcBrand AND
-            MsRequest.ReqType EQ {&REQTYPE_CATEGORY_CHG} AND
-            MsRequest.ReqStatus eq liStat AND
-            MsRequest.ActStamp >= idStartTS AND
-            MsRequest.CreStamp >= idStartTS AND
-            MsRequest.CreStamp < idEndTS AND
-            MsRequest.ReqCparam1 EQ "SELF EMPLOYED":
-         /*Document type,DocStatusCode,RevisionComment*/
-         ASSIGN
-         lcCaseTypeID   = '11'
-         lcCaseFileRow =
-                      lcCaseTypeID                    + lcDelim +
-                      /*Contract_ID*/
-                      STRING(MsRequest.ReqCparam4)    + lcDelim +
-                      /*SFID*/
-                      fCutChannel(MsRequest.UserCode) + lcDelim +
-                      /*MSISDN*/
-                      STRING(MsRequest.CLI)           + lcDelim +
-                      /*Q25 Extension_Request_date*/
-                      fPrintDate(MsRequest.CreStamp)      + lcDelim +
-                      /*Current tariff*/
-                      STRING(Msrequest.ReqCparam6). /*TODO how to fetch?*/
-
-                     
-         OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
-         PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
-         OUTPUT STREAM sOutFile CLOSE.
+        MSRequest.ReqStatus = {&REQUEST_STATUS_UNDER_WORK} .
+                           
+        OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
+        PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
+        OUTPUT STREAM sOutFile CLOSE.
 
         fLogLine(lcCaseFileRow, "").
 
-      END.
-   END.
-   RETURN "".
+    END.
+    RETURN "".
 
 END.
 
@@ -1725,6 +1716,9 @@ FUNCTION fCreateDocumentRows RETURNS CHAR
       WHEN {&DMS_CASE_TYPE_ID_Q25_STE} THEN DO:
          /*From MsRequest*/
          lcStatus = fCreateDocumentCase10(idPeriodStart, idPeriodEnd).
+      END.
+      WHEN {&DMS_CASE_TYPE_ID_CATEGORY_CHG} THEN DO:
+          lcStatus = fCreateDocumentCase15(idPeriodStart, idPeriodEnd).
       END.
 
    END. /*Case*/

@@ -1608,9 +1608,10 @@ END FUNCTION.
 FUNCTION fCustomerCategoryChangeRequest RETURNS INTEGER
    (INPUT idActStamp      AS DECIMAL   ,    /* when request should be handled */
     INPUT icUserCode      AS CHARACTER ,   /* user code */
+    INPUT iiMSSeq         AS INTEGER   ,
     INPUT iiCustnum       AS INTEGER   ,
     INPUT icNewCategory   AS CHARACTER ,     
-    INPUT icContractID    AS CHARACTER ,
+    INPUT icOldCategory   AS CHARACTER ,
     INPUT icCLI           AS CHARACTER ,   /* mobsub CLI */
     INPUT icSource        AS CHARACTER ,
     OUTPUT ocResult       AS CHARACTER ):
@@ -1629,9 +1630,10 @@ FUNCTION fCustomerCategoryChangeRequest RETURNS INTEGER
 
    ASSIGN
       bCreaReq.CLI        = icCLI
+      bCreaReq.MsSeq      = iiMSSeq
       bCreaReq.Custnum    = iiCustnum
       bCreaReq.ReqCparam1 = icNewCategory
-      bCreaReq.ReqCparam4 = icContractID
+      bCreaReq.ReqCparam2 = icOldCategory
       bCreaReq.ReqSource  = icSource
       liReqCreated        = bCreaReq.MsRequest.
 
