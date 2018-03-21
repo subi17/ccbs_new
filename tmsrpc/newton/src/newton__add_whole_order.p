@@ -2257,7 +2257,9 @@ ELSE IF Order.statuscode NE "4" THEN DO:
          OrderCustomer.RowType = 1 EXCLUSIVE-LOCK NO-ERROR.
 
       CASE Order.OrderChannel:
-         WHEN "renewal" OR WHEN "renewal_telesales" OR WHEN "retention" OR
+         WHEN "renewal" OR 
+         WHEN "renewal_telesales" OR 
+         WHEN "retention" OR
          WHEN "renewal_ctc" THEN DO:
             IF fCheckRenewalData() = TRUE THEN
                /* YBP-560 */
