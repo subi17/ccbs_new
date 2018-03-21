@@ -347,7 +347,7 @@ DO ON ERROR UNDO , LEAVE:
                                     "" ,    /* Creator           */
                                     0  ,    /* Charge            */
                                     {&REQUEST_SOURCE_YOIGO_TOOL}, 
-                                    liOrderID , 
+                                    0  , 
                                     0  ,    /* Parent Request */
                                     '' ,    /* Conract ID */
                                     OUTPUT ocInfo).
