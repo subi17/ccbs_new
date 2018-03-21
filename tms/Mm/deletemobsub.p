@@ -51,6 +51,12 @@ DEFINE VARIABLE lcTermReason AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liMLMsSeq           AS INT  NO-UNDO.
 DEFINE VARIABLE liELCount           AS INT  NO-UNDO.
 DEFINE VARIABLE lcExtraLineCLITypes AS CHAR NO-UNDO.
+DEFINE VARIABLE lcMandatoryELines   AS CHARACTER NO-UNDO.
+DEFINE VARIABLE liSTCELMSSeq        AS INTEGER NO-UNDO.
+DEFINE VARIABLE lcSTCELCLIType      AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lisMandatoryELExists  AS LOGICAL NO-UNDO.
+DEFINE VARIABLE liSTCRequest AS INTEGER NO-UNDO.
+
 
 DEF BUFFER bMNPSub FOR MNPSub.
 DEF BUFFER bMobsub FOR MobSub.
@@ -1107,12 +1113,92 @@ PROCEDURE pTerminate:
 
       IF fCLITypeIsExtraLine(TermMobSub.CLIType) THEN 
       DO:
-         ASSIGN TermMobSub.MultiSimId   = 0
-                TermMobSub.MultiSimType = 0.
+        
+          FIND FIRST lMLMobSub NO-LOCK WHERE 
+                     lMLMobsub.brand          =   Syst.Var:gcBrand          AND
+                     lMLMobSub.msseq          =   TermMobSub.MultiSimId     AND
+                     lMLMobSub.multisimtype   =   {&MULTISIMTYPE_PRIMARY}   AND
+                     (lMLMobSub.MsStatus      =   {&MSSTATUS_ACTIVE}  OR
+                      lMLMobSub.MsStatus      =   {&MSSTATUS_BARRED}) NO-ERROR.
+            
+          IF NOT AVAILABLE lMLMobSub THEN RETURN.
          
-         fCloseExtraLineDiscount(TermMobSub.MsSeq,
-                                 TermMobSub.CLIType + "DISC",
-                                 TODAY).
+          lcMandatoryELines = fGetMandatoryExtraLineForMainLine(lMLMobSub.CLIType) .
+         
+          IF LOOKUP (TermMobSub.CLIType , lcMandatoryELines ) > 0 
+          AND fExtraLineCountForMainLine(lMLMobSub.msseq , lMLMobSub.CustNum )  > 0 
+          THEN DO:
+              
+              IF CAN-FIND(FIRST lELMobSub NO-LOCK WHERE
+                                lELMobSub.Brand        EQ Syst.Var:gcBrand          AND
+                                lELMobSub.MultiSimId   EQ lMLMobSub.msseq           AND
+                                lELMobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} AND 
+                                (lELMobSub.MsStatus    EQ {&MSSTATUS_ACTIVE} OR
+                                 lELMobSub.MsStatus    EQ {&MSSTATUS_BARRED})       AND 
+                                (LOOKUP(lELMobSub.CLIType , lcMandatoryELines) > 0 )  )
+                                
+              THEN lisMandatoryELExists = YES.            
+              
+              
+              IF lisMandatoryELExists = NO  
+              THEN DO:
+                  
+                  FOR EACH lELMobSub NO-LOCK WHERE
+                       lELMobSub.Brand        EQ Syst.Var:gcBrand          AND
+                       lELMobSub.MultiSimId   EQ lMLMobSub.msseq           AND
+                       lELMobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} AND 
+                       (lELMobSub.MsStatus    EQ {&MSSTATUS_ACTIVE} OR
+                        lELMobSub.MsStatus    EQ {&MSSTATUS_BARRED})   BY MobSub.ActivationTS:
+                            
+                  
+                       ASSIGN liSTCELMSSeq    =  lELMobSub.MSSeq
+                              lcSTCELCLIType  =  lELMobSub.CLIType. /* Oldest Extraline That requires STC */
+                       LEAVE.              
+                            
+                  END. 
+                  
+                  lcSTCELCLIType = fGetExtraLineMandatoryCLIType(INPUT lMLMobSub.CLIType , INPUT lcSTCELCLIType).
+                  
+                  IF fCLITypeAllowedForExtraLine(lMLMobSub.CLIType , lcSTCELCLIType , OUTPUT liELCount) 
+                  AND lcSTCELCLIType > ""
+                  THEN DO:
+                      
+                      liSTCRequest = fCTChangeRequest(liSTCELMSSeq,                          /* The MSSeq of the subscription to where the STC is made */
+                                                      lcSTCELCLIType,                      /* NEW CLITYPE */
+                                                      "",                                     
+                                                      "",                                      
+                                                      Func.Common:mMakeTS(),
+                                                      0,                                        
+                                                      0,                                        
+                                                      "",                                        
+                                                      FALSE,                                   
+                                                      TRUE,                                     
+                                                      "",
+                                                      0,
+                                                      {&REQUEST_SOURCE_STC},
+                                                      0,
+                                                      MSRequest.MSRequest,  /*Parent Request*/
+                                                      "",                                      
+                                                      OUTPUT lcError).
+
+                      IF liSTCRequest = 0 THEN
+                      Func.Common:mWriteMemo("MobSub",
+                                             STRING(TermMobSub.MsSeq),
+                                             TermMobSub.Custnum,
+                                             "Extraline STC request creation failed",
+                                             lcError).                                    
+                      
+                  END. /*IF fCLITypeAllowedForExtraLine*/                 
+              END. /* IF lisMandatoryELExists */            
+          END. /* IF LOOKUP */                             
+          
+          ASSIGN TermMobSub.MultiSimId   = 0
+                 TermMobSub.MultiSimType = 0.
+         
+          fCloseExtraLineDiscount(TermMobSub.MsSeq,
+                                  TermMobSub.CLIType + "DISC",
+                                  TODAY).                        
+                           
       END.
       ELSE IF fCLITypeIsMainLine(TermMobSub.CLIType) THEN
       DO:

@@ -286,7 +286,6 @@ FUNCTION fCheckExistingMainLineAvailForExtraLine RETURNS INTEGER
              Customer.Roles      NE "inactive":
 
       FOR EACH MobSub NO-LOCK USE-INDEX CustNum WHERE
-               MobSub.Brand    EQ Syst.Var:gcBrand      AND
                MobSub.CustNum  EQ Customer.CustNum      AND
                MobSub.PayType  EQ FALSE                 AND
               (MobSub.MsStatus EQ {&MSSTATUS_ACTIVE} OR
@@ -639,5 +638,28 @@ FUNCTION fExtraLineCountForMainLine RETURN INTEGER
     RETURN iiELCount.
 
 END FUNCTION.
+
+FUNCTION fGetExtraLineMandatoryCLIType RETURN CHARACTER 
+        (INPUT lcMLCLIType            AS CHARACTER ,       
+         INPUT lcDependentCLIType     AS CHARACTER ) : 
+             
+             
+    DEFINE BUFFER bfTMSRelation FOR TMSRelation.         
+             
+    FOR EACH bfTMSRelation NO-LOCK WHERE
+             bfTMSRelation.TableName     =    {&ELTABLENAME}  AND
+             bfTMSRelation.KeyType       =    {&ELKEYTYPE}    AND 
+             bfTMSRelation.RelationType  =    {&ELMANDATORY}  AND 
+             bfTMSRelation.ParentValue   =    lcMLCLIType  :
+                    
+        IF ENTRY(3,bfTMSRelation.childValue,"_") = lcDependentCLIType
+        THEN RETURN ENTRY(1,bfTMSRelation.childValue,"_").               
+                    
+    END.
+    
+    RETURN "".           
+                      
+END FUNCTION.             
+
 
 &ENDIF
