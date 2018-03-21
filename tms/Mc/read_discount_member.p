@@ -193,27 +193,27 @@ REPEAT TRANS:
       END.
    END.
 
-   IF NOT ldDiscount > 0
-   THEN DO:
-      fError("The discount amount must be greater than zero").
-      NEXT.
+   IF ldDiscount > 0 THEN DO:
+      lcError = fAddDiscountPlanMember(liMsSeq,
+                                       DiscountPlan.DPRuleID,
+                                       ldDiscount,
+                                       ldaValidFrom,
+                                       ldaValidTo,
+                                       ?,
+                                       0).
+      IF lcError BEGINS "ERROR"
+      THEN DO:
+         fLogLine(lcError).
+         oiErrors = oiErrors + 1.
+         NEXT.
+      END.
+      ELSE IF lcError > ""
+      THEN fLogLine("NOTE: " + lcError).
    END.
-   
-   lcError = fAddDiscountPlanMember(liMsSeq,
-                                    DiscountPlan.DPRuleID,
-                                    ldDiscount,
-                                    ldaValidFrom,
-                                    ldaValidTo,
-                                    ?,
-                                    0).
-   IF lcError BEGINS "ERROR"
-   THEN DO:
-      fLogLine(lcError).
-      oiErrors = oiErrors + 1.
-      NEXT.
-   END.
-   ELSE IF lcError > ""
-   THEN fLogLine("NOTE: " + lcError).
+   ELSE fCloseDiscount(DiscountPlan.DPRuleID,
+                       liMsSeq,
+                       ldaValidFrom - 1,
+                       NO).
 
    fLogLine("OK").
 
