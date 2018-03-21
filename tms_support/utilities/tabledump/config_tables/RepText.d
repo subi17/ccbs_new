@@ -1938,6 +1938,22 @@
 1 "" 2 "Descompte per línea adicional" 0 "DISCCONT26HM" "1" 05/07/17 31/12/49
 1 "" 3 "Deskontua linea gehigarrietan" 0 "DISCCONT26HM" "1" 05/07/17 31/12/49
 1 "" 5 "Additional line discount" 0 "DISCCONT26HM" "1" 05/07/17 31/12/49
+1 "" 1 "Descuento línea adicional" 0 "DISCCONT33H" "1" 12/03/18 31/12/49
+1 "" 2 "Descompte per línea adicional" 0 "DISCCONT33H" "1" 12/03/18 31/12/49
+1 "" 3 "Deskontua linea gehigarrietan" 0 "DISCCONT33H" "1" 12/03/18 31/12/49
+1 "" 5 "Additional line discount" 0 "DISCCONT33H" "1" 12/03/18 31/12/49
+1 "" 1 "Descuento línea adicional" 0 "DISCCONT33HM" "1" 12/03/18 31/12/49
+1 "" 2 "Descompte per línea adicional" 0 "DISCCONT33HM" "1" 12/03/18 31/12/49
+1 "" 3 "Deskontua linea gehigarrietan" 0 "DISCCONT33HM" "1" 12/03/18 31/12/49
+1 "" 5 "Additional line discount" 0 "DISCCONT33HM" "1" 12/03/18 31/12/49
+1 "" 1 "Descuento línea adicional" 0 "DISCCONT34H" "1" 12/03/18 31/12/49
+1 "" 2 "Descompte per línea adicional" 0 "DISCCONT34H" "1" 12/03/18 31/12/49
+1 "" 3 "Deskontua linea gehigarrietan" 0 "DISCCONT34H" "1" 12/03/18 31/12/49
+1 "" 5 "Additional line discount" 0 "DISCCONT34H" "1" 12/03/18 31/12/49
+1 "" 1 "Descuento línea adicional" 0 "DISCCONT34HM" "1" 12/03/18 31/12/49
+1 "" 2 "Descompte per línea adicional" 0 "DISCCONT34HM" "1" 12/03/18 31/12/49
+1 "" 3 "Deskontua linea gehigarrietan" 0 "DISCCONT34HM" "1" 12/03/18 31/12/49
+1 "" 5 "Additional line discount" 0 "DISCCONT34HM" "1" 12/03/18 31/12/49
 1 "" 1 "Descuento promoción" 0 "DISCFH300" "1" 01/11/16 31/12/54
 1 "" 2 "Descompte promoció" 0 "DISCFH300" "1" 01/11/16 31/12/54
 1 "" 3 "Promozio-deskontua" 0 "DISCFH300" "1" 01/11/16 31/12/54
