@@ -160,7 +160,7 @@ ELSE /* Renewal, Rollback  and STC will be changed HTML in later YDR.
 
 IF lcErrFile > "" THEN DO:
    DEF STREAM outfile.
-   OUTPUT STREAM outfile to VALUE( lcRootDir + "errors.txt").
+   OUTPUT STREAM outfile to VALUE( lcRootDir + "errors.txt") APPEND.
    PUT STREAM outfile UNFORMATTED
            liLanguage SKIP
            OrderCustomer.CustIDType SKIP
