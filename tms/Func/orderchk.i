@@ -52,32 +52,42 @@ FUNCTION fCheckSubsLimit RETURNS INT (INPUT iiCustnum      AS INT,
    RETURN liLimit.
 END FUNCTION. /* FUNCTION fCheckSubsLimit */
 
+/*Usage of return values:
+TRUE  -> RENEWAL
+FALSE -> RENEWAL_HOLD*/
 FUNCTION fCheckRenewalData RETURNS LOGICAL:
 
    DEF BUFFER bOrderCustomer FOR OrderCustomer.
-
+   /* delivery address is different than customer address */
    IF CAN-FIND(FIRST bOrderCustomer NO-LOCK WHERE
-                     bOrderCustomer.Brand = Syst.Var:gcBrand AND
-                     bOrderCustomer.OrderId  = OrderCustomer.OrderID AND
-                     bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}) 
-                     THEN RETURN FALSE.
-   
-   IF 
+      bOrderCustomer.Brand = Syst.Var:gcBrand AND
+      bOrderCustomer.OrderId  = OrderCustomer.OrderID AND
+      bOrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_DELIVERY}) 
+      OR
       OrderCustomer.Firstname NE Customer.Firstname OR
       OrderCustomer.Surname1 NE Customer.Custname OR
       OrderCustomer.Surname2 NE Customer.Surname2 OR
-      
       OrderCustomer.BirthDay NE Customer.BirthDay OR
-      
       OrderCustomer.Address NE Customer.Address OR
       OrderCustomer.PostOffice NE Customer.PostOffice OR
       OrderCustomer.Region NE Customer.Region OR
       OrderCustomer.Country NE Customer.Country OR
-      OrderCustomer.ZipCode NE Customer.ZipCode OR
-      
+      OrderCustomer.ZipCode NE Customer.ZipCode OR      
       OrderCustomer.BankCode NE Customer.BankAcct  
-   THEN RETURN FALSE.
-   ELSE RETURN TRUE.
+   THEN DO:
+    /*YDR-2834 [RES-1119] Skip order status 31 SM/PM*/
+    /*No need to RENEWAL_HOLDwhen delivery to shop*/
+      IF (Order.OrderChannel EQ "renewal" OR
+          Order.OrderChannel EQ "renewal_telesales" OR
+          Order.OrderChannel EQ "retention" OR
+          Order.OrderChannel EQ "renewal_ctc") AND
+         (Order.Deliverytype EQ {&ORDER_DELTYPE_POS}  OR
+          Order.Deliverytype EQ {&ORDER_DELTYPE_KIALA} OR
+          Order.Deliverytype EQ {&ORDER_DELTYPE_POST})THEN RETURN TRUE.
+      RETURN FALSE.
+   END.
+
+   RETURN TRUE.
 
 END FUNCTION. 
 
