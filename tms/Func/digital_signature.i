@@ -13,6 +13,7 @@
 &THEN
 
 &GLOBAL-DEFINE digital_signature YES
+&GLOBAL-DEFINE DIGITAL_SIGNATURE_EXCLUDED_STATUSES "7,8,9,20,21,41,42,43,44"
 {Mc/offer.i}
 
 /*
@@ -32,7 +33,7 @@ FUNCTION fHandleSignature RETURNS CHAR
    DEF VAR liMonths AS INT NO-UNDO INIT 0.
    DEF VAR ldeFinalFee AS DECIMAL NO-UNDO.
    DEF VAR lcSignatureStatus AS CHAR NO-UNDO INIT "".
-   DEF VAR lcNewStatuses AS CHAR NO-UNDO.
+   DEF VAR lcExcludedDSStatuses AS CHAR NO-UNDO.
 
    DEF BUFFER bOrder FOR Order.
    DEF BUFFER bActionLog FOR ActionLog.
@@ -64,11 +65,10 @@ FUNCTION fHandleSignature RETURNS CHAR
       RETURN "Not Telesales". /* not error */
 
    /* Process ActionLog */
-
    ASSIGN
-      lcNewStatuses = fCParam("SignatureApi", "NewStatuses").
+      lcExcludedDSStatuses = {&DIGITAL_SIGNATURE_EXCLUDED_STATUSES}.
 
-   IF LOOKUP(icStatus, lcNewStatuses) > 0 THEN
+   IF LOOKUP(icStatus, lcExcludedDSStatuses) = 0 THEN
       lcActionID = "dssent".
    ELSE IF LOOKUP(icStatus, {&ORDER_CLOSE_STATUSES}) > 0 THEN DO: /* 7,8,9 */
       /* send cancel only if dssent sent */

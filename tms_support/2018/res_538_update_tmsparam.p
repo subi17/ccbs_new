@@ -52,5 +52,4 @@ fUpdateTMSParamC("UrlAdapter", "Adapter URL Path", "http://217.168.2.239:8080/di
 fUpdateTMSParamC("LogDir", "Logging directory", "/scratch/log/digitalsignature/").
 fUpdateTMSParamI("LogRequest", "Log Request", 1).
 /* fUpdateTMSParamC("NewStatuses", "Triggered NEW statutes", "1,3,12,30").*/
-fUpdateTMSParamC("NewStatuses", "Triggered NEW statutes", "1,2,3,4,6,10,12,15,16,17,22,23,30,31,32,33,50,51,73,74,75,76,77,78,79,80,99").
 
