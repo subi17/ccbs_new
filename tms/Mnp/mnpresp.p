@@ -547,8 +547,9 @@ PROCEDURE pHandleQueue:
          FIND MNPDetails NO-LOCK WHERE
               MNPDetails.MNPSeq = MNPProcess.MNPSeq NO-ERROR.
          
+         lcNewOper = SUBSTRING(lcPortCode,4,3).
          IF AVAIL MNPDetails AND
-                  MNPDetails.DonorCode NE SUBSTRING(lcPortCode,4,3) THEN
+                  MNPDetails.DonorCode NE lcNewOper THEN
             lcOperName = fGetMNPOperatorName(lcNewOper).
          ELSE lcOperName = "".
 
