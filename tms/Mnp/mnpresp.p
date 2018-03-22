@@ -558,7 +558,7 @@ PROCEDURE pHandleQueue:
 
             IF llDoEvent THEN RUN StarEventSetOldBuffer((BUFFER Order:HANDLE)).
             Order.CurrOper = lcOperName.
-            IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhOrder).
+            IF llDoEvent THEN RUN StarEventMakeModifyEvent((BUFFER Order:HANDLE)).
 
             FIND CURRENT MNPDetails EXCLUSIVE-LOCK.
             IF llDoEvent THEN RUN StarEventSetOldBuffer((BUFFER MNPDetails:HANDLE)).
