@@ -39,8 +39,7 @@ DEF VAR lcMsisdn AS CHAR NO-UNDO.
 DEF VAR lcNwProfile AS CHAR NO-UNDO. 
 
 ASSIGN
-   lcRootDir = "/store/riftp/profile/subscription/".
- /*  lcRootDir = fCParam("SubscriptionProfileBob","RootDir").*/
+   lcRootDir = fCParam("NWProfileBob","RootDir").
 
 IF NOT lcRootDir > "" THEN RETURN.
 
@@ -145,8 +144,6 @@ PROCEDURE pUpdateProfile:
    DEF INPUT PARAM pcMsisdn AS CHAR NO-UNDO. 
    DEF INPUT PARAM pcNewProfile AS CHAR NO-UNDO.
 
-   DEF VAR ldtActDate AS DATE NO-UNDO.
-   DEF VAR liActTime  AS INT NO-UNDO.
    DEF VAR lcError    AS CHAR NO-UNDO.
    DEF VAR liReq      AS INT  NO-UNDO.
 
@@ -160,10 +157,6 @@ PROCEDURE pUpdateProfile:
       
    IF NOT AVAILABLE MobSub THEN
       RETURN "ERROR:MobSub not found".
-
-   Func.Common:mSplitTS(MsRequest.ActStamp,
-                        OUTPUT ldtActDate,
-                        OUTPUT liActTime).
 
    /* CREATE SubSer */
    liReq = fServiceRequest(MobSub.MsSeq,
