@@ -40,12 +40,12 @@ ADD FIELD "AddressType" OF "Address" AS character
   HELP "Address type"
   ORDER 40
 
-ADD FIELD "Street" OF "Address" AS character 
+ADD FIELD "Address" OF "Address" AS character 
   FORMAT "x(20)"
   INITIAL ""
-  LABEL "Street"
-  COLUMN-LABEL "Street"
-  HELP "Street address"
+  LABEL "Address"
+  COLUMN-LABEL "Address"
+  HELP "Address (street, p.o. box)"
   ORDER 50
 
 ADD FIELD "City" OF "Address" AS character 

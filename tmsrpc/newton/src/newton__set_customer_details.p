@@ -583,6 +583,30 @@ IF llCustomerChanged THEN DO:
          END.
       END.
 
+/* CDS-10 start */
+      FIND FIRST Address WHERE Address.Keyvalue = STRING(Customer.CustNum) NO-LOCK NO-ERROR.
+      IF AVAIL Address THEN DO:
+         ASSIGN
+            Address.AddressType = "Billing"
+            Address.Address = Customer.Address
+            Address.City = Customer.PostOffice
+            Address.ZipCode = Customer.ZipCode
+            Address.Region = Customer.Region
+            Address.Country = Customer.Country.
+
+         FIND FIRST CustomerReport WHERE CustomerReport.Custnum = Customer.Custnum
+         NO-LOCK NO-ERROR.
+
+         IF AVAIL CustomerReport THEN
+            ASSIGN
+               Address.StreetCode = CustomerReport.StreetCode
+               Address.CityCode = CustomerReport.CityCode
+               Address.TownCode = CustomerReport.TownCode.
+      END.
+/* CDS-10 end */
+
+
+
    END.
         
     /* Added check for BankAccount change, YDR-1811
@@ -600,9 +624,15 @@ IF llCustomerChanged THEN DO:
          IF LENGTH(lcBankAccount) = 0 OR LENGTH(lcBankAccount) = 24 THEN DO:
             IF customer.BankAcct = lcBankAccount
             THEN llBankAcctChange = FALSE.
-            ELSE llBankAcctChange = TRUE.
-
-            customer.BankAcct = lcBankAccount.
+            ELSE DO: 
+               llBankAcctChange = TRUE.
+               customer.BankAcct = lcBankAccount.                             
+/* CDS-10 start */
+               FIND FIRST InvoiceTargetGroup USE-INDEX Custnum WHERE
+                          InvoiceTargetGroup.Custnum = Customer.Custnum.
+               IF AVAIL InvoiceTargetGroup THEN InvoiceTargetGroup.BankAccount = Customer.BankAcct.               
+/* CDS-10 end */
+            END.   
          END.
          ELSE
             UNDO CUST_UPDATE, RETURN appl_err("Incorrect bank account length").
@@ -683,6 +713,13 @@ IF llCustomerChanged THEN DO:
              InvoiceTargetGroup.DelType = {&INV_DEL_TYPE_FUSION_EMAIL}.
           ELSE
              InvoiceTargetGroup.DelType = {&INV_DEL_TYPE_FUSION_EMAIL_PENDING}.
+
+/* CDS-10 start */
+          FIND FIRST CustomerAccount EXCLUSIVE-LOCK WHERE
+                     CustomerAccount.Custnum = Customer.Custnum.
+          IF AVAIL CustomerAccount THEN                                   
+             CustomerAccount.DelType = InvoiceTargetGroup.DelType.
+/* CDS-10 end */
 
           RELEASE InvoiceTargetGroup.
        END. /* IF AVAIL InvoiceTargetGroup THEN DO: */

@@ -2,29 +2,37 @@ PROCEDURE pMigrateBillingAddressToAddress:
 
    DEF VAR liaddrID AS INT NO-UNDO.
 
-   DEF BUFFER bOrderCustomer FOR OrderCustomer.
-
-   FOR EACH bOrderCustomer NO-LOCK WHERE
-            bOrderCustomer.brand EQ Syst.Var:gcBrand:
+   DEF BUFFER bCustomer FOR Customer.
+   
+   FOR EACH bCustomer NO-LOCK WHERE 
+            bCustomer.brand EQ Syst.Var:gcBrand:   
 
       IF CAN-FIND(FIRST Address WHERE
-          Address.Keyvalue = STRING(bOrderCustomer.CustNum)) THEN NEXT.
+          Address.Keyvalue = STRING(bCustomer.CustNum)) THEN NEXT.
 
       liaddrID = liaddrID + 1.
       CREATE Address.
       ASSIGN
          Address.AddressID = liaddrID
          Address.HostTable = "Customer"
-         Address.KeyValue = STRING(bOrderCustomer.CustNum)
-/*         Address.AddressType = */
-         Address.Street = bOrderCustomer.Street
-         Address.City = bOrderCustomer.PostOffice
-         Address.ZipCode = bOrderCustomer.ZipCode
-         Address.Region = bOrderCustomer.Region
-         Address.Country = bOrderCustomer.Country
-         Address.StreetCode = bOrderCustomer.AddressCodC
-         Address.CityCode = bOrderCustomer.AddressCodP
-         Address.TownCode = bOrderCustomer.AddressCodM. 
+         Address.KeyValue = STRING(bCustomer.CustNum)
+         Address.AddressType = "Billing"
+         Address.Address = bCustomer.Address
+         Address.City = bCustomer.PostOffice
+         Address.ZipCode = bCustomer.ZipCode
+         Address.Region = bCustomer.Region
+         Address.Country = bCustomer.Country.
+
+      FIND FIRST CustomerReport WHERE
+                 CustomerReport.Custnum = bCustomer.Custnum
+      EXCLUSIVE-LOCK NO-ERROR.
+
+      IF AVAIL CustomerReport THEN
+         ASSIGN
+            Address.StreetCode = CustomerReport.StreetCode
+            Address.CityCode = CustomerReport.CityCode
+            Address.TownCode = CustomerReport.TownCode.
+
    END.
 END PROCEDURE.
 
