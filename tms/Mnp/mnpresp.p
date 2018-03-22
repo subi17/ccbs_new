@@ -203,9 +203,8 @@ PROCEDURE pHandleQueue:
    DEFINE VARIABLE liMNPProCount AS INT NO-UNDO. 
    DEFINE VARIABLE liRespLength AS INT NO-UNDO. 
    DEFINE VARIABLE lcNewOper    AS CHAR NO-UNDO. 
-   DEFINE VARIABLE llgMNPOperName  AS LOG NO-UNDO. 
-   DEFINE VARIABLE llgMNPOperBrand AS LOG NO-UNDO. 
    DEFINE VARIABLE llConfirm AS LOG NO-UNDO. 
+   DEFINE VARIABLE lcOperName AS CHAR NO-UNDO. 
    
    FIND MessageBuf WHERE RECID(MessageBuf) = pRecId EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
    IF ERROR-STATUS:ERROR OR LOCKED(MessageBuf) THEN 
@@ -381,39 +380,19 @@ PROCEDURE pHandleQueue:
                IF lcResponseCode EQ "AREC ENUME" THEN DO: 
                   
                   ASSIGN liRespLength    = 0
-                         lcNewOper       = ""
-                         llgMNPOperName  = FALSE
-                         llgMNPOperBrand = FALSE. 
+                         lcNewOper       = "".
 
                   IF liMNPProCount = 1 AND 
                      lcResponseDesc MATCHES "El MSISDN * no pertenece al operador donante *, pertenece al operador *" THEN DO:
                      
                      ASSIGN 
-                        liRespLength   = LENGTH(lcResponseDesc) 
-                        lcNewOper      = SUBSTRING(lcResponseDesc,liRespLength - 2,liRespLength).
+                        liRespLength = LENGTH(lcResponseDesc) 
+                        lcNewOper    = TRIM(SUBSTRING(lcResponseDesc,liRespLength - 2,liRespLength)).
                     
-                     FIND MNPOperator NO-LOCK WHERE
-                          MNPOperator.Brand    = Syst.Var:gcBrand         AND
-                          MNPOperator.OperCode = TRIM(lcNewOper) AND
-                          MNPOperator.Active   = TRUE NO-ERROR.
-                     
-                     IF NOT AVAIL MNPOperator THEN 
-                        FIND MNPOperator NO-LOCK WHERE
-                             MNPOperator.Brand    = Syst.Var:gcBrand         AND
-                             MNPOperator.OperCode = TRIM(lcNewOper) NO-ERROR.
+                     lcOperName = fGetMNPOperatorName(lcNewOper).
 
-                     IF AVAIL MNPOperator THEN llgMNPOperName = TRUE.
-                     ELSE DO:
-                        FIND FIRST MNPOperator NO-LOCK WHERE
-                                   MNPOperator.Brand    = Syst.Var:gcBrand         AND
-                                   MNPOperator.OperCode = TRIM(lcNewOper) NO-ERROR.
-                        IF AVAIL MNPOperator AND 
-                                 MNPOperator.OperBrand > "" THEN 
-                           llgMNPOperBrand = TRUE.         
-                        ELSE llgMNPOperName = TRUE. 
-                     END.
+                     IF lcOperName > "" THEN DO:
 
-                     IF AVAIL MNPOperator THEN DO:
                         IF llDoEvent THEN DO:
                            DEFINE VARIABLE lhOrder AS HANDLE NO-UNDO.
                            lhOrder = BUFFER Order:HANDLE.
@@ -421,10 +400,7 @@ PROCEDURE pHandleQueue:
                            RUN StarEventSetOldBuffer(lhOrder).
                         END.
                         
-                        IF llgMNPOperBrand THEN 
-                           Order.CurrOper = MNPOperator.OperBrand. 
-                        ELSE IF llgMNPOperName THEN  
-                           Order.CurrOper = MNPOperator.OperName.        
+                        Order.CurrOper = lcOperName.
 
                         IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhOrder).
                         
@@ -566,6 +542,29 @@ PROCEDURE pHandleQueue:
                       "800622600",
                       Order.OrderId).
 
+         END.
+                     
+         FIND MNPDetails NO-LOCK WHERE
+              MNPDetails.MNPSeq = MNPProcess.MNPSeq NO-ERROR.
+         
+         lcNewOper = SUBSTRING(lcPortCode,4,3).
+         IF AVAIL MNPDetails AND
+                  MNPDetails.DonorCode NE lcNewOper THEN
+            lcOperName = fGetMNPOperatorName(lcNewOper).
+         ELSE lcOperName = "".
+
+         /* CIFM-52 */
+         IF lcOperName > "" THEN DO:
+
+            IF llDoEvent THEN RUN StarEventSetOldBuffer((BUFFER Order:HANDLE)).
+            Order.CurrOper = lcOperName.
+            IF llDoEvent THEN RUN StarEventMakeModifyEvent((BUFFER Order:HANDLE)).
+
+            FIND CURRENT MNPDetails EXCLUSIVE-LOCK.
+            IF llDoEvent THEN RUN StarEventSetOldBuffer((BUFFER MNPDetails:HANDLE)).
+            MNPDetails.DonorCode = lcNewOper.
+            IF llDoEvent THEN RUN StarEventMakeModifyEvent((BUFFER MNPDetails:HANDLE)).
+            RELEASE MNPDetails.
          END.
          
          ASSIGN
