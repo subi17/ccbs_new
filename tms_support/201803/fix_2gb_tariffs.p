@@ -77,6 +77,31 @@ END PROCEDURE.
 DEFINE VARIABLE lcConvergentCLI AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lii AS INTEGER NO-UNDO.
 
+FUNCTION fFixPrice RETURNS LOGICAL
+   ( iiCCN       AS INTEGER,
+     icBDest     AS CHARACTER,
+     icBillCode  AS CHARACTER ):
+
+   FIND FIRST Tariff EXCLUSIVE-LOCK WHERE
+              Tariff.Brand      EQ Syst.Var:gcBrand   AND 
+              Tariff.PriceList  EQ "CONTRATOS"        AND 
+              Tariff.CCN        EQ iiCCN              AND 
+              Tariff.BDest      EQ icBDest            AND
+              Tariff.BillCode   EQ icBillCode         AND 
+              Tariff.ValidFrom <= TODAY               AND 
+              Tariff.ValidTo   >= TODAY
+   NO-ERROR.
+
+   IF NOT AVAILABLE Tariff
+   THEN RETURN TRUE.
+   
+   Tariff.PriceList = "CONTRATO8".
+
+   RETURN FALSE.
+
+END.
+
+DEFINE VARIABLE llPriceProblem AS LOGICAL INITIAL FALSE NO-UNDO.
 lcConvergentCLI = "CONTDSL2G,CONTFH2G_50,CONTFH2G_300,CONTFH2G_1000".
 
 ONE_TRANSACTION:
@@ -112,5 +137,28 @@ DO TRANSACTION:
    CLIType.PricePlan = "CONTRATO34".
    
    RUN pRatePlan("CONTRATO34", CLIType.CliName, "CONTRATO8", "UseExisting").   
+
+   IF NOT llPriceProblem
+   THEN llPriceProblem = fFixPrice(81,"CONT34_VOICE_IN", "CONT34VOICE_A").
+   IF NOT llPriceProblem
+   THEN llPriceProblem = fFixPrice(30,"CONT34_VOICE_IN", "CONT34CF_A").
+   IF NOT llPriceProblem
+   THEN llPriceProblem = fFixPrice(93,"CONT34_DATA_IN", "CONTDATA34").
+   IF NOT llPriceProblem
+   THEN llPriceProblem = fFixPrice(93,"CONT34_DATA_OUT", "CONTDATA34").
+   IF NOT llPriceProblem
+   THEN llPriceProblem = fFixPrice(3,"CONT34_VOICE_IN", "10104013B").
+   IF NOT llPriceProblem
+   THEN llPriceProblem = fFixPrice(3,"CONT34_VOICE_IN", "10104013B").
+   IF NOT llPriceProblem
+   THEN llPriceProblem = fFixPrice(90,"CONT34_VOICE_IN", "14104019").
+   IF NOT llPriceProblem
+   THEN llPriceProblem = fFixPrice(90,"CONT34_VOICE_IN", "14104019").
    
+   IF llPriceProblem
+   THEN DO:
+      MESSAGE "At least one of the prices cannot be found" VIEW-AS ALERT-BOX.
+      UNDO ONE_TRANSACTION, LEAVE ONE_TRANSACTION.
+   END.
+
 END. 
