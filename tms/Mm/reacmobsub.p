@@ -929,6 +929,15 @@ DO TRANSACTION:
          
    END.
 
+
+   /* CDS-14 start */
+   FIND FIRST CustomerAccount NO-LOCK WHERE CustomerAccount.Custnum EQ MobSub.CustNum NO-ERROR.
+   IF AVAIL CustomerAccount THEN 
+      CustomerAccount.ToDate = 12/31/2049.    
+   /* CDS-14 end */  
+
+
+
    /* HPD - Trigger some extra events to Cassandra */
    RUN pTriggerEvents(INPUT MobSub.MsSeq).
 

@@ -33,6 +33,7 @@
 {Func/orderfunc.i}
 {Func/custfunc.i}
 {Func/addline_discount.i}
+{Func/customeraccount.i}
 
 SESSION:SYSTEM-ALERT-BOXES = TRUE.
 
@@ -465,6 +466,14 @@ PROCEDURE pOwnerChange:
                 llNewCust           = TRUE.
          RUN Mm/copymobcu.p(INPUT-OUTPUT liCreated[liReqCnt],
                        FALSE).
+                       
+         /* CDS-12 start */
+         fCreateCustomerAccount(liCreated[liReqCnt]).
+         FIND FIRST CustomerAccount NO-LOCK WHERE CustomerAccount.Custnum EQ Customer.CustNum NO-ERROR.
+         IF AVAIL CustomerAccount THEN 
+            Mobsub.AccountID = CustomerAccount.AccountID.        
+         /* CDS-12 end */                       
+                       
       END.
       
       /* update old customer's data if vrk has been succesful */

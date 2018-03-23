@@ -198,7 +198,7 @@ IF liOldCustnum = 0 THEN DO:
    END.
 
    /* CDS-6 */
-   fCreateCustomerAccount(iiOrderID, iiRole).
+   fCreateCustomerAccount(new-custnum).
    /* CDS-6 */
 
    ASSIGN OICustNum = new-custnum.
