@@ -391,7 +391,8 @@ PROCEDURE pHandleQueue:
                     
                      lcOperName = fGetMNPOperatorName(lcNewOper).
 
-                     IF lcOperName > "" THEN DO:
+                     IF lcNewOper EQ "005" THEN .
+                     ELSE IF lcOperName > "" THEN DO:
 
                         IF llDoEvent THEN DO:
                            DEFINE VARIABLE lhOrder AS HANDLE NO-UNDO.
@@ -547,7 +548,9 @@ PROCEDURE pHandleQueue:
          FIND MNPDetails NO-LOCK WHERE
               MNPDetails.MNPSeq = MNPProcess.MNPSeq NO-ERROR.
          
-         lcNewOper = SUBSTRING(lcPortCode,4,3).
+         IF lcPortCode BEGINS "A05" THEN lcNewOper = "005".
+         ELSE lcNewOper = SUBSTRING(lcPortCode,4,3).
+
          IF AVAIL MNPDetails AND
                   MNPDetails.DonorCode NE lcNewOper THEN
             lcOperName = fGetMNPOperatorName(lcNewOper).
