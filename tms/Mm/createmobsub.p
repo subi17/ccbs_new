@@ -435,6 +435,7 @@ IF NOT AVAIL mobsub THEN DO:
       MobSub.TariffActDate    = TODAY
       MobSub.TariffActTS      = ldeActivationTS.
 
+
    /* CDS-8 start */
    FIND FIRST CustomerAccount NO-LOCK WHERE CustomerAccount.Custnum EQ Customer.CustNum NO-ERROR.
    IF AVAIL CustomerAccount THEN 

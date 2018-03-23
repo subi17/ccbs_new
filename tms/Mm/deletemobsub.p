@@ -1275,8 +1275,7 @@ PROCEDURE pTerminate:
                                ldtCloseDate).
       END.      
    END. 
-   
-   
+      
    /* CDS-13 start */
    IF NOT CAN-FIND(FIRST MobSub NO-LOCK WHERE
                Mobsub.Brand    = Syst.Var:gcBrand AND
@@ -1285,7 +1284,6 @@ PROCEDURE pTerminate:
       IF AVAIL CustomerAccount THEN 
          CustomerAccount.ToDate = TODAY.     
    /* CDS-13 end */   
-   
    
    
    /* Find Original request */

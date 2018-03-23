@@ -56,7 +56,6 @@ FUNCTION fAddInvoiceTargetGroup RETURNS INT
           bInvoiceTargetGroup.FromDate = TODAY 
           bInvoiceTargetGroup.ToDate = 12/31/2049
           bInvoiceTargetGroup.DelType = iiDelType
-
    /* CDS-6 */
           bInvoiceTargetGroup.Currency = bCustomer.Currency
           bInvoiceTargetGroup.BankAccount = bCustomer.BankAcct

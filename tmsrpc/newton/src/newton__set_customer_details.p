@@ -718,6 +718,7 @@ IF llCustomerChanged THEN DO:
           IF AVAIL CustomerAccount THEN                                   
              CustomerAccount.DelType = InvoiceTargetGroup.DelType.
           /* CDS-10 end */
+          
 
           RELEASE InvoiceTargetGroup.
        END. /* IF AVAIL InvoiceTargetGroup THEN DO: */

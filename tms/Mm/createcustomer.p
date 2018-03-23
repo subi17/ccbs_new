@@ -392,7 +392,7 @@ ELSE DO:
                END.
             END.
 
-            /* CDS-8 */
+            /* CDS-8 start */
             FIND FIRST CustomerAccount EXCLUSIVE-LOCK WHERE 
                CustomerAccount.Custnum EQ OrderCustomer.Custnum.
             IF AVAIL CustomerAccount THEN   
@@ -423,7 +423,7 @@ ELSE DO:
                      Address.CityCode = CustomerReport.CityCode
                      Address.TownCode = CustomerReport.TownCode.
             END.   
-            /* CDS-8 */
+            /* CDS-8 end */
 
          END. /* IF llUpdateCust THEN DO: */
 

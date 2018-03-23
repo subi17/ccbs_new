@@ -1,3 +1,7 @@
+
+/* customeraccount.i    23.03.18/ker 
+*/
+
 /* CDS-6 */
 FUNCTION fCreateCustomerAccount RETURNS LOGICAL
   (INPUT iiOrder   AS INT,
