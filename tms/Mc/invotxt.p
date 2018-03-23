@@ -121,7 +121,7 @@ form
     
     InvText.KeyValue                  Format "x(25)" COLON 12 
        targetname       NO-LABEL      Format "x(35)"             SKIP
-    InvText.TemplateID SKIP
+    InvText.TemplateID                Format "x(35)" SKIP
     InvText.FromDate LABEL "Valid"              COLON 12 "-"
        InvText.ToDate   NO-LABEL                                 
     InvText.Language   COLON 57 lcLanguage NO-LABEL              SKIP
