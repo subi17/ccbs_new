@@ -10,15 +10,18 @@ Syst.Var:gcBrand = "1".
    DEFINE VARIABLE lhRepText  AS HANDLE NO-UNDO.
    DEFINE VARIABLE lhInvText  AS HANDLE NO-UNDO.
    DEFINE VARIABLE lhDiscountplan  AS HANDLE NO-UNDO.
+   DEFINE VARIABLE lhDayCampaign   AS HANDLE NO-UNDO.
    
    lhBillItem = BUFFER BillItem:HANDLE.
    lhRepText  = BUFFER Reptext:HANDLE.
    lhInvText  = BUFFER InvText:HANDLE.
    lhDiscountplan = BUFFER Discountplan:HANDLE.
+   lhDayCampaign  = BUFFER DayCampaign:HANDLE.
    RUN StarEventInitialize(lhBillItem).
    RUN StarEventInitialize(lhRepText ).
    RUN StarEventInitialize(lhInvText ).
    RUN StarEventInitialize(lhDiscountplan).
+   RUN StarEventInitialize(lhDayCampaign).
 
 /* ANGELTECHMF */
 FIND BillItem WHERE BillItem.Brand   =  "1" AND BillItem.Billcode = "ANGELTECHMF" EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
@@ -196,6 +199,8 @@ IF AVAILABLE discountplan THEN DO:
     END. 
 END.
 
+
+
 /* Subject change for SVA_ASIST */   
 FOR EACH InvText EXCLUSIVE-LOCK WHERE
          InvText.Brand     = Syst.Var:gcBrand   AND
@@ -208,25 +213,19 @@ FOR EACH InvText EXCLUSIVE-LOCK WHERE
      ASSIGN invtext.TxtTitle = "SVA_ Soluciona Negocios #STATUS".
      RUN StarEventMakeModifyEvent(lhInvText).
 END.
+
+FIND DayCampaign WHERE DayCampaign.Brand = Syst.Var:gcBrand AND DayCampaign.DCEvent = "ASIST" EXCLUSIVE-LOCK NO-ERROR. 
+     RUN StarEventSetOldBuffer(lhDayCampaign).
+     IF AVAILABLE DayCampaign THEN  
+        DayCampaign.DCName = "Soluciona Negocios".
+     RUN StarEventMakeModifyEvent(lhDayCampaign).
+     FIND FeeModel WHERE FeeModel.Brand =  Syst.Var:gcBrand AND FeeModel.FeeModel = DayCampaign.FeeModel EXCLUSIVE-LOCK NO-ERROR.
+     IF AVAILABLE FeeModel THEN  
+         FeeModel.FeeName = "Soluciona Negocios".
   
 /* Create SMS InvText */
 
 DO :
-    CREATE InvText.
-    ASSIGN 
-        InvText.Brand     = Syst.Var:gcBrand   
-        InvText.ITNum     = NEXT-VALUE(it-seq)
-        InvText.Target    = "SMS"            
-        InvText.KeyValue  = "CategoryChangeSMS"   
-        InvText.FromDate  = TODAY - 1  
-        InvText.Todate    = 12/31/49               
-        InvText.Language  = 1
-        InvText.TemplateID  = ""
-        InvText.ParamKeyValue = ""
-        InvText.InvText   = "Yoigo info: ¡Que bien! ya tenemos tu solicitud para ser de Yoigo con Oferta Negocios. Necesitamos que nos envíes a Soporte.negocios@yoigo.com la documentación - recibo de autónomos- para seguir con el proceso."
-        InvText.UseMMan   = TRUE 
-        INvText.category  = "CustomerCategoryChange"
-        InvText.TxtTitle  = "Customer Category Change". 
 
     CREATE InvText.
     ASSIGN 

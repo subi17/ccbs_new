@@ -8,8 +8,4 @@ ADD FIELD "WebContractID" OF "DCCLi" AS CHARACTER
   HELP "Web contract ID"
   ORDER 150
   
-ADD INDEX "WebContractID" ON "DCCLi"
-  AREA "Sta_Index_64"
-  INDEX-FIELD "WebContractID" DESCENDING
-
   

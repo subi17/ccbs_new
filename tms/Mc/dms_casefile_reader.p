@@ -225,11 +225,32 @@ PROCEDURE pUpdateDMS:
       ldStatusTS      = DECIMAL(ENTRY(7,pcLine,lcSep))
       lcDocList       = ENTRY(8,pcLine,lcSep).
       
-    IF lcCaseTypeID = "11" THEN DO: /* Customer Category Change */
+    IF lcCaseTypeID =  {&DMS_CASE_TYPE_ID_CATEGORY_CHG} THEN DO: /* Customer Category Change */
        /* Get Request              */
+       FIND MSRequest WHERE 
+            MSRequest.Brand     = Syst.var:gcBrand      AND 
+            MSRequest.MsRequest = INTEGER(lcContractID) EXCLUSIVE-LOCK NO-ERROR.
        /* Change Customer category */
-       /* Send SMS request    */
+       IF AVAILABLE MSRequest AND MSRequest.ReqStatus =  {&REQUEST_STATUS_UNDER_WORK} 
+          AND lcStatusCode = "OK" THEN DO:
+              FIND Customer WHERE Customer.Brand = MSRequest.Brand  AND Customer.CustNum = MSRequest.CustNum EXCLUSIVE-LOCK NO-ERROR.
+              IF AVAILABLE Customer THEN 
+                  Customer.Category = MSRequest.ReqCParam1.
+       END.
+       IF AVAILABLE MSRequest THEN 
+          MSRequest.ReqStatus =  {&REQUEST_STATUS_DONE}.
        /* Set Request to Done */
+       lcUpdateDMS = fUpdateDMS(lcDmsExternalID,
+                                lcCaseTypeID,
+                                lcContractID,
+                                "MsRequest",
+                                liOrderId,
+                                lcStatusCode,
+                                lcStatusDesc,
+                                "",
+                                ldStatusTS,
+                                lcDocList,
+                                {&DMS_DOCLIST_SEP}).       
        RETURN "OK".
     END.
     ELSE DO: /* All other DMS cases */

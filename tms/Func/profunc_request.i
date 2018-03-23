@@ -178,13 +178,42 @@ FUNCTION fGetEmailKeyValuePairs RETURNS CHAR
    lcOutput = icKeyValueSrc.
 
    IF INDEX(lcOutput, "#OrderContractID") > 0 THEN
-      lcOutput = REPLACE(lcOutput, "#OrderContractID", STRING(Order.ContractID)).
+      lcOutput = REPLACE(lcOutput, "#OrderContractID", STRING(bOrder.ContractID)).
    
-   IF INDEX(lcOutput, "OrderCreationDate") > 0 THEN
-      lcOutput = REPLACE(lcOutput, "OrderCreationDate", STRING(Order.CrStamp)).
+   IF INDEX(lcOutput, "#OrderCreationDate") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#OrderCreationDate", STRING(bOrder.CrStamp)).
    
+   IF INDEX(lcOutput, "#CompanyName") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#CompanyName",   
+      IF bCustomer.CustIDType = "CIF" AND bCustomer.CompanyName > "" THEN
+          bCustomer.CompanyName + (IF bCustomer.CoName > ""  THEN " " + bCustomer.CoName  ELSE "")
+      ELSE 
+          ""
+      ).
+
+   IF INDEX(lcOutput, "#CompanyID") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#CompanyID",   
+      IF bCustomer.CustIDType = "CIF" THEN 
+         bCustomer.OrgID
+      ELSE 
+          ""
+      ).
     
-             
+   IF INDEX(lcOutput, "#FoundationDate") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#FoundationDate",   
+      IF bCustomer.CustIDType = "CIF" AND bCustomer.FoundationDate NE ? THEN 
+         STRING(bCustomer.FoundationDate)
+      ELSE 
+          ""
+      ).
+
+   IF INDEX(lcOutput, "#CustomerFirstName") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#CustomerFirstName",   
+      IF bCustomer.CustIDType = "CIF" AND bCustomer.FoundationDate NE ? THEN 
+         STRING(bCustomer.FoundationDate)
+      ELSE 
+          ""
+      ).                 
 END FUNCTION.
 
 FUNCTION fProMigrationRequest RETURNS INTEGER
