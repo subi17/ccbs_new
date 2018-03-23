@@ -57,7 +57,7 @@ FUNCTION fAddInvoiceTargetGroup RETURNS INT
           bInvoiceTargetGroup.ToDate = 12/31/2049
           bInvoiceTargetGroup.DelType = iiDelType
 
-/* CDS-5 */
+   /* CDS-6 */
           bInvoiceTargetGroup.Currency = bCustomer.Currency
           bInvoiceTargetGroup.BankAccount = bCustomer.BankAcct
           bInvoiceTargetGroup.PaymentMethod = bCustomer.PaymMethod.
@@ -72,7 +72,7 @@ FUNCTION fAddInvoiceTargetGroup RETURNS INT
    IF AVAIL MsOwner THEN 
       ASSIGN bInvoiceTargetGroup.MandateId = MsOwner.MandateId
              bInvoiceTargetGroup.MandateDate = MsOwner.MandateDate. 
-/*CDS-5 ends */
+   /*CDS-6 ends */
       
    IF llDoEvent THEN fMakeCreateEvent((BUFFER bInvoiceTargetGroup:HANDLE),
                                       "",

@@ -197,9 +197,9 @@ IF liOldCustnum = 0 THEN DO:
 
    END.
 
-/* CDS-5 */
+   /* CDS-6 */
    fCreateCustomerAccount(iiOrderID, iiRole).
-/* CDS-5 */
+   /* CDS-6 */
 
    ASSIGN OICustNum = new-custnum.
 
@@ -391,6 +391,39 @@ ELSE DO:
                         Customer.Category = OrderCustomer.Category.
                END.
             END.
+
+            /* CDS-8 */
+            FIND FIRST CustomerAccount EXCLUSIVE-LOCK WHERE 
+               CustomerAccount.Custnum EQ OrderCustomer.Custnum.
+            IF AVAIL CustomerAccount THEN   
+               CustomerAccount.DelType = OrderCustomer.DelType.
+
+            FIND FIRST InvoiceTargetGroup EXCLUSIVE-LOCK USE-INDEX Custnum WHERE
+               InvoiceTargetGroup.Custnum = Customer.CustNum.
+            IF AVAIL InvoiceTargetGroup THEN
+               InvoiceTargetGroup.BankAccount = Customer.BankAcct.
+               
+               
+            FIND FIRST Address EXCLUSIVE-LOCK WHERE 
+               Address.Keyvalue = STRING(Customer.CustNum).
+            IF AVAIL Address THEN DO:
+               ASSIGN
+                  Address.Address = Customer.Address
+                  Address.City = Customer.PostOffice
+                  Address.ZipCode = Customer.ZipCode
+                  Address.Region = Customer.Region
+                  Address.Country = Customer.Country.
+
+               FIND FIRST CustomerReport WHERE
+                  CustomerReport.Custnum = Customer.Custnum NO-LOCK NO-ERROR.
+
+               IF AVAIL CustomerReport THEN
+                  ASSIGN
+                     Address.StreetCode = CustomerReport.StreetCode
+                     Address.CityCode = CustomerReport.CityCode
+                     Address.TownCode = CustomerReport.TownCode.
+            END.   
+            /* CDS-8 */
 
          END. /* IF llUpdateCust THEN DO: */
 

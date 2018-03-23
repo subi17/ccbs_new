@@ -1,4 +1,4 @@
-/* CDS-5 */
+/* CDS-6 */
 FUNCTION fCreateCustomerAccount RETURNS LOGICAL
   (INPUT iiOrder   AS INT,
    INPUT iiTarget  AS INT):
@@ -43,4 +43,5 @@ DEFINE VARIABLE liTime             AS INTEGER   NO-UNDO.
 
    RETURN TRUE.
 END.
-/* CDS-5 */
+/* CDS-6 */
+

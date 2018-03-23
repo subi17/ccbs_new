@@ -130,6 +130,22 @@ PROCEDURE pAddressChange:
        CustomerReport.CityCode = lcCityCode
        CustomerReport.TownCode = lcTownCode.
    
+/* CDS-10 start */
+      FIND FIRST Address WHERE Address.Keyvalue = STRING(Customer.CustNum) NO-LOCK NO-ERROR.
+      IF AVAIL Address THEN DO:
+         ASSIGN
+            Address.AddressType = "Billing"
+            Address.Street = Customer.Address
+            Address.City = Customer.PostOffice
+            Address.ZipCode = Customer.ZipCode
+            Address.Region = Customer.Region
+            Address.Country = Customer.Country
+            Address.StreetCode = lcStreetCode
+            Address.CityCode = lcCityCode
+            Address.TownCode = lcTownCode.
+      END.
+/* CDS-10 end */
+   
    RELEASE Customer.
    RELEASE CustomerReport.
              

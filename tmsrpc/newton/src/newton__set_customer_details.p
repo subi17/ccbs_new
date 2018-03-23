@@ -583,7 +583,7 @@ IF llCustomerChanged THEN DO:
          END.
       END.
 
-/* CDS-10 start */
+      /* CDS-10 start */
       FIND FIRST Address WHERE Address.Keyvalue = STRING(Customer.CustNum) NO-LOCK NO-ERROR.
       IF AVAIL Address THEN DO:
          ASSIGN
@@ -603,9 +603,7 @@ IF llCustomerChanged THEN DO:
                Address.CityCode = CustomerReport.CityCode
                Address.TownCode = CustomerReport.TownCode.
       END.
-/* CDS-10 end */
-
-
+      /* CDS-10 end */
 
    END.
         
@@ -627,11 +625,11 @@ IF llCustomerChanged THEN DO:
             ELSE DO: 
                llBankAcctChange = TRUE.
                customer.BankAcct = lcBankAccount.                             
-/* CDS-10 start */
+               /* CDS-10 start */
                FIND FIRST InvoiceTargetGroup USE-INDEX Custnum WHERE
                           InvoiceTargetGroup.Custnum = Customer.Custnum.
                IF AVAIL InvoiceTargetGroup THEN InvoiceTargetGroup.BankAccount = Customer.BankAcct.               
-/* CDS-10 end */
+               /* CDS-10 end */
             END.   
          END.
          ELSE
@@ -714,12 +712,12 @@ IF llCustomerChanged THEN DO:
           ELSE
              InvoiceTargetGroup.DelType = {&INV_DEL_TYPE_FUSION_EMAIL_PENDING}.
 
-/* CDS-10 start */
+          /* CDS-10 start */
           FIND FIRST CustomerAccount EXCLUSIVE-LOCK WHERE
                      CustomerAccount.Custnum = Customer.Custnum.
           IF AVAIL CustomerAccount THEN                                   
              CustomerAccount.DelType = InvoiceTargetGroup.DelType.
-/* CDS-10 end */
+          /* CDS-10 end */
 
           RELEASE InvoiceTargetGroup.
        END. /* IF AVAIL InvoiceTargetGroup THEN DO: */
