@@ -11,7 +11,7 @@ llSimulate = true.
 def stream sout.
 
 if llSimulate then
-   output stream sout to /apps/yoigo/tms_support/201803/yco_169_split_shared_billtargets.txt.
+   output stream sout to /apps/yoigo/tms_support/201803/yco_169_split_shared_billtargets.simu.txt.
 else
    output stream sout to /apps/yoigo/tms_support/201803/yco_169_split_shared_billtargets.txt append.
 

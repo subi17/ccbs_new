@@ -18,7 +18,7 @@ else
 FOR EACH clitype NO-LOCK where
          clitype.basebundle = "cont34":
 
-   if clitype.priceplan = "CONTRATO8" then
+   if clitype.priceplan = "CONTRATO34" then
      lcRatePlanFrom = "CONTRATOS".
    else if clitype.priceplan = "CONTRATOCONVC" then
       lcRatePlanFrom = "CONTRATOCONVS".
