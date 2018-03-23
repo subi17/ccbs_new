@@ -146,8 +146,10 @@ DO TRANSACTION:
    THEN llPriceProblem = fFixPrice(93,"CONT34_DATA_OUT", "CONTDATA34").
    IF NOT llPriceProblem
    THEN llPriceProblem = fFixPrice(3,"CONT34_VOICE_IN", "10104013B").
+/*
    IF NOT llPriceProblem
    THEN llPriceProblem = fFixPrice(3,"CONT34_VOICE_OUT", "10104013B").
+*/
    IF NOT llPriceProblem
    THEN llPriceProblem = fFixPrice(90,"CONT34_DATA_IN", "14104019").
    IF NOT llPriceProblem
