@@ -5,6 +5,7 @@ DEF VAR i AS INT NO-UNDO.
 DEF VAR j AS INT NO-UNDO.
 
 DEFINE VARIABLE llSimulate AS LOGICAL NO-UNDO.
+def buffer bbilltarget for billtarget.
 llSimulate = true.
 
 def stream sout.
@@ -48,9 +49,10 @@ FOR EACH clitype NO-LOCK where
 
       if llSimulate then next.
       else do trans:
-         find current billtarget EXCLUSIVE-LOCK.
-         billtarget.rateplan = clitype.priceplan.
-         release billtarget.
+         find bbilltarget EXCLUSIVE-LOCK where
+              rowid(bbilltarget) = rowid(billtarget).
+         bbilltarget.rateplan = clitype.priceplan.
+         release bbilltarget.
       end.
    end.
 end.
