@@ -250,7 +250,7 @@ FUNCTION fGetOngoingExtralineCount RETURNS LOGICAL
             bELOrder.StatusCode   EQ {&ORDER_STATUS_PENDING_MAIN_LINE} AND
             bELOrder.CLIType      EQ icExtraLineCLIType                AND
             bELOrder.OrderType    NE {&ORDER_TYPE_RENEWAL}             AND
-            bELOrder.MultiSimId   NE 0                                 AND
+            bELOrder.MultiSimId   EQ liMLOrderId                       AND
             bELOrder.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}:
 
          IF LOOKUP(bELOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN
