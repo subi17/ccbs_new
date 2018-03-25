@@ -1008,7 +1008,7 @@ PROCEDURE pUpdateSubscription:
       
        /* If we are doing STC from convergent to NON-MAIN LINE . Need to close all the discounts for the extra lines and de-link for main line*/ 
       
-       FOR EACH lELMobSub NO-LOCK WHERE
+       FOR EACH lELMobSub EXCLUSIVE-LOCK WHERE
                 lELMobSub.Brand        =     Syst.Var:gcBrand          AND
                 lELMobSub.Custnum      =     MobSub.custnum            AND 
                 lELMobSub.PayType      =     FALSE                     AND
