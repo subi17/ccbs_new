@@ -3,6 +3,8 @@
       22.sep.2015 hugo.lujan - YPR-2521 - [Q25] - TMS - Subscription
        termination/ MNP out porting, STC (postpaid to prepaid)
 */
+&SCOPED-DEFINE STCREQUEST TRUE
+
 {Syst/commali.i}
 {Func/service.i}
 {Mm/fbundle.i}
