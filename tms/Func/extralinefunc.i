@@ -331,19 +331,21 @@ FUNCTION fCheckExistingMainLineAvailForExtraLine RETURNS INTEGER
                 NEXT.  
           END.      
 
-          IF liCount < liELCount THEN DO:
-             liMLMsSeq = MobSub.MsSeq.
-             RETURN Order.OrderId.  
-          END.   
-
-          &IF DEFINED(STCREQUEST) &THEN 
+          &IF DEFINED(STC) &THEN DO:             
             
-               IF liCount <= liELCount THEN DO:
-                    liMLMsSeq = MobSub.MsSeq.
-                    RETURN Order.OrderId.  
-              END.             
-          
-          &ENDIF 
+              IF liCount <= liELCount THEN DO:
+                  liMLMsSeq = MobSub.MsSeq.
+                  RETURN Order.OrderId.  
+              END.
+          END.           
+          &ELSE DO:
+              
+              IF liCount < liELCount THEN DO:
+                  liMLMsSeq = MobSub.MsSeq.
+                  RETURN Order.OrderId.  
+              END.              
+          END. 
+          &ENDIF       
 
       END.
 
