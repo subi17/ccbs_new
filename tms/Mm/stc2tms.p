@@ -3,6 +3,8 @@
       22.sep.2015 hugo.lujan - YPR-2521 - [Q25] - TMS - Subscription
        termination/ MNP out porting, STC (postpaid to prepaid)
 */
+&SCOPED-DEFINE STC TRUE
+
 {Syst/commali.i}
 {Func/service.i}
 {Mm/fbundle.i}
@@ -1000,6 +1002,44 @@ PROCEDURE pUpdateSubscription:
                                      MobSub.CustNum,
                                      MobSub.CLIType).
 
+   END.
+   ELSE IF fCLITypeIsMainLine(bOldType.CliType) AND 
+       NOT fCLITypeIsMainLine(CLIType.CliType) THEN DO:
+      
+       /* If we are doing STC from convergent to NON-MAIN LINE . Need to close all the discounts for the extra lines and de-link for main line*/ 
+      
+       FOR EACH lELMobSub EXCLUSIVE-LOCK WHERE
+                lELMobSub.Brand        =     Syst.Var:gcBrand          AND
+                lELMobSub.Custnum      =     MobSub.custnum            AND 
+                lELMobSub.PayType      =     FALSE                     AND
+                lELMobSub.MultiSimId   =     MobSub.MsSeq              AND
+                lELMobSub.MultiSimType =     {&MULTISIMTYPE_EXTRALINE} AND
+               (lELMobSub.MsStatus     =     {&MSSTATUS_ACTIVE} OR
+                lELMobSub.MsStatus     =     {&MSSTATUS_BARRED})  :
+               
+           FIND FIRST lbDiscountPlan NO-LOCK WHERE
+                      lbDiscountPlan.Brand      =  Syst.Var:gcBrand           AND
+                      lbDiscountPlan.DPRuleId   =  lELMobSub.CLIType + "DISC" AND
+                      lbDiscountPlan.ValidFrom <=  TODAY                      AND
+                      lbDiscountPlan.ValidTo   >=  TODAY                      NO-ERROR.
+                     
+           IF AVAIL lbDiscountPlan THEN DO:
+ 
+               fCloseExtraLineDiscount(lELMobSub.MsSeq,
+                                       lbDiscountPlan.DPRuleID,
+                                       TODAY).
+                                      
+               Func.Common:mWriteMemo("MobSub",
+                                      STRING(lELMobSub.MsSeq),
+                                      0,
+                                      "ExtraLine Discount is Closed",
+                                      "STC done from Extra line associated Main line to independent clitype"                                      ).   
+               
+               ASSIGN lELMobSub.MultiSimId   = 0
+                      lELMobSub.MultiSimType = 0.                     
+                                          
+           END.
+       END.
    END.
 
    /* ADDLINE-324 Additional Line Discounts

@@ -517,6 +517,10 @@ END.
 
 lcExtraLineAllowed = LEFT-TRIM(lcExtraLineAllowed, ",").
 
+IF fCLITypeIsExtraLine(pcCliType)           AND
+   LOOKUP(pcCliType,lcExtraLineAllowed) = 0 THEN
+   ASSIGN llOrderAllowed = FALSE.
+
 IF lcAddLineAllowed = "" THEN DO:
       
    FOR EACH OrderCustomer NO-LOCK WHERE   
