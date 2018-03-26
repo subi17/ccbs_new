@@ -80,7 +80,8 @@ FUNCTION fFixPrice RETURNS LOGICAL
      icBDest     AS CHARACTER,
      icBillCode  AS CHARACTER ):
 
-   FIND FIRST Tariff EXCLUSIVE-LOCK WHERE
+   DEFINE BUFFER lbTariff FOR Tariff.
+   FIND FIRST Tariff NO-LOCK WHERE
               Tariff.Brand      EQ Syst.Var:gcBrand   AND 
               Tariff.PriceList  EQ "CONTRATOS"        AND 
               Tariff.CCN        EQ iiCCN              AND 
@@ -93,7 +94,12 @@ FUNCTION fFixPrice RETURNS LOGICAL
    IF NOT AVAILABLE Tariff
    THEN RETURN TRUE.
    
-   Tariff.PriceList = "CONTRATO8".
+   CREATE lbTariff.
+
+   BUFFER-COPY Tariff EXCEPT Tariff.PriceList Tariff.TariffNum TO lbTariff
+      ASSIGN lbTariff.PriceList = "CONTRATO8"
+             lbTariff.TariffNum = NEXT-VALUE(Tariff)
+             .
 
    RETURN FALSE.
 
