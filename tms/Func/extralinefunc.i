@@ -229,6 +229,34 @@ FUNCTION fGetMandatoryExtraLineForMainLine RETURNS CHARACTER
 
 END FUNCTION.
 
+FUNCTION fGetAllowedExtraLinesForMainLine RETURN CHARACTER 
+    (INPUT icMainCLIType AS CHAR) :
+    
+    DEFINE BUFFER bfTMSRelation FOR TMSRelation.
+    
+    DEFINE VARIABLE lcExtraLineTypes AS CHARACTER NO-UNDO.
+    DEFINE VARIABLE lcExtraLineCount AS INTEGER NO-UNDO.
+    
+    FOR EACH bfTMSRelation NO-LOCK WHERE 
+             bfTMSRelation.TableName    EQ {&ELTABLENAME} AND
+             bfTMSRelation.KeyType      EQ {&ELKEYTYPE}   AND
+             bfTMSRelation.ParentValue  EQ icMainCLIType  :
+            
+        ASSIGN lcExtraLineCount = INT(bfTMSRelation.RelationType) NO-ERROR.
+        
+        IF ERROR-STATUS:ERROR OR 
+           lcExtraLineCount = 0 THEN NEXT.
+        
+        ASSIGN lcExtraLineTypes = lcExtraLineTypes + "," +  bfTMSRelation.ChildValue.
+                 
+    END.  
+     
+    ASSIGN lcExtraLineTypes = LEFT-TRIM(lcExtraLineTypes,",").
+     
+    RETURN lcExtraLineTypes.
+END.        
+
+
 FUNCTION fGetOngoingExtralineCount RETURNS LOGICAL
    (INPUT icExtraLineCLIType AS CHAR,
     INPUT icCustIDType       AS CHAR,
