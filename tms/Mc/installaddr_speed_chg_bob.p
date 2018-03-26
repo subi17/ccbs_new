@@ -86,7 +86,8 @@ DEFINE VARIABLE lcTerritoryOwner   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcCoverageToken    AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcAddressID        AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcToday            AS CHARACTER NO-UNDO.
-
+DEFINE VARIABLE liMonth            AS INTEGER   NO-UNDO.
+DEFINE VARIABLE liYear             AS INTEGER   NO-UNDO.
 
 /* ***************************  Main Block  *************************** */
 
@@ -285,27 +286,52 @@ DO ON ERROR UNDO , LEAVE:
                 PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";install_address_changed;" SKIP.
                 PUT STREAM sCurrentLog  UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";install_address_changed;" SKIP.
                 
-                IF llCreateSTC  THEN DO:
-                    ldActivationTS = Func.Common:mMake2DT( TODAY + 1 , 0 ).
-                    llReqExist4Month = FALSE.
+                IF llCreateSTC  THEN 
+                DO:
+                    ASSIGN 
+                        liMonth          = 0
+                        liYear           = 0
+                        llReqExist4Month = FALSE
+                        ldActivationTS   = Func.Common:mMake2DT(TODAY + 1, 0).
+                        
                     FOR EACH MsRequest 
-                       WHERE MsRequest.Msseq   = Order.Msseq
-                         AND Msrequest.reqtype = 0 NO-LOCK BY MsRequest.CreStamp DESC:
+                       WHERE MsRequest.Msseq     = Order.Msseq
+                         AND MsRequest.ReqType   = 0 
+                         AND MsRequest.ReqStatus = 2 NO-LOCK BY MsRequest.CreStamp DESC:
                              /* Not in current month */
-                        IF ( MONTH(Func.Common:mTSToDate(MsRequest.CreStamp)) NE MONTH(TODAY) ) AND 
-                           ( YEAR(Func.Common:mTSToDate(MsRequest.CreStamp))  EQ YEAR(TODAY)  ) THEN LEAVE.
-                        FIND CliType1 WHERE CliType1.Brand = Order.Brand AND CliType1.CliType = MsRequest.ReqCParam1 NO-LOCK NO-ERROR.
-                        FIND CliType2 WHERE CliType2.Brand = Order.Brand AND CliType2.CliType = MsRequest.ReqCParam2 NO-LOCK NO-ERROR.
-                        IF NOT AVAILABLE CliType1 OR  NOT AVAILABLE CLiType2 THEN NEXT.
-                        /* same tech then NEXT  */
-                        IF CliType1.fixedlinetype EQ CliType2.fixedlinetype THEN NEXT .
-                        llReqExist4Month = TRUE .
+                        ASSIGN 
+                            liMonth = MONTH(Func.Common:mTSToDate(MsRequest.CreStamp))
+                            liYear  =  YEAR(Func.Common:mTSToDate(MsRequest.CreStamp)).
+                             
+                        IF liMonth NE MONTH(TODAY) OR (liMonth EQ MONTH(TODAY) AND liYear <> YEAR(TODAY)) THEN 
+                            LEAVE.
+
+                        llReqExist4Month = TRUE.
+
                         LEAVE.
                     END.
-                    IF llReqExist4Month THEN DO:
+
+                    IF llReqExist4Month THEN 
+                    DO:
                         PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";install_address_change_stc_request_fail;" + "There exist STC already for this month." SKIP.
                         PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";install_address_change_stc_request_fail;" + "There exist STC already for this month." SKIP.
                         NEXT.
+                    END.
+
+                    /* same tech then NEXT  */
+                    FIND FIRST MobSub WHERE MobSub.MsSeq = Order.MsSeq NO-LOCK NO-ERROR.
+                    IF AVAILABLE MobSub THEN
+                    DO:
+                        FIND CliType1 WHERE CliType1.Brand = Order.Brand AND CliType1.CliType = MobSub.CliType NO-LOCK NO-ERROR.
+                        FIND CliType2 WHERE CliType2.Brand = Order.Brand AND CliType2.CliType = lcNewCliType   NO-LOCK NO-ERROR.
+                        IF NOT AVAILABLE CliType1 OR  NOT AVAILABLE CLiType2 THEN NEXT.
+                        
+                        IF CliType1.fixedlinetype EQ CliType2.fixedlinetype THEN
+                        DO:
+                            PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";install_address_change_stc_request_fail;" + "STC request between same technology." SKIP.
+                            PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";install_address_change_stc_request_fail;" + "STC request between same technology." SKIP.
+                            NEXT.
+                        END.
                     END.
                                                         
                     liRequest = fCTChangeRequest ( Order.msseq,
@@ -321,7 +347,7 @@ DO ON ERROR UNDO , LEAVE:
                                     "" ,    /* Creator           */
                                     0  ,    /* Charge            */
                                     {&REQUEST_SOURCE_YOIGO_TOOL}, 
-                                    liOrderID , 
+                                    0  , 
                                     0  ,    /* Parent Request */
                                     '' ,    /* Conract ID */
                                     OUTPUT ocInfo).
