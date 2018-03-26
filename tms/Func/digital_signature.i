@@ -66,7 +66,8 @@ FUNCTION fHandleSignature RETURNS CHAR
 
    /* Process ActionLog */
    ASSIGN
-      lcExcludedDSStatuses = {&DIGITAL_SIGNATURE_EXCLUDED_STATUSES}.
+      lcExcludedDSStatuses = fCParam("SignatureApi", "NewStatuses").
+     /* lcExcludedDSStatuses = {&DIGITAL_SIGNATURE_EXCLUDED_STATUSES}.*/
 
    IF LOOKUP(icStatus, lcExcludedDSStatuses) = 0 THEN
       lcActionID = "dssent".

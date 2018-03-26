@@ -29,6 +29,7 @@
 {Func/orderfunc.i}
 {Func/multitenantfunc.i}
 {Func/profunc_request.i}
+{Func/digital_signature.i}
 
 DEFINE INPUT  PARAMETER iiMSrequest AS INT  NO-UNDO.
 
@@ -871,6 +872,8 @@ PROCEDURE pTerminate:
                    ErrorLog.UserCode  = Syst.Var:katun
                    ErrorLog.ActionTS  = Func.Common:mMakeTS().
          END.
+         /* RES-538 Digital Signature */
+         fHandleSignature(Order.OrderId,Order.StatusCode).
 
          RUN pCreatePaytermCreditNote(Order.OrderId).
 
