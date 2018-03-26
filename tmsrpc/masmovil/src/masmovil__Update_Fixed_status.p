@@ -271,8 +271,21 @@ CASE FusionMessage.FixedStatus:
        ELSE
           ASSIGN OrderFusion.AppointmentDate = lcCita WHEN lcCita <> "".
    END.
+   
+   /*NEBA*/
+   WHEN "PENDIENTE_INSTALATION":
+      /*Create fixed line subscription*/
+      /*Create the new NEBA permanency: NTERM-xxx???*/
+      /**/
+      
+   END.
+
    /* installation done */
    WHEN "CERRADA" THEN DO:
+      /*NEBA TODO:*/
+      /*Remove NEBA permanency, clreate normal FTERM*/
+      /*Do not xcreate fixed subscription in neba case*/
+      /*start npowmal FTER; as earlier*/
        
       ASSIGN 
          OrderFusion.FixedInstallationTS = ldeLastDate
@@ -311,6 +324,9 @@ CASE FusionMessage.FixedStatus:
 
    /* installation cancelled */ 
    WHEN "CANCELADA" THEN DO:
+      /*NEBA TODO*/
+      /*If this is cancelled in NEBA PERMANENCY period,the penalty must be handled.*/
+
       IF llOldStructure THEN
          ASSIGN OrderFusion.CancellationReason = lcAdditionalInfo.
       ELSE
