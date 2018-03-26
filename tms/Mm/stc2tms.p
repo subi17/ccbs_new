@@ -889,6 +889,9 @@ PROCEDURE pUpdateSubscription:
                                                                       ENTRY(liELCLITypeCount,lcExtralineCLITypes),
                                                                       liConfigExtraLineCount)
                 lcMandatoryExtraLines   = fGetMandatoryExtraLineForMainLine(CLIType.CliType).
+         
+         IF lcMandatoryExtraLines = "" THEN
+             lcMandatoryExtraLines = fGetAllowedExtraLinesForMainLine(CLIType.CliType).
 
          IF NOT llgMandatoryExtraLine THEN
          DO liManELCount = 1 TO NUM-ENTRIES(lcMandatoryExtraLines):
@@ -900,7 +903,8 @@ PROCEDURE pUpdateSubscription:
                               lELMobSub.CustNum      EQ MobSub.CustNum            AND
                               lELMobSub.MultiSimId   EQ MobSub.MsSeq              AND
                               lELMobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} AND
-                              lELMobSub.CLIType      EQ ENTRY(liManELCount,lcExtraLineCLITypes)) THEN
+                             (lELMobSub.CLIType      EQ ENTRY(liManELCount,lcMandatoryExtraLines) OR
+                              LOOKUP(lELMobSub.CLIType,lcMandatoryExtraLines) > 0 )) THEN
                ASSIGN llgMandatoryExtraLine = TRUE
                       liAvailExtraLineCount = liAvailExtraLineCount + 1.
             ELSE DO:
@@ -912,8 +916,15 @@ PROCEDURE pUpdateSubscription:
                           lELMobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} AND
                    LOOKUP(lELMobSub.CLIType,lcMandatoryExtraLines) EQ 0       NO-ERROR.
 
+               IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
+                              MsRequest.MsSeq      EQ lELMobSub.MsSeq AND
+                              MsRequest.ReqType    EQ 0               AND
+                              MsRequest.ReqStatus  EQ 0               AND
+                              MsRequest.ReqCParam1 EQ lELMobSub.CLIType AND
+                              MsRequest.ReqCParam2 EQ ENTRY(liManELCount,lcMandatoryExtraLines) ) THEN NEXT.
+
                liRequest = fCTChangeRequest(lELMobSub.MsSeq,                          /* The MSSeq of the subscription to where the STC is made */
-                                            ENTRY(liManELCount,lcExtraLineCLITypes),  /* The CLIType of where to do the STC */
+                                            ENTRY(liManELCount,lcMandatoryExtraLines),  /* The CLIType of where to do the STC */
                                             "",                                       /* lcBundleID */
                                             "",                                       /* bank code validation is already done */
                                             Func.Common:mMakeTS(),
