@@ -873,7 +873,7 @@ PROCEDURE pTerminate:
                    ErrorLog.ActionTS  = Func.Common:mMakeTS().
          END.
          /* RES-538 Digital Signature */
-         fHandleSignature(Order.OrderId,Order.StatusCode).
+         fHandleSignature(Order.OrderId,{&ORDER_STATUS_CLOSED}).
 
          RUN pCreatePaytermCreditNote(Order.OrderId).
 
