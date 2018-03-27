@@ -112,6 +112,12 @@ FOR EACH daycampaign NO-LOCK:
                               FMItem.PriceList <> ""                   AND
                               FMItem.FromDate  <= TODAY                AND 
                               FMItem.ToDate    >= TODAY                NO-LOCK NO-ERROR.
+      FIND FIRST DCCLI NO-LOCK WHERE
+                 DCCLI.Brand      = Syst.Var:gcBrand     AND
+                 DCCLi.DCEvent    = DayCampaign.DCEvent  AND 
+                 DCCLI.MsSeq      = mobsub.MsSeq         AND
+                 DCCLi.ValidTo   >= TODAY  NO-ERROR. 
+                    
       IF AVAIL FMItem THEN 
           ldPrice = FMItem.Amount.
       ELSE 
@@ -122,6 +128,10 @@ FOR EACH daycampaign NO-LOCK:
       add_double(top_struct, "price"   , ldPrice).
       add_string(top_struct, "status"  , STRING(fGetSVAStatus(piMsSeq, daycampaign.dcevent))).
       add_string(top_struct, "category", "pro").
+      IF AVAILABLE DCCLI THEN 
+         add_string(top_struct, "contract_id", DCCli.WebContractId ).
+      ELSE 
+         add_string(top_struct, "contract_id", "").
    END.
    ELSE IF DayCampaign.BundleTarget = {&TELEVISION_BUNDLE} THEN 
    DO:
@@ -169,7 +179,7 @@ FOR EACH daycampaign NO-LOCK:
        IF AVAIL FMItem THEN 
            ldPrice = FMItem.Amount.
        ELSE 
-           ldPrice = 0.
+           ldPrice = 0. 
 
        top_struct = add_struct(top_array, "").
        add_string(top_struct, "service_id", Daycampaign.DCEvent).    

@@ -481,6 +481,8 @@ DEFINE VARIABLE lcoffice365Struct      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE cData                  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE faxtoEmailStruct       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcfaxtoEmailStruct     AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcWebContractIds       AS CHARACTER NO-UNDO.
+DEFINE VARIABLE liEntry                AS INTEGER   NO-UNDO.
 
 /* YBP-514 */
 FUNCTION fGetOrderFields RETURNS LOGICAL :
@@ -582,7 +584,7 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
 
          ASSIGN 
              pcBundleStruct = get_struct(pcAdditionalBundleArray,STRING(liBundleCnt))
-             lcBundleFields = validate_request(pcBundleStruct,"bundle_id!,extra_offer_id").
+             lcBundleFields = validate_request(pcBundleStruct,"bundle_id!,extra_offer_id,contract_id").
 
          IF LOOKUP('bundle_id'     , lcBundleFields) GT 0 AND 
             LOOKUP('extra_offer_id', lcBundleFields) GT 0 THEN 
@@ -594,6 +596,13 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
                  pcAdditionalOfferList  = pcAdditionalOfferList                              + 
                                           (IF pcAdditionalOfferList <> "" THEN "," ELSE "")  + 
                                           get_string(pcBundleStruct, "extra_offer_id").
+             IF LOOKUP('contract_id',lcBundleFields) GT 0 THEN 
+                  lcWebContractIds = lcWebContractIds +
+                                     (IF LENGTH(lcWebContractIds) > 0 THEN "," ELSE "")  +
+                                     get_string(pcBundleStruct, "contract_id").
+             ELSE 
+                  lcWebContractIds = lcWebContractIds + 
+                                     (IF LENGTH(lcWebContractIds) > 0 THEN "," ELSE "  ") .
          END.                           
       END.
    END.
@@ -605,22 +614,31 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
     
         IF LOOKUP('OFFICE365' , lcExtraDataStruct) GT 0 THEN DO:
             office365Struct    = get_struct(bundleExtraDataStruct , "OFFICE365").
-            lcoffice365Struct  = validate_request(office365Struct, 'email!').    
+            lcoffice365Struct  = validate_request(office365Struct, 'email!').
+            liEntry            = LOOKUP('OFFICE365',pcAdditionalBundleList) .     
             cData = "".
             cData = "|" + get_string(office365Struct, "email").
-            cData = cData + FILL("|", (3 - NUM-ENTRIES(cData,"|"))).
-            ENTRY( LOOKUP('OFFICE365',pcAdditionalBundleList)  
-            ,pcAdditionalOfferList ) = cData NO-ERROR.                     
+            IF ENTRY (liEntry,lcWebContractIds) NE "" THEN 
+                cData = cData + "|" + "contract_id=" + ENTRY (liEntry,lcWebContractIds). 
+            ELSE 
+                cData = cData + "|" .
+            cData = cData + FILL("|", (2 - NUM-ENTRIES(cData,"|"))).
+            ENTRY( liEntry , pcAdditionalOfferList ) = cData NO-ERROR.                     
         END.
         IF LOOKUP('FAXTOEMAIL', lcExtraDataStruct) GT 0 THEN DO:
             faxtoEmailStruct    = get_struct(bundleExtraDataStruct , "FAXTOEMAIL").
             lcfaxtoEmailStruct  = validate_request(faxtoEmailStruct, 'email!,fixed_number!').    
+            liEntry             = LOOKUP('FAXTOEMAIL',pcAdditionalBundleList) .     
+
             cData = "".
             cData = get_string(faxtoEmailStruct, "fixed_number").
             cData = cData + "|" + get_string(faxtoEmailStruct, "email").
-            cData = cData + FILL("|", (3 - NUM-ENTRIES(cData,"|"))).
-            ENTRY( LOOKUP('FAXTOEMAIL',pcAdditionalBundleList)  
-            ,pcAdditionalOfferList ) = cData NO-ERROR.                     
+            IF ENTRY (liEntry,lcWebContractIds) NE "" THEN 
+                cData = cData + "|" + "contract_id=" + ENTRY (liEntry,lcWebContractIds). 
+            ELSE 
+                cData = cData + "|" .
+            cData = cData + FILL("|", (2 - NUM-ENTRIES(cData,"|"))).
+            ENTRY( liEntry ,pcAdditionalOfferList ) = cData NO-ERROR.                     
         END.
     END.
 
