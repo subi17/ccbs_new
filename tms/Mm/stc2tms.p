@@ -2225,8 +2225,7 @@ PROCEDURE pUpdateDSSAccount:
                IF (fCLITypeIsMainLine(CLIType.CLIType) OR
                    fCLITypeIsExtraLine(CLIType.CLIType)) THEN 
                   IF NOT fCheckExtraLineMatrixSubscription(MobSub.MsSeq,
-                                                           MobSub.MultiSimId,
-                                                           MobSub.MultiSimType) THEN RETURN.  
+                                                           MobSub.CLIType) THEN RETURN.  
 
                /* If new postpaid subs. type compatible with DSS2 */
                IF LOOKUP(bOldType.CLIType,lcAllowedDSS2SubsType) = 0 AND

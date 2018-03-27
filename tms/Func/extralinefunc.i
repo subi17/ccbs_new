@@ -442,48 +442,47 @@ FUNCTION fCheckOngoingMainLineAvailForExtraLine RETURNS INTEGER
 END FUNCTION.
 
 FUNCTION fCheckExtraLineMatrixSubscription RETURNS LOG
-   (INPUT iiMsSeq        AS INT,
-    INPUT iiMultiSimId   AS INT,
-    INPUT iiMultiSimType AS INT):
+   (INPUT iiMsSeq   AS INT,
+    INPUT icCLIType AS CHAR):
 
    DEFINE BUFFER lbMLMobSub FOR MobSub.
    DEFINE BUFFER lbELMobSub FOR MobSub.
 
-   CASE iiMultiSimType:
+   IF fCLITypeIsMainLine(icCLIType) THEN DO:
 
-      WHEN {&MULTISIMTYPE_PRIMARY} THEN DO:
-         
-         FIND FIRST lbMLMobSub NO-LOCK WHERE 
-                    lbMLMobSub.MsSeq      = iiMsSeq             AND 
-                    lbMLMobSub.MultiSimId = iiMultiSimId        AND
-                   (lbMLMobSub.MsStatus   = {&MSSTATUS_ACTIVE}  OR
-                    lbMLMobSub.MsStatus   = {&MSSTATUS_BARRED}) NO-ERROR.
+      FIND FIRST lbMLMobSub NO-LOCK WHERE
+                 lbMLMobSub.MsSeq      = iiMsSeq             AND
+                (lbMLMobSub.MsStatus   = {&MSSTATUS_ACTIVE}  OR
+                 lbMLMobSub.MsStatus   = {&MSSTATUS_BARRED}) NO-ERROR.
+      IF AVAIL lbMLMobSub THEN DO:
+
+         FOR FIRST lbELMobSub NO-LOCK WHERE
+                   lbELMobSub.Brand        = Syst.Var:gcBrand      AND
+                   lbELMobSub.MultiSimId   = lbMLMobSub.MsSeq      AND
+                   lbELMobSub.MultiSimType = {&MULTISIMTYPE_EXTRALINE}:
+            RETURN TRUE.
+         END.
+
+      END.
+
+   END.
+   ELSE IF fCLITypeIsExtraLine(icCLIType) THEN DO:
+
+      FOR FIRST lbELMobSub NO-LOCK WHERE
+                lbELMobSub.MsSeq        = iiMsSeq               AND
+                lbELMobSub.MultiSimId  <> 0                     AND
+                lbELMobSub.MultiSimType = {&MULTISIMTYPE_EXTRALINE}:
+
+         FIND FIRST lbMLMobSub NO-LOCK WHERE
+                    lbMLMobSub.MsSeq        = lbELMobSub.MultiSimId AND
+                   (lbMLMobSub.MsStatus     = {&MSSTATUS_ACTIVE} OR
+                    lbMLMobSub.MsStatus     = {&MSSTATUS_BARRED})   NO-ERROR.
          IF AVAIL lbMLMobSub THEN
-            FIND FIRST lbELMobSub NO-LOCK WHERE 
-                       lbELMobSub.MsSeq        = lbMLMobSub.MultiSimId     AND 
-                       lbELMobSub.MultiSimId   = lbMLMobSub.MsSeq          AND 
-                       lbELMobSub.MUltiSimType = {&MULTISIMTYPE_EXTRALINE} NO-ERROR.
-         IF AVAIL lbELMobSub THEN 
             RETURN TRUE.
 
       END.
-      WHEN {&MULTISIMTYPE_EXTRALINE} THEN DO:
-         
-         FIND FIRST lbELMobSub NO-LOCK WHERE 
-                    lbELMobSub.MsSeq      = iiMsSeq      AND
-                    lbELMobSub.MultiSimID = iiMultiSimId NO-ERROR.
-         IF AVAIL lbELMobSub THEN 
-            FIND FIRST lbMLMobSub NO-LOCK WHERE 
-                       lbMLMobSub.MsSeq        = lbELMobSub.MultiSimId   AND 
-                       lbMLMobSub.MultiSimId   = lbELMobSub.MsSeq        AND 
-                       lbMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} AND 
-                      (lbMLMobSub.MsStatus     = {&MSSTATUS_ACTIVE}  OR 
-                       lbMLMobSub.MsStatus     = {&MSSTATUS_BARRED})     NO-ERROR.
-         IF AVAIL lbMLMobSub THEN 
-            RETURN TRUE.
-      END.
 
-   END CASE.
+   END.
 
    RETURN FALSE.
 

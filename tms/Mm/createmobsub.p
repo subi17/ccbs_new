@@ -971,8 +971,7 @@ IF NOT MobSub.PayType THEN DO:
       ELSE IF llgExtraLine        AND 
               lcBundleId = "DSS2" AND 
               fCheckExtraLineMatrixSubscription(MobSub.MsSeq,
-                                                MobSub.MultiSimId,
-                                                MobSub.MultiSimType) THEN DO:
+                                                MobSub.CLIType) THEN DO:
         
          /* If already DSS2 group exists then add extraline subscription 
             AND its associated main line to DSS2 group */  
