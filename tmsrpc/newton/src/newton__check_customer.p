@@ -517,6 +517,14 @@ END.
 
 lcExtraLineAllowed = LEFT-TRIM(lcExtraLineAllowed, ",").
 
+IF llOrderAllowed = NO               AND 
+   lcReason = "subscription limit"   AND
+   fCLITypeIsExtraLine(pcCliType)    AND 
+   LOOKUP(pcCliType,lcExtraLineAllowed) > 0 THEN
+   ASSIGN 
+       lcReason        = ""
+       llOrderAllowed  = TRUE.
+
 IF fCLITypeIsExtraLine(pcCliType)           AND
    LOOKUP(pcCliType,lcExtraLineAllowed) = 0 THEN
    ASSIGN llOrderAllowed = FALSE.
