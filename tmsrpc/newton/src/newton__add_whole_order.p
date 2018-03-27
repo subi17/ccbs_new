@@ -815,14 +815,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
                OUTPUT liSubLimit,
                OUTPUT liSubs,
                OUTPUT liSubLimit,
-               OUTPUT liActs) THEN DO:
-                   
-                   IF fCLITypeIsExtraLine(pcSubType) AND
-                      piMultiSimID > 0 THEN .              
-                   ELSE lcFError = "subscription limit".                
-                   
-            END. 
-            
+               OUTPUT liActs) THEN lcFError = "subscription limit".            
+                
             IF lcFError EQ "" THEN
                FOR FIRST Customer WHERE
                          Customer.Brand      = Syst.Var:gcBrand  AND
@@ -1760,33 +1754,7 @@ DO:
    lccTemp = validate_request(pcMobileLinePortabilityUserStruct, gcPoUserStructFields).
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
-  
-/* Extra Lines Validations, 
-   updating multisimid & multisimidtype for hard association */
-IF fCLITypeIsExtraLine(pcSubType) THEN DO:
 
-   piMultiSimID = fCheckExistingMainLineAvailForExtraLine(pcSubType, lcIdtype, lcId, OUTPUT liMLMsSeq). /* MainLine SubId */
-
-   IF piMultiSimID EQ 0 THEN 
-      piMultiSimID = fCheckOngoingMainLineAvailForExtraLine(pcSubType, lcIdtype, lcId). /* Ongoing order id */
-
-   piMultiSimType = {&MULTISIMTYPE_EXTRALINE}.
-
-   IF piMultiSimID = 0 THEN  
-      RETURN appl_err("No Existing Main line subscriptions OR Ongoing main line orders are available").
-
-   /* Discount rule id input is not necessary from WEB to TMS, 
-      As it is extra line we have to give default discount */
-   FIND FIRST ExtraLineDiscountPlan NO-LOCK WHERE
-              ExtraLineDiscountPlan.Brand      = Syst.Var:gcBrand      AND
-              ExtraLineDiscountPlan.DPRuleID   = pcSubType + "DISC"    AND
-              ExtraLineDiscountPlan.ValidFrom <= TODAY                 AND
-              ExtraLineDiscountPlan.ValidTo   >= TODAY                 NO-ERROR.
-   IF NOT AVAIL ExtraLineDiscountPlan THEN
-      RETURN appl_Err(SUBST("Incorrect Extra Line Discount Plan ID: &1", pcSubType + "DISC")).      
-
-END.
- 
 /* YBP-536 */
 lcError = fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
@@ -2023,7 +1991,32 @@ IF pcQ25Struct > "" THEN DO:
       
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
+  
+/* Extra Lines Validations, 
+   updating multisimid & multisimidtype for hard association */
+IF fCLITypeIsExtraLine(pcSubType) THEN DO:
 
+   piMultiSimID = fCheckExistingMainLineAvailForExtraLine(pcSubType, lcIdtype, lcId, OUTPUT liMLMsSeq). /* MainLine SubId */
+
+   IF piMultiSimID EQ 0 THEN 
+      piMultiSimID = fCheckOngoingMainLineAvailForExtraLine(pcSubType, lcIdtype, lcId). /* Ongoing order id */
+
+   piMultiSimType = {&MULTISIMTYPE_EXTRALINE}.
+
+   IF piMultiSimID = 0 THEN  
+      RETURN appl_err("No Existing Main line subscriptions OR Ongoing main line orders are available").
+
+   /* Discount rule id input is not necessary from WEB to TMS, 
+      As it is extra line we have to give default discount */
+   FIND FIRST ExtraLineDiscountPlan NO-LOCK WHERE
+              ExtraLineDiscountPlan.Brand      = Syst.Var:gcBrand      AND
+              ExtraLineDiscountPlan.DPRuleID   = pcSubType + "DISC"    AND
+              ExtraLineDiscountPlan.ValidFrom <= TODAY                 AND
+              ExtraLineDiscountPlan.ValidTo   >= TODAY                 NO-ERROR.
+   IF NOT AVAIL ExtraLineDiscountPlan THEN
+      RETURN appl_Err(SUBST("Incorrect Extra Line Discount Plan ID: &1", pcSubType + "DISC")).      
+
+END.
 
 /* YBP-532 */
 /*********************************************************************
