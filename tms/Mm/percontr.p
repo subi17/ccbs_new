@@ -1062,7 +1062,7 @@ PROCEDURE pContractActivation:
              DCCLI.CreateFees    = LOOKUP(DayCampaign.DCType,"3,5") > 0.
       
       IF DayCampaign.BundleTarget = {&DC_BUNDLE_TARGET_SVA} THEN DO:
-/*          DCCLi.WebContractID = MsRequest.ReqCparam5. */
+          DCCLi.WebContractID = MsRequest.ReqCparam5. 
           IF Mm.MManMessage:mGetMessage("EMAIL", "SVA_ActEmail", 1) EQ TRUE THEN DO:
               Mm.MManMessage:ParamKeyValue = "".
               Mm.MManMessage:mCreateMMLogEmail("", TRUE).
