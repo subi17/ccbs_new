@@ -275,7 +275,8 @@ FUNCTION fGetOngoingExtralineCount RETURNS LOGICAL
        EACH bELOrder NO-LOCK WHERE
             bELOrder.Brand        EQ Syst.Var:gcBrand                  AND
             bELOrder.OrderId      EQ bELOrderCustomer.OrderId          AND
-            bELOrder.StatusCode   EQ {&ORDER_STATUS_PENDING_MAIN_LINE} AND
+           (bELOrder.StatusCode   EQ {&ORDER_STATUS_PENDING_MAIN_LINE} OR
+            bELOrder.StatusCode   EQ {&ORDER_STATUS_COMPANY_NEW} )     AND /*In case of CIF*/
             bELOrder.CLIType      EQ icExtraLineCLIType                AND
             bELOrder.OrderType    NE {&ORDER_TYPE_RENEWAL}             AND
             bELOrder.MultiSimId   EQ liMLOrderId                       AND
