@@ -316,9 +316,9 @@ DO ON ERROR UNDO , LEAVE:
 
                     IF llReqExist4Month THEN 
                     DO:
-                        PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";install_address_change_stc_request_fail;" + "There exist STC already for this month." SKIP.
-                        PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";install_address_change_stc_request_fail;" + "There exist STC already for this month." SKIP.
-                        NEXT.
+                        PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";stc_request_creation;" + "There exist STC already for this month, so request is created for next month." SKIP.
+                        PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";stc_request_creation;" + "There exist STC already for this month, so request is created for next month." SKIP.
+                        ASSIGN ldActivationTS = Func.Common:mMake2DT((Func.Common:mLastDayOfMonth(TODAY + 1) + 1), 0).
                     END.
 
                     /* same tech then NEXT  */
@@ -331,8 +331,8 @@ DO ON ERROR UNDO , LEAVE:
                         
                         IF CliType1.fixedlinetype EQ CliType2.fixedlinetype THEN
                         DO:
-                            PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";install_address_change_stc_request_fail;" + "STC request between same technology." SKIP.
-                            PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";install_address_change_stc_request_fail;" + "STC request between same technology." SKIP.
+                            PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";stc_request_fail;" + "STC request between same technology." SKIP.
+                            PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";stc_request_fail;" + "STC request between same technology." SKIP.
                             NEXT.
                         END.
                     END.
@@ -355,17 +355,17 @@ DO ON ERROR UNDO , LEAVE:
                                     '' ,    /* Conract ID */
                                     OUTPUT ocInfo).
                     IF ocInfo > "" THEN DO:
-                        PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";install_address_change_stc_request_creation_failed;" + ocInfo SKIP.
-                        PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";install_address_change_stc_request_creation_failed;" + ocInfo  SKIP.
+                        PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";stc_request_creation_failed;" + ocInfo SKIP.
+                        PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";stc_request_creation_failed;" + ocInfo  SKIP.
                     END.
                     ELSE DO:
-                        PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";install_address_change_stc_request_created;Ok;" + Order.CliType + "->" + lcNewCliType SKIP.
-                        PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";install_address_change_stc_request_created;Ok;" + Order.CliType + "->" + lcNewCliType SKIP.
+                        PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";stc_request_created;Ok;" + Order.CliType + "->" + lcNewCliType SKIP.
+                        PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";stc_request_created;Ok;" + Order.CliType + "->" + lcNewCliType SKIP.
                     END.   
                 END.
                 CATCH err AS Progress.Lang.Error :
-                    PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";install_address_change_stc_request_creation_failed;" + err:GetMessage(1) SKIP.
-                    PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";install_address_change_stc_request_creation_failed;" + err:GetMessage(1) SKIP.
+                    PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";stc_request_creation_failed;" + err:GetMessage(1) SKIP.
+                    PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";stc_request_creation_failed;" + err:GetMessage(1) SKIP.
                 END CATCH.
             END. /* repeat  */            
             INPUT STREAM sCurrentFile CLOSE.
