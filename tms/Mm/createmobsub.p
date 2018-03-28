@@ -81,6 +81,7 @@ DEF VAR ldeActivationTS AS DEC  NO-UNDO.
 DEF VAR ldaActDate AS DATE NO-UNDO. 
 DEF VAR lcMobileNumber AS CHAR NO-UNDO. 
 DEF VAR llgExtraLine   AS LOG  NO-UNDO INITIAL NO. 
+DEF VAR llgPriDSSMobSub     AS LOG NO-UNDO.
 DEF VAR liOngoingOrderId    AS INT NO-UNDO.
 DEF VAR liExistingOrderId   AS INT NO-UNDO. 
 DEF VAR liMLMsSeq           AS INT NO-UNDO. 
@@ -973,14 +974,33 @@ IF NOT MobSub.PayType THEN DO:
               fCheckExtraLineMatrixSubscription(MobSub.MsSeq,
                                                 MobSub.CLIType) THEN DO:
         
-         /* If already DSS2 group exists then add extraline subscription 
-            AND its associated main line to DSS2 group */  
+         llgPriDSSMobSub = FALSE.
+
+         /* If already DSS2 group exists then add extraline subscription
+            AND its associated main line to DSS2 group */
          FOR EACH lbMobSubs NO-LOCK WHERE
-                  lbMobSubs.Brand        = Syst.Var:gcBrand        AND
-                  lbMobSubs.CustNum      = MobSub.CustNum AND
-                  lbMobSubs.MultiSimId  <> 0              AND
-                 (lbMobSubs.MultiSimType = {&MULTISIMTYPE_PRIMARY} OR
-                  lbMobSubs.MultiSimType = {&MULTISIMTYPE_EXTRALINE}):
+                  lbMobSubs.Brand        Eq Syst.Var:gcBrand     AND
+                  lbMobSubs.CustNum      EQ MobSub.CustNum       AND
+                  lbMobSubs.MultiSimId   NE 0                    AND
+                  lbMobSubs.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}:
+
+            FIND FIRST lbPriDSSMobSub NO-LOCK WHERE
+                       lbPriDSSMobSub.MsSeq EQ lbMobSubs.MultiSimId NO-ERROR.
+
+            IF NOT AVAIL lbPriDSSMobSub THEN LEAVE.
+
+            IF NOT llgPriDSSMobSub THEN DO:
+               RUN pUpdateDSSNetwork(INPUT lbPriDSSMobsub.MsSeq,
+                                     INPUT lbPriDSSMobsub.CLI,
+                                     INPUT lbPriDSSMobSub.CustNum,
+                                     INPUT "ADD",
+                                     INPUT "",           /* Optional param list */
+                                     INPUT MsRequest.MsRequest,
+                                     INPUT Func.Common:mSecOffSet(Func.Common:mMakeTS(),180), /* 3 mins delay */
+                                     INPUT MsRequest.ReqSource,
+                                     INPUT lcBundleId).
+               llgPriDSSMobSub = TRUE.
+            END.
 
             RUN pUpdateDSSNetwork(INPUT lbMobsubs.MsSeq,
                                   INPUT lbMobsubs.CLI,
@@ -991,6 +1011,7 @@ IF NOT MobSub.PayType THEN DO:
                                   INPUT Func.Common:mSecOffSet(Func.Common:mMakeTS(),180), /* 3 mins delay */
                                   INPUT MsRequest.ReqSource,
                                   INPUT lcBundleId).
+
          END.
  
       END.

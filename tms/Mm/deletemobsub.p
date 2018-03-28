@@ -84,46 +84,61 @@ DEF TEMP-TABLE ttContract NO-UNDO
 
 FUNCTION fUpdateDSSNewtorkForExtraLine RETURNS LOGICAL
    (INPUT iiMsSeq        AS INT,
+    INPUT icCLIType      AS CHAR,
     INPUT iiMultiSimId   AS INT,
-    INPUT iiMultiSimType AS INT,
     INPUT iiMsRequest    AS INT,
-    INPUT ideActStamp    AS DEC, 
+    INPUT ideActStamp    AS DEC,
     INPUT lcBundleId     AS CHAR):
 
-    DEFINE BUFFER lbMobSub      FOR MobSub.
-    
-    DEFINE VARIABLE liELMultiSimType AS INTEGER NO-UNDO.  
+   DEFINE BUFFER lbMLMobSub FOR MobSub.
+   DEFINE BUFFER lbELMobSub FOR MobSub.
 
    IF NOT fCheckExtraLineMatrixSubscription(iiMsSeq,
-                                            iiMultiSimId,
-                                            iiMultiSimType) THEN
+                                            icCLIType) THEN
    RETURN FALSE.
 
-   CASE iiMultiSimType : 
-      WHEN {&MULTISIMTYPE_PRIMARY}   THEN liELMultiSimType = {&MULTISIMTYPE_EXTRALINE}.  
-      WHEN {&MULTISIMTYPE_EXTRALINE} THEN liELMultiSimType = {&MULTISIMTYPE_PRIMARY}.
-   END CASE.
-   
-   FIND FIRST lbMobSub NO-LOCK WHERE 
-              lbMobSub.MsSeq        = iiMultiSimId     AND 
-              lbMobSub.MultiSimId   = iiMsSeq          AND 
-              lbMobSub.MultiSimType = liELMultiSimType NO-ERROR.
+   IF fCLITypeIsExtraLine(icCLIType) THEN DO:
 
-   IF AVAIL lbMobSub THEN 
-      RUN pUpdateDSSNetwork(INPUT lbMobsub.MsSeq,
-                            INPUT lbMobsub.CLI,
-                            INPUT lbMobsub.CustNum,
-                            INPUT "REMOVE",
-                            INPUT "",        /* Optional param list */
-                            INPUT iiMsRequest,
-                            INPUT ideActStamp,
-                            INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
-                            INPUT lcBundleId).   
-   
-   RETURN TRUE. 
+      FIND FIRST lbMLMobSub NO-LOCK WHERE
+                 lbMLMobSub.MsSeq      = iiMultiSimId        AND
+                (lbMLMobSub.MsStatus   = {&MSSTATUS_ACTIVE}  OR
+                 lbMLMobSub.MsStatus   = {&MSSTATUS_BARRED}) NO-ERROR.
+      IF AVAIL lbMLMobSub THEN
+         RUN pUpdateDSSNetwork(INPUT lbMLMobsub.MsSeq,
+                               INPUT lbMLMobsub.CLI,
+                               INPUT lbMLMobsub.CustNum,
+                               INPUT "REMOVE",
+                               INPUT "",        /* Optional param list */
+                               INPUT iiMsRequest,
+                               INPUT ideActStamp,
+                               INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
+                               INPUT lcBundleId).
+
+   END.
+   ELSE IF fCLITypeIsMainLine(icCLIType) THEN DO:
+
+      FOR EACH lbELMobSub NO-LOCK WHERE
+               lbELMobSub.Brand        EQ Syst.Var:gcBrand      AND
+               lbELMobSub.MultiSimId   EQ iiMsSeq               AND
+               lbELMobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}:
+
+         RUN pUpdateDSSNetwork(INPUT lbELMobsub.MsSeq,
+                               INPUT lbELMobsub.CLI,
+                               INPUT lbELMobsub.CustNum,
+                               INPUT "REMOVE",
+                               INPUT "",        /* Optional param list */
+                               INPUT iiMsRequest,
+                               INPUT ideActStamp,
+                               INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
+                               INPUT lcBundleId).
+
+      END.
+
+   END.
+
+   RETURN TRUE.
 
 END FUNCTION.
-
 
 ldCurrTS = Func.Common:mMakeTS().
 
@@ -484,8 +499,8 @@ PROCEDURE pTerminate:
                (fCLITypeIsMainLine(MobSub.CLIType) OR
                 fCLITypeIsExtraLine(MobSub.CLIType)) THEN
                 fUpdateDSSNewtorkForExtraLine(MobSub.MsSeq,
+                                              MobSub.CLIType,   
                                               MobSub.MultiSimId,
-                                              MobSub.MultiSimType,
                                               MsRequest.MsRequest,
                                               MsRequest.ActStamp,
                                               lcBundleId).
@@ -526,8 +541,8 @@ PROCEDURE pTerminate:
                (fCLITypeIsMainLine(MobSub.CLIType) OR
                 fCLITypeIsExtraLine(MobSub.CLIType)) THEN
                 fUpdateDSSNewtorkForExtraLine(MobSub.MsSeq,
+                                              MobSub.CLIType,
                                               MobSub.MultiSimId,
-                                              MobSub.MultiSimType,
                                               MsRequest.MsRequest,
                                               MsRequest.ActStamp,
                                               lcBundleId).
