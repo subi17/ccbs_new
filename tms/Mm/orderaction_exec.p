@@ -370,10 +370,11 @@ PROCEDURE pPeriodicalContract:
               WHEN "FAXTOEMAIL" THEN DO:
                   lcItemParams = OrderAction.ItemParam.
                   DO iCounter = 2 TO 5:
-                      IF ENTRY(iCounter,lcItemParams,"|") BEGINS "contract_id" THEN
-                        ASSIGN  
-                          lcContractID = ENTRY(2,ENTRY(iCounter,lcItemParams,"|"),"=")
-                          ENTRY(iCounter,lcItemParams,"|") = "".
+                      IF NUM-ENTRIES(lcItemParams,"|") >= iCounter THEN  
+                          IF ENTRY(iCounter,lcItemParams,"|") BEGINS "contract_id" THEN
+                            ASSIGN  
+                              lcContractID = ENTRY(2,ENTRY(iCounter,lcItemParams,"|"),"=")
+                              ENTRY(iCounter,lcItemParams,"|") = "".
                   END.
                   lcSVAParams = lcSVAParams + "|" + lcItemParams.
               END.
