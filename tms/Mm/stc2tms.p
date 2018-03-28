@@ -601,6 +601,8 @@ PROCEDURE pUpdateSubscription:
    DEF VAR llgConfigExtraLineCount AS LOG  NO-UNDO.
    DEF VAR liConfigExtraLineCount  AS INT  NO-UNDO.
    DEF VAR lcMandatoryExtraLines   AS CHAR NO-UNDO.
+   DEF VAR lcAllowedExtraLines     AS CHAR NO-UNDO.   
+   DEF VAR liAllowedELCount       AS INT  NO-UNDO.
    DEF VAR liManELCount            AS INT  NO-UNDO.
    DEF VAR liAvailExtraLineCount   AS INT  NO-UNDO.
    DEF VAR llgMandatoryExtraLine   AS LOG  NO-UNDO.
@@ -608,6 +610,7 @@ PROCEDURE pUpdateSubscription:
    DEF BUFFER bOwner         FOR MsOwner.
    DEF BUFFER bMobSub        FOR MobSub.
    DEF BUFFER lELMobSub      FOR MobSub.
+   DEF BUFFER ELMobSub2      FOR MobSub.  
    DEF BUFFER lMLMobSub      FOR MobSub.
    DEF BUFFER lbDiscountPlan FOR DiscountPlan.
    DEF BUFFER lbDPMember     FOR DPMember.
@@ -1004,7 +1007,91 @@ PROCEDURE pUpdateSubscription:
          END.
 
       END.
-
+      
+      /*STC of customer's other mobile subscription without discount to the destination mainline if it is allowed*/
+      DO liELCLITypeCount = 1 TO NUM-ENTRIES(lcExtralineCLITypes):
+          
+          FOR EACH lELMobSub NO-LOCK WHERE
+                   lELMobSub.Brand        EQ Syst.Var:gcBrand                             AND
+                   lELMobSub.CustNum      EQ MobSub.CustNum                               AND
+                   lELMobSub.MultiSimId   EQ 0                                            AND 
+                   lELMobSub.CliType      EQ ENTRY(liELCLITypeCount,lcExtralineCLITypes)  AND 
+                  (lELMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE}                           OR
+                   lELMobSub.MsStatus     EQ {&MSSTATUS_BARRED}) :
+                  
+              ASSIGN
+                  lcAllowedExtraLines  = fGetAllowedExtraLinesForMainLine(CLIType.CliType).
+                     
+              DO liManELCount = 1 TO NUM-ENTRIES(lcAllowedExtraLines) :
+                  
+                  llgConfigExtraLineCount = fCLITypeAllowedForExtraLine(CLIType.CLIType,
+                                                                        ENTRY(liManELCount,lcAllowedExtraLines),
+                                                                        liConfigExtraLineCount) .
+                   
+                  IF liConfigExtraLineCount = 0 THEN NEXT.
+                  
+                  ASSIGN liAllowedELCount = 0.
+                                      
+                  FOR EACH ELMobsub2 NO-LOCK WHERE
+                           ELMobsub2.Brand        EQ Syst.Var:gcBrand                                AND
+                           ELMobsub2.CustNum      EQ MobSub.CustNum                                  AND
+                           ELMobsub2.MultiSimId   EQ 0                                               AND
+                           ELMobsub2.CLIType      EQ ENTRY(liManELCount,lcAllowedExtraLines)         AND
+                          (ELMobsub2.MsStatus     EQ {&MSSTATUS_ACTIVE}                              OR
+                           ELMobsub2.MsStatus     EQ {&MSSTATUS_BARRED}) :
+                       liAllowedELCount = liAllowedELCount + 1 .
+                   END.
+                           
+                  IF liAllowedELCount >= liConfigExtraLineCount THEN NEXT.      
+                   
+                  IF LOOKUP(lELMobSub.CliType,lcAllowedExtraLines) > 0
+                  THEN DO:
+                      
+                      /*Taking extra buffer we need to update the same record in case of STC as well.*/
+                      FIND FIRST ELMobsub2 EXCLUSIVE-LOCK WHERE
+                           ROWID(ELMobsub2) = ROWID(lELMobSub) NO-WAIT NO-ERROR. 
+                           
+                      IF LOCKED(ELMobsub2) OR NOT AVAIL(ELMobsub2) THEN NEXT.
+                     
+                      ASSIGN ELMobsub2.MultiSIMId    =   MobSub.MsSeq
+                             ELMobsub2.MultiSimType  =   {&MULTISIMTYPE_EXTRALINE}.
+                             
+                      fCreateExtraLineDiscount(lELMobSub.MsSeq,
+                                               lELMobSub.CLIType + "DISC",
+                                               TODAY). 
+                                               
+                      RELEASE ELMobsub2 NO-ERROR.                       
+                  END.
+                  ELSE DO:
+                      
+                      liRequest = fCTChangeRequest(lELMobSub.MsSeq,                          /* The MSSeq of the subscription to where the STC is made */
+                                                   ENTRY(liManELCount,lcAllowedExtraLines),  /* The CLIType of where to do the STC */
+                                                   "",                                       /* lcBundleID */
+                                                   "",                                       /* bank code validation is already done */
+                                                   Func.Common:mMakeTS(),
+                                                   0,                                        /* 0 = Credit check ok */
+                                                   0,                                        /* extend contract */
+                                                   ""                                        /* pcSalesman */,
+                                                   FALSE,                                    /* charge */
+                                                   TRUE,                                     /* send sms */
+                                                   "",
+                                                   0,
+                                                   {&REQUEST_SOURCE_STC},
+                                                   0,
+                                                   MSRequest.MSRequest,
+                                                   "",                                       /* contract id */
+                                                   OUTPUT lcError).
+                                                   
+                      IF liRequest = 0 THEN
+                          Func.Common:mWriteMemo("MobSub",
+                                                 STRING(MobSub.MsSeq),
+                                                 MobSub.Custnum,
+                                                 "Mobile Line STC request creation failed",
+                                                 lcError).
+                  END.
+              END.
+          END.
+      END.
    END.
    ELSE IF fCLITypeIsMainLine(CLIType.CliType)  AND
        NOT fCLITypeIsMainLine(bOldType.CliType) THEN DO:
