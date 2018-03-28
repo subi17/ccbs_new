@@ -121,7 +121,6 @@ FUNCTION fSpecialNotify RETURNS CHAR
       IMPORT STREAM sIn UNFORMATTED lcRecipient.
       Mm.MManMessage:mCreateMMLogSMS(lcRecipient, FALSE).
    END.
-   Mm.MManMessage:mClearData().
    RETURN "".
 END.
 
