@@ -23,7 +23,7 @@ DEFINE VARIABLE lcMSISDN     AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcCategory   AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcError      AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liRequest    AS INTEGER   NO-UNDO.
-
+DEFINE BUFFER bf_CustCat FOR CustCat.
 liCustNum   = get_int(param_toplevel_id, "0").
 lcMSISDN    = get_string(param_toplevel_id, "1").
 lcCategory  = get_string(param_toplevel_id, "2").
@@ -32,12 +32,25 @@ FIND Customer WHERE Customer.Brand = Syst.Var:gcBrand AND Customer.Custnum = liC
 IF NOT AVAILABLE customer THEN 
     RETURN appl_err(SUBST("Customer &1 not found", STRING(liCustNum))).
 
-IF lcCategory = customer.category THEN  
-    RETURN appl_err(SUBST("Customer is already in the same category")).
 
-FIND CustCat WHERE CustCat.Category = lcCategory NO-LOCK NO-ERROR.
+FIND FIRST CustCat NO-LOCK WHERE
+           Custcat.brand EQ Syst.Var:gcBrand AND
+           CustCat.Category = Customer.Category NO-ERROR.
+
 IF NOT AVAILABLE CustCat THEN     
     RETURN appl_err(SUBST("Invalid Category")).
+
+IF lcCategory = CustCat.Segment THEN  
+    RETURN appl_err(SUBST("Customer is already in the same category")).
+    
+FIND FIRST bf_CustCat NO-LOCK WHERE
+           bf_CustCat.brand EQ Syst.Var:gcBrand AND
+           bf_CustCat.CustIdType EQ Customer.CustIdType AND 
+           bf_CustCat.segment EQ lcCategory NO-ERROR.
+
+IF NOT AVAILABLE bf_CustCat THEN     
+    RETURN appl_err(SUBST("Invalid Category")).
+    
 FIND MobSub WHERE 
      Mobsub.Brand = Syst.Var:gcBrand AND 
      MobSub.Cli = lcMSISDN AND 
@@ -45,11 +58,11 @@ FIND MobSub WHERE
 IF NOT AVAILABLE MobSub THEN     
     RETURN appl_err(SUBST("Subscription not found")).
      
-CASE CustCat.Segment:
+CASE lcCategory:
     WHEN "CONSUMER" THEN DO TRANSACTION:
         FIND customer WHERE customer.Custnum = liCustNum EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
         IF AVAILABLE customer THEN DO: 
-            Customer.category = lcCategory.
+            Customer.category = bf_CustCat.category .
             CREATE Memo.
             ASSIGN
                 Memo.CreStamp  = {&nowTS}
@@ -70,7 +83,7 @@ CASE CustCat.Segment:
             Syst.Var:katun   ,
             Customer.CustNum ,
             MobSub.Msseq     ,
-            lcCategory       ,
+            bf_CustCat.category ,
             Customer.category,
             lcMSISDN         ,
             {&REQUEST_SOURCE_NEWTON} ,
