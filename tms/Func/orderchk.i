@@ -105,7 +105,6 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
    DEF BUFFER CustCat FOR CustCat.
    DEF BUFFER bMobSub FOR MobSub.
  
-
    FOR EACH OrderCustomer NO-LOCK WHERE   
             OrderCustomer.Brand      EQ Syst.Var:gcBrand AND 
             OrderCustomer.CustId     EQ pcPersonId AND
@@ -127,8 +126,8 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
                         OrderAction.OrderID  = Order.OrderID           AND
                         OrderAction.ItemType = "ExtraLineDiscount"     AND
                         OrderAction.ItemKey  = Order.CLIType + "DISC") THEN NEXT.
-        END.
-       
+        END.        
+        
         IF LOOKUP(STRING(Order.statuscode),{&ORDER_CLOSE_STATUSES}) EQ 0
         THEN DO:
            /* YDR-1532 */
@@ -161,7 +160,7 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
    WHERE bMobSub.Brand             EQ Syst.Var:gcBrand 
      AND bMobsub.AgrCust           EQ Customer.CustNum
      AND bMobSub.SalesMan NE "GIFT":
-      /* YDR-2665 */
+     /* YDR-2665 */
       IF fCLITypeIsExtraLine(bMobsub.CliType)       AND 
          bMobsub.MultiSimId                   GT 0  AND 
          bMobsub.MultiSimType                 EQ {&MULTISIMTYPE_EXTRALINE} THEN DO: 

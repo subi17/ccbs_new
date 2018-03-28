@@ -815,8 +815,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
                OUTPUT liSubLimit,
                OUTPUT liSubs,
                OUTPUT liSubLimit,
-               OUTPUT liActs) THEN lcFError = "subscription limit".
-            
+               OUTPUT liActs) THEN lcFError = "subscription limit".            
+                
             IF lcFError EQ "" THEN
                FOR FIRST Customer WHERE
                          Customer.Brand      = Syst.Var:gcBrand  AND
@@ -1754,7 +1754,7 @@ DO:
    lccTemp = validate_request(pcMobileLinePortabilityUserStruct, gcPoUserStructFields).
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
-   
+
 /* YBP-536 */
 lcError = fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
@@ -1991,7 +1991,7 @@ IF pcQ25Struct > "" THEN DO:
       
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
-
+  
 /* Extra Lines Validations, 
    updating multisimid & multisimidtype for hard association */
 IF fCLITypeIsExtraLine(pcSubType) THEN DO:
