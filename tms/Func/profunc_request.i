@@ -107,20 +107,20 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
       IF bMsRequest.ReqType EQ 9 THEN 
       DO:
          IF bMsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
-             lcStatus = "3 - Pending deactivation".
+             lcStatus = "Pending deactivation".
          ELSE IF bMsRequest.ReqStatus EQ {&REQUEST_STATUS_CANCELLED} THEN
-             lcStatus = "1 - Active".
+             lcStatus = "Active".
          ELSE 
-             lcStatus = "0 - Inactive".
+             lcStatus = "Inactive".
       END.
       ELSE IF bMsRequest.reqtype EQ 8 THEN 
       DO:
          IF bMsRequest.reqstatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
-             lcStatus = "2 - Pending activation".
+             lcStatus = "Pending activation".
          ELSE IF bMsRequest.ReqStatus EQ {&REQUEST_STATUS_CANCELLED} THEN
-             lcStatus = "0 - Inactive".    
+             lcStatus = "Inactive".    
          ELSE 
-             lcStatus = "1 - Active".
+             lcStatus = "Active".
       END.
 
       lcMailHeader = REPLACE(lcMailHeader, "#STATUS", lcStatus).
