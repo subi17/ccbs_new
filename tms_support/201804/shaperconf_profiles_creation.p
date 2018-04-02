@@ -34,14 +34,3 @@ IF AVAIL ShaperConf THEN DO:
     ShaperConf.Active        = YES. 
 END.
 
-CREATE ShaperConf.
-ASSIGN
-   ShaperConf.Brand         = Syst.Var:gcBrand
-   ShaperConf.ShaperConfID  = "DSSINT"
-   ShaperConf.Template      = "HSPA_MONTHLY"
-   ShaperConf.TariffType    = "DSSINT"
-   ShaperConf.Tariff        = "DSS4"
-   ShaperConf.LimitUnshaped = 191469642056 
-   ShaperConf.LimitShaped   = 63017907651
-   ShaperConf.Active        = YES.
-
