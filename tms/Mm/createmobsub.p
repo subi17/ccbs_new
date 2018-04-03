@@ -46,6 +46,7 @@
 {Func/fixedlinefunc.i}
 {Func/msisdn_prefix.i}
 {Func/add_lines_request.i}
+{Func/order.i}
 
 DEF INPUT  PARAMETER iiMSRequest AS INT  NO-UNDO.
 
@@ -671,6 +672,7 @@ IF NOT AVAIL mobsub THEN DO:
    END. /* IF LOOKUP(Customer.category,"20,40,41") = 0 THEN DO: */
 
    IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} THEN DO:
+      fUpdateCustomerInstAddr(Order.OrderID).
       RUN Mm/orderaction_exec.p (MobSub.MsSeq,
                       Order.OrderID,
                       ldeActivationTS,
