@@ -527,7 +527,7 @@ FUNCTION fActionOnAdditionalLines RETURN LOGICAL
       ASSIGN lcDiscList       = {&ADDLINE_DISCOUNTS_20} + "," + {&ADDLINE_DISCOUNTS}
              llgMainLineAvail = TRUE
              illgConvOrder    = TRUE.
-   ELSE IF LOOKUP(icCLIType,"CONT25,CONT26") > 0 THEN DO: 
+   ELSE IF LOOKUP(icCLIType,{&ADDLINE_CLITYPES}) > 0 THEN DO: 
       ASSIGN lcDiscList       = {&ADDLINE_DISCOUNTS_HM}
              llgMainLineAvail = TRUE.
              
