@@ -23,7 +23,7 @@ def run_agent(*a):
         raise PikeException('Expected fcgi agent name as parameter')
 
     if environment != 'development' and environment != 'slavedevelopment':
-        os.environ['PROPATH'] += ',{0}/rpcmethods'.format(os.getcwd())
+        os.environ['PROPATH'] = '{0}/rpcmethods,{1}'.format(os.getcwd(),os.environ['PROPATH'])
         os.environ['PROPATH'] += ',rpcmethods.pl'
         
     args = ['-pf', getpf('../../db/progress/store/all'),
