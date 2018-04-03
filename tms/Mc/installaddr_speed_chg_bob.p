@@ -329,7 +329,14 @@ DO ON ERROR UNDO , LEAVE:
                         FIND CliType2 WHERE CliType2.Brand = Order.Brand AND CliType2.CliType = lcNewCliType   NO-LOCK NO-ERROR.
                         IF NOT AVAILABLE CliType1 OR  NOT AVAILABLE CLiType2 THEN NEXT.
                         
-                        IF CliType1.fixedlinetype EQ CliType2.fixedlinetype THEN
+                        IF NOT (LOOKUP(STRING(CliType1.TariffType),"{&CLITYPE_TARIFFTYPE_CONVERGENT},{&CLITYPE_TARIFFTYPE_FIXEDONLY}") > 0 AND 
+                                LOOKUP(STRING(CliType2.TariffType),"{&CLITYPE_TARIFFTYPE_CONVERGENT},{&CLITYPE_TARIFFTYPE_FIXEDONLY}") > 0) THEN
+                        DO:
+                            PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";stc_request_fail;" + "STC request between non-convergent nor non-fixedonly." SKIP.
+                            PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";stc_request_fail;" + "STC request between non-convergent nor non-fixedonly." SKIP.
+                            NEXT.
+                        END.
+                        ELSE IF CliType1.fixedlinetype EQ CliType2.fixedlinetype THEN
                         DO:
                             PUT STREAM sOutgoingLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(tt_file.file_name) +  ";" + STRING(liOrderID)  ";stc_request_fail;" + "STC request between same technology." SKIP.
                             PUT STREAM sCurrentLog UNFORMATTED STRING(TIME,"hh:mm:ss") +  ";" + STRING(liOrderID) + ";stc_request_fail;" + "STC request between same technology." SKIP.
