@@ -13,7 +13,7 @@
 &THEN
 
 &GLOBAL-DEFINE digital_signature YES
-/* &GLOBAL-DEFINE DIGITAL_SIGNATURE_EXCLUDED_STATUSES "7,8,9,20,21,41,42,43,44"*/
+
 {Mc/offer.i}
 
 /*
@@ -68,7 +68,6 @@ FUNCTION fHandleSignature RETURNS CHAR
    ASSIGN
       /* logic changed and using excluded statuses now */
       lcExcludedDSStatuses = fCParam("SignatureApi", "ExcludedStatuses").
-     /* lcExcludedDSStatuses = {&DIGITAL_SIGNATURE_EXCLUDED_STATUSES}.*/
 
    IF LOOKUP(icStatus, lcExcludedDSStatuses) = 0 THEN
       lcActionID = "dssent".
