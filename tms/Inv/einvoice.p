@@ -179,6 +179,12 @@ FOR EACH Invoice WHERE
       IF NOT AVAIL MobSub OR
          MobSub.CustNum NE Invoice.CustNum THEN NEXT SUBINVOICE_LOOP.
 
+      /*Ilkka test 28.3.2018*/
+/*      
+         IF NOT (Mobsub.CLI EQ "661473828" OR
+                 Mobsub.CLI EQ "661485255" OR
+                 Mobsub.CLI EQ "639152671") THEN NEXT SUBINVOICE_LOOP.
+*/
       IF Mm.MManMessage:mGetMessage("SMS", "EInvMessage", 1) EQ TRUE THEN DO:
          lcTemplate = fGetSMSTxt("EInvMessage",
                                  TODAY,
@@ -226,8 +232,10 @@ FOR EACH Invoice WHERE
 END. /* FOR EACH Invoice WHERE */
 
 /*notify the last message.*/
-fSpecialNotify(lcTemplate).
-
+IF Mm.MManMessage:mGetMessage("SMS", "EInvMessage", 1) EQ TRUE THEN DO:
+   Mm.MManMessage:ParamKeyValue = lcTemplate.
+   fSpecialNotify(lcTemplate).
+END.
 /* Send an email to configure list*/
 IF lcAddrConfDir > "" THEN
    lcAddrConfDir = lcAddrConfDir + "smsinvoice.email".
