@@ -1154,6 +1154,33 @@ IF Order.MNPStatus > 0 THEN DO:
    END.
 END.
 
+/* Override default national roaming profile */
+IF Customer.NWProfile > 0 AND
+   Customer.NWProfile NE {&CUSTOMER_NW_PROFILE_YG_OR} THEN DO:
+
+   liRequest = fServiceRequest(
+                  MobSub.MsSeq,
+                  "NW",
+                  Customer.NWProfile,
+                  "", /* param */
+                  Func.Common:mMakeTS(),
+                  "", /* salesman */
+                  TRUE,      /* fees */
+                  FALSE,      /* sms */
+                  "", /* usercode */
+                  {&REQUEST_SOURCE_SUBSCRIPTION_CREATION},
+                  msrequest.msrequest, /* father request */
+                  false, /* mandatory for father request */
+                  OUTPUT lcerror).
+   
+   IF liRequest = 0 THEN                               
+      /* write possible error to a memo */
+      Func.Common:mWriteMemo("MobSub",
+                       STRING(MobSub.MsSeq),
+                       MobSub.Custnum,
+                       "NW profile change failed",
+                       lcError).
+END.
 
 IF Order.MultiSimID > 0 THEN DO:
 
