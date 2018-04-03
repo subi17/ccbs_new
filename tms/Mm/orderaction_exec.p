@@ -399,10 +399,11 @@ PROCEDURE pPeriodicalContract:
                                 0,
                                 lcSVAParams,
                                 OUTPUT lcResult).
-         IF liRequest NE 0 AND lcContractID NE "" THEN 
+         IF liRequest NE 0 AND lcContractID NE "" THEN DO:
             FIND MsRequest WHERE MsRequest.MsRequest = liRequest EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
                IF AVAIL MsRequest THEN
-                    ASSIGN MsRequest.ReqCparam5 = lcContractID.  
+                    ASSIGN MsRequest.ReqCparam5 = lcContractID.
+         END.
    END.
  
    IF liRequest = 0 THEN 
