@@ -105,7 +105,6 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
    DEF BUFFER CustCat FOR CustCat.
    DEF BUFFER bMobSub FOR MobSub.
  
-
    FOR EACH OrderCustomer NO-LOCK WHERE   
             OrderCustomer.Brand      EQ Syst.Var:gcBrand AND 
             OrderCustomer.CustId     EQ pcPersonId AND
@@ -117,18 +116,7 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
             Order.OrderType          NE {&ORDER_TYPE_RENEWAL} AND
             Order.OrderType          NE {&ORDER_TYPE_STC} AND
             Order.SalesMan NE "GIFT":
-        /* YDR-2665 */
-        IF fCLITypeIsExtraLine(Order.CLIType)              AND 
-           Order.MultiSimId   NE 0                         AND 
-           Order.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} THEN 
-        DO:
-            IF CAN-FIND(FIRST OrderAction NO-LOCK WHERE
-                        OrderAction.Brand    = Syst.Var:gcBrand        AND
-                        OrderAction.OrderID  = Order.OrderID           AND
-                        OrderAction.ItemType = "ExtraLineDiscount"     AND
-                        OrderAction.ItemKey  = Order.CLIType + "DISC") THEN NEXT.
-        END.
-       
+        
         IF LOOKUP(STRING(Order.statuscode),{&ORDER_CLOSE_STATUSES}) EQ 0
         THEN DO:
            /* YDR-1532 */
@@ -139,7 +127,9 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
            oiActOrderCount = oiActOrderCount + 1.
 
         END.
-        
+
+        IF Order.StatusCode EQ {&ORDER_STATUS_PENDING_FIXED_LINE} THEN NEXT.
+
         IF LOOKUP(STRING(Order.statuscode),{&ORDER_INACTIVE_STATUSES}) EQ 0 THEN
             oiSubCount = oiSubCount + 1.
       
@@ -159,23 +149,6 @@ FUNCTION fSubscriptionLimitCheck RETURNS LOGICAL
    WHERE bMobSub.Brand             EQ Syst.Var:gcBrand 
      AND bMobsub.AgrCust           EQ Customer.CustNum
      AND bMobSub.SalesMan NE "GIFT":
-      /* YDR-2665 */
-      IF fCLITypeIsExtraLine(bMobsub.CliType)       AND 
-         bMobsub.MultiSimId                   GT 0  AND 
-         bMobsub.MultiSimType                 EQ {&MULTISIMTYPE_EXTRALINE} THEN DO: 
-         FOR EACH DiscountPlan NO-LOCK 
-            WHERE DiscountPlan.brand EQ Customer.Brand 
-              AND DiscountPlan.DPRuleID = (bMobsub.CLIType + "DISC")  
-              AND DiscountPlan.ValidTo >= TODAY,
-             FIRST DPMember NO-LOCK WHERE
-               DPMember.DPID       = DiscountPlan.DPID AND
-               DPMember.HostTable  = "MobSub" AND
-               DPMember.KeyValue   = STRING(bMobSub.MsSeq) AND
-               DPMember.ValidTo   >= TODAY AND
-               DPMember.ValidFrom <= DPMember.ValidTo:
-             NEXT subs_count.
-         END. 
-      END.
       oiSubCount = oiSubCount + 1.
    END.
 
