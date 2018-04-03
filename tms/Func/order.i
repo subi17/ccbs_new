@@ -498,6 +498,7 @@ FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
               bOrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED} NO-ERROR.
   IF NOT AVAIL bOrderFusion THEN RETURN FALSE.
 
+/*
    FIND CURRENT bCustomer EXCLUSIVE-LOCK NO-ERROR.
    IF llDoEvent THEN DO:
       DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
@@ -517,7 +518,7 @@ FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
       RUN StarEventMakeModifyEvent(lhCustomer).
       fCleanEventObjects().
    END.
-
+*/
    RETURN TRUE.
 
 END FUNCTION.
