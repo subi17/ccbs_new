@@ -383,9 +383,9 @@ FUNCTION fCloseExtraLineDiscount RETURNS LOGICAL
     INPUT lcExtraLineDisc AS CHAR,
     INPUT idtDate         AS DATE):
 
-  FOR FIRST DiscountPlan NO-LOCK WHERE
-             DiscountPlan.Brand    = Syst.Var:gcBrand         AND
-             DiscountPlan.DPRuleID = lcExtraLineDisc AND
+   FOR FIRST DiscountPlan NO-LOCK WHERE
+             DiscountPlan.Brand    = Syst.Var:gcBrand AND
+             DiscountPlan.DPRuleID = lcExtraLineDisc  AND
              DiscountPlan.ValidTo >= idtDate,
        FIRST DPRate NO-LOCK WHERE
              DPRate.DPId       = DiscountPlan.DPId AND
