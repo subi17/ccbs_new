@@ -2,13 +2,14 @@
    subser validations   2008/as
 */
 
+{Syst/tmsconst.i}
 {Func/fctserval.i}
 
 FUNCTION fSubSerSSStat RETURNS INT
 (INPUT iiMsseq AS INTEGER,
-INPUT icServCom AS CHAR,
-INPUT iiNewSSStat AS INTEGER,
-OUTPUT ocError AS CHARACTER):
+ INPUT icServCom AS CHAR,
+ INPUT iiNewSSStat AS INTEGER,
+ OUTPUT ocError AS CHARACTER):
   
    FIND FIRST ServCom where 
       ServCom.Brand   = Syst.Var:gcBrand    AND 
@@ -77,7 +78,7 @@ OUTPUT ocError AS CHARACTER):
                      MsRequest.MsSeq      = iiMsSeq AND
                      MsRequest.ReqType    = 1       AND
                      MsRequest.ReqCParam1 = SubSer.ServCom AND
-                     LOOKUP(STRING(MsRequest.ReqStat),"2,4,9") = 0) THEN DO:
+                     LOOKUP(STRING(MsRequest.ReqStat),{&REQ_INACTIVE_STATUSES}) = 0) THEN DO:
       ocError = "There is an active change request for service." + CHR(10) + 
                 "Change is not allowed before request is handled.".
       RETURN 3.
@@ -85,4 +86,78 @@ OUTPUT ocError AS CHARACTER):
 
    RETURN 0. /* ok */
 
-END FUNCTION. 
+END FUNCTION.
+
+
+/* 
+   RES-885 NRTR (National rouming traffic restrictions). 
+   Validate network profile in case of service_id "NW". 
+*/
+FUNCTION fSubSerValidateNW RETURNS INT
+   (INPUT iiMsseq     AS INT,
+    INPUT icServCom   AS CHAR,
+    INPUT icNewSSStat AS CHAR,
+    OUTPUT ocError    AS CHAR):
+
+    DEF VAR liDefValue AS INT NO-UNDO.
+    DEF VAR ok AS LOGICAL NO-UNDO.
+    DEF VAR cAllProfValues   AS CHAR NO-UNDO.
+
+    FIND FIRST MobSub WHERE MobSub.MsSeq = iiMsseq NO-LOCK NO-ERROR.
+
+    FIND FIRST SubSer NO-LOCK WHERE
+       SubSer.MsSeq = iiMsSeq AND
+       SubSer.ServCom = icServCom NO-ERROR.
+
+    /* 1 */
+    /* Gather all profile values from TMSCodes to cAllProfValues
+       comma separated list */
+    cAllProfValues = "".
+    FOR EACH TMSCodes WHERE 
+             TMSCodes.TableName = "Customer" AND 
+             TMSCodes.FieldName = "NWProfiles" AND
+             TMSCodes.CodeGroup = "NWProfile" AND
+             TMSCodes.inUse = 1 NO-LOCK:
+      IF cAllProfValues = "" THEN
+         cAllProfValues = TMSCodes.CodeValue.
+      ELSE
+         cAllProfValues = cAllProfValues + "," + TMSCodes.CodeValue.
+    END.
+
+    IF LOOKUP(icNewSSStat,cAllProfValues,",") = 0 THEN DO:
+       ocError = "Illegal network profile.".
+       RETURN 4.
+    END.
+
+    /* 2 */  
+    /* can service be changed from here */
+    liDefValue = fServComValue(MobSub.CLIType,
+                               icServCom,
+                               OUTPUT ok).
+    IF liDefValue = ? OR
+      (liDefValue = 0 AND NOT ok) THEN DO:
+       RETURN 2.
+    END.
+
+    /* 3 */
+    /* Check ongoing service requests */
+    IF AVAIL SubSer THEN DO:
+       IF CAN-FIND(FIRST MsRequest WHERE
+                         MsRequest.MsSeq      = iiMsSeq AND
+                         MsRequest.ReqType    = {&REQTYPE_SERVICE_CHANGE} AND
+                         MsRequest.ReqCParam1 = SubSer.ServCom AND
+                         LOOKUP(STRING(MsRequest.ReqStat),{&REQ_INACTIVE_STATUSES}) = 0) THEN DO:
+          ocError = "There is an active change request for service." + CHR(10) +
+                    "Change is not allowed before request is handled.".
+          RETURN 3.
+       END.
+    END.
+    ELSE DO:
+       ocError = "Service not found.".
+       RETURN 4.
+    END.
+
+    RETURN 0. /* ok */
+
+END FUNCTION.
+
