@@ -92,7 +92,7 @@ form
     CLIType.PricePlan  COLUMN-LABEL "RatePlan" FORMAT "X(14)"
 /*    CLIType.DiscPlan   COLUMN-LABEL "D.Plan" FORMAT "X(6)" */
     lcPayType          FORMAT "X(9)" COLUMN-LABEL "PayType"
-    CliType.BillTarget COLUMN-LABEL "B.Target"
+    CliType.BillTarget COLUMN-LABEL "B.Target" format ">>9"
 
 WITH ROW FrmRow width 80 OVERLAY FrmDown  DOWN
     COLOR VALUE(Syst.Var:cfc)   
@@ -121,7 +121,7 @@ form
       SPName FORMAT "x(10)" 
     "Service Class :"  AT 35 CliType.ServiceClass     SKIP
     
-    "BillingTarget :"  Clitype.BillTarget           SKIP
+    "BillingTarget :"  Clitype.BillTarget format ">>9" SKIP
     "DOC1 Code ....:"  Clitype.ContrType 
        HELP "Used in invoice printing"
        FORMAT ">9" SKIP
