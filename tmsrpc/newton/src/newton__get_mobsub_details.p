@@ -425,22 +425,21 @@ IF AVAIL PIndicator THEN
     add_string(resp_struct,"satisfaction_value",PIndicator.IndicatorValue) .
 
 
-IF MobSub.MultiSIMType > 0 AND
-   MobSub.MultiSIMID   > 0 THEN DO:
+IF (MobSub.MultiSIMType > 0 AND
+    MobSub.MultiSIMID   > 0) OR 
+   fCLITypeIsMainLine(MobSub.CLIType) THEN DO:
 
    liMultiSIMType = (IF MobSub.MultiSIMType EQ {&MULTISIMTYPE_PRIMARY}
                      THEN {&MULTISIMTYPE_SECONDARY} ELSE {&MULTISIMTYPE_PRIMARY}).
   
    /* Check if it Extra line hard associated subscription */
-   FIND FIRST lbELMobSub NO-LOCK  WHERE 
+   FIND FIRST lbELMobSub NO-LOCK WHERE 
               lbELMobSub.MsSeq        = MobSub.MultiSimId         AND 
               lbELMobSub.MultiSimId   = MobSub.MsSeq              AND 
               lbELMobSub.MultiSimType = {&MULTISIMTYPE_EXTRALINE} NO-ERROR. 
               
-   FIND FIRST lbMLMobSub NO-LOCK  WHERE 
-              lbMLMobSub.MsSeq        = MobSub.MultiSimId       AND 
-              lbMLMobSub.MultiSimId   = MobSub.MsSeq            AND 
-              lbMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} NO-ERROR. 
+   FIND FIRST lbMLMobSub NO-LOCK WHERE 
+              lbMLMobSub.MsSeq = MobSub.MultiSimId NO-ERROR. 
    
    FIND FIRST lbMobSub NO-LOCK USE-INDEX MultiSimID WHERE
               lbMobSub.Brand        = Syst.Var:gcBrand           AND

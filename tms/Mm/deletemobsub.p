@@ -1130,11 +1130,10 @@ PROCEDURE pTerminate:
       DO:
         
           FIND FIRST lMLMobSub NO-LOCK WHERE 
-                     lMLMobsub.brand          =   Syst.Var:gcBrand          AND
-                     lMLMobSub.msseq          =   TermMobSub.MultiSimId     AND
-                     lMLMobSub.multisimtype   =   {&MULTISIMTYPE_PRIMARY}   AND
-                     (lMLMobSub.MsStatus      =   {&MSSTATUS_ACTIVE}  OR
-                      lMLMobSub.MsStatus      =   {&MSSTATUS_BARRED}) NO-ERROR.
+                     lMLMobsub.brand    EQ Syst.Var:gcBrand       AND
+                     lMLMobSub.msseq    EQ TermMobSub.MultiSimId  AND
+                    (lMLMobSub.MsStatus EQ {&MSSTATUS_ACTIVE}  OR
+                     lMLMobSub.MsStatus EQ {&MSSTATUS_BARRED})    NO-ERROR.
             
           IF NOT AVAILABLE lMLMobSub THEN RETURN.
          

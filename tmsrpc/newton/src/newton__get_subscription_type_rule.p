@@ -199,9 +199,8 @@ FUNCTION fAddWarningStruct RETURNS LOGICAL:
       /* If the old CLIType can have extraline and the extraline actually exists */
       IF fCLITypeIsMainLine(MobSub.CLIType) AND
          CAN-FIND(FIRST lELMobSub NO-LOCK WHERE
-                        lELMobSub.MsSeq         EQ MobSub.MultiSimId          AND
-                        lELMobSub.MultiSimId    EQ MobSub.MsSeq               AND
-                        lELMobSub.MultiSimtype  EQ {&MULTISIMTYPE_EXTRALINE}  AND
+                        lELMobSub.MultiSimId   EQ MobSub.MsSeq               AND
+                        lELMobSub.MultiSimtype EQ {&MULTISIMTYPE_EXTRALINE}  AND
                        (lELMobSub.MsStatus     EQ {&MSSTATUS_ACTIVE} OR
                         lELMobSub.MsStatus     EQ {&MSSTATUS_BARRED}))
       THEN lcParentValue = fExtraLineForMainLine(MobSub.CLIType).

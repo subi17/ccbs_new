@@ -68,20 +68,26 @@ END FUNCTION.
 FUNCTION fExtraLineForMainLine RETURNS CHARACTER
    (icMainLineCLIType  AS CHARACTER):
 
-   DEFINE BUFFER MXItemMain FOR MXItem.
+   DEFINE BUFFER TMSRelation FOR TMSRelation.
 
-   FOR EACH  Matrix NO-LOCK WHERE
-             Matrix.Brand  = Syst.Var:gcBrand   AND
-             Matrix.MXKey  = {&EXTRALINEMATRIX},
-       FIRST MXItemMain NO-LOCK WHERE
-             MXItemMain.MXSeq   = Matrix.MXSeq AND
-             MXItemMain.MXName  = "SubsTypeFrom" AND
-             MXItemMain.MXValue = icMainLineCLIType,
-       FIRST MXItem NO-LOCK WHERE
-             MXItem.MXSeq   = MXItemMain.MXSeq AND
-             MXItem.MXName  = "SubsTypeTo":
-                
-       RETURN MXItem.MXValue.
+   /* Check for the mandatory extraline for mainline */
+   FIND FIRST TMSRelation NO-LOCK WHERE 
+              TMSRelation.TableName     EQ {&ELTABLENAME}     AND 
+              TMSRelation.KeyType       EQ {&ELKEYTYPE}       AND 
+              TMSRelation.ParentValue   EQ icMainLineCLIType  AND 
+              TMSRelation.RelationType  EQ {&ELMANDATORY}     NO-ERROR.
+   
+   IF AVAIL TMSRelation THEN 
+      RETURN ENTRY(1,TMSRelation.ChildValue,"_").
+   ELSE DO:
+      FIND FIRST TMSRelation NO-LOCK WHERE 
+                 TMSRelation.TableName     EQ {&ELTABLENAME}     AND 
+                 TMSRelation.KeyType       EQ {&ELKEYTYPE}       AND 
+                 TMSRelation.ParentValue   EQ icMainLineCLIType  AND 
+             INT(TMSRelation.RelationType) GT 0                  NO-ERROR.
+
+      IF AVAIL TMSRelation THEN
+         RETURN TMSRelation.ChildValue. 
    END.
    
    RETURN "".
