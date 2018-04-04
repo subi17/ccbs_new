@@ -32,8 +32,8 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 
 top_array = add_array(response_toplevel_id, "").
 
-DEFINE VARIABLE OnOffAlias AS CHARACTER NO-UNDO INIT "VMS,LANG,CF,IRDCUTOFF,BB,LTE".
-DEFINE VARIABLE OnOffTms   AS CHARACTER NO-UNDO INIT "VMS,LANG,CF,IRDCUTOFF,BB,LTE".
+DEFINE VARIABLE OnOffAlias AS CHARACTER NO-UNDO INIT "VMS,LANG,CF,IRDCUTOFF,BB,NW".
+DEFINE VARIABLE OnOffTms   AS CHARACTER NO-UNDO INIT "VMS,LANG,CF,IRDCUTOFF,BB,NW".
 DEFINE VARIABLE lcService  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcServiceAlias  AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcValue AS CHARACTER NO-UNDO. 
@@ -50,18 +50,32 @@ DO lii = 1 TO NUM-ENTRIES(OnOffTms):
    add_string(top_struct, "service_id", lcServiceAlias).
 
    FOR FIRST SubSer NO-LOCK WHERE
-             SubSer.MsSeq = MobSub.MsSeq AND
+             SubSer.MsSeq =  MobSub.MsSeq AND
              SubSer.ServCom = lcService,
        FIRST ServCom NO-LOCK WHERE
              ServCom.Brand = Syst.Var:gcBrand AND
              ServCom.ServCom = SubSer.ServCom:
-
+      
       /* Easy On-Off services */
       IF SubSer.ServCom = "BB" AND
          SubSer.SSStat EQ 2 THEN /* BB reset status */ 
         lcValue = "off".
       ELSE
         lcValue =  TRIM(STRING(SubSer.SSStat EQ 0, "off/on")).
+
+      /* RES-885 National rouming traffic restrictions
+         Return active profile as long name. */
+      IF SubSer.ServCom EQ "NW" THEN DO:
+         lcValue = "".
+         FIND FIRST TMSCodes NO-LOCK WHERE
+               TMSCodes.TableName = "Customer" AND
+               TMSCodes.FieldName = "NWProfiles" AND
+               TMSCodes.CodeGroup = "NWProfile" AND
+               TMSCodes.inUse = 1 AND
+               TMSCodes.CodeValue EQ STRING(SubSer.SSStat) NO-ERROR.
+         IF AVAIL TMSCodes THEN
+            lcValue = TMSCodes.CodeName.
+      END.
       
       add_string(top_struct, "value", lcValue).
 
