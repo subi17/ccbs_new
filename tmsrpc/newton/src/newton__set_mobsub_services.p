@@ -175,18 +175,30 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
          END.
       END.
  
-      liValidate = fSubSerValidate(
-         INPUT MobSub.MsSeq,
-         INPUT Subser.ServCom,
-         INPUT liValue,
-         OUTPUT ocError).
+      /* RES-885 NRTR */
+      IF SubSer.ServCom EQ "NW" THEN DO:
+         liValidate = fSubSerValidateNW(
+            INPUT MobSub.MsSeq,
+            INPUT Subser.ServCom,
+            INPUT pcValue,
+            OUTPUT ocError).
+         liValue = INT(pcValue).
+      END.
+      ELSE
+         liValidate = fSubSerValidate(
+            INPUT MobSub.MsSeq,
+            INPUT Subser.ServCom,
+            INPUT liValue,
+            OUTPUT ocError).
 
       IF liValidate NE 0 THEN 
       CASE liValidate:
+         WHEN 0 THEN appl_err("Service change succeeded").
          WHEN 3 THEN RETURN appl_err("Ongoing network command").
+         WHEN 4 THEN RETURN appl_err("Illegal network profile"). /* RES-885 error */
          OTHERWISE appl_err("Service change is not allowed").
       END.
-
+ 
       liValidate = fSubSerSSStat(
          INPUT MobSub.MsSeq,
          INPUT Subser.ServCom,
@@ -199,8 +211,13 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
       /* Return error if new value is same as existing value */ 
       IF SubSer.ServCom = "BB" AND
          (liValue = SubSer.SSStat OR (SubSer.SSStat = 2 AND liValue = 0)) THEN
-         RETURN appl_err("Service is already " +
+         RETURN appl_err("Selected service is already " +
                          (IF liValue = 1 THEN "active" ELSE "suspended")).
+
+      /* Return error if new NW value is same as existing value */
+      IF SubSer.ServCom = "NW" AND
+         liValue = SubSer.SSStat THEN
+         RETURN appl_err("Selected service is already active").
 
       /* check the validity of change date */
       ldActStamp = fServiceActStamp(SubSer.MsSeq,

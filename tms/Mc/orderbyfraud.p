@@ -133,27 +133,15 @@ fMarkOrderStamp(Order.OrderID,
                                   (OR)
    If ongoing extra line is Closed, and if its associated main line is in 
    ongoing state then reset multisimid and multisimtype values. */
-IF fCLITypeIsMainLine(Order.CLIType)       AND 
-   Order.MultiSimId                  NE 0  AND 
-   Order.MultiSimType                EQ {&MULTISIMTYPE_PRIMARY} THEN 
-   fActionOnExtraLineOrders(Order.MultiSimId, /* Extra line Order Id */
-                            Order.OrderId,    /* Main line Order Id  */ 
-                           "CLOSE").          /* Action              */
+IF fCLITypeIsMainLine(Order.CLIType) THEN      
+   fActionOnExtraLineOrders(Order.OrderId,    /* Main line Order Id  */ 
+                            "CLOSE").         /* Action              */
 ELSE IF fCLITypeIsExtraLine(Order.CLIType) AND
         Order.MultiSimId             NE 0  AND
         Order.MultiSimType           EQ {&MULTISIMTYPE_EXTRALINE} THEN
-DO:
-   FIND FIRST lbMLOrder EXCLUSIVE-LOCK WHERE
-              lbMLOrder.Brand        EQ Syst.Var:gcBrand           AND
-              lbMLOrder.OrderId      EQ Order.MultiSimId           AND
-              lbMLOrder.MultiSimId   EQ Order.OrderId              AND
-              lbMLOrder.MultiSimType EQ {&MULTISIMTYPE_PRIMARY}    AND
-       LOOKUP(lbMLOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 NO-ERROR.
-
-   IF AVAIL lbMLOrder THEN 
-      ASSIGN lbMLOrder.MultiSimId   = 0 
-             lbMLOrder.MultiSimType = 0.
-END.
+ASSIGN 
+   Order.MultiSimId   = 0
+   Order.MultiSimType = 0.
 
 /* YDR-70  and YOT-680 */
 IF (LOOKUP(Order.OrderChannel,{&ORDER_CHANNEL_INDIRECT}) > 0
