@@ -60,6 +60,7 @@ DEF VAR lcExtraLineAllowed            AS CHAR NO-UNDO.
 DEF VAR llNonProToProMigrationOngoing AS LOGI NO-UNDO.
 DEF VAR llProToNonProMigrationOngoing AS LOGI NO-UNDO.
 DEF VAR lcResult                      AS CHAR NO-UNDO.
+DEF VAR liMLMsSeq                     AS INT NO-UNDO. 
 DEFINE VARIABLE lii AS INTEGER NO-UNDO.
 DEFINE VARIABLE lcExtraLineCLITypes AS CHARACTER NO-UNDO.
 
@@ -162,8 +163,11 @@ END.
 lcExtraLineCLITypes = fExtraLineCLITypes().
 
 DO lii = 1 TO NUM-ENTRIES(lcExtraLineCLITypes):
-   IF fCheckConvergentAvailableForExtraLine(ENTRY(lii,lcExtraLineCLITypes), pcIdType,pcPersonId) > 0 OR
-      fCheckOngoingConvergentAvailForExtraLine(ENTRY(lii,lcExtraLineCLITypes), pcIdType,pcPersonId) > 0
+   IF fCheckExistingMainLineAvailForExtraLine(ENTRY(lii,lcExtraLineCLITypes), 
+                                              pcIdType,
+                                              pcPersonId, 
+                                              OUTPUT liMLMsSeq) > 0                               OR
+      fCheckOngoingMainLineAvailForExtraLine(ENTRY(lii,lcExtraLineCLITypes), pcIdType,pcPersonId) > 0
    THEN lcExtraLineAllowed = lcExtraLineAllowed + "," + ENTRY(lii,lcExtraLineCLITypes).
 END.
 
