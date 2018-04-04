@@ -9,6 +9,7 @@
 "CONTRATO27" "LA INFINITA 2 GB DTO." "" "" "1"
 "CONTRATO28" "Línea móvil extra" "" "" "1"
 "CONTRATO29" "La Dúo Interminable" "" "" "1"
+"CONTRATO34" "La Ciento 2 GB" "" "" "1"
 "CONTRATO4" "Contrato 4 (Post paid)" "" "" "1"
 "CONTRATO5" "Contrato 5 (Post paid)" "" "" "1"
 "CONTRATO6" "Contrato 6 (Post paid)" "" "" "1"
