@@ -707,8 +707,7 @@ PROCEDURE pContractActivation:
             IF (fCLITypeIsMainLine(bMobSub.CLIType) OR
                 fCLITypeIsExtraLine(bMobSub.CLIType)) THEN DO:
                IF fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
-                                                    bMobSub.MultiSimId,
-                                                    bMobSub.MultiSimType) 
+                                                    bMobSub.CLIType) 
                THEN DO:
                   fReqStatus(3,"Bundle Upsell can not be activated because " +
                              "DSS2 extra line analyse").
@@ -2710,6 +2709,10 @@ PROCEDURE pContractTermination:
       IF DayCampaign.DCType EQ {&DCTYPE_INSTALLMENT} AND
          FixedFee.SourceKey NE STRING(DCCLI.PerContractID) THEN NEXT.   
 
+      ASSIGN
+         llChargeUsageBased = FALSE
+         llFMFee = FALSE.
+
       /* If last month is usage based and bundle termination is   */
       /* not full month then fee will be calculated based on usage */
       /* Subscription is not part of DSS */
@@ -2729,7 +2732,6 @@ PROCEDURE pContractTermination:
       END.
 
       /* YDR-1818 */
-      llFMFee = FALSE.
       IF MsRequest.ReqSource  = {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION} AND
          ( DayCampaign.DCType = {&DCTYPE_SERVICE_PACKAGE} OR
            DayCampaign.DCType = {&DCTYPE_BUNDLE})                          AND 
