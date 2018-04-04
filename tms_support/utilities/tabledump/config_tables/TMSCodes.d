@@ -1441,6 +1441,7 @@
 "Salesman" "SmPrefix" "IFS" "CV" "EOS ONLINE" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "CW" "CARRITO WEB" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "D2" "DOOR TO DOOR" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "DB" "BYMOVIL NEGOCIOS" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "DX" "Dextra" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "EB" "EMERGIA BACKOFFICE" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "EM" "" "" "15" 1
@@ -1485,6 +1486,7 @@
 "Salesman" "SmPrefix" "IFS" "PS" "Power Sales Call" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "RB" "Recepción Bilbao" "" "15" 0
 "Salesman" "SmPrefix" "IFS" "RC" "CASTURTEL RECEPCION" "" "15" 1
+"Salesman" "SmPrefix" "IFS" "SC" "SERVINFORM CARTERA" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "SE" "SERVINFORM OUTBOUND" "" "15" 1
 "Salesman" "SmPrefix" "IFS" "TA" "Tal Digital" "" "27" 0
 "Salesman" "SmPrefix" "IFS" "TC" "Telecor" "" "25" 0
