@@ -856,11 +856,11 @@
 1 "" 2 "Nacionals" 0 "CONT29VOICE_B" "1" 18/12/17 31/12/49
 1 "" 3 "Nazionalak" 0 "CONT29VOICE_B" "1" 18/12/17 31/12/49
 1 "" 5 "National" 0 "CONT29VOICE_B" "1" 18/12/17 31/12/49
-1 "" 1 "Desví­o de Llamadas" 0 "CONT30CF_A" "1" 18/12/17 31/12/49
+1 "" 1 "Desvío de Llamadas" 0 "CONT30CF_A" "1" 18/12/17 31/12/49
 1 "" 2 "Desviament de Trucades" 0 "CONT30CF_A" "1" 18/12/17 31/12/49
 1 "" 3 "Dei-desbideraketa" 0 "CONT30CF_A" "1" 18/12/17 31/12/49
 1 "" 5 "Call forwarding" 0 "CONT30CF_A" "1" 18/12/17 31/12/49
-1 "" 1 "Desví­o de Llamadas" 0 "CONT30CF_B" "1" 18/12/17 31/12/49
+1 "" 1 "Desvío de Llamadas" 0 "CONT30CF_B" "1" 18/12/17 31/12/49
 1 "" 2 "Desviament de Trucades" 0 "CONT30CF_B" "1" 18/12/17 31/12/49
 1 "" 3 "Dei-desbideraketa" 0 "CONT30CF_B" "1" 18/12/17 31/12/49
 1 "" 5 "Call forwarding" 0 "CONT30CF_B" "1" 18/12/17 31/12/49
@@ -1938,6 +1938,10 @@
 1 "" 2 "Descompte per línea adicional" 0 "DISCCONT26HM" "1" 05/07/17 31/12/49
 1 "" 3 "Deskontua linea gehigarrietan" 0 "DISCCONT26HM" "1" 05/07/17 31/12/49
 1 "" 5 "Additional line discount" 0 "DISCCONT26HM" "1" 05/07/17 31/12/49
+1 "" 1 "Descuento línea adicional" 0 "DISCCONT33" "1" 22/03/18 31/12/49
+1 "" 2 "Descompte per línea adicional" 0 "DISCCONT33" "1" 22/03/18 31/12/49
+1 "" 3 "Deskontua linea gehigarrietan" 0 "DISCCONT33" "1" 22/03/18 31/12/49
+1 "" 5 "Additional line discount" 0 "DISCCONT33" "1" 22/03/18 31/12/49
 1 "" 1 "Descuento línea adicional" 0 "DISCCONT33H" "1" 12/03/18 31/12/49
 1 "" 2 "Descompte per línea adicional" 0 "DISCCONT33H" "1" 12/03/18 31/12/49
 1 "" 3 "Deskontua linea gehigarrietan" 0 "DISCCONT33H" "1" 12/03/18 31/12/49
@@ -1946,6 +1950,10 @@
 1 "" 2 "Descompte per línea adicional" 0 "DISCCONT33HM" "1" 12/03/18 31/12/49
 1 "" 3 "Deskontua linea gehigarrietan" 0 "DISCCONT33HM" "1" 12/03/18 31/12/49
 1 "" 5 "Additional line discount" 0 "DISCCONT33HM" "1" 12/03/18 31/12/49
+1 "" 1 "Descuento línea adicional" 0 "DISCCONT34" "1" 22/03/18 31/12/49
+1 "" 2 "Descompte per línea adicional" 0 "DISCCONT34" "1" 22/03/18 31/12/49
+1 "" 3 "Deskontua linea gehigarrietan" 0 "DISCCONT34" "1" 22/03/18 31/12/49
+1 "" 5 "Additional line discount" 0 "DISCCONT34" "1" 22/03/18 31/12/49
 1 "" 1 "Descuento línea adicional" 0 "DISCCONT34H" "1" 12/03/18 31/12/49
 1 "" 2 "Descompte per línea adicional" 0 "DISCCONT34H" "1" 12/03/18 31/12/49
 1 "" 3 "Deskontua linea gehigarrietan" 0 "DISCCONT34H" "1" 12/03/18 31/12/49
@@ -4186,6 +4194,16 @@
 1 "" 3 "Motorola Moto E4 + Lenovo Tab4 10 LTE 2GB+16GB" 0 "G0000390" "1" 26/02/18 31/12/49
 1 "" 4 "Motorola Moto E4 + Lenovo Tab4 10 LTE 2GB+16GB" 0 "G0000390" "1" 26/02/18 31/12/49
 1 "" 5 "Motorola Moto E4 + Lenovo Tab4 10 LTE 2GB+16GB" 0 "G0000390" "1" 26/02/18 31/12/49
+1 "" 1 "Sony Xperia XZ2" 0 "G0000391" "1" 23/03/18 31/12/49
+1 "" 2 "Sony Xperia XZ2" 0 "G0000391" "1" 23/03/18 31/12/49
+1 "" 3 "Sony Xperia XZ2" 0 "G0000391" "1" 23/03/18 31/12/49
+1 "" 4 "Sony Xperia XZ2" 0 "G0000391" "1" 23/03/18 31/12/49
+1 "" 5 "Sony Xperia XZ2" 0 "G0000391" "1" 23/03/18 31/12/49
+1 "" 1 "ZTE V9" 0 "G0000392" "1" 02/04/18 31/12/49
+1 "" 2 "ZTE V9" 0 "G0000392" "1" 02/04/18 31/12/49
+1 "" 3 "ZTE V9" 0 "G0000392" "1" 02/04/18 31/12/49
+1 "" 4 "ZTE V9" 0 "G0000392" "1" 02/04/18 31/12/49
+1 "" 5 "ZTE V9" 0 "G0000392" "1" 02/04/18 31/12/49
 1 "" 1 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 2 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
 1 "" 3 "PTE Galaxy Note 3 Neo" 0 "G9999999" "1" 17/09/14 31/12/49
@@ -4814,6 +4832,16 @@
 1 "" 3 "Sony Xperia S Negro" 0 "P013XSYW2" "1" 27/04/12 31/12/49
 1 "" 4 "Sony Xperia S Negro" 0 "P013XSYW2" "1" 27/04/12 31/12/49
 1 "" 5 "Sony Xperia S Blanco" 0 "P013XSYW2" "1" 27/04/12 31/12/49
+1 "" 1 "Sony Xperia XZ2 Azul" 0 "P013XZ2AC" "1" 23/03/18 31/12/49
+1 "" 2 "Sony Xperia XZ2 Azul" 0 "P013XZ2AC" "1" 23/03/18 31/12/49
+1 "" 3 "Sony Xperia XZ2 Azul" 0 "P013XZ2AC" "1" 23/03/18 31/12/49
+1 "" 4 "Sony Xperia XZ2 Azul" 0 "P013XZ2AC" "1" 23/03/18 31/12/49
+1 "" 5 "Sony Xperia XZ2 Petrol Blue" 0 "P013XZ2AC" "1" 23/03/18 31/12/49
+1 "" 1 "Sony Xperia XZ2 Negro" 0 "P013XZ2NC" "1" 02/04/18 31/12/49
+1 "" 2 "Sony Xperia XZ2 Negro" 0 "P013XZ2NC" "1" 02/04/18 31/12/49
+1 "" 3 "Sony Xperia XZ2 Negro" 0 "P013XZ2NC" "1" 02/04/18 31/12/49
+1 "" 4 "Sony Xperia XZ2 Negro" 0 "P013XZ2NC" "1" 02/04/18 31/12/49
+1 "" 5 "Sony Xperia XZ2 Black" 0 "P013XZ2NC" "1" 02/04/18 31/12/49
 1 "" 1 "Sony-Ericsson Z610i Azul" 0 "P013Z61A2" "1" 01/01/06 31/12/49
 1 "" 5 "Sony-Ericsson Z610i Blue" 0 "P013Z61A2" "1" 01/01/06 31/12/49
 1 "" 1 "Sony-Ericsson Z610i Rosa" 0 "P013Z61R2" "1" 01/01/06 31/12/49
@@ -5864,6 +5892,11 @@
 1 "" 3 "LG K8 4G Blanco con batería portátil de regalo" 0 "P030LK8WP" "1" 30/05/16 31/12/49
 1 "" 4 "LG K8 4G Blanco con batería portátil de regalo" 0 "P030LK8WP" "1" 30/05/16 31/12/49
 1 "" 5 "LG K8 4G White with rechargable battery gift" 0 "P030LK8WP" "1" 30/05/16 31/12/49
+1 "" 1 "LG Q6 Negro" 0 "P030LQ6NC" "1" 02/04/18 31/12/49
+1 "" 2 "LG Q6 Negro" 0 "P030LQ6NC" "1" 02/04/18 31/12/49
+1 "" 3 "LG Q6 Negro" 0 "P030LQ6NC" "1" 02/04/18 31/12/49
+1 "" 4 "LG Q6 Negro" 0 "P030LQ6NC" "1" 02/04/18 31/12/49
+1 "" 5 "LG Q6 Black" 0 "P030LQ6NC" "1" 02/04/18 31/12/49
 1 "" 1 "LG Q6 Platino" 0 "P030LQ6PC" "1" 27/07/17 31/12/49
 1 "" 2 "LG Q6 Platino" 0 "P030LQ6PC" "1" 27/07/17 31/12/49
 1 "" 3 "LG Q6 Platino" 0 "P030LQ6PC" "1" 27/07/17 31/12/49
@@ -7799,6 +7832,16 @@
 1 "" 3 "Huawei P20 Pro Negro" 0 "P04320PNC" "1" 23/02/18 31/12/49
 1 "" 4 "Huawei P20 Pro Negro" 0 "P04320PNC" "1" 23/02/18 31/12/49
 1 "" 5 "Huawei P20 Pro Black" 0 "P04320PNC" "1" 23/02/18 31/12/49
+1 "" 1 "Huawei P20 Pro Morado con Cámara Huawei EnVizion 360" 0 "P0432PPMC" "1" 28/03/18 31/12/49
+1 "" 2 "Huawei P20 Pro Morado con Cámara Huawei EnVizion 360" 0 "P0432PPMC" "1" 28/03/18 31/12/49
+1 "" 3 "Huawei P20 Pro Morado con Cámara Huawei EnVizion 360" 0 "P0432PPMC" "1" 28/03/18 31/12/49
+1 "" 4 "Huawei P20 Pro Morado con Cámara Huawei EnVizion 360" 0 "P0432PPMC" "1" 28/03/18 31/12/49
+1 "" 5 "Huawei P20 Pro Purple with Huawei EnVizion 360 Camera" 0 "P0432PPMC" "1" 28/03/18 31/12/49
+1 "" 1 "Huawei P20 Pro Negro con Cámara Huawei EnVizion 360" 0 "P0432PPNC" "1" 28/03/18 31/12/49
+1 "" 2 "Huawei P20 Pro Negro con Cámara Huawei EnVizion 360" 0 "P0432PPNC" "1" 28/03/18 31/12/49
+1 "" 3 "Huawei P20 Pro Negro con Cámara Huawei EnVizion 360" 0 "P0432PPNC" "1" 28/03/18 31/12/49
+1 "" 4 "Huawei P20 Pro Negro con Cámara Huawei EnVizion 360" 0 "P0432PPNC" "1" 28/03/18 31/12/49
+1 "" 5 "Huawei P20 Pro Black with Huawei EnVizion 360 Camera" 0 "P0432PPNC" "1" 28/03/18 31/12/49
 1 "" 1 "Modem USB Huawei E3131S-2 Negro" 0 "P043313N2" "1" 30/07/13 31/12/49
 1 "" 2 "Modem USB Huawei E3131S-2 Negro" 0 "P043313N2" "1" 30/07/13 31/12/49
 1 "" 3 "Modem USB Huawei E3131S-2 Negro" 0 "P043313N2" "1" 30/07/13 31/12/49
@@ -8150,6 +8193,16 @@
 1 "" 3 "Huawei P9 Plata con Protector de vidrio transparente" 0 "P043HP9WP" "1" 30/06/16 31/12/49
 1 "" 4 "Huawei P9 Plata con Protector de vidrio transparente" 0 "P043HP9WP" "1" 30/06/16 31/12/49
 1 "" 5 "Huawei P9 Silver with Tempered glass screen protector" 0 "P043HP9WP" "1" 30/06/16 31/12/49
+1 "" 1 "Huawei P Smart Azul" 0 "P043HPSAC" "1" 23/03/18 31/12/49
+1 "" 2 "Huawei P Smart Azul" 0 "P043HPSAC" "1" 23/03/18 31/12/49
+1 "" 3 "Huawei P Smart Azul" 0 "P043HPSAC" "1" 23/03/18 31/12/49
+1 "" 4 "Huawei P Smart Azul" 0 "P043HPSAC" "1" 23/03/18 31/12/49
+1 "" 5 "Huawei P Smart Blue" 0 "P043HPSAC" "1" 23/03/18 31/12/49
+1 "" 1 "Huawei P Smart Negro" 0 "P043HPSNC" "1" 23/03/18 31/12/49
+1 "" 2 "Huawei P Smart Negro" 0 "P043HPSNC" "1" 23/03/18 31/12/49
+1 "" 3 "Huawei P Smart Negro" 0 "P043HPSNC" "1" 23/03/18 31/12/49
+1 "" 4 "Huawei P Smart Negro" 0 "P043HPSNC" "1" 23/03/18 31/12/49
+1 "" 5 "Huawei P Smart Black" 0 "P043HPSNC" "1" 23/03/18 31/12/49
 1 "" 1 "Huawei Y6 Negro" 0 "P043HY6N2" "1" 25/09/15 31/12/49
 1 "" 2 "Huawei Y6 Negro" 0 "P043HY6N2" "1" 25/09/15 31/12/49
 1 "" 3 "Huawei Y6 Negro" 0 "P043HY6N2" "1" 25/09/15 31/12/49
@@ -8370,6 +8423,16 @@
 1 "" 3 "Huawei P20 Negro" 0 "P043P20NC" "1" 23/02/18 31/12/49
 1 "" 4 "Huawei P20 Negro" 0 "P043P20NC" "1" 23/02/18 31/12/49
 1 "" 5 "Huawei P20 Black" 0 "P043P20NC" "1" 23/02/18 31/12/49
+1 "" 1 "Huawei P20 Azul con Cámara Huawei EnVizion 360" 0 "P043P2PAC" "1" 27/03/18 31/12/49
+1 "" 2 "Huawei P20 Azul con Cámara Huawei EnVizion 360" 0 "P043P2PAC" "1" 27/03/18 31/12/49
+1 "" 3 "Huawei P20 Azul con Cámara Huawei EnVizion 360" 0 "P043P2PAC" "1" 27/03/18 31/12/49
+1 "" 4 "Huawei P20 Azul con Cámara Huawei EnVizion 360" 0 "P043P2PAC" "1" 27/03/18 31/12/49
+1 "" 5 "Huawei P20 Blue with Huawei EnVizion 360 Camera" 0 "P043P2PAC" "1" 27/03/18 31/12/49
+1 "" 1 "Huawei P20 Negro con Cámara Huawei EnVizion 360" 0 "P043P2PNC" "1" 27/03/18 31/12/49
+1 "" 2 "Huawei P20 Negro con Cámara Huawei EnVizion 360" 0 "P043P2PNC" "1" 27/03/18 31/12/49
+1 "" 3 "Huawei P20 Negro con Cámara Huawei EnVizion 360" 0 "P043P2PNC" "1" 27/03/18 31/12/49
+1 "" 4 "Huawei P20 Negro con Cámara Huawei EnVizion 360" 0 "P043P2PNC" "1" 27/03/18 31/12/49
+1 "" 5 "Huawei P20 Black with Huawei EnVizion 360 Camera" 0 "P043P2PNC" "1" 27/03/18 31/12/49
 1 "" 1 "Huawei P8 Champán" 0 "P043P8GD2" "1" 06/07/15 31/12/49
 1 "" 2 "Huawei P8 Champan" 0 "P043P8GD2" "1" 06/07/15 31/12/49
 1 "" 3 "Huawei P8 Champan" 0 "P043P8GD2" "1" 06/07/15 31/12/49
@@ -9150,6 +9213,11 @@
 1 "" 3 "Innjoo Halo 2 LTE Negro" 0 "P049H2LNC" "1" 27/07/17 31/12/49
 1 "" 4 "Innjoo Halo 2 LTE Negro" 0 "P049H2LNC" "1" 27/07/17 31/12/49
 1 "" 5 "Innjoo Halo 2 LTE Black" 0 "P049H2LNC" "1" 27/07/17 31/12/49
+1 "" 1 "Crosscall Action X3 Negro" 0 "P051AX3NC" "1" 23/03/18 31/12/49
+1 "" 2 "Crosscall Action X3 Negro" 0 "P051AX3NC" "1" 23/03/18 31/12/49
+1 "" 3 "Crosscall Action X3 Negro" 0 "P051AX3NC" "1" 23/03/18 31/12/49
+1 "" 4 "Crosscall Action X3 Negro" 0 "P051AX3NC" "1" 23/03/18 31/12/49
+1 "" 5 "Crosscall Action X3 Black" 0 "P051AX3NC" "1" 23/03/18 31/12/49
 1 "" 1 "Módem USB ZTE MF110" 0 "P075110N2" "1" 08/06/10 31/12/49
 1 "" 2 "Módem USB ZTE MF110" 0 "P075110N2" "1" 08/06/10 31/12/49
 1 "" 3 "Módem USB ZTE MF110" 0 "P075110N2" "1" 08/06/10 31/12/49
