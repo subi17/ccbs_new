@@ -102,8 +102,9 @@
      SPACE(0) 
      llDelNote[3] NO-LABEL
      SPACE(0)
-  lcCustCOName NO-LABEL 
-     SKIP
+  lcCustCOName NO-LABEL
+  lcNWProfile AT 46 LABEL "NW Profile" FORMAT "X(12)"
+  SKIP   
 
   "Address ....:"
      SPACE(0) 
