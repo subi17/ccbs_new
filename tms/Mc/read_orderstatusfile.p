@@ -228,8 +228,7 @@ PROCEDURE pUpdateOrderStatus:
             /* Release extra line orders only */
             IF Order.MultiSimId   NE 0                         AND 
                Order.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} THEN  
-            fActionOnExtraLineOrders(Order.MsSeq,
-                                     Order.MultiSimId,
+            fActionOnExtraLineOrders(Order.MultiSimId,
                                      "RELEASE").
          END.
          WHEN "7" THEN RUN Mc/closeorder.p(Order.OrderId, TRUE).
