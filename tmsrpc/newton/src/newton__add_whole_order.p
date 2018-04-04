@@ -333,7 +333,8 @@ DEF VAR pcOfferId  AS CHAR NO-UNDO.
 DEF VAR pdePriceSelTime AS DEC NO-UNDO.
 DEF VAR liTermOfferItemID AS INTEGER NO-UNDO.
 DEF VAR piMultiSimID AS INT NO-UNDO. 
-DEF VAR piMultiSimType AS INT NO-UNDO. 
+DEF VAR piMultiSimType AS INT NO-UNDO.
+DEF VAR liMLMsSeq      AS INT NO-UNDO. 
 DEF VAR plExcTermPenalty AS LOG NO-UNDO.
 DEF VAR plExtendTermContract AS LOG NO-UNDO.
 DEF VAR pcMandateId AS CHAR NO-UNDO. 
@@ -815,8 +816,8 @@ FUNCTION fCreateOrderCustomer RETURNS CHARACTER
                OUTPUT liSubLimit,
                OUTPUT liSubs,
                OUTPUT liSubLimit,
-               OUTPUT liActs) THEN lcFError = "subscription limit".
-            
+               OUTPUT liActs) THEN lcFError = "subscription limit".            
+                
             IF lcFError EQ "" THEN
                FOR FIRST Customer WHERE
                          Customer.Brand      = Syst.Var:gcBrand  AND
@@ -1754,7 +1755,7 @@ DO:
    lccTemp = validate_request(pcMobileLinePortabilityUserStruct, gcPoUserStructFields).
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
-   
+
 /* YBP-536 */
 lcError = fCreateOrderCustomer(pcCustomerStruct, gcCustomerStructFields, {&ORDERCUSTOMER_ROWTYPE_AGREEMENT}, FALSE).
 IF lcError <> "" THEN appl_err(lcError).
@@ -1991,27 +1992,20 @@ IF pcQ25Struct > "" THEN DO:
       
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 END.
-
+  
 /* Extra Lines Validations, 
    updating multisimid & multisimidtype for hard association */
 IF fCLITypeIsExtraLine(pcSubType) THEN DO:
 
-   piMultiSimID = fCheckConvergentAvailableForExtraLine(pcSubType, lcIdtype, lcId). /* MainLine order id */
+   piMultiSimID = fCheckExistingMainLineAvailForExtraLine(pcSubType, lcIdtype, lcId, OUTPUT liMLMsSeq). /* MainLine SubId */
 
-   IF piMultiSimID EQ 0
-   THEN piMultiSimID = fCheckOngoingConvergentAvailForExtraLine(pcSubType, lcIdtype, lcId). /* Ongoing order id */
+   IF piMultiSimID EQ 0 THEN 
+      piMultiSimID = fCheckOngoingMainLineAvailForExtraLine(pcSubType, lcIdtype, lcId). /* Ongoing order id */
 
    piMultiSimType = {&MULTISIMTYPE_EXTRALINE}.
 
    IF piMultiSimID = 0 THEN  
       RETURN appl_err("No Existing Main line subscriptions OR Ongoing main line orders are available").
-
-   FIND FIRST ExtraLineMainOrder EXCLUSIVE-LOCK WHERE
-              ExtraLineMainOrder.Brand   = Syst.Var:gcBrand      AND 
-              ExtraLineMainOrder.OrderId = piMultiSimID NO-ERROR.
-
-   IF NOT AVAIL ExtraLineMainOrder THEN 
-      RETURN appl_err("Extra line associated main line order is not available").
 
    /* Discount rule id input is not necessary from WEB to TMS, 
       As it is extra line we have to give default discount */
@@ -2086,18 +2080,11 @@ IF lcFixedLinePermanency > "" THEN DO:
 END.
 
 /* Extra line discount */
-IF fCLITypeIsExtraLine(pcSubType) THEN DO:
-   
-    /* Update Mainline multisimid and multisimtype values before 
-       extra line discount orderaction record is created */
-    ASSIGN ExtraLineMainOrder.MultiSimID   = Order.OrderId   /* Extraline order id */ 
-           ExtraLineMainOrder.MultiSimType = {&MULTISIMTYPE_PRIMARY}.
-   
+IF fCLITypeIsExtraLine(pcSubType) THEN 
     fCreateOrderAction(Order.Orderid,
                        "ExtraLineDiscount",
                        ExtraLineDiscountPlan.DPRuleId,
                        "").
-END.
 
 /* YBP-548 */
 IF pcMemo NE ""
