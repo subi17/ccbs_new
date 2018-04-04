@@ -462,6 +462,7 @@ FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
    DEF BUFFER bOrderFusion    FOR OrderFusion.
 
    FIND FIRST bOrder NO-LOCK WHERE
+              bOrder.Brand EQ Syst.Var:gcBrand AND
               bOrder.OrderId EQ iiOrder NO-ERROR.
    IF NOT AVAIL bOrder THEN RETURN FALSE.
 
