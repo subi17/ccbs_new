@@ -147,7 +147,7 @@ form
     "Cli.type.........:" MSOwner.Clitype FORMAT "X(14)" NO-LABEL
         CLIType.CliName AT 35 NO-LABEL
         MSOwner.TariffBundle AT 60 NO-LABEL           SKIP
-    "Billing Target ..:" MSOwner.BillTarget NO-LABEL
+    "Billing Target ..:" MSOwner.BillTarget FORMAT ">>9" NO-LABEL
        BillTarg.RatePlan   FORMAT "X(14)" AT 35 NO-LABEL  SKIP
     "CliEvent ........:" MSOwner.CliEvent FORMAT "X(5)" NO-LABEL   SKIP
     "InPortOperator...:" msowner.inportOper NO-LABEL  SKIP

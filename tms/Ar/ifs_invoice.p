@@ -13,6 +13,7 @@
 {Func/finvbal.i}
 {Syst/tmsconst.i}
 {Func/fixedlinefunc.i}
+{Func/extralinefunc.i}
 {Func/multitenantfunc.i}
 
 DEF INPUT  PARAMETER iiDumpID      AS INT  NO-UNDO.
