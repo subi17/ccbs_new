@@ -315,6 +315,7 @@ DEF VAR lcInvTargetRule AS CHAR NO-UNDO.
 DEF VAR llAddressValidated AS LOG NO-UNDO. 
 DEF VAR lcProfession  AS CHAR  NO-UNDO.
 DEF VAR lcMemo        AS CHAR  NO-UNDO.
+DEF VAR lcNWProfile   AS CHAR  NO-UNDO. /* RES-885 */
 
 DEF VAR lcCustCOname  LIKE Customer.COName  NO-UNDO.
 DEF VAR lcCustAddress LIKE Customer.Address  NO-UNDO.
@@ -581,6 +582,16 @@ FUNCTION fDispCustomer RETURNS LOGICAL:
    IF AVAIL CustomerReport AND
             CustomerReport.StreetCode > "" THEN llAddressValidated = TRUE.
 
+   /* RES-885 NRTR National roaming traffic restriction */
+   IF Customer.NWProfile EQ 1 THEN
+      lcNWProfile = "1 (YG)".
+   ELSE IF Customer.NWProfile EQ 2 THEN
+      lcNWProfile = "2 (YG+OR)".
+   ELSE IF Customer.NWProfile EQ 3 THEN
+      lcNWProfile = "3 (YG+OR+TE)".
+   ELSE
+      lcNWProfile = "".
+
 DISP 
   
    Customer.CustIDType
@@ -592,7 +603,8 @@ DISP
    Customer.FirstName
    Customer.CompanyName
    Customer.Profession lcProfession
-   Customer.COName @ lcCustCOName 
+   Customer.COName @ lcCustCOName
+   lcNWProfile
    Customer.Address @ lcCustAddress 
    Customer.AuthCustIdType WHEN Customer.CustIDType = "CIF"
    Customer.ZipCode @ lcCustZipCode 

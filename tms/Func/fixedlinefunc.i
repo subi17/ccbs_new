@@ -13,7 +13,7 @@
 &GLOBAL-DEFINE FIXEDLINEFUNC_I YES
 
 {Func/matrix.i}
-{Func/extralinefunc.i}
+{Syst/tmsconst.i}
 {Func/fcustpl.i}
 
 /*Function returns True if a tariff can be defined as convergent tariff.
@@ -668,7 +668,7 @@ FUNCTION fIsAddLineOrder RETURNS LOGICAL
 END FUNCTION.
 
 
-FUNCTION fCheckConvergentAvailableForExtraLine RETURNS INTEGER
+/* FUNCTION fCheckConvergentAvailableForExtraLine RETURNS INTEGER
    (INPUT icExtraLineCLIType AS CHAR,
     INPUT icCustIDType       AS CHAR,
     INPUT icCustID           AS CHAR):
@@ -757,41 +757,8 @@ FUNCTION fCheckOngoingConvergentAvailForExtraLine RETURNS INTEGER
 
    RETURN 0.
 
-END FUNCTION.
+END FUNCTION. */
 
-FUNCTION fCheckFixedLineInstalledForMainLine RETURNS LOGICAL
-   (INPUT liMainLineOrderId  AS INT,
-    INPUT liExtraLineOrderId AS INT):
-
-   DEFINE BUFFER Order FOR Order. 
-
-   FIND FIRST Order NO-LOCK WHERE
-              Order.Brand        EQ Syst.Var:gcBrand    AND
-              Order.OrderId      EQ liMainLineOrderId          AND
-       LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0 AND
-              Order.MultiSimId   EQ liExtraLineOrderId         AND
-              Order.MultiSimType EQ {&MULTISIMTYPE_PRIMARY}    AND 
-              Order.OrderType    NE {&ORDER_TYPE_RENEWAL}      NO-ERROR.
-
-   IF AVAIL Order THEN DO: 
-     
-      /* If Fixed line is installed for Main line Convergent Order 
-         THEN dont move extra line order to 76 */
-      FIND FIRST OrderFusion NO-LOCK WHERE
-                 OrderFusion.Brand        = Syst.Var:gcBrand          AND
-                 OrderFusion.OrderID      = Order.OrderID                    AND 
-                 OrderFusion.FusionStatus = {&FUSION_ORDER_STATUS_FINALIZED} NO-ERROR.
-                 
-      IF AVAIL OrderFusion THEN 
-         RETURN FALSE.
-
-      RETURN TRUE.
-
-   END.   
-
-   RETURN FALSE.
-
-END FUNCTION.
 
 /* If main line is installed for Main line (Convergent order or Mobile only)
    then don't move additional line order to 76 */
@@ -902,65 +869,5 @@ FUNCTION fGetMobileLineCompareFee RETURNS DECIMAL
 
 END FUNCTION. 
 
-
-FUNCTION fGetOldestCLITypeOfMobSub RETURNS CHAR
-   (iiCustNum AS INT):
-
-DEF VAR lcOldestCLIType  AS CHAR   NO-UNDO.
-
-   FOR EACH MobSub NO-LOCK WHERE MobSub.Brand = Syst.Var:gcBrand AND
-                                 MobSub.CustNum = iiCustNum 
-                                 BY CreationDate:
-      IF fCLITypeIsMainLine(MobSub.CLIType) THEN DO:
-         lcOldestCLIType = MobSub.CLIType.
-         LEAVE.
-      END.
-   END.
-
-   RETURN lcOldestCLIType.
-
-END FUNCTION.
-
-
-FUNCTION fGetOldestCLITypeOfOrder RETURNS CHAR
-   (iiCustNum AS INT):
-
-DEF VAR lcOldestCLIType  AS CHAR  NO-UNDO.
-
-   FOR EACH Order NO-LOCK WHERE Order.Brand = Syst.Var:gcBrand AND
-                      Order.CustNum = iiCustNum AND
-                      LOOKUP(Order.StatusCode,{&ORDER_INACTIVE_STATUSES}) = 0
-                      BY CrStamp:                      
-      IF fCLITypeIsMainLine(Order.CLIType) THEN DO:
-         lcOldestCLIType = Order.CLIType.
-         LEAVE.            
-      END.
-   END.
-
-   RETURN lcOldestCLIType.
-   
-END FUNCTION.
-
-
-FUNCTION fGetPayType RETURNS CHAR
-   (iiCustNum AS INT):
-
-DEF VAR lcPayType        AS CHAR NO-UNDO.
-DEF VAR lcCLIType        AS CHAR NO-UNDO.
-
-   /* YOT-5618 Handle correctly Way of payment for 66 and 67 */
-   lcCLIType = fGetOldestCLITypeOfMobSub(iiCustNum).
-   IF lcCLIType EQ "" THEN
-      lcCLIType = fGetOldestCLITypeOfOrder(iiCustNum).
-
-   IF INDEX(lcCLIType,"DSL") > 0 THEN
-      lcPayType = "66".
-   ELSE IF INDEX(lcCLIType,"TFH") > 0 THEN
-      lcPayType = "67".
-   ELSE lcPayType = "68".
-    
-   RETURN lcPayType.    
-      
-END FUNCTION.
 
 &ENDIF

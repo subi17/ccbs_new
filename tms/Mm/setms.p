@@ -84,6 +84,7 @@ DEF VAR llCheckSC AS LOG NO-UNDO INIT TRUE.
 DEF VAR llVoIPActive AS LOG NO-UNDO.
 DEF VAR lcShaperConfId AS CHAR NO-UNDO.
 DEF VAR lcBaseBundle AS CHAR NO-UNDO.
+DEF VAR lcParam AS CHAR NO-UNDO. 
 
 DEF BUFFER bSubSer FOR SubSer.
 DEF BUFFER bSSPara FOR SubSerPara.
@@ -332,13 +333,24 @@ IF ServCom.ActType = 0 THEN DO:
   END. /* IF lcServName EQ "SHAPER" AND */
   ELSE IF LOOKUP(MsRequest.ReqCParam1,"CF") > 0 THEN
      ttSolog.CommLine = ttSolog.CommLine + lcServName + ",".
-  ELSE
+  ELSE DO:
+
+     lcParam = STRING(MsRequest.ReqIParam1).
+
+     IF MsRequest.ReqIParam1 > 0 AND
+        MsRequest.ReqCparam2 NE "" THEN lcParam = MsRequest.ReqCParam2.
+     ELSE IF lcServName EQ "NW" THEN DO:
+       CASE MsRequest.ReqIParam1:
+          WHEN 1 THEN lcParam = "YOIGO".
+          WHEN 2 THEN lcParam = "YOIGO_ORANGE".
+          WHEN 3 THEN lcParam = "YOIGO_ORANGE_TELEFONICA".
+       END.
+     END.
+      
      ttSolog.CommLine = ttSolog.CommLine +
                       TRIM(lcServName)   + "="  +
-                      (IF MsRequest.ReqIParam1 > 0 AND
-                          MsRequest.ReqCParam2 NE "" 
-                       THEN MsRequest.ReqCParam2  
-                       ELSE STRING(MsRequest.ReqIParam1)) + ",".
+                      lcParam + ",".
+  END.
 END.     
 
 /* entries to db */
