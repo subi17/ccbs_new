@@ -334,6 +334,7 @@
 "TMSParam" "SYST"
 "TMSPrinter" "SYST"
 "TMSQueue" "SYST"
+"TMSRelation" "SYST"
 "TMSRepCfg" "SYST"
 "TMSRepModel" "SYST"
 "TMSReport" "SYST"
