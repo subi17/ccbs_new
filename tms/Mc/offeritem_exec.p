@@ -12,7 +12,7 @@
 {Mc/offer.i}
 {Func/ftopup.i}
 {Func/service.i}
-{Mc/dpmember.i}
+{Func/extralinefunc.i}
 {Func/contract_end_date.i}
 
 DEF INPUT  PARAMETER iiMsSeq       AS INT  NO-UNDO.

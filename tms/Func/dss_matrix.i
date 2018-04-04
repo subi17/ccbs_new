@@ -66,8 +66,7 @@ FUNCTION fIsDSSAllowedForCustomer RETURNS LOG
         (fCLITypeIsExtraLine(bMobSub.CLIType) OR 
          fCLITypeIsMainLine(bMobSub.CLIType)) THEN 
          IF NOT fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
-                                                  bMobSub.MultiSimId,
-                                                  bMobSub.MultiSimType) THEN NEXT.
+                                                  bMobSub.CLIType) THEN NEXT.
       
       ASSIGN liMobSubCount = liMobSubCount + 1
              lcALLSubsList = lcALLSubsList + ";34" + bMobSub.CLI.
@@ -267,8 +266,7 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
         (fCLITypeIsExtraLine(bMobSub.CLIType) OR
          fCLITypeIsMainLine(bMobSub.CLIType)) THEN
          IF NOT fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
-                                                  bMobSub.MultiSimId,
-                                                  bMobSub.MultiSimType) THEN 
+                                                  bMobSub.CLIType) THEN 
          DO:
             ocResult = "Primary manline or Extraline is not hard associated".
             RETURN FALSE.
@@ -290,8 +288,7 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
       IF (fCLITypeIsExtraLine(bMobSub.CLIType) OR
           fCLITypeIsMainLine(bMobSub.CLIType)) THEN
           IF NOT fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
-                                                   bMobSub.MultiSimId,
-                                                   bMobSub.MultiSimType) THEN NEXT. 
+                                                   bMobSub.CLIType) THEN NEXT. 
       
       /* Exclude subs. if termination request is ongoing */
       IF CAN-FIND (FIRST MsRequest NO-LOCK WHERE
@@ -418,8 +415,7 @@ FUNCTION fgetFlexUpsellBundle RETURNS CHAR
            (fCLITypeIsMainLine(Mobsub.CLIType) OR
             fCLITypeIsExtraLine(Mobsub.CLIType)) THEN
             IF NOT fCheckExtraLineMatrixSubscription(Mobsub.MsSeq,
-                                                     Mobsub.MultiSimId,
-                                                     Mobsub.MultiSimType) THEN
+                                                     Mobsub.CLIType) THEN
             llDSSNeeded = FALSE.
          ELSE IF NOT fIsDSS2Allowed(iiCustnum,0,ideActStamp,liDSSMsseq,
                                     lcResult) THEN
