@@ -1,7 +1,10 @@
 /* ftmrlimit.i      12.05.08/aam
  
 */
+&IF "{&ftmrlimit_i}" NE "YES"
+&THEN
 
+&GLOBAL-DEFINE ftmrlimit_i YES
 
 /* copy default limits to customer */
 FUNCTION fTMRLimit2Customer RETURNS LOGIC
@@ -66,4 +69,4 @@ FUNCTION fTMRLimit2Subscription RETURNS LOGIC
    END.
 
 END FUNCTION.
-  
+&ENDIF
