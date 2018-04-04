@@ -65,10 +65,10 @@ FORM
    SKIP
    "Info.............." ttOrderGroup.Info       FORMAT "X(25)"
    SKIP
-   "Created..........." ttOrderGroup.CrStamp " " ttOrderGroup.cCreatedTS FORMAT "X(40)"
+   "Created..........." ttOrderGroup.CrStamp " " ttOrderGroup.cCreatedTS FORMAT "X(20)"
    SKIP(2)
 
-   WITH OVERLAY ROW 1 WIDTH 80 centered
+   WITH OVERLAY ROW 6 WIDTH 66 centered
    COLOR VALUE(Syst.Var:cfc)
    TITLE COLOR VALUE(Syst.Var:ctc)
    " Order Group Contents " NO-LABELS 
@@ -374,6 +374,7 @@ PROCEDURE local-update-record:
            ttOrderGroup.GroupType 
            ttOrderGroup.Info     
            ttOrderGroup.CrStamp
+           ttOrderGroup.cCreatedTS
       WITH FRAME fDetails.
 
       PAUSE MESSAGE "Press ENTER".
