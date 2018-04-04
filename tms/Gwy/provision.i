@@ -156,7 +156,7 @@ function fMakeCommLine returns CHAR
                 "MSISDN=34" + lhMobSub::Cli       + ","  +     /* MSISDN    */
                 "IMSI="   + lhMobSub::Imsi       + ","  +     /* IMSI      */
                 ",PAYTYPE=" + STRING(lhMobSub::PayType,"PREPAID/POSTPAID") +
-                ",OPERATOR=YOIGO,NW=ERICSSON," + lcadkey    .
+                ",OPERATOR=YOIGO," + lcadkey    .
    END.                       
    
    ELSE IF Avail ProvMobsub  THEN DO:
@@ -165,14 +165,14 @@ function fMakeCommLine returns CHAR
                "MSISDN=34" + lhMobSub::Cli   + ","  +     /* MSISDN       */
                "IMSI="   + lhMobSub::Imsi  + ","  +     /* IMSI         */
                "PAYTYPE=" + STRING(lhMobSub::PayType,"PREPAID/POSTPAID") +
-               ",OPERATOR=YOIGO,NW=ERICSSON,"     .
+               ",OPERATOR=YOIGO,"     .
    END.
    ELSE IF icValue = "REACTIVATE"  THEN
      lcReturn = STRING(ProvSolog.Solog)      + " "  + 
                 "CREATE"                     + ","  +  /* Action-use the same command line for Reactivation */
                "MSISDN=34" + lhMobSub::Cli   + ","  +  /* MSISDN       */
                "IMSI="   + lhMobSub::Imsi  + ","  +    /* IMSI         */
-               ",OPERATOR=YOIGO,NW=ERICSSON," + lcAdkey.
+               ",OPERATOR=YOIGO," + lcAdkey.
    ELSE IF NOT AVAIL ProvMObsub AND Avail Order  
    THEN DO:
         
@@ -183,14 +183,14 @@ function fMakeCommLine returns CHAR
                  icValue                      + ","  +     /* Action  */
                 "MSISDN=34" + Order.Cli        + ","  +     /* MSISDN       */
                 "IMSI="   + Imsi.Imsi        + ","  +     /* IMSI         */
-                "OPERATOR=YOIGO,NW=ERICSSON," + 
+                "OPERATOR=YOIGO," + 
                 lcAdkey .
    END.
    ELSE DO:
      lcReturn = STRING(ProvSolog.Solog)      +  " " + 
                 icValue     + ","  +     /* Action  */
                "MSISDN=34" + Order.Cli        + ","  +     /* MSISDN       */
-               "OPERATOR=YOIGO,NW=ERICSSON," + 
+               "OPERATOR=YOIGO," + 
                lcAdKey                      + "," .   
    END.
 
@@ -264,7 +264,7 @@ function fMakeCommLine2 returns CHAR
                 "MSISDN=34" + lhMobSub::Cli   + "->34" +    /* MSISDN  */
                  ProvMSrequest.ReqCParam2     + ","  +
                 "IMSI="   + lhMobSub::Imsi  + ","  +    /* IMSI    */
-                "OPERATOR=YOIGO,NW=ERICSSON," + 
+                "OPERATOR=YOIGO," + 
                 "PAYTYPE=" + STRING(lhMobSub::PayType,"PREPAID/POSTPAID").
 
    END.
@@ -281,7 +281,7 @@ function fMakeCommLine2 returns CHAR
                 "MSISDN=34" + lhMobSub::Cli   +  ","  +    /* MSISDN  */
                 "IMSI="     + lhMobSub::IMSI + "->" + ProvIMSI.IMSI  + "," +
                 "KI=" +       ProvImsi.ki  +  "," +          
-                "OPERATOR=YOIGO,NW=ERICSSON," +
+                "OPERATOR=YOIGO," +
                 "PAYTYPE=" + STRING(lhMobSub::PayType,"PREPAID/POSTPAID").
       
    END.
@@ -328,7 +328,7 @@ function fMakeCommLine2 returns CHAR
               "MODIFY"                    + ","  +     /* Action  */
               "MSISDN=34" + lhMobSub::Cli       + ","  +     /* MSISDN       */
               "IMSI="   +   lhMobSub::Imsi      + ","  +     /* IMSI         */
-              "OPERATOR=YOIGO,NW=ERICSSON," + 
+              "OPERATOR=YOIGO," + 
               lcAdkey .
    END.
   
