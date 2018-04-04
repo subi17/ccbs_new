@@ -869,6 +869,44 @@ FUNCTION fRetention RETURNS LOGICAL
 
 
 END FUNCTION. /*fRetention*/   
-    
+
+
+FUNCTION fGetMNPOperatorName RETURNS CHAR
+   (INPUT icOperCode AS CHAR):
+
+   DEF BUFFER MNPOperator FOR MNPOperator.
+
+   icOperCode = TRIM(icOperCode).
+   IF icOperCode EQ "" OR icOperCode EQ ? THEN RETURN "".
+
+   FIND MNPOperator NO-LOCK WHERE
+        MNPOperator.Brand    = Syst.Var:gcBrand         AND
+        MNPOperator.OperCode = icOperCode AND
+        MNPOperator.Active   = TRUE NO-ERROR.
+   
+   IF NOT AVAIL MNPOperator THEN 
+      FIND MNPOperator NO-LOCK WHERE
+           MNPOperator.Brand    = Syst.Var:gcBrand         AND
+           MNPOperator.OperCode = icOperCode NO-ERROR.
+   IF AVAIL MNPOperator THEN RETURN MNPOperator.OperName.
+
+   IF NOT AVAIL MNPOperator THEN
+      FIND FIRST MNPOperator NO-LOCK WHERE
+                 MNPOperator.Brand    = Syst.Var:gcBrand AND
+                 MNPOperator.OperCode = icOperCode AND
+                 MNPOperator.Active = TRUE  NO-ERROR.
+
+   IF NOT AVAIL MNPOperator THEN 
+      FIND FIRST MNPOperator NO-LOCK WHERE
+                 MNPOperator.Brand    = Syst.Var:gcBrand AND
+                 MNPOperator.OperCode = icOperCode NO-ERROR.
+   
+   IF AVAIL MNPOperator THEN DO:
+      IF MNPOperator.OperBrand > "" THEN RETURN MNPOperator.OperBrand.
+      ELSE RETURN MNPOperator.OperName.
+   END.
+
+   RETURN "".
+END.
 
 &ENDIF
