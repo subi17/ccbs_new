@@ -990,3 +990,5 @@
 200 "SubsTypeFrom" "CONT34"
 200 "SubsTypeTo" "CONT10"
 200 "SubsTypeTo" "CONT34"
+201 "PerContract" "DDS2"
+201 "SubsTypeTo" "CONT30"
