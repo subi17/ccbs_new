@@ -164,14 +164,15 @@ FUNCTION fCheckForMandatoryExtraLine RETURNS LOGICAL
    DEFINE BUFFER MobSub      FOR MobSub.
    DEFINE BUFFER Order       FOR Order.
 
-   FIND FIRST TMSRelation NO-LOCK WHERE 
-              TMSRelation.TableName       EQ {&ELTABLENAME} AND 
-              TMSRelation.KeyType         EQ {&ELKEYTYPE}   AND 
-              TMSRelation.ParentValue     EQ icMainCLIType  AND 
-              TMSRelation.RelationType    EQ {&ELMANDATORY} NO-ERROR.
+   FOR EACH TMSRelation NO-LOCK WHERE 
+            TMSRelation.TableName       EQ {&ELTABLENAME} AND 
+            TMSRelation.KeyType         EQ {&ELKEYTYPE}   AND 
+            TMSRelation.ParentValue     EQ icMainCLIType  AND 
+            TMSRelation.RelationType    EQ {&ELMANDATORY}:
    
-   IF AVAIL TMSRelation AND
-      ENTRY(3,TMSRelation.ChildValue,"_") EQ icELCLIType THEN DO:
+      IF NUM-ENTRIES(TMSRelation.ChildValue,"_") < 3 THEN NEXT.
+
+      IF ENTRY(3,TMSRelation.ChildValue,"_") NE icELCLIType THEN NEXT.
       
       IF llgExisting THEN DO: 
          IF CAN-FIND(MobSub NO-LOCK USE-INDEX CustNum WHERE

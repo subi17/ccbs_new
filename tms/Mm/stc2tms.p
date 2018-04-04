@@ -21,6 +21,7 @@
 {Func/profunc_request.i}
 {Func/add_lines_request.i}
 {Func/custfunc.i}
+{Func/order.i}
 /* 21.2.2018 Migration is not used, commented the include file
 {Migration/migrationfunc.i}*/
 
@@ -1681,6 +1682,7 @@ PROCEDURE pUpdateCustomer:
 
     IF AVAIL Order AND Order.OrderType = {&ORDER_TYPE_STC} THEN 
     DO:
+        fUpdateCustomerInstAddr(Order.OrderId).
         FIND FIRST OrderCustomer WHERE OrderCustomer.Brand   = Syst.Var:gcBrand                            AND
                                        OrderCustomer.OrderID = Order.OrderId                      AND
                                        OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-LOCK NO-ERROR.

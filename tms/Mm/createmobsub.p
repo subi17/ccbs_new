@@ -45,6 +45,7 @@
 {Func/create_eventlog.i}
 {Func/msisdn_prefix.i}
 {Func/add_lines_request.i}
+{Func/order.i}
 
 DEF INPUT  PARAMETER iiMSRequest AS INT  NO-UNDO.
 
@@ -689,6 +690,7 @@ IF NOT AVAIL mobsub THEN DO:
    END. /* IF LOOKUP(Customer.category,"20,40,41") = 0 THEN DO: */
 
    IF MsRequest.ReqType EQ {&REQTYPE_FIXED_LINE_CREATE} THEN DO:
+      fUpdateCustomerInstAddr(Order.OrderID).
       RUN Mm/orderaction_exec.p (MobSub.MsSeq,
                       Order.OrderID,
                       ldeActivationTS,
@@ -890,7 +892,7 @@ FIND FIRST OrderAction WHERE
            OrderAction.ItemKey NE {&DSS} NO-LOCK NO-ERROR.
 
 IF NOT AVAIL OrderAction AND
-   LOOKUP(MobSub.CLIType,"CONT6,TARJRD1,CONT7,CONT8,CONTS,CONTFF,CONTSF,CONT9,CONT10,CONT15,CONT24,CONT23,CONT25,CONT26,CONT27") = 0 AND
+   LOOKUP(MobSub.CLIType,"CONT6,TARJRD1,CONT7,CONT8,CONTS,CONTFF,CONTSF,CONT9,CONT10,CONT15,CONT24,CONT23,CONT25,CONT26,CONT27,CONT31,CONT33,CONT34") = 0 AND
    NOT MobSub.CLIType BEGINS "CONTFH" AND
    NOT MobSub.CLITYpe BEGINS "CONTDSL" THEN DO:
 
@@ -1152,6 +1154,33 @@ IF Order.MNPStatus > 0 THEN DO:
    END.
 END.
 
+/* Override default national roaming profile */
+IF Customer.NWProfile > 0 AND
+   Customer.NWProfile NE {&CUSTOMER_NW_PROFILE_YG_OR} THEN DO:
+
+   liRequest = fServiceRequest(
+                  MobSub.MsSeq,
+                  "NW",
+                  Customer.NWProfile,
+                  "", /* param */
+                  Func.Common:mMakeTS(),
+                  "", /* salesman */
+                  TRUE,      /* fees */
+                  FALSE,      /* sms */
+                  "", /* usercode */
+                  {&REQUEST_SOURCE_SUBSCRIPTION_CREATION},
+                  msrequest.msrequest, /* father request */
+                  false, /* mandatory for father request */
+                  OUTPUT lcerror).
+   
+   IF liRequest = 0 THEN                               
+      /* write possible error to a memo */
+      Func.Common:mWriteMemo("MobSub",
+                       STRING(MobSub.MsSeq),
+                       MobSub.Custnum,
+                       "NW profile change failed",
+                       lcError).
+END.
 
 IF Order.MultiSimID > 0 THEN DO:
 
