@@ -801,6 +801,14 @@ PROCEDURE local-UPDATE-record:
                VIEW-AS ALERT-BOX ERROR.
                NEXT.
             END.
+            
+            IF INPUT DPMember.ValidFrom EQ ? OR
+               INPUT DPMember.ValidTo EQ ?
+            THEN DO:
+               MESSAGE "Invalid date value"
+               VIEW-AS ALERT-BOX ERROR.
+               NEXT.
+            END.
  
             IF DiscountPlan.Subject = "Contract Target" AND 
                DiscountPlan.SubjectType = "List"
