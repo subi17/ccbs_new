@@ -63,6 +63,7 @@ DO liCounter = 0 TO get_paramcount(pcIDArray) - 1:
       WHEN "profession" THEN fGetTMSCodes("OrderCustomer","Profession").
       WHEN "request_type" THEN fGetRequestTypes().
       WHEN "TFBank" THEN fGetTMSCodes("FixedFee","TFBank").
+      WHEN "NWProfiles" THEN fGetTMSCodes("Customer","NWProfiles").
       OTHERWISE RETURN appl_err("Unknown tmscodes identifier: " + pcId).
    END.
 
