@@ -8,6 +8,7 @@
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Mm/active_bundle.i}
+{Func/extralinefunc.i}
 {Func/fixedlinefunc.i}
 
 DEF TEMP-TABLE ttAction NO-UNDO

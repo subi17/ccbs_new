@@ -70,6 +70,7 @@ FUNCTION fExecuteMainLineOperations RETURNS LOGICAL
     INPUT ilgCreateDisc AS LOG):
 
    DEF VAR llgLinkAvailable AS LOG NO-UNDO. 
+   DEF VAR oiExtralineCount AS INT NO-UNDO. 
 
    DEFINE BUFFER lMLMobSub   FOR MobSub.
    DEFINE BUFFER bfELMobSub  FOR MobSub.
@@ -88,8 +89,11 @@ FUNCTION fExecuteMainLineOperations RETURNS LOGICAL
            (lMLMobSub.MsStatus EQ {&MSSTATUS_ACTIVE} OR
             lMLMobSub.MsStatus EQ {&MSSTATUS_BARRED})
        BY lMLMobSub.ActivationTS:
-
-       IF NOT fCLITypeAllowedForExtraLine(lMLMobSub.CLIType, bfELMobsub.CLIType) THEN NEXT.
+   
+        /* This cron job process is disabled, just to ignore the error messages
+           we have modified this file */
+       IF NOT fCLITypeAllowedForExtraLine(lMLMobSub.CLIType, bfELMobsub.CLIType, 
+                                          OUTPUT oiExtralineCount) THEN NEXT.
 
        /* Check if this mainline is already associated with other Extraline */
        FIND FIRST bAvELMobSub NO-LOCK WHERE
