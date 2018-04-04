@@ -268,7 +268,6 @@ PROCEDURE pServCompUpdate:
    DEF VAR lcBarring AS CHAR NO-UNDO. 
    DEF VAR lrBarring AS ROWID no-undo.
    DEF VAR llOngoing AS LOG NO-UNDO. 
-      
 
    DEF BUFFER bOrigRequest    FOR MsRequest.
    DEF BUFFER bMobsub         FOR MobSub.
