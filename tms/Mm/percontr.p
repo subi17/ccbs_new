@@ -707,8 +707,7 @@ PROCEDURE pContractActivation:
             IF (fCLITypeIsMainLine(bMobSub.CLIType) OR
                 fCLITypeIsExtraLine(bMobSub.CLIType)) THEN DO:
                IF fCheckExtraLineMatrixSubscription(bMobSub.MsSeq,
-                                                    bMobSub.MultiSimId,
-                                                    bMobSub.MultiSimType) 
+                                                    bMobSub.CLIType) 
                THEN DO:
                   fReqStatus(3,"Bundle Upsell can not be activated because " +
                              "DSS2 extra line analyse").
