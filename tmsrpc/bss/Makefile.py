@@ -31,5 +31,5 @@ def run_agent(*a):
             '-clientlog', '../../var/log/%s_agent.%d.log' % \
             	          (parameters[0], os.getpid())]
 
-    args = mpro + args + extraargs + ['-b', '-p', 'profcgi/main.p', '-param', ',,,/home/talammin/temp/ootest']
+    args = mpro + args + extraargs + ['-b', '-p', 'profcgi/main.p', '-param', ',,']
     os.execlp(args[0], *args)
