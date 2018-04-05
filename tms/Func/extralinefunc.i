@@ -126,6 +126,41 @@ FUNCTION fCLITypeIsMainLine RETURNS LOGICAL
 
 END FUNCTION.
 
+
+FUNCTION fCheckMNPOrdersforExtraLine RETURN INTEGER 
+        (INPUT lcExtraLineCLIType AS CHARACTER ,
+         INPUT lcCustIDType       AS CHARACTER ,
+         INPUT lcCustID           AS CHARACTER  ) :
+
+    DEFINE BUFFER bfOrder         FOR Order.
+    DEFINE BUFFER bfOrderCustomer FOR OrderCustomer.
+    
+    DEFINE VARIABLE liMNPELCount  AS INTEGER NO-UNDO.
+
+    FOR EACH bfOrderCustomer NO-LOCK WHERE
+             bfOrderCustomer.Brand      EQ Syst.Var:gcBrand AND
+             bfOrderCustomer.CustId     EQ lcCustID         AND
+             bfOrderCustomer.CustIdType EQ lcCustIDType     AND
+             bfOrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} :
+               
+        FOR EACH bfOrder NO-LOCK WHERE
+                 bfOrder.Brand        EQ Syst.Var:gcBrand        AND
+                 bfOrder.orderid      EQ bfOrderCustomer.Orderid AND
+                 bfOrder.OrderType    EQ {&ORDER_TYPE_MNP}       AND 
+                 bfOrder.CLIType      EQ lcExtraLineCLIType   :
+            
+            IF LOOKUP(bfOrder.StatusCode,{&ORDER_INACTIVE_STATUSES}) > 0 THEN NEXT.
+            
+            ASSIGN liMNPELCount = liMNPELCount + 1 .
+                     
+        END.
+        
+    END.      
+     
+    RETURN liMNPELCount.
+    
+END FUNCTION.          
+
 /* Function checks if STC is possible when the new clitype is
    extraline. It is possible when the customer has a free
    mainline and the mainline is suitable for the extraline */
@@ -307,6 +342,7 @@ FUNCTION fCheckExistingMainLineAvailForExtraLine RETURNS INTEGER
 
    DEF VAR liELCount AS INT NO-UNDO. 
    DEF VAR liCount   AS INT NO-UNDO. 
+   DEF VAR liMNPCnt  AS INT NO-UNDO.
 
    IF icExtraLineCLIType EQ "" THEN RETURN 0.
 
@@ -358,6 +394,11 @@ FUNCTION fCheckExistingMainLineAvailForExtraLine RETURNS INTEGER
              liCount = liCount + 1.   
           END.
           
+          ASSIGN liMNPCnt = fCheckMNPOrdersforExtraLine(icExtraLineCLIType , icCustIDType , icCustID )
+                 liCount  = liCount + liMNPCnt. 
+                 
+          IF liCount >= liELCount THEN NEXT.
+          
           IF liCount EQ 0 THEN DO:
              IF NOT fCheckForMandatoryExtraLine(MobSub.MsSeq,
                                                 Customer.CustNum,
@@ -392,6 +433,7 @@ FUNCTION fCheckOngoingMainLineAvailForExtraLine RETURNS INTEGER
 
    DEF VAR liELCount AS INT NO-UNDO. 
    DEF VAR liCount   AS INT NO-UNDO. 
+   DEF VAR liMNPCnt  AS INT NO-UNDO.
    
    DEFINE BUFFER OrderCustomer FOR OrderCustomer.
    DEFINE BUFFER Order         FOR Order.
@@ -429,6 +471,11 @@ FUNCTION fCheckOngoingMainLineAvailForExtraLine RETURNS INTEGER
                                 icCustID,
                                 Order.OrderId, /* Mainline OrderId */
                                 OUTPUT liCount).
+      
+      ASSIGN liMNPCnt = fCheckMNPOrdersforExtraLine(icExtraLineCLIType , icCustIDType , icCustID )
+             liCount  = liCount + liMNPCnt .
+             
+      IF liCount >= liELCount THEN NEXT.                              
 
       IF liCount EQ 0 THEN DO:
          IF NOT fCheckForMandatoryExtraLine(Order.OrderId,
@@ -701,6 +748,7 @@ FUNCTION fGetExtraLineMandatoryCLIType RETURN CHARACTER
     RETURN "".           
                       
 END FUNCTION.             
+   
 
 
 &ENDIF
