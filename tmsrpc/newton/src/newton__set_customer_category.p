@@ -81,8 +81,8 @@ CASE lcCategory:
 
         liRequest = fCustomerCategoryChangeRequest ( ? ,
             Syst.Var:katun   ,
-            Customer.CustNum ,
             MobSub.Msseq     ,
+            Customer.CustNum ,
             bf_CustCat.category ,
             Customer.category,
             lcMSISDN         ,
