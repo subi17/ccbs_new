@@ -358,7 +358,9 @@ llOrderAllowed = fSubscriptionLimitCheck(
 IF NOT llOrderAllowed THEN DO:
    IF plSTCMigrate THEN
       llOrderAllowed = TRUE.
-   ELSE lcReason = "subscription limit".
+   ELSE ASSIGN 
+       lcReason = "subscription limit"
+       lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
 END.
 
 FIND FIRST Customer NO-LOCK WHERE
@@ -556,7 +558,8 @@ IF llOrderAllowed = NO               AND
    lcReason = "subscription limit"   AND
    fCLITypeIsExtraLine(pcCliType)    AND 
    LOOKUP(pcCliType,lcExtraLineAllowed) > 0 THEN
-   ASSIGN 
+   ASSIGN
+       lcReasons       = REPLACE(lcReasons,lcReason,"") 
        lcReason        = ""
        llOrderAllowed  = TRUE.
        
