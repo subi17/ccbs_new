@@ -8,7 +8,7 @@ def main():
 
     result = {
         "jsonrpc": "2.0",
-        "method": "testi",
+        "method": "bss.cls.Test",
         "params": [{"serviceRef": "1234", "fromDate": "2017-01-01 00:00:00", "toDate": "2017-01-31 23:59:59"}],
         "id": 0,
     }
