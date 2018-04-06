@@ -44,6 +44,7 @@
 {Func/fixedfee.i}
 
 DEF VAR lcEmailErr AS CHAR NO-UNDO.
+DEFINE VARIABLE lcEmailAddr AS CHARACTER NO-UNDO.
 
 FUNCTION fBundleWithSTCCustomer RETURNS LOG
    (iiCustnum    AS INT,
@@ -1063,8 +1064,36 @@ PROCEDURE pContractActivation:
       IF DayCampaign.BundleTarget = {&DC_BUNDLE_TARGET_SVA} THEN DO:
           DCCLi.WebContractID = MsRequest.ReqCparam5. 
           IF Mm.MManMessage:mGetMessage("EMAIL", "SVA_ActEmail", 1) EQ TRUE THEN DO:
-              Mm.MManMessage:ParamKeyValue = "".
-              Mm.MManMessage:mCreateMMLogEmail("", TRUE).
+            FIND FIRST DiscountPlan WHERE DiscountPlan.Brand    = Syst.Var:gcBrand AND 
+                                          DiscountPlan.DPRuleID = DayCampaign.DcEvent + "DISC" NO-LOCK NO-ERROR.
+            FIND FIRST DPRate WHERE 
+                       DPRate.DPId = DiscountPlan.DPId AND 
+                       DPRate.ValidFrom <= TODAY AND
+                       DPRate.ValidTo   >= TODAY NO-LOCK NO-ERROR.
+            IF AVAILABLE DPrate THEN 
+               Mm.MManMessage:ParamKeyValue = REPLACE(Mm.MManMessage:ParamKeyValue,"#SVADISC", STRING(DPRate.DiscValue) ).
+            FIND FIRST FMItem WHERE FMItem.Brand     EQ Syst.Var:gcBrand              AND 
+                       FMItem.FeeModel  EQ DayCampaign.FeeModel AND 
+                       FMItem.BillCode  <> ""                   AND 
+                       FMItem.PriceList <> ""                   AND
+                       FMItem.FromDate  <= TODAY                AND 
+                       FMItem.ToDate    >= TODAY                NO-LOCK NO-ERROR.
+              IF AVAILABLE FMITem THEN 
+                  Mm.MManMessage:ParamKeyValue = REPLACE(Mm.MManMessage:ParamKeyValue,"#SVAMF" , STRING(FMItem.Amount)).
+              Mm.MManMessage:ParamKeyValue = REPLACE(Mm.MManMessage:ParamKeyValue,"#SVANAME",DayCampaign.DCName).
+              Mm.MManMessage:ParamKeyValue = fGetEmailKeyValuePairs( MSRequest.MsRequest ,Mm.MManMessage:ParamKeyValue ).
+              IF NUM-ENTRIES(bMSRequest.ReqCparam6,"|") GT 2 AND ENTRY(3,bMSRequest.ReqCparam6, "|") <> "" THEN
+                 lcEmailAddr = ENTRY(3,bMSRequest.ReqCparam6, "|").
+              ELSE IF NUM-ENTRIES(bMSRequest.ReqCparam6,"|") EQ 2 AND ENTRY(2,bMSRequest.ReqCparam6, "|") <> "" THEN
+                 lcEmailAddr = ENTRY(2,bMSRequest.ReqCparam6, "|").
+              ELSE DO:
+                   FIND FIRST Customer NO-LOCK WHERE
+                        Customer.CustNum EQ MsRequest.CustNum NO-ERROR.  
+                   IF AVAILABLE Customer THEN 
+                        lcEmailAddr  = Customer.email.
+              END. 
+              IF lcEmailAddr NE "" THEN 
+                 Mm.MManMessage:mCreateMMLogEmail(lcEmailAddr, TRUE).
               Mm.MManMessage:mClearData().
           END.
       END. 

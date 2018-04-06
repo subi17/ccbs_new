@@ -237,6 +237,7 @@ DO :
         InvText.Todate    = 12/31/49               
         InvText.Language  = 1
         InvText.TemplateID  = "SVA_ActEmail_MM"
+        InvText.ParamKeyValue = "contract_id=#CONTRACTID|order_date=#ORDERDATE|first_name=#FIRSTNAME|last_name=#LASTNAME|customer_id_type=#CUSTTYPE|customer_id=#CUSTID|customer_address=#PROVINCE|customer_postal_code=#POSTALCODE|contact_number=#NUMBER|contact_email=#EMAIL|sva_name=#SVANAME|sva_monthly_fee=#SVAMF|sva_discount=#SVADISC"
         InvText.InvText   = ""
         InvText.UseMMan   = TRUE 
         INvText.category  = "SVA Activation"

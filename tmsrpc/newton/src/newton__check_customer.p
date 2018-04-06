@@ -66,6 +66,13 @@ DEF VAR lcExtraLineCLITypes           AS CHAR NO-UNDO.
 DEF VAR liMLMsSeq                     AS INT  NO-UNDO. 
 DEF VAR lcReasons                     AS CHAR NO-UNDO.
 
+DEF BUFFER bCustomer  FOR Customer.
+DEF BUFFER bMobSub    FOR MobSub.
+DEF BUFFER bCustCat   FOR Custcat.
+DEF BUFFER bOrder     FOR Order.
+DEF BUFFER bClitype   FOR CLIType.
+DEF VARIABLE llHasLegacyTariff AS LOGICAL NO-UNDO.
+   
 top_array = validate_request(param_toplevel_id, "string,string,string,boolean,int,[string],[string],[boolean]").
 IF top_array EQ ? THEN RETURN.
 
@@ -96,6 +103,67 @@ IF gi_xmlrpc_error NE 0 THEN RETURN.
 IF INDEX(pcChannel,"PRO") > 0 THEN 
     llProChannel = TRUE.
 
+FUNCTION fSetError RETURNS LOG (INPUT icError AS CHARACTER):
+      ASSIGN
+         llOrderAllowed = FALSE
+         lcReason       = icError
+         lcReasons      = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.  
+      RETURN TRUE .
+END FUNCTION .        
+
+FUNCTION fPreCheck RETURNS LOG():
+    DEFINE VARIABLE lcSegment AS CHARACTER NO-UNDO.
+    DEFINE VARIABLE llError   AS LOGICAL   NO-UNDO.
+       FIND bCustomer WHERE bCustomer.Brand EQ Syst.Var:gcBrand AND bCustomer.CustNum = Customer.CustNum NO-LOCK NO-ERROR.
+       FIND bCustCat WHERE bCustcat.Category = bCustomer.Category NO-LOCK NO-ERROR.
+       IF AVAILABLE bCustCat THEN
+           lcSegment = bCustCat.Segment.
+       /* Is Customer among the required segment */
+       IF LOOKUP(lcSegment,"AUTONOMO,COMPANY,SOHO-AUTONOMO,SOHO-COMPANY") EQ 0  THEN DO:
+           llError = fSetError("Migration not allowed. Customer is of Consumer category") .
+       END.
+       /* Does customer have legacy tariffs */
+       FOR EACH bMobSub 
+          WHERE bMobSub.Brand = Syst.Var:gcBrand 
+            AND bMobSub.InvCust = bCustomer.CustNum 
+            AND bMobSub.MsStatus = {&MSSTATUS_ACTIVE} NO-LOCK:
+           IF bMobSub.Clitype EQ "CONT23" OR 
+              bMobSub.Clitype EQ "CONT24" OR 
+              bMobSub.Clitype EQ "CONT9" THEN DO: 
+              llHasLegacyTariff = TRUE.
+              LEAVE.
+           END.
+       END.
+       IF NOT llHasLegacyTariff THEN DO:
+            llError =  fSetError("Migration not allowed. Please check if customer tariffs met the change requirement").
+       END.
+       /* Convergent in ONGOING status */
+       FOR EACH bOrder
+          WHERE bOrder.Brand = Syst.Var:gcBrand 
+            AND bOrder.CustNum = bCustomer.CustNum 
+            AND bOrder.StatusCode = {&ORDER_STATUS_ONGOING} NO-LOCK:
+            FIND bClitype WHERE bClitype.CliType = bOrder.CliType NO-LOCK NO-ERROR.
+            IF AVAILABLE bCliType AND 
+               (bCliType.FixedLineType = {&CLITYPE_TARIFFTYPE_CONVERGENT} OR 
+                bCliType.FixedLineType = {&CLITYPE_TARIFFTYPE_FIXEDONLY}  )  THEN DO:
+                llError = fSetError("Migration not allowed. Please check if customer has an ongoing order").
+            END.  
+       END.         
+       /* Customer having a active prepaid subscription */
+       FOR EACH bMobSub 
+          WHERE bMobSub.Brand = Syst.Var:gcBrand
+            AND bMobSub.InvCust = bCustomer.CustNum 
+            AND bMobSub.MsStatus = {&MSSTATUS_ACTIVE} NO-LOCK:
+           IF bMobSub.paytype THEN DO:
+               llError = fSetError("Migration not allowed. Customer has an active prepaid subscription").
+           END.
+       END.
+       
+       RETURN llError.
+
+END FUNCTION.
+
+
 FUNCTION fCheckMigration RETURNS LOG ():
 
    DEF BUFFER Order FOR Order.
@@ -103,11 +171,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
 
    DEF VAR llOnlyActiveFound AS LOG NO-UNDO.
 
-   IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
-      ASSIGN
-         llOrderAllowed = FALSE
-         lcReason = "PRO migration not possible because of not company or selfemployed"
-         lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.         
+   IF fPreCheck() THEN DO: /* taken care in funcion */ END.      
    ELSE DO:
       FIND Mobsub WHERE Mobsub.Brand EQ Syst.Var:gcBrand AND Mobsub.InvCust EQ Customer.CustNum NO-LOCK NO-ERROR.
       IF AMBIG MobSub THEN
@@ -358,9 +422,7 @@ llOrderAllowed = fSubscriptionLimitCheck(
 IF NOT llOrderAllowed THEN DO:
    IF plSTCMigrate THEN
       llOrderAllowed = TRUE.
-   ELSE ASSIGN 
-       lcReason = "subscription limit"
-       lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
+   ELSE lcReason = "subscription limit".
 END.
 
 FIND FIRST Customer NO-LOCK WHERE
@@ -412,11 +474,7 @@ ELSE IF AVAIL Customer AND
 
     IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN 
     DO:
-        IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
-           ASSIGN
-              llOrderAllowed = FALSE
-              lcReason = "PRO migration not possible because of not company or selfemployed"
-              lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason. 
+        IF fPreCheck() THEN DO: /* taken care in funcion */ END.
         ELSE IF llCustCatPro THEN 
         DO:            
             IF NOT fIsConvergent3POnly(pcCliType) AND 
@@ -484,11 +542,7 @@ ELSE IF AVAIL Customer AND
 END.
 ELSE DO:
    IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN DO:
-      IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
-           ASSIGN
-              llOrderAllowed = FALSE
-              lcReason = "PRO migration not possible because of not company or selfemployed"
-              lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason. 
+      IF fPreCheck() THEN DO: /* taken care in funcion */ END.
       ELSE DO:
          FOR EACH OrderCustomer WHERE
                   OrderCustomer.Brand      EQ Syst.Var:gcBrand    AND
@@ -558,8 +612,7 @@ IF llOrderAllowed = NO               AND
    lcReason = "subscription limit"   AND
    fCLITypeIsExtraLine(pcCliType)    AND 
    LOOKUP(pcCliType,lcExtraLineAllowed) > 0 THEN
-   ASSIGN
-       lcReasons       = REPLACE(lcReasons,lcReason,"") 
+   ASSIGN 
        lcReason        = ""
        llOrderAllowed  = TRUE.
        

@@ -28,7 +28,7 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
    IF NOT AVAIL bMsRequest THEN RETURN "ERROR: Request not found " +
                                    STRING(iiMsRequest).
    FIND FIRST bCustomer NO-LOCK WHERE
-              bCustomer.CustNum EQ bMsRequest.CustNum.
+              bCustomer.CustNum EQ bMsRequest.CustNum NO-ERROR.
     IF NOT AVAIL bCustomer THEN
        RETURN "ERROR: Customer of requst not found " + STRING(iiMsRequest).
 
@@ -158,14 +158,15 @@ FUNCTION fGetEmailKeyValuePairs RETURNS CHAR
    DEF BUFFER bCliType   FOR CliType.
    DEF BUFFER bOrder     FOR Order.
    
-   DEFINE VARIABLE lcOutput AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcOutput  AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcReplace AS CHARACTER NO-UNDO.
    
    FIND FIRST bMsRequest NO-LOCK WHERE
               bMsRequest.MsRequest EQ iiMsRequest NO-ERROR.
    IF NOT AVAIL bMsRequest THEN RETURN "ERROR: Request not found " +
                                    STRING(iiMsRequest).
-   FIND FIRST bCustomer NO-LOCK WHERE
-              bCustomer.CustNum EQ bMsRequest.CustNum.
+   FIND FIRST bCustomer WHERE
+              bCustomer.CustNum EQ bMsRequest.CustNum NO-LOCK NO-ERROR.
     IF NOT AVAIL bCustomer THEN
        RETURN "ERROR: Customer of requst not found " + STRING(iiMsRequest).
 
@@ -177,43 +178,47 @@ FUNCTION fGetEmailKeyValuePairs RETURNS CHAR
       
    lcOutput = icKeyValueSrc.
 
-   IF INDEX(lcOutput, "#OrderContractID") > 0 THEN
-      lcOutput = REPLACE(lcOutput, "#OrderContractID", STRING(bOrder.ContractID)).
+   IF INDEX(lcOutput, "#CONTRACTID") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#CONTRACTID", STRING(bOrder.ContractID)).
    
-   IF INDEX(lcOutput, "#OrderCreationDate") > 0 THEN
-      lcOutput = REPLACE(lcOutput, "#OrderCreationDate", STRING(bOrder.CrStamp)).
+   IF INDEX(lcOutput, "#ORDERDATE") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#ORDERDATE", STRING(Func.Common:mTSToDate(bOrder.CrStamp))).
    
-   IF INDEX(lcOutput, "#CompanyName") > 0 THEN
-      lcOutput = REPLACE(lcOutput, "#CompanyName",   
-      IF bCustomer.CustIDType = "CIF" AND bCustomer.CompanyName > "" THEN
-          bCustomer.CompanyName + (IF bCustomer.CoName > ""  THEN " " + bCustomer.CoName  ELSE "")
+   IF INDEX(lcOutput, "#CUSTTYPE") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#CUSTTYPE", STRING(bCustomer.CustIdType)).
+   
+   IF INDEX(lcOutput, "#CUSTID") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#CUSTID", STRING(bCustomer.Orgid)).
+      
+   IF INDEX(lcOutput, "#FIRSTNAME") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#FIRSTNAME", Func.Common:mDispCustName(BUFFER bCustomer)).
+      
+   IF INDEX(lcOutput, "#PROVINCE") > 0 THEN
+   DO:
+      lcOutput = REPLACE(lcOutput, "#PROVINCE"       , bCustomer.Address).
+      lcOutput = REPLACE(lcOutput, "#CITY"           , bCustomer.PostOffice).
+      lcOutput = REPLACE(lcOutput, "#POSTALCODE"     , bCustomer.ZipCode).
+   END.
+   
+   IF INDEX(lcOutput, "#EMAIL") > 0 THEN 
+   DO:
+      IF NUM-ENTRIES(bMSRequest.ReqCparam6,"|") GT 2 AND ENTRY(3,bMSRequest.ReqCparam6, "|") <> "" THEN
+         lcReplace = ENTRY(3,bMSRequest.ReqCparam6, "|").
+      ELSE IF NUM-ENTRIES(bMSRequest.ReqCparam6,"|") EQ 2 AND ENTRY(2,bMSRequest.ReqCparam6, "|") <> "" THEN
+         lcReplace = ENTRY(2,bMSRequest.ReqCparam6, "|").
       ELSE 
-          ""
-      ).
+         lcReplace = bCustomer.Email.
 
-   IF INDEX(lcOutput, "#CompanyID") > 0 THEN
-      lcOutput = REPLACE(lcOutput, "#CompanyID",   
-      IF bCustomer.CustIDType = "CIF" THEN 
-         bCustomer.OrgID
-      ELSE 
-          ""
-      ).
-    
-   IF INDEX(lcOutput, "#FoundationDate") > 0 THEN
-      lcOutput = REPLACE(lcOutput, "#FoundationDate",   
-      IF bCustomer.CustIDType = "CIF" AND bCustomer.FoundationDate NE ? THEN 
-         STRING(bCustomer.FoundationDate)
-      ELSE 
-          ""
-      ).
+      lcOutput = REPLACE(lcOutput, "#EMAIL", lcReplace).
+   END.
 
-   IF INDEX(lcOutput, "#CustomerFirstName") > 0 THEN
-      lcOutput = REPLACE(lcOutput, "#CustomerFirstName",   
-      IF bCustomer.CustIDType = "CIF" AND bCustomer.FoundationDate NE ? THEN 
-         STRING(bCustomer.FoundationDate)
-      ELSE 
-          ""
-      ).                 
+   IF INDEX(lcOutput, "#NUMBER") > 0 THEN 
+   DO:
+      lcReplace = ENTRY(2,bMsRequest.Reqcparam6, "|").
+      lcOutput = REPLACE(lcOutput, "#NUMBER", lcReplace).
+   END.   
+         
+   RETURN lcOutput.
 END FUNCTION.
 
 FUNCTION fProMigrationRequest RETURNS INTEGER
@@ -257,7 +262,7 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
        /* Does customer have legacy tariffs */
        FOR EACH bMobSub 
           WHERE bMobSub.Brand = Syst.Var:gcBrand 
-            AND bMobSub.CustNum = bCustomer.CustNum 
+            AND bMobSub.InvCust = bCustomer.CustNum 
             AND bMobSub.MsStatus = {&MSSTATUS_ACTIVE} NO-LOCK:
            IF bMobSub.Clitype EQ "CONT23" OR 
               bMobSub.Clitype EQ "CONT24" OR 
@@ -284,9 +289,9 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
        /* Customer having a active prepaid subscription */
        FOR EACH bMobSub 
           WHERE bMobSub.Brand = Syst.Var:gcBrand
-            AND bMobSub.CustNum = bCustomer.CustNum 
+            AND bMobSub.InvCust = bCustomer.CustNum 
             AND bMobSub.MsStatus = {&MSSTATUS_ACTIVE} NO-LOCK:
-           IF bMobSub.Clitype BEGINS "TAR" THEN DO:
+           IF bMobSub.paytype THEN DO:
                ocResult = "105".
                RETURN 0.
            END.
