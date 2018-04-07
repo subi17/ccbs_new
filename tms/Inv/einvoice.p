@@ -227,6 +227,10 @@ FOR EACH Invoice WHERE
          STRING(DATE(TODAY)) + " " +
          STRING(TIME,"hh:mm:ss") SKIP.
       END.
+      /*Workaround to slowness: making pause connection is repoened 
+        and this releases buffers*/
+      IF liCounter MOD 50000 EQ 0 THEN PAUSE(120).
+       
    END. /* FOR EACH SubInvoice OF Invoice NO-LOCK: */
 
 END. /* FOR EACH Invoice WHERE */
