@@ -326,6 +326,7 @@ CASE FusionMessage.FixedStatus:
    WHEN "CANCELADA" THEN DO:
       /*NEBA TODO*/
       /*If this is cancelled in NEBA PERMANENCY period,the penalty must be handled.*/
+      
 
       IF llOldStructure THEN
          ASSIGN OrderFusion.CancellationReason = lcAdditionalInfo.
@@ -348,6 +349,11 @@ CASE FusionMessage.FixedStatus:
                              RETURN-VALUE).
             FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.
          END.
+      END.
+      /*NEBA penalty period before fixed line activation*/
+      ELSE IF Orderfusion.IUA > 0 /*AND ensure that it is neba before creating fee
+              Order.StatusCode NE */ THEN DO:
+                 
       END.
       ELSE FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.
    END.
