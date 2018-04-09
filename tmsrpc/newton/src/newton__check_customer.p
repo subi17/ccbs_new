@@ -474,7 +474,11 @@ ELSE IF AVAIL Customer AND
 
     IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN 
     DO:
-        IF fPreCheck() THEN DO: /* taken care in funcion */ END.
+       IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
+          ASSIGN
+             llOrderAllowed = FALSE
+             lcReason = "PRO migration not possible because of not company or selfemployed"
+             lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
         ELSE IF llCustCatPro THEN 
         DO:            
             IF NOT fIsConvergent3POnly(pcCliType) AND 
@@ -542,7 +546,11 @@ ELSE IF AVAIL Customer AND
 END.
 ELSE DO:
    IF LOOKUP(pcChannel,lcPROChannels) > 0 THEN DO:
-      IF fPreCheck() THEN DO: /* taken care in funcion */ END.
+       IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
+          ASSIGN
+             llOrderAllowed = FALSE
+             lcReason = "PRO migration not possible because of not company or selfemployed"
+             lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
       ELSE DO:
          FOR EACH OrderCustomer WHERE
                   OrderCustomer.Brand      EQ Syst.Var:gcBrand    AND
