@@ -1048,33 +1048,6 @@ PROCEDURE pTerminate:
                      ldtCloseDate,
                      NO).
                      
-      /* YCO-250 Additional line get SMS when the convergent package is broken */
-      FIND bCLIType NO-LOCK WHERE
-           bCLIType.Brand   = Syst.Var:gcBrand AND
-           bCLIType.CLIType = TermMobSub.CLIType
-         NO-ERROR.
-      IF AVAILABLE bCLIType AND
-         bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
-      DO:
-         FIND bCustomer NO-LOCK WHERE
-              bCustomer.Custnum = MobSub.Custnum NO-ERROR.
-
-         lcSMSText = fGetSMSTxt("ConPckEnd_AddLin",
-                                TODAY,
-                               (IF AVAIL bCustomer
-                                THEN bCustomer.Language ELSE 1),
-                                OUTPUT ldeSMSStamp).
-
-         IF lcSMSText > "" THEN
-            fMakeSchedSMS2(MobSub.CustNum,
-                           MobSub.CLI,
-                           11, /* service change */
-                           lcSMSText,
-                           ldeSMSStamp,
-                           "22622",
-                           "").      
-      END.
-      /* YCO-250 end */   
    END.
 
    /* COFF Partial termination */
@@ -1114,9 +1087,8 @@ PROCEDURE pTerminate:
    /* OR */
    /* Close Extra line discount, if extra line subscription is terminated */
    FIND bCLIType NO-LOCK WHERE
-        bCLIType.Brand      = Syst.Var:gcBrand          AND
-        bCLIType.CLIType    = TermMobSub.CLIType
-   NO-ERROR.
+        bCLIType.Brand   EQ Syst.Var:gcBrand   AND
+        bCLIType.CLIType EQ TermMobSub.CLIType NO-ERROR.
    
    IF AVAILABLE bCLIType AND
       ( ( bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} AND
@@ -1144,34 +1116,37 @@ PROCEDURE pTerminate:
 
         IF AVAIL lELOrderAction THEN     
         DO:     
-           fCloseExtraLineDiscount(lELOrder.MsSeq,
-                                   lELOrderAction.ItemKey,
-                                   TODAY).
+           lClose = fCloseExtraLineDiscount(lELOrder.MsSeq,
+                                            lELOrderAction.ItemKey,
+                                            TODAY).
            /* YCO-250 Extra line get SMS when the convergent package is broken */
-           FIND bCLIType NO-LOCK WHERE
-                bCLIType.Brand   = Syst.Var:gcBrand AND
-                bCLIType.CLIType = TermMobSub.CLIType
-                NO-ERROR.
-           IF AVAILABLE bCLIType AND
-              bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+           IF lClose THEN
            DO:
-              FIND bCustomer NO-LOCK WHERE
-                   bCustomer.Custnum = MobSub.Custnum NO-ERROR.
+              FIND bCLIType NO-LOCK WHERE
+                   bCLIType.Brand   = Syst.Var:gcBrand AND
+                   bCLIType.CLIType = TermMobSub.CLIType
+                   NO-ERROR.
+              IF AVAILABLE bCLIType AND
+                 bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+              DO:
+                 FIND bCustomerExtra NO-LOCK WHERE
+                      bCustomerExtra.Custnum = TermMobSub.Custnum NO-ERROR.
 
-              lcSMSText = fGetSMSTxt("ConPckEnd_ExtraLin",
-                                     TODAY,
-                                    (IF AVAIL bCustomer
-                                     THEN bCustomer.Language ELSE 1),
-                                     OUTPUT ldeSMSStamp).
+                 lcSMSText = fGetSMSTxt("ConPckEnd_ExtraLin",
+                                        TODAY,
+                                       (IF AVAIL bCustomerExtra
+                                        THEN bCustomerExtra.Language ELSE 1),
+                                        OUTPUT ldeSMSStamp).
 
-              IF lcSMSText > "" THEN
-                 fMakeSchedSMS2(MobSub.CustNum,
-                                MobSub.CLI,
-                                11, /* service change */
-                                lcSMSText,
-                                ldeSMSStamp,
-                                "22622",
-                                "").      
+                 IF lcSMSText > "" THEN
+                     fMakeSchedSMS2(TermMobSub.CustNum,
+                                    lElOrder.CLI,
+                                    11, /* service change */
+                                    lcSMSText,
+                                    ldeSMSStamp,
+                                    "22622",
+                                    "").      
+              END.
            END.
            /* YCO-250 end */   
         END.
@@ -1209,36 +1184,39 @@ PROCEDURE pTerminate:
                bMobSub.AgrCust = TermMobSub.CustNum AND
                bMobSub.MsSeq  <> TermMobSub.MsSeq   AND
                LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
-         fCloseAddLineDiscount(bMobSub.CustNum,
-                               bMobSub.MsSeq,
-                               bMobSub.CLIType,
-                               Func.Common:mLastDayOfMonth(TODAY)).
+         Close-1 = fCloseAddLineDiscount(bMobSub.CustNum,
+                                         bMobSub.MsSeq,
+                                         bMobSub.CLIType,
+                                         Func.Common:mLastDayOfMonth(TODAY)).
                                
          /* YCO-250 Additional line get SMS when the convergent package is broken */
-         FIND bCLIType NO-LOCK WHERE
-              bCLIType.Brand   = Syst.Var:gcBrand AND
-              bCLIType.CLIType = TermMobSub.CLIType
-              NO-ERROR.
-         IF AVAILABLE bCLIType AND
-            bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+         IF lClose THEN
          DO:
-            FIND bCustomer NO-LOCK WHERE
-                 bCustomer.Custnum = MobSub.Custnum NO-ERROR.
+            FIND bCLIType NO-LOCK WHERE
+                 bCLIType.Brand   = Syst.Var:gcBrand AND
+                 bCLIType.CLIType = TermMobSub.CLIType
+                 NO-ERROR.
+            IF AVAILABLE bCLIType AND
+               bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+            DO:
+               FIND bCustomerAdd NO-LOCK WHERE
+                    bCustomerAdd.Custnum = TermMobSub.Custnum NO-ERROR.
 
-            lcSMSText = fGetSMSTxt("ConPckEnd_AddLin",
-                                   TODAY,
-                                  (IF AVAIL bCustomer
-                                   THEN bCustomer.Language ELSE 1),
-                                   OUTPUT ldeSMSStamp).
+               lcSMSText = fGetSMSTxt("ConPckEnd_AddLin",
+                                      TODAY,
+                                     (IF AVAIL bCustomerAdd
+                                      THEN bCustomerAdd.Language ELSE 1),
+                                      OUTPUT ldeSMSStamp).
 
-            IF lcSMSText > "" THEN
-               fMakeSchedSMS2(MobSub.CustNum,
-                              MobSub.CLI,
-                              11, /* service change */
-                              lcSMSText,
-                              ldeSMSStamp,
-                              "22622",
-                              "").      
+               IF lcSMSText > "" THEN
+                   fMakeSchedSMS2(bMobSub.CustNum,
+                                  bMobSub.CLI,
+                                  11, /* service change */
+                                  lcSMSText,
+                                  ldeSMSStamp,
+                                  "22622",
+                                  "").      
+            END.
          END.
          /* YCO-250 end */ 
       END.
@@ -1355,36 +1333,39 @@ PROCEDURE pTerminate:
             YEAR(bMobSub.ActivationDate) < YEAR(TODAY) THEN
             ASSIGN ldtCloseDate = TODAY.
     
-         fCloseAddLineDiscount(bMobSub.CustNum,
-                               bMobSub.MsSeq,
-                               bMobSub.CLIType,
-                               ldtCloseDate).
+         lClose = fCloseAddLineDiscount(bMobSub.CustNum,
+                                        bMobSub.MsSeq,
+                                        bMobSub.CLIType,
+                                        ldtCloseDate).
                                
          /* YCO-250 Additional line get SMS when the convergent package is broken */
-         FIND bCLIType NO-LOCK WHERE
-              bCLIType.Brand   = Syst.Var:gcBrand AND
-              bCLIType.CLIType = TermMobSub.CLIType
-              NO-ERROR.
-         IF AVAILABLE bCLIType AND
-            bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+         IF lClose THEN
          DO:
-            FIND bCustomer NO-LOCK WHERE
-                 bCustomer.Custnum = MobSub.Custnum NO-ERROR.
+            FIND bCLIType NO-LOCK WHERE
+                 bCLIType.Brand   = Syst.Var:gcBrand AND
+                 bCLIType.CLIType = TermMobSub.CLIType
+                 NO-ERROR.
+            IF AVAILABLE bCLIType AND
+               bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+            DO:
+               FIND bCustomerAdd NO-LOCK WHERE
+                    bCustomerAdd.Custnum = TermMobSub.Custnum NO-ERROR.
 
-            lcSMSText = fGetSMSTxt("ConPckEnd_AddLin",
-                                   TODAY,
-                                  (IF AVAIL bCustomer
-                                   THEN bCustomer.Language ELSE 1),
-                                   OUTPUT ldeSMSStamp).
+               lcSMSText = fGetSMSTxt("ConPckEnd_AddLin",
+                                      TODAY,
+                                     (IF AVAIL bCustomerAdd
+                                      THEN bCustomerAdd.Language ELSE 1),
+                                      OUTPUT ldeSMSStamp).
 
-            IF lcSMSText > "" THEN
-               fMakeSchedSMS2(MobSub.CustNum,
-                              MobSub.CLI,
-                              11, /* service change */
-                              lcSMSText,
-                              ldeSMSStamp,
-                              "22622",
-                              "").      
+               IF lcSMSText > "" THEN
+                   fMakeSchedSMS2(bMobSub.CustNum,
+                                 bMobSub.CLI,
+                                 11, /* service change */
+                                 lcSMSText,
+                                 ldeSMSStamp,
+                                 "22622",
+                                 "").      
+            END.
          END.
          /* YCO-250 end */   
       END.      

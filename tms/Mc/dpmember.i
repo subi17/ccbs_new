@@ -383,7 +383,10 @@ FUNCTION fCloseExtraLineDiscount RETURNS LOGICAL
     INPUT lcExtraLineDisc AS CHAR,
     INPUT idtDate         AS DATE):
 
-  FOR FIRST DiscountPlan NO-LOCK WHERE
+   /* YCO-250 - Controlling if the discount has been really closed and, so, returning TRUE or FALSE */
+   DEFINE VARIABLE lClose AS LOGICAL NO-UNDO.
+   
+   FOR FIRST DiscountPlan NO-LOCK WHERE
              DiscountPlan.Brand    = Syst.Var:gcBrand         AND
              DiscountPlan.DPRuleID = lcExtraLineDisc AND
              DiscountPlan.ValidTo >= idtDate,
@@ -392,15 +395,14 @@ FUNCTION fCloseExtraLineDiscount RETURNS LOGICAL
              DPRate.ValidFrom <= idtDate           AND
              DPRate.ValidTo   >= idtDate:
 
-      fCloseDiscount(DiscountPlan.DPRuleID,
+      lClose = fCloseDiscount(DiscountPlan.DPRuleID,
                      iExtraLineMsSeq,
                      idtDate - 1,
                      NO).
 
    END. 
 
-   RETURN TRUE.
-
+   RETURN lClose. 
 END.    
 
 &ENDIF
