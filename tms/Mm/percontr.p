@@ -1082,10 +1082,10 @@ PROCEDURE pContractActivation:
                   Mm.MManMessage:ParamKeyValue = REPLACE(Mm.MManMessage:ParamKeyValue,"#SVAMF" , STRING(FMItem.Amount)).
               Mm.MManMessage:ParamKeyValue = REPLACE(Mm.MManMessage:ParamKeyValue,"#SVANAME",DayCampaign.DCName).
               Mm.MManMessage:ParamKeyValue = fGetEmailKeyValuePairs( MSRequest.MsRequest ,Mm.MManMessage:ParamKeyValue ).
-              IF NUM-ENTRIES(bMSRequest.ReqCparam6,"|") GT 2 AND ENTRY(3,bMSRequest.ReqCparam6, "|") <> "" THEN
-                 lcEmailAddr = ENTRY(3,bMSRequest.ReqCparam6, "|").
-              ELSE IF NUM-ENTRIES(bMSRequest.ReqCparam6,"|") EQ 2 AND ENTRY(2,bMSRequest.ReqCparam6, "|") <> "" THEN
-                 lcEmailAddr = ENTRY(2,bMSRequest.ReqCparam6, "|").
+              IF NUM-ENTRIES(MSRequest.ReqCparam6,"|") GT 2 AND ENTRY(3,MSRequest.ReqCparam6, "|") <> "" THEN
+                 lcEmailAddr = ENTRY(3,MSRequest.ReqCparam6, "|").
+              ELSE IF NUM-ENTRIES(MSRequest.ReqCparam6,"|") EQ 2 AND ENTRY(2,MSRequest.ReqCparam6, "|") <> "" THEN
+                 lcEmailAddr = ENTRY(2,MSRequest.ReqCparam6, "|").
               ELSE DO:
                    FIND FIRST Customer NO-LOCK WHERE
                         Customer.CustNum EQ MsRequest.CustNum NO-ERROR.  
