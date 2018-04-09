@@ -360,9 +360,7 @@ FUNCTION fCheckExistingMainLineAvailForExtraLine RETURNS INTEGER
           fGetOngoingExtralineCount(icExtraLineCLIType , icCustIDType , icCustID , Order.OrderId , OUTPUT liOngoingELCnt ).
           
           liCount  =  liCount + liOngoingELCnt. 
-                 
-          IF liCount >= liELCount THEN NEXT.
-          
+                   
           IF liCount EQ 0 THEN DO:
              IF NOT fCheckForMandatoryExtraLine(MobSub.MsSeq,
                                                 Customer.CustNum,
