@@ -76,13 +76,12 @@ FUNCTION fCheckRenewalData RETURNS LOGICAL:
       OrderCustomer.BankCode NE Customer.BankAcct  
    THEN DO:
     /*YDR-2834 [RES-1119] Skip order status 31 SM/PM*/
-    /*No need to RENEWAL_HOLDwhen delivery to shop*/
+    /*No need to RENEWAL_HOLD when delivery to shop*/
       IF (Order.OrderChannel EQ "renewal" OR
           Order.OrderChannel EQ "renewal_telesales" OR
           Order.OrderChannel EQ "retention" OR
           Order.OrderChannel EQ "renewal_ctc") AND
          (Order.Deliverytype EQ {&ORDER_DELTYPE_POS}  OR
-          Order.Deliverytype EQ {&ORDER_DELTYPE_KIALA} OR
           Order.Deliverytype EQ {&ORDER_DELTYPE_POST})THEN RETURN TRUE.
       RETURN FALSE.
    END.
