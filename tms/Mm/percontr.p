@@ -160,7 +160,7 @@ FUNCTION fExtractWebContractId RETURNS CHARACTER(INPUT icMemo AS CHARACTER ) :
             RETURN ENTRY(2,lcChar,"="). 
     END.
     RETURN ''.
-END FUNCTION 
+END FUNCTION. 
 
 DEF BUFFER bPendRequest FOR MsRequest.
 DEF BUFFER bOrigRequest FOR MsRequest.
