@@ -402,7 +402,7 @@ PROCEDURE pPeriodicalContract:
          IF liRequest NE 0 AND lcContractID NE "" THEN DO:
             FIND MsRequest WHERE MsRequest.MsRequest = liRequest EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
                IF AVAIL MsRequest THEN
-                    ASSIGN MsRequest.ReqCparam5 = lcContractID.
+                    ASSIGN MsRequest.Memo = MsRequest.Memo + (IF MsRequest.Memo > "" THEN ", "  ELSE "") + "WebContractID=" + lcContractID.
          END.
    END.
  

@@ -153,7 +153,7 @@ DO liInputCounter = 1 TO 1 /*get_paramcount(pcInputArray) - 1*/:
                    RETURN appl_err("SVA email request failure " + lcErr).
                */
                FIND MsRequest WHERE MsRequest.MsRequest = liSVARequest EXCLUSIVE-LOCK NO-ERROR.
-               ASSIGN MsRequest.ReqCparam5 = pcWebContractId.  
+               ASSIGN MsRequest.Memo = MsRequest.Memo + (IF MsRequest.Memo > "" THEN ", "  ELSE "") + "WebContractID=" + lcContractID.  
                CREATE Memo.
                ASSIGN
                    Memo.CreStamp  = {&nowTS}

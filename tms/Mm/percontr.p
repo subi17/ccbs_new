@@ -151,6 +151,17 @@ FUNCTION fUpdateServicelCounterMSID RETURNS LOGICAL
 
 END FUNCTION.
 
+FUNCTION fExtractWebContractId RETURNS CHARACTER(INPUT icMemo AS CHARACTER ) :
+    DEFINE VARIABLE ii     AS INTEGER   NO-UNDO.
+    DEFINE VARIABLE lcChar AS CHARACTER NO-UNDO.
+    DO ii = 1 TO NUM-ENTRIES(icMemo):
+        lcChar = ENTRY(ii,icMemo).
+        IF TRIM(lcChar) BEGINS 'WebContractID=' THEN 
+            RETURN ENTRY(2,lcChar,"="). 
+    END.
+    RETURN ''.
+END FUNCTION 
+
 DEF BUFFER bPendRequest FOR MsRequest.
 DEF BUFFER bOrigRequest FOR MsRequest.
 
@@ -1062,7 +1073,7 @@ PROCEDURE pContractActivation:
              DCCLI.CreateFees    = LOOKUP(DayCampaign.DCType,"3,5") > 0.
       
       IF DayCampaign.BundleTarget = {&DC_BUNDLE_TARGET_SVA} THEN DO:
-          DCCLi.WebContractID = MsRequest.ReqCparam5. 
+          DCCLi.WebContractID = fExtractWebContractId(MsRequest.Memo). 
           IF Mm.MManMessage:mGetMessage("EMAIL", "SVA_ActEmail", 1) EQ TRUE THEN DO:
             FIND FIRST DiscountPlan WHERE DiscountPlan.Brand    = Syst.Var:gcBrand AND 
                                           DiscountPlan.DPRuleID = DayCampaign.DcEvent + "DISC" NO-LOCK NO-ERROR.
