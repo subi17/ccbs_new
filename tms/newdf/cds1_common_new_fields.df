@@ -78,24 +78,6 @@ ADD FIELD "MandateDate" OF "InvoiceTargetGroup" AS date
   HELP "Mandate date"
   ORDER 150  
   
-  
-ADD FIELD "AccountID" OF "MobSub" AS integer 
-  FORMAT ">>>>>>>>9"
-  INITIAL "0"
-  LABEL "AccountID"
-  COLUMN-LABEL "AccountID"
-  HELP "Internal TMS ID"
-  ORDER 910  
-
-ADD FIELD "AccountID" OF "MSOwner" AS integer 
-  FORMAT ">>>>>>>>9"
-  INITIAL "0"
-  LABEL "AccountID"
-  COLUMN-LABEL "AccountID"
-  HELP "Internal TMS ID"
-  ORDER 370
-  
-
 ADD FIELD "AccountID" OF "FATime" AS integer 
   FORMAT ">>>>>>>>9"
   INITIAL "0"

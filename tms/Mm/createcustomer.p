@@ -173,34 +173,6 @@ IF liOldCustnum = 0 THEN DO:
       ELSE UNDO, RETURN "".
    END.
 
-   IF iiRole = 1 AND OrderCustomer.SubQty > 0 THEN DO:
-      
-      FIND FIRST Limit WHERE
-         Limit.CustNum = new-custnum AND
-         Limit.LimitType = {&LIMIT_TYPE_SUBQTY} AND
-         Limit.ToDate >= TODAY EXCLUSIVE-LOCK NO-ERROR.
-     
-      IF NOT AVAIL Limit THEN DO:
-         CREATE Limit.
-         ASSIGN
-            Limit.CustNum = new-custnum
-            Limit.LimitType = {&LIMIT_TYPE_SUBQTY}
-            Limit.ValueType = 1
-            Limit.FromDate  = TODAY
-            Limit.ToDate    = 12/31/2049
-            Limit.DefValue  = FALSE.
-      END.
-      
-      Limit.LimitAmt  = OrderCustomer.SubQty.
-
-      RELEASE Limit.
-
-   END.
-
-   /* CDS-6 */
-   fCreateCustomerAccount(new-custnum).
-   /* CDS-6 */
-
    ASSIGN OICustNum = new-custnum.
 
 END.
