@@ -16,6 +16,7 @@
                    additional_line_allowed;string;mandatory;OK,NO_MAIN_LINE,NO_SUBSCRIPTIONS (OK is returned also if there's no active main line but a pending main line order)
                    extra_line_allowed;string;mandatory;comma separated list of allowed extra lines
                    segment;string;mandatory;
+                   extra_line_status;integer;mandatory;status for allowed new extra lines orders
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
@@ -38,6 +39,7 @@ DEF VAR pcCliType        AS CHAR NO-UNDO.
 DEF VAR pcChannel        AS CHAR NO-UNDO.
 DEF VAR top_array        AS CHAR NO-UNDO.
 DEF VAR plSTCMigrate     AS LOG  NO-UNDO.
+
 
 /* Local variable */
 DEF VAR llOrderAllowed                AS LOG  NO-UNDO.
@@ -63,6 +65,12 @@ DEF VAR lcResult                      AS CHAR NO-UNDO.
 DEF VAR lii                           AS INT  NO-UNDO.
 DEF VAR lcExtraLineCLITypes           AS CHAR NO-UNDO.
 DEF VAR liMLMsSeq                     AS INT  NO-UNDO. 
+DEF VAR liCount                       AS INT  NO-UNDO. 
+DEF VAR liCont28                      AS INT  NO-UNDO.
+DEF VAR liCont29                      AS INT  NO-UNDO.
+DEF VAR liELStatusAux                 AS INT  NO-UNDO. 
+DEF VAR liExtraLineStatus             AS INT  NO-UNDO.
+
 
 top_array = validate_request(param_toplevel_id, "string,string,string,boolean,int,[string],[string],[boolean]").
 IF top_array EQ ? THEN RETURN.
@@ -564,6 +572,118 @@ END.
 
 IF lcAddLineAllowed EQ "" THEN lcAddLineAllowed = "NO_SUBSCRIPTIONS".
 
+YCO-272: /* Checking status for several "La Dúo" extra lines. */
+DO:   
+   IF AVAILABLE Customer AND LOOKUP(pcCliType,"CONT28,CONT29") > 0 THEN DO:
+      liExtraLineStatus = -1. /* Initializing variable */
+      /* Active subscriptions */
+      FOR EACH MobSub NO-LOCK  WHERE
+               MobSub.Brand    EQ Syst.Var:gcBrand      AND
+               MobSub.CustNum  EQ Customer.CustNum      AND
+               MobSub.PayType  EQ FALSE                 AND
+              (MobSub.MsStatus EQ {&MSSTATUS_ACTIVE} OR
+               MobSub.MsStatus EQ {&MSSTATUS_BARRED})    
+          USE-INDEX CustNum 
+          BY MobSub.ActivationTS:
+         
+         ASSIGN liCont28 = 0
+                liCont29 = 0. 
+                
+         FIND LAST Order NO-LOCK WHERE
+                   Order.MsSeq      EQ MobSub.MsSeq              AND
+                   Order.CLIType    EQ MobSub.CLIType            AND
+                   Order.StatusCode Eq {&ORDER_STATUS_DELIVERED} AND
+            LOOKUP(STRING(Order.OrderType),"0,1,4") > 0          NO-ERROR.
+         IF NOT AVAIL Order THEN 
+            FIND LAST Order NO-LOCK WHERE
+                      Order.MsSeq      EQ MobSub.MsSeq              AND
+                      Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} AND
+               LOOKUP(STRING(Order.OrderType),"0,1,4") > 0         NO-ERROR.
+               
+         IF NOT AVAIL Order THEN NEXT.                          
+             
+         /* Counting extra lines for each subscripcion (also ongoing extra lines) */       
+         liCont28 = fELCliTypeCountForMainLine (INPUT "CONT28",
+                                                INPUT MobSub.MsSeq, 
+                                                INPUT Customer.CustNum).
+         liCount = 0.                                       
+         fGetOngoingExtralineCount (INPUT "CONT28",
+                                    INPUT Customer.CustIDType, 
+                                    INPUT Customer.OrgID, 
+                                    INPUT Order.OrderId, /* Mainline OrderId */
+                                    OUTPUT liCount).
+         liCont28 = liCont28 + liCount.  
+                                           
+         liCont29 = fELCliTypeCountForMainLine (INPUT "CONT29",
+                                                INPUT MobSub.MsSeq, 
+                                                INPUT Customer.CustNum).                                               
+         liCount = 0.                                       
+         fGetOngoingExtralineCount (INPUT "CONT29",
+                                    INPUT Customer.CustIDType, 
+                                    INPUT Customer.OrgID, 
+                                    INPUT Order.OrderId, /* Mainline OrderId */
+                                    OUTPUT liCount).
+         liCont29 = liCont29 + liCount.
+                                                 
+         liELStatusAux = fExtraLinesStatus (INPUT MobSub.CliType, 
+                                            INPUT pcCliType, 
+                                            INPUT liCont28, 
+                                            INPUT liCont29).                                         
+         IF liELStatusAux EQ 0 THEN DO:
+            /* If available extra line for this subscription, stop searching */ 
+            liExtraLineStatus = 0.   
+            LEAVE YCO-272.
+         END.  
+         ELSE DO:
+           /* If we don't find a 0 status, then we keep the first status found */
+           IF liExtraLineStatus EQ -1 THEN
+              liExtraLineStatus = liELStatusAux. 
+         END. 
+      END. /* Active subscriptions */
+             
+      /* On-going orders */    
+      FOR EACH OrderCustomer NO-LOCK WHERE   
+               OrderCustomer.Brand      EQ Syst.Var:gcBrand    AND 
+               OrderCustomer.CustId     EQ Customer.OrgID      AND
+               OrderCustomer.CustIdType EQ Customer.CustIDType AND
+               OrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+          EACH Order NO-LOCK WHERE
+               Order.Brand      EQ Syst.Var:gcBrand AND
+               Order.orderid    EQ OrderCustomer.Orderid  AND
+               Order.OrderType  NE {&ORDER_TYPE_RENEWAL} 
+          BY Order.CrStamp:
+             
+         ASSIGN liCount  = 0 
+                liCont28 = 0
+                liCont29 = 0.   
+                            
+         fGetOngoingExtralineCount (INPUT "CONT28",
+                                    INPUT Customer.CustIDType, 
+                                    INPUT Customer.OrgID, 
+                                    INPUT Order.OrderId, /* Mainline OrderId */
+                                    OUTPUT liCont28).
+         fGetOngoingExtralineCount (INPUT "CONT29",
+                                    INPUT Customer.CustIDType, 
+                                    INPUT Customer.OrgID, 
+                                    INPUT Order.OrderId, /* Mainline OrderId */
+                                    OUTPUT liCont29).
+         liELStatusAux = fExtraLinesStatus(INPUT Order.CliType, 
+                                           INPUT pcCliType, 
+                                           INPUT liCont28, 
+                                           INPUT liCont29).                                         
+         IF liELStatusAux EQ 0 THEN DO:
+            /* If available extra line for this order, stop searching */ 
+            liExtraLineStatus = 0.   
+            LEAVE YCO-272.
+         END.  
+         ELSE DO:
+           IF liExtraLineStatus EQ -1 THEN
+              liExtraLineStatus = liELStatusAux. /* If we don't find a 0 status, then we keep the first status found */   
+         END.                                                 
+      END.                     
+   END. /* IF AVAILABLE Customer AND lcExtraLineAllowed <> "" */                                                                                                   
+END. /* YCO-272 */
+
 lcReturnStruct = add_struct(response_toplevel_id, "").
 add_boolean(lcReturnStruct, 'order_allowed', llOrderAllowed).
 add_int(lcReturnStruct, 'subscription_limit', liSubLimit).
@@ -585,6 +705,8 @@ ELSE
    add_boolean(lcReturnStruct,"activation_limit_reached",FALSE).
 
 add_string(lcReturnStruct, 'segment',lcSegment).
+
+add_int(lcReturnStruct, 'extra_line_status',liExtraLineStatus).
 
 FINALLY:
    END.
