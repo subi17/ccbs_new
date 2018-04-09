@@ -482,7 +482,7 @@ ELSE IF (MobSub.MultiSIMType > 0 AND
                
     IF AVAIL lbMobSub  
     THEN ASSIGN 
-         liMultiSimTypeValue = (IF MobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} THEN {&MULTISIMTYPE_PRIMARY} ELSE MobSub.MultiSimType)
+         liMultiSimTypeValue = MobSub.MultiSimType
          lcMultiSimCLI       = lbMobSub.CLI.
          
     add_int(resp_struct,"multisim_type", liMultiSimTypeValue) .
