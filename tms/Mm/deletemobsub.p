@@ -47,6 +47,9 @@ DEFINE VARIABLE liMsisdnStat AS INTEGER NO-UNDO.
 DEFINE VARIABLE liSimStat   AS INTEGER NO-UNDO.
 DEFINE VARIABLE lcTermReason AS CHARACTER NO-UNDO.
 
+/* YCO-250 Variables created to control discount closing */
+DEFINE VARIABLE lClose AS LOGICAL NO-UNDO.
+
 DEF BUFFER bMNPSub FOR MNPSub.
 DEF BUFFER bMobsub FOR MobSub.
 DEF BUFFER bCLIType FOR CLIType.
@@ -64,6 +67,10 @@ DEF BUFFER lMLMobSub      FOR MobSub.
 DEF BUFFER lbELMobSub     FOR MobSub.
 DEF BUFFER lbMLMobSub     FOR MobSub.
 DEF BUFFER lELOrderAction FOR OrderAction.
+
+/* YCO-250 */
+DEF BUFFER bCustomerAdd   FOR Customer.
+DEF BUFFER bCustomerExtra FOR Customer.
 
 DEF TEMP-TABLE ttContract NO-UNDO
    FIELD DCEvent   AS CHAR
