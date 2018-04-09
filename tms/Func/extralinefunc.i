@@ -187,13 +187,12 @@ FUNCTION fCheckForMandatoryExtraLine RETURNS LOGICAL
             RETURN FALSE.
       END.      
       ELSE DO:
-         IF CAN-FIND(Order NO-LOCK WHERE 
+         IF iiMultiSimId > 0 AND
+            CAN-FIND(Order NO-LOCK USE-INDEX MultiSimID WHERE 
                      Order.Brand        EQ Syst.Var:gcBrand                    AND 
-                     Order.StatusCode   EQ {&ORDER_STATUS_PENDING_MAIN_LINE}   AND 
-                     Order.CustNum      EQ iiCustNum                           AND
+                     Order.MultiSimId   EQ iiMultiSimId                        AND 
                      Order.CLIType      EQ ENTRY(1,TMSRelation.ChildValue,"_") AND 
                      Order.OrderType    NE {&ORDER_TYPE_RENEWAL}               AND 
-                     Order.MultiSimId   EQ iiMultiSimId                        AND 
                      Order.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE})          THEN
             RETURN TRUE.
          ELSE 
