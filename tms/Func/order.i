@@ -522,7 +522,7 @@ FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
 
    /* Update Customer */
    ASSIGN
-      bCustomer.Address = bOrderCustomer.Address WHEN bCustomer.Address NE lcNewAddress
+      bCustomer.Address = lcNewAddress WHEN bCustomer.Address NE lcNewAddress
       bCustomer.ZipCode = bOrderCustomer.ZipCode WHEN bCustomer.ZipCode NE bOrderCustomer.ZipCode
       bCustomer.PostOffice = bOrderCustomer.PostOffice WHEN bCustomer.PostOffice NE bOrderCustomer.PostOffice
       bCustomer.Region = bOrderCustomer.Region WHEN bCustomer.Region NE bOrderCustomer.Region.
