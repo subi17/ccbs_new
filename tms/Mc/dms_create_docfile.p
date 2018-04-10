@@ -1645,7 +1645,21 @@ FUNCTION fCreateDocumentCase15 RETURNS CHAR
                            STRING(MSRequest.MsRequest).                  /* Request number */
 
         MSRequest.ReqStatus = {&REQUEST_STATUS_UNDER_WORK} .
-        
+
+        /* solve needed documents: */
+        lcRequiredDocs = fNeededDocsCategoryChange().
+        DO liCount = 1 TO NUM-ENTRIES(lcRequiredDocs):
+           /* Document type, Type desc,DocStatusCode,RevisionComment */
+           lcDocListEntries = lcDocListEntries +
+                         ENTRY(liCount,lcRequiredDocs) + {&DMS_DOCLIST_SEP} +
+                         {&DMS_DOCLIST_SEP} + /* filled only by DMS responses */
+                         lcDMSDOCStatus + {&DMS_DOCLIST_SEP} +
+                         "".
+         IF liCount NE NUM-ENTRIES(lcRequiredDocs)
+            THEN lcDocListEntries = lcDocListEntries + {&DMS_DOCLIST_SEP}.
+        END.
+       
+        fNeededDocsCategoryChange().
         fUpdateDMS('',
                    lcCaseTypeID,
                    STRING(MSRequest.MsRequest),
@@ -1655,7 +1669,7 @@ FUNCTION fCreateDocumentCase15 RETURNS CHAR
                    lcDMSStatusDesc,
                    "",
                    MsRequest.CreStamp,
-                   '',
+                   lcDocListEntries,
                    {&DMS_DOCLIST_SEP}).          
         
         OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
