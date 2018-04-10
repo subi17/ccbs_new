@@ -455,6 +455,8 @@ END.
 FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
    (INPUT iiOrder AS INT):
 
+   DEF VAR lcNewAddress AS CHAR NO-UNDO.
+
    DEF BUFFER bCustomer       FOR Customer.
    DEF BUFFER bOrder          FOR Order.
    DEF BUFFER bOrderComp      FOR Order.
@@ -497,9 +499,19 @@ FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
               borderfusion.Brand EQ Syst.Var:gcBrand AND
               borderfusion.orderid = bOrder.Orderid AND
               bOrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED} NO-ERROR.
-  IF NOT AVAIL bOrderFusion THEN RETURN FALSE.
+   IF NOT AVAIL bOrderFusion THEN RETURN FALSE.
 
-/*
+   /* FIAD-9 Make new address from different data fields in installation address */
+   lcNewAddress = CAPS(bordercustomer.address).
+   IF bOrderCustomer.Floor NE "" THEN lcNewAddress = lcNewAddress + " " + LEFT-TRIM(bOrderCustomer.Floor,"0").
+   IF bOrderCustomer.Hand NE "" THEN lcNewAddress = lcNewAddress + " " + bOrderCustomer.Hand.
+   IF bOrderCustomer.Letter NE "" THEN lcNewAddress = lcNewAddress + " " + bOrderCustomer.Letter.
+   IF bOrderCustomer.Stair NE "" THEN lcNewAddress = lcNewAddress + " " + bOrderCustomer.Stair.
+   IF bOrderCustomer.Door NE "" THEN lcNewAddress = lcNewAddress + " " + bOrderCustomer.Door.
+   IF bOrderCustomer.Block NE "" THEN lcNewAddress = lcNewAddress + " " + bOrderCustomer.Block.
+   lcNewAddress = RIGHT-TRIM(lcNewAddress).
+   lcNewAddress = REPLACE(lcNewAddress, "  ", " ").
+
    FIND CURRENT bCustomer EXCLUSIVE-LOCK NO-ERROR.
    IF llDoEvent THEN DO:
       DEFINE VARIABLE lhCustomer AS HANDLE NO-UNDO.
@@ -510,7 +522,7 @@ FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
 
    /* Update Customer */
    ASSIGN
-      bCustomer.Address = bOrderCustomer.Address WHEN bCustomer.Address NE bOrderCustomer.Address
+      bCustomer.Address = bOrderCustomer.Address WHEN bCustomer.Address NE lcNewAddress
       bCustomer.ZipCode = bOrderCustomer.ZipCode WHEN bCustomer.ZipCode NE bOrderCustomer.ZipCode
       bCustomer.PostOffice = bOrderCustomer.PostOffice WHEN bCustomer.PostOffice NE bOrderCustomer.PostOffice
       bCustomer.Region = bOrderCustomer.Region WHEN bCustomer.Region NE bOrderCustomer.Region.
@@ -519,7 +531,7 @@ FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
       RUN StarEventMakeModifyEvent(lhCustomer).
       fCleanEventObjects().
    END.
-*/
+
    RETURN TRUE.
 
 END FUNCTION.
