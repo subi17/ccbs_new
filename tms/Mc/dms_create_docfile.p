@@ -1621,7 +1621,10 @@ FUNCTION fCreateDocumentCase15 RETURNS CHAR
     idEndTS AS DECIMAL):
    DEF VAR lcCaseTypeId     AS CHAR NO-UNDO.
    DEF VAR lcCasefileRow    AS CHAR NO-UNDO.
-   DEF VAR lcStatuses AS CHAR NO-UNDO.
+   DEF VAR lcStatuses       AS CHAR NO-UNDO.
+   DEF VAR lcRequiredDocs   AS CHAR NO-UNDO.
+   DEF VAR liCount          AS INT NO-UNDO.
+   DEF VAR lcDocListEntries AS CHAR NO-UNDO.
 
     FOR EACH MsRequest EXCLUSIVE-LOCK WHERE
         MsRequest.Brand EQ Syst.Var:gcBrand AND
@@ -1659,7 +1662,6 @@ FUNCTION fCreateDocumentCase15 RETURNS CHAR
             THEN lcDocListEntries = lcDocListEntries + {&DMS_DOCLIST_SEP}.
         END.
        
-        fNeededDocsCategoryChange().
         fUpdateDMS('',
                    lcCaseTypeID,
                    STRING(MSRequest.MsRequest),

@@ -163,6 +163,7 @@ END FUNCTION.
 /* Function is used in customer category change documentation */
 /* If we see that there are need for changes a specific CPARAM will be added */
 FUNCTION fNeededDocsCategoryChange RETURNS CHAR
+():
    RETURN "15".
 END.
 
