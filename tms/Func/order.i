@@ -515,7 +515,7 @@ FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
    /* FIAD-9 Make new address from different data fields in installation address */
    lcNewAddress = CAPS(bordercustomer.address).
    IF bOrderCustomer.Floor NE "" THEN lcNewAddress = lcNewAddress + " " + LEFT-TRIM(bOrderCustomer.Floor,"0").
-   IF bOrderCustomer.Hand NE "" THEN lcNewAddress = lcNewAddress + " " + bOrderCustomer.Hand.
+   IF bOrderCustomer.Hand NE "" THEN lcNewAddress = lcNewAddress + bOrderCustomer.Hand.
    IF bOrderCustomer.Letter NE "" THEN lcNewAddress = lcNewAddress + " " + bOrderCustomer.Letter.
    IF bOrderCustomer.Stair NE "" THEN lcNewAddress = lcNewAddress + " " + bOrderCustomer.Stair.
    IF bOrderCustomer.Door NE "" THEN lcNewAddress = lcNewAddress + " " + bOrderCustomer.Door.
