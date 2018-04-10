@@ -456,6 +456,7 @@ FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
    (INPUT iiOrder AS INT):
 
    DEF VAR lcNewAddress AS CHAR NO-UNDO.
+   DEF VAR lcregion AS CHAR NO-UNDO.
 
    DEF BUFFER bCustomer       FOR Customer.
    DEF BUFFER bOrder          FOR Order.
@@ -501,6 +502,16 @@ FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
               bOrderFusion.FusionStatus EQ {&FUSION_ORDER_STATUS_FINALIZED} NO-ERROR.
    IF NOT AVAIL bOrderFusion THEN RETURN FALSE.
 
+   /* FIAD-10 Few names come incorrectly from web coverage check */
+   lcregion = bOrderCustomer.Region.
+   IF bOrderCustomer.Region EQ "ISLAS BALEARES" THEN lcregion = "Baleares".
+   IF bOrderCustomer.Region EQ "TENERIFE" THEN lcregion = "Sta.Cruz Tenerife".
+   IF bOrderCustomer.Region EQ "LLEIDA" THEN lcregion = "Lérida".
+
+   FIND FIRST Region NO-LOCK WHERE
+              Region.RgName EQ lcregion NO-ERROR.
+   IF NOT AVAIL Region THEN RETURN FALSE.
+
    /* FIAD-9 Make new address from different data fields in installation address */
    lcNewAddress = CAPS(bordercustomer.address).
    IF bOrderCustomer.Floor NE "" THEN lcNewAddress = lcNewAddress + " " + LEFT-TRIM(bOrderCustomer.Floor,"0").
@@ -524,8 +535,8 @@ FUNCTION fUpdateCustomerInstAddr RETURNS LOGICAL
    ASSIGN
       bCustomer.Address = lcNewAddress WHEN bCustomer.Address NE lcNewAddress
       bCustomer.ZipCode = bOrderCustomer.ZipCode WHEN bCustomer.ZipCode NE bOrderCustomer.ZipCode
-      bCustomer.PostOffice = bOrderCustomer.PostOffice WHEN bCustomer.PostOffice NE bOrderCustomer.PostOffice
-      bCustomer.Region = bOrderCustomer.Region WHEN bCustomer.Region NE bOrderCustomer.Region.
+      bCustomer.PostOffice = CAPS(bOrderCustomer.PostOffice) WHEN bCustomer.PostOffice NE bOrderCustomer.PostOffice
+      bCustomer.Region = Region.Region WHEN bCustomer.Region NE Region.Region.
 
    IF llDoEvent THEN DO:
       RUN StarEventMakeModifyEvent(lhCustomer).
