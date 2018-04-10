@@ -111,59 +111,6 @@ FUNCTION fSetError RETURNS LOG (INPUT icError AS CHARACTER):
       RETURN TRUE .
 END FUNCTION .        
 
-FUNCTION fPreCheck RETURNS LOG():
-    DEFINE VARIABLE lcSegment AS CHARACTER NO-UNDO.
-    DEFINE VARIABLE llError   AS LOGICAL   NO-UNDO.
-       FIND bCustomer WHERE bCustomer.Brand EQ Syst.Var:gcBrand AND bCustomer.CustNum = Customer.CustNum NO-LOCK NO-ERROR.
-       FIND bCustCat WHERE bCustcat.Category = bCustomer.Category NO-LOCK NO-ERROR.
-       IF AVAILABLE bCustCat THEN
-           lcSegment = bCustCat.Segment.
-       /* Is Customer among the required segment */
-       IF LOOKUP(lcSegment,"AUTONOMO,COMPANY,SOHO-AUTONOMO,SOHO-COMPANY") EQ 0  THEN DO:
-           llError = fSetError("Migration not allowed. Customer is of Consumer category") .
-       END.
-       /* Does customer have legacy tariffs */
-       FOR EACH bMobSub 
-          WHERE bMobSub.Brand = Syst.Var:gcBrand 
-            AND bMobSub.InvCust = bCustomer.CustNum 
-            AND bMobSub.MsStatus = {&MSSTATUS_ACTIVE} NO-LOCK:
-           IF bMobSub.Clitype EQ "CONT23" OR 
-              bMobSub.Clitype EQ "CONT24" OR 
-              bMobSub.Clitype EQ "CONT9" THEN DO: 
-              llHasLegacyTariff = TRUE.
-              LEAVE.
-           END.
-       END.
-       IF NOT llHasLegacyTariff THEN DO:
-            llError =  fSetError("Migration not allowed. Please check if customer tariffs met the change requirement").
-       END.
-       /* Convergent in ONGOING status */
-       FOR EACH bOrder
-          WHERE bOrder.Brand = Syst.Var:gcBrand 
-            AND bOrder.CustNum = bCustomer.CustNum 
-            AND bOrder.StatusCode = {&ORDER_STATUS_ONGOING} NO-LOCK:
-            FIND bClitype WHERE bClitype.CliType = bOrder.CliType NO-LOCK NO-ERROR.
-            IF AVAILABLE bCliType AND 
-               (bCliType.FixedLineType = {&CLITYPE_TARIFFTYPE_CONVERGENT} OR 
-                bCliType.FixedLineType = {&CLITYPE_TARIFFTYPE_FIXEDONLY}  )  THEN DO:
-                llError = fSetError("Migration not allowed. Please check if customer has an ongoing order").
-            END.  
-       END.         
-       /* Customer having a active prepaid subscription */
-       FOR EACH bMobSub 
-          WHERE bMobSub.Brand = Syst.Var:gcBrand
-            AND bMobSub.InvCust = bCustomer.CustNum 
-            AND bMobSub.MsStatus = {&MSSTATUS_ACTIVE} NO-LOCK:
-           IF bMobSub.paytype THEN DO:
-               llError = fSetError("Migration not allowed. Customer has an active prepaid subscription").
-           END.
-       END.
-       
-       RETURN llError.
-
-END FUNCTION.
-
-
 FUNCTION fCheckMigration RETURNS LOG ():
 
    DEF BUFFER Order FOR Order.
@@ -171,7 +118,8 @@ FUNCTION fCheckMigration RETURNS LOG ():
 
    DEF VAR llOnlyActiveFound AS LOG NO-UNDO.
 
-   IF fPreCheck() THEN DO: /* taken care in funcion */ END.      
+   IF LOOKUP(pcIdType,"NIF,NIE") > 0 AND NOT plSelfEmployed THEN
+       fSetError ("PRO migration not possible because of not company or selfemployed") .
    ELSE DO:
       FIND Mobsub WHERE Mobsub.Brand EQ Syst.Var:gcBrand AND Mobsub.InvCust EQ Customer.CustNum NO-LOCK NO-ERROR.
       IF AMBIG MobSub THEN
@@ -180,18 +128,12 @@ FUNCTION fCheckMigration RETURNS LOG ():
                                Mobsub.Brand EQ Syst.Var:gcBrand AND
                                Mobsub.InvCust EQ Customer.CustNum AND
                                Mobsub.paytype) THEN DO:
-               ASSIGN
-                  llOrderAllowed = FALSE
-                  lcReason = "PRO migration not possible because of prepaid subscription"
-                  lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
+               fSetError ("PRO migration not possible because of prepaid subscription").
              END.
              /* Check any ongoing orders */
              ELSE IF fCheckOngoingOrders(Customer.OrgID, Customer.CustIDType,
                                     0) THEN DO:
-             ASSIGN
-                llOrderAllowed = FALSE
-                lcReason = "PRO migration not possible because of active non pro orders"
-                lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
+                   fSetError ("PRO migration not possible because of active non pro orders").
              END.
              ELSE DO:
                 llOnlyActiveFound = FALSE.             
@@ -208,10 +150,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                    IF (AVAIL CLitype AND clitype.WebStatusCode EQ 1) THEN DO:
                       IF fHasTVService(Mobsub.msseq) THEN DO:
                          /* TV service not allowed for PRO */
-                         ASSIGN
-                            llOrderAllowed = FALSE
-                            lcReason = "PRO migration not possible because of TV service"
-                            lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
+                         fSetError ("PRO migration not possible because of TV service").
                          LEAVE.
                       END.
                       ELSE
@@ -225,10 +164,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                    END.                  
                 END.
                 IF NOT llOnlyActiveFound AND lcReason EQ "" THEN DO:
-                   ASSIGN
-                      llOrderAllowed = FALSE
-                      lcReason = "This migration is not allowed. Please change tariff to the commercially active ones."
-                      lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
+                       fSetError ("This migration is not allowed. Please change tariff to the commercially active ones.").
                 END.
                 ELSE DO:
                    /* Check that mobile subscriptions are commercially active
@@ -278,10 +214,7 @@ FUNCTION fCheckMigration RETURNS LOG ():
                                Mobsub.Brand EQ Syst.Var:gcBrand AND
                                Mobsub.InvCust EQ Customer.CustNum AND
                                Mobsub.paytype) THEN DO:
-               ASSIGN
-                  llOrderAllowed = FALSE
-                  lcReason = "PRO migration not possible because of prepaid subscription"
-                  lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
+               fSetError ("PRO migration not possible because of prepaid subscription").
              END.
              /* Check any ongoing orders */
              ELSE IF fCheckOngoingOrders(Customer.OrgID, Customer.CustIDType,
@@ -349,29 +282,17 @@ FUNCTION fCheckMigration RETURNS LOG ():
              END.             
           END.          
           ELSE
-          ASSIGN
-             llOrderAllowed = FALSE
-             lcReason = "PRO migration not possible because of multiple mobile lines"
-             lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
+              fSetError ("PRO migration not possible because of multiple mobile lines") .
       ELSE IF AVAIL MobSub THEN
       DO:
          IF fCheckOngoingOrders(Customer.OrgID, Customer.CustIDType,
                                 mobsub.msseq) THEN DO:
-            ASSIGN
-               llOrderAllowed = FALSE
-               lcReason = "PRO migration not possible because of active non pro orders"
-               lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
+               fSetError ("PRO migration not possible because of active non pro orders").
          END.         
          ELSE IF Mobsub.paytype THEN
-            ASSIGN
-               llOrderAllowed = FALSE
-               lcReason = "PRO migration not possible because of prepaid subscription"
-               lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
+               fSetError ("PRO migration not possible because of prepaid subscription" ).
          ELSE IF fHasTVService(Mobsub.msseq) THEN
-            ASSIGN
-               llOrderAllowed = FALSE
-               lcReason = "PRO migration not possible because of TV service"
-               lcReasons = lcReasons + ( IF lcReasons NE "" THEN "|" ELSE "" ) + lcReason.
+               fSetError ("PRO migration not possible because of TV service").
          /* Migration not possible for retired or non active convergent */
          ELSE IF fIsConvergenceTariff(Mobsub.clitype) AND
             CAN-FIND(First CliType WHERE

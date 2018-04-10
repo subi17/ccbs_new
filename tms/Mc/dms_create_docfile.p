@@ -1645,7 +1645,19 @@ FUNCTION fCreateDocumentCase15 RETURNS CHAR
                            STRING(MSRequest.MsRequest).                  /* Request number */
 
         MSRequest.ReqStatus = {&REQUEST_STATUS_UNDER_WORK} .
-                           
+        
+        fUpdateDMS('',
+                   lcCaseTypeID,
+                   STRING(MSRequest.MsRequest),
+                   "MsRequest",
+                   MSRequest.MsRequest,
+                   lcInitStatus,
+                   lcDMSStatusDesc,
+                   "",
+                   MsRequest.CreStamp,
+                   '',
+                   {&DMS_DOCLIST_SEP}).          
+        
         OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
         PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
         OUTPUT STREAM sOutFile CLOSE.
