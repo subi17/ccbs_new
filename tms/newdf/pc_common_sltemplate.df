@@ -1,0 +1,83 @@
+ADD TABLE "SLTemplate"
+  AREA "Sta_Data_64"
+  LABEL "Service Limit Template"
+  DUMP-NAME "sltemplate"
+
+ADD FIELD "SLCode" OF "SLTemplate" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "ServiceLimit"
+  MAX-WIDTH 12
+  COLUMN-LABEL "ServiceLimit"
+  HELP "Code of Servicelimit"
+  ORDER 10
+
+ADD FIELD "elementtype" OF "SLTemplate" AS integer 
+  FORMAT ">9"
+  INITIAL "0"
+  MAX-WIDTH 4
+  ORDER 30
+
+ADD FIELD "BCC" OF "SLTemplate" AS integer 
+  FORMAT ">>>>>>>9"
+  INITIAL "0"
+  LABEL "BCC"
+  MAX-WIDTH 4
+  COLUMN-LABEL "BCC"
+  HELP "Billing call case"
+  ORDER 40
+
+ADD FIELD "unlimitedUsage" OF "SLTemplate" AS logical 
+  FORMAT "yes/no"
+  INITIAL "false"
+  MAX-WIDTH 1
+  ORDER 50
+
+ADD FIELD "trafficType" OF "SLTemplate" AS character 
+  FORMAT "x(12)"
+  INITIAL ""
+  LABEL "TrafficType"
+  MAX-WIDTH 12
+  ORDER 60
+
+ADD FIELD "InclAmt" OF "SLTemplate" AS integer 
+  FORMAT ">>>9"
+  INITIAL "0"
+  MAX-WIDTH 4
+  HELP "parameter"
+  ORDER 70
+
+ADD FIELD "bcc_list" OF "SLTemplate" AS character 
+  FORMAT "x(50)"
+  INITIAL ""
+  MAX-WIDTH 100
+  HELP "bcc-list"
+  ORDER 80
+
+ADD FIELD "SLType" OF "SLTemplate" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "SLType"
+  MAX-WIDTH 4
+  HELP "ServiceLimit Type"
+  ORDER 90
+
+ADD FIELD "Prior" OF "SLTemplate" AS integer 
+  FORMAT ">>9"
+  INITIAL "0"
+  LABEL "Priority"
+  MAX-WIDTH 4
+  COLUMN-LABEL "Pri"
+  HELP "Relative priority to other networkelements"
+  ORDER 100
+
+ADD INDEX "SLCode" ON "SLTemplate" 
+  AREA "Sta_Index_1"
+  PRIMARY
+  INDEX-FIELD "SLCode" ASCENDING 
+
+.
+PSC
+cpstream=1252
+.
+0000001508
