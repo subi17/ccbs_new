@@ -34,4 +34,20 @@ FUNCTION fCreateCustomerAccount RETURNS LOGICAL
 END.
 /* CDS-6 CDS-12 */
 
+
+/* CDS-12 CDS-13*/
+FUNCTION fCloseCustomerAccount RETURNS LOGICAL
+  (iiCustNum   AS INT):
+
+   IF NOT CAN-FIND(FIRST MobSub NO-LOCK WHERE
+               Mobsub.Brand    = Syst.Var:gcBrand AND
+               MobSub.CustNum  = iiCustNum) THEN
+      FIND FIRST CustomerAccount NO-LOCK WHERE CustomerAccount.Custnum EQ MobSub.CustNum NO-ERROR.
+      IF AVAIL CustomerAccount THEN 
+         CustomerAccount.ToDate = TODAY.     
+
+   RETURN TRUE.
+END.
+/* CDS-12 CDS-13 */
+
 &ENDIF

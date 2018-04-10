@@ -75,8 +75,8 @@ FOR EACH Customer NO-LOCK WHERE Customer.brand EQ Syst.Var:gcBrand:
                                              MobSub.AgrCust EQ Customer.CustNum AND
                                              MobSub.PayType EQ FALSE) THEN DO:
 
-         FIND FIRST InvoiceTargetGroup USE-INDEX Custnum WHERE
-                    InvoiceTargetGroup.Custnum = Customer.Custnum.
+         FIND FIRST InvoiceTargetGroup NO-LOCK USE-INDEX Custnum WHERE
+                    InvoiceTargetGroup.Custnum = Customer.Custnum NO-ERROR.
          IF AVAIL InvoiceTargetGroup THEN DO:                                   
             ASSIGN
                InvoiceTargetGroup.Currency = Customer.Currency
@@ -84,7 +84,7 @@ FOR EACH Customer NO-LOCK WHERE Customer.brand EQ Syst.Var:gcBrand:
                InvoiceTargetGroup.PaymentMethod = Customer.PaymMethod.
 
             FIND FIRST CustomerAccount NO-LOCK WHERE
-               CustomerAccount.CustNum = InvoiceTargetGroup.CustNum.
+               CustomerAccount.CustNum = InvoiceTargetGroup.CustNum NO-ERROR.
             IF AVAIL CustomerAccount THEN
                ASSIGN
                   InvoiceTargetGroup.AccountID = CustomerAccount.AccountID      

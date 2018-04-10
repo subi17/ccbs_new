@@ -31,6 +31,7 @@
 {Func/orderfunc.i}
 {Func/multitenantfunc.i}
 {Func/profunc_request.i}
+{Func/customeraccount.i}
 
 DEFINE INPUT  PARAMETER iiMSrequest AS INT  NO-UNDO.
 
@@ -1396,15 +1397,9 @@ PROCEDURE pTerminate:
    END. 
       
    /* CDS-13 start */
-   IF NOT CAN-FIND(FIRST MobSub NO-LOCK WHERE
-               Mobsub.Brand    = Syst.Var:gcBrand AND
-               MobSub.CustNum  = MobSub.CustNum) THEN
-      FIND FIRST CustomerAccount NO-LOCK WHERE CustomerAccount.Custnum EQ MobSub.CustNum NO-ERROR.
-      IF AVAIL CustomerAccount THEN 
-         CustomerAccount.ToDate = TODAY.     
+   fCloseCustomerAccount(bMobSub.CustNum).
    /* CDS-13 end */   
-   
-   
+      
    /* Find Original request */
    FIND FIRST MSRequest WHERE
               MSRequest.MSRequest = iiMSRequest NO-LOCK NO-ERROR.

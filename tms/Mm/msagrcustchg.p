@@ -465,15 +465,7 @@ PROCEDURE pOwnerChange:
          ASSIGN liCreated[liReqCnt] = liDefCust
                 llNewCust           = TRUE.
          RUN Mm/copymobcu.p(INPUT-OUTPUT liCreated[liReqCnt],
-                       FALSE).
-                       
-         /* CDS-12 start */
-         fCreateCustomerAccount(liCreated[liReqCnt]).
-         FIND FIRST CustomerAccount NO-LOCK WHERE CustomerAccount.Custnum EQ Customer.CustNum NO-ERROR.
-         IF AVAIL CustomerAccount THEN 
-            Mobsub.AccountID = CustomerAccount.AccountID.        
-         /* CDS-12 end */                       
-                       
+                       FALSE).                       
       END.
       
       /* update old customer's data if vrk has been succesful */
@@ -562,6 +554,15 @@ PROCEDURE pOwnerChange:
                fReqError("Wrong format in new customer data").
                RETURN.
             END.
+
+            /* CDS-12 start */
+            fCloseCustomerAccount(MobSub.CustNum).
+            
+            fCreateCustomerAccount(liCreated[liReqCnt]).
+            FIND FIRST CustomerAccount NO-LOCK WHERE CustomerAccount.Custnum EQ Customer.CustNum NO-ERROR.
+            IF AVAIL CustomerAccount THEN 
+               Mobsub.AccountID = CustomerAccount.AccountID.        
+            /* CDS-12 end */ 
 
             FIND FIRST CustomerReport WHERE
                        CustomerReport.Custnum = bNewCust.Custnum

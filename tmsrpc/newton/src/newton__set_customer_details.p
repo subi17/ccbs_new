@@ -589,9 +589,8 @@ IF llCustomerChanged THEN DO:
 
       /* CDS-10 start */
       FIND FIRST Address WHERE Address.Keyvalue = STRING(Customer.CustNum) NO-LOCK NO-ERROR.
-      IF AVAIL Address THEN DO:
+      IF AVAIL Address AND Address.AddressType = "Billing" THEN DO:
          ASSIGN
-            Address.AddressType = "Billing"
             Address.Address = Customer.Address
             Address.City = Customer.PostOffice
             Address.ZipCode = Customer.ZipCode
@@ -631,7 +630,7 @@ IF llCustomerChanged THEN DO:
                customer.BankAcct = lcBankAccount.                             
                /* CDS-10 start */
                FIND FIRST InvoiceTargetGroup USE-INDEX Custnum WHERE
-                          InvoiceTargetGroup.Custnum = Customer.Custnum.
+                          InvoiceTargetGroup.Custnum = Customer.Custnum EXCLUSIVE-LOCK NO-ERROR.
                IF AVAIL InvoiceTargetGroup THEN InvoiceTargetGroup.BankAccount = Customer.BankAcct.               
                /* CDS-10 end */
             END.   
@@ -718,7 +717,7 @@ IF llCustomerChanged THEN DO:
 
           /* CDS-10 start */
           FIND FIRST CustomerAccount EXCLUSIVE-LOCK WHERE
-                     CustomerAccount.Custnum = Customer.Custnum.
+                     CustomerAccount.Custnum = Customer.Custnum NO-ERROR.
           IF AVAIL CustomerAccount THEN                                   
              CustomerAccount.DelType = InvoiceTargetGroup.DelType.
           /* CDS-10 end */

@@ -132,9 +132,8 @@ PROCEDURE pAddressChange:
    
       /* CDS-10 start */
       FIND FIRST Address WHERE Address.Keyvalue = STRING(Customer.CustNum) NO-LOCK NO-ERROR.
-      IF AVAIL Address THEN DO:
+      IF AVAIL Address AND Address.AddressType = "Billing" THEN DO:
          ASSIGN
-            Address.AddressType = "Billing"
             Address.Street = Customer.Address
             Address.City = Customer.PostOffice
             Address.ZipCode = Customer.ZipCode

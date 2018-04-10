@@ -61,7 +61,7 @@ FUNCTION fAddInvoiceTargetGroup RETURNS INT
           bInvoiceTargetGroup.BankAccount = bCustomer.BankAcct
           bInvoiceTargetGroup.PaymentMethod = bCustomer.PaymMethod.
 
-   FIND FIRST CustomerAccount NO-LOCK WHERE CustomerAccount.CustNum = bInvoiceTargetGroup.CustNum.
+   FIND FIRST CustomerAccount NO-LOCK WHERE CustomerAccount.CustNum = bInvoiceTargetGroup.CustNum NO-ERROR.
       IF AVAIL CustomerAccount THEN 
          ASSIGN bInvoiceTargetGroup.AccountID = CustomerAccount.AccountID        
                 bInvoiceTargetGroup.CustAccName = CustomerAccount.AccountName.

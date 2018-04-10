@@ -366,19 +366,19 @@ ELSE DO:
 
             /* CDS-8 start */
             FIND FIRST CustomerAccount EXCLUSIVE-LOCK WHERE 
-               CustomerAccount.Custnum EQ OrderCustomer.Custnum.
+               CustomerAccount.Custnum EQ OrderCustomer.Custnum NO-ERROR.
             IF AVAIL CustomerAccount THEN   
                CustomerAccount.DelType = OrderCustomer.DelType.
 
             FIND FIRST InvoiceTargetGroup EXCLUSIVE-LOCK USE-INDEX Custnum WHERE
-               InvoiceTargetGroup.Custnum = Customer.CustNum.
+               InvoiceTargetGroup.Custnum = Customer.CustNum NO-ERROR.
             IF AVAIL InvoiceTargetGroup THEN
                InvoiceTargetGroup.BankAccount = Customer.BankAcct.
                
                
             FIND FIRST Address EXCLUSIVE-LOCK WHERE 
-               Address.Keyvalue = STRING(Customer.CustNum).
-            IF AVAIL Address THEN DO:
+               Address.Keyvalue = STRING(Customer.CustNum) NO-ERROR.
+            IF AVAIL Address /* AND Address.AddressType = "Billing"? */ THEN DO:
                ASSIGN
                   Address.Address = Customer.Address
                   Address.City = Customer.PostOffice
