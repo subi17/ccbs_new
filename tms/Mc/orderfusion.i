@@ -102,7 +102,11 @@ FUNCTION _fCreateFusionMessage RETURNS LOGICAL
 
    IF icMessageType EQ {&FUSIONMESSAGE_TYPE_CANCEL_ORDER} THEN
       lcPrefix = "Cancelación".
-   ELSE lcPrefix = "Alta".
+   ELSE alcPrefix = "Alta".
+
+   /*NEBACO-47*/
+   IF Order.Clitype MATCHES "CONTFHNB*" THEN 
+      lcPrefix = lcprefix + " NEBA".
       
    IF CLIType.FixedLineType EQ 1 THEN
       lcOrderType = "xDSL + VOIP".
