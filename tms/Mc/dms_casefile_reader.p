@@ -16,6 +16,15 @@ ASSIGN
 {Func/ftransdir.i}
 {Syst/eventlog.i}
 {Func/dms.i}
+{Syst/eventval.i}
+
+IF llDoEvent THEN DO:
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
+   {Func/lib/eventlog.i}
+   DEF VAR lhCustomer AS HANDLE NO-UNDO.
+   lhCustomer = BUFFER Customer:HANDLE.
+   RUN StarEventInitialize(lhCustomer).
+END.
 
 DEF VAR lcIncDir        AS CHAR NO-UNDO.
 DEF VAR lcProcDir       AS CHAR NO-UNDO.
@@ -235,10 +244,12 @@ PROCEDURE pUpdateDMS:
           AND lcStatusCode = "OK" THEN DO:
               FIND Customer WHERE Customer.Brand = MSRequest.Brand  AND Customer.CustNum = MSRequest.CustNum EXCLUSIVE-LOCK NO-ERROR.
               IF AVAILABLE Customer THEN 
+                  IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustomer).
                   Customer.Category = MSRequest.ReqCParam1.
+                  IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
+          MSRequest.ReqStatus =  {&REQUEST_STATUS_DONE}.  
        END.
-       IF AVAILABLE MSRequest THEN 
-          MSRequest.ReqStatus =  {&REQUEST_STATUS_DONE}.
+
        /* Set Request to Done */
        lcUpdateDMS = fUpdateDMS(lcDmsExternalID,
                                 lcCaseTypeID,
@@ -328,3 +339,8 @@ PROCEDURE pUpdateDMS:
     END.
 
 END PROCEDURE.
+
+FINALLY:
+   IF llDoEvent THEN fCleanEventObjects().
+END.
+

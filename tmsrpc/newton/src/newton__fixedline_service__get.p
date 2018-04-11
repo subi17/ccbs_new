@@ -129,10 +129,10 @@ FOR EACH daycampaign NO-LOCK:
                               FMItem.FromDate  <= TODAY                AND 
                               FMItem.ToDate    >= TODAY                NO-LOCK NO-ERROR.
       FIND FIRST DCCLI NO-LOCK WHERE
-                 DCCLI.Brand      = Syst.Var:gcBrand     AND
-                 DCCLi.DCEvent    = DayCampaign.DCEvent  AND 
                  DCCLI.MsSeq      = mobsub.MsSeq         AND
-                 DCCLi.ValidTo   >= TODAY  NO-ERROR. 
+                 DCCLi.ValidTo   >= TODAY                AND
+                 DCCLI.Brand      = Syst.Var:gcBrand     AND
+                 DCCLi.DCEvent    = DayCampaign.DCEvent NO-ERROR. 
                     
       IF AVAIL FMItem THEN 
           ldPrice = FMItem.Amount.

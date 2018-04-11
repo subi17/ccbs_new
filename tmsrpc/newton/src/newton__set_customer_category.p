@@ -15,8 +15,19 @@ Syst.Var:gcBrand = "1".
 Syst.Var:katun   = "NewtonRPC".
 {Syst/tmsconst.i}
 {Func/fmakemsreq.i}
+{Syst/eventlog.i}
+{Syst/eventval.i}
 
 IF validate_request(param_toplevel_id, "int,string,string") EQ ? THEN RETURN.
+
+IF llDoEvent THEN DO:
+   &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
+   {Func/lib/eventlog.i}
+   DEF VAR lhCustomer AS HANDLE NO-UNDO.
+   lhCustomer = BUFFER Customer:HANDLE.
+   RUN StarEventInitialize(lhCustomer).
+END.
+
 
 DEFINE VARIABLE liCustNum    AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcMSISDN     AS CHARACTER NO-UNDO.
@@ -61,8 +72,10 @@ IF NOT AVAILABLE MobSub THEN
 CASE lcCategory:
     WHEN "CONSUMER" THEN DO TRANSACTION:
         FIND customer WHERE customer.Custnum = liCustNum EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
-        IF AVAILABLE customer THEN DO: 
-            Customer.category = bf_CustCat.category .
+        IF AVAILABLE customer THEN DO:
+            IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustomer).
+            Customer.category = bf_CustCat.category.
+            IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
             CREATE Memo.
             ASSIGN
                 Memo.CreStamp  = {&nowTS}
@@ -99,4 +112,6 @@ END CASE.
 
 add_boolean(response_toplevel_id, "", TRUE).
 
- 
+FINALLY:
+   IF llDoEvent THEN fCleanEventObjects().
+END.
