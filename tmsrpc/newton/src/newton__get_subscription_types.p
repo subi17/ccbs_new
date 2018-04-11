@@ -365,6 +365,10 @@ FOR EACH CLIType NO-LOCK WHERE
                   lcMandatoryELines = fGetMandatoryExtraLineForMainLine(bfMobSub.CLIType).
                   
                   IF LOOKUP(MobSub.CLIType,lcMandatoryELines) > 0
+                  AND CAN-FIND(FIRST DPMember NO-LOCK WHERE 
+                                     DPMember.HostTable   EQ "MobSub"              AND
+                                     DPMember.KeyValue    EQ STRING(MobSub.MsSeq)  AND
+                                     DPMember.ValidTo     GE TODAY    )
                   AND CAN-FIND(FIRST TMSRelation NO-LOCK WHERE 
                                      TMSRelation.TableName        EQ {&ELTABLENAME}    AND 
                                      TMSRelation.KeyType          EQ {&ELKEYTYPE}      AND 
