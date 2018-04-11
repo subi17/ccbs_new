@@ -86,7 +86,7 @@ IF AVAILABLE BillItem THEN DO:
         BillItem.BiGroup    = "13"
         BillItem.AccNum     = 70518110
         BillItem.InvSect    = "" 
-        BillItem.TaxClass   = '1' 
+        BillItem.TaxClass   = '0' 
         BillItem.SAPRid     = "49"
         BillItem.CostCentre = "SL" .
     RUN StarEventMakeModifyEvent(lhBillItem).
@@ -119,7 +119,7 @@ IF AVAILABLE BillItem THEN DO:
         BillItem.BiGroup    = "13"
         BillItem.AccNum     = 70518110
         BillItem.InvSect    = "" 
-        BillItem.TaxClass   = '1' 
+        BillItem.TaxClass   = '0' 
         BillItem.SAPRid     = "49"
         BillItem.CostCentre = "SL" .
     RUN StarEventMakeModifyEvent(lhBillItem).
