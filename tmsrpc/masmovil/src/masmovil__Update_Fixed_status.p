@@ -273,7 +273,7 @@ CASE FusionMessage.FixedStatus:
    END.
    
    /*NEBA*/
-   WHEN "PENDIENTE_INSTALATION":
+   WHEN "PENDIENTE_INSTALATION" THEN DO:
       /*Create fixed line subscription*/
       /*Create the new NEBA permanency: NTERM-xxx???*/
       /**/
@@ -349,11 +349,6 @@ CASE FusionMessage.FixedStatus:
                              RETURN-VALUE).
             FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.
          END.
-      END.
-      /*NEBA penalty period before fixed line activation*/
-      ELSE IF Orderfusion.IUA > 0 /*AND ensure that it is neba before creating fee
-              Order.StatusCode NE */ THEN DO:
-                 
       END.
       ELSE FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_ERROR}.
    END.
