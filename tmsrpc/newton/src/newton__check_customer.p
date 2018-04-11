@@ -16,7 +16,7 @@
                    additional_line_allowed;string;mandatory;OK,NO_MAIN_LINE,NO_SUBSCRIPTIONS (OK is returned also if there's no active main line but a pending main line order)
                    extra_line_allowed;string;mandatory;comma separated list of allowed extra lines
                    segment;string;mandatory;
-                   extra_line_status;integer;mandatory;status for allowed new extra lines orders
+                   extra_line_status;integer;mandatory;status for allowed new extra lines orders (YCO-272)
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}
@@ -65,12 +65,10 @@ DEF VAR lcResult                      AS CHAR NO-UNDO.
 DEF VAR lii                           AS INT  NO-UNDO.
 DEF VAR lcExtraLineCLITypes           AS CHAR NO-UNDO.
 DEF VAR liMLMsSeq                     AS INT  NO-UNDO. 
-DEF VAR liCount                       AS INT  NO-UNDO. 
-DEF VAR liCont28                      AS INT  NO-UNDO.
-DEF VAR liCont29                      AS INT  NO-UNDO.
-DEF VAR liELStatusAux                 AS INT  NO-UNDO. 
 DEF VAR liExtraLineStatus             AS INT  NO-UNDO.
-
+DEF VAR llCompatibleActive            AS LOG  NO-UNDO.  
+DEF VAR llCompatibleOnGoing           AS LOG  NO-UNDO.
+DEF VAR llCompatible                  AS LOG  NO-UNDO.
 
 top_array = validate_request(param_toplevel_id, "string,string,string,boolean,int,[string],[string],[boolean]").
 IF top_array EQ ? THEN RETURN.
@@ -571,12 +569,14 @@ IF lcAddLineAllowed = "" THEN DO:
 END.
 
 IF lcAddLineAllowed EQ "" THEN lcAddLineAllowed = "NO_SUBSCRIPTIONS".
-
-YCO-272: /* Checking status for several "La Dúo" extra lines. */
-DO:   
-   IF AVAILABLE Customer AND LOOKUP(pcCliType,"CONT28,CONT29") > 0 THEN DO:
-      liExtraLineStatus = -1. /* Initializing variable */
+ 
+YCO-272: /* When asking about a Extra Line... */
+DO: 
+   liExtraLineStatus = -1. /* Initializing variable */
+   /* Checking if the customer has any subscription compatible with the asked extra line */  
+   IF AVAILABLE Customer AND LOOKUP(pcCliType, lcExtraLineCLITypes) > 0 THEN DO:
       /* Active subscriptions */
+      llCompatibleActive = FALSE.
       FOR EACH MobSub NO-LOCK  WHERE
                MobSub.Brand    EQ Syst.Var:gcBrand      AND
                MobSub.CustNum  EQ Customer.CustNum      AND
@@ -584,64 +584,20 @@ DO:
               (MobSub.MsStatus EQ {&MSSTATUS_ACTIVE} OR
                MobSub.MsStatus EQ {&MSSTATUS_BARRED})    
           USE-INDEX CustNum 
-          BY MobSub.ActivationTS:
-         
-         ASSIGN liCont28 = 0
-                liCont29 = 0. 
-                
-         FIND LAST Order NO-LOCK WHERE
-                   Order.MsSeq      EQ MobSub.MsSeq              AND
-                   Order.CLIType    EQ MobSub.CLIType            AND
-                   Order.StatusCode Eq {&ORDER_STATUS_DELIVERED} AND
-            LOOKUP(STRING(Order.OrderType),"0,1,4") > 0          NO-ERROR.
-         IF NOT AVAIL Order THEN 
-            FIND LAST Order NO-LOCK WHERE
-                      Order.MsSeq      EQ MobSub.MsSeq              AND
-                      Order.StatusCode EQ {&ORDER_STATUS_DELIVERED} AND
-               LOOKUP(STRING(Order.OrderType),"0,1,4") > 0         NO-ERROR.
-               
-         IF NOT AVAIL Order THEN NEXT.                          
-             
-         /* Counting extra lines for each subscripcion (also ongoing extra lines) */       
-         liCont28 = fELCliTypeCountForMainLine (INPUT "CONT28",
-                                                INPUT MobSub.MsSeq, 
-                                                INPUT Customer.CustNum).
-         liCount = 0.                                       
-         fGetOngoingExtralineCount (INPUT "CONT28",
-                                    INPUT Customer.CustIDType, 
-                                    INPUT Customer.OrgID, 
-                                    INPUT Order.OrderId, /* Mainline OrderId */
-                                    OUTPUT liCount).
-         liCont28 = liCont28 + liCount.  
-                                           
-         liCont29 = fELCliTypeCountForMainLine (INPUT "CONT29",
-                                                INPUT MobSub.MsSeq, 
-                                                INPUT Customer.CustNum).                                               
-         liCount = 0.                                       
-         fGetOngoingExtralineCount (INPUT "CONT29",
-                                    INPUT Customer.CustIDType, 
-                                    INPUT Customer.OrgID, 
-                                    INPUT Order.OrderId, /* Mainline OrderId */
-                                    OUTPUT liCount).
-         liCont29 = liCont29 + liCount.
-                                                 
-         liELStatusAux = fExtraLinesStatus (INPUT MobSub.CliType, 
-                                            INPUT pcCliType, 
-                                            INPUT liCont28, 
-                                            INPUT liCont29).                                         
-         IF liELStatusAux EQ 0 THEN DO:
-            /* If available extra line for this subscription, stop searching */ 
-            liExtraLineStatus = 0.   
-            LEAVE YCO-272.
-         END.  
-         ELSE DO:
-           /* If we don't find a 0 status, then we keep the first status found */
-           IF liExtraLineStatus EQ -1 THEN
-              liExtraLineStatus = liELStatusAux. 
-         END. 
-      END. /* Active subscriptions */
-             
-      /* On-going orders */    
+          BY MobSub.ActivationTS:  
+         IF CAN-FIND(FIRST TMSRelation WHERE 
+                           TMSRelation.TableName   EQ {&ELTABLENAME} AND 
+                           TMSRelation.KeyType     EQ {&ELKEYTYPE}   AND 
+                           TMSRelation.ParentValue EQ MobSub.CLIType AND  
+                           TMSRelation.ChildValue  EQ pcCliType      AND
+                           INT(TMSRelation.RelationType) > 0)
+         THEN DO:
+            llCompatibleActive = TRUE.      
+            LEAVE.                
+         END.                                                   
+      END.
+      /* Ongoing orders */
+      llCompatibleOnGoing = FALSE.
       FOR EACH OrderCustomer NO-LOCK WHERE   
                OrderCustomer.Brand      EQ Syst.Var:gcBrand    AND 
                OrderCustomer.CustId     EQ Customer.OrgID      AND
@@ -652,36 +608,43 @@ DO:
                Order.orderid    EQ OrderCustomer.Orderid  AND
                Order.OrderType  NE {&ORDER_TYPE_RENEWAL} 
           BY Order.CrStamp:
-             
-         ASSIGN liCount  = 0 
-                liCont28 = 0
-                liCont29 = 0.   
-                            
-         fGetOngoingExtralineCount (INPUT "CONT28",
-                                    INPUT Customer.CustIDType, 
-                                    INPUT Customer.OrgID, 
-                                    INPUT Order.OrderId, /* Mainline OrderId */
-                                    OUTPUT liCont28).
-         fGetOngoingExtralineCount (INPUT "CONT29",
-                                    INPUT Customer.CustIDType, 
-                                    INPUT Customer.OrgID, 
-                                    INPUT Order.OrderId, /* Mainline OrderId */
-                                    OUTPUT liCont29).
-         liELStatusAux = fExtraLinesStatus(INPUT Order.CliType, 
-                                           INPUT pcCliType, 
-                                           INPUT liCont28, 
-                                           INPUT liCont29).                                         
-         IF liELStatusAux EQ 0 THEN DO:
-            /* If available extra line for this order, stop searching */ 
-            liExtraLineStatus = 0.   
-            LEAVE YCO-272.
-         END.  
-         ELSE DO:
-           IF liExtraLineStatus EQ -1 THEN
-              liExtraLineStatus = liELStatusAux. /* If we don't find a 0 status, then we keep the first status found */   
-         END.                                                 
-      END.                     
-   END. /* IF AVAILABLE Customer AND lcExtraLineAllowed <> "" */                                                                                                   
+         IF CAN-FIND(FIRST TMSRelation WHERE 
+                           TMSRelation.TableName   EQ {&ELTABLENAME} AND 
+                           TMSRelation.KeyType     EQ {&ELKEYTYPE}   AND 
+                           TMSRelation.ParentValue EQ Order.CLIType AND  
+                           TMSRelation.ChildValue  EQ pcCliType      AND
+                           INT(TMSRelation.RelationType) > 0) 
+         THEN DO:
+            llCompatibleOnGoing = TRUE.      
+            LEAVE.                
+         END.       
+      END.
+      llCompatible = (llCompatibleActive OR llCompatibleOnGoing).
+      
+      /* Cases */
+      IF LOOKUP(pcClitype, lcExtraLineAllowed) > 0 THEN DO:
+         liExtraLineStatus = 0. /* Go on */
+         LEAVE YCO-272.         
+      END.                        
+      IF lcExtraLineAllowed = "" THEN DO:
+         IF NOT llCompatible THEN
+            liExtraLineStatus = 1. /* No subscriptions compatible with extra line and no other extra line allowed */
+         ELSE
+            liExtraLineStatus = 2. /* Compatible but no extra lines available*/
+         LEAVE YCO-272.
+      END.      
+      IF LOOKUP(pcClitype, lcExtraLineCLITypes) = 1 AND llCompatible AND LOOKUP(pcClitype, lcExtraLineAllowed) = 0 AND lcExtraLineAllowed <> "" THEN DO:
+         liExtraLineStatus = 5. /* Compatible but not available. Try another allowed */
+         LEAVE YCO-272.             
+      END.           
+      IF LOOKUP(pcClitype, lcExtraLineAllowed) = 0 AND lcExtraLineAllowed <> "" THEN DO:
+         IF LOOKUP(pcClitype, lcExtraLineCLITypes) = 1 THEN 
+           liExtraLineStatus = 3. /* Not allowed, but you can try other one of the allowed */
+         ELSE
+           liExtraLineStatus = 4. /* Not allowed, but you can try other one of the allowed */  
+         LEAVE YCO-272.         
+      END.                                                  
+   END.
 END. /* YCO-272 */
 
 lcReturnStruct = add_struct(response_toplevel_id, "").
