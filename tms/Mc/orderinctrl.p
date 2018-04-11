@@ -358,7 +358,8 @@ ELSE IF Order.OrderType EQ {&ORDER_TYPE_RENEWAL} THEN DO:
       WHEN "renewal_telesales" OR
       WHEN "retention" OR
       WHEN "renewal_ctc" THEN DO:
-         IF fCheckRenewalData() = TRUE OR OrderCustomer.DataChecked NE ? THEN
+         IF fCheckRenewalData(Order.OrderID) = TRUE OR 
+            OrderCustomer.DataChecked NE ? THEN
             lcNewStatus =  {&ORDER_STATUS_RENEWAL}.
          ELSE DO:
 
