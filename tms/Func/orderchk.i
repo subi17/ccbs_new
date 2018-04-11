@@ -55,9 +55,16 @@ END FUNCTION. /* FUNCTION fCheckSubsLimit */
 /*Usage of return values:
 TRUE  -> RENEWAL
 FALSE -> RENEWAL_HOLD*/
-FUNCTION fCheckRenewalData RETURNS LOGICAL:
+FUNCTION fCheckRenewalData RETURNS LOGICAL
+   (INPUT iiOrderID AS INT):
 
    DEF BUFFER bOrderCustomer FOR OrderCustomer.
+   DEF BUFFER Order FOR Order.
+   FIND FIRST Order NO-LOCK WHERE
+              Order.Brand EQ Syst.Var:gcBrand AND
+              Order.OrderID EQ iiOrderID NO-ERROR.
+   IF NOT AVAIL Order THEN RETURN FALSE.           
+
    /* delivery address is different than customer address */
    IF CAN-FIND(FIRST bOrderCustomer NO-LOCK WHERE
       bOrderCustomer.Brand = Syst.Var:gcBrand AND

@@ -2302,7 +2302,7 @@ ELSE IF Order.statuscode NE "4" THEN DO:
          WHEN "renewal_telesales" OR 
          WHEN "retention" OR
          WHEN "renewal_ctc" THEN DO:
-            IF fCheckRenewalData() = TRUE THEN
+            IF fCheckRenewalData(Order.Orderid) = TRUE THEN
                /* YBP-560 */
                Order.StatusCode = {&ORDER_STATUS_RENEWAL}.
             ELSE DO:
