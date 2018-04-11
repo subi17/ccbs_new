@@ -1621,7 +1621,10 @@ FUNCTION fCreateDocumentCase15 RETURNS CHAR
     idEndTS AS DECIMAL):
    DEF VAR lcCaseTypeId     AS CHAR NO-UNDO.
    DEF VAR lcCasefileRow    AS CHAR NO-UNDO.
-   DEF VAR lcStatuses AS CHAR NO-UNDO.
+   DEF VAR lcStatuses       AS CHAR NO-UNDO.
+   DEF VAR lcRequiredDocs   AS CHAR NO-UNDO.
+   DEF VAR liCount          AS INT NO-UNDO.
+   DEF VAR lcDocListEntries AS CHAR NO-UNDO.
 
     FOR EACH MsRequest EXCLUSIVE-LOCK WHERE
         MsRequest.Brand EQ Syst.Var:gcBrand AND
@@ -1645,7 +1648,32 @@ FUNCTION fCreateDocumentCase15 RETURNS CHAR
                            STRING(MSRequest.MsRequest).                  /* Request number */
 
         MSRequest.ReqStatus = {&REQUEST_STATUS_UNDER_WORK} .
-                           
+
+        /* solve needed documents: */
+        lcRequiredDocs = fNeededDocsCategoryChange().
+        DO liCount = 1 TO NUM-ENTRIES(lcRequiredDocs):
+           /* Document type, Type desc,DocStatusCode,RevisionComment */
+           lcDocListEntries = lcDocListEntries +
+                         ENTRY(liCount,lcRequiredDocs) + {&DMS_DOCLIST_SEP} +
+                         {&DMS_DOCLIST_SEP} + /* filled only by DMS responses */
+                         lcDMSDOCStatus + {&DMS_DOCLIST_SEP} +
+                         "".
+         IF liCount NE NUM-ENTRIES(lcRequiredDocs)
+            THEN lcDocListEntries = lcDocListEntries + {&DMS_DOCLIST_SEP}.
+        END.
+       
+        fUpdateDMS('',
+                   lcCaseTypeID,
+                   STRING(MSRequest.MsRequest),
+                   "MsRequest",
+                   MSRequest.MsRequest,
+                   lcInitStatus,
+                   lcDMSStatusDesc,
+                   "",
+                   MsRequest.CreStamp,
+                   lcDocListEntries,
+                   {&DMS_DOCLIST_SEP}).          
+        
         OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
         PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
         OUTPUT STREAM sOutFile CLOSE.

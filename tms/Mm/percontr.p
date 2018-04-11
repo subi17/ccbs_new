@@ -1083,6 +1083,8 @@ PROCEDURE pContractActivation:
                        DPRate.ValidTo   >= TODAY NO-LOCK NO-ERROR.
             IF AVAILABLE DPrate THEN 
                Mm.MManMessage:ParamKeyValue = REPLACE(Mm.MManMessage:ParamKeyValue,"#SVADISC", STRING(DPRate.DiscValue) ).
+            ELSE 
+               Mm.MManMessage:ParamKeyValue = REPLACE(Mm.MManMessage:ParamKeyValue,"#SVADISC", '').
             FIND FIRST FMItem WHERE FMItem.Brand     EQ Syst.Var:gcBrand              AND 
                        FMItem.FeeModel  EQ DayCampaign.FeeModel AND 
                        FMItem.BillCode  <> ""                   AND 
