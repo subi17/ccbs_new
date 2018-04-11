@@ -362,23 +362,26 @@ PROCEDURE pPeriodicalContract:
          END.     
       END.
 
-      ASSIGN lcSVAParams = (IF DayCampaign.BundleTarget = {&DC_BUNDLE_TARGET_SVA} THEN "SVA" ELSE "").
+      ASSIGN
+          lcSVAParams  = (IF DayCampaign.BundleTarget = {&DC_BUNDLE_TARGET_SVA} THEN "SVA" ELSE "")
+          lcContractID = "" .
 
       IF lcSVAParams <> "" THEN DO:
+          lcItemParams = OrderAction.ItemParam.
+          DO iCounter = 2 TO 5:
+              IF NUM-ENTRIES(lcItemParams,"|") >= iCounter THEN  
+                  IF ENTRY(iCounter,lcItemParams,"|") BEGINS "contract_id" THEN
+                    ASSIGN  
+                      lcContractID = ENTRY(2,ENTRY(iCounter,lcItemParams,"|"),"=")
+                      ENTRY(iCounter,lcItemParams,"|") = CHR(10) + CHR(13)
+                      lcItemParams = REPLACE(lcItemParams ,( "|" + CHR(10) + CHR(13) )  , "") .
+          END.
           CASE DayCampaign.DCEvent :
               WHEN "OFFICE365" OR 
               WHEN "FAXTOEMAIL" THEN DO:
-                  lcItemParams = OrderAction.ItemParam.
-                  DO iCounter = 2 TO 5:
-                      IF NUM-ENTRIES(lcItemParams,"|") >= iCounter THEN  
-                          IF ENTRY(iCounter,lcItemParams,"|") BEGINS "contract_id" THEN
-                            ASSIGN  
-                              lcContractID = ENTRY(2,ENTRY(iCounter,lcItemParams,"|"),"=")
-                              ENTRY(iCounter,lcItemParams,"|") = "".
-                  END.
                   lcSVAParams = lcSVAParams + "|" + lcItemParams.
               END.
-              OTHERWISE lcSVAParams = lcSVAParams + (IF OrderAction.ItemParam <> "" THEN "|||" ELSE "") + OrderAction.ItemParam. 
+              OTHERWISE lcSVAParams = lcSVAParams + (IF lcItemParams <> "" THEN "|||" ELSE "") + lcItemParams. 
           END CASE.
       END.
 

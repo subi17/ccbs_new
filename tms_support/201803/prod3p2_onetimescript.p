@@ -226,17 +226,22 @@ FIND DayCampaign WHERE DayCampaign.Brand = Syst.Var:gcBrand AND DayCampaign.DCEv
 /* Create SMS InvText */
 
 DO :
-
-    CREATE InvText.
+    FIND FIRST InvText WHERE  
+         InvText.Brand     = Syst.Var:gcBrand   AND 
+         InvText.Target    = "EMAIL"            AND 
+         InvText.KeyValue  = "SVA_ActEmail"     EXCLUSIVE-LOCK NO-ERROR.
+    IF NOT AVAILABLE InvText THEN DO:
+        CREATE InvText.       
+        InvText.Brand     = Syst.Var:gcBrand .
+        InvText.ITNum     = NEXT-VALUE(it-seq)   .
+    END.
     ASSIGN 
-        InvText.Brand     = Syst.Var:gcBrand
-        InvText.ITNum     = NEXT-VALUE(it-seq)   
         InvText.Target    = "EMAIL"            
         InvText.KeyValue  = "SVA_ActEmail"   
         InvText.FromDate  = TODAY - 1  
         InvText.Todate    = 12/31/49               
         InvText.Language  = 1
-        InvText.TemplateID  = "SVA_ActEmail_MM"
+        InvText.TemplateID  = "sva_activation"
         InvText.ParamKeyValue = "contract_id=#CONTRACTID|order_date=#ORDERDATE|first_name=#FIRSTNAME|last_name=#LASTNAME|customer_id_type=#CUSTTYPE|customer_id=#CUSTID|customer_address=#PROVINCE|customer_postal_code=#POSTALCODE|contact_number=#NUMBER|contact_email=#EMAIL|sva_name=#SVANAME|sva_monthly_fee=#SVAMF|sva_discount=#SVADISC"
         InvText.InvText   = ""
         InvText.UseMMan   = TRUE 
