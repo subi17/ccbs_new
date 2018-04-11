@@ -484,6 +484,8 @@ DEFINE VARIABLE faxtoEmailStruct       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcfaxtoEmailStruct     AS CHARACTER NO-UNDO.
 DEFINE VARIABLE lcWebContractIds       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liEntry                AS INTEGER   NO-UNDO.
+DEFINE VARIABLE liCount                AS INTEGER   NO-UNDO.
+DEFINE VARIABLE lcExtraDS              AS CHARACTER NO-UNDO.
 
 /* YBP-514 */
 FUNCTION fGetOrderFields RETURNS LOGICAL :
@@ -612,35 +614,32 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
     DO:
         bundleExtraDataStruct = get_struct(pcOrderStruct , "bundle_extra_data").
         lcExtraDataStruct     = validate_request(bundleExtraDataStruct, pcAdditionalBundleList).
-    
-        IF LOOKUP('OFFICE365' , lcExtraDataStruct) GT 0 THEN DO:
-            office365Struct    = get_struct(bundleExtraDataStruct , "OFFICE365").
-            lcoffice365Struct  = validate_request(office365Struct, 'email!').
-            liEntry            = LOOKUP('OFFICE365',pcAdditionalBundleList) .     
-            cData = "".
-            cData = "|" + get_string(office365Struct, "email").
-            IF ENTRY (liEntry,lcWebContractIds) NE "" THEN 
-                cData = cData + "|" + "contract_id=" + ENTRY (liEntry,lcWebContractIds). 
-            ELSE 
-                cData = cData + "|" .
-            cData = cData + FILL("|", (2 - NUM-ENTRIES(cData,"|"))).
-            ENTRY( liEntry , pcAdditionalOfferList ) = cData NO-ERROR.                     
-        END.
-        IF LOOKUP('FAXTOEMAIL', lcExtraDataStruct) GT 0 THEN DO:
-            faxtoEmailStruct    = get_struct(bundleExtraDataStruct , "FAXTOEMAIL").
-            lcfaxtoEmailStruct  = validate_request(faxtoEmailStruct, 'email!,fixed_number!').    
-            liEntry             = LOOKUP('FAXTOEMAIL',pcAdditionalBundleList) .     
-
-            cData = "".
-            cData = get_string(faxtoEmailStruct, "fixed_number").
-            cData = cData + "|" + get_string(faxtoEmailStruct, "email").
-            IF ENTRY (liEntry,lcWebContractIds) NE "" THEN 
-                cData = cData + "|" + "contract_id=" + ENTRY (liEntry,lcWebContractIds). 
-            ELSE 
-                cData = cData + "|" .
-            cData = cData + FILL("|", (2 - NUM-ENTRIES(cData,"|"))).
-            ENTRY( liEntry ,pcAdditionalOfferList ) = cData NO-ERROR.                     
-        END.
+        DO liCount = 1 TO NUM-ENTRIES(lcExtraDataStruct):
+            lcExtraDS = ENTRY(liCount,lcExtraDataStruct).
+            CASE lcExtraDS:
+                WHEN 'OFFICE365' THEN DO:
+                    office365Struct    = get_struct(bundleExtraDataStruct , "OFFICE365").
+                    lcoffice365Struct  = validate_request(office365Struct, 'email!').
+                    liEntry            = LOOKUP('OFFICE365',pcAdditionalBundleList) .     
+                    cData = "".
+                    cData = "|" + get_string(office365Struct, "email").
+                    cData = cData + "|" + ENTRY( liEntry , pcAdditionalOfferList ).
+                    cData = cData + FILL("|", (2 - NUM-ENTRIES(cData,"|"))).
+                    ENTRY( liEntry , pcAdditionalOfferList ) = cData NO-ERROR.                     
+                END.
+                WHEN  'FAXTOEMAIL' THEN DO:
+                    faxtoEmailStruct    = get_struct(bundleExtraDataStruct , "FAXTOEMAIL").
+                    lcfaxtoEmailStruct  = validate_request(faxtoEmailStruct, 'email!,fixed_number!').    
+                    liEntry             = LOOKUP('FAXTOEMAIL',pcAdditionalBundleList) .     
+                    cData = "".
+                    cData = get_string(faxtoEmailStruct, "fixed_number").
+                    cData = cData + "|" + get_string(faxtoEmailStruct, "email").
+                    cData = cData + "|" + ENTRY( liEntry , pcAdditionalOfferList ).
+                    cData = cData + FILL("|", (2 - NUM-ENTRIES(cData,"|"))).
+                    ENTRY( liEntry ,pcAdditionalOfferList ) = cData NO-ERROR.                     
+                END.
+            END CASE. 
+        END.        
     END.
 
    IF LOOKUP("subscription_bundle",lcOrderStruct) > 0 THEN
@@ -2536,8 +2535,12 @@ DO liBundleCnt = 1 TO NUM-ENTRIES(pcAdditionalBundleList):
 
    FIND FIRST DayCampaign WHERE DayCampaign.Brand = Syst.Var:gcBrand AND DayCampaign.DCEvent = ENTRY(liBundleCnt, pcAdditionalBundleList) NO-LOCK NO-ERROR.
    IF AVAIL DayCampaign AND LOOKUP(STRING(DayCampaign.BundleTarget), STRING({&TELEVISION_BUNDLE}) + "," + 
-                                                             STRING({&DC_BUNDLE_TARGET_SVA})) > 0 THEN 
-       fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList), ENTRY(liBundleCnt,pcAdditionalOfferList)).
+                                                             STRING({&DC_BUNDLE_TARGET_SVA})) > 0 THEN DO:
+       IF ENTRY (liBundleCnt,lcWebContractIds) NE "" THEN
+           fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList), ( ENTRY(liBundleCnt,pcAdditionalOfferList)  + "|contract_id=" + ENTRY (liBundleCnt,lcWebContractIds) )  ).
+       ELSE 
+          fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList), ENTRY(liBundleCnt,pcAdditionalOfferList)).
+   END.
    ELSE         
        fCreateOrderAction(Order.Orderid,"BundleItem",ENTRY(liBundleCnt, pcAdditionalBundleList),"").
 END.

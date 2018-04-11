@@ -193,6 +193,8 @@ FUNCTION fGetEmailKeyValuePairs RETURNS CHAR
    IF INDEX(lcOutput, "#FIRSTNAME") > 0 THEN
       lcOutput = REPLACE(lcOutput, "#FIRSTNAME", Func.Common:mDispCustName(BUFFER bCustomer)).
       
+   lcOutput = REPLACE(lcOutput, "#LASTNAME", ''). /* This is taken care in FIRSTNAME */
+      
    IF INDEX(lcOutput, "#PROVINCE") > 0 THEN
    DO:
       lcOutput = REPLACE(lcOutput, "#PROVINCE"       , bCustomer.Address).
