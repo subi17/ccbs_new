@@ -1136,7 +1136,7 @@ PROCEDURE pTerminate:
                      (lMLMobSub.MsStatus      =   {&MSSTATUS_ACTIVE}  OR
                       lMLMobSub.MsStatus      =   {&MSSTATUS_BARRED}) NO-ERROR.
             
-          IF NOT AVAILABLE lMLMobSub THEN RETURN.
+          IF AVAILABLE lMLMobSub THEN DO:
          
           lcMandatoryELines = fGetMandatoryExtraLineForMainLine(lMLMobSub.CLIType) .
          
@@ -1163,7 +1163,7 @@ PROCEDURE pTerminate:
                        lELMobSub.MultiSimId   EQ lMLMobSub.msseq           AND
                        lELMobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} AND 
                        (lELMobSub.MsStatus    EQ {&MSSTATUS_ACTIVE} OR
-                        lELMobSub.MsStatus    EQ {&MSSTATUS_BARRED})   BY MobSub.ActivationTS:
+                        lELMobSub.MsStatus    EQ {&MSSTATUS_BARRED})   BY lELMobSub.ActivationTS:
                             
                   
                        ASSIGN liSTCELMSSeq    =  lELMobSub.MSSeq
@@ -1182,7 +1182,7 @@ PROCEDURE pTerminate:
                                                       lcSTCELCLIType,                      /* NEW CLITYPE */
                                                       "",                                     
                                                       "",                                      
-                                                      Func.Common:mMakeTS(),
+                                                      TRUNC(Func.Common:mMakeTS(),0),
                                                       0,                                        
                                                       0,                                        
                                                       "",                                        
@@ -1190,7 +1190,7 @@ PROCEDURE pTerminate:
                                                       TRUE,                                     
                                                       "",
                                                       0,
-                                                      {&REQUEST_SOURCE_STC},
+                                                      {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                                       0,
                                                       MSRequest.MSRequest,  /*Parent Request*/
                                                       "",                                      
@@ -1214,6 +1214,7 @@ PROCEDURE pTerminate:
                                   TermMobSub.CLIType + "DISC",
                                   TODAY).                        
                            
+      END.
       END.
       ELSE IF fCLITypeIsMainLine(TermMobSub.CLIType) THEN
       DO:
