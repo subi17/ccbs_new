@@ -28,7 +28,7 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
    IF NOT AVAIL bMsRequest THEN RETURN "ERROR: Request not found " +
                                    STRING(iiMsRequest).
    FIND FIRST bCustomer NO-LOCK WHERE
-              bCustomer.CustNum EQ bMsRequest.CustNum.
+              bCustomer.CustNum EQ bMsRequest.CustNum NO-ERROR.
     IF NOT AVAIL bCustomer THEN
        RETURN "ERROR: Customer of requst not found " + STRING(iiMsRequest).
 
@@ -86,9 +86,9 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
 
    IF INDEX(lcOutput, "#EMAIL") > 0 THEN 
    DO:
-      IF NUM-ENTRIES(bMSRequest.ReqCparam6) GT 2 AND ENTRY(3,bMSRequest.ReqCparam6, "|") <> "" THEN
+      IF NUM-ENTRIES(bMSRequest.ReqCparam6,"|") GT 2 AND ENTRY(3,bMSRequest.ReqCparam6, "|") <> "" THEN
          lcReplace = ENTRY(3,bMSRequest.ReqCparam6, "|").
-      ELSE IF NUM-ENTRIES(bMSRequest.ReqCparam6) EQ 2 AND ENTRY(2,bMSRequest.ReqCparam6, "|") <> "" THEN
+      ELSE IF NUM-ENTRIES(bMSRequest.ReqCparam6,"|") EQ 2 AND ENTRY(2,bMSRequest.ReqCparam6, "|") <> "" THEN
          lcReplace = ENTRY(2,bMSRequest.ReqCparam6, "|").
       ELSE 
          lcReplace = bCustomer.Email.
@@ -107,20 +107,20 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
       IF bMsRequest.ReqType EQ 9 THEN 
       DO:
          IF bMsRequest.ReqStatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
-             lcStatus = "3 - Pending deactivation".
+             lcStatus = "Pending deactivation".
          ELSE IF bMsRequest.ReqStatus EQ {&REQUEST_STATUS_CANCELLED} THEN
-             lcStatus = "1 - Active".
+             lcStatus = "Active".
          ELSE 
-             lcStatus = "0 - Inactive".
+             lcStatus = "Inactive".
       END.
       ELSE IF bMsRequest.reqtype EQ 8 THEN 
       DO:
          IF bMsRequest.reqstatus EQ {&REQUEST_STATUS_CONFIRMATION_PENDING} THEN
-             lcStatus = "2 - Pending activation".
+             lcStatus = "Pending activation".
          ELSE IF bMsRequest.ReqStatus EQ {&REQUEST_STATUS_CANCELLED} THEN
-             lcStatus = "0 - Inactive".    
+             lcStatus = "Inactive".    
          ELSE 
-             lcStatus = "1 - Active".
+             lcStatus = "Active".
       END.
 
       lcMailHeader = REPLACE(lcMailHeader, "#STATUS", lcStatus).
@@ -147,15 +147,98 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
 END FUNCTION.
 
 
+
+FUNCTION fGetEmailKeyValuePairs RETURNS CHAR
+   (iiMsRequest   AS INT,
+    icKeyValueSrc AS CHAR):
+
+   DEF BUFFER bMsRequest FOR MsRequest.
+   DEF BUFFER bCustomer  FOR Customer.
+   DEF BUFFER bMobSub    FOR MobSub.
+   DEF BUFFER bCliType   FOR CliType.
+   DEF BUFFER bOrder     FOR Order.
+   
+   DEFINE VARIABLE lcOutput  AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcReplace AS CHARACTER NO-UNDO.
+   
+   FIND FIRST bMsRequest NO-LOCK WHERE
+              bMsRequest.MsRequest EQ iiMsRequest NO-ERROR.
+   IF NOT AVAIL bMsRequest THEN RETURN "ERROR: Request not found " +
+                                   STRING(iiMsRequest).
+   FIND FIRST bCustomer WHERE
+              bCustomer.CustNum EQ bMsRequest.CustNum NO-LOCK NO-ERROR.
+    IF NOT AVAIL bCustomer THEN
+       RETURN "ERROR: Customer of requst not found " + STRING(iiMsRequest).
+
+   FIND FIRST bMobSub WHERE bMobSub.MsSeq = bMsRequest.MsSeq NO-LOCK NO-ERROR.
+   IF AVAIL bMobSub THEN 
+       FIND FIRST bCliType WHERE bCliType.CliType = bMobSub.CliType NO-LOCK NO-ERROR.
+       
+   FIND bOrder WHERE bOrder.MsSeq = bMobSub.MsSeq NO-LOCK NO-ERROR.
+      
+   lcOutput = icKeyValueSrc.
+
+   IF INDEX(lcOutput, "#CONTRACTID") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#CONTRACTID", STRING(bOrder.ContractID)).
+   
+   IF INDEX(lcOutput, "#ORDERDATE") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#ORDERDATE", STRING(Func.Common:mTSToDate(bOrder.CrStamp))).
+   
+   IF INDEX(lcOutput, "#CUSTTYPE") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#CUSTTYPE", STRING(bCustomer.CustIdType)).
+   
+   IF INDEX(lcOutput, "#CUSTID") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#CUSTID", STRING(bCustomer.Orgid)).
+      
+   IF INDEX(lcOutput, "#FIRSTNAME") > 0 THEN
+      lcOutput = REPLACE(lcOutput, "#FIRSTNAME", Func.Common:mDispCustName(BUFFER bCustomer)).
+      
+   lcOutput = REPLACE(lcOutput, "#LASTNAME", ''). /* This is taken care in FIRSTNAME */
+      
+   IF INDEX(lcOutput, "#PROVINCE") > 0 THEN
+   DO:
+      lcOutput = REPLACE(lcOutput, "#PROVINCE"       , bCustomer.Address).
+      lcOutput = REPLACE(lcOutput, "#CITY"           , bCustomer.PostOffice).
+      lcOutput = REPLACE(lcOutput, "#POSTALCODE"     , bCustomer.ZipCode).
+   END.
+   
+   IF INDEX(lcOutput, "#EMAIL") > 0 THEN 
+   DO:
+      IF NUM-ENTRIES(bMSRequest.ReqCparam6,"|") GT 2 AND ENTRY(3,bMSRequest.ReqCparam6, "|") <> "" THEN
+         lcReplace = ENTRY(3,bMSRequest.ReqCparam6, "|").
+      ELSE IF NUM-ENTRIES(bMSRequest.ReqCparam6,"|") EQ 2 AND ENTRY(2,bMSRequest.ReqCparam6, "|") <> "" THEN
+         lcReplace = ENTRY(2,bMSRequest.ReqCparam6, "|").
+      ELSE 
+         lcReplace = bCustomer.Email.
+
+      lcOutput = REPLACE(lcOutput, "#EMAIL", lcReplace).
+   END.
+
+   IF INDEX(lcOutput, "#NUMBER") > 0 THEN 
+   DO:
+      lcReplace = ENTRY(2,bMsRequest.Reqcparam6, "|").
+      lcOutput = REPLACE(lcOutput, "#NUMBER", lcReplace).
+   END.   
+         
+   RETURN lcOutput.
+END FUNCTION.
+
 FUNCTION fProMigrationRequest RETURNS INTEGER
-   (INPUT  iiMsseq        AS INT,        /* msseq                */
+   (INPUT  iiMsseq        AS INTEGER  ,  /* msseq                */
     INPUT  icCreator      AS CHARACTER,  /* who made the request */
     INPUT  icSource       AS CHARACTER,
-    INPUT  iiOrig         AS INTEGER,
+    INPUT  iiOrig         AS INTEGER  ,
+    INPUT  ilValidate     AS LOGICAL  , 
     OUTPUT ocResult       AS CHARACTER):
 
    DEF VAR liReqCreated AS INT NO-UNDO.
    DEF VAR ldActStamp AS DEC NO-UNDO.
+   DEFINE BUFFER bCustomer  FOR Customer.
+   DEFINE BUFFER bMobSub    FOR MobSub.
+   DEFINE BUFFER bCustCat   FOR Custcat.
+   DEFINE BUFFER bOrder     FOR Order.
+   DEFINE BUFFER bClitype   FOR CLIType.
+   DEFINE VARIABLE llHasLegacyTariff AS LOGICAL NO-UNDO.
 
    ocResult = fChkRequest(iiMsSeq,
                           {&REQTYPE_PRO_MIGRATION},
@@ -163,6 +246,59 @@ FUNCTION fProMigrationRequest RETURNS INTEGER
                           icCreator).
 
    IF ocResult > "" THEN RETURN 0.
+   
+   IF ilValidate THEN DO:
+       FIND bMobsub WHERE bMobsub.brand EQ Syst.Var:gcBrand AND bMobsub.MsSeq = iiMsseq NO-LOCK NO-ERROR.
+       FIND bCustomer WHERE bCustomer.Brand EQ Syst.Var:gcBrand AND bCustomer.CustNum = bMobSub.CustNum NO-LOCK NO-ERROR.
+       FIND bCustCat WHERE bCustcat.Category = bCustomer.Category NO-LOCK NO-ERROR.
+       /* Is category available */
+       IF NOT AVAILABLE bCustCat THEN DO:
+           ocResult = "101".
+           RETURN 0. 
+       END.
+       /* Is Customer among the required segment */
+       IF LOOKUP(bCustCat.Segment,"AUTONOMO,COMPANY,SOHO-AUTONOMO,SOHO-COMPANY") EQ 0  THEN DO:
+           ocResult = "102".
+           RETURN 0.
+       END.
+       /* Does customer have legacy tariffs */
+       FOR EACH bMobSub 
+          WHERE bMobSub.Brand = Syst.Var:gcBrand 
+            AND bMobSub.InvCust = bCustomer.CustNum 
+            AND bMobSub.MsStatus = {&MSSTATUS_ACTIVE} NO-LOCK:
+           IF bMobSub.Clitype EQ "CONT23" OR 
+              bMobSub.Clitype EQ "CONT24" OR 
+              bMobSub.Clitype EQ "CONT9" THEN 
+              llHasLegacyTariff = TRUE.
+       END.
+       IF NOT llHasLegacyTariff THEN DO:
+            ocResult = "103".
+            RETURN 0.
+       END.
+       /* Convergent in ONGOING status */
+       FOR EACH bOrder
+          WHERE bOrder.Brand = Syst.Var:gcBrand 
+            AND bOrder.CustNum = bCustomer.CustNum 
+            AND bOrder.StatusCode = {&ORDER_STATUS_ONGOING} NO-LOCK:
+            FIND bClitype WHERE bClitype.CliType = bOrder.CliType NO-LOCK NO-ERROR.
+            IF AVAILABLE bCliType AND 
+               (bCliType.FixedLineType = {&CLITYPE_TARIFFTYPE_CONVERGENT} OR 
+                bCliType.FixedLineType = {&CLITYPE_TARIFFTYPE_FIXEDONLY}  )  THEN DO:
+                ocResult = "104".
+                RETURN 0.
+            END.  
+       END.         
+       /* Customer having a active prepaid subscription */
+       FOR EACH bMobSub 
+          WHERE bMobSub.Brand = Syst.Var:gcBrand
+            AND bMobSub.InvCust = bCustomer.CustNum 
+            AND bMobSub.MsStatus = {&MSSTATUS_ACTIVE} NO-LOCK:
+           IF bMobSub.paytype THEN DO:
+               ocResult = "105".
+               RETURN 0.
+           END.
+       END.
+   END.
 
    /* set activation time */
    ldActStamp = Func.Common:mMakeTS().
@@ -208,6 +344,7 @@ FUNCTION fProMigrateOtherSubs RETURNS CHAR
                                         INPUT icsalesman,
                                         INPUT {&REQUEST_SOURCE_MIGRATION},
                                         INPUT iimsrequest,
+                                        INPUT FALSE , /* Validations not required here */
                                         OUTPUT lcResult).
       END.
       ELSE IF AVAIL Clitype AND
