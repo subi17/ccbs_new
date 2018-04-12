@@ -109,7 +109,7 @@ FUNCTION _fCreateFusionMessage RETURNS LOGICAL
    ELSE IF CLIType.FixedLineType EQ 2 THEN
       lcOrderType = "FTTH".
 
-/*NEBACO-47*/
+   /* NEBACO-47 */
    IF Order.Clitype MATCHES "CONTFHNB*" THEN 
       lcOrderType = lcOrderType + " NEBA".
 

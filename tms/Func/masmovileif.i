@@ -159,17 +159,24 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
 
       IF AVAIL CLIType THEN DO:
          IF CLIType.FixedLineType EQ 1 THEN DO:
-            lcOrderType = "Alta xDSL + VOIP".
+            lcOrderType = "Alta xDSL".
             lcConnServiceId = "ADSL".
             lcConnServiceName = "ADSL connection".
             lcConnServiceType = "ADSL".
          END.
          ELSE IF CLIType.FixedLineType EQ 2 THEN DO:
-            lcOrderType = "Alta FTTH + VOIP".
+            lcOrderType = "Alta FTTH".
             lcConnServiceId = "FTTH".
             lcConnServiceName = "FTTH connection".
             lcConnServiceType = "FTTH".
          END.
+
+         /* NEBACO-47 */
+         IF Clitype.Clitype MATCHES "CONTFHNB*" THEN
+            lcOrderType = lcOrderType + " NEBA".
+
+         lcOrderType = lcOrderType +  " + VOIP".
+
          ELSE RETURN "Not allowed Fixed line type".
       END.
    END.
