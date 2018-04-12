@@ -192,7 +192,8 @@ DO TRANSACTION:
    END. /* IF NOT AVAILABLE Msowner THEN DO: */
    ELSE DO:
       IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSOWNER).
-      IF MSOwner.clievent EQ "F" THEN DO: /* react of partial terminated */
+      IF MSOwner.clievent EQ "F" OR /* react of partial terminated */
+         MSOwner.cli NE TermMobsub.cli THEN DO:
          BUFFER-COPY msowner TO ttoldmsowner.
          IF llDoEvent THEN RUN StarEventSetOldBuffer(lhMSOWNER).
          MSOwner.TsEnd = ldCurrTS.
