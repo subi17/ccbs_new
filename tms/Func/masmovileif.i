@@ -170,6 +170,7 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
             lcConnServiceName = "FTTH connection".
             lcConnServiceType = "FTTH".
          END.
+         ELSE RETURN "Not allowed Fixed line type".
 
          /* NEBACO-47 */
          IF Clitype.Clitype MATCHES "CONTFHNB*" THEN
@@ -177,7 +178,6 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
 
          lcOrderType = lcOrderType +  " + VOIP".
 
-         ELSE RETURN "Not allowed Fixed line type".
       END.
    END.
    ELSE
