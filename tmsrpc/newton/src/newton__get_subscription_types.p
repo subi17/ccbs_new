@@ -17,6 +17,7 @@ Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/cparam2.i}
 {Func/fixedlinefunc.i}
+{Func/extralinefunc.i}
 
 DEF VAR pcCliType     AS CHAR NO-UNDO.
 DEF VAR pcTenant      AS CHAR NO-UNDO.
@@ -28,8 +29,10 @@ DEF VAR piMsSeq       AS INT NO-UNDO.
 DEF VAR top_struct         AS CHAR NO-UNDO.
 DEF VAR result_array       AS CHAR NO-UNDO.
 DEF VAR sub_struct         AS CHAR NO-UNDO.
+DEF VAR lcMandatoryELines  AS CHAR NO-UNDO.
 DEF VAR ldaCont15PromoEnd  AS DATE NO-UNDO. 
 DEF VAR lcStatusCode       AS INT  NO-UNDO.
+DEF VAR liMLMsSeq          AS INT  NO-UNDO.
 
 DEFINE VARIABLE lcDownSpeed            AS CHAR  NO-UNDO.
 DEFINE VARIABLE lcUpSpeed              AS CHAR  NO-UNDO.
@@ -48,6 +51,7 @@ DEFINE TEMP-TABLE ttSpeed
 
 DEF BUFFER bCLIType        FOR CLIType.
 DEF BUFFER oldCLIType      FOR CLIType.
+DEF BUFFER bfMobSub        FOR MobSub.
 
 FUNCTION fSpeedConversion RETURNS INT64
     (INPUT icSpeed  AS CHAR):
@@ -250,6 +254,9 @@ DO:
                MobSub.MsSeq = piMsSeq          NO-ERROR. 
     IF AVAILABLE MobSub THEN
     DO:
+        FIND FIRST Customer NO-LOCK WHERE 
+            Customer.CustNum = MobSub.Custnum NO-ERROR.        
+        
          FIND FIRST oldCLIType WHERE oldCLIType.Brand   = Syst.Var:gcBrand  AND
                                      oldCLIType.cliType = pcCliType NO-LOCK NO-ERROR.
          IF AVAIL oldCliType AND oldCliType.FixedLineType EQ {&FIXED_LINE_TYPE_FIBER} THEN
@@ -329,6 +336,50 @@ FOR EACH CLIType NO-LOCK WHERE
               END.
           END.
       END.    
+      
+      IF fCLITypeIsExtraLine(CLIType.CLIType)
+      AND AVAILABLE Customer
+      THEN DO:
+          
+          IF fCheckExistingMainLineAvailForExtraLine(CLIType.CLIType, 
+                                                     Customer.CustidType,
+                                                     Customer.OrgId, 
+                                                     OUTPUT liMLMsSeq) > 0    OR
+             fCheckOngoingMainLineAvailForExtraLine(CLIType.CLIType, 
+                                                    Customer.CustidType,
+                                                    Customer.OrgId) > 0
+          THEN lcStatusCode = CLIType.StatusCode.
+          ELSE lcStatusCode = 0.
+          
+          /*STC not possible if the main line is ongoing.
+            If mandatory ExtraLine getting STC then we should not show dependent extra lines in the STC View*/
+          IF liMLMsSeq > 0 
+          THEN DO:
+              
+              FIND FIRST bfMobSub NO-LOCK WHERE 
+                  bfMobSub.MsSeq = liMLMsSeq NO-ERROR.
+              
+              IF AVAILABLE bfMobSub  
+              THEN DO:
+                  
+                  lcMandatoryELines = fGetMandatoryExtraLineForMainLine(bfMobSub.CLIType).
+                  
+                  IF LOOKUP(MobSub.CLIType,lcMandatoryELines) > 0
+                  AND CAN-FIND(FIRST DPMember NO-LOCK WHERE 
+                                     DPMember.HostTable   EQ "MobSub"              AND
+                                     DPMember.KeyValue    EQ STRING(MobSub.MsSeq)  AND
+                                     DPMember.ValidTo     GE TODAY    )
+                  AND CAN-FIND(FIRST TMSRelation NO-LOCK WHERE 
+                                     TMSRelation.TableName        EQ {&ELTABLENAME}    AND 
+                                     TMSRelation.KeyType          EQ {&ELKEYTYPE}      AND 
+                                     TMSRelation.ParentValue      EQ bfMobSub.CLIType  AND 
+                                     TMSRelation.RelationType     EQ {&ELMANDATORY}    AND
+                             ENTRY(3,TMSRelation.ChildValue,"_")  EQ CLIType.CLIType )
+                  THEN ASSIGN lcStatusCode = 0.
+                  
+              END.
+          END.          
+      END. 
 
       fAddCLITypeStruct(CLIType.CLIType,"",lcStatusCode).
    END. /*END ELSE DO*/
