@@ -104,15 +104,17 @@ FUNCTION _fCreateFusionMessage RETURNS LOGICAL
       lcPrefix = "Cancelación".
    ELSE lcPrefix = "Alta".
 
-   /*NEBACO-47*/
-   IF Order.Clitype MATCHES "CONTFHNB*" THEN 
-      lcPrefix = lcprefix + " NEBA".
-      
    IF CLIType.FixedLineType EQ 1 THEN
-      lcOrderType = "xDSL + VOIP".
+      lcOrderType = "xDSL".
    ELSE IF CLIType.FixedLineType EQ 2 THEN
-      lcOrderType = "FTTH + VOIP".
-     
+      lcOrderType = "FTTH".
+
+/*NEBACO-47*/
+   IF Order.Clitype MATCHES "CONTFHNB*" THEN 
+      lcOrderType = lcOrderType + " NEBA".
+
+   lcOrderType = lcOrderType + " + VOIP".
+
    CREATE FusionMessage.
    ASSIGN
       FusionMessage.MessageSeq = NEXT-VALUE(FusionMessageSeq)
