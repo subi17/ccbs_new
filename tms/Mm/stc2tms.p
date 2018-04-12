@@ -1570,11 +1570,9 @@ PROCEDURE pFinalize:
 				END.
 
             /* YTS-11912 */
-            IF fCLITypeIsMainLine(Order.CLIType) AND
-               Order.MultiSimId NE 0 AND
-               Order.MultiSimType EQ {&MULTISIMTYPE_PRIMARY}
-            THEN fActionOnExtraLineOrders(Order.OrderId,    /* Main line Order Id  */
-                                          "RELEASE").       /* Action              */
+            IF fCLITypeIsMainLine(Order.CLIType) THEN  
+               fActionOnExtraLineOrders(Order.OrderId,    /* Main line Order Id  */
+                                        "RELEASE").       /* Action              */
 
             fSetOrderStatus(Order.OrderId,"6").  
             fMarkOrderStamp(Order.OrderID,
