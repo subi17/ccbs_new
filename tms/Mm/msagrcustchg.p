@@ -1323,9 +1323,7 @@ PROCEDURE pMsCustMove:
       MobSub.MultiSimType                 EQ {&MULTISIMTYPE_EXTRALINE} THEN DO:
 
       FIND FIRST lbMLMobSub EXCLUSIVE-LOCK WHERE 
-                 lbMLMobSub.MsSeq        = MobSub.MultiSimId       AND
-                 lbMLMobSub.MultiSimId   = MobSub.MsSeq            AND
-                 lbMLMobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} NO-ERROR.
+                 lbMLMobSub.MsSeq = MobSub.MultiSimId NO-ERROR. 
       
       IF AVAIL lbMLMobSub THEN DO:
          
@@ -1336,9 +1334,7 @@ PROCEDURE pMsCustMove:
                                  TODAY).
          
          /* Hard association is also removed because ACC was done to extraline */
-         ASSIGN lbMLMobSub.MultiSimId   = 0
-                lbMLMobSub.MultiSimType = 0
-                MobSub.MultiSimId       = 0
+         ASSIGN MobSub.MultiSimId       = 0
                 MobSub.MultiSimType     = 0.
 
       END.           
