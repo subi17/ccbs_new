@@ -55,13 +55,21 @@ liMsReq = fProMigrationRequest(INPUT piMsseq,
                                INPUT Syst.Var:katun,
                                INPUT {&REQUEST_SOURCE_NEWTON},
                                0,
+                               TRUE ,  /* Perform validation on request */
                                OUTPUT lcResult).
 
 IF liMsReq > 0 THEN
    add_boolean(response_toplevel_id, "", true).
-ELSE
-   RETURN appl_err(lcResult).
-
+ELSE DO:
+    CASE lcResult:
+        WHEN '101' THEN RETURN appl_err("Invalid category.").
+        WHEN '102' THEN RETURN appl_err("Migration not allowed. Customer is of Consumer category").
+        WHEN '103' THEN RETURN appl_err("Migration not allowed. Please check if customer tariffs met the change requirement").
+        WHEN '104' THEN RETURN appl_err("Migration not allowed. Please check if customer has an ongoing order").
+        WHEN '105' THEN RETURN appl_err("Migration not allowed. Customer has an active prepaid subscription").
+        OTHERWISE       RETURN appl_err(lcResult).  
+    END CASE.
+END.
 
 FINALLY:
    END.
