@@ -1615,6 +1615,78 @@ FUNCTION fCreateDocumentCase10 RETURNS CHAR
 
 END.
 
+/*Customer category change*/
+FUNCTION fCreateDocumentCase15 RETURNS CHAR
+   (idStartTS AS DECIMAL,
+    idEndTS AS DECIMAL):
+   DEF VAR lcCaseTypeId     AS CHAR NO-UNDO.
+   DEF VAR lcCasefileRow    AS CHAR NO-UNDO.
+   DEF VAR lcStatuses       AS CHAR NO-UNDO.
+   DEF VAR lcRequiredDocs   AS CHAR NO-UNDO.
+   DEF VAR liCount          AS INT NO-UNDO.
+   DEF VAR lcDocListEntries AS CHAR NO-UNDO.
+
+    FOR EACH MsRequest EXCLUSIVE-LOCK WHERE
+        MsRequest.Brand EQ Syst.Var:gcBrand AND
+        MsRequest.ReqType EQ {&REQTYPE_CATEGORY_CHG} AND
+        MsRequest.ReqStatus EQ {&REQUEST_STATUS_NEW} AND
+        MsRequest.ActStamp >= idStartTS AND
+        MsRequest.CreStamp >= idStartTS AND
+        MsRequest.CreStamp < idEndTS :
+     /*Document type,DocStatusCode,RevisionComment*/
+        FIND Customer WHERE Customer.Brand = Syst.Var:gcBrand  AND Customer.CustNum = MSRequest.CustNum NO-LOCK NO-ERROR.
+      
+        ASSIGN
+            lcCaseTypeID   = '15'
+            lcCaseFileRow  =
+                           lcCaseTypeID                    + lcDelim +   /* Case ID */
+                           fPrintDate(MsRequest.CreStamp)  + lcDelim +   /* Request create date */
+                           Customer.CustIdType             + lcDelim +   /* Customer ID Type */
+                           MSRequest.ReqCParam2 + " - " + MSRequest.ReqCParam1  + lcDelim +  /* From - To */
+                           fCutChannel(MsRequest.UserCode) + lcDelim +   /* SFID */
+                           MSRequest.CLI                   + lcDelim +   /* MSISDN */
+                           STRING(MSRequest.MsRequest).                  /* Request number */
+
+        MSRequest.ReqStatus = {&REQUEST_STATUS_UNDER_WORK} .
+
+        /* solve needed documents: */
+        lcRequiredDocs = fNeededDocsCategoryChange().
+        DO liCount = 1 TO NUM-ENTRIES(lcRequiredDocs):
+           /* Document type, Type desc,DocStatusCode,RevisionComment */
+           lcDocListEntries = lcDocListEntries +
+                         ENTRY(liCount,lcRequiredDocs) + {&DMS_DOCLIST_SEP} +
+                         {&DMS_DOCLIST_SEP} + /* filled only by DMS responses */
+                         lcDMSDOCStatus + {&DMS_DOCLIST_SEP} +
+                         "".
+         IF liCount NE NUM-ENTRIES(lcRequiredDocs)
+            THEN lcDocListEntries = lcDocListEntries + {&DMS_DOCLIST_SEP}.
+        END.
+       
+        fUpdateDMS('',
+                   lcCaseTypeID,
+                   STRING(MSRequest.MsRequest),
+                   "MsRequest",
+                   MSRequest.MsRequest,
+                   lcInitStatus,
+                   lcDMSStatusDesc,
+                   "",
+                   MsRequest.CreStamp,
+                   lcDocListEntries,
+                   {&DMS_DOCLIST_SEP}).          
+        
+        OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
+        PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
+        OUTPUT STREAM sOutFile CLOSE.
+
+        fLogLine(lcCaseFileRow, "").
+
+    END.
+    RETURN "".
+
+END.
+
+
+
 
 FUNCTION fCreateDocumentRows RETURNS CHAR
  (icCaseID as CHAR):
@@ -1672,6 +1744,9 @@ FUNCTION fCreateDocumentRows RETURNS CHAR
       WHEN {&DMS_CASE_TYPE_ID_Q25_STE} THEN DO:
          /*From MsRequest*/
          lcStatus = fCreateDocumentCase10(idPeriodStart, idPeriodEnd).
+      END.
+      WHEN {&DMS_CASE_TYPE_ID_CATEGORY_CHG} THEN DO:
+          lcStatus = fCreateDocumentCase15(idPeriodStart, idPeriodEnd).
       END.
 
    END. /*Case*/
