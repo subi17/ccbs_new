@@ -130,27 +130,27 @@ form
            VALIDATE(input billitem.biname ne "","Missing Billing Item Name!")
            SKIP
     BillItem.BIGroup   label "Group ....." 
-       BItemGroup.BIGName AT 23 NO-LABEL  SKIP
+       BItemGroup.BIGName AT 25 NO-LABEL  SKIP
     BillItem.AccNum    label "Account ..." 
-           FORMAT ">>>>>>>9"
-           Account.AccName    AT 23 NO-LABEL  SKIP
+           FORMAT ">>>>>>>>>9"
+           Account.AccName    AT 25 NO-LABEL  SKIP
     BillItem.AltAccNum label "Own Use ..." 
-           FORMAT ">>>>>>>9"
+           FORMAT ">>>>>>>>>9"
            HELP "Account for own use"   
-           lcAltName   AT 23 NO-LABEL FORMAT "X(30)" SKIP
+           lcAltName   AT 25 NO-LABEL FORMAT "X(30)" SKIP
     BillItem.VIPAccNum label "VIP Use ..." 
-           FORMAT ">>>>>>>9"
+           FORMAT ">>>>>>>>>9"
            HELP "Account for VIP customer use"   
-           lcVIPName   AT 23 NO-LABEL FORMAT "X(30)" SKIP
+           lcVIPName   AT 25 NO-LABEL FORMAT "X(30)" SKIP
     BillItem.EUConAccNum LABEL "EU Consum. "
-           FORMAT ">>>>>>>9"
-           lcEUConName AT 23 NO-LABEL FORMAT "X(30)" SKIP
+           FORMAT ">>>>>>>>>9"
+           lcEUConName AT 25 NO-LABEL FORMAT "X(30)" SKIP
     BillItem.EUAccNum  label "EU Account " 
-           FORMAT ">>>>>>>9"
-           lcEUAccName AT 23 NO-LABEL FORMAT "X(30)" SKIP
+           FORMAT ">>>>>>>>>9"
+           lcEUAccName AT 25 NO-LABEL FORMAT "X(30)" SKIP
     BillItem.FSAccNum  label "FS Account " 
-           FORMAT ">>>>>>>9"
-           lcFSAccName AT 23 NO-LABEL FORMAT "X(30)" SKIP
+           FORMAT ">>>>>>>>>9"
+           lcFSAccName AT 25 NO-LABEL FORMAT "X(30)" SKIP
     BillItem.InvSect   label "Section ..." 
        InvSect.ISName  AT 23 NO-LABEL  SKIP
     BillItem.TaxClass label "Tax Class ." 
