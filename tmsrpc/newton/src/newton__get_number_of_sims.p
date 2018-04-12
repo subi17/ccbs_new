@@ -85,9 +85,7 @@ RUN pCheckAdditionalLineOrders.
 
 PROCEDURE pCheckExtraLineOrders:
 
-   IF fCLITypeIsMainLine(Order.CLIType)                        AND 
-      Order.MultiSimId               <> 0                      AND 
-      Order.MultiSimType             = {&MULTISIMTYPE_PRIMARY} THEN 
+   IF fCLITypeIsMainLine(Order.CLIType) THEN   
    DO:
       FIND FIRST bOrder NO-LOCK WHERE 
                  bOrder.Brand        EQ Syst.Var:gcBrand                  AND 
