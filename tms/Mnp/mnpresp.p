@@ -903,9 +903,7 @@ PROCEDURE pHandleQueue:
                                       FALSE,
                                       "RELEASE"). 
 
-            IF fCLITypeIsMainLine(Order.CLIType)       AND
-               Order.MultiSimId                  NE 0  AND
-               Order.MultiSimType                EQ {&MULTISIMTYPE_PRIMARY} THEN
+            IF fCLITypeIsMainLine(Order.CLIType) THEN 
                fActionOnExtraLineOrders(Order.OrderId,    /* Main line Order Id  */
                                         "RELEASE").       /* Action              */
 
