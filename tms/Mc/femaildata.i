@@ -2210,10 +2210,8 @@ PROCEDURE pGetCTNAME:
                Order.MultiSimType = {&MULTISIMTYPE_EXTRALINE} THEN DO:
           
           FIND FIRST lbMLOrder NO-LOCK WHERE
-                     lbMLOrder.Brand        = Syst.Var:gcBrand          AND
-                     lbMLOrder.OrderId      = Order.MultiSimId AND
-                     lbMLOrder.MultiSimId   = Order.OrderId    AND
-                     lbMLOrder.MultiSimType = {&MULTISIMTYPE_PRIMARY} NO-ERROR.
+                     lbMLOrder.Brand   = Syst.Var:gcBrand AND
+                     lbMLOrder.OrderId = Order.MultiSimId NO-ERROR. 
  
          IF AVAIL lbMLOrder THEN DO:
 
@@ -2445,10 +2443,8 @@ PROCEDURE pGetEXTRA_LINE_INFO:
          END.
          WHEN {&MULTISIMTYPE_EXTRALINE} THEN DO:
             FIND FIRST lbMLOrder NO-LOCK WHERE
-                       lbMLOrder.Brand        = Syst.Var:gcBrand            AND
-                       lbMLOrder.OrderId      = lbOrder.MultiSimId AND
-                       lbMLOrder.MultiSimId   = lbOrder.OrderId    AND
-                       lbMLOrder.MultiSimType = {&MULTISIMTYPE_PRIMARY} NO-ERROR.
+                       lbMLOrder.Brand   = Syst.Var:gcBrand   AND
+                       lbMLOrder.OrderId = lbOrder.MultiSimId NO-ERROR. 
 
             IF AVAIL lbMLOrder THEN
                ASSIGN 
