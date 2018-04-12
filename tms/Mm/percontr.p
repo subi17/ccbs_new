@@ -44,6 +44,7 @@
 {Func/fixedfee.i}
 
 DEF VAR lcEmailErr AS CHAR NO-UNDO.
+DEFINE VARIABLE lcEmailAddr AS CHARACTER NO-UNDO.
 
 FUNCTION fBundleWithSTCCustomer RETURNS LOG
    (iiCustnum    AS INT,
@@ -149,6 +150,17 @@ FUNCTION fUpdateServicelCounterMSID RETURNS LOGICAL
   RETURN TRUE.
 
 END FUNCTION.
+
+FUNCTION fExtractWebContractId RETURNS CHARACTER(INPUT icMemo AS CHARACTER ) :
+    DEFINE VARIABLE ii     AS INTEGER   NO-UNDO.
+    DEFINE VARIABLE lcChar AS CHARACTER NO-UNDO.
+    DO ii = 1 TO NUM-ENTRIES(icMemo):
+        lcChar = ENTRY(ii,icMemo).
+        IF TRIM(lcChar) BEGINS 'WebContractID=' THEN 
+            RETURN ENTRY(2,lcChar,"="). 
+    END.
+    RETURN ''.
+END FUNCTION. 
 
 DEF BUFFER bPendRequest FOR MsRequest.
 DEF BUFFER bOrigRequest FOR MsRequest.
@@ -1060,6 +1072,45 @@ PROCEDURE pContractActivation:
              DCCLI.ValidFrom     = ldtFromDate
              DCCLI.ValidTo       = ldtEndDate
              DCCLI.CreateFees    = LOOKUP(DayCampaign.DCType,"3,5") > 0.
+      
+      IF DayCampaign.BundleTarget = {&DC_BUNDLE_TARGET_SVA} THEN DO:
+          DCCLi.WebContractID = fExtractWebContractId(MsRequest.Memo). 
+          IF Mm.MManMessage:mGetMessage("EMAIL", "SVA_ActEmail", 1) EQ TRUE THEN DO:
+            FIND FIRST DiscountPlan WHERE DiscountPlan.Brand    = Syst.Var:gcBrand AND 
+                                          DiscountPlan.DPRuleID = DayCampaign.DcEvent + "DISC" NO-LOCK NO-ERROR.
+            FIND FIRST DPRate WHERE 
+                       DPRate.DPId = DiscountPlan.DPId AND 
+                       DPRate.ValidFrom <= TODAY AND
+                       DPRate.ValidTo   >= TODAY NO-LOCK NO-ERROR.
+            IF AVAILABLE DPrate THEN 
+               Mm.MManMessage:ParamKeyValue = REPLACE(Mm.MManMessage:ParamKeyValue,"#SVADISC", STRING(DPRate.DiscValue) ).
+            ELSE 
+               Mm.MManMessage:ParamKeyValue = REPLACE(Mm.MManMessage:ParamKeyValue,"#SVADISC", '').
+            FIND FIRST FMItem WHERE FMItem.Brand     EQ Syst.Var:gcBrand              AND 
+                       FMItem.FeeModel  EQ DayCampaign.FeeModel AND 
+                       FMItem.BillCode  <> ""                   AND 
+                       FMItem.PriceList <> ""                   AND
+                       FMItem.FromDate  <= TODAY                AND 
+                       FMItem.ToDate    >= TODAY                NO-LOCK NO-ERROR.
+              IF AVAILABLE FMITem THEN 
+                  Mm.MManMessage:ParamKeyValue = REPLACE(Mm.MManMessage:ParamKeyValue,"#SVAMF" , STRING(FMItem.Amount)).
+              Mm.MManMessage:ParamKeyValue = REPLACE(Mm.MManMessage:ParamKeyValue,"#SVANAME",DayCampaign.DCName).
+              Mm.MManMessage:ParamKeyValue = fGetEmailKeyValuePairs( MSRequest.MsRequest ,Mm.MManMessage:ParamKeyValue ).
+              IF NUM-ENTRIES(MSRequest.ReqCparam6,"|") GT 2 AND ENTRY(3,MSRequest.ReqCparam6, "|") <> "" THEN
+                 lcEmailAddr = ENTRY(3,MSRequest.ReqCparam6, "|").
+              ELSE IF NUM-ENTRIES(MSRequest.ReqCparam6,"|") EQ 2 AND ENTRY(2,MSRequest.ReqCparam6, "|") <> "" THEN
+                 lcEmailAddr = ENTRY(2,MSRequest.ReqCparam6, "|").
+              ELSE DO:
+                   FIND FIRST Customer NO-LOCK WHERE
+                        Customer.CustNum EQ MsRequest.CustNum NO-ERROR.  
+                   IF AVAILABLE Customer THEN 
+                        lcEmailAddr  = Customer.email.
+              END. 
+              IF lcEmailAddr NE "" THEN 
+                 Mm.MManMessage:mCreateMMLogEmail(lcEmailAddr, TRUE).
+              Mm.MManMessage:mClearData().
+          END.
+      END. 
 
       IF llDoEvent THEN RUN StarEventMakeCreateEvent (lhDCCLI).
 
