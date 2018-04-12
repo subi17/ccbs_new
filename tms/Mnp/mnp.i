@@ -842,7 +842,7 @@ FUNCTION fRetention RETURNS LOGICAL
                                   {&ORDER_STATUS_RENEWAL_STC}).
             END. /* IF bOrder.OrderChannel = "retention_stc" THEN DO: */
             ELSE DO:
-               IF fCheckRenewalData() THEN DO:
+               IF fCheckRenewalData(bOrder.Orderid) THEN DO:
                   lcMNPSMSText = "MNPCancelRetention".
                   fSetOrderStatus(bOrder.OrderId,{&ORDER_STATUS_RENEWAL}).
                END. /* IF fCheckRenewalData() THEN DO: */
