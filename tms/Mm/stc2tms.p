@@ -920,6 +920,8 @@ PROCEDURE pUpdateSubscription:
                           lELMobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} AND
                    LOOKUP(lELMobSub.CLIType,lcMandatoryExtraLines) EQ 0       NO-ERROR.
 
+               IF NOT AVAIL lELMobSub THEN NEXT.
+
                IF CAN-FIND(FIRST MsRequest NO-LOCK WHERE
                               MsRequest.MsSeq      EQ lELMobSub.MsSeq AND
                               MsRequest.ReqType    EQ 0               AND
@@ -931,7 +933,7 @@ PROCEDURE pUpdateSubscription:
                                             ENTRY(liManELCount,lcMandatoryExtraLines),  /* The CLIType of where to do the STC */
                                             "",                                       /* lcBundleID */
                                             "",                                       /* bank code validation is already done */
-                                            Func.Common:mMakeTS(),
+                                            TRUNC(Func.Common:mMakeTS(),0),
                                             0,                                        /* 0 = Credit check ok */
                                             0,                                        /* extend contract */
                                             ""                                        /* pcSalesman */,
@@ -1012,7 +1014,7 @@ PROCEDURE pUpdateSubscription:
       /*STC of customer's other mobile subscription without discount to the destination mainline if it is allowed*/
       DO liELCLITypeCount = 1 TO NUM-ENTRIES(lcExtralineCLITypes):
           
-          FOR EACH lELMobSub NO-LOCK WHERE
+          FOR EACH lELMobSub NO-LOCK USE-INDEX Custnum WHERE
                    lELMobSub.Brand        EQ Syst.Var:gcBrand                             AND
                    lELMobSub.CustNum      EQ MobSub.CustNum                               AND
                    lELMobSub.MultiSimId   EQ 0                                            AND 
@@ -1033,7 +1035,7 @@ PROCEDURE pUpdateSubscription:
                   
                   ASSIGN liAllowedELCount = 0.
                                       
-                  FOR EACH ELMobsub2 NO-LOCK WHERE
+                  FOR EACH ELMobsub2 NO-LOCK USE-INDEX Custnum WHERE
                            ELMobsub2.Brand        EQ Syst.Var:gcBrand                                AND
                            ELMobsub2.CustNum      EQ MobSub.CustNum                                  AND
                            ELMobsub2.MultiSimId   EQ 0                                               AND
@@ -1069,7 +1071,7 @@ PROCEDURE pUpdateSubscription:
                                                    ENTRY(liManELCount,lcAllowedExtraLines),  /* The CLIType of where to do the STC */
                                                    "",                                       /* lcBundleID */
                                                    "",                                       /* bank code validation is already done */
-                                                   Func.Common:mMakeTS(),
+                                                   TRUNC(Func.Common:mMakeTS(),0),
                                                    0,                                        /* 0 = Credit check ok */
                                                    0,                                        /* extend contract */
                                                    ""                                        /* pcSalesman */,
@@ -1568,11 +1570,9 @@ PROCEDURE pFinalize:
 				END.
 
             /* YTS-11912 */
-            IF fCLITypeIsMainLine(Order.CLIType) AND
-               Order.MultiSimId NE 0 AND
-               Order.MultiSimType EQ {&MULTISIMTYPE_PRIMARY}
-            THEN fActionOnExtraLineOrders(Order.OrderId,    /* Main line Order Id  */
-                                          "RELEASE").       /* Action              */
+            IF fCLITypeIsMainLine(Order.CLIType) THEN  
+               fActionOnExtraLineOrders(Order.OrderId,    /* Main line Order Id  */
+                                        "RELEASE").       /* Action              */
 
             fSetOrderStatus(Order.OrderId,"6").  
             fMarkOrderStamp(Order.OrderID,
