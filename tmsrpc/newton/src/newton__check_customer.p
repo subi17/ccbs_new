@@ -40,7 +40,6 @@ DEF VAR pcChannel        AS CHAR NO-UNDO.
 DEF VAR top_array        AS CHAR NO-UNDO.
 DEF VAR plSTCMigrate     AS LOG  NO-UNDO.
 
-
 /* Local variable */
 DEF VAR llOrderAllowed                AS LOG  NO-UNDO.
 DEF VAR lcReason                      AS CHAR NO-UNDO.
