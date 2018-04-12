@@ -1245,6 +1245,13 @@ PROCEDURE pTerminate:
                   fCloseExtraLineDiscount(lELMobsub.MsSeq,
                                           lELMobsub.CLIType + "DISC",
                                           TODAY).
+                  /* YCO-268 - Memo */
+                  Func.Common:mWriteMemo("MobSub",
+                                         STRING(lElMobSub.MsSeq),
+                                         TermMobSub.Custnum,
+                                         'Descuento "Línea DÚO" cancelado',
+                                         'Cambio automático por rotura de paquete "FIJO+MOVIL"'). 
+
                END.
             END.
 
@@ -1275,6 +1282,15 @@ PROCEDURE pTerminate:
                                bMobSub.MsSeq,
                                bMobSub.CLIType,
                                Func.Common:mLastDayOfMonth(TODAY)).
+                               
+                               
+         /* YCO-268 - Memo */
+         Func.Common:mWriteMemo("MobSub",
+                                STRING(bMobSub.MsSeq),
+                                bMobSub.Custnum,
+                                'Descuento "Línea Adicional" cancelado',
+                                'Cambio automático por modificación en la línea principal'). 
+                               
       END.
    END.
 
@@ -1392,6 +1408,14 @@ PROCEDURE pTerminate:
                                bMobSub.MsSeq,
                                bMobSub.CLIType,
                                ldtCloseDate).
+                               
+         /* YCO-268 - Memo */
+         Func.Common:mWriteMemo("MobSub",
+                                STRING(bMobSub.MsSeq),
+                                bMobSub.Custnum,
+                                'Descuento "Línea Adicional" cancelado',
+                                'Cambio automático por modificación en la línea principal').                       
+                               
       END.      
    END. 
    
