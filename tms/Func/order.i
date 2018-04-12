@@ -19,6 +19,7 @@
 {Func/custfunc.i}
 {Func/customeraccount.i}
 {Func/log.i}
+{Func/address.i}
 
 IF llDoEvent THEN DO:
    &GLOBAL-DEFINE STAR_EVENT_USER Syst.Var:katun
@@ -446,32 +447,15 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
          END.
 
          /* CDS- */
-         FIND FIRST InvoiceTargetGroup EXCLUSIVE-LOCK USE-INDEX Custnum WHERE
-            InvoiceTargetGroup.Custnum = Customer.CustNum NO-ERROR.
-         IF AVAIL InvoiceTargetGroup THEN
-            InvoiceTargetGroup.BankAccount = Customer.BankAcct.
-               
-               
-         FIND FIRST Address EXCLUSIVE-LOCK WHERE 
-            Address.Keyvalue = STRING(Customer.CustNum) NO-ERROR.
-         IF AVAIL Address THEN 
-         DO:
-            ASSIGN
-               Address.Address = Customer.Address
-               Address.City    = Customer.PostOffice
-               Address.ZipCode = Customer.ZipCode
-               Address.Region  = Customer.Region
-               Address.Country = Customer.Country.
+         fUpdateInvTargetGrpBankAccnt(Customer.Custnum,
+                                      Customer.BankAcct).               
 
-            FIND FIRST CustomerReport WHERE
-               CustomerReport.Custnum = Customer.Custnum NO-LOCK NO-ERROR.
-
-            IF AVAIL CustomerReport THEN
-               ASSIGN
-                  Address.StreetCode = CustomerReport.StreetCode
-                  Address.CityCode   = CustomerReport.CityCode
-                  Address.TownCode   = CustomerReport.TownCode.
-         END.   
+         fUpdateAddress(Customer.CustNum, 
+                        Customer.Address, 
+                        Customer.PostOffice, 
+                        Customer.ZipCode, 
+                        Customer.Region, 
+                        Customer.Country).   
          /* CDS- */
 
       END.   

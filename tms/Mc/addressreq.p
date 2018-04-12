@@ -11,6 +11,7 @@
 {Func/msreqfunc.i}
 {Syst/eventval.i}
 {Func/fcustdata.i}
+{Func/address.i}
 
 DEF INPUT PARAMETER iiRequest AS INT NO-UNDO.
 
@@ -131,18 +132,12 @@ PROCEDURE pAddressChange:
        CustomerReport.TownCode = lcTownCode.
    
       /* CDS-10 start */
-      FIND FIRST Address WHERE Address.Keyvalue = STRING(Customer.CustNum) NO-LOCK NO-ERROR.
-      IF AVAIL Address AND Address.AddressType = "Billing" THEN DO:
-         ASSIGN
-            Address.Street = Customer.Address
-            Address.City = Customer.PostOffice
-            Address.ZipCode = Customer.ZipCode
-            Address.Region = Customer.Region
-            Address.Country = Customer.Country
-            Address.StreetCode = lcStreetCode
-            Address.CityCode = lcCityCode
-            Address.TownCode = lcTownCode.
-      END.
+      fUpdateAddress(Customer.CustNum, 
+                     Customer.Address, 
+                     Customer.PostOffice, 
+                     Customer.ZipCode, 
+                     Customer.Region, 
+                     Customer.Country).      
       /* CDS-10 end */
    
    RELEASE Customer.

@@ -1397,7 +1397,7 @@ PROCEDURE pTerminate:
    END. 
       
    /* CDS-13 start */
-   fCloseCustomerAccount(bMobSub.CustNum).
+   fCloseCustomerAccount(bMobSub.AccountID).
    /* CDS-13 end */   
       
    /* Find Original request */

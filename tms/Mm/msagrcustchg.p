@@ -556,7 +556,7 @@ PROCEDURE pOwnerChange:
             END.
 
             /* CDS-12 start */
-            fCloseCustomerAccount(MobSub.CustNum).
+            fCloseCustomerAccount(MobSub.AccountID).
             
             fCreateCustomerAccount(liCreated[liReqCnt]).
             FIND FIRST CustomerAccount NO-LOCK WHERE CustomerAccount.Custnum EQ Customer.CustNum NO-ERROR.

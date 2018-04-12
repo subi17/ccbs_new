@@ -73,6 +73,8 @@ Syst.Var:gcBrand = "1".
 {Syst/tmsconst.i}
 {Func/fbankdata.i}
 {Func/msreqfunc.i}
+{Func/customeraccount.i}
+{Func/address.i}
 
 /* Input parameters */
 DEF VAR piCustNum AS INT NO-UNDO.
@@ -588,24 +590,12 @@ IF llCustomerChanged THEN DO:
       END.
 
       /* CDS-10 start */
-      FIND FIRST Address WHERE Address.Keyvalue = STRING(Customer.CustNum) NO-LOCK NO-ERROR.
-      IF AVAIL Address AND Address.AddressType = "Billing" THEN DO:
-         ASSIGN
-            Address.Address = Customer.Address
-            Address.City = Customer.PostOffice
-            Address.ZipCode = Customer.ZipCode
-            Address.Region = Customer.Region
-            Address.Country = Customer.Country.
-
-         FIND FIRST CustomerReport WHERE CustomerReport.Custnum = Customer.Custnum
-         NO-LOCK NO-ERROR.
-
-         IF AVAIL CustomerReport THEN
-            ASSIGN
-               Address.StreetCode = CustomerReport.StreetCode
-               Address.CityCode = CustomerReport.CityCode
-               Address.TownCode = CustomerReport.TownCode.
-      END.
+      fUpdateAddress(Customer.CustNum, 
+                     Customer.Address, 
+                     Customer.PostOffice, 
+                     Customer.ZipCode, 
+                     Customer.Region, 
+                     Customer.Country).
       /* CDS-10 end */
 
    END.
@@ -629,9 +619,8 @@ IF llCustomerChanged THEN DO:
                llBankAcctChange = TRUE.
                customer.BankAcct = lcBankAccount.                             
                /* CDS-10 start */
-               FIND FIRST InvoiceTargetGroup USE-INDEX Custnum WHERE
-                          InvoiceTargetGroup.Custnum = Customer.Custnum EXCLUSIVE-LOCK NO-ERROR.
-               IF AVAIL InvoiceTargetGroup THEN InvoiceTargetGroup.BankAccount = Customer.BankAcct.               
+               fUpdateInvTargetGrpBankAccnt(Customer.Custnum,
+                                            Customer.BankAcct).             
                /* CDS-10 end */
             END.   
          END.
@@ -716,10 +705,7 @@ IF llCustomerChanged THEN DO:
              InvoiceTargetGroup.DelType = {&INV_DEL_TYPE_FUSION_EMAIL_PENDING}.
 
           /* CDS-10 start */
-          FIND FIRST CustomerAccount EXCLUSIVE-LOCK WHERE
-                     CustomerAccount.Custnum = Customer.Custnum NO-ERROR.
-          IF AVAIL CustomerAccount THEN                                   
-             CustomerAccount.DelType = InvoiceTargetGroup.DelType.
+          fUpdateCustomerAccountDelType(Customer.Custnum, InvoiceTargetGroup.DelType).
           /* CDS-10 end */
           
 
