@@ -31,6 +31,7 @@
 {Func/orderfunc.i}
 {Func/multitenantfunc.i}
 {Func/profunc_request.i}
+{Func/digital_signature.i}
 
 DEFINE INPUT  PARAMETER iiMSrequest AS INT  NO-UNDO.
 
@@ -325,7 +326,7 @@ PROCEDURE pTerminate:
    END.
 /* COFF check */
    FIND FIRST MSOwner WHERE 
-              MSOwner.CLI    = MobSub.CLI AND
+              MSOwner.MsSeq = MobSub.MsSeq AND
               MSOwner.TsEnd >= Func.Common:mHMS2TS(TODAY,STRING(time,"hh:mm:ss"))
    EXCLUSIVE-LOCK NO-ERROR.
 
@@ -899,6 +900,8 @@ PROCEDURE pTerminate:
                    ErrorLog.UserCode  = Syst.Var:katun
                    ErrorLog.ActionTS  = Func.Common:mMakeTS().
          END.
+         /* RES-538 Digital Signature */
+         fHandleSignature(Order.OrderId,{&ORDER_STATUS_CLOSED}).
 
          RUN pCreatePaytermCreditNote(Order.OrderId).
 
@@ -1150,13 +1153,12 @@ PROCEDURE pTerminate:
       DO:
         
           FIND FIRST lMLMobSub NO-LOCK WHERE 
-                     lMLMobsub.brand          =   Syst.Var:gcBrand          AND
-                     lMLMobSub.msseq          =   TermMobSub.MultiSimId     AND
-                     lMLMobSub.multisimtype   =   {&MULTISIMTYPE_PRIMARY}   AND
-                     (lMLMobSub.MsStatus      =   {&MSSTATUS_ACTIVE}  OR
-                      lMLMobSub.MsStatus      =   {&MSSTATUS_BARRED}) NO-ERROR.
+                     lMLMobsub.brand    EQ Syst.Var:gcBrand       AND
+                     lMLMobSub.msseq    EQ TermMobSub.MultiSimId  AND
+                    (lMLMobSub.MsStatus EQ {&MSSTATUS_ACTIVE}  OR
+                     lMLMobSub.MsStatus EQ {&MSSTATUS_BARRED})    NO-ERROR.
             
-          IF NOT AVAILABLE lMLMobSub THEN RETURN.
+          IF AVAILABLE lMLMobSub THEN DO:
          
           lcMandatoryELines = fGetMandatoryExtraLineForMainLine(lMLMobSub.CLIType) .
          
@@ -1183,7 +1185,7 @@ PROCEDURE pTerminate:
                        lELMobSub.MultiSimId   EQ lMLMobSub.msseq           AND
                        lELMobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE} AND 
                        (lELMobSub.MsStatus    EQ {&MSSTATUS_ACTIVE} OR
-                        lELMobSub.MsStatus    EQ {&MSSTATUS_BARRED})   BY MobSub.ActivationTS:
+                        lELMobSub.MsStatus    EQ {&MSSTATUS_BARRED})   BY lELMobSub.ActivationTS:
                             
                   
                        ASSIGN liSTCELMSSeq    =  lELMobSub.MSSeq
@@ -1202,7 +1204,7 @@ PROCEDURE pTerminate:
                                                       lcSTCELCLIType,                      /* NEW CLITYPE */
                                                       "",                                     
                                                       "",                                      
-                                                      Func.Common:mMakeTS(),
+                                                      TRUNC(Func.Common:mMakeTS(),0),
                                                       0,                                        
                                                       0,                                        
                                                       "",                                        
@@ -1210,7 +1212,7 @@ PROCEDURE pTerminate:
                                                       TRUE,                                     
                                                       "",
                                                       0,
-                                                      {&REQUEST_SOURCE_STC},
+                                                      {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                                       0,
                                                       MSRequest.MSRequest,  /*Parent Request*/
                                                       "",                                      
@@ -1234,6 +1236,7 @@ PROCEDURE pTerminate:
                                   TermMobSub.CLIType + "DISC",
                                   TODAY).                        
                            
+      END.
       END.
       ELSE IF fCLITypeIsMainLine(TermMobSub.CLIType) THEN
       DO:
