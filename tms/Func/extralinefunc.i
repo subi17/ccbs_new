@@ -706,6 +706,70 @@ FUNCTION fGetExtraLineMandatoryCLIType RETURN CHARACTER
                       
 END FUNCTION.             
    
-
+/* Returns true if there is any Extra Line compatible with any 
+   subscription (active or ongoing) for this customer.         */ 
+FUNCTION fIsCompatibleExtraLine RETURNS LOGICAL 
+   (INPUT pcCustOrgID  AS CHAR,
+    INPUT pcCustIDType AS CHAR,
+    INPUT pcCliType    AS CHAR):
+   
+   DEF VAR llCompatibleActive  AS LOG NO-UNDO.
+   DEF VAR llCompatibleOnGoing AS LOG NO-UNDO.
+   
+   FIND FIRST Customer NO-LOCK WHERE
+              Customer.Brand      = Syst.Var:gcBrand AND
+              Customer.OrgID      = pcCustOrgID       AND
+              Customer.CustIDType = pcCustIDType      AND
+              Customer.Roles     NE "inactive" NO-ERROR.
+   IF AVAILABLE Customer THEN DO:                   
+      /* Active subscriptions */
+      llCompatibleActive = FALSE.
+      FOR EACH MobSub NO-LOCK  WHERE
+               MobSub.Brand    EQ Syst.Var:gcBrand      AND
+               MobSub.CustNum  EQ Customer.CustNum      AND
+               MobSub.PayType  EQ FALSE                 AND
+              (MobSub.MsStatus EQ {&MSSTATUS_ACTIVE} OR
+               MobSub.MsStatus EQ {&MSSTATUS_BARRED})    
+          USE-INDEX CustNum 
+          BY MobSub.ActivationTS:  
+         IF CAN-FIND(FIRST TMSRelation WHERE 
+                           TMSRelation.TableName   EQ {&ELTABLENAME} AND 
+                           TMSRelation.KeyType     EQ {&ELKEYTYPE}   AND 
+                           TMSRelation.ParentValue EQ MobSub.CLIType AND  
+                           TMSRelation.ChildValue  EQ pcCliType      AND
+                           INT(TMSRelation.RelationType) > 0)
+         THEN DO:
+            llCompatibleActive = TRUE.      
+            LEAVE.                
+         END.                                                   
+      END.
+      /* Ongoing orders */
+      llCompatibleOnGoing = FALSE.
+      FOR EACH OrderCustomer NO-LOCK WHERE   
+               OrderCustomer.Brand      EQ Syst.Var:gcBrand    AND 
+               OrderCustomer.CustId     EQ Customer.OrgID      AND
+               OrderCustomer.CustIdType EQ Customer.CustIDType AND
+               OrderCustomer.RowType    EQ {&ORDERCUSTOMER_ROWTYPE_AGREEMENT},
+          EACH Order NO-LOCK WHERE
+               Order.Brand      EQ Syst.Var:gcBrand AND
+               Order.orderid    EQ OrderCustomer.Orderid  AND
+               Order.OrderType  NE {&ORDER_TYPE_RENEWAL} 
+          BY Order.CrStamp:
+         IF CAN-FIND(FIRST TMSRelation WHERE 
+                           TMSRelation.TableName   EQ {&ELTABLENAME} AND 
+                           TMSRelation.KeyType     EQ {&ELKEYTYPE}   AND 
+                           TMSRelation.ParentValue EQ Order.CLIType AND  
+                           TMSRelation.ChildValue  EQ pcCliType      AND
+                           INT(TMSRelation.RelationType) > 0) 
+         THEN DO:
+            llCompatibleOnGoing = TRUE.      
+            LEAVE.                
+         END.       
+      END.
+      RETURN (llCompatibleActive OR llCompatibleOnGoing).
+   END.
+   
+   RETURN FALSE.   
+END. /* fIsCompatibleExtraLine */
 
 &ENDIF
