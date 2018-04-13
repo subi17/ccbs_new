@@ -41,11 +41,13 @@ FUNCTION fCloseCustomerAccount RETURNS LOGICAL
      
    DEF VAR liMobSubCount AS INT NO-UNDO.     
 
+   DEF BUFFER bMobSub   FOR MobSub.
+
    FIND FIRST CustomerAccount NO-LOCK WHERE CustomerAccount.AccountID EQ iiAccountID NO-ERROR.
    IF AVAIL CustomerAccount THEN DO: 
       /* Check if this is the last subscription, if yes, close CustomerAccount. */
-      FOR EACH MobSub WHERE MobSub.Brand   = Syst.Var:gcBrand   AND
-                            MobSub.CustNum = CustomerAccount.CustNum NO-LOCK:
+      FOR EACH bMobSub WHERE bMobSub.Brand   = Syst.Var:gcBrand   AND
+                            bMobSub.CustNum = CustomerAccount.CustNum NO-LOCK:
          liMobSubCount = liMobSubCount + 1.
       END.      
       
@@ -69,6 +71,18 @@ FUNCTION fUpdateCustomerAccountDelType RETURNS LOGICAL
    RETURN TRUE.
 
 END FUNCTION.
+
+
+
+FUNCTION fReopenCustomerAccount RETURNS LOGICAL
+   (INPUT iiAccountID AS INT):
+
+   FIND FIRST CustomerAccount NO-LOCK WHERE CustomerAccount.AccountID EQ iiAccountID NO-ERROR.
+   IF AVAIL CustomerAccount AND CustomerAccount.ToDate = TODAY THEN 
+      /* ToDate = TODAY means that there are no other subscriptions yet active */
+      CustomerAccount.ToDate = 12/31/2049. 
+
+END FUNCTION.      
 
 
 &ENDIF

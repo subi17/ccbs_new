@@ -28,6 +28,7 @@
 {Func/fbtc.i}
 {Mc/dpmember.i}
 {Func/add_lines_request.i}
+{Func/customeraccount.i}
 
 DEFINE INPUT PARAMETER iiMSrequest  AS INTEGER   NO-UNDO.
 
@@ -943,9 +944,7 @@ DO TRANSACTION:
 
 
    /* CDS-14 start */
-   FIND FIRST CustomerAccount NO-LOCK WHERE CustomerAccount.Custnum EQ MobSub.CustNum NO-ERROR.
-   IF AVAIL CustomerAccount AND CustomerAccount.ToDate = TODAY THEN 
-      CustomerAccount.ToDate = 12/31/2049.    
+   fReopenCustomerAccount(MobSub.AccountID).  
    /* CDS-14 end */  
 
    /* HPD - Trigger some extra events to Cassandra */
