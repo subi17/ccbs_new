@@ -1105,6 +1105,26 @@ PROCEDURE pTerminate:
          CREATE TermMobsub.
          BUFFER-COPY Mobsub TO TermMobsub.
       END.
+
+      /* YCO-268 - Memo */
+      IF llOutPort THEN 
+      DO:
+          Func.Common:mWriteMemo("MobSub",
+                                 STRING(MobSub.MsSeq),
+                                 MobSub.Custnum,
+                                 "Baja de la línea - Porta saliente",
+                                 "Solicitado por el cliente"). 
+      END.
+      ELSE 
+      DO:
+          Func.Common:mWriteMemo("MobSub",
+                                 STRING(MobSub.MsSeq),
+                                 MobSub.Custnum,
+                                 "Baja de la línea - Baja",
+                                 "Solicitado por el cliente").
+      END. 
+      /* YCO-268 - end */
+      
       DELETE MobSub.
 
    END.   
