@@ -5,13 +5,14 @@
 */
 
 /* CDS-6 CDS-12 */
+/* ************************  Function Implementations ***************** */
 FUNCTION fCreateCustomerAccount RETURNS LOGICAL
   (INPUT iiCustNum   AS INT):
 
    DEF BUFFER Customer FOR Customer.
 
    FIND Customer NO-LOCK WHERE 
-        Customer.CustNum = CustomerAccount.CustNum NO-ERROR.
+        Customer.CustNum = iiCustNum NO-ERROR.
    IF NOT AVAIL Customer THEN RETURN FALSE.
 
    CREATE CustomerAccount.
@@ -43,7 +44,7 @@ FUNCTION fCloseCustomerAccount RETURNS LOGICAL
 
    DEF BUFFER bMobSub   FOR MobSub.
 
-   FIND FIRST CustomerAccount NO-LOCK WHERE CustomerAccount.AccountID EQ iiAccountID NO-ERROR.
+   FIND FIRST CustomerAccount EXCLUSIVE-LOCK WHERE CustomerAccount.AccountID EQ iiAccountID NO-ERROR.
    IF AVAIL CustomerAccount THEN DO: 
       /* Check if this is the last subscription, if yes, close CustomerAccount. */
       FOR EACH bMobSub WHERE bMobSub.Brand   = Syst.Var:gcBrand   AND
@@ -57,6 +58,7 @@ FUNCTION fCloseCustomerAccount RETURNS LOGICAL
    RETURN TRUE.
 END.
 /* CDS-12 CDS-13 */
+
 
 
 FUNCTION fUpdateCustomerAccountDelType RETURNS LOGICAL
@@ -77,7 +79,7 @@ END FUNCTION.
 FUNCTION fReopenCustomerAccount RETURNS LOGICAL
    (INPUT iiAccountID AS INT):
 
-   FIND FIRST CustomerAccount NO-LOCK WHERE CustomerAccount.AccountID EQ iiAccountID NO-ERROR.
+   FIND FIRST CustomerAccount EXCLUSIVE-LOCK WHERE CustomerAccount.AccountID EQ iiAccountID NO-ERROR.
    IF AVAIL CustomerAccount AND CustomerAccount.ToDate = TODAY THEN 
       /* ToDate = TODAY means that there are no other subscriptions yet active */
       CustomerAccount.ToDate = 12/31/2049. 

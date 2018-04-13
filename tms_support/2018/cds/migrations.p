@@ -75,7 +75,7 @@ FOR EACH Customer NO-LOCK WHERE Customer.brand EQ Syst.Var:gcBrand:
                                              MobSub.AgrCust EQ Customer.CustNum AND
                                              MobSub.PayType EQ FALSE) THEN DO:
 
-         FIND FIRST InvoiceTargetGroup NO-LOCK USE-INDEX Custnum WHERE
+         FIND FIRST InvoiceTargetGroup EXCLUSIVE-LOCK USE-INDEX Custnum WHERE
                     InvoiceTargetGroup.Custnum = Customer.Custnum NO-ERROR.
          IF AVAIL InvoiceTargetGroup THEN DO:                                   
             ASSIGN
@@ -121,7 +121,7 @@ END PROCEDURE.
 
 PROCEDURE pMigrateAccountIDToFixedFee:
 
-   DEF BUFFER bFixedFee FOR FixedFee.
+DEF BUFFER bFixedFee FOR FixedFee.
 
    FOR EACH bFixedFee EXCLUSIVE-LOCK WHERE
             bFixedFee.Brand EQ Syst.Var:gcBrand:
@@ -147,12 +147,12 @@ PROCEDURE pMigrateAccountIDToSingleFee:
    END.
 END PROCEDURE.
 
-
 RUN pMigrateBillingAddressToAddress.
 RUN pMigrateSubsToCustAcc.
 RUN pPopulateInvoiceTargetGroup.
 
 RUN pMigrateAccountIDToMobSub.
+
 RUN pMigrateAccountIDToFixedFee.
 RUN pMigrateAccountIDToSingleFee.
 

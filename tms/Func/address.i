@@ -13,7 +13,7 @@ FUNCTION fUpdateAddress RETURNS LOGICAL
     INPUT icCountry AS CHAR): 
 
 
-   FIND FIRST Address WHERE Address.Keyvalue = STRING(iiCustNum) NO-LOCK NO-ERROR.
+   FIND FIRST Address WHERE Address.Keyvalue = STRING(iiCustNum) EXCLUSIVE-LOCK NO-ERROR.
    IF AVAIL Address AND Address.AddressType = "Billing" THEN DO:
       ASSIGN
          Address.Address = icAddress
