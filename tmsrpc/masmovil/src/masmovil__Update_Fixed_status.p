@@ -44,6 +44,7 @@ DEF VAR lcCanDS      AS CHAR NO-UNDO.
 DEF VAR lcPortStat   AS CHAR NO-UNDO.
 DEF VAR lcPortDate   AS CHAR NO-UNDO.
 DEF VAR lcRouterStat AS CHAR NO-UNDO.
+DEF VAR lcIUA        AS CHAR NO-UNDO.
 
 top_struct = get_struct(param_toplevel_id, "0").
 
@@ -86,7 +87,7 @@ IF gi_xmlrpc_error NE 0 THEN DO:
 END.
 
 IF NOT llOldStructure AND LOOKUP("additionalInfo", lcStatusFields) > 0 THEN DO:
-   lcAdditionalInfoFields = validate_struct(lcAdditionalInfo,"cita,canDS,portStat,portDate,routerStat").   
+   lcAdditionalInfoFields = validate_struct(lcAdditionalInfo,"cita,canDS,portStat,portDate,IUA,routerStat").   
    IF gi_xmlrpc_error NE 0 THEN RETURN.
 
    ASSIGN
@@ -98,6 +99,8 @@ IF NOT llOldStructure AND LOOKUP("additionalInfo", lcStatusFields) > 0 THEN DO:
         WHEN LOOKUP("portStat", lcAdditionalInfoFields) > 0 
      lcPortDate = get_string(lcAdditionalInfo, "portDate")
         WHEN LOOKUP("portDate", lcAdditionalInfoFields) > 0 
+     lcIUA =  get_string(lcAdditionalInfo, "IUA")
+        WHEN LOOKUP("IUA", lcAdditionalInfoFields) > 0
      lcRouterStat = get_string(lcAdditionalInfo, "routerStat")
         WHEN LOOKUP("routerStat", lcAdditionalInfoFields) > 0. 
    IF gi_xmlrpc_error NE 0 THEN RETURN.
@@ -365,6 +368,7 @@ ELSE DO:
 END.
 
 ASSIGN
+   OrderFusion.IUA        = lcIUA        WHEN lcIUA        <> ""
    OrderFusion.portStat   = lcPortStat   WHEN lcPortStat   <> ""
    OrderFusion.portDate   = lcPortDate   WHEN lcPortDate   <> ""
    OrderFusion.routerStat = lcRouterStat WHEN lcRouterStat <> "".
