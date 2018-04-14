@@ -277,18 +277,12 @@ CASE FusionMessage.FixedStatus:
    
    /*NEBA*/
    WHEN "PENDIENTE_INSTALATION" THEN DO:
-      /*Create fixed line subscription*/
-      /*Create the new NEBA permanency: NTERM-xxx???*/
-      /**/
+      /*NEBA: Create customer*/
       
    END.
 
    /* installation done */
    WHEN "CERRADA" THEN DO:
-      /*NEBA TODO:*/
-      /*Remove NEBA permanency, clreate normal FTERM*/
-      /*Do not xcreate fixed subscription in neba case*/
-      /*start npowmal FTER; as earlier*/
        
       ASSIGN 
          OrderFusion.FixedInstallationTS = ldeLastDate
