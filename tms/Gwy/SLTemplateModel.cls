@@ -1,4 +1,4 @@
- 
+
 USING Progress.Lang.*.
 
 ROUTINE-LEVEL ON ERROR UNDO, THROW.
@@ -7,7 +7,7 @@ USING Gwy.ModelInterface.
 
 {Syst/tmsconst.i}
 
-CLASS tms.Gwy.SLTemplateModel IMPLEMENTS Gwy.ModelInterface: 
+CLASS Gwy.SLTemplateModel IMPLEMENTS Gwy.ModelInterface: 
     
     DEF VAR lJson           AS LONGCHAR          NO-UNDO.
     DEF VAR lModelid        AS CHAR              NO-UNDO.
@@ -18,7 +18,7 @@ CLASS tms.Gwy.SLTemplateModel IMPLEMENTS Gwy.ModelInterface:
     DEF VAR loEventLogMaker AS Gwy.EventLogMaker NO-UNDO.
 
     DEFINE TEMP-TABLE ttSLTemplate NO-UNDO SERIALIZE-NAME "SLTemplate"
-        FIELD code                   AS CHAR
+        FIELD external_id            AS CHAR
         FIELD usage_type             AS CHAR
         FIELD traffic_type           AS CHAR
         FIELD billing_call_case      AS CHAR
@@ -57,15 +57,15 @@ CLASS tms.Gwy.SLTemplateModel IMPLEMENTS Gwy.ModelInterface:
         IF NOT AVAILABLE ttSLTemplate THEN
             RETURN loRequestMaker:logError("Empty SLTemplate set").
    
-        IF ttSLTemplate.code = "" THEN
+        IF ttSLTemplate.external_id = "" THEN
             RETURN loRequestMaker:logError("Invalid SLTemplate Code").
       
-        IF LENGTH(ttSLTemplate.code) > {&CONFIG_ID_MAX} THEN 
+        IF LENGTH(ttSLTemplate.external_id) > {&CONFIG_ID_MAX} THEN 
             RETURN loRequestMaker:logError(
                 "Max length for code is {&CONFIG_ID_MAX} characters").
 
         IF CAN-FIND(FIRST SLTemplate WHERE
-            SLTemplateDataset.code = ttSLTemplate.code) THEN
+            SLTemplate.code = ttSLTemplate.external_id) THEN
             RETURN loRequestMaker:logError("SLTemplate already exists").
              
         lcError = validate_sltemplate(TRUE).
@@ -73,7 +73,7 @@ CLASS tms.Gwy.SLTemplateModel IMPLEMENTS Gwy.ModelInterface:
         
         CREATE SLTemplate.
         ASSIGN
-            SLTemplate.SLCode         = ttSLTemplate.code
+            SLTemplate.SLCode         = ttSLTemplate.external_id
             SLTemplate.elementtype    = ttSLTemplate.usage_type
             SLTemplate.trafficType    = ttSLTemplate.traffic_type
             SLTemplate.BCC            = ttSLTemplate.billing_call_case
@@ -89,12 +89,12 @@ CLASS tms.Gwy.SLTemplateModel IMPLEMENTS Gwy.ModelInterface:
         /* error cases get response via logError, make response for 
           the successful one */
         loRequestMaker:create_response("SLTemplate",
-                                       ttSLTemplate.code,
+                                       ttSLTemplate.external_id,
                                        "OK",
                                        "").
         loRequestMaker:create_log(
                                   SUBSTITUTE("SLTemplate create: Id=&1 Ext.Request=&2", 
-                                  ttSLTemplate.code,
+                                  ttSLTemplate.external_id,
                                   lCorrelationID), 
                                   "DEBUG").
     
@@ -120,7 +120,7 @@ CLASS tms.Gwy.SLTemplateModel IMPLEMENTS Gwy.ModelInterface:
        
         DO WHILE TRUE:
             FIND FIRST SLTemplate WHERE
-                       SLTemplateDataset.SLCode = lModelid EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+                       SLTemplate.SLCode = lModelid EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
             IF LOCKED(SLTemplate) THEN DO:
                 liWait = liWait + 1.
             IF liWait > {&WAIT_CONFIG_LOCK} THEN 
@@ -155,9 +155,9 @@ CLASS tms.Gwy.SLTemplateModel IMPLEMENTS Gwy.ModelInterface:
     /* error cases get response via logError, make response for 
        the succesful one */
     loRequestMaker:create_response("SLTemplate",
-        lModelID,
-        "OK",
-        ""). 
+                                   lModelID,
+                                   "OK",
+                                   ""). 
 
     loRequestMaker:create_log(
                               SUBSTITUTE("SLTemplate Update: Id=&1 Ext.Request=&2", 

@@ -10,6 +10,8 @@ USING Syst.ExternalMap.
 USING dotr.Stomp.*.
 USING dotr.Stomp.Interface.*.
 
+{Func/multitenantfunc.i}
+
 CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon 
                      IMPLEMENTS dotr.Stomp.Interface.IStompHandler:
    
@@ -220,6 +222,8 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
                lcModel = lcValue.
             WHEN "source" THEN
                lcSource = lcValue.
+            WHEN "brand" THEN
+               lcBrand = lcValue.
             WHEN "action" THEN
                lcAction = lcValue.
             WHEN "id" THEN
@@ -262,6 +266,8 @@ CLASS Gwy.PCListener INHERITS gearbox.daemons.Daemon
       /* something to the eventlog */
       IF lcSource = "" THEN lcSource = "PC".
       
+      fsetEffectiveTenantForAllDB(lcBrand).
+           
       CASE lcModel:
          WHEN "account" THEN DO:
             loLogicModule = NEW Gwy.AccountModel(icMessageBody, lcModelId, lcSource,
