@@ -486,7 +486,7 @@ DEFINE VARIABLE lcWebContractIds       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liEntry                AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liCount                AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcExtraDS              AS CHARACTER NO-UNDO.
-
+DEFINE VARIABLE lcFixedNuber           AS CHARACTER NO-UNDO.
 /* YBP-514 */
 FUNCTION fGetOrderFields RETURNS LOGICAL :
    
@@ -629,10 +629,23 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
                 END.
                 WHEN  'FAXTOEMAIL' THEN DO:
                     faxtoEmailStruct    = get_struct(bundleExtraDataStruct , "FAXTOEMAIL").
-                    lcfaxtoEmailStruct  = validate_request(faxtoEmailStruct, 'email!,fixed_number!').    
+                    lcfaxtoEmailStruct  = validate_request(faxtoEmailStruct, 'email!,fixed_number').    
                     liEntry             = LOOKUP('FAXTOEMAIL',pcAdditionalBundleList) .     
                     cData = "".
-                    cData = get_string(faxtoEmailStruct, "fixed_number").
+                    /*Take fixed_number from field if available. 
+                      If not try to take from fusion data.
+                      If not available, try from mobsub. */
+                    lcFixedNumber = get_string(faxtoEmailStruct, "fixed_number").
+                    IF lcFixedNumber = "" THEN lcFixedNumber = lcFixedLineNumber.
+                    IF lcFixedNumber = "" THEN DO:
+                       IF AVAIL MobSub AND 
+                                MobSub.FixedNumber NE ? AND 
+                                MobSub.FixedNumber NE "" THEN lcFixedNumber = MobSub.FixedNumber.
+                       END.
+                    END.
+
+                    
+                    cData = lcFixedNuber.
                     cData = cData + "|" + get_string(faxtoEmailStruct, "email").
                     cData = cData + "|" + ENTRY( liEntry , pcAdditionalOfferList ).
                     cData = cData + FILL("|", (2 - NUM-ENTRIES(cData,"|"))).
