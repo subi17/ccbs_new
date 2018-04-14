@@ -65,8 +65,8 @@ DEF VAR lii                           AS INT  NO-UNDO.
 DEF VAR lcExtraLineCLITypes           AS CHAR NO-UNDO.
 DEF VAR liMLMsSeq                     AS INT  NO-UNDO. 
 DEF VAR lcReasons                     AS CHAR NO-UNDO.
-DEF VAR llCompatibleCurrent           AS LOG  NO-UNDO.  
-DEF VAR llCompatibleOther             AS LOG  NO-UNDO. 
+DEF VAR llAllowedELCliTypeCurrent     AS LOG  NO-UNDO.  
+DEF VAR llAllowedELCliTypeOther       AS LOG  NO-UNDO. 
 DEF VAR lcClitypeAux                  AS CHAR NO-UNDO.
 DEF VAR liExtraLineStatus             AS INT  NO-UNDO.
 
@@ -591,30 +591,30 @@ IF lcAddLineAllowed EQ "" THEN lcAddLineAllowed = "NO_SUBSCRIPTIONS".
 YCO-272: /* When asking about a new Extra Line... */
 DO: 
    liExtraLineStatus = -1. /* Initializing variable */      
-   IF AVAILABLE Customer AND LOOKUP(pcCliType, lcExtraLineCLITypes) > 0 THEN DO: 
-
-      llCompatibleCurrent = fIsCompatibleExtraLine (INPUT Customer.OrgID,
-                                                    INPUT Customer.CustIDType,
-                                                    INPUT pcCliType).
+   IF AVAILABLE Customer AND LOOKUP(pcCliType, lcExtraLineCliTypes) > 0 THEN DO: 
+      
+      /* Check if current extra line CliType is allowed for this customer */
+      llAllowedELCliTypeCurrent = fELCliTypeAllowedForCustomer (INPUT Customer.CustNum,
+                                                                INPUT pcCliType).
    
-      llCompatibleOther = FALSE.
-      DO lii = 1 TO NUM-ENTRIES(lcExtraLineCLITypes):
-         lcClitypeAux = TRIM(ENTRY(lii,lcExtraLineCLITypes)).
+      /* Check if other extra line CliType is allowed for this customer */
+      llAllowedELCliTypeOther = FALSE.
+      DO lii = 1 TO NUM-ENTRIES(lcExtraLineCliTypes):
+         lcCliTypeAux = TRIM(ENTRY(lii,lcExtraLineCliTypes)).
          IF lcCliTypeAux = pcCliType THEN 
            NEXT.
-         llCompatibleOther = fIsCompatibleExtraLine (INPUT Customer.OrgID,
-                                                     INPUT Customer.CustIDType,
-                                                     INPUT lcClitypeAux).
-         IF llCompatibleOther THEN
+         llAllowedELCliTypeOther = fELCliTypeAllowedForCustomer (INPUT Customer.CustNum,
+                                                                 INPUT lcCliTypeAux).
+         IF llAllowedELCliTypeOther THEN
            LEAVE.                                                                           
       END.               
       
       /* Cases */
-      IF LOOKUP(pcClitype, lcExtraLineAllowed) > 0 THEN DO:
+      IF LOOKUP(pcCliType, lcExtraLineAllowed) > 0 THEN DO:
          liExtraLineStatus = 0. /* Extra Line allowed. Go on. */
          LEAVE YCO-272.         
       END.               
-      IF (NOT llCompatibleCurrent) AND (NOT llCompatibleOther) THEN DO:
+      IF (NOT llAllowedELCliTypeCurrent) AND (NOT llAllowedELCliTypeOther) THEN DO:
          liExtraLineStatus = 1. /* No subscriptions compatible with Extra Lines */
          LEAVE YCO-272.         
       END.               
@@ -622,18 +622,18 @@ DO:
          liExtraLineStatus = 2. /* No more Extra Lines allowed */
          LEAVE YCO-272.         
       END.                 
-      IF lcExtraLineAllowed <> "" AND (NOT llCompatibleCurrent)  THEN DO:
-         liExtraLineStatus = 3. /* Extra Line allowed, but no this one */
+      IF lcExtraLineAllowed <> "" AND (NOT llAllowedELCliTypeCurrent) THEN DO:
+         liExtraLineStatus = 3. /* Extra Line allowed, but no this one that is not compatible */
          LEAVE YCO-272.         
       END.                                                
-      IF lcExtraLineAllowed <> "" AND LOOKUP(pcClitype, lcExtraLineAllowed) = 0 THEN DO:
-         IF LOOKUP(pcClitype, lcExtraLineCLITypes) = 1 THEN 
+      IF lcExtraLineAllowed <> "" AND LOOKUP(pcCliType, lcExtraLineAllowed) = 0 THEN DO:
+         IF LOOKUP(pcCliType, lcExtraLineCliTypes) = 1 THEN 
            liExtraLineStatus = 5. /* Not allowed itself, but you can try other one of the allowed */
          ELSE
            liExtraLineStatus = 4. /* Not allowed itself, but you can try other one of the allowed */  
          LEAVE YCO-272.             
       END.                                                                                       
-   END. /* IF AVAILABLE Customer AND LOOKUP(pcCliType, lcExtraLineCLITypes) > 0 */
+   END. /* IF AVAILABLE Customer AND LOOKUP(pcCliType, lcExtraLineCliTypes) > 0 */
    
 END. /* YCO-272 */
 
