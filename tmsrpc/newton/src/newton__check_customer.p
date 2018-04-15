@@ -17,6 +17,7 @@
                    additional_line_allowed;string;mandatory;OK,NO_MAIN_LINE,NO_SUBSCRIPTIONS (OK is returned also if there's no active main line but a pending main line order)
                    extra_line_allowed;string;mandatory;comma separated list of allowed extra lines
                    segment;string;mandatory;
+                   extra_line_status;integer;mandatory;status for extra lines orders (YCO-272). Only make sense if asking for a Extra Line CliType.
  */
 
 {fcgi_agent/xmlrpc/xmlrpc_access.i}

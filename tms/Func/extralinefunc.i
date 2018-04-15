@@ -755,8 +755,8 @@ FUNCTION fELCliTypeAllowedForCustomer RETURNS LOGICAL
          IF CAN-FIND(FIRST TMSRelation WHERE 
                            TMSRelation.TableName   EQ {&ELTABLENAME} AND 
                            TMSRelation.KeyType     EQ {&ELKEYTYPE}   AND 
-                           TMSRelation.ParentValue EQ Order.CLIType AND  
-                           TMSRelation.ChildValue  EQ icELCliType      AND
+                           TMSRelation.ParentValue EQ Order.CLIType  AND  
+                           TMSRelation.ChildValue  EQ icELCliType    AND
                            INT(TMSRelation.RelationType) > 0) 
          THEN DO:
             llAllowedOnGoing = TRUE.      
