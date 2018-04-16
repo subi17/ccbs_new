@@ -52,22 +52,23 @@ FUNCTION fUpdateInvTargetGrpBankAccnt RETURNS LOGICAL
    (INPUT iiCustNum AS INT,
     INPUT icBankAcct AS CHAR):
 
-   FIND FIRST InvoiceTargetGroup EXCLUSIVE-LOCK USE-INDEX Custnum WHERE
-              InvoiceTargetGroup.Custnum = iiCustNum NO-ERROR.
+   FIND FIRST InvoiceTargetGroup USE-INDEX Custnum WHERE
+              InvoiceTargetGroup.Custnum = iiCustNum EXCLUSIVE-LOCK NO-ERROR.
+                                         
    IF NOT AVAIL InvoiceTargetGroup THEN DO:
       CREATE ErrorLog.
       ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
              ErrorLog.ActionID  = "UpdateInvoiceTargetGroupBankAccount"
              ErrorLog.TableName = "InvoiceTargetGroup"
-             ErrorLog.KeyValue  = STRING(InvoiceTargetGroup.Custnum) 
+             ErrorLog.KeyValue  = STRING(iiCustNum) 
              ErrorLog.ErrorMsg  = "InvoiceTargetGroup not found"
              ErrorLog.UserCode  = Syst.Var:katun
-             ErrorLog.ActionTS  = Func.Common:mMakeTS().
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().            
       RETURN FALSE.
    END.       
+   IF AVAIL InvoiceTargetGroup THEN
+      InvoiceTargetGroup.BankAccount = icBankAcct.
       
-   InvoiceTargetGroup.BankAccount = icBankAcct.
-
    RETURN TRUE.
 
 END FUNCTION.

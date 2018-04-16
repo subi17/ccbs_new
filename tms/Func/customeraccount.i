@@ -18,7 +18,7 @@ FUNCTION fCreateCustomerAccount RETURNS LOGICAL
       ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
              ErrorLog.ActionID  = "CreateCustomerAccount"
              ErrorLog.TableName = "Customer"
-             ErrorLog.KeyValue  = STRING(Customer.CustNum) 
+             ErrorLog.KeyValue  = STRING(iiCustNum) 
              ErrorLog.ErrorMsg  = "Customer not found"
              ErrorLog.UserCode  = Syst.Var:katun
              ErrorLog.ActionTS  = Func.Common:mMakeTS().
@@ -60,7 +60,7 @@ FUNCTION fCloseCustomerAccount RETURNS LOGICAL
       ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
              ErrorLog.ActionID  = "CloseCustomerAccount"
              ErrorLog.TableName = "CustomerAccount"
-             ErrorLog.KeyValue  = STRING(CustomerAccount.AccountID) 
+             ErrorLog.KeyValue  = STRING(iiAccountID) 
              ErrorLog.ErrorMsg  = "Customer Account not found"
              ErrorLog.UserCode  = Syst.Var:katun
              ErrorLog.ActionTS  = Func.Common:mMakeTS().
@@ -92,7 +92,7 @@ FUNCTION fUpdateCustomerAccountDelType RETURNS LOGICAL
       ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
              ErrorLog.ActionID  = "UpdateCustomerAccount"
              ErrorLog.TableName = "CustomerAccount"
-             ErrorLog.KeyValue  = STRING(CustomerAccount.Custnum) 
+             ErrorLog.KeyValue  = STRING(iiCustNum) 
              ErrorLog.ErrorMsg  = "Customer Account not found"
              ErrorLog.UserCode  = Syst.Var:katun
              ErrorLog.ActionTS  = Func.Common:mMakeTS().
