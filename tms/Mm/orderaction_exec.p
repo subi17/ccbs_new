@@ -379,21 +379,6 @@ PROCEDURE pPeriodicalContract:
           CASE DayCampaign.DCEvent :
               WHEN "OFFICE365" OR 
               WHEN "FAXTOEMAIL" THEN DO:
-                 /*PRO3D2-55*/
-                 /*IF fixednumber is empty, try to fill it from fixed subscription.*/
-                 /*TODO: how to find the fixednumber. This must be tried again if not yet ready.*/ 
-                 1.entryssa.
-                 FIND FIRST OrderFusion NO-LOCK WHERE 
-                            OderFusion.Brand EQ "1" AND
-                            OrderFusion.OrderID EQ iiOrder
-                            OrderFusion.Fixednumber NE "" NO-ERROR. index.
-                 IF NOT AVAIL OrderFusion THEN DO:
-                    RETURN "ERROR: Fixed Number not yet available".
-
-                 END.
-                 
-                   If it is still empty, make dealy and try activation later.*/
-                 /**/
                   lcSVAParams = lcSVAParams + "|" + lcItemParams.
               END.
               OTHERWISE lcSVAParams = lcSVAParams + (IF lcItemParams <> "" THEN "|||" ELSE "") + lcItemParams. 

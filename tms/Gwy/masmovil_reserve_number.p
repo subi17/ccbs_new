@@ -78,6 +78,12 @@ IF lcError EQ "OK" THEN DO:
       FusionMessage.UpdateTS = OrderFusion.UpdateTS
       FusionMessage.MessageStatus = {&FUSIONMESSAGE_STATUS_HANDLED}.
 
+      /*PRO3D2-55*/
+      /*Because of possibility to have empty fixednumber in ordering phase we
+        need to update related data ot orderaction*/
+      FIND FIRST OrderAction EXCLUSIVE-LOCK WHERE
+
+
    IF NOT fCreateFusionCreateOrderMessage(OrderFusion.OrderId,
                                           OUTPUT lcError) THEN DO:
 
