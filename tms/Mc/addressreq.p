@@ -132,12 +132,15 @@ PROCEDURE pAddressChange:
        CustomerReport.TownCode = lcTownCode.
    
       /* CDS-10 start */
-      fUpdateAddress(Customer.CustNum, 
-                     Customer.Address, 
-                     Customer.PostOffice, 
-                     Customer.ZipCode, 
-                     Customer.Region, 
-                     Customer.Country).      
+      IF NOT fUpdateAddress(Customer.CustNum, 
+                            Customer.Address, 
+                            Customer.PostOffice, 
+                            Customer.ZipCode, 
+                            Customer.Region, 
+                            Customer.Country) THEN DO:
+         fReqError("Customer billing address can not be changed").
+         RETURN.
+      END.                              
       /* CDS-10 end */
    
    RELEASE Customer.

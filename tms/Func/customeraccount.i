@@ -13,7 +13,17 @@ FUNCTION fCreateCustomerAccount RETURNS LOGICAL
 
    FIND Customer NO-LOCK WHERE 
         Customer.CustNum = iiCustNum NO-ERROR.
-   IF NOT AVAIL Customer THEN RETURN FALSE.
+   IF NOT AVAIL Customer THEN DO:
+      CREATE ErrorLog.
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
+             ErrorLog.ActionID  = "CreateCustomerAccount"
+             ErrorLog.TableName = "Customer"
+             ErrorLog.KeyValue  = STRING(Customer.CustNum) 
+             ErrorLog.ErrorMsg  = "Customer not found"
+             ErrorLog.UserCode  = Syst.Var:katun
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
+      RETURN FALSE.
+   END.
 
    CREATE CustomerAccount.
    ASSIGN
@@ -45,17 +55,27 @@ FUNCTION fCloseCustomerAccount RETURNS LOGICAL
    DEF BUFFER bMobSub   FOR MobSub.
 
    FIND FIRST CustomerAccount EXCLUSIVE-LOCK WHERE CustomerAccount.AccountID EQ iiAccountID NO-ERROR.
-   IF AVAIL CustomerAccount THEN DO: 
-      /* Check if this is the last subscription, if yes, close CustomerAccount. */
-      FOR EACH bMobSub WHERE bMobSub.Brand   = Syst.Var:gcBrand   AND
-                            bMobSub.CustNum = CustomerAccount.CustNum NO-LOCK:
-         liMobSubCount = liMobSubCount + 1.
-      END.      
-      
-      IF liMobSubCount = 1 THEN CustomerAccount.ToDate = TODAY.
+   IF NOT AVAIL CustomerAccount THEN DO:
+      CREATE ErrorLog.
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
+             ErrorLog.ActionID  = "CloseCustomerAccount"
+             ErrorLog.TableName = "CustomerAccount"
+             ErrorLog.KeyValue  = STRING(CustomerAccount.AccountID) 
+             ErrorLog.ErrorMsg  = "Customer Account not found"
+             ErrorLog.UserCode  = Syst.Var:katun
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
+      RETURN FALSE.
    END.
-   
+
+   /* Check if this is the last subscription, if yes, close CustomerAccount. */
+   FOR EACH bMobSub WHERE bMobSub.Brand   = Syst.Var:gcBrand   AND
+                          bMobSub.CustNum = CustomerAccount.CustNum NO-LOCK:
+      liMobSubCount = liMobSubCount + 1.
+   END.      
+      
+   IF liMobSubCount = 1 THEN CustomerAccount.ToDate = TODAY.
    RETURN TRUE.
+
 END.
 /* CDS-12 CDS-13 */
 
@@ -67,8 +87,19 @@ FUNCTION fUpdateCustomerAccountDelType RETURNS LOGICAL
  
    FIND FIRST CustomerAccount EXCLUSIVE-LOCK WHERE 
       CustomerAccount.Custnum EQ iiCustNum NO-ERROR.
-   IF AVAIL CustomerAccount THEN   
-      CustomerAccount.DelType = iiDelType.
+   IF NOT AVAIL CustomerAccount THEN DO:
+      CREATE ErrorLog.
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
+             ErrorLog.ActionID  = "UpdateCustomerAccount"
+             ErrorLog.TableName = "CustomerAccount"
+             ErrorLog.KeyValue  = STRING(CustomerAccount.Custnum) 
+             ErrorLog.ErrorMsg  = "Customer Account not found"
+             ErrorLog.UserCode  = Syst.Var:katun
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
+      RETURN FALSE.
+   END.   
+   
+   CustomerAccount.DelType = iiDelType.
 
    RETURN TRUE.
 

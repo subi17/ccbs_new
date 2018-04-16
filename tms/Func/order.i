@@ -421,7 +421,8 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
          /* new user account */
          create_account(Customer.CustNum,?,?).
          /* CDS-6 */
-         fCreateCustomerAccount(Customer.Custnum).
+         IF NOT fCreateCustomerAccount(Customer.Custnum) THEN
+            RETURN FALSE.
          /* CDS-6 */
 
          IF OrderCustomer.SubQty > 0 THEN DO:
@@ -447,15 +448,17 @@ FUNCTION fMakeCustomer RETURNS LOGICAL
          END.
 
          /* CDS- */
-         fUpdateInvTargetGrpBankAccnt(Customer.Custnum,
-                                      Customer.BankAcct).               
+         IF NOT fUpdateInvTargetGrpBankAccnt(Customer.Custnum,
+                                      Customer.BankAcct) THEN
+            RETURN FALSE.
 
-         fUpdateAddress(Customer.CustNum, 
+         IF NOT fUpdateAddress(Customer.CustNum, 
                         Customer.Address, 
                         Customer.PostOffice, 
                         Customer.ZipCode, 
                         Customer.Region, 
-                        Customer.Country).   
+                        Customer.Country) THEN
+            RETURN FALSE.
          /* CDS- */
 
       END.   

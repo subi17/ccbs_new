@@ -590,12 +590,13 @@ IF llCustomerChanged THEN DO:
       END.
 
       /* CDS-10 start */
-      fUpdateAddress(Customer.CustNum, 
-                     Customer.Address, 
-                     Customer.PostOffice, 
-                     Customer.ZipCode, 
-                     Customer.Region, 
-                     Customer.Country).
+      IF NOT fUpdateAddress(Customer.CustNum, 
+                            Customer.Address, 
+                            Customer.PostOffice, 
+                            Customer.ZipCode, 
+                            Customer.Region, 
+                            Customer.Country) THEN
+         RETURN appl_err("Customer billing address can not be changed").                            
       /* CDS-10 end */
 
    END.
@@ -619,8 +620,9 @@ IF llCustomerChanged THEN DO:
                llBankAcctChange = TRUE.
                customer.BankAcct = lcBankAccount.                             
                /* CDS-10 start */
-               fUpdateInvTargetGrpBankAccnt(Customer.Custnum,
-                                            Customer.BankAcct).             
+               IF NOT fUpdateInvTargetGrpBankAccnt(Customer.Custnum,
+                                                   Customer.BankAcct) THEN
+                  RETURN appl_err("Customer bank account can not be changed").                                                                 
                /* CDS-10 end */
             END.   
          END.
@@ -705,7 +707,8 @@ IF llCustomerChanged THEN DO:
              InvoiceTargetGroup.DelType = {&INV_DEL_TYPE_FUSION_EMAIL_PENDING}.
 
           /* CDS-10 start */
-          fUpdateCustomerAccountDelType(Customer.Custnum, InvoiceTargetGroup.DelType).
+          IF NOT fUpdateCustomerAccountDelType(Customer.Custnum, InvoiceTargetGroup.DelType) THEN
+            RETURN appl_err("Customer delivery method can not be changed").           
           /* CDS-10 end */
           
 

@@ -1397,7 +1397,10 @@ PROCEDURE pTerminate:
    END. 
       
    /* CDS-13 start */
-   fCloseCustomerAccount(bMobSub.AccountID).
+   IF NOT fCloseCustomerAccount(bMobSub.AccountID) THEN DO:
+      fReqError("CustomerAccount not closed").
+      RETURN.      
+   END.   
    /* CDS-13 end */   
       
    /* Find Original request */

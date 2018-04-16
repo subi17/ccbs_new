@@ -14,7 +14,18 @@ FUNCTION fUpdateAddress RETURNS LOGICAL
 
 
    FIND FIRST Address WHERE Address.Keyvalue = STRING(iiCustNum) EXCLUSIVE-LOCK NO-ERROR.
-   IF AVAIL Address AND Address.AddressType = "Billing" THEN DO:
+   IF NOT AVAIL Address AND Address.AddressType = "Billing" THEN DO:
+      CREATE ErrorLog.
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
+             ErrorLog.ActionID  = "UpdateAddress"
+             ErrorLog.TableName = "Address"
+             ErrorLog.KeyValue  = STRING(iiCustNum) 
+             ErrorLog.ErrorMsg  = "InvoiceTargetGroup not found"
+             ErrorLog.UserCode  = Syst.Var:katun
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
+      RETURN FALSE.
+   END.
+   ELSE DO:     
       ASSIGN
          Address.Address = icAddress
          Address.City = icPostOffice
@@ -43,8 +54,19 @@ FUNCTION fUpdateInvTargetGrpBankAccnt RETURNS LOGICAL
 
    FIND FIRST InvoiceTargetGroup EXCLUSIVE-LOCK USE-INDEX Custnum WHERE
               InvoiceTargetGroup.Custnum = iiCustNum NO-ERROR.
-   IF AVAIL InvoiceTargetGroup THEN
-            InvoiceTargetGroup.BankAccount = icBankAcct.
+   IF NOT AVAIL InvoiceTargetGroup THEN DO:
+      CREATE ErrorLog.
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
+             ErrorLog.ActionID  = "UpdateInvoiceTargetGroupBankAccount"
+             ErrorLog.TableName = "InvoiceTargetGroup"
+             ErrorLog.KeyValue  = STRING(InvoiceTargetGroup.Custnum) 
+             ErrorLog.ErrorMsg  = "InvoiceTargetGroup not found"
+             ErrorLog.UserCode  = Syst.Var:katun
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
+      RETURN FALSE.
+   END.       
+      
+   InvoiceTargetGroup.BankAccount = icBankAcct.
 
    RETURN TRUE.
 

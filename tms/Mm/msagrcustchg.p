@@ -556,9 +556,15 @@ PROCEDURE pOwnerChange:
             END.
 
             /* CDS-12 start */
-            fCloseCustomerAccount(MobSub.AccountID).
+            IF NOT fCloseCustomerAccount(MobSub.AccountID) THEN DO:
+               fReqError("CustomerAccount not closed").
+               RETURN.
+            END.          
             
-            fCreateCustomerAccount(liCreated[liReqCnt]).
+            IF NOT fCreateCustomerAccount(liCreated[liReqCnt]) THEN DO:
+               fReqError("CustomerAccount not created").
+               RETURN.
+            END.               
             FIND FIRST CustomerAccount NO-LOCK WHERE CustomerAccount.Custnum EQ Customer.CustNum NO-ERROR.
             IF AVAIL CustomerAccount THEN 
                Mobsub.AccountID = CustomerAccount.AccountID.        
