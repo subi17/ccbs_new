@@ -14,7 +14,7 @@ FUNCTION fUpdateAddress RETURNS LOGICAL
 
 
    FIND FIRST Address WHERE Address.Keyvalue = STRING(iiCustNum) EXCLUSIVE-LOCK NO-ERROR.
-   IF NOT AVAIL Address AND Address.AddressType = "Billing" THEN DO:
+   IF NOT AVAIL Address THEN DO:
       CREATE ErrorLog.
       ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
              ErrorLog.ActionID  = "UpdateAddress"
@@ -25,7 +25,7 @@ FUNCTION fUpdateAddress RETURNS LOGICAL
              ErrorLog.ActionTS  = Func.Common:mMakeTS().
       RETURN FALSE.
    END.
-   ELSE DO:     
+   IF Address.AddressType = "Billing" THEN DO:     
       ASSIGN
          Address.Address = icAddress
          Address.City = icPostOffice
@@ -41,7 +41,7 @@ FUNCTION fUpdateAddress RETURNS LOGICAL
             Address.StreetCode = CustomerReport.StreetCode
             Address.CityCode = CustomerReport.CityCode
             Address.TownCode = CustomerReport.TownCode.
-   END.
+   END.            
    
    RETURN TRUE.
 
