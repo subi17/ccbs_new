@@ -20,7 +20,7 @@ FUNCTION fUpdateAddress RETURNS LOGICAL
              ErrorLog.ActionID  = "UpdateAddress"
              ErrorLog.TableName = "Address"
              ErrorLog.KeyValue  = STRING(iiCustNum) 
-             ErrorLog.ErrorMsg  = "InvoiceTargetGroup not found"
+             ErrorLog.ErrorMsg  = "Address not found"
              ErrorLog.UserCode  = Syst.Var:katun
              ErrorLog.ActionTS  = Func.Common:mMakeTS().
       RETURN FALSE.
