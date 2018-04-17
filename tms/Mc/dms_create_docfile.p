@@ -42,9 +42,9 @@ DEF TEMP-TABLE ttOrderList NO-UNDO
    FIELD Direct    AS LOGICAL
    FIELD MsRequest AS INT
    FIELD TeleSales AS LOGICAL
-INDEX OrderID OrderID
-INDEX CaseID CaseID
-INDEX Direct Direct
+   INDEX OrderID OrderID
+   INDEX CaseID CaseID
+   INDEX Direct Direct
    INDEX MsRequest MsRequest
    INDEX TeleSales TeleSales
    .
@@ -768,6 +768,47 @@ FUNCTION fFixNumberAndDonorInformation RETURNS CHARACTER
 
    RETURN lcReturnValue.
 
+END FUNCTION.
+
+FUNCTION fGetFixNumber RETURNS CHARACTER
+   ( iiOrderID AS INTEGER):
+
+   FIND FIRST OrderFusion NO-LOCK WHERE
+              OrderFusion.Brand EQ Syst.Var:gcBrand AND
+              OrderFusion.OrderID EQ iiOrderId NO-ERROR.
+
+   IF AVAILABLE OrderFusion THEN
+      RETURN OrderFusion.FixedNumber.
+
+   RETURN "".
+
+END FUNCTION.
+
+
+FUNCTION fGetTarrifType RETURNS CHARACTER
+   (icCLIType AS CHARACTER):
+
+   /* Ideally should never return -1 or -2 */
+   
+   DEFINE BUFFER bCLIType FOR CLIType.
+   DEFINE VARIABLE liTarrifType  AS INTEGER   NO-UNDO INITIAL -2.
+   
+   FIND FIRST bCLIType NO-LOCK WHERE
+              bCLIType.Brand      = Syst.Var:gcBrand           AND
+              bCLIType.CLIType    = icCLIType
+        NO-ERROR.
+   
+   IF AVAILABLE bCLIType THEN
+   
+      CASE bCLIType.TariffType:
+         WHEN {&CLITYPE_TARIFFTYPE_CONVERGENT}  THEN liTarrifType =  0.
+         WHEN {&CLITYPE_TARIFFTYPE_MOBILEONLY}  THEN liTarrifType =  1.
+         WHEN {&CLITYPE_TARIFFTYPE_FIXEDONLY}   THEN liTarrifType =  2.
+         OTHERWISE                                   liTarrifType = -1.
+      END CASE.
+
+   RETURN STRING(liTarrifType).
+   
 END FUNCTION.
 
 /*Order activation*/
@@ -1634,50 +1675,91 @@ FUNCTION fCreateDocumentCase10 RETURNS CHAR
 
 END.
 
-/*{14} TeleSales*/
-FUNCTION fCreateDocumentCase14 RETURNS CHAR
+/* {14} TeleSales */
+FUNCTION fCreateDocumentCase14 RETURNS CHARACTER
    (iiOrderId AS INT):
-   DEF VAR lcCaseTypeID    AS CHAR NO-UNDO.
-   DEF VAR lcCasefileRow   AS CHAR NO-UNDO.
-   DEF VAR lcErr AS CHAR NO-UNDO.
-   DEF VAR lcMsg AS CHAR NO-UNDO.
-
-   ASSIGN
-      lcCaseTypeId      = "14".
+   DEFINE VARIABLE lcCaseTypeID        AS CHARACTER   NO-UNDO.
+   DEFINE VARIABLE lcCasefileRow       AS CHARACTER   NO-UNDO.
+   DEFINE VARIABLE lcRequiredDocs      AS CHARACTER   NO-UNDO.
+   DEFINE VARIABLE lcDocListEntries    AS CHARACTER   NO-UNDO.
+   DEFINE VARIABLE liCount             AS INTEGER     NO-UNDO.
+   DEFINE VARIABLE lcCreateDMS         AS CHARACTER   NO-UNDO.
+   DEFINE VARIABLE lcErr               AS CHARACTER   NO-UNDO.
+   DEFINE VARIABLE lcMsg               AS CHARACTER   NO-UNDO.
 
    FIND FIRST Order NO-LOCK WHERE 
               Order.Brand = Syst.Var:gcBrand  AND
               Order.OrderID EQ iiOrderId NO-ERROR.
    IF NOT AVAIL Order THEN RETURN "14:Order not available" + STRING(iiOrderId).
 
-   lcCaseFileRow =
-   lcCaseTypeId                   + lcDelim +
-   /*Contract_ID : EB5CB2*/
-   STRING(Order.ContractID)       + lcDelim +
-   /*Order_ID : 14566933*/
-   STRING(Order.OrderID)          + lcDelim +
-   /* Brand */ /*Hard coding to be removed using some function to get Brand */ 
-   "YOI"                          + lcDelim +
-   /* Convergence Hard coding shud be removed using some funcation to identify convergence */
-   0                              + lcDelim +
-   /*MSISDN : 609321999*/
-   STRING(Order.CLI)              + lcDelim +   
-   /* Fixed Number To be modifed */
-   ""                             + lcDelim + 
-   /*SFID: WEB*/
-   STRING(Order.Salesman)         + lcDelim +
-   /* DNI To be modifed */
-   ""                             + lcDelim +
-   /*Order_date : 23-04-2015*/
-   fPrintDate(Order.CrStamp)      + lcDelim +
-   /* ReplacedContract Always empty*/
-   ""
-   .
+   FIND FIRST OrderCustomer NO-LOCK  WHERE
+              OrderCustomer.Brand EQ Syst.Var:gcBrand AND
+              OrderCustomer.OrderID EQ iiOrderID      AND
+              OrderCustomer.RowType = {&ORDERCUSTOMER_ROWTYPE_AGREEMENT} NO-ERROR.
+   IF NOT AVAIL OrderCustomer THEN
+      RETURN "14:Ordercustomer not available" + STRING(iiOrderId).
+   
+   ASSIGN
+      lcCaseTypeId  = "14"
+      lcCaseFileRow =
+         lcCaseTypeId                     + lcDelim +
+         /*Contract_ID : EB5CB2*/
+         Order.ContractID                 + lcDelim +
+         /*Order_ID : 14566933*/
+         STRING(Order.OrderID)            + lcDelim +
+         /* Brand */ /* Hard coding to be removed using some function to get Brand */
+         "YOI"                            + lcDelim +
+         /* Convergence */
+         fGetTarrifType(Order.CliType)    + lcDelim +
+         /*MSISDN : 609321999*/
+         Order.CLI                        + lcDelim +
+         /* Fixed Number */
+         fGetFixNumber(Order.OrderID)     + lcDelim +
+         /*SFID: WEB*/
+         Order.Salesman                   + lcDelim +
+         /* DNI */
+         OrderCustomer.CustID             + lcDelim +
+         /*Order_date : 23-04-2015*/
+         fPrintDate(Order.CrStamp)        + lcDelim +
+         /* ReplacedContract : Always empty*/
+         ""
+         .
 
+   /*solve needed documents:*/
+   lcRequiredDocs =  fNeededDocs(BUFFER Order).
+   DO liCount = 1 TO NUM-ENTRIES(lcRequiredDocs):
+      /*Document type, Type desc,DocStatusCode,RevisionComment*/
+      lcDocListEntries = lcDocListEntries +
+                         ENTRY(liCount,lcRequiredDocs) + {&DMS_DOCLIST_SEP} +
+                         {&DMS_DOCLIST_SEP} + /* filled only by DMS responses*/
+                         lcDMSDOCStatus + {&DMS_DOCLIST_SEP} +
+                         "".
+      IF liCount NE NUM-ENTRIES(lcRequiredDocs)
+         THEN lcDocListEntries = lcDocListEntries + {&DMS_DOCLIST_SEP}.
+   END.
+   
    OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
    PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
    OUTPUT STREAM sOutFile CLOSE.
 
+   lcCreateDMS = fUpdateDMS("", /*DmsExternalID*/
+                            lcCaseTypeID,
+                            Order.ContractID,
+                            {&DMS_HOST_TABLE_ORDER},
+                            Order.OrderId,
+                            lcInitStatus,/*StatusCode*/
+                            lcDMSStatusDesc,
+                            Order.StatusCode,
+                            0,
+                            lcDocListEntries /*DocList*/,
+                            {&DMS_DOCLIST_SEP}).
+   fLogLine(lcCaseFileRow,lcCreateDMS).
+   lcErr = fSendChangeInformation("", 
+                                  Order.OrderId, 
+                                  "", 
+                                  {&DMS_DOCLIST_SEP},
+                                   "create_cf",
+                                   lcMsg).
    fLogMsg("Msg,14 : " + lcMsg + " #Status: " + lcErr).
 
    RETURN "".
