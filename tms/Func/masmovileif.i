@@ -259,9 +259,9 @@ FUNCTION fMasCreate_FixedLineOrder RETURNS CHAR
    
    IF OrderFusion.IUA NE "" THEN DO:
        fAddCharacteristic(lcCharacteristicsArray, /*base*/
-                         "IUA",        /*param name*/
-                         OrderFusion.IUA,  /*param value*/
-                         "").                    /*old value*/
+                         "IUA",                   /*param name*/
+                         OrderFusion.IUA,         /*param value*/
+                         "").                     /*old value*/
       
    END.
 

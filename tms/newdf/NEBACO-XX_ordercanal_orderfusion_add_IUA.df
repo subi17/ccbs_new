@@ -1,10 +1,8 @@
-ADD FIELD "routerStat" OF "OrderFusion" AS character
+ADD FIELD "IUA" OF "OrderFusion" AS character
    FORMAT "X(14)"
    INITIAL ""
    LABEL "IUA"
-   POSITION 32
-   MAX-WIDTH 28
    COLUMN-LABEL "IUA"
-   HELP "IUA"
+   HELP "Access ID"
    ORDER 310
 
