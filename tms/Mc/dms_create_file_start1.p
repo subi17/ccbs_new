@@ -96,7 +96,7 @@ END.
 /*Execute read operation and assign new period end time to actionlog.*/
 ldCollPeriodEndTS = Func.Common:mSecOffSet(ldCurrentTimeTS, -60).
 /* Case type numbers:            1, 2, 3, 4, 5, 6, 9, 10 */
-RUN Mc/dms_create_docfile.p(SUBST("&1,&2,&3,&4,&5,&6,&7,&8,&9",
+RUN Mc/dms_create_docfile.p(SUBST("&1,&2,&3,&4,&5,&6,&7,&8,&9,&10",
                           {&DMS_CASE_TYPE_ID_ORDER_ACT},
                           {&DMS_CASE_TYPE_ID_ORDER_RESTUDY},
                           {&DMS_CASE_TYPE_ID_COMPANY},
@@ -105,7 +105,9 @@ RUN Mc/dms_create_docfile.p(SUBST("&1,&2,&3,&4,&5,&6,&7,&8,&9",
                           {&DMS_CASE_TYPE_ID_CANCEL},
                           {&DMS_CASE_TYPE_ID_Q25_TERM_RETURN},
                           {&DMS_CASE_TYPE_ID_Q25_STE},
-                          {&DMS_CASE_TYPE_ID_CATEGORY_CHG}),
+                          {&DMS_CASE_TYPE_ID_CATEGORY_CHG},
+                          {&DMS_CASE_TYPE_ID_TELESALES}
+                          ),
                        ldCollPeriodStartTS, 
                        ldCollPeriodEndTS, lcCaseFile, lcLogFile1).
 /* Move the file to Transfer directory */
