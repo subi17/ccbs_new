@@ -132,7 +132,7 @@ FUNCTION fUpdateAccountID RETURNS LOGICAL
    FIND FIRST bCustomerAccount NO-LOCK WHERE bCustomerAccount.Custnum EQ iiCustNum NO-ERROR.
    IF AVAIL bCustomerAccount THEN DO:
       liAccountID = bCustomerAccount.AccountID.
-      FIND FIRST bMobSub NO-LOCK WHERE bMobSub.Custnum EQ iiCustNum NO-ERROR.
+      FIND FIRST bMobSub EXCLUSIVE-LOCK WHERE bMobSub.Custnum EQ iiCustNum NO-ERROR.
       IF AVAIL bMobSub THEN 
          bMobSub.AccountID = liAccountID.
    END.
