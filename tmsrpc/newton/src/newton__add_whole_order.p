@@ -486,7 +486,7 @@ DEFINE VARIABLE lcWebContractIds       AS CHARACTER NO-UNDO.
 DEFINE VARIABLE liEntry                AS INTEGER   NO-UNDO.
 DEFINE VARIABLE liCount                AS INTEGER   NO-UNDO.
 DEFINE VARIABLE lcExtraDS              AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lcFixedNuber           AS CHARACTER NO-UNDO.
+DEFINE VARIABLE lcFixedNumber           AS CHARACTER NO-UNDO.
 /* YBP-514 */
 FUNCTION fGetOrderFields RETURNS LOGICAL :
    
@@ -642,11 +642,10 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
                        IF AVAIL MobSub AND 
                                 MobSub.FixedNumber NE ? AND 
                                 MobSub.FixedNumber NE "" THEN lcFixedNumber = MobSub.FixedNumber.
-                       END.
                     END.
 
                     
-                    cData = lcFixedNuber.
+                    cData = lcFixedNumber.
                     cData = cData + "|" + get_string(faxtoEmailStruct, "email").
                     cData = cData + "|" + ENTRY( liEntry , pcAdditionalOfferList ).
                     cData = cData + FILL("|", (2 - NUM-ENTRIES(cData,"|"))).
