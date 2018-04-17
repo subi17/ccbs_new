@@ -635,7 +635,8 @@ FUNCTION fGetOrderFields RETURNS LOGICAL :
                     /*Take fixed_number from field if available. 
                       If not try to take from fusion data.
                       If not available, try from mobsub. */
-                    lcFixedNumber = get_string(faxtoEmailStruct, "fixed_number").
+                    IF LOOKUP('fixed_number', faxtoEmailStruct) > 0 THEN
+                       lcFixedNumber = get_string(faxtoEmailStruct, "fixed_number").
                     IF lcFixedNumber = "" THEN lcFixedNumber = lcFixedLineNumber.
                     IF lcFixedNumber = "" THEN DO:
                        IF AVAIL MobSub AND 
