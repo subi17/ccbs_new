@@ -115,7 +115,71 @@ FUNCTION fReopenCustomerAccount RETURNS LOGICAL
       /* ToDate = TODAY means that there are no other subscriptions yet active */
       CustomerAccount.ToDate = 12/31/2049. 
 
+   RETURN TRUE.
+
 END FUNCTION.      
+
+
+
+FUNCTION fUpdateAccountID RETURNS LOGICAL
+  (INPUT iiCustNum   AS INT):  
+
+   DEF VAR liAccountID           AS INT NO-UNDO.
+    
+   DEF BUFFER bMobSub            FOR MobSub.
+   DEF BUFFER bCustomerAccount   FOR CustomerAccount.
+
+   FIND FIRST bCustomerAccount NO-LOCK WHERE bCustomerAccount.Custnum EQ iiCustNum NO-ERROR.
+   IF AVAIL bCustomerAccount THEN DO:
+      liAccountID = bCustomerAccount.AccountID.
+      FIND FIRST bMobSub NO-LOCK WHERE bMobSub.Custnum EQ iiCustNum NO-ERROR.
+      IF AVAIL bMobSub THEN 
+         bMobSub.AccountID = liAccountID.
+   END.
+   
+   FOR EACH FixedFee EXCLUSIVE-LOCK WHERE FixedFee.Brand EQ Syst.Var:gcBrand AND 
+                                          FixedFee.Custnum EQ iiCustNum.
+      IF AVAIL FixedFee THEN
+         ASSIGN FixedFee.AccountID = liAccountID.
+   END.   
+
+   FOR EACH SingleFee EXCLUSIVE-LOCK WHERE SingleFee.Brand EQ Syst.Var:gcBrand AND 
+                                           SingleFee.Custnum EQ iiCustNum.
+      IF AVAIL SingleFee THEN
+         ASSIGN SingleFee.AccountID = liAccountID.
+   END.   
+   
+
+   FOR EACH InvoiceTargetGroup EXCLUSIVE-LOCK WHERE InvoiceTargetGroup.Brand EQ Syst.Var:gcBrand AND 
+                                           InvoiceTargetGroup.Custnum EQ iiCustNum.
+   IF AVAIL InvoiceTargetGroup THEN
+      ASSIGN InvoiceTargetGroup.AccountID = liAccountID.
+   END.
+
+   
+   FOR EACH Invoice EXCLUSIVE-LOCK WHERE Invoice.Brand EQ Syst.Var:gcBrand AND 
+                                           Invoice.Custnum EQ iiCustNum.
+   IF AVAIL Invoice THEN
+      ASSIGN Invoice.AccountID = liAccountID.
+   END.
+
+
+   FOR EACH FATime EXCLUSIVE-LOCK WHERE FATime.Brand EQ Syst.Var:gcBrand AND 
+                                           FATime.Custnum EQ iiCustNum.
+   IF AVAIL FATime THEN
+      ASSIGN FATime.AccountID = liAccountID.
+   END.
+
+
+   FOR EACH MsOwner EXCLUSIVE-LOCK WHERE MsOwner.Brand EQ Syst.Var:gcBrand AND 
+                                           MsOwner.Custnum EQ iiCustNum.
+   IF AVAIL MsOwner THEN
+      ASSIGN MsOwner.AccountID = liAccountID.
+   END.   
+   
+   RETURN TRUE.
+
+END FUNCTION. 
 
 
 &ENDIF

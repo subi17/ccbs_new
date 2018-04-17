@@ -440,9 +440,7 @@ IF NOT AVAIL mobsub THEN DO:
 
 
    /* CDS-8 start */
-   FIND FIRST CustomerAccount NO-LOCK WHERE CustomerAccount.Custnum EQ Customer.CustNum NO-ERROR.
-   IF AVAIL CustomerAccount THEN 
-      Mobsub.AccountID = CustomerAccount.AccountID.
+   fUpdateAccountID(Customer.CustNum).
    /* CDS-8 end */
 
    /* Extra line */

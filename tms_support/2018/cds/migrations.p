@@ -147,6 +147,49 @@ PROCEDURE pMigrateAccountIDToSingleFee:
    END.
 END PROCEDURE.
 
+
+PROCEDURE pMigrateAccountIDToFATime:
+
+   DEF BUFFER bFATime FOR FATime.
+
+   FOR EACH bFATime EXCLUSIVE-LOCK WHERE bFATime.Brand = Syst.Var:gcBrand:
+
+      FIND FIRST CustomerAccount WHERE
+                 CustomerAccount.Custnum EQ bFATime.Custnum NO-LOCK NO-ERROR.
+      IF AVAIL CustomerAccount THEN
+         ASSIGN bFATime.AccountID = CustomerAccount.AccountID.
+   END.
+END PROCEDURE.
+
+
+PROCEDURE pMigrateAccountIDToInvoice:
+
+   DEF BUFFER bInvoice FOR Invoice.
+
+   FOR EACH bInvoice EXCLUSIVE-LOCK WHERE bInvoice.Brand = Syst.Var:gcBrand:
+
+      FIND FIRST CustomerAccount WHERE
+                 CustomerAccount.Custnum EQ bInvoice.Custnum NO-LOCK NO-ERROR.
+      IF AVAIL CustomerAccount THEN
+         ASSIGN bInvoice.AccountID = CustomerAccount.AccountID.
+   END.
+END PROCEDURE.
+
+
+PROCEDURE pMigrateAccountIDToMsOwner:
+
+   DEF BUFFER bMsOwner FOR MsOwner.
+
+   FOR EACH bMsOwner EXCLUSIVE-LOCK WHERE bMsOwner.Brand = Syst.Var:gcBrand:
+
+      FIND FIRST CustomerAccount WHERE
+                 CustomerAccount.Custnum EQ bMsOwner.Custnum NO-LOCK NO-ERROR.
+      IF AVAIL CustomerAccount THEN
+         ASSIGN bMsOwner.AccountID = CustomerAccount.AccountID.
+   END.
+END PROCEDURE.
+
+
 RUN pMigrateBillingAddressToAddress.
 RUN pMigrateSubsToCustAcc.
 RUN pPopulateInvoiceTargetGroup.
@@ -156,3 +199,6 @@ RUN pMigrateAccountIDToMobSub.
 RUN pMigrateAccountIDToFixedFee.
 RUN pMigrateAccountIDToSingleFee.
 
+RUN pMigrateAccountIDToFATime.
+RUN pMigrateAccountIDToInvoice.
+RUN pMigrateAccountIDToMsOwner.

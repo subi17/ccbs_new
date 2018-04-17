@@ -565,9 +565,7 @@ PROCEDURE pOwnerChange:
                fReqError("CustomerAccount not created").
                RETURN.
             END.               
-            FIND FIRST CustomerAccount NO-LOCK WHERE CustomerAccount.Custnum EQ Customer.CustNum NO-ERROR.
-            IF AVAIL CustomerAccount THEN 
-               Mobsub.AccountID = CustomerAccount.AccountID.        
+            fUpdateAccountID(Customer.CustNum).    
             /* CDS-12 end */ 
 
             FIND FIRST CustomerReport WHERE
