@@ -59,8 +59,8 @@ DEF INPUT PARAMETER    iiMsSeq LIKE MobSub.MsSeq NO-UNDO.
 DEF NEW SHARED VAR siirto AS CHAR.
 
 DEF VAR ok            AS LOG                          NO-UNDO FORMAT "Yes/No".
-DEF VAR new-type      AS CHAR  FORMAT "X(8)"          NO-UNDO.
-DEF VAR new-type-nimi AS CHAR  FORMAT "X(12)"         NO-UNDO.
+DEF VAR new-type      AS CHAR  FORMAT "X(16)"          NO-UNDO.
+DEF VAR new-type-nimi AS CHAR  FORMAT "X(16)"         NO-UNDO.
 DEF VAR i             AS INT                          NO-UNDO.
 DEF VAR UserName      AS CHAR                         NO-UNDO. 
 DEF VAR minutes       AS INT                          NO-UNDO. 
@@ -170,7 +170,7 @@ form /* asks MSISDN number */
    " Customer ID....:" AgrCust.OrgID                                    
        "Active postpaid:" AT 41 liPostPaid                              SKIP
 "------------------------------------------------------------------------------"                                                                       SKIP
-   " New CLIType....:" new-type FORMAT "X(12)"
+   " New CLIType....:" new-type FORMAT "X(16)"
         HELP "Enter new mobile CONNECTION Cli Type"
        "(F9)"     
       "Bank Acc..:" AT 41 lcBankAccount FORMAT "X(24)"              SKIP
