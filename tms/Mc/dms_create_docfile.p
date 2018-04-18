@@ -773,12 +773,14 @@ END FUNCTION.
 FUNCTION fGetFixNumber RETURNS CHARACTER
    ( iiOrderID AS INTEGER):
 
-   FIND FIRST OrderFusion NO-LOCK WHERE
-              OrderFusion.Brand EQ Syst.Var:gcBrand AND
-              OrderFusion.OrderID EQ iiOrderId NO-ERROR.
+   DEFINE BUFFER bOrderFusion FOR OrderFusion.
+   
+   FIND FIRST bOrderFusion NO-LOCK WHERE
+              bOrderFusion.Brand EQ Syst.Var:gcBrand AND
+              bOrderFusion.OrderID EQ iiOrderId NO-ERROR.
 
-   IF AVAILABLE OrderFusion THEN
-      RETURN OrderFusion.FixedNumber.
+   IF AVAILABLE bOrderFusion THEN
+      RETURN bOrderFusion.FixedNumber.
 
    RETURN "".
 
@@ -1680,12 +1682,7 @@ FUNCTION fCreateDocumentCase14 RETURNS CHARACTER
    (iiOrderId AS INT):
    DEFINE VARIABLE lcCaseTypeID        AS CHARACTER   NO-UNDO.
    DEFINE VARIABLE lcCasefileRow       AS CHARACTER   NO-UNDO.
-   DEFINE VARIABLE lcRequiredDocs      AS CHARACTER   NO-UNDO.
-   DEFINE VARIABLE lcDocListEntries    AS CHARACTER   NO-UNDO.
-   DEFINE VARIABLE liCount             AS INTEGER     NO-UNDO.
    DEFINE VARIABLE lcCreateDMS         AS CHARACTER   NO-UNDO.
-   DEFINE VARIABLE lcErr               AS CHARACTER   NO-UNDO.
-   DEFINE VARIABLE lcMsg               AS CHARACTER   NO-UNDO.
 
    FIND FIRST Order NO-LOCK WHERE 
               Order.Brand = Syst.Var:gcBrand  AND
@@ -1725,19 +1722,6 @@ FUNCTION fCreateDocumentCase14 RETURNS CHARACTER
          ""
          .
 
-   /*solve needed documents:*/
-   lcRequiredDocs =  fNeededDocs(BUFFER Order).
-   DO liCount = 1 TO NUM-ENTRIES(lcRequiredDocs):
-      /*Document type, Type desc,DocStatusCode,RevisionComment*/
-      lcDocListEntries = lcDocListEntries +
-                         ENTRY(liCount,lcRequiredDocs) + {&DMS_DOCLIST_SEP} +
-                         {&DMS_DOCLIST_SEP} + /* filled only by DMS responses*/
-                         lcDMSDOCStatus + {&DMS_DOCLIST_SEP} +
-                         "".
-      IF liCount NE NUM-ENTRIES(lcRequiredDocs)
-         THEN lcDocListEntries = lcDocListEntries + {&DMS_DOCLIST_SEP}.
-   END.
-   
    OUTPUT STREAM sOutFile to VALUE(icOutFile) APPEND.
    PUT STREAM sOutFile UNFORMATTED lcCaseFileRow SKIP.
    OUTPUT STREAM sOutFile CLOSE.
@@ -1751,16 +1735,9 @@ FUNCTION fCreateDocumentCase14 RETURNS CHARACTER
                             lcDMSStatusDesc,
                             Order.StatusCode,
                             0,
-                            lcDocListEntries /*DocList*/,
+                            "" /*DocList*/,
                             {&DMS_DOCLIST_SEP}).
    fLogLine(lcCaseFileRow,lcCreateDMS).
-   lcErr = fSendChangeInformation("", 
-                                  Order.OrderId, 
-                                  "", 
-                                  {&DMS_DOCLIST_SEP},
-                                   "create_cf",
-                                   lcMsg).
-   fLogMsg("Msg,14 : " + lcMsg + " #Status: " + lcErr).
 
    RETURN "".
 
