@@ -134,7 +134,8 @@ IF NOT AVAILABLE mobsub THEN
 /* Set the Syst.Var:katun to check correct barring */
 Syst.Var:katun = "NewtonAd".
 
-IF NOT fSTCPossible(MobSub.CustNum, pcCliType)
+IF fCLITypeIsExtraLine(pcCliType) AND
+   NOT fValidateExtraLineSTC(MobSub.CustNum, pcCliType)
 THEN RETURN appl_err("Mainline not available for the La Duo").
 
 /* Various validations */
