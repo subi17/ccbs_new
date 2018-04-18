@@ -129,14 +129,11 @@ END FUNCTION.
 /* Function checks if STC is possible when the new clitype is
    extraline. It is possible when the customer has a free
    mainline and the mainline is suitable for the extraline */
-FUNCTION fSTCPossible RETURNS LOGICAL
+FUNCTION fValidateExtraLineSTC RETURNS LOGICAL
    (iiCustNum    AS INTEGER,
     icNewCLIType AS CHARACTER):
 
    DEF VAR liELCount AS INT NO-UNDO. 
-
-   IF NOT fCLITypeIsExtraLine(icNewCLIType) THEN 
-      RETURN FALSE.
 
    DEFINE BUFFER MobSub FOR MobSub.
 
