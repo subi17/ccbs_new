@@ -23,8 +23,8 @@ DEF VAR must-print  AS logic                NO-UNDO.
 DEF VAR must-add    AS logic                NO-UNDO.
 
 form
-      CLIType.Clitype format "x(12)"
-      CLIType.CliName  format "x(30)"
+      CLIType.Clitype format "x(16)"
+      CLIType.CliName  format "x(45)"
       CLIType.StatusCode
     WITH scroll 1 11 DOWN  ROW 4 centered COLOR value(Syst.Var:cfc)
     title color value(Syst.Var:ctc) " CLI Type (" + Syst.Var:gcBrand + ") " OVERLAY FRAME sel.
