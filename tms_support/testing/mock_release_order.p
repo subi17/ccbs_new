@@ -40,8 +40,7 @@ FOR EACH Order NO-LOCK WHERE
          Order.StatusCode EQ {&ORDER_STATUS_PENDING_ICC_FROM_LO}):
 
    IF Order.OrderType NE 0 AND
-      Order.OrderType NE 1 AND 
-      Order.OrderType NE 4 THEN NEXT.
+      Order.OrderType NE 1 THEN NEXT.
    
    IF Order.Orderchannel BEGINS "migration" THEN NEXT.
 
