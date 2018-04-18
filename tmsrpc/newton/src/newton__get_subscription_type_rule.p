@@ -159,7 +159,8 @@ FUNCTION fAddWarningStruct RETURNS LOGICAL:
 
    lcBono = fGetCurrentSpecificBundle(Mobsub.MsSeq,"BONO").
 
-   IF NOT fSTCPossible(MobSub.CustNum, pcNewCLIType)
+   IF fCLITypeIsExtraLine(pcNewCLIType)   AND               
+      NOT fValidateExtraLineSTC(MobSub.CustNum, pcNewCLIType)
    THEN DO:
       add_string(warning_array,"","STC_EXTRALINE_ERROR").
       RETURN FALSE.
