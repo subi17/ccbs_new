@@ -296,7 +296,7 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
                    MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
                    MsRequest.ActStamp <= ideActStamp AND
                    LOOKUP(STRING(MsRequest.ReqStatus),
-                          {&REQ_INACTIVE_STATUSES} + ",3") = 0) THEN NEXT.
+                          {&REQ_INACTIVE_STATUSES} + ",3,19") = 0) THEN NEXT.
 
       /* Exclude subs. if STC request is ongoing */
       IF CAN-FIND (FIRST MsRequest NO-LOCK WHERE
@@ -304,7 +304,7 @@ FUNCTION fIsDSS2Allowed RETURNS LOG
                    MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
                    MsRequest.ActStamp <= ideActStamp AND
                    LOOKUP(STRING(MsRequest.ReqStatus),
-                          {&REQ_INACTIVE_STATUSES} + ",3") = 0 AND
+                          {&REQ_INACTIVE_STATUSES} + ",3,19") = 0 AND
                    LOOKUP(MsRequest.ReqCParam2,lcAllowedDSS2SubsType) = 0) THEN NEXT.
       
       /* Exclude subs. if ACC request is ongoing */
@@ -485,7 +485,7 @@ FUNCTION fCanDSSKeepActive RETURNS LOG
                    MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TERMINATION} AND
                    MsRequest.ActStamp <= ideActStamp AND
                    LOOKUP(STRING(MsRequest.ReqStatus),
-                          {&REQ_INACTIVE_STATUSES} + ",3") = 0) THEN NEXT.
+                          {&REQ_INACTIVE_STATUSES} + ",3,19") = 0) THEN NEXT.
 
       /* Exclude subs. if STC request is ongoing */
       IF icBundleId = "DSS2" AND
@@ -494,7 +494,7 @@ FUNCTION fCanDSSKeepActive RETURNS LOG
                    MsRequest.ReqType = {&REQTYPE_SUBSCRIPTION_TYPE_CHANGE} AND
                    MsRequest.ActStamp <= ideActStamp AND
                    LOOKUP(STRING(MsRequest.ReqStatus),
-                          {&REQ_INACTIVE_STATUSES} + ",3") = 0 AND
+                          {&REQ_INACTIVE_STATUSES} + ",3,19") = 0 AND
                    LOOKUP(MsRequest.ReqCParam2,lcAllowedDSS2SubsType) = 0)
       THEN NEXT.
 
