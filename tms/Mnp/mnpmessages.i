@@ -146,7 +146,8 @@ FUNCTION fSendConfirmation RETURNS LOGICAL
          lcArray = add_array(lcReqStruct, "confirmedMSISDN").
          FOR EACH MNPSub NO-LOCK WHERE
                   MNPSub.MNPSeq = MNPProcess.Mnpseq:
-            IF MNPSub.StatusReason EQ "" THEN
+            IF MNPSub.StatusReason EQ "" OR
+               MNPSub.StatusReason EQ "CONFIRM" THEN
                add_string(lcArray,"",MNPSub.CLI).
          END.
       END.
