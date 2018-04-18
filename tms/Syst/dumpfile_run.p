@@ -770,6 +770,7 @@ PROCEDURE pWriteDumpFile:
             
             ELSE DO:
                /* value to file */
+               lcvalue = REPLACE(lcValue, "|" , " ").
                PUT STREAM sFile UNFORMATTED lcValue.
          
                /* delimiter between fields */
