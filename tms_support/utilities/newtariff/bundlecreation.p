@@ -297,6 +297,7 @@ PROCEDURE pReadBundle:
 
    DEFINE VARIABLE lcLine      AS CHARACTER NO-UNDO.
    DEFINE VARIABLE lcError     AS CHARACTER NO-UNDO.
+   DEFINE VARIABLE lcTempVar   AS CHARACTER NO-UNDO.
 
    INPUT STREAM strin FROM VALUE(icFile).
 
@@ -316,27 +317,29 @@ PROCEDURE pReadBundle:
    IF lcError > ""
    THEN UNDO, THROW NEW Progress.Lang.AppError(lcError, 1).
    
-   IF CAN-FIND(FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand = Syst.Var:gcBrand AND DayCampaign.DCEvent = fGetFieldValue({&BUNDLE}))
-   THEN UNDO, THROW NEW Progress.Lang.AppError(SUBSTITUTE("Bundle '&1' already exists", fGetFieldValue({&BUNDLE})), 1). 
+   lcTempVar = fGetFieldValue({&BUNDLE}).
+   IF CAN-FIND(FIRST DayCampaign NO-LOCK WHERE DayCampaign.Brand = Syst.Var:gcBrand AND DayCampaign.DCEvent = lcTempVar)
+   THEN UNDO, THROW NEW Progress.Lang.AppError(SUBSTITUTE("Bundle '&1' already exists", lcTempVar), 1).
 
-   IF fGetFieldValue({&MFBILLCODE}) > "" AND CAN-FIND(FIRST FeeModel NO-LOCK WHERE FeeModel.Brand = Syst.Var:gcBrand AND FeeModel.FeeModel = fGetFieldValue({&MFBILLCODE}))    
-   THEN UNDO, THROW NEW Progress.Lang.AppError(SUBSTITUTE("Feemodel '&1' already exists", fGetFieldValue({&MFBILLCODE})), 1).
-   
-   IF CAN-FIND(FIRST ServiceLimitGroup NO-LOCK WHERE ServiceLimitGroup.Brand = Syst.Var:gcBrand AND ServiceLimitGroup.GroupCode = fGetFieldValue({&BUNDLE}))
-   THEN UNDO, THROW NEW Progress.Lang.AppError(SUBSTITUTE("ServiceLimitGroup having GroupCode '&1' already exists", fGetFieldValue({&BUNDLE})), 1).
+   IF CAN-FIND(FIRST ServiceLimitGroup NO-LOCK WHERE ServiceLimitGroup.Brand = Syst.Var:gcBrand AND ServiceLimitGroup.GroupCode = lcTempVar)
+   THEN UNDO, THROW NEW Progress.Lang.AppError(SUBSTITUTE("ServiceLimitGroup having GroupCode '&1' already exists", lcTempVar), 1).
 
-   IF fGetFieldValue({&PRICELIST}) > "" AND
-      CAN-FIND(FIRST PriceList NO-LOCK WHERE PriceList.Brand = Syst.Var:gcBrand AND PriceList.PriceList = fGetFieldValue({&PRICELIST}))
-   THEN UNDO, THROW NEW Progress.Lang.AppError(SUBSTITUTE("PriceList '&1' already exists", fGetFieldValue({&PRICELIST})), 1). 
+   lcTempVar = fGetFieldValue({&MFBILLCODE}).
+   IF lcTempVar > "" AND CAN-FIND(FIRST FeeModel NO-LOCK WHERE FeeModel.Brand = Syst.Var:gcBrand AND FeeModel.FeeModel = lcTempVar)    
+   THEN UNDO, THROW NEW Progress.Lang.AppError(SUBSTITUTE("Feemodel '&1' already exists", lcTempVar), 1).
+
+   lcTempVar = fGetFieldValue({&PRICELIST}).
+   IF lcTempVar > "" AND
+      NOT CAN-FIND(FIRST PriceList NO-LOCK WHERE PriceList.Brand = Syst.Var:gcBrand AND PriceList.PriceList = lcTempVar)
+   THEN UNDO, THROW NEW Progress.Lang.AppError(SUBSTITUTE("PriceList '&1' doesn't exists", lcTempVar), 1). 
 
    CATCH err AS Progress.Lang.Error:
-      UNDO, THROW NEW Progress.Lang.AppError('Incorrect input file data' + err:GetMessage(1), 1). 
+      UNDO, THROW NEW Progress.Lang.AppError('Incorrect input file data ' + err:GetMessage(1), 1). 
    END CATCH.
 
    FINALLY:
       INPUT STREAM strin CLOSE.
-   END FINALLY.   
-
+   END FINALLY.
 
 END PROCEDURE.
 
