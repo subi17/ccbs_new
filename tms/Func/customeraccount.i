@@ -25,22 +25,38 @@ FUNCTION fCreateCustomerAccount RETURNS LOGICAL
       RETURN FALSE.
    END.
 
-   CREATE CustomerAccount.
-   ASSIGN
-      CustomerAccount.AccountID = NEXT-VALUE(AccountID)
-      CustomerAccount.CustNum = iiCustNum 
-      CustomerAccount.DefaultAcc = TRUE
-      CustomerAccount.BillCycle = 1
-      CustomerAccount.InvInterval = 1
-      CustomerAccount.FromDate = TODAY 
-      CustomerAccount.ToDate = 12/31/2049
-      CustomerAccount.DelType = Customer.DelType
-      CustomerAccount.InvoiceGroup = Customer.InvGroup.
+   FIND FIRST CustomerAccount EXCLUSIVE-LOCK WHERE CustomerAccount.CustNum EQ iiCustNum NO-ERROR.
+   /* In first phase TMS support only for one CustomerAccount per customer */
+   IF NOT AVAIL CustomerAccount THEN DO:
+      CREATE CustomerAccount.
+      ASSIGN
+         CustomerAccount.AccountID = NEXT-VALUE(AccountID)
+         CustomerAccount.CustNum = iiCustNum 
+         CustomerAccount.DefaultAcc = TRUE
+         CustomerAccount.BillCycle = 1
+         CustomerAccount.InvInterval = 1
+         CustomerAccount.FromDate = TODAY 
+         CustomerAccount.ToDate = 12/31/2049
+         CustomerAccount.DelType = Customer.DelType
+         CustomerAccount.InvoiceGroup = Customer.InvGroup.
 /*
-      CustomerAccount.AccountName = 
-      CustomerAccount.ShippingAddressID =       
-      CustomerAccount.DueDateOffset = 
+         CustomerAccount.AccountName = 
+         CustomerAccount.ShippingAddressID =       
+         CustomerAccount.DueDateOffset = 
 */
+   END.
+   ELSE DO:
+      CREATE ErrorLog.
+      ASSIGN ErrorLog.Brand     = Syst.Var:gcBrand
+             ErrorLog.ActionID  = "CreateCustomerAccount"
+             ErrorLog.TableName = "Customer"
+             ErrorLog.KeyValue  = STRING(iiCustNum) 
+             ErrorLog.ErrorMsg  = "Customer already has a CustomerAccount"
+             ErrorLog.UserCode  = Syst.Var:katun
+             ErrorLog.ActionTS  = Func.Common:mMakeTS().
+      RETURN FALSE.      
+   END.
+
    RETURN TRUE.
 END.
 /* CDS-6 CDS-12 */
@@ -138,13 +154,17 @@ FUNCTION fUpdateAccountID RETURNS LOGICAL
    END.
    
    FOR EACH FixedFee EXCLUSIVE-LOCK WHERE FixedFee.Brand EQ Syst.Var:gcBrand AND 
-                                          FixedFee.Custnum EQ iiCustNum.
-      IF AVAIL FixedFee THEN
-         ASSIGN FixedFee.AccountID = liAccountID.
+                                          FixedFee.Custnum EQ iiCustNum.                                          
+      IF AVAIL FixedFee THEN DO:
+         FIND FIRST FFItem OF FixedFee NO-LOCK WHERE FFItem.Billed = FALSE NO-ERROR.
+         IF AVAIL FFItem THEN      
+            ASSIGN FixedFee.AccountID = liAccountID.
+      END.
    END.   
 
    FOR EACH SingleFee EXCLUSIVE-LOCK WHERE SingleFee.Brand EQ Syst.Var:gcBrand AND 
-                                           SingleFee.Custnum EQ iiCustNum.
+                                           SingleFee.Custnum EQ iiCustNum AND 
+                                           SingleFee.Billed = FALSE.
       IF AVAIL SingleFee THEN
          ASSIGN SingleFee.AccountID = liAccountID.
    END.   
@@ -158,7 +178,8 @@ FUNCTION fUpdateAccountID RETURNS LOGICAL
 
    
    FOR EACH Invoice EXCLUSIVE-LOCK WHERE Invoice.Brand EQ Syst.Var:gcBrand AND 
-                                           Invoice.Custnum EQ iiCustNum.
+                                         Invoice.Custnum EQ iiCustNum AND
+                                         MONTH(Invoice.InvDate) >= MONTH(TODAY).                              
    IF AVAIL Invoice THEN
       ASSIGN Invoice.AccountID = liAccountID.
    END.
