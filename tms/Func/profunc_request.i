@@ -78,8 +78,9 @@ FUNCTION fSendEmailByRequest RETURNS CHAR
    IF INDEX(lcOutput, "#PRODUCT") > 0 THEN
        lcOutput = REPLACE(lcOutput, "#PRODUCT", (IF AVAIL bCliType THEN bCliType.CliName ELSE "")).
 
+
    IF INDEX(lcOutput, "#SFID") > 0 THEN
-       lcOutput = REPLACE(lcOutput, "#SFID", "").
+       lcOutput = REPLACE(lcOutput, "#SFID", (IF AVAIL bMobSub THEN bMobSub.Salesman  ELSE bMsRequest.Salesman)).
 
    IF INDEX(lcOutput, "#SECRET") > 0 THEN
        lcOutput = REPLACE(lcOutput, "#SECRET", bCustomer.RobinsonsLimit).    
