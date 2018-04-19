@@ -592,7 +592,7 @@ IF lcAddLineAllowed EQ "" THEN lcAddLineAllowed = "NO_SUBSCRIPTIONS".
 YCO-272: /* When asking about a new Extra Line... */
 DO: 
    liExtraLineStatus = -1. /* Initializing variable */      
-   IF AVAILABLE Customer AND LOOKUP(pcCliType, lcExtraLineCliTypes) > 0 AND lcReason = "" THEN DO: 
+   IF AVAILABLE Customer AND LOOKUP(pcCliType, lcExtraLineCliTypes) > 0 THEN DO: 
       
       /* Check if current extra line CliType is allowed for this customer */
       llAllowedELCliTypeCurrent = fELCliTypeAllowedForCustomer (INPUT Customer.CustNum,
@@ -617,25 +617,25 @@ DO:
       END.               
       IF (NOT llAllowedELCliTypeCurrent) AND (NOT llAllowedELCliTypeOther) THEN DO:
          liExtraLineStatus = 1. /* No subscriptions compatible with Extra Lines */
-         llOrderAllowed = FALSE. 
+         fSetError ("Extra Line not allowed").
          LEAVE YCO-272.         
       END.               
       IF lcExtraLineAllowed = "" THEN DO:
          liExtraLineStatus = 2. /* No more Extra Lines allowed */
-         llOrderAllowed = FALSE.
+         fSetError ("Extra Line not allowed").         
          LEAVE YCO-272.         
       END.                 
       IF lcExtraLineAllowed <> "" AND (NOT llAllowedELCliTypeCurrent) THEN DO:
          liExtraLineStatus = 3. /* Extra Line allowed, but no this one that is not compatible */
-         llOrderAllowed = FALSE.
+         fSetError ("Extra Line not allowed").        
          LEAVE YCO-272.         
       END.                                                
       IF lcExtraLineAllowed <> "" AND LOOKUP(pcCliType, lcExtraLineAllowed) = 0 THEN DO:
          IF LOOKUP(pcCliType, lcExtraLineCliTypes) = 1 THEN 
            liExtraLineStatus = 5. /* Not allowed itself, but you can try other one of the allowed */
          ELSE
-           liExtraLineStatus = 4. /* Not allowed itself, but you can try other one of the allowed */  
-         llOrderAllowed = FALSE.
+           liExtraLineStatus = 4. /* Not allowed itself, but you can try other one of the allowed */
+         fSetError ("Extra Line not allowed").
          LEAVE YCO-272.             
       END.                                                                                       
    END. /* IF AVAILABLE Customer AND LOOKUP(pcCliType, lcExtraLineCliTypes) > 0 */
