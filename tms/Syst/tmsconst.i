@@ -860,6 +860,8 @@
 &GLOBAL-DEFINE DMS_INIT_STATUS_SENT "SENT"
 &GLOBAL-DEFINE DMS_INIT_STATUS_COMMENT "SENT"
 
+&GLOBAL-DEFINE DMS_CASE_14_FILTER "fusion_telesales,fusion_cc,cc,telesales,renewal_telesales,cc_pro,telesales_pro,fusion_telesales_pro,renewal_ctc,fusion_cc_pro,emission_pro,retention,emission,retention_stc"
+
 /*Barring */
 /*Barring status*/
 &GLOBAL-DEFINE BARR_STATUS_ACTIVE "ACTIVE"

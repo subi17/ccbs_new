@@ -142,14 +142,14 @@ FUNCTION fMakeTempTable RETURNS CHAR
                llgAddEntry = FALSE
                lcCase = "".
             /* Case 14 TeleSales */
-            IF llTeleSales AND Order.OrderChannel MATCHES "*telesales*" THEN DO:
-               CREATE ttOrderList.
-               ASSIGN 
-                  ttOrderList.OrderID     = OrderTimestamp.OrderId
-                  ttOrderList.CaseID      = {&DMS_CASE_TYPE_ID_TELESALES}
-                  ttOrderList.TeleSales   = TRUE
-                  .
-               NEXT. 
+            IF llTeleSales AND LOOKUP(Order.OrderChannel, {&DMS_CASE_14_FILTER}) > 0 THEN DO:
+               IF fChkDMSExists({&DMS_HOST_TABLE_ORDER},OrderTimestamp.OrderId) THEN
+                  CREATE ttOrderList.
+                  ASSIGN
+                     ttOrderList.OrderID     = OrderTimestamp.OrderId
+                     ttOrderList.CaseID      = {&DMS_CASE_TYPE_ID_TELESALES}
+                     ttOrderList.TeleSales   = TRUE
+                     .
             END.
             /*Case 5: Direct channels*/
             /*This can NOT be parallell with other cases.*/
