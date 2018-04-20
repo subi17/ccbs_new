@@ -143,7 +143,7 @@ FUNCTION fMakeTempTable RETURNS CHAR
                lcCase = "".
             /* Case 14 TeleSales */
             IF llTeleSales AND LOOKUP(Order.OrderChannel, {&DMS_CASE_14_FILTER}) > 0 THEN DO:
-               IF fChkDMSExists({&DMS_HOST_TABLE_ORDER},OrderTimestamp.OrderId) THEN
+               IF fChkDMSExists({&DMS_HOST_TABLE_ORDER},OrderTimestamp.OrderId) = FALSE THEN
                   CREATE ttOrderList.
                   ASSIGN
                      ttOrderList.OrderID     = OrderTimestamp.OrderId
