@@ -277,7 +277,7 @@ CASE FusionMessage.FixedStatus:
    
    /*NEBA*/
    WHEN "PENDIENTE_INSTALATION" THEN DO:
-      /*NEBA: Create customer*/
+      /*NEBA: no actions in this phase*/
       
    END.
 
@@ -322,8 +322,9 @@ CASE FusionMessage.FixedStatus:
    /* installation cancelled */ 
    WHEN "CANCELADA" THEN DO:
       /*NEBA TODO*/
-      /*If this is cancelled in NEBA PERMANENCY period,the penalty must be handled.*/
-      
+      /*If this is cancelled in NEBA PERMANENCY period,
+        the penalty must be handled.*/
+    /*cashfee???vai osa siitä*/      
 
       IF llOldStructure THEN
          ASSIGN OrderFusion.CancellationReason = lcAdditionalInfo.
