@@ -10,21 +10,22 @@ USING Gwy.AccountModel FROM PROPATH.
 
 CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface: 
     
-    DEF VAR lJson           AS LONGCHAR          NO-UNDO.
-    DEF VAR lcModelid       AS CHAR              NO-UNDO.
-    DEF VAR lcSource        AS CHAR              NO-UNDO.
-    DEF VAR gcBrand         AS CHAR              NO-UNDO.
-    DEF VAR lcCorrelationID AS CHAR              NO-UNDO.
-    DEF VAR lcError         AS CHAR              NO-UNDO. 
-    DEF VAR loRequestMaker  AS Gwy.RequestMaker  NO-UNDO.
-    DEF VAR loEventLogMaker AS Gwy.EventLogMaker NO-UNDO.
-    DEF VAR lcCodeName      AS CHAR              NO-UNDO.
-    DEF VAR liCodeValue     AS INT               NO-UNDO.
+    DEF VAR lJson            AS LONGCHAR          NO-UNDO.
+    DEF VAR lcModelId        AS CHAR              NO-UNDO.
+    DEF VAR lcSource         AS CHAR              NO-UNDO.
+    DEF VAR lcCorrelationID  AS CHAR              NO-UNDO.
+    DEF VAR lcError          AS CHAR              NO-UNDO. 
+    DEF VAR loRequestMaker   AS Gwy.RequestMaker  NO-UNDO.
+    DEF VAR loEventLogMaker  AS Gwy.EventLogMaker NO-UNDO.
+    DEF VAR lcCodeName       AS CHAR              NO-UNDO.
+    DEF VAR liCodeValue      AS INT               NO-UNDO.
     
-    DEF VAR lcAccType       AS CHAR              NO-UNDO.
-    DEF VAR lcAcctypeCode   AS CHAR              NO-UNDO.
-    DEF VAR liCount         AS CHAR              NO-UNDO.
-    DEF VAR lcLkupRes       AS INT               NO-UNDO.
+    DEF VAR liAccount        AS INT               NO-UNDO.
+    DEF VAR lcAccType        AS CHAR              NO-UNDO.
+    DEF VAR lcAccTypeCode    AS CHAR              NO-UNDO.
+    DEF VAR liCount          AS CHAR              NO-UNDO.
+    DEF VAR lcAccTypeCodeRes AS INT               NO-UNDO.
+    DEF VAR lcAccTypeRes     AS CHAR              NO-UNDO.
     
       
     DEF TEMP-TABLE ttAccount NO-UNDO SERIALIZE-NAME "Account"
@@ -37,15 +38,13 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
     CONSTRUCTOR PUBLIC AccountModel ( iJson AS LONGCHAR,
         iModelid AS CHAR, 
         iSource  AS CHAR,
-        iBrand   AS CHAR,
         iCorrelationID AS CHAR,
         iReplyTo AS CHAR):
                                    
         ASSIGN
             lJson           = iJson
-            lcModelid       = iModelid
+            lcModelId       = iModelid
             lcSource        = iSource
-            gcBrand         = iBrand
             lcCorrelationID = iCorrelationID
             loRequestMaker  = NEW Gwy.RequestMaker(iCorrelationID, iReplyTo, iSource)
             loEventLogMaker = NEW Gwy.EventLogMaker(iSource).
@@ -60,22 +59,27 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
        
         FIND ttAccount NO-ERROR.
         IF NOT AVAILABLE ttAccount THEN
-            RETURN loRequestMaker:logError("Empty Account Data").
+            RETURN loRequestMaker:logError("Empty Account Set").
    
         IF ttAccount.external_id = "" THEN
             RETURN loRequestMaker:logError("Invalid Account Id").
+            
+        liAccount = INT(ttAccount.external_id) NO-ERROR.
+        IF liAccount = 0 THEN 
+            RETURN loRequestMaker:logError("Invalid account ID").
       
         IF CAN-FIND(FIRST Account WHERE
-            Account.AccNum = ttAccount.external_id) THEN
+            Account.AccNum = liAccount) THEN
             RETURN loRequestMaker:logError("Account was already exists").
             
-        create_TmsCodes(ttaccount.account_type).
+        IF ttAccount.account_type > "" THEN 
+            tmsCodes(ttaccount.account_type).
              
         CREATE Account.
         ASSIGN 
-            Account.AccNum  = ttAccount.external_id
+            Account.AccNum  = liAccount
             Account.AccName = ttAccount.name
-            Account.AccType = lcEntryRes.       
+            Account.AccType = int(lcAccTypeRes).       
           
         loEventLogMaker:make_eventlog("create",BUFFER Account:HANDLE).
     
@@ -99,25 +103,30 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
 
         DEF VAR liWait AS INT NO-UNDO.
     
-        IF lcModelid = ? THEN 
-            RETURN loRequestMaker:logError('Account Number is not given').
+        IF lcModelId = ? THEN 
+            RETURN loRequestMaker:logError('Account id is not given').
 
         lJson = '~{"AccountDataset":~{"Account":' + lJson + '~}~}'.
         IF loRequestMaker:parser_error(DATASET AccountDataset BIND, lJson) THEN
             RETURN FALSE.
    
-        IF lModelID = "" THEN 
-            RETURN loRequestMaker:logError("Invalid Account Number").
+        IF lcModelId = "" THEN 
+            RETURN loRequestMaker:logError("Invalid Account id").
+            
+        liAccount = INT(lcModelId) NO-ERROR.
+        IF liAccount = 0 THEN 
+            RETURN loRequestMaker:logError("Invalid account ID").
       
         FIND ttAccount NO-ERROR.
         IF NOT AVAILABLE ttAccount THEN
             RETURN loRequestMaker:logError("Empty Account set").
        
-        create_TmsCodes(ttaccount.account_type).
+        IF ttAccount.account_type > "" THEN 
+            tmsCodes(ttaccount.account_type).
                 
         DO WHILE TRUE:
             FIND FIRST Account WHERE
-                Account.AccNum = lcModelid EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
+                Account.AccNum = lcModelId EXCLUSIVE-LOCK NO-ERROR NO-WAIT.
             IF LOCKED(Account) THEN 
             DO:
                 liWait = liWait + 1.
@@ -133,10 +142,12 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
             RETURN loRequestMaker:logError("Unknown Account").
       
         loEventLogMaker:make_eventlog("oldbuffer",BUFFER Account:HANDLE).
-    
+        
         ASSIGN 
-            Account.AccName = ttAccount.name
-            Account.AccType = lcEntryRes.       
+            Account.AccName = ttAccount.name 
+            WHEN ttAccount.name > ""
+            Account.AccType = INT(lcAccTypeRes) 
+            WHEN ttAccount.account_type > "".       
         
         loEventLogMaker:make_eventlog("modify",BUFFER Account:HANDLE).
    
@@ -145,22 +156,22 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
         /* error cases get response via logError, make response for 
            the succesful one */
         loRequestMaker:create_response("Account",
-            lModelID,
+            lcModelId,
             "OK",
             ""). 
 
         loRequestMaker:create_log(
             SUBSTITUTE("Account Update: Id=&1 Ext.Request=&2", 
-            lModelID,
+            lcModelId,
             lcCorrelationID), 
             "DEBUG").
       
     END METHOD.
     
-    METHOD PUBLIC CHAR create_TmsCodes (iacc_type AS CHAR):
+    METHOD PUBLIC CHAR tmsCodes (iacc_type AS CHAR):
         
         ASSIGN 
-            lcAcctype     = "receivable,payment,tax,revenue,overpayment,deposit,
+            lcAcctypeCode    = "receivable,payment,tax,revenue,overpayment,deposit,
                              advance_payment,rounding,discount,interest,
                              credit_loss,own_usage,payable,sales_expense,
                              reminder_fee,collection_fee,clearing,
@@ -171,23 +182,25 @@ CLASS Gwy.AccountModel IMPLEMENTS Gwy.ModelInterface:
                              discount_extension_over_q25,
                              google_purchase,q25_discount_1,q25_discount_2,
                              q25_charge_any_discount"
-            lcAccTypeCode = "1,4,5,12,6,7,19,8,9,14,,24,,13,10,11,15,16,17,18,2,
+            lcAccType        = "1,4,5,12,6,7,19,8,9,14,,24,,13,10,11,15,16,17,18,2,
                              20,21,22,23,25,26,2,43,55,60,70,79"                    
-            lcLkupRes     = LOOKUP(iacc_type,lcAcctype,",")
-            lcEntryRes    = ENTRY(lcLkupRes,lcAccTypeCode).  
+            lcAccTypeCodeRes = TRIM(LOOKUP(iacc_type,lcAcctype,","))
+            lcAccTypeRes     = TRIM(ENTRY(lcAccTypeCodeRes,lcAccType)).  
             
         IF NOT Func.Common:mTMSCodechk("Account",
             "AccType",
-            lcEntryRes) THEN 
+            lcAccTypeRes) THEN 
+        DO: 
             CREATE TMSCodes.
             ASSIGN 
                 TMSCodes.TableName = "Account"
                 TMSCodes.FieldName = "AccType"
                 TMSCodes.codeGroup = "Accounts"
-                TMSCodes.codeValue = lcEntryRes
+                TMSCodes.codeValue = lcAccTypeRes
                 TMSCodes.CodeName  = ttAccount.account_type.
+        END.    
                         
-        RETURN lcEntryRes.
+        RETURN lcAccTypeRes.
                     
     END METHOD. 
 
