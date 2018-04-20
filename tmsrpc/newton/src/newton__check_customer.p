@@ -592,10 +592,11 @@ IF lcAddLineAllowed EQ "" THEN lcAddLineAllowed = "NO_SUBSCRIPTIONS".
 YCO-272: /* When asking about a new Extra Line... */
 DO: 
    liExtraLineStatus = -1. /* Initializing variable */      
-   IF AVAILABLE Customer AND LOOKUP(pcCliType, lcExtraLineCliTypes) > 0 THEN DO: 
+   IF LOOKUP(pcCliType, lcExtraLineCliTypes) > 0 THEN DO: 
       
       /* Check if current extra line CliType is allowed for this customer */
-      llAllowedELCliTypeCurrent = fELCliTypeAllowedForCustomer (INPUT Customer.CustNum,
+      llAllowedELCliTypeCurrent = fELCliTypeAllowedForCustomer (INPUT pcIdType,
+                                                                INPUT pcPersonId,
                                                                 INPUT pcCliType).
    
       /* Check if other extra line CliType is allowed for this customer */
@@ -604,7 +605,8 @@ DO:
          lcCliTypeAux = TRIM(ENTRY(lii,lcExtraLineCliTypes)).
          IF lcCliTypeAux = pcCliType THEN 
            NEXT.
-         llAllowedELCliTypeOther = fELCliTypeAllowedForCustomer (INPUT Customer.CustNum,
+         llAllowedELCliTypeOther = fELCliTypeAllowedForCustomer (INPUT pcIdType,
+                                                                 INPUT pcPersonId,
                                                                  INPUT lcCliTypeAux).
          IF llAllowedELCliTypeOther THEN
            LEAVE.                                                                           
