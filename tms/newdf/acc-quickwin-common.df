@@ -97,7 +97,7 @@ ADD FIELD "CharValue" OF "OrderProductParam" AS character
   COLUMN-LABEL "CharValue"
   ORDER 40
 
-ADD FIELD "DateValue" OF "OrderProductParam" AS character
+ADD FIELD "DateValue" OF "OrderProductParam" AS date
   FORMAT "99-99-9999"
   INITIAL ?
   LABEL "DecValue"
