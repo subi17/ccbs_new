@@ -962,6 +962,30 @@ PROCEDURE pTerminate:
          END.
       END.
    END.
+   /* YDR-2052, Change the delivery type to paper only if the customer 
+      don't have any other active subscription with delivery type EMAIL or SMS*/
+   IF NOT MobSub.PayType AND 
+      CAN-FIND(FIRST Customer NO-LOCK WHERE
+                     Customer.CustNum = MobSub.CustNum        AND
+                    (Customer.DelType = {&INV_DEL_TYPE_EMAIL} OR
+                     Customer.DelType = {&INV_DEL_TYPE_ESI} OR
+                     Customer.DelTYpe = {&INV_DEL_TYPE_SMS})) THEN
+   DO:
+      llCallProc = TRUE.
+      
+      FOR EACH bMobSub NO-LOCK WHERE
+               bMobsub.Brand    = Syst.Var:gcBrand        AND
+               bMobSub.CustNum  = MobSub.CustNum AND
+               bMobSub.MsSeq   <> liMsSeq        AND 
+               bMobSub.PayType  = NO AND
+               bMobSub.MsStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE}:
+         llCallProc = NO.
+         LEAVE.
+      END.
+      
+      IF llCallProc THEN   
+         RUN pChangeDelType(MobSub.CustNum).
+   END. 
 
    /* ADDLINE-20 Additional Line */
    IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
@@ -1016,25 +1040,6 @@ PROCEDURE pTerminate:
          CREATE TermMobsub.
          BUFFER-COPY Mobsub TO TermMobsub.
       END.
-
-      /* YCO-268 - Memo */
-      IF llOutPort THEN 
-      DO:
-          Func.Common:mWriteMemo("MobSub",
-                                 STRING(MobSub.MsSeq),
-                                 MobSub.Custnum,
-                                 "Baja de la línea - Porta saliente",
-                                 "Solicitado por el cliente"). 
-      END.
-      ELSE 
-      DO:
-          Func.Common:mWriteMemo("MobSub",
-                                 STRING(MobSub.MsSeq),
-                                 MobSub.Custnum,
-                                 "Baja de la línea - Baja",
-                                 "Solicitado por el cliente").
-      END. 
-      /* YCO-268 - end */
       
       DELETE MobSub.
 
@@ -1173,43 +1178,9 @@ PROCEDURE pTerminate:
                   ASSIGN lELMobsub.MultiSimId   = 0
                          lELMobsub.MultiSimType = 0.
 
-
-                  lClose = fCloseExtraLineDiscount(lELMobsub.MsSeq,
-                                                   lELMobsub.CLIType + "DISC",
-                                                   TODAY).
-                  /* YCO-250 Extra line get SMS when the convergent package is broken */
-                  IF lClose THEN
-                  DO:
-                     FIND bCLIType NO-LOCK WHERE
-                          bCLIType.Brand   = Syst.Var:gcBrand AND
-                          bCLIType.CLIType = TermMobSub.CLIType
-                          NO-ERROR.
-                     IF AVAILABLE bCLIType AND
-                        bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
-                     DO:
-                         lcSMSText = fGetSMSTxt("ConPckEnd_ExtraLin",
-                                                TODAY,
-                                                bCustomer.Language,
-                                                OUTPUT ldeSMSStamp).
-
-                         IF lcSMSText > "" THEN
-                            fMakeSchedSMS2(TermMobSub.CustNum,
-                                           lELMobSub.CLI,
-                                           11, /* service change */
-                                           lcSMSText,
-                                           ldeSMSStamp,
-                                           "22622",
-                                           ""). 
-                         /* YCO-268 - Memo */
-                         Func.Common:mWriteMemo("MobSub",
-                                                STRING(lElMobSub.MsSeq),
-                                                TermMobSub.Custnum,
-                                                'Descuento "Línea DÚO" cancelado',
-                                                'Cambio automático por rotura de paquete "FIJO+MOVIL"').
-     
-                     END.
-                  END.
-                  /* YCO-250 end */   
+                  fCloseExtraLineDiscount(lELMobsub.MsSeq,
+                                          lELMobsub.CLIType + "DISC",
+                                          TODAY).
                END.
             END.
 
@@ -1237,49 +1208,10 @@ PROCEDURE pTerminate:
                bMobSub.MsSeq  <> TermMobSub.MsSeq   AND
                LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
 
-         lClose = fCloseAddLineDiscount(bMobSub.CustNum,
-                                        bMobSub.MsSeq,
-                                        bMobSub.CLIType,
-                                        Func.Common:mLastDayOfMonth(TODAY)).
-                                        
-         /* YCO-250 Additional line get SMS when the convergent package is broken */
-         IF lClose THEN
-         DO:
-            FIND bCLIType NO-LOCK WHERE
-                 bCLIType.Brand   = Syst.Var:gcBrand AND
-                 bCLIType.CLIType = TermMobSub.CLIType
-                 NO-ERROR.
-            IF AVAILABLE bCLIType AND
-               bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
-            DO:
-               FIND bCustomerAdd NO-LOCK WHERE
-                    bCustomerAdd.Custnum = TermMobSub.Custnum NO-ERROR.
-
-               lcSMSText = fGetSMSTxt("ConPckEnd_AddLin",
-                                      TODAY,
-                                     (IF AVAIL bCustomerAdd
-                                      THEN bCustomerAdd.Language ELSE 1),
-                                      OUTPUT ldeSMSStamp).
-
-               IF lcSMSText > "" THEN
-                  fMakeSchedSMS2(bMobSub.CustNum,
-                                 bMobSub.CLI,
-                                 11, /* service change */
-                                 lcSMSText,
-                                 ldeSMSStamp,
-                                 "22622",
-                                 "").
-
-               /* YCO-268 - Memo */
-               Func.Common:mWriteMemo("MobSub",
-                                      STRING(bMobSub.MsSeq),
-                                      bMobSub.Custnum,
-                                      'Descuento "Línea Adicional" cancelado',
-                                      'Cambio automático por modificación en la línea principal').
-
-            END.
-         END.
-         /* YCO-250 end */                                        
+         fCloseAddLineDiscount(bMobSub.CustNum,
+                               bMobSub.MsSeq,
+                               bMobSub.CLIType,
+                               Func.Common:mLastDayOfMonth(TODAY)).
       END.
    END.
 
@@ -1394,49 +1326,11 @@ PROCEDURE pTerminate:
             YEAR(bMobSub.ActivationDate) < YEAR(TODAY) THEN
             ASSIGN ldtCloseDate = TODAY.
     
-         lClose = fCloseAddLineDiscount(bMobSub.CustNum,
-                                        bMobSub.MsSeq,
-                                        bMobSub.CLIType,
-                                        ldtCloseDate).
+         fCloseAddLineDiscount(bMobSub.CustNum,
+                               bMobSub.MsSeq,
+                               bMobSub.CLIType,
+                               ldtCloseDate).
                                
-         /* YCO-250 Additional line get SMS when the convergent package is broken */
-         IF lClose THEN
-         DO:
-            FIND bCLIType NO-LOCK WHERE
-                 bCLIType.Brand   = Syst.Var:gcBrand AND
-                 bCLIType.CLIType = TermMobSub.CLIType
-                 NO-ERROR.
-            IF AVAILABLE bCLIType AND
-               bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
-            DO:
-               FIND bCustomerAdd NO-LOCK WHERE
-                    bCustomerAdd.Custnum = TermMobSub.Custnum NO-ERROR.
-
-               lcSMSText = fGetSMSTxt("ConPckEnd_AddLin",
-                                      TODAY,
-                                     (IF AVAIL bCustomerAdd
-                                      THEN bCustomerAdd.Language ELSE 1),
-                                      OUTPUT ldeSMSStamp).
-
-               IF lcSMSText > "" THEN
-                  fMakeSchedSMS2(bMobSub.CustNum,
-                                 bMobSub.CLI,
-                                 11, /* service change */
-                                 lcSMSText,
-                                 ldeSMSStamp,
-                                 "22622",
-                                 "").
-
-               /* YCO-268 - Memo */
-               Func.Common:mWriteMemo("MobSub",
-                                      STRING(bMobSub.MsSeq),
-                                      bMobSub.Custnum,
-                                      'Descuento "Línea Adicional" cancelado',
-                                      'Cambio automático por modificación en la línea principal').
-      
-            END.
-         END.
-         /* YCO-250 end */   
       END.      
    END. 
    
@@ -1726,3 +1620,81 @@ PROCEDURE pMultiSIMTermination:
    
 END PROCEDURE.
 
+PROCEDURE pChangeDelType:
+   DEFINE INPUT  PARAMETER liCustNum AS INTEGER NO-UNDO.   
+
+   DEF VAR lhCustomer   AS HANDLE NO-UNDO. 
+   DEF VAR ldeStartTime AS DEC    NO-UNDO. 
+   DEF VAR llgStarted   AS LOG    NO-UNDO.
+   DEF VAR llgInvDate   AS LOG    NO-UNDO.
+   DEF VAR llgInvType   AS LOG    NO-UNDO. 
+
+   lhCustomer = BUFFER Customer:HANDLE.
+
+   RUN StarEventInitialize(lhCustomer).
+
+   FIND FIRST Customer EXCLUSIVE-LOCK WHERE 
+              Customer.CustNum = liCustNum NO-ERROR.
+
+   IF AVAILABLE Customer THEN      
+   DO:
+
+      IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustomer).       
+
+      /* If subscription termination is on 1st day of month then change the 
+         delivery type and delivery status for invoices generated AND but not delivered */
+      IF DAY(TODAY) = 1 THEN
+      DO:
+         ASSIGN ldeStartTime = Func.Common:mMake2DT(TODAY,0)
+                llgStarted   = FALSE
+                llgInvDate   = FALSE
+                llgInvType   = FALSE. 
+
+         FOR EACH FuncRunQSchedule NO-LOCK WHERE 
+                  FuncRunQSchedule.StartTS  >= ldeStartTime AND
+                  FuncRunQSchedule.RunMode   = "Production", 
+             EACH FuncRunExec NO-LOCK WHERE
+                  FuncRunExec.FRQScheduleID EQ FuncRunQSchedule.FRQScheduleID AND
+                  FuncRunExec.FRConfigID    EQ {&INVPRINTSPLIT_CONFIG}: 
+                    
+             FOR EACH FuncRunQSParam NO-LOCK WHERE 
+                      FuncRunQSParam.FRQScheduleID EQ FuncRunQSchedule.FRQScheduleID AND 
+                      FuncRunQSParam.FRConfigID    EQ FuncRunExec.FRConfigID:      
+             
+                IF FuncRunQSParam.ParamSeq  EQ 1     AND 
+                   FuncRunQSParam.DateParam EQ TODAY THEN 
+                   llgInvDate = TRUE.
+                ELSE IF FuncRunQSParam.ParamSeq EQ 2                  AND 
+                        FuncRunQSParam.IntParam EQ {&INV_TYPE_NORMAL} THEN 
+                   llgInvType = TRUE.
+                  
+             END.   
+             
+             IF FuncRunExec.StartTS > 0 THEN 
+                llgStarted = TRUE.
+         END.
+
+         /* Update invoice deliverytype to paper only when funcrun
+            execution process "InvPrintSplit" is not started for current month */
+         IF NOT llgStarted AND 
+                llgInvDate AND 
+                llgInvType THEN DO: 
+            FOR EACH Invoice EXCLUSIVE-LOCK WHERE
+                     Invoice.Brand      = Syst.Var:gcBrand            AND
+                     Invoice.CustNum    = Customer.CustNum   AND
+                     Invoice.InvDate    = TODAY              AND
+                     Invoice.InvType    = {&INV_TYPE_NORMAL} AND 
+                     Invoice.PrintState = 0:
+               Invoice.DelType  = {&INV_DEL_TYPE_PAPER}.
+            END.          
+         END.
+
+      END.
+
+      Customer.DelType = {&INV_DEL_TYPE_PAPER}.
+
+      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
+
+   END.
+
+END PROCEDURE.

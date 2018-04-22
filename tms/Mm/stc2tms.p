@@ -994,20 +994,12 @@ PROCEDURE pUpdateSubscription:
                                           lbDiscountPlan.DPRuleID,
                                           TODAY).
 
-                  /* YCO-268 - Memo: new message  
                   Func.Common:mWriteMemo("MobSub",
                                          STRING(lELMobSub.MsSeq),
                                          0,
                                          "ExtraLine Discount is Closed",
-                                         "STC done from Extra line associated Main line to different mainline or independent clitype"). */
+                                         "STC done from Extra line associated Main line to different mainline or independent clitype"). 
                                          
-                  Func.Common:mWriteMemo("MobSub",
-                                         STRING(lELMobSub.MsSeq),
-                                         0,
-                                         'Descuento "Línea DÚO" cancelado',
-                                         'Cambio automático por rotura de paquete "FIJO+MOVIL"').                                         
-                  /* YCO-268 - end */
-
                   ASSIGN lELMobSub.MultiSimId   = 0
                          lELMobSub.MultiSimType = 0.
 
@@ -1137,21 +1129,12 @@ PROCEDURE pUpdateSubscription:
                fCloseExtraLineDiscount(lELMobSub.MsSeq,
                                        lbDiscountPlan.DPRuleID,
                                        TODAY).
-                                      
-               /* YCO-268 - Memo: new message  
+                 
                Func.Common:mWriteMemo("MobSub",
                                       STRING(lELMobSub.MsSeq),
                                       0,
                                       "ExtraLine Discount is Closed",
-                                      "STC done from Extra line associated Main line to independent clitype"). */   
-               
-               Func.Common:mWriteMemo("MobSub",
-                                      STRING(lELMobSub.MsSeq),
-                                      0,
-                                      'Descuento "Línea DÚO" cancelado',
-                                      'Cambio automático por rotura de paquete "FIJO+MOVIL"').                                         
-               /* YCO-268 - end */
-                                      
+                                      "STC done from Extra line associated Main line to independent clitype").    
                
                ASSIGN lELMobSub.MultiSimId   = 0
                       lELMobSub.MultiSimType = 0.                     
@@ -1182,13 +1165,6 @@ PROCEDURE pUpdateSubscription:
                                IF MONTH(bMobSub.ActivationDate) = MONTH(TODAY) THEN Func.Common:mLastDayOfMonth(TODAY)
                                ELSE ldtActDate - 1).
          
-         /* YCO-268 - Memos */                      
-         Func.Common:mWriteMemo("MobSub",
-                                STRING(bMobSub.MsSeq),
-                                0,
-                                'Descuento "Línea Adicional" cancelado',
-                                'Cambio automático por modificación en la línea principal').                                
-         /* YCO-268 - end */                               
       END.
    END.
    /* YPRO. If fixedline is terminated from convergent, also SVAs should be
@@ -1233,13 +1209,6 @@ PROCEDURE pUpdateSubscription:
                                bMobSub.CLIType,
                                ldtCloseDate).               
    
-         /* YCO-268 - Memos */                      
-         Func.Common:mWriteMemo("MobSub",
-                                STRING(bMobSub.MsSeq),
-                                0,
-                                'Descuento "Línea Adicional" cancelado',
-                                'Cambio automático por modificación en la línea principal').                                
-         /* YCO-268 - end */                                  
       END.
    END.
 
