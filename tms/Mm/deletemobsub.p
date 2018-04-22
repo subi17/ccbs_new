@@ -33,31 +33,33 @@
 {Func/profunc_request.i}
 {Func/digital_signature.i}
 
-DEFINE INPUT  PARAMETER iiMSrequest AS INT  NO-UNDO.
+DEFINE INPUT  PARAMETER iiMSrequest AS INT  NO-UNDO. 
 
 llCleanFLimitReqEventLog = FALSE.
 
-DEFINE VARIABLE llOutPort   AS LOGICAL   NO-UNDO.       
-DEFINE VARIABLE lcOutOper   AS CHARACTER NO-UNDO.
-DEFINE VARIABLE ldBilled    AS DECIMAL   NO-UNDO.
-DEFINE VARIABLE lcError     AS CHARACTER NO-UNDO. 
-DEFINE VARIABLE ldCurrTS    AS DECIMAL   NO-UNDO.
-DEFINE VARIABLE llCreateFee AS LOGICAL   NO-UNDO. 
-DEFINE VARIABLE ldaKillDate AS DATE      NO-UNDO.
-DEFINE VARIABLE liTime      AS INTEGER   NO-UNDO.
-DEFINE VARIABLE liQuarTime  AS INTEGER   NO-UNDO.
-DEFINE VARIABLE liMsisdnStat AS INTEGER NO-UNDO.
-DEFINE VARIABLE liSimStat   AS INTEGER NO-UNDO.
-DEFINE VARIABLE lcTermReason AS CHARACTER NO-UNDO.
-DEFINE VARIABLE liMLMsSeq           AS INT  NO-UNDO.
-DEFINE VARIABLE liELCount           AS INT  NO-UNDO.
-DEFINE VARIABLE lcExtraLineCLITypes AS CHAR NO-UNDO.
-DEFINE VARIABLE lcMandatoryELines   AS CHARACTER NO-UNDO.
-DEFINE VARIABLE liSTCELMSSeq        AS INTEGER NO-UNDO.
-DEFINE VARIABLE lcSTCELCLIType      AS CHARACTER NO-UNDO.
-DEFINE VARIABLE lisMandatoryELExists  AS LOGICAL NO-UNDO.
-DEFINE VARIABLE liSTCRequest AS INTEGER NO-UNDO.
+DEFINE VARIABLE llOutPort            AS LOG  NO-UNDO.       
+DEFINE VARIABLE lcOutOper            AS CHAR NO-UNDO.
+DEFINE VARIABLE ldBilled             AS DEC  NO-UNDO.
+DEFINE VARIABLE lcError              AS CHAR NO-UNDO. 
+DEFINE VARIABLE ldCurrTS             AS DEC  NO-UNDO.
+DEFINE VARIABLE llCreateFee          AS LOG  NO-UNDO. 
+DEFINE VARIABLE ldaKillDate          AS DATE NO-UNDO.
+DEFINE VARIABLE liTime               AS INT  NO-UNDO.
+DEFINE VARIABLE liQuarTime           AS INT  NO-UNDO.
+DEFINE VARIABLE liMsisdnStat         AS INT  NO-UNDO.
+DEFINE VARIABLE liSimStat            AS INT  NO-UNDO.
+DEFINE VARIABLE lcTermReason         AS CHAR NO-UNDO.
+DEFINE VARIABLE liMLMsSeq            AS INT  NO-UNDO.
+DEFINE VARIABLE liELCount            AS INT  NO-UNDO.
+DEFINE VARIABLE lcExtraLineCLITypes  AS CHAR NO-UNDO.
+DEFINE VARIABLE lcMandatoryELines    AS CHAR NO-UNDO.
+DEFINE VARIABLE liSTCELMSSeq         AS INT  NO-UNDO.
+DEFINE VARIABLE lcSTCELCLIType       AS CHAR NO-UNDO.
+DEFINE VARIABLE lisMandatoryELExists AS LOG  NO-UNDO.
+DEFINE VARIABLE liSTCRequest         AS INT  NO-UNDO.
 
+/* YCO-250 Variables created to control discount closing */
+DEFINE VARIABLE lClose AS LOGICAL NO-UNDO.
 
 DEF BUFFER bMNPSub FOR MNPSub.
 DEF BUFFER bMobsub FOR MobSub.
@@ -77,69 +79,14 @@ DEF BUFFER lELMobSub      FOR MobSub.
 DEF BUFFER lELMobSub2     FOR MobSub.
 DEF BUFFER lELOrderAction FOR OrderAction.
 
+/* YCO-250 */
+DEF BUFFER bCustomerAdd   FOR Customer.
+
 DEF TEMP-TABLE ttContract NO-UNDO
    FIELD DCEvent   AS CHAR
    FIELD PerContID AS INT
    FIELD CreateFee AS LOG
    FIELD ActTS     AS DEC.
-
-FUNCTION fUpdateDSSNewtorkForExtraLine RETURNS LOGICAL
-   (INPUT iiMsSeq        AS INT,
-    INPUT icCLIType      AS CHAR,
-    INPUT iiMultiSimId   AS INT,
-    INPUT iiMsRequest    AS INT,
-    INPUT ideActStamp    AS DEC,
-    INPUT lcBundleId     AS CHAR):
-
-   DEFINE BUFFER lbMLMobSub FOR MobSub.
-   DEFINE BUFFER lbELMobSub FOR MobSub.
-
-   IF NOT fCheckExtraLineMatrixSubscription(iiMsSeq,
-                                            icCLIType) THEN
-   RETURN FALSE.
-
-   IF fCLITypeIsExtraLine(icCLIType) THEN DO:
-
-      FIND FIRST lbMLMobSub NO-LOCK WHERE
-                 lbMLMobSub.MsSeq      = iiMultiSimId        AND
-                (lbMLMobSub.MsStatus   = {&MSSTATUS_ACTIVE}  OR
-                 lbMLMobSub.MsStatus   = {&MSSTATUS_BARRED}) NO-ERROR.
-      IF AVAIL lbMLMobSub THEN
-         RUN pUpdateDSSNetwork(INPUT lbMLMobsub.MsSeq,
-                               INPUT lbMLMobsub.CLI,
-                               INPUT lbMLMobsub.CustNum,
-                               INPUT "REMOVE",
-                               INPUT "",        /* Optional param list */
-                               INPUT iiMsRequest,
-                               INPUT ideActStamp,
-                               INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
-                               INPUT lcBundleId).
-
-   END.
-   ELSE IF fCLITypeIsMainLine(icCLIType) THEN DO:
-
-      FOR EACH lbELMobSub NO-LOCK WHERE
-               lbELMobSub.Brand        EQ Syst.Var:gcBrand      AND
-               lbELMobSub.MultiSimId   EQ iiMsSeq               AND
-               lbELMobSub.MultiSimType EQ {&MULTISIMTYPE_EXTRALINE}:
-
-         RUN pUpdateDSSNetwork(INPUT lbELMobsub.MsSeq,
-                               INPUT lbELMobsub.CLI,
-                               INPUT lbELMobsub.CustNum,
-                               INPUT "REMOVE",
-                               INPUT "",        /* Optional param list */
-                               INPUT iiMsRequest,
-                               INPUT ideActStamp,
-                               INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
-                               INPUT lcBundleId).
-
-      END.
-
-   END.
-
-   RETURN TRUE.
-
-END FUNCTION.
 
 ldCurrTS = Func.Common:mMakeTS().
 
@@ -209,6 +156,8 @@ PROCEDURE pTerminate:
 
    DEF VAR lcPostpaidDataBundles AS CHAR NO-UNDO.
    DEF VAR lcAllowedDSS2SubsType AS CHAR NO-UNDO.
+   DEF VAR lcAllowedDSS4SubsType AS CHAR NO-UNDO. 
+   DEF VAR lcDSSRelatedSubsType  AS CHAR NO-UNDO. 
 
    DEF VAR liPeriodPostpone    AS INT  NO-UNDO.
    DEF VAR ldaKillDatePostpone AS DATE NO-UNDO.
@@ -221,8 +170,6 @@ PROCEDURE pTerminate:
    DEF VAR lcAddlineClitypes AS CHARACTER   NO-UNDO.
    DEF VAR llDelete          AS LOGICAL     NO-UNDO.
    
-   
-
    ASSIGN liArrivalStatus = MsRequest.ReqStatus
           liMsSeq = MsRequest.MsSeq.
    
@@ -231,7 +178,7 @@ PROCEDURE pTerminate:
     /* request is under work */
    IF NOT fReqStatus(1,"") THEN DO:
       RETURN "ERROR".
-   END.
+   END. 
 
    Func.Common:mSplitTS(MsRequest.ActStamp, OUTPUT ldaKillDate, OUTPUT liTime).
 
@@ -256,7 +203,7 @@ PROCEDURE pTerminate:
    IF NOT Avail Mobsub THEN DO:
       fReqError("Mobile subscription already deactivated").
       RETURN.
-   ENd.
+   END.
 
    /* YOT-5580 If in mobile tariff change termination to full */
    IF NOT fIsConvergentORFixedOnly(Mobsub.CliType) THEN 
@@ -264,6 +211,7 @@ PROCEDURE pTerminate:
 
    /* COFF if partial termination cli = fixednumber (no actions needed) */
    IF NOT(MobSub.cli BEGINS "8" OR MobSub.cli BEGINS "9") THEN DO:
+      
       FIND FIRST MSISDN WHERE
                  MSISDN.Brand = Syst.Var:gcBrand AND
                  MSISDN.CLI   = MobSub.CLI
@@ -324,6 +272,7 @@ PROCEDURE pTerminate:
          IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhIMSI).
       END.
    END.
+
 /* COFF check */
    FIND FIRST MSOwner WHERE 
               MSOwner.MsSeq = MobSub.MsSeq AND
@@ -431,12 +380,18 @@ PROCEDURE pTerminate:
 
    IF llDSSActive THEN DO:
 
-      IF lcBundleId = "DSS2" THEN
-         lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE").
+      ASSIGN lcAllowedDSS2SubsType = fCParamC("DSS2_SUBS_TYPE")
+             lcAllowedDSS4SubsType = fCParamC("DSS4_SUBS_TYPE").
+
+      IF lcBundleId EQ {&DSS4} THEN 
+         lcDSSRelatedSubsType = lcAllowedDSS4SubsType.
+      ELSE IF lcBundleId EQ {&DSS2} THEN 
+         lcDSSRelatedSubsType = lcAllowedDSS2SubsType.
 
       /* Nothing if subs. type is not part of DSS2 */
-      IF lcBundleId = "DSS2" AND
-         LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType) = 0 THEN .
+      IF (lcBundleId = {&DSS2} OR lcBundleId = {&DSS4}) AND
+         LOOKUP(MobSub.CLIType,lcDSSRelatedSubsType) = 0 THEN .
+
       /* If directly linked to DSS */
       ELSE IF MobSub.MsSeq = liDSSMsSeq THEN DO:
          IF fIsDSSTransferAllowed(INPUT MobSub.CLI,
@@ -473,7 +428,7 @@ PROCEDURE pTerminate:
          END. /* IF fIsDSSTransferAllowed(INPUT MobSub.CLI */
 
          /* DSS is not transferred - delete DSS group now */
-         IF NOT llDSSTransferred THEN
+         IF NOT llDSSTransferred THEN 
             RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
                                   INPUT Mobsub.CLI,
                                   INPUT Mobsub.CustNum,
@@ -484,7 +439,7 @@ PROCEDURE pTerminate:
                                   INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                   INPUT lcBundleId).
          /* If DSS is transferred then remove subs. from DSS group */
-         ELSE DO:
+         ELSE 
             RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
                                   INPUT Mobsub.CLI,
                                   INPUT Mobsub.CustNum,
@@ -494,18 +449,6 @@ PROCEDURE pTerminate:
                                   INPUT MsRequest.ActStamp,
                                   INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                   INPUT lcBundleId).
-
-            /* If it is Extraline associated subscription */
-            IF lcBundleId = "DSS2"                                  AND
-               (fCLITypeIsMainLine(MobSub.CLIType) OR
-                fCLITypeIsExtraLine(MobSub.CLIType)) THEN
-                fUpdateDSSNewtorkForExtraLine(MobSub.MsSeq,
-                                              MobSub.CLIType,   
-                                              MobSub.MultiSimId,
-                                              MsRequest.MsRequest,
-                                              MsRequest.ActStamp,
-                                              lcBundleId).
-         END.
 
       END. /* IF MobSub.MsSeq = liDSSMsSeq THEN DO: */
       /* DSS is not linked directly */
@@ -526,7 +469,7 @@ PROCEDURE pTerminate:
                                   INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                   INPUT lcBundleId).
          /* Otherwise just remove subs. from DSS group */
-         ELSE DO:
+         ELSE 
             RUN pUpdateDSSNetwork(INPUT Mobsub.MsSeq,
                                   INPUT Mobsub.CLI,
                                   INPUT Mobsub.CustNum,
@@ -536,18 +479,6 @@ PROCEDURE pTerminate:
                                   INPUT MsRequest.ActStamp,
                                   INPUT {&REQUEST_SOURCE_SUBSCRIPTION_TERMINATION},
                                   INPUT lcBundleId).
-
-            /* If it is Extraline associated subscription */
-            IF lcBundleID = "DSS2"                                  AND 
-               (fCLITypeIsMainLine(MobSub.CLIType) OR
-                fCLITypeIsExtraLine(MobSub.CLIType)) THEN
-                fUpdateDSSNewtorkForExtraLine(MobSub.MsSeq,
-                                              MobSub.CLIType,
-                                              MobSub.MultiSimId,
-                                              MsRequest.MsRequest,
-                                              MsRequest.ActStamp,
-                                              lcBundleId).
-         END.
 
       END. /* ELSE DO: */
    END. /* IF llDSSActive THEN DO: */
@@ -624,16 +555,17 @@ PROCEDURE pTerminate:
                IF llDSSActive AND 
                   LOOKUP(ttContract.DCEvent,lcPostpaidDataBundles) > 0 THEN DO:
 
-                  IF lcBundleId = {&DSS} OR (lcBundleId = "DSS2" AND
-                     LOOKUP(MobSub.CLIType,lcAllowedDSS2SubsType) > 0) THEN
+                  IF lcBundleId EQ {&DSS}  OR 
+                    ((lcBundleId EQ {&DSS2} OR lcBundleId EQ {&DSS4}) AND
+                     LOOKUP(MobSub.CLIType,lcDSSRelatedSubsType) > 0) THEN
                   FOR FIRST FeeModel NO-LOCK WHERE
-                            FeeModel.Brand = Syst.Var:gcBrand AND
-                            FeeModel.FeeModel = DayCampaign.FeeModel,
+                            FeeModel.Brand    EQ Syst.Var:gcBrand AND
+                            FeeModel.FeeModel EQ DayCampaign.FeeModel,
                       FIRST FMItem NO-LOCK WHERE
-                            FMItem.Brand = Syst.Var:gcBrand AND
-                            FMItem.FeeModel = FeeModel.FeeModel AND
-                            FMItem.Todate >= TODAY AND
-                            FMItem.BrokenRental = 1: /* full month */
+                            FMItem.Brand        EQ Syst.Var:gcBrand  AND
+                            FMItem.FeeModel     EQ FeeModel.FeeModel AND
+                            FMItem.Todate       >= TODAY             AND
+                            FMItem.BrokenRental EQ 1: /* full month */
                      ttContract.ActTS = ldeMonthEndTS.
                   END.
                END.
@@ -1030,30 +962,6 @@ PROCEDURE pTerminate:
          END.
       END.
    END.
-   /* YDR-2052, Change the delivery type to paper only if the customer 
-      don't have any other active subscription with delivery type EMAIL or SMS*/
-   IF NOT MobSub.PayType AND 
-      CAN-FIND(FIRST Customer NO-LOCK WHERE
-                     Customer.CustNum = MobSub.CustNum        AND
-                    (Customer.DelType = {&INV_DEL_TYPE_EMAIL} OR
-                     Customer.DelType = {&INV_DEL_TYPE_ESI} OR
-                     Customer.DelTYpe = {&INV_DEL_TYPE_SMS})) THEN
-   DO:
-      llCallProc = TRUE.
-      
-      FOR EACH bMobSub NO-LOCK WHERE
-               bMobsub.Brand    = Syst.Var:gcBrand        AND
-               bMobSub.CustNum  = MobSub.CustNum AND
-               bMobSub.MsSeq   <> liMsSeq        AND 
-               bMobSub.PayType  = NO AND
-               bMobSub.MsStatus NE {&MSSTATUS_MOBILE_NOT_ACTIVE}:
-         llCallProc = NO.
-         LEAVE.
-      END.
-      
-      IF llCallProc THEN   
-         RUN pChangeDelType(MobSub.CustNum).
-   END. 
 
    /* ADDLINE-20 Additional Line */
    IF LOOKUP(MobSub.CliType, {&ADDLINE_CLITYPES}) > 0 THEN DO:
@@ -1108,6 +1016,26 @@ PROCEDURE pTerminate:
          CREATE TermMobsub.
          BUFFER-COPY Mobsub TO TermMobsub.
       END.
+
+      /* YCO-268 - Memo */
+      IF llOutPort THEN 
+      DO:
+          Func.Common:mWriteMemo("MobSub",
+                                 STRING(MobSub.MsSeq),
+                                 MobSub.Custnum,
+                                 "Baja de la línea - Porta saliente",
+                                 "Solicitado por el cliente"). 
+      END.
+      ELSE 
+      DO:
+          Func.Common:mWriteMemo("MobSub",
+                                 STRING(MobSub.MsSeq),
+                                 MobSub.Custnum,
+                                 "Baja de la línea - Baja",
+                                 "Solicitado por el cliente").
+      END. 
+      /* YCO-268 - end */
+      
       DELETE MobSub.
 
    END.   
@@ -1245,9 +1173,43 @@ PROCEDURE pTerminate:
                   ASSIGN lELMobsub.MultiSimId   = 0
                          lELMobsub.MultiSimType = 0.
 
-                  fCloseExtraLineDiscount(lELMobsub.MsSeq,
-                                          lELMobsub.CLIType + "DISC",
-                                          TODAY).
+
+                  lClose = fCloseExtraLineDiscount(lELMobsub.MsSeq,
+                                                   lELMobsub.CLIType + "DISC",
+                                                   TODAY).
+                  /* YCO-250 Extra line get SMS when the convergent package is broken */
+                  IF lClose THEN
+                  DO:
+                     FIND bCLIType NO-LOCK WHERE
+                          bCLIType.Brand   = Syst.Var:gcBrand AND
+                          bCLIType.CLIType = TermMobSub.CLIType
+                          NO-ERROR.
+                     IF AVAILABLE bCLIType AND
+                        bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+                     DO:
+                         lcSMSText = fGetSMSTxt("ConPckEnd_ExtraLin",
+                                                TODAY,
+                                                bCustomer.Language,
+                                                OUTPUT ldeSMSStamp).
+
+                         IF lcSMSText > "" THEN
+                            fMakeSchedSMS2(TermMobSub.CustNum,
+                                           lELMobSub.CLI,
+                                           11, /* service change */
+                                           lcSMSText,
+                                           ldeSMSStamp,
+                                           "22622",
+                                           ""). 
+                         /* YCO-268 - Memo */
+                         Func.Common:mWriteMemo("MobSub",
+                                                STRING(lElMobSub.MsSeq),
+                                                TermMobSub.Custnum,
+                                                'Descuento "Línea DÚO" cancelado',
+                                                'Cambio automático por rotura de paquete "FIJO+MOVIL"').
+     
+                     END.
+                  END.
+                  /* YCO-250 end */   
                END.
             END.
 
@@ -1274,18 +1236,59 @@ PROCEDURE pTerminate:
                bMobSub.AgrCust = TermMobSub.CustNum AND
                bMobSub.MsSeq  <> TermMobSub.MsSeq   AND
                LOOKUP(bMobSub.CliType, {&ADDLINE_CLITYPES}) > 0:
-         fCloseAddLineDiscount(bMobSub.CustNum,
-                               bMobSub.MsSeq,
-                               bMobSub.CLIType,
-                               Func.Common:mLastDayOfMonth(TODAY)).
+
+         lClose = fCloseAddLineDiscount(bMobSub.CustNum,
+                                        bMobSub.MsSeq,
+                                        bMobSub.CLIType,
+                                        Func.Common:mLastDayOfMonth(TODAY)).
+                                        
+         /* YCO-250 Additional line get SMS when the convergent package is broken */
+         IF lClose THEN
+         DO:
+            FIND bCLIType NO-LOCK WHERE
+                 bCLIType.Brand   = Syst.Var:gcBrand AND
+                 bCLIType.CLIType = TermMobSub.CLIType
+                 NO-ERROR.
+            IF AVAILABLE bCLIType AND
+               bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+            DO:
+               FIND bCustomerAdd NO-LOCK WHERE
+                    bCustomerAdd.Custnum = TermMobSub.Custnum NO-ERROR.
+
+               lcSMSText = fGetSMSTxt("ConPckEnd_AddLin",
+                                      TODAY,
+                                     (IF AVAIL bCustomerAdd
+                                      THEN bCustomerAdd.Language ELSE 1),
+                                      OUTPUT ldeSMSStamp).
+
+               IF lcSMSText > "" THEN
+                  fMakeSchedSMS2(bMobSub.CustNum,
+                                 bMobSub.CLI,
+                                 11, /* service change */
+                                 lcSMSText,
+                                 ldeSMSStamp,
+                                 "22622",
+                                 "").
+
+               /* YCO-268 - Memo */
+               Func.Common:mWriteMemo("MobSub",
+                                      STRING(bMobSub.MsSeq),
+                                      bMobSub.Custnum,
+                                      'Descuento "Línea Adicional" cancelado',
+                                      'Cambio automático por modificación en la línea principal').
+
+            END.
+         END.
+         /* YCO-250 end */                                        
       END.
    END.
 
    /* Additional Line with mobile only ALFMO-5 */
    ELSE IF AVAIL DiscountPlan AND 
         CAN-FIND(FIRST bCLIType NO-LOCK WHERE
-                 bCLIType.Brand      = Syst.Var:gcBrand           AND
-                 bCLIType.CLIType    = TermMobSub.CLIType                AND                     bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) AND 
+                 bCLIType.Brand      = Syst.Var:gcBrand   AND
+                 bCLIType.CLIType    = TermMobSub.CLIType AND
+                 bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_MOBILEONLY}) AND 
         NOT CAN-FIND(FIRST DPMember WHERE
                            DPMember.DPId = DiscountPlan.DPId AND
                            DPMember.HostTable = "MobSub" AND
@@ -1391,10 +1394,49 @@ PROCEDURE pTerminate:
             YEAR(bMobSub.ActivationDate) < YEAR(TODAY) THEN
             ASSIGN ldtCloseDate = TODAY.
     
-         fCloseAddLineDiscount(bMobSub.CustNum,
-                               bMobSub.MsSeq,
-                               bMobSub.CLIType,
-                               ldtCloseDate).
+         lClose = fCloseAddLineDiscount(bMobSub.CustNum,
+                                        bMobSub.MsSeq,
+                                        bMobSub.CLIType,
+                                        ldtCloseDate).
+                               
+         /* YCO-250 Additional line get SMS when the convergent package is broken */
+         IF lClose THEN
+         DO:
+            FIND bCLIType NO-LOCK WHERE
+                 bCLIType.Brand   = Syst.Var:gcBrand AND
+                 bCLIType.CLIType = TermMobSub.CLIType
+                 NO-ERROR.
+            IF AVAILABLE bCLIType AND
+               bCLIType.TariffType = {&CLITYPE_TARIFFTYPE_CONVERGENT} THEN
+            DO:
+               FIND bCustomerAdd NO-LOCK WHERE
+                    bCustomerAdd.Custnum = TermMobSub.Custnum NO-ERROR.
+
+               lcSMSText = fGetSMSTxt("ConPckEnd_AddLin",
+                                      TODAY,
+                                     (IF AVAIL bCustomerAdd
+                                      THEN bCustomerAdd.Language ELSE 1),
+                                      OUTPUT ldeSMSStamp).
+
+               IF lcSMSText > "" THEN
+                  fMakeSchedSMS2(bMobSub.CustNum,
+                                 bMobSub.CLI,
+                                 11, /* service change */
+                                 lcSMSText,
+                                 ldeSMSStamp,
+                                 "22622",
+                                 "").
+
+               /* YCO-268 - Memo */
+               Func.Common:mWriteMemo("MobSub",
+                                      STRING(bMobSub.MsSeq),
+                                      bMobSub.Custnum,
+                                      'Descuento "Línea Adicional" cancelado',
+                                      'Cambio automático por modificación en la línea principal').
+      
+            END.
+         END.
+         /* YCO-250 end */   
       END.      
    END. 
    
@@ -1684,81 +1726,3 @@ PROCEDURE pMultiSIMTermination:
    
 END PROCEDURE.
 
-PROCEDURE pChangeDelType:
-   DEFINE INPUT  PARAMETER liCustNum AS INTEGER NO-UNDO.   
-
-   DEF VAR lhCustomer   AS HANDLE NO-UNDO. 
-   DEF VAR ldeStartTime AS DEC    NO-UNDO. 
-   DEF VAR llgStarted   AS LOG    NO-UNDO.
-   DEF VAR llgInvDate   AS LOG    NO-UNDO.
-   DEF VAR llgInvType   AS LOG    NO-UNDO. 
-
-   lhCustomer = BUFFER Customer:HANDLE.
-
-   RUN StarEventInitialize(lhCustomer).
-
-   FIND FIRST Customer EXCLUSIVE-LOCK WHERE 
-              Customer.CustNum = liCustNum NO-ERROR.
-
-   IF AVAILABLE Customer THEN      
-   DO:
-
-      IF llDoEvent THEN RUN StarEventSetOldBuffer(lhCustomer).       
-
-      /* If subscription termination is on 1st day of month then change the 
-         delivery type and delivery status for invoices generated AND but not delivered */
-      IF DAY(TODAY) = 1 THEN
-      DO:
-         ASSIGN ldeStartTime = Func.Common:mMake2DT(TODAY,0)
-                llgStarted   = FALSE
-                llgInvDate   = FALSE
-                llgInvType   = FALSE. 
-
-         FOR EACH FuncRunQSchedule NO-LOCK WHERE 
-                  FuncRunQSchedule.StartTS  >= ldeStartTime AND
-                  FuncRunQSchedule.RunMode   = "Production", 
-             EACH FuncRunExec NO-LOCK WHERE
-                  FuncRunExec.FRQScheduleID EQ FuncRunQSchedule.FRQScheduleID AND
-                  FuncRunExec.FRConfigID    EQ {&INVPRINTSPLIT_CONFIG}: 
-                    
-             FOR EACH FuncRunQSParam NO-LOCK WHERE 
-                      FuncRunQSParam.FRQScheduleID EQ FuncRunQSchedule.FRQScheduleID AND 
-                      FuncRunQSParam.FRConfigID    EQ FuncRunExec.FRConfigID:      
-             
-                IF FuncRunQSParam.ParamSeq  EQ 1     AND 
-                   FuncRunQSParam.DateParam EQ TODAY THEN 
-                   llgInvDate = TRUE.
-                ELSE IF FuncRunQSParam.ParamSeq EQ 2                  AND 
-                        FuncRunQSParam.IntParam EQ {&INV_TYPE_NORMAL} THEN 
-                   llgInvType = TRUE.
-                  
-             END.   
-             
-             IF FuncRunExec.StartTS > 0 THEN 
-                llgStarted = TRUE.
-         END.
-
-         /* Update invoice deliverytype to paper only when funcrun
-            execution process "InvPrintSplit" is not started for current month */
-         IF NOT llgStarted AND 
-                llgInvDate AND 
-                llgInvType THEN DO: 
-            FOR EACH Invoice EXCLUSIVE-LOCK WHERE
-                     Invoice.Brand      = Syst.Var:gcBrand            AND
-                     Invoice.CustNum    = Customer.CustNum   AND
-                     Invoice.InvDate    = TODAY              AND
-                     Invoice.InvType    = {&INV_TYPE_NORMAL} AND 
-                     Invoice.PrintState = 0:
-               Invoice.DelType  = {&INV_DEL_TYPE_PAPER}.
-            END.          
-         END.
-
-      END.
-
-      Customer.DelType = {&INV_DEL_TYPE_PAPER}.
-
-      IF llDoEvent THEN RUN StarEventMakeModifyEvent(lhCustomer).
-
-   END.
-
-END PROCEDURE.
