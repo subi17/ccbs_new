@@ -50,7 +50,7 @@ FUNCTION fMSCustChangeRequest RETURNS INTEGER
    CASE icChgType:
    WHEN "user"    THEN liReqType = 3.
    WHEN "invcust" THEN liReqType = 4.
-   WHEN "agrcust" OR WHEN "tarj3" THEN liReqType = 10.
+   WHEN "agrcust" THEN liReqType = 10.
    OTHERWISE DO:
       ocResult = "Invalid change type".
       RETURN 0.
@@ -90,9 +90,6 @@ FUNCTION fMSCustChangeRequest RETURNS INTEGER
       bCreaReq.ReqSource  = icSource
       bCreaReq.ReqIParam4 = liOrderID
       bCreaReq.OrigRequest = iiOrigReq. 
-
-   If icChgType = "tarj3" THEN
-      bCreaReq.ReqIParam3 = 1.
 
    /* ACC for Fusion tariffs */
    FIND FIRST bReqMobSub WHERE 

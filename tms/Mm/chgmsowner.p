@@ -854,7 +854,7 @@ REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO ChooseOwner, NEXT ChooseOwner:
          NEXT.
       END.
 
-      IF MobSub.CLIType NE "TARJ3" AND ldtChgDate < TODAY THEN DO:
+      IF ldtChgDate < TODAY THEN DO:
          MESSAGE "Change cannot be dated into past"
          VIEW-AS ALERT-BOX ERROR.
          NEXT.
@@ -942,22 +942,18 @@ REPEAT WITH FRAME fNewCriter ON ENDKEY UNDO ChooseOwner, NEXT ChooseOwner:
       ELSE ldChgStamp = Func.Common:mMake2DT(ldtChgDate,liChgHour * 3600 + 
                                             liChgMin * 60).
        
-      /* create the request */ 
-      IF MobSub.CliType = "tarj3" THEN lcCode = "tarj3".
-      ELSE lcCode = "agrcust".
-      
       IF ldaNewBirthday = ? THEN lcNewBirthday = "".
       ELSE lcNewBirthday = STRING(ldaNewBirthday,"99-99-9999").
 
       liRequest = fMSCustChangeRequest(MobSub.MsSeq,
-                                       lcCode,
+                                       "agrcust",
                                        liNewCust1,
                                        MobSub.AgrCust,
                                        fParam1Data(),
                                        ldChgStamp,
                                        llCreateFees,    
                                        ldeFee,
-                                       (lcCode = "agrcust"), /* send SMS */
+                                       TRUE, /* send SMS */
                                        "",
                                        "4",
                                        0, /* orig. request */

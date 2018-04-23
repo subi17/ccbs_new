@@ -182,7 +182,6 @@ PROCEDURE pOwnerChange:
    DEF VAR lcChannel     AS CHAR NO-UNDO.
    DEF VAR lcCategory    AS CHAR NO-UNDO. 
 
-   DEF BUFFER bSubRequest   FOR MsRequest.
    DEF BUFFER bMobSub       FOR MobSub.
    DEF BUFFER bMsRequest    FOR MsRequest.
    DEF BUFFER bOldCustCat   FOR CustCat.
@@ -323,7 +322,7 @@ PROCEDURE pOwnerChange:
             OUTPUT liActTime).
    
    /* 1. phase for normal agr.cust change */
-   IF liOrigStat = 0 AND MsRequest.ReqIParam3 NE 1 THEN DO:
+   IF liOrigStat = 0 THEN DO:
 
       /* credit check for postpaid (not for companies) */
       IF MobSub.PayType = FALSE THEN DO:
@@ -357,40 +356,27 @@ PROCEDURE pOwnerChange:
    END.
 
    ELSE IF liOrigStat = 8 THEN DO:
-
-      IF MsRequest.ReqIParam3 = 1 THEN DO:
-         RUN pFinalize(MsRequest.ActStamp, 
-                       MsRequest.MsSeq,
-                       MsRequest.Cli).
-
-         fReqStatus(2,"").
-         RETURN.
-      END.
-   
-      ELSE DO:
          
-         /* mark final activation time and send notification to customer */
-         IF MobSub.PayType = FALSE AND 
-            MsRequest.ReqDParam1 > MsRequest.ActStamp
-         THEN DO:
-            
-            RUN Mm/acc_sendsms.p(MsRequest.MsRequest,
-                            MsRequest.CustNum,
-                            "Accepted",
-                            "").
+      /* mark final activation time and send notification to customer */
+      IF MobSub.PayType = FALSE AND 
+         MsRequest.ReqDParam1 > MsRequest.ActStamp
+      THEN DO:
+         
+         RUN Mm/acc_sendsms.p(MsRequest.MsRequest,
+                         MsRequest.CustNum,
+                         "Accepted",
+                         "").
 
-            RUN Mm/acc_sendsms.p(MsRequest.MsRequest,
-                            MsRequest.CustNum,
-                            "PreviousDay",
-                            "").
-            
-            FIND CURRENT MsRequest EXCLUSIVE-LOCK.
-            MsRequest.ActStamp = MsRequest.ReqDparam1.
-            
-            fReqStatus(8,"").
-            RETURN.
-         END.
-
+         RUN Mm/acc_sendsms.p(MsRequest.MsRequest,
+                         MsRequest.CustNum,
+                         "PreviousDay",
+                         "").
+         
+         FIND CURRENT MsRequest EXCLUSIVE-LOCK.
+         MsRequest.ActStamp = MsRequest.ReqDparam1.
+         
+         fReqStatus(8,"").
+         RETURN.
       END.
    END.
    
@@ -775,50 +761,6 @@ PROCEDURE pOwnerChange:
          OUTPUT liChargeReqId) NO-ERROR.
 
    END.
-   
-   /* request handled succesfully */   
-   
-   /* ReqIParam3 Value 1 indicates that this is special agrcust change
-      (from TARJ3 to TARJ1) */
-   IF MsRequest.ReqIParam3 = 1 THEN DO:
-
-      /* Set msrequest status to temporary status 99 so that
-         CTChange request can be done */
-      IF NOT fReqStatus(99,"") THEN DO:
-         fReqError("Temporary status 99 failed!").
-         RETURN.
-      END.
-
-      liSubRequest = fCTChangeRequest(MsRequest.MsSeq,
-                                      "TARJ",
-                                      "",              /* data bundle id */
-                                      "",              /* bank-account */
-                                      MsRequest.ActStamp,  /* new tsbegin  */
-                                      0,           /* 0 = Credit check ok */
-                                      0, /* extend contract 0=no extend_term_contract */
-                                      "",
-                                      FALSE,           /* llCreateFees */
-                                      FALSE,           /* llSendSMS    */
-                                      "",
-                                      0,
-                                      {&REQUEST_SOURCE_ACC},
-                                      0, /* order id */
-                                      0,
-                                      "", /*contract id*/
-                                      OUTPUT lcInfo).
-      
-      FIND bSubRequest EXCLUSIVE-LOCK WHERE
-           bSubRequest.MsRequest = liSubRequest NO-ERROR.
-      ASSIGN 
-         bSubRequest.OrigRequest = MsRequest.MsRequest
-         bSubRequest.Mandatory   = 1.
-
-      IF NOT fReqStatus(7,"") THEN DO:
-         fReqError("7Update failed").
-      END.
-
-      RETURN.
-   END.
 
    IF MobSub.MultiSimId > 0 AND
       MobSub.MultiSimType = {&MULTISIMTYPE_PRIMARY} THEN DO:
@@ -904,15 +846,12 @@ PROCEDURE pOwnerChange:
        Msrequest.MsRequest,
        MsRequest.ActStamp).
    
-   /* request handled succesfully */   
-   IF MsRequest.ReqIParam3 NE 1 THEN DO:
-      RUN pFinalize(MsRequest.ActStamp, 
-                    MsRequest.MsSeq,
-                    MsRequest.Cli).
-      fReqStatus(2,""). 
-      IF AVAIL bAccOrder THEN
-         fSetOrderStatus(bAccOrder.OrderId,"6").  
-   END.
+   RUN pFinalize(MsRequest.ActStamp, 
+                 MsRequest.MsSeq,
+                 MsRequest.Cli).
+   fReqStatus(2,""). 
+   IF AVAIL bAccOrder THEN
+      fSetOrderStatus(bAccOrder.OrderId,"6").  
    
 END PROCEDURE.
 
@@ -1344,10 +1283,6 @@ PROCEDURE pMsCustMove:
           MobSub.InvCust = iiNewInvCust WHEN iiNewInvCust > 0
           MobSub.AgrCust = iiNewOwner.
    
-   IF MsRequest.ReqIParam3 = 1 THEN DO: 
-      Mobsub.Salesman = ENTRY(11,MsRequest.ReqCParam1,";").
-   END.   
-
    /* Extraline discount will be closed WITH last date of previous month 
       if ACC is done on Extraline subscription */
    IF fCLITypeIsExtraLine(MobSub.CliType) AND 

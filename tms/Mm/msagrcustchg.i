@@ -142,13 +142,6 @@ PROCEDURE pCheckSubscriptionForACC:
       RETURN "ERROR/SMS/310".
    END.
 
-   IF MobSub.CLIType = "tarj3" AND 
-      LOOKUP(STRING(MobSub.AgrCust),"233718,239696,239680,239666") = 0 
-   THEN DO:
-      ocMessage = "Current customer is not a preactivated one".
-      RETURN "ERROR".
-   END.
-
    IF LOOKUP(STRING(MobSub.MsStat),"4,8") = 0 THEN DO:
       ocMessage = "Subscription status is not valid for owner change".
       RETURN "ERROR".
